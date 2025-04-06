@@ -22,7 +22,7 @@
 #include "d/actor/d_a_player_main.h"
 
 static u8 mt_count;
-daMt_HIO_c l_HIO;
+static daMt_HIO_c l_HIO;
 static int mt_all_count;
 static int mt_fight_count;
 static int j_index;
@@ -50,7 +50,7 @@ static int btk_data[8] = {
 static int move_ad[8] = {0, -6, -12, -18, -24, -30, -36, -42};
 static int move_ad2[8] = {0, -3, -6, -9, -12, -15, -18, -21};
 
-static u8 br_no[12] = {0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0};
+static u8 br_no[11] = {0, 1, 1, 2, 2, 2, 1, 0, 0, 0, 0};
 static s16 br_ya[11] = {0xCD38, 0xDCD8, 0xF060, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static f32 check_x[6] = {0.0f, 0.0f, 50.0f, -50.0f, -1.0f, 1.0f};
@@ -95,7 +95,7 @@ daMt_HIO_c::daMt_HIO_c() {
 /* 00000230-000002D8       .text anm_init__FP8mt_classifUcfi */
 void anm_init(mt_class* i_this, int index, float morf, unsigned char loopMode, float playSpeed, int param_6) {
     J3DAnmTransform* bckAnm = (J3DAnmTransform*) dComIfG_getObjectRes("Mt", index);
-    i_this->mpMorfs[0]->setAnm(bckAnm, loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
+    i_this->mpMorf[0]->setAnm(bckAnm, loopMode, morf, playSpeed, 0.0f, -1.0f, NULL);
 }
 
 /* 000002D8-00000350       .text mt_a_d_sub__FPvPv */
@@ -148,10 +148,10 @@ void tex_anm_set(mt_class* i_this, u16 index) {
 
 /* 0000053C-000005EC       .text mt_eye_tex_anm__FP8mt_class */
 void mt_eye_tex_anm(mt_class* i_this) {
-    if (i_this->m464 != 0) {
-        i_this->m464--;
+    if (i_this->mBlinkTimer != 0) {
+        i_this->mBlinkTimer--;
     } else {
-        i_this->m464 = cM_rndF(100.0f) + 50.0f;
+        i_this->mBlinkTimer = cM_rndF(100.0f) + 50.0f;
         if (!i_this->mTexAnmPlaying) {
             tex_anm_set(i_this, 0);
         }
@@ -179,7 +179,7 @@ static BOOL nodeCallBack_head(J3DNode* node, int calcTiming) {
                 cMtx_ZrotM(*calc_mtx, -i_this->m640[0].z);
             } else if (jntNo == 3) {
                 cMtx_YrotM(*calc_mtx, i_this->m640[15].x);
-                cMtx_ZrotM(*calc_mtx, -i_this->m640[15].x);
+                cMtx_ZrotM(*calc_mtx, -i_this->m640[15].z);
             } else {
                 f32 scale = i_this->m18F0;
                 MtxScale(scale, scale, scale, true);
@@ -306,8 +306,8 @@ void body_control2(mt_class* i_this) {
                 MtxPosition(&offset, &local_184);
             }
 
-            f32 fVar4 = local_184.x + i_this->m590[i].x + i_this->mPos[i].x - i_this->mPos[i - 1].x;
-            f32 fVar5 = local_184.z + i_this->m590[i].z + i_this->mPos[i].z - i_this->mPos[i - 1].z;
+            f32 fVar4 = i_this->mPos[i].x - i_this->mPos[i - 1].x + local_184.x + i_this->m590[i].x;
+            f32 fVar5 = i_this->mPos[i].z - i_this->mPos[i - 1].z + local_184.z + i_this->m590[i].z;
             int iVar8 = cM_atan2s(fVar4, fVar5);
             fVar4 = std::sqrtf(fVar4 * fVar4 + fVar5 * fVar5);
             s16 iVar9 = -cM_atan2s(f, fVar4);
@@ -318,17 +318,17 @@ void body_control2(mt_class* i_this) {
             MtxPosition(&offset2, &local_16c);
             i_this->mAngle[i].y = iVar8 + 0x8000;
             i_this->mAngle[i].x = -iVar9;
-            i_this->mOld[i] = i_this->mPos[i];
+            i_this->mOldPos[i] = i_this->mPos[i];
 
             i_this->mPos[i].x = i_this->mPos[i - 1].x + local_16c.x;
             i_this->mPos[i].y = i_this->mPos[i - 1].y + local_16c.y;
             i_this->mPos[i].z = i_this->mPos[i - 1].z + local_16c.z;
-            i_this->m590[i].x = fVar1 * (i_this->mPos[i].x - i_this->mOld[i].x);
-            i_this->m590[i].y = fVar1 * (i_this->mPos[i].y - i_this->mOld[i].y);
-            i_this->m590[i].z = fVar1 * (i_this->mPos[i].z - i_this->mOld[i].z);
+            i_this->m590[i].x = fVar1 * (i_this->mPos[i].x - i_this->mOldPos[i].x);
+            i_this->m590[i].y = fVar1 * (i_this->mPos[i].y - i_this->mOldPos[i].y);
+            i_this->m590[i].z = fVar1 * (i_this->mPos[i].z - i_this->mOldPos[i].z);
         }
 
-        J3DModel* model = i_this->mpMorfs[i]->getModel();
+        J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
         mDoMtx_stack_c::transS(i_this->mPos[i]);
         mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
@@ -337,6 +337,8 @@ void body_control2(mt_class* i_this) {
 
         if (i == 0) {
             mDoMtx_stack_c::YrotM(i_this->m468);
+        }
+        if (i == 0) {
             mDoMtx_stack_c::scaleM(l_HIO.m1C, l_HIO.m1C, l_HIO.m1C);
         } else {
             mDoMtx_stack_c::scaleM(i_this->mScale[i], i_this->mScale[i] * i_this->m620[i], 1.0f);
@@ -349,13 +351,13 @@ void body_control2(mt_class* i_this) {
         model->setBaseTRMtx(mDoMtx_stack_c::get());
 
         if (i == 0) {
-            cXyz offset1(0.0f, 0.0f, REG0_F(9) + 30.0f);
-            mDoMtx_stack_c::multVec(&offset1, &i_this->eyePos);
+            cXyz offset(0.0f, 0.0f, REG0_F(9) + 30.0f);
+            mDoMtx_stack_c::multVec(&offset, &i_this->eyePos);
             i_this->mEyeSph.SetC(i_this->eyePos);
-            cXyz offset2(0.0f, 0.0f, REG6_F(9) + 100.0f);
-            cXyz out;
-            mDoMtx_stack_c::multVec(&offset2, &out);
-            i_this->mSph[0].SetC(out);
+            offset.set(0.0f, 0.0f, REG6_F(9) + 100.0f);
+            cXyz headPos;
+            mDoMtx_stack_c::multVec(&offset, &headPos);
+            i_this->mSph[0].SetC(headPos);
 
             i_this->mSph[0].OffAtVsBitSet(cCcD_AtSPrm_VsEnemy_e);
             i_this->mSph[0].OnAtVsBitSet(cCcD_AtSPrm_VsOther_e);
@@ -390,9 +392,9 @@ void body_control2(mt_class* i_this) {
             u8 uVar3 = i_this->mC00 ? move_ad2[i] : move_ad[i];
             for (int j = 0; j < 6; j++) {
                 u8 uVar2 = uVar3 + j;
-                i_this->m6F4[uVar2].x = i_this->mPos[i].x + j * (i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f;
-                i_this->m6F4[uVar2].y = i_this->mPos[i].y + j * (i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f;
-                i_this->m6F4[uVar2].z = i_this->mPos[i].z + j * (i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f;
+                i_this->m6F4[uVar2].x = i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f);
+                i_this->m6F4[uVar2].y = i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f);
+                i_this->m6F4[uVar2].z = i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f);
                 i_this->m9F4[uVar2] = i_this->mAngle[i];
             }
         }
@@ -405,7 +407,7 @@ void body_control2(mt_class* i_this) {
         i_this->mBF4 = 0;
         i_this->mTimer[1] = 100;
         i_this->m48E = 0;
-        anm_init(i_this, 10, 20.0f, 2, 1.0f, 0);
+        anm_init(i_this, MT_BCK_WAIT1, 20.0f, 2, 1.0f, 0);
     }
 
     cLib_addCalc0(&i_this->m18F4, 1.0f, 0.01f);
@@ -429,14 +431,14 @@ BOOL wall_check_sub(mt_class* i_this, cXyz* start, cXyz* end) {
 
 /* 00001E44-00001F10       .text body_wall_check__FP8mt_class */
 void body_wall_check(mt_class* i_this) {
-    for (int i = 0; i < 8; i++) {
-        cXyz start = i_this->mOld[i];
+    for (int i = 1; i < 8; i++) {
+        cXyz start = i_this->mOldPos[i];
         start.y += 50.0f;
         cXyz end = i_this->mPos[i];
         end.y += 50.0f;
         if (wall_check_sub(i_this, &start, &end)) {
-            i_this->mPos[i].x = i_this->mOld[i].x;
-            i_this->mPos[i].z = i_this->mOld[i].z;
+            i_this->mPos[i].x = i_this->mOldPos[i].x;
+            i_this->mPos[i].z = i_this->mOldPos[i].z;
         }
     }
 }
@@ -448,7 +450,7 @@ void body_control1(mt_class* i_this) {
     i_this->mB74[i_this->mBF4] = i_this->m468;
     for (int i = 0; i < 8; i++) {
         u8 uVar2 = i_this->mC00 ? (i_this->mBF4 + move_ad2[i]) & 0x3F : (i_this->mBF4 + move_ad[i]) & 0x3F;
-        J3DModel* model = i_this->mpMorfs[i]->getModel();
+        J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
         mDoMtx_stack_c::transS(i_this->m6F4[uVar2].x, i_this->m6F4[uVar2].y, i_this->m6F4[uVar2].z);
         mDoMtx_stack_c::YrotM(i_this->m9F4[uVar2].y);
@@ -472,7 +474,7 @@ void body_control1(mt_class* i_this) {
             i_this->mEyeSph.SetR(l_HIO.m44);
             dComIfG_Ccsp()->Set(&i_this->mEyeSph);
 
-            cXyz offset2(0.0f, 0.0f, REG6_F(9) + 100.0f);
+            offset.set(0.0f, 0.0f, REG6_F(9) + 100.0f);
             mDoMtx_stack_c::multVec(&offset, &pos);
             i_this->mSph[0].SetC(pos);
             i_this->mSph[0].SetR(50.0f);
@@ -502,7 +504,7 @@ void body_control1(mt_class* i_this) {
         i_this->mFightMode = 0;
         i_this->mTimer[0] = l_HIO.m10;
         i_this->m48E = 0;
-        anm_init(i_this, 10, 20.0f, 2, 1.0f, 0);
+        anm_init(i_this, MT_BCK_WAIT1, 20.0f, 2, 1.0f, 0);
     }
 
     cLib_addCalc2(&i_this->m470, -10.0f, 1.0f, 1.0f);
@@ -557,13 +559,13 @@ void body_control3(mt_class* i_this) {
                 i_this->mAngle[i].y = sVar10 - 0x8000;
                 i_this->mAngle[i].x = sVar4;
             }
-            i_this->mOld[i] = i_this->mPos[i];
+            i_this->mOldPos[i] = i_this->mPos[i];
             i_this->mPos[i].x = i_this->mPos[i - 1].x + out.x;
             i_this->mPos[i].y = i_this->mPos[i - 1].y + out.y;
             i_this->mPos[i].z = i_this->mPos[i - 1].z + out.z;
         }
 
-        J3DModel* model = i_this->mpMorfs[i]->getModel();
+        J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
         mDoMtx_stack_c::transS(i_this->mPos[i] + out);
         mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
@@ -609,7 +611,7 @@ void body_control3(mt_class* i_this) {
 
 /* 000028BC-00002AB0       .text body_control4__FP8mt_class */
 void body_control4(mt_class* i_this) {
-    J3DModel* model = i_this->mpMorfs[0]->getModel();
+    J3DModel* model = i_this->mpMorf[0]->getModel();
     mDoMtx_stack_c::scaleS(0.0f, 0.0f, 0.0f);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     for (int i = 1; i < 8; i++) {
@@ -628,7 +630,7 @@ void body_control4(mt_class* i_this) {
             }
         } 
 
-        model = i_this->mpMorfs[i]->getModel();
+        model = i_this->mpMorf[i]->getModel();
         mDoMtx_stack_c::transS(i_this->mPos[i]);
         mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
         mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
@@ -673,14 +675,14 @@ void body_control5(mt_class* i_this) {
             cMtx_YrotS(*calc_mtx, iVar6);
             cMtx_XrotM(*calc_mtx, iVar7);
             MtxPosition(&offset, &out);
-            i_this->mAngle[i].y = iVar6 - 0x8000;
-            i_this->mAngle[i].x = iVar7;
+            i_this->mAngle[i].y = iVar6 + 0x8000;
+            i_this->mAngle[i].x = -iVar7;
             i_this->mPos[i].x = i_this->mPos[i - 1].x + out.x;
             i_this->mPos[i].y = i_this->mPos[i - 1].y + out.y;
             i_this->mPos[i].z = i_this->mPos[i - 1].z + out.z;
         }
 
-        J3DModel* model = i_this->mpMorfs[i]->getModel();
+        J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
         mDoMtx_stack_c::transS(i_this->mPos[i]);
         mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
@@ -757,20 +759,20 @@ static void daMt_shadowDraw(mt_class* i_this) {
         );
 
         i_this->m1CB8 = dComIfGd_setShadow(
-            i_this->m1CB8, 1, i_this->mpMorfs[0]->getModel(), &pos,
+            i_this->m1CB8, 1, i_this->mpMorf[0]->getModel(), &pos,
             REG0_F(19) + 800.0f, REG0_F(17) + 40.0f,
             i_this->current.pos.y, i_this->mAcch.GetGroundH(), i_this->mAcch.m_gnd,
             &i_this->tevStr, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
         );
 
         for (int i = 1; i < 8; i++) {
-            dComIfGd_addRealShadow(i_this->m1CB8, i_this->mpMorfs[i]->getModel());
+            dComIfGd_addRealShadow(i_this->m1CB8, i_this->mpMorf[i]->getModel());
         }
     } else {
         u32 player_shadow_id = daPy_getPlayerLinkActorClass()->getShadowID();
         if (player_shadow_id != 0) {
             for (int i = 0; i < 8; i++) {
-                dComIfGd_addRealShadow(player_shadow_id, i_this->mpMorfs[i]->getModel());
+                dComIfGd_addRealShadow(player_shadow_id, i_this->mpMorf[i]->getModel());
             }
         }
     }
@@ -785,7 +787,7 @@ static BOOL daMt_Draw(mt_class* i_this) {
 
     j_index = 0;
     for (int i = 0; i < 8; i++) {
-        J3DModel* model = i_this->mpMorfs[i]->getModel();
+        J3DModel* model = i_this->mpMorf[i]->getModel();
         if (i_this->mEnemyIce.mLightShrinkTimer == 0) {
             cXyz cStack_48;
             MTXMultVec(model->getBaseTRMtx(), &local_3c, &cStack_48);
@@ -823,7 +825,7 @@ static BOOL daMt_Draw(mt_class* i_this) {
             model->getModelData()->getMaterialTable().setTexNoAnimator(i_this->mpAnmTex, i_this->mpTexNoAnm);
             i_this->mpAnmTex->setFrame(i_this->mTexAnmFrame);
         }
-        i_this->mpMorfs[i]->updateDL();
+        i_this->mpMorf[i]->updateDL();
     }
 
     br_draw(i_this);
@@ -857,42 +859,41 @@ void bakuha(mt_class* i_this) {
 
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
 void mt_move(mt_class* i_this) {
-    u8 bVar8;
-    cXyz local_160[6];
-    cXyz ends[6];
+    u8 cross_bits;
+    cXyz cross_pos[6];
+    cXyz end_pos[6];
     dBgS_LinChk linChk;
     cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
     cXyz offset(0.0f, 50.0f, 0.0f);
-    cXyz local_184;
-    MtxPosition(&offset, &local_184);
-    local_184 = local_184 + i_this->current.pos;
-    int iVar6 = abs(i_this->current.angle.x);
-    int iVar11 = iVar6 < 0x1000 ? 6 : 4;
-    for (int i = 0; i < iVar11; i++) {
-        cXyz check;
-        check.x = check_x[i];
-        check.y = check_y[i];
-        check.z = check_z[i];
-        MtxPosition(&check, &ends[i]);
-        ends[i] += i_this->current.pos;
-        linChk.Set(&local_184, &ends[i], i_this);
+    cXyz start_pos;
+    MtxPosition(&offset, &start_pos);
+    start_pos = start_pos + i_this->current.pos;
+    int segs = abs(i_this->current.angle.x) < 0x1000 ? 6 : 4;
+    for (int i = 0; i < segs; i++) {
+        cXyz check_pos;
+        check_pos.x = check_x[i];
+        check_pos.y = check_y[i];
+        check_pos.z = check_z[i];
+        MtxPosition(&check_pos, &end_pos[i]);
+        end_pos[i] += i_this->current.pos;
+        linChk.Set(&start_pos, &end_pos[i], i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            local_160[i] = linChk.GetCross();
-            bVar8 |= check_bitD[i];
+            cross_pos[i] = linChk.GetCross();
+            cross_bits |= check_bitD[i];
         }
     }
 
-    if ((bVar8 & 0x3) == 0x3) {
-        cXyz local_190 = local_160[0] - local_160[1];
+    if ((cross_bits & 0x3) == 0x3) {
+        cXyz local_190 = cross_pos[0] - cross_pos[1];
         cXyz local_16C(0.0f, l_HIO.m18, 0.0f);
         cXyz local_178;
         MtxPosition(&local_16C, &local_178);
         if (i_this->m48E == 0) {
-            cLib_addCalc2(&i_this->current.pos.x, local_178.x + local_160[1].x + local_190.x * 0.5f, 1.0f, 1.0f);
-            cLib_addCalc2(&i_this->current.pos.y, local_178.y + local_160[1].y + local_190.y * 0.5f, 1.0f, 1.0f);
-            cLib_addCalc2(&i_this->current.pos.z, local_178.z + local_160[1].z + local_190.z * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.x, local_178.x + cross_pos[1].x + local_190.x * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.y, local_178.y + cross_pos[1].y + local_190.y * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&i_this->current.pos.z, local_178.z + cross_pos[1].z + local_190.z * 0.5f, 1.0f, 1.0f);
         }
         f32 fVar1 = std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z);
         i_this->current.angle.x = -cM_atan2s(local_190.y, fVar1);
@@ -905,7 +906,7 @@ void mt_move(mt_class* i_this) {
             i_this->current.angle.x = 0x8000 - i_this->current.angle.x;
         }
         i_this->m492 = 23;
-    } else if ((bVar8 & 0x1) == 0) {
+    } else if ((cross_bits & 0x1) == 0) {
         if (i_this->m492 == 0) {
             i_this->current.angle.x += REG0_S(2) + 0x800;
         } else {
@@ -913,8 +914,8 @@ void mt_move(mt_class* i_this) {
         }
     }
 
-    if ((bVar8 & 0xC) == 0xC) {
-        cXyz local_190 = local_160[2] - local_160[3];
+    if ((cross_bits & 0xC) == 0xC) {
+        cXyz local_190 = cross_pos[2] - cross_pos[3];
         cMtx_XrotS(*calc_mtx, -i_this->current.angle.x);
         cMtx_YrotM(*calc_mtx, -i_this->current.angle.y);
         cXyz local_178;
@@ -924,8 +925,8 @@ void mt_move(mt_class* i_this) {
     }
 
     if (abs(i_this->current.angle.x) < 0x1000) {
-        if ((bVar8 & 0x30) == 0x30) {
-            cXyz local_190 = local_160[4] - local_160[5];
+        if ((cross_bits & 0x30) == 0x30) {
+            cXyz local_190 = cross_pos[4] - cross_pos[5];
             i_this->current.angle.y = cM_atan2s(local_190.x, local_190.z) + 0x4000;
         } else {
             if (i_this->m2B4 >= 10) {
@@ -963,7 +964,7 @@ void mt_move(mt_class* i_this) {
                 }
             } 
 
-            if (i_this->m2B4 < 10 && !i_this->m18F9 && fopAcM_searchPlayerDistance(i_this) < l_HIO.m24) {
+            if (i_this->m2B4 < 10 && !i_this->mBlocked && fopAcM_searchPlayerDistance(i_this) < l_HIO.m24) {
                 bool bVar3 = false;
                 for (int i = 0; i < 64; i += 8) {
                     if (abs(i_this->m9F4[i].x) > 0x1000) {
@@ -998,7 +999,7 @@ void mt_move(mt_class* i_this) {
     cXyz local_16C(0.0f, 0.0f, i_this->speedF);
     MtxPosition(&local_16C, &i_this->speed);
     fopAcM_posMove(i_this, NULL);
-    if (bVar8 == 0) {
+    if (cross_bits == 0) {
         i_this->m46C++;
         if (i_this->m46C > 9) {
             i_this->mMode = 1;
@@ -1084,7 +1085,7 @@ void mt_fight(mt_class* i_this) {
             MtxPosition(&local_5c, &local_68);
             cLib_addCalc2(&i_this->current.pos.x, player->current.pos.x + local_68.x, 0.1f, REG0_F(10) + 4.0f);
             cLib_addCalc2(&i_this->current.pos.z, player->current.pos.z + local_68.z, 0.1f, REG0_F(10) + 4.0f);
-            if (fopAcM_searchPlayerDistance(i_this) > l_HIO.m24 + 100.0f || (i_this->m18F9 && i_this->m466 == 0)) {
+            if (fopAcM_searchPlayerDistance(i_this) > l_HIO.m24 + 100.0f || (i_this->mBlocked && i_this->m466 == 0)) {
                 cLib_addCalc2(&i_this->current.pos.y, i_this->mAcch.GetGroundH() + 40.0f, 0.5f, 3.0f);
                 sVar9 = 0;
                 i_this->m494 = 0;
@@ -1104,7 +1105,7 @@ void mt_fight(mt_class* i_this) {
                         local_5c.z = -30.0f;
                         MtxPosition(&local_5c, &i_this->m47C);
                         i_this->m47C += i_this->current.pos;
-                        anm_init(i_this, 8, 5.0f, 2, 1.0f, 0);
+                        anm_init(i_this, MT_BCK_SUKI, 5.0f, 2, 1.0f, 0);
                         fopAcM_monsSeStart(i_this, JA_SE_CV_MG_ATTACK, 0);
                     }
                 }
@@ -1115,7 +1116,7 @@ void mt_fight(mt_class* i_this) {
                 if (dComIfGp_getAttention().Lockon() && i_this == dComIfGp_getAttention().LockonTarget(0)) {
                     i_this->mMode = 6;
                     i_this->mTimer[0] = 0;
-                    anm_init(i_this, 7, 2.0f, 0, 1.0f, 0);
+                    anm_init(i_this, MT_BCK_ATTACK, 2.0f, 0, 1.0f, 0);
                     break;
                 }
             }
@@ -1126,7 +1127,7 @@ void mt_fight(mt_class* i_this) {
                 i_this->setBtNowFrame(10.0f);
             }
             if (i_this->mC02 == l_HIO.m3C) {
-                anm_init(i_this, 9, 2.0f, 0, 1.0f, 0);
+                anm_init(i_this, MT_BCK_TUKKOMI, 2.0f, 0, 1.0f, 0);
             }
             if (i_this->mC02 == l_HIO.m38) {
                 cMtx_YrotS(*calc_mtx, i_this->m496);
@@ -1142,7 +1143,7 @@ void mt_fight(mt_class* i_this) {
                 fVar11 = l_HIO.m2C;
                 fVar1 = 0.5f;
                 if (i_this->mC02 == l_HIO.m3E) {
-                    anm_init(i_this, 7, 2.0f, 0, 1.0f, 0);
+                    anm_init(i_this, MT_BCK_ATTACK, 2.0f, 0, 1.0f, 0);
                 }
             } else {
                 fVar11 = REG0_F(11) + 4.0f;
@@ -1180,13 +1181,13 @@ void mt_fight(mt_class* i_this) {
                 i_this->m47C += i_this->current.pos;
                 i_this->m462 = 10;
                 i_this->mTimer[0] = 10;
-                anm_init(i_this, 10, 2.0f, 2, 1.0f, 0);
+                anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
                 i_this->m18D4 = 0;
             }
             if (i_this->mC02 == l_HIO.m3A) {
                 i_this->mFightMode = 0;
                 i_this->mTimer[0] = l_HIO.m10;
-                anm_init(i_this, 10, 5.0f, 2, 1.0f, 0);
+                anm_init(i_this, MT_BCK_WAIT1, 5.0f, 2, 1.0f, 0);
             }
             break;
         case 0xA:
@@ -1200,16 +1201,16 @@ void mt_fight(mt_class* i_this) {
             }
             break;
         case 0xF:
-            cLib_addCalc2(&i_this->current.pos.x, i_this->m47C.x, 0.4f, 20.0f);
-            cLib_addCalc2(&i_this->current.pos.y, i_this->m47C.y + 20.0f, 0.4f, 20.0f);
-            cLib_addCalc2(&i_this->current.pos.z, i_this->m47C.z, 0.4f, 20.0f);
+            cLib_addCalc2(&i_this->current.pos.x, i_this->m47C.x, 0.5f, 20.0f);
+            cLib_addCalc2(&i_this->current.pos.y, i_this->m47C.y + 20.0f, 0.5f, 20.0f);
+            cLib_addCalc2(&i_this->current.pos.z, i_this->m47C.z, 0.5f, 20.0f);
             i_this->speed.x = i_this->m47C.x - i_this->current.pos.x;
             i_this->speed.y = -1.0f;
             i_this->speed.z = i_this->m47C.z - i_this->current.pos.z;
             if (i_this->mTimer[0] == 0) {
                 i_this->mFightMode = 0;
                 i_this->mTimer[0] = l_HIO.m10;
-                anm_init(i_this, 10, 2.0f, 2, 1.0f, 0);
+                anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
             }
             break;
         case 0x11:
@@ -1282,7 +1283,7 @@ switch_end:
 
 /* 00005088-00005A04       .text mt_move_maru__FP8mt_class */
 void mt_move_maru(mt_class* i_this) {
-    i_this->m464 = 3;
+    i_this->mBlinkTimer = 3;
     if (i_this->mFightMode == 0) {
         if (i_this->mTimer[0] == 0) {
             i_this->mSph[0].OnCoSetBit();
@@ -1400,7 +1401,7 @@ void mt_move_maru(mt_class* i_this) {
         if (i_this->m466 == 70) {
             i_this->m330 = REG0_F(3) + 2500.0f;
             i_this->m338 = 0.5f;
-            if (!i_this->m18FA) {
+            if (!i_this->mInLava) {
                 i_this->speed.y = REG0_F(11) + 30.0f;
             }
         }
@@ -1463,13 +1464,17 @@ void water_damage_se_set(mt_class* i_this) {
 /* 00005C54-0000614C       .text damage_check__FP8mt_class */
 void damage_check(mt_class* i_this) {
     CcAtInfo atInfo;
+    atInfo.pParticlePos = NULL;
+
     u8 iVar4 = 0;
-    int i = 0;
+    int startI = 0;
     i_this->mStts.Move();
     if (i_this->mC04 == 1) {
-        i = 2;
+        startI = 2;
     }
-    while (i < 8) {
+
+    cXyz pos;
+    for (int i = startI; i < 8; i++) {
         if (i_this->mSph[i].ChkTgHit() && i_this->m460 == 0) {
             atInfo.mpObj = i_this->mSph[i].GetTgHitObj();
             if (atInfo.mpObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
@@ -1502,7 +1507,7 @@ void damage_check(mt_class* i_this) {
                     if (atInfo.mResultingAttackType != 6 && i_this->mMode == 1) {
                         i_this->mFightMode = 0xF;
                         cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-                        cXyz pos(0.0f, 60.0f, -120.0f);
+                        pos.set(0.0f, 60.0f, -120.0f);
                         MtxPosition(&pos, &i_this->m47C);
                         i_this->m47C += i_this->current.pos;
                         i_this->m462 = REG6_S(7) + 6;
@@ -1518,14 +1523,12 @@ void damage_check(mt_class* i_this) {
                             i_this->m18F8 = 2;
                         }
                         i_this->m18FC = 12;
-                        // dScnPly_ply_c::setPauseTimer(REG0_S(7) + 6);
                         dComIfGp_particle_set(dPa_name::ID_SCENE_80CF, &i_this->current.pos);
                     }
                 }
             }
             break;
         }
-        i++;
     }
     if (i_this->m460 == 0 && i_this->mEyeSph.ChkTgHit()) {
         i_this->m460 = 5;
@@ -1559,7 +1562,7 @@ void damage_check(mt_class* i_this) {
         } else {
             i_this->mFightMode = 0xF;
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
-            cXyz pos(0.0f, 60.0f, -120.0f);
+            pos.set(0.0f, 60.0f, -120.0f);
             MtxPosition(&pos, &i_this->m47C);
             i_this->m47C += i_this->current.pos;
             i_this->m462 = 25;
@@ -1567,7 +1570,7 @@ void damage_check(mt_class* i_this) {
             i_this->current.angle.x = -0x4000;
         }
         fopAcM_monsSeStart(i_this, JA_SE_CV_MG_DAMAGE, 0);
-        anm_init(i_this, 10, 2.0f, 2, 1.0f, 0);
+        anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
         i_this->m18D4 = 0;
     }
     if (iVar4 != 0) {
@@ -1607,19 +1610,19 @@ static BOOL daMt_Execute(mt_class* i_this) {
     lavaChk.SetPos(&pos);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
     if (lavaY != C_BG_MIN_HEIGHT && i_this->current.pos.y - 30.0f + REG0_F(13) < lavaY) {
-        if (!i_this->m18FA) {
+        if (!i_this->mInLava) {
             i_this->speedF *= 0.1f;
             i_this->speed.y = 0.0f;
             cXyz pos(i_this->current.pos.x, lavaY, i_this->current.pos.z);
-            fopKyM_createMpillar(&pos, 1.75f);
+            fopKyM_createMpillar(&pos, 0.5);
         }
-        i_this->m18FA = true;
+        i_this->mInLava = true;
         i_this->gravity = -0.5f;
         if (i_this->speed.y < -5.0f) {
             i_this->speed.y = -5.0f;
         }
     } else {
-        i_this->m18FA = false;
+        i_this->mInLava = false;
         i_this->gravity = -3.0f;
     }
     i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
@@ -1670,13 +1673,15 @@ static BOOL daMt_Execute(mt_class* i_this) {
         i_this->mC04 = 0;
         dBgS_LinChk linChk;
 
-        cXyz end(player->current.pos.x, player->current.pos.y + 20.0f, player->current.pos.z);
-        cXyz start(i_this->current.pos.x, i_this->current.pos.y + 30.0f, i_this->current.pos.z);
+        cXyz end = player->current.pos;
+        end.y += 20.0f;
+        cXyz start = i_this->current.pos;
+        start.y += 30.0f;
         linChk.Set(&start, &end, i_this);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
-            i_this->m18F9 = true;
+            i_this->mBlocked = true;
         } else {
-            i_this->m18F9 = false;
+            i_this->mBlocked = false;
         }
 
         f32 f;
@@ -1724,7 +1729,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
                 body_control3(i_this);
                 if (i_this->m466 <= 100) {
                     body_wall_check(i_this);
-                } else if (i_this->m18FA && i_this->m466 > 50) {
+                } else if (i_this->mInLava && i_this->m466 > 50) {
                     i_this->m466 = 71;
                 }
                 stts = &i_this->mStts;
@@ -1741,7 +1746,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
                     i_this->mSph[0].OnTgShield();
                     i_this->mTimer[0] = l_HIO.m10;
                     i_this->m48E = 0;
-                    anm_init(i_this, 10, 20.0f, 2, 1.0f, 0);
+                    anm_init(i_this, MT_BCK_WAIT1, 20.0f, 2, 1.0f, 0);
                     fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
                     fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
                     i_this->mSph[0].OffAtSPrmBit(cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e);
@@ -1767,7 +1772,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
                     cLib_addCalc2(&i_this->current.pos.x, player->current.pos.x + pos2.x, 0.5f, 50.0f);
                     cLib_addCalc2(&i_this->current.pos.z, player->current.pos.z + pos2.z, 0.5f, 50.0f);
                 }
-                i_this->m464 = 3;
+                i_this->mBlinkTimer = 3;
                 i_this->m2E4 = 1;
                 i_this->m460 = 5;
                 body_control5(i_this);
@@ -1782,7 +1787,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
                         i_this->mSph[0].OnTgShield();
                         i_this->mTimer[0] = l_HIO.m10;
                         i_this->m48E = 0;
-                        anm_init(i_this, 10, 20.0f, 2, 1.0f, 0);
+                        anm_init(i_this, MT_BCK_WAIT1, 20.0f, 2, 1.0f, 0);
                         i_this->mSph[0].OffAtSPrmBit(cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e);
                         i_this->mSph[0].OnAtVsPlayerBit();
                     } else {
@@ -1809,7 +1814,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
                             angle.y = fopAcM_searchPlayerAngleY(i_this);
                             dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->current.pos, &angle, &scale);
                             dKy_SordFlush_set(i_this->current.pos, 1);
-                            anm_init(i_this, 8, 5.0f, 0, 1.0f, 0);
+                            anm_init(i_this, MT_BCK_SUKI, 5.0f, 0, 1.0f, 0);
                         }
                     }
                 } else {
@@ -1828,26 +1833,27 @@ static BOOL daMt_Execute(mt_class* i_this) {
     }
     dBgS_ObjLinChk linChk;
     cXyz start = i_this->old.pos;
-    cXyz end(start.x, start.y + 40.0f, start.z);
+    cXyz end = start;
+    end.y += 40.0f;
     linChk.Set(&start, &end, i_this);
 
     cXyz end2;
-    end2.y = 40.0f;
+    f32 h = 40.0f;
     if (dComIfG_Bgsp()->LineCross(&linChk)) {
-        end2.y = linChk.GetCrossP()->y - 1 - i_this->old.pos.y;
-        if (end2.y < 0.0f) {
-            end2.y = 0.0f;
+        h = linChk.GetCrossP()->y - 1 - i_this->old.pos.y;
+        if (h < 0.0f) {
+            h = 0.0f;
         }
     }
-    cXyz start2(i_this->old.pos.x, i_this->old.pos.y + end2.y, i_this->old.pos.z);
-    end2.x = i_this->current.pos.x;
-    end2.y = i_this->current.pos.y + end2.y;
-    end2.z = i_this->current.pos.z;
+    cXyz start2 = i_this->old.pos;
+    start2.y += h;
+    end2 = i_this->current.pos;
+    end2.y += h;
 
     dBgS_ObjLinChk linChk2;
     linChk2.Set(&start2, &end2, i_this);
     bool cross2 = dComIfG_Bgsp()->LineCross(&linChk2);
-    dBgS_LinChk linChk3;
+    dBgS_ObjLinChk linChk3;
     linChk3.Set(&end2, &start2, i_this);
     bool cross3 = dComIfG_Bgsp()->LineCross(&linChk3);
     if (cross2 && cross3) {
@@ -1904,7 +1910,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
         if (i_this->m466 == 120) {
             i_this->m490 = 15;
         }
-        i_this->mpMorfs[0]->play(&i_this->current.pos, 0, 0);
+        i_this->mpMorf[0]->play(&i_this->current.pos, 0, 0);
         i_this->m46E += l_HIO.m08;
         for (int i = 0; i < 30; i++) {
             int iVar4 = i;
@@ -1937,7 +1943,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
         for (int i = 0; i < 8; i++) {
             i_this->m620[i] = i_this->m338 * cM_ssin(i_this->m46A * (REG0_S(5) + 0x9C4) + i * (REG0_S(6) + 0x1D4C)) + 1.0f;
         }
-        cLib_addCalc2(&i_this->m338, 0.1f, 1.0f, 0.02f);
+        cLib_addCalc2(&i_this->m338, 0.1f, 1.0f, 0.002f);
     } else {
         i_this->m334 = 0;
         for (int i = 0; i < 30; i++) {
@@ -1948,25 +1954,26 @@ static BOOL daMt_Execute(mt_class* i_this) {
 
     if ((i_this->m2B4 & 1) == 0) {
         for (int i = 0; i < 8; i++) {
+            J3DModel* model = i_this->mpMorf[i]->getModel();
             cXyz local_300(REG0_F(5), REG0_F(6), REG0_F(7));
-            MTXMultVec(i_this->mpMorfs[i]->getModel()->getBaseTRMtx(), &local_300, &i_this->m350[i]);
-            if ((i_this->mMode > 1 && i_this->m466 > 40) || i_this->mMode == 6 || l_HIO.m07 != 0) {
+            MTXMultVec(model->getBaseTRMtx(), &local_300, &i_this->m350[i]);
+            if ((i_this->mMode >= 2 && i_this->m466 > 40) || i_this->mMode == 6 || l_HIO.m07 != 0) {
                 i_this->m350[i].y += 10000.0f;
             }
-            if (i > -1 && i < 7) {
+            if (i >= 0 && i <= 6) {
                 dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8058, &i_this->m350[i], 0xFF, g_whiteColor, g_whiteColor);
             }
-            if (i > 0 && i < 7) {
+            if (i >= 1 && i <= 6) {
                 dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8059, &i_this->m350[i], 0xFF, g_whiteColor, g_whiteColor);
             }
             if (!i_this->m34C && (i == 1 || i == 3 || i == 5)) {
-                dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C06C, &i_this->m350[i], NULL, NULL, 0xFF, i_this->m3B0[i]);
+                dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C06C, &i_this->m350[i], NULL, NULL, 0xFF, &i_this->mPtclCallback[i]);
             }
         }
         i_this->m34C = true;
     }
 
-    if (i_this->mMode < 2 && !i_this->m18FA && i_this->m48E == 0) {
+    if (i_this->mMode < 2 && !i_this->mInLava && i_this->m48E == 0) {
         if (i_this->mTimer[3] == 0) {
             i_this->mTimer[3] = cM_rndF(45.0f) + 45.0f;
             fopAcM_monsSeStart(i_this, JA_SE_CV_MG_NORMAL, 0);
@@ -1999,7 +2006,7 @@ static BOOL daMt_Delete(mt_class* i_this) {
         i_this->mpEmitter = NULL;
     }
     for (int i = 0; i < 8; i++) {
-        i_this->m3B0[i]->end(); // TODO remove?
+        i_this->mPtclCallback[i].end();
     }
     if (i_this->m1CBC != 0 && i_this->m2B6 && i_this->m2BA != 0 && !dComIfGs_isSwitch(i_this->m2BA, fopAcM_GetRoomNo(i_this))) {
         fopAcM_prm_class* params = fopAcM_CreateAppend();
@@ -2012,35 +2019,47 @@ static BOOL daMt_Delete(mt_class* i_this) {
     return TRUE;
 }
 
-static int br_bmd[3] = {
-    0,0,0
-};
-
-static s16 bmd_data[8] = {
-    0, MT_BDL_KBB, 0, MT_BDL_KBA, 0, MT_BDL_KBA,0, MT_BDL_KBA
+static int bmd_data[8] = {
+    MT_BDL_MG_HEAD, MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_BODY,
+    MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_TAIL
 };
 
 static f32 scale_data[8] = {
     1.0f, 1.0f, 1.0f, 0.975f, 0.925f, 0.825f, 0.75f, 0.525f
 };
 
+static int br_bmd[3] = {
+    MT_BDL_KBA, MT_BDL_KBB, MT_BDL_KBC
+};
+
+// static int bmd_data[8] = {
+//     MT_BDL_MG_HEAD, MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_BODY,
+//     MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_BODY, MT_BDL_MG_TAIL
+// };
+
+// static f32 scale_data[8] = {
+//     1.0f, 1.0f, 1.0f, 0.975f, 0.925f, 0.825f, 0.75f, 0.525f
+// };
+
+// static int br_bmd[3] = {
+//     MT_BDL_KBA, MT_BDL_KBB, MT_BDL_KBC
+// };
+
 /* 00007E18-00008400       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static BOOL CallbackCreateHeap(fopAc_ac_c* i_ac) {
     mt_class* actor = (mt_class*) i_ac;
     for (int i = 0; i < 8; i++) {
-        actor->mpMorfs[i] = new mDoExt_McaMorf(
+        actor->mpMorf[i] = new mDoExt_McaMorf(
             (J3DModelData*) dComIfG_getObjectRes("Mt", bmd_data[i]),
             NULL, NULL, NULL,
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
             0x800000, 0x37440402
         );
-        if (actor->mpMorfs[i] == NULL) {
+        if (actor->mpMorf[i] == NULL || actor->mpMorf[i]->getModel() == NULL) {
             return FALSE;
         }
-        J3DModel* model = actor->mpMorfs[i]->getModel();
-        if (model == NULL) {
-            return FALSE;
-        }
+
+        J3DModel* model = actor->mpMorf[i]->getModel();
         J3DModelData* modelData = model->getModelData();
         actor->btk[i] = new mDoExt_btkAnm();
         JUT_ASSERT(0x11C0, actor->btk[i]);
@@ -2055,31 +2074,31 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_ac) {
         }
 
         if (i == 0) {
-            anm_init(actor, 10, 0.0f, 2, 0.0f, 0);
+            anm_init(actor, 10, 20.0f, 2, 1.0f, 0);
             J3DAnmTexPattern* pat;
             for (int j = 0; j < 2; j++) {
                 pat = (J3DAnmTexPattern*) dComIfG_getObjectRes("Mt", mt_tex_anm_idx[j]);
                 pat->searchUpdateMaterialID(modelData);
             }
             actor->mpTexNoAnm = new J3DTexNoAnm[pat->getUpdateMaterialNum()];
-            for (int j = 0; j < pat->getUpdateMaterialNum(); j++) {
-                actor->mpTexNoAnm->setAnmIndex(j);
+            for (u16 j = 0; j < pat->getUpdateMaterialNum(); j++) {
+                actor->mpTexNoAnm[j].setAnmIndex(j);
             }
             tex_anm_set(actor, 0);
         }
 
         model->setUserArea((u32) actor);
-        for (int jntNo = 0; jntNo < modelData->getJointNum(); jntNo++) {
+        for (u16 jntNo = 0; jntNo < modelData->getJointNum(); jntNo++) {
             if (i == 0) {
-                if (jntNo > 1 && jntNo < 6) {
+                if (jntNo >= 2 && jntNo <= 5) {
                     modelData->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_head);
                 }
             } else if (i == 7) {
-                if (jntNo > 1 && jntNo < 6) {
+                if (jntNo >= 2 && jntNo <= 5) {
                     modelData->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_tail);
                 }
             } else {
-                if (jntNo > 1 && jntNo < 6) {
+                if (jntNo >= 2 && jntNo <= 5) {
                     modelData->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_body);
                 }
             }
@@ -2101,6 +2120,11 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_ac) {
 
     return TRUE;
 }
+
+const char* unused1 = "i_this->btk[i]";
+const char* unused2 = "i_this->brk[i]";
+const char* unused3 = "i_this->br_modelL[i] != 0";
+const char* unused4 = "i_this->br_modelR[i] != 0";
 
 static dCcD_SrcSph sph_src = {
     // dCcD_SrcGObjInf
@@ -2229,7 +2253,7 @@ static cPhs_State daMt_Create(fopAc_ac_c* i_ac) {
         if (i_this->m2B8 != 0xFF) {
             i_this->m2BB = i_this->m2B8 + 1;
         }
-        fopAcM_SetMtx(i_this, i_this->mpMorfs[1]->getModel()->getBaseTRMtx());
+        fopAcM_SetMtx(i_this, i_this->mpMorf[1]->getModel()->getBaseTRMtx());
         fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
         fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
         i_this->gravity = -3.0f;
