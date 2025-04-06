@@ -16,7 +16,6 @@
 
 /* 8014F8A0-8014F994       .text checkJumpFlower__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkJumpFlower() {
-    /* Nonmatching - floats, branching */
     fopAc_ac_c* iVar1;
     short sVar3;
 
@@ -24,17 +23,16 @@ BOOL daPy_lk_c::checkJumpFlower() {
     if (((mCyl.ChkCoHit()) && (iVar1 != 0)) && (fopAcM_GetName(iVar1) == PROC_JBO)) {
         if (checkModeFlg(ModeFlg_MIDAIR)) {
             if ((speed.y <= 0.0f) && (current.pos.y > iVar1->current.pos.y - 50.0f)) {
-                procVomitWait_init();
+                return procVomitWait_init();
             }
         } else if ((sVar3 = fopAcM_searchActorAngleY(this, iVar1),
                     cLib_distanceAngleS(sVar3, shape_angle.y) < 0x2000) &&
                    (mStickDistance > 0.2f))
         {
-            procVomitReady_init(sVar3, fopAcM_searchActorDistanceXZ(this, iVar1));
+            return procVomitReady_init(sVar3, fopAcM_searchActorDistanceXZ(this, iVar1));
         }
-    } else {
-        return false;
     }
+    return false;
 }
 
 /* 8014F994-8014FA88       .text procVomitReady_init__9daPy_lk_cFsf */
@@ -94,40 +92,46 @@ BOOL daPy_lk_c::procVomitWait_init() {
 
 /* 8014FC20-8014FD8C       .text procVomitWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVomitWait() {
-    /* Nonmatching - floats, branching */
-    int iVar1;
-    s16 sVar2;
+    /* Nonmatching - floats */
+    s16 r30 = 0;
 
     if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP)) {
-        sVar2 = 0;
         procVomitJump_init(0);
-    } else if (mStickDistance > 0.05f) {
-        iVar1 = getDirectionFromAngle(m34DC);
-        if (iVar1 == 2) {
-            sVar2 = (int)(512.0f * mStickDistance);
-            if (sVar2 > m34D4) {
-                m34D4 += (int)(64.0f * mStickDistance);
-                if (m34D4 > sVar2) {
-                    m34D4 = sVar2;
+    } else {
+        if (mStickDistance > 0.05f) {
+            int iVar1 = getDirectionFromAngle(m34DC);
+            if (iVar1 == 2) {
+                s16 r5 = 512.0f * mStickDistance;
+                if (r5 > m34D4) {
+                    s16 r0 = 64.0f * mStickDistance;
+                    m34D4 += r0;
+                    if (m34D4 > r5) {
+                        m34D4 = r5;
+                    }
+                    r30 = m34D4;
+                } else {
+                    r30 = r5;
                 }
-                sVar2 = m34D4;
-            }
-        } else if (iVar1 == 3) {
-            sVar2 = (int)(-512.0f * mStickDistance);
-            if (sVar2 < m34D4) {
-                m34D4 -= (int)(64.0f * mStickDistance);
-                if (m34D4 < sVar2) {
-                    m34D4 = sVar2;
+            } else if (iVar1 == 3) {
+                s16 r5 = -512.0f * mStickDistance;
+                if (r5 < m34D4) {
+                    s16 r0 = 64.0f * mStickDistance;
+                    m34D4 -= r0;
+                    if (m34D4 < r5) {
+                        m34D4 = r5;
+                    }
+                    r30 = m34D4;
+                } else {
+                    r30 = r5;
                 }
-                sVar2 = m34D4;
             } else {
-                sVar2 = 0;
+                r30 = 0;
             }
         } else {
-            sVar2 = 0;
+            r30 = 0;
         }
 
-        cLib_addCalcAngleS(&m34D4, sVar2, 3, 0x40, 0x10);
+        cLib_addCalcAngleS(&m34D4, r30, 3, 0x40, 0x10);
         shape_angle.y += m34D4;
         current.angle.y = shape_angle.y;
     }

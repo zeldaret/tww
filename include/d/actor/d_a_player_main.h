@@ -1492,14 +1492,14 @@ public:
     BOOL procShipRestart();
     BOOL checkRopeAnime() const;
     void freeRopeItem();
-    BOOL checkRopeRoofHit(s16);
-    void changeRopeSwingProc();
-    void changeRopeEndProc(int);
+    f32 checkRopeRoofHit(s16);
+    int changeRopeSwingProc();
+    int changeRopeEndProc(int);
     BOOL checkSpecialRope();
-    void changeRopeToHangProc();
+    int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
-    void throwRope();
+    int throwRope();
     BOOL checkNextActionRopeReady();
     BOOL checkNextRopeMode();
     BOOL checkHangRopeActorNull();
@@ -1511,7 +1511,7 @@ public:
     BOOL procRopeSwing();
     BOOL procRopeHangWait_init(int);
     BOOL procRopeHangWait();
-    void specialRopeHangUp();
+    int specialRopeHangUp();
     BOOL procRopeUp_init();
     BOOL procRopeUp();
     BOOL procRopeDown_init();
