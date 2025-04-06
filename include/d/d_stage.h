@@ -156,31 +156,33 @@ public:
 };
 
 struct stage_camera2_data_class {
-    /* 0x00 */ int field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
+    struct {
+        /* 0x00 */ char mpTypeStr[16];
+        /* 0x10 */ u8 mArrowIdx;
+        /* 0x11 */ u8 m11;
+        /* 0x12 */ u8 m12;
+        /* 0x13 */ u8 m13;
+    } 
+    /* 0x00 */ m00;
 };  // Size: 0x18
 
 struct stage_camera_class {
     /* 0x0 */ int num;
-    /* 0x4 */ stage_camera2_data_class* m_entries;
+    /* 0x4 */ stage_camera2_data_class* mEntries;
 };
 
 struct stage_arrow_data_class {
-    /* 0x00 */ cXyz mPosition;
-    /* 0x0C */ csXyz mAngle;
+    struct {
+        /* 0x00 */ cXyz mPosition;
+        /* 0x0C */ csXyz mAngle;
+        /* 0x12 */ s16 m12; 
+    }
+    /* 0x00 */ m00;
 };  // Size: 0x14
 
 struct stage_arrow_class {
     /* 0x00 */ int num;
-    /* 0x04 */ stage_arrow_data_class* m_entries;
+    /* 0x04 */ stage_arrow_data_class* mEntries;
 };
 
 class stage_actor_data_class {

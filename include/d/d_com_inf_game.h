@@ -3146,6 +3146,9 @@ inline dDemo_actor_c* dComIfGp_demo_getActor(u8 id) {
     return g_dComIfG_gameInfo.play.getDemo()->getObject()->getActor(id);
 }
 
+stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo);
+stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo);
+
 /**
  * === DRAWLIST ===
  */

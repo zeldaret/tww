@@ -1446,28 +1446,133 @@ bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
 }
 
 /* 80164DB4-80164DFC       .text SetTypeForce__9dCamera_cFPcP10fopAc_ac_c */
-void dCamera_c::SetTypeForce(char*, fopAc_ac_c*) {
-    /* Nonmatching */
+void dCamera_c::SetTypeForce(char* param_0, fopAc_ac_c* param_1) {
+    SetTypeForce(GetCameraTypeFromCameraName(param_0), param_1);
 }
 
 /* 80164DFC-80164E2C       .text SetTypeForce__9dCamera_cFlP10fopAc_ac_c */
-void dCamera_c::SetTypeForce(s32, fopAc_ac_c*) {
-    /* Nonmatching */
+bool dCamera_c::SetTypeForce(s32 param_0, fopAc_ac_c* param_1) {  
+    if (m524 != 0xFF) {
+        return false;
+    }
+    m524 = param_0;
+    m528 = param_1;
+    return m524 != 0xFF;
 }
 
 /* 80164E2C-80164F5C       .text onStyleChange__9dCamera_cFll */
-bool dCamera_c::onStyleChange(s32, s32) {
-    /* Nonmatching */
+bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
+    /* Nonmatching - Code 100% */
+    m11C = 0;
+
+    bool bVar1 = false;
+
+    switch (dCamParam_c::styles[param_0].engineIdx) {
+    case 5:
+    case 6:
+        if (m220 == 0) {
+            setDMCAngle();
+        }
+        bVar1 = true;
+        break;
+    case 4:
+        dComIfGp_setCameraZoomScale(mCameraInfoIdx, 1.0f);
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x48);
+        break;
+    }
+
+    switch(dCamParam_c::styles[param_1].engineIdx) {
+    case 1:
+    case 8:
+        if (dCamParam_c::styles[param_0].engineIdx == dCamParam_c::styles[param_1].engineIdx) {
+            setFlag(0x8000);
+        }
+        break;
+    case 5:
+    case 6:
+        if (m220 == 0 || bVar1) {
+            setDMCAngle();
+        }
+    case 4:
+    case 12:
+    case 13:
+        if (m144 == 0) {
+            m144 = 1;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
-int dCamera_c::GetCameraTypeFromMapToolID(s32, s32) {
-    /* Nonmatching */
+int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
+    /* Nonmatching - regswap */
+    dStage_stageDt_c& stage_dt = g_dComIfG_gameInfo.play.getStage();
+    
+    stage_camera_class* camera;
+    stage_arrow_class* arrow;
+
+    if (i_roomNo == -1) {
+        camera = stage_dt.getCamera();
+        arrow = stage_dt.getArrow();
+    } else {
+        camera = dComIfGp_getRoomCamera(i_roomNo);
+        arrow = dComIfGp_getRoomArrow(i_roomNo);
+
+        if (camera == NULL ) {
+            return 0xFF;
+        }
+    }
+
+    if (param_0 < 0 || camera == NULL || (camera != NULL && param_0 >= camera->num)) {
+        return 0xFF;
+    }
+
+    int cam_type_num = 0;
+    
+    while (cam_type_num < type_num) {
+        if (strcmp((char*)&camera->mEntries[param_0].m00.mpTypeStr, types[cam_type_num].name) == 0) {
+            break;
+        }
+        cam_type_num++;
+    }
+
+    if (cam_type_num == type_num) {
+        return 0xFF;
+    }
+
+    mCurRoomCamEntry = *(stage_camera__entry*)&camera->mEntries[param_0];
+    int arrowIdx = mCurRoomCamEntry.mArrowIdx;
+    if (arrowIdx != -1 && arrowIdx < arrow->num) {
+        mCurArrowIdx = arrowIdx;
+        mCurRoomArrowEntry = *(stage_arrow__entry*)&arrow->mEntries[arrowIdx];
+    }
+    else {
+        mCurArrowIdx = 0xFF;
+    }
+    return cam_type_num;
 }
 
 /* 8016513C-801651F0       .text GetCameraTypeFromCameraName__9dCamera_cFPCc */
-int dCamera_c::GetCameraTypeFromCameraName(const char*) {
-    /* Nonmatching */
+int dCamera_c::GetCameraTypeFromCameraName(const char* i_name) {
+    if (strcmp(i_name, types[mCurType].name) == 0) {
+        return mCurType;
+    }
+
+    int cam_type_num = 0;
+    while (cam_type_num < type_num) {
+        if (strcmp(i_name, types[cam_type_num].name) == 0) {
+            break;
+        }
+
+        cam_type_num++;
+    }
+
+    if (cam_type_num == type_num) {
+        return 0xFF;
+    }
+
+    return cam_type_num;
 }
 
 /* 801651F0-80165234       .text pushPos__9dCamera_cFv */

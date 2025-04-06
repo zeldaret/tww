@@ -333,7 +333,7 @@ public:
     int nextType(s32);
     bool onTypeChange(s32, s32);
     void SetTypeForce(char*, fopAc_ac_c*);
-    void SetTypeForce(s32, fopAc_ac_c*);
+    bool SetTypeForce(s32, fopAc_ac_c*);
     bool onStyleChange(s32, s32);
     int GetCameraTypeFromMapToolID(s32, s32);
     int GetCameraTypeFromCameraName(const char*);
@@ -473,9 +473,9 @@ public:
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 
     static engine_fn engine_tbl[];
-    static int type_num;
+    static const int type_num;
     static dCamera__Type types[63];
-    static int mvBGType_num;
+    static const int mvBGType_num;
     static char* mvBGTypes[34];
 };
 
