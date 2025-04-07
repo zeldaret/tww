@@ -121,7 +121,7 @@ namespace {
     
     inline static void setComZoomForcus(f32 param_0) {
         dComIfGp_setCameraZoomForcus(0, param_0);
-    } 
+    }
 }  // namespace
 
 
@@ -2701,7 +2701,7 @@ void preparation(camera_process_class* i_this) {
     int camera_id = get_camera_id(a_this);
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
-    f32 aspect = 1.3333334f * g_HIO.getAspectRatio();
+    f32 aspect = 1.3333334f * fapGmHIO_getAspectRatio();
 
     camera->SetWindow(viewport->mWidth, viewport->mHeight);
     fopCamM_SetAspect(a_this, aspect);
@@ -2822,7 +2822,7 @@ int init_phase2(camera_class* i_this) {
     fopCamM_SetNear(i_this, 1.0f);
     fopCamM_SetFar(i_this, farPlane);
     fopCamM_SetFovy(i_this, 30.0f);
-    fopCamM_SetAspect(i_this, viewPort->mWidth / viewPort->mHeight * g_HIO.getAspectRatio());
+    fopCamM_SetAspect(i_this, viewPort->mWidth / viewPort->mHeight * fapGmHIO_getAspectRatio());
     fopCamM_SetCenter(i_this, player->current.pos.x, player->current.pos.y, player->current.pos.z);
     fopCamM_SetBank(i_this, 0);
         

@@ -14,7 +14,6 @@ public:
     virtual ~fapGm_HIO_c();
 
     void genMessage(JORMContext* ctx);
-    f32 getAspectRatio() { return mAspectRatio; }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -78,5 +77,6 @@ inline bool fapGmHIO_isMenu() { return !!(g_HIO.mDisplayFlag & 0x02); }
 inline bool fapGmHIO_getMeter() { return g_HIO.mDisplayMeter; }
 inline s16 fapGmHIO_getFbWidth() { return g_HIO.mFbWidth; }
 inline s16 fapGmHIO_getEfbHeight() { return g_HIO.mEfbHeight; }
+inline f32 fapGmHIO_getAspectRatio() { return g_HIO.mAspectRatio; }
 
 #endif /* F_AP_GAME_H */
