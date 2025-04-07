@@ -1715,7 +1715,6 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cX
 
 /* 80165CC4-801660C8       .text groundHeight__9dCamera_cFP4cXyz */
 f32 dCamera_c::groundHeight(cXyz* param_0) {
-    /* Nonmatching */
     dBgS_GndChk gndchk;
     gndchk.SetPos(param_0);
     f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk);
@@ -1726,14 +1725,17 @@ f32 dCamera_c::groundHeight(cXyz* param_0) {
 
     f32 height = wtr_y;
     if (gnd_y >= wtr_y) {
-        height = gnd_y;
+        wtr_y = gnd_y;
     }
 
     if (wtr_y == -1000000000.0f) {
-        height = param_0->y;
+        gnd_y = param_0->y;
+    }
+    else {
+        gnd_y = wtr_y;
     }
     
-    return height;
+    return gnd_y;
 }
 
 /* 80166230-80166354       .text lineBGCheck__9dCamera_cFP4cXyzP4cXyzP11dBgS_LinChkUl */
