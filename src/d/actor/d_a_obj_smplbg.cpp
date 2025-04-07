@@ -6,23 +6,73 @@
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
+const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
+    /* 0x00 */ 0x000015E0,
+    /* 0x04 */ "Qtkhd",
+    /* 0x08 */ 4,
+    /* 0x0A */ 7,
+    /* 0x0C */ dBgS_MoveBGProc_TypicalRotY,
+    /* 0x10 */ 13.0f,
+    /* 0x14 */ 0,
+    /* 0x16 */ 2250,
+    /* 0x18 */ 0,
+    /* 0x1A */ 750,
+    /* 0x1C */ 0,
+    /* 0x1E */ 0,
+    /* 0x20 */ 1687.0f
+};
+
+Mtx daObjSmplbg::Act_c::M_tmp_mtx;
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::CreateHeap() {
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_attr[mType].resName, M_attr[mType].field_0x08);
+    JUT_ASSERT(0x6b, model_data != NULL);
+    mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
+    return mpModel != NULL;
     /* Nonmatching */
 }
 
 /* 00000144-0000032C       .text Create__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Create() {
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, cullMtx);
+    init_mtx();
+    eyePos.y += M_attr[mType].field_0x20;
+
+    if(((attr().field_0x10 + mType) & 8) != 0){
+        fopAcM_OffStatus(this, fopAcCnd_INIT_e); //maybe not noDraw
+    }
+    if(((attr().field_0x10 + mType) & 4) == 0){
+        cullType = 23;
+        fopAcM_setCullSizeSphere(this, M_attr[mType].field_0x14, M_attr[mType].field_0x16, M_attr[mType].field_0x18, M_attr[mType].field_0x1A);
+        
+    } else{
+        cullType = 14;
+        fopAcM_setCullSizeBox(this, M_attr[mType].field_0x14, M_attr[mType].field_0x16, M_attr[mType].field_0x18, M_attr[mType].field_0x1A, M_attr[mType].field_0x1C, M_attr[mType].field_0x1E);
+    }
+    return TRUE;
+
+
+
     /* Nonmatching */
 }
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, Act_c);
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Qtkhd", 0x0);
-    mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000022);
 
-    JUT_ASSERT(0x6b, modelData != NULL);
+    mType = prm_get_type();
+    if(mType >= 1){
+        mType = 0;
+    }
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_attr[mType].resName);
+    if(phase_state == cPhs_COMPLEATE_e){
+        phase_state = MoveBGCreate(M_attr[mType].resName, M_attr[mType].field_0x0A, M_attr[mType].moveBGProc, M_attr[mType].field_0x00);
+        JUT_ASSERT(181, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+   
+
+    return phase_state;
     /* Nonmatching */
 }
 
@@ -34,13 +84,17 @@ BOOL daObjSmplbg::Act_c::Delete() {
 /* 0000047C-000004D8       .text Mthd_Delete__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, "Qtkhd");
+    dComIfG_resDelete(&mPhs, attr().resName);
     return result;
     /* Nonmatching */
 }
 
 /* 000004D8-00000558       .text set_mtx__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::set_mtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
 
     /* Nonmatching */
 }
@@ -68,6 +122,13 @@ BOOL daObjSmplbg::Act_c::Execute(Mtx**) {
 
 /* 000006CC-00000764       .text Draw__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Draw() {
+    // if(((13 + field_0x2D4) & 1) == 0 ){
+    //     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    // }
+    // g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &tevStr);
+    // g_env_light.setLightTevColorType(mpModel, &tevStr);
+    // mDoExt_modelUpdateDL(mpModel);
+    // return TRUE;
     /* Nonmatching */
 }
 
