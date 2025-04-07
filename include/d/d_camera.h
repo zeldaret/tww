@@ -43,6 +43,25 @@ struct dCamera__Type {
     /* 0x18 */ s16 mStyles[2][10];
 };  // Size: 0x40
 
+struct dCamera_event_data {
+    /* 0x000 */ u8 field_0x00;
+    /* 0x001 */ u8 field_0x01[0x04 - 0x01];
+    /* 0x004 */ int field_0x04;
+    /* 0x008 */ int field_0x08;
+    /* 0x00C */ int field_0x0c;
+    /* 0x010 */ u8 field_0x10;
+    /* 0x011 */ u8 field_0x11[0x14 - 0x11];
+    /* 0x014 */ int field_0x14;
+    /* 0x018 */ int field_0x18;
+    /* 0x01C */ int field_0x1c;
+    /* 0x020 */ int field_0x20;
+    /* 0x024 */ int field_0x24;
+    /* 0x028 */ u8 field_0x28[0x2C - 0x28];
+    /* 0x02C */ dCamera__EventParam mEventParams[8];
+    /* 0x0EC */ dStage_Event_dt_c* field_0xec;
+    /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
+};  // Size: 0x124
+
 struct camSphChkdata {
     camSphChkdata(cXyz* i_center, f32 i_radius) {
         field_0x0 = i_center;
@@ -58,6 +77,28 @@ struct camSphChkdata {
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
     /* 0x14 */ cXyz field_0x14;
+};
+
+class dCamera_monitoring_things {
+    public:
+    dCamera_monitoring_things(){}
+    ~dCamera_monitoring_things(){}
+
+    /* 0x00 */ cXyz mPos;
+    /* 0x0C */ cXyz field_0x0C;
+    /* 0x10 */ int field_0x10;
+    /* 0x14 */ f32 field_0x14;
+};
+
+class dCamera_DMC_system {
+    public:
+    dCamera_DMC_system(){}
+    ~dCamera_DMC_system(){}
+
+    /* 0x0 */ u8 field_0x0;
+    /* 0x1 */ u8 field_0x1;
+    /* 0x2 */ cSAngle field_0x2;
+    /* 0x4 */ cSAngle field_0x4;
 };
 
 class dCamForcusLine {
@@ -208,17 +249,9 @@ public:
     /* 0x1AE */ u8 m1AE;
     /* 0x1AF */ u8 m1AF;
     /* 0x1B0 */ dCamForcusLine mForcusLine;
-    /* 0x220 */ u8 m220;
-    /* 0x221 */ u8 m221[0x222 - 0x221];
-    /* 0x222 */ cSAngle mDMCAngle;
-    /* 0x224 */ cSAngle m224;
+    /* 0x220 */ dCamera_DMC_system mDMCSystem;
     /* 0x226 */ u8 m226[0x228 - 0x226];
-    /* 0x228 */ cXyz mMonitorPos;
-    /* 0x234 */ f32 m234;
-    /* 0x238 */ f32 m238;
-    /* 0x23C */ f32 m23C;
-    /* 0x240 */ int m240;
-    /* 0x244 */ f32 m244;
+    /* 0x228 */ dCamera_monitoring_things mMonitoringThings;
     /* 0x248 */ int m248[3];
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
@@ -253,18 +286,8 @@ public:
     /* 0x3A8 */ u8 m3A8;
     /* 0x3A9 */ u8 m3A9[0x3AC - 0x3A9];
     /* 0x3AC */ cXyz mEvBasePos;
-    /* 0x3B8 */ u8 m3B8[0x3FC - 0x3B8];
-    /* 0x3FC */ int mStaffIdx;
-    /* 0x400 */ int m400;
-    /* 0x404 */ int m404;
-    /* 0x408 */ u8 m408;
-    /* 0x409 */ u8 m409[0x40C - 0x409];
-    /* 0x40C */ int m40C;
-    /* 0x410 */ int m410;
-    /* 0x414 */ u8 m414[0x424 - 0x414];
-    /* 0x424 */ dCamera__EventParam mEventParams[8];
-    /* 0x4C4 */ dStage_Event_dt_c* m4C4;
-    /* 0x4C8 */ d2DBSplinePath mSpline2DPath;
+    /* 0x3B8 */ u8 m3B8[0x3F8 - 0x3B8];
+    /* 0x3F8 */ dCamera_event_data mEventData;
     /* 0x50C */ u32 mEventFlags;
     /* 0x510 */ int mCurStyle;
     /* 0x514 */ int m514;

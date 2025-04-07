@@ -258,10 +258,10 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mLockOnActorId = -1;
     mStageMapToolCameraIdx = 0xFF;
     m0E8 = -1;
-    m40C = -1;
-    m410 = -1;
-    mStaffIdx = -1;
-    m404 = -1;
+    mEventData.field_0x14 = -1;
+    mEventData.field_0x18 = -1;
+    mEventData.field_0x04 = -1;
+    mEventData.field_0x0c = -1;
     mRoomNo = -1;
     m318 = -1e+09f;
     m310 = -1e+09f;
@@ -403,7 +403,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
     m060 = mFovY = mCamParam.Fovy(0.0f);
 
-    m220 = 0;
+    mDMCSystem.field_0x0 = 0;
 }
 
 /* 80162128-80162134       .text Start__9dCamera_cFv */
@@ -589,17 +589,17 @@ void dCamera_c::updatePad() {
 /* 80162710-801627A4       .text initMonitor__9dCamera_cFv */
 void dCamera_c::initMonitor() {
     if (mpPlayerActor) {
-        mMonitorPos = positionOf(mpPlayerActor);
+        mMonitoringThings.mPos = positionOf(mpPlayerActor);
     }
     else {
-        mMonitorPos = cXyz::Zero;
+        mMonitoringThings.mPos = cXyz::Zero;
     }
 
-    m23C = 0.0f;
-    m238 = 0.0f;
-    m234 = 0.0f;
-    m240 = 0;
-    m244 = 0.0f;
+    mMonitoringThings.field_0x0C.z = 0.0f;
+    mMonitoringThings.field_0x0C.y = 0.0f;
+    mMonitoringThings.field_0x0C.x = 0.0f;
+    mMonitoringThings.field_0x10 = 0;
+    mMonitoringThings.field_0x14 = 0.0f;
 }
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
@@ -612,27 +612,27 @@ void dCamera_c::updateMonitor() {
         playerPos = positionOf(mpPlayerActor);
 
         if (m31D != 0) {
-            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, TRUE, &mMonitorPos, NULL, NULL);
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, TRUE, &mMonitoringThings.mPos, NULL, NULL);
         }
 
-        playerMonitorHoritzontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitorPos);
+        playerMonitorHoritzontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitoringThings.mPos);
 
-        m23C = playerMonitorHoritzontalDist - m234;
+        mMonitoringThings.field_0x0C.z = playerMonitorHoritzontalDist - mMonitoringThings.field_0x0C.x;
 
-        m238 += (playerMonitorHoritzontalDist - m238) * 0.075f;
+        mMonitoringThings.field_0x0C.y += (playerMonitorHoritzontalDist - mMonitoringThings.field_0x0C.y) * 0.075f;
 
-        m234 = playerMonitorHoritzontalDist;
+        mMonitoringThings.field_0x0C.x = playerMonitorHoritzontalDist;
 
-        mMonitorPos = playerPos;
+        mMonitoringThings.mPos = playerPos;
 
         if (!m144 && *(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold == 0 && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) { // Possible union between u16 and bitfield rather than *(u16*) cast
-            m240++;
+            mMonitoringThings.field_0x10++;
         }
         else {
-            m240 = 0;
+            mMonitoringThings.field_0x10 = 0;
         }
 
-        m244 = mDirection.R() - m244;
+        mMonitoringThings.field_0x14 = mDirection.R() - mMonitoringThings.field_0x14;
     }
 }
 
@@ -829,7 +829,7 @@ bool dCamera_c::Run() {
     m068 = 9;
     
     if (chkFlag(0x200000) && dCamParam_c::styles[mCurStyle].engineIdx != 11) {
-        if (push_any_key(mPadId) || m234 > 10.0f || !m360 || m31C) {
+        if (push_any_key(mPadId) || mMonitoringThings.field_0x0C.x > 10.0f || !m360 || m31C) {
             clrFlag(0x200000);
         }
     }
@@ -894,13 +894,13 @@ bool dCamera_c::Run() {
 
     bumpCheck(m068);
 
-    cSAngle angle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle) - m224);
+    cSAngle angle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle) - mDMCSystem.field_0x4);
 
     if (mStickMainValueLast < mCamSetup.DMCValue() || angle > cSAngle(mCamSetup.DMCAngle()) || angle < cSAngle(-mCamSetup.DMCAngle())) {
-        m220 = 0;
+        mDMCSystem.field_0x0 = 0;
     }
 
-    if (m220) {
+    if (mDMCSystem.field_0x0) {
         mAngleY = getDMCAngle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle));
     }
     else {
@@ -977,7 +977,7 @@ bool dCamera_c::NotRun() {
         if (mCurType != mCamTypeEvent) {
             pushPos();
 
-            m404 = mCurType;
+            mEventData.field_0x0c = mCurType;
         }
 
         mCurType = mCamTypeEvent;
@@ -1321,15 +1321,15 @@ int dCamera_c::nextType(s32 curType) {
             clrFlag(0x200000);
             if (curType != mCamTypeEvent) {
                 pushPos();
-                m404 = curType;
+                mEventData.field_0x0c = curType;
             }
         }
     }
     else {
         if (mpPlayerActor && m514 != 1) {
             if (curType == mCamTypeEvent) {
-                nextType = m404;
-                m404 = -1;
+                nextType = mEventData.field_0x0c;
+                mEventData.field_0x0c = -1;
             }
             
             if (daNpc_kam_c::m_hyoi_kamome) {
@@ -1472,7 +1472,7 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
     switch (dCamParam_c::styles[param_0].engineIdx) {
     case 5:
     case 6:
-        if (m220 == 0) {
+        if (mDMCSystem.field_0x0 == 0) {
             setDMCAngle();
         }
         bVar1 = true;
@@ -1492,7 +1492,7 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
         break;
     case 5:
     case 6:
-        if (m220 == 0 || bVar1) {
+        if (mDMCSystem.field_0x0 == 0 || bVar1) {
             setDMCAngle();
         }
     case 4:
@@ -1682,14 +1682,14 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* 
 
 /* 801656AC-80165720       .text setDMCAngle__9dCamera_cFv */
 void dCamera_c::setDMCAngle() {
-    m220 = 1;
-    mDMCAngle = mDirection.U().Inv();
-    m224 = cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
+    mDMCSystem.field_0x0 = 1;
+    mDMCSystem.field_0x2 = mDirection.U().Inv();
+    mDMCSystem.field_0x4 = cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
 }
 
 /* 80165720-80165744       .text getDMCAngle__9dCamera_cF7cSAngle */
 cSAngle dCamera_c::getDMCAngle(cSAngle param_0) {
-    return mDMCAngle;
+    return mDMCSystem.field_0x2;
 }
 
 /* 80165744-80165800       .text pointInSight__9dCamera_cFP4cXyz */
