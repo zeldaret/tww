@@ -79,7 +79,7 @@ public:
         OnWaterGrp();
     };
 
-    virtual ~dBgS_CamGndChk_Wtr();
+    virtual ~dBgS_CamGndChk_Wtr() {}
 };
 
 #endif /* D_BG_D_BG_S_GND_CHK_H */
