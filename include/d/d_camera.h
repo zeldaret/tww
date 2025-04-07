@@ -99,6 +99,19 @@ public:
         /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
     };
 
+    struct somestruct {
+        somestruct() {}
+        ~somestruct() {}
+        /* 0x00 */ int m00;
+        /* 0x04 */ int m04;
+        /* 0x08 */ int m08;
+        /* 0x0C */ int m0C;
+        /* 0x10 */ int m10;
+        /* 0x14 */ int m14;
+        /* 0x18 */ int m18;
+        /* 0x1C */ int m1C;
+    };
+
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 m004;
     /* 0x005 */ u8 m005;
@@ -129,7 +142,7 @@ public:
     /* 0x0A0 */ cSAngle m0A0;
     /* 0x0A2 */ u8 m0A2[0x0A4 - 0x0A2];
     // /* 0x0A4 */ @class$4017d_camera_cpp m0A4[2];
-    /* 0x0A4 */ u8 m0A4[0x40];
+    /* 0x0A4 */ somestruct m0A4[2];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
     /* 0x0E8 */ int m0E8;
     /* 0x0EC */ cXyz mExtendedPos;
