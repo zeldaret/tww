@@ -1315,10 +1315,10 @@ int dStage_cameraCreate(stage_camera2_data_class* i_cameraData, int i_cameraIdx,
     i_cameraData = static_cast<stage_camera2_data_class*>(cMl::memalignB(-4, 0x18));
 
     if (i_cameraData != NULL) {
-        i_cameraData->m00.mpTypeStr[1] = 0;
-        i_cameraData->m00.mpTypeStr[2] = 0;
-        i_cameraData->m00.mpTypeStr[1] = 0;
-        i_cameraData->m00.mpTypeStr[2] = param_2;
+        i_cameraData->m04 = 0.0f;
+        i_cameraData->m08 = 0.0f;
+        i_cameraData->m04 = 0.0f;
+        i_cameraData->m00 = param_2;
         fopCamM_Create(i_cameraIdx, PROC_CAMERA, i_cameraData);
     }
 

@@ -1533,7 +1533,7 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
     int cam_type_num = 0;
     
     while (cam_type_num < type_num) {
-        if (strcmp((char*)&camera->mEntries[param_0].m00.mpTypeStr, types[cam_type_num].name) == 0) {
+        if (strcmp((char*)&camera->mEntries[param_0].m00, types[cam_type_num].name) == 0) {
             break;
         }
         cam_type_num++;

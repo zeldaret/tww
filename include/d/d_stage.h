@@ -156,14 +156,14 @@ public:
 };
 
 struct stage_camera2_data_class {
-    struct {
-        /* 0x00 */ char mpTypeStr[16];
-        /* 0x10 */ u8 mArrowIdx;
-        /* 0x11 */ u8 m11;
-        /* 0x12 */ u8 m12;
-        /* 0x13 */ u8 m13;
-    } 
-    /* 0x00 */ m00;
+    /* 0x00 */ int m00;
+    /* 0x04 */ f32 m04;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ u8 mArrowIdx;
+    /* 0x11 */ u8 m11;
+    /* 0x12 */ u8 m12;
+    /* 0x13 */ u8 m13;
 };  // Size: 0x18
 
 struct stage_camera_class {
