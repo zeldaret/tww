@@ -23,6 +23,8 @@
 #include "d/d_demo.h"
 #include "d/actor/d_a_sea.h"
 #include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_machine.h"
+#include "f_op/f_op_overlap_mng.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -81,7 +83,6 @@ namespace {
     inline static int get_controller_id(camera_class* i_camera) {
         return dComIfGp_getCameraPlayer1ID(get_camera_id(i_camera));
     }
-    
 
     inline static dDlst_window_c* get_window(int param_0) {
         return dComIfGp_getWindow(dComIfGp_getCameraWinID(param_0));
@@ -1846,7 +1847,7 @@ void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0
     /* Nonmatching - Code 100% */
     camSphChkdata* sph_chk_data = (camSphChkdata*)i_data;
     f32 len = cM3d_SignedLenPlaAndPos(i_plane, &sph_chk_data->field_0x8);
-    if (i_plane->getPlaneFunc(&sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
+    if (i_plane->getPlaneFunc(sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
         cXyz normal = *i_plane->GetNP();
         sph_chk_data->field_0x8 += normal * (sph_chk_data->field_0x4 - len);
     }
@@ -2768,8 +2769,60 @@ int camera_execute(camera_process_class* i_this) {
 }
 
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
-void camera_draw(camera_process_class*) {
+bool camera_draw(camera_process_class* i_this) {
     /* Nonmatching */
+    camera_class* a_this = (camera_class*)i_this;
+    dCamera_c* body = &((camera_class*)i_this)->mCamera;
+
+    dDlst_window_c* window = get_window(a_this);
+    view_port_class* viewport = window->getViewPort();
+    int camera_id = get_camera_id(a_this);
+
+    int trim_height = body->mTrimHeight;
+    window->setScissor(0.0f, trim_height, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight() - trim_height * 2.0f);
+    C_MTXPerspective(i_this->mProjMtx, i_this->mFovy, i_this->mAspect, i_this->mNear, i_this->mFar);
+    mDoMtx_lookAt(i_this->mViewMtx, &i_this->mLookat.mEye, &i_this->mLookat.mCenter, &i_this->mLookat.mUp, i_this->mBank);
+
+    j3dSys.setViewMtx(i_this->mViewMtx);
+    cMtx_inverse(i_this->mViewMtx, i_this->mInvViewMtx);
+    JAIZelBasic::zel_basic->getCameraInfo(&i_this->mLookat.mEye, j3dSys.mViewMtx, camera_id);
+
+    dBgS_GndChk gndchk;
+    gndchk.SetPos(&i_this->mLookat.mEye);
+
+    f32 cross = dComIfG_Bgsp()->GroundCross(&gndchk);
+    if (cross != -1000000000.0f) {
+        mDoAud_getCameraMapInfo(dComIfG_Bgsp()->GetMtrlSndId(gndchk));
+        mDoAud_setCameraGroupInfo(dComIfG_Bgsp()->GetGrpSoundId(gndchk));
+
+        Vec spDC;
+        spDC.x = i_this->mLookat.mEye.x;
+        spDC.y = cross;
+        spDC.z = i_this->mLookat.mEye.z;
+
+        JAIZelBasic::zel_basic->setCameraPolygonPos(&spDC);
+
+    } else {
+        JAIZelBasic::zel_basic->setCameraPolygonPos(NULL);
+    }
+
+    MTXCopy(i_this->mViewMtx, i_this->mViewMtxNoTrans);
+    i_this->mViewMtxNoTrans[0][3] = 0.0f;
+    i_this->mViewMtxNoTrans[1][3] = 0.0f;
+    i_this->mViewMtxNoTrans[2][3] = 0.0f;
+    cMtx_concatProjView(i_this->mProjMtx, i_this->mViewMtx, i_this->mProjViewMtx);
+
+    body->Draw();
+
+    if (fpcLf_GetPriority(a_this) != 1) {
+        fopCamM_GetParam(a_this);
+        if (!fopOvlpM_IsDoingReq()) {
+            fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(0);
+            dMap_c::draw(currPlayerActor->current.pos.y,  dComIfGp_roomControl_getStayNo(), currPlayerActor->current.pos.x, currPlayerActor->current.pos.z);
+            //dMap_c::draw(currPlayerActor->current.pos.y, currPlayerActor->current.pos.x, dComIfGp_roomControl_getStayNo(), currPlayerActor->current.pos.z);
+        }
+    }
+    return true;
 }
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
