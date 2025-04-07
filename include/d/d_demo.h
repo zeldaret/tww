@@ -181,11 +181,11 @@ public:
     bool checkEnable(u8 mask) { return mFlags & mask; }
     void onEnable(u8 flag) { mFlags |= flag; }
 
-    void getFovy() {}
-    void getRoll() {}
-    void getTarget() {}
-    void getTrans() {}
-    void getUp() {}
+    f32 getFovy() { return mFovy; }
+    f32 getRoll() { return mRoll; }
+    cXyz& getTarget() { return mTargetPosition; }
+    cXyz& getTrans() { return mViewPosition; }
+    cXyz& getUp() { return mUpVector; }
 
 private:
     /* 0x04 */ u8 mFlags;

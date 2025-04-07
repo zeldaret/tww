@@ -5,6 +5,19 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "f_op/f_op_camera.h"
 
+
+inline void fopCamM_SetAngleX(camera_class* i_camera, s16 angleX) {
+    i_camera->mAngle.x = angleX;
+}
+
+inline void fopCamM_SetAngleY(camera_class* i_camera, s16 angleY) {
+    i_camera->mAngle.y = angleY;
+}
+
+inline void fopCamM_SetAngleZ(camera_class* i_camera, s16 angleZ) {
+    i_camera->mAngle.z = angleZ;
+}
+
 inline void fopCamM_SetNear(camera_class* i_this, f32 near) {
     i_this->mNear = near;
 }
@@ -27,6 +40,10 @@ inline void fopCamM_SetEye(camera_class* i_this, f32 x, f32 y, f32 z) {
 
 inline void fopCamM_SetCenter(camera_class* i_this, f32 x, f32 y, f32 z) {
     i_this->mLookat.mCenter.set(x, y, z);
+}
+
+inline void fopCamM_SetUp(camera_class* i_this, f32 x, f32 y, f32 z) {
+    i_this->mLookat.mUp.set(x, y, z);
 }
 
 inline void fopCamM_SetBank(camera_class* i_this, s16 bank) {
@@ -68,6 +85,11 @@ inline cXyz* fopCamM_GetEye_p(camera_class* i_camera) {
 inline cXyz* fopCamM_GetCenter_p(camera_class* i_camera) {
     return &i_camera->mLookat.mCenter;
 }
+
+inline cXyz* fopCamM_GetUp_p(camera_class* i_camera) {
+    return &i_camera->mLookat.mUp;
+}
+
 
 inline s16 fopCamM_GetBank(camera_class* i_camera) {
     return i_camera->mBank;

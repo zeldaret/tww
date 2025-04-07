@@ -2702,6 +2702,7 @@ void preparation(camera_process_class* i_this) {
     dCamera_c* camera = &a_this->mCamera;
 
     int camera_id = get_camera_id(a_this);
+
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
     f32 aspect = 1.3333334f * fapGmHIO_getAspectRatio();
@@ -2741,8 +2742,76 @@ void view_setup(camera_process_class* i_this) {
 }
 
 /* 8017BFAC-8017C29C       .text store__FP20camera_process_class */
-void store(camera_process_class*) {
+void store(camera_process_class* i_this) {
     /* Nonmatching */
+    camera_class* a_this = (camera_class*)i_this;
+    dCamera_c* body = &((camera_class*)i_this)->mCamera;
+
+    int camera_id = get_camera_id(a_this);
+    
+    cXyz oldCenter = *fopCamM_GetCenter_p(a_this);
+    cXyz oldEye = *fopCamM_GetEye_p(a_this);
+    cXyz oldUp = *fopCamM_GetUp_p(a_this);
+    cSAngle bank = fopCamM_GetBank(a_this);
+    f32 fovy = fopCamM_GetFovy(a_this);
+
+    dDemo_camera_c* mDemoCamera = g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera();
+
+    if (mDemoCamera) {
+        if (mDemoCamera->checkEnable(0x40)) {
+            oldCenter = mDemoCamera->getTarget();
+        }
+
+        if (mDemoCamera->checkEnable(0x10)) {
+            oldEye = mDemoCamera->getTrans();
+        }
+
+        if (mDemoCamera->checkEnable(0x20)) {
+            oldUp = mDemoCamera->getUp();
+        }
+
+        if (mDemoCamera->checkEnable(0x80)) {
+            bank = cAngle::d2s(-mDemoCamera->getRoll());
+        }
+
+        if (mDemoCamera->checkEnable(4)) {
+            fovy = mDemoCamera->getFovy();
+        }
+    }
+    else {
+        if (body->chkFlag(1) == 0) {
+            oldCenter = body->Center();
+            oldEye = body->Eye();
+            oldUp = body->Up();
+            bank = body->Bank();
+            fovy = body->Fovy();
+        }
+    }
+    
+    fopCamM_SetCenter(a_this, oldCenter.x, oldCenter.y, oldCenter.z);
+    fopCamM_SetEye(a_this, oldEye.x, oldEye.y, oldEye.z);
+    fopCamM_SetUp(a_this, oldUp.x, oldUp.y, oldUp.z);
+    fopCamM_SetBank(a_this, bank);
+    fopCamM_SetFovy(a_this, fovy);
+
+    stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
+    if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
+        fopCamM_SetNear(a_this, 30.0f);
+    }
+    else {
+        if (stage_info) {
+            fopCamM_SetNear(a_this, dComIfGp_getStageStagInfo()->mNearPlane);
+        }
+    }
+
+    if (stage_info) {
+        fopCamM_SetFar(a_this, dComIfGp_getStageStagInfo()->mFarPlane);
+    }
+
+    fopCamM_SetAngleY(a_this, body->mDirection.U().Inv());
+    fopCamM_SetAngleX(a_this, body->mDirection.V());
+    return;
+
 }
 
 /* 8017C29C-8017C350       .text camera_execute__FP20camera_process_class */
@@ -2770,7 +2839,7 @@ int camera_execute(camera_process_class* i_this) {
 
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
 bool camera_draw(camera_process_class* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - Instruction Swap */
     camera_class* a_this = (camera_class*)i_this;
     dCamera_c* body = &((camera_class*)i_this)->mCamera;
 
@@ -2816,10 +2885,14 @@ bool camera_draw(camera_process_class* i_this) {
 
     if (fpcLf_GetPriority(a_this) != 1) {
         fopCamM_GetParam(a_this);
+        fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(0);
         if (!fopOvlpM_IsDoingReq()) {
-            fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(0);
-            dMap_c::draw(currPlayerActor->current.pos.y,  dComIfGp_roomControl_getStayNo(), currPlayerActor->current.pos.x, currPlayerActor->current.pos.z);
-            //dMap_c::draw(currPlayerActor->current.pos.y, currPlayerActor->current.pos.x, dComIfGp_roomControl_getStayNo(), currPlayerActor->current.pos.z);
+            dComIfGp_map_draw(
+                currPlayerActor->current.pos.x,
+                currPlayerActor->current.pos.z,
+                dComIfGp_roomControl_getStayNo(),
+                currPlayerActor->current.pos.y
+            );
         }
     }
     return true;

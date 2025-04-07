@@ -3712,6 +3712,10 @@ inline void dComIfGp_att_chkEnemySound() {
  * === MAP ===
  */
 
+ inline void dComIfGp_map_draw(f32 x, f32 z, int roomNo, f32 y) {
+    dMap_c::draw(x, z, roomNo, y);
+}
+
 inline void dComIfGp_map_mapBufferSendAGB(int param_0) {
     dMap_c::mapBufferSendAGB(param_0);
 }
@@ -3795,5 +3799,7 @@ class scene_class;
 BOOL dComIfG_resetToOpening(scene_class* i_scene);
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName);
+
+
 
 #endif /* D_COM_D_COM_INF_GAME_H */
