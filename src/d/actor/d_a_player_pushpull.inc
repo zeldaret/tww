@@ -92,8 +92,8 @@ BOOL daPy_lk_c::procPushPullWait() {
             s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
-            f32 dVar3 = cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && ((float)(dVar2 + dVar3) < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
+            dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
+            if (((!sVar1) && (dVar2 < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
                 m3570 = 0;

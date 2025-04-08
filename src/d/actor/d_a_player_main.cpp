@@ -1687,7 +1687,7 @@ BOOL daPy_lk_c::checkJumpCutFromButton() {
 }
 
 /* 8010D8B0-8010DB58       .text orderTalk__9daPy_lk_cFv */
-void daPy_lk_c::orderTalk() {
+int daPy_lk_c::orderTalk() {
     /* Nonmatching */
 }
 
