@@ -2,17 +2,18 @@
  * d_a_player_sword.inc
  *
  * Code relating using a sword item.
- * 
- * This file is not a standalone translation unit and is instead directly 
+ *
+ * This file is not a standalone translation unit and is instead directly
  * included into d_a_player_main.cpp.
- * 
+ *
  * The original name of this file is known because of an assert contained within
  * a function from this file.
  */
 
-#include "d/actor/d_a_player_main.h"
-#include "d/actor/d_a_player_HIO.h"
-#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+ #include "d/actor/d_a_boko.h"
+ #include "d/actor/d_a_player_main.h"
+ #include "d/actor/d_a_player_HIO.h"
+ #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
 void daPy_lk_c::setSwordModel(BOOL r28) {
@@ -125,9 +126,110 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
 
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */
 void daPy_lk_c::setLightSaver() {
-    /* Nonmatching */
+    /* Nonmatching - floats, .sdata2, branching */
     static JGeometry::TVec3<f32> d_scale(1.4f, 1.4f, 1.4f);
     static JGeometry::TVec3<f32> p_scale(1.6f, 1.4f, 1.4f);
+    static const GXColor g_prm0 = {0x09, 0x14, 0x06, 0xFF};
+    static const GXColor g_env0 = {0x0C, 0x18, 0x00, 0xFF};
+    static const GXColor y_prm0 = {0x14, 0x12, 0x0C, 0xFF};
+    static const GXColor y_env0 = {0x18, 0x18, 0x00, 0xFF};
+    static const GXColor g_prm1 = {0x80, 0xFF, 0x64, 0xFF};
+    static const GXColor y_prm1 = {0xFF, 0xFF, 0xC8, 0xFF};
+    static const GXColor y_env1 = {0xA5, 0xA5, 0x10, 0xFF};
+    static const GXColor s_prm1 = {0xC8, 0xC8, 0xFF, 0xFF};
+    static const GXColor s_env1 = {0x60, 0x60, 0xA5, 0xFF};
+    JPABaseEmitter* pJVar7;
+    const GXColor* pbVar8;
+    const GXColor* pbVar9;
+
+    if ((((mEquipItem == daPyItem_SWORD_e) && (mpEquipItemBrk != NULL)) && (mpSwordBtk != NULL)) &&
+        ((mpSwordModel1 != NULL && (mpEquipItemModel == NULL))))
+    {
+        if (checkChanceMode()) {
+            mpEquipItemBrk->setFrame(1.0f);
+        } else {
+            if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                mpEquipItemBrk->setFrame(0.0f);
+            } else {
+                mpEquipItemBrk->setFrame(2.0f);
+            }
+        }
+        mpSwordModel1->setBaseTRMtx(mpEquipItemModel->getBaseTRMtx());
+        if ((!checkDemoSwordNoDraw(0)) &&
+            (((checkChanceMode() || (checkNoResetFlg1(daPyFlg1_UNK8000))) ||
+              (checkFinalMasterSwordEquip()))))
+        {
+            simpleAnmPlay(mpSwordBtk);
+            if (((m3454).mpEmitter == NULL) &&
+                ((checkChanceMode() || (checkNoResetFlg1(daPyFlg1_UNK8000)))))
+            {
+                pJVar7 = m3454.makeEmitter(dPa_name::ID_COMMON_0309, mpSwordModel1->getAnmMtx(2),
+                                           &current.pos, NULL);
+                if (pJVar7 != 0) {
+                    if (checkMasterSwordEquip()) {
+                        pJVar7->setGlobalDynamicsScale(d_scale);
+                        pJVar7->setGlobalParticleScale(p_scale);
+                    }
+                }
+            } else {
+                if ((!checkChanceMode()) &&
+                    ((!checkNoResetFlg1(daPyFlg1_UNK8000) && (checkFinalMasterSwordEquip()))))
+                {
+                    m3454.end();
+                }
+            }
+            if (checkChanceMode()) {
+                pbVar8 = &g_prm0;
+                pbVar9 = &g_env0;
+            } else {
+                pbVar8 = &y_prm0;
+                pbVar9 = &y_env0;
+            }
+            pJVar7 = (m3454).mpEmitter;
+            if (pJVar7 != NULL) {
+                pJVar7->setGlobalPrmColor(pbVar8->r, pbVar8->g, pbVar8->b);
+                pJVar7->setGlobalEnvColor(pbVar9->r, pbVar9->g, pbVar9->b);
+            }
+            if (((dComIfGp_getDoStatus() == 26) && (m355C == 0)) ||
+                (((checkNoResetFlg1(daPyFlg1_UNK8000) || (checkFinalMasterSwordEquip())) &&
+                  (!checkNoResetFlg1(daPyFlg1_UNK200000)))))
+            {
+                if ((dComIfGp_getDoStatus() == 26) && (m355C == 0)) {
+                    pbVar9 = &g_prm1;
+                    pbVar8 = pbVar9;
+                    dComIfGp_getVibration().StartShock(6, 1, cXyz(0.0f, 1.0f, 0.0f));
+                } else if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                    pbVar9 = &y_prm1;
+                    pbVar8 = &y_env1;
+                } else {
+                    pbVar9 = &s_prm1;
+                    pbVar8 = &s_env1;
+                }
+                pJVar7 = dComIfGp_particle_setP1(dPa_name::ID_COMMON_030A, &current.pos, NULL, NULL,
+                                                 0xff, NULL, -1, pbVar9, pbVar8, NULL);
+                if (pJVar7 != 0) {
+                    JPASetRMtxTVecfromMtx(mpEquipItemModel->getAnmMtx(2), pJVar7->mGlobalRotation,
+                                          pJVar7->mGlobalTranslation);
+                    if (checkMasterSwordEquip()) {
+                        pJVar7->setGlobalDynamicsScale(d_scale);
+                        pJVar7->setGlobalParticleScale(p_scale);
+                    }
+                    if (pbVar9 == &g_prm1) {
+                        m355C = 0x1e;
+                    } else {
+                        onNoResetFlg1(daPyFlg1_UNK200000);
+                    }
+                }
+            }
+        } else {
+            m3454.end();
+            mpSwordBtk->setFrame(0.0f);
+        }
+        if ((m355C > 0) && (!checkChanceMode())) {
+            m355C--;
+        }
+    }
+    return;
 }
 
 /* 80155490-801554C8       .text checkDemoShieldNoDraw__9daPy_lk_cFv */
@@ -356,8 +458,85 @@ int daPy_lk_c::changeCutProc() {
 }
 
 /* 80155C3C-80156034       .text changeCutReverseProc__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
-int daPy_lk_c::changeCutReverseProc(daPy_ANM) {
-    /* Nonmatching */
+int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
+    /* Nonmatching - floats, branching */
+    if ((mEquipItem != dItem_SKULL_HAMMER_e) &&
+        (((mAtCps[0].ChkAtShieldHit() || (mAtCps[1].ChkAtShieldHit())) ||
+          (mAtCps[2].ChkAtShieldHit()))))
+    {
+        procCutReverse_init(param_0);
+    } else if (checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
+        cXyz local_24;
+        local_24.x = current.pos.x;
+        local_24.y = current.pos.y + 30.0f;
+        local_24.z = current.pos.z;
+        mLinkLinChk.Set(&local_24, &mSwordTopPos, this);
+        if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+            cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+            if (!(triPla->GetNP()->y >= 0.5f) ||
+                ((mCurProc == daPyProc_HAMMER_FRONT_SWING_e && triPla->GetNP()->y < 0.64278764f)))
+            {
+                if (mEquipItem != dItem_DEKU_LEAF_e) {
+                    u32 uVar7 = dComIfG_Bgsp()->GetMtrlSndId(mLinkLinChk);
+                    u32 uVar12;
+                    if (mAtCps[0].GetAtType() == AT_TYPE_BOKO_STICK) {
+                        uVar12 = JA_SE_LK_W_WEP_HIT;
+                    } else if ((mAtCps[0].GetAtType() == AT_TYPE_STALFOS_MACE) ||
+                               (mAtCps[0].GetAtType() == AT_TYPE_SKULL_HAMMER))
+                    {
+                        uVar12 = JA_SE_LK_HAMMER_HIT;
+                    } else {
+                        uVar12 = JA_SE_LK_SW_HIT_S;
+                    }
+                    if ((mAtCps[0].GetAtType() != AT_TYPE_SKULL_HAMMER) ||
+                        (!checkNoResetFlg0(daPyFlg0_UNK10000000)))
+                    {
+                        mDoAud_seStart(uVar12, &mSwordTopPos, uVar7, mReverb);
+                    }
+                    if ((mAtCps[0].GetAtType() == AT_TYPE_SKULL_HAMMER) &&
+                        (mCurProc != daPyProc_JUMP_CUT_e))
+                    {
+                        onNoResetFlg0(daPyFlg0_UNK10000000);
+                    }
+                    int iVar6 = dComIfG_Bgsp()->GetAttributeCode(mLinkLinChk);
+                    if (!(iVar6 - 2U > 1) || (iVar6 == dBgS_Attr_METAL_e)) {
+                        triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+                        csXyz local_44;
+                        local_44.x = cM_atan2s(-triPla->GetNP()->y, triPla->GetNP()->absXZ());
+                        local_44.y = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
+                        local_44.z = 0;
+                        JPABaseEmitter* emitter;
+                        if (iVar6 == dBgS_Attr_WOOD_e) {
+                            emitter = dComIfGp_particle_setP1(
+                                dPa_name::ID_COMMON_002B, mLinkLinChk.GetCrossP(), &local_44, NULL,
+                                0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+                            if (emitter != 0) {
+                                emitter->mSpread = 0.2f;
+                                emitter->mVolumeSweep = 0.15f;
+                                emitter->mRate = 8.0f;
+                                emitter->mMaxFrame = 1;
+                            }
+                        } else {
+                            local_44.x += 0x4000;
+                            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_002C,
+                                                              mLinkLinChk.GetCrossP(), &local_44);
+                            if (emitter != 0) {
+                                emitter->mInitialVelAxis = 20.0f;
+                                emitter->mRate = 20.0f;
+                                emitter->mMaxFrame = 1;
+                                emitter->mInitialVelDir = 20.0f;
+                            }
+                        }
+                    }
+                }
+                dKy_Sound_set(current.pos, 100, fopAcM_GetID(this), 5);
+                procCutReverse_init(param_0);
+            } else if (mCurProc == daPyProc_HAMMER_FRONT_SWING_e) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /* 80156034-80156198       .text procCutA_init__9daPy_lk_cFs */
@@ -1106,23 +1285,282 @@ BOOL daPy_lk_c::procCutExB() {
 }
 
 /* 80157D3C-80158220       .text procCutTurn_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procCutTurn_init(int) {
-    /* Nonmatching */
+BOOL daPy_lk_c::procCutTurn_init(int param_0) {
+    /* Nonmatching - floats */
+    float fVar1;
+
+    commonProcInit(daPyProc_CUT_TURN_e);
+    if (param_0 != 0) {
+        fVar1 = daPy_HIO_cutTurn_c0::m.field_0xC;
+    } else {
+        fVar1 = daPy_HIO_cutTurn_c0::m.field_0x8;
+    }
+    if (mEquipItem == daPyItem_SWORD_e) {
+        setSingleMoveAnime(ANM_CUTTURN, daPy_HIO_cutTurn_c0::m.field_0x4, fVar1,
+                           daPy_HIO_cutTurn_c0::m.field_0x0, daPy_HIO_cutTurn_c0::m.field_0x28);
+    } else {
+        setSingleMoveAnime(ANM_CUTTURNC, daPy_HIO_cutTurn_c0::m.field_0x4, fVar1,
+                           daPy_HIO_cutTurn_c0::m.field_0x0, daPy_HIO_cutTurn_c0::m.field_0x28);
+    }
+    if (mEquipItem == daPyItem_SWORD_e) {
+        if (checkNormalSwordEquip()) {
+            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTTURNA));
+        } else {
+            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_CUTTURNMS));
+        }
+        if (checkNormalSwordEquip()) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x40;
+            if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                mAtCyl.SetAtAtp(4);
+            } else {
+                mAtCyl.SetAtAtp(2);
+            }
+        } else {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x44;
+            if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                mAtCyl.SetAtAtp(8);
+            } else {
+                mAtCyl.SetAtAtp(4);
+            }
+        }
+        setBlurPosResource(LKANM__CUTTURN_POS);
+    } else {
+        daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+        u32 uVar5;
+        if (boko == NULL) {
+            uVar5 = 0;
+            mAtCyl.SetAtAtp(1);
+        } else {
+            uVar5 = fopAcM_GetParam(boko);
+            mAtCyl.SetAtAtp((boko->getAtPoint()));
+        }
+        if (uVar5 == 0) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x60;
+        } else if (uVar5 == 1) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x64;
+        } else if (uVar5 == 2) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x68;
+        } else if (uVar5 == 3) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x6C;
+        } else if (uVar5 == 4) {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x70;
+        } else {
+            m35A4 = daPy_HIO_cutTurn_c0::m.field_0x74;
+        }
+        setBlurPosResource(LKANM__WEAPONTURN_POS);
+    }
+    mAtCyl.SetR(m35A4 * 0.5f);
+    m35EC = fVar1;
+    m3700 = cXyz::Zero;
+    m34C2 = 1;
+    m34D0 = daPy_HIO_cutTurn_c0::m.field_0x2;
+    current.angle.y = shape_angle.y;
+    m3578 = 0;
+    voiceStart(1);
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
+    mCutType = 8;
+    offResetFlg0(daPyRFlg0_UNK8000000);
+    mAtCyl.SetR(m35A4 * 0.5f);
+    if (!checkNoResetFlg0(daPyFlg0_UNK80000000)) {
+        m32E4.makeEmitter(dPa_name::ID_COMMON_001E, mpCLModel->getAnmMtx(0x28), &current.pos, NULL);
+        if (mCurrAttributeCode == dBgS_Attr_GRASS_e) {
+            GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b,
+                             tevStr.mColorC0.a};
+            m32F0.makeEmitterColor(dPa_name::ID_COMMON_0021, mpCLModel->getAnmMtx(0x23),
+                                   &current.pos, &color, &tevStr.mColorK0);
+            m35A0 = 18.0f;
+        } else if (mCurrAttributeCode == dBgS_Attr_WATER_e) {
+            GXColor amb, dif;
+            dKy_get_seacolor(&amb, &dif);
+            m32F0.makeEmitterColor(dPa_name::ID_COMMON_0020, mpCLModel->getAnmMtx(0x23),
+                                   &current.pos, &amb, NULL);
+            m35A0 = 17.0f;
+        } else {
+            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_201F, &current.pos, NULL, NULL,
+                                        daPy_HIO_basic_c0::m.field_0x2, &mSmokeEcallBack, -1, NULL,
+                                        NULL, NULL);
+            m35A0 = 21.0f;
+        }
+    }
+    m3570 = 0;
+    if (m34C4 == 6) {
+        onNoResetFlg0(daPyFlg0_UNK4);
+        m3570 = 1;
+    } else {
+        mCutCount = 0;
+    }
+    mVelocity = 0.0f;
+    m34C4 = 0;
+    endFlameDamageEmitter();
+    return true;
 }
 
 /* 80158220-80158460       .text procCutTurn__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutTurn() {
-    /* Nonmatching */
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+    m35EC = frameCtrl.getFrame();
+    if (((m3570 != 0) && (swordButton())) && (m34C5 == 0)) {
+        onNoResetFlg0(daPyFlg0_UNK4);
+    } else {
+        offNoResetFlg0(daPyFlg0_UNK4);
+    }
+    if (frameCtrl.getRate() < 0.01f) {
+        if ((int)m34D0 > 0) {
+            m34D0--;
+        } else {
+            m34B8 = 3;
+            checkNextMode(0);
+            return true;
+        }
+    } else {
+        if (frameCtrl.getFrame() > daPy_HIO_cutTurn_c0::m.field_0x10) {
+            u8 uVar1 = m34B8;
+            m34B8 = 3;
+            if (checkNextMode(1)) {
+                return true;
+            }
+            m34B8 = uVar1;
+        } else {
+            if (frameCtrl.getFrame() > 17.0f) {
+                m32E4.end();
+            }
+        }
+    }
+    if (frameCtrl.getFrame() > m35A0) {
+        m32F0.end();
+        mSmokeEcallBack.end();
+    }
+    setSpecialBattle(1);
+    if ((doTrigger()) && (dComIfGp_getDoStatus() == 26)) {
+        changeSpecialBattle();
+    } else {
+        if ((frameCtrl.getFrame() >= daPy_HIO_cutTurn_c0::m.field_0x30) &&
+            (frameCtrl.getFrame() < daPy_HIO_cutTurn_c0::m.field_0x34))
+        {
+            if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
+                onResetFlg0(daPyRFlg0_UNK1);
+                seStartSwordCut(JA_SE_LK_KAITENGIRI);
+            }
+            onResetFlg0(daPyRFlg0_UNK2);
+            cLib_chaseF(mAtCyl.GetRP(), m35A4, 18.0f);
+        }
+        if (frameCtrl.checkPass(daPy_HIO_cutTurn_c0::m.field_0x34)) {
+            m331C.field_0x4 = 0x80;
+            m332C.field_0x4 = 0x80;
+            m333C.field_0x4 = 0x80;
+        } else {
+            if (m331C.field_0x4 == 0x80) {
+                m331C.field_0x4 = 0;
+                m332C.field_0x4 = 0;
+                m333C.field_0x4 = 0;
+            }
+        }
+        m34C2 = 1;
+        return true;
+    }
 }
 
 /* 80158460-801585D8       .text procCutRoll_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutRoll_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_CUT_ROLL_e);
+    setSingleMoveAnime(ANM_CUTTURNB, daPy_HIO_cutRoll_c0::m.field_0x8,
+                       daPy_HIO_cutRoll_c0::m.field_0xC, daPy_HIO_cutRoll_c0::m.field_0x0,
+                       daPy_HIO_cutRoll_c0::m.field_0x10);
+    m3578 = 0;
+    seStartMapInfo(JA_SE_LK_V_KAITEN_S);
+    dComIfGp_setItemMagicCount(-2);
+    mCutType = 9;
+    mCutCount = 0;
+    offResetFlg0(daPyRFlg0_UNK8000000);
+    if (checkNormalSwordEquip()) {
+        m35A4 = daPy_HIO_cutRoll_c0::m.field_0x20;
+        if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+            mAtCyl.SetAtAtp(4);
+        } else {
+            mAtCyl.SetAtAtp(2);
+        }
+    } else {
+        m35A4 = daPy_HIO_cutRoll_c0::m.field_0x24;
+        if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+            mAtCyl.SetAtAtp(8);
+        } else {
+            mAtCyl.SetAtAtp(4);
+        }
+    }
+    mAtCyl.SetR(m35A4 * 0.5f);
+    m34D0 = daPy_HIO_cutRoll_c0::m.field_0x2;
+    current.angle.y = shape_angle.y;
+    m34BE = 4;
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SPIN_ATTACK_e);
+    endFlameDamageEmitter();
+    return true;
 }
 
 /* 801585D8-801588F0       .text procCutRoll__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCutRoll() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc, math */
+    s16 uVar1;
+    float fVar2;
+    short sVar3;
+    cXyz local_48;
+    cXyz local_3c;
+
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        uVar1 = current.angle.y;
+        if ((mAcch.ChkWallHit()) && (mDemo.getDemoMode() != 0x2b)) {
+            fVar2 = 25.0f + (mAcchCir[0]).GetWallR();
+            local_48.set(current.pos.x, current.pos.y + (mAcchCir[0]).GetWallH(), current.pos.z);
+            local_3c.set(local_48.x + fVar2 * cM_ssin(uVar1), local_48.y,
+                         local_48.z + fVar2 * cM_scos(uVar1));
+            mLinkLinChk.Set(&local_48, &local_3c, this);
+            if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+                cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+                shape_angle.y = cM_atan2s(-triPla->GetNP()->x, -triPla->GetNP()->z);
+                current.angle.y = shape_angle.y;
+                return procFrontRollCrash_init();
+            }
+        } else if (mStickDistance > 0.05f) {
+            cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6,
+                               daPy_HIO_move_c0::m.field_0x0, daPy_HIO_move_c0::m.field_0x4);
+            shape_angle.y = current.angle.y;
+        }
+        sVar3 = current.angle.y - uVar1;
+        if (dComIfGp_event_runCheck() != 0) {
+            if (mDemo.getDemoMode() != 0x2b) {
+                m34D0 = 0;
+            } else {
+                m34D0 = 5;
+            }
+        }
+        if (m34D0 > 0) {
+            m34D0--;
+            mVelocity = daPy_HIO_cutRoll_c0::m.field_0x14;
+            m34EC -= daPy_HIO_cutRoll_c0::m.field_0x4 + sVar3;
+            if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
+                onResetFlg0(daPyRFlg0_UNK1);
+            }
+            onResetFlg0(daPyRFlg0_UNK2);
+            cLib_chaseF(mAtCyl.GetRP(), m35A4, 18.0f);
+            seStartMapInfo(JA_SE_LK_V_KAITEN_S);
+        } else {
+            if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
+                shape_angle.y = shape_angle.y + m34EC;
+                current.angle.y = shape_angle.y;
+                if ((dComIfGp_event_runCheck() != 0) && (mDemo.getDemoMode() != 0x2b)) {
+                    procWait_init();
+                } else {
+                    procCutRollEnd_init();
+                }
+            } else {
+                m34EC = (s16)(m34EC - (512.0f + sVar3 +
+                                       (daPy_HIO_cutRoll_c0::m.field_0x4 - 0x200) *
+                                           (mVelocity / daPy_HIO_cutRoll_c0::m.field_0x14)));
+            }
+        }
+    } else {
+        seStartMapInfo(JA_SE_LK_V_KAITEN_S);
+    }
+    return true;
 }
 
 /* 801588F0-80158A40       .text procCutRollEnd_init__9daPy_lk_cFv */

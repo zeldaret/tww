@@ -986,7 +986,7 @@ public:
     void checkItemAction();
     void getSlidePolygon();
     BOOL checkJumpCutFromButton();
-    void orderTalk();
+    int orderTalk();
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
@@ -1627,7 +1627,7 @@ public:
     BOOL procPullMove();
     int changeBottleDrinkFace(int);
     void setBottleModel(u16);
-    void makeFairy(cXyz*, u32);
+    fopAc_ac_c* makeFairy(cXyz*, u32);
     BOOL procBottleDrink_init(u16);
     BOOL procBottleDrink();
     BOOL procBottleOpen_init(u16);
