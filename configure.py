@@ -716,7 +716,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/object-id.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/stb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
