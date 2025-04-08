@@ -259,8 +259,8 @@ TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::~TVVOutput_ANIMATION_FRAME_() {
 }
 
 const TAdaptor_actor::TVVOutputObject TAdaptor_actor::saoVVOutput_[] = {
-    TVVOutputObject(1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
-    TVVOutputObject(-1, NULL, NULL)
+    TVVOutputObject(TEACTOR_1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
+    TVVOutputObject(TE_VALUE_NONE, NULL, NULL)
 };
 
 const TAdaptor_actor::TVVOutput_ANIMATION_FRAME_ TAdaptor_actor::saoVVOutput_ANIMATION_FRAME_[] = {
