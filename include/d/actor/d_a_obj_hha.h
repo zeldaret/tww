@@ -48,28 +48,28 @@ public:
     f32 get_pos_y() { return mPos.y; }
     void set_pos(cXyz& pos) { mPos.set(pos); }
     void set_pos_y(float y) { mPos.y = y; }
-    bool chk_stop() { return bIsActive == false; }
+    bool chk_stop() { return mbIsActive == false; }
     
     void delete_s() {
         if(mSplashCb.getEmitter() != NULL){
             mSplashCb.remove();
-            bIsActive = false;
+            mbIsActive = false;
         }
     }
 
     void play_particle() {
         JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
-            pSplashEmitter->clearStatus(1);
-            bIsActive = true;
+            pSplashEmitter->playCreateParticle();
+            mbIsActive = true;
         }
     }
     
     void stop_particle() {
         JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
-            pSplashEmitter->setStatus(1);
-            bIsActive = false;
+            pSplashEmitter->stopCreateParticle();
+            mbIsActive = false;
         }
     }
 
@@ -80,7 +80,7 @@ public:
     /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;
-    /* 0x32 */ bool bIsActive;
+    /* 0x32 */ bool mbIsActive;
 
 }; // Size : 0x34
 

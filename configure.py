@@ -745,7 +745,7 @@ config.libs = [
         "JStudio_JParticle",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JParticle/control.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp", extra_cflags=['-pragma "nosyminline on"']),
         ],
     ),
     JSystemLib(

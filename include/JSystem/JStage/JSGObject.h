@@ -29,7 +29,7 @@ namespace JStage {
         virtual void JSGSetParent(JStage::TObject*, u32);
         virtual void JSGSetRelation(bool, JStage::TObject*, u32);
         virtual s32 JSGFindNodeID(char const*) const;
-        virtual int JSGGetNodeTransformation(u32, MtxP) const;
+        virtual bool JSGGetNodeTransformation(u32, MtxP) const;
     };
 };
 

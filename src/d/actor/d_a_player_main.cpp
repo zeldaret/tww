@@ -3801,7 +3801,7 @@ BOOL daPy_lk_c::playerDelete() {
         mFootEffect[i].getOtherCallBack()->remove();
     }
     if (mFanSwingCb.mpEmitter) {
-        mFanSwingCb.mpEmitter->clearStatus(0x40);
+        mFanSwingCb.mpEmitter->quitImmortalEmitter();
         mFanSwingCb.mpEmitter->setEmitterCallBackPtr(NULL);
         mFanSwingCb.mpEmitter = NULL;
     }

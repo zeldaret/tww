@@ -1137,7 +1137,7 @@ BOOL daPy_lk_c::procCutRollEnd_init() {
     JPABaseEmitter* emitter =
         m33A8.makeEmitter(dPa_name::ID_COMMON_STARS_SPIN, mpCLModel->getAnmMtx(15), &current.pos, NULL);
     if (emitter != NULL) {
-        emitter->setStatus(0x40);
+        emitter->becomeImmortalEmitter();
         emitter->setVolumeSize(5);
         emitter->setLifeTime(daPy_HIO_cutRoll_c0::m.field_0x6);
         emitter->setEmitterTranslation(emitter_trans);

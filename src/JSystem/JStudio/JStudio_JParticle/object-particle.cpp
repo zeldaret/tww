@@ -15,14 +15,14 @@ TAdaptor_particle::TAdaptor_particle(JPAEmitterManager* emitterManager, const JS
     : mEmitterManager(emitterManager)
     , mEmitter(NULL)
     , mCallback(this)
-    , _188(-1)
-    , _18C(0)
-    , _190(0)
-    , _194(0)
+    , field_0x1B0(-1)
+    , field_0x1B4(0)
+    , field_0x1B8(0)
+    , field_0x1BC(0)
     , mSystem(system)
-    , _19C(NULL)
-    , _1A0(0xFFFFFFFF)
-    , _1A4(0)
+    , mObject(NULL)
+    , field_0x1C8(0xFFFFFFFF)
+    , field_0x1CC(0)
 {
 }
 
@@ -57,32 +57,32 @@ void TAdaptor_particle::adaptor_do_end(const JStudio::TObject*) {}
 
 /* 80279BD8-80279C2C       .text adaptor_do_update__Q217JStudio_JParticle17TAdaptor_particleFPCQ27JStudio7TObjectUl */
 void TAdaptor_particle::adaptor_do_update(const JStudio::TObject* param_1, u32 param_2) {
-    if (_190 == 0) {
+    if (field_0x1B8 == 0) {
         return;
     }
-    if (_194 >= _190) {
+    if (field_0x1BC >= field_0x1B8) {
         return;
     }
-    _194 += param_2;
-    if (_194 < _190) {
+    field_0x1BC += param_2;
+    if (field_0x1BC < field_0x1B8) {
         return;
     }
-    switch (_18C) {
+    switch (field_0x1B4) {
     case 2:
         break;
     default:
-        _18C     = 0;
+        field_0x1B4     = 0;
         break;
     }
-    _190 = 0;
-    _194 = 0;
+    field_0x1B8 = 0;
+    field_0x1BC = 0;
 }
 
 /* 80279C2C-80279C40       .text adaptor_do_PARTICLE__Q217JStudio_JParticle17TAdaptor_particleFQ37JStudio4data15TEOperationDataPCvUl */
 void TAdaptor_particle::adaptor_do_PARTICLE(JStudio::data::TEOperationData operation, const void* r5, u32) {
     switch (operation) {
     case JStudio::data::TEOD_Unknown_19:
-        _188 = *(int*)r5;
+        field_0x1B0 = *(int*)r5;
         break;
     default:
         break;
@@ -94,8 +94,8 @@ void TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operati
     switch (operation) {
     case JStudio::data::TEOD_Unknown_18:
         if (mSystem != NULL) {
-            _19C = (JStage::TObject*)mSystem->JSGFindObject((const char*)param_2, JStage::TOBJ_ACTOR_UNK);
-            if (_19C == 0) {
+            mObject = (JStage::TObject*)mSystem->JSGFindObject((const char*)param_2, JStage::TOBJ_ACTOR_UNK);
+            if (mObject == 0) {
                 // Fakematch, just need something in here to stop the compiler from optimizing out the cmplwi
                 *(f32*)NULL = *(f32*)NULL;
             }
@@ -110,15 +110,15 @@ void TAdaptor_particle::adaptor_do_PARENT(JStudio::data::TEOperationData operati
 void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData operation, const void* param_2, u32) {
     switch (operation) {
     case JStudio::data::TEOD_Unknown_18:
-        if (_19C != NULL) {
-            _1A0 = _19C->JSGFindNodeID((const char*)param_2);
-            if (_1A0 == 0xFFFFFFFF) {
+        if (mObject != NULL) {
+            field_0x1C8 = mObject->JSGFindNodeID((const char*)param_2);
+            if (field_0x1C8 == 0xFFFFFFFF) {
                 return;
             }
         }
         break;
     case JStudio::data::TEOD_Unknown_19:
-        _1A0 = *(u32*)param_2;
+        field_0x1C8 = *(u32*)param_2;
         break;
     default:
         break;
@@ -129,7 +129,7 @@ void TAdaptor_particle::adaptor_do_PARENT_NODE(JStudio::data::TEOperationData op
 void TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData operation, const void* param_2, u32 param_3) {
     switch (operation) {
     case JStudio::data::TEOD_Unknown_02:
-        _1A4 = *(u32*)param_2;
+        field_0x1CC = *(u32*)param_2;
         break;
     default:
         break;
@@ -137,45 +137,78 @@ void TAdaptor_particle::adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData 
 }
 
 /* 80279D40-80279E2C       .text __cl__Q317JStudio_JParticle17TAdaptor_particle21TVVOOn_BEGIN_FADE_IN_CFfPQ27JStudio8TAdaptor */
-void TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
+void TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(f32 value, JStudio::TAdaptor* adaptor) const {
+    TAdaptor_particle* adaptor_particle = (TAdaptor_particle*)adaptor;
+    u32 temp = adaptor_particle->field_0x1B0;
+    if (adaptor_particle->mEmitter) {
+        adaptor_particle->mEmitterManager->forceDeleteEmitter(adaptor_particle->mEmitter);
+    }
+    JGeometry::TVec3<f32> pos = (Vec){0.0f, 0.0f, 0.0f};
+    adaptor_particle->mEmitter = adaptor_particle->mEmitterManager->createSimpleEmitterID(
+        pos,
+        (temp & 0x0000FFFF),
+        (temp & 0xFF000000) >> 0x18,
+        (temp & 0x00FF0000) >> 0x10,
+        &adaptor_particle->mCallback,
+        NULL
+    );
+    if (adaptor_particle->mEmitter) {
+        adaptor_particle->mEmitter->becomeImmortalEmitter();
+        adaptor_particle->field_0x1B4 = 1;
+        adaptor_particle->field_0x1B8 = value;
+        adaptor_particle->field_0x1BC = 0;
+    }
 }
 
 /* 80279E2C-80279F08       .text __cl__Q317JStudio_JParticle17TAdaptor_particle20TVVOOn_END_FADE_OUT_CFfPQ27JStudio8TAdaptor */
-void TAdaptor_particle::TVVOOn_END_FADE_OUT_::operator()(float, JStudio::TAdaptor*) const {
-    /* Nonmatching */
+void TAdaptor_particle::TVVOOn_END_FADE_OUT_::operator()(f32 value, JStudio::TAdaptor* adaptor) const {
+    TAdaptor_particle* adaptor_particle = (TAdaptor_particle*)adaptor;
+    if (adaptor_particle->mEmitter) {
+        if (adaptor_particle->field_0x1B4 == 1 && adaptor_particle->field_0x1BC != 0) {
+            adaptor_particle->field_0x1B4 = 2;
+            f64 temp1 = adaptor_particle->field_0x1B8;
+            f64 temp2 = adaptor_particle->field_0x1BC;
+            f64 temp = temp1 / temp2;
+            adaptor_particle->field_0x1B8 = value * temp;
+            adaptor_particle->field_0x1BC = value * (temp - 1.0);
+        } else {
+            adaptor_particle->field_0x1B4 = 2;
+            adaptor_particle->field_0x1B8 = value;
+            adaptor_particle->field_0x1BC = 0.0f;
+        }
+    }
 }
 
 /* 80279F08-8027A2B8       .text execute__Q317JStudio_JParticle17TAdaptor_particle13TJPACallback_FP14JPABaseEmitter */
 void TAdaptor_particle::TJPACallback_::execute(JPABaseEmitter* emitter) {
     if (emitter->isEnableDeleteEmitter()) {
-        mAdaptor->_18C     = 0;
-        mAdaptor->_190     = 0;
-        mAdaptor->_194     = 0;
+        mAdaptor->field_0x1B4     = 0;
+        mAdaptor->field_0x1B8     = 0;
+        mAdaptor->field_0x1BC     = 0;
         mAdaptor->mEmitterManager->forceDeleteEmitter(emitter);
         mAdaptor->mEmitter = NULL;
         return;
     }
     
     f64 alpha = 1.0;
-    f64 val1 = mAdaptor->_190; // u32 stored as f64
-    switch (mAdaptor->_18C) {
+    f64 val1 = mAdaptor->field_0x1B8; // u32 stored as f64
+    switch (mAdaptor->field_0x1B4) {
     case 1:
-        if (mAdaptor->_190 != 0) {
-            f64 val2 = mAdaptor->_194; // u32 stored as f64
+        if (mAdaptor->field_0x1B8 != 0) {
+            f64 val2 = mAdaptor->field_0x1BC; // u32 stored as f64
             alpha = val2 / val1;
         }
         break;
     case 2:
-        if (mAdaptor->_190 == 0) {
+        if (mAdaptor->field_0x1B8 == 0) {
             alpha = 0.0;
             if (emitter != NULL) {
                 emitter->stopCreateParticle();
                 emitter->setMaxFrame(1);
-            } else {
-                f64 val2 = mAdaptor->_190 - mAdaptor->_194; // u32 stored as f64
-                alpha = val2 / val1;
             }
+        } else {
+            f64 val2 = mAdaptor->field_0x1B8 - mAdaptor->field_0x1BC; // u32 stored as f64
+            alpha = val2 / val1;
         }
         break;
     }
@@ -192,7 +225,7 @@ void TAdaptor_particle::TJPACallback_::execute(JPABaseEmitter* emitter) {
 
     Vec* pos; // r29
 
-    if (!mAdaptor->_1A4) {
+    if (!mAdaptor->field_0x1CC) {
         if (!ctrl->transformOnSet_isEnabled()) {
             pos = srts;
         } else {
@@ -211,13 +244,13 @@ void TAdaptor_particle::TJPACallback_::execute(JPABaseEmitter* emitter) {
         emitter->setGlobalRotation(JGeometry::TVec3<s16>(angleX, angleY, angleZ));
         emitter->setGlobalScale(sp0C);
     } else {
-        if (mAdaptor->_19C == NULL) {
+        if (mAdaptor->mObject == NULL) {
             return;
         }
         Mtx spA8;
         Mtx sp78;
         Mtx sp48;
-        if (mAdaptor->_19C->JSGGetNodeTransformation(mAdaptor->_1A0, spA8) == 0) {
+        if (!mAdaptor->mObject->JSGGetNodeTransformation(mAdaptor->field_0x1C8, spA8)) {
             return;
         }
         JStudio::math::getTransformation_SRxyzT(sp78, sp0C, srts[1], srts[0]);
