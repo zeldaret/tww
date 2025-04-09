@@ -626,6 +626,7 @@ struct J3DFog : public J3DFogInfo {
     // J3DFog() { *getFogInfo() = j3dDefaultFogInfo; } // Produces the wrong codegen for mDoExt_backupMatBlock_c's constructor
     J3DFog() { J3DFogInfo::operator=(j3dDefaultFogInfo); }
     explicit J3DFog(const J3DFogInfo& info) { J3DFogInfo::operator=(info); }
+    ~J3DFog() {}
     J3DFogInfo* getFogInfo() { return (J3DFogInfo*)this; }
 
     void load() const {

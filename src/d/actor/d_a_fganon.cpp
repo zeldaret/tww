@@ -1924,7 +1924,7 @@ void demo_camera(fganon_class* i_this) {
 
             player->changeOriginalDemo();
 
-            camera2 = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
+            camera2 = dComIfGp_getCamera(0);
 
             i_this->mB5C = camera2->mLookat.mEye;
             i_this->mB68 = camera2->mLookat.mCenter;
@@ -2497,7 +2497,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
         i_this->m684 = 0;
         i_this->mWeponSph.SetC(local_84);
     }
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mWeponSph);
+    dComIfG_Ccsp()->Set(&i_this->mWeponSph);
     i_this->m686 = 0;
     mant_class* cape = (mant_class*)fopAcM_SearchByID(i_this->mCapeID);
     if (cape != NULL) {
