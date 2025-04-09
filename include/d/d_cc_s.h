@@ -44,18 +44,19 @@ public:
         return mMass_Mng.Chk(p_xyz, p_actor, p_hitInf);
     }
     void SetMass(cCcD_Obj* i_obj, u8 i_priority) { mMass_Mng.Set(i_obj, i_priority); }
+    
     void PrepareMass() { mMass_Mng.Prepare(); }
     void SetMassAttr(f32 radius, f32 height, u8 param_2, u8 param_3) {
         mMass_Mng.SetAttr(radius, height, param_2, param_3);
     }
 
     void ChkActor(fopAc_ac_c*) {}
-    void GetMassCamTopPos(Vec*) {}
-    void GetMassResultCam() {}
+    void GetMassCamTopPos(Vec* o_pos) { mMass_Mng.GetCamTopPos(o_pos); }
+    u32 GetMassResultCam() { return mMass_Mng.GetResultCam(); }
     void OffMassAllTimer() {}
     void OnMassAllTimer() {}
     void SetMassAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32)) {}
-    void SetMassCam(cM3dGCps&) {}
+    void SetMassCam(cM3dGCps& i_cps) { mMass_Mng.SetCam(i_cps); }
 
     // /* 0x0000 */ cCcS mCCcS;
     /* 0x2854 */ dCcMassS_Mng mMass_Mng;

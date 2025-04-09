@@ -167,6 +167,18 @@ inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 para
     mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
 }
 
+inline void mDoAud_getCameraMapInfo(u32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->getCameraMapInfo(param_0);
+}
+
+inline void mDoAud_setCameraGroupInfo(u8 param_0) {
+    mDoAud_zelAudio_c::getInterface()->setCameraGroupInfo(param_0);
+}
+
+inline void mDoAud_getCameraInfo(Vec* param_0, MtxP param_1, u32 param_2) {
+    mDoAud_zelAudio_c::getInterface()->getCameraInfo(param_0, param_1, param_2);
+}
+
 inline void mDoAud_setLinkGroupInfo(u8 param_0) {
     mDoAud_zelAudio_c::getInterface()->setLinkGroupInfo(param_0);
 }
