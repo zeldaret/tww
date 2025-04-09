@@ -6,31 +6,30 @@
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-
+#include "d/res/res_qtkhd.h"
 const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
-    /* 0x00 */ 0x000015E0,
-    /* 0x04 */ "Qtkhd",
-    /* 0x08 */ 4,
-    /* 0x0A */ 7,
-    /* 0x0C */ dBgS_MoveBGProc_TypicalRotY,
-    /* 0x10 */ 13,
-    /* 0x14 */ 0,
-    /* 0x16 */ 2250,
-    /* 0x18 */ 0,
-    /* 0x1A */ 750,
-    /* 0x1C */ 0,
-    /* 0x1E */ 0,
-    /* 0x20 */ 1687.0f
+    /* mHeapSize */ 0x000015E0,
+    /* mResName */ "Qtkhd",
+    /* mBDLFileIndex */ QTKHD_BDL_QTKHD,
+    /* mDZBFileIndex */ QTKHD_DZB_QTKHD,
+    /* mMoveBGProc */ dBgS_MoveBGProc_TypicalRotY,
+    /* mFlags */ 13,
+    /* mCullMinX */ 0,
+    /* mCullMinY */ 2250,
+    /* mCullMinZ */ 0,
+    /* mCullMaxX */ 750,
+    /* mCullMaxY */ 0,
+    /* mCullMaxZ */ 0,
+    /* mEyeOffset */ 1687.0f
 };
 
 Mtx daObjSmplbg::Act_c::M_tmp_mtx;
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(attr().mResName, attr().field_0x08);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(attr().mResName, attr().mBDLFileIndex);
     JUT_ASSERT(0x6b, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
     return mpModel != NULL;
-    /* Nonmatching */
 }
 
 /* 00000144-0000032C       .text Create__Q211daObjSmplbg5Act_cFv */
@@ -38,12 +37,12 @@ BOOL daObjSmplbg::Act_c::Create() {
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_SetMtx(this, cullMtx);
     init_mtx();
-    eyePos.y += attr().field_0x20;
+    eyePos.y += attr().mEyeOffset;
 
-    if(((attr().field_0x10  ) & 8) != 0){
-        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e); //maybe not noDraw
+    if(((attr().mFlags) & 8) != 0){
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
     }
-    if(((attr().field_0x10) & 4) != 0){
+    if(((attr().mFlags) & 4) != 0){
         cullType = 23;
         fopAcM_setCullSizeSphere(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX);
         
@@ -52,7 +51,6 @@ BOOL daObjSmplbg::Act_c::Create() {
         fopAcM_setCullSizeBox(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX, attr().mCullMaxY, attr().mCullMaxZ);
     }
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
@@ -65,11 +63,10 @@ cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
     }
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, attr().mResName);
     if(phase_state == cPhs_COMPLEATE_e){
-        phase_state = MoveBGCreate(attr().mResName, attr().field_0x0A, attr().moveBGProc, attr().field_0x00);
+        phase_state = MoveBGCreate(attr().mResName, attr().mDZBFileIndex, attr().mMoveBGProc, attr().mHeapSize);
         JUT_ASSERT(181, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
-    /* Nonmatching */
 }
 
 /* 00000474-0000047C       .text Delete__Q211daObjSmplbg5Act_cFv */
@@ -82,7 +79,6 @@ BOOL daObjSmplbg::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
     dComIfG_resDelete(&mPhs, attr().mResName);
     return result;
-    /* Nonmatching */
 }
 
 /* 000004D8-00000558       .text set_mtx__Q211daObjSmplbg5Act_cFv */
@@ -91,15 +87,12 @@ void daObjSmplbg::Act_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
-
-    /* Nonmatching */
 }
 
 /* 00000558-00000594       .text init_mtx__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::init_mtx() {
     mpModel->mBaseScale = scale;
     set_mtx();
-    /* Nonmatching */
 }
 
 /* 00000594-0000061C       .text exec_qtkhd__Q211daObjSmplbg5Act_cFv */
@@ -108,7 +101,6 @@ void daObjSmplbg::Act_c::exec_qtkhd() {
         shape_angle.y += 0x5b;
         fopAcM_seStart(this, JA_SE_OBJ_TC_TOWER_ROUND, 0);
     }
-    /* Nonmatching */
 }
 
 /* 0000061C-000006CC       .text Execute__Q211daObjSmplbg5Act_cFPPA3_A4_f */
@@ -122,15 +114,14 @@ BOOL daObjSmplbg::Act_c::Execute(Mtx** matrix) {
     set_mtx();
     *matrix = &M_tmp_mtx;
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 000006CC-00000764       .text Draw__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Draw() {
     int tevType;
-    if (((attr().field_0x10) & 1) != 0) {
+    if (((attr().mFlags) & 1) != 0) {
         tevType = TEV_TYPE_BG0;
-    } else if (((attr().field_0x10) & 2) != 0) {
+    } else if (((attr().mFlags) & 2) != 0) {
         tevType = TEV_TYPE_BG1;
     } 
     else {    
@@ -140,7 +131,6 @@ BOOL daObjSmplbg::Act_c::Draw() {
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
-    /* Nonmatching */
 }
 
 namespace daObjSmplbg {

@@ -16,19 +16,19 @@ namespace daObjSmplbg {
 
         static Mtx M_tmp_mtx;
         struct Attr_c {
-            /* 0x00 */ u32 field_0x00;
+            /* 0x00 */ u32 mHeapSize;
             /* 0x04 */ const char* mResName;
-            /* 0x08 */ short field_0x08;             
-            /* 0x0A */ short field_0x0A;
-            /* 0x0C */ MoveBGActor_SetFunc moveBGProc;
-            /* 0x10 */ u32 field_0x10;
+            /* 0x08 */ short mBDLFileIndex;             
+            /* 0x0A */ short mDZBFileIndex;
+            /* 0x0C */ MoveBGActor_SetFunc mMoveBGProc;
+            /* 0x10 */ u32 mFlags;
             /* 0x14 */ short mCullMinX;
             /* 0x16 */ short mCullMinY;
             /* 0x18 */ short mCullMinZ;
             /* 0x1A */ short mCullMaxX;
             /* 0x1C */ short mCullMaxY;
             /* 0x1E */ short mCullMaxZ;             
-            /* 0x20 */ float field_0x20;
+            /* 0x20 */ float mEyeOffset;
         };
         
         static const Attr_c M_attr[1];
@@ -39,7 +39,6 @@ namespace daObjSmplbg {
         void onStop() {}
         int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W , PRM_TYPE_S);}
         
-    
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();
