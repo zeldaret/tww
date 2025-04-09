@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_smplbg.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
+
 const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
     /* 0x00 */ 0x000015E0,
     /* 0x04 */ "Qtkhd",
@@ -25,7 +26,7 @@ const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
 Mtx daObjSmplbg::Act_c::M_tmp_mtx;
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_attr[mType].resName, M_attr[mType].field_0x08);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(attr().mResName, attr().field_0x08);
     JUT_ASSERT(0x6b, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
     return mpModel != NULL;
@@ -37,41 +38,36 @@ BOOL daObjSmplbg::Act_c::Create() {
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_SetMtx(this, cullMtx);
     init_mtx();
-    eyePos.y += M_attr[mType].field_0x20;
+    eyePos.y += attr().field_0x20;
 
-    if(((attr().field_0x10 + mType) & 8) != 0){
-        fopAcM_OffStatus(this, fopAcCnd_INIT_e); //maybe not noDraw
+    if(((attr().field_0x10  ) & 8) != 0){
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e); //maybe not noDraw
     }
-    if(((attr().field_0x10 + mType) & 4) == 0){
+    if(((attr().field_0x10) & 4) == 0){
         cullType = 23;
-        fopAcM_setCullSizeSphere(this, M_attr[mType].field_0x14, M_attr[mType].field_0x16, M_attr[mType].field_0x18, M_attr[mType].field_0x1A);
+        fopAcM_setCullSizeSphere(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX);
         
     } else{
         cullType = 14;
-        fopAcM_setCullSizeBox(this, M_attr[mType].field_0x14, M_attr[mType].field_0x16, M_attr[mType].field_0x18, M_attr[mType].field_0x1A, M_attr[mType].field_0x1C, M_attr[mType].field_0x1E);
+        fopAcM_setCullSizeBox(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX, attr().mCullMaxY, attr().mCullMaxZ);
     }
     return TRUE;
-
-
-
     /* Nonmatching */
 }
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
+    
     fopAcM_SetupActor(this, Act_c);
-
     mType = prm_get_type();
     if(mType >= 1){
         mType = 0;
     }
-    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_attr[mType].resName);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, attr().mResName);
     if(phase_state == cPhs_COMPLEATE_e){
-        phase_state = MoveBGCreate(M_attr[mType].resName, M_attr[mType].field_0x0A, M_attr[mType].moveBGProc, M_attr[mType].field_0x00);
+        phase_state = MoveBGCreate(attr().mResName, attr().field_0x0A, attr().moveBGProc, attr().field_0x00);
         JUT_ASSERT(181, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
-   
-
     return phase_state;
     /* Nonmatching */
 }
@@ -84,7 +80,7 @@ BOOL daObjSmplbg::Act_c::Delete() {
 /* 0000047C-000004D8       .text Mthd_Delete__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, attr().resName);
+    dComIfG_resDelete(&mPhs, attr().mResName);
     return result;
     /* Nonmatching */
 }
@@ -108,55 +104,70 @@ void daObjSmplbg::Act_c::init_mtx() {
 
 /* 00000594-0000061C       .text exec_qtkhd__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::exec_qtkhd() {
-    if(field_0x2D8 == '\0'){
-        shape_angle.y = shape_angle.y + 0x5b;
+    if(field_0x2D8 == 0){
+        shape_angle.y += 0x5b;
         fopAcM_seStart(this, JA_SE_OBJ_TC_TOWER_ROUND, 0);
     }
     /* Nonmatching */
 }
 
 /* 0000061C-000006CC       .text Execute__Q211daObjSmplbg5Act_cFPPA3_A4_f */
-BOOL daObjSmplbg::Act_c::Execute(Mtx**) {
+BOOL daObjSmplbg::Act_c::Execute(Mtx** matrix) {
+    typedef void (daObjSmplbg::Act_c::*procFunc)();
+    static procFunc exec_proc[] = {
+        &daObjSmplbg::Act_c::exec_qtkhd,
+    };
+    (this->*exec_proc[mType])();
+
+    set_mtx();
+    *matrix = &M_tmp_mtx;
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 000006CC-00000764       .text Draw__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Draw() {
-    // if(((13 + field_0x2D4) & 1) == 0 ){
-    //     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-    // }
-    // g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &tevStr);
-    // g_env_light.setLightTevColorType(mpModel, &tevStr);
-    // mDoExt_modelUpdateDL(mpModel);
-    // return TRUE;
+    int tevType;
+    if (((attr().field_0x10) & 1) != 0) {
+        tevType = TEV_TYPE_BG0;
+    } else if (((attr().field_0x10) & 2) != 0) {
+        tevType = TEV_TYPE_BG1;
+    } 
+    else {    
+        tevType = TEV_TYPE_ACTOR;
+    }
+    g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
     /* Nonmatching */
 }
 
 namespace daObjSmplbg {
 namespace {
 /* 00000764-00000784       .text Mthd_Create__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000784-000007A4       .text Mthd_Delete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000007A4-000007C4       .text Mthd_Execute__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 000007C4-000007F0       .text Mthd_Draw__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->Draw();
 }
 
 /* 000007F0-0000081C       .text Mthd_IsDelete__Q211daObjSmplbg28@unnamed@d_a_obj_smplbg_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

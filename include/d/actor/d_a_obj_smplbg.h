@@ -18,17 +18,17 @@ namespace daObjSmplbg {
         static Mtx M_tmp_mtx;
         struct Attr_c {
             /* 0x00 */ u32 field_0x00;
-            /* 0x04 */ const char* resName;
+            /* 0x04 */ const char* mResName;
             /* 0x08 */ short field_0x08;             
             /* 0x0A */ short field_0x0A;
             /* 0x0C */ void (*moveBGProc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
             /* 0x10 */ u32 field_0x10;
-            /* 0x14 */ short field_0x14;
-            /* 0x16 */ short field_0x16;
-            /* 0x18 */ short field_0x18;
-            /* 0x1A */ short field_0x1A;
-            /* 0x1C */ short field_0x1C;
-            /* 0x1E */ short field_0x1E;             
+            /* 0x14 */ short mCullMinX;
+            /* 0x16 */ short mCullMinY;
+            /* 0x18 */ short mCullMinZ;
+            /* 0x1A */ short mCullMaxX;
+            /* 0x1C */ short mCullMaxY;
+            /* 0x1E */ short mCullMaxZ;             
             /* 0x20 */ float field_0x20;
         };
         
@@ -57,8 +57,9 @@ namespace daObjSmplbg {
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ int mType;
-        /* 0x2D8 */ u8 field_0x2D8[0x2DC - 0x2D8];
-};  // Size: 0x2DC
+        /* 0x2D8 */ u8 field_0x2D8;
+        /* 0x2D9 */ u8 field_0x2D9[0x2DC - 0x2D9];
+    };  // Size: 0x2DC
 };
 
 #endif /* D_A_OBJ_SMPLBG_H */
