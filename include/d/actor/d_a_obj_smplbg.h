@@ -9,10 +9,9 @@ namespace daObjSmplbg {
     class Act_c : public dBgS_MoveBgActor {
     public:
     
-        // idk what to name this
         enum Prm_e {
-            PRM_1_W = 8,
-            PRM_1_S = 0,
+            PRM_TYPE_W = 8,
+            PRM_TYPE_S = 0,
         };
 
         static Mtx M_tmp_mtx;
@@ -21,7 +20,7 @@ namespace daObjSmplbg {
             /* 0x04 */ const char* mResName;
             /* 0x08 */ short field_0x08;             
             /* 0x0A */ short field_0x0A;
-            /* 0x0C */ void (*moveBGProc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
+            /* 0x0C */ MoveBGActor_SetFunc moveBGProc;
             /* 0x10 */ u32 field_0x10;
             /* 0x14 */ short mCullMinX;
             /* 0x16 */ short mCullMinY;
@@ -38,7 +37,7 @@ namespace daObjSmplbg {
         void isStop() {}
         void offStop() {}
         void onStop() {}
-        int prm_get_type() const { return daObj::PrmAbstract(this, PRM_1_W , PRM_1_S);}
+        int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W , PRM_TYPE_S);}
         
     
         virtual BOOL CreateHeap();
@@ -53,7 +52,6 @@ namespace daObjSmplbg {
         virtual BOOL Draw();
     
     public:
-        /* 0x290 */ u8 field_0x290[0x2C8 - 0x290];
         /* 0x2C8 */ request_of_phase_process_class mPhs;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ int mType;

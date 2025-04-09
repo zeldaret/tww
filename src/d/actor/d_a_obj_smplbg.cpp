@@ -13,7 +13,7 @@ const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
     /* 0x08 */ 4,
     /* 0x0A */ 7,
     /* 0x0C */ dBgS_MoveBGProc_TypicalRotY,
-    /* 0x10 */ 13.0f,
+    /* 0x10 */ 13,
     /* 0x14 */ 0,
     /* 0x16 */ 2250,
     /* 0x18 */ 0,
@@ -43,7 +43,7 @@ BOOL daObjSmplbg::Act_c::Create() {
     if(((attr().field_0x10  ) & 8) != 0){
         fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e); //maybe not noDraw
     }
-    if(((attr().field_0x10) & 4) == 0){
+    if(((attr().field_0x10) & 4) != 0){
         cullType = 23;
         fopAcM_setCullSizeSphere(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX);
         
