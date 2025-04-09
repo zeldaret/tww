@@ -124,6 +124,12 @@ struct J3DTextureBlock : public JUTDataBlockHeader {
     /* 0x10 */ void* mpNameTable;
 };
 
+static inline u32 getMdlDataFlag_TevStageNum(u32 flags) { return (flags >> 0x10) & 0x1f; }
+static inline u32 getMdlDataFlag_TexGenFlag(u32 flags) { return flags & 0x0c000000; }
+static inline u32 getMdlDataFlag_ColorFlag(u32 flags) { return flags & 0xc0000000; }
+static inline u32 getMdlDataFlag_PEFlag(u32 flags) { return flags & 0x30000000; }
+static inline u32 getMdlDataFlag_MtxLoadType(u32 flags) { return flags & 0x10; }
+
 class J3DModelLoaderDataBase {
 public:
     static J3DModelData* load(void const*, u32);

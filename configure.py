@@ -1001,8 +1001,8 @@ config.libs = [
     JSystemLib(
         "J3DGraphLoader",
         [
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp"),
+            Object(Matching,     "JSystem/J3DGraphLoader/J3DMaterialFactory.cpp"),
+            Object(Matching,     "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DClusterLoader.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoader.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp"),
