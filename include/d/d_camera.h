@@ -166,7 +166,6 @@ public:
     /* 0x09C */ f32 m09C;
     /* 0x0A0 */ cSAngle m0A0;
     /* 0x0A2 */ u8 m0A2[0x0A4 - 0x0A2];
-    // /* 0x0A4 */ @class$4017d_camera_cpp m0A4[2];
     struct {
         struct {
             /* 0x00 */ cXyz m00;

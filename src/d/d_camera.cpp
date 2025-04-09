@@ -2839,7 +2839,6 @@ int camera_execute(camera_process_class* i_this) {
 
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
 bool camera_draw(camera_process_class* i_this) {
-    /* Nonmatching - Instruction Swap */
     camera_class* a_this = (camera_class*)i_this;
     dCamera_c* body = &((camera_class*)i_this)->mCamera;
 
@@ -2885,14 +2884,20 @@ bool camera_draw(camera_process_class* i_this) {
 
     if (fpcLf_GetPriority(a_this) != 1) {
         fopCamM_GetParam(a_this);
-        fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(0);
-        if (!fopOvlpM_IsDoingReq()) {
-            dComIfGp_map_draw(
-                currPlayerActor->current.pos.x,
-                currPlayerActor->current.pos.z,
-                dComIfGp_roomControl_getStayNo(),
-                currPlayerActor->current.pos.y
-            );
+        for (int i = 0; i < 1; i++) {
+            if (!fopOvlpM_IsDoingReq()) {
+                fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(i);
+                f32 depth = currPlayerActor->current.pos.y;
+                if (currPlayerActor->current.pos.y > 0.0f) {
+                    f32 temp = 0;
+                }
+                dComIfGp_map_draw(
+                    currPlayerActor->current.pos.x,
+                    currPlayerActor->current.pos.z,
+                    dComIfGp_roomControl_getStayNo(),
+                    depth
+                );
+            }
         }
     }
     return true;
