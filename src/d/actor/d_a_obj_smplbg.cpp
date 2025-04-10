@@ -7,23 +7,25 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_qtkhd.h"
-const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[1] = {
-    /* mHeapSize */ 0x000015E0,
-    /* mResName */ "Qtkhd",
+
+const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[] = {
+    /* mHeapSize     */ 0x15E0,
+    /* mResName      */ "Qtkhd",
     /* mBDLFileIndex */ QTKHD_BDL_QTKHD,
     /* mDZBFileIndex */ QTKHD_DZB_QTKHD,
-    /* mMoveBGProc */ dBgS_MoveBGProc_TypicalRotY,
-    /* mFlags */ 13,
-    /* mCullMinX */ 0,
-    /* mCullMinY */ 2250,
-    /* mCullMinZ */ 0,
-    /* mCullMaxX */ 750,
-    /* mCullMaxY */ 0,
-    /* mCullMaxZ */ 0,
-    /* mEyeOffset */ 1687.0f
+    /* mMoveBGProc   */ dBgS_MoveBGProc_TypicalRotY,
+    /* mFlags        */ 1 | 4 | 8,
+    /* mCullMinX     */ 0,
+    /* mCullMinY     */ 2250,
+    /* mCullMinZ     */ 0,
+    /* mCullMaxX     */ 750,
+    /* mCullMaxY     */ 0,
+    /* mCullMaxZ     */ 0,
+    /* mEyeOffset    */ 1687.0f
 };
 
 Mtx daObjSmplbg::Act_c::M_tmp_mtx;
+
 /* 00000078-00000144       .text CreateHeap__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(attr().mResName, attr().mBDLFileIndex);
@@ -39,15 +41,14 @@ BOOL daObjSmplbg::Act_c::Create() {
     init_mtx();
     eyePos.y += attr().mEyeOffset;
 
-    if(((attr().mFlags) & 8) != 0){
+    if(cLib_checkBit<u32>(attr().mFlags, 8)){
         fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
     }
-    if(((attr().mFlags) & 4) != 0){
-        cullType = 23;
+    if(cLib_checkBit<u32>(attr().mFlags, 4)){
+        fopAcM_SetCullSize(this, fopAc_CULLSPHERE_CUSTOM_e);
         fopAcM_setCullSizeSphere(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX);
-        
     } else{
-        cullType = 14;
+        fopAcM_SetCullSize(this, fopAc_CULLBOX_CUSTOM_e);
         fopAcM_setCullSizeBox(this, attr().mCullMinX, attr().mCullMinY, attr().mCullMinZ, attr().mCullMaxX, attr().mCullMaxY, attr().mCullMaxZ);
     }
     return TRUE;
@@ -55,8 +56,8 @@ BOOL daObjSmplbg::Act_c::Create() {
 
 /* 0000032C-00000474       .text Mthd_Create__Q211daObjSmplbg5Act_cFv */
 cPhs_State daObjSmplbg::Act_c::Mthd_Create() {
-    
     fopAcM_SetupActor(this, Act_c);
+
     mType = prm_get_type();
     if(mType >= 1){
         mType = 0;
@@ -76,7 +77,7 @@ BOOL daObjSmplbg::Act_c::Delete() {
 
 /* 0000047C-000004D8       .text Mthd_Delete__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Mthd_Delete() {
-    s32 result = MoveBGDelete();
+    BOOL result = MoveBGDelete();
     dComIfG_resDelete(&mPhs, attr().mResName);
     return result;
 }
@@ -91,7 +92,7 @@ void daObjSmplbg::Act_c::set_mtx() {
 
 /* 00000558-00000594       .text init_mtx__Q211daObjSmplbg5Act_cFv */
 void daObjSmplbg::Act_c::init_mtx() {
-    mpModel->mBaseScale = scale;
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -119,12 +120,11 @@ BOOL daObjSmplbg::Act_c::Execute(Mtx** matrix) {
 /* 000006CC-00000764       .text Draw__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Draw() {
     int tevType;
-    if (((attr().mFlags) & 1) != 0) {
+    if (cLib_checkBit<u32>(attr().mFlags, 1)) {
         tevType = TEV_TYPE_BG0;
-    } else if (((attr().mFlags) & 2) != 0) {
+    } else if (cLib_checkBit<u32>(attr().mFlags, 2)) {
         tevType = TEV_TYPE_BG1;
-    } 
-    else {    
+    } else {    
         tevType = TEV_TYPE_ACTOR;
     }
     g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);

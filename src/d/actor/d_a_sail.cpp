@@ -503,7 +503,7 @@ static BOOL daSail_Draw(sail_class* i_this) {
     mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
 
     mDoMtx_concat(j3dSys.mViewMtx, *calc_mtx, *i_this->mSailPacket.getStickMtx());
-    mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mStickModel->mBaseTransformMtx);
+    i_this->mSailPacket.mStickModel->setBaseTRMtx(*calc_mtx);
 
     MtxTrans(0.0f, 0.0f, 0.0f, 0);
     mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mTexMtx);

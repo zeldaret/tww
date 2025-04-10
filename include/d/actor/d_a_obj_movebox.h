@@ -270,9 +270,9 @@ namespace daObjMovebox {
         /* 0x6B8 */ fpc_ProcID mChildPID;
         /* 0x6BC */ BOOL mbRollCrash;
         
-        static const char* const M_arcname[13];
+        static const char* const M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;
-        static const Attr_c M_attr[13];
+        static const Attr_c M_attr[];
     };
     
     STATIC_ASSERT(sizeof(Act_c) == 0x6C0);

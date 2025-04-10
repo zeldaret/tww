@@ -165,7 +165,7 @@ void dComIfG_play_c::itemInit() {
 
     strcpy(mInputPassword, "\0");
 
-    field_0x4977 = 0;
+    mMesgBgm = 0;
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;

@@ -229,7 +229,6 @@ void daPy_lk_c::setLightSaver() {
             m355C--;
         }
     }
-    return;
 }
 
 /* 80155490-801554C8       .text checkDemoShieldNoDraw__9daPy_lk_cFv */

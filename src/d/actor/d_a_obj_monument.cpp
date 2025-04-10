@@ -15,7 +15,7 @@
 
 namespace daObjMonument {
     namespace {
-        static Attr_c L_attr[2] = {
+        static Attr_c L_attr[] = {
             { ESEKH_BDL_ESEKH,  ESEKH_DZB_ESEKH },
             { ESEKH_BDL_ESEKH2, ESEKH_DZB_ESEKH2 },
         };

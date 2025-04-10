@@ -3774,7 +3774,7 @@ BOOL daPy_lk_c::execute() {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_BOW_AIM_e);
     }
     
-    m3634 = -1;
+    mWhirlId = fpcM_ERROR_PROCESS_ID_e;
     
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
@@ -4323,8 +4323,8 @@ void daPy_lk_c::playerInit() {
     mActorKeepGrab.clearData();
     mActorKeepRope.clearData();
     m3628 = fpcM_ERROR_PROCESS_ID_e;
-    m3634 = fpcM_ERROR_PROCESS_ID_e;
-    mTactZevPartnerPID = fpcM_ERROR_PROCESS_ID_e;
+    mWhirlId = fpcM_ERROR_PROCESS_ID_e;
+    mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;
     
     ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);

@@ -3,7 +3,6 @@
 
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_a_obj.h"
-#include "d/d_bg_w.h"
 
 namespace daObjSmplbg {
     class Act_c : public dBgS_MoveBgActor {
@@ -18,20 +17,20 @@ namespace daObjSmplbg {
         struct Attr_c {
             /* 0x00 */ u32 mHeapSize;
             /* 0x04 */ const char* mResName;
-            /* 0x08 */ short mBDLFileIndex;             
-            /* 0x0A */ short mDZBFileIndex;
+            /* 0x08 */ s16 mBDLFileIndex;             
+            /* 0x0A */ s16 mDZBFileIndex;
             /* 0x0C */ MoveBGActor_SetFunc mMoveBGProc;
             /* 0x10 */ u32 mFlags;
-            /* 0x14 */ short mCullMinX;
-            /* 0x16 */ short mCullMinY;
-            /* 0x18 */ short mCullMinZ;
-            /* 0x1A */ short mCullMaxX;
-            /* 0x1C */ short mCullMaxY;
-            /* 0x1E */ short mCullMaxZ;             
-            /* 0x20 */ float mEyeOffset;
+            /* 0x14 */ s16 mCullMinX;
+            /* 0x16 */ s16 mCullMinY;
+            /* 0x18 */ s16 mCullMinZ;
+            /* 0x1A */ s16 mCullMaxX;
+            /* 0x1C */ s16 mCullMaxY;
+            /* 0x1E */ s16 mCullMaxZ;             
+            /* 0x20 */ f32 mEyeOffset;
         };
         
-        static const Attr_c M_attr[1];
+        static const Attr_c M_attr[];
         inline const Attr_c& attr() const { return M_attr[mType]; }
 
         void isStop() {}

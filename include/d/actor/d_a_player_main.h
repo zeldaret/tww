@@ -1759,7 +1759,7 @@ public:
     void getShadowID() const {}
     void npcStartRestartRoom() {}
     void setDaiokutaEnd() {}
-    void setWhirlId(fpc_ProcID) {}
+    void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
@@ -2173,9 +2173,9 @@ public:
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ u32 m3624;
     /* 0x3628 */ fpc_ProcID m3628;
-    /* 0x362C */ fpc_ProcID mTactZevPartnerPID;
+    /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
-    /* 0x3634 */ int m3634;
+    /* 0x3634 */ fpc_ProcID mWhirlId;
     /* 0x3638 */ fpc_ProcID mMsgId;
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;

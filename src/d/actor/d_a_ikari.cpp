@@ -130,7 +130,7 @@ cPhs_State daIkari_c::_create() {
 
             f32 mScaleX = scale.x;
 
-            fopAcM_SetMtx(this, &mpModel->mBaseTransformMtx[0]);
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             fopAcM_setCullSizeBox(this,
                 -160.0f * mScaleX, -2500.0f * mScaleX, -600.0f * mScaleX,
                 160.0f * mScaleX, 100.0f * mScaleX, 600.0f * mScaleX);

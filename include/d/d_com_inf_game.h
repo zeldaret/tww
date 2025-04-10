@@ -586,6 +586,8 @@ public:
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
     u8 getMesgStatus() { return mMesgStatus; }
+    u8 checkMesgBgm() { return mMesgBgm;; }
+    void setMesgBgm(u8 param_0) { mMesgBgm = param_0;; }
 
     u8 getButtonMode() { return mButtonMode; }
     void setButtonMode(u8 mode) { mButtonMode = mode; }
@@ -743,7 +745,7 @@ public:
 #endif
     /* 0x4965 */ u8 field_0x4965;
     /* 0x4966 */ char mInputPassword[0x11];
-    /* 0x4977 */ u8 field_0x4977;
+    /* 0x4977 */ u8 mMesgBgm;
     /* 0x4978 */ u8 field_0x4978;
     /* 0x4979 */ u8 m2dShow;
     /* 0x497A */ u8 field_0x497a;
@@ -2622,6 +2624,22 @@ inline void dComIfGp_clearMesgAnimeTagInfo() {
 
 inline u8 dComIfGp_getMesgStatus() {
     return g_dComIfG_gameInfo.play.getMesgStatus();
+}
+
+inline u8 dComIfGp_checkMesgBgm() {
+    return g_dComIfG_gameInfo.play.checkMesgBgm();
+}
+
+inline void dComIfGp_setMesgBgmOff() {
+    g_dComIfG_gameInfo.play.setMesgBgm(0);
+}
+
+inline void dComIfGp_setMesgBgmOn() {
+    g_dComIfG_gameInfo.play.setMesgBgm(1);
+}
+
+inline void dComIfGp_setMesgBgmOn2() {
+    g_dComIfG_gameInfo.play.setMesgBgm(2);
 }
 
 inline JKRAramBlock* dComIfGp_getPictureBoxData(int i) {

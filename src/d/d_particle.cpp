@@ -171,7 +171,7 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
         if (model->mInit == 0) {
             model->mInit = 1;
             J3DModel * j3dmodel = model->mModel;
-            j3dmodel->mModelData = modelData;
+            j3dmodel->setModelData(modelData);
 
             J3DShapePacket * shapePacket = j3dmodel->getShapePacket(0);
             for (u16 j = 0; j < modelData->getShapeNum(); shapePacket++, j++) {
@@ -189,7 +189,7 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
                 matPacket->setDisplayListObj(mat->getSharedDisplayListObj());
             }
 
-            j3dmodel->mVertexBuffer.setVertexData(&modelData->getVertexData());
+            j3dmodel->getVertexBuffer()->setVertexData(&modelData->getVertexData());
             return model->mModel;
         }
     }

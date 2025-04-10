@@ -375,7 +375,3 @@ bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
     }
     return isSame;
 }
-
-/* 802DB978-802DB97C       .text draw__9J3DPacketFv */
-void J3DPacket::draw() {
-}

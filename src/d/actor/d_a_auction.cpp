@@ -569,8 +569,14 @@ void daAuction_c::privateCut() {
         evtRes = eventGetItem();
         break;
     case ACT_GET_ITEM_MES:
+#if BUGFIX
+        evtRes = eventMesSet();
+#elif __MWERKS__
         // @bug They probably meant to call this function
         evtRes = eventMesSet;
+#else
+        evtRes = &daAuction_c::eventMesSet;
+#endif
         break;
     case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();

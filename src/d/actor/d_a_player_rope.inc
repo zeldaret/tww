@@ -43,7 +43,6 @@ void daPy_lk_c::freeRopeItem() {
             }
         }
     }
-    return;
 }
 
 /* 80142E0C-80142E98       .text checkRopeRoofHit__9daPy_lk_cFs */
@@ -54,7 +53,6 @@ f32 daPy_lk_c::checkRopeRoofHit(s16 param_0) {
                 current.pos.z - 15.0f * cM_scos(param_0));
     mRoofChk.SetPos(local_c);
     dComIfG_Bgsp()->RoofChk(&mRoofChk);
-    return;
 }
 
 /* 80142E98-80142FC8       .text changeRopeSwingProc__9daPy_lk_cFv */
@@ -227,7 +225,6 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
         fVar1 = -1.0f;
     }
     setMoveAnime(local_48, daPy_HIO_rope_c0::m.field_0x18, 1.0f, ANM_ROPECATCH, dVar4, 7, fVar1);
-    return;
 }
 
 /* 80143A44-80143C5C       .text throwRope__9daPy_lk_cFv */
@@ -332,7 +329,6 @@ BOOL daPy_lk_c::checkNextRopeMode() {
     } else {
         procRopeSubject_init();
     }
-    return;
 }
 
 /* 80143EAC-80143F3C       .text checkHangRopeActorNull__9daPy_lk_cFv */

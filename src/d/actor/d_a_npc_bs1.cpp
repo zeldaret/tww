@@ -1445,7 +1445,7 @@ void daNpc_Bs1_c::createShopList() {
     static __shop_items_set_data* Item_set_dataBs2[] = {
         &shopItems_setData_emptybottle,
         &shopItems_setData_kakera_heart,
-        &shopItems_setData_map
+        &shopItems_setData_map,
     };
     
     csXyz angle(csXyz::Zero);

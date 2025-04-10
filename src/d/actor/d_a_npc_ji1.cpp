@@ -1315,7 +1315,7 @@ s32 daNpc_Ji1_c::getEventActionNo(int staffIdx) {
         "03_dummy",
         "04_dummy",
         "05_dummy",
-        "06_dummy"
+        "06_dummy",
     };
 
     return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);

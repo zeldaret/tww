@@ -1723,9 +1723,7 @@ BOOL daShip_c::procCannon() {
         short prev0394 = m0394;
         
         if (target) {
-            cannonPos.x = mpCannonModel->mpNodeMtx[2][0][3];
-            cannonPos.y = mpCannonModel->mpNodeMtx[2][1][3];
-            cannonPos.z = mpCannonModel->mpNodeMtx[2][2][3];
+            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(2), &cannonPos);
 
             cannonPos = target->eyePos - cannonPos;
 

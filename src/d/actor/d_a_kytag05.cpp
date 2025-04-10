@@ -30,7 +30,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         10,
         10,
         0,
-        90
+        90,
     };
     static const s16 fuu_timer[] = {
         150,
