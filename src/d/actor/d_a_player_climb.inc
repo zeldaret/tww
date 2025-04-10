@@ -161,8 +161,8 @@ BOOL daPy_lk_c::checkBgClimbMove() {
 
     f32 dVar7 = cM_ssin(shape_angle.y);
     f32 dVar6 = cM_scos(shape_angle.y);
-    f32 dVar5 = (30.0f * dVar6);
-    f32 dVar4 = (-30.0f * dVar7);
+    f32 dVar5 = 30.0f * dVar6;
+    f32 dVar4 = -30.0f * dVar7;
     local_5c.set(current.pos.x + dVar5, current.pos.y, current.pos.z + dVar4);
     checkBgCorrectClimbMove(&current.pos, &local_5c);
 
@@ -197,7 +197,7 @@ BOOL daPy_lk_c::checkBgClimbMove() {
         mGndChk.SetPos(&local_5c);
         dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
         cM3dGPla* triPla;
-        if (((-1.0E+9f != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk), triPla->GetNP()->y >= 0.5f)) &&
+        if (((C_BG_MIN_HEIGHT != dVar3) && (triPla = dComIfG_Bgsp()->GetTriPla(mGndChk), triPla->GetNP()->y >= 0.5f)) &&
             (dVar3 >= (local_68.y - 30.0f)))
         {
             dVar4 = 3.0f;
@@ -436,7 +436,7 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     speedF = 0.0f;
     m34D0 = 1;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
-    cXyz local_38 = (mRightHandPos - mLeftHandPos);
+    cXyz local_38 = mRightHandPos - mLeftHandPos;
     dVar4 = local_38.absXZ();
     m35A0 = dVar4;
     return true;
@@ -466,7 +466,7 @@ BOOL daPy_lk_c::procClimbMoveSide() {
             dVar5 *= -1.0f;
         }
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar5);
-        cXyz local_28 = (mRightHandPos - mLeftHandPos);
+        cXyz local_28 = mRightHandPos - mLeftHandPos;
         dVar5 = local_28.absXZ();
         f32 fVar1 = std::fabsf(dVar5 - m35A0) * daPy_HIO_ladder_c0::m.field_0x40;
         f32 fVar2 = fVar1 * cM_ssin(m34D4);

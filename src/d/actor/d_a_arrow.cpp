@@ -346,7 +346,7 @@ void daArrow_c::ShieldReflect() {
         cXyz ganondorfChestPos = ganondorf->current.pos;
         ganondorfChestPos.y = 130.0f + REG8_F(0);
         targetAngleX = -cLib_targetAngleX(&link->current.pos, &ganondorfChestPos);
-        fpcM_SetParam(ganondorf, 0x23);
+        fopAcM_SetParam(ganondorf, 0x23);
         mSparkleTimer = 15 + REG0_S(3);
         mpSparkleEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &link->current.pos);
     }
@@ -738,7 +738,7 @@ BOOL daArrow_c::procMove() {
             mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, 0x20);
         } else if (hitType == 2) { // Hit a joint
-            fpcM_SetParam(this, 2);
+            fopAcM_SetParam(this, 2);
             mCurrProcFunc = &daArrow_c::procStop_Actor;
             
             if (mArrowType == TYPE_FIRE) {

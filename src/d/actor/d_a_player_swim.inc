@@ -218,7 +218,7 @@ BOOL daPy_lk_c::checkSwimFallCheck() {
 BOOL daPy_lk_c::changeSwimOutProc() {
     cM3dGPla* pcVar1;
     
-    if (mAcch.GetGroundH() != -1e+09f && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
+    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
         pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);   
     }
     else {

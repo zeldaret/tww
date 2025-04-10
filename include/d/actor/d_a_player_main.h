@@ -986,7 +986,7 @@ public:
     void checkItemAction();
     void getSlidePolygon();
     BOOL checkJumpCutFromButton();
-    void orderTalk();
+    int orderTalk();
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
@@ -1364,7 +1364,7 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    int getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
@@ -1436,8 +1436,8 @@ public:
     BOOL procSwimWait();
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
-    void setSpecialBattle(int);
-    int changeSpecialBattle();
+    void setSpecialBattle(BOOL);
+    BOOL changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);
@@ -1492,14 +1492,14 @@ public:
     BOOL procShipRestart();
     BOOL checkRopeAnime() const;
     void freeRopeItem();
-    BOOL checkRopeRoofHit(s16);
-    void changeRopeSwingProc();
-    void changeRopeEndProc(int);
+    f32 checkRopeRoofHit(s16);
+    int changeRopeSwingProc();
+    int changeRopeEndProc(int);
     BOOL checkSpecialRope();
-    void changeRopeToHangProc();
+    int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
-    void throwRope();
+    int throwRope();
     BOOL checkNextActionRopeReady();
     BOOL checkNextRopeMode();
     BOOL checkHangRopeActorNull();
@@ -1511,7 +1511,7 @@ public:
     BOOL procRopeSwing();
     BOOL procRopeHangWait_init(int);
     BOOL procRopeHangWait();
-    void specialRopeHangUp();
+    int specialRopeHangUp();
     BOOL procRopeUp_init();
     BOOL procRopeUp();
     BOOL procRopeDown_init();
@@ -1627,7 +1627,7 @@ public:
     BOOL procPullMove();
     int changeBottleDrinkFace(int);
     void setBottleModel(u16);
-    void makeFairy(cXyz*, u32);
+    fopAc_ac_c* makeFairy(cXyz*, u32);
     BOOL procBottleDrink_init(u16);
     BOOL procBottleDrink();
     BOOL procBottleOpen_init(u16);
@@ -1657,7 +1657,7 @@ public:
     void setSwordModel(BOOL);
     void setLightSaver();
     BOOL checkDemoShieldNoDraw();
-    BOOL checkDemoSwordNoDraw(int);
+    BOOL checkDemoSwordNoDraw(BOOL);
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -1766,8 +1766,7 @@ public:
         }
     }
     bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
-            dComIfGp_getMiniGameType() == 2;
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
@@ -1792,6 +1791,7 @@ public:
     
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL spBattleTrigger() const {return mItemTrigger & BTN_A; }
     BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
     BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
     BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
@@ -1801,7 +1801,6 @@ public:
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
     void allTrigger() const {}
     void otherWeaponTrigger() const {}
-    void spBattleTrigger() const {}
     
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
     void checkSpecialDemoMode() const {}

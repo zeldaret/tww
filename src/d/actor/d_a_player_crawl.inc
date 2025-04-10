@@ -208,11 +208,11 @@ BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0) {
 
 /* 801396B0-80139760       .text checkNotCrawlStand__9daPy_lk_cFP4cXyzP4cXyz */
 BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0, cXyz* param_1) {
-    cXyz local_2c = (*param_0 + *param_1);
+    cXyz local_2c = *param_0 + *param_1;
     if (checkNotCrawlStand(&local_2c)) {
         return true;
     }
-    local_2c = (*param_0 - *param_1);
+    local_2c = *param_0 - *param_1;
     if (checkNotCrawlStand(&local_2c)) {
         return true;
     }
@@ -222,8 +222,6 @@ BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0, cXyz* param_1) {
 /* 80139760-80139878       .text procCrawlMove_init__9daPy_lk_cFss */
 BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
     BOOL var_r29;
-    BOOL var_r28 = 0;
-
     if (mCurProc == daPyProc_CRAWL_AUTO_MOVE_e) {
         var_r29 = 0;
     } else {

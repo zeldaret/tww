@@ -293,7 +293,6 @@ BOOL daPy_lk_c::dProcDamage() {
 
 /* 8012DF24-8012E054       .text dProcHoldup_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcHoldup_init() {
-    s32 uVar1;
     daPy_ANM dVar3;
     short sVar2;
     f32 dVar6;
@@ -303,8 +302,8 @@ BOOL daPy_lk_c::dProcHoldup_init() {
     if (mCurProc == daPyProc_DEMO_HOLDUP_e) {
         return false;
     }
-    // TODO: figure out what's going on here.
-    uVar1 = mModeFlg >> 4 & ModeFlg_00000001;
+
+    BOOL uVar1 = checkModeFlg(ModeFlg_WHIDE) ? TRUE : FALSE;
     commonProcInit(daPyProc_DEMO_HOLDUP_e);
     if (uVar1) {
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
@@ -655,7 +654,7 @@ void daPy_lk_c::dProcLavaDamage_init_sub() {
     speed.y = daPy_HIO_restart_c0::m.field_0x8;
     m3570 = 0;
     voiceStart(4);
-    seStartMapInfo(0x3810);
+    seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     gravity = daPy_HIO_autoJump_c0::m.field_0xC;
     mDemo.setDemoType(5);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10000000_e);
@@ -714,7 +713,7 @@ void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
     onNoResetFlg1(daPyFlg1_FREEZE_STATE);
     offNoResetFlg1(daPyFlg1_UNK40000);
     mDoGph_gInf_c::fadeOut(1.0f, l_freeze_fade_color);
-    seStartMapInfo(0x2878);
+    seStartMapInfo(JA_SE_LK_FREEZE);
     for (int i = 0; i < 5; i++) {
         const u16* uVar1 = eff_joint;
         MtxP pMVar2 = mpCLModel->getAnmMtx(uVar1[i]);
@@ -808,7 +807,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     }
     int iVar4 = checkShipRideUseItem(0);
     u32 uVar2 = checkModeFlg(ModeFlg_SWIM);
-    u32 uVar3 = mNoResetFlg0 & 0x100;
+    u32 uVar3 = mNoResetFlg0 & daPyFlg0_UNK100;
     if (uVar2 != 0) {
         swimOutAfter(FALSE);
     }
@@ -885,7 +884,7 @@ BOOL daPy_lk_c::dProcDead() {
         if (frameCtrl.getRate() < 0.01f) {
             dGameover_c* this_01;
             cLib_chaseF(&m35A0, 0.0f, 0.01f);
-            f32 dVar3 = (1.0f - m35A0);
+            f32 dVar3 = 1.0f - m35A0;
             if ((m3628 != fpcM_ERROR_PROCESS_ID_e) && (this_01 = (dGameover_c*)fopMsgM_SearchByID(m3628), this_01)) {
                 this_01->setBackAlpha(dVar3);
             }
@@ -1460,7 +1459,7 @@ BOOL daPy_lk_c::dProcPresent_init() {
 BOOL daPy_lk_c::dProcPresent() {
     setShapeAngleToTalkActor();
     if (m3570 != 0) {
-        cXyz local_28 = (m370C - current.pos);
+        cXyz local_28 = m370C - current.pos;
         if ((0x4000 < cLib_distanceAngleS(cM_atan2s(local_28.x, local_28.z), current.angle.y)) || mAcch.ChkWallHit()) {
             current.pos.x = m370C.x;
             current.pos.z = m370C.z;
@@ -1542,14 +1541,14 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     m3570 = 0;
     pdVar1 = (daPy_py_c*)fopAcM_getEventPartner(this);
     if (pdVar1 != NULL) {
-        cXyz local_20 = (pdVar1->current.pos - current.pos);
+        cXyz local_20 = pdVar1->current.pos - current.pos;
         angle = fopAcM_GetShapeAngle_p(this);
         angle->y = fopAcM_searchActorAngleY(this, pdVar1);
         dVar5 = local_20.absXZ();
         if (0.0f < dVar5) {
             in_f4 = 0.5;
         }
-        m35C8 = (dVar5 - 47.0f);
+        m35C8 = dVar5 - 47.0f;
         angle = fopAcM_GetShapeAngle_p(pdVar1);
     } else {
         m35C8 = 15.0f;

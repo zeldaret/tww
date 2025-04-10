@@ -626,6 +626,7 @@ struct J3DFog : public J3DFogInfo {
     // J3DFog() { *getFogInfo() = j3dDefaultFogInfo; } // Produces the wrong codegen for mDoExt_backupMatBlock_c's constructor
     J3DFog() { J3DFogInfo::operator=(j3dDefaultFogInfo); }
     explicit J3DFog(const J3DFogInfo& info) { J3DFogInfo::operator=(info); }
+    ~J3DFog() {}
     J3DFogInfo* getFogInfo() { return (J3DFogInfo*)this; }
 
     void load() const {
@@ -646,8 +647,8 @@ struct J3DAlphaCompInfo {
     /* 0x7 */ u8 field_0x7;
 };
 
-inline u16 calcAlphaCmpID(u32 comp0, u32 op, u32 comp1) {
-    return (comp0 << 5) + ((op & 0xff) << 3) + (comp1 & 0xff);
+inline u16 calcAlphaCmpID(u8 comp0, u8 op, u8 comp1) {
+    return (comp0 << 5) + (op << 3) + (comp1);
 }
 
 extern u8 j3dAlphaCmpTable[768];
@@ -661,7 +662,11 @@ struct J3DAlphaComp {
 
     J3DAlphaComp(u16 id) : mAlphaCmpID(id), mRef0(0), mRef1(0) {}
 
-    explicit J3DAlphaComp(const J3DAlphaCompInfo& info) { setAlphaCompInfo(info); }
+    explicit J3DAlphaComp(const J3DAlphaCompInfo& info) {
+        mAlphaCmpID = calcAlphaCmpID(info.mComp0, info.mOp, info.mComp1);
+        mRef0 = info.mRef0;
+        mRef1 = info.mRef1;
+    }
 
     GXCompare getComp0() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3]); }
     GXAlphaOp getOp() const { return GXAlphaOp(j3dAlphaCmpTable[mAlphaCmpID * 3 + 1]); }
@@ -933,20 +938,20 @@ public:
 
 inline u16 calcColorChanID(u16 enable, u8 matSrc, u8 lightMask, u8 diffuseFn, u8 attnFn, u8 ambSrc) {
     u32 reg = 0;
-    reg = reg & ~0x0002 | enable << 1;
-    reg = reg & ~0x0001 | matSrc;
-    reg = reg & ~0x0040 | ambSrc << 6;
-    reg = reg & ~0x0004 | bool(lightMask & 0x01) << 2;
-    reg = reg & ~0x0008 | bool(lightMask & 0x02) << 3;
-    reg = reg & ~0x0010 | bool(lightMask & 0x04) << 4;
-    reg = reg & ~0x0020 | bool(lightMask & 0x08) << 5;
-    reg = reg & ~0x0800 | bool(lightMask & 0x10) << 11;
-    reg = reg & ~0x1000 | bool(lightMask & 0x20) << 12;
-    reg = reg & ~0x2000 | bool(lightMask & 0x40) << 13;
-    reg = reg & ~0x4000 | bool(lightMask & 0x80) << 14;
-    reg = reg & ~0x0180 | (attnFn == GX_AF_SPEC ? 0 : diffuseFn) << 7;
-    reg = reg & ~0x0200 | (attnFn != GX_AF_NONE) << 9;
-    reg = reg & ~0x0400 | (attnFn != GX_AF_SPEC) << 10;
+    reg = (reg & ~0x0002) | enable << 1;
+    reg = (reg & ~0x0001) | matSrc;
+    reg = (reg & ~0x0040) | ambSrc << 6;
+    reg = (reg & ~0x0004) | bool(lightMask & 0x01) << 2;
+    reg = (reg & ~0x0008) | bool(lightMask & 0x02) << 3;
+    reg = (reg & ~0x0010) | bool(lightMask & 0x04) << 4;
+    reg = (reg & ~0x0020) | bool(lightMask & 0x08) << 5;
+    reg = (reg & ~0x0800) | bool(lightMask & 0x10) << 11;
+    reg = (reg & ~0x1000) | bool(lightMask & 0x20) << 12;
+    reg = (reg & ~0x2000) | bool(lightMask & 0x40) << 13;
+    reg = (reg & ~0x4000) | bool(lightMask & 0x80) << 14;
+    reg = (reg & ~0x0180) | (attnFn == GX_AF_SPEC ? 0 : diffuseFn) << 7;
+    reg = (reg & ~0x0200) | (attnFn != GX_AF_NONE) << 9;
+    reg = (reg & ~0x0400) | (attnFn != GX_AF_SPEC) << 10;
     return reg;
 }
 
@@ -966,10 +971,9 @@ inline u32 setChanCtrlMacro(u8 enable, GXColorSrc ambSrc, GXColorSrc matSrc, u32
 struct J3DColorChan {
     J3DColorChan() { setColorChanInfo(j3dDefaultColorChanInfo); }
     J3DColorChan(const J3DColorChanInfo& info) {
-        mChanCtrl = calcColorChanID(
-            info.mEnable, info.mMatSrc, info.mLightMask, info.mDiffuseFn, info.mAttnFn,
-            info.mAmbSrc == 0xFF ? 0 : info.mAmbSrc
-        );
+        u32 ambSrc = info.mAmbSrc == 0xFF ? 0 : info.mAmbSrc;
+        mChanCtrl = calcColorChanID(info.mEnable, info.mMatSrc, info.mLightMask,
+            info.mDiffuseFn, info.mAttnFn, ambSrc);
     }
     void setColorChanInfo(const J3DColorChanInfo& info) {
         // Bug: It compares info.mAmbSrc (an 8 bit integer) with 0xFFFF instead of 0xFF.
@@ -978,10 +982,9 @@ struct J3DColorChan {
         // same logic but without the bug.
         // See J3DMaterialFactory::newColorChan - both the bugged and correct behavior are present there, as it calls
         // both constructors.
-        mChanCtrl = calcColorChanID(
-            info.mEnable, info.mMatSrc, info.mLightMask, info.mDiffuseFn, info.mAttnFn,
-            info.mAmbSrc == 0xFFFF ? 0 : info.mAmbSrc
-        );
+        u32 ambSrc = info.mAmbSrc == 0xFFFF ? 0 : info.mAmbSrc;
+        mChanCtrl = calcColorChanID(info.mEnable, info.mMatSrc, info.mLightMask,
+            info.mDiffuseFn, info.mAttnFn, ambSrc);
     }
     J3DColorChan(u16 id) : mChanCtrl(id) {}
     GXAttnFn getAttnFn();

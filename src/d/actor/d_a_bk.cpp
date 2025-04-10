@@ -1992,7 +1992,7 @@ static void fight_run(bk_class* i_this) {
             fopAc_ac_c* r29 = (fopAc_ac_c*)fpcM_Search(shot_s_sub, i_this);
             if (r29) {
                 if (r29->speedF > 10.0f) {
-                    cXyz sp18 = (r29->current.pos - i_this->eyePos);
+                    cXyz sp18 = r29->current.pos - i_this->eyePos;
                     if (sp18.abs() < r29->speedF * 10.0f) {
                         r27 = true;
                     }

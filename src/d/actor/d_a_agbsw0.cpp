@@ -1079,11 +1079,11 @@ BOOL daAgbsw0_c::ExeSubMW() {
 #if VERSION == VERSION_PAL
         if (dComIfGp_getAgb()->field_0x67d ||
             daPy_getPlayerLinkActorClass()->checkNoControll() ||
-            dComIfGp_checkPlayerStatus0(0, 0x08000000) ||
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e) ||
             (
                 daPy_getPlayerActorClass()->checkPlayerFly() &&
-                !dComIfGp_checkPlayerStatus0(0, 0x00100000) &&
-                !dComIfGp_checkPlayerStatus0(0, 0x00010000)
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
             )
         ) {
             return TRUE;

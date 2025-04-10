@@ -11,8 +11,8 @@ struct TIDData {
 public:
     TIDData(const void* id, u32 id_size) : mID(id), mID_size(id_size) {}
 
-    bool isEqual(JStudio::object::TIDData const&, JStudio::object::TIDData const&);
-    inline const void* getID() const { return mID; }
+    static bool isEqual(JStudio::object::TIDData const&, JStudio::object::TIDData const&);
+    inline const u8* getID() const { return (const u8*)mID; }
     inline u32 getIDSize() const { return mID_size; }
 
 private:

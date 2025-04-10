@@ -142,7 +142,7 @@ void daPy_lk_c::setGrabItemPos() {
                     (1.0f -
                      (((uint)mFrameCtrlUnder[UNDER_MOVE0_e].getStart() - mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()) /
                       ((int)mFrameCtrlUnder[UNDER_MOVE0_e].getEnd())));
-                fVar1 = (m35C8 * dVar10);
+                fVar1 = m35C8 * dVar10;
                 pfVar8->current.pos.x += fVar1 * cM_ssin(shape_angle.y);
                 pfVar8->current.pos.z += fVar1 * cM_scos(shape_angle.y);
                 if (mCurProc == daPyProc_GRAB_PUT_e) {
@@ -694,7 +694,7 @@ BOOL daPy_lk_c::procGrabPut() {
                 f32 dVar7 = local_44.abs();
                 f32 dVar5 = local_44.absXZ();
                 if (dVar5 > 0.01f) {
-                    float dVar6 = (dVar7 / dVar5);
+                    float dVar6 = dVar7 / dVar5;
                     local_44.x *= dVar6;
                     local_44.z *= dVar6;
                 } else {

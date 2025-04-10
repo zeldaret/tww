@@ -183,7 +183,7 @@ void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float
     mBasePos = mPos;
     mAngle = *pAngle;
     dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mSplashCb);
-    bIsActive = true;
+    mbIsActive = true;
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */

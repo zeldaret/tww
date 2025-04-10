@@ -235,88 +235,81 @@ BOOL daPy_lk_c::procFanSwing() {
             daPy_HIO_move_c0::m.field_0x1C,
             daPy_HIO_move_c0::m.field_0x20
         );
-    } else {
-        if (m3570 == 0) {
-            if (m34D0 != 0) {
-                if (!checkHeavyStateOn() &&
-                    (!mAcch.ChkGroundHit() ||
-                     checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000)) ||
-                     (!dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) || (!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd))))
-                {
-                    mVelocity = 10.0f;
-                    current.angle.y = shape_angle.y + 0x8000;
-                    if (mCurrAttributeCode == dBgS_Attr_ICE_e) {
-                        m36A0.x += 10.0f * cM_ssin(current.angle.y);
-                        m36A0.z += 10.0f * cM_scos(current.angle.y);
-                    }
+    } else if (m3570 == 0) {
+        if (m34D0 != 0) {
+            if (!checkHeavyStateOn() &&
+                (!mAcch.ChkGroundHit() || checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK80000000 | daPyFlg0_UNK20000000)) ||
+                 !dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd) || !dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)))
+            {
+                mVelocity = 10.0f;
+                current.angle.y = shape_angle.y + 0x8000;
+                if (mCurrAttributeCode == dBgS_Attr_ICE_e) {
+                    m36A0.x += 10.0f * cM_ssin(current.angle.y);
+                    m36A0.z += 10.0f * cM_scos(current.angle.y);
                 }
-                m3534 = 10;
-                m353A = 3;
-                local_60.set(current.pos.x, current.pos.y + 70.0f, current.pos.z);
-                m3536 = shape_angle.y;
-                if (mpAttnActorLockOn == NULL) {
-                    m3538 = 0;
-                } else {
-                    local_54 = (mpAttnActorLockOn->eyePos - current.pos);
-                    m3538 = cM_atan2s(-local_54.y, local_54.absXZ());
-                }
-                mpYuchw00Brk->setFrame(0.0f);
-                m33E8.end();
-                m33E8.makeEmitter(dPa_name::ID_COMMON_0032, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
-                pJVar5 = m33E8.getEmitter();
-                if (pJVar5 != NULL) {
-                    pJVar5->setGlobalPrmColor(tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b);
-                }
-                mFanWindCps.SetStartEnd(current.pos, local_60);
-                seStartOnlyReverb(JA_SE_LK_FAN_SWING);
-                local_48.set(
-                    current.pos.x + 100.0f * cM_ssin(shape_angle.y),
-                    current.pos.y + 50.0f,
-                    current.pos.z + 100.0f * cM_scos(shape_angle.y)
-                );
-                mGndChk.SetPos(&local_48);
-                local_48.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-                if (local_48.y >= current.pos.y - 50.0f) {
-                    int iVar4 = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
-                    if (!strcmp(dComIfGp_getStartStageName(), "Adanmae")) {
-                        dComIfGp_particle_setP1(dPa_name::ID_SCENE_8236, &local_48, &shape_angle);
-                    }
-                    dPa_control_c::mSmokeEcallback.onWindOff();
-                    int iStack_84;
-                    pJVar5 = dComIfGp_particle_setSimpleLand(
-                        iVar4, &local_48, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_84, 0x17
-                    );
-                    dPa_control_c::mSmokeEcallback.offWindOff();
-                    if (pJVar5) {
-                        csXyz local_80;
-                        local_80.y = shape_angle.y + 0x8000;
-                        local_80.x = getGroundAngle(&(mGndChk), local_80.y);
-                        local_80.z = getGroundAngle(&(mGndChk), local_80.y + -0x4000);
-                        mDoMtx_trans(mDoMtx_stack_c::now, local_48.x, local_48.y, local_48.z);
-                        mDoMtx_ZXYrotM(mDoMtx_stack_c::now, local_80.x, local_80.y, local_80.z);
-                        JPASetRMtxTVecfromMtx(
-                            mDoMtx_stack_c::now, pJVar5->mGlobalRotation, (pJVar5->mGlobalTranslation)
-                        );
-                        pJVar5->setSpread(0.45f);
-                        if (iVar4 == 4) {
-                            pJVar5->setRate(100.0f);
-                        } else {
-                            pJVar5->setRate(50.0f);
-                        }
-                    }
-                }
-                local_3c.set(current.pos.x, current.pos.y + 50.0f, current.pos.z);
-                dKyw_squal_set(&local_3c, 1000, shape_angle.y, 280.0f, 1000.0f, 1.0f, 140.0f, 0.08f);
+            }
+            m3534 = 10;
+            m353A = 3;
+            local_60.set(current.pos.x, current.pos.y + 70.0f, current.pos.z);
+            m3536 = shape_angle.y;
+            if (mpAttnActorLockOn == NULL) {
+                m3538 = 0;
             } else {
-                seStartSwordCut(JA_SE_LK_SW_KAZEKIRI_S);
+                local_54 = mpAttnActorLockOn->eyePos - current.pos;
+                m3538 = cM_atan2s(-local_54.y, local_54.absXZ());
             }
-            voiceStart(1);
-            m3570 = 1;
+            mpYuchw00Brk->setFrame(0.0f);
+            m33E8.end();
+            m33E8.makeEmitter(dPa_name::ID_COMMON_0032, mpYuchw00Model->getAnmMtx(2), &local_60, NULL);
+            pJVar5 = m33E8.getEmitter();
+            if (pJVar5 != NULL) {
+                pJVar5->setGlobalPrmColor(tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b);
+            }
+            mFanWindCps.SetStartEnd(current.pos, local_60);
+            seStartOnlyReverb(JA_SE_LK_FAN_SWING);
+            local_48.set(
+                current.pos.x + 100.0f * cM_ssin(shape_angle.y),
+                current.pos.y + 50.0f,
+                current.pos.z + 100.0f * cM_scos(shape_angle.y)
+            );
+            mGndChk.SetPos(&local_48);
+            local_48.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            if (local_48.y >= current.pos.y - 50.0f) {
+                int iVar4 = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
+                if (!strcmp(dComIfGp_getStartStageName(), "Adanmae")) {
+                    dComIfGp_particle_setP1(dPa_name::ID_SCENE_8236, &local_48, &shape_angle);
+                }
+                dPa_control_c::mSmokeEcallback.onWindOff();
+                int iStack_84;
+                pJVar5 = dComIfGp_particle_setSimpleLand(
+                    iVar4, &local_48, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_84, 0x17
+                );
+                dPa_control_c::mSmokeEcallback.offWindOff();
+                if (pJVar5) {
+                    csXyz local_80;
+                    local_80.y = shape_angle.y + 0x8000;
+                    local_80.x = getGroundAngle(&(mGndChk), local_80.y);
+                    local_80.z = getGroundAngle(&(mGndChk), local_80.y + -0x4000);
+                    mDoMtx_trans(mDoMtx_stack_c::now, local_48.x, local_48.y, local_48.z);
+                    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, local_80.x, local_80.y, local_80.z);
+                    JPASetRMtxTVecfromMtx(mDoMtx_stack_c::now, pJVar5->mGlobalRotation, (pJVar5->mGlobalTranslation));
+                    pJVar5->setSpread(0.45f);
+                    if (iVar4 == 4) {
+                        pJVar5->setRate(100.0f);
+                    } else {
+                        pJVar5->setRate(50.0f);
+                    }
+                }
+            }
+            local_3c.set(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+            dKyw_squal_set(&local_3c, 1000, shape_angle.y, 280.0f, 1000.0f, 1.0f, 140.0f, 0.08f);
         } else {
-            if (cLib_addCalc(&mVelocity, 0.0f, 0.5f, 1.5f, 0.3f) < 0.5f) {
-                resetFootEffect();
-            }
+            seStartSwordCut(JA_SE_LK_SW_KAZEKIRI_S);
         }
+        voiceStart(1);
+        m3570 = 1;
+    } else if (cLib_addCalc(&mVelocity, 0.0f, 0.5f, 1.5f, 0.3f) < 0.5f) {
+        resetFootEffect();
     }
 
     m35EC = frameCtrl.getFrame();
@@ -381,7 +374,7 @@ BOOL daPy_lk_c::procFanGlide() {
         }
     }
     if (frameCtrl.getRate() < 0.01f && m3570 == 0 && m32E4.mpEmitter == NULL) {
-        m32E4.makeEmitter(0x4c, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_COMMON_004C, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
     }
 
     if (frameCtrl.getFrame() > 2.0f || m3570 != 0) {
@@ -439,7 +432,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 gravity = daPy_HIO_fan_c0::m.field_0x3C;
                 maxFallSpeed = daPy_HIO_fan_c0::m.field_0x38;
             }
-            if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1) && (frameCtrl.getRate() < 0.01f) && m3570 == 0) {
+            if (checkSetItemTrigger(dItem_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && m3570 == 0) {
                 setSingleMoveAnime(
                     ANM_USEFANB,
                     daPy_HIO_fan_c0::m.field_0x20,

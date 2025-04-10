@@ -169,7 +169,10 @@ public:
     void setStatus(u8) {}
     void setTrack(u8) {}
     void setTrackVolumeU7(u8, u8, u32) {}
-    void setVolumeU7(u8, u32, u8) {}
+    void setVolumeU7(u8 value, u32 moveTime, u8 type) {
+        f32 volume = value / 127.0f;
+        setVolume(volume, moveTime, type);
+    }
     void setWait(u8) {}
 
     /* 0x04 */ u8 field_0x4;
