@@ -1688,7 +1688,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_plant"),
     ActorRel(NonMatching, "d_a_obj_rflw"),
     ActorRel(Matching,    "d_a_obj_rforce"),
-    ActorRel(NonMatching, "d_a_obj_smplbg"),
+    ActorRel(Matching, "d_a_obj_smplbg", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),
     ActorRel(Matching,    "d_a_obj_tower"),
