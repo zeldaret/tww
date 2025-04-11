@@ -249,5 +249,9 @@ void fopMsgM_demoMsgFlagOff();
 bool fopMsgM_demoMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
+void fopMsgM_blendInit(J2DPicture* pic, const char* data);
+
+void fopMsgM_outFontSet(J2DPicture*, J2DPicture*, s16*, u32, u8);
+void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8);
 
 #endif /* F_OP_MSG_MNG_H */

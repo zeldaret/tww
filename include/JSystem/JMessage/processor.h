@@ -60,7 +60,7 @@ public:
     virtual void do_select_separate();
     virtual void do_begin_(const void*, const char*)      = 0;
     virtual void do_end_()                                = 0;
-    virtual bool do_tag_(u32, const void*, u32)           = 0;
+    virtual void do_tag_(u32, const void*, u32)           = 0;
     virtual void do_systemTagCode_(u16, const void*, u32) = 0;
 
     void setBegin_messageCode(u16, u16);
@@ -123,7 +123,7 @@ struct TSequenceProcessor : public TProcessor {
     /* 0x08 */ virtual ~TSequenceProcessor();
     /* 0x30 */ virtual void do_begin_(const void*, const char*);
     /* 0x34 */ virtual void do_end_();
-    /* 0x38 */ virtual bool do_tag_(u32, const void*, u32);
+    /* 0x38 */ virtual void do_tag_(u32, const void*, u32);
     /* 0x3C */ virtual void do_systemTagCode_(u16, const void*, u32);
     /* 0x40 */ virtual void do_begin(const void*, const char*);
     /* 0x44 */ virtual void do_end();
@@ -186,7 +186,7 @@ struct TRenderingProcessor : public TProcessor {
 
     virtual void do_begin_(const void*, const char*);
     virtual void do_end_();
-    virtual bool do_tag_(u32, const void*, u32);
+    virtual void do_tag_(u32, const void*, u32);
     virtual void do_systemTagCode_(u16, const void*, u32);
     virtual ~TRenderingProcessor();
     virtual void do_begin(const void*, const char*);

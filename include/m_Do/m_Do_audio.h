@@ -199,6 +199,10 @@ inline void mDoAud_monsSeStart(u32 i_seNum, Vec* param_1, u32 param_2, u32 param
     mDoAud_zelAudio_c::getInterface()->monsSeStart(i_seNum, param_1, param_2, param_3, i_reverb);
 }
 
+inline void mDoAud_messageSePlay(u16 param_0, Vec* param_1, s8 param_2) {
+    mDoAud_zelAudio_c::getInterface()->messageSePlay(param_0, param_1, param_2);
+}
+
 inline void mDoAud_onEnemyDamage() {
     mDoAud_zelAudio_c::getInterface()->onEnemyDamage();
 }
