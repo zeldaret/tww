@@ -33,7 +33,7 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
         sVar1 = daPy_HIO_wall_c0::m.field_0x8;
         fVar6 = daPy_HIO_wall_c0::m.field_0x60;
         fVar3 = daPy_HIO_wall_c0::m.field_0x58;
-        if (m34B8 == 2) {
+        if (mDirection == DIR_LEFT) {
             dVar5 = ANM_WALLWR;
         } else {
             dVar5 = ANM_WALLWL;
@@ -45,7 +45,7 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
         sVar1 = daPy_HIO_wall_c0::m.field_0xA;
         fVar6 = daPy_HIO_wall_c0::m.field_0x64;
         fVar3 = daPy_HIO_wall_c0::m.field_0x5C;
-        if (m34B8 == 2) {
+        if (mDirection == DIR_LEFT) {
             dVar5 = ANM_WALLWRDW;
         } else {
             dVar5 = ANM_WALLWLDW;
@@ -72,7 +72,7 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
 }
 
 /* 801371E0-80137608       .text getWHideModePolygon__9daPy_lk_cFP4cXyzP4cXyzP4cXyzi */
-cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* param_2, int param_3) {
+cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* param_2, int direction) {
     if (param_0 != NULL) {
         mLinkLinChk.Set(param_0, param_1, this);
         if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
@@ -103,14 +103,14 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         return NULL;
     }
 
-    if (param_3 == 4) {
+    if (direction == DIR_NONE) {
         f31 = 49.9f;
     } else {
         f31 = 99.8f;
     }
     s16 sVar7 = uVar3;
     cXyz local_48;
-    if (param_3 != 3) {
+    if (direction != DIR_RIGHT) {
         local_3c.set(
             param_2->x + (f31 * triPla->GetNP()->z) + (triPla->GetNP()->x * 1.25f),
             param_2->y,
@@ -129,7 +129,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         }
     }
 
-    if (param_3 != 2) {
+    if (direction != DIR_LEFT) {
         local_3c.set(
             param_2->x - (f31 * triPla->GetNP()->z) + (triPla->GetNP()->x * 1.25f),
             param_2->y,
@@ -148,8 +148,8 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
         }
     }
 
-    if (param_3 != 4) {
-        if (param_3 == 2) {
+    if (direction != DIR_NONE) {
+        if (direction == DIR_LEFT) {
             sVar7 = sVar7 - shape_angle.y;
             param_2->x += daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->z;
             param_2->z -= daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->x;
@@ -217,12 +217,12 @@ BOOL daPy_lk_c::checkWHideFrontFloor(cXyz* param_0) {
 }
 
 /* 80137828-80137914       .text checkWHideModeChange__9daPy_lk_cFP4cXyz */
-BOOL daPy_lk_c::checkWHideModeChange(cXyz* param_0) {
+int daPy_lk_c::checkWHideModeChange(cXyz* param_0) {
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
         if (!checkWHideFrontFloor(param_0)) {
             dComIfGp_setRStatus(0);
         } else if (spActionButton()) {
-            return true;
+            return 1;
         }
     } else {
         cXyz local_18;
@@ -234,7 +234,7 @@ BOOL daPy_lk_c::checkWHideModeChange(cXyz* param_0) {
     if (checkModeFlg(ModeFlg_00000001) && mCurProc != daPyProc_WHIDE_PEEP_e) {
         setTextureAnime(mAnmDataTable[ANM_WALL].mTexAnmIdx, 0);
     }
-    return false;
+    return 0;
 }
 
 /* 80137914-80137A00       .text changeWHideEndProc__9daPy_lk_cFP4cXyz */
@@ -353,14 +353,13 @@ BOOL daPy_lk_c::procWHideWait() {
     cXyz cStack_24;
     cXyz cStack_3c;
     cXyz cStack_48;
-    int iVar1;
 
     getWHideBasePos(&cStack_3c);
     if (changeWHideEndProc(&cStack_3c)) {
         return true;
     }
 
-    iVar1 = checkWHideModeChange(&cStack_3c);
+    int iVar1 = checkWHideModeChange(&cStack_3c);
     if (iVar1 == 1) {
         setSingleMoveAnime(
             ANM_WALLDW,
@@ -388,22 +387,22 @@ BOOL daPy_lk_c::procWHideWait() {
     if (mStickDistance > 0.05f && C_BG_MIN_HEIGHT != mAcch.GetGroundH() &&
         dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y >= 0.5f)
     {
-        iVar1 = getDirectionFromCurrentAngle();
-        if (iVar1 == 3 || iVar1 == 2) {
-            if (iVar1 == 3) {
+        int direction = getDirectionFromCurrentAngle();
+        if (direction == DIR_RIGHT || direction == DIR_LEFT) {
+            if (direction == DIR_RIGHT) {
                 current.angle.y = shape_angle.y + -0x4000;
-                m34B8 = 3;
+                mDirection = DIR_RIGHT;
             } else {
                 current.angle.y = shape_angle.y + 0x4000;
-                m34B8 = 2;
+                mDirection = DIR_LEFT;
             }
 
             getWHideNextPos(&cStack_3c, &cStack_48);
-            iVar1 = checkWHideBackWall(&cStack_48);
-            if (iVar1 != 0 && (!checkNoResetFlg0(daPyFlg0_UNK10000) || checkWHideFrontFloor(&cStack_48))) {
+            BOOL iVar1 = checkWHideBackWall(&cStack_48);
+            if (iVar1 && (!checkNoResetFlg0(daPyFlg0_UNK10000) || checkWHideFrontFloor(&cStack_48))) {
                 return procWHideMove_init();
             }
-            if (iVar1 == 0) {
+            if (!iVar1) {
                 cStack_48 += (cStack_48 - cStack_3c) * 0.25f;
                 mLinkLinChk.Set(&cStack_3c, &cStack_48, this);
                 if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
@@ -420,7 +419,7 @@ BOOL daPy_lk_c::procWHideWait() {
 /* 80138074-801380F0       .text procWHideMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWHideMove_init() {
     commonProcInit(daPyProc_WHIDE_MOVE_e);
-    if (m34B8 == 2) {
+    if (mDirection == DIR_LEFT) {
         current.angle.y = shape_angle.y + 0x4000;
     } else {
         current.angle.y = shape_angle.y + -0x4000;
@@ -451,23 +450,23 @@ BOOL daPy_lk_c::procWHideMove() {
     cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
     s16 sVar8 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
     f32 fVar2;
-    if (checkWHideModeChange(&acStack_24)) {
+    if (checkWHideModeChange(&acStack_24) != 0) {
         fVar2 = 0.0f;
     } else if (mStickDistance > 0.05f && C_BG_MIN_HEIGHT != mAcch.GetGroundH() &&
                dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y >= 0.5f)
     {
-        int iVar6 = getDirectionFromCurrentAngle();
-        if (iVar6 == 1) {
+        int direction = getDirectionFromCurrentAngle();
+        if (direction == DIR_BACKWARD) {
             current.angle.y -= -0x8000;
             mVelocity *= 0.5f;
-            if (m34B8 == 2) {
-                m34B8 = 3;
+            if (mDirection == DIR_LEFT) {
+                mDirection = DIR_RIGHT;
             } else {
-                m34B8 = 2;
+                mDirection = DIR_LEFT;
             }
             setBlendWHideMoveAnime(2.0f);
         }
-        if (iVar6 == 0 || iVar6 == 1) {
+        if (direction == DIR_FORWARD || direction == DIR_BACKWARD) {
             fVar2 = daPy_HIO_move_c0::m.field_0x14;
             fVar2 *= mStickDistance;
         } else {
@@ -486,7 +485,7 @@ BOOL daPy_lk_c::procWHideMove() {
     }
 
     cXyz cStack_3c;
-    triPla = getWHideModePolygon(&acStack_24, &cStack_30, &cStack_3c, m34B8);
+    triPla = getWHideModePolygon(&acStack_24, &cStack_30, &cStack_3c, mDirection);
     if (triPla != NULL) {
         return procWHideReady_init(triPla, &cStack_3c);
     }
@@ -501,7 +500,7 @@ BOOL daPy_lk_c::procWHideMove() {
     }
 
     cXyz cStack_48;
-    if (sVar8 != shape_angle.y && getWHideModePolygon(NULL, NULL, &cStack_48, m34B8) != NULL) {
+    if (sVar8 != shape_angle.y && getWHideModePolygon(NULL, NULL, &cStack_48, mDirection) != NULL) {
         if ((s16)(current.angle.y - shape_angle.y) > 0) {
             current.angle.y = sVar8 + 0x4000;
         } else {
@@ -531,7 +530,7 @@ BOOL daPy_lk_c::procWHidePeep_init() {
         fVar3 = daPy_HIO_wall_c0::m.field_0x48;
         fVar2 = daPy_HIO_wall_c0::m.field_0x2C;
         sVar4 = daPy_HIO_wall_c0::m.field_0x4;
-        if (m34B8 == 2) {
+        if (mDirection == DIR_LEFT) {
             dVar2 = ANM_WALLPR;
         } else {
             dVar2 = ANM_WALLPL;
@@ -541,7 +540,7 @@ BOOL daPy_lk_c::procWHidePeep_init() {
         fVar3 = daPy_HIO_wall_c0::m.field_0x4C;
         fVar2 = daPy_HIO_wall_c0::m.field_0x30;
         sVar4 = daPy_HIO_wall_c0::m.field_0x6;
-        if (m34B8 == 2) {
+        if (mDirection == DIR_LEFT) {
             dVar2 = ANM_WALLPRDW;
         } else {
             dVar2 = ANM_WALLPLDW;
@@ -569,7 +568,7 @@ BOOL daPy_lk_c::procWHidePeep() {
     }
 
     if (std::fabsf(dVar3) < 0.01f) {
-        if (m34B8 == 2) {
+        if (mDirection == DIR_LEFT) {
             dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40_e);
         } else {
             dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20_e);
@@ -581,13 +580,13 @@ BOOL daPy_lk_c::procWHidePeep() {
         }
     }
 
-    if (checkWHideModeChange(&cStack_38)) {
+    if (checkWHideModeChange(&cStack_38) != 0) {
         if (dVar3 > 0.0f) {
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(-dVar3);
         }
     } else if (mStickDistance > 0.05f) {
-        int iVar1 = getDirectionFromCurrentAngle();
-        if ((iVar1 != 0 && dVar3 > 0.0f) || (iVar1 == 0 && dVar3 < 0.0f)) {
+        int direction = getDirectionFromCurrentAngle();
+        if ((direction != DIR_FORWARD && dVar3 > 0.0f) || (direction == 0 && dVar3 < 0.0f)) {
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(-dVar3);
         }
     } else if (dVar3 > 0.0f) {

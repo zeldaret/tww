@@ -37,7 +37,7 @@ void daPy_lk_c::setLadderFootSe() {
 int daPy_lk_c::changeLadderMoveProc(int param_0) {
     cXyz local_2c;
     cXyz local_38;
-    BOOL iVar5;
+    int direction;
 
     cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 0.5f, 0.05f);
     cLib_addCalc(&current.pos.y, m370C.y, 0.5f, 0.5f, 0.05f);
@@ -51,10 +51,10 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
         local_2c.z = current.pos.z;
         if (iVar2 < 0x4000) {
             local_2c.y = 50.0f + (125.0f + current.pos.y);
-            iVar5 = false;
+            direction = DIR_FORWARD;
         } else {
             local_2c.y = current.pos.y - 50.0f;
-            iVar5 = true;
+            direction = DIR_BACKWARD;
         }
         local_38.x = local_2c.x + cM_ssin(shape_angle.y) * 50.0f;
         local_38.z = local_2c.z + cM_scos(shape_angle.y) * 50.0f;
@@ -67,7 +67,7 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
                 procLadderDownEnd_init(param_0);
             }
         } else {
-            procLadderMove_init(param_0, iVar5, &m370C);
+            procLadderMove_init(param_0, direction, &m370C);
         }
     }
     return false;
@@ -307,13 +307,13 @@ BOOL daPy_lk_c::procLadderDownEnd() {
 }
 
 /* 80133BB4-80133E28       .text procLadderMove_init__9daPy_lk_cFiiP4cXyz */
-BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
+BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     int uVar3 = checkModeFlg(ModeFlg_MIDAIR) ? true : false;
     float dVar4 = getLadderMoveAnmSpeed();
 
     commonProcInit(daPyProc_LADDER_MOVE_e);
     if (uVar3 == 0) {
-        if (param_1 == 0) {
+        if (direction == DIR_FORWARD) {
             m370C.y = param_2->y + 37.5f;
         } else {
             dVar4 *= -1.0f;
@@ -351,8 +351,8 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int param_1, cXyz* param_2) {
     }
 
     setSingleMoveAnime(anm, dVar4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x2C);
-    m34B8 = param_1;
-    if (param_1 == 0) {
+    mDirection = direction;
+    if (direction == DIR_FORWARD) {
         setTextureAnime(10, 0);
     } else {
         setTextureAnime(0xb, 0);

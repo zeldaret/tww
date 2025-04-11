@@ -98,8 +98,8 @@ BOOL daPy_lk_c::procVomitWait() {
         procVomitJump_init(0);
     } else {
         if (mStickDistance > 0.05f) {
-            int iVar1 = getDirectionFromAngle(m34DC);
-            if (iVar1 == 2) {
+            int direction = getDirectionFromAngle(m34DC);
+            if (direction == DIR_LEFT) {
                 s16 r5 = 512.0f * mStickDistance;
                 if (r5 > m34D4) {
                     s16 r0 = 64.0f * mStickDistance;
@@ -111,7 +111,7 @@ BOOL daPy_lk_c::procVomitWait() {
                 } else {
                     r30 = r5;
                 }
-            } else if (iVar1 == 3) {
+            } else if (direction == DIR_RIGHT) {
                 s16 r5 = -512.0f * mStickDistance;
                 if (r5 < m34D4) {
                     s16 r0 = 64.0f * mStickDistance;
@@ -210,13 +210,12 @@ BOOL daPy_lk_c::procVomitJump() {
                 cLib_addCalc(&mVelocity, daPy_HIO_vomit_c0::m.field_0x20, 0.5f, 2.0f, 0.1f);
             } else {
                 f32 fVar2;
-                s32 iVar3;
                 if (!checkFanGlideProc(1)) {
                     if (mStickDistance > 0.05f) {
-                        iVar3 = getDirectionFromShapeAngle();
-                        if (iVar3 == 0) {
+                        int direction = getDirectionFromShapeAngle();
+                        if (direction == DIR_FORWARD) {
                             fVar2 = 1.0f;
-                        } else if (iVar3 == 1) {
+                        } else if (direction == DIR_BACKWARD) {
                             fVar2 = -1.0f;
                         } else {
                             fVar2 = 0.0f;

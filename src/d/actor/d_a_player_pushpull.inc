@@ -101,10 +101,10 @@ BOOL daPy_lk_c::procPushPullWait() {
         }
         if (m3570 == 0) {
             if (mStickDistance > 0.05f) {
-                int iVar1 = getDirectionFromShapeAngle();
-                if (iVar1 == 0) {
+                int direction = getDirectionFromShapeAngle();
+                if (direction == DIR_FORWARD) {
                     procPushMove_init();
-                } else if (iVar1 == 1) {
+                } else if (direction == DIR_BACKWARD) {
                     procPullMove_init();
                 }
             } else {
@@ -135,18 +135,18 @@ BOOL daPy_lk_c::procPushMove_init() {
 /* 80151A1C-80151B38       .text procPushMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushMove() {
     dComIfGp_setRStatus(0x11);
-    int iVar1 = getDirectionFromShapeAngle();
+    int direction = getDirectionFromShapeAngle();
     setFrontWallType();
     if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
             if (mStickDistance > 0.05f) {
-                if (iVar1 == 0) {
+                if (direction == DIR_FORWARD) {
                     setPushPullKeepData(dBgW::PP_UNK1_e);
                     return true;
                 }
-                if (iVar1 == 1) {
+                if (direction == DIR_BACKWARD) {
                     return procPullMove_init();
                 }
             }
@@ -180,14 +180,14 @@ BOOL daPy_lk_c::procPullMove_init() {
 BOOL daPy_lk_c::procPullMove() {
     /* Nonmatching - floats */
     dComIfGp_setRStatus(0x11);
-    int iVar1 = getDirectionFromShapeAngle();
+    int direction = getDirectionFromShapeAngle();
     setFrontWallType();
     if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
             if (mStickDistance > 0.05f) {
-                if (iVar1 == 1) {
+                if (direction == DIR_BACKWARD) {
                     f32 dVar4 = cM_ssin(shape_angle.y);
                     f32 dVar5 = cM_scos(shape_angle.y);
                     cXyz local_3c;
@@ -217,7 +217,7 @@ BOOL daPy_lk_c::procPullMove() {
                     }
                     return true;
                 }
-                if (iVar1 == 0) {
+                if (direction == DIR_FORWARD) {
                     return procPushMove_init();
                 }
             }

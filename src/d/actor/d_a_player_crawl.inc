@@ -236,7 +236,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
     commonProcInit(daPyProc_CRAWL_MOVE_e);
     if (var_r29 != 0) {
         f32 dVar4 = getCrawlMoveAnmSpeed();
-        if (getDirectionFromShapeAngle() == 1) {
+        if (getDirectionFromShapeAngle() == DIR_BACKWARD) {
             dVar4 *= -1.0f;
         }
         current.angle.y = shape_angle.y;

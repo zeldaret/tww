@@ -67,20 +67,20 @@ BOOL daPy_lk_c::procHammerSideSwing() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     } else {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x10) {
             f32 dVar4 = mVelocity;
-            u8 uVar1 = m34B8;
+            u8 orig_direction = mDirection;
             mVelocity = 0.0f;
-            m34B8 = 3;
+            mDirection = DIR_RIGHT;
             if (checkNextMode(1)) {
                 return true;
             }
             mVelocity = dVar4;
-            m34B8 = uVar1;
+            mDirection = orig_direction;
         }
         if (changeCutReverseProc(ANM_CUTREL)) {
             setHammerQuake(NULL, NULL, -1);

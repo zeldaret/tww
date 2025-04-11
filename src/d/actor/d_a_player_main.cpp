@@ -1137,13 +1137,13 @@ void daPy_lk_c::setDoStatus() {
 /* 80108A9C-80108B08       .text getDirectionFromAngle__9daPy_lk_cFs */
 int daPy_lk_c::getDirectionFromAngle(s16 angle) {
     if (abs(angle) > 0x6000) {
-        return 1;
+        return DIR_BACKWARD;
     } else if (angle >= 0x2000) {
-        return 2;
+        return DIR_LEFT;
     } else if (angle <= -0x2000) {
-        return 3;
+        return DIR_RIGHT;
     } else {
-        return 0;
+        return DIR_FORWARD;
     }
 }
 

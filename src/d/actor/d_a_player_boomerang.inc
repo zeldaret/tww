@@ -203,10 +203,10 @@ BOOL daPy_lk_c::procBoomerangMove_init() {
     }
 
     commonProcInit(daPyProc_BOOMERANG_MOVE_e);
-    if (m34B8 == 2) {
+    if (mDirection == DIR_LEFT) {
         current.angle.y = shape_angle.y + 0x4000;
     } else {
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
     setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, -1.0f);
@@ -231,8 +231,8 @@ BOOL daPy_lk_c::procBoomerangMove() {
         f32 fVar1 = -1.0f;
         if (std::fabsf(mVelocity) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
-            if (m34B8 != 3) {
-                m34B8 = 3;
+            if (mDirection != DIR_RIGHT) {
+                mDirection = DIR_RIGHT;
                 fVar1 = daPy_HIO_basic_c0::m.field_0xC;
             }
         } else {

@@ -235,8 +235,8 @@ int daPy_lk_c::throwRope() {
                      daPy_HIO_rope_c0::m.field_0x48, daPy_HIO_rope_c0::m.field_0x8, -1.0f);
     setPriTextureAnime(0x48, 0);
     mVelocity = 0.0f;
-    if (m34B8 != 3) {
-        m34B8 = 3;
+    if (mDirection != DIR_RIGHT) {
+        mDirection = DIR_RIGHT;
     }
     current.angle.y = shape_angle.y + -0x4000;
     onModeFlg(ModeFlg_00000001);
@@ -765,7 +765,6 @@ BOOL daPy_lk_c::procRopeHangWait_init(int param_0) {
 BOOL daPy_lk_c::procRopeHangWait() {
     /* Nonmatching */
     bool bVar1;
-    int iVar2;
     s16 unaff_r29;
     float dVar4;
 
@@ -784,21 +783,21 @@ BOOL daPy_lk_c::procRopeHangWait() {
         current.pos.z = mRopePos.z;
         s16 r30 = 0;
         if (mStickDistance > 0.05f) {
-            iVar2 = getDirectionFromAngle(m34DC);
+            int direction = getDirectionFromAngle(m34DC);
             if (spActionButton()) {
-                if (iVar2 == 0) {
+                if (direction == DIR_FORWARD) {
                     if (abs((int)m34D4) <= 0x80) {
                         procRopeUp_init();
                     }
                     bVar1 = true;
                     unaff_r29 = 0;
-                } else if (iVar2 == 1) {
+                } else if (direction == DIR_BACKWARD) {
                     if (abs((int)m34D4) <= 0x80) {
                         procRopeDown_init();
                     }
                     bVar1 = true;
                     unaff_r29 = 0;
-                } else if (iVar2 == 2) {
+                } else if (direction == DIR_LEFT) {
                     s16 r5 = 512.0f * mStickDistance;
                     if (r5 > m34D4) {
                         s16 r0 = 64.0f * mStickDistance;
@@ -810,7 +809,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
                     } else {
                         unaff_r29 = r5;
                     }
-                } else {
+                } else { // DIR_RIGHT
                     s16 r5 = -512.0f * mStickDistance;
                     if (r5 < m34D4) {
                         s16 r0 = 64.0f * mStickDistance;
@@ -829,7 +828,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
                     setSingleMoveAnime(ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1,
                                        daPy_HIO_rope_c0::m.field_0x2C);
                 }
-            } else if ((iVar2 == 0) || (iVar2 == 1)) {
+            } else if ((direction == DIR_FORWARD) || (direction == DIR_BACKWARD)) {
                 procRopeSwingStart_init();
             }
             unaff_r29 = 0;
@@ -939,15 +938,15 @@ BOOL daPy_lk_c::procRopeUp() {
         current.pos.x = mRopePos.x;
         current.pos.z = mRopePos.z;
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            int iVar1 = getDirectionFromAngle(m34DC);
+            int direction = getDirectionFromAngle(m34DC);
             if (mStickDistance <= 0.05f) {
                 procRopeHangWait_init(0);
             } else {
                 if (!spActionButton()) {
                     procRopeSwingStart_init();
-                } else if (iVar1 == 1) {
+                } else if (direction == DIR_BACKWARD) {
                     procRopeDown_init();
-                } else if (iVar1 == 0) {
+                } else if (direction == DIR_FORWARD) {
                     if (m35A0 <= current.pos.y) {
                         if (!specialRopeHangUp()) {
                             procRopeHangWait_init(0);
@@ -1017,15 +1016,15 @@ BOOL daPy_lk_c::procRopeDown() {
         mRopePos = pfVar2->current.pos;
         current.pos.x = mRopePos.x;
         current.pos.z = mRopePos.z;
-        int iVar1 = getDirectionFromAngle(m34DC);
+        int direction = getDirectionFromAngle(m34DC);
         if (mStickDistance <= 0.05f) {
             procRopeHangWait_init(1);
         } else {
             if (!spActionButton()) {
                 procRopeSwingStart_init();
-            } else if (iVar1 == 0) {
+            } else if (direction == DIR_FORWARD) {
                 procRopeUp_init();
-            } else if (iVar1 == 1) {
+            } else if (direction == DIR_BACKWARD) {
                 m35A0 += 1.5f;
                 if (m35A0 > daPy_HIO_rope_c0::m.field_0x40) {
                     m35A0 = daPy_HIO_rope_c0::m.field_0x40;
@@ -1112,10 +1111,10 @@ BOOL daPy_lk_c::procRopeMove_init() {
         return false;
     }
     commonProcInit(daPyProc_ROPE_MOVE_e);
-    if (m34B8 == 2) {
+    if (mDirection == DIR_LEFT) {
         current.angle.y = shape_angle.y + 0x4000;
     } else {
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
@@ -1147,8 +1146,8 @@ BOOL daPy_lk_c::procRopeMove() {
         f32 fVar1 = -1.0f;
         if (std::abs(mVelocity) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
-            if (m34B8 != 3) {
-                m34B8 = 3;
+            if (mDirection != DIR_RIGHT) {
+                mDirection = DIR_RIGHT;
                 fVar1 = daPy_HIO_basic_c0::m.field_0xC;
             }
         } else {

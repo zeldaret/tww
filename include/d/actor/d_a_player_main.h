@@ -888,6 +888,17 @@ public:
         /* 0x40 */ BTN_R = (1 << 6),
     };
     
+    /**
+     * Moving direction calculated from an angle
+     */
+    enum daPy_lk_DIR {
+        /* 0x0 */ DIR_FORWARD,
+        /* 0x1 */ DIR_BACKWARD,
+        /* 0x2 */ DIR_LEFT,
+        /* 0x3 */ DIR_RIGHT,
+        /* 0x4 */ DIR_NONE,
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -1351,9 +1362,9 @@ public:
     void setClimbShapeOffset();
     int getClimbDirectionFromAngle();
     void changeClimbMoveProc(int);
-    int setMoveBGCorrectClimb();
-    BOOL checkBgCorrectClimbMove(cXyz*, cXyz*);
-    BOOL checkBgClimbMove();
+    BOOL setMoveBGCorrectClimb();
+    void checkBgCorrectClimbMove(cXyz*, cXyz*);
+    void checkBgClimbMove();
     void procClimbUpStart_init_sub();
     BOOL procClimbUpStart_init();
     BOOL procClimbUpStart();
@@ -1369,7 +1380,7 @@ public:
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
     BOOL checkWHideFrontFloor(cXyz*);
-    BOOL checkWHideModeChange(cXyz*);
+    int checkWHideModeChange(cXyz*);
     int changeWHideEndProc(cXyz*);
     BOOL procWHideReady_init(cM3dGPla*, cXyz*);
     BOOL procWHideReady();
@@ -2025,7 +2036,7 @@ public:
     /* 0x3490 */ dAttList_c* mpAttnEntryZ;
     /* 0x3494 */ char* m3494;
     /* 0x3498 */ LIGHT_INFLUENCE mLightInfluence;
-    /* 0x34B8 */ u8 m34B8;
+    /* 0x34B8 */ u8 mDirection;
     /* 0x34B9 */ u8 mFrontWallType;
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;

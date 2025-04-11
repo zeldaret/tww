@@ -371,40 +371,36 @@ void daPy_lk_c::setJumpCutAtParam() {
 
 /* 80155970-801559F0       .text getCutDirection__9daPy_lk_cFv */
 int daPy_lk_c::getCutDirection() {
-    int iVar1;
-    s16 sVar2;
-
+    int direction;
     if (mStickDistance <= 0.05f) {
-        iVar1 = 4;
+        direction = DIR_NONE;
     } else {
+        s16 angle;
         if (mpAttnActorLockOn != NULL) {
-            sVar2 = fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
-            sVar2 = m34E8 - sVar2;
+            angle = m34E8 - fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
         } else {
-            sVar2 = m34E8 - m34DE;
+            angle = m34E8 - m34DE;
         }
-        iVar1 = getDirectionFromAngle(sVar2);
+        direction = getDirectionFromAngle(angle);
     }
-    return iVar1 + 1;
+    return direction + 1;
 }
 
 /* 801559F0-80155C3C       .text changeCutProc__9daPy_lk_cFv */
 int daPy_lk_c::changeCutProc() {
-    u32 bVar1;
-
     if (m34C5 == 5 && changeSpecialBattle()) {
         m34C4 = 0;
         return true;
     }
     m34C4++;
-    int iVar4 = getCutDirection() - 1;
+    int direction = getCutDirection() - 1;
     short sVar2;
     if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {
         sVar2 = m34E8;
     }
-    bVar1 = m34C4;
+    u32 bVar1 = m34C4;
     if (bVar1 > 4) {
         mCutCount = bVar1 - 2;
     } else {
@@ -413,17 +409,17 @@ int daPy_lk_c::changeCutProc() {
     bVar1 = m34C4;
 
     if (bVar1 == 4) {
-        if (iVar4 == 3 || iVar4 == 0) {
+        if (direction == DIR_RIGHT || direction == DIR_FORWARD) {
             procCutEA_init();
         } else {
             procCutEB_init();
         }
     } else if (bVar1 < 4) {
-        if (iVar4 == 0) {
+        if (direction == DIR_FORWARD) {
             procCutF_init(sVar2);
-        } else if (iVar4 == 3) {
+        } else if (direction == DIR_RIGHT) {
             procCutR_init(sVar2);
-        } else if (iVar4 == 4) {
+        } else if (direction == DIR_NONE) {
             if (mpAttention->Lockon()) {
                 procCutA_init(sVar2);
             } else {
@@ -433,19 +429,19 @@ int daPy_lk_c::changeCutProc() {
             procCutL_init(sVar2);
         }
     } else if (bVar1 == 6) {
-        if (iVar4 == 0) {
+        if (direction == DIR_FORWARD) {
             procCutTurn_init(1);
-        } else if (iVar4 == 4) {
+        } else if (direction == DIR_NONE) {
             procCutExB_init();
-        } else if (iVar4 == 3) {
+        } else if (direction == DIR_RIGHT) {
             procCutExMJ_init(1);
         } else {
             procCutExMJ_init(0);
         }
     } else if (bVar1 < 6) {
-        if (iVar4 == 0) {
+        if (direction == DIR_FORWARD) {
             procCutExMJ_init(1);
-        } else if (iVar4 == 3) {
+        } else if (direction == DIR_RIGHT) {
             procCutKesa_init();
         } else {
             procCutExA_init();
@@ -580,21 +576,21 @@ BOOL daPy_lk_c::procCutA() {
     m3522 = daPy_HIO_cutA_c0::m.field_0x0;
     if (frameCtrl.getRate() < 0.01f) {
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
 
     if (frameCtrl.getFrame() > daPy_HIO_cutA_c0::m.field_0xC) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTRER)) {
         return true;
@@ -684,21 +680,21 @@ BOOL daPy_lk_c::procCutF() {
     m3522 = daPy_HIO_cutF_c0::m.field_0x0;
     if (frameCtrl.getRate() < 0.01f) {
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
 
     if (frameCtrl.getFrame() > daPy_HIO_cutF_c0::m.field_0xC) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTRER)) {
         return true;
@@ -783,21 +779,21 @@ BOOL daPy_lk_c::procCutR() {
     m3522 = daPy_HIO_cutR_c0::m.field_0x0;
     if (frameCtrl.getRate() < 0.01f) {
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
 
     if (frameCtrl.getFrame() > daPy_HIO_cutR_c0::m.field_0xC) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
 
     if (changeCutReverseProc(ANM_CUTRER)) {
@@ -884,21 +880,21 @@ BOOL daPy_lk_c::procCutL() {
     m3522 = daPy_HIO_cutL_c0::m.field_0x0;
     if (frameCtrl.getRate() < 0.01f) {
         mVelocity = 0.0f;
-        m34B8 = 2;
+        mDirection = DIR_LEFT;
         checkNextMode(0);
         return true;
     }
 
     if (frameCtrl.getFrame() > daPy_HIO_cutL_c0::m.field_0xC) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 2;
+        mDirection = DIR_LEFT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTREL)) {
         return true;
@@ -985,7 +981,7 @@ BOOL daPy_lk_c::procCutEA() {
             m34D0--;
         } else {
             mVelocity = 0.0f;
-            m34B8 = 3;
+            mDirection = DIR_RIGHT;
             checkNextMode(0);
             return true;
         }
@@ -1069,7 +1065,7 @@ BOOL daPy_lk_c::procCutEB() {
             m34D0--;
         } else {
             mVelocity = 0.0f;
-            m34B8 = 2;
+            mDirection = DIR_LEFT;
             checkNextMode(0);
             return true;
         }
@@ -1407,18 +1403,18 @@ BOOL daPy_lk_c::procCutTurn() {
         if ((int)m34D0 > 0) {
             m34D0--;
         } else {
-            m34B8 = 3;
+            mDirection = DIR_RIGHT;
             checkNextMode(0);
             return true;
         }
     } else {
         if (frameCtrl.getFrame() > daPy_HIO_cutTurn_c0::m.field_0x10) {
-            u8 uVar1 = m34B8;
-            m34B8 = 3;
+            u8 orig_direction = mDirection;
+            mDirection = DIR_RIGHT;
             if (checkNextMode(1)) {
                 return true;
             }
-            m34B8 = uVar1;
+            mDirection = orig_direction;
         } else {
             if (frameCtrl.getFrame() > 17.0f) {
                 m32E4.end();
@@ -1632,7 +1628,7 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
         mAnmRatioUpper[UPPER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUpper[UPPER_MOVE0_e].getFrame());
     }
     m3598 = 1.0f;
-    m34B8 = 0;
+    mDirection = DIR_FORWARD;
 
     if (dComIfGs_isEventBit(0xb20)) {
         bVar1 = true;
@@ -1676,42 +1672,42 @@ BOOL daPy_lk_c::procCutTurnMove() {
     } else if (swordButton()) {
         f32 dVar8 = 0.0f;
         if (mStickDistance > 0.05f) {
-            s32 uVar5 = getDirectionFromAngle(m34E8 - m34E6);
+            int direction = getDirectionFromAngle(m34E8 - m34E6);
             daPy_ANM dVar6 = (daPy_ANM)0xffff;
             cLib_addCalcAngleS(&current.angle.y, m34E8, 4, 12000, 0x2000);
             f32 in_f30;
-            if (((u32)m34B8 == 0) || ((u32)m34B8 == 1)) {
-                if (uVar5 == 2 || uVar5 == 3) {
+            if ((mDirection == DIR_FORWARD) || (mDirection == DIR_BACKWARD)) {
+                if (direction == DIR_LEFT || direction == DIR_RIGHT) {
                     dVar6 = ANM_CUTTURNPWLR;
                     in_f30 = daPy_HIO_cutTurnR_c0::m.field_0x24;
                     mVelocity *= 0.5f;
-                } else if (m34B8 != uVar5) {
+                } else if (mDirection != direction) {
                     mVelocity *= 0.5f;
                 }
-            } else if (uVar5 == 0 || uVar5 == 1) {
+            } else if (direction == DIR_FORWARD || direction == DIR_BACKWARD) {
                 dVar6 = ANM_CUTTURNPWFB;
                 in_f30 = daPy_HIO_cutTurnR_c0::m.field_0x1C;
                 mVelocity *= 0.5f;
-            } else if (m34B8 != uVar5) {
+            } else if (mDirection != direction) {
                 mVelocity *= 0.5f;
             }
-            if (m34B8 == uVar5) {
+            if (mDirection == direction) {
                 dVar8 = daPy_HIO_move_c0::m.field_0x14 * mStickDistance;
             } else {
-                m34B8 = (u8)uVar5;
+                mDirection = direction;
             }
             if (dVar6 != (daPy_ANM)0xffff) {
                 setSingleMoveAnime(dVar6, 0.0f, 0.0f, -1, in_f30);
             }
         }
         setNormalSpeedF(dVar8, 0.5f, 2.0f, 0.25f);
-        if (m34B8 == 0) {
+        if (mDirection == DIR_FORWARD) {
             dVar8 = daPy_HIO_cutTurnR_c0::m.field_0x18;
-        } else if (m34B8 == 1) {
+        } else if (mDirection == DIR_BACKWARD) {
             dVar8 = -daPy_HIO_cutTurnR_c0::m.field_0x18;
-        } else if (m34B8 == 3) {
+        } else if (mDirection == DIR_RIGHT) {
             dVar8 = -daPy_HIO_cutTurnR_c0::m.field_0x20;
-        } else {
+        } else { // DIR_LEFT
             dVar8 = daPy_HIO_cutTurnR_c0::m.field_0x20;
         }
         f32 dVar7 = mVelocity / mMaxNormalSpeed;

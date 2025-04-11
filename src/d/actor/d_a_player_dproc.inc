@@ -1275,7 +1275,7 @@ BOOL daPy_lk_c::dProcLookWait_init() {
     mVelocity = 0.0f;
     setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
     current.angle.y = shape_angle.y;
-    m34B8 = 4;
+    mDirection = DIR_NONE;
     initShipRideUseItem(iVar1, 0);
     return true;
 }

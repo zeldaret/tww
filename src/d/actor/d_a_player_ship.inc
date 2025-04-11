@@ -212,8 +212,8 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
         setShapeAngleToAtnActor();
     } else {
         if (mStickDistance > 0.05f) {
-            int iVar1 = getDirectionFromAngle(m34DC);
-            if (iVar1 == 2) {
+            int direction = getDirectionFromAngle(m34DC);
+            if (direction == DIR_LEFT) {
                 s16 r5 = 512.0f * mStickDistance;
                 if (r5 > m34DA) {
                     s16 r0 = 64.0f * mStickDistance;
@@ -225,7 +225,7 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
                 } else {
                     r30 = r5;
                 }
-            } else if (iVar1 == 3) {
+            } else if (direction == DIR_RIGHT) {
                 s16 r5 = -512.0f * mStickDistance;
                 if (r5 < m34DA) {
                     s16 r0 = 64.0f * mStickDistance;
