@@ -132,7 +132,7 @@ public:
         BG() {}
         ~BG() {}
         /* 0x00 */ u8 m00[0x04 - 0x00];
-        /* 0x04 */ dBgS_CamGndChk_Wtr m04; // dBgS_CamGndChk might be too large by 4 bytes
+        /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
         /* 0x58 */ f32 m58;
         /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
     };
