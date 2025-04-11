@@ -210,6 +210,13 @@ public:
     void update(cXyz&, GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
     virtual void draw();
 
+    f32 getRndFX(f32 param_0) { return mRnd.getFX(param_0); }
+    f32 getRndValue(f32 param_0, f32 param_1) { return mRnd.getValue(param_0, param_1); }
+
+    void initRnd(int r0, int r1, int r2) {
+        mRnd.init(r0, r1, r2);
+    }
+
 public:
     /* 0x04 */ cM_rnd_c mRnd;
     /* 0x10 */ cXyz mPos;
@@ -238,6 +245,7 @@ public:
     void setScissor(f32, f32, f32, f32);
 
     view_port_class* getViewPort() { return &mViewport; }
+    scissor_class* getScissor() { return &mViewport.mScissor; }
     int getCameraID() { return mCameraID; }
     void setCameraID(int id) { mCameraID = id; }
     void setMode(int mode) { mMode = mode; }

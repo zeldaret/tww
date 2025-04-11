@@ -171,11 +171,11 @@ void dComIfG_play_c::itemInit() {
     field_0x497a = 0;
     mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
-    mMesgCameraTagInfo = 0;
-    field_0x4984 = 0;
+    mMesgCamInfo.mID = 0;
+    mMesgCamInfo.mBasicID = 0;
 
-    for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
-        field_0x4988[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mMesgCamInfo.mActor); i++) {
+        mMesgCamInfo.mActor[i] = 0;
     }
 }
 
