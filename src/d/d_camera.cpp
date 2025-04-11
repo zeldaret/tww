@@ -227,9 +227,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m528 = NULL;
     m258 = 0;
     m254 = 0;
-    m248[0] = 0x85e;
-    m248[1] = 0x828;
-    m248[2] = 0x381b;
+    m248[0] = JA_SE_MAN_CAMERA_NG;
+    m248[1] = JA_SE_CAMERA_TO_MANUAL;
+    m248[2] = JA_SE_ATM_PRT_SHIP_CREAK;
     mCurMode = 0;
     m144 = 1;
     m514 = 0;
@@ -247,7 +247,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
     if (stage_dt != NULL) {
         stage_stag_info_class*  stag_info = stage_dt->getStagInfo();
-        if (stag_info && stag_info->mCameraMapToolID != -1) { // Bug? 
+        if (stag_info && stag_info->mCameraMapToolID != -1) { // Bug, comparing unsigned value with -1 
             mapToolType = GetCameraTypeFromMapToolID(stag_info->mCameraMapToolID, -1);
             if (mapToolType != 0xFF && Chtyp(mapToolType)) {
                 mMapToolType = mapToolType;
@@ -256,7 +256,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     }
 
     mCurStyle = types[mCurType].mStyles[0][mCurMode];
-    mLockOnActorId = -1;
+    mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
     mStageMapToolCameraIdx = 0xFF;
     m0E8 = -1;
     mEventData.field_0x14 = -1;
@@ -606,7 +606,7 @@ void dCamera_c::initMonitor() {
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
 void dCamera_c::updateMonitor() {
     /* Nonmatching - Code 100%, mBG offset issue */
-    float playerMonitorHoritzontalDist;
+    float playerMonitorHorizontalDist;
     cXyz playerPos;
     
     if (mpPlayerActor != NULL) {
@@ -616,13 +616,13 @@ void dCamera_c::updateMonitor() {
             dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, TRUE, &mMonitoringThings.mPos, NULL, NULL);
         }
 
-        playerMonitorHoritzontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitoringThings.mPos);
+        playerMonitorHorizontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitoringThings.mPos);
 
-        mMonitoringThings.field_0x0C.z = playerMonitorHoritzontalDist - mMonitoringThings.field_0x0C.x;
+        mMonitoringThings.field_0x0C.z = playerMonitorHorizontalDist - mMonitoringThings.field_0x0C.x;
 
-        mMonitoringThings.field_0x0C.y += (playerMonitorHoritzontalDist - mMonitoringThings.field_0x0C.y) * 0.075f;
+        mMonitoringThings.field_0x0C.y += (playerMonitorHorizontalDist - mMonitoringThings.field_0x0C.y) * 0.075f;
 
-        mMonitoringThings.field_0x0C.x = playerMonitorHoritzontalDist;
+        mMonitoringThings.field_0x0C.x = playerMonitorHorizontalDist;
 
         mMonitoringThings.mPos = playerPos;
 
@@ -697,7 +697,7 @@ void dCamera_c::Att() {
 bool dCamera_c::checkForceLockTarget() {
     bool res = TRUE;
 
-    if (mLockOnActorId != -1) {
+    if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
         mpLockonActor = GetForceLockOnActor();
 
         if (mpLockonActor) {
@@ -734,13 +734,13 @@ bool dCamera_c::Run() {
 
     mForcusLine.Off();
 
-    clrFlag(~(0xefeb63fe));
+    clrFlag(0x10149C01);
 
     checkSpecialArea();
 
     checkGroundInfo();
 
-    if (m530 && !chkFlag(0x200000)) { // wrong flag, accessing same bit (21) but doesn't work for some reason
+    if (m530 && !chkFlag(0x200000)) {
         if (!(dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000))) {
             fVar1 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f) * m540; //regswap
             fVar3 = fVar1 - m538;
@@ -774,7 +774,7 @@ bool dCamera_c::Run() {
     }
     
     if (!checkForceLockTarget()) {
-        mLockOnActorId = -1;
+        mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
     }
     else {
         mForceLockTimer++;
@@ -949,7 +949,7 @@ bool dCamera_c::Run() {
         dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x10);
     }
 
-    if (mEventFlags >> 0x12 & 1) {
+    if (chkFlag(0x40000)) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
     }
     else {
@@ -968,7 +968,7 @@ bool dCamera_c::Run() {
 
 /* 80163EF4-801640A8       .text NotRun__9dCamera_cFv */
 bool dCamera_c::NotRun() {
-    clrFlag(~(0x6feb63de));
+    clrFlag(0x90149C21);
 
     checkGroundInfo();
 
@@ -1142,7 +1142,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
             clrFlag(0x4000000);
         }
 
-        if (mLockOnActorId != -1 && mpLockonActor && fopAcM_GetName(mpLockonActor) == PROC_NPC_MD) {
+        if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e && mpLockonActor && fopAcM_GetName(mpLockonActor) == PROC_NPC_MD) {
             m144 = 1;
             i_curMode = 0;
         }
@@ -1204,19 +1204,19 @@ int dCamera_c::nextMode(s32 i_curMode) {
             else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
                 mpLockonTarget = get_boomerang_actor(mpPlayerActor);
                 next_mode = 2;
-                mLockOnActorId = -1;
+                mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
             }
             else if (isPlayerGuarding(mPadId)) {
                 next_mode = 19;
             }
-            else if (mLockOnActorId != -1) {
+            else if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
                 if (mpLockonActor) {
                     next_mode = 2;
                     mpLockonTarget = mpLockonActor;
                 }
                 else {
                     next_mode = 0;
-                    mLockOnActorId = -1;
+                    mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
                 }
             }
             else {
@@ -1234,7 +1234,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
     }
 
     if (next_mode != 2) {
-        mLockOnActorId = -1;
+        mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
     }
 
     if (next_mode == 12 && types[mCurType].mStyles[0][next_mode] < 0) {
@@ -1510,7 +1510,7 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
 int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
     /* Nonmatching - regswap */
-    dStage_stageDt_c& stage_dt = g_dComIfG_gameInfo.play.getStage();
+    dStage_stageDt_c& stage_dt = dComIfGp_getStage();
     
     stage_camera_class* camera;
     stage_arrow_class* arrow;
@@ -1844,7 +1844,7 @@ BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
 /* 80166DE8-80166EA4       .text sph_chk_callback__FP11dBgS_SphChkP10cBgD_Vtx_tiiiP8cM3dGPlaPv */
 void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0, int i_vtxIdx1, int i_vtxIdx2, cM3dGPla* i_plane, void* i_data) {
-    /* Nonmatching - Code 100% */
+    /* Nonmatching - Was matching before (excluding memory offsets) but a recent commit must've changed it */
     camSphChkdata* sph_chk_data = (camSphChkdata*)i_data;
     f32 len = cM3d_SignedLenPlaAndPos(i_plane, &sph_chk_data->field_0x8);
     if (i_plane->getPlaneFunc(sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
@@ -2642,8 +2642,8 @@ bool dCamera_c::ForceLockOn(fpc_ProcID procId) {
 
 /* 8017BD2C-8017BD5C       .text ForceLockOff__9dCamera_cFUi */
 bool dCamera_c::ForceLockOff(fpc_ProcID procId) {
-    if (procId == mLockOnActorId || procId == -1) {
-        mLockOnActorId = -1;
+    if (procId == mLockOnActorId || procId == fpcM_ERROR_PROCESS_ID_e) {
+        mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
         return TRUE;
     }
     return FALSE;
@@ -2732,7 +2732,7 @@ void view_setup(camera_process_class* i_this) {
     dComIfGd_setView(view);
 
     f32 far;
-    if (g_dComIfG_gameInfo.play.mbCamOverrideFarPlane != 0) { // inline?
+    if (dComIfGp_getScopeMesgStatus() != 0) {
         far = view->mFar;
     } else {
         far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
@@ -2748,6 +2748,7 @@ void store(camera_process_class* i_this) {
     dCamera_c* body = &((camera_class*)i_this)->mCamera;
 
     int camera_id = get_camera_id(a_this);
+    // Based on the asm I'm not sure if `dComIfGp_checkCameraAttentionStatus(camera_id, 8)` is meant to be used here (or the functions that are used in the inline)
     
     cXyz oldCenter = *fopCamM_GetCenter_p(a_this);
     cXyz oldEye = *fopCamM_GetEye_p(a_this);
@@ -2794,6 +2795,7 @@ void store(camera_process_class* i_this) {
     fopCamM_SetBank(a_this, bank);
     fopCamM_SetFovy(a_this, fovy);
 
+    // The code logic seems right but it's just the usage of this `stage_info` variable that seems to be the key to this matching
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
     if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
         fopCamM_SetNear(a_this, 30.0f);
@@ -2823,7 +2825,7 @@ int camera_execute(camera_process_class* i_this) {
     a_this->mCamera.Pause();
 
     if (!dComIfGp_evmng_cameraPlay()) {
-        mDoGph_gInf_c::mAutoForcus = 1;
+        mDoGph_gInf_c::onAutoForcus();
     }
 
     a_this->mCamera.Active();
@@ -2853,25 +2855,25 @@ bool camera_draw(camera_process_class* i_this) {
 
     j3dSys.setViewMtx(i_this->mViewMtx);
     cMtx_inverse(i_this->mViewMtx, i_this->mInvViewMtx);
-    JAIZelBasic::zel_basic->getCameraInfo(&i_this->mLookat.mEye, j3dSys.mViewMtx, camera_id);
+    mDoAud_getCameraInfo(&i_this->mLookat.mEye, j3dSys.mViewMtx, camera_id);
 
     dBgS_GndChk gndchk;
     gndchk.SetPos(&i_this->mLookat.mEye);
 
-    f32 cross = dComIfG_Bgsp()->GroundCross(&gndchk);
-    if (cross != -1000000000.0f) {
+    f32 ground_y = dComIfG_Bgsp()->GroundCross(&gndchk);
+    if (ground_y != C_BG_MIN_HEIGHT) {
         mDoAud_getCameraMapInfo(dComIfG_Bgsp()->GetMtrlSndId(gndchk));
         mDoAud_setCameraGroupInfo(dComIfG_Bgsp()->GetGrpSoundId(gndchk));
 
         Vec spDC;
         spDC.x = i_this->mLookat.mEye.x;
-        spDC.y = cross;
+        spDC.y = ground_y;
         spDC.z = i_this->mLookat.mEye.z;
 
-        JAIZelBasic::zel_basic->setCameraPolygonPos(&spDC);
+        mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(&spDC);
 
     } else {
-        JAIZelBasic::zel_basic->setCameraPolygonPos(NULL);
+        mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(NULL);
     }
 
     MTXCopy(i_this->mViewMtx, i_this->mViewMtxNoTrans);
@@ -2904,7 +2906,7 @@ bool camera_draw(camera_process_class* i_this) {
 }
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
-int init_phase1(camera_class* i_this) {
+cPhs_State init_phase1(camera_class* i_this) {
     /* Nonmatching - Code 100% */
     int camera_id = get_camera_id(i_this);
     
@@ -2923,7 +2925,7 @@ int init_phase1(camera_class* i_this) {
 }
 
 /* 8017C7E4-8017C980       .text init_phase2__FP12camera_class */
-int init_phase2(camera_class* i_this) {
+cPhs_State init_phase2(camera_class* i_this) {
     /* Nonmatching - Code 100% */
     camera_process_class* a_this = (camera_process_class*)i_this;
     dCamera_c* body = &i_this->mCamera;

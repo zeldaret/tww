@@ -132,7 +132,7 @@ public:
         BG() {}
         ~BG() {}
         /* 0x00 */ u8 m00[0x04 - 0x00];
-        /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
+        /* 0x04 */ dBgS_CamGndChk_Wtr m04; // dBgS_CamGndChk might be too large by 4 bytes
         /* 0x58 */ f32 m58;
         /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
     };
@@ -196,7 +196,7 @@ public:
     /* 0x124 */ int mPadId;
     /* 0x128 */ fopAc_ac_c* mpPlayerActor;
     /* 0x12C */ fopAc_ac_c* mpLockonTarget;
-    /* 0x130 */ u32 mLockOnActorId;
+    /* 0x130 */ fpc_ProcID mLockOnActorId;
     /* 0x134 */ fopAc_ac_c* mpLockonActor;
     /* 0x138 */ int mForceLockTimer;
     /* 0x13C */ int mCurMode;
@@ -518,7 +518,7 @@ public:
     void StickUse() { clrFlag(0x1000000); }
     void StickUseless() { setFlag(0x1000000); }
     void setFlag(u32 flag) { mEventFlags |= flag; }
-    bool chkFlag(u32 flag) { return mEventFlags & flag; }
+    bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
 
     static engine_fn engine_tbl[];
