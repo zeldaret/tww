@@ -2733,6 +2733,7 @@ inline void dComIfGp_setMesgCameraAttrInfo(int param_1) {
 
 inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
     return g_dComIfG_gameInfo.play.getMesgCamInfo();
+}
 
   inline u8 dComIfGp_checkMesgBgm() {
     return g_dComIfG_gameInfo.play.checkMesgBgm();
