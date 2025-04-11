@@ -73,7 +73,7 @@ struct camSphChkdata {
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
-    /* 0x14 */ cXyz* field_0x14;
+    /* 0x14 */ cXyz field_0x14;
 };
 
 class dCamera_monitoring_things {

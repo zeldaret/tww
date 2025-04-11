@@ -1844,10 +1844,10 @@ BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
 /* 80166DE8-80166EA4       .text sph_chk_callback__FP11dBgS_SphChkP10cBgD_Vtx_tiiiP8cM3dGPlaPv */
 void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0, int i_vtxIdx1, int i_vtxIdx2, cM3dGPla* i_plane, void* i_data) {
-    /* Nonmatching - Was matching before (excluding memory offsets) but a recent commit must've changed it */
+    /* Nonmatching - Code 100% */
     camSphChkdata* sph_chk_data = (camSphChkdata*)i_data;
     f32 len = cM3d_SignedLenPlaAndPos(i_plane, &sph_chk_data->field_0x8);
-    if (i_plane->getPlaneFunc(sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
+    if (i_plane->getPlaneFunc(&sph_chk_data->field_0x14) >= -0.0001f && len < sph_chk_data->field_0x4) {
         cXyz normal = *i_plane->GetNP();
         sph_chk_data->field_0x8 += normal * (sph_chk_data->field_0x4 - len);
     }
