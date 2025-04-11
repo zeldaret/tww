@@ -4,6 +4,8 @@
 //
 
 #include "d/actor/d_a_obj_figure.h"
+#include "d/res/res_figure.h"
+#include "d/res/res_figure2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
@@ -947,7 +949,7 @@ BOOL daObjFigure_c::createHeap() {
     }
 
     if(mFigureNo == 0x3D) {
-        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(arcname, 7));
+        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_047));
         if(pBrkData == NULL) {
             return false;
         }
@@ -962,11 +964,11 @@ BOOL daObjFigure_c::createHeap() {
         }
     }
     if(mFigureNo == 0x40) {
-        J3DModelData* p1 = (J3DModelData*)dComIfG_getObjectIDRes(arcname, 4);
+        J3DModelData* p1 = (J3DModelData*)dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_044);
         mpMorf = new mDoExt_McaMorf(
             p1,
             NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, 0),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, FIGURE2_BCK_VF_064L),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
@@ -987,7 +989,7 @@ BOOL daObjFigure_c::createHeap() {
         }
     }
 
-    J3DModelData* pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", 1));
+    J3DModelData* pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
     if(pPedestalData == NULL) {
         return false;
     }
@@ -997,7 +999,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", 2));
+    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", FIGURE_BTP_VF_BS));
     if(mpPedestalBtp == NULL) {
         return false;
     }

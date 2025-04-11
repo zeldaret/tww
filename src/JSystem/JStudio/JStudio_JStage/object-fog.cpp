@@ -22,9 +22,9 @@ TAdaptor_fog::~TAdaptor_fog() {
 }
 
 const TAdaptor_fog::TVVOutput TAdaptor_fog::saoVVOutput_[] = {
-    TVVOutput(4, &JStage::TFog::JSGSetStartZ, &JStage::TFog::JSGGetStartZ),
-    TVVOutput(5, &JStage::TFog::JSGSetEndZ, &JStage::TFog::JSGGetEndZ),
-    TVVOutput(-1, NULL, NULL),
+    TVVOutput(TEFOG_4, &JStage::TFog::JSGSetStartZ, &JStage::TFog::JSGGetStartZ),
+    TVVOutput(TEFOG_5, &JStage::TFog::JSGSetEndZ, &JStage::TFog::JSGGetEndZ),
+    TVVOutput(TE_VALUE_NONE, NULL, NULL),
 };
 
 /* 80277D70-80277DB8       .text adaptor_do_prepare__Q214JStudio_JStage12TAdaptor_fogFPCQ27JStudio7TObject */

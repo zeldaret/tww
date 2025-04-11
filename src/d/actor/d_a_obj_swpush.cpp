@@ -17,7 +17,7 @@
 const char daObjSwpush::Act_c::M_arcname_kbota[] = "Kbota_00";
 const char daObjSwpush::Act_c::M_arcname_hhbot[] = "Hhbot";
 
-const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[4] = {
+const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
     {
         /* mHeapSize        */ 0xAE0,
         /* mFlags           */ static_cast<AttrFlag_e>(FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),

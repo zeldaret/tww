@@ -577,39 +577,39 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
     static const u32 shop_next_msg_tbl[4][2] = {
         {
             0x33FB,
-            0x33FC
+            0x33FC,
         },
         {
             0x33FD,
-            0x33FE
+            0x33FE,
         },
         {
             0x33FF,
-            0x3400
+            0x3400,
         },
         {
             0x3401,
-            0x3402
-        }
+            0x3402,
+        },
     };
 
     const u8 itemArr1[4][2] = {
         {
             dItem_BIRD_BAIT_5_e,
-            dItem_HYOI_PEAR_e
+            dItem_HYOI_PEAR_e,
         },
         {
             dItem_RED_POTION_e,
-            dItem_BLUE_POTION_e
+            dItem_BLUE_POTION_e,
         },
         {
             dItem_BOMB_10_e,
-            dItem_BOMB_30_e
+            dItem_BOMB_30_e,
         },
         {
             dItem_ARROW_10_e,
-            dItem_ARROW_30_e
-        }
+            dItem_ARROW_30_e,
+        },
     };
 
     int temp = 1;

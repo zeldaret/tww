@@ -246,7 +246,7 @@ BOOL daPy_lk_c::procBtRoll_init(fopEn_enemy_c* enemy) {
     local_38.z = 0.5f * (current.pos.z + (enemy->current.pos.z - enemy->getBtBodyR() * cM_scos(enemy->shape_angle.y)));
 
     daPy_ANM anm;
-    if (m34B8 == 2) {
+    if (mDirection == DIR_LEFT) {
         m34D4 = -0x7FF0;
         anm = ANM_MROLLL;
     } else {

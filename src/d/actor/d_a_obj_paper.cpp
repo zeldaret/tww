@@ -39,7 +39,7 @@ namespace daObjPaper {
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
-        static const Attr_c L_attr[3] = {
+        static const Attr_c L_attr[] = {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,

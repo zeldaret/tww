@@ -339,7 +339,7 @@ namespace daObjMovebox {
         },
     };
     
-    const Attr_c Act_c::M_attr[13] = {
+    const Attr_c Act_c::M_attr[] = {
         // TYPE_BREAKABLE_WOODEN_CRATE
         // Arcname: Kkiba_00
         {
@@ -1123,7 +1123,7 @@ namespace daObjMovebox {
     /* 00001674-000016B8       .text init_mtx__Q212daObjMovebox5Act_cFv */
     void Act_c::init_mtx() {
         if (mpModel) {
-            mpModel->mBaseScale = scale;
+            mpModel->setBaseScale(scale);
         }
         set_mtx();
     }

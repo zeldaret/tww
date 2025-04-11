@@ -587,7 +587,7 @@ void daArrow_c::setStopActorMatrix() {
     
     static cXyz offset_arrow_pos(0.0f, 0.0f, -50.0f);
     
-    mDoMtx_stack_c::copy(hitModel->mpNodeMtx[mHitJointIndex]);
+    mDoMtx_stack_c::copy(hitModel->getAnmMtx(mHitJointIndex));
     csXyz hitJointRot;
     mDoMtx_MtxToRot(mDoMtx_stack_c::get(), &hitJointRot);
     

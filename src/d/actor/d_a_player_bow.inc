@@ -285,10 +285,10 @@ BOOL daPy_lk_c::procBowMove_init() {
     }
 
     commonProcInit(daPyProc_BOW_MOVE_e);
-    if (m34B8 == 2) {
+    if (mDirection == DIR_LEFT) {
         current.angle.y = shape_angle.y + 0x4000;
     } else {
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
     if (!checkBowAnime()) {
@@ -314,8 +314,8 @@ BOOL daPy_lk_c::procBowMove() {
         f32 fVar1 = -1.0f;
         if (std::fabsf(mVelocity) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
-            if (m34B8 != 3) {
-                m34B8 = 3;
+            if (mDirection != DIR_RIGHT) {
+                mDirection = DIR_RIGHT;
                 fVar1 = daPy_HIO_basic_c0::m.field_0xC;
             }
             current.angle.y = shape_angle.y + -0x4000;

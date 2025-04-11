@@ -83,9 +83,9 @@ struct J3DTexCoord : public J3DTexCoordInfo {
     J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
     J3DTexCoord(const J3DTexCoordInfo& info) { *(J3DTexCoordInfo*)this = info; }
 
-    u8 getTexGenType() { return mTexGenType; }
-    u8 getTexGenSrc() { return mTexGenSrc; }
-    u32 getTexGenMtx() { return mTexGenMtx & 0xFF; }
+    u8 getTexGenType() const { return mTexGenType; }
+    u8 getTexGenSrc() const { return mTexGenSrc; }
+    u8 getTexGenMtx() const { return mTexGenMtx; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
 };  // Size: 0x4
 

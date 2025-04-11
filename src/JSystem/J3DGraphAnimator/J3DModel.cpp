@@ -675,14 +675,12 @@ void J3DModel::calcNrmMtx() {
         for (u16 i = 0; i < getModelData()->getDrawMtxNum(); i++) {
             if (getModelData()->getDrawMtxFlag(i) == 0) {
                 if (getScaleFlag(getModelData()->getDrawMtxIndex(i)) == 1) {
-                    Mtx& drawMtx = getDrawMtx(i);
-                    J3DPSMtx33CopyFrom34(drawMtx, getNrmMtx(i));
+                    setNrmMtx(i, getDrawMtx(i));
                 } else
                     J3DPSCalcInverseTranspose(getDrawMtx(i), getNrmMtx(i));
             } else {
                 if (getEnvScaleFlag(getModelData()->getDrawMtxIndex(i)) == 1) {
-                    Mtx& drawMtx = getDrawMtx(i);
-                    J3DPSMtx33CopyFrom34(drawMtx, getNrmMtx(i));
+                    setNrmMtx(i, getDrawMtx(i));
                 } else
                     J3DPSCalcInverseTranspose(getDrawMtx(i), getNrmMtx(i));
             }

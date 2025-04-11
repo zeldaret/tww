@@ -12,7 +12,7 @@
 #include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjSwheavy::Act_c::M_arcname[] = "Hhbot";
-const daObjSwheavy::Attr_c daObjSwheavy::Act_c::M_attr[4] = {
+const daObjSwheavy::Attr_c daObjSwheavy::Act_c::M_attr[] = {
     {
         /* m00            */ {},
         /* mFlags         */ 0,

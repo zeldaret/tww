@@ -1288,7 +1288,7 @@ namespace daBomb2 {
             1.04f,
             1.02f,
             1.01f,
-            1.0f
+            1.0f,
         };
 
         if(fopAcM_GetModel(this) == 0) {

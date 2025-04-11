@@ -88,20 +88,20 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
             m34D0--;
         } else {
             mVelocity = 0.0f;
-            m34B8 = 3;
+            mDirection = DIR_RIGHT;
             checkNextMode(0);
             return true;
         }
     } else if (frameCtrl.getFrame() > daPy_HIO_cutBoko_c0::m.field_0x1C) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTRER)) {
         return true;
@@ -174,19 +174,19 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
     }
     if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) || (mActorKeepEquip.getActor() == NULL)) {
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_cutBoko_c0::m.field_0x50) {
         f32 dVar4 = mVelocity;
-        u8 uVar1 = m34B8;
+        u8 orig_direction = mDirection;
         mVelocity = 0.0f;
-        m34B8 = 3;
+        mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
         mVelocity = dVar4;
-        m34B8 = uVar1;
+        mDirection = orig_direction;
     }
     if (changeCutReverseProc(ANM_CUTREL)) {
         return true;

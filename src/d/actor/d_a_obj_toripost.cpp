@@ -335,7 +335,7 @@ int daObjTpost_c::getMsgXY() {
             col.r = REG12_S(0) + 0x80;
             col.g = REG12_S(1) + 0x80;
             col.b = REG12_S(2) + 0x80;
-            mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
+            mDoMtx_stack_c::copy(mMorf->getModel()->getAnmMtx(2));
             mDoMtx_stack_c::multVec(&pos, &pos);
             dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             

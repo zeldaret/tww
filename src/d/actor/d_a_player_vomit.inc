@@ -20,16 +20,16 @@ BOOL daPy_lk_c::checkJumpFlower() {
     short sVar3;
 
     iVar1 = mCyl.GetCoHitAc();
-    if (((mCyl.ChkCoHit()) && (iVar1 != 0)) && (fopAcM_GetName(iVar1) == PROC_JBO)) {
+    if (mCyl.ChkCoHit() && iVar1 != 0 && fopAcM_GetName(iVar1) == PROC_JBO) {
         if (checkModeFlg(ModeFlg_MIDAIR)) {
-            if ((speed.y <= 0.0f) && (current.pos.y > iVar1->current.pos.y - 50.0f)) {
+            if (speed.y <= 0.0f && current.pos.y > iVar1->current.pos.y - 50.0f) {
                 return procVomitWait_init();
             }
-        } else if ((sVar3 = fopAcM_searchActorAngleY(this, iVar1),
-                    cLib_distanceAngleS(sVar3, shape_angle.y) < 0x2000) &&
-                   (mStickDistance > 0.2f))
-        {
-            return procVomitReady_init(sVar3, fopAcM_searchActorDistanceXZ(this, iVar1));
+        } else {
+            sVar3 = fopAcM_searchActorAngleY(this, iVar1);
+            if (cLib_distanceAngleS(sVar3, shape_angle.y) < 0x2000 && mStickDistance > 0.2f) {
+                return procVomitReady_init(sVar3, fopAcM_searchActorDistanceXZ(this, iVar1));
+            }
         }
     }
     return false;
@@ -92,15 +92,14 @@ BOOL daPy_lk_c::procVomitWait_init() {
 
 /* 8014FC20-8014FD8C       .text procVomitWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVomitWait() {
-    /* Nonmatching - floats */
     s16 r30 = 0;
 
     if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP)) {
         procVomitJump_init(0);
     } else {
         if (mStickDistance > 0.05f) {
-            int iVar1 = getDirectionFromAngle(m34DC);
-            if (iVar1 == 2) {
+            int direction = getDirectionFromAngle(m34DC);
+            if (direction == DIR_LEFT) {
                 s16 r5 = 512.0f * mStickDistance;
                 if (r5 > m34D4) {
                     s16 r0 = 64.0f * mStickDistance;
@@ -112,7 +111,7 @@ BOOL daPy_lk_c::procVomitWait() {
                 } else {
                     r30 = r5;
                 }
-            } else if (iVar1 == 3) {
+            } else if (direction == DIR_RIGHT) {
                 s16 r5 = -512.0f * mStickDistance;
                 if (r5 < m34D4) {
                     s16 r0 = 64.0f * mStickDistance;
@@ -140,12 +139,10 @@ BOOL daPy_lk_c::procVomitWait() {
 
 /* 8014FD8C-8014FF0C       .text procVomitJump_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procVomitJump_init(int param_0) {
-    /* Nonmatching - floats */
-    float fVar1;
-
     commonProcInit(daPyProc_VOMIT_JUMP_e);
     m35C4 = 40.0f;
-    if ((param_0 == 2) || (param_0 == 3)) {
+    float fVar1;
+    if (param_0 == 2 || param_0 == 3) {
         fVar1 = 3.0f;
     } else {
         fVar1 = -1.0f;
@@ -185,7 +182,6 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
 
 /* 8014FF0C-801500E4       .text procVomitJump__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVomitJump() {
-    /* Nonmatching - floats */
     if ((s32)m34D2 != 0) {
         m34D2--;
         if (m34D2 == 0) {
@@ -195,41 +191,41 @@ BOOL daPy_lk_c::procVomitJump() {
         }
         mStts.ClrCcMove();
         return true;
-    } else {
-        if (m34D0 != 0) {
-            mStts.ClrCcMove();
-            m34D0--;
-        }
-        if (!checkJumpFlower()) {
-            if (mAcch.ChkGroundHit()) {
-                changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+    }
+
+    if (m34D0 != 0) {
+        mStts.ClrCcMove();
+        m34D0--;
+    }
+    if (!checkJumpFlower()) {
+        if (mAcch.ChkGroundHit()) {
+            changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+        } else {
+            s16 sVar1 = shape_angle.x;
+            shape_angle.x = sVar1 + daPy_HIO_vomit_c0::m.field_0x2;
+            if (sVar1 < 0 && 0 < shape_angle.x) {
+                seStartOnlyReverb(JA_SE_LK_JUMP_FLOWER_OUT);
+            }
+            if (m3570 == 1) {
+                cLib_addCalc(&mVelocity, daPy_HIO_vomit_c0::m.field_0x20, 0.5f, 2.0f, 0.1f);
             } else {
-                s16 sVar1 = shape_angle.x;
-                shape_angle.x = sVar1 + daPy_HIO_vomit_c0::m.field_0x2;
-                if ((sVar1 < 0) && (0 < shape_angle.x)) {
-                    seStartOnlyReverb(JA_SE_LK_JUMP_FLOWER_OUT);
-                }
-                if (m3570 == 1) {
-                    cLib_addCalc(&mVelocity, daPy_HIO_vomit_c0::m.field_0x20, 0.5f, 2.0f, 0.1f);
-                } else {
-                    f32 fVar2;
-                    s32 iVar3;
-                    if (!checkFanGlideProc(1)) {
-                        if (mStickDistance > 0.05f) {
-                            if (iVar3 = getDirectionFromShapeAngle(), iVar3 == 0) {
-                                fVar2 = 1.0f;
-                            } else if (iVar3 == 1) {
-                                fVar2 = -1.0f;
-                            } else {
-                                fVar2 = 0.0f;
-                            }
+                f32 fVar2;
+                if (!checkFanGlideProc(1)) {
+                    if (mStickDistance > 0.05f) {
+                        int direction = getDirectionFromShapeAngle();
+                        if (direction == DIR_FORWARD) {
+                            fVar2 = 1.0f;
+                        } else if (direction == DIR_BACKWARD) {
+                            fVar2 = -1.0f;
                         } else {
                             fVar2 = 0.0f;
                         }
-                        cLib_addCalc(
-                            &mVelocity, (daPy_HIO_vomit_c0::m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
-                        );
+                    } else {
+                        fVar2 = 0.0f;
                     }
+                    cLib_addCalc(
+                        &mVelocity, (daPy_HIO_vomit_c0::m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
+                    );
                 }
             }
         }

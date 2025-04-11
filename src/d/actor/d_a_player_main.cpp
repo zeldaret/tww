@@ -1137,13 +1137,13 @@ void daPy_lk_c::setDoStatus() {
 /* 80108A9C-80108B08       .text getDirectionFromAngle__9daPy_lk_cFs */
 int daPy_lk_c::getDirectionFromAngle(s16 angle) {
     if (abs(angle) > 0x6000) {
-        return 1;
+        return DIR_BACKWARD;
     } else if (angle >= 0x2000) {
-        return 2;
+        return DIR_LEFT;
     } else if (angle <= -0x2000) {
-        return 3;
+        return DIR_RIGHT;
     } else {
-        return 0;
+        return DIR_FORWARD;
     }
 }
 
@@ -1687,7 +1687,7 @@ BOOL daPy_lk_c::checkJumpCutFromButton() {
 }
 
 /* 8010D8B0-8010DB58       .text orderTalk__9daPy_lk_cFv */
-void daPy_lk_c::orderTalk() {
+int daPy_lk_c::orderTalk() {
     /* Nonmatching */
 }
 
@@ -3774,7 +3774,7 @@ BOOL daPy_lk_c::execute() {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_BOW_AIM_e);
     }
     
-    m3634 = -1;
+    mWhirlId = fpcM_ERROR_PROCESS_ID_e;
     
     l_debug_keep_pos = current.pos;
     l_debug_shape_angle = shape_angle;
@@ -3801,7 +3801,7 @@ BOOL daPy_lk_c::playerDelete() {
         mFootEffect[i].getOtherCallBack()->remove();
     }
     if (mFanSwingCb.mpEmitter) {
-        mFanSwingCb.mpEmitter->clearStatus(0x40);
+        mFanSwingCb.mpEmitter->quitImmortalEmitter();
         mFanSwingCb.mpEmitter->setEmitterCallBackPtr(NULL);
         mFanSwingCb.mpEmitter = NULL;
     }
@@ -4323,8 +4323,8 @@ void daPy_lk_c::playerInit() {
     mActorKeepGrab.clearData();
     mActorKeepRope.clearData();
     m3628 = fpcM_ERROR_PROCESS_ID_e;
-    m3634 = fpcM_ERROR_PROCESS_ID_e;
-    mTactZevPartnerPID = fpcM_ERROR_PROCESS_ID_e;
+    mWhirlId = fpcM_ERROR_PROCESS_ID_e;
+    mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;
     
     ResTIMG* blur_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, LINK_BTI_BLUR);

@@ -39,7 +39,6 @@ namespace {
         ATTR_STATE_300 = ATTR_STATE_200 | ATTR_STATE_100
     };
 
-    //game has this with global visibility somehow
     const AttrSt_e L_attrState[] = {
         ATTR_STATE_A1,
         ATTR_STATE_1C,
@@ -50,7 +49,7 @@ namespace {
         ATTR_STATE_200,
         ATTR_STATE_2,
         ATTR_STATE_21,
-        ATTR_STATE_0
+        ATTR_STATE_0,
     };
     
     bool chk_attrState(const daBomb_c* i_this, AttrSt_e mask) {

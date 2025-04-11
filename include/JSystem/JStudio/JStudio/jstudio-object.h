@@ -224,6 +224,11 @@ struct TAdaptor {
 };
 
 struct TAdaptor_actor : public TAdaptor {
+    enum TEVariableValue {
+        TE_VALUE_NONE = -1,
+        TEACTOR_1 = 1,
+    };
+
     TAdaptor_actor()
         : TAdaptor(mValue, ARRAY_SIZE(mValue))
         , mValue()
@@ -285,6 +290,14 @@ struct TObject_ambientLight : public TObject {
 };
 
 struct TAdaptor_camera : public TAdaptor {
+    enum TEVariableValue {
+        TE_VALUE_NONE = -1,
+        TECAMERA_6 = 6,
+        TECAMERA_7 = 7,
+        TECAMERA_8 = 8,
+        TECAMERA_9 = 9,
+    };
+
     TAdaptor_camera()
         : TAdaptor(mValue, ARRAY_SIZE(mValue))
         , mValue()
@@ -315,6 +328,12 @@ struct TObject_camera : public TObject {
 };
 
 struct TAdaptor_fog : public TAdaptor {
+    enum TEVariableValue {
+        TE_VALUE_NONE = -1,
+        TEFOG_4 = 4,
+        TEFOG_5 = 5,
+    };
+
     TAdaptor_fog()
         : TAdaptor(mValue, ARRAY_SIZE(mValue))
         , mValue()

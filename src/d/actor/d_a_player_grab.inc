@@ -235,8 +235,8 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         dComIfGp_setDoStatus(9);
     } else {
         if (mpAttention->Lockon()) {
-            int iVar4 = getDirectionFromShapeAngle();
-            if ((mStickDistance <= 0.05f) || (mStickDistance > 0.05f && (iVar4 == 0 || (iVar4 == 1)))) {
+            int direction = getDirectionFromShapeAngle();
+            if ((mStickDistance <= 0.05f) || (mStickDistance > 0.05f && (direction == DIR_FORWARD || (direction == DIR_BACKWARD)))) {
                 dComIfGp_setDoStatus(14);
             }
         } else {

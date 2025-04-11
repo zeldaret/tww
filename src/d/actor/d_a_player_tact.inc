@@ -115,11 +115,11 @@ BOOL daPy_lk_c::checkTactLastInput() {
 }
 
 /* 8014D9F8-8014DA78       .text setTactZev__9daPy_lk_cFUiiPc */
-void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerPID, int r30, char* r31) {
-    if (tactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e) {
+void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerId, int r30, char* r31) {
+    if (tactZevPartnerId != fpcM_ERROR_PROCESS_ID_e) {
         mDoAud_seStart(JA_SE_PRE_TAKT);
     }
-    mTactZevPartnerPID = tactZevPartnerPID;
+    mTactZevPartnerId = tactZevPartnerId;
     m34CC = r30;
     m3494 = r31;
 }
@@ -596,8 +596,8 @@ BOOL daPy_lk_c::procTactPlay() {
                 m3628 = fpcM_ERROR_PROCESS_ID_e;
             }
 
-            if (mTactZevPartnerPID != fpcM_ERROR_PROCESS_ID_e && m34CC == m3570) {
-                tactZevPartner = fopAcM_SearchByID(mTactZevPartnerPID);
+            if (mTactZevPartnerId != fpcM_ERROR_PROCESS_ID_e && m34CC == m3570) {
+                tactZevPartner = fopAcM_SearchByID(mTactZevPartnerId);
             }
 
             if (m3574 == 0) {
@@ -676,7 +676,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
 
     if (r30 == -1) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerPID), m3494, 0, -1);
+        fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerId), m3494, 0, -1);
         mDemo.setDemoType(2);
     } else if (r30 == 0) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));

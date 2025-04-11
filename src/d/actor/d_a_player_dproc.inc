@@ -398,23 +398,23 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
         param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
     {
         mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
-        g_dComIfG_gameInfo.play.field_0x4977 = 2;
+        dComIfGp_setMesgBgmOn2();
     } else if ((param_1 == dItem_HEART_CONTAINER_e) ||
                (param_1 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
     {
         mDoAud_subBgmStart(JA_BGM_GET_HEART);
-        g_dComIfG_gameInfo.play.field_0x4977 = 1;
+        dComIfGp_setMesgBgmOn();
     } else if (param_1 == dItem_HEART_PIECE_e || param_1 == dItem_JOY_PENDANT_e || param_1 == dItem_SMALL_KEY_e ||
                param_1 == dItem_SILVER_RUPEE_e || param_1 == dItem_ORANGE_RUPEE_e)
     {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
-        g_dComIfG_gameInfo.play.field_0x4977 = 1;
+        dComIfGp_setMesgBgmOn();
     } else if (param_2 != dItem_HEART_e) {
         mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
-        g_dComIfG_gameInfo.play.field_0x4977 = 2;
+        dComIfGp_setMesgBgmOn2();
     } else {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
-        g_dComIfG_gameInfo.play.field_0x4977 = 1;
+        dComIfGp_setMesgBgmOn();
     }
 }
 
@@ -454,10 +454,10 @@ BOOL daPy_lk_c::setGetDemo() {
                         }
 
                         u32 itemGetMsgNo;
-                        if (itemNo == dItem_HEART_PIECE_e && dComIfGs_getMaxLife() % 4) {
-                            itemGetMsgNo = 0x7B + dComIfGs_getMaxLife() % 4;
+                        if (itemNo == dItem_HEART_PIECE_e && (dComIfGs_getMaxLife() % 4) != 0) {
+                            itemGetMsgNo = MSG_NO_FOR_ITEM(dItem_HEART_PIECE_2_e + (dComIfGs_getMaxLife() % 4) - 1);
                         } else {
-                            itemGetMsgNo = 0x65 + itemNo;
+                            itemGetMsgNo = MSG_NO_FOR_ITEM(itemNo);
                         }
 
                         if (mMsgId == fpcM_ERROR_PROCESS_ID_e) {
@@ -602,7 +602,7 @@ BOOL daPy_lk_c::dProcGetItem() {
                     if ((m34D4 == 7) && (dComIfGs_getMaxLife() % 4)) {
                         m3624 = (dComIfGs_getMaxLife() % 4) + 0x7b;
                     } else {
-                        m3624 = m34D4 + 0x65;
+                        m3624 = MSG_NO_FOR_ITEM(m34D4);
                     }
                 }
                 if ((m3624 != 0) && (checkEndMessage(m3624))) {
@@ -654,7 +654,7 @@ void daPy_lk_c::dProcLavaDamage_init_sub() {
     speed.y = daPy_HIO_restart_c0::m.field_0x8;
     m3570 = 0;
     voiceStart(4);
-    seStartMapInfo(0x3810);
+    seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     gravity = daPy_HIO_autoJump_c0::m.field_0xC;
     mDemo.setDemoType(5);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10000000_e);
@@ -713,7 +713,7 @@ void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
     onNoResetFlg1(daPyFlg1_FREEZE_STATE);
     offNoResetFlg1(daPyFlg1_UNK40000);
     mDoGph_gInf_c::fadeOut(1.0f, l_freeze_fade_color);
-    seStartMapInfo(0x2878);
+    seStartMapInfo(JA_SE_LK_FREEZE);
     for (int i = 0; i < 5; i++) {
         const u16* uVar1 = eff_joint;
         MtxP pMVar2 = mpCLModel->getAnmMtx(uVar1[i]);
@@ -807,7 +807,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     }
     int iVar4 = checkShipRideUseItem(0);
     u32 uVar2 = checkModeFlg(ModeFlg_SWIM);
-    u32 uVar3 = mNoResetFlg0 & 0x100;
+    u32 uVar3 = mNoResetFlg0 & daPyFlg0_UNK100;
     if (uVar2 != 0) {
         swimOutAfter(FALSE);
     }
@@ -1275,7 +1275,7 @@ BOOL daPy_lk_c::dProcLookWait_init() {
     mVelocity = 0.0f;
     setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
     current.angle.y = shape_angle.y;
-    m34B8 = 4;
+    mDirection = DIR_NONE;
     initShipRideUseItem(iVar1, 0);
     return true;
 }
@@ -1938,7 +1938,7 @@ BOOL daPy_lk_c::dProcGetDance() {
         if (m34D0 == 0) {
             m34D0 = 1;
             mDoAud_subBgmStart(JA_BGM_GET_SONG);
-            g_dComIfG_gameInfo.play.field_0x4977 = 1;
+            dComIfGp_setMesgBgmOn();
         }
         if (m34D6 > 0x4000) {
             shape_angle.y =
@@ -2167,11 +2167,10 @@ BOOL daPy_lk_c::dProcPowerUp() {
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f && m34D0 == 0) {
         m34D0 = 1;
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
-        // mItemLifeCountType? (according to TP)
-        g_dComIfG_gameInfo.play.field_0x4977 = 1;
+        dComIfGp_setMesgBgmOn();
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         if (m3624 == 0) {
-            m3624 = m3570 + 0x65;
+            m3624 = MSG_NO_FOR_ITEM(m3570);
         }
         if (checkEndMessage(m3624)) {
             dComIfGp_evmng_cutEnd(mStaffIdx);

@@ -1233,11 +1233,7 @@ static s32 daTbox_IsDelete(daTbox_c*) {
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 static s32 daTbox_Delete(daTbox_c* i_tbox) {
-    if (i_tbox->mpBgWCurrent != NULL) {
-        dComIfG_Bgsp()->Release(i_tbox->mpBgWCurrent);
-    }
-
-    i_tbox->mSmokeCB.end();
+    i_tbox->deleteProc();
     dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mNo >= 0) {
@@ -1265,11 +1261,10 @@ static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
     };
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
-    s32 result;
 
     fopAcM_SetupActor(tbox, daTbox_c);
 
-    result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
+    cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->home.angle.x & 0x3F;

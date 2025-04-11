@@ -79,7 +79,7 @@ void tama_draw(fganon_class* i_this) {
 /* 00000338-00000420       .text daFganon_Draw__FP12fganon_class */
 /* Renders all part's of Phantom Ganon's model including his body, sword, and energy ball */
 static BOOL daFganon_Draw(fganon_class* i_this) {
-    dSnap_RegistFig(DSNAP_TYPE_UNKC2, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_FGANON, i_this, 1.0f, 1.0f, 1.0f);
     J3DModel* pModel = i_this->mpMorf->getModel();
     g_env_light.setLightTevColorType(pModel, &i_this->tevStr);
     i_this->mpBrkAnm1->entry(pModel->getModelData());
@@ -1924,7 +1924,7 @@ void demo_camera(fganon_class* i_this) {
 
             player->changeOriginalDemo();
 
-            camera2 = g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera;
+            camera2 = dComIfGp_getCamera(0);
 
             i_this->mB5C = camera2->mLookat.mEye;
             i_this->mB68 = camera2->mLookat.mCenter;
@@ -2497,16 +2497,16 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
         i_this->m684 = 0;
         i_this->mWeponSph.SetC(local_84);
     }
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mWeponSph);
+    dComIfG_Ccsp()->Set(&i_this->mWeponSph);
     i_this->m686 = 0;
     mant_class* cape = (mant_class*)fopAcM_SearchByID(i_this->mCapeID);
     if (cape != NULL) {
-        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(5) + 20], *calc_mtx);
+        mDoMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(REG0_S(5) + 20), *calc_mtx);
         local_70.x = REG0_F(0) + 35.0f;
         local_70.y = REG0_F(1);
         local_70.z = REG0_F(2) + -30.0f;
         MtxPosition(&local_70, &cape->m1BE0);
-        mDoMtx_copy(i_this->mpMorf->mpModel->mpNodeMtx[REG0_S(6) + 11], *calc_mtx);
+        mDoMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(REG0_S(6) + 11), *calc_mtx);
         local_70.x = REG0_F(3) + 35.0f;
         local_70.y = REG0_F(4);
         local_70.z = REG0_F(5) + 30.0f;

@@ -716,7 +716,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/object-id.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/stb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
@@ -745,7 +745,7 @@ config.libs = [
         "JStudio_JParticle",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JParticle/control.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp", extra_cflags=['-pragma "nosyminline on"']),
         ],
     ),
     JSystemLib(
@@ -1001,8 +1001,8 @@ config.libs = [
     JSystemLib(
         "J3DGraphLoader",
         [
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp"),
+            Object(Matching,     "JSystem/J3DGraphLoader/J3DMaterialFactory.cpp"),
+            Object(Matching,     "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DClusterLoader.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoader.cpp"),
             Object(Matching,    "JSystem/J3DGraphLoader/J3DModelLoaderCalcSize.cpp"),
@@ -1688,7 +1688,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_plant"),
     ActorRel(NonMatching, "d_a_obj_rflw"),
     ActorRel(Matching,    "d_a_obj_rforce"),
-    ActorRel(NonMatching, "d_a_obj_smplbg"),
+    ActorRel(Matching, "d_a_obj_smplbg", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),
     ActorRel(Matching,    "d_a_obj_tower"),

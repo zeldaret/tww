@@ -63,8 +63,8 @@ namespace daObjSwheavy {
         bool _execute();
         bool _draw();
 
-        static const char M_arcname[6];
-        static const Attr_c M_attr[4];
+        static const char M_arcname[];
+        static const Attr_c M_attr[];
 
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;

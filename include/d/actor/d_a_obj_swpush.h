@@ -126,10 +126,10 @@ namespace daObjSwpush {
         BOOL Mthd_Execute();
         BOOL Mthd_Draw();
 
-        static const char M_arcname_kbota[9];
-        static const char M_arcname_hhbot[6];
-        static const Attr_c M_attr[4];
-        static const u8 M_op_vtx[4];
+        static const char M_arcname_kbota[];
+        static const char M_arcname_hhbot[];
+        static const Attr_c M_attr[];
+        static const u8 M_op_vtx[];
     
     public:
         /* 0x290 */ request_of_phase_process_class mKbotaPhs;

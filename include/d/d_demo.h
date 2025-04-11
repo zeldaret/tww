@@ -85,10 +85,10 @@ public:
         JUT_ASSERT(0x4d, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(name);
     }
-    int JSGGetNodeTransformation(u32 no, Mtx dst) const {
+    bool JSGGetNodeTransformation(u32 no, Mtx dst) const {
         JUT_ASSERT(0x52, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
-        return 1;
+        return true;
     }
     f32 JSGGetAnimationFrameMax() const { return mAnmFrameMax; }
     f32 JSGGetTextureAnimationFrameMax() const { return mTexAnimationFrameMax; }

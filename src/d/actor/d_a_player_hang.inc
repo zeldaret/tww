@@ -229,7 +229,7 @@ BOOL daPy_lk_c::procHangStart() {
          (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_wallCatch_c0::m.field_0x50)) &&
         (mStickDistance > 0.05f || m3570 != 0))
     {
-        if (getDirectionFromShapeAngle() == 0 || m3570 != 0) {
+        if (getDirectionFromShapeAngle() == DIR_FORWARD || m3570 != 0) {
             procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
         }
     } else {

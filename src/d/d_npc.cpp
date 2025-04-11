@@ -599,10 +599,10 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
 /* 8021BC8C-8021BD2C       .text dNpc_setShadowModel__FP8J3DModelP12J3DModelDataP8J3DModel */
 void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* param_3) {
     for(int i = 0; i < param_2->getWEvlpMtxNum(); i++) {
-        mDoMtx_copy(param_3->mpWeightEnvMtx[i], param_1->mpWeightEnvMtx[i]);
+        param_1->setWeightAnmMtx(i, param_3->getWeightAnmMtx(i));
     }
     for(int i = 0; i < param_2->getJointNum(); i++) {
-        mDoMtx_copy(param_3->mpNodeMtx[i], param_1->mpNodeMtx[i]);
+        param_1->setAnmMtx(i, param_3->getAnmMtx(i));
     }
 }
 

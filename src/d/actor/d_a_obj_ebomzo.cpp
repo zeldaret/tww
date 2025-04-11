@@ -115,7 +115,7 @@ void daObjEbomzo::Act_c::set_mtx() {
 
 /* 0000062C-00000668       .text init_mtx__Q211daObjEbomzo5Act_cFv */
 void daObjEbomzo::Act_c::init_mtx() {
-    mpModel->mBaseScale = scale;
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 

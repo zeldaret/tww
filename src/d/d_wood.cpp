@@ -321,7 +321,6 @@ dWood::Anm_c::Anm_c() {
 
     mNormAnimIdx = AnmID_Norm0;
     mAlphaScale = 0xff;
-    return;
 }
 
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
@@ -334,7 +333,6 @@ void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
         };
         (this->*mode_proc[mMode])(i_packet);
     }
-    return;
 }
 
 /* 800BD800-800BD848       .text copy_angamp__Q25dWood5Anm_cFPCQ25dWood5Anm_c */
@@ -833,7 +831,6 @@ dWood::Room_c::Room_c() {
 void dWood::Room_c::entry_unit(dWood::Unit_c *unit) {
     unit->mpNext = mpUnit;
     mpUnit = unit;
-    return;
 }
 
 /* 800BEF94-800BEFF0       .text delete_all_unit__Q25dWood6Room_cFv */

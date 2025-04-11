@@ -1723,9 +1723,7 @@ BOOL daShip_c::procCannon() {
         short prev0394 = m0394;
         
         if (target) {
-            cannonPos.x = mpCannonModel->mpNodeMtx[2][0][3];
-            cannonPos.y = mpCannonModel->mpNodeMtx[2][1][3];
-            cannonPos.z = mpCannonModel->mpNodeMtx[2][2][3];
+            mDoMtx_multVecZero(mpCannonModel->getAnmMtx(2), &cannonPos);
 
             cannonPos = target->eyePos - cannonPos;
 
@@ -1849,7 +1847,6 @@ BOOL daShip_c::procCrane() {
         return TRUE;
     }
     setControllAngle(0);
-    dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
     if (!dComIfGp_event_runCheck() && !daPy_getPlayerLinkActorClass()->checkNoControll()) {
         if (m0398 == m039A) {
             if(std::fabsf(speedF) < 3.0f &&
@@ -1867,8 +1864,7 @@ BOOL daShip_c::procCrane() {
                         setControllAngle(-0xA00);
                     }
                     if (m0353 && (sVar1 != mCurrentRopeSegmentIndex)) {
-                        //dComIfGp_getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f));
-                        play->getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f)); //Fakematch
+                        dComIfGp_getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f));
                     }
                 }
                 else if (m039A > 0) {
