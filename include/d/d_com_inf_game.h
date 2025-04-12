@@ -627,9 +627,8 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
-    int getMesgCameraInfo() { return mMesgCameraInfo; }
-    int getMesgCamInfoID() { return mMesgCameraTagInfo; }
-    void clearMesgCamInfoID() { mMesgCameraTagInfo = -1; }
+    int getMesgCamInfoID() { return mMesgCamInfo.mBasicID; }
+    void clearMesgCamInfoID() { mMesgCamInfo.mBasicID = -1; }
     u8 getMesgStatus() { return mMesgStatus; }
     void setMesgStatus(u8 status) { mMesgStatus = status; }
     u8 checkMesgBgm() { return mMesgBgm; }
