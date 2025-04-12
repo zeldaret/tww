@@ -5154,9 +5154,11 @@ void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
 
 /* 8003C16C-8003C1D4       .text fopMsgM_blendDraw__FP18fopMsgM_pane_classPCc */
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data) {
+    i_this->pane->show();
+    // fakematch - forcing the load order/reloads from i_this
     J2DPicture* pic = (J2DPicture*)i_this->pane;
-    pic->show();
     pic->remove(pic->getNumTexture() - 1);
+    pic = (J2DPicture*)i_this->pane;
     pic->insert(data, pic->getNumTexture(), 1.0f);
 }
 

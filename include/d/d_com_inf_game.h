@@ -287,7 +287,9 @@ public:
     }
     void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
     dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    int getMesgCamInfoID() { return mMesgCamInfo.mID; }
     void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
+    void clearMesgCamInfoID() { mMesgCamInfo.mID = -1; }
 
     ~dComIfG_play_c() {}
 
@@ -627,8 +629,6 @@ public:
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
-    int getMesgCamInfoID() { return mMesgCamInfo.mBasicID; }
-    void clearMesgCamInfoID() { mMesgCamInfo.mBasicID = -1; }
     u8 getMesgStatus() { return mMesgStatus; }
     void setMesgStatus(u8 status) { mMesgStatus = status; }
     u8 checkMesgBgm() { return mMesgBgm; }
