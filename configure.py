@@ -712,7 +712,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
+            Object(Equivalent,  "JSystem/JStudio/JStudio/functionvalue.cpp"), # weak func order
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),

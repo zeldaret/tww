@@ -9,40 +9,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 
-// RW data
-static dCcD_SrcSph sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_WIND | AT_TYPE_UNK400000,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 30.0f,
-    },
-};
-static u8 padding[76];
-
-// Need to break these out to get the rodata ordered right
-static const float partHeightOffset = 20.0f;
-static const float partMaxFlickerPerTick = 0.02f;
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
 static BOOL daLamp_Draw(lamp_class* i_this) {
@@ -95,9 +62,9 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
 
     if (i_this->mPa.getEmitter()) {
         cXyz whitePartPos = i_this->mPos;
-        whitePartPos.y += partHeightOffset;
+        whitePartPos.y += 20.0f;
         dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos);
-        cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, partMaxFlickerPerTick);
+        cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, 0.02f);
     } else {
         i_this->mParticlePower = 0.0f;
     }
@@ -187,6 +154,36 @@ static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
                 i_this->mParameters = 0;
             }
             i_this->mStts.Init(0xff, 0xff, i_this);
+
+            static dCcD_SrcSph sph_src = {
+                // dCcD_SrcGObjInf
+                {
+                    /* Flags             */ 0,
+                    /* SrcObjAt  Type    */ 0,
+                    /* SrcObjAt  Atp     */ 0,
+                    /* SrcObjAt  SPrm    */ 0,
+                    /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_WIND | AT_TYPE_UNK400000,
+                    /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+                    /* SrcObjCo  SPrm    */ 0,
+                    /* SrcGObjAt Se      */ 0,
+                    /* SrcGObjAt HitMark */ 0,
+                    /* SrcGObjAt Spl     */ 0,
+                    /* SrcGObjAt Mtrl    */ 0,
+                    /* SrcGObjAt SPrm    */ 0,
+                    /* SrcGObjTg Se      */ 0,
+                    /* SrcGObjTg HitMark */ 0,
+                    /* SrcGObjTg Spl     */ 0,
+                    /* SrcGObjTg Mtrl    */ 0,
+                    /* SrcGObjTg SPrm    */ 0,
+                    /* SrcGObjCo SPrm    */ 0,
+                },
+                // cM3dGSphS
+                {
+                    /* Center */ 0.0f, 0.0f, 0.0f,
+                    /* Radius */ 30.0f,
+                },
+            };
+
             i_this->mSph.Set(sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
 
