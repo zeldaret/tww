@@ -25,7 +25,7 @@ bool JPADraw::initialize(JPABaseEmitter* emtr, JPATextureResource* texRes) {
     dc.mpDraw = this;
     dc.mpTextureResource = texRes;
     dc.pTexIdx = dc.pbe->getEmitterDataBlockInfoPtr()->getTextureDataBase();
-    dc.mpActiveParticles = &dc.pbe->mActiveParticles;
+    dc.mpActiveParticles = dc.pbe->getParticleList();
     field_0xc2 = 0;
     mScaleOut = 1.0f;
 
@@ -811,7 +811,7 @@ void JPADraw::setChildClipBoard() {
 void JPADraw::drawParticle() {
     field_0xc2 &= ~0x02;
     setParticleClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mActiveParticles;
+    dc.mpActiveParticles = dc.pbe->getParticleList();
     GXSetPointSize(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetLineWidth(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetZMode(dc.pbsp->isEnableZCmp(), dc.pbsp->getZCmpFunction(), dc.pbsp->isEnableZCmpUpdate());
@@ -911,7 +911,7 @@ void JPADraw::zDraw() {
 void JPADraw::zDrawParticle() {
     field_0xc2 &= ~0x02;
     setParticleClipBoard();
-    dc.mpActiveParticles = &dc.pbe->mActiveParticles;
+    dc.mpActiveParticles = dc.pbe->getParticleList();
     GXSetPointSize(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetLineWidth(cb.mGlobalScaleX, GX_TO_ONE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);

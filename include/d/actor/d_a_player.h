@@ -13,8 +13,8 @@ class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
     void end();
-    void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
+    JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
+    JPABaseEmitter* makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
@@ -25,21 +25,11 @@ public:
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
-// TODO: this probably does not belong in d_a_player.h based on the .text section splitting in d_a_player_main
-class daPy_HIO_c {
-public:
-    // TODO: constructor should be weak, but not inlined?
-    // daPy_HIO_c() {}
-    daPy_HIO_c();
-
-public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
-};  // Size: 0x3F
-
 class daPy_demo_c {
 public:
     enum {
         DEMO_UNK1_e = 0x01,
+        DEMO_UNK11_e = 0x11,
         DEMO_UNK14_e = 0x14,
         DEMO_UNK18_e = 0x18,
         DEMO_UNK1D_e = 0x1D,
@@ -84,13 +74,16 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
+        daPyFlg0_UNK1               = 0x00000001,
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
+        daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK80              = 0x00000080,
         daPyFlg0_UNK100             = 0x00000100,
         daPyFlg0_SHIP_DROP          = 0x00000200,
+        daPyFlg0_UNK400             = 0x00000400,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
@@ -101,6 +94,7 @@ public:
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_UNK400000          = 0x00400000,
+        daPyFlg0_UNK800000          = 0x00800000,
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
@@ -142,8 +136,10 @@ public:
     };
     
     enum daPy_RFLG0 {
+        daPyRFlg0_UNK1                  = 0x00000001,
         daPyRFlg0_UNK2                  = 0x00000002,
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPyRFlg0_UNK8                  = 0x00000008,
         daPyRFlg0_UNK10                 = 0x00000010,
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
@@ -151,6 +147,7 @@ public:
         daPyRFlg0_UNK200                = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPyRFlg0_UNK1000               = 0x00001000,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
         daPyRFlg0_UNK4000               = 0x00004000,
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
@@ -161,9 +158,11 @@ public:
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
+        daPyRFlg0_UNK4000000            = 0x04000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
+        daPyRFlg0_UNK40000000           = 0x40000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
@@ -460,20 +459,22 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }
-    bool checkMasterSwordEquip() const {
+    BOOL checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
+    BOOL checkFinalMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+    }
+    
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkFinalMasterSwordEquip() const {}
+    BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
     void checkBowMiniGame() const {}
-    void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
     void checkUseArrowEffect() const {}

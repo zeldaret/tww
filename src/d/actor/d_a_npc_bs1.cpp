@@ -190,7 +190,7 @@ BOOL daNpc_Bs1_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bs", l_btp_ix_tbl[m828]);
     JUT_ASSERT(0x1bd, m_head_tex_pattern != NULL);
-    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
     mFrame = 0;
@@ -213,16 +213,16 @@ void daNpc_Bs1_c::playTexPatternAnm() {
 /* 000007F8-0000087C       .text setAnm__11daNpc_Bs1_cFSc */
 void daNpc_Bs1_c::setAnm(s8 index) {
     static u32 play_mode_tbl[10] = {
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
     };
     static f32 morf_frame_tbl[10] = {8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f};
     static f32 play_speed_tbl[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -1445,7 +1445,7 @@ void daNpc_Bs1_c::createShopList() {
     static __shop_items_set_data* Item_set_dataBs2[] = {
         &shopItems_setData_emptybottle,
         &shopItems_setData_kakera_heart,
-        &shopItems_setData_map
+        &shopItems_setData_map,
     };
     
     csXyz angle(csXyz::Zero);
@@ -1791,8 +1791,8 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
 
 /* 00003CB4-00003D7C       .text evn_talk_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_talk_init(int actorId) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "MsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
     l_msg = NULL;
     if (pMsgNo != NULL) {
@@ -1810,7 +1810,7 @@ BOOL daNpc_Bs1_c::evn_talk_init(int actorId) {
 
 /* 00003D7C-00003DE4       .text evn_continue_talk_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_continue_talk_init(int actorId) {
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(actorId, "EndMsgNo");
     if (pEndMsgNo != NULL) {
         m744 = *pEndMsgNo;
     } else {
@@ -1852,7 +1852,7 @@ BOOL daNpc_Bs1_c::evn_talk() {
 
 /* 00003F14-00003FE0       .text evn_jnt_lock_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_jnt_lock_init(int actorIdx) {
-    u32* substance = dComIfGp_evmng_getMyIntegerP(actorIdx, "prm");
+    int* substance = dComIfGp_evmng_getMyIntegerP(actorIdx, "prm");
     u32 jnt_to_lock;
     if (substance != NULL) {
         jnt_to_lock = *substance;
@@ -1882,7 +1882,7 @@ BOOL daNpc_Bs1_c::evn_jnt_lock_init(int actorIdx) {
 
 /* 00003FE0-00004048       .text evn_wait_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_wait_init(int actorIdx) {
-    u32* pTimer = dComIfGp_evmng_getMyIntegerP(actorIdx, "Timer");
+    int* pTimer = dComIfGp_evmng_getMyIntegerP(actorIdx, "Timer");
     if (pTimer != NULL) {
         m63E = (u16)*pTimer;
     } else {
@@ -1899,7 +1899,7 @@ BOOL daNpc_Bs1_c::evn_wait() {
 /* 00004078-000040E4       .text evn_set_anm_init__11daNpc_Bs1_cFi */
 BOOL daNpc_Bs1_c::evn_set_anm_init(int actorIdx) {
     u32 anmNo;
-    u32* pAnmNo = dComIfGp_evmng_getMyIntegerP(actorIdx, "AnmNo");
+    int* pAnmNo = dComIfGp_evmng_getMyIntegerP(actorIdx, "AnmNo");
     if (pAnmNo != NULL) {
         anmNo = *pAnmNo;
     } else {
@@ -2124,10 +2124,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00004980-00004AD8       .text _create__11daNpc_Bs1_cFv */
-s32 daNpc_Bs1_c::_create() {
+cPhs_State daNpc_Bs1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Bs1_c);
     
-    int phase_state = dComIfG_resLoad(&mPhase, "Bs");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Bs");
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x14, 0x4);
         switch (mType) {
@@ -2168,7 +2168,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("Bs", BS_INDEX_BCK_BS_WAIT01),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
         0, 0x11020203
     );
     if (!mpMorf || !mpMorf->getModel()) {
@@ -2226,7 +2226,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
 }
 
 /* 00005470-00005490       .text daNpc_Bs1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Bs1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Bs1_Create(fopAc_ac_c* i_this) {
     return ((daNpc_Bs1_c*)i_this)->_create();
 }
 

@@ -11,7 +11,7 @@ namespace daObjCorrect {
         void prm_get_swSave() const {}
         void prm_get_type() const {}
     
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void chk_try_actor0(fopAc_ac_c*);
         void chk_try_actor1(daObjTry::Act_c*, daObjTry::Type_e, float) const;

@@ -36,7 +36,7 @@ public:
     bool _execute();
     bool _draw();
     BOOL _createHeap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

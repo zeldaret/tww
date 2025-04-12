@@ -70,7 +70,7 @@ namespace daObjBarrel {
     
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_wait_init();
         void mode_wait();
@@ -149,7 +149,7 @@ namespace daObjBarrel {
     STATIC_ASSERT(sizeof(Act_c) == 0x634);
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

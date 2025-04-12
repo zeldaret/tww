@@ -193,7 +193,7 @@ void daObj_Warpt_c::createInit() {
 }
 
 /* 0000215C-00002378       .text _create__13daObj_Warpt_cFv */
-s32 daObj_Warpt_c::_create() {
+cPhs_State daObj_Warpt_c::_create() {
     /* Nonmatching */
 }
 

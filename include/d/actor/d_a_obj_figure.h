@@ -16,9 +16,9 @@ public:
     bool isDispFigure() { return mbDisplay; }
     void setResFlag(u8 flag) { mLoadFlags |= flag; }
 
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();

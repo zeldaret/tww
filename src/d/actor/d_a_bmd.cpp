@@ -147,7 +147,7 @@ static BOOL solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 00006528-00006908       .text daBmd_Create__FP10fopAc_ac_c */
-static s32 daBmd_Create(fopAc_ac_c*) {
+static cPhs_State daBmd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

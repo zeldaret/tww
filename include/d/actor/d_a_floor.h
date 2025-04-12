@@ -6,14 +6,14 @@
 
 class daFloor_c : public dBgS_MoveBgActor {
 public:
-    BOOL Delete();
-    int CreateHeap();
-    int Create();
-    s32 _create();
+    virtual BOOL Delete();
+    virtual BOOL CreateHeap();
+    virtual BOOL Create();
+    cPhs_State _create();
     void set_mtx();
     void set_effect();
-    BOOL Draw();
-    int Execute(Mtx**);
+    virtual BOOL Draw();
+    virtual BOOL Execute(Mtx**);
 
 public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;

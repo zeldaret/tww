@@ -28,7 +28,7 @@ static s32 fopOvlp_Delete(void* i_ovlp) {
     return fpcMtd_Delete((process_method_class*)i_this->sub_method, i_this);
 }
 
-static s32 fopOvlp_Create(void* i_ovlp) {
+static cPhs_State fopOvlp_Create(void* i_ovlp) {
     overlap_task_class* i_this = (overlap_task_class*)i_ovlp;
 
     if (fpcM_IsFirstCreating(i_this)) {

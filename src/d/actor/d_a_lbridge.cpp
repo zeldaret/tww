@@ -29,14 +29,14 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
     JUT_ASSERT(0xE8, pbtk != NULL);
 
-    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
     JUT_ASSERT(0xF6, pbpk != NULL);
 
-    if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -46,7 +46,7 @@ BOOL daLbridge_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
     JUT_ASSERT(0x106, pbrk != NULL);
 
-    if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
@@ -100,10 +100,10 @@ void daLbridge_c::CreateInit() {
 }
 
 /* 00000544-0000063C       .text _create__11daLbridge_cFv */
-s32 daLbridge_c::_create() {
+cPhs_State daLbridge_c::_create() {
     fopAcM_SetupActor(this, daLbridge_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2E10U)) {
@@ -308,7 +308,7 @@ bool daLbridge_c::_delete() {
 }
 
 /* 00000FF8-00001018       .text daLbridge_Create__FPv */
-static s32 daLbridge_Create(void* i_this) {
+static cPhs_State daLbridge_Create(void* i_this) {
     return static_cast<daLbridge_c*>(i_this)->_create();
 }
 

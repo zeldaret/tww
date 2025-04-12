@@ -163,7 +163,7 @@ namespace daObjMovebox {
         
         typedef void (Act_c::*ModeFunc)();
         
-        inline s32 Mthd_Create();
+        inline cPhs_State Mthd_Create();
         inline BOOL Mthd_Delete();
         
         s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
@@ -197,10 +197,10 @@ namespace daObjMovebox {
         void init_mtx();
         void path_init();
         void path_save();
-        int CreateHeap();
+        virtual BOOL CreateHeap();
         static void RideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
         static fopAc_ac_c* PPCallBack(fopAc_ac_c*, fopAc_ac_c*, s16, dBgW::PushPullLabel);
-        int Create();
+        virtual BOOL Create();
         void afl_sway();
         int check_to_walk();
         void clr_moment_cnt();
@@ -223,9 +223,9 @@ namespace daObjMovebox {
         void sound_land();
         void vib_land();
         void eff_land_smoke();
-        int Execute(Mtx**);
-        int Draw();
-        int Delete();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
+        virtual BOOL Delete();
         
         static const s16 M_dir_base[4];
     
@@ -270,9 +270,9 @@ namespace daObjMovebox {
         /* 0x6B8 */ fpc_ProcID mChildPID;
         /* 0x6BC */ BOOL mbRollCrash;
         
-        static const char* const M_arcname[13];
+        static const char* const M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;
-        static const Attr_c M_attr[13];
+        static const Attr_c M_attr[];
     };
     
     STATIC_ASSERT(sizeof(Act_c) == 0x6C0);

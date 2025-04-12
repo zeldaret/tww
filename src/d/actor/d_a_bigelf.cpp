@@ -322,7 +322,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
-s32 daBigelf_c::_create() {
+cPhs_State daBigelf_c::_create() {
     /* Nonmatching */
 }
 
@@ -332,7 +332,7 @@ void daBigelf_c::CreateHeap() {
 }
 
 /* 00003808-00003828       .text daBigelf_Create__FP10fopAc_ac_c */
-static s32 daBigelf_Create(fopAc_ac_c*) {
+static cPhs_State daBigelf_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

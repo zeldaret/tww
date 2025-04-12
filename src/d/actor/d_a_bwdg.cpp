@@ -233,11 +233,11 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 }
 
 /* 000009A0-00000B5C       .text daBwdg_Create__FP10fopAc_ac_c */
-static s32 daBwdg_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daBwdg_Create(fopAc_ac_c* i_actor) {
     bwdg_class* i_this = (bwdg_class*)i_actor;
     fopAcM_SetupActor(i_this, bwdg_class);
     
-    int phase_state = dComIfG_resLoad(&i_this->mPhase, "Bwdg");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bwdg");
     if (phase_state == cPhs_COMPLEATE_e) {
         boss = NULL;
         i_this->current.pos.setall(0.0f);
@@ -254,6 +254,7 @@ static s32 daBwdg_Create(fopAc_ac_c* i_actor) {
         i_this->mpBgW->CopyBackVtx();
         i_this->mpBgW->Move();
     }
+
     return phase_state;
 }
 

@@ -9,7 +9,7 @@ public:
     void onCancelFlg() { mCancelFlg = true; }
 
     daBoomerang_c();
-    s32 create();
+    cPhs_State create();
     BOOL draw();
     BOOL execute();
     float getFlyMax();

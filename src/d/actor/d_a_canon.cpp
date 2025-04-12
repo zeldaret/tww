@@ -148,7 +148,7 @@ static s32 daCanonCreate(void*) {
 }
 
 /* 00002094-000023C0       .text _create__9daCanon_cFv */
-s32 daCanon_c::_create() {
+cPhs_State daCanon_c::_create() {
     /* Nonmatching */
 }
 

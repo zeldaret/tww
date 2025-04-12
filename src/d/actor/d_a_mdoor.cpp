@@ -57,7 +57,7 @@ void daMdoor_c::CreateInit() {
 }
 
 /* 000005E0-00000698       .text create__9daMdoor_cFv */
-s32 daMdoor_c::create() {
+cPhs_State daMdoor_c::create() {
     /* Nonmatching */
 }
 
@@ -132,7 +132,7 @@ static BOOL daMdoor_Delete(daMdoor_c*) {
 }
 
 /* 00001054-00001074       .text daMdoor_Create__FP10fopAc_ac_c */
-static s32 daMdoor_Create(fopAc_ac_c*) {
+static cPhs_State daMdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

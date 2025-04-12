@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 namespace JGadget {
-    
+
 /* 802BFF14-802BFF1C       .text extend_default__Q27JGadget6vectorFUlUlUl */
 u32 vector::extend_default(u32, u32 param_2, u32) {
     return param_2 * 2;
@@ -15,26 +15,29 @@ u32 vector::extend_default(u32, u32 param_2, u32) {
 
 /* 802BFF1C-802BFF48       .text __ct__Q27JGadget20TVector_pointer_voidFRCQ27JGadget14TAllocator<Pv> */
 TVector_pointer_void::TVector_pointer_void(const TAllocator<void*>& allocator) {
-    _00 = allocator._00;
+    mAllocator = allocator;
     mBegin = NULL;
     mEnd = mBegin;
-    _0C = NULL;
+    mCapacity = 0;
     mExtend = vector::extend_default;
 }
 
-/* 802BFF48-802BFFF0       .text __dt__Q27JGadget20TVector_pointer_voidFv */
-TVector_pointer_void::~TVector_pointer_void() {
-    /* Nonmatching */
+// Unused function, fixes weak function ordering. Doesn't appear in the debug maps?
+TVector_pointer_void::TVector_pointer_void(u32 count, void* const& defaultValue, const TAllocator<void*>& allocator) {
+    TVector::insert(NULL, count, defaultValue);
 }
 
+/* 802BFF48-802BFFF0       .text __dt__Q27JGadget20TVector_pointer_voidFv */
+TVector_pointer_void::~TVector_pointer_void() {}
+
 /* 802BFFF0-802C0010       .text insert__Q27JGadget20TVector_pointer_voidFPPvRCPv */
-void TVector_pointer_void::insert(void**, void* const&) {
-    /* Nonmatching */
+void** TVector_pointer_void::insert(void** position, void* const& value) {
+    return TVector::insert(position, value);
 }
 
 /* 802C0010-802C0068       .text erase__Q27JGadget20TVector_pointer_voidFPPvPPv */
-void TVector_pointer_void::erase(void**, void**) {
-    /* Nonmatching */
+void** TVector_pointer_void::erase(void** start, void** end) {
+    return TVector::erase(start, end);
 }
 
 // /* 802C0068-802C00D8       .text insert__Q27JGadget38TVector<Pv,Q27JGadget14TAllocator<Pv>>FPPvUlRCPv */

@@ -140,12 +140,12 @@ static BOOL daBoomerang_createHeap(fopAc_ac_c*) {
 }
 
 /* 800E2CE8-800E2EF0       .text create__13daBoomerang_cFv */
-s32 daBoomerang_c::create() {
+cPhs_State daBoomerang_c::create() {
     /* Nonmatching */
 }
 
 /* 800E33F0-800E3410       .text daBoomerang_Create__FP10fopAc_ac_c */
-static s32 daBoomerang_Create(fopAc_ac_c*) {
+static cPhs_State daBoomerang_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

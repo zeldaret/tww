@@ -7,7 +7,6 @@
 #include "d/res/res_esekh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -16,7 +15,7 @@
 
 namespace daObjMonument {
     namespace {
-        static Attr_c L_attr[2] = {
+        static Attr_c L_attr[] = {
             { ESEKH_BDL_ESEKH,  ESEKH_DZB_ESEKH },
             { ESEKH_BDL_ESEKH2, ESEKH_DZB_ESEKH2 },
         };
@@ -56,10 +55,10 @@ bool daObjMonument::Act_c::create_heap() {
 }
 
 /* 00000238-00000318       .text _create__Q213daObjMonument5Act_cFv */
-s32 daObjMonument::Act_c::_create() {
+cPhs_State daObjMonument::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     mpBgW = NULL;
     if (ret == cPhs_COMPLEATE_e) {
@@ -121,7 +120,7 @@ bool daObjMonument::Act_c::_draw() {
 namespace daObjMonument {
     namespace {
         /* 00000538-00000558       .text Mthd_Create__Q213daObjMonument30@unnamed@d_a_obj_monument_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

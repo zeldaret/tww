@@ -38,7 +38,7 @@ public:
     void processMove();
     void wait_action(void*);
     void event_wait_action(void*);
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

@@ -103,7 +103,7 @@ static BOOL solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 00002A1C-00002E88       .text daBmdfoot_Create__FP10fopAc_ac_c */
-static s32 daBmdfoot_Create(fopAc_ac_c*) {
+static cPhs_State daBmdfoot_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

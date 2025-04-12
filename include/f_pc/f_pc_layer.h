@@ -41,7 +41,7 @@ s32 fpcLy_IntoQueue(layer_class* pLayer, int treeListIdx, create_tag_class* pTag
 s32 fpcLy_ToQueue(layer_class* pLayer, int treeListIdx, create_tag_class* pTag);
 s32 fpcLy_QueueTo(layer_class* pLayer, create_tag_class* pTag);
 
-s32 fpcLy_Cancel(layer_class* pLayer);
+BOOL fpcLy_Cancel(layer_class* pLayer);
 bool fpcLy_CancelMethod(process_method_tag_class* pLayer);
 
 void fpcLy_CancelQTo(process_method_tag_class* pMthd);
@@ -49,6 +49,6 @@ s32 fpcLy_ToCancelQ(layer_class* pLayer, process_method_tag_class* pMthd);
 
 void fpcLy_Create(layer_class* pLayer, void* pPcNode, node_list_class* pLists, int listNum);
 
-s32 fpcLy_Delete(layer_class* pLayer);
+BOOL fpcLy_Delete(layer_class* pLayer);
 
 #endif

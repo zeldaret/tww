@@ -253,7 +253,7 @@ void daDaiocta_c::createInit() {
 }
 
 /* 00004660-00004918       .text _create__11daDaiocta_cFv */
-s32 daDaiocta_c::_create() {
+cPhs_State daDaiocta_c::_create() {
     /* Nonmatching */
 }
 

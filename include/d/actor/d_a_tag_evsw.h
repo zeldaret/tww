@@ -24,7 +24,7 @@ namespace daTagEvsw {
         u16 prm_get_eventbitID() const { return daObj::PrmAbstract(this, PRM_EVENTBITID_W, PRM_EVENTBITID_S); }
         u16 prm_get_Type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
     
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         bool _execute();
         bool _draw();

@@ -321,7 +321,6 @@ dWood::Anm_c::Anm_c() {
 
     mNormAnimIdx = AnmID_Norm0;
     mAlphaScale = 0xff;
-    return;
 }
 
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
@@ -334,7 +333,6 @@ void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
         };
         (this->*mode_proc[mMode])(i_packet);
     }
-    return;
 }
 
 /* 800BD800-800BD848       .text copy_angamp__Q25dWood5Anm_cFPCQ25dWood5Anm_c */
@@ -351,8 +349,7 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
     }
 }
 
-/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs
- */
+/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
 void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, s16 targetAngle) {
     for (u32 i = 0; i < 2; i++) {
         mPhaseY[i] = 0;
@@ -834,7 +831,6 @@ dWood::Room_c::Room_c() {
 void dWood::Room_c::entry_unit(dWood::Unit_c *unit) {
     unit->mpNext = mpUnit;
     mpUnit = unit;
-    return;
 }
 
 /* 800BEF94-800BEFF0       .text delete_all_unit__Q25dWood6Room_cFv */

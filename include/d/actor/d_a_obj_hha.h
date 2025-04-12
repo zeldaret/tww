@@ -48,39 +48,39 @@ public:
     f32 get_pos_y() { return mPos.y; }
     void set_pos(cXyz& pos) { mPos.set(pos); }
     void set_pos_y(float y) { mPos.y = y; }
-    bool chk_stop() { return bIsActive == false; }
+    bool chk_stop() { return mbIsActive == false; }
     
     void delete_s() {
-        if(mEcallBack.getEmitter() != NULL){
-            mEcallBack.end();
-            bIsActive = false;
+        if(mSplashCb.getEmitter() != NULL){
+            mSplashCb.remove();
+            mbIsActive = false;
         }
     }
 
     void play_particle() {
-        JPABaseEmitter* pSplashEmitter = mEcallBack.getEmitter();
+        JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
-            pSplashEmitter->clearStatus(1);
-            bIsActive = true;
+            pSplashEmitter->playCreateParticle();
+            mbIsActive = true;
         }
     }
     
     void stop_particle() {
-        JPABaseEmitter* pSplashEmitter = mEcallBack.getEmitter();
+        JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
-            pSplashEmitter->setStatus(1);
-            bIsActive = false;
+            pSplashEmitter->stopCreateParticle();
+            mbIsActive = false;
         }
     }
 
     void create_s(u16, cXyz*, float, float, csXyz*);
 
 public:
-    /* 0x00 */ dPa_followEcallBack mEcallBack;
+    /* 0x00 */ dPa_followEcallBack mSplashCb;
     /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
     /* 0x2C */ csXyz mAngle;
-    /* 0x32 */ bool bIsActive;
+    /* 0x32 */ bool mbIsActive;
 
 }; // Size : 0x34
 
@@ -123,7 +123,7 @@ public:
 
     static int solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void set_tex(float, float, int);
     void init_mtx();

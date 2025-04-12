@@ -72,7 +72,7 @@ static int l_bck_ix_tbl_uo1[] = {
     0x14,
     0x04,
     0x04,
-    0x04
+    0x04,
 };
 
 static int l_bck_ix_tbl_uo2[] = {
@@ -81,7 +81,7 @@ static int l_bck_ix_tbl_uo2[] = {
     0x14,
     0x00,
     0x01,
-    0x01
+    0x01,
 };
 
 static int l_bck_ix_tbl_uo3[] = {
@@ -90,7 +90,7 @@ static int l_bck_ix_tbl_uo3[] = {
     0x14,
     0x12,
     0x13,
-    0x13
+    0x13,
 };
 
 static int l_bck_ix_tbl_ub1[] = {
@@ -99,7 +99,7 @@ static int l_bck_ix_tbl_ub1[] = {
     0x0E,
     0x0F,
     0x10,
-    0x10
+    0x10,
 };
 
 static int l_bck_ix_tbl_ub2[] = {
@@ -108,7 +108,7 @@ static int l_bck_ix_tbl_ub2[] = {
     0x0E,
     0x0F,
     0x10,
-    0x10
+    0x10,
 };
 
 static int l_bck_ix_tbl_ub3[] = {
@@ -117,7 +117,7 @@ static int l_bck_ix_tbl_ub3[] = {
     0x0E,
     0x0F,
     0x10,
-    0x11
+    0x11,
 };
 
 static int l_bck_ix_tbl_ub4[] = {
@@ -126,7 +126,7 @@ static int l_bck_ix_tbl_ub4[] = {
     0x0E,
     0x0F,
     0x10,
-    0x12
+    0x12,
 };
 
 static int l_bck_ix_tbl_uw1[] = {
@@ -135,7 +135,7 @@ static int l_bck_ix_tbl_uw1[] = {
     0x06,
     0x0B,
     0x0C,
-    0x0C
+    0x0C,
 };
 
 static int l_bck_ix_tbl_uw2[] = {
@@ -144,7 +144,7 @@ static int l_bck_ix_tbl_uw2[] = {
     0x07,
     0x0D,
     0x0F,
-    0x0E
+    0x0E,
 };
 
 static int l_bck_ix_tbl_um1[] = {
@@ -153,7 +153,7 @@ static int l_bck_ix_tbl_um1[] = {
     0x06,
     0x0E,
     0x0D,
-    0x17
+    0x17,
 };
 
 static int l_bck_ix_tbl_um2[] = {
@@ -162,7 +162,7 @@ static int l_bck_ix_tbl_um2[] = {
     0x06,
     0x0E,
     0x0D,
-    0x17
+    0x17,
 };
 
 static int l_bck_ix_tbl_um3[] = {
@@ -171,7 +171,7 @@ static int l_bck_ix_tbl_um3[] = {
     0x06,
     0x14,
     0x12,
-    0x10
+    0x10,
 };
 
 static int l_bck_ix_tbl_um3_n[] = {
@@ -180,7 +180,7 @@ static int l_bck_ix_tbl_um3_n[] = {
     0x06,
     0x14,
     0x12,
-    0x10
+    0x10,
 };
 
 static int l_bck_ix_tbl_sa1_n[] = {
@@ -189,7 +189,7 @@ static int l_bck_ix_tbl_sa1_n[] = {
     0x08,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa2[] = {
@@ -198,7 +198,7 @@ static int l_bck_ix_tbl_sa2[] = {
     0x18,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa3[] = {
@@ -207,7 +207,7 @@ static int l_bck_ix_tbl_sa3[] = {
     0x08,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa3_n[] = {
@@ -216,7 +216,7 @@ static int l_bck_ix_tbl_sa3_n[] = {
     0x08,
     0x24,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa4[] = {
@@ -225,7 +225,7 @@ static int l_bck_ix_tbl_sa4[] = {
     0x18,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa4_n[] = {
@@ -234,7 +234,7 @@ static int l_bck_ix_tbl_sa4_n[] = {
     0x18,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa5[] = {
@@ -243,7 +243,7 @@ static int l_bck_ix_tbl_sa5[] = {
     0x08,
     0x0A,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_sa5_n[] = {
@@ -252,7 +252,7 @@ static int l_bck_ix_tbl_sa5_n[] = {
     0x08,
     0x23,
     0x17,
-    0x16
+    0x16,
 };
 
 static int l_bck_ix_tbl_ug1[] = {
@@ -261,7 +261,7 @@ static int l_bck_ix_tbl_ug1[] = {
     0x13,
     0x11,
     0x0E,
-    0x0F
+    0x0F,
 };
 
 static int l_bck_ix_tbl_ug2[] = {
@@ -270,7 +270,7 @@ static int l_bck_ix_tbl_ug2[] = {
     0x13,
     0x11,
     0x0E,
-    0x0F
+    0x0F,
 };
 
 static int* l_bck_ix_tbl[][2] = {
@@ -358,7 +358,7 @@ static int l_head_bck_ix_sa[] = {
     0x06,
     0x09,
     0x06,
-    0x06
+    0x06,
 };
 
 static int l_head_bck_ix_sa_n[] = {
@@ -367,7 +367,7 @@ static int l_head_bck_ix_sa_n[] = {
     0x06,
     0x09,
     0x06,
-    0x06
+    0x06,
 };
 
 static int l_head_bck_ix_ug[] = {
@@ -376,7 +376,7 @@ static int l_head_bck_ix_ug[] = {
     0x0D,
     0x0B,
     0x08,
-    0x09
+    0x09,
 };
 
 static int* l_head_bck_ix_tbl[][2] = {
@@ -1123,7 +1123,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_uo1 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_uo2 = {
@@ -1165,7 +1165,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_uo2 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_uo3 = {
@@ -1207,7 +1207,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_uo3 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ub1 = {
@@ -1249,7 +1249,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ub1 = {
     0,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ub2 = {
@@ -1291,7 +1291,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ub2 = {
     0,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ub3 = {
@@ -1333,7 +1333,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ub3 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ub4 = {
@@ -1375,7 +1375,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ub4 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_uw1 = {
@@ -1417,7 +1417,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_uw1 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_uw2 = {
@@ -1459,7 +1459,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_uw2 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_um1 = {
@@ -1501,7 +1501,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_um1 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_um2 = {
@@ -1543,7 +1543,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_um2 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_um3 = {
@@ -1585,7 +1585,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_um3 = {
     0,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_um1_n = {
@@ -1627,7 +1627,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_um1_n = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_um3_n = {
@@ -1669,7 +1669,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_um3_n = {
     0,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa1 = {
@@ -1711,7 +1711,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa1 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa2 = {
@@ -1753,7 +1753,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa2 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa3 = {
@@ -1795,7 +1795,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa3 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa4 = {
@@ -1837,7 +1837,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa4 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa5 = {
@@ -1879,7 +1879,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa5 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa1_n = {
@@ -1921,7 +1921,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa1_n = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa3_n = {
@@ -1963,7 +1963,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa3_n = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa4_n = {
@@ -2005,7 +2005,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa4_n = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_sa5_n = {
@@ -2047,7 +2047,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_sa5_n = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ug1 = {
@@ -2089,7 +2089,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ug1 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat l_npc_dat_ug2 = {
@@ -2131,7 +2131,7 @@ static daNpcPeople_c__l_npc_dat l_npc_dat_ug2 = {
     1,
     0,
     0,
-    0
+    0,
 };
 
 static daNpcPeople_c__l_npc_dat* l_npc_dat[][2] = {
@@ -4057,7 +4057,7 @@ static const u8 l_photo_no[] = {
 /* 00000078-00000274       .text __ct__13daNpcPeople_cFv */
 daNpcPeople_c::daNpcPeople_c() {
     mNpcType = getPrmNpcNo();
-    m790 = 0;
+    mResFlag = 0;
     m78F = 0;
     m740 = 0.0f;
     m76E = 0;
@@ -4070,7 +4070,7 @@ daNpcPeople_c::daNpcPeople_c() {
     m793 = 0;
     m760 = 0;
     m794 = 0;
-    m758 = 0;
+    mEtcFlag = 0;
     m7A1 = 0;
     mbIsNight = dKy_daynight_check() & 0x1; // this is weird but it generates the clrlwi
     mpNpcDat = l_npc_dat[mNpcType][mbIsNight];
@@ -4109,7 +4109,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000075C-000008E0       .text phase_1__FP13daNpcPeople_c */
-static s32 phase_1(daNpcPeople_c* i_this) {
+static cPhs_State phase_1(daNpcPeople_c* i_this) {
     fopAcM_SetupActor(i_this, daNpcPeople_c);
 
     s16 arg0 = i_this->getPrmArg0();
@@ -4168,8 +4168,8 @@ static s32 phase_1(daNpcPeople_c* i_this) {
 }
 
 /* 000008E0-00000960       .text phase_2__FP13daNpcPeople_c */
-static s32 phase_2(daNpcPeople_c* i_this) {
-    int rt = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
+static cPhs_State phase_2(daNpcPeople_c* i_this) {
+    cPhs_State rt = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
     if(rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x3300)) {
             return i_this->createInit();
@@ -4183,11 +4183,11 @@ static s32 phase_2(daNpcPeople_c* i_this) {
 }
 
 /* 00000960-00000990       .text _create__13daNpcPeople_cFv */
-s32 daNpcPeople_c::_create() {
+cPhs_State daNpcPeople_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
-        NULL
+        NULL,
     };
 
     return dComLbG_PhaseHandler(&mPhs2, l_method, this);
@@ -4200,7 +4200,7 @@ BOOL daNpcPeople_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcType], getBck(m793))),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         l_diff_flag_tbl[mNpcType]
@@ -4223,7 +4223,7 @@ BOOL daNpcPeople_c::createHeap() {
             headModelData,
             NULL, NULL,
             (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcType], getHeadBck(m793))),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x00080000,
             l_head_diff_flag_tbl[mNpcType]
@@ -4283,7 +4283,7 @@ s16 daNpcPeople_photoCB(void* i_this, int param_1) {
 }
 
 /* 00000E6C-00001518       .text createInit__13daNpcPeople_cFv */
-s32 daNpcPeople_c::createInit() {
+cPhs_State daNpcPeople_c::createInit() {
     int temp = 0xFF;
 
     u8 pathIndex = getPrmRailID();
@@ -4344,7 +4344,7 @@ s32 daNpcPeople_c::createInit() {
             m766[1] = dComIfGp_evmng_getEventIdx("UM3_GET_ITEM");
 
             if(mbIsNight) {
-                m758 |= 0x40000000;
+                mEtcFlag |= 0x40000000;
             }
 
             break;
@@ -4370,7 +4370,7 @@ s32 daNpcPeople_c::createInit() {
         }
         case 0xF:
             if(mbIsNight) {
-                m758 |= 0x40000000;
+                mEtcFlag |= 0x40000000;
             }
 
             break;
@@ -4379,7 +4379,7 @@ s32 daNpcPeople_c::createInit() {
             if(getPrmArg0() == 0) {
                 temp = 0x50;
                 m76E = 1;
-                m758 = 0x1000;
+                mEtcFlag = 0x1000;
             }
 
             m766[0] = dComIfGp_evmng_getEventIdx("UG1_TALK");
@@ -4467,7 +4467,7 @@ bool daNpcPeople_c::_draw() {
     /* Nonmatching - regalloc */
 
     J3DModel* pModel1 = mpMorf->getModel();
-    J3DModel* pModel2 = m6D4;
+    J3DModel* pModel2;
     if(m6D4) {
         pModel2 = m6D4;
     }
@@ -4504,7 +4504,7 @@ bool daNpcPeople_c::_draw() {
         mBtpAnm.remove(modelData);
     }
 
-    if(m6D8 && (m758 & 0x40000001)) {
+    if(m6D8 && (mEtcFlag & 0x40000001)) {
         g_env_light.setLightTevColorType(m6D8, &tevStr);
         m6D8->setBaseTRMtx(pModel1->getAnmMtx(m7A3));
         mDoExt_modelUpdateDL(m6D8);
@@ -4614,8 +4614,8 @@ bool daNpcPeople_c::_execute() {
         if(!mbIsNight) {
             switch(mNpcType) {
                 case 0x3:
-                    if(m795 & 0x3) {
-                        m795 &= ~0x3;
+                    if(mAnmFlag & 0x3) {
+                        mAnmFlag &= ~0x3;
                         u8 rand = getRand(8);
                         if(rand == m794) {
                             rand = 0;
@@ -4627,8 +4627,8 @@ bool daNpcPeople_c::_execute() {
 
                     break;
                 case 0x4:
-                    if(m795 & 0x3) {
-                        m795 &= ~0x3;
+                    if(mAnmFlag & 0x3) {
+                        mAnmFlag &= ~0x3;
                         u8 rand = getRand(8);
                         if(rand == m794) {
                             rand = 0;
@@ -4640,8 +4640,8 @@ bool daNpcPeople_c::_execute() {
 
                     break;
                 case 0xB:
-                    if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e) && (m795 & 0x3)) {
-                        m795 &= ~0x3;
+                    if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_15_e) && (mAnmFlag & 0x3)) {
+                        mAnmFlag &= ~0x3;
                         u8 rand = getRand(8);
                         if(rand == m794) {
                             rand = 0;
@@ -4657,8 +4657,8 @@ bool daNpcPeople_c::_execute() {
         else {
             switch(mNpcType) {
                 case 0xE:
-                    if(m795 & 0x3) {
-                        m795 &= ~0x3;
+                    if(mAnmFlag & 0x3) {
+                        mAnmFlag &= ~0x3;
                         u8 rand;
                         if(m794 == 3) {
                             rand = 0;
@@ -4680,8 +4680,8 @@ bool daNpcPeople_c::_execute() {
 
                     break;
                 case 0x10:
-                    if(m795 & 0x3) {
-                        m795 &= ~0x3;
+                    if(mAnmFlag & 0x3) {
+                        mAnmFlag &= ~0x3;
                         u8 rand;
                         if(m794 == 3) {
                             rand = 0;
@@ -4774,16 +4774,16 @@ bool daNpcPeople_c::executeCommon() {
         executeSetMode(4);
         return true;
     }
-    if((m758 & 0x10) && !(m758 & 0x20)) {
+    if((mEtcFlag & 0x10) && !(mEtcFlag & 0x20)) {
         executeSetMode(9);
         return true;
     }
-    if((m758 & 0x4000) && m78F != 0xD) {
+    if((mEtcFlag & 0x4000) && m78F != 0xD) {
         executeSetMode(0xD);
         return true;
     }
-    if(m758 & 0x20000) {
-        m758 &= ~0x20000;
+    if(mEtcFlag & 0x20000) {
+        mEtcFlag &= ~0x20000;
         executeSetMode(0xB);
         return true;
     }
@@ -4839,7 +4839,7 @@ void daNpcPeople_c::executeWait() {
                     }
                     else {
                         m748 = mpNpcDat->field_0x28;
-                        m758 &= ~0x80000700;
+                        mEtcFlag &= ~0x80000700;
                     }
 
                     if(m789) {
@@ -4848,19 +4848,19 @@ void daNpcPeople_c::executeWait() {
                         }
                         else if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
                             dComIfGp_setScopeType(1);
-                            if(dKy_moon_look_chk() && !(m758 & 0x100)) {
+                            if(dKy_moon_look_chk() && !(mEtcFlag & 0x100)) {
                                 dComIfGs_onEventBit(0x2308);
-                                m758 |= 0x100;
+                                mEtcFlag |= 0x100;
                                 m7A7 = 0;
                                 m78D = 0xB;
                             }
-                            else if(dKy_orion_look_chk() && !(m758 & 0x200)) {
-                                m758 |= 0x200;
+                            else if(dKy_orion_look_chk() && !(mEtcFlag & 0x200)) {
+                                mEtcFlag |= 0x200;
                                 m7A7 = 1;
                                 m78D = 0xB;
                             }
-                            else if(dKy_hokuto_look_chk() && !(m758 & 0x400)) {
-                                m758 |= 0x400;
+                            else if(dKy_hokuto_look_chk() && !(mEtcFlag & 0x400)) {
+                                mEtcFlag |= 0x400;
                                 m7A7 = 2;
                                 m78D = 0xB;
                             }
@@ -4874,7 +4874,7 @@ void daNpcPeople_c::executeWait() {
                 break;
             case 0x11:
             case 0x12:
-                if((m758 & 0x1000) && m76E != 0) {
+                if((mEtcFlag & 0x1000) && m76E != 0) {
                     m76E--;
                     if(m76E == 0) {
                         executeSetMode(0xB);
@@ -4906,10 +4906,10 @@ void daNpcPeople_c::executeTalk() {
     executeCommon();
 
     if(!dComIfGp_event_chkTalkXY() || dComIfGp_evmng_ChkPresentEnd()) {
-        m758 &= ~0x200000;
+        mEtcFlag &= ~0x200000;
         if(talk2(1, this) == fopMsgStts_BOX_CLOSED_e) {
             m788 = 0;
-            m758 &= ~0x1;
+            mEtcFlag &= ~0x1;
             executeSetMode(0);
 
             if(m77E & 0x1) {
@@ -4947,8 +4947,8 @@ void daNpcPeople_c::executeTalk() {
                 }
             }
 
-            if(m758 & 0x100000) {
-                m758 &= ~0x100000;
+            if(mEtcFlag & 0x100000) {
+                mEtcFlag &= ~0x100000;
                 dComIfGp_startItemTimer();
             }
         }
@@ -4957,7 +4957,7 @@ void daNpcPeople_c::executeTalk() {
 
 /* 00002718-000027D8       .text executeWalkInit__13daNpcPeople_cFv */
 s32 daNpcPeople_c::executeWalkInit() {
-    m758 &= ~0x00400008;
+    mEtcFlag &= ~0x00400008;
     setAnmTbl(l_npc_anm_walk, 1);
     m76E = mpNpcDat->field_0x54 + cM_rndF(mpNpcDat->field_0x56 - mpNpcDat->field_0x54);
 
@@ -5002,12 +5002,12 @@ void daNpcPeople_c::executeWalk() {
                 }
             }
             else if(mNpcType != 2 || !mPathRun.mbGoingForwards) {
-                m758 |= 4;
+                mEtcFlag |= 4;
                 mPathRun.mbGoingForwards ^= 1;
                 executeSetMode(0);
             }
             else {
-                m758 &= ~0x4;
+                mEtcFlag &= ~0x4;
                 executeSetMode(6);
             }
         }
@@ -5019,7 +5019,7 @@ s32 daNpcPeople_c::executeTurnInit() {
     cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
     s16 angle;
     dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
-    if(angle == current.angle.y && (m758 & 8) == 0) {
+    if(angle == current.angle.y && (mEtcFlag & 8) == 0) {
         setAnmTbl(l_npc_anm_walk, 1);
         m76E = mpNpcDat->field_0x54 + cM_rndF(mpNpcDat->field_0x56 - mpNpcDat->field_0x54);
 
@@ -5033,7 +5033,7 @@ s32 daNpcPeople_c::executeTurnInit() {
 void daNpcPeople_c::executeTurn() {
     if(!executeCommon()) {
         s16 temp;
-        if(m758 & 0x400008) {
+        if(mEtcFlag & 0x400008) {
             temp = m77A;
         }
         else {
@@ -5046,10 +5046,10 @@ void daNpcPeople_c::executeTurn() {
         m799 = 2;
         m_jnt.setTrn();
         if(current.angle.y == temp) {
-            if(m758 & 0x400000) {
+            if(mEtcFlag & 0x400000) {
                 executeSetMode(2);
             }
-            else if(m758 & 8) {
+            else if(mEtcFlag & 8) {
                 executeSetMode(7);
             }
             else {
@@ -5133,7 +5133,7 @@ s32 daNpcPeople_c::executeKyoroInit() {
 
     m79D = 0;
     m79E = 0;
-    m758 &= ~0x00000008;
+    mEtcFlag &= ~0x00000008;
     setAnmTbl(l_npc_anm_kyoro, 1);
 
     return 6;
@@ -5142,8 +5142,8 @@ s32 daNpcPeople_c::executeKyoroInit() {
 /* 00002F80-0000301C       .text executeKyoro__13daNpcPeople_cFv */
 void daNpcPeople_c::executeKyoro() {
     if(executeCommon() == false) {
-        if(m795 & 1) {
-            m758 |= 8;
+        if(mAnmFlag & 1) {
+            mEtcFlag |= 8;
             if(m78A || m789) {
                 m79D = 1;
                 m79E = 1;
@@ -5165,7 +5165,7 @@ s32 daNpcPeople_c::executeLetterInit() {
     m79D = 0;
     m79E = 0;
     setAnmTbl(l_npc_anm_letter, 1);
-    m758 &= ~0x00400000;
+    mEtcFlag &= ~0x00400000;
 
     return 7;
 }
@@ -5175,16 +5175,16 @@ void daNpcPeople_c::executeLetter() {
     if(!executeCommon()) {
         int frame = mpMorf->getFrame();
         if(frame < 0x23 || frame > 0x45) {
-            m758 &= ~0x1;
+            mEtcFlag &= ~0x1;
         }
         else {
-            m758 |= 1;
+            mEtcFlag |= 1;
             m7A6 = 1;
         }
 
-        if(m795 & 1) {
-            m758 |= 0x400002;
-            m758 &= ~0x8;
+        if(mAnmFlag & 1) {
+            mEtcFlag |= 0x400002;
+            mEtcFlag &= ~0x8;
             m79D = 1;
             m79E = 1;
             mPathRun.mbGoingForwards ^= 0x1;
@@ -5193,7 +5193,7 @@ void daNpcPeople_c::executeLetter() {
         }
     }
     else {
-        m758 |= 1;
+        mEtcFlag |= 1;
         m79D = 1;
         m79E = 1;
     }
@@ -5249,7 +5249,7 @@ s32 daNpcPeople_c::executeLook2Init() {
     m79D = 0;
     m79E = 0;
     setAnmTbl(l_npc_anm_wait, 1);
-    m758 |= 0x20;
+    mEtcFlag |= 0x20;
 
     return 9;
 }
@@ -5257,7 +5257,7 @@ s32 daNpcPeople_c::executeLook2Init() {
 /* 00003314-00003408       .text executeLook2__13daNpcPeople_cFv */
 void daNpcPeople_c::executeLook2() {
     if(!executeCommon()) {
-        if(m758 & 0x10) {
+        if(mEtcFlag & 0x10) {
             fopAc_ac_c* pActor = fopAcM_searchFromName(l_npc_staff_id[10], 0, 0);
             if(pActor) {
                 mLookAtPos = pActor->eyePos;
@@ -5269,7 +5269,7 @@ void daNpcPeople_c::executeLook2() {
             m748 = mpNpcDat->field_0x28;
             m79D = 1;
             m79E = 1;
-            m758 &= ~0x20;
+            mEtcFlag &= ~0x20;
 
             executeSetMode(0);
         }
@@ -5280,10 +5280,10 @@ void daNpcPeople_c::executeLook2() {
         m748 = mpNpcDat->field_0x28;
         m79D = 1;
         m79E = 1;
-        m758 &= ~0x20;
+        mEtcFlag &= ~0x20;
     }
 
-    m758 &= ~0x10;
+    mEtcFlag &= ~0x10;
 }
 
 /* 00003408-00003438       .text executeUgWalkInit__13daNpcPeople_cFv */
@@ -5304,28 +5304,28 @@ void daNpcPeople_c::executeUgWalk() {
         f32 temp2 = diff.abs();
         
         if(temp < 30.0f) {
-            if(m758 & 0x10000) {
-                m758 &= ~0x10000;
+            if(mEtcFlag & 0x10000) {
+                mEtcFlag &= ~0x10000;
                 m71C = getDirDistToPos(getRand(0x10000), cM_rndF(180.0f)) + home.pos;
             }
             else {
-                if((mNpcType != 0x12 && (getRand(100) < 0x19 && !(m758 & 0x8000))) || (m758 & 0x2000)) {
-                    m758 &= ~0x2000;
+                if((mNpcType != 0x12 && (getRand(100) < 0x19 && !(mEtcFlag & 0x8000))) || (mEtcFlag & 0x2000)) {
+                    mEtcFlag &= ~0x2000;
                     executeSetMode(0xC);
                 }
                 else if(getRand(100) < 0x19) {
                     executeSetMode(0xE);
                 }
                 else {
-                    m758 &= ~0x8000;
+                    mEtcFlag &= ~0x8000;
                     executeSetMode(0);
                 }
             }
         }
         else {
             if(temp2 < 180.0f) {
-                if(m758 & 0x10000) {
-                    m758 &= ~0x10000;
+                if(mEtcFlag & 0x10000) {
+                    mEtcFlag &= ~0x10000;
                     m71C = getDirDistToPos(getRand(0x10000), cM_rndF(180.0f)) + home.pos;
                 }
 
@@ -5335,7 +5335,7 @@ void daNpcPeople_c::executeUgWalk() {
                         u8 type = pActor->getNpcNo();
                         if((mNpcType == 0x11 && type == 0x12) || (mNpcType == 0x12 && type == 0x11)) {
                             pActor->setEtcFlag(0x60000);
-                            m758 |= 0x42000;
+                            mEtcFlag |= 0x42000;
                             executeSetMode(0xB);
                         }
                     }
@@ -5361,7 +5361,7 @@ void daNpcPeople_c::executeUgWalk() {
                             }
 
                             m71C = getDirDistToPos(angle1, 50.0f) + current.pos;
-                            m758 |= 0x10000;
+                            mEtcFlag |= 0x10000;
                         }
                     }
                 }
@@ -5391,8 +5391,8 @@ void daNpcPeople_c::executeUgWalk() {
 s32 daNpcPeople_c::executeUgTurnInit() {
     s16 angle;
 
-    if(m758 & 0x40000) {
-        m758 &= ~0x40000;
+    if(mEtcFlag & 0x40000) {
+        mEtcFlag &= ~0x40000;
         
         fopAc_ac_c* pActor;
         if(mNpcType == 0x11) {
@@ -5470,7 +5470,7 @@ void daNpcPeople_c::executeUgLook() {
 s32 daNpcPeople_c::executeUgLook2Init() {
     m76E = 0x78;
     setAnmTbl(l_npc_anm_wait, 1);
-    m758 &= ~0x00004000;
+    mEtcFlag &= ~0x00004000;
 
     return 0xD;
 }
@@ -5491,7 +5491,7 @@ void daNpcPeople_c::executeUgLook2() {
         }
     }
 
-    m758 &= ~0x10;
+    mEtcFlag &= ~0x10;
 }
 
 /* 00003EE4-00003F38       .text executeUgSitInit__13daNpcPeople_cFv */
@@ -5499,7 +5499,7 @@ s32 daNpcPeople_c::executeUgSitInit() {
     setAnmTbl(l_npc_anm_sit_ug, 1);
     m79D = 0;
     m79E = 0;
-    m758 |= 0x00080000;
+    mEtcFlag |= 0x00080000;
 
     return 0xE;
 }
@@ -5507,10 +5507,10 @@ s32 daNpcPeople_c::executeUgSitInit() {
 /* 00003F38-00003FC0       .text executeUgSit__13daNpcPeople_cFv */
 void daNpcPeople_c::executeUgSit() {
     if(!executeCommon()) {
-        if(m795 & 1) {
+        if(mAnmFlag & 1) {
             m79D = 1;
             m79E = 1;
-            m758 &= ~0x00080000;
+            mEtcFlag &= ~0x00080000;
             setAnmTbl(l_npc_anm_wait, 1);
             executeSetMode(0xB);
         }
@@ -5583,7 +5583,7 @@ void daNpcPeople_c::eventOrder() {
         m79F = mpNpcDat->field_0x5C;
         m778 = mpNpcDat->field_0x36;
         m788 = 0;
-        m795 |= 2;
+        mAnmFlag |= 2;
         dComIfGp_event_reset();
         if(mNpcType == 8) {
             m77A = home.angle.y;
@@ -5610,7 +5610,7 @@ void daNpcPeople_c::eventOrder() {
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], 0, 0xFFFF);
     }
     else if(m78D == 0xB) {
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], 8, 0xFFFF);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[0], dEvtFlag_UNK8_e, 0xFFFF);
     }
     else if(m78D == 0xC) {
         fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, m766[1], 0, 0xFFFF);
@@ -5636,7 +5636,7 @@ void daNpcPeople_c::eventMove() {
             }
         }
         else {
-            m758 &= ~0x00200000;
+            mEtcFlag &= ~0x00200000;
             privateCut();
         }
     }
@@ -5770,7 +5770,7 @@ void daNpcPeople_c::eventMesSetTpInit(int param_1) {
 
 /* 00004784-0000498C       .text eventMesSetInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventMesSetInit(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(pMsgNo) {
         m734 = 0;
 
@@ -5780,12 +5780,12 @@ void daNpcPeople_c::eventMesSetInit(int staffIdx) {
                 break;
             case 0x358C:
                 if(mCurrMsgNo != 0x358D) {
-                    m758 |= 0x800;
+                    mEtcFlag |= 0x800;
                 }
 
                 break;
             case 0x3594:
-                m758 |= 0x800;
+                mEtcFlag |= 0x800;
 
                 dComIfGs_onTmpBit(0x208);
                 if(!dComIfGs_checkGetItem(NORMAL_SAIL)) {
@@ -5804,14 +5804,14 @@ void daNpcPeople_c::eventMesSetInit(int staffIdx) {
                     setMessage(0x3598);
                 }
                 else {
-                    m758 &= ~0x800;
+                    mEtcFlag &= ~0x800;
                     dComIfGs_onEventBit(0x2B04);
                     setMessage(0x3599);
                 }
 
                 break;
             case 0x359A:
-                m758 |= 0x800;
+                mEtcFlag |= 0x800;
             default:
                 setMessage(*pMsgNo);
         }
@@ -5834,8 +5834,8 @@ bool daNpcPeople_c::eventMesSet2() {
 
 /* 000049F8-00004A90       .text eventFlagSetInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventFlagSetInit(int staffIdx) {
-    s32* pTurn = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "Turn");
-    s32* pLook = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "Look");
+    int* pTurn = dComIfGp_evmng_getMyIntegerP(staffIdx, "Turn");
+    int* pLook = dComIfGp_evmng_getMyIntegerP(staffIdx, "Look");
 
     if(*pTurn != 0) {
         m79D = *pTurn;
@@ -5848,7 +5848,7 @@ void daNpcPeople_c::eventFlagSetInit(int staffIdx) {
 /* 00004A90-00004B34       .text eventGetItemInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventGetItemInit(int staffIdx) {
     int itemNo;
-    u32* pItemIdx = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
+    int* pItemIdx = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pItemIdx) {
         itemNo = l_get_item_no[*pItemIdx];
     }
@@ -5931,7 +5931,7 @@ bool daNpcPeople_c::eventUb1Talk() {
 
 /* 00004DC0-00004F24       .text eventUb1TalkXyInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventUb1TalkXyInit(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     BOOL temp = false;
     if(pMsgNo) {
         switch(*pMsgNo) {
@@ -6016,7 +6016,7 @@ bool daNpcPeople_c::eventUb2Talk() {
         }
     }
 
-    m758 |= 0x200000;
+    mEtcFlag |= 0x200000;
 
     return 0;
 }
@@ -6025,15 +6025,15 @@ bool daNpcPeople_c::eventUb2Talk() {
 bool daNpcPeople_c::eventUbSetAnm() {
     switch(mNpcType) {
         case 0x3:
-            if(m795 & 3) {
-                m795 &= ~0x3;
+            if(mAnmFlag & 3) {
+                mAnmFlag &= ~0x3;
                 setAnmTbl(l_npc_anm_ub1_tbl[getRand(8)], 1);
             }
 
             break;
         case 0x4:
-            if(m795 & 3) {
-                m795 &= ~0x3;
+            if(mAnmFlag & 3) {
+                mAnmFlag &= ~0x3;
                 setAnmTbl(l_npc_anm_ub2_tbl[getRand(8)], 1);
             }
 
@@ -6090,7 +6090,7 @@ void daNpcPeople_c::eventCameraStartInit() {
 
 /* 00005314-0000539C       .text eventCoCylRInit__13daNpcPeople_cFi */
 void daNpcPeople_c::eventCoCylRInit(int staffIdx) {
-    s32* pRad = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "CoCylR");
+    int* pRad = dComIfGp_evmng_getMyIntegerP(staffIdx, "CoCylR");
     if(pRad) {
         m74C = *pRad;
     }
@@ -6172,8 +6172,8 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
 
                 break;
             case fopMsgStts_BOX_CLOSED_e:
-                if(m758 & 0x800) {
-                    m758 &= ~0x800;
+                if(mEtcFlag & 0x800) {
+                    mEtcFlag &= ~0x800;
                     initUgSearchArea();
                     dComIfGp_event_reset();
                 }
@@ -6202,7 +6202,7 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
         }
     }
 
-    if(!(m758 & 0x200000)) {
+    if(!(mEtcFlag & 0x200000)) {
         setAnmFromMsgTag();
     }
 
@@ -6446,7 +6446,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                                 dComIfGp_resetItemTimer(0xE10);
                             }
 
-                            m758 |= 0x100000;
+                            mEtcFlag |= 0x100000;
                         }
                         else {
                             m734 = l_msg_sa5_no;
@@ -6464,7 +6464,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                                 m734 = l_msg_xy_sa5_yes;
                                 dComIfGp_setItemBeastNumCount(0x0, -3);
                                 dComIfGp_resetItemTimer(0xE10);
-                                m758 |= 0x100000;
+                                mEtcFlag |= 0x100000;
                             }
                         }
                         else {
@@ -6693,7 +6693,7 @@ u32 daNpcPeople_c::getMsg() {
 
                 break;
             case 2:
-                if(m793 == 3 || (m758 & 0x8)) {
+                if(m793 == 3 || (mEtcFlag & 0x8)) {
                     m734 = l_msg_uo3_kyoro;
                 }
                 else if(m793 == 4) {
@@ -6703,10 +6703,10 @@ u32 daNpcPeople_c::getMsg() {
                     dComIfGs_onEventBit(0x1E08);
                     m734 = l_msg_uo3_1st_talk;
                 }
-                else if(!(m758 & 0x2)) {
+                else if(!(mEtcFlag & 0x2)) {
                     m734 = l_msg_uo3_befor_letter;
                 }
-                else if((m758 & 0x4)) {
+                else if((mEtcFlag & 0x4)) {
                     m734 = l_msg_uo3_retry_letter;
                 }
                 else {
@@ -6739,7 +6739,7 @@ u32 daNpcPeople_c::getMsg() {
 
                 break;
             case 6:
-                if(m758 & 0x40) {
+                if(mEtcFlag & 0x40) {
                     m734 = l_msg_ub4_photo_house;
                 }
                 else if(!dComIfGs_isEventBit(0x1D10)) {
@@ -7000,8 +7000,8 @@ u32 daNpcPeople_c::getMsg() {
                     msgNo = 0x3299;
                 }
                 else if(!mbIsNight) {
-                    if(m758 & 0x80) {
-                        m758 &= ~0x80;
+                    if(mEtcFlag & 0x80) {
+                        mEtcFlag &= ~0x80;
                         if(!dComIfGs_isEventBit(0x2680)) {
                             m734 = l_msg_sa5__next_day;
                         }
@@ -7617,7 +7617,7 @@ void daNpcPeople_c::playAnm() {
                 if(m796 == 0) {
                     m728 += 1;
                     if(setAnmTbl(m728, 1)) {
-                        m795 |= 1;
+                        mAnmFlag |= 1;
                     }
                 }
                 else {
@@ -7689,7 +7689,7 @@ bool daNpcPeople_c::setAnmTbl(sPeopleAnmDat* param_1, int param_2) {
         }
     }
 
-    m795 &= ~0x1;
+    mAnmFlag &= ~0x1;
     if(param_1->field_0x00 == 0xFF && param_2 != 0) {
         m728 = NULL;
         return true;
@@ -7761,7 +7761,7 @@ s16 daNpcPeople_c::XyCheckCB(int i_itemBtn) {
 
             break;
         case 0x6:
-            if(!(m758 & 0x40) && isPhoto(itemNo)) {
+            if(!(mEtcFlag & 0x40) && isPhoto(itemNo)) {
                 return true;
             }
 
@@ -7979,8 +7979,8 @@ BOOL daNpcPeople_c::chkEndEvent() {
             break;
         case 0x10:
             if(dComIfGp_evmng_endCheck(m766[0]) || dComIfGp_evmng_endCheck(m766[1])) {
-                if(m758 & 0x100000) {
-                    m758 &= ~0x100000;
+                if(mEtcFlag & 0x100000) {
+                    mEtcFlag &= ~0x100000;
                     dComIfGp_startItemTimer();
                 }
 
@@ -8120,7 +8120,7 @@ BOOL daNpcPeople_c::checkPig() {
                 if(temp < 400.0f && std::abs(current.pos.y - pPig->current.pos.y) <= 10.0f) {
                     pPig->taura_pos_set(current.pos);
                     m78D = 2;
-                    m758 |= 0x80;
+                    mEtcFlag |= 0x80;
                     dComIfGs_setTmpReg(0xFC03, i);
                     u8 reg = dComIfGs_getTmpReg(0xFD07);
                     reg |= 1 << i;
@@ -8172,7 +8172,7 @@ void daNpcPeople_c::initUgSearchArea() {
             pActor->m788 = 0;
             pActor->m78C = 1;
             pActor->m78D = 0;
-            pActor->m795 |= 2;
+            pActor->setAnmFlag(2);
             pActor->m79D = 1;
             pActor->m79E = 1;
             pActor->m748 = mpNpcDat->field_0x28;

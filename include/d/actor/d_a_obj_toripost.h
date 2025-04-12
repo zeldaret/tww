@@ -42,7 +42,7 @@ public:
     };
 
     void eventSet(s8 eventIdx) { mEventIdx = eventIdx; }
-    s32 getSendPrice() { return m_send_price[mPayType]; }
+    int getSendPrice() { return m_send_price[mPayType]; }
     bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
     void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
 
@@ -84,7 +84,7 @@ public:
     bool _draw();
     void createInit();
     void getArg();
-    int _create();
+    cPhs_State _create();
     bool _delete();
 
     static const char m_arc_name[];

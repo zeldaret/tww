@@ -31,55 +31,67 @@ void fpcNdRq_ToRequestQ(node_create_request* i_NdCtReq) {
 }
 
 /* 8003F328-8003F380       .text fpcNdRq_phase_IsCreated__FP19node_create_request */
-s32 fpcNdRq_phase_IsCreated(node_create_request* i_NdCtReq) {
+cPhs_State fpcNdRq_phase_IsCreated(node_create_request* i_NdCtReq) {
     if (fpcCtRq_IsCreatingByID(i_NdCtReq->mCreatingID) == TRUE) {
         return cPhs_INIT_e;
     } else {
-        return fpcEx_IsExist(i_NdCtReq->mCreatingID) == TRUE ? 2 : 3;
+        if (fpcEx_IsExist(i_NdCtReq->mCreatingID) == TRUE) {
+            return cPhs_NEXT_e;
+        } else {
+            return cPhs_STOP_e;
+        }
     }
 }
 
 /* 8003F380-8003F3DC       .text fpcNdRq_phase_Create__FP19node_create_request */
-s32 fpcNdRq_phase_Create(node_create_request* i_NdCtReq) {
+cPhs_State fpcNdRq_phase_Create(node_create_request* i_NdCtReq) {
     i_NdCtReq->mCreatingID = fpcSCtRq_Request(i_NdCtReq->mpLayerClass, i_NdCtReq->mProcName,
         (stdCreateFunc)i_NdCtReq->mpNodeCrReqMthCls->mpPostMethodFunc, i_NdCtReq,
         i_NdCtReq->mpUserData);
-    return i_NdCtReq->mCreatingID == fpcM_ERROR_PROCESS_ID_e ? 3 : 2;
+    if (i_NdCtReq->mCreatingID == fpcM_ERROR_PROCESS_ID_e) {
+        return cPhs_STOP_e;
+     } else {
+        return cPhs_NEXT_e;
+     }
 }
 
 /* 8003F3DC-8003F3E4       .text fpcNdRq_phase_IsDeleteTiming__FP19node_create_request */
-s32 fpcNdRq_phase_IsDeleteTiming(node_create_request* i_NdCtReq) {
-    return 2;
+cPhs_State fpcNdRq_phase_IsDeleteTiming(node_create_request* i_NdCtReq) {
+    return cPhs_NEXT_e;
 }
 
 /* 8003F3E4-8003F414       .text fpcNdRq_phase_IsDeleted__FP19node_create_request */
-s32 fpcNdRq_phase_IsDeleted(node_create_request* i_NdCtReq) {
-    return fpcDt_IsComplete() == 0 ? cPhs_INIT_e : 2;
+cPhs_State fpcNdRq_phase_IsDeleted(node_create_request* i_NdCtReq) {
+    if (fpcDt_IsComplete() == FALSE) {
+        return cPhs_INIT_e;
+     } else {
+        return cPhs_NEXT_e;
+     }
 }
 
 /* 8003F414-8003F468       .text fpcNdRq_phase_Delete__FP19node_create_request */
-s32 fpcNdRq_phase_Delete(node_create_request* i_NdCtReq) {
+cPhs_State fpcNdRq_phase_Delete(node_create_request* i_NdCtReq) {
     if (i_NdCtReq->mNodeProc.mpNodeProc != NULL) {
-        if (fpcDt_Delete(&i_NdCtReq->mNodeProc.mpNodeProc->base) == 0) {
+        if (fpcDt_Delete(&i_NdCtReq->mNodeProc.mpNodeProc->base) == FALSE) {
             return cPhs_INIT_e;
         }
         i_NdCtReq->mNodeProc.mpNodeProc = NULL;
     }
-    return 2;
+    return cPhs_NEXT_e;
 }
 
 /* 8003F468-8003F4B0       .text fpcNdRq_DoPhase__FP19node_create_request */
-s32 fpcNdRq_DoPhase(node_create_request* i_NdCtReq) {
-    s32 result = cPhs_Handler(&i_NdCtReq->mReqPhsProc, i_NdCtReq->mpPhsHandler, i_NdCtReq);
-    if (result == 2) {
+cPhs_State fpcNdRq_DoPhase(node_create_request* i_NdCtReq) {
+    cPhs_State result = cPhs_Handler(&i_NdCtReq->mReqPhsProc, i_NdCtReq->mpPhsHandler, i_NdCtReq);
+    if (result == cPhs_NEXT_e) {
         return fpcNdRq_DoPhase(i_NdCtReq);
     }
     return result;
 }
 
 /* 8003F4B0-8003F514       .text fpcNdRq_Execute__FP19node_create_request */
-s32 fpcNdRq_Execute(node_create_request* i_NdCtReq) {
-    s32 result = fpcNdRq_DoPhase(i_NdCtReq);
+cPhs_State fpcNdRq_Execute(node_create_request* i_NdCtReq) {
+    cPhs_State result = fpcNdRq_DoPhase(i_NdCtReq);
     switch (result) {
     case cPhs_INIT_e:
     case cPhs_LOADING_e:
@@ -95,18 +107,25 @@ s32 fpcNdRq_Execute(node_create_request* i_NdCtReq) {
 }
 
 /* 8003F514-8003F57C       .text fpcNdRq_Delete__FP19node_create_request */
-s32 fpcNdRq_Delete(node_create_request* i_NdCtReq) {
+BOOL fpcNdRq_Delete(node_create_request* i_NdCtReq) {
     fpcNdRq_RequestQTo(i_NdCtReq);
-    if (i_NdCtReq->mpNodeCrReqMthCls != NULL && i_NdCtReq->mpNodeCrReqMthCls->mpUnkFunc != NULL && fpcMtd_Method(i_NdCtReq->mpNodeCrReqMthCls->mpUnkFunc, i_NdCtReq) == 0)
-        return 0;
+    if (
+        i_NdCtReq->mpNodeCrReqMthCls != NULL &&
+        i_NdCtReq->mpNodeCrReqMthCls->mpUnkFunc != NULL &&
+        fpcMtd_Method(i_NdCtReq->mpNodeCrReqMthCls->mpUnkFunc, i_NdCtReq) == FALSE
+    )
+        return FALSE;
     cMl::free(i_NdCtReq);
-    return 1;
+    return TRUE;
 }
 
 /* 8003F57C-8003F5D4       .text fpcNdRq_Cancel__FP19node_create_request */
-s32 fpcNdRq_Cancel(node_create_request* i_NdCtReq) {
-    if (i_NdCtReq->mpNodeCrReqMthCls != NULL && fpcMtd_Method(i_NdCtReq->mpNodeCrReqMthCls->mpCancelFunc, i_NdCtReq) == 0)
-        return 0;
+BOOL fpcNdRq_Cancel(node_create_request* i_NdCtReq) {
+    if (
+        i_NdCtReq->mpNodeCrReqMthCls != NULL &&
+        fpcMtd_Method(i_NdCtReq->mpNodeCrReqMthCls->mpCancelFunc, i_NdCtReq) == FALSE
+    )
+        return FALSE;
     return fpcNdRq_Delete(i_NdCtReq);
 }
 
@@ -119,13 +138,13 @@ s32 fpcNdRq_Handler() {
         case cPhs_STOP_e:
         case cPhs_ERROR_e:
             currentNode = NODE_GET_NEXT(currentNode);
-            if (fpcNdRq_Cancel(req) == 0) {
+            if (fpcNdRq_Cancel(req) == FALSE) {
                 return 0;
             }
             break;
         case cPhs_COMPLEATE_e:
             currentNode = NODE_GET_NEXT(currentNode);
-            if (fpcNdRq_Delete(req) == 0) {
+            if (fpcNdRq_Delete(req) == FALSE) {
                 return 0;
             }
             break;

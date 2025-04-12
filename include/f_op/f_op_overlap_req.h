@@ -25,9 +25,9 @@ public:
     /* 0x24 */ layer_class* pCurrentLayer;
 };
 
-int fopOvlpReq_OverlapClr(overlap_request_class* param_1);
+BOOL fopOvlpReq_OverlapClr(overlap_request_class* param_1);
 overlap_request_class* fopOvlpReq_Request(overlap_request_class*, s16, u16);
-s32 fopOvlpReq_Handler(overlap_request_class*);
+cPhs_State fopOvlpReq_Handler(overlap_request_class*);
 BOOL fopOvlpReq_Cancel(overlap_request_class*);
 BOOL fopOvlpReq_Is_PeektimeLimit(overlap_request_class*);
 

@@ -17,7 +17,7 @@ public:
     void clrFlag(u16 flag) { mFlag &= ~flag; }
     void setFlag(u16 flag) { mFlag |= flag; }
 
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     void setActio(u8 action) { mAction = action; }

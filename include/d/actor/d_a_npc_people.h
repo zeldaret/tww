@@ -75,17 +75,17 @@ public:
 
     u8 getNpcNo() { return mNpcType; }
     request_of_phase_process_class* getPhaseP() { return &mPhs; }
-    void setAnmFlag(u8) {}
-    void setEtcFlag(u32 flags) { m758 |= flags; }
+    void setEtcFlag(u32 flags) { mEtcFlag |= flags; }
+    void setResFlag(u8 flag) { mResFlag = flag; }
+    void setAnmFlag(u8 flags) { mAnmFlag |= flags; }
+    void setTalk(u8) {}
     void setNoTalk(u8) {}
     void setOrderEventNum(u8) {}
-    void setResFlag(u8 flag) { m790 = flag; }
-    void setTalk(u8) {}
 
     daNpcPeople_c();
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     bool _delete();
     bool _draw();
     bool _execute();
@@ -225,7 +225,7 @@ public:
     /* 0x74C */ f32 m74C;
     /* 0x750 */ f32 m750;
     /* 0x754 */ u8 m754[0x758 - 0x754];
-    /* 0x758 */ u32 m758;
+    /* 0x758 */ u32 mEtcFlag;
     /* 0x75C */ int m75C;
     /* 0x760 */ int m760;
     /* 0x764 */ bool m764;
@@ -252,12 +252,12 @@ public:
     /* 0x78D */ u8 m78D;
     /* 0x78E */ u8 m78E;
     /* 0x78F */ u8 m78F;
-    /* 0x790 */ u8 m790;
+    /* 0x790 */ u8 mResFlag;
     /* 0x791 */ u8 mNpcType;
     /* 0x792 */ u8 m792;
     /* 0x793 */ u8 m793;
     /* 0x794 */ u8 m794;
-    /* 0x795 */ u8 m795;
+    /* 0x795 */ u8 mAnmFlag;
     /* 0x796 */ s8 m796;
     /* 0x797 */ s8 m797;
     /* 0x798 */ u8 m798;

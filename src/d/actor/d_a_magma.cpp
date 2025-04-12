@@ -13,10 +13,10 @@ daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");
 }
 
-s32 daMagma_c::create() {
+cPhs_State daMagma_c::create() {
     fopAcM_SetupActor(this, daMagma_c);
 
-    int result = dComIfG_resLoad(&mPhs, "Magma");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Magma");
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -45,7 +45,7 @@ static BOOL daMagma_Delete(daMagma_c* i_this) {
 }
 
 /* 000000CC-00000178       .text daMagma_Create__FP10fopAc_ac_c */
-static s32 daMagma_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMagma_Create(fopAc_ac_c* i_this) {
     return ((daMagma_c*)i_this)->create();
 }
 

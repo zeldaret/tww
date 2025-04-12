@@ -30,6 +30,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JKernel/JKRMemArchive.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -62,13 +63,16 @@ dSn_HIO_c::dSn_HIO_c() {
 }
 
 /* 8022F8F0-8022F95C       .text phase_1__FPc */
-static s32 phase_1(char* resName) {
+static cPhs_State phase_1(char* resName) {
     mDoAud_bgmStart(JA_BGM_SELECT);
-    return !dComIfG_setStageRes(resName, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    if (dComIfG_setStageRes(resName, NULL) == FALSE) {
+        return cPhs_ERROR_e;
+    }
+    return cPhs_NEXT_e;
 }
 
 /* 8022F95C-8022F9B4       .text phase_2__FPc */
-static s32 phase_2(char* resName) {
+static cPhs_State phase_2(char* resName) {
     s32 rt = dComIfG_syncStageRes(resName);
     if (rt < 0)
         return cPhs_ERROR_e;
@@ -78,12 +82,12 @@ static s32 phase_2(char* resName) {
 }
 
 /* 8022F9B4-8022F9BC       .text phase_3__FPc */
-static s32 phase_3(char*) {
+static cPhs_State phase_3(char*) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
-s32 resLoad(request_of_phase_process_class* phase, char* resName) {
+cPhs_State resLoad(request_of_phase_process_class* phase, char* resName) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -96,13 +100,13 @@ s32 resLoad(request_of_phase_process_class* phase, char* resName) {
 }
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
-s32 dScnName_c::create() {
+cPhs_State dScnName_c::create() {
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
 
-    s32 rt = resLoad(&mPhs, "Stage");
+    cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
         heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
         JUT_ASSERT(0x1c8, heap != NULL);
@@ -148,7 +152,7 @@ s32 dScnName_c::create() {
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;
         f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
-        field_0x2a8 = aspect * g_HIO.field_0x0c;
+        field_0x2a8 = aspect * fapGmHIO_getAspectRatio();
         field_0x2ac.x = 9377.0f;
         field_0x2ac.y = 0.0;
         field_0x2ac.z = 7644.0;
@@ -918,28 +922,28 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-static s32 dScnName_Draw(dScnName_c* i_this) {
+static BOOL dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-static s32 dScnName_Execute(dScnName_c* i_this) {
+static BOOL dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-static s32 dScnName_IsDelete(dScnName_c*) {
-    return 1;
+static BOOL dScnName_IsDelete(dScnName_c*) {
+    return TRUE;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-static s32 dScnName_Delete(dScnName_c* i_this) {
+static BOOL dScnName_Delete(dScnName_c* i_this) {
     i_this->~dScnName_c();
-    return 1;
+    return TRUE;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-static s32 dScnName_Create(scene_class* i_scn) {
+static cPhs_State dScnName_Create(scene_class* i_scn) {
     dScnName_c* i_this = new (i_scn) dScnName_c();
     return i_this->create();
 }
@@ -956,7 +960,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     Mtx44 mtx;
     view_port_class* viewport = dComIfGp_getCurrentViewport();
     f32 aspect = viewport->mWidth / viewport->mHeight;
-    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.field_0x0c, 1.0f, 100000.0f);
+    C_MTXPerspective(mtx, 30.0f, aspect * fapGmHIO_getAspectRatio(), 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
     cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();

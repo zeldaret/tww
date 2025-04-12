@@ -93,7 +93,7 @@ public:
     void normalize(f32*);
     void normalizeWeight(int, f32*);
 
-    void checkFlag(u32) {}
+    bool checkFlag(u32 i_flag) { return mFlags & i_flag; }
 
 private:
     friend class J3DClusterLoader;

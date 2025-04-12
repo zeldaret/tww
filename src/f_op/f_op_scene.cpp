@@ -7,29 +7,29 @@
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
 
-static void fopScn_Draw(scene_class* i_this) {
-    fpcNd_DrawMethod((nodedraw_method_class*)i_this->mpMtd, i_this);
+static BOOL fopScn_Draw(scene_class* i_this) {
+    return fpcNd_DrawMethod((nodedraw_method_class*)i_this->mpMtd, i_this);
 }
 
-static void fopScn_Execute(scene_class* i_this) {
-    fpcMtd_Execute((process_method_class*)i_this->mpMtd, i_this);
+static BOOL fopScn_Execute(scene_class* i_this) {
+    return fpcMtd_Execute((process_method_class*)i_this->mpMtd, i_this);
 }
 
-static s32 fopScn_IsDelete(void* i_this) {
+static BOOL fopScn_IsDelete(void* i_this) {
     return fpcMtd_IsDelete((process_method_class*)((scene_class*)i_this)->mpMtd, i_this);
 }
 
-static s32 fopScn_Delete(void* i_this) {
+static BOOL fopScn_Delete(void* i_this) {
     scene_class* scene = static_cast<scene_class*>(i_this);
-    s32 ret = fpcMtd_Delete((process_method_class*)scene->mpMtd, scene);
-    if (ret == 1) {
+    BOOL ret = fpcMtd_Delete((process_method_class*)scene->mpMtd, scene);
+    if (ret == TRUE) {
         fopScnTg_QueueTo(&scene->mScnTg);
     }
     mDoHIO_root.update();
     return ret;
 }
 
-static s32 fopScn_Create(void* i_this) {
+static cPhs_State fopScn_Create(void* i_this) {
     scene_class* scene = static_cast<scene_class*>(i_this);
     if (fpcM_IsFirstCreating(i_this)) {
         scene_process_profile_definition* profile = (scene_process_profile_definition*)fpcM_GetProfile(i_this);

@@ -1296,11 +1296,9 @@ const char* dStage_getName2(s16 i_procName, s8 i_subtype) {
     return dStage_getName(i_procName, i_subtype);
 }
 
-/* 80041628-8004169C       .text dStage_actorCreate__FP22stage_actor_data_classP16fopAcM_prm_class
- */
+/* 80041628-8004169C       .text dStage_actorCreate__FP22stage_actor_data_classP16fopAcM_prm_class */
 void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
     dStage_objectNameInf* nameinf_p = dStage_searchName(i_actorData->mName);
-    fopAc_ac_c* actor;
 
     if (nameinf_p == NULL) {
         JKRHeap::free(i_actorPrm, NULL);
@@ -1317,10 +1315,10 @@ int dStage_cameraCreate(stage_camera2_data_class* i_cameraData, int i_cameraIdx,
     i_cameraData = static_cast<stage_camera2_data_class*>(cMl::memalignB(-4, 0x18));
 
     if (i_cameraData != NULL) {
-        i_cameraData->field_0x4 = 0.0f;
-        i_cameraData->field_0x8 = 0.0f;
-        i_cameraData->field_0x4 = 0.0f;
-        i_cameraData->field_0x0 = param_2;
+        i_cameraData->m04 = 0.0f;
+        i_cameraData->m08 = 0.0f;
+        i_cameraData->m04 = 0.0f;
+        i_cameraData->m00 = param_2;
         fopCamM_Create(i_cameraIdx, PROC_CAMERA, i_cameraData);
     }
 
@@ -1501,7 +1499,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
 int dStage_cameraInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     stage_camera_class* camera = (stage_camera_class*)((char*)i_data + 4);
     i_stage->setCamera(camera);
-    dStage_cameraCreate(camera->m_entries, 0, 0);
+    dStage_cameraCreate(camera->mEntries, 0, 0);
     return 1;
 }
 
@@ -1729,7 +1727,6 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
 
     for (int i = 0; i < rtbl->num; i++) {
         rtbl_entries[i] = (roomRead_data_class*)((u32)i_file + (u32)rtbl_entries[i]);
-        roomRead_data_class * pEntry = rtbl_entries[i];
         rtbl_entries[i]->mpRooms = (u8*)((u32)i_file + (u32)rtbl_entries[i]->mpRooms);
     }
 
@@ -1758,7 +1755,7 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPathInfo(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPntInf()+1) + (u32)pPath->mpPnt); // TODO clean this up
+        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
     return 1;
 }
 
@@ -1775,7 +1772,7 @@ int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->mpPnt = (dPath__Point*)((u32)*((int*)i_stage->getPnt2Inf()+1) + (u32)pPath->mpPnt); // TODO clean this up
+        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
     return 1;
 }
 

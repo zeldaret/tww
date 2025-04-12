@@ -38,7 +38,7 @@ void onSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
 
 /* 80045660-80045714       .text isSaveArriveGridForAgbUseGridPos__Fii */
 BOOL isSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
-    dComIfGs_isSaveArriveGridForAgb(gridPos2GridNo(i_gridX, i_gridY));
+    return dComIfGs_isSaveArriveGridForAgb(gridPos2GridNo(i_gridX, i_gridY));
 }
 
 /* 80045714-80045734       .text IsFloorNo__Fi */

@@ -42,7 +42,7 @@ int daShutter2_c::CreateHeap() {
 }
 
 /* 00000194-00000350       .text Create__12daShutter2_cFv */
-int daShutter2_c::Create() {
+BOOL daShutter2_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
     Vec cullMax = m_cull_max[mType];
@@ -69,10 +69,10 @@ int daShutter2_c::Create() {
 }
 
 /* 00000350-0000041C       .text _create__12daShutter2_cFv */
-s32 daShutter2_c::_create() {
+cPhs_State daShutter2_c::_create() {
     fopAcM_SetupActor(this, daShutter2_c);
     mType = 0;
-    int phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(m_arcname[mType], m_dzbidx[mType], NULL, m_heapsize[mType]);
         if (phase_state == cPhs_ERROR_e) {
@@ -89,7 +89,6 @@ void daShutter2_c::set_mtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
-    return;
 }
 
 /* 000004AC-00000528       .text Execute__12daShutter2_cFPPA3_A4_f */
@@ -156,7 +155,6 @@ void daShutter2_c::shutter_move() {
             dComIfGp_evmng_cutEnd(mStaffId);
             break;
     }
-    return;
 }
 
 /* 00000698-000008B0       .text demo__12daShutter2_cFv */
@@ -204,7 +202,6 @@ void daShutter2_c::demo() {
         fopAcM_orderOtherEventId(this, mCloseEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
-    return;
 }
 
 /* 000008B0-00000950       .text Draw__12daShutter2_cFv */
@@ -218,7 +215,7 @@ BOOL daShutter2_c::Draw() {
 }
 
 /* 00000950-00000970       .text daShutter2_Create__FPv */
-static s32 daShutter2_Create(void* i_this) {
+static cPhs_State daShutter2_Create(void* i_this) {
     return ((daShutter2_c*)i_this)->_create();
 }
 

@@ -20,7 +20,7 @@ enum dCcD_ObjAtType {
     /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
     /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
     /* 0x00000800 */ AT_TYPE_UNK800         = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
+    /* 0x00001000 */ AT_TYPE_SPIKE          = (1 << 12),
     /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
     /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
     /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
@@ -96,6 +96,7 @@ enum CcG_At_HitMark {
 enum CcG_Tg_HitMark {
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
+    /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
 };
 
 enum dCcG_At_Spl {
@@ -103,8 +104,10 @@ enum dCcG_At_Spl {
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
+    /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
     /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
+    /* 0xA */ dCcG_At_Spl_UNKA = 0xA,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
 };
 

@@ -60,10 +60,10 @@ const daSteamTag_mData* daSteamTag_c::getData() {
 }
 
 /* 00000084-0000029C       .text CreateInit__12daSteamTag_cFv */
-s32 daSteamTag_c::CreateInit() {
+BOOL daSteamTag_c::CreateInit() {
     m29B = daSteamTag_prm::getSchBit(this);
     mEmitTimer = getData()->emit_time_min + cM_rndF(getData()->emit_time_range);
-    mCreateTimer = cM_rndF(getData()->create_time_range);;
+    mCreateTimer = cM_rndF(getData()->create_time_range);
     mpEmitter = NULL;
     mEmitTimer = 0;
     mGStts.Init(0xFF,0xFF,this);
@@ -196,13 +196,13 @@ daSteamTag_c::~daSteamTag_c() {
         mpEmitter = NULL;
     }
     mPointWind.set_pwind_delete();
-    return;
 }
 
-s32 daSteamTag_c::create() {
-    int phase_state;
+cPhs_State daSteamTag_c::create() {
     fopAcM_SetupActor(this, daSteamTag_c);
     CreateInit();
+
+    cPhs_State phase_state;
     if ((strcmp(dComIfGp_getStartStageName(),"Adanmae") == 0) &&
         (current.roomNo == 0) &&
         (checkItemGet(dItem_PEARL_DIN_e, TRUE))) {
@@ -210,11 +210,12 @@ s32 daSteamTag_c::create() {
     } else {
         phase_state = cPhs_COMPLEATE_e;
     }
+
     return phase_state;
 }
 
 /* 00000930-00000AD0       .text daSteamTag_Create__FP10fopAc_ac_c */
-static s32 daSteamTag_Create(fopAc_ac_c* i_this) {
+static cPhs_State daSteamTag_Create(fopAc_ac_c* i_this) {
     return ((daSteamTag_c*)i_this)->create();
 }
 

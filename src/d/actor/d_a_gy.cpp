@@ -207,7 +207,7 @@ void daGy_c::createInit() {
 }
 
 /* 00004920-00004A80       .text _create__6daGy_cFv */
-s32 daGy_c::_create() {
+cPhs_State daGy_c::_create() {
     /* Nonmatching */
 }
 

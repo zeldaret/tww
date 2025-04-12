@@ -502,7 +502,7 @@ BOOL daTag_Event_c::execute() {
     return TRUE;
 }
 
-s32 daTag_Event_c::create() {
+cPhs_State daTag_Event_c::create() {
     fopAcM_SetupActor(this, daTag_Event_c);
 
     int swbit = getSwbit();
@@ -549,7 +549,7 @@ static BOOL daTag_Event_Delete(daTag_Event_c* i_this) {
 }
 
 /* 0000140C-00001524       .text daTag_Event_Create__FP10fopAc_ac_c */
-static s32 daTag_Event_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTag_Event_Create(fopAc_ac_c* i_this) {
     return static_cast<daTag_Event_c*>(i_this)->create();
 }
 

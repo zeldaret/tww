@@ -33,7 +33,7 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
     void CreateHeap();
     
     static s32 ship_race_rupee;

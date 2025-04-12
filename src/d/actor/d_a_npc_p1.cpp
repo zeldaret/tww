@@ -128,7 +128,7 @@ void daNpc_P1_c::setAttentionPos(cXyz*) {
 }
 
 /* 00002B00-00003484       .text _create__10daNpc_P1_cFv */
-s32 daNpc_P1_c::_create() {
+cPhs_State daNpc_P1_c::_create() {
     /* Nonmatching */
 }
 
@@ -183,7 +183,7 @@ static BOOL daNpc_P1_Delete(daNpc_P1_c*) {
 }
 
 /* 00004BEC-00004C0C       .text daNpc_P1_Create__FP10fopAc_ac_c */
-static s32 daNpc_P1_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_P1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

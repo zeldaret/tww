@@ -35,7 +35,7 @@ public:
     void closeEnd();
     void calcMtx();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
     void demoProc();
     BOOL draw();
 

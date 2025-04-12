@@ -9,7 +9,7 @@ class daSwItem_c : public fopAc_ac_c {
 public:
     bool _delete();
     BOOL CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     BOOL isRupeeInAllCreateTable(int);
     bool _draw();

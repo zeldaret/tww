@@ -17,7 +17,7 @@ public:
         PRM_POWER_S = 0xB,
     };
 
-    s32 _create();
+    cPhs_State _create();
     BOOL _delete();
     BOOL _is_delete();
     BOOL _execute();

@@ -179,7 +179,7 @@ void daArrow_c::setBlur() {
     }
     s32 alpha = blurEmitter->getGlobalAlpha();
     if (alpha - 50 <= 0) {
-        mBlurFollowCb.end();
+        mBlurFollowCb.remove();
     } else {
         blurEmitter->setGlobalAlpha(alpha - 50);
     }
@@ -303,7 +303,7 @@ void daArrow_c::arrowShooting() {
     
     clrAtHitNormal();
     setAtHitPosBuff(&end);
-    mNearestHitDist = MAXFLOAT;
+    mNearestHitDist = FLOAT_MAX;
 }
 
 /* 800D4D98-800D4DC0       .text arrowUseMp__9daArrow_cFv */
@@ -346,7 +346,7 @@ void daArrow_c::ShieldReflect() {
         cXyz ganondorfChestPos = ganondorf->current.pos;
         ganondorfChestPos.y = 130.0f + REG8_F(0);
         targetAngleX = -cLib_targetAngleX(&link->current.pos, &ganondorfChestPos);
-        fpcM_SetParam(ganondorf, 0x23);
+        fopAcM_SetParam(ganondorf, 0x23);
         mSparkleTimer = 15 + REG0_S(3);
         mpSparkleEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &link->current.pos);
     }
@@ -587,7 +587,7 @@ void daArrow_c::setStopActorMatrix() {
     
     static cXyz offset_arrow_pos(0.0f, 0.0f, -50.0f);
     
-    mDoMtx_stack_c::copy(hitModel->mpNodeMtx[mHitJointIndex]);
+    mDoMtx_stack_c::copy(hitModel->getAnmMtx(mHitJointIndex));
     csXyz hitJointRot;
     mDoMtx_MtxToRot(mDoMtx_stack_c::get(), &hitJointRot);
     
@@ -722,8 +722,8 @@ BOOL daArrow_c::procMove() {
         field_0x604 = 0x28;
         fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
         
-        if (mBlurFollowCb.mpEmitter) {
-            mBlurFollowCb.end();
+        if (mBlurFollowCb.getEmitter()) {
+            mBlurFollowCb.remove();
         }
         
         if (hitType == 1) { // Blocked hit
@@ -738,7 +738,7 @@ BOOL daArrow_c::procMove() {
             mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
             fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, 0x20);
         } else if (hitType == 2) { // Hit a joint
-            fpcM_SetParam(this, 2);
+            fopAcM_SetParam(this, 2);
             mCurrProcFunc = &daArrow_c::procStop_Actor;
             
             if (mArrowType == TYPE_FIRE) {
@@ -1217,7 +1217,7 @@ BOOL daArrow_c::_draw() {
 }
 
 /* 800D7960-800D7A38       .text _create__9daArrow_cFv */
-s32 daArrow_c::_create() {
+cPhs_State daArrow_c::_create() {
     fopAcM_SetupActor(this, daArrow_c);
     
     checkCreater();
@@ -1251,7 +1251,7 @@ s32 daArrow_c::_create() {
 
 /* 800D81D0-800D8200       .text _delete__9daArrow_cFv */
 BOOL daArrow_c::_delete() {
-    mBlurFollowCb.end();
+    mBlurFollowCb.remove();
     return TRUE;
 }
 

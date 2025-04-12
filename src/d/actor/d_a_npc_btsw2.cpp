@@ -135,7 +135,7 @@ BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
     JUT_ASSERT(282, m_btp != NULL);
-    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
         return FALSE;
     }
     mBtpFrame = 0;
@@ -158,17 +158,17 @@ void daNpc_Btsw2_c::playTexPatternAnm() {
 /* 000005B0-0000067C       .text setAnm__13daNpc_Btsw2_cFSc */
 void daNpc_Btsw2_c::setAnm(s8 param_0) {
     static int a_play_mode_tbl[] = {
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
     };
     static f32 a_morf_frame_tbl[] = {
         8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,
@@ -347,7 +347,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BCK_BN_WAIT01)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x15020022
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x15020022
     );
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
@@ -456,8 +456,8 @@ void daNpc_Btsw2_c::pathMove() {
     } else {
         pathPntIdx = 0;
     }
-    dPath__Point* pnt = &mpPath->mpPnt[pathPntIdx];
-    cXyz targetPos(pnt->mPos.x, pnt->mPos.y, pnt->mPos.z);
+    dPnt* pnt = &mpPath->m_points[pathPntIdx];
+    cXyz targetPos(pnt->m_position.x, pnt->m_position.y, pnt->m_position.z);
     s16 targetAngle = cLib_targetAngleY(&current.pos, &targetPos);
     cLib_addCalcAngleS2(&current.angle.y, targetAngle, l_HIO.m32, l_HIO.m30);
     cXyz sp48 = targetPos - current.pos;
@@ -527,14 +527,14 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 }
 
 /* 00001660-00001884       .text _create__13daNpc_Btsw2_cFv */
-s32 daNpc_Btsw2_c::_create() {
+cPhs_State daNpc_Btsw2_c::_create() {
     fopAcM_SetupActor(this, daNpc_Btsw2_c);
     
     if (dComIfGs_getEventReg(0xC203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     
-    int phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x29E0)) {
@@ -618,7 +618,7 @@ BOOL daNpc_Btsw2_c::_draw() {
 }
 
 /* 00001F6C-00001F8C       .text daNpc_Btsw2_Create__FP10fopAc_ac_c */
-static s32 daNpc_Btsw2_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Btsw2_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Btsw2_c*>(i_this)->_create();
 }
 

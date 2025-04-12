@@ -147,10 +147,10 @@ BOOL daToge_c::Create() {
 }
 
 /* 000004F4-00000620       .text _create__8daToge_cFv */
-s32 daToge_c::_create() {
+cPhs_State daToge_c::_create() {
     fopAcM_SetupActor(this, daToge_c);
 
-    s32 phase_state = dComIfG_resLoad(&m_Phs, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&m_Phs, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1400)) {
@@ -297,7 +297,7 @@ BOOL daToge_c::_draw() {
 }
 
 /* 00000D44-00000D64       .text daToge_Create__FPv */
-static BOOL daToge_Create(void* i_this) {
+static cPhs_State daToge_Create(void* i_this) {
     return static_cast<daToge_c*>(i_this)->_create();
 }
 

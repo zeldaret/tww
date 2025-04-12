@@ -11,16 +11,16 @@ void daShip_c::initStartPos(const cXyz* pos, short rotY) {
     old.pos = *pos;
     shape_angle.y = rotY;
     current.angle.y = shape_angle.y;
-    m0358 &= ~0x10;
+    offStateFlg(daSFLG_UNK10_e);
     gravity = -2.5f;
 
     mWaveL.remove();
     mWaveR.remove();
     mSplash.remove();
     mTrack.remove();
-    m1970.end();
-    m1984.end();
-    m1998.end();
-    m19AC.end();
-    m19C0.end();
+    mRipple.remove();
+    m1984.remove();
+    m1998.remove();
+    m19AC.remove();
+    m19C0.remove();
 }

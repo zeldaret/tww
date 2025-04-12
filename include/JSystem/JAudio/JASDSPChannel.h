@@ -40,6 +40,7 @@ namespace JASystem {
         static int getNumBreak();
 
         u8 getNumber() { return mNumber; }
+        u8 getStatus() { return mStatus; }
         u8 getPriority() { return mPriority; }
         void setPriority(u8 priority) { mPriority = priority; }
         u16 getPriorityTime() { return mPriorityTime; }
@@ -58,12 +59,11 @@ namespace JASystem {
         // TODO: inlines
         void checkSign(u32) {}
         void isFree() {}
-        void getStatus() {}
         void forceStop(TDSPChannel*) {}
         void release(TDSPChannel*, u32) {}
 
         /* 0x00 */ u8 mNumber;
-        /* 0x01 */ u8 field_0x1;
+        /* 0x01 */ u8 mStatus;
         /* 0x02 */ u8 field_0x2;
         /* 0x03 */ u8 mPriority;
         /* 0x04 */ u16 mPriorityTime;

@@ -158,7 +158,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 000084AC-000088A8       .text daMt_Create__FP10fopAc_ac_c */
-static s32 daMt_Create(fopAc_ac_c*) {
+static cPhs_State daMt_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -27,7 +27,7 @@ void daWfall_c::CreateInit() {
 }
 
 /* 00000708-00000838       .text _create__9daWfall_cFv */
-s32 daWfall_c::_create() {
+cPhs_State daWfall_c::_create() {
     /* Nonmatching */
 }
 
@@ -102,7 +102,7 @@ void daWfall_c::set_se() {
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
-static s32 daWfall_Create(void*) {
+static cPhs_State daWfall_Create(void*) {
     /* Nonmatching */
 }
 

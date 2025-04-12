@@ -137,7 +137,7 @@ void daDoor12_c::CreateInit() {
 }
 
 /* 0000134C-0000144C       .text create__10daDoor12_cFv */
-s32 daDoor12_c::create() {
+cPhs_State daDoor12_c::create() {
     /* Nonmatching */
 }
 
@@ -192,7 +192,7 @@ static BOOL daDoor12_Delete(daDoor12_c*) {
 }
 
 /* 00001CC4-00001D3C       .text daDoor12_Create__FP10fopAc_ac_c */
-static s32 daDoor12_Create(fopAc_ac_c*) {
+static cPhs_State daDoor12_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

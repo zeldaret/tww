@@ -52,9 +52,9 @@ bool Act_c::create_heap() {
 }
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */
-s32 Act_c::_create() {
+cPhs_State Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
-    int phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             set_mtx();
@@ -104,23 +104,23 @@ bool Act_c::_draw() {
 
 namespace {
 
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<Act_c*>(i_this)->_create();
 }
 
-s32 Mthd_Delete(void* i_this) {
+BOOL Mthd_Delete(void* i_this) {
     return static_cast<Act_c*>(i_this)->_delete();
 }
 
-s32 Mthd_Execute(void* i_this) {
+BOOL Mthd_Execute(void* i_this) {
     return static_cast<Act_c*>(i_this)->_execute();
 }
 
-s32 Mthd_Draw(void* i_this) {
+BOOL Mthd_Draw(void* i_this) {
     return static_cast<Act_c*>(i_this)->_draw();
 }
 
-s32 Mthd_IsDelete(void* i_this) {
+BOOL Mthd_IsDelete(void* i_this) {
     return TRUE;
 }
 

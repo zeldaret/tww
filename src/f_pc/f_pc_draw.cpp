@@ -10,10 +10,10 @@
 #include "f_pc/f_pc_pause.h"
 
 /* 8004042C-800404CC       .text fpcDw_Execute__FP18base_process_class */
-s32 fpcDw_Execute(base_process_class* i_proc) {
+BOOL fpcDw_Execute(base_process_class* i_proc) {
     if (!fpcPause_IsEnable(i_proc, 2)) {
         layer_class* curLay;
-        s32 ret;
+        BOOL ret;
         process_method_func draw_func;
         curLay = fpcLy_CurrentLayer();
         if (fpcBs_Is_JustOfType(g_fpcLf_type, i_proc->mSubType)) {
@@ -26,15 +26,15 @@ s32 fpcDw_Execute(base_process_class* i_proc) {
         fpcLy_SetCurrentLayer(curLay);
         return ret;
     } else {
-        return 0;
+        return FALSE;
     }
 }
 
 /* 800404CC-80040520       .text fpcDw_Handler__FPFPFPvPv_i_iPFPvPv_i */
-s32 fpcDw_Handler(fpcDw_HandlerFuncFunc param_1, fpcDw_HandlerFunc param_2) {
-    s32 ret;
+BOOL fpcDw_Handler(fpcDw_HandlerFuncFunc i_iterHandler, fpcDw_HandlerFunc i_func) {
+    BOOL ret;
     cAPIGph_BeforeOfDraw();
-    ret = param_1(param_2);
+    ret = i_iterHandler(i_func);
     cAPIGph_AfterOfDraw();
     return ret;
 }

@@ -770,9 +770,9 @@ dEv_seach_prm::dEv_seach_prm(const char* name, u32 mask, u32 value) {
 }
 
 /* 80075394-800753A8       .text dEv_extra_createCB__FPv */
-int dEv_extra_createCB(void* actor) {
+cPhs_State dEv_extra_createCB(void* actor) {
     fopAcM_OnStatus((fopAc_ac_c*)actor, fopAcStts_UNK800_e);
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 800753A8-80075450       .text dEv_talkman_get_action__Fi */

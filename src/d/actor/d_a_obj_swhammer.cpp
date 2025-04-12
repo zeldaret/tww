@@ -7,7 +7,7 @@
 #include "d/res/res_mhmrsw.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -127,7 +127,7 @@ BOOL daObjSwhammer::Act_c::CreateHeap() {
 }
 
 /* 0000058C-0000070C       .text Create__Q213daObjSwhammer5Act_cFv */
-int daObjSwhammer::Act_c::Create() {
+BOOL daObjSwhammer::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeSphere(this, 0.0f, 30.0f, 0.0f, 120.0f);
@@ -164,14 +164,14 @@ int daObjSwhammer::Act_c::Create() {
     attention_info.distances[fopAc_Attn_TYPE_MISC_e] = 0x2D;
     attention_info.position.y = current.pos.y + mTopPos + 120.0f;
     eyePos.y = attention_info.position.y;
-    return 1;
+    return TRUE;
 }
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
-s32 daObjSwhammer::Act_c::_create() {
+cPhs_State daObjSwhammer::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, MHMRSW_DZB_MHMRSW, NULL, 0xa80);
         JUT_ASSERT(0x1e9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -181,13 +181,13 @@ s32 daObjSwhammer::Act_c::_create() {
 
 /* 000007F8-00000828       .text Delete__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::Delete() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
     return TRUE;
 }
 
 /* 00000828-0000087C       .text _delete__Q213daObjSwhammer5Act_cFv */
 bool daObjSwhammer::Act_c::_delete() {
-    int ret = MoveBGDelete();
+    BOOL ret = MoveBGDelete();
     dComIfG_resDelete(&mPhs, M_arcname);
     return ret;
 }
@@ -442,7 +442,7 @@ BOOL daObjSwhammer::Act_c::Draw() {
 namespace daObjSwhammer {
 namespace {
 /* 00001564-00001584       .text Mthd_Create__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->_create();
 }
 
@@ -452,18 +452,18 @@ BOOL Mthd_Delete(void* i_this) {
 }
 
 /* 000015A8-000015C8       .text Mthd_Execute__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-int Mthd_Execute(void* i_this) {
+BOOL Mthd_Execute(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGExecute();
 }
 
 /* 000015C8-000015F4       .text Mthd_Draw__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
-void Mthd_Draw(void* i_this) {
-    static_cast<daObjSwhammer::Act_c*>(i_this)->Draw();
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGDraw();
 }
 
 /* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return static_cast<daObjSwhammer::Act_c*>(i_this)->IsDelete();
+    return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {

@@ -27,7 +27,7 @@ public:
     void chkException();
     void calcMtx();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
     void setStart(float, float);
     void setAngle();
     void adjustmentProc();

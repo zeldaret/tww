@@ -101,13 +101,13 @@ void daTitle_proc_c::proc_init3D() {
     J3DAnmTransform* bck_ship = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BCK_TITLE_SHIP, TLOGOE_BCK_TITLE_SHIP, TLOGOE0_BCK_TITLE_SHIP)));
     JUT_ASSERT(VERSION_SELECT(0xED, 0x118, 0x118), bck_ship != NULL);
 
-    BOOL ok_bck = mBckShip.init(modelData_ship, bck_ship, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+    BOOL ok_bck = mBckShip.init(modelData_ship, bck_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
     JUT_ASSERT(VERSION_SELECT(0xF4, 0x11F, 0x11F), ok_bck != FALSE);
 
     J3DAnmColor* bpk_ship = static_cast<J3DAnmColor*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BPK_TITLE_SHIP, TLOGOE_BPK_TITLE_SHIP, TLOGOE0_BPK_TITLE_SHIP)));
     JUT_ASSERT(VERSION_SELECT(0xF9, 0x124, 0x124), bpk_ship != NULL);
 
-    BOOL ok_bpk = mBpkShip.init(modelData_ship, bpk_ship, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    BOOL ok_bpk = mBpkShip.init(modelData_ship, bpk_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(VERSION_SELECT(0xFF, 0x12A, 0x12A), ok_bpk != FALSE);
 
     mBpkShip.setFrame(0.0f);
@@ -116,13 +116,13 @@ void daTitle_proc_c::proc_init3D() {
     J3DAnmTextureSRTKey* btk_sub = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_START_ANIM, TLOGOE_BTK_SUBTITLE_START_ANIM_E, TLOGOE0_BTK_SUBTITLE_START_ANIM_E)));
     JUT_ASSERT(VERSION_SELECT(0x106, 0x131, 0x131), btk_sub != NULL);
 
-    BOOL ok_btk_subtitle = mBtkSub.init(modelData_sub, btk_sub, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    BOOL ok_btk_subtitle = mBtkSub.init(modelData_sub, btk_sub, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(VERSION_SELECT(0x10D, 0x138, 0x138), ok_btk_subtitle != FALSE);
 
     J3DAnmTextureSRTKey* btk_kirari = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_KIRARI, TLOGOE_BTK_SUBTITLE_KIRARI_E, TLOGOE0_BTK_SUBTITLE_KIRARI_E)));
     JUT_ASSERT(VERSION_SELECT(0x112, 0x13D, 0x13D), btk_kirari != NULL);
 
-    BOOL ok_btk_kirari = mBtkKirari.init(modelData_kirari, btk_kirari, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    BOOL ok_btk_kirari = mBtkKirari.init(modelData_kirari, btk_kirari, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
     JUT_ASSERT(VERSION_SELECT(0x119, 0x144, 0x144), ok_btk_kirari != FALSE);
 
     mDoExt_restoreCurrentHeap();
@@ -473,7 +473,7 @@ daTitle_c::~daTitle_c() {
     dComIfG_resDelete(&mPhs, ARCNAME);
 }
 
-s32 daTitle_c::create() {
+cPhs_State daTitle_c::create() {
     fopAcM_SetupActor(this, daTitle_c);
 
 #if VERSION == VERSION_PAL
@@ -481,7 +481,7 @@ s32 daTitle_c::create() {
     sprintf(ARCNAME, "TlogoE%d\0", dComIfGs_getPalLanguage());
 #endif
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, ARCNAME);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, ARCNAME);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         mpTitleProc = new daTitle_proc_c();
@@ -563,7 +563,7 @@ static BOOL daTitle_Delete(daTitle_c* i_this) {
 }
 
 /* 00001D70-00001E28       .text daTitle_Create__FP10fopAc_ac_c */
-static s32 daTitle_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTitle_Create(fopAc_ac_c* i_this) {
     return static_cast<daTitle_c*>(i_this)->create();
 }
 

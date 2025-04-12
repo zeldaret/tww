@@ -106,7 +106,7 @@ void dLib_debugDrawFan(cXyz& center, s16 angleY, s16 fanSpreadAngle, f32 radius,
 bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcName, fileno);
     JUT_ASSERT(0xae, brk != NULL);
-    if (anm->init(modelData, brk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
+    if (anm->init(modelData, brk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
 }
@@ -115,7 +115,7 @@ bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcNa
 bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcName, fileno);
     JUT_ASSERT(0xbb, btk != NULL);
-    if (anm->init(modelData, btk, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0)
+    if (anm->init(modelData, btk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0)
         return false;
     return true;
 }
@@ -140,7 +140,7 @@ void dLib_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pAnmIdx, s8* pPr
     *pOldPrmIdx = *pPrmIdx;
 
     if (morf->isStop()) {
-        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::EMode_NONE) {
             *pPrmIdx = anmPrmTbl[*pPrmIdx].mNextPrmIdx;
         }
     }
@@ -159,7 +159,7 @@ void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pAnmIdx, s8
     *pOldPrmIdx = *pPrmIdx;
 
     if (morf->isStop()) {
-        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+        if (anmPrmTbl[*pPrmIdx].mNextPrmIdx != -1 && anmPrmTbl[*pPrmIdx].mLoopMode == J3DFrameCtrl::EMode_NONE) {
             *pPrmIdx = anmPrmTbl[*pPrmIdx].mNextPrmIdx;
         }
     }
@@ -206,8 +206,8 @@ void dLib_pathMove(cXyz* pos, s8* pPntNo, dPath* pPath, f32 speed, int (*pCallBa
     } else {
         pnt_next_no = 0;
     }
-    cXyz pnt_pos = pPath->mpPnt[pnt_no].mPos;
-    cXyz pnt_next_pos = pPath->mpPnt[pnt_next_no].mPos;
+    cXyz pnt_pos = pPath->m_points[pnt_no].m_position;
+    cXyz pnt_next_pos = pPath->m_points[pnt_next_no].m_position;
 
     cXyz move = (pnt_next_pos - pnt_pos).normZP();
     if (pCallBack == NULL) {

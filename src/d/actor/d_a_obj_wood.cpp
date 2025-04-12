@@ -9,7 +9,7 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-s32 daObjWood::Act_c::_create() {
+cPhs_State daObjWood::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
     if (dComIfGp_createWood() != NULL)
         dComIfGp_getWood()->put_unit(current.pos, fopAcM_GetRoomNo(this));
@@ -30,7 +30,7 @@ bool daObjWood::Act_c::_draw() {
 }
 
 /* 00000078-00000190       .text Create__Q29daObjWood6MethodFPv */
-s32 daObjWood::Method::Create(void* i_this) {
+cPhs_State daObjWood::Method::Create(void* i_this) {
     return ((Act_c*)i_this)->_create();
 }
 

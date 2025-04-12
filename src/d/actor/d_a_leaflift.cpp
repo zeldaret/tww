@@ -148,7 +148,7 @@ void daLlift_c::CreateInit() {
 }
 
 /* 00000634-00000760       .text _create__9daLlift_cFv */
-s32 daLlift_c::_create() {
+cPhs_State daLlift_c::_create() {
     int res;
     fopAcM_SetupActor(this, daLlift_c);
     res = dComIfG_resLoad(&mPhs, m_arcname);
@@ -216,7 +216,6 @@ static void rideCallBack(dBgW* param1, fopAc_ac_c* i_act, fopAc_ac_c* i_other) {
         i_this->mTargetRotation.w = cM_scos(i_this->mTiltAngle);
     }
     i_this->m43D = FALSE;
-    return;
 }
 
 /* 00000CAC-00000D34       .text set_mtx__9daLlift_cFv */
@@ -225,7 +224,6 @@ void daLlift_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(current.angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    return;
 }
 
 /* 00000D34-00000D9C       .text setMoveBGMtx__9daLlift_cFv */
@@ -234,7 +232,6 @@ void daLlift_c::setMoveBGMtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::quatM(&mCurrentRotation);
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
-    return;
 }
 
 /* 00000D9C-00000F24       .text _execute__9daLlift_cFv */
@@ -286,7 +283,6 @@ void daLlift_c::emitterCtrl() {
     if (mEmitter2) {
         mEmitter2 ->setGlobalRTMatrix(mBGMtx);
     }
-    return;
 }
 
 /* 00000FE0-000010E0       .text MoveDownLift__9daLlift_cFv */
@@ -323,7 +319,7 @@ bool daLlift_c::_draw() {
 }
 
 /* 00001180-000011A0       .text daLlift_Create__FPv */
-static s32 daLlift_Create(void* i_this) {
+static cPhs_State daLlift_Create(void* i_this) {
     return ((daLlift_c*)i_this)->_create();
 }
 

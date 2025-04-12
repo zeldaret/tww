@@ -13,7 +13,7 @@ public:
     void CreateHeap();
     void calcMtx();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* Place member variables here */

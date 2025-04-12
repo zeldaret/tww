@@ -87,7 +87,7 @@ public:
     void bigelf_change();
     void findPlayer();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
     void CreateHeap();
     void setMtx();
 

@@ -60,10 +60,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 }
 
 /* 000003CC-0000045C       .text _create__10daObjHat_cFv */
-s32 daObjHat_c::_create() {
+cPhs_State daObjHat_c::_create() {
     fopAcM_SetupActor(this, daObjHat_c);
 
-    int phase_state = dComIfG_resLoad(&mPhs, "Ro");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Ro");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0uL)) {
@@ -84,7 +84,7 @@ BOOL daObjHat_c::createHeap() {
         mDoExt_McaMorf* morf = new mDoExt_McaMorf(
             pModelData, NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes("Ro", l_bck_ix_tbl[mHatNo]),
-            J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
+            J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x37441422);
 
         mpMorf = morf;
         if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -107,7 +107,7 @@ BOOL daObjHat_c::createHeap() {
 }
 
 /* 000005D4-000006AC       .text createInit__10daObjHat_cFv */
-s32 daObjHat_c::createInit() {
+cPhs_State daObjHat_c::createInit() {
     mStts.Init(2, 0xff, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
@@ -157,7 +157,7 @@ BOOL daObjHat_c::_execute() {
     fopAcM_SetSpeed(this, xspeed, yspeed, zspeed);
 
     fopAcM_posMove(this, mStts.GetCCMoveP());
-    mAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
+    mAcch.CrrPos(*dComIfG_Bgsp());
     if (mAcch.ChkWallHit()) {
         fopAcM_SetSpeedF(this, 0.0f);
     }

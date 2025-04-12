@@ -96,10 +96,10 @@ BOOL daMtoge_c::CreateInit() {
 }
 
 /* 00000384-0000041C       .text create__9daMtoge_cFv */
-s32 daMtoge_c::create() {
+cPhs_State daMtoge_c::create() {
     fopAcM_SetupActor(this, daMtoge_c);
 
-    cPhs__Step phase_state = (cPhs__Step)dComIfG_resLoad(&mPhaseProcReq, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhaseProcReq, M_arcname);
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
@@ -226,7 +226,7 @@ static BOOL daMtoge_Delete(daMtoge_c* i_this) {
 }
 
 /* 00000790-000007B0       .text daMtoge_Create__FP10fopAc_ac_c */
-static s32 daMtoge_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMtoge_Create(fopAc_ac_c* i_this) {
     return static_cast<daMtoge_c*>(i_this)->create();
 }
 

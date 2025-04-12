@@ -12,7 +12,7 @@ const char daObjUsovmc::Act_c::M_arcname[7] = "Usovmc";
 Mtx daObjUsovmc::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjUsovmc5Act_cFv */
-int daObjUsovmc::Act_c::CreateHeap() {
+BOOL daObjUsovmc::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, USOVMC_BDL_VMCBX);
     JUT_ASSERT(0x4a, model_data != NULL);
     mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
@@ -20,7 +20,7 @@ int daObjUsovmc::Act_c::CreateHeap() {
 }
 
 /* 0000012C-00000198       .text Create__Q211daObjUsovmc5Act_cFv */
-int daObjUsovmc::Act_c::Create() {
+BOOL daObjUsovmc::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -80.0f, -1.0f, -80.0f, 80.0f, 205.0f, 80.0f);
@@ -28,10 +28,10 @@ int daObjUsovmc::Act_c::Create() {
 }
 
 /* 00000198-00000290       .text Mthd_Create__Q211daObjUsovmc5Act_cFv */
-s32 daObjUsovmc::Act_c::Mthd_Create() {
+cPhs_State daObjUsovmc::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, USOVMC_DZB_VMCBS, NULL, 0);
         JUT_ASSERT(0x74, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -47,7 +47,7 @@ BOOL daObjUsovmc::Act_c::Delete() {
 
 /* 00000298-000002E4       .text Mthd_Delete__Q211daObjUsovmc5Act_cFv */
 BOOL daObjUsovmc::Act_c::Mthd_Delete() {
-    s32 ret = MoveBGDelete();
+    BOOL ret = MoveBGDelete();
     dComIfG_resDelete(&mPhs, M_arcname);
     return ret;
 }
@@ -67,7 +67,7 @@ void daObjUsovmc::Act_c::init_mtx() {
 }
 
 /* 000003A0-000003DC       .text Execute__Q211daObjUsovmc5Act_cFPPA3_A4_f */
-int daObjUsovmc::Act_c::Execute(Mtx** mtx) {
+BOOL daObjUsovmc::Act_c::Execute(Mtx** mtx) {
     set_mtx();
     *mtx = &M_tmp_mtx;
     return TRUE;
@@ -86,7 +86,7 @@ BOOL daObjUsovmc::Act_c::Draw() {
 namespace daObjUsovmc {
 namespace {
 /* 0000047C-0000049C       .text Mthd_Create__Q211daObjUsovmc28@unnamed@d_a_obj_usovmc_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((Act_c*)i_ac)->Mthd_Create();
 }
 

@@ -10,9 +10,9 @@
 #include "f_pc/f_pc_layer.h"
 
 /* 8003CC08-8003CC44       .text fpcCtIt_Method__FPFPvPv_iPv */
-s32 fpcCtIt_Method(fpcCtIt_MethodFunc i_judgeFunc, void* i_data) {
-    node_method_data iter;
-    iter.mFunc = i_judgeFunc;
+BOOL fpcCtIt_Method(fpcCtIt_MethodFunc i_judgeFunc, void* i_data) {
+    method_filter iter;
+    iter.mpMethodFunc = (cNdIt_MethodFunc)i_judgeFunc;
     iter.mpUserData = i_data;
     return cLsIt_Method(&g_fpcCtTg_Queue, (cNdIt_MethodFunc)cTgIt_MethodCall, &iter);
 }

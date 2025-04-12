@@ -20,8 +20,8 @@ enum {
 };
 
 /* 00000078-00000080       .text daAndsw0_Draw__FP12andsw0_class */
-static s32 daAndsw0_Draw(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_Draw(andsw0_class*) {
+    return TRUE;
 }
 
 /* 00000080-000003C4       .text daAndsw0_check__FP12andsw0_class */
@@ -295,27 +295,27 @@ static void event_start_check(andsw0_class* i_this) {
 }
 
 /* 00000914-00000964       .text daAndsw0_Execute__FP12andsw0_class */
-static s32 daAndsw0_Execute(andsw0_class* i_this) {
+static BOOL daAndsw0_Execute(andsw0_class* i_this) {
     event_start_check(i_this);
     if (i_this->mNumSwitchesToCheck == 0xFF)
         hajimarinomori_check(i_this);
     else
         daAndsw0_check(i_this);
-    return 1;
+    return TRUE;
 }
 
 /* 00000964-0000096C       .text daAndsw0_IsDelete__FP12andsw0_class */
-static s32 daAndsw0_IsDelete(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_IsDelete(andsw0_class*) {
+    return TRUE;
 }
 
 /* 0000096C-00000974       .text daAndsw0_Delete__FP12andsw0_class */
-static s32 daAndsw0_Delete(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_Delete(andsw0_class*) {
+    return TRUE;
 }
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
-static s32 daAndsw0_Create(fopAc_ac_c* ac) {
+static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
     fopAcM_SetupActor(ac, andsw0_class);
 
     andsw0_class * i_this = (andsw0_class *)ac;

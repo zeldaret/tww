@@ -58,14 +58,14 @@ void daArrow_Lighteff_c::delete_particle() {
             field_0x2F4.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x2F4.end();
+        field_0x2F4.remove();
     }
     if(field_0x308.getEmitter()) {
         if(field_0x2E8 == 3) {
             field_0x308.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x308.end();
+        field_0x308.remove();
     }
 }
 
@@ -114,10 +114,10 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     JUT_ASSERT(216, btk != NULL);
     JUT_ASSERT(217, brk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
-    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 
@@ -187,7 +187,7 @@ void daArrow_Lighteff_c::set_mtx() {
     }
 }
 
-s32 daArrow_Lighteff_c::_create() {
+cPhs_State daArrow_Lighteff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Lighteff_c);
 
     field_0x2EA = 0;
@@ -201,7 +201,7 @@ s32 daArrow_Lighteff_c::_create() {
 }
 
 /* 00000980-00000A70       .text daArrow_Lighteff_Create__FPv */
-static s32 daArrow_Lighteff_Create(void* i_this) {
+static cPhs_State daArrow_Lighteff_Create(void* i_this) {
     return static_cast<daArrow_Lighteff_c*>(i_this)->_create();
 }
 

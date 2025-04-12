@@ -87,7 +87,7 @@ static BOOL dOvlpFd_Delete(overlap1_class* i_this) {
 }
 
 /* 802237E0-802237F4       .text dOvlpFd_Create__FPv */
-static BOOL dOvlpFd_Create(void* i_this) {
+static cPhs_State dOvlpFd_Create(void* i_this) {
     dOvlpFd_execute_f = dOvlpFd_FadeIn;
     return cPhs_COMPLEATE_e;
 }

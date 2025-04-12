@@ -47,7 +47,7 @@ static dCcD_SrcCyl cyl_check_src = {
 };
 
 /* 00000078-00000134       .text CreateHeap__Q29daObjVfan5Act_cFv */
-int daObjVfan::Act_c::CreateHeap() {
+BOOL daObjVfan::Act_c::CreateHeap() {
     J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, VFAN_BDL_V_FAN_00));
 
     JUT_ASSERT(0x8c, model_data != NULL);
@@ -61,7 +61,7 @@ int daObjVfan::Act_c::CreateHeap() {
 }
 
 /* 00000134-00000214       .text Create__Q29daObjVfan5Act_cFv */
-int daObjVfan::Act_c::Create() {
+BOOL daObjVfan::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
     init_mtx();
@@ -83,11 +83,10 @@ int daObjVfan::Act_c::Create() {
 }
 
 /* 00000214-000003D0       .text Mthd_Create__Q29daObjVfan5Act_cFv */
-s32 daObjVfan::Act_c::Mthd_Create() {
+cPhs_State daObjVfan::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjVfan::Act_c);
 
-    int phase_state;
-
+    cPhs_State phase_state;
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         return cPhs_STOP_e;
     } else {
@@ -150,7 +149,7 @@ void daObjVfan::Act_c::ParticleSet() {
 }
 
 /* 000009B4-00000C74       .text Execute__Q29daObjVfan5Act_cFPPA3_A4_f */
-int daObjVfan::Act_c::Execute(Mtx** mtx) {
+BOOL daObjVfan::Act_c::Execute(Mtx** mtx) {
     switch (mState) {
     case 0:
         dComIfG_Ccsp()->Set(&mCyl);
@@ -219,20 +218,20 @@ BOOL daObjVfan::Act_c::Draw() {
 
 namespace daObjVfan {
 namespace {
-static int Mthd_Create(void* i_this) {
+static cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjVfan::Act_c*>(i_this)->Mthd_Create();
 }
-static int Mthd_Delete(void* i_this) {
+static BOOL Mthd_Delete(void* i_this) {
     return static_cast<daObjVfan::Act_c*>(i_this)->Mthd_Delete();
 }
-static int Mthd_Execute(void* i_this) {
+static BOOL Mthd_Execute(void* i_this) {
     return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGExecute();
 }
-static int Mthd_Draw(void* i_this) {
-    return static_cast<daObjVfan::Act_c*>(i_this)->Draw();
+static BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGDraw();
 }
-static int Mthd_IsDelete(void* i_this) {
-    return static_cast<daObjVfan::Act_c*>(i_this)->IsDelete();
+static BOOL Mthd_IsDelete(void* i_this) {
+    return static_cast<daObjVfan::Act_c*>(i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Vfan = {

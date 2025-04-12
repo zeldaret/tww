@@ -27,7 +27,7 @@ static s32 daYkgrCreate(void*) {
 }
 
 /* 00000428-00000680       .text _create__8daYkgr_cFv */
-s32 daYkgr_c::_create() {
+cPhs_State daYkgr_c::_create() {
     /* Nonmatching */
 }
 

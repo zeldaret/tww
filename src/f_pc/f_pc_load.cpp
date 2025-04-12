@@ -3,8 +3,8 @@
 // Translation Unit: f_pc_load.cpp
 //
 
-#include "c/c_dylink.h"
 #include "f_pc/f_pc_load.h"
+#include "c/c_dylink.h"
 #include "SSystem/SComponent/c_phase.h"
 
 /* 8003E230-8003E280       .text fpcLd_Use__Fs */
@@ -15,7 +15,7 @@ BOOL fpcLd_Use(s16 i_procName) {
 }
 
 /* 8003E280-8003E2A4       .text fpcLd_IsLoaded__Fs */
-s32 fpcLd_IsLoaded(s16 i_procName) {
+BOOL fpcLd_IsLoaded(s16 i_procName) {
     return cDyl_IsLinked((int)i_procName);
 }
 
@@ -25,14 +25,14 @@ void fpcLd_Free(s16 i_procName) {
 }
 
 /* 8003E2C8-8003E318       .text fpcLd_Load__Fs */
-s32 fpcLd_Load(s16 i_procName) {
-    s32 phase = cDyl_LinkASync((int)i_procName);
+cPhs_State fpcLd_Load(s16 i_procName) {
+    cPhs_State phase = cDyl_LinkASync((int)i_procName);
 
     switch (phase) {
     case cPhs_COMPLEATE_e:
         return cPhs_COMPLEATE_e;
-    case 0:
-        return 0;
+    case cPhs_INIT_e:
+        return cPhs_INIT_e;
     default:
         return cPhs_ERROR_e;
     }

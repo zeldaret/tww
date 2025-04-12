@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_tag_waterlevel.h"
-#include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
@@ -27,7 +26,7 @@ namespace daTagWaterlevel {
     }
 
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
         if ((prm_get_sch() & dKy_get_schbit() & 0xFF)) {
@@ -113,7 +112,7 @@ namespace daTagWaterlevel {
     }
 
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

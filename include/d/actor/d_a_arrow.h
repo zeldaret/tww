@@ -51,7 +51,7 @@ public:
     BOOL createInit();
     BOOL _execute();
     BOOL _draw();
-    s32 _create();
+    cPhs_State _create();
     BOOL _delete();
     
     static u8 getKeepType();

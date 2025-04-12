@@ -27,7 +27,7 @@ void daWarpdm20_c::CreateInit() {
 }
 
 /* 000005C8-000006A0       .text _create__12daWarpdm20_cFv */
-s32 daWarpdm20_c::_create() {
+cPhs_State daWarpdm20_c::_create() {
     /* Nonmatching */
 }
 
@@ -167,7 +167,7 @@ bool daWarpdm20_c::_draw() {
 }
 
 /* 000017C0-000017E0       .text daWarpdm20_Create__FPv */
-static s32 daWarpdm20_Create(void*) {
+static cPhs_State daWarpdm20_Create(void*) {
     /* Nonmatching */
 }
 

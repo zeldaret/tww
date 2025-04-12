@@ -6,11 +6,30 @@ Naming variables properly isn't required to help with the decompilation. You can
 
 ## Table of Contents
 
-1. [Offsets and padding](#offsets-and-padding)
-2. [Includes](#includes)
-3. [Naming style](#naming-style)
-4. [Use the official names where possible](#use-the-official-names-where-possible)
-5. [Look at the actor's model](#look-at-the-actors-model)
+1. [Primitive types](#primitive-types)
+2. [Offsets and padding](#offsets-and-padding)
+3. [Includes](#includes)
+4. [Naming style](#naming-style)
+5. [Use the official names where possible](#use-the-official-names-where-possible)
+6. [Look at the actor's model](#look-at-the-actors-model)
+
+## Primitive types
+
+Prefer using the [Dolphin typedefs](../include/dolphin/types.h) for primitive types in game code, for example:
+
+* `signed char` -> `s8`
+* `signed short` -> `s16`
+* `signed long` -> `s32`
+* `signed long long` -> `s64`
+* `unsigned char` -> `u8`
+* `unsigned short` -> `u16`
+* `unsigned long` -> `u32`
+* `float` -> `f32`
+* `double` -> `f64`
+
+This makes no difference for matching, but the original devs used these in game code so it's best to do the same for consistency. The typedefs are also shorter and require less typing.
+
+But be aware that `int` and `s32` are *not* the same type. Even though they are both signed 32-bit integers, the compiler treats them differently and will produce different code sometimes, so which one you use matters for matching. There is no typedef for `int`, so use that type directly.
 
 ## Offsets and padding
 
@@ -35,7 +54,7 @@ If a translation unit isn't fully decompiled yet, then there's no way to know if
 
 Avoid unnecessary includes, especially in header files. clangd will give you a warning saying "Included header is not used directly (fix available)" if you aren't using a header at all.
 
-Forward declaring types where possible will reduce compile times. So instead of putting all the includes in a actor's header file, like so:
+Forward declaring types where possible will reduce compile times. So instead of putting all the includes in an actor's header file, like so:
 
 ```cpp
 #include "d/d_path.h"

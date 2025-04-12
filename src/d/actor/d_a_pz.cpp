@@ -362,7 +362,7 @@ void daPz_c::createInit() {
 }
 
 /* 00006BAC-00006CB0       .text _create__6daPz_cFv */
-s32 daPz_c::_create() {
+cPhs_State daPz_c::_create() {
     /* Nonmatching */
 }
 
@@ -372,7 +372,7 @@ bool daPz_c::_delete() {
 }
 
 /* 00007E20-00007E40       .text daPzCreate__FPv */
-static s32 daPzCreate(void*) {
+static cPhs_State daPzCreate(void*) {
     /* Nonmatching */
 }
 

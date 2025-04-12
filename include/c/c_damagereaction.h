@@ -178,16 +178,18 @@ public:
     /* 0x772 */ u8 m772[0x774 - 0x772];
     /* 0x774 */ dPa_smokeEcallBack mParticleCallBack;
     /* 0x794 */ s16 m794;
-    /* 0x796 */ u8 m796[0x7A0 - 0x796];
+    /* 0x796 */ u8 m796[0x798 - 0x796];
+    /* 0x798 */ f32 m798;
+    /* 0x79C */ cXyz* m79C;
     /* 0x7A0 */ cXyz m7A0;
     /* 0x7AC */ u8 m7AC[0x7AE - 0x7AC];
     /* 0x7AE */ s16 m7AE;
     /* 0x7B0 */ u8 m7B0[0x7B2 - 0x7B0];
     /* 0x7B2 */ s16 m7B2;
-    /* 0x7B4 */ u8 m7B4[0x7B6 - 0x7B4];
+    /* 0x7B4 */ s16 m7B4;
     /* 0x7B6 */ u8 m7B6;
     /* 0x7B7 */ u8 m7B7[0x7B8 - 0x7B7];
-    /* 0x7B8 */ int m7B8;
+    /* 0x7B8 */ fpc_ProcID m7B8;
 };  // Size: 0x7BC
 
 // STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);

@@ -358,6 +358,8 @@ void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
 f32* dKyw_get_wind_power();
 cXyz dKyw_get_wind_vecpow();
+void dKyw_squal_set(cXyz* i_pos, s16 i_x, s16 i_y, f32 i_radius, f32 i_minRadius, f32 i_strength,
+    f32 i_speed, f32 i_maxStrength);
 cXyz * dKyw_get_wind_vec();
 void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
@@ -369,7 +371,10 @@ void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
+int dKyw_get_tactwind_dir();
 BOOL dKyw_gbwind_use_check();
 void dKyw_tornado_Notice(cXyz* param_0);
+void dKyw_custom_windpower(f32 i_windpower);
+void dKyw_tact_wind_set_go();
 
 #endif /* D_KANKYO_WETHER_H */

@@ -39,7 +39,7 @@ namespace daObjPaper {
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
-        static const Attr_c L_attr[3] = {
+        static const Attr_c L_attr[] = {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,
@@ -139,12 +139,12 @@ namespace daObjPaper {
     }
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
         mType = prm_get_type();
 
-        s32 result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
+        cPhs_State result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
 
         if (result == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, solidHeapCB, attr(mType).mHeapSize)) {
@@ -323,27 +323,27 @@ namespace daObjPaper {
 
     namespace {
         /* 00000BD4-00000BF4       .text Mthd_Create__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Create(void* i_this) {
+        static cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
 
         /* 00000BF4-00000C18       .text Mthd_Delete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Delete(void* i_this) {
+        static BOOL Mthd_Delete(void* i_this) {
             return static_cast<Act_c*>(i_this)->_delete();
         }
 
         /* 00000C18-00000C3C       .text Mthd_Execute__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Execute(void* i_this) {
+        static BOOL Mthd_Execute(void* i_this) {
             return static_cast<Act_c*>(i_this)->_execute();
         }
 
         /* 00000C3C-00000C60       .text Mthd_Draw__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Draw(void* i_this) {
+        static BOOL Mthd_Draw(void* i_this) {
             return static_cast<Act_c*>(i_this)->_draw();
         }
 
         /* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_IsDelete(void* i_this) {
+        static BOOL Mthd_IsDelete(void* i_this) {
             return TRUE;
         }
 

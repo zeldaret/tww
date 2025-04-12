@@ -8,7 +8,14 @@
 
 class dBgS_SphChk : public cM3dGSph, public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
-    dBgS_SphChk();
+    dBgS_SphChk() {
+        SetPolyPassChk(GetPolyPassChkInfo());
+        SetGrpPassChk(GetGrpPassChkInfo());
+        SetActorPid(fpcM_ERROR_PROCESS_ID_e);
+        Init();
+        SetCallback(NULL);
+    };
+    
     void Init() {
         ClearPi();
     }
@@ -21,5 +28,11 @@ public:
 public:
     /* 0x4c */ SphChk_Callback mpCallback;
 };  // Size: 0x50
+
+class dBgS_CamSphChk : public dBgS_SphChk {
+public:
+    dBgS_CamSphChk() { SetCam(); }
+    virtual ~dBgS_CamSphChk() {}
+};
 
 #endif /* D_BG_D_BG_S_SPH_CHK_H */

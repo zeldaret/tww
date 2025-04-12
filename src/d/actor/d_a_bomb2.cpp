@@ -239,7 +239,7 @@ namespace daBomb2 {
         f32 z = mpPos->z;
         emitter->mGlobalTranslation.set(x, y, z);
 
-        JSUPtrLink* link = emitter->mActiveParticles.getFirstLink();
+        JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
         while(link != 0) {
             JSUPtrLink* next = link->getNext();
 
@@ -273,11 +273,11 @@ namespace daBomb2 {
 
         J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(0x30D, bck_data != NULL);
-        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
 
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(0x314, brk_data != NULL);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp3;
     }
@@ -405,10 +405,10 @@ namespace daBomb2 {
         start_proc_call();
     }
 
-    int Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
-        int status = dComIfG_resLoad(&mPhase, attr().resName);
+        cPhs_State status = dComIfG_resLoad(&mPhase, attr().resName);
 
         if(status == cPhs_COMPLEATE_e) {
             if(fopAcM_entrySolidHeap(this, solidHeapCB, attr().heapSize)) {
@@ -493,21 +493,21 @@ namespace daBomb2 {
     void Act_c::posMoveF() {
         if (mWindVec.abs2() > 0.01f) {
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-            cXyz* r6;
-            f32 f3, f4;
+            cXyz* norm;
+            f32 friction, no_grade_cos;
             if (triPla) {
-                r6 = triPla->GetNP();
-                f3 = 0.06f;
-                f4 = cM_scos(0xA4F);
+                norm = triPla->GetNP();
+                friction = 0.06f;
+                no_grade_cos = cM_scos(0xA4F);
             } else {
-                r6 = NULL;
-                f3 = 0.0f;
-                f4 = 0.0f;
+                norm = NULL;
+                friction = 0.0f;
+                no_grade_cos = 0.0f;
             }
             daObj::posMoveF_grade(
                 this, mStts.GetCCMoveP(), &mWindVec,
                 attr().field_0x30, attr().field_0x34,
-                r6, f3, f4, NULL
+                norm, friction, no_grade_cos, NULL
             );
         } else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
@@ -650,7 +650,7 @@ namespace daBomb2 {
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
         if (f31 > f30*f30) {
-            sp48 *= f30 / std::sqrtf(f31);;
+            sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
         cXyz hitNormal = cXyz::Zero;
@@ -1288,7 +1288,7 @@ namespace daBomb2 {
             1.04f,
             1.02f,
             1.01f,
-            1.0f
+            1.0f,
         };
 
         if(fopAcM_GetModel(this) == 0) {
@@ -1312,7 +1312,7 @@ namespace daBomb2 {
     }
 
     namespace {
-        int Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
 
@@ -1328,8 +1328,8 @@ namespace daBomb2 {
             return static_cast<Act_c*>(i_this)->_draw();
         }
 
-        bool Mthd_IsDelete(void*) {
-            return true;
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
         }
         
         static actor_method_class Mthd_Table = {

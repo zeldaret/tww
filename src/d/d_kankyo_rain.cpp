@@ -566,7 +566,7 @@ void dKyr_sun_move() {
         cLib_addCalc(&pSunPkt->mSunAlpha, 1.0f, 0.5f, 0.1f, 0.01f);
 
         if (pCamera != NULL) {
-            borderY = pCamera->mCamera.m5F8;
+            borderY = pCamera->mCamera.mTrimHeight;
         }
 
         cXyz projected;
@@ -2467,7 +2467,7 @@ void dKyr_thunder_move() {
             cLib_addCalc(&pThunder->mFlashTimer, 1.0f, 0.3f, 0.2f, 0.001f);
             if (pThunder->mFlashTimer >= 1.0f) {
                 if (pThunder->mState < 10)
-                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR);
+                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR, NULL);
                 pThunder->mState++;
             }
 

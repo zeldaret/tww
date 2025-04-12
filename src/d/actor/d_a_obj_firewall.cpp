@@ -72,7 +72,7 @@ void daObjFirewall_c::setup_put_the_fire_out() {
 }
 
 /* 00000EAC-000011F8       .text _create__15daObjFirewall_cFv */
-s32 daObjFirewall_c::_create() {
+cPhs_State daObjFirewall_c::_create() {
     /* Nonmatching */
 }
 
@@ -127,7 +127,7 @@ bool daObjFirewall_c::_draw() {
 }
 
 /* 00001CD4-00001CF4       .text daObjFirewall_Create__FP10fopAc_ac_c */
-static s32 daObjFirewall_Create(fopAc_ac_c*) {
+static cPhs_State daObjFirewall_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -67,7 +67,7 @@ BOOL daAgbsw0_c::draw() {
         if(toCheck != 0xFF) {
             if(conditionNo == 0) {
                 if(!fopAcM_isSwitch(this, toCheck)) {
-                    return 1;
+                    return true;
                 }
             }
             else {
@@ -149,7 +149,7 @@ BOOL daAgbsw0_c::draw() {
 }
 
 /* 00004F80-00005458       .text create__10daAgbsw0_cFv */
-int daAgbsw0_c::create() {
+cPhs_State daAgbsw0_c::create() {
     u8 type = getType();
     u8 sw0 = getSw0();
     s16 paramNo = getParamNo();
@@ -408,7 +408,7 @@ BOOL daAgbsw0_c::ExeSubA() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -494,7 +494,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -578,7 +578,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
-                    return 1;
+                    return true;
                 }
 
                 MailSend(-1, 0, 0xFF, 0xFF, 0);
@@ -1079,11 +1079,11 @@ BOOL daAgbsw0_c::ExeSubMW() {
 #if VERSION == VERSION_PAL
         if (dComIfGp_getAgb()->field_0x67d ||
             daPy_getPlayerLinkActorClass()->checkNoControll() ||
-            dComIfGp_checkPlayerStatus0(0, 0x08000000) ||
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e) ||
             (
                 daPy_getPlayerActorClass()->checkPlayerFly() &&
-                !dComIfGp_checkPlayerStatus0(0, 0x00100000) &&
-                !dComIfGp_checkPlayerStatus0(0, 0x00010000)
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)
             )
         ) {
             return TRUE;
@@ -2121,7 +2121,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
         case 0x43:
             for (int i = 0; i < 3; i++) {
                 if(daNpc_Os_c::isPlayerRoom(i)) {
-                    return 1;
+                    return true;
                 }
             }
 
@@ -2552,8 +2552,8 @@ static BOOL daAgbsw0_Draw(daAgbsw0_c* i_this) {
 }
 
 /* 00004B2C-00004CF8       .text daAgbsw0_Execute__FP10daAgbsw0_c */
-static void daAgbsw0_Execute(daAgbsw0_c* i_this) {
-    i_this->execute();
+static BOOL daAgbsw0_Execute(daAgbsw0_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00004CF8-00004D00       .text daAgbsw0_IsDelete__FP10daAgbsw0_c */
@@ -2571,7 +2571,7 @@ static BOOL daAgbsw0_Delete(daAgbsw0_c* i_this) {
 }
 
 /* 00004E98-00004F80       .text daAgbsw0_Create__FP10fopAc_ac_c */
-static int daAgbsw0_Create(fopAc_ac_c* i_this) {
+static cPhs_State daAgbsw0_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, daAgbsw0_c);
 
     return static_cast<daAgbsw0_c*>(i_this)->create();

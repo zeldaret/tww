@@ -230,7 +230,7 @@ void JASystem::HardStream::getAddrCallback(s32 param_1, DVDCommandBlock* param_2
     }
 }
 
-static float dummy1() {
+static f32 dummy1() {
     return 0.0f;
 }
 
@@ -297,6 +297,9 @@ static void dummy2() {
     OSReport("[JASHardStream::registBgmPair] このペア(%d)にはイントロ／ループともにありませんので登録できません。\n");
     OSReport("new_list != 0");
     OSReport("[JASHardStream::playBgm] まだ前の曲が再生中ですので、新たに開始できません。\n");
+    OSReport("[JASHardStream::main] ファイルが開けません。(%s)\n");
+    OSReport("finfo != 0");
+    OSReport("\x00");
 }
 
 /* 8027C5B4-8027C648       .text fileOpen__Q38JASystem10HardStream8TControlFUsP11DVDFileInfo */
@@ -382,7 +385,65 @@ u8 JASystem::HardStream::TControl::getCurVol() {
 
 /* 8027C900-8027CB5C       .text calcCurVolume__Q38JASystem10HardStream8TControlFv */
 void JASystem::HardStream::TControl::calcCurVolume() {
-    /* Nonmatching */
+    f32 f0 = 1.0f;
+    f32 f30 = 1.0f;
+    f32 f29 = 1.0f;
+
+    if (field_0x14 != 0) {
+        if (field_0x38 == 0)
+            field_0x20 = 1.0f / (f32)field_0x14;
+
+        f30 = field_0x20 * (f32)field_0x38;
+
+        if (f30 >= 1.0f) {
+            f30 = 1.0f;
+            field_0x14 = 0;
+            field_0x20 = 0.0f;
+            field_0x38 = 0;
+        } else {
+            ++field_0x38;
+        }
+    }
+
+    if (field_0x18 != 0) {
+        if (field_0x3c == 0)
+            field_0x24 = 1.0f / (f32)field_0x18;
+
+        f29 = 1.0f - field_0x24 * (f32)field_0x3c;
+
+        if (f29 <= 0.0f) {
+            f29 = 0.0f;
+
+            resetFader();
+            field_0xb  = 6;
+
+            unregistBgmAll();
+        } else {
+            ++field_0x3c;
+        }
+    }
+
+    if (field_0x1c != 0) {
+        if (field_0x40 == 0)
+            field_0x34 = (field_0x28 - field_0x30) / (f32)field_0x1c;
+
+        f32 fVar2 = field_0x34 * (f32)field_0x40 + field_0x30;
+        if (field_0x40 >= field_0x1c) {
+            fVar2 = field_0x28;
+            field_0x30 = fVar2;
+            field_0x28 = field_0x30;
+            field_0x1c = 0;
+            field_0x34 = 0.0f;
+            field_0x40 = 0;
+        } else {
+            ++field_0x40;
+        }
+        field_0x2c = fVar2;
+    }
+
+    f0 *= field_0x2c * (f30 * f29);
+    f0 *= field_0xc;
+    field_0x10 = f0;
 }
 
 /* 8027CB5C-8027CB9C       .text volFloatToU8__Q38JASystem10HardStream8TControlFf */

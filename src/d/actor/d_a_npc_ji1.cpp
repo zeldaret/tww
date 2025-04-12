@@ -734,7 +734,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
             if(l_msg) {
                 if(actionNo == 2) {
                     dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
-                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, 0, 0, 0);
+                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, NULL);
                 }
 
                 field_0xC78 += 1;
@@ -1106,7 +1106,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000033D0-000039AC       .text speakAction__11daNpc_Ji1_cFPv */
@@ -1315,7 +1315,7 @@ s32 daNpc_Ji1_c::getEventActionNo(int staffIdx) {
         "03_dummy",
         "04_dummy",
         "05_dummy",
-        "06_dummy"
+        "06_dummy",
     };
 
     return dComIfGp_evmng_getMyActIdx(staffIdx, ActionNames, ARRAY_SIZE(ActionNames), FALSE, 0);
@@ -1356,7 +1356,7 @@ BOOL daNpc_Ji1_c::eventAction(void*) {
 
 /* 00004714-00004778       .text evn_init_pos_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_init_pos_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
 
     u32 value = 0;
     if(data) {
@@ -1369,7 +1369,7 @@ u32 daNpc_Ji1_c::evn_init_pos_init(int staffIdx) {
 
 /* 00004778-00004838       .text evn_setAnm_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_setAnm_init(int staffIdx) {
-    u32* iData = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
+    int* iData = dComIfGp_evmng_getMyIntegerP(staffIdx, "AnmNo");
     f32* fData = dComIfGp_evmng_getMyFloatP(staffIdx, "hokan");
 
     if(iData) {
@@ -1391,8 +1391,8 @@ u32 daNpc_Ji1_c::evn_setAnm_init(int staffIdx) {
 
 /* 00004838-000049AC       .text evn_talk_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_talk_init(int staffIdx) {
-    u32* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
-    u32* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pEndMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
     l_msgId = fpcM_ERROR_PROCESS_ID_e;
     l_msg = 0;
@@ -1482,7 +1482,7 @@ u32 daNpc_Ji1_c::evn_talk() {
 
 /* 00004B1C-00004B84       .text evn_continue_talk_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_continue_talk_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsgNo");
 
     if(data) {
         field_0xD80 = *data;
@@ -1542,7 +1542,7 @@ u32 daNpc_Ji1_c::evn_continue_talk() {
 
 /* 00004CF4-00004D50       .text evn_setAngle_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_setAngle_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "angle");
 
     if(data) {
         current.angle.y = *data;
@@ -1553,7 +1553,7 @@ u32 daNpc_Ji1_c::evn_setAngle_init(int staffIdx) {
 
 /* 00004D50-00004E8C       .text evn_sound_proc_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
 
     if(data) {
         switch(*data) {
@@ -1576,7 +1576,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
 
 /* 00004E8C-00004F60       .text evn_head_swing_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_head_swing_init(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;
@@ -1602,7 +1602,7 @@ u32 daNpc_Ji1_c::evn_head_swing_init(int staffIdx) {
 
 /* 00004F60-00005008       .text evn_harpoon_proc_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_harpoon_proc_init(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;
@@ -1686,7 +1686,7 @@ u32 daNpc_Ji1_c::evn_RollAtControl() {
 
 /* 00005314-000053F8       .text evn_game_mode_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_game_mode_init(int staffIdx) {
-    u32* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* data = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
 
     u32 value;
     if(data) {
@@ -1725,7 +1725,7 @@ u32 daNpc_Ji1_c::evn_turn_to_player() {
 /* 0000545C-00005508       .text evn_hide_init__11daNpc_Ji1_cFi */
 u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm");
     u32 value;
     if(!pData) {
         value = 0;
@@ -1754,7 +1754,7 @@ u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
 /* 00005508-000055E4       .text AnimeControlToWait__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::AnimeControlToWait() {
     /* Nonmatching */
-    if(field_0x330->getPlayMode() == J3DFrameCtrl::LOOP_ONCE_e) {
+    if(field_0x330->getPlayMode() == J3DFrameCtrl::EMode_NONE) {
         if(field_0x330->checkFrame(field_0x330->getEndFrame() - 1.0f)) {
             if(isAttackAnim() || isGuardAnim()) {
                 setAnm(5, 4.0f, 0);
@@ -1896,7 +1896,7 @@ u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
 /* 000058B8-000058F0       .text dtParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::dtParticle() {
     if(field_0x2E0.getEmitter()) {
-        field_0x2E0.end();
+        field_0x2E0.remove();
     }
 }
 
@@ -1926,7 +1926,7 @@ u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
 /* 000059E8-00005A20       .text dtParticleAT__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::dtParticleAT() {
     if(field_0x300.getEmitter()) {
-        field_0x300.end();
+        field_0x300.remove();
     }
 }
 
@@ -2110,7 +2110,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
                 
-                return 1;
+                return TRUE;
             }
             
             if(cutType == 8) {
@@ -2119,7 +2119,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 setAction(&daNpc_Ji1_c::eventAction, 0);
                 field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
-                return 1;
+                return TRUE;
             }
 
             field_0x7E0.OnTgShield();
@@ -2561,7 +2561,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
                     setClearRecord(field_0xD70);
                 }
 
-                return 1;
+                return TRUE;
             }
         }
 
@@ -2592,7 +2592,7 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 0000C7E4-0000CA98       .text battleAction__11daNpc_Ji1_cFPv */
@@ -3035,10 +3035,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         field_0x330->setAnm(temp1, temp2, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(field_0xD64 == 0x13) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
         else if(field_0xD64 == 0x14) {
-            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
 
         return true;
@@ -3147,10 +3147,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
-s32 daNpc_Ji1_c::_create() {
+cPhs_State daNpc_Ji1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Ji1_c);
 
-    s32 state = dComIfG_resLoad(&field_0xC7C, "Ji");
+    cPhs_State state = dComIfG_resLoad(&field_0xC7C, "Ji");
     if(state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, &CheckCreateHeap, 0x16840)) {
             return cPhs_ERROR_e;
@@ -3171,7 +3171,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
         0x00000000,
         0x11020203
@@ -3204,7 +3204,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
-        J3DFrameCtrl::LOOP_ONCE_e, 0.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1,
         0,
         0x00000000,
         0x11020203
@@ -3224,8 +3224,8 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-    int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    int temp1 = field_0x3FC.init(modelData, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp2 = field_0x418.init(modelData, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
     if(field_0x3F8 == 0 || temp1 == 0 || temp2 == 0) {
         return false;
@@ -3234,7 +3234,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
+    if(field_0x3D8.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
         return false;
     }
 
@@ -3444,8 +3444,8 @@ BOOL daNpc_Ji1_c::_delete() {
     
     dComIfGp_att_revivalAleart();
 
-    field_0x2E0.end();
-    field_0x300.end();
+    field_0x2E0.remove();
+    field_0x300.remove();
 
     return true;
 }
@@ -3788,7 +3788,7 @@ static BOOL daNpc_Ji1_Delete(daNpc_Ji1_c* i_this) {
 }
 
 /* 00011FC0-00011FE0       .text daNpc_Ji1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Ji1_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_Ji1_Create(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Ji1_c*>(i_this)->_create();
 }
 

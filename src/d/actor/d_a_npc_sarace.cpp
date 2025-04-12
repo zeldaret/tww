@@ -128,7 +128,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00001B00-00001D1C       .text _create__14daNpc_Sarace_cFv */
-s32 daNpc_Sarace_c::_create() {
+cPhs_State daNpc_Sarace_c::_create() {
     /* Nonmatching */
 }
 
@@ -138,7 +138,7 @@ void daNpc_Sarace_c::CreateHeap() {
 }
 
 /* 00002498-000024B8       .text daNpc_Sarace_Create__FP10fopAc_ac_c */
-static s32 daNpc_Sarace_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Sarace_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

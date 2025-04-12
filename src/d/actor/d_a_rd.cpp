@@ -132,7 +132,7 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 00000358-00000514       .text _nodeControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
     cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
@@ -169,7 +169,7 @@ static BOOL nodeHeadControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 0000059C-000006A0       .text _nodeHeadControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
     
@@ -204,7 +204,7 @@ BOOL daRd_c::_createHeap() {
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, RD_BCK_SUWARIP)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x37441622
@@ -220,7 +220,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
     JUT_ASSERT(525, btk != NULL);
-    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -228,7 +228,7 @@ BOOL daRd_c::_createHeap() {
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
     JUT_ASSERT(550, brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -1329,10 +1329,10 @@ void daRd_c::setBrkAnm(s8 idx) {
         RD_BRK_BEAM_END,
     };
     static const int a_play_mod_tbl[] = {
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
     };
     
     J3DModel* model = mpMorf->getModel();
@@ -1355,11 +1355,11 @@ void daRd_c::setBtkAnm(s8 idx) {
         int loopMode;
     };
     static const anm_prm_struct a_anm_prm_tbl[] = {
-        {0x01,   -1, J3DFrameCtrl::LOOP_ONCE_e},
-        {0x00,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
-        {0x01,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
-        {0x02, 0x01, J3DFrameCtrl::LOOP_ONCE_e},
-        {0x03, 0x02, J3DFrameCtrl::LOOP_ONCE_e},
+        {0x01,   -1, J3DFrameCtrl::EMode_NONE},
+        {0x00,   -1, J3DFrameCtrl::EMode_LOOP},
+        {0x01,   -1, J3DFrameCtrl::EMode_LOOP},
+        {0x02, 0x01, J3DFrameCtrl::EMode_NONE},
+        {0x03, 0x02, J3DFrameCtrl::EMode_NONE},
     };
     
     if (idx != 5) {
@@ -1374,7 +1374,7 @@ void daRd_c::setBtkAnm(s8 idx) {
         mBtkAnm.init(modelData, btk, true, a_anm_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
         
         if (mBtkAnm.isStop()) {
-            if (a_anm_prm_tbl[m6DB].m01 != -1 && a_anm_prm_tbl[m6DB].loopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+            if (a_anm_prm_tbl[m6DB].m01 != -1 && a_anm_prm_tbl[m6DB].loopMode == J3DFrameCtrl::EMode_NONE) {
                 m6DB = a_anm_prm_tbl[m6DB].m01;
             }
         }
@@ -1409,7 +1409,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_TACHIP1
@@ -1418,7 +1418,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_SUWARIP
@@ -1427,7 +1427,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_WALK2ATACK
@@ -1436,7 +1436,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_ATACK
@@ -1445,7 +1445,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_ATACK2WALK
@@ -1454,7 +1454,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_WALK
@@ -1463,7 +1463,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_DAMAGE
@@ -1472,7 +1472,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_DEAD
@@ -1481,7 +1481,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_TATSU
@@ -1490,7 +1490,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.5f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_SUWARU
@@ -1499,7 +1499,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.5f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_KANOKEP
@@ -1508,7 +1508,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_BEAM_HIT
@@ -1517,7 +1517,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_BEAM
@@ -1526,7 +1526,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_BEAM_END
@@ -1535,7 +1535,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
     };
     
@@ -1815,10 +1815,10 @@ void daRd_c::getArg() {
 }
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
-s32 daRd_c::_create() {
+cPhs_State daRd_c::_create() {
     fopAcM_SetupActor(this, daRd_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();

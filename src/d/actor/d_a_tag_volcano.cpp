@@ -22,7 +22,7 @@ namespace daTagvolcano {
 }
 
 /* 00000078-000002B4       .text _create__Q212daTagvolcano5Act_cFv */
-s32 daTagvolcano::Act_c::_create() {
+cPhs_State daTagvolcano::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
     field_0x298 = 0;
@@ -186,7 +186,7 @@ bool daTagvolcano::Act_c::_draw() {
 
 namespace daTagvolcano {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

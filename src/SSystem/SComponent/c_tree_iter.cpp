@@ -10,24 +10,24 @@
 #include "dolphin/types.h"
 
 /* 802450D0-80245144       .text cTrIt_Method__FP21node_lists_tree_classPFP10node_classPv_iPv */
-int cTrIt_Method(node_lists_tree_class* pTree, cNdIt_MethodFunc pMethod, void* pUserData) {
-    node_list_class* pList = pTree->mpLists;
-    int i = pTree->mNumLists;
-    int ret = 1;
+BOOL cTrIt_Method(node_lists_tree_class* tree, cNdIt_MethodFunc method, void* data) {
+    node_list_class* pList = tree->mpLists;
+    int i = tree->mNumLists;
+    BOOL ret = TRUE;
     while (i-- > 0) {
-        int sub = cLsIt_Method(pList++, pMethod, pUserData);
-        if (sub == 0)
-            ret = 0;
+        BOOL sub = cLsIt_Method(pList++, method, data);
+        if (sub == FALSE)
+            ret = FALSE;
     }
     return ret;
 }
 
 /* 80245144-802451B4       .text cTrIt_Judge__FP21node_lists_tree_classPFP10node_classPv_PvPv */
-void* cTrIt_Judge(node_lists_tree_class* pTree, cNdIt_JudgeFunc pJudge, void* pUserData) {
-    node_list_class* pList = pTree->mpLists;
-    int i = pTree->mNumLists;
+void* cTrIt_Judge(node_lists_tree_class* tree, cNdIt_JudgeFunc judge, void* data) {
+    node_list_class* pList = tree->mpLists;
+    int i = tree->mNumLists;
     while (i-- > 0) {
-        void* pJudgeRet = cLsIt_Judge(pList++, pJudge, pUserData);
+        void* pJudgeRet = cLsIt_Judge(pList++, judge, data);
         if (pJudgeRet != NULL)
             return pJudgeRet;
     }

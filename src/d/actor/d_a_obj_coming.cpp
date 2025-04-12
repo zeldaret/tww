@@ -42,7 +42,7 @@ void daObjComing::Act_c::chk_switch() {
 }
 
 /* 000003B0-000004B0       .text _create__Q211daObjComing5Act_cFv */
-s32 daObjComing::Act_c::_create() {
+cPhs_State daObjComing::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -144,27 +144,27 @@ bool daObjComing::Act_c::_draw() {
 namespace daObjComing {
 namespace {
 /* 00001318-00001338       .text Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00001338-0000135C       .text Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000135C-00001380       .text Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00001380-000013A4       .text Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000013A4-000013AC       .text Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

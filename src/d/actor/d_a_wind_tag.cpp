@@ -75,17 +75,17 @@ BOOL daWindTag::daWindTag_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mType], m_btkidx[mType]);
     JUT_ASSERT(0x17A, pbtk != NULL);
-    if (!mBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname[mType], m_btkidx2[mType]);
     JUT_ASSERT(0x17A, pbtk != NULL);
-    if (!mBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname[mType], m_bckidx[mType]);
     JUT_ASSERT(0x192, pbck != NULL);
-    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
         return FALSE;
 
     return TRUE;
@@ -147,8 +147,8 @@ void daWindTag::daWindTag_c::CreateInit() {
         if (mpPath != NULL) {
             mPathPointDir = 1;
             mCurPathPoint = 1;
-            mTargetPos = mpPath->mpPnt[mCurPathPoint].mPos;
-            current.pos = mpPath->mpPnt[0].mPos;
+            mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
+            current.pos = mpPath->m_points[0].m_position;
             speedF = 10.0f + ((fopAcM_GetParam(this) >> 16) & 0x1F);
         } else {
             mPathId = 0xFF;
@@ -184,10 +184,10 @@ void daWindTag::daWindTag_c::set_wind_angle() {
 }
 
 /* 000008D4-0000099C       .text _create__Q29daWindTag11daWindTag_cFv */
-s32 daWindTag::daWindTag_c::_create() {
+cPhs_State daWindTag::daWindTag_c::_create() {
     fopAcM_SetupActor(this, daWindTag_c);
     mType = (fopAcM_GetParam(this) >> 21) & 0x03;
-    s32 rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State rt = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType]))
             return cPhs_ERROR_e;
@@ -277,7 +277,7 @@ void daWindTag::daWindTag_c::set_next_pnt() {
         return;
 
     mCurPathPoint += mPathPointDir;
-    if (mpPath->mLoops & 1) {
+    if (dPath_ChkClose(mpPath)) {
         if (mCurPathPoint > mpPath->m_num - 1) {
             mCurPathPoint = 0;
         } else if (mCurPathPoint < 0) {
@@ -293,7 +293,7 @@ void daWindTag::daWindTag_c::set_next_pnt() {
         }
     }
 
-    mTargetPos = mpPath->mpPnt[mCurPathPoint].mPos;
+    mTargetPos = mpPath->m_points[mCurPathPoint].m_position;
 }
 
 /* 00001700-00001814       .text _draw__Q29daWindTag11daWindTag_cFv */
@@ -326,7 +326,7 @@ void daWindTag::daWindTag_c::MoveEmitter() {
 }
 
 /* 00001B00-00001B20       .text daWindTag_Create__FPv */
-static s32 daWindTag_Create(void* i_ac) {
+static cPhs_State daWindTag_Create(void* i_ac) {
     return ((daWindTag::daWindTag_c*)i_ac)->_create();
 }
 

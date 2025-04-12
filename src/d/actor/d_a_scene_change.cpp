@@ -19,7 +19,7 @@ daSceneChgHIO_c::daSceneChgHIO_c() {
 }
 
 /* 00000118-000001A8       .text daSceneChgCreate__FPv */
-static s32 daSceneChgCreate(void* i_this) {
+static cPhs_State daSceneChgCreate(void* i_this) {
     d_a_scene_change_c* scnChg = static_cast<d_a_scene_change_c*>(i_this);
     
     fopAcM_SetupActor(scnChg, d_a_scene_change_c);

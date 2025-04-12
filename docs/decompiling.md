@@ -10,8 +10,9 @@ If you haven't already, you should first follow the instructions in the [readme]
 2. [Setting up classes/structs](#setting-up-classesstructs)
 3. [Decompiling functions](#decompiling-functions)
 4. [Inline functions and how to read the debug maps](#inline-functions-and-how-to-read-the-debug-maps)
-5. [Linking a 100% matching object](#linking-a-100-matching-object)
-6. [Documentation and naming](#documentation-and-naming)
+5. [Fixing minor nonmatching issues](#fixing-minor-nonmatching-issues)
+6. [Linking a 100% matching object](#linking-a-100-matching-object)
+7. [Documentation and naming](#documentation-and-naming)
 
 ## Choosing an object to decompile
 
@@ -158,7 +159,7 @@ The macro to use in this case is `JUT_ASSERT`, which handles checking a conditio
     JUT_ASSERT(0x181, modelData != NULL);
 ```
 
-Note that any variables used in an debug assertion must have their names match the assertion string exactly, like the `modelData` local variable in this case. This can sometimes even give you the official name of a member variable. Defines like `NULL` or `FALSE` work a bit differently and show up as their value (zero) in the assertion strings, instead of appearing the way the programmer actually wrote them.
+Note that any variables used in a debug assertion must have their names match the assertion string exactly, like the `modelData` local variable in this case. This can sometimes even give you the official name of a member variable. Defines like `NULL` or `FALSE` work a bit differently and show up as their value (zero) in the assertion strings, instead of appearing the way the programmer actually wrote them.
 
 Other than those two macros, there's another common case that can cause code to look very different in Ghidra compared to how it was originally written: **inline functions**. These are used all over the place in TWW's codebase, and they're important to get right for several reasons, but as there are thousands of them we can't go over all of them individually in this guide. Instead, let's go over what the workflow for finding them on your own will look like.
 
@@ -240,7 +241,7 @@ void daWall_c::set_se() {
 ```
 
 This is much closer to how it would have looked when written by the original devs.  
-(The `JA_SE` value there is part of an enum of sound effects - if you search through the decomp for decompiled actors that call `fopAcM_seStart`, you will see this enum being when that inline is called.)  
+(The `JA_SE` value there is part of an enum of sound effects - if you search through the decomp for decompiled actors that call `fopAcM_seStart`, you will see this enum being used when that inline is called.)  
 
 However, there's an important caveat to keep in mind when reading the debug maps: Each inline only appears **once per map**, even if it was called multiple times.  
 We got lucky in this example, because `fopAcM_seStart` was only called once in the entire file. But if it had been called multiple times and it already appeared higher up in the tree, nothing would have appeared underneath `set_se` when we had looked at it.  

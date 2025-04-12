@@ -82,7 +82,7 @@ static BOOL daSitem_solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */
-static s32 daSitem_Create(fopAc_ac_c*) {
+static cPhs_State daSitem_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

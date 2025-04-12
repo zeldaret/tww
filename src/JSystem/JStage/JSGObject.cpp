@@ -51,7 +51,7 @@ s32 JStage::TObject::JSGFindNodeID(const char*) const {
 }
 
 /* 8026DFBC-8026DFF8       .text JSGGetNodeTransformation__Q26JStage7TObjectCFUlPA4_f */
-int JStage::TObject::JSGGetNodeTransformation(u32, MtxP mtx) const {
+bool JStage::TObject::JSGGetNodeTransformation(u32, MtxP mtx) const {
     mtx[0][0] = 0.0f;
     mtx[0][1] = 0.0f;
     mtx[0][2] = 0.0f;
@@ -64,6 +64,5 @@ int JStage::TObject::JSGGetNodeTransformation(u32, MtxP mtx) const {
     mtx[2][1] = 0.0f;
     mtx[2][2] = 0.0f;
     mtx[2][3] = 0.0f;
-    return 0;
+    return false;
 }
-

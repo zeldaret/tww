@@ -14,17 +14,17 @@ namespace daObj {
         return ((1 << width) - 1) & (param >> shift);
     }
     
-    void make_land_effect(fopAc_ac_c*, dBgS_GndChk*, float);
-    cXyz& get_wind_spd(fopAc_ac_c*, float);
-    cXyz& get_path_spd(cBgS_PolyInfo&, float);
-    void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, float, float);
-    void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, float, float, const cXyz*, float, float, const cXyz*);
+    void make_land_effect(fopAc_ac_c*, dBgS_GndChk*, f32);
+    cXyz& get_wind_spd(fopAc_ac_c*, f32);
+    cXyz& get_path_spd(cBgS_PolyInfo&, f32);
+    void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32);
+    void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32, const cXyz*, f32, f32, const cXyz*);
     void quat_rotBaseY(Quaternion*, const cXyz&);
     void quat_rotBaseY2(Quaternion*, const cXyz&);
     void quat_rotBaseZ(Quaternion*, const cXyz&);
     void quat_rotVec(Quaternion*, const cXyz&, const cXyz&);
     void SetCurrentRoomNo(fopAc_ac_c*, dBgS_GndChk*);
-    void HitSeStart(const cXyz*, int, const dCcD_GObjInf*, unsigned long);
+    void HitSeStart(const cXyz*, int, const dCcD_GObjInf*, u32);
     void HitEff_sub_kikuzu(const cXyz*, const cXyz*, const dKy_tevstr_c*);
     void HitEff_kikuzu(const fopAc_ac_c*, const dCcD_Cyl*);
     void HitEff_hibana(const cXyz*, const cXyz*);

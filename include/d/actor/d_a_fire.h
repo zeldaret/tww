@@ -7,7 +7,7 @@ class daFire_c : public fopAc_ac_c {
 public:
     bool _delete();
     void CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     void search_wind();
     void ctrlEffect();

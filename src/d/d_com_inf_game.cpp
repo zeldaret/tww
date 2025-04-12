@@ -74,7 +74,7 @@ void dComIfG_play_c::itemInit() {
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
-    field_0x48c8 = 0;
+    mItemTimeMax = 0;
     mNpcNameMessageID = 0;
     mItemNameMessageID = 0;
     mItemKeyNumCount = 0;
@@ -99,7 +99,7 @@ void dComIfG_play_c::itemInit() {
     mItemTimer = 0;
     mItemNowLife = 0;
     mItemNowRupee = 0;
-    field_0x4928 = 0;
+    mItemSwimTimerStatus = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
     mbCamOverrideFarPlane = 0;
@@ -165,20 +165,18 @@ void dComIfG_play_c::itemInit() {
 
     strcpy(mInputPassword, "\0");
 
-    field_0x4977 = 0;
+    mMesgBgm = 0;
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;
     mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
-    mMesgCameraTagInfo = 0;
-    mMesgCameraInfo = 0;
+    mMesgCamInfo.mID = 0;
+    mMesgCamInfo.mBasicID = 0;
 
-    for (int i = 0; i < ARRAY_SIZE(field_0x4988); i++) {
-        field_0x4988[i] = 0;
+    for (int i = 0; i < ARRAY_SIZE(mMesgCamInfo.mActor); i++) {
+        mMesgCamInfo.mActor[i] = 0;
     }
-
-    return;
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
@@ -491,44 +489,53 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
 }
 
 /* 8005326C-800532D8       .text dComIfG_resetToOpening__FP11scene_class */
-int dComIfG_resetToOpening(scene_class* i_scene) {
+BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     if (!mDoRst::isReset()) {
-        return 0;
+        return FALSE;
     }
 
     dComIfG_changeOpeningScene(i_scene, 8);
     mDoAud_bgmStop(30);
     mDoAud_resetProcess();
-    return 1;
+    return TRUE;
 }
 
 /* 800532D8-80053330       .text phase_1__FPc */
-static int phase_1(char* i_arcName) {
-    return !dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+static cPhs_State phase_1(char* i_arcName) {
+    if (dComIfG_setObjectRes(i_arcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL) == FALSE) {
+        return cPhs_ERROR_e;
+    } else {
+        return cPhs_NEXT_e;
+    }
 }
 
 /* 80053330-80053388       .text phase_2__FPc */
-static int phase_2(char* i_arcName) {
+static cPhs_State phase_2(char* i_arcName) {
     int syncStatus = dComIfG_syncObjectRes(i_arcName);
 
     if (syncStatus < 0) {
         return cPhs_ERROR_e;
+    } else if (syncStatus > 0) {
+        return cPhs_INIT_e;
     } else {
-        return syncStatus > 0 ? 0 : 2;
+        return cPhs_NEXT_e;
     }
 }
 
 /* 80053388-80053390       .text phase_3__FPc */
-static int phase_3(char* i_arcName) {
+static cPhs_State phase_3(char* i_arcName) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 80053390-800533D0       .text dComIfG_resLoad__FP30request_of_phase_process_classPCc */
-int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcName) {
-    static int (*l_method[3])(void*) = {(int (*)(void*))phase_1, (int (*)(void*))phase_2,
-                                        (int (*)(void*))phase_3};
+cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcName) {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        (cPhs__Handler)phase_3
+    };
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         return cPhs_COMPLEATE_e;
     }
 
@@ -539,9 +546,9 @@ int dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* i_arcNa
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
     JUT_ASSERT(VERSION_SELECT(1045, 1048, 1048), i_phase->id != 1);
 
-    if (i_phase->id == cPhs_NEXT_e) {
+    if (i_phase->id == 2) {
         dComIfG_deleteObjectRes(i_resName);
-        i_phase->id = cPhs_INIT_e;
+        i_phase->id = 0;
     }
 
     return 0;
@@ -552,8 +559,7 @@ s8 dComIfGp_getReverb(int param_0) {
     return dStage_roomRead_dt_c_GetReverbStage(*dComIfGp_getStageRoom(), param_0);
 }
 
-/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj
- */
+/* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {

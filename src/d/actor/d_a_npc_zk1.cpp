@@ -252,7 +252,7 @@ bool daNpc_Zk1_c::_delete() {
 }
 
 /* 00001EFC-00002148       .text _create__11daNpc_Zk1_cFv */
-s32 daNpc_Zk1_c::_create() {
+cPhs_State daNpc_Zk1_c::_create() {
     /* Nonmatching */
 }
 
@@ -267,7 +267,7 @@ void daNpc_Zk1_c::CreateHeap() {
 }
 
 /* 0000270C-0000272C       .text daNpc_Zk1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Zk1_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Zk1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -33,6 +33,7 @@ public:
     f32 getEndFrame() { return mFrameCtrl->getEnd(); }
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
     void setPlayMode(int i_mode) { mFrameCtrl->setAttribute(i_mode); }
+    f32 getLoopFrame() { return mFrameCtrl->getLoop(); }
     void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
     BOOL isStop() {
         return mFrameCtrl->checkState(J3DFrameCtrl::STATE_STOP_E) || mFrameCtrl->getRate() == 0.0f;
@@ -52,6 +53,7 @@ public:
     void entry(J3DModelData *i_modelData, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
+    void entry(J3DMaterialTable* i_matTable) { entry(i_matTable, getFrame()); }
     int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute,
              f32 i_rate, s16 i_start, s16 i_end, bool i_modify, BOOL i_entry);
 
@@ -178,6 +180,9 @@ public:
     void entry(J3DModel*, s16);
 
     int init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool);
+
+    // TODO
+    void entry(J3DModel* i_model) {}
 
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;
@@ -577,7 +582,7 @@ public:
     mDoExt_3Dline_c();
     ~mDoExt_3Dline_c();
 
-    int init(u16, int, int);
+    BOOL init(u16 numSegments, BOOL hasSize, BOOL hasTex);
 
 public:
     /* 0x00 */ cXyz* mpSegments;
@@ -588,12 +593,15 @@ public:
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, int);
+    BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
+
+    cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
+    u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
 public:
     /* 0x08 */ GXColor mColor;
@@ -607,12 +615,15 @@ public:
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, ResTIMG*, int);
+    BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
+
+    cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
+    u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
 public:
     /* 0x08 */ GXTexObj mTexObj;
@@ -622,9 +633,25 @@ public:
     /* 0x32 */ u16 mMaxSegments;
     /* 0x34 */ u16 mNumSegments;
     /* 0x36 */ u8 mCurArr;
-    /* 0x37 */ u8 m37[0x38 - 0x37];
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
 };
+
+// The following classes only appear in the debug maps and seem unused:
+// mDoExt_ArrowPacket
+// mDoExt_circlePacket
+// mDoExt_cube8pPacket
+// mDoExt_cubePacket
+// mDoExt_cylinderMPacket
+// mDoExt_cylinderPacket
+// mDoExt_linePacket
+// mDoExt_pointPacket
+// mDoExt_quadPacket
+// mDoExt_spherePacket
+// mDoExt_trianglePacket
+
+inline void mDoExt_bckAnmRemove(J3DModelData* i_modelData) {
+    i_modelData->getJointNodePointer(0)->setMtxCalc(NULL);
+}
 
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag);
 

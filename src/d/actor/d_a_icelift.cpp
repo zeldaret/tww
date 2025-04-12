@@ -33,7 +33,7 @@ void daIlift_c::CreateInit() {
 }
 
 /* 00000680-00000794       .text _create__9daIlift_cFv */
-s32 daIlift_c::_create() {
+cPhs_State daIlift_c::_create() {
     /* Nonmatching */
 }
 
@@ -73,7 +73,7 @@ bool daIlift_c::_draw() {
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */
-static s32 daIlift_Create(void*) {
+static cPhs_State daIlift_Create(void*) {
     /* Nonmatching */
 }
 

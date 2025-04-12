@@ -87,7 +87,7 @@ namespace daObjFtree {
         void solidHeapCB(fopAc_ac_c*);
         BOOL NodeCallBack_Effect(J3DNode*, int);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         bool _execute();

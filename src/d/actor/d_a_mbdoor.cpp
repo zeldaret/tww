@@ -253,8 +253,8 @@ BOOL daMbdoor_c::CreateInit() {
 }
 
 /* 00000A44-00000AF4       .text create__10daMbdoor_cFv */
-s32 daMbdoor_c::create() {
-    s32 phase_state = dComIfG_resLoad(&mPhs, getArcName());
+cPhs_State daMbdoor_c::create() {
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, getArcName());
     
     fopAcM_SetupActor(this, daMbdoor_c);
     
@@ -326,7 +326,7 @@ void daMbdoor_c::demoProc() {
         case ACT_ADJUSTMENT:
             calcMtx();
             mAdjustmentTimer = 0;
-            u32* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+            int* timerP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
             if (timerP) {
                 mAdjustmentTimer = *timerP;
             }
@@ -540,7 +540,7 @@ BOOL daMbdoor_c::execute() {
     dDemo_actor_c* demoActor = dComIfGp_demo_getActor(demoActorID);
     if (demoActor) {
         field_0x2ad = 0;
-        if (demoActor->checkEnable(0x8)) {
+        if (demoActor->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
             field_0x2b2 = demoActor->getRatate()->y;
             field_0x2b0 = demoActor->getRatate()->z;
         }
@@ -572,7 +572,7 @@ static BOOL daMbdoor_Delete(daMbdoor_c* i_this) {
 }
 
 /* 000015D4-000015F4       .text daMbdoor_Create__FP10fopAc_ac_c */
-static s32 daMbdoor_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMbdoor_Create(fopAc_ac_c* i_this) {
     return ((daMbdoor_c*)i_this)->create();
 }
 

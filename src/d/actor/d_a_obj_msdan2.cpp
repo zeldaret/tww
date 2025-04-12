@@ -7,44 +7,44 @@
 #include "d/d_procname.h"
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
-void daObjMsdan2::Act_c::Mthd_Create() {
+cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
-void daObjMsdan2::Act_c::Mthd_Execute() {
+BOOL daObjMsdan2::Act_c::Mthd_Execute() {
     /* Nonmatching */
 }
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
-void daObjMsdan2::Act_c::Mthd_Delete() {
+BOOL daObjMsdan2::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
 namespace daObjMsdan2 {
 namespace {
 /* 0000034C-0000036C       .text Mthd_Create__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000036C-0000038C       .text Mthd_Delete__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000038C-000003AC       .text Mthd_Execute__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 000003AC-000003B4       .text Mthd_Draw__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000003B4-000003BC       .text Mthd_IsDelete__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

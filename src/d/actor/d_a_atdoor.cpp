@@ -32,7 +32,7 @@ void daAtdoor_c::CreateInit() {
 }
 
 /* 0000036C-00000418       .text create__10daAtdoor_cFv */
-s32 daAtdoor_c::create() {
+cPhs_State daAtdoor_c::create() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ static BOOL daAtdoor_Delete(daAtdoor_c*) {
 }
 
 /* 0000070C-0000072C       .text daAtdoor_Create__FP10fopAc_ac_c */
-static s32 daAtdoor_Create(fopAc_ac_c*) {
+static cPhs_State daAtdoor_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

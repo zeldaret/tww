@@ -113,7 +113,7 @@ public:
     bool _draw();
     void getArg();
     void createInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

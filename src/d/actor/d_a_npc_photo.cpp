@@ -33,7 +33,7 @@ void phase_2(daNpcPhoto_c*) {
 }
 
 /* 000009D4-00000A04       .text _create__12daNpcPhoto_cFv */
-s32 daNpcPhoto_c::_create() {
+cPhs_State daNpcPhoto_c::_create() {
     /* Nonmatching */
 }
 

@@ -33,24 +33,24 @@ void dEnvSe_getNearPathPos(cXyz* r30, cXyz* r31, dPath* r26) {
     cXyz sp30[2];
     f32 sp8;
     f32 f31 = FLOAT_MAX;
-    dPath__Point* point = r26->mpPnt;
+    dPnt* point = r26->m_points;
     cM3dGLin lin;
     
     for (i = 0; i < r26->m_num; point++, i++) {
-        sp8 = r31->abs2(point->mPos);
+        sp8 = r31->abs2(point->m_position);
         if (f31 > sp8) {
             f31 = sp8;
             nearIdx = i;
         }
     }
     
-    point = &r26->mpPnt[nearIdx];
+    point = &r26->m_points[nearIdx];
     if (nearIdx != 0) {
-        lin.set(point[-1].mPos, point[0].mPos);
+        lin.set(point[-1].m_position, point[0].m_position);
         spc[0] = cM3d_Len3dSqPntAndSegLine(&lin, r31, &sp30[0], &sp8);
     }
     if (nearIdx != r26->m_num-1) {
-        lin.set(point[0].mPos, point[1].mPos);
+        lin.set(point[0].m_position, point[1].m_position);
         spc[1] = cM3d_Len3dSqPntAndSegLine(&lin, r31, &sp30[1], &sp8);
     }
     
@@ -68,7 +68,7 @@ void dEnvSe_getNearPathPos(cXyz* r30, cXyz* r31, dPath* r26) {
         if (spc[1]) {
             *r30 = sp30[1];
         } else {
-            *r30 = point[0].mPos;;
+            *r30 = point[0].m_position;
         }
     }
 }
@@ -183,7 +183,7 @@ static BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
 }
 
 /* 8017DB38-8017DB40       .text dEnvSe_Create__FP12kankyo_class */
-static s32 dEnvSe_Create(kankyo_class*) {
+static cPhs_State dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 

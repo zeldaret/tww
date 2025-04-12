@@ -22,7 +22,7 @@ void daStone::Act_c::chk_appear() {
 }
 
 /* 0000033C-00000744       .text _create__Q27daStone5Act_cFv */
-s32 daStone::Act_c::_create() {
+cPhs_State daStone::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -212,7 +212,7 @@ bool daStone::Act_c::_draw() {
 }
 
 /* 0000344C-0000346C       .text Create__Q27daStone6MethodFPv */
-s32 daStone::Method::Create(void*) {
+cPhs_State daStone::Method::Create(void*) {
     /* Nonmatching */
 }
 
