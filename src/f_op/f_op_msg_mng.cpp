@@ -628,7 +628,11 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
         if(*cursor == 0x1A) {
             if((cursor[1] & 0xFFFFFF) == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
+#if VERSION == VERSION_JPN
+                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+#endif
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -681,7 +685,11 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
         if(*cursor == 0x1A) {
             if((cursor[1] & 0xFFFFFF) == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
+#if VERSION == VERSION_JPN
+                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+#endif
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2218,7 +2226,11 @@ void fopMsgM_msgDataProc_c::stringSet() {
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
                 strcpy(buf, dComIfGs_getPlayerName());
+#if VERSION == VERSION_JPN
+                if(field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE) {
+#else
                 if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE)) {
+#endif
                     s32 bufLen = strlen(buf);
                     char current = (buf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2405,7 +2417,11 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
+#if VERSION == VERSION_JPN
+                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+#endif
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2465,7 +2481,11 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
+#if VERSION == VERSION_JPN
+                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+#endif
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
