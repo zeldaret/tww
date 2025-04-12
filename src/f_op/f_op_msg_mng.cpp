@@ -23,6 +23,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTFont.h"
 #include "SSystem/SComponent/c_malloc.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include <stdio.h>
 
 #include "global.h"
@@ -38,7 +39,7 @@ struct mesg_header : JUTDataFileHeader {
 struct mesg_entry {
     /* 0x00 */ u32 mDataOffs;
     /* 0x04 */ u16 mMesgID;
-    /* 0x06 */ u16 mItemPrice;
+    /* 0x06 */ s16 mItemPrice;
     /* 0x08 */ u16 mNextMessageID;
     /* 0x0A */ u16 field_0x0a;
     /* 0x0C */ u8 mTextboxType;
@@ -382,7 +383,6 @@ fpc_ProcID fop_Timer_create(s16 param_1, u8 param_2, u16 param_3, u8 param_4, u8
 
 /* 8002B324-8002B520       .text fopMsgM_messageTypeSelect__FP10fopAc_ac_cP4cXyzPUlPUl */
 uint fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4) {
-    /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
@@ -400,11 +400,14 @@ uint fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3,
         mesg_header* header = msgGet.getMesgHeader(*param_3);
         if(header != NULL) {
             if(msgGet.getMessage(header) != NULL) {
-                mesg_entry entry = msgGet.getMesgEntry(header);
+                const mesg_entry& entry = msgGet.getMesgEntry(header);
+                u16 price = entry.mItemPrice;
+                u16 type = entry.mTextboxType;
                 dComIfGp_setMesgAnimeAttrInfo(entry.mInitialAnimation);
-                dComIfGp_setMessageRupee(entry.mItemPrice);
+                dComIfGp_setMesgCameraAttrInfo(entry.mInitialCamera);
+                dComIfGp_setMessageRupee(price);
 
-                if(entry.mTextboxType == 2 || entry.mTextboxType == 6 || entry.mTextboxType == 7) {
+                if(type == 2 || type == 6 || type == 7) {
                     pcId = fopMsgM_create(PROC_MSG2, param_1, param_2, param_3, param_4, NULL);
                 }
                 else {
@@ -724,6 +727,11 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     strcpy(param_5, "");
     strcpy(param_6, "");
 
+    J2DTextBox::TFontSize size;
+    J2DTextBox::TFontSize size2;
+    ((J2DTextBox*)param_1)->getFontSize(size);
+    ((J2DTextBox*)param_2)->getFontSize(size2);
+
     mesg_header* head_p = msgGet.getMesgHeader(param_7);
     JUT_ASSERT(0x79B, head_p);
 
@@ -732,9 +740,21 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     temp.dataInit();
     temp.font[0] = ((J2DTextBox*)param_1)->getFont();
     temp.font[1] = ((J2DTextBox*)param_2)->getFont();
+    temp.field_0x11C = ((J2DTextBox*)param_1)->getCharSpace();
+    temp.field_0x124 = ((J2DTextBox*)param_2)->getCharSpace();
+    temp.field_0x120 = ((J2DTextBox*)param_2)->getLineSpace();
+    temp.field_0x0C = &entry;
+    temp.field_0x144 = size.mSizeX;
+    temp.field_0x14C = size2.mSizeX;
+    temp.field_0x128 = param_2->getWidth();
+    temp.field_0x160 = 2;
+    temp.field_0x15C = 0;
+    temp.field_0x299 = 1;
+    temp.field_0x29C = 0;
     temp.stringLength();
     temp.stringShift();
     temp.iconIdxRefresh();
+    temp.field_0x130 = 0;
     temp.stringSet();
     ((J2DTextBox*)param_1)->setString(param_3);
     ((J2DTextBox*)param_1)->setString(param_4);
@@ -925,13 +945,16 @@ void fopMsgM_outFontSet(J2DPicture* param_1, J2DPicture* param_2, s16* param_3, 
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_5]);
     fopMsgM_blendDraw(param_2, fopMsgM_buttonTex[param_5]);
     if((0xA <= param_5 && param_5 <= 0xE) || param_5 == 0x15 || param_5 == 0x17) {
-        JUtility::TColor col(param_4 >> 0x18, param_4 >> 0x10, param_4 >> 0x8, 0xFF);
+        GXColor col;
+        col.r = param_4 >> 0x18;
+        col.g = param_4 >> 0x10;
+        col.b = param_4 >> 0x8;
+        col.a = 0xFF;
         param_1->setWhite(col);
         param_1->setBlack(0x00000000);
     }
     else {
-        JUtility::TColor col(fopMsgM_buttonW[param_5]);
-        param_1->setWhite(col);
+        param_1->setWhite(fopMsgM_buttonW[param_5]);
         param_1->setBlack(0x00000000);
     }
 
@@ -962,13 +985,17 @@ void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param
     param_1->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_4]);
     if((0xA <= param_4 && param_4 <= 0xE) || param_4 == 0x15 || param_4 == 0x17) {
-        JUtility::TColor col(param_3 >> 0x18, param_3 >> 0x10, param_3 >> 0x8, 0xFF);
+        GXColor col;
+        col.r = param_3 >> 0x18;
+        col.g = param_3 >> 0x10;
+        col.b = param_3 >> 0x8;
+        col.a = 0xFF;
         param_1->setWhite(col);
+        GXColor col2 = {0, 0, 0, 0};
         param_1->setBlack(0x00000000);
     }
     else {
-        JUtility::TColor col(fopMsgM_buttonW[param_4]);
-        param_1->setWhite(col);
+        param_1->setWhite(fopMsgM_buttonW[param_4]);
         param_1->setBlack(0x00000000);
     }
 
@@ -979,63 +1006,309 @@ void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param
 
 /* 8002CBDC-8002CEB0       .text fopMsgM_outFontStickAnimePiece__FP10J2DPictureP10J2DPicturess */
 void fopMsgM_outFontStickAnimePiece(J2DPicture* param_1, J2DPicture* param_2, s16 param_3, s16 param_4) {
-    /* Nonmatching */
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-    param_2->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    s16 temp2 = g_msgHIO.field_0x88 + temp * param_4;
+    s16 temp3 = g_msgHIO.field_0x87 + temp2;
+    s16 temp4 = g_msgHIO.field_0x89 + temp3;
+    s16 temp5 = g_msgHIO.field_0x87 + temp4;
+
+    if(param_3 < temp2) {
+        param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+        param_2->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    }
+    else if(param_3 < temp3) {
+        float temp6 = fopMsgM_valueIncrease(temp, param_3 - temp2, 0);
+        param_1->setBlendRatio(temp6, 1.0f - temp6, 1.0f, 1.0f);
+        param_2->setBlendRatio(temp6, 1.0f - temp6, 1.0f, 1.0f);
+    }
+    else if(param_3 < temp4) {
+        param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+        param_2->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    }
+    else if(param_3 < temp5) {
+        float temp6 = fopMsgM_valueIncrease(temp, param_3 - temp4, 0);
+        param_1->setBlendRatio(1.0f - temp6, temp6, 1.0f, 1.0f);
+        param_2->setBlendRatio(1.0f - temp6, temp6, 1.0f, 1.0f);
+    }
 }
 
 /* 8002CEB0-8002D088       .text fopMsgM_outFontStickAnimePiece__FP10J2DPicturess */
-void fopMsgM_outFontStickAnimePiece(J2DPicture* param_1, s16, s16) {
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-    param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+void fopMsgM_outFontStickAnimePiece(J2DPicture* param_1, s16 param_2, s16 param_3) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    s16 temp2 = g_msgHIO.field_0x88 + temp * param_3;
+    s16 temp3 = g_msgHIO.field_0x87 + temp2;
+    s16 temp4 = g_msgHIO.field_0x89 + temp3;
+    s16 temp5 = g_msgHIO.field_0x87 + temp4;
+
+    if(param_2 < temp2) {
+        param_1->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    }
+    else if(param_2 < temp3) {
+        float temp6 = fopMsgM_valueIncrease(temp, param_2 - temp2, 0);
+        param_1->setBlendRatio(temp6, 1.0f - temp6, 1.0f, 1.0f);
+    }
+    else if(param_2 < temp4) {
+        param_1->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    }
+    else if(param_2 < temp5) {
+        float temp6 = fopMsgM_valueIncrease(temp, param_2 - temp4, 0);
+        param_1->setBlendRatio(1.0f - temp6, temp6, 1.0f, 1.0f);
+    }
 }
 
 /* 8002D0E4-8002D2B8       .text fopMsgM_outFontStickAnime__FP10J2DPictureP10J2DPicturePiPiiPs */
-void fopMsgM_outFontStickAnime(J2DPicture*, J2DPicture*, int*, int*, int, s16*) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime(J2DPicture* param_1, J2DPicture* param_2, int* param_3, int* param_4, int param_5, s16* param_6) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+
+    if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 0);
+    }
+    else if(*param_6 < temp * 2) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 1);
+        *param_3 += param_5;
+    }
+    else if(*param_6 < temp * 3) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 2);
+        *param_3 += param_5;
+        *param_4 += param_5;
+    }
+    else if(*param_6 < temp * 4) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 3);
+        *param_4 += param_5;
+    }
+
+    if(*param_6 % temp == 0) {
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, (*param_6 / temp) * -90.0f);
+        param_2->rotate(0.0f, 0.0f, ROTATE_Z, (*param_6 / temp) * -90.0f);
+    }
+
+    *param_6 += 1;
+    if(*param_6 >= temp * 4) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002D2B8-8002D464       .text fopMsgM_outFontStickAnime__FP10J2DPicturePiPiPiPiPs */
-void fopMsgM_outFontStickAnime(J2DPicture*, int*, int*, int*, int*, s16*) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime(J2DPicture* param_1, int* param_2, int* param_3, int* param_4, int* param_5, s16* param_6) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+
+    if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 0);
+    }
+    else if(*param_6 < temp * 2) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 1);
+        int temp2 = *param_4;
+        *param_4 = *param_5;
+        *param_5 = temp2;
+        *param_2 += *param_5;
+    }
+    else if(*param_6 < temp * 3) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 2);
+        *param_2 += *param_4;
+        *param_3 += *param_5;
+    }
+    else if(*param_6 < temp * 4) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 3);
+        int temp2 = *param_4;
+        *param_4 = *param_5;
+        *param_5 = temp2;
+        *param_3 += *param_4;
+    }
+
+    if(*param_6 % temp == 0) {
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, (*param_6 / temp) * -90.0f);
+    }
+
+    *param_6 += 1;
+    if(*param_6 >= temp * 4) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002D464-8002D620       .text fopMsgM_outFontStickAnime2__FP10J2DPictureP10J2DPicturePiPiiPsUc */
-void fopMsgM_outFontStickAnime2(J2DPicture*, J2DPicture*, int*, int*, int, s16*, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime2(J2DPicture* param_1, J2DPicture* param_2, int* param_3, int* param_4, int param_5, s16* param_6, u8 param_7) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    int temp2;
+
+    if(param_7 == 0) {
+        if(*param_6 < temp) {
+            fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 0);
+            *param_3 += param_5;
+            temp2 = 1;
+        }
+        else if(*param_6 < temp * 2) {
+            fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 1);
+            *param_4 += param_5;
+            temp2 = 3;
+        }
+    }
+    else if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 0);
+        temp2 = 0;
+    }
+    else if(*param_6 < temp * 2) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 1);
+        *param_3 += param_5;
+        *param_4 += param_5;
+        temp2 = 2;
+    }
+
+    param_1->rotate(0.0f, 0.0f, ROTATE_Z, temp2 * -90.0f);
+    param_2->rotate(0.0f, 0.0f, ROTATE_Z, temp2 * -90.0f);
+
+    *param_6 += 1;
+    if(*param_6 >= temp * 2) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002D620-8002D7D0       .text fopMsgM_outFontStickAnime2__FP10J2DPicturePiPiPiPiPsUc */
-void fopMsgM_outFontStickAnime2(J2DPicture*, int*, int*, int*, int*, s16*, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime2(J2DPicture* param_1, int* param_2, int* param_3, int* param_4, int* param_5, s16* param_6, u8 param_7) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    int temp3;
+
+    if(param_7 == 0) {
+        if(*param_6 < temp) {
+            fopMsgM_outFontStickAnimePiece(param_1, *param_6, 0);
+            int temp2 = *param_4;
+            *param_4 = *param_5;
+            *param_5 = temp2;
+            *param_2 += *param_5;
+            temp3 = 1;
+        }
+        else if(*param_6 < temp * 2) {
+            fopMsgM_outFontStickAnimePiece(param_1, *param_6, 1);
+            int temp2 = *param_4;
+            *param_4 = *param_5;
+            *param_5 = temp2;
+            *param_3 += *param_4;
+            temp3 = 3;
+        }
+    }
+    else if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 0);
+        temp3 = 0;
+    }
+    else if(*param_6 < temp * 2) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 1);
+        *param_2 += *param_4;
+        *param_3 += *param_5;
+        temp3 = 2;
+    }
+
+    param_1->rotate(0.0f, 0.0f, ROTATE_Z, temp3 * -90.0f);
+
+    *param_6 += 1;
+    if(*param_6 >= temp * 2) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002D7D0-8002D95C       .text fopMsgM_outFontStickAnime__FP10J2DPictureP10J2DPicturePiPiiPsUc */
-void fopMsgM_outFontStickAnime(J2DPicture*, J2DPicture*, int*, int*, int, s16*, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime(J2DPicture* param_1, J2DPicture* param_2, int* param_3, int* param_4, int param_5, s16* param_6, u8 param_7) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+
+    if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, param_2, *param_6, 0);
+        switch(param_7) {
+            case 1:
+                *param_3 += param_5;
+                break;
+            case 2:
+                *param_3 += param_5;
+                *param_4 += param_5;
+                break;
+            case 3:
+                *param_4 += param_5;
+                break;
+        }
+    }
+
+    param_1->rotate(0.0f, 0.0f, ROTATE_Z, param_7 * -90.0f);
+    param_2->rotate(0.0f, 0.0f, ROTATE_Z, param_7 * -90.0f);
+
+    *param_6 += 1;
+    if(*param_6 >= temp) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002D95C-8002DAE4       .text fopMsgM_outFontStickAnime__FP10J2DPicturePiPiPiPiPsUc */
-void fopMsgM_outFontStickAnime(J2DPicture*, int*, int*, int*, int*, s16*, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontStickAnime(J2DPicture* param_1, int* param_2, int* param_3, int* param_4, int* param_5, s16* param_6, u8 param_7) {
+    s16 temp = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    s16 temp2;
+
+    if(*param_6 < temp) {
+        fopMsgM_outFontStickAnimePiece(param_1, *param_6, 0);
+        switch(param_7) {
+            case 1:
+                temp2 = *param_4;
+                *param_4 = *param_5;
+                *param_5 = temp2;
+                *param_2 += *param_5;
+                break;
+            case 2:
+                *param_2 += *param_4;
+                *param_3 += *param_5;
+                break;
+            case 3:
+                temp2 = *param_4;
+                *param_4 = *param_5;
+                *param_5 = temp2;
+                *param_3 += *param_4;
+                break;
+        }
+    }
+
+    param_1->rotate(0.0f, 0.0f, ROTATE_Z, param_7 * -90.0f);
+
+    *param_6 += 1;
+    if(*param_6 >= temp) {
+        *param_6 = 0;
+    }
 }
 
 /* 8002DAE4-8002DC74       .text fopMsgM_outFontArrow__FP10J2DPictureP10J2DPicturePiPiiUc */
-void fopMsgM_outFontArrow(J2DPicture*, J2DPicture*, int*, int*, int, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontArrow(J2DPicture* param_1, J2DPicture* param_2, int* param_3, int* param_4, int param_5, u8 param_6) {
+    if(param_6 == 0xA) {
+        *param_3 += param_5;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 270.0f);
+        param_2->rotate(0.0f, 0.0f, ROTATE_Z, 270.0f);
+    }
+    else if(param_6 == 0xB) {
+        *param_4 += param_5;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 90.0f);
+        param_2->rotate(0.0f, 0.0f, ROTATE_Z, 90.0f);
+    }
+    else if(param_6 == 0xC) {
+        *param_3 += param_5;
+        *param_4 += param_5;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 180.0f);
+        param_2->rotate(0.0f, 0.0f, ROTATE_Z, 180.0f);
+    }
 }
 
 /* 8002DC74-8002DD98       .text fopMsgM_outFontArrow__FP10J2DPicturePiPiPiPiUc */
-void fopMsgM_outFontArrow(J2DPicture*, int*, int*, int*, int*, u8) {
-    /* Nonmatching */
+void fopMsgM_outFontArrow(J2DPicture* param_1, int* param_2, int* param_3, int* param_4, int* param_5, u8 param_6) {
+    if(param_6 == 0xA) {
+        int temp2 = *param_4;
+        *param_4 = *param_5;
+        *param_5 = temp2;
+        *param_2 += *param_5;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 270.0f);
+    }
+    else if(param_6 == 0xB) {
+        int temp2 = *param_4;
+        *param_4 = *param_5;
+        *param_5 = temp2;
+        *param_3 += *param_4;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 90.0f);
+    }
+    else if(param_6 == 0xC) {
+        *param_2 += *param_4;
+        *param_3 += *param_5;
+        param_1->rotate(0.0f, 0.0f, ROTATE_Z, 180.0f);
+    }
 }
 
 /* 8002DD98-8002DFB4       .text fopMsgM_outFontDraw__FP10J2DPictureP10J2DPictureiiiPsUcUc */
@@ -1327,7 +1600,6 @@ void fopMsgM_msgDataProc_c::dataInit() {
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
 f32 fopMsgM_msgDataProc_c::charLength(int scale, int charNo, bool mode) {
-    /* Nonmatching */
     JUTFont::TWidth width;
     font[0]->getWidthEntry(charNo, &width);
     f32 charWidth = (f32)(int)width.field_0x1;
@@ -1397,28 +1669,243 @@ void fopMsgM_msgDataProc_c::iconIdxRefresh() {
 }
 
 /* 8003144C-80031808       .text fopMsgM_arrowAnime__FP10J2DPicturePs */
-void fopMsgM_arrowAnime(J2DPicture*, s16*) {
-    /* Nonmatching */
+void fopMsgM_arrowAnime(J2DPicture* param_1, s16* param_2) {
+    GXColor white, black;
+    white.a = 0xFF;
+    black.a = 0x0;
+    u8 alpha = 0;
+
+    static GXColor color1 = {0xFF, 0x50, 0x50, 0x00};
+    static GXColor color2 = {0xFF, 0x96, 0x96, 0x00};
+
+    if(*param_2 < 0x16) {
+        float temp = fopMsgM_valueIncrease(0x16, *param_2, 2);
+        black.r = temp * (color2.r - color1.r) + color1.r;
+        white.r = black.r;
+        black.g = temp * (color2.g - color1.g) + color1.g;
+        white.g = black.g;
+        black.b = temp * (color2.b - color1.b) + color1.b;
+        white.b = black.b;
+        alpha = g_msgHIO.field_0x2c + temp * (g_msgHIO.field_0x30 - g_msgHIO.field_0x2c);
+    }
+    else {
+        float temp = fopMsgM_valueIncrease(0x16, *param_2 - 0x16, 2);
+        black.r = temp * (color1.r - color2.r) + color2.r;
+        white.r = black.r;
+        black.g = temp * (color1.g - color2.g) + color2.g;
+        white.g = black.g;
+        black.b = temp * (color1.b - color2.b) + color2.b;
+        white.b = black.b;
+        alpha = g_msgHIO.field_0x30 + temp * (g_msgHIO.field_0x2c - g_msgHIO.field_0x30);
+    }
+
+    *param_2 += 1;
+    if(*param_2 >= 0x2D) {
+        *param_2 = 0;
+    }
+
+    param_1->setWhite(white);
+    param_1->setBlack(black);
+    param_1->setAlpha(alpha);
 }
 
 /* 80031808-800319D8       .text selectCheck2__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-void fopMsgM_msgDataProc_c::selectCheck2(J2DPane*, int, int, int) {
-    /* Nonmatching */
+int fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_3, int param_4) {
+    field_0x264 = param_1->getWidth() / 2.0f;
+    field_0x268 = param_1->getHeight() / 2.0f;
+    field_0x278 = g_msgHIO.field_0x70;
+    field_0x274 = g_msgHIO.field_0x70;
+    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
+    field_0x164 = temp;
+
+    if(!temp) {
+        if(g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
+            if(field_0x27D == 1) {
+                field_0x27D = 0;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+        else if(g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
+            if(field_0x27D == 0) {
+                field_0x27D = 1;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+    }
+
+    field_0x26C = param_2;
+    field_0x270 = param_3 + field_0x27D * param_4;
+    return field_0x27D;
 }
 
 /* 800319D8-80031C38       .text selectCheck3__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-void fopMsgM_msgDataProc_c::selectCheck3(J2DPane*, int, int, int) {
-    /* Nonmatching */
+int fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_3, int param_4) {
+    field_0x264 = param_1->getWidth() / 2.0f;
+    field_0x268 = param_1->getHeight() / 2.0f;
+    field_0x278 = g_msgHIO.field_0x70;
+    field_0x274 = g_msgHIO.field_0x70;
+    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
+    field_0x164 = temp;
+
+    if(!temp) {
+        if(g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
+            if(field_0x27D == 1) {
+                field_0x27D = 0;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+            else if(field_0x27D == 2) {
+                field_0x27D = 1;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+        else if(g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
+            if(field_0x27D == 0) {
+                field_0x27D = 1;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+            else if(field_0x27D == 1) {
+                field_0x27D = 2;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+    }
+
+    field_0x26C = param_2;
+    field_0x270 = param_3 + field_0x27D * param_4;
+    return field_0x27D;
 }
 
 /* 80031C38-80031E04       .text selectCheckYoko__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-void fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane*, int, int, int) {
-    /* Nonmatching */
+int fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int param_3, int param_4) {
+    field_0x264 = param_1->getWidth() / 2.0f;
+    field_0x268 = param_1->getHeight() / 2.0f;
+    field_0x278 = g_msgHIO.field_0x70;
+    field_0x274 = g_msgHIO.field_0x70;
+    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
+    field_0x164 = temp;
+
+    if(!temp) {
+        if(g_mDoCPd_cpadInfo[0].mMainStickPosX < -0.7f) {
+            if(field_0x27D == 1) {
+                field_0x27D = 0;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+        else if(g_mDoCPd_cpadInfo[0].mMainStickPosX > 0.7f) {
+            if(field_0x27D == 0) {
+                field_0x27D = 1;
+                field_0x164 = 10;
+                mDoAud_seStart(JA_SE_TALK_CURSOR);
+            }
+        }
+    }
+
+    field_0x26C = param_2 + field_0x27D * param_4;
+    field_0x270 = param_3;
+    return field_0x27D;
 }
 
 /* 80031E04-800320E0       .text inputNumber__21fopMsgM_msgDataProc_cFi */
-void fopMsgM_msgDataProc_c::inputNumber(int) {
-    /* Nonmatching */
+int fopMsgM_msgDataProc_c::inputNumber(int param_1) {
+    s16 temp = dComIfGp_getMessageSetNumber();
+    bool temp2 = false;
+
+    stick.setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
+    stick.checkTrigger();
+    if(stick.checkRightTrigger()) {
+        if(field_0x27D != 0) {
+            field_0x27D--;
+            mDoAud_seStart(JA_SE_AUC_BID_CURSOR_LR);
+        }
+    }
+    else if(stick.checkLeftTrigger()) {
+        if(field_0x27D < param_1 - 1) {
+            field_0x27D++;
+            mDoAud_seStart(JA_SE_AUC_BID_CURSOR_LR);
+        }
+    }
+
+    if(stick.checkUpTrigger()) {
+        if(field_0x27D == 0) {
+            if(temp < 999) {
+                temp2 = true;
+                temp += 1;
+            }
+        }
+        else if(field_0x27D == 1) {
+            if(temp < 999) {
+                temp += 10;
+                if(temp > 999) {
+                    temp = 99;
+                }
+
+                temp2 = true;
+            }
+        }
+        else if(field_0x27D == 2) {
+            if(temp < 999) {
+                temp += 100;
+                if(temp > 999) {
+                    temp = 999;
+                }
+
+                temp2 = true;
+            }
+        }
+    }
+    else if(stick.checkDownTrigger()) {
+        if(field_0x27D == 0) {
+            if(temp > 0) {
+                temp2 = true;
+                temp -= 1;
+            }
+        }
+        else if(field_0x27D == 1) {
+            if(temp > 0) {
+                temp -= 10;
+                if(temp < 0) {
+                    temp = 0;
+                }
+
+                temp2 = true;
+            }
+        }
+        else if(field_0x27D == 2) {
+            if(temp > 0) {
+                temp -= 100;
+                if(temp < 0) {
+                    temp = 0;
+                }
+
+                temp2 = true;
+            }
+        }
+    }
+
+    if(param_1 == 2) {
+        if(temp > daNpc_Bs1_c::m_tag_buy_item_max) {
+            temp = daNpc_Bs1_c::m_tag_buy_item_max;
+        }
+        else if(temp < 1) {
+            temp = 1;
+        }
+        else if(temp2) {
+            mDoAud_seStart(JA_SE_AUC_BID_CURSOR_UD);
+        }
+    }
+    else if(temp2) {
+        mDoAud_seStart(JA_SE_AUC_BID_CURSOR_UD);
+    }
+
+    dComIfGp_setMessageSetNumber(temp);
+    return field_0x27D;
 }
 
 /* 800320E0-800321CC       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureffff */
@@ -1450,6 +1937,7 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* picture) {
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
+    /* Nonmatching */
     field_0x60 = field_0x40;
     field_0x64 = field_0x44;
     field_0x68 = field_0x48;
@@ -1501,6 +1989,39 @@ void fopMsgM_msgDataProc_c::stringSet() {
         }
 
         return;
+    }
+
+    if(field_0x154 != 0) {
+        field_0x1C = field_0x20 - field_0x28;
+
+        int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
+        if(field_0x24 > temp1) {
+            char temp[16];
+            sprintf(temp, "\x1b""CR[%d]", (int)(field_0x24 - temp1 + 0.5f));
+            strcat(field_0x64, temp);
+            strcat(field_0x6C, temp);
+        }
+        else if(temp1 == 0.0f) {
+            char temp[16];
+            sprintf(temp, "\x1b""CL[%d]", (int)(temp1 - field_0x24 + 0.5f));
+            strcat(field_0x64, temp);
+            strcat(field_0x6C, temp);
+        }
+
+        strcat(field_0x64, field_0x70);
+        strcat(field_0x6C, field_0x70);
+        field_0x154 = 0;
+    }
+
+    strcat(field_0x60, "\n");
+    strcat(field_0x64, "\n");
+    strcat(field_0x68, "\n");
+    strcat(field_0x6C, "\n");
+    field_0x118++;
+    field_0x130++;
+    if(field_0x29D) {
+        field_0x130++;
+        field_0x29D = 0;
     }
 
     while(true) {
@@ -1813,6 +2334,7 @@ u8 fopMsgM_itemNum(u8 itemNo) {
 
 /* 80035060-800350B8       .text fopMsgM_getColorTable__FUs */
 u32 fopMsgM_getColorTable(u16 param_1) {
+    /* Nonmatching */
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
     return *(((u32**)JKRArchive::getGlbResource('ROOT', "color.bmc", arc))[param_1] + 0xB); // probably a struct i have no idea what it looks like though
 }
@@ -1854,6 +2376,7 @@ void fopMsgM_int_to_char2(char* dst, int num) {
 
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
+    /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
@@ -1913,6 +2436,7 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
 
 /* 80035408-80035A24       .text getString__21fopMsgM_msgDataProc_cFPcPcPcPcUlPfPfPi */
 void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo, f32*, f32*, int*) {
+    /* Nonmatching */
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;

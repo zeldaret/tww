@@ -55,6 +55,7 @@ public:
     void setWhite(JUtility::TColor c) { mBlack = c; }
     void setLineSpace(f32 x) { mLineSpace = x; }
     f32 getLineSpace() const { return mLineSpace; }
+    f32 getCharSpace() const { return mCharSpace; }
     void setCharSpace(f32 x) { mCharSpace = x; }
     void draw(f32, f32, f32, J2DTextBoxHBinding);
     char* getStringPtr() const;
