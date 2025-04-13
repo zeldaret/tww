@@ -102,7 +102,7 @@ void dComIfG_play_c::itemInit() {
     mItemSwimTimerStatus = 0;
     field_0x4929 = 0;
     mMesgStatus = 0;
-    mbCamOverrideFarPlane = 0;
+    mScopeMesgStatus = 0;
     field_0x492c = 0;
     field_0x492d = 0;
     mCurrButtonBAction = 0;

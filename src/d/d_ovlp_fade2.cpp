@@ -235,15 +235,6 @@ static cPhs_State dOvlpFd2_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-// Fakematch. Manually define this template function here to make it non-weak, fixing the weak function ordering.
-template <>
-s8 cLib_calcTimer<s8>(s8* value) {
-    if (*(s8*)value != 0) {
-        *value = *value - 1;
-    }
-    return *value;
-}
-
 overlap_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,
     (process_method_func)dOvlpFd2_Delete,
@@ -281,3 +272,6 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     &l_dOvlpFd2_Method,
 };
 #endif
+
+// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
+#pragma sym off

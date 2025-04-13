@@ -382,14 +382,14 @@ fpc_ProcID fop_Timer_create(s16 param_1, u8 param_2, u16 param_3, u8 param_4, u8
 }
 
 /* 8002B324-8002B520       .text fopMsgM_messageTypeSelect__FP10fopAc_ac_cP4cXyzPUlPUl */
-uint fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4) {
+fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* param_3, u32* param_4) {
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
     msgGet.mResMsgIdx = 0;  
 
-    uint pcId;
+    fpc_ProcID pcId;
     if(*param_3 >> 0x10 == 0x63) {
         pcId = fopMsgM_create(PROC_SCP, param_1, param_2, param_3, param_4, NULL);
     }
@@ -463,7 +463,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, fopAc_ac_c* pActor) {
     dComIfGp_clearMesgCameraTagInfo();
 
     cXyz lookAtPos = pActor->eyePos;
-    if(i_msgID == -1) {
+    if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(pActor, &lookAtPos, &msgNo, &msgNo);
     }
     else if(fopMsgM_IsExecuting(i_msgID)) {
@@ -496,7 +496,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
     dComIfGp_clearMesgAnimeTagInfo();
     dComIfGp_clearMesgCameraTagInfo();
 
-    if(i_msgID == -1) {
+    if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, lookAtPos, &msgNo, &msgNo);
     }
     else if(fopMsgM_IsExecuting(i_msgID)) {
@@ -528,7 +528,7 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
     }
 
     cXyz lookAtPos(0.0f, 0.0f, 0.0f);
-    if(i_msgID == -1) {
+    if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNo, &msgNo);
     }
     else if(fopMsgM_IsExecuting(i_msgID)) {
@@ -582,7 +582,7 @@ u32 fopMsgM_tactMessageSet() {
 
     u32 msgNoTemp = 0x5AC;
     cXyz lookAtPos(0.0f, 0.0f, 0.0f);
-    if(i_msgID == -1) {
+    if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNoTemp, &msgNoTemp);
         fopMsgM_tactMsgFlagOn();
     }
@@ -5139,7 +5139,7 @@ f32 fopMsgM_valueIncrease(int max, int value, u8 mode) {
 
 /* 8003C07C-8003C0F8       .text fopMsgM_blendInit__FP18fopMsgM_pane_classPCc */
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data) {
-    ((J2DPicture*)i_this->pane)->insert(data, ((J2DPicture*)i_this->pane)->getNumTexture(), 1.0f);
+    ((J2DPicture*)i_this->pane)->append(data, 1.0f);
     J2DPicture* pic = (J2DPicture*)i_this->pane;
     pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
     pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
@@ -5147,7 +5147,7 @@ void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data) {
 
 /* 8003C0F8-8003C16C       .text fopMsgM_blendInit__FP10J2DPicturePCc */
 void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
-    pic->insert(data, pic->getNumTexture(), 1.0f);
+    pic->append(data, 1.0f);
     pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
     pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -5155,18 +5155,15 @@ void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
 /* 8003C16C-8003C1D4       .text fopMsgM_blendDraw__FP18fopMsgM_pane_classPCc */
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data) {
     i_this->pane->show();
-    // fakematch - forcing the load order/reloads from i_this
-    J2DPicture* pic = (J2DPicture*)i_this->pane;
-    pic->remove(pic->getNumTexture() - 1);
-    pic = (J2DPicture*)i_this->pane;
-    pic->insert(data, pic->getNumTexture(), 1.0f);
+    ((J2DPicture*)i_this->pane)->remove();
+    ((J2DPicture*)i_this->pane)->append(data, 1.0f);
 }
 
 /* 8003C1D4-8003C234       .text fopMsgM_blendDraw__FP10J2DPicturePCc */
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data) {
     pic->show();
-    pic->remove(pic->getNumTexture() - 1);
-    pic->insert(data, pic->getNumTexture(), 1.0f);
+    pic->remove();
+    pic->append(data, 1.0f);
 }
 
 /* 8003C234-8003C380       .text fopMsgM_setFontsizeCenter__FPcPcPcPcii */

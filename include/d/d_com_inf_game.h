@@ -507,8 +507,8 @@ public:
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
     
-    u8 getScopeMesgStatus() { return mbCamOverrideFarPlane; }
-    void setScopeMesgStatus(u8 status) { mbCamOverrideFarPlane = status; }
+    u8 getScopeMesgStatus() { return mScopeMesgStatus; }
+    void setScopeMesgStatus(u8 status) { mScopeMesgStatus = status; }
 
     void setCurrentGrafPort(J2DOrthoGraph* i_graf) { mCurrentGrafPort = i_graf; }
     void setCurrentWindow(dDlst_window_c* i_window) { mCurrentWindow = i_window; }
@@ -739,7 +739,7 @@ public:
     /* 0x4928 */ bool mItemSwimTimerStatus;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
-    /* 0x492B */ u8 mbCamOverrideFarPlane;
+    /* 0x492B */ u8 mScopeMesgStatus;
     /* 0x492C */ u8 field_0x492c;
     /* 0x492D */ u8 field_0x492d;
     /* 0x492E */ u8 mCurrButtonBAction;
