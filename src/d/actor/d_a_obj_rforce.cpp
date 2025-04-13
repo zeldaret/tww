@@ -18,7 +18,6 @@ BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::create_heap() {
-
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);

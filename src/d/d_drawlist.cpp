@@ -1651,8 +1651,6 @@ void dDlst_shadowSimple_c::draw() {
 
 /* 80084AC8-80084D48       .text set__20dDlst_shadowSimple_cFP4cXyzffP4cXyzsfP9_GXTexObj */
 void dDlst_shadowSimple_c::set(cXyz* pos, f32 y, f32 param_3, cXyz* floorNrm, s16 rotY, f32 param_6, GXTexObj* texObj) {
-    /* Nonmatching */
-
     f32 offsetY = param_3 * 16.0f * (1.0f - floorNrm->y) + 1.0f;
     mDoMtx_stack_c::transS(pos->x, y + offsetY, pos->z);
     mDoMtx_stack_c::YrotM(rotY);
@@ -1733,10 +1731,10 @@ void dDlst_shadowControl_c::imageDraw(Mtx mtx) {
 
 /* 80084EF0-800850D4       .text draw__21dDlst_shadowControl_cFPA4_f */
 void dDlst_shadowControl_c::draw(Mtx drawMtx) {
-    /* Nonmatching */
-
     j3dSys.reinitGX();
+#if VERSION != VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     dKy_GxFog_set();
     GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_ALPHA0, (GXColor){ 0x00, 0x00, 0x00, 0x20 });
@@ -1847,9 +1845,10 @@ void dDlst_shadowControl_c::setSimpleTex(void* pImg) {
 
 /* 80085348-800855B4       .text draw__18dDlst_mirrorPacketFv */
 void dDlst_mirrorPacket::draw() {
-    /* Nonmatching */
     j3dSys.reinitGX();
+#if VERSION != VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     dKy_GxFog_set();
 
     static GXColor l_color = { 0xFF, 0xFF, 0xFF, 0x40 };
@@ -1895,7 +1894,9 @@ void dDlst_mirrorPacket::draw() {
     GXCallDisplayList(l_shadowVolDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
+#if VERSION != VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800855B4-80085624       .text init__18dDlst_mirrorPacketFP7ResTIMG */
@@ -1994,7 +1995,9 @@ void dDlst_alphaVolPacket::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
+#if VERSION != VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80085AF4-80085BBC       .text draw__23dDlst_alphaInvVolPacketFv */
@@ -2012,7 +2015,9 @@ void dDlst_alphaInvVolPacket::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
+#if VERSION != VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80085BBC-80085BFC       .text newData__13dDlst_peekZ_cFssPUl */
@@ -2218,7 +2223,7 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
         mWipeRate = 1.0f;
     }
     ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
-    JUT_ASSERT(0x1637, texture != NULL);
+    JUT_ASSERT(VERSION_SELECT(5679, 5687, 5687), texture != NULL);
     mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
 }
 

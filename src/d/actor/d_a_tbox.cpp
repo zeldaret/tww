@@ -873,7 +873,6 @@ void daTbox_c::OpenInit_com() {
 
     s32 openSwNo = home.angle.z & 0xFF;
     if (openSwNo != 0xFF) {
-
         dComIfGs_onSwitch(openSwNo, mRoomNo);
     }
 

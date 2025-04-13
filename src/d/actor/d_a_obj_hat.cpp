@@ -145,7 +145,6 @@ static daObjHat_c::MoveFunc_t moveProc[] = {
 
 /* 0000073C-00000884       .text _execute__10daObjHat_cFv */
 BOOL daObjHat_c::_execute() {
-
     (this->*moveProc[mState])();
     f32 xspeed = mMoveNorm.x * speedF;
     f32 yspeed = speed.y + gravity;
