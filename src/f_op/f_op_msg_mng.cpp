@@ -1999,39 +1999,6 @@ void fopMsgM_msgDataProc_c::stringSet() {
         return;
     }
 
-    if(field_0x154 != 0) {
-        field_0x1C = field_0x20 - field_0x28;
-
-        int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
-        if(field_0x24 > temp1) {
-            char temp[16];
-            sprintf(temp, "\x1b""CR[%d]", (int)(field_0x24 - temp1 + 0.5f));
-            strcat(field_0x64, temp);
-            strcat(field_0x6C, temp);
-        }
-        else if(temp1 == 0.0f) {
-            char temp[16];
-            sprintf(temp, "\x1b""CL[%d]", (int)(temp1 - field_0x24 + 0.5f));
-            strcat(field_0x64, temp);
-            strcat(field_0x6C, temp);
-        }
-
-        strcat(field_0x64, field_0x70);
-        strcat(field_0x6C, field_0x70);
-        field_0x154 = 0;
-    }
-
-    strcat(field_0x60, "\n");
-    strcat(field_0x64, "\n");
-    strcat(field_0x68, "\n");
-    strcat(field_0x6C, "\n");
-    field_0x118++;
-    field_0x130++;
-    if(field_0x29D) {
-        field_0x130++;
-        field_0x29D = 0;
-    }
-
     while(true) {
         while(true) {
             if(field_0x3C[field_0x118] == '\0') {
@@ -2294,6 +2261,39 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
             sprintf(field_0x60, "\x1B""CL[%d]", 0.5f);
         }
+    }
+
+    if(field_0x154 != 0) {
+        field_0x1C = field_0x20 - field_0x28;
+
+        int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
+        if(field_0x24 > temp1) {
+            char temp[16];
+            sprintf(temp, "\x1b""CR[%d]", (int)(field_0x24 - temp1 + 0.5f));
+            strcat(field_0x64, temp);
+            strcat(field_0x6C, temp);
+        }
+        else if(temp1 == 0.0f) {
+            char temp[16];
+            sprintf(temp, "\x1b""CL[%d]", (int)(temp1 - field_0x24 + 0.5f));
+            strcat(field_0x64, temp);
+            strcat(field_0x6C, temp);
+        }
+
+        strcat(field_0x64, field_0x70);
+        strcat(field_0x6C, field_0x70);
+        field_0x154 = 0;
+    }
+
+    strcat(field_0x60, "\n");
+    strcat(field_0x64, "\n");
+    strcat(field_0x68, "\n");
+    strcat(field_0x6C, "\n");
+    field_0x118++;
+    field_0x130++;
+    if(field_0x29D) {
+        field_0x130++;
+        field_0x29D = 0;
     }
 }
 
