@@ -42,14 +42,20 @@ struct fopMsg_prm_timer : public fopMsg_prm_class {
 
 class J2DScreen;
 
+class fopMsgM_f2d_class {
+public:
+    f32 x;
+    f32 y;
+};
+
 struct fopMsgM_pane_class {
     /* 0x00 */ J2DPane * pane;
-    /* 0x04 */ cXy mPosTopLeftOrig;
-    /* 0x0C */ cXy mPosTopLeft;
-    /* 0x14 */ cXy mPosCenterOrig;
-    /* 0x1C */ cXy mPosCenter;
-    /* 0x24 */ cXy mSizeOrig;
-    /* 0x2C */ cXy mSize;
+    /* 0x04 */ fopMsgM_f2d_class mPosTopLeftOrig;
+    /* 0x0C */ fopMsgM_f2d_class mPosTopLeft;
+    /* 0x14 */ fopMsgM_f2d_class mPosCenterOrig;
+    /* 0x1C */ fopMsgM_f2d_class mPosCenter;
+    /* 0x24 */ fopMsgM_f2d_class mSizeOrig;
+    /* 0x2C */ fopMsgM_f2d_class mSize;
     /* 0x34 */ u8 mInitAlpha;
     /* 0x35 */ u8 mNowAlpha;
     /* 0x36 */ s16 mUserArea;
@@ -95,18 +101,18 @@ public:
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
-    virtual ~fopMsgM_msgDataProc_c();
+    virtual ~fopMsgM_msgDataProc_c() {}
     void dataInit();
     f32 charLength(int, int, bool);
-    void rubyLength(int, bool);
+    f32 rubyLength(int, bool);
     void stringLength();
     void stringShift();
     void iconSelect(int, u8);
     void iconIdxRefresh();
-    void selectCheck2(J2DPane*, int, int, int);
-    void selectCheck3(J2DPane*, int, int, int);
-    void selectCheckYoko(J2DPane*, int, int, int);
-    void inputNumber(int);
+    int selectCheck2(J2DPane*, int, int, int);
+    int selectCheck3(J2DPane*, int, int, int);
+    int selectCheckYoko(J2DPane*, int, int, int);
+    int inputNumber(int);
     void selectArrow(J2DPicture*, f32, f32, f32, f32);
     void selectArrow(J2DPicture*, f32, f32);
     void colorAnime(J2DPicture*);
@@ -115,8 +121,8 @@ public:
     void setSelectFlagOn();
     void setHandSendFlagOn();
     void setAutoSendFlagOn();
-    void getHandSendFlag();
-    void getAutoSendFlag();
+    u8 getHandSendFlag();
+    u8 getAutoSendFlag();
     void getString(char*, u32);
     void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
     void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
@@ -185,13 +191,87 @@ public:
 
 public:
     /* 0x004 */ JUTFont* font[2];
-    /* 0x00C */ mesg_entry* mesg_entry;
-    /* 0x010 */ u32 field_0x010;
-    /* 0x014 */ f32 field_0x014;
-    /* 0x018 */ f32 field_0x018;
-    /* 0x01C */ f32 field_0x01C;
-    /* 0x020 */ f32 field_0x020;
-    /* 0x000 */ u8 field_0x00[0x29C];
+    /* 0x00C */ mesg_entry* field_0x0C;
+    /* 0x010 */ u32 field_0x10;
+    /* 0x014 */ f32 field_0x14;
+    /* 0x018 */ f32 field_0x18;
+    /* 0x01C */ f32 field_0x1C;
+    /* 0x020 */ f32 field_0x20;
+    /* 0x024 */ f32 field_0x24;
+    /* 0x028 */ f32 field_0x28;
+    /* 0x02C */ u32 field_0x2C;
+    /* 0x030 */ u32 field_0x30;
+    /* 0x034 */ u32 field_0x34;
+    /* 0x038 */ u32 field_0x38;
+    /* 0x03C */ char* field_0x3C;
+    /* 0x040 */ char* field_0x40;
+    /* 0x044 */ char* field_0x44;
+    /* 0x048 */ char* field_0x48;
+    /* 0x04C */ char* field_0x4C;
+    /* 0x050 */ char* field_0x50[4];
+    /* 0x060 */ char* field_0x60;
+    /* 0x064 */ char* field_0x64;
+    /* 0x068 */ char* field_0x68;
+    /* 0x06C */ char* field_0x6C;
+    /* 0x070 */ char field_0x70[0x64]; // no idea how big this array is
+    /* 0x0D4 */ char field_0xD4[4];
+    /* 0x0D4 */ s32 field_0xD8[4];
+    /* 0x0D4 */ s32 field_0xE8[4];
+    /* 0x0F8 */ s32 field_0xF8[4];
+    /* 0x108 */ s32 field_0x108[4];
+    /* 0x118 */ u32 field_0x118;
+    /* 0x11C */ s32 field_0x11C;
+    /* 0x120 */ s32 field_0x120;
+    /* 0x124 */ s32 field_0x124;
+    /* 0x128 */ s32 field_0x128;
+    /* 0x12C */ u32 field_0x12C;
+    /* 0x130 */ s32 field_0x130;
+    /* 0x134 */ u32 field_0x134;
+    /* 0x138 */ u32 field_0x138;
+    /* 0x13C */ u32 field_0x13C;
+    /* 0x140 */ u32 field_0x140;
+    /* 0x144 */ s32 field_0x144;
+    /* 0x148 */ u32 field_0x148;
+    /* 0x14C */ s32 field_0x14C;
+    /* 0x150 */ int field_0x150;
+    /* 0x154 */ u32 field_0x154;
+    /* 0x158 */ u32 field_0x158;
+    /* 0x15C */ u32 field_0x15C;
+    /* 0x160 */ u32 field_0x160;
+    /* 0x164 */ int field_0x164;
+    /* 0x168 */ s32 field_0x168[0xF];
+    /* 0x1A4 */ u32 field_0x1A4[0xF];
+    /* 0x1A4 */ u32 field_0x1E0[0xF];
+    /* 0x21C */ u32 field_0x21C;
+    /* 0x21C */ u32 field_0x220[0xF];
+    /* 0x25C */ u32 field_0x25C;
+    /* 0x260 */ s16 field_0x260;
+    /* 0x264 */ f32 field_0x264;
+    /* 0x268 */ f32 field_0x268;
+    /* 0x26C */ f32 field_0x26C;
+    /* 0x270 */ f32 field_0x270;
+    /* 0x274 */ f32 field_0x274;
+    /* 0x278 */ f32 field_0x278;
+    /* 0x27C */ u8 field_0x27C;
+    /* 0x27D */ u8 field_0x27D;
+    /* 0x27E */ u8 field_0x27E;
+    /* 0x27F */ u8 field_0x27F;
+    /* 0x280 */ u8 field_0x280;
+    /* 0x281 */ u8 field_0x281[0xF];
+    /* 0x290 */ u8 field_0x290;
+    /* 0x291 */ u8 field_0x291;
+    /* 0x292 */ u8 field_0x292;
+    /* 0x293 */ u8 field_0x293;
+    /* 0x294 */ u8 field_0x294;
+    /* 0x295 */ u8 field_0x295;
+    /* 0x296 */ u8 field_0x296;
+    /* 0x297 */ u8 field_0x297;
+    /* 0x298 */ u8 field_0x298;
+    /* 0x299 */ u8 field_0x299;
+    /* 0x29A */ u8 field_0x29A;
+    /* 0x29B */ u8 field_0x29B;
+    /* 0x29C */ u8 field_0x29C;
+    /* 0x29D */ u8 field_0x29D;
 };
 
 typedef int (*fopMsgCreateFunc)(void*);
@@ -201,7 +281,7 @@ JKRExpHeap* fopMsgM_createExpHeap(u32);
 fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*);
 fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
                           u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
-void fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc);
+fpc_ProcID fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc);
 void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
@@ -247,7 +327,15 @@ void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOn();
 void fopMsgM_demoMsgFlagOff();
 bool fopMsgM_demoMsgFlagCheck();
+void fopMsgM_tactMsgFlagOn();
+void fopMsgM_tactMsgFlagOff();
+bool fopMsgM_tactMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
+u32 fopMsgM_getColorTable(u16 param_1);
+void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data);
+void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
+void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
+void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
 #endif /* F_OP_MSG_MNG_H */

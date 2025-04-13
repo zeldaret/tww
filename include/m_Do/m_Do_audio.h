@@ -131,6 +131,10 @@ inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos, u32 param_2, s8 i_reverb) 
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
+inline void mDoAud_messageSePlay(u16 i_seNum, Vec* i_sePos = NULL, s8 i_reverb = 0) {
+    mDoAud_zelAudio_c::getInterface()->messageSePlay(i_seNum, i_sePos, i_reverb);
+}
+
 inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos, u32 param_2) {
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, param_2, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
