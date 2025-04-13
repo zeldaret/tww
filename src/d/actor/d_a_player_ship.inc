@@ -60,10 +60,57 @@ BOOL daPy_lk_c::checkShipNotNormalMode() {
 }
 
 /* 8013F9B0-8013FE78       .text setShipRideArmAngle__9daPy_lk_cFiP16J3DTransformInfo */
-void daPy_lk_c::setShipRideArmAngle(int, J3DTransformInfo*) {
-    /* Nonmatching */
-    static cXyz arm_pos;
-    static cXyz armA_offset;
+void daPy_lk_c::setShipRideArmAngle(int param_1, J3DTransformInfo* param_2) {
+    /* Nonmatching - regalloc, math */
+    static cXyz arm_pos(0.0f, 0.0f, 0.0f);
+    static cXyz armA_offset(17.0f, 0.0f, 0.0f);
+    cXyz local_74;
+    cXyz local_68;
+
+    s32 uVar3 = (param_1 == 0xA) ? 1 : 0;
+    if (uVar3 != 0) {
+        f32 fVar1 = m_old_fdata->getOldFrameRate();
+        f32 fVar2 = 1.0f / (1.0f - fVar1);
+        J3DTransformInfo* iVar4 = m_old_fdata->getOldFrameTransInfo(param_1);
+        param_2->mTranslate.x *= fVar2 - iVar4->mTranslate.x * fVar1;
+        param_2->mTranslate.y *= fVar2 - iVar4->mTranslate.y * fVar1;
+        param_2->mTranslate.z *= fVar2 - iVar4->mTranslate.z * fVar1;
+        local_74.set(param_2->mTranslate.x, param_2->mTranslate.y, param_2->mTranslate.z);
+        mDoMtx_multVec(J3DSys::mCurrentMtx, &local_74, &arm_pos);
+    }
+    local_68 = (dComIfGp_getShipActor()->m0438 - arm_pos);
+    f32 dVar10 = local_68.absXZ();
+    u32 uVar5 = cM_atan2s(local_68.y, dVar10);
+    mDoMtx_stack_c::transS(arm_pos.x, arm_pos.y, arm_pos.z);
+    f32 dVar12 = (26.299999f * cM_scos((uVar5 & 0xffff)));
+    f32 dVar8 = local_68.absXZ();
+    dVar10 = dVar8;
+    if (uVar3 == 0) {
+        mDoMtx_stack_c::YrotM(cM_atan2s(local_68.x, local_68.z) + -0x4000);
+        if (dVar10 >= dVar12) {
+            mDoMtx_stack_c::scaleM((dVar10 / dVar12), 1.0f, 1.0f);
+        }
+    } else {
+        f32 dVar9 = (17.0f * cM_scos(uVar5 & 0xffff));
+        f32 dVar11 = (dVar12 + dVar9);
+        if (dVar10 >= dVar11) {
+            mDoMtx_stack_c::YrotM(cM_atan2s(local_68.x, local_68.z) + -0x4000);
+            mDoMtx_stack_c::scaleM((dVar10 / dVar11), 1.0f, 1.0f);
+        } else {
+            dVar12 = ((dVar8 + ((dVar9 * dVar9) - (dVar12 * dVar12))) / (2.0f * dVar8));
+            mDoMtx_stack_c::YrotM(
+                (cM_atan2s(local_68.x, local_68.z) + -0x4000) -
+                cM_atan2s(std::sqrtf((dVar9 * dVar9) - (dVar12 * (dVar8 * dVar12))),
+                          (dVar10 * dVar12)));
+        }
+    }
+    mDoMtx_stack_c::ZrotM(uVar5);
+    mDoMtx_stack_c::XrotM(0x4000);
+    mDoMtx_copy(mDoMtx_stack_c::now, J3DSys::mCurrentMtx);
+    if (uVar3 != 0) {
+        mDoMtx_stack_c::multVec(&armA_offset, &arm_pos);
+    }
+    return;
 }
 
 /* 8013FE78-8013FEF4       .text checkShipRideUseItem__9daPy_lk_cFi */
@@ -117,7 +164,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
     daShip_c* iVar1 = dComIfGp_getShipActor();
     if (iVar1 != 0) {
         if (iVar1->mStateFlag & 0x4000) {
-            g_dComIfG_gameInfo.play.field_0x492d = 0x12;
+            dComIfGp_setRStatus(0x12);
         }
         if (param_0 != 0) {
             shape_angle.y = iVar1->shape_angle.y;
@@ -130,10 +177,10 @@ void daPy_lk_c::setShipRidePos(int param_0) {
             m3542 = 0;
         } else {
             m353C = m353C + m3540;
-            m3540 = (s16)(int)((float)m3540 + 0.75f * (int)(short)(iVar1->shape_angle.x - m353C));
+            m3540 = (s16)(m3540 + 0.75f * (s16)(iVar1->shape_angle.x - m353C));
             cLib_addCalcAngleS(&m3540, 0, 5, 0x200, 0x100);
             m353E = m353E + m3542;
-            m3542 = m3542 + ((short)(iVar1->shape_angle.z - m353E) >> 1);
+            m3542 += ((s16)(iVar1->shape_angle.z - m353E) >> 1);
             cLib_addCalcAngleS(&m3542, 0, 5, 0x100, 0x30);
         }
         if (mCurProc == ANM_WARPOUT) {
@@ -400,11 +447,11 @@ void daPy_lk_c::initShipCraneAnime() {
 
     if ((s16)dComIfGp_getShipActor()->m039A > 0) {
         dVar1 = ANM_SALVRWAIT;
-        m3570 = 3;
+        mProcVar0.m3570 = 3;
         m3574 = 3;
     } else {
         dVar1 = ANM_SALVLWAIT;
-        m3570 = 2;
+        mProcVar0.m3570 = 2;
         m3574 = 2;
     }
     daPy_matAnm_c::offMabaFlg();
@@ -434,7 +481,7 @@ BOOL daPy_lk_c::procShipReady_init() {
         m34D0 = 1;
     }
     current.angle.y = shape_angle.y;
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     iVar1->m034D = 3;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1000000_e);
     swimOutAfter(1);
@@ -454,14 +501,14 @@ BOOL daPy_lk_c::procShipReady() {
         return checkNextMode(0);
     }
 
-    if (m3570 == 0) {
+    if (mProcVar0.m3570 == 0) {
         if (m34D0 == 0) {
             mDoMtx_multVec(ship->m0298->getModel()->getBaseTRMtx(), &l_ship_ledge, &current.pos);
         } else {
             mDoMtx_multVec(ship->m0298->getModel()->getBaseTRMtx(), &l_ship_redge, &current.pos);
         }
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
             mVelocity = 6.0f;
             setSingleMoveAnime(ANM_WALK, daPy_HIO_move_c0::m.field_0x40, 0.0f, -1, 5.0f);
             m34C2 = 10;
@@ -800,9 +847,9 @@ BOOL daPy_lk_c::procShipHookshot_init() {
     setShipRidePos(0);
     m34D4 = ship->shape_angle.y;
     if (mpAttention->Lockon()) {
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
     } else {
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
     }
 
     return true;
@@ -818,7 +865,7 @@ BOOL daPy_lk_c::procShipHookshot() {
     dComIfGp_setDoStatus(7);
     daHookshot_c* pfVar4 = (daHookshot_c*)mActorKeepEquip.getActor();
     if (((doTrigger()) || (pfVar4 == NULL)) ||
-        ((m3570 != 0) && (m355E == 0)) && (!mpAttention->Lockon()))
+        ((mProcVar0.m3570 != 0) && (m355E == 0)) && (!mpAttention->Lockon()))
     {
         procShipPaddle_init();
         deleteEquipItem(TRUE);
@@ -836,11 +883,11 @@ BOOL daPy_lk_c::procShipHookshot() {
             } else {
                 m34DA = 0;
             }
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         } else {
             m34DA = 0;
             setBodyAngleToCamera();
-            m3570 = 0;
+            mProcVar0.m3570 = 0;
         }
         if (mpAttnActorLockOn == NULL) {
             shape_angle.y += (s16)(ship->shape_angle.y - m34D4);
@@ -884,9 +931,9 @@ BOOL daPy_lk_c::procShipBow_init() {
     m34D4 = ship->shape_angle.y;
     m34DA = 0;
     if (mpAttention->Lockon() && mDemo.getDemoMode() != 0x44) {
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
     } else {
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
     }
 
     return true;
@@ -901,7 +948,7 @@ BOOL daPy_lk_c::procShipBow() {
     if (mDemo.getDemoMode() != 0x44) {
         dComIfGp_setDoStatus(7);
         if ((doTrigger()) ||
-            (((!mpAttention->Lockon()) && (mActorKeepEquip.getActor() == NULL)) && (m3570 != 0)))
+            (((!mpAttention->Lockon()) && (mActorKeepEquip.getActor() == NULL)) && (mProcVar0.m3570 != 0)))
         {
             procShipPaddle_init();
             deleteEquipItem(TRUE);
@@ -916,11 +963,11 @@ BOOL daPy_lk_c::procShipBow() {
     }
     if ((mpAttention->Lockon()) && (mDemo.getDemoMode() != 0x44)) {
         setShipAttnetionBodyAngle();
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
     } else {
         m34DA = 0;
         setBodyAngleToCamera();
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
     }
     if (mpAttnActorLockOn == NULL) {
         shape_angle.y += (s16)(iVar1->shape_angle.y - m34D4);
@@ -956,7 +1003,7 @@ BOOL daPy_lk_c::procShipCannon() {
         return true;
     }
 
-    g_dComIfG_gameInfo.play.field_0x492d = 0x2c;
+    dComIfGp_setRStatus(0x2c);
     if (dComIfGp_getDoStatus() == 0 && dComIfGp_getShipActor()->speedF >= 3.0f) {
         dComIfGp_setDoStatus(19);
     }
@@ -1007,7 +1054,7 @@ BOOL daPy_lk_c::procShipGetOff_init() {
     gravity = 0.0f;
     shape_angle.y = iVar1->shape_angle.y + -0x4000;
     current.angle.y = shape_angle.y;
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     m370C.x = current.pos.x + cM_ssin(shape_angle.y) * l_ship_ledge.x;
     m370C.y = iVar1->current.pos.y + l_ship_ledge.y;
     m370C.z = current.pos.z + cM_scos(shape_angle.y) * l_ship_ledge.x;
@@ -1023,7 +1070,7 @@ BOOL daPy_lk_c::procShipGetOff() {
     daShip_c* iVar1 = dComIfGp_getShipActor();
     if (iVar1 == 0) {
         checkNextMode(0);
-    } else if (m3570 == 0) {
+    } else if (mProcVar0.m3570 == 0) {
         current.pos.y = current.pos.y + (iVar1->current.pos.y - m35A0);
         cLib_chaseF(&current.pos.y, iVar1->current.pos.y + l_ship_ledge.y, 4.0f);
         m35A0 = iVar1->current.pos.y;
@@ -1035,7 +1082,7 @@ BOOL daPy_lk_c::procShipGetOff() {
             gravity = daPy_HIO_autoJump_c0::m.field_0xC;
             mVelocity = daPy_HIO_ship_c0::m.field_0x10;
             speed.y = daPy_HIO_ship_c0::m.field_0x14;
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
             m34C2 = 1;
             iVar1->m034D = 6;
             onModeFlg(ModeFlg_MIDAIR);

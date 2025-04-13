@@ -19,7 +19,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
             cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK8_e);
         }
-        if (m3570) {
+        if (mProcVar0.m3570) {
             cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK4_e);
         }
     }
@@ -48,7 +48,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
 /* 80151644-801517C0       .text procPushPullWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
     commonProcInit(daPyProc_PUSH_PULL_WAIT_e);
-    m3570 = param_0;
+    mProcVar0.m3570 = param_0;
     mVelocity = 0.0f;
     if ((param_0 == 0) || (mEquipItem == daPyItem_NONE_e)) {
         if (checkEquipAnime()) {
@@ -77,29 +77,28 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
 
 /* 801517C0-8015198C       .text procPushPullWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushPullWait() {
-    /* Nonmatching - "sVar1" if statement */
     dComIfGp_setRStatus(0x11);
     setFrontWallType();
     if (m34D6 != 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF) {
             setSingleMoveAnime(
                 ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
             );
             m34D6 = 0;
         }
     } else if ((spActionButton()) && (checkResetFlg0(daPyRFlg0_UNK8))) {
-        if (m3570 != 0) {
+        if (mProcVar0.m3570 != 0) {
             s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && (dVar2 < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
+            if (((!sVar1) && (dVar2 < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF)) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
-                m3570 = 0;
+                mProcVar0.m3570 = 0;
             }
         }
-        if (m3570 == 0) {
+        if (mProcVar0.m3570 == 0) {
             if (mStickDistance > 0.05f) {
                 int direction = getDirectionFromShapeAngle();
                 if (direction == DIR_FORWARD) {
@@ -126,7 +125,7 @@ BOOL daPy_lk_c::procPushMove_init() {
         setSingleMoveAnime(
             ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC
         );
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
     return true;
@@ -152,10 +151,10 @@ BOOL daPy_lk_c::procPushMove() {
             }
             return procPushPullWait_init(0);
         }
-        if (m3570 != 0) {
+        if (mProcVar0.m3570 != 0) {
             voiceStart(19);
         }
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         setPushPullKeepData(dBgW::PP_UNK1_e);
     }
     return true;
@@ -170,7 +169,7 @@ BOOL daPy_lk_c::procPullMove_init() {
         setSingleMoveAnime(
             ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14
         );
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
     return true;
@@ -178,7 +177,6 @@ BOOL daPy_lk_c::procPullMove_init() {
 
 /* 80151BC8-80151E40       .text procPullMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPullMove() {
-    /* Nonmatching - floats */
     dComIfGp_setRStatus(0x11);
     int direction = getDirectionFromShapeAngle();
     setFrontWallType();
@@ -223,10 +221,10 @@ BOOL daPy_lk_c::procPullMove() {
             }
             return procPushPullWait_init(0);
         }
-        if (m3570 == 1) {
+        if (mProcVar0.m3570 == 1) {
             voiceStart(19);
         }
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         setPushPullKeepData(dBgW::PP_UNK2_e);
     }
     return true;

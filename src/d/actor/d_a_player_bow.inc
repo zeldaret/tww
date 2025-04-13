@@ -17,7 +17,6 @@
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::bowJointCB(int param_0) {
-    /* Nonmatching - floats */
     if (checkBowReadyAnime()) {
         return true;
     }

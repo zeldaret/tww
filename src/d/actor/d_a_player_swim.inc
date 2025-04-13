@@ -14,10 +14,6 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-daPy_HIO_swim_c0 l_HIO_swim_c0;
-daPy_HIO_wallCatch_c0 l_HIO_wallCatch_c0;
-daPy_HIO_turn_c0 l_HIO_turn_c0;
-
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleSwim() {
     float fVar1;
@@ -38,7 +34,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                     current.angle.y = m34E8;
                 }
                 else {
-                    cLib_addCalcAngleS(&shape_angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);     
+                    cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);     
                 }
 
                 fVar1 = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
@@ -49,7 +45,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 
             cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 2, 0x2000, 0x1000);
 
-            mMaxNormalSpeed = l_HIO_swim_c0.m.field_0xC;
+            mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
         }
         else {
             setShapeAngleToAtnActor();
@@ -65,7 +61,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                     bVar3 = TRUE;
                 }
                 else {
-                    cLib_addCalcAngleS(&current.angle.y, m34E8, l_HIO_swim_c0.m.field_0x8, l_HIO_swim_c0.m.field_0x4, l_HIO_swim_c0.m.field_0x6);
+                    cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);
                     fVar1 = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
                 }
             }
@@ -73,15 +69,15 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
                 fVar1 = 0.0f;
             }
             
-            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * l_HIO_swim_c0.m.field_0xC;
+            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.field_0xC;
         }
     }
     else {
         fVar1 = 0.0f;
-        mMaxNormalSpeed = l_HIO_swim_c0.m.field_0xC;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
     }
 
-    setNormalSpeedF(fVar1, l_HIO_swim_c0.m.field_0x18, l_HIO_swim_c0.m.field_0x1C, l_HIO_swim_c0.m.field_0x20);
+    setNormalSpeedF(fVar1, daPy_HIO_swim_c0::m.field_0x18, daPy_HIO_swim_c0::m.field_0x1C, daPy_HIO_swim_c0::m.field_0x20);
 
     if (bVar3 && mVelocity < 5.0f) {
         current.angle.y = m34E8;
@@ -117,7 +113,7 @@ BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > l_HIO_swim_c0.m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
 
@@ -128,7 +124,7 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         offNoResetFlg0(daPyFlg0_UNK100);
 
-        mMaxNormalSpeed = l_HIO_swim_c0.m.field_0xC;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
         mVelocity *= 0.75f;
 
         if (mVelocity >= mMaxNormalSpeed) {
@@ -140,11 +136,11 @@ BOOL daPy_lk_c::changeSwimProc() {
         setSwimTimerStartStop();
         
         if (checkModeFlg(ModeFlg_MIDAIR)) {
-            current.pos.y += l_HIO_swim_c0.m.field_0x24;
-            speed.y = mOldSpeed.y * l_HIO_swim_c0.m.field_0x10;
+            current.pos.y += daPy_HIO_swim_c0::m.field_0x24;
+            speed.y = mOldSpeed.y * daPy_HIO_swim_c0::m.field_0x10;
 
-            if (speed.y < l_HIO_swim_c0.m.field_0x14) {
-                speed.y = l_HIO_swim_c0.m.field_0x14;
+            if (speed.y < daPy_HIO_swim_c0::m.field_0x14) {
+                speed.y = daPy_HIO_swim_c0::m.field_0x14;
             }
             else if (speed.y > 0.0f) {
                 speed.y = 0.0f;
@@ -175,16 +171,16 @@ BOOL daPy_lk_c::changeSwimProc() {
 
 /* 8013D1B0-8013D2AC       .text changeSwimUpProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeSwimUpProc() {
-    if (speed.y < l_HIO_swim_c0.m.field_0x68) {
-        speed.y += l_HIO_swim_c0.m.field_0x64;
-        if (speed.y > l_HIO_swim_c0.m.field_0x68) {
-            speed.y = l_HIO_swim_c0.m.field_0x68;
+    if (speed.y < daPy_HIO_swim_c0::m.field_0x68) {
+        speed.y += daPy_HIO_swim_c0::m.field_0x64;
+        if (speed.y > daPy_HIO_swim_c0::m.field_0x68) {
+            speed.y = daPy_HIO_swim_c0::m.field_0x68;
         }
         if (speed.y > 0.0f && mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
     }
-    if (m35D0 - current.pos.y < 40.1f + l_HIO_swim_c0.m.field_0x28 && speed.y >= 0.0f) {
+    if (m35D0 - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.field_0x28 && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
             onNoResetFlg0(daPyFlg0_UNK100);
             current.pos.y = m35D0;
@@ -232,10 +228,10 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
         swimOutAfter(TRUE);
 
-        return procFall_init(1, l_HIO_wallCatch_c0.m.field_0x54);
+        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < l_HIO_swim_c0.m.field_0x24 - 5.0f)) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
         current.pos.y = m35D0;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
@@ -259,10 +255,10 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
-    f32 rate = (std::fabsf(mVelocity) * (l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50) / mMaxNormalSpeed) +
-                l_HIO_swim_c0.m.field_0x50 +
-               (getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74);
-    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, l_HIO_swim_c0.m.field_0x58);
+    f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50) / mMaxNormalSpeed) +
+                daPy_HIO_swim_c0::m.field_0x50 +
+               (getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74);
+    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x58);
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(endFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
 }
@@ -295,15 +291,15 @@ void daPy_lk_c::setSwimTimerStartStop() {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
-                target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * M_PI)) * -l_HIO_swim_c0.m.field_0x78;
+                target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * M_PI)) * -daPy_HIO_swim_c0::m.field_0x78;
 
                 if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
-                    if (m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
+                    if (mProcVar0.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
                         voiceStart(0x22);
-                        m3570 = 0;
+                        mProcVar0.m3570 = 0;
                     }
                     else {
-                        m3570 = 1;
+                        mProcVar0.m3570 = 1;
                     }
                 }
             }
@@ -331,11 +327,11 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
     current.pos.y = m35D0;
 
-    setSingleMoveAnime(ANM_SWIMP, l_HIO_swim_c0.m.field_0x2C, l_HIO_swim_c0.m.field_0x30, l_HIO_swim_c0.m.field_0x0, l_HIO_swim_c0.m.field_0x38);
+    setSingleMoveAnime(ANM_SWIMP, daPy_HIO_swim_c0::m.field_0x2C, daPy_HIO_swim_c0::m.field_0x30, daPy_HIO_swim_c0::m.field_0x0, daPy_HIO_swim_c0::m.field_0x38);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = l_HIO_swim_c0.m.field_0x3C;
+    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
 
     onNoResetFlg0(daPyFlg0_UNK100);
 
@@ -356,7 +352,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
         }
     }
 
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     return TRUE;
 }
 
@@ -371,7 +367,7 @@ BOOL daPy_lk_c::procSwimUp() {
             procSwimWait_init(FALSE);
         }
         else {
-            if (mFrameCtrl->getFrame() > l_HIO_swim_c0.m.field_0x34) {
+            if (mFrameCtrl->getFrame() > daPy_HIO_swim_c0::m.field_0x34) {
                 if (mStickDistance > 0.05f) {
                     procSwimMove_init(FALSE);
                 }
@@ -383,7 +379,7 @@ BOOL daPy_lk_c::procSwimUp() {
                     seStartOnlyReverb(JA_SE_LK_SWIM);
                 }
                 else {
-                    m35C4 = l_HIO_swim_c0.m.field_0x3C;
+                    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
                     current.pos.y = m35D0;
                 }
             }
@@ -405,14 +401,14 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     if (param_1) {
         fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
         uVar3 = cM_rad2s(fVar2 * M_PI);
-        mVelocity = speedF * (1.0f - l_HIO_swim_c0.m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * l_HIO_swim_c0.m.field_0x60;
+        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * daPy_HIO_swim_c0::m.field_0x60;
     }
     else {
         fVar2 = 0.0f;
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40, 0.0f, -1, l_HIO_swim_c0.m.field_0x44);
+    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x44);
     mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
@@ -425,17 +421,17 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
         speed.y = 0.0f;
     }
 
-    m35C4 = l_HIO_swim_c0.m.field_0x48;
+    m35C4 = daPy_HIO_swim_c0::m.field_0x48;
     m34D4 = 0;
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     return TRUE;
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
-    m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * l_HIO_swim_c0.m.field_0x2);
-    m35C4 = cM_ssin(m34D4) * l_HIO_swim_c0.m.field_0x4C + l_HIO_swim_c0.m.field_0x48;
+    m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * daPy_HIO_swim_c0::m.field_0x2);
+    m35C4 = cM_ssin(m34D4) * daPy_HIO_swim_c0::m.field_0x4C + daPy_HIO_swim_c0::m.field_0x48;
 
     if (changeSwimOutProc()) {
         return TRUE;
@@ -458,12 +454,12 @@ BOOL daPy_lk_c::procSwimWait() {
         fopAc_ac_c* talkEventPartner = fopAcM_getTalkEventPartner(this);
         if (talkEventPartner) {
             short targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
-            cLib_addCalcAngleS(&shape_angle.y, targetAngleY, l_HIO_turn_c0.m.field_0x6, l_HIO_turn_c0.m.field_0x8, l_HIO_turn_c0.m.field_0xA);
+            cLib_addCalcAngleS(&shape_angle.y, targetAngleY, daPy_HIO_turn_c0::m.field_0x6, daPy_HIO_turn_c0::m.field_0x8, daPy_HIO_turn_c0::m.field_0xA);
             current.angle.y = shape_angle.y;
         }
     }
 
-    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * l_HIO_swim_c0.m.field_0x70) + l_HIO_swim_c0.m.field_0x40);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40);
 
     if (mStickDistance > 0.05f) {
         procSwimMove_init(TRUE);
@@ -501,8 +497,8 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = l_HIO_swim_c0.m.field_0x5C;
-    m3570 = 0;
+    m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
+    mProcVar0.m3570 = 0;
 
     return TRUE;
 }
@@ -532,7 +528,7 @@ BOOL daPy_lk_c::procSwimMove() {
 
         if (mDirection == DIR_FORWARD) {
             anm = ANM_SWIMING;
-            m35C4 = l_HIO_swim_c0.m.field_0x5C;
+            m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
         }
         else {
             m35C4 = -80.0f;
@@ -563,7 +559,7 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (l_HIO_swim_c0.m.field_0x54 - l_HIO_swim_c0.m.field_0x50)) / mMaxNormalSpeed + l_HIO_swim_c0.m.field_0x50 + (float)(getSwimTimerRate() * l_HIO_swim_c0.m.field_0x74));
+        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50)) / mMaxNormalSpeed + daPy_HIO_swim_c0::m.field_0x50 + (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74));
     }
 
     if (mDirection == DIR_BACKWARD) {

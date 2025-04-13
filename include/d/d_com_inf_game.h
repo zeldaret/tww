@@ -45,6 +45,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_UNK200_e         = 0x00000200,
     daPyStts0_UNK400_e         = 0x00000400,
+    daPyStts0_UNK800_e         = 0x00000800,
     daPyStts0_BOW_AIM_e        = 0x00001000,
     daPyStts0_UNK2000_e        = 0x00002000,
     daPyStts0_HOOKSHOT_AIM_e   = 0x00004000,
@@ -76,7 +77,10 @@ enum daPy__PlayerStatus1 {
     daPyStts1_DEKU_LEAF_FLY_e      = 0x00000020,
     daPyStts1_DEKU_LEAF_FAN_e      = 0x00000040,
     daPyStts1_UNK80_e              = 0x00000080,
+    daPyStts1_UNK100_e             = 0x00000100,
+    daPyStts1_UNK200_e             = 0x00000200,
     daPyStts1_SAIL_e               = 0x00000400,
+    daPyStts1_UNK800_e             = 0x00000800,
     daPyStts1_UNK1000_e            = 0x00001000,
     daPyStts1_UNK2000_e            = 0x00002000,
     daPyStts1_UNK4000_e            = 0x00004000,
@@ -84,6 +88,7 @@ enum daPy__PlayerStatus1 {
     daPyStts1_UNK10000_e           = 0x00010000,
     daPyStts1_UNK20000_e           = 0x00020000,
     daPyStts1_UNK40000_e           = 0x00040000,
+    daPyStts1_UNK80000_e           = 0x00080000,
 };
 
 class __d_timer_info_c {
@@ -497,6 +502,7 @@ public:
     void setAStatus(u8 status) { mCurrButtonBAction = status; }
     u8 getDoStatus() { return mCurrButtonAAction; }
     void setDoStatus(u8 status) { mCurrButtonAAction = status; }
+    u8 getRStatus() { return field_0x492d; }
     void setRStatus(u8 status) { field_0x492d = status; }
     u8 getRStatusForce() { return field_0x4930; }
     void setRStatusForce(u8 status) { field_0x4930 = status; }
@@ -2598,6 +2604,10 @@ inline u8 dComIfGp_getDoStatus() {
 
 inline void dComIfGp_setDoStatus(u8 status) {
     g_dComIfG_gameInfo.play.setDoStatus(status);
+}
+
+inline u8 dComIfGp_getRStatus() {
+    return g_dComIfG_gameInfo.play.getRStatus();
 }
 
 inline void dComIfGp_setRStatus(u8 status) {

@@ -362,7 +362,6 @@ BOOL daPy_lk_c::procWeaponThrow_init() {
 
 /* 8015411C-80154334       .text procWeaponThrow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponThrow() {
-    /* Nonmatching - floats */
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
 
     if ((frameCtrl.getRate() < 0.01f) || (mActorKeepEquip.getActor() == NULL)) {
