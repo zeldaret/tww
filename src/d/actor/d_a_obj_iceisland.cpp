@@ -92,7 +92,6 @@ void daObjIceisland_c::daObjIceisland_freeze_main() {
 
 /* 0000067C-00000774       .text daObjIceisland_melt_demo_wait__16daObjIceisland_cFv */
 void daObjIceisland_c::daObjIceisland_melt_demo_wait() {
-    u32 uVar1;
     if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
         mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         JPABaseEmitter* emitter = mEmitter1;
@@ -247,7 +246,6 @@ bool daObjIceisland_c::_execute(){
         
     }
     return true;
-
 }
 
 /* 000009B8-00000B2C       .text daObjIceisland_Create__FPv */
