@@ -104,7 +104,7 @@ const daPy_HIO_backJump_c1 daPy_HIO_backJump_c0::m = {
 };
 
 const daPy_HIO_slip_c1 daPy_HIO_slip_c0::m = {
-    0.0f, 0.6f, 1.1f, 0.4f, 1.25f, 0.1875f, 0.6f, 1.7f, 2.5f,
+    0, 0, 0.6f, 1.1f, 0.4f, 1.25f, 0.1875f, 0.6f, 1.7f, 2.5f,
 };
 
 const daPy_HIO_slide_c1 daPy_HIO_slide_c0::m = {
@@ -169,7 +169,7 @@ const daPy_HIO_hang_c1 daPy_HIO_hang_c0::m = {
 };
 
 const daPy_HIO_guard_c1 daPy_HIO_guard_c0::m = {
-    11, 0.85f, 0.0f, 2.0f, 7.5f, 0.02f, 0.5f, 1.125f, 0.3f, 12.5f,
+    11, 0, 0.85f, 0.0f, 2.0f, 7.5f, 0.02f, 0.5f, 1.125f, 0.3f, 12.5f,
 };
 
 const daPy_HIO_nockback_c1 daPy_HIO_nockback_c0::m = {
@@ -213,7 +213,7 @@ const daPy_HIO_slowJump_c1 daPy_HIO_slowJump_c0::m = {
 };
 
 const daPy_HIO_sideStep_c1 daPy_HIO_sideStep_c0::m = {
-    256, 6200, 4, 5, 30.0f, 0.3f, 0.0f, 1.0f, -2.4f, 0.85f, 1.0f, 0.0f, 1.5f, 14.0f, 50.0f,
+    1, 0, 6200, 4, 5, 30.0f, 0.3f, 0.0f, 1.0f, -2.4f, 0.85f, 1.0f, 0.0f, 1.5f, 14.0f, 50.0f,
 };
 
 const daPy_HIO_grab_c1 daPy_HIO_grab_c0::m = {

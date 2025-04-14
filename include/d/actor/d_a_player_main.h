@@ -310,12 +310,17 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x018 - 0x000];
+    /* 0x000 */ u8 field_0x000[0x002 - 0x000];
     // TODO: is this right?
+    /* 0x002 */ s16 field_0x002;
+    /* 0x004 */ u8 field_0x004[0x008 - 0x004];
+    /* 0x008 */ s16 field_0x008;
+    /* 0x00A */ s16 field_0x00A;
+    /* 0x00C */ u8 field_0x00C[0x018 - 0x00C];
     /* 0x018 */ cXyz field_0x018;
     /* 0x018 */ u8 field_0x024[0x034 - 0x024];
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
-    /* 0x088 */ u8 field_0x088[0x118 - 0x088];
+    /* 0x088 */ Mtx field_0x088[3];
 };
 
 struct daPy_aura_c {
@@ -924,7 +929,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    BOOL checkNormalFace();
+    s32 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -995,7 +1000,7 @@ public:
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
     void checkItemAction();
-    void getSlidePolygon();
+    cM3dGPla* getSlidePolygon();
     BOOL checkJumpCutFromButton();
     int orderTalk();
     BOOL checkNextActionFromButton();
@@ -1878,7 +1883,7 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
@@ -2137,7 +2142,13 @@ public:
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;
     /* 0x356C */ int mCameraInfoIdx;
-    /* 0x3570 */ s32 m3570;
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    union {
+        s32 m3570;
+        daPy_ANM mDamageAnm;
+        int mBottleItem;
+    } /* 0x3570  */ mProcVar0;
     /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;

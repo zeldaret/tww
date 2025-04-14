@@ -284,11 +284,11 @@ BOOL daPy_lk_c::procWHideReady_init(cM3dGPla* param_0, cXyz* param_1) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
         setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
     } else {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
         setAnimeUnequip();
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
     }
     if (uVar1 != 0) {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1_e);
@@ -301,10 +301,10 @@ BOOL daPy_lk_c::procWHideReady() {
     if (changeWHideEndProc(NULL)) {
         return true;
     }
-    if (m3570 == 0) {
+    if (mProcVar0.m3570 == 0) {
         if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
             setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         }
         return true;
     }

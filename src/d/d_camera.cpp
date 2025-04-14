@@ -501,7 +501,7 @@ void dCamera_c::updatePad() {
         fVar3 = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
     }
 
-    cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
+    cSAngle unused(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
 
     mStickMainPosXDelta = fVar1 - mStickMainPosXLast;
     mStickMainPosYDelta = fVar2 - mStickMainPosYLast;
@@ -1118,7 +1118,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 }
                 break;
             case 12:
-                if (mStickCValueLast < 0.01f && mDirection.R() < mCamSetup.m098 || chkFlag(0x80000000)) {
+                if ((mStickCValueLast < 0.01f && mDirection.R() < mCamSetup.m098) || chkFlag(0x80000000)) {
                     m144 = 1;
                     m184 = 0;
                 }
@@ -1534,7 +1534,7 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
     int cam_type_num = 0;
     
     while (cam_type_num < type_num) {
-        if (strcmp((char*)&camera->mEntries[param_0].m00, types[cam_type_num].name) == 0) {
+        if (strcmp(camera->m_entries[param_0].m_cam_type, types[cam_type_num].name) == 0) {
             break;
         }
         cam_type_num++;
@@ -1544,11 +1544,11 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
         return 0xFF;
     }
 
-    mCurRoomCamEntry = *(stage_camera__entry*)&camera->mEntries[param_0];
-    int arrowIdx = mCurRoomCamEntry.mArrowIdx;
+    mCurRoomCamEntry = camera->m_entries[param_0];
+    int arrowIdx = mCurRoomCamEntry.m_arrow_idx;
     if (arrowIdx != -1 && arrowIdx < arrow->num) {
         mCurArrowIdx = arrowIdx;
-        mCurRoomArrowEntry = *(stage_arrow__entry*)&arrow->mEntries[arrowIdx];
+        mCurRoomArrowEntry = arrow->m_entries[arrowIdx];
     }
     else {
         mCurArrowIdx = 0xFF;
@@ -2891,7 +2891,8 @@ bool camera_draw(camera_process_class* i_this) {
                 fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(i);
                 f32 depth = currPlayerActor->current.pos.y;
                 if (currPlayerActor->current.pos.y > 0.0f) {
-                    f32 temp = 0;
+                    // Fakematch? Fixes load order of y
+                    f32 temp = 0.0f;
                 }
                 dComIfGp_map_draw(
                     currPlayerActor->current.pos.x,

@@ -80,13 +80,13 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
     fopAcM_prm_class* params = (fopAcM_prm_class*)cMl::memalignB(-4, sizeof(fopAcM_prm_class));
     if (params != NULL) {
         cLib_memSet(params, 0, sizeof(fopAcM_prm_class));
-        params->mSetId = 0xFFFF;
-        params->mRoomNo = -1;
-        params->mScale.x = 10;
-        params->mScale.y = 10;
-        params->mScale.z = 10;
-        params->mParentPcId = fpcM_ERROR_PROCESS_ID_e;
-        params->mSubtype = -1;
+        params->base.setID = 0xFFFF;
+        params->room_no = -1;
+        params->scale.x = 10;
+        params->scale.y = 10;
+        params->scale.z = 10;
+        params->parent_id = fpcM_ERROR_PROCESS_ID_e;
+        params->subtype = -1;
     }
     return params;
 }
@@ -98,30 +98,30 @@ fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pA
         return NULL;
 
     if (pPos != NULL)
-        params->mPos = *pPos;
+        params->base.position = *pPos;
     else
-        params->mPos = cXyz::Zero;
+        params->base.position = cXyz::Zero;
 
-    params->mRoomNo = roomNo;
+    params->room_no = roomNo;
 
     if (pAngle != NULL)
-        params->mAngle = *pAngle;
+        params->base.angle = *pAngle;
     else
-        params->mAngle = csXyz::Zero;
+        params->base.angle = csXyz::Zero;
 
     if (pScale != NULL) {
-        params->mScale.x = 10.0f * pScale->x;
-        params->mScale.y = 10.0f * pScale->y;
-        params->mScale.z = 10.0f * pScale->z;
+        params->scale.x = 10.0f * pScale->x;
+        params->scale.y = 10.0f * pScale->y;
+        params->scale.z = 10.0f * pScale->z;
     } else {
-        params->mScale.x = 10.0f;
-        params->mScale.y = 10.0f;
-        params->mScale.z = 10.0f;
+        params->scale.x = 10.0f;
+        params->scale.y = 10.0f;
+        params->scale.z = 10.0f;
     }
 
-    params->mParameter = parameter;
-    params->mParentPcId = parentPcId;
-    params->mSubtype = subtype;
+    params->base.parameters = parameter;
+    params->parent_id = parentPcId;
+    params->subtype = subtype;
 
     return params;
 }
@@ -1388,11 +1388,11 @@ fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
     fopAcM_search_prm* Prm = (fopAcM_search_prm*)i_prm;
     JUT_ASSERT(4095, Prm);
 
-    dStage_objectNameInf *inf = dStage_searchName(Prm->mpProcName);
+    dStage_objectNameInf *inf = dStage_searchName(Prm->procname);
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->subtype && (Prm->mParamMask == 0 || Prm->mParameter == (fopAcM_GetParam(it) & Prm->mParamMask)))
+    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->subtype && (Prm->prm_mask == 0 || Prm->parameter == (fopAcM_GetParam(it) & Prm->prm_mask)))
         return it;
 
     return NULL;
@@ -1401,9 +1401,9 @@ fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
 /* 80028410-80028448       .text fopAcM_searchFromName__FPcUlUl */
 fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter) {
     fopAcM_search_prm param;
-    param.mpProcName = pProcName;
-    param.mParamMask = paramMask;
-    param.mParameter = parameter;
+    param.procname = pProcName;
+    param.prm_mask = paramMask;
+    param.parameter = parameter;
     return fopAcM_Search((fopAcIt_JudgeFunc)fopAcM_findObjectCB, &param);
 }
 

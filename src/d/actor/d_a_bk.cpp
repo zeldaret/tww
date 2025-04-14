@@ -3879,20 +3879,20 @@ static void waki_set(bk_class* i_this) {
     
     if (r23 && r27 >= 0) {
         fopAcM_prm_class* params = fopAcM_CreateAppend();
-        params->mPos = pnt->m_position;
-        params->mAngle.x = 0;
-        params->mAngle.z = pnt_idx;
+        params->base.position = pnt->m_position;
+        params->base.angle.x = 0;
+        params->base.angle.z = pnt_idx;
         if (r27 > pnt_idx) {
-            params->mAngle.y = 1;
+            params->base.angle.y = 1;
         } else {
-            params->mAngle.y = -1;
+            params->base.angle.y = -1;
         }
         if (cM_rndF(1.0f) < 0.5f) {
-            params->mParameter = (i_this->m02B6 << 0x10) | 0xFF00FF19; // TODO clean up parameters
+            params->base.parameters = (i_this->m02B6 << 0x10) | 0xFF00FF19; // TODO clean up parameters
         } else {
-            params->mParameter = (i_this->m02B6 << 0x10) | 0xFF00FF39; // TODO clean up parameters
+            params->base.parameters = (i_this->m02B6 << 0x10) | 0xFF00FF39; // TODO clean up parameters
         }
-        params->mRoomNo = actor->current.roomNo;
+        params->room_no = actor->current.roomNo;
         fopAcM_Create(PROC_BK, NULL, params);
         i_this->m1212++;
     }

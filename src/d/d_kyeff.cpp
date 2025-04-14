@@ -28,7 +28,6 @@ static BOOL dKyeff_Draw(dKyeff_c* i_this) {
 /* 80198008-8019803C       .text get_parcent__Ffff */
 static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f1;
-    f32 temp_f2;
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {

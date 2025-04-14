@@ -65,7 +65,7 @@ f32 mapOffsetY() {
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
         if (dComIfGp_getStage().getDMap() != NULL) {
             dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
-            dStage_DMap_entry_c* entry = pinf->entry;
+            dStage_DMap_dt_c* entry = pinf->entries;
             JUT_ASSERT(0x587, pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++)
                 ret = entry->offsetY;
@@ -84,10 +84,10 @@ BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p) {
     u8 top;
 
     dStage_FloorInfo_c* floor = stag->getFloorInfo();
-    dStage_FloorInfo_entry_c* entry;
+    dStage_FloorInfo_dt_c* entry;
 
     if (floor != NULL && floor->num >= 1) {
-        entry = floor->entry;
+        entry = floor->m_entries;
         bottom = Floor_B5F;
         top = Floor_5F;
         for (int i = 0; i < floor->num; i++, entry++) {
@@ -121,13 +121,13 @@ void dMap_GetFloorInfoDtP(dStage_FloorInfo_c* floor, f32 ret) {
 }
 
 /* 80045A98-80045AEC       .text dMap_GetFloorInfoDtPFromFloorNo__FP18dStage_FloorInfo_cUc */
-dStage_FloorInfo_entry_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
+dStage_FloorInfo_dt_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
     /* Nonmatching */
-    dStage_FloorInfo_entry_c* entry;
+    dStage_FloorInfo_dt_c* entry;
     BOOL valid = FALSE;
 
     if (floor != NULL) {
-        entry = floor->entry;
+        entry = floor->m_entries;
         for (int i = 0; i < floor->num; i++, entry++) {
             if (entry->floorNo == i_floorNo) {
                 valid = TRUE;

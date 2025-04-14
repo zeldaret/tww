@@ -599,7 +599,8 @@ public:
 
 class daPy_HIO_slip_c1 {
 public:
-    /* 0x00 */ f32 field_0x0;
+    /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;
@@ -961,6 +962,7 @@ public:
 class daPy_HIO_guard_c1 {
 public:
     /* 0x00 */ s16 field_0x0;
+    /* 0x02 */ s16 field_0x2;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;
@@ -1212,7 +1214,8 @@ public:
 
 class daPy_HIO_sideStep_c1 {
 public:
-    /* 0x00 */ s16 field_0x0;
+    /* 0x00 */ u8 field_0x0;
+    /* 0x01 */ u8 field_0x1;
     /* 0x02 */ s16 field_0x2;
     /* 0x04 */ s16 field_0x4;
     /* 0x06 */ s16 field_0x6;
