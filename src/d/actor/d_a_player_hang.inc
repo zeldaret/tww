@@ -201,7 +201,7 @@ BOOL daPy_lk_c::procHangStart_init() {
         }
     }
     commonProcInit(daPyProc_HANG_START_e);
-    m3570 = sVar3;
+    mProcVar0.m3570 = sVar3;
     setSingleMoveAnime(
         ANM_VJMPCHA,
         daPy_HIO_wallCatch_c0::m.field_0x44,
@@ -227,9 +227,9 @@ BOOL daPy_lk_c::procHangStart() {
 
     if (((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
          (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_wallCatch_c0::m.field_0x50)) &&
-        (mStickDistance > 0.05f || m3570 != 0))
+        (mStickDistance > 0.05f || mProcVar0.m3570 != 0))
     {
-        if (getDirectionFromShapeAngle() == DIR_FORWARD || m3570 != 0) {
+        if (getDirectionFromShapeAngle() == DIR_FORWARD || mProcVar0.m3570 != 0) {
             procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
         }
     } else {
@@ -366,7 +366,7 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
         daPy_HIO_hang_c0::m.field_0x20
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
-    m3570 = param_0;
+    mProcVar0.m3570 = param_0;
     mVelocity = 0.0f;
     return true;
 }
@@ -384,10 +384,10 @@ BOOL daPy_lk_c::procHangUp() {
     if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
         (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_hang_c0::m.field_0x1C))
     {
-        if (m3570 == 0) {
+        if (mProcVar0.m3570 == 0) {
             procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
-        } else if (changeHangMoveProc(m3570)) {
-            procHangMove_init(m3570);
+        } else if (changeHangMoveProc(mProcVar0.m3570)) {
+            procHangMove_init(mProcVar0.m3570);
         } else {
             procHangWait_init();
         }

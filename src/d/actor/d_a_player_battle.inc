@@ -111,9 +111,9 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
     if (daPy_HIO_b_jump_c0::m.field_0x18 <= 0.0f) {
         speed.y = m35A0;
         mVelocity = m35A4;
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
     } else {
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
     }
     voiceStart(6);
     offNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
@@ -123,17 +123,17 @@ BOOL daPy_lk_c::procBtJump_init(fopEn_enemy_c* enemy) {
 
 /* 8013E72C-8013E860       .text procBtJump__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBtJump() {
-    if (m3570 == 0) {
+    if (mProcVar0.m3570 == 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= daPy_HIO_b_jump_c0::m.field_0x18) {
             speed.y = m35A0;
             mVelocity = m35A4;
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         }
     } else {
         if (mAcch.ChkGroundHit()) {
             return changeLandProc(daPy_HIO_b_jump_c0::m.field_0xC);
         }
-        if (m3570 == 1) {
+        if (mProcVar0.m3570 == 1) {
             m34D0++;
             if (speed.y < -gravity) {
                 return procBtJumpCut_init(&m370C);
@@ -168,7 +168,7 @@ BOOL daPy_lk_c::procBtJumpCut_init(cXyz* param_0) {
     gravity = 0.0f;
     speed.y = 0.0f;
     m370C = *param_0;
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, (daPyStts0_UNK2_e | daPyStts0_UNK400_e));
     voiceStart(1);
     setBlurPosResource(LKANM__BTJUMPCUT_POS);
@@ -199,13 +199,13 @@ BOOL daPy_lk_c::procBtJumpCut() {
         return changeLandProc(daPy_HIO_b_jump_c0::m.field_0xC);
     }
 
-    if (m3570 == 0 && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+    if (mProcVar0.m3570 == 0 && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         gravity = daPy_HIO_b_jump_c0::m.field_0x3C;
         speed.y = daPy_HIO_b_jump_c0::m.field_0x34;
         mVelocity = daPy_HIO_b_jump_c0::m.field_0x38;
-        m3570 = 1;
-    } else if (m3570 == 1 && speed.y < -gravity && daPy_HIO_b_jump_c0::m.field_0x0 == 1) {
-        m3570 = 2;
+        mProcVar0.m3570 = 1;
+    } else if (mProcVar0.m3570 == 1 && speed.y < -gravity && daPy_HIO_b_jump_c0::m.field_0x0 == 1) {
+        mProcVar0.m3570 = 2;
         setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, daPy_HIO_b_jump_c0::m.field_0x40);
         offModeFlg(ModeFlg_00000400);
         setTextureAnime(0x37, 0);
@@ -318,12 +318,12 @@ BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
     s16 angle_y_delta = current.angle.y - shape_angle.y;
     if (angle_y_delta > 0) {
         dVar4 = ANM_MROLLLC;
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
         m34EC = 1;
         setBlurPosResource(LKANM__BTROTATECUTL_POS);
     } else {
         dVar4 = ANM_MROLLRC;
-        m3570 = -1;
+        mProcVar0.m3570 = -1;
         m34EC = -1;
         setBlurPosResource(LKANM__BTROTATECUTR_POS);
     }
@@ -364,7 +364,7 @@ BOOL daPy_lk_c::procBtRollCut() {
     m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     s16 sVar2 = cLib_targetAngleY(&current.pos, &m370C);
     cLib_addCalcAngleS(&shape_angle.y, sVar2, 5, 0x5e8, 0x13c);
-    current.angle.y = shape_angle.y + m3570 * 0x4000;
+    current.angle.y = shape_angle.y + mProcVar0.m3570 * 0x4000;
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         if (m34D4 == 0) {
             m34D4 = 1;
@@ -377,7 +377,7 @@ BOOL daPy_lk_c::procBtRollCut() {
             m34D4 = 2;
         }
         if (m34D4 > 1) {
-            int iVar3 = m3570;
+            int iVar3 = mProcVar0.m3570;
             if ((iVar3 > 0 && m34EC < 0) || (iVar3 < 0 && m34EC > 0)) {
                 cLib_addCalcAngleS(&m34EC, -iVar3, 4, daPy_HIO_b_roll_c0::m.field_0xA, 0x200);
             } else {
