@@ -10,10 +10,10 @@
 class J3DModel;
 
 struct color_RGB_class {
-    u8 r;
-    u8 g;
-    u8 b;
-};
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+};  // Size: 0x3
 
 struct LIGHT_INFLUENCE {
     /* 0x00 */ cXyz mPos;

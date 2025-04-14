@@ -1942,7 +1942,7 @@ inline void dComIfGp_init() { g_dComIfG_gameInfo.play.init(); }
 void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8 i_layer = -1,
                            f32 i_lastSpeed = 0.0f, u32 i_lastMode = 0, BOOL i_setPoint = TRUE,
                            s8 i_wipe = 0);
-dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1);
+dStage_Ship_dt_c* dComIfGp_getShip(int i_roomNo, int param_1);
 bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle);
 
 inline camera_class* dComIfGp_getCamera(int idx) { return g_dComIfG_gameInfo.play.getCamera(idx); }

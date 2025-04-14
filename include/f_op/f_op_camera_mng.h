@@ -1,10 +1,12 @@
 #ifndef F_F_OP_CAMERA_MNG_H_
 #define F_F_OP_CAMERA_MNG_H_
 
-#include "SSystem/SComponent/c_phase.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "f_op/f_op_camera.h"
 
+struct fopCamM_prm_class {
+    /* 0x00 */ fopAcM_prmBase_class base;
+};  // Size: 0x18
 
 inline void fopCamM_SetAngleX(camera_class* i_camera, s16 angleX) {
     i_camera->mAngle.x = angleX;

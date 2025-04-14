@@ -573,7 +573,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyIn
 }
 
 /* 800535B8-80053678       .text dComIfGp_getShip__Fii */
-dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
+dStage_Ship_dt_c* dComIfGp_getShip(int i_roomNo, int param_1) {
     dStage_roomDt_c* roomSt_p = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
     if (roomSt_p == NULL) {
         return NULL;
@@ -584,7 +584,7 @@ dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
         return NULL;
     }
 
-    dStage_Ship_data* data_p = ship_p->m_entries;
+    dStage_Ship_dt_c* data_p = ship_p->m_entries;
     if (data_p == NULL) {
         return NULL;
     }

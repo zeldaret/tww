@@ -19,20 +19,6 @@ class d2DBSplinePath;
 class dStage_Event_dt_c;
 class fopAc_ac_c;
 
-struct stage_camera__entry {
-    /* 0x00 */ char mpTypeStr[16];
-    /* 0x10 */ u8 mArrowIdx;
-    /* 0x11 */ u8 m11;
-    /* 0x12 */ u8 m12;
-    /* 0x13 */ u8 m13;
-};
-
-struct stage_arrow__entry {
-    /* 0x00 */ cXyz mPos;
-    /* 0x0C */ csXyz mRot;
-    /* 0x12 */ s16 m12;
-};
-
 struct dCamera__EventParam {
     /* 0x00 */ char mName[16];
     /* 0x10 */ int mValue;
@@ -314,8 +300,8 @@ public:
     /* 0x5AC */ cXyz mBlureScale;
     /* 0x5B8 */ f32 mBlureAlpha;
     /* 0x5BC */ u8 m5BC[0x5C0 - 0x5BC];
-    /* 0x5C0 */ stage_camera__entry mCurRoomCamEntry;
-    /* 0x5D4 */ stage_arrow__entry mCurRoomArrowEntry;
+    /* 0x5C0 */ stage_camera2_data_class mCurRoomCamEntry;
+    /* 0x5D4 */ stage_arrow_data_class mCurRoomArrowEntry;
     /* 0x5E8 */ int mCurArrowIdx;
     /* 0x5EC */ f32 mWindowWidth;
     /* 0x5F0 */ f32 mWindowHeight;

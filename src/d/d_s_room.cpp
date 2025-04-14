@@ -210,7 +210,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
         if (dStage_roomControl_c::mDemoArcName[0] == '\0') {
             dStage_Lbnk_c * lbnk = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getLbnk();
             if (lbnk != NULL) {
-                u8 * banks = lbnk->m_bank;
+                u8* banks = lbnk->m_entries;
                 if (banks != NULL) {
                     u32 layerNo = dComIfG_play_c::getLayerNo(roomNo);
                     s32 bank = banks[layerNo];
