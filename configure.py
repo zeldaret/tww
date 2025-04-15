@@ -683,7 +683,7 @@ config.libs = [
             Object(Matching,    "JSystem/JParticle/JPATexture.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAResourceManager.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAEmitterLoader.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAMath.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAMath.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAField.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAEmitter.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAParticle.cpp"),
