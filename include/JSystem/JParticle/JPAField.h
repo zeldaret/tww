@@ -10,6 +10,7 @@ class JPAFieldData;
 class JPABaseParticle;
 class JPABaseField;
 class JPAFieldBlock;
+class JPAFieldContainer;
 
 class JPAFieldManager {
 public:
@@ -19,6 +20,8 @@ public:
     void calc(JPABaseParticle*);
     void deleteField(JPAFieldData*);
     void deleteAllField();
+    
+    static JPAFieldContainer fc;
     
 public:
     /* 0x00 */ JSUList<JPAFieldData> mList;
@@ -38,8 +41,8 @@ public:
     /* 0x08 */ JSULink<JPAFieldData> mLink;
     /* 0x18 */ JGeometry::TVec3<f32> mVel;
     /* 0x24 */ JGeometry::TVec3<f32> mWork0;
-    /* 0x28 */ JGeometry::TVec3<f32> mWork1;
-    /* 0x2C */ JGeometry::TVec3<f32> mWork2;
+    /* 0x30 */ JGeometry::TVec3<f32> mWork1;
+    /* 0x3C */ JGeometry::TVec3<f32> mWork2;
     /* 0x48 */ f32 mMaxDistSq;
     /* 0x4C */ f32 mFadeOutRate;
     /* 0x50 */ f32 mFadeInRate;

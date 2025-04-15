@@ -686,7 +686,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JParticle/JPAMath.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAField.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAEmitter.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAParticle.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAParticle.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAEmitterManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADrawVisitor.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADraw.cpp"),
