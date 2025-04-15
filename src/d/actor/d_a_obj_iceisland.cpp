@@ -58,7 +58,7 @@ void daObjIceisland_c::CreateInit() {
     u8 switchNo = daObjIceisland_prm::getSwitchNo(this);
     if(fopAcM_isSwitch(this, switchNo)){
         mBrkAnm.setFrame(mBrkAnm.getEndFrame());
-        if(dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()){// some if
+        if(dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()){
             field_0x39C = 6;
         }else {
             field_0x39C = 3;
