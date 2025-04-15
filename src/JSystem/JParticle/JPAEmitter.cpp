@@ -64,14 +64,14 @@ void JPABaseEmitter::calcVolumeCube() {
 
 /* 8025C63C-8025C8A4       .text calcVolumeSphere__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeSphere() {
-    /* Nonmatching */
     s16 x;
     s16 angle;
     if (checkEmDataFlag(0x02)) {
         u16 angleNo = (emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax;
         x = (u16)((emtrInfo.mVolumeEmitXCount * 0x8000) / (emtrInfo.mDivNumber - 1) + 0x4000);
         angle = (f32)angleNo * mVolumeSweep + 32768.0f;
-        if (++emtrInfo.mVolumeEmitAngleCount == emtrInfo.mVolumeEmitAngleMax) {
+        emtrInfo.mVolumeEmitAngleCount++;
+        if (emtrInfo.mVolumeEmitAngleCount == emtrInfo.mVolumeEmitAngleMax) {
             emtrInfo.mVolumeEmitAngleCount = 0;
             ++emtrInfo.mVolumeEmitXCount;
             if (emtrInfo.mVolumeEmitXCount * 2 < emtrInfo.mDivNumber) {
@@ -102,12 +102,14 @@ void JPABaseEmitter::calcVolumeSphere() {
 
 /* 8025C8A4-8025CA28       .text calcVolumeCylinder__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCylinder() {
-    /* Nonmatching */
     s16 angle = mVolumeSweep * getRandomSS();
     f32 rad = getRandomF();
     if (checkEmDataFlag(0x01))
         rad = 1.0f - rad * rad;
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
+
+    // Fakematch, needed to force mRandomSeed.value to be reloaded before the third random call
+    *(f32*)NULL = *(f32*)NULL;
 
     emtrInfo.mVolumePos.set(rad * JMASSin(angle), emtrInfo.mVolumeSize * getRandomRF(), rad * JMASCos(angle));
     emtrInfo.mVelOmni.mul(emtrInfo.mVolumePos, emtrInfo.mEmitterGlobalScale);
@@ -428,7 +430,6 @@ JPABaseParticle * JPABaseEmitter::getPtclFromVacList() {
 
 /* 8025DBB4-8025DC2C       .text doStartFrameProcess__14JPABaseEmitterFv */
 bool JPABaseEmitter::doStartFrameProcess() {
-    /* Nonmatching */
     if (mTime.getFrame() >= mStartFrame)
         return true;
 
