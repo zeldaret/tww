@@ -105,7 +105,7 @@ void mDoMemCd_Ctrl_c::restore() {
     CARDFileInfo cardInfo;
     s32 ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
     if (ret == CARD_ERROR_READY) {
-        if (!mDoMemCdRWm_Restore(&cardInfo, this, 0x1650)) {
+        if (!mDoMemCdRWm_Restore(&cardInfo, mData, sizeof(mData))) {
             field_0x1660 = 3;
         } else {
             setCardState(ret);
@@ -133,7 +133,7 @@ void mDoMemCd_Ctrl_c::store() {
     if (field_0x1660 == 1) {
         ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
         if (ret == CARD_ERROR_READY) {
-            ret = mDoMemCdRWm_Store(&cardInfo, this, 0x1650);
+            ret = mDoMemCdRWm_Store(&cardInfo, mData, sizeof(mData));
             if (ret != CARD_ERROR_READY)
                 setCardState(ret);
             else

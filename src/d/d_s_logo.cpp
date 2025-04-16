@@ -12,6 +12,7 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
@@ -590,12 +591,12 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     dComIfGp_setWindowNum(0);
 
     for (s32 i = 0; i < 3; i++) {
-        dComIfGp_setPictureBoxData(JKRAllocFromAram(0x2000, JKRAramHeap::HEAD), i);
+        dComIfGp_setPictureBoxData(JKRAllocFromAram(sizeof(card_pictdata), JKRAramHeap::HEAD), i);
         dComIfGp_offPictureFlag(i);
     }
 
     for (s32 i = 0; i < 4; i++) {
-        dComIfGp_setBossBattleData(JKRAllocFromAram(0x70, JKRAramHeap::HEAD), i);
+        dComIfGp_setBossBattleData(JKRAllocFromAram(sizeof(dSv_player_status_c_c), JKRAramHeap::HEAD), i);
     }
 
 #if VERSION == VERSION_PAL
