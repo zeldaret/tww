@@ -2730,7 +2730,7 @@ void daPy_lk_c::setOldRootQuaternion(s16, s16, s16) {
 
 /* 80111E54-80111EFC       .text checkRestHPAnime__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkRestHPAnime() {
-    if ((((!checkPlayerGuard()) && (checkUpperAnime(-1))) &&
+    if ((((!checkPlayerGuard()) && (checkNoUpperAnime())) &&
          (mpAttnActorLockOn == NULL)) &&
         ((((mDemo.getDemoType() == 0 && (!checkModeFlg(ModeFlg_IN_SHIP))) &&
            (dComIfGs_getLife() <= daPy_HIO_move_c0::m.field_0xE)) ||
@@ -3918,7 +3918,7 @@ BOOL daPy_lk_c::procBackJumpLand_init() {
     }
     if ((((mEquipItem == daPyItem_SWORD_e) || (mEquipItem == daPyItem_BOKO_e)) &&
          (daPy_dmEcallBack_c::m_type != 1)) &&
-        (checkUpperAnime(-1)))
+        (checkNoUpperAnime()))
     {
         mProcVar0.m3570 = 1;
     } else {

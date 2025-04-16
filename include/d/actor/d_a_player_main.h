@@ -1727,6 +1727,7 @@ public:
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
     
     bool checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
+    bool checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
     
     bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
     bool checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
@@ -1834,7 +1835,6 @@ public:
     void checkFaceTypeNot() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
-    void checkNoUpperAnime() const {}
     void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}

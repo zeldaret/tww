@@ -302,7 +302,7 @@ BOOL daPy_lk_c::procWHideReady() {
         return true;
     }
     if (mProcVar0.m3570 == 0) {
-        if (checkUpperAnime(-1)) {
+        if (checkNoUpperAnime()) {
             setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
             mProcVar0.m3570 = 1;
         }

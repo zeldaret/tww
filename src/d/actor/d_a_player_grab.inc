@@ -393,7 +393,7 @@ BOOL daPy_lk_c::procGrabReady() {
             } else {
                 checkNextMode(0);
             }
-        } else if ((mProcVar0.m3570 == 0) && (checkUpperAnime(-1))) {
+        } else if ((mProcVar0.m3570 == 0) && (checkNoUpperAnime())) {
             setSingleMoveAnime(
                 ANM_GRABP,
                 daPy_HIO_grab_c0::m.field_0x20,

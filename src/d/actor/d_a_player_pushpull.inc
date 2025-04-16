@@ -80,7 +80,7 @@ BOOL daPy_lk_c::procPushPullWait() {
     dComIfGp_setRStatus(0x11);
     setFrontWallType();
     if (m34D6 != 0) {
-        if (checkUpperAnime(-1)) {
+        if (checkNoUpperAnime()) {
             setSingleMoveAnime(
                 ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
             );
@@ -92,7 +92,7 @@ BOOL daPy_lk_c::procPushPullWait() {
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && (dVar2 < 5.0f)) && (checkUpperAnime(-1))) {
+            if (((!sVar1) && (dVar2 < 5.0f)) && (checkNoUpperAnime())) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
                 mProcVar0.m3570 = 0;

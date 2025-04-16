@@ -138,7 +138,7 @@ BOOL daPy_lk_c::procLadderUpStart() {
     }
 
     if (mProcVar0.m3570 == 0) {
-        if (checkUpperAnime(-1)) {
+        if (checkNoUpperAnime()) {
             procLadderUpStart_init_sub();
         }
     } else {
@@ -253,7 +253,7 @@ BOOL daPy_lk_c::procLadderDownStart() {
     }
 
     if (mProcVar0.m3570 == 0) {
-        if (checkUpperAnime(-1)) {
+        if (checkNoUpperAnime()) {
             procLadderDownStart_init_sub();
         }
     } else {
