@@ -4,10 +4,11 @@
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_drawlist.h"
+#include "d/d_stage.h"
 #include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "d/d_bg_s_gnd_chk.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_spline_path.h"
 #include "global.h"
 
@@ -128,8 +129,8 @@ public:
     };  // Size: 0xB8
 
     /* 0x000 */ camera_class* mpCamera;
-    /* 0x004 */ u8 m004;
-    /* 0x005 */ u8 m005;
+    /* 0x004 */ u8 mActive;
+    /* 0x005 */ u8 mPause;
     /* 0x006 */ cSAngle m006;
     /* 0x008 */ cSGlobe mDirection;
     /* 0x010 */ cXyz mCenter;
@@ -457,6 +458,7 @@ public:
     cSAngle Bank() {}
     cXyz Up() {}
     cXyz Center() { return mCenter + mCenterShake; }
+    cXyz Eye() { return mEye + mEyeShake; }
 
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);
@@ -498,16 +500,16 @@ public:
     void bSplineEvCamera();
     void twoActor0EvCamera();
 
-    void Pause() { if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera()) ResetView(); }
-    void Active() { if (m004 && !m005) Run(); else NotRun(); }
+    bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
+    void setFlag(u32 flag) { mEventFlags |= flag; }
+    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
     void CStickUse() { clrFlag(0x800000); }
     void CStickUseless() { setFlag(0x800000); }
-    cXyz Eye() { return mEye + mEyeShake; }
     void StickUse() { clrFlag(0x1000000); }
     void StickUseless() { setFlag(0x1000000); }
-    void setFlag(u32 flag) { mEventFlags |= flag; }
-    bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
-    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
+
+    bool Active() { return mActive; }
+    bool Pause() { return mPause; }
 
     static engine_fn engine_tbl[];
     static const int type_num;

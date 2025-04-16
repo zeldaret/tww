@@ -291,8 +291,8 @@ public:
     dDemo_fog_c* createFog();
     void remove();
 
+    dDemo_camera_c* getCamera() { return mpCamera; }
     void createEditorCamera() {}
-    void getCamera() {}
     void getEditorCamera() {}
     void removeEditorCamera() {}
 
@@ -300,7 +300,7 @@ private:
     /* 0x00 */ u8 mNumActor;
     /* 0x01 */ u8 mNumLight;
     /* 0x04 */ dDemo_actor_c* mpActors[32];
-    /* 0x84 */ dDemo_camera_c* mpActiveCamera;
+    /* 0x84 */ dDemo_camera_c* mpCamera;
     /* 0x88 */ dDemo_ambient_c* mpAmbient;
     /* 0x8C */ dDemo_light_c* mpLight[8];
     /* 0xAC */ dDemo_fog_c* mpFog;

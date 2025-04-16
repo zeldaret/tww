@@ -389,7 +389,7 @@ void JPABaseEmitter::calcKey() {
         case 7: mInitialVelAxis = value; break;
         case 8: mInitialVelDir = value; break;
         case 9: mSpread = value; break;
-        case 10: mDraw.mScaleOut = value; break;
+        case 10: mDraw.setKeyScl(value); break;
         }
     }
 }

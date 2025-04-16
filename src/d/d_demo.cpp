@@ -453,7 +453,7 @@ void dDemo_fog_c::JSGSetColor(GXColor color) {
 dDemo_object_c::dDemo_object_c() {
     mNumActor = 0;
     mNumLight = 0;
-    mpActiveCamera = NULL;
+    mpCamera = NULL;
     mpAmbient = NULL;
     mpFog = NULL;
 }
@@ -491,17 +491,17 @@ dDemo_actor_c* dDemo_object_c::getActor(u8 no) {
 
 /* 8006A31C-8006A398       .text createCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::createCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (mpCamera != NULL)
+        return mpCamera;
 
-    mpActiveCamera = new dDemo_camera_c();
-    return mpActiveCamera;
+    mpCamera = new dDemo_camera_c();
+    return mpCamera;
 }
 
 /* 8006A398-8006A3AC       .text getActiveCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::getActiveCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (getCamera() != NULL)
+        return getCamera();
     return NULL;
 }
 
@@ -541,9 +541,9 @@ void dDemo_object_c::remove() {
     while (mNumActor)
         delete mpActors[--mNumActor];
 
-    if (mpActiveCamera != NULL) {
-        delete mpActiveCamera;
-        mpActiveCamera = NULL;
+    if (mpCamera != NULL) {
+        delete mpCamera;
+        mpCamera = NULL;
     }
 
     if (mpAmbient != NULL) {

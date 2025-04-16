@@ -332,7 +332,7 @@ void initiateLighting(GXColorS10& dif, GXColor& amb, GXColor& k1) {
 /* 8007B804-8007BB44       .text smokeEcallBack__FP14JPABaseEmitterP12dKy_tevstr_cSc8_GXColor */
 void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor color) {
     GXFlush();
-    GXLoadNrmMtxImm(JPADraw::cb.mDrawMtxPtr, GX_PNMTX0);
+    GXLoadNrmMtxImm(emtr->getCamMtxPtr(), GX_PNMTX0);
     GXInvalidateVtxCache();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
@@ -343,7 +343,7 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
     GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    if (!(emtr->mDraw.field_0xc2 & 1)) {
+    if (!emtr->isZDraw()) {
         GXSetNumChans(1);
         if (tevStr == NULL) {
             GXColorS10 dif;

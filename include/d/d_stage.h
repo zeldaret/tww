@@ -34,7 +34,7 @@ struct dStage_nodeHeader {
 // made up name
 struct dStage_fileHeader {
     /* 0x0 */ int m_chunkCount;
-    /* 0x4 */ dStage_nodeHeader m_nodes[1]; // Variable length
+    /* 0x4 */ dStage_nodeHeader m_nodes[];
 };
 
 // Virt

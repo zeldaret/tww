@@ -104,12 +104,12 @@ void dComIfG_play_c::itemInit() {
     mMesgStatus = 0;
     mScopeMesgStatus = 0;
     field_0x492c = 0;
-    field_0x492d = 0;
-    mCurrButtonBAction = 0;
-    mCurrButtonAAction = 0;
-    field_0x4930 = 0;
-    field_0x4931 = 0;
-    field_0x4932 = 0;
+    mRStatus = 0;
+    mAStatus = 0;
+    mDoStatus = 0;
+    mRStatusForce = 0;
+    mAStatusForce = 0;
+    mDoStatusForce = 0;
 
     for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = 0;
@@ -152,7 +152,7 @@ void dComIfG_play_c::itemInit() {
     mPlacenameIndex = 0;
     mPlacenameState = 0;
     mGameoverStatus = 0;
-    field_0x495a = 0;
+    mMenuCollect = false;
     mPictureFlag = 0;
     mPictureResult = 0;
     mPictureResultDetail = 0;

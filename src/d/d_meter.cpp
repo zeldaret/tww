@@ -1880,9 +1880,9 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
 
     fopMsgM_Create(PROC_MESG, NULL, NULL);
 
-    g_dComIfG_gameInfo.play.field_0x4932 = 0;
-    g_dComIfG_gameInfo.play.field_0x4930 = 0;
-    g_dComIfG_gameInfo.play.field_0x4931 = 0;
+    dComIfGp_setDoStatusForce(0);
+    dComIfGp_setRStatusForce(0);
+    dComIfGp_setAStatusForce(0);
 
     mDoHIO_createChild("通常画面表示", &g_meterHIO); // "Normal Screen Display"
     mDoHIO_createChild("メニュー画面", &g_menuHIO); // "Menu Screen"

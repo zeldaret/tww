@@ -8,6 +8,7 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_sph_chk.h"
 #include "SSystem/SComponent/c_bg_s.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -202,8 +203,8 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     int mapToolType;
     
     mpCamera = camera;
-    m004 = 1;
-    m005 = 0;
+    mActive = 1;
+    mPause = 0;
 
     mpPlayerActor = playerActor;
     mCameraInfoIdx = cameraInfoIdx;
@@ -409,17 +410,17 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
 /* 80162128-80162134       .text Start__9dCamera_cFv */
 void dCamera_c::Start() {
-    m004 = 1;
+    mActive = 1;
 }
 
 /* 80162134-80162140       .text Stop__9dCamera_cFv */
 void dCamera_c::Stop() {
-    m004 = 0;
+    mActive = 0;
 }
 
 /* 80162140-8016214C       .text Stay__9dCamera_cFv */
 void dCamera_c::Stay() {
-    m005 = 1;
+    mPause = 1;
 }
 
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
@@ -833,7 +834,7 @@ bool dCamera_c::Run() {
             clrFlag(0x200000);
         }
     }
-    else if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera() && mCamParam.Algorythmn() != 11) {
+    else if (dComIfGp_demo_getCamera() && mCamParam.Algorythmn() != 11) {
         camera = (dCamera_c *)demoCamera(0);
     }
     else {
@@ -1002,7 +1003,7 @@ bool dCamera_c::NotRun() {
 
     shakeCamera();
 
-    m005 = 0;
+    mPause = 0;
 
     if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 8)) {
         if (chkFlag(0x400000)) {
@@ -2753,7 +2754,7 @@ void store(camera_process_class* i_this) {
     cSAngle bank = fopCamM_GetBank(a_this);
     f32 fovy = fopCamM_GetFovy(a_this);
 
-    dDemo_camera_c* mDemoCamera = g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera();
+    dDemo_camera_c* mDemoCamera = dComIfGp_demo_getCamera();
 
     if (mDemoCamera) {
         if (mDemoCamera->checkEnable(0x40)) {
@@ -2819,13 +2820,19 @@ int camera_execute(camera_process_class* i_this) {
     
     preparation(i_this);
 
-    a_this->mCamera.Pause();
+    if (dComIfGp_demo_getCamera()) {
+        a_this->mCamera.ResetView();
+    }
 
     if (!dComIfGp_evmng_cameraPlay()) {
         mDoGph_gInf_c::onAutoForcus();
     }
 
-    a_this->mCamera.Active();
+    if (a_this->mCamera.Active() && !a_this->mCamera.Pause()) {
+        a_this->mCamera.Run();
+    } else {
+        a_this->mCamera.NotRun();
+    }
 
     a_this->mCamera.CalcTrimSize();
 
