@@ -624,10 +624,6 @@ BOOL daPy_lk_c::procShipPaddle_init() {
 
 /* 801413A4-801416BC       .text procShipPaddle__9daPy_lk_cFv */
 BOOL daPy_lk_c::procShipPaddle() {
-    /* Nonmatching */
-    bool bVar2;
-    int iVar3;
-    int iVar4;
     daPy_ANM dVar5;
     float dVar6;
 
@@ -661,41 +657,37 @@ BOOL daPy_lk_c::procShipPaddle() {
                 voiceStart(47);
             }
         }
-        if ((!(mStickDistance > 0.05f) && (!dComIfGp_event_runCheck())) &&
-            (dComIfGp_getDoStatus() == 29))
+        if (((mStickDistance > 0.05f) || (dComIfGp_event_runCheck())) ||
+            (dComIfGp_getDoStatus() != 29) || (ship->checkForceMove()) || (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f))
         {
-            if ((!ship->checkForceMove()) && !(mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f))
-                goto LAB_801416a4;
+            initShipBaseAnime();
+            m34D0 = cM_rndF(150.0f) + 300.0f;
         }
-        initShipBaseAnime();
-        m34D0 = cM_rndF(150.0f) + 300.0f;
     } else {
         if (((!dComIfGp_event_runCheck()) && (dComIfGp_getDoStatus() == 29)) &&
-            (mStickDistance <= 0.05f))
+            (mStickDistance <= 0.05f) && (!ship->checkForceMove()) && (!checkShipNotNormalMode()))
         {
-            if ((!ship->checkForceMove()) && (!checkShipNotNormalMode())) {
-                m34D0--;
-                if (m34D0 == 0) {
-                    dVar6 = cM_rnd();
-                    m34D0 = -1;
-                    if (dVar6 < 0.3333f) {
-                        dVar5 = ANM_FREEA;
+            m34D0--;
+            if (m34D0 == 0) {
+                dVar6 = cM_rnd();
+                m34D0 = -1;
+                if (dVar6 < 0.3333f) {
+                    dVar5 = ANM_FREEA;
+                } else {
+                    if (dVar6 < 0.6666f) {
+                        dVar5 = ANM_FREEB;
+                        m34D0 = -2;
                     } else {
-                        if (dVar6 < 0.6666f) {
-                            dVar5 = ANM_FREEB;
-                            m34D0 = -2;
-                        } else {
-                            dVar5 = ANM_FREED;
-                        }
+                        dVar5 = ANM_FREED;
                     }
-                    setSingleMoveAnime(dVar5, 1.0f, 0.0f, -1, 5.0f);
                 }
-                goto LAB_801416a4;
+                setSingleMoveAnime(dVar5, 1.0f, 0.0f, -1, 5.0f);
             }
+        } else {
+            m34D0 = cM_rndF(150.0f) + 300.0f;
         }
-        m34D0 = cM_rndF(150.0f) + 300.0f;
     }
-LAB_801416a4:
+
     return true;
 }
 
@@ -775,7 +767,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
     } else {
         setShipRidePos(0);
         if (mActorKeepThrow.getActor() == NULL) {
-            if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx != LKANM_BCK_BOOMCATCH) {
+            if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
                 dComIfGp_setDoStatus(7);
                 if (doTrigger()) {
                     {
@@ -788,9 +780,9 @@ BOOL daPy_lk_c::procShipBoomerang() {
         }
         mSightPacket.offDrawFlg();
         daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx != LKANM_BCK_BOOMCATCH) {
+        if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
             if (mEquipItem == dItem_BOOMERANG_e) {
-                if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMWAIT) {
+                if (checkUpperAnime(LKANM_BCK_BOOMWAIT)) {
                     setShipAttentionAnmSpeed(daPy_HIO_boom_c0::m.field_0x18);
                     checkNextActionBoomerangReady();
                     if (mpAttention->Lockon()) {
@@ -864,8 +856,8 @@ BOOL daPy_lk_c::procShipHookshot() {
     setShipRidePos(0);
     dComIfGp_setDoStatus(7);
     daHookshot_c* pfVar4 = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (((doTrigger()) || (pfVar4 == NULL)) ||
-        ((mProcVar0.m3570 != 0) && (m355E == 0)) && (!mpAttention->Lockon()))
+    if (doTrigger() || pfVar4 == NULL ||
+        (mProcVar0.m3570 != 0 && m355E == 0 && !mpAttention->Lockon()))
     {
         procShipPaddle_init();
         deleteEquipItem(TRUE);
@@ -918,7 +910,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     ship->m034D = 2;
-    if (mDemo.getDemoMode() == 0x44) {
+    if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e) {
         mEquipItem = dItem_BOW_e;
     } else {
         mEquipItem = dComIfGp_getSelectItem(mReadyItemBtn);
@@ -930,7 +922,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     setShipRidePos(0);
     m34D4 = ship->shape_angle.y;
     m34DA = 0;
-    if (mpAttention->Lockon() && mDemo.getDemoMode() != 0x44) {
+    if (mpAttention->Lockon() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
         mProcVar0.m3570 = 1;
     } else {
         mProcVar0.m3570 = 0;
@@ -941,11 +933,11 @@ BOOL daPy_lk_c::procShipBow_init() {
 
 /* 80142084-80142250       .text procShipBow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procShipBow() {
-    if ((mDemo.getDemoMode() != 0x44) && (changeShipEndProc())) {
+    if ((mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) && (changeShipEndProc())) {
         return true;
     }
     setShipRidePos(0);
-    if (mDemo.getDemoMode() != 0x44) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
         dComIfGp_setDoStatus(7);
         if ((doTrigger()) ||
             (((!mpAttention->Lockon()) && (mActorKeepEquip.getActor() == NULL)) && (mProcVar0.m3570 != 0)))
@@ -958,10 +950,10 @@ BOOL daPy_lk_c::procShipBow() {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     }
     daShip_c* iVar1 = (daShip_c*)dComIfGp_getShipActor();
-    if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOWWAIT) {
+    if (checkUpperAnime(LKANM_BCK_BOWWAIT)) {
         setShipAttentionAnmSpeed(1.0f);
     }
-    if ((mpAttention->Lockon()) && (mDemo.getDemoMode() != 0x44)) {
+    if ((mpAttention->Lockon()) && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e)) {
         setShipAttnetionBodyAngle();
         mProcVar0.m3570 = 1;
     } else {

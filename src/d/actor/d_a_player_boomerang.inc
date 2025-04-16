@@ -52,7 +52,7 @@ int daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
 
     if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 &&
-        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || checkPlayerGuard() || checkDashDamageAnime() ||
+        (checkUpperAnime(-1) || checkPlayerGuard() || checkDashDamageAnime() ||
          checkBoomerangAnime()) &&
         (!checkModeFlg(
              ModeFlg_WHIDE | ModeFlg_ROPE | ModeFlg_IN_SHIP | ModeFlg_CLIMB | ModeFlg_SWIM | ModeFlg_00080000 |
@@ -122,7 +122,7 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
 int daPy_lk_c::changeBoomerangCatchProc() {
     if (checkNoResetFlg0(daPyFlg0_UNK20)) {
         if (!dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 && checkModeFlg(ModeFlg_00020000) &&
-            (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff || checkBoomerangThrowAnime()))
+            (checkUpperAnime(-1) || checkBoomerangThrowAnime()))
         {
             setActAnimeUpper(
                 LKANM_BCK_BOOMCATCH,

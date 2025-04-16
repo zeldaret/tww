@@ -492,15 +492,15 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
                     {
                         onNoResetFlg0(daPyFlg0_UNK10000000);
                     }
-                    int iVar6 = dComIfG_Bgsp()->GetAttributeCode(mLinkLinChk);
-                    if (!(iVar6 - 2U > 1) || (iVar6 == dBgS_Attr_METAL_e)) {
+                    int attrib_code = dComIfG_Bgsp()->GetAttributeCode(mLinkLinChk);
+                    if (attrib_code == dBgS_Attr_WOOD_e || attrib_code == dBgS_Attr_STONE_e || attrib_code == dBgS_Attr_METAL_e) {
                         triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
                         csXyz local_44;
                         local_44.x = cM_atan2s(-triPla->GetNP()->y, triPla->GetNP()->absXZ());
                         local_44.y = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z);
                         local_44.z = 0;
                         JPABaseEmitter* emitter;
-                        if (iVar6 == dBgS_Attr_WOOD_e) {
+                        if (attrib_code == dBgS_Attr_WOOD_e) {
                             emitter = dComIfGp_particle_setP1(
                                 dPa_name::ID_COMMON_002B, mLinkLinChk.GetCrossP(), &local_44, NULL,
                                 0xff, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
@@ -1500,7 +1500,7 @@ BOOL daPy_lk_c::procCutRoll() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         uVar1 = current.angle.y;
-        if ((mAcch.ChkWallHit()) && (mDemo.getDemoMode() != 0x2b)) {
+        if ((mAcch.ChkWallHit()) && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
             fVar2 = 25.0f + (mAcchCir[0]).GetWallR();
             local_48.set(current.pos.x, current.pos.y + (mAcchCir[0]).GetWallH(), current.pos.z);
             local_3c.set(local_48.x + fVar2 * cM_ssin(uVar1), local_48.y,
@@ -1519,7 +1519,7 @@ BOOL daPy_lk_c::procCutRoll() {
         }
         sVar3 = current.angle.y - uVar1;
         if (dComIfGp_event_runCheck() != 0) {
-            if (mDemo.getDemoMode() != 0x2b) {
+            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e) {
                 m34D0 = 0;
             } else {
                 m34D0 = 5;
@@ -1539,7 +1539,7 @@ BOOL daPy_lk_c::procCutRoll() {
             if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
                 shape_angle.y = shape_angle.y + m34EC;
                 current.angle.y = shape_angle.y;
-                if ((dComIfGp_event_runCheck() != 0) && (mDemo.getDemoMode() != 0x2b)) {
+                if ((dComIfGp_event_runCheck() != 0) && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
                     procWait_init();
                 } else {
                     procCutRollEnd_init();

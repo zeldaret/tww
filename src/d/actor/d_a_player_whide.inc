@@ -243,7 +243,7 @@ int daPy_lk_c::changeWHideEndProc(cXyz* param_0) {
     dComIfGp_setRStatus(15);
 
     if (((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
-         (m_anm_heap_upper[UPPER_MOVE2_e].mIdx != LKANM_BCK_REST && swordTrigger())) ||
+         (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger())) ||
         !checkWHideBackWall(param_0))
     {
         mVelocity = 0.7f * mMaxNormalSpeed;
@@ -302,7 +302,7 @@ BOOL daPy_lk_c::procWHideReady() {
         return true;
     }
     if (mProcVar0.m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+        if (checkUpperAnime(-1)) {
             setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
             mProcVar0.m3570 = 1;
         }

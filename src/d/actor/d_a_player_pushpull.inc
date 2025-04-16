@@ -15,19 +15,19 @@
 
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
 int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
-    if (param_0 != dBgW::PP_UNK0_e) {
+    if (param_0 != dBgW::PPLABEL_NONE) {
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK8_e);
+            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PPLABEL_HEAVY);
         }
         if (mProcVar0.m3570) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK4_e);
+            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PPLABEL_UNK4);
         }
     }
     fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, param_0);
     if (pp_actor == NULL) {
         return 0;
     }
-    if (param_0 != dBgW::PP_UNK0_e) {
+    if (param_0 != dBgW::PPLABEL_NONE) {
         if (pp_actor->shape_angle.y != m34D4) {
             cXyz local_28 = current.pos - m370C;
             mDoMtx_trans(mDoMtx_stack_c::now, m370C.x, m370C.y, m370C.z);
@@ -80,7 +80,7 @@ BOOL daPy_lk_c::procPushPullWait() {
     dComIfGp_setRStatus(0x11);
     setFrontWallType();
     if (m34D6 != 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF) {
+        if (checkUpperAnime(-1)) {
             setSingleMoveAnime(
                 ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
             );
@@ -92,7 +92,7 @@ BOOL daPy_lk_c::procPushPullWait() {
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && (dVar2 < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF)) {
+            if (((!sVar1) && (dVar2 < 5.0f)) && (checkUpperAnime(-1))) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
                 mProcVar0.m3570 = 0;
@@ -118,7 +118,7 @@ BOOL daPy_lk_c::procPushPullWait() {
 
 /* 8015198C-80151A1C       .text procPushMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushMove_init() {
-    if (!setPushPullKeepData(dBgW::PP_UNK0_e)) {
+    if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
     } else {
         commonProcInit(daPyProc_PUSH_MOVE_e);
@@ -142,7 +142,7 @@ BOOL daPy_lk_c::procPushMove() {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
             if (mStickDistance > 0.05f) {
                 if (direction == DIR_FORWARD) {
-                    setPushPullKeepData(dBgW::PP_UNK1_e);
+                    setPushPullKeepData(dBgW::PPLABEL_PUSH);
                     return true;
                 }
                 if (direction == DIR_BACKWARD) {
@@ -155,14 +155,14 @@ BOOL daPy_lk_c::procPushMove() {
             voiceStart(19);
         }
         mProcVar0.m3570 = 0;
-        setPushPullKeepData(dBgW::PP_UNK1_e);
+        setPushPullKeepData(dBgW::PPLABEL_PUSH);
     }
     return true;
 }
 
 /* 80151B38-80151BC8       .text procPullMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPullMove_init() {
-    if (!setPushPullKeepData(dBgW::PP_UNK0_e)) {
+    if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
     } else {
         commonProcInit(daPyProc_PULL_MOVE_e);
@@ -211,7 +211,7 @@ BOOL daPy_lk_c::procPullMove() {
                     mGndChk.SetPos(&local_48);
                     dVar4 = dComIfG_Bgsp()->GroundCross(&mGndChk);
                     if (!((dVar4 - current.pos.y) < -30.1f)) {
-                        setPushPullKeepData(dBgW::PP_UNK2_e);
+                        setPushPullKeepData(dBgW::PPLABEL_PULL);
                     }
                     return true;
                 }
@@ -225,7 +225,7 @@ BOOL daPy_lk_c::procPullMove() {
             voiceStart(19);
         }
         mProcVar0.m3570 = 0;
-        setPushPullKeepData(dBgW::PP_UNK2_e);
+        setPushPullKeepData(dBgW::PPLABEL_PULL);
     }
     return true;
 }

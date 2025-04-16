@@ -34,9 +34,9 @@ public:
     void arrowUseMp();
     void ShieldReflect();
     bool check_water_in();
-    BOOL changeArrowMp();
+    static BOOL changeArrowMp();
     daArrow_c* changeArrowType();
-    void changeArrowTypeNotReady();
+    static void changeArrowTypeNotReady();
     void setRoomInfo();
     void setKeepMatrix();
     void setStopActorMatrix();

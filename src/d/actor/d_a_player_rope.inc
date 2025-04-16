@@ -21,7 +21,7 @@
 /* 80142D08-80142D68       .text checkRopeAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkRopeAnime() const {
     return ((checkRopeReadyAnime()) ||
-            ((m_anm_heap_upper[UPPER_MOVE2_e]).mIdx == LKANM_BCK_ROPETHROW));
+            (checkUpperAnime(LKANM_BCK_ROPETHROW)));
 }
 
 /* 80142D68-80142E0C       .text freeRopeItem__9daPy_lk_cFv */
@@ -72,7 +72,7 @@ int daPy_lk_c::changeRopeSwingProc() {
 /* 80142FC8-801430D4       .text changeRopeEndProc__9daPy_lk_cFi */
 int daPy_lk_c::changeRopeEndProc(int param_0) {
     dComIfGp_setDoStatus(0x16);
-    if (((doTrigger()) || (cancelTrigger())) || (!checkRopeTag()) && itemTrigger()) {
+    if (doTrigger() || cancelTrigger() || (!checkRopeTag() && itemTrigger())) {
         freeRopeItem();
         voiceStart(6);
         if ((cancelTrigger()) && (!checkBossGomaStage())) {
@@ -274,7 +274,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
     if (uVar2 == 2) {
         return procRopeReady_init();
     } else if (uVar2 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROW) {
+        if (checkUpperAnime(LKANM_BCK_ROPETHROW)) {
             if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
                 return procRopeThrowCatch_init();
             } else {

@@ -1668,7 +1668,7 @@ void demo_camera(fganon_class* i_this) {
             i_this->mB80 = 0.0f;
 
             player->changeOriginalDemo();
-            player->changeDemoMode(0x18);
+            player->changeDemoMode(daPy_demo_c::DEMO_UNK18_e);
         }
         case 2: {
             transformedPos.x = -300306.0f;
@@ -1690,7 +1690,7 @@ void demo_camera(fganon_class* i_this) {
             }
             
             if (i_this->mB56 == 30) {
-                player->mDemo.setDemoMode(0x35);
+                player->changeDemoMode(daPy_demo_c::DEMO_UNK35_e);
             }
             
             if (i_this->mB56 == 45) {
@@ -1809,7 +1809,7 @@ void demo_camera(fganon_class* i_this) {
                 i_this->mB5C.y = 921.0f;
                 i_this->mB5C.z = -300851.0f;
 
-                player->changeDemoMode(0x1A);
+                player->changeDemoMode(daPy_demo_c::DEMO_UNK1A_e);
             }
             break;
         }
@@ -1865,7 +1865,7 @@ void demo_camera(fganon_class* i_this) {
             cLib_addCalc2(&i_this->mB68.y, (i_this->eyePos.y - 30.0f) + REG0_F(11), 0.1f, 20.0f);
             if (i_this->mB56 == 100) {
                 i_this->mB54 = 55;
-                player->changeDemoMode(0xF);
+                player->changeDemoMode(daPy_demo_c::DEMO_UNK0F_e);
                 i_this->mB56 = 0;
             }
             else {

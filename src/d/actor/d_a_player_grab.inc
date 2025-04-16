@@ -393,7 +393,7 @@ BOOL daPy_lk_c::procGrabReady() {
             } else {
                 checkNextMode(0);
             }
-        } else if ((mProcVar0.m3570 == 0) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
+        } else if ((mProcVar0.m3570 == 0) && (checkUpperAnime(-1))) {
             setSingleMoveAnime(
                 ANM_GRABP,
                 daPy_HIO_grab_c0::m.field_0x20,
@@ -647,7 +647,7 @@ BOOL daPy_lk_c::procGrabPut() {
     fopAc_ac_c* pfVar4 = mActorKeepGrab.getActor();
 
     if (pfVar4 == NULL) {
-        if (mDemo.getDemoMode() == 0x38) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
             return true;
         } else {
@@ -705,7 +705,7 @@ BOOL daPy_lk_c::procGrabPut() {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
             pfVar4->speedF = 0.0f;
             freeGrabItem();
-            if (mDemo.getDemoMode() == 0x38) {
+            if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
             } else {
                 checkNextMode(0);

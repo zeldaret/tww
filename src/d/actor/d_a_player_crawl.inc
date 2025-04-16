@@ -341,10 +341,10 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
         if (m34D0 == 0) {
             setCrawlMoveDirectionArrow();
             if (mStickDistance > 0.05f) {
-                int iVar10 = getDirectionFromShapeAngle();
+                int direction = getDirectionFromShapeAngle();
                 f32 fVar2 = cM_ssin(shape_angle.y);
                 f32 fVar3 = cM_scos(shape_angle.y);
-                if ((iVar10 == 2) && ((mProcVar0.m3570 & 4))) {
+                if ((direction == DIR_LEFT) && ((mProcVar0.m3570 & 4))) {
                     m370C.x += 75.0f * fVar3;
                     m370C.z -= 75.0f * fVar2;
                     m34D4 = current.angle.y + 0x4000;
@@ -354,7 +354,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
                         m35A0 = -1.0f;
                     }
                     m34D0 = -1;
-                } else if ((iVar10 == 3) && ((mProcVar0.m3570 & 8))) {
+                } else if ((direction == DIR_RIGHT) && ((mProcVar0.m3570 & 8))) {
                     m370C.x -= 75.0f * fVar3;
                     m370C.z += 75.0f * fVar2;
                     m34D4 = current.angle.y + -0x4000;
@@ -365,15 +365,15 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
                     }
                     m34D0 = -1;
                 } else if (((mProcVar0.m3570 & 1)) &&
-                           (((shape_angle.y == current.angle.y && (iVar10 == 0)) ||
-                             ((shape_angle.y != current.angle.y && (iVar10 == 1))))))
+                           (((shape_angle.y == current.angle.y && (direction == DIR_FORWARD)) ||
+                             ((shape_angle.y != current.angle.y && (direction == DIR_BACKWARD))))))
                 {
                     m370C.x += 75.0f * cM_ssin(current.angle.y);
                     m370C.z += 75.0f * cM_scos(current.angle.y);
                     m34D4 = shape_angle.y;
                     m35A0 = 0.0f;
                     m34D0 = -1;
-                } else if (((shape_angle.y == current.angle.y) && (iVar10 == 1)) || ((shape_angle.y != current.angle.y && (iVar10 == 0)))) {
+                } else if (((shape_angle.y == current.angle.y) && (direction == DIR_BACKWARD)) || ((shape_angle.y != current.angle.y && (direction == DIR_FORWARD)))) {
                     current.angle.y += 0x8000;
                     m370C.x -= 75.0f * cM_ssin(current.angle.y);
                     m370C.z -= 75.0f * cM_scos(current.angle.y);

@@ -28,17 +28,19 @@ STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 class daPy_demo_c {
 public:
     enum {
-        DEMO_UNK1_e = 0x01,
-        DEMO_UNK4_e = 0x04,
-        DEMO_UNK6_e = 0x06,
-        DEMO_UNK8_e = 0x08,
-        DEMO_UNK9_e = 0x09,
+        DEMO_UNK01_e = 0x01,
+        DEMO_UNK04_e = 0x04,
+        DEMO_UNK06_e = 0x06,
+        DEMO_UNK08_e = 0x08,
+        DEMO_UNK09_e = 0x09,
+        DEMO_UNK0F_e = 0x0F,
         DEMO_UNK10_e = 0x10,
         DEMO_UNK11_e = 0x11,
         DEMO_UNK12_e = 0x12,
         DEMO_UNK14_e = 0x14,
         DEMO_UNK17_e = 0x17,
         DEMO_UNK18_e = 0x18,
+        DEMO_UNK1A_e = 0x1A,
         DEMO_UNK1B_e = 0x1B,
         DEMO_UNK1D_e = 0x1D,
         DEMO_UNK1E_e = 0x1E,
@@ -46,8 +48,11 @@ public:
         DEMO_UNK22_e = 0x22,
         DEMO_UNK25_e = 0x25,
         DEMO_UNK2A_e = 0x2A,
+        DEMO_UNK2B_e = 0x2B,
         DEMO_UNK2F_e = 0x2F,
         DEMO_UNK33_e = 0x33,
+        DEMO_UNK35_e = 0x35,
+        DEMO_UNK38_e = 0x38,
         DEMO_UNK3D_e = 0x3D,
         DEMO_UNK3E_e = 0x3E,
         DEMO_UNK40_e = 0x40,
@@ -414,7 +419,7 @@ public:
     }
     void cancelOriginalDemo() {
         mDemo.setSystemDemoType();
-        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
+        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK01_e);
     }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }

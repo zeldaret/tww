@@ -53,7 +53,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
             if (mStickDistance > 0.05f) {
                 oldAngleY = current.angle.y;
 
-                if (getDirectionFromCurrentAngle() == 1) {
+                if (getDirectionFromCurrentAngle() == DIR_BACKWARD) {
                     mSwimTailEcallBack[0].onEnd();
                     mSwimTailEcallBack[1].onEnd();
 

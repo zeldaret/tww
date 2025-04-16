@@ -56,13 +56,13 @@ BOOL daPy_lk_c::bowButton() const {
 
 /* 8014A008-8014A02C       .text checkBowReadyAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBowReadyAnime() const {
-    return (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ARROWRELORD) ||
-           (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOWWAIT);
+    return (checkUpperAnime(LKANM_BCK_ARROWRELORD)) ||
+           (checkUpperAnime(LKANM_BCK_BOWWAIT));
 }
 
 /* 8014A02C-8014A080       .text checkBowAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBowAnime() const {
-    return (checkBowReadyAnime()) || (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ARROWSHOOT);
+    return (checkBowReadyAnime()) || (checkUpperAnime(LKANM_BCK_ARROWSHOOT));
 }
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
@@ -115,10 +115,8 @@ void daPy_lk_c::setBowReloadAnime() {
 
 /* 8014A328-8014A60C       .text checkNextActionBowReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionBowReady() {
-    /* Nonmatching - branching, regalloc */
-    u16 uVar1 = m_anm_heap_upper[UPPER_MOVE2_e].mIdx;
-    if (uVar1 == LKANM_BCK_BOWWAIT) {
-        daArrow_c* bow = (daArrow_c*)mActorKeepEquip.getActor();
+    if (checkUpperAnime(LKANM_BCK_BOWWAIT)) {
+        daArrow_c* arrow = (daArrow_c*)mActorKeepEquip.getActor();
         if (m355C != 0) {
             setActAnimeUpper(
                 LKANM_BCK_ARROWSHOOT,
@@ -131,72 +129,52 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             setPriTextureAnime(0x70, 0);
             mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
             m35EC = 0.0f;
-        } else {
-            if (bowButton() == NULL) {
-                if (bow != NULL) {
-                    fopAcM_SetParam(bow, 1);
-                    if (mDemo.getDemoMode() != 0x44) {
-                        dComIfGp_setItemArrowNumCount(-1);
-                    }
-                    mActorKeepEquip.clearData();
-                    seStartOnlyReverb(JA_SE_LK_SHOOT_ARROW);
-                    voiceStart(41);
-                    onResetFlg0(daPyRFlg0_ARROW_SHOOT);
+        } else if (bowButton() == NULL) {
+            if (arrow != NULL) {
+                fopAcM_SetParam(arrow, 1);
+                if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
+                    dComIfGp_setItemArrowNumCount(-1);
                 }
-                m355C = 1;
-            } else {
-                if (bow->changeArrowMp()) {
-                    if (((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) &&
-                        (bow != NULL))
-                    {
-                        bow = bow->changeArrowType();
-                        mActorKeepEquip.setData(bow);
-                        setBowReloadAnime();
-                    }
-                }
+                mActorKeepEquip.clearData();
+                seStartOnlyReverb(JA_SE_LK_SHOOT_ARROW);
+                voiceStart(41);
+                onResetFlg0(daPyRFlg0_ARROW_SHOOT);
+            }
+            m355C = 1;
+        } else if (daArrow_c::changeArrowMp()) {
+            if (((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) &&
+                (arrow != NULL))
+            {
+                mActorKeepEquip.setData(arrow->changeArrowType());
+                setBowReloadAnime();
             }
         }
-        goto LAB_8014a5ec;
-    }
-    if (uVar1 == LKANM_BCK_ARROWRELORD) {
+    } else if (checkUpperAnime(LKANM_BCK_ARROWRELORD)) {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
             setActAnimeUpper(LKANM_BCK_BOWWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
             mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_BOWWAITA));
             m35EC = 0.0f;
             setPriTextureAnime(0x70, 0);
         }
-        goto LAB_8014a5ec;
-    }
-    if (uVar1 != LKANM_BCK_ARROWSHOOT)
-        goto LAB_8014a5ec;
-    if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
-        if ((m355E == 0) && (bowButton())) {
-            if (mDemo.getDemoMode() != 0x44) {
-                if (mEquipItem != getReadyItem())
-                    goto LAB_8014a5a0;
-            }
-            if (!checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT)) {
+    } else if (checkUpperAnime(LKANM_BCK_ARROWSHOOT)) {
+        if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
+            if ((m355E == 0) && (bowButton()) && (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e || mEquipItem == getReadyItem()) && !checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT)) {
                 setBowReloadAnime();
                 makeArrow();
                 if (mActorKeepEquip.getActor() == NULL) {
                     mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
                 }
-                goto LAB_8014a5d8;
+            } else if (daArrow_c::changeArrowMp()) {
+                if ((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) {
+                    daArrow_c::changeArrowTypeNotReady();
+                }
             }
         }
-    LAB_8014a5a0:
-        daArrow_c* bow;
-        if (bow->changeArrowMp()) {
-            if ((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) {
-                bow->changeArrowTypeNotReady();
-            }
+        if (m355E != 0) {
+            m355E--;
         }
     }
-LAB_8014a5d8:
-    if (m355E != 0) {
-        m355E--;
-    }
-LAB_8014a5ec:
+
     cancelItemUpperReadyAnime();
 }
 

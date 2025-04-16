@@ -445,7 +445,7 @@ BOOL daPy_lk_c::jointCB0(int param_1) {
             }
         }
     } else if ((checkUpperReadyAnime()) ||
-               (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROW) ||
+               (checkUpperAnime(LKANM_BCK_ROPETHROW)) ||
                ((mCurProc != daPyProc_GRAB_WAIT_e) && checkGrabAnime()))
     {
         if (param_1 == 0xf) {
@@ -691,10 +691,10 @@ s32 daPy_lk_c::checkNormalFace() {
     if ((checkResetFlg0(daPyRFlg0_UNK40000))) {
         return daPyFace_TMABAG;
     }
-    if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAITB) {
+    if (checkUpperAnime(LKANM_BCK_GRABWAITB)) {
         return daPyFace_TMABAJ_TEYORIME;
     }
-    if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAIT) {
+    if (checkUpperAnime(LKANM_BCK_GRABWAIT)) {
         return daPyFace_TMABAE;
     }
     if ((daPy_dmEcallBack_c::m_type == 1) || (checkRestHPAnime())) {
@@ -773,8 +773,8 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
     if (param_1 == 0) {
         param_1 = checkNormalFace();
     }
-    u16 uVar2 = mTexAnmIndexTable[param_1].mBtpIdx;
-    u16 uVar1 = mTexAnmIndexTable[param_1].mBtkIdx;
+    u16 btp_idx = mTexAnmIndexTable[param_1].mBtpIdx;
+    u16 btk_idx = mTexAnmIndexTable[param_1].mBtkIdx;
     if (((param_1 < 0x13) &&
          (checkMabaAnimeBtp(m_tex_anm_heap.mIdx))) &&
         (mFace == daPyFace_UNKNOWN))
@@ -784,64 +784,64 @@ void daPy_lk_c::setTextureAnime(u16 param_1, int param_2) {
     } else {
         bVar3 = false;
     }
-    if (m_tex_anm_heap.mIdx == uVar2) {
+    if (m_tex_anm_heap.mIdx == btp_idx) {
         if ((mFace == daPyFace_UNKNOWN) && (!checkModeFlg(ModeFlg_00000100 | ModeFlg_00000400))) {
             m3530 = param_2;
         }
     } else {
-        m_tex_anm_heap.mIdx = uVar2;
+        m_tex_anm_heap.mIdx = btp_idx;
         if ((m_tex_anm_heap.field_0x2 == 0xFFFF) && (m_tex_anm_heap.field_0x4 == 0xFFFF)) {
-            setTextureAnimeResource(loadTextureAnimeResource(uVar2, 0), param_2);
+            setTextureAnimeResource(loadTextureAnimeResource(btp_idx, 0), param_2);
         }
     }
     dVar9 = cM_rnd();
-    if (m_tex_scroll_heap.mIdx != uVar1) {
+    if (m_tex_scroll_heap.mIdx != btk_idx) {
         if ((((bVar3) && (checkModeFlg(ModeFlg_00000001))) && (daPy_matAnm_c::m_maba_flg != 0)) &&
-            (((!dComIfGp_event_runCheck() && (mpAttnActorLockOn == NULL)) && (uVar1 == 0x1a7))))
+            (((!dComIfGp_event_runCheck() && (mpAttnActorLockOn == NULL)) && (btk_idx == LKANM_BTK_TMABA))))
         {
             if (daPy_matAnm_c::m_maba_timer == 0) {
                 if (dVar9 < 0.44f) {
-                    uVar1 = 0x1a7;
+                    btk_idx = LKANM_BTK_TMABA;
                 } else {
                     param_2 = 0;
                     if (dVar9 < 0.51f) {
-                        uVar1 = LKANM_BTK_TEUP;
+                        btk_idx = LKANM_BTK_TEUP;
                     } else if (dVar9 < 0.58f) {
-                        uVar1 = LKANM_BTK_TEDW;
+                        btk_idx = LKANM_BTK_TEDW;
                     } else if (dVar9 < 0.65f) {
-                        uVar1 = LKANM_BTK_TEL;
+                        btk_idx = LKANM_BTK_TEL;
                     } else if (dVar9 < 0.72f) {
-                        uVar1 = LKANM_BTK_TER;
+                        btk_idx = LKANM_BTK_TER;
                     } else if (dVar9 < 0.79f) {
-                        uVar1 = LKANM_BTK_TEDL;
+                        btk_idx = LKANM_BTK_TEDL;
                     } else if (dVar9 < 0.86f) {
-                        uVar1 = LKANM_BTK_TEDR;
+                        btk_idx = LKANM_BTK_TEDR;
                     } else if (dVar9 < 0.93f) {
-                        uVar1 = LKANM_BTK_TEUR;
+                        btk_idx = LKANM_BTK_TEUR;
                     } else {
-                        uVar1 = LKANM_BTK_TEUL;
+                        btk_idx = LKANM_BTK_TEUL;
                     }
                 }
-                m_tex_scroll_heap.mIdx = uVar1;
+                m_tex_scroll_heap.mIdx = btk_idx;
                 if ((m_tex_scroll_heap.field_0x2 == 0xFFFF) &&
                     (m_tex_scroll_heap.field_0x4 == 0xFFFF))
                 {
-                    setTextureScrollResource(loadTextureScrollResource(uVar1, 0), param_2);
+                    setTextureScrollResource(loadTextureScrollResource(btk_idx, 0), param_2);
                 }
-                if (uVar1 != 0x1a7) {
+                if (btk_idx != LKANM_BTK_TMABA) {
                     daPy_matAnm_c::onMabaFlg();
                 }
             }
         } else {
-            m_tex_scroll_heap.mIdx = uVar1;
+            m_tex_scroll_heap.mIdx = btk_idx;
             if ((m_tex_scroll_heap.field_0x2 == 0xFFFF) && (m_tex_scroll_heap.field_0x4 == 0xFFFF))
             {
-                setTextureScrollResource(loadTextureScrollResource(uVar1, 0), param_2);
+                setTextureScrollResource(loadTextureScrollResource(btk_idx, 0), param_2);
             }
         }
     } else if (((((bVar3) && (checkModeFlg(ModeFlg_00000001))) && (!dComIfGp_event_runCheck())) &&
                 ((daPy_matAnm_c::m_maba_timer == 0 && (mpAttnActorLockOn == NULL)))) &&
-               (((uVar1 == 0x1a7 && ((m_tex_scroll_heap.field_0x2 == 0xFFFF &&
+               (((btk_idx == LKANM_BTK_TMABA && ((m_tex_scroll_heap.field_0x2 == 0xFFFF &&
                                       (m_tex_scroll_heap.field_0x4 == 0xFFFF)))) &&
                  (cM_rnd() < 0.025f))))
     {
@@ -1588,7 +1588,7 @@ void daPy_lk_c::setSpeedAndAngleAtn() {
 void daPy_lk_c::setSpeedAndAngleAtnBack() {
     f32 f1;
     if (mStickDistance > 0.05f) {
-        if (getDirectionFromCurrentAngle() == 1) {
+        if (getDirectionFromCurrentAngle() == DIR_BACKWARD) {
             current.angle.y += 0x8000;
             mVelocity *= -1.0f;
         }
@@ -1791,20 +1791,20 @@ BOOL daPy_lk_c::checkBossGomaStage() {
 
 /* 8010C4A4-8010C4C8       .text checkSingleItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkSingleItemEquipAnime() const {
-    return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKEL ||
-        m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKER;
+    return checkUpperAnime(LKANM_BCK_TAKEL) ||
+        checkUpperAnime(LKANM_BCK_TAKER);
 }
 
 /* 8010C4C8-8010C528       .text checkItemEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkItemEquipAnime() const {
-    return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKE ||
+    return checkUpperAnime(LKANM_BCK_TAKE) ||
         checkSingleItemEquipAnime() ||
-        m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKEBOTH;
+        checkUpperAnime(LKANM_BCK_TAKEBOTH);
 }
 
 /* 8010C528-8010C570       .text checkEquipAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkEquipAnime() const {
-    return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_REST ||
+    return checkUpperAnime(LKANM_BCK_REST) ||
         checkItemEquipAnime();
 }
 
@@ -2071,12 +2071,12 @@ void daPy_lk_c::checkItemAction() {
     {
         mReadyItemBtn = dItemBtn_Z_e;
     }
-    if ((((checkEquipAnime()) || (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW)) ||
-         (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH)) ||
-        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROW))
+    if ((((checkEquipAnime()) || (checkUpperAnime(LKANM_BCK_BOOMTHROW))) ||
+         (checkUpperAnime(LKANM_BCK_BOOMCATCH))) ||
+        (checkUpperAnime(LKANM_BCK_ROPETHROW)))
     {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUpper[UPPER_MOVE2_e];
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH) {
+        if (checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
             if (!(frameCtrl.getRate() < 0.01f)) {
                 if (!(mStickDistance > 0.05f)) {
                     return;
@@ -2089,7 +2089,7 @@ void daPy_lk_c::checkItemAction() {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 procShipPaddle_init();
             }
-        } else if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW) {
+        } else if (checkUpperAnime(LKANM_BCK_BOOMTHROW)) {
             if ((frameCtrl.getRate() < 0.01f) ||
                 ((mStickDistance > 0.05f &&
                   (frameCtrl.getFrame() > daPy_HIO_boom_c0::m.field_0x10))))
@@ -2100,7 +2100,7 @@ void daPy_lk_c::checkItemAction() {
                     throwBoomerang();
                 }
             }
-        } else if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROW) {
+        } else if (checkUpperAnime(LKANM_BCK_ROPETHROW)) {
             if (frameCtrl.getRate() < 0.01f) {
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
@@ -2110,11 +2110,11 @@ void daPy_lk_c::checkItemAction() {
         } else {
             if (checkEquipAnime()) {
                 if ((mEquipItem == daPyItem_SWORD_e) &&
-                    (((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_REST &&
+                    (((checkUpperAnime(LKANM_BCK_REST) &&
                        (frameCtrl.checkPass(7.0f - frameCtrl.getRate()))) ||
-                      ((((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKE &&
+                      ((((checkUpperAnime(LKANM_BCK_TAKE) &&
                           (frameCtrl.checkPass(7.0f - frameCtrl.getRate()))) ||
-                         ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKEBOTH &&
+                         ((checkUpperAnime(LKANM_BCK_TAKEBOTH) &&
                            (frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x30 -
                                                 frameCtrl.getRate()))))) ||
                         ((checkSingleItemEquipAnime() &&
@@ -2126,11 +2126,11 @@ void daPy_lk_c::checkItemAction() {
                 if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
                     resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
                 } else {
-                    if (((((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_REST) &&
+                    if (((((checkUpperAnime(LKANM_BCK_REST)) &&
                            (frameCtrl.checkPass(7.0f))) ||
-                          ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKE &&
+                          ((checkUpperAnime(LKANM_BCK_TAKE) &&
                             (frameCtrl.checkPass(7.0f))))) ||
-                         ((m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_TAKEBOTH &&
+                         ((checkUpperAnime(LKANM_BCK_TAKEBOTH) &&
                            (frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x30))))) ||
                         ((checkSingleItemEquipAnime() &&
                           (frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x20)))))
@@ -2294,9 +2294,9 @@ BOOL daPy_lk_c::checkElecReturnDamage(dCcD_GObjInf* param_1, cXyz* param_2) {
 /* 801105D8-80110654       .text checkWallAtributeDamage__9daPy_lk_cFP12dBgS_AcchCir */
 s32 daPy_lk_c::checkWallAtributeDamage(dBgS_AcchCir* param_1) {
     if ((param_1->ChkWallHit()) && (dComIfG_Bgsp()->ChkPolySafe(*param_1))) {
-        int iVar1 = dComIfG_Bgsp()->GetAttributeCode(*param_1);
-        if ((iVar1 == dBgS_Attr_DAMAGE_e || (iVar1 == dBgS_Attr_ELECTRICITY_e))) {
-            return iVar1;
+        int attrib_code = dComIfG_Bgsp()->GetAttributeCode(*param_1);
+        if ((attrib_code == dBgS_Attr_DAMAGE_e || (attrib_code == dBgS_Attr_ELECTRICITY_e))) {
+            return attrib_code;
         }
     }
     return false;
@@ -2556,9 +2556,9 @@ BOOL daPy_lk_c::changeDemoProc() {
                          (demo_mode == daPy_demo_c::DEMO_NEW_ANM0_e));
     if ((((demo_mode != daPy_demo_c::DEMO_NEW_ANM0_e) &&
           (demo_mode != daPy_demo_c::DEMO_UNK1E_e)) &&
-         (demo_mode != daPy_demo_c::DEMO_UNK9_e)) &&
+         (demo_mode != daPy_demo_c::DEMO_UNK09_e)) &&
         (((demo_mode != daPy_demo_c::DEMO_UNK11_e && (demo_mode != daPy_demo_c::DEMO_UNK40_e)) &&
-          ((demo_mode != daPy_demo_c::DEMO_UNK4_e &&
+          ((demo_mode != daPy_demo_c::DEMO_UNK04_e &&
             ((demo_mode != daPy_demo_c::DEMO_UNK2F_e &&
               (demo_mode != daPy_demo_c::DEMO_UNK3E_e))))))))
     {
@@ -2581,7 +2581,7 @@ BOOL daPy_lk_c::changeDemoProc() {
         onNoResetFlg0(daPyFlg0_UNK100000);
         return (this->*mDemoProcInitFuncTable[demo_mode])();
     }
-    if (demo_mode == daPy_demo_c::DEMO_UNK4_e) {
+    if (demo_mode == daPy_demo_c::DEMO_UNK04_e) {
         int var_r28;
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             return true;
@@ -2591,7 +2591,7 @@ BOOL daPy_lk_c::changeDemoProc() {
             m_old_fdata->initOldFrameMorf(0.0f, 0, 0x2A);
         }
         return var_r28;
-    } else if ((demo_mode == daPy_demo_c::DEMO_UNK6_e) || (demo_mode == daPy_demo_c::DEMO_UNK8_e)) {
+    } else if ((demo_mode == daPy_demo_c::DEMO_UNK06_e) || (demo_mode == daPy_demo_c::DEMO_UNK08_e)) {
         if (checkModeFlg(ModeFlg_04000000)) {
             return true;
         }
@@ -2615,7 +2615,7 @@ BOOL daPy_lk_c::changeDemoProc() {
                 return dProcTalk_init();
             }
         }
-    } else if (demo_mode == daPy_demo_c::DEMO_UNK9_e) {
+    } else if (demo_mode == daPy_demo_c::DEMO_UNK09_e) {
         onNoResetFlg0(daPyFlg0_UNK100000);
         if ((mCurProc == daPyProc_LARGE_DAMAGE_UP_e) || (mCurProc == daPyProc_LARGE_DAMAGE_WALL_e))
         {
@@ -2730,11 +2730,11 @@ void daPy_lk_c::setOldRootQuaternion(s16, s16, s16) {
 
 /* 80111E54-80111EFC       .text checkRestHPAnime__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkRestHPAnime() {
-    if ((((!checkPlayerGuard()) && ((m_anm_heap_upper[UPPER_MOVE2_e]).mIdx == 0xFFFF)) &&
+    if ((((!checkPlayerGuard()) && (checkUpperAnime(-1))) &&
          (mpAttnActorLockOn == NULL)) &&
         ((((mDemo.getDemoType() == 0 && (!checkModeFlg(ModeFlg_IN_SHIP))) &&
            (dComIfGs_getLife() <= daPy_HIO_move_c0::m.field_0xE)) ||
-          (mDemo.getDemoMode() == 0x12))))
+          (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK12_e))))
     {
         return true;
     }
@@ -3918,7 +3918,7 @@ BOOL daPy_lk_c::procBackJumpLand_init() {
     }
     if ((((mEquipItem == daPyItem_SWORD_e) || (mEquipItem == daPyItem_BOKO_e)) &&
          (daPy_dmEcallBack_c::m_type != 1)) &&
-        (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF))
+        (checkUpperAnime(-1)))
     {
         mProcVar0.m3570 = 1;
     } else {
@@ -3995,7 +3995,7 @@ BOOL daPy_lk_c::procLand_init(f32 param_1, int param_2) {
 BOOL daPy_lk_c::procLand() {
     resetFootEffect();
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if (mDemo.getDemoMode() == 0x40) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK40_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             checkNextMode(0);
@@ -4531,18 +4531,16 @@ BOOL daPy_lk_c::procLavaDamage_init() {
 
 /* 80118BC4-80118C58       .text procLavaDamage__9daPy_lk_cFv */
 BOOL daPy_lk_c::procLavaDamage() {
-    int iVar1;
-    daPy_ANM anm;
-
     if (mAcch.ChkGroundHit()) {
-        iVar1 = getDirectionFromAngle(current.angle.y - shape_angle.y);
-        if (iVar1 == 0) {
+        int direction = getDirectionFromAngle(current.angle.y - shape_angle.y);
+        daPy_ANM anm;
+        if (direction == DIR_FORWARD) {
             anm = ANM_DAMFB;
-        } else if (iVar1 == 1) {
+        } else if (direction == DIR_BACKWARD) {
             anm = ANM_DAMFF;
-        } else if (iVar1 == 2) {
+        } else if (direction == DIR_LEFT) {
             anm = ANM_DAMFR;
-        } else {
+        } else { // DIR_RIGHT
             anm = ANM_DAMFL;
         }
         procLargeDamageUp_init(anm, 1, 0, 0);
@@ -4701,20 +4699,20 @@ BOOL daPy_lk_c::procGuardSlip() {
 /* 80119334-80119478       .text procIceSlipFall_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procIceSlipFall_init() {
     commonProcInit(daPyProc_ICE_SLIP_FALL_e);
-    int iVar1 = getDirectionFromAngle(cM_atan2s(-m36A0.x, -m36A0.z) - shape_angle.y);
-    if (iVar1 == 0) {
+    int direction = getDirectionFromAngle(cM_atan2s(-m36A0.x, -m36A0.z) - shape_angle.y);
+    if (direction == DIR_FORWARD) {
         mProcVar0.mDamageAnm = ANM_DAMFB;
         m34D4 = 0x3fff;
         m34D6 = 1;
-    } else if (iVar1 == 3) {
+    } else if (direction == DIR_RIGHT) {
         mProcVar0.mDamageAnm = ANM_DAMFL;
         m34D4 = 0x3fff;
         m34D6 = 0;
-    } else if (iVar1 == 2) {
+    } else if (direction == DIR_LEFT) {
         mProcVar0.mDamageAnm = ANM_DAMFR;
         m34D4 = -0x3fff;
         m34D6 = 0;
-    } else {
+    } else { // DIR_BACKWARD
         mProcVar0.mDamageAnm = ANM_DAMFF;
         m34D4 = -0x3fff;
         m34D6 = 1;
@@ -4811,18 +4809,18 @@ BOOL daPy_lk_c::procIceSlipFallUp() {
 
 /* 8011970C-801197D4       .text procIceSlipAlmostFall_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procIceSlipAlmostFall_init() {
-    daPy_ANM anm;
 
     commonProcInit(daPyProc_ICE_SLIP_ALMOST_FALL_e);
     current.angle.y = cM_atan2s(m36AC.x, m36AC.z);
-    int iVar1 = getDirectionFromAngle(current.angle.y - shape_angle.y);
-    if (iVar1 == 1) {
+    int direction = getDirectionFromAngle(current.angle.y - shape_angle.y);
+    daPy_ANM anm;
+    if (direction == DIR_BACKWARD) {
         anm = ANM_DAMF;
-    } else if (iVar1 == 2) {
+    } else if (direction == DIR_LEFT) {
         anm = ANM_DAMR;
-    } else if (iVar1 == 3) {
+    } else if (direction == DIR_RIGHT) {
         anm = ANM_DAML;
-    } else {
+    } else { // DIR_FORWARD
         anm = ANM_DAMB;
     }
     setSingleMoveAnime(anm, daPy_HIO_iceSlip_c0::m.field_0x64, daPy_HIO_iceSlip_c0::m.field_0x68,
@@ -5363,7 +5361,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
     if (!checkNoResetFlg0(daPyFlg0_UNK4000) && (i_point != 0 || dComIfGp_event_compulsory(this))) {
         mDemo.setOriginalDemoType();
         if (i_point == 0) {
-            mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
+            mDemo.setDemoMode(daPy_demo_c::DEMO_UNK01_e);
         }
         onNoResetFlg0(daPyFlg0_UNK4000);
         changePlayer(this);

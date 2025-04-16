@@ -249,7 +249,7 @@ BOOL daPy_lk_c::procClimbUpStart() {
     }
 
     if (mProcVar0.m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+        if (checkUpperAnime(-1)) {
             procLadderUpStart_init_sub();
         }
     } else {

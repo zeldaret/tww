@@ -1262,17 +1262,17 @@ namespace daObjMovebox {
     fopAc_ac_c* Act_c::PPCallBack(fopAc_ac_c* actor, fopAc_ac_c*, s16 angle, dBgW::PushPullLabel orig_pp_label) {
         Act_c* i_this = (Act_c*)actor;
         
-        dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PP_UNK1_e | dBgW::PP_UNK2_e));
+        dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL));
         if (pp_label) {
             bool unk;
             if (!i_this->i_attr()->m9A) {
                 unk = true;
             } else {
-                unk = orig_pp_label & dBgW::PP_UNK8_e;
+                unk = orig_pp_label & dBgW::PPLABEL_HEAVY;
             }
             if (unk) {
-                s16 angleDiff = (s16)(pp_label & dBgW::PP_UNK2_e ? angle - 0x8000 : angle) - actor->home.angle.y;
-                int pp_field = dBgW::PP_UNK1_e | dBgW::PP_UNK2_e;
+                s16 angleDiff = (s16)(pp_label & dBgW::PPLABEL_PULL ? angle - 0x8000 : angle) - actor->home.angle.y;
+                int pp_field = dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL;
                 JUT_ASSERT(1813, pp_label != pp_field);
                 
                 i_this->mPPLabel = orig_pp_label;
@@ -1431,8 +1431,8 @@ namespace daObjMovebox {
         bool r29 = true;
         
         if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_ON_GROUND_e) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildPID == fpcM_ERROR_PROCESS_ID_e)) {
-            BOOL temp = cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e);
-            BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PP_UNK4_e);
+            BOOL temp = cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL);
+            BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PPLABEL_UNK4);
             s16 r0;
             if (temp) {
                 if (r3) {
@@ -1587,7 +1587,7 @@ namespace daObjMovebox {
             daPy_getPlayerActorClass()->onPushPullKeep();
             mode_walk_init();
             
-            if (cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e)) {
+            if (cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL)) {
                 m644 = i_attr()->m0A;
                 m630 = (f32)0x8000 / i_attr()->m0A;
             } else {

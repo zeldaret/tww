@@ -275,14 +275,14 @@ BOOL daPy_lk_c::procFanSwing() {
             mGndChk.SetPos(&local_48);
             local_48.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
             if (local_48.y >= current.pos.y - 50.0f) {
-                int iVar4 = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
+                int attrib_code = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
                 if (!strcmp(dComIfGp_getStartStageName(), "Adanmae")) {
                     dComIfGp_particle_setP1(dPa_name::ID_SCENE_8236, &local_48, &shape_angle);
                 }
                 dPa_control_c::mSmokeEcallback.onWindOff();
                 int iStack_84;
                 pJVar5 = dComIfGp_particle_setSimpleLand(
-                    iVar4, &local_48, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_84, 0x17
+                    attrib_code, &local_48, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_84, 0x17
                 );
                 dPa_control_c::mSmokeEcallback.offWindOff();
                 if (pJVar5) {
@@ -294,7 +294,7 @@ BOOL daPy_lk_c::procFanSwing() {
                     mDoMtx_ZXYrotM(mDoMtx_stack_c::now, local_80.x, local_80.y, local_80.z);
                     JPASetRMtxTVecfromMtx(mDoMtx_stack_c::now, pJVar5->mGlobalRotation, (pJVar5->mGlobalTranslation));
                     pJVar5->setSpread(0.45f);
-                    if (iVar4 == dBgS_Attr_GRASS_e) {
+                    if (attrib_code == dBgS_Attr_GRASS_e) {
                         pJVar5->setRate(100.0f);
                     } else {
                         pJVar5->setRate(50.0f);

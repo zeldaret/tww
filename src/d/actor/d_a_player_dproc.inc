@@ -586,7 +586,7 @@ BOOL daPy_lk_c::dProcGetItem() {
         }
     }
     if (mProcVar0.m3570 != 0) {
-        if ((m_anm_heap_upper[UPPER_MOVE2_e]).mIdx == 0xffff) {
+        if (checkUpperAnime(-1)) {
             setSingleMoveAnime(ANM_ITEMGET, 1.0f, 0.0f, -1, 3.0f);
             mProcVar0.m3570 = 0;
             onModeFlg(ModeFlg_00000400);
@@ -643,7 +643,7 @@ BOOL daPy_lk_c::dProcUnequip_init() {
 
 /* 8012ED30-8012ED74       .text dProcUnequip__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcUnequip() {
-    if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF) {
+    if (checkUpperAnime(-1)) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     }
     return true;
