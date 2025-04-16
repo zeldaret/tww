@@ -3,6 +3,7 @@
 // Translation Unit: d_envse.cpp
 //
 
+#include "d/d_envse.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -11,14 +12,6 @@
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_audio.h"
-
-class dEnvSe_c : public kankyo_class {
-public:
-    BOOL execute();
-
-    /* 0xF8 */ u32 field_0xf8;
-    /* 0xFC */ u32 field_0xfc;
-};
 
 /* 8017D4C0-8017D4C8       .text dEnvSe_Draw__FP8dEnvSe_c */
 static BOOL dEnvSe_Draw(dEnvSe_c* i_this) {

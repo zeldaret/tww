@@ -1,6 +1,7 @@
 #ifndef F_OP_MSG_MNG_H
 #define F_OP_MSG_MNG_H
 
+#include "JSystem/J2DGraph/J2DPicture.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_op/f_op_msg.h"
@@ -96,6 +97,21 @@ public:
     /* 0x04 */ u32 mMsgIdx;
     /* 0x08 */ u16 mMsgID;
     /* 0x0A */ u16 mResMsgIdx;
+};
+
+class MyPicture : public J2DPicture {
+public:
+    virtual ~MyPicture() {}
+    virtual void drawSelf(f32, f32);
+    virtual void drawSelf(f32, f32, Mtx*);
+    virtual void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
+
+private:
+    /* 0x124 */ f32 m124;
+    /* 0x128 */ f32 m128;
+    /* 0x12C */ f32 m12C;
+    /* 0x130 */ f32 m130;
+    /* 0x134 */ u8 m134;
 };
 
 class fopMsgM_msgDataProc_c {

@@ -147,22 +147,6 @@ static struct {
 class mesg_header;
 class fopMsgM_pane_alpha_class;
 
-class MyPicture : public J2DPicture {
-public:
-    virtual ~MyPicture() {}
-    virtual void drawSelf(f32, f32);
-    virtual void drawSelf(f32, f32, Mtx*);
-    virtual void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
-
-private:
-    f32 m124;
-    f32 m128;
-    f32 m12C;
-    f32 m130;
-    u8 m134;
-};
-
-
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
 void MyPicture::drawSelf(f32 x, f32 y) {

@@ -24,9 +24,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-class sub_kankyo__class : public kankyo_class {
-};
-
 #include "d/d_kankyo_dayproc.inc"
 
 struct dKy_setLight__Status {

@@ -3,12 +3,12 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/d_place_name.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
-#include "d/d_place_name.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
@@ -66,23 +66,6 @@ const char * name_texture[] = {
     "/res/placename/pn_19.bti",
 };
 #endif
-
-class dPn_c : public msg_class {
-public:
-    cPhs_State _create();
-    BOOL _execute();
-    BOOL _draw();
-    BOOL _delete();
-
-public:
-    /* 0x0FC */ JKRExpHeap * mpHeap;
-    /* 0x100 */ request_of_phase_process_class mPhs;
-    /* 0x108 */ dPlace_name_c * dPn_scrn;
-    /* 0x11C */ mDoDvdThd_toMainRam_c * dvd;
-    /* 0x114 */ ResTIMG * mpTIMG;
-    /* 0x118 */ u8 mState;
-    /* 0x119 */ u8 pad[3];
-};
 
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {

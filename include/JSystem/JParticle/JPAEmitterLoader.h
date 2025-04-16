@@ -26,4 +26,17 @@ public:
     /* 0x06 */ u16 userIndex;
 };
 
+class JPAEmitterArchiveLoader_v10 {
+public:
+    void load();
+    JPAEmitterResource* getEmitterResource() { return mpEmtrRes; }
+    JPATextureResource* getTextureResource() { return mpTexRes; }
+
+public:
+    /* 0x00 */ JKRHeap* pHeap;
+    /* 0x04 */ const u8* pData;
+    /* 0x08 */ JPAEmitterResource* mpEmtrRes;
+    /* 0x0C */ JPATextureResource* mpTexRes;
+};
+
 #endif /* JPAEMITTERLOADER_H */

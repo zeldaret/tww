@@ -241,6 +241,23 @@ struct TContainerEnumerator_const : public TEnumerator2<typename TLinkList<T, I>
         : TEnumerator2<typename TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
 };
 
+namespace {
+
+template <typename T>
+class TPRIsEqual_pointer_ {
+public:
+    TPRIsEqual_pointer_<T>(const T* p) { this->p_ = p; }
+
+    bool operator()(const T& rSrc) const {
+        return &rSrc == this->p_;
+    }
+
+private:
+    const T* p_;
+};
+
+};  // namespace
+
 };  // namespace JGadget
 
 #endif /* LINKLIST_H */

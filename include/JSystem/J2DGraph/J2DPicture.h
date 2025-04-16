@@ -139,7 +139,7 @@ protected:
     /* 0x10C */ JUtility::TColor mCornerColor[4];
     /* 0x11C */ JUtility::TColor mBlendKonstColor;
     /* 0x120 */ JUtility::TColor mBlendKonstAlpha;
-};
+};  // Size: 0x124
 
 STATIC_ASSERT(sizeof(J2DPicture) == 0x124);
 

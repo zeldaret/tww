@@ -16,19 +16,6 @@ inline InputIterator find_if(InputIterator first, InputIterator last, Predicate 
 
 } // namespace std
 
-template <typename T>
-class TPRIsEqual_pointer_ {
-public:
-    TPRIsEqual_pointer_<T>(const T* p) { this->p_ = p; }
-
-    bool operator()(const T& rSrc) const {
-        return &rSrc == this->p_;
-    }
-
-private:
-    const T* p_;
-};
-
 /* 802BFC00-802BFC3C       .text __dt__Q27JGadget13TNodeLinkListFv */
 JGadget::TNodeLinkList::~TNodeLinkList() {
 }
@@ -100,4 +87,3 @@ JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::Erase(TLinkListNode* p)
 void JGadget::TNodeLinkList::Remove(TLinkListNode* p) {
     remove_if(TPRIsEqual_pointer_<TLinkListNode>(p));
 }
-
