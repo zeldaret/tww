@@ -830,7 +830,7 @@ f32 daShip_c::getWaterY() {
         m03F8 = mAcch.m_wtr.GetHeight();
     }
     else {
-        m03F8 = -1e9f;
+        m03F8 = C_BG_MIN_HEIGHT;
     }
     if (daSea_ChkArea(current.pos.x, current.pos.z)) {
         waterY = daSea_calcWave(current.pos.x, current.pos.z);

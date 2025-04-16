@@ -115,13 +115,17 @@ typedef bool (dCamera_c::*engine_fn)(s32);
 class dCamera_c {
 public:
     struct BG {
-        BG() {}
-        ~BG() {}
-        /* 0x00 */ u8 m00[0x04 - 0x00];
-        /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
-        /* 0x58 */ f32 m58;
-        /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
-    };
+        struct {
+            /* 0x00 */ bool m00;
+            /* 0x04 */ dBgS_CamGndChk m04;
+            /* 0x58 */ f32 m58;
+        } m00;
+        struct {
+            /* 0x00 */ bool m00;
+            /* 0x04 */ dBgS_CamGndChk m04;
+            /* 0x58 */ f32 m58;
+        } m5C;
+    };  // Size: 0xB8
 
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 m004;
@@ -235,8 +239,6 @@ public:
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x30C */ int m30C;
-    /* 0x310 */ f32 m310;
     /* 0x314 */ int m314;
     /* 0x318 */ f32 m318;
     /* 0x31C */ u8 m31C;
