@@ -1273,7 +1273,7 @@ BOOL daPy_lk_c::draw() {
             }
             link_root_joint->entryIn();
             if (checkMaskDraw()) {
-                entryDLSetLight(mpYamuModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+                entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
             }
             j3dSys.setModel(mpCLModel);
             j3dSys.setTexture(mpCLModelData->getTexture());
@@ -1317,23 +1317,23 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
     mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
     if (!r24) {
-        entryDLSetLight(mpHandsModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        entryDLSetLight(mpHandsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide() && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
-            entryDLSetLight(mpKatsuraModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            entryDLSetLight(mpKatsuraModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
         if (checkFreezeState() && checkMaskDraw()) {
-            entryDLSetLight(mpYamuModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            entryDLSetLight(mpPringModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            entryDLSetLight(mpPringModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
         if (checkMasterSwordEquip() && !checkCaughtShapeHide() && !checkDemoShieldNoDraw()) {
-            updateDLSetLight(mpPodmsModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            updateDLSetLight(mpPodmsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
     }
     if (checkEquipHeavyBoots()) {
-        entryDLSetLight(mpHbootsModels[0], mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
-        entryDLSetLight(mpHbootsModels[1], mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+        entryDLSetLight(mpHbootsModels[0], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+        entryDLSetLight(mpHbootsModels[1], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
     }
     
     tevStr.mFogColor.r = origFogR;
@@ -1361,11 +1361,11 @@ BOOL daPy_lk_c::draw() {
         }
         if (!r24 && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)) {
             if (checkSwordEquip() && !checkDemoSwordNoDraw(TRUE)) {
-                entryDLSetLight(mpEquippedSwordModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+                entryDLSetLight(mpEquippedSwordModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
             }
         }
         if (dComIfGs_getSelectEquip(1) != dItem_NONE_e && !checkCaughtShapeHide() && !checkDemoShieldNoDraw()) {
-            entryDLSetLight(mpEquippedShieldModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+            entryDLSetLight(mpEquippedShieldModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
         dComIfGd_setList();
         drawMirrorLightModel();
@@ -1382,7 +1382,7 @@ BOOL daPy_lk_c::draw() {
                         mpEquipItemModel->setAnmMtx(4, hookshot->getMtxTop());
                     }
                 }
-                entryDLSetLight(mpEquipItemModel, mNoResetFlg1 & daPyFlg1_FREEZE_STATE);
+                entryDLSetLight(mpEquipItemModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
                 if (mpSwordModel1 != NULL) {
                     if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
@@ -2843,9 +2843,9 @@ void daPy_lk_c::cancelNoDamageMode() {
 BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     ProcInitTableEntry& procInit = mProcInitTable[proc];
     
-    s32 temp_r29;
+    BOOL temp_r29;
     BOOL resetDemoAnime = FALSE;
-    s32 temp_r28;
+    BOOL temp_r28;
     
     if (mCurProc == daPyProc_SLIP_e) {
         mDoAud_seStop(JA_SE_LK_RUN_SLIP, 0);
@@ -2892,14 +2892,22 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     
     returnKeepItemData();
     
-    temp_r28 = checkModeFlg(ModeFlg_SWIM) >> 0x12; // TODO fakematch? fixes regalloc
+    if (checkModeFlg(ModeFlg_SWIM)) {
+        temp_r28 = TRUE;
+    } else {
+        temp_r28 = FALSE;
+    }
     
     // TODO: is this an inline?
     if (checkModeFlg(ModeFlg_HANG | ModeFlg_ROPE | ModeFlg_SWIM | ModeFlg_CAUGHT)) {
         m34C2 = 0xA;
     }
     
-    temp_r29 = (checkModeFlg(ModeFlg_MIDAIR) >> 1) ^ 1; // TODO fakematch? fixes regalloc
+    if (checkModeFlg(ModeFlg_MIDAIR)) {
+        temp_r29 = FALSE;
+    } else {
+        temp_r29 = TRUE;
+    }
     
     mCurProc = proc;
     mCurProcFunc = procInit.mProcFunc;
@@ -5018,7 +5026,6 @@ void daPy_lk_c::setWaterY() {
 
 /* 8011AC78-8011AD9C       .text autoGroundHit__9daPy_lk_cFv */
 void daPy_lk_c::autoGroundHit() {
-    /* Nonmatching - srwi uVar4 */
     u32 uVar4 = checkNoResetFlg0(daPyFlg0_UNK80000000);
     offNoResetFlg0(daPyFlg0_UNK80000000);
     if (mTinkleHoverTimer == 0) {

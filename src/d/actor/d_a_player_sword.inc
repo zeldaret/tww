@@ -1746,7 +1746,7 @@ BOOL daPy_lk_c::procCutReverse_init(daPy_ANM param_0) {
         return true;
     }
 
-    s32 uVar2 = checkNoResetFlg0(daPyFlg0_UNK4);
+    BOOL uVar2 = checkNoResetFlg0(daPyFlg0_UNK4) ? TRUE : FALSE;
     commonProcInit(daPyProc_CUT_REVERSE_e);
     if ((uVar2) != 0) {
         onNoResetFlg0(daPyFlg0_UNK4);

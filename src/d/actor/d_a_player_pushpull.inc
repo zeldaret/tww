@@ -14,20 +14,22 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
-int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
-    if (param_0 != dBgW::PPLABEL_NONE) {
+BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
+    if (pp_label != dBgW::PPLABEL_NONE) {
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PPLABEL_HEAVY);
+            cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_HEAVY);
         }
         if (mProcVar0.m3570) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PPLABEL_UNK4);
+            cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_UNK4);
         }
     }
-    fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, param_0);
+
+    fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, pp_label);
     if (pp_actor == NULL) {
-        return 0;
+        return FALSE;
     }
-    if (param_0 != dBgW::PPLABEL_NONE) {
+
+    if (pp_label != dBgW::PPLABEL_NONE) {
         if (pp_actor->shape_angle.y != m34D4) {
             cXyz local_28 = current.pos - m370C;
             mDoMtx_trans(mDoMtx_stack_c::now, m370C.x, m370C.y, m370C.z);
@@ -42,7 +44,7 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
     }
     m370C = pp_actor->current.pos;
     m34D4 = pp_actor->shape_angle.y;
-    return true;
+    return TRUE;
 }
 
 /* 80151644-801517C0       .text procPushPullWait_init__9daPy_lk_cFi */
@@ -50,7 +52,7 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
     commonProcInit(daPyProc_PUSH_PULL_WAIT_e);
     mProcVar0.m3570 = param_0;
     mVelocity = 0.0f;
-    if ((param_0 == 0) || (mEquipItem == daPyItem_NONE_e)) {
+    if (param_0 == 0 || mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
@@ -86,13 +88,13 @@ BOOL daPy_lk_c::procPushPullWait() {
             );
             m34D6 = 0;
         }
-    } else if ((spActionButton()) && (checkResetFlg0(daPyRFlg0_UNK8))) {
+    } else if (spActionButton() && checkResetFlg0(daPyRFlg0_UNK8)) {
         if (mProcVar0.m3570 != 0) {
             s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && (dVar2 < 5.0f)) && (checkNoUpperAnime())) {
+            if (sVar1 == 0 && dVar2 < 5.0f && checkNoUpperAnime()) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
                 mProcVar0.m3570 = 0;
@@ -120,14 +122,13 @@ BOOL daPy_lk_c::procPushPullWait() {
 BOOL daPy_lk_c::procPushMove_init() {
     if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
-    } else {
-        commonProcInit(daPyProc_PUSH_MOVE_e);
-        setSingleMoveAnime(
-            ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC
-        );
-        mProcVar0.m3570 = 1;
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
+
+    commonProcInit(daPyProc_PUSH_MOVE_e);
+    setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
+    mProcVar0.m3570 = 1;
+    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
+
     return true;
 }
 
@@ -136,7 +137,7 @@ BOOL daPy_lk_c::procPushMove() {
     dComIfGp_setRStatus(0x11);
     int direction = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
+    if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
@@ -164,14 +165,13 @@ BOOL daPy_lk_c::procPushMove() {
 BOOL daPy_lk_c::procPullMove_init() {
     if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
-    } else {
-        commonProcInit(daPyProc_PULL_MOVE_e);
-        setSingleMoveAnime(
-            ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14
-        );
-        mProcVar0.m3570 = 1;
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
+
+    commonProcInit(daPyProc_PULL_MOVE_e);
+    setSingleMoveAnime(ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14);
+    mProcVar0.m3570 = 1;
+    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
+
     return true;
 }
 
@@ -180,7 +180,7 @@ BOOL daPy_lk_c::procPullMove() {
     dComIfGp_setRStatus(0x11);
     int direction = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
+    if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {

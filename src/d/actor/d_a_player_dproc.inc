@@ -807,7 +807,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     }
     int iVar4 = checkShipRideUseItem(0);
     u32 uVar2 = checkModeFlg(ModeFlg_SWIM);
-    u32 uVar3 = mNoResetFlg0 & daPyFlg0_UNK100;
+    u32 uVar3 = checkNoResetFlg0(daPyFlg0_UNK100);
     if (uVar2 != 0) {
         swimOutAfter(FALSE);
     }
