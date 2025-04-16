@@ -430,7 +430,7 @@ u16 daPy_dmEcallBack_c::m_type = 3;
 
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
 void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
-    if (m_type == 0) {
+    if (checkFlame()) {
         cXy v;
         v.x = emitter->mGlobalTranslation.x;
         v.y = emitter->mGlobalTranslation.z;
@@ -1126,7 +1126,7 @@ void daPy_lk_c::setWaterDrop() {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
     }
 
-    if (mDmEcallBack->m_type == 0) {
+    if (daPy_dmEcallBack_c::checkFlame()) {
         m334C.end();
         m336C.end();
         m3460[0].end();
@@ -1135,11 +1135,11 @@ void daPy_lk_c::setWaterDrop() {
     }
 
     if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
-        if (m3460[0].mpEmitter == NULL) {
+        if (m3460[0].getEmitter() == NULL) {
             m3460[0].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
         }
 
-        if (m3460[1].mpEmitter == NULL) {
+        if (m3460[1].getEmitter() == NULL) {
             m3460[1].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
         }
 

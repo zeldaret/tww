@@ -697,13 +697,13 @@ s32 daPy_lk_c::checkNormalFace() {
     if (checkUpperAnime(LKANM_BCK_GRABWAIT)) {
         return daPyFace_TMABAE;
     }
-    if ((daPy_dmEcallBack_c::m_type == 1) || (checkRestHPAnime())) {
+    if ((daPy_dmEcallBack_c::checkCurse()) || (checkRestHPAnime())) {
         return daPyFace_TMABAF;
     }
     if (checkNoDamageMode()) {
         return daPyFace_TMABAC;
     }
-    if (daPy_dmEcallBack_c::m_type == 0) {
+    if (daPy_dmEcallBack_c::checkFlame()) {
         return daPyFace_TDAMDASH;
     }
     if (checkNoResetFlg1(daPyFlg1_CONFUSE)) {
@@ -3925,7 +3925,7 @@ BOOL daPy_lk_c::procBackJumpLand_init() {
         dComIfGp_getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f));
     }
     if ((((mEquipItem == daPyItem_SWORD_e) || (mEquipItem == daPyItem_BOKO_e)) &&
-         (daPy_dmEcallBack_c::m_type != 1)) &&
+         (!daPy_dmEcallBack_c::checkCurse())) &&
         (checkNoUpperAnime()))
     {
         mProcVar0.m3570 = 1;

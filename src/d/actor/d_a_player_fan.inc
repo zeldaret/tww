@@ -373,7 +373,7 @@ BOOL daPy_lk_c::procFanGlide() {
             JPASetRMtxTVecfromMtx(mpCLModel->getAnmMtx(0xf), emitter->mGlobalRotation, emitter->mGlobalTranslation);
         }
     }
-    if (frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0 && m32E4.mpEmitter == NULL) {
+    if (frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0 && m32E4.getEmitter() == NULL) {
         m32E4.makeEmitter(dPa_name::ID_COMMON_004C, mpCLModel->getAnmMtx(0xf), &current.pos, NULL);
     }
 

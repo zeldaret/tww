@@ -230,6 +230,7 @@ public:
         setTimer(timer);
     }
 
+private:
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
