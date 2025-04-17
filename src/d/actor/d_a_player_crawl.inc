@@ -328,7 +328,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
             mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(fVar2);
             mVelocity = fVar3;
         } else {
-            if (std::fabsf(frameCtrl.mRate) < 0.01f) {
+            if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
                 mVelocity = 0.0f;
                 m34D0--;
             }

@@ -379,7 +379,7 @@ BOOL daPy_lk_c::procLadderMove() {
         m34C2 = 0;
         procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-        if ((int)m34D0 > 0) {
+        if (m34D0 > 0) {
             m34D0--;
             setLadderFootSe();
         } else {

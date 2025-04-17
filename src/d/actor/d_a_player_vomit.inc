@@ -260,7 +260,7 @@ BOOL daPy_lk_c::procVomitLand() {
             checkNextMode(1);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if ((s32)m34D0 > 0) {
+        if (m34D0 > 0) {
             m34D0--;
         } else {
             setSingleMoveAnime(

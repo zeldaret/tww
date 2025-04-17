@@ -34,7 +34,7 @@ public:
         daSFLG_UNK4000_e      = 0x00004000,
         daSFLG_UNK8000_e      = 0x00008000,
         daSFLG_UNK10000_e     = 0x00010000,
-        daSFLG_UNK20000_e     = 0x00020000,
+        daSFLG_SHOOT_CANNON_e = 0x00020000,
         daSFLG_UNK40000_e     = 0x00040000,
         daSFLG_UNK80000_e     = 0x00080000,
         daSFLG_UNK100000_e    = 0x00100000,
@@ -62,12 +62,15 @@ public:
     
     bool checkStateFlg(daSHIP_SFLG flag) const { return mStateFlag & flag; }
     bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
+    bool checkShootCannon() const { return checkStateFlg(daSFLG_SHOOT_CANNON_e); }
     
     int getTactWarpPosNum() const { return mTactWarpPosNum; }
     void setTactWarpPosNum(int num) { mTactWarpPosNum = num; }
     u32 getTactWarpID() { return mTactWarpID; }
     void setTactWarpID(u32 warpID) { mTactWarpID = warpID; }
-        
+    
+    Mtx& getBodyMtx() { return m0298->getModel()->getBaseTRMtx(); }
+    
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
     BOOL checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
@@ -75,11 +78,9 @@ public:
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
     void checkSalvageDemo() const {}
-    void checkShootCannon() const {}
     void checkTornadoFlg() const {}
     void checkTornadoUp() const {}
     void getBeltSpeed() const {}
-    void getBodyMtx() {}
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
     void getCraneAngle() const {}

@@ -56,13 +56,12 @@ BOOL daPy_lk_c::bowButton() const {
 
 /* 8014A008-8014A02C       .text checkBowReadyAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBowReadyAnime() const {
-    return (checkUpperAnime(LKANM_BCK_ARROWRELORD)) ||
-           (checkUpperAnime(LKANM_BCK_BOWWAIT));
+    return checkUpperAnime(LKANM_BCK_ARROWRELORD) || checkUpperAnime(LKANM_BCK_BOWWAIT);
 }
 
 /* 8014A02C-8014A080       .text checkBowAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkBowAnime() const {
-    return (checkBowReadyAnime()) || (checkUpperAnime(LKANM_BCK_ARROWSHOOT));
+    return checkBowReadyAnime() || checkUpperAnime(LKANM_BCK_ARROWSHOOT);
 }
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
@@ -74,7 +73,7 @@ void daPy_lk_c::makeArrow() {
 void daPy_lk_c::deleteArrow() {
     fopAc_ac_c* pfVar1 = mActorKeepEquip.getActor();
 
-    if ((pfVar1 != NULL) && (fopAcM_GetName(pfVar1) == PROC_ARROW)) {
+    if (pfVar1 != NULL && fopAcM_GetName(pfVar1) == PROC_ARROW) {
         fopAcM_delete(pfVar1);
         mActorKeepEquip.clearData();
     }
@@ -142,11 +141,12 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             }
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
-            if (((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) &&
-                (arrow != NULL))
-            {
-                mActorKeepEquip.setData(arrow->changeArrowType());
-                setBowReloadAnime();
+            if (mEquipItem != dItem_BOW_e) {
+                dComIfGp_setRStatus(0x22);
+                if (spActionTrigger() && arrow != NULL) {
+                    mActorKeepEquip.setData(arrow->changeArrowType());
+                    setBowReloadAnime();
+                }
             }
         }
     } else if (checkUpperAnime(LKANM_BCK_ARROWRELORD)) {
@@ -158,15 +158,21 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         }
     } else if (checkUpperAnime(LKANM_BCK_ARROWSHOOT)) {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
-            if ((m355E == 0) && (bowButton()) && (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e || mEquipItem == getReadyItem()) && !checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT)) {
+            if (m355E == 0 && bowButton() &&
+                (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e || mEquipItem == getReadyItem()) &&
+                !checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT))
+            {
                 setBowReloadAnime();
                 makeArrow();
                 if (mActorKeepEquip.getActor() == NULL) {
                     mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
                 }
             } else if (daArrow_c::changeArrowMp()) {
-                if ((mEquipItem != dItem_BOW_e) && (dComIfGp_setRStatus(0x22), spActionTrigger())) {
-                    daArrow_c::changeArrowTypeNotReady();
+                if (mEquipItem != dItem_BOW_e) {
+                    dComIfGp_setRStatus(0x22);
+                    if (spActionTrigger()) {
+                        daArrow_c::changeArrowTypeNotReady();
+                    }
                 }
             }
         }
@@ -175,33 +181,30 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         }
     }
 
-    cancelItemUpperReadyAnime();
+    return cancelItemUpperReadyAnime();
 }
 
 /* 8014A60C-8014A680       .text checkNextActionBowFly__9daPy_lk_cFv */
-BOOL daPy_lk_c::checkNextActionBowFly() {
+void daPy_lk_c::checkNextActionBowFly() {
     if (checkBowAnime()) {
         checkNextActionBowReady();
-    } else {
-        if ((itemTrigger()) && (mEquipItem == getReadyItem())) {
-            setBowReadyAnime();
-            m355E = 0;
-        }
+    } else if (itemTrigger() && mEquipItem == getReadyItem()) {
+        setBowReadyAnime();
+        m355E = 0;
     }
 }
 
 /* 8014A680-8014A6F4       .text checkNextBowMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextBowMode() {
     if (mpAttention->Lockon()) {
-        procBowMove_init();
+        return procBowMove_init();
     } else {
-        procBowSubject_init();
+        return procBowSubject_init();
     }
 }
 
 /* 8014A6F4-8014A834       .text setBowModel__9daPy_lk_cFv */
 void daPy_lk_c::setBowModel() {
-    /* Nonmatching - regalloc */
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_ARROWRELORDA);
     JKRHeap* oldHeap = setItemHeap();
     J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_BOW, 0x37221222);
@@ -211,9 +214,10 @@ void daPy_lk_c::setBowModel() {
     }
     mDoExt_setCurrentHeap(oldHeap);
     m35EC = 0.0f;
-    J3DMaterial* mesh = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
-    mesh->getNext()->getShape()->show();
-    mesh->getShape()->hide();
+    J3DMaterial* r3 = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+    J3DMaterial* r4 = r3->getNext();
+    r3->getShape()->show();
+    r4->getShape()->hide();
     tmp_modelData->getJointNodePointer(6)->setCallBack(daPy_bowJointCB);
     tmp_modelData->getJointNodePointer(11)->setCallBack(daPy_bowJointCB);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
@@ -280,12 +284,10 @@ BOOL daPy_lk_c::procBowMove_init() {
 BOOL daPy_lk_c::procBowMove() {
     if (mpAttnActorLockOn != NULL) {
         setSpeedAndAngleAtnActor();
+    } else if (!mpAttention->Lockon() && mActorKeepEquip.getActor() == NULL) {
+        resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
     } else {
-        if ((!mpAttention->Lockon()) && (mActorKeepEquip.getActor() == NULL)) {
-            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
-        } else {
-            setSpeedAndAngleAtn();
-        }
+        setSpeedAndAngleAtn();
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;

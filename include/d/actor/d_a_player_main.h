@@ -997,7 +997,7 @@ public:
     void makeItemType();
     void setScopeModel();
     void setPhotoBoxModel();
-    void changeDragonShield(int);
+    BOOL changeDragonShield(int);
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
     void checkItemAction();
@@ -1480,7 +1480,7 @@ public:
     void setShipRidePos(int);
     void setShipAttentionAnmSpeed(f32);
     void setShipAttnetionBodyAngle();
-    int changeShipEndProc();
+    BOOL changeShipEndProc();
     void initShipBaseAnime();
     void initShipCraneAnime();
     BOOL procShipReady_init();
@@ -1563,7 +1563,7 @@ public:
     void setBowReadyAnime();
     void setBowReloadAnime();
     BOOL checkNextActionBowReady();
-    BOOL checkNextActionBowFly();
+    void checkNextActionBowFly();
     BOOL checkNextBowMode();
     void setBowModel();
     BOOL procBowSubject_init();

@@ -381,19 +381,19 @@ static BOOL daPy_auraCallback(J3DNode* node, int calcTiming) {
 }
 
 /* 80103494-80103A88       .text jointBeforeCB__9daPy_lk_cFiP16J3DTransformInfoP10Quaternion */
-BOOL daPy_lk_c::jointBeforeCB(int, J3DTransformInfo*, Quaternion*) {
+BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo*, Quaternion*) {
     /* Nonmatching */
     static Mtx root_mtx;
     static Quaternion norm_quat = {0.0f, 0.0f, 0.0f, 1.0f};
 }
 
 /* 80103A88-80103AAC       .text daPy_jointBeforeCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-static BOOL daPy_jointBeforeCallback(u32 userArea, u16 param_1, J3DTransformInfo* param_2, Quaternion* param_3) {
-    return reinterpret_cast<daPy_lk_c*>(userArea)->jointBeforeCB(param_1, param_2, param_3);
+static BOOL daPy_jointBeforeCallback(u32 userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
+    return reinterpret_cast<daPy_lk_c*>(userArea)->jointBeforeCB(jnt_no, param_2, param_3);
 }
 
 /* 80103AAC-80103C1C       .text jointAfterCB__9daPy_lk_cFiP16J3DTransformInfoP10Quaternion */
-BOOL daPy_lk_c::jointAfterCB(int param_1, J3DTransformInfo* param_2, Quaternion* param_3) {
+BOOL daPy_lk_c::jointAfterCB(int jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
     if (m34C6 != 0) {
         if ((m34C6 & 1) != 0) {
             param_3->x = m3658.x;
@@ -408,25 +408,25 @@ BOOL daPy_lk_c::jointAfterCB(int param_1, J3DTransformInfo* param_2, Quaternion*
         }
         m34C6 = 0;
     }
-    if (param_1 == 0x22) {
+    if (jnt_no == 0x22) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x22), mFootData[1].field_0x088[2]);
-    } else if (param_1 == 0x27) {
+    } else if (jnt_no == 0x27) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x27), mFootData[0].field_0x088[2]);
-    } else if (param_1 == 0x20) {
+    } else if (jnt_no == 0x20) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x20), mFootData[1].field_0x088[0]);
-    } else if (param_1 == 0x21) {
+    } else if (jnt_no == 0x21) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x21), mFootData[1].field_0x088[1]);
-    } else if (param_1 == 0x25) {
+    } else if (jnt_no == 0x25) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x25), mFootData[0].field_0x088[0]);
-    } else if (param_1 == 0x26) {
+    } else if (jnt_no == 0x26) {
         mDoMtx_copy(mpCLModel->getAnmMtx(0x26), mFootData[0].field_0x088[1]);
     }
     return true;
 }
 
 /* 80103C1C-80103C40       .text daPy_jointAfterCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-static BOOL daPy_jointAfterCallback(u32 userArea, u16 param_1, J3DTransformInfo* param_2, Quaternion* param_3) {
-    return reinterpret_cast<daPy_lk_c*>(userArea)->jointAfterCB(param_1, param_2, param_3);
+static BOOL daPy_jointAfterCallback(u32 userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
+    return reinterpret_cast<daPy_lk_c*>(userArea)->jointAfterCB(jnt_no, param_2, param_3);
 }
 
 /* 80103C40-80103EE4       .text jointCB0__9daPy_lk_cFi */
@@ -1989,7 +1989,7 @@ void daPy_lk_c::setPhotoBoxModel() {
 }
 
 /* 8010CC78-8010CD34       .text changeDragonShield__9daPy_lk_cFi */
-void daPy_lk_c::changeDragonShield(int) {
+BOOL daPy_lk_c::changeDragonShield(int) {
     /* Nonmatching */
 }
 
@@ -3790,7 +3790,7 @@ BOOL daPy_lk_c::procFrontRollCrash() {
     }
     if ((mAcch.ChkGroundHit()) && (checkModeFlg(ModeFlg_MIDAIR))) {
         mVelocity = 0.0f;
-        mFrameCtrlUnder[UNDER_MOVE0_e].mRate = daPy_HIO_roll_c0::m.field_0x24;
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_roll_c0::m.field_0x24);
         voiceStart(9);
         offModeFlg(ModeFlg_MIDAIR);
         onModeFlg(ModeFlg_00008000);

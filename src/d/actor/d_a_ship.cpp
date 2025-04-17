@@ -3533,7 +3533,7 @@ BOOL daShip_c::execute() {
         mEvtStaffId = -1;
     }
     
-    offStateFlg(daSHIP_SFLG(daSFLG_UNK40_e | daSFLG_UNK80_e | daSFLG_UNK100_e | daSFLG_UNK4000_e | daSFLG_UNK20000_e | daSFLG_UNK100000_e | daSFLG_UNK8000000_e));
+    offStateFlg(daSHIP_SFLG(daSFLG_UNK40_e | daSFLG_UNK80_e | daSFLG_UNK100_e | daSFLG_UNK4000_e | daSFLG_SHOOT_CANNON_e | daSFLG_UNK100000_e | daSFLG_UNK8000000_e));
     
     if (m0388 > 0) {
         m0388--;
@@ -3971,7 +3971,7 @@ BOOL daShip_c::execute() {
 
                     seStart(JA_SE_LK_SHIP_CANNON_FIRE, &m1038);
 
-                    onStateFlg(daSFLG_UNK20000_e);
+                    onStateFlg(daSFLG_SHOOT_CANNON_e);
 
                     dComIfGp_setItemBombNumCount(-1);
 

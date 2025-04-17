@@ -501,7 +501,7 @@ BOOL daPy_lk_c::procGrabMiss() {
     }
     if (mProcVar0.m3570 == 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            if ((int)m34D0 > 0) {
+            if (m34D0 > 0) {
                 m34D0--;
             } else {
                 setSingleMoveAnime(
@@ -784,7 +784,7 @@ BOOL daPy_lk_c::procGrabWait() {
                     }
                     setBlendMoveAnime(fVar2);
                     m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
-                    m35A0 = 0.0049999999f * (short)(shape_angle.y - m34DE);
+                    m35A0 = 0.005f * (short)(shape_angle.y - m34DE);
                     onNoResetFlg1(daPyFlg1_UNK800000);
                 } else if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
                 if (checkGrabSpecialHeavyState()) {
