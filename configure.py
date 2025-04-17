@@ -567,7 +567,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_option.cpp"),
             Object(NonMatching, "d/d_menu_save.cpp"),
             Object(NonMatching, "d/d_menu_window.cpp"),
-            Object(NonMatching, "d/d_mesg.cpp"),
+            Object(NonMatching, "d/d_mesg.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_message_paper.cpp"),
             Object(NonMatching, "d/d_meter.cpp"),
