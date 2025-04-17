@@ -348,10 +348,14 @@ void fopMsgM_tactMsgFlagOff();
 bool fopMsgM_tactMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
+void fopMsgM_blendInit(J2DPicture* pic, const char* data);
 u32 fopMsgM_getColorTable(u16 param_1);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
+
+void fopMsgM_outFontSet(J2DPicture*, J2DPicture*, s16*, u32, u8);
+void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8);
 
 #endif /* F_OP_MSG_MNG_H */

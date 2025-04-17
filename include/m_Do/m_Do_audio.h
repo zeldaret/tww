@@ -385,4 +385,12 @@ inline void mDoAud_registWindowPos(Vec* param_0) {
     mDoAud_zelAudio_c::getInterface()->registWindowPos(param_0);
 }
 
+inline void mDoAud_talkIn() {
+    mDoAud_zelAudio_c::getInterface()->talkIn();
+}
+
+inline void mDoAud_talkOut() {
+    mDoAud_zelAudio_c::getInterface()->talkOut();
+}
+
 #endif /* M_DO_AUDIO_H */

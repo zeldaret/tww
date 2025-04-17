@@ -68,7 +68,7 @@ public:
     virtual void resize(f32, f32);
     virtual u16 getTypeID() { return 19; };
 
-private:
+public:
     /* 0xCC */ JUTFont* mpFont;
     /* 0xD0 */ JUtility::TColor mCharColor;
     /* 0xD4 */ JUtility::TColor mGradColor;
