@@ -764,7 +764,7 @@ BOOL daPy_lk_c::procTactPlayEnd() {
                     dComIfG_getTimerPtr()->deleteRequest();
                 }
                 procShipPaddle_init();
-                ship->m034D = 0xE; // TODO inline
+                ship->setTactWarp();
             }
         }
     }

@@ -17,21 +17,21 @@ class daBomb_c;
 class daShip_c : public fopAc_ac_c {
 public:
     enum daSHIP_SFLG {
-        daSFLG_UNK1_e         = 0x00000001,
+        daSFLG_FLY_e          = 0x00000001,
         daSFLG_UNK2_e         = 0x00000002,
         daSFLG_UNK4_e         = 0x00000004,
         daSFLG_UNK8_e         = 0x00000008,
         daSFLG_UNK10_e        = 0x00000010,
         daSFLG_UNK20_e        = 0x00000020,
-        daSFLG_UNK40_e        = 0x00000040,
-        daSFLG_UNK80_e        = 0x00000080,
+        daSFLG_JUMP_e         = 0x00000040,
+        daSFLG_LAND_e         = 0x00000080,
         daSFLG_UNK100_e       = 0x00000100,
-        daSFLG_UNK200_e       = 0x00000200,
+        daSFLG_SAIL_ON_e      = 0x00000200,
         daSFLG_UNK400_e       = 0x00000400,
         daSFLG_UNK800_e       = 0x00000800,
         daSFLG_UNK1000_e      = 0x00001000,
-        daSFLG_UNK2000_e      = 0x00002000,
-        daSFLG_UNK4000_e      = 0x00004000,
+        daSFLG_JUMP_RIDE_e    = 0x00002000,
+        daSFLG_JUMP_OK_e      = 0x00004000,
         daSFLG_UNK8000_e      = 0x00008000,
         daSFLG_UNK10000_e     = 0x00010000,
         daSFLG_SHOOT_CANNON_e = 0x00020000,
@@ -51,57 +51,85 @@ public:
         daSFLG_UNK80000000_e  = 0x80000000
     };
 
-    enum daShip_c__ShipMode {
-        Idle = 0,
-        Sailing = 1,
-        UsingCannon = 2,
-        UsingSalvageArm = 3,
+    enum Mode_e {
+        MODE_WAIT_e = 0,
+        MODE_STEER_MOVE_e = 1,
+        MODE_PADDLE_MOVE_e = 2,
+        MODE_READY_FIRST_e = 3,
+        MODE_READY_SECOND_e = 4,
+        MODE_GET_OFF_FIRST_e = 5,
+        MODE_GET_OFF_SECOND_e = 6,
+        MODE_TALK_e = 8,
+        MODE_CANNON_e = 9,
+        MODE_CRANE_e = 10,
+        MODE_CRANE_UP_e = 11,
+        MODE_START_MODE_WARP_e = 13,
+        MODE_TACT_WARP_e = 14,
+        MODE_START_MODE_THROW_e = 16,
+    };
+
+    enum Part_e {
+        PART_WAIT_e = 0,
+        PART_STEER_e = 1,
+        PART_CANNON_e = 2,
+        PART_CRANE_e = 3,
     };
 
     typedef BOOL (daShip_c::*ProcFunc)();
     
     bool checkStateFlg(daSHIP_SFLG flag) const { return mStateFlag & flag; }
-    bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
+    bool getFlyFlg() { return checkStateFlg(daSFLG_FLY_e); }
+    bool getJumpFlg() const { return checkStateFlg(daSFLG_JUMP_e); }
+    bool getLandFlg() const { return checkStateFlg(daSFLG_LAND_e); }
+    bool getSailOn() { return checkStateFlg(daSFLG_SAIL_ON_e); }
+    void onJumpRideFlg() { onStateFlg(daSFLG_JUMP_RIDE_e); }
+    bool checkJumpOkFlg() const { return checkStateFlg(daSFLG_JUMP_OK_e); }
     bool checkShootCannon() const { return checkStateFlg(daSFLG_SHOOT_CANNON_e); }
+    bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
+    
+    void setSteerMove() { mNextMode = MODE_STEER_MOVE_e; }
+    void setPaddleMove() { mNextMode = MODE_PADDLE_MOVE_e; }
+    void setReadyFirst() { mNextMode = MODE_READY_FIRST_e; }
+    void setReadySecond() { mNextMode = MODE_READY_SECOND_e; }
+    void setGetOffFirst() { mNextMode = MODE_GET_OFF_FIRST_e; }
+    void setGetOffSecond() { mNextMode = MODE_GET_OFF_SECOND_e; }
+    void setCannon() { mNextMode = MODE_CANNON_e; }
+    void setCrane() { mNextMode = MODE_CRANE_e; }
+    void setTactWarp() { mNextMode = MODE_TACT_WARP_e; }
     
     int getTactWarpPosNum() const { return mTactWarpPosNum; }
     void setTactWarpPosNum(int num) { mTactWarpPosNum = num; }
     u32 getTactWarpID() { return mTactWarpID; }
     void setTactWarpID(u32 warpID) { mTactWarpID = warpID; }
     
-    Mtx& getBodyMtx() { return m0298->getModel()->getBaseTRMtx(); }
+    Mtx& getBodyMtx() { return mpBodyAnm->getModel()->getBaseTRMtx(); }
     
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
     BOOL checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
-    void checkJumpOkFlg() const {}
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
     void checkSalvageDemo() const {}
     void checkTornadoFlg() const {}
     void checkTornadoUp() const {}
-    void getBeltSpeed() const {}
+    f32 getBeltSpeed() const { return m1044.absXZ(); }
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
     void getCraneAngle() const {}
-    void getCraneBaseAngle() const {}
+    s16 getCraneBaseAngle() const { return mCraneBaseAngle; }
     void getCraneHookAngleY() const {}
     void getCraneRipplePosX() const {}
     void getCraneRipplePosY() const {}
     void getCraneRipplePosZ() const {}
     void getCraneTop() {}
-    void getFlyFlg() {}
     void getHeadJntMtx() {}
-    void getJumpFlg() const {}
-    void getJumpRate() {}
-    void getLandFlg() const {}
-    void getPart() const {}
-    void getRopeCnt() const {}
-    void getSailAngle() {}
-    void getSailOn() {}
+    f32 getJumpRate() { return mJumpRate; }
+    u8 getPart() const { return mPart; }
+    s16 getRopeCnt() const { return mRopeCnt; }
+    s16 getSailAngle() { return mSailAngle; }
     void getTactJntMtx() {}
-    void getTillerAngleRate() {}
-    void getTillerTopPosP() {}
+    f32 getTillerAngleRate() { return mTillerAngleRate; }
+    cXyz* getTillerTopPosP() { return &mTillerTopPos; }
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
     void offCraneHookFlg() {}
@@ -120,7 +148,6 @@ public:
     void onCraneHookFlg() {}
     void onCrashFlg() {}
     void onFantomGanonBattle() {}
-    void onJumpRideFlg() {}
     //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() {}
@@ -130,17 +157,8 @@ public:
     void onWhirlFlg(u32, s16) {}
     void onWhirlFlgDirect(u32, s16) {}
     void setAtnPos(const cXyz*) {}
-    void setCannon() {}
-    void setCrane() {}
-    void setGetOffFirst() {}
-    void setGetOffSecond() {}
-    void setPaddleMove() { m034D = 2; }
-    void setReadyFirst() {}
-    void setReadySecond() {}
     void setStartModeThrow() {}
     void setStartModeWarp() {}
-    void setSteerMove() {}
-    void setTactWarp() {}
 
     BOOL bodyJointCallBack(int);
     BOOL cannonJointCallBack(int);
@@ -228,8 +246,8 @@ public:
 
 public:
     /* 0x0290 */ request_of_phase_process_class mPhs;
-    /* 0x0298 */ mDoExt_McaMorf* m0298;
-    /* 0x029C */ mDoExt_McaMorf* m029C;
+    /* 0x0298 */ mDoExt_McaMorf* mpBodyAnm;
+    /* 0x029C */ mDoExt_McaMorf* mpHeadAnm;
     /* 0x02A0 */ J3DTexMtx* m02A0;
     /* 0x02A4 */ J3DTexMtx* m02A4;
     /* 0x02A8 */ Mtx m02A8;
@@ -243,9 +261,9 @@ public:
     /* 0x0348 */ u8 m0348[0x034A - 0x0348];
     /* 0x034A */ s8 m034A;
     /* 0x034B */ u8 m034B;
-    /* 0x034C */ u8 m034C;
-    /* 0x034D */ u8 m034D;
-    /* 0x034E */ u8 mShipMode;
+    /* 0x034C */ u8 mCurMode;
+    /* 0x034D */ u8 mNextMode;
+    /* 0x034E */ u8 mPart;
     /* 0x034F */ u8 m034F;
     /* 0x0350 */ u8 m0350;
     /* 0x0351 */ u8 m0351;
@@ -255,7 +273,7 @@ public:
     /* 0x0358 */ u32 mStateFlag;
     /* 0x035C */ u32 mNextMessageNo;
     /* 0x0360 */ u32 mShadowId;
-    /* 0x0364 */ s16 m0364;
+    /* 0x0364 */ s16 mSailAngle;
     /* 0x0366 */ s16 m0366;
     /* 0x0368 */ u8 m0368[0x036C - 0x0368];
     /* 0x036C */ s16 m036C;
@@ -273,17 +291,17 @@ public:
     /* 0x0384 */ s16 m0384;
     /* 0x0386 */ s16 m0386;
     /* 0x0388 */ s16 m0388;
-    /* 0x038A */ u16 m038A;
+    /* 0x038A */ u16 m038A; // file idx
     /* 0x038C */ s16 m038C;
     /* 0x038E */ s16 m038E;
     /* 0x0390 */ u16 m0390;
-    /* 0x0392 */ u16 m0392;
+    /* 0x0392 */ u16 m0392; // file idx
     /* 0x0394 */ s16 m0394;
     /* 0x0396 */ s16 m0396;
     /* 0x0398 */ s16 m0398;
-    /* 0x039A */ s16 m039A;
+    /* 0x039A */ s16 mCraneBaseAngle;
     /* 0x039C */ s16 m039C;
-    /* 0x039E */ s16 mCurrentRopeSegmentIndex;
+    /* 0x039E */ s16 mRopeCnt;
     /* 0x03A0 */ s16 m03A0;
     /* 0x03A2 */ s16 m03A2;
     /* 0x03A4 */ s16 mStickMAng;
@@ -294,7 +312,7 @@ public:
     /* 0x03AE */ s16 m03AE;
     /* 0x03B0 */ s16 m03B0;
     /* 0x03B2 */ s16 m03B2;
-    /* 0x03B4 */ u16 m03B4;
+    /* 0x03B4 */ u16 m03B4; // file idx
     /* 0x03B6 */ s16 m03B6;
     /* 0x03B8 */ s16 m03B8;
     /* 0x03BA */ s16 m03BA;
@@ -306,9 +324,9 @@ public:
     /* 0x03D0 */ f32 m03D0;
     /* 0x03D4 */ f32 m03D4;
     /* 0x03D8 */ f32 m03D8;
-    /* 0x03DC */ f32 m03DC;
+    /* 0x03DC */ f32 mTillerAngleRate;
     /* 0x03E0 */ f32 m03E0;
-    /* 0x03E4 */ f32 m03E4;
+    /* 0x03E4 */ f32 mJumpRate;
     /* 0x03E8 */ f32 m03E8;
     /* 0x03EC */ f32 mStickMVal;
     /* 0x03F0 */ u8 m03F0[0x03F4 - 0x03F0];
@@ -329,7 +347,7 @@ public:
     /* 0x042C */ fpc_ProcID mTactWarpID;
     /* 0x0430 */ fpc_ProcID m0430;
     /* 0x0434 */ cXyz* m0434;
-    /* 0x0438 */ cXyz m0438;
+    /* 0x0438 */ cXyz mTillerTopPos;
     /* 0x0444 */ cXyz m0444;
     /* 0x0450 */ cXyz m0450;
     /* 0x045C */ cXyz m045C;

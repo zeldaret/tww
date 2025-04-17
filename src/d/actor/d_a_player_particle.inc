@@ -1134,7 +1134,7 @@ void daPy_lk_c::setWaterDrop() {
         return;
     }
 
-    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
+    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != daPyProc_DEMO_LAST_COMBO_e && mAcch.m_roof_y == C_BG_MAX_HEIGHT) {
         if (m3460[0].getEmitter() == NULL) {
             m3460[0].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
         }

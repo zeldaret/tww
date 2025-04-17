@@ -396,15 +396,10 @@ static BOOL daPy_jointBeforeCallback(u32 userArea, u16 jnt_no, J3DTransformInfo*
 BOOL daPy_lk_c::jointAfterCB(int jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
     if (m34C6 != 0) {
         if ((m34C6 & 1) != 0) {
-            param_3->x = m3658.x;
-            param_3->y = m3658.y;
-            param_3->z = m3658.z;
-            param_3->w = m3658.w;
+            *param_3 = m3658;
         }
         if ((m34C6 & 2) != 0) {
-            param_2->mScale = m3668.mScale;
-            param_2->mRotation = m3668.mRotation;
-            param_2->mTranslate = m3668.mTranslate;
+            *param_2 = m3668;
         }
         m34C6 = 0;
     }
@@ -7155,11 +7150,11 @@ void daPy_lk_c::endDemoMode() {
             checkNextMode(0);
         } else if (daPy_getPlayerActorClass() != this) {
             procControllWait_init();
-        } else if (dComIfGp_getShipActor()->mShipMode == 2) {
+        } else if (dComIfGp_getShipActor()->getPart() == daShip_c::PART_CANNON_e) {
             procShipCannon_init();
-        } else if (dComIfGp_getShipActor()->mShipMode == 3) {
+        } else if (dComIfGp_getShipActor()->getPart() == daShip_c::PART_CRANE_e) {
             procShipCrane_init();
-        } else if (dComIfGp_getShipActor()->mShipMode == 1) {
+        } else if (dComIfGp_getShipActor()->getPart() == daShip_c::PART_STEER_e) {
             procShipSteer_init();
         } else {
             procShipPaddle_init();
