@@ -580,7 +580,7 @@ JKRHeap* daPy_lk_c::setItemHeap() {
 
 /* 80104240-80104280       .text setBlurPosResource__9daPy_lk_cFUs */
 void daPy_lk_c::setBlurPosResource(u16 index) {
-    JKRReadIdxResource(mSwBlur.mpPosBuffer, 0x4800, index, dComIfGp_getAnmArchive());
+    JKRReadIdxResource(mSwBlur.mpPosBuffer, sizeof(Vec) * 2 * 0x300, index, dComIfGp_getAnmArchive());
 }
 
 /* 80104280-80104364       .text getItemAnimeResource__9daPy_lk_cFUs */
@@ -1810,7 +1810,7 @@ BOOL daPy_lk_c::checkEquipAnime() const {
 
 /* 8010C570-8010C71C       .text deleteEquipItem__9daPy_lk_cFi */
 void daPy_lk_c::deleteEquipItem(BOOL param_1) {
-    fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
+    fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
     
     if (param_1 && (mEquipItem != daPyItem_NONE_e && mEquipItem != daPyItem_BOKO_e)) {
         if (mEquipItem == daPyItem_SWORD_e) {
@@ -1823,11 +1823,11 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
     if (mEquipItem == daPyItem_SWORD_e) {
         mDoAud_bgmSetSwordUsing(0);
     } else if (mEquipItem == daPyItem_BOKO_e) {
-        if (equipActor != NULL) {
-            fopAcM_cancelCarryNow(equipActor);
+        if (equip_actor != NULL) {
+            fopAcM_cancelCarryNow(equip_actor);
         }
-    } else if (equipActor != NULL) {
-        fopAcM_delete(equipActor);
+    } else if (equip_actor != NULL) {
+        fopAcM_delete(equip_actor);
     }
     
     if ((mEquipItem == dItem_GRAPPLING_HOOK_e && checkRopeAnime()) ||
@@ -2452,7 +2452,7 @@ BOOL daPy_lk_c::changeDamageProc() {
                 setDamageEmitter();
                 changePlayer(this);
                 setDamagePoint(-damage);
-                fopAc_ac_c* grabActor = mActorKeepGrab.getActor();
+                fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
                 if (daPy_dmEcallBack_c::checkElec()) {
                     if (procElecDamage_init(NULL)) {
                         return TRUE;
@@ -2465,11 +2465,11 @@ BOOL daPy_lk_c::changeDamageProc() {
                 
                 if (checkGrabWear() &&
                     mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
-                    grabActor
+                    grab_actor != NULL
                 ) {
                     cXyz* damageVec = getDamageVec(&mCyl);
-                    grabActor->shape_angle.y = cM_atan2s(damageVec->x, damageVec->z);
-                    grabActor->shape_angle.x = 0x2000;
+                    grab_actor->shape_angle.y = cM_atan2s(damageVec->x, damageVec->z);
+                    grab_actor->shape_angle.x = 0x2000;
                     return procLargeDamage_init(-4, 1, 0, 0);
                 }
                 if (spl == 7 || spl == 2 || spl == 10) {
@@ -2536,7 +2536,6 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
 /* 80111424-80111A80       .text changeDemoProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeDemoProc() {
     static const Vec tact_scale = {2.5f, 2.5f, 2.5f};
-    fopAc_ac_c* pfVar6;
 
     if (!dComIfGp_event_runCheck()) {
         return false;
@@ -2602,9 +2601,9 @@ BOOL daPy_lk_c::changeDemoProc() {
             return procShipPaddle_init();
         } else {
             onNoResetFlg0(daPyFlg0_UNK100000);
-            pfVar6 = mActorKeepGrab.getActor();
-            if (pfVar6 != NULL) {
-                if ((fopAcM_CheckStatus(pfVar6, fopAcStts_UNK10000_e)) &&
+            fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
+            if (grab_actor != NULL) {
+                if ((fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e)) &&
                     (!checkGrabSpecialHeavyState()))
                 {
                     return procGrabThrow_init(0);
@@ -2666,8 +2665,8 @@ BOOL daPy_lk_c::changeDemoProc() {
         }
         return procTactWait_init(mDemo.getParam0());
     } else if (demo_mode == daPy_demo_c::DEMO_UNK33_e) {
-        pfVar6 = mActorKeepGrab.getActor();
-        if ((pfVar6 == NULL) || (pfVar6 != dComIfGp_getCb1Player())) {
+        fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
+        if ((grab_actor == NULL) || (grab_actor != dComIfGp_getCb1Player())) {
             deleteEquipItem(FALSE);
             freeGrabItem();
             mActorKeepGrab.setData(dComIfGp_getCb1Player());
@@ -5601,12 +5600,12 @@ BOOL daPy_lk_c::execute() {
     if (dComIfGp_event_runCheck()) {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
         if (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mEquipItem == daPyItem_BOKO_e) {
-            fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
-            if (equipActor) {
+            fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
+            if (equip_actor) {
                 s16 angle = shape_angle.y + 0x8000;
-                equipActor->speed.y = 0.0f;
-                equipActor->speedF = 5.0f;
-                equipActor->current.angle.y = angle;
+                equip_actor->speed.y = 0.0f;
+                equip_actor->speedF = 5.0f;
+                equip_actor->current.angle.y = angle;
             }
             deleteEquipItem(FALSE);
         }
@@ -5684,15 +5683,15 @@ BOOL daPy_lk_c::execute() {
         m34C2 = 0;
     }
     
-    fopAc_ac_c* grabActor = mActorKeepGrab.getActor();
-    fopAc_ac_c* equipActor = mActorKeepEquip.getActor();
+    fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
+    fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
     
-    if (grabActor && !fopAcM_checkCarryNow(grabActor)) {
+    if (grab_actor && !fopAcM_checkCarryNow(grab_actor)) {
         freeGrabItem();
     }
     
     if (mEquipItem == daPyItem_BOKO_e) {
-        if (equipActor == NULL || !fopAcM_checkCarryNow(equipActor)) {
+        if (equip_actor == NULL || !fopAcM_checkCarryNow(equip_actor)) {
             deleteEquipItem(FALSE);
         }
     }
@@ -5890,11 +5889,11 @@ BOOL daPy_lk_c::execute() {
         checkFallCode();
     }
     
-    equipActor = mActorKeepEquip.getActor();
-    if (equipActor) {
-        equipActor->tevStr.mRoomNo = tevStr.mRoomNo;
-        equipActor->tevStr.mEnvrIdxOverride = tevStr.mEnvrIdxOverride;
-        equipActor->current.roomNo = roomNo;
+    equip_actor = mActorKeepEquip.getActor();
+    if (equip_actor) {
+        equip_actor->tevStr.mRoomNo = tevStr.mRoomNo;
+        equip_actor->tevStr.mEnvrIdxOverride = tevStr.mEnvrIdxOverride;
+        equip_actor->current.roomNo = roomNo;
     }
     
     setWorldMatrix();

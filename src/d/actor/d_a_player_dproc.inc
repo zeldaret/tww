@@ -284,7 +284,7 @@ BOOL daPy_lk_c::dProcDamage_init() {
 
 /* 8012DEA0-8012DF24       .text dProcDamage__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcDamage() {
-    mVelocity = -2.0f * cM_ssin(cM_rad2s(m35A0 * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()));
+    mVelocity = -2.0f * cM_fsin(m35A0 * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     }
@@ -345,7 +345,6 @@ BOOL daPy_lk_c::dProcHoldup() {
 BOOL daPy_lk_c::dProcOpenTreasure_init() {
     float fVar1;
     daPy_ANM dVar2;
-    daBoko_c* pfVar4;
 
     if (mCurProc == daPyProc_DEMO_OPEN_TREASURE_e) {
         return true;
@@ -361,13 +360,13 @@ BOOL daPy_lk_c::dProcOpenTreasure_init() {
     setSingleMoveAnime(dVar2, 1.0f, 0.0f, -1, 3.0f);
     mVelocity = 0.0f;
     if (mEquipItem == daPyItem_BOKO_e) {
-        pfVar4 = (daBoko_c*)mActorKeepEquip.getActor();
-        if (pfVar4 != NULL) {
+        daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+        if (boko != NULL) {
             mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
             mDoMtx_YrotM(mDoMtx_stack_c::now, (shape_angle.y + 0x2000));
             MtxP mtx = mDoMtx_stack_c::now;
-            if (pfVar4->mpModel != NULL) {
-                pfVar4->mpModel->setBaseTRMtx(mtx);
+            if (boko->mpModel != NULL) {
+                boko->mpModel->setBaseTRMtx(mtx);
             }
         }
     }
@@ -1566,8 +1565,6 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
 
 /* 8013116C-80131274       .text dProcStandItemPut__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcStandItemPut() {
-    fopAc_ac_c* pfVar2;
-
     if (mProcVar0.m3570 == 1) {
         if (m_old_fdata->getOldFrameRate() < 0.01f) {
             setSingleMoveAnime(
@@ -1581,10 +1578,10 @@ BOOL daPy_lk_c::dProcStandItemPut() {
             voiceStart(7);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
-        pfVar2 = mActorKeepGrab.getActor();
-        if (pfVar2 != NULL) {
+        fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
+        if (grab_actor != NULL) {
             mDoAud_seStart(
-                JA_SE_LK_W_DAIZA_ATTACH, &pfVar2->current.pos, NULL, dComIfGp_getReverb(pfVar2->current.roomNo)
+                JA_SE_LK_W_DAIZA_ATTACH, &grab_actor->current.pos, NULL, dComIfGp_getReverb(grab_actor->current.roomNo)
             );
         }
         freeGrabItem();
@@ -2199,7 +2196,7 @@ BOOL daPy_lk_c::dProcShipSit_init() {
     initShipRideUseItem(iVar1, 1);
     daShip_c* ship = dComIfGp_getShipActor();
     ship->onLinkSit();
-    ship->m034D = 2;
+    ship->setPaddleMove();
     return true;
 }
 

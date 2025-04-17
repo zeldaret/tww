@@ -134,7 +134,7 @@ public:
     void setCrane() {}
     void setGetOffFirst() {}
     void setGetOffSecond() {}
-    void setPaddleMove() {}
+    void setPaddleMove() { m034D = 2; }
     void setReadyFirst() {}
     void setReadySecond() {}
     void setStartModeThrow() {}

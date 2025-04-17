@@ -291,7 +291,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
-                target = cM_scos(cM_rad2s((1.0f - swimTimerRate) * M_PI)) * -daPy_HIO_swim_c0::m.field_0x78;
+                target = cM_fcos((1.0f - swimTimerRate) * M_PI) * -daPy_HIO_swim_c0::m.field_0x78;
 
                 if (mFrameCtrlUnder->checkPass(0.0f) && mCurProc != daPyProc_SWIM_UP_e) {
                     if (mProcVar0.m3570 && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
@@ -392,7 +392,6 @@ BOOL daPy_lk_c::procSwimUp() {
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     float fVar2;
-    u32 uVar3;
     
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
@@ -400,8 +399,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 
     if (param_1) {
         fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
-        uVar3 = cM_rad2s(fVar2 * M_PI);
-        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60) + speedF * std::fabsf(cM_scos(uVar3)) * daPy_HIO_swim_c0::m.field_0x60;
+        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * daPy_HIO_swim_c0::m.field_0x60;
     }
     else {
         fVar2 = 0.0f;

@@ -192,7 +192,7 @@ void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColor
     mBlurTopRate = blurTopRate;
     mBlurColorType = blurColorType;
 
-    mDoMtx_multVec(mtx, mpPosBuffer + i, &field_0x034[0]);
+    mDoMtx_multVec(mtx, mpPosBuffer + i + 0, &field_0x034[0]);
     mDoMtx_multVec(mtx, mpPosBuffer + i + 1, &field_0x304[0]);
 
     field_0x034[0] += (field_0x034[0] - field_0x304[0]) * mBlurTopRate;
@@ -242,7 +242,7 @@ void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
     cXyz sp38 = field_0x028 - sp50;
     field_0x028 = sp50;
     for (i = 0; i < var_r31 && buffIdx >= 0; i++) {
-        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx, &field_0x034[i]);
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 0, &field_0x034[i]);
         mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 1, &field_0x304[i]);
 
         field_0x034[i] += (field_0x034[i] - field_0x304[i]) * mBlurTopRate;
@@ -312,9 +312,9 @@ void daPy_swBlur_c::draw() {
     s16 r28 = 0x00;
     GXBegin(GX_QUADS, GX_VTXFMT0, 4 + field_0x014*4);
     for (int i = field_0x014; i >= 0; i--) {
-        GXPosition3f32(field_0x034[i].x, field_0x034[i].y, field_0x034[i].z);
+        GXPosition3f32(field_0x034[i+0].x, field_0x034[i+0].y, field_0x034[i+0].z);
         GXTexCoord2s16(r29, 0x00);
-        GXPosition3f32(field_0x304[i].x, field_0x304[i].y, field_0x304[i].z);
+        GXPosition3f32(field_0x304[i+0].x, field_0x304[i+0].y, field_0x304[i+0].z);
         GXTexCoord2s16(r29, 0xFF);
         GXPosition3f32(field_0x304[i+1].x, field_0x304[i+1].y, field_0x304[i+1].z);
         GXTexCoord2s16(r28, 0xFF);

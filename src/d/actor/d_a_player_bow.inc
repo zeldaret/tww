@@ -71,10 +71,10 @@ void daPy_lk_c::makeArrow() {
 
 /* 8014A180-8014A1CC       .text deleteArrow__9daPy_lk_cFv */
 void daPy_lk_c::deleteArrow() {
-    fopAc_ac_c* pfVar1 = mActorKeepEquip.getActor();
+    fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
 
-    if (pfVar1 != NULL && fopAcM_GetName(pfVar1) == PROC_ARROW) {
-        fopAcM_delete(pfVar1);
+    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == PROC_ARROW) {
+        fopAcM_delete(equip_actor);
         mActorKeepEquip.clearData();
     }
 }

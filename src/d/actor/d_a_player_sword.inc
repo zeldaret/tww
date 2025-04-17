@@ -1519,8 +1519,8 @@ BOOL daPy_lk_c::procCutRoll() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         uVar1 = current.angle.y;
         if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
-            fVar2 = 25.0f + (mAcchCir[0]).GetWallR();
-            local_48.set(current.pos.x, current.pos.y + (mAcchCir[0]).GetWallH(), current.pos.z);
+            fVar2 = 25.0f + mAcchCir[0].GetWallR();
+            local_48.set(current.pos.x, current.pos.y + mAcchCir[0].GetWallH(), current.pos.z);
             f32 cos = cM_scos(uVar1);
             f32 sin = cM_ssin(uVar1);
             local_3c.x = local_48.x + fVar2 * sin;
@@ -1825,8 +1825,8 @@ BOOL daPy_lk_c::procCutReverse() {
 
 /* 80159390-80159500       .text procJumpCut_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procJumpCut_init(int param_0) {
-    fopAc_ac_c* uVar1 = mActorKeepEquip.getActor();
-    if (daPy_dmEcallBack_c::checkCurse() || (mEquipItem == daPyItem_BOKO_e && uVar1 == NULL)) {
+    fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
+    if (daPy_dmEcallBack_c::checkCurse() || (mEquipItem == daPyItem_BOKO_e && equip_actor == NULL)) {
         return false;
     }
 

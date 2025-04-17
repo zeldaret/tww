@@ -36,7 +36,7 @@ f32 daPy_lk_c::getCrawlMoveSpeed() {
         fVar1 = fVar1 - 17.0f;
     }
     return (daPy_HIO_crouch_c0::m.field_0x3C * mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) *
-           cM_ssin(cM_rad2s(0.18479957f * fVar1));
+           cM_fsin((M_PI / 17) * fVar1);
 }
 
 /* 80138868-801389D0       .text setCrawlMoveDirectionArrow__9daPy_lk_cFv */

@@ -293,18 +293,16 @@ void daPy_lk_c::setShipAttnetionBodyAngle() {
 
 /* 801405F0-80140C88       .text changeShipEndProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeShipEndProc() {
-    /* Nonmatching - branching */
-    daBoomerang_c* pfVar4;
-
+    /* Nonmatching - missing daShip_c inline */
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     if (ship == NULL) {
         return checkNextMode(0);
     }
     offNoResetFlg0(daPyFlg0_SHIP_DROP);
     if (doTrigger()) {
-        pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-        if (pfVar4 != NULL) {
-            pfVar4->onCancelFlg();
+        daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+        if (boomerang != NULL) {
+            boomerang->onCancelFlg();
         }
     }
     if (mCurProc != daPyProc_SHIP_SCOPE_e && mCurProc != daPyProc_SHIP_BOW_e && mCurProc != daPyProc_SHIP_HOOKSHOT_e &&
@@ -341,44 +339,44 @@ BOOL daPy_lk_c::changeShipEndProc() {
             }
         }
         if (checkSetItemTrigger(NORMAL_SAIL, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipSteer_init();
         }
         if (checkSetItemTrigger(dItem_BOMB_BAG_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipCannon_init();
         }
         if (checkSetItemTrigger(dItem_GRAPPLING_HOOK_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipCrane_init();
         }
         if (checkSetItemTrigger(dItem_TELESCOPE_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipScope_init(1);
         }
         if (checkSetItemTrigger(daPyItem_PHOTOBOX_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipScope_init(0);
         }
         if (checkSetItemTrigger(daPyItem_BOW_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipBow_init();
         }
@@ -386,16 +384,16 @@ BOOL daPy_lk_c::changeShipEndProc() {
             return procShipBoomerang_init();
         }
         if (checkSetItemTrigger(dItem_HOOKSHOT_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procShipHookshot_init();
         }
         if (checkSetItemTrigger(dItem_WIND_WAKER_e, 1)) {
-            pfVar4 = (daBoomerang_c*)mActorKeepThrow.getActor();
-            if (pfVar4 != NULL) {
-                pfVar4->onCancelFlg();
+            daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
+            if (boomerang != NULL) {
+                boomerang->onCancelFlg();
             }
             return procTactWait_init(-1);
         }

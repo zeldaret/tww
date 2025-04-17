@@ -3735,7 +3735,7 @@ BOOL daShip_c::execute() {
                     onStateFlg(daSFLG_UNK100_e);
                 }
 
-                fopAcM_posMoveF(this, (cXyz *)&mStts);
+                fopAcM_posMoveF(this, mStts.GetCCMoveP());
                 
                 m1044 = cXyz::Zero;
             }
@@ -3778,7 +3778,7 @@ BOOL daShip_c::execute() {
                     }
                     else {
                         prev_speedF = current.pos.y;
-                        fopAcM_posMoveF(this, (cXyz *)&mStts);
+                        fopAcM_posMoveF(this, mStts.GetCCMoveP());
                         current.pos.y = prev_speedF;
                     }
                     if (r23) {
@@ -3796,7 +3796,7 @@ BOOL daShip_c::execute() {
                     speed.x = (speedF * cM_ssin(current.angle.y)) * cM_scos(m0370);
                     speed.y = -speedF * cM_ssin(m0370);
                     speed.z = (speedF * cM_scos(current.angle.y)) * cM_scos(m0370);
-                    fopAcM_posMove(this, (cXyz *)&mStts);
+                    fopAcM_posMove(this, mStts.GetCCMoveP());
                     if (dComIfGp_event_runCheck()) {
                         m1044 = cXyz::Zero;
                         
@@ -3835,7 +3835,7 @@ BOOL daShip_c::execute() {
                     speed.y = -speedF * cM_ssin(m0370);
                 }
                 speed.z = (speedF * cM_scos(current.angle.y)) * cM_scos(m0370);
-                fopAcM_posMove(this, (cXyz*)&mStts);
+                fopAcM_posMove(this, mStts.GetCCMoveP());
             }
         }
     }

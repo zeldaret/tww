@@ -384,7 +384,7 @@ BOOL daPy_lk_c::procClimbMoveUpDown() {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
             dVar2 *= -1.0f;
         }
-        (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar2);
         checkBgClimbMove();
     }
     return true;
