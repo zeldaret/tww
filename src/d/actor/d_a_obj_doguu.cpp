@@ -5,6 +5,51 @@
 
 #include "d/actor/d_a_obj_doguu.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_item.h"
+
+namespace {
+    struct Attr_c {
+        /* 0x00 */ float idk;
+        /* 0x04 */ float mEyepos;
+    };
+
+    static const Attr_c L_attr = {
+        0.5f, 125.0f,
+    };
+
+    inline const Attr_c& attr() { return L_attr; }
+}
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cCcD_SrcCylAttr
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
+        /* Height */ 200.0f,
+    }
+};
 
 /* 00000078-00000168       .text setPointLight__12daObjDoguu_cFv */
 void daObjDoguu_c::setPointLight() {
@@ -12,17 +57,88 @@ void daObjDoguu_c::setPointLight() {
 }
 
 /* 00000168-00000188       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daObjDoguu_c*>(i_this)->CreateHeap();
 }
 
 /* 00000188-000007D0       .text CreateHeap__12daObjDoguu_cFv */
-void daObjDoguu_c::CreateHeap() {
+BOOL daObjDoguu_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 000007D0-00000B80       .text CreateInit__12daObjDoguu_cFv */
 void daObjDoguu_c::CreateInit() {
+    cullMtx = field_0x6CC->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 400.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    if (field_0x894 == 0){
+        field_0x890 = 106;
+    } else if(field_0x894 == 1) {
+        field_0x890 = 107;
+    } else{
+        field_0x890 = 105;
+    }
+    mStts.Init(0xff, 0xff, this);
+    mCyl.Set(l_cyl_src);
+    if(!checkItemGet(field_0x890, 1)){
+        mCyl.SetR(50.f);
+    }
+    mCyl.SetStts(&mStts);
+    dKy_plight_set(&field_0x8DC);
+    if (subtype >= 1) {
+        mBck1.setFrame(mBck1.getEndFrame());
+        mBck2.setFrame(mBck2.getEndFrame());
+        mBck3.setFrame(mBck3.getEndFrame());
+        field_0x8A0 = true;
+        field_0x8A1 = false;
+        field_0x8A2 = true;
+        field_0x8AC = 14;
+    } else {
+        int eventBit = dComIfGs_isEventBit(0x1480);
+        if ((eventBit != false) && (eventBit = dComIfGs_isEventBit(0x1440),
+            eventBit != 0) && (eventBit = dComIfGs_isEventBit(0x1410),
+            eventBit != 0)) {
+        
+            mBck1.setFrame(mBck1.getEndFrame());
+            mBck2.setFrame(mBck2.getEndFrame());
+            mBck3.setFrame(mBck3.getEndFrame());
+            field_0x8A0 = true;
+            field_0x8A1 = true;
+            field_0x8A2 = false;
+            field_0x8AC = 14;
+        
+        } else {
+            field_0x8A1 = false;
+            if (((field_0x894 == 0) && (eventBit = dComIfGs_isEventBit(0x1480), eventBit != 0)) ||
+            (field_0x894 == 1 && (eventBit = dComIfGs_isEventBit(0x1440),
+             eventBit != 0)) || (field_0x894 == 2 && (eventBit = dComIfGs_isEventBit(0x1410),
+             eventBit != 0))){
+                 field_0x8A2 = true;
+                 field_0x8A0 = true;
+                 field_0x8AC = 10;                   
+             }
+             else {
+                 field_0x8A2 = false;
+                 field_0x8A0 = false;
+                 field_0x8AC = 0;
+             }
+        }
+    }
+    eyePos.y += attr().mEyepos;
+    set_mtx();
+
+    field_0x8A4 = dComIfGp_evmng_getEventIdx("DOGUU_DEMO1", 0xff);
+    field_0x8A6 = dComIfGp_evmng_getEventIdx("DOGUU_DEMO2", 0xff);
+    field_0x8A8 = dComIfGp_evmng_getEventIdx("DOGUU_DEMO3", 0xff);
+    field_0x8AA = dComIfGp_evmng_getEventIdx("MEGAMI_DEMO", 0xff);
+    field_0x8FC = 1.0f;
+    if (!field_0x8A0) {
+        field_0x8A3 = 1;
+      }
+      else {
+        field_0x8A3 = 0;
+      }
+      field_0x8C8 = 1.0;
     /* Nonmatching */
 }
 
@@ -38,11 +154,21 @@ void daObjDoguu_c::next_msgStatus(unsigned long*) {
 
 /* 00000D80-00000DBC       .text getMsg__12daObjDoguu_cFv */
 void daObjDoguu_c::getMsg() {
+    // if (this->field_0x8b0 == '\x04') {
+    //     return 0xeed;
+    //   }
+    //   if (this->field1137_0x894 == 0) {
+    //     return 0xeee;
+    //   }
+    //   return 0xef0 - (uint)(this->field1137_0x894 == 1);
     /* Nonmatching */
 }
 
 /* 00000DBC-00000E98       .text setGoal__12daObjDoguu_cFi */
 void daObjDoguu_c::setGoal(int) {
+    // mDoMtx_stack_c::now[0][3] = current.pos.x;
+    // mDoMtx_stack_c::now[1][3] = current.pos.y;
+    // mDoMtx_stack_c::now[2][3] = current.pos.z;
     /* Nonmatching */
 }
 
@@ -77,12 +203,14 @@ void daObjDoguu_c::setFinishMyEvent() {
 }
 
 /* 000016A4-000016C4       .text daObjDoguu_Create__FPv */
-static cPhs_State daObjDoguu_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjDoguu_Create(void* i_this) {
+    return static_cast<daObjDoguu_c*>(i_this)->_create();
+
 }
 
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
 cPhs_State daObjDoguu_c::_create() {
+    fopAcM_SetupActor(this, daObjDoguu_c);
     /* Nonmatching */
 }
 
@@ -107,7 +235,8 @@ void daObjDoguu_c::setEffectMtx(const cXyz*, float) {
 }
 
 /* 00002264-00002288       .text daObjDoguu_Execute__FPv */
-static BOOL daObjDoguu_Execute(void*) {
+static BOOL daObjDoguu_Execute(void* i_this) {
+    return static_cast<daObjDoguu_c*>(i_this)->_execute();
     /* Nonmatching */
 }
 
@@ -118,7 +247,7 @@ bool daObjDoguu_c::_execute() {
 
 /* 000027AC-000027B4       .text daObjDoguu_IsDelete__FPv */
 static BOOL daObjDoguu_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_DoguuMethodTable = {
