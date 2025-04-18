@@ -104,12 +104,12 @@ void dComIfG_play_c::itemInit() {
     mMesgStatus = 0;
     mScopeMesgStatus = 0;
     field_0x492c = 0;
-    field_0x492d = 0;
-    mCurrButtonBAction = 0;
-    mCurrButtonAAction = 0;
-    field_0x4930 = 0;
-    field_0x4931 = 0;
-    field_0x4932 = 0;
+    mRStatus = 0;
+    mAStatus = 0;
+    mDoStatus = 0;
+    mRStatusForce = 0;
+    mAStatusForce = 0;
+    mDoStatusForce = 0;
 
     for (int i = 0; i < ARRAY_SIZE(mSelectItem); i++) {
         mSelectItem[i] = 0;
@@ -152,7 +152,7 @@ void dComIfG_play_c::itemInit() {
     mPlacenameIndex = 0;
     mPlacenameState = 0;
     mGameoverStatus = 0;
-    field_0x495a = 0;
+    mMenuCollect = false;
     mPictureFlag = 0;
     mPictureResult = 0;
     mPictureResultDetail = 0;
@@ -573,7 +573,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyIn
 }
 
 /* 800535B8-80053678       .text dComIfGp_getShip__Fii */
-dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
+dStage_Ship_dt_c* dComIfGp_getShip(int i_roomNo, int param_1) {
     dStage_roomDt_c* roomSt_p = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
     if (roomSt_p == NULL) {
         return NULL;
@@ -584,7 +584,7 @@ dStage_Ship_data* dComIfGp_getShip(int i_roomNo, int param_1) {
         return NULL;
     }
 
-    dStage_Ship_data* data_p = ship_p->m_entries;
+    dStage_Ship_dt_c* data_p = ship_p->m_entries;
     if (data_p == NULL) {
         return NULL;
     }

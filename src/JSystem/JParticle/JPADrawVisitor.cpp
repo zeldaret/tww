@@ -833,7 +833,6 @@ void JPADrawCalcScaleY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
 
 /* 80264EE8-802650B8       .text calc__24JPADrawCalcScaleXBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     JGeometry::TVec3<f32> vel;
     vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
@@ -848,7 +847,6 @@ void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* 
 
 /* 802650B8-80265288       .text calc__24JPADrawCalcScaleYBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     JGeometry::TVec3<f32> vel;
     vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {

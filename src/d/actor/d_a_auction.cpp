@@ -750,7 +750,7 @@ void daAuction_c::eventMainInit() {
     daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
 
     pLink->changeOriginalDemo();
-    mCurLinkAnm = daPy_demo_c::DEMO_UNK1_e;
+    mCurLinkAnm = daPy_demo_c::DEMO_UNK01_e;
     dComIfGp_event_setTalkPartner(this);
     m82F = 0;
 
@@ -775,11 +775,11 @@ bool daAuction_c::eventMain() {
 
     if (
         pLink->getBaseAnimeFrameRate() == 0.0f &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK25_e
     ) {
-        setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
     }
 
     mFlags &= 4;
@@ -1106,8 +1106,8 @@ void daAuction_c::eventMainMsgSet() {
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
     if (eventMesEnd()) {
-        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
 
         if (m834 & 0x20) {
@@ -1341,7 +1341,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         m826 = tmp;
         m824 = tmp;
         if (m826 != 0) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
         break;
     }
@@ -1563,7 +1563,7 @@ void daAuction_c::setCameraNpc(int idx, s16 param_2) {
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
 void daAuction_c::setLinkAnm(u8 linkAnm) {
-    if (linkAnm == daPy_demo_c::DEMO_UNK1_e && m826 == 0) {
+    if (linkAnm == daPy_demo_c::DEMO_UNK01_e && m826 == 0) {
         linkAnm = daPy_demo_c::DEMO_UNK1D_e;
     }
 

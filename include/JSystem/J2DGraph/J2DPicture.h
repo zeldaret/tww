@@ -96,7 +96,9 @@ public:
         setBlendColorRatio(f1, f2, f3, f4);
         setBlendAlphaRatio(f1, f2, f3, f4);
     }
+    const JUtility::TColor& getWhite() const { return mColorWhite; }
     bool setWhite(JUtility::TColor white) { mColorWhite = white; return true; }
+    const JUtility::TColor& getBlack() const { return mColorBlack; }
     bool setBlack(JUtility::TColor black) { mColorBlack = black; return true; }
     bool setBlackWhite(JUtility::TColor black, JUtility::TColor white) {
         mColorBlack = black;
@@ -121,9 +123,7 @@ public:
     void load(u8 i) { mpTexture[i]->load((GXTexMapID)i); }
 
     // TODO
-    void getBlack() const {}
     void getCornerColor(J2DPicture::TCornerColor&) const {}
-    void getWhite() const {}
 
 protected:
     /* 0x0CC */ JUTTexture* mpTexture[4];
@@ -139,7 +139,7 @@ protected:
     /* 0x10C */ JUtility::TColor mCornerColor[4];
     /* 0x11C */ JUtility::TColor mBlendKonstColor;
     /* 0x120 */ JUtility::TColor mBlendKonstAlpha;
-};
+};  // Size: 0x124
 
 STATIC_ASSERT(sizeof(J2DPicture) == 0x124);
 

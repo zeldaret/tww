@@ -21,28 +21,25 @@ class J3DModelData;
 class daItem_c;
 
 struct fopAcM_prmBase_class {
-    /* 0x00 */ u32 field_0x00;
-    /* 0x04 */ cXyz field_0x04;
-    /* 0x10 */ csXyz field_0x10;
-    /* 0x16 */ u16 field_0x16;
+    /* 0x00 */ u32 parameters;
+    /* 0x04 */ cXyz position;
+    /* 0x10 */ csXyz angle;
+    /* 0x16 */ u16 setID;
 };  // Size = 0x18
 
 struct fopAcM_prmScale_class {
-    u8 x;
-    u8 y;
-    u8 z;
-};
+    /* 0x0 */ u8 x;
+    /* 0x1 */ u8 y;
+    /* 0x2 */ u8 z;
+};  // Size: 0x3
 
 struct fopAcM_prm_class {
-    /* 0x00 */ u32 mParameter;  // single U32 Parameter
-    /* 0x04 */ cXyz mPos;
-    /* 0x10 */ csXyz mAngle;  // rotation
-    /* 0x16 */ u16 mSetId;
-    /* 0x18 */ fopAcM_prmScale_class mScale;
-    /* 0x1B */ u8 mGbaName;
-    /* 0x1C */ fpc_ProcID mParentPcId;  // parent process ID
-    /* 0x20 */ s8 mSubtype;
-    /* 0x21 */ s8 mRoomNo;
+    /* 0x00 */ fopAcM_prmBase_class base;
+    /* 0x18 */ fopAcM_prmScale_class scale;
+    /* 0x1B */ u8 gbaName;
+    /* 0x1C */ fpc_ProcID parent_id;
+    /* 0x20 */ s8 subtype;
+    /* 0x21 */ s8 room_no;
 };
 
 struct fopAcM_search4ev_prm {
@@ -61,9 +58,9 @@ struct fopAcM_search4ev_prm {
 };
 
 struct fopAcM_search_prm {
-    /* 0x00 */ const char * mpProcName;
-    /* 0x04 */ u32 mParamMask;
-    /* 0x08 */ u32 mParameter;
+    /* 0x00 */ const char * procname;
+    /* 0x04 */ u32 prm_mask;
+    /* 0x08 */ u32 parameter;
 };
 
 enum daItemType_e {

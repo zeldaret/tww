@@ -28,12 +28,34 @@ STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 class daPy_demo_c {
 public:
     enum {
-        DEMO_UNK1_e = 0x01,
+        DEMO_UNK01_e = 0x01,
+        DEMO_UNK04_e = 0x04,
+        DEMO_UNK06_e = 0x06,
+        DEMO_UNK08_e = 0x08,
+        DEMO_UNK09_e = 0x09,
+        DEMO_UNK0F_e = 0x0F,
+        DEMO_UNK10_e = 0x10,
         DEMO_UNK11_e = 0x11,
+        DEMO_UNK12_e = 0x12,
         DEMO_UNK14_e = 0x14,
+        DEMO_UNK17_e = 0x17,
         DEMO_UNK18_e = 0x18,
+        DEMO_UNK1A_e = 0x1A,
+        DEMO_UNK1B_e = 0x1B,
         DEMO_UNK1D_e = 0x1D,
+        DEMO_UNK1E_e = 0x1E,
+        DEMO_UNK1F_e = 0x1F,
+        DEMO_UNK22_e = 0x22,
         DEMO_UNK25_e = 0x25,
+        DEMO_UNK2A_e = 0x2A,
+        DEMO_UNK2B_e = 0x2B,
+        DEMO_UNK2F_e = 0x2F,
+        DEMO_UNK33_e = 0x33,
+        DEMO_UNK35_e = 0x35,
+        DEMO_UNK38_e = 0x38,
+        DEMO_UNK3D_e = 0x3D,
+        DEMO_UNK3E_e = 0x3E,
+        DEMO_UNK40_e = 0x40,
         DEMO_UNK44_e = 0x44,
         DEMO_UNK48_e = 0x48,
         DEMO_UNK4A_e = 0x4A,
@@ -75,6 +97,7 @@ class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
         daPyFlg0_UNK1               = 0x00000001,
+        daPyFlg0_UNK2               = 0x00000002,
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
@@ -92,6 +115,7 @@ public:
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
+        daPyFlg0_UNK100000          = 0x00100000,
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_UNK400000          = 0x00400000,
         daPyFlg0_UNK800000          = 0x00800000,
@@ -153,9 +177,11 @@ public:
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
         daPyRFlg0_ATTENTION_LOCK        = 0x00010000,
         daPyRFlg0_HAMMER_QUAKE          = 0x00020000,
+        daPyRFlg0_UNK40000              = 0x00040000,
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
+        daPyRFlg0_UNK800000             = 0x00800000,
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
         daPyRFlg0_UNK4000000            = 0x04000000,
@@ -393,12 +419,12 @@ public:
     }
     void cancelOriginalDemo() {
         mDemo.setSystemDemoType();
-        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
+        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK01_e);
     }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
-    bool checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
+    u32 checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
     bool getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
     void onPushPullKeep() { onNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
     void offPushPullKeep() { offNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
@@ -416,7 +442,7 @@ public:
     
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
-    bool checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
+    u32 checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
     bool checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
     void onNpcCallCommand() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onNpcCall() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
@@ -441,7 +467,7 @@ public:
     
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
     void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
-    bool checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
+    u32 checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
     bool getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
     bool getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
     bool getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }

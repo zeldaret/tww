@@ -837,7 +837,7 @@ public:
     f32 getFrame() const { return mFrame; }
     void setFrame(f32 frame) { mFrame = frame; }
 
-public:
+private:
     /* 0x04 */ u8 mAttribute;
     /* 0x05 */ u8 mState;
     /* 0x06 */ s16 mStart;

@@ -24,9 +24,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-class sub_kankyo__class : public kankyo_class {
-};
-
 #include "d/d_kankyo_dayproc.inc"
 
 struct dKy_setLight__Status {
@@ -325,12 +322,14 @@ void plight_set() {
 
         for (int i = 0; i < dComIfGp_getStagePlightNumInfo(); i++) {
             if (idx < 30) {
-                g_env_light.mLightInfluence[idx].mPos = plight_info[i].mPos;
-                g_env_light.mLightInfluence[idx].mColor.r = plight_info[i].mColorR;
-                g_env_light.mLightInfluence[idx].mColor.g = plight_info[i].mColorG;
-                g_env_light.mLightInfluence[idx].mColor.b = plight_info[i].mColorB;
-                g_env_light.mLightInfluence[idx].mPower = plight_info[i].mRadius * 200.0f;
-                g_env_light.mLightInfluence[idx].mFluctuation = plight_info[i].mFluctuation;
+                g_env_light.mLightInfluence[idx].mPos.x = plight_info[i].position.x;
+                g_env_light.mLightInfluence[idx].mPos.y = plight_info[i].position.y;
+                g_env_light.mLightInfluence[idx].mPos.z = plight_info[i].position.z;
+                g_env_light.mLightInfluence[idx].mColor.r = plight_info[i].color.r;
+                g_env_light.mLightInfluence[idx].mColor.g = plight_info[i].color.g;
+                g_env_light.mLightInfluence[idx].mColor.b = plight_info[i].color.b;
+                g_env_light.mLightInfluence[idx].mPower = plight_info[i].radius * 200.0f;
+                g_env_light.mLightInfluence[idx].mFluctuation = plight_info[i].fluctuation;
                 dKy_plight_set(&g_env_light.mLightInfluence[idx]);
                 idx++;
             }
@@ -659,111 +658,111 @@ void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* 
             stage_pselect_info_class* psel_p;
             switch (*i_pSelIdx0) {
             case 0:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[0]];
                 break;
             case 1:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[1]];
                 break;
             case 2:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[2]];
                 break;
             case 3:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[3]];
                 break;
             case 4:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[4]];
                 break;
             case 5:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[5]];
                 break;
             case 6:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[6]];
                 break;
             case 7:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[7]];
                 break;
             }
 
             switch (*i_pSelPalIdx0) {
             case 0:
-                *i_palIdx0A = psel_p->mPalIdx[0];
+                *i_palIdx0A = psel_p->palette_id[0];
                 break;
             case 1:
-                *i_palIdx0A = psel_p->mPalIdx[1];
+                *i_palIdx0A = psel_p->palette_id[1];
                 break;
             case 2:
-                *i_palIdx0A = psel_p->mPalIdx[2];
+                *i_palIdx0A = psel_p->palette_id[2];
                 break;
             case 3:
-                *i_palIdx0A = psel_p->mPalIdx[3];
+                *i_palIdx0A = psel_p->palette_id[3];
                 break;
             case 4:
-                *i_palIdx0A = psel_p->mPalIdx[4];
+                *i_palIdx0A = psel_p->palette_id[4];
                 break;
             case 5:
-                *i_palIdx0A = psel_p->mPalIdx[5];
+                *i_palIdx0A = psel_p->palette_id[5];
                 break;
             }
 
             switch (*i_pSelPalIdx1) {
             case 0:
-                *i_palIdx0B = psel_p->mPalIdx[0];
+                *i_palIdx0B = psel_p->palette_id[0];
                 break;
             case 1:
-                *i_palIdx0B = psel_p->mPalIdx[1];
+                *i_palIdx0B = psel_p->palette_id[1];
                 break;
             case 2:
-                *i_palIdx0B = psel_p->mPalIdx[2];
+                *i_palIdx0B = psel_p->palette_id[2];
                 break;
             case 3:
-                *i_palIdx0B = psel_p->mPalIdx[3];
+                *i_palIdx0B = psel_p->palette_id[3];
                 break;
             case 4:
-                *i_palIdx0B = psel_p->mPalIdx[4];
+                *i_palIdx0B = psel_p->palette_id[4];
                 break;
             case 5:
-                *i_palIdx0B = psel_p->mPalIdx[5];
+                *i_palIdx0B = psel_p->palette_id[5];
                 break;
             }
 
             envr_p = &g_env_light.mpEnvrInfo[*i_envrSel1];
             switch (*i_pSelIdx1) {
             case 0:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[0]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[0]];
                 break;
             case 1:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[1]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[1]];
                 break;
             case 2:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[2]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[2]];
                 break;
             case 3:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[3]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[3]];
                 break;
             case 4:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[4]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[4]];
                 break;
             case 5:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[5]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[5]];
                 break;
             case 6:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[6]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[6]];
                 break;
             case 7:
-                psel_p = &g_env_light.mpPselectInfo[envr_p->mPselIdx[7]];
+                psel_p = &g_env_light.mpPselectInfo[envr_p->pselect_id[7]];
                 break;
             }
 
             if (*i_envrSel0 != *i_envrSel1 || *i_pSelIdx0 != *i_pSelIdx1) {
-                if (psel_p->mChangeRate < 0.033333335f) {
-                    psel_p->mChangeRate = 0.033333335f;
+                if (psel_p->change_rate < 0.033333335f) {
+                    psel_p->change_rate = 0.033333335f;
                 }
 
                 if (g_env_light.mColPatMode == 0) {
                     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && *i_pSelIdx0 != *i_pSelIdx1) {
                         *i_blendPal01 += 0.0033333334f;
-                    } else if (psel_p->mChangeRate > 0.0f) {
-                        *i_blendPal01 += 0.033333335f / psel_p->mChangeRate;
+                    } else if (psel_p->change_rate > 0.0f) {
+                        *i_blendPal01 += 0.033333335f / psel_p->change_rate;
                     }
 
                     if (*i_blendPal01 >= 1.0f) {
@@ -776,43 +775,43 @@ void dScnKy_env_light_c::setLight_palno_get(u8* i_envrSel0, u8* i_envrSel1, u8* 
 
             switch (*i_pSelPalIdx0) {
             case 0:
-                *i_palIdx1A = psel_p->mPalIdx[0];
+                *i_palIdx1A = psel_p->palette_id[0];
                 break;
             case 1:
-                *i_palIdx1A = psel_p->mPalIdx[1];
+                *i_palIdx1A = psel_p->palette_id[1];
                 break;
             case 2:
-                *i_palIdx1A = psel_p->mPalIdx[2];
+                *i_palIdx1A = psel_p->palette_id[2];
                 break;
             case 3:
-                *i_palIdx1A = psel_p->mPalIdx[3];
+                *i_palIdx1A = psel_p->palette_id[3];
                 break;
             case 4:
-                *i_palIdx1A = psel_p->mPalIdx[4];
+                *i_palIdx1A = psel_p->palette_id[4];
                 break;
             case 5:
-                *i_palIdx1A = psel_p->mPalIdx[5];
+                *i_palIdx1A = psel_p->palette_id[5];
                 break;
             }
 
             switch (*i_pSelPalIdx1) {
             case 0:
-                *i_palIdx1B = psel_p->mPalIdx[0];
+                *i_palIdx1B = psel_p->palette_id[0];
                 break;
             case 1:
-                *i_palIdx1B = psel_p->mPalIdx[1];
+                *i_palIdx1B = psel_p->palette_id[1];
                 break;
             case 2:
-                *i_palIdx1B = psel_p->mPalIdx[2];
+                *i_palIdx1B = psel_p->palette_id[2];
                 break;
             case 3:
-                *i_palIdx1B = psel_p->mPalIdx[3];
+                *i_palIdx1B = psel_p->palette_id[3];
                 break;
             case 4:
-                *i_palIdx1B = psel_p->mPalIdx[4];
+                *i_palIdx1B = psel_p->palette_id[4];
                 break;
             case 5:
-                *i_palIdx1B = psel_p->mPalIdx[5];
+                *i_palIdx1B = psel_p->palette_id[5];
                 break;
             }
 
@@ -1900,13 +1899,13 @@ void dScnKy_env_light_c::SetBaseLight() {
     }
 
     if (plight_p != NULL) {
-        mBaseLightInfluence.mPos = plight_p->mPos;
+        mBaseLightInfluence.mPos = plight_p->position;
         mBaseLightInfluence.mColor.r = 0;
         mBaseLightInfluence.mColor.g = 0;
         mBaseLightInfluence.mColor.b = 0;
         mBaseLightInfluence.mColor.a = 0;
-        mBaseLightInfluence.mPower = plight_p->mRadius * 200.0f;
-        mBaseLightInfluence.mFluctuation = plight_p->mFluctuation;
+        mBaseLightInfluence.mPower = plight_p->radius * 200.0f;
+        mBaseLightInfluence.mFluctuation = plight_p->fluctuation;
     } else {
         if (dComIfGs_getTime() > 97.5f && dComIfGs_getTime() < 292.5f) {
             mBaseLightInfluence.mPos = env_light.mSunPos2;

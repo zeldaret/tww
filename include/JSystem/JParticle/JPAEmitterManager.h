@@ -26,7 +26,7 @@ public:
 class JPAEmitterManager {
 public:
     JPAEmitterManager(JPAResourceManager*, u32, u32, u32, JKRHeap*);
-    JPABaseEmitter* createSimpleEmitterID(const JGeometry::TVec3<float>&, u16, u8, u8, JPACallBackBase<JPABaseEmitter*>*, JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>*);
+    JPABaseEmitter* createSimpleEmitterID(const JGeometry::TVec3<f32>&, u16, u8, u8, JPACallBackBase<JPABaseEmitter*>*, JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>*);
     void calc(u8);
     void draw(JPADrawInfo*, u8);
     void deleteEmitter(JPABaseEmitter*);

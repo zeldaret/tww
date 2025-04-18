@@ -263,11 +263,11 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
             for(int i = 0; i < num; i++) {
                 fopAcM_prm_class* params = fopAcM_CreateAppend();
                 cXyz pos = player->getLeftHandPos();
-                params->mPos = pos;
-                params->mAngle.x = 0;
-                params->mAngle.y = i_this->current.angle.y;
-                params->mAngle.z = cM_rndF(65536.0f);
-                params->mParameter = 0x000000FF;
+                params->base.position = pos;
+                params->base.angle.x = 0;
+                params->base.angle.y = i_this->current.angle.y;
+                params->base.angle.z = cM_rndF(65536.0f);
+                params->base.parameters = 0x000000FF;
                 fpcM_Create(PROC_ESA, 0, params);
             }
         }

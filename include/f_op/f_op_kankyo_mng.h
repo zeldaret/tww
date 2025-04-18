@@ -24,8 +24,8 @@ base_process_class* fopKyM_fastCreate(s16 param_0, int param_1, cXyz* param_2, c
 fpc_ProcID fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int i_param);
 int fopKyM_createMpillar(cXyz const* i_pos, f32 i_size);
 
-inline void* fopKyM_GetAppend(void* param_0) {
-    return fpcM_GetAppend(param_0);
+inline fopKyM_prm_class* fopKyM_GetAppend(void* param_0) {
+    return (fopKyM_prm_class*)fpcM_GetAppend(param_0);
 }
 
 #endif

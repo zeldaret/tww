@@ -19,11 +19,11 @@ typedef struct _GXColor GXColor;
 class dBgW : public cBgW {
 public:
     enum PushPullLabel {
-        PP_UNK0_e = 0x00,
-        PP_UNK1_e = 0x01,
-        PP_UNK2_e = 0x02,
-        PP_UNK4_e = 0x04,
-        PP_UNK8_e = 0x08,
+        PPLABEL_NONE = 0x00,
+        PPLABEL_PUSH = 0x01,
+        PPLABEL_PULL = 0x02,
+        PPLABEL_UNK4 = 0x04,
+        PPLABEL_HEAVY = 0x08,
     };
     
     typedef void (*dBgW_CrrFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);

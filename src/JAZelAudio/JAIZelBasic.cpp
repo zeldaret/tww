@@ -1532,8 +1532,16 @@ void JAIZelBasic::bgmMute(JAISound**, u32, s32, u32) {
 }
 
 /* 802ABBD0-802ABC3C       .text checkStreamPlaying__11JAIZelBasicFUl */
-int JAIZelBasic::checkStreamPlaying(u32) {
+int JAIZelBasic::checkStreamPlaying(u32 param_1) {
     /* Nonmatching */
+    JAISound* sound = JAInter::StreamMgr::streamUpdate->mpSound;
+    if (!sound) {
+        return false;
+    }
+    if (JAInter::StreamLib::getPlayingFlag() == 0) {
+        return false;
+    }
+    return param_1 == sound->mSoundID;
 }
 
 /* 802ABC3C-802ABC88       .text stWaterLevelUp__11JAIZelBasicFv */

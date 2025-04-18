@@ -1,6 +1,7 @@
 #ifndef F_OP_MSG_MNG_H
 #define F_OP_MSG_MNG_H
 
+#include "JSystem/J2DGraph/J2DPicture.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_op/f_op_msg.h"
@@ -96,6 +97,21 @@ public:
     /* 0x04 */ u32 mMsgIdx;
     /* 0x08 */ u16 mMsgID;
     /* 0x0A */ u16 mResMsgIdx;
+};
+
+class MyPicture : public J2DPicture {
+public:
+    virtual ~MyPicture() {}
+    virtual void drawSelf(f32, f32);
+    virtual void drawSelf(f32, f32, Mtx*);
+    virtual void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
+
+private:
+    /* 0x124 */ f32 m124;
+    /* 0x128 */ f32 m128;
+    /* 0x12C */ f32 m12C;
+    /* 0x130 */ f32 m130;
+    /* 0x134 */ u8 m134;
 };
 
 class fopMsgM_msgDataProc_c {
@@ -332,10 +348,14 @@ void fopMsgM_tactMsgFlagOff();
 bool fopMsgM_tactMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
+void fopMsgM_blendInit(J2DPicture* pic, const char* data);
 u32 fopMsgM_getColorTable(u16 param_1);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
+
+void fopMsgM_outFontSet(J2DPicture*, J2DPicture*, s16*, u32, u8);
+void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8);
 
 #endif /* F_OP_MSG_MNG_H */

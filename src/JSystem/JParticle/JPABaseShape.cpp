@@ -77,12 +77,6 @@ GXTevAlphaArg JPABaseShapeArc::stTevAlphaArg[2][4] = {
     { GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0   },
 };
 
-class JPAColorRegAnmKey {
-public:
-    s16 m00;
-    GXColor m02;
-};
-
 /* 80256F88-80257248       .text makeColorTable__FP17JPAColorRegAnmKeyiiP7JKRHeap */
 GXColor* makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHeap* pHeap) {
     GXColor* colTbl = (GXColor*)JKRHeap::alloc((frmNum + 1) * sizeof(GXColor), 4, pHeap);

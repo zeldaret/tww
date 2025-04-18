@@ -147,7 +147,7 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     } else {
         fVar1 = -1.0f;
     }
-    m3570 = param_0;
+    mProcVar0.m3570 = param_0;
     setSingleMoveAnime(ANM_VOMITJMP, 1.0f, 0.0f, -1, fVar1);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK80000000_e);
     mStts.ClrCcMove();
@@ -171,7 +171,7 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
         voiceStart(0);
         if (param_0 == 3) {
             speed.y = 46.0f;
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         } else {
             speed.y = daPy_HIO_vomit_c0::m.field_0x1C;
         }
@@ -206,7 +206,7 @@ BOOL daPy_lk_c::procVomitJump() {
             if (sVar1 < 0 && 0 < shape_angle.x) {
                 seStartOnlyReverb(JA_SE_LK_JUMP_FLOWER_OUT);
             }
-            if (m3570 == 1) {
+            if (mProcVar0.m3570 == 1) {
                 cLib_addCalc(&mVelocity, daPy_HIO_vomit_c0::m.field_0x20, 0.5f, 2.0f, 0.1f);
             } else {
                 f32 fVar2;
@@ -245,7 +245,7 @@ BOOL daPy_lk_c::procVomitLand_init() {
         daPy_HIO_vomit_c0::m.field_0x2C
     );
     m34D0 = daPy_HIO_vomit_c0::m.field_0x6;
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     m34BE = 5;
     return true;
 }
@@ -253,14 +253,14 @@ BOOL daPy_lk_c::procVomitLand_init() {
 /* 80150164-8015023C       .text procVomitLand__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVomitLand() {
     resetFootEffect();
-    if (m3570 != 0) {
+    if (mProcVar0.m3570 != 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             checkNextMode(0);
         } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_vomit_c0::m.field_0x3C) {
             checkNextMode(1);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        if ((s32)m34D0 > 0) {
+        if (m34D0 > 0) {
             m34D0--;
         } else {
             setSingleMoveAnime(
@@ -270,7 +270,7 @@ BOOL daPy_lk_c::procVomitLand() {
                 daPy_HIO_vomit_c0::m.field_0x8,
                 daPy_HIO_vomit_c0::m.field_0x38
             );
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         }
     }
     return true;

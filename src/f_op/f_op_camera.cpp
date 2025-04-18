@@ -4,6 +4,7 @@
 //
 
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
 #include "dolphin/types.h"
 #include "d/d_meter.h"
@@ -56,10 +57,10 @@ cPhs_State fopCam_Create(void* pProc) {
         camera->mpMtd = profile->sub_method;
 
         fopDwTg_Init(&camera->draw_tag, camera);
-        u32* append = (u32*)fpcM_GetAppend(camera);
+        fopCamM_prm_class* append = (fopCamM_prm_class*)fpcM_GetAppend(camera);
 
         if (append) {
-            fpcM_SetParam(camera, *append);
+            fpcM_SetParam(camera, append->base.parameters);
         }
     }
 

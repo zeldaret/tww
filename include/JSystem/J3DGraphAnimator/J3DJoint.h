@@ -121,7 +121,7 @@ public:
     J3DMtxCalcMayaAnm(J3DAnmTransform* pAnmTransform)
         : J3DMtxCalcMaya(), J3DMtxCalcAnm(pAnmTransform) {}
     virtual ~J3DMtxCalcMayaAnm() {}
-    virtual void calc(u16 v) { J3DMtxCalcAnm::calc(v); }
+    virtual void calc(u16 jnt_no) { J3DMtxCalcAnm::calc(jnt_no); }
 };
 
 enum J3DJointMtxType {

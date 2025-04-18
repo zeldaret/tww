@@ -40,7 +40,11 @@ void JPABaseParticle::initParticle() {
 
     if (emtr->mInitialVelDir) {
         Mtx mtx;
-        JPAGetYZRotateMtx(emtr->mSpread * emtr->getRandomRF() * 32768.0f, emtr->getRandomSS(), mtx);
+        JPAGetYZRotateMtx(
+            emtr->getRandomRF() * 0x8000 * emtr->mSpread,
+            emtr->getRandomSS(),
+            mtx
+        );
         MTXConcat(emtrInfo.mEmitterDirMtx, mtx, mtx);
         velDir.set(mtx[0][2], mtx[1][2], mtx[2][2]);
         velDir.scale(emtr->mInitialVelDir);
@@ -95,7 +99,6 @@ void JPABaseParticle::initParticle() {
 
 /* 8025E62C-8025EB28       .text initChild__15JPABaseParticleFP15JPABaseParticle */
 void JPABaseParticle::initChild(JPABaseParticle* parent) {
-    /* Nonmatching */
     JPAEmitterInfo & emtrInfo = JPABaseEmitter::emtrInfo;
     JPABaseEmitter * emtr = emtrInfo.mpCurEmitter;
     JPASweepShape * sweep = emtr->mpDataLinkInfo->getSweepShape();
@@ -146,8 +149,7 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     if (posRndm != 0.0f) {
         JGeometry::TVec3<f32> unit;
         JPAGetUnitVec(emtr->getRandomSS(), emtr->getRandomSS(), unit);
-        f32 rndm = posRndm * emtr->getRandomF();
-        unit.scale(rndm);
+        unit.scale(posRndm * emtr->getRandomF());
         mLocalPosition.add(unit);
     }
 

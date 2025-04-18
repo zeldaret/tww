@@ -22,16 +22,17 @@ public:
 
 class dFile_select_c {
 public:
+    u8 getIconMode() { return mIconMode;}
+    void setIconMode(u8 mode) { mIconMode = mode; }
+    void setSaveDataPtr(u8* dataPtr) { mSaveDataPtr = dataPtr; }
+    void setSavePicDataPtr(u8* dataPtr) { mSavePicDataPtr = dataPtr; }
+    void setUseType(u8 useType) { mUseType = useType; }
+
     void getErrType() {}
-    void getIconMode() {}
     void getSelectNum() {}
     void isDataExtra(u8) {}
     void isDataNew(u8) {}
     void isSelectEnd() {}
-    void setIconMode(u8) {}
-    void setSaveDataPtr(u8* dataPtr) { mSaveDataPtr = dataPtr; }
-    void setSavePicDataPtr(u8* dataPtr) { mSavePicDataPtr = dataPtr; }
-    void setUseType(u8 useType) { mUseType = useType; }
 
     dFile_select_c() {}
     void _create();
@@ -242,7 +243,7 @@ public:
     /* 0x3930 */ s16 field_0x3930;
     /* 0x3932 */ s16 field_0x3932;
     /* 0x3934 */ u8 field_0x3934[0x3936 - 0x3934];
-    /* 0x3936 */ u8 field_0x3936;
+    /* 0x3936 */ u8 mIconMode;
     /* 0x3938 */ u8* mSaveDataPtr;
     /* 0x393C */ u8* mSavePicDataPtr;
     /* 0x3940 */ u8 mUseType;
