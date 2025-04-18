@@ -6,7 +6,10 @@
 #include "d/actor/d_a_kamome.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
 
+bool hio_set;
+static daKamome_HIO_c l_kamomeHIO;
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */
 void anm_init(kamome_class*, int, float, unsigned char, float, int) {
     /* Nonmatching */
@@ -132,8 +135,102 @@ static BOOL createHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static dCcD_SrcSph eye_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 40.0f,
+    },
+};
+
+
+//tjink this is correct, maybe wrong name
+
+
+
 /* 00004B94-00004F84       .text daKamome_Create__FP10fopAc_ac_c */
-static cPhs_State daKamome_Create(fopAc_ac_c*) {
+static cPhs_State daKamome_Create(fopAc_ac_c* i_actor) {
+    kamome_class* i_this = (kamome_class*)i_actor;
+    fopAcM_SetupActor(i_actor, kamome_class);
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhsKamome, "Kamome");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        i_this->mType = (fopAcM_GetParam(i_this) >> 0x00) & 0xFF; //prob wrong
+        if (i_this->mType == 0xFF) {
+            i_this->mType = 0;
+        }
+        i_this->mKoMaxCount = (fopAcM_GetParam(i_this) >> 0x08) & 0xFF;
+        i_this->mPathIdx = (fopAcM_GetParam(i_this) >> 0x10) & 0xFF;
+        i_this->mSwitchNoPrm = (fopAcM_GetParam(i_this) >> 0x18) & 0xFF;
+        if(fopAcM_entrySolidHeap(i_this, createHeap, 0x1360)){
+            phase_state = cPhs_ERROR_e;
+        } else {
+            if(i_this->mPathIdx != 0xFF){
+                i_this->mpPath = dPath_GetRoomPath(i_this->mPathIdx, i_this->current.roomNo);
+                if(i_this->mpPath == NULL){
+                    return cPhs_ERROR_e;
+                }
+                i_this->mPathIdxIncr = 1;
+                i_this->mbUsePathMovement = i_this->mPathIdx + 1;
+                i_this->mPathIdxIncr = 1;
+
+            }
+            if (i_this->mSwitchNoPrm != 0xff) {
+                i_this->mSwitchNo = i_this->mSwitchNoPrm + 1;
+            }
+            // i_this->cullMtx = &i_this->mpMorf->mpModel->getBaseTRMtx();
+            J3DModel* model = i_this->mpMorf->getModel();
+            cXyz scale = i_this->scale;
+            model->setBaseScale(scale);
+            daKamome_setMtx(i_this);
+            i_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(i_this));
+            if ((i_this->mType == 4) || (i_this->mType == 5)) {
+                i_this->mAcchCir.SetWall(50.0f,80.0f);
+            } else {
+                i_this->mAcchCir.SetWall(30.0f,20.0f);
+            }
+            if (i_this->mType == 4) {
+                i_this->mCcD.Init(0x32,0xff,i_this);
+                i_this->mSph.Set(eye_co_sph_src);
+                // i_this->mSph.SetStts(&mStts);
+                // i_this->mSph.SetStts(&i_this->mStts);
+
+            }
+            i_this->mGlobalTimer = (int)cM_rndF(10000.0f);
+            // something with hio
+            
+            if(hio_set == false){
+                hio_set = true;
+                l_kamomeHIO.mNo = mDoHIO_createChild("汎用触手", &l_HIO);s
+                i_this->m688 = 1;
+            }
+    
+            fopAcM_SetRoomNo(i_this, 0xff);
+
+        }
+
+        
+    }
     /* Nonmatching */
 }
 
