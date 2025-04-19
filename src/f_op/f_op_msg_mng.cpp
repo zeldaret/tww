@@ -647,6 +647,7 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     }
 
     dst[numRead] = '\0';
+    return dst;
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */

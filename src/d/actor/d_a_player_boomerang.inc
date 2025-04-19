@@ -91,10 +91,10 @@ BOOL daPy_lk_c::checkNextActionBoomerangReady() {
 /* 8014984C-801498D8       .text checkNextActionBoomerangFly__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionBoomerangFly() {
     if (checkBoomerangReadyAnime()) {
-        checkNextActionBoomerangReady();
+        return checkNextActionBoomerangReady();
     } else {
         if (itemTrigger() && mEquipItem == getReadyItem()) {
-            setActAnimeUpper(
+            return setActAnimeUpper(
                 LKANM_BCK_BOOMWAIT,
                 UPPER_MOVE2_e,
                 daPy_HIO_boom_c0::m.field_0x18,
@@ -112,9 +112,9 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
     if (mpAttention->Lockon()) {
-        procBoomerangMove_init();
+        return procBoomerangMove_init();
     } else {
-        procBoomerangSubject_init();
+        return procBoomerangSubject_init();
     }
 }
 

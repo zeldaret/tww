@@ -80,7 +80,7 @@ public:
     static const char* process_select_(TProcessor*);
 
     void pushCurrent(const char*);
-    const char* popCurrent();
+    void popCurrent();
     void on_select_begin(OnSelectBeginCallBack, const void*, const char*, u32);
     void on_select_end();
     void on_select_separate();

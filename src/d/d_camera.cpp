@@ -2276,7 +2276,7 @@ void dCamera_c::checkGroundInfo() {
 
 /* 8016A0F0-8016A110       .text followCamera2__9dCamera_cFl */
 bool dCamera_c::followCamera2(s32 param_0) {
-    followCamera(param_0);
+    return followCamera(param_0);
 }
 
 /* 8016A110-8016C4F8       .text followCamera__9dCamera_cFl */
