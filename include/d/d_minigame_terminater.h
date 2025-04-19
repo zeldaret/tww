@@ -5,7 +5,7 @@
 
 class JKRArchive;
 class J2DPane;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 class dDlst_TerminaterScrnDraw_c {
 public:

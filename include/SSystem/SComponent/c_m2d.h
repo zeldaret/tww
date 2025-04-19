@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-struct cM2dGCir;
+class cM2dGCir;
 
 void cM2d_CrossCirLin(cM2dGCir&, float, float, float, float, float*, float*);
 

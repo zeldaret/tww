@@ -7,7 +7,7 @@ namespace JMessage {
 
 struct TReference;
 struct TControl;
-struct TResource;
+class TResource;
 
 struct TProcessor {
 public:

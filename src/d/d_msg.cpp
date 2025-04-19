@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 class J2DTextBox;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 J2DPicture* button_icon[8];
 J2DPicture* button_kage[8];

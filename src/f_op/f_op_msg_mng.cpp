@@ -144,8 +144,7 @@ static struct {
     /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
 };
 
-class mesg_header;
-class fopMsgM_pane_alpha_class;
+struct fopMsgM_pane_alpha_class;
 
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */

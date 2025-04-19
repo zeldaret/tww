@@ -8,7 +8,7 @@
 
 class JUTTexture;
 class JPABaseEmitter;
-class WIND_INFLUENCE;
+struct WIND_INFLUENCE;
 
 class dKankyo_sun_Packet : public J3DPacket {
 public:

@@ -8,7 +8,7 @@
 class J2DPane;
 class JPABaseEmitter;
 class fopAc_ac_c;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class msg_class;
 class sub_meter_class;
 

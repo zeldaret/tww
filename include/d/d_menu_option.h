@@ -7,7 +7,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
