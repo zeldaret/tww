@@ -135,7 +135,7 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 void daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
-    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     
     if (mJntCtrl.getHeadJntNum() == jntNo) {
         static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
@@ -174,7 +174,7 @@ void daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
     int jntNo = joint->getJntNo();
     
     cXyz temp4(mD38, 0.0f, 0.0f);
-    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     mDoMtx_stack_c::transM(temp4);
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);

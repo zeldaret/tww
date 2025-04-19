@@ -73,20 +73,20 @@ BOOL daShip_c::bodyJointCallBack(int jno) {
     J3DModel *pModel = mpBodyAnm->getModel();
     
     if ((jno == 10) || (jno == 5)) {
-        cMtx_ZrotS(mDoMtx_stack_c::get(), m0366);
+        mDoMtx_stack_c::ZrotS(m0366);
     }
     else if (jno == 7) {
-        cMtx_ZrotS(mDoMtx_stack_c::get(), -mSailAngle);
+        mDoMtx_stack_c::ZrotS(-mSailAngle);
     }
     else if (jno == 6) {
-        cMtx_ZrotS(mDoMtx_stack_c::get(), 0xC000);
-        cMtx_concat(pModel->getAnmMtx(jno), mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::ZrotS(0xC000);
+        mDoMtx_stack_c::revConcat(pModel->getAnmMtx(jno));
         mpSalvageArmModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        cMtx_YrotM(mDoMtx_stack_c::get(), -0x8000);
+        mDoMtx_stack_c::YrotM(-0x8000);
         mpCannonModel->setBaseTRMtx(mDoMtx_stack_c::get());
-        cMtx_scale(mDoMtx_stack_c::get(), m03E8, m03E8, m03E8);
+        mDoMtx_stack_c::scaleS(m03E8, m03E8, m03E8);
     }
-    cMtx_concat(pModel->getAnmMtx(jno), mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::revConcat(pModel->getAnmMtx(jno));
     pModel->setAnmMtx(jno, mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return TRUE;
@@ -109,12 +109,12 @@ static BOOL daShip_bodyJointCallBack(J3DNode* node, int calcTiming) {
 /* 00000284-0000033C       .text cannonJointCallBack__8daShip_cFi */
 BOOL daShip_c::cannonJointCallBack(int jno) {
     if (jno == 1) {
-        cMtx_XrotS(mDoMtx_stack_c::get(), m0394);
+        mDoMtx_stack_c::XrotS(m0394);
     }
     else {
-        cMtx_YrotS(mDoMtx_stack_c::get(), -m0396);
+        mDoMtx_stack_c::YrotS(-m0396);
     }
-    cMtx_concat(mpCannonModel->getAnmMtx(jno), mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::revConcat(mpCannonModel->getAnmMtx(jno));
     mpCannonModel->setAnmMtx(jno, mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     return TRUE;
@@ -181,7 +181,7 @@ BOOL daShip_c::headJointCallBack1(int jno) {
     
     short sVar5 = shape_angle.y + m03A2 * (jno + -2);
     mDoMtx_stack_c::YrotS(sVar5);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), m03A0, m03A2, 0);
+    mDoMtx_stack_c::ZXYrotM(m03A0, m03A2, 0);
     mDoMtx_stack_c::YrotM(-sVar5);
     mDoMtx_stack_c::concat(mpHeadAnm->getModel()->getAnmMtx(jno));
     
@@ -787,7 +787,7 @@ void daShip_c::setWaveAngle(short* param1, short* param2) {
 
     mDoMtx_stack_c::transS(current.pos);
     
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
     cXyz frontPos;
     cXyz leftPos;
@@ -3241,8 +3241,8 @@ void daShip_c::setRopePos() {
     s16 z = sVar12 + cM_atan2s(-spBC.x, fVar1);
     s16 y = shape_angle.y;
     s16 x = sVar14 + cM_atan2s(spBC.z, spBC.y);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), x, y, z);
-    mDoMtx_XrotM(mDoMtx_stack_c::get(), -0x4000);
+    mDoMtx_stack_c::ZXYrotM(x, y, z);
+    mDoMtx_stack_c::XrotM(-0x4000);
 
     if (m0392 == SHIP_BCK_FN_MAST_ON2) {
         J3DTransformInfo sp104;
@@ -3913,7 +3913,7 @@ BOOL daShip_c::execute() {
 
     mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
     
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     
     J3DModel* mModel1;
     J3DModel* mModel2;
@@ -4660,7 +4660,7 @@ cPhs_State daShip_c::create() {
         }
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-        mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), shape_angle.x, shape_angle.y, shape_angle.z);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
         
         mpBodyAnm->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         mpBodyAnm->play(NULL, 0, 0);

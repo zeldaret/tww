@@ -106,7 +106,7 @@ void daPy_lk_c::setShipRideArmAngle(int jnt_no, J3DTransformInfo* param_2) {
     }
     mDoMtx_stack_c::ZrotM(uVar5);
     mDoMtx_stack_c::XrotM(0x4000);
-    mDoMtx_copy(mDoMtx_stack_c::now, J3DSys::mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     if (uVar3) {
         mDoMtx_stack_c::multVec(&armA_offset, &arm_pos);
     }

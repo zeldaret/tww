@@ -21,7 +21,7 @@ public:
     static void dump_long(dRes_info_c*, int);
     static void dump(dRes_info_c*, int);
 
-    void* getRes(u32 resIdx) { return *(mRes + resIdx); }
+    void* getRes(s32 i_index) { return mRes[i_index]; }
     int getResNum() { return mpArchive->countFile(); }
     int getCount() { return mCount; }
     char* getArchiveName() { return mArchiveName; }
@@ -31,6 +31,10 @@ public:
     u16 decCount() {
         return --mCount;
     }
+
+    // Debug only
+    u64 dump(char*, dRes_info_c*, int) {}
+    u64 getSize() {}
 
 private:
     /* 0x00 */ char mArchiveName[14];

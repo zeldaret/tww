@@ -234,17 +234,15 @@ namespace daBomb2 {
     }
 
     void FuseSparksCB_c::execute(JPABaseEmitter* emitter) {
-        f32 x = mpPos->x;
-        f32 y = mpPos->y;
-        f32 z = mpPos->z;
-        emitter->mGlobalTranslation.set(x, y, z);
+        JGeometry::TVec3<f32> pos(*mpPos);
+        emitter->setGlobalTranslation(pos);
 
         JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
         while(link != 0) {
             JSUPtrLink* next = link->getNext();
 
             JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-            ptcl->setOffsetPosition(x, y, z);
+            ptcl->setOffsetPosition(pos);
 
             link = next;
         }

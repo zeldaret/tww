@@ -200,9 +200,7 @@ void daPy_lk_c::setLightSaver() {
                 dPa_name::ID_COMMON_030A, &current.pos, NULL, NULL, 0xFF, NULL, -1, pbVar9, pbVar8, NULL
             );
             if (pJVar7 != 0) {
-                JPASetRMtxTVecfromMtx(
-                    mpEquipItemModel->getAnmMtx(2), pJVar7->mGlobalRotation, pJVar7->mGlobalTranslation
-                );
+                pJVar7->setGlobalRTMatrix(mpEquipItemModel->getAnmMtx(2));
                 if (checkMasterSwordEquip()) {
                     pJVar7->setGlobalDynamicsScale(d_scale);
                     pJVar7->setGlobalParticleScale(p_scale);
@@ -504,20 +502,20 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
                                 &tevStr.mColorK0
                             );
                             if (emitter != 0) {
-                                emitter->mSpread = 0.2f;
-                                emitter->mVolumeSweep = 0.15f;
-                                emitter->mRate = 8.0f;
-                                emitter->mMaxFrame = 1;
+                                emitter->setSpread(0.2f);
+                                emitter->setVolumeSweep(0.15f);
+                                emitter->setRate(8.0f);
+                                emitter->setMaxFrame(1);
                             }
                         } else {
                             local_44.x += 0x4000;
                             emitter =
                                 dComIfGp_particle_setP1(dPa_name::ID_COMMON_002C, mLinkLinChk.GetCrossP(), &local_44);
                             if (emitter != 0) {
-                                emitter->mInitialVelAxis = 20.0f;
-                                emitter->mRate = 20.0f;
-                                emitter->mMaxFrame = 1;
-                                emitter->mInitialVelDir = 20.0f;
+                                emitter->setAwayFromAxisSpeed(20.0f);
+                                emitter->setRate(20.0f);
+                                emitter->setMaxFrame(1);
+                                emitter->setDirectionalSpeed(20.0f);
                             }
                         }
                     }

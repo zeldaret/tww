@@ -34,9 +34,9 @@ void draw_SUB(pw_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y + i_this->m3A4, i_this->current.pos.z);
-    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 
     i_this->mpMorf->calc();

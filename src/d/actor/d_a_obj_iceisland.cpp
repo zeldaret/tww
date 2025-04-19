@@ -76,8 +76,8 @@ void daObjIceisland_c::CreateInit() {
 /* 00000588-00000608       .text set_mtx__16daObjIceisland_cFv */
 void daObjIceisland_c::set_mtx() {
     mpModel->setBaseScale(scale);
-    mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 

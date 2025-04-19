@@ -418,9 +418,9 @@ void daDitem_c::set_mtx() {
         mDoMtx_stack_c::ZrotM(current.angle.z);
         mDoMtx_stack_c::XrotM(0x12C0);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        mDoMtx_stack_c::now[0][3] = current.pos.x;
-        mDoMtx_stack_c::now[1][3] = current.pos.y;
-        mDoMtx_stack_c::now[2][3] = current.pos.z;
+        mDoMtx_stack_c::get()[0][3] = current.pos.x;
+        mDoMtx_stack_c::get()[1][3] = current.pos.y;
+        mDoMtx_stack_c::get()[2][3] = current.pos.z;
     }
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }

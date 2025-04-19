@@ -22,9 +22,9 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
     }
 
     if (param_0 == 6) {
-        mDoMtx_trans(mDoMtx_stack_c::now, 0.0f, 4.5f, 4.5f);
-        mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
-        mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::now);
+        mDoMtx_stack_c::transS(0.0f, 4.5f, 4.5f);
+        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(6));
+        mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::get());
     } else {
         mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
     }

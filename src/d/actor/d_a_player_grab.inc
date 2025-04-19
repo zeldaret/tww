@@ -74,9 +74,9 @@ void daPy_lk_c::setGrabItemPos() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
     if (grab_actor != NULL) {
         if (mCurProc == daPyProc_GRAB_READY_e) {
-            mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, (int)(short)(shape_angle.y - m34D4));
-            mDoMtx_multVec(mDoMtx_stack_c::now, &m370C, &grab_actor->current.pos);
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y - m34D4);
+            mDoMtx_stack_c::multVec(&m370C, &grab_actor->current.pos);
         } else {
             s8 sVar2 = current.roomNo;
             grab_actor->tevStr.mRoomNo = sVar2;
