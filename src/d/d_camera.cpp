@@ -1508,10 +1508,11 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
 }
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
-int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
-    /* Nonmatching - regswap */
-    dStage_stageDt_c& stage_dt = dComIfGp_getStage();
+int dCamera_c::GetCameraTypeFromMapToolID(s32 r27, s32 i_roomNo) {
+    dStage_stageDt_c& stage_dt = *(dStage_stageDt_c*)&dComIfGp_getStage();
     
+    int cam_type_num;
+    int arrowIdx;
     stage_camera_class* camera;
     stage_arrow_class* arrow;
 
@@ -1527,14 +1528,14 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
         }
     }
 
-    if (param_0 < 0 || camera == NULL || (camera != NULL && param_0 >= camera->num)) {
+    if (r27 < 0 || camera == NULL || (camera != NULL && r27 >= camera->num)) {
         return 0xFF;
     }
 
-    int cam_type_num = 0;
+    cam_type_num = 0;
     
     while (cam_type_num < type_num) {
-        if (strcmp(camera->m_entries[param_0].m_cam_type, types[cam_type_num].name) == 0) {
+        if (strcmp(camera->m_entries[r27].m_cam_type, types[cam_type_num].name) == 0) {
             break;
         }
         cam_type_num++;
@@ -1544,8 +1545,8 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
         return 0xFF;
     }
 
-    mCurRoomCamEntry = camera->m_entries[param_0];
-    int arrowIdx = mCurRoomCamEntry.m_arrow_idx;
+    mCurRoomCamEntry = camera->m_entries[r27];
+    arrowIdx = mCurRoomCamEntry.m_arrow_idx;
     if (arrowIdx != -1 && arrowIdx < arrow->num) {
         mCurArrowIdx = arrowIdx;
         mCurRoomArrowEntry = arrow->m_entries[arrowIdx];
@@ -1815,14 +1816,11 @@ bool dCamera_c::lineBGCheckBoth(cXyz* i_start, cXyz* i_end, dBgS_LinChk* i_linCh
 }
 
 /* 80166D00-80166DE8       .text lineCollisionCheckBush__9dCamera_cFP4cXyzP4cXyz */
-BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
-    /* Nonmatching */
-    BOOL ret = 0;
+u32 dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
+    u32 ret = 0;
 
-    dCcS* Ccsp = dComIfG_Ccsp();
-
-    u32 result = Ccsp->GetMassResultCam();
-
+    // Fakematch
+    u32 result = g_dComIfG_gameInfo.play.mCcS.GetMassResultCam();
     if (result & 2) {
         ret |= 1;
     }
@@ -1835,8 +1833,8 @@ BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
     cM3dGCps cps;
     cps.Set(*i_start, *i_end, 30.0f);
-    
-    Ccsp->SetMassCam(cps);
+    // Fakematch
+    g_dComIfG_gameInfo.play.mCcS.SetMassCam(cps);
 
     return ret;
 }
@@ -1854,10 +1852,9 @@ void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0
 
 /* 80166EA4-80167294       .text compWallMargin__9dCamera_cFP4cXyzf */
 cXyz dCamera_c::compWallMargin(cXyz* i_center, f32 i_radius) {
-    /* Nonmatching */
     dBgS_CamSphChk sph_chk;
     camSphChkdata sph_chk_data(i_center, i_radius);
-    //sph_chk_data.field_0x14 = missing some assignment here (or in ctor)
+    sph_chk_data.field_0x14 = m044;
     sph_chk.SetCallback(&sph_chk_callback);
     sph_chk.Set(*i_center, i_radius);
 
@@ -2793,18 +2790,18 @@ void store(camera_process_class* i_this) {
     fopCamM_SetBank(a_this, bank);
     fopCamM_SetFovy(a_this, fovy);
 
-    // The code logic seems right but it's just the usage of this `stage_info` variable that seems to be the key to this matching
-    stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
+    // The code logic seems right but it's just the usage of this `stage` variable that seems to be the key to this matching
+    dStage_stageDt_c* stage = &dComIfGp_getStage();
     if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
         fopCamM_SetNear(a_this, 30.0f);
     }
     else {
-        if (stage_info) {
+        if (stage) {
             fopCamM_SetNear(a_this, dComIfGp_getStageStagInfo()->mNearPlane);
         }
     }
 
-    if (stage_info) {
+    if (stage) {
         fopCamM_SetFar(a_this, dComIfGp_getStageStagInfo()->mFarPlane);
     }
 
@@ -2912,7 +2909,6 @@ bool camera_draw(camera_process_class* i_this) {
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
 cPhs_State init_phase1(camera_class* i_this) {
-    /* Nonmatching - Code 100% */
     int camera_id = get_camera_id(i_this);
     
     dComIfGp_setCamera(camera_id, i_this);
@@ -2920,7 +2916,7 @@ cPhs_State init_phase1(camera_class* i_this) {
     fopCamM_SetPrm2(i_this, dComIfGp_getCameraPlayer1ID(camera_id));
     fopCamM_SetPrm3(i_this, dComIfGp_getCameraPlayer2ID(camera_id));
     
-    Vec local_18 = {1000000.0f, 1000000.0f, 1000000.0f};
+    Vec local_18 = {10000000.0f, 10000000.0f, 10000000.0f};
 
     mDoAud_getCameraInfo(&local_18, j3dSys.getViewMtx(), camera_id);
 
