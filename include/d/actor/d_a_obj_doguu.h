@@ -4,8 +4,10 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
+
 class daObjDoguu_c : public fopAc_ac_c {
 public:
+    daObjDoguu_c();
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
@@ -27,7 +29,8 @@ public:
     void setFinishMyEvent();
 
 public:
-    /* 0x290 */ u8 field_0x290[0x6CC - 0x290];
+    /* 0x290 */ u8 field_0x290[0x6C4 - 0x290];
+    /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ J3DModel* field_0x6CC;
     /* 0x6D0 */ J3DModel* field_0x6D0;
     /* 0x6D4 */ J3DModel* field_0x6D4;
@@ -41,7 +44,8 @@ public:
     /* 0x890 */ u8 field_0x890;
     /* 0x891 */ u8 field_0x891[0x894 - 0x891];
     /* 0x894 */ int field_0x894;
-    /* 0x898 */ u8 field_0x898[0x8A0 - 0x898];
+    /* 0x898 */ u8 field_0x898[0x89C - 0x898];
+    /* 0x89C */ int field_0x89C;
     /* 0x8A0 */ bool field_0x8A0;
     /* 0x8A1 */ bool field_0x8A1;
     /* 0x8A2 */ bool field_0x8A2;

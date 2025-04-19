@@ -7,10 +7,20 @@
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
+#include "d/res/res_doguu.h"
+
+const int daObjDoguu_idx_table[18   ] = {
+    DOGUU_BMT_VGSMD, DOGUU_BMT_VGSMF, DOGUU_BMT_VGSMN,
+    DOGUU_BMT_VGSBD, DOGUU_BMT_VGSBF, DOGUU_BMT_VGSBN,
+    DOGUU_BCK_VGSHD, DOGUU_BCK_VGSHF, DOGUU_BCK_VGSHN,
+    DOGUU_BRK_VGSMD, DOGUU_BRK_VGSMF, DOGUU_BRK_VGSMN,
+    DOGUU_BDL_VGSHD, DOGUU_BDL_VGSHF, DOGUU_BDL_VGSHN,
+    DOGUU_BDL_VGSPD, DOGUU_BDL_VGSPF, DOGUU_BDL_VGSPN
+};
 
 namespace {
     struct Attr_c {
-        /* 0x00 */ float idk;
+        /* 0x00 */ float field_0x00;
         /* 0x04 */ float mEyepos;
     };
 
@@ -63,6 +73,106 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000188-000007D0       .text CreateHeap__12daObjDoguu_cFv */
 BOOL daObjDoguu_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA);
+    JUT_ASSERT(0x160, modelData != NULL);
+    J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+    modelData->setMaterialTable(bmt, J3DMatCopyFlag_All);
+    field_0x6CC = mDoExt_J3DModel__create(modelData, 0x80000,0x15220202);
+
+    int uVar5;
+    if(field_0x6CC == NULL) {
+        uVar5 = 0;
+    } else{
+        J3DAnmTevRegKey* brk_doguu = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+        JUT_ASSERT(0x170, brk_doguu != NULL);
+        int iVar7;
+        iVar7 = mBrk.init(modelData, brk_doguu, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+        if(iVar7 == 0) {
+            uVar5 = 0;
+        } else{
+            J3DSkinDeform* deform = new J3DSkinDeform();
+            if(deform = NULL) {
+                uVar5 = 0; // could be wrong
+            } else {
+                field_0x6D0->setSkinDeform(deform, 1);
+                modelData = (J3DModelData*)dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA);
+                JUT_ASSERT(0x177, modelData != NULL);
+
+                field_0x6D0 = mDoExt_J3DModel__create(modelData, 0,0x11020203);
+                if (field_0x6D0 == NULL) {
+                  uVar5 = 0;
+                } else {
+                    J3DAnmTransform* bck_head = (J3DAnmTransform *)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+                    JUT_ASSERT(0x17D, bck_head != NULL);
+                    iVar7 = mBck1.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+                    if(iVar7 == 0) {
+                        uVar5 = 0;
+                    } else {
+                        deform = new J3DSkinDeform();
+                        if (deform != NULL) {
+                            field_0x6D0->setSkinDeform(deform, 1);
+                            modelData = (J3DModelData*)dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA);
+                            JUT_ASSERT(0x1C3, modelData != NULL); // the 0x1C3 maybe just wrong
+                            bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+                            modelData->setMaterialTable(bmt, J3DMatCopyFlag_All);
+                            field_0x6D4 = mDoExt_J3DModel__create(modelData, 0x80000,0x15220202);
+                            if (field_0x6D4 == NULL) {
+                                JUTNameTab* nameTable = field_0x6D4->getModelData()->getJointName();
+                                short iVar9 = 0;
+                                while (true) {
+                                    if (field_0x6D4->getModelData()->getJointNum() <= iVar9) {
+                                        break;
+                                    }
+                                    char* name = (char*)nameTable->getName(iVar9);
+                                    iVar7 = strcmp(name, name); // prob wrong
+                                    if (iVar7 == 0) {
+                                        *(uint*)&field_0x898 = (uint)iVar9; // prob wrong
+                                        break;
+                                    }
+                                    iVar9++;
+                                }
+                                bck_head = (J3DAnmTransform*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+                                JUT_ASSERT(0x17D, bck_head != NULL);
+                                iVar7 = mBck2.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+                                if (iVar7 == 0) {
+                                    uVar5 = 0;
+                                } else {
+                                    deform = new J3DSkinDeform();
+                                    if (deform != NULL) {
+                                        field_0x6D4->setSkinDeform(deform, 1);
+                                        modelData = (J3DModelData*)dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA);
+                                        JUT_ASSERT(0x1BD, modelData != NULL);
+                                        field_0x6D8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+                                        if (field_0x6D8 == NULL) {
+                                            bck_head = (J3DAnmTransform*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+                                            JUT_ASSERT(0x1C3, bck_head != NULL);
+                                            iVar7 = mBck3.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+                                            if (iVar7 == 0) {
+                                                uVar5 = 0;
+                                            } else {
+                                                field_0x89C = 1;
+                                                uVar5 = 1;
+                                            }
+                                        } else {
+                                            uVar5 = 0;
+                                        }
+                                    } else {
+                                        uVar5 = 0; // could be wrong
+                                    }
+                                }
+                            } else {
+                                uVar5 = 0;
+                            }
+                        } else{
+                            uVar5 = 0; // could be wrong
+                        }
+                    }
+                }
+            
+            }
+        }
+    }
+    return uVar5;
     /* Nonmatching */
 }
 
@@ -208,9 +318,25 @@ static cPhs_State daObjDoguu_Create(void* i_this) {
 
 }
 
+daObjDoguu_c::daObjDoguu_c() {}
+
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
 cPhs_State daObjDoguu_c::_create() {
     fopAcM_SetupActor(this, daObjDoguu_c);
+    if(subtype >= 1) {
+        field_0x894 = subtype - 1;
+    } else {
+        field_0x894 = fopAcM_GetParam(this) & 0xFF;
+    }
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs,"Doguu");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0)){
+            return cPhs_ERROR_e;
+        } else{
+            CreateInit();
+        }   
+    }
+    return phase_state;
     /* Nonmatching */
 }
 
@@ -220,12 +346,48 @@ static BOOL daObjDoguu_Delete(void*) {
 }
 
 /* 00001D0C-00001D30       .text daObjDoguu_Draw__FPv */
-static BOOL daObjDoguu_Draw(void*) {
+static BOOL daObjDoguu_Draw(void* i_this) {
+    return static_cast<daObjDoguu_c*>(i_this)->_draw();
+
     /* Nonmatching */
 }
 
 /* 00001D30-00001F64       .text _draw__12daObjDoguu_cFv */
 bool daObjDoguu_c::_draw() {
+    J3DMaterialTable* bmt;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x6CC, &tevStr);
+    g_env_light.setLightTevColorType(field_0x6D0, &tevStr);
+    g_env_light.setLightTevColorType(field_0x6D4, &tevStr);
+    g_env_light.setLightTevColorType(field_0x6D8, &tevStr);
+    
+    setEffectMtx(&eyePos, attr().field_0x00);
+
+    if(field_0x8A1){
+        bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+        
+        field_0x6D0->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
+        mBck1.entry(field_0x6D0->getModelData());
+        mDoExt_modelUpdateDL(field_0x6D0);
+        field_0x6D0->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+
+        mBck2.entry(field_0x6D4->getModelData());
+        mDoExt_modelUpdateDL(field_0x6D4);
+        field_0x6D4->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+    } else {
+        bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+        field_0x6CC->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
+        mBrk.entry(field_0x6CC->getModelData());
+        mDoExt_modelUpdateDL(field_0x6CC);
+        field_0x6CC->getModelData()->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+    }
+    if (field_0x8A0 == true) {
+        mBck3.entry(field_0x6D8->getModelData());
+        mDoExt_modelUpdateDL(field_0x6D8);
+        field_0x6D8->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);       
+    }
+    return true;
+
     /* Nonmatching */
 }
 
