@@ -156,16 +156,16 @@ cPhs_State fopAc_Create(void* pProc) {
 
         fopAcM_prm_class* prm = fopAcM_GetAppend(actor);
         if (prm != NULL) {
-            fopAcM_SetParam(actor, prm->mParameter);
-            actor->home.pos = prm->mPos;
-            actor->home.angle = prm->mAngle;
-            actor->shape_angle = prm->mAngle;
-            actor->parentActorID = prm->mParentPcId;
-            actor->subtype = prm->mSubtype;
-            actor->gbaName = prm->mGbaName;
-            actor->scale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
-            actor->setID = prm->mSetId;
-            actor->home.roomNo = prm->mRoomNo;
+            fopAcM_SetParam(actor, prm->base.parameters);
+            actor->home.pos = prm->base.position;
+            actor->home.angle = prm->base.angle;
+            actor->shape_angle = prm->base.angle;
+            actor->parentActorID = prm->parent_id;
+            actor->subtype = prm->subtype;
+            actor->gbaName = prm->gbaName;
+            actor->scale.set(prm->scale.x * 0.1f, prm->scale.y * 0.1f, prm->scale.z * 0.1f);
+            actor->setID = prm->base.setID;
+            actor->home.roomNo = prm->room_no;
         }
 
         actor->old = actor->home;

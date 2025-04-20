@@ -2,6 +2,8 @@
 #define D_A_OBJ_ICEISLAND_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_particle.h"
+#include "f_op/f_op_actor_mng.h"
 
 class daObjIceisland_c : public fopAc_ac_c {
 public:
@@ -10,7 +12,7 @@ public:
     inline bool _draw();
     inline bool _execute();
 
-    void CreateHeap();
+    BOOL CreateHeap();
     void daObjIceisland_particle_set();
     void CreateInit();
     void set_mtx();
@@ -24,7 +26,23 @@ public:
     void daObjIceisland_fail_demo_main();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm1;
+    /* 0x2B0 */ mDoExt_btkAnm mBtkAnm2;
+    /* 0x2C4 */ mDoExt_brkAnm mBrkAnm;
+    /* 0x2DC */ JPABaseEmitter* mEmitter1;
+    /* 0x2E0 */ JPABaseEmitter* mEmitter2;
+    /* 0x2E4 */ dKy_tevstr_c mTevStr;
+    /* 0x394 */ u8 field_0x394[0x396 - 0x394];
+    /* 0x396 */ s16 field_0x396;
+    /* 0x398 */ s16 mMeltIceEventIdx;
+    /* 0x39A */ s16 mFreezeIceEventIdx;
+    /* 0x39C */ int field_0x39C;
+};  // Size: 0x3A0
+
+namespace daObjIceisland_prm {
+    inline u8 getSwitchNo(daObjIceisland_c* ac) { return (fopAcM_GetParam(ac) >> 8) & 0xFF; }
 };
 
 #endif /* D_A_OBJ_ICEISLAND_H */

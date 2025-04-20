@@ -3201,7 +3201,7 @@ BOOL daNpc_Md_c::draw() {
         mDoExt_modelUpdateDL(mpHarpLightModel);
         mLightBtkAnm.remove(mpHarpLightModel->getModelData());
         
-        mDoMtx_copy(mpHarpModel->getBaseTRMtx(), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::copy(mpHarpModel->getBaseTRMtx());
         mDoMtx_stack_c::transM(l_HIO.m034.m0C, l_HIO.m034.m10, l_HIO.m034.m14);
         Mtx mtx;
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx);

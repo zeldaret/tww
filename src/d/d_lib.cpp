@@ -360,7 +360,6 @@ s32 STControl::checkTrigger() {
         u8 newAngle = 0;
     s16 iVar6 = (0x2000 - field_0x26) >> 1;
     if (!cM3d_IsZero(valueStick)) {
-
         if (angleStick < field_0x22 + -0x7000 + iVar6) {
             newAngle |= 4;
         } else if (angleStick < field_0x22 + -0x5000 - iVar6) {

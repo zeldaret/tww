@@ -359,7 +359,7 @@ void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
 
     mDoMtx_stack_c::transM(pos);
     

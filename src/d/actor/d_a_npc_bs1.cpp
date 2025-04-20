@@ -2094,7 +2094,7 @@ BOOL daNpc_Bs1_c::_execute() {
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     J3DModel* pModel = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     for (int i = 0; i < 3; i++) {
         if (m76C[i] != 0) {

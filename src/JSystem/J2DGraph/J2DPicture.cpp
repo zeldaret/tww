@@ -82,7 +82,7 @@ J2DPicture::J2DPicture(const ResTIMG* pTimg) {
     mpTexture[0] = NULL;
     mNumTexture = 0;
     if (pTimg) {
-        insert(pTimg, mNumTexture, 1.0f);
+        append(pTimg, 1.0f);
     }
     mpPalette = NULL;
     initinfo();
@@ -93,7 +93,7 @@ J2DPicture::J2DPicture(const char* name) {
     mpTexture[0] = NULL;
     mNumTexture = 0;
     if (name) {
-        insert(name, mNumTexture, 1.0f);
+        append(name, 1.0f);
     }
     mpPalette = NULL;
     initinfo();
@@ -134,7 +134,7 @@ void J2DPicture::private_initiate(const ResTIMG* pTimg, const ResTLUT* pTlut) {
 /* 802D35FC-802D3774       .text initinfo__10J2DPictureFv */
 void J2DPicture::initinfo() {
     mMagic = 'PIC1';
-    mBinding = J2DBind_Bottom | J2DBind_Top | J2DBind_Right | J2DBind_Left;
+    setBinding(J2DBinding(J2DBind_Bottom | J2DBind_Top | J2DBind_Right | J2DBind_Left));
     mFlag &= 4;
     mFlag &= 3;
     setBlendRatio(1.0f, 1.0f, 1.0f, 1.0f);
@@ -336,7 +336,7 @@ void J2DPicture::draw(f32 x, f32 y, f32 width, f32 height, bool mirrorX, bool mi
     }
     for (u8 i = 0; i < mNumTexture; i++) {
         if (i < mNumTexture) {
-            mpTexture[i]->load((GXTexMapID)i);
+            load(i);
         }
     }
     GXSetNumTexGens(mNumTexture);
@@ -400,7 +400,7 @@ void J2DPicture::drawOut(const JGeometry::TBox2<f32>& posBox, const JGeometry::T
     }
     for (u8 i = 0; i < mNumTexture; i++) {
         if (i < mNumTexture) {
-            mpTexture[i]->load((GXTexMapID)i);
+            load(i);
         }
     }
     GXSetNumTexGens(mNumTexture);
@@ -452,7 +452,7 @@ void J2DPicture::drawOut(const JGeometry::TBox2<f32>& posBox, const JGeometry::T
 void J2DPicture::drawTexCoord(f32 x, f32 y, f32 width, f32 height, f32 s0, f32 t0, f32 s1, f32 t1, f32 s2, f32 t2, f32 s3, f32 t3, Mtx* mtx) {
     for (u8 i = 0; i < mNumTexture; i++) {
         if (i < mNumTexture) {
-            mpTexture[i]->load(GXTexMapID(i));
+            load(i);
         }
     }
     f32 x2 = x + width;

@@ -10,9 +10,9 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/res/res_gaship.h"
 
-const char daObjGaship::Act_c::M_arcname[7] = "GaShip";
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
-static f32 dummy[19];
+const char daObjGaship::Act_c::M_arcname[7] = "GaShip";
 
 /* 000000EC-000002DC       .text birth_flag__Q211daObjGaship5Act_cFv */
 void daObjGaship::Act_c::birth_flag() {

@@ -482,7 +482,6 @@ void daSea_packet_c::CheckRoomChange() {
     dStage_roomDt_c * room = dComIfGp_roomControl_getStatusRoomDt(dComIfGp_roomControl_getStayNo());
     if (room != NULL) {
         mRoomNo = dComIfGp_roomControl_getStayNo();
-        u32 procName = PROC_DAIOCTA;
         daDaiocta_c* octa = (daDaiocta_c *)fopAcM_SearchByName(PROC_DAIOCTA);
         if (octa == NULL) {
             if (mFlags & 0x01) {
@@ -1073,7 +1072,6 @@ void daSea_packet_c::draw() {
             int count = temp_r26_2 + trunc;
 
             for (; z < end; z++) {
-
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (1+count) * 2);
 
                 f32 texX;

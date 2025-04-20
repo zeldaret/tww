@@ -42,7 +42,6 @@ void daPy_lk_c::setHammerWaterSplash() {
 
 /* 80150B60-80150C40       .text procHammerSideSwing_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHammerSideSwing_init() {
-    /* Nonmatching - floats */
     commonProcInit(daPyProc_HAMMER_SIDE_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGA,
@@ -115,7 +114,6 @@ BOOL daPy_lk_c::procHammerSideSwing() {
 
 /* 80150DDC-80150F08       .text procHammerFrontSwingReady_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
-    /* Nonmatching - floats */
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_READY_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBPRE,

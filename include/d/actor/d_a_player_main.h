@@ -230,6 +230,7 @@ public:
         setTimer(timer);
     }
 
+private:
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
@@ -310,12 +311,17 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x018 - 0x000];
+    /* 0x000 */ u8 field_0x000[0x002 - 0x000];
     // TODO: is this right?
+    /* 0x002 */ s16 field_0x002;
+    /* 0x004 */ u8 field_0x004[0x008 - 0x004];
+    /* 0x008 */ s16 field_0x008;
+    /* 0x00A */ s16 field_0x00A;
+    /* 0x00C */ u8 field_0x00C[0x018 - 0x00C];
     /* 0x018 */ cXyz field_0x018;
     /* 0x018 */ u8 field_0x024[0x034 - 0x024];
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
-    /* 0x088 */ u8 field_0x088[0x118 - 0x088];
+    /* 0x088 */ Mtx field_0x088[3];
 };
 
 struct daPy_aura_c {
@@ -924,7 +930,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    BOOL checkNormalFace();
+    s32 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -991,11 +997,11 @@ public:
     void makeItemType();
     void setScopeModel();
     void setPhotoBoxModel();
-    void changeDragonShield(int);
+    BOOL changeDragonShield(int);
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
     void checkItemAction();
-    void getSlidePolygon();
+    cM3dGPla* getSlidePolygon();
     BOOL checkJumpCutFromButton();
     int orderTalk();
     BOOL checkNextActionFromButton();
@@ -1474,7 +1480,7 @@ public:
     void setShipRidePos(int);
     void setShipAttentionAnmSpeed(f32);
     void setShipAttnetionBodyAngle();
-    int changeShipEndProc();
+    BOOL changeShipEndProc();
     void initShipBaseAnime();
     void initShipCraneAnime();
     BOOL procShipReady_init();
@@ -1557,7 +1563,7 @@ public:
     void setBowReadyAnime();
     void setBowReloadAnime();
     BOOL checkNextActionBowReady();
-    BOOL checkNextActionBowFly();
+    void checkNextActionBowFly();
     BOOL checkNextBowMode();
     void setBowModel();
     BOOL procBowSubject_init();
@@ -1629,7 +1635,7 @@ public:
     BOOL procHammerFrontSwing();
     BOOL procHammerFrontSwingEnd_init();
     BOOL procHammerFrontSwingEnd();
-    int setPushPullKeepData(dBgW::PushPullLabel);
+    BOOL setPushPullKeepData(dBgW::PushPullLabel);
     BOOL procPushPullWait_init(int);
     BOOL procPushPullWait();
     BOOL procPushMove_init();
@@ -1721,21 +1727,24 @@ public:
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
     
+    bool checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
+    bool checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
+    
     bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    bool checkGrabAnimeLight() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAIT; };
-    bool checkGrabAnimeHeavy() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAITB; };
-    bool checkBoomerangCatchAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH; };
-    bool checkBoomerangThrowAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW; };
-    bool checkBoomerangReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMWAIT; };
-    bool checkHookshotReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_HOOKSHOTWAIT; }
-    bool checkDashDamageAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH; }
+    bool checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
+    bool checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
+    bool checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
+    bool checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
+    bool checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
+    bool checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
+    bool checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
     bool checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
     bool checkUpperGuardAnime() const {
-        return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNG ||
-            m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNGHAM;
+        return checkUpperAnime(LKANM_BCK_ATNG) ||
+            checkUpperAnime(LKANM_BCK_ATNGHAM);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
@@ -1827,12 +1836,10 @@ public:
     void checkFaceTypeNot() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
-    void checkNoUpperAnime() const {}
     void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void checkUpperAnime(u16) const {}
     void getAnmSpeedStickRate(f32, f32) {}
     void getBombWaterPillarBrk() {}
     void getBombWaterPillarBtk() {}
@@ -1878,7 +1885,7 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
@@ -1887,7 +1894,7 @@ public:
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROWWAIT; }
+    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
@@ -2137,7 +2144,13 @@ public:
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;
     /* 0x356C */ int mCameraInfoIdx;
-    /* 0x3570 */ s32 m3570;
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    union {
+        s32 m3570;
+        daPy_ANM mDamageAnm;
+        int mBottleItem;
+    } /* 0x3570  */ mProcVar0;
     /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;

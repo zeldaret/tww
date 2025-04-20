@@ -114,8 +114,8 @@ BOOL daPy_lk_c::procBottleDrink_init(u16 param_0) {
     keepItemData();
     setBottleModel(param_0);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK2000_e);
-    m3570 = 1;
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
+    mProcVar0.m3570 = 1;
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     initShipRideUseItem(iVar1, 2);
     return true;
 }
@@ -207,7 +207,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
         return true;
     }
 
-    if (mDemo.getDemoMode() != 0x3d) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
         if (!dComIfGp_event_compulsory(this)) {
             return false;
         }
@@ -230,12 +230,12 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     setBottleModel(param_0);
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK4000_e);
     if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
-        m3570 = 3;
+        mProcVar0.m3570 = 3;
     } else {
-        m3570 = 2;
+        mProcVar0.m3570 = 2;
     }
-    if (mDemo.getDemoMode() != 0x3d) {
-        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
+        dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     }
     initShipRideUseItem(iVar1, 2);
     m34D4 = 0;
@@ -295,7 +295,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
         );
         m35A0 = daPy_HIO_bottle_c0::m.field_0x18;
     }
-    m3570 = 0;
+    mProcVar0.m3570 = 0;
     m3574 = 0;
     m34D4 = 0;
     voiceStart(7);
@@ -306,15 +306,15 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
 /* 80153064-80153338       .text procBottleSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBottleSwing() {
     setShipRidePosUseItem();
-    if (m3570 == 0) {
+    if (mProcVar0.m3570 == 0) {
         if (eventInfo.checkCommandCatch()) {
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
             u8 bVar5 = dComIfGp_event_getPreItemNo();
             if (bVar5 == dItem_WATER_BOTTLE_e) {
                 seStartOnlyReverb(JA_SE_LK_SCOOP_WATER);
                 if (!strcmp(dComIfGp_getStartStageName(), "Omori")) {
                     bVar5 = dItem_FOREST_WATER_e;
-                    if (dComIfGs_checkBottle(89)) {
+                    if (dComIfGs_checkBottle(dItem_FOREST_WATER_e)) {
                         m3628 = fpcM_ERROR_PROCESS_ID_e;
                         m3574 = 1;
                     } else {
@@ -350,7 +350,7 @@ BOOL daPy_lk_c::procBottleSwing() {
                 endDemoMode();
             }
         } else {
-            if (m3570 != 0) {
+            if (mProcVar0.m3570 != 0) {
                 procBottleGet_init();
             } else {
                 if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
@@ -361,7 +361,7 @@ BOOL daPy_lk_c::procBottleSwing() {
             }
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m35A0) {
-        if (m3570 == 0 && !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+        if (mProcVar0.m3570 == 0 && !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             checkNextMode(1);
         }
     }
@@ -381,8 +381,8 @@ BOOL daPy_lk_c::procBottleGet_init() {
     );
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK1000_e);
     m3628 = fpcM_ERROR_PROCESS_ID_e;
-    m3570 = 0;
-    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &m3570, 0);
+    mProcVar0.m3570 = 0;
+    dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     if (mEquipItem == dItem_FOREST_WATER_e) {
         m32F0.makeEmitter(dPa_name::ID_COMMON_020D, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     }

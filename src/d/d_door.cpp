@@ -390,12 +390,8 @@ void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
     if (emtr != NULL) {
         emtr->setRate(16.0f);
         emtr->setSpread(0.35f);
-        emtr->mGlobalDynamicsScale.x = 2.0f;
-        emtr->mGlobalDynamicsScale.y = 2.0f;
-        emtr->mGlobalDynamicsScale.z = 2.0f;
-        emtr->mGlobalParticleScale.x = 2.0f;
-        emtr->mGlobalParticleScale.y = 2.0f;
-        emtr->mGlobalParticleScale.z = 2.0f;
+        JGeometry::TVec3<f32> scale(2.0f, 2.0f, 2.0f);
+        emtr->setGlobalScale(scale);
     }
 }
 

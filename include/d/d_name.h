@@ -14,10 +14,10 @@ class dDlst_NameIN_c : public dDlst_base_c {
 
 class dName_c {
 public:
-    void draw() {}
-    void getInputStrPtr() {}
-    void isInputEnd() {}
-    void setNextNameStr(char*) {}
+    void draw() { _draw(); }
+    int isInputEnd() { return mIsInputEnd; }
+    char* getInputStrPtr() { return mInputStr; }
+    void setNextNameStr(char* i_name) { strcpy(mNextNameStr, i_name); }
 
     virtual ~dName_c() {}
     void _create();
@@ -68,11 +68,11 @@ public:
     /* 0x0004 */ u8 field_0x4[0x0008 - 0x0004];
     /* 0x0008 */ dDlst_NameIN_c field_0x8;
     /* 0x000C */ u8 field_0xc[0x290B - 0x000C];
-    /* 0x290B */ u8 field_0x290b;
+    /* 0x290B */ u8 mIsInputEnd;
     /* 0x290C */ u8 field_0x290c[0x2A5C - 0x290C];
-    /* 0x2A5C */ char field_0x2a5c[8];
+    /* 0x2A5C */ char mInputStr[8];
     /* 0x2A64 */ u8 field_0x2964[0x2AD0 - 0x2A64];
-    /* 0x2AD0 */ char field_0x2ad0[0x2AE8 - 0x2AD0];
+    /* 0x2AD0 */ char mNextNameStr[0x2AE8 - 0x2AD0];
 };
 
 #endif /* D_NAME_H */

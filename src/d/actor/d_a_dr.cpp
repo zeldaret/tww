@@ -167,9 +167,9 @@ static void daDr_setMtx(dr_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos);
-    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->current.angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->current.angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->current.angle.z);
+    mDoMtx_stack_c::YrotM(i_this->current.angle.y);
+    mDoMtx_stack_c::XrotM(i_this->current.angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->current.angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     
     i_this->mpMorf->calc();

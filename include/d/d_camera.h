@@ -4,10 +4,11 @@
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_drawlist.h"
+#include "d/d_stage.h"
 #include "f_pc/f_pc_base.h"
 #include "d/d_cam_param.h"
 #include "d/d_bg_s_gnd_chk.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_spline_path.h"
 #include "global.h"
 
@@ -18,20 +19,6 @@ class dBgS_CamGndChk;
 class d2DBSplinePath;
 class dStage_Event_dt_c;
 class fopAc_ac_c;
-
-struct stage_camera__entry {
-    /* 0x00 */ char mpTypeStr[16];
-    /* 0x10 */ u8 mArrowIdx;
-    /* 0x11 */ u8 m11;
-    /* 0x12 */ u8 m12;
-    /* 0x13 */ u8 m13;
-};
-
-struct stage_arrow__entry {
-    /* 0x00 */ cXyz mPos;
-    /* 0x0C */ csXyz mRot;
-    /* 0x12 */ s16 m12;
-};
 
 struct dCamera__EventParam {
     /* 0x00 */ char mName[16];
@@ -129,17 +116,21 @@ typedef bool (dCamera_c::*engine_fn)(s32);
 class dCamera_c {
 public:
     struct BG {
-        BG() {}
-        ~BG() {}
-        /* 0x00 */ u8 m00[0x04 - 0x00];
-        /* 0x04 */ dBgS_CamGndChk m04; // dBgS_CamGndChk might be too large by 4 bytes
-        /* 0x58 */ f32 m58;
-        /* 0x5C */ dBgS_CamGndChk m5C; // This offset is wrong, needs to be at 0x60
-    };
+        struct {
+            /* 0x00 */ bool m00;
+            /* 0x04 */ dBgS_CamGndChk m04;
+            /* 0x58 */ f32 m58;
+        } m00;
+        struct {
+            /* 0x00 */ bool m00;
+            /* 0x04 */ dBgS_CamGndChk m04;
+            /* 0x58 */ f32 m58;
+        } m5C;
+    };  // Size: 0xB8
 
     /* 0x000 */ camera_class* mpCamera;
-    /* 0x004 */ u8 m004;
-    /* 0x005 */ u8 m005;
+    /* 0x004 */ u8 mActive;
+    /* 0x005 */ u8 mPause;
     /* 0x006 */ cSAngle m006;
     /* 0x008 */ cSGlobe mDirection;
     /* 0x010 */ cXyz mCenter;
@@ -249,8 +240,6 @@ public:
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x30C */ int m30C;
-    /* 0x310 */ f32 m310;
     /* 0x314 */ int m314;
     /* 0x318 */ f32 m318;
     /* 0x31C */ u8 m31C;
@@ -303,7 +292,8 @@ public:
     /* 0x568 */ cXyz mCenterShake;
     /* 0x574 */ cXyz mEyeShake;
     /* 0x580 */ f32 mFovYShake;
-    /* 0x584 */ u8 m584[0x588 - 0x584];
+    /* 0x584 */ cSAngle m584;
+    /* 0x586 */ u8 m586[0x588 - 0x586];
     /* 0x588 */ int m588;
     /* 0x58C */ int m58C;
     /* 0x590 */ int mBlureTimer;
@@ -314,8 +304,8 @@ public:
     /* 0x5AC */ cXyz mBlureScale;
     /* 0x5B8 */ f32 mBlureAlpha;
     /* 0x5BC */ u8 m5BC[0x5C0 - 0x5BC];
-    /* 0x5C0 */ stage_camera__entry mCurRoomCamEntry;
-    /* 0x5D4 */ stage_arrow__entry mCurRoomArrowEntry;
+    /* 0x5C0 */ stage_camera2_data_class mCurRoomCamEntry;
+    /* 0x5D4 */ stage_arrow_data_class mCurRoomArrowEntry;
     /* 0x5E8 */ int mCurArrowIdx;
     /* 0x5EC */ f32 mWindowWidth;
     /* 0x5F0 */ f32 mWindowHeight;
@@ -403,7 +393,7 @@ public:
     bool lineBGCheck(cXyz*, cXyz*, u32);
     bool lineBGCheckBack(cXyz*, cXyz*, u32);
     bool lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32);
-    BOOL lineCollisionCheckBush(cXyz*, cXyz*);
+    u32 lineCollisionCheckBush(cXyz*, cXyz*);
     cXyz compWallMargin(cXyz*, f32);
     int defaultTriming();
     void setView(f32, f32, f32, f32);
@@ -466,9 +456,10 @@ public:
     bool ScopeViewMsgModeOff();
 
     f32 Fovy() { return mFovY + mFovYShake; }
-    cSAngle Bank() {}
-    cXyz Up() {}
+    cSAngle Bank() { return mBank + m584; }
+    cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
+    cXyz Eye() { return mEye + mEyeShake; }
 
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);
@@ -510,16 +501,16 @@ public:
     void bSplineEvCamera();
     void twoActor0EvCamera();
 
-    void Pause() { if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera()) ResetView(); }
-    void Active() { if (m004 && !m005) Run(); else NotRun(); }
+    bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
+    void setFlag(u32 flag) { mEventFlags |= flag; }
+    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
     void CStickUse() { clrFlag(0x800000); }
     void CStickUseless() { setFlag(0x800000); }
-    cXyz Eye() { return mEye + mEyeShake; }
     void StickUse() { clrFlag(0x1000000); }
     void StickUseless() { setFlag(0x1000000); }
-    void setFlag(u32 flag) { mEventFlags |= flag; }
-    bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
-    void clrFlag(u32 flag) { mEventFlags &= ~flag; }
+
+    bool Active() { return mActive; }
+    bool Pause() { return mPause; }
 
     static engine_fn engine_tbl[];
     static const int type_num;

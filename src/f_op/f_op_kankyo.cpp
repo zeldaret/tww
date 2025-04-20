@@ -71,7 +71,7 @@ static cPhs_State fopKy_Create(void* i_ky) {
         i_this->sub_method = profile->sub_method;
 
         fopDwTg_Init(&i_this->draw_tag, i_this);
-        fopKyM_prm_class* append = (fopKyM_prm_class*)fopKyM_GetAppend(i_this);
+        fopKyM_prm_class* append = fopKyM_GetAppend(i_this);
 
         if (append != NULL) {
             i_this->mPos = append->mPos;

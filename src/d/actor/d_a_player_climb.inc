@@ -209,7 +209,7 @@ void daPy_lk_c::checkBgClimbMove() {
 /* 80136588-801365F4       .text procClimbUpStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procClimbUpStart_init_sub() {
     setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x8);
-    m3570 = 1;
+    mProcVar0.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK10000_e);
 }
@@ -229,7 +229,7 @@ BOOL daPy_lk_c::procClimbUpStart_init() {
     } else {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
         setAnimeUnequip();
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         m3598 = 0.0f;
     }
     f32 fVar2 = cM_ssin(m352C);
@@ -248,8 +248,8 @@ BOOL daPy_lk_c::procClimbUpStart() {
         return true;
     }
 
-    if (m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+    if (mProcVar0.m3570 == 0) {
+        if (checkNoUpperAnime()) {
             procLadderUpStart_init_sub();
         }
     } else {
@@ -292,7 +292,7 @@ BOOL daPy_lk_c::procClimbDownStart_init(s16 param_0) {
     current.pos.y = current.pos.y - 20.0f;
     current.pos.z = current.pos.z - 35.0f * cM_scos(param_0);
     m35E0 = 43.67353f;
-    m3570 = 1;
+    mProcVar0.m3570 = 1;
     return true;
 }
 
@@ -331,14 +331,14 @@ BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
         dVar3 *= -1.0f;
     }
     if (param_0 != 0) {
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         if (mDirection == DIR_FORWARD) {
             dVar2 = ANM_LADDERLTOR;
         } else {
             dVar2 = ANM_LADDERRTOL;
         }
     } else {
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
         if (mDirection == DIR_FORWARD) {
             dVar2 = ANM_LADDERRTOL;
         } else {
@@ -377,14 +377,14 @@ BOOL daPy_lk_c::procClimbMoveUpDown() {
             m34D0 = 0;
             setLadderFootSe();
         } else {
-            changeClimbMoveProc(m3570);
+            changeClimbMoveProc(mProcVar0.m3570);
         }
     } else {
         f32 dVar2 = getLadderMoveAnmSpeed();
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.0f) {
             dVar2 *= -1.0f;
         }
-        (mFrameCtrlUnder[UNDER_MOVE0_e]).setRate(dVar2);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(dVar2);
         checkBgClimbMove();
     }
     return true;
@@ -399,7 +399,7 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
     commonProcInit(daPyProc_CLIMB_MOVE_SIDE_e);
     m34D4 = m34E8 - shape_angle.y;
     m34C2 = 7;
-    m3570 = param_0;
+    mProcVar0.m3570 = param_0;
     if (param_0 != 0) {
         dVar2 = ANM_FCLIMBSLIDELUP;
         if (mDirection == DIR_RIGHT) {
@@ -446,7 +446,7 @@ BOOL daPy_lk_c::procClimbMoveSide() {
             m34D0 = 0;
             setLadderFootSe();
         } else {
-            changeClimbMoveProc(m3570);
+            changeClimbMoveProc(mProcVar0.m3570);
         }
     } else {
         f32 dVar5 = getClimbMoveAnmSpeed();

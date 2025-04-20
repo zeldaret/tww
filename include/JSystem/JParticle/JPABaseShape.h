@@ -93,6 +93,12 @@ public:
     virtual f32 getTexScrollRotate() = 0;
 };
 
+class JPAColorRegAnmKey {
+public:
+    s16 m00;
+    GXColor m02;
+};
+
 struct JPABaseShapeData {
     /* 0x00 */ u32 mFlags;
     /* 0x04 */ s16 mPrmAnimDataOffs;

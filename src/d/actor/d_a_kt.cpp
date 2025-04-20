@@ -338,9 +338,9 @@ static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
                 fopAcM_SetParam(i_this, 1000);
                 for (s32 i = 0; i < num; i++) {
                     fopAcM_prm_class* params = fopAcM_CreateAppend();
-                    params->mPos = i_this->current.pos;
-                    params->mAngle.set(0, 0, 0);
-                    params->mParameter = 1001 + i;
+                    params->base.position = i_this->current.pos;
+                    params->base.angle.set(0, 0, 0);
+                    params->base.parameters = 1001 + i;
                     fpcM_Create(PROC_KT, NULL, params);
                 }
             }

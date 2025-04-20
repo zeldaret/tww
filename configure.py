@@ -151,8 +151,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.4.0"
-config.objdiff_tag = "v2.7.1"
+config.dtk_tag = "v1.4.1"
+config.objdiff_tag = "v3.0.0-beta.5"
 config.sjiswrap_tag = "v1.2.0"
 config.wibo_tag = "0.6.11"
 
@@ -393,7 +393,7 @@ config.libs = [
             Object(Matching,    "f_op/f_op_kankyo.cpp"),
             Object(Matching,    "f_op/f_op_msg.cpp"),
             Object(Matching,    "f_op/f_op_kankyo_mng.cpp"),
-            Object(NonMatching, "f_op/f_op_msg_mng.cpp"),
+            Object(NonMatching, "f_op/f_op_msg_mng.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "f_op/f_op_draw_iter.cpp"),
             Object(Matching,    "f_op/f_op_draw_tag.cpp"),
             Object(Matching,    "f_op/f_op_scene_pause.cpp"),
@@ -476,7 +476,7 @@ config.libs = [
             Object(NonMatching, "d/d_particle.cpp"),
             Object(Matching,    "d/d_particle_name.cpp"),
             Object(Matching,    "d/d_path.cpp"),
-            Object(NonMatching, "d/d_drawlist.cpp"),
+            Object(Matching,    "d/d_drawlist.cpp", extra_cflags=['-sym off']),
             Object(Matching,    "d/d_kankyo_data.cpp"),
             Object(Matching,    "d/d_kankyo_wether.cpp"),
             Object(NonMatching, "d/d_kankyo_rain.cpp"),
@@ -567,7 +567,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_option.cpp"),
             Object(NonMatching, "d/d_menu_save.cpp"),
             Object(NonMatching, "d/d_menu_window.cpp"),
-            Object(NonMatching, "d/d_mesg.cpp"),
+            Object(NonMatching, "d/d_mesg.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_message_paper.cpp"),
             Object(NonMatching, "d/d_meter.cpp"),
@@ -683,11 +683,11 @@ config.libs = [
             Object(Matching,    "JSystem/JParticle/JPATexture.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAResourceManager.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAEmitterLoader.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAMath.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAMath.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAField.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAEmitter.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAParticle.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAEmitterManager.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAEmitter.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAParticle.cpp"),
+            Object(Matching,    "JSystem/JParticle/JPAEmitterManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADrawVisitor.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPADraw.cpp"),
             Object(Matching,    "JSystem/JParticle/JPADrawSetupTev.cpp"),
@@ -712,7 +712,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
+            Object(Equivalent,  "JSystem/JStudio/JStudio/functionvalue.cpp"), # weak func order
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
@@ -1665,7 +1665,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_homensmoke", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
     ActorRel(NonMatching, "d_a_obj_htetu1"),
-    ActorRel(NonMatching, "d_a_obj_iceisland"),
+    ActorRel(Matching, "d_a_obj_iceisland", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
     ActorRel(Equivalent,  "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']), # weak func order

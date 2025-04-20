@@ -26,6 +26,10 @@ enum J2DMirror {
 
 class J2DPicture : public J2DPane {
 public:
+    struct TCornerColor {
+        // TODO
+    };
+
     J2DPicture();
     J2DPicture(J2DPane*, JSURandomInputStream*);
     J2DPicture(const ResTIMG*);
@@ -51,14 +55,20 @@ public:
     void initinfo();
     bool insert(const ResTIMG*, u8, f32);
     bool insert(const char*, u8, f32);
+    bool append(const ResTIMG* timg, f32 param_1) { return insert(timg, mNumTexture, param_1); }
+    bool append(const char* name, f32 param_1) { return insert(name, mNumTexture, param_1); }
     bool remove(u8);
+    bool remove() { return remove(mNumTexture - 1); }
     const ResTIMG * changeTexture(const ResTIMG*, u8);
     const ResTIMG * changeTexture(const char*, u8);
     void drawFullSet(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
     void draw(f32, f32, f32, f32, bool, bool, bool);
-    void draw(f32 x, f32 y, bool mirrorX, bool mirrorY, bool tumble) {
-        if (mNumTexture > 0)
+    void draw(f32 x, f32 y, u8 i, bool mirrorX, bool mirrorY, bool tumble) {
+        if (i < mNumTexture)
             draw(x, y, mpTexture[0]->getWidth(), mpTexture[0]->getHeight(), mirrorX, mirrorY, tumble);
+    }
+    void draw(f32 x, f32 y, bool mirrorX, bool mirrorY, bool tumble) {
+        draw(x, y, 0, mirrorX, mirrorY, tumble);
     }
     void drawOut(const JGeometry::TBox2<f32>&, const JGeometry::TBox2<f32>&);
     void drawTexCoord(f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, f32, Mtx*);
@@ -86,7 +96,9 @@ public:
         setBlendColorRatio(f1, f2, f3, f4);
         setBlendAlphaRatio(f1, f2, f3, f4);
     }
+    const JUtility::TColor& getWhite() const { return mColorWhite; }
     bool setWhite(JUtility::TColor white) { mColorWhite = white; return true; }
+    const JUtility::TColor& getBlack() const { return mColorBlack; }
     bool setBlack(JUtility::TColor black) { mColorBlack = black; return true; }
     bool setBlackWhite(JUtility::TColor black, JUtility::TColor white) {
         mColorBlack = black;
@@ -101,16 +113,19 @@ public:
     }
     void setCornerColor(JUtility::TColor c) { setCornerColor(c, c, c, c); }
 
-    u8 getNumTexture() { return mNumTexture; }
-
     void setBinding(J2DBinding v) { mBinding = v; }
     void setMirror(J2DMirror v) {} // untested { mFlag = (mFlag & ~0x03) | v; }
     J2DMirror getMirror() const { return J2DMirror(mFlag & 0x03); }
 
     void setTumble(bool v) {} // untested { mFlag = (mFlag & ~0x04) | (v << 2); }
-    bool isTumble() const { return mFlag >> 2 & 1; }
+    bool isTumble() const { return mFlag & 0x04; }
 
-private:
+    void load(u8 i) { mpTexture[i]->load((GXTexMapID)i); }
+
+    // TODO
+    void getCornerColor(J2DPicture::TCornerColor&) const {}
+
+protected:
     /* 0x0CC */ JUTTexture* mpTexture[4];
     /* 0x0DC */ u8 mNumTexture;
     /* 0x0DD */ u8 mValidTexture;
@@ -124,7 +139,7 @@ private:
     /* 0x10C */ JUtility::TColor mCornerColor[4];
     /* 0x11C */ JUtility::TColor mBlendKonstColor;
     /* 0x120 */ JUtility::TColor mBlendKonstAlpha;
-};
+};  // Size: 0x124
 
 STATIC_ASSERT(sizeof(J2DPicture) == 0x124);
 

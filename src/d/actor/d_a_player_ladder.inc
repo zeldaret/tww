@@ -94,7 +94,7 @@ int daPy_lk_c::setMoveBGLadderCorrect() {
 /* 801333A8-80133414       .text procLadderUpStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procLadderUpStart_init_sub() {
     setSingleMoveAnime(ANM_LADDERUPST, daPy_HIO_ladder_c0::m.field_0x4, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x8);
-    m3570 = 1;
+    mProcVar0.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
 }
@@ -114,7 +114,7 @@ BOOL daPy_lk_c::procLadderUpStart_init() {
     } else {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
         setAnimeUnequip();
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         m3598 = 0.0f;
     }
     f32 fVar1 = cM_ssin(m352C);
@@ -137,8 +137,8 @@ BOOL daPy_lk_c::procLadderUpStart() {
         return true;
     }
 
-    if (m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+    if (mProcVar0.m3570 == 0) {
+        if (checkNoUpperAnime()) {
             procLadderUpStart_init_sub();
         }
     } else {
@@ -207,7 +207,7 @@ BOOL daPy_lk_c::procLadderUpEnd() {
 /* 801337B4-8013384C       .text procLadderDownStart_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::procLadderDownStart_init_sub() {
     setSingleMoveAnime(ANM_LADDERDWST, daPy_HIO_ladder_c0::m.field_0x14, 0.0f, -1, daPy_HIO_ladder_c0::m.field_0x18);
-    m3570 = 1;
+    mProcVar0.m3570 = 1;
     m34C2 = 4;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000000_e);
     setOldRootQuaternion(0, -0x8000, 0);
@@ -232,7 +232,7 @@ BOOL daPy_lk_c::procLadderDownStart_init() {
     } else {
         setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
         setAnimeUnequip();
-        m3570 = 0;
+        mProcVar0.m3570 = 0;
         m3598 = 0.0f;
     }
     f32 fVar1 = cM_ssin(m352C);
@@ -252,8 +252,8 @@ BOOL daPy_lk_c::procLadderDownStart() {
         return true;
     }
 
-    if (m3570 == 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+    if (mProcVar0.m3570 == 0) {
+        if (checkNoUpperAnime()) {
             procLadderDownStart_init_sub();
         }
     } else {
@@ -328,9 +328,9 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     daPy_ANM anm;
     if (param_0 != 0) {
         if (uVar3 != 0) {
-            m3570 = 1;
+            mProcVar0.m3570 = 1;
         } else {
-            m3570 = 0;
+            mProcVar0.m3570 = 0;
             m370C.x = m370C.x - 2.0f * cM_scos(shape_angle.y);
             m370C.z = m370C.z - -2.0f * cM_ssin(shape_angle.y);
         }
@@ -340,7 +340,7 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
             anm = ANM_LADDERRTOL;
         }
     } else {
-        m3570 = 1;
+        mProcVar0.m3570 = 1;
         if (dVar4 >= 0.0f) {
             anm = ANM_LADDERRTOL;
         } else {
@@ -379,11 +379,11 @@ BOOL daPy_lk_c::procLadderMove() {
         m34C2 = 0;
         procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     } else if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
-        if ((int)m34D0 > 0) {
+        if (m34D0 > 0) {
             m34D0--;
             setLadderFootSe();
         } else {
-            changeLadderMoveProc(m3570);
+            changeLadderMoveProc(mProcVar0.m3570);
         }
     } else {
         f32 dVar2 = getLadderMoveAnmSpeed();

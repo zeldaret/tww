@@ -3,21 +3,11 @@
 // Translation Unit: d_kyeff2.cpp
 //
 
+#include "d/d_kyeff2.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_kankyo.h"
-#include "d/d_kankyo_data.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
-#include "d/d_stage.h"
-#include "m_Do/m_Do_audio.h"
-#include "dolphin/os/OS.h"
-
-class dKyeff2_c : public kankyo_class {
-public:
-    BOOL execute();
-};
 
 /* 80198758-8019877C       .text dKyeff2_Draw__FP9dKyeff2_c */
 static BOOL dKyeff2_Draw(dKyeff2_c* i_this) {

@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
+#include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "f_op/f_op_view.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_rnd.h"
@@ -392,6 +393,22 @@ private:
 };  // Size: 0x15E28
 
 STATIC_ASSERT(sizeof(dDlst_shadowControl_c) == 0x15E28);
+
+class ShdwDrawPoly_c : public cBgS_ShdwDraw {
+public:
+    virtual ~ShdwDrawPoly_c() {}
+
+    void setCenter(cXyz* center) { mCenter = center; }
+    cXyz* getCenter() { return mCenter; }
+    void setLightVec(cXyz* lightVec) { mLightVec = lightVec; }
+    cXyz* getLightVec() { return mLightVec; }
+    void setPoly(dDlst_shadowPoly_c* poly) { mPoly = poly; }
+    dDlst_shadowPoly_c* getPoly() { return mPoly; }
+
+    /* 0x34 */ cXyz* mCenter;
+    /* 0x38 */ cXyz* mLightVec;
+    /* 0x3C */ dDlst_shadowPoly_c* mPoly;
+};  // Size: 0x40
 
 class dDlst_mirrorPacket : public J3DPacket {
 public:

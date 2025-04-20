@@ -734,7 +734,7 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
                     player->changeOriginalDemo();
-                    player->changeDemoMode(daPy_demo_c::DEMO_UNK1_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_UNK01_e);
                 }
 
                 break;

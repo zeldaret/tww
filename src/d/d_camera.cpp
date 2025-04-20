@@ -8,6 +8,7 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_sph_chk.h"
 #include "SSystem/SComponent/c_bg_s.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -202,8 +203,8 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     int mapToolType;
     
     mpCamera = camera;
-    m004 = 1;
-    m005 = 0;
+    mActive = 1;
+    mPause = 0;
 
     mpPlayerActor = playerActor;
     mCameraInfoIdx = cameraInfoIdx;
@@ -265,10 +266,10 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mEventData.field_0x0c = -1;
     mRoomNo = -1;
     m318 = -1e+09f;
-    m310 = -1e+09f;
-    mBG.m58 = -1e+09f;
-    mBG.m04.OffNormalGrp();
-    mBG.m04.OnWaterGrp();
+    mBG.m5C.m58 = C_BG_MIN_HEIGHT;
+    mBG.m00.m58 = C_BG_MIN_HEIGHT;
+    mBG.m00.m04.OffNormalGrp();
+    mBG.m00.m04.OnWaterGrp();
     m31D = 0;
     m31C = 0;
     m32C = cXyz::Zero;
@@ -279,7 +280,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m350 = 0;
     m364 = 0;
     m368 = 0.0f;
-    m354 = -1e+09f;
+    m354 = C_BG_MIN_HEIGHT;
     mRoomMapToolCameraIdx = 0xFF;
     m608 = mCamSetup.mBGChk.WallUpDistance();
 
@@ -409,17 +410,17 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
 
 /* 80162128-80162134       .text Start__9dCamera_cFv */
 void dCamera_c::Start() {
-    m004 = 1;
+    mActive = 1;
 }
 
 /* 80162134-80162140       .text Stop__9dCamera_cFv */
 void dCamera_c::Stop() {
-    m004 = 0;
+    mActive = 0;
 }
 
 /* 80162140-8016214C       .text Stay__9dCamera_cFv */
 void dCamera_c::Stay() {
-    m005 = 1;
+    mPause = 1;
 }
 
 /* 8016214C-801621A0       .text ChangeModeOK__9dCamera_cFl */
@@ -501,7 +502,7 @@ void dCamera_c::updatePad() {
         fVar3 = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
     }
 
-    cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
+    cSAngle unused(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
 
     mStickMainPosXDelta = fVar1 - mStickMainPosXLast;
     mStickMainPosYDelta = fVar2 - mStickMainPosYLast;
@@ -605,7 +606,6 @@ void dCamera_c::initMonitor() {
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
 void dCamera_c::updateMonitor() {
-    /* Nonmatching - Code 100%, mBG offset issue */
     float playerMonitorHorizontalDist;
     cXyz playerPos;
     
@@ -613,7 +613,7 @@ void dCamera_c::updateMonitor() {
         playerPos = positionOf(mpPlayerActor);
 
         if (m31D != 0) {
-            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, TRUE, &mMonitoringThings.mPos, NULL, NULL);
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, TRUE, &mMonitoringThings.mPos, NULL, NULL);
         }
 
         playerMonitorHorizontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitoringThings.mPos);
@@ -834,7 +834,7 @@ bool dCamera_c::Run() {
             clrFlag(0x200000);
         }
     }
-    else if (g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera() && mCamParam.Algorythmn() != 11) {
+    else if (dComIfGp_demo_getCamera() && mCamParam.Algorythmn() != 11) {
         camera = (dCamera_c *)demoCamera(0);
     }
     else {
@@ -1003,7 +1003,7 @@ bool dCamera_c::NotRun() {
 
     shakeCamera();
 
-    m005 = 0;
+    mPause = 0;
 
     if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 8)) {
         if (chkFlag(0x400000)) {
@@ -1063,7 +1063,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
     cXyz player_pos = positionOf(mpPlayerActor);
 
     if (!dComIfGp_evmng_cameraPlay()) {
-        if (mBG.m58 > player_pos.y) {
+        if (mBG.m00.m58 > player_pos.y) {
             m1AE = 0;
         }
         switch(i_curMode) {
@@ -1118,7 +1118,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 }
                 break;
             case 12:
-                if (mStickCValueLast < 0.01f && mDirection.R() < mCamSetup.m098 || chkFlag(0x80000000)) {
+                if ((mStickCValueLast < 0.01f && mDirection.R() < mCamSetup.m098) || chkFlag(0x80000000)) {
                     m144 = 1;
                     m184 = 0;
                 }
@@ -1508,10 +1508,11 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
 }
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
-int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
-    /* Nonmatching - regswap */
-    dStage_stageDt_c& stage_dt = dComIfGp_getStage();
+int dCamera_c::GetCameraTypeFromMapToolID(s32 r27, s32 i_roomNo) {
+    dStage_stageDt_c& stage_dt = *(dStage_stageDt_c*)&dComIfGp_getStage();
     
+    int cam_type_num;
+    int arrowIdx;
     stage_camera_class* camera;
     stage_arrow_class* arrow;
 
@@ -1527,14 +1528,14 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
         }
     }
 
-    if (param_0 < 0 || camera == NULL || (camera != NULL && param_0 >= camera->num)) {
+    if (r27 < 0 || camera == NULL || (camera != NULL && r27 >= camera->num)) {
         return 0xFF;
     }
 
-    int cam_type_num = 0;
+    cam_type_num = 0;
     
     while (cam_type_num < type_num) {
-        if (strcmp((char*)&camera->mEntries[param_0].m00, types[cam_type_num].name) == 0) {
+        if (strcmp(camera->m_entries[r27].m_cam_type, types[cam_type_num].name) == 0) {
             break;
         }
         cam_type_num++;
@@ -1544,11 +1545,11 @@ int dCamera_c::GetCameraTypeFromMapToolID(s32 param_0, s32 i_roomNo) {
         return 0xFF;
     }
 
-    mCurRoomCamEntry = *(stage_camera__entry*)&camera->mEntries[param_0];
-    int arrowIdx = mCurRoomCamEntry.mArrowIdx;
+    mCurRoomCamEntry = camera->m_entries[r27];
+    arrowIdx = mCurRoomCamEntry.m_arrow_idx;
     if (arrowIdx != -1 && arrowIdx < arrow->num) {
         mCurArrowIdx = arrowIdx;
-        mCurRoomArrowEntry = *(stage_arrow__entry*)&arrow->mEntries[arrowIdx];
+        mCurRoomArrowEntry = arrow->m_entries[arrowIdx];
     }
     else {
         mCurArrowIdx = 0xFF;
@@ -1724,12 +1725,11 @@ f32 dCamera_c::groundHeight(cXyz* param_0) {
     gndchk_wtr.SetPos(param_0);
     f32 wtr_y = dComIfG_Bgsp()->GroundCross(&gndchk_wtr);
 
-    f32 height = wtr_y;
     if (gnd_y >= wtr_y) {
         wtr_y = gnd_y;
     }
 
-    if (wtr_y == -1000000000.0f) {
+    if (wtr_y == C_BG_MIN_HEIGHT) {
         gnd_y = param_0->y;
     }
     else {
@@ -1816,14 +1816,11 @@ bool dCamera_c::lineBGCheckBoth(cXyz* i_start, cXyz* i_end, dBgS_LinChk* i_linCh
 }
 
 /* 80166D00-80166DE8       .text lineCollisionCheckBush__9dCamera_cFP4cXyzP4cXyz */
-BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
-    /* Nonmatching */
-    BOOL ret = 0;
+u32 dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
+    u32 ret = 0;
 
-    dCcS* Ccsp = dComIfG_Ccsp();
-
-    u32 result = Ccsp->GetMassResultCam();
-
+    // Fakematch
+    u32 result = g_dComIfG_gameInfo.play.mCcS.GetMassResultCam();
     if (result & 2) {
         ret |= 1;
     }
@@ -1836,8 +1833,8 @@ BOOL dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
     cM3dGCps cps;
     cps.Set(*i_start, *i_end, 30.0f);
-    
-    Ccsp->SetMassCam(cps);
+    // Fakematch
+    g_dComIfG_gameInfo.play.mCcS.SetMassCam(cps);
 
     return ret;
 }
@@ -1855,10 +1852,9 @@ void sph_chk_callback(dBgS_SphChk* i_sphChk, cBgD_Vtx_t* i_vtxTbl, int i_vtxIdx0
 
 /* 80166EA4-80167294       .text compWallMargin__9dCamera_cFP4cXyzf */
 cXyz dCamera_c::compWallMargin(cXyz* i_center, f32 i_radius) {
-    /* Nonmatching */
     dBgS_CamSphChk sph_chk;
     camSphChkdata sph_chk_data(i_center, i_radius);
-    //sph_chk_data.field_0x14 = missing some assignment here (or in ctor)
+    sph_chk_data.field_0x14 = m044;
     sph_chk.SetCallback(&sph_chk_callback);
     sph_chk.Set(*i_center, i_radius);
 
@@ -2111,28 +2107,28 @@ void dCamera_c::checkGroundInfo() {
 
     f32 ground_y = dComIfG_Bgsp()->GroundCross(&gnd_chk);
     
-    mBG.m5C.SetCam();
-    mBG.m5C.ClrObj();
+    mBG.m00.m04.SetCam();
+    mBG.m5C.m04.ClrObj();
 
-    mBG.m5C.SetPos(&gnd_chk_pos);
+    mBG.m5C.m04.SetPos(&gnd_chk_pos);
     
-    m310 = dComIfG_Bgsp()->GroundCross(&mBG.m5C);
+    mBG.m5C.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m5C.m04);
 
-    if (m310 < ground_y) {
-        m310 = ground_y;
-        mBG.m5C = gnd_chk;
+    if (mBG.m5C.m58 < ground_y) {
+        mBG.m5C.m58 = ground_y;
+        mBG.m5C.m04 = gnd_chk;
     }
 
-    //mBG.m5C = m310 != -1000000000.0f; // wshould be a bool at 0x5C and mBG.m5C should be at 0x6
+    mBG.m5C.m00 = mBG.m5C.m58 != C_BG_MIN_HEIGHT;
     
-    mBG.m04.SetPos(&player_pos);
+    mBG.m00.m04.SetPos(&player_pos);
 
-    mBG.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m04);
+    mBG.m00.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m00.m04);
 
-    //mBG.m5C mBG.m58 != -1000000000.0f); // should be a bool at 0x00
+    mBG.m00.m00 = mBG.m00.m58 != C_BG_MIN_HEIGHT;
 
-    m354 = mBG.m58;
-    if (mpPlayerActor->current.pos.y - m310 > mCamSetup.mBGChk.FloorMargin()) {
+    m354 = mBG.m00.m58;
+    if (mpPlayerActor->current.pos.y - mBG.m5C.m58 > mCamSetup.mBGChk.FloorMargin()) {
         m360 = 0;
     }
     else {
@@ -2141,11 +2137,8 @@ void dCamera_c::checkGroundInfo() {
 
     m31D = 0;
     m33C = 0;
-    if (dComIfG_Bgsp()->ChkMoveBG(mBG.m5C)) {
-        m31C = 0;
-    }
-    else {
-        m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.GetBgIndex());
+    if (dComIfG_Bgsp()->ChkMoveBG(mBG.m5C.m04)) {
+        m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.m04.GetBgIndex());
         if (m33C) {
             cXyz pos = positionOf(m33C);
             cSAngle angle = directionOf(m33C);
@@ -2166,17 +2159,19 @@ void dCamera_c::checkGroundInfo() {
             }
 
             if (m31D) {
-                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, true, &m044, NULL, NULL);
-                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C, true, &m050, NULL, NULL);
+                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m044, NULL, NULL);
+                dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m050, NULL, NULL);
                 m03C.Val(m050 - m044);
             }
             m32C = pos;
             m33A = angle;
         }
+    } else {
+        m31C = 0;
     }
     
-    if (mBG.m58) { // wrong, there is a bool at 0x5C
-        m350 = dComIfG_Bgsp()->GetCamMoveBG(mBG.m5C);
+    if (mBG.m00.m00) {
+        m350 = dComIfG_Bgsp()->GetCamMoveBG(mBG.m5C.m04);
     }
     else {
         m350 = 0;
@@ -2756,7 +2751,7 @@ void store(camera_process_class* i_this) {
     cSAngle bank = fopCamM_GetBank(a_this);
     f32 fovy = fopCamM_GetFovy(a_this);
 
-    dDemo_camera_c* mDemoCamera = g_dComIfG_gameInfo.play.mDemo->getObject()->getActiveCamera();
+    dDemo_camera_c* mDemoCamera = dComIfGp_demo_getCamera();
 
     if (mDemoCamera) {
         if (mDemoCamera->checkEnable(0x40)) {
@@ -2795,18 +2790,18 @@ void store(camera_process_class* i_this) {
     fopCamM_SetBank(a_this, bank);
     fopCamM_SetFovy(a_this, fovy);
 
-    // The code logic seems right but it's just the usage of this `stage_info` variable that seems to be the key to this matching
-    stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
+    // The code logic seems right but it's just the usage of this `stage` variable that seems to be the key to this matching
+    dStage_stageDt_c* stage = &dComIfGp_getStage();
     if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
         fopCamM_SetNear(a_this, 30.0f);
     }
     else {
-        if (stage_info) {
+        if (stage) {
             fopCamM_SetNear(a_this, dComIfGp_getStageStagInfo()->mNearPlane);
         }
     }
 
-    if (stage_info) {
+    if (stage) {
         fopCamM_SetFar(a_this, dComIfGp_getStageStagInfo()->mFarPlane);
     }
 
@@ -2822,13 +2817,19 @@ int camera_execute(camera_process_class* i_this) {
     
     preparation(i_this);
 
-    a_this->mCamera.Pause();
+    if (dComIfGp_demo_getCamera()) {
+        a_this->mCamera.ResetView();
+    }
 
     if (!dComIfGp_evmng_cameraPlay()) {
         mDoGph_gInf_c::onAutoForcus();
     }
 
-    a_this->mCamera.Active();
+    if (a_this->mCamera.Active() && !a_this->mCamera.Pause()) {
+        a_this->mCamera.Run();
+    } else {
+        a_this->mCamera.NotRun();
+    }
 
     a_this->mCamera.CalcTrimSize();
 
@@ -2891,7 +2892,8 @@ bool camera_draw(camera_process_class* i_this) {
                 fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(i);
                 f32 depth = currPlayerActor->current.pos.y;
                 if (currPlayerActor->current.pos.y > 0.0f) {
-                    f32 temp = 0;
+                    // Fakematch? Fixes load order of y
+                    f32 temp = 0.0f;
                 }
                 dComIfGp_map_draw(
                     currPlayerActor->current.pos.x,
@@ -2907,7 +2909,6 @@ bool camera_draw(camera_process_class* i_this) {
 
 /* 8017C72C-8017C7E4       .text init_phase1__FP12camera_class */
 cPhs_State init_phase1(camera_class* i_this) {
-    /* Nonmatching - Code 100% */
     int camera_id = get_camera_id(i_this);
     
     dComIfGp_setCamera(camera_id, i_this);
@@ -2915,7 +2916,7 @@ cPhs_State init_phase1(camera_class* i_this) {
     fopCamM_SetPrm2(i_this, dComIfGp_getCameraPlayer1ID(camera_id));
     fopCamM_SetPrm3(i_this, dComIfGp_getCameraPlayer2ID(camera_id));
     
-    Vec local_18 = {1000000.0f, 1000000.0f, 1000000.0f};
+    Vec local_18 = {10000000.0f, 10000000.0f, 10000000.0f};
 
     mDoAud_getCameraInfo(&local_18, j3dSys.getViewMtx(), camera_id);
 

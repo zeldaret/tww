@@ -3,6 +3,7 @@
 // Translation Unit: d_ky_thunder.cpp
 //
 
+#include "d/d_ky_thunder.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -15,34 +16,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class dThunder_modelInfo_c {
-public:
-    // Offsets are relative to dThunder_c instead of dThunder_modelInfo_c
-    /* 0x0FC */ J3DModel * mpModel;
-    /* 0x100 */ mDoExt_invisibleModel mInvisModel;
-    /* 0x108 */ mDoExt_btkAnm mBtk;
-    /* 0x11C */ mDoExt_brkAnm mBrk;
-};
-
-class dThunder_c : public kankyo_class {
-public:
-    inline ~dThunder_c();
-    BOOL createHeap();
-    void adjustHeap();
-    cPhs_State create();
-    inline BOOL draw();
-    inline BOOL execute();
-
-public:
-    /* 0x0F8 */ JKRSolidHeap * solid_heap;
-    /* 0x0FC */ dThunder_modelInfo_c mModelInfo;
-    /* 0x134 */ cXyz mScale;
-    /* 0x140 */ cXyz mPos;
-    /* 0x14C */ cXyz mPosNeg;
-    /* 0x158 */ f32 mRot;
-    /* 0x15C */ f32 mBtkTime;
-};
 
 dThunder_c::~dThunder_c() {
     mDoExt_destroySolidHeap(solid_heap);

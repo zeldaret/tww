@@ -740,7 +740,7 @@ void daTbox_c::demoProcAppear() {
         if (emitter != NULL) {
             emitter->setRate(100.0f);
             emitter->setSpread(1.0f);
-            emitter->mInitialVelDir = 25.0f;
+            emitter->setDirectionalSpeed(25.0f);
         }
     }
 
@@ -873,7 +873,6 @@ void daTbox_c::OpenInit_com() {
 
     s32 openSwNo = home.angle.z & 0xFF;
     if (openSwNo != 0xFF) {
-
         dComIfGs_onSwitch(openSwNo, mRoomNo);
     }
 

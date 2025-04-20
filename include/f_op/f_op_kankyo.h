@@ -23,6 +23,9 @@ struct kankyo_process_profile_definition {
     /* 0x24 */ kankyo_method_class* sub_method;
 };  // Size: 0x28
 
+class sub_kankyo__class : public kankyo_class {
+};
+
 extern leafdraw_method_class g_fopKy_Method;
 
 #endif /* F_OP_KANKYO_H */
