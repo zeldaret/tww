@@ -8,8 +8,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/res/res_doguu.h"
+#include "d/actor/d_a_player.h"
 
-const int daObjDoguu_idx_table[18   ] = {
+
+const int daObjDoguu_idx_table[18] = {
     DOGUU_BMT_VGSMD, DOGUU_BMT_VGSMF, DOGUU_BMT_VGSMN,
     DOGUU_BMT_VGSBD, DOGUU_BMT_VGSBF, DOGUU_BMT_VGSBN,
     DOGUU_BCK_VGSHD, DOGUU_BCK_VGSHF, DOGUU_BCK_VGSHN,
@@ -17,6 +19,7 @@ const int daObjDoguu_idx_table[18   ] = {
     DOGUU_BDL_VGSHD, DOGUU_BDL_VGSHF, DOGUU_BDL_VGSHN,
     DOGUU_BDL_VGSPD, DOGUU_BDL_VGSPF, DOGUU_BDL_VGSPN
 };
+
 
 namespace {
     struct Attr_c {
@@ -30,40 +33,25 @@ namespace {
 
     inline const Attr_c& attr() { return L_attr; }
 }
-
-static dCcD_SrcCyl l_cyl_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cCcD_SrcCylAttr
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 200.0f,
-        /* Height */ 200.0f,
-    }
+static const s16 light_color[3][3] = {
+    {0x00C8, 0x0032, 0x0032},
+    {0x0032, 0x00C8, 0x0032},
+    {0x0032, 0x0032, 0x00C8},
 };
+
+
+
+
 
 /* 00000078-00000168       .text setPointLight__12daObjDoguu_cFv */
 void daObjDoguu_c::setPointLight() {
-    /* Nonmatching */
+    cLib_addCalc2(&field_0x8FC, cM_rndF(0.1f)+ 1.0f,0.5f,0.05f);
+    field_0x8DC.mPos = field_0x8D0;
+    field_0x8DC.mColor.r = light_color[field_0x894][0];
+    field_0x8DC.mColor.g = light_color[field_0x894][1];
+    field_0x8DC.mColor.b = light_color[field_0x894][2];
+    field_0x8DC.mPower = (s16)(field_0x8FC * 300.0f);
+    field_0x8DC.mFluctuation = 100.0f;
 }
 
 /* 00000168-00000188       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -178,6 +166,36 @@ BOOL daObjDoguu_c::CreateHeap() {
 
 /* 000007D0-00000B80       .text CreateInit__12daObjDoguu_cFv */
 void daObjDoguu_c::CreateInit() {
+    static dCcD_SrcCyl l_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cCcD_SrcCylAttr
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 200.0f,
+            /* Height */ 200.0f,
+        }
+    };
+
     cullMtx = field_0x6CC->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 400.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
@@ -223,14 +241,14 @@ void daObjDoguu_c::CreateInit() {
             (field_0x894 == 1 && (eventBit = dComIfGs_isEventBit(0x1440),
              eventBit != 0)) || (field_0x894 == 2 && (eventBit = dComIfGs_isEventBit(0x1410),
              eventBit != 0))){
-                 field_0x8A2 = true;
-                 field_0x8A0 = true;
-                 field_0x8AC = 10;                   
+                field_0x8A2 = true;
+                field_0x8A0 = true;
+                field_0x8AC = 10;                   
              }
              else {
-                 field_0x8A2 = false;
-                 field_0x8A0 = false;
-                 field_0x8AC = 0;
+                field_0x8A2 = false;
+                field_0x8A0 = false;
+                field_0x8AC = 0;
              }
         }
     }
@@ -254,11 +272,29 @@ void daObjDoguu_c::CreateInit() {
 
 /* 00000B80-00000CEC       .text set_mtx__12daObjDoguu_cFv */
 void daObjDoguu_c::set_mtx() {
-    /* Nonmatching */
+    field_0x6CC->setBaseScale(scale);
+    field_0x6D4->setBaseScale(scale);
+    field_0x6D8->setBaseScale(scale);
+    field_0x6D0->setBaseScale(scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    field_0x6CC->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    field_0x6D8->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    field_0x6D0->setBaseTRMtx(field_0x6D4->getAnmMtx(field_0x898));
 }
 
 /* 00000CEC-00000D80       .text next_msgStatus__12daObjDoguu_cFPUl */
 void daObjDoguu_c::next_msgStatus(unsigned long*) {
+    
     /* Nonmatching */
 }
 
@@ -275,40 +311,219 @@ void daObjDoguu_c::getMsg() {
 }
 
 /* 00000DBC-00000E98       .text setGoal__12daObjDoguu_cFi */
-void daObjDoguu_c::setGoal(int) {
-    // mDoMtx_stack_c::now[0][3] = current.pos.x;
-    // mDoMtx_stack_c::now[1][3] = current.pos.y;
-    // mDoMtx_stack_c::now[2][3] = current.pos.z;
+void daObjDoguu_c::setGoal(int i_staffIdx) {
+    cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::transM(pos.x, pos.y,  pos.z);
+
+    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &pos);
+    field_0x8B4 = pos;
+    dComIfGp_evmng_setGoal(&field_0x8B4);
     /* Nonmatching */
 }
 
 /* 00000E98-00000F18       .text setPlayerAngle__12daObjDoguu_cFi */
-void daObjDoguu_c::setPlayerAngle(int) {
+void daObjDoguu_c::setPlayerAngle(int i_staffIdx) {
+    cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "angle");
     /* Nonmatching */
 }
 
 /* 00000F18-00000FB8       .text setQuake__12daObjDoguu_cFi */
-void daObjDoguu_c::setQuake(int) {
+void daObjDoguu_c::setQuake(int i_staffIdx) {
+    // u8 temp[4] = {0x00, 0x10, 0xFF, 0xEE}; // Doesn't match
+    u32 temp2 = 0x0010FFEE;
+    u8* temp = (u8*)&temp2;
+    dComIfGp_getVibration().StartQuake(temp, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
+
+    field_0x8C0 = (int)dComIfGp_evmng_getMyXyzP(i_staffIdx, "Timer");
     /* Nonmatching */
 }
 
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */
 void daObjDoguu_c::setJDemo(int) {
+    dComIfGp_setNextStage("ADMumi", (short)field_0x894, 0, 8);
+
     /* Nonmatching */
 }
 
 /* 0000100C-000015A8       .text privateCut__12daObjDoguu_cFv */
 void daObjDoguu_c::privateCut() {
+    static char* cut_name_tbl[] = {
+        "SETGOAL",
+        "SETBALL",
+        "SETANGLE",
+        "EYEFLASH",
+        "MESSAGE_KOKOE",
+        "MESSAGE_OITA",
+        "QUAKE",
+        "JDEMO",
+        "SETLIGHT",
+        
+    };
+    short sVar3;
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("DOGUU");
+    if (staffIdx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if(mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else{
+            bool idk = false;
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch (mActIdx) {
+                case 0:
+                    setGoal(staffIdx);
+                    break;
+                case 1:
+                    field_0x8A0 = true;
+                    fopAcM_seStartCurrent(this, JA_SE_LK_PUT_PEARL, 0);
+                    break;
+                case 2:
+                    setPlayerAngle(staffIdx);
+                    break;
+                case 3:
+                    field_0x8A2 = true;
+                    break;
+                //case 4 doesnt exist?
+                case 5:
+                    mDoAud_subBgmStart(JA_BGM_GET_PEARL); 
+                    break;
+                case 6:
+                    setQuake(staffIdx);
+                    break;
+                case 7:
+                    setJDemo(staffIdx);
+                    break;
+                case 8:
+                    field_0x8C4 = 0;
+                    break;
+                default:
+                    dComIfGp_evmng_cutEnd(staffIdx);
+                }
+            }
+            switch (mActIdx) {
+            case 0:
+                idk = true;
+                break;
+            case 1:
+                idk = true;
+                break;
+            case 2:
+                idk = true;
+                break;
+            case 3:
+                idk = true;
+                break;
+            case 4:
+                // if (static_cast<fopNpc_npc_c*>(this)->talk(1) == 0x12) {
+                //     idk = true;
+                // }
+                break;
+            case 5:
+                // if (talk(1) == 0x12) {
+                //     idk = true;
+                // }
+                break;
+            case 6:
+                field_0x8C0 --;
+                if (field_0x8C0 == 0) {
+                  idk = true;
+                  dComIfGp_getVibration().StopQuake(63);
+                }
+                break;
+            case 7:
+                idk= true;
+                break;
+            case 8:
+                int iVar2 = field_0x8C4;
+                if(iVar2 < 200){
+                    field_0x8C4++;
+                } else {
+                    field_0x8C8 = 1.0f;
+                }
+                idk = iVar2 >= 200;
+                iVar2 = field_0x8C4;
+                if (iVar2 < 21) {
+                    field_0x8C8 = 1.0 - (float)iVar2 * 0.01875;
+                } else if (iVar2 < 41) {
+                    field_0x8C8 = 0.625 - (float)(iVar2 + -0x14) * 0.0125;
+                } else if (iVar2 < 0x61) {
+                    field_0x8C8 = 0.375 - (float)(iVar2 + -0x28) * 0.00625;
+                } else if ((iVar2 < 130) || (iVar2 > 149)) {
+                    if ((iVar2 < 150) || (iVar2 > 169)) {
+                      if ((iVar2 > 169) && (iVar2 < 191)) {
+                        field_0x8C8 = (float)(iVar2 + -0xaa) * 0.01875 + 0.625;
+                      }
+                    } else {
+                        field_0x8C8 = (float)(iVar2 + -0x96) * 0.0125 + 0.375;
+                    }
+                } else {
+                    field_0x8C8 = (float)(iVar2 + -0x82) * 0.00625 + 0.25;
+                }
+
+                if (field_0x8C8 == 40) {
+                    // (this->field1110_0x8d0).x = 0.0;
+                    // (this->field1110_0x8d0).y = 0.0;
+                    // (this->field1110_0x8d0).z = 0.0;
+                    // mtx::PSMTXCopy(this->field1081_0x6d8->mpNodeMtx + this->field1094_0x89c,
+                    //                &mDoMtx_stack_c::now);
+                    // (this->field1110_0x8d0).x = mDoMtx_stack_c::now.m[0][3];
+                    // (this->field1110_0x8d0).y = mDoMtx_stack_c::now.m[1][3];
+                    // (this->field1110_0x8d0).z = mDoMtx_stack_c::now.m[2][3];
+                    
+                    if (field_0x894 == 0) {
+                        dComIfGp_particle_set(dPa_name::ID_SCENE_8434, &field_0x8D0, &current.angle);
+                    } else if (field_0x894 == 1) {
+                        dComIfGp_particle_set(dPa_name::ID_SCENE_8436, &field_0x8D0, &current.angle);
+                    } else {
+                        dComIfGp_particle_set(dPa_name::ID_SCENE_8435, &field_0x8D0, &current.angle);
+                    }
+                } else if (field_0x8C4 == 125) {
+                    field_0x8A3 = true;
+                }
+                break;
+            default:
+                idk = true;
+            }
+            if(idk){
+                dComIfGp_evmng_cutEnd(staffIdx);
+            } 
+        }
+    }
     /* Nonmatching */
 }
 
 /* 000015A8-00001630       .text getFinishEventCount__12daObjDoguu_cFv */
-void daObjDoguu_c::getFinishEventCount() {
+int daObjDoguu_c::getFinishEventCount() {
+    int count = 0;
+    if (dComIfGs_isEventBit(0x1480)) {
+        count += 1;
+    }
+    if (dComIfGs_isEventBit(0x1440)) {
+        count += 1;
+    }
+    if (dComIfGs_isEventBit(0x1410)) {
+        count += 1;
+    }
+    return count;
     /* Nonmatching */
 }
 
+
 /* 00001630-000016A4       .text setFinishMyEvent__12daObjDoguu_cFv */
 void daObjDoguu_c::setFinishMyEvent() {
+    if (field_0x894 == 0) {
+        dComIfGs_onEventBit(0x1480);
+      }
+      else if (field_0x894 == 1) {
+        dComIfGs_onEventBit(0x1440);
+      }
+      else {
+        dComIfGs_onEventBit(0x1410);
+      }
+      return;
     /* Nonmatching */
 }
 
@@ -341,7 +556,12 @@ cPhs_State daObjDoguu_c::_create() {
 }
 
 /* 00001CC8-00001D0C       .text daObjDoguu_Delete__FPv */
-static BOOL daObjDoguu_Delete(void*) {
+static BOOL daObjDoguu_Delete(void* i_this) {
+
+    // dKy_plight_cut((daObjDoguu_c*)&i_this->field_0x8DC);
+    // dComIfG_resDelete(&i_this->mPhs,"Doguu");
+    // return 1;
+    //something  like this
     /* Nonmatching */
 }
 
@@ -354,7 +574,6 @@ static BOOL daObjDoguu_Draw(void* i_this) {
 
 /* 00001D30-00001F64       .text _draw__12daObjDoguu_cFv */
 bool daObjDoguu_c::_draw() {
-    J3DMaterialTable* bmt;
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(field_0x6CC, &tevStr);
     g_env_light.setLightTevColorType(field_0x6D0, &tevStr);
@@ -364,7 +583,7 @@ bool daObjDoguu_c::_draw() {
     setEffectMtx(&eyePos, attr().field_0x00);
 
     if(field_0x8A1){
-        bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
         
         field_0x6D0->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
         mBck1.entry(field_0x6D0->getModelData());
@@ -375,7 +594,7 @@ bool daObjDoguu_c::_draw() {
         mDoExt_modelUpdateDL(field_0x6D4);
         field_0x6D4->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
     } else {
-        bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
+        J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table[field_0x894]);
         field_0x6CC->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
         mBrk.entry(field_0x6CC->getModelData());
         mDoExt_modelUpdateDL(field_0x6CC);
