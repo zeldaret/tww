@@ -2019,7 +2019,7 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                     return TRUE;
                 }
             } else if (doTrigger()) {
-                if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
+                if (dComIfGp_getDoStatus() == dActStts_PUT_AWAY_e) {
                     setAnimeUnequip();
                 }
             }
@@ -2034,12 +2034,12 @@ BOOL daPy_lk_c::checkItemChangeFromButton() {
                 } else if (checkSetItemTrigger(dItem_FAIRY_BOTTLE_e, 0)) {
                     return procBottleOpen_init(dItem_FAIRY_BOTTLE_e);
                 } else if (doTrigger()) {
-                    if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
+                    if (dComIfGp_getDoStatus() == dActStts_PUT_AWAY_e) {
                         setAnimeUnequip();
                     }
                 }
             } else if (doTrigger()) {
-                if (dComIfGp_getDoStatus() == 0x08) { // A button shows "Put Away"
+                if (dComIfGp_getDoStatus() == dActStts_PUT_AWAY_e) {
                     setAnimeUnequip();
                 }
             }
@@ -3066,7 +3066,7 @@ BOOL daPy_lk_c::procSubjectivity_init(BOOL i_crouch) {
 
 /* 80112B18-80112BEC       .text procSubjectivity__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSubjectivity() {
-    dComIfGp_setAStatus(7); // Show "Return" on the B button
+    dComIfGp_setAStatus(dActStts_RETURN_e);
 
     if(
         checkSubjectEnd(FALSE) ||
@@ -3432,7 +3432,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
 
 /* 801142F4-801143D4       .text procCrouchDefenseSlip__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrouchDefenseSlip() {
-    dComIfGp_setRStatus(0x36);
+    dComIfGp_setRStatus(dActStts_DEFEND_e);
     if (m34D0 > 0) {
         m34D0--;
     }
@@ -5631,15 +5631,15 @@ BOOL daPy_lk_c::execute() {
     m35B4 = mStickDistance;
     m34EA = m34DC;
     
-    dComIfGp_setDoStatus(0);
-    dComIfGp_setRStatus(0);
+    dComIfGp_setDoStatus(dActStts_BLANK_e);
+    dComIfGp_setRStatus(dActStts_BLANK_e);
     
     if (mEquipItem == daPyItem_BOKO_e) {
-        dComIfGp_setAStatus(0x2F);
+        dComIfGp_setAStatus(dActStts_SWING_e);
     } else if (checkSwordEquip()) {
-        dComIfGp_setAStatus(0x35);
+        dComIfGp_setAStatus(dActStts_sword_01);
     } else {
-        dComIfGp_setAStatus(0x00);
+        dComIfGp_setAStatus(dActStts_BLANK_e);
     }
     
     mFrontWallType = 0;
@@ -6021,14 +6021,14 @@ BOOL daPy_lk_c::execute() {
     offNoResetFlg1((daPy_FLG1)(daPyFlg1_NPC_CALL_COMMAND | daPyFlg1_VINE_CATCH));
     
     if (dComIfGp_event_runCheck() || checkNoControll()) {
-        dComIfGp_setDoStatus(0);
-        dComIfGp_setRStatus(0);
+        dComIfGp_setDoStatus(dActStts_BLANK_e);
+        dComIfGp_setRStatus(dActStts_BLANK_e);
     } else {
-        if (dComIfGp_getDoStatus() == 0x43) {
-            dComIfGp_setDoStatus(0x12);
+        if (dComIfGp_getDoStatus() == dActStts_UNK43) {
+            dComIfGp_setDoStatus(dActStts_JUMP_e);
         }
         if (checkResetFlg0(daPyRFlg0_UNK10000000)) {
-            dComIfGp_setAStatus(0);
+            dComIfGp_setAStatus(dActStts_BLANK_e);
         }
     }
     offNoResetFlg1((daPy_FLG1)(daPyFlg1_UNK4 | daPyFlg1_FORCE_VOMIT_JUMP | daPyFlg1_FORCE_VOMIT_JUMP_SHORT | daPyFlg1_UNK10000000));

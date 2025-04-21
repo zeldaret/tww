@@ -135,10 +135,10 @@ void daObjIceisland_c::daObjIceisland_freeze_demo_wait() {
         daObjIceisland_particle_set();
         mBrkAnm.setPlaySpeed(-1.0f);
         field_0x39C = 5;
-      }
-      else {
+    }
+    else {
         fopAcM_orderOtherEventId(this, mFreezeIceEventIdx, 0xffff);
-      }
+    }
 }
 
 /* 000008C0-00000928       .text daObjIceisland_freeze_demo__16daObjIceisland_cFv */

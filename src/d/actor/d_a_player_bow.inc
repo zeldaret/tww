@@ -142,7 +142,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
             if (mEquipItem != dItem_BOW_e) {
-                dComIfGp_setRStatus(0x22);
+                dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                 if (spActionTrigger() && arrow != NULL) {
                     mActorKeepEquip.setData(arrow->changeArrowType());
                     setBowReloadAnime();
@@ -169,7 +169,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                 }
             } else if (daArrow_c::changeArrowMp()) {
                 if (mEquipItem != dItem_BOW_e) {
-                    dComIfGp_setRStatus(0x22);
+                    dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                     if (spActionTrigger()) {
                         daArrow_c::changeArrowTypeNotReady();
                     }
@@ -245,7 +245,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
 
 /* 8014A8D4-8014A974       .text procBowSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBowSubject() {
-    dComIfGp_setDoStatus(7);
+    dComIfGp_setDoStatus(dActStts_RETURN_e);
 
     if (mpAttention->Lockon()) {
         setSpeedAndAngleAtn();

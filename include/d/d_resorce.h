@@ -33,8 +33,8 @@ public:
     }
 
     // Debug only
-    u64 dump(char*, dRes_info_c*, int) {}
-    u64 getSize() {}
+    void dump(char*, dRes_info_c*, int) {}
+    void getSize() {}
 
 private:
     /* 0x00 */ char mArchiveName[14];

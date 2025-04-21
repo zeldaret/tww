@@ -310,7 +310,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
     f32 fVar2;
     f32 fVar3;
 
-    dComIfGp_setRStatus(0xf);
+    dComIfGp_setRStatus(dActStts_CROUCH_e);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
     onResetFlg0(daPyRFlg0_UNK1000);
     s16 sVar4 = shape_angle.y;

@@ -85,7 +85,7 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
                 if (ret != CARD_ERROR_READY) return ret;
             }
         }
-   }
+    }
 
     mDoMemCdRWm_SetCardStat(card);
     return ret;

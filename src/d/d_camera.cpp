@@ -367,7 +367,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     else if (m783) {
         m530 = 3;
         m540 = 1.0f;
-        m538 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);;
+        m538 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);
         m538 *= m540;
     }
     else {

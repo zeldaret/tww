@@ -181,11 +181,11 @@ void daPy_lk_c::setLightSaver() {
             pJVar7->setGlobalPrmColor(pbVar8->r, pbVar8->g, pbVar8->b);
             pJVar7->setGlobalEnvColor(pbVar9->r, pbVar9->g, pbVar9->b);
         }
-        if ((dComIfGp_getDoStatus() == 26 && m355C == 0) ||
+        if ((dComIfGp_getDoStatus() == dActStts_PARRY_e && m355C == 0) ||
             ((checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) &&
              !checkNoResetFlg1(daPyFlg1_UNK200000)))
         {
-            if (dComIfGp_getDoStatus() == 26 && m355C == 0) {
+            if (dComIfGp_getDoStatus() == dActStts_PARRY_e && m355C == 0) {
                 pbVar9 = &g_prm1;
                 pbVar8 = pbVar9;
                 dComIfGp_getVibration().StartShock(6, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -243,7 +243,7 @@ BOOL daPy_lk_c::checkDemoSwordNoDraw(BOOL param_0) {
 
 /* 80155544-80155574       .text checkChanceMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkChanceMode() {
-    if (dComIfGp_getDoStatus() == 26 || checkModeFlg(ModeFlg_PARRY)) {
+    if (dComIfGp_getDoStatus() == dActStts_PARRY_e || checkModeFlg(ModeFlg_PARRY)) {
         return true;
     }
     return false;
@@ -594,7 +594,7 @@ BOOL daPy_lk_c::procCutA() {
     }
 
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -697,7 +697,7 @@ BOOL daPy_lk_c::procCutF() {
         return true;
     }
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -798,7 +798,7 @@ BOOL daPy_lk_c::procCutR() {
     }
 
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -898,7 +898,7 @@ BOOL daPy_lk_c::procCutL() {
     }
 
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
     if (swordTrigger() && m34C5 != 5) {
@@ -992,7 +992,7 @@ BOOL daPy_lk_c::procCutEA() {
         current.angle.y = shape_angle.y;
     }
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -1073,7 +1073,7 @@ BOOL daPy_lk_c::procCutEB() {
     setShapeAngleToAtnActor();
     current.angle.y = shape_angle.y;
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -1159,7 +1159,7 @@ BOOL daPy_lk_c::procCutExA() {
     }
 
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -1252,7 +1252,7 @@ BOOL daPy_lk_c::procCutExB() {
 
     setSpecialBattle(TRUE);
 
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -1438,7 +1438,7 @@ BOOL daPy_lk_c::procCutTurn() {
         mSmokeEcallBack.end();
     }
     setSpecialBattle(1);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -2064,7 +2064,7 @@ BOOL daPy_lk_c::procCutExMJ() {
         current.angle.y = shape_angle.y;
     }
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
 
@@ -2147,7 +2147,7 @@ BOOL daPy_lk_c::procCutKesa() {
     }
 
     setSpecialBattle(TRUE);
-    if (doTrigger() && dComIfGp_getDoStatus() == 26) {
+    if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {
         return changeSpecialBattle();
     }
     if (swordTrigger() && m34C5 != 5) {

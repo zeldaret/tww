@@ -254,10 +254,10 @@ void daObjBarrel::Act_c::mode_vib1_init() {
 
 /* 00000B74-00000BB8       .text mode_vib1__Q211daObjBarrel5Act_cFv */
 void daObjBarrel::Act_c::mode_vib1() {
-   vib_pos_ang();
-   if (--mTimer <= 0) {
-       mode_vib2_init();
-   }
+    vib_pos_ang();
+    if (--mTimer <= 0) {
+        mode_vib2_init();
+    }
 }
 
 /* 00000BB8-00000BDC       .text mode_vib2_init__Q211daObjBarrel5Act_cFv */
@@ -453,7 +453,7 @@ void daObjBarrel::Act_c::set_walk_rot() {
         targetAngle += 0x8000;
         negAngle = true;
     }
-    if (mag > l_min_move_dir || mMode == MODE_WAIT && mag > l_min_move_dir / 2) {
+    if (mag > l_min_move_dir || (mMode == MODE_WAIT && mag > l_min_move_dir / 2)) {
         cLib_chaseAngleS(&shape_angle.y, targetAngle, 0x600);
     }
     float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 65535.0f;

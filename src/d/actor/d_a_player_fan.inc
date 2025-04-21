@@ -417,7 +417,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 }
             }
             if (m34D2 == 0) {
-                dComIfGp_setDoStatus(0x27);
+                dComIfGp_setDoStatus(dActStts_CANCEL_e);
             }
             if ((m34D2 == 0 && (doTrigger() || cancelTrigger())) || (dComIfGs_getMagic() < 1 && m3574 == 0)) {
                 m3688 = current.pos;

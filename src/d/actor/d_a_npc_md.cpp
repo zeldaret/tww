@@ -942,25 +942,25 @@ void daNpc_Md_c::playerAction(void* arg) {
     }
     
     if (mAcch.ChkGroundHit() && isOldLightBodyHit()) {
-        dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
+        dComIfGp_setRStatusForce(dActStts_RETURN_e);
         if (chkPlayerAction(&daNpc_Md_c::mkamaePlayerAction)) {
-            dComIfGp_setDoStatus(0x00); // Show the A button without anything on it
-            dComIfGp_setAStatus(0x08); // TODO
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
+            dComIfGp_setAStatus(dActStts_PUT_AWAY_e);
         } else {
-            dComIfGp_setDoStatus(0x2E); // TODO
-            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+            dComIfGp_setDoStatus(dActStts_ba_motu__dupe_2E);
+            dComIfGp_setAStatus(dActStts_HIDDEN_e);
             if (!m3140) {
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
         }
     } else {
-        dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
+        dComIfGp_setDoStatus(dActStts_FLY_e);
         if (chkPlayerAction(&daNpc_Md_c::flyPlayerAction)) {
-            dComIfGp_setRStatusForce(0x3E); // TODO
-            dComIfGp_setAStatus(0x06); // Show "Let Go" on the B button icon
+            dComIfGp_setRStatusForce(dActStts_HIDDEN_e);
+            dComIfGp_setAStatus(dActStts_LET_GO_e);
         } else {
-            dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
-            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+            dComIfGp_setRStatusForce(dActStts_RETURN_e);
+            dComIfGp_setAStatus(dActStts_HIDDEN_e);
         }
     }
     

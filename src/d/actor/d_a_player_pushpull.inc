@@ -79,7 +79,7 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
 
 /* 801517C0-8015198C       .text procPushPullWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushPullWait() {
-    dComIfGp_setRStatus(0x11);
+    dComIfGp_setRStatus(dActStts_GRAB_e);
     setFrontWallType();
     if (m34D6 != 0) {
         if (checkNoUpperAnime()) {
@@ -134,7 +134,7 @@ BOOL daPy_lk_c::procPushMove_init() {
 
 /* 80151A1C-80151B38       .text procPushMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushMove() {
-    dComIfGp_setRStatus(0x11);
+    dComIfGp_setRStatus(dActStts_GRAB_e);
     int direction = getDirectionFromShapeAngle();
     setFrontWallType();
     if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {
@@ -177,7 +177,7 @@ BOOL daPy_lk_c::procPullMove_init() {
 
 /* 80151BC8-80151E40       .text procPullMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPullMove() {
-    dComIfGp_setRStatus(0x11);
+    dComIfGp_setRStatus(dActStts_GRAB_e);
     int direction = getDirectionFromShapeAngle();
     setFrontWallType();
     if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {

@@ -220,7 +220,7 @@ BOOL daPy_lk_c::checkWHideFrontFloor(cXyz* param_0) {
 int daPy_lk_c::checkWHideModeChange(cXyz* param_0) {
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
         if (!checkWHideFrontFloor(param_0)) {
-            dComIfGp_setRStatus(0);
+            dComIfGp_setRStatus(dActStts_BLANK_e);
         } else if (spActionButton()) {
             return 1;
         }
@@ -239,8 +239,8 @@ int daPy_lk_c::checkWHideModeChange(cXyz* param_0) {
 
 /* 80137914-80137A00       .text changeWHideEndProc__9daPy_lk_cFP4cXyz */
 int daPy_lk_c::changeWHideEndProc(cXyz* param_0) {
-    dComIfGp_setDoStatus(16);
-    dComIfGp_setRStatus(15);
+    dComIfGp_setDoStatus(dActStts_SIDLE_e);
+    dComIfGp_setRStatus(dActStts_CROUCH_e);
 
     if (((!doButton() && (!checkNoResetFlg0(daPyFlg0_UNK10000) || !mAcch.ChkRoofHit())) ||
          (!checkUpperAnime(LKANM_BCK_REST) && swordTrigger())) ||

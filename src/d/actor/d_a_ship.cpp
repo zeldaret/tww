@@ -1067,7 +1067,7 @@ void daShip_c::decrementShipSpeed(float decrementSpeed) {
 /* 00002CFC-00002D5C       .text firstDecrementShipSpeed__8daShip_cFf */
 void daShip_c::firstDecrementShipSpeed(float decrementSpeed) {
     if (cLib_addCalc(&speedF, decrementSpeed, 0.1f, 5.0f, 1.0f) < 3.0f) {
-      m03E0 = 10000.0f;
+        m03E0 = 10000.0f;
     }
 }
 
@@ -1360,7 +1360,7 @@ void daShip_c::setSelfMove(int param_1) {
                 firstDecrementShipSpeed(m03E0);
             }
             else {
-                if (dComIfGp_getDoStatus() == 0x13 && (CPad_CHECK_HOLD_A(0))) {
+                if (dComIfGp_getDoStatus() == dActStts_STOP_e && (CPad_CHECK_HOLD_A(0))) {
                     fVar6 = cLib_addCalc(&speedF, 0.0f, 0.1f, 1.0f, 0.1f);
                 }
                 else {
@@ -3181,7 +3181,7 @@ void daShip_c::setRopePos() {
             *ropeSegments += (*currentRopeSegment - spF8) * 0.05f;
         }
         if (mRopeCnt == 20 && checkStateFlg(daSFLG_UNK10000000_e)) {
-            r4 = mRopeLine.getPos(0);;
+            r4 = mRopeLine.getPos(0);
             mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
             spE0 -= *r4;
 
