@@ -165,7 +165,7 @@ public:
             /* 0x14 */ int m14;
             /* 0x18 */ int m18;
             /* 0x1C */ int m1C;
-        } field_0x00;
+        } m00;
     } 
     /* 0x0A4 */ m0A4[2];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
@@ -176,7 +176,7 @@ public:
     /* 0x101 */ u8 m101;
     /* 0x102 */ u8 m102;
     /* 0x103 */ u8 m103[0x108 - 0x103];
-    /* 0x108 */ int m108;
+    /* 0x108 */ u32 m108;
     /* 0x10C */ int m10C;
     /* 0x110 */ u8 m110;
     /* 0x111 */ u8 m111[0x114 - 0x111];
@@ -257,9 +257,10 @@ public:
     /* 0x35C */ int mRoomMapToolCameraIdx;
     /* 0x360 */ u8 m360;
     /* 0x361 */ u8 m361[0x364 - 0x361];
-    /* 0x364 */ u32 m364;
+    /* 0x364 */ int m364;
     /* 0x368 */ f32 m368;
-    /* 0x36C */ u8 m36C[0x394 - 0x36C];
+    /* 0x36C */ cXyz m36C;
+    /* 0x378 */ u8 m378[0x394 - 0x378];
     /* 0x394 */ f32 mEvFovy;
     /* 0x398 */ f32 mEvBank;
     /* 0x39C */ fopAc_ac_c* mpEvRelActor;
@@ -292,7 +293,7 @@ public:
     /* 0x568 */ cXyz mCenterShake;
     /* 0x574 */ cXyz mEyeShake;
     /* 0x580 */ f32 mFovYShake;
-    /* 0x584 */ cSAngle m584;
+    /* 0x584 */ cSAngle mBankShake;
     /* 0x586 */ u8 m586[0x588 - 0x586];
     /* 0x588 */ int m588;
     /* 0x58C */ int m58C;
@@ -398,7 +399,7 @@ public:
     int defaultTriming();
     void setView(f32, f32, f32, f32);
     cSAngle forwardCheckAngle();
-    void bumpCheck(u32);
+    bool bumpCheck(u32);
     f32 getWaterSurfaceHeight(cXyz*);
     void checkSpecialArea();
     void checkGroundInfo();
@@ -456,7 +457,7 @@ public:
     bool ScopeViewMsgModeOff();
 
     f32 Fovy() { return mFovY + mFovYShake; }
-    cSAngle Bank() { return mBank + m584; }
+    cSAngle Bank() { return mBank + mBankShake; }
     cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
     cXyz Eye() { return mEye + mEyeShake; }
