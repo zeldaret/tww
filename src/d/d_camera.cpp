@@ -1715,7 +1715,93 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2) {
 
 /* 80165830-80165CC4       .text radiusActorInSight__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyzfs */
 f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* i_center, cXyz* i_eye, f32 i_fovY, s16 i_bank) {
-    /* Nonmatching */
+    f32 radius;
+    
+    cSGlobe globe_delta(*i_eye - *i_center);
+
+    cXyz pos1 = attentionPos(i_actor1);
+    cXyz pos2 = attentionPos(i_actor2);
+
+    cXyz delta = pos1 - pos2;
+
+    delta.normalize();
+
+    pos1 += delta * 50.0f;
+    pos2 -= delta * 50.0f;
+
+    dDlst_window_c* window = get_window(mpCamera);
+    scissor_class* scissor = window->getScissor();
+
+    cSAngle local_130(i_fovY * 0.5f * (scissor->mHeight / 480.f) * 0.95f);
+    cSAngle local_134((scissor->mWidth / 640.0f) * (i_fovY * mWindowAspectRatio * 0.5f) * 0.95f);
+
+    cSGlobe cStack_12c(*i_eye - pos1);
+    cSGlobe cStack_124(*i_eye - pos2);
+
+    int uVar4 = 0;
+
+    cSAngle local_13c;
+
+    local_13c = cStack_12c.U() - globe_delta.U();
+    if (local_13c < -local_134 || local_13c > local_134) {
+        uVar4 |= 1;
+    }
+
+    local_13c = cStack_12c.V() - globe_delta.V();
+    if (local_13c < -local_130 || local_13c > local_130) {
+        uVar4 |= 2;
+    }
+
+    local_13c = cStack_124.U() - globe_delta.U();
+    if (local_13c < -local_134 || local_13c > local_134) {
+        uVar4 |= 4;
+    }
+
+    local_13c = cStack_124.V() - globe_delta.V();
+    if (local_13c < -local_130 || local_13c > local_130) {
+        uVar4 |= 8;
+    }
+
+    if (uVar4 == 0) {
+        return 0.0f;
+    }
+    
+    radius = 0.0f;
+    Mtx look_mtx;
+    cXyz local_a8;
+    f32 fVar3;
+    mDoMtx_lookAt(look_mtx, i_eye, i_center, &mUp, i_bank);
+    if ((uVar4 & 3) != 0) {
+        PSMTXMultVec(look_mtx, &pos1, &local_a8);
+        if ((uVar4 & 1) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.x) / local_134.Tan());
+            if (0.0f < fVar3) {
+                radius = fVar3;
+            }
+        }
+        if ((uVar4 & 2) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.y) / local_130.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+    }
+    if ((uVar4 & 0xc) != 0) {
+        PSMTXMultVec(look_mtx, &pos2, &local_a8);
+        if ((uVar4 & 4) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.x) / local_134.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+        if ((uVar4 & 8) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.y) / local_130.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+    }
+    return radius;
 }
 
 /* 80165CC4-801660C8       .text groundHeight__9dCamera_cFP4cXyz */
