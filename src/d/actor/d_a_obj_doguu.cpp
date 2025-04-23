@@ -14,6 +14,8 @@
 #include "m_Do/m_Do_mtx.h"
 
 
+
+
 const int daObjDoguu_idx_table[18] = {
     DOGUU_BMT_VGSMD, DOGUU_BMT_VGSMF, DOGUU_BMT_VGSMN,
     DOGUU_BMT_VGSBD, DOGUU_BMT_VGSBF, DOGUU_BMT_VGSBN,
@@ -334,7 +336,10 @@ void daObjDoguu_c::setGoal(int i_staffIdx) {
 
 /* 00000E98-00000F18       .text setPlayerAngle__12daObjDoguu_cFi */
 void daObjDoguu_c::setPlayerAngle(int i_staffIdx) {
-    cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "angle");
+    u32 angle = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "angle");
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    
+    player->setPlayerPosAndAngle(&player->current.pos, current.angle.y + (s16)angle);
     /* Nonmatching */
 }
 
@@ -344,8 +349,9 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
     u32 temp2 = 0x0010FFEE;
     u8* temp = (u8*)&temp2;
     dComIfGp_getVibration().StartQuake(temp, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
+    int* timer = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
+    field_0x8C0 = *timer;
 
-    field_0x8C0 = (int)dComIfGp_evmng_getMyXyzP(i_staffIdx, "Timer"); //pos of something
     /* Nonmatching */
 }
 
@@ -370,7 +376,7 @@ void daObjDoguu_c::privateCut() {
         "SETLIGHT",
     };
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId("DOGUU");
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Doguu");
     if (staffIdx != -1) {
 
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
@@ -459,9 +465,9 @@ void daObjDoguu_c::privateCut() {
                 } else if ((iVar2 >= 130) && (iVar2 < 150)) {
                     field_0x8C8 = (iVar2 + -130) * 0.00625f + 0.25f;
                 } else {
-                    if ((iVar2 < 150) || (iVar2 < 170)) {
+                    if((field_0x8C4 >= 150) && (field_0x8C4 < 170)){
                         field_0x8C8 = (iVar2 + -150) * 0.0125f + 0.375f;
-                    } else if ((field_0x8C4 >= 200) && (field_0x8C4 <= 190)) {
+                    } else if((iVar2 >= 170) && (iVar2 <= 190)){
                         field_0x8C8 = (iVar2 + -170) * 0.01875f + 0.625f;
                     }
                 }
