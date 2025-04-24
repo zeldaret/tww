@@ -35,7 +35,7 @@ BOOL daPy_lk_c::fanJointCB(int param_0) {
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
     mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(j3dSys.mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 
@@ -62,7 +62,7 @@ BOOL daPy_lk_c::parachuteJointCB(int param_0) {
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
     mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(j3dSys.mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 

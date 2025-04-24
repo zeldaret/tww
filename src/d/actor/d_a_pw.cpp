@@ -55,11 +55,11 @@ static BOOL daPW_Draw(pw_class*) {
 void anm_init(pw_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
     i_this->mBckIdx = bckFileIdx;
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("AM", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        void* soundAnm = dComIfG_getObjectRes("PW", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("PW", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("PW", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
 }
