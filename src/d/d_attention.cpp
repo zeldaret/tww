@@ -539,12 +539,12 @@ fopAc_ac_c* dAttention_c::stockAttention(u32 interactMask) {
     if (pTarget != mLockOnList[0].getActor()) {
         if (pTarget != NULL) {
             if (mLockOnList[0].getActor() != NULL)
-                setFlag(0x02);
+                setFlag(AttnFlag_00000002);
         } else {
-            setFlag(0x01);
+            setFlag(AttnFlag_00000001);
         }
 
-        setFlag(0x04);
+        setFlag(AttnFlag_00000004);
     }
 
     return LockonTarget(0);
@@ -655,12 +655,12 @@ BOOL sound_attention(fopAc_ac_c* actor, void* userWork) {
 void dAttention_c::runSoundProc() {
     mEnemyBsPcId = fpcM_ERROR_PROCESS_ID_e;
     mEnemyDistance = 10000.0f;
-    if (!chkFlag(0x80000000)) {
+    if (!chkFlag(AttnFlag_80000000)) {
         fopAcIt_Executor((fopAcIt_ExecutorFunc)sound_attention, this);
         fopAc_ac_c* actor = fopAcM_SearchByID(mEnemyBsPcId);
         if (actor != NULL) {
             mDoAud_bgmNowBattle(mEnemyDistance * 0.1f);
-            setFlag(0x100);
+            setFlag(AttnFlag_00000100);
         }
     }
 }
@@ -672,34 +672,34 @@ void dAttention_c::runSoundProc() {
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
     /* TODO: Magic constants */
-    if (this->chkFlag(8)) {
+    if (this->chkFlag(AttnFlag_00000008)) {
         this->draw[0].setAnm(0x1b, 0x48, 0);
         if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
-    } else if (this->chkFlag(0x10)) {
+    } else if (this->chkFlag(AttnFlag_00000010)) {
         this->draw[0].setAnm(0x17, 0x44, 0);
         if (this->field_0x028 >= 0) {
             this->field_0x028 = 1;
-            this->setFlag(0x40000000);
+            this->setFlag(AttnFlag_40000000);
         }
 
         if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
-    } else if (this->chkFlag(1)) {
+    } else if (this->chkFlag(AttnFlag_00000001)) {
         this->draw[0].setAnm(0x18, 0x45, 0);
-        this->setFlag(0x40000000);
-    } else if (this->chkFlag(2)) {
+        this->setFlag(AttnFlag_40000000);
+    } else if (this->chkFlag(AttnFlag_00000002)) {
         this->draw[0].setAnm(0x18, 0x45, 0);
         this->draw[1].setAnm(0x1a, 0x47, 0);
-        this->setFlag(0x40000000);
+        this->setFlag(AttnFlag_40000000);
     } else if (mLockOnNum <= 0 && this->field_0x028 == 0) {
         this->draw[0].setAnm(0x1a, 0x47, 0);
         this->field_0x028 = 1;
-        this->setFlag(0x40000000);
+        this->setFlag(AttnFlag_40000000);
     }
 
     int result;
@@ -707,12 +707,12 @@ void dAttention_c::runDrawProc() {
         result = this->draw[0].anm->play(NULL, 0, 0);
         if (result) {
             this->draw[0].setAnm(0x19, -1, 2);
-            this->clrFlag(0x40000000);
+            this->clrFlag(AttnFlag_40000000);
         }
     } else {
         result = this->draw[0].anm->play(NULL, 0, 0);
         if (result) {
-            this->clrFlag(0x40000000);
+            this->clrFlag(AttnFlag_40000000);
             this->field_0x028 = 0xff;
         }
     }
@@ -763,7 +763,7 @@ void dAttention_c::judgementButton() {
 void dAttention_c::judgementTriggerProc() {
     bool haveTarget = chaseAttention();
     if (haveTarget) {
-        this->setFlag(8);
+        this->setFlag(AttnFlag_00000008);
         mLockOnState = LockState_LOCK;
     }
 }
@@ -775,9 +775,9 @@ int dAttention_c::judgementLostCheck() {
         return false;
     }
     mLockOnState = LockState_NONE;
-    this->setFlag(0x10);
+    this->setFlag(AttnFlag_00000010);
     freeAttention();
-    this->setFlag(0x40);
+    this->setFlag(AttnFlag_00000040);
     return true;
 }
 
@@ -802,24 +802,24 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
                 if (-0.9f < stickY &&
                     (actor = nextAttention(interactMask), actor != 0) &&
                     mLockOnNum > 1) {
-                    this->setFlag(8);
+                    this->setFlag(AttnFlag_00000008);
                 } else {
                     mLockOnState = LockState_RELEASE;
-                    this->setFlag(0x10);
+                    this->setFlag(AttnFlag_00000010);
                 }
             } else {
                 judgementLostCheck();
             }
             break;
         case LockState_RELEASE:
-            this->setFlag(0x40);
+            this->setFlag(AttnFlag_00000040);
             if (this->field_0x01a == 1) {
                 mLockOnState = LockState_NONE;
                 judgementTriggerProc();
             }
             else {
                 actor = LockonTarget(0);
-                if (actor == NULL || !this->chkFlag(0x40000000)) {
+                if (actor == NULL || !this->chkFlag(AttnFlag_40000000)) {
                     mLockOnState = LockState_NONE;
                     freeAttention();
                 }
@@ -844,16 +844,16 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
             s32 result = judgementLostCheck();
             if (result == 0 && this->field_0x01a == 0) {
                 mLockOnState = LockState_RELEASE;
-                this->setFlag(0x10);
+                this->setFlag(AttnFlag_00000010);
             }
             break;
         }
         case LockState_RELEASE:
-            this->setFlag(0x40);
+            this->setFlag(AttnFlag_00000040);
             if (this->field_0x01a == 1) {
                 fopAc_ac_c *actor = nextAttention(interactMask);
                 if (actor != NULL) {
-                    this->setFlag(8);
+                    this->setFlag(AttnFlag_00000008);
                     mLockOnState = LockState_LOCK;
                 } else {
                     mLockOnState = LockState_NONE;
@@ -862,7 +862,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
             }
             else {
                 fopAc_ac_c *actor = LockonTarget(0);
-                if (actor == NULL || !this->chkFlag(0x40000000)) {
+                if (actor == NULL || !this->chkFlag(AttnFlag_40000000)) {
                     mLockOnState = LockState_NONE;
                     freeAttention();
                 }
@@ -875,19 +875,19 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 bool dAttention_c::Run(u32 interactMask) {
     // TODO: magic numbers
     bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
-    if (this->chkFlag(0x80)) {
+    if (this->chkFlag(AttnFlag_00000080)) {
         mpPlayer = (daPy_lk_c*)g_dComIfG_gameInfo.play.mpPlayer[0];
         mPlayerNo = 0;
     }
     this->runDebugDisp0();
-    this->clrFlag(0x7ffffff);
+    this->clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
         mLockOnState = LockState_NONE;
         this->field_0x01a = 0;
         this->field_0x01b = 0;
-        this->clrFlag(0x20000000);
-        this->clrFlag(0x10000000);
-        this->clrFlag(0x07ffffff);
+        this->clrFlag(AttnFlag_20000000);
+        this->clrFlag(AttnFlag_10000000);
+        this->clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
         mLockOnTargetBsPcID = -1;
         this->freeAttention();
     } else {
@@ -898,21 +898,21 @@ bool dAttention_c::Run(u32 interactMask) {
             judgementStatusSw(interactMask);
         }
 
-        if (this->chkFlag(1<<0x1c)) {
+        if (this->chkFlag(AttnFlag_10000000)) {
             if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
-                if (this->chkFlag(0x20000000)) {
+                if (this->chkFlag(AttnFlag_20000000)) {
                     JAIZelBasic::zel_basic->seStart(0x81d, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
-                    this->clrFlag(0x20000000);
+                    this->clrFlag(AttnFlag_20000000);
                 }
-                this->clrFlag(0x10000000);
+                this->clrFlag(AttnFlag_10000000);
             }
         } else if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL != 0) {
             fopAc_ac_c *target = this->LockonTarget(0);
             if (target == NULL) {
-                this->setFlag(0x20000000 | 0x20);
+                this->setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
                 JAIZelBasic::zel_basic->seStart(0x81c, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
             }
-            this->setFlag(0x10000000);
+            this->setFlag(AttnFlag_10000000);
         }
     }
     this->field_0x019 = mLockOnState;

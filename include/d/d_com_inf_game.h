@@ -3853,7 +3853,7 @@ inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
 }
 
 inline void dComIfGp_att_ChangeOwner() {
-    dComIfGp_getAttention().setFlag(0x80);
+    dComIfGp_getAttention().setFlag(AttnFlag_00000080);
 }
 
 inline fopAc_ac_c* dComIfGp_att_getLookTarget() {

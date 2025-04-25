@@ -115,6 +115,40 @@ public:
 
 class daPy_lk_c;
 
+enum AttentionFlags {
+    AttnFlag_00000001 = 0x00000001,
+    AttnFlag_00000002 = 0x00000002,
+    AttnFlag_00000004 = 0x00000004,
+    AttnFlag_00000008 = 0x00000008,
+    AttnFlag_00000010 = 0x00000010,
+    AttnFlag_00000020 = 0x00000020,
+    AttnFlag_00000040 = 0x00000040,
+    AttnFlag_00000080 = 0x00000080,
+    AttnFlag_00000100 = 0x00000100,
+    AttnFlag_00000200 = 0x00000200,
+    AttnFlag_00000400 = 0x00000400,
+    AttnFlag_00000800 = 0x00000800,
+    AttnFlag_00001000 = 0x00001000,
+    AttnFlag_00002000 = 0x00002000,
+    AttnFlag_00004000 = 0x00004000,
+    AttnFlag_00008000 = 0x00008000,
+    AttnFlag_00010000 = 0x00010000,
+    AttnFlag_00020000 = 0x00020000,
+    AttnFlag_00040000 = 0x00040000,
+    AttnFlag_00080000 = 0x00080000,
+    AttnFlag_00100000 = 0x00100000,
+    AttnFlag_00200000 = 0x00200000,
+    AttnFlag_00400000 = 0x00400000,
+    AttnFlag_00800000 = 0x00800000,
+    AttnFlag_01000000 = 0x01000000,
+    AttnFlag_02000000 = 0x02000000,
+    AttnFlag_04000000 = 0x04000000,
+    AttnFlag_08000000 = 0x08000000,
+    AttnFlag_10000000 = 0x10000000,
+    AttnFlag_20000000 = 0x20000000,
+    AttnFlag_40000000 = 0x40000000,
+    AttnFlag_80000000 = 0x80000000,
+};
 class dAttention_c {
     enum LockState {
         LockState_NONE = 0,
@@ -171,15 +205,15 @@ public:
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
     
-    bool chkFlag(u32 flag) { return (mFlags & flag) ? true : false; }
-    void setFlag(u32 flag) { mFlags |= flag; }
-    void clrFlag(u32 flag) { mFlags &= ~flag; }
-    bool Lockon() { return LockonTruth() || chkFlag(0x20000000); } // regswap
+    bool chkFlag(AttentionFlags flag) { return (mFlags & flag) ? true : false; }
+    void setFlag(AttentionFlags flag) { mFlags |= flag; }
+    void clrFlag(AttentionFlags flag) { mFlags &= ~flag; }
+    bool Lockon() { return LockonTruth() || chkFlag(AttnFlag_20000000); } // regswap
     void offAleart() {
-        setFlag(0x80000000);
+        setFlag(AttnFlag_80000000);
     }
     void revivalAleart() {
-        clrFlag(0x80000000);
+        clrFlag(AttnFlag_80000000);
     }
 
     void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
