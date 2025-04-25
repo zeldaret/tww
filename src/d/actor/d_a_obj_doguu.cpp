@@ -11,7 +11,35 @@
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_rain.h"
-
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cCcD_SrcCylAttr
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
+        /* Height */ 200.0f,
+    }
+};
 const struct {
     int bmt_vgsm[3];
     int bmt_vgsb[3];
@@ -40,18 +68,15 @@ namespace {
 
     inline const Attr_c& attr() { return L_attr; }
 }
-static const s16 light_color[3][3] = {
-    {0x00C8, 0x0032, 0x0032},
-    {0x0032, 0x00C8, 0x0032},
-    {0x0032, 0x0032, 0x00C8},
-};
-
-
-
 
 
 /* 00000078-00000168       .text setPointLight__12daObjDoguu_cFv */
 void daObjDoguu_c::setPointLight() {
+    static const s16 light_color[3][3] = {
+        {0x00C8, 0x0032, 0x0032},
+        {0x0032, 0x00C8, 0x0032},
+        {0x0032, 0x0032, 0x00C8},
+    };
     cLib_addCalc2(&field_0x8FC, cM_rndF(0.1f)+ 1.0f,0.5f,0.05f);
     mLightInfluence.mPos = mPos;
     mLightInfluence.mColor.r = light_color[field_0x894][0];
@@ -166,35 +191,7 @@ BOOL daObjDoguu_c::CreateHeap() {
 
 /* 000007D0-00000B80       .text CreateInit__12daObjDoguu_cFv */
 void daObjDoguu_c::CreateInit() {
-    static dCcD_SrcCyl l_cyl_src = {
-        // dCcD_SrcGObjInf
-        {
-            /* Flags             */ 0,
-            /* SrcObjAt  Type    */ 0,
-            /* SrcObjAt  Atp     */ 0,
-            /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ 0,
-            /* SrcObjTg  SPrm    */ 0,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
-            /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
-            /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ 0,
-            /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
-            /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
-            /* SrcGObjCo SPrm    */ 0,
-        },
-        // cCcD_SrcCylAttr
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
-            /* Radius */ 200.0f,
-            /* Height */ 200.0f,
-        }
-    };
+    
 
     cullMtx = field_0x6CC->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 400.0f, 600.0f);
@@ -266,6 +263,7 @@ void daObjDoguu_c::CreateInit() {
         field_0x8A3 = false;
     }
     mAllColRatio = 1.0f;
+    /* Nonmatching */
 }
 
 /* 00000B80-00000CEC       .text set_mtx__12daObjDoguu_cFv */
@@ -341,7 +339,6 @@ void daObjDoguu_c::setGoal(int i_staffIdx) {
     mDoMtx_multVecZero(mDoMtx_stack_c::get(), &pos);
     field_0x8B4 = pos;
     dComIfGp_evmng_setGoal(&field_0x8B4);
-    /* Nonmatching */
 }
 
 /* 00000E98-00000F18       .text setPlayerAngle__12daObjDoguu_cFi */
@@ -350,7 +347,6 @@ void daObjDoguu_c::setPlayerAngle(int i_staffIdx) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     
     player->setPlayerPosAndAngle(&player->current.pos, current.angle.y + (s16)angle);
-    /* Nonmatching */
 }
 
 /* 00000F18-00000FB8       .text setQuake__12daObjDoguu_cFi */
@@ -361,7 +357,6 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
     dComIfGp_getVibration().StartQuake(temp, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
     mTimer = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
 
-    /* Nonmatching */
 }
 
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */
@@ -507,7 +502,6 @@ void daObjDoguu_c::privateCut() {
             } 
         }
     }
-    /* Nonmatching */
 }
 
 /* 000015A8-00001630       .text getFinishEventCount__12daObjDoguu_cFv */
@@ -581,8 +575,6 @@ static BOOL daObjDoguu_Delete(void* i_this) {
 /* 00001D0C-00001D30       .text daObjDoguu_Draw__FPv */
 static BOOL daObjDoguu_Draw(void* i_this) {
     return static_cast<daObjDoguu_c*>(i_this)->_draw();
-
-    /* Nonmatching */
 }
 
 /* 00001D30-00001F64       .text _draw__12daObjDoguu_cFv */
@@ -619,7 +611,6 @@ bool daObjDoguu_c::_draw() {
         field_0x6D8->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);       
     }
     return true;
-
     /* Nonmatching */
 }
 
