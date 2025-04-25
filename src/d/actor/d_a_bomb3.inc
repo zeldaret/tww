@@ -69,14 +69,14 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
     vec1.set(*field_0x0C);
     JGeometry::TVec3<f32> vec2;
     vec2.set(*mpPos);
-    emitter->mGlobalTranslation.set(vec2);
+    emitter->setGlobalTranslation(vec2);
     f32 temp = mpPos->abs(*field_0x0C);
     s16 temp2 = (20.0f - temp) * 0.5f + 10.0f;
     if(temp2 < 10) {
         temp2 = 10;
     }
 
-    emitter->mLifeTime = temp2;
+    emitter->setLifeTime(temp2);
     
     JGeometry::TVec3<f32> vec3;
     vec3.z = 0.5f * (vec2.x - vec1.x);
@@ -99,7 +99,7 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
             JGeometry::TVec3<f32> vec5;
             vec5.cubic<f32>(vec1, vec2, vec3, vec4, i);
             
-            emitter->mLifeTime = temp8;
+            emitter->setLifeTime(temp8);
             JPABaseParticle* particle = emitter->createParticle();
             if(particle) {
                 particle->setOffsetPosition(vec5);
@@ -112,17 +112,15 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
 
 /* 800D977C-800D97C4       .text execute__26daBomb_fuseSparksEcallBackFP14JPABaseEmitter */
 void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
-    f32 x = mpPos->x;
-    f32 y = mpPos->y;
-    f32 z = mpPos->z;
-    emitter->mGlobalTranslation.set(x, y, z);
+    JGeometry::TVec3<f32> pos(*mpPos);
+    emitter->setGlobalTranslation(pos);
     
     JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
     while(link != 0) {
         JSUPtrLink* next = link->getNext();
 
         JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-        ptcl->setOffsetPosition(x, y, z);
+        ptcl->setOffsetPosition(pos);
 
         link = next;
     }
@@ -714,7 +712,7 @@ void daBomb_c::eff_explode_normal(const csXyz* rotation) {
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
     JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
     if(emitter) {
-        emitter->mLifeTime = 0xC;
+        emitter->setLifeTime(0xC);
         JGeometry::TVec3<f32> vec(0.5f, 0.67f, 1.0f);
         emitter->setGlobalParticleScale(vec);
     }
@@ -722,14 +720,14 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
     dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_232A, &current.pos, NULL, &scale);
     emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
     if(emitter) {
-        emitter->mLifeTime = 0x46;
+        emitter->setLifeTime(0x46);
     }
     
     emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
     if(emitter) {
-        emitter->mLifeTime = 0x46;
-        emitter->mInitialVelAxis = 25.0f;
-        emitter->mInitialVelDir = 35.0f;
+        emitter->setLifeTime(0x46);
+        emitter->setAwayFromAxisSpeed(25.0f);
+        emitter->setDirectionalSpeed(35.0f);
     }
 }
 

@@ -535,9 +535,7 @@ void daArrow_c::setKeepMatrix() {
         
         mDoMtx_stack_c::transS(0.7f, -0.07f, -0.2f);
         mDoMtx_stack_c::XYZrotM(0x238E, 0x2CDF, 0x29BE);
-        
-        MtxP handMtx = zelda->getRightHandMatrix();
-        cMtx_concat(handMtx, mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::revConcat(zelda->getRightHandMatrix());
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         
         MtxP mtx = mDoMtx_stack_c::get();
@@ -554,9 +552,7 @@ void daArrow_c::setKeepMatrix() {
         // X rotation must be a float literal to force the compiler to pass an unsigned short.
         // Z rotation must be an int literal to pass a signed short as normal.
         mDoMtx_stack_c::XYZrotM((248.5f*65536)/360, 0x238E, -0x6333);
-        
-        MtxP handMtx = player->getLeftHandMatrix();
-        cMtx_concat(handMtx, mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::revConcat(player->getLeftHandMatrix());
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         
         MtxP mtx = mDoMtx_stack_c::get();

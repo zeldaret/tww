@@ -6,7 +6,7 @@
 #include "d/d_meter.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
+#include "JSystem/JKernel/JKRExpHeap.h" // IWYU pragma: keep
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
@@ -731,72 +731,72 @@ const char* dMeter_actionTex(s16 id) {
         u8 id;
         const char* filename;
     } act[] = {
-        { 0, "ba_shiraberu.bti" },
-        { 1, "ba_miru.bti" },
-        { 2, "ba_syaberu.bti" },
-        { 3, "ba_shiraberu.bti" },
-        { 4, "ba_motu.bti" },
-        { 5, "ba_noru.bti" },
-        { 6, "ba_oriru.bti" },
-        { 7, "ba_modoru.bti" },
-        { 8, "ba_shimau.bti" },
-        { 9, "ba_oku.bti" },
-        { 10, "ba_chekku.bti" },
-        { 11, "ba_hiraku.bti" },
-        { 12, "ba_attack.bti" },
-        { 13, "ba_osu.bti" },
-        { 14, "ba_nageru.bti" },
-        { 15, "ba_shagamu.bti" },
-        { 16, "ba_harituku.bti" },
-        { 17, "ba_tukamu.bti" },
-        { 18, "ba_jump.bti" },
-        { 19, "ba_tomeru.bti" },
-        { 20, "ba_haru.bti" },
-        { 21, "ba_tatamu.bti" },
-        { 22, "ba_hanasu.bti" },
-        { 23, "ba_kettei.bti" },
-        { 24, "ba_kogu.bti" },
-        { 25, "ba_tugihe.bti" },
-        { 26, "ba_sake.bti" },
-        { 27, "ba_motu_buki.bti" },
-        { 28, "ba_noru_hune.bti" },
-        { 29, "ba_oriru_hune.bti" },
-        { 30, "ba_save.bti" },
-        { 31, "ba_option.bti" },
-        { 32, "ba_toru.bti" },
-        { 33, "ba_setumei.bti" },
-        { 34, "ba_kirikae.bti" },
-        { 35, "ba_tobu.bti" },
-        { 36, "ba_yobu.bti" },
-        { 37, "ba_hoshii.bti" },
-        { 38, "ba_yomu.bti" },
-        { 39, "ba_yameru.bti" },
-        { 40, "ba_kakudai.bti" },
-        { 41, "ba_hikaku.bti" },
-        { 42, "ba_zoom01.bti" },
-        { 43, "ba_zoom02.bti" },
-        { 44, "ba_susumu.bti" },
-        { 45, "ba_nageru.bti" },
-        { 46, "ba_motu.bti" },
-        { 47, "ba_huru.bti" },
-        { 48, "ba_kaizuhe.bti" },
-        { 49, "ba_sake.bti" },
-        { 50, "ba_modoru.bti" },
-        { 51, "ba_save.bti" },
-        { 52, "ba_save.bti" },
-        { 53, "sword_01.bti" },
-        { 54, "ba_husegu.bti" },
-        { 55, "boko_stick.bti" },
-        { 56, "hatchet.bti" },
-        { 57, "iron_club.bti" },
-        { 58, "longsword.bti" },
-        { 59, "spear.bti" },
-        { 60, "spear.bti" },
-        { 61, "bow_01.bti" },
-        { 62, "ba_modoru.bti" },
+        { dActStts_BLANK_e, "ba_shiraberu.bti" },
+        { dActStts_LOOK_e, "ba_miru.bti" },
+        { dActStts_SPEAK_e, "ba_syaberu.bti" },
+        { dActStts_CHARTS_e, "ba_shiraberu.bti" },
+        { dActStts_LIFT_e, "ba_motu.bti" },
+        { dActStts_CLIMB_e, "ba_noru.bti" },
+        { dActStts_LET_GO_e, "ba_oriru.bti" },
+        { dActStts_RETURN_e, "ba_modoru.bti" },
+        { dActStts_PUT_AWAY_e, "ba_shimau.bti" },
+        { dActStts_DROP_e, "ba_oku.bti" },
+        { dActStts_CHECK_e, "ba_chekku.bti" },
+        { dActStts_OPEN_e, "ba_hiraku.bti" },
+        { dActStts_ATTACK_e, "ba_attack.bti" },
+        { dActStts_ba_osu, "ba_osu.bti" },
+        { dActStts_THROW_e, "ba_nageru.bti" },
+        { dActStts_CROUCH_e, "ba_shagamu.bti" },
+        { dActStts_SIDLE_e, "ba_harituku.bti" },
+        { dActStts_GRAB_e, "ba_tukamu.bti" },
+        { dActStts_JUMP_e, "ba_jump.bti" },
+        { dActStts_STOP_e, "ba_tomeru.bti" },
+        { dActStts_ba_haru, "ba_haru.bti" },
+        { dActStts_ba_tatamu, "ba_tatamu.bti" },
+        { dActStts_LET_GO_ROPE_e, "ba_hanasu.bti" },
+        { dActStts_CHOOSE_e, "ba_kettei.bti" },
+        { dActStts_ba_kogu, "ba_kogu.bti" },
+        { dActStts_NEXT_e, "ba_tugihe.bti" },
+        { dActStts_PARRY_e, "ba_sake.bti" },
+        { dActStts_PICK_UP_e, "ba_motu_buki.bti" },
+        { dActStts_GET_IN_SHIP_e, "ba_noru_hune.bti" },
+        { dActStts_GET_OUT_SHIP_e, "ba_oriru_hune.bti" },
+        { dActStts_ba_save, "ba_save.bti" },
+        { dActStts_ba_option, "ba_option.bti" },
+        { dActStts_TAKE_PHOTO_e, "ba_toru.bti" },
+        { dActStts_INFO_e, "ba_setumei.bti" },
+        { dActStts_SWAP_MODES_e, "ba_kirikae.bti" },
+        { dActStts_FLY_e, "ba_tobu.bti" },
+        { dActStts_CALL_e, "ba_yobu.bti" },
+        { dActStts_BID_e, "ba_hoshii.bti" },
+        { dActStts_READ_e, "ba_yomu.bti" },
+        { dActStts_CANCEL_e, "ba_yameru.bti" },
+        { dActStts_ba_kakudai, "ba_kakudai.bti" },
+        { dActStts_ba_hikaku, "ba_hikaku.bti" },
+        { dActStts_ba_zoom01, "ba_zoom01.bti" },
+        { dActStts_ba_zoom02, "ba_zoom02.bti" },
+        { dActStts_CRUISE_e, "ba_susumu.bti" },
+        { dActStts_ba_nageru__dupe_2D, "ba_nageru.bti" },
+        { dActStts_ba_motu__dupe_2E, "ba_motu.bti" },
+        { dActStts_SWING_e, "ba_huru.bti" },
+        { dActStts_SEA_CHART_e, "ba_kaizuhe.bti" },
+        { dActStts_ba_sake__dupe_31, "ba_sake.bti" },
+        { dActStts_ba_modoru__dupe_32, "ba_modoru.bti" },
+        { dActStts_ba_save__dupe_33, "ba_save.bti" },
+        { dActStts_ba_save__dupe_34, "ba_save.bti" },
+        { dActStts_sword_01, "sword_01.bti" },
+        { dActStts_DEFEND_e, "ba_husegu.bti" },
+        { dActStts_boko_stick, "boko_stick.bti" },
+        { dActStts_hatchet, "hatchet.bti" },
+        { dActStts_iron_club, "iron_club.bti" },
+        { dActStts_longsword, "longsword.bti" },
+        { dActStts_spear, "spear.bti" },
+        { dActStts_spear__dupe_3C, "spear.bti" },
+        { dActStts_bow_01, "bow_01.bti" },
+        { dActStts_HIDDEN_e, "ba_modoru.bti" },
     };
     int found = 0;
-    for (int i = 0; i < 63; i++) {
+    for (int i = 0; i < ARRAY_SIZE(act); i++) {
         if (id == act[i].id) {
             found = i;
             break;
@@ -1667,10 +1667,9 @@ void dMeter_placeNameMove() {
 
 /* 8020240C-80202438       .text dMeter_arrowInit__FP15sub_meter_class */
 void dMeter_arrowInit(sub_meter_class* i_this) {
-    /* Nonmatching */
     for (int i = 0; i < 4; i++)
         i_this->field_0x2e48[i].mUserArea = 0;
-    // i_this->field_0x3025 = 0;
+    i_this->field_0x3025 = 0;
 }
 
 /* 80202438-80202580       .text dMeter_arrowCheckStatus__FP15sub_meter_class */
@@ -1880,9 +1879,9 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
 
     fopMsgM_Create(PROC_MESG, NULL, NULL);
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setRStatusForce(0);
-    dComIfGp_setAStatusForce(0);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setRStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_BLANK_e);
 
     mDoHIO_createChild("通常画面表示", &g_meterHIO); // "Normal Screen Display"
     mDoHIO_createChild("メニュー画面", &g_menuHIO); // "Menu Screen"

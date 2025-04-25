@@ -362,9 +362,9 @@ BOOL daPy_lk_c::dProcOpenTreasure_init() {
     if (mEquipItem == daPyItem_BOKO_e) {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
         if (boko != NULL) {
-            mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, (shape_angle.y + 0x2000));
-            MtxP mtx = mDoMtx_stack_c::now;
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y + 0x2000);
+            MtxP mtx = mDoMtx_stack_c::get();
             if (boko->mpModel != NULL) {
                 boko->mpModel->setBaseTRMtx(mtx);
             }
@@ -1059,38 +1059,29 @@ BOOL daPy_lk_c::dProcTalismanWait_init() {
     mVelocity = 0.0f;
     setTalismanModel();
     m32E4.makeEmitter(dPa_name::ID_COMMON_03E9, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
-    MtxP anmMtx = mpCLModel->getAnmMtx(12);
-    MtxP baseMtx = mpEquipItemModel->getBaseTRMtx();
-    MTXCopy(anmMtx, baseMtx);
-    MTXCopy(mpCLModel->getAnmMtx(12), mDoMtx_stack_c::now);
+    mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(12));
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
     f32 adjust = (cM_ssin(g_Counter.mTimer * 1512));
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
-    cXyz* pcVar1 = &m338C.mPos;
-    pcVar1->x = mDoMtx_stack_c::now[0][3];
-    pcVar1->y = mDoMtx_stack_c::now[1][3];
-    pcVar1->z = mDoMtx_stack_c::now[2][3];
-    dComIfGp_particle_setP1(dPa_name::ID_COMMON_03EA, pcVar1, NULL, NULL, 0xff, &m338C, -1);
+    mDoMtx_stack_c::multVecZero(&m338C.getPos());
+    dComIfGp_particle_setP1(dPa_name::ID_COMMON_03EA, &m338C.getPos(), NULL, NULL, 0xff, &m338C, -1);
     initShipRideUseItem(iVar2, 1);
     return true;
 }
 
 /* 8012FE58-8012FFEC       .text dProcTalismanWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcTalismanWait() {
-    cXyz* pcVar1;
-
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         setShipRidePos(1);
     }
-    pcVar1 = &m338C.mPos;
-    MTXCopy(mpCLModel->getAnmMtx(12), mDoMtx_stack_c::now);
+    cXyz* pcVar1 = &m338C.getPos();
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
     f32 adjust = (cM_ssin(g_Counter.mTimer * 1512));
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
-    pcVar1->x = mDoMtx_stack_c::now[0][3];
-    pcVar1->y = mDoMtx_stack_c::now[1][3];
-    pcVar1->z = mDoMtx_stack_c::now[2][3];
-    mDoMtx_trans(mDoMtx_stack_c::now, pcVar1->x, pcVar1->y, pcVar1->z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, (g_Counter.mTimer * 511));
-    mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mDoMtx_stack_c::multVecZero(pcVar1);
+    mDoMtx_stack_c::transS(*pcVar1);
+    mDoMtx_stack_c::YrotM(g_Counter.mTimer * 511);
+    mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mSwordAnim.play();
     J3DModelData* modelData = mpEquipItemModel->getModelData();
     f32 frame = mSwordAnim.getFrameCtrl()->getFrame();

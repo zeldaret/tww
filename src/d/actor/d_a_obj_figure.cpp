@@ -1244,8 +1244,8 @@ bool daObjFigure_c::eventMesSet() {
                 m73A--;
             }
             else {
-                dComIfGp_setDoStatusForce(0x21);
-                dComIfGp_setAStatusForce(0x27);
+                dComIfGp_setDoStatusForce(dActStts_INFO_e);
+                dComIfGp_setAStatusForce(dActStts_CANCEL_e);
                 if(g_mDoCPd_cpadInfo[0].mMainStickPosX || g_mDoCPd_cpadInfo[0].mMainStickPosY || g_mDoCPd_cpadInfo[0].mCStickPosY) {
                     m738 = l_figure_check_tbl[0].field_0x32;
                     m734 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosX * l_figure_check_tbl[0].field_0x2C);
@@ -1275,8 +1275,8 @@ bool daObjFigure_c::eventMesSet() {
                     }
                 }
 
-                dComIfGp_setDoStatusForce(0x21);
-                dComIfGp_setAStatusForce(0x27);
+                dComIfGp_setDoStatusForce(dActStts_INFO_e);
+                dComIfGp_setAStatusForce(dActStts_CANCEL_e);
                 if(CPad_CHECK_TRIG_B(0)) {
                     m732 = 0;
                     m734 = 0;

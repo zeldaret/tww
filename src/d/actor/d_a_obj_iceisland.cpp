@@ -76,8 +76,8 @@ void daObjIceisland_c::CreateInit() {
 /* 00000588-00000608       .text set_mtx__16daObjIceisland_cFv */
 void daObjIceisland_c::set_mtx() {
     mpModel->setBaseScale(scale);
-    mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -135,10 +135,10 @@ void daObjIceisland_c::daObjIceisland_freeze_demo_wait() {
         daObjIceisland_particle_set();
         mBrkAnm.setPlaySpeed(-1.0f);
         field_0x39C = 5;
-      }
-      else {
+    }
+    else {
         fopAcM_orderOtherEventId(this, mFreezeIceEventIdx, 0xffff);
-      }
+    }
 }
 
 /* 000008C0-00000928       .text daObjIceisland_freeze_demo__16daObjIceisland_cFv */

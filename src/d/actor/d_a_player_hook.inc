@@ -219,7 +219,7 @@ BOOL daPy_lk_c::procHookshotSubject() {
 
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
-        dComIfGp_setDoStatus(7);
+        dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
     if (mpAttention->Lockon()) {

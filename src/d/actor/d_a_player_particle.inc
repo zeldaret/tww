@@ -431,24 +431,23 @@ u16 daPy_dmEcallBack_c::m_type = 3;
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
 void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
     if (checkFlame()) {
-        cXy v;
-        v.x = emitter->mGlobalTranslation.x;
-        v.y = emitter->mGlobalTranslation.z;
+        JGeometry::TVec3<f32> pos;
+        emitter->getGlobalTranslation(pos);
 
         emitter->setGlobalTranslation(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
 
-        v.x = (mpMtx[0][3] - v.x) * -0.05f;
-        v.y = (mpMtx[2][3] - v.y) * -0.05f;
-        f32 sq = v.x * v.x + v.y * v.y;
+        pos.x = (mpMtx[0][3] - pos.x) * -0.05f;
+        pos.z = (mpMtx[2][3] - pos.z) * -0.05f;
+        f32 sq = pos.x * pos.x + pos.z * pos.z;
 
         if (sq > 1.0f) {
             f32 distFrac = 1.0f / std::sqrtf(sq);
 
-            v.x *= distFrac;
-            v.y *= distFrac;
+            pos.x *= distFrac;
+            pos.z *= distFrac;
         }
 
-        emitter->setDirection(JGeometry::TVec3<f32>(v.x, 0.6f, v.y));
+        emitter->setDirection(JGeometry::TVec3<f32>(pos.x, 0.6f, pos.z));
     } else {
         emitter->setGlobalRTMatrix(mpMtx);
     }

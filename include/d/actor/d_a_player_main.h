@@ -1819,7 +1819,7 @@ public:
     BOOL itemTriggerZ() const { return mItemTrigger & BTN_Z; }
     BOOL spLTrigger() const { return mItemTrigger & BTN_L; }
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
-    void allTrigger() const {}
+    BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
     
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }

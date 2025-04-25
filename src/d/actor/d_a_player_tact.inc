@@ -323,13 +323,13 @@ BOOL daPy_lk_c::procTactWait() {
             m35AC -= 1.0f;
         }
         if (mProcVar0.m3570 == 5) {
-            dComIfGp_setAStatus(7);
+            dComIfGp_setAStatus(dActStts_RETURN_e);
         }
     } else if (mProcVar0.m3570 != -5) {
-        dComIfGp_setAStatus(7);
+        dComIfGp_setAStatus(dActStts_RETURN_e);
     }
 
-    if (m34D2 == 0 || (cancelTrigger() && dComIfGp_getAStatus() == 7) || m35AC <= 0.0f) {
+    if (m34D2 == 0 || (cancelTrigger() && dComIfGp_getAStatus() == dActStts_RETURN_e) || m35AC <= 0.0f) {
         if (m34D2 != 0) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
@@ -709,7 +709,7 @@ BOOL daPy_lk_c::procTactPlayEnd() {
     }
 
     if (mProcVar0.m3570 == 0) {
-        dComIfGp_setAStatus(0x07);
+        dComIfGp_setAStatus(dActStts_RETURN_e);
     } else if (mProcVar0.m3570 == 5) {
         if (dComIfGp_evmng_endCheck(l_tact_night_event_label) && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
             onNoResetFlg0(daPyFlg0_UNK4000);

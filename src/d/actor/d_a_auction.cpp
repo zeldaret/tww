@@ -697,8 +697,8 @@ bool daAuction_c::eventStart() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x3E);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_HIDDEN_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 
     return mpTimer != NULL;
 }
@@ -991,8 +991,8 @@ void daAuction_c::eventMainKai() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x25);
-    dComIfGp_setAStatusForce(0x27);
+    dComIfGp_setDoStatusForce(dActStts_BID_e);
+    dComIfGp_setAStatusForce(dActStts_CANCEL_e);
 }
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
@@ -1092,7 +1092,7 @@ void daAuction_c::eventMainUri() {
     }
 
     if (m82E != 0) {
-        dComIfGp_setDoStatusForce(0x25);
+        dComIfGp_setDoStatusForce(dActStts_BID_e);
     }
 }
 
@@ -1178,8 +1178,8 @@ void daAuction_c::eventMainMsgBikonC() {
         eyePos = getNpcActorP(m827)->eyePos;
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */
@@ -1196,8 +1196,8 @@ void daAuction_c::eventMainMsgBikonW() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */

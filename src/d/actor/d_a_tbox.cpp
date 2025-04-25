@@ -740,7 +740,7 @@ void daTbox_c::demoProcAppear() {
         if (emitter != NULL) {
             emitter->setRate(100.0f);
             emitter->setSpread(1.0f);
-            emitter->mInitialVelDir = 25.0f;
+            emitter->setDirectionalSpeed(25.0f);
         }
     }
 

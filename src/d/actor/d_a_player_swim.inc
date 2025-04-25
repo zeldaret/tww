@@ -93,7 +93,7 @@ BOOL daPy_lk_c::checkNextModeSwim() {
     BOOL res;
 
     if (mpAttnEntryA && mpAttnEntryA->mType == fopAc_Attn_TYPE_SHIP_e) {
-        dComIfGp_setDoStatus(0x1C); // Show `Get In` on the A Button? Ghidra says `GetInShip` is the symbol
+        dComIfGp_setDoStatus(dActStts_GET_IN_SHIP_e);
         if (doTrigger()) { 
             return procShipReady_init();
         }

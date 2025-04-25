@@ -22,9 +22,9 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
     }
 
     if (param_0 == 6) {
-        mDoMtx_trans(mDoMtx_stack_c::now, 0.0f, 4.5f, 4.5f);
-        mDoMtx_concat(mpEquipItemModel->getAnmMtx(6), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
-        mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::now);
+        mDoMtx_stack_c::transS(0.0f, 4.5f, 4.5f);
+        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(6));
+        mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::get());
     } else {
         mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
     }
@@ -142,7 +142,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
             if (mEquipItem != dItem_BOW_e) {
-                dComIfGp_setRStatus(0x22);
+                dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                 if (spActionTrigger() && arrow != NULL) {
                     mActorKeepEquip.setData(arrow->changeArrowType());
                     setBowReloadAnime();
@@ -169,7 +169,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                 }
             } else if (daArrow_c::changeArrowMp()) {
                 if (mEquipItem != dItem_BOW_e) {
-                    dComIfGp_setRStatus(0x22);
+                    dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                     if (spActionTrigger()) {
                         daArrow_c::changeArrowTypeNotReady();
                     }
@@ -245,7 +245,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
 
 /* 8014A8D4-8014A974       .text procBowSubject__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBowSubject() {
-    dComIfGp_setDoStatus(7);
+    dComIfGp_setDoStatus(dActStts_RETURN_e);
 
     if (mpAttention->Lockon()) {
         setSpeedAndAngleAtn();
