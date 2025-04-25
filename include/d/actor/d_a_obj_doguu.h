@@ -1,9 +1,6 @@
 #ifndef D_A_OBJ_DOGUU_H
 #define D_A_OBJ_DOGUU_H
 
-#include "f_op/f_op_actor.h"
-#include "d/d_particle.h"
-#include "d/d_cc_d.h"
 #include "d/d_npc.h"
 
 class daObjDoguu_c : public fopNpc_npc_c {
@@ -13,7 +10,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void setEffectMtx(const cXyz*, float); // weak but not inlined?
+    inline void setEffectMtx(const cXyz*, float); // weak but not inlined?
 
     void setPointLight();
     BOOL CreateHeap();
@@ -42,7 +39,6 @@ public:
     /* 0x724 */ dCcD_Stts mStts;
     /* 0x760 */ dCcD_Cyl mCyl;
     /* 0x890 */ u8 mItemNo;
-    /* 0x891 */ u8 field_0x891[0x894 - 0x891];
     /* 0x894 */ int field_0x894;
     /* 0x898 */ u32 mJointIdx;
     /* 0x89C */ u32 field_0x89C;
@@ -56,7 +52,6 @@ public:
     /* 0x8AA */ s16 mMegamiDemoEventIdx;
     /* 0x8AC */ int field_0x8AC;
     /* 0x8B0 */ s8 mActIdx;
-    /* 0x8B1 */ u8 field_0x8B1[0x8B4 - 0x8B1];
     /* 0x8B4 */ cXyz field_0x8B4;
     /* 0x8C0 */ int mTimer;
     /* 0x8C4 */ int field_0x8C4;

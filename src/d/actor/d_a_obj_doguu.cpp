@@ -11,6 +11,7 @@
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_rain.h"
+
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -93,7 +94,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000188-000007D0       .text CreateHeap__12daObjDoguu_cFv */
 BOOL daObjDoguu_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", DOGUU_BDL_VGSMA));
     JUT_ASSERT(0x160, modelData != NULL);
     
@@ -214,6 +214,7 @@ void daObjDoguu_c::CreateInit() {
         mBck1.setFrame(mBck1.getStartFrame());
         mBck2.setFrame(mBck2.getStartFrame());
         mBck3.setFrame(mBck3.getStartFrame());
+
         field_0x8A0 = true;
         field_0x8A1 = false;
         field_0x8A2 = true;
@@ -263,7 +264,6 @@ void daObjDoguu_c::CreateInit() {
         field_0x8A3 = false;
     }
     mAllColRatio = 1.0f;
-    /* Nonmatching */
 }
 
 /* 00000B80-00000CEC       .text set_mtx__12daObjDoguu_cFv */
@@ -289,28 +289,26 @@ void daObjDoguu_c::set_mtx() {
 }
 
 /* 00000CEC-00000D80       .text next_msgStatus__12daObjDoguu_cFPUl */
-u16 daObjDoguu_c::next_msgStatus(unsigned long* i_idk) {
-    u16 uVar2 = 15;
-
-    switch (*i_idk) {
+u16 daObjDoguu_c::next_msgStatus(u32* pMsgNo) {
+    u16 message_status = fopMsgStts_MSG_CONTINUES_e;
+    switch (*pMsgNo) {
         case 3822:
         case 3823:
         case 3824:
             if (getFinishEventCount() == 0) {
-                *i_idk = 3825;
+                *pMsgNo = 3825;
             } else if (getFinishEventCount() == 1) {
-                *i_idk = 3826;
+                *pMsgNo = 3826;
             } else {
-                uVar2 = 16;
+                message_status = fopMsgStts_MSG_ENDS_e;
             }
             break;
 
         default:
-            uVar2 = 16;
+            message_status = fopMsgStts_MSG_ENDS_e;
             break;
     }
-
-    return uVar2;
+    return message_status;
 }
 
 /* 00000D80-00000DBC       .text getMsg__12daObjDoguu_cFv */
@@ -345,7 +343,6 @@ void daObjDoguu_c::setGoal(int i_staffIdx) {
 void daObjDoguu_c::setPlayerAngle(int i_staffIdx) {
     u32 angle = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "angle");
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    
     player->setPlayerPosAndAngle(&player->current.pos, current.angle.y + (s16)angle);
 }
 
@@ -362,8 +359,6 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */
 void daObjDoguu_c::setJDemo(int) {
     dComIfGp_setNextStage("ADMumi", (short)field_0x894, 0, 8);
-
-    /* Nonmatching */
 }
 
 /* 0000100C-000015A8       .text privateCut__12daObjDoguu_cFv */
@@ -382,14 +377,13 @@ void daObjDoguu_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Doguu");
     if (staffIdx != -1) {
-
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else{
             bool doCutEnd = false;
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
-                switch ((char)mActIdx) {
+                switch (mActIdx) {
                 case 0:
                     setGoal(staffIdx);
                     break;
@@ -403,7 +397,6 @@ void daObjDoguu_c::privateCut() {
                 case 3:
                     field_0x8A2 = true;
                     break;
-                //case 4 doesnt exist?
                 case 5:
                     mDoAud_subBgmStart(JA_BGM_GET_PEARL); 
                     break;
@@ -535,7 +528,6 @@ void daObjDoguu_c::setFinishMyEvent() {
 /* 000016A4-000016C4       .text daObjDoguu_Create__FPv */
 static cPhs_State daObjDoguu_Create(void* i_this) {
     return static_cast<daObjDoguu_c*>(i_this)->_create();
-
 }
 
 daObjDoguu_c::daObjDoguu_c() {}
@@ -557,7 +549,6 @@ cPhs_State daObjDoguu_c::_create() {
         }   
     }
     return phase_state;
-    /* Nonmatching */
 }
 
 bool daObjDoguu_c::_delete(){
@@ -611,16 +602,16 @@ bool daObjDoguu_c::_draw() {
         field_0x6D8->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);       
     }
     return true;
-    /* Nonmatching */
 }
 
 /* 00001F64-00002264       .text setEffectMtx__12daObjDoguu_cFPC4cXyzf */
 void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
-    static Mtx mtx_adj = {
+    static Mtx mtx_adj = { 
         0.5f, 0.0f, 0.0f, 0.5f,
         0.0f, -0.5f, 0.0f, 0.5f,
         0.0f, 0.0f, 1.0f, 0.0f,
     };
+    
     float scale = 1.0f /i_scale;
     camera_class* camera = dCam_getCamera();
     cXyz lookDir = *i_pos - camera->mLookat.mEye;
@@ -663,7 +654,6 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
 /* 00002264-00002288       .text daObjDoguu_Execute__FPv */
 static BOOL daObjDoguu_Execute(void* i_this) {
     return static_cast<daObjDoguu_c*>(i_this)->_execute();
-    /* Nonmatching */
 }
 
 /* 00002288-000027AC       .text _execute__12daObjDoguu_cFv */
@@ -683,109 +673,111 @@ bool daObjDoguu_c::_execute() {
         dKy_set_allcol_ratio(mAllColRatio);
     }
     
-    fopAc_ac_c *ac;
     switch(field_0x8AC) {
         case 0:
-        if ((checkItemGet(mItemNo, 1) != 0) && mCyl.ChkCoHit()) {
-            cCcD_Obj* hitObj = mCyl.GetCoHitObj();
-            if (hitObj != NULL) {
-                if (hitObj->GetStts() == NULL) {
-                    ac = NULL;
-                } else {
-                    ac = hitObj->GetStts()->GetActor();
-                }
-                if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
-                    mCyl.SetR(50.0f);
-                    fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
-                    field_0x8AC = 1;
+            fopAc_ac_c *ac;
+            if ((checkItemGet(mItemNo, 1) != 0) && mCyl.ChkCoHit()) {
+                cCcD_Obj* hitObj = mCyl.GetCoHitObj();
+                if (hitObj != NULL) {
+                    if (hitObj->GetStts() == NULL) {
+                        ac = NULL;
+                    } else {
+                        ac = hitObj->GetStts()->GetActor();
+                    }
+                    if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
+                        mCyl.SetR(50.0f);
+                        fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
+                        field_0x8AC = 1;
+                    }
                 }
             }
-        }
-        break;        
+            break;        
         case 1:
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
-            field_0x8AC = 2;
-        } else {
-            fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
-        }
-        break;
+            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+                field_0x8AC = 2;
+            } else {
+                fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
+            }
+            break;
         case 2:
-        privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo1EventIdx)) {
-          field_0x8AC = 3;
-        }
-        break;
+            privateCut();
+            if (dComIfGp_evmng_endCheck(mDoguuDemo1EventIdx)) {
+            field_0x8AC = 3;
+            }
+            break;
         case 3:
-        if (getFinishEventCount() == 0) {
-            fopAcM_orderChangeEventId(this, mDoguuDemo2EventIdx, 0, 0xFFFF);
-            field_0x8AC = 4;
-        }
-        else {
+            if (getFinishEventCount() == 0) {
+                fopAcM_orderChangeEventId(this, mDoguuDemo2EventIdx, 0, 0xFFFF);
+                field_0x8AC = 4;
+            }
+            else {
+                fopAcM_orderChangeEventId(this, mDoguuDemo3EventIdx, 0, 0xFFFF);
+                field_0x8AC = 7;
+            }
+            break;
+        case 4:
+            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            field_0x8AC = 5;
+            }
+            break;
+        case 5:
+            privateCut();
+            if (dComIfGp_evmng_endCheck(mDoguuDemo2EventIdx)) {
+                field_0x8AC = 6;
+            }
+            break;
+        case 6:
             fopAcM_orderChangeEventId(this, mDoguuDemo3EventIdx, 0, 0xFFFF);
             field_0x8AC = 7;
-        }
-        break;
-        case 4:
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
-          field_0x8AC = 5;
-        }
-        break;
-        case 5:
-        privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo2EventIdx)) {
-            field_0x8AC = 6;
-        }
-        break;
-        case 6:
-        fopAcM_orderChangeEventId(this, mDoguuDemo3EventIdx, 0, 0xFFFF);
-        field_0x8AC = 7;
-        break;
+            break;
         case 7:
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
-            field_0x8AC = 8;
-        }
-        break;
+            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+                field_0x8AC = 8;
+            }
+            break;
         case 8:
-        privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo3EventIdx)) {
-            field_0x8AC = 9;
-        }
-        break;
+            privateCut();
+            if (dComIfGp_evmng_endCheck(mDoguuDemo3EventIdx)) {
+                field_0x8AC = 9;
+            }
+            break;
         case 9:
-        setFinishMyEvent();
-   
-        if (getFinishEventCount() >= 3) {
-            dComIfGs_onEventBit(0x1e40);
-            fopAcM_orderChangeEventId(this, mMegamiDemoEventIdx, 0, 0xFFFF);
-            field_0x8AC = 11;
-        } else {
-            field_0x8AC = 10;
-            dComIfGp_event_reset();
-        }
-        break;
+            setFinishMyEvent();
+    
+            if (getFinishEventCount() >= 3) {
+                dComIfGs_onEventBit(0x1e40);
+                fopAcM_orderChangeEventId(this, mMegamiDemoEventIdx, 0, 0xFFFF);
+                field_0x8AC = 11;
+            } else {
+                field_0x8AC = 10;
+                dComIfGp_event_reset();
+            }
+            break;
         case 10:
-        mCyl.SetR(30.0f);
-        break;
+            mCyl.SetR(30.0f);
+            break;
         case 11:
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
-            field_0x8AC = 12;
-        }
-        break;
+            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+                field_0x8AC = 12;
+            }
+            break;
         case 12:
-        privateCut();
-        if (dComIfGp_evmng_endCheck(mMegamiDemoEventIdx)) {
-            field_0x8AC = 13;
-        }
-        break;
-        case 14: // no case 13?
-        mCyl.SetR(30.0f);
+            privateCut();
+            if (dComIfGp_evmng_endCheck(mMegamiDemoEventIdx)) {
+                field_0x8AC = 13;
+            }
+            break;
+        case 14:
+            mCyl.SetR(30.0f);
     }
+    
     if (!field_0x8A1 && field_0x8A2 == true) {
         if (mBrk.getFrame() < 1.0f) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_SDOLL_EYE_PULSE, 0);
         }
         mBrk.play();
     }
+
     if(demoActorID != 0){
         dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
         if (demo_actor != NULL) {
