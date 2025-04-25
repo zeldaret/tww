@@ -14,7 +14,7 @@ class JUTNameTab;
 enum J3DMaterialCopyFlag {
     J3DMatCopyFlag_Material = 0x01,
     J3DMatCopyFlag_Texture = 0x02,
-    J3DMatCopyFlag_All = 0x03,
+    J3DMatCopyFlag_All = J3DMatCopyFlag_Material | J3DMatCopyFlag_Texture,
 };
 
 enum {

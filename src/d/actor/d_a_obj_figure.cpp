@@ -984,7 +984,7 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
 
-        if(mpMorf->getModel()->setSkinDeform(pDeform, 1) != 0) {
+        if(mpMorf->getModel()->setSkinDeform(pDeform, 1) != J3DErrType_Success) {
             return false;
         }
     }

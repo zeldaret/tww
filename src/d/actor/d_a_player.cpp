@@ -88,10 +88,8 @@ void daPy_py_c::setDoButtonQuake() {
     onNoResetFlg0(daPyFlg0_UNK200000);
     mQuakeTimer = 60;
     
-    // u8 temp[4] = {0x00, 0x10, 0xFF, 0xEE}; // Doesn't match
-    u32 temp2 = 0x0010FFEE;
-    u8* temp = (u8*)&temp2;
-    dComIfGp_getVibration().StartQuake(temp, 0, 1, cXyz(0.0f, 1.0f, 0.0f));
+    u32 pattern = 0x0010FFEE;
+    dComIfGp_getVibration().StartQuake((u8*)&pattern, 0, 1, cXyz(0.0f, 1.0f, 0.0f));
 }
 
 /* 80102D90-80102E18       .text stopDoButtonQuake__9daPy_py_cFi */

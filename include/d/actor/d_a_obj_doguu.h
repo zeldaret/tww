@@ -10,7 +10,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    inline void setEffectMtx(const cXyz*, float); // weak but not inlined?
+    inline void setEffectMtx(const cXyz*, float); // weak but not inlined
 
     void setPointLight();
     BOOL CreateHeap();

@@ -41,6 +41,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Height */ 200.0f,
     }
 };
+
 const struct {
     int bmt_vgsm[3];
     int bmt_vgsb[3];
@@ -109,7 +110,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     JUT_ASSERT(0x170, brk_doguu != NULL);
     
     if (mBrk.init(modelData, brk_doguu, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
-      return FALSE;
+        return FALSE;
     }
     
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bdl_vgsh[field_0x894]));
@@ -142,7 +143,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     field_0x6D4 = mDoExt_J3DModel__create(modelData, 0x80000,0x15220202);
     
     if (field_0x6D4 == NULL) {
-      return FALSE;
+        return FALSE;
     }
     
     JUTNameTab* nameTable = field_0x6D4->getModelData()->getJointName();
@@ -159,7 +160,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     JUT_ASSERT(0x1AB, bck_body != NULL);
     
     if (mBckBody.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
-      return FALSE;
+        return FALSE;
     }
 
     deform = new J3DSkinDeform();
@@ -183,19 +184,18 @@ BOOL daObjDoguu_c::CreateHeap() {
     
     if(mBckCrystal.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0){
         return FALSE;
-    } else{
-        field_0x89C = 1;
-        return TRUE;
     }
+
+    field_0x89C = 1;
+    return TRUE;
 }
 
 /* 000007D0-00000B80       .text CreateInit__12daObjDoguu_cFv */
 void daObjDoguu_c::CreateInit() {
-    
-
-    cullMtx = field_0x6CC->getBaseTRMtx();
+    fopAcM_SetMtx(this, field_0x6CC->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 400.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
+
     if (field_0x894 == 0){
         mItemNo = dItem_PEARL_DIN_e;
     } else if(field_0x894 == 1) {
@@ -203,6 +203,7 @@ void daObjDoguu_c::CreateInit() {
     } else{
         mItemNo = dItem_PEARL_NAYRU_e;
     }
+
     mStts.Init(0xff, 0xff, this);
     mCyl.Set(l_cyl_src);
     if(!checkItemGet(mItemNo, TRUE)){ 
@@ -232,9 +233,9 @@ void daObjDoguu_c::CreateInit() {
     } else {
         field_0x8A1 = false;
         if (
-            (field_0x894 == 0) && dComIfGs_isEventBit(0x1480) ||
-            (field_0x894 == 1 && dComIfGs_isEventBit(0x1440) ||
-            (field_0x894 == 2 && dComIfGs_isEventBit(0x1410)))
+            (field_0x894 == 0 && dComIfGs_isEventBit(0x1480)) ||
+            (field_0x894 == 1 && dComIfGs_isEventBit(0x1440)) ||
+            (field_0x894 == 2 && dComIfGs_isEventBit(0x1410))
         ) {
             field_0x8A2 = true;
             field_0x8A0 = true;
@@ -245,6 +246,7 @@ void daObjDoguu_c::CreateInit() {
             field_0x8AC = 0;
         }
     }
+    
     eyePos.y += attr().mOffsetEyePos;
     set_mtx();
 
@@ -310,13 +312,11 @@ u16 daObjDoguu_c::next_msgStatus(u32* pMsgNo) {
 u32 daObjDoguu_c::getMsg() {
     if (mActIdx == 4) {
         return 3821;
-    }
-    if (field_0x894 == 0) {
+    } else if (field_0x894 == 0) {
         return 3822;
-    }
-    if(field_0x894 == 1){
+    } else if (field_0x894 == 1){
         return 3823;
-    } else{
+    } else {
         return 3824;
     }
 }
@@ -343,10 +343,8 @@ void daObjDoguu_c::setPlayerAngle(int i_staffIdx) {
 
 /* 00000F18-00000FB8       .text setQuake__12daObjDoguu_cFi */
 void daObjDoguu_c::setQuake(int i_staffIdx) {
-    // u8 temp[4] = {0x00, 0x10, 0xFF, 0xEE}; // Doesn't match
-    u32 temp2 = 0x0010FFEE;
-    u8* temp = (u8*)&temp2;
-    dComIfGp_getVibration().StartQuake(temp, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
+    u32 pattern = 0x0010FFEE;
+    dComIfGp_getVibration().StartQuake((u8*)&pattern, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
     mTimer = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
 
 }
@@ -432,14 +430,14 @@ void daObjDoguu_c::privateCut() {
             case 6:
                 mTimer--;
                 if (mTimer == 0) {
-                  doCutEnd = true;
-                  dComIfGp_getVibration().StopQuake(63);
+                    doCutEnd = true;
+                    dComIfGp_getVibration().StopQuake(63);
                 }
                 break;
             case 7:
                 doCutEnd = true;
                 break;
-            case 8:
+            case 8: {
                 int iVar2 = field_0x8C4;
                 if(iVar2 >= 200){
                     mAllColRatio = 1.0f;
@@ -456,12 +454,10 @@ void daObjDoguu_c::privateCut() {
                     mAllColRatio = 0.375f - (iVar2 + -40) * 0.00625f;
                 } else if ((iVar2 >= 130) && (iVar2 < 150)) {
                     mAllColRatio = (iVar2 + -130) * 0.00625f + 0.25f;
-                } else {
-                    if((field_0x8C4 >= 150) && (field_0x8C4 < 170)){
-                        mAllColRatio = (iVar2 + -150) * 0.0125f + 0.375f;
-                    } else if((iVar2 >= 170) && (iVar2 <= 190)){
-                        mAllColRatio = (iVar2 + -170) * 0.01875f + 0.625f;
-                    }
+                } else if((field_0x8C4 >= 150) && (field_0x8C4 < 170)){
+                    mAllColRatio = (iVar2 + -150) * 0.0125f + 0.375f;
+                } else if((iVar2 >= 170) && (iVar2 <= 190)){
+                    mAllColRatio = (iVar2 + -170) * 0.01875f + 0.625f;
                 }
 
                 if (field_0x8C4 == 40) {
@@ -482,6 +478,7 @@ void daObjDoguu_c::privateCut() {
                     field_0x8A3 = true;
                 }
                 break;
+            }
             default:
                 doCutEnd = true;
                 break;
@@ -513,20 +510,17 @@ int daObjDoguu_c::getFinishEventCount() {
 void daObjDoguu_c::setFinishMyEvent() {
     if (field_0x894 == 0) {
         dComIfGs_onEventBit(0x1480);
-      } else if (field_0x894 == 1) {
+    } else if (field_0x894 == 1) {
         dComIfGs_onEventBit(0x1440);
-      } else {
+    } else {
         dComIfGs_onEventBit(0x1410);
-      }
-      return;
+    }
 }
 
 /* 000016A4-000016C4       .text daObjDoguu_Create__FPv */
 static cPhs_State daObjDoguu_Create(void* i_this) {
     return static_cast<daObjDoguu_c*>(i_this)->_create();
 }
-
-daObjDoguu_c::daObjDoguu_c() {}
 
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
 cPhs_State daObjDoguu_c::_create() {
@@ -540,19 +534,19 @@ cPhs_State daObjDoguu_c::_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0)){
             return cPhs_ERROR_e;
-        } else{
-            CreateInit();
-        }   
+        }
+        CreateInit();
     }
     return phase_state;
 }
+
+daObjDoguu_c::daObjDoguu_c() {}
 
 bool daObjDoguu_c::_delete(){
     dKy_plight_cut(&mLightInfluence);
     dComIfG_resDelete(&mPhs,"Doguu");
     return true;
 }
-
 
 /* 00001CC8-00001D0C       .text daObjDoguu_Delete__FPv */
 static BOOL daObjDoguu_Delete(void* i_this) {
@@ -620,28 +614,31 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
     Mtx reflMtx;
     C_MTXLookAt(reflMtx, &cXyz::Zero, &cXyz::BaseY, &refl);
     mDoMtx_stack_c::scaleS(scale, scale, 1.0f);
-    MTXConcat(mDoMtx_stack_c::now, mtx_adj, mDoMtx_stack_c::now);
-    MTXConcat(mDoMtx_stack_c::now, reflMtx, mDoMtx_stack_c::now);
-    mDoMtx_stack_c::now[0][3] = 0.0f;
-    mDoMtx_stack_c::now[1][3] = 0.0f;
-    mDoMtx_stack_c::now[2][3] = 0.0f;
+    mDoMtx_stack_c::concat(mtx_adj);
+    mDoMtx_stack_c::concat(reflMtx);
+    MtxP mtx = mDoMtx_stack_c::get();
+    mtx[0][3] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[2][3] = 0.0f;
+    
     J3DModelData *modelData = field_0x6D0->getModelData();
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
         for (u32 j = 0; j < 8; j++) {
             J3DTexMtx* texMtx = mat->getTexMtx(j);
             if (texMtx != NULL && texMtx->getTexMtxInfo().mInfo == 10) {
-                texMtx->getTexMtxInfo().setEffectMtx(mDoMtx_stack_c::now);
+                texMtx->getTexMtxInfo().setEffectMtx(mDoMtx_stack_c::get());
             }
         }
     }
+    
     modelData = field_0x6D4->getModelData();
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
         for (u32 j = 0; j < 8; j++) {
             J3DTexMtx* texMtx = mat->getTexMtx(j);
             if (texMtx != NULL && texMtx->getTexMtxInfo().mInfo == 10) {
-                texMtx->getTexMtxInfo().setEffectMtx(mDoMtx_stack_c::now);
+                texMtx->getTexMtxInfo().setEffectMtx(mDoMtx_stack_c::get());
             }
         }
     }
@@ -665,17 +662,17 @@ bool daObjDoguu_c::_execute() {
     
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
+    
     if (mAllColRatio != 1.0f) {
         dKy_set_allcol_ratio(mAllColRatio);
     }
     
     switch(field_0x8AC) {
         case 0:
-            fopAc_ac_c *ac;
             if (checkItemGet(mItemNo, TRUE) && mCyl.ChkCoHit()) {
                 cCcD_Obj* hitObj = mCyl.GetCoHitObj();
                 if (hitObj != NULL) {
-                    ac = hitObj->GetAc();
+                    fopAc_ac_c *ac = hitObj->GetAc();
                     if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
                         mCyl.SetR(50.0f);
                         fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
