@@ -123,7 +123,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTransform* bck_head = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bck[field_0x894]));
     JUT_ASSERT(0x17D, bck_head != NULL);
     
-    if (mBck1.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mBckHead.init(modelData, bck_head, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
         return FALSE;
     }
 
@@ -150,15 +150,15 @@ BOOL daObjDoguu_c::CreateHeap() {
     for (u16 i = 0; i < field_0x6D4->getModelData()->getJointNum(); i++) {
         const char* name = nameTable->getName(i);
         if (strcmp("head1", name) == 0) {
-            mJointIdx = i;
+            mHead1JntNo = i;
             break;
         }
     }
     
-    J3DAnmTransform* bck_body = static_cast<J3DAnmTransform *>(dComIfG_getObjectRes("Doguu", 6));
+    J3DAnmTransform* bck_body = static_cast<J3DAnmTransform *>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSBA));
     JUT_ASSERT(0x1AB, bck_body != NULL);
     
-    if (mBck2.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    if (mBckBody.init(modelData, bck_body, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
       return FALSE;
     }
 
@@ -181,7 +181,7 @@ BOOL daObjDoguu_c::CreateHeap() {
     J3DAnmTransform* bck_crystal = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Doguu", DOGUU_BCK_VGSPA));
     JUT_ASSERT(0x1c3, bck_crystal != NULL);
     
-    if(mBck3.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0){
+    if(mBckCrystal.init(modelData, bck_crystal, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0){
         return FALSE;
     } else{
         field_0x89C = 1;
@@ -205,49 +205,44 @@ void daObjDoguu_c::CreateInit() {
     }
     mStts.Init(0xff, 0xff, this);
     mCyl.Set(l_cyl_src);
-    if(!checkItemGet(mItemNo, 1)){
+    if(!checkItemGet(mItemNo, TRUE)){ 
         mCyl.SetR(50.f);
     }
     mCyl.SetStts(&mStts);
     dKy_plight_set(&mLightInfluence);
     if (subtype >= 1) {
-        mBck1.setFrame(mBck1.getStartFrame());
-        mBck2.setFrame(mBck2.getStartFrame());
-        mBck3.setFrame(mBck3.getStartFrame());
+        mBckHead.setFrame(mBckHead.getStartFrame());
+        mBckBody.setFrame(mBckBody.getStartFrame());
+        mBckCrystal.setFrame(mBckCrystal.getStartFrame());
 
         field_0x8A0 = true;
         field_0x8A1 = false;
         field_0x8A2 = true;
         field_0x8AC = 14;
+    } else if (dComIfGs_isEventBit(0x1480) && dComIfGs_isEventBit(0x1440) && dComIfGs_isEventBit(0x1410)) {
+
+        mBckHead.setFrame(mBckHead.getEndFrame());
+        mBckBody.setFrame(mBckBody.getEndFrame());
+        mBckCrystal.setFrame(mBckCrystal.getEndFrame());
+        field_0x8A0 = true;
+        field_0x8A1 = true;
+        field_0x8A2 = false;
+        field_0x8AC = 14;
+        
     } else {
-        int eventBit = dComIfGs_isEventBit(0x1480);
-        if ((eventBit != false) && (eventBit = dComIfGs_isEventBit(0x1440),
-            eventBit != 0) && (eventBit = dComIfGs_isEventBit(0x1410),
-            eventBit != 0)) {
-        
-            mBck1.setFrame(mBck1.getEndFrame());
-            mBck2.setFrame(mBck2.getEndFrame());
-            mBck3.setFrame(mBck3.getEndFrame());
+        field_0x8A1 = false;
+        if (
+            (field_0x894 == 0) && dComIfGs_isEventBit(0x1480) ||
+            (field_0x894 == 1 && dComIfGs_isEventBit(0x1440) ||
+            (field_0x894 == 2 && dComIfGs_isEventBit(0x1410)))
+        ) {
+            field_0x8A2 = true;
             field_0x8A0 = true;
-            field_0x8A1 = true;
-            field_0x8A2 = false;
-            field_0x8AC = 14;
-        
+            field_0x8AC = 10;                   
         } else {
-            field_0x8A1 = false;
-            if (((field_0x894 == 0) && (eventBit = dComIfGs_isEventBit(0x1480), eventBit != 0)) ||
-            (field_0x894 == 1 && (eventBit = dComIfGs_isEventBit(0x1440),
-             eventBit != 0)) || (field_0x894 == 2 && (eventBit = dComIfGs_isEventBit(0x1410),
-             eventBit != 0))){
-                field_0x8A2 = true;
-                field_0x8A0 = true;
-                field_0x8AC = 10;                   
-             }
-             else {
-                field_0x8A2 = false;
-                field_0x8A0 = false;
-                field_0x8AC = 0;
-             }
+            field_0x8A2 = false;
+            field_0x8A0 = false;
+            field_0x8AC = 0;
         }
     }
     eyePos.y += attr().mOffsetEyePos;
@@ -285,7 +280,7 @@ void daObjDoguu_c::set_mtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     field_0x6D8->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    field_0x6D0->setBaseTRMtx(field_0x6D4->getAnmMtx(mJointIdx));
+    field_0x6D0->setBaseTRMtx(field_0x6D4->getAnmMtx(mHead1JntNo));
 }
 
 /* 00000CEC-00000D80       .text next_msgStatus__12daObjDoguu_cFPUl */
@@ -334,7 +329,7 @@ void daObjDoguu_c::setGoal(int i_staffIdx) {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::transM(pos.x, pos.y,  pos.z);
 
-    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &pos);
+    mDoMtx_stack_c::multVecZero(&pos);
     field_0x8B4 = pos;
     dComIfGp_evmng_setGoal(&field_0x8B4);
 }
@@ -474,7 +469,7 @@ void daObjDoguu_c::privateCut() {
                     mPos.y = 0.0f;
                     mPos.z = 0.0f;
                     mDoMtx_stack_c::copy(field_0x6D8->getAnmMtx(field_0x89C));
-                    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &mPos);
+                    mDoMtx_stack_c::multVecZero(&mPos);
                     
                     if (field_0x894 == 0) {
                         dComIfGp_particle_set(dPa_name::ID_SCENE_8434, &mPos, &current.angle);
@@ -489,6 +484,7 @@ void daObjDoguu_c::privateCut() {
                 break;
             default:
                 doCutEnd = true;
+                break;
             }
             if(doCutEnd){
                 dComIfGp_evmng_cutEnd(staffIdx);
@@ -582,11 +578,11 @@ bool daObjDoguu_c::_draw() {
         J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bmt_vgsb[field_0x894]);
         
         field_0x6D4->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
-        mBck1.entry(field_0x6D0->getModelData());
+        mBckHead.entry(field_0x6D0->getModelData());
         mDoExt_modelUpdateDL(field_0x6D0);
         field_0x6D0->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
 
-        mBck2.entry(field_0x6D4->getModelData());
+        mBckBody.entry(field_0x6D4->getModelData());
         mDoExt_modelUpdateDL(field_0x6D4);
         field_0x6D4->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
     } else {
@@ -597,7 +593,7 @@ bool daObjDoguu_c::_draw() {
         field_0x6CC->getModelData()->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
     }
     if (field_0x8A0 == true) {
-        mBck3.entry(field_0x6D8->getModelData());
+        mBckCrystal.entry(field_0x6D8->getModelData());
         mDoExt_modelUpdateDL(field_0x6D8);
         field_0x6D8->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);       
     }
@@ -618,12 +614,12 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
     cXyz lightDir;
     cXyz refl;
 
-    dKyr_get_vectle_calc((cXyz*)&tevStr.mLightPosWorld, (cXyz*)i_pos, &lightDir);
+    dKyr_get_vectle_calc(&tevStr.mLightPosWorld, (cXyz*)i_pos, &lightDir);
 
     C_VECHalfAngle(&lookDir, &lightDir, &refl);
     Mtx reflMtx;
     C_MTXLookAt(reflMtx, &cXyz::Zero, &cXyz::BaseY, &refl);
-    PSMTXScale(mDoMtx_stack_c::now, scale, scale, 1.0f);
+    mDoMtx_stack_c::scaleS(scale, scale, 1.0f);
     MTXConcat(mDoMtx_stack_c::now, mtx_adj, mDoMtx_stack_c::now);
     MTXConcat(mDoMtx_stack_c::now, reflMtx, mDoMtx_stack_c::now);
     mDoMtx_stack_c::now[0][3] = 0.0f;
@@ -663,7 +659,7 @@ bool daObjDoguu_c::_execute() {
         mPos.y = 0.0f;
         mPos.z = 0.0f;
         mDoMtx_stack_c::copy(field_0x6D8->getAnmMtx(field_0x89C));
-        mDoMtx_multVecZero(mDoMtx_stack_c::get(), &mPos);
+        mDoMtx_stack_c::multVecZero(&mPos);
         setPointLight();
     }
     
@@ -676,14 +672,10 @@ bool daObjDoguu_c::_execute() {
     switch(field_0x8AC) {
         case 0:
             fopAc_ac_c *ac;
-            if ((checkItemGet(mItemNo, 1) != 0) && mCyl.ChkCoHit()) {
+            if (checkItemGet(mItemNo, TRUE) && mCyl.ChkCoHit()) {
                 cCcD_Obj* hitObj = mCyl.GetCoHitObj();
                 if (hitObj != NULL) {
-                    if (hitObj->GetStts() == NULL) {
-                        ac = NULL;
-                    } else {
-                        ac = hitObj->GetStts()->GetActor();
-                    }
+                    ac = hitObj->GetAc();
                     if ((ac != NULL) && (fopAcM_GetName(ac) == PROC_PLAYER)) {
                         mCyl.SetR(50.0f);
                         fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
@@ -717,7 +709,7 @@ bool daObjDoguu_c::_execute() {
             break;
         case 4:
             if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
-            field_0x8AC = 5;
+                field_0x8AC = 5;
             }
             break;
         case 5:
@@ -769,6 +761,7 @@ bool daObjDoguu_c::_execute() {
             break;
         case 14:
             mCyl.SetR(30.0f);
+            break;
     }
     
     if (!field_0x8A1 && field_0x8A2 == true) {
@@ -792,9 +785,9 @@ bool daObjDoguu_c::_execute() {
             }
             if(demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
                 f32 frame = demo_actor->getAnmFrame();
-                mBck1.setFrame(frame);
-                mBck2.setFrame(frame);
-                mBck3.setFrame(frame);
+                mBckHead.setFrame(frame);
+                mBckBody.setFrame(frame);
+                mBckCrystal.setFrame(frame);
             }
         }
         if (mShape == 0) {

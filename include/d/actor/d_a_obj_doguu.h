@@ -33,14 +33,14 @@ public:
     /* 0x6D4 */ J3DModel* field_0x6D4;
     /* 0x6D8 */ J3DModel* field_0x6D8;
     /* 0x6DC */ mDoExt_brkAnm mBrk;
-    /* 0x6F4 */ mDoExt_bckAnm mBck1;
-    /* 0x704 */ mDoExt_bckAnm mBck2;
-    /* 0x714 */ mDoExt_bckAnm mBck3;
+    /* 0x6F4 */ mDoExt_bckAnm mBckHead;
+    /* 0x704 */ mDoExt_bckAnm mBckBody;
+    /* 0x714 */ mDoExt_bckAnm mBckCrystal;
     /* 0x724 */ dCcD_Stts mStts;
     /* 0x760 */ dCcD_Cyl mCyl;
     /* 0x890 */ u8 mItemNo;
     /* 0x894 */ int field_0x894;
-    /* 0x898 */ u32 mJointIdx;
+    /* 0x898 */ u32 mHead1JntNo;
     /* 0x89C */ u32 field_0x89C;
     /* 0x8A0 */ bool field_0x8A0;
     /* 0x8A1 */ bool field_0x8A1;
