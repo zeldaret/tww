@@ -14,10 +14,16 @@
 #include "d/d_procname.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_scene_mng.h"
+#if VERSION == VERSION_PAL
+#include "m_Do/m_Do_MemCard.h"
+#endif
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_main.h"
+#if VERSION == VERSION_PAL
+#include "stdio.h"
+#endif
 
 s32 l_startID;
 s32 l_cursolID;
@@ -26,6 +32,47 @@ s16 l_weekpat;
 s16 l_demo23;
 s8* l_groupPoint;
 u8 l_languageType;
+
+#if VERSION == VERSION_PAL
+static mDoDvdThd_mountXArchive_c* l_bmgData2;
+static int mBmgStatus2;
+
+static void dScnMenu_bmg_data_set() {
+    if (mBmgStatus2 == 0) {
+        dComIfGp_getMsgDtArchive()->unmount();
+        char sp08[40];
+        sprintf(sp08, "/res/Msg/data%d/bmgres.arc", dComIfGs_getPalLanguage());
+        l_bmgData2 = mDoDvdThd_mountXArchive_c::create(sp08, 0, JKRArchive::MOUNT_MEM);
+        mBmgStatus2 = 1;
+    }
+    if (mBmgStatus2 == 1 && l_bmgData2->sync()) {
+        mBmgStatus2 = 2;
+    }
+    if (mBmgStatus2 == 2) {
+        dComIfGp_setMsgDtArchive(l_bmgData2->getArchive());
+        delete l_bmgData2;
+        mBmgStatus2 = 3;
+    }
+}
+
+static void dScnMenu_tex_data_set() {
+    if (mBmgStatus2 == 3) {
+        dComIfGp_getActionIconArchive()->unmount();
+        char sp08[40];
+        sprintf(sp08, "/res/Msg/data%d/acticon.arc", dComIfGs_getPalLanguage());
+        l_bmgData2 = mDoDvdThd_mountXArchive_c::create(sp08, 0, JKRArchive::MOUNT_ARAM);
+        mBmgStatus2 = 4;
+    }
+    if (mBmgStatus2 == 4 && l_bmgData2->sync()) {
+        mBmgStatus2 = 5;
+    }
+    if (mBmgStatus2 == 5) {
+        dComIfGp_setActionIconArchive(l_bmgData2->getArchive());
+        delete l_bmgData2;
+        mBmgStatus2 = 6;
+    }
+}
+#endif
 
 /* 8022E9F4-8022ED50       .text dScnMenu_Draw__FP19menu_of_scene_class */
 static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
@@ -173,6 +220,9 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
         if (++l_languageType > 4)
             l_languageType = 0;
         dComIfGs_setPalLanguage(language[l_languageType]);
+#if VERSION == VERSION_PAL
+        g_mDoMemCd_control.field_0x165B = language[l_languageType];
+#endif
     }
 #endif
 
@@ -231,6 +281,14 @@ static BOOL dScnMenu_IsDelete(menu_of_scene_class*) {
 
 /* 8022F320-8022F3C4       .text dScnMenu_Delete__FP19menu_of_scene_class */
 static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
+#if VERSION == VERSION_PAL
+    dScnMenu_bmg_data_set();
+    dScnMenu_tex_data_set();
+    if (mBmgStatus2 < 6) {
+        return false;
+    }
+    mBmgStatus2 = 0;
+#endif
     JUTDbPrint::getManager()->changeFont(JFWSystem::systemFont);
     delete i_this->font;
     JKRFree(i_this->info);
@@ -243,22 +301,20 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
 cPhs_State phase_1(menu_of_scene_class* i_this) {
-    /* Nonmatching */
     i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
-    JUT_ASSERT(732, i_this->command != NULL);
+    JUT_ASSERT(VERSION_SELECT(616, 732, 732), i_this->command != NULL);
     i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
-    JUT_ASSERT(735, i_this->fontCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(619, 735, 735), i_this->fontCommand != NULL);
     return cPhs_NEXT_e;
 }
 
 /* 8022F4B0-8022F70C       .text phase_2__FP19menu_of_scene_class */
 cPhs_State phase_2(menu_of_scene_class* i_this) {
-    /* Nonmatching */
     if (!i_this->command->sync() || !i_this->fontCommand->sync()) {
         return cPhs_INIT_e;
     }
     i_this->info = (menu_of_scene_class::menu_inf*)i_this->command->getMemAddress();
-    JUT_ASSERT(779, i_this->info != NULL);
+    JUT_ASSERT(VERSION_SELECT(663, 779, 779), i_this->info != NULL);
     delete i_this->command;
     menu_of_scene_class::menu_inf* info = i_this->info;
     info->stage = (menu_of_scene_class::stage_inf*)(u32(info->stage) + u32(info));
@@ -267,7 +323,7 @@ cPhs_State phase_2(menu_of_scene_class* i_this) {
     }
     if (!l_groupPoint) {
         l_groupPoint = new s8[info->num];
-        JUT_ASSERT(792, l_groupPoint != NULL);
+        JUT_ASSERT(VERSION_SELECT(676, 792, 792), l_groupPoint != NULL);
         for (int i = 0; i < info->num; i++) {
             l_groupPoint[i] = 0;
         }
