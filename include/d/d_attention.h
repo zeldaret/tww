@@ -229,13 +229,12 @@ public:
     /* 0x008 */ dAttDraw_CallBack_c mCallBack;
     /* 0x00C */ int mPlayerNo;
     /* 0x010 */ u32 mFlagMask;
-    /* 0x014 */ u8 field_0x014[0x018 - 0x014];
+    /* 0x014 */ u8 field_0x014[0x018 - 0x014]; // seemingly unused but removing this yields a smaller structure
     /* 0x018 */ u8 mLockOnState;
-    /* 0x019 */ u8 field_0x019;
+    /* 0x019 */ u8 field_0x019; // data copied from mLockState, looks to be same as TP's dAttention_c::field_0x32a
     /* 0x01A */ u8 field_0x01a;
     /* 0x01B */ u8 field_0x01b;
     /* 0x01C */ s16 field_0x01c;
-    /* 0x01E */ u8 field_0x01E[0x020 - 0x01E];
     /* 0x020 */ u32 mFlags;
     /* 0x024 */ JKRSolidHeap* heap;
     /* 0x028 */ s8 field_0x028; // looks to be same as TP's dAttention_c::field_0x328
