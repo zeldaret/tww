@@ -174,7 +174,7 @@ void fly_se_set(fganon_class* i_this) {
     cXyz local_34 = i_this->current.pos - i_this->old.pos;
     uint uVar2 = (uint)(local_34.abs() * 3.5f);
     if (uVar2 > 100) {
-      uVar2 = 100;
+        uVar2 = 100;
     }
     fopAcM_seStart(i_this, JA_SE_CM_PG_FLYING, uVar2);
 }
@@ -333,8 +333,8 @@ void shot(fganon_class* i_this) {
     pos_move(i_this, 0);
     fly_se_set(i_this);
     if ((i_this->m388 >= 2) && (i_this->m408 == 0)) {
-      i_this->m386 = 5;
-      i_this->m388 = 0;
+        i_this->m386 = 5;
+        i_this->m388 = 0;
     }
     if ((i_this->m388 == 3) || (i_this->m388 == 4)) {
         mDoAud_monsSeStart(JA_SE_OBJ_PG_EBALL_FLY_S, &i_this->m3E0, 100, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
@@ -2295,7 +2295,7 @@ void energy_ball_move(fganon_class* i_this) {
     local_5c = a_this->home.pos - i_this->m3E0;
         
     if (local_5c.abs() > 10000.0f) {
-      i_this->m408 = 35;
+        i_this->m408 = 35;
     }
 }
 

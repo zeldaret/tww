@@ -29,13 +29,13 @@ BOOL daPy_lk_c::fanWindCrashEffectDraw() {
 /* 8014BB38-8014BBE8       .text fanJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::fanJointCB(int param_0) {
     if (param_0 == 2) {
-        mDoMtx_ZrotS(mDoMtx_stack_c::now, m3558);
+        mDoMtx_stack_c::ZrotS(m3558);
     } else {
-        mDoMtx_ZrotS(mDoMtx_stack_c::now, m355A);
+        mDoMtx_stack_c::ZrotS(m355A);
     }
-    mDoMtx_concat(mpEquipItemModel->getAnmMtx(param_0), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
-    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::now);
-    mDoMtx_copy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+    mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
+    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 
@@ -54,15 +54,15 @@ BOOL daPy_fanJointCallback(J3DNode* node, int calcTiming) {
 /* 8014BC2C-8014BD08       .text parachuteJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::parachuteJointCB(int param_0) {
     if (param_0 == 3 || param_0 == 9) {
-        mDoMtx_trans(mDoMtx_stack_c::now, m3600, 0.0f, 0.0f);
+        mDoMtx_stack_c::transS(m3600, 0.0f, 0.0f);
     } else if (param_0 == 1 || param_0 == 7) {
-        mDoMtx_YrotS(mDoMtx_stack_c::now, m355E);
+        mDoMtx_stack_c::YrotS(m355E);
     } else {
         return true;
     }
-    mDoMtx_concat(mpEquipItemModel->getAnmMtx(param_0), mDoMtx_stack_c::now, mDoMtx_stack_c::now);
-    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::now);
-    mDoMtx_copy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
+    mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
+    mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 
@@ -290,9 +290,9 @@ BOOL daPy_lk_c::procFanSwing() {
                     local_80.y = shape_angle.y + 0x8000;
                     local_80.x = getGroundAngle(&(mGndChk), local_80.y);
                     local_80.z = getGroundAngle(&(mGndChk), local_80.y + -0x4000);
-                    mDoMtx_trans(mDoMtx_stack_c::now, local_48.x, local_48.y, local_48.z);
-                    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, local_80.x, local_80.y, local_80.z);
-                    JPASetRMtxTVecfromMtx(mDoMtx_stack_c::now, pJVar5->mGlobalRotation, (pJVar5->mGlobalTranslation));
+                    mDoMtx_stack_c::transS(local_48);
+                    mDoMtx_stack_c::ZXYrotM(local_80.x, local_80.y, local_80.z);
+                    pJVar5->setGlobalRTMatrix(mDoMtx_stack_c::get());
                     pJVar5->setSpread(0.45f);
                     if (attrib_code == dBgS_Attr_GRASS_e) {
                         pJVar5->setRate(100.0f);
@@ -370,7 +370,7 @@ BOOL daPy_lk_c::procFanGlide() {
     if (frameCtrl.checkPass(4.0f)) {
         JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_004B, &current.pos);
         if (emitter) {
-            JPASetRMtxTVecfromMtx(mpCLModel->getAnmMtx(0xf), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+            emitter->setGlobalRTMatrix(mpCLModel->getAnmMtx(0xf));
         }
     }
     if (frameCtrl.getRate() < 0.01f && mProcVar0.m3570 == 0 && m32E4.getEmitter() == NULL) {
@@ -417,7 +417,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 }
             }
             if (m34D2 == 0) {
-                dComIfGp_setDoStatus(0x27);
+                dComIfGp_setDoStatus(dActStts_CANCEL_e);
             }
             if ((m34D2 == 0 && (doTrigger() || cancelTrigger())) || (dComIfGs_getMagic() < 1 && m3574 == 0)) {
                 m3688 = current.pos;

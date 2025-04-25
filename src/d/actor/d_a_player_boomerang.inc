@@ -170,7 +170,7 @@ BOOL daPy_lk_c::procBoomerangSubject() {
     }
 
     if (checkBoomerangReadyAnime()) {
-        dComIfGp_setDoStatus(7);
+        dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
     setShapeAngleToAtnActor();

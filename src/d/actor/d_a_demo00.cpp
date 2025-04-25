@@ -69,8 +69,8 @@ void daDemo00_c::setBaseMtx() {
 void daDemo00_c::setShadowSize() {
     J3DModelData* modelData = model.model->getModelData();
 
-    cXyz min(1000000000.0f, 1000000000.0f, 1000000000.0f);
-    cXyz max(-1000000000.0f, -1000000000.0f, -1000000000.0f);
+    cXyz min(100000000.0f, 100000000.0f, 100000000.0f);
+    cXyz max(-100000000.0f, -100000000.0f, -100000000.0f);
 
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         J3DJoint* joint = modelData->getJointNodePointer(i);

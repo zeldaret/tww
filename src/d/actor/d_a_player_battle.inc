@@ -47,13 +47,13 @@ void daPy_lk_c::setSpecialBattle(BOOL param_0) {
         enemy->getBtNowFrame() < enemy->getBtEndFrame() &&
         enemy->getBtMaxDis() > fopAcM_searchActorDistanceXZ(this, enemy))
     {
-        dComIfGp_setDoStatus(0x1a);
+        dComIfGp_setDoStatus(dActStts_PARRY_e);
     }
 }
 
 /* 8013E384-8013E454       .text changeSpecialBattle__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeSpecialBattle() {
-    if (mpAttnActorLockOn != NULL && (dComIfGp_getDoStatus() == 26 || (m34C5 == 5))) {
+    if (mpAttnActorLockOn != NULL && (dComIfGp_getDoStatus() == dActStts_PARRY_e || (m34C5 == 5))) {
         fopEn_enemy_c* enemy = (fopEn_enemy_c*)mpAttnActorLockOn;
         if (m34C5 == 5 || (spBattleTrigger() && enemy->getBtStartFrame() <= enemy->getBtNowFrame())) {
             if (enemy->getBtAttackType() == 1) {

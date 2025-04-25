@@ -1074,7 +1074,7 @@ void JAIZelBasic::changeSeaBgm() {
     
     switch (r3) {
     case 4:
-        field_0x0094 = 0.0f;
+        field_0x0094 = 1.0f;
         bgmStart(checkSeaBgmID(), 0x5A, 1);
         break;
     case 1:

@@ -266,7 +266,7 @@ static void daJi1_AtHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc
 
 /* 000004A0-000004CC       .text isGuardAnim__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::isGuardAnim() {
-    if(field_0xD64 >= 8 && field_0xD64 <= 10 || field_0xD64 == 0xF) {
+    if((field_0xD64 >= 8 && field_0xD64 <= 10) || field_0xD64 == 0xF) {
         return true;
     }
 
@@ -356,7 +356,7 @@ static BOOL daNpc_Ji1_plRoomOutCheck() {
     static cXyz out_chk_pos(0.0f, 0.0f, 500.0f);
 
     cXyz temp = plyrPos - out_chk_pos;
-    if(temp.absXZ() < 100.0f && dComIfGp_getDoStatus() == 0xB) {
+    if(temp.absXZ() < 100.0f && dComIfGp_getDoStatus() == dActStts_OPEN_e) {
         return true;
     }
 

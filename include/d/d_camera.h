@@ -292,7 +292,8 @@ public:
     /* 0x568 */ cXyz mCenterShake;
     /* 0x574 */ cXyz mEyeShake;
     /* 0x580 */ f32 mFovYShake;
-    /* 0x584 */ u8 m584[0x588 - 0x584];
+    /* 0x584 */ cSAngle m584;
+    /* 0x586 */ u8 m586[0x588 - 0x586];
     /* 0x588 */ int m588;
     /* 0x58C */ int m58C;
     /* 0x590 */ int mBlureTimer;
@@ -392,7 +393,7 @@ public:
     bool lineBGCheck(cXyz*, cXyz*, u32);
     bool lineBGCheckBack(cXyz*, cXyz*, u32);
     bool lineBGCheckBoth(cXyz*, cXyz*, dBgS_LinChk*, u32);
-    BOOL lineCollisionCheckBush(cXyz*, cXyz*);
+    u32 lineCollisionCheckBush(cXyz*, cXyz*);
     cXyz compWallMargin(cXyz*, f32);
     int defaultTriming();
     void setView(f32, f32, f32, f32);
@@ -455,8 +456,8 @@ public:
     bool ScopeViewMsgModeOff();
 
     f32 Fovy() { return mFovY + mFovYShake; }
-    cSAngle Bank() {}
-    cXyz Up() {}
+    cSAngle Bank() { return mBank + m584; }
+    cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
     cXyz Eye() { return mEye + mEyeShake; }
 

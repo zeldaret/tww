@@ -127,7 +127,7 @@ void daObjHhaPart_c::init_mtx(cXyz currentPos, csXyz shapeAngle, cXyz scale) {
     mDoMtx_stack_c::transS(currentPos);
     mDoMtx_stack_c::ZXYrotM(shapeAngle);
     mDoMtx_stack_c::transM(mPos);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
@@ -237,7 +237,7 @@ void daObjHhaYgush_c::init_mtx() {
         mDoMtx_stack_c::transS(mPos);
         mDoMtx_stack_c::ZXYrotM(mRot);
         mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
-        M_mdl->setBaseTRMtx(mDoMtx_stack_c::now);
+        M_mdl->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
 
@@ -411,7 +411,7 @@ void daObjHha_c::init_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::transM(mPosOffset);
     mDoMtx_stack_c::scaleM(1.0f, 1.0f, mWtrScale);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 

@@ -145,7 +145,7 @@ BOOL daPy_lk_c::procLadderUpStart() {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
         m34C2 = 5;
         if (frameCtrl.getRate() < 0.01f) {
-            dComIfGp_setDoStatus(6);
+            dComIfGp_setDoStatus(dActStts_LET_GO_e);
             if (m34D4 == 0) {
                 setLadderFootSe();
                 m34D4 = 1;
@@ -260,7 +260,7 @@ BOOL daPy_lk_c::procLadderDownStart() {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
         m34C2 = 5;
         if (frameCtrl.getRate() < 0.01f) {
-            dComIfGp_setDoStatus(6);
+            dComIfGp_setDoStatus(dActStts_LET_GO_e);
             if (doTrigger()) {
                 m34C2 = 0;
                 procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
@@ -373,7 +373,7 @@ BOOL daPy_lk_c::procLadderMove() {
         return true;
     }
     m34C2 = 5;
-    dComIfGp_setDoStatus(6);
+    dComIfGp_setDoStatus(dActStts_LET_GO_e);
 
     if (doTrigger()) {
         m34C2 = 0;

@@ -470,9 +470,9 @@ void daNpc_kam_c::playerAction(void* arg) {
         setPlayerAction(&daNpc_kam_c::waitPlayerAction, NULL);
     }
     
-    dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
-    dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
-    dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+    dComIfGp_setRStatusForce(dActStts_RETURN_e);
+    dComIfGp_setDoStatus(dActStts_FLY_e);
+    dComIfGp_setAStatus(dActStts_HIDDEN_e);
     
     (this->*mCurrPlayerActionFunc)(arg);
 }

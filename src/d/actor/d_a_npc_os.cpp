@@ -593,9 +593,9 @@ void daNpc_Os_c::playerAction(void* param_1) {
         setPlayerAction(&daNpc_Os_c::waitPlayerAction, 0);
     }
 
-    dComIfGp_setRStatusForce(7);
-    dComIfGp_setDoStatus(0x3E);
-    dComIfGp_setAStatus(0x3E);
+    dComIfGp_setRStatusForce(dActStts_RETURN_e);
+    dComIfGp_setDoStatus(dActStts_HIDDEN_e);
+    dComIfGp_setAStatus(dActStts_HIDDEN_e);
 
     (this->*mPlayerAction)(param_1);
 }

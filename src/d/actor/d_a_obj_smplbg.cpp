@@ -87,7 +87,7 @@ void daObjSmplbg::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    cMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000558-00000594       .text init_mtx__Q211daObjSmplbg5Act_cFv */

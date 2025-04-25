@@ -638,8 +638,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             *pMsgNo = 0x2F6C;
 
             break;
@@ -695,8 +695,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             msgStatus = fopMsgStts_MSG_DISPLAYED_e;
             break;
         case 0x2F47:
@@ -705,8 +705,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             msgStatus = fopMsgStts_MSG_DISPLAYED_e;
             break;
         case 0xF3F:
@@ -732,8 +732,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             msgStatus = fopMsgStts_MSG_DISPLAYED_e;
             break;
         case 0x2F78:
@@ -742,8 +742,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             msgStatus = fopMsgStts_MSG_DISPLAYED_e;
             break;
         case 0xF42:
@@ -769,8 +769,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             *pMsgNo = mShopItems.getSelectItemBuyMsg();
             break;
         case 0x2F4A:
@@ -784,8 +784,8 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 break;
             }
 
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             *pMsgNo = mShopItems.getSelectItemBuyMsg();
             break;
         case 0xF45:
@@ -1703,12 +1703,12 @@ bool daNpc_Bs1_c::talk01() {
     } else {
         if (shopMsgCheck(m738) && status == 8) {
             if (mShopItems.getSelectItemBuyMsg() == m738) {
-                dComIfGp_setDoStatusForce(0x17);
-                dComIfGp_setAStatusForce(0x27);
+                dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+                dComIfGp_setAStatusForce(dActStts_CANCEL_e);
             }
         } else if (status == 8 && checkBeastItemSellMsg(m738)) {
-            dComIfGp_setDoStatusForce(0x17);
-            dComIfGp_setAStatusForce(0x27);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
+            dComIfGp_setAStatusForce(dActStts_CANCEL_e);
         }
     }
     return mpMorf->isMorf();
@@ -2094,7 +2094,7 @@ BOOL daNpc_Bs1_c::_execute() {
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     J3DModel* pModel = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     for (int i = 0; i < 3; i++) {
         if (m76C[i] != 0) {

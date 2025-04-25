@@ -83,7 +83,7 @@ void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* pDC) {
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -131,7 +131,7 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -248,7 +248,7 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -441,7 +441,7 @@ void rotTypeZ(f32 sin, f32 cos, Mtx& out) {
 /* 80261568-802615C4       .text rotTypeXYZ__FffRA3_A4_f */
 void rotTypeXYZ(f32 sin, f32 cos, Mtx& out) {
     f32 a, b, c;
-    a = (1.0f - cos) * (1.0f / 3.0f);
+    a = (1.0f - cos) * 0.333333f;
     c = a + (0.57735f * sin);
     b = a - (0.57735f * sin);
     a = a + cos;

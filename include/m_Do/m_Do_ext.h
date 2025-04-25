@@ -573,7 +573,9 @@ public:
     void setModel(J3DModel*) {}
     void update() {}
     
-    void draw();
+    void draw() {
+        /* Nonmatching */
+    }
     void setMaterial();
 };
 
