@@ -1363,7 +1363,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kytag04"),
     ActorRel(Matching,    "d_a_kytag05"),
     ActorRel(Matching,    "d_a_kytag06"),
-    ActorRel(NonMatching, "d_a_kytag07"),
+    ActorRel(Matching,    "d_a_kytag07"),
     ActorRel(Matching,    "d_a_lamp" , extra_cflags=['-sym off']),
     ActorRel(NonMatching, "d_a_lod_bg"),
     ActorRel(Matching,    "d_a_lwood"),
