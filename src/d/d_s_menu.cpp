@@ -21,7 +21,7 @@
 
 s32 l_startID;
 s32 l_cursolID;
-s32 l_timepat;
+int l_timepat;
 s16 l_weekpat;
 s16 l_demo23;
 s8* l_groupPoint;
@@ -29,7 +29,6 @@ u8 l_languageType;
 
 /* 8022E9F4-8022ED50       .text dScnMenu_Draw__FP19menu_of_scene_class */
 static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
-    /* Nonmatching - regalloc */
     JUTReport(300, 50, "メニュー");
     if (i_this->startCode) {
         JUTReport(400, 50,"<%d>", i_this->startCode - 1);
@@ -56,9 +55,7 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
         }
     }
     for (s32 id = l_startID, i = 0; i < lineNum; id++, y += 16, i++) {
-        char selectChar = l_cursolID == id ? 79 : 32;
-        menu_of_scene_class::stage_inf* stage = &info->stage[id];
-        JUTReport(20, y, "%c %2d %s　＜%s＞", selectChar, id, stage->name, stage->roomPtr[l_groupPoint[id]].name);
+        JUTReport(20, y, "%c %2d %s　＜%s＞", l_cursolID == id ? (s8)79 : (s8)32, id, info->stage[id].name, info->stage[id].roomPtr[l_groupPoint[id]].name);
     }
     JUTReport(280,400,"Ｘ：進む　Ｙ：戻る");
     char* timepat_str[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
@@ -85,7 +82,6 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
 
 /* 8022ED50-8022F318       .text dScnMenu_Execute__FP19menu_of_scene_class */
 static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
-    /* Nonmatching */
     menu_of_scene_class::menu_inf* info = i_this->info;
     if (CPad_CHECK_HOLD_UP(0) || CPad_CHECK_HOLD_DOWN(0)) {
         BOOL trig = TRUE;

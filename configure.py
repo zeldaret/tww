@@ -584,7 +584,7 @@ config.libs = [
             Object(NonMatching, "d/d_ovlp_fade4.cpp"),
             Object(NonMatching, "d/d_picture_box.cpp"),
             Object(Matching,    "d/d_s_logo.cpp"),
-            Object(NonMatching, "d/d_s_menu.cpp"),
+            Object(Matching,    "d/d_s_menu.cpp"),
             Object(NonMatching, "d/d_s_name.cpp"),
             Object(Matching,    "d/d_s_open.cpp"),
             Object(NonMatching, "d/d_s_open_sub.cpp"),
