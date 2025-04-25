@@ -211,9 +211,9 @@ void daObjDoguu_c::CreateInit() {
     mCyl.SetStts(&mStts);
     dKy_plight_set(&mLightInfluence);
     if (subtype >= 1) {
-        mBck1.setFrame(mBck1.getEndFrame());
-        mBck2.setFrame(mBck2.getEndFrame());
-        mBck3.setFrame(mBck3.getEndFrame());
+        mBck1.setFrame(mBck1.getStartFrame());
+        mBck2.setFrame(mBck2.getStartFrame());
+        mBck3.setFrame(mBck3.getStartFrame());
         field_0x8A0 = true;
         field_0x8A1 = false;
         field_0x8A2 = true;
@@ -590,7 +590,7 @@ bool daObjDoguu_c::_draw() {
     if(field_0x8A1){
         J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Doguu", daObjDoguu_idx_table.bmt_vgsb[field_0x894]);
         
-        field_0x6D0->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
+        field_0x6D4->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
         mBck1.entry(field_0x6D0->getModelData());
         mDoExt_modelUpdateDL(field_0x6D0);
         field_0x6D0->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
@@ -717,11 +717,11 @@ bool daObjDoguu_c::_execute() {
         break;
         case 3:
         if (getFinishEventCount() == 0) {
-            fopAcM_orderChangeEventId(this, mDoguuDemo1EventIdx, 0, 0xFFFF);
+            fopAcM_orderChangeEventId(this, mDoguuDemo2EventIdx, 0, 0xFFFF);
             field_0x8AC = 4;
         }
         else {
-            fopAcM_orderChangeEventId(this, mDoguuDemo1EventIdx, 0, 0xFFFF);
+            fopAcM_orderChangeEventId(this, mDoguuDemo3EventIdx, 0, 0xFFFF);
             field_0x8AC = 7;
         }
         break;
@@ -732,12 +732,12 @@ bool daObjDoguu_c::_execute() {
         break;
         case 5:
         privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo1EventIdx)) {
+        if (dComIfGp_evmng_endCheck(mDoguuDemo2EventIdx)) {
             field_0x8AC = 6;
         }
         break;
         case 6:
-        fopAcM_orderChangeEventId(this, mDoguuDemo1EventIdx, 0, 0xFFFF);
+        fopAcM_orderChangeEventId(this, mDoguuDemo3EventIdx, 0, 0xFFFF);
         field_0x8AC = 7;
         break;
         case 7:
@@ -747,7 +747,7 @@ bool daObjDoguu_c::_execute() {
         break;
         case 8:
         privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo1EventIdx)) {
+        if (dComIfGp_evmng_endCheck(mDoguuDemo3EventIdx)) {
             field_0x8AC = 9;
         }
         break;
@@ -756,7 +756,7 @@ bool daObjDoguu_c::_execute() {
    
         if (getFinishEventCount() >= 3) {
             dComIfGs_onEventBit(0x1e40);
-            fopAcM_orderChangeEventId(this, mDoguuDemo1EventIdx, 0, 0xFFFF);
+            fopAcM_orderChangeEventId(this, mMegamiDemoEventIdx, 0, 0xFFFF);
             field_0x8AC = 11;
         } else {
             field_0x8AC = 10;
@@ -773,7 +773,7 @@ bool daObjDoguu_c::_execute() {
         break;
         case 12:
         privateCut();
-        if (dComIfGp_evmng_endCheck(mDoguuDemo1EventIdx)) {
+        if (dComIfGp_evmng_endCheck(mMegamiDemoEventIdx)) {
             field_0x8AC = 13;
         }
         break;
