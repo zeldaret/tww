@@ -136,7 +136,10 @@ dAttList_c* dAttention_c::GetLockonList(s32 idx) {
 dAttList_c* dAttention_c::getActionBtnB() {
     int i;
     dAttList_c* list = GetLockonList(0);
-    if (list != NULL && list->getActor() != NULL && list->mType == fopAc_Attn_TYPE_TALK_e && LockonTruth() != 0 && !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
+    if (list != NULL && list->getActor() != NULL &&
+            list->mType == fopAc_Attn_TYPE_TALK_e &&
+            LockonTruth() != 0 &&
+            !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
         return list;
 
     if (mActionNum == 0)
