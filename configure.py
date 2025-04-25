@@ -1381,7 +1381,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_cafelmp"),
     ActorRel(NonMatching, "d_a_obj_coming"),
     ActorRel(NonMatching, "d_a_obj_demo_barrel"),
-    ActorRel(NonMatching, "d_a_obj_doguu"),
+    ActorRel(Equivalent, "d_a_obj_doguu"), # weak func order
     ActorRel(Matching,    "d_a_obj_doguu_demo"),
     ActorRel(Matching,    "d_a_obj_gryw00", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_hfuck1", extra_cflags=['-pragma "nosyminline on"']),
