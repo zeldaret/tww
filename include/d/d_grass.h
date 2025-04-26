@@ -59,11 +59,17 @@ public:
     dGrass_data_c* newData(cXyz&, int, s8);
     s32 newAnm();
     void setAnm(int, s16);
-    dGrass_anm_c& getAnm(s32 idx) { return mGrassAnm[idx]; }
-    void deleteRoom(s32 roomNo) { mGrassRoom[roomNo].deleteData(); }
+    dGrass_data_c* getData() { return mGrassData; }
+    dGrass_anm_c* getAnm() { return mGrassAnm; }
+    dGrass_anm_c& getAnm(int idx) { return mGrassAnm[idx]; }
+    void deleteAnm(int idx) { mGrassAnm[idx].mState = 0; }
+    void deleteRoom(int roomNo) { mGrassRoom[roomNo].deleteData(); }
 
     u16 getKusaRunPID() { return mCoParticle; }
     u16 getKusaKenPID() { return mAtParticle; }
+
+    // TODO
+    void getNum() {}
 
     virtual void draw();
     virtual ~dGrass_packet_c();

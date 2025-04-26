@@ -2051,15 +2051,15 @@ void daNpcRoten_c::eventOrder() {
         }
     }
     else if(field_0x9B7 == 3) {
-        fopAcM_orderOtherEventId(this, field_0x99E, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x99E, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 4) {
-        fopAcM_orderOtherEventId(this, field_0x9A0, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x9A0, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 5) {
-        fopAcM_orderOtherEventId(this, field_0x9A2, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x9A2, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 6) {

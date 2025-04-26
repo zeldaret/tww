@@ -7,7 +7,7 @@
 
 class daToge_c : public fopAc_ac_c {
 public:
-    inline void set_mtx();  // weak but not inlined?
+    inline void set_mtx(); // weak but not inlined
 
     BOOL _delete();
     BOOL CreateHeap();

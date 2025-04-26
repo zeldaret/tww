@@ -36,8 +36,7 @@ BOOL daObjSmplbg::Act_c::CreateHeap() {
 
 /* 00000144-0000032C       .text Create__Q211daObjSmplbg5Act_cFv */
 BOOL daObjSmplbg::Act_c::Create() {
-    cullMtx = mpModel->getBaseTRMtx();
-    fopAcM_SetMtx(this, cullMtx);
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     eyePos.y += attr().mEyeOffset;
 

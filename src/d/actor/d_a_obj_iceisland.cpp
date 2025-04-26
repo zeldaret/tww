@@ -48,8 +48,8 @@ void daObjIceisland_c::daObjIceisland_particle_set() {
 
 /* 00000410-00000588       .text CreateInit__16daObjIceisland_cFv */
 void daObjIceisland_c::CreateInit() {
-    cullMtx = mpModel->getBaseTRMtx();
-    cullSizeFar = 1.0f;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
     dKy_tevstr_init(&mTevStr, fopAcM_GetHomeRoomNo(this), 0xFF);
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &mTevStr);
@@ -85,7 +85,7 @@ void daObjIceisland_c::set_mtx() {
 void daObjIceisland_c::daObjIceisland_freeze_main() {
     u8 switchNo = daObjIceisland_prm::getSwitchNo(this);
     if(fopAcM_isSwitch(this, switchNo)){
-        fopAcM_orderOtherEventId(this, mMeltIceEventIdx, 0xffff);
+        fopAcM_orderOtherEventId(this, mMeltIceEventIdx);
         field_0x39C = 1;
     }
 }
@@ -107,7 +107,7 @@ void daObjIceisland_c::daObjIceisland_melt_demo_wait() {
         mBrkAnm.setPlaySpeed(1.0f);
         field_0x39C = 2;
     } else {
-        fopAcM_orderOtherEventId(this,mMeltIceEventIdx,0xffff);
+        fopAcM_orderOtherEventId(this, mMeltIceEventIdx);
     }
 }
 
@@ -124,7 +124,7 @@ void daObjIceisland_c::daObjIceisland_melt_demo() {
 void daObjIceisland_c::daObjIceisland_melt_main() {
     u8 switchNo = daObjIceisland_prm::getSwitchNo(this);
     if(!fopAcM_isSwitch(this, switchNo)){
-        fopAcM_orderOtherEventId(this,mFreezeIceEventIdx,0xffff);
+        fopAcM_orderOtherEventId(this, mFreezeIceEventIdx);
         field_0x39C = 4;
     }
 }
@@ -137,7 +137,7 @@ void daObjIceisland_c::daObjIceisland_freeze_demo_wait() {
         field_0x39C = 5;
     }
     else {
-        fopAcM_orderOtherEventId(this, mFreezeIceEventIdx, 0xffff);
+        fopAcM_orderOtherEventId(this, mFreezeIceEventIdx);
     }
 }
 

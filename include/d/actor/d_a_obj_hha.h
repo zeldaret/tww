@@ -118,8 +118,7 @@ public:
 
 class daObjHha_c : public fopAc_ac_c {
 public:
-
-    BOOL check_sw(); // weak but not inline?
+    inline BOOL check_sw(); // weak but not inlined
 
     static int solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();

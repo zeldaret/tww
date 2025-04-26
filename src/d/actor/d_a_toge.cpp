@@ -168,7 +168,6 @@ void daToge_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
-
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
 }
@@ -201,11 +200,7 @@ BOOL daToge_c::_execute() {
 
     toge_move();
 
-    mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::YrotM(current.angle.y);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
+    set_mtx();
 
     mpBgW2->Move();
 

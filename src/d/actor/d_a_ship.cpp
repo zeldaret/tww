@@ -4358,7 +4358,7 @@ BOOL daShip_c::createHeap() {
             return FALSE;
         }
 
-        if (pModel->setSkinDeform(mSkinDeform, 1)) {
+        if (pModel->setSkinDeform(mSkinDeform, 1) != J3DErrType_Success) {
             return FALSE;
         }
     }
