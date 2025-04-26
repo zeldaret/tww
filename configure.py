@@ -471,7 +471,7 @@ config.libs = [
             Object(Matching,    "d/d_event_manager.cpp"),
             Object(NonMatching, "d/d_magma.cpp", extra_cflags=['-sym off']),
             Object(NonMatching, "d/d_boss_magma.cpp"),
-            Object(NonMatching, "d/d_grass.cpp"),
+            Object(Matching,    "d/d_grass.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(NonMatching, "d/d_tree.cpp"),
             Object(NonMatching, "d/d_particle.cpp"),
             Object(Matching,    "d/d_particle_name.cpp"),
