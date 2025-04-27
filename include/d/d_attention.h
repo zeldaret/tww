@@ -68,6 +68,7 @@ public:
     /* 0x10 */ f32 mDangerBGMDistance;
     /* 0x14 */ f32 mBGMDistMargin;
     /* 0x18 */ f32 mSWModeDisable;
+    /* 0x1C vtable */
 
 public:
     dAttParam_c() {}
@@ -75,7 +76,12 @@ public:
 
     virtual ~dAttParam_c();
 
-    /* 0x1C vtable */
+    // These are likely debug-only functions.
+    // void CheckFlag(u16) {}
+    // void FreeStick() {}
+    // void connectHIO() {}
+    // void genMessage(JORMContext*) {}
+    // void releaseHIO() {}
 };  // Size: 0x20
 
 class dAttLook_c {
@@ -168,7 +174,7 @@ public:
     dAttList_c* getActionBtnX();
     dAttList_c* getActionBtnY();
     dAttList_c* getActionBtnZ();
-    s32 chkAttMask(u32, u32);
+    BOOL chkAttMask(u32, u32);
     f32 calcWeight(int, fopAc_ac_c*, f32, s16, s16, u32*);
     void setLList(fopAc_ac_c*, f32, f32, u32);
     void setAList(fopAc_ac_c*, f32, f32, u32);
@@ -187,7 +193,7 @@ public:
     void runDebugDisp();
     void judgementButton();
     void judgementTriggerProc();
-    int judgementLostCheck();
+    BOOL judgementLostCheck();
     void judgementStatusSw(u32);
     void judgementStatusHd(u32);
     bool Run(u32 interactMask);
@@ -198,9 +204,9 @@ public:
     fopAc_ac_c* ActionTarget(s32);
     bool LockonTruth();
 
-    void Init(fopAc_ac_c* i_owner, u32 i_playerNo) {
+    void Init(fopAc_ac_c* i_owner, u32 i_padNo) {
         mpPlayer = (daPy_lk_c*)i_owner;
-        mPlayerNo = i_playerNo;
+        mPadNo = i_padNo;
     }
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
@@ -208,17 +214,14 @@ public:
     bool chkFlag(u32 flag) { return (mFlags & flag) ? true : false; }
     void setFlag(u32 flag) { mFlags |= flag; }
     void clrFlag(u32 flag) { mFlags &= ~flag; }
+    void changeOwner() { setFlag(AttnFlag_00000080); }
     bool Lockon() { return LockonTruth() || chkFlag(AttnFlag_20000000); } // regswap
-    void offAleart() {
-        setFlag(AttnFlag_80000000);
-    }
-    void revivalAleart() {
-        clrFlag(AttnFlag_80000000);
-    }
+    void offAleart() { setFlag(AttnFlag_80000000); }
+    void revivalAleart() { clrFlag(AttnFlag_80000000); }
 
-    void CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                      f32 param_4, s16 param_5, int param_6) {
-        mCatch.request(param_0, param_1, param_2, param_3, param_4, param_5, param_6);
+    void CatchRequest(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist,
+                      f32 downDist, s16 angle, int param_6) {
+        mCatch.request(reqActor, itemNo, horizontalDist, upDist, downDist, angle, param_6);
     }
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     fopAc_ac_c* getCatghTarget() { return mCatch.getCatghTarget(); }
@@ -230,6 +233,8 @@ public:
     int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
         return mHint.request(param_1, param_2);
     }
+
+    int GetLockonCount() { return mLockonCount; }
 
     static s32 loc_type_num;
     static u32 act_type_num;
@@ -250,20 +255,18 @@ public:
     } dist_table[];
 
     // TODO:
-    void GetLockonCount() {}
     void LockEdge() {}
-    void changeOwner() {}
     void chkEnemySound() {}
     void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
     void Look2RequestF(fopAc_ac_c*, s16, int) {}
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;
-    /* 0x004 */ int mLockOnTargetBsPcID;
+    /* 0x004 */ fpc_ProcID mLockonTargetID;
     /* 0x008 */ dAttDraw_CallBack_c mCallBack;
-    /* 0x00C */ int mPlayerNo;
+    /* 0x00C */ int mPadNo;
     /* 0x010 */ u32 mFlagMask;
-    /* 0x014 */ u8 field_0x014[0x018 - 0x014]; // seemingly unused but removing this yields a smaller structure
+    /* 0x014 */ u8 field_0x014[0x018 - 0x014];
     /* 0x018 */ u8 mLockOnState;
     /* 0x019 */ u8 field_0x019; // data copied from mLockState, looks to be same as TP's dAttention_c::field_0x32a
     /* 0x01A */ u8 field_0x01a;
@@ -274,17 +277,17 @@ public:
     /* 0x028 */ s8 field_0x028; // looks to be same as TP's dAttention_c::field_0x328
     /* 0x02C */ cXyz mDrawAttnPos;
     /* 0x038 */ dAttDraw_c draw[2];
-    /* 0x050 */ u32 mlockedOnPId;
+    /* 0x050 */ fpc_ProcID mDrawLockonTargetID;
     /* 0x054 */ dAttList_c mLockOnList[8];
-    /* 0x0D4 */ int mLockOnNum;
-    /* 0x0D8 */ int mLockOnOffs;
+    /* 0x0D4 */ int mLockonCount;
+    /* 0x0D8 */ int mLockOnOffset;
     /* 0x0DC */ dAttList_c mActionList[4];
-    /* 0x11C */ int mActionNum;
-    /* 0x120 */ int mActionOffs;
+    /* 0x11C */ int mActionCount;
+    /* 0x120 */ int mActionOffset;
     /* 0x124 */ dAttHint_c mHint;
     /* 0x130 */ dAttCatch_c mCatch;
     /* 0x148 */ dAttLook_c mLook[2];
-    /* 0x168 */ int mEnemyBsPcId;
+    /* 0x168 */ fpc_ProcID mEnemyID;
     /* 0x16C */ f32 mEnemyDistance;
     /* 0x170 */ dAttParam_c mAttParam;
 };  // Size: 0x190

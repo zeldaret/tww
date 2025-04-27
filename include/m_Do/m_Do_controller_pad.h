@@ -36,8 +36,34 @@ extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 int mDoCPd_Create();
 int mDoCPd_Read();
 
-inline bool mDoCPd_L_LOCK_BUTTON(unsigned long i_playerNo) {
-    return g_mDoCPd_cpadInfo[i_playerNo].mHoldLockL;
+inline bool mDoCPd_L_LOCK_BUTTON(u32 i_padNo) {
+    return g_mDoCPd_cpadInfo[i_padNo].mHoldLockL;
+}
+
+inline bool mDoCPd_L_LOCK_TRIGGER(u32 i_padNo) {
+    return g_mDoCPd_cpadInfo[i_padNo].mTrigLockL;
+}
+
+inline bool mDoCPd_R_LOCK_BUTTON(u32 i_padNo) {
+    return g_mDoCPd_cpadInfo[i_padNo].mHoldLockR;
+}
+
+inline bool mDoCPd_R_LOCK_TRIGGER(u32 i_padNo) {
+    return g_mDoCPd_cpadInfo[i_padNo].mTrigLockR;
+}
+
+inline void mDoCPd_ANALOG_CONV(u8 analog, f32& param_1) {
+    param_1 = analog * (1.0f / 15.0f);
+    if (param_1 > 1.0f) {
+        param_1 = 1.0f;
+    }
+}
+
+inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
+    param_1 = analog * (1.0f / 140.0f);
+    if (param_1 > 1.0f) {
+        param_1 = 1.0f;
+    }
 }
 
 #endif

@@ -535,8 +535,8 @@ void dCamera_c::updatePad() {
     mTriggerLeftDelta = mTriggerLeftLast - fVar1;
     mTriggerLeftLast = fVar1;
 
-    mHoldLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockL;
-    mTrigLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockL;
+    mHoldLockL = mDoCPd_L_LOCK_BUTTON(mPadId);
+    mTrigLockL = mDoCPd_L_LOCK_TRIGGER(mPadId);
 
     if (mTriggerLeftLast > mCamSetup.m0A0) {
         if (m19A == 0) {
@@ -557,8 +557,8 @@ void dCamera_c::updatePad() {
     mTriggerRightDelta = mTriggerRightLast - fVar1;
     mTriggerRightLast = fVar1;
 
-    mHoldLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockR;
-    mTrigLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockR;
+    mHoldLockR = mDoCPd_R_LOCK_BUTTON(mPadId);
+    mTrigLockR = mDoCPd_R_LOCK_TRIGGER(mPadId);
 
     if (mTriggerRightLast > mCamSetup.m0A0) {
         if (m1A6 == 0) {

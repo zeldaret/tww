@@ -3849,9 +3849,9 @@ inline void dComIfGp_att_Look2RequestF(fopAc_ac_c* param_0, s16 param_1, int par
     dComIfGp_getAttention().Look2RequestF(param_0, param_1, param_2);
 }
 
-inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                                      f32 param_4, s16 param_5, int param_6) {
-    dComIfGp_getAttention().CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+inline void dComIfGp_att_CatchRequest(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist,
+                                      f32 downDist, s16 angle, int param_6) {
+    dComIfGp_getAttention().CatchRequest(reqActor, itemNo, horizontalDist, upDist, downDist,angle, param_6);
 }
 
 inline u8 dComIfGp_att_getCatchChgItem() {
@@ -3863,7 +3863,7 @@ inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
 }
 
 inline void dComIfGp_att_ChangeOwner() {
-    dComIfGp_getAttention().setFlag(AttnFlag_00000080);
+    dComIfGp_getAttention().changeOwner();
 }
 
 inline fopAc_ac_c* dComIfGp_att_getLookTarget() {

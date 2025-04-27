@@ -1639,7 +1639,7 @@ BOOL daShip_c::procSteerMove() {
             mFwdVel > 16.5f) {
             if (!checkForceMove() && windPower >= 11.0f) {
                 onStateFlg(daSFLG_JUMP_OK_e);
-                if (g_mDoCPd_cpadInfo[0].mTrigLockR) {
+                if (mDoCPd_R_LOCK_TRIGGER(0)) {
                     onStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_JUMP_e));
                     speed.y = windPower;
                     if (speed.y < 15.0f) {
@@ -1733,7 +1733,7 @@ BOOL daShip_c::procCannon() {
             cLib_addCalcAngleS(&m0396, cM_atan2s(-cannonPos.y, cannonPos.absXZ()) + 0x4000, 5, 0x180, 0x40);
             cLib_addCalcAngleS(&m0394, cM_atan2s(cannonPos.x, cannonPos.z) - shape_angle.y, 5, 0x180, 0x40);
         
-        } else if (!g_mDoCPd_cpadInfo[0].mHoldLockR) {
+        } else if (!mDoCPd_R_LOCK_BUTTON(0)) {
             float adjust = mStickMVal * (m0404 * 4.0f + 1.0f);
             m0396 += (adjust * 384.0f) * cM_scos(mStickMAng);
             m0394 += (s16)((adjust * 384.0f) * cM_ssin(mStickMAng));
@@ -1767,7 +1767,7 @@ BOOL daShip_c::procCannon() {
             m037A--;
         }
         
-        if (g_mDoCPd_cpadInfo[0].mHoldLockR) {
+        if (mDoCPd_R_LOCK_BUTTON(0)) {
             setSelfMove(1);
         } else {
             setSelfMove(0);
@@ -1890,7 +1890,7 @@ BOOL daShip_c::procCrane() {
                 }
             }
             cLib_chaseAngleS(&m039C, sVar3, 0x100);
-            if (mRopeCnt == 20 && !g_mDoCPd_cpadInfo[0].mHoldLockR && mStickMVal > 0.1f) {
+            if (mRopeCnt == 20 && !mDoCPd_R_LOCK_BUTTON(0) && mStickMVal > 0.1f) {
                 sVar2 = mCraneBaseAngle;
                 if ((mStickMAng < -0x2000) && (mStickMAng > -0x6000)) {
                     mCraneBaseAngle = 0x3000;
@@ -1911,7 +1911,7 @@ BOOL daShip_c::procCrane() {
             cLib_chaseAngleS(&m03A6, 0x1800, 0x100);
             cLib_addCalcAngleS(&m0398, mCraneBaseAngle, 5, m03A6, 0x100);
         }
-        if (g_mDoCPd_cpadInfo[0].mHoldLockR && mRopeCnt == 20) {
+        if (mDoCPd_R_LOCK_BUTTON(0) && mRopeCnt == 20) {
             setSelfMove(1);
             if (cM_rnd() < 0.5f) {
                 m0353 = 1;

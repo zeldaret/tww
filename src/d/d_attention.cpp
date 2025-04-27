@@ -9,26 +9,25 @@
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "d/res/res_always.h"
-#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 
-s32 dAttention_c::loc_type_num = 3;
-u32 dAttention_c::act_type_num = 5;
-
 dAttention_c::LocTbl dAttention_c::loc_type_tbl[3] = {
-    { 0, 1 },
-    { 1, 2 },
-    { 2, 4 },
+    { fopAc_Attn_TYPE_MISC_e,   fopAc_Attn_LOCKON_MISC_e   },
+    { fopAc_Attn_TYPE_TALK_e,   fopAc_Attn_LOCKON_TALK_e   },
+    { fopAc_Attn_TYPE_BATTLE_e, fopAc_Attn_LOCKON_BATTLE_e },
 };
 
 dAttention_c::LocTbl dAttention_c::act_type_tbl[5] = {
-    { 3, 0x08 },
-    { 4, 0x10 },
-    { 5, 0x20 },
-    { 6, 0x40 },
-    { 7, 0x80 },
+    { fopAc_Attn_TYPE_SPEAK_e,    fopAc_Attn_ACTION_SPEAK_e    },
+    { fopAc_Attn_TYPE_CARRY_e,    fopAc_Attn_ACTION_CARRY_e    },
+    { fopAc_Attn_TYPE_DOOR_e,     fopAc_Attn_ACTION_DOOR_e     },
+    { fopAc_Attn_TYPE_TREASURE_e, fopAc_Attn_ACTION_TREASURE_e },
+    { fopAc_Attn_TYPE_SHIP_e,     fopAc_Attn_ACTION_SHIP_e     },
 };
+
+s32 dAttention_c::loc_type_num = ARRAY_SIZE(loc_type_tbl);
+u32 dAttention_c::act_type_num = ARRAY_SIZE(act_type_tbl);
 
 /* 8009D220-8009D268       .text __ct__11dAttParam_cFl */
 dAttParam_c::dAttParam_c(s32) {
@@ -54,9 +53,9 @@ bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
 }
 
 /* 8009D2E0-8009D654       .text __ct__12dAttention_cFP10fopAc_ac_cUl */
-dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
-    mpPlayer = (daPy_lk_c*)player;
-    mPlayerNo = playerNo;
+dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
+    mpPlayer = (daPy_lk_c*)i_player;
+    mPadNo = i_padNo;
     initList(0xFFFFFFFF);
     mFlagMask = 0;
     field_0x01c = -1;
@@ -64,7 +63,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* player, u32 playerNo) {
     mLockOnState = LockState_NONE;
     field_0x01a = 0;
     field_0x01b = 0;
-    mLockOnTargetBsPcID = fpcM_ERROR_PROCESS_ID_e;
+    mLockonTargetID = fpcM_ERROR_PROCESS_ID_e;
     heap = mDoExt_createSolidHeapFromGameToCurrent(0x3600, 0);
     JUT_ASSERT(0xb9, heap != NULL);
 
@@ -122,16 +121,16 @@ dAttention_c::~dAttention_c() {
 
 /* 8009D6EC-8009D728       .text GetActionList__12dAttention_cFl */
 dAttList_c* dAttention_c::GetActionList(s32 idx) {
-    if (mActionNum != 0)
-        return &mActionList[(mActionOffs + idx) % mActionNum];
+    if (mActionCount != 0)
+        return &mActionList[(mActionOffset + idx) % mActionCount];
     else
         return NULL;
 }
 
 /* 8009D728-8009D764       .text GetLockonList__12dAttention_cFl */
 dAttList_c* dAttention_c::GetLockonList(s32 idx) {
-    if (mLockOnNum != 0)
-        return &mLockOnList[(mLockOnOffs + idx) % mLockOnNum];
+    if (mLockonCount != 0)
+        return &mLockOnList[(mLockOnOffset + idx) % mLockonCount];
     else
         return NULL;
 }
@@ -146,10 +145,10 @@ dAttList_c* dAttention_c::getActionBtnB() {
             !(list->getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
         return list;
 
-    if (mActionNum == 0)
+    if (mActionCount == 0)
         return NULL;
 
-    for (i = 0; i < mActionNum; i++) {
+    for (i = 0; i < mActionCount; i++) {
         if (mActionList[i].mType == fopAc_Attn_TYPE_SPEAK_e) {
             if (!(mActionList[i].getActor()->attention_info.flags & fopAc_Attn_TALKFLAG_NOTALK_e))
                 return &mActionList[i];
@@ -173,22 +172,22 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
         }
 
         return NULL;
-    } else {
-        if (mActionNum == 0)
-            return NULL;
+    }
 
-        for (i = 0; i < mActionNum; i++) {
-            if (mActionList[i].mType == fopAc_Attn_TYPE_SPEAK_e) {
-                fopAc_ac_c* actor = mActionList[i].getActor();
-                if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
-                    if (actor->eventInfo.runXyCheckCB(actor, button))
-                        return &mActionList[i];
-                }
+    if (mActionCount == 0)
+        return NULL;
+
+    for (i = 0; i < mActionCount; i++) {
+        if (mActionList[i].mType == fopAc_Attn_TYPE_SPEAK_e) {
+            fopAc_ac_c* actor = mActionList[i].getActor();
+            if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
+                if (actor->eventInfo.runXyCheckCB(actor, button))
+                    return &mActionList[i];
             }
         }
-
-        return NULL;
     }
+
+    return NULL;
 }
 
 /* 8009D9A8-8009D9FC       .text getActionBtnX__12dAttention_cFv */
@@ -216,14 +215,14 @@ dAttList_c* dAttention_c::getActionBtnZ() {
 }
 
 /* 8009DAA4-8009DAF4       .text chkAttMask__12dAttention_cFUlUl */
-s32 dAttention_c::chkAttMask(u32 type, u32 mask) {
+BOOL dAttention_c::chkAttMask(u32 type, u32 mask) {
     for (s32 i = 0; i < loc_type_num; i++) {
         if (type == loc_type_tbl[i].mType) {
             return mask & loc_type_tbl[i].mMask;
         }
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 8009DAF4-8009DB60       .text check_event_condition__FUlUs */
@@ -258,9 +257,7 @@ s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
         0x04, 0x01, 0x02, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100,
     };
     static s16 ang_table[3] = {
-        0x4000,
-        0x2000,
-        0x0AAA,
+        0x4000, 0x2000, 0x0AAA,
     };
     static s16 ang_table2[] = {
         0x0AAA, 0x2000, 0x2AAA, 0x4000, 0x4E38, 0x6000,
@@ -384,9 +381,9 @@ f32 dAttention_c::calcWeight(int listType, fopAc_ac_c* actor, f32 distance, s16 
 void dAttention_c::setLList(fopAc_ac_c* i_actor, f32 i_weight, f32 i_distance, u32 i_attnType) {
     if (i_weight > 0.0f) {
         int i, maxIndex;
-        if (mLockOnNum < (s32)ARRAY_SIZE(mLockOnList)) {
-            maxIndex = mLockOnNum;
-            mLockOnNum++;
+        if (mLockonCount < (s32)ARRAY_SIZE(mLockOnList)) {
+            maxIndex = mLockonCount;
+            mLockonCount++;
         } else {
             f32 bestWeight = 0.0f;
             for (i = 0, maxIndex = 0; i < (s32)ARRAY_SIZE(mLockOnList); i++) {
@@ -410,9 +407,9 @@ void dAttention_c::setLList(fopAc_ac_c* i_actor, f32 i_weight, f32 i_distance, u
 void dAttention_c::setAList(fopAc_ac_c* i_actor, f32 i_weight, f32 i_distance, u32 i_attnType) {
     if (i_weight > 0.0f) {
         int i, maxIndex;
-        if (mActionNum < (s32)ARRAY_SIZE(mActionList)) {
-            maxIndex = mActionNum;
-            mActionNum++;
+        if (mActionCount < (s32)ARRAY_SIZE(mActionList)) {
+            maxIndex = mActionCount;
+            mActionCount++;
         } else {
             f32 bestWeight = 0.0f;
             for (i = 0, maxIndex = 0; i < (s32)ARRAY_SIZE(mActionList); i++) {
@@ -442,15 +439,15 @@ void dAttention_c::initList(u32 flagMask) {
         mLockOnList[i].setActor(NULL);
         mLockOnList[i].mWeight = FLOAT_MAX;
     }
-    mLockOnOffs = 0;
-    mLockOnNum = 0;
+    mLockOnOffset = 0;
+    mLockonCount = 0;
 
     for (i = 0; i < (s32)ARRAY_SIZE(mActionList); i++) {
         mActionList[i].setActor(NULL);
         mActionList[i].mWeight = FLOAT_MAX;
     }
-    mActionOffs = 0;
-    mActionNum = 0;
+    mActionOffset = 0;
+    mActionCount = 0;
 }
 
 /* 8009E2CC-8009E2F8       .text select_attention__FP10fopAc_ac_cPv */
@@ -462,7 +459,7 @@ int select_attention(fopAc_ac_c* pActor, void* i_attention) {
 /* 8009E2F8-8009E33C       .text makeList__12dAttention_cFv */
 s32 dAttention_c::makeList() {
     fopAcIt_Executor((fopAcIt_ExecutorFunc)select_attention, this);
-    return mLockOnNum + mActionNum;
+    return mLockonCount + mActionCount;
 }
 
 /* 8009E33C-8009E474       .text SelectAttention__12dAttention_cFP10fopAc_ac_c */
@@ -496,8 +493,8 @@ void dAttention_c::sortList() {
     dAttList_c* list;
 
     list = mLockOnList;
-    for (i = 0; i < mLockOnNum - 1; i++) {
-        for (j = i + 1; j < mLockOnNum; j++) {
+    for (i = 0; i < mLockonCount - 1; i++) {
+        for (j = i + 1; j < mLockonCount; j++) {
             if (list[i].mWeight > list[j].mWeight) {
                 memcpy(&swap, &list[j], sizeof(dAttList_c));
                 memcpy(&list[j], &list[i], sizeof(dAttList_c));
@@ -507,8 +504,8 @@ void dAttention_c::sortList() {
     }
 
     list = mActionList;
-    for (i = 0; i < mActionNum - 1; i++) {
-        for (j = i + 1; j < mActionNum; j++) {
+    for (i = 0; i < mActionCount - 1; i++) {
+        for (j = i + 1; j < mActionCount; j++) {
             if (list[i].mWeight > list[j].mWeight) {
                 memcpy(&swap, &list[j], sizeof(dAttList_c));
                 memcpy(&list[j], &list[i], sizeof(dAttList_c));
@@ -541,30 +538,30 @@ fopAc_ac_c* dAttention_c::stockAttention(u32 interactMask) {
 
 /* 8009E684-8009E728       .text nextAttention__12dAttention_cFUl */
 fopAc_ac_c *dAttention_c::nextAttention(u32 interactMask) {
-    fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockOnTargetBsPcID);
+    fopAc_ac_c * pTarget = fopAcM_SearchByID(mLockonTargetID);
     initList(interactMask);
     if (makeList())
         sortList();
 
-    if (pTarget == mLockOnList[0].getActor() && mLockOnNum > 1)
-        mLockOnOffs = 1;
+    if (pTarget == mLockOnList[0].getActor() && mLockonCount > 1)
+        mLockOnOffset = 1;
 
     return LockonTarget(0);
 }
 
 /* 8009E728-8009E764       .text freeAttention__12dAttention_cFv */
 s32 dAttention_c::freeAttention() {
-    mLockOnOffs = 0;
-    mLockOnNum = 0;
-    mActionOffs = 0;
-    mActionNum = 0;
+    mLockOnOffset = 0;
+    mLockonCount = 0;
+    mActionOffset = 0;
+    mActionCount = 0;
     initList(0xFFFFFFFF);
     return 0;
 }
 
 /* 8009E764-8009E978       .text chaseAttention__12dAttention_cFv */
 bool dAttention_c::chaseAttention() {
-    int offset = mLockOnOffs;
+    int offset = mLockOnOffset;
     fopAc_ac_c* actor = mLockOnList[offset].getActor();
 
     if (actor == NULL) {
@@ -634,7 +631,7 @@ BOOL sound_attention(fopAc_ac_c* actor, void* userWork) {
     if (dist < 0.0f)
         return FALSE;
     if (dist < i_this->mEnemyDistance) {
-        i_this->mEnemyBsPcId = fopAcM_GetID(actor);
+        i_this->mEnemyID = fopAcM_GetID(actor);
         i_this->mEnemyDistance = dist;
     }
     return FALSE;
@@ -642,12 +639,11 @@ BOOL sound_attention(fopAc_ac_c* actor, void* userWork) {
 
 /* 8009EAA4-8009EB38       .text runSoundProc__12dAttention_cFv */
 void dAttention_c::runSoundProc() {
-    mEnemyBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    mEnemyID = fpcM_ERROR_PROCESS_ID_e;
     mEnemyDistance = 10000.0f;
     if (!chkFlag(AttnFlag_80000000)) {
         fopAcIt_Executor((fopAcIt_ExecutorFunc)sound_attention, this);
-        fopAc_ac_c* actor = fopAcM_SearchByID(mEnemyBsPcId);
-        if (actor != NULL) {
+        if (fopAcM_SearchByID(mEnemyID) != NULL) {
             mDoAud_bgmNowBattle(mEnemyDistance * 0.1f);
             setFlag(AttnFlag_00000100);
         }
@@ -680,7 +676,7 @@ void dAttention_c::runDrawProc() {
         draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
         draw[1].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
         setFlag(AttnFlag_40000000);
-    } else if (mLockOnNum <= 0 && field_0x028 == 0) {
+    } else if (mLockonCount <= 0 && field_0x028 == 0) {
         draw[0].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
         field_0x028 = 1;
         setFlag(AttnFlag_40000000);
@@ -697,7 +693,7 @@ void dAttention_c::runDrawProc() {
         result = draw[0].anm->play(NULL, 0, 0);
         if (result) {
             clrFlag(AttnFlag_40000000);
-            field_0x028 = 0xff;
+            field_0x028 = -1;
         }
     }
 
@@ -727,7 +723,7 @@ void dAttention_c::judgementButton() {
     } else {
         switch(field_0x01a) {
             case 0:
-                if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
+                if (!mDoCPd_L_LOCK_BUTTON(mPadNo)) {
                     break;
                 }
                 field_0x01a = 1;
@@ -735,7 +731,7 @@ void dAttention_c::judgementButton() {
             case 1:
                 field_0x01a = 2;
             case 2:
-                if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
+                if (!mDoCPd_L_LOCK_BUTTON(mPadNo)) {
                     field_0x01a = 0;
                 }
                 break;
@@ -753,7 +749,7 @@ void dAttention_c::judgementTriggerProc() {
 }
 
 /* 8009EED8-8009EF40       .text judgementLostCheck__12dAttention_cFv */
-int dAttention_c::judgementLostCheck() {
+BOOL dAttention_c::judgementLostCheck() {
     bool haveTarget = chaseAttention();
     if (haveTarget) {
         return false;
@@ -767,25 +763,19 @@ int dAttention_c::judgementLostCheck() {
 
 /* 8009EF40-8009F0A4       .text judgementStatusSw__12dAttention_cFUl */
 void dAttention_c::judgementStatusSw(u32 interactMask) {
-    fpc_ProcID target;
-    fopAc_ac_c *actor;
-  
     switch(mLockOnState) {
         case LockState_NONE:
-            mLockOnTargetBsPcID = -1;
+            mLockonTargetID = fpcM_ERROR_PROCESS_ID_e;
             stockAttention(interactMask);
             if (field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
         case LockState_LOCK:
-            target = LockonTargetPId(0);
-            mLockOnTargetBsPcID = target;
+            mLockonTargetID = LockonTargetPId(0);
             if (field_0x01a == 1) {
-                f32 stickY = g_mDoCPd_cpadInfo[mPlayerNo].mMainStickPosY;
-                if (-0.9f < stickY &&
-                    (actor = nextAttention(interactMask), actor != 0) &&
-                    mLockOnNum > 1) {
+                f32 stickY = g_mDoCPd_cpadInfo[mPadNo].mMainStickPosY;
+                if (-0.9f < stickY && nextAttention(interactMask) != NULL && mLockonCount > 1) {
                     setFlag(AttnFlag_00000008);
                 } else {
                     mLockOnState = LockState_RELEASE;
@@ -802,8 +792,7 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
                 judgementTriggerProc();
             }
             else {
-                actor = LockonTarget(0);
-                if (actor == NULL || !chkFlag(AttnFlag_40000000)) {
+                if (LockonTarget(0) == NULL || !chkFlag(AttnFlag_40000000)) {
                     mLockOnState = LockState_NONE;
                     freeAttention();
                 }
@@ -816,15 +805,14 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
 void dAttention_c::judgementStatusHd(u32 interactMask) {
     switch(mLockOnState) {
         case LockState_NONE:
-            mLockOnTargetBsPcID = -1;
+            mLockonTargetID = fpcM_ERROR_PROCESS_ID_e;
             stockAttention(interactMask);
             if (field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
         case LockState_LOCK: {
-            fpc_ProcID target = LockonTargetPId(0);
-            mLockOnTargetBsPcID = target;
+            mLockonTargetID = LockonTargetPId(0);
             s32 result = judgementLostCheck();
             if (result == 0 && field_0x01a == 0) {
                 mLockOnState = LockState_RELEASE;
@@ -860,7 +848,7 @@ bool dAttention_c::Run(u32 interactMask) {
     bool var = dComIfGs_getOptAttentionType() == 0;
     if (chkFlag(AttnFlag_00000080)) {
         mpPlayer = (daPy_lk_c*)dComIfGp_getPlayer(0);
-        mPlayerNo = 0;
+        mPadNo = 0;
     }
     runDebugDisp0();
     clrFlag(~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000));
@@ -871,7 +859,7 @@ bool dAttention_c::Run(u32 interactMask) {
         clrFlag(AttnFlag_20000000);
         clrFlag(AttnFlag_10000000);
         clrFlag(~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000));
-        mLockOnTargetBsPcID = -1;
+        mLockonTargetID = fpcM_ERROR_PROCESS_ID_e;
         freeAttention();
     } else {
         judgementButton();
@@ -882,14 +870,14 @@ bool dAttention_c::Run(u32 interactMask) {
         }
 
         if (chkFlag(AttnFlag_10000000)) {
-            if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
+            if (!mDoCPd_L_LOCK_BUTTON(mPadNo)) {
                 if (chkFlag(AttnFlag_20000000)) {
                     mDoAud_seStart(JA_SE_CAMERA_L_CANCEL);
                     clrFlag(AttnFlag_20000000);
                 }
                 clrFlag(AttnFlag_10000000);
             }
-        } else if (mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
+        } else if (mDoCPd_L_LOCK_BUTTON(mPadNo)) {
             fopAc_ac_c *target = LockonTarget(0);
             if (target == NULL) {
                 setFlag(AttnFlag_20000000 | AttnFlag_00000020);
@@ -903,9 +891,9 @@ bool dAttention_c::Run(u32 interactMask) {
     runDrawProc();
     runDebugDisp();
     if (mLockOnState == LockState_LOCK) {
-        dComIfGp_onCameraAttentionStatus(mPlayerNo, 1);
+        dComIfGp_onCameraAttentionStatus(mPadNo, 1);
     } else {
-        dComIfGp_offCameraAttentionStatus(mPlayerNo, 1);
+        dComIfGp_offCameraAttentionStatus(mPadNo, 1);
     }
 
     mHint.proc();
@@ -918,7 +906,7 @@ bool dAttention_c::Run(u32 interactMask) {
 /* 8009F460-8009F5FC       .text Draw__12dAttention_cFv */
 void dAttention_c::Draw() {
     Mtx invCamera;
-    MTXInverse(dComIfGd_getViewRotMtx(), invCamera);
+    cMtx_inverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
     if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != 0)
         return;
@@ -927,11 +915,11 @@ void dAttention_c::Draw() {
             draw[0].draw(target->attention_info.position, invCamera);
         }
 
-        if (mLockOnNum >= 2 && draw[1].mpAnmClr != NULL) {
-            int listIdx = mLockOnOffs;
+        if (mLockonCount >= 2 && draw[1].mpAnmClr != NULL) {
+            int listIdx = mLockOnOffset;
 
-            if (mLockOnOffs == 0) {
-                listIdx = mLockOnNum - 1;
+            if (mLockOnOffset == 0) {
+                listIdx = mLockonCount - 1;
             } else {
                 listIdx--;
             }
@@ -942,19 +930,16 @@ void dAttention_c::Draw() {
             }
         }
 
-        fpc_ProcID id = LockonTargetPId(0);
-        mlockedOnPId = id;
+        mDrawLockonTargetID = LockonTargetPId(0);
         mDrawAttnPos = target->attention_info.position;
         field_0x028 = 0;
-    } else {
-        if (field_0x028 > 0) {
-            target = fopAcM_SearchByID(mlockedOnPId);
-            if (target != NULL) {
-                draw[0].draw(target->attention_info.position, invCamera);
-                mDrawAttnPos = target->attention_info.position;
-            } else {
-                draw[0].draw(mDrawAttnPos, invCamera);
-            }
+    } else if (field_0x028 > 0) {
+        target = fopAcM_SearchByID(mDrawLockonTargetID);
+        if (target != NULL) {
+            draw[0].draw(target->attention_info.position, invCamera);
+            mDrawAttnPos = target->attention_info.position;
+        } else {
+            draw[0].draw(mDrawAttnPos, invCamera);
         }
     }
 }
@@ -1008,12 +993,12 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
 
 /* 8009F834-8009F88C       .text LockonTarget__12dAttention_cFl */
 fopAc_ac_c* dAttention_c::LockonTarget(s32 idx) {
-    if (idx >= mLockOnNum)
+    if (idx >= mLockonCount)
         return NULL;
 
-    s32 listIdx = mLockOnOffs + idx;
-    if (listIdx >= mLockOnNum)
-        listIdx -= mLockOnNum;
+    s32 listIdx = mLockOnOffset + idx;
+    if (listIdx >= mLockonCount)
+        listIdx -= mLockonCount;
 
     return mLockOnList[listIdx].getActor();
 }
@@ -1024,12 +1009,12 @@ f32 dAttention_c::LockonReleaseDistanse() {
         return 0.0f;
     }
 
-    fopAc_ac_c* actor = mLockOnList[mLockOnOffs].getActor();
+    fopAc_ac_c* actor = mLockOnList[mLockOnOffset].getActor();
     if (actor == NULL) {
         return 0.0f;
     }
 
-    int idx =  actor->attention_info.distances[mLockOnList[mLockOnOffs].mType];
+    int idx =  actor->attention_info.distances[mLockOnList[mLockOnOffset].mType];
     cSGlobe globe(actor->attention_info.position - mpPlayer->attention_info.position);
     cSAngle angle(globe.U() - fopAcM_GetShapeAngle_p(mpPlayer)->y);
 
@@ -1038,24 +1023,24 @@ f32 dAttention_c::LockonReleaseDistanse() {
 
 /* 8009F980-8009F9B8       .text LockonTargetPId__12dAttention_cFl */
 fpc_ProcID dAttention_c::LockonTargetPId(s32 idx) {
-    if (idx >= mLockOnNum)
+    if (idx >= mLockonCount)
         return NULL;
 
-    s32 listIdx = mLockOnOffs + idx;
-    if (listIdx >= mLockOnNum)
-        listIdx -= mLockOnNum;
+    s32 listIdx = mLockOnOffset + idx;
+    if (listIdx >= mLockonCount)
+        listIdx -= mLockonCount;
 
     return mLockOnList[listIdx].getPid();
 }
 
 /* 8009F9B8-8009FA10       .text ActionTarget__12dAttention_cFl */
 fopAc_ac_c* dAttention_c::ActionTarget(s32 idx) {
-    if (idx >= mActionNum)
+    if (idx >= mActionCount)
         return NULL;
 
-    s32 listIdx = mActionOffs + idx;
-    if (listIdx >= mActionNum)
-        listIdx -= mActionNum;
+    s32 listIdx = mActionOffset + idx;
+    if (listIdx >= mActionCount)
+        listIdx -= mActionCount;
 
     return mActionList[listIdx].getActor();
 }
@@ -1119,7 +1104,7 @@ fopAc_ac_c* dAttCatch_c::convPId(fpc_ProcID i_procID) {
 
 /* 8009FBBC-8009FBDC       .text init__11dAttCatch_cFv */
 void dAttCatch_c::init() {
-    mCatchItemNo = 0x56;
+    mCatchItemNo = dItem_WATER_BOTTLE_e;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     mCatghTargetID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
@@ -1131,7 +1116,7 @@ void dAttCatch_c::proc() {
     mChangeItem = mCatchItemNo;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
-    mCatchItemNo = 0x56;
+    mCatchItemNo = dItem_WATER_BOTTLE_e;
 }
 
 
