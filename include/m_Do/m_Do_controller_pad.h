@@ -36,4 +36,8 @@ extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 int mDoCPd_Create();
 int mDoCPd_Read();
 
+inline bool mDoCPd_L_LOCK_BUTTON(unsigned long i_playerNo) {
+    return g_mDoCPd_cpadInfo[i_playerNo].mHoldLockL;
+}
+
 #endif

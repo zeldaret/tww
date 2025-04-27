@@ -740,7 +740,7 @@ void dAttention_c::judgementButton() {
     } else {
         switch(field_0x01a) {
             case 0:
-                if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+                if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
                     break;
                 }
                 field_0x01a = 1;
@@ -748,7 +748,7 @@ void dAttention_c::judgementButton() {
             case 1:
                 field_0x01a = 2;
             case 2:
-                if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+                if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
                     field_0x01a = 0;
                 }
                 break;
@@ -896,14 +896,14 @@ bool dAttention_c::Run(u32 interactMask) {
         }
 
         if (chkFlag(AttnFlag_10000000)) {
-            if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
+            if (!mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
                 if (chkFlag(AttnFlag_20000000)) {
                     mDoAud_seStart(JA_SE_CAMERA_L_CANCEL);
                     clrFlag(AttnFlag_20000000);
                 }
                 clrFlag(AttnFlag_10000000);
             }
-        } else if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL != 0) {
+        } else if (mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
             fopAc_ac_c *target = LockonTarget(0);
             if (target == NULL) {
                 setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
