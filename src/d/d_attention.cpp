@@ -859,7 +859,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 bool dAttention_c::Run(u32 interactMask) {
     bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
     if (chkFlag(AttnFlag_00000080)) {
-        mpPlayer = (daPy_lk_c*)g_dComIfG_gameInfo.play.mpPlayer[0];
+        mpPlayer = (daPy_lk_c*)dComIfGp_getPlayer(0);
         mPlayerNo = 0;
     }
     runDebugDisp0();
@@ -1138,10 +1138,10 @@ void dAttCatch_c::proc() {
 /* 8009FC08-8009FE10       .text request__11dAttCatch_cFP10fopAc_ac_cUcfffsi */
 bool dAttCatch_c::request(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_7) {
     // TODO: what is param_7?
-    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_7 > field_0x4) {
         return false;
-    } 
+    }
 
     cXyz vec_to_player = reqActor->attention_info.position - player->attention_info.position;
     if (vec_to_player.y < downDist || vec_to_player.y > upDist) {
@@ -1199,7 +1199,7 @@ void dAttLook_c::proc() {
 /* 8009FE74-800A009C       .text request__10dAttLook_cFP10fopAc_ac_cfffsi */
 bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_6) {
     // TODO: what is param_6
-    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_6 > field_0x4) {
         return false;
     }
