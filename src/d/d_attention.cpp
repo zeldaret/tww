@@ -671,9 +671,9 @@ void dAttention_c::runDrawProc() {
     /* TODO: Magic constants */
     if (chkFlag(AttnFlag_00000008)) {
         draw[0].setAnm(ALWAYS_BCK_YJ_SCALE, ALWAYS_BPK_YJ_SCALE, J3DFrameCtrl::EMode_NONE);
-        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) == 0
-            || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
-            JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK37a02371_e)
+            || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e | daPyStts1_UNK10_e)) {
+            mDoAud_seStart(JA_SE_L_FOCUS_SET);
         }
     } else if (chkFlag(AttnFlag_00000010)) {
         draw[0].setAnm(ALWAYS_BCK_YJ_DELETE, ALWAYS_BPK_YJ_DELETE, J3DFrameCtrl::EMode_NONE);
@@ -682,9 +682,9 @@ void dAttention_c::runDrawProc() {
             setFlag(AttnFlag_40000000);
         }
 
-        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) == 0
-            || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
-            JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK37a02371_e)
+            || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e | daPyStts1_UNK10_e)) {
+            mDoAud_seStart(JA_SE_L_FOCUS_RESET);
         }
     } else if (chkFlag(AttnFlag_00000001)) {
         draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
@@ -730,8 +730,8 @@ void dAttention_c::runDebugDisp() {
 
 /* 8009EDC0-8009EE90       .text judgementButton__12dAttention_cFv */
 void dAttention_c::judgementButton() {
-    if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) != 0
-        || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK37a02371_e)
+        || dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e | daPyStts1_UNK10_e)) {
         if ((int)field_0x01a >= 3)
             return;
         if ((int)field_0x01a < 1)
@@ -898,7 +898,7 @@ bool dAttention_c::Run(u32 interactMask) {
         if (chkFlag(AttnFlag_10000000)) {
             if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
                 if (chkFlag(AttnFlag_20000000)) {
-                    JAIZelBasic::zel_basic->seStart(0x81d, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+                    mDoAud_seStart(JA_SE_CAMERA_L_CANCEL);
                     clrFlag(AttnFlag_20000000);
                 }
                 clrFlag(AttnFlag_10000000);
@@ -907,7 +907,7 @@ bool dAttention_c::Run(u32 interactMask) {
             fopAc_ac_c *target = LockonTarget(0);
             if (target == NULL) {
                 setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
-                JAIZelBasic::zel_basic->seStart(0x81c, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
+                mDoAud_seStart(JA_SE_CAMERA_L_MOVE);
             }
             setFlag(AttnFlag_10000000);
         }
@@ -917,9 +917,9 @@ bool dAttention_c::Run(u32 interactMask) {
     runDrawProc();
     runDebugDisp();
     if (mLockOnState == LockState_LOCK) {
-        g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus |= 1;
+        dComIfGp_onCameraAttentionStatus(mPlayerNo, 1);
     } else {
-        g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus &= ~1;
+        dComIfGp_offCameraAttentionStatus(mPlayerNo, 1);
     }
 
     mHint.proc();
@@ -933,7 +933,7 @@ bool dAttention_c::Run(u32 interactMask) {
 void dAttention_c::Draw() {
     /* Nonmatching */
     Mtx invCamera;
-    PSMTXInverse(g_dComIfG_gameInfo.drawlist.mpCamera->mViewMtxNoTrans, invCamera);
+    MTXInverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 || g_dComIfG_gameInfo.play.mScopeMesgStatus != 0)
         return;
@@ -963,9 +963,7 @@ void dAttention_c::Draw() {
         field_0x028 = 0;
     } else {
         if (field_0x028 > 0) {
-            uint temp = mlockedOnPId;
-            // unsure about this cast
-            target = reinterpret_cast<fopAc_ac_c*>(fopAcIt_Judge(&fpcSch_JudgeByID, &temp));
+            target = fopAcM_SearchByID(mlockedOnPId);
             if (target != NULL) {
                 draw[0].draw(target->attention_info.position, invCamera);
                 mDrawAttnPos = target->attention_info.position;
@@ -997,7 +995,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
     J3DModel *model = anm->mpModel;
     mDoMtx_stack_c::transS(pos);
     mDoMtx_stack_c::concat(mtx);
-    PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
@@ -1014,16 +1012,13 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
         modeldata->getMaterialTable().setMatColorAnimator(mpAnmClr, mpAnmMatClr);
     }
 
-    if ((int)mDoGph_gInf_c::mMonotone != 0) {
-        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListP1, 0);
-        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListP1, 1);
+    if (mDoGph_gInf_c::isMonotone()) {
+        dComIfGd_setListP1();
     } else {
-        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListMaskOff, 0);
-        j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListMaskOff, 1);
+        dComIfGd_setListMaskOff();
     }
     anm->updateDL();
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, 0);
-    j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, 1);
+    dComIfGd_setList();
 }
 
 /* 8009F834-8009F88C       .text LockonTarget__12dAttention_cFl */
