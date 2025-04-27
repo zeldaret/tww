@@ -672,54 +672,54 @@ void dAttention_c::runSoundProc() {
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
     /* TODO: Magic constants */
-    if (this->chkFlag(AttnFlag_00000008)) {
-        this->draw[0].setAnm(0x1b, 0x48, 0);
+    if (chkFlag(AttnFlag_00000008)) {
+        draw[0].setAnm(0x1b, 0x48, 0);
         if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
-    } else if (this->chkFlag(AttnFlag_00000010)) {
-        this->draw[0].setAnm(0x17, 0x44, 0);
-        if (this->field_0x028 >= 0) {
-            this->field_0x028 = 1;
-            this->setFlag(AttnFlag_40000000);
+    } else if (chkFlag(AttnFlag_00000010)) {
+        draw[0].setAnm(0x17, 0x44, 0);
+        if (field_0x028 >= 0) {
+            field_0x028 = 1;
+            setFlag(AttnFlag_40000000);
         }
 
         if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
-    } else if (this->chkFlag(AttnFlag_00000001)) {
-        this->draw[0].setAnm(0x18, 0x45, 0);
-        this->setFlag(AttnFlag_40000000);
-    } else if (this->chkFlag(AttnFlag_00000002)) {
-        this->draw[0].setAnm(0x18, 0x45, 0);
-        this->draw[1].setAnm(0x1a, 0x47, 0);
-        this->setFlag(AttnFlag_40000000);
-    } else if (mLockOnNum <= 0 && this->field_0x028 == 0) {
-        this->draw[0].setAnm(0x1a, 0x47, 0);
-        this->field_0x028 = 1;
-        this->setFlag(AttnFlag_40000000);
+    } else if (chkFlag(AttnFlag_00000001)) {
+        draw[0].setAnm(0x18, 0x45, 0);
+        setFlag(AttnFlag_40000000);
+    } else if (chkFlag(AttnFlag_00000002)) {
+        draw[0].setAnm(0x18, 0x45, 0);
+        draw[1].setAnm(0x1a, 0x47, 0);
+        setFlag(AttnFlag_40000000);
+    } else if (mLockOnNum <= 0 && field_0x028 == 0) {
+        draw[0].setAnm(0x1a, 0x47, 0);
+        field_0x028 = 1;
+        setFlag(AttnFlag_40000000);
     }
 
     int result;
-    if (this->mLockOnState == LockState_LOCK) {
-        result = this->draw[0].anm->play(NULL, 0, 0);
+    if (mLockOnState == LockState_LOCK) {
+        result = draw[0].anm->play(NULL, 0, 0);
         if (result) {
-            this->draw[0].setAnm(0x19, -1, 2);
-            this->clrFlag(AttnFlag_40000000);
+            draw[0].setAnm(0x19, -1, 2);
+            clrFlag(AttnFlag_40000000);
         }
     } else {
-        result = this->draw[0].anm->play(NULL, 0, 0);
+        result = draw[0].anm->play(NULL, 0, 0);
         if (result) {
-            this->clrFlag(AttnFlag_40000000);
-            this->field_0x028 = 0xff;
+            clrFlag(AttnFlag_40000000);
+            field_0x028 = 0xff;
         }
     }
 
-    result = this->draw[1].anm->play(NULL, 0, 0);
+    result = draw[1].anm->play(NULL, 0, 0);
     if (result) {
-        this->draw[1].mpAnmClr = NULL;
+        draw[1].mpAnmClr = NULL;
     }
 }
 
@@ -735,24 +735,24 @@ void dAttention_c::runDebugDisp() {
 void dAttention_c::judgementButton() {
     if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) != 0
         || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
-        if ((int)this->field_0x01a >= 3)
+        if ((int)field_0x01a >= 3)
             return;
-        if ((int)this->field_0x01a < 1)
+        if ((int)field_0x01a < 1)
             return;
-        this->field_0x01a = 0;
+        field_0x01a = 0;
     } else {
-        switch(this->field_0x01a) {
+        switch(field_0x01a) {
             case 0:
                 if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
                     break;
                 }
-                this->field_0x01a = 1;
+                field_0x01a = 1;
                 break;
             case 1:
-                this->field_0x01a = 2;
+                field_0x01a = 2;
             case 2:
                 if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
-                    this->field_0x01a = 0;
+                    field_0x01a = 0;
                 }
                 break;
         }
@@ -763,7 +763,7 @@ void dAttention_c::judgementButton() {
 void dAttention_c::judgementTriggerProc() {
     bool haveTarget = chaseAttention();
     if (haveTarget) {
-        this->setFlag(AttnFlag_00000008);
+        setFlag(AttnFlag_00000008);
         mLockOnState = LockState_LOCK;
     }
 }
@@ -775,9 +775,9 @@ int dAttention_c::judgementLostCheck() {
         return false;
     }
     mLockOnState = LockState_NONE;
-    this->setFlag(AttnFlag_00000010);
+    setFlag(AttnFlag_00000010);
     freeAttention();
-    this->setFlag(AttnFlag_00000040);
+    setFlag(AttnFlag_00000040);
     return true;
 }
 
@@ -790,36 +790,36 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
         case LockState_NONE:
             mLockOnTargetBsPcID = -1;
             stockAttention(interactMask);
-            if (this->field_0x01a == 1) {
+            if (field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
         case LockState_LOCK:
             target = LockonTargetPId(0);
             mLockOnTargetBsPcID = target;
-            if (this->field_0x01a == 1) {
-                f32 stickY = g_mDoCPd_cpadInfo[this->mPlayerNo].mMainStickPosY;
+            if (field_0x01a == 1) {
+                f32 stickY = g_mDoCPd_cpadInfo[mPlayerNo].mMainStickPosY;
                 if (-0.9f < stickY &&
                     (actor = nextAttention(interactMask), actor != 0) &&
                     mLockOnNum > 1) {
-                    this->setFlag(AttnFlag_00000008);
+                    setFlag(AttnFlag_00000008);
                 } else {
                     mLockOnState = LockState_RELEASE;
-                    this->setFlag(AttnFlag_00000010);
+                    setFlag(AttnFlag_00000010);
                 }
             } else {
                 judgementLostCheck();
             }
             break;
         case LockState_RELEASE:
-            this->setFlag(AttnFlag_00000040);
-            if (this->field_0x01a == 1) {
+            setFlag(AttnFlag_00000040);
+            if (field_0x01a == 1) {
                 mLockOnState = LockState_NONE;
                 judgementTriggerProc();
             }
             else {
                 actor = LockonTarget(0);
-                if (actor == NULL || !this->chkFlag(AttnFlag_40000000)) {
+                if (actor == NULL || !chkFlag(AttnFlag_40000000)) {
                     mLockOnState = LockState_NONE;
                     freeAttention();
                 }
@@ -834,7 +834,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
         case LockState_NONE:
             mLockOnTargetBsPcID = -1;
             stockAttention(interactMask);
-            if (this->field_0x01a == 1) {
+            if (field_0x01a == 1) {
                 judgementTriggerProc();
             }
             break;
@@ -842,18 +842,18 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
             fpc_ProcID target = LockonTargetPId(0);
             mLockOnTargetBsPcID = target;
             s32 result = judgementLostCheck();
-            if (result == 0 && this->field_0x01a == 0) {
+            if (result == 0 && field_0x01a == 0) {
                 mLockOnState = LockState_RELEASE;
-                this->setFlag(AttnFlag_00000010);
+                setFlag(AttnFlag_00000010);
             }
             break;
         }
         case LockState_RELEASE:
-            this->setFlag(AttnFlag_00000040);
-            if (this->field_0x01a == 1) {
+            setFlag(AttnFlag_00000040);
+            if (field_0x01a == 1) {
                 fopAc_ac_c *actor = nextAttention(interactMask);
                 if (actor != NULL) {
-                    this->setFlag(AttnFlag_00000008);
+                    setFlag(AttnFlag_00000008);
                     mLockOnState = LockState_LOCK;
                 } else {
                     mLockOnState = LockState_NONE;
@@ -862,7 +862,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
             }
             else {
                 fopAc_ac_c *actor = LockonTarget(0);
-                if (actor == NULL || !this->chkFlag(AttnFlag_40000000)) {
+                if (actor == NULL || !chkFlag(AttnFlag_40000000)) {
                     mLockOnState = LockState_NONE;
                     freeAttention();
                 }
@@ -875,50 +875,50 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 bool dAttention_c::Run(u32 interactMask) {
     // TODO: magic numbers
     bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
-    if (this->chkFlag(AttnFlag_00000080)) {
+    if (chkFlag(AttnFlag_00000080)) {
         mpPlayer = (daPy_lk_c*)g_dComIfG_gameInfo.play.mpPlayer[0];
         mPlayerNo = 0;
     }
-    this->runDebugDisp0();
-    this->clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
+    runDebugDisp0();
+    clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
     if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
         mLockOnState = LockState_NONE;
-        this->field_0x01a = 0;
-        this->field_0x01b = 0;
-        this->clrFlag(AttnFlag_20000000);
-        this->clrFlag(AttnFlag_10000000);
-        this->clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
+        field_0x01a = 0;
+        field_0x01b = 0;
+        clrFlag(AttnFlag_20000000);
+        clrFlag(AttnFlag_10000000);
+        clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
         mLockOnTargetBsPcID = -1;
-        this->freeAttention();
+        freeAttention();
     } else {
-        this->judgementButton();
+        judgementButton();
         if (var) {
             judgementStatusHd(interactMask);
         } else {
             judgementStatusSw(interactMask);
         }
 
-        if (this->chkFlag(AttnFlag_10000000)) {
+        if (chkFlag(AttnFlag_10000000)) {
             if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL == 0) {
-                if (this->chkFlag(AttnFlag_20000000)) {
+                if (chkFlag(AttnFlag_20000000)) {
                     JAIZelBasic::zel_basic->seStart(0x81d, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
-                    this->clrFlag(AttnFlag_20000000);
+                    clrFlag(AttnFlag_20000000);
                 }
-                this->clrFlag(AttnFlag_10000000);
+                clrFlag(AttnFlag_10000000);
             }
         } else if (g_mDoCPd_cpadInfo[mPlayerNo].mHoldLockL != 0) {
-            fopAc_ac_c *target = this->LockonTarget(0);
+            fopAc_ac_c *target = LockonTarget(0);
             if (target == NULL) {
-                this->setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
+                setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
                 JAIZelBasic::zel_basic->seStart(0x81c, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
             }
-            this->setFlag(AttnFlag_10000000);
+            setFlag(AttnFlag_10000000);
         }
     }
-    this->field_0x019 = mLockOnState;
-    this->runSoundProc();
-    this->runDrawProc();
-    this->runDebugDisp();
+    field_0x019 = mLockOnState;
+    runSoundProc();
+    runDrawProc();
+    runDebugDisp();
     if (mLockOnState == LockState_LOCK) {
         g_dComIfG_gameInfo.play.mCameraInfo[mPlayerNo].mCameraAttentionStatus |= 1;
     } else {
@@ -942,10 +942,10 @@ void dAttention_c::Draw() {
         return;
     if (target != NULL) {
         if (target != NULL) {
-            this->draw[0].draw(target->attention_info.position, invCamera);
+            draw[0].draw(target->attention_info.position, invCamera);
         }
 
-        if (mLockOnNum >= 2 && this->draw[1].mpAnmClr != NULL) {
+        if (mLockOnNum >= 2 && draw[1].mpAnmClr != NULL) {
             int listIdx = mLockOnOffs;
 
             if (mLockOnOffs == 0) {
@@ -956,24 +956,24 @@ void dAttention_c::Draw() {
 
             if (mLockOnList[listIdx].getActor() != NULL) {
                 fopAc_ac_c* target = mLockOnList[listIdx].getActor();
-                this->draw[1].draw(target->attention_info.position, invCamera);
+                draw[1].draw(target->attention_info.position, invCamera);
             }
         }
 
         fpc_ProcID id = LockonTargetPId(0);
-        this->mlockedOnPId = id;
-        this->mDrawAttnPos = target->attention_info.position;
-        this->field_0x028 = 0;
+        mlockedOnPId = id;
+        mDrawAttnPos = target->attention_info.position;
+        field_0x028 = 0;
     } else {
-        if (this->field_0x028 > 0) {
-            uint temp = this->mlockedOnPId;
+        if (field_0x028 > 0) {
+            uint temp = mlockedOnPId;
             // unsure about this cast
             target = reinterpret_cast<fopAc_ac_c*>(fopAcIt_Judge(&fpcSch_JudgeByID, &temp));
             if (target != NULL) {
-                this->draw[0].draw(target->attention_info.position, invCamera);
-                this->mDrawAttnPos = target->attention_info.position;
+                draw[0].draw(target->attention_info.position, invCamera);
+                mDrawAttnPos = target->attention_info.position;
             } else {
-                this->draw[0].draw(this->mDrawAttnPos, invCamera);
+                draw[0].draw(mDrawAttnPos, invCamera);
             }
         }
     }
@@ -985,36 +985,36 @@ void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
     J3DAnmColor *color;
 
     pAnimRes = (J3DAnmTransform *) dRes_control_c::getRes("Always", resIdxTransform, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-    this->anm->setAnm(pAnimRes, loopMode, 0.0, 1.0, 0.0, -1.0, NULL);
+    anm->setAnm(pAnimRes, loopMode, 0.0, 1.0, 0.0, -1.0, NULL);
     if (resIdxColor < 0) {
-        this->mpAnmClr = NULL;
+        mpAnmClr = NULL;
     }
     else {
         color = (J3DAnmColor *)dRes_control_c::getRes("Always", resIdxColor, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
-        this->mpAnmClr = color;
+        mpAnmClr = color;
     }
 }
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
 void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
-    J3DModel *model = this->anm->mpModel;
+    J3DModel *model = anm->mpModel;
     mDoMtx_stack_c::transS(pos);
     mDoMtx_stack_c::concat(mtx);
     PSMTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 
     J3DModelData *modeldata = model->getModelData();
-    if (this->mpAnmClr == NULL) {
+    if (mpAnmClr == NULL) {
         J3DAnmColor *color = reinterpret_cast<J3DAnmColor*>(dRes_control_c::getRes("Always", 0x45, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40));
         modeldata->getMaterialTable().removeMatColorAnimator(color);
     } else {
-        this->mpAnmClr->setFrame(this->anm->mFrameCtrl.getFrame());
-        J3DMatColorAnm *p = this->mpAnmMatClr;
-        for(u16 i = 0; i < this->mpAnmClr->getUpdateMaterialNum(); i++) {
-            p->setAnmColor(this->mpAnmClr);
+        mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
+        J3DMatColorAnm *p = mpAnmMatClr;
+        for(u16 i = 0; i < mpAnmClr->getUpdateMaterialNum(); i++) {
+            p->setAnmColor(mpAnmClr);
             p->setAnmIndex(i);
             p++;
         }
-        modeldata->getMaterialTable().setMatColorAnimator(this->mpAnmClr, this->mpAnmMatClr);
+        modeldata->getMaterialTable().setMatColorAnimator(mpAnmClr, mpAnmMatClr);
     }
 
     if ((int)mDoGph_gInf_c::mMonotone != 0) {
@@ -1024,7 +1024,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
         j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaListMaskOff, 0);
         j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluListMaskOff, 1);
     }
-    this->anm->updateDL();
+    anm->updateDL();
     j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpOpaList, 0);
     j3dSys.setDrawBuffer(g_dComIfG_gameInfo.drawlist.mpXluList, 1);
 }
@@ -1263,7 +1263,7 @@ bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f
 bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
     // TODO: what is param_3?
     fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
-    if (param_3 > this->field_0x4) {
+    if (param_3 > field_0x4) {
         return false;
     }
     cXyz vec_to_player = reqActor->eyePos - player->eyePos;
