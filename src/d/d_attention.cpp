@@ -857,14 +857,14 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 
 /* 8009F1D4-8009F460       .text Run__12dAttention_cFUl */
 bool dAttention_c::Run(u32 interactMask) {
-    bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
+    bool var = dComIfGs_getOptAttentionType() == 0;
     if (chkFlag(AttnFlag_00000080)) {
         mpPlayer = (daPy_lk_c*)dComIfGp_getPlayer(0);
         mPlayerNo = 0;
     }
     runDebugDisp0();
     clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
-    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0) {
+    if (dComIfGp_event_getMode() != 0) {
         mLockOnState = LockState_NONE;
         field_0x01a = 0;
         field_0x01b = 0;
@@ -920,7 +920,7 @@ void dAttention_c::Draw() {
     Mtx invCamera;
     MTXInverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
-    if (g_dComIfG_gameInfo.play.mEvtCtrl.mMode != 0 || g_dComIfG_gameInfo.play.mScopeMesgStatus != 0)
+    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != 0)
         return;
     if (target != NULL) {
         if (target != NULL) {
