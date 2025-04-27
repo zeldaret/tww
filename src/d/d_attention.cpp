@@ -168,13 +168,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
     if (list != NULL && list->getActor() != NULL && list->mType == fopAc_Attn_TYPE_TALK_e && LockonTruth()) {
         fopAc_ac_c* actor = list->getActor();
         if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
-            s16 rt;
-            if (actor->eventInfo.mpCheckCB == NULL)
-                rt = 1;
-            else
-                rt = actor->eventInfo.mpCheckCB(actor, button);
-
-            if (rt)
+            if (actor->eventInfo.runXyCheckCB(actor, button))
                 return list;
         }
 
@@ -187,13 +181,7 @@ dAttList_c* dAttention_c::getActionBtnXYZ_local(int button) {
             if (mActionList[i].mType == fopAc_Attn_TYPE_SPEAK_e) {
                 fopAc_ac_c* actor = mActionList[i].getActor();
                 if (actor->eventInfo.chkCondition(dEvtCnd_CANTALKITEM_e)) {
-                    s16 rt;
-                    if (actor->eventInfo.mpCheckCB == NULL)
-                        rt = 1;
-                    else
-                        rt = actor->eventInfo.mpCheckCB(actor, button);
-
-                    if (rt)
+                    if (actor->eventInfo.runXyCheckCB(actor, button))
                         return &mActionList[i];
                 }
             }
