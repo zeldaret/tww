@@ -8,6 +8,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "SSystem/SComponent/c_angle.h"
+#include "d/res/res_always.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
@@ -673,13 +674,13 @@ void dAttention_c::runSoundProc() {
 void dAttention_c::runDrawProc() {
     /* TODO: Magic constants */
     if (chkFlag(AttnFlag_00000008)) {
-        draw[0].setAnm(0x1b, 0x48, 0);
+        draw[0].setAnm(ALWAYS_BCK_YJ_SCALE, ALWAYS_BPK_YJ_SCALE, J3DFrameCtrl::EMode_NONE);
         if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
     } else if (chkFlag(AttnFlag_00000010)) {
-        draw[0].setAnm(0x17, 0x44, 0);
+        draw[0].setAnm(ALWAYS_BCK_YJ_DELETE, ALWAYS_BPK_YJ_DELETE, J3DFrameCtrl::EMode_NONE);
         if (field_0x028 >= 0) {
             field_0x028 = 1;
             setFlag(AttnFlag_40000000);
@@ -690,14 +691,14 @@ void dAttention_c::runDrawProc() {
             JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
     } else if (chkFlag(AttnFlag_00000001)) {
-        draw[0].setAnm(0x18, 0x45, 0);
+        draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
         setFlag(AttnFlag_40000000);
     } else if (chkFlag(AttnFlag_00000002)) {
-        draw[0].setAnm(0x18, 0x45, 0);
-        draw[1].setAnm(0x1a, 0x47, 0);
+        draw[0].setAnm(ALWAYS_BCK_YJ_IN, ALWAYS_BPK_YJ_IN, J3DFrameCtrl::EMode_NONE);
+        draw[1].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
         setFlag(AttnFlag_40000000);
     } else if (mLockOnNum <= 0 && field_0x028 == 0) {
-        draw[0].setAnm(0x1a, 0x47, 0);
+        draw[0].setAnm(ALWAYS_BCK_YJ_OUT, ALWAYS_BPK_YJ_OUT, J3DFrameCtrl::EMode_NONE);
         field_0x028 = 1;
         setFlag(AttnFlag_40000000);
     }
@@ -706,7 +707,7 @@ void dAttention_c::runDrawProc() {
     if (mLockOnState == LockState_LOCK) {
         result = draw[0].anm->play(NULL, 0, 0);
         if (result) {
-            draw[0].setAnm(0x19, -1, 2);
+            draw[0].setAnm(ALWAYS_BCK_YJ_LOOP, -1, J3DFrameCtrl::EMode_LOOP);
             clrFlag(AttnFlag_40000000);
         }
     } else {
@@ -984,13 +985,13 @@ void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
     J3DAnmTransform *pAnimRes;
     J3DAnmColor *color;
 
-    pAnimRes = (J3DAnmTransform *) dRes_control_c::getRes("Always", resIdxTransform, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+    pAnimRes = (J3DAnmTransform *)dComIfG_getObjectRes("Always", resIdxTransform);
     anm->setAnm(pAnimRes, loopMode, 0.0, 1.0, 0.0, -1.0, NULL);
     if (resIdxColor < 0) {
         mpAnmClr = NULL;
     }
     else {
-        color = (J3DAnmColor *)dRes_control_c::getRes("Always", resIdxColor, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40);
+        color = (J3DAnmColor *)dComIfG_getObjectRes("Always", resIdxColor);
         mpAnmClr = color;
     }
 }
@@ -1004,7 +1005,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
 
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
-        J3DAnmColor *color = reinterpret_cast<J3DAnmColor*>(dRes_control_c::getRes("Always", 0x45, g_dComIfG_gameInfo.mResControl.mObjectInfo, 0x40));
+        J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
         modeldata->getMaterialTable().removeMatColorAnimator(color);
     } else {
         mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
