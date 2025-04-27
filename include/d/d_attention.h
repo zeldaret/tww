@@ -205,9 +205,9 @@ public:
 
     fopAc_ac_c* Owner() { return (fopAc_ac_c*)mpPlayer; }
     
-    bool chkFlag(AttentionFlags flag) { return (mFlags & flag) ? true : false; }
-    void setFlag(AttentionFlags flag) { mFlags |= flag; }
-    void clrFlag(AttentionFlags flag) { mFlags &= ~flag; }
+    bool chkFlag(u32 flag) { return (mFlags & flag) ? true : false; }
+    void setFlag(u32 flag) { mFlags |= flag; }
+    void clrFlag(u32 flag) { mFlags &= ~flag; }
     bool Lockon() { return LockonTruth() || chkFlag(AttnFlag_20000000); } // regswap
     void offAleart() {
         setFlag(AttnFlag_80000000);
