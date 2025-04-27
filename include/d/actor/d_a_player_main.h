@@ -264,13 +264,14 @@ public:
     }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
-    static void getEyeMoveFlg() {}
-    static void getMabaFlg() {}
-    static void getMabaTimer() {}
+    static u8 getEyeMoveFlg() { return m_eye_move_flg; }
+    static u8 getMabaFlg() { return m_maba_flg; }
+    static u8 getMabaTimer() { return m_maba_timer; }
+    static u8 getMorfFrame() { return m_morf_frame; }
     static void getNowOffsetXP() {}
     static void getNowOffsetYP() {}
-    static void offEyeMoveFlg() {}
-    static void onEyeMoveFlg() {}
+    static void offEyeMoveFlg() { m_eye_move_flg = 0; }
+    static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
     static void setNowOffsetX(f32) {}
@@ -311,15 +312,18 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x002 - 0x000];
     // TODO: is this right?
+    /* 0x000 */ u8 field_0x000;
+    /* 0x001 */ u8 field_0x001;
     /* 0x002 */ s16 field_0x002;
-    /* 0x004 */ u8 field_0x004[0x008 - 0x004];
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
     /* 0x008 */ s16 field_0x008;
     /* 0x00A */ s16 field_0x00A;
-    /* 0x00C */ u8 field_0x00C[0x018 - 0x00C];
+    /* 0x00C */ cXyz field_0x00C;
     /* 0x018 */ cXyz field_0x018;
-    /* 0x018 */ u8 field_0x024[0x034 - 0x024];
+    /* 0x024 */ cXyz field_0x024;
+    /* 0x030 */ f32 field_0x030;
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
     /* 0x088 */ Mtx field_0x088[3];
 };
@@ -930,7 +934,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    s32 checkNormalFace();
+    u16 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -941,7 +945,7 @@ public:
     void playTextureAnime();
     BOOL checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
-    void setItemModel();
+    s32 setItemModel();
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
@@ -1013,7 +1017,7 @@ public:
     void setFrontWallType();
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
-    void changeWaitProc();
+    BOOL changeWaitProc();
     BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
@@ -1140,7 +1144,7 @@ public:
     BOOL procNotUse_init(int);
     BOOL procNotUse();
     s16 getGroundAngle(cBgS_PolyInfo*, s16);
-    void setLegAngle(f32, int, s16*, s16*);
+    int setLegAngle(f32, int, s16*, s16*);
     void footBgCheck();
     void setWaterY();
     void autoGroundHit();

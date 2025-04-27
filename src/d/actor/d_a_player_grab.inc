@@ -243,7 +243,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return true;
     }
     if (checkSetItemTrigger(dItem_IRON_BOOTS_e, 1) ||
-        (checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS) && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
+        (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
     {
         return procBootsEquip_init(dItem_IRON_BOOTS_e);
     } else if (fopAcM_GetName(grab_actor) == PROC_BOMB && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
@@ -600,7 +600,7 @@ BOOL daPy_lk_c::procGrabPut_init() {
     }
 
     commonProcInit(daPyProc_GRAB_PUT_e);
-    if (field_0x2b0 < 0.0f) {
+    if (checkGrabWear()) {
         mProcVar0.m3570 = 1;
         setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
     } else {
@@ -638,7 +638,7 @@ BOOL daPy_lk_c::procGrabPut() {
     }
 
     if (mProcVar0.m3570 == 1) {
-        if (!(field_0x2b0 < 0.0f)) {
+        if (!checkGrabWear()) {
             mProcVar0.m3570 = 0;
             setSingleMoveAnime(
                 ANM_GRABUP,
