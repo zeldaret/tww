@@ -188,7 +188,7 @@ public:
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
     s16 runXyCheckCB(void* ac, int i_itemBtn) {
         if (mpCheckCB == NULL)
-            return -1;
+            return 1;
         return mpCheckCB(ac, i_itemBtn);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
