@@ -863,14 +863,14 @@ bool dAttention_c::Run(u32 interactMask) {
         mPlayerNo = 0;
     }
     runDebugDisp0();
-    clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
+    clrFlag(~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000));
     if (dComIfGp_event_getMode() != 0) {
         mLockOnState = LockState_NONE;
         field_0x01a = 0;
         field_0x01b = 0;
         clrFlag(AttnFlag_20000000);
         clrFlag(AttnFlag_10000000);
-        clrFlag((AttentionFlags) (~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000)));
+        clrFlag(~(AttnFlag_80000000 | AttnFlag_40000000 | AttnFlag_20000000 | AttnFlag_10000000 | AttnFlag_08000000));
         mLockOnTargetBsPcID = -1;
         freeAttention();
     } else {
@@ -892,7 +892,7 @@ bool dAttention_c::Run(u32 interactMask) {
         } else if (mDoCPd_L_LOCK_BUTTON(mPlayerNo)) {
             fopAc_ac_c *target = LockonTarget(0);
             if (target == NULL) {
-                setFlag((AttentionFlags)(AttnFlag_20000000 | AttnFlag_00000020));
+                setFlag(AttnFlag_20000000 | AttnFlag_00000020);
                 mDoAud_seStart(JA_SE_CAMERA_L_MOVE);
             }
             setFlag(AttnFlag_10000000);
