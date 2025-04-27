@@ -66,6 +66,14 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
     daPyStts0_UNK80000000_e    = 0x80000000,
+
+    // This is some combination of flags which is seemingly related to "judgement", used in dAttention_c
+    daPyStts0_UNK37a02371_e    = daPyStts0_UNK1_e | daPyStts0_UNK10_e | daPyStts0_UNK20_e
+                                 | daPyStts0_UNK40_e | daPyStts0_UNK100_e | daPyStts0_UNK200_e
+                                 | daPyStts0_UNK2000_e| daPyStts0_TELESCOPE_LOOK_e
+                                 | daPyStts0_UNK800000_e | daPyStts0_UNK1000000_e
+                                 | daPyStts0_UNK2000000_e | daPyStts0_UNK4000000_e
+                                 | daPyStts0_UNK10000000_e | daPyStts0_UNK20000000_e
 };
 
 enum daPy__PlayerStatus1 {

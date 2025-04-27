@@ -666,16 +666,12 @@ void dAttention_c::runSoundProc() {
     }
 }
 
-// This is some combination of flags `g_dComIfG_gameInfo.play.mPlayerStatus[0][0]`
-// can take, seemingly related to "judgement".
-#define PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT 0x37a02371
-
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
     /* TODO: Magic constants */
     if (chkFlag(AttnFlag_00000008)) {
         draw[0].setAnm(ALWAYS_BCK_YJ_SCALE, ALWAYS_BPK_YJ_SCALE, J3DFrameCtrl::EMode_NONE);
-        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
+        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x804, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
@@ -686,7 +682,7 @@ void dAttention_c::runDrawProc() {
             setFlag(AttnFlag_40000000);
         }
 
-        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) == 0
+        if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) == 0
             || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
             JAIZelBasic::zel_basic->seStart(0x805, NULL, 0, 0, 1.0, 1.0, -1.0, -1.0, 0);
         }
@@ -734,7 +730,7 @@ void dAttention_c::runDebugDisp() {
 
 /* 8009EDC0-8009EE90       .text judgementButton__12dAttention_cFv */
 void dAttention_c::judgementButton() {
-    if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & PLAYER_STATUS_FLAG_MAGIC_JUDGEMENT) != 0
+    if ((g_dComIfG_gameInfo.play.mPlayerStatus[0][0] & daPyStts0_UNK37a02371_e) != 0
         || (g_dComIfG_gameInfo.play.mPlayerStatus[0][1] & 0x11) != 0) {
         if ((int)field_0x01a >= 3)
             return;
