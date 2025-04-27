@@ -668,7 +668,6 @@ void dAttention_c::runSoundProc() {
 
 /* 8009EB38-8009EDB8       .text runDrawProc__12dAttention_cFv */
 void dAttention_c::runDrawProc() {
-    /* TODO: Magic constants */
     if (chkFlag(AttnFlag_00000008)) {
         draw[0].setAnm(ALWAYS_BCK_YJ_SCALE, ALWAYS_BPK_YJ_SCALE, J3DFrameCtrl::EMode_NONE);
         if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK37a02371_e)
@@ -870,7 +869,6 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 
 /* 8009F1D4-8009F460       .text Run__12dAttention_cFUl */
 bool dAttention_c::Run(u32 interactMask) {
-    // TODO: magic numbers
     bool var = g_dComIfG_gameInfo.save.mSavedata.mPlayer.mConfig.mAttentionType == 0;
     if (chkFlag(AttnFlag_00000080)) {
         mpPlayer = (daPy_lk_c*)g_dComIfG_gameInfo.play.mpPlayer[0];
@@ -931,7 +929,6 @@ bool dAttention_c::Run(u32 interactMask) {
 
 /* 8009F460-8009F5FC       .text Draw__12dAttention_cFv */
 void dAttention_c::Draw() {
-    /* Nonmatching */
     Mtx invCamera;
     MTXInverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
