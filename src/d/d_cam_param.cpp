@@ -140,12 +140,12 @@ f32 dCamParam_c::ratiof(f32 t, f32 upper, f32 lower, f32 base) {
 BOOL dCamParam_c::DefaultRadius(f32* radius) {
     /* Nonmatching */
     f32 min, max;
-    if (mpStyle->m3C < mpStyle->m40) {
-        min = mpStyle->m3C;
-        max = mpStyle->m40;
+    if (mpStyle->m08[13] < mpStyle->m08[14]) {
+        min = mpStyle->m08[13];
+        max = mpStyle->m08[14];
     } else {
-        min = mpStyle->m40;
-        max = mpStyle->m3C;
+        min = mpStyle->m08[14];
+        max = mpStyle->m08[13];
     }
 
     if (*radius > max) {
@@ -166,46 +166,93 @@ void dCamParam_c::RadiusRatio(f32) {
 
 /* 800AFB88-800AFBB8       .text CenterHeight__11dCamParam_cFf */
 f32 dCamParam_c::CenterHeight(f32 t) {
-    return ratiof(t, mpStyle->centerHeightUpper, mpStyle->centerHeightLower, mpStyle->centerHeightBase);
+    return ratiof(t, mpStyle->m08[6], mpStyle->m08[7], mpStyle->m08[5]);
     /* Nonmatching */
 }
 
 /* 800AFBB8-800AFBE8       .text Fovy__11dCamParam_cFf */
 f32 dCamParam_c::Fovy(f32 t) {
-    return ratiof(t, mpStyle->fovyUpper, mpStyle->fovyLower, mpStyle->fovyBase);
+    return ratiof(t, mpStyle->m08[26], mpStyle->m08[27], mpStyle->m08[25]);
 }
 
 /* 800AFBE8-800AFC74       .text LockonLongitude__11dCamParam_cFf */
 s16 dCamParam_c::LockonLongitude(f32 t) {
-    cSAngle ret(mpStyle->lockonLongitudeMin);
-    ret += (cSAngle(mpStyle->lockonLongitudeMax) - ret) * t;
+    cSAngle ret(mpStyle->m08[23]);
+    ret += (cSAngle(mpStyle->m08[24]) - ret) * t;
     return ret.Val();
 }
 
 /* 800AFC74-800AFD00       .text LockonLatitude__11dCamParam_cFf */
 s16 dCamParam_c::LockonLatitude(f32 t) {
-    cSAngle ret(mpStyle->lockonLatitudeMin);
-    ret += (cSAngle(mpStyle->lockonLatitudeMax) - ret) * t;
+    cSAngle ret(mpStyle->m08[18]);
+    ret += (cSAngle(mpStyle->m08[19]) - ret) * t;
     return ret.Val();
 }
 
 /* 800AFD00-800AFD20       .text LockonFovy__11dCamParam_cFf */
 f32 dCamParam_c::LockonFovy(f32 t) {
-    f32 ret = mpStyle->lockonFovyMin;
-    ret += t * (mpStyle->lockonFovyMax - ret);
+    f32 ret = mpStyle->m08[28];
+    ret += t * (mpStyle->m08[29] - ret);
     return ret;
 }
 
 /* 800AFD20-800AFD40       .text LockonCenterHeight__11dCamParam_cFf */
 f32 dCamParam_c::LockonCenterHeight(f32 t) {
-    f32 ret = mpStyle->lockonCenterHeightMin;
-    ret += t * (mpStyle->lockonCenterHeightMax - ret);
+    f32 ret = mpStyle->m08[8];
+    ret += t * (mpStyle->m08[9] - ret);
     return ret;
 }
 
 /* 800AFD40-800AFEE0       .text __ct__11dCamSetup_cFv */
 dCamSetup_c::dCamSetup_c() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    mDrawNear = 1.0f;
+    mDrawFar = 100000.0f;
+    m00C = 1;
+    mForceType = mModeSwitchType = -1;
+    mCusCus = 0.2f;
+    m024 = 0.05f;
+    m060 = 80.0f;
+    m05C = -60.0f;
+    m028 = 0.33f;
+    m02C = 0.02f;
+    m050 = 100.0f;
+    m030 = 0.75f;
+    mBaseCushion = 0.28f;
+    mJumpCushion = 1.0f;
+    m058 = 0.15f;
+    m044 = 0.005f;
+    m054 = 0.06f;
+    mCurveWeight = 1.0f;
+    m034 = 25.0f;
+    m048 = 70.0f;
+    mParallelDist = 60.0f;
+    mTrimVistaHeight = 52.0f;
+    mTrimCineScopeHeight = 65.0f;
+    m094 = 150;
+    m098 = 60.0f;
+    m09C = 0.3f;
+    m0A0 = 0.2f;
+    mDMCValue = 0.1f;
+    mDMCAngle = 30.0f;
+    mDebugFlags = 1;
+    m0A4 = 27.0f;
+    m0A8 = 20;
+    mChargeLatitude = 2.0f;
+    mChargeTimer = 60;
+    mChargeBRatio = 0.15f;
+    mManualStartCThreshold = 0.66f;
+    mManualEndVal = 0.0f;
+    m06C = 45.0f;
+    mForceLockOffDist = 1800.0f;
+    mForceLockOffTimer = 120;
+    m078 = 0.5f;
+    m07C = 0.4f;
+    m080 = 10.0f;
+    m084 = 4.0f;
+    m0C0 = 1.0f;
+    mLockonChangeCushion = 100.0f;
+    mLockonChangeTimer = -1;
 }
 
 /* 800AFEE0-800AFF40       .text __dt__11dCamSetup_cFv */

@@ -7,38 +7,9 @@
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
     /* 0x04 */ int engineIdx;
-    /* 0x08 */ u32 m08;
-    /* 0x0C */ u32 m0C;
-    /* 0x10 */ u32 m10;
-    /* 0x14 */ u32 m14;
-    /* 0x18 */ u32 m18;
-    /* 0x1C */ f32 centerHeightBase;
-    /* 0x20 */ f32 centerHeightUpper;
-    /* 0x24 */ f32 centerHeightLower;
-    /* 0x28 */ f32 lockonCenterHeightMin;
-    /* 0x2C */ f32 lockonCenterHeightMax;
-    /* 0x30 */ u32 m30;
-    /* 0x34 */ u32 m34;
-    /* 0x38 */ u32 m38;
-    /* 0x3C */ f32 m3C;
-    /* 0x40 */ f32 m40;
-    /* 0x44 */ u32 m44;
-    /* 0x48 */ u32 m48;
-    /* 0x4C */ u32 m4C;
-    /* 0x50 */ f32 lockonLatitudeMin;
-    /* 0x54 */ f32 lockonLatitudeMax;
-    /* 0x58 */ u32 m58;
-    /* 0x5C */ u32 m5C;
-    /* 0x60 */ u32 m60;
-    /* 0x64 */ f32 lockonLongitudeMin;
-    /* 0x68 */ f32 lockonLongitudeMax;
-    /* 0x6C */ f32 fovyBase;
-    /* 0x70 */ f32 fovyUpper;
-    /* 0x74 */ f32 fovyLower;
-    /* 0x78 */ f32 lockonFovyMin;
-    /* 0x7C */ f32 lockonFovyMax;
+    /* 0x08 */ f32 m08[30];
     /* 0x80 */ u16 flag;
-};  // Size: 0x84
+};  // Size: 0x82
 
 class dCstick_c {
 public:
@@ -200,8 +171,8 @@ public:
     dCamParam_c(s32);
     virtual ~dCamParam_c();
 
-    void Flag(s32, u16) {}
-    void Val(s32, int) {}
+    s16 Flag(s32 styleIdx, u16 mask) { return mask & styles[styleIdx].flag; }
+    f32 Val(s32 styleIdx, int structIdx) { return *((f32*)&styles[styleIdx] + 0x8 + structIdx); }
     BOOL Change(s32);
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);
