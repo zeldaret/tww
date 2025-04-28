@@ -69,7 +69,7 @@ int daPy_lk_c::changeRopeSwingProc() {
 
 /* 80142FC8-801430D4       .text changeRopeEndProc__9daPy_lk_cFi */
 int daPy_lk_c::changeRopeEndProc(int param_0) {
-    dComIfGp_setDoStatus(0x16);
+    dComIfGp_setDoStatus(dActStts_LET_GO_ROPE_e);
     if (doTrigger() || cancelTrigger() || (!checkRopeTag() && itemTrigger())) {
         freeRopeItem();
         voiceStart(6);
@@ -282,7 +282,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
                 return true;
             }
         } else if (!mpAttention->Lockon()) {
-            dComIfGp_setDoStatus(7);
+            dComIfGp_setDoStatus(dActStts_RETURN_e);
         }
         if (((itemButton()) && (mEquipItem == getReadyItem())) && (m355C == 0)) {
             m355E = 1;
@@ -584,7 +584,7 @@ BOOL daPy_lk_c::procRopeSwing() {
     mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x28), &sp34);
     fopAc_ac_c* rope = mActorKeepRope.getActor();
     mRopePos = rope->current.pos;
-    dComIfGp_setRStatus(0x13);
+    dComIfGp_setRStatus(dActStts_STOP_e);
     f32 f30 = (m35A8 * m35A4);
     f32 dVar13 = (m35AC * m35A4);
     mDoMtx_stack_c::ZrotS(-shape_angle.z);
@@ -759,7 +759,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
     s16 unaff_r29;
     float dVar4;
 
-    dComIfGp_setRStatus(0x13);
+    dComIfGp_setRStatus(dActStts_STOP_e);
     if (m34D0 > 0) {
         m34D0--;
     }
@@ -913,7 +913,7 @@ BOOL daPy_lk_c::procRopeUp_init() {
 
 /* 80145DBC-80145F64       .text procRopeUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeUp() {
-    dComIfGp_setRStatus(0x13);
+    dComIfGp_setRStatus(dActStts_STOP_e);
     if (checkHangRopeActorNull()) {
         return true;
     }
@@ -988,7 +988,7 @@ BOOL daPy_lk_c::procRopeDown_init() {
 
 /* 801460EC-80146240       .text procRopeDown__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeDown() {
-    dComIfGp_setRStatus(0x13);
+    dComIfGp_setRStatus(dActStts_STOP_e);
     if (checkHangRopeActorNull()) {
         return true;
     }
@@ -1043,7 +1043,7 @@ BOOL daPy_lk_c::procRopeSwingStart_init() {
 
 /* 801463E8-80146610       .text procRopeSwingStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeSwingStart() {
-    dComIfGp_setRStatus(0x13);
+    dComIfGp_setRStatus(dActStts_STOP_e);
     cXyz local_28;
     local_28.set(0.0f, -m35A0, 0.0f);
     if (checkHangRopeActorNull()) {

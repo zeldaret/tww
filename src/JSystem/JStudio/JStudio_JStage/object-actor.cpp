@@ -10,7 +10,7 @@ namespace JStudio_JStage {
 
 /* 80276264-80276318       .text __ct__Q214JStudio_JStage14TAdaptor_actorFPCQ26JStage7TSystemPQ26JStage6TActor */
 TAdaptor_actor::TAdaptor_actor(const JStage::TSystem* system, JStage::TActor* actor)
-   : JStudio::TAdaptor_actor()
+    : JStudio::TAdaptor_actor()
     , mSystem(system)
     , mObject(actor)
     , m12C(NULL)

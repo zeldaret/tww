@@ -1067,7 +1067,7 @@ void daShip_c::decrementShipSpeed(float decrementSpeed) {
 /* 00002CFC-00002D5C       .text firstDecrementShipSpeed__8daShip_cFf */
 void daShip_c::firstDecrementShipSpeed(float decrementSpeed) {
     if (cLib_addCalc(&speedF, decrementSpeed, 0.1f, 5.0f, 1.0f) < 3.0f) {
-      m03E0 = 10000.0f;
+        m03E0 = 10000.0f;
     }
 }
 
@@ -1360,7 +1360,7 @@ void daShip_c::setSelfMove(int param_1) {
                 firstDecrementShipSpeed(m03E0);
             }
             else {
-                if (dComIfGp_getDoStatus() == 0x13 && (CPad_CHECK_HOLD_A(0))) {
+                if (dComIfGp_getDoStatus() == dActStts_STOP_e && (CPad_CHECK_HOLD_A(0))) {
                     fVar6 = cLib_addCalc(&speedF, 0.0f, 0.1f, 1.0f, 0.1f);
                 }
                 else {
@@ -1639,7 +1639,7 @@ BOOL daShip_c::procSteerMove() {
             mFwdVel > 16.5f) {
             if (!checkForceMove() && windPower >= 11.0f) {
                 onStateFlg(daSFLG_JUMP_OK_e);
-                if (g_mDoCPd_cpadInfo[0].mTrigLockR) {
+                if (mDoCPd_R_LOCK_TRIGGER(0)) {
                     onStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_JUMP_e));
                     speed.y = windPower;
                     if (speed.y < 15.0f) {
@@ -1733,7 +1733,7 @@ BOOL daShip_c::procCannon() {
             cLib_addCalcAngleS(&m0396, cM_atan2s(-cannonPos.y, cannonPos.absXZ()) + 0x4000, 5, 0x180, 0x40);
             cLib_addCalcAngleS(&m0394, cM_atan2s(cannonPos.x, cannonPos.z) - shape_angle.y, 5, 0x180, 0x40);
         
-        } else if (!g_mDoCPd_cpadInfo[0].mHoldLockR) {
+        } else if (!mDoCPd_R_LOCK_BUTTON(0)) {
             float adjust = mStickMVal * (m0404 * 4.0f + 1.0f);
             m0396 += (adjust * 384.0f) * cM_scos(mStickMAng);
             m0394 += (s16)((adjust * 384.0f) * cM_ssin(mStickMAng));
@@ -1767,7 +1767,7 @@ BOOL daShip_c::procCannon() {
             m037A--;
         }
         
-        if (g_mDoCPd_cpadInfo[0].mHoldLockR) {
+        if (mDoCPd_R_LOCK_BUTTON(0)) {
             setSelfMove(1);
         } else {
             setSelfMove(0);
@@ -1890,7 +1890,7 @@ BOOL daShip_c::procCrane() {
                 }
             }
             cLib_chaseAngleS(&m039C, sVar3, 0x100);
-            if (mRopeCnt == 20 && !g_mDoCPd_cpadInfo[0].mHoldLockR && mStickMVal > 0.1f) {
+            if (mRopeCnt == 20 && !mDoCPd_R_LOCK_BUTTON(0) && mStickMVal > 0.1f) {
                 sVar2 = mCraneBaseAngle;
                 if ((mStickMAng < -0x2000) && (mStickMAng > -0x6000)) {
                     mCraneBaseAngle = 0x3000;
@@ -1911,7 +1911,7 @@ BOOL daShip_c::procCrane() {
             cLib_chaseAngleS(&m03A6, 0x1800, 0x100);
             cLib_addCalcAngleS(&m0398, mCraneBaseAngle, 5, m03A6, 0x100);
         }
-        if (g_mDoCPd_cpadInfo[0].mHoldLockR && mRopeCnt == 20) {
+        if (mDoCPd_R_LOCK_BUTTON(0) && mRopeCnt == 20) {
             setSelfMove(1);
             if (cM_rnd() < 0.5f) {
                 m0353 = 1;
@@ -3181,7 +3181,7 @@ void daShip_c::setRopePos() {
             *ropeSegments += (*currentRopeSegment - spF8) * 0.05f;
         }
         if (mRopeCnt == 20 && checkStateFlg(daSFLG_UNK10000000_e)) {
-            r4 = mRopeLine.getPos(0);;
+            r4 = mRopeLine.getPos(0);
             mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
             spE0 -= *r4;
 
@@ -4358,7 +4358,7 @@ BOOL daShip_c::createHeap() {
             return FALSE;
         }
 
-        if (pModel->setSkinDeform(mSkinDeform, 1)) {
+        if (pModel->setSkinDeform(mSkinDeform, 1) != J3DErrType_Success) {
             return FALSE;
         }
     }

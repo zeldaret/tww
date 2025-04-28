@@ -1420,7 +1420,7 @@ void daPy_lk_c::dProcPresent_init_sub() {
         daPy_HIO_turn_c0::m.field_0x30
     );
     onModeFlg(ModeFlg_00000400);
-    if (checkBottleItem(dComIfGp_event_getPreItemNo()) == 0) {
+    if (!checkBottleItem(dComIfGp_event_getPreItemNo())) {
         dComIfGp_event_setItemPartnerId(fopAcM_createItemForPresentDemo(
             &current.pos, dComIfGp_event_getPreItemNo(), 3, -1, fopAcM_GetRoomNo(this), &shape_angle, &scale
         ));

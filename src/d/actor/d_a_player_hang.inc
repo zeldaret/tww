@@ -123,7 +123,7 @@ int daPy_lk_c::changeHangEndProc(int param_0) {
         return procLand_init(daPy_HIO_autoJump_c0::m.field_0x24, 0);
     }
     if (param_0 != 0) {
-        dComIfGp_setDoStatus(6);
+        dComIfGp_setDoStatus(dActStts_LET_GO_e);
         if (doTrigger()) {
             speed.y = 0.0f;
             return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);

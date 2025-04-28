@@ -1667,8 +1667,8 @@ void fopMsgM_arrowAnime(J2DPicture* param_1, s16* param_2) {
     black.a = 0x0;
     u8 alpha = 0;
 
-    static GXColor color1 = {0xFF, 0x50, 0x50, 0x00};
-    static GXColor color2 = {0xFF, 0x96, 0x96, 0x00};
+    static const GXColor color1 = {0xFF, 0x50, 0x50, 0x00};
+    static const GXColor color2 = {0xFF, 0x96, 0x96, 0x00};
 
     if(*param_2 < 0x16) {
         float temp = fopMsgM_valueIncrease(0x16, *param_2, 2);

@@ -15,8 +15,7 @@ f32 dCamMath::rationalBezierRatio(f32 x, f32 y) {
 
 /* 800AF4F4-800AF544       .text customRBRatio__8dCamMathFff */
 f32 dCamMath::customRBRatio(f32 x, f32 y) {
-    /* Nonmatching */
-    if (x > 0.7071068f) {
+    if (x > 0.70710677f) {
         if (x < 0.0f) {
             return -1.0f;
         } else {
@@ -24,7 +23,7 @@ f32 dCamMath::customRBRatio(f32 x, f32 y) {
         }
     }
 
-    return rationalBezierRatio(x * 1.414214f, y);
+    return rationalBezierRatio(x * 1.4142135f, y);
 }
 
 /* 800AF544-800AF5A0       .text zoomFovy__8dCamMathFff */

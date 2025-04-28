@@ -4,6 +4,7 @@
 #include "dolphin/os/__start.h"
 
 void DBInit();
+static void __init_registers(void);
 
 SECTION_INIT void __check_pad3(void) {
     if ((*(u16*)0x800030E4 & 0xEEF) == 0xEEF) {

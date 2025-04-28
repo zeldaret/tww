@@ -96,7 +96,7 @@ public:
     void offHyoiKamome() { m_hyoi_kamome = false; }
     
     s16 XyCheckCB(int);
-    int callDemoStartCheck();
+    BOOL callDemoStartCheck();
     s16 XyEventCB(int);
     ~daNpc_kam_c();
     void setAttention(bool, int);

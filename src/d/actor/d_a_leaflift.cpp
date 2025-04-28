@@ -247,7 +247,7 @@ bool daLlift_c::_execute() {
         mTargetRotation = ZeroQuat;
         if (distXZ > 270.0f) {
             mbIsDescending = TRUE;
-      }
+        }
     }
     MoveDownLift();
     set_mtx();
@@ -290,7 +290,7 @@ BOOL daLlift_c::MoveDownLift() {
     float maxSpeed = m_max_speed;
     float minSpeed = m_min_speed;
     if (!mbIsDescending) {
-      return TRUE;
+        return TRUE;
     }
     float downVel = cLib_addCalc(&current.pos.y, home.pos.y, 0.1f, maxSpeed, minSpeed);
     if (downVel == 0.0f) {

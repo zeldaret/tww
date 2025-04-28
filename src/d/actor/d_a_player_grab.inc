@@ -211,26 +211,26 @@ BOOL daPy_lk_c::checkNextActionGrab() {
 
     int iVar3 = checkGrabBarrelSearch(0);
     if (fopAcM_CheckStatus(grab_actor, fopAcStts_UNK10000_e) && !checkGrabSpecialHeavyState()) {
-        dComIfGp_setRStatus(14);
-        dComIfGp_setDoStatus(14);
+        dComIfGp_setRStatus(dActStts_THROW_e);
+        dComIfGp_setDoStatus(dActStts_THROW_e);
     } else {
-        dComIfGp_setRStatus(9);
+        dComIfGp_setRStatus(dActStts_DROP_e);
     }
     if (mpAttnActorLockOn == NULL && mpAttnEntryA != NULL && iVar3 == 0 &&
         mpAttnEntryA->mType == fopAc_Attn_TYPE_DOOR_e && fopAcM_CheckStatus(grab_actor, fopAcStts_UNK2000000_e))
     {
-        dComIfGp_setDoStatus(11);
+        dComIfGp_setDoStatus(dActStts_OPEN_e);
     } else if (iVar3 != 0) {
-        dComIfGp_setDoStatus(9);
+        dComIfGp_setDoStatus(dActStts_DROP_e);
     } else if (mpAttention->Lockon()) {
         int direction = getDirectionFromShapeAngle();
         if (mStickDistance <= 0.05f ||
             (mStickDistance > 0.05f && (direction == DIR_FORWARD || direction == DIR_BACKWARD)))
         {
-            dComIfGp_setDoStatus(14);
+            dComIfGp_setDoStatus(dActStts_THROW_e);
         }
     } else {
-        dComIfGp_setDoStatus(14);
+        dComIfGp_setDoStatus(dActStts_THROW_e);
     }
     if (setHintActor() && doTrigger()) {
         fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
@@ -243,14 +243,14 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return true;
     }
     if (checkSetItemTrigger(dItem_IRON_BOOTS_e, 1) ||
-        (checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS) && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
+        (checkEquipHeavyBoots() && checkSetItemTrigger(dItem_IRON_BOOTS_e, 0)))
     {
         return procBootsEquip_init(dItem_IRON_BOOTS_e);
     } else if (fopAcM_GetName(grab_actor) == PROC_BOMB && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
         return procGrabThrow_init(0);
     }
     if (cancelTrigger() && checkSwordEquip() && iVar3 == 0) {
-        if (dComIfGp_getRStatus() == 14) {
+        if (dComIfGp_getRStatus() == dActStts_THROW_e) {
             return procGrabThrow_init(1);
         }
         freeGrabItem();
@@ -258,13 +258,13 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return true;
     }
     if (doTrigger() && !checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)) &&
-        dComIfGp_getDoStatus() == 11)
+        dComIfGp_getDoStatus() == dActStts_OPEN_e)
     {
         fopAcM_orderDoorEvent(this, mpAttnActorA);
         return true;
     }
-    if ((doTrigger() && dComIfGp_getDoStatus() == 14) ||
-        (dComIfGp_getRStatus() == 14 && ((mItemTrigger & 0x1f) != 0 || spActionTrigger())))
+    if ((doTrigger() && dComIfGp_getDoStatus() == dActStts_THROW_e) ||
+        (dComIfGp_getRStatus() == dActStts_THROW_e && (allTrigger() || spActionTrigger())))
     {
         if (cancelTrigger()) {
             return procGrabThrow_init(1);
@@ -272,7 +272,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
             return procGrabThrow_init(0);
         }
     }
-    if ((((mItemTrigger & 0x1f) != 0) || spActionTrigger()) && (!doTrigger() || dComIfGp_getDoStatus() != 0)) {
+    if ((allTrigger() || spActionTrigger()) && (!doTrigger() || dComIfGp_getDoStatus() != dActStts_BLANK_e)) {
         return procGrabPut_init();
     } else {
         return false;
@@ -600,7 +600,7 @@ BOOL daPy_lk_c::procGrabPut_init() {
     }
 
     commonProcInit(daPyProc_GRAB_PUT_e);
-    if (field_0x2b0 < 0.0f) {
+    if (checkGrabWear()) {
         mProcVar0.m3570 = 1;
         setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, daPy_HIO_grab_c0::m.field_0x7C);
     } else {
@@ -638,7 +638,7 @@ BOOL daPy_lk_c::procGrabPut() {
     }
 
     if (mProcVar0.m3570 == 1) {
-        if (!(field_0x2b0 < 0.0f)) {
+        if (!checkGrabWear()) {
             mProcVar0.m3570 = 0;
             setSingleMoveAnime(
                 ANM_GRABUP,

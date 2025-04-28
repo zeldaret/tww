@@ -35,7 +35,7 @@ BOOL daPy_lk_c::fanJointCB(int param_0) {
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
     mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(j3dSys.mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 
@@ -62,7 +62,7 @@ BOOL daPy_lk_c::parachuteJointCB(int param_0) {
     }
     mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(param_0));
     mpEquipItemModel->setAnmMtx(1 * param_0, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(j3dSys.mCurrentMtx);
+    mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
     return true;
 }
 
@@ -388,7 +388,7 @@ BOOL daPy_lk_c::procFanGlide() {
             return true;
         }
 
-        if (m3280.mpBaseEmitter != NULL) {
+        if (m3280.getEmitter() != NULL) {
             if ((int)m34DA == 0) {
                 seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_WATER);
                 m34DA = 6;
@@ -417,7 +417,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 }
             }
             if (m34D2 == 0) {
-                dComIfGp_setDoStatus(0x27);
+                dComIfGp_setDoStatus(dActStts_CANCEL_e);
             }
             if ((m34D2 == 0 && (doTrigger() || cancelTrigger())) || (dComIfGs_getMagic() < 1 && m3574 == 0)) {
                 m3688 = current.pos;

@@ -82,7 +82,7 @@ s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
 }
 
 /* 000002A4-000004F0       .text callDemoStartCheck__11daNpc_kam_cFv */
-int daNpc_kam_c::callDemoStartCheck() {
+BOOL daNpc_kam_c::callDemoStartCheck() {
     if (l_demo_start_chk_cnt != 0) {
         return l_demo_start_chk_flag;
     }
@@ -126,7 +126,7 @@ int daNpc_kam_c::callDemoStartCheck() {
                 mDescendStartAngle.set(0x1555, angle + 0x8000, 0);
                 mLinChk.OffBackFlag();
                 l_demo_start_chk_flag = 1;
-                return 1;
+                return TRUE;
             }
         }
         
@@ -135,7 +135,7 @@ int daNpc_kam_c::callDemoStartCheck() {
     
     mLinChk.OffBackFlag();
     
-    return 0;
+    return FALSE;
 }
 
 /* 0000052C-0000054C       .text daNpc_kam_XyEventCB__FPvi */
@@ -470,9 +470,9 @@ void daNpc_kam_c::playerAction(void* arg) {
         setPlayerAction(&daNpc_kam_c::waitPlayerAction, NULL);
     }
     
-    dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
-    dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
-    dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+    dComIfGp_setRStatusForce(dActStts_RETURN_e);
+    dComIfGp_setDoStatus(dActStts_FLY_e);
+    dComIfGp_setAStatus(dActStts_HIDDEN_e);
     
     (this->*mCurrPlayerActionFunc)(arg);
 }

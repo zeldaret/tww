@@ -559,7 +559,7 @@ void dKyr_sun_move() {
         pSunPkt->field_0x3c--;
     pSunPkt->field_0x3d = false;
 
-    if (dKy_getEnvlight().mCurTime > 95.7f && dKy_getEnvlight().mCurTime < 292.5f) {
+    if (dKy_getEnvlight().mCurTime > 97.5f && dKy_getEnvlight().mCurTime < 292.5f) {
         f32 borderY = 0.0f;
         s32 numPointsCulled = 0;
 
@@ -658,9 +658,9 @@ void dKyr_sun_move() {
             cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.5f, 0.2f, 0.01f);
     } else {
         if (numPointsVisible < 3)
-            cLib_addCalc(&pSunPkt->mVisibility, 0.0f, 0.5f, 0.2f, 0.01f);
+            cLib_addCalc(&pSunPkt->mVisibility, 0.0f, 0.5f, 0.2f, 0.001f);
         else
-            cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.1f, 0.1f, 0.01f);
+            cLib_addCalc(&pSunPkt->mVisibility, 1.0f, 0.1f, 0.1f, 0.001f);
     }
 
     if (numPointsVisible >= 2) {
@@ -2361,7 +2361,7 @@ void drawCloudShadow(Mtx drawMtx, u8** pImg) {
 
     for (s32 i = 0; i < pPkt->mCount; i++) {
         f32 size = pPkt->mEff[i].mSize;
-        if (pPkt->mEff[i].mAlpha <= 0.0f)
+        if (pPkt->mEff[i].mAlpha <= 0.000001f)
             continue;
 
         GXLoadTexObj(&texObj, GX_TEXMAP0);

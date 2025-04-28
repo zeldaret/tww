@@ -66,6 +66,14 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
     daPyStts0_UNK80000000_e    = 0x80000000,
+
+    // This is some combination of flags which is seemingly related to "judgement", used in dAttention_c
+    daPyStts0_UNK37a02371_e    = daPyStts0_UNK1_e | daPyStts0_UNK10_e | daPyStts0_UNK20_e
+                                 | daPyStts0_UNK40_e | daPyStts0_UNK100_e | daPyStts0_UNK200_e
+                                 | daPyStts0_UNK2000_e| daPyStts0_TELESCOPE_LOOK_e
+                                 | daPyStts0_UNK800000_e | daPyStts0_UNK1000000_e
+                                 | daPyStts0_UNK2000000_e | daPyStts0_UNK4000000_e
+                                 | daPyStts0_UNK10000000_e | daPyStts0_UNK20000000_e
 };
 
 enum daPy__PlayerStatus1 {
@@ -580,6 +588,7 @@ public:
     void setNameResArchive(JKRArchive * pArc) { mpNameResArchive = pArc; }
     void setErrorResArchive(JKRArchive * pArc) { mpErrorResArchive = pArc; }
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
+    JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
     void setCamResArchive(JKRArchive * pArc) { mpCamResArchive = pArc; }
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
@@ -2592,6 +2601,73 @@ inline void dComIfGp_endMiniGame(u16 i_gameType) {
     g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
+enum dActionStatus_e {
+    /* 0x00 */ dActStts_BLANK_e,
+    /* 0x01 */ dActStts_LOOK_e, // "Look"
+    /* 0x02 */ dActStts_SPEAK_e, // "Speak"
+    /* 0x03 */ dActStts_CHARTS_e, // "Charts"
+    /* 0x04 */ dActStts_LIFT_e, // "Lift"
+    /* 0x05 */ dActStts_CLIMB_e, // "Climb"
+    /* 0x06 */ dActStts_LET_GO_e, // "Let Go"
+    /* 0x07 */ dActStts_RETURN_e, // "Return"
+    /* 0x08 */ dActStts_PUT_AWAY_e, // "Put Away"
+    /* 0x09 */ dActStts_DROP_e, // "Drop"
+    /* 0x0A */ dActStts_CHECK_e, // "Check"
+    /* 0x0B */ dActStts_OPEN_e, // "Open"
+    /* 0x0C */ dActStts_ATTACK_e, // "Attack"
+    /* 0x0D */ dActStts_ba_osu, // "おす"
+    /* 0x0E */ dActStts_THROW_e, // "Throw"
+    /* 0x0F */ dActStts_CROUCH_e, // "Crouch"
+    /* 0x10 */ dActStts_SIDLE_e, // "Sidle"
+    /* 0x11 */ dActStts_GRAB_e, // "Grab"
+    /* 0x12 */ dActStts_JUMP_e, // "Jump"
+    /* 0x13 */ dActStts_STOP_e, // "Stop"
+    /* 0x14 */ dActStts_ba_haru, // "はる"
+    /* 0x15 */ dActStts_ba_tatamu, // "たたむ"
+    /* 0x16 */ dActStts_LET_GO_ROPE_e, // "Let Go"
+    /* 0x17 */ dActStts_CHOOSE_e, // "Choose"
+    /* 0x18 */ dActStts_ba_kogu, // "こぐ"
+    /* 0x19 */ dActStts_NEXT_e, // "Next"
+    /* 0x1A */ dActStts_PARRY_e,
+    /* 0x1B */ dActStts_PICK_UP_e, // "Pick Up"
+    /* 0x1C */ dActStts_GET_IN_SHIP_e, // "Get In"
+    /* 0x1D */ dActStts_GET_OUT_SHIP_e, // "Get Out"
+    /* 0x1E */ dActStts_ba_save, // "セーブ"
+    /* 0x1F */ dActStts_ba_option, // "オプション"
+    /* 0x20 */ dActStts_TAKE_PHOTO_e, // "Take Photo"
+    /* 0x21 */ dActStts_INFO_e, // "Info"
+    /* 0x22 */ dActStts_SWAP_MODES_e, // "Swap Modes"
+    /* 0x23 */ dActStts_FLY_e, // "Fly"
+    /* 0x24 */ dActStts_CALL_e, // "Call"
+    /* 0x25 */ dActStts_BID_e, // "Bid"
+    /* 0x26 */ dActStts_READ_e, // "Read"
+    /* 0x27 */ dActStts_CANCEL_e, // "Cancel"
+    /* 0x28 */ dActStts_ba_kakudai, // "拡大"
+    /* 0x29 */ dActStts_ba_hikaku, // "ひかく"
+    /* 0x2A */ dActStts_ba_zoom01, // "Zoom 1"
+    /* 0x2B */ dActStts_ba_zoom02, // "Zoom 2"
+    /* 0x2C */ dActStts_CRUISE_e, // "Cruise"
+    /* 0x2D */ dActStts_ba_nageru__dupe_2D, // TODO: special case
+    /* 0x2E */ dActStts_ba_motu__dupe_2E, // TODO: special case, use medlis' harp to reflect light?
+    /* 0x2F */ dActStts_SWING_e, // "Swing"
+    /* 0x30 */ dActStts_SEA_CHART_e, // "Sea Chart"
+    /* 0x31 */ dActStts_ba_sake__dupe_31, // TODO: special case
+    /* 0x32 */ dActStts_ba_modoru__dupe_32, // TODO
+    /* 0x33 */ dActStts_ba_save__dupe_33, // TODO
+    /* 0x34 */ dActStts_ba_save__dupe_34, // TODO
+    /* 0x35 */ dActStts_sword_01, // TODO
+    /* 0x36 */ dActStts_DEFEND_e, // "Defend"
+    /* 0x37 */ dActStts_boko_stick, // TODO
+    /* 0x38 */ dActStts_hatchet, // TODO
+    /* 0x39 */ dActStts_iron_club, // TODO
+    /* 0x3A */ dActStts_longsword, // TODO
+    /* 0x3B */ dActStts_spear, // TODO
+    /* 0x3C */ dActStts_spear__dupe_3C, // TODO
+    /* 0x3D */ dActStts_bow_01, // TODO
+    /* 0x3E */ dActStts_HIDDEN_e, // Hides the entire button itself, not just the text on the button
+    /* 0x43 */ dActStts_UNK43 = 0x43, // TODO
+};
+
 // R Button
 inline u8 dComIfGp_getRStatus() {
     return g_dComIfG_gameInfo.play.getRStatus();
@@ -2787,7 +2863,7 @@ inline void dComIfGp_setMesgCameraTagInfo(int id) {
 }
 
 inline void dComIfGp_setMesgCameraAttrInfo(int param_1) {
-  g_dComIfG_gameInfo.play.setMesgCamInfoBasicID(param_1);
+    g_dComIfG_gameInfo.play.setMesgCamInfoBasicID(param_1);
 }
 
 inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
@@ -3446,6 +3522,7 @@ inline JKRArchive* dComIfGp_getItemIconArchive() { return g_dComIfG_gameInfo.pla
 inline void dComIfGp_setNameResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setNameResArchive(pArc); }
 inline void dComIfGp_setErrorResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setErrorResArchive(pArc); }
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
+inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
 inline void dComIfGp_setCamResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCamResArchive(pArc); }
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
@@ -3772,9 +3849,9 @@ inline void dComIfGp_att_Look2RequestF(fopAc_ac_c* param_0, s16 param_1, int par
     dComIfGp_getAttention().Look2RequestF(param_0, param_1, param_2);
 }
 
-inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                                      f32 param_4, s16 param_5, int param_6) {
-    dComIfGp_getAttention().CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+inline void dComIfGp_att_CatchRequest(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist,
+                                      f32 downDist, s16 angle, int param_6) {
+    dComIfGp_getAttention().CatchRequest(reqActor, itemNo, horizontalDist, upDist, downDist,angle, param_6);
 }
 
 inline u8 dComIfGp_att_getCatchChgItem() {
@@ -3786,7 +3863,7 @@ inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
 }
 
 inline void dComIfGp_att_ChangeOwner() {
-    dComIfGp_getAttention().setFlag(0x80);
+    dComIfGp_getAttention().changeOwner();
 }
 
 inline fopAc_ac_c* dComIfGp_att_getLookTarget() {
