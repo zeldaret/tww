@@ -81,8 +81,12 @@ namespace {
         return false;
     }
 
-    inline static void hideActor(fopAc_ac_c* actor) {
+    static void hideActor(fopAc_ac_c* actor) {
         fopAcM_OnStatus(actor, 0x1000000);
+    }
+
+    static bool lineCollisionCheck(cXyz param_1, cXyz param_2, fopAc_ac_c* param_3, fopAc_ac_c* param_4) {
+        return dComIfG_Ccsp()->ChkCamera(param_1, param_2, 15.0f, param_3, param_4);
     }
 
     inline static int get_camera_id(camera_class* i_camera) {
@@ -3567,6 +3571,7 @@ static const int PatternLengthMax[] = {0x00000004};
 
 /* 8017BA50-8017BB8C       .text StartShake__9dCamera_cFlPUcl4cXyz */
 int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) {
+    /* Nonmatching - Code 100%, just need to figure out where PatternLengthMax is meant to be placed */
     if (i_length < 0 || i_length > PatternLengthMax[0] << 3) {
         i_length = PatternLengthMax[0] << 3;
     }
