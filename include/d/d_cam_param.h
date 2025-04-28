@@ -171,8 +171,8 @@ public:
     dCamParam_c(s32);
     virtual ~dCamParam_c();
 
-    s16 Flag(s32 styleIdx, u16 mask) { return mask & styles[styleIdx].flag; }
-    f32 Val(s32 styleIdx, int structIdx) { return *((f32*)&styles[styleIdx] + 0x8 + structIdx); }
+    u16 Flag(s32 styleIdx, u16 mask) { return mask & styles[styleIdx].flag; }
+    f32 Val(s32 styleIdx, int structIdx) { return styles[styleIdx].m08[structIdx]; }
     BOOL Change(s32);
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);
