@@ -729,6 +729,7 @@ bool dCamera_c::checkForceLockTarget() {
 bool dCamera_c::Run() {
     /* Nonmatching */
     float fVar1;
+    float fVar2;
     float fVar3;
     bool bVar4;
     uint uVar5;
@@ -750,13 +751,14 @@ bool dCamera_c::Run() {
 
     if (m530 && !chkFlag(0x200000)) {
         if (!(dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000))) {
-            fVar1 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f) * m540; //regswap
-            fVar3 = fVar1 - m538;
+            fVar1 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);
+            fVar2 = fVar1 * m540;
+            fVar3 = fVar2 - m538;
             if (((m530 == 1) && (m53C < 0.0f)) && (fVar3 > 0.0f)) {
                 m254 |= 4;
             }
             m53C = fVar3;
-            m538 = fVar1;
+            m538 = fVar2;
             m044.y -= m53C * mCamSetup.mManualStartCThreshold;
         }
     }
@@ -921,7 +923,7 @@ bool dCamera_c::Run() {
         mUp.y = 1.0f;
         mUp.z = 0.0f;
     }
-    else if (m006 >= cSAngle(-90.0f) && mDirection.V() <= cSAngle(90.0f)) {
+    else if (mDirection.V() < cSAngle(-90.0f) && mDirection.V() > cSAngle(90.0f)) {
         mUp.x = 0.0f;
         mUp.y = 1.0f;
         mUp.z = 0.0f;
@@ -3587,9 +3589,39 @@ void dCamera_c::shakeCamera() {
     /* Nonmatching */
 }
 
+static const int PatternLengthMax[] = {0x00000004};
+
 /* 8017BA50-8017BB8C       .text StartShake__9dCamera_cFlPUcl4cXyz */
-void dCamera_c::StartShake(s32, u8*, s32, cXyz) {
-    /* Nonmatching */
+int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) {
+    if (i_length < 0 || i_length > PatternLengthMax[0] << 3) {
+        i_length = PatternLengthMax[0] << 3;
+    }
+    
+    m550 = i_length;
+    
+    int i;
+    int var_r28 = i_length >> 3;
+    for (i = 0; i < PatternLengthMax[0]; i++) {
+        m544[i] = m548[i] = 0;
+    }
+
+    for (i = 0; i < var_r28; i++) {
+        m544[i] = m548[i] = i_pattern[i];
+    }
+
+    var_r28 = i_length & 7;
+    m544[i] = (0xFF << (8 - var_r28)) & i_pattern[i];
+
+    if (i_length == (PatternLengthMax[0] << 3)) {
+        m548[i] = m544[i] | (i_pattern[0] >> var_r28);
+    } else {
+        m548[i] = m544[i];
+    }
+
+    m55C = i_pos.norm();
+    m554 = 0;
+    m588 = i_flags;
+    return 1;
 }
 
 /* 8017BB8C-8017BBA4       .text StopShake__9dCamera_cFv */

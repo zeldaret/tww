@@ -308,10 +308,13 @@ public:
     /* 0x538 */ f32 m538;
     /* 0x53C */ f32 m53C;
     /* 0x540 */ f32 m540;
-    /* 0x544 */ u8 m544[0x550 - 0x544];
+    /* 0x544 */ u8 m544[4];
+    /* 0x548 */ u8 m548[4];
+    /* 0x54C */ u8 m54C[0x550 - 0x54C];
     /* 0x550 */ int m550;
     /* 0x554 */ int m554;
-    /* 0x558 */ u8 m558[0x568 - 0x558];
+    /* 0x558 */ u8 m558[0x55C - 0x558];
+    /* 0x55C */ cXyz m55C;
     /* 0x568 */ cXyz mCenterShake;
     /* 0x574 */ cXyz mEyeShake;
     /* 0x580 */ f32 mFovYShake;
@@ -461,7 +464,7 @@ public:
     s16 U2();
     //void U2(s16 i_val) { mAngleY = cSAngle(i_val); }
     void shakeCamera();
-    void StartShake(s32, u8*, s32, cXyz);
+    int StartShake(s32, u8*, s32, cXyz);
     bool StopShake();
     void ResetBlure(int);
     void SetBlureAlpha(f32);
