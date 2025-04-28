@@ -2445,9 +2445,8 @@ void dCamera_c::checkSpecialArea() {
 
 /* 80169528-8016A0F0       .text checkGroundInfo__9dCamera_cFv */
 void dCamera_c::checkGroundInfo() {
-    /* Nonmatching */
     cXyz player_pos = positionOf(mpPlayerActor);
-    cXyz gnd_chk_pos(player_pos);
+    cXyz gnd_chk_pos = player_pos;
 
     f32 player_height; // suprisingly the `heightOf` function wasn't used here
     if (is_player(mpPlayerActor)) {
@@ -2463,22 +2462,22 @@ void dCamera_c::checkGroundInfo() {
 
     f32 roof_y = dComIfG_Bgsp()->RoofChk(&roof_chk);
 
-    if (player_pos.y < roof_y) {
-        player_pos.y = roof_y;
+    if (gnd_chk_pos.y < roof_y) {
+        gnd_chk_pos.y = roof_y;
     }
 
     dBgS_CamGndChk gnd_chk;
     gnd_chk.ClrCam();
     gnd_chk.SetObj();
 
-    gnd_chk.SetPos(&gnd_chk_pos);
+    gnd_chk.SetPos(&player_pos);
 
     f32 ground_y = dComIfG_Bgsp()->GroundCross(&gnd_chk);
     
-    mBG.m00.m04.SetCam();
+    mBG.m5C.m04.SetCam();
     mBG.m5C.m04.ClrObj();
 
-    mBG.m5C.m04.SetPos(&gnd_chk_pos);
+    mBG.m5C.m04.SetPos(&player_pos);
     
     mBG.m5C.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m5C.m04);
 
@@ -2489,7 +2488,7 @@ void dCamera_c::checkGroundInfo() {
 
     mBG.m5C.m00 = mBG.m5C.m58 != C_BG_MIN_HEIGHT;
     
-    mBG.m00.m04.SetPos(&player_pos);
+    mBG.m00.m04.SetPos(&gnd_chk_pos);
 
     mBG.m00.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m00.m04);
 
@@ -2505,6 +2504,7 @@ void dCamera_c::checkGroundInfo() {
 
     m31D = 0;
     m33C = 0;
+    
     if (dComIfG_Bgsp()->ChkMoveBG(mBG.m5C.m04)) {
         m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.m04.GetBgIndex());
         if (m33C) {
@@ -2515,14 +2515,14 @@ void dCamera_c::checkGroundInfo() {
                 m320 = m32C - pos;
                 m338 = m33A - angle;
 
-                if (m33C->shape_angle.y == 0x3b) {
-                    m044.y += m320.y * mCamSetup.DMCAngle();
+                if (fopAcM_GetName(m33C) == PROC_Obj_Pirateship) {
+                    m044.y += m320.y * mCamSetup.mManualStartCThreshold;
                 }
             }
 
             m31C = 1;
 
-            if (dComIfGp_evmng_cameraPlay() && chkFlag(0x20000000) && m360) { 
+            if (!dComIfGp_evmng_cameraPlay() && !chkFlag(0x20000000) && m360) { 
                 m31D = 1;
             }
 
@@ -2531,14 +2531,16 @@ void dCamera_c::checkGroundInfo() {
                 dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m050, NULL, NULL);
                 m03C.Val(m050 - m044);
             }
+
             m32C = pos;
             m33A = angle;
         }
-    } else {
+    } 
+    else {
         m31C = 0;
     }
     
-    if (mBG.m00.m00) {
+    if (mBG.m5C.m00) {
         m350 = dComIfG_Bgsp()->GetCamMoveBG(mBG.m5C.m04);
     }
     else {
@@ -2547,99 +2549,71 @@ void dCamera_c::checkGroundInfo() {
 
     mRoomNo = -1;
 
-    //if ((*(char *)&this->mBG == '\0') ||
-    //   ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[this->mPadId * 2][0] & 0x100000) == 0))
-    //{
-    //  if (this->field_0x360 == '\0') {
-    //    this->mRoomMapToolCameraIdx = 0x1ff;
-    //  }
-    //  else if ((this->mBG).field_0x5c == '\0') {
-    //    this->mRoomMapToolCameraIdx = 0xff;
-    //  }
-    //  else {
-    //    iVar3 = dBgS::GetRoomCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                               &(this->mBG).field113_0x74);
-    //    this->mRoomMapToolCameraIdx = iVar3;
-    //    if (this->mRoomMapToolCameraIdx == 0xff) {
-    //      iVar3 = dBgS::GetPolyCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                                 (uint)(ushort)(this->mBG).field113_0x74.mBgIndex,
-    //                                 (uint)(ushort)(this->mBG).field113_0x74.mTriIdx);
-    //      this->mRoomMapToolCameraIdx = iVar3;
-    //    }
-    //    else {
-    //      iVar3 = dBgS::GetRoomId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                              &(this->mBG).field113_0x74);
-    //      this->mRoomNo = iVar3;
-    //    }
-    //  }
-    //}
-    //else {
-    //  iVar3 = dBgS::GetPolyCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                             (uint)*(ushort *)&(this->mBG).field_0x1a,
-    //                             (uint)*(ushort *)&(this->mBG).field_0x18);
-    //  this->mRoomMapToolCameraIdx = iVar3;
-    //}
+    if (mBG.m00.m00 && check_owner_action(mPadId, 0x100000)) {
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04.GetBgIndex(), mBG.m00.m04.GetPolyIndex());
+    }
+    else if (m360 == 0) {
+        mRoomMapToolCameraIdx = 0x1ff;
+    }
+    else if (mBG.m5C.m00) {
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetRoomCamId(mBG.m5C.m04);
+        if (mRoomMapToolCameraIdx == 0xff) {
+            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04.GetBgIndex(), mBG.m5C.m04.GetPolyIndex());
+        }
+        else {
+            mRoomNo = dComIfG_Bgsp()->GetRoomId(mBG.m5C.m04);;
+        }
+    }
+    else {
+        mRoomMapToolCameraIdx = 0xff;
+    }
 
-    //if (daSea_ChkArea(local_164, local_15c)) {
-    //    m318 = daSea_calcWave(local_164, local_15c);
-    //    m314 = 1;
-    //}
-    //else {
-    //    m318 = -1e+09;
-    //    m314 = 0;
-    //}
-    //
-    //if (m354 < m318) {
-    //    m354 = m318;
-    //}
+    if (daSea_ChkArea(player_pos.x, player_pos.z)) {
+        m318 = daSea_calcWave(player_pos.x, player_pos.z);
+        m314 = 1;
+    }
+    else {
+        m318 = -1e+09;
+        m314 = 0;
+    }
+    
+    if (m354 < m318) {
+        m354 = m318;
+    }
 
     dBgS_GndChk gnd_chk_2;
 
-    gnd_chk.SetPos(&mEye);
+    gnd_chk_2.SetPos(&mEye);
 
-    //fVar11 = cBgS::GroundCross((cBgS *)&d_com_inf_game::g_dComIfG_gameInfo.play,&local_158);
-    //if (*(float *)&this->field_0x310 + 40.0 <= fVar11) {
-    //  local_194.x = (this->mEye).x;
-    //  local_194.y = (this->mEye).y;
-    //  local_194.z = (this->mEye).z;
-    //  attentionPos(&local_1f4,this,this->mpPlayerActor);
-    //  local_188.x = local_1f4.x;
-    //  local_188.y = local_1f4.y;
-    //  local_188.z = local_1f4.z;
-    //  ::cXyz::operator_-(&cStack_200,&local_194,&local_188);
-    //  ::cXyz::operator*(&cStack_20c,&cStack_200,0.5);
-    //  mtx::PSVECAdd(&local_188,&cStack_20c,&local_188);
-    //}
-    //else {
-    //  local_188.x = (this->mEye).x;
-    //  local_188.y = (this->mEye).y;
-    //  local_188.z = (this->mEye).z;
-    //  attentionPos(&local_1d0,this,this->mpPlayerActor);
-    //  local_194.x = local_1d0.x;
-    //  local_194.y = local_1d0.y;
-    //  local_194.z = local_1d0.z;
-    //  ::cXyz::operator_-(&cStack_1dc,&local_188,&local_194);
-    //  ::cXyz::operator*(&cStack_1e8,&cStack_1dc,0.5);
-    //  mtx::PSVECAdd(&local_194,&cStack_1e8,&local_194);
-    //}
-    //if (this->field_0x360 == '\0') {
-    //  *(undefined4 *)&this->field_0x364 = 0;
-    //  *(float *)&this->field_0x368 = 0.0;
-    //}
-    //else {
-    //  uVar4 = lineCollisionCheckBush(this,&local_188,&local_194);
-    //  *(uint *)&this->field_0x364 = uVar4 & 5;
-    //  if ((*(uint *)&this->field_0x364 & 4) != 0) {
-    //    *(float *)&this->field_0x368 = (this->mCamSetup).field59_0xc0;
-    //  }
-    //  if ((*(uint *)&this->field_0x364 & 1) != 0) {
-    //    *(float *)&this->field_0x368 = (this->mCamSetup).field60_0xc4;
-    //  }
-    //  if (*(int *)&this->field_0x364 != 0) {
-    //    dCcMassS_Mng::GetCamTopPos
-    //              (&d_com_inf_game::g_dComIfG_gameInfo.play.mCcS.mMassMng,(cXyz *)&this->field_0x36c);
-    //  }
-    //}
+    cXyz pos1;
+    cXyz pos2;
+    if (dComIfG_Bgsp()->GroundCross(&gnd_chk_2) < mBG.m5C.m58 + 40.0f) {
+        pos1 = mEye;
+        pos2 = attentionPos(mpPlayerActor);
+        pos2 += (pos1 - pos2) * 0.5f;
+    }
+    else {
+        pos2 = mEye;
+        pos1 = attentionPos(mpPlayerActor);
+        pos1 += (pos2 - pos1) * 0.5f;
+    }
+
+    if (m360) {
+        m364 = lineCollisionCheckBush(&pos1, &pos2) & 5;
+        if (m364 & 4) {
+            m368 = mCamSetup.m0C0;
+        }
+        if (m364 & 1) {
+            m368 = mCamSetup.LockonChangeCushion();
+        }
+        if (m364) {
+            dComIfG_Ccsp()->GetMassCamTopPos(&m36C);
+        }
+    }
+    else {
+        m364 = 0;
+        m368 = 0.0f;
+    }
 }
 
 /* 8016A0F0-8016A110       .text followCamera2__9dCamera_cFl */

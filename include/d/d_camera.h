@@ -240,7 +240,8 @@ public:
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x314 */ int m314;
+    /* 0x314 */ u8 m314;
+    /* 0x315 */ u8 m315[0x318 -0x315];
     /* 0x318 */ f32 m318;
     /* 0x31C */ u8 m31C;
     /* 0x31D */ u8 m31D;
@@ -528,7 +529,7 @@ public:
     void twoActor0EvCamera();
 
     bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
-    void setFlag(u32 flag) { mEventFlags |= flag; }
+    BOOL setFlag(u32 flag) { return mEventFlags |= flag; }
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
     void CStickUse() { clrFlag(0x800000); }
     void CStickUseless() { setFlag(0x800000); }
