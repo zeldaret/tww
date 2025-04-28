@@ -464,7 +464,7 @@ public:
     bool Chtyp(s32);
     s16 U2();
     //void U2(s16 i_val) { mAngleY = cSAngle(i_val); }
-    void shakeCamera();
+    f32 shakeCamera();
     int StartShake(s32, u8*, s32, cXyz);
     bool StopShake();
     void ResetBlure(int);

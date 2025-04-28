@@ -68,7 +68,7 @@ public:
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
     static void setBlureMtx(const Mtx) {}
-    static void setBlureRate(u8) {}
+    static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

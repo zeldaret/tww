@@ -3565,8 +3565,127 @@ s16 dCamera_c::U2() {
 }
 
 /* 8017B524-8017BA50       .text shakeCamera__9dCamera_cFv */
-void dCamera_c::shakeCamera() {
-    /* Nonmatching */
+f32 dCamera_c::shakeCamera() {
+    /* Nonmatching - Code 100% */
+    static f32 const wave[] = {0.4f, 0.9f, 2.1f, 3.2f};
+
+    f32 fVar6 = 0.0f;
+
+    if (m554 < m550) {
+        int uVar5 = (m548[m554 >> 3] << 8) | m548[(m554 >> 3) + 1];;
+        int uVar4 = 1 << (15 - (m554 & 7));
+        f32 fVar7 = 1.0f;
+        for (int i = 0; i < 4; i++) {
+            if (uVar4 & uVar5) {
+                fVar6 += fVar7 * wave[i];
+            }
+            else {
+                fVar7 *= 0.43f;
+            }
+            uVar4 = uVar4 >> 1;
+        }
+        
+        m554++;
+
+        fVar6 *= cM_rndFX(0.05f) + 0.95f;
+
+        if (m554 & 1) {
+            fVar6 = -fVar6;
+        }
+
+        cXyz local_38(m55C);
+        local_38.x += cM_rndFX(0.045f);
+        local_38.z += cM_rndFX(0.045f);
+        local_38 = local_38 * fVar6;
+
+        if (m588 & 2) {
+            mEyeShake = local_38;
+            mCenterShake = mEyeShake;
+        }
+
+        if (m588 & 4) {
+            mFovYShake = fVar6 * cM_rndFX(0.12f);
+        }
+
+        if (m588 & 8) {
+            mBankShake = cSAngle(fVar6 * cM_rndFX(0.15f));
+        }
+
+        if (m588 & 0x10) {
+            mDoGph_gInf_c::setBlureRate(fVar6 * 30.0f);
+            mDoGph_gInf_c::onBlure();
+            mBlureTimer = 0;
+        }
+        else {
+            if (m588 & 0x20) {
+                if (mBlurePositionType == 0) {
+                    dDlst_window_c* window = get_window(mpCamera);
+                    scissor_class* scissor = window->getScissor();
+                    cXyz eye = eyePos(mpPlayerActor);
+                    cXyz eye_proj;
+                    mDoLib_project(&eye, &eye_proj);
+                    mBlurePosition.x = eye_proj.x / scissor->mWidth;
+                    mBlurePosition.y = eye_proj.y / scissor->mHeight;
+                    mBlurePosition.z = 0.0f;
+                }
+
+                bool bVar1 = false;
+
+                if (mBlureTimer > 0) {
+                    mBlureTimer--;
+                }
+                else if (m58C == 1) {
+                    bVar1 = true;
+                }
+
+                if (!bVar1) {
+                    mDoMtx_trans(mDoMtx_stack_c::get(), mBlurePosition.x, mBlurePosition.y, mBlurePosition.z);
+                    mDoMtx_stack_c::scaleM(mBlureScale.x, mBlureScale.y, mBlureScale.z);
+                    mDoMtx_XrotM(mDoMtx_stack_c::get(), m594.x);
+                    mDoMtx_YrotM(mDoMtx_stack_c::get(), m594.y);
+                    mDoMtx_ZrotM(mDoMtx_stack_c::get(), m594.z);
+                    mDoMtx_stack_c::transM(-mBlurePosition.x, -mBlurePosition.y, -mBlurePosition.z);
+                    mDoGph_gInf_c::onBlure(mDoMtx_stack_c::get());
+                    int blurRate = mBlureAlpha * 230.0f;
+                    mDoMtx_stack_c::scaleM(mBlureScale.x, mBlureScale.y, mBlureScale.z);
+                    mDoGph_gInf_c::setBlureRate(blurRate);
+                }
+            }
+        }
+    }
+    else {
+        mCenterShake -= mCenterShake * 0.1f;
+        mEyeShake -= mEyeShake * 0.1f;
+        mFovYShake -= mFovYShake * 0.1f;
+        mBankShake -= mBankShake * 0.1f;
+        
+        if (mBlureTimer <= 0) {
+            mDoGph_gInf_c::offBlure();
+            m588 &= ~0x20;
+            mBlureTimer = 0;
+        }
+        else if (mBlureTimer > 0) {
+            if (m58C == 1) {
+                mDoMtx_trans(mDoMtx_stack_c::get(), mBlurePosition.x, mBlurePosition.y, mBlurePosition.z);
+                mDoMtx_stack_c::scaleM(mBlureScale.x, mBlureScale.y, mBlureScale.z);
+                mDoMtx_XrotM(mDoMtx_stack_c::get(), m594.x);
+                mDoMtx_YrotM(mDoMtx_stack_c::get(), m594.y);
+                mDoMtx_ZrotM(mDoMtx_stack_c::get(), m594.z);
+                mDoMtx_stack_c::transM(-mBlurePosition.x, -mBlurePosition.y, -mBlurePosition.z);
+                mDoGph_gInf_c::onBlure(mDoMtx_stack_c::get());
+                int blurRate = mBlureAlpha * 230.0f;
+                mDoMtx_stack_c::scaleM(mBlureScale.x, mBlureScale.y, mBlureScale.z);
+                mDoGph_gInf_c::setBlureRate(blurRate);
+            }
+
+            if ((int)(mBlureAlpha * 230.0f) > mBlureTimer && m58C == 0) {
+                mDoGph_gInf_c::setBlureRate(mBlureTimer);
+            }
+
+            mBlureTimer--;
+        }
+    }
+    return fVar6;
 }
 
 static const int PatternLengthMax[] = {0x00000004};
