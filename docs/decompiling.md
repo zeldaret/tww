@@ -159,7 +159,7 @@ The macro to use in this case is `JUT_ASSERT`, which handles checking a conditio
     JUT_ASSERT(0x181, modelData != NULL);
 ```
 
-Note that any variables used in a debug assertion must have their names match the assertion string exactly, like the `modelData` local variable in this case. This can sometimes even give you the official name of a member variable. Defines like `NULL` or `FALSE` work a bit differently and show up as their value (zero) in the assertion strings, instead of appearing the way the programmer actually wrote them.
+Note that any variables used in a debug assertion must have their names match the assertion string exactly, like the `modelData` local variable in this case. This can sometimes even give you the official name of a member variable. Defines like `NULL` or `FALSE` work a bit differently and show up as their value (e.g. `0`) in the assertion strings, instead of appearing the way the programmer actually wrote them.
 
 Other than those two macros, there's another common case that can cause code to look very different in Ghidra compared to how it was originally written: **inline functions**. These are used all over the place in TWW's codebase, and they're important to get right for several reasons, but as there are thousands of them we can't go over all of them individually in this guide. Instead, let's go over what the workflow for finding them on your own will look like.
 
