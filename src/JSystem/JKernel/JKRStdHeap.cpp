@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRStdHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "new.h"
+#include <new>
 #include "global.h"
 
 /* 802B0F34-802B0FE0       .text create__10JKRStdHeapFUlP7JKRHeapb */

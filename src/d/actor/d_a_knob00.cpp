@@ -12,7 +12,7 @@
 #include "res/Object/Knob.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_com_inf_game.h"
-#include "ctype.h"
+#include <cctype>
 
 const char daKnob00_c::M_arcname[] = "knob";
 

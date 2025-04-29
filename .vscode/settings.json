@@ -19,6 +19,7 @@
     "dsptask.c": "cpp",
     "osdsp.c": "cpp",
     "osdsp_task.c": "cpp",
+    "src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include/**": "cpp",
   },
   // Disable C/C++ IntelliSense, use clangd instead
   "C_Cpp.intelliSenseEngine": "disabled",

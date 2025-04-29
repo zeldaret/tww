@@ -12,7 +12,7 @@
 #include "math.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "new.h"
+#include <new>
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"

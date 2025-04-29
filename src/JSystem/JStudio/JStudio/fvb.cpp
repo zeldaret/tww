@@ -9,7 +9,7 @@
 #include "JSystem/JStudio/JStudio/fvb-data.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "dolphin/types.h"
-#include "algorithm.h"
+#include <algorithm>
 #include "string.h"
 
 namespace JStudio {

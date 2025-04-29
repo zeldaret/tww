@@ -2,8 +2,8 @@
 #define MSL_ALGORITHM_H_
 
 #include <string.h>
-#include <iterator.h>
-#include <functional.h>
+#include <iterator>
+#include <functional>
 
 namespace std {
 

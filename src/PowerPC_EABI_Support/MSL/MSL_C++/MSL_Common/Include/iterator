@@ -1,5 +1,5 @@
-#ifndef MSL_ITERATOR_H_
-#define MSL_ITERATOR_H_
+#ifndef MSL_ITERATOR
+#define MSL_ITERATOR
 
 #include <stddef.h>
 
