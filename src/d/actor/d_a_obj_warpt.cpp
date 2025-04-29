@@ -129,8 +129,8 @@ daObj_Warpt_HIO_c::daObj_Warpt_HIO_c() {
     m08 = 150.0f;
     m0C = 30.0f;
     m10 = -2.5f;
-    m14 = (GXColor){0, 0, 0, 128};
-    m18 = (GXColor){0, 0, 0, 128};
+    m14 = COMPOUND_LITERAL(GXColor){0, 0, 0, 128};
+    m18 = COMPOUND_LITERAL(GXColor){0, 0, 0, 128};
 }
 
 /* 000001D8-000001F8       .text createHeap_CB__FP10fopAc_ac_c */

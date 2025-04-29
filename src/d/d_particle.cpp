@@ -515,7 +515,7 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* emitter) {
 /* 8007C674-8007C6EC       .text draw__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
     if (mbIsSmoke)
-        smokeEcallBack(emtr, NULL, -1, (GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
+        smokeEcallBack(emtr, NULL, -1, COMPOUND_LITERAL(GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
 
     if (emtr->getGroupID() == dPa_control_c::dPtclGroup_Projection_e)
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);

@@ -75,7 +75,7 @@ static void ride_call_back(dBgW*, fopAc_ac_c* arg1, fopAc_ac_c* arg2) {
 
 /* 00000408-00000488       .text himo_Draw__FP11mflft_class */
 void himo_Draw(mflft_class* i_this) {
-    i_this->mLineMat.update(10, (GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
+    i_this->mLineMat.update(10, COMPOUND_LITERAL(GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 

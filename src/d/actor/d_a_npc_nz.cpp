@@ -865,7 +865,7 @@ bool daNpc_Nz_c::_draw() {
 
         GXColor unusedColor_5609 = {255, 255, 0, 128};
         GXColor unusedColor_5611 = {255, 0, 0, 128};
-        field_0x934.update(10, scale.x * 5.0f, (GXColor){200, 200, 200, 255}, 6, &tevStr);
+        field_0x934.update(10, scale.x * 5.0f, COMPOUND_LITERAL(GXColor){200, 200, 200, 255}, 6, &tevStr);
         dComIfGd_set3DlineMat(&field_0x934);
     }
 

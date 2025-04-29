@@ -291,7 +291,7 @@ void daObjPirateship::Act_c::CreateWave() {
         dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PIRATESHIPTAIL00, &m6C8, &current.angle, NULL, 0, &m4AC);
         JPABaseEmitter* emitter = m4AC.getEmitter();
         if (emitter != NULL) {
-            const JGeometry::TVec3<f32> scale = (Vec){20.0f, 20.0f, 20.0f};
+            const JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){20.0f, 20.0f, 20.0f};
 
             emitter->setGlobalDynamicsScale(scale);
             emitter->setGlobalParticleScale(scale);

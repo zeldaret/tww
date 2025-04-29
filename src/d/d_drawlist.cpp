@@ -1544,7 +1544,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
 #endif
     dKy_GxFog_set();
     GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_ALPHA0, (GXColor){ 0x00, 0x00, 0x00, 0x20 });
+    GXSetChanMatColor(GX_ALPHA0, COMPOUND_LITERAL(GXColor){ 0x00, 0x00, 0x00, 0x20 });
     GXSetArray(GX_VA_POS, l_shadowVolPos, sizeof(*l_shadowVolPos));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);

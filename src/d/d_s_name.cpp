@@ -1541,7 +1541,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     view_port_class* viewport = dComIfGp_getCurrentViewport();
     C_MTXPerspective(mtx, 30.0f, fapGmHIO_getAspectRatio() * (viewport->mWidth / viewport->mHeight), 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
-    cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
+    cloth_c->draw(0.0f, COMPOUND_LITERAL(GXColor){0xe3, 0xff, 0xb3, 0xff}, COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();
 }
 

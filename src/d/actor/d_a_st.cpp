@@ -222,7 +222,7 @@ static void ke_pos_set(st_class* i_this, st_ke_s* param_2, int param_3) {
 static void ke_disp(st_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
-    i_this->mLineMat.update(10, 1.2f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
+    i_this->mLineMat.update(10, 1.2f, COMPOUND_LITERAL(GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 
