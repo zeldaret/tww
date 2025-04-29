@@ -1554,7 +1554,7 @@ void dMesg_screenDataItem_c::createScreen() {
         f32 y = (field_0x1b4.mSize.y * 0.5f + pane->mScreenBounds.i.y - 240.0f) - 10.0f;
         f32 x = (field_0x1b4.mSize.x * 0.5f + pane->mScreenBounds.i.x - 320.0f) + 10.0f;
         cXyz pos(x, y, 0.0f);
-        field_0x3e4 = dComIfGp_particle_set2Dfore(0x2e1, &pos);
+        field_0x3e4 = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_02E1, &pos);
     }
 }
 
@@ -1571,7 +1571,7 @@ void dMesg_screenDataItem_c::deleteScreen() {
     delete scrn;
     if (field_0x3e4) {
         field_0x3e4->becomeInvalidEmitter();
-        field_0x3e4->clearStatus(JPAEmtrStts_Immortal);
+        field_0x3e4->quitImmortalEmitter();
     }
     mHeap->free(texBuffer);
 }
@@ -1650,7 +1650,7 @@ void dMesg_screenDataItem_c::move() {
         vec.y = (field_0x1b4.mSize.y * 0.5f + pane->mScreenBounds.i.y - 240.0f) - 10.0f;
         vec.z = 0.0f;
         field_0x3e4->setGlobalTranslation(vec);
-        field_0x3e4->clearStatus(JPAEmtrStts_StopDraw);
+        field_0x3e4->playDrawParticle();
         field_0x3e4->setGlobalAlpha(field_0x1b4.mNowAlpha);
     }
 }

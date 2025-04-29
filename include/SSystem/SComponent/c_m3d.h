@@ -120,7 +120,7 @@ void cM3d_CalcVecZAngle(const Vec&, csXyz*);
 bool cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*);
 void cM3d_PlaneCrossLineProcWork(f32, f32, f32, f32, f32, f32, f32, f32*, f32*);
 int cM3d_2PlaneCrossLine(const cM3dGPla&, const cM3dGPla&, cM3dGLin*);
-bool cM3d_3PlaneCrossPos(const cM3dGPla&, const cM3dGPla&, const cM3dGPla&, Vec*);
+BOOL cM3d_3PlaneCrossPos(const cM3dGPla&, const cM3dGPla&, const cM3dGPla&, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const cM3dGLin*, const Vec*, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const Vec&, const Vec&, const Vec&, Vec*);
 int cM3d_2PlaneLinePosNearPos(const cM3dGPla&, const cM3dGPla&, const Vec*, Vec*);

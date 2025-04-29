@@ -972,7 +972,7 @@ public:
     void posMove();
     void setShapeAngleToAtnActor();
     BOOL cancelItemUpperReadyAnime();
-    BOOL checkBodyAngleX(s16);
+    s16 checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
@@ -1549,9 +1549,9 @@ public:
     void throwBoomerang();
     int returnBoomerang();
     BOOL checkNextActionBoomerangReady();
-    BOOL checkNextActionBoomerangFly();
+    void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
-    int changeBoomerangCatchProc();
+    BOOL changeBoomerangCatchProc();
     BOOL procBoomerangSubject_init();
     BOOL procBoomerangSubject();
     BOOL procBoomerangMove_init();
@@ -1742,6 +1742,9 @@ public:
     bool checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
     bool checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
     bool checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
+    bool checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
+    bool checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
+    bool checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
     bool checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
@@ -1832,9 +1835,6 @@ public:
     void checkAttentionLock() {}
     void checkBoomerangRock() {}
     void checkBothItemEquipAnime() const {}
-    void checkBowReloadAnime() const {}
-    void checkBowShootAnime() const {}
-    void checkBowWaitAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
@@ -1845,8 +1845,8 @@ public:
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
     void getAnmSpeedStickRate(f32, f32) {}
-    void getBombWaterPillarBrk() {}
-    void getBombWaterPillarBtk() {}
+    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
+    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
     void seStartSystem(u32) {}
