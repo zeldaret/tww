@@ -33,7 +33,7 @@ struct dCamera__Type {
 struct dCamera_event_data {
     /* 0x000 */ u8 field_0x00;
     /* 0x001 */ u8 field_0x01[0x04 - 0x01];
-    /* 0x004 */ int field_0x04;
+    /* 0x004 */ int mStaffIdx;
     /* 0x008 */ int field_0x08;
     /* 0x00C */ int field_0x0c;
     /* 0x010 */ u8 field_0x10;
@@ -43,7 +43,7 @@ struct dCamera_event_data {
     /* 0x01C */ int field_0x1c;
     /* 0x020 */ int field_0x20;
     /* 0x024 */ int field_0x24;
-    /* 0x028 */ u8 field_0x28[0x2C - 0x28];
+    /* 0x028 */ int field_0x28;
     /* 0x02C */ dCamera__EventParam mEventParams[8];
     /* 0x0EC */ dStage_Event_dt_c* field_0xec;
     /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
@@ -159,12 +159,11 @@ public:
     /* 0x0A2 */ u8 m0A2[0x0A4 - 0x0A2];
     struct {
         struct {
-            /* 0x00 */ cXyz m00;
-            /* 0x0C */ int m0C;
-            /* 0x10 */ int m10;
-            /* 0x14 */ int m14;
-            /* 0x18 */ int m18;
-            /* 0x1C */ int m1C;
+            /* 0x00 */ cXyz mCenter;
+            /* 0x0C */ cXyz mEye;
+            /* 0x18 */ f32 mFovY;
+            /* 0x1C */ cSAngle mBank;
+            /* 0x1E */ s16 m1E;
         } m00;
     } 
     /* 0x0A4 */ m0A4[2];
@@ -181,8 +180,8 @@ public:
     /* 0x110 */ u8 m110;
     /* 0x111 */ u8 m111[0x114 - 0x111];
     /* 0x114 */ int m114;
-    /* 0x118 */ int m118;
-    /* 0x11C */ int m11C;
+    /* 0x118 */ u32 m118;
+    /* 0x11C */ u32 m11C;
     /* 0x120 */ int mCameraInfoIdx;
     /* 0x124 */ int mPadId;
     /* 0x128 */ fopAc_ac_c* mpPlayerActor;
@@ -235,7 +234,7 @@ public:
     /* 0x1B0 */ dCamForcusLine mForcusLine;
     /* 0x220 */ dCamera_DMC_system mDMCSystem;
     /* 0x226 */ u8 m226[0x228 - 0x226];
-    /* 0x228 */ dCamera_monitoring_things mMonitoringThings;
+    /* 0x228 */ dCamera_monitoring_things mMonitor;
     /* 0x248 */ int m248[3];
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
@@ -263,9 +262,9 @@ public:
     /* 0x36C */ cXyz m36C;
     /* 0x378 */ int m378;
     /* 0x37C */ int m37C;
-    /* 0x380 */ f32 m380;
+    /* 0x380 */ int m380;
     /* 0x384 */ f32 m384;
-    /* 0x388 */ int m388;
+    /* 0x388 */ f32 m388;
     /* 0x38C */ int m38C;
     /* 0x390 */ s16 m390;
     /* 0x392 */ s16 m392;
@@ -437,7 +436,7 @@ public:
     fopAc_ac_c* getMsgCmdSpeaker();
     int getMsgCmdCut();
     bool talktoCamera(s32);
-    void CalcSubjectAngle(s16*, s16*);
+    bool CalcSubjectAngle(s16*, s16*);
     bool subjectCamera(s32);
     bool towerCamera(s32);
     bool crawlCamera(s32);
@@ -496,37 +495,37 @@ public:
     void getEvIntData(int*, char*, int);
     void getEvFloatData(f32*, char*, f32);
     void getEvXyzData(cXyz*, char*, cXyz);
-    void getEvStringData(char*, char*, char*);
+    bool getEvStringData(char*, char*, char*);
     void getEvStringPntData(char*, char*);
     void getEvActor(char*);
     void getEvActor(char*, char*);
-    void pauseEvCamera();
-    void fixedFrameEvCamera();
-    void stokerEvCamera();
-    void rollingEvCamera();
-    void fixedPositionEvCamera();
-    void uniformTransEvCamera();
-    void uniformBrakeEvCamera();
-    void uniformAcceleEvCamera();
-    void watchActorEvCamera();
-    void restorePosEvCamera();
-    void talktoEvCamera();
-    void maptoolIdEvCamera();
-    void styleEvCamera();
-    void gameOverEvCamera();
-    void tactEvCamera();
-    void windDirectionEvCamera();
-    void turnToActorEvCamera();
-    void tornadoWarpEvCamera();
-    void saveEvCamera();
-    void loadEvCamera();
-    void useItem0EvCamera();
-    void useItem1EvCamera();
-    void getItemEvCamera();
-    void possessedEvCamera();
-    void fixedFramesEvCamera();
-    void bSplineEvCamera();
-    void twoActor0EvCamera();
+    bool pauseEvCamera();
+    bool fixedFrameEvCamera();
+    bool stokerEvCamera();
+    bool rollingEvCamera();
+    bool fixedPositionEvCamera();
+    bool uniformTransEvCamera();
+    bool uniformBrakeEvCamera();
+    bool uniformAcceleEvCamera();
+    bool watchActorEvCamera();
+    bool restorePosEvCamera();
+    bool talktoEvCamera();
+    bool maptoolIdEvCamera();
+    bool styleEvCamera();
+    bool gameOverEvCamera();
+    bool tactEvCamera();
+    bool windDirectionEvCamera();
+    bool turnToActorEvCamera();
+    bool tornadoWarpEvCamera();
+    bool saveEvCamera();
+    bool loadEvCamera();
+    bool useItem0EvCamera();
+    bool useItem1EvCamera();
+    bool getItemEvCamera();
+    bool possessedEvCamera();
+    bool fixedFramesEvCamera();
+    bool bSplineEvCamera();
+    bool twoActor0EvCamera();
 
     bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
     BOOL setFlag(u32 flag) { return mEventFlags |= flag; }

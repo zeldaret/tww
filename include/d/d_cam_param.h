@@ -177,7 +177,7 @@ public:
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);
     BOOL DefaultRadius(f32*);
-    void RadiusRatio(f32);
+    f32 RadiusRatio(f32);
     f32 CenterHeight(f32);
     f32 Fovy(f32);
     s16 LockonLongitude(f32);

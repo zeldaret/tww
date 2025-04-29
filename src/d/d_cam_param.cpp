@@ -159,7 +159,7 @@ BOOL dCamParam_c::DefaultRadius(f32* radius) {
 }
 
 /* 800AFB00-800AFB88       .text RadiusRatio__11dCamParam_cFf */
-void dCamParam_c::RadiusRatio(f32) {
+f32 dCamParam_c::RadiusRatio(f32) {
     /* Nonmatching */
 }
 
