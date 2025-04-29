@@ -1553,7 +1553,8 @@ void dMesg_screenDataItem_c::createScreen() {
         J2DPane* pane = field_0x1b4.pane;
         f32 y = (field_0x1b4.mSize.y * 0.5f + pane->mScreenBounds.i.y - 240.0f) - 10.0f;
         f32 x = (field_0x1b4.mSize.x * 0.5f + pane->mScreenBounds.i.x - 320.0f) + 10.0f;
-        field_0x3e4 = dComIfGp_particle_set2Dfore(0x2e1, &cXyz(x, y, 0.0f));
+        cXyz pos(x, y, 0.0f);
+        field_0x3e4 = dComIfGp_particle_set2Dfore(0x2e1, &pos);
     }
 }
 
