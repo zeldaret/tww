@@ -54,7 +54,7 @@ void TProcessor::pushCurrent(const char* v) {
 }
 
 /* 8029EEA4-8029EEC8       .text popCurrent__Q28JMessage10TProcessorFv */
-const char* TProcessor::popCurrent() {
+void TProcessor::popCurrent() {
     setCurrent_(mStack.top());
     mStack.pop();
 }

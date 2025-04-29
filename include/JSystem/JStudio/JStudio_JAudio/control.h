@@ -5,8 +5,8 @@
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "JSystem/JStage/JSGSystem.h"
 
-struct JAIBasic;
-struct JAISound;
+class JAIBasic;
+class JAISound;
 namespace JStudio_JAudio {
 typedef JStudio::TObject* (*JStudioAudioCreateFunc)(const JStudio::stb::data::TParse_TBlock_object&, JAIBasic*);
 typedef void (JAISound::*TVVOSoundSetFunc)(f32, u32); // e.g. JAISound::setDirectVolume, JAISound::setDirectPitch

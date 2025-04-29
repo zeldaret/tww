@@ -144,8 +144,7 @@ static struct {
     /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
 };
 
-class mesg_header;
-class fopMsgM_pane_alpha_class;
+struct fopMsgM_pane_alpha_class;
 
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
@@ -647,6 +646,7 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     }
 
     dst[numRead] = '\0';
+    return dst;
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */

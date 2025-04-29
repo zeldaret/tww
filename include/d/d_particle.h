@@ -20,7 +20,7 @@ class JKRHeap;
 class JPABaseEmitter;
 class JPAEmitterManager;
 class J3DModelData;
-struct csXyz;
+class csXyz;
 
 class dPa_simpleData_c {
 public:

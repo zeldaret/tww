@@ -8,7 +8,7 @@ struct ResTIMG;
 struct dmap_dmap_tlut_s;
 class fopAc_ac_c;
 struct map_dt_c;
-class stage_map_info_class;
+struct stage_map_info_class;
 
 class dMap_2DMtMapSpcl_tex_c {
 public:

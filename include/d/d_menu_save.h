@@ -4,7 +4,7 @@
 #include "d/d_drawlist.h"
 #include "dolphin/types.h"
 
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 class dDlst_MenuSave_c : public dDlst_base_c {
 public:

@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "global.h"
 
-class ResTIMG;
+struct ResTIMG;
 class cM3dGPla;
 
 class dDlst_base_c {
@@ -427,7 +427,7 @@ public:
 
 struct view_port_class;
 struct view_class;
-struct camera_class;
+class camera_class;
 
 struct dDlst_alphaModelData_c {
 public:

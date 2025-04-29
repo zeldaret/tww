@@ -3,9 +3,9 @@
 
 #include "dolphin/types.h"
 
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class J2DScreen;
-class ResTIMG;
+struct ResTIMG;
 class aramCmapDat_c;
 class dMenu_FmapSv_c;
 
