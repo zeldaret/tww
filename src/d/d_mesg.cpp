@@ -624,7 +624,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
         }
         }
         break;
-    case 0x10000:
+    case 0x10000: {
         u16 r24 = param_1 & 0xFFFF;
         s8 tmp = dComIfGp_getReverb(dComIfGp_roomControl_getStayNo());
         if (r24 == 8) {
@@ -634,6 +634,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
         }
         r29 = true;
         break;
+    }
     case 0x20000:
         dComIfGp_setMesgCameraTagInfo(u16(param_1));
         r29 = true;
