@@ -180,7 +180,7 @@ cPhs_State daAgbsw0_c::create() {
     }
     else if(type == daAgbsw0Type_B_e) {
         if(((paramNo == 1 || paramNo == 3) && sw0 != 0xFF && fopAcM_isSwitch(this, sw0)) ||
-            paramNo == 2 && sw0 < 0x20 && dComIfGs_isTbox(sw0)) {
+            (paramNo == 2 && sw0 < 0x20 && dComIfGs_isTbox(sw0))) {
                 return cPhs_ERROR_e;
             }
     }
@@ -215,7 +215,7 @@ cPhs_State daAgbsw0_c::create() {
     if(type == daAgbsw0Type_B_e && getMsgNo() == 0xFFFF) {
         u16 msgNo = 0xE;
         // Debug map indicates fpcM_SetParam was used here instead of fopAcM_SetParam.
-        fpcM_SetParam(this, fopAcM_GetParam(this) & 0xFFFF0000 | msgNo);
+        fpcM_SetParam(this, (fopAcM_GetParam(this) & 0xFFFF0000) | msgNo);
     }
 
     if(type != daAgbsw0Type_MW_e && type != daAgbsw0Type_T_e && type != daAgbsw0Type_S_e && type != daAgbsw0Type_UNK_0xE_e && getMsgNo() == 0xFFFF) {
