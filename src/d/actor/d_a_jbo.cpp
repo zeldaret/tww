@@ -10,6 +10,7 @@
 #include "d/d_s_play.h"
 #include "d/d_procname.h"
 
+
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode *i_node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
@@ -64,7 +65,6 @@ static BOOL daJBO_Draw(jbo_class *i_this) {
 
 /* 000002C4-00000584       .text jbo_move__FP9jbo_class */
 void jbo_move(jbo_class *i_this) {
-    /* Not yet matching */
     u8 state = i_this->mState;
     switch (state) {
         case 0: {
@@ -120,7 +120,6 @@ void jbo_move(jbo_class *i_this) {
 
 /* 00000584-00000698       .text daJBO_Execute__FP9jbo_class */
 static BOOL daJBO_Execute(jbo_class* i_this) {
-    /* almost matching */
     if (i_this->mParamsLower == 3) {
         if (dComIfGs_isEventBit(0x1801)) {
             i_this->mParamsLower = 0;
@@ -216,7 +215,6 @@ static dCcD_SrcSph co_sph_src = {
 };
 /* 0000081C-00000A90       .text daJBO_Create__FP10fopAc_ac_c */
 static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
-    /* Nonmatching - constant offsets */
     fopAcM_SetupActor(actor, jbo_class);
     jbo_class* i_this = (jbo_class*)actor;
     cPhs_State state = dComIfG_resLoad(&i_this->mPhs, "JBO");
