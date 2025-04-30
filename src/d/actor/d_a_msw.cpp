@@ -12,7 +12,7 @@
 #include "d/d_s_play.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     msw_class* pActor = static_cast<msw_class*>(i_ac);
 
     cMtx_YrotS(*calc_mtx, -i_ac->current.angle.y);

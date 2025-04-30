@@ -56,7 +56,7 @@ void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loo
 }
 
 /* 000001E4-000004B8       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* ac1, void* ac2) {
+static void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     fopAc_ac_c* actor2 = (fopAc_ac_c*)ac2;
 

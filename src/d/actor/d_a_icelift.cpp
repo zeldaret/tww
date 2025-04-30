@@ -23,7 +23,7 @@ void daIlift_c::CreateHeap() {
 }
 
 /* 00000284-00000480       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
+static void rideCallBack(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
     /* Nonmatching */
 }
 

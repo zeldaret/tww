@@ -1128,7 +1128,7 @@ void eff_cont(bmd_class* i_this) {
 }
 
 /* 00003D48-00003E38       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bmd_class* i_this = (bmd_class*)i_ac;
 #if VERSION == VERSION_DEMO
     if (i_this->m304 == 3)

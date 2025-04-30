@@ -69,7 +69,7 @@ daobj_stairHIO_c::daobj_stairHIO_c() {
 }
 
 /* 00000130-000001D8       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
+static void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
     daObj_Stair_c* i_this = (daObj_Stair_c*)i_arg1;
     if (fopAcM_GetProfName(i_arg2) == fpcNm_PLAYER_e && i_this->field_0x2E0 < l_HIO.m18){
         i_this->field_0x2E4 = 1;

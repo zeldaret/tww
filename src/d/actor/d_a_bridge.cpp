@@ -26,7 +26,7 @@ static f32* wp;
 static f32 ita_z_p[] = { 0.1f, 0.3f, 0.5f, 0.75f, 0.9f, 1.0f, 0.9f, 0.75f, 0.5f, 0.3f, 0.1f };
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bridge_class* i_this = (bridge_class*)i_ac;
 
     cXyz pos = i_this->mBr[0].mPosition - i_pt->current.pos;
