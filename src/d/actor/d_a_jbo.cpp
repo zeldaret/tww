@@ -4,53 +4,256 @@
 //
 
 #include "d/actor/d_a_jbo.h"
-#include "m_Do/m_Do_ext.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "d/d_s_play.h"
 #include "d/d_procname.h"
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode *i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = reinterpret_cast<J3DJoint*>(i_node);
+        s32 jntNo = joint->getJntNo();
+        jbo_class* jbo = reinterpret_cast<jbo_class*>(j3dSys.getModel()->getUserArea());
+        if (jbo != NULL && jntNo == 9) {
+            MTXCopy(j3dSys.getModel()->getAnmMtx(jntNo), *calc_mtx);
+            cXyz pos;
+            pos.x = 0;
+            pos.y = 0;
+            pos.z = 0;
+            MtxPosition(&pos, &jbo->m2C4);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000108-00000240       .text jbo_draw_SUB__FP9jbo_class */
-void jbo_draw_SUB(jbo_class*) {
-    /* Nonmatching */
+void jbo_draw_SUB(jbo_class *i_this) {
+    J3DModel *model = i_this->mpMorf->mpModel;
+    model->getBaseScale()->x = i_this->scale.x;
+    model->getBaseScale()->y = i_this->scale.y;
+    model->getBaseScale()->z = i_this->scale.z;
+    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
+    if (*(s16*)&i_this->m2C2) {
+        cXyz scale;
+        scale.x = REG8_F(1) + 1.1F;
+        scale.y = REG8_F(2) + 1.0F;
+        scale.z = REG8_F(3) + 0.9F;
+        i_this->m2C0 += i_this->m2C2;
+        mDoMtx_stack_c::YrotM(i_this->m2C0);
+        mDoMtx_stack_c::scaleM(scale);
+        mDoMtx_stack_c::YrotM(-i_this->m2C0);
+    }
+    MTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 }
 
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */
-static BOOL daJBO_Draw(jbo_class*) {
-    /* Nonmatching */
+static BOOL daJBO_Draw(jbo_class *i_this) {
+    J3DModel *model = i_this->mpMorf->mpModel;
+    if (i_this->mParamsLower == 3)
+        return TRUE;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    i_this->mpMorf->updateDL();
+    return TRUE;
 }
 
 /* 000002C4-00000584       .text jbo_move__FP9jbo_class */
-void jbo_move(jbo_class*) {
-    /* Nonmatching */
+void jbo_move(jbo_class *i_this) {
+    /* Not yet matching */
+    u8 state = i_this->mState;
+    switch (state) {
+        case 0: {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e) && i_this->mSph.ChkCoHit()) {
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 4);
+                i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
+                mDoAud_seStart(JA_SE_OBJ_JFLOWER_IN, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                g_dComIfG_gameInfo.play.mItemMagicCount += 4;
+                i_this->m2BE = 0x46;
+                i_this->mState += 1;
+            }
+            break;
+        }
+        case 1: {
+            i_this->m2C2 = 0x46 - i_this->m2BE;
+            i_this->m2C2 *= 200;
+            if (i_this->m2BE == 1) {
+                g_dComIfG_gameInfo.play.mpPlayer[0]->onNoResetFlg1(daPy_py_c::daPyFlg1_FORCE_VOMIT_JUMP);
+            }
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80000000_e)) {
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 5);
+                i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
+                mDoAud_seStart(JA_SE_OBJ_JFLOWER_OUT, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                i_this->m2C2 = 0;
+                i_this->m2C0 = 0;
+                JPABaseEmitter *emitter = dComIfGp_particle_setToon(
+                    /*particleID=*/ 0xa110,
+                    /*pos=*/ &i_this->m2C4
+                );
+                if (emitter != NULL) {
+                    emitter->mGlobalPrmColor.a = 100;
+                }
+                if (i_this->mParamsLower == 2) {
+                    i_this->m2BA = 1;
+                }
+                i_this->mState = 0;
+            }
+            break;
+        }
+        case 2: {
+            J3DFrameCtrl &ctrl = i_this->mpMorf->mFrameCtrl;
+            bool var = true;
+            if (!ctrl.checkState(1) && ctrl.getRate() != 0.0f){
+                var = false;
+            }
+            if (var) {
+                i_this->mState = 0;
+            }
+            break;
+        }
+    }
 }
 
 /* 00000584-00000698       .text daJBO_Execute__FP9jbo_class */
-static BOOL daJBO_Execute(jbo_class*) {
-    /* Nonmatching */
+static BOOL daJBO_Execute(jbo_class* i_this) {
+    /* almost matching */
+    if (i_this->mParamsLower == 3) {
+        if (dComIfGs_isEventBit(0x1801)) {
+            i_this->mParamsLower = 0;
+            i_this->mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
+        }
+        return 1;
+    }
+    if (i_this->m2BE != 0) {
+        i_this->m2BE--;
+    }
+    switch(i_this->m2BB) {
+        case 0:
+            jbo_move(i_this);
+            break;
+    }
+    i_this->mpMorf->play(NULL, 0, 0);
+    cXyz pos(i_this->current.pos);
+    pos.y += 30.0;
+    i_this->mSph.SetC(pos);
+    i_this->mSph.SetR(55.0);
+    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mSph);
+    jbo_draw_SUB(i_this);
+    return 1;
 }
 
 /* 00000698-000006A0       .text daJBO_IsDelete__FP9jbo_class */
 static BOOL daJBO_IsDelete(jbo_class*) {
-    /* Nonmatching */
+    return true;
 }
 
 /* 000006A0-000006D0       .text daJBO_Delete__FP9jbo_class */
-static BOOL daJBO_Delete(jbo_class*) {
-    /* Nonmatching */
+static BOOL daJBO_Delete(jbo_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "JBO");
+    return 1;
 }
 
 /* 000006D0-0000081C       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_actor) {
+    jbo_class* i_this = (jbo_class*)i_actor;
+    mDoExt_McaMorf* morf = new mDoExt_McaMorf(
+        (J3DModelData *)dComIfG_getObjectRes("JBO", 9),
+        /*callback1=*/ NULL,
+        /*callback2=*/ NULL,
+        (J3DAnmTransformKey *)dComIfG_getObjectRes("JBO", 4),
+        J3DFrameCtrl::EMode_RESET,
+        0.0f,
+        0,
+        -1,
+        1,
+        /*basAnm=*/ NULL,
+        0,
+        /*differedDlistFlag=*/ 0x11020203
+    );
+    i_this->mpMorf = morf;
+    J3DModel *model;
+    if (i_this->mpMorf == NULL || (model = i_this->mpMorf->mpModel) == NULL) {
+        return FALSE;
+    }
+    model->setUserArea(reinterpret_cast<u32>(i_this));
+    for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    }
+    return TRUE;
 }
 
+static dCcD_SrcSph co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_VsEnemy_e|cCcD_CoSPrm_IsOther_e|cCcD_CoSPrm_Set_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 15.0f,
+    },
+};
 /* 0000081C-00000A90       .text daJBO_Create__FP10fopAc_ac_c */
-static cPhs_State daJBO_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
+    /* Nonmatching - constant offsets */
+    fopAcM_SetupActor(actor, jbo_class);
+    jbo_class* i_this = (jbo_class*)actor;
+    cPhs_State state = dComIfG_resLoad(&i_this->mPhs, "JBO");
+    if (state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(actor, &useHeapInit, 0x1c20)) {
+            return cPhs_ERROR_e;
+        } else {
+            i_this->mParamsLower = (u8)actor->base.mParameters;
+            if (i_this->mParamsLower == 0xFF) {
+                i_this->mParamsLower = 0;
+            }
+
+            if (REG8_S(9) != 0) {
+                i_this->mParamsLower = REG8_S(9);
+            }
+            i_this->cullMtx = i_this->mpMorf->getModel()->getBaseTRMtx();
+            i_this->attention_info.flags = 0;
+            i_this->mStts.Init(0xff, 0xff, i_this);
+            i_this->mSph.Set(co_sph_src);
+            i_this->mSph.SetStts(&i_this->mStts);
+            if (i_this->mParamsLower == 3) {
+                i_this->actor_status &= ~fopAcStts_SHOWMAP_e;
+                i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+            }
+            if (i_this->mParamsLower == 1) {
+                J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", 6);
+                i_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
+                mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                i_this->mState = 2;
+            }
+            i_this->gbaName = 0x21;
+            jbo_draw_SUB(i_this);
+        }
+    }
+    return state;
 }
+
 
 static actor_method_class l_daJBO_Method = {
     (process_method_func)daJBO_Create,
