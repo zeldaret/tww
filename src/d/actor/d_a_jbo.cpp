@@ -185,34 +185,6 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     return TRUE;
 }
 
-static dCcD_SrcSph co_sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_VsEnemy_e|cCcD_CoSPrm_IsOther_e|cCcD_CoSPrm_Set_e,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 15.0f,
-    },
-};
 /* 0000081C-00000A90       .text daJBO_Create__FP10fopAc_ac_c */
 static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
     fopAcM_SetupActor(actor, jbo_class);
@@ -233,6 +205,34 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
             i_this->cullMtx = i_this->mpMorf->getModel()->getBaseTRMtx();
             i_this->attention_info.flags = 0;
             i_this->mStts.Init(0xff, 0xff, i_this);
+            static dCcD_SrcSph co_sph_src = {
+                // dCcD_SrcGObjInf
+                {
+                    /* Flags             */ 0,
+                    /* SrcObjAt  Type    */ 0,
+                    /* SrcObjAt  Atp     */ 0,
+                    /* SrcObjAt  SPrm    */ 0,
+                    /* SrcObjTg  Type    */ 0,
+                    /* SrcObjTg  SPrm    */ 0,
+                    /* SrcObjCo  SPrm    */ cCcD_CoSPrm_VsEnemy_e|cCcD_CoSPrm_IsOther_e|cCcD_CoSPrm_Set_e,
+                    /* SrcGObjAt Se      */ 0,
+                    /* SrcGObjAt HitMark */ 0,
+                    /* SrcGObjAt Spl     */ 0,
+                    /* SrcGObjAt Mtrl    */ 0,
+                    /* SrcGObjAt SPrm    */ 0,
+                    /* SrcGObjTg Se      */ 0,
+                    /* SrcGObjTg HitMark */ 0,
+                    /* SrcGObjTg Spl     */ 0,
+                    /* SrcGObjTg Mtrl    */ 0,
+                    /* SrcGObjTg SPrm    */ 0,
+                    /* SrcGObjCo SPrm    */ 0,
+                },
+                // cM3dGSphS
+                {
+                    /* Center */ 0.0f, 0.0f, 0.0f,
+                    /* Radius */ 15.0f,
+                },
+            };
             i_this->mSph.Set(co_sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
             if (i_this->mParamsLower == 3) {
