@@ -40,10 +40,8 @@ void daPy_lk_c::throwBoomerang() {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
         offModeFlg(ModeFlg_SUBJECT);
         onModeFlg(ModeFlg_00000080);
-    } else {
-        if (mAcch.ChkGroundHit()) {
-            procWait_init();
-        }
+    } else if (mAcch.ChkGroundHit()) {
+        procWait_init();
     }
 }
 
@@ -52,9 +50,9 @@ int daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
 
     if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 &&
-        (checkNoUpperAnime() || checkPlayerGuard() || checkDashDamageAnime() ||
-         checkBoomerangAnime()) &&
+        (checkNoUpperAnime() || checkPlayerGuard() || checkDashDamageAnime() || checkBoomerangAnime()) &&
         (!checkModeFlg(
+             // These combine to: 0x01FD2810
              ModeFlg_WHIDE | ModeFlg_ROPE | ModeFlg_IN_SHIP | ModeFlg_CLIMB | ModeFlg_SWIM | ModeFlg_00080000 |
              ModeFlg_GRAB | ModeFlg_PUSHPULL | ModeFlg_LADDER | ModeFlg_CROUCH | ModeFlg_CRAWL
          ) ||
@@ -89,20 +87,13 @@ BOOL daPy_lk_c::checkNextActionBoomerangReady() {
 }
 
 /* 8014984C-801498D8       .text checkNextActionBoomerangFly__9daPy_lk_cFv */
-BOOL daPy_lk_c::checkNextActionBoomerangFly() {
+void daPy_lk_c::checkNextActionBoomerangFly() {
     if (checkBoomerangReadyAnime()) {
         checkNextActionBoomerangReady();
-    } else {
-        if (itemTrigger() && mEquipItem == getReadyItem()) {
-            setActAnimeUpper(
-                LKANM_BCK_BOOMWAIT,
-                UPPER_MOVE2_e,
-                daPy_HIO_boom_c0::m.field_0x18,
-                0.0f,
-                -1,
-                daPy_HIO_basic_c0::m.field_0xC
-            );
-        }
+    } else if (itemTrigger() && mEquipItem == getReadyItem()) {
+        setActAnimeUpper(
+            LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC
+        );
     }
 }
 
@@ -112,14 +103,14 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
     if (mpAttention->Lockon()) {
-        procBoomerangMove_init();
+        return procBoomerangMove_init();
     } else {
-        procBoomerangSubject_init();
+        return procBoomerangSubject_init();
     }
 }
 
 /* 80149964-80149A44       .text changeBoomerangCatchProc__9daPy_lk_cFv */
-int daPy_lk_c::changeBoomerangCatchProc() {
+BOOL daPy_lk_c::changeBoomerangCatchProc() {
     if (checkNoResetFlg0(daPyFlg0_UNK20)) {
         if (!dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 && checkModeFlg(ModeFlg_00020000) &&
             (checkNoUpperAnime() || checkBoomerangThrowAnime()))

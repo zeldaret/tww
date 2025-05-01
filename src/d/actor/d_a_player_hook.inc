@@ -187,9 +187,9 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
     if (mpAttention->Lockon()) {
-        procHookshotMove_init();
+        return procHookshotMove_init();
     } else {
-        procHookshotSubject_init();
+        return procHookshotSubject_init();
     }
 }
 

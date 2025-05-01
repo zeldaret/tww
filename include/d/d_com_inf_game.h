@@ -3544,7 +3544,7 @@ inline void dComIfGp_setFmapData(void * pData) { g_dComIfG_gameInfo.play.setFmap
  * === RESOURCE ===
  */
 
-class request_of_phase_process_class;
+struct request_of_phase_process_class;
 cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 

@@ -17,7 +17,7 @@ class camera_process_class;
 class dBgS_LinChk;
 class dBgS_CamGndChk;
 class d2DBSplinePath;
-class dStage_Event_dt_c;
+struct dStage_Event_dt_c;
 class fopAc_ac_c;
 
 struct dCamera__EventParam {

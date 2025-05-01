@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 

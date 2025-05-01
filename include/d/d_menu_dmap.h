@@ -4,7 +4,7 @@
 #include "dolphin/types.h"
 
 class J2DPane;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 

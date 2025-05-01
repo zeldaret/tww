@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 
-class Vec;
+struct Vec;
 class JAISound;
 class JAIBasic;
 namespace JAInter {

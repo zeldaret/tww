@@ -50,7 +50,7 @@ f32 daPy_lk_c::checkRopeRoofHit(s16 param_0) {
 
     local_c.set(current.pos.x - 15.0f * cM_ssin(param_0), current.pos.y, current.pos.z - 15.0f * cM_scos(param_0));
     mRoofChk.SetPos(local_c);
-    dComIfG_Bgsp()->RoofChk(&mRoofChk);
+    return dComIfG_Bgsp()->RoofChk(&mRoofChk);
 }
 
 /* 80142E98-80142FC8       .text changeRopeSwingProc__9daPy_lk_cFv */
@@ -317,9 +317,9 @@ BOOL daPy_lk_c::checkNextRopeMode() {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
     if (mpAttention->Lockon()) {
-        procRopeMove_init();
+        return procRopeMove_init();
     } else {
-        procRopeSubject_init();
+        return procRopeSubject_init();
     }
 }
 

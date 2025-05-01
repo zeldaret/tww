@@ -157,13 +157,13 @@ class dKankyo_cloud_Packet;
 class dKankyo_vrkumo_Packet;
 class dKankyo_wave_Packet;
 class dKankyo_poison_Packet;
-class WINDEFF_SET;
+struct WINDEFF_SET;
 class dKankyo_star_Packet;
-class stage_palet_info_class;
-class stage_pselect_info_class;
-class stage_envr_info_class;
-class stage_vrbox_info_class;
-class stage_plight_info_class;
+struct stage_palet_info_class;
+struct stage_pselect_info_class;
+struct stage_envr_info_class;
+struct stage_vrbox_info_class;
+struct stage_plight_info_class;
 struct dKyd_Schedule;
 
 class dScnKy_env_light_c {

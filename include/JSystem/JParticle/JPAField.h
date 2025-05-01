@@ -5,7 +5,7 @@
 #include "JSystem/JGeometry.h"
 
 class JPADataBlockLinkInfo;
-class JPAEmitterInfo;
+struct JPAEmitterInfo;
 class JPAFieldData;
 class JPABaseParticle;
 class JPABaseField;

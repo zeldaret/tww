@@ -87,7 +87,7 @@ void daPy_lk_c::setBottleModel(u16 param_0) {
 fopAc_ac_c* daPy_lk_c::makeFairy(cXyz* param_0, u32 param_1) {
     onResetFlg0(daPyRFlg0_FAIRY_USE);
     resetCurse();
-    fopAcM_fastCreate(PROC_NPC_FA1, param_1, param_0, fopAcM_GetRoomNo(this), &shape_angle);
+    return (fopAc_ac_c*)fopAcM_fastCreate(PROC_NPC_FA1, param_1, param_0, fopAcM_GetRoomNo(this), &shape_angle);
 }
 
 /* 801521A0-80152300       .text procBottleDrink_init__9daPy_lk_cFUs */
