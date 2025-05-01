@@ -2099,11 +2099,12 @@ cSAngle dCamera_c::forwardCheckAngle() {
 
 /* 80167F08-80168D44       .text bumpCheck__9dCamera_cFUl */
 bool dCamera_c::bumpCheck(u32 i_flags) {
-    /* Nonmatching - Code 100%, regalloc and local variable mem address issues */
+    /* Nonmatching - Code 100% */
     static int prev_hit_type = 0;
     static int prev_plat1 = 0;
     static int prev_plat2 = 0;
 
+    int curr_hit_type;
     int res = 0;
 
     f32 gaze_back_margin = mCamSetup.mBGChk.GazeBackMargin();
@@ -2188,8 +2189,20 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
     dBgS_CamLinChk_NorWtr lin_chk1;
     dBgS_CamLinChk_NorWtr lin_chk2;
 
-    int curr_hit_type;
     float fVar2;
+
+    cXyz local_2fc; /* 0x2FC */
+    cXyz mid; /* 0x2F0 */
+    cXyz local_2e4; /* 0x2E4 */
+    cXyz cross_prod; /* 0x2D8 */
+    cXyz cross1; /* 0x2CC */
+    cXyz cross2; /* 0x2C0 */
+    cXyz local_2b4; /* 0x2B4 */
+    cXyz local_2a8; /* 0x2A8 */
+    cXyz local_29c; /* 0x29C */
+    cXyz local_290; /* 0x290 */
+    cXyz local_284; /* 0x284 */
+    cXyz local_278; /* 0x278 */
 
     if (lineBGCheck(&mCenter, &eye, &lin_chk1, i_flags)) {
         cM3dGPla* plane1 = dComIfG_Bgsp()->GetTriPla(lin_chk1);
@@ -2200,58 +2213,52 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
         else {
             if (lineBGCheck(&eye, &mCenter, &lin_chk2, i_flags)) {
                 plane2 = dComIfG_Bgsp()->GetTriPla(lin_chk2);
-                float fVar15 = PSVECDotProduct(plane1->GetNP(), plane2->GetNP());
-                cXyz cross_prod;
+                float dot_prod = PSVECDotProduct(plane1->GetNP(), plane2->GetNP());
                 PSVECCrossProduct(plane1->GetNP(), plane2->GetNP(), &cross_prod);
-                if (fVar15 > corner_angle_max_cos && std::fabsf(cross_prod.y) > 0.5f) {
+                if (dot_prod > corner_angle_max_cos && std::fabsf(cross_prod.y) > 0.5f) {
                     curr_hit_type = 3;
                 }
-                else {
-                    if (prev_hit_type != 3) {
+                else if (prev_hit_type != 3) {
                         curr_hit_type = 4;
-                    }
-                    else {
-                        curr_hit_type = 5;
-                    }
                 }
-            }
-            else {
-                if (prev_hit_type == 3 || prev_hit_type == 5) {
+                else {
                     curr_hit_type = 5;
                 }
-                else {
-                    curr_hit_type = 2;
-                }
+            }
+            else if (prev_hit_type == 3 || prev_hit_type == 5) {
+                curr_hit_type = 5;
+            }
+            else {
+                curr_hit_type = 2;
             }
         }
         switch (curr_hit_type) {
             case 3: {
                 res |= 2;
-                cXyz cross1 = lin_chk1.GetCross(); 
-                cXyz cross2 = lin_chk2.GetCross();
-                cXyz mid = cross1 + (cross2 - cross1) * 0.5f;
-                cXyz cStack_164;
-                if (cM3d_2PlaneLinePosNearPos(*plane1, *plane2, &mid, &cStack_164)) {
-                    cXyz local_284 = *plane1->GetNP() + *plane2->GetNP();
-                    m070 = cStack_164 + local_284 * 2.0f;
+                cross1 = lin_chk1.GetCross(); 
+                cross2 = lin_chk2.GetCross();
+                mid = cross1 + (cross2 - cross1) * 0.5f;
+                if (cM3d_2PlaneLinePosNearPos(*plane1, *plane2, &mid, &local_2fc)) {
+                    local_2e4 = *plane1->GetNP() + *plane2->GetNP();
+                    m070 = local_2fc + local_2e4 * 2.0f;
                     
-                    cSGlobe local_3ec;
-                    local_3ec.Val(m070 - mCenter);
+                    cSGlobe globe;
+                    globe.Val(m070 - mCenter);
 
-                    mDirection.R(local_3ec.R());
-                    mDirection.U(mDirection.V() + (local_3ec.V() - mDirection.V()) * 0.05f);
-                    mDirection.V(mDirection.U() + (local_3ec.U() - mDirection.U()) * corner_cushion);
+                    mDirection.R(direction.R());
+                    mDirection.U(mDirection.V() + (globe.V() - mDirection.V()) * 0.05f);
+                    mDirection.V(mDirection.U() + (globe.U() - mDirection.U()) * corner_cushion);
 
-                    cXyz local_1ac = mCenter + mDirection.Xyz();
-                    local_3ec.R(local_3ec.R() + 50.0f);
-                    cXyz local_1b8 = mCenter + local_3ec.Xyz();
-                    if (!lineBGCheck(&mCenter, &local_1b8, 0x7f)) {
-                        if (lineBGCheck(&m070, &local_1ac, &lin_chk1, 0x7f)) {
-                            cXyz local_1bc = lin_chk1.GetLinP()->GetStart();
-                            local_1ac = compWallMargin(&local_1bc, gaze_back_margin);
+                    local_2b4 = mCenter + mDirection.Xyz();
+                    globe.R(globe.R() + 50.0f);
+                    local_2a8 = mCenter + globe.Xyz();
+                    if (!lineBGCheck(&mCenter, &local_2a8, 0x7f)) {
+                        if (lineBGCheck(&m070, &local_2b4, &lin_chk1, 0x7f)) {
+                            local_29c = lin_chk1.GetLinP()->GetEnd();
+                            local_2b4 = compWallMargin(&local_29c, gaze_back_margin);
                         }
-                        lineBGCheck(&mCenter, &local_1ac, &lin_chk1, i_flags);
-                        mEye = local_1ac;
+                        lineBGCheck(&mCenter, &local_2b4, &lin_chk1, i_flags);
+                        mEye = local_2b4;
                         setFlag(0x80000);
                         break;
                     }
@@ -2264,12 +2271,17 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             case 5: {
                 setFlag(0x80);
                 setFlag(0x80);
-                cXyz normal1 = lin_chk1.GetLinP()->GetStart();
-                cXyz local_2f0 = compWallMargin(&normal1, 0.5f + gaze_back_margin);
-                cXyz local_1dc = local_2f0;
-                if (chkFlag(8) && (i_flags & 0x10) && res != 4) {
-                    float xyzDist = dCamMath::xyzHorizontalDistance(normal1, mCenter);
+
+                local_290 = lin_chk1.GetLinP()->GetEnd();
+
+                local_284 = compWallMargin(&local_290, 0.5f + gaze_back_margin);
+
+                local_278 = local_284;
+
+                if (chkFlag(8) && (i_flags & 0x10) && curr_hit_type != 4) {
+                    float xyzDist = dCamMath::xyzHorizontalDistance(local_290, mCenter);
                     float dVar14 =  wall_up_distance - (mCenter.y - attentionPos(mpPlayerActor).y);
+
                     if (!(xyzDist < 20.0f)) {
                         if (xyzDist > 320.0f) {
                             dVar14 = 0.0f;
@@ -2278,44 +2290,49 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                             dVar14 *= 1.0f - (xyzDist - 20.0f) / 300.0f;
                         }
                     }
-                    if (local_2f0.y - mCenter.y < dVar14) {
-                        normal1 = *plane1->GetNP();
-                        cSGlobe local_3f4(normal1);
-                        local_3f4.U(local_3f4.V() + cSAngle::_90);
-                        local_3f4.R(dVar14 * local_3f4.V().Sin());
-                        local_1dc += local_3f4.Xyz();
 
-                        if (lineBGCheck(&local_1dc, &local_2f0, &lin_chk1, i_flags)) {
+                    if (local_284.y - mCenter.y < dVar14) {
+                        local_2e4 = *plane1->GetNP();
+
+                        cSGlobe globe(local_2e4);
+                        globe.U(globe.V() + cSAngle::_90);
+                        globe.R(dVar14 * globe.V().Sin());
+
+                        local_284 += globe.Xyz();
+
+                        if (lineBGCheck(&local_278, &local_284, &lin_chk1, i_flags)) {
                             cXyz cross = lin_chk1.GetCross();
-                            local_1dc = compWallMargin(&cross, gaze_back_margin);
-                            mEye += (local_1dc - mEye) * mCamSetup.mBGChk.WallCushion();
+                            local_284 = compWallMargin(&cross, gaze_back_margin);
+                            mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallCushion();
                         }
                         else {
-                            mEye += (local_1dc - mEye) * mCamSetup.mBGChk.WallCushion();
+                            mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallCushion();
                         }
 
                         setFlag(0x4000);
                     }
                     else {
-                        if (lineBGCheck(&local_1dc, &local_2f0, &lin_chk1, i_flags)) {
+                        if (lineBGCheck(&local_278, &local_284, &lin_chk1, i_flags)) {
                             cXyz cross = lin_chk1.GetCross();
-                            local_1dc = compWallMargin(&cross, gaze_back_margin);
+                            local_284 = compWallMargin(&cross, gaze_back_margin);
                         }
-                        mEye += (local_1dc - mEye) * mCamSetup.mBGChk.WallBackCushion();
+
+                        mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallBackCushion();
                     }
                 }
                 else {
-                    mEye = local_2f0;
+                    mEye = local_284;
                 }
 
                 int engine_idx = mCamParam.Algorythmn();
 
                 if ((engine_idx == 1) || (engine_idx == 10)) {
                     cXyz attn_pos = attentionPos(mpPlayerActor);
-                    cSGlobe local_3fc(mEye - attn_pos);
-                    if (local_3fc.R() < 40.0f) {
-                        local_3fc.R(40.0f);
-                        mEye = attn_pos + local_3fc.Xyz();
+                    cSGlobe globe(mEye - attn_pos);
+
+                    if (globe.R() < 40.0f) {
+                        globe.R(40.0f);
+                        mEye = attn_pos + globe.Xyz();
                     }
                 }
 
@@ -2328,8 +2345,10 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                 mDirection = direction;
                 break;
         }
-    } else {
+    } 
+    else {
         curr_hit_type = 0;
+
         if (chkFlag(0x4000)) {
             if (i_flags & 0x10) {
                 fVar2 = mCamSetup.mBGChk.WallBackCushion();
@@ -2337,20 +2356,26 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
             else {
                 fVar2 = 0.2f;
             }
+
             mDirection.R(mDirection.R() + (m03C.R() - mDirection.R()) * fVar2);
             mDirection.U(mDirection.V() + (m03C.V() - mDirection.V()) * fVar2);
             mDirection.V(m03C.U());
+
             mEye = mCenter + mDirection.Xyz();
+
             if (lineBGCheck(&mCenter, &mEye, &lin_chk1, i_flags)) {
                 cXyz cross = lin_chk1.GetCross();
                 mEye = compWallMargin(&cross, 0.5f + gaze_back_margin);
             }
+
             cSAngle acStack_440 = mDirection.V() - m03C.V();
             corner_angle_max_cos = acStack_440.Degree();
+
             if (std::fabsf(corner_angle_max_cos) < 0.2f) {
                 clrFlag(0x4000);
             }
-        } else {
+        } 
+        else {
             mEye = eye;
             mDirection = direction;
         }
@@ -3028,7 +3053,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     if (m392 <= 0 || iVar17 <= m392) {
         dVar20 = dCamMath::rationalBezierRatio((float) iVar5 / (float)iVar17, fVar38);
         m3D8 = 1;
-        m3B8 = (1.0f - m3B8) * dVar20;
+        m3B8 = (1.0f - m3B8.Val()) * dVar20;
     }
     else if (chkFlag(0x100000) || daNpc_Cb1_c::isFlying()) {
         if (m3D8) {
@@ -3036,7 +3061,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
 
         m3D8 = 0;
-        m3B8 += (1.0f - m3B8) * 0.2f;
+        m3B8 += (1.0f - m3B8.Val()) * 0.2f;
     }
     else if (daNpc_Md_c::isFlying() || daNpc_kam_c::m_hyoi_kamome) {
         m3D8 = 1;
@@ -3047,7 +3072,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         }
 
         m3D8 = 0;
-        m3B8 += (0.5f - m3B8) * 0.05f;
+        m3B8 += (0.5f - m3B8.Val()) * 0.05f;
     }
     else {
         m3D8 = 1;
@@ -3139,7 +3164,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     }
 
     cSAngle acStack_4b8 = cSAngle((s16)0);
-    cSAngle acStack_51c = (acStack_4b4 - local_484.V()) * m3B8 * local_484.U().Cos();
+    cSAngle acStack_51c = (acStack_4b4 - local_484.V()) * m3B8.Degree() * local_484.U().Cos();
     m03C.U(local_484.V() + acStack_51c + acStack_4b8);
     cSAngle local_4bc;
     if (check_owner_action1(mPadId, 0x20000)) {
@@ -3165,7 +3190,7 @@ bool dCamera_c::followCamera(s32 param_1) {
 
         if (mCurMode == 1) {
             m3E0 = 0.5f;
-            m3BC = m3A0 = m3A0 + (m3B8 * (dVar28 - m3A0));
+            m3BC = m3A0 = m3A0 + (m3B8.Val() * (dVar28 - m3A0));
             local_4bc = cAngle::d2s(m3A0);
             m3E0 += (fVar40 - m3E0) * 0.5f;
         }
@@ -3481,7 +3506,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
         fVar3 = mCamSetup.Cushion4Jump();
     }
 
-    m3B8 += (fVar3 - m3B8) * mCamSetup.CusCus();
+    m3B8 += (fVar3 - m3B8.Val()) * mCamSetup.CusCus();
     m390 = local_108.x;
     m398 = local_108.z;
 
@@ -3729,19 +3754,16 @@ namespace {
 
 /* 80170490-801708E0       .text CalcSubjectAngle__9dCamera_cFPsPs */
 bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
-    float fVar1;
-    float fVar2;
-    float fVar3;
-    float fVar4;
-    float fVar5;
-    float fVar6;
-    int iVar7;
-    uint uVar8;
-    bool bVar9 = true;
-    fopAc_ac_c *pfVar10;
+    f32 fVar1;
+    f32 fVar2;
+    f32 dVar13;
+    f32 fVar3;
+    f32 fVar4;
+    f32 fVar6;
     f32 dVar11;
     f32 dVar12;
-    f32 dVar13;
+
+    bool bVar9 = true;
     
     if (dComIfGp_evmng_cameraPlay() && dComIfGp_getMiniGameType() != 8) {
         return false;
@@ -3755,9 +3777,7 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
         return false;
     }
 
-    bVar9 = m37C;
-
-    if (!bVar9) {
+    if (!m37C) {
         bVar9 = false;
     }
 
@@ -3769,7 +3789,7 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
     if (!bVar9) {
           cSAngle local_88(fVar2 * m384);
           cSAngle local_8c(fVar1 * m388);
-          s16 local_98 = local_88 + (s16)(m3B8 + 2);
+          s16 local_98 = local_88.Val() + m3BA;
           *param_2 = local_98;
           *param_1 = local_8c.Val();
     }
@@ -3778,60 +3798,68 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
     fVar4 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
 
     if (is_player(mpPlayerActor)) {
-        m3B8 = cSAngle(mpPlayerActor->shape_angle.z);
+        m3B8 = ((daPy_py_c*)mpPlayerActor)->getBodyAngleX();
     }
     else {
-        m3B8 = cSAngle(mpPlayerActor->shape_angle.x);
+        m3B8 = mpPlayerActor->shape_angle.x;
     }
 
-    m3B8 = cSAngle(mpPlayerActor->shape_angle.y);
+    m3BA = mpPlayerActor->shape_angle.y;
 
+    f32 f1;
     if (fVar6 > 0.7f) {
-        fVar6 = 1.0f;
+        f1 = 1.0f;
     } 
     else if (fVar6 < -0.7f) {
-        fVar6 = -1.0f;
+        f1 = -1.0f;
     }
     else {
-        fVar6 = fVar6 / 0.7f;
+        f1 = fVar6 / 0.7f;
     }
 
+    f32 f3;
     if (fVar4 > 0.7f) {
-        fVar4 = 1.0f;
+        f3 = 1.0f;
     } 
     else if (fVar4 < -0.7f) {
-        fVar4 = -1.0f;
+        f3 = -1.0f;
     }
     else {
-        fVar4 = fVar4 / 0.7f;
+        f3 = fVar4 / 0.7f;
     }
+    fVar4 = f3;
 
-    if ((mEye.y <= m354 + 5.0f || mEye.y <= mBG.m5C.m58 + 5.0f) && 
-        (m388 >= 0.0f && fVar4 > 0.0f) || (m388 < 0.0f && fVar4 <= 0.0f)) {
+    f32 f2 = 5.0f;
+    if ((mEye.y <= m354 + f2 || mEye.y <= mBG.m5C.m58 + f2) && ((m388 >= 0.0f && f3 > 0.0f) || (m388 < 0.0f && f3 <= 0.0f))) {
         fVar4 = 0.0f;
     }
     
     if (dComIfGp_checkPlayerStatus0(mPadId, 0x8000000)) {
         fVar4 = 0.0f;
     }
-    if (dComIfGp_checkPlayerStatus0(mPadId, 0x40000)) {
+
+    if (!dComIfGp_checkPlayerStatus0(mPadId, 0x40000)) {
         if (dCamParam_c::styles[m380].flag & 0x20) {
-            dVar11 = dCamMath::rationalBezierRatio(fVar6, mCamSetup.CurveWeight());
+            m384 = -f1;
+            m388 = fVar4;
+        }
+        else {
+            dVar11 = dCamMath::rationalBezierRatio(f1, mCamSetup.CurveWeight());
             dVar12 = dCamMath::rationalBezierRatio(fVar4, mCamSetup.CurveWeight());
             if (dComIfGp_checkPlayerStatus0(mPadId, 0x2000)) {
-                if (dCamParam_c::styles[m380].flag & 0x10) {
-                    m384 = -dVar11 * dVar13;
-                    m388 += dVar12 * dVar13;
-                }
-                else {
-                    dVar13 -= m38C * dVar13 * fVar3;
-                    m384 = -dVar11 * dVar13;
-                    m388 += dVar12 * dVar13;
-                }
-            }
-            else {
                 m384 = -dVar11 * dVar13;
                 m388 += dVar12 * dVar13;
+            }
+            else {
+                if (dCamParam_c::styles[m380].flag & 0x10) {
+                    f32 temp = dVar13 - (m38C * (dVar13 * fVar3));
+                    m384 = -dVar11 * temp;
+                    m388 += dVar12 * temp;
+                }
+                else {
+                    m384 = -dVar11 * dVar13;
+                    m388 += dVar12 * dVar13;
+                }
             }
             if (m384 > 1.0f) {
                 m384 = 1.0f;
@@ -3846,21 +3874,18 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
                 m388 = -1.0f;
             }
         }
-        else {
-            m384 = -fVar6;
-            m388 = fVar4;
-        }
     }
     else {
-        m384 = 0.01f;
+        m384 = 0.0f;
     }
+
     cSAngle local_90(fVar2 * m384);
     cSAngle local_94(fVar1 * m388);
     
-    s16 local_a8 = local_90.Val() + (m3B8 + 2);
+    s16 local_a8 = local_90.Val() + m3BA;
     *param_2 = local_a8;
     *param_1 = local_94.Val();
-    m37C = 0;
+    m37D = 0;
     return bVar9;
 }
 
