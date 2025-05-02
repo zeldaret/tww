@@ -514,9 +514,9 @@ public:
 
     static engine_fn engine_tbl[];
     static const int type_num;
-    static dCamera__Type types[63];
+    static dCamera__Type types[];
     static const int mvBGType_num;
-    static char* mvBGTypes[34];
+    static const char* mvBGTypes[];
 };
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);

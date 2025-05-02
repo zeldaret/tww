@@ -5,3 +5,10 @@
 
 #include "d/d_cam_param.h"
 
+#include "global.h"
+
+dCamera__Style dCamParam_c::styles[145] = {
+    // TODO
+};
+
+const s32 dCamParam_c::style_num = ARRAY_SIZE(styles);
