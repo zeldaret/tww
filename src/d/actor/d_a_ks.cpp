@@ -9,7 +9,10 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_snap.h"
+#include "d/actor/d_a_player.h"
 
+int HEAVY_IN;
+int GORON_COUNT;
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
@@ -53,7 +56,7 @@ void draw_SUB(ks_class* i_this) {
 
     pJVar5->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    enemy_fire(&i_this->mA60);
+    enemy_fire(&i_this->mEnemyFire);
 }
 
 /* 000002CC-00000568       .text daKS_Draw__FP8ks_class */
@@ -144,7 +147,7 @@ void speed_keisan(ks_class*, short) {
 }
 
 /* 00000EBC-00001314       .text action_dousa_move__FP8ks_class */
-void action_dousa_move(ks_class*) {
+void action_dousa_move(ks_class* i_this) {
     /* Nonmatching */
 }
 
@@ -194,13 +197,141 @@ void BG_check(ks_class*) {
 }
 
 /* 00002C54-00003054       .text daKS_Execute__FP8ks_class */
-static BOOL daKS_Execute(ks_class*) {
-    /* Nonmatching */
+static BOOL daKS_Execute(ks_class* i_this) {    
+    if (enemy_ice(&i_this->mEnemyIce)) {
+        i_this->m2B4->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        i_this->m2B8->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        if (i_this->m2D0 && (i_this->m320++, i_this->m320 > 7.0f)) {
+            i_this->m320 = 7.0f;
+        }
+        return TRUE;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (i_this->m2E8[i]) {
+            i_this->m2E8[i]--;
+        }
+    }
+
+    if (i_this->m2D4 != 0 && i_this->m2CB != 3) {
+        fopAc_ac_c* pfVar4 = fopAcM_SearchByID(i_this->m2D4);
+        bool bVar5 = false;
+        if (pfVar4 && ((fopAcM_GetParam(pfVar4) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(pfVar4) & 0xff0000) == 0)) {
+            if (fopAcM_GetName(pfVar4) == PROC_GM) {
+                if (pfVar4->health <= 0) {
+                    bVar5 = true;
+                }
+            }
+            else {
+                bVar5 = true;
+            }
+            if (bVar5) {
+                if (i_this->m2CB != 4) {
+                    i_this->m2CB = 3;
+                    i_this->m2CC = 30;
+                }
+                else {
+                    if (i_this->m2CC != 43) {
+                        daPy_py_c* link = (daPy_py_c*)daPy_getPlayerLinkActorClass();
+                        link->offHeavyState();
+                        HEAVY_IN = 0;
+                        GORON_COUNT = 0;
+                        i_this->m2F0 = 0;
+                        i_this->m2F2 = 0;
+                        i_this->m2CC = 0x2a;
+                    }
+                }
+            }
+        }
+    }
+    switch(i_this->m2CB) {
+    case 0:
+        action_dousa_move(i_this);
+        ks_kuttuki_check(i_this);
+        break;
+    case 1:
+        action_kougeki_move(i_this);
+        break;
+    case 2:
+        action_kaze_move(i_this);
+        break;
+    case 3:
+        action_dead_move(i_this);
+        break;
+    case 4:
+        action_omoi(i_this);
+        break;
+    case 10:
+        action_tubo_search(i_this);
+        break;
+    case 20:
+        action_kb_birth_check(i_this);
+    }
+
+    if (i_this->m2C8 == 6) {
+        return TRUE;
+    }
+
+    if (i_this->m302 && (i_this->m302++, i_this->m302 > 7)) {
+        i_this->m302 = 0;
+    }
+
+    if (i_this->m2E8[0] == 0) {
+        i_this->m2E8[0] = cM_rndFX(25.0f) + 50.0f;
+        i_this->m302 = 1;
+    }
+    
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+
+    cXyz local_18;
+    local_18.x = 0.0f;
+    local_18.y = 0.0f;
+    local_18.z = i_this->speedF;
+
+    cXyz local_c;
+    MtxPosition(&local_18, &local_c);
+
+    i_this->speed.x = local_c.x;
+    i_this->speed.z = local_c.z;
+
+    if (i_this->m2CC != 41 && !(i_this->m38C & 0x20) && !(i_this->m38C & 0x1000)) {
+        i_this->speed.y += i_this->gravity;
+        if (i_this->speed.y < -20.0f) {
+            i_this->speed.y = -20.0f;
+        }
+    }
+
+    i_this->eyePos = i_this->current.pos;
+
+    i_this->attention_info.position = i_this->eyePos;
+
+    i_this->mSph.SetC(i_this->current.pos);
+    i_this->mSph.SetR(i_this->m31C);
+
+    dComIfG_Ccsp()->Set(&i_this->mSph);
+
+    if (i_this->mSph.ChkCoSet() && (i_this->m2CB == 0 || i_this->m2CB == 2)) {
+        fopAcM_posMove(i_this, &i_this->m540);
+    }
+    else {
+        fopAcM_posMove(i_this, NULL);
+    }
+
+    if (i_this->m2CC != 41) {
+        BG_check(i_this);
+        naraku_check(i_this);
+    }
+
+    draw_SUB(i_this);
+
+    i_this->m2CD = 1;
+
+    return TRUE;
 }
 
 /* 00003054-0000305C       .text daKS_IsDelete__FP8ks_class */
-static BOOL daKS_IsDelete(ks_class*) {
-    /* Nonmatching */
+static BOOL daKS_IsDelete(ks_class* i_this) {
+    return TRUE;
 }
 
 /* 0000305C-000030F4       .text daKS_Delete__FP8ks_class */
