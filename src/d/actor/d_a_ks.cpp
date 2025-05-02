@@ -118,8 +118,18 @@ void naraku_check(ks_class*) {
 }
 
 /* 0000074C-00000788       .text tyaku_check__FP8ks_class */
-BOOL tyaku_check(ks_class*) {
-    /* Nonmatching */
+BOOL tyaku_check(ks_class* i_this) {
+    if (i_this->m38C & 0x20) {
+        return TRUE;
+    }
+
+    if (i_this->m38C & 0x1000) {
+        i_this->speed.y = 0.0f;
+        i_this->gravity = 0.0f;
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000788-0000087C       .text ks_kuttuki_check__FP8ks_class */
