@@ -5,15 +5,107 @@
 
 #include "d/actor/d_a_ks.h"
 #include "d/d_procname.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_camera.h"
+#include "d/d_snap.h"
+
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
-void draw_SUB(ks_class*) {
-    /* Nonmatching */
+void draw_SUB(ks_class* i_this) {
+    J3DModel* pJVar6 = i_this->m2B4->getModel();
+    J3DModel* pJVar5 = i_this->m2B8->getModel();
+
+    cXyz local_24 = dComIfGp_getCamera(0)->mLookat.mEye - i_this->current.pos;
+
+    int iVar3 = cM_atan2s(local_24.x, local_24.z);
+    int iVar4 = (s16)-cM_atan2s(local_24.y, std::sqrtf(local_24.x * local_24.x + local_24.z * local_24.z));
+    
+    f32 fVar1 = 0.0f;
+    if (i_this->m2D0) {
+        fVar1 = i_this->m304;
+    }
+
+    mDoMtx_trans(mDoMtx_stack_c::get(), i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
+    
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), iVar3);
+    mDoMtx_XrotM(mDoMtx_stack_c::get(), iVar4);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z + i_this->m2FA.x);
+
+    cXyz local_18;
+    local_18.setall(1.0f);
+
+    i_this->m2FA.x += i_this->m2FA.z;
+
+    mDoMtx_stack_c::scaleM(1.0f,1.0f,1.0f);
+
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z - i_this->m2FA.x);
+
+    pJVar6->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_trans(mDoMtx_stack_c::get(), i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
+
+    mDoMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
+    mDoMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+
+    mDoMtx_stack_c::scaleM(local_18);
+
+    pJVar5->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    enemy_fire(&i_this->mA60);
 }
 
 /* 000002CC-00000568       .text daKS_Draw__FP8ks_class */
-static BOOL daKS_Draw(ks_class*) {
-    /* Nonmatching */
+static BOOL daKS_Draw(ks_class* i_this) {
+    cXyz local_24 = i_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye;
+
+    if (local_24.abs() < REG0_F(10) + 100.0f) {
+        return TRUE;
+    }
+
+    J3DModel* pJVar3 = i_this->m2B4->getModel();
+    J3DModel* pJVar2 = i_this->m2B8->getModel();
+
+    cXyz local_18 = i_this->current.pos;
+    local_18.y += 40.0f;
+
+    dSnap_RegistFig(0xb3, i_this, 1.0f, 1.0f, 1.0f);
+
+    if (i_this->m2C8 == 6) {
+        return TRUE;
+    }
+
+    if (i_this->m2D0 == 0 && i_this->m2CD == 0) {
+        draw_SUB(i_this);
+    }
+
+    i_this->m2CD = 0;
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(pJVar3, &i_this->tevStr);
+
+    i_this->m2C0->entry(pJVar3->getModelData());
+    i_this->m2C0->setFrame(i_this->m320);
+
+    i_this->m2B4->updateDL();
+
+    i_this->m2C0->remove(pJVar3->getModelData());
+    
+    g_env_light.setLightTevColorType(pJVar2, &i_this->tevStr);
+    
+    i_this->m2BC->entry(pJVar2->getModelData());
+    i_this->m2BC->setFrame(i_this->m302);
+
+    i_this->m2C4->entry(pJVar2->getModelData());
+    i_this->m2C4->setFrame(i_this->m320);
+
+    i_this->m2B8->updateDL();
+
+    i_this->m2C4->remove(pJVar2->getModelData());
+    i_this->m2BC->remove(pJVar2->getModelData());
+    
+    return TRUE;
 }
 
 /* 00000568-0000074C       .text naraku_check__FP8ks_class */
