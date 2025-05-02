@@ -119,11 +119,11 @@ void naraku_check(ks_class*) {
 
 /* 0000074C-00000788       .text tyaku_check__FP8ks_class */
 BOOL tyaku_check(ks_class* i_this) {
-    if (i_this->m38C & 0x20) {
+    if (i_this->mAcch.ChkGroundHit()) {
         return TRUE;
     }
 
-    if (i_this->m38C & 0x1000) {
+    if (i_this->mAcch.ChkWaterIn()) {
         i_this->speed.y = 0.0f;
         i_this->gravity = 0.0f;
         return TRUE;
@@ -153,8 +153,21 @@ BOOL body_atari_check(ks_class*) {
 }
 
 /* 00000DE8-00000EBC       .text speed_keisan__FP8ks_classs */
-void speed_keisan(ks_class*, short) {
-    /* Nonmatching */
+void speed_keisan(ks_class* i_this, short i_speed) {
+    cMtx_YrotS(*calc_mtx, i_speed);
+    
+    s16 sVar1 = i_this->m30C * cM_ssin(i_this->m2F0[0]);
+
+    cXyz local_14;
+    local_14.x = sVar1;
+    local_14.y = 0.0f;
+    local_14.z = 0.0f;
+
+    cXyz local_8;
+    MtxPosition(&local_14, &local_8);
+    
+    i_this->current.pos.x += local_8.x;
+    i_this->current.pos.z += local_8.z;
 }
 
 /* 00000EBC-00001314       .text action_dousa_move__FP8ks_class */
@@ -198,7 +211,7 @@ void action_dousa_move(ks_class* i_this) {
             
             i_this->m2CC++;
         case 2:
-            if (i_this->m38C & 0x20) {
+            if (i_this->mAcch.ChkGroundHit()) {
                 i_this->current.angle.y = i_this->m2FA.y + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
             }
 
@@ -404,7 +417,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
     i_this->speed.x = local_c.x;
     i_this->speed.z = local_c.z;
 
-    if (i_this->m2CC != 41 && !(i_this->m38C & 0x20) && !(i_this->m38C & 0x1000)) {
+    if (i_this->m2CC != 41 && !i_this->mAcch.ChkGroundHit() && !i_this->mAcch.ChkWaterIn()) {
         i_this->speed.y += i_this->gravity;
         if (i_this->speed.y < -20.0f) {
             i_this->speed.y = -20.0f;
