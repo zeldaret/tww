@@ -9,10 +9,11 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_snap.h"
-#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_main.h"
 
 int HEAVY_IN;
 int GORON_COUNT;
+int KUTTUKU_ALL_COUNT;
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
@@ -117,7 +118,7 @@ void naraku_check(ks_class*) {
 }
 
 /* 0000074C-00000788       .text tyaku_check__FP8ks_class */
-void tyaku_check(ks_class*) {
+BOOL tyaku_check(ks_class*) {
     /* Nonmatching */
 }
 
@@ -137,7 +138,7 @@ void shock_damage_check(ks_class*) {
 }
 
 /* 00000A98-00000DE8       .text body_atari_check__FP8ks_class */
-void body_atari_check(ks_class*) {
+BOOL body_atari_check(ks_class*) {
     /* Nonmatching */
 }
 
@@ -147,8 +148,107 @@ void speed_keisan(ks_class*, short) {
 }
 
 /* 00000EBC-00001314       .text action_dousa_move__FP8ks_class */
-void action_dousa_move(ks_class* i_this) {
-    /* Nonmatching */
+void action_dousa_move(ks_class* i_this) { 
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+
+    switch (i_this->m2CC) {
+        case 0:
+            i_this->m30C = 0.0f;
+
+            i_this->gravity = -3.0f;
+            
+            for (int i = 0; i < 5; i++) {
+                i_this->m2F0[i] = 0;
+            }
+
+            i_this->m2CC++;
+        case 1:
+            cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
+            
+            if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) > 10000.0f) {
+                break;
+            }
+            
+            if (i_this->shape_angle.z > 0x100) {
+                return;
+            }
+
+            i_this->shape_angle.z = 0;
+
+            fopAcM_seStart(i_this, 0x587a, 0);
+
+            if (tyaku_check(i_this) != 0) {
+                i_this->gravity = -3.0f;
+
+                i_this->speed.y = 1.0f;
+                i_this->speed.y += cM_rndF(5.0f);
+            }
+
+            i_this->current.angle.y = i_this->m2FA.y + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            
+            i_this->m2CC++;
+        case 2:
+            if (i_this->m38C & 0x20) {
+                i_this->current.angle.y = i_this->m2FA.y + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            }
+
+            if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
+                (link->getSpeedF() > 12.0f || HEAVY_IN != 0) && 
+                fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f &&
+                !dComIfGp_checkPlayerStatus0(0, 0x100000) &&
+                tyaku_check(i_this)) {
+                
+                i_this->m2CB = 1;
+                i_this->m2CC = 10;
+
+                return;
+            }
+
+            if (link->getSpeedF() <= 12.0f || dComIfGp_checkPlayerStatus0(0, 0x100000)) {
+                cLib_addCalc0(&i_this->speedF, 0.3f, cM_rndF(1.0f) + 0.3f);
+                
+                cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
+                
+                i_this->m2FA.y = 0;
+                break;
+            }
+
+            if (i_this->m2FA.y == 0) {
+                i_this->m2FA.y = (fopAcM_GetID(i_this) & 0xf) * cM_rndFX(512.0f);
+            }
+
+            i_this->shape_angle.z = cM_rndFX(2000.0f);
+
+            speed_keisan(i_this, i_this->current.angle.y);
+
+            i_this->speedF = 12.0f;
+
+            i_this->m2F0[0] += 1000;
+
+            i_this->m30C = 10.0f;
+
+            if (tyaku_check(i_this)) {
+                fopAcM_seStart(i_this, 0x587a, 0);
+
+                i_this->gravity = -3.0f;
+
+                i_this->speed.y = 1.0f;
+                i_this->speed.y += cM_rndF(5.0f);
+            }
+            break;
+        case 3:
+            if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f) {
+                i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            }
+    }
+
+    if (i_this->m2CC == 2 || i_this->m2CC == 3) {
+        cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x1000);
+    }
+    
+    if (body_atari_check(i_this) != 0) {
+        fopAcM_seStart(i_this, 0x2828, 0);
+    }
 }
 
 /* 00001314-00001630       .text action_kougeki_move__FP8ks_class */
@@ -236,8 +336,8 @@ static BOOL daKS_Execute(ks_class* i_this) {
                         link->offHeavyState();
                         HEAVY_IN = 0;
                         GORON_COUNT = 0;
-                        i_this->m2F0 = 0;
-                        i_this->m2F2 = 0;
+                        i_this->m2F0[0] = 0;
+                        i_this->m2F0[1] = 0;
                         i_this->m2CC = 0x2a;
                     }
                 }
@@ -245,27 +345,27 @@ static BOOL daKS_Execute(ks_class* i_this) {
         }
     }
     switch(i_this->m2CB) {
-    case 0:
-        action_dousa_move(i_this);
-        ks_kuttuki_check(i_this);
-        break;
-    case 1:
-        action_kougeki_move(i_this);
-        break;
-    case 2:
-        action_kaze_move(i_this);
-        break;
-    case 3:
-        action_dead_move(i_this);
-        break;
-    case 4:
-        action_omoi(i_this);
-        break;
-    case 10:
-        action_tubo_search(i_this);
-        break;
-    case 20:
-        action_kb_birth_check(i_this);
+        case 0:
+            action_dousa_move(i_this);
+            ks_kuttuki_check(i_this);
+            break;
+        case 1:
+            action_kougeki_move(i_this);
+            break;
+        case 2:
+            action_kaze_move(i_this);
+            break;
+        case 3:
+            action_dead_move(i_this);
+            break;
+        case 4:
+            action_omoi(i_this);
+            break;
+        case 10:
+            action_tubo_search(i_this);
+            break;
+        case 20:
+            action_kb_birth_check(i_this);
     }
 
     if (i_this->m2C8 == 6) {

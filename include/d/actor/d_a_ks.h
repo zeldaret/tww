@@ -8,6 +8,7 @@
 class mDoExt_McaMorf;
 class mDoExt_brkAnm;
 class mDoExt_btkAnm;
+class daPy_lk_c;
 
 class ks_class : public fopEn_enemy_c {
 public:
@@ -28,14 +29,14 @@ public:
     /* 0x2D4 */ fpc_ProcID m2D4;
     /* 0x2D8 */ u8 m2D8[0x2E8 - 0x2D8];
     /* 0x2E8 */ s16 m2E8[4];
-    /* 0x2F0 */ s16 m2F0;
-    /* 0x2F2 */ s16 m2F2;
-    /* 0x2F4 */ u8 m2F4[0x2FA - 0x2F4];
+    /* 0x2F0 */ s16 m2F0[5];
     /* 0x2FA */ csXyz m2FA;
     /* 0x300 */ u8 m300[0x302 - 0x300];
     /* 0x302 */ s16 m302;
     /* 0x304 */ f32 m304;
-    /* 0x308 */ u8 m308[0x31C - 0x308];
+    /* 0x308 */ u8 m308[0x30C - 0x308];
+    /* 0x30C */ f32 m30C;
+    /* 0x310 */ u8 m310[0x31C - 0x310];
     /* 0x31C */ f32 m31C;
     /* 0x320 */ f32 m320;
     /* 0x324 */ u8 m324[0x38C - 0x324];
