@@ -18,7 +18,8 @@ public:
     /* 0x2C0 */ mDoExt_brkAnm* m2C0;
     /* 0x2C4 */ mDoExt_brkAnm* m2C4;
     /* 0x2C8 */ u8 m2C8;
-    /* 0x2C9 */ u8 m2C9[0x2CB - 0x2C9];
+    /* 0x2C9 */ u8 m2C9;
+    /* 0x2CA */ u8 m2CA;
     /* 0x2CB */ u8 m2CB;
     /* 0x2CC */ u8 m2CC;
     /* 0x2CD */ u8 m2CD;
@@ -30,7 +31,7 @@ public:
     /* 0x2D3 */ u8 m2D3;
     /* 0x2D4 */ fpc_ProcID mGmID;
     /* 0x2D8 */ fpc_ProcID mProcID;
-    /* 0x2DC */ u8 m2DC[0x2E8 - 0x2DC];
+    /* 0x2DC */ cXyz m2DC;
     /* 0x2E8 */ s16 m2E8[4];
     /* 0x2F0 */ s16 m2F0[5];
     /* 0x2FA */ csXyz m2FA;
@@ -45,12 +46,10 @@ public:
     /* 0x31C */ f32 m31C;
     /* 0x320 */ f32 m320;
     /* 0x324 */ dBgS_AcchCir mAcchCir;
-    /* 0x364 */ dBgS_Acch mAcch;
+    /* 0x364 */ dBgS_ObjAcch mAcch;
     /* 0x528 */ MtxP m528;
     /* 0x52C */ dPa_rippleEcallBack m52C;
-    /* 0x540 */ cXyz m540;
-    /* 0x54C */ u8 m54C[0x55C - 0x54C];
-    /* 0x55C */ dCcD_GStts mGStts;
+    /* 0x540 */ dCcD_Stts mStts;
     /* 0x57C */ dCcD_Sph mSph;
     /* 0x6A8 */ enemyice mEnemyIce;
     /* 0xA60 */ enemyfire mEnemyFire;

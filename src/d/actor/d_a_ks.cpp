@@ -20,7 +20,6 @@ int KUTTUKU_ALL_COUNT;
 int HEAVY_IN;
 int GORON_COUNT;
 
-
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
     J3DModel* pJVar6 = i_this->m2B4->getModel();
@@ -235,7 +234,7 @@ BOOL body_atari_check(ks_class* i_this) {
     cXyz mTgHitPos;
     cXyz mParticleScale;
     
-    i_this->mGStts.Move();
+    i_this->mStts.Move();
     
     if (i_this->mSph.ChkTgHit()) {
         daPy_py_c* mpCurPlayerActor = daPy_getPlayerActorClass();
@@ -616,7 +615,7 @@ void action_kaze_move(ks_class* i_this) {
     }
 }
 
-u8 item_tbl[3] = {0xA, 0xB, 0xC};
+u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
 
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
 void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
@@ -718,7 +717,7 @@ void action_dead_move(ks_class* i_this) {
     }
 }
 
-u32 pl_harituki_joint_dt[19] = {
+u32 pl_harituki_joint_dt[20] = {
     0x20,
     0x21,
     0x25,
@@ -737,7 +736,8 @@ u32 pl_harituki_joint_dt[19] = {
     0x0C,
     0x0A,
     0x0B,
-    0x09
+    0x09,
+    0x0e,
 };
 
 /* 00001C5C-000026DC       .text action_omoi__FP8ks_class */
@@ -1055,8 +1055,83 @@ BOOL tsubo_search(void* param_1, void* param_2) {
 }
 
 /* 000027A0-00002A40       .text action_tubo_search__FP8ks_class */
-void action_tubo_search(ks_class*) {
-    /* Nonmatching */
+void action_tubo_search(ks_class* i_this) {
+    /* Nonmatching - regalloc */
+    switch (i_this->m2CC) {
+        case 0x32: {
+            i_this->mProcID = fpcM_ERROR_PROCESS_ID_e;
+
+            fpcEx_Search((fpcLyIt_JudgeFunc)tsubo_search, i_this);
+
+            if (i_this->mProcID == fpcM_ERROR_PROCESS_ID_e) {
+                fopAcM_delete(i_this);
+            }
+            else {
+                i_this->m2CC++;
+            }
+            break;
+        }
+        case 0x33: {
+            fopAc_ac_c* pfVar2 = fopAcM_SearchByID(i_this->mProcID);
+
+            if (pfVar2) {
+                i_this->current.pos = pfVar2->current.pos;
+
+                if (!i_this->m318) {
+                    return;
+                }
+
+                if (fopAcM_searchActorDistance(i_this, daPy_getPlayerActorClass()) > i_this->m318) {
+                    return;
+                }
+            }
+
+            i_this->m31C = 100.0f;
+
+            i_this->mSph.OffAtNoTgHitInfSet();
+
+            i_this->mSph.OnAtVsBitSet(8);
+
+            i_this->mSph.OffAtVsBitSet(4);
+            i_this->mSph.OffAtVsBitSet(0x10);
+
+            i_this->mSph.OnAtSPrmBit(1);
+
+            i_this->mSph.OnAtHitBit();
+
+            i_this->mSph.SetC(i_this->current.pos);
+            i_this->mSph.SetR(i_this->m31C);
+
+            dComIfG_Ccsp()->Set(&i_this->mSph);
+
+            i_this->m2CC++;
+
+            break;
+        }
+        case 0x34: {
+            i_this->mSph.SetC(i_this->current.pos);
+            i_this->mSph.SetR(i_this->m31C);
+
+            dComIfG_Ccsp()->Set(&i_this->mSph);
+
+            if (i_this->m2C9 > 0x15 || i_this->m2C9 == 0) {
+                i_this->m2C9 = 1;
+            }
+
+            for (int i = 0; i < i_this->m2C9; i++) {
+                cXyz local_24 = i_this->current.pos;
+                local_24.y += cM_rndF(40.0f);
+                if (i != 0) {
+                    local_24.x += cM_rndFX(40.0f);
+                    local_24.z += cM_rndFX(40.0f);
+                }
+                i_this->shape_angle = i_this->current.angle;
+                i_this->shape_angle.x = 0;
+                fopAcM_create(PROC_KS, 3, &local_24, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
+            }
+            fopAcM_delete(i_this);
+        }
+    }
 }
 
 /* 00002A40-00002BC4       .text action_kb_birth_check__FP8ks_class */
@@ -1224,7 +1299,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
     dComIfG_Ccsp()->Set(&i_this->mSph);
 
     if (i_this->mSph.ChkCoSet() && (i_this->m2CB == 0 || i_this->m2CB == 2)) {
-        fopAcM_posMove(i_this, &i_this->m540);
+        fopAcM_posMove(i_this, i_this->mStts.GetCCMoveP());
     }
     else {
         fopAcM_posMove(i_this, NULL);
@@ -1307,9 +1382,222 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     return iVar5 ? TRUE : FALSE;
 }
 
+static dCcD_SrcSph body_co_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0x01000000,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0x15,
+        /* SrcObjTg  Type    */ 0xff3dfeff,
+        /* SrcObjTg  SPrm    */ 0x3,
+        /* SrcObjCo  SPrm    */ 0x65,
+        /* SrcGObjAt Se      */ 6,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 6,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 15.0f,
+    },
+};
+
+static s8 fire_j[10] = {
+    0x0,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF,
+     
+};
+
+static f32 fire_sc[10] = {
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+    1.0f,
+};
+
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
-static cPhs_State daKS_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daKS_Create(fopAc_ac_c* i_act) {
+    s32 res;
+    u32 parameters;
+    ks_class* i_this = (ks_class*)i_act;
+
+    fopAcM_SetupActor(i_act, ks_class);
+    
+    res = dComIfG_resLoad(&i_this->mPhs, "KS");
+    if (res == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1060)) {
+            return cPhs_ERROR_e;
+        }
+
+        i_this->m2C8 = fopAcM_GetParam(i_this);
+        i_this->m2C9 = fopAcM_GetParam(i_this) >> 8;
+        i_this->m2CA = fopAcM_GetParam(i_this) >> 0x10;
+
+        if (i_this->m2C8 == 0xff) {
+            i_this->m2C8 = 0;
+        }
+
+        if (i_this->m2C8 <= 1 && (i_this->m2C9 > 0x15 || i_this->m2C9 == 0)) {
+            i_this->m2C9 = 1;
+        }
+
+        if (i_this->m2CA == 0xff) {
+            i_this->m2CA = 0;
+        }
+
+        i_this->m318 = i_this->m2CA * 10.0f;
+
+        if (i_this->m2C8 <= 1) {
+            parameters = 2;
+            if (i_this->m2C8 == 0) {
+              parameters = 3;
+            }
+
+            for (int i = 0; i < i_this->m2C9; i++) {
+                cXyz local_4c = i_this->current.pos;
+                if (i != 0) {
+                    if (i_this->current.angle.x != 0) {
+                        local_4c.y += cM_rndFX(120.0f);\
+                        f32 ground_y = i_this->mAcch.GetGroundH();
+                        if (local_4c.y < ground_y) {
+                            local_4c.y = ground_y + cM_rndF(120.0f);
+                        }
+                    }
+                    else {
+                        local_4c.x += cM_rndFX(40.0f);
+                        local_4c.z += cM_rndFX(40.0f);
+                    }
+                }
+                i_this->shape_angle = i_this->current.angle;
+                i_this->shape_angle.x = 0;
+
+                fopAcM_create(PROC_KS, parameters, &local_4c, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
+            }
+
+            return cPhs_ERROR_e;
+        }
+
+        if (KS_ALL_COUNT == 0) {
+            KUTTUKU_ALL_COUNT = 0;
+            HEAVY_IN = 0;
+            GORON_COUNT = 0;
+        }
+
+        KS_ALL_COUNT++;
+
+        i_this->cullMtx = i_this->m2B4->getModel()->getBaseTRMtx();
+
+        fopAcM_setCullSizeBox(i_this, -20.0f, -20.0f, -20.0f, 20.0f, 20.0f, 20.0f);
+        
+        i_this->attention_info.flags = 0;
+        
+        i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mAcchCir, &i_this->speed, NULL, NULL);
+        
+        i_this->mStts.Init(2, 1, i_this);
+        
+        i_this->max_health = 1;
+        i_this->health = 1;
+
+        i_this->m304 = 25.0f;
+
+        i_this->m2E8[0] = cM_rndFX(25.0f) + 50.0f;
+
+        i_this->m2DC.setall(1.0f);
+
+        i_this->m2FA.z = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
+
+        i_this->mSph.Set(body_co_sph_src);
+        i_this->mSph.SetStts(&i_this->mStts);
+
+        i_this->mEnemyIce.mpActor = i_this;
+        i_this->mEnemyIce.mWallRadius = 20.0f;
+        i_this->mEnemyIce.mCylHeight = 20.0f;
+        i_this->mEnemyIce.m1B0 = 1;
+
+        i_this->mEnemyFire.mpMcaMorf = i_this->m2B4;
+        i_this->mEnemyFire.mpActor = i_this;
+
+        for (int i = 0; i < 10; i++) {
+            i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+            i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
+        }
+
+        i_this->itemTableIdx =dComIfGp_CharTbl()->GetNameIndex("kuro_s", 0);
+        
+        if (i_this->m2C8 == 4 || i_this->m2C8 == 5) {
+            i_this->mGmID = i_this->parentActorID;
+            if (i_this->mGmID == fpcM_ERROR_PROCESS_ID_e) {
+                return cPhs_ERROR_e;
+            }
+
+            fopAc_ac_c* i_act = fopAcM_SearchByID(i_this->mGmID);
+            if (i_act && fopAc_IsActor(i_act) && fopAcM_GetName(i_act) == PROC_GM && i_this->m2C8 == 5) {
+                i_this->current.angle.y += cM_rndFX(8192.0f);
+                i_this->speedF = cM_rndF(6.0f) + 34.0f;
+                i_this->speed.y = cM_rndF(8.0f) + 22.0f;
+            }
+        }
+
+        i_this->m31C = 20.0f;
+
+        if (i_this->m2C8 == 6) {
+            i_this->mSph.OffTgSetBit();
+            i_this->mSph.OffCoSetBit();
+            i_this->mSph.ClrTgHit();
+
+            i_this->m2CB = 10;
+            i_this->m2CC = 0x32;
+
+            return res;
+        }
+        
+        if (i_this->m2C8 == 7) {
+            fopAcM_OnStatus(i_this, 0x4000);
+
+            i_this->m2CB = 0x14;
+            i_this->m2CC = 0x3c;
+
+            return res;
+        }
+
+        if (i_this->m2C8 == 2) {
+            i_this->m2CB = 0;
+            i_this->m2CC = 3;
+
+            i_this->gravity = -3.0f;
+
+            BG_check(i_this);
+            
+            if (!i_this->mAcch.ChkGroundHit()) {
+                i_this->gravity = 0.0f;
+            }
+
+            return res;
+        }
+    }
 }
 
 static actor_method_class l_daKS_Method = {
