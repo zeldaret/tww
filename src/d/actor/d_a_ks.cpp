@@ -11,9 +11,13 @@
 #include "d/d_snap.h"
 #include "d/actor/d_a_player_main.h"
 
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
+int KS_ALL_COUNT;
+int KUTTUKU_ALL_COUNT;
 int HEAVY_IN;
 int GORON_COUNT;
-int KUTTUKU_ALL_COUNT;
+
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
@@ -512,8 +516,64 @@ void action_kougeki_move(ks_class* i_this) {
 }
 
 /* 00001630-00001874       .text action_kaze_move__FP8ks_class */
-void action_kaze_move(ks_class*) {
-    /* Nonmatching */
+void action_kaze_move(ks_class* i_this) {
+    s8 bVar1;
+
+    switch (i_this->m2CC) {
+        case 0x14: {
+            for (int i = 0; i < 5; i++) {
+                i_this->m2F0[i] = 0;
+            }
+    
+            i_this->m2E8[1] = 0x32;
+    
+            fopAcM_monsSeStart(i_this, 0x486f, 0);
+            i_this->m310 = i_this->current.pos.y;
+            i_this->m30C = 0.0f;
+            i_this->speedF = cM_rndF(15.0f) + 10.0f;
+            i_this->m314 = cM_rndF(15.0f) + 10.0f;
+            i_this->m308 = 0.0f;
+            i_this->m2CC++;
+        }
+        case 0x15: {
+            cLib_addCalc2(&i_this->speed.y, i_this->m314, 0.8f, i_this->m308);
+            
+            cLib_addCalc2(&i_this->m308, 5.0f, 1.0f, 0.5f);
+            
+            if (i_this->m310 + 200.0f < i_this->current.pos.y || i_this->m2E8[1] == 0) {
+                i_this->m2CC++;
+            }
+            
+            break;
+        }
+        case 0x16: {
+            cLib_addCalc2(&i_this->gravity, -1.0f, 0.3f, 0.5f);
+            
+            if (i_this->speed.y < -2.0f) {
+                i_this->speed.y = -2.0f;
+            }
+
+            cLib_addCalc0(&i_this->speedF, 0.5f, 2.0f);
+            
+            speed_keisan(i_this, i_this->shape_angle.y);
+
+            i_this->m2F0[0] += 3000;
+
+            i_this->m30C = 2.0f;
+
+            if (tyaku_check(i_this)) {
+                i_this->m2CB = 0;
+                i_this->m2CC = 0;
+                return;
+            }
+        }
+    }
+
+    i_this->shape_angle.z += 0x500;
+
+    if (body_atari_check(i_this)) {
+        fopAcM_seStart(i_this, 0x2828, 0);
+    }
 }
 
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
