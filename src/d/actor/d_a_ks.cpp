@@ -1352,49 +1352,48 @@ static BOOL daKS_Delete(ks_class* i_this) {
 
 /* 000030F4-000034B0       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_act) {
-    J3DModel* pModel;
-    int init_res;
+    J3DModel* mpBodyModel;
+    J3DModel* mpEyeModel;
 
     ks_class* i_this = (ks_class*)i_act;
 
-    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", KS_BDL_KS_BODY), NULL, NULL, NULL, 
+    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", KS_BDL_KS_BODY), NULL, NULL, NULL, 
                                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
-    
-    if (i_this->mpBodyMorf == NULL || (pModel = i_this->mpBodyMorf->mpModel, pModel == NULL))
+    if (i_this->mpBodyMorf == NULL || i_this->mpBodyMorf->getModel() == NULL)
         return FALSE;
+    mpBodyModel = i_this->mpBodyMorf->getModel();
 
     i_this->mpBodyBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpBodyBrkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpBodyBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, 
-                                          J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
-    if (init_res == 0)
+    if (i_this->mpBodyBrkAnm->init(mpBodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0)
         return FALSE;
 
-    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", KS_BDL_KS_EYE), NULL, NULL, 
-                                           (J3DAnmTransformKey*)dComIfG_getObjectRes("KS", KS_BCK_MABATAKI), 
-                                           J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     
-    if (i_this->mpEyeMorf == NULL || (pModel = i_this->mpEyeMorf->mpModel, pModel == NULL))
+    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", KS_BDL_KS_EYE), NULL, NULL, 
+                                      (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", KS_BCK_MABATAKI), 
+                                      J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+
+    if (i_this->mpEyeMorf == NULL || i_this->mpEyeMorf->getModel() == NULL)
         return FALSE;
+    mpEyeModel = i_this->mpEyeMorf->getModel();
 
     i_this->mpEyeBtkAnm = new mDoExt_btkAnm();
     if (i_this->mpEyeBtkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpEyeBtkAnm->init(pModel->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, 
-                                         J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
-    if (init_res == 0)
+    if (i_this->mpEyeBtkAnm->init(mpEyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0)
         return FALSE;
     
     i_this->mpEyeBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpEyeBrkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpEyeBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, 
-                                         J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
-    return init_res ? TRUE : FALSE;
+    if (i_this->mpEyeBrkAnm->init(mpEyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0) == 0) {
+        return FALSE;
+    }
+    return TRUE; 
 }
 
 static dCcD_SrcSph body_co_sph_src = {
