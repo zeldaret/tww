@@ -235,11 +235,6 @@ struct TAdaptor_actor : public TAdaptor {
     {
     }
     virtual ~TAdaptor_actor() = 0;
-    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
-    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
@@ -304,11 +299,6 @@ struct TAdaptor_camera : public TAdaptor {
     {
     }
     virtual ~TAdaptor_camera() = 0;
-    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
-    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
@@ -317,7 +307,7 @@ struct TAdaptor_camera : public TAdaptor {
 
     static u32 const sauVariableValue_3_POSITION_XYZ[3];
     static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
-    static u8 sauVariableValue_2_DISTANCE_NEAR_FAR[8];
+    static u32 const sauVariableValue_2_DISTANCE_NEAR_FAR[2];
 };
 
 struct TObject_camera : public TObject {
@@ -343,9 +333,9 @@ struct TAdaptor_fog : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[6];
 
-    static const u32 sauVariableValue_3_COLOR_RGB[12];
-    static const u32 sauVariableValue_4_COLOR_RGBA[16];
-    static u8 sauVariableValue_2_RANGE_BEGIN_END[8];
+    static const u32 sauVariableValue_3_COLOR_RGB[3];
+    static const u32 sauVariableValue_4_COLOR_RGBA[4];
+    static const u32 sauVariableValue_2_RANGE_BEGIN_END[2];
 };
 
 struct TObject_fog : public TObject {
@@ -377,21 +367,16 @@ struct TAdaptor_light : public TAdaptor {
     {
     }
     virtual ~TAdaptor_light() = 0;
-    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_begin(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
-    virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32) = 0;
     virtual void adaptor_do_ENABLE(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_FACULTY(JStudio::data::TEOperationData, void const*, u32) = 0;
 
     /* 0x10 */ TVariableValue mValue[13];
 
-    static u8 const sauVariableValue_3_COLOR_RGB[12];
+    static u32 const sauVariableValue_3_COLOR_RGB[3];
     static u32 const sauVariableValue_4_COLOR_RGBA[4];
     static u32 const sauVariableValue_3_POSITION_XYZ[3];
     static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
-    static u8 sauVariableValue_2_DIRECTION_THETA_PHI[8];
+    static u32 const sauVariableValue_2_DIRECTION_THETA_PHI[2];
 };
 
 struct TObject_light : public TObject {
@@ -427,9 +412,6 @@ struct TAdaptor_particle : public TAdaptor {
     {
     }
     virtual ~TAdaptor_particle() = 0;
-    virtual void adaptor_do_prepare(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_end(const JStudio::TObject*) = 0;
-    virtual void adaptor_do_update(const JStudio::TObject*, u32) = 0;
     virtual void adaptor_do_PARTICLE(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, void const*, u32) = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32) = 0;
@@ -437,13 +419,13 @@ struct TAdaptor_particle : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[20];
 
-    static u32 const sauVariableValue_3_TRANSLATION_XYZ[12];
-    static u32 const sauVariableValue_3_ROTATION_XYZ[12];
-    static u32 const sauVariableValue_3_SCALING_XYZ[12];
-    static u32 const sauVariableValue_3_COLOR_RGB[12];
-    static u32 const sauVariableValue_4_COLOR_RGBA[16];
-    static u32 const sauVariableValue_3_COLOR1_RGB[12];
-    static u32 const sauVariableValue_4_COLOR1_RGBA[16];
+    static u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
+    static u32 const sauVariableValue_3_ROTATION_XYZ[3];
+    static u32 const sauVariableValue_3_SCALING_XYZ[3];
+    static u32 const sauVariableValue_3_COLOR_RGB[3];
+    static u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static u32 const sauVariableValue_3_COLOR1_RGB[3];
+    static u32 const sauVariableValue_4_COLOR1_RGBA[4];
 };
 
 struct TObject_particle : public TObject {

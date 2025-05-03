@@ -194,7 +194,7 @@ public:
     /* 0x4 */ s32 mStyleIdx;
 
     static dCamera__Style styles[];
-    static s32 style_num;
+    static const s32 style_num;
 
 public:
     dCamParam_c(s32);
