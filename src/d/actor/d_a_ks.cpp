@@ -18,7 +18,7 @@
 
 int KS_ALL_COUNT;
 int KUTTUKU_ALL_COUNT;
-int HEAVY_IN;
+BOOL HEAVY_IN;
 int GORON_COUNT;
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
@@ -415,7 +415,7 @@ void action_dousa_move(ks_class* i_this) {
             }
 
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
-                (link->getSpeedF() > 12.0f || HEAVY_IN != 0) && 
+                (link->getSpeedF() > 12.0f || HEAVY_IN) && 
                 fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f &&
                 !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
                 tyaku_check(i_this)) {
@@ -751,7 +751,7 @@ void action_omoi(ks_class* i_this) {
     daPy_py_c* mpCurPlayerActor = (daPy_py_c*)daPy_getPlayerActorClass();
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     
-    if (i_this->m2CE == 1 && HEAVY_IN == 1) {
+    if (i_this->m2CE == 1 && HEAVY_IN == TRUE) {
         link->onHeavyState();
     }
 
@@ -798,9 +798,9 @@ void action_omoi(ks_class* i_this) {
 
             KUTTUKU_ALL_COUNT++;
 
-            if (HEAVY_IN == 0 && KUTTUKU_ALL_COUNT >= 5) {
+            if (HEAVY_IN == FALSE && KUTTUKU_ALL_COUNT >= 5) {
                 link->onHeavyState();
-                HEAVY_IN = 1;
+                HEAVY_IN = TRUE;
             }
 
             i_this->m2D2 = 0;
@@ -909,7 +909,7 @@ void action_omoi(ks_class* i_this) {
 
                 if (i_this->m2CE) {
                     link->offHeavyState();
-                    HEAVY_IN = 0;
+                    HEAVY_IN = FALSE;
 
                     KUTTUKU_ALL_COUNT = 0;
                     GORON_COUNT = 0;
@@ -975,7 +975,7 @@ void action_omoi(ks_class* i_this) {
                 i_this->m2CE = 0;
 
                 link->offHeavyState();
-                HEAVY_IN = 0;
+                HEAVY_IN = FALSE;
 
                 i_this->m2F0[0] = 0;
                 i_this->m2F0[1] = 0;
@@ -995,8 +995,8 @@ void action_omoi(ks_class* i_this) {
                 GORON_COUNT--;
                 KUTTUKU_ALL_COUNT--;
 
-                if (HEAVY_IN != 0 && KUTTUKU_ALL_COUNT < 5) {
-                    HEAVY_IN = 0;
+                if (HEAVY_IN && KUTTUKU_ALL_COUNT < 5) {
+                    HEAVY_IN = FALSE;
                     link->offHeavyState();
                 }
 
@@ -1224,7 +1224,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
                         daPy_py_c* link = (daPy_py_c*)daPy_getPlayerLinkActorClass();
                         link->offHeavyState();
 
-                        HEAVY_IN = 0;
+                        HEAVY_IN = FALSE;
                         GORON_COUNT = 0;
 
                         i_this->m2F0[0] = 0;
@@ -1343,7 +1343,7 @@ static BOOL daKS_Delete(ks_class* i_this) {
         link->offHeavyState();
 
         KUTTUKU_ALL_COUNT = 0;
-        HEAVY_IN = 0;
+        HEAVY_IN = FALSE;
         GORON_COUNT = 0;
     }
 
@@ -1515,7 +1515,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 
         if (KS_ALL_COUNT == 0) {
             KUTTUKU_ALL_COUNT = 0;
-            HEAVY_IN = 0;
+            HEAVY_IN = FALSE;
             GORON_COUNT = 0;
         }
 
