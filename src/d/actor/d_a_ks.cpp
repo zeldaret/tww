@@ -118,8 +118,44 @@ static BOOL daKS_Draw(ks_class* i_this) {
 }
 
 /* 00000568-0000074C       .text naraku_check__FP8ks_class */
-void naraku_check(ks_class*) {
-    /* Nonmatching */
+void naraku_check(ks_class* i_this) {
+    cXyz local_24;
+    cXyz local_18;
+
+    if (i_this->mAcch.GetGroundH() != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) && dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4) {
+        i_this->m2D3++;
+
+        if (i_this->current.pos.y < -500.0f || i_this->m2D3 > 0x32) {
+            i_this->speedF = 0.0;
+            i_this->speed.setall(0.0f);
+            i_this->gravity = 0.0f;
+
+            fopAcM_delete(i_this);
+
+            return;
+        }
+    }
+
+    if (i_this->mAcch.ChkWaterIn() && i_this->current.pos.y < i_this->mAcch.m_wtr.GetHeight() + 20.0f) {
+        if (!i_this->m2CF) {
+            local_24 = i_this->current.pos;
+            i_this->m2CF = 1;
+            local_18.setall(0.5f);
+            i_this->m52C.end();
+            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, NULL, &local_18, 0xFF, &i_this->m52C);
+            i_this->m52C.setRate(0.0f);
+        }
+        cLib_addCalc2(&i_this->current.pos.y, i_this->mAcch.m_wtr.GetHeight() + 20.0f, 1.0f, 10.0);
+        i_this->gravity = 0.0f;
+        i_this->speed.y = 0.0f;
+        
+    }
+    else {
+        if (i_this->m2CF && (i_this->mAcch.ChkGroundHit() || i_this->current.pos.y > i_this->mAcch.m_wtr.GetHeight() + 100.0f)) {
+            i_this->m2CF = 0;
+            i_this->m52C.end();
+        }
+    }
 }
 
 /* 0000074C-00000788       .text tyaku_check__FP8ks_class */
