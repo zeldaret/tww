@@ -653,8 +653,68 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
 }
 
 /* 00001A14-00001C5C       .text action_dead_move__FP8ks_class */
-void action_dead_move(ks_class*) {
-    /* Nonmatching */
+void action_dead_move(ks_class* i_this) {
+    cXyz local_28;
+    
+    switch (i_this->m2CC) {
+        case 0x1e: {
+            for (int i = 0; i < 5; i++) {
+                i_this->m2F0[i] = 0;
+            }
+
+            i_this->mSph.OffTgSetBit();
+            i_this->mSph.ClrCoSet();
+            i_this->mSph.ClrTgHit();
+
+            fopAcM_monsSeStart(i_this, 0x486e, 0);
+
+            i_this->speedF = cM_rndF(5.0f) + 15.0f;
+            i_this->gravity = -3.0f;
+            i_this->speed.y = cM_rndF(5.0f) + 20.0f;
+
+            i_this->m2CC++;
+
+            i_this->m2F0[1] = (s16)cM_rndFX(4096.0f);
+
+            i_this->mSph.OffAtSPrmBit(1);
+            i_this->mSph.OffAtSPrmBit(1);
+        }
+        case 0x1f: {
+            i_this->shape_angle.z += i_this->m2F0[1];
+
+            if (tyaku_check(i_this)) {
+                i_this->gravity = -3.0f;
+                i_this->speedF *= 0.5f;
+
+                switch (i_this->m2F0[0]) {
+                    case 0:
+                        i_this->speed.y = 13.0f;
+
+                        i_this->m2F0[0]++;
+
+                        break;
+                    case 1:
+                        i_this->speed.y = 7.0f;
+
+                        i_this->m2F0[0]++;
+
+                        break;
+                    case 2:
+                        local_28 = i_this->current.pos;
+                        local_28.y += 20.0f;
+
+                        dead_eff_set(i_this, &local_28);
+                }
+            }
+            break;
+        }
+        case 0x20: {
+            local_28 = i_this->current.pos;
+            local_28.y += 45.0f;
+
+            dead_eff_set(i_this, &local_28);
+        }
+    }
 }
 
 /* 00001C5C-000026DC       .text action_omoi__FP8ks_class */
