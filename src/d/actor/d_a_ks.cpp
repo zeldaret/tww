@@ -723,8 +723,17 @@ void action_omoi(ks_class*) {
 }
 
 /* 000026DC-000027A0       .text tsubo_search__FPvPv */
-void tsubo_search(void*, void*) {
-    /* Nonmatching */
+BOOL tsubo_search(void* param_1, void* param_2) {
+    ks_class* i_ks1 = (ks_class*)param_1;
+    ks_class* i_ks2 = (ks_class*)param_2;
+    
+    if (fopAc_IsActor(i_ks1) && (fopAcM_GetName(i_ks1) == 0x1cb) &&
+        std::fabsf(i_ks1->current.pos.x - i_ks2->current.pos.x) < 20.0f &&
+        std::fabsf(i_ks1->current.pos.y - i_ks2->current.pos.y) < 20.0f &&
+        std::fabsf(i_ks1->current.pos.z - i_ks2->current.pos.z) < 20.0f) {
+        i_ks2->mProcID = fopAcM_GetID(i_ks1);
+    }
+    return FALSE;
 }
 
 /* 000027A0-00002A40       .text action_tubo_search__FP8ks_class */
