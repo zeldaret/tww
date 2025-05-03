@@ -668,8 +668,16 @@ void action_kb_birth_check(ks_class* i_this) {
 }
 
 /* 00002BC4-00002C54       .text BG_check__FP8ks_class */
-void BG_check(ks_class*) {
-    /* Nonmatching */
+void BG_check(ks_class* i_this) {
+    i_this->mAcchCir.SetWall(30.0f, 30.0f);
+    
+    i_this->current.pos.y -= i_this->m304;
+    i_this->old.pos.y -= i_this->m304;
+
+    i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+
+    i_this->current.pos.y += i_this->m304;
+    i_this->old.pos.y += i_this->m304;
 }
 
 /* 00002C54-00003054       .text daKS_Execute__FP8ks_class */
@@ -780,7 +788,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
     if (i_this->m2CC != 41 && !i_this->mAcch.ChkGroundHit() && !i_this->mAcch.ChkWaterIn()) {
         i_this->speed.y += i_this->gravity;
-        
+
         if (i_this->speed.y < -20.0f) {
             i_this->speed.y = -20.0f;
         }

@@ -43,7 +43,7 @@ public:
     /* 0x318 */ f32 m318;
     /* 0x31C */ f32 m31C;
     /* 0x320 */ f32 m320;
-    /* 0x324 */ u8 m324[0x364 - 0x324];
+    /* 0x324 */ dBgS_AcchCir mAcchCir;
     /* 0x364 */ dBgS_Acch mAcch;
     /* 0x528 */ u8 m528[0x52C - 0x528];
     /* 0x52C */ dPa_rippleEcallBack m52C;
