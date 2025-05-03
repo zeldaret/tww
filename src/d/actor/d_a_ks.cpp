@@ -430,8 +430,85 @@ void action_dousa_move(ks_class* i_this) {
 }
 
 /* 00001314-00001630       .text action_kougeki_move__FP8ks_class */
-void action_kougeki_move(ks_class*) {
-    /* Nonmatching */
+void action_kougeki_move(ks_class* i_this) {    
+    cXyz head_top_pos = daPy_getPlayerActorClass()->getHeadTopPos();
+
+    i_this->m31C = 20.0f;
+
+    if (head_top_pos.y > i_this->current.pos.y) {
+        i_this->m31C = 60.0f;
+    }
+
+    switch (i_this->m2CC) {
+        case 0xa: {
+            i_this->mSph.OffCoSetBit();
+
+            i_this->speedF = 26.0f;
+            i_this->gravity = -4.0f;
+            i_this->speed.y = 28.0f;
+
+            for (int i = 0; i < 5; i++) {
+                i_this->m2F0[i] = 0;
+            }
+
+            i_this->m30C = 0.0f;
+
+            i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            
+            mDoAud_seStart(0x587b, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            
+            fopAcM_monsSeStart(i_this, 0x486d, 0);
+            
+            i_this->m2CC++;
+            
+            break;
+        }
+        case 0xb: {
+            if (i_this->speedF > 0.0f && i_this->m2F0[1] == 0 && i_this->mSph.ChkAtShieldHit()) {
+                i_this->gravity = -4.0f;
+                i_this->speed.y = 25.0f;
+                i_this->speedF *= -0.5f;
+                
+                i_this->m2F0[1] = 1;
+            }
+
+            if (!i_this->m2F0[1] && ks_kuttuki_check(i_this)) {
+                return;
+            }
+
+            if (!i_this->mAcch.ChkGroundHit() && !i_this->mAcch.ChkWaterIn()) {
+                break;
+            }
+
+            i_this->mSph.OnCoSetBit();
+
+            i_this->m2E8[2] = (s16)(cM_rndF(20.0f) + 20.0f);
+
+            i_this->m2CC++;
+        }
+        case 0xc:
+            ks_kuttuki_check(i_this);
+
+            if (tyaku_check(i_this)) {
+                i_this->gravity = -4.0f;
+                i_this->speed.y = 1.0f;
+                i_this->speed.y += cM_rndF(5.0f);
+                i_this->speedF = 16.0f;
+            }
+        
+            if (i_this->m2E8[2] == 0) {
+                i_this->speedF = 0.0f;
+                i_this->m31C = 20.0f;
+                i_this->m2CB = 0;
+                i_this->m2CC = 0;
+            }
+    }
+
+    cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x1000);
+    
+    if (body_atari_check(i_this)) {
+        fopAcM_seStart(i_this, 0x2828, 0);
+    }
 }
 
 /* 00001630-00001874       .text action_kaze_move__FP8ks_class */
