@@ -230,7 +230,6 @@ BOOL shock_damage_check(ks_class* i_this) {
 
 /* 00000A98-00000DE8       .text body_atari_check__FP8ks_class */
 BOOL body_atari_check(ks_class* i_this) {
-    /* Nonmatching - regswap */
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz mTgHitPos;
     cXyz mParticleScale;
@@ -238,7 +237,7 @@ BOOL body_atari_check(ks_class* i_this) {
     i_this->mStts.Move();
     
     if (i_this->mSph.ChkTgHit()) {
-        daPy_py_c* mpCurPlayerActor = daPy_getPlayerActorClass();
+        daPy_py_c* mpCurPlayerActor = (daPy_py_c*)daPy_getPlayerActorClass();
 
         cCcD_Obj* mTgHitObj = i_this->mSph.GetTgHitObj();
 
@@ -248,13 +247,13 @@ BOOL body_atari_check(ks_class* i_this) {
             return FALSE;
         }
 
-        i_this->current.angle.y = fopAcM_searchActorAngleY(a_this, dComIfGp_getPlayer(0)) + 0x8000;
+        a_this->current.angle.y = fopAcM_searchActorAngleY(a_this, dComIfGp_getPlayer(0)) + 0x8000;
         
         i_this->m2CB = 3;
 
         switch (mTgHitObj->GetAtType()) {
             case AT_TYPE_WIND: {
-                i_this->current.angle.y = cM_atan2s(i_this->current.pos.x - mTgHitPos.x, i_this->current.pos.z - mTgHitPos.z);
+                a_this->current.angle.y = cM_atan2s(a_this->current.pos.x - mTgHitPos.x, a_this->current.pos.z - mTgHitPos.z);
                 
                 i_this->m2CB = 2;
                 i_this->m2CC = 20;
@@ -264,8 +263,8 @@ BOOL body_atari_check(ks_class* i_this) {
             case AT_TYPE_UNK8: {
                 i_this->m2CC = 0x20;
 
-                i_this->health = 0;
-                
+                a_this->health = 0;
+
                 i_this->m2CC = 30;
 
                 return FALSE;
@@ -273,7 +272,7 @@ BOOL body_atari_check(ks_class* i_this) {
             case AT_TYPE_SWORD: {
                 if (i_this->m2CC != 43 || i_this->m2CE) {
                     dScnPly_ply_c::setPauseTimer(2);
-                    i_this->stealItemBitNo = 1;
+                    a_this->stealItemBitNo = 1;
                 }
                 
                 mParticleScale.setall(REG8_F(0) + 0.8f); 
@@ -283,15 +282,15 @@ BOOL body_atari_check(ks_class* i_this) {
             }
             case AT_TYPE_SKULL_HAMMER: {
                 if (mpCurPlayerActor->getCutType() == 0x12 || mpCurPlayerActor->getCutType() == 0x13) {
-                    i_this->speedF = 0.0f;
-                    i_this->gravity = 0.0f;
-                    i_this->speed.setall(0.0f);
+                    a_this->speedF = 0.0f;
+                    a_this->gravity = 0.0f;
+                    a_this->speed.setall(0.0f);
 
-                    i_this->health = 0;
+                    a_this->health = 0;
 
                     dScnPly_ply_c::setPauseTimer(2);
 
-                    i_this->stealItemBitNo = 1;
+                    a_this->stealItemBitNo = 1;
 
                     i_this->m2CC = 0x20;
 
@@ -333,7 +332,7 @@ BOOL body_atari_check(ks_class* i_this) {
             }
         }
 
-        i_this->health = 0;
+        a_this->health = 0;
 
         i_this->m2CC = 30;
         
@@ -685,20 +684,15 @@ void action_dead_move(ks_class* i_this) {
                 switch (i_this->m2F0[0]) {
                     case 0:
                         i_this->speed.y = 13.0f;
-
                         i_this->m2F0[0]++;
-
                         break;
                     case 1:
                         i_this->speed.y = 7.0f;
-
                         i_this->m2F0[0]++;
-
                         break;
                     case 2:
                         local_28 = i_this->current.pos;
                         local_28.y += 20.0f;
-
                         dead_eff_set(i_this, &local_28);
                 }
             }
@@ -707,7 +701,6 @@ void action_dead_move(ks_class* i_this) {
         case 0x20: {
             local_28 = i_this->current.pos;
             local_28.y += 45.0f;
-
             dead_eff_set(i_this, &local_28);
         }
     }
@@ -738,11 +731,11 @@ u32 pl_harituki_joint_dt[20] = {
 
 /* 00001C5C-000026DC       .text action_omoi__FP8ks_class */
 void action_omoi(ks_class* i_this) {
-    /* Nonmatching - regalloc */
+    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz local_1c;
     cXyz local_10;
     
-    daPy_py_c* mpCurPlayerActor = daPy_getPlayerActorClass();
+    daPy_py_c* mpCurPlayerActor = (daPy_py_c*)daPy_getPlayerActorClass();
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     
     if (i_this->m2CE == 1 && HEAVY_IN == 1) {
@@ -753,17 +746,17 @@ void action_omoi(ks_class* i_this) {
         case 0x28: {
             i_this->m52C.remove();
 
-            i_this->speedF = 0.0f;
-            i_this->gravity = 0.0f;
-            i_this->speed.setall(0.0f);
+            a_this->speedF = 0.0f;
+            a_this->gravity = 0.0f;
+            a_this->speed.setall(0.0f);
 
             if (GORON_COUNT != 0 || KUTTUKU_ALL_COUNT >= 0x14) {
                 i_this->m528 = 0;
 
-                fopAcM_OffStatus(i_this, 0x4000);   
+                fopAcM_OffStatus(a_this, 0x4000);   
 
                 i_this->m2CC = 0x2a;
-                
+
                 break;
             }
 
@@ -802,20 +795,20 @@ void action_omoi(ks_class* i_this) {
             i_this->m2E8[1] = 0;
             i_this->m2E8[2] = 0;
 
-            fopAcM_OnStatus(i_this, 0x4000);
+            fopAcM_OnStatus(a_this, 0x4000);
 
-            fopAcM_setStageLayer(i_this);
+            fopAcM_setStageLayer(a_this);
 
             i_this->m2CC++;
         }
         case 0x29: {
-            fopAcM_SetRoomNo(i_this, fopAcM_GetRoomNo(mpCurPlayerActor));
+            fopAcM_SetRoomNo(a_this, fopAcM_GetRoomNo(mpCurPlayerActor));
             
-            if (!(fopAcM_GetID(i_this) & 1)) {
-                i_this->shape_angle.y += i_this->m2FA.z * 0.25f;
+            if (!(fopAcM_GetID(a_this) & 1)) {
+                a_this->shape_angle.y += i_this->m2FA.z * 0.25f;
             }
             else {
-                i_this->shape_angle.y -= i_this->m2FA.z * 0.25f;
+                a_this->shape_angle.y -= i_this->m2FA.z * 0.25f;
             }
 
             if (i_this->m528) {
@@ -849,9 +842,9 @@ void action_omoi(ks_class* i_this) {
             if (std::sqrtf(mpCurPlayerActor->speed.x * mpCurPlayerActor->speed.x + mpCurPlayerActor->speed.y * mpCurPlayerActor->speed.y + mpCurPlayerActor->speed.z * mpCurPlayerActor->speed.z) < REG12_F(17) + 8.0f) {
                 local_1c.setall(REG12_F(18) + 8.0f);
 
-                f32 x = i_this->current.pos.x - local_10.x;
-                f32 y = i_this->current.pos.y - local_10.y;
-                f32 z = i_this->current.pos.z - local_10.z;
+                f32 x = a_this->current.pos.x - local_10.x;
+                f32 y = a_this->current.pos.y - local_10.y;
+                f32 z = a_this->current.pos.z - local_10.z;
 
                 if (std::sqrtf(x * x + y * y + z * z) < 2.0f && i_this->m2E8[1] == 0) {
                     i_this->m2E8[1] = cM_rndF(10.0f) + 10.0f;
@@ -893,9 +886,9 @@ void action_omoi(ks_class* i_this) {
                 local_1c.setall(100.0f);
             }
 
-            cLib_addCalc2(&i_this->current.pos.x, local_10.x, 1.0f, local_1c.x);
-            cLib_addCalc2(&i_this->current.pos.y, local_10.y, 1.0f, local_1c.y);
-            cLib_addCalc2(&i_this->current.pos.z, local_10.z, 1.0f, local_1c.z);
+            cLib_addCalc2(&a_this->current.pos.x, local_10.x, 1.0f, local_1c.x);
+            cLib_addCalc2(&a_this->current.pos.y, local_10.y, 1.0f, local_1c.y);
+            cLib_addCalc2(&a_this->current.pos.z, local_10.z, 1.0f, local_1c.z);
             
             if (link->checkFrontRollCrash() || link->getCutType() == 8 || link->getCutType() == 9 || dComIfGp_checkPlayerStatus0(0, 0x100000)) {
                 i_this->mSph.OnCoSetBit();
@@ -959,7 +952,6 @@ void action_omoi(ks_class* i_this) {
                 if (GORON_COUNT == 0) {
                     GORON_COUNT = 1;
                 }
-                
                 i_this->m2F0[0]++;
                 i_this->m2F0[1] = 1;
 
@@ -1002,14 +994,14 @@ void action_omoi(ks_class* i_this) {
         }
         case 0x2a: {
             if (i_this->m528) {
-                fopAcM_OffStatus(i_this, 0x4000);
+                fopAcM_OffStatus(a_this, 0x4000);
                 
-                fopAcM_setRoomLayer(i_this, fopAcM_GetRoomNo(i_this));
+                fopAcM_setRoomLayer(a_this, fopAcM_GetRoomNo(a_this));
                 
                 i_this->m528 = 0;
             }
 
-            i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+            i_this->current.angle.y = fopAcM_searchActorAngleY(a_this, dComIfGp_getPlayer(0)) + 0x8000;
             i_this->current.angle.y += (s16)cM_rndFX(16384.0f);
 
             i_this->speedF = 15.0f;
@@ -1032,7 +1024,7 @@ void action_omoi(ks_class* i_this) {
     }
 
     if (i_this->m2CC == 0x2b && body_atari_check(i_this) && i_this->m2CE) {
-        fopAcM_seStart(i_this, 0x2828, 0);
+        fopAcM_seStart(a_this, 0x2828, 0);
         i_this->m2CE = 0;
     }
 }
@@ -1059,10 +1051,10 @@ void action_tubo_search(ks_class* i_this) {
         case 0x32: {
             i_this->mKsID = fpcM_ERROR_PROCESS_ID_e;
 
-            fpcEx_Search((fpcLyIt_JudgeFunc)tsubo_search, i_this);
+            fpcEx_Search((fpcLyIt_JudgeFunc)tsubo_search, a_this);
 
             if (i_this->mKsID == fpcM_ERROR_PROCESS_ID_e) {
-                fopAcM_delete(i_this);
+                fopAcM_delete(a_this);
             }
             else {
                 i_this->m2CC++;
@@ -1071,16 +1063,16 @@ void action_tubo_search(ks_class* i_this) {
             break;
         }
         case 0x33: {
-            fopAc_ac_c* mpCurrActor = fopAcM_SearchByID(i_this->mKsID);
+            fopAc_ac_c* mpCurrActor = (fopAc_ac_c*)fopAcM_SearchByID(i_this->mKsID);
 
             if (mpCurrActor) {
-                i_this->current.pos = mpCurrActor->current.pos;
+                a_this->current.pos = mpCurrActor->current.pos;
 
                 if (!i_this->m318) {
                     return;
                 }
 
-                if (fopAcM_searchActorDistance(i_this, daPy_getPlayerActorClass()) > i_this->m318) {
+                if (fopAcM_searchActorDistance(a_this, daPy_getPlayerActorClass()) > i_this->m318) {
                     return;
                 }
             }
@@ -1108,7 +1100,7 @@ void action_tubo_search(ks_class* i_this) {
             break;
         }
         case 0x34: {
-            i_this->mSph.SetC(i_this->current.pos);
+            i_this->mSph.SetC(a_this->current.pos);
             i_this->mSph.SetR(i_this->m31C);
 
             dComIfG_Ccsp()->Set(&i_this->mSph);
@@ -1118,7 +1110,7 @@ void action_tubo_search(ks_class* i_this) {
             }
 
             for (int i = 0; i < i_this->m2C9; i++) {
-                cXyz local_24 = i_this->current.pos;
+                cXyz local_24 = a_this->current.pos;
                 local_24.y += cM_rndF(40.0f);
 
                 if (i != 0) {
@@ -1126,13 +1118,13 @@ void action_tubo_search(ks_class* i_this) {
                     local_24.z += cM_rndFX(40.0f);
                 }
 
-                i_this->shape_angle = i_this->current.angle;
-                i_this->shape_angle.x = 0;
+                a_this->shape_angle = a_this->current.angle;
+                a_this->shape_angle.x = 0;
 
-                fopAcM_create(PROC_KS, 3, &local_24, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
+                fopAcM_create(PROC_KS, 3, &local_24, fopAcM_GetRoomNo(a_this), &a_this->shape_angle, &a_this->scale, 0);
             }
 
-            fopAcM_delete(i_this);
+            fopAcM_delete(a_this);
         }
     }
 }
