@@ -615,11 +615,12 @@ void action_kaze_move(ks_class* i_this) {
     }
 }
 
-u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
+static u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
 
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
 void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
     /* Nonmatching - regswap */
+    fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     u8 health;
     if (!strcmp(dComIfGp_getStartStageName(), "GanonK") && (i_this->stealItemBitNo != 0)) {
         if (dComIfGs_getLife() <= 8) {
@@ -629,10 +630,10 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
             if (dComIfGs_getArrowNum() == 0) {
                 health = 0xc;
             }
-            else if (dComIfGs_getMagic() < dComIfGs_getMaxMagic() >> 1) {
+            else if (dComIfGs_getMagic() < dComIfGs_getMaxMagic() / 2) {
                 health = 0xb;
             }
-            else if (dComIfGs_getArrowNum() < 10){
+            else if (dComIfGs_getArrowNum() < 10) {
                 health = 0xc;
             }
             else {
@@ -642,14 +643,18 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
         else {
             health = 0xd;
         }
+
         fopAcM_createDisappear(i_this, i_pos, 3, health, 0xff);
     }
     else {
         fopAcM_seStart(i_this, 0x587c, 0);
+
         dComIfGp_particle_setSimple(0x8068, i_pos);
+
         gm_birth_delet(i_this);
     }
-    fopAcM_delete(i_this);
+
+    fopAcM_delete(a_this);
 }
 
 /* 00001A14-00001C5C       .text action_dead_move__FP8ks_class */
@@ -1359,9 +1364,10 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (iVar5 == 0)
         return FALSE;
 
+    
     i_this->m2B8 = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", 0x10), NULL, NULL, 
-                                   (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", 0xc), 
-                                       J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+                                      (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", 0xc), 
+                                      J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     J3DModel* mpModel2;
     if (i_this->m2B8 == NULL || (mpModel2 = i_this->m2B8->getModel(), mpModel2 == NULL))
         return FALSE;
@@ -1440,6 +1446,7 @@ static f32 fire_sc[10] = {
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_act) {
+    /* Nonmatching - regalloc */
     s32 res;
     u32 parameters;
     ks_class* i_this = (ks_class*)i_act;
