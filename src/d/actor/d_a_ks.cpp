@@ -1067,6 +1067,7 @@ void action_tubo_search(ks_class* i_this) {
             else {
                 i_this->m2CC++;
             }
+            
             break;
         }
         case 0x33: {
@@ -1447,50 +1448,48 @@ static f32 fire_sc[10] = {
 };
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
-static cPhs_State daKS_Create(fopAc_ac_c* i_act) {
-    /* Nonmatching - regalloc */
+static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
+    fopAcM_SetupActor(i_this, ks_class);
+    ks_class* a_this = (ks_class*)i_this;
+    
     s32 res;
     u32 parameters;
-    ks_class* i_this = (ks_class*)i_act;
-
-    fopAcM_SetupActor(i_act, ks_class);
-    
-    res = dComIfG_resLoad(&i_this->mPhs, "KS");
+    res = dComIfG_resLoad(&a_this->mPhs, "KS");
     if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1060)) {
             return cPhs_ERROR_e;
         }
 
-        i_this->m2C8 = fopAcM_GetParam(i_this);
-        i_this->m2C9 = fopAcM_GetParam(i_this) >> 8;
-        i_this->m2CA = fopAcM_GetParam(i_this) >> 0x10;
+        a_this->m2C8 = fopAcM_GetParam(i_this);
+        a_this->m2C9 = fopAcM_GetParam(i_this) >> 8;
+        a_this->m2CA = fopAcM_GetParam(i_this) >> 0x10;
 
-        if (i_this->m2C8 == 0xff) {
-            i_this->m2C8 = 0;
+        if (a_this->m2C8 == 0xff) {
+            a_this->m2C8 = 0;
         }
 
-        if (i_this->m2C8 <= 1 && (i_this->m2C9 > 0x15 || i_this->m2C9 == 0)) {
-            i_this->m2C9 = 1;
+        if (a_this->m2C8 <= 1 && (a_this->m2C9 > 0x15 || a_this->m2C9 == 0)) {
+            a_this->m2C9 = 1;
         }
 
-        if (i_this->m2CA == 0xff) {
-            i_this->m2CA = 0;
+        if (a_this->m2CA == 0xff) {
+            a_this->m2CA = 0;
         }
 
-        i_this->m318 = i_this->m2CA * 10.0f;
+        a_this->m318 = a_this->m2CA * 10.0f;
 
-        if (i_this->m2C8 <= 1) {
+        if (a_this->m2C8 <= 1) {
             parameters = 2;
-            if (i_this->m2C8 == 0) {
+            if (a_this->m2C8 == 0) {
               parameters = 3;
             }
 
-            for (int i = 0; i < i_this->m2C9; i++) {
+            for (int i = 0; i < a_this->m2C9; i++) {
                 cXyz local_4c = i_this->current.pos;
                 if (i != 0) {
                     if (i_this->current.angle.x != 0) {
                         local_4c.y += cM_rndFX(120.0f);\
-                        f32 ground_y = i_this->mAcch.GetGroundH();
+                        f32 ground_y = a_this->mAcch.GetGroundH();
                         if (local_4c.y < ground_y) {
                             local_4c.y = ground_y + cM_rndF(120.0f);
                         }
@@ -1517,96 +1516,97 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_act) {
 
         KS_ALL_COUNT++;
 
-        i_this->cullMtx = i_this->mpBodyMorf->getModel()->getBaseTRMtx();
+        fopAcM_SetMtx(i_this, a_this->mpBodyMorf->getModel()->getBaseTRMtx());
 
         fopAcM_setCullSizeBox(i_this, -20.0f, -20.0f, -20.0f, 20.0f, 20.0f, 20.0f);
         
         i_this->attention_info.flags = 0;
         
-        i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mAcchCir, &i_this->speed, NULL, NULL);
+        a_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &a_this->mAcchCir, &i_this->speed, NULL, NULL);
         
-        i_this->mStts.Init(2, 1, i_this);
+        a_this->mStts.Init(2, 1, i_this);
         
         i_this->max_health = 1;
         i_this->health = 1;
 
-        i_this->m304 = 25.0f;
+        a_this->m304 = 25.0f;
 
-        i_this->m2E8[0] = cM_rndFX(25.0f) + 50.0f;
+        a_this->m2E8[0] = cM_rndFX(25.0f) + 50.0f;
 
-        i_this->m2DC.setall(1.0f);
+        a_this->m2DC.setall(1.0f);
 
-        i_this->m2FA.z = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
+        a_this->m2FA.z = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
 
-        i_this->mSph.Set(body_co_sph_src);
-        i_this->mSph.SetStts(&i_this->mStts);
+        a_this->mSph.Set(body_co_sph_src);
+        a_this->mSph.SetStts(&a_this->mStts);
 
-        i_this->mEnemyIce.mpActor = i_this;
-        i_this->mEnemyIce.mWallRadius = 20.0f;
-        i_this->mEnemyIce.mCylHeight = 20.0f;
-        i_this->mEnemyIce.m1B0 = 1;
+        a_this->mEnemyIce.mpActor = i_this;
+        a_this->mEnemyIce.mWallRadius = 20.0f;
+        a_this->mEnemyIce.mCylHeight = 20.0f;
+        a_this->mEnemyIce.m1B0 = 1;
 
-        i_this->mEnemyFire.mpMcaMorf = i_this->mpBodyMorf;
-        i_this->mEnemyFire.mpActor = i_this;
+        a_this->mEnemyFire.mpMcaMorf = a_this->mpBodyMorf;
+        a_this->mEnemyFire.mpActor = i_this;
 
         for (int i = 0; i < 10; i++) {
-            i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
-            i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
+            a_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
+            a_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }
 
-        i_this->itemTableIdx =dComIfGp_CharTbl()->GetNameIndex("kuro_s", 0);
+        i_this->itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("kuro_s", 0);
         
-        if (i_this->m2C8 == 4 || i_this->m2C8 == 5) {
-            i_this->mGmID = i_this->parentActorID;
-            if (i_this->mGmID == fpcM_ERROR_PROCESS_ID_e) {
+        if (a_this->m2C8 == 4 || a_this->m2C8 == 5) {
+            a_this->mGmID = fopAcM_GetLinkId(i_this);
+            if (a_this->mGmID == fpcM_ERROR_PROCESS_ID_e) {
                 return cPhs_ERROR_e;
             }
 
-            fopAc_ac_c* i_act = fopAcM_SearchByID(i_this->mGmID);
-            if (i_act && fopAc_IsActor(i_act) && fopAcM_GetName(i_act) == PROC_GM && i_this->m2C8 == 5) {
+            fopAc_ac_c* i_act = fopAcM_SearchByID(a_this->mGmID);
+            if (i_act && fopAc_IsActor(i_act) && fopAcM_GetName(i_act) == PROC_GM && a_this->m2C8 == 5) {
                 i_this->current.angle.y += cM_rndFX(8192.0f);
                 i_this->speedF = cM_rndF(6.0f) + 34.0f;
                 i_this->speed.y = cM_rndF(8.0f) + 22.0f;
             }
         }
 
-        i_this->m31C = 20.0f;
+        a_this->m31C = 20.0f;
 
-        if (i_this->m2C8 == 6) {
-            i_this->mSph.OffTgSetBit();
-            i_this->mSph.OffCoSetBit();
-            i_this->mSph.ClrTgHit();
+        if (a_this->m2C8 == 6) {
+            a_this->mSph.OffTgSetBit();
+            a_this->mSph.OffCoSetBit();
+            a_this->mSph.ClrTgHit();
 
-            i_this->m2CB = 10;
-            i_this->m2CC = 0x32;
+            a_this->m2CB = 10;
+            a_this->m2CC = 0x32;
 
             return res;
         }
         
-        if (i_this->m2C8 == 7) {
+        if (a_this->m2C8 == 7) {
             fopAcM_OnStatus(i_this, 0x4000);
 
-            i_this->m2CB = 0x14;
-            i_this->m2CC = 0x3c;
+            a_this->m2CB = 0x14;
+            a_this->m2CC = 0x3c;
 
             return res;
         }
 
-        if (i_this->m2C8 == 2) {
-            i_this->m2CB = 0;
-            i_this->m2CC = 3;
+        if (a_this->m2C8 == 2) {
+            a_this->m2CB = 0;
+            a_this->m2CC = 3;
 
-            i_this->gravity = -3.0f;
+            fopAcM_SetGravity(i_this, -3.0f);
 
-            BG_check(i_this);
+            BG_check(a_this);
             
-            if (!i_this->mAcch.ChkGroundHit()) {
+            if (!a_this->mAcch.ChkGroundHit()) {
                 i_this->gravity = 0.0f;
             }
 
-            return res;
         }
     }
+    
+    return res;
 }
 
 static actor_method_class l_daKS_Method = {
