@@ -34,7 +34,9 @@ public:
     /* 0x2DC */ cXyz m2DC;
     /* 0x2E8 */ s16 m2E8[4];
     /* 0x2F0 */ s16 m2F0[5];
-    /* 0x2FA */ csXyz m2FA; // Possibly just 3 s16s rather than csXyz
+    /* 0x2FA */ s16 m2FA;
+    /* 0x2FC */ s16 m2FC;
+    /* 0x2FE */ s16 m2FE;
     /* 0x300 */ s16 m300;
     /* 0x302 */ s16 m302;
     /* 0x304 */ f32 m304;

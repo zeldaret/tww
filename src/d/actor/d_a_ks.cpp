@@ -40,16 +40,16 @@ void draw_SUB(ks_class* i_this) {
     
     mDoMtx_YrotM(mDoMtx_stack_c::get(), iVar3);
     mDoMtx_XrotM(mDoMtx_stack_c::get(), iVar4);
-    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z + i_this->m2FA.x);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z + i_this->m2FA);
 
     cXyz local_18;
     local_18.setall(1.0f);
 
-    i_this->m2FA.x += i_this->m2FA.z;
+    i_this->m2FA += i_this->m2FE;
 
     mDoMtx_stack_c::scaleM(1.0f,1.0f,1.0f);
 
-    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z - i_this->m2FA.x);
+    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z - i_this->m2FA);
 
     pBodyModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
@@ -406,12 +406,12 @@ void action_dousa_move(ks_class* i_this) {
                 i_this->speed.y += cM_rndF(5.0f);
             }
 
-            i_this->current.angle.y = i_this->m2FA.y + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            i_this->current.angle.y = i_this->m2FC + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
             
             i_this->m2CC++;
         case 2:
             if (i_this->mAcch.ChkGroundHit()) {
-                i_this->current.angle.y = i_this->m2FA.y + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                i_this->current.angle.y = i_this->m2FC + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
             }
 
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
@@ -431,12 +431,12 @@ void action_dousa_move(ks_class* i_this) {
                 
                 cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
                 
-                i_this->m2FA.y = 0;
+                i_this->m2FC = 0;
                 break;
             }
 
-            if (i_this->m2FA.y == 0) {
-                i_this->m2FA.y = (fopAcM_GetID(i_this) & 0xf) * cM_rndFX(512.0f);
+            if (i_this->m2FC == 0) {
+                i_this->m2FC = (fopAcM_GetID(i_this) & 0xf) * cM_rndFX(512.0f);
             }
 
             i_this->shape_angle.z = cM_rndFX(2000.0f);
@@ -818,10 +818,10 @@ void action_omoi(ks_class* i_this) {
             fopAcM_SetRoomNo(a_this, fopAcM_GetRoomNo(mpCurPlayerActor));
             
             if (!(fopAcM_GetID(a_this) & 1)) {
-                a_this->shape_angle.y += i_this->m2FA.z * 0.25f;
+                a_this->shape_angle.y += i_this->m2FE * 0.25f;
             }
             else {
-                a_this->shape_angle.y -= i_this->m2FA.z * 0.25f;
+                a_this->shape_angle.y -= i_this->m2FE * 0.25f;
             }
 
             if (i_this->m528) {
@@ -1540,7 +1540,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 
         a_this->m2DC.setall(1.0f);
 
-        a_this->m2FA.z = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
+        a_this->m2FE = (fopAcM_GetID(i_this) & 7) * 0x32 + 1000;
 
         a_this->mSph.Set(body_co_sph_src);
         a_this->mSph.SetStts(&a_this->mStts);
