@@ -2,7 +2,6 @@
 #define D_A_KS_H
 
 #include "f_op/f_op_actor.h"
-#include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "c/c_damagereaction.h"
 
 class mDoExt_McaMorf;
@@ -23,7 +22,8 @@ public:
     /* 0x2CB */ u8 m2CB;
     /* 0x2CC */ u8 m2CC;
     /* 0x2CD */ u8 m2CD;
-    /* 0x2CE */ u8 m2CE[0x2D0 - 0x2CE];
+    /* 0x2CE */ u8 m2CE;
+    /* 0x2CF */ u8 m2CF;
     /* 0x2D0 */ u8 m2D0;
     /* 0x2D1 */ u8 m2D1[0x2D4 - 0x2D1];
     /* 0x2D4 */ fpc_ProcID m2D4;
@@ -43,7 +43,8 @@ public:
     /* 0x364 */ dBgS_Acch mAcch;
     /* 0x528 */ u8 m528[0x540 - 0x528];
     /* 0x540 */ cXyz m540;
-    /* 0x54C */ u8 m54C[0x57C - 0x54C];
+    /* 0x54C */ u8 m54C[0x55C - 0x54C];
+    /* 0x55C */ dCcD_GStts mGStts;
     /* 0x57C */ dCcD_Sph mSph;
     /* 0x6A8 */ enemyice mEnemyIce;
     /* 0xA60 */ enemyfire mEnemyFire;

@@ -143,13 +143,150 @@ void gm_birth_delet(ks_class*) {
 }
 
 /* 000008F4-00000A98       .text shock_damage_check__FP8ks_class */
-void shock_damage_check(ks_class*) {
-    /* Nonmatching */
+BOOL shock_damage_check(ks_class* i_this) {
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+
+    if (link->checkHammerQuake()) {
+        cXyz mSwordTopPos = link->getSwordTopPos();
+
+        mSwordTopPos.x -= i_this->current.pos.x;
+        mSwordTopPos.y -= i_this->current.pos.y;
+        mSwordTopPos.z -= i_this->current.pos.z;
+        
+        float distXZ = std::sqrtf(mSwordTopPos.x * mSwordTopPos.x + mSwordTopPos.z * mSwordTopPos.z);
+        
+        if (distXZ < 200.0f) {
+            if (std::sqrtf(mSwordTopPos.y * mSwordTopPos.y) < 40.0f) {
+                i_this->m2CB = 3;
+                i_this->m2CC = 0x20;
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* 00000A98-00000DE8       .text body_atari_check__FP8ks_class */
-BOOL body_atari_check(ks_class*) {
-    /* Nonmatching */
+BOOL body_atari_check(ks_class* i_this) {
+    cXyz mTgHitPos;
+    cXyz mParticleScale;
+    
+    i_this->mGStts.Move();
+    
+    if (i_this->mSph.ChkTgHit()) {
+        daPy_py_c* mpCurPlayerActor = daPy_getPlayerActorClass();
+
+        cCcD_Obj* mTgHitObj = i_this->mSph.GetTgHitObj();
+
+        mTgHitPos = *i_this->mSph.GetTgHitPosP();
+
+        if (!mTgHitObj) {
+            return FALSE;
+        }
+
+        i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+        
+        i_this->m2CB = 3;
+
+        switch (mTgHitObj->GetAtType()) {
+            case AT_TYPE_WIND: {
+                i_this->current.angle.y = cM_atan2s(i_this->current.pos.x - mTgHitPos.x, i_this->current.pos.z - mTgHitPos.z);
+                
+                i_this->m2CB = 2;
+
+                i_this->m2CC = 20;
+                
+                return FALSE;
+            }
+            case AT_TYPE_UNK8: {
+                i_this->m2CC = 0x20;
+                
+                i_this->health = 0;
+                
+                i_this->m2CC = 30;
+                
+                return FALSE;
+            }
+            case AT_TYPE_SWORD: {
+                if (i_this->m2CC != 43 || i_this->m2CE) {
+                    dScnPly_ply_c::setPauseTimer(2);
+                    
+                    i_this->stealItemBitNo = 1;
+                }
+                
+                mParticleScale.setall(REG8_F(0) + 0.8f);
+                
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &mpCurPlayerActor->shape_angle, &mParticleScale);
+                
+                break;
+            }
+            case AT_TYPE_SKULL_HAMMER: {
+                if (mpCurPlayerActor->getCutType() == 0x12 || mpCurPlayerActor->getCutType() == 0x13) {
+                    i_this->speedF = 0.0f;
+
+                    i_this->gravity = 0.0f;
+
+                    i_this->speed.setall(0.0f);
+
+                    i_this->health = 0;
+
+                    dScnPly_ply_c::setPauseTimer(2);
+
+                    i_this->stealItemBitNo = 1;
+
+                    i_this->m2CC = 0x20;
+
+                    return TRUE;
+                }
+
+                break;
+            }
+            case AT_TYPE_FIRE:
+            case AT_TYPE_FIRE_ARROW: {
+                i_this->mEnemyFire.mFireDuration = 100;
+
+                break;
+            }
+            case AT_TYPE_ICE_ARROW: {
+                i_this->mEnemyIce.mFreezeDuration = 200;
+
+                i_this->m2D0 = 1;
+
+                i_this->mEnemyIce.mParticleScale = 0.2f;
+
+                i_this->mEnemyIce.mYOffset = 0.0f;
+
+                enemy_fire_remove(&i_this->mEnemyFire);
+
+                break;
+            }
+            case AT_TYPE_LIGHT_ARROW: {
+                i_this->mEnemyIce.mLightShrinkTimer = 1;
+
+                i_this->mEnemyIce.mParticleScale = 0.2f;
+
+                i_this->mEnemyIce.mYOffset = 0.0f;
+
+                i_this->m2D0 = 1;
+
+                break;
+            }
+            default: {
+                mParticleScale.setall(REG8_F(0) + 0.8f);
+
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &mpCurPlayerActor->shape_angle, &mParticleScale);
+            }
+        }
+
+        i_this->health = 0;
+
+        i_this->m2CC = 30;
+
+        return TRUE;
+    }
+    else {
+        return shock_damage_check(i_this) ? 1 : 0;
+    }
 }
 
 /* 00000DE8-00000EBC       .text speed_keisan__FP8ks_classs */
