@@ -141,7 +141,7 @@ void naraku_check(ks_class* i_this) {
             local_24 = i_this->current.pos;
             i_this->m2CF = 1;
             local_18.setall(0.5f);
-            i_this->m52C.end();
+            i_this->m52C.remove();
             dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, NULL, &local_18, 0xFF, &i_this->m52C);
             i_this->m52C.setRate(0.0f);
         }
@@ -150,11 +150,9 @@ void naraku_check(ks_class* i_this) {
         i_this->speed.y = 0.0f;
         
     }
-    else {
-        if (i_this->m2CF && (i_this->mAcch.ChkGroundHit() || i_this->current.pos.y > i_this->mAcch.m_wtr.GetHeight() + 100.0f)) {
-            i_this->m2CF = 0;
-            i_this->m52C.end();
-        }
+    else if (i_this->m2CF && (i_this->mAcch.ChkGroundHit() || i_this->current.pos.y > i_this->mAcch.m_wtr.GetHeight() + 100.0f)) {
+        i_this->m2CF = 0;
+        i_this->m52C.remove();
     }
 }
 
@@ -183,7 +181,7 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 
         if (i_this->m2CF) {
             i_this->m2CF = 0;
-            i_this->m52C.end();
+            i_this->m52C.remove();
         }
         
         i_this->m2CB = 4;
@@ -642,8 +640,31 @@ void action_tubo_search(ks_class*) {
 }
 
 /* 00002A40-00002BC4       .text action_kb_birth_check__FP8ks_class */
-void action_kb_birth_check(ks_class*) {
-    /* Nonmatching */
+void action_kb_birth_check(ks_class* i_this) {
+    switch (i_this->m2CC) {
+        case 0x3c: {
+            i_this->current.pos.y += REG8_F(13) + 30.0f;
+            i_this->current.angle.y = cM_rndFX(32767.0f);
+            
+            i_this->speedF = REG8_F(8) + 4.0f + cM_rndF(REG8_F(9) + 4.0f);
+            i_this->speed.y = REG8_F(10) + 20.0f + cM_rndF(REG8_F(11) + 5.0f);
+            i_this->gravity = -(REG8_F(12) + 2.0f);
+
+            i_this->m2CC++;
+        }
+        case 0x3d: {
+            if (i_this->speed.y <= 0.0f && (i_this->mAcch.ChkGroundHit() || i_this->mAcch.GetGroundH() + (REG8_F(19) + 10.0f) > i_this->current.pos.y )) {
+                fopAcM_OffStatus(i_this, 0x4000);
+
+                i_this->speedF = 0.0f;
+                i_this->gravity = 0.0f;
+                i_this->speed.setall(0.0f);
+
+                i_this->m2CB = 0;
+                i_this->m2CC = 0;
+            }
+        }
+    } 
 }
 
 /* 00002BC4-00002C54       .text BG_check__FP8ks_class */
@@ -790,8 +811,19 @@ static BOOL daKS_IsDelete(ks_class* i_this) {
 }
 
 /* 0000305C-000030F4       .text daKS_Delete__FP8ks_class */
-static BOOL daKS_Delete(ks_class*) {
-    /* Nonmatching */
+static BOOL daKS_Delete(ks_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "KS");
+    i_this->m52C.remove();
+    enemy_fire_remove(&i_this->mEnemyFire);
+    KS_ALL_COUNT--;
+    if (KS_ALL_COUNT == 0) {
+        daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+        link->offHeavyState();
+        KUTTUKU_ALL_COUNT = 0;
+        HEAVY_IN = 0;
+        GORON_COUNT = 0;
+    }
+    return 1;
 }
 
 /* 000030F4-000034B0       .text useHeapInit__FP10fopAc_ac_c */

@@ -11,7 +11,7 @@ class daPy_lk_c;
 
 class ks_class : public fopEn_enemy_c {
 public:
-    /* 0x2AC */ u8 m2AC[0x2B4 - 0x2AC];
+    /* 0x2AC */ request_of_phase_process_class mPhs;
     /* 0x2B4 */ mDoExt_McaMorf* m2B4;
     /* 0x2B8 */ mDoExt_McaMorf* m2B8;
     /* 0x2BC */ mDoExt_btkAnm* m2BC;
