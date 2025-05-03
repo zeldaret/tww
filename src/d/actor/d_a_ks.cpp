@@ -11,6 +11,7 @@
 #include "d/d_snap.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_gm.h"
+#include "d/res/res_ks.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -22,8 +23,8 @@ int GORON_COUNT;
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
-    J3DModel* pJVar6 = i_this->mpBodyMorf->getModel();
-    J3DModel* pJVar5 = i_this->mpEyeMorf->getModel();
+    J3DModel* pBodyModel = i_this->mpBodyMorf->getModel();
+    J3DModel* pEyeModel = i_this->mpEyeMorf->getModel();
 
     cXyz local_24 = dComIfGp_getCamera(0)->mLookat.mEye - i_this->current.pos;
 
@@ -50,7 +51,7 @@ void draw_SUB(ks_class* i_this) {
 
     mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z - i_this->m2FA.x);
 
-    pJVar6->setBaseTRMtx(mDoMtx_stack_c::get());
+    pBodyModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     mDoMtx_trans(mDoMtx_stack_c::get(), i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
 
@@ -60,7 +61,7 @@ void draw_SUB(ks_class* i_this) {
 
     mDoMtx_stack_c::scaleM(local_18);
 
-    pJVar5->setBaseTRMtx(mDoMtx_stack_c::get());
+    pEyeModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
     enemy_fire(&i_this->mEnemyFire);
 }
@@ -73,8 +74,8 @@ static BOOL daKS_Draw(ks_class* i_this) {
         return TRUE;
     }
 
-    J3DModel* pJVar3 = i_this->mpBodyMorf->getModel();
-    J3DModel* pJVar2 = i_this->mpEyeMorf->getModel();
+    J3DModel* pBodyModel = i_this->mpBodyMorf->getModel();
+    J3DModel* pEyeModel = i_this->mpEyeMorf->getModel();
 
     cXyz local_18 = i_this->current.pos;
     local_18.y += 40.0f;
@@ -92,27 +93,27 @@ static BOOL daKS_Draw(ks_class* i_this) {
     i_this->m2CD = 0;
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(pJVar3, &i_this->tevStr);
+    g_env_light.setLightTevColorType(pBodyModel, &i_this->tevStr);
 
-    i_this->mpBodyBrkAnm->entry(pJVar3->getModelData());
+    i_this->mpBodyBrkAnm->entry(pBodyModel->getModelData());
     i_this->mpBodyBrkAnm->setFrame(i_this->m320);
 
     i_this->mpBodyMorf->updateDL();
 
-    i_this->mpBodyBrkAnm->remove(pJVar3->getModelData());
+    i_this->mpBodyBrkAnm->remove(pBodyModel->getModelData());
     
-    g_env_light.setLightTevColorType(pJVar2, &i_this->tevStr);
+    g_env_light.setLightTevColorType(pEyeModel, &i_this->tevStr);
     
-    i_this->mpEyeBtkAnm->entry(pJVar2->getModelData());
+    i_this->mpEyeBtkAnm->entry(pEyeModel->getModelData());
     i_this->mpEyeBtkAnm->setFrame(i_this->m302);
 
-    i_this->mpEyeBrkAnm->entry(pJVar2->getModelData());
+    i_this->mpEyeBrkAnm->entry(pEyeModel->getModelData());
     i_this->mpEyeBrkAnm->setFrame(i_this->m320);
 
     i_this->mpEyeMorf->updateDL();
 
-    i_this->mpEyeBrkAnm->remove(pJVar2->getModelData());
-    i_this->mpEyeBtkAnm->remove(pJVar2->getModelData());
+    i_this->mpEyeBrkAnm->remove(pEyeModel->getModelData());
+    i_this->mpEyeBtkAnm->remove(pEyeModel->getModelData());
     
     return TRUE;
 }
@@ -139,19 +140,24 @@ void naraku_check(ks_class* i_this) {
     if (i_this->mAcch.ChkWaterIn() && i_this->current.pos.y < i_this->mAcch.m_wtr.GetHeight() + 20.0f) {
         if (!i_this->m2CF) {
             local_24 = i_this->current.pos;
+
             i_this->m2CF = 1;
+
             local_18.setall(0.5f);
+
             i_this->m52C.remove();
             dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &i_this->current.pos, NULL, &local_18, 0xFF, &i_this->m52C);
             i_this->m52C.setRate(0.0f);
         }
+
         cLib_addCalc2(&i_this->current.pos.y, i_this->mAcch.m_wtr.GetHeight() + 20.0f, 1.0f, 10.0);
+        
         i_this->gravity = 0.0f;
         i_this->speed.y = 0.0f;
-        
     }
     else if (i_this->m2CF && (i_this->mAcch.ChkGroundHit() || i_this->current.pos.y > i_this->mAcch.m_wtr.GetHeight() + 100.0f)) {
         i_this->m2CF = 0;
+
         i_this->m52C.remove();
     }
 }
@@ -181,6 +187,7 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 
         if (i_this->m2CF) {
             i_this->m2CF = 0;
+
             i_this->m52C.remove();
         }
         
@@ -221,6 +228,7 @@ BOOL shock_damage_check(ks_class* i_this) {
             if (std::sqrtf(mSwordTopPos.y * mSwordTopPos.y) < 40.0f) {
                 i_this->m2CB = 3;
                 i_this->m2CC = 0x20;
+
                 return TRUE;
             }
         }
@@ -389,7 +397,7 @@ void action_dousa_move(ks_class* i_this) {
 
             i_this->shape_angle.z = 0;
 
-            fopAcM_seStart(i_this, 0x587a, 0);
+            fopAcM_seStart(i_this, JA_SE_CM_KS_MOVE, 0);
 
             if (tyaku_check(i_this) != 0) {
                 i_this->gravity = -3.0f;
@@ -409,7 +417,7 @@ void action_dousa_move(ks_class* i_this) {
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
                 (link->getSpeedF() > 12.0f || HEAVY_IN != 0) && 
                 fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f &&
-                !dComIfGp_checkPlayerStatus0(0, 0x100000) &&
+                !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
                 tyaku_check(i_this)) {
                 
                 i_this->m2CB = 1;
@@ -418,7 +426,7 @@ void action_dousa_move(ks_class* i_this) {
                 return;
             }
 
-            if (link->getSpeedF() <= 12.0f || dComIfGp_checkPlayerStatus0(0, 0x100000)) {
+            if (link->getSpeedF() <= 12.0f || dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
                 cLib_addCalc0(&i_this->speedF, 0.3f, cM_rndF(1.0f) + 0.3f);
                 
                 cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
@@ -442,7 +450,7 @@ void action_dousa_move(ks_class* i_this) {
             i_this->m30C = 10.0f;
 
             if (tyaku_check(i_this)) {
-                fopAcM_seStart(i_this, 0x587a, 0);
+                fopAcM_seStart(i_this, JA_SE_CM_KS_MOVE, 0);
 
                 i_this->gravity = -3.0f;
 
@@ -461,7 +469,7 @@ void action_dousa_move(ks_class* i_this) {
     }
     
     if (body_atari_check(i_this) != 0) {
-        fopAcM_seStart(i_this, 0x2828, 0);
+        fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
     }
 }
 
@@ -491,9 +499,9 @@ void action_kougeki_move(ks_class* i_this) {
 
             i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
             
-            mDoAud_seStart(0x587b, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            mDoAud_seStart(JA_SE_CM_KS_ATTACK, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             
-            fopAcM_monsSeStart(i_this, 0x486d, 0);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_KS_ATTACK, 0);
             
             i_this->m2CC++;
             
@@ -543,7 +551,7 @@ void action_kougeki_move(ks_class* i_this) {
     cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x1000);
     
     if (body_atari_check(i_this)) {
-        fopAcM_seStart(i_this, 0x2828, 0);
+        fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
     }
 }
 
@@ -557,12 +565,17 @@ void action_kaze_move(ks_class* i_this) {
     
             i_this->m2E8[1] = 0x32;
     
-            fopAcM_monsSeStart(i_this, 0x486f, 0);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_KS_BLOW, 0);
+
             i_this->m310 = i_this->current.pos.y;
+
             i_this->m30C = 0.0f;
+
             i_this->speedF = cM_rndF(15.0f) + 10.0f;
             i_this->m314 = cM_rndF(15.0f) + 10.0f;
+
             i_this->m308 = 0.0f;
+            
             i_this->m2CC++;
         }
         case 0x15: {
@@ -602,7 +615,7 @@ void action_kaze_move(ks_class* i_this) {
     i_this->shape_angle.z += 0x500;
 
     if (body_atari_check(i_this)) {
-        fopAcM_seStart(i_this, 0x2828, 0);
+        fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
     }
 }
 
@@ -637,9 +650,9 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
         fopAcM_createDisappear(i_this, i_pos, 3, health, 0xff);
     }
     else {
-        fopAcM_seStart(i_this, 0x587c, 0);
+        fopAcM_seStart(i_this, JA_SE_CM_KS_DIE, 0);
 
-        dComIfGp_particle_setSimple(0x8068, i_pos);
+        dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8068, i_pos);
 
         gm_birth_delet(i_this);
     }
@@ -661,7 +674,7 @@ void action_dead_move(ks_class* i_this) {
             i_this->mSph.ClrCoSet();
             i_this->mSph.ClrTgHit();
 
-            fopAcM_monsSeStart(i_this, 0x486e, 0);
+            fopAcM_monsSeStart(i_this, JA_SE_CV_KS_DAMAGE, 0);
 
             i_this->speedF = cM_rndF(5.0f) + 15.0f;
             i_this->gravity = -3.0f;
@@ -753,7 +766,7 @@ void action_omoi(ks_class* i_this) {
             if (GORON_COUNT != 0 || KUTTUKU_ALL_COUNT >= 0x14) {
                 i_this->m528 = 0;
 
-                fopAcM_OffStatus(a_this, 0x4000);   
+                fopAcM_OffStatus(a_this, fopAcStts_UNK4000_e);   
 
                 i_this->m2CC = 0x2a;
 
@@ -795,7 +808,7 @@ void action_omoi(ks_class* i_this) {
             i_this->m2E8[1] = 0;
             i_this->m2E8[2] = 0;
 
-            fopAcM_OnStatus(a_this, 0x4000);
+            fopAcM_OnStatus(a_this, fopAcStts_UNK4000_e);
 
             fopAcM_setStageLayer(a_this);
 
@@ -882,7 +895,7 @@ void action_omoi(ks_class* i_this) {
                 }
             }
 
-            if (dComIfGp_checkPlayerStatus0(0, 0x800000) || dComIfGp_checkPlayerStatus1(0, 0x10)) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e) || dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK10_e)) {
                 local_1c.setall(100.0f);
             }
 
@@ -890,7 +903,7 @@ void action_omoi(ks_class* i_this) {
             cLib_addCalc2(&a_this->current.pos.y, local_10.y, 1.0f, local_1c.y);
             cLib_addCalc2(&a_this->current.pos.z, local_10.z, 1.0f, local_1c.z);
             
-            if (link->checkFrontRollCrash() || link->getCutType() == 8 || link->getCutType() == 9 || dComIfGp_checkPlayerStatus0(0, 0x100000)) {
+            if (link->checkFrontRollCrash() || link->getCutType() == 8 || link->getCutType() == 9 || dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
                 i_this->mSph.OnCoSetBit();
                 i_this->mSph.OnTgSetBit();
 
@@ -994,7 +1007,7 @@ void action_omoi(ks_class* i_this) {
         }
         case 0x2a: {
             if (i_this->m528) {
-                fopAcM_OffStatus(a_this, 0x4000);
+                fopAcM_OffStatus(a_this, fopAcStts_UNK4000_e);
                 
                 fopAcM_setRoomLayer(a_this, fopAcM_GetRoomNo(a_this));
                 
@@ -1024,7 +1037,7 @@ void action_omoi(ks_class* i_this) {
     }
 
     if (i_this->m2CC == 0x2b && body_atari_check(i_this) && i_this->m2CE) {
-        fopAcM_seStart(a_this, 0x2828, 0);
+        fopAcM_seStart(a_this, JA_SE_LK_LAST_HIT, 0);
         i_this->m2CE = 0;
     }
 }
@@ -1143,7 +1156,7 @@ void action_kb_birth_check(ks_class* i_this) {
         }
         case 0x3d: {
             if (i_this->speed.y <= 0.0f && (i_this->mAcch.ChkGroundHit() || i_this->mAcch.GetGroundH() + (REG8_F(19) + 10.0f) > i_this->current.pos.y )) {
-                fopAcM_OffStatus(i_this, 0x4000);
+                fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
 
                 i_this->speedF = 0.0f;
                 i_this->gravity = 0.0f;
@@ -1344,7 +1357,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 
     ks_class* i_this = (ks_class*)i_act;
 
-    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", 0xf), NULL, NULL, NULL, 
+    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", KS_BDL_KS_BODY), NULL, NULL, NULL, 
                                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
     
     if (i_this->mpBodyMorf == NULL || (pModel = i_this->mpBodyMorf->mpModel, pModel == NULL))
@@ -1354,12 +1367,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpBodyBrkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpBodyBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", 0x13), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
+    init_res = i_this->mpBodyBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, 
+                                          J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (init_res == 0)
         return FALSE;
 
-    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", 0x10), NULL, NULL, 
-                                           (J3DAnmTransformKey*)dComIfG_getObjectRes("KS", 0xc), 
+    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("KS", KS_BDL_KS_EYE), NULL, NULL, 
+                                           (J3DAnmTransformKey*)dComIfG_getObjectRes("KS", KS_BCK_MABATAKI), 
                                            J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
     
     if (i_this->mpEyeMorf == NULL || (pModel = i_this->mpEyeMorf->mpModel, pModel == NULL))
@@ -1369,7 +1383,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpEyeBtkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpEyeBtkAnm->init(pModel->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("KS", 0x17), TRUE, 
+    init_res = i_this->mpEyeBtkAnm->init(pModel->getModelData(), (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, 
                                          J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (init_res == 0)
         return FALSE;
@@ -1378,7 +1392,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpEyeBrkAnm == NULL)
         return FALSE;
 
-    init_res = i_this->mpEyeBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("KS", 0x14), TRUE, 
+    init_res = i_this->mpEyeBrkAnm->init(pModel->getModelData(), (J3DAnmTevRegKey*)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, 
                                          J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     return init_res ? TRUE : FALSE;
 }
@@ -1480,7 +1494,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
                 cXyz local_4c = i_this->current.pos;
                 if (i != 0) {
                     if (i_this->current.angle.x != 0) {
-                        local_4c.y += cM_rndFX(120.0f);\
+                        local_4c.y += cM_rndFX(120.0f);
                         f32 ground_y = a_this->mAcch.GetGroundH();
                         if (local_4c.y < ground_y) {
                             local_4c.y = ground_y + cM_rndF(120.0f);
@@ -1575,7 +1589,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
         }
         
         if (a_this->m2C8 == 7) {
-            fopAcM_OnStatus(i_this, 0x4000);
+            fopAcM_OnStatus(i_this, fopAcStts_UNK4000_e);
 
             a_this->m2CB = 0x14;
             a_this->m2CC = 0x3c;
