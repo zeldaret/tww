@@ -41,7 +41,8 @@ public:
     /* 0x320 */ f32 m320;
     /* 0x324 */ u8 m324[0x364 - 0x324];
     /* 0x364 */ dBgS_Acch mAcch;
-    /* 0x528 */ u8 m528[0x540 - 0x528];
+    /* 0x528 */ u8 m528[0x52C - 0x528];
+    /* 0x52C */ dPa_rippleEcallBack m52C;
     /* 0x540 */ cXyz m540;
     /* 0x54C */ u8 m54C[0x55C - 0x54C];
     /* 0x55C */ dCcD_GStts mGStts;

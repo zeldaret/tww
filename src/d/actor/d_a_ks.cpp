@@ -133,8 +133,26 @@ BOOL tyaku_check(ks_class* i_this) {
 }
 
 /* 00000788-0000087C       .text ks_kuttuki_check__FP8ks_class */
-void ks_kuttuki_check(ks_class*) {
-    /* Nonmatching */
+BOOL ks_kuttuki_check(ks_class* i_this) {        
+    fopAc_ac_c* mAtHitAc;    
+    if (i_this->mSph.ChkAtHit() && !i_this->mSph.ChkAtShieldHit() && (mAtHitAc = i_this->mSph.GetAtHitAc(), mAtHitAc) && mAtHitAc == dComIfGp_getLinkPlayer() && KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && GORON_COUNT == 0) {
+        i_this->mSph.OffTgSetBit();
+        i_this->mSph.ClrCoSet();
+        i_this->mSph.ClrTgHit();
+
+        if (i_this->m2CF) {
+            i_this->m2CF = 0;
+            i_this->m52C.end();
+        }
+        
+        i_this->m2CB = 4;
+        i_this->m2CC = 0x28;
+
+        return TRUE;
+    }
+    else {
+        return FALSE;
+    }
 }
 
 /* 0000087C-000008F4       .text gm_birth_delet__FP8ks_class */
