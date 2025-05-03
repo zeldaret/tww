@@ -230,6 +230,7 @@ BOOL shock_damage_check(ks_class* i_this) {
 
 /* 00000A98-00000DE8       .text body_atari_check__FP8ks_class */
 BOOL body_atari_check(ks_class* i_this) {
+    /* Nonmatching - regswap */
     cXyz mTgHitPos;
     cXyz mParticleScale;
     
@@ -614,9 +615,41 @@ void action_kaze_move(ks_class* i_this) {
     }
 }
 
+u8 item_tbl[3] = {0xA, 0xB, 0xC};
+
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
-void dead_eff_set(ks_class*, cXyz*) {
-    /* Nonmatching */
+void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
+    /* Nonmatching - regswap */
+    u8 health;
+    if (!strcmp(dComIfGp_getStartStageName(), "GanonK") && (i_this->stealItemBitNo != 0)) {
+        if (dComIfGs_getLife() <= 8) {
+            health = 10;
+        }
+        else if (cM_rndF(1.0f) < 0.5f) {
+            if (dComIfGs_getArrowNum() == 0) {
+                health = 0xc;
+            }
+            else if (dComIfGs_getMagic() < dComIfGs_getMaxMagic() >> 1) {
+                health = 0xb;
+            }
+            else if (dComIfGs_getArrowNum() < 10){
+                health = 0xc;
+            }
+            else {
+                health = item_tbl[(int)cM_rndF(2.99f)];
+            }
+        }
+        else {
+            health = 0xd;
+        }
+        fopAcM_createDisappear(i_this, i_pos, 3, health, 0xff);
+    }
+    else {
+        fopAcM_seStart(i_this, 0x587c, 0);
+        dComIfGp_particle_setSimple(0x8068, i_pos);
+        gm_birth_delet(i_this);
+    }
+    fopAcM_delete(i_this);
 }
 
 /* 00001A14-00001C5C       .text action_dead_move__FP8ks_class */
@@ -670,7 +703,7 @@ void action_kb_birth_check(ks_class* i_this) {
 /* 00002BC4-00002C54       .text BG_check__FP8ks_class */
 void BG_check(ks_class* i_this) {
     i_this->mAcchCir.SetWall(30.0f, 30.0f);
-    
+
     i_this->current.pos.y -= i_this->m304;
     i_this->old.pos.y -= i_this->m304;
 
@@ -844,8 +877,47 @@ static BOOL daKS_Delete(ks_class* i_this) {
 }
 
 /* 000030F4-000034B0       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* i_act) {
+    /* Nonmatching - regalloc */
+    int iVar5;
+
+    ks_class* i_this = (ks_class*)i_act;
+
+    i_this->m2B4 = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", 0xf), NULL, NULL, NULL, 
+                                       J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+    J3DModel* mpModel1;
+    if (i_this->m2B4 == NULL || (mpModel1 = i_this->m2B4->getModel(), mpModel1 == NULL))
+        return FALSE;
+
+    i_this->m2C0 = new mDoExt_brkAnm();
+    if (i_this->m2C0 == NULL)
+        return FALSE;
+
+    iVar5 = i_this->m2C0->init(mpModel1->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", 0x13), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
+    if (iVar5 == 0)
+        return FALSE;
+
+    i_this->m2B8 = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", 0x10), NULL, NULL, 
+                                   (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", 0xc), 
+                                       J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
+    J3DModel* mpModel2;
+    if (i_this->m2B8 == NULL || (mpModel2 = i_this->m2B8->getModel(), mpModel2 == NULL))
+        return FALSE;
+
+    i_this->m2BC = new mDoExt_btkAnm();
+    if (i_this->m2BC == NULL)
+        return FALSE;
+
+    iVar5 = i_this->m2BC->init(mpModel2->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", 0x17), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
+    if (iVar5 == 0)
+        return FALSE;
+    
+    i_this->m2C4 = new mDoExt_brkAnm();
+    if (i_this->m2C4 == NULL)
+        return FALSE;
+
+    iVar5 = i_this->m2C4->init(mpModel2->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", 0x14), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
+    return iVar5 ? TRUE : FALSE;
 }
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
