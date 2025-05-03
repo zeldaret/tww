@@ -34,7 +34,7 @@ public:
     /* 0x2E8 */ s16 m2E8[4];
     /* 0x2F0 */ s16 m2F0[5];
     /* 0x2FA */ csXyz m2FA;
-    /* 0x300 */ u8 m300[0x302 - 0x300];
+    /* 0x300 */ s16 m300;
     /* 0x302 */ s16 m302;
     /* 0x304 */ f32 m304;
     /* 0x308 */ f32 m308;
@@ -46,7 +46,7 @@ public:
     /* 0x320 */ f32 m320;
     /* 0x324 */ dBgS_AcchCir mAcchCir;
     /* 0x364 */ dBgS_Acch mAcch;
-    /* 0x528 */ u8 m528[0x52C - 0x528];
+    /* 0x528 */ MtxP m528;
     /* 0x52C */ dPa_rippleEcallBack m52C;
     /* 0x540 */ cXyz m540;
     /* 0x54C */ u8 m54C[0x55C - 0x54C];

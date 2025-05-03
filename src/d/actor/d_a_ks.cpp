@@ -13,6 +13,7 @@
 #include "d/actor/d_a_gm.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 int KS_ALL_COUNT;
 int KUTTUKU_ALL_COUNT;
@@ -717,9 +718,326 @@ void action_dead_move(ks_class* i_this) {
     }
 }
 
+u32 pl_harituki_joint_dt[19] = {
+    0x20,
+    0x21,
+    0x25,
+    0x26,
+    0x02,
+    0x03,
+    0x04,
+    0x1E,
+    0x29,
+    0x1F,
+    0x24,
+    0x08,
+    0x06,
+    0x07,
+    0x05,
+    0x0C,
+    0x0A,
+    0x0B,
+    0x09
+};
+
 /* 00001C5C-000026DC       .text action_omoi__FP8ks_class */
-void action_omoi(ks_class*) {
-    /* Nonmatching */
+void action_omoi(ks_class* i_this) {
+    /* Nonmatching - regalloc */
+    cXyz local_1c;
+    cXyz local_10;
+    
+    daPy_py_c* mpCurPlayerActor = daPy_getPlayerActorClass();
+    daPy_lk_c* link = daPy_getPlayerLinkActorClass();
+    
+    if (i_this->m2CE == 1 && HEAVY_IN == 1) {
+        link->onHeavyState();
+    }
+
+    switch (i_this->m2CC) {
+        case 0x28: {
+            i_this->m52C.remove();
+
+            i_this->speedF = 0.0f;
+            i_this->gravity = 0.0f;
+            i_this->speed.setall(0.0f);
+
+            if (GORON_COUNT != 0 || KUTTUKU_ALL_COUNT >= 0x14) {
+                i_this->m528 = 0;
+
+                fopAcM_OffStatus(i_this, 0x4000);   
+
+                i_this->m2CC = 0x2a;
+
+                break;
+            }
+
+            for (int i = 0; i < 5; i++) {
+                i_this->m2F0[i] = 0;
+            }
+
+            if (KUTTUKU_ALL_COUNT >= 0x14) {
+                i_this->m300 = 0x13;
+            }
+
+            if (KUTTUKU_ALL_COUNT < 0) {
+                i_this->m300 = 0;
+            }
+            else {
+                i_this->m300 = KUTTUKU_ALL_COUNT;
+            }
+
+            i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[i_this->m300]);
+
+            if (KUTTUKU_ALL_COUNT == 0) {
+                GORON_COUNT = 0;
+
+                i_this->m2CE = 1;
+            }
+
+            KUTTUKU_ALL_COUNT++;
+
+            if (HEAVY_IN == 0 && KUTTUKU_ALL_COUNT >= 5) {
+                link->onHeavyState();
+                HEAVY_IN = 1;
+            }
+
+            i_this->m2D2 = 0;
+
+            i_this->m2E8[1] = 0;
+            i_this->m2E8[2] = 0;
+
+            fopAcM_OnStatus(i_this, 0x4000);
+
+            fopAcM_setStageLayer(i_this);
+
+            i_this->m2CC++;
+        }
+        case 0x29: {
+            fopAcM_SetRoomNo(i_this, fopAcM_GetRoomNo(mpCurPlayerActor));
+            
+            if (!(fopAcM_GetID(i_this) & 1)) {
+                i_this->shape_angle.y += i_this->m2FA.z * 0.25f;
+            }
+            else {
+                i_this->shape_angle.y -= i_this->m2FA.z * 0.25f;
+            }
+
+            if (i_this->m528) {
+                local_10.x = i_this->m528[0][3];
+                local_10.y = i_this->m528[1][3];
+                local_10.z = i_this->m528[2][3];
+            }
+            else {
+                local_10 = mpCurPlayerActor->current.pos;
+            }
+
+            if (!(local_10.x || local_10.y || local_10.z)) {
+                local_10 = mpCurPlayerActor->current.pos;
+            }
+
+            local_1c.x = std::fabsf(mpCurPlayerActor->speed.x * 10.0f);
+            if (local_1c.x < REG12_F(16) + 10.0f) {
+                local_1c.x = REG12_F(16) + 10.0f;
+            }
+
+            local_1c.y = std::fabsf(mpCurPlayerActor->speed.y * 10.0f);
+            if (local_1c.y < REG12_F(16) + 10.0f) {
+                local_1c.y = REG12_F(16) + 10.0f;
+            }
+
+            local_1c.z = std::fabsf(mpCurPlayerActor->speed.z * 10.0f);
+            if (local_1c.z < REG12_F(16) + 10.0f) {
+                local_1c.z = REG12_F(16) + 10.0f;
+            }
+
+            if (std::sqrtf(mpCurPlayerActor->speed.x * mpCurPlayerActor->speed.x + mpCurPlayerActor->speed.y * mpCurPlayerActor->speed.y + mpCurPlayerActor->speed.z * mpCurPlayerActor->speed.z) < REG12_F(17) + 8.0f) {
+                local_1c.setall(REG12_F(18) + 8.0f);
+
+                f32 x = i_this->current.pos.x - local_10.x;
+                f32 y = i_this->current.pos.y - local_10.y;
+                f32 z = i_this->current.pos.z - local_10.z;
+
+                if (std::sqrtf(x * x + y * y + z * z) < 2.0f && i_this->m2E8[1] == 0) {
+                    i_this->m2E8[1] = cM_rndF(10.0f) + 10.0f;
+
+                    switch (i_this->m2D2) {
+                        case 0: {
+                            if (i_this->m300 < 0x13) {
+                                i_this->m300++;
+                            }
+                            else {
+                                i_this->m2D2 = 1;
+                                i_this->m300--;
+                            }
+                            break;
+                        }
+                        case 1: {
+                            if (i_this->m300 > 0) {
+                                i_this->m300--;
+                            }
+                            else {
+                                i_this->m2D2 = 0;
+                                i_this->m300++;
+                            }
+                        }
+                    }
+
+                    if (i_this->m300 >= 0x14) {
+                        i_this->m300 = 0x13;
+                    }
+                    else if (i_this->m300 < 0) {
+                        i_this->m300 = 1;
+                    }
+
+                    i_this->m528 = link->getModelJointMtx(pl_harituki_joint_dt[i_this->m300]);
+                }
+            }
+
+            if (dComIfGp_checkPlayerStatus0(0, 0x800000) || dComIfGp_checkPlayerStatus1(0, 0x10)) {
+                local_1c.setall(100.0f);
+            }
+
+            cLib_addCalc2(&i_this->current.pos.x, local_10.x, 1.0f, local_1c.x);
+            cLib_addCalc2(&i_this->current.pos.y, local_10.y, 1.0f, local_1c.y);
+            cLib_addCalc2(&i_this->current.pos.z, local_10.z, 1.0f, local_1c.z);
+            
+            if (link->checkFrontRollCrash() || link->getCutType() == 8 || link->getCutType() == 9 || dComIfGp_checkPlayerStatus0(0, 0x100000)) {
+                i_this->mSph.OnCoSetBit();
+                i_this->mSph.OnTgSetBit();
+
+                if (i_this->m2CE) {
+                    link->offHeavyState();
+                    HEAVY_IN = 0;
+
+                    KUTTUKU_ALL_COUNT = 0;
+                    GORON_COUNT = 0;
+
+                    i_this->m2F0[0] = 0;
+                    i_this->m2F0[1] = 0;
+                }
+
+                i_this->m2CC = 0x2a;
+
+                return;
+            }
+
+            if (!link->checkFrontRoll()) {
+                if (i_this->m2CE == 0) {
+                    return;
+                }
+                
+                if (i_this->m2F0[1]) {
+                    i_this->m2F0[1] = 0;
+                    i_this->m2E8[2] = 0x32;
+                }
+
+                if (i_this->m2E8[2] != 1) {
+                    return;
+                }
+
+                if (i_this->m2F0[0] <= 0) {
+                    return;
+                }
+
+                i_this->m2F0[0] = 0;
+
+                return;
+            }
+
+            if (i_this->m2CE) {
+                if (i_this->m2F0[1]) {
+                  return;
+                }
+
+                switch (i_this->m2F0[0]) {
+                    case 0:
+                        GORON_COUNT = KUTTUKU_ALL_COUNT * 0.25f;
+                        break;
+                    case 1:
+                        GORON_COUNT = KUTTUKU_ALL_COUNT * 0.5f;
+                        break;
+                    case 2:
+                        GORON_COUNT = KUTTUKU_ALL_COUNT;
+                }
+                
+                if (GORON_COUNT == 0) {
+                    GORON_COUNT = 1;
+                }
+                i_this->m2F0[0]++;
+                i_this->m2F0[1] = 1;
+
+                if (i_this->m2F0[0] < 3 && KUTTUKU_ALL_COUNT >= 3) {
+                    return;
+                }
+
+                i_this->m2CE = 0;
+
+                link->offHeavyState();
+                HEAVY_IN = 0;
+
+                i_this->m2F0[0] = 0;
+                i_this->m2F0[1] = 0;
+
+                if (KUTTUKU_ALL_COUNT > 0) {
+                    KUTTUKU_ALL_COUNT--;
+                }
+
+                GORON_COUNT = KUTTUKU_ALL_COUNT;
+
+                i_this->m2CC = 0x2a;
+
+                return;
+            }
+
+            if (KUTTUKU_ALL_COUNT != 0 && GORON_COUNT > 0) {
+                GORON_COUNT--;
+                KUTTUKU_ALL_COUNT--;
+
+                if (HEAVY_IN != 0 && KUTTUKU_ALL_COUNT < 5) {
+                    HEAVY_IN = 0;
+                    link->offHeavyState();
+                }
+
+                i_this->m2CC = 0x2a;
+            }
+
+            break;
+        }
+        case 0x2a: {
+            if (i_this->m528) {
+                fopAcM_OffStatus(i_this, 0x4000);
+                
+                fopAcM_setRoomLayer(i_this, fopAcM_GetRoomNo(i_this));
+                
+                i_this->m528 = 0;
+            }
+
+            i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) + 0x8000;
+            i_this->current.angle.y += (s16)cM_rndFX(16384.0f);
+
+            i_this->speedF = 15.0f;
+            i_this->gravity = -3.0f;
+            i_this->speed.y = 26.0f;
+
+            i_this->m2CC++;
+        }
+        case 0x2b: {
+            if (i_this->mAcch.ChkGroundHit() || i_this->mAcch.ChkWaterIn()) {
+                i_this->m2E8[2] = (s16)(cM_rndF(40.0f) + 40.0f);
+
+                i_this->mSph.OnCoSetBit();
+                i_this->mSph.OnTgSetBit();
+
+                i_this->m2CB = 1;
+                i_this->m2CC = 0xc;
+            }
+        }
+    }
+
+    if (i_this->m2CC == 0x2b && body_atari_check(i_this) && i_this->m2CE) {
+        fopAcM_seStart(i_this, 0x2828, 0);
+        i_this->m2CE = 0;
+    }
 }
 
 /* 000026DC-000027A0       .text tsubo_search__FPvPv */
