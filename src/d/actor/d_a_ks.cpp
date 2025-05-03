@@ -10,6 +10,7 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_gm.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
@@ -160,8 +161,13 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 }
 
 /* 0000087C-000008F4       .text gm_birth_delet__FP8ks_class */
-void gm_birth_delet(ks_class*) {
-    /* Nonmatching */
+void gm_birth_delet(ks_class* i_this) {
+    if (i_this->m2D4) {
+        gm_class* i_gm = (gm_class*)fopAcM_SearchByID(i_this->m2D4);
+        if (i_gm && fopAc_IsActor(i_gm) && fopAcM_GetName(i_gm) == PROC_GM && i_gm->m31E > 0) {
+            i_gm->m31E--;
+        }
+    }
 }
 
 /* 000008F4-00000A98       .text shock_damage_check__FP8ks_class */
@@ -517,8 +523,6 @@ void action_kougeki_move(ks_class* i_this) {
 
 /* 00001630-00001874       .text action_kaze_move__FP8ks_class */
 void action_kaze_move(ks_class* i_this) {
-    s8 bVar1;
-
     switch (i_this->m2CC) {
         case 0x14: {
             for (int i = 0; i < 5; i++) {
@@ -543,7 +547,7 @@ void action_kaze_move(ks_class* i_this) {
             if (i_this->m310 + 200.0f < i_this->current.pos.y || i_this->m2E8[1] == 0) {
                 i_this->m2CC++;
             }
-            
+
             break;
         }
         case 0x16: {
