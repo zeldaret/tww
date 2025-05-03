@@ -12,11 +12,11 @@ class daPy_lk_c;
 class ks_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ request_of_phase_process_class mPhs;
-    /* 0x2B4 */ mDoExt_McaMorf* m2B4;
-    /* 0x2B8 */ mDoExt_McaMorf* m2B8;
-    /* 0x2BC */ mDoExt_btkAnm* m2BC;
-    /* 0x2C0 */ mDoExt_brkAnm* m2C0;
-    /* 0x2C4 */ mDoExt_brkAnm* m2C4;
+    /* 0x2B4 */ mDoExt_McaMorf* mpBodyMorf;
+    /* 0x2B8 */ mDoExt_McaMorf* mpEyeMorf;
+    /* 0x2BC */ mDoExt_btkAnm* mpEyeBtkAnm;
+    /* 0x2C0 */ mDoExt_brkAnm* mpBodyBrkAnm;
+    /* 0x2C4 */ mDoExt_brkAnm* mpEyeBrkAnm;
     /* 0x2C8 */ u8 m2C8;
     /* 0x2C9 */ u8 m2C9;
     /* 0x2CA */ u8 m2CA;
@@ -29,12 +29,12 @@ public:
     /* 0x2D1 */ u8 m2D1;
     /* 0x2D2 */ u8 m2D2;
     /* 0x2D3 */ u8 m2D3;
-    /* 0x2D4 */ fpc_ProcID mGmID;
-    /* 0x2D8 */ fpc_ProcID mProcID;
+    /* 0x2D4 */ fpc_ProcID mGmID; // Mothula
+    /* 0x2D8 */ fpc_ProcID mKsID; // Morth
     /* 0x2DC */ cXyz m2DC;
     /* 0x2E8 */ s16 m2E8[4];
     /* 0x2F0 */ s16 m2F0[5];
-    /* 0x2FA */ csXyz m2FA;
+    /* 0x2FA */ csXyz m2FA; // Possibly just 3 s16s rather than csXyz
     /* 0x300 */ s16 m300;
     /* 0x302 */ s16 m302;
     /* 0x304 */ f32 m304;
