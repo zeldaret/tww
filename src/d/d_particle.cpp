@@ -562,6 +562,7 @@ dPa_smokePcallBack dPa_control_c::mSmokePcallback;
 dPa_singleRippleEcallBack dPa_control_c::mSingleRippleEcallBack;
 dPa_ripplePcallBack dPa_control_c::mRipplePcallBack;
 dPa_bombSmokeEcallBack dPa_control_c::mBombSmokeEcallBack;
+Mtx dPa_control_c::mWindViewMatrix;
 u8 dPa_control_c::mStatus;
 
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */

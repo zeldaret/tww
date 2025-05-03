@@ -504,7 +504,7 @@ config.libs = [
             Object(NonMatching, "d/d_cam_param.cpp"),
             Object(NonMatching, "d/d_cam_type.cpp"),
             Object(NonMatching, "d/d_cam_style.cpp"),
-            Object(NonMatching, "d/d_cam_type2.cpp"),
+            Object(Matching,    "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),
             Object(Matching,    "d/d_wood.cpp", extra_cflags=["-sym off"]),
             Object(NonMatching, "d/d_flower.cpp"),
