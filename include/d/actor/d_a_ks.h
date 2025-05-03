@@ -28,7 +28,7 @@ public:
     /* 0x2D1 */ u8 m2D1;
     /* 0x2D2 */ u8 m2D2;
     /* 0x2D3 */ u8 m2D3;
-    /* 0x2D4 */ fpc_ProcID m2D4;
+    /* 0x2D4 */ fpc_ProcID mGmID;
     /* 0x2D8 */ u8 m2D8[0x2E8 - 0x2D8];
     /* 0x2E8 */ s16 m2E8[4];
     /* 0x2F0 */ s16 m2F0[5];

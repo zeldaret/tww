@@ -196,8 +196,8 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 
 /* 0000087C-000008F4       .text gm_birth_delet__FP8ks_class */
 void gm_birth_delet(ks_class* i_this) {
-    if (i_this->m2D4) {
-        gm_class* i_gm = (gm_class*)fopAcM_SearchByID(i_this->m2D4);
+    if (i_this->mGmID) {
+        gm_class* i_gm = (gm_class*)fopAcM_SearchByID(i_this->mGmID);
         if (i_gm && fopAc_IsActor(i_gm) && fopAcM_GetName(i_gm) == PROC_GM && i_gm->m31E > 0) {
             i_gm->m31E--;
         }
@@ -645,7 +645,7 @@ void action_kb_birth_check(ks_class* i_this) {
         case 0x3c: {
             i_this->current.pos.y += REG8_F(13) + 30.0f;
             i_this->current.angle.y = cM_rndFX(32767.0f);
-            
+
             i_this->speedF = REG8_F(8) + 4.0f + cM_rndF(REG8_F(9) + 4.0f);
             i_this->speed.y = REG8_F(10) + 20.0f + cM_rndF(REG8_F(11) + 5.0f);
             i_this->gravity = -(REG8_F(12) + 2.0f);
@@ -689,18 +689,21 @@ static BOOL daKS_Execute(ks_class* i_this) {
         }
     }
 
-    if (i_this->m2D4 != 0 && i_this->m2CB != 3) {
-        fopAc_ac_c* pfVar4 = fopAcM_SearchByID(i_this->m2D4);
+    if (i_this->mGmID != 0 && i_this->m2CB != 3) {
+        fopAc_ac_c* mpGmActor = fopAcM_SearchByID(i_this->mGmID);
+
         bool bVar5 = false;
-        if (pfVar4 && ((fopAcM_GetParam(pfVar4) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(pfVar4) & 0xff0000) == 0)) {
-            if (fopAcM_GetName(pfVar4) == PROC_GM) {
-                if (pfVar4->health <= 0) {
+
+        if (mpGmActor && ((fopAcM_GetParam(mpGmActor) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(mpGmActor) & 0xff0000) == 0)) {
+            if (fopAcM_GetName(mpGmActor) == PROC_GM) {
+                if (mpGmActor->health <= 0) {
                     bVar5 = true;
                 }
             }
             else {
                 bVar5 = true;
             }
+
             if (bVar5) {
                 if (i_this->m2CB != 4) {
                     i_this->m2CB = 3;
@@ -710,16 +713,20 @@ static BOOL daKS_Execute(ks_class* i_this) {
                     if (i_this->m2CC != 43) {
                         daPy_py_c* link = (daPy_py_c*)daPy_getPlayerLinkActorClass();
                         link->offHeavyState();
+
                         HEAVY_IN = 0;
                         GORON_COUNT = 0;
+
                         i_this->m2F0[0] = 0;
                         i_this->m2F0[1] = 0;
+
                         i_this->m2CC = 0x2a;
                     }
                 }
             }
         }
     }
+
     switch(i_this->m2CB) {
         case 0:
             action_dousa_move(i_this);
@@ -754,6 +761,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
     if (i_this->m2E8[0] == 0) {
         i_this->m2E8[0] = cM_rndFX(25.0f) + 50.0f;
+
         i_this->m302 = 1;
     }
     
@@ -772,6 +780,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
     if (i_this->m2CC != 41 && !i_this->mAcch.ChkGroundHit() && !i_this->mAcch.ChkWaterIn()) {
         i_this->speed.y += i_this->gravity;
+        
         if (i_this->speed.y < -20.0f) {
             i_this->speed.y = -20.0f;
         }
