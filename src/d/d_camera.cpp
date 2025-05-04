@@ -49,7 +49,7 @@ namespace {
     }
 
     inline static bool isPlayerGuarding(u32 param_0) {
-        return dComIfGp_checkPlayerStatus1(param_0, 0x80000) || daNpc_Md_c::m_mirror;
+        return dComIfGp_checkPlayerStatus1(param_0, 0x80000) || daNpc_Md_c::isMirror();
     }
 
     inline static bool isPlayerFlying(u32 param_0) {
@@ -727,15 +727,13 @@ bool dCamera_c::Run() {
     float fVar1;
     float fVar2;
     float fVar3;
-    bool bVar4;
-    uint uVar5;
     long next;
     dCamera_c* camera;
-    cSAngle local_40 ;
+    cSAngle local_40;
 
     bool res = FALSE;
     
-    camera = (dCamera_c *)0x0;
+    camera = NULL;
 
     mForcusLine.Off();
 
@@ -835,7 +833,7 @@ bool dCamera_c::Run() {
     mTrimTypeForce = -1;
     m068 = 9;
     
-    if (chkFlag(0x200000) && dCamParam_c::styles[mCurStyle].engineIdx != 11) {
+    if (chkFlag(0x200000) && mCamParam.Algorythmn(mCurStyle) != 11) {
         if (push_any_key(mPadId) || mMonitor.field_0x0C.x > 10.0f || !m360 || m31C) {
             clrFlag(0x200000);
         }
@@ -845,15 +843,15 @@ bool dCamera_c::Run() {
     }
     else {
         // Issues here
-        res = (this->*engine_tbl[dCamParam_c::styles[mCurStyle].engineIdx])(mCurStyle);
+        res = (this->*engine_tbl[mCamParam.Algorythmn(mCurStyle)])(mCurStyle);
         m07C++;
         m080++;
         m118++;
         m108++;
-        m11C++;   
+        m11C++;
     }
 
-    if (res) {
+    if (!res) {
         m514 = 0;
     }
 
@@ -882,7 +880,7 @@ bool dCamera_c::Run() {
         mCenter.x = m044.x;
         mCenter.z = m044.z;
         
-        if ((dCamParam_c::styles[mCurStyle].engineIdx == 4) && chkFlag(0x10000800)) {
+        if ((mCamParam.Algorythmn(mCurStyle) == 4) && chkFlag(0x10000800)) {
             m068 &= ~8;
             mCenter.y = m044.y;
         }
@@ -907,10 +905,10 @@ bool dCamera_c::Run() {
     }
 
     if (mDMCSystem.field_0x0) {
-        mAngleY = getDMCAngle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle));
+        mAngleY = getDMCAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
     }
     else {
-        mAngleY = cSAngle(mDirection.U().Inv());
+        mAngleY = mDirection.U().Inv();
     }
 
     if (mCenter.x == mEye.x && mCenter.z == mEye.z) {
@@ -918,7 +916,7 @@ bool dCamera_c::Run() {
         mUp.y = 1.0f;
         mUp.z = 0.0f;
     }
-    else if (mDirection.V() < cSAngle(-90.0f) && mDirection.V() > cSAngle(90.0f)) {
+    else if (mDirection.V().Val() > cSAngle(-90.0f) && mDirection.V() < cSAngle(90.0f)) {
         mUp.x = 0.0f;
         mUp.y = 1.0f;
         mUp.z = 0.0f;
@@ -931,7 +929,7 @@ bool dCamera_c::Run() {
 
     for (u32 i = 0; i < 3; i++) {
         bool playSound = FALSE;
-        if (m254 & uVar5 && (m258 & uVar5) == 0) { // Inline?
+        if ((m254 & (1 << i)) != 0 && (m258 & (1 << i)) == 0) {
             playSound = TRUE;
         }
         if (playSound) {
@@ -940,14 +938,14 @@ bool dCamera_c::Run() {
     }
 
     m258 = m254;
-    m254 = 0;
+    bool r3 = FALSE;
+    m254 = r3;    
     
-    bVar4 = FALSE;
     if (m100 && m101 && m102) { // Also Inline?
-        bVar4 = TRUE;
+        r3 = TRUE;
     }
 
-    if (bVar4) {
+    if (r3) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x10);
     }
     else {
@@ -957,14 +955,13 @@ bool dCamera_c::Run() {
     if (chkFlag(0x40000)) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
     }
-    else {
-        if (mDirection.R() < mCamSetup.m048) {
-            if (chkFlag(0x800)) {
-                dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
-            }
-            if (chkFlag(0x10000000)) {
-                dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x20);
-            }
+    else if (mDirection.R() < mCamSetup.m048) {
+        if (chkFlag(0x800)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
+        }
+        
+        if (chkFlag(0x10000000)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x20);
         }
     }
 
@@ -1156,12 +1153,12 @@ int dCamera_c::nextMode(s32 i_curMode) {
             next_mode = 0;
         }
         else if (check_owner_action(mPadId, 0x200000) || check_owner_action1(mPadId, 8)) {
-                next_mode = 14;
+            next_mode = 0xe;
         }
-        else if (check_owner_action(mPadId, 0x80000080)) {
+        else if (check_owner_action1(mPadId, 0x80000080)) {
             next_mode = 0x11;
         }
-        else if (check_owner_action(mPadId, 0x800000)) {
+        else if (check_owner_action1(mPadId, 0x800000)) {
             if (m144 == 0) {
                 next_mode = 0xc;
             }
@@ -1169,71 +1166,69 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 next_mode = 0x12;
             }
         }
-        else if (check_owner_action1(mPadId, 0x10)) {
+        else if (check_owner_action(mPadId, 0x10)) {
             next_mode = 0xf;
         }
-        else if (check_owner_action(mPadId, 0x2000)) {
+        else if (check_owner_action1(mPadId, 0x2000)) {
             next_mode = 4;
         }
-        else {
-            if (check_owner_action(mPadId, 0x25000) && !attn.Lockon()) {
-                next_mode = 10;
-            } else if (check_owner_action(mPadId, 0x80000) && !attn.Lockon()) {
-                next_mode = 11;
-            } else if (m144 == 0) {
-                next_mode = 12;
+        else if (check_owner_action1(mPadId, 0x25000) && !attn.Lockon()) {
+            next_mode = 10;
+        } else if (check_owner_action(mPadId, 0x80000) && !attn.Lockon()) {
+            next_mode = 11;
+        } else if (m144 == 0) {
+            next_mode = 12;
+        }
+        else if (check_owner_action1(mPadId, 2)) {
+            next_mode = 5;
+        }
+        else if (check_owner_action1(mPadId, 4)) {
+            next_mode = 6;
+        }
+        else if (check_owner_action(mPadId, 0x60)) {
+            next_mode = 6;
+        }
+        else if (check_owner_action(mPadId, 0x61)) {
+            next_mode = 5;
+        }
+        else if (check_owner_action(mPadId, 0x406) && i_curMode != 12) {
+            if (mpLockonTarget) {
+                next_mode = 8;
             }
-            else if (check_owner_action1(mPadId, 2)) {
-                next_mode = 5;
-            }
-            else if (check_owner_action1(mPadId, 4)) {
-                next_mode = 6;
-            }
-            else if (check_owner_action(mPadId, 0x60)) {
-                next_mode = 6;
-            }
-            else if (check_owner_action(mPadId, 0x61)) {
-                next_mode = 5;
-            }
-            else if (check_owner_action(mPadId, 0x406) && i_curMode != 12) {
-                if (mpLockonTarget) {
-                    next_mode = 8;
-                }
-            }
-            else if (attn.LockonTruth() && !check_owner_action(mPadId, 0xC000000)) {
+        }
+        else if (attn.LockonTruth() && !check_owner_action(mPadId, 0xC000000)) {
+            next_mode = 2;
+        }
+        else if (attn.Lockon()) {
+            next_mode = 1;
+        }
+        else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
+            mpLockonTarget = get_boomerang_actor(mpPlayerActor);
+            next_mode = 2;
+            mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
+        }
+        else if (isPlayerGuarding(mPadId)) {
+            next_mode = 19;
+        }
+        else if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
+            if (mpLockonActor) {
                 next_mode = 2;
-            }
-            else if (attn.Lockon()) {
-                next_mode = 1;
-            }
-            else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
-                mpLockonTarget = get_boomerang_actor(mpPlayerActor);
-                next_mode = 2;
-                mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
-            }
-            else if (isPlayerGuarding(mPadId)) {
-                next_mode = 19;
-            }
-            else if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
-                if (mpLockonActor) {
-                    next_mode = 2;
-                    mpLockonTarget = mpLockonActor;
-                }
-                else {
-                    next_mode = 0;
-                    mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
-                }
+                mpLockonTarget = mpLockonActor;
             }
             else {
-                switch (i_curMode) {
-                case 12:
-                    if (m144 != 0) {
-                        next_mode = 0;
-                    }
-                    break;
-                default:
+                next_mode = 0;
+                mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
+            }
+        }
+        else {
+            switch (i_curMode) {
+            case 12:
+                if (m144 != 0) {
                     next_mode = 0;
                 }
+                break;
+            default:
+                next_mode = 0;
             }
         }
     }
@@ -2392,7 +2387,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
 
     prev_hit_type = curr_hit_type;
 
-    if (m78B && (dCamParam_c::styles[mCurStyle].engineIdx != 4 || !chkFlag(0x10000800))) {
+    if (m78B && (mCamParam.Algorythmn(mCurStyle) != 4 || !chkFlag(0x10000800))) {
         mEye.y += 25.0f;
     }
 
@@ -2648,9 +2643,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     bool bVar3;
     bool bVar4;
     int iVar5;
-    short sVar10;
     float fVar37;
-    float fVar39;
     
     f32 fVar40 = 0.9f;
 
@@ -2694,7 +2687,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     }
 
     bVar1 = false;
-
+    
     if (daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying()) {
         bVar1 = true;
     }
@@ -2720,7 +2713,7 @@ bool dCamera_c::followCamera(s32 param_1) {
 
         local_49c.Val(80.0f);
 
-        if (daNpc_Cb1_c::m_flying && m788) {
+        if (daNpc_Cb1_c::isFlying() && m788) {
             if (m787) {
                 if (local_498 < cSAngle(30.0f)) {
                     local_498.Val(30.0f);
@@ -2978,7 +2971,7 @@ bool dCamera_c::followCamera(s32 param_1) {
         m388 = 0;
     }
 
-    if (check_owner_action(mPadId, 0x6800061) || check_owner_action1(mPadId, 0x10000) && mDMCSystem.field_0x0 == 0) {
+    if (check_owner_action(mPadId, 0x6800061) || (check_owner_action1(mPadId, 0x10000) && mDMCSystem.field_0x0 == 0)) {
         setDMCAngle();
     }
 

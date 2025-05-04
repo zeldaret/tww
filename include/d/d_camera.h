@@ -261,13 +261,13 @@ public:
     /* 0x368 */ f32 m368;
     /* 0x36C */ cXyz m36C;
     /* 0x378 */ int m378;
-    /* 0x37C */ u8 m37C;
-    /* 0x37D */ u8 m37D;
+    /* 0x37C */ u8 m37C; // `CalcSubjectAngle` suggests this should be u8 but `followCamera` suggests it should be int
+    /* 0x37D */ u8 m37D; // The fact that this a referenced in `CalcSubjectAngle` suggests m37C can't be an int?
     /* 0x37E */ s16 m37E;
     /* 0x380 */ int m380;
     /* 0x384 */ f32 m384;
-    /* 0x388 */ f32 m388;
-    /* 0x38C */ f32 m38C;
+    /* 0x388 */ f32 m388; // `CalcSubjectAngle` suggests this should be a float but `followCamera` suggests it should be int
+    /* 0x38C */ f32 m38C; // Similar issue for 38C
     /* 0x390 */ s16 m390;
     /* 0x392 */ s16 m392;
     /* 0x394 */ f32 m394;
@@ -279,7 +279,7 @@ public:
     /* 0x3AC */ f32 m3AC;
     /* 0x3B0 */ f32 m3B0;
     /* 0x3B4 */ int m3B4;
-    /* 0x3B8 */ cSAngle m3B8;
+    /* 0x3B8 */ cSAngle m3B8; // `CalcSubjectAngle` thinks this is a cSAngle but `followCamera` thinks its a float (could also be cSGlobe since m3BA is a cSAngle and m3BC is a float)
     /* 0x3BA */ cSAngle m3BA;
     /* 0x3BC */ f32 m3BC;
     /* 0x3C0 */ cXyz m3C0;

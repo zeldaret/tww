@@ -184,7 +184,7 @@ public:
     s16 LockonLatitude(f32);
     f32 LockonFovy(f32);
     f32 LockonCenterHeight(f32);
-    int Algorythmn(s32 i_style) { return mpStyle[i_style].engineIdx; }
+    int Algorythmn(s32 i_style) { return styles[i_style].engineIdx; }
     int Algorythmn() { return mpStyle->engineIdx; }
     bool CheckFlag(u16 flag) { return mpStyle->flag & flag; }
 };
