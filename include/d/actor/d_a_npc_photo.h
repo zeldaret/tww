@@ -6,7 +6,9 @@
 #include "d/d_npc.h"
 
 struct sPhotoAnmDat {
-    
+    /* 0x00 */ u8 field_0x00;
+    /* 0x01 */ u8 field_0x01;
+    /* 0x02 */ u8 field_0x02;
 };
 
 class daNpcPhoto_c : public fopNpc_npc_c {
@@ -83,25 +85,27 @@ public:
     BOOL isPhotoDxOk();
     void setCollision(dCcD_Cyl*, cXyz, float, float);
 
-    static const char M_arcname[4];
+    static const char m_arcname[4];
 
 public:
+    typedef void(daNpcPhoto_c::*MoveFunc_t)();
+
     /* 0x6C4 */ request_of_phase_process_class mPhs1;
     /* 0x6CC */ request_of_phase_process_class mPhs2;
-    /* 0x6D4 */ J3DAnmTexPattern* mHeadTexPattern;
+    /* 0x6D4 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6EC */ uint field_0x6EC;
+    /* 0x6EC */ uint mShadowId;
     /* 0x6F0 */ dNpc_PathRun_c mPathRun;
     /* 0x6F8 */ dCcD_Cyl field_0x6F8[2];
     /* 0x958 */ cXyz field_0x958;
     /* 0x964 */ cXyz field_0x964;
     /* 0x970 */ cXyz field_0x970;
     /* 0x97C */ int field_0x97C;
-    /* 0x980 */ int field_0x980;
-    /* 0x984 */ int field_0x984;
+    /* 0x980 */ u32* field_0x980;
+    /* 0x984 */ f32 field_0x984;
     /* 0x988 */ f32 field_0x988;
     /* 0x98C */ f32 field_0x98C;
-    /* 0x990 */ u8 field_0x990[0x994 - 0x990];
+    /* 0x990 */ int field_0x990;
     /* 0x994 */ bool field_0x994;
     /* 0x995 */ u8 field_0x995[0x996 - 0x995];
     /* 0x996 */ s16 mPhotoLinkBackEventIdx;
@@ -126,22 +130,23 @@ public:
     /* 0x9BC */ bool field_0x9BC;
     /* 0x9BD */ bool field_0x9BD;
     /* 0x9BE */ u8 field_0x9BE;
-    /* 0x9BF */ bool field_0x9BF;
+    /* 0x9BF */ u8 field_0x9BF;
     /* 0x9C0 */ u8 field_0x9C0;
     /* 0x9C1 */ u8 field_0x9C1;
     /* 0x9C2 */ bool field_0x9C2;
-    /* 0x9C3 */ u8 field_0x9C3[0x9C5 - 0x9C3];
+    /* 0x9C3 */ u8 field_0x9C3;
+    /* 0x9C4 */ u8 field_0x9C4[0x9C5 - 0x9C4];
     /* 0x9C5 */ u8 mItemNo;
     /* 0x9C6 */ u8 field_0x9C6;
     /* 0x9C7 */ bool field_0x9C7;
     /* 0x9C8 */ bool field_0x9C8;
     /* 0x9C9 */ u8 field_0x9C9;
-    /* 0x9CA */ u8 field_0x9CA[0x9CB - 0x9CA];
+    /* 0x9CA */ u8 field_0x9CA;
     /* 0x9CB */ s8 mActIdx;
-    /* 0x9CC */ u8 field_0x9CC[0x9CD - 0x9CC];
+    /* 0x9CC */ bool field_0x9CC;
     /* 0x9CD */ bool field_0x9CD;
     /* 0x9CE */ u8 field_0x9CE[0x9D0 - 0x9CE];
-    /* 0x9D0 */ int field_0x9D0;
+    /* 0x9D0 */ u32 field_0x9D0;
     /* 0x9D4 */ bool field_0x9D4;
     /* 0x9D5 */ u8 field_0x9D5[0x9D6 - 0x9D5];
     /* 0x9D6 */ u8 field_0x9D6;
