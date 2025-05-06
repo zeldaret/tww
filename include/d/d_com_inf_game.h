@@ -1141,6 +1141,10 @@ inline void dComIfGs_offCompleteCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }
 
+inline s32 dComIfGs_getCollectMapNum() {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().getCollectMapNum();
+}
+
 inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGridForAgb(i_no);
 }
