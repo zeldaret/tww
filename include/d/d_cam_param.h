@@ -4,10 +4,44 @@
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_angle.h"
 
+// Array indexes, do not change values
+enum dCamStyleParam_e {
+    dCamStyleParam_UNK0 = 0,
+    dCamStyleParam_UNK1 = 1,
+    dCamStyleParam_UNK2 = 2,
+    dCamStyleParam_UNK3 = 3,
+    dCamStyleParam_UNK4 = 4,
+    dCamStyleParam_CENTER_HEIGHT_BASE = 5,
+    dCamStyleParam_CENTER_HEIGHT_UPPER = 6,
+    dCamStyleParam_CENTER_HEIGHT_LOWER = 7,
+    dCamStyleParam_LOCKON_CENTER_HEIGHT_MIN = 8,
+    dCamStyleParam_LOCKON_CENTER_HEIGHT_MAX = 9,
+    dCamStyleParam_UNK10 = 10,
+    dCamStyleParam_UNK11 = 11,
+    dCamStyleParam_UNK12 = 12,
+    dCamStyleParam_UNK13 = 13,
+    dCamStyleParam_UNK14 = 14,
+    dCamStyleParam_UNK15 = 15,
+    dCamStyleParam_UNK16 = 16,
+    dCamStyleParam_UNK17 = 17,
+    dCamStyleParam_LOCKON_LATITUDE_MIN = 18,
+    dCamStyleParam_LOCKON_LATITUDE_MAX = 19,
+    dCamStyleParam_UNK20 = 20,
+    dCamStyleParam_UNK21 = 21,
+    dCamStyleParam_UNK22 = 22,
+    dCamStyleParam_LOCKON_LONGITUDE_MIN = 23,
+    dCamStyleParam_LOCKON_LONGITUDE_MAX = 24,
+    dCamStyleParam_FOVY_BASE = 25,
+    dCamStyleParam_FOVY_UPPER = 26,
+    dCamStyleParam_FOVY_LOWER = 27,
+    dCamStyleParam_LOCKON_FOVY_MIN = 28,
+    dCamStyleParam_LOCKON_FOVY_MAX = 29,
+};
+
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
     /* 0x04 */ int engineIdx;
-    /* 0x08 */ f32 m08[30];
+    /* 0x08 */ f32 styleParam[30];
     /* 0x80 */ u16 flag;
 };  // Size: 0x82
 
@@ -172,7 +206,7 @@ public:
     virtual ~dCamParam_c();
 
     u16 Flag(s32 styleIdx, u16 mask) { return mask & styles[styleIdx].flag; }
-    f32 Val(s32 styleIdx, int structIdx) { return styles[styleIdx].m08[structIdx]; }
+    f32 Val(s32 styleIdx, int paramIdx) { return styles[styleIdx].styleParam[paramIdx]; }
     BOOL Change(s32);
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);

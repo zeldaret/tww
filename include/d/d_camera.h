@@ -326,7 +326,7 @@ public:
     /* 0x588 */ int m588;
     /* 0x58C */ int m58C;
     /* 0x590 */ int mBlureTimer;
-    /* 0x594 */ csXyz m594;
+    /* 0x594 */ csXyz mBlureRotation;
     /* 0x59A */ s16 m59A;
     /* 0x59C */ int mBlurePositionType;
     /* 0x5A0 */ cXyz mBlurePosition;
