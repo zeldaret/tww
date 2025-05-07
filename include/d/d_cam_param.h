@@ -43,7 +43,7 @@ struct dCamera__Style {
     /* 0x04 */ int engineIdx;
     /* 0x08 */ f32 styleParam[30];
     /* 0x80 */ u16 flag;
-};  // Size: 0x82
+};  // Size: 0x84
 
 class dCstick_c {
 public:
