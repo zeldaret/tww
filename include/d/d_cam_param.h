@@ -38,6 +38,19 @@ enum dCamStyleParam_e {
     dCamStyleParam_LOCKON_FOVY_MAX = 29,
 };
 
+enum dCamParamFlag_e {
+    dCamParam_UNK001 = 0x001,
+    dCamParam_UNK002 = 0x002,
+    dCamParam_UNK004 = 0x004,
+    dCamParam_UNK010 = 0x010,
+    dCamParam_UNK020 = 0x020,
+    dCamParam_UNK040 = 0x040,
+    dCamParam_UNK080 = 0x080,
+    dCamParam_UNK100 = 0x100,
+    dCamParam_UNK200 = 0x200,
+    dCamParam_UNK400 = 0x400,
+};
+
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
     /* 0x04 */ int engineIdx;
@@ -195,10 +208,10 @@ public:
 
 class dCamParam_c {
 public:
-    /* 0x0 */ dCamera__Style* mpStyle;
+    /* 0x0 */ const dCamera__Style* mpStyle;
     /* 0x4 */ s32 mStyleIdx;
 
-    static dCamera__Style styles[];
+    static const dCamera__Style styles[];
     static const s32 style_num;
 
 public:

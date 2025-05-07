@@ -543,7 +543,7 @@ public:
 
     static engine_fn engine_tbl[];
     static const int type_num;
-    static dCamera__Type types[];
+    static const dCamera__Type types[];
     static const int mvBGType_num;
     static const char* mvBGTypes[];
 };
