@@ -243,9 +243,7 @@ cflags_runtime = [
 # Dolphin library flags
 cflags_dolphin = [
     *cflags_base,
-    "-use_lmw_stmw on",
-    "-str reuse,pool,readonly",
-    "-inline auto",
+    "-fp_contract off",
 ]
 
 # Framework flags
@@ -275,7 +273,7 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
-        "cflags": cflags_base,
+        "cflags": cflags_dolphin,
         "progress_category": "sdk",
         "host": False,
         "objects": objects,
@@ -502,8 +500,8 @@ config.libs = [
             Object(Matching,    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),
-            Object(NonMatching, "d/d_cam_type.cpp"),
-            Object(NonMatching, "d/d_cam_style.cpp"),
+            Object(MatchingFor("GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
+            Object(Matching,    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),
             Object(Matching,    "d/d_wood.cpp", extra_cflags=["-sym off"]),
@@ -1075,11 +1073,11 @@ config.libs = [
     DolphinLib(
         "mtx",
         [
-            Object(NonMatching, "dolphin/mtx/mtx.c"),
-            Object(NonMatching, "dolphin/mtx/mtxvec.c"),
-            Object(NonMatching, "dolphin/mtx/mtx44.c"),
-            Object(NonMatching, "dolphin/mtx/vec.c"),
-            Object(NonMatching, "dolphin/mtx/quat.c"),
+            Object(Matching,    "dolphin/mtx/mtx.c"),
+            Object(Matching,    "dolphin/mtx/mtxvec.c"),
+            Object(Matching,    "dolphin/mtx/mtx44.c"),
+            Object(Matching,    "dolphin/mtx/vec.c"),
+            Object(Matching,    "dolphin/mtx/quat.c"),
         ],
     ),
     DolphinLib(

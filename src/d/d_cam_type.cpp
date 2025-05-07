@@ -5,7 +5,10 @@
 
 #include "d/d_camera.h"
 
-dCamera__Type dCamera_c::types[63] = {
+// Note: Not matching for JPN yet.
+// All these array values are different because they're indexes into dCamParam_c::styles, which got shifted around.
+// Need to make an enum for these.
+const dCamera__Type dCamera_c::types[63] = {
     { "Empty", {
         { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
         { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
