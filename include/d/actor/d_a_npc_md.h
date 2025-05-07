@@ -19,7 +19,7 @@ public:
     /* 0x10 */ f32 m10;
     /* 0x14 */ f32 m14;
     /* 0x18 */ f32 m18;
-    /* 0x1C */ f32 m1C;
+    /* 0x1C */ f32 wallSlowdownFactor;
     /* 0x20 */ s16 m20;
     /* 0x22 */ s16 m22;
     /* 0x24 */ s16 m24;
@@ -546,7 +546,7 @@ public:
     /* 0x30FC */ f32 mRunRate;
     /* 0x3100 */ int m3100;
     /* 0x3104 */ int m3104;
-    /* 0x3108 */ f32 m3108;
+    /* 0x3108 */ f32 mCurrentSpeed;
     /* 0x310C */ f32 m310C;
     /* 0x3110 */ s16 m3110;
     /* 0x3112 */ s16 m3112;

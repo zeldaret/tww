@@ -43,7 +43,7 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
     cLib_addCalc(&current.pos.y, m370C.y, 0.5f, 0.5f, 0.05f);
     cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 0.5f, 0.05f);
     if (mStickDistance > 0.05f) {
-        int iVar2 = abs((s16)(m34E8 - shape_angle.y));
+        int iVar2 = abs((s16)(mTargetAngleY - shape_angle.y));
         if (iVar2 > 0x3c72 && iVar2 < 0x438e) {
             return false;
         }

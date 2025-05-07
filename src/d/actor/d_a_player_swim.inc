@@ -16,77 +16,149 @@
 
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
 void daPy_lk_c::setSpeedAndAngleSwim() {
-    float fVar1;
+    float calculatedSpeed;
     short oldAngleY;
 
-    BOOL bVar3 = false;
+    // Flag used to indicate a forced stop due to backwards swimming input while locked on
+    BOOL isForcedStop = false;
 
+    // Only perform calculations if not currently in the "swim upward" state
     if (mCurProc != daPyProc_SWIM_UP_e) {
+
+        // If not locked onto a target, handle free swimming movement
         if (!mpAttention->Lockon()) {
+
+            // Only process movement if the stick input is significant
             if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
 
+                // If swimming backward relative to facing angle, forcibly reset direction
                 if (getDirectionFromShapeAngle() == DIR_BACKWARD) {
+                    // Stop Link's ripple animation(s)
                     mSwimTailEcallBack[0].onEnd();
                     mSwimTailEcallBack[1].onEnd();
 
-                    shape_angle.y = m34E8;
-                    current.angle.y = m34E8;
+                    // Snap to target
+                    shape_angle.y = mTargetAngleY;
+                    current.angle.y = mTargetAngleY;
                 }
                 else {
-                    cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);     
+                    // Smoothly rotate towards target angle
+                    cLib_addCalcAngleS(
+                        &shape_angle.y,
+                        mTargetAngleY,
+                        daPy_HIO_swim_c0::m.angleApproachStep,
+                        daPy_HIO_swim_c0::m.angleTurnRateMin,
+                        daPy_HIO_swim_c0::m.angleTurnRateMax
+                    );
                 }
 
-                fVar1 = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
+                // Calculate forward movement speed based on how much direction has changed
+                /*
+                   Note:
+                   This code is the beginning of a series of oversights that resulted in the `super-swim` bug.
+                   The code cM_scos(shape_angle.y - oldAngleY) can return a range of values from -1.0 to 1.0[1].
+                   Due to a lack of clamping on the this value, a value <0 would result in a negative speed
+                   as mStickDistance represents the magnitude of the stick direction (ie. it is strictley positive).
+                   The fact that this variable can take on a negative value produces issues strictly when those negative values 
+                   are maintained. The devs most likely intended for negative speeds to be possible but did not foresee 
+                   the possibility of maintaining negative directions while in free-cam mode.
+                   
+                   [1] The case in which it returns -1.0f is when the new shape angle is -180 degrees 
+                   relative to the old shape angle (ie. Link turns around in the water). 
+                   The 1.0 case would be when the angle hasn't changed at all (ie. Link moving in the same direction).
+                */
+                calculatedSpeed = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
             }
             else {
-                fVar1 = 0.0f;
+                // Halt movement if no significant stick input detected
+                calculatedSpeed = 0.0f;
             }
 
+            // Smoothly rotate body angle to match shape angle
             cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 2, 0x2000, 0x1000);
 
-            mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+            /* 
+               Note: 
+               This assignment is strictily positive. This itself is not a bug but it has implications 
+               for the `super-swim` glitch by the usage of mMaxNormalSpeed in `daNpc_Md_c::setNormalSpeedF`
+            */
+            mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
+
+        // If locked on to a target, handle swimming behavior differently
         else {
-            setShapeAngleToAtnActor();
+            setShapeAngleToAtnActor();  // align shape angle to look-at target
 
             if (mStickDistance > 0.05f) {
                 oldAngleY = current.angle.y;
 
+                // Prevent swimming backward while locked on
                 if (getDirectionFromCurrentAngle() == DIR_BACKWARD) {
                     mSwimTailEcallBack[0].onEnd();
                     mSwimTailEcallBack[1].onEnd();
 
-                    fVar1 = 0.0f;
-                    bVar3 = TRUE;
+                    calculatedSpeed = 0.0f;
+                    isForcedStop = TRUE;  // stop movement
                 }
                 else {
-                    cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);
-                    fVar1 = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
+                    cLib_addCalcAngleS(
+                        &current.angle.y,
+                        mTargetAngleY,
+                        daPy_HIO_swim_c0::m.angleApproachStep,
+                        daPy_HIO_swim_c0::m.angleTurnRateMin,
+                        daPy_HIO_swim_c0::m.angleTurnRateMax
+                    );
+
+                    calculatedSpeed = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
                 }
             }
             else {
-                fVar1 = 0.0f;
+                calculatedSpeed = 0.0f;
             }
-            
-            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.field_0xC;
+
+            // Adjust max speed based on alignment between shape and facing direction
+            /* 
+               Note: 
+               This assignment is strictily positive as it is guarenteed to be at worst half the base swim speed.
+               This has implications for the `super-swim` glitch by the usage of mMaxNormalSpeed in `daNpc_Md_c::setNormalSpeedF`
+            */
+            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
     }
+
+    // If in swim-up state, stop horizontal movement
     else {
-        fVar1 = 0.0f;
-        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+        calculatedSpeed = 0.0f;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
     }
 
-    setNormalSpeedF(fVar1, daPy_HIO_swim_c0::m.field_0x18, daPy_HIO_swim_c0::m.field_0x1C, daPy_HIO_swim_c0::m.field_0x20);
+    // Apply calculated speed with acceleration parameters
+    /*
+        Note:
+        The speed increase calculation done by this function was not developed
+        to properly handle negative values resulting in continous increase of negative speed. 
+        More details in the function itself.
+    */
+    setNormalSpeedF(
+        calculatedSpeed,
+        daPy_HIO_swim_c0::m.acceleration,
+        daPy_HIO_swim_c0::m.speedStepMax,
+        daPy_HIO_swim_c0::m.speedStepMin
+    );
 
-    if (bVar3 && mVelocity < 5.0f) {
-        current.angle.y = m34E8;
+    // If a forced stop was triggered and velocity is low, zero velocity and reset angle
+    if (isForcedStop && mVelocity < 5.0f) {
+        current.angle.y = mTargetAngleY;
         mVelocity = 0.0f;
     }
+
+    // Special case: some player status triggers an immediate stop
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         mVelocity = 0.0f;
     }
 }
+
 
 /* 8013CF2C-8013CFC0       .text checkNextModeSwim__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextModeSwim() {
@@ -124,7 +196,7 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         offNoResetFlg0(daPyFlg0_UNK100);
 
-        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         mVelocity *= 0.75f;
 
         if (mVelocity >= mMaxNormalSpeed) {

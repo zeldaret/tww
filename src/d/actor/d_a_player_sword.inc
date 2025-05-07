@@ -367,9 +367,9 @@ int daPy_lk_c::getCutDirection() {
     } else {
         s16 angle;
         if (mpAttnActorLockOn != NULL) {
-            angle = m34E8 - fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
+            angle = mTargetAngleY - fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
         } else {
-            angle = m34E8 - m34DE;
+            angle = mTargetAngleY - m34DE;
         }
         direction = getDirectionFromAngle(angle);
     }
@@ -388,7 +388,7 @@ int daPy_lk_c::changeCutProc() {
     if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {
-        sVar2 = m34E8;
+        sVar2 = mTargetAngleY;
     }
     u32 bVar1 = m34C4;
     if (bVar1 > 4) {
@@ -1535,7 +1535,7 @@ BOOL daPy_lk_c::procCutRoll() {
         if (mStickDistance > 0.05f) {
             cLib_addCalcAngleS(
                 &current.angle.y,
-                m34E8,
+                mTargetAngleY,
                 daPy_HIO_move_c0::m.field_0x6,
                 daPy_HIO_move_c0::m.field_0x0,
                 daPy_HIO_move_c0::m.field_0x4
@@ -1695,9 +1695,9 @@ BOOL daPy_lk_c::procCutTurnMove() {
     } else if (swordButton()) {
         f32 dVar8 = 0.0f;
         if (mStickDistance > 0.05f) {
-            int direction = getDirectionFromAngle(m34E8 - m34E6);
+            int direction = getDirectionFromAngle(mTargetAngleY - m34E6);
             daPy_ANM dVar6 = (daPy_ANM)0xffff;
-            cLib_addCalcAngleS(&current.angle.y, m34E8, 4, 12000, 0x2000);
+            cLib_addCalcAngleS(&current.angle.y, mTargetAngleY, 4, 12000, 0x2000);
             f32 in_f30;
             if (mDirection == DIR_FORWARD || mDirection == DIR_BACKWARD) {
                 if (direction == DIR_LEFT || direction == DIR_RIGHT) {

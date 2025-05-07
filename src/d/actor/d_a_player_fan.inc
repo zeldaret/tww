@@ -471,7 +471,7 @@ BOOL daPy_lk_c::procFanGlide() {
 
             f32 local_64;
             dKyw_get_AllWind_vec(&mHeadTopPos, &local_60, &local_64);
-            int uVar6 = m34E8 - shape_angle.y;
+            int uVar6 = mTargetAngleY - shape_angle.y;
             cLib_addCalc(
                 &mVelocity,
                 (daPy_HIO_fan_c0::m.field_0x48 * mStickDistance) * cM_scos(uVar6),

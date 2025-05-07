@@ -218,7 +218,7 @@ daNpc_Md_HIO2_c::daNpc_Md_HIO2_c() {
     m22 = 2900;
     m24 = 5;
     m18 = 2.6f;
-    m1C = 0.6f;
+    wallSlowdownFactor = 0.6f;
 }
 
 /* 00000274-00000574       .text __ct__14daNpc_Md_HIO_cFv */
@@ -1629,41 +1629,83 @@ BOOL daNpc_Md_c::hitNpcAction(void* r29) {
 }
 
 /* 00008E54-00008FFC       .text setNormalSpeedF__10daNpc_Md_cFfffff */
-void daNpc_Md_c::setNormalSpeedF(f32 f1, f32 f2, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
-    f32 f31 = mMaxNormalSpeed * f1;
-    int r3 = wallHitCheck();
-    if (r3 >= 0) {
-        s16 angle = current.angle.y + 0x8000 - mAcchCir[r3].GetWallAngleY();
+void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
+    // Calculate the desired speed based on a scaling factor and the NPC's maximum normal speed
+    /* 
+        Note: 
+        This code is where the negative speed increase happens. It was established in the
+        calling function that `mMaxNormalSpeed` was a stricley positive variable.
+        That means that if `i_speedScale` is negative, then `desiredSpeed` will be as well.
+    */
+    f32 desiredSpeed = mMaxNormalSpeed * i_speedScale;
+
+    // Check if the NPC is colliding with a wall
+    int wallIndex = wallHitCheck();
+    
+    if (wallIndex >= 0) {
+        // Calculate the angle between the NPC and the wall
+        s16 angle = current.angle.y + 0x8000 - mAcchCir[wallIndex].GetWallAngleY();
+
+        // If the angle is not too steep, reduce speed based on angle and slowdown factor
         if (abs(angle) < 0x4000) {
-            f31 *= (1.0f - l_HIO.m008.m1C * cM_scos(angle));
+            desiredSpeed *= (1.0f - l_HIO.m008.wallSlowdownFactor * cM_scos(angle));
         }
     }
+
     f32 targetSpeed;
     f32 maxStep;
-    f32 f28;
-    if (f31 < m3108) {
-        f32 temp2 = m3108 - f31;
-        if (temp2 > i_maxStep) {
+
+    // If slowing down (desired speed is less than current speed)
+    /*
+        Note: 
+        When desiredSpeed is a negative value due to the reasons above,
+        this conditional will always return TRUE
+    */
+    if (desiredSpeed < mCurrentSpeed) {
+        // Determine how much the NPC should slow down by
+        f32 speedDelta = mCurrentSpeed - desiredSpeed;
+
+        // Limit how fast the NPC slows down
+        if (speedDelta > i_maxStep) {
             maxStep = i_maxStep;
         } else {
-            maxStep = temp2;
+            maxStep = speedDelta;
         }
+
+        // Enforce a minimum deceleration step
         if (maxStep < i_minStep) {
             maxStep = i_minStep;
         }
-        f2 = 0.0f;
-        targetSpeed = f31;
+
+        // External speed adjustments are ignored when slowing down
+        i_externalSpeedAdd = 0.0f;
+        /* 
+            Note:
+            Link's speed is getting set to the larger negative value
+        */
+        targetSpeed = desiredSpeed;
+
     } else {
+        // When accelerating, use the max step directly
         maxStep = i_maxStep;
         targetSpeed = 0.0f;
     }
-    if (!cM3d_IsZero(f2)) {
-        m3108 += f2;
-        if (m3108 > f31) {
-            m3108 = f31;
+
+    // Apply external speed additions if present
+    if (!cM3d_IsZero(i_externalSpeedAdd)) {
+        mCurrentSpeed += i_externalSpeedAdd;
+
+        // Clamp to the desired speed if it would exceed it
+        /*
+            Note:
+            Will always be true with negative values
+        */
+        if (mCurrentSpeed > desiredSpeed) {
+            mCurrentSpeed = desiredSpeed;
         }
     } else {
-        cLib_addCalc(&m3108, targetSpeed, i_scale, maxStep, i_minStep);
+        // Smoothly adjust current speed towards target speed
+        cLib_addCalc(&mCurrentSpeed, targetSpeed, i_scale, maxStep, i_minStep);
     }
 }
 
@@ -1687,12 +1729,12 @@ void daNpc_Md_c::setSpeedAndAngleNormal(f32 f1, s16 r4) {
 void daNpc_Md_c::walkProc(f32 f1, s16 r3) {
     mMaxNormalSpeed = l_HIO.m008.m08;
     setSpeedAndAngleNormal(f1, r3);
-    f32 temp = std::fabsf(m3108 / mMaxNormalSpeed);
+    f32 temp = std::fabsf(mCurrentSpeed / mMaxNormalSpeed);
     f32 temp2 = temp * l_HIO.m008.m18;
     mpMorf->setPlaySpeed(temp2);
     mpArmMorf->setPlaySpeed(temp2);
     setRunRate(temp);
-    speedF = m3108;
+    speedF = mCurrentSpeed;
 }
 
 /* 00009180-000092E0       .text jumpNpcAction__10daNpc_Md_cFPv */

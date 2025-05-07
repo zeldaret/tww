@@ -66,7 +66,7 @@ void daPy_lk_c::setClimbShapeOffset() {
 
 /* 80135DA0-80135E14       .text getClimbDirectionFromAngle__9daPy_lk_cFv */
 int daPy_lk_c::getClimbDirectionFromAngle() {
-    s16 angle = m34E8 - shape_angle.y;
+    s16 angle = mTargetAngleY - shape_angle.y;
     if (abs(angle) > 0x7000) {
         return DIR_BACKWARD;
     } else if (angle >= 0x1000) {
@@ -397,7 +397,7 @@ BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
 
     dVar4 = getClimbMoveAnmSpeed();
     commonProcInit(daPyProc_CLIMB_MOVE_SIDE_e);
-    m34D4 = m34E8 - shape_angle.y;
+    m34D4 = mTargetAngleY - shape_angle.y;
     m34C2 = 7;
     mProcVar0.m3570 = param_0;
     if (param_0 != 0) {

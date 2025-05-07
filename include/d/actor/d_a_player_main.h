@@ -2082,7 +2082,7 @@ public:
     /* 0x34E2 */ s16 m34E2;
     /* 0x34E4 */ s16 m34E4;
     /* 0x34E6 */ s16 m34E6;
-    /* 0x34E8 */ s16 m34E8;
+    /* 0x34E8 */ s16 mTargetAngleY;
     /* 0x34EA */ s16 m34EA;
     /* 0x34EC */ s16 m34EC;
     /* 0x34EE */ u16 mSeAnmIdx;

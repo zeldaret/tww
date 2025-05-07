@@ -2160,12 +2160,12 @@ int daPy_lk_c::getDirectionFromAngle(s16 angle) {
 
 /* 80108B08-80108B38       .text getDirectionFromShapeAngle__9daPy_lk_cFv */
 int daPy_lk_c::getDirectionFromShapeAngle() {
-    return getDirectionFromAngle(m34E8 - shape_angle.y);
+    return getDirectionFromAngle(mTargetAngleY - shape_angle.y);
 }
 
 /* 80108B38-80108B68       .text getDirectionFromCurrentAngle__9daPy_lk_cFv */
 int daPy_lk_c::getDirectionFromCurrentAngle() {
-    return getDirectionFromAngle(m34E8 - current.angle.y);
+    return getDirectionFromAngle(mTargetAngleY - current.angle.y);
 }
 
 /* 80108B68-80108D80       .text setNormalSpeedF__9daPy_lk_cFffff */
@@ -2410,7 +2410,7 @@ void daPy_lk_c::setSpeedAndAngleAtnBack() {
         }
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
-            &current.angle.y, m34E8,
+            &current.angle.y, mTargetAngleY,
             daPy_HIO_atnMoveB_c0::m.field_0x4,
             daPy_HIO_atnMoveB_c0::m.field_0x0,
             daPy_HIO_atnMoveB_c0::m.field_0x2
@@ -2438,7 +2438,7 @@ void daPy_lk_c::setSpeedAndAngleAtnActor() {
         }
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
-            &current.angle.y, m34E8,
+            &current.angle.y, mTargetAngleY,
             daPy_HIO_atnMove_c0::m.field_0x4,
             daPy_HIO_atnMove_c0::m.field_0x0,
             daPy_HIO_atnMove_c0::m.field_0x2
@@ -3621,7 +3621,7 @@ BOOL daPy_lk_c::checkNextMode(int param_1) {
         mDirection = DIR_NONE;
         int direction = getDirectionFromCurrentAngle();
         if (std::abs(mVelocity) <= 0.001f) {
-            if ((cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800) && (mStickDistance > 0.05f))
+            if ((cLib_distanceAngleS(mTargetAngleY, current.angle.y) > 0x7800) && (mStickDistance > 0.05f))
             {
                 if (((!procWaitTurn_init()) && (!dComIfGp_event_runCheck())) &&
                     (mDemo.getDemoType() == 0))
@@ -3633,7 +3633,7 @@ BOOL daPy_lk_c::checkNextMode(int param_1) {
             }
         } else if ((mCurProc == daPyProc_MOVE_TURN_e) && (current.angle.y != shape_angle.y)) {
             param_1 = procMoveTurn_init(0);
-        } else if ((cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800) &&
+        } else if ((cLib_distanceAngleS(mTargetAngleY, current.angle.y) > 0x7800) &&
                    (mStickDistance > 0.05f))
         {
             if ((speedF / mMaxNormalSpeed > daPy_HIO_slip_c0::m.field_0x4) &&
@@ -5513,7 +5513,7 @@ BOOL daPy_lk_c::procWaitTurn_init() {
     if (dComIfGp_event_runCheck()) {
         mVelocity = 0.0f;
     }
-    m34D4 = m34E8;
+    m34D4 = mTargetAngleY;
     current.angle.y = shape_angle.y;
     return true;
 }
@@ -5557,7 +5557,7 @@ BOOL daPy_lk_c::procMoveTurn_init(int param_1) {
         m34D4 = (daPy_HIO_move_c0::m.field_0x0 * 4) + 0x4A56;
         m34D6 = daPy_HIO_move_c0::m.field_0x0 * 2;
         m34D0 = 2;
-        current.angle.y = m34E8;
+        current.angle.y = mTargetAngleY;
         mVelocity *= 0.5f;
     } else {
         m34D4 = daPy_HIO_move_c0::m.field_0x0 * 2;

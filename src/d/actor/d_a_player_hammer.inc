@@ -127,7 +127,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     if (mpAttention->Lockon() || (mStickDistance <= 0.05f)) {
         m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        m34D4 = mTargetAngleY;
     }
     setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 18, 50.0f);
     voiceStart(7);
@@ -176,7 +176,7 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     if (mpAttention->Lockon() || (mStickDistance <= 0.05f)) {
         m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        m34D4 = mTargetAngleY;
     }
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERFRONT_POS);

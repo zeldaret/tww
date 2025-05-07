@@ -711,15 +711,15 @@ class daPy_HIO_swim_c1 {
 public:
     /* 0x00 */ s16 field_0x0;  // 0x18
     /* 0x02 */ s16 field_0x2;  // 0x91A
-    /* 0x04 */ s16 field_0x4;  // 0x1388
-    /* 0x06 */ s16 field_0x6;  // 0x4B0
-    /* 0x08 */ s16 field_0x8;  // 0x11
-    /* 0x0C */ f32 field_0xC;  // 18.0f
+    /* 0x04 */ s16 angleTurnRateMin;  // 0x1388
+    /* 0x06 */ s16 angleTurnRateMax;  // 0x4B0
+    /* 0x08 */ s16 angleApproachStep;  // 0x11
+    /* 0x0C */ f32 baseSwimSpeed;  // 18.0f
     /* 0x10 */ f32 field_0x10; // 1.0f
     /* 0x14 */ f32 field_0x14; // -50.0f
-    /* 0x18 */ f32 field_0x18; // 0.02f
-    /* 0x1C */ f32 field_0x1C; // 2.0f
-    /* 0x20 */ f32 field_0x20; // 0.5f
+    /* 0x18 */ f32 acceleration; // 0.02f
+    /* 0x1C */ f32 speedStepMax; // 2.0f
+    /* 0x20 */ f32 speedStepMin; // 0.5f
     /* 0x24 */ f32 field_0x24; // 90.0f
     /* 0x28 */ f32 field_0x28; // 15.0f
     /* 0x2C */ f32 field_0x2C; // 0.7f

@@ -805,7 +805,7 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
     if (!mpAttention->Lockon() && mStickDistance > 0.05f) {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34E8,
+            mTargetAngleY,
             daPy_HIO_grab_c0::m.field_0x16,
             daPy_HIO_grab_c0::m.field_0x18,
             daPy_HIO_grab_c0::m.field_0x1A
