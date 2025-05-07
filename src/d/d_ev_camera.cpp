@@ -47,7 +47,7 @@ void dCamera_c::getEvXyzData(cXyz*, char*, cXyz) {
 }
 
 /* 800B066C-800B074C       .text getEvStringData__9dCamera_cFPcPcPc */
-void dCamera_c::getEvStringData(char*, char*, char*) {
+bool dCamera_c::getEvStringData(char*, char*, char*) {
     /* Nonmatching */
 }
 
@@ -67,137 +67,137 @@ void dCamera_c::getEvActor(char*, char*) {
 }
 
 /* 800B0A20-800B0AF8       .text pauseEvCamera__9dCamera_cFv */
-void dCamera_c::pauseEvCamera() {
+bool dCamera_c::pauseEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B0AF8-800B14D4       .text fixedFrameEvCamera__9dCamera_cFv */
-void dCamera_c::fixedFrameEvCamera() {
+bool dCamera_c::fixedFrameEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B14D4-800B18E4       .text stokerEvCamera__9dCamera_cFv */
-void dCamera_c::stokerEvCamera() {
+bool dCamera_c::stokerEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B18E4-800B2680       .text rollingEvCamera__9dCamera_cFv */
-void dCamera_c::rollingEvCamera() {
+bool dCamera_c::rollingEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B2680-800B2B60       .text fixedPositionEvCamera__9dCamera_cFv */
-void dCamera_c::fixedPositionEvCamera() {
+bool dCamera_c::fixedPositionEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B2B60-800B3CC8       .text uniformTransEvCamera__9dCamera_cFv */
-void dCamera_c::uniformTransEvCamera() {
+bool dCamera_c::uniformTransEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B3E18-800B5110       .text uniformBrakeEvCamera__9dCamera_cFv */
-void dCamera_c::uniformBrakeEvCamera() {
+bool dCamera_c::uniformBrakeEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B514C-800B6434       .text uniformAcceleEvCamera__9dCamera_cFv */
-void dCamera_c::uniformAcceleEvCamera() {
+bool dCamera_c::uniformAcceleEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B6470-800B7640       .text watchActorEvCamera__9dCamera_cFv */
-void dCamera_c::watchActorEvCamera() {
+bool dCamera_c::watchActorEvCamera() {
     /* Nonmatching */
 }
 
 
 /* 800B76C8-800B7E00       .text restorePosEvCamera__9dCamera_cFv */
-void dCamera_c::restorePosEvCamera() {
+bool dCamera_c::restorePosEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B7E00-800B7EBC       .text talktoEvCamera__9dCamera_cFv */
-void dCamera_c::talktoEvCamera() {
+bool dCamera_c::talktoEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B7EBC-800B8108       .text maptoolIdEvCamera__9dCamera_cFv */
-void dCamera_c::maptoolIdEvCamera() {
+bool dCamera_c::maptoolIdEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B8108-800B81D0       .text styleEvCamera__9dCamera_cFv */
-void dCamera_c::styleEvCamera() {
+bool dCamera_c::styleEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B81D0-800B8AB8       .text gameOverEvCamera__9dCamera_cFv */
-void dCamera_c::gameOverEvCamera() {
+bool dCamera_c::gameOverEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B8AB8-800B8C90       .text tactEvCamera__9dCamera_cFv */
-void dCamera_c::tactEvCamera() {
+bool dCamera_c::tactEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B8C90-800B99B8       .text windDirectionEvCamera__9dCamera_cFv */
-void dCamera_c::windDirectionEvCamera() {
+bool dCamera_c::windDirectionEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B99B8-800B9FB0       .text turnToActorEvCamera__9dCamera_cFv */
-void dCamera_c::turnToActorEvCamera() {
+bool dCamera_c::turnToActorEvCamera() {
     /* Nonmatching */
 }
 
 /* 800B9FB0-800BA688       .text tornadoWarpEvCamera__9dCamera_cFv */
-void dCamera_c::tornadoWarpEvCamera() {
+bool dCamera_c::tornadoWarpEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BA688-800BA7BC       .text saveEvCamera__9dCamera_cFv */
-void dCamera_c::saveEvCamera() {
+bool dCamera_c::saveEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BA7BC-800BA904       .text loadEvCamera__9dCamera_cFv */
-void dCamera_c::loadEvCamera() {
+bool dCamera_c::loadEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BA904-800BB39C       .text useItem0EvCamera__9dCamera_cFv */
-void dCamera_c::useItem0EvCamera() {
+bool dCamera_c::useItem0EvCamera() {
     /* Nonmatching */
 }
 
 /* 800BB39C-800BBD88       .text useItem1EvCamera__9dCamera_cFv */
-void dCamera_c::useItem1EvCamera() {
+bool dCamera_c::useItem1EvCamera() {
     /* Nonmatching */
 }
 
 /* 800BBD88-800BC364       .text getItemEvCamera__9dCamera_cFv */
-void dCamera_c::getItemEvCamera() {
+bool dCamera_c::getItemEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BC364-800BC9D8       .text possessedEvCamera__9dCamera_cFv */
-void dCamera_c::possessedEvCamera() {
+bool dCamera_c::possessedEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BC9D8-800BCDA0       .text fixedFramesEvCamera__9dCamera_cFv */
-void dCamera_c::fixedFramesEvCamera() {
+bool dCamera_c::fixedFramesEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BCDA0-800BCFE8       .text bSplineEvCamera__9dCamera_cFv */
-void dCamera_c::bSplineEvCamera() {
+bool dCamera_c::bSplineEvCamera() {
     /* Nonmatching */
 }
 
 /* 800BCFE8-800BD678       .text twoActor0EvCamera__9dCamera_cFv */
-void dCamera_c::twoActor0EvCamera() {
+bool dCamera_c::twoActor0EvCamera() {
     /* Nonmatching */
 }

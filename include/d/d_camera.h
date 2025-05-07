@@ -33,7 +33,7 @@ struct dCamera__Type {
 struct dCamera_event_data {
     /* 0x000 */ u8 field_0x00;
     /* 0x001 */ u8 field_0x01[0x04 - 0x01];
-    /* 0x004 */ int field_0x04;
+    /* 0x004 */ int mStaffIdx;
     /* 0x008 */ int field_0x08;
     /* 0x00C */ int field_0x0c;
     /* 0x010 */ u8 field_0x10;
@@ -43,7 +43,7 @@ struct dCamera_event_data {
     /* 0x01C */ int field_0x1c;
     /* 0x020 */ int field_0x20;
     /* 0x024 */ int field_0x24;
-    /* 0x028 */ u8 field_0x28[0x2C - 0x28];
+    /* 0x028 */ int field_0x28;
     /* 0x02C */ dCamera__EventParam mEventParams[8];
     /* 0x0EC */ dStage_Event_dt_c* field_0xec;
     /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
@@ -159,13 +159,12 @@ public:
     /* 0x0A2 */ u8 m0A2[0x0A4 - 0x0A2];
     struct {
         struct {
-            /* 0x00 */ cXyz m00;
-            /* 0x0C */ int m0C;
-            /* 0x10 */ int m10;
-            /* 0x14 */ int m14;
-            /* 0x18 */ int m18;
-            /* 0x1C */ int m1C;
-        } field_0x00;
+            /* 0x00 */ cXyz mCenter;
+            /* 0x0C */ cXyz mEye;
+            /* 0x18 */ f32 mFovY;
+            /* 0x1C */ cSAngle mBank;
+            /* 0x1E */ s16 m1E;
+        } m00;
     } 
     /* 0x0A4 */ m0A4[2];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
@@ -176,13 +175,13 @@ public:
     /* 0x101 */ u8 m101;
     /* 0x102 */ u8 m102;
     /* 0x103 */ u8 m103[0x108 - 0x103];
-    /* 0x108 */ int m108;
+    /* 0x108 */ u32 m108;
     /* 0x10C */ int m10C;
     /* 0x110 */ u8 m110;
     /* 0x111 */ u8 m111[0x114 - 0x111];
     /* 0x114 */ int m114;
-    /* 0x118 */ int m118;
-    /* 0x11C */ int m11C;
+    /* 0x118 */ u32 m118;
+    /* 0x11C */ u32 m11C;
     /* 0x120 */ int mCameraInfoIdx;
     /* 0x124 */ int mPadId;
     /* 0x128 */ fopAc_ac_c* mpPlayerActor;
@@ -235,12 +234,13 @@ public:
     /* 0x1B0 */ dCamForcusLine mForcusLine;
     /* 0x220 */ dCamera_DMC_system mDMCSystem;
     /* 0x226 */ u8 m226[0x228 - 0x226];
-    /* 0x228 */ dCamera_monitoring_things mMonitoringThings;
+    /* 0x228 */ dCamera_monitoring_things mMonitor;
     /* 0x248 */ int m248[3];
     /* 0x254 */ int m254;
     /* 0x258 */ int m258;
     /* 0x25C */ BG mBG;
-    /* 0x314 */ int m314;
+    /* 0x314 */ u8 m314;
+    /* 0x315 */ u8 m315[0x318 -0x315];
     /* 0x318 */ f32 m318;
     /* 0x31C */ u8 m31C;
     /* 0x31D */ u8 m31D;
@@ -257,18 +257,44 @@ public:
     /* 0x35C */ int mRoomMapToolCameraIdx;
     /* 0x360 */ u8 m360;
     /* 0x361 */ u8 m361[0x364 - 0x361];
-    /* 0x364 */ u32 m364;
+    /* 0x364 */ int m364;
     /* 0x368 */ f32 m368;
-    /* 0x36C */ u8 m36C[0x394 - 0x36C];
-    /* 0x394 */ f32 mEvFovy;
-    /* 0x398 */ f32 mEvBank;
-    /* 0x39C */ fopAc_ac_c* mpEvRelActor;
-    /* 0x3A0 */ char mEvRelUseMask[4];
-    /* 0x3A4 */ int mEvTimer;
-    /* 0x3A8 */ u8 m3A8;
-    /* 0x3A9 */ u8 m3A9[0x3AC - 0x3A9];
-    /* 0x3AC */ cXyz mEvBasePos;
-    /* 0x3B8 */ u8 m3B8[0x3F8 - 0x3B8];
+    /* 0x36C */ cXyz m36C;
+    /* 0x378 */ int m378;
+    /* 0x37C */ u8 m37C; // `CalcSubjectAngle` suggests this should be u8 but `followCamera` suggests it should be int
+    /* 0x37D */ u8 m37D; // The fact that this a referenced in `CalcSubjectAngle` suggests m37C can't be an int?
+    /* 0x37E */ s16 m37E;
+    /* 0x380 */ int m380;
+    /* 0x384 */ f32 m384;
+    /* 0x388 */ f32 m388; // `CalcSubjectAngle` suggests this should be a float but `followCamera` suggests it should be int
+    /* 0x38C */ f32 m38C; // Similar issue for 38C
+    /* 0x390 */ s16 m390;
+    /* 0x392 */ s16 m392;
+    /* 0x394 */ f32 m394;
+    /* 0x398 */ f32 m398;
+    /* 0x39C */ f32 m39C;
+    /* 0x3A0 */ f32 m3A0;
+    /* 0x3A4 */ f32 m3A4;
+    /* 0x3A8 */ f32 m3A8;
+    /* 0x3AC */ f32 m3AC;
+    /* 0x3B0 */ f32 m3B0;
+    /* 0x3B4 */ int m3B4;
+    /* 0x3B8 */ cSAngle m3B8; // `CalcSubjectAngle` thinks this is a cSAngle but `followCamera` thinks its a float (could also be cSGlobe since m3BA is a cSAngle and m3BC is a float)
+    /* 0x3BA */ cSAngle m3BA;
+    /* 0x3BC */ f32 m3BC;
+    /* 0x3C0 */ cXyz m3C0;
+    /* 0x3CC */ cXyz m3CC;
+    /* 0x3D8 */ u8 m3D8;
+    /* 0x3D9 */ u8 m3D9;
+    /* 0x3DA */ u8 m3DA;
+    /* 0x3DB */ u8 m3DB;
+    /* 0x3DC */ f32 m3DC;
+    /* 0x3E0 */ f32 m3E0;
+    /* 0x3E4 */ f32 m3E4;
+    /* 0x3E8 */ f32 m3E8;
+    /* 0x3EC */ f32 m3EC;
+    /* 0x3F0 */ f32 m3F0;
+    /* 0x3F4 */ u8 m3F4[0x3F8 - 0x3F4];
     /* 0x3F8 */ dCamera_event_data mEventData;
     /* 0x50C */ u32 mEventFlags;
     /* 0x510 */ int mCurStyle;
@@ -285,19 +311,22 @@ public:
     /* 0x538 */ f32 m538;
     /* 0x53C */ f32 m53C;
     /* 0x540 */ f32 m540;
-    /* 0x544 */ u8 m544[0x550 - 0x544];
+    /* 0x544 */ u8 m544[4];
+    /* 0x548 */ u8 m548[4];
+    /* 0x54C */ u8 m54C[0x550 - 0x54C];
     /* 0x550 */ int m550;
     /* 0x554 */ int m554;
-    /* 0x558 */ u8 m558[0x568 - 0x558];
+    /* 0x558 */ u8 m558[0x55C - 0x558];
+    /* 0x55C */ cXyz m55C;
     /* 0x568 */ cXyz mCenterShake;
     /* 0x574 */ cXyz mEyeShake;
     /* 0x580 */ f32 mFovYShake;
-    /* 0x584 */ cSAngle m584;
+    /* 0x584 */ cSAngle mBankShake;
     /* 0x586 */ u8 m586[0x588 - 0x586];
     /* 0x588 */ int m588;
     /* 0x58C */ int m58C;
     /* 0x590 */ int mBlureTimer;
-    /* 0x594 */ csXyz m594;
+    /* 0x594 */ csXyz mBlureRotation;
     /* 0x59A */ s16 m59A;
     /* 0x59C */ int mBlurePositionType;
     /* 0x5A0 */ cXyz mBlurePosition;
@@ -338,7 +367,7 @@ public:
     /* 0x789 */ u8 m789;
     /* 0x78A */ u8 m78A;
     /* 0x78B */ u8 m78B;
-    /* 0x78C */ u8 m78C[0x800 - 0x78C];;
+    /* 0x78C */ u8 m78C[0x800 - 0x78C];
 
 public:
     dCamera_c(camera_class*);
@@ -398,7 +427,7 @@ public:
     int defaultTriming();
     void setView(f32, f32, f32, f32);
     cSAngle forwardCheckAngle();
-    void bumpCheck(u32);
+    bool bumpCheck(u32);
     f32 getWaterSurfaceHeight(cXyz*);
     void checkSpecialArea();
     void checkGroundInfo();
@@ -410,7 +439,7 @@ public:
     fopAc_ac_c* getMsgCmdSpeaker();
     int getMsgCmdCut();
     bool talktoCamera(s32);
-    void CalcSubjectAngle(s16*, s16*);
+    bool CalcSubjectAngle(s16*, s16*);
     bool subjectCamera(s32);
     bool towerCamera(s32);
     bool crawlCamera(s32);
@@ -437,8 +466,8 @@ public:
     bool Chtyp(s32);
     s16 U2();
     //void U2(s16 i_val) { mAngleY = cSAngle(i_val); }
-    void shakeCamera();
-    void StartShake(s32, u8*, s32, cXyz);
+    f32 shakeCamera();
+    int StartShake(s32, u8*, s32, cXyz);
     bool StopShake();
     void ResetBlure(int);
     void SetBlureAlpha(f32);
@@ -456,7 +485,7 @@ public:
     bool ScopeViewMsgModeOff();
 
     f32 Fovy() { return mFovY + mFovYShake; }
-    cSAngle Bank() { return mBank + m584; }
+    cSAngle Bank() { return mBank + mBankShake; }
     cXyz Up() { return mUp; }
     cXyz Center() { return mCenter + mCenterShake; }
     cXyz Eye() { return mEye + mEyeShake; }
@@ -469,40 +498,40 @@ public:
     void getEvIntData(int*, char*, int);
     void getEvFloatData(f32*, char*, f32);
     void getEvXyzData(cXyz*, char*, cXyz);
-    void getEvStringData(char*, char*, char*);
+    bool getEvStringData(char*, char*, char*);
     void getEvStringPntData(char*, char*);
     void getEvActor(char*);
     void getEvActor(char*, char*);
-    void pauseEvCamera();
-    void fixedFrameEvCamera();
-    void stokerEvCamera();
-    void rollingEvCamera();
-    void fixedPositionEvCamera();
-    void uniformTransEvCamera();
-    void uniformBrakeEvCamera();
-    void uniformAcceleEvCamera();
-    void watchActorEvCamera();
-    void restorePosEvCamera();
-    void talktoEvCamera();
-    void maptoolIdEvCamera();
-    void styleEvCamera();
-    void gameOverEvCamera();
-    void tactEvCamera();
-    void windDirectionEvCamera();
-    void turnToActorEvCamera();
-    void tornadoWarpEvCamera();
-    void saveEvCamera();
-    void loadEvCamera();
-    void useItem0EvCamera();
-    void useItem1EvCamera();
-    void getItemEvCamera();
-    void possessedEvCamera();
-    void fixedFramesEvCamera();
-    void bSplineEvCamera();
-    void twoActor0EvCamera();
+    bool pauseEvCamera();
+    bool fixedFrameEvCamera();
+    bool stokerEvCamera();
+    bool rollingEvCamera();
+    bool fixedPositionEvCamera();
+    bool uniformTransEvCamera();
+    bool uniformBrakeEvCamera();
+    bool uniformAcceleEvCamera();
+    bool watchActorEvCamera();
+    bool restorePosEvCamera();
+    bool talktoEvCamera();
+    bool maptoolIdEvCamera();
+    bool styleEvCamera();
+    bool gameOverEvCamera();
+    bool tactEvCamera();
+    bool windDirectionEvCamera();
+    bool turnToActorEvCamera();
+    bool tornadoWarpEvCamera();
+    bool saveEvCamera();
+    bool loadEvCamera();
+    bool useItem0EvCamera();
+    bool useItem1EvCamera();
+    bool getItemEvCamera();
+    bool possessedEvCamera();
+    bool fixedFramesEvCamera();
+    bool bSplineEvCamera();
+    bool twoActor0EvCamera();
 
     bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
-    void setFlag(u32 flag) { mEventFlags |= flag; }
+    BOOL setFlag(u32 flag) { return mEventFlags |= flag; }
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
     void CStickUse() { clrFlag(0x800000); }
     void CStickUseless() { setFlag(0x800000); }
@@ -514,7 +543,7 @@ public:
 
     static engine_fn engine_tbl[];
     static const int type_num;
-    static dCamera__Type types[];
+    static const dCamera__Type types[];
     static const int mvBGType_num;
     static const char* mvBGTypes[];
 };
