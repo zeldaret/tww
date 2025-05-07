@@ -4,39 +4,44 @@
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_angle.h"
 
+// Array indexes, do not change values
+enum dCamStyleParam_e {
+    dCamStyleParam_UNK0 = 0,
+    dCamStyleParam_UNK1 = 1,
+    dCamStyleParam_UNK2 = 2,
+    dCamStyleParam_UNK3 = 3,
+    dCamStyleParam_UNK4 = 4,
+    dCamStyleParam_CENTER_HEIGHT_BASE = 5,
+    dCamStyleParam_CENTER_HEIGHT_UPPER = 6,
+    dCamStyleParam_CENTER_HEIGHT_LOWER = 7,
+    dCamStyleParam_LOCKON_CENTER_HEIGHT_MIN = 8,
+    dCamStyleParam_LOCKON_CENTER_HEIGHT_MAX = 9,
+    dCamStyleParam_UNK10 = 10,
+    dCamStyleParam_UNK11 = 11,
+    dCamStyleParam_UNK12 = 12,
+    dCamStyleParam_UNK13 = 13,
+    dCamStyleParam_UNK14 = 14,
+    dCamStyleParam_UNK15 = 15,
+    dCamStyleParam_UNK16 = 16,
+    dCamStyleParam_UNK17 = 17,
+    dCamStyleParam_LOCKON_LATITUDE_MIN = 18,
+    dCamStyleParam_LOCKON_LATITUDE_MAX = 19,
+    dCamStyleParam_UNK20 = 20,
+    dCamStyleParam_UNK21 = 21,
+    dCamStyleParam_UNK22 = 22,
+    dCamStyleParam_LOCKON_LONGITUDE_MIN = 23,
+    dCamStyleParam_LOCKON_LONGITUDE_MAX = 24,
+    dCamStyleParam_FOVY_BASE = 25,
+    dCamStyleParam_FOVY_UPPER = 26,
+    dCamStyleParam_FOVY_LOWER = 27,
+    dCamStyleParam_LOCKON_FOVY_MIN = 28,
+    dCamStyleParam_LOCKON_FOVY_MAX = 29,
+};
+
 struct dCamera__Style {
     /* 0x00 */ u32 m00;
     /* 0x04 */ int engineIdx;
-    /* 0x08 */ u32 m08;
-    /* 0x0C */ u32 m0C;
-    /* 0x10 */ u32 m10;
-    /* 0x14 */ u32 m14;
-    /* 0x18 */ u32 m18;
-    /* 0x1C */ f32 centerHeightBase;
-    /* 0x20 */ f32 centerHeightUpper;
-    /* 0x24 */ f32 centerHeightLower;
-    /* 0x28 */ f32 lockonCenterHeightMin;
-    /* 0x2C */ f32 lockonCenterHeightMax;
-    /* 0x30 */ u32 m30;
-    /* 0x34 */ u32 m34;
-    /* 0x38 */ u32 m38;
-    /* 0x3C */ f32 m3C;
-    /* 0x40 */ f32 m40;
-    /* 0x44 */ u32 m44;
-    /* 0x48 */ u32 m48;
-    /* 0x4C */ u32 m4C;
-    /* 0x50 */ f32 lockonLatitudeMin;
-    /* 0x54 */ f32 lockonLatitudeMax;
-    /* 0x58 */ u32 m58;
-    /* 0x5C */ u32 m5C;
-    /* 0x60 */ u32 m60;
-    /* 0x64 */ f32 lockonLongitudeMin;
-    /* 0x68 */ f32 lockonLongitudeMax;
-    /* 0x6C */ f32 fovyBase;
-    /* 0x70 */ f32 fovyUpper;
-    /* 0x74 */ f32 fovyLower;
-    /* 0x78 */ f32 lockonFovyMin;
-    /* 0x7C */ f32 lockonFovyMax;
+    /* 0x08 */ f32 styleParam[30];
     /* 0x80 */ u16 flag;
 };  // Size: 0x84
 
@@ -200,20 +205,20 @@ public:
     dCamParam_c(s32);
     virtual ~dCamParam_c();
 
-    void Flag(s32, u16) {}
-    void Val(s32, int) {}
+    u16 Flag(s32 styleIdx, u16 mask) { return mask & styles[styleIdx].flag; }
+    f32 Val(s32 styleIdx, int paramIdx) { return styles[styleIdx].styleParam[paramIdx]; }
     BOOL Change(s32);
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);
     BOOL DefaultRadius(f32*);
-    void RadiusRatio(f32);
+    f32 RadiusRatio(f32);
     f32 CenterHeight(f32);
     f32 Fovy(f32);
     s16 LockonLongitude(f32);
     s16 LockonLatitude(f32);
     f32 LockonFovy(f32);
     f32 LockonCenterHeight(f32);
-    int Algorythmn(s32 i_style) { return mpStyle[i_style].engineIdx; }
+    int Algorythmn(s32 i_style) { return styles[i_style].engineIdx; }
     int Algorythmn() { return mpStyle->engineIdx; }
     bool CheckFlag(u16 flag) { return mpStyle->flag & flag; }
 };
