@@ -139,12 +139,12 @@ f32 dCamParam_c::ratiof(f32 t, f32 upper, f32 lower, f32 base) {
 BOOL dCamParam_c::DefaultRadius(f32* radius) {
     /* Nonmatching */
     f32 min, max;
-    if (mpStyle->m08[13] < mpStyle->m08[14]) {
-        min = mpStyle->m08[13];
-        max = mpStyle->m08[14];
+    if (mpStyle->styleParam[dCamStyleParam_UNK13] < mpStyle->styleParam[dCamStyleParam_UNK14]) {
+        min = mpStyle->styleParam[dCamStyleParam_UNK13];
+        max = mpStyle->styleParam[dCamStyleParam_UNK14];
     } else {
-        min = mpStyle->m08[14];
-        max = mpStyle->m08[13];
+        min = mpStyle->styleParam[dCamStyleParam_UNK14];
+        max = mpStyle->styleParam[dCamStyleParam_UNK13];
     }
 
     if (*radius > max) {
@@ -165,40 +165,40 @@ f32 dCamParam_c::RadiusRatio(f32) {
 
 /* 800AFB88-800AFBB8       .text CenterHeight__11dCamParam_cFf */
 f32 dCamParam_c::CenterHeight(f32 t) {
-    return ratiof(t, mpStyle->m08[6], mpStyle->m08[7], mpStyle->m08[5]);
+    return ratiof(t, mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_UPPER], mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_LOWER], mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_BASE]);
     /* Nonmatching */
 }
 
 /* 800AFBB8-800AFBE8       .text Fovy__11dCamParam_cFf */
 f32 dCamParam_c::Fovy(f32 t) {
-    return ratiof(t, mpStyle->m08[26], mpStyle->m08[27], mpStyle->m08[25]);
+    return ratiof(t, mpStyle->styleParam[dCamStyleParam_FOVY_UPPER], mpStyle->styleParam[dCamStyleParam_FOVY_LOWER], mpStyle->styleParam[dCamStyleParam_FOVY_BASE]);
 }
 
 /* 800AFBE8-800AFC74       .text LockonLongitude__11dCamParam_cFf */
 s16 dCamParam_c::LockonLongitude(f32 t) {
-    cSAngle ret(mpStyle->m08[23]);
-    ret += (cSAngle(mpStyle->m08[24]) - ret) * t;
+    cSAngle ret(mpStyle->styleParam[dCamStyleParam_LOCKON_LONGITUDE_MIN]);
+    ret += (cSAngle(mpStyle->styleParam[dCamStyleParam_LOCKON_LONGITUDE_MAX]) - ret) * t;
     return ret.Val();
 }
 
 /* 800AFC74-800AFD00       .text LockonLatitude__11dCamParam_cFf */
 s16 dCamParam_c::LockonLatitude(f32 t) {
-    cSAngle ret(mpStyle->m08[18]);
-    ret += (cSAngle(mpStyle->m08[19]) - ret) * t;
+    cSAngle ret(mpStyle->styleParam[dCamStyleParam_LOCKON_LATITUDE_MIN]);
+    ret += (cSAngle(mpStyle->styleParam[dCamStyleParam_LOCKON_LATITUDE_MAX]) - ret) * t;
     return ret.Val();
 }
 
 /* 800AFD00-800AFD20       .text LockonFovy__11dCamParam_cFf */
 f32 dCamParam_c::LockonFovy(f32 t) {
-    f32 ret = mpStyle->m08[28];
-    ret += t * (mpStyle->m08[29] - ret);
+    f32 ret = mpStyle->styleParam[dCamStyleParam_LOCKON_FOVY_MIN];
+    ret += t * (mpStyle->styleParam[dCamStyleParam_LOCKON_FOVY_MAX] - ret);
     return ret;
 }
 
 /* 800AFD20-800AFD40       .text LockonCenterHeight__11dCamParam_cFf */
 f32 dCamParam_c::LockonCenterHeight(f32 t) {
-    f32 ret = mpStyle->m08[8];
-    ret += t * (mpStyle->m08[9] - ret);
+    f32 ret = mpStyle->styleParam[dCamStyleParam_LOCKON_CENTER_HEIGHT_MIN];
+    ret += t * (mpStyle->styleParam[dCamStyleParam_LOCKON_CENTER_HEIGHT_MAX] - ret);
     return ret;
 }
 
