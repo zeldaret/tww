@@ -949,7 +949,7 @@ public:
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
-    void setDrawHandModel();
+    s32 setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
     void hideHatAndBackle(J3DMaterial*);
@@ -1191,7 +1191,7 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
     BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
     BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
     BOOL resetActAnimeUpper(daPy_UPPER, f32);
@@ -1403,7 +1403,7 @@ public:
     f32 getCrawlMoveAnmSpeed();
     f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
-    void changeCrawlAutoMoveProc(cXyz*);
+    BOOL changeCrawlAutoMoveProc(cXyz*);
     int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);

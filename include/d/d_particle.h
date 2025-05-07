@@ -313,13 +313,16 @@ public:
     void getAlpha() {}
     void remove() {}
     void setAlpha(u8) {}
-    void setPosArray(cXyz*, s16) {}
+    void setPosArray(cXyz* param_1, s16 param_2) {
+        field_0x8 = param_1;
+        field_0x6 = param_2;
+    }
 
 public:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u16 field_0x6;
-    /* 0x08 */ u8 field_0x8[0xC - 0x08];
+    /* 0x08 */ cXyz* field_0x8;
     /* 0x0C */ JPABaseEmitter* mpBaseEmitter;
 };  // Size: 0x10
 

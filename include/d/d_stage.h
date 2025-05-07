@@ -1,6 +1,7 @@
 #ifndef D_D_STAGE_H
 #define D_D_STAGE_H
 
+#include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
@@ -1115,6 +1116,7 @@ inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
 }
 
 bool dStage_chkPlayerId(int playerId, int room_no);
+int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 i_roomNo);
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 void dStage_restartRoom(u32 roomParam, u32 mode);
 void dStage_turnRestart();
