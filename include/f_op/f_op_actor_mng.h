@@ -502,23 +502,11 @@ void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 estimatedHeapSize);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.min.set(minX, minY, minZ);
-#else
-    p_actor->cull.box.min.x = minX;
-    p_actor->cull.box.min.y = minY;
-    p_actor->cull.box.min.z = minZ;
-#endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.max.set(maxX, maxY, maxZ);
-#else
-    p_actor->cull.box.max.x = maxX;
-    p_actor->cull.box.max.y = maxY;
-    p_actor->cull.box.max.z = maxZ;
-#endif
 }
 
 void fopAcM_setCullSizeBox(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY,

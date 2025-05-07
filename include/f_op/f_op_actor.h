@@ -227,54 +227,43 @@ class JntHit_c;
 struct fopAc_cullSizeSphere {
 public:
 #ifdef __MWERKS__
-    /* 0x0 */ cXyz center;
-    /* 0xC */ f32 radius;
-
     fopAc_cullSizeSphere() {}
+    ~fopAc_cullSizeSphere() {}
+#else
+    fopAc_cullSizeSphere() = default;
+    ~fopAc_cullSizeSphere() = default;
+#endif
     fopAc_cullSizeSphere(cXyz p, f32 r) {
         center = p;
         radius = r;
     }
-    ~fopAc_cullSizeSphere() {}
-#else
-    /* 0x0 */ Vec center;
-    /* 0xC */ f32 radius;
-#endif
-};
 
-#ifdef __MWERKS__
-#define fopAc_MakeCullSizeSphere(center, radius) fopAc_cullSizeSphere(center, radius)
-#else
-#define fopAc_MakeCullSizeSphere(center, radius) {(Vec)center, radius}
-#endif
+    /* 0x0 */ cXyz center;
+    /* 0xC */ f32 radius;
+};
 
 struct fopAc_cullSizeBox {
 public:
 #ifdef __MWERKS__
     fopAc_cullSizeBox() {}
+    ~fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
         min = box.min;
         max = box.max;
     }
+#else
+    fopAc_cullSizeBox() = default;
+    ~fopAc_cullSizeBox() = default;
+    fopAc_cullSizeBox(const fopAc_cullSizeBox& box) = default;
+#endif
     fopAc_cullSizeBox(cXyz min, cXyz max) {
         this->min = min;
         this->max = max;
     }
-    ~fopAc_cullSizeBox() {}
 
     /* 0x0 */ cXyz min;
     /* 0xC */ cXyz max;
-#else
-    /* 0x0 */ Vec min;
-    /* 0xC */ Vec max;
-#endif
 };
-
-#ifdef __MWERKS__
-#define fopAc_MakeCullSizeBox(min, max) fopAc_cullSizeBox(min, max)
-#else
-#define fopAc_MakeCullSizeBox(min, max) {(Vec)min, (Vec)max}
-#endif
 
 class fopAc_ac_c : public leafdraw_class {
 public:

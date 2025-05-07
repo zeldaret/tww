@@ -13,9 +13,15 @@ public:
     const static cSAngle _90;
     const static cSAngle _180;
     const static cSAngle _270;
+#ifdef __MWERKS__
     cSAngle() {}
     ~cSAngle() {}
     cSAngle(const cSAngle&);
+#else
+    cSAngle() = default;
+    ~cSAngle() = default;
+    cSAngle(const cSAngle&) = default;
+#endif
     cSAngle(s16);
     cSAngle(float);
     s16 Val() const { return mAngle; }
@@ -45,7 +51,9 @@ public:
     bool operator<(const cSAngle& other) const { return mAngle < other.mAngle; }
     bool operator>(const cSAngle& other) const { return mAngle > other.mAngle; }
     operator s16() const { return mAngle; }
+#ifdef __MWERKS__
     void operator=(const cSAngle& other) { mAngle = other.mAngle; }
+#endif
     static inline cSAngle getMaxNegative() { return cSAngle((s16)-0x8000); }
     inline void mirrorAtMaxNeg() { *this = cSAngle((s16)-0x8000) - *this; }
 };
@@ -131,12 +139,18 @@ private:
     cSAngle mInclination;  // original: U
 
 public:
-    cSGlobe() {};
+#ifdef __MWERKS__
+    cSGlobe() {}
+    ~cSGlobe() {}
     cSGlobe(const cSGlobe&);
+#else
+    cSGlobe() = default;
+    ~cSGlobe() = default;
+    cSGlobe(const cSGlobe&) = default;
+#endif
     cSGlobe(float, short, short);
     cSGlobe(float, const cSAngle&, const cSAngle&);
     cSGlobe(const cXyz&);
-    ~cSGlobe() {}
     cSGlobe& Formal();
     void Val(const cSGlobe&);
     void Val(float, short, short);
@@ -154,6 +168,6 @@ public:
     void Polar(cSPolar*) const;
     cXyz Norm() const;
     cSGlobe& Invert();
-};
+};  // Size: 0x8
 
 #endif /* C_ANGLE_H */
