@@ -1698,7 +1698,8 @@ void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i
         // Clamp to the desired speed if it would exceed it
         /*
             Note:
-            Will always be true with negative values
+            Will always be true with negative values however from a magnitude standpoint,
+            mCurrentSpeed is smaller hence the increasing negative speed in the `super-swim` bug
         */
         if (mCurrentSpeed > desiredSpeed) {
             mCurrentSpeed = desiredSpeed;
