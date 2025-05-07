@@ -242,8 +242,6 @@ public:
     /* 0xC */ f32 radius;
 };
 
-#define fopAc_MakeCullSizeSphere(center, radius) fopAc_cullSizeSphere(center, radius)
-
 struct fopAc_cullSizeBox {
 public:
 #ifdef __MWERKS__
@@ -266,8 +264,6 @@ public:
     /* 0x0 */ cXyz min;
     /* 0xC */ cXyz max;
 };
-
-#define fopAc_MakeCullSizeBox(min, max) fopAc_cullSizeBox(min, max)
 
 class fopAc_ac_c : public leafdraw_class {
 public:
