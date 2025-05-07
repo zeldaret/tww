@@ -14,10 +14,12 @@ const cSAngle cSAngle::_90(static_cast<s16>(0x4000));
 const cSAngle cSAngle::_180(static_cast<s16>(-0x8000));
 const cSAngle cSAngle::_270(static_cast<s16>(-0x4000));
 
+#ifdef __MWERKS__
 /* 80253BB0-80253BE0       .text __ct__7cSAngleFRC7cSAngle */
 cSAngle::cSAngle(const cSAngle& angle) {
     Val(angle);
 }
+#endif
 
 /* 80253BE0-80253C10       .text __ct__7cSAngleFs */
 cSAngle::cSAngle(s16 angle) {
@@ -246,10 +248,12 @@ void cSPolar::Globe(cSGlobe* globe) const {
     globe->Val(mRadial, 0x4000 - mAngle1.Val(), mAngle2.Val());
 }
 
+#ifdef __MWERKS__
 /* 80254524-80254554       .text __ct__7cSGlobeFRC7cSGlobe */
 cSGlobe::cSGlobe(const cSGlobe& other) {
     Val(other);
 }
+#endif
 
 /* 80254554-80254584       .text __ct__7cSGlobeFfss */
 cSGlobe::cSGlobe(f32 f, s16 s1, s16 s2) {
