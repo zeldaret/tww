@@ -66,7 +66,19 @@ BOOL daPy_lk_c::checkBowAnime() const {
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
 void daPy_lk_c::makeArrow() {
-    /* Nonmatching */
+    /* Nonmatching - missing "cntlzw" instruction, "getItemPartner" */    
+    s32 uVar1 = (0x44 - mDemo.getDemoMode()) >> 5 & 0xff;
+    if (((uVar1 == 0) && (dComIfGs_getArrowNum() != 0)) ||
+        ((uVar1 != 0 && ((((fopAc_ac_c*)dComIfGp_event_getItemPartner() != 0 &&
+                           (fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO)) &&
+                          (0 < 10 - (dComIfGp_event_getPt1()->actor_type)))))))
+    {
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos,
+                                                             current.roomNo, NULL, NULL, -1, NULL);
+        mActorKeepEquip.setData(arrow_p);
+    }
+    m355C = 0;
+    return;
 }
 
 /* 8014A180-8014A1CC       .text deleteArrow__9daPy_lk_cFv */

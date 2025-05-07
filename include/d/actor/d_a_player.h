@@ -28,6 +28,7 @@ STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 class daPy_demo_c {
 public:
     enum {
+        DEMO_UNK00_e = 0x00,
         DEMO_UNK01_e = 0x01,
         DEMO_UNK02_e = 0x02,
         DEMO_UNK03_e = 0x03,
@@ -37,6 +38,7 @@ public:
         DEMO_UNK08_e = 0x08,
         DEMO_UNK09_e = 0x09,
         DEMO_UNK0A_e = 0x0A,
+        DEMO_UNK0E_e = 0x0E,
         DEMO_UNK0F_e = 0x0F,
         DEMO_UNK10_e = 0x10,
         DEMO_UNK11_e = 0x11,
@@ -51,8 +53,10 @@ public:
         DEMO_UNK1F_e = 0x1F,
         DEMO_UNK22_e = 0x22,
         DEMO_UNK25_e = 0x25,
+        DEMO_UNK27_e = 0x27,
         DEMO_UNK2A_e = 0x2A,
         DEMO_UNK2B_e = 0x2B,
+        DEMO_UNK2C_e = 0x2C,
         DEMO_UNK2F_e = 0x2F,
         DEMO_UNK33_e = 0x33,
         DEMO_UNK35_e = 0x35,
@@ -73,6 +77,7 @@ public:
     void setDemoMode(u32 mode) { mDemoMode = mode; }
     u32 getDemoMode() const { return mDemoMode; }
     int getParam1() const { return mParam1; }
+    s16 getTimer() const { return mTimer; }
     void setTimer(s16 time) { mTimer = time; }
     void decTimer() { mTimer--; }
     void setOriginalDemoType() { setDemoType(3); }
@@ -153,6 +158,7 @@ public:
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
         daPyFlg1_UNK40000               = 0x00040000,
         daPyFlg1_WATER_DROP             = 0x00080000,
+        daPyFlg1_UNK100000              = 0x00100000,
         daPyFlg1_UNK200000              = 0x00200000,
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,

@@ -13,6 +13,8 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 
+extern JGeometry::TVec3<f32> l_hammer_splash_particle_scale;
+
 /* 8015023C-80150324       .text setHammerModel__9daPy_lk_cFv */
 void daPy_lk_c::setHammerModel() {
     J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_HAMMERDAM);
@@ -28,16 +30,145 @@ void daPy_lk_c::setHammerModel() {
 }
 
 /* 80150324-801508FC       .text setHammerQuake__9daPy_lk_cFP13cBgS_PolyInfoPC4cXyzi */
-void daPy_lk_c::setHammerQuake(cBgS_PolyInfo*, const cXyz*, int) {
-    /* Nonmatching */
-    static JGeometry::TVec3<f32> smoke_kusa_particle_scale;
-    static JGeometry::TVec3<f32> emitter_scale;
-    static JGeometry::TVec3<f32> emitter_trans;
+void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int param_3) {
+    static JGeometry::TVec3<f32> smoke_kusa_particle_scale(2.0f, 2.0f, 2.0f);
+    static JGeometry::TVec3<f32> emitter_scale(1.0f, 0.1f, 1.0f);
+    static JGeometry::TVec3<f32> emitter_trans(0.0f, 10.0f, 0.0f);
+    float local_54;
+    BOOL bVar2;
+    int attrib_code;
+    int iVar6;
+    JPABaseEmitter* emitter;
+    f32 dVar9;
+    int iStack_58;
+    cXyz local_2c;
+    cXyz local_38;
+
+    dComIfGp_getVibration().StartShock(6, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+    onResetFlg0(daPyRFlg0_HAMMER_QUAKE);
+    if (!checkNoResetFlg0(daPyFlg0_UNK10000000)) {
+        if (param_3 == -1) {
+            local_2c.set(mSwordTopPos.x, mSwordTopPos.y + 100.0f, mSwordTopPos.z);
+            mGndChk.SetPos(&local_2c);
+            dVar9 = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            if (C_BG_MIN_HEIGHT != dVar9) {
+                iVar6 = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
+            } else {
+                iVar6 = mMtrlSndId;
+            }
+        } else {
+            iVar6 = param_3;
+        }
+        mDoAud_seStart(JA_SE_LK_HAMMER_HIT, &mSwordTopPos, iVar6, mReverb);
+    }
+    if ((param_1 != NULL) && (m355C == 0)) {
+        mDoMtx_stack_c::transS(param_2->x, param_2->y, param_2->z);
+        mDoMtx_stack_c::ZXYrotM(getGroundAngle(param_1, shape_angle.y), shape_angle.y,
+                                getGroundAngle(param_1, shape_angle.y + -0x4000));
+        mDoMtx_stack_c::transM(0.0f, 0.0f, -30.0f);
+        local_38.x = mDoMtx_stack_c::now[0][3];
+        local_38.y = mDoMtx_stack_c::now[1][3];
+        local_38.z = mDoMtx_stack_c::now[2][3];
+        if ((!fopAcM_getWaterY(&local_38, &local_54)) || (local_54 < (5.0f + local_38.y))) {
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0214, &local_38);
+            if (emitter != NULL) {
+                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation,
+                                      emitter->mGlobalTranslation);
+            }
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0215, &local_38);
+            if (emitter != NULL) {
+                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation,
+                                      emitter->mGlobalTranslation);
+            }
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0216, &local_38);
+            if (emitter != NULL) {
+                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation,
+                                      emitter->mGlobalTranslation);
+            }
+            bVar2 = false;
+        } else {
+            bVar2 = true;
+            local_38.y = local_54;
+            mDoMtx_stack_c::transS(local_38.x, local_54, local_38.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+        }
+        if (bVar2) {
+            attrib_code = dBgS_Attr_WATER_e;
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_38);
+            dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_003D, &local_38, NULL, NULL, 0xFF,
+                                          &dPa_control_c::mSingleRippleEcallBack);
+        } else {
+            attrib_code = dComIfG_Bgsp()->GetAttributeCode(*param_1);
+        }
+        emitter = dComIfGp_particle_setSimpleLand(attrib_code, &local_38, NULL, 1.0f, 1.0f, 1.0f,
+                                                  &tevStr, &iStack_58, 0x1E);
+        if (emitter != NULL) {
+            JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation,
+                                  emitter->mGlobalTranslation);
+            if ((attrib_code == dBgS_Attr_WATER_e) || (attrib_code == dBgS_Attr_GRASS_e)) {
+                emitter->setRate(60.0f);
+                emitter->setSpread(1.0f);
+                if (attrib_code == dBgS_Attr_WATER_e) {
+                    emitter->setDirectionalSpeed(10.0f);
+                    emitter->setGlobalParticleScale(l_hammer_splash_particle_scale);
+                } else {
+                    emitter->setDirectionalSpeed(40.0f);
+                    emitter->setGlobalParticleScale(smoke_kusa_particle_scale);
+                }
+            } else {
+                emitter->setRate(45.0f);
+                emitter->setSpread(0.0f);
+                emitter->setLifeTime(0x28);
+                emitter->setEmitterScale(emitter_scale);
+                emitter->setEmitterTranslation(emitter_trans);
+                emitter->setAwayFromCenterSpeed(50.0f);
+                emitter->setGlobalParticleScale(smoke_kusa_particle_scale);
+            }
+        }
+    }
+    m355C = 1;
+    dKy_Sound_set(current.pos, 500, fopAcM_GetID(this), 10);
+    return;
 }
 
 /* 801508FC-80150B60       .text setHammerWaterSplash__9daPy_lk_cFv */
 void daPy_lk_c::setHammerWaterSplash() {
-    /* Nonmatching */
+    f32 local_50;
+    cXyz local_28;
+
+    if ((mCurProc != daPyProc_HAMMER_FRONT_SWING_e) ||
+        (m35EC <= mFrameCtrlUnder[UNDER_MOVE0_e].getRate()))
+    {
+        return;
+    }
+    if (m355C == 0) {
+        local_28 = m36C4 - mSwordTopPos;
+        local_28.normalize();
+        local_28 = mSwordTopPos + (local_28 * 30.0f);
+        if ((fopAcM_getWaterY(&local_28, &local_50)) && (local_50 >= local_28.y + 5.0f)) {
+            local_28.y += 150.0f;
+            mGndChk.SetPos(&local_28);
+            if (!(local_50 < dComIfG_Bgsp()->GroundCross(&mGndChk) + 5.0f)) {
+                local_28.y = local_50;
+                dComIfGp_particle_setP1(dPa_name::ID_COMMON_027C, &local_28);
+                dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_003D, &local_28, NULL, NULL, 0xFF,
+                                              &dPa_control_c::mSingleRippleEcallBack);
+                GXColor amb, dif;
+                dKy_get_seacolor(&amb, &dif);
+                JPABaseEmitter* emitter = dComIfGp_particle_setP1(
+                    dPa_name::ID_COMMON_0023, &local_28, NULL, NULL, 0xFF, NULL, -1, &amb);
+                if (emitter != NULL) {
+                    emitter->setRate(60.0f);
+                    emitter->setSpread(1.0f);
+                    emitter->setMaxFrame(1);
+                    emitter->setDirectionalSpeed(10.0f);
+                    emitter->setGlobalParticleScale(l_hammer_splash_particle_scale);
+                }
+                m355C = 1;
+            }
+        }
+    }
+    return;
 }
 
 /* 80150B60-80150C40       .text procHammerSideSwing_init__9daPy_lk_cFv */
@@ -191,7 +322,83 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
 
 /* 801510DC-801513D4       .text procHammerFrontSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHammerFrontSwing() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    f32 fVar1;
+    f32 fVar2;
+    f32 fVar3;
+    f32 fVar4;
+    int iVar5;
+    int iVar6;
+    int iVar7;
+    f32 dVar8;
+    f32 dVar10;
+    cXyz local_58;
+
+    m35EC = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
+    fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getRate();
+    if (fVar1 < 0.01f) {
+        if (m34D0 == 0) {
+            procHammerFrontSwingEnd_init();
+        } else {
+            m34D0--;
+        }
+        return true;
+    }
+    if ((m35EC > fVar1) && (changeCutReverseProc(ANM_CUTREL))) {
+        if (mCurProc == daPyProc_HAMMER_FRONT_SWING_e) {
+            local_58.set(mSwordTopPos.x, current.pos.y + 300.0f, mSwordTopPos.z);
+            mGndChk.SetPos(&local_58);
+            dVar8 = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            local_58.y = dVar8;
+            if (dVar8 > mSwordTopPos.y) {
+                iVar5 = -1;
+                iVar7 = 0;
+                dVar8 = 300.0f;
+                dVar10 = C_BG_MIN_HEIGHT;
+                for (iVar6 = 0; iVar6 < mSwBlur.field_0x014; iVar6++, iVar7++) {
+                    local_58.set(mSwBlur.field_0x034[iVar7].x, dVar8 + mSwBlur.field_0x034[iVar7].y,
+                                 mSwBlur.field_0x034[iVar7].z);
+                    mGndChk.SetPos(&local_58);
+                    local_58.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
+                    if ((dVar10 != local_58.y) && (mSwBlur.field_0x034[iVar7].y > local_58.y)) {
+                        iVar5 = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
+                        break;
+                    }
+                }
+                fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getRate();
+                fVar3 = (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - fVar1) - 0.1f * iVar6 * fVar1;
+                if ((iVar6 != 0) && (iVar6 < mSwBlur.field_0x014)) {
+                    fVar2 = (&mSwBlur.field_0x034[0])[iVar6].y;
+                    fVar4 = (&mSwBlur.field_0x028)[iVar6].y - fVar2;
+                    if (std::abs(fVar4) > 1.0f) {
+                        fVar3 = fVar3 + 0.1f * (1.0f - (local_58.y - fVar2) / fVar4) * fVar1;
+                    }
+                }
+                if (fVar3 < 0.0f) {
+                    fVar3 = 0.0f;
+                }
+                mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(fVar3);
+                mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
+                m35EC = fVar3;
+                m34D0 = 10;
+                setHammerQuake(&mGndChk, &local_58, iVar5);
+                return true;
+            }
+        } else {
+            setHammerQuake(NULL, NULL, -1);
+            return true;
+        }
+    }
+    if (mpAttnActorLockOn != NULL) {
+        setShapeAngleToAtnActor();
+        m34D4 = shape_angle.y;
+    } else {
+        cLib_addCalcAngleS(&shape_angle.y, m34D4, daPy_HIO_turn_c0::m.field_0x4,
+                           daPy_HIO_turn_c0::m.field_0x0, daPy_HIO_turn_c0::m.field_0x2);
+    }
+    current.angle.y = shape_angle.y;
+    onResetFlg0(daPyRFlg0_UNK2);
+    return true;
 }
 
 /* 801513D4-80151450       .text procHammerFrontSwingEnd_init__9daPy_lk_cFv */
