@@ -27,7 +27,7 @@ struct dCamera__EventParam {
 
 struct dCamera__Type {
     /* 0x00 */ char name[24];
-    /* 0x18 */ s16 mStyles[2][10];
+    /* 0x18 */ s16 mStyles[20];
 };  // Size: 0x40
 
 struct dCamera_event_data {

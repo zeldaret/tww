@@ -104,7 +104,7 @@ BOOL dCamParam_c::Change(s32 i_styleIdx) {
         mpStyle = &styles[mStyleIdx];
         return TRUE;
     } else {
-        mpStyle = &styles[0];
+        mpStyle = &styles[dCamStyle_NN00_e];
         return FALSE;
     }
 }
