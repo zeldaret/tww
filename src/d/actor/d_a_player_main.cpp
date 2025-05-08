@@ -1884,7 +1884,7 @@ BOOL daPy_lk_c::draw() {
     if (!r24) {
         if (mCurProc == daPyProc_CUT_F_e || mCurProc == daPyProc_BT_VERTICAL_JUMP_CUT_e) {
             updateDLSetLight(mpSwordTipStabModel, 0);
-        } else if (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100) && !(mCurProc == daPyProc_DEMO_DEAD_e && m34D6 == 0)) {
+        } else if (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_IN_WATER) && !(mCurProc == daPyProc_DEMO_DEAD_e && m34D6 == 0)) {
             GXColor spc;
             GXColor sp8;
             dKy_get_seacolor(&spc, &sp8);
@@ -4669,7 +4669,7 @@ void daPy_lk_c::setFrontWallType() {
         if (iVar10 == 2 || current.pos.y - m35D4 < 125.0f) {
             return;
         }
-        if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (checkNoResetFlg0(daPyFlg0_IN_WATER)) {
             if ((iVar10 == 3 && !checkModeFlg(ModeFlg_SWIM)) && !checkModeFlg(ModeFlg_MIDAIR)) {
                 onResetFlg0(daPyRFlg0_UNK8);
                 mPolyInfo = mLinkLinChk;
@@ -4908,7 +4908,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 current.pos.x = (m3724.x + 20.5f * fVar3) - fVar2;
                 current.pos.y = m3724.y + 37.5f * iVar8;
                 current.pos.z = (m3724.z + 20.5f * fVar2) + fVar3;
-                while (mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+                while (mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.minDepthToSwim) {
                     current.pos.y += 37.5f;
                 }
                 procLadderMove_init(1, 0, &current.pos);
@@ -11654,7 +11654,7 @@ BOOL daPy_lk_c::execute() {
     checkLavaFace(&oldPos, dBgS_Attr_NORMAL_e);
     
     if (checkModeFlg(ModeFlg_SWIM)) {
-        if (checkNoResetFlg0(daPyFlg0_UNK100) && !checkSwimFallCheck()) {
+        if (checkNoResetFlg0(daPyFlg0_IN_WATER) && !checkSwimFallCheck()) {
             current.pos.y = mSwimHeight;
         }
         if (mCurProc != daPyProc_DEMO_DEAD_e) {
@@ -11888,7 +11888,7 @@ BOOL daPy_lk_c::execute() {
     if (!checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000))) {
         if (mAcch.ChkGroundHit() && !daPy_lk_c::checkPlayerFly()) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e | dEvtCnd_CANDOOR_e | dEvtCnd_CANGETITEM_e | dEvtCnd_UNK10_e | dEvtCnd_CANCATCH_e);
-        } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100))) {
+        } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_IN_WATER))) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
@@ -12558,7 +12558,7 @@ void daPy_lk_c::playerInit() {
         mEventIdx = dComIfGp_evmng_startDemo(getStartEvent());
     }
     
-    onNoResetFlg0(daPyFlg0_UNK100);
+    onNoResetFlg0(daPyFlg0_IN_WATER);
     mLavaGndChk.OffWaterGrp();
     mDemo.setStick(1.0f);
     endDamageEmitter();

@@ -194,9 +194,15 @@ BOOL daPy_lk_c::checkNextModeSwim() {
  */
 BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
-    cXyz local_18;
+    cXyz splashEffectPos;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) &&  // Precondition for being ready to swim, maybe daPyFlg0_READY_TO_SWIM could be a good name?
+        !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && 
+        !checkNoControll() && 
+        mDemo.getDemoMode() 
+        != daPy_demo_c::DEMO_UNK11_e && 
+        mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.minDepthToSwim) {
+        
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
 
@@ -205,7 +211,7 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         endFlameDamageEmitter();
 
-        offNoResetFlg0(daPyFlg0_UNK100);
+        offNoResetFlg0(daPyFlg0_SWIM_EXIT);
 
         mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         mVelocity *= 0.75f;
@@ -219,11 +225,11 @@ BOOL daPy_lk_c::changeSwimProc() {
         setSwimTimerStartStop();
         
         if (checkModeFlg(ModeFlg_MIDAIR)) {
-            current.pos.y += daPy_HIO_swim_c0::m.field_0x24;
-            speed.y = mOldSpeed.y * daPy_HIO_swim_c0::m.field_0x10;
+            current.pos.y += daPy_HIO_swim_c0::m.minDepthToSwim;
+            speed.y = mOldSpeed.y * daPy_HIO_swim_c0::m.fallSpeedMultiplier;
 
-            if (speed.y < daPy_HIO_swim_c0::m.field_0x14) {
-                speed.y = daPy_HIO_swim_c0::m.field_0x14;
+            if (speed.y < daPy_HIO_swim_c0::m.minSplashEntrySpeed) {
+                speed.y = daPy_HIO_swim_c0::m.minSplashEntrySpeed;
             }
             else if (speed.y > 0.0f) {
                 speed.y = 0.0f;
@@ -235,10 +241,10 @@ BOOL daPy_lk_c::changeSwimProc() {
                 oldSpeedY = 1.0f;
             }
 
-            local_18.x = current.pos.x;
-            local_18.y = mSwimHeight;
-            local_18.z = current.pos.z;
-            fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
+            splashEffectPos.x = current.pos.x;
+            splashEffectPos.y = mSwimHeight;
+            splashEffectPos.z = current.pos.z;
+            fopKyM_createWpillar(&splashEffectPos, 1.0f, oldSpeedY, 0);
             seStartOnlyReverb(JA_SE_LK_INTO_WATER);
             res = procSwimWait_init(FALSE);
         }
@@ -278,7 +284,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
 
     if (mSwimHeight - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.swimSurfaceCloseThreshold && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
-            onNoResetFlg0(daPyFlg0_UNK100); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
+            onNoResetFlg0(daPyFlg0_SWIM_EXIT); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
             current.pos.y = mSwimHeight;
             return TRUE;
         }
@@ -298,7 +304,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
  *   - i_bPlayWaterExitSE: If TRUE, triggers water exit sound effect.
  */
 void daPy_lk_c::swimOutAfter(BOOL i_bPlayWaterExitSE) {
-    onNoResetFlg0(daPyFlg0_UNK100);
+    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
     
     m35C4 = 0.0f;
 
@@ -362,7 +368,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && mSwimHeight - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && mSwimHeight - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.minDepthToSwim - 5.0f)) {
         current.pos.y = mSwimHeight;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
@@ -395,10 +401,10 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
-    f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50) / mMaxNormalSpeed) +
-                daPy_HIO_swim_c0::m.field_0x50 +
-               (getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74);
-    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x58);
+    f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale) / mMaxNormalSpeed) +
+                daPy_HIO_swim_c0::m.minAnimSpeedScale +
+               (getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterAnimBoost);
+    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.blendTimer);
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(endFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
 }
@@ -444,7 +450,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
     if (mAcch.GetGroundH() <= mSwimHeight - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
-        if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
@@ -499,7 +505,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
     m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
 
-    onNoResetFlg0(daPyFlg0_UNK100);
+    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
 
     if (param_1) {
         mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0040, &current.pos);
@@ -600,7 +606,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
@@ -634,7 +640,7 @@ BOOL daPy_lk_c::procSwimWait() {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }
@@ -694,7 +700,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL i_bKeepSwimAnime) {
 
     mDirection = DIR_FORWARD;
 
-    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
@@ -779,7 +785,7 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50)) / mMaxNormalSpeed + daPy_HIO_swim_c0::m.field_0x50 + (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74));
+        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale)) / mMaxNormalSpeed + daPy_HIO_swim_c0::m.minAnimSpeedScale + (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterAnimBoost));
     }
 
     if (mDirection == DIR_BACKWARD) {
@@ -790,7 +796,7 @@ BOOL daPy_lk_c::procSwimMove() {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }

@@ -114,7 +114,7 @@ public:
         daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK80              = 0x00000080,
-        daPyFlg0_UNK100             = 0x00000100,
+        daPyFlg0_SWIM_EXIT          = 0x00000100, // Link is on land
         daPyFlg0_SHIP_DROP          = 0x00000200,
         daPyFlg0_UNK400             = 0x00000400,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
