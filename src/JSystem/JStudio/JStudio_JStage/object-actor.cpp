@@ -10,7 +10,7 @@ namespace JStudio_JStage {
 
 /* 80276264-80276318       .text __ct__Q214JStudio_JStage14TAdaptor_actorFPCQ26JStage7TSystemPQ26JStage6TActor */
 TAdaptor_actor::TAdaptor_actor(const JStage::TSystem* system, JStage::TActor* actor)
-   : JStudio::TAdaptor_actor()
+    : JStudio::TAdaptor_actor()
     , mSystem(system)
     , mObject(actor)
     , m12C(NULL)
@@ -259,8 +259,8 @@ TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::~TVVOutput_ANIMATION_FRAME_() {
 }
 
 const TAdaptor_actor::TVVOutputObject TAdaptor_actor::saoVVOutput_[] = {
-    TVVOutputObject(1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
-    TVVOutputObject(-1, NULL, NULL)
+    TVVOutputObject(TEACTOR_1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
+    TVVOutputObject(TE_VALUE_NONE, NULL, NULL)
 };
 
 const TAdaptor_actor::TVVOutput_ANIMATION_FRAME_ TAdaptor_actor::saoVVOutput_ANIMATION_FRAME_[] = {

@@ -8,7 +8,7 @@
 class J2DPane;
 class JPABaseEmitter;
 class fopAc_ac_c;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class msg_class;
 class sub_meter_class;
 
@@ -594,5 +594,7 @@ extern dMeter_HIO_c g_meterHIO;
 extern dMeter_menuHIO_c g_menuHIO;
 extern dMeter_msg_HIO_c g_msgHIO;
 extern dMeter_message_HIO_c g_messageHIO;
+
+void dMeter_mtrShow();
 
 #endif /* D_METER_H */

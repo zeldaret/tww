@@ -7,13 +7,13 @@
 namespace daObjUsovmc {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        virtual int CreateHeap() /* override */;
-        virtual int Create() /* override */;
-        virtual int Delete() /* override */;
-        virtual int Execute(Mtx**) /* override */;
-        virtual int Draw() /* override */;
+        virtual BOOL CreateHeap() /* override */;
+        virtual BOOL Create() /* override */;
+        virtual BOOL Delete() /* override */;
+        virtual BOOL Execute(Mtx**) /* override */;
+        virtual BOOL Draw() /* override */;
 
-        s32 Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();

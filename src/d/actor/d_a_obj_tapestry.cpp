@@ -267,7 +267,7 @@ void daObjTapestry_c::set_eye_pos() {
 }
 
 /* 00004F2C-00005168       .text _create__15daObjTapestry_cFv */
-s32 daObjTapestry_c::_create() {
+cPhs_State daObjTapestry_c::_create() {
     /* Nonmatching */
 }
 
@@ -317,7 +317,7 @@ bool daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
-static s32 daObjTapestry_Create(fopAc_ac_c*) {
+static cPhs_State daObjTapestry_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

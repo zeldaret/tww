@@ -43,7 +43,6 @@ struct CharaData {
 };  // Size: 0x12
 
 static const CharaData l_CharaData[] = {
-
     {   // 0x00
         /* offset    */ {0, 10, 0},
         /* radius    */ 25,

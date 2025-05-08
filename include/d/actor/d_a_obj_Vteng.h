@@ -10,7 +10,7 @@ class mDoExt_McaMorf;
 class daObjVteng_c : public fopAc_ac_c {
 public:
     void init_mtx();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     bool _draw();
     bool _delete();

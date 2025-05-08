@@ -57,7 +57,7 @@ void daObjHcbh_c::make_item() {
 }
 
 /* 00000A20-00000E30       .text _create__11daObjHcbh_cFv */
-s32 daObjHcbh_c::_create() {
+cPhs_State daObjHcbh_c::_create() {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ bool daObjHcbh_c::_draw() {
 }
 
 /* 0000197C-0000199C       .text daObjHcbh_Create__FP10fopAc_ac_c */
-static s32 daObjHcbh_Create(fopAc_ac_c*) {
+static cPhs_State daObjHcbh_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

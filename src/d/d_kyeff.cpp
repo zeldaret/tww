@@ -3,6 +3,7 @@
 // Translation Unit: d_kyeff.cpp
 //
 
+#include "d/d_kyeff.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -14,11 +15,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "dolphin/os/OS.h"
 
-class dKyeff_c : public kankyo_class {
-public:
-    BOOL execute();
-};
-
 /* 80197FE4-80198008       .text dKyeff_Draw__FP8dKyeff_c */
 static BOOL dKyeff_Draw(dKyeff_c* i_this) {
     dKyw_wether_draw();
@@ -28,7 +24,6 @@ static BOOL dKyeff_Draw(dKyeff_c* i_this) {
 /* 80198008-8019803C       .text get_parcent__Ffff */
 static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f1;
-    f32 temp_f2;
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {
@@ -135,7 +130,7 @@ static BOOL dKyeff_Delete(dKyeff_c* i_this) {
 }
 
 /* 80198518-80198758       .text dKyeff_Create__FP12kankyo_class */
-static s32 dKyeff_Create(kankyo_class* i_ky) {
+static cPhs_State dKyeff_Create(kankyo_class* i_ky) {
     dKyw_wether_init();
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {

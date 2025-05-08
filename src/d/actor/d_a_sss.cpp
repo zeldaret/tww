@@ -92,7 +92,7 @@ static BOOL daSss_solidHeapCB(fopAc_ac_c*) {
 }
 
 /* 000028C0-00002BB4       .text daSss_Create__FP10fopAc_ac_c */
-static s32 daSss_Create(fopAc_ac_c*) {
+static cPhs_State daSss_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

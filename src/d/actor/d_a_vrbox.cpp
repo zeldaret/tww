@@ -177,13 +177,13 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
 }
 
 /* 8015E968-8015EA14       .text daVrbox_Create__FP10fopAc_ac_c */
-static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daVrbox_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, vrbox_class);
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
 
     i_this->m29C = 0;
 
-    s32 phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, daVrbox_solidHeapCB, 0xC60)) {
         dComIfGp_onStatus(1);
         g_env_light.mbVrboxInvisible = 0;

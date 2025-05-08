@@ -362,7 +362,7 @@ BOOL dOvlpFd4_Delete(dOvlpFd4_c*) {
 }
 
 /* 80225694-802256C0       .text dOvlpFd4_Create__FPv */
-s32 dOvlpFd4_Create(void* i_this) {
+cPhs_State dOvlpFd4_Create(void* i_this) {
     new (i_this) dOvlpFd4_c();
     return cPhs_COMPLEATE_e;
 }

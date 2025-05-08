@@ -31,12 +31,14 @@
 #define SECTION_DATA __declspec(section ".data")
 #define SECTION_INIT __declspec(section ".init")
 #define ASM asm
+#define WEAKFUNC __declspec(weak)
 #else
 #define STATIC_ASSERT(...)
 #define ALIGN_DECL(...)
 #define SECTION_DATA
 #define SECTION_INIT
 #define ASM
+#define WEAKFUNC
 #endif
 
 extern int __cntlzw(uint);

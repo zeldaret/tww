@@ -2,6 +2,7 @@
 #define D_A_TBOX_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_w.h"
@@ -41,14 +42,19 @@ public:
     request_of_phase_process_class* getPhase() { return &mPhase; }
     bool action() { return (this->*mActionFunc)(); }
     void setAction(ActionFunc func) { mActionFunc = func; }
-    void deleteProc() {} // Maybe only used in the demo
+    void deleteProc() {
+        if (mpBgWCurrent != NULL) {
+            dComIfG_Bgsp()->Release(mpBgWCurrent);
+        }
+        mSmokeCB.remove();
+    }
 
     inline BOOL draw();
     BOOL execute();
-    s32 commonShapeSet();
-    s32 effectShapeSet();
-    s32 envShapeSet();
-    s32 bgCheckSet();
+    cPhs_State commonShapeSet();
+    cPhs_State effectShapeSet();
+    cPhs_State envShapeSet();
+    cPhs_State bgCheckSet();
     void searchRoomNo();
     void lightReady();
     BOOL checkEnv();

@@ -151,7 +151,11 @@ static s16 daObjMknjD_XyEventCB(void* i_this, int i_param2) {
 
 /* 000002F0-00000314       .text XyCheckCB__Q210daObjMknjD5Act_cFi */
 s16 daObjMknjD::Act_c::XyCheckCB(int i_itemBtn) {
-    return dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e ? 1 : 0;
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 00000314-0000031C       .text XyEventCB__Q210daObjMknjD5Act_cFi */
@@ -160,7 +164,7 @@ s16 daObjMknjD::Act_c::XyEventCB(int) {
 }
 
 /* 0000031C-00000620       .text CreateHeap__Q210daObjMknjD5Act_cFv */
-int daObjMknjD::Act_c::CreateHeap() {
+BOOL daObjMknjD::Act_c::CreateHeap() {
     const void* temp_r26; // Fakematch to get it to use the same register for model_data_d and jntName
     if (m043E == true) {
         temp_r26 = dComIfG_getObjectRes(M_arcname, MKNJD_BDL_MKNJK);
@@ -215,14 +219,14 @@ int daObjMknjD::Act_c::CreateHeap() {
         mBreakMdl->setUserArea(reinterpret_cast<u32>(this));
         mMainMdlAlpha = 0xFF;
 
-        return 1;
+        return TRUE;
     }
 
-    return 0;
+    return FALSE;
 }
 
 /* 00000620-000008E8       .text Create__Q210daObjMknjD5Act_cFv */
-int daObjMknjD::Act_c::Create() {
+BOOL daObjMknjD::Act_c::Create() {
     fopAcM_SetMtx(this, mMainMdl->getBaseTRMtx());
     init_mtx();
     fopAcM_SetMtx(this, mBreakMdl->getBaseTRMtx());
@@ -285,22 +289,21 @@ int daObjMknjD::Act_c::Create() {
     mMsgPID = fpcM_ERROR_PROCESS_ID_e;
     m0504 = false;
 
-    return 1;
+    return TRUE;
 }
 
 /* 000008E8-00000A84       .text Mthd_Create__Q210daObjMknjD5Act_cFv */
-s32 daObjMknjD::Act_c::Mthd_Create() {
-    s32 phase_state;
-
+cPhs_State daObjMknjD::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjMknjD::Act_c);
 
     m043E = prm_get_Type();
 
+    cPhs_State phase_state;
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         mEmitters[2] = NULL;
         mEmitters[3] = NULL;
 
-        return 3;
+        return cPhs_STOP_e;
     }
     else {
         phase_state = dComIfG_resLoad(&mPhs, M_arcname);
@@ -315,18 +318,18 @@ s32 daObjMknjD::Act_c::Mthd_Create() {
 }
 
 /* 00000B64-00000BDC       .text Delete__Q210daObjMknjD5Act_cFv */
-int daObjMknjD::Act_c::Delete() {
+BOOL daObjMknjD::Act_c::Delete() {
     dComIfGp_att_revivalAleart();
 
     for (int i = 0; i < 4; i++) {
         mSmokeCBs[i].end();
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 00000BDC-00000C34       .text Mthd_Delete__Q210daObjMknjD5Act_cFv */
-s32 daObjMknjD::Act_c::Mthd_Delete() {
+BOOL daObjMknjD::Act_c::Mthd_Delete() {
     int bgDeleteResult = MoveBGDelete();
     
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
@@ -360,7 +363,7 @@ void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
     mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), current.angle.y);
+    mDoMtx_stack_c::YrotM(current.angle.y);
 
     mDoMtx_stack_c::transM(pos);
     
@@ -695,7 +698,7 @@ bool daObjMknjD::Act_c::daObjMknjD_break() {
 }
 
 /* 0000195C-000020E0       .text Execute__Q210daObjMknjD5Act_cFPPA3_A4_f */
-int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
+BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     daPy_py_c* partner = static_cast<daPy_py_c*>(dComIfGp_getCb1Player());
 
@@ -906,7 +909,7 @@ int daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
         m0434 = 0;
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 000020E0-000022FC       .text setMaterial__10daObjMknjDFP11J3DMaterialUc */
@@ -943,7 +946,7 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
 }
 
 /* 000022FC-00002430       .text Draw__Q210daObjMknjD5Act_cFv */
-int daObjMknjD::Act_c::Draw() {
+BOOL daObjMknjD::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mBreakMdl, &tevStr);
 
@@ -967,34 +970,34 @@ int daObjMknjD::Act_c::Draw() {
 
     dComIfGd_setList();
 
-    return 1;
+    return TRUE;
 }
 
 namespace daObjMknjD {
     namespace {
         /* 00002430-00002450       .text Mthd_Create__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
 
         /* 00002450-00002470       .text Mthd_Delete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Delete(void* i_this) {
+        BOOL Mthd_Delete(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Delete();
         }
 
         /* 00002470-00002490       .text Mthd_Execute__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Execute(void* i_this) {
+        BOOL Mthd_Execute(void* i_this) {
             return static_cast<Act_c*>(i_this)->MoveBGExecute();
         }
 
         /* 00002490-000024BC       .text Mthd_Draw__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Draw();
+        BOOL Mthd_Draw(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGDraw();
         }
 
         /* 000024BC-000024E8       .text Mthd_IsDelete__Q210daObjMknjD27@unnamed@d_a_obj_mknjd_cpp@FPv */
-        s32 Mthd_IsDelete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->IsDelete();
+        BOOL Mthd_IsDelete(void* i_this) {
+            return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
         }
 
         static actor_method_class Mthd_Table = {

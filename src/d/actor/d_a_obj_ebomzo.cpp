@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/res/res_ebomzo.h"
+#include "d/d_procname.h"
 
 typedef enum {
     /*0*/ Ebomzo_Mode_Check = 0,
@@ -49,7 +50,7 @@ dCcD_SrcSph sph_check_src = {
 };
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::CreateHeap() {
+BOOL daObjEbomzo::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, EBOMZO_BDL_EBOMZO);
     JUT_ASSERT(140, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
@@ -57,7 +58,7 @@ int daObjEbomzo::Act_c::CreateHeap() {
 }
 
 /* 0000012C-0000021C       .text Create__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::Create() {
+BOOL daObjEbomzo::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
 
@@ -80,12 +81,10 @@ int daObjEbomzo::Act_c::Create() {
 }
 
 /* 0000021C-000003A0       .text Mthd_Create__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::Mthd_Create() {
-    int phase_state;
-
+cPhs_State daObjEbomzo::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjEbomzo::Act_c);
     
-    phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, EBOMZO_DZB_EBOMZO, NULL, 0x1200);
         JUT_ASSERT(194, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -94,12 +93,12 @@ int daObjEbomzo::Act_c::Mthd_Create() {
 }
 
 /* 00000558-00000560       .text Delete__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::Delete() {
+BOOL daObjEbomzo::Act_c::Delete() {
     return TRUE;
 }
 
 /* 00000560-000005AC       .text Mthd_Delete__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::Mthd_Delete() {
+BOOL daObjEbomzo::Act_c::Mthd_Delete() {
     u32 result = MoveBGDelete();
     dComIfG_resDelete(&mPhs, M_arcname);
     return result;
@@ -110,28 +109,22 @@ void daObjEbomzo::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
-    cMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 0000062C-00000668       .text init_mtx__Q211daObjEbomzo5Act_cFv */
 void daObjEbomzo::Act_c::init_mtx() {
-    mpModel->mBaseScale = scale;
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
 /* 00000668-00000864       .text check__Q211daObjEbomzo5Act_cFv */
 void daObjEbomzo::Act_c::check() {
-    //Nonmatching
-
-    fopAc_ac_c* acActor;
-    cXyz diffVec;
-    u8 b, g, r;
-
     if (mCollider.ChkTgHit()) {
-        acActor = mCollider.GetTgHitAc();
+        fopAc_ac_c* acActor = mCollider.GetTgHitAc();
         if (acActor) {
-            diffVec = mCollider.GetC() - acActor->current.pos;
+            cXyz diffVec = mCollider.GetC() - acActor->current.pos;
             if (diffVec.abs() < 100.0f) {
                 mXRotRate = 8;
                 current.angle.x += mXRotRate;
@@ -142,9 +135,9 @@ void daObjEbomzo::Act_c::check() {
                 fopAcM_onSwitch(this, prm_get_swSave());
                 
                 if (!mpParticleEmitter) {
-                    r = tevStr.mColorK0.r;
-                    g = tevStr.mColorK0.g;
-                    b = tevStr.mColorK0.b;
+                    const u8 r = tevStr.mColorK0.r;
+                    const u8 g = tevStr.mColorK0.g;
+                    const u8 b = tevStr.mColorK0.b;
                     mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828E, &current.pos, &current.angle);
                     if (mpParticleEmitter) mpParticleEmitter->setGlobalPrmColor(r, g, b);
                 }
@@ -178,7 +171,7 @@ void daObjEbomzo::Act_c::demo() {
 void daObjEbomzo::Act_c::fall() {}
 
 /* 000009C0-00000AFC       .text Execute__Q211daObjEbomzo5Act_cFPPA3_A4_f */
-int daObjEbomzo::Act_c::Execute(Mtx** matrix) {
+BOOL daObjEbomzo::Act_c::Execute(Mtx** matrix) {
     cXyz offset;
 
     offset.x = cM_ssin(current.angle.y) * 50.0f;
@@ -202,7 +195,7 @@ int daObjEbomzo::Act_c::Execute(Mtx** matrix) {
 }
 
 /* 00000AFC-00000B9C       .text Draw__Q211daObjEbomzo5Act_cFv */
-int daObjEbomzo::Act_c::Draw() {
+BOOL daObjEbomzo::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
@@ -215,7 +208,7 @@ int daObjEbomzo::Act_c::Draw() {
 namespace daObjEbomzo {
     namespace {
         /* 00000B9C-00000BBC      .text Mthd_Create__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
 
@@ -231,12 +224,12 @@ namespace daObjEbomzo {
 
         /* 00000BFC-00000C28      .text Mthd_Draw__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
         BOOL Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->Draw();
+            return static_cast<Act_c*>(i_this)->MoveBGDraw();
         }
 
         /* 00000C28-00000C54      .text Mthd_IsDelete__Q211daObjEbomzo28@unnamed@d_a_obj_ebomzo_cpp@FPv  */
         BOOL Mthd_IsDelete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->IsDelete();
+            return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
         }
 
         static actor_method_class Mthd_Ebomzo = {

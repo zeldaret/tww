@@ -83,7 +83,7 @@ void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* pDC) {
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -131,7 +131,7 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -248,7 +248,7 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = DEG_TO_RAD(tick * pDC->pbsp->getTexScrollRotate());
+    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -441,7 +441,7 @@ void rotTypeZ(f32 sin, f32 cos, Mtx& out) {
 /* 80261568-802615C4       .text rotTypeXYZ__FffRA3_A4_f */
 void rotTypeXYZ(f32 sin, f32 cos, Mtx& out) {
     f32 a, b, c;
-    a = (1.0f - cos) * (1.0f / 3.0f);
+    a = (1.0f - cos) * 0.333333f;
     c = a + (0.57735f * sin);
     b = a - (0.57735f * sin);
     a = a + cos;
@@ -833,7 +833,6 @@ void JPADrawCalcScaleY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
 
 /* 80264EE8-802650B8       .text calc__24JPADrawCalcScaleXBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     JGeometry::TVec3<f32> vel;
     vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
@@ -848,7 +847,6 @@ void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* 
 
 /* 802650B8-80265288       .text calc__24JPADrawCalcScaleYBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     JGeometry::TVec3<f32> vel;
     vel.set(ptcl->mVelocity);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {

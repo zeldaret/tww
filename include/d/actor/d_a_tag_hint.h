@@ -6,7 +6,7 @@
 class daTag_Hint_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned short) {}
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     void setActio(unsigned char) {}

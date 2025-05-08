@@ -240,7 +240,7 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 800E8AB0-800E8CA4       .text daEsa_Create__FP10fopAc_ac_c */
-static s32 daEsa_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     fopAcM_SetupActor(i_actor, esa_class);
@@ -263,11 +263,11 @@ static s32 daEsa_Create(fopAc_ac_c* i_actor) {
             for(int i = 0; i < num; i++) {
                 fopAcM_prm_class* params = fopAcM_CreateAppend();
                 cXyz pos = player->getLeftHandPos();
-                params->mPos = pos;
-                params->mAngle.x = 0;
-                params->mAngle.y = i_this->current.angle.y;
-                params->mAngle.z = cM_rndF(65536.0f);
-                params->mParameter = 0x000000FF;
+                params->base.position = pos;
+                params->base.angle.x = 0;
+                params->base.angle.y = i_this->current.angle.y;
+                params->base.angle.z = cM_rndF(65536.0f);
+                params->base.parameters = 0x000000FF;
                 fpcM_Create(PROC_ESA, 0, params);
             }
         }

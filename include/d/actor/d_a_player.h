@@ -13,8 +13,8 @@ class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
     void end();
-    void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
+    JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
+    JPABaseEmitter* makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
@@ -25,25 +25,46 @@ public:
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
-// TODO: this probably does not belong in d_a_player.h based on the .text section splitting in d_a_player_main
-class daPy_HIO_c {
-public:
-    // TODO: constructor should be weak, but not inlined?
-    // daPy_HIO_c() {}
-    daPy_HIO_c();
-
-public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
-};  // Size: 0x3F
-
 class daPy_demo_c {
 public:
     enum {
-        DEMO_UNK1_e = 0x01,
+        DEMO_UNK00_e = 0x00,
+        DEMO_UNK01_e = 0x01,
+        DEMO_UNK02_e = 0x02,
+        DEMO_UNK03_e = 0x03,
+        DEMO_UNK04_e = 0x04,
+        DEMO_UNK05_e = 0x05,
+        DEMO_UNK06_e = 0x06,
+        DEMO_UNK08_e = 0x08,
+        DEMO_UNK09_e = 0x09,
+        DEMO_UNK0A_e = 0x0A,
+        DEMO_UNK0E_e = 0x0E,
+        DEMO_UNK0F_e = 0x0F,
+        DEMO_UNK10_e = 0x10,
+        DEMO_UNK11_e = 0x11,
+        DEMO_UNK12_e = 0x12,
         DEMO_UNK14_e = 0x14,
+        DEMO_UNK17_e = 0x17,
         DEMO_UNK18_e = 0x18,
+        DEMO_UNK1A_e = 0x1A,
+        DEMO_UNK1B_e = 0x1B,
         DEMO_UNK1D_e = 0x1D,
+        DEMO_UNK1E_e = 0x1E,
+        DEMO_UNK1F_e = 0x1F,
+        DEMO_UNK22_e = 0x22,
         DEMO_UNK25_e = 0x25,
+        DEMO_UNK27_e = 0x27,
+        DEMO_UNK2A_e = 0x2A,
+        DEMO_UNK2B_e = 0x2B,
+        DEMO_UNK2C_e = 0x2C,
+        DEMO_UNK2F_e = 0x2F,
+        DEMO_UNK33_e = 0x33,
+        DEMO_UNK35_e = 0x35,
+        DEMO_UNK38_e = 0x38,
+        DEMO_UNK39_e = 0x39,
+        DEMO_UNK3D_e = 0x3D,
+        DEMO_UNK3E_e = 0x3E,
+        DEMO_UNK40_e = 0x40,
         DEMO_UNK44_e = 0x44,
         DEMO_UNK48_e = 0x48,
         DEMO_UNK4A_e = 0x4A,
@@ -56,6 +77,7 @@ public:
     void setDemoMode(u32 mode) { mDemoMode = mode; }
     u32 getDemoMode() const { return mDemoMode; }
     int getParam1() const { return mParam1; }
+    s16 getTimer() const { return mTimer; }
     void setTimer(s16 time) { mTimer = time; }
     void decTimer() { mTimer--; }
     void setOriginalDemoType() { setDemoType(3); }
@@ -84,13 +106,17 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
+        daPyFlg0_UNK1               = 0x00000001,
+        daPyFlg0_UNK2               = 0x00000002,
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
+        daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK80              = 0x00000080,
         daPyFlg0_UNK100             = 0x00000100,
         daPyFlg0_SHIP_DROP          = 0x00000200,
+        daPyFlg0_UNK400             = 0x00000400,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
@@ -99,8 +125,10 @@ public:
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
+        daPyFlg0_UNK100000          = 0x00100000,
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_UNK400000          = 0x00400000,
+        daPyFlg0_UNK800000          = 0x00800000,
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
@@ -130,6 +158,7 @@ public:
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
         daPyFlg1_UNK40000               = 0x00040000,
         daPyFlg1_WATER_DROP             = 0x00080000,
+        daPyFlg1_UNK100000              = 0x00100000,
         daPyFlg1_UNK200000              = 0x00200000,
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
@@ -142,28 +171,37 @@ public:
     };
     
     enum daPy_RFLG0 {
+        daPyRFlg0_UNK1                  = 0x00000001,
         daPyRFlg0_UNK2                  = 0x00000002,
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPyRFlg0_UNK8                  = 0x00000008,
         daPyRFlg0_UNK10                 = 0x00000010,
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
         daPyRFlg0_UNK80                 = 0x00000080,
+        daPyRFlg0_UNK100                = 0x00000100,
         daPyRFlg0_UNK200                = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPyRFlg0_UNK1000               = 0x00001000,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
         daPyRFlg0_UNK4000               = 0x00004000,
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
         daPyRFlg0_ATTENTION_LOCK        = 0x00010000,
         daPyRFlg0_HAMMER_QUAKE          = 0x00020000,
+        daPyRFlg0_UNK40000              = 0x00040000,
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
+        daPyRFlg0_UNK200000             = 0x00200000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
+        daPyRFlg0_UNK800000             = 0x00800000,
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
+        daPyRFlg0_UNK4000000            = 0x04000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
+        daPyRFlg0_UNK40000000           = 0x40000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
@@ -394,12 +432,12 @@ public:
     }
     void cancelOriginalDemo() {
         mDemo.setSystemDemoType();
-        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
+        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK01_e);
     }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
-    bool checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
+    u32 checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
     bool getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
     void onPushPullKeep() { onNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
     void offPushPullKeep() { offNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
@@ -417,7 +455,7 @@ public:
     
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
-    bool checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
+    u32 checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
     bool checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
     void onNpcCallCommand() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onNpcCall() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
@@ -431,6 +469,7 @@ public:
     void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    bool checkUseArrowEffect() const { return checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
@@ -442,7 +481,7 @@ public:
     
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
     void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
-    bool checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
+    u32 checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
     bool getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
     bool getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
     bool getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
@@ -460,29 +499,27 @@ public:
     bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }
-    bool checkMasterSwordEquip() const {
+    BOOL checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
+    BOOL checkFinalMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+    }
+    
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkFinalMasterSwordEquip() const {}
+    BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
     void checkBowMiniGame() const {}
-    void checkSwordMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    void checkUseArrowEffect() const {}
     void getRopeJumpLand() const {}
     void checkRopeForceEnd() const {}
     
-    // This class's weak virtual functions tend to cause weak function ordering issues in TUs that use them.
-    // The proper way to match this is still unknown, so some of the definitions have been temporarily commented out
-    // here so that they can be fakematched instead.
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;

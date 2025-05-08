@@ -47,24 +47,21 @@ JPAEmitterManager::JPAEmitterManager(JPAResourceManager* resMgr, u32 ptclNum, u3
 }
 
 /* 8025F0E4-8025F2F4       .text createSimpleEmitterID__17JPAEmitterManagerFRCQ29JGeometry8TVec3<f>UsUcUcP34JPACallBackBase<P14JPABaseEmitter>P54JPACallBackBase2<P14JPABaseEmitter,P15JPABaseParticle> */
-JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(const JGeometry::TVec3<float>& pos, u16 userID, u8 groupID, u8 rmID, JPACallBackBase<JPABaseEmitter*>* pEmtrCallBack, JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* pPtclCallBack) {
-    /* Nonmatching - regalloc */
-    JUT_ASSERT(0x56, groupID < 16);
-    JUT_ASSERT(0x57, rmID < 8);
-    JUT_ASSERT(0x58, pResMgrArray[rmID] != NULL);
+JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(const JGeometry::TVec3<f32>& pos, u16 userID, u8 groupID, u8 rmID, JPACallBackBase<JPABaseEmitter*>* pEmtrCallBack, JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* pPtclCallBack) {
+    JUT_ASSERT(86, groupID < 16);
+    JUT_ASSERT(87, rmID < 8);
+    JUT_ASSERT(88, pResMgrArray[rmID] != NULL);
 
     JPABaseEmitter* emtr;
     JPAEmitterData* emtrData;
-    JPAResourceManager* resMgr;
 
     emtr = NULL;
-    resMgr = pResMgrArray[rmID];
-    emtrData = resMgr->getEmitterResource()->getByUserIndex(userID);
+    emtrData = pResMgrArray[rmID]->getEmitterResource()->getByUserIndex(userID);
 
     if (emtrData == NULL) {
         JUT_WARN(98, "%s", "JParticle::Couldn't Create Emitter!");
         JUT_WARN(99, "%s", "User Index Number specification has mistaken.");
-        JUT_WARN(100, "Group ID (%d),EmitterManagerPtr(%x)", groupID, resMgr);
+        JUT_WARN(100, "Group ID (%d),EmitterManagerPtr(%x)", groupID, this);
     } else if (mEmtrPool.getNumLinks() != 0) {
         emtr = mEmtrPool.getFirst()->getObject();
         mEmtrPool.remove(emtr->getLinkBufferPtr());
@@ -75,7 +72,7 @@ JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(const JGeometry::TVec3<
         emtr->setParticleCallBackPtr(pPtclCallBack);
         emtr->mGroupID = groupID;
         emtr->mResMgrID = rmID;
-        emtr->mGlobalTranslation.set(pos);
+        emtr->setGlobalTranslation(pos);
     }
 
     return emtr;

@@ -24,7 +24,7 @@ BOOL daObjHbrf1::Act_c::CreateHeap() {
 }
 
 /* 0000012C-000002B4       .text Create__Q210daObjHbrf15Act_cFv */
-int daObjHbrf1::Act_c::Create() {
+BOOL daObjHbrf1::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
     if (prm_get_Type() == 0 && !fopAcM_isSwitch(this, prm_get_swSave())) {
@@ -48,10 +48,10 @@ int daObjHbrf1::Act_c::Create() {
 }
 
 /* 000002B4-000003B0       .text Mthd_Create__Q210daObjHbrf15Act_cFv */
-s32 daObjHbrf1::Act_c::Mthd_Create() {
+cPhs_State daObjHbrf1::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjHbrf1::Act_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, HBRF1_DZB_HBRF1, dBgS_MoveBGProc_Trans, 0);
@@ -260,7 +260,7 @@ BOOL daObjHbrf1::Act_c::Draw() {
 namespace daObjHbrf1 {
 namespace {
 /* 00000CBC-00000CDC       .text Mthd_Create__Q210daObjHbrf127@unnamed@d_a_obj_hbrf1_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjHbrf1::Act_c*>(i_this)->Mthd_Create();
 }
 

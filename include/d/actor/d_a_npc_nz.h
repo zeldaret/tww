@@ -50,7 +50,7 @@ public:
     BOOL createInit();
     void setSmokeParticle();
     void getArg();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     BOOL _searchEsa(fopAc_ac_c*);
     void cutProc();

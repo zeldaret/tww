@@ -27,7 +27,7 @@ void daAmiProp_c::CreateInit() {
 }
 
 /* 00000318-00000444       .text _create__11daAmiProp_cFv */
-s32 daAmiProp_c::_create() {
+cPhs_State daAmiProp_c::_create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ bool daAmiProp_c::_draw() {
 }
 
 /* 00000924-00000944       .text daAmiProp_Create__FPv */
-static s32 daAmiProp_Create(void*) {
+static cPhs_State daAmiProp_Create(void*) {
     /* Nonmatching */
 }
 

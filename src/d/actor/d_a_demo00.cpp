@@ -69,8 +69,8 @@ void daDemo00_c::setBaseMtx() {
 void daDemo00_c::setShadowSize() {
     J3DModelData* modelData = model.model->getModelData();
 
-    cXyz min(1000000000.0f, 1000000000.0f, 1000000000.0f);
-    cXyz max(-1000000000.0f, -1000000000.0f, -1000000000.0f);
+    cXyz min(100000000.0f, 100000000.0f, 100000000.0f);
+    cXyz max(-100000000.0f, -100000000.0f, -100000000.0f);
 
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         J3DJoint* joint = modelData->getJointNodePointer(i);
@@ -206,7 +206,7 @@ static BOOL daDemo00_Delete(daDemo00_c* i_this) {
 }
 
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
-static s32 daDemo00_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daDemo00_Create(fopAc_ac_c* i_ac) {
     daDemo00_c* i_this = (daDemo00_c*)i_ac;
     fopAcM_SetupActor(i_this, daDemo00_c);
     dKy_tevstr_init(&i_this->tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);

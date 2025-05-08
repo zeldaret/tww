@@ -390,12 +390,8 @@ void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
     if (emtr != NULL) {
         emtr->setRate(16.0f);
         emtr->setSpread(0.35f);
-        emtr->mGlobalDynamicsScale.x = 2.0f;
-        emtr->mGlobalDynamicsScale.y = 2.0f;
-        emtr->mGlobalDynamicsScale.z = 2.0f;
-        emtr->mGlobalParticleScale.x = 2.0f;
-        emtr->mGlobalParticleScale.y = 2.0f;
-        emtr->mGlobalParticleScale.z = 2.0f;
+        JGeometry::TVec3<f32> scale(2.0f, 2.0f, 2.0f);
+        emtr->setGlobalScale(scale);
     }
 }
 
@@ -417,8 +413,8 @@ void dDoor_smoke_c::smokeEnd() {
 }
 
 /* 8006C448-8006C478       .text keyResLoad__12dDoor_key2_cFv */
-void dDoor_key2_c::keyResLoad() {
-    dComIfG_resLoad(&mPhs, "Key");
+cPhs_State dDoor_key2_c::keyResLoad() {
+    return dComIfG_resLoad(&mPhs, "Key");
 }
 
 /* 8006C478-8006C4A8       .text keyResDelete__12dDoor_key2_cFv */
@@ -468,7 +464,7 @@ BOOL dDoor_key2_c::keyCreate_Nkey() {
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCN);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
         return FALSE;
 
     return TRUE;
@@ -484,7 +480,7 @@ BOOL dDoor_key2_c::keyCreate_Bkey() {
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCB);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
         return FALSE;
 
     J3DSkinDeform* deform = new J3DSkinDeform();
@@ -683,7 +679,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
 }
 
 /* 8006D0DC-8006D11C       .text resLoad__12dDoor_hkyo_cFv */
-s32 dDoor_hkyo_c::resLoad() {
+cPhs_State dDoor_hkyo_c::resLoad() {
     if (m11 == 0) {
         return cPhs_COMPLEATE_e;
     }
@@ -715,7 +711,7 @@ BOOL dDoor_hkyo_c::create() {
         return FALSE;
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", HKYO_BRK_HKYO1B);
-    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     return TRUE;
@@ -739,7 +735,7 @@ void dDoor_hkyo_c::setAnm(u8 idx) {
 
     J3DModelData* modelData = mpModel->getModelData();
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", fileIndex);
-    mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, true, 0);
+    mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
 }
 
 /* 8006D3A8-8006D3B4       .text init__12dDoor_hkyo_cFv */

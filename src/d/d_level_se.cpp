@@ -37,7 +37,7 @@ static BOOL dLevelSe_Delete(dLevelSe_c* i_this) {
 }
 
 /* 80199404-8019940C       .text dLevelSe_Create__FP12kankyo_class */
-static s32 dLevelSe_Create(kankyo_class*) {
+static cPhs_State dLevelSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 

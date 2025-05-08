@@ -8,13 +8,13 @@ class dBgW;
 
 class daObj_Pbco_c : public fopAc_ac_c {
 public:
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
     static const char M_arcname[];
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
     void set_mtx();
 
 public:

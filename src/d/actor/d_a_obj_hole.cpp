@@ -249,10 +249,10 @@ void daObj_Hole_c::getArg() {
 }
 
 /* 0000096C-00000BA8       .text _create__12daObj_Hole_cFv */
-s32 daObj_Hole_c::_create() {
+cPhs_State daObj_Hole_c::_create() {
     fopAcM_SetupActor(this, daObj_Hole_c);
 
-    s32 result = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
         getArg();
 

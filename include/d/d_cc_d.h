@@ -20,7 +20,7 @@ enum dCcD_ObjAtType {
     /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
     /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
     /* 0x00000800 */ AT_TYPE_UNK800         = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
+    /* 0x00001000 */ AT_TYPE_SPIKE          = (1 << 12),
     /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
     /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
     /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
@@ -96,20 +96,25 @@ enum CcG_At_HitMark {
 enum CcG_Tg_HitMark {
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
+    /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
 };
 
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
+    /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
+    /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
     /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
+    /* 0xA */ dCcG_At_Spl_UNKA = 0xA,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
 };
 
 enum dCcG_Tg_Spl {
     /* 0x0 */ dCcG_Tg_Spl_UNK0 = 0,
+    /* 0x1 */ dCcG_Tg_Spl_UNK1 = 1,
 };
 
 struct dCcD_SrcGAtTgCoCommonBase {
@@ -353,6 +358,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
+    /* 0x00 */ /* dCcD_GAtTgCoCommonBase */
     virtual ~dCcD_GObjCo() {}
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
     void ClrHit() { ClrActorInfo(); }
@@ -474,6 +480,7 @@ public:
     cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
 protected:
+    /* 0x000 */ /* cCcD_GObjInf */
     /* 0x050 */ dCcD_GObjAt mGObjAt;
     /* 0x094 */ dCcD_GObjTg mGObjTg;
     /* 0x0DC */ dCcD_GObjCo mGObjCo;
@@ -503,6 +510,9 @@ STATIC_ASSERT(sizeof(dCcD_Cyl) == 0x130);
 // Sphere
 class dCcD_Sph : public dCcD_GObjInf, public cCcD_SphAttr {
 public:
+    /* 0x000 */ /* dCcD_GObjInf */
+    /* 0x0F8 */ /* cCcD_SphAttr */
+
     dCcD_Sph() {}
     void Set(dCcD_SrcSph const&);
     void StartCAt(cXyz&);
@@ -531,11 +541,14 @@ public:
 // Triangle
 class dCcD_Tri : public dCcD_GObjInf, public cCcD_TriAttr {
 public:
+    /* 0x00 */ /* dCcD_GObjInf */
+    /* 0xF8 */ /* cCcD_TriAttr */
+
     void Set(dCcD_SrcTri const&);
     virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
-};
+};  // Size: 0x150
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);
 

@@ -503,7 +503,7 @@ static BOOL daSail_Draw(sail_class* i_this) {
     mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
 
     mDoMtx_concat(j3dSys.mViewMtx, *calc_mtx, *i_this->mSailPacket.getStickMtx());
-    mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mStickModel->mBaseTransformMtx);
+    i_this->mSailPacket.mStickModel->setBaseTRMtx(*calc_mtx);
 
     MtxTrans(0.0f, 0.0f, 0.0f, 0);
     mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mTexMtx);
@@ -633,10 +633,10 @@ static BOOL demo_move(sail_class* i_this) {
     if (i_this->demoActorID == 0) {
         return FALSE;
     }
-    dDemo_actor_c* demo = g_dComIfG_gameInfo.play.mDemo->mDemoObj.getActor(i_this->demoActorID);
-    if (demo != NULL) {
-        if (demo->checkEnable(0x40)) {
-            f32 frame = demo->mAnimationFrame;
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(i_this->demoActorID);
+    if (demo_actor != NULL) {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+            f32 frame = demo_actor->getAnmFrame();
             frame = 0.6f - (frame * 0.006f);
             i_this->mSailPacket.m1C44 = frame;
             i_this->mSailPacket.m1C44 = cLib_minMaxLimit<f32>(i_this->mSailPacket.m1C44, 0.0f, 0.6f);
@@ -763,12 +763,12 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
-static s32 daSail_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, sail_class);
     sail_class* i_this = (sail_class*)i_actor;
     
     {
-        int phase_state = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
+        cPhs_State phase_state = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
         if (phase_state != cPhs_COMPLEATE_e) {
             return phase_state;
         }
@@ -778,7 +778,7 @@ static s32 daSail_Create(fopAc_ac_c* i_actor) {
         }
     }
     
-    int phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"

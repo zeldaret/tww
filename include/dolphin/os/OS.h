@@ -2,6 +2,7 @@
 #define OS_H_
 
 #include "stdarg.h"
+#include "dolphin/base/PPCArch.h" // IWYU pragma: export
 #include "dolphin/dvd/dvd.h"
 
 #include "dolphin/os/OSAlarm.h" // IWYU pragma: export
@@ -92,8 +93,6 @@ extern BOOL __OSIsGcam;
 
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
-
-void OSReportInit__Fv(void);  // needed for inline asm
 
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);
@@ -284,6 +283,12 @@ struct GLOBAL_MEMORY {
 };
 
 #define OS_ASSERT(...)
+
+#define ASSERTLINE(line, cond) (void)0
+#define ASSERTMSGLINE(line, cond, msg) (void)0
+#define ASSERTMSG1LINE(line, cond, msg, arg1) (void)0
+#define ASSERTMSG2LINE(line, cond, msg, arg1, arg2) (void)0
+#define ASSERTMSGLINEV(line, cond, ...) (void)0
 
 #define OSPhysicalToCached(paddr) ((void*)((u32)(paddr) + OS_BASE_CACHED))
 #define OSPhysicalToUncached(paddr) ((void*)((u32)(paddr) + OS_BASE_UNCACHED))

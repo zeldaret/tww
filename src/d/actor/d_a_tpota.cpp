@@ -5,71 +5,148 @@
 
 #include "d/actor/d_a_tpota.h"
 #include "d/d_procname.h"
+#include "JSystem/JGeometry.h"
+#include "d/d_particle.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "d/d_particle.h"
+#include "d/d_com_inf_game.h"
+
+const u16 l_daTpota_idx_table[2] = {dPa_name::ID_SCENE_82AE, dPa_name::ID_SCENE_82AF};
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
-s32 daTpota_c::_create() {
-    /* Nonmatching */
+cPhs_State daTpota_c::_create() {
+    fopAcM_SetupActor(this, daTpota_c);
+    JPABaseEmitter* emitter;
+    for (int i = 0; i < 2; i++) {
+        mPositions[i] = current.pos;
+        mAngles[i] = current.angle;
+        emitter = dComIfGp_particle_set(
+            l_daTpota_idx_table[i],
+            &mPositions[i], 
+            &mAngles[i],
+            NULL, 0xff, NULL, -1, NULL, NULL, NULL
+        );
+        mpEmitters[i] = emitter;
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000250-00000298       .text _delete__9daTpota_cFv */
 bool daTpota_c::_delete() {
-    /* Nonmatching */
+    for (int i = 0; i < 2; i++) {
+        if (mpEmitters[i] != NULL) {
+            mpEmitters[i]->becomeInvalidEmitter();
+            mpEmitters[i] = NULL;
+        }
+    }
+    return true;
 }
 
 /* 00000298-000002FC       .text make_ripple__9daTpota_cF4cXyz */
-void daTpota_c::make_ripple(cXyz) {
-    /* Nonmatching */
+void daTpota_c::make_ripple(cXyz i_position) {
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82B0, &i_position,
+        NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
 }
 
 /* 000002FC-00000354       .text check_water_h__9daTpota_cFP15JPABaseParticlef */
-void daTpota_c::check_water_h(JPABaseParticle*, float) {
-    /* Nonmatching */
+BOOL daTpota_c::check_water_h(JPABaseParticle* i_ptcl, float i_position_y) {
+    unknown_struct* unknown_struct = field_0x2C4;
+    int ret = FALSE;
+    if (i_position_y <= -230.0f) {
+        for (int i = 0; i < ARRAY_SIZE(field_0x2C4); i++, unknown_struct++) {
+            if (unknown_struct->ptcl == i_ptcl) {
+                if (unknown_struct->pos_y > -230.0f) {
+                    ret = TRUE;
+                }
+                break;
+            }
+        }
+    }
+    return ret;
 }
 
 /* 00000354-00000380       .text clear_splash__9daTpota_cFv */
 void daTpota_c::clear_splash() {
-    /* Nonmatching */
+    unknown_struct* unknown_struct = field_0x2C4;
+    for (int i = 0; i < 30; i++) {
+        unknown_struct->ptcl = NULL;
+        unknown_struct->pos_y = 0.0f;
+        unknown_struct++;
+    }
 }
 
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
-    /* Nonmatching */
+    if (mpEmitters[1] != NULL) {
+        JSUPtrList* list = mpEmitters[1]->getParticleList();
+        unknown_struct *unknown_struct = field_0x2C4;
+        if(list != NULL){
+            clear_splash();
+            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL); link = link->getNext()){
+                JPABaseParticle* particle = (JPABaseParticle*)link->getObjectPtr();
+                JGeometry::TVec3<f32> position;
+                particle->getGlobalPosition(position);
+                unknown_struct->ptcl = particle;
+                unknown_struct->pos_y = position.y;
+                unknown_struct++;
+            }   
+        }
+    }
 }
 
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
-    /* Nonmatching */
+    if (mpEmitters[1] != NULL){
+        JSUPtrList* list = mpEmitters[1]->getParticleList();
+        if(list != NULL){
+            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
+            link = link->getNext()){
+                JPABaseParticle* particle = (JPABaseParticle *)link->getObjectPtr();
+                JGeometry::TVec3<f32> position;
+                particle->getGlobalPosition(position);
+                if(check_water_h(particle, position.y)){
+                    cXyz local_48;
+                    local_48.x = position.x;
+                    local_48.y = -230.0;
+                    local_48.z = position.z;
+                    make_ripple(local_48);
+                }
+            }
+        }
+        renew_splash();
+    }
+    return true;
 }
 
 /* 000004C8-000004D0       .text _draw__9daTpota_cFv */
 bool daTpota_c::_draw() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace {
 /* 000004D0-000004F0       .text Mthd_Create__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_create();
 }
 
 /* 000004F0-00000514       .text Mthd_Delete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_delete();
 }
 
 /* 00000514-00000538       .text Mthd_Execute__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_execute();
 }
 
 /* 00000538-0000055C       .text Mthd_Draw__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return static_cast<daTpota_c*>(i_this)->_draw();
 }
 
 /* 0000055C-00000564       .text Mthd_IsDelete__23@unnamed@d_a_tpota_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Tpota_Mthd_Table = {

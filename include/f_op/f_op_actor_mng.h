@@ -21,28 +21,25 @@ class J3DModelData;
 class daItem_c;
 
 struct fopAcM_prmBase_class {
-    /* 0x00 */ u32 field_0x00;
-    /* 0x04 */ cXyz field_0x04;
-    /* 0x10 */ csXyz field_0x10;
-    /* 0x16 */ u16 field_0x16;
+    /* 0x00 */ u32 parameters;
+    /* 0x04 */ cXyz position;
+    /* 0x10 */ csXyz angle;
+    /* 0x16 */ u16 setID;
 };  // Size = 0x18
 
 struct fopAcM_prmScale_class {
-    u8 x;
-    u8 y;
-    u8 z;
-};
+    /* 0x0 */ u8 x;
+    /* 0x1 */ u8 y;
+    /* 0x2 */ u8 z;
+};  // Size: 0x3
 
 struct fopAcM_prm_class {
-    /* 0x00 */ u32 mParameter;  // single U32 Parameter
-    /* 0x04 */ cXyz mPos;
-    /* 0x10 */ csXyz mAngle;  // rotation
-    /* 0x16 */ u16 mSetId;
-    /* 0x18 */ fopAcM_prmScale_class mScale;
-    /* 0x1B */ u8 mGbaName;
-    /* 0x1C */ fpc_ProcID mParentPcId;  // parent process ID
-    /* 0x20 */ s8 mSubtype;
-    /* 0x21 */ s8 mRoomNo;
+    /* 0x00 */ fopAcM_prmBase_class base;
+    /* 0x18 */ fopAcM_prmScale_class scale;
+    /* 0x1B */ u8 gbaName;
+    /* 0x1C */ fpc_ProcID parent_id;
+    /* 0x20 */ s8 subtype;
+    /* 0x21 */ s8 room_no;
 };
 
 struct fopAcM_search4ev_prm {
@@ -61,9 +58,9 @@ struct fopAcM_search4ev_prm {
 };
 
 struct fopAcM_search_prm {
-    /* 0x00 */ const char * mpProcName;
-    /* 0x04 */ u32 mParamMask;
-    /* 0x08 */ u32 mParameter;
+    /* 0x00 */ const char * procname;
+    /* 0x04 */ u32 prm_mask;
+    /* 0x08 */ u32 parameter;
 };
 
 enum daItemType_e {
@@ -363,6 +360,7 @@ inline cXyz* fopAcM_getCullSizeBoxMin(fopAc_ac_c* actor) {
 inline void dComIfGs_onSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offSwitch(int i_no, int i_roomNo);
 inline BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
+inline void dComIfGs_revSwitch(int i_no, int i_roomNo);
 inline void dComIfGs_offActor(int i_no, int i_roomNo);
 
 inline void fopAcM_onSwitch(fopAc_ac_c* pActor, int sw) {
@@ -375,6 +373,10 @@ inline void fopAcM_offSwitch(fopAc_ac_c* pActor, int sw) {
 
 inline BOOL fopAcM_isSwitch(fopAc_ac_c* pActor, int sw) {
     return dComIfGs_isSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
+}
+
+inline void fopAcM_revSwitch(fopAc_ac_c* pActor, int sw) {
+    return dComIfGs_revSwitch(sw, fopAcM_GetHomeRoomNo(pActor));
 }
 
 inline fopAc_ac_c* fopAcM_SearchByID(fpc_ProcID id) {
@@ -442,9 +444,9 @@ void fopAcM_setStageLayer(void* p_proc);
 
 void fopAcM_setRoomLayer(void* p_proc, int roomNo);
 
-s32 fopAcM_SearchByID(fpc_ProcID id, fopAc_ac_c** p_actor);
+BOOL fopAcM_SearchByID(fpc_ProcID id, fopAc_ac_c** p_actor);
 
-s32 fopAcM_SearchByName(s16 procName, fopAc_ac_c** p_actor);
+BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** p_actor);
 
 fopAcM_prm_class* fopAcM_CreateAppend();
 
@@ -454,8 +456,8 @@ fopAcM_prm_class* createAppend(u16 enemyNo, u32 parameters, cXyz* p_pos, int roo
 
 void fopAcM_Log(fopAc_ac_c* p_actor, char* str);
 
-s32 fopAcM_delete(fopAc_ac_c* p_actor);
-s32 fopAcM_delete(fpc_ProcID actorID);
+BOOL fopAcM_delete(fopAc_ac_c* p_actor);
+BOOL fopAcM_delete(fpc_ProcID actorID);
 
 fpc_ProcID fopAcM_create(s16 i_procName, u32 i_parameter, cXyz* i_pos = NULL, int i_roomNo = -1,
                    csXyz* i_angle = NULL, cXyz* i_scale = NULL, s8 i_subType = -1,
@@ -465,7 +467,13 @@ fpc_ProcID fopAcM_create(char*, u32 i_parameter, cXyz* i_pos = NULL, int i_roomN
                    csXyz* i_angle = NULL, cXyz* i_scale = NULL,
                    createFunc i_createFunc = NULL);
 
-inline s32 fopAcM_create(s16 i_procName, createFunc i_createFunc, void*);
+inline fpc_ProcID fopAcM_create(s16 i_procName, createFunc i_createFunc, void* params) {
+    return fpcM_Create(i_procName, i_createFunc, params);
+}
+
+inline fpc_ProcID fopAcM_Create(s16 i_procName, createFunc i_createFunc, void* params) {
+    return fpcM_Create(i_procName, i_createFunc,params);
+}
 
 void* fopAcM_fastCreate(s16 procName, u32 parameter, cXyz* p_pos = NULL, int roomNo = -1,
                         csXyz* p_angle = NULL, cXyz* p_scale = NULL, s8 subType = -1,
@@ -494,23 +502,11 @@ void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 estimatedHeapSize);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.min.set(minX, minY, minZ);
-#else
-    p_actor->cull.box.min.x = minX;
-    p_actor->cull.box.min.y = minY;
-    p_actor->cull.box.min.z = minZ;
-#endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.max.set(maxX, maxY, maxZ);
-#else
-    p_actor->cull.box.max.x = maxX;
-    p_actor->cull.box.max.y = maxY;
-    p_actor->cull.box.max.z = maxZ;
-#endif
 }
 
 void fopAcM_setCullSizeBox(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY,
@@ -544,6 +540,10 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
 s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
+s32 fopAcM_orderTalkXBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
+s32 fopAcM_orderTalkYBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
+s32 fopAcM_orderTalkZBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
+s32 fopAcM_orderZHintEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*);
@@ -554,7 +554,7 @@ s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hi
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventIdx, u8 mapToolID = -1, u16 hind = -1,
                              u16 priority = 0, u16 flag = 1);
-s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16, u16, u16);
+s32 fopAcM_orderPotentialEvent(fopAc_ac_c*, u16 flag, u16 hind, u16 priority);
 s32 fopAcM_orderItemEvent(fopAc_ac_c*);
 s32 fopAcM_orderTreasureEvent(fopAc_ac_c*, fopAc_ac_c*);
 fopAc_ac_c* fopAcM_getTalkEventPartner(fopAc_ac_c*);
@@ -623,7 +623,7 @@ fopAc_ac_c* fopAcM_findObject4EventCB(fopAc_ac_c* p_actor, void* p_data);
 
 fopAc_ac_c* fopAcM_searchFromName4Event(char* name, s16 eventID);
 
-s32 fopAcM_getWaterY(const cXyz*, f32*);
+BOOL fopAcM_getWaterY(const cXyz*, f32*);
 void fpoAcM_relativePos(fopAc_ac_c* actor, cXyz* p_inPos, cXyz* p_outPos);
 
 void fopAcM_setGbaName(fopAc_ac_c* i_this, u8 itemNo, u8 gbaName0, u8 gbaName1);
@@ -632,6 +632,10 @@ inline fopAc_ac_c* dComIfGp_getPlayer(int);
 
 inline s16 fopAcM_searchPlayerAngleY(fopAc_ac_c* actor) {
     return fopAcM_searchActorAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
+}
+
+inline s32 fopAcM_seenPlayerAngleY(fopAc_ac_c* actor) {
+    return fopAcM_seenActorAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
 }
 
 inline f32 fopAcM_searchPlayerDistanceY(fopAc_ac_c* actor) {

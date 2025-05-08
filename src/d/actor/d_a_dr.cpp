@@ -61,14 +61,14 @@ static void move(dr_class* i_this) {
     switch (i_this->mState) {
     case 0:
         isIdle = true;
-        anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+        anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mState++;
         i_this->mCountDownTimers[0] = (s16)(200.0f + cM_rndF(200.0f));
         break;
     case 1:
         isIdle = true;
         if (i_this->mCountDownTimers[0] == 0) {
-            anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_AKUBI1);
+            anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_AKUBI1);
             i_this->mState++;
         }
         break;
@@ -79,7 +79,7 @@ static void move(dr_class* i_this) {
         }
         break;
     case 10:
-        anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_BIKU1);
+        anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_BIKU1);
         i_this->mState++;
         i_this->mCountDownTimers[0] = l_HIO.m0E;
         i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C4, &i_this->current.pos);
@@ -99,11 +99,11 @@ static void move(dr_class* i_this) {
             
             if (i_this->mCountDownTimers[0] != 0) {
                 if (cM_rndF(1.0f) < 0.5f) {
-                    anm_init(i_this, DR_BCK_DR_ABARE1, l_HIO.mAbare1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE1);
+                    anm_init(i_this, DR_BCK_DR_ABARE1, l_HIO.mAbare1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_ABARE1);
                     i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C5, &i_this->current.pos);
                     i_this->mCountDownTimers[1] = 500;
                 } else {
-                    anm_init(i_this, DR_BCK_DR_ABARE2, l_HIO.mAbare2Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, DR_BAS_ABARE2);
+                    anm_init(i_this, DR_BCK_DR_ABARE2, l_HIO.mAbare2Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_ABARE2);
                     
                     cXyz rootPos;
                     cXyz offset(0.0f, 0.0f, 0.0f);
@@ -116,7 +116,7 @@ static void move(dr_class* i_this) {
                     i_this->mCountDownTimers[1] = 0;
                 }
             } else {
-                anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+                anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C6, &i_this->current.pos);
                 i_this->mState++;
             }
@@ -167,9 +167,9 @@ static void daDr_setMtx(dr_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos);
-    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->current.angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->current.angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->current.angle.z);
+    mDoMtx_stack_c::YrotM(i_this->current.angle.y);
+    mDoMtx_stack_c::XrotM(i_this->current.angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->current.angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     
     i_this->mpMorf->calc();
@@ -219,7 +219,7 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
         (J3DModelData*)dComIfG_getObjectRes("Dr", DR_BMD_DR1),
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr", DR_BCK_DR_BIKU1),
-        J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1,
         dComIfG_getObjectRes("Dr", DR_BAS_BIKU1),
         0x00000000,
         0x11020203
@@ -232,12 +232,12 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
-static s32 daDr_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daDr_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, dr_class);
     
     dr_class* i_this = (dr_class*)i_actor;
     
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(i_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;

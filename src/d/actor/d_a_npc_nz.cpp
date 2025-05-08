@@ -96,7 +96,7 @@ void daNpc_Nz_c::TailControl() {
     int temp7;
     cXyz* r19 = &field_0x974[1];
     cXyz* r18 = &field_0x9EC[1];
-    cXyz* r17 = &field_0x934.mpLines->mpSegments[0];
+    cXyz* r17 = field_0x934.getPos(0);
     dBgS_GndChk gndChk;
     for(i = 1; i < 10; i++, r19++, r18++) {
         f32 temp3 = 1.0f - (i-1) * 0.1f;
@@ -176,7 +176,8 @@ BOOL daNpc_Nz_c::_createHeap() {
         }
     }
 
-    if (field_0x934.init(1, 10, static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO)), 0)) {
+    ResTIMG* img = static_cast<ResTIMG*>(dComIfG_getObjectRes(m_arc_name, NZ_BTI_SIPPO));
+    if (field_0x934.init(1, 10, img, FALSE)) {
         return TRUE;
     } else {
         return FALSE;
@@ -523,7 +524,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
 }
 
 /* 00001B38-00001B70       .text daNpc_Nz_ShopItemCreateCB__FPv */
-static int daNpc_Nz_ShopItemCreateCB(void* i_item) {
+static cPhs_State daNpc_Nz_ShopItemCreateCB(void* i_item) {
     daShopItem_c* i_this = static_cast<daShopItem_c*>(i_item);
     i_this->hide();
     i_this->setTevType(TEV_TYPE_ACTOR);
@@ -576,39 +577,39 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
     static const u32 shop_next_msg_tbl[4][2] = {
         {
             0x33FB,
-            0x33FC
+            0x33FC,
         },
         {
             0x33FD,
-            0x33FE
+            0x33FE,
         },
         {
             0x33FF,
-            0x3400
+            0x3400,
         },
         {
             0x3401,
-            0x3402
-        }
+            0x3402,
+        },
     };
 
     const u8 itemArr1[4][2] = {
         {
             dItem_BIRD_BAIT_5_e,
-            dItem_HYOI_PEAR_e
+            dItem_HYOI_PEAR_e,
         },
         {
             dItem_RED_POTION_e,
-            dItem_BLUE_POTION_e
+            dItem_BLUE_POTION_e,
         },
         {
             dItem_BOMB_10_e,
-            dItem_BOMB_30_e
+            dItem_BOMB_30_e,
         },
         {
             dItem_ARROW_10_e,
-            dItem_ARROW_30_e
-        }
+            dItem_ARROW_30_e,
+        },
     };
 
     int temp = 1;
@@ -901,12 +902,12 @@ void daNpc_Nz_c::getArg() {
 }
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
-s32 daNpc_Nz_c::_create() {
+cPhs_State daNpc_Nz_c::_create() {
     fopAcM_SetupActor(this, daNpc_Nz_c);
 
     getArg();
 
-    s32 result = dComIfG_resLoad(&mPhs1, m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs1, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }

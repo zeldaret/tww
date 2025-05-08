@@ -14,9 +14,24 @@ class daTornado_HIO_c0 {
 
 class daTornado_c : public fopAc_ac_c {
 public:
-    void getJointXPos(int) const {}
-    void getJointYPos(int) const {}
-    void getJointZPos(int) const {}
+    float getJointXPos(int jno) const { 
+        if (mpModel) 
+            return mpModel->getAnmMtx(jno)[0][3]; 
+        else 
+            return current.pos.x; 
+    }
+    float getJointYPos(int jno) const { 
+        if (mpModel) 
+            return mpModel->getAnmMtx(jno)[1][3]; 
+        else 
+            return current.pos.y; 
+    }
+    float getJointZPos(int jno) const { 
+        if (mpModel) 
+            return mpModel->getAnmMtx(jno)[2][3]; 
+        else 
+            return current.pos.z; 
+    }
     void getScaleEnd() {}
     void getSmallScaleEnd() {}
     void setScaleOn() {}
@@ -26,7 +41,7 @@ public:
     BOOL execute();
     BOOL tornado_delete();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

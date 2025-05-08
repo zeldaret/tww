@@ -1586,7 +1586,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 000008EC-00000974       .text phase_1__FP12daNpcRoten_c */
-static s32 phase_1(daNpcRoten_c* i_this) {
+static cPhs_State phase_1(daNpcRoten_c* i_this) {
     fopAcM_SetupActor(i_this, daNpcRoten_c);
 
     i_this->setNpcNo(i_this->getPrmNpcNo());
@@ -1600,8 +1600,8 @@ static s32 phase_1(daNpcRoten_c* i_this) {
 }
 
 /* 00000974-000009F4       .text phase_2__FP12daNpcRoten_c */
-static s32 phase_2(daNpcRoten_c* i_this) {
-    s32 result = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getPrmNpcNo()]);
+static cPhs_State phase_2(daNpcRoten_c* i_this) {
+    cPhs_State result = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getPrmNpcNo()]);
     if(result == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x4620)) {
             result = i_this->createInit();
@@ -1616,7 +1616,7 @@ static s32 phase_2(daNpcRoten_c* i_this) {
 }
 
 /* 000009F4-00000A24       .text _create__12daNpcRoten_cFv */
-s32 daNpcRoten_c::_create() {
+cPhs_State daNpcRoten_c::_create() {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -1633,7 +1633,7 @@ BOOL daNpcRoten_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][field_0x9C0])),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         l_diff_flag_tbl[mNpcNo]
@@ -1648,7 +1648,7 @@ BOOL daNpcRoten_c::createHeap() {
         headModelData,
         NULL, NULL,
         (J3DAnmTransformKey*)(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo])),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x37441422
@@ -1693,7 +1693,7 @@ static s16 daNpcRoten_XyEventCB(void* i_this, int param_1) {
 }
 
 /* 00000EA8-000011C8       .text createInit__12daNpcRoten_cFv */
-s32 daNpcRoten_c::createInit() {
+cPhs_State daNpcRoten_c::createInit() {
     int weight = 0xFF;
     if(getPrmRailID() != 0xFF) {
         mPathRun.setInf(getPrmRailID(), fopAcM_GetRoomNo(this), true);
@@ -1998,7 +1998,7 @@ void daNpcRoten_c::executeTurn() {
 s32 daNpcRoten_c::executeWindInit() {
     setAnmTbl(l_npc_anm_wind);
     J3DAnmTransform* pAnmRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_head_bck_ix_tbl[mNpcNo]));
-    field_0x6D8->setAnm(pAnmRes, J3DFrameCtrl::LOOP_ONCE_e, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
+    field_0x6D8->setAnm(pAnmRes, J3DFrameCtrl::EMode_NONE, 14.0f, 1.0f, 0.0f, 39.0f, NULL);
 
     return 4;
 }
@@ -2051,15 +2051,15 @@ void daNpcRoten_c::eventOrder() {
         }
     }
     else if(field_0x9B7 == 3) {
-        fopAcM_orderOtherEventId(this, field_0x99E, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x99E, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 4) {
-        fopAcM_orderOtherEventId(this, field_0x9A0, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x9A0, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 5) {
-        fopAcM_orderOtherEventId(this, field_0x9A2, 0xFF, 0xFF7F, 0, 1);
+        fopAcM_orderOtherEventId(this, field_0x9A2, 0xFF, 0xFF7F);
         field_0x9B2 |= 0x4000;
     }
     else if(field_0x9B7 == 6) {
@@ -2228,7 +2228,7 @@ void daNpcRoten_c::eventInit() {
 
 /* 00002600-0000280C       .text eventMesSetInit__12daNpcRoten_cFi */
 void daNpcRoten_c::eventMesSetInit(int staffIdx) {
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if(pData) {
         u32 msgNo = *pData;
         switch(msgNo) {
@@ -2310,7 +2310,7 @@ void daNpcRoten_c::eventClrItemInit() {
 void daNpcRoten_c::eventGetItemInit(int staffIdx) {
     fpc_ProcID pcId;
 
-    u32* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
+    int* pData = dComIfGp_evmng_getMyIntegerP(staffIdx, "ItemNo");
     if(pData != NULL) {
         u32 itemNo = *pData; // fakematch?
         itemNo = l_get_item_no[itemNo];
@@ -2689,7 +2689,7 @@ BOOL daNpcRoten_c::initTexPatternAnm(bool modify) {
     m_head_tex_pattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]));
     JUT_ASSERT(0xBFF, m_head_tex_pattern != NULL);
 
-    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::LOOP_REPEAT_e,  1.0f, 0, -1, modify, 0)) {
+    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP,  1.0f, 0, -1, modify, 0)) {
         return false;
     }
 

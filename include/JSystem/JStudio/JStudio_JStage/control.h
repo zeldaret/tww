@@ -23,28 +23,7 @@ struct TCreateObject : public JStudio::TCreateObject {
 };
 
 template <typename Adaptor, typename Object>
-struct TVariableValueOutput_object_ : public JStudio::TVariableValue::TOutput {
-    typedef void (Object::*Setter)(f32);
-    typedef f32 (Object::*Getter)() const;
-
-    TVariableValueOutput_object_(int valueIndex, Setter setter, Getter getter)
-        : TOutput()
-        , mValueIndex(valueIndex)
-        , mSetter(setter)
-        , mGetter(getter)
-    {
-    }
-
-    virtual void operator()(f32 value, JStudio::TAdaptor* adaptor) const // _08 (weak)
-    {
-        (static_cast<Object*>(static_cast<Adaptor*>(adaptor)->mObject)->*mSetter)(value);
-    }
-    virtual ~TVariableValueOutput_object_() { } // _0C (weak)
-
-    int mValueIndex; // _04
-    Setter mSetter;  // _08
-    Getter mGetter;  // _14
-};
+struct TVariableValueOutput_object_;
 
 struct TAdaptor_object_ {
     static void adaptor_data_(JStage::TObject*, void const*, u32, void const*, u32);
@@ -149,7 +128,7 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera {
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, void const*, u32);
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, void const*, u32);
 
-    static const TVVOutput saoVVOutput_[5];
+    static const TVVOutput saoVVOutput_[];
 
     /* 0xE8 */ const JStage::TSystem* mSystem;
     /* 0xEC */ JStage::TCamera* mObject;
@@ -168,11 +147,35 @@ struct TAdaptor_fog : public JStudio::TAdaptor_fog {
     virtual void adaptor_do_update(const JStudio::TObject*, u32);
     virtual void adaptor_do_data(const JStudio::TObject*, void const*, u32, void const*, u32);
 
-    static const TVVOutput saoVVOutput_[3];
+    static const TVVOutput saoVVOutput_[];
 
     /* 0x84 */ const JStage::TSystem* mSystem;
     /* 0x88 */ JStage::TFog* mObject;
 };  // Size: 0x8C
+
+template <typename Adaptor, typename Object>
+struct TVariableValueOutput_object_ : public JStudio::TVariableValue::TOutput {
+    typedef void (Object::*Setter)(f32);
+    typedef f32 (Object::*Getter)() const;
+
+    TVariableValueOutput_object_(typename Adaptor::TEVariableValue valueIndex, Setter setter, Getter getter)
+        : TOutput()
+        , mValueIndex(valueIndex)
+        , mSetter(setter)
+        , mGetter(getter)
+    {
+    }
+
+    virtual void operator()(f32 value, JStudio::TAdaptor* adaptor) const // _08 (weak)
+    {
+        (static_cast<Object*>(static_cast<Adaptor*>(adaptor)->mObject)->*mSetter)(value);
+    }
+    virtual ~TVariableValueOutput_object_() { } // _0C (weak)
+
+    int mValueIndex; // _04
+    Setter mSetter;  // _08
+    Getter mGetter;  // _14
+};
 
 struct TAdaptor_light : public JStudio::TAdaptor_light {
     struct TVVOutput_direction_ : public JStudio::TVariableValue::TOutput {

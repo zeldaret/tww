@@ -7,7 +7,7 @@
 #include "dolphin/types.h"
 
 class J2DTextBox;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 J2DPicture* button_icon[8];
 J2DPicture* button_kage[8];
@@ -320,12 +320,12 @@ void dMsg_outnowProc(sub_msg_class*) {
 }
 
 /* 802143A8-80214560       .text dMsg_Draw__FP13sub_msg_class */
-static void dMsg_Draw(sub_msg_class*) {
+static BOOL dMsg_Draw(sub_msg_class*) {
     /* Nonmatching */
 }
 
 /* 80214560-802153B0       .text dMsg_Execute__FP13sub_msg_class */
-static void dMsg_Execute(sub_msg_class*) {
+static BOOL dMsg_Execute(sub_msg_class*) {
     /* Nonmatching */
 }
 
@@ -335,12 +335,12 @@ static BOOL dMsg_IsDelete(sub_msg_class*) {
 }
 
 /* 802153B8-80215698       .text dMsg_Delete__FP13sub_msg_class */
-static void dMsg_Delete(sub_msg_class*) {
+static BOOL dMsg_Delete(sub_msg_class*) {
     /* Nonmatching */
 }
 
 /* 80215698-80215CD0       .text dMsg_Create__FP9msg_class */
-static void dMsg_Create(msg_class*) {
+static cPhs_State dMsg_Create(msg_class*) {
     /* Nonmatching */
 }
 

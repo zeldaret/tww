@@ -77,6 +77,7 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xC:
         case 0xD:
             dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            // Fall-through
         case 0x3:
             dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
             dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
@@ -95,7 +96,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 }
 
 /* 800E7DBC-800E7E60       .text daDisappear_Create__FP10fopAc_ac_c */
-static s32 daDisappear_Create(fopAc_ac_c* i_this) {
+static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
     fopAcM_SetupActor(dis, disappear_class);

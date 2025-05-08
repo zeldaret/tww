@@ -293,7 +293,7 @@ void daNpc_Tc_c::isCreate() {
 }
 
 /* 00003FC0-00004090       .text _create__10daNpc_Tc_cFv */
-s32 daNpc_Tc_c::_create() {
+cPhs_State daNpc_Tc_c::_create() {
     /* Nonmatching */
 }
 
@@ -303,7 +303,7 @@ void daNpc_Tc_c::_createHeap() {
 }
 
 /* 000047DC-000047FC       .text daNpc_Tc_Create__FP10fopAc_ac_c */
-static s32 daNpc_Tc_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Tc_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

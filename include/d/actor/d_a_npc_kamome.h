@@ -96,13 +96,13 @@ public:
     void offHyoiKamome() { m_hyoi_kamome = false; }
     
     s16 XyCheckCB(int);
-    int callDemoStartCheck();
+    BOOL callDemoStartCheck();
     s16 XyEventCB(int);
     ~daNpc_kam_c();
     void setAttention(bool, int);
     void setBaseMtx();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
     daNpc_kam_c() {}
     BOOL init();
     BOOL setAction(ActionFunc*, ActionFunc, void*);

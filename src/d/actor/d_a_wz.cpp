@@ -138,7 +138,7 @@ static BOOL useHeapInit2(fopAc_ac_c*) {
 }
 
 /* 00006888-000071C4       .text daWZ_Create__FP10fopAc_ac_c */
-static s32 daWZ_Create(fopAc_ac_c*) {
+static cPhs_State daWZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -43,7 +43,7 @@ static dCcD_SrcCyl cyl_check_src = {
 
 namespace daTagRet {
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, daTagRet::Act_c);
 
         if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
@@ -93,7 +93,7 @@ namespace daTagRet {
 
     namespace {
         /* 00000468-00000488       .text Mthd_Create__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

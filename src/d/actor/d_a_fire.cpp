@@ -17,7 +17,7 @@ void daFire_c::CreateInit() {
 }
 
 /* 00000518-00000758       .text _create__8daFire_cFv */
-s32 daFire_c::_create() {
+cPhs_State daFire_c::_create() {
     /* Nonmatching */
 }
 
@@ -87,7 +87,7 @@ bool daFire_c::_draw() {
 }
 
 /* 000015AC-000015CC       .text daFire_Create__FPv */
-static s32 daFire_Create(void*) {
+static cPhs_State daFire_Create(void*) {
     /* Nonmatching */
 }
 

@@ -3,6 +3,7 @@
 // Translation Unit: d_s_logo.cpp
 //
 
+#include "d/d_s_logo.h"
 #include "d/res/res_logo.h"
 #include "d/res/res_system.h"
 #include "f_op/f_op_scene.h"
@@ -12,6 +13,7 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
@@ -29,29 +31,6 @@
 #include "dolphin/os/OS.h"
 #include "string.h"
 #include "stdio.h"
-
-class dScnLogo_c : public scene_class {
-public:
-    /* 0x1C4 */ request_of_phase_process_class mPhs;
-    /* 0x1CC */ dDlst_2D_c * nintendoImg;
-    /* 0x1D0 */ dDlst_2D_c * dolbyImg;
-    /* 0x1D4 */ dDlst_2D_c * progchoiceImg;
-    /* 0x1D8 */ dDlst_2D_c * progyesImg;
-    /* 0x1DC */ dDlst_2D_c * prognoImg;
-    /* 0x1E0 */ dDlst_2D_c * progImg;
-    /* 0x1E4 */ dDlst_2D_c * interImg;
-    /* 0x1E8 */ u8 mAction;
-    /* 0x1E9 */ u8 mInterFlag;
-    /* 0x1EA */ u8 field_0x1ea;
-    /* 0x1EB */ u8 field_0x1eb;
-    /* 0x1EC */ u16 mTimer;
-    /* 0x1EE */ u16 field_0x1ee;
-    /* 0x1F0 */ u16 field_0x1f0;
-    /* 0x1F2 */ u16 field_0x1f2;
-    /* 0x1F4 */ u16 field_0x1f4;
-    /* 0x1F8 */ void * field_0x1f8;
-    /* 0x1FC */ u32 field_0x1fc;
-};
 
 mDoDvdThd_mountXArchive_c * l_anmCommand;
 mDoDvdThd_mountXArchive_c * l_fmapCommand;
@@ -590,12 +569,12 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     dComIfGp_setWindowNum(0);
 
     for (s32 i = 0; i < 3; i++) {
-        dComIfGp_setPictureBoxData(JKRAllocFromAram(0x2000, JKRAramHeap::HEAD), i);
+        dComIfGp_setPictureBoxData(JKRAllocFromAram(sizeof(card_pictdata), JKRAramHeap::HEAD), i);
         dComIfGp_offPictureFlag(i);
     }
 
     for (s32 i = 0; i < 4; i++) {
-        dComIfGp_setBossBattleData(JKRAllocFromAram(0x70, JKRAramHeap::HEAD), i);
+        dComIfGp_setBossBattleData(JKRAllocFromAram(sizeof(dSv_player_status_c_c), JKRAramHeap::HEAD), i);
     }
 
 #if VERSION == VERSION_PAL
@@ -611,7 +590,7 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
 }
 
 /* 8022D984-8022DB20       .text phase_0__FP10dScnLogo_c */
-s32 phase_0(dScnLogo_c* i_this) {
+cPhs_State phase_0(dScnLogo_c* i_this) {
 #if VERSION != VERSION_PAL
     if (!OSGetResetCode()) {
         if (!VIGetDTVStatus())
@@ -652,7 +631,7 @@ s32 phase_0(dScnLogo_c* i_this) {
 }
 
 /* 8022DB20-8022DC58       .text phase_1__FP10dScnLogo_c */
-s32 phase_1(dScnLogo_c* i_this) {
+cPhs_State phase_1(dScnLogo_c* i_this) {
     if (dComIfG_syncAllObjectRes() != 0)
         return cPhs_INIT_e;
 
@@ -701,7 +680,7 @@ mDoDvdThd_mountXArchive_c * onMemMount(const char* pArc) {
 }
 
 /* 8022DCA8-8022E9B4       .text phase_2__FP10dScnLogo_c */
-s32 phase_2(dScnLogo_c* i_this) {
+cPhs_State phase_2(dScnLogo_c* i_this) {
     s32 rt;
     
     rt = dComIfG_syncObjectRes("Logo");
@@ -911,7 +890,7 @@ s32 phase_2(dScnLogo_c* i_this) {
 }
 
 /* 8022E9B4-8022E9F4       .text dScnLogo_Create__FP11scene_class */
-static s32 dScnLogo_Create(scene_class* i_scn) {
+static cPhs_State dScnLogo_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,
@@ -932,15 +911,14 @@ scene_method_class l_dScnLogo_Method = {
 };
 
 scene_process_profile_definition g_profile_LOGO_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_LOGO_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnLogo_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnLogo_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_LOGO_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnLogo_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnLogo_Method,
 };

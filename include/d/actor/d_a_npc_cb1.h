@@ -77,7 +77,7 @@ public:
     ~daNpc_Cb1_c();
     void isTagCheckOK();
     void setMessageAnimation(unsigned char);
-    s32 create();
+    cPhs_State create();
     void createHeap();
     void setAction(int (daNpc_Cb1_c::**)(void*), int (daNpc_Cb1_c::*)(void*), void*);
     void setWaitAction(void*);

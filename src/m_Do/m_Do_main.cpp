@@ -51,7 +51,7 @@ void HeapCheck::CheckHeap1() {
         mMaxTotalFreeSize = freeSize;
 }
 
-char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+char mDoMain::COPYDATE_STRING[18] = "\?\?/\?\?/?? ??:??:??";
 
 static HeapCheck RootHeapCheck = {
     "Root", NULL, 0, 0x7FFFFFFF, 0x1400000, 0x140, 0x10000, 0, 0,

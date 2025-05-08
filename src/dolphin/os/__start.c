@@ -1,9 +1,11 @@
 #include "stdlib.h"
 #include "global.h"
 #include "dolphin/os/OS.h"
+#include <string.h>
 #include "dolphin/os/__start.h"
 
 void DBInit();
+static void __init_registers(void);
 
 SECTION_INIT void __check_pad3(void) {
     if ((*(u16*)0x800030E4 & 0xEEF) == 0xEEF) {
@@ -12,6 +14,7 @@ SECTION_INIT void __check_pad3(void) {
 }
 
 SECTION_INIT ASM void __start(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -112,6 +115,7 @@ lbl_8000329C:
     bl main
     b exit
     // clang-format on
+#endif
 }
 
 ASM static void __init_registers(void)

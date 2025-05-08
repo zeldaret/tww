@@ -54,7 +54,8 @@ namespace daObjBarrel {
         };
 
         const Attr_c& attr() const { return M_attr; }
-        void get_slant_angle() {}
+        s16 get_slant_angle() { return m61C; }
+        void set_slant_angle(s16 angle) { m61C = angle; }
         bool pos_init() {
             if (mMode == MODE_WAIT) {
                 current.pos = home.pos;
@@ -66,11 +67,10 @@ namespace daObjBarrel {
             }
         }
         int prm_get_cull() const { return daObj::PrmAbstract<Prm_e>(this, PRM_CULL_W, PRM_CULL_S); }
-        void set_slant_angle(s16) {}
     
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_wait_init();
         void mode_wait();
@@ -132,24 +132,24 @@ namespace daObjBarrel {
         /* 0x4A0 */ dCcD_Stts mStts;
         /* 0x4DC */ dCcD_Cyl mCyl;
         /* 0x60C */ int mMode;
-        /* 0x610 */ short m610;
-        /* 0x612 */ short m612;
+        /* 0x610 */ s16 m610;
+        /* 0x612 */ s16 m612;
         /* 0x614 */ int mTimer;
         /* 0x618 */ float mLastGroundY;
-        /* 0x61C */ short m61C;
+        /* 0x61C */ s16 m61C;
         /* 0x61E */ u8 m61E[0x620 - 0x61E];
         /* 0x620 */ bool mOnGround;
         /* 0x621 */ s8 mInitTimer;
         /* 0x622 */ bool mForceExec;
         /* 0x623 */ bool mSunk;
         /* 0x624 */ cXyz mMove;
-        /* 0x630 */ short m630;
+        /* 0x630 */ s16 m630;
     }; // Size: 0x634
 
     STATIC_ASSERT(sizeof(Act_c) == 0x634);
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

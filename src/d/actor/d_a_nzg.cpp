@@ -42,7 +42,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
-static s32 daNZG_Create(fopAc_ac_c*) {
+static cPhs_State daNZG_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

@@ -12,7 +12,7 @@ class mDoExt_brkAnm;
 namespace daObjFlame {
     class Act_c : public fopAc_ac_c {
     public:
-        inline s32 _create();
+        inline cPhs_State _create();
         inline bool _delete();
         inline bool _draw();
         inline bool _execute();
@@ -91,7 +91,7 @@ namespace daObjFlame {
     };
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

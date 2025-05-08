@@ -29,7 +29,7 @@ namespace daObjBarrel2 {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void tg_hitCB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
         void co_hitCB(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
@@ -81,7 +81,7 @@ namespace daObjBarrel2 {
     };
     
     namespace Method {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

@@ -41,9 +41,9 @@ bool daObjGaship2::Act_c::create_heap() {
 }
 
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
-s32 daObjGaship2::Act_c::_create() {
+cPhs_State daObjGaship2::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
-    int phase_state = dComIfG_resLoad(&mphs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mphs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -98,7 +98,7 @@ bool daObjGaship2::Act_c::_draw() {
 
 namespace daObjGaship2 {
     namespace {
-        s32 Mthd_Create(void *i_this) {
+        cPhs_State Mthd_Create(void *i_this) {
             return ((daObjGaship2::Act_c *) i_this)->_create();
         }
 

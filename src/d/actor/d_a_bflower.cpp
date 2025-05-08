@@ -129,7 +129,7 @@ BOOL daBFlower_c::CreateHeap() {
     J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAHX));
     JUT_ASSERT(0x1C3, pbck != NULL);
 
-    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, false)) {
+    if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, false)) {
         return FALSE;
     }
     mBck1.setFrame(mBck1.getEndFrame());
@@ -137,7 +137,7 @@ BOOL daBFlower_c::CreateHeap() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAHX));
     JUT_ASSERT(0x1D9, pbrk != NULL);
 
-    if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     mBrk1.setPlaySpeed(0.0f);
@@ -153,7 +153,7 @@ BOOL daBFlower_c::CreateHeap() {
     pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAMX));
     JUT_ASSERT(0x1F7, pbck != NULL);
 
-    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
+    if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
         return FALSE;
     }
     mBck2.setPlaySpeed(0.0f);
@@ -161,7 +161,7 @@ BOOL daBFlower_c::CreateHeap() {
     pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAMX));
     JUT_ASSERT(0x208, pbrk != NULL);
 
-    if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     mBrk2.setPlaySpeed(0.0f);
@@ -230,14 +230,14 @@ int daBFlower_c::init_bck_anm(s16 param) {
     J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
     J3DAnmTransform* pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, param));
 
-    return mBck1.init(pModelData, pBck, TRUE, J3DFrameCtrl::LOOP_ONCE_RESET_e, 1.0f, 0, -1, true);
+    return mBck1.init(pModelData, pBck, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, true);
 }
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
-s32 daBFlower_c::_create() {
+cPhs_State daBFlower_c::_create() {
     fopAcM_SetupActor(this, daBFlower_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xFC0)) {
@@ -489,7 +489,7 @@ bool daBFlower_c::_delete() {
 }
 
 /* 00001AC4-00001AE4       .text daBFlower_Create__FPv */
-static s32 daBFlower_Create(void* i_this) {
+static cPhs_State daBFlower_Create(void* i_this) {
     return static_cast<daBFlower_c*>(i_this)->_create();
 }
 

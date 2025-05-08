@@ -3,12 +3,12 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/d_place_name.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
-#include "d/d_place_name.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
@@ -67,23 +67,6 @@ const char * name_texture[] = {
 };
 #endif
 
-class dPn_c : public msg_class {
-public:
-    s32 _create();
-    BOOL _execute();
-    BOOL _draw();
-    BOOL _delete();
-
-public:
-    /* 0x0FC */ JKRExpHeap * mpHeap;
-    /* 0x100 */ request_of_phase_process_class mPhs;
-    /* 0x108 */ dPlace_name_c * dPn_scrn;
-    /* 0x11C */ mDoDvdThd_toMainRam_c * dvd;
-    /* 0x114 */ ResTIMG * mpTIMG;
-    /* 0x118 */ u8 mState;
-    /* 0x119 */ u8 pad[3];
-};
-
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
     scrn = new J2DScreen();
@@ -132,8 +115,8 @@ void dPlace_name_c::draw() {
 }
 
 /* 801611E0-801614E8       .text _create__5dPn_cFv */
-s32 dPn_c::_create() {
-    s32 rt = dComIfG_resLoad(&mPhs, "PName");
+cPhs_State dPn_c::_create() {
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "PName");
 
     if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 10) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
@@ -255,7 +238,7 @@ static BOOL dPn_Delete(dPn_c* i_this) {
 }
 
 /* 801616F4-80161714       .text dPn_Create__FP9msg_class */
-static s32 dPn_Create(msg_class* i_msg) {
+static cPhs_State dPn_Create(msg_class* i_msg) {
     dPn_c * i_this = (dPn_c *)i_msg;
     return i_this->_create();
 }

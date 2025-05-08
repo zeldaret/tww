@@ -44,7 +44,7 @@ BOOL daGhostship_c::_createHeap() {
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
     JUT_ASSERT(95, btk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 
@@ -236,11 +236,11 @@ void daGhostship_c::getArg() {
 }
 
 /* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
-static s32 daGhostshipCreate(void* i_actor) {
+static cPhs_State daGhostshipCreate(void* i_actor) {
     daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
     fopAcM_SetupActor(i_this, daGhostship_c);
 
-    s32 result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -345,7 +345,7 @@ bool daGhostship_c::_execute() {
 
         dLib_setCirclePath(&mPaths[i]);
         if(mAlpha != 0.0f) {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos);
         }
     }
 

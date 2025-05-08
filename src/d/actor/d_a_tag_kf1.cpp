@@ -137,12 +137,12 @@ bool daTag_Kf1_c::_delete() {
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
-s32 daTag_Kf1_c::_create() {
+cPhs_State daTag_Kf1_c::_create() {
     /* Nonmatching */
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static s32 daTag_Kf1_Create(fopAc_ac_c*) {
+static cPhs_State daTag_Kf1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

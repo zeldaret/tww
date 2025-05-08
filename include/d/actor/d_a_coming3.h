@@ -26,7 +26,7 @@ namespace daComing3 {
         void collision_main();
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         bool _execute();
         bool _draw();

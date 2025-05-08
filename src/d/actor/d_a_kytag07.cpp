@@ -14,7 +14,6 @@ static BOOL daKytag07_Draw(kytag07_class*) {
 
 /* 00000080-000002A8       .text daKytag07_Execute__FP13kytag07_class */
 static BOOL daKytag07_Execute(kytag07_class* i_this) {
-    /* Nonmatching */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0) {
         f32 time = dComIfGs_getTime();
@@ -26,7 +25,7 @@ static BOOL daKytag07_Execute(kytag07_class* i_this) {
     } else {
         u8 mode = fopAcM_GetParam(i_this) & 0xFF;
         if (mode != 1) {
-            if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("g2before") && dComIfGp_demo_get() != NULL && dComIfGp_demo_get()->getFrameNoMsg() >= 4719) {
+            if (dComIfGp_event_runCheck() != FALSE && dComIfGp_evmng_startCheck("g2before") && dComIfGp_demo_get() != NULL && dComIfGp_demo_get()->getFrameNoMsg() >= 4719) {
                 if (dComIfGp_demo_get()->getFrameNoMsg() == 4719)
                     dKy_change_colpat(1);
                 if (envLight.mRainCount < 250)
@@ -39,7 +38,7 @@ static BOOL daKytag07_Execute(kytag07_class* i_this) {
                     dKy_getEnvlight().mThunderEff.mMode = 2;
             }
         } else {
-            if (dComIfGp_event_runCheck()) {
+            if (dComIfGp_event_runCheck() != FALSE) {
                 dDemo_manager_c* demo = dComIfGp_demo_get();
                 dKy_getEnvlight().mMoyaMode = 0;
                 if (demo != NULL) {
@@ -80,7 +79,7 @@ static BOOL daKytag07_Delete(kytag07_class*) {
 }
 
 /* 000002C8-00000350       .text daKytag07_Create__FP10fopAc_ac_c */
-static s32 daKytag07_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag07_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     kytag07_class* i_this = (kytag07_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag07_class);

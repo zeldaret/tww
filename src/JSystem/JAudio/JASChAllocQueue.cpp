@@ -25,7 +25,7 @@ void JASystem::TDSPQueue::deQueue() {
                 r31--;
                 continue;
             }
-            if (TDSPChannel::breakLower(channel->field_0x48)) {
+            if (TDSPChannel::breakLower(channel->getNoteOnPriority())) {
                 continue;
             }
             channel->field_0x28(channel, 6);

@@ -155,7 +155,7 @@ void* JKRArchive::getResource(u32 type, const char* path) {
     JUT_ASSERT(VERSION_SELECT(384, 332, 332), isMounted());
 
     SDIFileEntry* fileEntry;
-    if (type == 0 || type == '????') {
+    if (type == 0 || type == '\?\?\?\?') {
         fileEntry = findNameResource(path);
     } else {
         fileEntry = findTypeResource(type, path);
@@ -193,7 +193,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char*
     JUT_ASSERT(VERSION_SELECT(543, 491, 491), isMounted());
 
     SDIFileEntry* fileEntry;
-    if (type == 0 || type == '????') {
+    if (type == 0 || type == '\?\?\?\?') {
         fileEntry = findNameResource(path);
     } else {
         fileEntry = findTypeResource(type, path);

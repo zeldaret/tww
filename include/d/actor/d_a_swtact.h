@@ -14,7 +14,7 @@ public:
     void CreateInit();
     void set_mtx();
     s32 getAnswer();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     bool _draw();
 

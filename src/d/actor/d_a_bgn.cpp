@@ -270,7 +270,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 0000B9DC-0000CA80       .text daBgn_Create__FP10fopAc_ac_c */
-static s32 daBgn_Create(fopAc_ac_c* i_this) {
+static cPhs_State daBgn_Create(fopAc_ac_c* i_this) {
     /* Nonmatching */
     fopAcM_SetupActor(i_this, bgn_class);
 }

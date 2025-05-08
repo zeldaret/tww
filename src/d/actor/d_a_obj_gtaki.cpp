@@ -32,12 +32,12 @@ void daObjGtaki_c::set_mtx() {
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
-static s32 daObjGtaki_Create(void*) {
+static cPhs_State daObjGtaki_Create(void*) {
     /* Nonmatching */
 }
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
-s32 daObjGtaki_c::_create() {
+cPhs_State daObjGtaki_c::_create() {
     /* Nonmatching */
 }
 

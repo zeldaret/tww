@@ -7,10 +7,13 @@
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_bk.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_cc_uty.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_procname.h"
 
 cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
@@ -594,13 +597,98 @@ void enemy_piyo_set(fopAc_ac_c* enemy) {
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */
-void wall_angle_get(fopAc_ac_c*, s16) {
-    /* Nonmatching */
+s16 wall_angle_get(fopAc_ac_c* actor, s16 angle_y) {
+    dBgS_LinChk linChk;
+    cMtx_YrotS(*calc_mtx, angle_y);
+    cXyz sp20(0.0f, 0.0f, 100.0f);
+    cXyz sp14;
+    MtxPosition(&sp20, &sp14);
+    sp14 += actor->current.pos;
+    cXyz sp2C[2];
+    sp20.set(10.0f, 0.0f, -300.0f);
+    for (int i = 0; i < 2; i++) {
+        MtxPosition(&sp20, &sp2C[i]);
+        sp20.x *= -1.0f;
+        sp2C[i] += sp14;
+        linChk.Set(&sp14, &sp2C[i], actor);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            sp2C[i] = linChk.GetCross();
+        } else {
+            return 1;
+        }
+    }
+    sp20 = sp2C[1] - sp2C[0];
+    return cM_atan2s(sp20.x, sp20.z) + 0x4000;
 }
 
 /* 8001DCC8-8001E244       .text dr_body_bg_check__FP14damagereaction */
 void dr_body_bg_check(damagereaction* dr) {
-    /* Nonmatching */
+    cXyz sp20;
+    
+    f32 f31 = dr->m488 == 1 ? 12.5f : 0.0f;
+    if (dr->m71E == 0) {
+        dr->mpEnemy->current.pos.y -= dr->m44C.y + f31;
+        dr->mpEnemy->old.pos.y -= dr->m44C.y + f31;
+        dr->mpEnemy->speed.y /= 4.0f;
+        dr->mAcch.CrrPos(*dComIfG_Bgsp());
+        dr->mpEnemy->speed.y *= 4.0f;
+        dr->mpEnemy->current.pos.y += dr->m44C.y + f31;
+        dr->mpEnemy->old.pos.y += dr->m44C.y + f31;
+        dr->m6E8 = dr->mpEnemy->old.pos;
+        dr->m6E8.y = dr->mSpawnY;
+        dr->mSpawnY = dr->mAcch.GetGroundH();
+    } else {
+        dr->m71E--;
+    }
+    
+    if (dr->mState != 21 && dr->mState != 22) {
+        dBgS_ObjGndChk_Spl gndChk;
+        f32 x = dr->mpEnemy->current.pos.x;
+        f32 y = dr->mpEnemy->current.pos.y;
+        f32 z = dr->mpEnemy->current.pos.z;
+        y += 1000.0f;
+        Vec temp;
+        temp.x = x;
+        temp.y = y;
+        temp.z = z;
+        gndChk.SetPos(&temp);
+        f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
+        if (floor_y != C_BG_MIN_HEIGHT && dr->mpEnemy->current.pos.y <= floor_y) {
+            dr->mpEnemy->current.pos.y = floor_y + REG0_F(13);
+            dr->m004 = 0;
+            dr->m47C = 0;
+            if (dComIfG_Bgsp()->ChkGrpInf(gndChk, 0x100)) {
+                dr->mState = 22;
+                cXyz sp14(x, floor_y, z);
+                fopKyM_createWpillar(&sp14, REG0_F(9) + 1.0f, REG0_F(10) + 1.0f, 0);
+            } else {
+                dr->mState = 21;
+                cXyz sp08(x, floor_y, z);
+                fopKyM_createMpillar(&sp08, REG0_F(14) + 0.5f);
+            }
+        }
+    }
+    
+    if (dr->mEnemyType == 2 && daSea_ChkArea(dr->mpEnemy->current.pos.x, dr->mpEnemy->current.pos.z)) {
+        f32 sea_y = daSea_calcWave(dr->mpEnemy->current.pos.x, dr->mpEnemy->current.pos.z);
+        sea_y -= 40.0f;
+        sea_y = REG0_F(13) + sea_y;
+        sea_y = dr->m44C.y + sea_y;
+        if (dr->mpEnemy->current.pos.y <= sea_y) {
+            dr->mpEnemy->current.pos.y = sea_y;
+            sp20 = dr->mpEnemy->current.pos;
+            sp20.y = sea_y;
+            fopKyM_createWpillar(&sp20, REG0_F(9) + 1.0f, REG0_F(10) + 1.0f, 0);
+            fopAcM_seStart(dr->mpEnemy, JA_SE_OBJ_FALL_WATER_S, 0);
+            fopAcM_delete(dr->mpEnemy);
+            bk_class* bk = (bk_class*)dr->mpEnemy;
+            u8 switch_no = bk->m02B8;
+            if (switch_no != 0) {
+                s8 roomNo = fopAcM_GetRoomNo(bk);
+                dComIfGs_onSwitch(switch_no, roomNo);
+            }
+        }
+    }
 }
 
 /* 8001E684-8001F6A0       .text dr_joint_bg_check__FP14damagereaction */

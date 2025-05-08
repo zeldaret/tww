@@ -258,7 +258,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
-s32 daNpc_Rsh1_c::_create() {
+cPhs_State daNpc_Rsh1_c::_create() {
     /* Nonmatching */
 }
 
@@ -273,7 +273,7 @@ void daNpc_Rsh1_c::set_mtx() {
 }
 
 /* 00004A28-00004A48       .text daNpc_Rsh1_Create__FP10fopAc_ac_c */
-static s32 daNpc_Rsh1_Create(fopAc_ac_c*) {
+static cPhs_State daNpc_Rsh1_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

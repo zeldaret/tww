@@ -45,7 +45,7 @@ void daObjLeaves_c::tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD
 }
 
 /* 000008C0-00000B08       .text _create__13daObjLeaves_cFv */
-s32 daObjLeaves_c::_create() {
+cPhs_State daObjLeaves_c::_create() {
     /* Nonmatching */
 }
 
@@ -95,7 +95,7 @@ bool daObjLeaves_c::_draw() {
 }
 
 /* 00001290-000012B0       .text daObjLeaves_Create__FP13daObjLeaves_c */
-static s32 daObjLeaves_Create(daObjLeaves_c*) {
+static cPhs_State daObjLeaves_Create(daObjLeaves_c*) {
     /* Nonmatching */
 }
 

@@ -10,7 +10,7 @@ namespace daObjLight {
         void create_heap();
         void init_collision();
         void set_collision();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void set_fire(int);
         void draw_fire();

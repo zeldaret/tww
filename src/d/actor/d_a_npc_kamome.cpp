@@ -82,7 +82,7 @@ s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
 }
 
 /* 000002A4-000004F0       .text callDemoStartCheck__11daNpc_kam_cFv */
-int daNpc_kam_c::callDemoStartCheck() {
+BOOL daNpc_kam_c::callDemoStartCheck() {
     if (l_demo_start_chk_cnt != 0) {
         return l_demo_start_chk_flag;
     }
@@ -126,7 +126,7 @@ int daNpc_kam_c::callDemoStartCheck() {
                 mDescendStartAngle.set(0x1555, angle + 0x8000, 0);
                 mLinChk.OffBackFlag();
                 l_demo_start_chk_flag = 1;
-                return 1;
+                return TRUE;
             }
         }
         
@@ -135,7 +135,7 @@ int daNpc_kam_c::callDemoStartCheck() {
     
     mLinChk.OffBackFlag();
     
-    return 0;
+    return FALSE;
 }
 
 /* 0000052C-0000054C       .text daNpc_kam_XyEventCB__FPvi */
@@ -219,7 +219,7 @@ BOOL daNpc_kam_c::createHeap() {
         modelData,
         NULL, NULL,
         (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x11000002
@@ -247,7 +247,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
-s32 daNpc_kam_c::create() {
+cPhs_State daNpc_kam_c::create() {
     fopAcM_SetupActor(this, daNpc_kam_c);
     
     if (l_act != NULL && l_act != this) {
@@ -257,7 +257,7 @@ s32 daNpc_kam_c::create() {
     
     static u32 l_heap_size = 0x1360;
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, "Kamome");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
@@ -470,9 +470,9 @@ void daNpc_kam_c::playerAction(void* arg) {
         setPlayerAction(&daNpc_kam_c::waitPlayerAction, NULL);
     }
     
-    dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
-    dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
-    dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+    dComIfGp_setRStatusForce(dActStts_RETURN_e);
+    dComIfGp_setDoStatus(dActStts_FLY_e);
+    dComIfGp_setAStatus(dActStts_HIDDEN_e);
     
     (this->*mCurrPlayerActionFunc)(arg);
 }
@@ -981,7 +981,7 @@ BOOL daNpc_kam_c::actionDefault(int evtStaffId) {
 
 /* 0000351C-00003580       .text initialWaitEvent__11daNpc_kam_cFi */
 void daNpc_kam_c::initialWaitEvent(int evtStaffId) {
-    u32* timerP = dComIfGp_evmng_getMyIntegerP(evtStaffId, "timer");
+    int* timerP = dComIfGp_evmng_getMyIntegerP(evtStaffId, "timer");
     if (timerP) {
         mWaitTimer = *timerP;
     } else {
@@ -1118,21 +1118,21 @@ void daNpc_kam_c::setAnm(int anmIdx) {
     static anmPrm_c l_anmPrm[] = {
         {
             /* mAnmTblIdx */ 0,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 1,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_REPEAT_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_LOOP,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
         },
         {
             /* mAnmTblIdx */ 2,
-            /* mLoopMode  */ J3DFrameCtrl::LOOP_ONCE_e,
+            /* mLoopMode  */ J3DFrameCtrl::EMode_NONE,
             /* mMorf      */ 8.0f,
             /* mPlaySpeed */ 1.0f,
             /* m10        */ 0,
@@ -1404,7 +1404,7 @@ static BOOL daNpc_kam_Delete(daNpc_kam_c* i_this) {
 }
 
 /* 000045B8-000045D8       .text daNpc_kam_Create__FP10fopAc_ac_c */
-static s32 daNpc_kam_Create(fopAc_ac_c* i_this) {
+static cPhs_State daNpc_kam_Create(fopAc_ac_c* i_this) {
     return ((daNpc_kam_c*)i_this)->create();
 }
 

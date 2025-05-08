@@ -19,22 +19,22 @@ namespace daObjHomensmoke {
             cXyz forwardOffset(0.0f, 0.0f, 200.0f);
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::transM(forwardOffset);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_stack_c::transM(backOffset);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         } else {
             mDoMtx_stack_c::transS(current.pos);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         }
     }
 
     /* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
         
         mbInitialized = FALSE;
@@ -48,7 +48,7 @@ namespace daObjHomensmoke {
             /* 0x0 */ Vec mMin;
             /* 0xC */ Vec mMax;
         };
-        static daObjHomensmoke__cullbox culling_dat[2] = {
+        static daObjHomensmoke__cullbox culling_dat[] = {
             {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
             {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
         };
@@ -126,7 +126,7 @@ namespace daObjHomensmoke {
 
     namespace {
         /* 00000740-00000760       .text Mthd_Create__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

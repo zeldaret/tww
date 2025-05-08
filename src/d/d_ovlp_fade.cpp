@@ -3,17 +3,12 @@
 // Translation Unit: d_ovlp_fade.cpp
 //
 
+#include "d/d_ovlp_fade.h"
 #include "f_op/f_op_overlap.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_graphic.h"
-
-class overlap1_class : public overlap_task_class {
-public:
-    /* 0xCC */ s32 mFadeOutTime;
-    /* 0xD0 */ s32 mFadeInTime;
-};
 
 BOOL (*dOvlpFd_execute_f)(overlap1_class*);
 
@@ -87,7 +82,7 @@ static BOOL dOvlpFd_Delete(overlap1_class* i_this) {
 }
 
 /* 802237E0-802237F4       .text dOvlpFd_Create__FPv */
-static BOOL dOvlpFd_Create(void* i_this) {
+static cPhs_State dOvlpFd_Create(void* i_this) {
     dOvlpFd_execute_f = dOvlpFd_FadeIn;
     return cPhs_COMPLEATE_e;
 }

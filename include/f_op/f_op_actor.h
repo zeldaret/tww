@@ -32,6 +32,7 @@ enum fopAc_Status_e {
     fopAcStts_CARRY_e       = 0x00002000,
     fopAcStts_UNK4000_e     = 0x00004000,
     fopAcStts_FORCEMOVE_e   = 0x00008000,
+    fopAcStts_UNK10000_e    = 0x00010000,
     fopAcStts_NOPAUSE_e     = 0x00020000,
     fopAcStts_UNK40000_e    = 0x00040000,
     fopAcStts_UNK80000_e    = 0x00080000, // Hookshot related
@@ -45,17 +46,17 @@ enum fopAc_Status_e {
 };
 
 enum fopAc_Condition_e {
-    fopAcCnd_NOEXEC_e       = 0x02,
-    fopAcCnd_NODRAW_e       = 0x04,
-    fopAcCnd_INIT_e         = 0x08,
+    fopAcCnd_NOEXEC_e = 0x02,
+    fopAcCnd_NODRAW_e = 0x04,
+    fopAcCnd_INIT_e   = 0x08,
 };
 
 enum fopAc_Group_e {
-    fopAc_ACTOR_e,
-    fopAc_PLAYER_e,
-    fopAc_ENEMY_e,
-    fopAc_ENV_e,
-    fopAc_NPC_e,
+    fopAc_ACTOR_e  = 0x0,
+    fopAc_PLAYER_e = 0x1,
+    fopAc_ENEMY_e  = 0x2,
+    fopAc_ENV_e    = 0x3,
+    fopAc_NPC_e    = 0x4,
 };
 
 enum fopAc_AttentionType_e {
@@ -88,30 +89,30 @@ enum fopAc_AttentionFlag_e {
 };
 
 enum fopAc_Cull_e {
-    fopAc_CULLBOX_0_e,
-    fopAc_CULLBOX_1_e,
-    fopAc_CULLBOX_2_e,
-    fopAc_CULLBOX_3_e,
-    fopAc_CULLBOX_4_e,
-    fopAc_CULLBOX_5_e,
-    fopAc_CULLBOX_6_e,
-    fopAc_CULLBOX_7_e,
-    fopAc_CULLBOX_8_e,
-    fopAc_CULLBOX_9_e,
-    fopAc_CULLBOX_10_e,
-    fopAc_CULLBOX_11_e,
-    fopAc_CULLBOX_12_e,
-    fopAc_CULLBOX_13_e,
-    fopAc_CULLBOX_CUSTOM_e,
-    fopAc_CULLSPHERE_0_e,
-    fopAc_CULLSPHERE_1_e,
-    fopAc_CULLSPHERE_2_e,
-    fopAc_CULLSPHERE_3_e,
-    fopAc_CULLSPHERE_4_e,
-    fopAc_CULLSPHERE_5_e,
-    fopAc_CULLSPHERE_6_e,
-    fopAc_CULLSPHERE_7_e,
-    fopAc_CULLSPHERE_CUSTOM_e,
+    /* 0x00 */ fopAc_CULLBOX_0_e,
+    /* 0x01 */ fopAc_CULLBOX_1_e,
+    /* 0x02 */ fopAc_CULLBOX_2_e,
+    /* 0x03 */ fopAc_CULLBOX_3_e,
+    /* 0x04 */ fopAc_CULLBOX_4_e,
+    /* 0x05 */ fopAc_CULLBOX_5_e,
+    /* 0x06 */ fopAc_CULLBOX_6_e,
+    /* 0x07 */ fopAc_CULLBOX_7_e,
+    /* 0x08 */ fopAc_CULLBOX_8_e,
+    /* 0x09 */ fopAc_CULLBOX_9_e,
+    /* 0x0A */ fopAc_CULLBOX_10_e,
+    /* 0x0B */ fopAc_CULLBOX_11_e,
+    /* 0x0C */ fopAc_CULLBOX_12_e,
+    /* 0x0D */ fopAc_CULLBOX_13_e,
+    /* 0x0E */ fopAc_CULLBOX_CUSTOM_e,
+    /* 0x0F */ fopAc_CULLSPHERE_0_e,
+    /* 0x10 */ fopAc_CULLSPHERE_1_e,
+    /* 0x11 */ fopAc_CULLSPHERE_2_e,
+    /* 0x12 */ fopAc_CULLSPHERE_3_e,
+    /* 0x13 */ fopAc_CULLSPHERE_4_e,
+    /* 0x14 */ fopAc_CULLSPHERE_5_e,
+    /* 0x15 */ fopAc_CULLSPHERE_6_e,
+    /* 0x16 */ fopAc_CULLSPHERE_7_e,
+    /* 0x17 */ fopAc_CULLSPHERE_CUSTOM_e,
 };
 
 struct actor_process_profile_definition {
@@ -187,7 +188,7 @@ public:
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
     s16 runXyCheckCB(void* ac, int i_itemBtn) {
         if (mpCheckCB == NULL)
-            return -1;
+            return true;
         return mpCheckCB(ac, i_itemBtn);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
@@ -226,54 +227,43 @@ class JntHit_c;
 struct fopAc_cullSizeSphere {
 public:
 #ifdef __MWERKS__
-    /* 0x0 */ cXyz center;
-    /* 0xC */ f32 radius;
-
     fopAc_cullSizeSphere() {}
+    ~fopAc_cullSizeSphere() {}
+#else
+    fopAc_cullSizeSphere() = default;
+    ~fopAc_cullSizeSphere() = default;
+#endif
     fopAc_cullSizeSphere(cXyz p, f32 r) {
         center = p;
         radius = r;
     }
-    ~fopAc_cullSizeSphere() {}
-#else
-    /* 0x0 */ Vec center;
-    /* 0xC */ f32 radius;
-#endif
-};
 
-#ifdef __MWERKS__
-#define fopAc_MakeCullSizeSphere(center, radius) fopAc_cullSizeSphere(center, radius)
-#else
-#define fopAc_MakeCullSizeSphere(center, radius) {(Vec)center, radius}
-#endif
+    /* 0x0 */ cXyz center;
+    /* 0xC */ f32 radius;
+};
 
 struct fopAc_cullSizeBox {
 public:
 #ifdef __MWERKS__
     fopAc_cullSizeBox() {}
+    ~fopAc_cullSizeBox() {}
     fopAc_cullSizeBox(const fopAc_cullSizeBox& box) {
         min = box.min;
         max = box.max;
     }
+#else
+    fopAc_cullSizeBox() = default;
+    ~fopAc_cullSizeBox() = default;
+    fopAc_cullSizeBox(const fopAc_cullSizeBox& box) = default;
+#endif
     fopAc_cullSizeBox(cXyz min, cXyz max) {
         this->min = min;
         this->max = max;
     }
-    ~fopAc_cullSizeBox() {}
 
     /* 0x0 */ cXyz min;
     /* 0xC */ cXyz max;
-#else
-    /* 0x0 */ Vec min;
-    /* 0xC */ Vec max;
-#endif
 };
-
-#ifdef __MWERKS__
-#define fopAc_MakeCullSizeBox(min, max) fopAc_cullSizeBox(min, max)
-#else
-#define fopAc_MakeCullSizeBox(min, max) {(Vec)min, (Vec)max}
-#endif
 
 class fopAc_ac_c : public leafdraw_class {
 public:

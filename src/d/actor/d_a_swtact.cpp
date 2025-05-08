@@ -69,7 +69,7 @@ void daSwTact_c::set_mtx() {
 }
 
 /* 000002CC-0000038C       .text _create__10daSwTact_cFv */
-s32 daSwTact_c::_create() {
+cPhs_State daSwTact_c::_create() {
     fopAcM_SetupActor(this, daSwTact_c);
 
     s32 result = cPhs_COMPLEATE_e;
@@ -180,7 +180,7 @@ bool daSwTact_c::_draw() {
 }
 
 /* 00000720-00000740       .text daSwTact_Create__FPv */
-static s32 daSwTact_Create(void* i_ac) {
+static cPhs_State daSwTact_Create(void* i_ac) {
     return ((daSwTact_c *)i_ac)->_create();
 }
 

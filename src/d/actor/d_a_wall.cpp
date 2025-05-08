@@ -137,7 +137,7 @@ void daWall_c::CreateInit() {
 }
 
 /* 00000380-000004EC       .text _create__8daWall_cFv */
-s32 daWall_c::_create() {
+cPhs_State daWall_c::_create() {
     fopAcM_SetupActor(this, daWall_c);
     mType = fopAcM_GetParam(this) >> 8;
     mSwitchNo = fopAcM_GetParam(this) & 0xFF;
@@ -146,7 +146,7 @@ s32 daWall_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname[mType]);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
@@ -183,7 +183,7 @@ bool daWall_c::_execute() {
     };
 
     (this->*mode_proc[mState])();
-    return 1;
+    return true;
 }
 
 /* 00000980-00000A58       .text mode_wait__8daWall_cFv */
@@ -218,7 +218,7 @@ void daWall_c::mode_break() {
                 fopAcM_delete(this);
             }
 
-            JPABaseEmitter* pEmitter = mSmokeCb.mpEmitter;
+            JPABaseEmitter* pEmitter = mSmokeCb.getEmitter();
             if (pEmitter != NULL) {
                 pEmitter->setGlobalAlpha(mDst);
             }
@@ -319,7 +319,7 @@ bool daWall_c::_draw() {
 }
 
 /* 00001044-00001064       .text daWall_Create__FPv */
-static s32 daWall_Create(void* i_this) {
+static cPhs_State daWall_Create(void* i_this) {
     return ((daWall_c*)i_this)->_create();
 }
 

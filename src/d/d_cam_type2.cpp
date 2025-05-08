@@ -5,3 +5,42 @@
 
 #include "d/d_camera.h"
 
+const char* dCamera_c::mvBGTypes[35] = {
+    "????",
+    "Field",
+    "Dungeon",
+    "Plain",
+    "DungeonDown",
+    "DungeonUp",
+    "DungeonCorner",
+    "Jump",
+    "DungeonWide",
+    "Room",
+    "FieldCushion",
+    "OverLook",
+    "Corridor",
+    "Subject",
+    "DungeonPassage",
+    "Cliff",
+    "Cliff2",
+    "MajTower",
+    "Boss01",
+    "Boss02",
+    "Gamoss",
+    "MiniIsland",
+    "Amoss",
+    "Cafe",
+    "P_Ganon1",
+    "P_Ganon2",
+    "WindBoss",
+    "P_Ganon3",
+    "G_BedRoom",
+    "G_Roof",
+    "G_BedRoom2",
+    "Boss04",
+    "WindHall",
+    "BigBird",
+    "DStairs",
+};
+
+const int dCamera_c::mvBGType_num = ARRAY_SIZE(mvBGTypes);

@@ -22,7 +22,7 @@ public:
     void smokeInit();
     void smokeEnd();
     void CreateInit();
-    s32 create();
+    cPhs_State create();
     void demoProc();
 
 public:

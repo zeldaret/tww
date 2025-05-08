@@ -52,7 +52,7 @@ static BOOL daMant_Delete(mant_class*) {
 }
 
 /* 00001A4C-00001D18       .text daMant_Create__FP10fopAc_ac_c */
-static s32 daMant_Create(fopAc_ac_c*) {
+static cPhs_State daMant_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

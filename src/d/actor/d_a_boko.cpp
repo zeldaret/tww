@@ -17,7 +17,7 @@ dBgS_ObjLinChk daBoko_c::m_line_check;
 const s16 daBoko_HIO_c0::throw_timer = 2;
 const f32 daBoko_HIO_c0::throw_speed = 70.0f;
 
-static u8 l_HIO;
+static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
@@ -251,7 +251,7 @@ BOOL daBoko_c::createHeap() {
 }
 
 /* 00002DE4-00003154       .text create__8daBoko_cFv */
-s32 daBoko_c::create() {
+cPhs_State daBoko_c::create() {
     /* Nonmatching */
     fopAcM_SetupActor(this, daBoko_c);
 }
@@ -261,7 +261,7 @@ daBoko_c::daBoko_c() {
 }
 
 /* 00003824-00003844       .text daBoko_Create__FP10fopAc_ac_c */
-static s32 daBoko_Create(fopAc_ac_c* i_this) {
+static cPhs_State daBoko_Create(fopAc_ac_c* i_this) {
     return static_cast<daBoko_c*>(i_this)->create();
 }
 

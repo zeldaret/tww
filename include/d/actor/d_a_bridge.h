@@ -36,13 +36,16 @@ struct br_s {
     /* 0x3F4 */ f32 m3F4;
     /* 0x3F8 */ u8 m3F8[0x3FC - 0x3F8];
     /* 0x3FC */ f32 m3FC;
-    /* 0x400 */ u8 m400[0x408 - 0x400];
+    /* 0x400 */ s16 m400;
+    /* 0x402 */ u8 m402[0x406 - 0x402];
+    /* 0x406 */ u8 m406;
+    /* 0x407 */ u8 m407[0x408 - 0x407];
     /* 0x408 */ u8 m408;
     /* 0x409 */ u8 m409[0x40C - 0x409];
     /* 0x40C */ cXyz mScale;
     /* 0x418 */ s16 m418;
     /* 0x41A */ u8 m41A[0x41C - 0x41A];
-};
+};  // Size: 0x41C
 
 class bridge_class : public fopAc_ac_c {
 public:

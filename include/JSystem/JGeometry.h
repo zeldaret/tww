@@ -22,10 +22,10 @@ struct TUtil {
     static inline f32 inv_sqrt(f32 mag) {
         if (mag <= 0.0f) {
             return mag;
-        } else {
-            f32 root = __frsqrte(mag);
-            return 0.5f * root * (3.0f - mag * (root * root));
         }
+        f32 root = __frsqrte(mag);
+        root = 0.5f * root * (3.0f - mag * (root * root));
+        return root;
     }
 };
 
@@ -42,7 +42,7 @@ struct TVec3 {
 
     TVec3() {}
 
-    TVec3(T x, T y, T z) { set(x, y, z); }
+    TVec3(const T x, const T y, const T z) { set(x, y, z); }
 
     void set(T x_, T y_, T z_) {
         x = x_;
@@ -62,9 +62,17 @@ struct TVec3<s16> : public SVec {
 
     TVec3() {}
 
-    TVec3(s16 x, s16 y, s16 z) { set(x, y, z); }
+    TVec3(const s16 x, const s16 y, const s16 z) { set(x, y, z); }
 
     void set(s16 x_, s16 y_, s16 z_) {
+        x = x_;
+        y = y_;
+        z = z_;
+    }
+
+    TVec3(const int x, const int y, const int z) { set(x, y, z); }
+
+    void set(int x_, int y_, int z_) {
         x = x_;
         y = y_;
         z = z_;
@@ -74,7 +82,7 @@ struct TVec3<s16> : public SVec {
 template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
-    TVec3(f32 x, f32 y, f32 z) { set(x, y, z); }
+    TVec3(const f32 x, const f32 y, const f32 z) { set(x, y, z); }
     TVec3(const Vec& b) { set(b); }
 
     operator Vec*() { return (Vec*)&x; }
@@ -108,8 +116,8 @@ struct TVec3<f32> : public Vec {
 
     void add(const TVec3<f32>& a, const TVec3<f32>& b) {
         x = a.x + b.x;
-        y = a.x + b.y;
-        z = a.x + b.z;
+        y = a.y + b.y;
+        z = a.z + b.z;
     }
 
     void sub(const TVec3<f32>& b) {
@@ -165,7 +173,7 @@ struct TVec3<f32> : public Vec {
     }
 
     f32 squared() const {
-        return x*x + y*y + z*z;
+        return dot(*this);
     }
 
     f32 squared(const TVec3<f32>& b) const {
@@ -173,8 +181,7 @@ struct TVec3<f32> : public Vec {
     }
 
     f32 length() const {
-        f32 sqr = squared();
-        return TUtil<f32>::sqrt(sqr);
+        return TUtil<f32>::sqrt(squared());
     }
 
     f32 normalize() {

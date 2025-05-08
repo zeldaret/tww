@@ -8,29 +8,27 @@
 
 class daTori_Flag_HIO_c {
     public:
-        // Constructor
         daTori_Flag_HIO_c();
 
-        // Virtual Destructor
-        virtual ~daTori_Flag_HIO_c(){}
+        virtual ~daTori_Flag_HIO_c() {}
         
     public:
         /* 0x00 */ //vtable
-        /* 0x04 */ signed char mNo;
-        /* 0x08 */ float someFloat;
-        /* 0x0c */ signed short someShort;
+        /* 0x04 */ s8 mNo;
+        /* 0x08 */ f32 m08;
+        /* 0x0C */ s16 m0C;
 };
 
 class daTori_Flag_c : public fopAc_ac_c {
 public:
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
 
     void set_mtx();
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
 
     static const char M_arcname[7];
 

@@ -222,7 +222,7 @@ void kita_move(kita_class* actor) {
 }
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
-int himo_create(kita_class* actor) {
+cPhs_State himo_create(kita_class* actor) {
     static short yad[4] = {0x2000, 0xE000, 0x6000, 0xA000};
     int shand_count = 0;
     fopAcM_prm_class *param;
@@ -349,7 +349,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* p_actor) {
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-static BOOL daKita_Create(kita_class* actor) {
+static cPhs_State daKita_Create(kita_class* actor) {
     static dCcD_SrcSph utiwa_sph_src = {
         // dCcD_SrcGObjInf
         {

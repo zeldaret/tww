@@ -73,7 +73,7 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
 const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_btk_idx_table[2] = {HHA_BTK_YSWTR00_01, HHA_BTK_YSWTR00_02};
-const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::LOOP_REPEAT_e, J3DFrameCtrl::LOOP_ONCE_e};
+const J3DFrameCtrl::Attribute_e l_daObjHha_btk_mode_table[2] = {J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NONE};
 const u16 l_daObjHha_splash_id_table[] = {
     dPa_name::ID_SCENE_810D,
     dPa_name::ID_SCENE_810E,
@@ -127,7 +127,7 @@ void daObjHhaPart_c::init_mtx(cXyz currentPos, csXyz shapeAngle, cXyz scale) {
     mDoMtx_stack_c::transS(currentPos);
     mDoMtx_stack_c::ZXYrotM(shapeAngle);
     mDoMtx_stack_c::transM(mPos);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
@@ -182,8 +182,8 @@ void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float
     mPos += calcVec;
     mBasePos = mPos;
     mAngle = *pAngle;
-    dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mEcallBack);
-    bIsActive = true;
+    dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mSplashCb);
+    mbIsActive = true;
 }
 
 /* 00000698-000008AC       .text create_area__15daObjHhaYgush_cFPCc */
@@ -201,11 +201,11 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
             JUT_ASSERT(0x290, btk_data != NULL);
             
-            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, false) != false){  
+            if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
                 JUT_ASSERT(0x295, bck_data != NULL);
                 
-                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false) != false){
+                if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
                     ret = TRUE;
                 }
             }
@@ -237,7 +237,7 @@ void daObjHhaYgush_c::init_mtx() {
         mDoMtx_stack_c::transS(mPos);
         mDoMtx_stack_c::ZXYrotM(mRot);
         mDoMtx_stack_c::scaleM(13.0f, 1.0f, 11.0f);
-        M_mdl->setBaseTRMtx(mDoMtx_stack_c::now);
+        M_mdl->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
 
@@ -295,7 +295,7 @@ BOOL daObjHha_c::create_heap() {
 }
 
 /* 00000E48-000011AC       .text _create__10daObjHha_cFv */
-s32 daObjHha_c::_create() {
+cPhs_State daObjHha_c::_create() {
     static const float pos_y[4] = {150.0f, -150.0f, 0.0f, 0.0f};
     static const float tar_y[4] = {0.0f, 0.0f, 150.0f, -150.0f};
     static const u16 move_frame[2] = {55, 30};
@@ -304,7 +304,7 @@ s32 daObjHha_c::_create() {
 
 
     fopAcM_SetupActor(this, daObjHha_c);
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if(ret == cPhs_COMPLEATE_e){
         ret = cPhs_ERROR_e;
         if(fopAcM_entrySolidHeap(this, &solidHeapCB, 0x3C80) != false){
@@ -411,7 +411,7 @@ void daObjHha_c::init_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::transM(mPosOffset);
     mDoMtx_stack_c::scaleM(1.0f, 1.0f, mWtrScale);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
@@ -669,7 +669,7 @@ bool daObjHha_c::_draw() {
 
 namespace {
 /* 000029F4-00002A14       .text Mthd_Create__25@unnamed@d_a_obj_hha_cpp@FPv */
-s32 Mthd_Create(void* i_this) {
+cPhs_State Mthd_Create(void* i_this) {
     return static_cast<daObjHha_c*>(i_this)->_create();
 }
 

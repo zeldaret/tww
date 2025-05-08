@@ -5,10 +5,10 @@
 
 typedef struct base_process_class base_process_class;
 
-typedef int (*fpcDw_HandlerFunc)(void*, void*);
-typedef int (*fpcDw_HandlerFuncFunc)(fpcDw_HandlerFunc);
+typedef BOOL (*fpcDw_HandlerFunc)(void*, void*);
+typedef BOOL (*fpcDw_HandlerFuncFunc)(fpcDw_HandlerFunc);
 
-s32 fpcDw_Execute(base_process_class* pProc);
-s32 fpcDw_Handler(fpcDw_HandlerFuncFunc param_1, fpcDw_HandlerFunc param_2);
+BOOL fpcDw_Execute(base_process_class* i_proc);
+BOOL fpcDw_Handler(fpcDw_HandlerFuncFunc i_iterHandler, fpcDw_HandlerFunc i_func);
 
 #endif

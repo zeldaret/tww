@@ -54,10 +54,10 @@ void daMmusic::Act_c::set_mtx() {
 }
 
 /* 000001A4-00000268       .text _create__Q28daMmusic5Act_cFv */
-s32 daMmusic::Act_c::_create() {
+cPhs_State daMmusic::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = cPhs_COMPLEATE_e;
+    cPhs_State ret = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
         set_mtx();
         fopAcM_SetMtx(this, mMtx);
@@ -151,7 +151,7 @@ bool daMmusic::Act_c::_draw() {
 
 namespace daMmusic {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

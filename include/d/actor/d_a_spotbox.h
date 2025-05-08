@@ -6,7 +6,7 @@
 
 class daSpotbox_c : public fopAc_ac_c {
 public:
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     inline u32 getType() { return fopAcM_GetParam(this) & 1; }

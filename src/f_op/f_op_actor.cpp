@@ -32,7 +32,7 @@ s32 fopAc_IsActor(void* pProc) {
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
 s32 fopAc_Draw(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = TRUE;
+    BOOL ret = TRUE;
 
     if (!dMenu_flag()) {
         s32 moveApproval = dComIfGp_event_moveApproval(actor);
@@ -68,9 +68,9 @@ s32 fopAc_Draw(void* pProc) {
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 8002362C-80023BDC       .text fopAc_Execute__FPv */
-s32 fopAc_Execute(void* pProc) {
+BOOL fopAc_Execute(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = TRUE;
+    BOOL ret = TRUE;
 
     CHECK_FLOAT_CLASS(0x27d, actor->current.pos.x);
     CHECK_FLOAT_CLASS(0x27e, actor->current.pos.y);
@@ -114,19 +114,19 @@ s32 fopAc_Execute(void* pProc) {
 }
 
 /* 80023BDC-80023C30       .text fopAc_IsDelete__FPv */
-s32 fopAc_IsDelete(void* pProc) {
+BOOL fopAc_IsDelete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
-    if (ret == 1)
+    BOOL ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
+    if (ret == TRUE)
         fopDwTg_DrawQTo(&actor->draw_tag);
     return ret;
 }
 
 /* 80023C30-80023CD4       .text fopAc_Delete__FPv */
-s32 fopAc_Delete(void* pProc) {
+BOOL fopAc_Delete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    s32 ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
-    if (ret == 1) {
+    BOOL ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
+    if (ret == TRUE) {
         fopAcTg_ActorQTo(&actor->actor_tag);
         fopDwTg_DrawQTo(&actor->draw_tag);
         fopAcM_DeleteHeap(actor);
@@ -140,7 +140,7 @@ s32 fopAc_Delete(void* pProc) {
 }
 
 /* 80023CD4-80023F78       .text fopAc_Create__FPv */
-s32 fopAc_Create(void* pProc) {
+cPhs_State fopAc_Create(void* pProc) {
     fopAc_ac_c* actor = (fopAc_ac_c*)pProc;
 
     if (fpcM_IsFirstCreating(actor)) {
@@ -156,16 +156,16 @@ s32 fopAc_Create(void* pProc) {
 
         fopAcM_prm_class* prm = fopAcM_GetAppend(actor);
         if (prm != NULL) {
-            fopAcM_SetParam(actor, prm->mParameter);
-            actor->home.pos = prm->mPos;
-            actor->home.angle = prm->mAngle;
-            actor->shape_angle = prm->mAngle;
-            actor->parentActorID = prm->mParentPcId;
-            actor->subtype = prm->mSubtype;
-            actor->gbaName = prm->mGbaName;
-            actor->scale.set(prm->mScale.x * 0.1f, prm->mScale.y * 0.1f, prm->mScale.z * 0.1f);
-            actor->setID = prm->mSetId;
-            actor->home.roomNo = prm->mRoomNo;
+            fopAcM_SetParam(actor, prm->base.parameters);
+            actor->home.pos = prm->base.position;
+            actor->home.angle = prm->base.angle;
+            actor->shape_angle = prm->base.angle;
+            actor->parentActorID = prm->parent_id;
+            actor->subtype = prm->subtype;
+            actor->gbaName = prm->gbaName;
+            actor->scale.set(prm->scale.x * 0.1f, prm->scale.y * 0.1f, prm->scale.z * 0.1f);
+            actor->setID = prm->base.setID;
+            actor->home.roomNo = prm->room_no;
         }
 
         actor->old = actor->home;
@@ -184,7 +184,7 @@ s32 fopAc_Create(void* pProc) {
         dKy_tevstr_init(&actor->tevStr, actor->home.roomNo, 0xFF);
     }
 
-    s32 status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
+    cPhs_State status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
     if (status == cPhs_COMPLEATE_e) {
         s32 priority = fpcLf_GetPriority(actor);
         fopDwTg_ToDrawQ(&actor->draw_tag, priority);

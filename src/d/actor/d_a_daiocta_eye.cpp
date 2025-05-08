@@ -103,7 +103,7 @@ void daDaiocta_Eye_c::createInit() {
 }
 
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
-s32 daDaiocta_Eye_c::_create() {
+cPhs_State daDaiocta_Eye_c::_create() {
     /* Nonmatching */
 }
 

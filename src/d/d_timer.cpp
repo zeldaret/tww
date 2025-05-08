@@ -46,8 +46,8 @@ u32 VolcanoSeTable[] = {
 };
 
 /* 8023B860-8023BCD8       .text _create__8dTimer_cFv */
-s32 dTimer_c::_create() {
-    s32 rt = dComIfG_resLoad(&mPhs, "Timer");
+cPhs_State dTimer_c::_create() {
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "Timer");
     fopMsg_prm_timer* prm;
     if (rt == cPhs_COMPLEATE_e) {
         prm = (fopMsg_prm_timer*)fopMsgM_GetAppend(this);
@@ -737,7 +737,7 @@ static BOOL dTimer_Delete(dTimer_c* i_this) {
 }
 
 /* 8023DA08-8023DA28       .text dTimer_Create__FP9msg_class */
-static s32 dTimer_Create(msg_class* i_this) {
+static cPhs_State dTimer_Create(msg_class* i_this) {
     return ((dTimer_c*)i_this)->_create();
 }
 

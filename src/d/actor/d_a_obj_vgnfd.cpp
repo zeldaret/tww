@@ -75,24 +75,22 @@ enum {
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVgnfd_cFP10fopAc_ac_c */
 BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    /* Nonmatching */
     return ((daObjVgnfd_c*)i_ac)->create_heap();
 }
 
 /* 00000098-0000022C       .text create_bdl_brk__12daObjVgnfd_cFi */
 BOOL daObjVgnfd_c::create_bdl_brk(int i) {
-    /* Nonmatching */
     BOOL ret = FALSE;
-    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]);
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_bdl_table[i]));
     JUT_ASSERT(0xfe, mdl_data != NULL);
     if (mdl_data != NULL) {
         mModel[i] = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mModel[i] != NULL) {
             if (M_brk_table[i] != -1) {
-                J3DAnmTevRegKey* brk_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, M_brk_table[i]);
+                J3DAnmTevRegKey* brk_p = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, M_brk_table[i]));
                 JUT_ASSERT(0x105, brk_p != NULL);
                 if (brk_p != NULL) {
-                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, FALSE))
+                    if (mBrkAnm[i].init(mdl_data, brk_p, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE))
                         ret = TRUE;
                 }
             } else {
@@ -105,9 +103,9 @@ BOOL daObjVgnfd_c::create_bdl_brk(int i) {
 
 /* 0000022C-000004A4       .text create_heap__12daObjVgnfd_cFv */
 BOOL daObjVgnfd_c::create_heap() {
-    /* Nonmatching */
     BOOL ret = TRUE;
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(mModel); i++) {
+    s32 i;
+    for (i = 0; i < (s32)ARRAY_SIZE(mModel); i++) {
         if (!create_bdl_brk(i)) {
             ret = FALSE;
             break;
@@ -115,8 +113,8 @@ BOOL daObjVgnfd_c::create_heap() {
     }
 
     if (ret) {
-        for (s32 i = 0; i < (s32)ARRAY_SIZE(mModel2); i++) {
-            J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]);
+        for (i = 0; i < (s32)ARRAY_SIZE(mModel2); i++) {
+            J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, M_door_bdl_table[i]));
             JUT_ASSERT(0x133, mdl_data != NULL);
 
             if (mdl_data != NULL) {
@@ -133,10 +131,10 @@ BOOL daObjVgnfd_c::create_heap() {
     }
 
     if (ret) {
-        J3DAnmTextureSRTKey* btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, VGNFD_BTK_YGCBD00);
+        J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, VGNFD_BTK_YGCBD00));
         JUT_ASSERT(0x144, btk_data != NULL);
 
-        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, FALSE)) {
+        if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
             ret = FALSE;
         }
     }
@@ -155,8 +153,8 @@ BOOL daObjVgnfd_c::create_heap() {
 }
 
 /* 000004A4-00000704       .text _create__12daObjVgnfd_cFv */
-s32 daObjVgnfd_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVgnfd_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVgnfd_c);
 
@@ -186,8 +184,8 @@ s32 daObjVgnfd_c::_create() {
                 fopAcM_setCullSizeBox(this, -260.0f, -10.0f, -50.0f, 260.0f, 510.0f, 100.0f);
                 mSmoke.setTevStr(&tevStr);
                 mSmoke.setRateOff(0);
-                mSmoke.field_0x15 = 1;
-                mSmoke.field_0x12 = 1;
+                mSmoke.onWindOff();
+                mSmoke.setFollowOff();
 
                 dComIfG_Bgsp()->Regist(M_bgw, this);
                 M_bgw->Move();
@@ -209,7 +207,7 @@ bool daObjVgnfd_c::_delete() {
         }
     }
 
-    mSmoke.end();
+    mSmoke.remove();
     dComIfG_resDelete(&mPhs, M_arcname);
     return true;    
 }
@@ -219,12 +217,20 @@ BOOL daObjVgnfd_c::check_ev_init(int i) {
     return dComIfGs_isEventBit(M_door_ev_table[i]);
 }
 
+void daObjVgnfd_c::on_door_ev(int i) {
+    dComIfGs_onEventBit(M_door_ev_table[i]);
+}
+
+BOOL daObjVgnfd_c::check_boss(int i) {
+    return dComIfGs_isEventBit(M_boss_ev_table[i]);
+}
+
 /* 00000914-000009AC       .text get_start_demo_idx__12daObjVgnfd_cFv */
 s32 daObjVgnfd_c::get_start_demo_idx() {
     s32 ret = -1;
     
     for (s32 i = 0; i < (s32)ARRAY_SIZE(M_door_ev_table); i++) {
-        if (!dComIfGs_isEventBit(M_door_ev_table[i]) && dComIfGs_isEventBit(M_boss_ev_table[i])) {
+        if (!check_ev_init(i) && check_boss(i)) {
             ret = i;
             break;
         }
@@ -235,11 +241,11 @@ s32 daObjVgnfd_c::get_start_demo_idx() {
 
 /* 000009AC-00000A28       .text check_fin__12daObjVgnfd_cFv */
 BOOL daObjVgnfd_c::check_fin() {
-    /* Nonmatching */
+    s32 i;
     BOOL ret = TRUE;
 
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(M_door_ev_table); i++) {
-        if (!dComIfGs_isEventBit(M_door_ev_table[i])) {
+    for (i = 0; i < (s32)ARRAY_SIZE(M_door_ev_table); i++) {
+        if (!check_ev_init(i)) {
             ret = FALSE;
             break;
         }
@@ -266,7 +272,7 @@ void daObjVgnfd_c::init_mtx() {
 
 /* 00000B3C-00000BA0       .text set_timer__12daObjVgnfd_cFv */
 void daObjVgnfd_c::set_timer() {
-    u32* int_p = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
+    int* int_p = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
     mTimer = 0;
     if (int_p != NULL)
         mTimer = *int_p;
@@ -274,7 +280,6 @@ void daObjVgnfd_c::set_timer() {
 
 /* 00000BA0-00001298       .text _execute__12daObjVgnfd_cFv */
 bool daObjVgnfd_c::_execute() {
-    /* Nonmatching */
     BOOL done = FALSE;
 
     switch (mState) {
@@ -308,7 +313,7 @@ bool daObjVgnfd_c::_execute() {
                     if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
                         switch (actIdx) {
                         case ACT_WAIT0:
-                            dComIfGs_onEventBit(M_door_ev_table[M_demo_idx]);
+                            on_door_ev(M_demo_idx);
                             set_timer();
                             break;
                         case ACT_WAIT1:
@@ -400,9 +405,9 @@ bool daObjVgnfd_c::_execute() {
                         mTimer--;
 
                     switch (actIdx) {
-                    case ACT_WAIT0:
                     case ACT_BURST:
                         break;
+                    case ACT_WAIT0:
                     case ACT_GANNON:
                     case ACT_VIB0:
                     case ACT_VIB1:
@@ -447,7 +452,7 @@ bool daObjVgnfd_c::_draw() {
 
 namespace {
 /* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVgnfd_c*)i_ac)->_create();
 }
 

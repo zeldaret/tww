@@ -27,12 +27,12 @@ void daStone2::Act_c::on_switch() const {
 }
 
 /* 00000638-00000704       .text CreateHeap__Q28daStone25Act_cFv */
-void daStone2::Act_c::CreateHeap() {
+BOOL daStone2::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 00000704-000009C8       .text Create__Q28daStone25Act_cFv */
-s32 daStone2::Act_c::Create() {
+BOOL daStone2::Act_c::Create() {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daStone2::Act_c::chk_appear() {
 }
 
 /* 000009F4-00000B3C       .text Mthd_Create__Q28daStone25Act_cFv */
-void daStone2::Act_c::Mthd_Create() {
+cPhs_State daStone2::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -52,7 +52,7 @@ BOOL daStone2::Act_c::Delete() {
 }
 
 /* 00000B84-00000BEC       .text Mthd_Delete__Q28daStone25Act_cFv */
-void daStone2::Act_c::Mthd_Delete() {
+BOOL daStone2::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -227,7 +227,7 @@ void daStone2::Act_c::demo_proc_call() {
 }
 
 /* 000023BC-00002574       .text Execute__Q28daStone25Act_cFPPA3_A4_f */
-void daStone2::Act_c::Execute(float(**)[3][4]) {
+BOOL daStone2::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -244,27 +244,27 @@ BOOL daStone2::Act_c::Draw() {
 namespace daStone2 {
 namespace {
 /* 0000273C-0000275C       .text Mthd_Create__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 0000275C-0000277C       .text Mthd_Delete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 0000277C-0000279C       .text Mthd_Execute__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 0000279C-000027C8       .text Mthd_Draw__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 000027C8-000027F4       .text Mthd_IsDelete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 

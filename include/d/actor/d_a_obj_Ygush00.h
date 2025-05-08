@@ -18,7 +18,7 @@ public:
 
     int param_get_arg() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
 
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();

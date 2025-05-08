@@ -104,7 +104,7 @@ public:
     void CursorMove(fopAc_ac_c*, u32);
     void modeMove();
     void modeDelete();
-    int createHeap();
+    BOOL createHeap();
 
     inline void modeProcCall();
     

@@ -3,6 +3,7 @@
 // Translation Unit: d_ky_thunder.cpp
 //
 
+#include "d/d_ky_thunder.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -15,34 +16,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-class dThunder_modelInfo_c {
-public:
-    // Offsets are relative to dThunder_c instead of dThunder_modelInfo_c
-    /* 0x0FC */ J3DModel * mpModel;
-    /* 0x100 */ mDoExt_invisibleModel mInvisModel;
-    /* 0x108 */ mDoExt_btkAnm mBtk;
-    /* 0x11C */ mDoExt_brkAnm mBrk;
-};
-
-class dThunder_c : public kankyo_class {
-public:
-    inline ~dThunder_c();
-    BOOL createHeap();
-    void adjustHeap();
-    s32 create();
-    inline BOOL draw();
-    inline BOOL execute();
-
-public:
-    /* 0x0F8 */ JKRSolidHeap * solid_heap;
-    /* 0x0FC */ dThunder_modelInfo_c mModelInfo;
-    /* 0x134 */ cXyz mScale;
-    /* 0x140 */ cXyz mPos;
-    /* 0x14C */ cXyz mPosNeg;
-    /* 0x158 */ f32 mRot;
-    /* 0x15C */ f32 mBtkTime;
-};
 
 dThunder_c::~dThunder_c() {
     mDoExt_destroySolidHeap(solid_heap);
@@ -121,18 +94,18 @@ static BOOL dThunder_Delete(dThunder_c* i_this) {
 }
 
 /* 80198B68-80198BC4       .text dThunder_Create__FP12kankyo_class */
-static s32 dThunder_Create(kankyo_class* i_ky) {
+static cPhs_State dThunder_Create(kankyo_class* i_ky) {
     dThunder_c * i_this = (dThunder_c *)i_ky;
     if (!i_this->createHeap())
         return cPhs_ERROR_e;
 
-    s32 ret = i_this->create();
+    cPhs_State ret = i_this->create();
     i_this->adjustHeap();
     return ret;
 }
 
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
-s32 dThunder_c::create() {
+cPhs_State dThunder_c::create() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 
@@ -149,12 +122,12 @@ s32 dThunder_c::create() {
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
     JUT_ASSERT(0x7d, anm != NULL);
-    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
     JUT_ASSERT(0x8c, canm != NULL);
-    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);

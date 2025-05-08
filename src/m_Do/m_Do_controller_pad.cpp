@@ -14,20 +14,6 @@
 JUTGamePad* g_mDoCPd_gamePad[4];
 interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 
-inline void mDoCPd_ANALOG_CONV(u8 analog, f32& param_1) {
-    param_1 = analog * (1.0f / 15.0f);
-    if (param_1 > 1.0f) {
-        param_1 = 1.0f;
-    }
-}
-
-inline void mDoCPd_TRIGGER_CONV(u8 analog, f32& param_1) {
-    param_1 = analog * 0.0071428571827709675f;
-    if (param_1 > 1.0f) {
-        param_1 = 1.0f;
-    }
-}
-
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
     pInterface->mButtonHold.up    = pPad->mButton.mButton & CButton::DPAD_UP;

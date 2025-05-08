@@ -35,7 +35,7 @@ void daWarpfout_c::CreateInit() {
 }
 
 /* 0000008C-000000E4       .text _create__12daWarpfout_cFv */
-s32 daWarpfout_c::_create() {
+cPhs_State daWarpfout_c::_create() {
     fopAcM_SetupActor(this, daWarpfout_c);
     CreateInit();
 
@@ -179,7 +179,7 @@ csXyz daWarpfout_c::get_effect_angle() {
 }
 
 /* 00000670-00000690       .text daWarpfout_Create__FPv */
-static s32 daWarpfout_Create(void* i) {
+static cPhs_State daWarpfout_Create(void* i) {
     daWarpfout_c* i_this = static_cast<daWarpfout_c*>(i);
 
     return i_this->_create();

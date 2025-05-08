@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-class dPath;
+struct dPath;
 class JPABaseEmitter;
 class JPABaseParticle;
 
@@ -29,7 +29,7 @@ public:
     static dPath* m_path;
     static JPABaseEmitter* m_emitter;
 
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();

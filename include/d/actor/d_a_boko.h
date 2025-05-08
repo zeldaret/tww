@@ -79,7 +79,7 @@ public:
     BOOL execute();
     void bokoDelete();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
@@ -115,6 +115,11 @@ public:
     /* 0x848 */ u8 m848[0x8A8 - 0x848];
     /* 0x8A8 */ mDoExt_3DlineMat0_c* mpLineMat;
     /* 0x8AC */ ProcFunc_t mCurrentProc;
+};
+
+class daBoko_HIO_c {
+public:
+    // Size 1 in retail, size 0x14 in debug.
 };
 
 class daBoko_HIO_c0 {

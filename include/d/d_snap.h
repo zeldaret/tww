@@ -199,7 +199,7 @@ enum {
     /* 0xBF */ DSNAP_TYPE_UNKBF,
     /* 0xC0 */ DSNAP_TYPE_UNKC0,
     /* 0xC1 */ DSNAP_TYPE_UNKC1,
-    /* 0xC2 */ DSNAP_TYPE_UNKC2,
+    /* 0xC2 */ DSNAP_TYPE_FGANON,
     /* 0xC3 */ DSNAP_TYPE_UNKC3,
     /* 0xC4 */ DSNAP_TYPE_UNKC4,
     /* 0xC5 */ DSNAP_TYPE_UNKC5,

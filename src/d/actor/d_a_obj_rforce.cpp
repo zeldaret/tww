@@ -18,7 +18,6 @@ BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::create_heap() {
-
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
@@ -42,10 +41,10 @@ bool daObjRforce::Act_c::create_heap() {
 }
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
-s32 daObjRforce::Act_c::_create() {
+cPhs_State daObjRforce::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     
     if(ret == cPhs_COMPLEATE_e){
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0)){
@@ -102,7 +101,7 @@ bool daObjRforce::Act_c::_draw() {
 namespace daObjRforce {
 namespace {
 /* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-s32 Mthd_Create(void* obj) {
+cPhs_State Mthd_Create(void* obj) {
     return static_cast<daObjRforce::Act_c*>(obj)->_create();
 }
 

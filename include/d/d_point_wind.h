@@ -11,7 +11,7 @@ public:
 
     void set_pwind_init(cM3dGCpsS * pCps);
     void set_pwind_power(float windStrength){ mWind.mStrength = windStrength; }
-    float get_pwind_power_p(){ return mWind.mStrength; }
+    float get_pwind_power_p() { return mWind.mStrength; }
     void set_pwind_move();
     void set_pwind_delete();
 };

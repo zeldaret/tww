@@ -22,7 +22,7 @@ static s32 daObj_TousekikiCreate(void*) {
 }
 
 /* 000002DC-000004F4       .text _create__17daObj_Tousekiki_cFv */
-s32 daObj_Tousekiki_c::_create() {
+cPhs_State daObj_Tousekiki_c::_create() {
     /* Nonmatching */
 }
 

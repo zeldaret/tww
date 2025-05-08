@@ -9,40 +9,7 @@
 #include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 
-// RW data
-static dCcD_SrcSph sph_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_WIND | AT_TYPE_UNK400000,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
-        /* Radius */ 30.0f,
-    },
-};
-static u8 padding[76];
-
-// Need to break these out to get the rodata ordered right
-static const float partHeightOffset = 20.0f;
-static const float partMaxFlickerPerTick = 0.02f;
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
 static BOOL daLamp_Draw(lamp_class* i_this) {
@@ -79,11 +46,11 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     i_this->mModel->setBaseTRMtx(*calc_mtx);
     MtxTrans(10.0f, -140.0f, -15.0f, 1);
 
-    cXyz pos;
-    pos.z = 0.0f;
-    pos.y = 0.0f;
-    pos.x = 0.0f;
-    MtxPosition(&pos, &i_this->mPos);
+    cXyz offset;
+    offset.z = 0.0f;
+    offset.y = 0.0f;
+    offset.x = 0.0f;
+    MtxPosition(&offset, &i_this->mPos);
 
     if (!i_this->mParticleInit) {
         static cXyz fire_scale(0.5f, 0.5f, 0.5f);
@@ -95,9 +62,9 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
 
     if (i_this->mPa.getEmitter()) {
         cXyz whitePartPos = i_this->mPos;
-        whitePartPos.y += partHeightOffset;
-        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos, 0xFF, g_whiteColor, g_whiteColor, 0);
-        cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, partMaxFlickerPerTick);
+        whitePartPos.y += 20.0f;
+        dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &whitePartPos);
+        cLib_addCalc2(&i_this->mParticlePower, cM_rndF(0.2f) + 1.0f, 0.5f, 0.02f);
     } else {
         i_this->mParticlePower = 0.0f;
     }
@@ -122,7 +89,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
         }
     } else {
         i_this->mHitTimeoutLeft--;
-        if (i_this->mPa.mpEmitter) {
+        if (i_this->mPa.getEmitter()) {
             float tgtZ;
             if (i_this->mHitTimeoutLeft > 10) {
                 tgtZ = 4.0f;
@@ -131,14 +98,12 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
             }
             cLib_addCalc2(&i_this->mHitReactCurZ, tgtZ, 1.0f, 0.5f);
             cMtx_YrotS(*calc_mtx, i_this->mHitAngle);
-            cXyz localPos;
-            localPos.set(0.0f, 1.0f, i_this->mHitReactCurZ);
-            cXyz globalPos;
-            MtxPosition(&localPos, &globalPos);
-            float y = globalPos.y;
-            float z = globalPos.z;
-            float x = globalPos.x;
-            i_this->mPa.mpEmitter->mEmitterDir.set(x, y, z);
+            cXyz offset;
+            offset.set(0.0f, 1.0f, i_this->mHitReactCurZ);
+            cXyz rotOffset;
+            MtxPosition(&offset, &rotOffset);
+            JGeometry::TVec3<f32> dir(rotOffset);
+            i_this->mPa.getEmitter()->setDirection(dir);
         }
     }
 
@@ -147,7 +112,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
 
 /* 00000604-00000634       .text daLamp_IsDelete__FP10lamp_class */
 static BOOL daLamp_IsDelete(lamp_class* i_this) {
-    i_this->mPa.end();
+    i_this->mPa.remove();
     return TRUE;
 }
 
@@ -177,11 +142,11 @@ static BOOL daLamp_solidHeapCB(fopAc_ac_c* i_ac) {
 }
 
 /* 0000075C-00000914       .text daLamp_Create__FP10fopAc_ac_c */
-static int daLamp_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
     fopAcM_SetupActor(i_ac, lamp_class);
     lamp_class* i_this = (lamp_class*)i_ac;
 
-    s32 phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");
+    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Lamp");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, &daLamp_solidHeapCB, 0x6040)) {
             i_this->mParameters = fopAcM_GetParam(i_this);
@@ -189,6 +154,36 @@ static int daLamp_Create(fopAc_ac_c* i_ac) {
                 i_this->mParameters = 0;
             }
             i_this->mStts.Init(0xff, 0xff, i_this);
+
+            static dCcD_SrcSph sph_src = {
+                // dCcD_SrcGObjInf
+                {
+                    /* Flags             */ 0,
+                    /* SrcObjAt  Type    */ 0,
+                    /* SrcObjAt  Atp     */ 0,
+                    /* SrcObjAt  SPrm    */ 0,
+                    /* SrcObjTg  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW | AT_TYPE_WIND | AT_TYPE_UNK400000,
+                    /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+                    /* SrcObjCo  SPrm    */ 0,
+                    /* SrcGObjAt Se      */ 0,
+                    /* SrcGObjAt HitMark */ 0,
+                    /* SrcGObjAt Spl     */ 0,
+                    /* SrcGObjAt Mtrl    */ 0,
+                    /* SrcGObjAt SPrm    */ 0,
+                    /* SrcGObjTg Se      */ 0,
+                    /* SrcGObjTg HitMark */ 0,
+                    /* SrcGObjTg Spl     */ 0,
+                    /* SrcGObjTg Mtrl    */ 0,
+                    /* SrcGObjTg SPrm    */ 0,
+                    /* SrcGObjCo SPrm    */ 0,
+                },
+                // cM3dGSphS
+                {
+                    /* Center */ 0.0f, 0.0f, 0.0f,
+                    /* Radius */ 30.0f,
+                },
+            };
+
             i_this->mSph.Set(sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
 

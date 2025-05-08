@@ -10,10 +10,10 @@
 class J3DModel;
 
 struct color_RGB_class {
-    u8 r;
-    u8 g;
-    u8 b;
-};
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+};  // Size: 0x3
 
 struct LIGHT_INFLUENCE {
     /* 0x00 */ cXyz mPos;
@@ -157,13 +157,13 @@ class dKankyo_cloud_Packet;
 class dKankyo_vrkumo_Packet;
 class dKankyo_wave_Packet;
 class dKankyo_poison_Packet;
-class WINDEFF_SET;
+struct WINDEFF_SET;
 class dKankyo_star_Packet;
-class stage_palet_info_class;
-class stage_pselect_info_class;
-class stage_envr_info_class;
-class stage_vrbox_info_class;
-class stage_plight_info_class;
+struct stage_palet_info_class;
+struct stage_pselect_info_class;
+struct stage_envr_info_class;
+struct stage_vrbox_info_class;
+struct stage_plight_info_class;
 struct dKyd_Schedule;
 
 class dScnKy_env_light_c {
@@ -419,6 +419,7 @@ void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
 void dKy_pship_existense_set();
 void dKy_pship_existense_cut();
 u8 dKy_pship_existense_chk();
+void dKy_Itemgetcol_chg_on();
 void dKy_Itemgetcol_chg_off();
 void dKy_Itemgetcol_chg_move();
 void dKy_arrowcol_chg_on(cXyz*, int);

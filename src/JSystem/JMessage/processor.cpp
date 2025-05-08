@@ -54,7 +54,7 @@ void TProcessor::pushCurrent(const char* v) {
 }
 
 /* 8029EEA4-8029EEC8       .text popCurrent__Q28JMessage10TProcessorFv */
-const char* TProcessor::popCurrent() {
+void TProcessor::popCurrent() {
     setCurrent_(mStack.top());
     mStack.pop();
 }
@@ -149,7 +149,7 @@ void TProcessor::on_tag_() {
 }
 
 /* 8029F120-8029F248       .text do_tag___Q28JMessage10TProcessorFUlPCvUl */
-bool TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     u16 code = data::getTagCode(tag);
     u8 group = data::getTagGroup(tag);
 
@@ -421,7 +421,7 @@ void TSequenceProcessor::do_end_() {
 }
 
 /* 8029F8C8-8029F9D4       .text do_tag___Q28JMessage18TSequenceProcessorFUlPCvUl */
-bool TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     const char* datap = (const char*)data;
     u16 code = data::getTagCode(tag);
     u8 group = data::getTagGroup(tag);
@@ -477,27 +477,27 @@ void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size)
 /* 8029FA2C-8029FA5C       .text process_jump_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_limited_(TSequenceProcessor* proc) {
     JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_index_(proc->mControl, work->mTarget);
+    return process_setMessage_index_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA5C-8029FA88       .text process_jump___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessor */
 bool TSequenceProcessor::process_jump_(TSequenceProcessor* proc) {
     JumpCallBackWork* work = (JumpCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_code_(proc->mControl, work->mTarget);
+    return process_setMessage_code_(proc->mControl, work->mTarget);
 }
 
 /* 8029FA88-8029FAB8       .text process_branch_limited___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
 bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
     BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
+    return process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
 }
 
 /* 8029FAB8-8029FAE8       .text process_branch___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
 bool TSequenceProcessor::process_branch_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
     BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
+    return process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
 }
 
 /* 8029FAE8-8029FB20       .text __ct__Q28JMessage19TRenderingProcessorFPQ28JMessage8TControl */
@@ -538,7 +538,7 @@ void TRenderingProcessor::do_end_() {
 }
 
 /* 8029FC50-8029FC84       .text do_tag___Q28JMessage19TRenderingProcessorFUlPCvUl */
-bool TRenderingProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TRenderingProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     u8 group = data::getTagGroup(tag);
 
     switch (group) {

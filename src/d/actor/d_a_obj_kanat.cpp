@@ -13,7 +13,7 @@ Mtx daObjKanat::Act_c::M_tmp_mtx;
 const char daObjKanat::Act_c::M_arcname[] = "Kanat";
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjKanat5Act_cFv */
-int daObjKanat::Act_c::CreateHeap() {
+BOOL daObjKanat::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KANAT_BDL_KANAT);
     JUT_ASSERT(79, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
@@ -21,7 +21,7 @@ int daObjKanat::Act_c::CreateHeap() {
 }
 
 /* 0000012C-000001AC       .text Create__Q210daObjKanat5Act_cFv */
-int daObjKanat::Act_c::Create() {
+BOOL daObjKanat::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -500.0f, -100.0f, -500.0f, 500.0f, 200.0f, 500.0f);
@@ -32,14 +32,14 @@ int daObjKanat::Act_c::Create() {
 }
 
 /* 000001AC-000002EC       .text Mthd_Create__Q210daObjKanat5Act_cFv */
-s32 daObjKanat::Act_c::Mthd_Create() {
+cPhs_State daObjKanat::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjKanat::Act_c);
     
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         return cPhs_STOP_e;
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, KANAT_DZB_KANAT, NULL, 0x6440);
         JUT_ASSERT(126, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -122,7 +122,7 @@ BOOL daObjKanat::Act_c::Draw() {
 
 namespace daObjKanat {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
         

@@ -192,7 +192,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00007AC0-00007CFC       .text daGnd_Create__FP10fopAc_ac_c */
-static s32 daGnd_Create(fopAc_ac_c*) {
+static cPhs_State daGnd_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

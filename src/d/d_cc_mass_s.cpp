@@ -210,7 +210,7 @@ void dCcMassS_Mng::Clear() {
 
 /* 800AD234-800AD310       .text Set__12dCcMassS_MngFP8cCcD_ObjUc */
 void dCcMassS_Mng::Set(cCcD_Obj* i_obj, u8 i_priority) {
-    if (mMassObjCount >= 5) {
+    if (mMassObjCount >= (s32)ARRAY_SIZE(mMassObjs)) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mMassObjs); i++) {
             int priority = mMassObjs[i].GetPriority();
             if (priority > i_priority || (priority == i_priority && cM_rndF(1.0f) < 0.5f)) {

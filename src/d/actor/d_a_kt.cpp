@@ -325,12 +325,11 @@ static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
 }
 
 /* 0000134C-00001530       .text daKt_Create__FP10fopAc_ac_c */
-static s32 daKt_Create(fopAc_ac_c* i_ac) {
-    s32 rt;
+static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
+    fopAcM_SetupActor(i_ac, kt_class);
     kt_class* i_this = (kt_class*)i_ac;
-    fopAcM_SetupActor(i_this, kt_class);
 
-    rt = dComIfG_resLoad(&i_this->mPhs, "Kt");
+    cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Kt");
     if (rt == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, daKt_solidHeapCB, 0)) {
             s32 num = fopAcM_GetParam(i_this);
@@ -339,9 +338,9 @@ static s32 daKt_Create(fopAc_ac_c* i_ac) {
                 fopAcM_SetParam(i_this, 1000);
                 for (s32 i = 0; i < num; i++) {
                     fopAcM_prm_class* params = fopAcM_CreateAppend();
-                    params->mPos = i_this->current.pos;
-                    params->mAngle.set(0, 0, 0);
-                    params->mParameter = 1001 + i;
+                    params->base.position = i_this->current.pos;
+                    params->base.angle.set(0, 0, 0);
+                    params->base.parameters = 1001 + i;
                     fpcM_Create(PROC_KT, NULL, params);
                 }
             }

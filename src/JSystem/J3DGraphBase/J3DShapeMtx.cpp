@@ -141,8 +141,8 @@ Mtx * J3DShapeMtxConcatView::sMtxPtrTbl[2];
 
 /* 802DBFBC-802DC08C       .text load__21J3DShapeMtxConcatViewCFv */
 void J3DShapeMtxConcatView::load() const {
-    sMtxPtrTbl[0] = j3dSys.getModel()->mpNodeMtx;
-    sMtxPtrTbl[1] = j3dSys.getModel()->mpWeightEnvMtx;
+    sMtxPtrTbl[0] = (Mtx*)j3dSys.getModel()->getAnmMtx(0);
+    sMtxPtrTbl[1] = (Mtx*)j3dSys.getModel()->getWeightAnmMtx(0);
 
     MtxLoadConcatView f = sMtxLoadPipeline[sCurrentPipeline];
     j3dSys.setModelDrawMtx(sMtxPtrTbl[j3dSys.getModel()->getModelData()->getDrawMtxFlag(mUseMtxIndex)]);
@@ -234,8 +234,8 @@ void J3DShapeMtxMultiImm::load() const {
 
 /* 802DC428-802DC524       .text load__26J3DShapeMtxMultiConcatViewCFv */
 void J3DShapeMtxMultiConcatView::load() const {
-    sMtxPtrTbl[0] = j3dSys.getModel()->mpNodeMtx;
-    sMtxPtrTbl[1] = j3dSys.getModel()->mpWeightEnvMtx;
+    sMtxPtrTbl[0] = (Mtx*)j3dSys.getModel()->getAnmMtx(0);
+    sMtxPtrTbl[1] = (Mtx*)j3dSys.getModel()->getWeightAnmMtx(0);
 
     MtxLoadConcatView f = sMtxLoadPipeline[sCurrentPipeline];
 

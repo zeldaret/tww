@@ -27,12 +27,12 @@ typedef struct leaf_process_profile_definition {
 } leaf_process_profile_definition;
 
 s16 fpcLf_GetPriority(leafdraw_class* pLeaf);
-s32 fpcLf_DrawMethod(leafdraw_method_class* pMthd, void* pUserData);
-s32 fpcLf_Draw(leafdraw_class* pMthd);
-s32 fpcLf_Execute(leafdraw_class* pLeaf);
-s32 fpcLf_IsDelete(leafdraw_class* pLeaf);
-s32 fpcLf_Delete(leafdraw_class* pLeaf);
-s32 fpcLf_Create(leafdraw_class* pLeaf);
+BOOL fpcLf_DrawMethod(leafdraw_method_class* pMthd, void* pUserData);
+BOOL fpcLf_Draw(leafdraw_class* pMthd);
+BOOL fpcLf_Execute(leafdraw_class* pLeaf);
+BOOL fpcLf_IsDelete(leafdraw_class* pLeaf);
+BOOL fpcLf_Delete(leafdraw_class* pLeaf);
+cPhs_State fpcLf_Create(leafdraw_class* pLeaf);
 
 extern int g_fpcLf_type;
 extern leafdraw_method_class g_fpcLf_Method;

@@ -38,7 +38,7 @@ namespace daObjPaper {
     
         static int solidHeapCB(fopAc_ac_c*);
         bool create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void mode_wait_init();
         void mode_wait();

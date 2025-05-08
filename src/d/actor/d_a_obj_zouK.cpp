@@ -74,7 +74,7 @@ bool daObjZouk::Act_c::create_heap() {
             mdl_data,
             NULL, NULL,
             M_bck_data,
-            J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, 1,
+            J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1,
             NULL,
             0x00000000,
             0x11020203
@@ -119,10 +119,10 @@ bool daObjZouk::Act_c::create_heap() {
 }
 
 /* 00000468-00000724       .text _create__Q29daObjZouk5Act_cFv */
-s32 daObjZouk::Act_c::_create() {
+cPhs_State daObjZouk::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
@@ -323,7 +323,7 @@ void daObjZouk::Act_c::setEffectMtx(const cXyz* pos, f32 scaleMag) {
 
 namespace daObjZouk {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

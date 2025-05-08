@@ -590,10 +590,14 @@ void wether_move_snow() {
 
 /* 80088A50-80088D08       .text wether_move_star__Fv */
 void wether_move_star() {
-    if (dComIfGp_checkStatus(1) && (!g_env_light.mbVrboxInvisible &&
-                                    strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0) ||
-        strcmp(dComIfGp_getStartStageName(), "Name") == 0)
-    {
+    if (
+        (
+            dComIfGp_checkStatus(1) &&
+            !g_env_light.mbVrboxInvisible &&
+            strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0
+        ) ||
+        strcmp(dComIfGp_getStartStageName(), "Name") == 0
+    ) {
         f32 time = g_env_light.getDaytime();
         f32 target;
 
@@ -1369,7 +1373,7 @@ void dKyw_evt_wind_set_go() {
 /* 8008A96C-8008A9F8       .text dKyw_gbwind_use_check__Fv */
 BOOL dKyw_gbwind_use_check() {
     dStage_FileList_dt_c* fili_p = NULL;
-    int rt = 0;
+    BOOL rt = 0;
 
     if (g_env_light.mWind.mpWindVecOverride == NULL) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
@@ -1378,7 +1382,7 @@ BOOL dKyw_gbwind_use_check() {
         }
 
         if (fili_p != NULL && dStage_FileList_dt_GlobalWindLevel(fili_p) <= 2) {
-            rt = 1;
+            rt = TRUE;
         }
     }
 

@@ -335,7 +335,7 @@ int daObjTpost_c::getMsgXY() {
             col.r = REG12_S(0) + 0x80;
             col.g = REG12_S(1) + 0x80;
             col.b = REG12_S(2) + 0x80;
-            mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
+            mDoMtx_stack_c::copy(mMorf->getModel()->getAnmMtx(2));
             mDoMtx_stack_c::multVec(&pos, &pos);
             dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
@@ -466,7 +466,7 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
         case 0xCF4:
         case 0xCF8:
             if(mpCurrMsg->mSelectNum == 0) {
-                s32 price = 0x0A;
+                int price = 0x0A;
                 if(m_letter[mNumReadable].mEventReg == 0xB203) {
                     price = 0xC9;
                 }
@@ -552,8 +552,6 @@ void daObjTpost_c::checkOrder() {
             }
         }
     }
-
-    return;
 }
 
 /* 00000E48-00000EA4       .text setAttention__12daObjTpost_cFv */
@@ -579,7 +577,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_POST_GET0
@@ -588,7 +586,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_GET1
@@ -597,7 +595,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_PUTOUT
@@ -606,7 +604,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_WAIT
@@ -615,7 +613,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
     };
 
@@ -736,7 +734,7 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
                     player->changeOriginalDemo();
-                    player->changeDemoMode(daPy_demo_c::DEMO_UNK1_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_UNK01_e);
                 }
 
                 break;
@@ -895,7 +893,7 @@ bool daObjTpost_c::_draw() {
     mMorf->entryDL();
     dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
-    return 1;
+    return true;
 }
 
 /* 00001980-00001BA4       .text createInit__12daObjTpost_cFv */
@@ -957,11 +955,11 @@ void daObjTpost_c::getArg() {
 }
 
 /* 00001BA8-00001D88       .text _create__12daObjTpost_cFv */
-int daObjTpost_c::_create() {
+cPhs_State daObjTpost_c::_create() {
     fopAcM_SetupActor(this, daObjTpost_c);
 
     getArg();
-    int step = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State step = dComIfG_resLoad(&mPhs, m_arc_name);
     if(step == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, createHeap_CB, 0x7E0) == 0) {
             return cPhs_ERROR_e;
@@ -980,7 +978,7 @@ bool daObjTpost_c::_delete() {
 }
 
 /* 000020C4-000020E4       .text daObjTpostCreate__FPv */
-static int daObjTpostCreate(void* i_this) {
+static cPhs_State daObjTpostCreate(void* i_this) {
     return static_cast<daObjTpost_c*>(i_this)->_create();
 }
 

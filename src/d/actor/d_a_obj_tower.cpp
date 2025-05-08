@@ -7,9 +7,7 @@
 #include "d/res/res_x_tower.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "dolphin/mtx/mtx.h"
 #include "f_op/f_op_actor_mng.h"
-#include "m_Do/m_Do_printf.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -59,30 +57,29 @@ void daObjTower_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-cPhs__Step daObjTower_c::_create() {
-    cPhs__Step PVar3;
-
+cPhs_State daObjTower_c::_create() {
     fopAcM_SetupActor(this, daObjTower_c);
 
     field_0x2d0 = 0;
 
+    cPhs_State phase_state;
     if (!dComIfGs_isEventBit(0x1e40)) {
-        PVar3 = cPhs_STOP_e;
+        phase_state = cPhs_STOP_e;
     } else {
-        PVar3 = (cPhs__Step)dComIfG_resLoad(&mPhs, "X_tower");
-        if (PVar3 == cPhs_COMPLEATE_e) {
+        phase_state = dComIfG_resLoad(&mPhs, "X_tower");
+        if (phase_state == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1c6c0)) {
-                PVar3 = cPhs_ERROR_e;
+                phase_state = cPhs_ERROR_e;
             } else {
                 CreateInit();
             }
         }
     }
 
-    return PVar3;
+    return phase_state;
 }
 /* 0000030C-000003DC       .text daObjTower_Create__FPv */
-static cPhs__Step daObjTower_Create(void* i_this) {
+static cPhs_State daObjTower_Create(void* i_this) {
     return ((daObjTower_c*)i_this)->_create();
 }
 
@@ -121,9 +118,9 @@ static BOOL daObjTower_Draw(void* i_this) {
 
 bool daObjTower_c::_execute() {
     if (demoActorID != 0) {
-        dDemo_actor_c* pdVar1 = dComIfGp_demo_getActor(demoActorID);
-        if (pdVar1 != NULL && pdVar1->checkEnable(0x02)) {
-            current.pos = pdVar1->mTranslation;
+        dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+        if (demo_actor != NULL && demo_actor->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+            current.pos = *demo_actor->getTrans();
         }
     }
 

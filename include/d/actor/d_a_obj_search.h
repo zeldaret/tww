@@ -46,7 +46,7 @@ namespace daObj_Search {
         void attr() const;
         void SetArgData();
         void CreateInit();
-        s32 _create();
+        cPhs_State _create();
         void smoke_set(float, int);
         bool _execute();
         void check_bk_control();
@@ -79,7 +79,7 @@ namespace daObj_Search {
     };
 
     namespace Mthd {
-        s32 Create(void*);
+        cPhs_State Create(void*);
         BOOL Delete(void*);
         BOOL Execute(void*);
         BOOL Draw(void*);

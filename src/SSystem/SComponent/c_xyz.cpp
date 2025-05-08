@@ -5,8 +5,6 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "float.h"
-#include "SSystem/SComponent/c_math.h"
 
 const cXyz cXyz::Zero(0, 0, 0);
 const cXyz cXyz::BaseX(1, 0, 0);

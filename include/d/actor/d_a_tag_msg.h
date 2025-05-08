@@ -7,7 +7,7 @@ class daTag_Msg_c : public fopAc_ac_c {
 public:
     typedef BOOL (ActionFunc)(daTag_Msg_c*);
 
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     void setActio(u8 action) { mAction = action; }

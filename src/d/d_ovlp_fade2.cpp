@@ -51,7 +51,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXEnd();
 
     Mtx44 proj;
-    C_MTXPerspective(proj, 60.0f, g_HIO.field_0x0c * 1.33333333f, 100.0f, 100000.0f);
+    C_MTXPerspective(proj, 60.0f, fapGmHIO_getAspectRatio() * 1.33333333f, 100.0f, 100000.0f);
     GXSetProjection(proj, GX_PERSPECTIVE);
 
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), 320, 240, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -130,7 +130,7 @@ void dOvlpFd2_c::execFirstSnap() {
 void dOvlpFd2_c::execFadeOut() {
     dComIfGp_setWindowNum(0);
     cLib_chaseAngleS(&field_0x112, 2000, 100);
-    s16 r5 = ((field_0x110 + 0x4000) & 0x8000 | 0x4000) - field_0x112;
+    s16 r5 = (((field_0x110 + 0x4000) & 0x8000) | 0x4000) - field_0x112;
     field_0x110 += field_0x112;
     s16 r0_1 = r5 - field_0x110;
     if (field_0x112 * r0_1 < 0) {
@@ -230,18 +230,9 @@ static BOOL dOvlpFd2_Delete(dOvlpFd2_c*) {
 }
 
 /* 8022423C-80224268       .text dOvlpFd2_Create__FPv */
-static s32 dOvlpFd2_Create(void* i_this) {
+static cPhs_State dOvlpFd2_Create(void* i_this) {
     new (i_this) dOvlpFd2_c();
     return cPhs_COMPLEATE_e;
-}
-
-// Fakematch. Manually define this template function here to make it non-weak, fixing the weak function ordering.
-template <>
-s8 cLib_calcTimer<s8>(s8* value) {
-    if (*(s8*)value != 0) {
-        *value = *value - 1;
-    }
-    return *value;
 }
 
 overlap_method_class l_dOvlpFd2_Method = {
@@ -281,3 +272,6 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     &l_dOvlpFd2_Method,
 };
 #endif
+
+// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
+#pragma sym off

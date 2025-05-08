@@ -11,7 +11,7 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "dolphin/mtx/mtxvec.h"
 
-JPAFieldContainer fc;
+JPAFieldContainer JPAFieldManager::fc;
 JPAEmitterInfo * JPAFieldData::pEmtrInfo;
 
 /* 80259EE8-8025A0D8       .text loadFieldData__12JPABaseFieldFP12JPAFieldDataP13JPAFieldBlock */
@@ -119,7 +119,7 @@ void JPAAirField::preCalc(JPAFieldData* data) {
 
     data->mVel.scale(data->mMag, data->mWork2);
     if (data->mSttFlag & 0x01) {
-        data->mWork1.x = JMASCos(data->mVal1 * 0xFFFF);
+        data->mWork1.x = JMASCos(data->mVal1 * 0x8000);
         if (data->mSttFlag & 0x02) {
             data->mWork0.set(data->mPos);
         } else {
@@ -130,7 +130,6 @@ void JPAAirField::preCalc(JPAFieldData* data) {
 
 /* 8025A510-8025A6EC       .text calc__11JPAAirFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAAirField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
     if (data->mSttFlag & 0x01) {
         JGeometry::TVec3<f32> vel;
         if (data->mSttFlag & 0x02) {
@@ -222,8 +221,6 @@ void JPAVortexField::preCalc(JPAFieldData* data) {
 
 /* 8025ACA0-8025AE04       .text calc__14JPAVortexFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
-
     JGeometry::TVec3<f32> force;
     f32 dot = data->mWork0.dot(ptcl->mLocalPosition);
     force.scale(dot, data->mWork0);
@@ -233,9 +230,9 @@ void JPAVortexField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
     f32 power = sqDist;
     if (sqDist > data->mVal1)
         power = data->mVal1;
-    power *= data->mVal2;
+    f32 temp = power * data->mVal2;
 
-    f32 speed = (1.0f - power) * data->mMag + power * data->mMagRndm;
+    f32 speed = (1.0f - temp) * data->mMag + temp * data->mMagRndm;
     force.normalize();
 
     data->mVel.cross(force, data->mWork0);
@@ -261,11 +258,45 @@ void JPAConvectionField::preCalc(JPAFieldData* data) {
 
 /* 8025B114-8025B3CC       .text calc__18JPAConvectionFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc, maybe related to cross_hack fake inline? */
 
     JGeometry::TVec3<f32> axisX, axisZ;
-    axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
-    axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
+
+    // axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
+    // axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
+
+    f32 dot0 = data->mWork0.dot(ptcl->mLocalPosition);
+
+    // f32 f3 = data->mWork0.x * dot0;
+    // f32 f4 = data->mWork0.y * dot0;
+    // f32 f5 = data->mWork0.z * dot0;
+    // axisX.set(f3, f4, f5);
+
+    // axisX.set(data->mWork0.x * dot0, data->mWork0.y * dot0, data->mWork0.z * dot0);
+
+    axisX.set(data->mWork0);
+    // axisX.set(data->mWork0.x, data->mWork0.y, data->mWork0.z);
+    axisX.scale(dot0);
+
+    // axisX.scale(dot0, data->mWork0);
+
+    // axisX.scale(data->mWork0.dot(ptcl->mLocalPosition), data->mWork0);
+
+    f32 dot2 = data->mWork2.dot(ptcl->mLocalPosition);
+
+    f32 f1 = data->mWork2.x * dot2;
+    f32 f2 = data->mWork2.y * dot2;
+    f32 f0 = data->mWork2.z * dot2;
+    axisZ.set(f1, f2, f0);
+
+    // axisZ.set(data->mWork2.x * dot2, data->mWork2.y * dot2, data->mWork2.z * dot2);
+
+    // axisZ.set(data->mWork2);
+    // axisZ.scale(dot2);
+
+    // axisZ.scale(dot2, data->mWork2);
+
+    // axisZ.scale(data->mWork2.dot(ptcl->mLocalPosition), data->mWork2);
 
     JGeometry::TVec3<f32> newPos;
     newPos.add(axisX, axisZ);
@@ -274,8 +305,12 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
     JGeometry::TVec3<f32> delta, axisY;
     delta.sub(ptcl->mLocalPosition, newPos);
-    axisY.cross_hack(data->mWork1, newPos);
-    data->mVel.cross_hack(delta, axisY);
+    axisY.cross_hack(data->mWork1, newPos); // fake inline
+    // axisY.cross(data->mWork1, newPos);
+    // axisY.cross(newPos, data->mWork1);
+    // data->mVel.cross_hack(axisY, delta); // fake inline
+    data->mVel.cross(axisY, delta);
+    // data->mVel.cross(delta, axisY);
     data->mVel.setLength(data->mMag);
 
     if (data->mVal2 != 0.0f) {

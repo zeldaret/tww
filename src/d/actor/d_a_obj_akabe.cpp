@@ -8,9 +8,6 @@
 #include "d/res/res_akabed.h"
 #include "d/res/res_akabek.h"
 #include "d/res/res_nbox.h"
-#include "d/d_item.h"
-#include "d/d_item_data.h"
-#include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -25,12 +22,12 @@ namespace daObjAkabe {
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
     BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-        return ((Act_c*)i_this)->create_heap() & 0xFF; // Fakematch (see comment in create_heap)
+        return ((Act_c*)i_this)->create_heap();
     }
 
     /* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
-    BOOL Act_c::create_heap() {
-        bool rt = false;
+    u8 Act_c::create_heap() {
+        bool ret = false;
 
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
@@ -38,21 +35,22 @@ namespace daObjAkabe {
             cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
             JUT_ASSERT(0x82, bgw_data != NULL);
             if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))
-                rt = true;
+                ret = true;
         }
 
-        // Fakematch: create_heap should have return type bool based on the clrlwi in solidHeapCB,
-        // but this part doesn't match unless the return variable and the return type are both BOOL.
-        BOOL ret = rt;
-        if (!rt)
+        if (!ret) {
             mpBgW = NULL;
+            return ret;
+        }
 
+        // Fakematch? This function should probably have return type bool, but the codegen towards the
+        // end here doesn't work unless the return type is u8.
         return ret;
     }
 
     /* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
-    s32 Act_c::_create() {
-        s32 rt = cPhs_ERROR_e;
+    cPhs_State Act_c::_create() {
+        cPhs_State rt = cPhs_ERROR_e;
 
         s32 arg0 = prm_get_arg0();
         if (arg0 == 1)
@@ -96,8 +94,9 @@ namespace daObjAkabe {
     /* 00000360-000003F8       .text _delete__Q210daObjAkabe5Act_cFv */
     bool Act_c::_delete() {
         if (mbAppear) {
-            if (mpBgW != NULL && mpBgW->ChkUsed())
-            dComIfG_Bgsp()->Release(mpBgW);
+            if (mpBgW != NULL && mpBgW->ChkUsed()) {
+                dComIfG_Bgsp()->Release(mpBgW);
+            }
 
             dComIfG_resDelete(&mPhs, M_arcname[mType]);
         }
@@ -154,7 +153,7 @@ namespace daObjAkabe {
 
     namespace {
         /* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 

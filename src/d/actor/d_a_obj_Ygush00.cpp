@@ -15,14 +15,12 @@
 #include "m_Do/m_Do_mtx.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
 
 #ifdef DEBUG
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 static daObjYgush00_HIO_c l_HIO;
 #endif
 
@@ -56,8 +54,8 @@ bool daObjYgush00_c::create_heap() {
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
 
         if (!mpModel || !btkRet || !bckRet)
             ret = false;
@@ -67,7 +65,7 @@ bool daObjYgush00_c::create_heap() {
 }
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_create() {
+cPhs_State daObjYgush00_c::_create() {
     fopAcM_SetupActor(this, daObjYgush00_c);
 
     if (fopAcM_IsFirstCreating(this)) {
@@ -77,7 +75,7 @@ s32 daObjYgush00_c::_create() {
             mType = 0;
     }
 
-    s32 ret = dComIfG_resLoad(&mPhase, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
@@ -150,7 +148,7 @@ bool daObjYgush00_c::_draw() {
 }
 
 /* 000006FC-0000071C       .text daObjYgush00_Create__FP14daObjYgush00_c */
-static s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
+static cPhs_State daObjYgush00_Create(daObjYgush00_c* i_this) {
     return i_this->_create();
 }
 

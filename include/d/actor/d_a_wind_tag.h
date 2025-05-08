@@ -8,7 +8,7 @@
 #include "m_Do/m_Do_ext.h"
 
 class JPABaseEmitter;
-class dPath;
+struct dPath;
 
 namespace daWindTag {
     static BOOL CheckCreateHeap(fopAc_ac_c*);
@@ -22,7 +22,7 @@ namespace daWindTag {
         BOOL CreateHeap();
         void CreateInit();
         void set_wind_angle();
-        s32 _create();
+        cPhs_State _create();
         void set_mtx();
         bool checkSizeSpecialBig();
         void set_wind_se_sub(unsigned long, cXyz*);

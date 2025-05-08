@@ -128,7 +128,7 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00007EBC-0000842C       .text daGM_Create__FP10fopAc_ac_c */
-static s32 daGM_Create(fopAc_ac_c*) {
+static cPhs_State daGM_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 

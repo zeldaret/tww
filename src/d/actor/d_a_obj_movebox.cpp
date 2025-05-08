@@ -69,10 +69,10 @@ namespace daObjMovebox {
         {-0.75f, -0.25f, 0.0f, 0.0f},
     };
     
-    s32 Act_c::Mthd_Create() {
+    cPhs_State Act_c::Mthd_Create() {
         fopAcM_SetupActor(this, Act_c);
         
-        s32 phase_state;
+        cPhs_State phase_state;
         mType = prm_get_type();
         phase_state = cPhs_ERROR_e;
         prmX_init();
@@ -115,7 +115,6 @@ namespace daObjMovebox {
     
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
     void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
-        f32 tempz;
         f32 maxGroundY = C_BG_MIN_HEIGHT;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
@@ -340,7 +339,7 @@ namespace daObjMovebox {
         },
     };
     
-    const Attr_c Act_c::M_attr[13] = {
+    const Attr_c Act_c::M_attr[] = {
         // TYPE_BREAKABLE_WOODEN_CRATE
         // Arcname: Kkiba_00
         {
@@ -1124,7 +1123,7 @@ namespace daObjMovebox {
     /* 00001674-000016B8       .text init_mtx__Q212daObjMovebox5Act_cFv */
     void Act_c::init_mtx() {
         if (mpModel) {
-            mpModel->mBaseScale = scale;
+            mpModel->setBaseScale(scale);
         }
         set_mtx();
     }
@@ -1156,9 +1155,9 @@ namespace daObjMovebox {
             }
             
             mpPath = dPath_GetRoomPath(pathId, home.roomNo);
-            dPath__Point* pnt = dPath_GetPnt(mpPath, pntIdx);
-            home.pos = pnt->mPos;
-            current.pos = pnt->mPos;
+            dPnt* pnt = dPath_GetPnt(mpPath, pntIdx);
+            home.pos = pnt->m_position;
+            current.pos = pnt->m_position;
         }
     }
     
@@ -1183,7 +1182,7 @@ namespace daObjMovebox {
             
             s32 pntIdx;
             for (pntIdx = 0; pntIdx < numPnts; pntIdx++) {
-                cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->mPos;
+                cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->m_position;
                 if (current.pos.abs2(pntPos) < 9.0f) {
                     break;
                 }
@@ -1211,14 +1210,14 @@ namespace daObjMovebox {
     }
     
     /* 00001A10-00001B00       .text CreateHeap__Q212daObjMovebox5Act_cFv */
-    int Act_c::CreateHeap() {
+    BOOL Act_c::CreateHeap() {
         BOOL success = TRUE;
         if (i_attr()->mModelFileIndex >= 0) {
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], i_attr()->mModelFileIndex);
             JUT_ASSERT(1722, modelData != NULL);
             
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-            success = (mpModel != 0);
+            success = (mpModel != NULL);
         } else {
             mpModel = NULL;
         }
@@ -1263,17 +1262,17 @@ namespace daObjMovebox {
     fopAc_ac_c* Act_c::PPCallBack(fopAc_ac_c* actor, fopAc_ac_c*, s16 angle, dBgW::PushPullLabel orig_pp_label) {
         Act_c* i_this = (Act_c*)actor;
         
-        dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PP_UNK1_e | dBgW::PP_UNK2_e));
+        dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL));
         if (pp_label) {
             bool unk;
             if (!i_this->i_attr()->m9A) {
                 unk = true;
             } else {
-                unk = orig_pp_label & dBgW::PP_UNK8_e;
+                unk = orig_pp_label & dBgW::PPLABEL_HEAVY;
             }
             if (unk) {
-                s16 angleDiff = (s16)(pp_label & dBgW::PP_UNK2_e ? angle - 0x8000 : angle) - actor->home.angle.y;
-                int pp_field = dBgW::PP_UNK1_e | dBgW::PP_UNK2_e;
+                s16 angleDiff = (s16)(pp_label & dBgW::PPLABEL_PULL ? angle - 0x8000 : angle) - actor->home.angle.y;
+                int pp_field = dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL;
                 JUT_ASSERT(1813, pp_label != pp_field);
                 
                 i_this->mPPLabel = orig_pp_label;
@@ -1305,7 +1304,7 @@ namespace daObjMovebox {
     }
     
     /* 00001DD4-00002214       .text Create__Q212daObjMovebox5Act_cFv */
-    int Act_c::Create() {
+    BOOL Act_c::Create() {
         m604 = 0;
         m608 = 0.0f;
         m60C = 0.0f;
@@ -1432,8 +1431,8 @@ namespace daObjMovebox {
         bool r29 = true;
         
         if (m64A && cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_ON_GROUND_e) && (mType != TYPE_BLACK_BOX_WITH_MKIE || mChildPID == fpcM_ERROR_PROCESS_ID_e)) {
-            BOOL temp = cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e);
-            BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PP_UNK4_e);
+            BOOL temp = cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL);
+            BOOL r3 = cLib_checkBit(mPPLabel, dBgW::PPLABEL_UNK4);
             s16 r0;
             if (temp) {
                 if (r3) {
@@ -1588,7 +1587,7 @@ namespace daObjMovebox {
             daPy_getPlayerActorClass()->onPushPullKeep();
             mode_walk_init();
             
-            if (cLib_checkBit(mPPLabel, dBgW::PP_UNK2_e)) {
+            if (cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL)) {
                 m644 = i_attr()->m0A;
                 m630 = (f32)0x8000 / i_attr()->m0A;
             } else {
@@ -1892,7 +1891,7 @@ namespace daObjMovebox {
     
     namespace {
         /* 000042A0-000044E0       .text Mthd_Create__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
         

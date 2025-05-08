@@ -27,7 +27,7 @@ void daLStair_c::CreateInit() {
 }
 
 /* 00000638-00000758       .text _create__10daLStair_cFv */
-s32 daLStair_c::_create() {
+cPhs_State daLStair_c::_create() {
     /* Nonmatching */
 }
 
@@ -82,7 +82,7 @@ void daLStair_c::set_off_se() {
 }
 
 /* 00001144-00001164       .text daLStair_Create__FPv */
-static s32 daLStair_Create(void*) {
+static cPhs_State daLStair_Create(void*) {
     /* Nonmatching */
 }
 

@@ -29,7 +29,7 @@ fapGm_HIO_c::fapGm_HIO_c() {
 
     field_0x09 = 1;
     field_0x0a = 1;
-    field_0x0c = 0.96f;
+    mAspectRatio = 0.96f;
     field_0x10 = 0;
     field_0x11 = 0;
     field_0x12 = 8;

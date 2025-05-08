@@ -93,7 +93,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
         emitter->setDirection(right_dir);
     }
 
-    for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link != NULL;) {
+    for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link != NULL;) {
         JSULink<JPABaseParticle>* nextLink = link->getNext();
         JPABaseParticle* particle = link->getObject();
 
@@ -192,7 +192,7 @@ void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColor
     mBlurTopRate = blurTopRate;
     mBlurColorType = blurColorType;
 
-    mDoMtx_multVec(mtx, mpPosBuffer + i, &field_0x034[0]);
+    mDoMtx_multVec(mtx, mpPosBuffer + i + 0, &field_0x034[0]);
     mDoMtx_multVec(mtx, mpPosBuffer + i + 1, &field_0x304[0]);
 
     field_0x034[0] += (field_0x034[0] - field_0x304[0]) * mBlurTopRate;
@@ -242,7 +242,7 @@ void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
     cXyz sp38 = field_0x028 - sp50;
     field_0x028 = sp50;
     for (i = 0; i < var_r31 && buffIdx >= 0; i++) {
-        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx, &field_0x034[i]);
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 0, &field_0x034[i]);
         mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 1, &field_0x304[i]);
 
         field_0x034[i] += (field_0x034[i] - field_0x304[i]) * mBlurTopRate;
@@ -312,9 +312,9 @@ void daPy_swBlur_c::draw() {
     s16 r28 = 0x00;
     GXBegin(GX_QUADS, GX_VTXFMT0, 4 + field_0x014*4);
     for (int i = field_0x014; i >= 0; i--) {
-        GXPosition3f32(field_0x034[i].x, field_0x034[i].y, field_0x034[i].z);
+        GXPosition3f32(field_0x034[i+0].x, field_0x034[i+0].y, field_0x034[i+0].z);
         GXTexCoord2s16(r29, 0x00);
-        GXPosition3f32(field_0x304[i].x, field_0x304[i].y, field_0x304[i].z);
+        GXPosition3f32(field_0x304[i+0].x, field_0x304[i+0].y, field_0x304[i+0].z);
         GXTexCoord2s16(r29, 0xFF);
         GXPosition3f32(field_0x304[i+1].x, field_0x304[i+1].y, field_0x304[i+1].z);
         GXTexCoord2s16(r28, 0xFF);
@@ -364,12 +364,8 @@ void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle
 
 /* 80129F48-80129F98       .text execute__22daPy_followEcallBack_cFP14JPABaseEmitter */
 void daPy_followEcallBack_c::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(mPos.x, mPos.y, mPos.z);
-    emitter->setGlobalTranslation(pos);
-    JGeometry::TVec3<s16> rot;
-    rot.x = mAngle.x;
-    rot.y = mAngle.y;
-    rot.z = mAngle.z;
+    emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
+    JGeometry::TVec3<s16> rot(mAngle.x, mAngle.y, mAngle.z);
     emitter->setGlobalRotation(rot);
 }
 
@@ -434,25 +430,24 @@ u16 daPy_dmEcallBack_c::m_type = 3;
 
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
 void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
-    if (m_type == 0) {
-        cXy v;
-        v.x = emitter->mGlobalTranslation.x;
-        v.y = emitter->mGlobalTranslation.z;
+    if (checkFlame()) {
+        JGeometry::TVec3<f32> pos;
+        emitter->getGlobalTranslation(pos);
 
         emitter->setGlobalTranslation(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
 
-        v.x = (mpMtx[0][3] - v.x) * -0.05f;
-        v.y = (mpMtx[2][3] - v.y) * -0.05f;
-        f32 sq = v.x * v.x + v.y * v.y;
+        pos.x = (mpMtx[0][3] - pos.x) * -0.05f;
+        pos.z = (mpMtx[2][3] - pos.z) * -0.05f;
+        f32 sq = pos.x * pos.x + pos.z * pos.z;
 
         if (sq > 1.0f) {
             f32 distFrac = 1.0f / std::sqrtf(sq);
 
-            v.x *= distFrac;
-            v.y *= distFrac;
+            pos.x *= distFrac;
+            pos.z *= distFrac;
         }
 
-        emitter->setDirection(JGeometry::TVec3<f32>(v.x, 0.6f, v.y));
+        emitter->setDirection(JGeometry::TVec3<f32>(pos.x, 0.6f, pos.z));
     } else {
         emitter->setGlobalRTMatrix(mpMtx);
     }
@@ -517,12 +512,12 @@ void daPy_lk_c::setAuraEffect() {
         }
 
         if (pYaura00Brk != curYaura00Brk) {
-            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYaura00rBrk.init(mMagicArmorAuraEntries[0].getModel()->getModelData(), pYaura00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYaura00Brk = pYaura00Brk;
         }
 
         if (pYmgcs00Brk != curYmgcs00Brk) {
-            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, true, 0);
+            mYmgcs00Brk.init(mpYmgcs00Model->getModelData(), pYmgcs00Brk, FALSE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
             curYmgcs00Brk = pYmgcs00Brk;
         }
     }
@@ -593,7 +588,6 @@ void daPy_lk_c::setAuraEffect() {
             } else {
                 auraEntry->getModel()->setBaseScale((scale * (1.0f - (0.3f * var_f31))) * 2.0f);
             }
-
         }
     }
 
@@ -825,8 +819,8 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     s32 oldEffectID = footEffect->getID();
     if (effectID != oldEffectID) {
         if (oldEffectID != -1) {
-            footEffect->getSmokeCallBack()->end();
-            footEffect->getOtherCallBack()->end();
+            footEffect->getSmokeCallBack()->remove();
+            footEffect->getOtherCallBack()->remove();
         }
 
         if (effectID == -2) {
@@ -983,7 +977,6 @@ void daPy_lk_c::setFootEffect() {
         } else {
             var_r29 = 2;
         }
-
     } else {
         if (mCurProc == daPyProc_JUMP_CUT_LAND_e) {
             var_r29 = 3;
@@ -1003,9 +996,9 @@ void daPy_lk_c::setFootEffect() {
         cXyz sp44 = m370C;
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
 
-        if (m3570 != 0) {
+        if (mProcVar0.m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
-            m3570 = 0;
+            mProcVar0.m3570 = 0;
         } else {
             cXyz sp38 = m370C - sp44;
             current.angle.y = cM_atan2s(sp38.x, sp38.z);
@@ -1062,8 +1055,8 @@ void daPy_lk_c::setFootEffect() {
 void daPy_lk_c::resetFootEffect() {
     daPy_footEffect_c* pFootEffect = mFootEffect;
     for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
-        pFootEffect->getSmokeCallBack()->end();
-        pFootEffect->getOtherCallBack()->end();
+        pFootEffect->getSmokeCallBack()->remove();
+        pFootEffect->getOtherCallBack()->remove();
         pFootEffect->setID(-1);
     }
 
@@ -1132,7 +1125,7 @@ void daPy_lk_c::setWaterDrop() {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
     }
 
-    if (mDmEcallBack->m_type == 0) {
+    if (daPy_dmEcallBack_c::checkFlame()) {
         m334C.end();
         m336C.end();
         m3460[0].end();
@@ -1140,12 +1133,12 @@ void daPy_lk_c::setWaterDrop() {
         return;
     }
 
-    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
-        if (m3460[0].mpEmitter == NULL) {
+    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != daPyProc_DEMO_LAST_COMBO_e && mAcch.m_roof_y == C_BG_MAX_HEIGHT) {
+        if (m3460[0].getEmitter() == NULL) {
             m3460[0].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
         }
 
-        if (m3460[1].mpEmitter == NULL) {
+        if (m3460[1].getEmitter() == NULL) {
             m3460[1].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
         }
 
@@ -1268,7 +1261,7 @@ u32 daPy_lk_c::setItemWaterEffect(fopAc_ac_c* i_actor, int param_1, int param_2)
     static JGeometry::TVec3<f32> direction(0.0f, 1.0f, 0.0f);
 
     f32 waterY;
-    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) != 0 && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
+    if (fopAcM_getWaterY(&i_actor->current.pos, &waterY) && ((param_1 != 0 && i_actor->current.pos.y > waterY) || (param_1 == 0 && waterY >= i_actor->current.pos.y))) {
         param_1 ^= 1;
         if (param_1 == 0 && param_2 == 0) {
             return param_1;

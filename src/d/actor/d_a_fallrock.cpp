@@ -47,12 +47,12 @@ static BOOL daFallRock_Delete(daFallRock_c*) {
 }
 
 /* 00001030-00001050       .text daFallRock_Create__FP10fopAc_ac_c */
-static s32 daFallRock_Create(fopAc_ac_c*) {
+static cPhs_State daFallRock_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
-s32 daFallRock_c::create() {
+cPhs_State daFallRock_c::create() {
     /* Nonmatching */
 }
 

@@ -235,10 +235,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
-s32 daAuction_c::_create() {
+cPhs_State daAuction_c::_create() {
     fopAcM_SetupActor(this, daAuction_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, "Pspl");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Pspl");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
@@ -269,7 +269,7 @@ BOOL daAuction_c::createHeap() {
 }
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
-s32 daAuction_c::createInit() {
+cPhs_State daAuction_c::createInit() {
     mEvtStartIdx = dComIfGp_evmng_getEventIdx("AUCTION_START");
     mEvtGetItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_GET_ITEM");
     mEvtNoItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_NO_ITEM");
@@ -492,6 +492,19 @@ void daAuction_c::privateCut() {
         "END",
         "CAMERA_TEST",
     };
+    enum {
+        ACT_MES_SET,
+        ACT_MES_END,
+        ACT_START,
+        ACT_MAIN,
+        ACT_GET_ITEM,
+        ACT_CAMERA_OFF,
+        ACT_GET_ITEM_NPC,
+        ACT_GET_ITEM_MES,
+        ACT_CAMERA_OFF_NPC,
+        ACT_END,
+        ACT_CAMERA_TEST,
+    };
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Auction");
 
@@ -508,31 +521,31 @@ void daAuction_c::privateCut() {
 
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (mAction) {
-        case 0:
+        case ACT_MES_SET:
             eventTalkInit(staffIdx);
             break;
-        case 2:
+        case ACT_START:
             eventStartInit();
             break;
-        case 3:
+        case ACT_MAIN:
             eventMainInit();
             break;
-        case 4:
+        case ACT_GET_ITEM:
             eventGetItemInit();
             break;
-        case 5:
+        case ACT_CAMERA_OFF:
             eventCameraOffInit();
             break;
-        case 6:
+        case ACT_GET_ITEM_NPC:
             eventGetItemNpcInit(staffIdx);
             break;
-        case 7:
+        case ACT_GET_ITEM_MES:
             eventGetItemMesInit();
             break;
-        case 9:
+        case ACT_END:
             eventEndInit();
             break;
-        case 10:
+        case ACT_CAMERA_TEST:
             eventCameraTestInit();
             break;
         }
@@ -540,31 +553,38 @@ void daAuction_c::privateCut() {
 
     bool evtRes;
     switch (mAction) {
-    case 0:
+    case ACT_MES_SET:
         evtRes = eventMesSet();
         break;
-    case 1:
+    case ACT_MES_END:
         evtRes = eventMesEnd();
         break;
-    case 2:
+    case ACT_START:
         evtRes = eventStart();
         break;
-    case 3:
+    case ACT_MAIN:
         evtRes = eventMain();
         break;
-    case 4:
+    case ACT_GET_ITEM:
         evtRes = eventGetItem();
         break;
-    case 7:
-        evtRes = &daAuction_c::eventMesSet != NULL;
+    case ACT_GET_ITEM_MES:
+#if BUGFIX
+        evtRes = eventMesSet();
+#elif __MWERKS__
+        // @bug They probably meant to call this function
+        evtRes = eventMesSet;
+#else
+        evtRes = &daAuction_c::eventMesSet;
+#endif
         break;
-    case 8:
+    case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();
         break;
-    case 9:
+    case ACT_END:
         evtRes = eventEnd();
         break;
-    case 10:
+    case ACT_CAMERA_TEST:
         evtRes = eventCameraTest();
         break;
     default:
@@ -597,7 +617,7 @@ void daAuction_c::privateCut() {
 
 /* 00001300-000013C0       .text eventTalkInit__11daAuction_cFi */
 void daAuction_c::eventTalkInit(int staffIdx) {
-    s32* pMsg = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsg = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
 
     if (pMsg != NULL) {
         switch (*pMsg) {
@@ -677,8 +697,8 @@ bool daAuction_c::eventStart() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x3E);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_HIDDEN_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 
     return mpTimer != NULL;
 }
@@ -730,7 +750,7 @@ void daAuction_c::eventMainInit() {
     daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
 
     pLink->changeOriginalDemo();
-    mCurLinkAnm = daPy_demo_c::DEMO_UNK1_e;
+    mCurLinkAnm = daPy_demo_c::DEMO_UNK01_e;
     dComIfGp_event_setTalkPartner(this);
     m82F = 0;
 
@@ -755,11 +775,11 @@ bool daAuction_c::eventMain() {
 
     if (
         pLink->getBaseAnimeFrameRate() == 0.0f &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK25_e
     ) {
-        setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
     }
 
     mFlags &= 4;
@@ -971,8 +991,8 @@ void daAuction_c::eventMainKai() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x25);
-    dComIfGp_setAStatusForce(0x27);
+    dComIfGp_setDoStatusForce(dActStts_BID_e);
+    dComIfGp_setAStatusForce(dActStts_CANCEL_e);
 }
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
@@ -1072,7 +1092,7 @@ void daAuction_c::eventMainUri() {
     }
 
     if (m82E != 0) {
-        dComIfGp_setDoStatusForce(0x25);
+        dComIfGp_setDoStatusForce(dActStts_BID_e);
     }
 }
 
@@ -1086,8 +1106,8 @@ void daAuction_c::eventMainMsgSet() {
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
     if (eventMesEnd()) {
-        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
 
         if (m834 & 0x20) {
@@ -1158,8 +1178,8 @@ void daAuction_c::eventMainMsgBikonC() {
         eyePos = getNpcActorP(m827)->eyePos;
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */
@@ -1176,8 +1196,8 @@ void daAuction_c::eventMainMsgBikonW() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
@@ -1217,7 +1237,7 @@ void daAuction_c::eventCameraOffInit() {
 void daAuction_c::eventGetItemNpcInit(int staffIdx) {
     setCameraNpc(m824, 0);
 
-    u32* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+    int* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
 
     if (pTimerData != NULL) {
         mTimer = *pTimerData;
@@ -1321,7 +1341,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         m826 = tmp;
         m824 = tmp;
         if (m826 != 0) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
         break;
     }
@@ -1543,7 +1563,7 @@ void daAuction_c::setCameraNpc(int idx, s16 param_2) {
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
 void daAuction_c::setLinkAnm(u8 linkAnm) {
-    if (linkAnm == daPy_demo_c::DEMO_UNK1_e && m826 == 0) {
+    if (linkAnm == daPy_demo_c::DEMO_UNK01_e && m826 == 0) {
         linkAnm = daPy_demo_c::DEMO_UNK1D_e;
     }
 

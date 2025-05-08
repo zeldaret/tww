@@ -13,7 +13,7 @@ BOOL fpcCt_IsCreatingByID(fpc_ProcID i_id) {
 }
 
 /* 8003D108-8003D12C       .text fpcCt_IsDoing__FP18base_process_class */
-s32 fpcCt_IsDoing(base_process_class* i_proc) {
+BOOL fpcCt_IsDoing(base_process_class* i_proc) {
     return fpcCtRq_IsDoing(i_proc->mpCtRq);
 }
 
@@ -23,6 +23,6 @@ BOOL fpcCt_Abort(base_process_class* i_proc) {
 }
 
 /* 8003D150-8003D170       .text fpcCt_Handler__Fv */
-s32 fpcCt_Handler() {
+BOOL fpcCt_Handler() {
     return fpcCtRq_Handler();
 }

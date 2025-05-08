@@ -249,7 +249,7 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
 }
 
 /* 00000D3C-00000FE0       .text daMsw_Create__FP10fopAc_ac_c */
-static s32 daMsw_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMsw_Create(fopAc_ac_c* i_this) {
     static dCcD_SrcCyl himo_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -283,7 +283,7 @@ static s32 daMsw_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, msw_class);
     msw_class* pActor = static_cast<msw_class*>(i_this);
 
-    s32 phase_state = dComIfG_resLoad(&pActor->mPhs, "Msw");
+    cPhs_State phase_state = dComIfG_resLoad(&pActor->mPhs, "Msw");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         pActor->m2A0 = (fopAcM_GetParam(pActor) >> 0) & 0xFF;

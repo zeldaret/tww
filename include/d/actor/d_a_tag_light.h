@@ -40,7 +40,7 @@ namespace daTagLight {
         void get_cc_r() const;
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void chk_sw() const;
         void chk_sch() const;
