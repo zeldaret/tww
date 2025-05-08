@@ -232,10 +232,10 @@ cPhs_State himo_create(kita_class* actor) {
         switch(actor->field_2E4[i]){
             case 0:
                 param = fopAcM_CreateAppend();
-                param->mPos = actor->current.pos;
-                param->mAngle.y = yad[i];
-                param->mParameter = 0xFFFFFF35;
-                param->mRoomNo = actor->current.roomNo;
+                param->base.position = actor->current.pos;
+                param->base.angle.y = yad[i];
+                param->base.parameters = 0xFFFFFF35;
+                param->room_no = actor->current.roomNo;
                 actor->field_2D4[i] = fpcM_Create(PROC_SHAND, NULL, param);
                 actor->field_2E4[i]++;
 
