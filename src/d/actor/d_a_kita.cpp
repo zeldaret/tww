@@ -331,21 +331,21 @@ static BOOL daKita_Delete(kita_class* i_this) {
 /* 00001D3C-00001EB0       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static BOOL CallbackCreateHeap(fopAc_ac_c* p_this) {
     BOOL ret;
-    kita_class* i_this = static_cast<kita_class*>(p_this);
+    kita_class* actor = static_cast<kita_class*>(p_this);
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", 4));
-    i_this->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
-    if(i_this->mModel == NULL){
+    if(actor->mModel == NULL){
         ret = FALSE;
     }
     else {
         JUT_ASSERT(0x3b2, modelData != 0);
-        i_this->pm_bgw = new dBgW();
-        JUT_ASSERT(0x3b7, i_this->pm_bgw != NULL);
-        i_this->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", 7)), cBgW::MOVE_BG_e, &i_this->mBgwMtx);
-        i_this->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
-        i_this->pm_bgw->SetRideCallback(ride_call_back);
+        actor->pm_bgw = new dBgW();
+        JUT_ASSERT(0x3b7, actor->pm_bgw != NULL);
+        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", 7)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
+        actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
+        actor->pm_bgw->SetRideCallback(ride_call_back);
         ret = TRUE;
     }
 
