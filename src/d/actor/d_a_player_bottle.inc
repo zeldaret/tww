@@ -270,7 +270,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
         } else {
             bVar1 = true;
         }
-    } else if (m35D0 > 10.0f + current.pos.y) {
+    } else if (mSwimHeight > 10.0f + current.pos.y) {
         bVar1 = true;
     } else {
         bVar1 = false;
@@ -331,7 +331,7 @@ BOOL daPy_lk_c::procBottleSwing() {
         } else {
             if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 1.0f &&
                 mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= 4.0f && getReadyItem() == dItem_EMPTY_BOTTLE_e &&
-                (dComIfGp_att_getCatghTarget() != NULL || m35D0 > current.pos.y + 10.0f))
+                (dComIfGp_att_getCatghTarget() != NULL || mSwimHeight > current.pos.y + 10.0f))
             {
                 fopAcM_orderCatchEvent(this, dComIfGp_att_getCatghTarget());
             }

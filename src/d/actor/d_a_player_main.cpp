@@ -3638,7 +3638,7 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
 /* 8010C71C-8010C7F4       .text setFallVoice__9daPy_lk_cFv */
 void daPy_lk_c::setFallVoice() {
     if (((!checkNoResetFlg0(daPyFlg0_NO_FALL_VOICE)) &&
-         ((((!checkNoResetFlg0(daPyFlg0_UNK80) || (m35D0 < mAcch.GetGroundH())) || (m3580 == 4)) ||
+         ((((!checkNoResetFlg0(daPyFlg0_UNK80) || (mSwimHeight < mAcch.GetGroundH())) || (m3580 == 4)) ||
            (C_BG_MIN_HEIGHT == mAcch.GetGroundH())))) &&
         (m35F0 - current.pos.y > 500.0f))
     {
@@ -4908,7 +4908,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 current.pos.x = (m3724.x + 20.5f * fVar3) - fVar2;
                 current.pos.y = m3724.y + 37.5f * iVar8;
                 current.pos.z = (m3724.z + 20.5f * fVar2) + fVar3;
-                while (m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+                while (mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
                     current.pos.y += 37.5f;
                 }
                 procLadderMove_init(1, 0, &current.pos);
@@ -5397,7 +5397,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                     }
                     if ((((pcVar4 != NULL) && (std::abs((pcVar4->mNormal).y) <= 0.05f)) &&
                          ((dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 2 &&
-                           ((dVar11 < -125.0f && ((m35D0 - current.pos.y) < -125.0f)))))) &&
+                           ((dVar11 < -125.0f && ((mSwimHeight - current.pos.y) < -125.0f)))))) &&
                         (current.pos.y - m35D4 > 125.0f))
                     {
                         current.pos.x = mLinkLinChk.GetCrossP()->x;
@@ -6479,7 +6479,7 @@ BOOL daPy_lk_c::procCrouchDefense_init() {
 /* 80113DBC-80114014       .text procCrouchDefense__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrouchDefense() {
     dComIfGp_setRStatus(dActStts_DEFEND_e);
-    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= m35D0)) {
+    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= mSwimHeight)) {
         onResetFlg0(daPyRFlg0_UNK4000000);
         if (((dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000))) &&
             (!dComIfGp_event_runCheck()))
@@ -6604,7 +6604,7 @@ BOOL daPy_lk_c::procCrouch() {
     cXyz local_68;
 
     dComIfGp_setRStatus(dActStts_CROUCH_e);
-    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= m35D0)) {
+    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= mSwimHeight)) {
         onResetFlg0(daPyRFlg0_UNK4000000);
         if (((dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000))) &&
             (!dComIfGp_event_runCheck()))
@@ -6621,7 +6621,7 @@ BOOL daPy_lk_c::procCrouch() {
         checkNextMode(0);
     } else {
         if (((m_old_fdata->getOldFrameRate() < 0.01f) && (mStickDistance > 0.05f)) &&
-            !(m35D0 > current.pos.y + 15.0f))
+            !(mSwimHeight > current.pos.y + 15.0f))
         {
             mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
             mDoMtx_stack_c::ZXYrotM(m34E2, shape_angle.y, 0);
@@ -9013,13 +9013,13 @@ void daPy_lk_c::setWaterY() {
         } else {
             offNoResetFlg0(daPyFlg0_UNK80);
         }
-        m35D0 = mAcch.m_wtr.GetHeight();
+        mSwimHeight = mAcch.m_wtr.GetHeight();
         dPa_control_c::offStatus(1);
     } else {
         onNoResetFlg0(daPyFlg0_UNK80);
-        m35D0 = daSea_calcWave(current.pos.x, current.pos.z);
-        if (mAcch.m_wtr.GetHeight() > m35D0) {
-            m35D0 = mAcch.m_wtr.GetHeight();
+        mSwimHeight = daSea_calcWave(current.pos.x, current.pos.z);
+        if (mAcch.m_wtr.GetHeight() > mSwimHeight) {
+            mSwimHeight = mAcch.m_wtr.GetHeight();
             dPa_control_c::offStatus(1);
         } else {
             dPa_control_c::onStatus(1);
@@ -10451,7 +10451,7 @@ void daPy_lk_c::setAttentionPos() {
             attention_info.position.x =
                 ship->current.pos.x + cM_ssin(ship->shape_angle.y) * l_ship_offset.z;
             if (checkNoResetFlg0(daPyFlg0_UNK80)) {
-                attention_info.position.y = 92.5f + (m35D0 + l_ship_offset.y);
+                attention_info.position.y = 92.5f + (mSwimHeight + l_ship_offset.y);
             } else {
                 attention_info.position.y = 92.5f + mpCLModel->getBaseTRMtx()[1][3];
             }
@@ -10986,7 +10986,7 @@ void daPy_lk_c::checkFallCode() {
     cXyz local_44;
 
     if ((m3580 == 4) || (C_BG_MIN_HEIGHT == mAcch.GetGroundH())) {
-        bVar4 = (m35D0 > mAcch.GetGroundH()) ? TRUE : FALSE;
+        bVar4 = (mSwimHeight > mAcch.GetGroundH()) ? TRUE : FALSE;
         if (((((!bVar4) && (checkModeFlg(ModeFlg_MIDAIR))) &&
               ((!checkModeFlg(ModeFlg_HOOKSHOT) &&
                 (m35F4 - current.pos.y > 100.0f * daPy_HIO_fall_c0::m.field_0x14)))) ||
@@ -11655,7 +11655,7 @@ BOOL daPy_lk_c::execute() {
     
     if (checkModeFlg(ModeFlg_SWIM)) {
         if (checkNoResetFlg0(daPyFlg0_UNK100) && !checkSwimFallCheck()) {
-            current.pos.y = m35D0;
+            current.pos.y = mSwimHeight;
         }
         if (mCurProc != daPyProc_DEMO_DEAD_e) {
             if (mAcch.GetGroundH() + 84.9f > current.pos.y && mAcch.ChkGroundHit()) {

@@ -722,7 +722,7 @@ public:
     /* 0x1C */ f32 speedStepMax; // 2.0f
     /* 0x20 */ f32 speedStepMin; // 0.5f
     /* 0x24 */ f32 field_0x24; // 90.0f
-    /* 0x28 */ f32 field_0x28; // 15.0f
+    /* 0x28 */ f32 swimSurfaceCloseThreshold; // 15.0f
     /* 0x2C */ f32 field_0x2C; // 0.7f
     /* 0x30 */ f32 field_0x30; // 0.0f
     /* 0x34 */ f32 field_0x34; // 19.0f
@@ -737,8 +737,8 @@ public:
     /* 0x58 */ f32 field_0x58; // 5.3f
     /* 0x5C */ f32 field_0x5C; // 0.0f
     /* 0x60 */ f32 field_0x60; // 0.4f
-    /* 0x64 */ f32 field_0x64; // 6.0f
-    /* 0x68 */ f32 field_0x68; // 9.5f
+    /* 0x64 */ f32 maxUnderwaterUpAcceleration; // 6.0f
+    /* 0x68 */ f32 maxUnderwaterUpSpeed; // 9.5f
     /* 0x6C */ f32 field_0x6C;
     /* 0x70 */ f32 field_0x70; // 2.5f
     /* 0x74 */ f32 field_0x74; // 1.0f

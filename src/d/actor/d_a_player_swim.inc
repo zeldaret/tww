@@ -151,6 +151,16 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
 
 
 /* 8013CF2C-8013CFC0       .text checkNextModeSwim__9daPy_lk_cFv */
+/*
+ * Determines whether Link should transition from swimming to another interaction mode.
+ * 
+ * Specifically checks if Link is near a ship or an NPC, in which case the swim state can end and
+ * a new state like boarding or talking may begin.
+ * 
+ * Returns:
+ *   - TRUE if a new mode was triggered (e.g. boarding a ship or talking to an NPC).
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::checkNextModeSwim() {
     BOOL res;
 
@@ -171,11 +181,22 @@ BOOL daPy_lk_c::checkNextModeSwim() {
 }
 
 /* 8013CFC0-8013D1B0       .text changeSwimProc__9daPy_lk_cFv */
+/*
+ * Attempts to initiate the swim state based on current conditions.
+ *
+ * Handles resetting various player states (e.g. removing Iron boots), applying initial velocity and vertical
+ * position correction based on water surface, and spawning visual effects (water splash). Transitions to
+ * either Swim Wait or Swim Up depending on airborne status.
+ * 
+ * Returns:
+ *   - TRUE if a swim process is initiated.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
     cXyz local_18;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
 
@@ -215,7 +236,7 @@ BOOL daPy_lk_c::changeSwimProc() {
             }
 
             local_18.x = current.pos.x;
-            local_18.y = m35D0;
+            local_18.y = mSwimHeight;
             local_18.z = current.pos.z;
             fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
             seStartOnlyReverb(JA_SE_LK_INTO_WATER);
@@ -232,47 +253,95 @@ BOOL daPy_lk_c::changeSwimProc() {
 }
 
 /* 8013D1B0-8013D2AC       .text changeSwimUpProc__9daPy_lk_cFv */
+/*
+ * Handles the logic for transitioning into the "swim up" state from underwater.
+ * 
+ * Gradually accelerates Link upward. If close enough to the surface and not in a special death state,
+ * initiates the Swim Up process. Also handles item deletion if rising to surface with something equipped.
+ * 
+ * Returns:
+ *   - TRUE if transition to Swim Up occurred or a death-state override triggered.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimUpProc() {
-    if (speed.y < daPy_HIO_swim_c0::m.field_0x68) {
-        speed.y += daPy_HIO_swim_c0::m.field_0x64;
-        if (speed.y > daPy_HIO_swim_c0::m.field_0x68) {
-            speed.y = daPy_HIO_swim_c0::m.field_0x68;
+    if (speed.y < daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed) {
+        speed.y += daPy_HIO_swim_c0::m.maxUnderwaterUpAcceleration;
+
+        if (speed.y > daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed) {
+            speed.y = daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed;
         }
+
         if (speed.y > 0.0f && mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
     }
-    if (m35D0 - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.field_0x28 && speed.y >= 0.0f) {
+
+    if (mSwimHeight - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.swimSurfaceCloseThreshold && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
-            onNoResetFlg0(daPyFlg0_UNK100);
-            current.pos.y = m35D0;
+            onNoResetFlg0(daPyFlg0_UNK100); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
+            current.pos.y = mSwimHeight;
             return TRUE;
         }
         return procSwimUp_init(TRUE);
     }
+
     return FALSE;
 }
 
 /* 8013D2AC-8013D314       .text swimOutAfter__9daPy_lk_cFi */
-void daPy_lk_c::swimOutAfter(BOOL param_1) {
+/*
+ * Post-processing for exiting the water (either by swimming out or falling out).
+ *
+ * Resets swim timers, plays sound effects if requested, and clears texture animations.
+ * 
+ * Parameters:
+ *   - i_bPlayWaterExitSE: If TRUE, triggers water exit sound effect.
+ */
+void daPy_lk_c::swimOutAfter(BOOL i_bPlayWaterExitSE) {
     onNoResetFlg0(daPyFlg0_UNK100);
+    
     m35C4 = 0.0f;
-    if (param_1) {
+
+    if (i_bPlayWaterExitSE) {
         seStartOnlyReverb(JA_SE_LK_OUTOF_WATER);
     }
+
     dComIfGp_clearItemTimeCount();
+
     resetPriTextureAnime();
 }
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
+/*
+ * Checks if Link should be considered as falling out of water.
+ *
+ * Returns TRUE if:
+ *   - Not in swim state (flag missing), OR
+ *   - Y-position is significantly above the swim height threshold AND particle status is not active.
+ * 
+ * Returns:
+ *   - TRUE if Link is falling out of swim state.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1))) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > mSwimHeight + 30.1f && !dPa_control_c::isStatus(1))) {
         return TRUE;
     }
     return FALSE;
 }
 
 /* 8013D354-8013D530       .text changeSwimOutProc__9daPy_lk_cFv */
+/*
+ * Handles the logic for transitioning out of swim mode.
+ *
+ * This function checks ground conditions and whether Link is emerging from the water
+ * or falling out. Depending on the evaluation, it initiates appropriate animations and
+ * possibly restarts the room if drowning conditions are met.
+ * 
+ * Returns:
+ *   - TRUE if swim mode ends (either via fall or ground emergence).
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimOutProc() {
     cM3dGPla* pcVar1;
     
@@ -293,8 +362,8 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
-        current.pos.y = m35D0;
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && mSwimHeight - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
+        current.pos.y = mSwimHeight;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
             current.pos.y += m35C4;
@@ -314,6 +383,15 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 }
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
+/*
+ * Sets the swimming movement animation for Link.
+ * 
+ * Calculates animation playback rate based on Link's current swim velocity and timer status.
+ * This ensures that animation speed matches movement speed and reflects swim urgency (e.g. drowning).
+ * 
+ * Parameters:
+ *   - swimMoveAnm: Enum value for the specific swim animation to use.
+ */
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
@@ -326,6 +404,15 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
 }
 
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
+/*
+ * Returns a normalized value (0.0 to 1.0) representing how depleted the air meter is.
+ *
+ * This value affects things like swim animation speed and possibly audio/visual feedback.
+ * Returns 1.0 if the meter is fully depleted or disabled, and 0.0 if it's full.
+ * 
+ * Returns:
+ *   - A float from 0.0 (meter full) to 1.0 (meter depleted).
+ */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
     if (dComIfGp_getItemSwimTimerStatus() && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
@@ -343,10 +430,18 @@ f32 daPy_lk_c::getSwimTimerRate() {
 }
 
 /* 8013D6B8-8013D814       .text setSwimTimerStartStop__9daPy_lk_cFv */
+/*
+ * Starts or stops the air meter timer based on Link's vertical position.
+ *
+ * If Link is significantly below the surface, the timer begins. Also sets the
+ * drowning voice clip based on swim timer state and current swim animation loop.
+ * 
+ * Adjusts `m3608` field using a cosine function to reflect Link's oxygen discomfort level.
+ */
 void daPy_lk_c::setSwimTimerStartStop() {
     float target = 0.0f;
 
-    if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
+    if (mAcch.GetGroundH() <= mSwimHeight - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
         if (checkNoResetFlg0(daPyFlg0_UNK100)) {
@@ -376,6 +471,15 @@ void daPy_lk_c::setSwimTimerStartStop() {
 }
 
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
+/*
+ * Starts or stops the air meter timer based on Link's vertical position.
+ *
+ * If Link is significantly below the surface, the timer begins. Also sets the
+ * drowning voice clip based on air meter level and current swim animation loop.
+ * 
+ * Adjusts `m3608` field using a cosine function to reflect Link's oxygen level.
+ */
+
 BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     JPABaseEmitter* mEmitter;
     
@@ -387,7 +491,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     gravity = 0.0f;
     speed.y = 0.0f;
 
-    current.pos.y = m35D0;
+    current.pos.y = mSwimHeight;
 
     setSingleMoveAnime(ANM_SWIMP, daPy_HIO_swim_c0::m.field_0x2C, daPy_HIO_swim_c0::m.field_0x30, daPy_HIO_swim_c0::m.field_0x0, daPy_HIO_swim_c0::m.field_0x38);
 
@@ -419,6 +523,16 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 }
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
+/*
+ * Handles the Swim Up process, transitioning Link from swimming under water to swimming at the water's surface.
+ *
+ * Updates Link's vertical position, checks for animation progress, and plays the appropriate swim sounds.
+ * The function handles different swim speed values depending on whether the user is swimming upwards 
+ * manually or being moved by the game logic.
+ * 
+ * Returns:
+ *   - TRUE: Successfully handled the Swim Up process.
+ */
 BOOL daPy_lk_c::procSwimUp() {
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
@@ -442,7 +556,7 @@ BOOL daPy_lk_c::procSwimUp() {
                 }
                 else {
                     m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
-                    current.pos.y = m35D0;
+                    current.pos.y = mSwimHeight;
                 }
             }
         }
@@ -452,6 +566,19 @@ BOOL daPy_lk_c::procSwimUp() {
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
+/*
+ * Initializes the Swim Wait state, where Link treads water while idle.
+ *
+ * Sets up the swim animation with appropriate playback speed, vertical position, 
+ * and initializes the water interaction flags. Disables gravity during this process. 
+ * Based on the parameter, either plays the splash sound and effects or keeps the character idle.
+ * 
+ * Parameters:
+ *   - param_1: If TRUE, plays the splash effect and sound.
+ * 
+ * Returns:
+ *   - TRUE when initialization of the swim wait process is successful.
+ */
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     float fVar2;
     
@@ -477,7 +604,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         speed.y = 0.0f;
     }
 
@@ -488,6 +615,16 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
+/*
+ * Handles the Swim Wait process, where Link remains idle in the water while waiting for user input or event triggers.
+ *
+ * Updates swim direction and speed, checks for potential transitions to other swim states like swimming up or 
+ * swimming out of the water. If specific thresholds are met, Link's animation is modified, and sound effects 
+ * are triggered. 
+ * 
+ * Returns:
+ *   - TRUE: Successfully processed the Swim Wait state.
+ */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
     m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * daPy_HIO_swim_c0::m.field_0x2);
@@ -503,7 +640,7 @@ BOOL daPy_lk_c::procSwimWait() {
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
     }
 
     if (checkNextModeSwim()) {
@@ -531,10 +668,23 @@ BOOL daPy_lk_c::procSwimWait() {
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
+/*
+ * Initializes the Swim Move state, where Link begins moving through the water in a swimming motion.
+ *
+ * Sets up swimming animation and speed, and handles various setup tasks like resetting gravity and adjusting
+ * the character's vertical position. If certain flags are set (such as an equipped item), it adjusts the swim 
+ * behavior accordingly. Sets the swim tail animation to simulate water movement.
+ * 
+ * Parameters:
+ *   - i_bKeepSwimAnime: If FALSE, resets the swim animation frame to 0; otherwise, it keeps the animation's current state.
+ * 
+ * Returns:
+ *   - TRUE when initialization of the swim move process is successful.
+ */
+BOOL daPy_lk_c::procSwimMove_init(BOOL i_bKeepSwimAnime) {
     commonProcInit(daPyProc_SWIM_MOVE_e);
 
-    if (!param_1) {
+    if (!i_bKeepSwimAnime) {
         mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(0.0f);
     }
 
@@ -549,7 +699,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
             deleteEquipItem(TRUE);
         }
 
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         speed.y = 0.0f;
 
         setSwimTail();
@@ -564,6 +714,16 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
 }
 
 /* 8013DF60-8013E250       .text procSwimMove__9daPy_lk_cFv */
+/*
+ * Handles the Swim Move state, where Link is actively swimming in the water.
+ *
+ * Adjusts movement speed and direction based on player input and environment. The direction of swimming is 
+ * updated, and if necessary, it triggers a change in swim animation (forward, backward, or turning). Additionally, 
+ * the function handles sound effects and swimming transitions such as moving out of the water or swimming upwards.
+ * 
+ * Returns:
+ *   - TRUE when the swimming move process is successfully processed.
+ */
 BOOL daPy_lk_c::procSwimMove() {
     daPy_ANM anm;
 
@@ -636,7 +796,7 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         setSwimTail();
     }
 

@@ -2178,7 +2178,7 @@ public:
     /* 0x35C4 */ f32 m35C4;
     /* 0x35C8 */ f32 m35C8;
     /* 0x35CC */ f32 m35CC;
-    /* 0x35D0 */ f32 m35D0;
+    /* 0x35D0 */ f32 mSwimHeight;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
     /* 0x35DC */ f32 m35DC;
