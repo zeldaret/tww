@@ -884,8 +884,11 @@ BOOL daPy_lk_c::dProcDead() {
             dGameover_c* this_01;
             cLib_chaseF(&m35A0, 0.0f, 0.01f);
             f32 dVar3 = 1.0f - m35A0;
-            if ((m3628 != fpcM_ERROR_PROCESS_ID_e) && (this_01 = (dGameover_c*)fopMsgM_SearchByID(m3628), this_01)) {
-                this_01->setBackAlpha(dVar3);
+            if ((m3628 != fpcM_ERROR_PROCESS_ID_e)) {
+                this_01 = (dGameover_c*)fopMsgM_SearchByID(m3628);
+                if (this_01) {
+                    this_01->setBackAlpha(dVar3);
+                }
             }
             if (((m35A0 < 0.38f) && (m3628 != fpcM_ERROR_PROCESS_ID_e)) &&
                 (this_01 = (dGameover_c*)fopMsgM_SearchByID(m3628), this_01))

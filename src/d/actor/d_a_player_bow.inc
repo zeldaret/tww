@@ -11,6 +11,7 @@
  */
 
 #include "d/actor/d_a_arrow.h"
+#include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_procname.h"
@@ -66,19 +67,16 @@ BOOL daPy_lk_c::checkBowAnime() const {
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
 void daPy_lk_c::makeArrow() {
-    /* Nonmatching - missing "cntlzw" instruction, "getItemPartner" */    
-    s32 uVar1 = (0x44 - mDemo.getDemoMode()) >> 5 & 0xff;
-    if (((uVar1 == 0) && (dComIfGs_getArrowNum() != 0)) ||
-        ((uVar1 != 0 && ((((fopAc_ac_c*)dComIfGp_event_getItemPartner() != 0 &&
-                           (fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO)) &&
-                          (0 < 10 - (dComIfGp_event_getPt1()->actor_type)))))))
+    /* Nonmatching - weird gameinfo load */
+    BOOL r4 = mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e;
+    if ((!r4 && dComIfGs_getArrowNum() != 0) ||
+        (r4 && dComIfGp_event_getPt1() != NULL && fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
+         ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
-        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos,
-                                                             current.roomNo, NULL, NULL, -1, NULL);
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo);
         mActorKeepEquip.setData(arrow_p);
     }
     m355C = 0;
-    return;
 }
 
 /* 8014A180-8014A1CC       .text deleteArrow__9daPy_lk_cFv */
@@ -172,7 +170,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
             if (m355E == 0 && bowButton() &&
                 (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e || mEquipItem == getReadyItem()) &&
-                !checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT))
+                !checkUseArrowEffect())
             {
                 setBowReloadAnime();
                 makeArrow();
