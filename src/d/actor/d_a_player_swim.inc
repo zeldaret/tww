@@ -78,11 +78,6 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
             // Smoothly rotate body angle to match shape angle
             cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 2, 0x2000, 0x1000);
 
-            /* 
-               Note: 
-               This assignment is strictily positive. This itself is not a bug but it has implications 
-               for the `super-swim` glitch by the usage of mMaxNormalSpeed in `daNpc_Md_c::setNormalSpeedF`
-            */
             mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
 
@@ -118,11 +113,6 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
             }
 
             // Adjust max speed based on alignment between shape and facing direction
-            /* 
-               Note: 
-               This assignment is strictily positive as it is guarenteed to be at worst half the base swim speed.
-               This has implications for the `super-swim` glitch by the usage of mMaxNormalSpeed in `daNpc_Md_c::setNormalSpeedF`
-            */
             mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
     }
@@ -136,9 +126,9 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
     // Apply calculated speed with acceleration parameters
     /*
         Note:
-        The speed increase calculation done by this function was not developed
-        to properly handle negative values resulting in continous increase of negative speed. 
-        More details in the function itself.
+        This function was developed without consideration of clamping Link's velocity 
+        in the negative direction leading to super-swimming being possible. 
+        More details on this can be found within the function itself.
     */
     setNormalSpeedF(
         calculatedSpeed,
@@ -200,7 +190,7 @@ BOOL daPy_lk_c::changeSwimProc() {
         mVelocity *= 0.75f;
 
         if (mVelocity >= mMaxNormalSpeed) {
-          mVelocity = mMaxNormalSpeed;
+            mVelocity = mMaxNormalSpeed;
         }
 
         m35C4 = 0.0f;

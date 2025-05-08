@@ -504,7 +504,7 @@ BOOL daPy_lk_c::procCrawlMove() {
                 cXyz sp38;
                 sVar3 = shape_angle.y;
 
-                cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_crouch_c0::m.field_0x8,
+                cLib_addCalcAngleS(&shape_angle.y, mTargetAngleY, daPy_HIO_crouch_c0::m.field_0x8,
                                    daPy_HIO_crouch_c0::m.field_0xA,
                                    daPy_HIO_crouch_c0::m.field_0xC);
 

@@ -1629,21 +1629,15 @@ BOOL daNpc_Md_c::hitNpcAction(void* r29) {
 }
 
 /* 00008E54-00008FFC       .text setNormalSpeedF__10daNpc_Md_cFfffff */
-void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
+void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_acceleration, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
     // Calculate the desired speed based on a scaling factor and the NPC's maximum normal speed
-    /* 
-        Note: 
-        This code is where the negative speed increase happens. It was established in the
-        calling function that `mMaxNormalSpeed` was a stricley positive variable.
-        That means that if `i_speedScale` is negative, then `desiredSpeed` will be as well.
-    */
     f32 desiredSpeed = mMaxNormalSpeed * i_speedScale;
 
-    // Check if the NPC is colliding with a wall
+    // Check if Medli is colliding with a wall
     int wallIndex = wallHitCheck();
     
     if (wallIndex >= 0) {
-        // Calculate the angle between the NPC and the wall
+        // Calculate the angle between Medli and the wall
         s16 angle = current.angle.y + 0x8000 - mAcchCir[wallIndex].GetWallAngleY();
 
         // If the angle is not too steep, reduce speed based on angle and slowdown factor
@@ -1656,16 +1650,11 @@ void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i
     f32 maxStep;
 
     // If slowing down (desired speed is less than current speed)
-    /*
-        Note: 
-        When desiredSpeed is a negative value due to the reasons above,
-        this conditional will always return TRUE
-    */
     if (desiredSpeed < mCurrentSpeed) {
-        // Determine how much the NPC should slow down by
+        // Determine how much the Medli should slow down by
         f32 speedDelta = mCurrentSpeed - desiredSpeed;
 
-        // Limit how fast the NPC slows down
+        // Limit how fast Medli slows down
         if (speedDelta > i_maxStep) {
             maxStep = i_maxStep;
         } else {
@@ -1678,11 +1667,7 @@ void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i
         }
 
         // External speed adjustments are ignored when slowing down
-        i_externalSpeedAdd = 0.0f;
-        /* 
-            Note:
-            Link's speed is getting set to the larger negative value
-        */
+        i_acceleration = 0.0f;
         targetSpeed = desiredSpeed;
 
     } else {
@@ -1692,20 +1677,15 @@ void daNpc_Md_c::setNormalSpeedF(f32 i_speedScale, f32 i_externalSpeedAdd, f32 i
     }
 
     // Apply external speed additions if present
-    if (!cM3d_IsZero(i_externalSpeedAdd)) {
-        mCurrentSpeed += i_externalSpeedAdd;
+    if (!cM3d_IsZero(i_acceleration)) {
+        mCurrentSpeed += i_acceleration;
 
         // Clamp to the desired speed if it would exceed it
-        /*
-            Note:
-            Will always be true with negative values however from a magnitude standpoint,
-            mCurrentSpeed is smaller hence the increasing negative speed in the `super-swim` bug
-        */
         if (mCurrentSpeed > desiredSpeed) {
             mCurrentSpeed = desiredSpeed;
         }
     } else {
-        // Smoothly adjust current speed towards target speed
+        // Smoothly adjust Medli's current speed towards target speed
         cLib_addCalc(&mCurrentSpeed, targetSpeed, i_scale, maxStep, i_minStep);
     }
 }
