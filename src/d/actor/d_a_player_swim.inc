@@ -211,7 +211,7 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         endFlameDamageEmitter();
 
-        offNoResetFlg0(daPyFlg0_SWIM_EXIT);
+        offNoResetFlg0(daPyFlg0_IS_SWIMMING);
 
         mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         mVelocity *= 0.75f;
@@ -284,7 +284,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
 
     if (mSwimHeight - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.swimSurfaceCloseThreshold && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
-            onNoResetFlg0(daPyFlg0_SWIM_EXIT); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
+            onNoResetFlg0(daPyFlg0_IS_SWIMMING); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
             current.pos.y = mSwimHeight;
             return TRUE;
         }
@@ -304,7 +304,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
  *   - i_bPlayWaterExitSE: If TRUE, triggers water exit sound effect.
  */
 void daPy_lk_c::swimOutAfter(BOOL i_bPlayWaterExitSE) {
-    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
+    onNoResetFlg0(daPyFlg0_IS_SWIMMING);
     
     m35C4 = 0.0f;
 
@@ -450,7 +450,7 @@ void daPy_lk_c::setSwimTimerStartStop() {
     if (mAcch.GetGroundH() <= mSwimHeight - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
-        if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
+        if (checkNoResetFlg0(daPyFlg0_IS_SWIMMING)) {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
@@ -505,7 +505,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
     m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
 
-    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
+    onNoResetFlg0(daPyFlg0_IS_SWIMMING);
 
     if (param_1) {
         mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0040, &current.pos);
@@ -606,7 +606,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
+    if (checkNoResetFlg0(daPyFlg0_IS_SWIMMING)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
@@ -640,7 +640,7 @@ BOOL daPy_lk_c::procSwimWait() {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
+    if (!checkNoResetFlg0(daPyFlg0_IS_SWIMMING)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }
@@ -700,7 +700,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL i_bKeepSwimAnime) {
 
     mDirection = DIR_FORWARD;
 
-    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
+    if (checkNoResetFlg0(daPyFlg0_IS_SWIMMING)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
@@ -796,7 +796,7 @@ BOOL daPy_lk_c::procSwimMove() {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
+    if (!checkNoResetFlg0(daPyFlg0_IS_SWIMMING)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }
