@@ -5208,8 +5208,8 @@ BOOL daPy_lk_c::changeDamageProc() {
                     mCyl.GetTgHitAc() && fopAcM_GetName(mCyl.GetTgHitAc()) == PROC_NZ &&
                     grab_actor != NULL
                 ) {
-                    cXyz* damageVec = getDamageVec(&mCyl);
-                    grab_actor->shape_angle.y = cM_atan2s(damageVec->x, damageVec->z);
+                    cXyz* damage_vec = getDamageVec(&mCyl);
+                    grab_actor->shape_angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
                     grab_actor->shape_angle.x = 0x2000;
                     return procLargeDamage_init(-4, 1, 0, 0);
                 }
@@ -6018,7 +6018,6 @@ BOOL daPy_lk_c::procControllWait() {
 
 /* 80112E60-80113044       .text procWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWait_init() {
-    /* Nonmatching - missing "cntlzw" instruction */
     if ((mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK2A_e) &&
         (m_tex_scroll_heap.field_0x6 == 0xFFFF))
     {
@@ -6040,7 +6039,7 @@ BOOL daPy_lk_c::procWait_init() {
     mVelocity = 0.0f;
     int iVar4 = checkRestHPAnime();
     if ((iVar4 != 0) && (iVar3 == 0)) {
-        s32 uVar2 = (mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx - m_tex_anm_heap.mIdx) >> 5 & 0xFF;
+        s32 uVar2 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
         u16 uVar1 = m3530;
         setSingleMoveAnime(ANM_WAITATOB, daPy_HIO_move_c0::m.field_0x68,
                            daPy_HIO_move_c0::m.field_0x6C, daPy_HIO_move_c0::m.field_0x10,
@@ -6064,7 +6063,6 @@ BOOL daPy_lk_c::procWait_init() {
 
 /* 80113044-801133FC       .text procWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWait() {
-    /* Nonmatching - missing "cntlzw" instruction */
     if ((m36A0.abs2XZ() <= (1.0f / 999999.9f)) && (m36AC.abs2XZ() >= 25.0f)) {
         return procIceSlipAlmostFall_init();
     }
@@ -6101,7 +6099,7 @@ BOOL daPy_lk_c::procWait() {
         } else if ((checkRestHPAnime()) &&
                    (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITB))
         {
-            s32 uVar3 = (mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx - m_tex_anm_heap.mIdx) >> 5 & 0xFF;
+            s32 uVar3 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
             u16 uVar1 = m3530;
             setSingleMoveAnime(ANM_WAITATOB, daPy_HIO_move_c0::m.field_0x68,
                                daPy_HIO_move_c0::m.field_0x6C, daPy_HIO_move_c0::m.field_0x10,
@@ -6436,8 +6434,8 @@ BOOL daPy_lk_c::procCrouchDefense() {
 /* 80114014-801142F4       .text procCrouchDefenseSlip_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
     commonProcInit(daPyProc_CROUCH_DEFENSE_SLIP_e);
-    cXyz* pfVar2 = getDamageVec(&mCyl);
-    current.angle.y = cM_atan2s(pfVar2->x, pfVar2->z);
+    cXyz* damage_vec = getDamageVec(&mCyl);
+    current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
     dCcD_GObjInf* pfVar3 = mCyl.GetTgHitGObj();
     f32 dVar5;
     if ((pfVar3 != NULL) &&
@@ -6447,7 +6445,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
         setSingleMoveAnime(ANM_DIFENCEA, daPy_HIO_nockback_c0::m.field_0x8,
                            daPy_HIO_nockback_c0::m.field_0xC, daPy_HIO_nockback_c0::m.field_0x0,
                            daPy_HIO_nockback_c0::m.field_0x10);
-        dVar5 = pfVar2->absXZ();
+        dVar5 = damage_vec->absXZ();
         mVelocity =
             (daPy_HIO_nockback_c0::m.field_0x18 * dVar5) + daPy_HIO_nockback_c0::m.field_0x14;
         m34D0 = daPy_HIO_nockback_c0::m.field_0x2;
@@ -6461,7 +6459,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
         setSingleMoveAnime(ANM_DIFENCEA, daPy_HIO_guard_c0::m.field_0x4,
                            daPy_HIO_guard_c0::m.field_0x8, daPy_HIO_guard_c0::m.field_0x0,
                            daPy_HIO_guard_c0::m.field_0xC);
-        dVar5 = pfVar2->absXZ();
+        dVar5 = damage_vec->absXZ();
         mVelocity = (daPy_HIO_guard_c0::m.field_0x14 * dVar5) + daPy_HIO_guard_c0::m.field_0x10;
         m34D0 = daPy_HIO_guard_c0::m.field_0x2;
         m35A0 = daPy_HIO_guard_c0::m.field_0x18;
@@ -7539,17 +7537,13 @@ BOOL daPy_lk_c::procGuardCrash() {
 
 /* 801170F0-80117448       .text procDamage_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procDamage_init() {
-    /* Nonmatching - cXyz */
-    cXyz local_54;
-
-    cXyz* pfVar1 = getDamageVec(&mCyl);
-    f32 dVar5 = cM_ssin(shape_angle.y);
-    f32 dVar6 = cM_scos(shape_angle.y);
+    cXyz* damage_vec = getDamageVec(&mCyl);
+    f32 f31 = cM_ssin(shape_angle.y);
+    f32 f30 = cM_scos(shape_angle.y);
     commonProcInit(daPyProc_DAMAGE_e);
     mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
-    local_54.set(pfVar1->z * -dVar5 + pfVar1->x * dVar6, pfVar1->y,
-                 pfVar1->z * dVar6 + pfVar1->x * dVar5);
-    m34D4 = cM_atan2s(local_54.x, local_54.z);
+    cXyz local_54(damage_vec->z * -f31 + damage_vec->x * f30, damage_vec->y, damage_vec->z * f30 + damage_vec->x * f31);
+    m34D4 = cM_atan2s(local_54.z, local_54.y);
     m34D6 = cM_atan2s(-local_54.x, std::sqrtf(local_54.y * local_54.y + local_54.z * local_54.z));
     if (m34D4 > daPy_HIO_damage_c0::m.field_0x2) {
         m34D4 = daPy_HIO_damage_c0::m.field_0x2;
@@ -7578,7 +7572,7 @@ BOOL daPy_lk_c::procDamage_init() {
     }
     setSingleMoveAnime(dVar2, daPy_HIO_damage_c0::m.field_0x14, daPy_HIO_damage_c0::m.field_0x18,
                        daPy_HIO_damage_c0::m.field_0x0, daPy_HIO_damage_c0::m.field_0x8);
-    current.angle.y = cM_atan2s(pfVar1->x, pfVar1->z);
+    current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
     if (dVar2 != ANM_DAMR) {
         m34BE = 2;
     }
@@ -7586,7 +7580,7 @@ BOOL daPy_lk_c::procDamage_init() {
         m34BE = 1;
     }
     mVelocity =
-        (daPy_HIO_damage_c0::m.field_0x10 * pfVar1->absXZ()) + daPy_HIO_damage_c0::m.field_0xC;
+        (daPy_HIO_damage_c0::m.field_0x10 * damage_vec->absXZ()) + daPy_HIO_damage_c0::m.field_0xC;
     voiceStart(2);
     seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
     mProcVar0.mDamageAnm = dVar2;
@@ -7597,7 +7591,6 @@ BOOL daPy_lk_c::procDamage_init() {
 
 /* 80117448-801176FC       .text procDamage__9daPy_lk_cFv */
 BOOL daPy_lk_c::procDamage() {
-    /* Nonmatching - uVar4 */
     f32 fVar1;
     f32 fVar2;
     s16 uVar4;
@@ -7621,7 +7614,7 @@ BOOL daPy_lk_c::procDamage() {
                                               daPy_HIO_damage_c0::m.field_0x28))));
         fVar1 = 1.0f - cM_scos(uVar4);
         uVar4 = uVar4;
-        fVar2 = 1.0f - cM_scos((((uVar4 < 0x2000) - (uVar4 >> 0x1f)) & ~((uVar4 - 0x2000) * 2)));
+        fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
     }
     m3564 = m34D4 * fVar1;
     m3566 = 0;
@@ -7633,10 +7626,8 @@ BOOL daPy_lk_c::procDamage() {
                          daPy_HIO_damage_c0::m.field_0x20, daPy_HIO_damage_c0::m.field_0x24);
     if ((dVar5 <= 0.001f) && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f)) {
         checkNextMode(0);
-    } else {
-        if (mVelocity < daPy_HIO_damage_c0::m.field_0x2C) {
-            resetFootEffect();
-        }
+    } else if (mVelocity < daPy_HIO_damage_c0::m.field_0x2C) {
+        resetFootEffect();
     }
     return true;
 }
@@ -7666,7 +7657,7 @@ BOOL daPy_lk_c::procPolyDamage() {
 BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 param_4) {
     f32 fVar2;
     s16 sVar3;
-    cXyz* pfVar5;
+    cXyz* damage_vec;
     int iVar7;
 
     if (mCurProc == daPyProc_LARGE_DAMAGE_e) {
@@ -7708,8 +7699,8 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
             current.angle.y = m3550;
             setDamagePoint(-1.0f);
         } else {
-            pfVar5 = getDamageVec(&mCyl);
-            current.angle.y = cM_atan2s(pfVar5->x, pfVar5->z);
+            damage_vec = getDamageVec(&mCyl);
+            current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
         }
         sVar3 = current.angle.y - shape_angle.y;
         if (std::abs(sVar3) < 8192.0f) {
@@ -7724,8 +7715,8 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         seStartOnlyReverb(JA_SE_LK_DAMAGE_LARGE);
         dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     } else if ((param_1 == -1) || (param_1 == -6)) {
-        pfVar5 = getDamageVec(&mCyl);
-        current.angle.y = cM_atan2s(pfVar5->x, pfVar5->z);
+        damage_vec = getDamageVec(&mCyl);
+        current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
         iVar7 = getDirectionFromAngle(current.angle.y - shape_angle.y);
         seStartOnlyReverb(JA_SE_LK_DAMAGE_LARGE);
         dComIfGp_getVibration().StartShock(6, -0x21, cXyz(0.0f, 1.0f, 0.0f));
@@ -8235,8 +8226,8 @@ BOOL daPy_lk_c::procElecDamage_init(const cXyz* param_1) {
         m34D6 = 1;
     } else {
         if (mCyl.ChkTgHit()) {
-            cXyz* pfVar4 = getDamageVec(&mCyl);
-            m370C = *pfVar4;
+            cXyz* damage_vec = getDamageVec(&mCyl);
+            m370C = *damage_vec;
             m34D6 = 1;
         } else {
             m34D6 = 0;
@@ -8275,7 +8266,7 @@ BOOL daPy_lk_c::procElecDamage() {
 BOOL daPy_lk_c::procGuardSlip_init() {
     daPy_ANM dVar5;
 
-    cXyz* pfVar2 = getDamageVec(&mCyl);
+    cXyz* damage_vec = getDamageVec(&mCyl);
     commonProcInit(daPyProc_GUARD_SLIP_e);
     if (mEquipItem == dItem_SKULL_HAMMER_e) {
         dVar5 = ANM_ATNGAHAM;
@@ -8293,7 +8284,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
         setSingleMoveAnime(dVar5, daPy_HIO_nockback_c0::m.field_0x8,
                            daPy_HIO_nockback_c0::m.field_0xC, daPy_HIO_nockback_c0::m.field_0x0,
                            daPy_HIO_nockback_c0::m.field_0x10);
-        mVelocity = (daPy_HIO_nockback_c0::m.field_0x18 * pfVar2->absXZ()) +
+        mVelocity = (daPy_HIO_nockback_c0::m.field_0x18 * damage_vec->absXZ()) +
                     daPy_HIO_nockback_c0::m.field_0x14;
         m34D0 = daPy_HIO_nockback_c0::m.field_0x2;
         m35A0 = daPy_HIO_nockback_c0::m.field_0x1C;
@@ -8305,7 +8296,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
         setSingleMoveAnime(dVar5, daPy_HIO_guard_c0::m.field_0x4, daPy_HIO_guard_c0::m.field_0x8,
                            daPy_HIO_guard_c0::m.field_0x0, daPy_HIO_guard_c0::m.field_0xC);
         mVelocity =
-            (daPy_HIO_guard_c0::m.field_0x14 * pfVar2->absXZ()) + daPy_HIO_guard_c0::m.field_0x10;
+            (daPy_HIO_guard_c0::m.field_0x14 * damage_vec->absXZ()) + daPy_HIO_guard_c0::m.field_0x10;
         m34D0 = daPy_HIO_guard_c0::m.field_0x2;
         m35A0 = daPy_HIO_guard_c0::m.field_0x18;
         m35A4 = daPy_HIO_guard_c0::m.field_0x1C;
@@ -8318,7 +8309,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
     } else {
         m35E8 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     }
-    current.angle.y = cM_atan2s(pfVar2->x, pfVar2->z);
+    current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
     m34BE = 3;
     m_pbCalc[PART_UPPER_e]->setRatio(2, 0.0f);
     return true;
@@ -12553,7 +12544,6 @@ daPy_footData_c::daPy_footData_c() {}
 
 /* 80127160-80127B50       .text makeBgWait__9daPy_lk_cFv */
 cPhs_State daPy_lk_c::makeBgWait() {
-    /* Nonmatching - regalloc, missing "cntlzw" instruction */
     cXyz local_38;
     cXyz local_44;
     cXyz local_50;
@@ -12585,7 +12575,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         dComIfGs_setRestartRoom(current.pos, shape_angle.y, getStartRoomNo());
     }
     setRoomInfo();
-    s32 startMode = getStartMode();
+    int startMode = getStartMode();
     u8 sceneMode = dComIfGs_getLastSceneMode();
     if ((((startMode == 2) || (startMode == 9)) ||
          ((sceneMode == 6 || ((startMode == 5 && (sceneMode == 1)))))) ||
@@ -12654,7 +12644,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
             current.pos.y = mAcch.GetGroundH();
             mDemo.setDemoType(4);
             mDoAud_subBgmStop();
-            procLargeDamageUp_init(((4 - sceneMode) >> 5) - 2, 1, 0, 0);
+            procLargeDamageUp_init(sceneMode == 4 ? -1 : -2, 1, 0, 0);
         }
     } else if ((startMode == 1) || (startMode == 5)) {
         if (mEventIdx == 0xFF) {
