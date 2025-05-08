@@ -806,7 +806,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     }
     int iVar4 = checkShipRideUseItem(0);
     u32 uVar2 = checkModeFlg(ModeFlg_SWIM);
-    u32 uVar3 = checkNoResetFlg0(daPyFlg0_IS_SWIMMING);
+    u32 uVar3 = checkNoResetFlg0(daPyFlg0_SWIM_EXIT);
     if (uVar2 != 0) {
         swimOutAfter(FALSE);
     }
@@ -828,7 +828,7 @@ BOOL daPy_lk_c::dProcDead_init() {
             onModeFlg(ModeFlg_SWIM);
             dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
             if (uVar3 == 0) {
-                offNoResetFlg0(daPyFlg0_IS_SWIMMING);
+                offNoResetFlg0(daPyFlg0_SWIM_EXIT);
                 dVar8 = 0.0f;
                 m34D4 = 1;
             } else {
