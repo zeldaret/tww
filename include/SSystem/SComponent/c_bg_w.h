@@ -273,8 +273,18 @@ public:
     /* 0xA4 */ int m_rootGrpIdx;
 };
 
-bool cBgW_CheckBGround(f32 ny);
-bool cBgW_CheckBRoof(f32 ny);
-bool cBgW_CheckBWall(f32 ny);
+inline bool cBgW_CheckBGround(f32 ny) {
+    return ny >= 0.5f;
+}
+
+inline bool cBgW_CheckBRoof(f32 ny) {
+    return ny < (-4.0f / 5.0f);
+}
+
+inline bool cBgW_CheckBWall(float y) {
+    if (!cBgW_CheckBGround(y) && !cBgW_CheckBRoof(y))
+        return true;
+    return false;
+}
 
 #endif /* C_BG_W_H */

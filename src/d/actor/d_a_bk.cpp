@@ -3264,7 +3264,7 @@ static void rope_on(bk_class* i_this) {
         break;
     case 2: {
         i_this->speedF = 70.0f;
-        s16 targetAngle = fopAcM_searchPlayerAngleY((i_this));
+        s16 targetAngle = fopAcM_searchPlayerAngleY(i_this);
         cLib_addCalcAngleS2(&i_this->current.angle.y, targetAngle, 4, 0x1000);
         if (i_this->dr.mAcch.ChkWallHit()) {
             i_this->speed.y = 100.0f + REG0_F(16);

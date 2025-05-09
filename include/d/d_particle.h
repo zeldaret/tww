@@ -310,19 +310,19 @@ public:
     virtual void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
 
-    void getAlpha() {}
-    void remove() {}
-    void setAlpha(u8) {}
-    void setPosArray(cXyz* param_1, s16 param_2) {
-        field_0x8 = param_1;
+    u8 getAlpha() { return mAlpha; }
+    void setAlpha(u8 alpha) { mAlpha = alpha;}
+    void remove() { end(); }
+    void setPosArray(cXyz* pos_array, s16 param_2) {
+        mPosArray = pos_array;
         field_0x6 = param_2;
     }
 
 public:
-    /* 0x04 */ u8 field_0x4;
+    /* 0x04 */ u8 mAlpha;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u16 field_0x6;
-    /* 0x08 */ cXyz* field_0x8;
+    /* 0x08 */ cXyz* mPosArray;
     /* 0x0C */ JPABaseEmitter* mpBaseEmitter;
 };  // Size: 0x10
 

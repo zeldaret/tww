@@ -168,21 +168,14 @@ int daPy_lk_c::getCrawlMoveVec(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
         int iVar4 = dComIfG_Bgsp()->GetSpecialCode(mLinkLinChk);
-        f32 fVar1 = triPla->GetNP()->y;
-        bool bVar2;
-        if (!(fVar1 >= 0.5f || fVar1 < -0.8f)) {
-            bVar2 = true;
-        } else {
-            bVar2 = false;
-        }
-        if (bVar2) {
+        if (cBgW_CheckBWall(triPla->GetNP()->y)) {
             cXyz local_3c = (*param_1 - mLinkLinChk.GetCross());
             f32 dVar7 = local_3c.absXZ();
             param_2->x = -dVar7 * triPla->GetNP()->x;
             param_2->y = local_3c.y;
             param_2->z = -dVar7 * triPla->GetNP()->z;
             return true;
-        } else if (iVar4 == 1 || (fVar1 < 0.643832f && iVar4 == 2)) {
+        } else if (iVar4 == 1 || (triPla->GetNP()->y < 0.643832f && iVar4 == 2)) {
             *param_2 = (*param_1 - mLinkLinChk.GetCross());
             return true;
         }

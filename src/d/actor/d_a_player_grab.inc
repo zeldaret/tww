@@ -661,13 +661,7 @@ BOOL daPy_lk_c::procGrabPut() {
     mLinkLinChk.Set(&m370C, &local_2c, this);
     if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-        bool bVar1;
-        if ((!(triPla->GetNP()->y >= 0.5f)) && (!(triPla->GetNP()->y < -0.8f))) {
-            bVar1 = true;
-        } else {
-            bVar1 = false;
-        }
-        if (bVar1) {
+        if (cBgW_CheckBWall(triPla->GetNP()->y)) {
             cXyz local_44 = (local_2c - mLinkLinChk.GetCross());
             f32 dVar7 = local_44.abs();
             f32 dVar5 = local_44.absXZ();
