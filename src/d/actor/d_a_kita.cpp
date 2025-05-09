@@ -9,8 +9,11 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
+#include "d/res/res_kita.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_movebg_actor.h"
+
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 // Inline helper because i cannot get things to match otherwise
 inline void cap_min_val(float& a, float b){
@@ -29,7 +32,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         MtxPosition(&delta_pos,&local_44);
         delta_pos = i_pt->old.pos - pActor->current.pos;
         MtxPosition(&delta_pos, &local_50);
-        if (fopAcM_GetName(i_pt) == 169) {
+        if (fopAcM_GetName(i_pt) == PROC_PLAYER) {
             pActor->mExecuteCount = 10;
         }
         short zAngle_target = -local_44.x * ((REG0_F(0) + 10.0f) / pActor->scale.x);
@@ -94,11 +97,13 @@ void kita_move(kita_class* i_this) {
             if(mask == 0b1111){
                 i_this->field_29A = 1;
                 dBgS_GndChk solid_ground_check;
-                /* Nonmatching */ solid_ground_check.m_pos.set(i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z);
+                Vec pos_solid_ground_check = {i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z};
+                solid_ground_check.SetPos(&pos_solid_ground_check);
                 float solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
                 cap_min_val(i_this->field_35C, solid_ground_cross);
                 dBgS_ObjGndChk_Spl liquid_ground_check;
-                /* Nonmatching */ liquid_ground_check.m_pos.set(i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z);
+                Vec pos_liquid_ground_check = {i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z};
+                liquid_ground_check.SetPos(&pos_liquid_ground_check);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
                 if(liquid_gnd_cross != -1e+09f && i_this->field_35C > liquid_gnd_cross){
                     i_this->field_35C = liquid_gnd_cross + 40.0f + REG0_F(17);
@@ -147,7 +152,7 @@ void kita_move(kita_class* i_this) {
                         i_this->mPlayerAngle = fopAcM_searchPlayerAngleY(i_this);
                         i_this->field_374 = 20;
                     }
-                    fopAcM_seStartCurrent(i_this, 0x2884, 0);
+                    fopAcM_seStartCurrent(i_this, JA_SE_LK_FLIFT_GO_WATER, 0);
                 }
                 mDoMtx_YrotS(*calc_mtx, i_this->mPlayerAngle);
                 cXyz pos_offset, pos_offset2;
@@ -202,15 +207,15 @@ void kita_move(kita_class* i_this) {
                     i_this->field_2BC.x = 2000.0f;
                     if(i_this->field_360 != 0){
                         i_this->field_360 = 2;
-                        fopAcM_seStart(i_this, 0x6953, 0);
+                        fopAcM_seStart(i_this, JA_SE_OBJ_P_FLOWER_LAND_W, 0);
                         cXyz particle_scale(3.0, 3.0, 3.0);
-                        dComIfGp_particle_set(0x828C, &i_this->current.pos);
-                        dComIfGp_particle_set(0x3F, &i_this->current.pos, 0, &particle_scale);
+                        dComIfGp_particle_set(dPa_name::ID_SCENE_828C, &i_this->current.pos);
+                        dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &i_this->current.pos, 0, &particle_scale);
 
                         dComIfGp_getVibration().StartShock(REG0_S(2) + 4, -0x21, cXyz(0.0, 1.0, 0.0));
                     }
                     else{
-                        fopAcM_seStart(i_this, 0x6951, 0);
+                        fopAcM_seStart(i_this, JA_SE_OBJ_KOKIRI_H_LANDING, 0);
                     }
                 }
                 i_this->speed.y = 0;
@@ -239,7 +244,7 @@ cPhs_State himo_create(kita_class* i_this) {
                 param->base.angle.y = yad[i];
                 param->base.parameters = 0xFFFFFF35;
                 param->room_no = i_this->current.roomNo;
-                i_this->field_2D4[i] = fpcM_Create(PROC_SHAND, NULL, param);
+                i_this->field_2D4[i] = fopAcM_Create(PROC_SHAND, NULL, param);
                 i_this->field_2E4[i]++;
 
             case 1:
@@ -294,7 +299,7 @@ static BOOL daKita_Execute(kita_class* i_this) {
     i_this->pm_bgw->Move();
     if(i_this->field_360 == 2){
         if(i_this->mBaseEmitter == NULL){
-            i_this->mBaseEmitter = dComIfGp_particle_set(0x828D, &i_this->current.pos);
+            i_this->mBaseEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_828D, &i_this->current.pos);
         }
         else {
             i_this->mBaseEmitter->setGlobalTranslation(i_this->current.pos.x, i_this->current.pos.y - (REG0_F(17) + 40.0f), i_this->current.pos.z);
@@ -329,21 +334,21 @@ static BOOL daKita_Delete(kita_class* i_this) {
 }
 
 /* 00001D3C-00001EB0       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(fopAc_ac_c* p_this) {
+static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     BOOL ret;
-    kita_class* actor = static_cast<kita_class*>(p_this);
+    kita_class* actor = static_cast<kita_class*>(i_this);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", 4));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kita", KITA_BDL_VHLIF_00));
     actor->mModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if(actor->mModel == NULL){
         ret = FALSE;
     }
     else {
-        JUT_ASSERT(0x3b2, modelData != 0);
+        JUT_ASSERT(0x3b2, modelData != NULL);
         actor->pm_bgw = new dBgW();
         JUT_ASSERT(0x3b7, actor->pm_bgw != NULL);
-        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", 7)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
+        actor->pm_bgw->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Kita", KITA_DZB_HLIF_00)), cBgW::MOVE_BG_e, &actor->mBgwMtx);
         actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
         actor->pm_bgw->SetRideCallback(ride_call_back);
         ret = TRUE;
@@ -353,8 +358,8 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* p_this) {
 }
 
 /* 00001EB0-00002224       .text daKita_Create__FP10fopAc_ac_c */
-static cPhs_State daKita_Create(kita_class* i_this) {
-    /* Nonmatching - regalloc and data address*/
+static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
+    /* Nonmatching - regalloc */
     static dCcD_SrcSph utiwa_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -383,15 +388,18 @@ static cPhs_State daKita_Create(kita_class* i_this) {
             /* Radius */ 400.0f,
         },
     };
+    
 
-    fopAcM_SetupActor(i_this, kita_class);
+    fopAcM_SetupActor(a_this, kita_class);
+    kita_class* i_this = static_cast<kita_class*>(a_this);
+
     s32 ret = dComIfG_resLoad(&i_this->mPhs, "Kita");
     if(ret != cPhs_COMPLEATE_e){
         return ret;
     }
 
-    i_this->field_2A0 = i_this->base.mParameters;
-    i_this->field_2A1 = i_this->base.mParameters >> 8;
+    i_this->field_2A0 = fopAcM_GetParam(i_this);
+    i_this->field_2A1 = fopAcM_GetParam(i_this) >> 8;
     if(i_this->field_2A1 == 1){
         i_this->field_29A = 1;
         i_this->field_360 = 1;
@@ -432,7 +440,7 @@ static cPhs_State daKita_Create(kita_class* i_this) {
     }
 
     i_this->scale.y = 1.0f;
-    i_this->cullMtx = i_this->mModel->getBaseTRMtx();
+    fopAcM_SetMtx(i_this, i_this->mModel->getBaseTRMtx());
     fopAcM_SetMin(i_this, i_this->scale.x * -200.0f, -200.0f, i_this->scale.z * -200.0f);
     fopAcM_SetMax(i_this, i_this->scale.x * 200.0f, 200.0f, i_this->scale.z * 200.0f);
     i_this->mModel->setBaseScale(i_this->scale);
@@ -442,7 +450,7 @@ static cPhs_State daKita_Create(kita_class* i_this) {
     i_this->mStts.Init(0xff, 0xff, i_this);
     i_this->mSph.Set(utiwa_sph_src);
     i_this->mSph.SetStts(&i_this->mStts);
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 2; i++){ // i regalloc mismatch
         daKita_Execute(i_this);
     }
     return ret;
