@@ -1273,8 +1273,8 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
-    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_health & 0xFF);
+fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_dropType, u8 i_itemBitNo) {
+    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_dropType & 0xFF);
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {
         disappear->itemTableIdx = i_actor->itemTableIdx;

@@ -917,7 +917,7 @@ static void action_itai_move(am_class* i_this) {
         // fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
         mDoAud_seStart(JA_SE_LK_LAST_HIT, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
 
-        fopAcM_createDisappear(i_this, &centerPos, 5);
+        fopAcM_createDisappear(i_this, &centerPos, 5, daDisItem_IBALL_e);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);
         break;

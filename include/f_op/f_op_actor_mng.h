@@ -86,7 +86,7 @@ enum daItemAction_e {
 };
 
 enum daDisappearItemType_e {
-    daDisItem_NORMAL_e = 0,
+    daDisItem_IBALL_e = 0,
     daDisItem_NONE1_e = 1,
     daDisItem_HEART_CONTAINER_e = 2,
     daDisItem_NONE3_e = 3,
@@ -94,7 +94,7 @@ enum daDisappearItemType_e {
     daDisItem_HEART_e = 10,
     daDisItem_MAGIC_e = 11,
     daDisItem_ARROW_e = 12,
-    daDisItem_UNK13_e = 13,
+    daDisItem_NONE13_e = 13,
 };
 
 class l_HIO {
@@ -606,7 +606,7 @@ BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
-fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health = 0, u8 i_itemBitNo = -1);
+fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_dropType, u8 i_itemBitNo = -1);
 void fopAcM_setCarryNow(fopAc_ac_c* i_this, BOOL stageLayer);
 void fopAcM_cancelCarryNow(fopAc_ac_c* i_this);
 s32 fopAcM_otoCheck(fopAc_ac_c*, f32);

@@ -1468,7 +1468,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(NonMatching, "d_a_kn"),
     ActorRel(NonMatching, "d_a_kokiie"),
-    ActorRel(NonMatching, "d_a_ks"), # code 100%, possible issue unique to this TU
+    ActorRel(Equivalent,  "d_a_ks", extra_cflags=["-sym off"]), # weak func order
     ActorRel(NonMatching, "d_a_kt"), # regalloc, weak func order
     ActorRel(NonMatching, "d_a_mflft"),
     ActorRel(NonMatching, "d_a_npc_cb1"),

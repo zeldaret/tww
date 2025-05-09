@@ -644,7 +644,7 @@ void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
             }
         }
         else {
-            drop_type = daDisItem_UNK13_e; // Might just be a void drop (ie. getting nothing)
+            drop_type = daDisItem_NONE13_e;
         }
 
         fopAcM_createDisappear(i_this, i_pos, 3, drop_type, 0xff);
@@ -1096,7 +1096,7 @@ void action_tubo_search(ks_class* i_this) {
             i_this->mSph.OnAtVsBitSet(cCcD_AtSPrm_VsOther_e);
 
             i_this->mSph.OffAtVsBitSet(cCcD_AtSPrm_VsPlayer_e);
-            i_this->mSph.OffAtVsBitSet(cCcD_AtSPrm_NoTgHitInfSet_e);
+            i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_NoTgHitInfSet_e);
 
             i_this->mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
 

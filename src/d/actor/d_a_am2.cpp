@@ -934,7 +934,7 @@ static void action_itai(am2_class* i_this) {
         dComIfGp_particle_set(dPa_name::ID_SCENE_81AF, &i_this->current.pos, &i_this->shape_angle);
         dComIfGp_particle_set(dPa_name::ID_SCENE_81B0, &i_this->current.pos, &i_this->shape_angle);
         fopAcM_seStart(i_this, JA_SE_CM_AM2_EXPLODE, 0);
-        fopAcM_createDisappear(i_this, &centerPos, 5);
+        fopAcM_createDisappear(i_this, &centerPos, 5, daDisItem_IBALL_e);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);
         break;

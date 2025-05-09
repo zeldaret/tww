@@ -800,7 +800,7 @@ void daRd_c::modeDeath() {
     fopAcM_SetGroup(this, fopAc_ENV_e);
     
     if (cLib_calcTimer(&mTimer1) == 0) {
-        fopAcM_createDisappear(this, &current.pos, 5);
+        fopAcM_createDisappear(this, &current.pos, 5, daDisItem_IBALL_e);
         fopAcM_delete(this);
     }
 }

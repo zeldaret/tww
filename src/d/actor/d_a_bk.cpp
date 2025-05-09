@@ -2623,11 +2623,11 @@ static void fail(bk_class* i_this) {
     case 1:
         cXyz sp08 = i_this->current.pos;
         sp08.y += 100.0f + l_bkHIO.m020;
-        u8 dropType = daDisItem_NORMAL_e;
+        u8 drop_type = daDisItem_IBALL_e;
         if (i_this->m0300[2] >= 1000) {
-            dropType = daDisItem_NONE1_e;
+            drop_type = daDisItem_NONE1_e;
         }
-        fopAcM_createDisappear(i_this, &sp08, 10, dropType, i_this->stealItemBitNo);
+        fopAcM_createDisappear(i_this, &sp08, 10, drop_type, i_this->stealItemBitNo);
         if (i_this->mType == 10) {
             i_this->m02DE = 1;
             i_this->dr.m004 = -1;
@@ -3907,8 +3907,6 @@ static void demo_camera(bk_class* i_this) {
     s8 r28 = true;
     cXyz sp8C;
     cXyz sp80;
-    cXyz sp44;
-    cXyz sp38;
     camera_class* r3;
     switch (i_this->m1234) {
     case 0:
