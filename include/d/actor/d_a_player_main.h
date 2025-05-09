@@ -179,15 +179,15 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setPos(const cXyz* pos) { mPos = *pos; }
     cXyz& getPos() { return mPos; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
-    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
 class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
@@ -949,7 +949,7 @@ public:
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
-    void setDrawHandModel();
+    s32 setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
     void hideHatAndBackle(J3DMaterial*);
@@ -1011,7 +1011,7 @@ public:
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
-    BOOL checkNextActionItemFly();
+    void checkNextActionItemFly();
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
@@ -1191,7 +1191,7 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
     BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
     BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
     BOOL resetActAnimeUpper(daPy_UPPER, f32);
@@ -1403,7 +1403,7 @@ public:
     f32 getCrawlMoveAnmSpeed();
     f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
-    void changeCrawlAutoMoveProc(cXyz*);
+    BOOL changeCrawlAutoMoveProc(cXyz*);
     int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);

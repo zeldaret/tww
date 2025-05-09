@@ -5,263 +5,273 @@
 
 #include "d/d_camera.h"
 
-// Note: Not matching for JPN yet.
-// All these array values are different because they're indexes into dCamParam_c::styles, which got shifted around.
-// Need to make an enum for these.
-const dCamera__Type dCamera_c::types[63] = {
-    { "Empty", {
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "Plain", {
-        { 0x55, 0x55, 0x48, 0x08, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Keep", {
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0004, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "Event", {
-        { 0x0004, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0004, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "Boss01", {
-        { 0x5C, 0x5C, 0x4A, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x30, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Cliff", {
-        { 0x7A, 0x7A, 0x15, 0x07, 0x88, 0x21, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x32, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "PlaySlide", {
-        { 0x5E, 0x5E, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Field", {
-        { 0x53, 0x53, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "ThrowUp", {
-        { 0x5F, 0x5F, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x31, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Gamoss", {
-        { 0x61, 0x61, 0x4C, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "MiniIsland", {
-        { 0x62, 0x62, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x3B, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Cliff2", {
-        { 0x63, 0x59, 0x17, 0x07, 0x88, 0x37, 0x35, 0x0D, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3C, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "FieldCushion", {
-        { 0x5A, 0x5A, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "FixdPos", {
-        { 0x02, 0x54, 0x47, 0x07, 0x88, 0xFFFF, 0xFFFF, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "SmoothFixdPos", {
-        { 0x03, 0x54, 0x47, 0x07, 0x88, 0xFFFF, 0xFFFF, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "WaterBattle", {
-        { 0x28, 0x28, 0x45, 0x07, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0x75, 0xFFFF, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "SmoothFixdPosC", {
-        { 0x40, 0x54, 0x47, 0x07, 0x88, 0xFFFF, 0xFFFF, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "ThrowInto", {
-        { 0x2B, 0x2B, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x31, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Boss03", {
-        { 0x66, 0x66, 0x4D, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "P_Ganon1", {
-        { 0x67, 0x67, 0x4E, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "P_Ganon2", {
-        { 0x68, 0x68, 0x4F, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "WindBoss", {
-        { 0x69, 0x69, 0x50, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "P_Ganon3", {
-        { 0x6A, 0x6A, 0x4F, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Test01", {
-        { 0x64, 0x64, 0x4B, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Amoss", {
-        { 0x6B, 0x6B, 0x51, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Dungeon", {
-        { 0x54, 0x54, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Jump", {
-        { 0x01, 0x01, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "DungeonCorner", {
-        { 0x57, 0x57, 0x16, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "DungeonWide", {
-        { 0x59, 0x59, 0x17, 0x07, 0x88, 0x37, 0x35, 0x0D, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3C, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "CannonGame", {
-        { 0x3F, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "FieldFOX", {
-        { 0x38, 0x38, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "G_Roof", {
-        { 0x41, 0x41, 0x52, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x44, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "G_BedRoom", {
-        { 0x77, 0x77, 0x7B, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x87, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "G_BedRoom2", {
-        { 0x77, 0x77, 0x7B, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x3D, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "TowerUp", {
-        { 0x43, 0x62, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "MajTower", {
-        { 0x80, 0x54, 0x80, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x8E, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Tower", {
-        { 0x42, 0x62, 0x43, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Boat", {
-        { 0x24, 0x20, 0x45, 0x06, 0x88, 0x1A, 0x6F, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0x76, 0xFFFF, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "BoatBattle", {
-        { 0x2A, 0x29, 0x6C, 0x06, 0x88, 0x1A, 0x6F, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0x76, 0xFFFF, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "WindHall", {
-        { 0x90, 0x71, 0x17, 0x07, 0x88, 0x37, 0x35, 0x0D, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3C, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Tornado", {
-        { 0x34, 0x20, 0x45, 0x06, 0x88, 0x1A, 0x6E, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0xFFFF, 0xFFFF, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "OverLook", {
-        { 0x82, 0x82, 0x46, 0x70, 0x88, 0x21, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x3A, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Dome", {
-        { 0x72, 0x85, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3A, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "ForceFixdPos", {
-        { 0x02, 0xFFFF, 0xFFFF, 0xFFFF, 0x88, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0xFFFF, 0x13, 0x19, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "FixdFrm", {
-        { 0x1D, 0xFFFF, 0xFFFF, 0xFFFF, 0x88, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0xFFFF, 0x13, 0x19, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "DStairs", {
-        { 0x54, 0x54, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x73, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Boss02", {
-        { 0x78, 0x78, 0x4A, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Seagal", {
-        { 0x86, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0xFFFF, 0xFFFF, 0x39, 0xFFFF, 0xFFFF, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "SmallRoom", {
-        { 0x79, 0x79, 0x49, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x8D, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "DanMae", {
-        { 0x7F, 0x7F, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x7D, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Cafe", {
-        { 0x65, 0x65, 0x49, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x84, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "DungeonPassage", {
-        { 0x5D, 0x5D, 0x16, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x84, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Corridor", {
-        { 0x05, 0x05, 0x17, 0x07, 0x88, 0x37, 0x35, 0x0D, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x84, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Subject", {
-        { 0x33, 0xFFFF, 0xFFFF, 0xFFFF, 0x88, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0xFFFF, 0x14, 0x19, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "BigBird", {
-        { 0x81, 0x81, 0x89, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2E, 0x2D, 0x39, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Room", {
-        { 0x58, 0x58, 0x49, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x8C, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "DungeonDown", {
-        { 0x85, 0x85, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x83, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Boss04", {
-        { 0x6D, 0x85, 0x47, 0x07, 0x88, 0x37, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3A, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x8A },
-    }},
-    { "UnderTheEaves", {
-        { 0x53, 0x53, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x8B, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Restrict", {
-        { 0x36, 0xFFFF, 0xFFFF, 0xFFFF, 0x88, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0xFFFF, 0x13, 0x19, 0xFFFF, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-    { "DungeonUp", {
-        { 0x56, 0x56, 0x15, 0x07, 0x88, 0x21, 0x35, 0x0E, 0x0B, 0x0F },
-        { 0x2C, 0x2D, 0x3C, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7E },
-    }},
-    { "Block", {
-        { 0x53, 0x53, 0x46, 0x06, 0x88, 0x37, 0x35, 0x0D, 0x1F, 0x1E },
-        { 0x2C, 0x2D, 0x8F, 0x13, 0x19, 0x1C, 0x04, 0x27, 0x23, 0x7C },
-    }},
-    { "Water", {
-        { 0x5B, 0x5B, 0x47, 0x07, 0x88, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF },
-        { 0x2C, 0x2D, 0x74, 0x13, 0x19, 0x1C, 0x04, 0xFFFF, 0xFFFF, 0xFFFF },
-    }},
-
+const dCamera__Type dCamera_c::types[] = {
+    {
+        "Empty",
+        {dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Plain",
+        {dCamStyle_FN03_e, dCamStyle_FN03_e, dCamStyle_LL03_e, dCamStyle_TT03_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Keep",
+        {dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Event",
+        {dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Boss01",
+        {dCamStyle_FN15_e, dCamStyle_FN15_e, dCamStyle_LL05_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM05_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Cliff",
+        {dCamStyle_FN19_e, dCamStyle_FN19_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM04_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "PlaySlide",
+        {dCamStyle_FN20_e, dCamStyle_FN20_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Field",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "ThrowUp",
+        {dCamStyle_FN21_e, dCamStyle_FN21_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM09_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Gamoss",
+        {dCamStyle_FN23_e, dCamStyle_FN23_e, dCamStyle_LL09_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "MiniIsland",
+        {dCamStyle_FN24_e, dCamStyle_FN24_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM10_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Cliff2",
+        {dCamStyle_FN26_e, dCamStyle_FN07_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "FieldCushion",
+        {dCamStyle_FN10_e, dCamStyle_FN10_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "FixdPos",
+        {dCamStyle_PN05_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "SmoothFixdPos",
+        {dCamStyle_PN12_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "WaterBattle",
+        {dCamStyle_FN25_e, dCamStyle_FN25_e, dCamStyle_LL11_e, dCamStyle_TT02_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_MM15_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "SmoothFixdPosC",
+        {dCamStyle_PN13_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "ThrowInto",
+        {dCamStyle_FN29_e, dCamStyle_FN29_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM09_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Boss03",
+        {dCamStyle_FN30_e, dCamStyle_FN30_e, dCamStyle_LL12_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon1",
+        {dCamStyle_FN31_e, dCamStyle_FN31_e, dCamStyle_LL13_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon2",
+        {dCamStyle_FN32_e, dCamStyle_FN32_e, dCamStyle_LL14_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "WindBoss",
+        {dCamStyle_FN33_e, dCamStyle_FN33_e, dCamStyle_LL15_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon3",
+        {dCamStyle_FN34_e, dCamStyle_FN34_e, dCamStyle_LL14_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Test01",
+        {dCamStyle_FN27_e, dCamStyle_FN27_e, dCamStyle_LL10_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Amoss",
+        {dCamStyle_FN35_e, dCamStyle_FN35_e, dCamStyle_LL16_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Dungeon",
+        {dCamStyle_FN02_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Jump",
+        {dCamStyle_FN08_e, dCamStyle_FN08_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+#if VERSION == VERSION_JPN
+    {
+        "DungeonUp",
+        {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+#endif
+    {
+        "DungeonCorner",
+        {dCamStyle_FN06_e, dCamStyle_FN06_e, dCamStyle_LL08_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "DungeonWide",
+        {dCamStyle_FN07_e, dCamStyle_FN07_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "CannonGame",
+        {dCamStyle_ZZ00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "FieldFOX",
+        {dCamStyle_GN01_e, dCamStyle_GN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_Roof",
+        {dCamStyle_FN82_e, dCamStyle_FN82_e, dCamStyle_LL82_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM82_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_BedRoom",
+        {dCamStyle_FN81_e, dCamStyle_FN81_e, dCamStyle_LL81_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM81_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_BedRoom2",
+        {dCamStyle_FN81_e, dCamStyle_FN81_e, dCamStyle_LL81_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM83_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "TowerUp",
+        {dCamStyle_IN02_e, dCamStyle_FN24_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "MajTower",
+        {dCamStyle_IN03_e, dCamStyle_FN02_e, dCamStyle_IN03_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Tower",
+        {dCamStyle_IN01_e, dCamStyle_FN24_e, dCamStyle_IN02_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Boat",
+        {dCamStyle_BN07_e, dCamStyle_BP07_e, dCamStyle_LL11_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE07_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM07_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "BoatBattle",
+        {dCamStyle_BN08_e, dCamStyle_BP08_e, dCamStyle_LL17_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE07_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM07_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+#if VERSION == VERSION_JPN
+    {
+        "Water",
+        {dCamStyle_FN14_e, dCamStyle_FN14_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM14_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#endif
+    {
+        "WindHall",
+        {dCamStyle_FN38_e, dCamStyle_FP38_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Tornado",
+        {dCamStyle_QN07_e, dCamStyle_BP07_e, dCamStyle_LL11_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE08_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "OverLook",
+        {dCamStyle_FN11_e, dCamStyle_FN11_e, dCamStyle_LL01_e, dCamStyle_TT04_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Dome",
+        {dCamStyle_FN39_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "ForceFixdPos",
+        {dCamStyle_PN05_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "FixdFrm",
+        {dCamStyle_XN06_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "DStairs",
+        {dCamStyle_FN02_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM16_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Boss02",
+        {dCamStyle_FN40_e, dCamStyle_FN40_e, dCamStyle_LL05_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Seagal",
+        {dCamStyle_FN36_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_MM01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "SmallRoom",
+        {dCamStyle_FN41_e, dCamStyle_FN41_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM17_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DanMae",
+        {dCamStyle_FN42_e, dCamStyle_FN42_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM19_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Cafe",
+        {dCamStyle_FN28_e, dCamStyle_FN28_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DungeonPassage",
+        {dCamStyle_FN17_e, dCamStyle_FN17_e, dCamStyle_LL08_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Corridor",
+        {dCamStyle_FN12_e, dCamStyle_FN12_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Subject",
+        {dCamStyle_LN17_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC02_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "BigBird",
+        {dCamStyle_FN43_e, dCamStyle_FN43_e, dCamStyle_LL18_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Room",
+        {dCamStyle_FN09_e, dCamStyle_FN09_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM18_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DungeonDown",
+        {dCamStyle_FN05_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM21_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Boss04",
+        {dCamStyle_FN37_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD04_e},
+    },
+    {
+        "UnderTheEaves",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM22_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Restrict",
+        {dCamStyle_LN01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#if VERSION != VERSION_JPN
+    {
+        "DungeonUp",
+        {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Block",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM23_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Water",
+        {dCamStyle_FN14_e, dCamStyle_FN14_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM14_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#endif
 };
 
 const int dCamera_c::type_num = ARRAY_SIZE(types);

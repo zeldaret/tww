@@ -95,7 +95,9 @@ public:
     void setGetOffSecond() { mNextMode = MODE_GET_OFF_SECOND_e; }
     void setCannon() { mNextMode = MODE_CANNON_e; }
     void setCrane() { mNextMode = MODE_CRANE_e; }
+    void setStartModeWarp() { mNextMode = MODE_START_MODE_WARP_e; }
     void setTactWarp() { mNextMode = MODE_TACT_WARP_e; }
+    void setStartModeThrow() { mNextMode = MODE_START_MODE_THROW_e; }
     
     int getTactWarpPosNum() const { return mTactWarpPosNum; }
     void setTactWarpPosNum(int num) { mTactWarpPosNum = num; }
@@ -150,15 +152,13 @@ public:
     void onFantomGanonBattle() {}
     //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
-    void onSceneChange() {}
+    void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
     void onShortHitFlg() {}
     void onStateFlg(daSHIP_SFLG flag) { mStateFlag |= flag; }
     void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
     void onWhirlFlg(u32, s16) {}
     void onWhirlFlgDirect(u32, s16) {}
     void setAtnPos(const cXyz*) {}
-    void setStartModeThrow() {}
-    void setStartModeWarp() {}
 
     BOOL bodyJointCallBack(int);
     BOOL cannonJointCallBack(int);

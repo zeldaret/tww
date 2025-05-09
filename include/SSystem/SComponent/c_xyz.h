@@ -18,17 +18,23 @@ struct cXyz : Vec {
     static const cXyz BaseXZ;
     static const cXyz BaseYZ;
     static const cXyz BaseXYZ;
+#ifdef __MWERKS__
+    cXyz() {}
     ~cXyz() {}
-    /* inlined  */ cXyz() {}
-    cXyz(f32 pX, f32 pY, f32 pZ) {
-        x = pX;
-        y = pY;
-        z = pZ;
-    }
     cXyz(const cXyz& vec) {
         x = vec.x;
         y = vec.y;
         z = vec.z;
+    }
+#else
+    cXyz() = default;
+    ~cXyz() = default;
+    cXyz(const cXyz& vec) = default;
+#endif
+    cXyz(f32 pX, f32 pY, f32 pZ) {
+        x = pX;
+        y = pY;
+        z = pZ;
     }
     cXyz(const Vec& vec) {
         x = vec.x;

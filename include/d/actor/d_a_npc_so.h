@@ -11,7 +11,7 @@ public:
         
     };
 
-    void getMiniGameRestArrow() {}
+    int getMiniGameRestArrow() { return 10 - mB78; }
     void isAnm(signed char) {}
     void modeProcInit(int) {}
 
@@ -128,6 +128,8 @@ public:
 
 public:
     /* Place member variables here */
+    /* 0x290 */ u8 m290[0xB78 - 0x290];
+    /* 0xB78 */ int mB78;
 };
 
 class daNpc_So_HIO_c {

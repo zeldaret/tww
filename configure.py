@@ -152,7 +152,7 @@ if args.no_asm:
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
 config.dtk_tag = "v1.4.1"
-config.objdiff_tag = "v3.0.0-beta.5"
+config.objdiff_tag = "v3.0.0-beta.6"
 config.sjiswrap_tag = "v1.2.0"
 config.wibo_tag = "0.6.11"
 
@@ -500,7 +500,7 @@ config.libs = [
             Object(Matching,    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
             Object(NonMatching, "d/d_cam_param.cpp"),
-            Object(MatchingFor("GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
+            Object(Matching,    "d/d_cam_type.cpp"),
             Object(Matching,    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),

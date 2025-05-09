@@ -17,7 +17,7 @@ dBgS_ObjLinChk daBoko_c::m_line_check;
 const s16 daBoko_HIO_c0::throw_timer = 2;
 const f32 daBoko_HIO_c0::throw_speed = 70.0f;
 
-static u8 l_HIO;
+static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {

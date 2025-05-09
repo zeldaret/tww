@@ -231,7 +231,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && pcVar1->mNormal.y >= 0.5f && m35D0 - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && cBgW_CheckBGround(pcVar1->GetNP()->y) && m35D0 - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
         current.pos.y = m35D0;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {

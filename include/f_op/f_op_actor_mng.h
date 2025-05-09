@@ -502,23 +502,11 @@ void fopAcM_DeleteHeap(fopAc_ac_c* p_actor);
 bool fopAcM_entrySolidHeap(fopAc_ac_c* p_actor, heapCallbackFunc p_heapCallback, u32 estimatedHeapSize);
 
 inline void fopAcM_SetMin(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.min.set(minX, minY, minZ);
-#else
-    p_actor->cull.box.min.x = minX;
-    p_actor->cull.box.min.y = minY;
-    p_actor->cull.box.min.z = minZ;
-#endif
 }
 
 inline void fopAcM_SetMax(fopAc_ac_c* p_actor, f32 maxX, f32 maxY, f32 maxZ) {
-#ifdef __MWERKS__
     p_actor->cull.box.max.set(maxX, maxY, maxZ);
-#else
-    p_actor->cull.box.max.x = maxX;
-    p_actor->cull.box.max.y = maxY;
-    p_actor->cull.box.max.z = maxZ;
-#endif
 }
 
 void fopAcM_setCullSizeBox(fopAc_ac_c* p_actor, f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY,
@@ -552,6 +540,9 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag);
 s32 fopAcM_checkCullingBox(Mtx, f32, f32, f32, f32, f32, f32);
 s32 fopAcM_cullingCheck(fopAc_ac_c*);
 s32 fopAcM_orderTalkEvent(fopAc_ac_c*, fopAc_ac_c*);
+s32 fopAcM_orderTalkXBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
+s32 fopAcM_orderTalkYBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
+s32 fopAcM_orderTalkZBtnEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner);
 s32 fopAcM_orderZHintEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);
