@@ -198,7 +198,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
                 pm_out_poly_info->SetPolyInfo(linChk);
 
             cM3dGPla* pla = i_bgs.GetTriPla(linChk);
-            if (!(pla->GetNP()->y >= 0.5f)) {
+            if (!cBgW_CheckBGround(pla->GetNP()->y)) {
                 VECAdd(pm_pos, pla->GetNP(), pm_pos);
                 if (!cM3d_IsZero(std::sqrtf(pla->GetNP()->x*pla->GetNP()->x + pla->GetNP()->z*pla->GetNP()->z)))
                     pm_acch_cir[i].SetWallHDirect(pm_pos->y);

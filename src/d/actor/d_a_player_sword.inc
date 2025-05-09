@@ -458,7 +458,7 @@ int daPy_lk_c::changeCutReverseProc(daPy_ANM param_0) {
         mLinkLinChk.Set(&local_24, &mSwordTopPos, this);
         if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
-            if (!(triPla->GetNP()->y >= 0.5f) ||
+            if (!cBgW_CheckBGround(triPla->GetNP()->y) ||
                 (mCurProc == daPyProc_HAMMER_FRONT_SWING_e && triPla->GetNP()->y < 0.64278764f))
             {
                 if (mEquipItem != dItem_DEKU_LEAF_e) {
@@ -1454,13 +1454,13 @@ BOOL daPy_lk_c::procCutTurn() {
     }
 
     if (frameCtrl.checkPass(daPy_HIO_cutTurn_c0::m.field_0x34)) {
-        m331C.field_0x4 = 0x80;
-        m332C.field_0x4 = 0x80;
-        m333C.field_0x4 = 0x80;
-    } else if (m331C.field_0x4 == 0x80) {
-        m331C.field_0x4 = 0;
-        m332C.field_0x4 = 0;
-        m333C.field_0x4 = 0;
+        m331C.setAlpha(0x80);
+        m332C.setAlpha(0x80);
+        m333C.setAlpha(0x80);
+    } else if (m331C.getAlpha() == 0x80) {
+        m331C.setAlpha(0x00);
+        m332C.setAlpha(0x00);
+        m333C.setAlpha(0x00);
     }
     m34C2 = 1;
     return true;

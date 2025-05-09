@@ -469,6 +469,7 @@ public:
     void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
     bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    bool checkUseArrowEffect() const { return checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
@@ -516,13 +517,9 @@ public:
     void checkBowMiniGame() const {}
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    void checkUseArrowEffect() const {}
     void getRopeJumpLand() const {}
     void checkRopeForceEnd() const {}
     
-    // This class's weak virtual functions tend to cause weak function ordering issues in TUs that use them.
-    // The proper way to match this is still unknown, so some of the definitions have been temporarily commented out
-    // here so that they can be fakematched instead.
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;

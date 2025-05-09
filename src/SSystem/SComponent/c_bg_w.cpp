@@ -138,14 +138,6 @@ void cBgW::BlckConnect(u16* rwg, int* prev, int i_no) {
     pm_rwg[*prev].next = -1;
 }
 
-inline bool cBgW_CheckBGround(f32 ny) {
-    return ny >= 0.5f;
-}
-
-inline bool cBgW_CheckBRoof(f32 ny) {
-    return ny < (-4.0f / 5.0f);
-}
-
 /* 80247A24-80247BF8       .text ClassifyPlane__4cBgWFv */
 void cBgW::ClassifyPlane() {
     if (pm_vtx_tbl == NULL)
