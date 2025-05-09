@@ -2175,7 +2175,7 @@ public:
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
-    /* 0x35C4 */ f32 m35C4;
+    /* 0x35C4 */ f32 mAnimYDelta;
     /* 0x35C8 */ f32 m35C8;
     /* 0x35CC */ f32 m35CC;
     /* 0x35D0 */ f32 mSwimHeight;

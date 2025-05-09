@@ -219,7 +219,7 @@ BOOL daPy_lk_c::changeSwimProc() {
             mVelocity = mMaxNormalSpeed;
         }
 
-        m35C4 = 0.0f;
+        mAnimYDelta = 0.0f;
 
         setSwimTimerStartStop();
         
@@ -305,7 +305,7 @@ BOOL daPy_lk_c::changeSwimUpProc() {
 void daPy_lk_c::swimOutAfter(BOOL i_bPlayWaterExitSE) {
     onNoResetFlg0(daPyFlg0_SWIM_EXIT);
     
-    m35C4 = 0.0f;
+    mAnimYDelta = 0.0f;
 
     if (i_bPlayWaterExitSE) {
         seStartOnlyReverb(JA_SE_LK_OUTOF_WATER);
@@ -359,7 +359,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
     if (checkSwimFallCheck()) {
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
-            current.pos.y += m35C4;
+            current.pos.y += mAnimYDelta;
         }
 
         swimOutAfter(TRUE);
@@ -371,7 +371,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         current.pos.y = mSwimHeight;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
-            current.pos.y += m35C4;
+            current.pos.y += mAnimYDelta;
         }
 
         swimOutAfter(TRUE);
@@ -400,9 +400,35 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
+    
+    // Set the animation rate
+    /*
+        Given:
+        s: speed magnitude (abs(mVelocity))
+        a: air meter timer value
+        
+        Constants:
+        minAnimSpeedScale=0.6f
+        maxAnimSpeedScale=1.f
+        mMaxNormalSpeed=18.0f (baseSwimSpeed)
+        airMeterSwimAnimBoost=1.0f
+        airMeterSwimAnimBoost=1
+
+        We can express getSwimTimerRate() as a function of a:
+        = 1.0f - a * 0.0011111111f
+        = 1.0f - (a / 900)
+
+        Plugging these into the rate function:
+        = (s * (1.f - 0.6f) / 18.0f) + 0.6f + 1.0f - (a / 900)
+        = (s / 36.0f) + 1.6f - (a / 900)
+
+        This is a slight variation to the empirical formula found by TrogWW
+        that is avaliable on the ZSR page for superswimming
+
+    */
     f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale) / mMaxNormalSpeed) +
                 daPy_HIO_swim_c0::m.minAnimSpeedScale +
-               (getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterAnimBoost);
+               (getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterSwimAnimBoost);
     setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.blendTimer);
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(endFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
@@ -502,7 +528,7 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
+    mAnimYDelta = daPy_HIO_swim_c0::m.field_0x3C;
 
     onNoResetFlg0(daPyFlg0_SWIM_EXIT);
 
@@ -560,7 +586,7 @@ BOOL daPy_lk_c::procSwimUp() {
                     seStartOnlyReverb(JA_SE_LK_SWIM);
                 }
                 else {
-                    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
+                    mAnimYDelta = daPy_HIO_swim_c0::m.field_0x3C;
                     current.pos.y = mSwimHeight;
                 }
             }
@@ -593,14 +619,14 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 
     if (param_1) {
         fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
-        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * daPy_HIO_swim_c0::m.field_0x60;
+        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.idleSwimOscillationBlend) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * daPy_HIO_swim_c0::m.idleSwimOscillationBlend;
     }
     else {
         fVar2 = 0.0f;
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x44);
+    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterIdleAnimBoost) + daPy_HIO_swim_c0::m.baseIdleAnimSpeed, 0.0f, -1, daPy_HIO_swim_c0::m.idleAnimBlendTimer);
     mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
@@ -613,7 +639,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
         speed.y = 0.0f;
     }
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x48;
+    mAnimYDelta = daPy_HIO_swim_c0::m.headBobHeight;
     m34D4 = 0;
     mProcVar0.m3570 = 0;
     return TRUE;
@@ -633,7 +659,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
     m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * daPy_HIO_swim_c0::m.field_0x2);
-    m35C4 = cM_ssin(m34D4) * daPy_HIO_swim_c0::m.field_0x4C + daPy_HIO_swim_c0::m.field_0x48;
+    mAnimYDelta = cM_ssin(m34D4) * daPy_HIO_swim_c0::m.field_0x4C + daPy_HIO_swim_c0::m.headBobHeight;
 
     if (changeSwimOutProc()) {
         return TRUE;
@@ -661,7 +687,7 @@ BOOL daPy_lk_c::procSwimWait() {
         }
     }
 
-    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterIdleAnimBoost) + daPy_HIO_swim_c0::m.baseIdleAnimSpeed);
 
     if (mStickDistance > 0.05f) {
         procSwimMove_init(TRUE);
@@ -712,7 +738,7 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL i_bKeepSwimAnime) {
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
+    mAnimYDelta = daPy_HIO_swim_c0::m.swimForwardYOffset;
     mProcVar0.m3570 = 0;
 
     return TRUE;
@@ -747,16 +773,17 @@ BOOL daPy_lk_c::procSwimMove() {
         direction = DIR_FORWARD;
     }
 
+    // If swim direction has changed, update animation
     if (mDirection != direction) {
         mDirection = direction;
-        float fVar1 = m35C4;
+        float prevYDelta = mAnimYDelta;
 
         if (mDirection == DIR_FORWARD) {
             anm = ANM_SWIMING;
-            m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
+            mAnimYDelta = daPy_HIO_swim_c0::m.swimForwardYOffset;
         }
         else {
-            m35C4 = -80.0f;
+            mAnimYDelta = -80.0f;
 
             if (mDirection == DIR_LEFT) {
                 anm = ANM_ATNDLS;
@@ -769,7 +796,7 @@ BOOL daPy_lk_c::procSwimMove() {
             } 
         }
 
-        m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= m35C4 - fVar1;
+        m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= mAnimYDelta - prevYDelta;
         setSwimMoveAnime(anm);
 
         if (mDirection != DIR_FORWARD) {
@@ -784,7 +811,9 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale)) / mMaxNormalSpeed + daPy_HIO_swim_c0::m.minAnimSpeedScale + (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterAnimBoost));
+        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale)) / mMaxNormalSpeed + 
+                               daPy_HIO_swim_c0::m.minAnimSpeedScale + 
+                               (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterSwimAnimBoost));
     }
 
     if (mDirection == DIR_BACKWARD) {

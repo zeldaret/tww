@@ -2424,7 +2424,7 @@ void daPy_lk_c::posMoveFromFootPos() {
                 dVar14 = getSwimTimerRate();
                 fVar1 = (((1.0f + (dVar14 * daPy_HIO_swim_c0::m.field_0x7C)) /
                         ((1.0f - (speedF * daPy_HIO_swim_c0::m.field_0x7C)) +
-                        (speedF * dVar13) * daPy_HIO_swim_c0::m.field_0x60)));
+                        (speedF * dVar13) * daPy_HIO_swim_c0::m.idleSwimOscillationBlend)));
                 speed.x = fVar1 * cM_ssin(current.angle.y);
                 speed.z = fVar1 * cM_scos(current.angle.y);
             } else if (((mCurProc != daPyProc_CUT_ROLL_e) || (!dComIfGp_event_runCheck())) ||
@@ -5879,7 +5879,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m3544 = 0;
     mSightPacket.offDrawFlg();
     mSightPacket.offLockFlg();
-    m35C4 = 0.0f;
+    mAnimYDelta = 0.0f;
     mFanSwingCb.onAlphaOutFlg();
     shape_angle.x = 0;
     shape_angle.z = 0;
@@ -8288,7 +8288,7 @@ BOOL daPy_lk_c::procElecDamage_init(const cXyz* param_1) {
     mDemo.setDemoType(5);
     int iVar2 = checkShipRideUseItem(0);
     if (checkModeFlg(ModeFlg_SWIM)) {
-        current.pos.y += m35C4;
+        current.pos.y += mAnimYDelta;
         m34D4 = 1;
         swimOutAfter(1);
     } else {
@@ -8918,7 +8918,7 @@ void daPy_lk_c::footBgCheck() {
     } else {
         iVar8 = 0;
     }
-    if (((iVar8 == 2) || (mCurProc == daPyProc_DEMO_TOOL_e)) || (std::abs(m35C4) > 1.0f)) {
+    if (((iVar8 == 2) || (mCurProc == daPyProc_DEMO_TOOL_e)) || (std::abs(mAnimYDelta) > 1.0f)) {
         fVar1 = 0.0f;
     } else {
         if (local_108[0] > local_108[1]) {
@@ -9730,7 +9730,7 @@ void daPy_lk_c::setWorldMatrix() {
     cXyz local_44;
     Mtx afStack_38;
 
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m35C4 + m3608, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mAnimYDelta + m3608, current.pos.z);
     ship = dComIfGp_getShipActor();
     if ((dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) && (ship != NULL)) {
         mDoMtx_stack_c::ZXYrotM(m353C, ship->shape_angle.y, m353E);
@@ -11266,7 +11266,7 @@ void daPy_lk_c::setStepsOffset() {
     f32 dVar6;
     cXyz local_2c;
 
-    cLib_addCalc(&m35C4, 0.0f, 0.5f, 25.0f, 5.0f);
+    cLib_addCalc(&mAnimYDelta, 0.0f, 0.5f, 25.0f, 5.0f);
     dVar6 = (cM_ssin(m34E2) / cM_scos(m34E2));
     local_2c.x = current.pos.x + speedF * cM_ssin(current.angle.y);
     local_2c.y = 30.1f + current.pos.y;
@@ -11279,12 +11279,12 @@ void daPy_lk_c::setStepsOffset() {
     fVar1 = (dVar5 - current.pos.y) - (-speedF * dVar6);
     if (fVar1 > 0.0f) {
         current.pos.y = dVar5;
-        m35C4 -= fVar1 * 0.7f;
+        mAnimYDelta -= fVar1 * 0.7f;
     } else if (!checkNoResetFlg0(daPyFlg0_UNK80000000)) {
         local_2c = old.pos - current.pos;
         fVar1 = local_2c.y - (dVar6 * local_2c.absXZ());
         if (fVar1 >= 0.0f) {
-            m35C4 += fVar1 * 0.7f;
+            mAnimYDelta += fVar1 * 0.7f;
         }
     }
     return;
