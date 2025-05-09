@@ -15,6 +15,26 @@
 #include "f_op/f_op_kankyo_mng.h"
 
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
+/*
+ * Handles directional input, angle adjustment, and movement speed when Link is swimming.
+ * 
+ * This function interprets analog stick input to determine Link’s swimming direction and
+ * velocity, accounting for whether Link is locked onto a target or moving freely. It also
+ * applies angle smoothing and speed calculations based on input intensity and current angles.
+ * 
+ * Behavior varies depending on whether Link is in the swim-up state, free-swimming, or locked on:
+ *   - When not locked on, angle and speed are derived from stick direction relative to shape angle.
+ *   - When locked on, movement is restricted to prevent backward swimming and aligns angles with the target.
+ *   - In swim-up state, all horizontal motion is halted.
+ * 
+ * Notably, this function contains logic that inadvertently allows for the "super-swim" exploit,
+ * due to a lack of clamping when speed is calculated from cosine of angle difference.
+ * 
+ * Additionally:
+ *   - Applies acceleration and clamps final velocity.
+ *   - Handles forced stops for invalid movement (e.g., trying to swim backward while locked on).
+ *   - Cancels movement under specific player status conditions.
+ */
 void daPy_lk_c::setSpeedAndAngleSwim() {
     float calculatedSpeed;
     short oldAngleY;
@@ -148,7 +168,6 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
         mVelocity = 0.0f;
     }
 }
-
 
 /* 8013CF2C-8013CFC0       .text checkNextModeSwim__9daPy_lk_cFv */
 /*
@@ -419,7 +438,7 @@ void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
         = 1.0f - (a / 900)
 
         Plugging these into the rate function:
-        = (s * (1.f - 0.6f) / 18.0f) + 0.6f + 1.0f - (a / 900)
+        = (s * (1.1f - 0.6f) / 18.0f) + 0.6f + 1.0f - (a / 900)
         = (s / 36.0f) + 1.6f - (a / 900)
 
         This is a slight variation to the empirical formula found by TrogWW
@@ -605,29 +624,48 @@ BOOL daPy_lk_c::procSwimUp() {
  * Based on the parameter, either plays the splash sound and effects or keeps the character idle.
  * 
  * Parameters:
- *   - param_1: If TRUE, plays the splash effect and sound.
+ *   - param_1: If TRUE, adjust Link's velocity based on his progress in the swimming animation
  * 
  * Returns:
  *   - TRUE when initialization of the swim wait process is successful.
  */
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
-    float fVar2;
+    float swim_animation_state;
     
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
     commonProcInit(daPyProc_SWIM_WAIT_e);
 
     if (param_1) {
-        fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
-        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.idleSwimOscillationBlend) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * daPy_HIO_swim_c0::m.idleSwimOscillationBlend;
+        // Adjust Link's velocity based on his forward speed and his current position within his swimming animation
+        /*
+            Given:
+            s: forward speed (`speedF`)
+            x: Link's current animation position (`mFrameCtrl->getFrame()`)
+            swim_animation_state: Represents (as a percentage) how far Link is through one cycle of his swimming animation
+
+            Constants:
+            idleSwimOscillationBlend=0.4f
+
+            Assuming Link's swimming animation runs for a total of 23 frames, we can express `swim_animation_state` as a function of x:
+            = x / 23.0
+
+            Plugging these into the velocity function:
+            = s * (1.0f - 0.4f) + s * |cos(π * x / 23.0f)| * 0.4f
+            = s * (0.6f + |cos(π * x / 23.0f)| * 0.4f)
+
+            Which is the exact empirical formula found by TrogWW that is avaliable on the ZSR page for superswimming
+        */
+        swim_animation_state = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
+        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.idleSwimOscillationBlend) + speedF * std::fabsf(cM_fcos(swim_animation_state * M_PI)) * daPy_HIO_swim_c0::m.idleSwimOscillationBlend;
     }
     else {
-        fVar2 = 0.0f;
+        swim_animation_state = 0.0f;
     }
 
     gravity = 0.0f;
     setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterIdleAnimBoost) + daPy_HIO_swim_c0::m.baseIdleAnimSpeed, 0.0f, -1, daPy_HIO_swim_c0::m.idleAnimBlendTimer);
-    mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
+    mFrameCtrl->setFrame(swim_animation_state * mFrameCtrl->getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
@@ -678,7 +716,7 @@ BOOL daPy_lk_c::procSwimWait() {
         return TRUE;
     }
 
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) { // Probably indicates that Link is actively talking to someone (or there's a textbox on screen)?
         fopAc_ac_c* talkEventPartner = fopAcM_getTalkEventPartner(this);
         if (talkEventPartner) {
             short targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
@@ -847,7 +885,7 @@ BOOL daPy_lk_c::procSwimMove() {
         procSwimWait_init(TRUE);
     }
     else if ((mDirection == DIR_FORWARD && mFrameCtrl->checkPass(20.0f)) || (mDirection != DIR_FORWARD && mFrameCtrl->checkPass(0.0f))) {
-            seStartOnlyReverb(JA_SE_LK_SWIM);
+        seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 
     setSwimTimerStartStop();
