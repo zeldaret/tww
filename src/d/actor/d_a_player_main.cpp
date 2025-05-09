@@ -2219,7 +2219,7 @@ int daPy_lk_c::getDirectionFromCurrentAngle() {
 }
 
 /* 80108B68-80108D80       .text setNormalSpeedF__9daPy_lk_cFffff */
-oid daPy_lk_c::setNormalSpeedF(f32 i_acceleration, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
+void daPy_lk_c::setNormalSpeedF(f32 i_acceleration, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
    f32 desiredSpeed;
    // Calculate the desired speed based on the stick distance and Link's maximum normal speed
    if (dComIfGp_event_getMode() != dEvtMode_NONE_e || checkHeavyStateOn() || field_0x2b0 < 0.0f) {
@@ -2309,7 +2309,7 @@ oid daPy_lk_c::setNormalSpeedF(f32 i_acceleration, f32 i_scale, f32 i_maxStep, f
        */
        cLib_addCalc(&mVelocity, targetSpeed, i_scale, maxStep, i_minStep);
    }
-
+}
 
 /* 80108D80-8010959C       .text posMoveFromFootPos__9daPy_lk_cFv */
 void daPy_lk_c::posMoveFromFootPos() {
