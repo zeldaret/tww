@@ -11,7 +11,7 @@ public:
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xC;
     /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
+    /* 0x14 */ f32 wallSlowdownFactor;
     /* 0x18 */ f32 field_0x18;
     /* 0x1C */ f32 field_0x1C;
 };  // Size: 0x20
@@ -712,36 +712,36 @@ class daPy_HIO_swim_c1 {
 public:
     /* 0x00 */ s16 field_0x0;  // 0x18
     /* 0x02 */ s16 field_0x2;  // 0x91A
-    /* 0x04 */ s16 field_0x4;  // 0x1388
-    /* 0x06 */ s16 field_0x6;  // 0x4B0
-    /* 0x08 */ s16 field_0x8;  // 0x11
-    /* 0x0C */ f32 field_0xC;  // 18.0f
-    /* 0x10 */ f32 field_0x10; // 1.0f
-    /* 0x14 */ f32 field_0x14; // -50.0f
-    /* 0x18 */ f32 field_0x18; // 0.02f
-    /* 0x1C */ f32 field_0x1C; // 2.0f
-    /* 0x20 */ f32 field_0x20; // 0.5f
-    /* 0x24 */ f32 field_0x24; // 90.0f
-    /* 0x28 */ f32 field_0x28; // 15.0f
+    /* 0x04 */ s16 angleTurnRateMin;  // 0x1388
+    /* 0x06 */ s16 angleTurnRateMax;  // 0x4B0
+    /* 0x08 */ s16 angleApproachStep;  // 0x11
+    /* 0x0C */ f32 baseSwimSpeed;  // 18.0f
+    /* 0x10 */ f32 fallSpeedMultiplier; // 1.0f
+    /* 0x14 */ f32 minSplashEntrySpeed; // -50.0f
+    /* 0x18 */ f32 acceleration; // 0.02f
+    /* 0x1C */ f32 speedStepMax; // 2.0f
+    /* 0x20 */ f32 speedStepMin; // 0.5f
+    /* 0x24 */ f32 minDepthToSwim; // 90.0f
+    /* 0x28 */ f32 swimSurfaceCloseThreshold; // 15.0f
     /* 0x2C */ f32 field_0x2C; // 0.7f
     /* 0x30 */ f32 field_0x30; // 0.0f
     /* 0x34 */ f32 field_0x34; // 19.0f
     /* 0x38 */ f32 field_0x38; // 3.0f
     /* 0x3C */ f32 field_0x3C; // 0.0f
-    /* 0x40 */ f32 field_0x40; // 0.5f
-    /* 0x44 */ f32 field_0x44; // 18.0f
-    /* 0x48 */ f32 field_0x48; // 1.0f
+    /* 0x40 */ f32 baseIdleAnimSpeed; // 0.5f
+    /* 0x44 */ f32 idleAnimBlendTimer; // 18.0f
+    /* 0x48 */ f32 headBobHeight; // 1.0f
     /* 0x4C */ f32 field_0x4C; // 5.0f
-    /* 0x50 */ f32 field_0x50; // 0.6f
-    /* 0x54 */ f32 field_0x54; // 1.1f
-    /* 0x58 */ f32 field_0x58; // 5.3f
-    /* 0x5C */ f32 field_0x5C; // 0.0f
-    /* 0x60 */ f32 field_0x60; // 0.4f
-    /* 0x64 */ f32 field_0x64; // 6.0f
-    /* 0x68 */ f32 field_0x68; // 9.5f
+    /* 0x50 */ f32 minAnimSpeedScale; // 0.6f
+    /* 0x54 */ f32 maxAnimSpeedScale; // 1.1f
+    /* 0x58 */ f32 blendTimer; // 5.3f
+    /* 0x5C */ f32 swimForwardYOffset; // 0.0f
+    /* 0x60 */ f32 idleSwimOscillationBlend; // 0.4f
+    /* 0x64 */ f32 maxUnderwaterUpAcceleration; // 6.0f
+    /* 0x68 */ f32 maxUnderwaterUpSpeed; // 9.5f
     /* 0x6C */ f32 field_0x6C;
-    /* 0x70 */ f32 field_0x70; // 2.5f
-    /* 0x74 */ f32 field_0x74; // 1.0f
+    /* 0x70 */ f32 airMeterIdleAnimBoost; // 2.5f
+    /* 0x74 */ f32 airMeterSwimAnimBoost; // 1.0f
     /* 0x78 */ f32 field_0x78; // 30.0f
     /* 0x7C */ f32 field_0x7C;
 };  // Size: 0x80

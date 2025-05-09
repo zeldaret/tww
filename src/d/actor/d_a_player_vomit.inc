@@ -140,7 +140,7 @@ BOOL daPy_lk_c::procVomitWait() {
 /* 8014FD8C-8014FF0C       .text procVomitJump_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     commonProcInit(daPyProc_VOMIT_JUMP_e);
-    m35C4 = 40.0f;
+    mAnimYDelta = 40.0f;
     float fVar1;
     if (param_0 == 2 || param_0 == 3) {
         fVar1 = 3.0f;

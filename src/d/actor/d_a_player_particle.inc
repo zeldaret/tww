@@ -617,7 +617,7 @@ void daPy_lk_c::setWaterRipple() {
 
     // Probably fakematch (May use inlines?)
     if ((var_r3 && m34D6 != 0) ||
-        (mCurProc != daPyProc_VOMIT_WAIT_e && !var_r3 && (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) && ((checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) || (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())))
+        (mCurProc != daPyProc_VOMIT_WAIT_e && !var_r3 && (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) && ((checkNoResetFlg0(daPyFlg0_UNK80) && mSwimHeight > 5.0f + mCyl.GetC().y && mSwimHeight < mCyl.GetC().y + mCyl.GetH()) || (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())))
     ) {
 
         if (m3280.getEmitter() == NULL) {
@@ -663,7 +663,7 @@ void daPy_lk_c::setWaterRipple() {
 
         cXyz local_20;
         cXyz local_28;
-        local_1c.y = m35D0;
+        local_1c.y = mSwimHeight;
 
         f32 cos = cM_scos(shape_angle.y) * 5.0f;
         f32 sin = cM_ssin(shape_angle.y) * 5.0f;
@@ -675,10 +675,10 @@ void daPy_lk_c::setWaterRipple() {
         local_28.y = local_1c.y;
         local_28.z = local_1c.z + sin;
         mSwimTailEcallBack[0].mPos.set(local_20);
-        mSwimTailEcallBack[0].field_0x0C = m35D0 + 2.0f;
+        mSwimTailEcallBack[0].field_0x0C = mSwimHeight + 2.0f;
         mSwimTailEcallBack[0].field_0x10 = mAcch.m_wtr.GetHeight();
         mSwimTailEcallBack[1].mPos.set(local_28);
-        mSwimTailEcallBack[1].field_0x0C = m35D0 + 2.0f;
+        mSwimTailEcallBack[1].field_0x0C = mSwimHeight + 2.0f;
         mSwimTailEcallBack[1].field_0x10 = mAcch.m_wtr.GetHeight();
 
         cXyz local_40;
@@ -688,7 +688,7 @@ void daPy_lk_c::setWaterRipple() {
         cXyz local_4c;
         mDoMtx_multVecZero(suimenMunyaMtx, &local_4c);
 
-        local_40.y = m35D0;
+        local_40.y = mSwimHeight;
         local_4c -= local_40;
 
         cXyz local_50;
@@ -807,8 +807,8 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     footEffect->setPos(i_pos);
     footEffect->setAngle(&angle);
     if (effectID == dPa_name::ID_COMMON_0023) {
-        if (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 10.0f + i_pos->y) {
-            footEffect->mPos.y = m35D0 - 10.0f;
+        if (checkNoResetFlg0(daPyFlg0_UNK80) && mSwimHeight > 10.0f + i_pos->y) {
+            footEffect->mPos.y = mSwimHeight - 10.0f;
         }
     } else if (mCurProc == daPyProc_CUT_ROLL_e && effectID == dPa_name::ID_COMMON_2022) {
         effectID = -2;
@@ -923,10 +923,10 @@ void daPy_lk_c::setFootEffect() {
         }
     }
 
-    if (checkResetFlg0(daPyRFlg0_UNK10) && mCurrAttributeCode == dBgS_Attr_WATER_e && m35D0 > 25.0f + current.pos.y) {
+    if (checkResetFlg0(daPyRFlg0_UNK10) && mCurrAttributeCode == dBgS_Attr_WATER_e && mSwimHeight > 25.0f + current.pos.y) {
         cXyz& p = m3410.getPos();
         p.x = current.pos.x + 45.0f * cM_ssin(current.angle.y);
-        p.y = m35D0;
+        p.y = mSwimHeight;
         p.z = current.pos.z + 45.0f * cM_scos(current.angle.y);
 
         m3410.setAngle(0, current.angle.y + 0x8000, 0);
@@ -949,7 +949,7 @@ void daPy_lk_c::setFootEffect() {
 
     if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
         if (checkResetFlg0(daPyRFlg0_UNK10)) {
-            if (getFootOnGround() && m35D0 <= current.pos.y) {
+            if (getFootOnGround() && mSwimHeight <= current.pos.y) {
                 dComIfGp_particle_setP1(dPa_name::ID_SCENE_8237, &pos, &current.angle);
             }
         }
@@ -1089,7 +1089,7 @@ void daPy_lk_c::setCutWaterSplash() {
 
 /* 8012C330-8012C45C       .text setSwimWaterDrop__9daPy_lk_cFP25daPy_waterDropEcallBack_c */
 void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
-    f32 tmp = m35D0 + 10.0f;
+    f32 tmp = mSwimHeight + 10.0f;
     if (checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP) || !checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) || (callBack->getPos().y > tmp && !checkModeFlg(ModeFlg_SWIM))) {
         if (callBack->getEmitter() == NULL && (callBack->field_0x1C || checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP))) {
             JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, &callBack->getPos(), NULL, NULL, 0xFF, callBack);
@@ -1101,7 +1101,7 @@ void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
 
         callBack->field_0x1C = FALSE;
         offNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP);
-    } else if (checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) && callBack->getPos().y < m35D0) {
+    } else if (checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) && callBack->getPos().y < mSwimHeight) {
         callBack->end();
         if (mCurProc != daPyProc_VOMIT_WAIT_e) {
             callBack->field_0x1C = TRUE;
@@ -1231,11 +1231,11 @@ void daPy_lk_c::setDamageEmitter() {
 void daPy_lk_c::endFlameDamageEmitter() {
     if (!daPy_dmEcallBack_c::checkFlame()) return;
 
-    if (current.pos.y < m35D0 - 10.0f) {
+    if (current.pos.y < mSwimHeight - 10.0f) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
             cXyz pos;
             mDoMtx_multVecZero(mDmEcallBack[i].mpMtx, &pos);
-            pos.y = m35D0;
+            pos.y = mSwimHeight;
 
             dComIfGp_particle_set(dPa_name::ID_COMMON_035A, &pos);
         }

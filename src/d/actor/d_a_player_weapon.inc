@@ -60,7 +60,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        m34D4 = mTargetAngleY;
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m351E = m34DC;
@@ -241,7 +241,7 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
     if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        m34D4 = mTargetAngleY;
     }
     setEnemyWeaponAtParam(0);
     voiceStart(7);
@@ -290,7 +290,7 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
     if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        m34D4 = mTargetAngleY;
     }
     m34D4 = shape_angle.y;
     setBlurPosResource(LKANM__HAMMERFRONT_POS);

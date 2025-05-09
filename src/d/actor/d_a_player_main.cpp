@@ -1867,7 +1867,7 @@ BOOL daPy_lk_c::draw() {
     if (!r24) {
         if (mCurProc == daPyProc_CUT_F_e || mCurProc == daPyProc_BT_VERTICAL_JUMP_CUT_e) {
             updateDLSetLight(mpSwordTipStabModel, 0);
-        } else if (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100) && !(mCurProc == daPyProc_DEMO_DEAD_e && m34D6 == 0)) {
+        } else if (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_SWIM_EXIT) && !(mCurProc == daPyProc_DEMO_DEAD_e && m34D6 == 0)) {
             GXColor spc;
             GXColor sp8;
             dKy_get_seacolor(&spc, &sp8);
@@ -2210,66 +2210,105 @@ int daPy_lk_c::getDirectionFromAngle(s16 angle) {
 
 /* 80108B08-80108B38       .text getDirectionFromShapeAngle__9daPy_lk_cFv */
 int daPy_lk_c::getDirectionFromShapeAngle() {
-    return getDirectionFromAngle(m34E8 - shape_angle.y);
+    return getDirectionFromAngle(mTargetAngleY - shape_angle.y);
 }
 
 /* 80108B38-80108B68       .text getDirectionFromCurrentAngle__9daPy_lk_cFv */
 int daPy_lk_c::getDirectionFromCurrentAngle() {
-    return getDirectionFromAngle(m34E8 - current.angle.y);
+    return getDirectionFromAngle(mTargetAngleY - current.angle.y);
 }
 
 /* 80108B68-80108D80       .text setNormalSpeedF__9daPy_lk_cFffff */
-void daPy_lk_c::setNormalSpeedF(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
-    s16 uVar2;
-    f32 dVar6;
-    f32 dVar10;
-
-    if (((dComIfGp_event_runCheck()) || (checkHeavyStateOn())) || (checkGrabWear())) {
-        dVar10 = mMaxNormalSpeed * mStickDistance;
-    } else {
-        dVar10 = mStickDistance * (mMaxNormalSpeed * mStickDistance);
-    }
-    if ((mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK0E_e) || (getSlidePolygon() != NULL)) {
-        return;
-    }
-    if (mAcch.ChkWallHit()) {
-        uVar2 = 0;
-        dBgS_AcchCir* pdVar4 = &mAcchCir[0];
-        for (int i = 0; i < 3; i++, pdVar4++) {
-            if (pdVar4->ChkWallHit()) {
-                uVar2 = (current.angle.y + 0x8000) - pdVar4->GetWallAngleY();
-                break;
-            }
-        }
-        if (abs(uVar2) < 0x4000) {
-            dVar10 *= (1.0f - cM_scos(uVar2) * daPy_HIO_basic_c0::m.field_0x14);
-        }
-    }
-    f32 temp_f3;
-    if (dVar10 < mVelocity) {
-        f32 temp_f0 = mVelocity - dVar10;
-        if (temp_f0 > param_3) {
-            temp_f3 = param_3;
-        } else {
-            temp_f3 = temp_f0;
-        }
-        if (temp_f3 < param_4) {
-            temp_f3 = param_4;
-        }
-        param_1 = 0.0f;
-        dVar6 = dVar10;
-    } else {
-        temp_f3 = param_3;
-        dVar6 = 0.0f;
-    }
-    if (!(cM3d_IsZero(param_1))) {
-        mVelocity += param_1;
-        if (mVelocity > dVar10) {
-            mVelocity = dVar10;
-        }
-    } else {
-        cLib_addCalc(&mVelocity, dVar6, param_2, temp_f3, param_4);
-    }
+void daPy_lk_c::setNormalSpeedF(f32 i_acceleration, f32 i_scale, f32 i_maxStep, f32 i_minStep) {
+   f32 desiredSpeed;
+   // Calculate the desired speed based on the stick distance and Link's maximum normal speed
+   if (dComIfGp_event_getMode() != dEvtMode_NONE_e || checkHeavyStateOn() || field_0x2b0 < 0.0f) {
+       desiredSpeed = mMaxNormalSpeed * mStickDistance;
+   }
+   else {
+       desiredSpeed = (mMaxNormalSpeed * mStickDistance) * mStickDistance;
+   }
+   if ((mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK0E_e) || getSlidePolygon()) {
+       return;
+   }
+   // Special speed adjustment if Link collides with a wall
+   if (mAcch.ChkWallHit()) {
+       s16 angle = 0;
+       // Loop that determines which part of Link is touching the wall? (unsure about this)
+       dBgS_AcchCir* acchPtr = mAcchCir;
+       for (int i = 0; i < 3; i++, acchPtr++) {
+           if(acchPtr->ChkWallHit()) {
+               // Calculate the angle between Link and the wall
+               angle = current.angle.y + 0x8000 - acchPtr->GetWallAngleY();
+               break;
+           }
+       }
+       // If the angle is not too steep, reduce speed based on angle and slowdown factor
+       if (abs(angle) < 0x4000) {
+           desiredSpeed *= (1.0f - daPy_HIO_basic_c0::m.wallSlowdownFactor * cM_scos(angle));
+       }
+   }
+   f32 targetSpeed;
+   f32 maxStep;
+   // If slowing down (desired speed is less than current speed)
+   /* 
+       Note:
+       When `mVeloctiy`is negative, this conditional always evaluates to FALSE.
+   */
+   if (desiredSpeed < mVelocity) {
+       // Determine how much the Link should slow down by
+       f32 speedDelta = mVelocity - desiredSpeed;
+       // Limit how fast Link slows down
+       if (speedDelta > i_maxStep) {
+           maxStep = i_maxStep;
+       } else {
+           maxStep = speedDelta;
+       }
+       // Enforce a minimum deceleration step
+       if (maxStep < i_minStep) {
+           maxStep = i_minStep;
+       }
+       // External speed adjustments are ignored when slowing down
+       i_acceleration = 0.0f;
+       targetSpeed = desiredSpeed;
+   }
+   else {
+       // When accelerating, use the max step directly
+       maxStep = i_maxStep;
+       targetSpeed = 0.0f;
+   }
+   // Apply external speed additions if present
+   /*
+       Note: 
+       When this function is called from `setSpeedAndAngleSwim`, `i_acceleration` is the same as
+       `calculatedSpeed` and for any non-zero value `calculatedSpeed`, this conditional always evaluates to TRUE.
+   */
+   if (!cM3d_IsZero(i_acceleration)) {
+       /*
+           Note: 
+           Negative speed is added additively as well
+       */
+       mVelocity += i_acceleration;
+        // Clamp to the desired speed if it would exceed it
+        /*
+           Note:
+           This is purely a clamp on the positive speed and the lack of one 
+           for negative speed is what gives rise to super-swimming
+        */
+       if (mVelocity > desiredSpeed) {
+           mVelocity = desiredSpeed;
+       }
+   } 
+   else {
+       // Smoothly adjust Link's current speed towards target speed
+       /*
+           Note: 
+           When `mVelocity` is negative, the target speed is 0 and a value of 2.0 (speedStepMax)
+           will be added to the negative speed each frame until Link has stopped moving.
+           This behaviour is documented on the ZSR page for Super-Swimming: https://www.zeldaspeedruns.com/tww/techniques/superswim
+       */
+       cLib_addCalc(&mVelocity, targetSpeed, i_scale, maxStep, i_minStep);
+   }
 }
 
 /* 80108D80-8010959C       .text posMoveFromFootPos__9daPy_lk_cFv */
@@ -2350,7 +2389,7 @@ void daPy_lk_c::posMoveFromFootPos() {
             f32 f30;
             f30 = std::abs(cM_scos(r3 & 0xFFFF));
             f32 f1 =
-                ((speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60)) + daPy_HIO_swim_c0::m.field_0x60 * (speedF * f30)) /
+                ((speedF * (1.0f - daPy_HIO_swim_c0::m.idleSwimOscillationBlend)) + daPy_HIO_swim_c0::m.idleSwimOscillationBlend * (speedF * f30)) /
                 (1.0f + (daPy_HIO_swim_c0::m.field_0x7C * getSwimTimerRate()));
             speed.x = f1 * cM_ssin(current.angle.y);
             speed.z = f1 * cM_scos(current.angle.y);
@@ -2685,7 +2724,7 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
         if (checkGrabWear()) {
             dVar11 *= 1.0f / (daPy_HIO_move_c0::m.field_0x74 * daPy_HIO_move_c0::m.field_0x74);
         }
-        if ((!mpAttention->Lockon() && cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800) &&
+        if ((!mpAttention->Lockon() && cLib_distanceAngleS(mTargetAngleY, current.angle.y) > 0x7800) &&
             mCurProc != daPyProc_MOVE_TURN_e)
         {
             if (checkModeFlg(ModeFlg_00000001)) {
@@ -2698,13 +2737,13 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                     return;
                 }
                 if (speedF / mMaxNormalSpeed <= daPy_HIO_slip_c0::m.field_0x4) {
-                    cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6,
+                    cLib_addCalcAngleS(&current.angle.y, mTargetAngleY, daPy_HIO_move_c0::m.field_0x6,
                                        param_1, daPy_HIO_move_c0::m.field_0x4);
                     return;
                 }
                 bVar2 = true;
             } else {
-                cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6, param_1,
+                cLib_addCalcAngleS(&current.angle.y, mTargetAngleY, daPy_HIO_move_c0::m.field_0x6, param_1,
                                    daPy_HIO_move_c0::m.field_0x4);
             }
         } else {
@@ -2721,11 +2760,11 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                     sVar7 = 1;
                 }
             }
-            cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6, sVar6,
+            cLib_addCalcAngleS(&current.angle.y, mTargetAngleY, daPy_HIO_move_c0::m.field_0x6, sVar6,
                                sVar7);
         }
         if (!bVar2) {
-            dVar9 = cM_scos(m34E8 - current.angle.y);
+            dVar9 = cM_scos(mTargetAngleY - current.angle.y);
             if (mVelocity > 0.5f * mMaxNormalSpeed) {
                 if (dVar9 < 0.7f) {
                     dVar9 = 0.7f;
@@ -2759,7 +2798,7 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
         mStickDistance > 0.05f)
     {
         sVar6 = shape_angle.y;
-        cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6,
+        cLib_addCalcAngleS(&shape_angle.y, mTargetAngleY, daPy_HIO_move_c0::m.field_0x6,
                            (s16)(param_1 << 1), (s16)(daPy_HIO_move_c0::m.field_0x4 << 1));
         sVar7 = current.angle.y;
         if ((s16)(sVar6 - sVar7) * (s16)(shape_angle.y - sVar7) <= 0) {
@@ -2786,7 +2825,7 @@ void daPy_lk_c::setSpeedAndAngleAtn() {
                 mVelocity *= -1.0f;
             }
             sVar1 = current.angle.y;
-            cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_atnMove_c0::m.field_0x4,
+            cLib_addCalcAngleS(&current.angle.y, mTargetAngleY, daPy_HIO_atnMove_c0::m.field_0x4,
                                daPy_HIO_atnMove_c0::m.field_0x0, daPy_HIO_atnMove_c0::m.field_0x2);
             fVar2 = daPy_HIO_atnMove_c0::m.field_0x8 * mStickDistance *
                     cM_scos(current.angle.y - sVar1);
@@ -2809,7 +2848,7 @@ void daPy_lk_c::setSpeedAndAngleAtnBack() {
         }
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
-            &current.angle.y, m34E8,
+            &current.angle.y, mTargetAngleY,
             daPy_HIO_atnMoveB_c0::m.field_0x4,
             daPy_HIO_atnMoveB_c0::m.field_0x0,
             daPy_HIO_atnMoveB_c0::m.field_0x2
@@ -2837,7 +2876,7 @@ void daPy_lk_c::setSpeedAndAngleAtnActor() {
         }
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
-            &current.angle.y, m34E8,
+            &current.angle.y, mTargetAngleY,
             daPy_HIO_atnMove_c0::m.field_0x4,
             daPy_HIO_atnMove_c0::m.field_0x0,
             daPy_HIO_atnMove_c0::m.field_0x2
@@ -3551,7 +3590,7 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
 /* 8010C71C-8010C7F4       .text setFallVoice__9daPy_lk_cFv */
 void daPy_lk_c::setFallVoice() {
     if ((!checkNoResetFlg0(daPyFlg0_NO_FALL_VOICE) &&
-         ((((!checkNoResetFlg0(daPyFlg0_UNK80) || m35D0 < mAcch.GetGroundH()) || m3580 == 4) ||
+         ((((!checkNoResetFlg0(daPyFlg0_UNK80) || mSwimHeight < mAcch.GetGroundH()) || m3580 == 4) ||
            C_BG_MIN_HEIGHT == mAcch.GetGroundH()))) &&
         (m35F0 - current.pos.y > 500.0f))
     {
@@ -4245,7 +4284,7 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
             }
         } else if (dComIfGp_getDoStatus() == dActStts_ATTACK_e) {
             if (!mpAttention->Lockon() && mStickDistance > 0.05f) {
-                shape_angle.y = m34E8;
+                shape_angle.y = mTargetAngleY;
             }
             return procFrontRoll_init(daPy_HIO_roll_c0::m.field_0xC);
         }
@@ -4405,7 +4444,7 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
         mDirection = DIR_NONE;
         int direction = getDirectionFromCurrentAngle();
         if (std::abs(mVelocity) <= 0.001f) {
-            if (cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800 && mStickDistance > 0.05f)
+            if (cLib_distanceAngleS(mTargetAngleY, current.angle.y) > 0x7800 && mStickDistance > 0.05f)
             {
                 r3 = procWaitTurn_init();
                 if (!r3 && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0)
@@ -4417,7 +4456,7 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
             }
         } else if (mCurProc == daPyProc_MOVE_TURN_e && current.angle.y != shape_angle.y) {
             r3 = procMoveTurn_init(0);
-        } else if (cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800 &&
+        } else if (cLib_distanceAngleS(mTargetAngleY, current.angle.y) > 0x7800 &&
                    mStickDistance > 0.05f)
         {
             if ((speedF / mMaxNormalSpeed > daPy_HIO_slip_c0::m.field_0x4) &&
@@ -4557,7 +4596,7 @@ void daPy_lk_c::setFrontWallType() {
         if (iVar10 == 2 || current.pos.y - m35D4 < 125.0f) {
             return;
         }
-        if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
             if ((iVar10 == 3 && !checkModeFlg(ModeFlg_SWIM)) && !checkModeFlg(ModeFlg_MIDAIR)) {
                 onResetFlg0(daPyRFlg0_UNK8);
                 mPolyInfo = mLinkLinChk;
@@ -4796,7 +4835,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 current.pos.x = (m3724.x + 20.5f * fVar3) - fVar2;
                 current.pos.y = m3724.y + 37.5f * iVar8;
                 current.pos.z = (m3724.z + 20.5f * fVar2) + fVar3;
-                while (m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+                while (mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.minDepthToSwim) {
                     current.pos.y += 37.5f;
                 }
                 procLadderMove_init(1, 0, &current.pos);
@@ -5282,7 +5321,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                     }
                     if (pcVar4 != NULL && std::abs(pcVar4->GetNP()->y) <= 0.05f &&
                         dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 2 && dVar11 < -125.0f &&
-                        m35D0 - current.pos.y < -125.0f && current.pos.y - m35D4 > 125.0f)
+                        mSwimHeight - current.pos.y < -125.0f && current.pos.y - m35D4 > 125.0f)
                     {
                         current.pos.x = mLinkLinChk.GetCrossP()->x;
                         current.pos.z = mLinkLinChk.GetCrossP()->z;
@@ -5762,7 +5801,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m3544 = 0;
     mSightPacket.offDrawFlg();
     mSightPacket.offLockFlg();
-    m35C4 = 0.0f;
+    mAnimYDelta = 0.0f;
     mFanSwingCb.onAlphaOutFlg();
     shape_angle.x = 0;
     shape_angle.z = 0;
@@ -6364,7 +6403,7 @@ BOOL daPy_lk_c::procCrouchDefense_init() {
 /* 80113DBC-80114014       .text procCrouchDefense__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrouchDefense() {
     dComIfGp_setRStatus(dActStts_DEFEND_e);
-    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= m35D0)) {
+    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= mSwimHeight)) {
         onResetFlg0(daPyRFlg0_UNK4000000);
         if (((dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000))) &&
             (!dComIfGp_event_runCheck()))
@@ -6379,7 +6418,7 @@ BOOL daPy_lk_c::procCrouchDefense() {
         mDirection = DIR_RIGHT;
         checkNextMode(0);
     } else {
-        s16 uVar2 = m34E8 - shape_angle.y;
+        s16 uVar2 = mTargetAngleY - shape_angle.y;
         f32 fVar1 = mStickDistance * cM_scos(uVar2);
         s16 sVar5;
         if (fVar1 >= 0.0f) {
@@ -6489,7 +6528,7 @@ BOOL daPy_lk_c::procCrouch() {
     cXyz local_68;
 
     dComIfGp_setRStatus(dActStts_CROUCH_e);
-    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= m35D0)) {
+    if ((dCam_getBody()->ChangeModeOK(4)) && (current.pos.y >= mSwimHeight)) {
         onResetFlg0(daPyRFlg0_UNK4000000);
         if (((dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000))) &&
             (!dComIfGp_event_runCheck()))
@@ -6506,7 +6545,7 @@ BOOL daPy_lk_c::procCrouch() {
         checkNextMode(0);
     } else {
         if (((m_old_fdata->getOldFrameRate() < 0.01f) && (mStickDistance > 0.05f)) &&
-            !(m35D0 > current.pos.y + 15.0f))
+            !(mSwimHeight > current.pos.y + 15.0f))
         {
             mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
             mDoMtx_stack_c::ZXYrotM(m34E2, shape_angle.y, 0);
@@ -6539,7 +6578,7 @@ BOOL daPy_lk_c::procWaitTurn_init() {
     if (dComIfGp_event_runCheck()) {
         mVelocity = 0.0f;
     }
-    m34D4 = m34E8;
+    m34D4 = mTargetAngleY;
     current.angle.y = shape_angle.y;
     return true;
 }
@@ -6583,7 +6622,7 @@ BOOL daPy_lk_c::procMoveTurn_init(int param_1) {
         m34D4 = (daPy_HIO_move_c0::m.field_0x0 * 4) + 0x4A56;
         m34D6 = daPy_HIO_move_c0::m.field_0x0 * 2;
         m34D0 = 2;
-        current.angle.y = m34E8;
+        current.angle.y = mTargetAngleY;
         mVelocity *= 0.5f;
     } else {
         m34D4 = daPy_HIO_move_c0::m.field_0x0 * 2;
@@ -8151,7 +8190,7 @@ BOOL daPy_lk_c::procElecDamage_init(const cXyz* param_1) {
     mDemo.setDemoType(5);
     int iVar2 = checkShipRideUseItem(0);
     if (checkModeFlg(ModeFlg_SWIM)) {
-        current.pos.y += m35C4;
+        current.pos.y += mAnimYDelta;
         m34D4 = 1;
         swimOutAfter(1);
     } else {
@@ -8784,7 +8823,7 @@ void daPy_lk_c::footBgCheck() {
     } else {
         iVar8 = 0;
     }
-    if (((iVar8 == 2) || (mCurProc == daPyProc_DEMO_TOOL_e)) || (std::abs(m35C4) > 1.0f)) {
+    if (((iVar8 == 2) || (mCurProc == daPyProc_DEMO_TOOL_e)) || (std::abs(mAnimYDelta) > 1.0f)) {
         fVar1 = 0.0f;
     } else {
         if (local_108[0] > local_108[1]) {
@@ -8878,13 +8917,13 @@ void daPy_lk_c::setWaterY() {
         } else {
             offNoResetFlg0(daPyFlg0_UNK80);
         }
-        m35D0 = mAcch.m_wtr.GetHeight();
+        mSwimHeight = mAcch.m_wtr.GetHeight();
         dPa_control_c::offStatus(1);
     } else {
         onNoResetFlg0(daPyFlg0_UNK80);
-        m35D0 = daSea_calcWave(current.pos.x, current.pos.z);
-        if (mAcch.m_wtr.GetHeight() > m35D0) {
-            m35D0 = mAcch.m_wtr.GetHeight();
+        mSwimHeight = daSea_calcWave(current.pos.x, current.pos.z);
+        if (mAcch.m_wtr.GetHeight() > mSwimHeight) {
+            mSwimHeight = mAcch.m_wtr.GetHeight();
             dPa_control_c::offStatus(1);
         } else {
             dPa_control_c::onStatus(1);
@@ -9590,7 +9629,7 @@ void daPy_lk_c::setWorldMatrix() {
     cXyz local_44;
     Mtx afStack_38;
 
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + m35C4 + m3608, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mAnimYDelta + m3608, current.pos.z);
     ship = dComIfGp_getShipActor();
     if ((dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) && (ship != NULL)) {
         mDoMtx_stack_c::ZXYrotM(m353C, ship->shape_angle.y, m353E);
@@ -10307,7 +10346,7 @@ void daPy_lk_c::setAttentionPos() {
             attention_info.position.x =
                 ship->current.pos.x + cM_ssin(ship->shape_angle.y) * l_ship_offset.z;
             if (checkNoResetFlg0(daPyFlg0_UNK80)) {
-                attention_info.position.y = 92.5f + (m35D0 + l_ship_offset.y);
+                attention_info.position.y = 92.5f + (mSwimHeight + l_ship_offset.y);
             } else {
                 attention_info.position.y = 92.5f + mpCLModel->getBaseTRMtx()[1][3];
             }
@@ -10582,12 +10621,12 @@ void daPy_lk_c::setStickData() {
     mItemButton = 0;
     if (daPy_getPlayerActorClass() != this) {
         mStickDistance = 0.0f;
-        m34E8 = 0;
+        mTargetAngleY = 0;
     } else {
         if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e) {
             mStickDistance = g_mDoCPd_cpadInfo[0].mMainStickValue;
             m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
-            m34E8 = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
+            mTargetAngleY = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
             if (CPad_CHECK_HOLD_A(0)) {
                 mItemButton |= BTN_A;
             }
@@ -10606,13 +10645,13 @@ void daPy_lk_c::setStickData() {
             } else {
                 mStickDistance = 0.0f;
             }
-            m34E8 = mDemo.getMoveAngle();
+            mTargetAngleY = mDemo.getMoveAngle();
             if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK0E_e) {
                 mItemButton = m34CA;
             }
         } else if (fopOvlpM_IsPeek() == 1) {
             mStickDistance = 0.0f;
-            m34E8 = 0;
+            mTargetAngleY = 0;
         } else {
             mStickDistance = g_mDoCPd_cpadInfo[0].mMainStickValue;
             if ((checkNoResetFlg1(daPyFlg1_CONFUSE)) && (dComIfGp_event_runCheck() == 0)) {
@@ -10620,7 +10659,7 @@ void daPy_lk_c::setStickData() {
             } else {
                 m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
             }
-            m34E8 = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
+            mTargetAngleY = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
             bVar2 = dComIfGp_getButtonActionMode();
             bVar1 = false;
             if (CPad_CHECK_TRIG_B(0)) {
@@ -10814,7 +10853,7 @@ void daPy_lk_c::checkFallCode() {
     cXyz local_44;
 
     if (m3580 == 4 || C_BG_MIN_HEIGHT == mAcch.GetGroundH()) {
-        bVar4 = m35D0 > mAcch.GetGroundH() ? TRUE : FALSE;
+        bVar4 = mSwimHeight > mAcch.GetGroundH() ? TRUE : FALSE;
         if (((((!bVar4) && checkModeFlg(ModeFlg_MIDAIR)) &&
               (!checkModeFlg(ModeFlg_HOOKSHOT) && (m35F4 - current.pos.y > 100.0f * daPy_HIO_fall_c0::m.field_0x14))) ||
              (bVar4 && checkModeFlg(ModeFlg_SWIM))) ||
@@ -11083,7 +11122,7 @@ void daPy_lk_c::setStepsOffset() {
     f32 dVar6;
     cXyz local_2c;
 
-    cLib_addCalc(&m35C4, 0.0f, 0.5f, 25.0f, 5.0f);
+    cLib_addCalc(&mAnimYDelta, 0.0f, 0.5f, 25.0f, 5.0f);
     dVar6 = (cM_ssin(m34E2) / cM_scos(m34E2));
     local_2c.x = current.pos.x + speedF * cM_ssin(current.angle.y);
     local_2c.y = 30.1f + current.pos.y;
@@ -11096,12 +11135,12 @@ void daPy_lk_c::setStepsOffset() {
     fVar1 = (dVar5 - current.pos.y) - (-speedF * dVar6);
     if (fVar1 > 0.0f) {
         current.pos.y = dVar5;
-        m35C4 -= fVar1 * 0.7f;
+        mAnimYDelta -= fVar1 * 0.7f;
     } else if (!checkNoResetFlg0(daPyFlg0_UNK80000000)) {
         local_2c = old.pos - current.pos;
         fVar1 = local_2c.y - (dVar6 * local_2c.absXZ());
         if (fVar1 >= 0.0f) {
-            m35C4 += fVar1 * 0.7f;
+            mAnimYDelta += fVar1 * 0.7f;
         }
     }
 }
@@ -11467,8 +11506,8 @@ BOOL daPy_lk_c::execute() {
     checkLavaFace(&oldPos, dBgS_Attr_NORMAL_e);
     
     if (checkModeFlg(ModeFlg_SWIM)) {
-        if (checkNoResetFlg0(daPyFlg0_UNK100) && !checkSwimFallCheck()) {
-            current.pos.y = m35D0;
+        if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT) && !checkSwimFallCheck()) {
+            current.pos.y = mSwimHeight;
         }
         if (mCurProc != daPyProc_DEMO_DEAD_e) {
             if (mAcch.GetGroundH() + 84.9f > current.pos.y && mAcch.ChkGroundHit()) {
@@ -11701,7 +11740,7 @@ BOOL daPy_lk_c::execute() {
     if (!checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000))) {
         if (mAcch.ChkGroundHit() && !daPy_lk_c::checkPlayerFly()) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e | dEvtCnd_CANDOOR_e | dEvtCnd_CANGETITEM_e | dEvtCnd_UNK10_e | dEvtCnd_CANCATCH_e);
-        } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_UNK100))) {
+        } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) || (checkModeFlg(ModeFlg_SWIM) && checkNoResetFlg0(daPyFlg0_SWIM_EXIT))) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
@@ -12371,7 +12410,7 @@ void daPy_lk_c::playerInit() {
         mEventIdx = dComIfGp_evmng_startDemo(getStartEvent());
     }
     
-    onNoResetFlg0(daPyFlg0_UNK100);
+    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
     mLavaGndChk.OffWaterGrp();
     mDemo.setStick(1.0f);
     endDamageEmitter();
@@ -12582,7 +12621,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
             mDemo.setTimer(0x23);
             if (changeSwimProc()) {
                 if (startMode == 1) {
-                    mVelocity = 0.5f * daPy_HIO_swim_c0::m.field_0xC;
+                    mVelocity = 0.5f * daPy_HIO_swim_c0::m.baseSwimSpeed;
                 }
                 speedF = mVelocity;
                 procSwimMove_init(0);
@@ -12591,13 +12630,13 @@ cPhs_State daPy_lk_c::makeBgWait() {
                 speedF = mVelocity;
                 procMove_init();
             } else if (sceneMode == 2) {
-                m34E8 = shape_angle.y;
+                mTargetAngleY = shape_angle.y;
                 procCrawlMove_init(0, 0);
             } else if (sceneMode == 3) {
                 shape_angle.y += 0x8000;
                 current.angle.y = shape_angle.y;
                 m34DE = shape_angle.y;
-                m34E8 = shape_angle.y + 0x8000;
+                mTargetAngleY = shape_angle.y + 0x8000;
                 procCrawlMove_init(0, 0);
             } else {
                 if (mVelocity > daPy_HIO_move_c0::m.field_0x18) {

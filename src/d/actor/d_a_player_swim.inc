@@ -15,80 +15,171 @@
 #include "f_op/f_op_kankyo_mng.h"
 
 /* 8013CC64-8013CF2C       .text setSpeedAndAngleSwim__9daPy_lk_cFv */
+/*
+ * Handles directional input, angle adjustment, and movement speed when Link is swimming.
+ * 
+ * This function interprets analog stick input to determine Link’s swimming direction and
+ * velocity, accounting for whether Link is locked onto a target or moving freely. It also
+ * applies angle smoothing and speed calculations based on input intensity and current angles.
+ * 
+ * Behavior varies depending on whether Link is in the swim-up state, free-swimming, or locked on:
+ *   - When not locked on, angle and speed are derived from stick direction relative to shape angle.
+ *   - When locked on, movement is restricted to prevent backward swimming and aligns angles with the target.
+ *   - In swim-up state, all horizontal motion is halted.
+ * 
+ * Notably, this function contains logic that inadvertently allows for the "super-swim" exploit,
+ * due to a lack of clamping when speed is calculated from cosine of angle difference.
+ * 
+ * Additionally:
+ *   - Applies acceleration and clamps final velocity.
+ *   - Handles forced stops for invalid movement (e.g., trying to swim backward while locked on).
+ *   - Cancels movement under specific player status conditions.
+ */
 void daPy_lk_c::setSpeedAndAngleSwim() {
-    float fVar1;
+    float calculatedSpeed;
     short oldAngleY;
 
-    BOOL bVar3 = false;
+    // Flag used to indicate a forced stop due to backwards swimming input while locked on
+    BOOL isForcedStop = false;
 
+    // Only perform calculations if not currently in the "swim upward" state
     if (mCurProc != daPyProc_SWIM_UP_e) {
+
+        // If not locked onto a target, handle free swimming movement
         if (!mpAttention->Lockon()) {
+
+            // Only process movement if the stick input is significant
             if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
 
+                // If swimming backward relative to facing angle, forcibly reset direction
                 if (getDirectionFromShapeAngle() == DIR_BACKWARD) {
+                    // Stop Link's ripple animation(s)
                     mSwimTailEcallBack[0].onEnd();
                     mSwimTailEcallBack[1].onEnd();
 
-                    shape_angle.y = m34E8;
-                    current.angle.y = m34E8;
+                    // Snap to target
+                    shape_angle.y = mTargetAngleY;
+                    current.angle.y = mTargetAngleY;
                 }
                 else {
-                    cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);     
+                    // Smoothly rotate towards target angle
+                    cLib_addCalcAngleS(
+                        &shape_angle.y,
+                        mTargetAngleY,
+                        daPy_HIO_swim_c0::m.angleApproachStep,
+                        daPy_HIO_swim_c0::m.angleTurnRateMin,
+                        daPy_HIO_swim_c0::m.angleTurnRateMax
+                    );
                 }
 
-                fVar1 = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
+                // Calculate forward movement speed based on how much direction has changed
+                /*
+                   Note:
+                   This code is the beginning of a series of oversights that resulted in the `super-swim` bug.
+                   The code cM_scos(shape_angle.y - oldAngleY) can return a range of values from -1.0 to 1.0[1].
+                   Due to a lack of clamping on the this value, a value <0 would result in a negative speed
+                   as mStickDistance represents the magnitude of the stick direction (ie. it is strictley positive).
+                   The fact that this variable can take on a negative value produces issues strictly when those negative values 
+                   are maintained. The devs most likely intended for negative speeds to be possible but did not foresee 
+                   the possibility of maintaining negative directions while in free-cam mode.
+                   
+                   [1] The case in which it returns -1.0f is when the new shape angle is -180 degrees 
+                   relative to the old shape angle (ie. Link turns around in the water). 
+                   The 1.0 case would be when the angle hasn't changed at all (ie. Link moving in the same direction).
+                */
+                calculatedSpeed = mStickDistance * 3.0f * cM_scos(shape_angle.y - oldAngleY);
             }
             else {
-                fVar1 = 0.0f;
+                // Halt movement if no significant stick input detected
+                calculatedSpeed = 0.0f;
             }
 
+            // Smoothly rotate body angle to match shape angle
             cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 2, 0x2000, 0x1000);
 
-            mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+            mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
+
+        // If locked on to a target, handle swimming behavior differently
         else {
-            setShapeAngleToAtnActor();
+            setShapeAngleToAtnActor();  // align shape angle to look-at target
 
             if (mStickDistance > 0.05f) {
                 oldAngleY = current.angle.y;
 
+                // Prevent swimming backward while locked on
                 if (getDirectionFromCurrentAngle() == DIR_BACKWARD) {
                     mSwimTailEcallBack[0].onEnd();
                     mSwimTailEcallBack[1].onEnd();
 
-                    fVar1 = 0.0f;
-                    bVar3 = TRUE;
+                    calculatedSpeed = 0.0f;
+                    isForcedStop = TRUE;  // stop movement
                 }
                 else {
-                    cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_swim_c0::m.field_0x8, daPy_HIO_swim_c0::m.field_0x4, daPy_HIO_swim_c0::m.field_0x6);
-                    fVar1 = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
+                    cLib_addCalcAngleS(
+                        &current.angle.y,
+                        mTargetAngleY,
+                        daPy_HIO_swim_c0::m.angleApproachStep,
+                        daPy_HIO_swim_c0::m.angleTurnRateMin,
+                        daPy_HIO_swim_c0::m.angleTurnRateMax
+                    );
+
+                    calculatedSpeed = mStickDistance * 3.0f * cM_scos(current.angle.y - oldAngleY);
                 }
             }
             else {
-                fVar1 = 0.0f;
+                calculatedSpeed = 0.0f;
             }
-            
-            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.field_0xC;
+
+            // Adjust max speed based on alignment between shape and facing direction
+            mMaxNormalSpeed = ((cM_scos(current.angle.y - shape_angle.y) + 1.0f) * 0.25f + 0.5f) * daPy_HIO_swim_c0::m.baseSwimSpeed;
         }
     }
+
+    // If in swim-up state, stop horizontal movement
     else {
-        fVar1 = 0.0f;
-        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+        calculatedSpeed = 0.0f;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
     }
 
-    setNormalSpeedF(fVar1, daPy_HIO_swim_c0::m.field_0x18, daPy_HIO_swim_c0::m.field_0x1C, daPy_HIO_swim_c0::m.field_0x20);
+    // Apply calculated speed with acceleration parameters
+    /*
+        Note:
+        This function was developed without consideration of clamping Link's velocity 
+        in the negative direction leading to super-swimming being possible. 
+        More details on this can be found within the function itself.
+    */
+    setNormalSpeedF(
+        calculatedSpeed,
+        daPy_HIO_swim_c0::m.acceleration,
+        daPy_HIO_swim_c0::m.speedStepMax,
+        daPy_HIO_swim_c0::m.speedStepMin
+    );
 
-    if (bVar3 && mVelocity < 5.0f) {
-        current.angle.y = m34E8;
+    // If a forced stop was triggered and velocity is low, zero velocity and reset angle
+    if (isForcedStop && mVelocity < 5.0f) {
+        current.angle.y = mTargetAngleY;
         mVelocity = 0.0f;
     }
+
+    // Special case: some player status triggers an immediate stop
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         mVelocity = 0.0f;
     }
 }
 
 /* 8013CF2C-8013CFC0       .text checkNextModeSwim__9daPy_lk_cFv */
+/*
+ * Determines whether Link should transition from swimming to another interaction mode.
+ * 
+ * Specifically checks if Link is near a ship or an NPC, in which case the swim state can end and
+ * a new state like boarding or talking may begin.
+ * 
+ * Returns:
+ *   - TRUE if a new mode was triggered (e.g. boarding a ship or talking to an NPC).
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::checkNextModeSwim() {
     BOOL res;
 
@@ -109,11 +200,27 @@ BOOL daPy_lk_c::checkNextModeSwim() {
 }
 
 /* 8013CFC0-8013D1B0       .text changeSwimProc__9daPy_lk_cFv */
+/*
+ * Attempts to initiate the swim state based on current conditions.
+ *
+ * Handles resetting various player states (e.g. removing Iron boots), applying initial velocity and vertical
+ * position correction based on water surface, and spawning visual effects (water splash). Transitions to
+ * either Swim Wait or Swim Up depending on airborne status.
+ * 
+ * Returns:
+ *   - TRUE if a swim process is initiated.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimProc() {
     BOOL res;
-    cXyz local_18;
+    cXyz splashEffectPos;
     
-    if (checkNoResetFlg0(daPyFlg0_UNK80) && !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && !checkNoControll() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+    if (checkNoResetFlg0(daPyFlg0_UNK80) &&  // Precondition for being ready to swim, maybe daPyFlg0_READY_TO_SWIM could be a good name?
+        !checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_SWIM) && 
+        !checkNoControll() && 
+        mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK11_e && 
+        mSwimHeight - current.pos.y > daPy_HIO_swim_c0::m.minDepthToSwim) {
+        
         dComIfGp_setItemTimeCount(900);
         dComIfGp_setItemTimeMax(900);
 
@@ -122,25 +229,25 @@ BOOL daPy_lk_c::changeSwimProc() {
 
         endFlameDamageEmitter();
 
-        offNoResetFlg0(daPyFlg0_UNK100);
+        offNoResetFlg0(daPyFlg0_SWIM_EXIT);
 
-        mMaxNormalSpeed = daPy_HIO_swim_c0::m.field_0xC;
+        mMaxNormalSpeed = daPy_HIO_swim_c0::m.baseSwimSpeed;
         mVelocity *= 0.75f;
 
         if (mVelocity >= mMaxNormalSpeed) {
-          mVelocity = mMaxNormalSpeed;
+            mVelocity = mMaxNormalSpeed;
         }
 
-        m35C4 = 0.0f;
+        mAnimYDelta = 0.0f;
 
         setSwimTimerStartStop();
         
         if (checkModeFlg(ModeFlg_MIDAIR)) {
-            current.pos.y += daPy_HIO_swim_c0::m.field_0x24;
-            speed.y = mOldSpeed.y * daPy_HIO_swim_c0::m.field_0x10;
+            current.pos.y += daPy_HIO_swim_c0::m.minDepthToSwim;
+            speed.y = mOldSpeed.y * daPy_HIO_swim_c0::m.fallSpeedMultiplier;
 
-            if (speed.y < daPy_HIO_swim_c0::m.field_0x14) {
-                speed.y = daPy_HIO_swim_c0::m.field_0x14;
+            if (speed.y < daPy_HIO_swim_c0::m.minSplashEntrySpeed) {
+                speed.y = daPy_HIO_swim_c0::m.minSplashEntrySpeed;
             }
             else if (speed.y > 0.0f) {
                 speed.y = 0.0f;
@@ -152,10 +259,10 @@ BOOL daPy_lk_c::changeSwimProc() {
                 oldSpeedY = 1.0f;
             }
 
-            local_18.x = current.pos.x;
-            local_18.y = m35D0;
-            local_18.z = current.pos.z;
-            fopKyM_createWpillar(&local_18, 1.0f, oldSpeedY, 0);
+            splashEffectPos.x = current.pos.x;
+            splashEffectPos.y = mSwimHeight;
+            splashEffectPos.z = current.pos.z;
+            fopKyM_createWpillar(&splashEffectPos, 1.0f, oldSpeedY, 0);
             seStartOnlyReverb(JA_SE_LK_INTO_WATER);
             res = procSwimWait_init(FALSE);
         }
@@ -170,47 +277,95 @@ BOOL daPy_lk_c::changeSwimProc() {
 }
 
 /* 8013D1B0-8013D2AC       .text changeSwimUpProc__9daPy_lk_cFv */
+/*
+ * Handles the logic for transitioning into the "swim up" state from underwater.
+ * 
+ * Gradually accelerates Link upward. If close enough to the surface and not in a special death state,
+ * initiates the Swim Up process. Also handles item deletion if rising to surface with something equipped.
+ * 
+ * Returns:
+ *   - TRUE if transition to Swim Up occurred or a death-state override triggered.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimUpProc() {
-    if (speed.y < daPy_HIO_swim_c0::m.field_0x68) {
-        speed.y += daPy_HIO_swim_c0::m.field_0x64;
-        if (speed.y > daPy_HIO_swim_c0::m.field_0x68) {
-            speed.y = daPy_HIO_swim_c0::m.field_0x68;
+    if (speed.y < daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed) {
+        speed.y += daPy_HIO_swim_c0::m.maxUnderwaterUpAcceleration;
+
+        if (speed.y > daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed) {
+            speed.y = daPy_HIO_swim_c0::m.maxUnderwaterUpSpeed;
         }
+
         if (speed.y > 0.0f && mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
     }
-    if (m35D0 - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.field_0x28 && speed.y >= 0.0f) {
+
+    if (mSwimHeight - current.pos.y < 40.1f + daPy_HIO_swim_c0::m.swimSurfaceCloseThreshold && speed.y >= 0.0f) {
         if (mCurProc == daPyProc_DEMO_DEAD_e) {
-            onNoResetFlg0(daPyFlg0_UNK100);
-            current.pos.y = m35D0;
+            onNoResetFlg0(daPyFlg0_SWIM_EXIT); // Seems to indicate that Link is leaving/has left the water (probably set after drowning since the death animation plays on land)
+            current.pos.y = mSwimHeight;
             return TRUE;
         }
         return procSwimUp_init(TRUE);
     }
+
     return FALSE;
 }
 
 /* 8013D2AC-8013D314       .text swimOutAfter__9daPy_lk_cFi */
-void daPy_lk_c::swimOutAfter(BOOL param_1) {
-    onNoResetFlg0(daPyFlg0_UNK100);
-    m35C4 = 0.0f;
-    if (param_1) {
+/*
+ * Post-processing for exiting the water (either by swimming out or falling out).
+ *
+ * Resets swim timers, plays sound effects if requested, and clears texture animations.
+ * 
+ * Parameters:
+ *   - i_bPlayWaterExitSE: If TRUE, triggers water exit sound effect.
+ */
+void daPy_lk_c::swimOutAfter(BOOL i_bPlayWaterExitSE) {
+    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
+    
+    mAnimYDelta = 0.0f;
+
+    if (i_bPlayWaterExitSE) {
         seStartOnlyReverb(JA_SE_LK_OUTOF_WATER);
     }
+
     dComIfGp_clearItemTimeCount();
+
     resetPriTextureAnime();
 }
 
 /* 8013D314-8013D354       .text checkSwimFallCheck__9daPy_lk_cFv */
+/*
+ * Checks if Link should be considered as falling out of water.
+ *
+ * Returns TRUE if:
+ *   - Not in swim state (flag missing), OR
+ *   - Y-position is significantly above the swim height threshold AND particle status is not active.
+ * 
+ * Returns:
+ *   - TRUE if Link is falling out of swim state.
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::checkSwimFallCheck() {
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > m35D0 + 30.1f && !dPa_control_c::isStatus(1))) {
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (current.pos.y > mSwimHeight + 30.1f && !dPa_control_c::isStatus(1))) {
         return TRUE;
     }
     return FALSE;
 }
 
 /* 8013D354-8013D530       .text changeSwimOutProc__9daPy_lk_cFv */
+/*
+ * Handles the logic for transitioning out of swim mode.
+ *
+ * This function checks ground conditions and whether Link is emerging from the water
+ * or falling out. Depending on the evaluation, it initiates appropriate animations and
+ * possibly restarts the room if drowning conditions are met.
+ * 
+ * Returns:
+ *   - TRUE if swim mode ends (either via fall or ground emergence).
+ *   - FALSE otherwise.
+ */
 BOOL daPy_lk_c::changeSwimOutProc() {
     cM3dGPla* pcVar1;
     
@@ -223,7 +378,7 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 
     if (checkSwimFallCheck()) {
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
-            current.pos.y += m35C4;
+            current.pos.y += mAnimYDelta;
         }
 
         swimOutAfter(TRUE);
@@ -231,11 +386,11 @@ BOOL daPy_lk_c::changeSwimOutProc() {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && cBgW_CheckBGround(pcVar1->GetNP()->y) && m35D0 - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.field_0x24 - 5.0f)) {
-        current.pos.y = m35D0;
+    if (!checkNoResetFlg0(daPyFlg0_UNK80) || (pcVar1 && cBgW_CheckBGround(pcVar1->GetNP()->y) && mSwimHeight - mAcch.GetGroundH() < daPy_HIO_swim_c0::m.minDepthToSwim - 5.0f)) {
+        current.pos.y = mSwimHeight;
 
         if (mCurProc == daPyProc_SWIM_MOVE_e && mDirection != DIR_FORWARD) {
-            current.pos.y += m35C4;
+            current.pos.y += mAnimYDelta;
         }
 
         swimOutAfter(TRUE);
@@ -252,18 +407,62 @@ BOOL daPy_lk_c::changeSwimOutProc() {
 }
 
 /* 8013D530-8013D638       .text setSwimMoveAnime__9daPy_lk_cFQ29daPy_lk_c8daPy_ANM */
+/*
+ * Sets the swimming movement animation for Link.
+ * 
+ * Calculates animation playback rate based on Link's current swim velocity and timer status.
+ * This ensures that animation speed matches movement speed and reflects swim urgency (e.g. drowning).
+ * 
+ * Parameters:
+ *   - swimMoveAnm: Enum value for the specific swim animation to use.
+ */
 void daPy_lk_c::setSwimMoveAnime(daPy_ANM swimMoveAnm) {
     f32 startFrame = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     f32 endFrame = startFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd();
-    f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50) / mMaxNormalSpeed) +
-                daPy_HIO_swim_c0::m.field_0x50 +
-               (getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74);
-    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x58);
+    
+    // Set the animation rate
+    /*
+        Given:
+        s: speed magnitude (abs(mVelocity))
+        a: air meter timer value
+        
+        Constants:
+        minAnimSpeedScale=0.6f
+        maxAnimSpeedScale=1.f
+        mMaxNormalSpeed=18.0f (baseSwimSpeed)
+        airMeterSwimAnimBoost=1.0f
+        airMeterSwimAnimBoost=1
+
+        We can express getSwimTimerRate() as a function of a:
+        = 1.0f - a * 0.0011111111f
+        = 1.0f - (a / 900)
+
+        Plugging these into the rate function:
+        = (s * (1.1f - 0.6f) / 18.0f) + 0.6f + 1.0f - (a / 900)
+        = (s / 36.0f) + 1.6f - (a / 900)
+
+        This is a slight variation to the empirical formula found by TrogWW
+        that is avaliable on the ZSR page for superswimming
+
+    */
+    f32 rate = (std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale) / mMaxNormalSpeed) +
+                daPy_HIO_swim_c0::m.minAnimSpeedScale +
+               (getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterSwimAnimBoost);
+    setSingleMoveAnime(swimMoveAnm, rate, 0.0f, -1, daPy_HIO_swim_c0::m.blendTimer);
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(endFrame * mFrameCtrlUnder[UNDER_MOVE0_e].getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
 }
 
 /* 8013D638-8013D6B8       .text getSwimTimerRate__9daPy_lk_cFv */
+/*
+ * Returns a normalized value (0.0 to 1.0) representing how depleted the air meter is.
+ *
+ * This value affects things like swim animation speed and possibly audio/visual feedback.
+ * Returns 1.0 if the meter is fully depleted or disabled, and 0.0 if it's full.
+ * 
+ * Returns:
+ *   - A float from 0.0 (meter full) to 1.0 (meter depleted).
+ */
 f32 daPy_lk_c::getSwimTimerRate() {
     f32 swimTimerRate;
     if (dComIfGp_getItemSwimTimerStatus() && dComIfGp_event_getMode() == dEvtMode_NONE_e) {
@@ -281,13 +480,21 @@ f32 daPy_lk_c::getSwimTimerRate() {
 }
 
 /* 8013D6B8-8013D814       .text setSwimTimerStartStop__9daPy_lk_cFv */
+/*
+ * Starts or stops the air meter timer based on Link's vertical position.
+ *
+ * If Link is significantly below the surface, the timer begins. Also sets the
+ * drowning voice clip based on swim timer state and current swim animation loop.
+ * 
+ * Adjusts `m3608` field using a cosine function to reflect Link's oxygen discomfort level.
+ */
 void daPy_lk_c::setSwimTimerStartStop() {
     float target = 0.0f;
 
-    if (mAcch.GetGroundH() <= m35D0 - 175.0f) {
+    if (mAcch.GetGroundH() <= mSwimHeight - 175.0f) {
         dComIfGp_startItemSwimTimer();
 
-        if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+        if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
             float swimTimerRate = getSwimTimerRate();
 
             if (swimTimerRate > 0.5f) {
@@ -314,6 +521,15 @@ void daPy_lk_c::setSwimTimerStartStop() {
 }
 
 /* 8013D814-8013DA18       .text procSwimUp_init__9daPy_lk_cFi */
+/*
+ * Starts or stops the air meter timer based on Link's vertical position.
+ *
+ * If Link is significantly below the surface, the timer begins. Also sets the
+ * drowning voice clip based on air meter level and current swim animation loop.
+ * 
+ * Adjusts `m3608` field using a cosine function to reflect Link's oxygen level.
+ */
+
 BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     JPABaseEmitter* mEmitter;
     
@@ -325,15 +541,15 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
     gravity = 0.0f;
     speed.y = 0.0f;
 
-    current.pos.y = m35D0;
+    current.pos.y = mSwimHeight;
 
     setSingleMoveAnime(ANM_SWIMP, daPy_HIO_swim_c0::m.field_0x2C, daPy_HIO_swim_c0::m.field_0x30, daPy_HIO_swim_c0::m.field_0x0, daPy_HIO_swim_c0::m.field_0x38);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
+    mAnimYDelta = daPy_HIO_swim_c0::m.field_0x3C;
 
-    onNoResetFlg0(daPyFlg0_UNK100);
+    onNoResetFlg0(daPyFlg0_SWIM_EXIT);
 
     if (param_1) {
         mEmitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0040, &current.pos);
@@ -357,6 +573,16 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 }
 
 /* 8013DA18-8013DB24       .text procSwimUp__9daPy_lk_cFv */
+/*
+ * Handles the Swim Up process, transitioning Link from swimming under water to swimming at the water's surface.
+ *
+ * Updates Link's vertical position, checks for animation progress, and plays the appropriate swim sounds.
+ * The function handles different swim speed values depending on whether the user is swimming upwards 
+ * manually or being moved by the game logic.
+ * 
+ * Returns:
+ *   - TRUE: Successfully handled the Swim Up process.
+ */
 BOOL daPy_lk_c::procSwimUp() {
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
@@ -379,8 +605,8 @@ BOOL daPy_lk_c::procSwimUp() {
                     seStartOnlyReverb(JA_SE_LK_SWIM);
                 }
                 else {
-                    m35C4 = daPy_HIO_swim_c0::m.field_0x3C;
-                    current.pos.y = m35D0;
+                    mAnimYDelta = daPy_HIO_swim_c0::m.field_0x3C;
+                    current.pos.y = mSwimHeight;
                 }
             }
         }
@@ -390,65 +616,107 @@ BOOL daPy_lk_c::procSwimUp() {
 }
 
 /* 8013DB24-8013DCDC       .text procSwimWait_init__9daPy_lk_cFi */
+/*
+ * Initializes the Swim Wait state, where Link treads water while idle.
+ *
+ * Sets up the swim animation with appropriate playback speed, vertical position, 
+ * and initializes the water interaction flags. Disables gravity during this process. 
+ * Based on the parameter, either plays the splash sound and effects or keeps the character idle.
+ * 
+ * Parameters:
+ *   - param_1: If TRUE, adjust Link's velocity based on his progress in the swimming animation
+ * 
+ * Returns:
+ *   - TRUE when initialization of the swim wait process is successful.
+ */
 BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
-    float fVar2;
+    float swim_animation_state;
     
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
     commonProcInit(daPyProc_SWIM_WAIT_e);
 
     if (param_1) {
-        fVar2 = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
-        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60) + speedF * std::fabsf(cM_fcos(fVar2 * M_PI)) * daPy_HIO_swim_c0::m.field_0x60;
+        // Adjust Link's velocity based on his forward speed and his current position within his swimming animation
+        /*
+            Given:
+            s: forward speed (`speedF`)
+            x: Link's current animation position (`mFrameCtrl->getFrame()`)
+            swim_animation_state: Represents (as a percentage) how far Link is through one cycle of his swimming animation
+
+            Constants:
+            idleSwimOscillationBlend=0.4f
+
+            Assuming Link's swimming animation runs for a total of 23 frames, we can express `swim_animation_state` as a function of x:
+            = x / 23.0
+
+            Plugging these into the velocity function:
+            = s * (1.0f - 0.4f) + s * |cos(π * x / 23.0f)| * 0.4f
+            = s * (0.6f + |cos(π * x / 23.0f)| * 0.4f)
+
+            Which is the exact empirical formula found by TrogWW that is avaliable on the ZSR page for superswimming
+        */
+        swim_animation_state = mFrameCtrl->getFrame() / (float)mFrameCtrl->getEnd();
+        mVelocity = speedF * (1.0f - daPy_HIO_swim_c0::m.idleSwimOscillationBlend) + speedF * std::fabsf(cM_fcos(swim_animation_state * M_PI)) * daPy_HIO_swim_c0::m.idleSwimOscillationBlend;
     }
     else {
-        fVar2 = 0.0f;
+        swim_animation_state = 0.0f;
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40, 0.0f, -1, daPy_HIO_swim_c0::m.field_0x44);
-    mFrameCtrl->setFrame(fVar2 * mFrameCtrl->getEnd());
+    setSingleMoveAnime(ANM_SWIMWAIT, (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterIdleAnimBoost) + daPy_HIO_swim_c0::m.baseIdleAnimSpeed, 0.0f, -1, daPy_HIO_swim_c0::m.idleAnimBlendTimer);
+    mFrameCtrl->setFrame(swim_animation_state * mFrameCtrl->getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrl->getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         speed.y = 0.0f;
     }
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x48;
+    mAnimYDelta = daPy_HIO_swim_c0::m.headBobHeight;
     m34D4 = 0;
     mProcVar0.m3570 = 0;
     return TRUE;
 }
 
 /* 8013DCDC-8013DE8C       .text procSwimWait__9daPy_lk_cFv */
+/*
+ * Handles the Swim Wait process, where Link remains idle in the water while waiting for user input or event triggers.
+ *
+ * Updates swim direction and speed, checks for potential transitions to other swim states like swimming up or 
+ * swimming out of the water. If specific thresholds are met, Link's animation is modified, and sound effects 
+ * are triggered. 
+ * 
+ * Returns:
+ *   - TRUE: Successfully processed the Swim Wait state.
+ */
 BOOL daPy_lk_c::procSwimWait() {
     setSpeedAndAngleSwim();
     m34D4 += (short)((cM_rndF(0.3f) + 0.85f) * daPy_HIO_swim_c0::m.field_0x2);
-    m35C4 = cM_ssin(m34D4) * daPy_HIO_swim_c0::m.field_0x4C + daPy_HIO_swim_c0::m.field_0x48;
+    mAnimYDelta = cM_ssin(m34D4) * daPy_HIO_swim_c0::m.field_0x4C + daPy_HIO_swim_c0::m.headBobHeight;
 
     if (changeSwimOutProc()) {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
     }
 
     if (checkNextModeSwim()) {
         return TRUE;
     }
 
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) { // Probably indicates that Link is actively talking to someone (or there's a textbox on screen)?
         fopAc_ac_c* talkEventPartner = fopAcM_getTalkEventPartner(this);
         if (talkEventPartner) {
             short targetAngleY = cLib_targetAngleY(&current.pos, &talkEventPartner->eyePos);
@@ -457,7 +725,7 @@ BOOL daPy_lk_c::procSwimWait() {
         }
     }
 
-    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x70) + daPy_HIO_swim_c0::m.field_0x40);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setRate((getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterIdleAnimBoost) + daPy_HIO_swim_c0::m.baseIdleAnimSpeed);
 
     if (mStickDistance > 0.05f) {
         procSwimMove_init(TRUE);
@@ -469,10 +737,23 @@ BOOL daPy_lk_c::procSwimWait() {
 }
 
 /* 8013DE8C-8013DF60       .text procSwimMove_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
+/*
+ * Initializes the Swim Move state, where Link begins moving through the water in a swimming motion.
+ *
+ * Sets up swimming animation and speed, and handles various setup tasks like resetting gravity and adjusting
+ * the character's vertical position. If certain flags are set (such as an equipped item), it adjusts the swim 
+ * behavior accordingly. Sets the swim tail animation to simulate water movement.
+ * 
+ * Parameters:
+ *   - i_bKeepSwimAnime: If FALSE, resets the swim animation frame to 0; otherwise, it keeps the animation's current state.
+ * 
+ * Returns:
+ *   - TRUE when initialization of the swim move process is successful.
+ */
+BOOL daPy_lk_c::procSwimMove_init(BOOL i_bKeepSwimAnime) {
     commonProcInit(daPyProc_SWIM_MOVE_e);
 
-    if (!param_1) {
+    if (!i_bKeepSwimAnime) {
         mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(0.0f);
     }
 
@@ -482,12 +763,12 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
 
     mDirection = DIR_FORWARD;
 
-    if (checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (mEquipItem != daPyItem_NONE_e) {
             deleteEquipItem(TRUE);
         }
 
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         speed.y = 0.0f;
 
         setSwimTail();
@@ -495,13 +776,23 @@ BOOL daPy_lk_c::procSwimMove_init(BOOL param_1) {
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
 
-    m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
+    mAnimYDelta = daPy_HIO_swim_c0::m.swimForwardYOffset;
     mProcVar0.m3570 = 0;
 
     return TRUE;
 }
 
 /* 8013DF60-8013E250       .text procSwimMove__9daPy_lk_cFv */
+/*
+ * Handles the Swim Move state, where Link is actively swimming in the water.
+ *
+ * Adjusts movement speed and direction based on player input and environment. The direction of swimming is 
+ * updated, and if necessary, it triggers a change in swim animation (forward, backward, or turning). Additionally, 
+ * the function handles sound effects and swimming transitions such as moving out of the water or swimming upwards.
+ * 
+ * Returns:
+ *   - TRUE when the swimming move process is successfully processed.
+ */
 BOOL daPy_lk_c::procSwimMove() {
     daPy_ANM anm;
 
@@ -520,16 +811,17 @@ BOOL daPy_lk_c::procSwimMove() {
         direction = DIR_FORWARD;
     }
 
+    // If swim direction has changed, update animation
     if (mDirection != direction) {
         mDirection = direction;
-        float fVar1 = m35C4;
+        float prevYDelta = mAnimYDelta;
 
         if (mDirection == DIR_FORWARD) {
             anm = ANM_SWIMING;
-            m35C4 = daPy_HIO_swim_c0::m.field_0x5C;
+            mAnimYDelta = daPy_HIO_swim_c0::m.swimForwardYOffset;
         }
         else {
-            m35C4 = -80.0f;
+            mAnimYDelta = -80.0f;
 
             if (mDirection == DIR_LEFT) {
                 anm = ANM_ATNDLS;
@@ -542,7 +834,7 @@ BOOL daPy_lk_c::procSwimMove() {
             } 
         }
 
-        m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= m35C4 - fVar1;
+        m_old_fdata->getOldFrameTransInfo(0)->mTranslate.y -= mAnimYDelta - prevYDelta;
         setSwimMoveAnime(anm);
 
         if (mDirection != DIR_FORWARD) {
@@ -557,7 +849,9 @@ BOOL daPy_lk_c::procSwimMove() {
         }
     }
     else {
-        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.field_0x54 - daPy_HIO_swim_c0::m.field_0x50)) / mMaxNormalSpeed + daPy_HIO_swim_c0::m.field_0x50 + (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.field_0x74));
+        mFrameCtrl[0].setRate((std::fabsf(mVelocity) * (daPy_HIO_swim_c0::m.maxAnimSpeedScale - daPy_HIO_swim_c0::m.minAnimSpeedScale)) / mMaxNormalSpeed + 
+                               daPy_HIO_swim_c0::m.minAnimSpeedScale + 
+                               (float)(getSwimTimerRate() * daPy_HIO_swim_c0::m.airMeterSwimAnimBoost));
     }
 
     if (mDirection == DIR_BACKWARD) {
@@ -568,13 +862,13 @@ BOOL daPy_lk_c::procSwimMove() {
         return TRUE;
     }
 
-    if (!checkNoResetFlg0(daPyFlg0_UNK100)) {
+    if (!checkNoResetFlg0(daPyFlg0_SWIM_EXIT)) {
         if (changeSwimUpProc()) {
             return TRUE;
         }
     }
     else {
-        current.pos.y = m35D0;
+        current.pos.y = mSwimHeight;
         setSwimTail();
     }
 
@@ -591,7 +885,7 @@ BOOL daPy_lk_c::procSwimMove() {
         procSwimWait_init(TRUE);
     }
     else if ((mDirection == DIR_FORWARD && mFrameCtrl->checkPass(20.0f)) || (mDirection != DIR_FORWARD && mFrameCtrl->checkPass(0.0f))) {
-            seStartOnlyReverb(JA_SE_LK_SWIM);
+        seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 
     setSwimTimerStartStop();

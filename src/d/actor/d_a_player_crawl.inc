@@ -242,13 +242,13 @@ void daPy_lk_c::setDoStatusCrawl() {
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x80)) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-        if (checkSubjectEnd(1) || m35D0 > current.pos.y) {
+        if (checkSubjectEnd(1) || (mSwimHeight > current.pos.y)) {
             dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
         } else {
             dComIfGp_setPlayerStatus0(0, daPyStts0_UNK2000_e);
         }
     } else if (dCam_getBody()->ChangeModeOK(4)) {
-        if (m35D0 <= current.pos.y) {
+        if (mSwimHeight <= current.pos.y) {
             onResetFlg0(daPyRFlg0_UNK4000000);
             if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
                 setSubjectMode();
@@ -298,7 +298,7 @@ BOOL daPy_lk_c::procCrawlStart() {
     local_20.y = 50.0f;
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &local_20, &cStack_38);
     crawlBgCheck(&cStack_38, &cStack_38);
-    if (!spActionButton() || m35D0 > 15.0f + current.pos.y) {
+    if ((!spActionButton()) || (mSwimHeight > 15.0f + current.pos.y)) {
         procCrawlEnd_init(0, shape_angle.x, shape_angle.z);
     } else if (mStickDistance > 0.05f &&
                ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
@@ -411,7 +411,8 @@ BOOL daPy_lk_c::procCrawlMove() {
         bVar5 = true;
         offModeFlg(ModeFlg_04000000);
     }
-    if ((bVar5 != false && !spActionButton()) || (getSlidePolygon() != NULL || m35D0 > current.pos.y + 15.0f)) {
+
+    if ((bVar5 != false && !spActionButton()) || (getSlidePolygon() != NULL || mSwimHeight > current.pos.y + 15.0f)) {
         procCrawlEnd_init(1, shape_angle.x, shape_angle.z);
     } else {
         bVar4 = false;
@@ -488,12 +489,13 @@ BOOL daPy_lk_c::procCrawlMove() {
             if (iVar9 != 0 && iVar6 != 0 && iVar7 != 0 && iVar8 != 0 && changeCrawlAutoMoveProc(&spF4)) {
                 return true;
             }
+            
             if (mStickDistance > 0.05f && (frameCtrl.getRate() > 0.0f)) {
                 s16 r24 = shape_angle.y;
 
                 cLib_addCalcAngleS(
                     &shape_angle.y,
-                    m34E8,
+                    mTargetAngleY,
                     daPy_HIO_crouch_c0::m.field_0x8,
                     daPy_HIO_crouch_c0::m.field_0xA,
                     daPy_HIO_crouch_c0::m.field_0xC

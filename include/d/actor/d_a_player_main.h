@@ -2082,7 +2082,7 @@ public:
     /* 0x34E2 */ s16 m34E2;
     /* 0x34E4 */ s16 m34E4;
     /* 0x34E6 */ s16 m34E6;
-    /* 0x34E8 */ s16 m34E8;
+    /* 0x34E8 */ s16 mTargetAngleY;
     /* 0x34EA */ s16 m34EA;
     /* 0x34EC */ s16 m34EC;
     /* 0x34EE */ u16 mSeAnmIdx;
@@ -2170,15 +2170,15 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 mStickDistance; // 
+    /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;
     /* 0x35C0 */ u8 m35C0[0x35C4 - 0x35C0];
-    /* 0x35C4 */ f32 m35C4;
+    /* 0x35C4 */ f32 mAnimYDelta;
     /* 0x35C8 */ f32 m35C8;
     /* 0x35CC */ f32 m35CC;
-    /* 0x35D0 */ f32 m35D0;
+    /* 0x35D0 */ f32 mSwimHeight;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
     /* 0x35DC */ f32 m35DC;

@@ -21,7 +21,7 @@ f32 daPy_lk_c::getHangMoveAnmSpeed() {
 
 /* 80133F40-80133FB4       .text getHangDirectionFromAngle__9daPy_lk_cFv */
 int daPy_lk_c::getHangDirectionFromAngle() {
-    s16 angle = m34E8 - shape_angle.y;
+    s16 angle = mTargetAngleY - shape_angle.y;
     if (abs(angle) > 0x78E4) {
         return 1;
     }
