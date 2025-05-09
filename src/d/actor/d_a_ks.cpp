@@ -16,10 +16,10 @@
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-int KS_ALL_COUNT;
-int KUTTUKU_ALL_COUNT;
-BOOL HEAVY_IN;
-int GORON_COUNT;
+static int KS_ALL_COUNT = 0;
+static int KUTTUKU_ALL_COUNT = 0;
+static BOOL HEAVY_IN = FALSE;
+static int GORON_COUNT = 0;
 
 /* 00000078-000002CC       .text draw_SUB__FP8ks_class */
 void draw_SUB(ks_class* i_this) {
@@ -36,11 +36,11 @@ void draw_SUB(ks_class* i_this) {
         fVar1 = i_this->m304;
     }
 
-    mDoMtx_trans(mDoMtx_stack_c::get(), i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
+    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
     
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), iVar3);
-    mDoMtx_XrotM(mDoMtx_stack_c::get(), iVar4);
-    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z + i_this->m2FA);
+    mDoMtx_stack_c::YrotM(iVar3);
+    mDoMtx_stack_c::XrotM(iVar4);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z + i_this->m2FA);
 
     cXyz local_18;
     local_18.setall(1.0f);
@@ -49,15 +49,15 @@ void draw_SUB(ks_class* i_this) {
 
     mDoMtx_stack_c::scaleM(1.0f,1.0f,1.0f);
 
-    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z - i_this->m2FA);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z - i_this->m2FA);
 
     pBodyModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    mDoMtx_trans(mDoMtx_stack_c::get(), i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
+    mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y + fVar1, i_this->current.pos.z);
 
-    mDoMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
-    mDoMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
-    mDoMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
 
     mDoMtx_stack_c::scaleM(local_18);
 
@@ -80,7 +80,7 @@ static BOOL daKS_Draw(ks_class* i_this) {
     cXyz local_18 = i_this->current.pos;
     local_18.y += 40.0f;
 
-    dSnap_RegistFig(0xb3, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KS, i_this, 1.0f, 1.0f, 1.0f);
 
     if (i_this->m2C8 == 6) {
         return TRUE;
@@ -255,7 +255,7 @@ BOOL body_atari_check(ks_class* i_this) {
             return FALSE;
         }
 
-        a_this->current.angle.y = fopAcM_searchActorAngleY(a_this, dComIfGp_getPlayer(0)) + 0x8000;
+        a_this->current.angle.y = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
         
         i_this->m2CB = 3;
 
@@ -406,12 +406,12 @@ void action_dousa_move(ks_class* i_this) {
                 i_this->speed.y += cM_rndF(5.0f);
             }
 
-            i_this->current.angle.y = i_this->m2FC + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            i_this->current.angle.y = i_this->m2FC + fopAcM_searchPlayerAngleY(i_this);
             
             i_this->m2CC++;
         case 2:
             if (i_this->mAcch.ChkGroundHit()) {
-                i_this->current.angle.y = i_this->m2FC + fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                i_this->current.angle.y = i_this->m2FC + fopAcM_searchPlayerAngleY(i_this);
             }
 
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
@@ -460,7 +460,7 @@ void action_dousa_move(ks_class* i_this) {
             break;
         case 3:
             if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f) {
-                i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
             }
     }
 
@@ -497,7 +497,7 @@ void action_kougeki_move(ks_class* i_this) {
 
             i_this->m30C = 0.0f;
 
-            i_this->current.angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+            i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
             
             mDoAud_seStart(JA_SE_CM_KS_ATTACK, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             
@@ -624,30 +624,30 @@ static u8 item_tbl[4] = {0xA, 0xB, 0xC, 0xA};
 /* 00001874-00001A14       .text dead_eff_set__FP8ks_classP4cXyz */
 void dead_eff_set(ks_class* i_this, cXyz* i_pos) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
-    u8 health;
+    u8 drop_type;
     if (!strcmp(dComIfGp_getStartStageName(), "GanonK") && (i_this->stealItemBitNo != 0)) {
         if (dComIfGs_getLife() <= 8) {
-            health = 10;
+            drop_type = daDisItem_HEART_e;
         }
         else if (cM_rndF(1.0f) < 0.5f) {
             if (dComIfGs_getArrowNum() == 0) {
-                health = 0xc;
+                drop_type = daDisItem_ARROW_e;
             }
             else if (dComIfGs_getMagic() < dComIfGs_getMaxMagic() / 2) {
-                health = 0xb;
+                drop_type = daDisItem_MAGIC_e;
             }
             else if (dComIfGs_getArrowNum() < 10) {
-                health = 0xc;
+                drop_type = daDisItem_ARROW_e;
             }
             else {
-                health = item_tbl[(int)cM_rndF(2.99f)];
+                drop_type = item_tbl[(int)cM_rndF(2.99f)];
             }
         }
         else {
-            health = 0xd;
+            drop_type = daDisItem_UNK13_e; // Might just be a void drop (ie. getting nothing)
         }
 
-        fopAcM_createDisappear(i_this, i_pos, 3, health, 0xff);
+        fopAcM_createDisappear(i_this, i_pos, 3, drop_type, 0xff);
     }
     else {
         fopAcM_seStart(i_this, JA_SE_CM_KS_DIE, 0);
@@ -684,8 +684,8 @@ void action_dead_move(ks_class* i_this) {
 
             i_this->m2F0[1] = (s16)cM_rndFX(4096.0f);
 
-            i_this->mSph.OffAtSPrmBit(1);
-            i_this->mSph.OffAtSPrmBit(1);
+            i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+            i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
         }
         case 0x1f: {
             i_this->shape_angle.z += i_this->m2F0[1];
@@ -1014,7 +1014,7 @@ void action_omoi(ks_class* i_this) {
                 i_this->m528 = 0;
             }
 
-            i_this->current.angle.y = fopAcM_searchActorAngleY(a_this, dComIfGp_getPlayer(0)) + 0x8000;
+            i_this->current.angle.y = fopAcM_searchPlayerAngleY(a_this) + 0x8000;
             i_this->current.angle.y += (s16)cM_rndFX(16384.0f);
 
             i_this->speedF = 15.0f;
@@ -1093,12 +1093,12 @@ void action_tubo_search(ks_class* i_this) {
 
             i_this->mSph.OffAtNoTgHitInfSet();
 
-            i_this->mSph.OnAtVsBitSet(8);
+            i_this->mSph.OnAtVsBitSet(cCcD_AtSPrm_VsOther_e);
 
-            i_this->mSph.OffAtVsBitSet(4);
-            i_this->mSph.OffAtVsBitSet(0x10);
+            i_this->mSph.OffAtVsBitSet(cCcD_AtSPrm_VsPlayer_e);
+            i_this->mSph.OffAtVsBitSet(cCcD_AtSPrm_NoTgHitInfSet_e);
 
-            i_this->mSph.OnAtSPrmBit(1);
+            i_this->mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
 
             i_this->mSph.OnAtHitBit();
 
@@ -1259,6 +1259,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
             break;
         case 20:
             action_kb_birth_check(i_this);
+            break;
     }
 
     if (i_this->m2C8 == 6) {
@@ -1426,16 +1427,16 @@ static dCcD_SrcSph body_co_sph_src = {
 };
 
 static s8 fire_j[10] = {
-    0x0,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
+    0,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
      
 };
 
@@ -1457,7 +1458,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
     fopAcM_SetupActor(i_this, ks_class);
     ks_class* a_this = (ks_class*)i_this;
     
-    s32 res;
+    cPhs_State res;
     u32 parameters;
     res = dComIfG_resLoad(&a_this->mPhs, "KS");
     if (res == cPhs_COMPLEATE_e) {
