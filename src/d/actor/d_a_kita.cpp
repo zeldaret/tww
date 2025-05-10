@@ -16,11 +16,6 @@
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
-// Inline helper because i cannot get things to match otherwise
-inline void cap_min_val(float& a, float b){
-    if(a < b) a = b;
-}
-
 
 /* 00000078-0000032C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
@@ -40,8 +35,13 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
         short xAngle_target = local_44.z * ((REG0_F(0) + 10.0f) / pActor->scale.z);
         cLib_addCalcAngleS2(&pActor->current.angle.x,xAngle_target,10,0x800);
         cLib_addCalcAngleS2(&pActor->current.angle.z,zAngle_target,10,0x800);
-        cap_min_val(pActor->field_2BC.x,  (REG0_F(4) + 50.0f) * std::abs(local_44.z - local_50.z));
-        cap_min_val(pActor->field_2BC.z, (REG0_F(4) + 50.0f) * std::abs(local_44.x - local_50.x));
+        
+        f32 min_val_x = (REG0_F(4) + 50.0f) * std::abs(local_44.z - local_50.z);
+        if(pActor->field_2BC.x < min_val_x) pActor->field_2BC.x = min_val_x;
+        
+        f32 min_val_z = (REG0_F(4) + 50.0f) * std::abs(local_44.x - local_50.x);
+        if(pActor->field_2BC.z < min_val_z) pActor->field_2BC.z = min_val_z;
+        
         float fVar1 = (REG0_F(8) + 5.0f) * std::abs(local_44.x - local_50.x);
         if (fVar1 > 10.0f && pActor->field_2B0.x < fVar1) {
             cLib_addCalc2(&pActor->field_2B0.x,fVar1,1.0,REG0_F(7) + 1.2f);
@@ -105,7 +105,7 @@ void kita_move(kita_class* i_this) {
                 sgc_pos.x = sgc_c; sgc_pos.y = sgc_y; sgc_pos.z = sgc_z;
                 solid_ground_check.SetPos(&sgc_pos);
                 float solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
-                cap_min_val(i_this->field_35C, solid_ground_cross);
+                if (i_this->field_35C < solid_ground_cross) i_this->field_35C = solid_ground_cross;
 
                 dBgS_ObjGndChk_Spl liquid_ground_check;
                 Vec lgc_pos;
