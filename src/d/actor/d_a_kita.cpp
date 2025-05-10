@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_kita.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_shand.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -96,15 +97,24 @@ void kita_move(kita_class* i_this) {
             cLib_addCalc2(&i_this->mHeight, REG0_F(4) + (-static_cast<float>(himo_off_yp[mask]) * 0.3f), 0.05, i_this->field_320 * 250.0f);
             if(mask == 0b1111){
                 i_this->field_29A = 1;
+
                 dBgS_GndChk solid_ground_check;
-                Vec pos_solid_ground_check = {i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z};
-                solid_ground_check.SetPos(&pos_solid_ground_check);
+                Vec sgc_pos;
+                f32 sgc_c = i_this->current.pos.x, sgc_y = i_this->current.pos.y, sgc_z = i_this->current.pos.z;
+                sgc_y -= 200.0f;
+                sgc_pos.x = sgc_c; sgc_pos.y = sgc_y; sgc_pos.z = sgc_z;
+                solid_ground_check.SetPos(&sgc_pos);
                 float solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
                 cap_min_val(i_this->field_35C, solid_ground_cross);
+
                 dBgS_ObjGndChk_Spl liquid_ground_check;
-                Vec pos_liquid_ground_check = {i_this->current.pos.x, i_this->current.pos.y - 200.0f, i_this->current.pos.z};
-                liquid_ground_check.SetPos(&pos_liquid_ground_check);
+                Vec lgc_pos;
+                f32 lgc_x = i_this->current.pos.x, lgc_y = i_this->current.pos.y, lgc_z = i_this->current.pos.z;
+                lgc_y -= 200.0f;
+                lgc_pos.x = lgc_x; lgc_pos.y = lgc_y; lgc_pos.z = lgc_z;
+                liquid_ground_check.SetPos(&lgc_pos);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
+
                 if(liquid_gnd_cross != -1e+09f && i_this->field_35C > liquid_gnd_cross){
                     i_this->field_35C = liquid_gnd_cross + 40.0f + REG0_F(17);
                     i_this->field_360 = 1;
@@ -230,11 +240,10 @@ void kita_move(kita_class* i_this) {
 
 /* 00001894-000019F8       .text himo_create__FP10kita_class */
 cPhs_State himo_create(kita_class* i_this) {
-    /* Nonmatching - yad does not have the right address in .data section */
     static short yad[4] = {0x2000, 0xE000, 0x6000, 0xA000};
     int shand_count = 0;
     fopAcM_prm_class *param;
-    fopAc_ac_c* shand_i;
+    shand_class* shand_i;
 
     for(int i = 0; i < 4; i++){
         switch(i_this->field_2E4[i]){
@@ -248,12 +257,11 @@ cPhs_State himo_create(kita_class* i_this) {
                 i_this->field_2E4[i]++;
 
             case 1:
-                // Junk implementation since shand object has not been decomp yet
-                shand_i = fopAcM_SearchByID(i_this->field_2D4[i]);
+                shand_i = static_cast<shand_class*>(fopAcM_SearchByID(i_this->field_2D4[i]));
                 if(shand_i != NULL){
-                    *(uint*)((int)shand_i + 0x308) = (i_this != NULL) ? i_this->base.mBsPcId : 0xffffffff;
-                    *(cXyz**)((int)shand_i + 0x310) = &i_this->field_2E8[i];
-                    *(u8**)((int)shand_i + 0x314) = &i_this->field_318[i];
+                    shand_i->field_308 = fopAcM_GetID(i_this);
+                    shand_i->field_310 = &i_this->field_2E8[i];
+                    shand_i->field_314 = &i_this->field_318[i];
                     i_this->field_2E4[i]++;
                     shand_count++;
                 }
@@ -269,7 +277,6 @@ cPhs_State himo_create(kita_class* i_this) {
 
 /* 000019F8-00001CB8       .text daKita_Execute__FP10kita_class */
 static BOOL daKita_Execute(kita_class* i_this) {
-    /* Nonmatching - static variables does not have the right address in .data section */
     static float xd[4] = {130, -130, 130, -130};
     static float zd[4] = {130, 130, -130, -130};
 
@@ -392,12 +399,10 @@ static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
 
     fopAcM_SetupActor(a_this, kita_class);
     kita_class* i_this = static_cast<kita_class*>(a_this);
-
     s32 ret = dComIfG_resLoad(&i_this->mPhs, "Kita");
     if(ret != cPhs_COMPLEATE_e){
         return ret;
     }
-
     i_this->field_2A0 = fopAcM_GetParam(i_this);
     i_this->field_2A1 = fopAcM_GetParam(i_this) >> 8;
     if(i_this->field_2A1 == 1){
@@ -450,7 +455,7 @@ static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
     i_this->mStts.Init(0xff, 0xff, i_this);
     i_this->mSph.Set(utiwa_sph_src);
     i_this->mSph.SetStts(&i_this->mStts);
-    for(int i = 0; i < 2; i++){ // i regalloc mismatch
+    for(int i = 0; i < 2; i++){
         daKita_Execute(i_this);
     }
     return ret;
