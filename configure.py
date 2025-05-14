@@ -1761,6 +1761,7 @@ out_dir = config.build_dir / version
 
 # This generates the build steps needed for preprocessing
 def emit_build_rule(asset):
+    assert config.custom_build_steps is not None
     steps = config.custom_build_steps.setdefault("pre-compile", [])
     custom_data = asset.get("custom_data") or {}
 
