@@ -12,6 +12,7 @@
 
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_boko.h"
+#include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_itembase.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
@@ -527,7 +528,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
             item_no = dComIfGp_event_getGtItm();
         }
         fpc_ProcID itemID =
-            fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, 0xffffffff, fopAcM_GetRoomNo(this), NULL, NULL);
+            fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, -1, fopAcM_GetRoomNo(this));
         if (itemID != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(itemID);
         }
@@ -590,12 +591,12 @@ BOOL daPy_lk_c::dProcGetItem() {
             mProcVar0.m3570 = 0;
             onModeFlg(ModeFlg_00000400);
         }
-        if ((item != NULL) && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
             item->hide();
         }
     } else {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-            if ((item != NULL) && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+            if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
                 item->show();
                 if ((m3624 == 0) && (m34D4 != -1)) {
                     if ((m34D4 == 7) && (dComIfGs_getMaxLife() % 4)) {
@@ -618,7 +619,7 @@ BOOL daPy_lk_c::dProcGetItem() {
                     setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
                 }
             }
-        } else if ((item != NULL) && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
+        } else if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
             item->hide();
         }
     }
@@ -820,25 +821,25 @@ BOOL daPy_lk_c::dProcDead_init() {
     }
     mVelocity = 0.0f;
     m34D4 = 0;
+
     if (iVar4 != 0) {
         dVar6 = ANM_SHIPDIE;
-    } else {
-        if (uVar2 != 0) {
-            dVar6 = ANM_SWIMDIE;
-            onModeFlg(ModeFlg_SWIM);
-            dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
-            if (uVar3 == 0) {
-                offNoResetFlg0(daPyFlg0_UNK100);
-                dVar8 = 0.0f;
-                m34D4 = 1;
-            } else {
-                m34C2 = 0;
-            }
+    } else if (uVar2 != 0) {
+        dVar6 = ANM_SWIMDIE;
+        onModeFlg(ModeFlg_SWIM);
+        dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
+        if (uVar3 == 0) {
+            offNoResetFlg0(daPyFlg0_UNK100);
+            dVar8 = 0.0f;
+            m34D4 = 1;
         } else {
-            dVar6 = ANM_DIELONG;
-            onModeFlg(ModeFlg_02000000);
+            m34C2 = 0;
         }
+    } else {
+        dVar6 = ANM_DIELONG;
+        onModeFlg(ModeFlg_02000000);
     }
+
     setSingleMoveAnime(dVar6, dVar8, daPy_HIO_restart_c0::m.field_0x10, -1, daPy_HIO_restart_c0::m.field_0x14);
     mDamageWaitTimer = 0;
     m35E4 = 0.0f;
@@ -1425,7 +1426,13 @@ void daPy_lk_c::dProcPresent_init_sub() {
     onModeFlg(ModeFlg_00000400);
     if (!checkBottleItem(dComIfGp_event_getPreItemNo())) {
         dComIfGp_event_setItemPartnerId(fopAcM_createItemForPresentDemo(
-            &current.pos, dComIfGp_event_getPreItemNo(), 3, -1, fopAcM_GetRoomNo(this), &shape_angle, &scale
+            &current.pos,
+            dComIfGp_event_getPreItemNo(),
+            daDitem_c::FLAG_UNK01 | daDitem_c::FLAG_UNK02,
+            -1,
+            fopAcM_GetRoomNo(this),
+            &shape_angle,
+            &scale
         ));
     }
     keepItemData();
@@ -1477,7 +1484,7 @@ BOOL daPy_lk_c::dProcPresent() {
                 }
             } else {
                 daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
-                if ((item != NULL) && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
+                if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || fopAcM_GetName(item) == PROC_Demo_Item)) {
                     item->show();
                 }
             }

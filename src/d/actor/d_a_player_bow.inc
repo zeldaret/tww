@@ -67,10 +67,12 @@ BOOL daPy_lk_c::checkBowAnime() const {
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
 void daPy_lk_c::makeArrow() {
-    /* Nonmatching - weird gameinfo load */
+    // Fakematch: The first call to getPt1 needs to load gameinfo differently from the other two.
+    // Adding a redundant (dEvt_control_c*) cast to just that one fixes it.
     BOOL r4 = mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e;
     if ((!r4 && dComIfGs_getArrowNum() != 0) ||
-        (r4 && dComIfGp_event_getPt1() != NULL && fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
+        (r4 && ((dEvt_control_c*)&g_dComIfG_gameInfo.play.getEvent())->getPt1() != NULL &&
+         fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
          ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
         fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo);

@@ -750,9 +750,8 @@ BOOL daPy_lk_c::procRopeHangWait_init(int param_0) {
 
 /* 801457FC-80145B38       .text procRopeHangWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procRopeHangWait() {
-    /* Nonmatching */
-    bool bVar1;
-    s16 unaff_r29;
+    BOOL r30;
+    s16 r29;
     float dVar4;
 
     dComIfGp_setRStatus(dActStts_STOP_e);
@@ -763,72 +762,80 @@ BOOL daPy_lk_c::procRopeHangWait() {
         return true;
     }
     if (!changeRopeEndProc(1)) {
-        bVar1 = false;
+        r30 = false;
         fopAc_ac_c* rope = mActorKeepRope.getActor();
         mRopePos = rope->current.pos;
         current.pos.x = mRopePos.x;
         current.pos.z = mRopePos.z;
-        s16 r30 = 0;
         if (mStickDistance > 0.05f) {
             int direction = getDirectionFromAngle(m34DC);
             if (spActionButton()) {
                 if (direction == DIR_FORWARD) {
                     if (abs((int)m34D4) <= 0x80) {
                         procRopeUp_init();
+                    } else {
+                        r30 = true;
+                        r29 = 0;
                     }
-                    bVar1 = true;
-                    unaff_r29 = 0;
                 } else if (direction == DIR_BACKWARD) {
                     if (abs((int)m34D4) <= 0x80) {
                         procRopeDown_init();
-                    }
-                    bVar1 = true;
-                    unaff_r29 = 0;
-                } else if (direction == DIR_LEFT) {
-                    s16 r5 = 512.0f * mStickDistance;
-                    if (r5 > m34D4) {
-                        s16 r0 = 64.0f * mStickDistance;
-                        m34D4 += r0;
-                        if (m34D4 > r5) {
-                            m34D4 = r5;
-                        }
-                        unaff_r29 = m34D4;
                     } else {
-                        unaff_r29 = r5;
+                        r30 = true;
+                        r29 = 0;
                     }
-                } else { // DIR_RIGHT
-                    s16 r5 = -512.0f * mStickDistance;
-                    if (r5 < m34D4) {
-                        s16 r0 = 64.0f * mStickDistance;
-                        m34D4 -= r0;
-                        if (m34D4 < r5) {
-                            m34D4 = r5;
+                } else {
+                    if (direction == DIR_LEFT) {
+                        s16 r5 = 512.0f * mStickDistance;
+                        if (r5 > m34D4) {
+                            s16 r0 = 64.0f * mStickDistance;
+                            m34D4 += r0;
+                            if (m34D4 > r5) {
+                                m34D4 = r5;
+                            }
+                            r29 = m34D4;
+                        } else {
+                            r29 = r5;
                         }
-                        unaff_r29 = m34D4;
-                    } else {
-                        unaff_r29 = r5;
+                    } else { // DIR_RIGHT
+                        s16 r5 = -512.0f * mStickDistance;
+                        if (r5 < m34D4) {
+                            s16 r0 = 64.0f * mStickDistance;
+                            m34D4 -= r0;
+                            if (m34D4 < r5) {
+                                m34D4 = r5;
+                            }
+                            r29 = m34D4;
+                        } else {
+                            r29 = r5;
+                        }
                     }
-                }
-                bVar1 = true;
-                if (m34D0 != -1) {
-                    m34D0 = -1;
-                    setSingleMoveAnime(
-                        ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C
-                    );
+                    r30 = true;
+                    if (m34D0 != -1) {
+                        m34D0 = -1;
+                        setSingleMoveAnime(
+                            ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C
+                        );
+                    }
                 }
             } else if ((direction == DIR_FORWARD) || (direction == DIR_BACKWARD)) {
                 procRopeSwingStart_init();
+            } else {
+                r29 = 0;
+                r30 = true;
             }
-            unaff_r29 = 0;
-            bVar1 = true;
-        } else if (m34D0 == 0) {
-            m34D0 = -1;
-            setSingleMoveAnime(ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C);
+        } else {
+            if (m34D0 == 0) {
+                m34D0 = -1;
+                setSingleMoveAnime(
+                    ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C
+                );
+            }
+            r29 = 0;
+            r30 = true;
         }
-        unaff_r29 = 0;
-        bVar1 = true;
-        if (bVar1) {
-            cLib_addCalcAngleS(&m34D4, unaff_r29, 3, 0x40, 0x10);
+        if (r30) {
+            cLib_addCalcAngleS(&m34D4, r29, 3, 0x40, 0x10);
             if (m34D4 > 0) {
                 dVar4 = checkRopeRoofHit(shape_angle.y + 0x2000);
             } else {

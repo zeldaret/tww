@@ -938,14 +938,14 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, u8 argFlag) {
+fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* i_angle, int i_roomNo, cXyz* i_scale, u8 i_argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
-    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, angle, scale);
+    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (i_argFlag & 0xFF) << 0x10;
+    return fopAcM_create(PROC_Demo_Item, params, pos, i_roomNo, i_angle, i_scale);
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
