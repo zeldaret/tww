@@ -3,12 +3,18 @@
 // Translation Unit: d_a_ks.cpp
 //
 
+// Fakematch? Having sym off before d_a_ks.h but then turning it on before
+// d_a_player_main.h fixes the weak function ordering of
+// `daPy_py_c::getSwordTopPos() const` and `daPy_py_c::getHeadTopPos() const`
+// in this TU.
+#pragma sym off
 #include "d/actor/d_a_ks.h"
 #include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_snap.h"
+#pragma sym on
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_gm.h"
 #include "d/res/res_ks.h"
