@@ -4,62 +4,123 @@
 //
 
 #include "d/actor/d_a_tag_kk1.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-/* 000000EC-00000120       .text __ct__15daTag_Kk1_HIO_cFv */
+
+static daTag_Kk1_HIO_c l_HIO;
+static f32 a_prm_tbl[] = {350.0f,30.0f,0.0f};
+
 daTag_Kk1_HIO_c::daTag_Kk1_HIO_c() {
     /* Nonmatching */
+    // 99% matched
+    field_0x8 = a_prm_tbl[0];
+    field_0xC = a_prm_tbl[1];
+    field_0x10 = *(u8*)&a_prm_tbl[2];
+    mNo = -0x01;
+}
+void daTag_Kk1_HIO_c::foo() {
+
 }
 
 /* 00000120-00000128       .text createInit__11daTag_Kk1_cFv */
-void daTag_Kk1_c::createInit() {
-    /* Nonmatching */
+BOOL daTag_Kk1_c::createInit() {
+    return 1;
 }
 
 /* 00000128-00000130       .text _draw__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_draw() {
-    /* Nonmatching */
+    return 1;
 }
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_execute() {
     /* Nonmatching */
+    // 98% matched
+    short minadjustdistance = 0x1000;
+    f32 distance = PSVECSquareDistance(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+
+
+    distance = std::sqrtf(distance);
+    f32 vertDistance = dComIfGp_getPlayer(0)->current.pos.y - this->current.pos.y;
+
+    field_0x6C5 = 0;
+
+    if (
+        (distance < l_HIO.field_0x8) &&
+        (vertDistance< l_HIO.field_0xC) &&
+        ((short)abs((short)(dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y)) < minadjustdistance)) {      
+        field_0x6C5 = 1;
+    }
+
+    return true;
 }
+
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_delete() {
-    /* Nonmatching */
+
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = 0xff;
+    }
+    return TRUE;
 }
 
 /* 000002A0-0000046C       .text _create__11daTag_Kk1_cFv */
 cPhs_State daTag_Kk1_c::_create() {
-    /* Nonmatching */
+
+    int test = 0;
+    s32 ret = cPhs_COMPLEATE_e;
+
+    fopAcM_SetupActor(this, daTag_Kk1_c);
+
+    switch(fopAcM_GetName(this)){
+        case PROC_TAG_KK1:
+            this->field_0x6C6 = 0;
+            break;
+        default:
+            return cPhs_ERROR_e;
+    }
+
+    if((char)l_HIO.mNo  < 0){
+        l_HIO.mNo = mDoHIO_createChild("貧乏ム−ル追跡起動タグ",&l_HIO); //Poor Muuru chase startup tag
+    }
+    if(!createInit()){
+        ret = cPhs_ERROR_e;
+    }
+
+    fpcM_GetName(&test);
+    return ret;
 }
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Kk1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Kk1_Create(fopAc_ac_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_create();
 }
 
 /* 000006B4-000006D4       .text daTag_Kk1_Delete__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Delete(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Delete(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_delete();
 }
 
 /* 000006D4-000006F4       .text daTag_Kk1_Execute__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Execute(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Execute(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_execute();
 }
 
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Draw(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Draw(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_draw();
+
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c* obj) {
+    return TRUE;
 }
+
+// static float a_prm_tbl;
 
 static actor_method_class l_daTag_Kk1_Method = {
     (process_method_func)daTag_Kk1_Create,
