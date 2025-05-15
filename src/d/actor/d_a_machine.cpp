@@ -5,116 +5,344 @@
 
 #include "d/actor/d_a_machine.h"
 #include "m_Do/m_Do_ext.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_path.h"
 #include "d/d_procname.h"
+#include "d/res/res_gbrg00.h"
+#include "d/actor/d_a_player.h"
+
+const char daMachine_c::m_arcname[] = "Hkikai1";
+
+static dCcD_SrcSph l_sph_src_at = {
+    /* Nonmatching */
+};
+
+static dCcD_SrcSph l_sph_src_col = {
+    /* Nonmatching */
+};
+
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
 bool daMachine_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arcname);
+    return TRUE;
 }
 
 /* 000000A8-000000C8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    daMachine_c* i_this = (daMachine_c*)i_actor;
+    return i_this->CreateHeap();
 }
 
 /* 000000C8-0000022C       .text CreateHeap__11daMachine_cFv */
-void daMachine_c::CreateHeap() {
+BOOL daMachine_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
+    JUT_ASSERT(0x159, modelData != 0);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, 0x4);
+    JUT_ASSERT(0x169, pbck != 0);
+
+    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+    mBckAnm.entry(mpModel->getModelData());
+    return TRUE;
 }
 
 /* 0000022C-000002A0       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        s32 jntNo = ((J3DJoint*)node)->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daMachine_c* i_this = (daMachine_c*)model->getUserArea();
+
+        if (i_this != 0) {
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            mDoMtx_copy(mDoMtx_stack_c::get(), i_this->mJointMatrix);
+        }
+    }
+    return TRUE;
 }
 
 /* 000002A0-00000520       .text CreateInit__11daMachine_cFv */
 void daMachine_c::CreateInit() {
     /* Nonmatching */
+    scale.x = 1.5f;
+    scale.y = 1.5f;
+    scale.z = 1.5f;
+
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -50.0f, 100.0f, 100.0f, 500.0f);
+
+    mStts.Init(0xff, 0xff, this);
+    mCollider.Set(l_sph_src_at);
+    mCollider.SetStts(&mStts);
+    for (int i = 0; i < 3; i++) {
+        mColColliders[i].Set(l_sph_src_col);
+        mColColliders[i].SetStts(&mStts);
+    }
+    mUnkCollider.Set(l_sph_src_col);
+    mUnkCollider.SetStts(&mStts);
+
+    mAcchCir.SetWallR(50.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+
+    set_mtx();
+    mpModel->setUserArea((u32)this);
+
+    JUTNameTab* jointNameTab = mpModel->getModelData()->getJointName();
+
+    for (int i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        const char* jointName = jointNameTab->getName(i);
+        if (strcmp(jointName, "joint3") == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+        }
+
+        mPathId = (fopAcM_GetParam(this) >> 8) & 0xFF;
+        if (mPathId != 0xFF) {
+            mPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
+
+            if (mPath == NULL) {
+                mPathId = 0xFF;
+            } else {
+
+            }
+        }
+
+        mpModel->calc();
+    }
 }
 
 /* 00000520-00000604       .text path_move__11daMachine_cFv */
 void daMachine_c::path_move() {
     /* Nonmatching */
+    if (mPathId != 0xFF) {
+        cLib_chasePos(&current.pos, mTargetPos, speedF);
+
+        float distance = (mTargetPos - current.pos).abs();
+        if (distance < 80.0f) {
+            set_next_pnt();
+        }
+    }
 }
 
 /* 00000604-00000700       .text set_next_pnt__11daMachine_cFv */
 void daMachine_c::set_next_pnt() {
     /* Nonmatching */
+    if (mPathId == 0xFF) {
+        return;
+    }
+
+    mCurrPathPoint += mPathPointDir;
+    if (!dPath_ChkClose(mPath)) {
+        if (mPath->m_num - 1 < mCurrPathPoint) {
+            mPathPointDir = 0xFF;
+            mCurrPathPoint = mPath->m_num - 2;
+        } else if (mCurrPathPoint < 0) {
+            mPathPointDir = 1;
+            mCurrPathPoint = 1;
+        }
+
+    } else {
+        if (mPath->m_num - 1 < mCurrPathPoint) {
+            mCurrPathPoint = 0;
+        } else if (mCurrPathPoint < 0) {
+            mCurrPathPoint = mPath->m_num - 1;
+        }
+    }
+
+    field_0xC28 = mTargetPos;
+    mTargetPos = mPath->m_points[mCurrPathPoint].m_position;
 }
 
 /* 00000700-00000734       .text search_wind_mill__11daMachine_cFv */
-void daMachine_c::search_wind_mill() {
-    /* Nonmatching */
+daWindMill_c* daMachine_c::search_wind_mill() {
+    return (daWindMill_c*)fopAcM_SearchByName(PROC_WINDMILL);
 }
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
 void daMachine_c::set_speed() {
     /* Nonmatching */
+    daWindMill_c* wind_mill = search_wind_mill();
+
+    float target;
+    if (wind_mill != 0) {
+        float wind_mill_angle = wind_mill->mAngle[1];
+        float rotationSpeed = daWindMill_c::m_max_rot_speed[wind_mill->mType * 2];
+        target = wind_mill_angle / rotationSpeed;
+    } else {
+        target = 0.0f;
+    }
+
+    float speed = speedF;
+    cLib_addCalc(&speed, target * 5.0f, 0.1f, 1.0f, 0.5f);
+    speedF = speed;
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
 cPhs_State daMachine_c::_create() {
+    fopAcM_SetupActor(this, daMachine_c);
+
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arcname);
+    if (result == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB00)) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+
+    return result;
+}
+
+/* 00000898-00000968       .text __ct__11daMachine_cFv */
+daMachine_c::daMachine_c() {
     /* Nonmatching */
 }
 
 /* 00000F74-0000100C       .text set_mtx__11daMachine_cFv */
 void daMachine_c::set_mtx() {
-    /* Nonmatching */
+    csXyz current_angle(current.angle);
+
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000100C-000010F8       .text _execute__11daMachine_cFv */
 bool daMachine_c::_execute() {
     /* Nonmatching */
+    set_speed();
+
+    cXyz negative_pos = cXyz::Zero - current.pos;
+    current.angle.y = cM_atan2s(negative_pos.x, negative_pos.z);
+
+    path_move();
+    attack();
+    set_body();
+    set_at();
+    set_mtx();
+
+    if (speedF != 0.0f) {
+        fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_MOVE, 0);
+    }
+    return TRUE;
 }
 
 /* 000010F8-0000124C       .text attack__11daMachine_cFv */
 void daMachine_c::attack() {
     /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (player == NULL) {
+        return;
+    }
+
+    set_cube();
+
+    cXyz unk1;
+    unk1.x = player->current.pos.x;
+    unk1.y = player->current.pos.y;
+    unk1.z = player->current.pos.z + 60.0f;
+
+    field_0xBF0.SetC(unk1);
+    field_0xBF0.SetR(90.0f);
+
+    if (field_0xC78 == 1) {
+        fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_OUT, 0);
+    }
+
+    if (mBckAnm.play()) {
+        field_0xC78 = 0;
+    }
 }
 
 /* 0000124C-00001330       .text set_cube__11daMachine_cFv */
 void daMachine_c::set_cube() {
     /* Nonmatching */
+    cXyz unk1(0.0, 0.0, 350.0);
+    cXyz unk2(0.0, 0.0, 500.0);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
+
+    mDoMtx_stack_c::multVec(&unk1, &unk1);
+    mDoMtx_stack_c::multVec(&unk2, &unk2);
+
+    mCubeCorner1 = unk1;
+    mCubeCorner2 = unk2;
+
+    field_0xBEC = 200.0f;
 }
 
 /* 00001330-0000144C       .text set_body__11daMachine_cFv */
 void daMachine_c::set_body() {
     /* Nonmatching */
+    cXyz unk[3];
+    unk[0].set(0.0f, 0.0f, 75.0f);
+    unk[1].set(0.0f, 0.0f, 225.0f);
+    unk[2].set(0.0f, 0.0f, 375.0f);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+
+    for (int i = 0; i < 3; i++) {
+        mDoMtx_stack_c::multVec(&unk[i], &unk[i]);
+        mColColliders[i].SetC(unk[i]);
+        dComIfG_Ccsp()->Set(&mColColliders[i]);
+    }
+    mColColliders[0].OnAtSetBit();
+    mColColliders[0].SetR(100.0f);
 }
 
 /* 0000144C-000014D4       .text set_at__11daMachine_cFv */
 void daMachine_c::set_at() {
     /* Nonmatching */
+    float frame = mBckAnm.getFrame();
+    if (frame > 5.0 && frame < 25.0) {
+    }
 }
 
 /* 000014D4-0000154C       .text _draw__11daMachine_cFv */
 bool daMachine_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mBckAnm.entry(mpModel->getModelData());
+
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 0000154C-0000156C       .text daMachine_Create__FPv */
-static cPhs_State daMachine_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daMachine_Create(void* i_this) {
+    return ((daMachine_c*)i_this)->_create();
 }
 
 /* 0000156C-00001590       .text daMachine_Delete__FPv */
-static BOOL daMachine_Delete(void*) {
-    /* Nonmatching */
+static BOOL daMachine_Delete(void* i_this) {
+    return ((daMachine_c*)i_this)->_delete();
 }
 
 /* 00001590-000015B4       .text daMachine_Draw__FPv */
-static BOOL daMachine_Draw(void*) {
-    /* Nonmatching */
+static BOOL daMachine_Draw(void* i_this) {
+    return ((daMachine_c*)i_this)->_draw();
 }
 
 /* 000015B4-000015D8       .text daMachine_Execute__FPv */
-static BOOL daMachine_Execute(void*) {
-    /* Nonmatching */
+static BOOL daMachine_Execute(void* i_this) {
+    return ((daMachine_c*)i_this)->_execute();
 }
 
 /* 000015D8-000015E0       .text daMachine_IsDelete__FPv */
 static BOOL daMachine_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daMachineMethodTable = {
