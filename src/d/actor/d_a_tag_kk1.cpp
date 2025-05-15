@@ -7,7 +7,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-
 static daTag_Kk1_HIO_c l_HIO;
 static f32 a_prm_tbl[] = {350.0f,30.0f,0.0f};
 
@@ -37,21 +36,25 @@ bool daTag_Kk1_c::_draw() {
 bool daTag_Kk1_c::_execute() {
     /* Nonmatching */
     // 98% matched
-    short minadjustdistance = 0x1000;
-    f32 distance = PSVECSquareDistance(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    cXyz* thepos = &dComIfGp_getPlayer(0)->current.pos; 
+    f32 distance = current.pos.abs(*thepos);
+    //distance = std::sqrtf(distance);
 
-
-    distance = std::sqrtf(distance);
+    //distance = std::sqrtf(distance);
     f32 vertDistance = dComIfGp_getPlayer(0)->current.pos.y - this->current.pos.y;
 
     field_0x6C5 = 0;
-
     if (
         (distance < l_HIO.field_0x8) &&
-        (vertDistance< l_HIO.field_0xC) &&
-        ((short)abs((short)(dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y)) < minadjustdistance)) {      
-        field_0x6C5 = 1;
+        (vertDistance< l_HIO.field_0xC)
+    ){
+        s16 fillerVal = dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y;
+        fillerVal =abs(fillerVal);
+        if(fillerVal < 0x1000){        //(iVar3 = abs((int)(short)((mpCurPlayerActor[0]->shape_angle.y -current.angle.y)),(short)iVar3 < 0x1000)
+            field_0x6C5 = 1;
+        }
     }
+
 
     return true;
 }
