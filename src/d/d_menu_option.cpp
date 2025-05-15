@@ -294,7 +294,7 @@ void dMenu_Option_c::cursorMove() {
 void dMenu_Option_c::cursorScale() {
     float x[2];
     float y;
-    
+
     switch (mB30[1].mUserArea) {
         case 0: {
             x[0] = m9A8[mE3C].mPosTopLeftOrig.x - 20.0f;
@@ -324,8 +324,44 @@ void dMenu_Option_c::cursorScale() {
 }
 
 /* 801D3E70-801D3F98       .text typeMove__14dMenu_Option_cFv */
-void dMenu_Option_c::typeMove() {
-    /* Nonmatching */
+void dMenu_Option_c::typeMove() {   
+    switch (mB30[1].mUserArea) {
+        case 0: {
+            for (int i = 0; i < 2; i++) {
+                if(i == mE3C) {
+                    fopMsgM_setInitAlpha(&m9A8[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&m9A8[i]);
+                }
+            }
+            break;
+        }
+        case 3: {
+            for (int i = 0; i < 3; i++) {
+                if(i == mE3E) {
+                    fopMsgM_setInitAlpha(&mA18[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&mA18[i]);
+                }
+            }
+            break;
+        }
+        case 2: {
+            for (int i = 0; i < 2; i++) {
+                if(i == mE3F) {
+                    fopMsgM_setInitAlpha(&mAC0[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&mAC0[i]);
+                }
+            }
+            break; 
+        }
+    }
+
+    cursorScale();
 }
 
 /* 801D3F98-801D41C4       .text yazAnime__14dMenu_Option_cFv */
