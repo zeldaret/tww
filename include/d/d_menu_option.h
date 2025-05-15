@@ -60,20 +60,17 @@ private:
     /* 0x7B0 */ fopMsgM_pane_class m7B0;
     /* 0x7E8 */ fopMsgM_pane_class m7E8;
     /* 0x820 */ fopMsgM_pane_class m820;
-    /* 0x858 */ fopMsgM_pane_class m858;
-    /* 0x890 */ fopMsgM_pane_class m890;
+    /* 0x858 */ fopMsgM_pane_class m858[2];
     /* 0x8C8 */ fopMsgM_pane_class m8C8[4];
     /* 0x9A8 */ fopMsgM_pane_class m9A8[2];
     /* 0xA18 */ fopMsgM_pane_class mA18[3];
     /* 0xAC0 */ fopMsgM_pane_class mAC0[2];
-    /* 0xB30 */ fopMsgM_pane_class mB30;
-    /* 0xB68 */ fopMsgM_pane_class mB68;
+    /* 0xB30 */ fopMsgM_pane_class mB30[2];
     /* 0xBA0 */ fopMsgM_pane_class mBA0;
     /* 0xBD8 */ fopMsgM_pane_class mBD8;
     /* 0xC10 */ fopMsgM_pane_class mC10;
     /* 0xC48 */ fopMsgM_pane_class mC48;
-    /* 0xC80 */ fopMsgM_pane_class mC80;
-    /* 0xCB8 */ fopMsgM_pane_class mCB8;
+    /* 0xC80 */ fopMsgM_pane_class mC80[2];
     /* 0xCF0 */ fopMsgM_pane_class mCF0;
     /* 0xD28 */ JKRArchive* mpArchive;
     /* 0xD2C */ JUTFont* mD2C;
@@ -89,7 +86,10 @@ private:
     /* 0xE39 */ u8 mE39;
     /* 0xE3A */ u8 mE3A;
     /* 0xE3B */ u8 mE3B;
-    /* 0xE3C */ u8 mE3C[0xE40 - 0xE3C];
+    /* 0xE3C */ u8 mE3C;
+    /* 0xE3D */ u8 mE3D;
+    /* 0xE3E */ u8 mE3E;
+    /* 0xE3F */ u8 mE3F;
     /* 0xE40 */ u8 mE40;
     /* 0xE41 */ u8 mE41[0xE42 - 0xE41];
 };  // Size: 0xE42
