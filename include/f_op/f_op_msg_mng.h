@@ -378,5 +378,6 @@ void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int siz
 
 void fopMsgM_outFontSet(J2DPicture*, J2DPicture*, s16*, u32, u8);
 void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8);
+void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8, u8);
 
 #endif /* F_OP_MSG_MNG_H */

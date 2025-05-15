@@ -713,7 +713,15 @@ void dMenu_Option_c::outFontMove() {
 
 /* 801D4D74-801D4E34       .text outFontDraw__14dMenu_Option_cFv */
 void dMenu_Option_c::outFontDraw() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        if (m0B0[i].mUserArea != -1) {
+            m0B0[i].mNowAlpha = m740.pane->getAlpha();
+            fopMsgM_outFontDraw2((J2DPicture*)m0B0[i].pane, (J2DPicture*)m3F8[i].pane, m3F8[i].mPosTopLeft.x, m3F8[i].mPosTopLeft.y, 0x19, 0x19, &m0B0[i].mUserArea, m0B0[i].mNowAlpha, m0B0[i].mPosTopLeftOrig.y);
+        }
+        else {
+            fopMsgM_setAlpha(&m0B0[i]); 
+        }
+    }
 }
 
 /* 801D4E34-801D505C       .text stringlength__14dMenu_Option_cFP18fopMsgM_pane_classPc */
