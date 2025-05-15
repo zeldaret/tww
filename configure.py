@@ -1432,7 +1432,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_ghostship"),
     ActorRel(NonMatching, "d_a_tag_hint"),
     ActorRel(Matching,    "d_a_tag_kb_item"),
-    ActorRel(NonMatching, "d_a_tag_kk1"),
+    ActorRel(Equivalent, "d_a_tag_kk1", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_tag_light"),
     ActorRel(Matching,    "d_a_tag_msg"),
     ActorRel(NonMatching, "d_a_tag_photo"),

@@ -4,8 +4,6 @@
 #include "d/d_npc.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class daTag_Kk1_c : public fopNpc_npc_c {
 public:
     BOOL createInit();
@@ -15,29 +13,23 @@ public:
     cPhs_State _create();
 
 public:
-    /* 0x6C4 */ u8 field_0x6C4;
-    /* 0x6C5 */ bool field_0x6C5;
-    /* 0x6C6 */ u8 field_0x6C6;
-    /* 0x6C7 */ u8 field_0x6C7;
+    /* 0x6C4 */ u8   padding_0x6C4;
+    /* 0x6C5 */ bool mTagSet;
+    /* 0x6C6 */ bool mNameIsWrong;
 };  // Size: 0x6C8
 
 
 class daTag_Kk1_HIO_c : public JORReflexible{
 
+    public:
+        daTag_Kk1_HIO_c();
+        virtual ~daTag_Kk1_HIO_c(){};
 
-public:
-
-    virtual void foo();
-    daTag_Kk1_HIO_c();
-    virtual ~daTag_Kk1_HIO_c(){};
-
-public:
-    /* 0x4  */ s8 mNo;
-    /* 0x8  */ f32 field_0x8;
-    /* 0xC  */ f32 field_0xC;
-    /* 0x10 */ u8 field_0x10;
+    public:
+        /* 0x04  */ s8  mNo;
+        /* 0x08  */ f32 mHorizontalDistance;
+        /* 0x0C  */ f32 mVerticalDistance;
+        /* 0x10  */ u8  mUnusedU8;
 };
-
-
 
 #endif /* D_A_TAG_KK1_H */
