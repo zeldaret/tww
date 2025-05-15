@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_npc_kk1.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
 /* 000000EC-00000150       .text __ct__15daNpc_Kk1_HIO_cFv */
@@ -37,7 +38,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 0000044C-000004EC       .text searchActor_SWC00__FPvPv */
-void searchActor_SWC00(void*, void*) {
+void* searchActor_SWC00(void*, void*) {
     /* Nonmatching */
 }
 
@@ -137,58 +138,342 @@ void daNpc_Kk1_c::anmAtr(unsigned short) {
 }
 
 /* 000011A0-0000149C       .text next_msgStatus__11daNpc_Kk1_cFPUl */
-void daNpc_Kk1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Kk1_c::next_msgStatus(unsigned long* param_1) {
     /* Nonmatching */
+   u8 bVar1 = this->mpCurrMsg->mSelectNum;
+   u16 uVar2 = 0xf;
+   switch(*param_1) {
+    case 0x1c85:
+        *param_1 = 0x1c86;
+        break;
+    case 0x1c86:
+        *param_1 = 0x1ca7;
+        break;
+    case 0x1c88:
+        *param_1 = 0x1c89;
+        break;
+    case 0x1c89:
+        *param_1 = 0x1c8a;
+        break;
+    case 0x1c8a:
+        *param_1 = 0x1ca9;
+        break;
+    case 0x1c8b:
+        *param_1 = 0x1cac;
+        this->field_0x7B8 = 1;
+        break;
+    case 0x1c8d:
+        *param_1 = 0x1c8e;
+        break;
+    case 0x1c8e:
+        *param_1 = 0x1c8f;
+        break;
+    case 0x1c8f:
+        if (bVar1 == 1) {
+            *param_1 = 0x1ca5;
+            field_0x7AE++;
+        }
+        else if (bVar1 == 0) {
+            *param_1 = 0x1c90;
+        }
+        break;
+    case 0x1c90:
+        *param_1 = 0x1c91;
+        break;
+    case 0x1c91:
+        if (bVar1 == 1) {
+            *param_1 = 0x1c92;
+            field_0x7AE++;
+        }
+        else if (bVar1 == 0) {
+            *param_1 = 0x1c93;
+        }
+        break;
+    case 0x1c92:
+        *param_1 = 0x1c91;
+        break;
+    case 0x1c93:
+        *param_1 = 0x1c94;
+        break;
+    case 0x1c94:
+        if (bVar1 == 1) {
+            *param_1 = 0x1c95;
+            field_0x7AE++;
+        }
+        else if (bVar1 == 0) {
+            *param_1 = 0x1c96;
+        }
+        break;
+    case 0x1c95:
+        *param_1 = 0x1c96;
+        break;
+    case 0x1c96:
+        *param_1 = 0x1c97;
+        break;
+    case 0x1c97:
+            if (bVar1 == 1) {
+                *param_1 = (this->field_0x7AE <= 1) ? (0x1C9B - 1 - (this->field_0x7AE >> 31)) 
+                                                    : (0x1C9B - 0 - (this->field_0x7AE >> 31));
+            }
+        else if (bVar1 == 0) {
+            *param_1 = 0x1c98;
+        }
+        break;
+    case 0x1c98:
+        if (bVar1 == 1) {
+            uVar2 = 0x10;
+        }
+        else if (bVar1 == 0) {
+            *param_1 = 0x1c99;
+        }
+        break;
+    case 0x1c99:
+        if (bVar1 == 1) {
+            *param_1 = 0x1c9a;
+        }
+        else if (bVar1 == 0) {
+            int fieldValue = this->field_0x7AE;
+            uint temp = (fieldValue <= 1) ? 1 : 0;
+            *param_1 = (-temp) - (fieldValue >> 31) + 0x1C9D;
+        }
+        break;
+    case 0x1c9b:
+        *param_1 = 0x1c9d;
+        break;
+    case 0x1c9d:
+        *param_1 = 0x1c9e;
+        break;
+    case 0x1c9e:
+        *param_1 = 0x1caa;
+        break;
+    case 0x1c9f:
+        uVar2 = 0x10;
+        break;
+    case 0x1ca1:
+        *param_1 = 0x1ca2;
+        break;
+    case 0x1ca2:
+        *param_1 = 0x1ca3;
+        break;
+    case 0x1ca3:
+        *param_1 = 0x1ca4;
+        break;
+    case 0x1ca4:
+        *param_1 = 0x1cab;
+        break;
+    case 0x1ca5:
+        *param_1 = 0x1c8f;
+        break;
+    case 0x1ca7:
+        *param_1 = 0x1ca8;
+        break;
+    case 0x1caa:
+        *param_1 = 0x1c9f;
+        break;
+    default:
+        uVar2 = 0x10;
+        break;
+   }
+   return uVar2;
 }
 
 /* 0000149C-00001534       .text getMsg_KK1_0__11daNpc_Kk1_cFv */
-void daNpc_Kk1_c::getMsg_KK1_0() {
-    /* Nonmatching */
+u32 daNpc_Kk1_c::getMsg_KK1_0() {
+
+   if (dKy_daynight_check() == 1) {
+      if (field_0x7BA != 0) {
+
+          field_0x7BA = 0;
+          return 0x1ca1;
+      }
+      else {
+          return 0x1c8b;
+      }
+   }
+   else {
+      if (dComIfGs_isEventBit(0xe08) == 0) {
+            if(dComIfGs_isEventBit(0xe10)){
+                return 0x1C87;
+            }else{
+                return 0x1C88;
+            }
+      }
+      else {
+          return 0x1c85;
+      }
+   }
+   //I'm the goat
 }
 
 /* 00001534-00001570       .text getMsg__11daNpc_Kk1_cFv */
-void daNpc_Kk1_c::getMsg() {
-    /* Nonmatching */
+u32 daNpc_Kk1_c::getMsg() {
+    u32 result = 0;
+    switch((int)field_0x820){
+        case 0:
+            result = getMsg_KK1_0();
+            break;
+    }
+    return result;
 }
 
 /* 00001570-000015FC       .text eventOrder__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::eventOrder() {
     /* Nonmatching */
-}
+    char cVar1 = field_0x81B;
+    if ((cVar1 == '\x01') || (cVar1 == '\x02')) {
+        // this->eventInfo.mCondition |= dEvtCnd_CANTALK_e;
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if(field_0x81B == '\x01'){
+            fopAcM_orderSpeakEvent(this);
+        }
+    }else if (cVar1 >= 0x03){
+        field_0x78C = (cVar1 - 3);
+        fopAcM_orderOtherEventId(this,field_0x77C[field_0x78C],0x00ff,0xffff,0,1);
 
+    }
+        //fopAcM_orderOtherEventId(this,(&field_0x77C + 2*field_0x78C),)
+}
 /* 000015FC-000016DC       .text checkOrder__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::checkOrder() {
     /* Nonmatching */
+    if(eventInfo.checkCommandDemoAccrpt()){
+        if(dComIfGp_evmng_startCheck(field_0x77C[field_0x78C]) && (s8)field_0x81B >= 0x03){
+            switch(field_0x78C){
+                case 4:
+                    setAnm_NUM(0,1);
+                    break;
+                case 5:
+                case 3:
+                default:
+                    break;
+            }
+
+            field_0x81B = 0;
+            field_0x817 = 0xFF;
+            field_0x818 = 0xFF;
+        };
+
+    }
+    else{
+        if((this->checkCommandTalk() != 0)&&((field_0x81B == 1) ||(field_0x81B == 2))){
+            this->field_0x81B = 0;
+            this->field_0x7C3 = 1;
+        }
+    }
+
 }
 
 /* 000016DC-00001774       .text chk_talk__11daNpc_Kk1_cFv */
-void daNpc_Kk1_c::chk_talk() {
-    /* Nonmatching */
+bool daNpc_Kk1_c::chk_talk() {
+    bool retval;
+    if(dComIfGp_event_chkTalkXY()){
+        retval = true;
+        if(dComIfGp_evmng_ChkPresentEnd() != 0){
+            field_0x7B4 = dComIfGp_event_getPreItemNo();
+            retval = true;
+        }else{
+            retval = false;
+        }
+    }else{
+        field_0x7B4 = 0xFF;
+        retval = true;
+    }
+    return retval;
 }
 
 /* 00001774-000017B4       .text chk_parts_notMov__11daNpc_Kk1_cFv */
-void daNpc_Kk1_c::chk_parts_notMov() {
-    /* Nonmatching */
+bool daNpc_Kk1_c::chk_parts_notMov() {
+    bool retval = 0;
+    if((field_0x772 != m_jnt.mAngles[0][1])||
+    (field_0x774 != m_jnt.mAngles[1][1])||
+    (field_0x770 != current.angle.y)){
+        retval = 1;
+    }
+    return retval;
+
 }
 
 /* 000017B4-00001808       .text searchByID__11daNpc_Kk1_cFUiPi */
-void daNpc_Kk1_c::searchByID(fpc_ProcID, int*) {
-    /* Nonmatching */
+fopAc_ac_c* daNpc_Kk1_c::searchByID(fpc_ProcID param_1, int* param_2) {
+    fopAc_ac_c *fiveActors[4];
+    fiveActors[0] = NULL;
+    *param_2 = 0;
+    if(!fopAcM_SearchByID(param_1,fiveActors)){
+        *param_2 = 1;
+    }
+    return fiveActors[0];
 }
 
+
+static u32 l_check_inf[0x14];
+#define SEARCH_PTR_FIELD   (*(void**)(&l_check_inf[0]))
+#define SEARCH_ID_FIELD    (l_check_inf[1])
+static s32 l_check_wrk;
+//static PartnerSearchResult l_check_inf;  // Search results buffer
 /* 00001808-000018B8       .text partner_search_sub__11daNpc_Kk1_cFPFPvPv_Pv */
-void daNpc_Kk1_c::partner_search_sub(void* (*)(void*, void*)) {
-    /* Nonmatching */
+bool daNpc_Kk1_c::partner_search_sub(void* (*param_1)(void*, void*)) {
+    u32 uVar1;
+    bool retVal = false;
+    field_0x6FC = -1;
+    l_check_wrk = 0;
+
+    for(int i = 0; i != 0x14; i++){
+        l_check_inf[i] = 0x0000;
+    }
+    fpcEx_Search(param_1, this);
+    if(l_check_wrk != 0){
+        if(SEARCH_PTR_FIELD != 0){
+
+            uVar1 = l_check_inf[1];
+
+        }else{
+            uVar1 = -1;
+        }
+        field_0x6FC = uVar1;
+        retVal = 1;
+    }
+
+    return retVal;
 }
 
 /* 000018B8-00001924       .text partner_search__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::partner_search() {
     /* Nonmatching */
+    bool cVar1;
+    if(field_0x821 == '\x01'){
+
+        switch(field_0x820){
+
+
+            case 0:
+                cVar1 = partner_search_sub(searchActor_SWC00);
+                break;
+            default:
+                cVar1 = 1;
+        }
+        if(cVar1){
+            field_0x821 += 1;
+        }
+    }
+    return;
 }
 
 /* 00001924-00001B10       .text lookBack__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::lookBack() {
+    field_0x772 = m_jnt.mAngles[0][1];
+    field_0x774 = m_jnt.mAngles[1][1];
+    field_0x770 = current.angle.y;
+    volatile cXyz Vec1 = cXyz::Zero;
+    volatile cXyz* VecPtr1 = NULL;
+    volatile f32 targetY = current.angle.y;
+
     /* Nonmatching */
+    //        6] getHead_y__14dNpc_JntCtrl_cFv (func,weak) found in d_a_npc_kk1.o 
+    //        6] getBackbone_y__14dNpc_JntCtrl_cFv (func,weak) found in d_a_npc_kk1.o 
+    // >>> SYMBOL NOT FOUND: dNpc_playerEyePos__Ff
+    //        6] kyorokyoro__11daNpc_Kk1_cFv (func,global) found in d_a_npc_kk1.o 
+
+    //
 }
 
 /* 00001B10-00001B90       .text chkAttention__11daNpc_Kk1_cFv */
@@ -367,7 +652,7 @@ void daNpc_Kk1_c::event_proc(int) {
 }
 
 /* 00002F80-00002FB8       .text checkCommandTalk__11daNpc_Kk1_cFv */
-void daNpc_Kk1_c::checkCommandTalk() {
+bool daNpc_Kk1_c::checkCommandTalk() {
     /* Nonmatching */
 }
 
@@ -567,28 +852,30 @@ void daNpc_Kk1_c::CreateHeap() {
 }
 
 /* 00006684-000066A4       .text daNpc_Kk1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Kk1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daNpc_Kk1_Create(fopAc_ac_c* obj) {
+    (static_cast<daNpc_Kk1_c*>(obj))->_create();
+
 }
 
 /* 000066A4-000066C4       .text daNpc_Kk1_Delete__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c* obj) {
+    (static_cast<daNpc_Kk1_c*>(obj))->_delete();
 }
 
 /* 000066C4-000066E4       .text daNpc_Kk1_Execute__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c* obj) {
+    (static_cast<daNpc_Kk1_c*>(obj))->_execute();
 }
 
 /* 000066E4-00006704       .text daNpc_Kk1_Draw__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c* obj) {
+    (static_cast<daNpc_Kk1_c*>(obj))->_draw();
 }
 
 /* 00006704-0000670C       .text daNpc_Kk1_IsDelete__FP11daNpc_Kk1_c */
 static BOOL daNpc_Kk1_IsDelete(daNpc_Kk1_c*) {
     /* Nonmatching */
+    return true;
 }
 
 static actor_method_class l_daNpc_Kk1_Method = {
