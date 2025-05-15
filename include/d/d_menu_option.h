@@ -10,6 +10,7 @@
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
+struct mesg_entry;
 
 class dMenu_Option_c : public dDlst_base_c {
 public:
@@ -72,7 +73,10 @@ private:
     /* 0xD2C */ JUTFont* mD2C;
     /* 0xD30 */ JUTFont* mD30;
     /* 0xD34 */ STControl* stick;
-    /* 0xD38 */ u8 mD38[0xD48 - 0xD38];
+    /* 0xD38 */ char* mD38;
+    /* 0xD3C */ char* mD3C;
+    /* 0xD40 */ char* mD40;
+    /* 0xD44 */ char* mD44;
     /* 0xD48 */ char mD48[20];
     /* 0xD5C */ char mD5C[2][20];
     /* 0xD84 */ char mD84[2][20];

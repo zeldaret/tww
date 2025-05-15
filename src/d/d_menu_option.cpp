@@ -7,9 +7,10 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_lib.h"
-#include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "global.h"
+#include "f_op/f_op_msg_mng.h"
 
 dMo_HIO_c g_moHIO;
 
@@ -367,27 +368,331 @@ void dMenu_Option_c::typeMove() {
 /* 801D3F98-801D41C4       .text yazAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::yazAnime() {
     /* Nonmatching */
-    static const u32 moveX[6] = { 0, 2, 8, 18, 8, 2};
+    static const int moveX[6] = { 0, 2, 8, 18, 8, 2};
+    float fVar1;
+    
+    if (m858[0].mUserArea < 10) {
+        fVar1 = 6.0f;
+    }
+    else {
+        fVar1 = -6.0f;
+    }
+
+    m858[0].pane->rotate(m858[0].mSize.x / 2.0f, m858[0].mSize.y / 2.0f, ROTATE_Z, 90.0f + fVar1);
+    m858[1].pane->rotate(m858[1].mSize.x / 2.0f, m858[1].mSize.y / 2.0f, ROTATE_Z, 90.0f + fVar1);
+
+    m858[0].mUserArea++;
+
+    if(m858[1].mUserArea > 0) {
+        m858[1].mUserArea--; 
+        m858[1].pane->move((int)(m858[1].mPosTopLeft.x + 0.5f) + moveX[m858[1].mUserArea], m858[1].mPosTopLeft.y + 0.5f);
+    }
+    else if (m858[1].mUserArea < 0) {
+        m858[1].mUserArea++;
+        m858[0].pane->move((int)(m858[0].mPosTopLeft.x + 0.5f) - moveX[abs(m858[1].mUserArea)], m858[0].mPosTopLeft.y + 0.5f);
+    }
+
+    if (m858[0].mUserArea >= 0x14) {
+        m858[0].mUserArea = 0;
+    }
 }
 
 /* 801D41C4-801D428C       .text ccAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::ccAnime() {
     /* Nonmatching */
+    int j = 0;
+    for (int i = 0; i < 3; i++) {
+        if (i == mB30[0].mUserArea / 7) {
+            fopMsgM_setInitAlpha(&mB30[i]);
+            fopMsgM_setInitAlpha(&mB30[j+1]);
+        }
+        else {
+            fopMsgM_setNowAlphaZero(&mB30[i]);
+            fopMsgM_setNowAlphaZero(&mB30[j+1]);
+        }
+        j += 2;
+    }
+
+    mB30[0].mUserArea++;
+
+    if (mB30[0].mUserArea >= 0x15) {
+      mB30[0].mUserArea = 0;
+    }
 }
 
 /* 801D428C-801D47A4       .text stickMove__14dMenu_Option_cFUc */
-void dMenu_Option_c::stickMove(u8) {
-    /* Nonmatching */
+void dMenu_Option_c::stickMove(u8 param_1) {
+    switch (param_1) {
+        case 4: {
+            if (mB30[1].mUserArea > 0) {
+                mB30[1].mUserArea--;
+                if (mB30[1].mUserArea == 1) {
+                    mB30[1].mUserArea = 0;
+                }
+                cursorMove();
+                noteSet();
+                mDoAud_seStart(0x80e, NULL, 0, 0);
+            }
+            break;
+        }
+        case 8: {
+            if (mB30[1].mUserArea < 3) {
+                mB30[1].mUserArea++;
+                if (mB30[1].mUserArea == 1) {
+                    mB30[1].mUserArea = 2;
+                }
+                cursorMove();
+                noteSet();
+                mDoAud_seStart(0x80e, NULL, 0, 0);
+            }
+            break;
+        }
+        case 2: {
+            switch (mB30[1].mUserArea) {
+                case 0: {
+                    if (mE3C) {
+                        mE3C = 0;
+                    }
+                    else {
+                        mE3C = 1;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    break;
+                }
+                case 1: {
+                    if (mE3D) {
+                        mE3D = 0;
+                    }
+                    else {
+                        mE3D = 1;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    ;
+                    break;
+                }
+                case 3: {
+                    if (mE3E < 2) {
+                        mE3E++;
+                    }
+                    else {
+                        mE3E = 0;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_setOutputMode(soundMode[mE3E]);
+                    setSoundMode(soundMode[mE3E]);
+                    break;
+                }
+                case 2: {
+                    if ((JUTGamePad::sRumbleSupported & 0x80000000) != 0) {
+                        if (mE3F) {
+                            mE3F = 0;
+                        }
+                        else {
+                            mE3F = 1;
+                            g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
+                        }
+                        m858[1].mUserArea = 6;
+                        mDoAud_seStart(0x84f, NULL, 0, 0);
+                    }
+                    break;
+                }
+            }
+            typeMove();
+            break;
+        }
+        case 1: {
+            switch (mB30[1].mUserArea) {
+                case 0: {
+                    if (mE3C) {
+                        mE3C = 0;
+                    }
+                    else {
+                        mE3C = 1;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    break;
+                }
+                case 1: {
+                    if (mE3D) {
+                        mE3D = 0;
+                    }
+                    else {
+                        mE3D = 1;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    break;
+                }
+                case 3: {
+                    if (mE3E) {
+                        mE3E--;
+                    }
+                    else {
+                        mE3E = 2;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_setOutputMode(soundMode[mE3E]);
+                    setSoundMode(soundMode[mE3E]);
+                    break;
+                }
+                case 2: {
+                    if ((JUTGamePad::sRumbleSupported & 0x80000000) != 0) {
+                        if (mE3F) {
+                            mE3F = 0;
+                        }
+                        else {
+                            mE3F = 1;
+                            g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
+                        }
+                        m858[1].mUserArea = -6;
+                        mDoAud_seStart(0x84f, NULL, 0, 0);
+                    }
+                    break;
+                }
+            }
+            typeMove();
+            break;
+        }
+    }
 }
 
 /* 801D47A4-801D4C00       .text noteSet__14dMenu_Option_cFv */
 void dMenu_Option_c::noteSet() {
     /* Nonmatching */
+    fopMsgM_itemMsgGet_c msgGet;
+    //local_354.x = 0;
+    //local_354.y = 0;
+    //local_354.z = 0;
+    fopMsgM_msgDataProc_c msgDataProc;
+
+    strcpy(mD38, "");
+    strcpy(mD3C, "");
+    strcpy(mD40, "");
+    strcpy(mD44, "");
+
+    outFontInit();
+
+    float fVar1 = (m740).pane[1].mBounds.getHeight();
+    float fVar2 = (m778).pane[1].mBounds.getHeight();
+
+    mesg_header* mesg_header = msgGet.getMesgHeader(0x262);
+    if (mesg_header == NULL) {
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_menu_option.cpp", 0x313, "head_p");
+        OSPanic("d_menu_option.cpp", 0x313, "Halt");
+    }
+
+    const char* mesg = msgGet.getMessage(mesg_header);
+    mesg_entry mesg_entry = msgGet.getMesgEntry(mesg_header);
+
+    //local_334.mTextOffs = local_34c;
+    //local_334.mMesgID = local_348;
+    //local_334.mItemPrice = local_346;
+    //local_334.mNextMessageID = local_344;
+    //local_334.field4_0xa = local_342;
+    //local_334.mTextboxType = local_340;
+    //local_334.mDrawType = local_33f;
+    //local_334.mTextboxPosition = local_33e;
+    //local_334.mItemImage = local_33d;
+    //local_334.field9_0x10 = local_33c;
+    //local_334.mInitialSound = local_33b;
+    //local_334.mInitialCamera = local_33a;
+    //local_334.mInitialAnimation = local_339;
+    //local_334.field13_0x14 = local_338;
+    //local_334.field14_0x15 = local_337;
+    //local_334.mTotalRows = local_336;
+    //local_334.field16_0x17 = local_335;
+
+    msgDataProc.dataInit();
+
+    //local_2d0 = *(char **)&field_0xd44;
+    //local_2d4 = *(char **)&field_0xd40;
+    //local_2d8 = *(char **)&field_0xd3c;
+    //auStack_31c._64_4_ = *(undefined4 *)&field_0xd38;
+    //auStack_31c._4_4_ = field21_0xd2c;
+    //auStack_31c._8_4_ = field22_0xd30;
+    //pJVar7 = (m740).pane;
+    //local_200 = (int)pJVar7[1].parent.mBounds.mTL.x;
+    //local_78 = (longlong)local_200;
+    //local_1f8 = (int)(m778).pane[1].parent.mBounds.mTL.x;
+    //local_70 = (longlong)local_1f8;
+    //local_1fc = (int)pJVar7[1].parent.mBounds.mTL.y;
+    //local_68 = (longlong)local_1fc;
+    //auStack_31c._12_4_ = &local_334;
+    //local_1d8 = (int)fVar1;
+    //local_60 = (longlong)local_1d8;
+    //local_1d0 = (int)fVar2;
+    //local_58 = (longlong)local_1d0;
+    //local_1f4 = 0x1d0;
+    //local_1f0 = 0x1d0;
+    //local_1bc = 2;
+    //local_1c0 = 0;
+    //local_83 = 1;
+    //local_80 = 0;
+    //auStack_31c._60_4_ = pcVar6;
+    //local_2bc = (char *)auStack_31c._64_4_;
+    //local_2b8 = local_2d8;
+    //local_2b4 = local_2d4;
+    //local_2b0 = local_2d0;
+    //fopMsgM_msgDataProc_c::stringLength((fopMsgM_msgDataProc_c *)auStack_31c);
+    //fopMsgM_msgDataProc_c::stringShift((fopMsgM_msgDataProc_c *)auStack_31c);
+    //fopMsgM_msgDataProc_c::iconIdxRefresh((fopMsgM_msgDataProc_c *)auStack_31c);
+    //iVar9 = (int)local_1ec._2_2_;
+    //local_1ec = 0;
+    //fopMsgM_msgDataProc_c::stringSet((fopMsgM_msgDataProc_c *)auStack_31c);
+    //pJVar7 = (m740).pane;
+    //uStack_4c = iVar9 ^ 0x80000000;
+    //local_50 = 0x43300000;
+    //fVar1 = ((((pJVar7->parent).mBounds.mBR.y - (pJVar7->parent).mBounds.mTL.y) - fVar1) -
+    //        (float)iVar9 * pJVar7[1].parent.mBounds.mTL.y) * 0.5;
+    //*(float *)pJVar7[1].parent.mMagic = 0.0;
+    //pJVar7[1].parent.mName = (int)fVar1;
+    //pJVar7 = (m778).pane;
+    //*(float *)pJVar7[1].parent.mMagic = 0.0;
+    //pJVar7[1].parent.mName = (int)fVar1;
+    //J2DTextBox::setString((J2DTextBox *)(m740).pane,*(char **)&field_0xd38);
+    //J2DTextBox::setString((J2DTextBox *)(m778).pane,*(char **)&field_0xd3c);
+    //iVar9 = (int)((m740).pane[1].parent.mBounds.mTL.y * 0.5);
+    //local_48 = (longlong)iVar9;
+    //iVar12 = 0;
+    //iVar11 = 0;
+    //iVar10 = 0;
+    //do {
+    //  uVar8 = (uint)abStack_9b[iVar12];
+    //  if (((uVar8 != 0xff) && (*(short *)((int)&m0B0[0].mUserArea + iVar10) == -1)) &&
+    //     (uVar8 != 0x16)) {
+    //    local_48 = CONCAT44(0x43300000,*(int *)((int)local_1b4 + iVar11) ^ 0x80000000);
+    //    *(float *)((int)&m0B0[0].mPosTopLeft.x + iVar10) =
+    //         (float)*(int *)((int)local_1b4 + iVar11);
+    //    iVar3 = iVar9 * *(int *)((int)local_178 + iVar11) * 2;
+    //    uStack_4c = iVar3 ^ 0x80000000;
+    //    local_50 = 0x43300000;
+    //    *(float *)((int)&m0B0[0].mPosTopLeft.y + iVar10) = fVar1 + (float)iVar3;
+    //    local_58 = CONCAT44(0x43300000,uVar8);
+    //    *(float *)((int)&m0B0[0].mPosTopLeftOrig.y + iVar10) = (float)uVar8;
+    //    f_op_msg_mng::fopMsgM_outFontSet
+    //              (*(undefined4 *)((int)&m0B0[0].pane + iVar10),
+    //               (int)&m0B0[0].mUserArea + iVar10,0xff);
+    //  }
+    //  iVar12 = iVar12 + 1;
+    //  iVar11 = iVar11 + 4;
+    //  iVar10 = iVar10 + 0x38;
+    //} while (iVar12 < 0xf);
+    //fopMsgM_msgDataProc_c::~fopMsgM_msgDataProc_c((fopMsgM_msgDataProc_c *)auStack_31c);
 }
 
 /* 801D4C00-801D4C88       .text outFontInit__14dMenu_Option_cFv */
 void dMenu_Option_c::outFontInit() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        m0B0[i].mUserArea = -1;
+        m0B0[i].pane->rotate(0.0f);
+        fopMsgM_setNowAlphaZero(&m0B0[i]);
+
+    }
 }
 
 /* 801D4C88-801D4D74       .text outFontMove__14dMenu_Option_cFv */
