@@ -8,7 +8,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 
-
 static daTag_Kk1_HIO_c l_HIO;
 
 static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
