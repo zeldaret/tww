@@ -31,7 +31,7 @@ public: // Attributes
     /* 0x31C */ short mRotY;
     /* 0x31E */ short mRotX;
     /* 0x320 */ float field_320;
-    /* 0x324 */ int pad324;
+    /* 0x324 */ int unused_324;
     /* 0x328 */ Mtx mBgwMtx;
     /* 0x358 */ dBgW* pm_bgw;
     /* 0x35C */ float field_35C;
