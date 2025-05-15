@@ -65,11 +65,7 @@ private:
     /* 0x9A8 */ fopMsgM_pane_class m9A8[2];
     /* 0xA18 */ fopMsgM_pane_class mA18[3];
     /* 0xAC0 */ fopMsgM_pane_class mAC0[2];
-    /* 0xB30 */ fopMsgM_pane_class mB30[2];
-    /* 0xBA0 */ fopMsgM_pane_class mBA0;
-    /* 0xBD8 */ fopMsgM_pane_class mBD8;
-    /* 0xC10 */ fopMsgM_pane_class mC10;
-    /* 0xC48 */ fopMsgM_pane_class mC48;
+    /* 0xB30 */ fopMsgM_pane_class mB30[6];
     /* 0xC80 */ fopMsgM_pane_class mC80[2];
     /* 0xCF0 */ fopMsgM_pane_class mCF0;
     /* 0xD28 */ JKRArchive* mpArchive;

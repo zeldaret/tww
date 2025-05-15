@@ -60,10 +60,10 @@ void dMenu_Option_c::screenSet() {
     fopMsgM_setPaneData(&mAC0[0], scrn->search('tnas'));
     fopMsgM_setPaneData(&mB30[0], scrn->search('cr32'));
     fopMsgM_setPaneData(&mB30[1], scrn->search('cr31'));
-    fopMsgM_setPaneData(&mBA0, scrn->search('cc22'));
-    fopMsgM_setPaneData(&mBD8, scrn->search('cc21'));
-    fopMsgM_setPaneData(&mC10, scrn->search('cc12'));
-    fopMsgM_setPaneData(&mC48, scrn->search('cr11'));
+    fopMsgM_setPaneData(&mB30[2], scrn->search('cc22'));
+    fopMsgM_setPaneData(&mB30[3], scrn->search('cc21'));
+    fopMsgM_setPaneData(&mB30[4], scrn->search('cc12'));
+    fopMsgM_setPaneData(&mB30[5], scrn->search('cr11'));
     fopMsgM_setPaneData(&mC80[0], scrn->search('bs09'));
     fopMsgM_setPaneData(&mC80[1], scrn->search('bs00'));
     fopMsgM_setPaneData(&mCF0, scrn->search('blak'));
@@ -112,6 +112,7 @@ void dMenu_Option_c::screenSet() {
     m008.mUserArea = m008.pane->mRotation;
     m040.mUserArea = m040.pane->mRotation;
     m078.mUserArea = m078.pane->mRotation;
+
     if (m820.mUserArea > 180) m820.mUserArea -= 360;
     if (m008.mUserArea > 180) m008.mUserArea -= 360;
     if (m040.mUserArea > 180) m040.mUserArea -= 360;
@@ -120,42 +121,38 @@ void dMenu_Option_c::screenSet() {
 
 /* 801D3388-801D3518       .text mainInit__14dMenu_Option_cFv */
 void dMenu_Option_c::mainInit() {
-    /* Nonmatching */
-    fopMsgM_pane_class* mpPane;
-    
+    /* Nonmatching - regalloc */
     fopMsgM_setNowAlphaZero(&mCF0);
 
     for (int i = 0; i < 2; i++) {
-        mpPane = &m858[i];
-        fopMsgM_paneTrans(mpPane, 0.0f, 0.0f);
+        fopMsgM_paneTrans(&m858[i], 0.0f, 0.0f);
 
         m858[i].pane->rotate(m858[i].mSize.x / 2.0f, m858[i].mSize.y / 2.0f, ROTATE_Z, 90.0f);
 
-        fopMsgM_setNowAlphaZero((fopMsgM_pane_class*)(&mC80[i].pane));
-        fopMsgM_setNowAlphaZero(mpPane);
-        fopMsgM_setNowAlphaZero((fopMsgM_pane_class*)(&m9A8[i].pane));
-        fopMsgM_setNowAlphaZero((fopMsgM_pane_class*)(&mAC0[i].pane));
+        fopMsgM_setNowAlphaZero(&mC80[i]);
+        fopMsgM_setNowAlphaZero(&m858[i]);
+        fopMsgM_setNowAlphaZero(&m9A8[i]);
+        fopMsgM_setNowAlphaZero(&mAC0[i]);
     }
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setNowAlphaZero((fopMsgM_pane_class*)(&mA18[i].pane));
+        fopMsgM_setNowAlphaZero(&mA18[i]);
     }
 
     for (int i = 0; i < 4; i++) {
         if (i != 1) {
-            fopMsgM_setNowAlphaZero((fopMsgM_pane_class*)(&m8C8[i].pane));
+            fopMsgM_setNowAlphaZero(&m8C8[i]);
         }
     }
 
     for (int i = 0; i < 6; i++) {
-        mpPane = (fopMsgM_pane_class*)(&mB30[i].pane);
-        fopMsgM_paneTrans(mpPane, 0.0f, 0.0f);
-        fopMsgM_setNowAlphaZero(mpPane);
+        fopMsgM_paneTrans(&mB30[i], 0.0f, 0.0f);
+        fopMsgM_setNowAlphaZero(&mB30[i]);
     }
 
     mB30[0].mUserArea = 0;
     mB30[1].mUserArea = 0;
-    mBA0.mUserArea = 0;
+    mB30[2].mUserArea = 0;
     m858[0].mUserArea = 0;
     m858[1].mUserArea = 0;
     
@@ -210,13 +207,13 @@ void dMenu_Option_c::mainMove() {
     fopMsgM_setNowAlpha(&mA18[mE3E], alpha);
 
     for(int i = 0; i < 2; i++) {
-        fopMsgM_setNowAlpha((fopMsgM_pane_class*)(&mC80[i].pane), alpha);
-        fopMsgM_setNowAlpha((fopMsgM_pane_class*)(&m858[i].pane), alpha);
+        fopMsgM_setNowAlpha(&mC80[i], alpha);
+        fopMsgM_setNowAlpha(&m858[i], alpha);
     }
     
     for (int i = 0; i < 4; i++) {
         if (i != 1) {
-            fopMsgM_setNowAlpha((fopMsgM_pane_class*)(&m8C8[i].pane), alpha);
+            fopMsgM_setNowAlpha(&m8C8[i], alpha);
         }
     }
 
@@ -277,11 +274,53 @@ void dMenu_Option_c::titleMove() {
 /* 801D3C6C-801D3D34       .text cursorMove__14dMenu_Option_cFv */
 void dMenu_Option_c::cursorMove() {
     /* Nonmatching */
+    short sVar2 = mB30[1].mUserArea;
+
+    for (int i = 0; i < 6; i++) {
+        mB30[i].mPosCenter.x = m8C8[sVar2].mPosCenterOrig.x;
+        mB30[i].mPosCenter.y = m8C8[sVar2].mPosCenterOrig.y;
+
+        mB30[i].mSize.x = m8C8[sVar2].mSizeOrig.x;
+
+        fopMsgM_cposMove((fopMsgM_pane_class *)(&mB30[i].pane));
+
+        mB30[i].pane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, 0.5f);
+    }
+
+    cursorScale();
 }
 
 /* 801D3D34-801D3E70       .text cursorScale__14dMenu_Option_cFv */
 void dMenu_Option_c::cursorScale() {
-    /* Nonmatching */
+    float x[2];
+    float y;
+    
+    switch (mB30[1].mUserArea) {
+        case 0: {
+            x[0] = m9A8[mE3C].mPosTopLeftOrig.x - 20.0f;
+            x[1] = m9A8[mE3C].mPosTopLeftOrig.x + m9A8[mE3C].mSizeOrig.x + 20.0f;
+            y = m9A8[mE3C].mPosCenterOrig.y;
+            break;
+        }
+        case 3: {
+            x[0] = mA18[mE3E].mPosTopLeftOrig.x - 20.0f;
+            x[1] = mA18[mE3E].mPosTopLeftOrig.x + mA18[mE3E].mSizeOrig.x + 20.0f;
+            y = mA18[mE3E].mPosCenterOrig.y;
+            break;
+        }
+        case 2: {
+            x[0] = mAC0[mE3F].mPosTopLeftOrig.x - 20.0f;
+            x[1] = mAC0[mE3F].mPosTopLeftOrig.x + mAC0[mE3F].mSizeOrig.x + 20.0f;
+            y = mAC0[mE3F].mPosCenterOrig.y;
+            break; 
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        m858[i].mPosCenter.x = x[i];
+        m858[i].mPosCenter.y = y;
+        fopMsgM_cposMove(&m858[i]);
+    }
 }
 
 /* 801D3E70-801D3F98       .text typeMove__14dMenu_Option_cFv */
