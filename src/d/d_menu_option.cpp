@@ -587,7 +587,7 @@ void dMenu_Option_c::noteSet() {
     }
 
     const char* mesg = msgGet.getMessage(mesg_header);
-    mesg_entry mesg_entry = msgGet.getMesgEntry(mesg_header);
+    mesg_entry msg_entry = msgGet.getMesgEntry(mesg_header);
 
     //local_334.mTextOffs = local_34c;
     //local_334.mMesgID = local_348;
@@ -638,12 +638,16 @@ void dMenu_Option_c::noteSet() {
     //local_2b8 = local_2d8;
     //local_2b4 = local_2d4;
     //local_2b0 = local_2d0;
-    //fopMsgM_msgDataProc_c::stringLength((fopMsgM_msgDataProc_c *)auStack_31c);
-    //fopMsgM_msgDataProc_c::stringShift((fopMsgM_msgDataProc_c *)auStack_31c);
-    //fopMsgM_msgDataProc_c::iconIdxRefresh((fopMsgM_msgDataProc_c *)auStack_31c);
+
+    msgDataProc.stringLength();
+    msgDataProc.stringShift();
+    msgDataProc.iconIdxRefresh();
+    
     //iVar9 = (int)local_1ec._2_2_;
     //local_1ec = 0;
-    //fopMsgM_msgDataProc_c::stringSet((fopMsgM_msgDataProc_c *)auStack_31c);
+
+    msgDataProc.stringSet();
+
     //pJVar7 = (m740).pane;
     //uStack_4c = iVar9 ^ 0x80000000;
     //local_50 = 0x43300000;
@@ -654,8 +658,10 @@ void dMenu_Option_c::noteSet() {
     //pJVar7 = (m778).pane;
     //*(float *)pJVar7[1].parent.mMagic = 0.0;
     //pJVar7[1].parent.mName = (int)fVar1;
-    //J2DTextBox::setString((J2DTextBox *)(m740).pane,*(char **)&field_0xd38);
-    //J2DTextBox::setString((J2DTextBox *)(m778).pane,*(char **)&field_0xd3c);
+
+    ((J2DTextBox*)m740.pane)->setString(mD38);
+    ((J2DTextBox*)m778.pane)->setString(mD3C);
+
     //iVar9 = (int)((m740).pane[1].parent.mBounds.mTL.y * 0.5);
     //local_48 = (longlong)iVar9;
     //iVar12 = 0;
@@ -725,13 +731,17 @@ void dMenu_Option_c::outFontDraw() {
 }
 
 /* 801D4E34-801D505C       .text stringlength__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
+f32 dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
     /* Nonmatching */
 }
 
 /* 801D505C-801D50A0       .text changeScaleCenter__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class* param_1, char* param_2) {
+    f32 str_length = stringlength(param_1, param_2);
+    param_1->mSize.x = str_length;
+    param_1->mSizeOrig.x = str_length;
+    fopMsgM_cposMove(param_1);
+    param_1->mPosTopLeftOrig.x = param_1->mPosTopLeft.x;
 }
 
 /* 801D50A0-801D50E8       .text setSoundMode__14dMenu_Option_cFUl */

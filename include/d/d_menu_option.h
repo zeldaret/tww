@@ -37,7 +37,7 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    void stringlength(fopMsgM_pane_class*, char*);
+    f32 stringlength(fopMsgM_pane_class*, char*);
     void changeScaleCenter(fopMsgM_pane_class*, char*);
     void setSoundMode(u32);
     void changeScaleRight(fopMsgM_pane_class*, char*);
