@@ -738,15 +738,28 @@ f32 dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
 /* 801D505C-801D50A0       .text changeScaleCenter__14dMenu_Option_cFP18fopMsgM_pane_classPc */
 void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class* param_1, char* param_2) {
     f32 str_length = stringlength(param_1, param_2);
+
     param_1->mSize.x = str_length;
     param_1->mSizeOrig.x = str_length;
+
     fopMsgM_cposMove(param_1);
+
     param_1->mPosTopLeftOrig.x = param_1->mPosTopLeft.x;
 }
 
 /* 801D50A0-801D50E8       .text setSoundMode__14dMenu_Option_cFUl */
-void dMenu_Option_c::setSoundMode(u32) {
-    /* Nonmatching */
+void dMenu_Option_c::setSoundMode(u32 i_soundMode) {
+    switch(i_soundMode) {
+        case 0:
+            OSSetSoundMode(0);
+            break;
+        case 1:
+        case 2:
+            OSSetSoundMode(1);
+            break;
+        default:
+            break;
+    }
 }
 
 /* 801D50E8-801D5148       .text changeScaleRight__14dMenu_Option_cFP18fopMsgM_pane_classPc */
