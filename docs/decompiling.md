@@ -360,7 +360,7 @@ s32 getAnswer__10daSwTact_cFv(daSwTact_c *this) {
 }
 ```
 
-m2c isn't aware of field names/types defined in Ghidra or the decomp, but other than that, its output is almost perfect in this example. For comparison, here is the same function when fully decompiled and matching:
+m2c isn't aware of field names/types defined in Ghidra or the decomp, but other than that, its output is pretty close. For comparison, here is the same function when fully decompiled and matching:
 
 ```c++
 /* 0000038C-00000410       .text getAnswer__10daSwTact_cFv */
@@ -385,7 +385,13 @@ s32 daSwTact_c::getAnswer() {
 }
 ```
 
-Note that occasionally, you may run into a very small switch statement that only has a single case label (optionally plus the default label). In these cases, there will be no `bge` in the assembly, just `cmpwi`, `beq`, `b`. For example:
+One important detail in the above example is the `case 0xFF:`. Because this case leads to the same block as the default case, it has no functional effect on what the code does, and so m2c does not include it. However, if you don't include that useless case, the comparison tree will be missing some parts and the function will not match:
+
+![A comparison tree missing a useless case label in objdiff](images/objdiff_tree_switch_useless.png)
+
+If you run into a situation like this, try looking through values that are compared against in objdiff or Ghidra and adding them as cases above `default:` (or if no default label exists, just make them immediately `break;` without doing anything). Sometimes the value you need to add as a case will be plus or minus one compared to the actual value being compared against, so it may take some trial and error to find which specific cases are required to get the tree to generate correctly.
+
+Also note that occasionally, you may run into a very small switch statement that only has a single case label (optionally plus the default label). In these cases, there will be no `bge` in the assembly, just `cmpwi`, `beq`, `b`. For example:
 
 ![A comparison tree switch in objdiff](images/objdiff_tree_switch_small.png)
 
@@ -401,9 +407,6 @@ BOOL dDoor_key2_c::keyCreate(int type) {
     }
 }
 ```
-
-Rarely, you may run into a comparison tree switch where there are comparisons missing even after you've decompiled it in a way that's equivalent to the original. This can happen because cases that immediately `break;` without doing anything still affect which constants appear in the comparison tree, even though they have no effect on what the code actually does.  
-If you run into this, try adding one or more `case N: break;` blocks, where `N` is a number that either appears in the comparison tree or is close in value to one of the numbers that does appear in the comparison tree. This will take some trial and error but should eventually match the tree.
 
 ### Jump table switches
 
