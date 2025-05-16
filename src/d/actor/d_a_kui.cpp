@@ -4,68 +4,363 @@
 //
 
 #include "d/actor/d_a_kui.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_btd.h"
+#include "d/actor/d_a_dr2.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
+#include "d/res/res_kui.h"
+#include "f_op/f_op_camera.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_pc/f_pc_executor.h"
+#include "JSystem/JUtility/JUTReport.h"
 
 class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
-void s_a_i_sub(void*, void*) {
-    /* Nonmatching */
+static void* s_a_i_sub(void* i_this, void*) {
+    if (fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_DR2) {
+        return i_this;
+    }
+    return NULL;
 }
 
 /* 000000C4-000000F0       .text search_dragontail__FP9kui_class */
-void search_dragontail(kui_class*) {
-    /* Nonmatching */
+static dr2_class* search_dragontail(kui_class* i_this) {
+    return (dr2_class*)fpcM_Search(&s_a_i_sub, i_this);
 }
 
 /* 000000F0-0000013C       .text b_a_i_sub__FPvPv */
-void b_a_i_sub(void*, void*) {
-    /* Nonmatching */
+static void* b_a_i_sub(void* i_this, void*) {
+    if (fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BTD) {
+        return i_this;
+    }
+    return NULL;
 }
 
 /* 0000013C-00000168       .text search_btd__FP9kui_class */
-void search_btd(kui_class*) {
-    /* Nonmatching */
+static btd_class* search_btd(kui_class* i_this) {
+    return (btd_class*)fpcM_Search(&b_a_i_sub, i_this);
 }
 
 /* 00000168-0000037C       .text setEffectMtx__FP10fopAc_ac_cP12J3DModelDataf */
-void setEffectMtx(fopAc_ac_c*, J3DModelData*, float) {
+static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scale) {
+    static Mtx mtx_adj = {
+        5.785636E-39f, 0.0f, 0.0f, 5.785636E-39f,
+        0.0f, 1.754058E-38f, 0.0f, 5.785636E-39f,
+        0.0f, 0.0f, 5.831554E-39f, 0.0f,
+    };
+
     /* Nonmatching */
+    kui_class* i_this = (kui_class*)a_this;
+
+    camera_class* camera = dCam_getCamera();
+    cXyz look_dir = i_this->eyePos - camera->mLookat.mEye;
+
+    cXyz light_dir;
+    dKyr_get_vectle_calc(&i_this->tevStr.mLightPosWorld, &i_this->eyePos, &light_dir);
+
+    cXyz refl;
+    C_VECHalfAngle(&look_dir, &light_dir, &refl);
+    Mtx reflMtx;
+    C_MTXLookAt(reflMtx, &cXyz::Zero, &cXyz::BaseY, &refl);
+
+    mDoMtx_stack_c::scaleS(scale, scale, 1.0f);
+    mDoMtx_stack_c::concat(mtx_adj);
+    mDoMtx_stack_c::concat(reflMtx);
+    MtxP mtx = mDoMtx_stack_c::get();
+    mtx[0][3] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[2][3] = 0.0f;
+
+    Mtx now_copy;
+    PSMTXCopy(mDoMtx_stack_c::get(), now_copy);
+
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
+        J3DMaterial* mat = modelData->getMaterialNodePointer(i);
+        for (u32 j = 0; j < 8; j++) {
+            J3DTexMtx* texMtx = mat->getTexMtx(j);
+            if (texMtx != NULL && texMtx->getTexMtxInfo().mInfo < 12 && texMtx->getTexMtxInfo().mInfo > 9) {
+                texMtx->getTexMtxInfo().setEffectMtx(now_copy);
+            }
+        }
+    }
 }
 
 /* 0000037C-00000540       .text daKui_Draw__FP9kui_class */
-static BOOL daKui_Draw(kui_class*) {
-    /* Nonmatching */
+static BOOL daKui_Draw(kui_class* i_this) {
+    if (i_this->type == 3) {
+        u32 light_type = 0;
+        if (REG0_S(0) != 0) {
+            light_type = 1;
+        }
+
+        i_this->eyePos = i_this->current.pos;
+        i_this->eyePos.y += REG0_F(10);
+
+        g_env_light.settingTevStruct(light_type, &i_this->eyePos, &i_this->tevStr);
+        g_env_light.setLightTevColorType(i_this->mpModel2, &i_this->tevStr);
+        g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
+
+        setEffectMtx(i_this, i_this->mpModel2->getModelData(), REG0_F(11) + 1.0f);
+        setEffectMtx(i_this, i_this->mpModel->getModelData(), REG0_F(12) + 1.0f);
+
+        mDoExt_modelUpdateDL(i_this->mpModel2);
+        mDoExt_modelUpdateDL(i_this->mpModel);
+    } else if (i_this->type != 1) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+        g_env_light.setLightTevColorType(i_this->mpModel2, &i_this->tevStr);
+
+        dComIfGd_setListBG();
+        mDoExt_modelUpdateDL(i_this->mpModel2);
+        dComIfGd_setList();
+
+        if (i_this->mpModel) {
+            g_env_light.setLightTevColorType(i_this->mpModel, &i_this->tevStr);
+            mDoExt_modelUpdateDL(i_this->mpModel);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000540-00000920       .text demo_camera__FP9kui_class */
-void demo_camera(kui_class*) {
+static void demo_camera(kui_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c *player = dComIfGp_getPlayer(0);
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+
+    s8 bVar2 = 0;
+
+    if (i_this->field_0x2E8 == 1) {
+        if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
+            fopAcM_orderPotentialEvent(i_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
+            i_this->eventInfo.onCondition(dEvtCnd_UNK2_e);
+            bVar2 = false;
+        }
+    }
+
+    LAB_8042e04c:
+    if ((i_this->field_0x2E8 != 0) && (bVar2)) {
+        camera->mCamera.Set(i_this->field_0x2F8, i_this->field_0x2EC);
+        JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", (int)i_this->field_0x2EA);
+        i_this->field_0x2EA++;
+    }
 }
 
 /* 00000920-000012E4       .text daKui_Execute__FP9kui_class */
-static BOOL daKui_Execute(kui_class*) {
+static BOOL daKui_Execute(kui_class* i_this) {
     /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    if (i_this->field_0x2A2 != 0) {
+        dr2_class* dragon_tail = search_dragontail(i_this);
+        btd_class* btd = search_btd(i_this);
+
+        if (dragon_tail == NULL || btd == NULL) {
+            i_this->current.pos.set(0.0f, -10000.0f, 0.0f);
+        } else {
+
+        }
+    }
+
+    if (i_this->type == 3) {
+        if (i_this->health == 3) {
+            cXyz hand_pos = player->getLeftHandPos();
+
+            cXyz hand_vec = i_this->home.pos - hand_pos;
+            cMtx_YrotS(*calc_mtx, -i_this->shape_angle.y);
+
+            cXyz pos_vec;
+            MtxPosition(&hand_vec, &pos_vec);
+            pos_vec.z *= REG0_F(1) + 1.0f;
+
+            short angle;
+            if (REG0_S(0) == 0) {
+                angle = -(short)cM_atan2s(pos_vec.z, -pos_vec.y);
+            } else {
+                angle = (short)cM_atan2s(pos_vec.z, -pos_vec.y);
+            }
+
+            u32 unk = (u32) std::fabsf(REG0_F(2) + 3000.0f) * cM_ssin(angle);
+        }
+    } else {
+
+    }
+
+    if (i_this->type == 2 || i_this->type == 4) {
+
+        if (dComIfGs_isSwitch(i_this->field_0x2A3, dComIfGp_roomControl_getStayNo()) == 0) {
+            i_this->current.pos.y = i_this->home.pos.y - 70.0f;
+        } else if (i_this->health == 3 && i_this->field_0x308 == 0) {
+            i_this->field_0x308 = 1000;
+        }
+
+        if (i_this->field_0x308 != 0) {
+            i_this->field_0x308--;
+
+            if (i_this->field_0x308 == REG8_S(3) + 0x3CA) {
+                if (i_this->type == 2) {
+                    i_this->field_0x2E8 = 1;
+                } else {
+                    fopAcM_seStart(i_this, JA_SE_OBJ_ROPE_SW_ON, 0);
+                    dComIfGs_onSwitch(i_this->field_0x2A3, fopAcM_GetRoomNo(i_this));
+                    mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+                }
+            }
+        }
+
+        demo_camera(i_this);
+    }
+
+    i_this->eyePos = i_this->current.pos;
 }
 
 /* 000012E4-000012EC       .text daKui_IsDelete__FP9kui_class */
 static BOOL daKui_IsDelete(kui_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000012EC-00001340       .text daKui_Delete__FP9kui_class */
-static BOOL daKui_Delete(kui_class*) {
-    /* Nonmatching */
+static BOOL daKui_Delete(kui_class* i_this) {
+    dComIfG_resDelete(&i_this->mPhs, "Kui");
+    dComIfG_Bgsp()->Release(i_this->field_0x2D8);
+    return TRUE;
 }
 
 /* 00001340-00001664       .text daKui_CreateHeap__FP10fopAc_ac_c */
-static BOOL daKui_CreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
+    kui_class* i_this = (kui_class*)a_this;
+    J3DModelData* modelData;
+
+    if (i_this->type == 3) {
+        // Bell body
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE1);
+        JUT_ASSERT(0x353, modelData != 0);
+
+        i_this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (!i_this->mpModel) {
+            return FALSE;
+        }
+
+        // Bell handle
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE2);
+        JUT_ASSERT(0x35F, modelData != 0);
+
+        i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (!i_this->mpModel2) {
+            return FALSE;
+        }
+    } else {
+        // Rope
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_OBI_ROPETAG);
+        JUT_ASSERT(0x36B, modelData != 0);
+
+        i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
+        if (!i_this->mpModel2) {
+            return FALSE;
+        }
+
+        if (i_this->type == 2 || i_this->type == 4) {
+            // Rope swing attachment
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_MROPESW);
+            JUT_ASSERT(0x377, modelData != 0);
+
+            i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
+            if (!i_this->mpModel) {
+                return FALSE;
+            }
+        }
+    }
+
+    dBgW* bgw = new dBgW();
+    i_this->field_0x2D8 = bgw;
+    if (!i_this->field_0x2D8) {
+        return FALSE;
+    }
+
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Kui", KUI_DZB_OBI_ROPETAG);
+    if (i_this->field_0x2D8->Set(pData, cBgW::MOVE_BG_e, &i_this->field_0x2A8) == true) {
+        return FALSE;
+    }
+
+    i_this->field_0x2D8->SetCrrFunc(dBgS_MoveBGProc_Typical);
+
+    return TRUE;
 }
 
 /* 00001664-000018C8       .text daKui_Create__FP10fopAc_ac_c */
-static cPhs_State daKui_Create(fopAc_ac_c*) {
+static cPhs_State daKui_Create(fopAc_ac_c* a_this) {
     /* Nonmatching */
+    fopAcM_SetupActor(a_this, fopAc_ac_c);
+
+    kui_class* i_this = (kui_class*)a_this;
+    cPhs_State result = dComIfG_resLoad(&i_this->mPhs, "Kui");
+
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    u32 params = fopAcM_GetParam(a_this);
+    if (params == -1) {
+        return cPhs_ERROR_e;
+    }
+
+    i_this->type = params & 0xF;
+    i_this->field_0x2A2 = params & 0xF0;
+    i_this->field_0x2A1 = params >> 8;
+    i_this->field_0x2A3 = params >> 0x18;
+
+    if (i_this->field_0x2A3 == -1) {
+        i_this->field_0x2A3 = 0;
+    }
+    if (i_this->type == 3) {
+        i_this->field_0x2A1 = 4;
+    }
+
+    if (i_this->field_0x2A1 == 4) {
+        i_this->scale.setall(2.0f);
+    } else if (i_this->field_0x2A1 < 4) {
+        if (i_this->field_0x2A1 == 1) {
+            i_this->scale.x = 2.0f;
+            i_this->scale.y = 2.0f;
+        } else if (i_this->field_0x2A1 == 0) {
+            i_this->scale.x = 0.5f;
+            i_this->scale.y = 0.5f;
+        } else if (i_this->field_0x2A1 == 2) {
+            i_this->scale.x = 0.5f;
+            i_this->scale.y = 0.5f;
+        } else {
+            i_this->scale.x = 0.5f;
+            i_this->scale.y = 0.5f;
+            i_this->scale.z = 2.0f;
+        }
+    } else if (i_this->field_0x2A1 != 0xff && i_this->field_0x2A1 < 6) {
+        i_this->scale.x = 4.0f;
+        i_this->scale.y = REG0_F(2) + 2.0f;
+        i_this->scale.z = 4.0f;
+    }
+
+    if (!fopAcM_entrySolidHeap(i_this, &daKui_CreateHeap, 0x29f4)) {
+        return cPhs_ERROR_e;
+    }
+
+    if (dComIfG_Bgsp()->Regist(i_this->field_0x2D8, i_this)) {
+        return cPhs_ERROR_e;
+    }
+
+    fopAcM_SetMtx(i_this, i_this->mpModel2->getBaseTRMtx());
+    if (i_this->type >= 2) {
+        fopAcM_SetMin(i_this, -200.0f, -1000.0f, -200.0f);
+        fopAcM_SetMax(i_this, 200.0f, 2000.0f, 200.0f);
+    } else {
+        fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
+        fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daKui_Method = {
