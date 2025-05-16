@@ -1150,7 +1150,7 @@ config.libs = [
         "gx",
         [
             Object(NonMatching, "dolphin/gx/GXInit.c", extra_cflags=["-opt nopeephole"]),
-            Object(NonMatching, "dolphin/gx/GXFifo.c"),
+            Object(Matching,    "dolphin/gx/GXFifo.c"),
             Object(NonMatching, "dolphin/gx/GXAttr.c"),
             Object(NonMatching, "dolphin/gx/GXMisc.c"),
             Object(NonMatching, "dolphin/gx/GXGeometry.c"),

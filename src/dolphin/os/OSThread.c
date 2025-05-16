@@ -932,6 +932,3 @@ void OSClearStack(u8 val) {
         *p = pattern;
     }
 }
-
-extern u8 data_804516D0[8];
-u8 data_804516D0[8] ALIGN_DECL(8);
