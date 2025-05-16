@@ -763,8 +763,20 @@ void dMenu_Option_c::setSoundMode(u32 i_soundMode) {
 }
 
 /* 801D50E8-801D5148       .text changeScaleRight__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class* param_1, char* param_2) {
+    /* Nonmatching - regalloc */
+    float str_length = stringlength(param_1, param_2);
+    float str_pos = (param_1->mPosTopLeft.x + param_1->mSize.x);
+
+    param_1->mSize.x = str_length;
+    param_1->mSizeOrig.x = str_length;
+
+    str_pos -= param_1->mSize.x / 2.0f;
+
+    param_1->mPosCenter.x = str_pos;
+    param_1->mPosCenterOrig.x = str_pos;
+    
+    fopMsgM_cposMove(param_1);
 }
 
 /* 801D5148-801D5224       .text initialize__14dMenu_Option_cFv */
