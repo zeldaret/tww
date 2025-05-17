@@ -46,7 +46,7 @@ public:
     void _delete();
     void _move();
     void _draw();
-    void _open();
+    bool _open();
     bool _close();
 
 private:

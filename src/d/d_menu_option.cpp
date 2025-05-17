@@ -818,7 +818,7 @@ void dMenu_Option_c::initialize() {
 
 /* 801D5224-801D53F0       .text _create__14dMenu_Option_cFv */
 void dMenu_Option_c::_create() {
-    /* Nonmatching */
+    /* Nonmatching - Code 100% */
     scrn = new J2DScreen();
     JUT_ASSERT(1074, scrn != NULL);
     scrn->set("option.blo", mpArchive);
@@ -857,8 +857,37 @@ void dMenu_Option_c::_draw() {
 }
 
 /* 801D5C04-801D5CBC       .text _open__14dMenu_Option_cFv */
-void dMenu_Option_c::_open() {
-    /* Nonmatching */
+bool dMenu_Option_c::_open() {
+    bool ret = false;
+
+    dMenu_setPushMenuButton(0);
+
+    if (mC80[0].mUserArea == 0) {
+        noteSet();
+    }
+
+    mC80[0].mUserArea++;
+
+    if (mC80[0].mUserArea <= 7) {
+        mainMove();
+    }
+    else if (mC80[0].mUserArea <= 0xe) {
+        noteMove();
+
+        titleMove();
+
+        _move();
+
+        if (mC80[0].mUserArea == 0xe) {
+          mE40 = 2;
+
+          mC80[0].mUserArea = 0;
+
+          ret = true;
+        }
+    }
+
+    return ret;
 }
 
 /* 801D5CBC-801D5D38       .text _close__14dMenu_Option_cFv */
