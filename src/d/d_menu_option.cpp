@@ -10,7 +10,9 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "global.h"
+#include "d/d_meter.h"
 #include "f_op/f_op_msg_mng.h"
+#include "d/d_com_inf_game.h"
 
 dMo_HIO_c g_moHIO;
 
@@ -781,7 +783,37 @@ void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class* param_1, char* param_2
 
 /* 801D5148-801D5224       .text initialize__14dMenu_Option_cFv */
 void dMenu_Option_c::initialize() {
-    /* Nonmatching */
+    mainInit();
+
+    noteInit();
+
+    titleInit();
+
+    outFontInit();
+
+    mE40 = 1;
+
+    mCF0.mUserArea = 0;
+    m7B0.mUserArea = 0;
+
+    mC80[0].mUserArea = 0;
+    mC80[1].mUserArea = 0;
+
+    mE3C = dComIfGs_getOptAttentionType();
+    mE3D = dComIfGs_getOptRuby();
+    mE3E = dComIfGs_getOptSound();
+
+    if ((JUTGamePad::sRumbleSupported & 0x80000000)) {
+        mE3F = dComIfGp_getNowVibration();
+    }
+    else {
+        mE3F = 0;
+    }
+
+    mE41 = 0;
+
+    mDoAud_setOutputMode(soundMode[mE3E]);
+    setSoundMode(soundMode[mE3E]);
 }
 
 /* 801D5224-801D53F0       .text _create__14dMenu_Option_cFv */
@@ -827,6 +859,21 @@ void dMenu_Option_c::_open() {
 }
 
 /* 801D5CBC-801D5D38       .text _close__14dMenu_Option_cFv */
-void dMenu_Option_c::_close() {
-    /* Nonmatching */
+bool dMenu_Option_c::_close() {
+    bool ret = false;
+    
+    mC80[0].mUserArea++;
+    s16 user_area = mC80[0].mUserArea;
+    
+    fopMsgM_valueIncrease(10, user_area, 0);
+    
+    dMenu_setPushMenuButton(2);
+
+    if (user_area >= 10) {
+        initialize();
+        mE40 = 0;
+        ret = true;
+    }
+
+    return ret;
 }

@@ -47,7 +47,7 @@ public:
     void _move();
     void _draw();
     void _open();
-    void _close();
+    bool _close();
 
 private:
     /* 0x004 */ J2DScreen* scrn;
@@ -91,7 +91,7 @@ private:
     /* 0xE3E */ u8 mE3E;
     /* 0xE3F */ u8 mE3F;
     /* 0xE40 */ u8 mE40;
-    /* 0xE41 */ u8 mE41[0xE42 - 0xE41];
+    /* 0xE41 */ u8 mE41;
 };  // Size: 0xE42
 
 class dMo_HIO_c : public JORReflexible {
