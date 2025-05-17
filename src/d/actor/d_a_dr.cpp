@@ -58,29 +58,29 @@ static void anm_init(dr_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
 /* 00000320-0000091C       .text move__FP8dr_class */
 static void move(dr_class* i_this) {
     bool isIdle = false;
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
         isIdle = true;
         anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-        i_this->mState++;
+        i_this->mMode++;
         i_this->mCountDownTimers[0] = (s16)(200.0f + cM_rndF(200.0f));
         break;
     case 1:
         isIdle = true;
         if (i_this->mCountDownTimers[0] == 0) {
             anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_AKUBI1);
-            i_this->mState++;
+            i_this->mMode++;
         }
         break;
     case 2:
         isIdle = true;
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
         }
         break;
     case 10:
         anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_BIKU1);
-        i_this->mState++;
+        i_this->mMode++;
         i_this->mCountDownTimers[0] = l_HIO.m0E;
         i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C4, &i_this->current.pos);
         i_this->m2C9 = 0;
@@ -118,7 +118,7 @@ static void move(dr_class* i_this) {
             } else {
                 anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C6, &i_this->current.pos);
-                i_this->mState++;
+                i_this->mMode++;
             }
         }
         
@@ -138,7 +138,7 @@ static void move(dr_class* i_this) {
         }
         
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
             if (i_this->mpBreathEmitter) {
                 i_this->mpBreathEmitter->becomeInvalidEmitter();
                 i_this->mpBreathEmitter = NULL;
@@ -151,7 +151,7 @@ static void move(dr_class* i_this) {
         if ((isIdle && (l_HIO.m0C || dComIfGp_getVibration().CheckQuake())) || i_this->m2C8 != 0) {
             l_HIO.m0C = false;
             i_this->m2C8 = 0;
-            i_this->mState = 10;
+            i_this->mMode = 10;
         }
     }
     

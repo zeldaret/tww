@@ -17,7 +17,7 @@ public:
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ f32 mYOffset;
     /* 0x00C */ s8 m00C;
-    /* 0x00D */ s8 mState;
+    /* 0x00D */ s8 mMode;
     /* 0x00E */ s16 mFreezeTimer;
     /* 0x010 */ s16 mMoveDelayTimer;
     /* 0x012 */ s16 mAngleY;
@@ -46,7 +46,7 @@ struct enemyfire {
 public:
     /* 0x000 */ fopAc_ac_c* mpActor;
     /* 0x004 */ s16 mFireDuration;
-    /* 0x006 */ s8 mState;
+    /* 0x006 */ s8 mMode;
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ s16 mFireTimer;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
@@ -77,8 +77,8 @@ public:
     };
     
     /* 0x000 */ fopEn_enemy_c* mpEnemy;
-    /* 0x004 */ s16 m004;
-    /* 0x006 */ s16 mState;
+    /* 0x004 */ s16 mMode;
+    /* 0x006 */ s16 mAction;
     /* 0x008 */ s16 mEnemyType;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
     /* 0x00C */ int mTimer;

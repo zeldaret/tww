@@ -30,8 +30,8 @@ public:
     /* 0x2D1 */ u8 m2D1[0x2D4 - 0x2D1];
     /* 0x2D4 */ dKy_tevstr_c mKenTevStr;
     /* 0x384 */ s16 m384;
-    /* 0x386 */ s16 m386;
-    /* 0x388 */ s16 m388;
+    /* 0x386 */ s16 mAction;
+    /* 0x388 */ s16 mMode;
     /* 0x38A */ s16 m38A;
     /* 0x38C */ cXyz m38C;
     /* 0x398 */ s16 m398;
