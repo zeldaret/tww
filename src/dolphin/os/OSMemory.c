@@ -6,7 +6,7 @@
 
 vu16 __MEMRegs[64] AT_ADDRESS(0xCC004000);
 
-extern OSErrorHandlerEx __OSErrorTable[16];
+extern OSErrorHandler __OSErrorTable[EXCEPTION_MAX];
 
 u32 OSGetConsoleSimulatedMemSize() {
     return *(u32*)(OSPhysicalToCached(0x00F0));
