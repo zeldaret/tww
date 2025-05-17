@@ -560,12 +560,12 @@ static PsoData l_pso_photo[] = {
 
 static cXyz l_counter_pos[][2] = {
     {
-        cXyz(50.0f, 50.0f, -490.0f), 
-        cXyz(-10.0f, -260.0f, -250.0f)
+        cXyz(-490.0f, 0.0f, -10.0f), 
+        cXyz(-260.0f, 0.0f, -250.0f)
     },
 };
 
-static cXyz l_gallery_pos = cXyz(-600.0f, -50.0f, 50.0f);
+static cXyz l_gallery_pos(-260.0f, 500.0f, 400.0f);
 
 
 /* 000000EC-000002D0       .text __ct__12daNpcPhoto_cFv */
@@ -826,13 +826,11 @@ bool daNpcPhoto_c::_draw() {
     if (field_0x9C1 == 4) {
         dSnap_Obj obj;
 
-        cXyz temp; 
-        temp.set(
+        cXyz temp(
             l_pso_photo->field_0x00,
             l_pso_photo->field_0x04,
             l_pso_photo->field_0x08
-        );
-
+        ); 
         VECAdd(&temp, &current.pos, &temp);
         obj.SetInf(5, this, l_pso_photo->field_0x16, l_pso_photo->field_0x17, 0x7FFF);
         obj.SetGeo(temp, l_pso_photo->field_0x0C, l_pso_photo->field_0x10, l_pso_photo->field_0x14 + current.angle.y);
@@ -900,12 +898,12 @@ bool daNpcPhoto_c::_execute() {
             );
         }
     }
-    cXyz temp;
-    temp.set(
+    cXyz temp(
         l_npc_dat[0].field_0x1C,
         l_npc_dat[0].field_0x20,
         l_npc_dat[0].field_0x24
     );
+
     mDoMtx_stack_c::YrotS(current.angle.y);
     mDoMtx_stack_c::multVec(&temp, &temp);
     VECAdd(&temp, &current.pos, &temp);
@@ -1596,7 +1594,7 @@ u16 daNpcPhoto_c::talk2(int i_param) {
 }
 
 static cXyz l_msg_camera[][2] = {
-    {cXyz(500.0f, -1336.0f, -497.0f), cXyz(928.0f, 185.0f, -26.0f)},
+    {cXyz(-1336.0f, -497.0f, 928.0f), cXyz(185.0f, -26.0f, 0.0f)},
     {cXyz(-1213.0f, -902.0f, -244.0f), cXyz(284.0f, 36.0f, 280.0f)},
     {cXyz(-29.0f, 252.0f, -1634.0f), cXyz(5.0f, -91.0f, 178.0f)},
 };
@@ -1654,6 +1652,7 @@ u16 daNpcPhoto_c::next_msgStatus(u32* pMsgNo) {
                 
                 case 7:
                 case 8:
+                case 11:
                     status = fopMsgStts_MSG_ENDS_e;
                     break;
                 case 9:
@@ -1674,7 +1673,7 @@ u16 daNpcPhoto_c::next_msgStatus(u32* pMsgNo) {
                         *pMsgNo = 0x378A;
                     }
                     break;
-                case 11:
+                case 10:
                     status = fopMsgStts_MSG_ENDS_e;
                     break;
                 case 6:
