@@ -840,7 +840,10 @@ void dMenu_Option_c::_create() {
 
 /* 801D53F0-801D546C       .text _delete__14dMenu_Option_cFv */
 void dMenu_Option_c::_delete() {
-    /* Nonmatching */
+    mpArchive->removeResourceAll();
+    delete scrn;
+    delete stick;
+    mDoHIO_deleteChild(g_moHIO.mNo);
 }
 
 /* 801D546C-801D576C       .text _move__14dMenu_Option_cFv */
