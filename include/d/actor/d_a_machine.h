@@ -16,7 +16,7 @@ public:
     void path_move();
     void set_next_pnt();
     daWindMill_c* search_wind_mill();
-    f32 set_speed();
+    void set_speed();
     cPhs_State _create();
     daMachine_c();
     void set_mtx();
@@ -28,7 +28,9 @@ public:
     bool _draw();
 
     static const char m_arcname[];
-
+    static const f32 static_float1;
+    static const f32 static_float2;
+    
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;

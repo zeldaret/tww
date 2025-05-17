@@ -10,6 +10,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 
+
 //TODO: Add proper ENUMS
 static dCcD_SrcSph l_sph_src_at = {//
     // dCcD_SrcGObjInf
@@ -72,6 +73,9 @@ static dCcD_SrcSph l_sph_src_col = {
 };
 
 const char daMachine_c::m_arcname[8] = "Hkikai1";
+
+const f32 daMachine_c::static_float1 = 300.0f;
+const f32 daMachine_c::static_float2 = 800.0f;
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
 bool daMachine_c::_delete() {
@@ -233,25 +237,24 @@ daWindMill_c* daMachine_c::search_wind_mill() {
 }
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
-f32 daMachine_c::set_speed() {
+void daMachine_c::set_speed() {
     /* Nonmatching */
-
+    f32 new_speed;
     daWindMill_c* windmill = search_wind_mill();
-    f32 new_speed = 0;
-
+    f32 local_1;
+    
+    
     if(windmill != NULL) {
-        s16 max_speed = daWindMill_c::m_max_rot_speed[windmill->mType];
-        new_speed = (f32)windmill->mAngle[1]/(f32)max_speed;
+        new_speed = (f32)windmill->mAngle[1]/(f32)daWindMill_c::m_max_rot_speed[windmill->mType];
         
     } else {
         new_speed = 0.0f;
     }
 
-    f32 local_1 = speedF;
+    local_1 = speedF;
     new_speed = cLib_addCalc(&local_1, new_speed * 5.0f,0.1,1.0,0.5);
     speedF = local_1;
 
-    return new_speed;
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
@@ -286,7 +289,6 @@ void daMachine_c::set_mtx() {
 
 /* 0000100C-000010F8       .text _execute__11daMachine_cFv */
 bool daMachine_c::_execute() {
-    /* Nonmatching */
     cXyz xyz;
     set_speed();
     xyz = cXyz::Zero - current.pos;
@@ -309,6 +311,7 @@ void daMachine_c::attack() {
     /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
     cXyz xyz;
+
     if(player == NULL)
         return;
 
@@ -318,17 +321,25 @@ void daMachine_c::attack() {
     field_0xbf0.SetC(xyz);
     field_0xbf0.SetR(90.0f);
 
-    if(field_0xc78 == 1 && field_0xbd0.Cross(&field_0xbf0,&xyz) != 0) {
-        field_0xc78 = 1;
-    } else {
+    switch (field_0xc78) {
+    case 0:
+        if(field_0xbd0.Cross(&field_0xbf0,&xyz) !=0) {
+            field_0xc78 = 1;
+            return;
+        }
+        break;
+    case 1:
         fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_OUT,0);
         field_0xc04.setFrame(0);
         field_0xc04.setPlaySpeed(1);
         field_0xc78 += 1;
 
+    case 2:
+        
         if(field_0xc04.play() != 0) {
             field_0xc78 = NULL;
         }
+        break;
     }
 }
 
