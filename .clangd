@@ -1,7 +1,6 @@
 # https://clangd.llvm.org/config
 CompileFlags:
   Add: [
-    "-fdeclspec",
     "-Wno-c++11-compat-deprecated-writable-strings",
     "-Wno-undefined-inline",
     "-Wno-multichar",
