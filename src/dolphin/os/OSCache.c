@@ -5,6 +5,7 @@
 
 static ASM void DCEnable(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     sync
@@ -13,11 +14,13 @@ static ASM void DCEnable(void) {
     mtspr 0x3F0, r3
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCInvalidateRange(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -35,11 +38,13 @@ do_invalidate:
     bdnz do_invalidate
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCFlushRange(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -58,11 +63,13 @@ do_flush:
     sc
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCStoreRange(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -81,11 +88,13 @@ do_store:
     sc
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCFlushRangeNoSync(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -103,11 +112,13 @@ do_flush:
     bdnz do_flush
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCStoreRangeNoSync(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -125,11 +136,13 @@ do_store:
     bdnz do_store
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void DCZeroRange(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -147,11 +160,13 @@ do_zero:
     bdnz do_zero
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void ICInvalidateRange(register void* start, register u32 nBytes) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     cmplwi nBytes, 0
@@ -172,11 +187,13 @@ do_invalidate:
     isync
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void ICFlashInvalidate(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     mfspr r3, 0x3F0
@@ -184,11 +201,13 @@ ASM void ICFlashInvalidate(void) {
     mtspr 0x3F0, r3
 
     blr
+#endif
     // clang-format on
 }
 
 static ASM void ICEnable(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     isync
@@ -197,11 +216,13 @@ static ASM void ICEnable(void) {
     mtspr 0x3F0, r3
 
     blr
+#endif
     // clang-format on
 }
 
 ASM void __LCEnable(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     mfmsr r5
@@ -265,6 +286,7 @@ do_load:
     nop
 
     blr
+#endif
     // clang-format on
 }
 
@@ -276,6 +298,7 @@ void LCEnable(void) {
 
 ASM void LCDisable(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     lis r3, 0xE000
@@ -291,12 +314,14 @@ do_invalidate:
     mtspr 0x398, r4
 
     blr
+#endif
     // clang-format on
 }
 
 static ASM void LCStoreBlocks(register void* destAddr, register void* srcAddr,
                               register u32 blockNum){
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     rlwinm r6, blockNum, 0x1E, 0x1B, 0x1F
@@ -309,8 +334,11 @@ static ASM void LCStoreBlocks(register void* destAddr, register void* srcAddr,
     mtspr 0x39B, r6
 
     blr
+#endif
     // clang-format on
-} /* 8033B838-8033B8E4 336178 00AC+00 0/0 0/0 3/3 .text            LCStoreData */
+}
+
+/* 8033B838-8033B8E4 336178 00AC+00 0/0 0/0 3/3 .text            LCStoreData */
 u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
     u32 blocks = (nBytes + 31) / 32;
     u32 ret = (blocks + 127) / 128;
@@ -333,6 +361,7 @@ u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
 
 ASM void LCQueueWait(register u32 len) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     addi len, len, 1
@@ -343,6 +372,7 @@ LCQueueWait_04:
     bge cr2, LCQueueWait_04
 
     blr
+#endif
     // clang-format on
 }
 
