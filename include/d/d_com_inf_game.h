@@ -513,6 +513,10 @@ public:
 
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
+    void setPictureStatusGetOn(u8 to_set) { 
+        mPictureStatus = 3; 
+        field_0x495f = to_set; 
+    }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }
     void setScopeMesgStatus(u8 status) { mScopeMesgStatus = status; }
@@ -2726,6 +2730,10 @@ inline u8 dComIfGp_getPictureStatus() {
 
 inline void dComIfGp_setPictureStatusOn() {
     g_dComIfG_gameInfo.play.setPictureStatusOn();
+}
+
+inline void dComIfGp_setPictureStatusGetOn(u8 to_set){
+    g_dComIfG_gameInfo.play.setPictureStatusGetOn(to_set);
 }
 
 inline s16 dComIfGp_getMiniGameRupee() {
