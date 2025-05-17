@@ -35,15 +35,12 @@ jobs:
     - name: Prepare
       run: cp -R /orig .
 
-    - name: Diff
-      run: |
-        ninja diff
-
     # Build the project
     - name: Build
       run: |
         python configure.py --map --version ${{ matrix.version }} \
             --binutils /binutils --compilers /compilers
+        ninja diff
         ninja all_source build/${{ matrix.version }}/progress.json \
             build/${{ matrix.version }}/report.json
 
