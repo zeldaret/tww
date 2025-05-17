@@ -10,9 +10,8 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 
-
 //TODO: Add proper ENUMS
-static dCcD_SrcSph l_sph_src_at = {//
+static dCcD_SrcSph l_sph_src_at = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -90,7 +89,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000C8-0000022C       .text CreateHeap__11daMachine_cFv */
 BOOL daMachine_c::CreateHeap() {
-    /* Nonmatching */
     BOOL success;
 
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, 7);
@@ -134,8 +132,6 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000002A0-00000520       .text CreateInit__11daMachine_cFv */
 void daMachine_c::CreateInit() {
-    /* Nonmatching */
-
     scale.setall(1.5f);
     
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -194,7 +190,6 @@ void daMachine_c::CreateInit() {
 
 /* 00000520-00000604       .text path_move__11daMachine_cFv */
 void daMachine_c::path_move() {
-    /* Nonmatching */
     if (field_0xc14 != 0xFF){
         cLib_chasePos(&current.pos, field_0xc1c, speedF);
         
@@ -238,7 +233,6 @@ daWindMill_c* daMachine_c::search_wind_mill() {
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
 void daMachine_c::set_speed() {
-    /* Nonmatching */
     f32 new_speed;
     daWindMill_c* windmill = search_wind_mill();
     f32 local_1;
@@ -275,6 +269,7 @@ cPhs_State daMachine_c::_create() {
 
 /* 00000898-00000AA0       .text __ct__11daMachine_cFv */
 daMachine_c::daMachine_c() {
+    /* Nonmatching */
 }
 
 /* 00000F74-0000100C       .text set_mtx__11daMachine_cFv */
@@ -308,17 +303,22 @@ bool daMachine_c::_execute() {
 
 /* 000010F8-0000124C       .text attack__11daMachine_cFv */
 void daMachine_c::attack() {
-    /* Nonmatching */
-    daPy_py_c* player = daPy_getPlayerActorClass();
-    cXyz xyz;
+    daPy_py_c* player;
 
-    if(player == NULL)
+    if( (player = daPy_getPlayerActorClass()) == NULL)
         return;
 
     set_cube();
-    xyz = player->current.pos;
-    xyz.y += 60;
-    field_0xbf0.SetC(xyz);
+    cXyz player_pos;
+    cXyz xyz;
+    f32 unk_float = 60;
+    
+    player_pos.x = player->current.pos.x;
+    player_pos.y = player->current.pos.y;
+    player_pos.z = player->current.pos.z;
+    player_pos.y = player_pos.y + unk_float;
+
+    field_0xbf0.SetC(player_pos);
     field_0xbf0.SetR(90.0f);
 
     switch (field_0xc78) {
@@ -333,9 +333,8 @@ void daMachine_c::attack() {
         field_0xc04.setFrame(0);
         field_0xc04.setPlaySpeed(1);
         field_0xc78 += 1;
-
+        // Fall through
     case 2:
-        
         if(field_0xc04.play() != 0) {
             field_0xc78 = NULL;
         }
@@ -345,14 +344,12 @@ void daMachine_c::attack() {
 
 /* 0000124C-00001330       .text set_cube__11daMachine_cFv */
 void daMachine_c::set_cube() {
-    /* Nonmatching */
-
     cXyz xyz1(0,0,350.0f);
     cXyz xyz2(0,0,500.0f);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    mDoMtx_stack_c::multVec(&xyz1, &xyz1);
     mDoMtx_stack_c::multVec(&xyz2, &xyz2);
+    mDoMtx_stack_c::multVec(&xyz1, &xyz1);
     field_0xbd0.GetStart() = xyz1;
     field_0xbd0.GetEnd() = xyz2;
     field_0xbd0.SetR(200.0f);
@@ -360,8 +357,6 @@ void daMachine_c::set_cube() {
 
 /* 00001330-0000144C       .text set_body__11daMachine_cFv */
 void daMachine_c::set_body() {
-    /* Nonmatching */
-
     cXyz xyz[3];
     xyz[0].set(0,0,75);
     xyz[1].set(0,0,225);
@@ -384,7 +379,6 @@ void daMachine_c::set_body() {
 
 /* 0000144C-000014D4       .text set_at__11daMachine_cFv */
 void daMachine_c::set_at() {
-    /* Nonmatching */
     f32 fVar1;
   
     fVar1 = field_0xc04.getFrameCtrl()->getFrame();
