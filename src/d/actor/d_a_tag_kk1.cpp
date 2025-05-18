@@ -37,7 +37,7 @@ bool daTag_Kk1_c::_draw() {
 bool daTag_Kk1_c::_execute() {
 
     f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
-    f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - this->current.pos.y;
+    f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
     mTagSet = false;
     if (
         (distance < l_HIO.mHorizontalDistance) && (vert_distance< l_HIO.mVerticalDistance)
