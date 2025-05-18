@@ -124,13 +124,13 @@ void dMenu_Option_c::screenSet() {
 
 /* 801D3388-801D3518       .text mainInit__14dMenu_Option_cFv */
 void dMenu_Option_c::mainInit() {
-    /* Nonmatching - regalloc */
     fopMsgM_setNowAlphaZero(&mCF0);
 
     for (int i = 0; i < 2; i++) {
         fopMsgM_paneTrans(&m858[i], 0.0f, 0.0f);
 
-        m858[i].pane->rotate(m858[i].mSize.x / 2.0f, m858[i].mSize.y / 2.0f, ROTATE_Z, 90.0f);
+        // Potential bug: Why access 0th index multiple times?
+        m858[0].pane->rotate(m858[0].mSize.x / 2.0f, m858[0].mSize.y / 2.0f, ROTATE_Z, 90.0f);
 
         fopMsgM_setNowAlphaZero(&mC80[i]);
         fopMsgM_setNowAlphaZero(&m858[i]);
@@ -241,7 +241,6 @@ void dMenu_Option_c::noteMove() {
 
 /* 801D39F4-801D3C6C       .text titleMove__14dMenu_Option_cFv */
 void dMenu_Option_c::titleMove() {
-    /* Nonmatching - regalloc */
     float alpha = fopMsgM_valueIncrease(7, mC80[0].mUserArea + -7,0);
     
     float rotate_angle = m008.mUserArea + 20;
@@ -253,7 +252,7 @@ void dMenu_Option_c::titleMove() {
         rotate_angle += 360.0f;
     }
 
-    rotate_angle *= 1.0f - alpha;
+    f32 f30 = rotate_angle * (1.0f - alpha);
 
     if (mC80[0].mUserArea == 8) {
         mDoAud_seStart(0x84e, NULL, 0, 0);
@@ -265,9 +264,9 @@ void dMenu_Option_c::titleMove() {
     fopMsgM_paneTrans(&m040, 0.0f, y * -50.0f);
     fopMsgM_paneTrans(&m078, 0.0f, y * -50.0f);
 
-    m008.pane->rotate(m008.mSize.x / 2.0f, m008.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m008.mUserArea);
-    m040.pane->rotate(m040.mSize.x / 2.0f, m040.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m040.mUserArea);
-    m078.pane->rotate(m078.mSize.x / 2.0f, m078.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m078.mUserArea);
+    m008.pane->rotate(m008.mSize.x / 2.0f, m008.mSize.y / 2.0f, ROTATE_Z, f30 + m008.mUserArea);
+    m040.pane->rotate(m040.mSize.x / 2.0f, m040.mSize.y / 2.0f, ROTATE_Z, f30 + m040.mUserArea);
+    m078.pane->rotate(m078.mSize.x / 2.0f, m078.mSize.y / 2.0f, ROTATE_Z, f30 + m078.mUserArea);
 
     fopMsgM_setNowAlpha(&m008, alpha);
     fopMsgM_setNowAlpha(&m040, alpha);
@@ -285,7 +284,7 @@ void dMenu_Option_c::cursorMove() {
 
         mB30[i].mSize.x = m8C8[sVar2].mSizeOrig.x;
 
-        fopMsgM_cposMove((fopMsgM_pane_class *)(&mB30[i].pane));
+        fopMsgM_cposMove(&mB30[i]);
 
         mB30[i].pane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, 0.5f);
     }
@@ -401,18 +400,16 @@ void dMenu_Option_c::yazAnime() {
 
 /* 801D41C4-801D428C       .text ccAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::ccAnime() {
-    /* Nonmatching - Tried a double `for` loop with `mB30` as shape `[2][3]`, didn't work */
-    int j = 0;
+    int r29 = mB30[0].mUserArea / 7;
     for (int i = 0; i < 3; i++) {
-        if (i == mB30[0].mUserArea / 7) {
-            fopMsgM_setInitAlpha(&mB30[i]);
-            fopMsgM_setInitAlpha(&mB30[j+1]);
+        if (i == r29) {
+            fopMsgM_setInitAlpha(&mB30[(i*2)+0]);
+            fopMsgM_setInitAlpha(&mB30[(i*2)+1]);
         }
         else {
-            fopMsgM_setNowAlphaZero(&mB30[i]);
-            fopMsgM_setNowAlphaZero(&mB30[j+1]);
+            fopMsgM_setNowAlphaZero(&mB30[(i*2)+0]);
+            fopMsgM_setNowAlphaZero(&mB30[(i*2)+1]);
         }
-        j += 2;
     }
 
     mB30[0].mUserArea++;
