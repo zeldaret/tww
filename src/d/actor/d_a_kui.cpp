@@ -21,9 +21,9 @@
 class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
-static void* s_a_i_sub(void* i_this, void*) {
-    if (fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_DR2) {
-        return i_this;
+static void* s_a_i_sub(void* search, void*) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_DR2) {
+        return search;
     }
     return NULL;
 }
@@ -34,9 +34,9 @@ static dr2_class* search_dragontail(kui_class* i_this) {
 }
 
 /* 000000F0-0000013C       .text b_a_i_sub__FPvPv */
-static void* b_a_i_sub(void* i_this, void*) {
-    if (fopAcM_IsActor(i_this) && fopAcM_GetName(i_this) == PROC_BTD) {
-        return i_this;
+static void* b_a_i_sub(void* search, void*) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BTD) {
+        return search;
     }
     return NULL;
 }
@@ -154,7 +154,7 @@ static void demo_camera(kui_class* i_this) {
 
             s32 uVar3 = (s32) i_this->field_0x2EA;
             if (uVar3 < 20) {
-                f32 sin_result = cM_ssin((uVar3 & 0x1F) << 11);
+                f32 sin_result = cM_ssin((uVar3 & 0x1F) * 0x800);
                 i_this->field_0x30C = sin_result * 5.0f;
             } else if (uVar3 <= 27) {
                 if (uVar3 == 27) {
@@ -192,7 +192,7 @@ static void demo_camera(kui_class* i_this) {
             break;
     }
 
-    if (((s8)i_this->field_0x2E8 != 0) && bVar2) {
+    if ((i_this->field_0x2E8 != 0) && bVar2) {
         camera->mCamera.Set(i_this->field_0x2F8, i_this->field_0x2EC);
         JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", i_this->field_0x2EA);
         i_this->field_0x2EA++;
@@ -374,7 +374,7 @@ static BOOL daKui_Execute(kui_class* i_this) {
         if (i_this->field_0x308 != 0) {
             i_this->field_0x308--;
 
-            s16 finished = REG8_S(3) + 0x3CA;
+            s16 finished = REG8_S(3) + 970;
             if (i_this->field_0x308 == finished) {
                 if (i_this->type == 2) {
                     i_this->field_0x2E8 = 1;
@@ -412,7 +412,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
     if (i_this->type == 3) {
         // Bell body
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE1);
-        JUT_ASSERT(0x353, modelData != 0);
+        JUT_ASSERT(0x353, modelData != NULL);
 
         i_this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (!i_this->mpModel) {
@@ -421,7 +421,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
         // Bell handle
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_HKANE2);
-        JUT_ASSERT(0x35F, modelData != 0);
+        JUT_ASSERT(0x35F, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (!i_this->mpModel2) {
@@ -430,7 +430,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
     } else {
         // Rope
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_OBI_ROPETAG);
-        JUT_ASSERT(0x36B, modelData != 0);
+        JUT_ASSERT(0x36B, modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!i_this->mpModel2) {
@@ -440,7 +440,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         if (i_this->type == 2 || i_this->type == 4) {
             // Rope swing attachment
             modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", KUI_BDL_MROPESW);
-            JUT_ASSERT(0x377, modelData != 0);
+            JUT_ASSERT(0x377, modelData != NULL);
 
             i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
             if (!i_this->mpModel) {
