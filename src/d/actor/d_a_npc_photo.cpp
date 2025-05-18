@@ -558,12 +558,11 @@ static PsoData l_pso_photo[] = {
 };
 // cXyz(205.0f, -600.0f, -50.f)
 
-static cXyz l_counter_pos[][2] = {
-    {
-        cXyz(-490.0f, 0.0f, -10.0f), 
-        cXyz(-260.0f, 0.0f, -250.0f)
-    },
+static cXyz l_counter_pos[] = {
+    cXyz(-490.0f, 0.0f, -10.0f), 
+    cXyz(-260.0f, 0.0f, -250.0f)
 };
+
 
 static cXyz l_gallery_pos(-260.0f, 500.0f, 400.0f);
 
@@ -890,14 +889,15 @@ bool daNpcPhoto_c::_execute() {
         for(int i = 0; i < 2; i++) {
             setCollision(&field_0x6F8[i], 
                 cXyz(
-                    l_counter_pos[i][0].x,
-                    l_counter_pos[i][0].y,
-                    l_counter_pos[i][0].z
+                    l_counter_pos[i].x,
+                    l_counter_pos[i].y,
+                    l_counter_pos[i].z
                 ), 
                 110.0f, 150.0f
             );
         }
     }
+    
     cXyz temp(
         l_npc_dat[0].field_0x1C,
         l_npc_dat[0].field_0x20,
@@ -997,8 +997,9 @@ void daNpcPhoto_c::executeWait() {
                 eventInfo.setEventId(-1);
                 field_0x9C7 = true;
 
+                dCcD_GObjInf* pGObjInf;
                 for (int i = 0; i < 2; i++) {
-                    dCcD_GObjInf* pGObjInf = &field_0x6F8[i];
+                    pGObjInf = &field_0x6F8[i];
                     if (pGObjInf->ChkCoHit()) {
                         daNpcPhoto_c* pActor = (daNpcPhoto_c*)pGObjInf->GetCoHitAc();
                         if(pActor != NULL && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
@@ -1009,7 +1010,7 @@ void daNpcPhoto_c::executeWait() {
                 }
             }
 
-            if(field_0x9C1 == 1 && !field_0x9BD && dComIfGp_getLinkPlayer()->current.pos.y < current.pos.y + 50.0f) {
+            if(field_0x9C1 == 1 && !field_0x9BD && dComIfGp_getLinkPlayer()->current.pos.y < current.pos.y + -50.0f) {
                 executeSetMode(3);
                 field_0x9C1 = 3;
             }
@@ -1403,38 +1404,38 @@ void daNpcPhoto_c::eventPosSetInit() {
         if(path != NULL){
             dPnt* pnt = dPath_GetPnt(path, ac->getTagNo());
             if(pnt != NULL){
-
                 old.pos = pnt->m_position;
                 current.pos = old.pos;
                 dBgS_GndChk gndChk;
                 
-                cXyz temp2(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+                Vec temp;
+                temp.y = current.pos.y;
+                temp.z = current.pos.z;
+                temp.y += 50.0f;
+                temp.x = current.pos.x;
+
+                gndChk.SetPos(&temp);
+
                 f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
                 if(floor_y != C_BG_MIN_HEIGHT){
                     old.pos.y = floor_y;
                     current.pos.y = floor_y;
                 }
-
-
             }         
         }
-
-
         dNpc_calc_DisXZ_AngY(current.pos, temp, NULL, &angle);
-        field_0x9AE = current.angle.y = shape_angle.y = angle;
+        shape_angle.y = current.angle.y = field_0x9AE = angle;
     } else {
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
         old.pos = l_gallery_pos;
         current.pos = old.pos;
-        dNpc_calc_DisXZ_AngY(current.pos, link->old.pos, NULL, &angle);
-        field_0x9AE = current.angle.y = shape_angle.y = angle;
-        
+        dNpc_calc_DisXZ_AngY(current.pos, link->current.pos, NULL, &angle);
+        shape_angle.y = current.angle.y = field_0x9AE = angle;
     }
     dComIfGp_event_setTalkPartner(this);
-   
     mPathRun.mCurrPointIndex = mPathRun.mPath->m_num - 2;
-
     mPathRun.mbGoingForwards = false;
+
     executeSetMode(0);
     field_0x9C1 = 1;
     int temp = (int)cM_rndF(3.0f);
@@ -1442,8 +1443,6 @@ void daNpcPhoto_c::eventPosSetInit() {
         temp = 0;
     }
     field_0x990 = l_msg_2F[temp];
-
-    /* Nonmatching */
 }
 
 /* 00002FE0-0000303C       .text eventGetItemInit__12daNpcPhoto_cFv */
@@ -1537,7 +1536,6 @@ bool daNpcPhoto_c::eventLookUb() {
       field_0x994 = false;
     }
     return true;
-    /* Nonmatching */
 }
 
 /* 000033E4-0000357C       .text talk2__12daNpcPhoto_cFi */
