@@ -1,6 +1,7 @@
 #ifndef D_A_NPC_KK1_H
 #define D_A_NPC_KK1_H
 
+#include "d/actor/d_a_player.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 
@@ -46,37 +47,37 @@ public:
     bool partner_search_sub(void* (*)(void*, void*));
     void partner_search();
     void lookBack();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
-    void decideType(int);
+    BOOL decideType(int);
     void cut_init_RUN_START(int);
-    void cut_move_RUN_START();
+    bool cut_move_RUN_START();
     void cut_init_RUN(int);
-    void cut_move_RUN();
+    bool cut_move_RUN();
     void cut_init_CATCH_START(int);
-    void cut_move_CATCH_START();
+    bool cut_move_CATCH_START();
     void cut_init_CATCH_END(int);
-    void cut_move_CATCH_END();
+    bool cut_move_CATCH_END();
     void cut_init_TRN(int);
-    void cut_move_TRN();
+    bool cut_move_TRN();
     void cut_init_BYE_START(int);
-    void cut_move_BYE_START();
+    bool cut_move_BYE_START();
     void cut_init_BYE(int);
-    void cut_move_BYE();
+    bool cut_move_BYE();
     void cut_init_BYE_CONTINUE(int);
-    void cut_move_BYE_CONTINUE();
+    bool cut_move_BYE_CONTINUE();
     void cut_init_BYE_END(int);
-    void cut_move_BYE_END();
+    bool cut_move_BYE_END();
     void cut_init_PLYER_TRN(int);
-    void cut_move_PLYER_TRN();
+    bool cut_move_PLYER_TRN();
     void cut_init_OTOBOKE(int);
-    void cut_move_OTOBOKE();
+    bool cut_move_OTOBOKE();
     void cut_init_PLYER_MOV(int);
-    void cut_move_PLYER_MOV();
+    bool cut_move_PLYER_MOV();
     void cut_init_RUNAWAY_START(int);
-    void cut_move_RUNAWAY_START();
+    bool cut_move_RUNAWAY_START();
     void cut_init_RUNAWAY_END(int);
-    void cut_move_RUNAWAY_END();
+    bool cut_move_RUNAWAY_END();
     void privateCut(int);
     void endEvent();
     void isEventEntry();
@@ -89,7 +90,7 @@ public:
     void startEvent_check();
     void chkHitPlayer();
     void set_pthPoint(unsigned char);
-    void event_move(bool);
+    bool event_move(bool);
     void kyoroPos(int);
     void kyorokyoro();
     void chk_attn();
@@ -123,49 +124,100 @@ public:
     void CreateHeap();
 
 public:
-    /* 0x6C4 */ u8 field_0x6C4[0x6FC - 0x6C4];
-    /* 0x6FC*/  u32 field_0x6FC;
-    /* 0x700 */ u8 field_0x700[0x72C - 0x700];   
+    /* 0x6C4 */ f32 field_0x6C4;
+    /* 0x6C8 */ f32 field_0x6C8;
+    /* 0x6CC */ u16 field_0x6CC;
+    /* 0x6CE */ char mKkString; 
+    /* 0x6CF */ u8 field_0xCF; 
+    /* 0x6D6 */ u8 field_0x6C2[0x6FC - 0x6D0];
+    /* 0x6FC*/  fpc_ProcID mPartnerProcID;
+    /* 0x700*/  u32 field_0x700;
+    /* 0x700*/  dNpc_PathRun_c mRunPath;
+    /* 0x704 */ u8 field_0x70C[0x72C - 0x70C];
     /* 0x72C */ cXyz field_0x72C;
     /* 0x738 */ cXyz field_0x738;
     /* 0x744 */ u8 field_0x744[0x750 - 0x744];
     /* 0x750 */ cXyz field_0x750;
     /* 0x75C */ u8  field_0x75C[0x770 - 0x75C];
-    /* 0x770 */ s16 field_0x770;
+    /* 0x770 */ s16 mAngleY;
     /* 0x772 */ s16 field_0x772;
     /* 0x774 */ s16 field_0x774;
-    /* 0x776 */ u8  field_0x776[0x77C - 0x776];
+    /* 0x776 */ s16 field_0x776;
+    /* 0x778 */ int field_0x778;  
     /* 0x77C */ s16 field_0x77C[0x08]; //8 Elements * U16 = 16 bytes
     /* 0x78C */ s16  field_0x78C; //Array Index?
-    /* 0x78E */ s8  field_0x78D[0x7AE - 0x78E];
-    /* 0x7AE */ u16 field_0x7AE;
-    /* 0x7B0 */ u8 field_0x7B0[0x7B4 - 0x7B0];
+    /* 0x78E */ s8  field_0x78E[0x798 - 0x78E];
+    /* 0x798 */ s16 field_0x798;
+    /* 0x79A */ s16 field_0x79A;
+    /* 0x79C */ s16 field_0x79C;
+    /* 0x79E */ s16 field_0x79E;
+    /* 0x7A0 */ s16 field_0x7A0;
+
+    /* 0x7A2 */ s16 field_0x7A2;
+
+    /* 0x7A4 */ s16 field_0x7A4;
+
+    /* 0x7A6 */ s16 field_0x7A6;
+
+    /* 0x7A8 */ s16 field_0x7A8;
+
+    /* 0x7AA */ s16 field_0x7AA;
+
+    /* 0x7AC */ s16 field_0x7AC;
+    /* 0x7AE */ s16 field_0x7AE;
+    /* 0x7B0 */ s16 field_0x7B0;
+    /* 0x7B2 */ s8 field_0x7B2;
+    /* 0x7B2 */ u8 field_0x7B3;
     /* 0x7B4 */ u8 field_0x7B4;
-    /* 0x7B5 */ u8 field_0x7B5[0x7B8 - 0x7B5];
+    /* 0x7B5 */ u8 field_0x7B5;
+    /* 0x7B5 */ u8 field_0x7B6;
+    /* 0x7B5 */ u8 field_0x7B7[0x7B8 - 0x7B7];
     /* 0x7B8 */ u8 field_0x7B8;
     /* 0x7B9 */ u8 field_0x7B9[0x7BA - 0x7B9];
     /* 0x7BA */ u8 field_0x7BA;
-    /* 0x7BB */ u8 field_0x7BB[0x7C3 - 0x7BB];
+    /* 0x7BB */ u8 field_0x7BB;
+    /* 0x7BC */ u8 field_0x7BC;
+    /* 0x7BD */ u8 field_0x7BD;
+    /* 0x7BE */ u8 field_0x7BE;
+    /* 0x7BF */ u8 field_0x7BF;
+    /* 0x7C0 */ u8 field_0x7C0;
+    /* 0x7C1 */ u8 field_0x7C1; 
+    /* 0x7C2 */ u8 field_0x7C2;
     /* 0x7C3 */ u8 field_0x7C3;
-    /* 0x7C4 */ u8 field_0x7C4;
-    /* 0x7C5 */ u8 field_0x7C5[0x817 - 0x7C5];
+    /* 0x7C4 */ bool field_0x7C4;
+    /* 0x7C5 */ u8 field_0x7C5[0x814 - 0x7C5];
+    /* 0x814 */ s8 field_0x814;
+    /* 0x815 */ u8 field_0x815;
+    /* 0x816 */ s8 field_0x816;
     /* 0x817 */ u8 field_0x817;
     /* 0x818 */ u8 field_0x818;
-    /* 0x819 */ u8 field_0x819[0x81B - 0x819];
+    /* 0x819 */ u8 field_0x819;
+    /* 0x81B */ s8 field_0x81A;
     /* 0x81B */ s8 field_0x81B;
     /* 0x81C */ u8 field_0x81C;
     /* 0x81D */ u8 field_0x81D;
     /* 0x81E */ u8 field_0x81E;
-    /* 0x81F */ u8 field_0x81F[0x820 - 0x81F];
-    /* 0x820 */ u8 field_0x820;
+    /* 0x81F */ s8 field_0x81F;
+    /* 0x820 */ s8 field_0x820;
     /* 0x821 */ s8 field_0x821;
 };  // Size: 0x824
 
 class daNpc_Kk1_HIO_c {
 public:
     daNpc_Kk1_HIO_c();
-
+    virtual ~daNpc_Kk1_HIO_c();
 public:
+    /* 0x04  */ s8  mNo;
+    /* 0x08  */ f32 mHorizontalDistance;
+    /* 0x0C  */ f32 mVerticalDistance;
+    /* 0x10  */ u8  mUnusedU8[0x1E - 0x10];
+    /* 0x1E  */ s16 field_0x1E;  
+    /* 0x20  */ f32 field_0x20;
+    /* 0x24  */ f32 field_0x24;
+    /* 0x28  */ f32 field_0x28;
+    /* 0x2C  */ f32 field_0x2C;
+    /* 0x30  */ s16 field_0x30;
+    /* 0x32  */ s16 field_0x32;
     /* Place member variables here */
 };
 
