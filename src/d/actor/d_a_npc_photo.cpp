@@ -774,7 +774,6 @@ cPhs_State daNpcPhoto_c::createInit() {
     field_0x6F8[1].Set(l_cyl_src2);
     field_0x6F8[1].SetStts(&mStts);
     return 4;
-    /* Nonmatching */
 }
 
 /* 00001048-000010A4       .text _delete__12daNpcPhoto_cFv */
@@ -1053,7 +1052,6 @@ void daNpcPhoto_c::executeTalk() {
             setAnmFromMsgTag();
         }
     }
-    /* Nonmatching */
 }
 
 /* 00001BB4-00001D98       .text executeWalk__12daNpcPhoto_cFv */
@@ -1364,8 +1362,6 @@ void daNpcPhoto_c::eventMesSetInit(int i_staffId) {
         }
         setMessage(*field_0x980);
     }
-
-    /* Nonmatching */
 }
 
 /* 00002758-0000278C       .text eventMesSet__12daNpcPhoto_cFv */
@@ -1484,7 +1480,6 @@ bool daNpcPhoto_c::eventSetEye() {
     mDoMtx_stack_c::multVec(&mEyePos, &mEyePos);
     VECAdd(&mEyePos, &link->eyePos, &mEyePos);
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 000031F0-00003260       .text eventTurnToPlayerInit__12daNpcPhoto_cFv */
@@ -1704,7 +1699,6 @@ u16 daNpcPhoto_c::next_msgStatus(u32* pMsgNo) {
             }
     }
     return status;
-    /* Nonmatching */
 }
 
 /* 000038E8-00003E68       .text getMsg__12daNpcPhoto_cFv */
@@ -2103,8 +2097,6 @@ void daNpcPhoto_c::playAnm() {
             }
         }
     }
-
-    /* Nonmatching */
 }
 
 /* 0000474C-0000481C       .text setAnm__12daNpcPhoto_cFUcif */
