@@ -579,14 +579,12 @@ void dMenu_Option_c::noteSet() {
     float fVar1 = m740[0].pane[1].mBounds.getHeight();
     float fVar2 = m740[1].pane[1].mBounds.getHeight();
 
-    mesg_header* mesg_header = msgGet.getMesgHeader(0x262);
-    if (mesg_header == NULL) {
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_menu_option.cpp", 0x313, "head_p");
-        OSPanic("d_menu_option.cpp", 0x313, "Halt");
-    }
+    mesg_header* head_p = msgGet.getMesgHeader(0x262);
+    
+    JUT_ASSERT(0x313, head_p);
 
-    const char* mesg = msgGet.getMessage(mesg_header);
-    mesg_entry msg_entry = msgGet.getMesgEntry(mesg_header);
+    const char* mesg = msgGet.getMessage(head_p);
+    mesg_entry msg_entry = msgGet.getMesgEntry(head_p);
 
     msgDataProc.dataInit();
 

@@ -15,8 +15,6 @@ static dMc_HIO_c g_mcHIO;
 
 /* 8019BE8C-8019BF14       .text __ct__9dMc_HIO_cFv */
 dMc_HIO_c::dMc_HIO_c() {
-    /* Fakematch */
-    m58 = -1;
     m46 = 40;
     m48 = 10;
     m4A = 120;
@@ -27,10 +25,7 @@ dMc_HIO_c::dMc_HIO_c() {
     m52 = 130;
     m4E = 250;
     m50 = 20;
-    ((u8*)&m58)[0] = -1;
-    ((u8*)&m58)[1] = 170;
-    ((u8*)&m58)[2] = 0;
-    ((u8*)&m58)[3] = 0;
+    m58.set(-1, 170, 0, 0);
     m44 = 13;
 }
 
@@ -163,12 +158,12 @@ void dMenu_Collect_c::screenSet() {
 
     // Couple of functions missing here
     ((J2DTextBox*)(m740).pane)->setWhite(-1);
-    ((J2DTextBox*)(m740).pane)->setCharColor(0xff);
-    ((J2DTextBox*)(m740).pane)->setGradColor(0xff);
+    ((J2DTextBox*)(m740).pane)->setCharColor(-1);
+    ((J2DTextBox*)(m740).pane)->setGradColor(-1);
 
     ((J2DTextBox*)(m778).pane)->setWhite(-1);
-    ((J2DTextBox*)(m778).pane)->setCharColor(0xff);
-    ((J2DTextBox*)(m778).pane)->setGradColor(0xff);
+    ((J2DTextBox*)(m778).pane)->setCharColor(-1);
+    ((J2DTextBox*)(m778).pane)->setGradColor(-1);
     
 
     fopMsgM_setPaneData(&m858, m004, 'wd');

@@ -181,7 +181,7 @@ public:
     /* 0x52 */ u8 m52;
     /* 0x53 */ u8 m53;
     /* 0x54 */ f32 m54;
-    /* 0x58 */ int m58;
+    /* 0x58 */ JUtility::TColor m58;
     /* 0x5C */ u8 m5C;
     /* 0x5D */ u8 m5D;
 };
