@@ -4,11 +4,18 @@
 //
 
 #include "d/actor/d_a_hys.h"
+#include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+
+const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
+const s16 daHys_c::m_dzbidx[2] = {0xB, 0xB};
+const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
 
 /* 00000078-000000B8       .text Delete__7daHys_cFv */
 BOOL daHys_c::Delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    return TRUE;
 }
 
 /* 000000B8-00000250       .text CreateHeap__7daHys_cFv */
@@ -16,14 +23,37 @@ BOOL daHys_c::CreateHeap() {
     /* Nonmatching */
 }
 
+cPhs_State daHys_c::_create() {
+    /* Nonmatching */
+    fopAcM_SetupActor(this, daHys_c);
+
+    mType = fopAcM_GetParam(this) >> 8;
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+
+    res = MoveBGCreate(m_arcname[mType], m_dzbidx[mType], dBgS_MoveBGProc_TypicalRotY, m_heapsize[mType]);
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+
+    return cPhs_COMPLEATE_e;
+}
+
 /* 00000250-00000368       .text Create__7daHys_cFv */
 BOOL daHys_c::Create() {
     /* Nonmatching */
+    return _create();
 }
 
 /* 00000368-000003F8       .text set_mtx__7daHys_cFv */
 void daHys_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
 /* 000003F8-000004A4       .text Execute__7daHys_cFPPA3_A4_f */
@@ -53,37 +83,42 @@ void daHys_c::mode_sw_on() {
 
 /* 000006F8-00000704       .text mode_wait_init__7daHys_cFv */
 void daHys_c::mode_wait_init() {
-    /* Nonmatching */
+    field_0x450 = 0;
 }
 
 /* 00000704-00000778       .text Draw__7daHys_cFv */
 BOOL daHys_c::Draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBtpAnm.entry(mpModel->getModelData(), field_0x458);
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 00000778-00000904       .text daHys_Create__FPv */
-static cPhs_State daHys_Create(void*) {
+static cPhs_State daHys_Create(void* i_this) {
     /* Nonmatching */
+    return ((daHys_c*)i_this)->_create();
 }
 
 /* 00000BBC-00000BDC       .text daHys_Delete__FPv */
-static BOOL daHys_Delete(void*) {
-    /* Nonmatching */
+static BOOL daHys_Delete(void* i_this) {
+    return ((daHys_c*)i_this)->MoveBGDelete();
 }
 
 /* 00000BDC-00000C08       .text daHys_Draw__FPv */
-static BOOL daHys_Draw(void*) {
-    /* Nonmatching */
+static BOOL daHys_Draw(void* i_this) {
+    return ((daHys_c*)i_this)->Draw();
 }
 
 /* 00000C08-00000C28       .text daHys_Execute__FPv */
-static BOOL daHys_Execute(void*) {
-    /* Nonmatching */
+static BOOL daHys_Execute(void* i_this) {
+    return ((daHys_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000C28-00000C30       .text daHys_IsDelete__FPv */
 static BOOL daHys_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daHysMethodTable = {
