@@ -53,15 +53,13 @@ static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scal
         0.0f, 1.754058E-38f, 0.0f, 5.785636E-39f,
         0.0f, 0.0f, 5.831554E-39f, 0.0f,
     };
-
-    /* Nonmatching */
-    kui_class* i_this = (kui_class*)a_this;
-
+    cXyz& eyePos = a_this->eyePos;
     camera_class* camera = dCam_getCamera();
-    cXyz look_dir = i_this->eyePos - camera->mLookat.mEye;
+
+    cXyz look_dir = eyePos - camera->mLookat.mEye;
 
     cXyz light_dir;
-    dKyr_get_vectle_calc(&i_this->tevStr.mLightPosWorld, &i_this->eyePos, &light_dir);
+    dKyr_get_vectle_calc(&a_this->tevStr.mLightPosWorld, &eyePos, &light_dir);
 
     cXyz refl;
     C_VECHalfAngle(&look_dir, &light_dir, &refl);
@@ -83,8 +81,13 @@ static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scal
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
         for (u32 j = 0; j < 8; j++) {
             J3DTexMtx* texMtx = mat->getTexMtx(j);
-            if (texMtx != NULL && texMtx->getTexMtxInfo().mInfo < 12 && texMtx->getTexMtxInfo().mInfo > 9) {
-                texMtx->getTexMtxInfo().setEffectMtx(now_copy);
+            if (texMtx != NULL) {
+                switch (texMtx->getTexMtxInfo().mInfo) {
+                    case 10:
+                    case 11:
+                        texMtx->getTexMtxInfo().setEffectMtx(now_copy);
+                        break;
+                }
             }
         }
     }
@@ -128,24 +131,70 @@ static BOOL daKui_Draw(kui_class* i_this) {
 
 /* 00000540-00000920       .text demo_camera__FP9kui_class */
 static void demo_camera(kui_class* i_this) {
-    /* Nonmatching */
-    fopAc_ac_c *player = dComIfGp_getPlayer(0);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    s8 bVar2 = true;
 
-    s8 bVar2 = 0;
+    switch ((s8)i_this->field_0x2E8) {
+        case 0:
+            break;
+        case 1:
+            if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
+                fopAcM_orderPotentialEvent(i_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
+                i_this->eventInfo.onCondition(dEvtCnd_UNK2_e);
+                bVar2 = false;
+                break;
+            }
+            i_this->field_0x2E8 = i_this->field_0x2E8 + 1;
+            camera->mCamera.Stop();
+            camera->mCamera.SetTrimSize(2);
+            i_this->field_0x2EA = 0;
+            // fallthrough
+        case 2:
+            i_this->current.pos.y = i_this->home.pos.y + i_this->field_0x30C;
 
-    if (i_this->field_0x2E8 == 1) {
-        if (!i_this->eventInfo.checkCommandDemoAccrpt()) {
-            fopAcM_orderPotentialEvent(i_this, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
-            i_this->eventInfo.onCondition(dEvtCnd_UNK2_e);
-            bVar2 = false;
-        }
+            s32 uVar3 = (s32) i_this->field_0x2EA;
+            if (uVar3 < 20) {
+                f32 sin_result = cM_ssin((uVar3 & 0x1F) << 11);
+                i_this->field_0x30C = sin_result * 5.0f;
+            } else if (uVar3 <= 27) {
+                if (uVar3 == 27) {
+                    fopAcM_seStartCurrent(i_this, JA_SE_OBJ_ROPE_SW_ON, 0);
+                    dComIfGp_getVibration().StartShock(3, -33, cXyz(0.0f, 1.0f, 0.0f));
+                }
+                cLib_addCalc2(&i_this->field_0x30C, -70.0f, 1.0f, 10.0f);
+            } else if (uVar3 < 42) {
+                f32 sin_result = cM_ssin(uVar3 * 0x3A00);
+                i_this->field_0x30C = sin_result * 5.0f + (-70.0f);
+            }
+
+            i_this->field_0x2F8 = i_this->home.pos;
+            i_this->field_0x2F8.y += REG8_F(0) + 200.0f;
+            cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+        
+            cXyz vec(REG8_F(1) + 800.f, REG8_F(2), REG8_F(3) + 100.0f);
+            cXyz posVec;
+            MtxPosition(&vec, &posVec);
+        
+            i_this->field_0x2EC = i_this->home.pos + posVec;
+        
+            if (i_this->field_0x2EA == 70) {
+                i_this->field_0x2E8 = 0;
+        
+                camera->mCamera.Reset(i_this->field_0x2F8, i_this->field_0x2EC);
+                camera->mCamera.Start();
+                camera->mCamera.SetTrimSize(0);
+        
+                dComIfGp_event_reset();
+        
+                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+                mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+            }
+            break;
     }
 
-    LAB_8042e04c:
-    if ((i_this->field_0x2E8 != 0) && (bVar2)) {
+    if (((s8)i_this->field_0x2E8 != 0) && bVar2) {
         camera->mCamera.Set(i_this->field_0x2F8, i_this->field_0x2EC);
-        JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", (int)i_this->field_0x2EA);
+        JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", i_this->field_0x2EA);
         i_this->field_0x2EA++;
     }
 }
@@ -153,7 +202,11 @@ static void demo_camera(kui_class* i_this) {
 /* 00000920-000012E4       .text daKui_Execute__FP9kui_class */
 static BOOL daKui_Execute(kui_class* i_this) {
     /* Nonmatching */
+    static s16 bure_xa_d[2] = {0x10, 0xF0};
+
+    s16 target_x_angle;
     daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz temp;
 
     if (i_this->field_0x2A2 != 0) {
         dr2_class* dragon_tail = search_dragontail(i_this);
@@ -162,60 +215,180 @@ static BOOL daKui_Execute(kui_class* i_this) {
         if (dragon_tail == NULL || btd == NULL) {
             i_this->current.pos.set(0.0f, -10000.0f, 0.0f);
         } else {
+            // TODO: needs fields from dr2_class and btd_class
+            if (false) {
 
+            } else {
+                i_this->current.pos.set(0.0f, -10000.0f, 0.0f);
+            }
         }
     }
 
     if (i_this->type == 3) {
         if (i_this->health == 3) {
-            cXyz hand_pos = player->getLeftHandPos();
 
-            cXyz hand_vec = i_this->home.pos - hand_pos;
+            cXyz hand_vec = i_this->home.pos - player->getLeftHandPos();
             cMtx_YrotS(*calc_mtx, -i_this->shape_angle.y);
 
-            cXyz pos_vec;
-            MtxPosition(&hand_vec, &pos_vec);
-            pos_vec.z *= REG0_F(1) + 1.0f;
+            MtxPosition(&hand_vec, &temp);
+            temp.z *= REG0_F(1) + 1.0f;
 
-            short angle;
             if (REG0_S(0) == 0) {
-                angle = -(short)cM_atan2s(pos_vec.z, -pos_vec.y);
+                target_x_angle = -cM_atan2s(temp.z, -temp.y);
             } else {
-                angle = (short)cM_atan2s(pos_vec.z, -pos_vec.y);
+                target_x_angle = (s32) cM_atan2s(temp.z, -temp.y);
+            }
+            s16 unk = std::fabsf((REG0_F(2) + 3000.0f) * cM_ssin(i_this->shape_angle.y));
+
+            s8 unk_flag = 0;
+            
+            if (target_x_angle > unk) {
+                target_x_angle = unk;
+                unk_flag = 1;
+            } else if (target_x_angle < (s16)-unk) {
+                target_x_angle = -unk;
+                unk_flag = 2;
             }
 
-            u32 unk = (u32) std::fabsf(REG0_F(2) + 3000.0f) * cM_ssin(angle);
-        }
-    } else {
+            if (unk_flag != 0 && unk > 2000) {
+                s16* shorts = (&i_this->field_0x2DC);
+                if (shorts[unk_flag] == 0) {
+                    i_this->field_0x2DC = 0x50;
+                    i_this->field_0x2DC = REG0_S(3) + 40;
 
+                    dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                    fopAcM_seStartCurrent(i_this, JA_SE_OBJ_ST_CHIME, 0);
+
+                    i_this->field_0x2E4 = *(s16*) (bure_xa_d + unk_flag - 1);
+                    i_this->field_0x2E4 *= (s16) (REG17_S(4) + 1);
+                    i_this->field_0x2E6 = REG17_S(5) + 0x400;
+                }
+            }
+
+            if (REG0_S(1) == 0) {
+                i_this->shape_angle.y = -(i_this->current.angle.y - player->shape_angle.y);
+            } else {
+                i_this->shape_angle.y = i_this->current.angle.y - player->shape_angle.y;
+            }
+        }
+        else {
+            target_x_angle = 0;
+        }
+
+        cLib_addCalcAngleS2(&i_this->current.angle.x, target_x_angle, 4, REG0_S(1) + 0x200);
+        if (i_this->field_0x2DE != 0) {
+            i_this->field_0x2DE--;
+        }
+        if (i_this->field_0x2E0 != 0) {
+            i_this->field_0x2E0--;
+        }
+
+        s16 x = 0;
+        s16 z = 0;
+        f32 unk_f = 1.0f;
+
+        if (i_this->field_0x2DC != 0) {
+            i_this->field_0x2DC--;
+
+            s32 iVar10 = (s32) i_this->field_0x2DC;
+            f32 fVar1 = iVar10 * (REG0_F(16) + 40.0f);
+
+            x = (s16) (fVar1 * cM_ssin(iVar10 * (REG0_S(4) + 0x1900)));
+            z = (s16) (fVar1 * cM_scos(iVar10 * (REG0_S(5) + 0x2100)) * 0.25f);
+
+            if ((iVar10 & 1) != 0) {
+                unk_f = (iVar10 * (REG0_F(17) + 0.001f)) + 1.0f;
+            }
+
+            if (i_this->field_0x2DC == 0 && i_this->health == 3 && REG0_S(3) == 0) {
+                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+            }
+        }
+
+        cLib_addCalcAngleS2(&i_this->field_0x2E2, i_this->field_0x2E4, 4, i_this->field_0x2E6);
+        cLib_addCalcAngleS2(&i_this->field_0x2E4, 0, 1, REG17_S(6) + 0x80);
+        cLib_addCalcAngleS2(&i_this->field_0x2E6, REG17_S(7) + 0x100, 1, REG17_S(8) + 0x40);
+
+        MtxTrans(i_this->home.pos.x, i_this->home.pos.y, i_this->home.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+
+        MtxPush();
+        mDoMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
+        mDoMtx_XrotM(*calc_mtx, x + i_this->field_0x2E2);
+        mDoMtx_ZrotM(*calc_mtx, z);
+        mDoMtx_YrotM(*calc_mtx, -i_this->shape_angle.y);
+        MtxScale(unk_f, unk_f, unk_f, TRUE);
+        i_this->mpModel->setBaseTRMtx(*calc_mtx);
+
+
+        MtxPull();
+        mDoMtx_YrotM(*calc_mtx, i_this->shape_angle.y + REG0_S(5));
+        mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x + REG0_S(6));
+        mDoMtx_YrotM(*calc_mtx, -(i_this->shape_angle.y + REG0_S(5) + 0x4000));
+
+        MtxScale(unk_f, 1.0, unk_f, TRUE);
+        i_this->mpModel2->setBaseTRMtx(*calc_mtx);
+        MtxTrans(0.0, REG0_F(6) + -850.0f, 0.0, TRUE);
+
+        temp.setall(0.0f);
+        MtxPosition(&temp, &i_this->current.pos);
+
+        MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+        MtxScale(i_this->scale.x, i_this->scale.y, i_this->scale.z, TRUE);
+        cMtx_copy(*calc_mtx, i_this->field_0x2A8);
+        i_this->field_0x2D8->Move();
+    } else {
+        Mtx local_mtx;
+
+        MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+        if (i_this->type == 2 || i_this->type == 4) {
+            i_this->mpModel->setBaseTRMtx(*calc_mtx);
+        }
+
+        i_this->mpModel2->setBaseScale(i_this->scale);
+        i_this->mpModel2->setBaseTRMtx(*calc_mtx);
+        if (i_this->field_0x2A2) {
+            cMtx_scale(local_mtx, 4.0f, 4.0f, 4.0f);
+        } else {
+            cMtx_scale(local_mtx, i_this->scale.x, i_this->scale.y, i_this->scale.z);
+        }
+
+        cMtx_concat(*calc_mtx, local_mtx, i_this->field_0x2A8);
+        i_this->field_0x2D8->Move();
     }
 
     if (i_this->type == 2 || i_this->type == 4) {
+        BOOL is_switch = dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo());
 
-        if (dComIfGs_isSwitch(i_this->field_0x2A3, dComIfGp_roomControl_getStayNo()) == 0) {
+        if (!is_switch) {
+            if (i_this->health == 3 && i_this->field_0x308 == 0) {
+                i_this->field_0x308 = 1000;
+            }            
+        } else {
             i_this->current.pos.y = i_this->home.pos.y - 70.0f;
-        } else if (i_this->health == 3 && i_this->field_0x308 == 0) {
-            i_this->field_0x308 = 1000;
         }
 
         if (i_this->field_0x308 != 0) {
             i_this->field_0x308--;
 
-            if (i_this->field_0x308 == REG8_S(3) + 0x3CA) {
+            s16 finished = REG8_S(3) + 0x3CA;
+            if (i_this->field_0x308 == finished) {
                 if (i_this->type == 2) {
                     i_this->field_0x2E8 = 1;
                 } else {
                     fopAcM_seStart(i_this, JA_SE_OBJ_ROPE_SW_ON, 0);
-                    dComIfGs_onSwitch(i_this->field_0x2A3, fopAcM_GetRoomNo(i_this));
+                    dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
                     mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 }
             }
         }
-
         demo_camera(i_this);
     }
 
     i_this->eyePos = i_this->current.pos;
+    return TRUE;
 }
 
 /* 000012E4-000012EC       .text daKui_IsDelete__FP9kui_class */
@@ -293,74 +466,78 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
 /* 00001664-000018C8       .text daKui_Create__FP10fopAc_ac_c */
 static cPhs_State daKui_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
-    fopAcM_SetupActor(a_this, fopAc_ac_c);
+    kui_class* i_this;
+    cPhs_State result;
 
-    kui_class* i_this = (kui_class*)a_this;
-    cPhs_State result = dComIfG_resLoad(&i_this->mPhs, "Kui");
+    fopAcM_SetupActor(a_this, kui_class);
+    i_this = (kui_class*) a_this;
 
-    if (result != cPhs_COMPLEATE_e) {
-        return result;
-    }
-
-    u32 params = fopAcM_GetParam(a_this);
-    if (params == -1) {
-        return cPhs_ERROR_e;
-    }
-
-    i_this->type = params & 0xF;
-    i_this->field_0x2A2 = params & 0xF0;
-    i_this->field_0x2A1 = params >> 8;
-    i_this->field_0x2A3 = params >> 0x18;
-
-    if (i_this->field_0x2A3 == -1) {
-        i_this->field_0x2A3 = 0;
-    }
-    if (i_this->type == 3) {
-        i_this->field_0x2A1 = 4;
-    }
-
-    if (i_this->field_0x2A1 == 4) {
-        i_this->scale.setall(2.0f);
-    } else if (i_this->field_0x2A1 < 4) {
-        if (i_this->field_0x2A1 == 1) {
-            i_this->scale.x = 2.0f;
-            i_this->scale.y = 2.0f;
-        } else if (i_this->field_0x2A1 == 0) {
-            i_this->scale.x = 0.5f;
-            i_this->scale.y = 0.5f;
-        } else if (i_this->field_0x2A1 == 2) {
-            i_this->scale.x = 0.5f;
-            i_this->scale.y = 0.5f;
-        } else {
-            i_this->scale.x = 0.5f;
-            i_this->scale.y = 0.5f;
-            i_this->scale.z = 2.0f;
+    result = dComIfG_resLoad(&i_this->mPhs, "Kui");
+    if (result == cPhs_COMPLEATE_e) {
+        if (fopAcM_GetParam(a_this) == -1) {
+            return cPhs_ERROR_e;
         }
-    } else if (i_this->field_0x2A1 != 0xff && i_this->field_0x2A1 < 6) {
-        i_this->scale.x = 4.0f;
-        i_this->scale.y = REG0_F(2) + 2.0f;
-        i_this->scale.z = 4.0f;
-    }
 
-    if (!fopAcM_entrySolidHeap(i_this, &daKui_CreateHeap, 0x29f4)) {
-        return cPhs_ERROR_e;
-    }
+        i_this->type = fopAcM_GetParam(a_this) & 0xF;
+        i_this->field_0x2A2 = fopAcM_GetParam(a_this) & 0xF0;
+        i_this->field_0x2A1 = fopAcM_GetParam(a_this) >> 8;
+        i_this->mSwitchNo = fopAcM_GetParam(a_this) >> 0x18;
 
-    if (dComIfG_Bgsp()->Regist(i_this->field_0x2D8, i_this)) {
-        return cPhs_ERROR_e;
-    }
+        if (i_this->mSwitchNo == 0xFF) {
+            i_this->mSwitchNo = 0;
+        }
+        if (i_this->type == 3) {
+            i_this->field_0x2A1 = 4;
+        }
 
-    fopAcM_SetMtx(i_this, i_this->mpModel2->getBaseTRMtx());
-    if (i_this->type >= 2) {
-        fopAcM_SetMin(i_this, -200.0f, -1000.0f, -200.0f);
-        fopAcM_SetMax(i_this, 200.0f, 2000.0f, 200.0f);
-    } else {
-        fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
-        fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
-    }
+        switch (i_this->field_0x2A1) {
+            case 0:
+                i_this->scale.x = 0.5f;
+                i_this->scale.y = 0.5f;
+                break;
+            case 1:
+                i_this->scale.x = 2.0f;
+                i_this->scale.y = 2.0f;
+                break;
+            case 2:
+                i_this->scale.z = 2.0f;
+                break;
+            case 3:
+                i_this->scale.x = 0.5f;
+                i_this->scale.y = 0.5f;
+                i_this->scale.z = 2.0f;
+                break;
+            case 4:
+                i_this->scale.setall(2.0f);
+                break;
+            case 5:
+                i_this->scale.x = 4.0f;
+                i_this->scale.y = REG0_F(2) + 2.0f;
+                i_this->scale.z = 4.0f;
+                break;
+            case 0xff:
+            default:
+                break;
+        }
 
-    return cPhs_COMPLEATE_e;
+        if (!fopAcM_entrySolidHeap(i_this, &daKui_CreateHeap, 0x29f4)) {
+            return cPhs_ERROR_e;
+        }
+
+        if (dComIfG_Bgsp()->Regist(i_this->field_0x2D8, i_this)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(i_this, i_this->mpModel2->getBaseTRMtx());
+        if (i_this->type >= 2) {
+            fopAcM_SetMin(i_this, -200.0f, -1000.0f, -200.0f);
+            fopAcM_SetMax(i_this, 200.0f, 2000.0f, 200.0f);
+        } else {
+            fopAcM_SetMin(i_this, -200.0f, -200.0f, -200.0f);
+            fopAcM_SetMax(i_this, 200.0f, 200.0f, 200.0f);
+        }
+    }
+    return result;
 }
 
 static actor_method_class l_daKui_Method = {
