@@ -255,7 +255,7 @@ void dMenu_Option_c::titleMove() {
     f32 f30 = rotate_angle * (1.0f - alpha);
 
     if (mC80[0].mUserArea == 8) {
-        mDoAud_seStart(0x84e, NULL, 0, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_STR, NULL, 0, 0);
     }
 
     float y = 1.0f - alpha;
@@ -396,7 +396,7 @@ void dMenu_Option_c::yazAnime() {
         m858[0].pane->move(x, y);
     }
 
-    if (m858[0].mUserArea >= 0x14) {
+    if (m858[0].mUserArea >= 20) {
         m858[0].mUserArea = 0;
     }
 }
@@ -433,7 +433,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                 }
                 cursorMove();
                 noteSet();
-                mDoAud_seStart(0x80e, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
             }
             break;
         }
@@ -445,7 +445,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                 }
                 cursorMove();
                 noteSet();
-                mDoAud_seStart(0x80e, NULL, 0, 0);
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
             }
             break;
         }
@@ -459,7 +459,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3C = 1;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     break;
                 }
                 case 1: {
@@ -470,7 +470,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3D = 1;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     ;
                     break;
                 }
@@ -482,7 +482,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3E = 0;
                     }
                     m858[1].mUserArea = 6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     mDoAud_setOutputMode(soundMode[mE3E]);
                     setSoundMode(soundMode[mE3E]);
                     break;
@@ -497,7 +497,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                             g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
                         }
                         m858[1].mUserArea = 6;
-                        mDoAud_seStart(0x84f, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     }
                     break;
                 }
@@ -515,7 +515,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3C = 1;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     break;
                 }
                 case 1: {
@@ -526,7 +526,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3D = 1;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     break;
                 }
                 case 3: {
@@ -537,7 +537,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                         mE3E = 2;
                     }
                     m858[1].mUserArea = -6;
-                    mDoAud_seStart(0x84f, NULL, 0, 0);
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     mDoAud_setOutputMode(soundMode[mE3E]);
                     setSoundMode(soundMode[mE3E]);
                     break;
@@ -552,7 +552,7 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                             g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
                         }
                         m858[1].mUserArea = -6;
-                        mDoAud_seStart(0x84f, NULL, 0, 0);
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
                     }
                     break;
                 }
@@ -809,7 +809,7 @@ void dMenu_Option_c::_move() {
         dComIfGp_setNowVibration(mE3F);
         dComIfGs_setOptSound(mE3E);
 
-        mDoAud_seStart(0x84D, NULL, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
     }
     else if (CPad_CHECK_TRIG_B(0) && 
             !CPad_CHECK_TRIG_START(0) && 
@@ -822,7 +822,7 @@ void dMenu_Option_c::_move() {
         mE40 = 3;
         mE41 = 1;
         mC80[0].mUserArea = 0;
-        mDoAud_seStart(0x84D, NULL, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
     }
     else {
         if (!check_trigger) {
@@ -881,7 +881,7 @@ void dMenu_Option_c::_move() {
 
 /* 801D576C-801D5C04       .text _draw__14dMenu_Option_cFv */
 void dMenu_Option_c::_draw() {
-    /* Nonmatching */ 
+    /* Nonmatching - probably some inlining, tried using `setAlpha` and `getAlpha` but didn't work */ 
     if (mE41 == 0) {
         fopMsgM_setAlpha(&m008);
         fopMsgM_setAlpha(&m040);
@@ -945,7 +945,7 @@ void dMenu_Option_c::_draw() {
         }
 
         for (int i = 0; i < 6; i++) {
-            mAC0[i].pane->setAlpha(mB30[i].pane->getAlpha() * alpha_scale);
+            mAC0[i].pane->mAlpha = mB30[i].pane->mAlpha * alpha_scale;
         }
 
         mCF0.pane->mAlpha *= alpha_scale;
