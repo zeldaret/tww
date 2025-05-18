@@ -1353,7 +1353,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kanban"),
     ActorRel(NonMatching, "d_a_ki"),
     ActorRel(NonMatching, "d_a_knob00"),
-    ActorRel(NonMatching, "d_a_kui"),
+    ActorRel(Matching, "d_a_kui"),
     ActorRel(Matching,    "d_a_kytag00"),
     ActorRel(Matching,    "d_a_kytag01"),
     ActorRel(NonMatching, "d_a_kytag02"),

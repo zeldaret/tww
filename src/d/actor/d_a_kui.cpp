@@ -49,9 +49,9 @@ static btd_class* search_btd(kui_class* i_this) {
 /* 00000168-0000037C       .text setEffectMtx__FP10fopAc_ac_cP12J3DModelDataf */
 static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scale) {
     static Mtx mtx_adj = {
-        5.785636E-39f, 0.0f, 0.0f, 5.785636E-39f,
-        0.0f, 1.754058E-38f, 0.0f, 5.785636E-39f,
-        0.0f, 0.0f, 5.831554E-39f, 0.0f,
+        0.5f, 0.0f, 0.0f, 0.5f,
+        0.0f, -0.5f, 0.0f, 0.5f,
+        0.0f, 0.0f, 1.0f, 0.0f,
     };
     cXyz& eyePos = a_this->eyePos;
     camera_class* camera = dCam_getCamera();
@@ -201,36 +201,39 @@ static void demo_camera(kui_class* i_this) {
 
 /* 00000920-000012E4       .text daKui_Execute__FP9kui_class */
 static BOOL daKui_Execute(kui_class* i_this) {
-    /* Nonmatching */
-    static s16 bure_xa_d[2] = {0x10, 0xF0};
+    fopAc_ac_c* actor = i_this;
+    static s16 bure_xa_d[2] = {0x1000, 0xF000};
 
-    s16 target_x_angle;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    cXyz temp2;
     cXyz temp;
+    daPy_py_c* player;
+    s16 target_x_angle;
+    Mtx local_mtx;
+
+    player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     if (i_this->field_0x2A2 != 0) {
         dr2_class* dragon_tail = search_dragontail(i_this);
         btd_class* btd = search_btd(i_this);
 
-        if (dragon_tail == NULL || btd == NULL) {
-            i_this->current.pos.set(0.0f, -10000.0f, 0.0f);
-        } else {
-            // TODO: needs fields from dr2_class and btd_class
-            if (false) {
-
+        if (dragon_tail != NULL && btd != NULL) {
+            if ((dragon_tail->field_0x4BA == 0 || dragon_tail->field_0x4BA >= 10) && btd->field_0x2e4 < 10) {
+                actor->current.pos = dragon_tail->field_0x3B0;
+                actor->current.angle = dragon_tail->current.angle;
             } else {
-                i_this->current.pos.set(0.0f, -10000.0f, 0.0f);
+                actor->current.pos.set(0.0f, -10000.0f, 0.0f);
             }
+        } else {
+            actor->current.pos.set(0.0f, -10000.0f, 0.0f);
         }
     }
 
     if (i_this->type == 3) {
-        if (i_this->health == 3) {
+        if (actor->health == 3) {
+            temp2 = player->getLeftHandPos() - actor->home.pos;
+            cMtx_YrotS(*calc_mtx, -player->shape_angle.y);
 
-            cXyz hand_vec = i_this->home.pos - player->getLeftHandPos();
-            cMtx_YrotS(*calc_mtx, -i_this->shape_angle.y);
-
-            MtxPosition(&hand_vec, &temp);
+            MtxPosition(&temp2, &temp);
             temp.z *= REG0_F(1) + 1.0f;
 
             if (REG0_S(0) == 0) {
@@ -238,10 +241,9 @@ static BOOL daKui_Execute(kui_class* i_this) {
             } else {
                 target_x_angle = (s32) cM_atan2s(temp.z, -temp.y);
             }
-            s16 unk = std::fabsf((REG0_F(2) + 3000.0f) * cM_ssin(i_this->shape_angle.y));
+            s16 unk = std::fabsf((REG0_F(2) + 3000.0f) * cM_ssin(actor->shape_angle.y));
 
             s8 unk_flag = 0;
-            
             if (target_x_angle > unk) {
                 target_x_angle = unk;
                 unk_flag = 1;
@@ -251,13 +253,14 @@ static BOOL daKui_Execute(kui_class* i_this) {
             }
 
             if (unk_flag != 0 && unk > 2000) {
-                s16* shorts = (&i_this->field_0x2DC);
-                if (shorts[unk_flag] == 0) {
-                    i_this->field_0x2DC = 0x50;
+                s16* shorts_array = (&i_this->field_0x2DC);
+                s16& unk_short = shorts_array[unk_flag];
+                if (unk_short == 0) {
+                    unk_short = 0x50;
                     i_this->field_0x2DC = REG0_S(3) + 40;
 
                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                    fopAcM_seStartCurrent(i_this, JA_SE_OBJ_ST_CHIME, 0);
+                    fopAcM_seStartCurrent(actor, JA_SE_OBJ_ST_CHIME, 0);
 
                     i_this->field_0x2E4 = *(s16*) (bure_xa_d + unk_flag - 1);
                     i_this->field_0x2E4 *= (s16) (REG17_S(4) + 1);
@@ -266,16 +269,16 @@ static BOOL daKui_Execute(kui_class* i_this) {
             }
 
             if (REG0_S(1) == 0) {
-                i_this->shape_angle.y = -(i_this->current.angle.y - player->shape_angle.y);
+                actor->shape_angle.y = -(actor->current.angle.y - player->shape_angle.y);
             } else {
-                i_this->shape_angle.y = i_this->current.angle.y - player->shape_angle.y;
+                actor->shape_angle.y = actor->current.angle.y - player->shape_angle.y;
             }
         }
         else {
             target_x_angle = 0;
         }
 
-        cLib_addCalcAngleS2(&i_this->current.angle.x, target_x_angle, 4, REG0_S(1) + 0x200);
+        cLib_addCalcAngleS2(&actor->current.angle.x, target_x_angle, 4, REG0_S(1) + 0x200);
         if (i_this->field_0x2DE != 0) {
             i_this->field_0x2DE--;
         }
@@ -300,8 +303,8 @@ static BOOL daKui_Execute(kui_class* i_this) {
                 unk_f = (iVar10 * (REG0_F(17) + 0.001f)) + 1.0f;
             }
 
-            if (i_this->field_0x2DC == 0 && i_this->health == 3 && REG0_S(3) == 0) {
-                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+            if (i_this->field_0x2DC == 0 && actor->health == 3 && REG0_S(3) == 0) {
+                dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(actor));
             }
         }
 
@@ -309,50 +312,48 @@ static BOOL daKui_Execute(kui_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x2E4, 0, 1, REG17_S(6) + 0x80);
         cLib_addCalcAngleS2(&i_this->field_0x2E6, REG17_S(7) + 0x100, 1, REG17_S(8) + 0x40);
 
-        MtxTrans(i_this->home.pos.x, i_this->home.pos.y, i_this->home.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+        MtxTrans(actor->home.pos.x, actor->home.pos.y, actor->home.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
 
         MtxPush();
-        mDoMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
+        mDoMtx_YrotM(*calc_mtx, actor->shape_angle.y);
         mDoMtx_XrotM(*calc_mtx, x + i_this->field_0x2E2);
         mDoMtx_ZrotM(*calc_mtx, z);
-        mDoMtx_YrotM(*calc_mtx, -i_this->shape_angle.y);
+        mDoMtx_YrotM(*calc_mtx, -actor->shape_angle.y);
         MtxScale(unk_f, unk_f, unk_f, TRUE);
         i_this->mpModel->setBaseTRMtx(*calc_mtx);
 
 
         MtxPull();
-        mDoMtx_YrotM(*calc_mtx, i_this->shape_angle.y + REG0_S(5));
-        mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x + REG0_S(6));
-        mDoMtx_YrotM(*calc_mtx, -(i_this->shape_angle.y + REG0_S(5) + 0x4000));
+        mDoMtx_YrotM(*calc_mtx, actor->shape_angle.y + REG0_S(5));
+        mDoMtx_XrotM(*calc_mtx, actor->current.angle.x + REG0_S(6));
+        mDoMtx_YrotM(*calc_mtx, -(actor->shape_angle.y + REG0_S(5) + 0x4000));
 
         MtxScale(unk_f, 1.0, unk_f, TRUE);
         i_this->mpModel2->setBaseTRMtx(*calc_mtx);
         MtxTrans(0.0, REG0_F(6) + -850.0f, 0.0, TRUE);
 
-        temp.setall(0.0f);
-        MtxPosition(&temp, &i_this->current.pos);
+        temp2.setall(0.0f);
+        MtxPosition(&temp2, &actor->current.pos);
 
-        MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-        MtxScale(i_this->scale.x, i_this->scale.y, i_this->scale.z, TRUE);
+        MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
+        MtxScale(actor->scale.x, actor->scale.y, actor->scale.z, TRUE);
         cMtx_copy(*calc_mtx, i_this->field_0x2A8);
         i_this->field_0x2D8->Move();
     } else {
-        Mtx local_mtx;
-
-        MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+        MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, FALSE);
+        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
         if (i_this->type == 2 || i_this->type == 4) {
             i_this->mpModel->setBaseTRMtx(*calc_mtx);
         }
 
-        i_this->mpModel2->setBaseScale(i_this->scale);
+        i_this->mpModel2->setBaseScale(actor->scale);
         i_this->mpModel2->setBaseTRMtx(*calc_mtx);
         if (i_this->field_0x2A2) {
             cMtx_scale(local_mtx, 4.0f, 4.0f, 4.0f);
         } else {
-            cMtx_scale(local_mtx, i_this->scale.x, i_this->scale.y, i_this->scale.z);
+            cMtx_scale(local_mtx, actor->scale.x, actor->scale.y, actor->scale.z);
         }
 
         cMtx_concat(*calc_mtx, local_mtx, i_this->field_0x2A8);
@@ -363,11 +364,11 @@ static BOOL daKui_Execute(kui_class* i_this) {
         BOOL is_switch = dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo());
 
         if (!is_switch) {
-            if (i_this->health == 3 && i_this->field_0x308 == 0) {
+            if (actor->health == 3 && i_this->field_0x308 == 0) {
                 i_this->field_0x308 = 1000;
             }            
         } else {
-            i_this->current.pos.y = i_this->home.pos.y - 70.0f;
+            actor->current.pos.y = actor->home.pos.y - 70.0f;
         }
 
         if (i_this->field_0x308 != 0) {
@@ -378,8 +379,8 @@ static BOOL daKui_Execute(kui_class* i_this) {
                 if (i_this->type == 2) {
                     i_this->field_0x2E8 = 1;
                 } else {
-                    fopAcM_seStart(i_this, JA_SE_OBJ_ROPE_SW_ON, 0);
-                    dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(i_this));
+                    fopAcM_seStartCurrent(actor, JA_SE_OBJ_ROPE_SW_ON, 0);
+                    dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(actor));
                     mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 }
             }
@@ -387,7 +388,7 @@ static BOOL daKui_Execute(kui_class* i_this) {
         demo_camera(i_this);
     }
 
-    i_this->eyePos = i_this->current.pos;
+    actor->eyePos = actor->current.pos;
     return TRUE;
 }
 
