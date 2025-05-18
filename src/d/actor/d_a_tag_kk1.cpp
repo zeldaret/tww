@@ -13,6 +13,7 @@ static daTag_Kk1_HIO_c l_HIO;
 
 static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
 
+/* 000000EC-00000120       .text __ct__15daTag_Kk1_HIO_cFv */
 daTag_Kk1_HIO_c::daTag_Kk1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
         350.0f,
@@ -40,7 +41,7 @@ bool daTag_Kk1_c::_execute() {
     f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
     mTagSet = false;
     if (
-        (distance < l_HIO.mHorizontalDistance) && (vert_distance< l_HIO.mVerticalDistance)
+        (distance < l_HIO.prm.mHorizontalDistance) && (vert_distance< l_HIO.prm.mVerticalDistance)
     ){
         s16 angle_deviation = dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y;
         angle_deviation =abs(angle_deviation);
