@@ -15,6 +15,10 @@ public:
 
 public:
     cM3dGPla() {}
+    cM3dGPla(const cXyz* normal, f32 d) {
+        mNormal = *normal;
+        mD = d;
+    }
     void CalcAngleXz(short* pAngleX, short* pAngleY) const;
     void SetupNP0(const Vec& pNormal, const Vec& pPoint);
     
@@ -57,9 +61,6 @@ public:
     }
     
     virtual ~cM3dGPla() {}
-
-    // TODO
-    cM3dGPla(const cXyz*, f32) {}
 };  // Size: 0x14
 
 STATIC_ASSERT(sizeof(cM3dGPla) == 0x14);

@@ -15,16 +15,14 @@ int daPy_npc_c::check_initialRoom() {
         mAcch.CrrPos(*dComIfG_Bgsp());
         if (mAcch.GetGroundH() == C_BG_MIN_HEIGHT || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
             return 0;
-        } else {
-            int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-            if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
-                return 0;
-            } else {
-                fopAcM_SetHomeRoomNo(this, roomNo);
-                fopAcM_SetRoomNo(this, roomNo);
-                return -1;
-            }
         }
+        int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
+            return 0;
+        }
+        fopAcM_SetHomeRoomNo(this, roomNo);
+        fopAcM_SetRoomNo(this, roomNo);
+        return -1;
     }
     return 1;
 }

@@ -19,7 +19,7 @@ public:
     /* 0x02C2 */ u8 mStartsInactive;
     /* 0x02C3 */ u8 mSwitch;
     /* 0x02C4 */ u8 mAction;
-    /* 0x02C5 */ u8 mState;
+    /* 0x02C5 */ u8 mMode;
     /* 0x02C6 */ u8 mHugeKnockback;
     /* 0x02C7 */ bool mbIsBodyBeingHit;
     /* 0x02C8 */ s16 mCountDownTimers[4];

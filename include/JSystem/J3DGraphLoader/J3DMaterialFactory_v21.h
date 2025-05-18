@@ -7,24 +7,24 @@
 
 class J3DMaterial;
 struct J3DMaterialBlock_v21;
-class J3DMaterialInitData_v21;
-class J3DIndInitData;
-class J3DColorChanInfo;
+struct J3DMaterialInitData_v21;
+struct J3DIndInitData;
+struct J3DColorChanInfo;
 class J3DLightInfo;
-class J3DTexCoordInfo;
-class J3DTexCoord2Info;
-class J3DTexMtxInfo;
-class J3DTevOrderInfo;
-class J3DTevStageInfo;
-class J3DTevSwapModeInfo;
-class J3DTevSwapModeTableInfo;
-class J3DFogInfo;
-class J3DAlphaCompInfo;
-class J3DBlendInfo;
-class J3DZModeInfo;
-class J3DNBTScaleInfo;
-class J3DDisplayListInit;
-class J3DPatchingInfo;
+struct J3DTexCoordInfo;
+struct J3DTexCoord2Info;
+struct J3DTexMtxInfo;
+struct J3DTevOrderInfo;
+struct J3DTevStageInfo;
+struct J3DTevSwapModeInfo;
+struct J3DTevSwapModeTableInfo;
+struct J3DFogInfo;
+struct J3DAlphaCompInfo;
+struct J3DBlendInfo;
+struct J3DZModeInfo;
+struct J3DNBTScaleInfo;
+struct J3DDisplayListInit;
+struct J3DPatchingInfo;
 class J3DCurrentMtxInfo;
 
 struct J3DMaterialInitData_v21 {

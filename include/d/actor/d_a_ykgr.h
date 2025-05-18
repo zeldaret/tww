@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-class dPath;
+struct dPath;
 class JPABaseEmitter;
 class JPABaseParticle;
 

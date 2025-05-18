@@ -151,9 +151,8 @@ void raincnt_set(f32 count) {
     s32 newCount = 0;
 
     if (dKy_checkEventNightStop()) {
-        s32 newCount2;
-        if (g_env_light.mRainCount < (newCount2 = (count * count * count) * 250.0f))
-            newCount = newCount2;
+        if (g_env_light.mRainCount < (s32)((count * count * count) * 250.0f))
+            newCount = (count * count * count) * 250.0f;
     } else {
         newCount = (count * count * count) * 250.0f;
     }

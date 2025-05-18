@@ -179,15 +179,15 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setPos(const cXyz* pos) { mPos = *pos; }
     cXyz& getPos() { return mPos; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
-    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
 class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
@@ -264,13 +264,14 @@ public:
     }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
-    static void getEyeMoveFlg() {}
-    static void getMabaFlg() {}
-    static void getMabaTimer() {}
+    static u8 getEyeMoveFlg() { return m_eye_move_flg; }
+    static u8 getMabaFlg() { return m_maba_flg; }
+    static u8 getMabaTimer() { return m_maba_timer; }
+    static u8 getMorfFrame() { return m_morf_frame; }
     static void getNowOffsetXP() {}
     static void getNowOffsetYP() {}
-    static void offEyeMoveFlg() {}
-    static void onEyeMoveFlg() {}
+    static void offEyeMoveFlg() { m_eye_move_flg = 0; }
+    static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
     static void setNowOffsetX(f32) {}
@@ -311,18 +312,21 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x002 - 0x000];
     // TODO: is this right?
+    /* 0x000 */ u8 field_0x000;
+    /* 0x001 */ u8 field_0x001;
     /* 0x002 */ s16 field_0x002;
-    /* 0x004 */ u8 field_0x004[0x008 - 0x004];
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
     /* 0x008 */ s16 field_0x008;
     /* 0x00A */ s16 field_0x00A;
-    /* 0x00C */ u8 field_0x00C[0x018 - 0x00C];
+    /* 0x00C */ cXyz field_0x00C;
     /* 0x018 */ cXyz field_0x018;
-    /* 0x018 */ u8 field_0x024[0x034 - 0x024];
+    /* 0x024 */ cXyz field_0x024;
+    /* 0x030 */ f32 field_0x030;
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
     /* 0x088 */ Mtx field_0x088[3];
-};
+};  // Size: 0x118
 
 struct daPy_aura_c {
 public:
@@ -930,7 +934,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    s32 checkNormalFace();
+    u16 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -941,11 +945,11 @@ public:
     void playTextureAnime();
     BOOL checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
-    void setItemModel();
+    s32 setItemModel();
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
-    void setDrawHandModel();
+    s32 setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
     void hideHatAndBackle(J3DMaterial*);
@@ -968,7 +972,7 @@ public:
     void posMove();
     void setShapeAngleToAtnActor();
     BOOL cancelItemUpperReadyAnime();
-    BOOL checkBodyAngleX(s16);
+    s16 checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
@@ -1007,13 +1011,13 @@ public:
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
-    BOOL checkNextActionItemFly();
+    void checkNextActionItemFly();
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
-    void changeWaitProc();
+    BOOL changeWaitProc();
     BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
@@ -1140,7 +1144,7 @@ public:
     BOOL procNotUse_init(int);
     BOOL procNotUse();
     s16 getGroundAngle(cBgS_PolyInfo*, s16);
-    void setLegAngle(f32, int, s16*, s16*);
+    int setLegAngle(f32, int, s16*, s16*);
     void footBgCheck();
     void setWaterY();
     void autoGroundHit();
@@ -1187,7 +1191,7 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
     BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
     BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
     BOOL resetActAnimeUpper(daPy_UPPER, f32);
@@ -1399,7 +1403,7 @@ public:
     f32 getCrawlMoveAnmSpeed();
     f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
-    void changeCrawlAutoMoveProc(cXyz*);
+    BOOL changeCrawlAutoMoveProc(cXyz*);
     int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);
@@ -1545,9 +1549,9 @@ public:
     void throwBoomerang();
     int returnBoomerang();
     BOOL checkNextActionBoomerangReady();
-    BOOL checkNextActionBoomerangFly();
+    void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
-    int changeBoomerangCatchProc();
+    BOOL changeBoomerangCatchProc();
     BOOL procBoomerangSubject_init();
     BOOL procBoomerangSubject();
     BOOL procBoomerangMove_init();
@@ -1738,6 +1742,9 @@ public:
     bool checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
     bool checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
     bool checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
+    bool checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
+    bool checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
+    bool checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
     bool checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
@@ -1828,9 +1835,6 @@ public:
     void checkAttentionLock() {}
     void checkBoomerangRock() {}
     void checkBothItemEquipAnime() const {}
-    void checkBowReloadAnime() const {}
-    void checkBowShootAnime() const {}
-    void checkBowWaitAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
@@ -1841,8 +1845,8 @@ public:
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
     void getAnmSpeedStickRate(f32, f32) {}
-    void getBombWaterPillarBrk() {}
-    void getBombWaterPillarBtk() {}
+    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
+    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
     void seStartSystem(u32) {}

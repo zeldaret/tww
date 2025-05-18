@@ -37,6 +37,8 @@ struct mesg_header : JUTDataFileHeader {
 };
 
 struct mesg_entry {
+    // mesg_entry() {} // fixes fopMsgM_selectMessageGet, but messes up getMesgEntry
+
     /* 0x00 */ u32 mDataOffs;
     /* 0x04 */ u16 mMesgID;
     /* 0x06 */ s16 mItemPrice;
@@ -50,7 +52,10 @@ struct mesg_entry {
     /* 0x11 */ u8 mInitialSound;
     /* 0x12 */ u8 mInitialCamera;
     /* 0x13 */ u8 mInitialAnimation;
-    /* 0x14 */ u8 field_0x14[4];
+    /* 0x14 */ u8 field_0x14;
+    /* 0x15 */ u8 field_0x15;
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 field_0x17;
 };
 
 struct mesg_info : JUTDataBlockHeader {
@@ -144,8 +149,7 @@ static struct {
     /* 0x3B */ {PRESIDENT_STATUE, "beast_12.bti"},
 };
 
-class mesg_header;
-class fopMsgM_pane_alpha_class;
+struct fopMsgM_pane_alpha_class;
 
 
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
@@ -594,6 +598,7 @@ u32 fopMsgM_tactMessageSet() {
 
 /* 8002BB78-8002BDBC       .text fopMsgM_messageGet__FPcUl */
 char* fopMsgM_messageGet(char* dst, u32 msgNo) {
+    /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgID = 0;
@@ -647,10 +652,12 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     }
 
     dst[numRead] = '\0';
+    return dst;
 }
 
 /* 8002BE04-8002C02C       .text fopMsgM_passwordGet__FPcUl */
 void fopMsgM_passwordGet(char* dst, u32 msgNo) {
+    /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mMsgID = 0;
@@ -708,6 +715,7 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
 
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
 void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3, char* param_4, char* param_5, char* param_6, u32 param_7) {
+    /* Nonmatching */
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
@@ -1425,7 +1433,8 @@ mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* msg) {
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
 mesg_entry fopMsgM_msgGet_c::getMesgEntry(mesg_header* msg) {
-    return getMesgInfo(msg)->mEntries[mMsgIdx];
+    mesg_info* info = getMesgInfo(msg);
+    return info->mEntries[mMsgIdx];
 }
 
 /* 8002E378-8002E430       .text getMessage__16fopMsgM_msgGet_cFP11mesg_header */
@@ -1490,7 +1499,8 @@ mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* msg) {
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
 mesg_entry fopMsgM_itemMsgGet_c::getMesgEntry(mesg_header* msg) {
-    return getMesgInfo(msg)->mEntries[mMsgIdx];
+    mesg_info* info = getMesgInfo(msg);
+    return info->mEntries[mMsgIdx];
 }
 
 /* 8002E54C-8002E5FC       .text getMessage__20fopMsgM_itemMsgGet_cFP11mesg_header */

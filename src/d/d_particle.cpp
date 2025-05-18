@@ -562,6 +562,7 @@ dPa_smokePcallBack dPa_control_c::mSmokePcallback;
 dPa_singleRippleEcallBack dPa_control_c::mSingleRippleEcallBack;
 dPa_ripplePcallBack dPa_control_c::mRipplePcallBack;
 dPa_bombSmokeEcallBack dPa_control_c::mBombSmokeEcallBack;
+Mtx dPa_control_c::mWindViewMatrix;
 u8 dPa_control_c::mStatus;
 
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */
@@ -1058,7 +1059,7 @@ void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter* param_1, const cXyz* param_2,
     mpBaseEmitter = param_1;
     field_0x6 = 0;
     field_0x5 = 0;
-    field_0x4 = 0xFF;
+    mAlpha = 0xFF;
 }
 
 /* 8007E9D4-8007EAC4       .text executeAfter__22dPa_cutTurnEcallBack_cFP14JPABaseEmitter */

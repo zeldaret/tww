@@ -45,6 +45,10 @@ extern int __cntlzw(uint);
 extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
 
+#ifndef __MWERKS__
+extern void __sync();
+#endif
+
 #define VERSION_JPN 0
 #define VERSION_USA 1
 #define VERSION_PAL 2

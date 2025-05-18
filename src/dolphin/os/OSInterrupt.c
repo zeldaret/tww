@@ -2,11 +2,13 @@
 #include "dolphin/dsp.h"
 #include "dolphin/exi/EXIBios.h"
 #include "dolphin/os/OS.h"
+#include <string.h>
 
 vu32 __PIRegs[12] AT_ADDRESS(0xCC003000);
 vu16 __MEMRegs[64] AT_ADDRESS(0xCC004000);
 
 ASM BOOL OSDisableInterrupts(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -23,9 +25,11 @@ ASM BOOL OSDisableInterrupts(void) {
     rlwinm r3, r3, 17, 31, 31
     blr
     // clang-format on
+#endif
 }
 
 ASM BOOL OSEnableInterrupts(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -38,9 +42,11 @@ ASM BOOL OSEnableInterrupts(void) {
     rlwinm r3, r3, 17, 31, 31
     blr
     // clang-format on
+#endif
 }
 
 ASM BOOL OSRestoreInterrupts(register BOOL status) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -62,6 +68,7 @@ set_msr:
     rlwinm r3, r4, 17, 31, 31
     blr
     // clang-format on
+#endif
 }
 
 static __OSInterruptHandler* InterruptHandlerTable;
@@ -401,6 +408,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
 }
 
 static ASM void ExternalInterruptHandler(register __OSInterrupt type, register OSContext* context) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -427,4 +435,5 @@ static ASM void ExternalInterruptHandler(register __OSInterrupt type, register O
     stwu r1, -8(r1)
     b __OSDispatchInterrupt
     // clang-format on
+#endif
 }

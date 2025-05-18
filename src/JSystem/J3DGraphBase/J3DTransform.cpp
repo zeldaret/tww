@@ -12,6 +12,22 @@
 // that forces it into .data instead because the size is unknown when it's used. Even const is ignored.
 f32 PSMulUnit01[2] = { 0.0f, -1.0f };
 
+const J3DTransformInfo j3dDefaultTransformInfo = {
+    { 1.0f, 1.0f, 1.0f },
+    { 0, 0, 0 },
+    { 0.0f, 0.0f, 0.0f },
+};
+
+const Vec j3dDefaultScale = { 1.0f, 1.0f, 1.0f };
+
+const Mtx j3dDefaultMtx = {
+    { 1.0f, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f, 0.0f },
+};
+
+f32 Unit01[2] = { 0.0f, 1.0f };
+
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
 void __MTGQR7(register u32 v) {
 #ifdef __MWERKS__

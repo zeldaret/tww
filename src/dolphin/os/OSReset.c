@@ -1,5 +1,6 @@
 #include "dolphin/os/OSReset.h"
 #include "dolphin/os/OS.h"
+#include <string.h>
 
 vu16 __VIRegs[59] AT_ADDRESS(0xCC002000);
 OSThreadQueue __OSActiveThreadQueue AT_ADDRESS(OS_BASE_CACHED | 0x00DC);

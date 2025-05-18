@@ -26,6 +26,10 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_machine.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "d/d_a_obj.h"
+#include "d/actor/d_a_tsubo.h"
+#include "d/actor/d_a_npc_cb1.h"
+
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -45,7 +49,11 @@ namespace {
     }
 
     inline static bool isPlayerGuarding(u32 param_0) {
-        return dComIfGp_checkPlayerStatus1(param_0, 0x80000) ||  daNpc_Md_c::m_mirror;
+        return dComIfGp_checkPlayerStatus1(param_0, daPyStts1_UNK80000_e) || daNpc_Md_c::isMirror();
+    }
+
+    inline static bool isPlayerFlying(u32 param_0) {
+        return dComIfGp_checkPlayerStatus1(param_0, daPyStts1_DEKU_LEAF_FLY_e) || daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying();
     }
 
     inline static fopAc_ac_c* get_boomerang_actor(fopAc_ac_c* actor) {
@@ -71,10 +79,6 @@ namespace {
         }
 
         return false;
-    }
-
-    inline static void hideActor(fopAc_ac_c* actor) {
-        fopAcM_OnStatus(actor, 0x1000000);
     }
 
     inline static int get_camera_id(camera_class* i_camera) {
@@ -129,6 +133,7 @@ namespace {
 
 engine_fn dCamera_c::engine_tbl[] = {
     &dCamera_c::letCamera,
+    &dCamera_c::followCamera,
     &dCamera_c::lockonCamera,
     &dCamera_c::talktoCamera,
     &dCamera_c::subjectCamera,
@@ -136,17 +141,16 @@ engine_fn dCamera_c::engine_tbl[] = {
     &dCamera_c::fixedFrameCamera,
     &dCamera_c::towerCamera,
     &dCamera_c::rideCamera,
+    &dCamera_c::hungCamera,
     &dCamera_c::manualCamera,
     &dCamera_c::eventCamera,
-    &dCamera_c::hookshotCamera,
-    &dCamera_c::followCamera2,
-    &dCamera_c::followCamera,
     &dCamera_c::crawlCamera,
+    &dCamera_c::hookshotCamera,
     &dCamera_c::tornadoCamera,
-    &dCamera_c::hungCamera,
     &dCamera_c::vomitCamera,
     &dCamera_c::shieldCamera,
     &dCamera_c::nonOwnerCamera,
+    &dCamera_c::followCamera2,
     &dCamera_c::demoCamera,
 };
 
@@ -256,16 +260,16 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
         }
     }
 
-    mCurStyle = types[mCurType].mStyles[0][mCurMode];
+    mCurStyle = types[mCurType].mStyles[mCurMode];
     mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
     mStageMapToolCameraIdx = 0xFF;
     m0E8 = -1;
     mEventData.field_0x14 = -1;
     mEventData.field_0x18 = -1;
-    mEventData.field_0x04 = -1;
+    mEventData.mStaffIdx = -1;
     mEventData.field_0x0c = -1;
     mRoomNo = -1;
-    m318 = -1e+09f;
+    m318 = C_BG_MIN_HEIGHT;
     mBG.m5C.m58 = C_BG_MIN_HEIGHT;
     mBG.m00.m58 = C_BG_MIN_HEIGHT;
     mBG.m00.m04.OffNormalGrp();
@@ -428,7 +432,7 @@ bool dCamera_c::ChangeModeOK(s32 param_1) {
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
         return 0;
     }
-    return !(types[mCurType].mStyles[0][param_1] < 0);
+    return !(types[mCurType].mStyles[param_1] < 0);
 }
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
@@ -535,8 +539,8 @@ void dCamera_c::updatePad() {
     mTriggerLeftDelta = mTriggerLeftLast - fVar1;
     mTriggerLeftLast = fVar1;
 
-    mHoldLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockL;
-    mTrigLockL = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockL;
+    mHoldLockL = mDoCPd_L_LOCK_BUTTON(mPadId);
+    mTrigLockL = mDoCPd_L_LOCK_TRIGGER(mPadId);
 
     if (mTriggerLeftLast > mCamSetup.m0A0) {
         if (m19A == 0) {
@@ -557,8 +561,8 @@ void dCamera_c::updatePad() {
     mTriggerRightDelta = mTriggerRightLast - fVar1;
     mTriggerRightLast = fVar1;
 
-    mHoldLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mHoldLockR;
-    mTrigLockR = (bool)g_mDoCPd_cpadInfo[mPadId].mTrigLockR;
+    mHoldLockR = mDoCPd_R_LOCK_BUTTON(mPadId);
+    mTrigLockR = mDoCPd_R_LOCK_TRIGGER(mPadId);
 
     if (mTriggerRightLast > mCamSetup.m0A0) {
         if (m1A6 == 0) {
@@ -591,17 +595,17 @@ void dCamera_c::updatePad() {
 /* 80162710-801627A4       .text initMonitor__9dCamera_cFv */
 void dCamera_c::initMonitor() {
     if (mpPlayerActor) {
-        mMonitoringThings.mPos = positionOf(mpPlayerActor);
+        mMonitor.mPos = positionOf(mpPlayerActor);
     }
     else {
-        mMonitoringThings.mPos = cXyz::Zero;
+        mMonitor.mPos = cXyz::Zero;
     }
 
-    mMonitoringThings.field_0x0C.z = 0.0f;
-    mMonitoringThings.field_0x0C.y = 0.0f;
-    mMonitoringThings.field_0x0C.x = 0.0f;
-    mMonitoringThings.field_0x10 = 0;
-    mMonitoringThings.field_0x14 = 0.0f;
+    mMonitor.field_0x0C.z = 0.0f;
+    mMonitor.field_0x0C.y = 0.0f;
+    mMonitor.field_0x0C.x = 0.0f;
+    mMonitor.field_0x10 = 0;
+    mMonitor.field_0x14 = 0.0f;
 }
 
 /* 801627A4-801628DC       .text updateMonitor__9dCamera_cFv */
@@ -613,27 +617,27 @@ void dCamera_c::updateMonitor() {
         playerPos = positionOf(mpPlayerActor);
 
         if (m31D != 0) {
-            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, TRUE, &mMonitoringThings.mPos, NULL, NULL);
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, TRUE, &mMonitor.mPos, NULL, NULL);
         }
 
-        playerMonitorHorizontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitoringThings.mPos);
+        playerMonitorHorizontalDist = dCamMath::xyzHorizontalDistance(playerPos, mMonitor.mPos);
 
-        mMonitoringThings.field_0x0C.z = playerMonitorHorizontalDist - mMonitoringThings.field_0x0C.x;
+        mMonitor.field_0x0C.z = playerMonitorHorizontalDist - mMonitor.field_0x0C.x;
 
-        mMonitoringThings.field_0x0C.y += (playerMonitorHorizontalDist - mMonitoringThings.field_0x0C.y) * 0.075f;
+        mMonitor.field_0x0C.y += (playerMonitorHorizontalDist - mMonitor.field_0x0C.y) * 0.075f;
 
-        mMonitoringThings.field_0x0C.x = playerMonitorHorizontalDist;
+        mMonitor.field_0x0C.x = playerMonitorHorizontalDist;
 
-        mMonitoringThings.mPos = playerPos;
+        mMonitor.mPos = playerPos;
 
         if (!m144 && *(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold == 0 && mStickMainValueLast < 0.05f && mStickCValueLast < 0.05f) { // Possible union between u16 and bitfield rather than *(u16*) cast
-            mMonitoringThings.field_0x10++;
+            mMonitor.field_0x10++;
         }
         else {
-            mMonitoringThings.field_0x10 = 0;
+            mMonitor.field_0x10 = 0;
         }
 
-        mMonitoringThings.field_0x14 = mDirection.R() - mMonitoringThings.field_0x14;
+        mMonitor.field_0x14 = mDirection.R() - mMonitor.field_0x14;
     }
 }
 
@@ -641,7 +645,7 @@ void dCamera_c::updateMonitor() {
 cSAngle dCamera_c::calcPeepAngle() {
     cSAngle res(cSAngle::_0);
     
-    if (check_owner_action(mPadId, 0x20)) {
+    if (check_owner_action(mPadId, daPyStts0_UNK20_e)) {
         f32 temp_30 = 30.0f;
         cXyz local_b8(0.0f, 0.0f, -temp_30);
 
@@ -658,7 +662,7 @@ cSAngle dCamera_c::calcPeepAngle() {
             res = cSAngle::_90 + (cSGlobe(plane->mNormal).U() - directionOf(mpPlayerActor)); // GetNP() doesn't work?
         }
     }
-    else if (check_owner_action(mPadId, 0x40)) {
+    else if (check_owner_action(mPadId, daPyStts0_UNK40_e)) {
         f32 temp_30 = 30.0f;
         cXyz local_88(0.0f, 0.0f, -temp_30);
 
@@ -721,16 +725,15 @@ bool dCamera_c::checkForceLockTarget() {
 bool dCamera_c::Run() {
     /* Nonmatching */
     float fVar1;
+    float fVar2;
     float fVar3;
-    bool bVar4;
-    uint uVar5;
     long next;
     dCamera_c* camera;
-    cSAngle local_40 ;
+    cSAngle local_40;
 
     bool res = FALSE;
     
-    camera = (dCamera_c *)0x0;
+    camera = NULL;
 
     mForcusLine.Off();
 
@@ -742,13 +745,14 @@ bool dCamera_c::Run() {
 
     if (m530 && !chkFlag(0x200000)) {
         if (!(dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000))) {
-            fVar1 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f) * m540; //regswap
-            fVar3 = fVar1 - m538;
+            fVar1 = daObjPirateship::getShipOffsetY(&m534, &m536, 130.0f);
+            fVar2 = fVar1 * m540;
+            fVar3 = fVar2 - m538;
             if (((m530 == 1) && (m53C < 0.0f)) && (fVar3 > 0.0f)) {
                 m254 |= 4;
             }
             m53C = fVar3;
-            m538 = fVar1;
+            m538 = fVar2;
             m044.y -= m53C * mCamSetup.mManualStartCThreshold;
         }
     }
@@ -790,19 +794,19 @@ bool dCamera_c::Run() {
     next = mNextMode;
 
     if (next != mCurMode) {
-        if (types[mCurType].mStyles[0][next] >= 0 && onModeChange(mCurMode, next)) {
+        if (types[mCurType].mStyles[next] >= 0 && onModeChange(mCurMode, next)) {
             mCurMode = mNextMode;
         }
     }
 
-    if (types[mCurType].mStyles[0][mCurMode] < 0) {
+    if (types[mCurType].mStyles[mCurMode] < 0) {
         mCurMode = 0;
     }
 
-    short curStyle = types[mCurType].mStyles[0][mCurMode];
+    const s16 curStyle = types[mCurType].mStyles[mCurMode];
     if (curStyle >= 0) {
         if (mCurStyle != curStyle && onStyleChange(mCurStyle, curStyle)) {
-            mCurStyle = (int)types[mCurType].mStyles[0][mCurMode];
+            mCurStyle = types[mCurType].mStyles[mCurMode];
             mCamParam.Change(mCurStyle);
         }
     }
@@ -817,7 +821,7 @@ bool dCamera_c::Run() {
     
     dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 0x80);
 
-    if (mCamParam.CheckFlag(4) && !check_owner_action(mPadId, 0x4000000) && !check_owner_action1(mPadId, 0x40000)) {
+    if (mCamParam.CheckFlag(dCamPrmFlg_UNK004) && !check_owner_action(mPadId, daPyStts0_UNK4000000_e) && !check_owner_action1(mPadId, daPyStts1_UNK40000_e)) {
         m148 += (forwardCheckAngle() - m148) * mCamSetup.mBGChk.FwdCushion();
     }
     else {
@@ -829,23 +833,22 @@ bool dCamera_c::Run() {
     mTrimTypeForce = -1;
     m068 = 9;
     
-    if (chkFlag(0x200000) && dCamParam_c::styles[mCurStyle].engineIdx != 11) {
-        if (push_any_key(mPadId) || mMonitoringThings.field_0x0C.x > 10.0f || !m360 || m31C) {
+    if (chkFlag(0x200000) && mCamParam.Algorythmn(mCurStyle) != 11) {
+        if (push_any_key(mPadId) || mMonitor.field_0x0C.x > 10.0f || !m360 || m31C) {
             clrFlag(0x200000);
         }
     }
     else if (dComIfGp_demo_getCamera() && mCamParam.Algorythmn() != 11) {
-        camera = (dCamera_c *)demoCamera(0);
+        res = demoCamera(0);
     }
     else {
         // Issues here
-        camera = this;
-        res = (this->*engine_tbl[dCamParam_c::styles[mCurStyle].engineIdx])(mCurStyle);
+        res = (this->*engine_tbl[mCamParam.Algorythmn(mCurStyle)])(mCurStyle);
         m07C++;
         m080++;
         m118++;
         m108++;
-        m11C++;   
+        m11C++;
     }
 
     if (!res) {
@@ -860,14 +863,14 @@ bool dCamera_c::Run() {
 
     clrFlag(0x90080);
 
-    if (mCamParam.CheckFlag(1)) {
+    if (mCamParam.CheckFlag(dCamPrmFlg_UNK001)) {
         m068 = 0x3F;
     }
-    else if (mCamParam.CheckFlag(2)) {
+    else if (mCamParam.CheckFlag(dCamPrmFlg_UNK002)) {
         m068 = 0xF;
     }
 
-    if (mCamParam.CheckFlag(0x400)) {
+    if (mCamParam.CheckFlag(dCamPrmFlg_UNK400)) {
         m068 |= 0x40;
     }
 
@@ -877,7 +880,7 @@ bool dCamera_c::Run() {
         mCenter.x = m044.x;
         mCenter.z = m044.z;
         
-        if ((dCamParam_c::styles[mCurStyle].engineIdx == 4) && chkFlag(0x10000800)) {
+        if ((mCamParam.Algorythmn(mCurStyle) == 4) && chkFlag(0x10000800)) {
             m068 &= ~8;
             mCenter.y = m044.y;
         }
@@ -902,10 +905,10 @@ bool dCamera_c::Run() {
     }
 
     if (mDMCSystem.field_0x0) {
-        mAngleY = getDMCAngle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle));
+        mAngleY = getDMCAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
     }
     else {
-        mAngleY = cSAngle(mDirection.U().Inv());
+        mAngleY = mDirection.U().Inv();
     }
 
     if (mCenter.x == mEye.x && mCenter.z == mEye.z) {
@@ -913,7 +916,7 @@ bool dCamera_c::Run() {
         mUp.y = 1.0f;
         mUp.z = 0.0f;
     }
-    else if (m006 >= cSAngle(-90.0f) && mDirection.V() <= cSAngle(90.0f)) {
+    else if (mDirection.V().Val() > cSAngle(-90.0f) && mDirection.V() < cSAngle(90.0f)) {
         mUp.x = 0.0f;
         mUp.y = 1.0f;
         mUp.z = 0.0f;
@@ -926,7 +929,7 @@ bool dCamera_c::Run() {
 
     for (u32 i = 0; i < 3; i++) {
         bool playSound = FALSE;
-        if (m254 & uVar5 && (m258 & uVar5) == 0) { // Inline?
+        if ((m254 & (1 << i)) != 0 && (m258 & (1 << i)) == 0) {
             playSound = TRUE;
         }
         if (playSound) {
@@ -935,14 +938,14 @@ bool dCamera_c::Run() {
     }
 
     m258 = m254;
-    m254 = 0;
+    bool r3 = FALSE;
+    m254 = r3;    
     
-    bVar4 = FALSE;
     if (m100 && m101 && m102) { // Also Inline?
-        bVar4 = TRUE;
+        r3 = TRUE;
     }
 
-    if (bVar4) {
+    if (r3) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x10);
     }
     else {
@@ -952,14 +955,13 @@ bool dCamera_c::Run() {
     if (chkFlag(0x40000)) {
         dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
     }
-    else {
-        if (mDirection.R() < mCamSetup.m048) {
-            if (chkFlag(0x800)) {
-                dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
-            }
-            if (chkFlag(0x10000000)) {
-                dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x20);
-            }
+    else if (mDirection.R() < mCamSetup.m048) {
+        if (chkFlag(0x800)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 2);
+        }
+        
+        if (chkFlag(0x10000000)) {
+            dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 0x20);
         }
     }
 
@@ -983,7 +985,7 @@ bool dCamera_c::NotRun() {
 
         mCurType = mCamTypeEvent;
 
-        eventCamera(types[mCurType].mStyles[0][3]);
+        eventCamera(types[mCurType].mStyles[3]);
 
         m07C++;
         m118++;
@@ -1057,7 +1059,7 @@ bool dCamera_c::Draw() {
 
 /* 8016418C-80164898       .text nextMode__9dCamera_cFl */
 int dCamera_c::nextMode(s32 i_curMode) {
-    /* Nonmatching - regswap */
+    /* Nonmatching - regswap related to check_owner_action/check_owner_action1 */
     dAttention_c& attn = dComIfGp_getAttention();
     s32 next_mode = i_curMode;
     cXyz player_pos = positionOf(mpPlayerActor);
@@ -1097,7 +1099,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                                 !(
                                     mStickMainValueLast >= 0.5f ||
                                     attn.LockonTruth() ||
-                                    check_owner_action(mPadId, 0x100000))
+                                    check_owner_action(mPadId, daPyStts0_SWIM_e))
                                 ) {
                                 if (m184 == 1) {
                                     if (mStickCPosYLast < mCamSetup.mCstick.m00) {
@@ -1133,7 +1135,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 m254 |= 1;
             }
 
-            if (check_owner_action(mPadId, 0x80000000)) {
+            if (check_owner_action(mPadId, daPyStts0_UNK80000000_e)) {
                 setFlag(0x8000);
             }
 
@@ -1150,13 +1152,13 @@ int dCamera_c::nextMode(s32 i_curMode) {
         if (i_curMode == 12 && m144 != 0) {
             next_mode = 0;
         }
-        else if (check_owner_action(mPadId, 0x200000) || check_owner_action1(mPadId, 8)) {
-                next_mode = 14;
+        else if (check_owner_action(mPadId, daPyStts0_TELESCOPE_LOOK_e) || check_owner_action1(mPadId, daPyStts1_PICTO_BOX_AIM_e)) {
+            next_mode = 0xe;
         }
-        else if (check_owner_action(mPadId, 0x80000080)) {
+        else if (check_owner_action(mPadId, daPyStts0_UNK80000000_e | daPyStts0_UNK80_e)) {
             next_mode = 0x11;
         }
-        else if (check_owner_action(mPadId, 0x800000)) {
+        else if (check_owner_action(mPadId, daPyStts0_UNK800000_e)) {
             if (m144 == 0) {
                 next_mode = 0xc;
             }
@@ -1164,71 +1166,69 @@ int dCamera_c::nextMode(s32 i_curMode) {
                 next_mode = 0x12;
             }
         }
-        else if (check_owner_action1(mPadId, 0x10)) {
+        else if (check_owner_action1(mPadId, daPyStts1_UNK10_e)) {
             next_mode = 0xf;
         }
-        else if (check_owner_action(mPadId, 0x2000)) {
+        else if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
             next_mode = 4;
         }
-        else {
-            if (check_owner_action(mPadId, 0x25000) && !attn.Lockon()) {
-                next_mode = 10;
-            } else if (check_owner_action(mPadId, 0x80000) && !attn.Lockon()) {
-                next_mode = 11;
-            } else if (m144 == 0) {
-                next_mode = 12;
+        else if (check_owner_action(mPadId, daPyStts0_ROPE_AIM_e | daPyStts0_HOOKSHOT_AIM_e | daPyStts0_BOW_AIM_e) && !attn.Lockon()) {
+            next_mode = 10;
+        } else if (check_owner_action(mPadId, daPyStts0_BOOMERANG_AIM_e) && !attn.Lockon()) {
+            next_mode = 11;
+        } else if (m144 == 0) {
+            next_mode = 12;
+        }
+        else if (check_owner_action1(mPadId, daPyStts1_UNK2_e)) {
+            next_mode = 5;
+        }
+        else if (check_owner_action1(mPadId, daPyStts1_UNK4_e)) {
+            next_mode = 6;
+        }
+        else if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
+            next_mode = 6;
+        }
+        else if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e)) {
+            next_mode = 5;
+        }
+        else if (check_owner_action(mPadId, daPyStts0_UNK400_e | daPyStts0_UNK4_e | daPyStts0_UNK2_e) && i_curMode != 12) {
+            if (mpLockonTarget) {
+                next_mode = 8;
             }
-            else if (check_owner_action1(mPadId, 2)) {
-                next_mode = 5;
-            }
-            else if (check_owner_action1(mPadId, 4)) {
-                next_mode = 6;
-            }
-            else if (check_owner_action(mPadId, 0x60)) {
-                next_mode = 6;
-            }
-            else if (check_owner_action(mPadId, 0x61)) {
-                next_mode = 5;
-            }
-            else if (check_owner_action(mPadId, 0x406) && i_curMode != 12) {
-                if (mpLockonTarget) {
-                    next_mode = 8;
-                }
-            }
-            else if (attn.LockonTruth() && !check_owner_action(mPadId, 0xC000000)) {
+        }
+        else if (attn.LockonTruth() && !check_owner_action(mPadId, daPyStts0_CRAWL_e | daPyStts0_UNK4000000_e)) {
+            next_mode = 2;
+        }
+        else if (attn.Lockon()) {
+            next_mode = 1;
+        }
+        else if (check_owner_action(mPadId, daPyStts0_BOOMERANG_WAIT_e) && !check_owner_action(mPadId, daPyStts0_UNK37a02371_e & ~daPyStts0_UNK1000000_e) && !check_owner_action1(mPadId, daPyStts1_UNK10_e | daPyStts1_WIND_WAKER_CONDUCT_e)) {
+            mpLockonTarget = get_boomerang_actor(mpPlayerActor);
+            next_mode = 2;
+            mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
+        }
+        else if (isPlayerGuarding(mPadId)) {
+            next_mode = 19;
+        }
+        else if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
+            if (mpLockonActor) {
                 next_mode = 2;
-            }
-            else if (attn.Lockon()) {
-                next_mode = 1;
-            }
-            else if (check_owner_action(mPadId, 0x400000) && !check_owner_action(mPadId, 0x36a02371) && !check_owner_action1(mPadId, 0x11)) {
-                mpLockonTarget = get_boomerang_actor(mpPlayerActor);
-                next_mode = 2;
-                mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
-            }
-            else if (isPlayerGuarding(mPadId)) {
-                next_mode = 19;
-            }
-            else if (mLockOnActorId != fpcM_ERROR_PROCESS_ID_e) {
-                if (mpLockonActor) {
-                    next_mode = 2;
-                    mpLockonTarget = mpLockonActor;
-                }
-                else {
-                    next_mode = 0;
-                    mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
-                }
+                mpLockonTarget = mpLockonActor;
             }
             else {
-                switch (i_curMode) {
-                case 12:
-                    if (m144 != 0) {
-                        next_mode = 0;
-                    }
-                    break;
-                default:
+                next_mode = 0;
+                mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
+            }
+        }
+        else {
+            switch (i_curMode) {
+            case 12:
+                if (m144 != 0) {
                     next_mode = 0;
                 }
+                break;
+            default:
+                next_mode = 0;
             }
         }
     }
@@ -1237,7 +1237,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
         mLockOnActorId = fpcM_ERROR_PROCESS_ID_e;
     }
 
-    if (next_mode == 12 && types[mCurType].mStyles[0][next_mode] < 0) {
+    if (next_mode == 12 && types[mCurType].mStyles[next_mode] < 0) {
         next_mode = i_curMode;
         if (mCurType != mCamTypeEvent && mCurType != mCamTypeBoat && mCurType != mCamTypeBoatBattle && mCurType != mCamTypeRestrict) {
             m254 |= 1;
@@ -1245,7 +1245,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
         m144 = 1;
     }
 
-    if (types[mCurType].mStyles[0][next_mode] >= 0) {
+    if (types[mCurType].mStyles[next_mode] >= 0) {
         if (next_mode == 1) {
             setFlag(0x100000);
         }
@@ -1257,7 +1257,7 @@ int dCamera_c::nextMode(s32 i_curMode) {
 
 /* 80164898-80164A48       .text onModeChange__9dCamera_cFll */
 bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
-    if (i_curMode == 0xe && mCamParam.CheckFlag(0x10)) {
+    if (i_curMode == 0xe && mCamParam.CheckFlag(dCamPrmFlg_UNK010)) {
         setView(0.0f, 0.0f, 640.0f, 480.0f);
     }
     
@@ -1289,12 +1289,12 @@ bool dCamera_c::onModeChange(s32 i_curMode, s32 i_nextMode) {
         setFlag(0x10);
         break;
     case 0:
-        if (i_curMode == 1 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+        if (i_curMode == 1 && types[mCurType].mStyles[0] == types[mCurType].mStyles[1]) {
             m110 = 0;
         }
         break;
     case 1:
-        if (i_curMode == 0 && types[mCurType].mStyles[0][0] == types[mCurType].mStyles[0][1]) {
+        if (i_curMode == 0 && types[mCurType].mStyles[0] == types[mCurType].mStyles[1]) {
             m110 = 0;
         }
         break;
@@ -1336,7 +1336,7 @@ int dCamera_c::nextType(s32 curType) {
             if (daNpc_kam_c::m_hyoi_kamome) {
                 nextType = GetCameraTypeFromCameraName("Seagal");
             }
-            else if ((check_owner_action(mPadId, 0x1010000) || check_owner_action1(mPadId, 0x80)) && m524 == 0xFF) {
+            else if ((check_owner_action(mPadId, daPyStts0_UNK1000000_e | daPyStts0_SHIP_RIDE_e) || check_owner_action1(mPadId, daPyStts1_UNK80_e)) && m524 == 0xFF) {
                 nextType = mCamTypeBoat;
             }
             else {
@@ -1375,7 +1375,7 @@ int dCamera_c::nextType(s32 curType) {
                         }
                     }
                     else {
-                        if (check_owner_action(mPadId, 0x100000)) {
+                        if (check_owner_action(mPadId, daPyStts0_SWIM_e)) {
                             nextType = mCamTypeWater;
                         }
                         else {
@@ -1384,10 +1384,10 @@ int dCamera_c::nextType(s32 curType) {
                     }
                 }
                 else if (idx == 0x1ff) {
-                    if (check_owner_action1(mPadId, 0x20)) {
+                    if (check_owner_action1(mPadId, daPyStts1_DEKU_LEAF_FLY_e)) {
                         nextType = mMapToolType;
                     }
-                    else if (check_owner_action(mPadId, 0x100000)) {
+                    else if (check_owner_action(mPadId, daPyStts0_SWIM_e)) {
                         nextType = mCamTypeWater;
                     }
                     
@@ -1425,9 +1425,9 @@ bool dCamera_c::onTypeChange(s32 i_curType, s32 i_nextType) {
     m114 = 0;
     mode = mCurMode;
     if (m144 == 0) {
-        s32 style = types[i_nextType].mStyles[0][0];
+        s32 style = types[i_nextType].mStyles[0];
         if (style >= 0) {
-            switch (dCamParam_c::styles[style].engineIdx) {
+            switch (mCamParam.Algorythmn(style)) {
             case 5:
             case 6:
             case 11:
@@ -1465,12 +1465,12 @@ bool dCamera_c::SetTypeForce(s32 param_0, fopAc_ac_c* param_1) {
 }
 
 /* 80164E2C-80164F5C       .text onStyleChange__9dCamera_cFll */
-bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
+bool dCamera_c::onStyleChange(s32 i_style1, s32 i_style2) {
     m11C = 0;
 
     bool bVar1 = false;
 
-    switch (dCamParam_c::styles[param_0].engineIdx) {
+    switch (mCamParam.Algorythmn(i_style1)) {
     case 5:
     case 6:
         if (mDMCSystem.field_0x0 == 0) {
@@ -1484,10 +1484,10 @@ bool dCamera_c::onStyleChange(s32 param_0, s32 param_1) {
         break;
     }
 
-    switch(dCamParam_c::styles[param_1].engineIdx) {
+    switch(mCamParam.Algorythmn(i_style2)) {
     case 1:
     case 8:
-        if (dCamParam_c::styles[param_0].engineIdx == dCamParam_c::styles[param_1].engineIdx) {
+        if (mCamParam.Algorythmn(i_style1) == mCamParam.Algorythmn(i_style2)) {
             setFlag(0x8000);
         }
         break;
@@ -1656,7 +1656,6 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor, cXyz* i_offset, cSAngle param
 
 /* 8016548C-801656AC       .text relationalPos__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzf */
 cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* i_offset, f32 param_3) {
-    /* Nonmatching */
     if (i_actor1 == NULL) {
         return cXyz::Zero;
     }
@@ -1672,11 +1671,11 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* 
     
     cSGlobe delta_globe(pos2 - pos1);
     cSGlobe offset_globe(*i_offset);
-    
-    cSAngle angle = directionOf(i_actor1) + offset_globe.U();
 
-    offset_globe.U(delta_globe.U() - offset_globe.U());
-    delta_globe.R(0.5f * delta_globe.R() * angle.Cos() * param_3);
+    offset_globe.V(directionOf(i_actor1) + offset_globe.U());
+    
+    cSAngle acStack_104 = m03C.U() - delta_globe.U();
+    delta_globe.R(0.5f * delta_globe.R() * acStack_104.Cos() * param_3);
 
     cXyz ret = mid + delta_globe.Xyz() + offset_globe.Xyz();
     return ret;
@@ -1712,7 +1711,93 @@ f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2) {
 
 /* 80165830-80165CC4       .text radiusActorInSight__9dCamera_cFP10fopAc_ac_cP10fopAc_ac_cP4cXyzP4cXyzfs */
 f32 dCamera_c::radiusActorInSight(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* i_center, cXyz* i_eye, f32 i_fovY, s16 i_bank) {
-    /* Nonmatching */
+    f32 radius;
+    
+    cSGlobe globe_delta(*i_eye - *i_center);
+
+    cXyz pos1 = attentionPos(i_actor1);
+    cXyz pos2 = attentionPos(i_actor2);
+
+    cXyz delta = pos1 - pos2;
+
+    delta.normalize();
+
+    pos1 += delta * 50.0f;
+    pos2 -= delta * 50.0f;
+
+    dDlst_window_c* window = get_window(mpCamera);
+    scissor_class* scissor = window->getScissor();
+
+    cSAngle local_130(i_fovY * 0.5f * (scissor->mHeight / 480.f) * 0.95f);
+    cSAngle local_134((scissor->mWidth / 640.0f) * (i_fovY * mWindowAspectRatio * 0.5f) * 0.95f);
+
+    cSGlobe cStack_12c(*i_eye - pos1);
+    cSGlobe cStack_124(*i_eye - pos2);
+
+    int uVar4 = 0;
+
+    cSAngle local_13c;
+
+    local_13c = cStack_12c.U() - globe_delta.U();
+    if (local_13c < -local_134 || local_13c > local_134) {
+        uVar4 |= 1;
+    }
+
+    local_13c = cStack_12c.V() - globe_delta.V();
+    if (local_13c < -local_130 || local_13c > local_130) {
+        uVar4 |= 2;
+    }
+
+    local_13c = cStack_124.U() - globe_delta.U();
+    if (local_13c < -local_134 || local_13c > local_134) {
+        uVar4 |= 4;
+    }
+
+    local_13c = cStack_124.V() - globe_delta.V();
+    if (local_13c < -local_130 || local_13c > local_130) {
+        uVar4 |= 8;
+    }
+
+    if (uVar4 == 0) {
+        return 0.0f;
+    }
+    
+    radius = 0.0f;
+    Mtx look_mtx;
+    cXyz local_a8;
+    f32 fVar3;
+    mDoMtx_lookAt(look_mtx, i_eye, i_center, &mUp, i_bank);
+    if ((uVar4 & 3) != 0) {
+        MTXMultVec(look_mtx, &pos1, &local_a8);
+        if ((uVar4 & 1) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.x) / local_134.Tan());
+            if (0.0f < fVar3) {
+                radius = fVar3;
+            }
+        }
+        if ((uVar4 & 2) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.y) / local_130.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+    }
+    if ((uVar4 & 0xc) != 0) {
+        MTXMultVec(look_mtx, &pos2, &local_a8);
+        if ((uVar4 & 4) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.x) / local_134.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+        if ((uVar4 & 8) != 0) {
+            fVar3 = local_a8.z + (std::fabsf(local_a8.y) / local_130.Tan());
+            if (radius < fVar3) {
+                radius = fVar3;
+            }
+        }
+    }
+    return radius;
 }
 
 /* 80165CC4-801660C8       .text groundHeight__9dCamera_cFP4cXyz */
@@ -1897,11 +1982,11 @@ int dCamera_c::defaultTriming() {
                 break;
             case 10:
             case 11:
-                if (check_owner_action(mPadId, 0x40000)) {
+                if (check_owner_action(mPadId, daPyStts0_UNK40000_e)) {
                     mTrimSize = 2;
 
                 }
-                else if (check_owner_action(mPadId, 0xa5000)) {
+                else if (check_owner_action(mPadId, daPyStts0_BOOMERANG_AIM_e | daPyStts0_ROPE_AIM_e | daPyStts0_HOOKSHOT_AIM_e | daPyStts0_BOW_AIM_e)) {
                     mTrimSize = 1;
                 }
                 break;
@@ -2008,9 +2093,307 @@ cSAngle dCamera_c::forwardCheckAngle() {
 }
 
 /* 80167F08-80168D44       .text bumpCheck__9dCamera_cFUl */
-void dCamera_c::bumpCheck(u32) {
-    /* Nonmatching */
+bool dCamera_c::bumpCheck(u32 i_flags) {
+    /* Nonmatching - Code 100% */
+    static int prev_hit_type = 0;
+    static int prev_plat1 = 0;
+    static int prev_plat2 = 0;
+
+    int curr_hit_type;
+    int res = 0;
+
+    f32 gaze_back_margin = mCamSetup.mBGChk.GazeBackMargin();
+    f32 corner_cushion = mCamSetup.mBGChk.CornerCushion();
+    f32 corner_angle_max_cos = cDegree(mCamSetup.mBGChk.CornerAngleMax()).Cos();
+    f32 wall_up_distance = mCamSetup.mBGChk.WallUpDistance();
+
+    if (is_player(mpPlayerActor)) {
+        u32 grab_actor_id = static_cast<daPy_py_c*>(mpPlayerActor)->getGrabActorID();
+        if (grab_actor_id != -1) {
+            fopAc_ac_c* grab_actor = fopAcM_SearchByID(grab_actor_id);
+            if (grab_actor != NULL) {
+                s16 proc_name = fopAcM_GetName(grab_actor);
+                if (proc_name == PROC_TSUBO) {
+                    switch (daObj::PrmAbstract(grab_actor, daTsubo::Act_c::PRM_TYPE_W, daTsubo::Act_c::PRM_TYPE_S)) {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 7:
+                        case 8:
+                        case 13:
+                        case 14:
+                        case 15:
+                            wall_up_distance = 150.0f;
+                            break;
+                      
+                        default:
+                            wall_up_distance = 110.0f;
+                            break;
+                      }
+                }
+                else if (proc_name == PROC_NPC_MD) {
+                    wall_up_distance = 130.0f;
+                }
+                else if (proc_name == PROC_Obj_Try) {
+                    wall_up_distance = 200.0f;
+                }
+                else {
+                    wall_up_distance = 110.0f;
+                }
+            }
+        }
+    }
+
+    cXyz eye = m050;
+    cSGlobe direction = m03C;
+
+    if (chkFlag(0x2000) && mpLockonTarget) {
+        f32 sight_radius = radiusActorInSight(mpPlayerActor, mpLockonTarget);
+        if (sight_radius > 0.0f) {
+            if (sight_radius >= 3500.0f) {
+                sight_radius = 3500.0f;
+            }
+            m14C += (sight_radius - m14C) * 0.33f;
+            res |= 0x40;
+        }
+        else {
+            m14C -= m14C * 0.08f;
+        }
+
+        f32 fVar15 = 1.0f;
+        if (m108 < 10) {
+            fVar15 = m108 / 10.0f;
+        }
+        
+        direction.R(m14C * fVar15 + direction.R());
+        eye = m044 + direction.Xyz();
+    }
+
+    if ((i_flags & 0x40) && m364 != 0) {
+        cSGlobe cStack_3e4 = m36C - m044;
+        if (direction.V() < cStack_3e4.V()) {
+            cSAngle local_408 = mDirection.V();
+            local_408 += (cStack_3e4.V() - local_408) * 0.05f;
+            direction.U(local_408);
+            eye = m044 + direction.Xyz();
+            res |= 0x20;
+        }
+    }
+
+    dBgS_CamLinChk_NorWtr lin_chk1;
+    dBgS_CamLinChk_NorWtr lin_chk2;
+
+    float fVar2;
+
+    cXyz local_2fc; /* 0x2FC */
+    cXyz mid; /* 0x2F0 */
+    cXyz local_2e4; /* 0x2E4 */
+    cXyz cross_prod; /* 0x2D8 */
+    cXyz cross1; /* 0x2CC */
+    cXyz cross2; /* 0x2C0 */
+    cXyz local_2b4; /* 0x2B4 */
+    cXyz local_2a8; /* 0x2A8 */
+    cXyz local_29c; /* 0x29C */
+    cXyz local_290; /* 0x290 */
+    cXyz local_284; /* 0x284 */
+    cXyz local_278; /* 0x278 */
+
+    if (lineBGCheck(&mCenter, &eye, &lin_chk1, i_flags)) {
+        cM3dGPla* plane1 = dComIfG_Bgsp()->GetTriPla(lin_chk1);
+        cM3dGPla* plane2 = NULL;
+        if ((i_flags & 0x20) == 0) {
+            curr_hit_type = 2;
+        }
+        else {
+            if (lineBGCheck(&eye, &mCenter, &lin_chk2, i_flags)) {
+                plane2 = dComIfG_Bgsp()->GetTriPla(lin_chk2);
+                float dot_prod = VECDotProduct(plane1->GetNP(), plane2->GetNP());
+                VECCrossProduct(plane1->GetNP(), plane2->GetNP(), &cross_prod);
+                if (dot_prod > corner_angle_max_cos && std::fabsf(cross_prod.y) > 0.5f) {
+                    curr_hit_type = 3;
+                }
+                else if (prev_hit_type != 3) {
+                        curr_hit_type = 4;
+                }
+                else {
+                    curr_hit_type = 5;
+                }
+            }
+            else if (prev_hit_type == 3 || prev_hit_type == 5) {
+                curr_hit_type = 5;
+            }
+            else {
+                curr_hit_type = 2;
+            }
+        }
+        switch (curr_hit_type) {
+            case 3: {
+                res |= 2;
+                cross1 = lin_chk1.GetCross(); 
+                cross2 = lin_chk2.GetCross();
+                mid = cross1 + (cross2 - cross1) * 0.5f;
+                if (cM3d_2PlaneLinePosNearPos(*plane1, *plane2, &mid, &local_2fc)) {
+                    local_2e4 = *plane1->GetNP() + *plane2->GetNP();
+                    m070 = local_2fc + local_2e4 * 2.0f;
+                    
+                    cSGlobe globe;
+                    globe.Val(m070 - mCenter);
+
+                    mDirection.R(direction.R());
+                    mDirection.U(mDirection.V() + (globe.V() - mDirection.V()) * 0.05f);
+                    mDirection.V(mDirection.U() + (globe.U() - mDirection.U()) * corner_cushion);
+
+                    local_2b4 = mCenter + mDirection.Xyz();
+                    globe.R(globe.R() + 50.0f);
+                    local_2a8 = mCenter + globe.Xyz();
+                    if (!lineBGCheck(&mCenter, &local_2a8, 0x7f)) {
+                        if (lineBGCheck(&m070, &local_2b4, &lin_chk1, 0x7f)) {
+                            local_29c = lin_chk1.GetLinP()->GetEnd();
+                            local_2b4 = compWallMargin(&local_29c, gaze_back_margin);
+                        }
+                        lineBGCheck(&mCenter, &local_2b4, &lin_chk1, i_flags);
+                        mEye = local_2b4;
+                        setFlag(0x80000);
+                        break;
+                    }
+                    curr_hit_type = 2;
+                }
+                // Fall-through
+            }
+            case 2:
+            case 4:
+            case 5: {
+                setFlag(0x80);
+                setFlag(0x80);
+
+                local_290 = lin_chk1.GetLinP()->GetEnd();
+
+                local_284 = compWallMargin(&local_290, 0.5f + gaze_back_margin);
+
+                local_278 = local_284;
+
+                if (chkFlag(8) && (i_flags & 0x10) && curr_hit_type != 4) {
+                    float xyzDist = dCamMath::xyzHorizontalDistance(local_290, mCenter);
+                    float dVar14 =  wall_up_distance - (mCenter.y - attentionPos(mpPlayerActor).y);
+
+                    if (!(xyzDist < 20.0f)) {
+                        if (xyzDist > 320.0f) {
+                            dVar14 = 0.0f;
+                        }
+                        else {
+                            dVar14 *= 1.0f - (xyzDist - 20.0f) / 300.0f;
+                        }
+                    }
+
+                    if (local_284.y - mCenter.y < dVar14) {
+                        local_2e4 = *plane1->GetNP();
+
+                        cSGlobe globe(local_2e4);
+                        globe.U(globe.V() + cSAngle::_90);
+                        globe.R(dVar14 * globe.V().Sin());
+
+                        local_284 += globe.Xyz();
+
+                        if (lineBGCheck(&local_278, &local_284, &lin_chk1, i_flags)) {
+                            cXyz cross = lin_chk1.GetCross();
+                            local_284 = compWallMargin(&cross, gaze_back_margin);
+                            mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallCushion();
+                        }
+                        else {
+                            mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallCushion();
+                        }
+
+                        setFlag(0x4000);
+                    }
+                    else {
+                        if (lineBGCheck(&local_278, &local_284, &lin_chk1, i_flags)) {
+                            cXyz cross = lin_chk1.GetCross();
+                            local_284 = compWallMargin(&cross, gaze_back_margin);
+                        }
+
+                        mEye += (local_284 - mEye) * mCamSetup.mBGChk.WallBackCushion();
+                    }
+                }
+                else {
+                    mEye = local_284;
+                }
+
+                int engine_idx = mCamParam.Algorythmn();
+
+                if ((engine_idx == 1) || (engine_idx == 10)) {
+                    cXyz attn_pos = attentionPos(mpPlayerActor);
+                    cSGlobe globe(mEye - attn_pos);
+
+                    if (globe.R() < 40.0f) {
+                        globe.R(40.0f);
+                        mEye = attn_pos + globe.Xyz();
+                    }
+                }
+
+                mDirection.Val(mEye - mCenter);
+                res |= 1;
+                break;
+            }
+            default:
+                mEye = eye;
+                mDirection = direction;
+                break;
+        }
+    } 
+    else {
+        curr_hit_type = 0;
+
+        if (chkFlag(0x4000)) {
+            if (i_flags & 0x10) {
+                fVar2 = mCamSetup.mBGChk.WallBackCushion();
+            }
+            else {
+                fVar2 = 0.2f;
+            }
+
+            mDirection.R(mDirection.R() + (m03C.R() - mDirection.R()) * fVar2);
+            mDirection.U(mDirection.V() + (m03C.V() - mDirection.V()) * fVar2);
+            mDirection.V(m03C.U());
+
+            mEye = mCenter + mDirection.Xyz();
+
+            if (lineBGCheck(&mCenter, &mEye, &lin_chk1, i_flags)) {
+                cXyz cross = lin_chk1.GetCross();
+                mEye = compWallMargin(&cross, 0.5f + gaze_back_margin);
+            }
+
+            cSAngle acStack_440 = mDirection.V() - m03C.V();
+            corner_angle_max_cos = acStack_440.Degree();
+
+            if (std::fabsf(corner_angle_max_cos) < 0.2f) {
+                clrFlag(0x4000);
+            }
+        } 
+        else {
+            mEye = eye;
+            mDirection = direction;
+        }
+    }
+
+    if ((i_flags & 8) != 0) {
+        float water_surface_height = getWaterSurfaceHeight(&mEye);
+        if (water_surface_height > mEye.y) {
+            mEye.y = water_surface_height;
+            mDirection.Val(mEye - mCenter);
+            res |= 8;
+        }
+    }
+
+    prev_hit_type = curr_hit_type;
+
+    if (m78B && (mCamParam.Algorythmn(mCurStyle) != 4 || !chkFlag(0x10000800))) {
+        mEye.y += 25.0f;
+    }
+
+    return res != 0;
 }
+
 
 /* 80168EF0-801693AC       .text getWaterSurfaceHeight__9dCamera_cFP4cXyz */
 f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
@@ -2077,9 +2460,8 @@ void dCamera_c::checkSpecialArea() {
 
 /* 80169528-8016A0F0       .text checkGroundInfo__9dCamera_cFv */
 void dCamera_c::checkGroundInfo() {
-    /* Nonmatching */
     cXyz player_pos = positionOf(mpPlayerActor);
-    cXyz gnd_chk_pos(player_pos);
+    cXyz gnd_chk_pos = player_pos;
 
     f32 player_height; // suprisingly the `heightOf` function wasn't used here
     if (is_player(mpPlayerActor)) {
@@ -2095,22 +2477,22 @@ void dCamera_c::checkGroundInfo() {
 
     f32 roof_y = dComIfG_Bgsp()->RoofChk(&roof_chk);
 
-    if (player_pos.y < roof_y) {
-        player_pos.y = roof_y;
+    if (gnd_chk_pos.y < roof_y) {
+        gnd_chk_pos.y = roof_y;
     }
 
     dBgS_CamGndChk gnd_chk;
     gnd_chk.ClrCam();
     gnd_chk.SetObj();
 
-    gnd_chk.SetPos(&gnd_chk_pos);
+    gnd_chk.SetPos(&player_pos);
 
     f32 ground_y = dComIfG_Bgsp()->GroundCross(&gnd_chk);
     
-    mBG.m00.m04.SetCam();
+    mBG.m5C.m04.SetCam();
     mBG.m5C.m04.ClrObj();
 
-    mBG.m5C.m04.SetPos(&gnd_chk_pos);
+    mBG.m5C.m04.SetPos(&player_pos);
     
     mBG.m5C.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m5C.m04);
 
@@ -2121,7 +2503,7 @@ void dCamera_c::checkGroundInfo() {
 
     mBG.m5C.m00 = mBG.m5C.m58 != C_BG_MIN_HEIGHT;
     
-    mBG.m00.m04.SetPos(&player_pos);
+    mBG.m00.m04.SetPos(&gnd_chk_pos);
 
     mBG.m00.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m00.m04);
 
@@ -2137,6 +2519,7 @@ void dCamera_c::checkGroundInfo() {
 
     m31D = 0;
     m33C = 0;
+    
     if (dComIfG_Bgsp()->ChkMoveBG(mBG.m5C.m04)) {
         m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.m04.GetBgIndex());
         if (m33C) {
@@ -2147,14 +2530,14 @@ void dCamera_c::checkGroundInfo() {
                 m320 = m32C - pos;
                 m338 = m33A - angle;
 
-                if (m33C->shape_angle.y == 0x3b) {
-                    m044.y += m320.y * mCamSetup.DMCAngle();
+                if (fopAcM_GetName(m33C) == PROC_Obj_Pirateship) {
+                    m044.y += m320.y * mCamSetup.mManualStartCThreshold;
                 }
             }
 
             m31C = 1;
 
-            if (dComIfGp_evmng_cameraPlay() && chkFlag(0x20000000) && m360) { 
+            if (!dComIfGp_evmng_cameraPlay() && !chkFlag(0x20000000) && m360) { 
                 m31D = 1;
             }
 
@@ -2163,14 +2546,16 @@ void dCamera_c::checkGroundInfo() {
                 dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m050, NULL, NULL);
                 m03C.Val(m050 - m044);
             }
+
             m32C = pos;
             m33A = angle;
         }
-    } else {
+    } 
+    else {
         m31C = 0;
     }
     
-    if (mBG.m00.m00) {
+    if (mBG.m5C.m00) {
         m350 = dComIfG_Bgsp()->GetCamMoveBG(mBG.m5C.m04);
     }
     else {
@@ -2179,109 +2564,759 @@ void dCamera_c::checkGroundInfo() {
 
     mRoomNo = -1;
 
-    //if ((*(char *)&this->mBG == '\0') ||
-    //   ((d_com_inf_game::g_dComIfG_gameInfo.play.mPlayerStatus[this->mPadId * 2][0] & 0x100000) == 0))
-    //{
-    //  if (this->field_0x360 == '\0') {
-    //    this->mRoomMapToolCameraIdx = 0x1ff;
-    //  }
-    //  else if ((this->mBG).field_0x5c == '\0') {
-    //    this->mRoomMapToolCameraIdx = 0xff;
-    //  }
-    //  else {
-    //    iVar3 = dBgS::GetRoomCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                               &(this->mBG).field113_0x74);
-    //    this->mRoomMapToolCameraIdx = iVar3;
-    //    if (this->mRoomMapToolCameraIdx == 0xff) {
-    //      iVar3 = dBgS::GetPolyCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                                 (uint)(ushort)(this->mBG).field113_0x74.mBgIndex,
-    //                                 (uint)(ushort)(this->mBG).field113_0x74.mTriIdx);
-    //      this->mRoomMapToolCameraIdx = iVar3;
-    //    }
-    //    else {
-    //      iVar3 = dBgS::GetRoomId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                              &(this->mBG).field113_0x74);
-    //      this->mRoomNo = iVar3;
-    //    }
-    //  }
-    //}
-    //else {
-    //  iVar3 = dBgS::GetPolyCamId(&d_com_inf_game::g_dComIfG_gameInfo.play.mBgS,
-    //                             (uint)*(ushort *)&(this->mBG).field_0x1a,
-    //                             (uint)*(ushort *)&(this->mBG).field_0x18);
-    //  this->mRoomMapToolCameraIdx = iVar3;
-    //}
+    if (mBG.m00.m00 && check_owner_action(mPadId, daPyStts0_SWIM_e)) {
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04.GetBgIndex(), mBG.m00.m04.GetPolyIndex());
+    }
+    else if (m360 == 0) {
+        mRoomMapToolCameraIdx = 0x1ff;
+    }
+    else if (mBG.m5C.m00) {
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetRoomCamId(mBG.m5C.m04);
+        if (mRoomMapToolCameraIdx == 0xff) {
+            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04.GetBgIndex(), mBG.m5C.m04.GetPolyIndex());
+        }
+        else {
+            mRoomNo = dComIfG_Bgsp()->GetRoomId(mBG.m5C.m04);;
+        }
+    }
+    else {
+        mRoomMapToolCameraIdx = 0xff;
+    }
 
-    //if (daSea_ChkArea(local_164, local_15c)) {
-    //    m318 = daSea_calcWave(local_164, local_15c);
-    //    m314 = 1;
-    //}
-    //else {
-    //    m318 = -1e+09;
-    //    m314 = 0;
-    //}
-    //
-    //if (m354 < m318) {
-    //    m354 = m318;
-    //}
+    if (daSea_ChkArea(player_pos.x, player_pos.z)) {
+        m318 = daSea_calcWave(player_pos.x, player_pos.z);
+        m314 = 1;
+    }
+    else {
+        m318 = C_BG_MIN_HEIGHT;
+        m314 = 0;
+    }
+    
+    if (m354 < m318) {
+        m354 = m318;
+    }
 
     dBgS_GndChk gnd_chk_2;
 
-    gnd_chk.SetPos(&mEye);
+    gnd_chk_2.SetPos(&mEye);
 
-    //fVar11 = cBgS::GroundCross((cBgS *)&d_com_inf_game::g_dComIfG_gameInfo.play,&local_158);
-    //if (*(float *)&this->field_0x310 + 40.0 <= fVar11) {
-    //  local_194.x = (this->mEye).x;
-    //  local_194.y = (this->mEye).y;
-    //  local_194.z = (this->mEye).z;
-    //  attentionPos(&local_1f4,this,this->mpPlayerActor);
-    //  local_188.x = local_1f4.x;
-    //  local_188.y = local_1f4.y;
-    //  local_188.z = local_1f4.z;
-    //  ::cXyz::operator_-(&cStack_200,&local_194,&local_188);
-    //  ::cXyz::operator*(&cStack_20c,&cStack_200,0.5);
-    //  mtx::PSVECAdd(&local_188,&cStack_20c,&local_188);
-    //}
-    //else {
-    //  local_188.x = (this->mEye).x;
-    //  local_188.y = (this->mEye).y;
-    //  local_188.z = (this->mEye).z;
-    //  attentionPos(&local_1d0,this,this->mpPlayerActor);
-    //  local_194.x = local_1d0.x;
-    //  local_194.y = local_1d0.y;
-    //  local_194.z = local_1d0.z;
-    //  ::cXyz::operator_-(&cStack_1dc,&local_188,&local_194);
-    //  ::cXyz::operator*(&cStack_1e8,&cStack_1dc,0.5);
-    //  mtx::PSVECAdd(&local_194,&cStack_1e8,&local_194);
-    //}
-    //if (this->field_0x360 == '\0') {
-    //  *(undefined4 *)&this->field_0x364 = 0;
-    //  *(float *)&this->field_0x368 = 0.0;
-    //}
-    //else {
-    //  uVar4 = lineCollisionCheckBush(this,&local_188,&local_194);
-    //  *(uint *)&this->field_0x364 = uVar4 & 5;
-    //  if ((*(uint *)&this->field_0x364 & 4) != 0) {
-    //    *(float *)&this->field_0x368 = (this->mCamSetup).field59_0xc0;
-    //  }
-    //  if ((*(uint *)&this->field_0x364 & 1) != 0) {
-    //    *(float *)&this->field_0x368 = (this->mCamSetup).field60_0xc4;
-    //  }
-    //  if (*(int *)&this->field_0x364 != 0) {
-    //    dCcMassS_Mng::GetCamTopPos
-    //              (&d_com_inf_game::g_dComIfG_gameInfo.play.mCcS.mMassMng,(cXyz *)&this->field_0x36c);
-    //  }
-    //}
+    cXyz pos1;
+    cXyz pos2;
+    if (dComIfG_Bgsp()->GroundCross(&gnd_chk_2) < mBG.m5C.m58 + 40.0f) {
+        pos1 = mEye;
+        pos2 = attentionPos(mpPlayerActor);
+        pos2 += (pos1 - pos2) * 0.5f;
+    }
+    else {
+        pos2 = mEye;
+        pos1 = attentionPos(mpPlayerActor);
+        pos1 += (pos2 - pos1) * 0.5f;
+    }
+
+    if (m360) {
+        m364 = lineCollisionCheckBush(&pos1, &pos2) & 5;
+        if (m364 & 4) {
+            m368 = mCamSetup.m0C0;
+        }
+        if (m364 & 1) {
+            m368 = mCamSetup.LockonChangeCushion();
+        }
+        if (m364) {
+            dComIfG_Ccsp()->GetMassCamTopPos(&m36C);
+        }
+    }
+    else {
+        m364 = 0;
+        m368 = 0.0f;
+    }
 }
 
 /* 8016A0F0-8016A110       .text followCamera2__9dCamera_cFl */
 bool dCamera_c::followCamera2(s32 param_0) {
-    followCamera(param_0);
+    return followCamera(param_0);
 }
 
 /* 8016A110-8016C4F8       .text followCamera__9dCamera_cFl */
-bool dCamera_c::followCamera(s32) {
-    /* Nonmatching */
+bool dCamera_c::followCamera(s32 param_1) {
+    bool bVar1;
+    bool bVar2;
+    bool bVar3;
+    bool bVar4;
+    int iVar5;
+    float fVar37;
+    
+    f32 fVar40 = 0.9f;
+
+    cSAngle acStack_490 = cSAngle(mCamSetup.m0A4);
+
+    int iVar17 = mCamSetup.m0A8;
+    f32 fVar38 = mCamSetup.mChargeLatitude;
+
+    cSAngle local_494(80.0f);
+
+    f32 dVar19 = mCamParam.Val(param_1, 1);
+    f32 dVar20 = mCamParam.Val(param_1, 5);
+    f32 dVar21 = mCamParam.Val(param_1, 0);
+    f32 dVar22 = mCamParam.Val(param_1, 4);
+    f32 dVar23 = mCamParam.Val(param_1, 3);
+    f32 dVar24 = mCamParam.Val(param_1, 10);
+    f32 dVar25 = mCamParam.Val(param_1, 0xb);
+    f32 dVar26 = mCamParam.Val(param_1, 0xd);
+    f32 dVar27 = mCamParam.Val(param_1, 0xe);
+    f32 dVar28 = mCamParam.Val(param_1, 0xf);
+
+    cSAngle local_498(mCamParam.Val(param_1, 0x10));
+    cSAngle local_49c(mCamParam.Val(param_1, 0x11));
+
+    f32 dVar29 = mCamParam.Val(param_1, 0x13);
+    f32 dVar30 = mCamParam.Val(param_1, 0x12);
+    f32 dVar31 = mCamParam.Val(param_1, 0x19);
+    f32 dVar32 = mCamParam.Val(param_1, 0x1d);
+    f32 dVar33 = mCamParam.Val(param_1, 0x17);
+    f32 dVar34 = mCamParam.Val(param_1, 0x18);
+    f32 dVar35 = mCamParam.Val(param_1, 0x14);
+    
+    dAttention_c& attention = dComIfGp_getAttention();
+
+    bVar2 = false;
+
+    if (m108 == 0) {
+        mWork.follow.m3AC = 0;
+        mWork.follow.m3B0 = 0.0f;
+        mWork.follow.m3D9 = 0;
+    }
+
+    bVar1 = false;
+    
+    if (daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying()) {
+        bVar1 = true;
+    }
+
+    if (bVar1) {
+        fVar40 = 0.66f;
+
+        static f32 SA_FLY = 35.0f;
+
+        if (dVar28 < SA_FLY) {
+            dVar28 = SA_FLY;
+        }
+
+        m148 *= 0.33f;
+
+        if (dVar24 < 420.0f) {
+            dVar24 = 420.0f;
+        }
+
+        if (dVar25 < 350.0f) {
+            dVar25 = 350.0f;
+        }
+
+        local_49c.Val(80.0f);
+
+        if (daNpc_Cb1_c::isFlying() && m788) {
+            if (m787) {
+                if (local_498 < cSAngle(30.0f)) {
+                    local_498.Val(30.0f);
+                }
+
+                if (dVar28 < 50.0f) {
+                    dVar28 = 50.0f;
+                }
+
+                dVar24 = 800.0f;
+                dVar25 = 600.0f;
+            }
+            else {
+                if (local_498 < cSAngle(10.0f)) {
+                    local_498.Val(10.0f);
+                }
+            }
+        }
+    }
+
+    if (check_owner_action(mPadId, daPyStts0_CRAWL_e | daPyStts0_SWIM_e)) {        
+        if (local_498 < cSAngle(4.0f)) {
+            local_498.Val(4.0f);
+        }
+
+        if (dVar20 < -10.0f) {
+            dVar20 = -10.0f;
+        }
+    }
+
+    if (check_owner_action(mPadId, daPyStts0_UNK200_e | daPyStts0_UNK100_e) && !check_owner_action(mPadId, daPyStts0_UNK2000000_e)) {
+        if (dVar21 > -10.0f) {
+            mWork.follow.m3B0 = -10.0f;
+        }
+    }
+    else {
+        mWork.follow.m3B0 += ((dVar21 - mWork.follow.m3B0) * 0.06f);
+    }
+
+    if (check_owner_action1(mPadId, daPyStts1_UNK40000_e)) {
+        m148 = cSAngle::_0;
+        dVar28 = -24.0f;
+        dVar24 = dVar25 = 420.0f;
+        dVar31 = 80.0f;
+        dVar20 = 140.0f;
+        bVar2 = true;
+    }
+
+    cSAngle acStack_4a0 = cSAngle::_0;
+
+    if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
+        acStack_4a0 = calcPeepAngle();
+        if (check_owner_action(mPadId, daPyStts0_UNK20_e)) {
+            dVar19 = -dVar19;
+        }
+    }
+    
+    if (mCamParam.Flag(param_1, dCamPrmFlg_UNK200)) {
+        bVar2 = true;
+    }
+
+    if (!chkFlag(daPyStts0_SWIM_e) || !check_owner_action(mPadId, daPyStts0_BOOMERANG_AIM_e | daPyStts0_ROPE_AIM_e | daPyStts0_HOOKSHOT_AIM_e | daPyStts0_BOW_AIM_e)) {
+        bVar3 = false;
+        if (daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying()) {
+            bVar3 = true;
+        }
+        
+        if (bVar3) {
+            if (mStickMainPosXLast < -0.2f) {
+                mWork.follow.m3D9 = 1;
+            }
+    
+            if (mStickMainPosXLast > 0.2f) {
+                mWork.follow.m3D9 = 0;
+            }
+            
+            f32 temp_004 = 0.04f;
+
+            if (mWork.follow.m3D9) {
+                fVar37 = -45.0f;
+            }
+            else {
+                fVar37 = 45.0f;
+            }
+
+            mWork.follow.m3AC += (fVar37 - mWork.follow.m3AC) * temp_004;
+        }
+        else {
+            mWork.follow.m3AC += (dVar19 - mWork.follow.m3AC) * 0.06f;
+            
+        }
+    }
+    
+
+    cXyz local_314(mWork.follow.m3AC, dVar20, mWork.follow.m3B0);
+    cXyz local_158;
+    if (m108 == 0) {
+        m03C.Val(m050 - m044);
+        mWork.follow.m378 = 'FLLW';
+        mWork.follow.m394 = fVar40;
+        mWork.follow.m388 = 0x50;
+        mWork.follow.m398 = dVar25;
+        mWork.follow.m39C = dVar24;
+        mWork.follow.m38C = mWork.follow.m392 = mWork.follow.m390 = 0;
+        mWork.follow.m3A0 = mWork.follow.m3BC = mDirection.V().Degree();
+        mWork.follow.m3C0 = m044;
+        mWork.follow.m3CC = m050;
+        mWork.follow.m3E8 = mWork.follow.m3E0 = mWork.follow.m3E4 = 0.01f;
+        mWork.follow.m3DC = 0.75f;
+        mWork.follow.m3EC = dVar23;
+        mWork.follow.m3F0 = dVar22;
+        mWork.follow.m3B4 = 0;
+        mWork.follow.m3D8 = 1;
+        mWork.follow.m3A8 = m060;
+        mWork.follow.m3B8 = 0.0f;
+        mWork.follow.m3DA = 0;
+
+        mWork.follow.m3A4 = positionOf(mpPlayerActor).y;
+
+        if (chkFlag(0x8000) || !m110) {
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+            mWork.follow.m37C = 1;
+        }
+        else {
+            cXyz cStack_248 = relationalPos(mpPlayerActor, &local_314);
+            cSAngle acStack_4a4; 
+            if (chkFlag(0x100000)) {
+                acStack_4a4.Val(directionOf(mpPlayerActor).Inv());
+            }
+            else {
+                acStack_4a4.Val(m03C.V());
+            }
+            
+            cSGlobe cStack_46c(dVar24, cSAngle(dVar28), acStack_4a4);
+            cXyz cStack_2fc = cStack_248 + cStack_46c.Xyz();
+            cXyz cStack_2e0 = mEye - cStack_2fc;
+            dVar20 = cStack_2e0.abs();
+            cXyz cStack_314 = mCenter - cStack_2e0;
+            dVar19 = cStack_314.abs() * 4.0f;
+
+            if (dVar20 > dVar19) {
+                dVar20 = dVar19;
+            }
+            else {
+                dVar20 = 4.0f;
+            }
+
+            fVar37 = std::fabsf(dVar20);
+            f32 playerHeight = heightOf(mpPlayerActor);
+
+            if (fVar37 > 10.0f) {
+                dVar20 = fVar37;
+            } 
+            else {
+                dVar20 = 10.0f;
+            }
+
+            mWork.follow.m37C = (std::sqrtf(playerHeight / dVar20) * 3.8f) + 1;
+        }
+
+        mWork.follow.m398 = mWork.follow.m39C = mDirection.R();
+        mWork.follow.m3A8 = mFovY;
+        mWork.follow.m380 = mWork.follow.m37C * (mWork.follow.m37C + 1) >> 1;
+        mWork.follow.m384 = 0.0f;
+    }
+
+    cXyz cStack_260 = relationalPos(mpPlayerActor, &local_314);
+    cSAngle acStack_4a8 = directionOf(mpPlayerActor);
+    cSAngle local_4ac = acStack_4a8 - m03C.V();
+    cStack_260.y = getWaterSurfaceHeight(&cStack_260);
+    cM3dGPla* plane;
+    cXyz cross;
+    if (m100 == 0) {
+        if (m31D != 0) {
+            dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &mWork.follow.m3C0, NULL, NULL);
+        }
+        
+        mWork.follow.m384 = mWork.follow.m37C - m108;
+
+        f32 temp = (mWork.follow.m384 / mWork.follow.m380);
+        mWork.follow.m3C0 += (cStack_260 - mWork.follow.m3C0) * temp;
+
+        m044 += (mWork.follow.m3C0 - m044) * dVar23;
+
+        f32 xyzDist = dCamMath::xyzHorizontalDistance(cStack_260, mWork.follow.m3C0);
+
+        if (local_314.x > local_314.z) {
+            local_314.z = local_314.x;
+        }
+
+        if (xyzDist < std::fabsf(local_314.z) + 20.0f) {
+            cXyz cStack_26c = attentionPos(mpPlayerActor);
+            cStack_26c.y -= 15.0f;
+            dBgS_CamLinChk_NorWtr lin_chk;
+            if (lineBGCheck(&cStack_26c, &m044, &lin_chk, 0x7f)) {
+                plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+                m044 = lin_chk.GetCross();
+                m044 += plane->mNormal;
+            }
+        }
+
+        dVar29 = limitf(m03C.R(), dVar25, dVar24);
+
+        cSAngle local_4b0 = m03C.U();
+
+        if (local_4b0 < local_498) {
+            local_4b0 = local_498;
+        }
+
+        if (local_49c > local_4b0) {
+            local_4b0 = local_49c;
+        }
+        
+        cSGlobe local_474(dVar29, local_4b0, cSAngle(mAngleY.Inv()));
+        m03C.R(m03C.R() + fVar40 * (local_474.R() - m03C.R()));
+        m03C.V(m03C.U() + ((local_474.U() - m03C.U()) * fVar40));
+
+        if (chkFlag(0x100000)) {
+            m03C.U(m03C.U() + ((acStack_4a8.Inv() - m03C.U()) * fVar40));
+        }
+
+        mWork.follow.m3CC = m050 = m044 + m03C.Xyz();
+
+        if (mWork.follow.m37C <= m108) {
+            m102 = 1;
+            m101 = 1;
+            m100 = 1;
+        }
+
+        mWork.follow.m3A0 = m03C.V().Degree();
+        mWork.follow.m398 = mWork.follow.m39C = m03C.R();
+        m060 += (fVar40 * (dVar31 - m060));
+        mWork.follow.m380 -= mWork.follow.m384;
+        return true;
+    }
+
+    cXyz player_pos = positionOf(mpPlayerActor);
+    player_pos.y += 10.0f;
+    fVar37 = mpPlayerActor->current.pos.y;
+    fVar37 -= groundHeight(&player_pos);
+
+    if (m360 && (check_owner_action(mPadId, daPyStts0_SWIM_e) || daNpc_kam_c::m_hyoi_kamome == 0 || check_owner_action(mPadId, 0x200))) {
+        if (mWork.follow.m388 < 0x50) {
+            mWork.follow.m388++;
+            local_158.x = 176.0f;
+            local_158.y = mWork.follow.m388; 
+            mWork.follow.m394 += (fVar40 - mWork.follow.m394) * dCamMath::rationalBezierRatio(mWork.follow.m388 / 80.0f, 1.25f);
+        }
+    }
+    else {
+        mWork.follow.m394 = 0.0F;
+        mWork.follow.m388 = 0;
+    }
+
+    if (check_owner_action(mPadId, daPyStts0_UNK4000000_e | daPyStts0_UNK2000000_e | daPyStts0_UNK800000_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e) || (check_owner_action1(mPadId, daPyStts1_UNK10000_e) && mDMCSystem.field_0x0 == 0)) {
+        setDMCAngle();
+    }
+
+    if ((check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e) && check_owner_action1(mPadId, daPyStts1_UNK10000_e)) || (cSAngle::_270 < local_4ac && local_4ac < cSAngle::_90)) {
+        mWork.follow.m3EC = dVar23;
+    }
+    else {
+        mWork.follow.m3EC = 0.1f;
+    }
+
+    if (mWork.follow.m388 == 0) {
+        mWork.follow.m3F0 = dVar22;
+    }
+    else {
+        mWork.follow.m3F0 = dVar22 * 0.1f + (1.0f - (dVar22 * 0.1f)) * mWork.follow.m394;
+        if (chkFlag(0x100000) || mWork.follow.m3EC <= 0.25f) {
+            bVar3 = false;
+            if (daNpc_Cb1_c::isFlying() || daNpc_Md_c::isFlying()) {
+                bVar3 = true;
+            }
+            if (!bVar3 && check_owner_action1(mPadId, daPyStts1_UNK40000_e)) goto LAB_8016b24c;
+        }
+        mWork.follow.m3EC = mWork.follow.m394 * 0.75f + 0.25f;
+    }
+
+    LAB_8016b24c:
+    cXyz cStack_284(mWork.follow.m3EC, mWork.follow.m3F0, mWork.follow.m3EC);
+    bVar4 = true;
+    bVar3 = false;
+
+    if (chkFlag(0x80) && (mDirection.R() < dVar25)) {
+        bVar3 = true;
+    }
+
+    if (chkFlag(0x100000) || check_owner_action(mPadId, daPyStts0_UNK4000000_e | daPyStts0_UNK2000000_e | daPyStts0_UNK800000_e | daPyStts0_TELESCOPE_LOOK_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e) || check_owner_action1(mPadId, daPyStts1_UNK10000_e | daPyStts1_DEKU_LEAF_FAN_e) || mWork.follow.m388) {
+        bVar4 = false;
+    }
+
+    if (mCurMode == 1) {
+        if (cStack_260.y < attentionPos(mpPlayerActor).y + 50.0f) {
+            cSGlobe cStack_47c(dVar25, 0, directionOf(mpPlayerActor).Inv());
+            cXyz cStack_290 = attentionPos(mpPlayerActor);
+            cXyz cStack_29c = cStack_290 + cStack_47c.Xyz();
+            if (lineBGCheck(&cStack_290, &cStack_29c, 0x7f)) {
+                cStack_260.y = cStack_290.y + 50.0f;
+            }
+        }
+    }
+
+    cXyz cStack_3c8 = cStack_260 - m044;
+    m044 += cStack_3c8 * cStack_3c8;
+    
+    if (m780) {
+        cXyz attn_pos = attentionPos(mpPlayerActor);
+        if (check_owner_action(mPadId, daPyStts0_CRAWL_e | daPyStts0_SWIM_e | daPyStts0_UNK100_e)) {
+            attn_pos.y = eyePos(mpPlayerActor).y + 30.0f;
+        }
+        else {
+            attn_pos.y -= 15.0f;
+        }
+
+        dBgS_CamLinChk_NorWtr lin_chk;
+        if (lineBGCheck(&attn_pos, &m044, &lin_chk, 0x7f)) {
+            plane = dComIfG_Bgsp()->GetTriPla(lin_chk);
+            m044 = lin_chk.GetCross();
+            m044 += plane->mNormal;
+        }
+    }
+
+    cSGlobe local_484(m050 - m044);
+    
+    if (mWork.follow.m392 <= 0 || iVar17 <= mWork.follow.m392) {
+        dVar20 = dCamMath::rationalBezierRatio((float) iVar5 / (float)iVar17, fVar38);
+        mWork.follow.m3D8 = 1;
+        mWork.follow.m3B8 = (1.0f - mWork.follow.m3B8) * dVar20;
+    }
+    else if (chkFlag(0x100000) || daNpc_Cb1_c::isFlying()) {
+        if (mWork.follow.m3D8) {
+            mWork.follow.m3B8 = 0.05f;
+        }
+
+        mWork.follow.m3D8 = 0;
+        mWork.follow.m3B8 += (1.0f - mWork.follow.m3B8) * 0.2f;
+    }
+    else if (daNpc_Md_c::isFlying() || daNpc_kam_c::m_hyoi_kamome) {
+        mWork.follow.m3D8 = 1;
+    }
+    else if (check_owner_action1(mPadId, check_owner_action1(mPadId, daPyStts1_UNK40000_e | daPyStts1_DEKU_LEAF_FAN_e))) {
+        if (mWork.follow.m3D8) {
+            mWork.follow.m3B8 = 0.05f;
+        }
+
+        mWork.follow.m3D8 = 0;
+        mWork.follow.m3B8 += (0.5f - mWork.follow.m3B8) * 0.05f;
+    }
+    else {
+        mWork.follow.m3D8 = 1;
+
+        if (mDMCSystem.field_0x0) {
+            mWork.follow.m3B8 = 0.0f;
+        }
+        else if (mStickMainPosYLast >= 0.0f) {
+            mWork.follow.m3B8 = 1.0f - ((cSAngle(dCamMath::rationalBezierRatio(mStickMainPosXLast, dVar33) * 180.0f).Cos() * 0.5f) + 0.5f);
+        }
+        else {
+            mWork.follow.m3B8 = 1.0f - ((cSAngle(dCamMath::rationalBezierRatio(mStickMainPosXLast, dVar34) * 180.0f).Cos() * 0.25f) + 0.75f);
+        }
+
+        mWork.follow.m3B8 *= mStickMainValueLast;
+        
+        if (chkFlag(0x80000)) {
+            mWork.follow.m3B8 *= 0.5f;
+        }
+        else {
+            mWork.follow.m3B8 *= 0.1f;
+        }
+
+        if (check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e) || check_owner_action1(mPadId, check_owner_action1(mPadId, daPyStts1_UNK10000_e))) {
+            if (mWork.follow.m38C == 0) {
+                if (local_4ac > cSAngle::_270 && local_4ac < cSAngle::_90) {
+                    mWork.follow.m38C = 1;
+                }
+                else {
+                    mWork.follow.m38C = -1;
+                }
+            }
+            else if (mWork.follow.m38C < 0) {
+                mWork.follow.m38C--;
+                if (mWork.follow.m38C <= -0x20) {
+                    mWork.follow.m38C = 0x10;
+                }
+            }
+            else if (mWork.follow.m38C < 0xf) {
+                mWork.follow.m3B8 = mWork.follow.m38C * 0.033333335f;
+                mWork.follow.m38C++;
+            }
+            else if (!check_owner_action(mPadId, daPyStts0_UNK2000000_e)) {
+                if (mStickMainValueLast < 0.1f) {
+                    mWork.follow.m3B8 = 0.05f;
+                }
+                else {
+                    mWork.follow.m3B8 = dCamMath::rationalBezierRatio(std::fabsf(local_4ac.Sin()), 12.0f);
+                }
+            }
+        }
+        else if (bVar1) {
+            if (mWork.follow.m38C == 0 && (local_4ac <= cSAngle::_270 || local_4ac >= cSAngle::_90)) {
+                mWork.follow.m38C = 1;
+            }
+            else if (mWork.follow.m38C < 0xf) {
+                mWork.follow.m3B8 = iVar5 * 0.033333335f;
+                mWork.follow.m38C++;
+            }
+            else if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
+                mWork.follow.m3B8 = 0.15f;
+            }
+            else if (mStickMainValueLast < 0.1f) {
+                mWork.follow.m3B8 = 0.05f;
+            }
+            else {
+                mWork.follow.m3B8 = dCamMath::rationalBezierRatio(std::fabsf(local_4ac.Sin()), 12.0f);
+            }
+        }
+        else {
+            mWork.follow.m3B8 *= dVar35;
+            mWork.follow.m38C = 0;
+        }
+    }
+
+    cSAngle acStack_4b4;
+    
+    if (chkFlag(0x80) && !chkFlag(0x80000) && mCurMode == 0 && mWork.follow.m38C == 0) {
+        acStack_4b4 = cSAngle(mDirection.U().Val()); 
+    }
+    else if (bVar1) {
+        acStack_4b4 = acStack_4a8;
+        if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
+            acStack_4b4 += acStack_4a0;
+        }
+    }
+    else {
+        acStack_4b4 = acStack_4a8.Inv();
+    }
+
+    cSAngle acStack_4b8 = cSAngle((s16)0);
+    cSAngle acStack_51c = (acStack_4b4 - local_484.V()) * mWork.follow.m3B8 * local_484.U().Cos();
+    m03C.U(local_484.V() + acStack_51c + acStack_4b8);
+    cSAngle local_4bc;
+    if (check_owner_action1(mPadId, daPyStts1_UNK20000_e)) {
+        if (mWork.follow.m392 <= iVar17) {
+            local_4bc = acStack_490;
+            mWork.follow.m3E0 = dCamMath::rationalBezierRatio((float)mWork.follow.m392 / (float)iVar17, fVar38);
+            setFlag(0x4000000);
+            mWork.follow.m392++;
+        }
+        else {
+            local_4bc = acStack_490;
+            mWork.follow.m3E0 = 1.0f;
+        }
+
+        mWork.follow.m3BC = mWork.follow.m3A0 = local_4bc.Degree();
+    }
+    else {
+        if (mWork.follow.m392 != 0) {
+            mWork.follow.m3E0 = 0.0f;
+        }
+
+        mWork.follow.m392 = 0;
+
+        if (mCurMode == 1) {
+            mWork.follow.m3E0 = 0.5f;
+            mWork.follow.m3BC = mWork.follow.m3A0 = mWork.follow.m3A0 + (mWork.follow.m3B8 * (dVar28 - mWork.follow.m3A0));
+            local_4bc = cAngle::d2s(mWork.follow.m3A0);
+            mWork.follow.m3E0 += (fVar40 - mWork.follow.m3E0) * 0.5f;
+        }
+        else if (mWork.follow.m388 == 0) {
+            mWork.follow.m3BC += dVar27 * (dVar28 - mWork.follow.m3BC);
+            dVar20 = 0.01f;
+
+            if (mWork.follow.m3B4 != 0) {
+                dVar20 = 0.25f;
+                dVar29 = dVar20;
+            }
+            
+            mWork.follow.m3A0 += dVar29 * ((mWork.follow.m3BC + m148.Degree()) - mWork.follow.m3A0);
+            local_4bc = cAngle::d2s(mWork.follow.m3A0);
+
+            if (chkFlag(0x80000)) {
+                mWork.follow.m3E0 = 0.0f;
+            }
+            else if (mWork.follow.m3B4) {
+                mWork.follow.m3E0 += dVar20 * (fVar40 - mWork.follow.m3E0);
+            }
+            else if (mMonitor.mPos.y < 0.01f && mCurMode == 0) {
+                mWork.follow.m3E0 += (0.1f - mWork.follow.m3E0) * 0.05f;
+            }
+            else {
+                mWork.follow.m3E0 += dVar20 * (fVar40 - mWork.follow.m3E0);
+            }
+        }
+        else {
+            if (check_owner_action(mPadId, daPyStts0_UNK2000000_e) || check_owner_action1(mPadId, daPyStts1_UNK10000_e)) {
+                local_4bc = acStack_51c;
+                mWork.follow.m3BC = mWork.follow.m3A0 = local_4bc.Degree();
+                mWork.follow.m3E0 = 0.95f;
+            }
+            else if (isPlayerFlying(mPadId) || daNpc_kam_c::m_hyoi_kamome) {
+                local_4bc = acStack_51c;
+                if (mWork.follow.m3A4 < positionOf(mpPlayerActor).y) {
+                    mWork.follow.m3E0 = dCamMath::rationalBezierRatio(mWork.follow.m394, dVar30);
+                }
+                else {
+                    mWork.follow.m3E0 += (0.75f - mWork.follow.m3E0) * 0.15f;
+                }
+
+                mWork.follow.m3BC = mWork.follow.m3A0 = local_4bc.Degree();
+            }
+            else {
+                local_4bc = acStack_51c;
+                mWork.follow.m3BC = mWork.follow.m3A0 = local_4bc.Degree();
+                mWork.follow.m3E0 = dCamMath::rationalBezierRatio(mWork.follow.m394, dVar30);
+            }
+        }
+    }
+    
+    mWork.follow.m3A4 = positionOf(mpPlayerActor).y;
+    
+    if (check_owner_action(mPadId, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e || check_owner_action1(mPadId, daPyStts1_UNK10000_e))) {
+        mWork.follow.m3B4 = 1;
+    }
+    else {
+        mWork.follow.m3B4 = 0;
+    }
+
+    if (local_4bc < local_498) {
+        local_4bc.Val(local_498);
+    }
+    else if (local_4bc > local_49c) {
+        local_4bc.Val(local_49c);
+    }
+
+    m03C.V(m03C.U() + ((local_4bc - m03C.U()) * mWork.follow.m3E0));
+
+    if (local_494 > m03C.U()) {
+        m03C.V(local_494);
+    }
+
+    mWork.follow.m398 += dVar27 * (dVar25 - mWork.follow.m398);
+    mWork.follow.m39C += dVar27 * (dVar24 - mWork.follow.m39C);
+
+    if (mWork.follow.m398 < local_484.R()) {
+        mWork.follow.m3DC += (dVar26 - mWork.follow.m3DC) * 0.01f;
+        local_484.R(mWork.follow.m398);
+        
+    }
+    else if (local_484.R() > mWork.follow.m39C) {
+        mWork.follow.m3DC += (dVar26 - mWork.follow.m3DC) * 0.01f;
+        local_484.R(mWork.follow.m39C);
+    }
+    else {
+        mWork.follow.m3DC = 1.0f;
+    }
+
+    m03C.R(m03C.R() + mWork.follow.m3DC * (local_484.R() - m03C.R()));
+    mWork.follow.m3CC = m044 + m03C.Xyz();
+
+    if (bVar3 && bVar4 && mCamParam.Flag(param_1, dCamPrmFlg_UNK001)) {
+        cSGlobe cStack_48c(m03C);
+        cStack_48c.V(cSAngle(dVar28));
+        cXyz cStack_2b4 = m044 + cStack_48c.Xyz();
+        if (lineBGCheck(&m044, &cStack_2b4, 0x7f)) {
+            setFlag(8);
+        }
+    }
+
+    m050 += (mWork.follow.m3CC - m050) * 0.75f;
+    m03C.Val(m050 - m044);
+    
+    if (chkFlag(8)) {
+        mWork.follow.m3DA = 1;
+    }
+
+    mWork.follow.m3E8 += (dVar32 - mWork.follow.m3E8) * 0.01f;
+    m060 += mWork.follow.m3E8 * (dVar31 - m060);
+
+    if (check_owner_action1(mPadId, daPyStts1_DEKU_LEAF_FAN_e)) {
+        m060 += cM_rndFX(mCamSetup.m078);
+    }
+
+    if (isPlayerFlying(mPadId) || daNpc_kam_c::m_hyoi_kamome) {
+        if (fVar37 < 200.0f) {
+            fVar37 = fVar37 / 200.0f;
+            fVar40 = mStickMainPosXLast * fVar37;
+            fVar38 = 1.0f - fVar37 * 0.96f;
+        }
+        else {
+            fVar40 = mStickMainPosXLast;
+            fVar38 = 0.04f;
+        }
+        
+        m060 += mCamSetup.m07C * cSAngle((s16)(m07C << 7)).Sin();
+        m05C += (cSAngle(fVar40 * mCamSetup.FanBank()) - m05C) * fVar38;
+        setFlag(0x400);
+    }
+
+    return 1;
 }
 
 /* 8016C55C-8016C578       .text eyePos__9dCamera_cFP10fopAc_ac_c */
@@ -2300,8 +3335,362 @@ f32 dCamera_c::heightOf(fopAc_ac_c* i_actor) {
 }
 
 /* 8016C618-8016D824       .text lockonCamera__9dCamera_cFl */
-bool dCamera_c::lockonCamera(s32) {
-    /* Nonmatching */
+bool dCamera_c::lockonCamera(s32 param_1) {
+    /* Nonmatching - Lots of conficts between the asm produced by this function and `followCamera` regarding class member types */
+    int iVar15 = mCamSetup.ChargeTimer();
+    f32 fVar22 = mCamSetup.ChargeBRatio();
+    cSAngle local_250 = cSAngle(mCamSetup.m0A4);
+    int iVar16 = mCamSetup.m0A8;
+    f32 fVar1 = mCamSetup.ChargeLatitude();
+    f32 fVar2 = mCamParam.Val(param_1 ,dCamStyleParam_UNK4);
+    f32 fVar21 = mCamParam.Val(param_1 ,dCamStyleParam_UNK3);
+    if (m108 == 0) {
+        m100 = 1;
+        m101 = 1;
+        m102 = 1;
+        mWork.lockon.m378 = 'LOCK';
+        mWork.lockon.m380 = 0;
+        mWork.lockon.m384 = 1.0f;
+        mWork.lockon.m38C = 0;
+        mWork.lockon.m39C = 0;
+        mWork.lockon.m390 = m044;
+        cXyz cStack_150 = m044 - attentionPos(mpPlayerActor);
+        mWork.lockon.m3A8.Val(cStack_150);
+        mWork.lockon.m3A0 = mWork.lockon.m39C = 0.0f;
+        mWork.lockon.m3B8 = mCamSetup.Cushion4Base();
+        mWork.lockon.m388 = 0;
+        mWork.lockon.m3A0 = 0;
+        mWork.lockon.m3A4 = 0;
+
+        if (mpLockonTarget) {
+            radiusActorInSight(mpPlayerActor, mpLockonTarget);
+        }
+    }
+
+    if (m31D != 0) {
+        dComIfG_Bgsp()->MoveBgMatrixCrrPos(mBG.m5C.m04, true, &m36C, NULL, NULL);
+    }
+    if (dComIfGp_getAttention().LockonTruth() && check_owner_action(mPadId, daPyStts0_BOOMERANG_WAIT_e)) {
+        mWork.lockon.m38C = 1;
+    }
+    else {
+        mWork.lockon.m38C = 0;
+    }
+
+    if (check_owner_action(mPadId, daPyStts0_UNK400_e)) {
+        mWork.lockon.m38C = 0;
+    }
+    else {
+      if (mWork.lockon.m38C) {
+        dComIfGp_getVibration().StartShock(2, 0x10, cXyz(0.0f, 1.0f, 0.0f));
+      }
+      mWork.lockon.m38C = 1;
+    }
+
+    bool bVar6 = true;
+    if (dComIfGp_getAttention().chkFlag(1 << 3) >> 3 && dComIfGp_getAttention().chkFlag(20)) {
+        bVar6 = false;
+    }
+    if (bVar6) {
+        m11C = 0;
+        m108 = 0;
+        clrFlag(0x100);
+    }
+
+    f32 fVar3 = mCamSetup.CurveWeight();
+    f32 fVar4;
+    f32 dVar17 = dComIfGp_getAttention().LockonReleaseDistanse();
+    f32 dVar20 = 10000.0f;
+    cSGlobe local_230;
+    if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e | daPyStts0_UNK1_e)) {
+        if (mpLockonTarget) {
+            local_230.Val(mCamSetup.ParallelDist(), cSAngle::_0, directionOf(mpPlayerActor));
+            fVar4 = 1.0f;
+        }
+        else {
+            cXyz local_f0 = attentionPos(mpLockonTarget);
+            cXyz local_fc = attentionPos(mpPlayerActor);
+
+            if (fopAcM_GetName(mpLockonTarget) == PROC_BDK) {
+                local_f0.x = positionOf(mpLockonTarget).x;
+                local_f0.z = positionOf(mpLockonTarget).z;
+            }
+
+            local_230.Val(local_f0 - local_fc);
+            fVar4 = local_230.R() / dVar17;
+
+            if (fVar4 > 1.0f) {
+                fVar4 = 1.0f;
+            }
+
+            dVar20 = dCamMath::xyzHorizontalDistance(local_f0, local_fc);
+        }
+    }
+    else {
+        local_230.Val(mCamSetup.ParallelDist(), 0, directionOf(mpPlayerActor).Inv());
+        fVar4 = 1.0f;
+        mpLockonTarget = NULL;
+    }
+
+    cSAngle acStack_254 = local_230.U();
+    cSAngle local_258 = mCamParam.LockonLongitude(fVar4);
+
+    if (m11C < iVar15 && chkFlag(0x100)) {
+        local_258 *= (float)m108 / (float)iVar15;
+    }
+    else if (iVar15 <= m11C) {
+        setFlag(0x100);
+    }
+
+    cSAngle local_25c = m03C.U().Inv() - acStack_254;
+
+    if (local_25c < cSAngle::_0) {
+        mWork.lockon.m38C = 0;
+        acStack_254 -= local_258;
+        local_25c = -acStack_254;
+    }
+    else {
+        mWork.lockon.m38C = 1;
+        acStack_254 += local_258;
+    }
+
+    cXyz local_108 = attentionPos(mpPlayerActor);
+    bVar6 = false;
+    if (chkFlag(0x80080)) {
+        cXyz local_114 = attentionPos(mpPlayerActor);
+        if (pointInSight(&local_114)) {
+            if (mWork.lockon.m388 == 0) {
+                int iVar10 = -mWork.lockon.m38C + 1;
+                mWork.lockon.m388 = iVar10 - (-mWork.lockon.m38C + (iVar10 == 0));
+            }
+            bVar6 = true;
+            mWork.lockon.m388 = 0x3c;
+        }
+    }
+
+    if (lineBGCheckBack(&m044, &local_108, 0x7f) && lineBGCheck(&m050, &m044, 0x7f)) {
+        bVar6 = true;
+        mWork.lockon.m388 = 0x3c;
+    }
+
+    if (mWork.lockon.m388) {
+        mWork.lockon.m388--;
+        if (mWork.lockon.m388 && mStickMainValueLast <= 0.1f) {
+            mWork.lockon.m388 = 1;
+        }
+        bVar6 = true;
+    }
+
+    f32 fVar5 = mStickCPosYLast; 
+    dCamMath::customRBRatio(mCamParam.RadiusRatio(m03C.R()), fVar3);
+
+    if (chkFlag(0x10)) {
+        fVar3 = 0.01f;
+        mWork.lockon.m3B8 = 0.01f;
+    }
+    else if (m360) {
+        fVar3 = mCamSetup.Cushion4Base();
+    }
+    else {
+        fVar3 = mCamSetup.Cushion4Jump();
+    }
+
+    mWork.lockon.m3B8 += (fVar3 - mWork.lockon.m3B8) * mCamSetup.CusCus();
+    mWork.lockon.m390.x = local_108.x;
+    mWork.lockon.m390.z = local_108.z;
+
+    if (bVar6) {
+        dVar17 = mCamParam.LockonCenterHeight(fVar4); 
+    }
+    else {
+        dVar17 = mCamParam.LockonCenterHeight(fVar4) + 25.0f;
+    }
+
+    mWork.lockon.m390.z += mWork.lockon.m3B8 * ((local_108.y + dVar17) - mWork.lockon.m390.z);
+    dVar17 = local_230.R();
+
+    f32 dVar19;
+    if (mpLockonTarget) {
+        f32 dVar18 = local_25c.Cos();
+        dVar19 = cSAngle(local_230.U() * 1.3f).Cos();
+        if (std::fabsf(dVar18) < std::fabsf(dVar19)) {
+          dVar19 = dVar18;
+        }
+        dVar19 = (local_230.R() - dVar17 * 0.05f * 2.0f) * std::fabsf(dVar19 * -0.5f + 0.5f);
+    }
+    else {
+        dVar19 = local_230.R() * std::fabsf(local_25c.Cos() * -0.5f + 0.5f);
+    }
+
+    cSAngle acStack_260 = local_230.U();
+    mWork.lockon.m3B4 += (fVar21 - mWork.lockon.m3B4) * mCamSetup.CusCus();
+    mWork.lockon.m3B0 += (fVar2 - mWork.lockon.m3B0) * mCamSetup.CusCus();
+    cSAngle temp(mWork.lockon.m3B0 + 2);
+    cSAngle acStack_264 = temp + (acStack_260 - temp) * mWork.lockon.m3B4;
+    cSAngle acStack_268;
+    if (bVar6) {
+        fVar2 = mWork.lockon.m3A8.R() * 0.75f;
+        acStack_268.Val(m534 + (local_230.U() - m534) * 0.05f);
+    }
+    else {
+        fVar2 = mWork.lockon.m3A8.R() + mWork.lockon.m3B0 * (mWork.lockon.m384 * (dVar19 + dVar17 * 0.05f) - mWork.lockon.m3A8.R());
+        acStack_268.Val(m534 + mWork.lockon.m3B4 * (local_230.U() - m534));
+    }
+
+    mWork.lockon.m3A8.Val(fVar2, acStack_268, acStack_264);
+    m044 = mWork.lockon.m390 + mWork.lockon.m3A8.Xyz();
+    if (mpLockonTarget && mLockOnActorId != -1) {
+        cXyz local_120 = attentionPos(mpPlayerActor);
+        if (lineBGCheck(&local_120, &m044, 0x7f)) {
+              ForceLockOff(mLockOnActorId);
+        }
+    }
+
+    cSGlobe cStack_238(mEye - m044);
+    cSGlobe local_240(m050 - m044);
+    cSAngle acStack_26c(m03C.V());
+    cSAngle local_270(m03C.U());
+    fVar2 = m03C.R();
+    cSAngle local_274 = local_25c - local_258;
+    fVar21 = mCamSetup.m044;
+
+    if (bVar6) {
+        cSAngle acStack_278;
+        if (m514 == 1) {
+            acStack_278.Val(15.0f);
+        }
+        else {
+            acStack_278.Val(-15.0f);
+        }
+        acStack_26c += (m03C.U().Inv() + acStack_278 - acStack_26c) * 0.05f;
+    }
+    else {
+        if (!mpLockonTarget) {
+            dVar17 = mCamSetup.m028;
+        }
+        else if (!chkFlag(0x100)) {
+            int iVar10 = local_258.Val(); 
+            if (local_258 == cSAngle::_0) {
+                dVar17 = 0.15f;
+            }
+            else {
+                f32 fVar7 = m11C;
+                fVar3 = mCamParam.Val(param_1, dCamStyleParam_UNK15);
+                fVar3 *= dCamMath::customRBRatio(-((float)local_274.Val() / (float)iVar10), fVar21);
+                dVar17 = (fVar3 + (1.0f - fVar7 / (float)iVar15) * (fVar22 - fVar3));
+            }
+        }
+        else {
+            iVar15 = local_258.Val();
+            f32 f1 = (float)local_274.Val() / (float)iVar15;
+            if (local_25c.Val() < iVar15) {
+                fVar22 = mCamParam.Val(param_1, dCamStyleParam_UNK15);
+                fVar21 = dCamMath::customRBRatio(-f1, fVar21);
+                dVar17 = fVar22 * fVar21;
+            }
+            else {
+                cSAngle local_27c(45.0f);
+                cSAngle local_2d8(135.0f);
+                
+                if (local_258 < local_2d8) {
+                    local_27c = cSAngle::_180 - local_258;
+                }
+
+                dVar17 = mCamParam.Val(param_1, dCamStyleParam_UNK20) * dCamMath::rationalBezierRatio(f1, fVar21);
+                
+                if (dVar20 < 100.0f) {
+                    dVar17 *= dCamMath::rationalBezierRatio(dVar20 / 100.0f, 1.0f);
+                }
+            }
+        }
+        local_274 = acStack_254.Inv() - m03C.U();
+        local_274.Degree();
+        acStack_26c += local_274 * dVar17;
+    }
+
+    if (check_owner_action1(mPadId, daPyStts1_UNK20000_e)) {
+        iVar15 = mWork.lockon.m380;
+        if (iVar15 <= iVar16) {
+            f32 bezier_ratio = dCamMath::rationalBezierRatio((float)iVar15 / (float)iVar16, fVar1);
+            local_270 += (local_250 - local_270) * bezier_ratio;
+            setFlag(0x4000000);
+            mWork.lockon.m380++;
+        }
+        else {
+            local_270 = local_250;
+        }
+    }
+    else {
+        if (bVar6) {
+            local_270 -= (local_230.U() * 0.7f + local_270) * 0.1f;
+        }
+        else {
+            mWork.lockon.m380 = 0;
+            if (chkFlag(0x10)) {
+                local_270 += (mCamParam.LockonLatitude(fVar4) - local_270) * 0.05f;
+            }
+            else if (!m360 && !check_owner_action(mPadId, daPyStts0_UNK400_e)) {
+                //dVar17 = mWork.lockon.m3A8.V().Cos();
+                local_270 += (local_240.U() - local_270) * (1.0f - std::fabsf(fVar5)) * std::fabsf(dVar17);
+            }
+            else {
+                fopAc_ac_c* playerActor;
+                if (is_player(mpPlayerActor)) {
+                    playerActor = fopAcM_SearchByID(fopAcM_GetID(mpPlayerActor));
+                }
+                else {
+                    playerActor = NULL;
+                }
+                if (mpLockonTarget == playerActor && m784) {
+                    local_270 -= local_270 * mCamSetup.m028;
+                }
+                else {
+                    local_270 += (mCamParam.LockonLatitude(fVar4) - local_270) * mCamSetup.m028;
+                }
+                if (mpLockonTarget && check_owner_action(mPadId, daPyStts0_UNK400_e)) {
+                    cXyz local_12c = attentionPos(mpLockonTarget);
+                    cXyz local_138 = attentionPos(mpPlayerActor);
+                    local_138.y = 0.0f;
+                    local_12c.y = 0.0f;
+                    local_12c = local_12c - local_138;
+                    fVar22 = local_12c.abs();
+                }
+            }
+
+            if (check_owner_action(mPadId, daPyStts0_UNK1000000_e | daPyStts0_SHIP_RIDE_e)) {
+                dVar17 = local_270.Degree();
+                if (dVar17 < mCamParam.Val(param_1, dCamStyleParam_UNK16)) {
+                    local_270.Val(mCamParam.Val(param_1, dCamStyleParam_UNK16));
+                }
+                
+                if (dVar17 > mCamParam.Val(param_1, dCamStyleParam_UNK17)) {
+                    local_270.Val(mCamParam.Val(param_1, dCamStyleParam_UNK17));
+                }
+            }
+            else {
+                s16 local_284 = local_270;
+                if (!mCamSetup.CheckLatitudeRange(&local_284)) {
+                    local_270.Val(local_284);
+                }
+            }
+        }
+    }
+
+    if (bVar6) {
+        fVar22 = fVar2 + (280.0f - fVar2) * 0.05f;
+    }
+    else {
+        f32 local_244 = local_240.R();
+        if (mCamParam.DefaultRadius(&local_244)) {
+            fVar22 = fVar2 + (fVar22 - fVar2) * 0.05f;
+        }
+    }
+
+    m03C.Val(fVar22, local_270, acStack_26c);
+    m044 = m044 + m03C.Xyz();
+    m060 += (mCamParam.LockonFovy(fVar4) - m060) * mCamSetup.m028;
+    setFlag(0x2000);
+    return true;
 }
 
 /* 8016D824-8016D880       .text getMsgCmdSpeaker__9dCamera_cFv */
@@ -2343,9 +3732,151 @@ bool dCamera_c::talktoCamera(s32) {
     /* Nonmatching */
 }
 
+namespace {
+    static void hideActor(fopAc_ac_c* actor) {
+        fopAcM_OnStatus(actor, fopAcStts_NODRAW_e);
+    }
+
+    static bool lineCollisionCheck(cXyz param_1, cXyz param_2, fopAc_ac_c* param_3, fopAc_ac_c* param_4) {
+        return dComIfG_Ccsp()->ChkCamera(param_1, param_2, 15.0f, param_3, param_4);
+    }
+}
+
 /* 80170490-801708E0       .text CalcSubjectAngle__9dCamera_cFPsPs */
-void dCamera_c::CalcSubjectAngle(s16*, s16*) {
-    /* Nonmatching */
+bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
+    f32 fVar1;
+    f32 fVar2;
+    f32 fVar3;
+    f32 fVar4;
+    f32 fVar5;
+    f32 fVar6;
+    f32 dVar11;
+    f32 dVar12;
+
+    bool bVar9 = true;
+    
+    if (dComIfGp_evmng_cameraPlay() && dComIfGp_getMiniGameType() != 8) {
+        return false;
+    }
+
+    if (mWork.subject.m378 != 'SUBJ') {
+        return false;
+    }
+
+    if (!m100) {
+        return false;
+    }
+
+    if (!mWork.subject.m37C) {
+        bVar9 = false;
+    }
+
+    fVar1 = mCamParam.Val(mWork.subject.m380, 19);
+    fVar2 = mCamParam.Val(mWork.subject.m380, 24);
+    fVar3 = mCamParam.Val(mWork.subject.m380, 21);
+    fVar4 = mCamSetup.m030;
+    
+    if (!bVar9) {
+          cSAngle local_88(fVar2 * mWork.subject.m384);
+          cSAngle local_8c(fVar1 * mWork.subject.m388);
+          s16 local_98 = local_88.Val() + mWork.subject.m3BA;
+          *param_2 = local_98;
+          *param_1 = local_8c.Val();
+    }
+    
+    fVar6 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
+    fVar5 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
+
+    if (is_player(mpPlayerActor)) {
+        mWork.subject.m3B8 = ((daPy_py_c*)mpPlayerActor)->getBodyAngleX();
+    }
+    else {
+        mWork.subject.m3B8 = mpPlayerActor->shape_angle.x;
+    }
+
+    mWork.subject.m3BA = mpPlayerActor->shape_angle.y;
+
+    f32 f1;
+    if (fVar6 > 0.7f) {
+        f1 = 1.0f;
+    } 
+    else if (fVar6 < -0.7f) {
+        f1 = -1.0f;
+    }
+    else {
+        f1 = fVar6 / 0.7f;
+    }
+
+    f32 f3;
+    if (fVar5 > 0.7f) {
+        f3 = 1.0f;
+    } 
+    else if (fVar5 < -0.7f) {
+        f3 = -1.0f;
+    }
+    else {
+        f3 = fVar5 / 0.7f;
+    }
+    fVar5 = f3;
+
+    f32 f2 = 5.0f;
+    if ((mEye.y <= m354 + f2 || mEye.y <= mBG.m5C.m58 + f2) && ((mWork.subject.m388 >= 0.0f && f3 > 0.0f) || (mWork.subject.m388 < 0.0f && f3 <= 0.0f))) {
+        fVar5 = 0.0f;
+    }
+    
+    if (check_owner_action(mPadId, daPyStts0_CRAWL_e)) {
+        fVar5 = 0.0f;
+    }
+
+    if (!check_owner_action(mPadId, daPyStts0_UNK40000_e)) {
+        if (mCamParam.Flag(mWork.subject.m380, dCamPrmFlg_UNK020)) {
+            mWork.subject.m384 = -f1;
+            mWork.subject.m388 = fVar5;
+        }
+        else {
+            dVar11 = dCamMath::rationalBezierRatio(f1, mCamSetup.CurveWeight());
+            dVar12 = dCamMath::rationalBezierRatio(fVar5, mCamSetup.CurveWeight());
+            if (check_owner_action(mPadId, daPyStts0_UNK2000_e)) {
+                mWork.subject.m384 = -dVar11 * fVar3;
+                mWork.subject.m388 += dVar12 * fVar3;
+            }
+            else {
+                if (mCamParam.Flag(mWork.subject.m380, dCamPrmFlg_UNK010)) {
+                    f32 temp = fVar3 - (mWork.subject.m38C * (fVar3 * fVar4));
+                    mWork.subject.m384 = -dVar11 * temp;
+                    mWork.subject.m388 += dVar12 * temp;
+                }
+                else {
+                    mWork.subject.m384 = -dVar11 * fVar3;
+                    mWork.subject.m388 += dVar12 * fVar3;
+                }
+            }
+            if (mWork.subject.m384 > 1.0f) {
+                mWork.subject.m384 = 1.0f;
+            }
+            if (mWork.subject.m384 < -1.0f) {
+                mWork.subject.m384 = -1.0f;
+            }
+            if (mWork.subject.m388 > 1.0f) {
+                mWork.subject.m388 = 1.0f;
+            }
+            if (mWork.subject.m388 < -1.0f) {
+                mWork.subject.m388 = -1.0f;
+            }
+        }
+    }
+    else {
+        mWork.subject.m384 = 0.0f;
+    }
+
+    cSAngle local_90(fVar2 * mWork.subject.m384);
+    cSAngle local_94(fVar1 * mWork.subject.m388);
+    
+    s16 local_a8 = local_90.Val() + mWork.subject.m3BA;
+    *param_2 = local_a8;
+    *param_1 = local_94.Val();
+    mWork.subject.m37D = 0;
+    return bVar9;
 }
 
 /* 801708E0-801719C4       .text subjectCamera__9dCamera_cFl */
@@ -2416,6 +3947,207 @@ bool dCamera_c::fixedPositionCamera(s32) {
 /* 8017A80C-8017B144       .text eventCamera__9dCamera_cFl */
 bool dCamera_c::eventCamera(s32) {
     /* Nonmatching */
+    typedef bool (dCamera_c::*func)();
+    func l_func[] = {
+        &dCamera_c::pauseEvCamera,
+        &dCamera_c::pauseEvCamera,
+        &dCamera_c::talktoEvCamera,
+        &dCamera_c::fixedPositionEvCamera,
+        &dCamera_c::fixedFrameEvCamera,
+        &dCamera_c::uniformTransEvCamera,
+        &dCamera_c::watchActorEvCamera,
+        &dCamera_c::restorePosEvCamera,
+        &dCamera_c::getItemEvCamera,
+        &dCamera_c::gameOverEvCamera,
+        &dCamera_c::turnToActorEvCamera,
+        &dCamera_c::rollingEvCamera,
+        &dCamera_c::tactEvCamera,
+        &dCamera_c::windDirectionEvCamera,
+        &dCamera_c::tornadoWarpEvCamera,
+        &dCamera_c::styleEvCamera,
+        &dCamera_c::saveEvCamera,
+        &dCamera_c::loadEvCamera,
+        &dCamera_c::useItem0EvCamera,
+        &dCamera_c::useItem1EvCamera,
+        &dCamera_c::fixedFramesEvCamera,
+        &dCamera_c::bSplineEvCamera,
+        &dCamera_c::possessedEvCamera,
+        &dCamera_c::twoActor0EvCamera,
+        &dCamera_c::stokerEvCamera,
+        &dCamera_c::uniformBrakeEvCamera,
+        &dCamera_c::uniformAcceleEvCamera,
+        &dCamera_c::maptoolIdEvCamera,
+    };
+
+    static char* ActionNames[28] = {
+        "PAUSE",
+        "WAIT",
+        "TALK",
+        "FIXEDPOS",
+        "FIXEDFRM",
+        "UNITRANS",
+        "WATCHACTOR",
+        "RESTOREPOS",
+        "GETITEM",
+        "GAMEOVER",
+        "TURNTOACTOR",
+        "ROLLING",
+        "TACT",
+        "WINDDIR",
+        "TORNADO",
+        "STYLE",
+        "SAVE",
+        "LOAD",
+        "USEITEM0",
+        "USEITEM1",
+        "FIXEDFRMS",
+        "BSPLINE",
+        "POSSESSED",
+        "TWOACTOR0",
+        "STOKER",
+        "UNIBRAKE",
+        "UNIACCELE",
+        "MAPTOOL"
+    };
+
+    if (m118 == 0) {
+        m0A4[1].m00.mCenter = mCenter;
+        m0A4[0].m00.mCenter = m0A4[1].m00.mCenter;
+
+        m0A4[1].m00.mEye = mEye;
+        m0A4[0].m00.mEye = m0A4[1].m00.mEye;
+
+        m0A4[0].m00.mFovY = m0A4[1].m00.mFovY = mFovY;
+
+        m0A4[1].m00.mBank = mBank;
+        m0A4[0].m00.mBank = m0A4[1].m00.mBank;
+
+        m0A4[0].m00.m1E = m0A4[1].m00.m1E = 0;
+    }
+
+    long lVar12;
+    
+    if (!chkFlag(0x20000000)) {
+        if (!dComIfGp_evmng_cameraPlay()) {
+            return 0;
+        }
+
+        int staff_id = dComIfGp_evmng_getMyStaffId("CAMERA");
+
+        if (staff_id < 0) {
+            return 0;
+        }
+
+        if (mEventData.mStaffIdx != staff_id) {
+            clrFlag(0x200000);
+            m11C = 0;
+            m108 = 0;
+            m118 = 0;
+        }
+
+        mEventData.mStaffIdx = staff_id;
+        if (dComIfGp_evmng_getIsAddvance(mEventData.mStaffIdx)) {
+            m102 = 0;
+            m101 = 0;
+            m100 = 0;
+            m11C = 0;
+        }
+        lVar12 = dComIfGp_evmng_getMyActIdx(mEventData.mStaffIdx, ActionNames, 0x1C, 0, 0);
+    }
+    else {
+        mEventData.mStaffIdx = -1;
+        if (m118 == 0) {
+            m11C = 0;
+        }
+        lVar12 = mEventData.field_0x18;
+    }
+
+    if (lVar12 < 0 || lVar12 >= 0x1c) {
+        dComIfGp_evmng_cutEnd(mEventData.mStaffIdx);
+        return 0;
+    }
+
+    if (m11C == 0) {
+        if (m118 == 0) {
+            clrFlag(0x200000);
+            mEventData.field_0x1c = 2;
+        }
+
+        u32 evStringData;
+        if (getEvStringData((char*)&evStringData, "Trim", "CINESCO")) {
+            if (evStringData == 'STAN') {
+                mEventData.field_0x1c = 0;
+            }
+            else if (evStringData == 'VIST') {
+                mEventData.field_0x1c = 1;
+            }
+            else if (evStringData == 'DEMO') {
+                mEventData.field_0x1c = 3;
+            }
+            else if (evStringData == 'NONE') {
+                mEventData.field_0x1c = 4;
+            }
+            else if (evStringData == 'KEEP') {
+                mEventData.field_0x1c = 999;
+            }
+        }
+
+        getEvIntData(&mEventData.field_0x24, "WaitAnyKey", 0);
+
+        if (mEventData.field_0x24) {
+            setFlag(0x200000);
+        }
+
+        getEvIntData(&mEventData.field_0x20, "BGCheck", 1);
+        getEvIntData(&mEventData.field_0x24, "AutoForcus", 1);
+
+        if (mEventData.field_0x24 == 0) {
+            mDoGph_gInf_c::offAutoForcus();
+        }
+        getEvIntData(&mEventData.field_0x28, "MoveBGCheck", 1);
+    }
+
+    switch (mEventData.field_0x20) {
+        case 1:
+            m068 = 0xf;
+            break;
+        case 2:
+            m068 = 0x3f;
+            break;
+        case 3:
+        case 4:
+            m068 = 0;
+            break;
+        default:
+            m068 = 9;
+    }
+    
+    mTrimSize = mEventData.field_0x1c;
+
+    // TODO: inline?
+    bool bVar5 = false;
+    if (m100 && m101 && m102) {
+        bVar5 = true;
+    }
+    if (bVar5) {
+        dComIfGp_onCameraAttentionStatus(mCameraInfoIdx, 4);
+    }
+    else {
+        dComIfGp_offCameraAttentionStatus(mCameraInfoIdx, 4);
+    }
+
+    //Runtime.PPCEABI.H::__ptmf_scall(&local_170 + (int)((ulonglong)lVar12 >> 0x20),this,pvVar8);
+    if ((this->*l_func[lVar12])()) {
+        dComIfGp_evmng_cutEnd(mEventData.mStaffIdx);
+    }
+
+    if (mEventData.field_0x20 == 4) {
+        dBgS_LinChk lin_chk;
+        if (lineBGCheck(&m044, &m050, &lin_chk, 4)) {
+            m050 = lin_chk.GetCross();
+        }
+    }
+    return 1;
 }
 
 /* 8017B144-8017B14C       .text demoCamera__9dCamera_cFl */
@@ -2535,13 +4267,169 @@ s16 dCamera_c::U2() {
 }
 
 /* 8017B524-8017BA50       .text shakeCamera__9dCamera_cFv */
-void dCamera_c::shakeCamera() {
-    /* Nonmatching */
+f32 dCamera_c::shakeCamera() {
+    /* Nonmatching - Code 100% */
+    static f32 const wave[] = {0.4f, 0.9f, 2.1f, 3.2f};
+
+    f32 fVar6 = 0.0f;
+
+    if (m554 < m550) {
+        int uVar5 = (m548[m554 >> 3] << 8) | m548[(m554 >> 3) + 1];;
+        int uVar4 = 1 << (15 - (m554 & 7));
+        f32 fVar7 = 1.0f;
+        for (int i = 0; i < 4; i++) {
+            if (uVar4 & uVar5) {
+                fVar6 += fVar7 * wave[i];
+            }
+            else {
+                fVar7 *= 0.43f;
+            }
+            uVar4 = uVar4 >> 1;
+        }
+        
+        m554++;
+
+        fVar6 *= cM_rndFX(0.05f) + 0.95f;
+
+        if (m554 & 1) {
+            fVar6 = -fVar6;
+        }
+
+        cXyz local_38(m55C);
+        local_38.x += cM_rndFX(0.045f);
+        local_38.z += cM_rndFX(0.045f);
+        local_38 = local_38 * fVar6;
+
+        if (m588 & 2) {
+            mEyeShake = local_38;
+            mCenterShake = mEyeShake;
+        }
+
+        if (m588 & 4) {
+            mFovYShake = fVar6 * cM_rndFX(0.12f);
+        }
+
+        if (m588 & 8) {
+            mBankShake = cSAngle(fVar6 * cM_rndFX(0.15f));
+        }
+
+        if (m588 & 0x10) {
+            mDoGph_gInf_c::setBlureRate(fVar6 * 30.0f);
+            mDoGph_gInf_c::onBlure();
+            mBlureTimer = 0;
+        }
+        else {
+            if (m588 & 0x20) {
+                if (mBlurePositionType == 0) {
+                    dDlst_window_c* window = get_window(mpCamera);
+                    scissor_class* scissor = window->getScissor();
+                    cXyz eye = eyePos(mpPlayerActor);
+                    cXyz eye_proj;
+                    mDoLib_project(&eye, &eye_proj);
+                    mBlurePosition.x = eye_proj.x / scissor->mWidth;
+                    mBlurePosition.y = eye_proj.y / scissor->mHeight;
+                    mBlurePosition.z = 0.0f;
+                }
+                
+                // TODO: inline?
+                bool bVar1 = false;
+
+                if (mBlureTimer > 0) {
+                    mBlureTimer--;
+                }
+                else if (m58C == 1) {
+                    bVar1 = true;
+                }
+
+                if (!bVar1) {
+                    mDoMtx_stack_c::transS(mBlurePosition);
+                    mDoMtx_stack_c::scaleM(mBlureScale);
+                    mDoMtx_stack_c::XrotM(mBlureRotation.x);
+                    mDoMtx_stack_c::YrotM(mBlureRotation.y);
+                    mDoMtx_stack_c::ZrotM(mBlureRotation.z);
+                    mDoMtx_stack_c::transM(-mBlurePosition.x, -mBlurePosition.y, -mBlurePosition.z);
+                    mDoGph_gInf_c::onBlure(mDoMtx_stack_c::get());
+                    int blurRate = mBlureAlpha * 230.0f;
+                    mDoMtx_stack_c::scaleM(mBlureScale);
+                    mDoGph_gInf_c::setBlureRate(blurRate);
+                }
+            }
+        }
+    }
+    else {
+        mCenterShake -= mCenterShake * 0.1f;
+        mEyeShake -= mEyeShake * 0.1f;
+        mFovYShake -= mFovYShake * 0.1f;
+        mBankShake -= mBankShake * 0.1f;
+        
+        if (mBlureTimer <= 0) {
+            mDoGph_gInf_c::offBlure();
+            m588 &= ~0x20;
+            mBlureTimer = 0;
+        }
+        else if (mBlureTimer > 0) {
+            // TODO: inline?
+            bool r3 = false;
+            if (m58C != 1) {
+                r3 = true;
+            }
+            if (!r3) {
+                mDoMtx_stack_c::transS(mBlurePosition);
+                mDoMtx_stack_c::scaleM(mBlureScale);
+                mDoMtx_stack_c::XrotM(mBlureRotation.x);
+                mDoMtx_stack_c::YrotM(mBlureRotation.y);
+                mDoMtx_stack_c::ZrotM(mBlureRotation.z);
+                mDoMtx_stack_c::transM(-mBlurePosition.x, -mBlurePosition.y, -mBlurePosition.z);
+                mDoGph_gInf_c::onBlure(mDoMtx_stack_c::get());
+                int blurRate = mBlureAlpha * 230.0f;
+                mDoMtx_stack_c::scaleM(mBlureScale);
+                mDoGph_gInf_c::setBlureRate(blurRate);
+            }
+
+            if ((int)(mBlureAlpha * 230.0f) > mBlureTimer && m58C == 0) {
+                mDoGph_gInf_c::setBlureRate(mBlureTimer);
+            }
+
+            mBlureTimer--;
+        }
+    }
+    return fVar6;
 }
 
+static const int PatternLengthMax[] = {0x00000004};
+
 /* 8017BA50-8017BB8C       .text StartShake__9dCamera_cFlPUcl4cXyz */
-void dCamera_c::StartShake(s32, u8*, s32, cXyz) {
-    /* Nonmatching */
+int dCamera_c::StartShake(s32 i_length, u8* i_pattern, s32 i_flags, cXyz i_pos) {
+    /* Nonmatching - Code 100%, just need to figure out where PatternLengthMax is meant to be placed */
+    if (i_length < 0 || i_length > PatternLengthMax[0] << 3) {
+        i_length = PatternLengthMax[0] << 3;
+    }
+    
+    m550 = i_length;
+    
+    int i;
+    int var_r28 = i_length >> 3;
+    for (i = 0; i < PatternLengthMax[0]; i++) {
+        m544[i] = m548[i] = 0;
+    }
+
+    for (i = 0; i < var_r28; i++) {
+        m544[i] = m548[i] = i_pattern[i];
+    }
+
+    var_r28 = i_length & 7;
+    m544[i] = (0xFF << (8 - var_r28)) & i_pattern[i];
+
+    if (i_length == (PatternLengthMax[0] << 3)) {
+        m548[i] = m544[i] | (i_pattern[0] >> var_r28);
+    } else {
+        m548[i] = m544[i];
+    }
+
+    m55C = i_pos.norm();
+    m554 = 0;
+    m588 = i_flags;
+    return 1;
 }
 
 /* 8017BB8C-8017BBA4       .text StopShake__9dCamera_cFv */
@@ -2564,9 +4452,9 @@ void dCamera_c::ResetBlure(int param_0) {
     mBlureScale.x = 0.99f;
     mBlureScale.y = 0.99f;
     mBlureScale.z = 0.0f;
-    m594.x = 0;
-    m594.y = 0;
-    m594.z = 0;
+    mBlureRotation.x = 0;
+    mBlureRotation.y = 0;
+    mBlureRotation.z = 0;
     mBlureTimer = 0;
 }
 
@@ -2743,8 +4631,9 @@ void store(camera_process_class* i_this) {
     dCamera_c* body = &((camera_class*)i_this)->mCamera;
 
     int camera_id = get_camera_id(a_this);
-    // Based on the asm I'm not sure if `dComIfGp_checkCameraAttentionStatus(camera_id, 8)` is meant to be used here (or the functions that are used in the inline)
     
+    dStage_stageDt_c* stage = &dComIfGp_getStage();
+
     cXyz oldCenter = *fopCamM_GetCenter_p(a_this);
     cXyz oldEye = *fopCamM_GetEye_p(a_this);
     cXyz oldUp = *fopCamM_GetUp_p(a_this);
@@ -2790,8 +4679,6 @@ void store(camera_process_class* i_this) {
     fopCamM_SetBank(a_this, bank);
     fopCamM_SetFovy(a_this, fovy);
 
-    // The code logic seems right but it's just the usage of this `stage` variable that seems to be the key to this matching
-    dStage_stageDt_c* stage = &dComIfGp_getStage();
     if (dComIfGp_checkCameraAttentionStatus(camera_id, 8)) {
         fopCamM_SetNear(a_this, 30.0f);
     }
@@ -2872,7 +4759,6 @@ bool camera_draw(camera_process_class* i_this) {
         spDC.z = i_this->mLookat.mEye.z;
 
         mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(&spDC);
-
     } else {
         mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(NULL);
     }
@@ -2886,7 +4772,7 @@ bool camera_draw(camera_process_class* i_this) {
     body->Draw();
 
     if (fpcLf_GetPriority(a_this) != 1) {
-        fopCamM_GetParam(a_this);
+        get_camera_id(a_this);
         for (int i = 0; i < 1; i++) {
             if (!fopOvlpM_IsDoingReq()) {
                 fopAc_ac_c* currPlayerActor = dComIfGp_getPlayer(i);
@@ -2930,7 +4816,7 @@ cPhs_State init_phase2(camera_class* i_this) {
     /* Nonmatching - Code 100% */
     camera_process_class* a_this = (camera_process_class*)i_this;
     dCamera_c* body = &i_this->mCamera;
-    int camId = fopCamM_GetParam(i_this);
+    int camera_id = get_camera_id(i_this);
 
     fopAc_ac_c* player = (fopAc_ac_c*)get_player_actor(i_this);
     
@@ -2953,7 +4839,7 @@ cPhs_State init_phase2(camera_class* i_this) {
         farPlane = stage_dt->getStagInfo()->mFarPlane;
     }
 
-    view_port_class* viewPort = (view_port_class*)get_window(camId);
+    view_port_class* viewPort = (view_port_class*)get_window(camera_id);
     
     fopCamM_SetNear(i_this, 1.0f);
     fopCamM_SetFar(i_this, farPlane);

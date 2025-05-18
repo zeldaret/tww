@@ -240,8 +240,11 @@ bool daLlift_c::_execute() {
     cXyz adjustedPosition;
     float distXZ = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
     mActorLifetimeFrameCount++;
-    if ((m43F) && (m43F--, !m43F)) {
-        m43E = TRUE;
+    if (m43F > 0) {
+        m43F--;
+        if (m43F == 0) {
+            m43E = TRUE;
+        }
     }
     if ((!m43C) && (m43E)) {
         mTargetRotation = ZeroQuat;

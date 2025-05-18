@@ -8,6 +8,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "wchar_io.h"
+#include "ansi_fp.h"
 
 #define TARGET_FLOAT_BITS 64
 #define TARGET_FLOAT_BYTES (TARGET_FLOAT_BITS / 8)

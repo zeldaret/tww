@@ -112,7 +112,9 @@ Sometimes, instead of writing a single line that does multiple things at once, y
 
 Inlines can affect regalloc, so be sure that you're using the exact inlines mentioned in the debug maps. Also try using inlines used in other functions from the same object, or inlines used in similar functions from a different object.
 
-If you're sure that you're using the right inline, but there are still regswaps happening in the area of the function where the inline is used, the cause can sometimes be that the inline itself is implemented wrong. You may have to try modifying the inline and write the code inside it differently in order to fix the regalloc in the functions that use it. But when doing this, be careful that you don't break any already-matched functions that use the same inline you're modifying.
+If you're sure that you're using the right inline, but there are still regswaps happening in the area of the function where the inline is used, the cause can sometimes be that the inline itself is implemented wrong. You may have to try modifying the inline and write the code inside it differently in order to fix the regalloc in the functions that use it.
+
+But when modifying an existing inline, be careful that you don't break any already-matched functions that use the same inline. If you want to quickly check if you caused any regressions, first run `ninja baseline` on the main branch, then run `ninja changes` on your own branch, and any functions that decreased in match percent on your branch will be printed out.
 
 ## Const
 
@@ -132,4 +134,4 @@ However, `f32` is a primitive type. So the following is another possibility for 
 TVec3(const f32 x, const f32 y, const f32 z)
 ```
 
-You may need to try adding or removing const from inlines like this, but be careful that you don't break any already-matched functions that use the same inline you're modifying.
+You may need to try adding or removing const from inlines like this, but be careful that you don't break any already-matched functions that use the same inline you're modifying. Again, you can use `ninja changes` to check if you caused any regressions.

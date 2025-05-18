@@ -431,7 +431,6 @@ u32 J3DMaterialFactory::calcSizeLockedMaterial(J3DMaterial* i_material, int i_id
 J3DGXColor J3DMaterialFactory::newMatColor(int idx, int stage) const {
     GXColor _ret = { 0xFF, 0xFF, 0xFF, 0xFF };
     J3DGXColor ret(_ret);
-    J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mMatColorIdx[stage];
     if (no != 0xFFFF)
         return mpMatColor[no];
@@ -461,7 +460,6 @@ J3DColorChan J3DMaterialFactory::newColorChan(int idx, int stage) const {
 J3DGXColor J3DMaterialFactory::newAmbColor(int idx, int stage) const {
     GXColor _ret = { 0x32, 0x32, 0x32, 0x32 };
     J3DGXColor ret(_ret);
-    J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mAmbColorIdx[stage];
     if (no != 0xFFFF)
         return mpAmbColor[no];
@@ -527,7 +525,6 @@ J3DTevOrder J3DMaterialFactory::newTevOrder(int idx, int stage) const {
 J3DGXColorS10 J3DMaterialFactory::newTevColor(int idx, int stage) const {
     GXColorS10 _ret = { 0x00, 0x00, 0x00, 0x00 };
     J3DGXColorS10 ret(_ret);
-    J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mTevColorIdx[stage];
     if (no != 0xFFFF)
         return mpTevColor[no];
@@ -539,7 +536,6 @@ J3DGXColorS10 J3DMaterialFactory::newTevColor(int idx, int stage) const {
 J3DGXColor J3DMaterialFactory::newTevKColor(int idx, int stage) const {
     GXColor _ret = { 0xFF, 0xFF, 0xFF, 0xFF };
     J3DGXColor ret(_ret);
-    J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mTevKColorIdx[stage];
     if (no != 0xFFFF)
         return mpTevKColor[no];

@@ -13,7 +13,7 @@ typedef struct OSAlarmLink {
     /* 0x4 */ struct OSAlarm* next;
 } OSAlarmLink;
 
-typedef struct OSAlarm;
+typedef struct OSAlarm OSAlarm;
 typedef void (*OSAlarmHandler)(struct OSAlarm* alarm, OSContext* context);
 
 typedef struct OSAlarm {

@@ -177,6 +177,8 @@ BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
     return TRUE;
 }
 
+BOOL DVDGetCurrentDir(char* path, u32 maxlen);
+
 BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     s32 entry;
     char currentDir[128];
