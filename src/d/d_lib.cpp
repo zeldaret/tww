@@ -353,7 +353,7 @@ s16 CSTControl::getAngleStick() {
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */
-s32 STControl::checkTrigger() {
+u8 STControl::checkTrigger() {
     field_0x0d = field_0x0c;
     f32 valueStick = getValueStick();
     s16 angleStick = getAngleStick();

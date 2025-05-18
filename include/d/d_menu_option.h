@@ -56,8 +56,7 @@ private:
     /* 0x078 */ fopMsgM_pane_class m078;
     /* 0x0B0 */ fopMsgM_pane_class m0B0[15];
     /* 0x3F8 */ fopMsgM_pane_class m3F8[15];
-    /* 0x740 */ fopMsgM_pane_class m740;
-    /* 0x778 */ fopMsgM_pane_class m778;
+    /* 0x740 */ fopMsgM_pane_class m740[2];
     /* 0x7B0 */ fopMsgM_pane_class m7B0;
     /* 0x7E8 */ fopMsgM_pane_class m7E8;
     /* 0x820 */ fopMsgM_pane_class m820;

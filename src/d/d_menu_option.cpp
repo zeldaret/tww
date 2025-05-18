@@ -44,8 +44,8 @@ void dMenu_Option_c::screenSet() {
         fopMsgM_blendInit(&m0B0[i], "font_00.bti");
     }
     
-    fopMsgM_setPaneData(&m778, scrn->search('str0'));
-    fopMsgM_setPaneData(&m740, scrn->search('st00'));
+    fopMsgM_setPaneData(&m740[1], scrn->search('str0'));
+    fopMsgM_setPaneData(&m740[0], scrn->search('st00'));
     fopMsgM_setPaneData(&m7B0, scrn->search('nt00'));
     fopMsgM_setPaneData(&m7E8, scrn->search('nk00'));
     fopMsgM_setPaneData(&m820, scrn->search('no11'));
@@ -86,8 +86,8 @@ void dMenu_Option_c::screenSet() {
     
     ((J2DTextBox*)m008.pane)->setFont(mD2C);
     ((J2DTextBox*)m008.pane)->setString(mD48);
-    ((J2DTextBox*)m740.pane)->setFont(mD2C);
-    ((J2DTextBox*)m778.pane)->setFont(mD30);
+    ((J2DTextBox*)m740[0].pane)->setFont(mD2C);
+    ((J2DTextBox*)m740[1].pane)->setFont(mD30);
     
     for (int i = 0; i < 2; i++) {
         ((J2DTextBox*)m9A8[i].pane)->setFont(mD2C);
@@ -168,8 +168,8 @@ void dMenu_Option_c::noteInit() {
 
     m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, m820.mUserArea + -12.0f);
 
-    fopMsgM_setNowAlphaZero(&m740);
-    fopMsgM_setNowAlphaZero(&m778);
+    fopMsgM_setNowAlphaZero(&m740[0]);
+    fopMsgM_setNowAlphaZero(&m740[1]);
     fopMsgM_setNowAlphaZero(&m7B0);
     fopMsgM_setNowAlphaZero(&m7E8);
     fopMsgM_setNowAlphaZero(&m820);
@@ -233,8 +233,8 @@ void dMenu_Option_c::noteMove() {
 
     m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, (1.0f - alpha) * -12.0f + m820.mUserArea);
     
-    fopMsgM_setNowAlpha(&m740, alpha);
-    fopMsgM_setNowAlpha(&m778, alpha);
+    fopMsgM_setNowAlpha(&m740[0], alpha);
+    fopMsgM_setNowAlpha(&m740[1], alpha);
     fopMsgM_setNowAlpha(&m7B0, alpha);
     fopMsgM_setNowAlpha(&m7E8, alpha);
 }
@@ -275,7 +275,6 @@ void dMenu_Option_c::titleMove() {
 
 /* 801D3C6C-801D3D34       .text cursorMove__14dMenu_Option_cFv */
 void dMenu_Option_c::cursorMove() {
-    /* Nonmatching */
     short sVar2 = mB30[1].mUserArea;
 
     for (int i = 0; i < 6; i++) {
@@ -285,8 +284,9 @@ void dMenu_Option_c::cursorMove() {
         mB30[i].mSize.x = m8C8[sVar2].mSizeOrig.x;
 
         fopMsgM_cposMove(&mB30[i]);
-
-        mB30[i].pane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, 0.5f);
+        
+        J2DPane* mpPane = mB30[i].pane;
+        mpPane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, mpPane->getRotate());
     }
 
     cursorScale();
@@ -368,7 +368,6 @@ void dMenu_Option_c::typeMove() {
 
 /* 801D3F98-801D41C4       .text yazAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::yazAnime() {
-    /* Nonmatching */
     static const int moveX[6] = { 0, 2, 8, 18, 8, 2};
     float fVar1;
     
@@ -386,11 +385,15 @@ void dMenu_Option_c::yazAnime() {
 
     if(m858[1].mUserArea > 0) {
         m858[1].mUserArea--; 
-        m858[1].pane->move((int)(m858[1].mPosTopLeft.x + 0.5f) + moveX[m858[1].mUserArea], (int)(m858[1].mPosTopLeft.y + 0.5f));
+        int x = (int)(m858[1].mPosTopLeft.x + 0.5f) + moveX[m858[1].mUserArea];
+        int y = (int)(m858[1].mPosTopLeft.y + 0.5f);
+        m858[1].pane->move(x, y);
     }
     else if (m858[1].mUserArea < 0) {
         m858[1].mUserArea++;
-        m858[0].pane->move((int)(m858[0].mPosTopLeft.x + 0.5f) - moveX[abs(m858[1].mUserArea)], (int)(m858[0].mPosTopLeft.y + 0.5f));
+        int x = (int)(m858[0].mPosTopLeft.x + 0.5f) - moveX[abs(m858[1].mUserArea)];
+        int y = (int)(m858[0].mPosTopLeft.y + 0.5f);
+        m858[0].pane->move(x, y);
     }
 
     if (m858[0].mUserArea >= 0x14) {
@@ -573,8 +576,8 @@ void dMenu_Option_c::noteSet() {
 
     outFontInit();
 
-    float fVar1 = (m740).pane[1].mBounds.getHeight();
-    float fVar2 = (m778).pane[1].mBounds.getHeight();
+    float fVar1 = m740[0].pane[1].mBounds.getHeight();
+    float fVar2 = m740[1].pane[1].mBounds.getHeight();
 
     mesg_header* mesg_header = msgGet.getMesgHeader(0x262);
     if (mesg_header == NULL) {
@@ -593,16 +596,16 @@ void dMenu_Option_c::noteSet() {
 
     msgDataProc.stringSet();
 
-    ((J2DTextBox*)m740.pane)->setString(mD38);
-    ((J2DTextBox*)m778.pane)->setString(mD3C);
+    ((J2DTextBox*)m740[0].pane)->setString(mD38);
+    ((J2DTextBox*)m740[1].pane)->setString(mD3C);
 
     for (int i = 0; i < 0xf; i++) {
         if(m0B0[i].mUserArea == -1) {
-            m0B0[i].mPosTopLeft.x = m740.mPosTopLeft.x;
-            m0B0[i].mPosTopLeftOrig.x = m740.mPosTopLeftOrig.x;
+            m0B0[i].mPosTopLeft.x = m740[0].mPosTopLeft.x;
+            m0B0[i].mPosTopLeftOrig.x = m740[0].mPosTopLeftOrig.x;
 
-            m0B0[i].mPosTopLeft.y = m740.mPosTopLeft.y;
-            m0B0[i].mPosTopLeftOrig.y = m740.mPosTopLeftOrig.y;
+            m0B0[i].mPosTopLeft.y = m740[0].mPosTopLeft.y;
+            m0B0[i].mPosTopLeftOrig.y = m740[0].mPosTopLeftOrig.y;
 
             fopMsgM_outFontSet((J2DPicture*)&m0B0[i], &m0B0[i].mUserArea, 0, 0);
         }
@@ -622,8 +625,8 @@ void dMenu_Option_c::outFontInit() {
 void dMenu_Option_c::outFontMove() {  
     for (int i = 0; i < 15; i++) {
         if (m0B0[i].mUserArea != -1) {
-            m3F8[i].mPosTopLeft.x = m0B0[i].mPosTopLeft.x + (m740.mPosTopLeft.x + (m820.mPosTopLeft.x + m7B0.mPosTopLeft.x));
-            m3F8[i].mPosTopLeft.y = m0B0[i].mPosTopLeft.y + (m740.mPosTopLeft.y + (m820.mPosTopLeft.y + m7B0.mPosTopLeft.y));
+            m3F8[i].mPosTopLeft.x = m0B0[i].mPosTopLeft.x + (m740[0].mPosTopLeft.x + (m820.mPosTopLeft.x + m7B0.mPosTopLeft.x));
+            m3F8[i].mPosTopLeft.y = m0B0[i].mPosTopLeft.y + (m740[0].mPosTopLeft.y + (m820.mPosTopLeft.y + m7B0.mPosTopLeft.y));
 
             f32 rotation_offset_x = m820.mPosCenter.x - m3F8[i].mPosTopLeft.x;
             f32 rotation_offset_y = m820.mPosCenter.y - m3F8[i].mPosTopLeft.y;
@@ -639,7 +642,7 @@ void dMenu_Option_c::outFontMove() {
 void dMenu_Option_c::outFontDraw() {
     for (int i = 0; i < 15; i++) {
         if (m0B0[i].mUserArea != -1) {
-            m0B0[i].mNowAlpha = m740.pane->getAlpha();
+            m0B0[i].mNowAlpha = m740[0].pane->getAlpha();
             fopMsgM_outFontDraw2((J2DPicture*)m0B0[i].pane, (J2DPicture*)m3F8[i].pane, m3F8[i].mPosTopLeft.x, m3F8[i].mPosTopLeft.y, 0x19, 0x19, &m0B0[i].mUserArea, m0B0[i].mNowAlpha, m0B0[i].mPosTopLeftOrig.y);
         }
         else {
@@ -654,8 +657,8 @@ f32 dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
 }
 
 /* 801D505C-801D50A0       .text changeScaleCenter__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class* param_1, char* param_2) {
-    f32 str_length = stringlength(param_1, param_2);
+void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class* param_1, char* i_str) {
+    f32 str_length = stringlength(param_1, i_str);
 
     param_1->mSize.x = str_length;
     param_1->mSizeOrig.x = str_length;
@@ -681,18 +684,17 @@ void dMenu_Option_c::setSoundMode(u32 i_soundMode) {
 }
 
 /* 801D50E8-801D5148       .text changeScaleRight__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class* param_1, char* param_2) {
-    /* Nonmatching - regalloc */
-    float str_length = stringlength(param_1, param_2);
+void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class* param_1, char* i_str) {
+    float str_length = stringlength(param_1, i_str);
     float str_pos = (param_1->mPosTopLeft.x + param_1->mSize.x);
 
     param_1->mSize.x = str_length;
     param_1->mSizeOrig.x = str_length;
 
-    str_pos -= param_1->mSize.x / 2.0f;
+    float new_str_pos = str_pos - param_1->mSize.x / 2.0f;
 
-    param_1->mPosCenter.x = str_pos;
-    param_1->mPosCenterOrig.x = str_pos;
+    param_1->mPosCenter.x = new_str_pos;
+    param_1->mPosCenterOrig.x = new_str_pos;
     
     fopMsgM_cposMove(param_1);
 }
@@ -764,7 +766,6 @@ void dMenu_Option_c::_delete() {
 
 /* 801D546C-801D576C       .text _move__14dMenu_Option_cFv */
 void dMenu_Option_c::_move() {
-    /* Nonmatching */
     u8 check_trigger = stick->checkTrigger();
 
     if (mE3F) {
@@ -833,9 +834,11 @@ void dMenu_Option_c::_move() {
                 stickMove(check_trigger);
             }
 
-            int sVar2 = 4;
+            int sVar2;
             if (m7B0.mUserArea < 2) {
                 sVar2 = 10;
+            } else {
+                sVar2 = 4;
             }
 
             mC80[1].mUserArea++;
@@ -852,7 +855,6 @@ void dMenu_Option_c::_move() {
         }
     }
     
-
     yazAnime();
 
     if (mB30[1].mUserArea != 2 || JUTGamePad::sRumbleSupported & 0x80000000)
@@ -870,17 +872,88 @@ void dMenu_Option_c::_move() {
     outFontMove();
 
     if (mE3D) {
-        m778.pane->hide();
+        m740[1].pane->hide();
     }
     else {
-        m778.pane->show();
+        m740[1].pane->show();
     }
-    return;
 }
 
 /* 801D576C-801D5C04       .text _draw__14dMenu_Option_cFv */
 void dMenu_Option_c::_draw() {
-    /* Nonmatching */
+    /* Nonmatching */ 
+    if (mE41 == 0) {
+        fopMsgM_setAlpha(&m008);
+        fopMsgM_setAlpha(&m040);
+        fopMsgM_setAlpha(&m078);
+
+        for (int i = 0; i < 2; i++) {
+            fopMsgM_setAlpha(&m740[i]);
+            fopMsgM_setAlpha(&m858[i]);
+            fopMsgM_setAlpha(&m9A8[i]);
+            fopMsgM_setAlpha(&mAC0[i]);
+            fopMsgM_setAlpha(&mC80[i]);
+        }
+
+        fopMsgM_setAlpha(&m7B0);
+        fopMsgM_setAlpha(&m7E8);
+        fopMsgM_setAlpha(&m820);
+
+        for (int i = 0; i < 4; i++) {
+            if (i != 1) {
+                fopMsgM_setAlpha(&m8C8[i]);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            fopMsgM_setAlpha(&mA18[i]);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            fopMsgM_setAlpha(&mB30[i]);
+        }
+        
+        fopMsgM_setAlpha(&mCF0);
+    }
+    else {
+        float alpha_scale = 1.0f - fopMsgM_valueIncrease(10, mC80[0].mUserArea, 0);
+        
+        m008.pane->mAlpha *= alpha_scale;
+        m040.pane->mAlpha *= alpha_scale;
+        m078.pane->mAlpha *= alpha_scale;
+
+        for (int i = 0; i < 2; i++) {
+            m740[i].pane->mAlpha *= alpha_scale;
+            m8C8[i].pane->mAlpha *= alpha_scale;
+            m9A8[i].pane->mAlpha *= alpha_scale;
+            mAC0[i].pane->mAlpha *= alpha_scale;
+            mC80[i].pane->mAlpha *= alpha_scale;
+        }
+
+        m7B0.pane->mAlpha *= alpha_scale;
+        m7E8.pane->mAlpha *= alpha_scale;
+        m820.pane->mAlpha *= alpha_scale;
+        
+        for (int i = 0; i < 4; i++) {
+            if (i != 1) {
+                m8C8[i].pane->mAlpha *= alpha_scale;
+            }
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            mA18[i].pane->mAlpha *= alpha_scale;
+        }
+
+        for (int i = 0; i < 6; i++) {
+            mAC0[i].pane->setAlpha(mB30[i].pane->getAlpha() * alpha_scale);
+        }
+
+        mCF0.pane->mAlpha *= alpha_scale;
+    }
+
+    outFontDraw();
+
+    scrn->draw(0.0f, 0.0f, (J2DGrafContext*)dComIfGp_getCurrentGrafPort());
 }
 
 /* 801D5C04-801D5CBC       .text _open__14dMenu_Option_cFv */
@@ -919,17 +992,15 @@ bool dMenu_Option_c::_open() {
 
 /* 801D5CBC-801D5D38       .text _close__14dMenu_Option_cFv */
 bool dMenu_Option_c::_close() {
-    /* Nonmatching */
     bool ret = false;
     
-    mC80[0].mUserArea++;
-    s16 user_area = mC80[0].mUserArea;
+    int value = ++mC80[0].mUserArea;
     
-    fopMsgM_valueIncrease(10, user_area, 0);
+    fopMsgM_valueIncrease(10, value, 0);
     
     dMenu_setPushMenuButton(2);
 
-    if (user_area >= 10) {
+    if (value >= 10) {
         initialize();
         mE40 = 0;
         ret = true;
