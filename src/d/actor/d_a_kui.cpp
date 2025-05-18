@@ -253,11 +253,9 @@ static BOOL daKui_Execute(kui_class* i_this) {
             }
 
             if (unk_flag != 0 && unk > 2000) {
-                s16* shorts_array = (&i_this->field_0x2DC);
-                s16& unk_short = shorts_array[unk_flag];
-                if (unk_short == 0) {
-                    unk_short = 0x50;
-                    i_this->field_0x2DC = REG0_S(3) + 40;
+                if (i_this->field_0x2DC[unk_flag] == 0) {
+                    i_this->field_0x2DC[unk_flag] = 0x50;
+                    i_this->field_0x2DC[0] = REG0_S(3) + 40;
 
                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                     fopAcM_seStartCurrent(actor, JA_SE_OBJ_ST_CHIME, 0);
@@ -279,21 +277,21 @@ static BOOL daKui_Execute(kui_class* i_this) {
         }
 
         cLib_addCalcAngleS2(&actor->current.angle.x, target_x_angle, 4, REG0_S(1) + 0x200);
-        if (i_this->field_0x2DE != 0) {
-            i_this->field_0x2DE--;
+        if (i_this->field_0x2DC[1] != 0) {
+            i_this->field_0x2DC[1]--;
         }
-        if (i_this->field_0x2E0 != 0) {
-            i_this->field_0x2E0--;
+        if (i_this->field_0x2DC[2] != 0) {
+            i_this->field_0x2DC[2]--;
         }
 
         s16 x = 0;
         s16 z = 0;
         f32 unk_f = 1.0f;
 
-        if (i_this->field_0x2DC != 0) {
-            i_this->field_0x2DC--;
+        if (i_this->field_0x2DC[0] != 0) {
+            i_this->field_0x2DC[0]--;
 
-            s32 iVar10 = (s32) i_this->field_0x2DC;
+            s32 iVar10 = (s32) i_this->field_0x2DC[0];
             f32 fVar1 = iVar10 * (REG0_F(16) + 40.0f);
 
             x = (s16) (fVar1 * cM_ssin(iVar10 * (REG0_S(4) + 0x1900)));
@@ -303,7 +301,7 @@ static BOOL daKui_Execute(kui_class* i_this) {
                 unk_f = (iVar10 * (REG0_F(17) + 0.001f)) + 1.0f;
             }
 
-            if (i_this->field_0x2DC == 0 && actor->health == 3 && REG0_S(3) == 0) {
+            if (i_this->field_0x2DC[0] == 0 && actor->health == 3 && REG0_S(3) == 0) {
                 dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(actor));
             }
         }
