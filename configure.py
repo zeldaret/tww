@@ -1606,7 +1606,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(NonMatching, "d_a_npc_people", extra_cflags=['-pragma "nosyminline on"']), # regalloc, weak func order
     ActorRel(NonMatching, "d_a_npc_pf1"),
-    ActorRel(NonMatching, "d_a_npc_photo"),
+    ActorRel(Matching, "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
     ActorRel(Equivalent,  "d_a_npc_roten", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_npc_rsh1"),
