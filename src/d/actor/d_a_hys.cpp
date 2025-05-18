@@ -8,9 +8,46 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
 
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
-const s16 daHys_c::m_dzbidx[2] = {0xB, 0xB};
+
+/* Model file indexes. */
+const s16 daHys_c::m_bdlidx[2] = {5, 5};
+/* Texture file  */
+const s16 daHys_c::m_btpidx[2] = {8, 8};
+const s16 daHys_c::m_dzbidx[2] = {11, 11};
 const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
+const f32 daHys_c::m_tg_r[2] = {35.0f, 70.0f};
+
+static dCcD_SrcSph l_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_NORMAL_ARROW | AT_TYPE_FIRE_ARROW | AT_TYPE_ICE_ARROW | AT_TYPE_LIGHT_ARROW,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+    },
+};
 
 /* 00000078-000000B8       .text Delete__7daHys_cFv */
 BOOL daHys_c::Delete() {
@@ -20,31 +57,66 @@ BOOL daHys_c::Delete() {
 
 /* 000000B8-00000250       .text CreateHeap__7daHys_cFv */
 BOOL daHys_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
+    JUT_ASSERT(0x106, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020022);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTexPattern* pbtp = (J3DAnmTexPattern *)dComIfG_getObjectRes(m_arcname[mType], m_btpidx[mType]);
+    JUT_ASSERT(0x114, pbtp != NULL);
+
+    if (!mBtpAnm.init(modelData, pbtp, 0, 0, 1.0, 0, -1, FALSE, FALSE)) {
+        return FALSE;
+    }
+    field_0x458 = 0;
+    return TRUE;
 }
 
 cPhs_State daHys_c::_create() {
-    /* Nonmatching */
+    // Inlined into daHys_Create
     fopAcM_SetupActor(this, daHys_c);
 
     mType = fopAcM_GetParam(this) >> 8;
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
-    if (res != cPhs_COMPLEATE_e) {
-        return res;
+    if (res == cPhs_COMPLEATE_e) {
+        res = MoveBGCreate(m_arcname[mType], m_dzbidx[mType], dBgS_MoveBGProc_TypicalRotY, m_heapsize[mType]);
+        if (res == cPhs_ERROR_e) {
+            return cPhs_ERROR_e;
+        }
     }
 
-    res = MoveBGCreate(m_arcname[mType], m_dzbidx[mType], dBgS_MoveBGProc_TypicalRotY, m_heapsize[mType]);
-    if (res != cPhs_COMPLEATE_e) {
-        return res;
-    }
-
-    return cPhs_COMPLEATE_e;
+    return res;
 }
 
 /* 00000250-00000368       .text Create__7daHys_cFv */
 BOOL daHys_c::Create() {
-    /* Nonmatching */
-    return _create();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -240.0, -240.0, -90.0, 240.0, 240.0, 90.0);
+
+    mStts.Init(255, 255, this);
+    mSph.Set(l_sph_src);
+    mSph.SetStts(&mStts);
+    mSph.SetR(m_tg_r[mType]);
+
+    set_mtx();
+    mSwitchNo = fopAcM_GetParam(this) & 0xFF;
+
+    if (fopAcM_isSwitch(this, mSwitchNo)) {
+        field_0x450 = 1;
+        field_0x458 = 3;
+    } else {
+        field_0x450 = 0;
+        field_0x458 = 0;
+    }
+
+    if (mType == 1) {
+        scale.setall(2.0f);
+    }
+
+    return TRUE;
 }
 
 /* 00000368-000003F8       .text set_mtx__7daHys_cFv */
@@ -57,28 +129,67 @@ void daHys_c::set_mtx() {
 }
 
 /* 000003F8-000004A4       .text Execute__7daHys_cFPPA3_A4_f */
-BOOL daHys_c::Execute(Mtx**) {
-    /* Nonmatching */
+BOOL daHys_c::Execute(Mtx** mtx) {
+    mode_proc_call();
+
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
+
+    *mtx = &mBgMtx;
+    return TRUE;
 }
 
 /* 000004A4-00000560       .text mode_proc_call__7daHys_cFv */
 void daHys_c::mode_proc_call() {
-    /* Nonmatching */
+    typedef void (daHys_c::*ModeFunc)();
+    static const ModeFunc mode_proc[2] = {
+        &daHys_c::mode_wait,
+        &daHys_c::mode_sw_on,
+    };
+
+    (this->*mode_proc[field_0x450])();
+    mSph.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mSph);
 }
 
 /* 00000560-00000600       .text mode_wait__7daHys_cFv */
 void daHys_c::mode_wait() {
-    /* Nonmatching */
+    if (mSph.ChkTgHit()) {
+        cCcD_Obj* obj = mSph.GetTgHitObj();
+        if (obj != NULL && (obj->ChkAtType(AT_TYPE_NORMAL_ARROW) ||
+                            obj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
+                            obj->ChkAtType(AT_TYPE_ICE_ARROW) ||
+                            obj->ChkAtType(AT_TYPE_LIGHT_ARROW))) {
+            mSph.ClrTgHit();
+            mode_sw_on_init();
+            return;
+        }
+    }
+
+    if (field_0x458 != 0) {
+        field_0x458--;
+    }
 }
 
 /* 00000600-00000690       .text mode_sw_on_init__7daHys_cFv */
 void daHys_c::mode_sw_on_init() {
-    /* Nonmatching */
+    fopAcM_onSwitch(this, mSwitchNo);
+    field_0x450 = 1;
+    fopAcM_seStart(this, JA_SE_OBJ_ARROW_SW_ON, 0);
 }
 
 /* 00000690-000006F8       .text mode_sw_on__7daHys_cFv */
 void daHys_c::mode_sw_on() {
-    /* Nonmatching */
+    if (!fopAcM_isSwitch(this, mSwitchNo)) {
+        mode_wait_init();
+    } else {
+        if (field_0x458 < 3) {
+            field_0x458++;
+        }
+    }
 }
 
 /* 000006F8-00000704       .text mode_wait_init__7daHys_cFv */
@@ -97,7 +208,6 @@ BOOL daHys_c::Draw() {
 
 /* 00000778-00000904       .text daHys_Create__FPv */
 static cPhs_State daHys_Create(void* i_this) {
-    /* Nonmatching */
     return ((daHys_c*)i_this)->_create();
 }
 
