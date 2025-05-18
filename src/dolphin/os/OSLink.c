@@ -1,4 +1,5 @@
 #include "dolphin/os/OS.h"
+#include <string.h>
 
 #define SHN_UNDEF 0
 #define SHN_LORESERVE 0xff00

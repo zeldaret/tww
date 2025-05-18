@@ -98,18 +98,6 @@ enum daPy__PlayerStatus1 {
     daPyStts1_UNK20000_e           = 0x00020000,
     daPyStts1_UNK40000_e           = 0x00040000,
     daPyStts1_UNK80000_e           = 0x00080000,
-    daPyStts1_UNK100000_e          = 0x00100000,
-    daPyStts1_UNK200000_e          = 0x00200000,
-    daPyStts1_UNK400000_e          = 0x00400000,
-    daPyStts1_UNK800000_e          = 0x00800000,
-    daPyStts1_UNK1000000_e         = 0x01000000,
-    daPyStts1_UNK2000000_e         = 0x02000000,
-    daPyStts1_UNK4000000_e         = 0x04000000,
-    daPyStts1_UNK8000000_e         = 0x08000000,
-    daPyStts1_UNK10000000_e        = 0x10000000,
-    daPyStts1_UNK20000000_e        = 0x20000000,
-    daPyStts1_UNK40000000_e        = 0x40000000,
-    daPyStts1_UNK80000000_e        = 0x80000000,
 };
 
 class __d_timer_info_c {

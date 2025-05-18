@@ -258,7 +258,7 @@ void myExceptionCallback(OSError, OSContext*, u32, u32) {
 }
 
 /* 8000C3C0-8000C70C       .text fault_callback_scroll__FUsP9OSContextUlUl */
-void fault_callback_scroll(u16, OSContext* p_context, u32, u32) {
+void fault_callback_scroll(OSError, OSContext* p_context, u32, u32) {
     JUTException* manager = JUTException::getManager();
     JUTConsole* exConsole = manager->getConsole();
 

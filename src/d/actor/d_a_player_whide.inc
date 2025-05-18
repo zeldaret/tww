@@ -99,7 +99,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
     local_3c.z = param_2->z + cM_ssin(uVar3) * daPy_HIO_wall_c0::m.field_0x50;
     mGndChk.SetPos(&local_3c);
     float f31 = bgs->GroundCross(&mGndChk);
-    if (C_BG_MIN_HEIGHT != f31 && (!(bgs->GetTriPla(mGndChk)->GetNP()->y >= 0.5f))) {
+    if (C_BG_MIN_HEIGHT != f31 && (!cBgW_CheckBGround(bgs->GetTriPla(mGndChk)->GetNP()->y))) {
         return NULL;
     }
 
@@ -350,7 +350,6 @@ BOOL daPy_lk_c::procWHideWait_init() {
 
 /* 80137DF0-80138074       .text procWHideWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWHideWait() {
-    cXyz cStack_24;
     cXyz cStack_3c;
     cXyz cStack_48;
 
@@ -385,7 +384,7 @@ BOOL daPy_lk_c::procWHideWait() {
     }
 
     if (mStickDistance > 0.05f && C_BG_MIN_HEIGHT != mAcch.GetGroundH() &&
-        dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y >= 0.5f)
+        cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y))
     {
         int direction = getDirectionFromCurrentAngle();
         if (direction == DIR_RIGHT || direction == DIR_LEFT) {
@@ -453,7 +452,7 @@ BOOL daPy_lk_c::procWHideMove() {
     if (checkWHideModeChange(&acStack_24) != 0) {
         fVar2 = 0.0f;
     } else if (mStickDistance > 0.05f && C_BG_MIN_HEIGHT != mAcch.GetGroundH() &&
-               dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y >= 0.5f)
+               cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y))
     {
         int direction = getDirectionFromCurrentAngle();
         if (direction == DIR_BACKWARD) {
@@ -492,7 +491,7 @@ BOOL daPy_lk_c::procWHideMove() {
     if (std::fabsf(mVelocity) <= 0.001f) {
         return procWHideWait_init();
     }
-    if (mAcch.GetGroundH() == C_BG_MIN_HEIGHT || !(dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y >= 0.5f) ||
+    if (mAcch.GetGroundH() == C_BG_MIN_HEIGHT || !cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y) ||
         !checkWHideBackWall(&cStack_30))
     {
         mVelocity = 0.0f;

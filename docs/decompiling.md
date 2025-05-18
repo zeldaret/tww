@@ -10,9 +10,10 @@ If you haven't already, you should first follow the instructions in the [readme]
 2. [Setting up classes/structs](#setting-up-classesstructs)
 3. [Decompiling functions](#decompiling-functions)
 4. [Inline functions and how to read the debug maps](#inline-functions-and-how-to-read-the-debug-maps)
-5. [Fixing minor nonmatching issues](#fixing-minor-nonmatching-issues)
-6. [Linking a 100% matching object](#linking-a-100-matching-object)
-7. [Documentation and naming](#documentation-and-naming)
+5. [Recognizing switch statements](#recognizing-switch-statements)
+6. [Fixing minor nonmatching issues](#fixing-minor-nonmatching-issues)
+7. [Linking a 100% matching object](#linking-a-100-matching-object)
+8. [Documentation and naming](#documentation-and-naming)
 
 ## Choosing an object to decompile
 
@@ -210,7 +211,7 @@ void daWall_c::set_se() {
 }
 ```
 
-That does match in this case (it won't always), but we can improve it by checking this function in the debug map for this actor. Copy paste the function's *mangled* name (the last part of the comment after .text, e.g. `set_se__8daWall_cFv`) and Ctrl+F for it in the `D.map` for your actor.  
+That does match in this case (it won't always), but we can improve it by checking this function in the debug map for this actor. Copy paste the function's *mangled* name (the last part of the comment after .text, e.g. `set_se__8daWall_cFv`) and `Ctrl+F` for it in the `D.map` for your actor.  
 You should see something along these lines:
 
 ```
@@ -302,6 +303,216 @@ Specifically, inlines at the same depth/indentation as each other in the linker 
 
 This doesn't tell us as much as the real linker trees, and is based on guesswork, but going through this process can sometimes help you to determine what inlines you should be using where.
 
+## Recognizing switch statements
+
+The way that switch statements get compiled into assembly is not always obvious, and you usually can't rely on Ghidra to decompile them properly either. So we'll go over some things to watch out for that can indicate when a switch should be used.
+
+The compiler can choose to compile a switch statement in two possible ways: As a tree of comparisons, or as a jump table.
+
+We'll go over how to recognize what each of these types of switches looks like in both Ghidra and objdiff/assembly. We'll also cover how to use m2c to help decompile them, as m2c handles switches better than Ghidra.
+
+### Comparison tree switches
+
+The most common way for a switch to be compiled is as a tree of comparisons: `cmpwi`, `beq`, `bge`, `cmpwi`, etc, eventually ending in `b`, and then followed by the case blocks. Here's what an example with seven cases looks like in objdiff:
+
+![A comparison tree switch in objdiff](images/objdiff_tree_switch.png)
+
+The comparison tree starts at offset 4 in this function and ends at offset 48. The first case block starts at offset 4c, the second at offset 54, etc.
+
+Be aware that Ghidra does not handle this type of switch statement very well. It sees the comparisons and assumes they are if/else statements instead of a switch. If you only looked at Ghidra, you probably wouldn't be able to tell this was a switch at all, and would be tempted to write it with if statements instead (which will not match):
+
+![A comparison tree switch in Ghidra](images/ghidra_tree_switch.png)
+
+Furthermore, note that Ghidra almost always displays the case blocks in the wrong order for this type of switch statement.  
+In this example, the return values in Ghidra are ordered like so: 3, 4, -1, 1, 0, 2, 5. The assembly in objdiff shows them as 0, 1, 5, 2, 3, 4, -1. You need to write the cases in the order shown by objdiff, not the order shown by Ghidra.
+
+But decompiling switch statements with just Ghidra and objdiff can be difficult not only because Ghidra shows case blocks in the wrong order, but also because neither Ghidra nor objdiff show all of the case constants needed for the switch.  
+For example, the `return 4;` case block in the above function is reached only when `mAnswer` is equal to `5`, so you need to write `case 5:`. But the constant 5 is not shown anywhere in either Ghidra or objdiff, as the compiler optimized it into the tree as a comparison against 4 and a comparison against 6 instead.
+
+But there's another decompiler you can use instead of Ghidra that handles switch statements better: [m2c](https://github.com/matt-kempster/m2c).
+
+To decompile a switch with m2c, first open the `.s` assembly file for your TU. Then find the function that has the switch in it and copy the whole thing to your clipboard, starting with the `.fn` line and ending with the `.endfn` line for that function.
+
+Next go to [this online version of m2c](https://simonsoftware.se/other/m2c.html) and paste the contents of your function into the assembly field. Switch the "Target arch, compiler, & language:" field to "PPC, MWCC, C++" and hit decompile.
+
+m2c should give you output similar to this:
+```c++
+s32 getAnswer__10daSwTact_cFv(daSwTact_c *this) {
+    u8 temp_r0;
+
+    temp_r0 = this->unk2A4;
+    switch ((s32) temp_r0) {                        /* irregular */
+    case 0x0:
+        return 0;
+    case 0x1:
+        return 1;
+    case 0x2:
+        return 5;
+    case 0x3:
+        return 2;
+    case 0x4:
+        return 3;
+    case 0x5:
+        return 4;
+    default:
+        return -1;
+    }
+}
+```
+
+m2c isn't aware of field names/types defined in Ghidra or the decomp, but other than that, its output is pretty close. For comparison, here is the same function when fully decompiled and matching:
+
+```c++
+/* 0000038C-00000410       .text getAnswer__10daSwTact_cFv */
+s32 daSwTact_c::getAnswer() {
+    switch (mAnswer) {
+    case 0:
+        return 0;
+    case 1:
+        return 1;
+    case 2:
+        return 5;
+    case 3:
+        return 2;
+    case 4:
+        return 3;
+    case 5:
+        return 4;
+    case 0xFF:
+    default:
+        return -1;
+    }
+}
+```
+
+One important detail in the above example is the `case 0xFF:`. Because this case leads to the same block as the default case, it has no functional effect on what the code does, and so m2c does not include it. However, if you don't include that useless case, the comparison tree will be missing some parts and the function will not match:
+
+![A comparison tree missing a useless case label in objdiff](images/objdiff_tree_switch_useless.png)
+
+If you run into a situation like this, try looking through values that are compared against in objdiff or Ghidra and adding them as cases above `default:` (or if no default label exists, just make them immediately `break;` without doing anything). Sometimes the value you need to add as a case will be plus or minus one compared to the actual value being compared against, so it may take some trial and error to find which specific cases are required to get the tree to generate correctly.
+
+Also note that occasionally, you may run into a very small switch statement that only has a single case label (optionally plus the default label). In these cases, there will be no `bge` in the assembly, just `cmpwi`, `beq`, `b`. For example:
+
+![A comparison tree switch in objdiff](images/objdiff_tree_switch_small.png)
+
+Both Ghidra *and* m2c will decompile these as if statements, but if you try writing them like that you'll see that the code doesn't match as the compiler produces `cmpwi`, `bne` with no `beq` or `b`. Here is how the small switch above should be decompiled to match:
+
+```c++
+/* 8006C910-8006C948       .text keyCreate__12dDoor_key2_cFi */
+BOOL dDoor_key2_c::keyCreate(int type) {
+    mbIsBossDoor = type;
+    switch (type) {
+    case 1: return keyCreate_Bkey();
+    default: return keyCreate_Nkey();
+    }
+}
+```
+
+### Jump table switches
+
+The other way the compiler may choose to compile a switch statement is as a jump table: `lis`, `addi`, `slwi`, `lwzx`, `mtcr`, `bctr`.  
+This type of switch first loads a table located in the .data section (`lis`, `addi`), indexes into it with a variable (`slwi`, `lwzx`), and then jumps to the address read from the table (`mtcr`, `bctr`).
+
+Unlike comparison tree switches, Ghidra is able to correctly recognize jump table switches as being switches, and will show them as such. For example:
+
+![A jump table switch in Ghidra](images/ghidra_jump_table_switch.png)
+
+However, Ghidra still has the issue where it will show the case blocks out of order for this type of switch as well sometimes. The last 4 cases in the above example are not in the correct order and won't match when written like that.
+
+You could write them in Ghidra's wrong order and then shuffle them around until they match in objdiff.  
+However, note that even if a function shows 100% matching in objdiff, it's possible that the contents of the jump table could still be wrong. You would need to look at the .data section in objdiff, as the mismatch won't be shown within the function itself in this situation.
+
+Alternatively, we can use m2c for this type of switch statement as well, and it will decompile the cases in the proper order.  
+The process for decompiling jump table switches with m2c is similar to comparison tree switches, but there's an extra step required for m2c to find the jump table.
+
+First open the assembly file and copy paste the function containing the switch into [m2c](https://simonsoftware.se/other/m2c.html) as mentioned earlier.  
+Next, find where the assembly loads the jump table. It will look something like `lis r5, "@7298"@ha` followed by `addi r5, r5, "@7298"@l`, but the number after the `@` will be different. `Ctrl+F` for that `@` + number in the assembly file to find the contents of the jump table. It will look similar to this:
+
+```asm
+.obj "@7298", local
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A48
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A58
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A78
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A48
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A88
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A98
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A58
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A58
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A68
+	.rel setAnmFromMsgTagSa__13daNpcPeople_cFi, .L_00007A58
+.endobj "@7298"
+```
+
+Copy the table, and paste it at the top of "Assembly" field in m2c (above the function itself). Then, replace the compiler-generated name (e.g. `@7298`) with the name `jtbl` (both the ones inside the function and the one before jump table itself).  
+Finally, add a new line `.section .data` before the jump table, as well as a new line `.section .text` after the table, before the function. It will look like this:
+
+![Jump table switch assembly for m2c](images/m2c_jump_table_switch.png)
+
+Now you can click "Decompile" and m2c will decompile the switch statement with its cases in the proper order, like this:
+
+```cpp
+void setAnmFromMsgTagSa__13daNpcPeople_cFi(daNpcPeople_c *this, u32 arg0) {
+    switch (arg0) {
+    case 0:
+    case 3:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x490, 1);
+        return;
+    case 1:
+    case 6:
+    case 7:
+    case 9:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x494, 1);
+        return;
+    case 8:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x5D4, 1);
+        return;
+    case 2:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x5D8, 1);
+        return;
+    case 4:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x5DC, 1);
+        return;
+    case 5:
+        setAnmTbl__13daNpcPeople_cFP13sPeopleAnmDati(this, &@2100 + 0x5E0, 1);
+        /* fallthrough */
+    default:
+        return;
+    }
+}
+```
+
+For comparison, here is how that switch statement should actually be decompiled:
+
+```cpp
+/* 00007A14-00007AB4       .text setAnmFromMsgTagSa__13daNpcPeople_cFi */
+void daNpcPeople_c::setAnmFromMsgTagSa(int param_1) {
+    switch(param_1) {
+        case 0:
+        case 3:
+            setAnmTbl(l_npc_anm_wait, 1);
+            break;
+        case 1:
+        case 6:
+        case 7:
+        case 9:
+            setAnmTbl(l_npc_anm_talk, 1);
+            break;
+        case 8:
+            setAnmTbl(l_npc_anm_talk_sa, 1);
+            break;
+        case 2:
+            setAnmTbl(l_npc_anm_talk2_sa, 1);
+            break;
+        case 4:
+            setAnmTbl(l_npc_anm_talk3_sa, 1);
+            break;
+        case 5:
+            setAnmTbl(l_npc_anm_kiai_sa, 1);
+            break;
+    }
+}
+```
+
 ## Fixing minor nonmatching issues
 
 Once you've gone through and decompiled every function in your chosen TU, you might have run into a few functions that you could only get *mostly* matching, falling short of showing a 100% match in objdiff.
@@ -377,7 +588,7 @@ Your web browser will be opened automatically, and you should see a blank page t
 
 Switch from the "Source code" tab to the "Context" tab. Search through this tab for the specific function you had opened up. Cut (don't copy) this entire function out of the Context tab and paste it into the Source code tab. You also might need to go back to the Context tab and delete all the code that comes *after* the function you just cut in order for it to compile properly (don't touch the context that comes before it though).
 
-If done correctly, the scratch should compile and show the same issue as you were seeing in objdiff. Save (Ctrl+S) the scratch. Now you can share this scratch's URL in the [tww-decomp-help](https://discord.com/channels/688807550715560050/1150077114347966545) channel of the ZeldaRET Discord server and ask for help.
+If done correctly, the scratch should compile and show the same issue as you were seeing in objdiff. Save (`Ctrl+S`) the scratch. Now you can share this scratch's URL in the [tww-decomp-help](https://discord.com/channels/688807550715560050/1150077114347966545) channel of the ZeldaRET Discord server and ask for help.
 
 Note that scratches only show functions, not data. So if all the functions match 100% but some data doesn't, you'll have to figure that out locally using objdiff.
 

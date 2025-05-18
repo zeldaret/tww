@@ -1287,7 +1287,7 @@ void daItem_c::mode_wait() {
         break;
     }
     
-    if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y ||
+    if ((mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y) ||
         (daSea_ChkArea(current.pos.x, current.pos.z) && daSea_calcWave(current.pos.x, current.pos.z) > current.pos.y))
     {
         mode_water_init();

@@ -16,7 +16,7 @@ public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];
     /* 0x2AC */ request_of_phase_process_class mPhs;
     /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
-    /* 0x2B8 */ u8 mState;
+    /* 0x2B8 */ u8 mMode;
     /* 0x2B9 */ u8 m2B9[0x2BA - 0x2B9];
     /* 0x2BA */ s16 mCountDownTimers[3];
     /* 0x2C0 */ int mCurrBckIdx;

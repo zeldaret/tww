@@ -17,7 +17,7 @@
 #include "dolphin/vi/vi.h"
 
 struct CallbackObject {
-    /* 0x00 */ OSErrorHandler callback;
+    /* 0x00 */ JUTExceptionUserCallback callback;
     /* 0x04 */ u16 error;
     /* 0x06 */ u16 pad_0x06;
     /* 0x08 */ OSContext* context;
@@ -49,17 +49,17 @@ const char* JUTException::sCpuExpName[] = {
     "FLOATING POINT",
 };
 JUTException* JUTException::sErrorManager;
-OSErrorHandler JUTException::sPreUserCallback;
-OSErrorHandler JUTException::sPostUserCallback;
+JUTExceptionUserCallback JUTException::sPreUserCallback;
+JUTExceptionUserCallback JUTException::sPostUserCallback;
 
 /* 802C4AC8-802C4BAC       .text __ct__12JUTExceptionFP14JUTDirectPrint */
 JUTException::JUTException(JUTDirectPrint* directPrint) : JKRThread(0x4000, 0x10, 0) {
     mDirectPrint = directPrint;
-    OSSetErrorHandler(EXCEPTION_DSI, errorHandler);
-    OSSetErrorHandler(EXCEPTION_ISI, errorHandler);
-    OSSetErrorHandler(EXCEPTION_PROGRAM, errorHandler);
-    OSSetErrorHandler(EXCEPTION_ALIGNMENT, errorHandler);
-    OSSetErrorHandler(EXCEPTION_MEMORY_PROTECTION, errorHandler);
+    OSSetErrorHandler(EXCEPTION_DSI, (OSErrorHandler)errorHandler);
+    OSSetErrorHandler(EXCEPTION_ISI, (OSErrorHandler)errorHandler);
+    OSSetErrorHandler(EXCEPTION_PROGRAM, (OSErrorHandler)errorHandler);
+    OSSetErrorHandler(EXCEPTION_ALIGNMENT, (OSErrorHandler)errorHandler);
+    OSSetErrorHandler(EXCEPTION_MEMORY_PROTECTION, (OSErrorHandler)errorHandler);
     setFPException(0);
 
     sPreUserCallback = NULL;
@@ -96,7 +96,7 @@ void* JUTException::run() {
     while (true) {
         OSReceiveMessage(&sMessageQueue, &message, OS_MESSAGE_BLOCK);
         CallbackObject* cb = (CallbackObject*)message;
-        OSErrorHandler callback = cb->callback;
+        JUTExceptionUserCallback callback = cb->callback;
         u16 error = cb->error;
         OSContext* context = cb->context;
         int r24 = cb->param_3;
@@ -214,7 +214,7 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
 void JUTException::setFPException(u32 fpscr_enable_bits) {
     __OSFpscrEnableBits = fpscr_enable_bits;
     if (fpscr_enable_bits) {
-        OSSetErrorHandler(EXCEPTION_FLOATING_POINT_EXCEPTION, errorHandler);
+        OSSetErrorHandler(EXCEPTION_FLOATING_POINT_EXCEPTION, (OSErrorHandler)errorHandler);
     } else {
         OSSetErrorHandler(EXCEPTION_FLOATING_POINT_EXCEPTION, NULL);
     }
@@ -802,15 +802,15 @@ void JUTException::createFB() {
 }
 
 /* 802C6868-802C6878       .text setPreUserCallback__12JUTExceptionFPFUsP9OSContextUlUl_v */
-OSErrorHandler JUTException::setPreUserCallback(OSErrorHandler callback) {
-    OSErrorHandler previous = sPreUserCallback;
+JUTExceptionUserCallback JUTException::setPreUserCallback(JUTExceptionUserCallback callback) {
+    JUTExceptionUserCallback previous = sPreUserCallback;
     sPreUserCallback = callback;
     return previous;
 }
 
 /* 802C6878-802C6888       .text setPostUserCallback__12JUTExceptionFPFUsP9OSContextUlUl_v */
-OSErrorHandler JUTException::setPostUserCallback(OSErrorHandler callback) {
-    OSErrorHandler previous = sPostUserCallback;
+JUTExceptionUserCallback JUTException::setPostUserCallback(JUTExceptionUserCallback callback) {
+    JUTExceptionUserCallback previous = sPostUserCallback;
     sPostUserCallback = callback;
     return previous;
 }

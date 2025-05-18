@@ -117,6 +117,11 @@ public:
     /* 0x8AC */ ProcFunc_t mCurrentProc;
 };
 
+class daBoko_HIO_c {
+public:
+    // Size 1 in retail, size 0x14 in debug.
+};
+
 class daBoko_HIO_c0 {
 public:
     static const s16 throw_timer;

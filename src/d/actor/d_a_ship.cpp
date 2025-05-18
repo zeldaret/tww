@@ -4252,20 +4252,20 @@ BOOL daShip_c::execute() {
         cyl->SetC(sp9C);
         dComIfG_Ccsp()->Set(cyl);
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-            cyl->SetTgGrp(cCcD_AtSPrm_VsPlayer_e);
+            cyl->SetTgGrp(cCcD_TgSPrm_IsPlayer_e);
         }
         else {
-            cyl->SetTgGrp(cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e);
+            cyl->SetTgGrp(cCcD_TgSPrm_IsPlayer_e | cCcD_TgSPrm_IsOther_e);
         }
     }
 
     cMtx_multVec(mpHeadAnm->getModel()->getAnmMtx(8), &sph_offset, &sp9C);
 
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-        mSph.SetTgGrp(cCcD_AtSPrm_VsPlayer_e);
+        mSph.SetTgGrp(cCcD_TgSPrm_IsPlayer_e);
     }
     else {
-        mSph.SetTgGrp(cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e);
+        mSph.SetTgGrp(cCcD_TgSPrm_IsPlayer_e | cCcD_TgSPrm_IsOther_e);
     }
 
     mSph.SetC(sp9C);

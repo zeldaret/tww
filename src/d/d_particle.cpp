@@ -1059,7 +1059,7 @@ void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter* param_1, const cXyz* param_2,
     mpBaseEmitter = param_1;
     field_0x6 = 0;
     field_0x5 = 0;
-    field_0x4 = 0xFF;
+    mAlpha = 0xFF;
 }
 
 /* 8007E9D4-8007EAC4       .text executeAfter__22dPa_cutTurnEcallBack_cFP14JPABaseEmitter */

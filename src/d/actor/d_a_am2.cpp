@@ -177,7 +177,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     i_this->mNeedleCyl.OnAtHitBit();
                     i_this->mNeedleCyl.OnTgSetBit();
                     i_this->mAction = ACTION_DOUSA;
-                    i_this->mState = 2;
+                    i_this->mMode = 2;
                 } else {
                     dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos, &player->shape_angle);
                     // Using the fopAcM_seStart inline breaks the codegen.
@@ -185,7 +185,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     mDoAud_seStart(JA_SE_CM_AM2_PARALYZED, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                     fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_PARALYZED, 0x42);
                     i_this->mAction = ACTION_MAHI;
-                    i_this->mState = 10;
+                    i_this->mMode = 10;
                 }
                 return TRUE;
             }
@@ -294,7 +294,7 @@ static BOOL week_atari_check(am2_class* i_this) {
                 }
                 
                 i_this->mAction = ACTION_ITAI;
-                i_this->mState = 20;
+                i_this->mMode = 20;
                 if (i_this->m2CE == 7 || i_this->m2CE == 8) {
                     actor->health = 0;
                 }
@@ -341,7 +341,7 @@ static BOOL body_atari_check(am2_class* i_this) {
                 break;
             }
             i_this->mAction = ACTION_HANDOU_MOVE;
-            i_this->mState = 30;
+            i_this->mMode = 30;
             i_this->m2CE = 7;
             if (player->getCutType() == 0x11) {
                 i_this->m2CE = 8;
@@ -448,7 +448,7 @@ static void action_dousa(am2_class* i_this) {
     
     cXyz offset;
     cXyz rotOffset;
-    if (i_this->mState == 4 || i_this->mState == 5) {
+    if (i_this->mMode == 4 || i_this->mMode == 5) {
         cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
         offset.set(0.0f, 0.0f, 200.0f);
         MtxPosition(&offset, &rotOffset);
@@ -456,7 +456,7 @@ static void action_dousa(am2_class* i_this) {
         rotOffset.y += 100.0f + REG12_F(19);
     }
     
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
@@ -465,7 +465,7 @@ static void action_dousa(am2_class* i_this) {
         if (i_this->mCurrBckIdx != AM2_BCK_WAIT) {
             anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     case 1: {
         f32 playerDist = fopAcM_searchPlayerDistance(i_this);
@@ -479,7 +479,7 @@ static void action_dousa(am2_class* i_this) {
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM2_AWAKE, 0);
                 i_this->mEyeSph.OnTgSetBit();
                 i_this->mWeakSph.OnTgSetBit();
-                i_this->mState += 1;
+                i_this->mMode += 1;
             }
         }
         break;
@@ -491,7 +491,7 @@ static void action_dousa(am2_class* i_this) {
         if (!i_this->mpMorf->isStop()) {
             break;
         }
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     case 3: {
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
@@ -501,7 +501,7 @@ static void action_dousa(am2_class* i_this) {
         f32 playerDist = fopAcM_searchPlayerDistance(i_this);
         f32 radiusAdjust = 200.0f;
         if (playerDist > i_this->mAreaRadius + radiusAdjust) {
-            i_this->mState = 6;
+            i_this->mMode = 6;
         } else {
             i_this->mNeedleCyl.OnAtSetBit();
             i_this->mNeedleCyl.OnAtHitBit();
@@ -512,7 +512,7 @@ static void action_dousa(am2_class* i_this) {
             if (i_this->mCurrBckIdx != AM2_BCK_JUMP) {
                 anm_init(i_this, AM2_BCK_JUMP, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
-            i_this->mState++;
+            i_this->mMode++;
         }
         break;
     }
@@ -521,11 +521,11 @@ static void action_dousa(am2_class* i_this) {
             i_this->gravity = -3.0f;
             i_this->speed.y = 12.0f;
             fopAcM_seStart(i_this, JA_SE_CM_AM2_LANDING, 0);
-            i_this->mState = 3;
+            i_this->mMode = 3;
             s16 angleDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->current.angle.y);
             if (angleDiff < 0x1000) {
                 if (Line_check(i_this, rotOffset) || player->getDamageWaitTimer() == 0) {
-                    i_this->mState = 5;
+                    i_this->mMode = 5;
                 }
             }
         }
@@ -552,7 +552,7 @@ static void action_dousa(am2_class* i_this) {
             }
             
             if (i_this->mCountUpTimers[0] > 8) {
-                i_this->mState = 3;
+                i_this->mMode = 3;
             } else {
                 i_this->speedF = 9.0f;
                 i_this->gravity = -8.0f;
@@ -570,7 +570,7 @@ static void action_dousa(am2_class* i_this) {
         fopAcM_seStart(i_this, JA_SE_CM_AM2_SPIKE_IN, 0);
         i_this->mWeakSph.OffTgSetBit();
         i_this->mWeakSph.ClrTgHit();
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     case 7:
         if (i_this->mpMorf->isStop()) {
@@ -583,7 +583,7 @@ static void action_dousa(am2_class* i_this) {
             i_this->mNeedleCyl.ClrTgHit();
             i_this->m304 = i_this->current.pos;
             i_this->mAction = ACTION_DOUSA;
-            i_this->mState = 1;
+            i_this->mMode = 1;
         }
         break;
     }
@@ -598,10 +598,10 @@ static void action_dousa(am2_class* i_this) {
             fopAcM_delete(i_this);
         } else {
             i_this->mAction = ACTION_MODORU_MOVE;
-            i_this->mState = 40;
+            i_this->mMode = 40;
         }
     } else if (!medama_atari_check(i_this)) {
-        if (i_this->mState < 3 || !week_atari_check(i_this)) {
+        if (i_this->mMode < 3 || !week_atari_check(i_this)) {
             body_atari_check(i_this);
         }
     }
@@ -612,7 +612,7 @@ static void action_mahi(am2_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* actor = i_this; // Fixes regswaps
     
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 10:
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
@@ -631,7 +631,7 @@ static void action_mahi(am2_class* i_this) {
         fopAcM_seStart(actor, JA_SE_CM_AM2_SPIKE_IN, 0);
         anm_init(i_this, AM2_BCK_DAMAGE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         
-        i_this->mState++;
+        i_this->mMode++;
         break;
     case 11:
         cLib_addCalc0(&actor->speedF, 0.5f, 1.0f);
@@ -640,7 +640,7 @@ static void action_mahi(am2_class* i_this) {
                 actor->speedF = 0.0f;
                 i_this->mCountDownTimers[2] = 20*30;
                 anm_init(i_this, AM2_BCK_MAHI, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-                i_this->mState++;
+                i_this->mMode++;
             }
         }
         break;
@@ -653,7 +653,7 @@ static void action_mahi(am2_class* i_this) {
                 fopAcM_delete(actor);
             } else {
                 i_this->mAction = ACTION_MODORU_MOVE;
-                i_this->mState = 40;
+                i_this->mMode = 40;
             }
         } else {
             if (i_this->mCountUpTimers[1] != 0 && i_this->mAcch.ChkGroundHit()) {
@@ -672,7 +672,7 @@ static void action_mahi(am2_class* i_this) {
                 actor->speedF = 0.0f;
                 i_this->mbNotInHomeRoom = false;
                 i_this->mBodyCyl.OffCoSetBit();
-                i_this->mState++;
+                i_this->mMode++;
             }
         }
         break;
@@ -692,11 +692,11 @@ static void action_mahi(am2_class* i_this) {
                 actor->speed.y = 25.0f;
                 actor->speedF = 35.0f;
                 i_this->mAcch.OnLineCheck();
-                i_this->mState = 14;
+                i_this->mMode = 14;
             } else {
                 actor->gravity = -3.0f;
                 i_this->mCountUpTimers[1] = 1;
-                i_this->mState = 12;
+                i_this->mMode = 12;
             }
         }
         break;
@@ -710,7 +710,7 @@ static void action_mahi(am2_class* i_this) {
             } else {
                 i_this->mAcch.OffLineCheck();
                 i_this->mAction = ACTION_MODORU_MOVE;
-                i_this->mState = 40;
+                i_this->mMode = 40;
             }
         } else {
             if (i_this->mAcch.ChkGroundHit()) {
@@ -740,7 +740,7 @@ static void action_mahi(am2_class* i_this) {
                 } else {
                     actor->speedF = 0.0f;
                     i_this->mCountUpTimers[0] = 0;
-                    i_this->mState = 12;
+                    i_this->mMode = 12;
                 }
             }
             
@@ -753,7 +753,7 @@ static void action_mahi(am2_class* i_this) {
                 fopAcM_delete(actor);
             } else {
                 i_this->mAction = ACTION_MODORU_MOVE;
-                i_this->mState = 40;
+                i_this->mMode = 40;
                 return;
             }
         }
@@ -764,14 +764,14 @@ static void action_mahi(am2_class* i_this) {
             actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
             fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
             i_this->mAction = ACTION_DOUSA;
-            i_this->mState = 3;
+            i_this->mMode = 3;
         }
         break;
     }
     
     i_this->mTargetAngleY = actor->current.angle.y;
     
-    if (i_this->mState >= 12 && i_this->mState != 15) {
+    if (i_this->mMode >= 12 && i_this->mMode != 15) {
         if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF) {
             if (!dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
                 i_this->mCountDownTimers[2] = 20*30;
@@ -781,7 +781,7 @@ static void action_mahi(am2_class* i_this) {
             
             i_this->mSwitch = 0xFF;
             i_this->mAction = ACTION_DOUSA;
-            i_this->mState = 0;
+            i_this->mMode = 0;
             
             if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
                 fopAcM_cancelCarryNow(actor);
@@ -811,19 +811,19 @@ static void action_mahi(am2_class* i_this) {
                 actor->gravity = -4.0f;
                 actor->speed.y = 20.0f;
                 i_this->mBodyCyl.OnCoSetBit();
-                i_this->mState = 15;
+                i_this->mMode = 15;
             }
         }
     }
     
-    if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e) || i_this->mState == 15 || !week_atari_check(i_this)) {
+    if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e) || i_this->mMode == 15 || !week_atari_check(i_this)) {
         body_atari_check(i_this);
     }
 }
 
 /* 00002B08-000032AC       .text action_itai__FP9am2_class */
 static void action_itai(am2_class* i_this) {
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 20:
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
@@ -845,9 +845,9 @@ static void action_itai(am2_class* i_this) {
             if (i_this->mCountDownTimers[2] > 5) {
                 i_this->speedF = 5.0f;
             }
-            i_this->mState++;
+            i_this->mMode++;
         } else {
-            i_this->mState = 22;
+            i_this->mMode = 22;
         }
         break;
     case 21:
@@ -857,11 +857,11 @@ static void action_itai(am2_class* i_this) {
             i_this->gravity = -3.0f;
             if (i_this->mCountDownTimers[2] < 5) {
                 i_this->mAction = ACTION_DOUSA;
-                i_this->mState = 3;
+                i_this->mMode = 3;
             } else {
                 anm_init(i_this, AM2_BCK_MAHI, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
                 i_this->mAction = ACTION_MAHI;
-                i_this->mState = 12;
+                i_this->mMode = 12;
             }
         }
         break;
@@ -871,7 +871,7 @@ static void action_itai(am2_class* i_this) {
         i_this->mEyeSph.ClrTgHit();
         i_this->mWeakSph.ClrTgHit();
         anm_init(i_this, AM2_BCK_DEAD1, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        i_this->mState++;
+        i_this->mMode++;
         break;
     case 23:
         if (!i_this->mpMorf->isStop()) {
@@ -885,7 +885,7 @@ static void action_itai(am2_class* i_this) {
         i_this->mCountDownTimers[0] = 100;
         i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
         anm_init(i_this, AM2_BCK_DEAD2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     case 24:
         if (i_this->speed.y > 0.0f && i_this->mCountUpTimers[1] == 0) {
@@ -921,7 +921,7 @@ static void action_itai(am2_class* i_this) {
             
             i_this->speedF = 0.0f;
             
-            i_this->mState++;
+            i_this->mMode++;
         }
         break;
     case 25:
@@ -934,7 +934,7 @@ static void action_itai(am2_class* i_this) {
         dComIfGp_particle_set(dPa_name::ID_SCENE_81AF, &i_this->current.pos, &i_this->shape_angle);
         dComIfGp_particle_set(dPa_name::ID_SCENE_81B0, &i_this->current.pos, &i_this->shape_angle);
         fopAcM_seStart(i_this, JA_SE_CM_AM2_EXPLODE, 0);
-        fopAcM_createDisappear(i_this, &centerPos, 5);
+        fopAcM_createDisappear(i_this, &centerPos, 5, daDisItem_IBALL_e);
         fopAcM_onActor(i_this);
         fopAcM_delete(i_this);
         break;
@@ -942,15 +942,15 @@ static void action_itai(am2_class* i_this) {
     
     if (naraku_check(i_this)) {
         if (i_this->mbNotInHomeRoom || i_this->health <= 0) {
-            if (i_this->mState != 25) {
+            if (i_this->mMode != 25) {
                 anm_init(i_this, AM2_BCK_DEAD3, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_seStart(i_this, JA_SE_CM_AM2_BEF_EXPLODE, 0);
                 i_this->speedF = 0.0f;
-                i_this->mState = 25;
+                i_this->mMode = 25;
             }
         } else {
             i_this->mAction = ACTION_MODORU_MOVE;
-            i_this->mState = 40;
+            i_this->mMode = 40;
         }
     }
 }
@@ -958,7 +958,7 @@ static void action_itai(am2_class* i_this) {
 /* 000032AC-000034A4       .text action_handou_move__FP9am2_class */
 static void action_handou_move(am2_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 30: {
         i_this->speedF = 40.0f;
         s16 angleToPlayer = fopAcM_searchPlayerAngleY(i_this);
@@ -972,7 +972,7 @@ static void action_handou_move(am2_class* i_this) {
         i_this->mNeedleCyl.OffTgSetBit();
         i_this->mNeedleCyl.ClrTgHit();
         i_this->mTargetAngleY = i_this->current.angle.y;
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     }
     case 31:
@@ -982,12 +982,12 @@ static void action_handou_move(am2_class* i_this) {
             i_this->speedF = 0.0f;
             i_this->current.angle.y = i_this->shape_angle.y;
             i_this->mAction = ACTION_DOUSA;
-            i_this->mState = 3;
+            i_this->mMode = 3;
             if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
                 i_this->attention_info.flags = 0;
                 i_this->mCountDownTimers[2] = 20*30;
                 i_this->mAction = ACTION_MAHI;
-                i_this->mState = 12;
+                i_this->mMode = 12;
             }
         }
     }
@@ -997,7 +997,7 @@ static void action_handou_move(am2_class* i_this) {
             fopAcM_delete(i_this);
         } else {
             i_this->mAction = ACTION_MODORU_MOVE;
-            i_this->mState = 40;
+            i_this->mMode = 40;
         }
     }
 }
@@ -1005,7 +1005,7 @@ static void action_handou_move(am2_class* i_this) {
 /* 000034A4-0000379C       .text action_modoru_move__FP9am2_class */
 static void action_modoru_move(am2_class* i_this) {
     // Respawns the Armos back at its spawn point after it falls into an abyss.
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 40:
         dCam_getBody()->ForceLockOff(fopAcM_GetID(i_this));
         i_this->mInAbyssTimer = 0;
@@ -1013,7 +1013,7 @@ static void action_modoru_move(am2_class* i_this) {
         i_this->mRippleCb.remove();
         anm_init(i_this, AM2_BCK_WAIT, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(i_this, JA_SE_CM_AM2_WTR_RECOVER, 0);
-        i_this->mState++;
+        i_this->mMode++;
         // Fall-through
     case 41:
         cLib_addCalc0(&i_this->scale.x, 1.0f, 0.1f);
@@ -1034,7 +1034,7 @@ static void action_modoru_move(am2_class* i_this) {
             i_this->current.pos = i_this->mSpawnPos;
             i_this->mTargetAngleY = i_this->current.angle.y;
             
-            i_this->mState++;
+            i_this->mMode++;
         }
         break;
     case 42:
@@ -1056,13 +1056,13 @@ static void action_modoru_move(am2_class* i_this) {
             i_this->mWeakSph.ClrTgHit();
             i_this->mNeedleCyl.ClrTgHit();
             i_this->mAction = ACTION_DOUSA;
-            i_this->mState = 0;
+            i_this->mMode = 0;
             
             if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
                 i_this->attention_info.flags = 0;
                 i_this->mCountDownTimers[2] = 20*30;
                 i_this->mAction = ACTION_MAHI;
-                i_this->mState = 12;
+                i_this->mMode = 12;
             }
         }
         break;
@@ -1456,7 +1456,7 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_actor) {
             i_this->attention_info.flags = 0;
             i_this->mCountDownTimers[2] = 20*30;
             i_this->mAction = ACTION_MAHI;
-            i_this->mState = 12;
+            i_this->mMode = 12;
         }
         
         i_this->mAcchRadius = 40.0f + REG8_F(10);

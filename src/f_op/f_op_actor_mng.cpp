@@ -548,30 +548,30 @@ s32 fopAcM_checkCullingBox(Mtx pMtx, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32
 static l_HIO l_hio;
 
 static fopAc_cullSizeBox l_cullSizeBox[14] = {
-    /* fopAc_CULLBOX_0_e  */ fopAc_MakeCullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
-    /* fopAc_CULLBOX_1_e  */ fopAc_MakeCullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
-    /* fopAc_CULLBOX_2_e  */ fopAc_MakeCullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
-    /* fopAc_CULLBOX_3_e  */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
-    /* fopAc_CULLBOX_4_e  */ fopAc_MakeCullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
-    /* fopAc_CULLBOX_5_e  */ fopAc_MakeCullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
-    /* fopAc_CULLBOX_6_e  */ fopAc_MakeCullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
-    /* fopAc_CULLBOX_7_e  */ fopAc_MakeCullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
-    /* fopAc_CULLBOX_8_e  */ fopAc_MakeCullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
-    /* fopAc_CULLBOX_9_e  */ fopAc_MakeCullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
-    /* fopAc_CULLBOX_10_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
-    /* fopAc_CULLBOX_11_e */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
-    /* fopAc_CULLBOX_12_e */ fopAc_MakeCullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
-    /* fopAc_CULLBOX_13_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
+    /* fopAc_CULLBOX_0_e  */ fopAc_cullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
+    /* fopAc_CULLBOX_1_e  */ fopAc_cullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
+    /* fopAc_CULLBOX_2_e  */ fopAc_cullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
+    /* fopAc_CULLBOX_3_e  */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
+    /* fopAc_CULLBOX_4_e  */ fopAc_cullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
+    /* fopAc_CULLBOX_5_e  */ fopAc_cullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
+    /* fopAc_CULLBOX_6_e  */ fopAc_cullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
+    /* fopAc_CULLBOX_7_e  */ fopAc_cullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
+    /* fopAc_CULLBOX_8_e  */ fopAc_cullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
+    /* fopAc_CULLBOX_9_e  */ fopAc_cullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
+    /* fopAc_CULLBOX_10_e */ fopAc_cullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
+    /* fopAc_CULLBOX_11_e */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
+    /* fopAc_CULLBOX_12_e */ fopAc_cullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
+    /* fopAc_CULLBOX_13_e */ fopAc_cullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
 };
 static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
-    /* fopAc_CULLSPHERE_0_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
-    /* fopAc_CULLSPHERE_1_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
-    /* fopAc_CULLSPHERE_2_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
-    /* fopAc_CULLSPHERE_3_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
-    /* fopAc_CULLSPHERE_4_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
-    /* fopAc_CULLSPHERE_5_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
-    /* fopAc_CULLSPHERE_6_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
-    /* fopAc_CULLSPHERE_7_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
+    /* fopAc_CULLSPHERE_0_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
+    /* fopAc_CULLSPHERE_1_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
+    /* fopAc_CULLSPHERE_2_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
+    /* fopAc_CULLSPHERE_3_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
+    /* fopAc_CULLSPHERE_4_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
+    /* fopAc_CULLSPHERE_5_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
+    /* fopAc_CULLSPHERE_6_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
+    /* fopAc_CULLSPHERE_7_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
 };
 
 static void dummy() {
@@ -938,14 +938,14 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, u8 argFlag) {
+fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* i_angle, int i_roomNo, cXyz* i_scale, u8 i_argFlag) {
     JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
-    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, angle, scale);
+    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (i_argFlag & 0xFF) << 0x10;
+    return fopAcM_create(PROC_Demo_Item, params, pos, i_roomNo, i_angle, i_scale);
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
@@ -1273,8 +1273,8 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
-    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_health & 0xFF);
+fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_dropType, u8 i_itemBitNo) {
+    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_dropType & 0xFF);
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
     if (disappear) {
         disappear->itemTableIdx = i_actor->itemTableIdx;

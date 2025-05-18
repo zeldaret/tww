@@ -6,7 +6,6 @@
 #include "JSystem/J3DGraphLoader/J3DMaterialFactory_v21.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
-#include "JSystem/JMath/JMath.h"
 #include "JSystem/JSupport/JSupport.h"
 
 /* 802F9A88-802F9C68       .text __ct__22J3DMaterialFactory_v21FRC20J3DMaterialBlock_v21 */
@@ -172,7 +171,6 @@ J3DMaterial* J3DMaterialFactory_v21::create(J3DMaterial* i_material, int i_idx, 
 J3DGXColor J3DMaterialFactory_v21::newMatColor(int idx, int stage) const {
     GXColor _ret = { 0xFF, 0xFF, 0xFF, 0xFF };
     J3DGXColor ret(_ret);
-    J3DMaterialInitData_v21* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mMatColorIdx[stage];
     if (no != 0xFFFF)
         return mpMatColor[no];
@@ -256,7 +254,6 @@ J3DTevOrder J3DMaterialFactory_v21::newTevOrder(int idx, int stage) const {
 J3DGXColorS10 J3DMaterialFactory_v21::newTevColor(int idx, int stage) const {
     GXColorS10 _ret = { 0x00, 0x00, 0x00, 0x00 };
     J3DGXColorS10 ret(_ret);
-    J3DMaterialInitData_v21* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mTevColorIdx[stage];
     if (no != 0xFFFF)
         return mpTevColor[no];
@@ -268,7 +265,6 @@ J3DGXColorS10 J3DMaterialFactory_v21::newTevColor(int idx, int stage) const {
 J3DGXColor J3DMaterialFactory_v21::newTevKColor(int idx, int stage) const {
     GXColor _ret = { 0xFF, 0xFF, 0xFF, 0xFF };
     J3DGXColor ret(_ret);
-    J3DMaterialInitData_v21* initData = &mpMaterialInitData[mpMaterialID[idx]];
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mTevKColorIdx[stage];
     if (no != 0xFFFF)
         return mpTevKColor[no];

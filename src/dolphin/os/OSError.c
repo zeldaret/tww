@@ -12,8 +12,8 @@ extern volatile u32 __OSLastInterruptSrr0;
 extern volatile s16 __OSLastInterrupt;
 extern volatile OSTime __OSLastInterruptTime;
 
-extern OSErrorHandlerEx __OSErrorTable[EXCEPTION_MAX];
-OSErrorHandlerEx __OSErrorTable[EXCEPTION_MAX];
+extern OSErrorHandler __OSErrorTable[EXCEPTION_MAX];
+OSErrorHandler __OSErrorTable[EXCEPTION_MAX];
 
 #define FPSCR_ENABLE (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE)
 u32 __OSFpscrEnableBits = FPSCR_ENABLE;
@@ -53,12 +53,12 @@ __declspec(weak) void OSPanic(const char* file, s32 line, const char* msg, ...) 
 }
 
 OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler) {
-    OSErrorHandlerEx oldHandler;
+    OSErrorHandler oldHandler;
     BOOL enabled;
 
     enabled = OSDisableInterrupts();
     oldHandler = __OSErrorTable[error];
-    __OSErrorTable[error] = (OSErrorHandlerEx)handler;
+    __OSErrorTable[error] = (OSErrorHandler)handler;
 
     if (error == EXCEPTION_FLOATING_POINT_EXCEPTION) {
         u32 msr;
