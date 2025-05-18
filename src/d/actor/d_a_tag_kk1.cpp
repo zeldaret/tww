@@ -36,8 +36,7 @@ bool daTag_Kk1_c::_draw() {
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_execute() {
 
-    cXyz* player_pos = &dComIfGp_getPlayer(0)->current.pos; 
-    f32 distance = std::sqrtf(current.pos.abs2(*player_pos));
+    f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
     f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - this->current.pos.y;
     mTagSet = false;
     if (
