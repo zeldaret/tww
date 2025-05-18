@@ -14,10 +14,12 @@ static daTag_Kk1_HIO_c l_HIO;
 static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
 
 daTag_Kk1_HIO_c::daTag_Kk1_HIO_c() {
-    static f32 a_prm_tbl[] = {350.0f,30.0f,0.0f};
-    mHorizontalDistance = a_prm_tbl[0];
-    mVerticalDistance = a_prm_tbl[1];
-    mUnusedU8 = *reinterpret_cast<u8*>(&a_prm_tbl[2]); //TODO: This u8 appears to be inside the float table. May be a better way to refactor.
+    static hio_prm_c a_prm_tbl = {
+        350.0f,
+        30.0f,
+        0,
+    };
+    prm = a_prm_tbl;
     mNo = -1;
 }
 
