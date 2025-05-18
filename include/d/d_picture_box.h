@@ -4,8 +4,8 @@
 #include "dolphin/types.h"
 
 class JKRExpHeap;
-class fopMsgM_pane_class;
-class fopMsgM_pane_alpha_class;
+struct fopMsgM_pane_class;
+struct fopMsgM_pane_alpha_class;
 
 class sub_pb_class;
 

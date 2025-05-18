@@ -926,7 +926,7 @@ cPhs_State daObjFigure_c::_create() {
         NULL,
     };
 
-    dComLbG_PhaseHandler(&mPhsLoad, l_method, this);
+    return dComLbG_PhaseHandler(&mPhsLoad, l_method, this);
 }
 
 /* 00000720-00000A90       .text createHeap__13daObjFigure_cFv */
@@ -1512,9 +1512,9 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DShape* ZOnShape[4];
 
     J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
-    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13); // cl_eye joint
-    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15); // cl_mayu joint
-    
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13);    // cl_eye joint
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15);   // cl_mayu joint
+
     J3DMaterial* mtl;
     mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
     int zoff_blend_cnt = 0;
@@ -1525,20 +1525,16 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
         while (mtl) {
             mtl->setMaterialMode(1);
             if (mtl->getZMode()->getCompareEnable() == 0) {
-                // TODO: debug map indicates J3DBlend::getType inline was used
-                if (mtl->getBlend()->mBlendMode == GX_BM_BLEND) {
-                    ZOffBlendShape[zoff_blend_cnt] = mtl->getShape();
-                    zoff_blend_cnt++;
-                    JUT_ASSERT(0x6E7, zoff_blend_cnt <= 4);
+                if ((u8)mtl->getBlend()->getType() == GX_BM_BLEND) {
+                    ZOffBlendShape[zoff_blend_cnt++] = mtl->getShape();
+                    JUT_ASSERT(1767, zoff_blend_cnt <= 4);
                 } else {
-                    ZOffNoneShape[zoff_none_cnt] = mtl->getShape();
-                    zoff_none_cnt++;
-                    JUT_ASSERT(0x6EA, zoff_none_cnt <= 4);
+                    ZOffNoneShape[zoff_none_cnt++] = mtl->getShape();
+                    JUT_ASSERT(1770, zoff_none_cnt <= 4);
                 }
             } else {
-                ZOnShape[zon_cnt] = mtl->getShape();
-                zon_cnt++;
-                JUT_ASSERT(0x6EE, zon_cnt <= 4);
+                ZOnShape[zon_cnt++] = mtl->getShape();
+                JUT_ASSERT(1774, zon_cnt <= 4);
             }
             mtl = mtl->getNext();
         }
@@ -1548,7 +1544,7 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     dComIfGd_setListP0();
     l_onCupOffAupPacket2.entryOpa();
 
-    for(i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         ZOffBlendShape[i]->hide();
         ZOnShape[i]->hide();
         ZOffNoneShape[i]->show();
@@ -1558,7 +1554,7 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     cl_mayu_joint->entryIn();
     l_offCupOnAupPacket2.entryOpa();
 
-    for(i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         ZOffBlendShape[i]->show();
         ZOffNoneShape[i]->hide();
     }
@@ -1568,25 +1564,24 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
 
     mtl = link_root_joint->getMesh();
     for (i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
-        if(i != 2 && i != 5) {
+        if (i != 2 && i != 5) {
             mtl->getShape()->hide();
         }
     }
 
     link_root_joint->entryIn();
-    
+
     for (i = 0, mtl = link_root_joint->getMesh(); mtl != NULL; i++, mtl = mtl->getNext()) {
-        if(i != 2 && i != 5) {
+        if (i != 2 && i != 5) {
             mtl->getShape()->show();
-        }
-        else {
+        } else {
             mtl->getShape()->hide();
         }
     }
 
     l_onCupOffAupPacket1.entryOpa();
 
-    for(i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         ZOffBlendShape[i]->hide();
         ZOnShape[i]->show();
         ZOffNoneShape[i]->hide();
@@ -1594,10 +1589,10 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
 
     cl_eye_joint->entryIn();
     cl_mayu_joint->entryIn();
-    
+
     l_offCupOnAupPacket1.entryOpa();
 
-    for(i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         ZOnShape[i]->hide();
     }
 

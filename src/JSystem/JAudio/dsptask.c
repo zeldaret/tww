@@ -10,7 +10,7 @@
 #include "global.h"
 
 /* 8028E860-8028E898       .text DspHandShake__FPv */
-void DspHandShake(void*) {
+void DspHandShake(void* param_1) {
     while (DSPCheckMailFromDSP() == 0) {}
     DSPReadMailFromDSP();
     DSPCheckMailFromDSP();

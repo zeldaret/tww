@@ -5,7 +5,7 @@
 
 struct ResTIMG;
 class JUTFont;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 class dDlst_2DNumber_c : public dDlst_base_c {
 public:

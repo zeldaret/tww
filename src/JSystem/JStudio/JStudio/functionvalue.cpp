@@ -8,7 +8,7 @@
 #include "JSystem/JGadget/linklist.h"
 #include "dolphin/types.h"
 #include "math.h"
-#include "arith.h"
+#include "stdlib.h"
 
 namespace JStudio {
 

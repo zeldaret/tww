@@ -26,7 +26,7 @@ public:
     /* 0x308 */ cXyz mHomePos;
     /* 0x314 */ s16 mTimer[3];
     /* 0x31A */ s16 mAngleRoll;
-    /* 0x31C */ s8 mState;
+    /* 0x31C */ s8 mMode;
     /* 0x31D */ u8 field_0x31d;
     /* 0x31E */ bool mHitGround;
     /* 0x31E */ u8 field_0x31f;

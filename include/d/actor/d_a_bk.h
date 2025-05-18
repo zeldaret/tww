@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "m_Do/m_Do_hostIO.h"
 
-class dPath;
+struct dPath;
 namespace daObj_Search { class Act_c; };
 struct br_s;
 

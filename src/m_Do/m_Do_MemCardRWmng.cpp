@@ -13,7 +13,7 @@
 #include "dolphin/os/OS.h"
 
 #include <string.h>
-#include <printf.h>
+#include <stdio.h>
 
 static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
 static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);

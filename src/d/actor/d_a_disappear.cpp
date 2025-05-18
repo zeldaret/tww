@@ -27,7 +27,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                 if (dropType == daDisItem_HEART_CONTAINER_e) {
                     fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
                 }
-                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_UNK13_e) {
+                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_NONE13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
@@ -101,7 +101,7 @@ static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
 
     fopAcM_SetupActor(dis, disappear_class);
 
-    dis->health = fopAcM_GetParam(dis) & 0xFF;
+    dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
 
     dis->mItemBitNo = (fopAcM_GetParam(dis) >> 0x10) & 0xFF;

@@ -47,7 +47,7 @@ public:
     /* 0x359 */ u8 mPathIndex;
     /* 0x35A */ u8 m35A[0x366 - 0x35A];
     /* 0x366 */ s16 mAction;
-    /* 0x368 */ s16 mState;
+    /* 0x368 */ s16 mMode;
     /* 0x36A */ u8 m36A[0x36C - 0x36A];
     /* 0x36C */ fpc_ProcID mJalhallaID;
     /* 0x370 */ fpc_ProcID mKanteraID;

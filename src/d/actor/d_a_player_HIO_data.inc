@@ -71,7 +71,7 @@ const daPy_HIO_cutTurn_c1 daPy_HIO_cutTurn_c0::m = {
 };
 
 const daPy_HIO_cutTurnR_c1 daPy_HIO_cutTurnR_c0::m = {
-    0, 4, 9, 27379, 1748, 0.8f, 1.0f, 3.0f, 0.8f, 3.0f, 0.8f, 3.0f, 0.95f,
+    0, 0, 4, 9, 27379, 1748, 0.8f, 1.0f, 3.0f, 0.8f, 3.0f, 0.8f, 3.0f, 0.95f,
 };
 
 const daPy_HIO_cutRoll_c1 daPy_HIO_cutRoll_c0::m = {

@@ -25,6 +25,7 @@ namespace JASystem {
         extern TBank** sBankArray;
         extern u16* sVir2PhyTable;
 
+        extern s16 OSC_RELEASE_TABLE[6];
         extern TOscillator::Osc_ OSC_ENV;
     }
 }

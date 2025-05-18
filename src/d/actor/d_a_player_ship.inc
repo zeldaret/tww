@@ -941,7 +941,7 @@ BOOL daPy_lk_c::procShipBow() {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     }
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
-    if (checkUpperAnime(LKANM_BCK_BOWWAIT)) {
+    if (checkBowWaitAnime()) {
         setShipAttentionAnmSpeed(1.0f);
     }
     if (mpAttention->Lockon() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e)) {

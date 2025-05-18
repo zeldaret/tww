@@ -1,5 +1,6 @@
 #include "dolphin/dvd/dvdidutils.h"
 #include "dolphin/os/OS.h"
+#include <string.h>
 
 static u32 strnlen(const char* str, u32 maxlen) {
     u32 i;

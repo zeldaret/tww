@@ -116,6 +116,7 @@ void JASystem::TTrack::inherit() {
 
 u16 (*JASystem::TTrack::sCallBackFunc)(JASystem::TTrack*, u16);
 JASystem::TSeqParser JASystem::TTrack::sParser;
+JASystem::TTrack* JASystem::TTrack::sFreeList;
 
 /* 80280D0C-80280F80       .text mainProc__Q28JASystem6TTrackFv */
 s8 JASystem::TTrack::mainProc() {

@@ -388,7 +388,7 @@ BOOL daPy_lk_c::procFanGlide() {
             return true;
         }
 
-        if (m3280.mpBaseEmitter != NULL) {
+        if (m3280.getEmitter() != NULL) {
             if ((int)m34DA == 0) {
                 seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_WATER);
                 m34DA = 6;

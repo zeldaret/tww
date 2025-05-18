@@ -38,6 +38,7 @@ class J2DOrthoGraph;
 enum daPy__PlayerStatus0 {
     daPyStts0_UNK1_e           = 0x00000001,
     daPyStts0_UNK2_e           = 0x00000002,
+    daPyStts0_UNK4_e           = 0x00000004,
     daPyStts0_UNK10_e          = 0x00000010,
     daPyStts0_UNK20_e          = 0x00000020,
     daPyStts0_UNK40_e          = 0x00000040,
@@ -66,6 +67,14 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK20000000_e    = 0x20000000,
     daPyStts0_SPIN_ATTACK_e    = 0x40000000,
     daPyStts0_UNK80000000_e    = 0x80000000,
+
+    // This is some combination of flags which is seemingly related to "judgement", used in dAttention_c
+    daPyStts0_UNK37a02371_e    = daPyStts0_UNK1_e | daPyStts0_UNK10_e | daPyStts0_UNK20_e
+                                 | daPyStts0_UNK40_e | daPyStts0_UNK100_e | daPyStts0_UNK200_e
+                                 | daPyStts0_UNK2000_e| daPyStts0_TELESCOPE_LOOK_e
+                                 | daPyStts0_UNK800000_e | daPyStts0_UNK1000000_e
+                                 | daPyStts0_UNK2000000_e | daPyStts0_UNK4000000_e
+                                 | daPyStts0_UNK10000000_e | daPyStts0_UNK20000000_e
 };
 
 enum daPy__PlayerStatus1 {
@@ -3536,7 +3545,7 @@ inline void dComIfGp_setFmapData(void * pData) { g_dComIfG_gameInfo.play.setFmap
  * === RESOURCE ===
  */
 
-class request_of_phase_process_class;
+struct request_of_phase_process_class;
 cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, char const* arc_name);
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, char const* resName);
 
@@ -3841,9 +3850,9 @@ inline void dComIfGp_att_Look2RequestF(fopAc_ac_c* param_0, s16 param_1, int par
     dComIfGp_getAttention().Look2RequestF(param_0, param_1, param_2);
 }
 
-inline void dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 param_2, f32 param_3,
-                                      f32 param_4, s16 param_5, int param_6) {
-    dComIfGp_getAttention().CatchRequest(param_0, param_1, param_2, param_3, param_4,param_5, param_6);
+inline void dComIfGp_att_CatchRequest(fopAc_ac_c* reqActor, u8 itemNo, f32 horizontalDist, f32 upDist,
+                                      f32 downDist, s16 angle, int param_6) {
+    dComIfGp_getAttention().CatchRequest(reqActor, itemNo, horizontalDist, upDist, downDist,angle, param_6);
 }
 
 inline u8 dComIfGp_att_getCatchChgItem() {
@@ -3855,7 +3864,7 @@ inline fopAc_ac_c* dComIfGp_att_getCatghTarget() {
 }
 
 inline void dComIfGp_att_ChangeOwner() {
-    dComIfGp_getAttention().setFlag(0x80);
+    dComIfGp_getAttention().changeOwner();
 }
 
 inline fopAc_ac_c* dComIfGp_att_getLookTarget() {

@@ -6,7 +6,7 @@
 
 vu16 __MEMRegs[64] AT_ADDRESS(0xCC004000);
 
-extern OSErrorHandlerEx __OSErrorTable[16];
+extern OSErrorHandler __OSErrorTable[EXCEPTION_MAX];
 
 u32 OSGetConsoleSimulatedMemSize() {
     return *(u32*)(OSPhysicalToCached(0x00F0));
@@ -75,6 +75,7 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
 
 static ASM void Config24MB(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     li r7, 0
@@ -109,11 +110,13 @@ static ASM void Config24MB(void) {
     mflr r3
     mtspr 0x1a, r3
     rfi
+#endif
     // clang-format on
 }
 
 static ASM void Config48MB(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     li r7, 0
@@ -148,11 +151,13 @@ static ASM void Config48MB(void) {
     mflr r3
     mtspr 0x1a, r3
     rfi
+#endif
     // clang-format on
 }
 
 static ASM void RealMode(register u32 config) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     clrlwi config, config, 2
@@ -161,6 +166,7 @@ static ASM void RealMode(register u32 config) {
     rlwinm config, config, 0, 0x1c, 0x19
     mtspr 0x1b, config
     rfi
+#endif
     // clang-format on
 }
 

@@ -904,7 +904,7 @@ BOOL daArrow_c::procReturn() {
         s32 temp3 = -field_0x69c;
         field_0x69c = (temp3 / 2);
         triPla = dComIfG_Bgsp()->GetTriPla(mLinChk);
-        if (triPla->mNormal.y >= 0.5f) {
+        if (cBgW_CheckBGround(triPla->GetNP()->y)) {
             field_0x69a = true;
         }
     } else if (field_0x69a && speed.y < 0.0f) {

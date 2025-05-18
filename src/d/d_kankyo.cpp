@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 #include "d/d_kankyo_dayproc.inc"
 
@@ -2093,7 +2093,7 @@ void dKy_event_proc() {
     static f32 S_wether_time_pat03[] = {5.0f, 12.5f, 5.0f};
 
     static u8 S_wether_mode_pat04[] = {4, 0xFF};
-    static f32 S_wether_time_pat04[] = {10.0f, 0.0f};
+    static f32 S_wether_time_pat04[] = {10.0f};
 
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
 

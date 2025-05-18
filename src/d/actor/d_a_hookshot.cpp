@@ -280,7 +280,7 @@ BOOL daHookshot_c::procShot() {
                 if (
                     strcmp(dComIfGp_getStartStageName(), "kazeB") == 0 &&
                     (
-                        (sp8C.y < 950.0f && dComIfG_Bgsp()->GetTriPla(mLinChk)->GetNP()->y >= 0.5f) ||
+                        (sp8C.y < 950.0f && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mLinChk)->GetNP()->y)) ||
                         dComIfG_Bgsp()->GetAttributeCode(mLinChk) == dBgS_Attr_SAND_e
                     )
                 ) {

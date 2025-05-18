@@ -56,7 +56,7 @@ public:
     /* 0x15 */ u8 mEventInfoIdx;
 };  // Size = 0x18
 
-class dStage_Event_dt_c;
+struct dStage_Event_dt_c;
 
 enum dTalkXYButton_e {
     dTalkBtn_NONE_e = 0,

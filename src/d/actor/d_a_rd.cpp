@@ -601,7 +601,7 @@ bool daRd_c::checkTgHit() {
         case AT_TYPE_FIRE:
         case AT_TYPE_UNK20000:
             r29 = false;
-            if (mEnemyFire.mState == 0) {
+            if (mEnemyFire.mMode == 0) {
                 mEnemyFire.mFireDuration = l_HIO.m4C;
             } else {
                 mHitType = 0xD;
@@ -800,7 +800,7 @@ void daRd_c::modeDeath() {
     fopAcM_SetGroup(this, fopAc_ENV_e);
     
     if (cLib_calcTimer(&mTimer1) == 0) {
-        fopAcM_createDisappear(this, &current.pos, 5);
+        fopAcM_createDisappear(this, &current.pos, 5, daDisItem_IBALL_e);
         fopAcM_delete(this);
     }
 }
@@ -887,7 +887,7 @@ void daRd_c::modeMove() {
                 temp = 0.1f;
             }
             f32 temp2 = l_HIO.m68;
-            if (mEnemyFire.mState != 0) {
+            if (mEnemyFire.mMode != 0) {
                 temp2 *= 2.0f;
             }
             cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
@@ -943,7 +943,7 @@ void daRd_c::modeCry() {
                 temp = 0.1f;
             }
             f32 temp2 = l_HIO.m68;
-            if (mEnemyFire.mState != 0) {
+            if (mEnemyFire.mMode != 0) {
                 temp2 *= 2.0f;
             }
             cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
@@ -1592,7 +1592,7 @@ bool daRd_c::_execute() {
     }
     current.angle = shape_angle;
     
-    if (mEnemyFire.mState == 0) { // Not on fire (TODO enum)
+    if (mEnemyFire.mMode == 0) { // Not on fire (TODO enum)
         mCyl.SetAtType(0);
         m6D4 = l_HIO.m4E;
     } else {

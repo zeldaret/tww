@@ -495,7 +495,7 @@ BOOL daPy_lk_c::procHangMove() {
                         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
                         s16 sVar6 = cM_atan2s(triPla->GetNP()->x, triPla->GetNP()->z) + 0x8000;
                         if (sVar6 != shape_angle.y) {
-                            if ((short)(current.angle.y - shape_angle.y) > 0) {
+                            if ((s16)(current.angle.y - shape_angle.y) > 0) {
                                 current.angle.y = sVar6 + 0x4000;
                             } else {
                                 current.angle.y = sVar6 + -0x4000;

@@ -2,6 +2,7 @@
 #define OS_H_
 
 #include "stdarg.h"
+#include "dolphin/base/PPCArch.h" // IWYU pragma: export
 #include "dolphin/dvd/dvd.h"
 
 #include "dolphin/os/OSAlarm.h" // IWYU pragma: export

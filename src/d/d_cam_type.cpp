@@ -5,3 +5,273 @@
 
 #include "d/d_camera.h"
 
+const dCamera__Type dCamera_c::types[] = {
+    {
+        "Empty",
+        {dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Plain",
+        {dCamStyle_FN03_e, dCamStyle_FN03_e, dCamStyle_LL03_e, dCamStyle_TT03_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Keep",
+        {dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Event",
+        {dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "Boss01",
+        {dCamStyle_FN15_e, dCamStyle_FN15_e, dCamStyle_LL05_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM05_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Cliff",
+        {dCamStyle_FN19_e, dCamStyle_FN19_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM04_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "PlaySlide",
+        {dCamStyle_FN20_e, dCamStyle_FN20_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Field",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "ThrowUp",
+        {dCamStyle_FN21_e, dCamStyle_FN21_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM09_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Gamoss",
+        {dCamStyle_FN23_e, dCamStyle_FN23_e, dCamStyle_LL09_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "MiniIsland",
+        {dCamStyle_FN24_e, dCamStyle_FN24_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM10_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Cliff2",
+        {dCamStyle_FN26_e, dCamStyle_FN07_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "FieldCushion",
+        {dCamStyle_FN10_e, dCamStyle_FN10_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "FixdPos",
+        {dCamStyle_PN05_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "SmoothFixdPos",
+        {dCamStyle_PN12_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "WaterBattle",
+        {dCamStyle_FN25_e, dCamStyle_FN25_e, dCamStyle_LL11_e, dCamStyle_TT02_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_MM15_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "SmoothFixdPosC",
+        {dCamStyle_PN13_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "ThrowInto",
+        {dCamStyle_FN29_e, dCamStyle_FN29_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM09_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Boss03",
+        {dCamStyle_FN30_e, dCamStyle_FN30_e, dCamStyle_LL12_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon1",
+        {dCamStyle_FN31_e, dCamStyle_FN31_e, dCamStyle_LL13_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon2",
+        {dCamStyle_FN32_e, dCamStyle_FN32_e, dCamStyle_LL14_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "WindBoss",
+        {dCamStyle_FN33_e, dCamStyle_FN33_e, dCamStyle_LL15_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "P_Ganon3",
+        {dCamStyle_FN34_e, dCamStyle_FN34_e, dCamStyle_LL14_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Test01",
+        {dCamStyle_FN27_e, dCamStyle_FN27_e, dCamStyle_LL10_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Amoss",
+        {dCamStyle_FN35_e, dCamStyle_FN35_e, dCamStyle_LL16_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Dungeon",
+        {dCamStyle_FN02_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Jump",
+        {dCamStyle_FN08_e, dCamStyle_FN08_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+#if VERSION == VERSION_JPN
+    {
+        "DungeonUp",
+        {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+#endif
+    {
+        "DungeonCorner",
+        {dCamStyle_FN06_e, dCamStyle_FN06_e, dCamStyle_LL08_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "DungeonWide",
+        {dCamStyle_FN07_e, dCamStyle_FN07_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "CannonGame",
+        {dCamStyle_ZZ00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "FieldFOX",
+        {dCamStyle_GN01_e, dCamStyle_GN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_Roof",
+        {dCamStyle_FN82_e, dCamStyle_FN82_e, dCamStyle_LL82_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM82_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_BedRoom",
+        {dCamStyle_FN81_e, dCamStyle_FN81_e, dCamStyle_LL81_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM81_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "G_BedRoom2",
+        {dCamStyle_FN81_e, dCamStyle_FN81_e, dCamStyle_LL81_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM83_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "TowerUp",
+        {dCamStyle_IN02_e, dCamStyle_FN24_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "MajTower",
+        {dCamStyle_IN03_e, dCamStyle_FN02_e, dCamStyle_IN03_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Tower",
+        {dCamStyle_IN01_e, dCamStyle_FN24_e, dCamStyle_IN02_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Boat",
+        {dCamStyle_BN07_e, dCamStyle_BP07_e, dCamStyle_LL11_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE07_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM07_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "BoatBattle",
+        {dCamStyle_BN08_e, dCamStyle_BP08_e, dCamStyle_LL17_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE07_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM07_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+#if VERSION == VERSION_JPN
+    {
+        "Water",
+        {dCamStyle_FN14_e, dCamStyle_FN14_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM14_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#endif
+    {
+        "WindHall",
+        {dCamStyle_FN38_e, dCamStyle_FP38_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Tornado",
+        {dCamStyle_QN07_e, dCamStyle_BP07_e, dCamStyle_LL11_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE08_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "OverLook",
+        {dCamStyle_FN11_e, dCamStyle_FN11_e, dCamStyle_LL01_e, dCamStyle_TT04_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Dome",
+        {dCamStyle_FN39_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "ForceFixdPos",
+        {dCamStyle_PN05_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "FixdFrm",
+        {dCamStyle_XN06_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "DStairs",
+        {dCamStyle_FN02_e, dCamStyle_FN02_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM16_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Boss02",
+        {dCamStyle_FN40_e, dCamStyle_FN40_e, dCamStyle_LL05_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Seagal",
+        {dCamStyle_FN36_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_MM01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "SmallRoom",
+        {dCamStyle_FN41_e, dCamStyle_FN41_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM17_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DanMae",
+        {dCamStyle_FN42_e, dCamStyle_FN42_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM19_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Cafe",
+        {dCamStyle_FN28_e, dCamStyle_FN28_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DungeonPassage",
+        {dCamStyle_FN17_e, dCamStyle_FN17_e, dCamStyle_LL08_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Corridor",
+        {dCamStyle_FN12_e, dCamStyle_FN12_e, dCamStyle_LL07_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM20_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Subject",
+        {dCamStyle_LN17_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC02_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+    {
+        "BigBird",
+        {dCamStyle_FN43_e, dCamStyle_FN43_e, dCamStyle_LL18_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX02_e, dCamStyle_SY01_e, dCamStyle_MM01_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Room",
+        {dCamStyle_FN09_e, dCamStyle_FN09_e, dCamStyle_LL04_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM18_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "DungeonDown",
+        {dCamStyle_FN05_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM21_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Boss04",
+        {dCamStyle_FN37_e, dCamStyle_FN05_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD04_e},
+    },
+    {
+        "UnderTheEaves",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM22_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Restrict",
+        {dCamStyle_LN01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#if VERSION != VERSION_JPN
+    {
+        "DungeonUp",
+        {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
+    },
+    {
+        "Block",
+        {dCamStyle_FN01_e, dCamStyle_FN01_e, dCamStyle_LL01_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH01_e, dCamStyle_LA01_e, dCamStyle_LB01_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM23_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
+    },
+    {
+        "Water",
+        {dCamStyle_FN14_e, dCamStyle_FN14_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM14_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
+    },
+#endif
+};
+
+const int dCamera_c::type_num = ARRAY_SIZE(types);
