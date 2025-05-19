@@ -28,12 +28,13 @@ from tools.project import (
 )
 
 # Game versions
-DEFAULT_VERSION = 1
 VERSIONS = [
-    "GZLJ01",  # 0
-    "GZLE01",  # 1
-    "GZLP01",  # 2
+    "D44J01",  # 0
+    "GZLJ01",  # 1
+    "GZLE01",  # 2
+    "GZLP01",  # 3
 ]
+DEFAULT_VERSION = VERSIONS.index("GZLE01")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

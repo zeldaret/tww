@@ -7,10 +7,11 @@
         "id": "gameVersion",
         "type": "pickString",
         "options": [
+            "D44J01",
             "GZLJ01",
             "GZLE01",
             "GZLP01",
-            "GZLJ01 --debug",
+            "D44J01 --debug",
         ],
         "default": "GZLE01",
         "description": "Game version to build."
