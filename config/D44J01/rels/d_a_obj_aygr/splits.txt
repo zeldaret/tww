@@ -6,10 +6,10 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_obj_aygr.o:
+d/actor/d_a_obj_aygr.cpp:
 	.text       start:0x00000078 end:0x00000858
 	.text       start:0x00000858 end:0x00000870
 	.text       start:0x00000870 end:0x0000088C

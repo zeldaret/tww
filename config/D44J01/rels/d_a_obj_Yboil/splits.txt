@@ -5,10 +5,10 @@ Sections:
 	.rodata     type:rodata align:8
 	.data       type:data align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_obj_Yboil.o:
+d/actor/d_a_obj_Yboil.cpp:
 	.text       start:0x00000078 end:0x00000E14
 	.text       start:0x00000E14 end:0x00000E30
 	.rodata     start:0x00000000 end:0x0000007F

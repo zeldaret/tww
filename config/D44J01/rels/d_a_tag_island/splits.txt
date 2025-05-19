@@ -6,10 +6,10 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_tag_island.o:
+d/actor/d_a_tag_island.cpp:
 	.text       start:0x00000078 end:0x000013D0
 	.text       start:0x000013D0 end:0x000013D0
 	.rodata     start:0x00000000 end:0x0000011E

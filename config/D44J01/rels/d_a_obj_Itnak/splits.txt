@@ -5,10 +5,10 @@ Sections:
 	.rodata     type:rodata align:8
 	.data       type:data align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_obj_Itnak.o:
+d/actor/d_a_obj_Itnak.cpp:
 	.text       start:0x00000078 end:0x0000143C
 	.text       start:0x0000143C end:0x00001840
 	.text       start:0x00001840 end:0x000018AC

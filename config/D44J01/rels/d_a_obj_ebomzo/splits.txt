@@ -6,10 +6,10 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_obj_ebomzo.o:
+d/actor/d_a_obj_ebomzo.cpp:
 	.text       start:0x00000078 end:0x00000C5C
 	.text       start:0x00000C5C end:0x00000D60
 	.text       start:0x00000D60 end:0x00000D8C

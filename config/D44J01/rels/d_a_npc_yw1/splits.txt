@@ -6,15 +6,15 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-global_destructor_chain.o:
+REL/global_destructor_chain.c:
 	.text       start:0x00000078 end:0x000000EC
 	.dtors      start:0x00000000 end:0x00000004
 	.bss        start:0x00000000 end:0x00000008
 
-d_a_npc_yw1.o:
+d/actor/d_a_npc_yw1.cpp:
 	.text       start:0x000000EC end:0x00003F20
 	.text       start:0x00003F20 end:0x00003F34
 	.ctors      start:0x00000000 end:0x00000004

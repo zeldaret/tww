@@ -4,9 +4,9 @@ Sections:
 	.dtors      type:rodata align:4
 	.data       type:data align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_tag_kb_item.o:
+d/actor/d_a_tag_kb_item.cpp:
 	.text       start:0x00000078 end:0x00000294
 	.data       start:0x00000000 end:0x00000050

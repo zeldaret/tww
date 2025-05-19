@@ -6,10 +6,10 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
-executor.o:
+REL/executor.c:
 	.text       start:0x00000000 end:0x00000078
 
-d_a_obj_ojtree.o:
+d/actor/d_a_obj_ojtree.cpp:
 	.text       start:0x00000078 end:0x000005BC
 	.text       start:0x000005BC end:0x000005D4
 	.rodata     start:0x00000000 end:0x0000008B
