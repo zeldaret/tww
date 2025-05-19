@@ -15,8 +15,9 @@ const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
 
 /* Model file indexes. */
 const s16 daHys_c::m_bdlidx[2] = {HYS_BDL_HYS, HYS_BDL_HYS};
-/* Texture file indexes.  */
+/* Texture animation file indexes. */
 const s16 daHys_c::m_btpidx[2] = {HYS_BTP_HYS, HYS_BTP_HYS};
+/* Collision mesh file indexes. */
 const s16 daHys_c::m_dzbidx[2] = {HYS_DZB_HYS, HYS_DZB_HYS};
 const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
 const f32 daHys_c::m_tg_r[2] = {35.0f, 70.0f};
@@ -77,7 +78,6 @@ BOOL daHys_c::CreateHeap() {
 }
 
 cPhs_State daHys_c::_create() {
-    // Inlined into daHys_Create
     fopAcM_SetupActor(this, daHys_c);
 
     mType = fopAcM_GetParam(this) >> 8;
@@ -219,7 +219,7 @@ static BOOL daHys_Delete(void* i_this) {
 
 /* 00000BDC-00000C08       .text daHys_Draw__FPv */
 static BOOL daHys_Draw(void* i_this) {
-    return ((daHys_c*)i_this)->Draw();
+    return ((daHys_c*)i_this)->MoveBGDraw();
 }
 
 /* 00000C08-00000C28       .text daHys_Execute__FPv */
