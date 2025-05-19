@@ -4,26 +4,34 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
+
+
 
 class daNpc_Kk1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
-        
+        s8 pad1;
+        s8 field_0x1;
+        f32 field_0x2;
+        u32 pad3;
+        u32 pad4;
     };
 
-    void getSWbit() {}
+    int getSWbit();
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
-    void init_KK1_0();
-    void createInit();
+    static void* searchActor_SWC00(void*, void*); //Todo: Self-added. Do I need this?
+    bool init_KK1_0();
+    bool createInit();
     void play_animation();
     void setMtx(bool);
-    void bckResID(int);
-    void btpResID(int);
-    void setBtp(signed char, bool);
+    int bckResID(int);
+    int btpResID(int);
+    bool setBtp(signed char, bool);
     void init_texPttrnAnm(signed char, bool);
     void play_btp_anm();
     void play_eff_anm();
@@ -112,7 +120,7 @@ public:
     void wait_3();
     void wait_4();
     void talk_1();
-    void wait_action1(void*);
+    int wait_action1(void*);
     void demo();
     void shadowDraw();
     bool _draw();
@@ -127,30 +135,40 @@ public:
     /* 0x6C4 */ f32 field_0x6C4;
     /* 0x6C8 */ f32 field_0x6C8;
     /* 0x6CC */ u16 field_0x6CC;
-    /* 0x6CE */ char mKkString; 
-    /* 0x6CF */ u8 field_0xCF; 
-    /* 0x6D6 */ u8 field_0x6C2[0x6FC - 0x6D0];
+    /* 0x6CE */ char mKkString;  
+    /* 0x6CF */ u8 field_0x6CF;
+    /* 0x6D0 */ u8 field_0x6D0[0x6D8 - 0x6D0];
+    /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x6EC*/  u8 field_0x6EC;
+    /* 0x6ED*/  s8 field_0x6ED;
+    /* 0x6EE*/  s16 field_0x6EE;
+    /* 0x6F2*/  u8 field_0x6F2[0x6FC - 0x6F2];
     /* 0x6FC*/  fpc_ProcID mPartnerProcID;
     /* 0x700*/  u32 field_0x700;
-    /* 0x700*/  dNpc_PathRun_c mRunPath;
-    /* 0x704 */ u8 field_0x70C[0x72C - 0x70C];
+    /* 0x704*/  dNpc_PathRun_c mRunPath;
+    /* 0x70C */ u8 field_0x70C[0x71E - 0x70C];
+    /* 0x71E */ csXyz field_0x71E;
+    /* 0x724 */ u8 field_0x724[0x72C - 0x724];
     /* 0x72C */ cXyz field_0x72C;
     /* 0x738 */ cXyz field_0x738;
     /* 0x744 */ u8 field_0x744[0x750 - 0x744];
     /* 0x750 */ cXyz field_0x750;
-    /* 0x75C */ u8  field_0x75C[0x770 - 0x75C];
+    /* 0x75C */ cXyz field_0x75C;
+    /* 0x768 */ f32  field_0x768;
+    /* 0x76A */ u8   field_0x76A[4];
     /* 0x770 */ s16 mAngleY;
     /* 0x772 */ s16 field_0x772;
     /* 0x774 */ s16 field_0x774;
     /* 0x776 */ s16 field_0x776;
     /* 0x778 */ int field_0x778;  
-    /* 0x77C */ s16 field_0x77C[0x08]; //8 Elements * U16 = 16 bytes
-    /* 0x78C */ s16  field_0x78C; //Array Index?
+    /* 0x77C */ s16 mEvtIDTbl[0x08]; //8 Elements * U16 = 16 bytes
+    /* 0x78C */ s16  mEvtIDIdx; //Array Index?
     /* 0x78E */ s8  field_0x78E[0x798 - 0x78E];
     /* 0x798 */ s16 field_0x798;
     /* 0x79A */ s16 field_0x79A;
     /* 0x79C */ s16 field_0x79C;
-    /* 0x79E */ s16 field_0x79E;
+    /* 0x79E */ s8 field_0x79E;
+    /* 0x79E */ s8 field_0x79F;
     /* 0x7A0 */ s16 field_0x7A0;
 
     /* 0x7A2 */ s16 field_0x7A2;
@@ -185,32 +203,56 @@ public:
     /* 0x7C2 */ u8 field_0x7C2;
     /* 0x7C3 */ u8 field_0x7C3;
     /* 0x7C4 */ bool field_0x7C4;
-    /* 0x7C5 */ u8 field_0x7C5[0x814 - 0x7C5];
+    /* 0x7C5 */ u8 field_0x7C5[0x7CE - 0x7C5];
+    /* 0x7D0 */ anm_prm_c* field_0x7D0;
+    /* 0x7D4 */ u8 field_0x7D4[0x7E4 - 0x7D4];
+    /* 0x7E4 */ u32 field_0x7E4[3];                //Appears to be a struct
+    /* 0x7E8 */ //u8 field_0x7E8[0x7F0 - 0x7E8];
+    /* 0x7F0 */ mDoExt_bckAnm field_0x7F0;
+    /* 0x800 */ s16 field_0x800;
+    /* 0x802 */ s16 field_0x802;
+    /* 0x804 */ s16 field_0x804;
+    /* 0x806 */ u16 field_0x806;
+//TODO: SOME KIND OF STRUCT HERE?
+    /* 0x808*/  u8 field_0x808_base[4];       //Offset 0
+    /* 0x80C */ J3DModelData* field_0x80C;  //Offset 4
+    /* 0x810 */ u32 field_0x810;
     /* 0x814 */ s8 field_0x814;
     /* 0x815 */ u8 field_0x815;
     /* 0x816 */ s8 field_0x816;
-    /* 0x817 */ u8 field_0x817;
+    /* 0x817 */ u8 anm_prm_idx;
     /* 0x818 */ u8 field_0x818;
-    /* 0x819 */ u8 field_0x819;
-    /* 0x81B */ s8 field_0x81A;
-    /* 0x81B */ s8 field_0x81B;
-    /* 0x81C */ u8 field_0x81C;
-    /* 0x81D */ u8 field_0x81D;
+    /* 0x819 */ s8 field_0x819;
+    /* 0x81A */ s8 field_0x81A;
+    /* 0x81B */ s8 field_0x81B; 
+    /* 0x81C */ u16 field_0x81C;
     /* 0x81E */ u8 field_0x81E;
     /* 0x81F */ s8 field_0x81F;
     /* 0x820 */ s8 field_0x820;
     /* 0x821 */ s8 field_0x821;
+    /* 0x822 */ s8 field_0x822;
+    /* 0x823 */ s8 field_0x823;     
+    //TODO: Wtf out of class size?
+    // /* 0x824 */ u32 field_0x824;
+    // /* 0x828 */ u32 field_0x828;
+    // /* 0x82C */ u32 field_0x82C;
+
+
+
+
 };  // Size: 0x824
 
-class daNpc_Kk1_HIO_c {
+class daNpc_Kk1_HIO_c : mDoHIO_entry_c{
 public:
     daNpc_Kk1_HIO_c();
-    virtual ~daNpc_Kk1_HIO_c();
+    virtual ~daNpc_Kk1_HIO_c(){};
 public:
     /* 0x04  */ s8  mNo;
-    /* 0x08  */ f32 mHorizontalDistance;
-    /* 0x0C  */ f32 mVerticalDistance;
-    /* 0x10  */ u8  mUnusedU8[0x1E - 0x10];
+    /* 0x08  */ s16 mHorizontalDistance;
+    /* 0x08  */ s32 field_0xA;
+    /* 0x0C  */ s16 field_0xC;
+    /* 0x10  */ u8  mUnusedU8;
+    /* 0x11  */ u8  field_0x11[0x1E - 0x11];
     /* 0x1E  */ s16 field_0x1E;  
     /* 0x20  */ f32 field_0x20;
     /* 0x24  */ f32 field_0x24;
