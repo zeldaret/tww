@@ -1554,7 +1554,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_lbridge", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_leaflift", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_lstair"),
-    ActorRel(NonMatching, "d_a_machine"),
+    ActorRel(NonMatching, "d_a_machine", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_mant"),
     ActorRel(Matching,    "d_a_mbdoor"),
     ActorRel(NonMatching, "d_a_mgameboard"),

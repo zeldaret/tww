@@ -15,15 +15,15 @@ static dCcD_SrcSph l_sph_src_at = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x800,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
         /* SrcObjAt  Atp     */ 1,
-        /* SrcObjAt  SPrm    */ 0xd,
-        /* SrcObjTg  Type    */ 0xffffffbf,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ ~AT_TYPE_BOOMERANG,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ 0x79,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 1,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
@@ -45,15 +45,15 @@ static dCcD_SrcSph l_sph_src_col = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x800,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
         /* SrcObjAt  Atp     */ 1,
-        /* SrcObjAt  SPrm    */ 0x0c,
-        /* SrcObjTg  Type    */ 0xffffffbf,
-        /* SrcObjTg  SPrm    */ 0x9,
-        /* SrcObjCo  SPrm    */ 0x79,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ ~AT_TYPE_BOOMERANG,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 1,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
@@ -268,9 +268,7 @@ cPhs_State daMachine_c::_create() {
 }
 
 /* 00000898-00000AA0       .text __ct__11daMachine_cFv */
-daMachine_c::daMachine_c() {
-    /* Nonmatching */
-}
+daMachine_c::daMachine_c() {}
 
 /* 00000F74-0000100C       .text set_mtx__11daMachine_cFv */
 void daMachine_c::set_mtx() {
@@ -323,7 +321,7 @@ void daMachine_c::attack() {
 
     switch (field_0xc78) {
     case 0:
-        if(field_0xbd0.Cross(&field_0xbf0,&xyz) !=0) {
+        if(field_0xab8.Cross(&field_0xbf0,&xyz) !=0) {
             field_0xc78 = 1;
             return;
         }
@@ -350,9 +348,9 @@ void daMachine_c::set_cube() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&xyz2, &xyz2);
     mDoMtx_stack_c::multVec(&xyz1, &xyz1);
-    field_0xbd0.GetStart() = xyz1;
-    field_0xbd0.GetEnd() = xyz2;
-    field_0xbd0.SetR(200.0f);
+    field_0xab8.GetStart() = xyz1;
+    field_0xab8.GetEnd() = xyz2;
+    field_0xab8.SetR(200.0f);
 }
 
 /* 00001330-0000144C       .text set_body__11daMachine_cFv */

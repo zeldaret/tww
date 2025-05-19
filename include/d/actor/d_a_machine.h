@@ -38,13 +38,9 @@ public:
     /* 0x2d8 */ dCcD_Sph mSph;
     /* 0x404 */ dCcD_Sph field_0x404[3];
     /* 0x788 */ dCcD_Sph field_0x788;
-    /* 0x8b4 */ dBgS_Acch field_0x84b;
+    /* 0x8b4 */ dBgS_ObjAcch field_0x84b;
     /* 0xa78 */ dBgS_AcchCir field_0xa78;
-    /* 0xab8 */ dCcD_GObjInf field_0xab8;
-
-    /* 0xbb0 */ u8 field_0xbb0[0xbd0 - 0xbb0]; //Filler
-
-    /* 0xbd0 */ cM3dGCps field_0xbd0;
+    /* 0xab8 */ dCcD_Cps field_0xab8;
     /* 0xbf0 */ cM3dGSph field_0xbf0;
     /* 0xc04 */ mDoExt_bckAnm field_0xc04;
     /* 0xc14 */ u8 field_0xc14;
