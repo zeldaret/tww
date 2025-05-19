@@ -323,6 +323,9 @@ static BOOL Mthd_Draw(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGDraw();
 }
 
+// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
+#pragma nosyminline off
+
 /* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static BOOL Mthd_IsDelete(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGIsDelete();

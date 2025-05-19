@@ -222,6 +222,9 @@ static BOOL daHys_Draw(void* i_this) {
     return ((daHys_c*)i_this)->MoveBGDraw();
 }
 
+// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
+#pragma nosyminline off
+
 /* 00000C08-00000C28       .text daHys_Execute__FPv */
 static BOOL daHys_Execute(void* i_this) {
     return ((daHys_c*)i_this)->MoveBGExecute();

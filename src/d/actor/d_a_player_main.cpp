@@ -16,6 +16,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_kankyo.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"

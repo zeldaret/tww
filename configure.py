@@ -1353,7 +1353,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kanban"),
     ActorRel(NonMatching, "d_a_ki"),
     ActorRel(NonMatching, "d_a_knob00"),
-    ActorRel(Matching, "d_a_kui"),
+    ActorRel(Matching,   "d_a_kui"),
     ActorRel(Matching,    "d_a_kytag00"),
     ActorRel(Matching,    "d_a_kytag01"),
     ActorRel(NonMatching, "d_a_kytag02"),
@@ -1390,7 +1390,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_leaves"),
     ActorRel(NonMatching, "d_a_obj_lpalm"),
     ActorRel(Matching,    "d_a_obj_monument"),
-    ActorRel(Equivalent,  "d_a_obj_movebox", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(Matching,    "d_a_obj_movebox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_mshokki"),
     ActorRel(NonMatching, "d_a_obj_ohatch"),
     ActorRel(NonMatching, "d_a_obj_otble"),
@@ -1463,7 +1463,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_gy_ctrl"),
     ActorRel(NonMatching, "d_a_himo3"),
     ActorRel(NonMatching, "d_a_hmlif"),
-    ActorRel(Equivalent, "d_a_hys", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(Matching,   "d_a_hys", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_kamome"),
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(NonMatching, "d_a_kn"),
@@ -1485,7 +1485,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
     ActorRel(NonMatching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
-    ActorRel(Equivalent,  "d_a_obj_swhammer"), # weak func order
+    ActorRel(Matching,    "d_a_obj_swhammer", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_swheavy"),
     ActorRel(NonMatching, "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
@@ -1547,7 +1547,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_icelift"),
     ActorRel(NonMatching, "d_a_kb"),
     ActorRel(NonMatching, "d_a_kddoor"),
-    ActorRel(Matching, "d_a_kita", extra_cflags=['-pragma "sym off"']),
+    ActorRel(Matching,   "d_a_kita", extra_cflags=['-pragma "sym off"']),
     ActorRel(NonMatching, "d_a_klft"),
     ActorRel(NonMatching, "d_a_kmon"),
     ActorRel(Matching,    "d_a_komore", extra_cflags=['-pragma "nosyminline on"']),
@@ -1637,7 +1637,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_eayogn"),
     ActorRel(Matching,    "d_a_obj_ebomzo", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_ekskz"),
-    ActorRel(Equivalent,  "d_a_obj_eskban", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(Matching,    "d_a_obj_eskban", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_ferris", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_figure", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_firewall"),
@@ -1666,7 +1666,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_iceisland", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
-    ActorRel(Equivalent,  "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(Matching,    "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_light"),
     ActorRel(NonMatching, "d_a_obj_mkie"),
     ActorRel(NonMatching, "d_a_obj_mkiek"),
@@ -1676,7 +1676,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_msdan2"),
     ActorRel(NonMatching, "d_a_obj_msdan_sub"),
     ActorRel(NonMatching, "d_a_obj_msdan_sub2"),
-    ActorRel(Equivalent,  "d_a_obj_mtest", extra_cflags=['-pragma "nosyminline on"']), # weak func order
+    ActorRel(Matching,    "d_a_obj_mtest", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_nest"),
     ActorRel(Matching,    "d_a_obj_ojtree"),
     ActorRel(NonMatching, "d_a_obj_ospbox"),
