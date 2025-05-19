@@ -39,7 +39,7 @@ public:
     /* 0x12B8 */ Mtx mMtx;
     /* 0x12E8 */ dCcD_Cyl mCyl;
     /* 0x1418 */ u8 mType;
-    /* 0x141A */ u16 mAngle[3];
+    /* 0x141A */ s16 mAngle[3];
     /* 0x1420 */ u32 mWindTagId;
 };
 
