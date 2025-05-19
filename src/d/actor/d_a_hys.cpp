@@ -4,6 +4,7 @@
 //
 
 #include "d/actor/d_a_hys.h"
+#include "d/res/res_hys.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
@@ -13,10 +14,10 @@
 const char* daHys_c::m_arcname[2] = {"Hys", "Hys"};
 
 /* Model file indexes. */
-const s16 daHys_c::m_bdlidx[2] = {5, 5};
-/* Texture file  */
-const s16 daHys_c::m_btpidx[2] = {8, 8};
-const s16 daHys_c::m_dzbidx[2] = {11, 11};
+const s16 daHys_c::m_bdlidx[2] = {HYS_BDL_HYS, HYS_BDL_HYS};
+/* Texture file indexes.  */
+const s16 daHys_c::m_btpidx[2] = {HYS_BTP_HYS, HYS_BTP_HYS};
+const s16 daHys_c::m_dzbidx[2] = {HYS_DZB_HYS, HYS_DZB_HYS};
 const u32 daHys_c::m_heapsize[2] = {0xA00, 0xA00};
 const f32 daHys_c::m_tg_r[2] = {35.0f, 70.0f};
 
@@ -94,7 +95,7 @@ cPhs_State daHys_c::_create() {
 /* 00000250-00000368       .text Create__7daHys_cFv */
 BOOL daHys_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -240.0, -240.0, -90.0, 240.0, 240.0, 90.0);
+    fopAcM_setCullSizeBox(this, -240.0f, -240.0f, -90.0f, 240.0f, 240.0f, 90.0f);
 
     mStts.Init(255, 255, this);
     mSph.Set(l_sph_src);
