@@ -17,10 +17,10 @@ public:
     /* 0x2BA */ u8 m2BA;
     /* 0x2BB */ u8 m2BB;
     /* 0x2BC */ u8 mState;
-    /* 0x2BE */ s16 m2BE;
-    /* 0x2C0 */ s16 m2C0;
-    /* 0x2C2 */ s16 m2C2;
-    /* 0x2C4 */ cXyz m2C4;
+    /* 0x2BE */ s16 mFramesUntilJump;
+    /* 0x2C0 */ s16 mAnimRotation;
+    /* 0x2C2 */ s16 mAnimationSpeed;
+    /* 0x2C4 */ cXyz mParticlePos;
     /* 0x2D0 */ dCcD_Stts mStts;
     /* 0x30C */ dCcD_Sph mSph;
 };

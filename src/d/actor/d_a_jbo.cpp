@@ -23,7 +23,7 @@ static BOOL nodeCallBack(J3DNode *i_node, int calcTiming) {
             pos.x = 0;
             pos.y = 0;
             pos.z = 0;
-            MtxPosition(&pos, &jbo->m2C4);
+            MtxPosition(&pos, &jbo->mParticlePos);
         }
     }
     return TRUE;
@@ -39,15 +39,15 @@ void jbo_draw_SUB(jbo_class *i_this) {
     mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
     mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
     mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
-    if (*(s16*)&i_this->m2C2) {
+    if (i_this->mAnimationSpeed) {
         cXyz scale;
         scale.x = REG8_F(1) + 1.1F;
         scale.y = REG8_F(2) + 1.0F;
         scale.z = REG8_F(3) + 0.9F;
-        i_this->m2C0 += i_this->m2C2;
-        mDoMtx_stack_c::YrotM(i_this->m2C0);
+        i_this->mAnimRotation += i_this->mAnimationSpeed;
+        mDoMtx_stack_c::YrotM(i_this->mAnimRotation);
         mDoMtx_stack_c::scaleM(scale);
-        mDoMtx_stack_c::YrotM(-i_this->m2C0);
+        mDoMtx_stack_c::YrotM(-i_this->mAnimRotation);
     }
     MTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
 }
@@ -73,27 +73,24 @@ void jbo_move(jbo_class *i_this) {
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_OBJ_JFLOWER_IN, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 g_dComIfG_gameInfo.play.mItemMagicCount += 4;
-                i_this->m2BE = 0x46;
+                i_this->mFramesUntilJump = JUMP_ANIMATION_TIME;
                 i_this->mState += 1;
             }
             break;
         }
         case 1: {
-            i_this->m2C2 = 0x46 - i_this->m2BE;
-            i_this->m2C2 *= 200;
-            if (i_this->m2BE == 1) {
-                g_dComIfG_gameInfo.play.mpPlayer[0]->onNoResetFlg1(daPy_py_c::daPyFlg1_FORCE_VOMIT_JUMP);
+            i_this->mAnimationSpeed = JUMP_ANIMATION_TIME - i_this->mFramesUntilJump;
+            i_this->mAnimationSpeed *= 200;
+            if (i_this->mFramesUntilJump == 1) {
+                g_dComIfG_gameInfo.play.mpPlayer[0]->onForceVomitJump();
             }
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80000000_e)) {
                 J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 5);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_OBJ_JFLOWER_OUT, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-                i_this->m2C2 = 0;
-                i_this->m2C0 = 0;
-                JPABaseEmitter *emitter = dComIfGp_particle_setToon(
-                    /*particleID=*/ 0xa110,
-                    /*pos=*/ &i_this->m2C4
-                );
+                i_this->mAnimationSpeed = 0;
+                i_this->mAnimRotation = 0;
+                JPABaseEmitter *emitter = dComIfGp_particle_setToon(0xa110, &i_this->mParticlePos);
                 if (emitter != NULL) {
                     emitter->mGlobalPrmColor.a = 100;
                 }
@@ -127,8 +124,8 @@ static BOOL daJBO_Execute(jbo_class* i_this) {
         }
         return 1;
     }
-    if (i_this->m2BE != 0) {
-        i_this->m2BE--;
+    if (i_this->mFramesUntilJump != 0) {
+        i_this->mFramesUntilJump--;
     }
     switch(i_this->m2BB) {
         case 0:
