@@ -55,7 +55,7 @@ void jbo_draw_SUB(jbo_class *i_this) {
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */
 static BOOL daJBO_Draw(jbo_class *i_this) {
     J3DModel *model = i_this->mpMorf->mpModel;
-    if (i_this->mParamsLower == 3)
+    if (i_this->mParam == 3)
         return TRUE;
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
     g_env_light.setLightTevColorType(model, &i_this->tevStr);
@@ -97,7 +97,7 @@ void jbo_move(jbo_class *i_this) {
                 if (emitter != NULL) {
                     emitter->mGlobalPrmColor.a = 100;
                 }
-                if (i_this->mParamsLower == 2) {
+                if (i_this->mParam == 2) {
                     i_this->m2BA = 1;
                 }
                 i_this->mState = 0;
@@ -120,9 +120,9 @@ void jbo_move(jbo_class *i_this) {
 
 /* 00000584-00000698       .text daJBO_Execute__FP9jbo_class */
 static BOOL daJBO_Execute(jbo_class* i_this) {
-    if (i_this->mParamsLower == 3) {
+    if (i_this->mParam == 3) {
         if (dComIfGs_isEventBit(0x1801)) {
-            i_this->mParamsLower = 0;
+            i_this->mParam = 0;
             i_this->mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
         }
         return 1;
@@ -194,13 +194,13 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
         if (!fopAcM_entrySolidHeap(actor, &useHeapInit, 0x1c20)) {
             return cPhs_ERROR_e;
         } else {
-            i_this->mParamsLower = (u8)actor->base.mParameters;
-            if (i_this->mParamsLower == 0xFF) {
-                i_this->mParamsLower = 0;
+            i_this->mParam = (u8)actor->base.mParameters;
+            if (i_this->mParam == 0xFF) {
+                i_this->mParam = 0;
             }
 
             if (REG8_S(9) != 0) {
-                i_this->mParamsLower = REG8_S(9);
+                i_this->mParam = REG8_S(9);
             }
             i_this->cullMtx = i_this->mpMorf->getModel()->getBaseTRMtx();
             i_this->attention_info.flags = 0;
@@ -235,11 +235,11 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
             };
             i_this->mSph.Set(co_sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
-            if (i_this->mParamsLower == 3) {
+            if (i_this->mParam == 3) {
                 i_this->actor_status &= ~fopAcStts_SHOWMAP_e;
                 i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
             }
-            if (i_this->mParamsLower == 1) {
+            if (i_this->mParam == 1) {
                 J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", 6);
                 i_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
