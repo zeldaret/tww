@@ -2029,7 +2029,7 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
 
     for (s32 i = 0; i < dKy_getEnvlight().mPoisonCount; i++) {
         f32 size = pPkt->mEff[i].mSize;
-        if (pPkt->mEff[i].mAlpha <= 0.0f)
+        if (pPkt->mEff[i].mAlpha <= 0.000001f)
             continue;
 
         GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -2203,7 +2203,7 @@ void drawWave(Mtx drawMtx, u8** pImg) {
         f32 scaleBottom = dKy_getEnvlight().mWaveChan.mWaveScaleBottom * scale;
         f32 strength = pPkt->mEff[i].mStrengthEnv;
         f32 height = strength * scale;
-        f32 width = scaleBottom * (strength - 0.000015f * (i * 32) * height);
+        f32 width = scaleBottom * (strength - 0.00000015f * (i * 32) * height);
         if (height <= 0.0f)
             continue;
 
