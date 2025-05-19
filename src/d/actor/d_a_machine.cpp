@@ -9,8 +9,8 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/res/res_hkikai1.h"
 
-//TODO: Add proper ENUMS
 static dCcD_SrcSph l_sph_src_at = {
     // dCcD_SrcGObjInf
     {
@@ -40,7 +40,6 @@ static dCcD_SrcSph l_sph_src_at = {
     },
 };
 
-//TODO: Add proper ENUMS
 static dCcD_SrcSph l_sph_src_col = {
     // dCcD_SrcGObjInf
     {
@@ -91,17 +90,17 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daMachine_c::CreateHeap() {
     BOOL success;
 
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, 7);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BDL_HKIKAI1);
     JUT_ASSERT(0x159, modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if(mpModel == NULL) {
         success = false;   
     } else{
-        J3DAnmTransform * pbck = (J3DAnmTransform *)dComIfG_getObjectRes(m_arcname, 4);
+        J3DAnmTransform * pbck = (J3DAnmTransform *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BCK_HKIKAI1);
         JUT_ASSERT(0x169, pbck != NULL)
 
-        int initRet = field_0xc04.init(modelData,pbck, true, 0,1,0,-1,false);
+        int initRet = field_0xc04.init(modelData,pbck, true, 0,1.0f,0,-1,false);
         if(initRet == NULL)
             success = false;
         else{
@@ -136,7 +135,7 @@ void daMachine_c::CreateInit() {
     
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
-    fopAcM_setCullSizeBox(this, -100.0, -100.0, -50.0, 100.0, 100.0, 500.0);
+    fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -50.0f, 100.0f, 100.0f, 500.0f);
     mStts.Init(255, 255, this);
     mSph.Set(l_sph_src_at);
     mSph.SetStts(&mStts);
@@ -165,6 +164,7 @@ void daMachine_c::CreateInit() {
             break;
         }
     }
+
     mpModel->calc();
     field_0xc14 = fopAcM_GetParam(this);
     if (field_0xc14 != 0xff){
@@ -180,7 +180,6 @@ void daMachine_c::CreateInit() {
             current.pos.x = field_0xc18->m_points[0].m_position.x;
             current.pos.y = field_0xc18->m_points[0].m_position.y;
             current.pos.z = field_0xc18->m_points[0].m_position.z;
-
             
         }else {
             field_0xc14 = 0xff;
@@ -246,7 +245,7 @@ void daMachine_c::set_speed() {
     }
 
     local_1 = speedF;
-    new_speed = cLib_addCalc(&local_1, new_speed * 5.0f,0.1,1.0,0.5);
+    new_speed = cLib_addCalc(&local_1, new_speed * 5.0f,0.1f,1.0f,0.5f);
     speedF = local_1;
 
 }
@@ -309,7 +308,7 @@ void daMachine_c::attack() {
     set_cube();
     cXyz player_pos;
     cXyz xyz;
-    f32 unk_float = 60;
+    f32 unk_float = 60.0f;
     
     player_pos.x = player->current.pos.x;
     player_pos.y = player->current.pos.y;
@@ -328,8 +327,8 @@ void daMachine_c::attack() {
         break;
     case 1:
         fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_OUT,0);
-        field_0xc04.setFrame(0);
-        field_0xc04.setPlaySpeed(1);
+        field_0xc04.setFrame(0.0f);
+        field_0xc04.setPlaySpeed(1.0f);
         field_0xc78 += 1;
         // Fall through
     case 2:
@@ -342,8 +341,8 @@ void daMachine_c::attack() {
 
 /* 0000124C-00001330       .text set_cube__11daMachine_cFv */
 void daMachine_c::set_cube() {
-    cXyz xyz1(0,0,350.0f);
-    cXyz xyz2(0,0,500.0f);
+    cXyz xyz1(0.0f,0.0f,350.0f);
+    cXyz xyz2(0.0f,0.0f,500.0f);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&xyz2, &xyz2);
@@ -356,9 +355,9 @@ void daMachine_c::set_cube() {
 /* 00001330-0000144C       .text set_body__11daMachine_cFv */
 void daMachine_c::set_body() {
     cXyz xyz[3];
-    xyz[0].set(0,0,75);
-    xyz[1].set(0,0,225);
-    xyz[2].set(0,0,375);
+    xyz[0].set(0.0f,0.0f,75.0f);
+    xyz[1].set(0.0f,0.0f,225.0f);
+    xyz[2].set(0.0f,0.0f,375.0f);
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(current.angle);
@@ -370,7 +369,6 @@ void daMachine_c::set_body() {
     }
 
     field_0x404[0].OnAtSPrmBit(cCcD_AtSPrm_Set_e);
-   
 
     field_0x404[0].SetR(100.0f);
 }
@@ -387,16 +385,15 @@ void daMachine_c::set_at() {
                         field_0xc3c[2][3]);
 
         mSph.SetC(field_0xc6c);
-        g_dComIfG_gameInfo.play.mCcS.Set(&mSph);
+        dComIfG_Ccsp()->Set(&mSph);
     }
-
 }
 
 /* 000014D4-0000154C       .text _draw__11daMachine_cFv */
 bool daMachine_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    field_0xc04.entry(mpModel->getModelData()); //need float param
+    field_0xc04.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
     return true;
 }
