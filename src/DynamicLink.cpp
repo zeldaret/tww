@@ -193,7 +193,7 @@ JKRArchive* DynamicModuleControl::mountCallback(void* param_0) {
 }
 
 void DynamicModuleControl::mountCreate() {
-    mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)DynamicModuleControl::callback, NULL);
+    mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)DynamicModuleControl::mountCallback, NULL);
 }
 
 bool DynamicModuleControl::initialize() {
@@ -221,7 +221,6 @@ static u32 calcSum2(u16 const* data, u32 size) {
 
 #if VERSION == VERSION_DEMO
 bool DynamicModuleControl::do_load() {
-    /* Nonmatching - sArchive load order */
     if (mModule != NULL) {
         return true;
     }

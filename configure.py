@@ -259,9 +259,17 @@ cflags_framework = [
     "-fp_contract off",
 ]
 
+# TWW game code flags
+cflags_dolzel = [
+    *cflags_framework,
+]
+
+if config.version == "D44J01":
+    cflags_dolzel.extend(['-pragma "opt_propagation off"'])
+
 # REL flags
 cflags_rel = [
-    *cflags_framework,
+    *cflags_dolzel,
     "-sdata 0",
     "-sdata2 0",
 ]
@@ -329,7 +337,7 @@ config.libs = [
     {
         "lib": "machine",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_framework,
+        "cflags": cflags_dolzel,
         "progress_category": "core",
         "host": True,
         "objects": [
@@ -355,7 +363,7 @@ config.libs = [
     {
         "lib": "c",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_framework,
+        "cflags": cflags_dolzel,
         "progress_category": "game",
         "host": True,
         "objects": [
@@ -366,7 +374,7 @@ config.libs = [
     {
         "lib": "framework",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_framework,
+        "cflags": cflags_dolzel,
         "progress_category": "core",
         "host": True,
         "objects": [
@@ -433,7 +441,7 @@ config.libs = [
     {
         "lib": "dolzel",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_framework,
+        "cflags": cflags_dolzel,
         "progress_category": "game",
         "host": True,
         "objects": [
@@ -602,11 +610,11 @@ config.libs = [
     {
         "lib": "DynamicLink",
         "mw_version": "GC/1.3.2",
-        "cflags": cflags_framework,
+        "cflags": cflags_dolzel,
         "progress_category": "core",
         "host": True,
         "objects": [
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "DynamicLink.cpp"),
+            Object(Matching,    "DynamicLink.cpp"),
         ],
     },
     {

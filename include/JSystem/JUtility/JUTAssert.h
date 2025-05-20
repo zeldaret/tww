@@ -6,7 +6,7 @@
 
 #define JUT_SHOW_ASSERT(LINE, COND) JUTAssertion::showAssert(JUTAssertion::getSDevice(), __FILE__, LINE, #COND)
 
-#define JUT_ASSERT(LINE, COND) (void)((COND) || (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"), 0));
+#define JUT_ASSERT(LINE, COND) (COND) ? (void)0 : (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"));
 
 // Favored by JAI (JAudio)
 #define JUT_ASSERT_MSG(LINE, COND, MSG)                                                            \

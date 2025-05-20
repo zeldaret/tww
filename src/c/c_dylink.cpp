@@ -566,9 +566,6 @@ cPhs_State cDyl_LinkASync(s16 i_ProfName) {
         OSReport_Error("初期化が終わってないのに呼んでもらっても困ります %d\n", i_ProfName);
         return cPhs_INIT_e;
     }
-#endif
-
-#if VERSION == VERSION_DEMO
     JUT_ASSERT(203, cDyl_Initialized);
 #else
     JUT_ASSERT(257, DMC_initialized);
@@ -610,11 +607,7 @@ BOOL cDyl_InitCallback(void*) {
     JKRFileCache* loader = JKRMountDvdDrive("/", mDoExt_getArchiveHeap(), NULL);
     DynamicModuleControl::initialize();
 
-#if VERSION == VERSION_DEMO
-    void* strTbl = (void*)JKRGetResource("/dvd/framework.str");
-#else
     void* strTbl = JKRGetResource("/dvd/framework.str");
-#endif
     JKRDetachResource(strTbl, loader);
     JKRUnmountDvdDrive(loader);
     OSSetStringTable(strTbl);
