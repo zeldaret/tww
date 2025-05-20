@@ -360,7 +360,7 @@ config.libs = [
         "host": True,
         "objects": [
             Object(NonMatching, "c/c_damagereaction.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "c/c_dylink.cpp"),
+            Object(Matching,    "c/c_dylink.cpp"),
         ],
     },
     {
