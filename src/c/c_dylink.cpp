@@ -17,12 +17,13 @@
 #include "string.h"
 
 DynamicModuleControlBase * DMC[PROC_COUNT_e];
-#if VERSION != VERSION_DEMO
+#if VERSION == VERSION_DEMO
+JKRSolidHeap* cCc_solidHeap = NULL;
+#else
 bool DMC_initialized = false;
 #endif
 volatile BOOL cDyl_Initialized = false;
 mDoDvdThd_callback_c * cDyl_DVD = NULL;
-JKRSolidHeap* cCc_solidHeap = NULL;
 
 const DynamicNameTableEntry DynamicNameTable[] = {
     {PROC_ALLDIE,         "d_a_alldie"},
@@ -609,7 +610,11 @@ BOOL cDyl_InitCallback(void*) {
     JKRFileCache* loader = JKRMountDvdDrive("/", mDoExt_getArchiveHeap(), NULL);
     DynamicModuleControl::initialize();
 
+#if VERSION == VERSION_DEMO
     void* strTbl = (void*)JKRGetResource("/dvd/framework.str");
+#else
+    void* strTbl = JKRGetResource("/dvd/framework.str");
+#endif
     JKRDetachResource(strTbl, loader);
     JKRUnmountDvdDrive(loader);
     OSSetStringTable(strTbl);
