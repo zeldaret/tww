@@ -1319,15 +1319,15 @@ config.libs = [
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "REL/executor.c"),
+            Object(Matching, "REL/executor.c"),
             Object(
-                MatchingFor("GZLJ01", "GZLE01", "GZLP01"),
+                Matching,
                 "REL/global_destructor_chain.c",
                 source="PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c",
             ),
         ],
     },
-    Rel("f_pc_profile_lst", [Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "f_pc/f_pc_profile_lst.cpp")]),
+    Rel("f_pc_profile_lst", [Object(Matching, "f_pc/f_pc_profile_lst.cpp")]),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_agbsw0", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_andsw0"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_andsw2"),
