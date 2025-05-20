@@ -63,11 +63,17 @@ static BOOL daJBO_Draw(jbo_class *i_this) {
     return TRUE;
 }
 
+enum daJbo_State {
+    daJbo_State_IDLE = 0,
+    daJbo_State_WAIT_JUMP = 1,
+    daJbo_State_SPAWN = 2,
+};
+
 /* 000002C4-00000584       .text jbo_move__FP9jbo_class */
 void jbo_move(jbo_class *i_this) {
     u8 state = i_this->mState;
     switch (state) {
-        case 0: {
+        case daJbo_State_IDLE: {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e) && i_this->mSph.ChkCoHit()) {
                 J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 4);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
@@ -78,7 +84,7 @@ void jbo_move(jbo_class *i_this) {
             }
             break;
         }
-        case 1: {
+        case daJbo_State_WAIT_JUMP: {
             i_this->mAnimationSpeed = JUMP_ANIMATION_TIME - i_this->mFramesUntilJump;
             i_this->mAnimationSpeed *= 200;
             if (i_this->mFramesUntilJump == 1) {
@@ -97,18 +103,18 @@ void jbo_move(jbo_class *i_this) {
                 if (i_this->mParam == 2) {
                     i_this->m2BA = 1;
                 }
-                i_this->mState = 0;
+                i_this->mState = daJbo_State_IDLE;
             }
             break;
         }
-        case 2: {
+        case daJbo_State_SPAWN: {
             J3DFrameCtrl &ctrl = i_this->mpMorf->mFrameCtrl;
             bool var = true;
             if (!ctrl.checkState(1) && ctrl.getRate() != 0.0f){
                 var = false;
             }
             if (var) {
-                i_this->mState = 0;
+                i_this->mState = daJbo_State_IDLE;
             }
             break;
         }
@@ -240,7 +246,7 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
                 J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", 6);
                 i_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-                i_this->mState = 2;
+                i_this->mState = daJbo_State_SPAWN;
             }
             i_this->gbaName = 0x21;
             jbo_draw_SUB(i_this);
