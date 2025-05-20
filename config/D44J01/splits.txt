@@ -3040,7 +3040,7 @@ JSystem/JUtility/JUTGba.cpp:
 	.sbss       start:0x803EB7E0 end:0x803EB7E8
 
 JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp: comment:0
-	.rodata     start:0x80360440 end:0x803645A0
+	.rodata     start:0x80360440 end:0x803645A0 align:32
 
 JSystem/J2DGraph/J2DGrafContext.cpp:
 	.text       start:0x802C79EC end:0x802C8478
@@ -3974,7 +3974,14 @@ TRK_MINNOW_DOLPHIN/Portable/notify.c:
 TRK_MINNOW_DOLPHIN/ppc/Generic/flush_cache.c:
 	.text       start:0x80334424 end:0x8033445C
 
+dolphin/os/__start.c:
+	.init       start:0x80003100 end:0x800033A8
+
+PowerPC_EABI_Support/Runtime/Src/__mem.c:
+	.init       start:0x800033A8 end:0x800034E0
+
 TRK_MINNOW_DOLPHIN/Portable/mem_TRK.c:
+	.init       start:0x800034E0 end:0x80003534
 	.text       start:0x8033445C end:0x80334518
 
 TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c:
@@ -3984,9 +3991,13 @@ TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c:
 	.bss        start:0x803E7828 end:0x803E7DA8
 
 TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s: comment:0
-	.text       start:0x80335DB0 end:0x80335DD0
+	.text       start:0x80335DB0 end:0x80335DD0 align:16
+
+TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c: comment:0
+	.init       start:0x80003534 end:0x80005468
 
 TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c:
+	.init       start:0x80005468 end:0x8000556C
 	.text       start:0x80335DD0 end:0x80335F10
 	.data       start:0x80396AB8 end:0x80396AF8
 	.bss        start:0x803E7DA8 end:0x803E7DB0
