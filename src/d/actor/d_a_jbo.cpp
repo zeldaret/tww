@@ -12,8 +12,8 @@
 
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode *i_node, int calcTiming) {
-    if (calcTiming == J3DNodeCBCalcTiming_In) {
+static BOOL nodeCallBack(J3DNode *i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = reinterpret_cast<J3DJoint*>(i_node);
         s32 jntNo = joint->getJntNo();
         jbo_class* jbo = reinterpret_cast<jbo_class*>(j3dSys.getModel()->getUserArea());
@@ -171,7 +171,7 @@ static BOOL daJBO_Delete(jbo_class* i_this) {
 
 /* 000006D0-0000081C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
-    jbo_class* i_this = (jbo_class*)i_actor;
+    jbo_class* that = (jbo_class*)i_actor;
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
         (J3DModelData *)dComIfG_getObjectRes("JBO", Jbo_bmdm_jh),
         /*callback1=*/ NULL,
@@ -186,38 +186,38 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         0,
         /*differedDlistFlag=*/ 0x11020203
     );
-    i_this->mpMorf = morf;
+    that->mpMorf = morf;
     J3DModel *model;
-    if (i_this->mpMorf == NULL || (model = i_this->mpMorf->mpModel) == NULL) {
+    if (that->mpMorf == NULL || (model = that->mpMorf->mpModel) == NULL) {
         return FALSE;
     }
-    model->setUserArea(reinterpret_cast<u32>(i_this));
-    for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
-        i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    model->setUserArea(reinterpret_cast<u32>(that));
+    for (u16 i = 0; i < that->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        that->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
     return TRUE;
 }
 
 /* 0000081C-00000A90       .text daJBO_Create__FP10fopAc_ac_c */
-static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
-    fopAcM_SetupActor(actor, jbo_class);
-    jbo_class* i_this = (jbo_class*)actor;
-    cPhs_State state = dComIfG_resLoad(&i_this->mPhs, "JBO");
+static cPhs_State daJBO_Create(fopAc_ac_c* i_actor) {
+    fopAcM_SetupActor(i_actor, jbo_class);
+    jbo_class* that = (jbo_class*)i_actor;
+    cPhs_State state = dComIfG_resLoad(&that->mPhs, "JBO");
     if (state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(actor, &useHeapInit, 0x1c20)) {
+        if (!fopAcM_entrySolidHeap(i_actor, &useHeapInit, 0x1c20)) {
             return cPhs_ERROR_e;
         } else {
-            i_this->mParam = (u8)actor->base.mParameters;
-            if (i_this->mParam == 0xFF) {
-                i_this->mParam = 0;
+            that->mParam = (u8)i_actor->base.mParameters;
+            if (that->mParam == 0xFF) {
+                that->mParam = 0;
             }
 
             if (REG8_S(9) != 0) {
-                i_this->mParam = REG8_S(9);
+                that->mParam = REG8_S(9);
             }
-            i_this->cullMtx = i_this->mpMorf->getModel()->getBaseTRMtx();
-            i_this->attention_info.flags = 0;
-            i_this->mStts.Init(0xff, 0xff, i_this);
+            that->cullMtx = that->mpMorf->getModel()->getBaseTRMtx();
+            that->attention_info.flags = 0;
+            that->mStts.Init(0xff, 0xff, that);
             static dCcD_SrcSph co_sph_src = {
                 // dCcD_SrcGObjInf
                 {
@@ -246,20 +246,20 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
                     /* Radius */ 15.0f,
                 },
             };
-            i_this->mSph.Set(co_sph_src);
-            i_this->mSph.SetStts(&i_this->mStts);
-            if (i_this->mParam == 3) {
-                i_this->actor_status &= ~fopAcStts_SHOWMAP_e;
-                i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+            that->mSph.Set(co_sph_src);
+            that->mSph.SetStts(&that->mStts);
+            if (that->mParam == 3) {
+                that->actor_status &= ~fopAcStts_SHOWMAP_e;
+                that->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
             }
-            if (i_this->mParam == 1) {
+            if (that->mParam == 1) {
                 J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", Jbo_bck_Umareru1);
-                i_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
-                mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-                i_this->mState = daJbo_State_SPAWN;
+                that->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
+                mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &that->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(that)));
+                that->mState = daJbo_State_SPAWN;
             }
-            i_this->gbaName = 0x21;
-            jbo_draw_SUB(i_this);
+            that->gbaName = 0x21;
+            jbo_draw_SUB(that);
         }
     }
     return state;
