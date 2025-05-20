@@ -6,6 +6,16 @@
 
 class mDoExt_McaMorf;
 
+/**
+ * Baba bulb
+ * Only the lowest byte of fopAc_ac_c::base::mParameters is used,
+ * It is expected to be:
+ * - 0 - silently appears
+ * - 1 - plays a popup sound and animation on spawn
+ * - 2 - sets otherwise locally unused m2BA=1
+ * - 3 - waits until an event bit is set, does nothing until then, after converts to 0
+ * - 0xFF - converts to 0
+ */
 class jbo_class : public fopAc_ac_c {
 public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];
@@ -14,6 +24,7 @@ public:
 
     /* 0x2B8 */ u8 mParam;
     /* 0x2B9 */ u8 m2B9[0x2B9 - 0x2B8];
+    // FIXME: give following two fields names if external use is spotted
     /* 0x2BA */ u8 m2BA;
     /* 0x2BB */ u8 m2BB;
     /* 0x2BC */ u8 mState;
