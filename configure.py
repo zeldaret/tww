@@ -972,7 +972,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DGD.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DSys.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphBase/J3DTransform.cpp"),
+            Object(Matching,    "JSystem/J3DGraphBase/J3DTransform.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DPacket.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
