@@ -65,6 +65,14 @@ static BOOL daJBO_Draw(jbo_class *i_this) {
 
 // time from link entering blub to being vomited out
 #define JUMP_ANIMATION_TIME 70
+enum Jbo_Resources {
+    Jbo_bck_In1 = 4,
+    Jbo_bck_Out1 = 5,
+    Jbo_bck_Umareru1 = 6, // spawn animation
+
+    Jbo_bmdm_jh = 9, // model
+};
+
 enum daJbo_State {
     daJbo_State_IDLE = 0,
     daJbo_State_WAIT_JUMP = 1,
@@ -77,7 +85,7 @@ void jbo_move(jbo_class *i_this) {
     switch (state) {
         case daJbo_State_IDLE: {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e) && i_this->mSph.ChkCoHit()) {
-                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 4);
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", Jbo_bck_In1);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_OBJ_JFLOWER_IN, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 g_dComIfG_gameInfo.play.mItemMagicCount += 4;
@@ -93,7 +101,7 @@ void jbo_move(jbo_class *i_this) {
                 g_dComIfG_gameInfo.play.mpPlayer[0]->onForceVomitJump();
             }
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80000000_e)) {
-                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", 5);
+                J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", Jbo_bck_Out1);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_OBJ_JFLOWER_OUT, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 i_this->mAnimationSpeed = 0;
@@ -165,10 +173,10 @@ static BOOL daJBO_Delete(jbo_class* i_this) {
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     jbo_class* i_this = (jbo_class*)i_actor;
     mDoExt_McaMorf* morf = new mDoExt_McaMorf(
-        (J3DModelData *)dComIfG_getObjectRes("JBO", 9),
+        (J3DModelData *)dComIfG_getObjectRes("JBO", Jbo_bmdm_jh),
         /*callback1=*/ NULL,
         /*callback2=*/ NULL,
-        (J3DAnmTransformKey *)dComIfG_getObjectRes("JBO", 4),
+        (J3DAnmTransformKey *)dComIfG_getObjectRes("JBO", Jbo_bck_In1),
         J3DFrameCtrl::EMode_RESET,
         0.0f,
         0,
@@ -245,7 +253,7 @@ static cPhs_State daJBO_Create(fopAc_ac_c* actor) {
                 i_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
             }
             if (i_this->mParam == 1) {
-                J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", 6);
+                J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", Jbo_bck_Umareru1);
                 i_this->mpMorf->setAnm(pAnimRes, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 mDoAud_seStart(JA_SE_CM_BV_BASE_POPUP, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 i_this->mState = daJbo_State_SPAWN;
