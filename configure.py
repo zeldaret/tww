@@ -1211,6 +1211,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/direct_io.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/file_io.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/FILE_POS.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/locale.c"), # Demo-only
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mbstring.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c"),
@@ -1219,6 +1220,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtold.c"), # Demo-only
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtoul.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/uart_console_io.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wchar_io.c"),
@@ -1226,6 +1228,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_pow.c"), # Demo-only
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2.c"),
@@ -1238,12 +1241,14 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_nextafter.c"), # Demo-only
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_acos.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_pow.c"), # Demo-only
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/math_ppc.c"),
         ],
     },
@@ -1466,6 +1471,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_hmlif"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),   "d_a_hys", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_kamome"),
+    ActorRel(NonMatching, "d_a_kamome2"), # Demo-only
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(NonMatching, "d_a_kn"),
     ActorRel(NonMatching, "d_a_kokiie"),
