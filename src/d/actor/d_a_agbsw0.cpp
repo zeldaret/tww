@@ -366,7 +366,7 @@ BOOL daAgbsw0_c::ExeSubA() {
             if(!fopAcM_isSwitch(this, sw0)) {
                 if(field_0x298 == 1) {
                     if(mDoGaC_GbaLink()) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                         if(mDoGac_SendStatusCheck(5)) {
 #else
                         if(!mDoGac_SendStatusCheck(5)) {
@@ -404,7 +404,7 @@ BOOL daAgbsw0_c::ExeSubA() {
     }
 
     if(MoveCheck(conditionNo)) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
@@ -450,7 +450,7 @@ BOOL daAgbsw0_c::ExeSubAT() {
             if(!dComIfGs_isTbox(flag)) {
                 if(field_0x298 == 1) {
                     if(mDoGaC_GbaLink()) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                         if(mDoGac_SendStatusCheck(5)) {
 #else
                         if(!mDoGac_SendStatusCheck(5)) {
@@ -574,7 +574,7 @@ BOOL daAgbsw0_c::ExeSubA2() {
     }
     
     if(MoveCheck(conditionNo)) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
@@ -837,7 +837,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
             if(mDoGaC_GbaLink() && mDoGac_SendStatusCheck(5)) {
                 daAgb_c* agb = dComIfGp_getAgb();
                 if(agb && agb->isActive() && (agb->isFree() || agb->getFollowTarget() != 1) && HitCheck(agb)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                     u16 gbaMsgNo = TriforceCheck();
 #else
                     u16 gbaMsgNo = TriforceCheck(agb);
@@ -858,7 +858,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
     }
 }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 u32 daAgbsw0_c::TriforceCheck()
 #else
 /* 00001368-000017B0       .text TriforceCheck__10daAgbsw0_cFP7daAgb_c */
@@ -896,7 +896,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
     }
     if(!dComIfGs_isGetCollectMap(2) && dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e)) {
         if(dComIfGs_checkGetItem(COTTAGE_PAPER)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
             int roomNo = agb->field_0x66d;
@@ -911,7 +911,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
     if(!dComIfGs_isGetCollectMap(3)) {
         if(dComIfGs_checkGetItem(dItem_BAIT_BAG_e)) {
             if(dComIfGs_checkBaitItem(dItem_HYOI_PEAR_e)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
                 int roomNo = agb->field_0x66d;
@@ -930,7 +930,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
             s32 hour = dKy_getdaytime_hour();
             if(hour < 6 || hour >= 0x13) {
                 u32 moonType = dKy_moon_type_chk();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 int roomNo = dComIfGp_roomControl_getStayNo();
 #else
                 int roomNo = agb->field_0x66d;
@@ -993,7 +993,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
     }
     if(!dComIfGs_isGetCollectMap(5)) {
         if(dComIfGs_isEventBit(0x3E80)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             if (!dComIfGs_isGetCollectMap(0x1C)) {
                 return 0x31E;
             } else if (!dComIfGs_isCompleteCollectMap(0x1C)) {
@@ -1010,7 +1010,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 #endif
         }
         else {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
             int roomNo = agb->field_0x66d;
@@ -1028,7 +1028,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
     }
 
     if(!dComIfGs_isGetCollectMap(6)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
         int roomNo = agb->field_0x66d;
@@ -1036,7 +1036,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         return roomNo == dIsleRoom_OutsetIsland_e ? 0x325 : 0x324;
     }
     if(!dComIfGs_isGetCollectMap(7)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
         int roomNo = agb->field_0x66d;
@@ -1044,7 +1044,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         return roomNo == dIsleRoom_StoneWatcherIsland_e ? 0x327 : 0x326;
     }
     if(dComIfGs_checkGetItem(dItem_HOOKSHOT_e)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         s8 roomNo = dComIfGp_roomControl_getStayNo();
 #else
         int roomNo = agb->field_0x66d;
@@ -1184,7 +1184,7 @@ BOOL daAgbsw0_c::ExeSubS() {
         return true;
     }
     else {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if(strcmp(dComIfGp_getStartStageName(), "M_NewD2") == 0 && fopAcM_GetHomeRoomNo(this) == 0xC && dComIfGs_isTbox(0xC)) {
             fopAcM_delete(this);
             return true;
@@ -1559,7 +1559,7 @@ BOOL daAgbsw0_c::ExeSubFA() {
             if(!fopAcM_isSwitch(this, sw0)) {
                 if(field_0x298 == 1) {
                     if(mDoGaC_GbaLink()) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                         if(mDoGac_SendStatusCheck(5)) {
 #else
                         if(!mDoGac_SendStatusCheck(5)) {
@@ -1613,7 +1613,7 @@ BOOL daAgbsw0_c::ExeSubFA() {
     }
     
     if(MoveCheck(conditionNo)) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
@@ -2502,7 +2502,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             }
 
             break;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         case 0x82:
             if(field_0x29B == 0) {
                 if(daNpc_Md_c::isPlayerRoom()) {

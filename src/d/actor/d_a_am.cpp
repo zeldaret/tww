@@ -143,7 +143,7 @@ static void anm_init(am_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
 static void body_atari_check(am_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
         return;
     }
@@ -183,7 +183,7 @@ static void body_atari_check(am_class* i_this) {
             break;
         case AT_TYPE_SKULL_HAMMER:
             fopAcM_seStart(i_this, JA_SE_LK_HAMMER_HIT, 0x42);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
                 return;
             }

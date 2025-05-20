@@ -189,7 +189,7 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) 
 void daPirate_Flag_packet_c::draw() {
     j3dSys.reinitGX();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
@@ -278,7 +278,7 @@ void daPirate_Flag_packet_c::draw() {
     GXSetArray(GX_VA_NRM, m4F4[m87E], sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -449,7 +449,7 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 
     i_this->mPacket.setBackNrm();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: The number of bytes (0x1D4C) passed here is way too large and causes an overflow.
     // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos) * sizeof(*i_this->mPacket.mNrm) / sizeof(cXyz));

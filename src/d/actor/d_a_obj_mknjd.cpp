@@ -837,7 +837,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                     m0500 = 0;
                     m043F = 9;
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
                     fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
 #endif
                 }

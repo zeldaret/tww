@@ -358,7 +358,7 @@ dGrass_data_c::dGrass_data_c() {
 
 /* 80077CDC-80077E58       .text draw__15dGrass_packet_cFv */
 void dGrass_packet_c::draw() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
 #endif
@@ -401,7 +401,7 @@ void dGrass_packet_c::draw() {
         }
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -518,7 +518,7 @@ void dGrass_packet_c::setData(dGrass_data_c* data, int nextIdx, cXyz& pos, int i
 
 /* 800785C0-800786FC       .text newData__15dGrass_packet_cFR4cXyziSc */
 dGrass_data_c* dGrass_packet_c::newData(cXyz& pos, int i_roomNo, s8 itemIdx) {
-    JUT_ASSERT(VERSION_SELECT(1530, 1536, 1536), 0 <= i_roomNo && i_roomNo < 64);
+    JUT_ASSERT(VERSION_SELECT(1530, 1530, 1536, 1536), 0 <= i_roomNo && i_roomNo < 64);
 
     dGrass_data_c* data = &mGrassData[mNextIdx];
     s32 i = mNextIdx;

@@ -1048,7 +1048,7 @@ void dWood::Packet_c::draw() {
         }
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -1074,7 +1074,7 @@ s32 dWood::Packet_c::search_empty_UnitID() const {
 dWood::AnmID_e dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
     u32 animIdx;
 
-    JUT_ASSERT(VERSION_SELECT(2059, 2061, 2061), (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
+    JUT_ASSERT(VERSION_SELECT(2059, 2059, 2061, 2061), (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
 
     if (i_mode == Anm_c::Mode_Norm) {
         static s32 anm_norm_num = 0;

@@ -344,7 +344,7 @@ void daSail_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
 void daSail_packet_c::draw() {
     j3dSys.reinitGX();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
@@ -466,7 +466,7 @@ void daSail_packet_c::draw() {
     GXSetArray(GX_VA_NRM, getNrm() + 2 * 0x54, sizeof(cXyz));
     GXCallDisplayList(l_sail_DL, 0x200);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -709,7 +709,7 @@ static void sail_move(sail_class* i_this) {
     }
     i_this->mSailPacket.setBackNrm();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: The number of bytes (0x14AC0) passed here is way too large and causes an overflow.
     // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
     DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos) * sizeof(*i_this->mSailPacket.mNrm) / sizeof(cXyz));

@@ -226,7 +226,7 @@ public:
 
 class dComIfG_play_c {
 public:
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dComIfG_play_c();
 #else
     dComIfG_play_c() { ct(); }
@@ -554,7 +554,7 @@ public:
     inline u8 getNowVibration() { return mNowVibration; }
     inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
     // dSv_player_config_c::getPalLanguage() const inline in TP debug.
     inline u8 getPalLanguage() { return mPalLanguage; }
@@ -597,7 +597,7 @@ public:
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
     JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
     JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
 #endif
@@ -700,7 +700,7 @@ public:
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
     /* 0x4800 */ JKRAramBlock* mPictureBoxData[3];
     /* 0x480C */ JKRAramBlock* mBossBattleData[4];
@@ -804,7 +804,7 @@ public:
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
     /* 0x4963 */ u8 mNowVibration;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x4964 */ u8 mPalLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
@@ -840,7 +840,7 @@ public:
 
 class dComIfG_inf_c {
 public:
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dComIfG_inf_c();
 #else
     dComIfG_inf_c() { ct(); }
@@ -858,7 +858,7 @@ public:
     /* 0x1D1C1 */ u8 mBrightness;
 };
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 #endif
 
@@ -2790,7 +2790,7 @@ inline void dComIfGp_setNowVibration(u8 vibration) {
     g_dComIfG_gameInfo.play.setNowVibration(vibration);
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 // Inline name is official because while it's not present in the JPN debug maps, it is present in
 // the USA release maps because there was one TU where it failed to get inlined (f_op_msg_mng).
 inline u8 dComIfGs_getPalLanguage() {
@@ -3531,7 +3531,7 @@ inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.p
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 #endif

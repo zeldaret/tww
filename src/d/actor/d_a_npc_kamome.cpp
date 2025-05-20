@@ -449,7 +449,7 @@ void daNpc_kam_c::npcAction(void* arg) {
         speedF = 0.0f;
         offHyoiKamome();
         setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
     }
@@ -887,7 +887,7 @@ BOOL daNpc_kam_c::checkCommandTalk() {
 void daNpc_kam_c::returnLinkPlayer() {
     changePlayer(dComIfGp_getLinkPlayer());
     offHyoiKamome();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
 }
@@ -1016,7 +1016,7 @@ void daNpc_kam_c::initialDescendEvent(int evtStaffId) {
     mTargetAngVelX = l_HIO.mHio1.mGlidingAngVelX;
     
     mDoAud_seStart(JA_SE_HYOI_USE_DEMO, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoAud_zelAudio_c::getInterface()->field_0x0062 = 1;
 #endif
     

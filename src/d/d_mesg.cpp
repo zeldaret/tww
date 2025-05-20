@@ -465,7 +465,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             unk_messageData stack_a8 = *(unk_messageData*)messageData;
 
             strcpy(local_8c, dComIfGs_getPlayerName());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
                 if (stack_a8.field_0x4 == 0x33b ||
                     stack_a8.field_0x4 == 0xc8b ||
@@ -873,7 +873,7 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             unk_messageData stack_98 = *(unk_messageData*)messageData;
 
             strcpy(local_7c, dComIfGs_getPlayerName());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
                 if (stack_98.field_0x4 == 0x33b ||
                     stack_98.field_0x4 == 0xc8b ||
@@ -1782,12 +1782,12 @@ void dMesg_finalize() {
 
 /* 801E5C8C-801E5E14       .text dMesg_parse__Fv */
 int dMesg_parse() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     headerFlag = false;
 #endif
     header = JKRGetResource('ROOT', "zel_00.bmg", dComIfGp_getMsgDtArchive());
     JUT_ASSERT(2956, header != NULL);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     header2 = JKRGetResource('ROOT', "zel_01.bmg", dComIfGp_getMsgDt2Archive());
     JUT_ASSERT(2961, header2 != NULL);
 #endif
@@ -1795,7 +1795,7 @@ int dMesg_parse() {
     JUT_ASSERT(2964, oParse != NULL);
 
     oParse->parse(header, 0);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     oParse->parse(header2, 0);
 #endif
     return 1;

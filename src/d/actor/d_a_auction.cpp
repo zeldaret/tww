@@ -67,8 +67,8 @@ static NpcDatStruct l_npc_dat[7] = {
     {0.3f, 0.5f, 0x4, 0x6, 450 },
     {0.3f, 0.6f, 0x3, 0x7, 500 },
     {0.4f, 0.7f, 0x2, 0x4, 250 },
-    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 990, 990) },
-    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 990, 990) },
+    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 998, 990, 990) },
+    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 998, 990, 990) },
     {0.7f, 1.2f, 0x2, 0x2, 150 },
 };
 

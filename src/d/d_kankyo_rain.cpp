@@ -1661,7 +1661,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
                 GXEnd();
             }
         }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         J3DShape::resetVcdVatCache();
 #endif
     }
@@ -1733,7 +1733,7 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
             GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
             GXSetZMode(true, GX_LEQUAL, false);
             GXSetCullMode(GX_CULL_NONE);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             GXSetClipMode(GX_CLIP_DISABLE);
 #endif
             GXSetNumIndStages(0);
@@ -1823,7 +1823,7 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
                 }
             }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             GXSetClipMode(GX_CLIP_ENABLE);
             J3DShape::resetVcdVatCache();
 #endif
@@ -1891,7 +1891,7 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
     GXSetZMode(true, GX_GEQUAL, false);
     GXSetCullMode(GX_CULL_NONE);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetClipMode(GX_CLIP_DISABLE);
 #endif
     GXSetNumIndStages(0);
@@ -1954,7 +1954,7 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
         GXEnd();
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetClipMode(GX_CLIP_ENABLE);
     J3DShape::resetVcdVatCache();
 #endif
@@ -2098,7 +2098,7 @@ void drawPoison(Mtx drawMtx, u8** pImg) {
         GXEnd();
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetClipMode(GX_CLIP_ENABLE);
     J3DShape::resetVcdVatCache();
 #endif
@@ -2272,7 +2272,7 @@ void drawWave(Mtx drawMtx, u8** pImg) {
         }
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -2304,7 +2304,7 @@ void drawCloudShadow(Mtx drawMtx, u8** pImg) {
         return;
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetClipMode(GX_CLIP_DISABLE);
 #endif
 
@@ -2417,7 +2417,7 @@ void drawCloudShadow(Mtx drawMtx, u8** pImg) {
         GXEnd();
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetClipMode(GX_CLIP_ENABLE);
     J3DShape::resetVcdVatCache();
 #endif

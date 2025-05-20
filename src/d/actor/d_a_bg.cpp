@@ -276,7 +276,7 @@ static BOOL daBg_Draw(daBg_c* i_this) {
 
 BOOL daBg_c::execute() {
     if (mUnloadTimer != 0) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         mUnloadTimer = 0;
         fopAcM_delete(this);
 #else
@@ -287,7 +287,7 @@ BOOL daBg_c::execute() {
     }
 
     if (dComIfGp_roomControl_checkStatusFlag(fopAcM_GetParam(this), 0x04)) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         mUnloadTimer = 1;
 #else
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)

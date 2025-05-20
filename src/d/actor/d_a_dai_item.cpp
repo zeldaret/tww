@@ -368,7 +368,7 @@ void daStandItem_c::CreateInit() {
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
 }
