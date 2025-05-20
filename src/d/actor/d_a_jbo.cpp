@@ -63,6 +63,8 @@ static BOOL daJBO_Draw(jbo_class *i_this) {
     return TRUE;
 }
 
+// time from link entering blub to being vomited out
+#define JUMP_ANIMATION_TIME 70
 enum daJbo_State {
     daJbo_State_IDLE = 0,
     daJbo_State_WAIT_JUMP = 1,
