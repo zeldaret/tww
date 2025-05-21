@@ -1299,7 +1299,7 @@ void daItem_c::mode_wait() {
     temp.set(old.pos.x, old.pos.y, old.pos.z);
     lavaChk.SetPos(&temp);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
-    if (lavaY != C_BG_MIN_HEIGHT && lavaY > current.pos.y) {
+    if (lavaY != -G_CM3D_F_INF && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }

@@ -2131,7 +2131,7 @@ BOOL daNpc_Os_c::execute() {
             mAcch.CrrPos(*dComIfG_Bgsp());
             
             field_0x784 |= 0x10;
-            if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+            if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
 
@@ -2208,7 +2208,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
 
-        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
             if(plane) {
                 field_0x7F0 = *plane->GetNP();
@@ -2228,7 +2228,7 @@ BOOL daNpc_Os_c::execute() {
 
         field_0x7A8 = mAcch.ChkGroundHit();
         if(!fopAcM_checkCarryNow(this)) {
-            if(mAcch.GetGroundH() == C_BG_MIN_HEIGHT || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+            if(mAcch.GetGroundH() == -G_CM3D_F_INF || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
                 if(m4E8 < 30) {
                     m4E8 += 1;
                 }
@@ -2270,7 +2270,7 @@ BOOL daNpc_Os_c::execute() {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
         field_0x784 |= 0x10;
-        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }

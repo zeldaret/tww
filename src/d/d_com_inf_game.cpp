@@ -562,7 +562,7 @@ s8 dComIfGp_getReverb(int param_0) {
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
-    if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {
+    if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
@@ -1041,7 +1041,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
                        s16 rotY, f32 param_12, GXTexObj* pTexObj) {
-    if (groundY <= C_BG_MIN_HEIGHT) {
+    if (groundY <= -G_CM3D_F_INF) {
         return 0;
     }
 

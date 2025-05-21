@@ -603,7 +603,7 @@ bool dWood::Unit_c::set_ground() {
     gndChk.SetPos(&pos);
     f32 gndHeight = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-    if (gndHeight > C_BG_MIN_HEIGHT) {
+    if (gndHeight > -G_CM3D_F_INF) {
         mPos.y = gndHeight;
         cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
 

@@ -1553,7 +1553,7 @@ void daPy_lk_c::drawShadow() {
     local_30.y = pMVar3[1][3];
     local_30.z = pMVar3[2][3];
     if (checkGrabWear()) {
-        if ((C_BG_MIN_HEIGHT != mAcch.GetGroundH()) && (dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd))) {
+        if ((-G_CM3D_F_INF != mAcch.GetGroundH()) && (dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd))) {
             dComIfGd_setSimpleShadow2(&local_30, mAcch.GetGroundH(), 30.0f, mAcch.m_gnd, 0, 1.0f,
                                       &dDlst_shadowControl_c::mSimpleTexObj);
         }
@@ -3540,7 +3540,7 @@ void daPy_lk_c::deleteEquipItem(BOOL param_1) {
 void daPy_lk_c::setFallVoice() {
     if ((!checkNoResetFlg0(daPyFlg0_NO_FALL_VOICE) &&
          ((((!checkNoResetFlg0(daPyFlg0_UNK80) || m35D0 < mAcch.GetGroundH()) || m3580 == 4) ||
-           C_BG_MIN_HEIGHT == mAcch.GetGroundH()))) &&
+           -G_CM3D_F_INF == mAcch.GetGroundH()))) &&
         (m35F0 - current.pos.y > 500.0f))
     {
         if (current.pos.y - mAcch.GetGroundH() >= 100.0f * daPy_HIO_fall_c0::m.field_0x14) {
@@ -4662,7 +4662,7 @@ void daPy_lk_c::setFrontWallType() {
         if (!checkModeFlg(ModeFlg_SWIM) && dVar16 < current.pos.y) {
             return;
         }
-        if (dVar16 == C_BG_MIN_HEIGHT || !cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y)) {
+        if (dVar16 == -G_CM3D_F_INF || !cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y)) {
             return;
         }
         cXyz sp3C;
@@ -8710,7 +8710,7 @@ void daPy_lk_c::footBgCheck() {
         } else {
             sp10[i] = 0;
         }
-        if (f1 != C_BG_MIN_HEIGHT && sp5C.y - f1 < 60.2f) {
+        if (f1 != -G_CM3D_F_INF && sp5C.y - f1 < 60.2f) {
             *r26 = f1;
             r25_r26->field_0x000 = 1;
         } else {
@@ -10696,7 +10696,7 @@ BOOL daPy_lk_c::checkLavaFace(cXyz* oldPos, int attributeCode) {
         mLavaGndChk.SetPos(&pos);
         m35D4 = dComIfG_Bgsp()->GroundCross(&mLavaGndChk);
         if (mAcch.GetGroundH() > m35D4) {
-            m35D4 = C_BG_MIN_HEIGHT;
+            m35D4 = -G_CM3D_F_INF;
         }
         if (m35D4 > current.pos.y) {
             attributeCode = dComIfG_Bgsp()->GetAttributeCode(mLavaGndChk);
@@ -10731,7 +10731,7 @@ void daPy_lk_c::checkFallCode() {
     f32 dVar6;
     cXyz local_44;
 
-    if (m3580 == 4 || C_BG_MIN_HEIGHT == mAcch.GetGroundH()) {
+    if (m3580 == 4 || -G_CM3D_F_INF == mAcch.GetGroundH()) {
         bVar4 = m35D0 > mAcch.GetGroundH() ? TRUE : FALSE;
         if (((((!bVar4) && checkModeFlg(ModeFlg_MIDAIR)) &&
               (!checkModeFlg(ModeFlg_HOOKSHOT) && (m35F4 - current.pos.y > 100.0f * daPy_HIO_fall_c0::m.field_0x14))) ||
@@ -10955,7 +10955,7 @@ void daPy_lk_c::setShapeAngleOnGround() {
             mDoMtx_stack_c::multVec(&l_crawl_back_up_offset, &local_50);
             mGndChk.SetPos(&local_44);
             local_44.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (C_BG_MIN_HEIGHT != local_44.y) {
+            if (-G_CM3D_F_INF != local_44.y) {
                 triPla = dComIfG_Bgsp()->GetTriPla(mGndChk);
             } else {
                 triPla = NULL;
@@ -10967,7 +10967,7 @@ void daPy_lk_c::setShapeAngleOnGround() {
             }
             mGndChk.SetPos(&local_50);
             local_50.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (C_BG_MIN_HEIGHT != local_50.y) {
+            if (-G_CM3D_F_INF != local_50.y) {
                 triPla = dComIfG_Bgsp()->GetTriPla(mGndChk);
             } else {
                 triPla = NULL;
@@ -11245,7 +11245,7 @@ BOOL daPy_lk_c::execute() {
         !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
         !checkModeFlg(ModeFlg_ROPE | ModeFlg_CLIMB | ModeFlg_LADDER) &&
         mCurProc != daPyProc_DEMO_TOOL_e &&
-        mAcch.GetGroundH() != C_BG_MIN_HEIGHT &&
+        mAcch.GetGroundH() != -G_CM3D_F_INF &&
         !checkNoResetFlg0((daPy_FLG0)(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)) &&
         dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd) &&
         dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)
@@ -11403,7 +11403,7 @@ BOOL daPy_lk_c::execute() {
         }
     } else if (mCurProc == daPyProc_DEMO_TOOL_e) {
         current.pos = sp14;
-        if (m3574 != 0 && mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if (m3574 != 0 && mAcch.GetGroundH() != -G_CM3D_F_INF) {
             current.pos.y = mAcch.GetGroundH();
         }
     } else if (mCurProc == daPyProc_HOOKSHOT_FLY_e ||
@@ -11423,7 +11423,7 @@ BOOL daPy_lk_c::execute() {
     }
     
     int roomNo;
-    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
         roomNo = setRoomInfo();
         m357C = m3580;
         m3580 = dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd);
@@ -12398,7 +12398,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         m352E--;
     }
     mAcch.CrrPos(*dComIfG_Bgsp());
-    if ((C_BG_MIN_HEIGHT == mAcch.GetGroundH()) ||
+    if ((-G_CM3D_F_INF == mAcch.GetGroundH()) ||
         (((m352E != 0 && (dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd))) &&
           (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd.GetBgIndex())) ==
            PROC_TBOX))))

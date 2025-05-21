@@ -766,7 +766,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
         dBgS_ObjGndChk chk;
         cXyz chkPos(pos->x, pos->y + 10.0f, pos->z);
         chk.SetPos(&chkPos);
-        if (dComIfG_Bgsp()->GroundCross(&chk) != C_BG_MIN_HEIGHT) {
+        if (dComIfG_Bgsp()->GroundCross(&chk) != -G_CM3D_F_INF) {
             code = dComIfG_Bgsp()->GetAttributeCode(chk);
         }
     }

@@ -444,7 +444,7 @@ static f32 checkGroundY(cXyz& pos) {
     chk.SetPos(&pos);
     f32 y = dComIfG_Bgsp()->GroundCross(&chk);
     pos.y -= 50.0f;
-    if (y <= C_BG_MIN_HEIGHT)
+    if (y <= -G_CM3D_F_INF)
         return pos.y;
     else
         return y;

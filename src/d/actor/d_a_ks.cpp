@@ -130,7 +130,7 @@ void naraku_check(ks_class* i_this) {
     cXyz local_24;
     cXyz local_18;
 
-    if (i_this->mAcch.GetGroundH() != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) && dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4) {
+    if (i_this->mAcch.GetGroundH() != -G_CM3D_F_INF && dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) && dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4) {
         i_this->m2D3++;
 
         if (i_this->current.pos.y < -500.0f || i_this->m2D3 > 0x32) {

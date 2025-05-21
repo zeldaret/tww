@@ -808,7 +808,7 @@ void down(fganon_class* i_this) {
     sp2C.y += 300.0f;
     gndChk.SetPos(&sp2C);
     f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (height != C_BG_MIN_HEIGHT && i_this->current.pos.y <= height) {
+    if (height != -G_CM3D_F_INF && i_this->current.pos.y <= height) {
         bVar3 = TRUE;
     }
     if ((i_this->m3A4[0] == 0) || bVar3) {

@@ -1286,7 +1286,7 @@ BOOL daNpc_kam_c::execute() {
         
         if (!isNoBgCheck()) {
             mAcch.CrrPos(*dComIfG_Bgsp());
-            if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+            if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 fopAcM_SetRoomNo(this, roomNo);
                 tevStr.mRoomNo = roomNo;

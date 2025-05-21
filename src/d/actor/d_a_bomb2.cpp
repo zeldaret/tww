@@ -292,12 +292,12 @@ namespace daBomb2 {
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
         mAcch.OnLineCheck();
-        field_0x51C = C_BG_MIN_HEIGHT;
-        field_0x520 = C_BG_MIN_HEIGHT;
+        field_0x51C = -G_CM3D_F_INF;
+        field_0x520 = -G_CM3D_F_INF;
         field_0x524 = 0;
         mbWaterIn = 0;
         field_0x526 = 0;
-        field_0x528 = C_BG_MIN_HEIGHT;
+        field_0x528 = -G_CM3D_F_INF;
     }
 
     dCcD_SrcSph Act_c::M_sph_src = {
@@ -553,7 +553,7 @@ namespace daBomb2 {
             r5 = true;
             field_0x526 = 1;
         } else {
-            field_0x520 = C_BG_MIN_HEIGHT;
+            field_0x520 = -G_CM3D_F_INF;
             field_0x526 = 0;
         }
         mbWaterIn = r5;
@@ -564,7 +564,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_lava_in() const {
-        if(field_0x51C == C_BG_MIN_HEIGHT) {
+        if(field_0x51C == -G_CM3D_F_INF) {
             return false;
         }
 
@@ -573,7 +573,7 @@ namespace daBomb2 {
 
     void Act_c::setRoomInfo() {
         s32 roomNo;
-        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
@@ -1092,7 +1092,7 @@ namespace daBomb2 {
     void Act_c::mode_sink() {
         f32 temp;
         bool temp2 = fopAcM_getWaterY(&current.pos, &temp);
-        if(temp2 && field_0x528 != C_BG_MIN_HEIGHT && --field_0x698 > 0) {
+        if(temp2 && field_0x528 != -G_CM3D_F_INF && --field_0x698 > 0) {
             current.pos.y += temp - field_0x528;
             field_0x528 = temp;
             posMoveF();

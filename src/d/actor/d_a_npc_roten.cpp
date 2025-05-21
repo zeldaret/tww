@@ -1760,7 +1760,7 @@ cPhs_State daNpcRoten_c::createInit() {
     fopAcM_setCullSizeBox(this, -200.0f, 0.0f, -200.0f, 200.0f, 300.0f, 200.0f);
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
+    if(-G_CM3D_F_INF != mObjAcch.GetGroundH()) {
         current.pos.y = home.pos.y = mObjAcch.GetGroundH();
     }
 

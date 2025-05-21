@@ -52,7 +52,7 @@ void bg_check(esa_class* i_this) {
     cXyz sp54 = i_this->current.pos;
     sp54.y += 100.0f;
     f32 waterHeight = dBgS_GetWaterHeight(sp54);
-    if(waterHeight != C_BG_MIN_HEIGHT && i_this->mGroundHeight <= waterHeight) {
+    if(waterHeight != -G_CM3D_F_INF && i_this->mGroundHeight <= waterHeight) {
         i_this->mGroundHeight = waterHeight;
         state = 2;
     }

@@ -260,12 +260,12 @@ void hand_move(shand_class* i_this) {
                     chk_pos_y += 200.0f;
                     local_100.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     float spl_ground_y = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
-                    if(spl_ground_y != C_BG_MIN_HEIGHT){
+                    if(spl_ground_y != -G_CM3D_F_INF){
                         i_this->ground_y = spl_ground_y;
                     }
                 }
                 else {
-                    i_this->ground_y = C_BG_MIN_HEIGHT;
+                    i_this->ground_y = -G_CM3D_F_INF;
                 }
                 i_this->mState = 2;
 

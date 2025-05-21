@@ -4547,7 +4547,7 @@ cPhs_State daNpcPeople_c::createInit() {
 
     if(mNpcType != 0xB) {
         mObjAcch.CrrPos(*dComIfG_Bgsp());
-        if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
+        if(-G_CM3D_F_INF != mObjAcch.GetGroundH()) {
             current.pos.y = home.pos.y = mObjAcch.GetGroundH();
         }
     }

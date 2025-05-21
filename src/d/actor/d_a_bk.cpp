@@ -627,8 +627,8 @@ static u8 ground_4_check(bk_class* i_this, int r18, s16 r20, f32 f29) {
         sp8 += i_this->current.pos;
         gndChk.SetPos(&sp8);
         sp8.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp8.y == C_BG_MIN_HEIGHT) {
-            sp8.y = C_BG_MAX_HEIGHT;
+        if (sp8.y == -G_CM3D_F_INF) {
+            sp8.y = G_CM3D_F_INF;
         }
         if (i_this->dr.mAcch.GetGroundH() - sp8.y > 200.0f) {
             r19 |= check_bit[i];
@@ -4451,14 +4451,14 @@ static BOOL daBk_Execute(bk_class* i_this) {
         sp28.y += 50.0f - i_this->dr.m44C.y;
         gndChk.SetPos(&sp28);
         sp28.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp28.y != C_BG_MIN_HEIGHT) {
+        if (sp28.y != -G_CM3D_F_INF) {
             Vec temp;
             temp.x = sp28.x;
             temp.y = 50.0f + sp28.y;
             temp.z = sp28.z + f31;
             gndChk.SetPos(&temp);
             f32 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != C_BG_MIN_HEIGHT) {
+            if (f1 != -G_CM3D_F_INF) {
                 r21 = (s16)-cM_atan2s(f1 - sp28.y, temp.z - sp28.z);
                 if (r21 > 0x2000 || r21 < -0x2000) {
                     r21 = 0;
@@ -4469,7 +4469,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             temp.z = sp28.z;
             gndChk.SetPos(&temp);
             f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != C_BG_MIN_HEIGHT) {
+            if (f1 != -G_CM3D_F_INF) {
                 r23 = (s16)cM_atan2s(f1 - sp28.y, temp.x - sp28.x);
                 if (r23 > 0x2000 || r23 < -0x2000) {
                     r23 = 0;

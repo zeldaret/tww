@@ -726,7 +726,7 @@ bool overhead_bg_chk() {
     pos.y += 50.0f;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != C_BG_MAX_HEIGHT)
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
         ret = true;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
@@ -755,7 +755,7 @@ bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
     *pPos = pos;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != C_BG_MAX_HEIGHT)
+    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
         ret = true;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);

@@ -70,7 +70,7 @@ void daBoko_c::setFlameEffect() {
 /* 00001340-000013CC       .text setRoomInfo__8daBoko_cFv */
 void daBoko_c::setRoomInfo() {
     int roomNo;
-    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     } else {
@@ -195,7 +195,7 @@ BOOL daBoko_c::procCarry() {
             int i;
             for (i = 0; i < 3; i++) {
                 m_ground_check.SetPos(&current.pos);
-                if (dComIfG_Bgsp()->GroundCross(&m_ground_check) != C_BG_MIN_HEIGHT) {
+                if (dComIfG_Bgsp()->GroundCross(&m_ground_check) != -G_CM3D_F_INF) {
                     break;
                 }
                 current.pos.x -= 50.0f * cM_ssin(shape_angle.y);

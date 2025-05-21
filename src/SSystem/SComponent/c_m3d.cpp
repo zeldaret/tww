@@ -21,6 +21,9 @@
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
 
 const f32 G_CM3D_F_ABS_MIN = 3.8146973e-06f;
+#if VERSION == VERSION_DEMO
+const f32 G_CM3D_F_INF = 1.0e38f;
+#endif
 
 static void dummy(f32 dummy) {
     // to fix float literal order

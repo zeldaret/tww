@@ -118,7 +118,7 @@ void kita_move(kita_class* i_this) {
                 lgc_pos.x = lgc_x; lgc_pos.y = lgc_y; lgc_pos.z = lgc_z;
                 liquid_ground_check.SetPos(&lgc_pos);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
-                if(liquid_gnd_cross != C_BG_MIN_HEIGHT && liquid_gnd_cross > i_this->field_35C){
+                if(liquid_gnd_cross != -G_CM3D_F_INF && liquid_gnd_cross > i_this->field_35C){
                     i_this->field_35C = liquid_gnd_cross + 40.0f + REG0_F(17);
                     i_this->field_360 = 1;
                 }

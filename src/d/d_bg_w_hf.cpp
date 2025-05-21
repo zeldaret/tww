@@ -153,8 +153,8 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
         r31 = pm_bgd->m_t_num - 1;
     }
     
-    *r28 = C_BG_MAX_HEIGHT;
-    *r29 = C_BG_MIN_HEIGHT;
+    *r28 = G_CM3D_F_INF;
+    *r29 = -G_CM3D_F_INF;
     
     for (int t = r7; t <= r31; t++) {
 #if VERSION > VERSION_JPN

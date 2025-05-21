@@ -197,7 +197,7 @@ BOOL daBomb_c::draw() {
         draw_norm();
     }
 
-    if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -G_CM3D_F_INF) {
         cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         if(pNormal) {
             dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
@@ -438,7 +438,7 @@ bool daBomb_c::checkExplodeBg() {
 /* 800DA320-800DA3A0       .text water_tention__8daBomb_cFv */
 void daBomb_c::water_tention() {
     if(chk_water_in()) {
-        if(field_0x558 != C_BG_MIN_HEIGHT && field_0x55C != C_BG_MIN_HEIGHT) {
+        if(field_0x558 != -G_CM3D_F_INF && field_0x55C != -G_CM3D_F_INF) {
             f32 temp = field_0x558 - field_0x55C;
             current.pos.y += temp < 0.0f ? 0.8f * temp : 0.2f * temp;
         }
@@ -533,7 +533,7 @@ void daBomb_c::bgCrrPos_water() {
         r5 = true;
         field_0x562 = 1;
     } else {
-        field_0x558 = C_BG_MIN_HEIGHT;
+        field_0x558 = -G_CM3D_F_INF;
         field_0x562 = 0;
     }
     field_0x560 = r5 && !mbWaterIn;
@@ -559,7 +559,7 @@ bool daBomb_c::chk_water_sink() {
 
 /* 800DA768-800DA794       .text chk_lava_hit__8daBomb_cFv */
 bool daBomb_c::chk_lava_hit() {
-    if(field_0x554 == C_BG_MIN_HEIGHT) {
+    if(field_0x554 == -G_CM3D_F_INF) {
         return false;
     }
 
@@ -568,7 +568,7 @@ bool daBomb_c::chk_lava_hit() {
 
 /* 800DA794-800DA7CC       .text chk_dead_zone__8daBomb_cFv */
 bool daBomb_c::chk_dead_zone() {
-    return mAcch.GetGroundH() == C_BG_MIN_HEIGHT && field_0x558 == C_BG_MIN_HEIGHT && field_0x554 == C_BG_MIN_HEIGHT;
+    return mAcch.GetGroundH() == -G_CM3D_F_INF && field_0x558 == -G_CM3D_F_INF && field_0x554 == -G_CM3D_F_INF;
 }
 
 /* 800DA7CC-800DA8C8       .text bound__8daBomb_cFf */
@@ -629,7 +629,7 @@ void daBomb_c::set_real_shadow_flag() {
 /* 800DA9DC-800DAA60       .text setRoomInfo__8daBomb_cFv */
 void daBomb_c::setRoomInfo() {
     s32 roomNo;
-    if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     }
@@ -1398,9 +1398,9 @@ void daBomb_c::create_init() {
     mAcch.m_roof_crr_height = 50.0f;
     mAcch.OnLineCheck();
 
-    field_0x554 = C_BG_MIN_HEIGHT;
-    field_0x558 = C_BG_MIN_HEIGHT;
-    field_0x55C = C_BG_MIN_HEIGHT;
+    field_0x554 = -G_CM3D_F_INF;
+    field_0x558 = -G_CM3D_F_INF;
+    field_0x55C = -G_CM3D_F_INF;
     field_0x560 = 0;
     mbWaterIn = 0;
     field_0x562 = 0;
