@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_htetu1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
 void daObjHtetu1Splash_c::create_s(unsigned short, cXyz*, csXyz*, dKy_tevstr_c*) {
@@ -111,7 +112,7 @@ actor_process_profile_definition g_profile_Obj_Htetu1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004A,
+    /* Priority     */ PRIO_Obj_Htetu1,
     /* Actor SubMtd */ &Htetu1_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

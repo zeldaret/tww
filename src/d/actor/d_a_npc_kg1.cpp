@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_kg1.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E0       .text __ct__15daNpc_Kg1_HIO_cFv */
 daNpc_Kg1_HIO_c::daNpc_Kg1_HIO_c() {
@@ -160,7 +161,7 @@ actor_process_profile_definition g_profile_NPC_KG1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0170,
+    /* Priority     */ PRIO_NPC_KG1,
     /* Actor SubMtd */ &daNpc_Kg1MethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

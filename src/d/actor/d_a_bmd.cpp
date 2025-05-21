@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bmd.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000134       .text __ct__11daBmd_HIO_cFv */
 daBmd_HIO_c::daBmd_HIO_c() {
@@ -169,7 +170,7 @@ actor_process_profile_definition g_profile_BMD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00DF,
+    /* Priority     */ PRIO_BMD,
     /* Actor SubMtd */ &l_daBmd_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

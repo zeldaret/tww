@@ -190,7 +190,7 @@ void daPy_lk_c::checkBgClimbMove() {
         local_5c.set(current.pos.x + (25.0f * dVar7), local_68.y + 30.0f, current.pos.z + (25.0f * dVar6));
         mGndChk.SetPos(&local_5c);
         dVar3 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-        if (C_BG_MIN_HEIGHT != dVar3 && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y) &&
+        if (-G_CM3D_F_INF != dVar3 && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mGndChk)->GetNP()->y) &&
             dVar3 >= local_68.y - 30.0f)
         {
             dVar4 = 3.0f;

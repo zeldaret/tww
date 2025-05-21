@@ -9,6 +9,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_search.h"
 #include "d/actor/d_a_bridge.h"
@@ -626,8 +627,8 @@ static u8 ground_4_check(bk_class* i_this, int r18, s16 r20, f32 f29) {
         sp8 += i_this->current.pos;
         gndChk.SetPos(&sp8);
         sp8.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp8.y == C_BG_MIN_HEIGHT) {
-            sp8.y = C_BG_MAX_HEIGHT;
+        if (sp8.y == -G_CM3D_F_INF) {
+            sp8.y = G_CM3D_F_INF;
         }
         if (i_this->dr.mAcch.GetGroundH() - sp8.y > 200.0f) {
             r19 |= check_bit[i];
@@ -1070,7 +1071,7 @@ static void jyunkai(bk_class* i_this) {
                     }
                     if ((i_this->ppd->m_nextID & 0xFFFF) != 0xFFFF) {
                         i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(i_this));
-                        JUT_ASSERT(VERSION_SELECT(2907, 2924, 2924), i_this->ppd != NULL);
+                        JUT_ASSERT(VERSION_SELECT(2907, 2907, 2924, 2924), i_this->ppd != NULL);
                     }
                 } else if (i_this->m1216 < 0) {
                     i_this->m1217 = 1;
@@ -4450,14 +4451,14 @@ static BOOL daBk_Execute(bk_class* i_this) {
         sp28.y += 50.0f - i_this->dr.m44C.y;
         gndChk.SetPos(&sp28);
         sp28.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp28.y != C_BG_MIN_HEIGHT) {
+        if (sp28.y != -G_CM3D_F_INF) {
             Vec temp;
             temp.x = sp28.x;
             temp.y = 50.0f + sp28.y;
             temp.z = sp28.z + f31;
             gndChk.SetPos(&temp);
             f32 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != C_BG_MIN_HEIGHT) {
+            if (f1 != -G_CM3D_F_INF) {
                 r21 = (s16)-cM_atan2s(f1 - sp28.y, temp.z - sp28.z);
                 if (r21 > 0x2000 || r21 < -0x2000) {
                     r21 = 0;
@@ -4468,7 +4469,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             temp.z = sp28.z;
             gndChk.SetPos(&temp);
             f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != C_BG_MIN_HEIGHT) {
+            if (f1 != -G_CM3D_F_INF) {
                 r23 = (s16)cM_atan2s(f1 - sp28.y, temp.x - sp28.x);
                 if (r23 > 0x2000 || r23 < -0x2000) {
                     r23 = 0;
@@ -4562,7 +4563,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     
     J3DModelData* modelData;
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_KB);
-    JUT_ASSERT(VERSION_SELECT(9398, 9418, 9418), modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(9398, 9398, 9418, 9418), modelData != NULL);
     if (i_this->m02D5 & 0x40) {
         J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_KEN);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
@@ -4581,13 +4582,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     if (i_this->m02D4 != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
         i_this->m02D0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        JUT_ASSERT(VERSION_SELECT(9425, 9445, 9445), modelData != NULL);
+        JUT_ASSERT(VERSION_SELECT(9425, 9425, 9445, 9445), modelData != NULL);
     }
     
     if (i_this->m02DC != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BOUEN);
         i_this->m02D8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        JUT_ASSERT(VERSION_SELECT(9434, 9454, 9454), modelData != NULL);
+        JUT_ASSERT(VERSION_SELECT(9434, 9434, 9454, 9454), modelData != NULL);
     }
     
     static Vec hip_offset[] = {
@@ -5106,7 +5107,7 @@ actor_process_profile_definition g_profile_BK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00B0,
+    /* Priority     */ PRIO_BK,
     /* Actor SubMtd */ &l_daBk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

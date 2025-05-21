@@ -8,6 +8,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
@@ -456,7 +457,7 @@ actor_process_profile_definition g_profile_AYUSH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009E,
+    /* Priority     */ PRIO_AYUSH,
     /* Actor SubMtd */ &daGhostshipMethodTable,
     /* Status       */ 0x03 | fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

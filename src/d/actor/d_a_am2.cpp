@@ -7,6 +7,7 @@
 #include "d/res/res_am2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
@@ -387,7 +388,7 @@ static BOOL Line_check(am2_class* i_this, cXyz destPos) {
 /* 0000177C-00001A24       .text naraku_check__FP9am2_class */
 static BOOL naraku_check(am2_class* i_this) {
     // Checks if the Armos has fallen into an abyss.
-    if (i_this->mAcch.GetGroundH() != C_BG_MIN_HEIGHT &&
+    if (i_this->mAcch.GetGroundH() != -G_CM3D_F_INF &&
         dComIfG_Bgsp()->ChkPolySafe(i_this->mAcch.m_gnd) &&
         dComIfG_Bgsp()->GetGroundCode(i_this->mAcch.m_gnd) == 4) // Abyss ground code
     {
@@ -1483,7 +1484,7 @@ actor_process_profile_definition g_profile_AM2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00BE,
+    /* Priority     */ PRIO_AM2,
     /* Actor SubMtd */ &l_daAM2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

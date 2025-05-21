@@ -2454,8 +2454,14 @@ s32 mDoExt_font0_getCount;
 
 /* 80016884-800168E0       .text mDoExt_initFont0__Fv */
 void mDoExt_initFont0() {
+#if VERSION == VERSION_DEMO
+    int r30 = g_msgDHIO.field_0x08;
+    static const char fontdata[] = "rock_24_20_4i_usa.bfn";
+    mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), r30, 0xB4, 0x800);
+#else
     static const char fontdata[] = "rock_24_20_4i_usa.bfn";
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), 1, 0, 0);
+#endif
 }
 
 /* 800168E0-8001691C       .text mDoExt_getMesgFont__Fv */

@@ -7,6 +7,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
@@ -514,7 +515,7 @@ void daArrow_c::setRoomInfo() {
     
     mGndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (groundY != C_BG_MIN_HEIGHT) {
+    if (groundY != -G_CM3D_F_INF) {
         roomNo = dComIfG_Bgsp()->GetRoomId(mGndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mGndChk);
     } else {
@@ -1294,7 +1295,7 @@ actor_process_profile_definition g_profile_ARROW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01BF,
+    /* Priority     */ PRIO_ARROW,
     /* Actor SubMtd */ &daArrowMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

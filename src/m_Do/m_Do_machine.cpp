@@ -40,7 +40,7 @@ static int archiveHeapErrors;
 static int unknownHeapErrors;
 static u32 heapErrors;
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 const int FifoBufSize = 0x80000; // 512 KB
 const int CommandHeapSize = 0x1000; // 4 KB
 const int ArchiveHeapSize = 0xA3F000; // 10492 KB
@@ -485,11 +485,11 @@ bool mDoMch_Create() {
     JFWSystem::getSystemHeap()->setErrorFlag(true);
 
     JKRHeap* rootHeap = JKRHeap::getRootHeap();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     rootHeap->dump_sort();
 #endif
     mDoExt_createCommandHeap(CommandHeapSize, rootHeap);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     rootHeap->dump_sort();
 #endif
 
@@ -500,7 +500,7 @@ bool mDoMch_Create() {
 
     JKRHeap* sysHeap = JKRGetSystemHeap();
     s32 size = sysHeap->getFreeSize() - SysHeapNonZeldaSize;
-    JUT_ASSERT(VERSION_SELECT(996, 1104, 1143), size > 0);
+    JUT_ASSERT(VERSION_SELECT(996, 996, 1104, 1143), size > 0);
     JKRHeap* zeldaHeap = mDoExt_createZeldaHeap(size, sysHeap);
     zeldaHeap->becomeCurrentHeap();
 

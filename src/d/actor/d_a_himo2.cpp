@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_himo2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 800EB60C-800EBABC       .text spin_draw__FP11himo2_class */
 void spin_draw(himo2_class*) {
@@ -129,7 +130,7 @@ actor_process_profile_definition g_profile_HIMO2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x019A,
+    /* Priority     */ PRIO_HIMO2,
     /* Actor SubMtd */ &l_daHimo2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

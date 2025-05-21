@@ -202,7 +202,7 @@ public:
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
     /* 0x0024 */ u8* field_0x0024;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x0028 */ int field_0x0028;
 #endif
     /* Offsets below are for USA/PAL */
@@ -228,7 +228,7 @@ public:
     /* 0x0054 */ Vec field_0x0054;
     /* 0x0060 */ u8 mbLandingDemoStarted;
     /* 0x0061 */ u8 field_0x0061;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x0062 */ u8 field_0x0062;
 #endif
     /* 0x0063 */ u8 field_0x0063;
@@ -266,7 +266,7 @@ public:
     /* 0x00BC */ u8 field_0x00bc;
     /* 0x00BD */ u8 field_0x00bd;
     /* 0x00BE */ u8 field_0x00be;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x00BF */ u8 field_0x00bf;
 #endif
     /* 0x00C0 */ u8 field_0x00c0;

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_rectangle.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "SSystem/SComponent/c_phase.h"
 
 /* 00000078-00000080       .text daRct_Draw__FP15RECTANGLE_class */
@@ -51,7 +52,7 @@ actor_process_profile_definition g_profile_RECTANGLE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009F,
+    /* Priority     */ PRIO_RECTANGLE,
     /* Actor SubMtd */ &l_daRct_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

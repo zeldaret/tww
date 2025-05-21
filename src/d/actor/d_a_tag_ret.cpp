@@ -8,6 +8,7 @@
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 
@@ -137,7 +138,7 @@ actor_process_profile_definition g_profile_Tag_Ret = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x005F,
+    /* Priority     */ PRIO_Tag_Ret,
     /* Actor SubMtd */ &daTagRet::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -137,7 +137,7 @@ int mDoCPd_Create() {
 
     JUTGamePad::setAnalogMode(3);
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     JUTGamePad::clearResetOccurred();
     JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
 #else

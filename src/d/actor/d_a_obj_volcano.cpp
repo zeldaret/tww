@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_volcano.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000003CC       .text StartFire__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::StartFire() {
@@ -153,7 +154,7 @@ actor_process_profile_definition g_profile_Obj_Volcano = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x001F,
+    /* Priority     */ PRIO_Obj_Volcano,
     /* Actor SubMtd */ &daObjVolcano::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

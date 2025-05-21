@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_mdoor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000084       .text getSwbit__9daMdoor_cFv */
 void daMdoor_c::getSwbit() {
@@ -154,7 +155,7 @@ actor_process_profile_definition g_profile_MDOOR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0130,
+    /* Priority     */ PRIO_MDOOR,
     /* Actor SubMtd */ &l_daMdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

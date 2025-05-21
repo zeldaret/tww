@@ -257,7 +257,7 @@ overlap_process_profile_definition g_profile_OVERLAP2 = {
     &l_dOvlpFd2_Method,
 };
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 overlap_process_profile_definition g_profile_OVERLAP3 = {
     fpcLy_ROOT_e,
     2,

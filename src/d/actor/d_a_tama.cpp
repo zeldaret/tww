@@ -6,6 +6,7 @@
 #include "d/actor/d_a_tama.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_npc.h"
 
 static dCcD_SrcSph l_sph_src = {
@@ -155,7 +156,7 @@ actor_process_profile_definition g_profile_TAMA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x012C,
+    /* Priority     */ PRIO_TAMA,
     /* Actor SubMtd */ &l_daTama_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

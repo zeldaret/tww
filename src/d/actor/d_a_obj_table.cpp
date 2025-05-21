@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_table.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000001B8       .text CreateHeap__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::CreateHeap() {
@@ -98,7 +99,7 @@ actor_process_profile_definition g_profile_Obj_Table = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0075,
+    /* Priority     */ PRIO_Obj_Table,
     /* Actor SubMtd */ &daObjTable::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

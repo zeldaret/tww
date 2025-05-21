@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_pt.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000110       .text __ct__10daPt_HIO_cFv */
 daPt_HIO_c::daPt_HIO_c() {
@@ -134,7 +135,7 @@ actor_process_profile_definition g_profile_PT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00EC,
+    /* Priority     */ PRIO_PT,
     /* Actor SubMtd */ &l_daPt_Method,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

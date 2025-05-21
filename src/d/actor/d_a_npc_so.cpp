@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_so.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002A4       .text __ct__14daNpc_So_HIO_cFv */
 daNpc_So_HIO_c::daNpc_So_HIO_c() {
@@ -411,7 +412,7 @@ actor_process_profile_definition g_profile_NPC_SO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0149,
+    /* Priority     */ PRIO_NPC_SO,
     /* Actor SubMtd */ &daNpc_SoMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

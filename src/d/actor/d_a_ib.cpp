@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -206,7 +207,7 @@ void daIball_c::checkGeo() {
     lavaChk.SetPos(&pos);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
     f32 groundH = mAcch.GetGroundH();
-    if (lavaY != C_BG_MIN_HEIGHT) {
+    if (lavaY != -G_CM3D_F_INF) {
         f32 lava_depth = lavaY - groundH;
         if ((lava_depth < 20.0f && lavaY > current.pos.y) || (lava_depth >= 20.0f && lavaY > current.pos.y + 20.0f)) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_FALL_MAGMA_S, 0);
@@ -238,7 +239,7 @@ void daIball_c::mode_wait() {
     }
     
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight > current.pos.y && seaHeight != C_BG_MIN_HEIGHT) {
+    if (seaHeight > current.pos.y && seaHeight != -G_CM3D_F_INF) {
         mode_water_init();
         current.pos.y = seaHeight;
     }
@@ -254,10 +255,10 @@ void daIball_c::mode_water_init() {
 /* 800F3FE8-800F4054       .text mode_water__9daIball_cFv */
 void daIball_c::mode_water() {
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight == C_BG_MIN_HEIGHT || seaHeight < current.pos.y) {
+    if (seaHeight == -G_CM3D_F_INF || seaHeight < current.pos.y) {
         mode_wait_init();
     }
-    if (seaHeight != C_BG_MIN_HEIGHT) {
+    if (seaHeight != -G_CM3D_F_INF) {
         current.pos.y = seaHeight;
     }
 }
@@ -529,7 +530,7 @@ actor_process_profile_definition g_profile_Iball = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0187,
+    /* Priority     */ PRIO_Iball,
     /* Actor SubMtd */ &l_daIball_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

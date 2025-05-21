@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ice.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 class J3DMaterial;
 
@@ -126,7 +127,7 @@ actor_process_profile_definition g_profile_Obj_Ice = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x000F,
+    /* Priority     */ PRIO_Obj_Ice,
     /* Actor SubMtd */ &l_daObjIce_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

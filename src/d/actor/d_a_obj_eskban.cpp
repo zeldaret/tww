@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_eskban.h"
 #include "d/res/res_eskban.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -436,7 +437,7 @@ actor_process_profile_definition g_profile_Obj_Eskban = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x007A,
+    /* Priority     */ PRIO_Obj_Eskban,
     /* Actor SubMtd */ &daObjEskban::Mthd_Eskban,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

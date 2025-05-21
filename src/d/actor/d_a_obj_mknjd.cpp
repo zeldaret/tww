@@ -13,6 +13,7 @@
 #include "JAZelAudio/JAIZelBasic.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_w.h"
@@ -837,7 +838,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                     m0500 = 0;
                     m043F = 9;
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
                     fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
 #endif
                 }
@@ -1020,7 +1021,7 @@ actor_process_profile_definition g_profile_Obj_MknjD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C6,
+    /* Priority     */ PRIO_Obj_MknjD,
     /* Actor SubMtd */ &daObjMknjD::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

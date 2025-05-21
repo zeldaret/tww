@@ -14,6 +14,7 @@
 #include "d/d_path.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -113,7 +114,7 @@ namespace daObjMovebox {
     
     /* 000001F0-000003A4       .text gnd_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cif */
     void Bgc_c::gnd_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, f32 param_4) {
-        f32 maxGroundY = C_BG_MIN_HEIGHT;
+        f32 maxGroundY = -G_CM3D_F_INF;
         
         mDoMtx_stack_c::transS(movebox->current.pos);
         mDoMtx_stack_c::YrotM(movebox->home.angle.y);
@@ -1869,7 +1870,7 @@ namespace daObjMovebox {
             int temp = mBgc.mMaxGroundIdx;
             f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
-            if (triPla && groundH != C_BG_MIN_HEIGHT) {
+            if (triPla && groundH != -G_CM3D_F_INF) {
                 dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, triPla->GetNP(), shape_angle.y, 1.0f, NULL);
             }
         }
@@ -1937,7 +1938,7 @@ actor_process_profile_definition g_profile_Obj_Movebox = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0015,
+    /* Priority     */ PRIO_Obj_Movebox,
     /* Actor SubMtd */ &daObjMovebox::Mthd_Table,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

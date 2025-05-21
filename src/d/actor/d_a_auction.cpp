@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
@@ -67,8 +68,8 @@ static NpcDatStruct l_npc_dat[7] = {
     {0.3f, 0.5f, 0x4, 0x6, 450 },
     {0.3f, 0.6f, 0x3, 0x7, 500 },
     {0.4f, 0.7f, 0x2, 0x4, 250 },
-    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 990, 990) },
-    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 990, 990) },
+    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 998, 990, 990) },
+    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 998, 990, 990) },
     {0.7f, 1.2f, 0x2, 0x2, 150 },
 };
 
@@ -1661,7 +1662,7 @@ actor_process_profile_definition g_profile_AUCTION = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01E0,
+    /* Priority     */ PRIO_AUCTION,
     /* Actor SubMtd */ &daAuctionMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

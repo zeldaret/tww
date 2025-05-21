@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -239,7 +240,7 @@ actor_process_profile_definition g_profile_Obj_Dragonhead = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0025,
+    /* Priority     */ PRIO_Obj_Dragonhead,
     /* Actor SubMtd */ &daObj_DragonheadMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

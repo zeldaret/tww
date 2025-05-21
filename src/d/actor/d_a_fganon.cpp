@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_fganon.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_mant.h"
@@ -807,7 +808,7 @@ void down(fganon_class* i_this) {
     sp2C.y += 300.0f;
     gndChk.SetPos(&sp2C);
     f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (height != C_BG_MIN_HEIGHT && i_this->current.pos.y <= height) {
+    if (height != -G_CM3D_F_INF && i_this->current.pos.y <= height) {
         bVar3 = TRUE;
     }
     if ((i_this->m3A4[0] == 0) || bVar3) {
@@ -2877,7 +2878,7 @@ actor_process_profile_definition g_profile_FGANON = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00E6,
+    /* Priority     */ PRIO_FGANON,
     /* Actor SubMtd */ &l_daFganon_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tag_ba1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
@@ -99,7 +100,7 @@ actor_process_profile_definition g_profile_TAG_BA1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x012A,
+    /* Priority     */ PRIO_TAG_BA1,
     /* Actor SubMtd */ &l_daTag_Ba1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

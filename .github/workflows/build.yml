@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [GZLE01, GZLP01, GZLJ01]
+        version: [GZLE01, GZLP01, GZLJ01, D44J01]
 
     steps:
     # Checkout the repository

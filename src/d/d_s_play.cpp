@@ -306,7 +306,7 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
                 PROC_OVERLAP8,
             };
 
-            JUT_ASSERT(VERSION_SELECT(997, 1001, 1001),
+            JUT_ASSERT(VERSION_SELECT(997, 997, 1001, 1001),
                        dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
@@ -1154,7 +1154,7 @@ BOOL heapSizeCheck() {
     f32 temp_f28 = (f32)game_free / (f32)game_total_free;
 
     mDoExt_getZeldaHeap()->getFreeSize();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     int zelda_total_free = mDoExt_getZeldaHeap()->getFreeSize();
 #else
     int zelda_total_free = mDoExt_getZeldaHeap()->getTotalFreeSize();
@@ -1162,7 +1162,7 @@ BOOL heapSizeCheck() {
     f32 temp_f27 = (f32)zelda_total_free / (f32)mDoExt_getSafeZeldaHeapSize();
 
     mDoExt_getCommandHeap()->getFreeSize();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     int command_total_free = mDoExt_getCommandHeap()->getFreeSize();
 #else
     int command_total_free = mDoExt_getCommandHeap()->getTotalFreeSize();
@@ -1208,7 +1208,7 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
         dComIfGs_init();
     } else {
         if (!heapSizeCheck()) {
-            JUT_WARN(VERSION_SELECT(3356, 3372, 3372), "%s", "Memory Danger !!");
+            JUT_WARN(VERSION_SELECT(3356, 3356, 3372, 3372), "%s", "Memory Danger !!");
         }
     }
 
@@ -1243,7 +1243,7 @@ cPhs_State phase_0(dScnPly_ply_c* i_this) {
             char buf[32];
             sprintf(buf, "/res/Object/LkD%02d.arc", dComIfGp_getLkDemoAnmNo());
             l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
-            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
+            JUT_ASSERT(VERSION_SELECT(3399, 3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
         }
 
         return cPhs_NEXT_e;
@@ -1257,7 +1257,7 @@ cPhs_State phase_1(dScnPly_ply_c* i_this) {
             return cPhs_INIT_e;
         }
 
-        JUT_ASSERT(VERSION_SELECT(3424, 3439, 3439), l_lkDemoAnmCommand->getArchive());
+        JUT_ASSERT(VERSION_SELECT(3424, 3424, 3439, 3439), l_lkDemoAnmCommand->getArchive());
         dComIfGp_setLkDemoAnmArchive(l_lkDemoAnmCommand->getArchive());
 
         delete l_lkDemoAnmCommand;
@@ -1274,7 +1274,7 @@ cPhs_State phase_1(dScnPly_ply_c* i_this) {
     dComIfGp_setStatus(0);
 
     int rt = dComIfG_setStageRes("Stage", NULL);
-    JUT_ASSERT(VERSION_SELECT(3443, 3458, 3458), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(3443, 3443, 3458, 3458), rt == 1);
 
     dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", ALWAYS_BMT_ICE),
                            (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_ICE));
@@ -1285,7 +1285,7 @@ cPhs_State phase_1(dScnPly_ply_c* i_this) {
 /* 802359DC-80235ABC       .text phase_2__FP13dScnPly_ply_c */
 cPhs_State phase_2(dScnPly_ply_c* i_this) {
     int rt = dComIfG_syncStageRes("Stage");
-    JUT_ASSERT(VERSION_SELECT(3470, 3485, 3485), rt >= 0)
+    JUT_ASSERT(VERSION_SELECT(3470, 3470, 3485, 3485), rt >= 0)
 
     if (rt != 0) {
         return cPhs_INIT_e;
@@ -1311,7 +1311,7 @@ cPhs_State phase_3(dScnPly_ply_c* i_this) {
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
 cPhs_State phase_4(dScnPly_ply_c* i_this) {
     if (i_this->sceneCommand != NULL) {
-        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
+        JUT_ASSERT(VERSION_SELECT(3552, 3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     } else {
@@ -1336,8 +1336,8 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
 
-    JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x73EA1, 0x73EA1));
-    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != NULL);
+    JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x736A1, 0x73EA1, 0x73EA1));
+    JUT_ASSERT(VERSION_SELECT(3633, 3633, 3653, 3653), heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
     dStage_Create();
@@ -1446,7 +1446,7 @@ cPhs_State phase_5(dScnPly_ply_c* i_this) {
         const char** resName = PreLoadInfoT[preLoadNo].resName;
         s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
         if (resName != NULL && resName[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
+            JUT_ASSERT(VERSION_SELECT(3804, 3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
             for (int i = 0; i < resNameNum; i++) {
                 if (dComIfG_resLoad(&resPhase[i], resName[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;
@@ -1469,7 +1469,7 @@ cPhs_State phase_6(dScnPly_ply_c* i_this) {
         const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
         s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
         if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
+            JUT_ASSERT(VERSION_SELECT(3838, 3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
             for (int i = 0; i < dylKeyTblNum; i++) {
                 if (cDylPhs::Link(&dylPhase[i], dylKeyTbl[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;

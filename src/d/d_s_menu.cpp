@@ -114,7 +114,7 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     }
     JUTReport(40, 420, "十字右：進む　十字左：戻る");
     JUTReport(200, 400, "曜日：%s", weekpat_str[l_weekpat]);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
     JUTReport(40, 440, "%s", language[dComIfGs_getPalLanguage()]);
 #endif
@@ -214,7 +214,7 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
     }
     dComIfGs_setDate(l_weekpat);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     static const u8 language[] = { 0, 1, 2, 3, 4, };
     if (CPad_CHECK_TRIG_Z(3)) {
         if (++l_languageType > 4)
@@ -302,9 +302,9 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
 cPhs_State phase_1(menu_of_scene_class* i_this) {
     i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
-    JUT_ASSERT(VERSION_SELECT(616, 732, 732), i_this->command != NULL);
+    JUT_ASSERT(VERSION_SELECT(616, 616, 732, 732), i_this->command != NULL);
     i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
-    JUT_ASSERT(VERSION_SELECT(619, 735, 735), i_this->fontCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(619, 619, 735, 735), i_this->fontCommand != NULL);
     return cPhs_NEXT_e;
 }
 
@@ -314,7 +314,7 @@ cPhs_State phase_2(menu_of_scene_class* i_this) {
         return cPhs_INIT_e;
     }
     i_this->info = (menu_of_scene_class::menu_inf*)i_this->command->getMemAddress();
-    JUT_ASSERT(VERSION_SELECT(663, 779, 779), i_this->info != NULL);
+    JUT_ASSERT(VERSION_SELECT(663, 663, 779, 779), i_this->info != NULL);
     delete i_this->command;
     menu_of_scene_class::menu_inf* info = i_this->info;
     info->stage = (menu_of_scene_class::stage_inf*)(u32(info->stage) + u32(info));
@@ -323,7 +323,7 @@ cPhs_State phase_2(menu_of_scene_class* i_this) {
     }
     if (!l_groupPoint) {
         l_groupPoint = new s8[info->num];
-        JUT_ASSERT(VERSION_SELECT(676, 792, 792), l_groupPoint != NULL);
+        JUT_ASSERT(VERSION_SELECT(676, 676, 792, 792), l_groupPoint != NULL);
         for (int i = 0; i < info->num; i++) {
             l_groupPoint[i] = 0;
         }
@@ -349,7 +349,7 @@ static cPhs_State dScnMenu_Create(scene_class* i_scn) {
         (cPhs__Handler)phase_2,
     };
     menu_of_scene_class* i_this = (menu_of_scene_class *)i_scn;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     l_languageType = dComIfGs_getPalLanguage();
 #endif
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);

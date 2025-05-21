@@ -7,6 +7,7 @@
 #include "d/res/res_dr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -271,7 +272,7 @@ actor_process_profile_definition g_profile_DR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D2,
+    /* Priority     */ PRIO_DR,
     /* Actor SubMtd */ &l_daDr_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

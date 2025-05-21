@@ -4026,7 +4026,7 @@ TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c: comment:0
 
 TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c:
 	.init       start:0x80005468 end:0x8000556C
-	.text       start:0x80337040 end:0x80337180 align:32
+	.text       start:0x80337040 end:0x80337180
 	.data       start:0x803A28F0 end:0x803A2930
 	.bss        start:0x803F3E88 end:0x803F3E90
 
