@@ -49,7 +49,9 @@ mDoDvdThd_mountXArchive_c * l_swimResCommand;
 mDoDvdThd_mountXArchive_c * l_windResCommand;
 mDoDvdThd_mountXArchive_c * l_nameResCommand;
 mDoDvdThd_mountXArchive_c * l_tmsgCommand;
+#if VERSION > VERSION_DEMO
 mDoDvdThd_mountXArchive_c * l_dmsgCommand;
+#endif
 mDoDvdThd_mountXArchive_c * l_errorResCommand;
 mDoDvdThd_mountXArchive_c * l_msgDtCommand;
 #if VERSION > VERSION_JPN
@@ -63,7 +65,11 @@ mDoDvdThd_toMainRam_c * l_particleCommand;
 mDoDvdThd_toMainRam_c * l_itemTableCommand;
 mDoDvdThd_toMainRam_c * l_ActorDataCommand;
 mDoDvdThd_toMainRam_c * l_FmapDataCommand;
+#if VERSION == VERSION_DEMO
+mDoDvdThd_mountXArchive_c * l_DmcMountCommand;
+#else
 mDoDvdThd_mountXArchive_c * l_lodCommand;
+#endif
 
 enum {
     ACT_nintendoInDraw = 0,
@@ -416,7 +422,9 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
         && l_windResCommand->sync()
         && l_nameResCommand->sync()
         && l_tmsgCommand->sync()
+#if VERSION > VERSION_DEMO
         && l_dmsgCommand->sync()
+#endif
         && l_errorResCommand->sync()
         && l_msgDtCommand->sync()
 #if VERSION > VERSION_JPN
@@ -430,7 +438,10 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
         && l_itemTableCommand->sync()
         && l_ActorDataCommand->sync()
         && l_FmapDataCommand->sync()
-        && l_lodCommand->sync() && !mDoRst::isReset()) {
+#if VERSION > VERSION_DEMO
+        && l_lodCommand->sync() && !mDoRst::isReset()
+#endif
+    ) {
 
         dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
     }
@@ -491,19 +502,21 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     dComIfGp_setItemResArchive(l_itemResCommand->getArchive());
     dComIfGp_setFmapResArchive(l_fmapResCommand->getArchive());
     dComIfGp_setDmapResArchive(l_dmapResCommand->getArchive());
-    dComIfGp_setClctResArchive(l_clctResCommand->getArchive());
-    dComIfGp_setOptResArchive(l_optResCommand->getArchive());
+    dComIfGp_setCollectResArchive(l_clctResCommand->getArchive());
+    dComIfGp_setOptionResArchive(l_optResCommand->getArchive());
     dComIfGp_setSaveResArchive(l_saveResCommand->getArchive());
     dComIfGp_setClothResArchive(l_clothResCommand->getArchive());
     dComIfGp_setItemIconArchive(l_itemiconCommand->getArchive());
     dComIfGp_setActionIconArchive(l_actioniconCommand->getArchive());
     dComIfGp_setScopeResArchive(l_scopeResCommand->getArchive());
-    dComIfGp_setCamResArchive(l_camResCommand->getArchive());
+    dComIfGp_setCameraResArchive(l_camResCommand->getArchive());
     dComIfGp_setSwimResArchive(l_swimResCommand->getArchive());
     dComIfGp_setWindResArchive(l_windResCommand->getArchive());
     dComIfGp_setNameResArchive(l_nameResCommand->getArchive());
-    dComIfGp_setTmsgArchive(l_tmsgCommand->getArchive());
+    dComIfGp_setTactMsgArchive(l_tmsgCommand->getArchive());
+#if VERSION > VERSION_DEMO
     dComIfGp_setDmsgArchive(l_dmsgCommand->getArchive());
+#endif
     dComIfGp_setErrorResArchive(l_errorResCommand->getArchive());
     dComIfGp_setMsgDtArchive(l_msgDtCommand->getArchive());
 #if VERSION > VERSION_JPN
@@ -531,7 +544,9 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     delete l_windResCommand;
     delete l_nameResCommand;
     delete l_tmsgCommand;
+#if VERSION > VERSION_DEMO
     delete l_dmsgCommand;
+#endif
     delete l_errorResCommand;
     delete l_msgDtCommand;
 #if VERSION > VERSION_JPN
@@ -561,7 +576,11 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
 
     delete l_ActorDataCommand;
     delete l_FmapDataCommand;
+#if VERSION == VERSION_DEMO
+    delete l_DmcMountCommand;
+#else
     delete l_lodCommand;
+#endif
 
     ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
     dDlst_shadowControl_c::setSimpleTex(timg);
@@ -581,10 +600,16 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     g_dComIfG_gameInfo.play.field_0x4820 = JKRAllocFromAram(0xB000, JKRAramHeap::HEAD);
 #endif
 
+#if VERSION == VERSION_DEMO
+    mDoRst::offReset();
+#endif
+
+#if VERSION > VERSION_DEMO
     mDoExt_setSafeGameHeapSize();
     mDoExt_setSafeZeldaHeapSize();
     mDoExt_setSafeCommandHeapSize();
     mDoExt_setSafeArchiveHeapSize();
+#endif
 
     return TRUE;
 }
@@ -804,13 +829,17 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 
     JKRHeap::free(i_this->field_0x1f8, NULL);
 
+#if VERSION > VERSION_DEMO
     l_lodCommand = aramMount("/res/Stage/sea/LODALL.arc");
     JUT_ASSERT(VERSION_SELECT(1346, 1346, 1645, 1685), l_lodCommand != NULL);
+#endif
     
     rt = dComIfG_setObjectRes("Always", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1351, 1351, 1650, 1690), rt == 1);
 
+#if VERSION > VERSION_DEMO
     archiveHeap->dump_sort();
+#endif
 
     rt = dComIfG_setObjectRes("Link", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1356, 1356, 1655, 1695), rt == 1);
@@ -843,7 +872,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_windResCommand = aramMount("/res/Msg/windres.arc");
     l_nameResCommand = aramMount("/res/Msg/nameres.arc");
     l_tmsgCommand = aramMount("/res/Msg/tmsgres.arc");
+#if VERSION > VERSION_DEMO
     l_dmsgCommand = aramMount("/res/Msg/dmsgres.arc");
+#endif
     l_errorResCommand = aramMount("/res/Msg/errorres.arc");
     l_saveResCommand = aramMount("/res/Msg/saveres.arc");
 
@@ -884,8 +915,11 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     mDoRst::offResetPrepare();
 #endif
 
+#if VERSION > VERSION_DEMO
     JUTGamePad::clearResetOccurred();
     JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 

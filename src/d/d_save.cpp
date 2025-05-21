@@ -1336,7 +1336,9 @@ void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_p
     field_0x13 = 0;
     mShipPos = i_shipPos;
     mShipAngleY = i_shipAngle;
+#if VERSION > VERSION_DEMO
     mHasShip = i_hasShip;
+#endif
 }
 
 /* 8005D604-8005D660       .text init__10dSv_info_cFv */

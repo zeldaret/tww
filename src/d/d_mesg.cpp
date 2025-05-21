@@ -1327,7 +1327,11 @@ void dMesg_screenDataTalk_c::createScreen() {
     JUtility::TColor black(30, 30, 75, 0);
     scrn = new J2DScreen();
     JUT_ASSERT(2145, scrn != NULL);
+#if VERSION == VERSION_DEMO
+    scrn->set("hukidashi_d00.blo", dComIfGp_getMsgArchive());
+#else
     scrn->set("hukidashi_d00.blo", dComIfGp_getDmsgArchive());
+#endif
     fopMsgM_setPaneData(&field_0x18, scrn->search('dt00'));
     fopMsgM_setPaneData(&field_0x50, scrn->search('yz00'));
     fopMsgM_setPaneData(&field_0x88[0], scrn->search('tx02'));
@@ -1489,7 +1493,11 @@ void dMesg_screenDataItem_c::createScreen() {
     JUT_ASSERT(2424, texBuffer != NULL);
 
     field_0x3e4 = NULL;
+#if VERSION == VERSION_DEMO
+    scrn->set("hukidashi_d09.blo", dComIfGp_getMsgArchive());
+#else
     scrn->set("hukidashi_d09.blo", dComIfGp_getDmsgArchive());
+#endif
     fopMsgM_setPaneData(&field_0x18, scrn->search('dt90'));
     fopMsgM_setPaneData(&field_0x50, scrn->search('yz90'));
     fopMsgM_setPaneData(&field_0x88[0], scrn->search('tx92'));
@@ -2084,7 +2092,11 @@ void dMesg_closeProc(sub_mesg_class* i_Msg) {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
     if (i_Msg->screen->closeAnime()) {
         delete i_Msg->screen->scrn;
+#if VERSION == VERSION_DEMO
+        dComIfGp_getMsgArchive()->removeResourceAll();
+#else
         dComIfGp_getDmsgArchive()->removeResourceAll();
+#endif
         delete (void*)i_Msg->screen;
         i_Msg->screen = NULL;
         dMesg_reset();
@@ -2163,7 +2175,11 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
         mDoExt_setCurrentHeap(i_Msg->field_0x100);
         if (i_Msg->screen) {
             delete i_Msg->screen->scrn;
+#if VERSION == VERSION_DEMO
+            dComIfGp_getMsgArchive()->removeResourceAll();
+#else
             dComIfGp_getDmsgArchive()->removeResourceAll();
+#endif
             delete (void*)i_Msg->screen;
             i_Msg->screen = NULL;
         }
