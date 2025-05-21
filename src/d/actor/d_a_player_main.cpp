@@ -12494,7 +12494,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
         }
     } else if ((startMode == 1) || (startMode == 5)) {
         if (mEventIdx == 0xFF) {
-            mVelocity = g_dComIfG_gameInfo.save.getRestart().getLastSpeedF();
+            mVelocity = dComIfGs_getLastSceneSpeedF();
             mDemo.setDemoType(4);
             mDemo.setDemoMode(daPy_demo_c::DEMO_UNK0E_e);
             mDemo.setMoveAngle(current.angle.y);

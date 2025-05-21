@@ -1269,7 +1269,7 @@ static void dummy() {
     // Fakematch to fix the vtable order and weak destructor order of dDlst_shadowReal_c and dDlst_shadowTri_c.
     struct {
         dDlst_shadowReal_c temp[1];
-    }* temp;
+    }* temp = NULL;
     delete temp;
 }
 

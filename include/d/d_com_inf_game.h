@@ -1305,6 +1305,10 @@ inline s16 dComIfGs_getRestartOptionAngleY() {
     return g_dComIfG_gameInfo.save.getRestart().getRestartOptionAngleY();
 }
 
+inline f32 dComIfGs_getLastSceneSpeedF() {
+    return g_dComIfG_gameInfo.save.getRestart().getLastSpeedF();
+}
+
 inline u32 dComIfGs_getLastSceneMode() {
     return g_dComIfG_gameInfo.save.getRestart().getLastMode();
 }

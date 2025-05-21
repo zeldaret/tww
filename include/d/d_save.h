@@ -783,8 +783,8 @@ public:
     }
 
     s16 getStartPoint() { return mStartCode; }
-    u32 getLastMode() { return mLastMode; }
     f32 getLastSpeedF() { return mLastSpeedF; }
+    u32 getLastMode() { return mLastMode; }
     s8 getRoomNo() { return mRestartRoom; }
     u32 getRoomParam() { return mRestartParam; }
     cXyz& getRoomPos() { return mRestartPos; }

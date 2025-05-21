@@ -4588,7 +4588,7 @@ void preparation(camera_process_class* i_this) {
 
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
-    f32 aspect = 1.3333334f * fapGmHIO_getAspectRatio();
+    f32 aspect = (4.0f/3.0f) * fapGmHIO_getAspectRatio();
 
     camera->SetWindow(viewport->mWidth, viewport->mHeight);
     fopCamM_SetAspect(a_this, aspect);
