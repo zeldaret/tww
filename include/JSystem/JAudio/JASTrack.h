@@ -67,7 +67,7 @@ namespace JASystem {
             TIMED_IIR_Unk3    = 15,
             TIMED_Unk16       = 16,
             TIMED_Unk17       = 17,
-            TIMED_Count, // 18
+            TIMED_PARAMS, // 18
         };
 
         class TOuterParam {
@@ -138,10 +138,10 @@ namespace JASystem {
 #ifdef __MWERKS__
             union {
                 AInnerParam_ mInnerParam;
-                MoveParam_ mMoveParams[TIMED_Count];
+                MoveParam_ mMoveParams[TIMED_PARAMS];
             };
 #else
-            MoveParam_ mMoveParams[TIMED_Count];
+            MoveParam_ mMoveParams[TIMED_PARAMS];
 #endif
         };
 
@@ -218,7 +218,7 @@ namespace JASystem {
         void writeSelfPort(int, u16);
         int writePortAppDirect(u32, u16);
         int readPortAppDirect(u32, u16*);
-        void routeTrack(u32);
+        JASystem::TTrack* routeTrack(u32);
         int writePortApp(u32, u16);
         int readPortApp(u32, u16*);
         void pause(bool, bool);
@@ -226,7 +226,7 @@ namespace JASystem {
         void setTempo(u16);
         void setTimebase(u16);
         f32 panCalc(f32, f32, f32, u8);
-        static int rootCallback(void*);
+        static s32 rootCallback(void*);
         static void registerSeqCallback(u16 (*)(TTrack*, u16));
         static void newMemPool(int);
 
@@ -250,7 +250,7 @@ namespace JASystem {
         void unPauseTrackAll() { pause(false, true); }
         void setPanPower(int i, u16 power) { mRegisterParam.setPanPower(i, power); }
         void setPauseStatus(u8 status) { mPauseStatus = status; }
-        void setTranspose(s32 transpose) { field_0x37a = transpose; }
+        void setTranspose(s32 transpose) { mTranspose = transpose; }
         void setVolumeMode(u8 mode) { mVolumeMode = mode; }
 
         /* 0x000 */ union {
@@ -278,7 +278,7 @@ namespace JASystem {
         /* 0x374 */ u16 field_0x374;
         /* 0x376 */ u16 field_0x376;
         /* 0x378 */ u16 field_0x378;
-        /* 0x37A */ u8 field_0x37a;
+        /* 0x37A */ s8 mTranspose;
         /* 0x37B */ u8 field_0x37b;
         /* 0x37C */ u8 mPauseStatus;
         /* 0x37D */ u8 mVolumeMode;
