@@ -11,6 +11,7 @@
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
+#if VERSION > VERSION_DEMO
 /* 80251D88-80252020       .text SetC__8cM3dGCylFRC4cXyz */
 void cM3dGCyl::SetC(const cXyz& pos) {
     CHECK_FLOAT_CLASS(21, pos.x);
@@ -33,6 +34,7 @@ void cM3dGCyl::SetR(f32 r) {
     CHECK_FLOAT_RANGE(49, r);
     mRadius = r;
 }
+#endif
 
 /* 80252278-8025229C       .text cross__8cM3dGCylCFPC8cM3dGSphP4cXyz */
 bool cM3dGCyl::cross(const cM3dGSph* pOther, cXyz* pOut) const {

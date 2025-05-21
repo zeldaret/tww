@@ -1423,7 +1423,7 @@ config.libs = [
     ActorRel(Equivalent,  "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_obj_tousekiki"),
     ActorRel(NonMatching, "d_a_obj_warpt"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_wood", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_obj_wood", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_pirate_flag"), # weak func order
     ActorRel(Equivalent,  "d_a_race_item", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Equivalent,  "d_a_rd", extra_cflags=['-pragma "nosyminline on"']), # weak func order
@@ -1546,7 +1546,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_bwds"),
     ActorRel(NonMatching, "d_a_daiocta"),
     ActorRel(NonMatching, "d_a_daiocta_eye"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_deku_item", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_deku_item", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_dk"),
     ActorRel(Matching,    "d_a_dummy"),
     ActorRel(NonMatching, "d_a_fallrock_tag"),
@@ -1732,7 +1732,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_st"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_steam_tag", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swattack", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_switem", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_switem", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_swpropeller"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swtact"),
     ActorRel(Matching,    "d_a_tag_etc"),
