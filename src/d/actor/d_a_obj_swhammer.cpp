@@ -461,6 +461,9 @@ BOOL Mthd_Draw(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGDraw();
 }
 
+// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
+#pragma nosyminline off
+
 /* 000015F4-00001620       .text Mthd_IsDelete__Q213daObjSwhammer30@unnamed@d_a_obj_swhammer_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
     return static_cast<daObjSwhammer::Act_c*>(i_this)->MoveBGIsDelete();

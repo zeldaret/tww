@@ -538,149 +538,194 @@ static u8 l_npc_dist_tbl[][2] = {
 };
 
 static sPeopleAnmDat l_npc_anm_wait[] = {
-    0x00,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talk[] = {
-    0x01,
-    0x08,
-    0x00,
+    {
+        0x01,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_walk[] = {
-    0x02,
-    0x08,
-    0x00,
+    {
+        0x02,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_surprise[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0x04,
-    0x00,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0x04,
+        0x00,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_bikkuri[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x00,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x00,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_furue[] = {
-    0x04,
-    0x00,
-    0x00,
+    {
+        0x04,
+        0x00,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_miburui[] = {
-    0x00,
-    0x08,
-    0x01,
-
-    0x04,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x01,
+    },
+    {
+        0x04,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_kyoro[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_letter[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_kyoro2[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0x00,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0x00,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_ub_anm_wait2[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_ub_anm_yada[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0x00,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0x00,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_ub_anm_look[] = {
-    0x00,
-    0x08,
-    0x01,
-
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x01,
+    },
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_ub_anm_kuyasi[] = {
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_ub1_wait1[] = {
-    0x00,
-    0x08,
-    0x04,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x04,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_ub1_wait2[] = {
-    0x03,
-    0x08,
-    0x04,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x04,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_ub1_yada[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_ub1_tbl[] = {
@@ -695,33 +740,42 @@ static sPeopleAnmDat* l_npc_anm_ub1_tbl[] = {
 };
 
 static sPeopleAnmDat l_npc_anm_ub2_wait1[] = {
-    0x03,
-    0x08,
-    0x04,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x04,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_ub2_wait2[] = {
-    0x00,
-    0x08,
-    0x04,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x04,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_ub2_yada[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_ub2_tbl[] = {
@@ -736,125 +790,163 @@ static sPeopleAnmDat* l_npc_anm_ub2_tbl[] = {
 };
 
 static sPeopleAnmDat l_npc_anm_talk3[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talk4[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0x00,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0x00,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talkH[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0x01,
-    0x0C,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0x01,
+        0x0C,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talkH2[] = {
-    0x03,
-    0x08,
-    0xFF,
-
-    0x00,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0xFF,
+    },
+    {
+        0x00,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_Mojimoji[] = {
-    0x04,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_happy[] = {
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_shobon_um[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_happy_um[] = {
-    0x04,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_happy2_um[] = {
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_wait3[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_talk2[] = {
-    0x01,
-    0x08,
-    0x00,
+    {
+        0x01,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_talk3[] = {
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_wait2[] = {
-    0x00,
-    0x0F,
-    0x01,
-
-    0x00,
-    0x08,
-    0x03,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x0F,
+        0x01,
+    },
+    {
+        0x00,
+        0x08,
+        0x03,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_wait[] = {
-    0x03,
-    0x0F,
-    0x01,
-
-    0x03,
-    0x08,
-    0x03,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x0F,
+        0x01,
+    },
+    {
+        0x03,
+        0x08,
+        0x03,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_um3_tameiki[] = {
-    0x04,
-    0x0F,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x0F,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_um3_tbl[] = {
@@ -869,47 +961,61 @@ static sPeopleAnmDat* l_npc_anm_um3_tbl[] = {
 };
 
 static sPeopleAnmDat l_npc_anm_talk_sa[] = {
-    0x01,
-    0x10,
-    0x00,
+    {
+        0x01,
+        0x10,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talk2_sa[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_talk3_sa[] = {
-    0x04,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_kiai_sa[] = {
-    0x05,
-    0x08,
-    0x00,
+    {
+        0x05,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_sa3_wait3[] = {
-    0x00,
-    0x08,
-    0x04,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x00,
+        0x08,
+        0x04,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_sa3_laugh[] = {
-    0x03,
-    0x08,
-    0x03,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x03,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_sa3_tbl[] = {
@@ -920,13 +1026,16 @@ static sPeopleAnmDat* l_npc_anm_sa3_tbl[] = {
 };
 
 static sPeopleAnmDat l_npc_anm_sa5_drink[] = {
-    0x03,
-    0x08,
-    0x01,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_sa5_tbl[] = {
@@ -937,27 +1046,34 @@ static sPeopleAnmDat* l_npc_anm_sa5_tbl[] = {
 };
 
 static sPeopleAnmDat l_npc_anm_talk2_ug[] = {
-    0x03,
-    0x08,
-    0x00,
+    {
+        0x03,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat l_npc_anm_sit_ug[] = {
-    0x04,
-    0x08,
-    0x01,
-
-    0x05,
-    0x08,
-    0x02,
-
-    0x04,
-    0x08,
-    0xFF,
-
-    0xFF,
-    0x08,
-    0x00,
+    {
+        0x04,
+        0x08,
+        0x01,
+    },
+    {
+        0x05,
+        0x08,
+        0x02,
+    },
+    {
+        0x04,
+        0x08,
+        0xFF,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 static sPeopleAnmDat* l_npc_anm_wait_tbl[][2] = {

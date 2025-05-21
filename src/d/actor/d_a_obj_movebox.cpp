@@ -3,12 +3,6 @@
  * Object - Pushable Box
  */
 
-#include "global.h"
-#include "d/d_procname.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/res/res_ecube.h"
 #include "d/res/res_hbox2.h"
@@ -17,6 +11,7 @@
 #include "d/res/res_mmirror.h"
 #include "d/res/res_mpwrb.h"
 #include "d/res/res_osiblk.h"
+#include "d/d_path.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -27,6 +22,9 @@
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/actor/d_a_obj_mkie.h"
 #include "d/actor/d_a_player.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjMovebox {
     dBgS_ObjGndChk Bgc_c::M_gnd_work[23];
@@ -1894,6 +1892,10 @@ namespace daObjMovebox {
         cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
+
+// Fakematch to fix weak func order/.text section splitting of daObjMovebox::EffSmokeCB's ctor and dtor.
+// Also fixes weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
+#pragma nosyminline off
         
         /* 000044E0-00004544       .text Mthd_Delete__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
         BOOL Mthd_Delete(void* i_this) {
