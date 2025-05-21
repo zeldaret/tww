@@ -7,8 +7,12 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_lib.h"
-#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "global.h"
+#include "d/d_meter.h"
+#include "f_op/f_op_msg_mng.h"
+#include "d/d_com_inf_game.h"
 
 dMo_HIO_c g_moHIO;
 
@@ -40,13 +44,13 @@ void dMenu_Option_c::screenSet() {
         fopMsgM_blendInit(&m0B0[i], "font_00.bti");
     }
     
-    fopMsgM_setPaneData(&m778, scrn->search('str0'));
-    fopMsgM_setPaneData(&m740, scrn->search('st00'));
+    fopMsgM_setPaneData(&m740[1], scrn->search('str0'));
+    fopMsgM_setPaneData(&m740[0], scrn->search('st00'));
     fopMsgM_setPaneData(&m7B0, scrn->search('nt00'));
     fopMsgM_setPaneData(&m7E8, scrn->search('nk00'));
     fopMsgM_setPaneData(&m820, scrn->search('no11'));
-    fopMsgM_setPaneData(&m858, scrn->search('yaz2'));
-    fopMsgM_setPaneData(&m890, scrn->search('yaz1'));
+    fopMsgM_setPaneData(&m858[0], scrn->search('yaz2'));
+    fopMsgM_setPaneData(&m858[1], scrn->search('yaz1'));
     fopMsgM_setPaneData(&m8C8[0], scrn->search('ttyu'));
     fopMsgM_setPaneData(&m9A8[0], scrn->search('thld'));
     fopMsgM_setPaneData(&m9A8[1], scrn->search('tsic'));
@@ -57,16 +61,16 @@ void dMenu_Option_c::screenSet() {
     fopMsgM_setPaneData(&m8C8[2], scrn->search('tvib'));
     fopMsgM_setPaneData(&mAC0[1], scrn->search('tari'));
     fopMsgM_setPaneData(&mAC0[0], scrn->search('tnas'));
-    fopMsgM_setPaneData(&mB30, scrn->search('cr32'));
-    fopMsgM_setPaneData(&mB68, scrn->search('cr31'));
-    fopMsgM_setPaneData(&mBA0, scrn->search('cc22'));
-    fopMsgM_setPaneData(&mBD8, scrn->search('cc21'));
-    fopMsgM_setPaneData(&mC10, scrn->search('cc12'));
-    fopMsgM_setPaneData(&mC48, scrn->search('cr11'));
-    fopMsgM_setPaneData(&mC80, scrn->search('bs09'));
-    fopMsgM_setPaneData(&mCB8, scrn->search('bs00'));
+    fopMsgM_setPaneData(&mB30[0], scrn->search('cr32'));
+    fopMsgM_setPaneData(&mB30[1], scrn->search('cr31'));
+    fopMsgM_setPaneData(&mB30[2], scrn->search('cc22'));
+    fopMsgM_setPaneData(&mB30[3], scrn->search('cc21'));
+    fopMsgM_setPaneData(&mB30[4], scrn->search('cc12'));
+    fopMsgM_setPaneData(&mB30[5], scrn->search('cr11'));
+    fopMsgM_setPaneData(&mC80[0], scrn->search('bs09'));
+    fopMsgM_setPaneData(&mC80[1], scrn->search('bs00'));
     fopMsgM_setPaneData(&mCF0, scrn->search('blak'));
-    
+
     fopMsgM_messageGet(mD48, 0x19D);
     fopMsgM_messageGet(mD5C[0], 0x19B);
     fopMsgM_messageGet(mD5C[1], 0x1A9);
@@ -82,8 +86,8 @@ void dMenu_Option_c::screenSet() {
     
     ((J2DTextBox*)m008.pane)->setFont(mD2C);
     ((J2DTextBox*)m008.pane)->setString(mD48);
-    ((J2DTextBox*)m740.pane)->setFont(mD2C);
-    ((J2DTextBox*)m778.pane)->setFont(mD30);
+    ((J2DTextBox*)m740[0].pane)->setFont(mD2C);
+    ((J2DTextBox*)m740[1].pane)->setFont(mD30);
     
     for (int i = 0; i < 2; i++) {
         ((J2DTextBox*)m9A8[i].pane)->setFont(mD2C);
@@ -111,6 +115,7 @@ void dMenu_Option_c::screenSet() {
     m008.mUserArea = m008.pane->mRotation;
     m040.mUserArea = m040.pane->mRotation;
     m078.mUserArea = m078.pane->mRotation;
+
     if (m820.mUserArea > 180) m820.mUserArea -= 360;
     if (m008.mUserArea > 180) m008.mUserArea -= 360;
     if (m040.mUserArea > 180) m040.mUserArea -= 360;
@@ -119,113 +124,617 @@ void dMenu_Option_c::screenSet() {
 
 /* 801D3388-801D3518       .text mainInit__14dMenu_Option_cFv */
 void dMenu_Option_c::mainInit() {
-    /* Nonmatching */
+    fopMsgM_setNowAlphaZero(&mCF0);
+
+    for (int i = 0; i < 2; i++) {
+        fopMsgM_paneTrans(&m858[i], 0.0f, 0.0f);
+
+        // Potential bug: Why access 0th index multiple times?
+        m858[0].pane->rotate(m858[0].mSize.x / 2.0f, m858[0].mSize.y / 2.0f, ROTATE_Z, 90.0f);
+
+        fopMsgM_setNowAlphaZero(&mC80[i]);
+        fopMsgM_setNowAlphaZero(&m858[i]);
+        fopMsgM_setNowAlphaZero(&m9A8[i]);
+        fopMsgM_setNowAlphaZero(&mAC0[i]);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setNowAlphaZero(&mA18[i]);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (i != 1) {
+            fopMsgM_setNowAlphaZero(&m8C8[i]);
+        }
+    }
+
+    for (int i = 0; i < 6; i++) {
+        fopMsgM_paneTrans(&mB30[i], 0.0f, 0.0f);
+        fopMsgM_setNowAlphaZero(&mB30[i]);
+    }
+
+    mB30[0].mUserArea = 0;
+    mB30[1].mUserArea = 0;
+    mB30[2].mUserArea = 0;
+    m858[0].mUserArea = 0;
+    m858[1].mUserArea = 0;
+    
+    cursorMove();
 }
 
 /* 801D3518-801D35DC       .text noteInit__14dMenu_Option_cFv */
-void dMenu_Option_c::noteInit() {
-    /* Nonmatching */
+void dMenu_Option_c::noteInit() {   
+    fopMsgM_paneTrans(&m820, 0.0f, 35.0f);
+
+    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, m820.mUserArea + -12.0f);
+
+    fopMsgM_setNowAlphaZero(&m740[0]);
+    fopMsgM_setNowAlphaZero(&m740[1]);
+    fopMsgM_setNowAlphaZero(&m7B0);
+    fopMsgM_setNowAlphaZero(&m7E8);
+    fopMsgM_setNowAlphaZero(&m820);
 }
 
 /* 801D35DC-801D37C8       .text titleInit__14dMenu_Option_cFv */
-void dMenu_Option_c::titleInit() {
-    /* Nonmatching */
+void dMenu_Option_c::titleInit() {    
+    float rotate_angle = m008.mUserArea + 20;
+    if (rotate_angle > 180.0f) {
+        rotate_angle -= 360.0f;
+    }
+
+    if (rotate_angle < -180.0f) {
+        rotate_angle += 360.0f;
+    }
+
+    fopMsgM_paneTrans(&m008, 0.0f, -50.0f);
+    fopMsgM_paneTrans(&m040, 0.0f, -50.0f);
+    fopMsgM_paneTrans(&m078, 0.0f, -50.0f);
+
+    m008.pane->rotate(m008.mSize.x / 2.0f, m008.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m008.mUserArea);
+    m040.pane->rotate(m040.mSize.x / 2.0f, m040.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m040.mUserArea);
+    m078.pane->rotate(m078.mSize.x / 2.0f, m078.mSize.y / 2.0f, ROTATE_Z, rotate_angle + m078.mUserArea);
+
+    fopMsgM_setNowAlphaZero(&m008);
+    fopMsgM_setNowAlphaZero(&m040);
+    fopMsgM_setNowAlphaZero(&m078);
 }
 
 /* 801D37C8-801D38E0       .text mainMove__14dMenu_Option_cFv */
 void dMenu_Option_c::mainMove() {
-    /* Nonmatching */
+    float alpha = fopMsgM_valueIncrease(7, mC80[0].mUserArea, 0);
+    
+    fopMsgM_setNowAlpha(&mCF0, alpha);
+
+    fopMsgM_setNowAlpha(&m9A8[mE3C], alpha);
+    fopMsgM_setNowAlpha(&mAC0[mE3F], alpha);
+    fopMsgM_setNowAlpha(&mA18[mE3E], alpha);
+
+    for(int i = 0; i < 2; i++) {
+        fopMsgM_setNowAlpha(&mC80[i], alpha);
+        fopMsgM_setNowAlpha(&m858[i], alpha);
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        if (i != 1) {
+            fopMsgM_setNowAlpha(&m8C8[i], alpha);
+        }
+    }
+
+    fopMsgM_setNowAlpha(&mB30[0], alpha);
+    fopMsgM_setNowAlpha(&mB30[1], alpha);
 }
 
 /* 801D38E0-801D39F4       .text noteMove__14dMenu_Option_cFv */
 void dMenu_Option_c::noteMove() {
-    /* Nonmatching */
+    float alpha;
+    
+    alpha = fopMsgM_valueIncrease(7, mC80[0].mUserArea + -7, 0);
+    fopMsgM_paneTrans(&m820, 0.0f, (1.0f - alpha) * 35.0f);
+
+    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, (1.0f - alpha) * -12.0f + m820.mUserArea);
+    
+    fopMsgM_setNowAlpha(&m740[0], alpha);
+    fopMsgM_setNowAlpha(&m740[1], alpha);
+    fopMsgM_setNowAlpha(&m7B0, alpha);
+    fopMsgM_setNowAlpha(&m7E8, alpha);
 }
 
 /* 801D39F4-801D3C6C       .text titleMove__14dMenu_Option_cFv */
 void dMenu_Option_c::titleMove() {
-    /* Nonmatching */
+    float alpha = fopMsgM_valueIncrease(7, mC80[0].mUserArea + -7,0);
+    
+    float rotate_angle = m008.mUserArea + 20;
+    if (rotate_angle > 180.0f) {
+        rotate_angle -= 360.0f;
+    }
+
+    if (rotate_angle < -180.0f) {
+        rotate_angle += 360.0f;
+    }
+
+    f32 f30 = rotate_angle * (1.0f - alpha);
+
+    if (mC80[0].mUserArea == 8) {
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_STR, NULL, 0, 0);
+    }
+
+    float y = 1.0f - alpha;
+
+    fopMsgM_paneTrans(&m008, 0.0f, y * -50.0f);
+    fopMsgM_paneTrans(&m040, 0.0f, y * -50.0f);
+    fopMsgM_paneTrans(&m078, 0.0f, y * -50.0f);
+
+    m008.pane->rotate(m008.mSize.x / 2.0f, m008.mSize.y / 2.0f, ROTATE_Z, f30 + m008.mUserArea);
+    m040.pane->rotate(m040.mSize.x / 2.0f, m040.mSize.y / 2.0f, ROTATE_Z, f30 + m040.mUserArea);
+    m078.pane->rotate(m078.mSize.x / 2.0f, m078.mSize.y / 2.0f, ROTATE_Z, f30 + m078.mUserArea);
+
+    fopMsgM_setNowAlpha(&m008, alpha);
+    fopMsgM_setNowAlpha(&m040, alpha);
+    fopMsgM_setNowAlpha(&m078, alpha);
 }
 
 /* 801D3C6C-801D3D34       .text cursorMove__14dMenu_Option_cFv */
 void dMenu_Option_c::cursorMove() {
-    /* Nonmatching */
+    short sVar2 = mB30[1].mUserArea;
+
+    for (int i = 0; i < 6; i++) {
+        mB30[i].mPosCenter.x = m8C8[sVar2].mPosCenterOrig.x;
+        mB30[i].mPosCenter.y = m8C8[sVar2].mPosCenterOrig.y;
+
+        mB30[i].mSize.x = m8C8[sVar2].mSizeOrig.x;
+
+        fopMsgM_cposMove(&mB30[i]);
+        
+        J2DPane* mpPane = mB30[i].pane;
+        mpPane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, mpPane->getRotate());
+    }
+
+    cursorScale();
 }
 
 /* 801D3D34-801D3E70       .text cursorScale__14dMenu_Option_cFv */
 void dMenu_Option_c::cursorScale() {
-    /* Nonmatching */
+    float x[2];
+    float y;
+
+    switch (mB30[1].mUserArea) {
+        case 0: {
+            x[0] = m9A8[mE3C].mPosTopLeftOrig.x - 20.0f;
+            x[1] = m9A8[mE3C].mPosTopLeftOrig.x + m9A8[mE3C].mSizeOrig.x + 20.0f;
+            y = m9A8[mE3C].mPosCenterOrig.y;
+            break;
+        }
+        case 3: {
+            x[0] = mA18[mE3E].mPosTopLeftOrig.x - 20.0f;
+            x[1] = mA18[mE3E].mPosTopLeftOrig.x + mA18[mE3E].mSizeOrig.x + 20.0f;
+            y = mA18[mE3E].mPosCenterOrig.y;
+            break;
+        }
+        case 2: {
+            x[0] = mAC0[mE3F].mPosTopLeftOrig.x - 20.0f;
+            x[1] = mAC0[mE3F].mPosTopLeftOrig.x + mAC0[mE3F].mSizeOrig.x + 20.0f;
+            y = mAC0[mE3F].mPosCenterOrig.y;
+            break; 
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        m858[i].mPosCenter.x = x[i];
+        m858[i].mPosCenter.y = y;
+        fopMsgM_cposMove(&m858[i]);
+    }
 }
 
 /* 801D3E70-801D3F98       .text typeMove__14dMenu_Option_cFv */
-void dMenu_Option_c::typeMove() {
-    /* Nonmatching */
+void dMenu_Option_c::typeMove() {   
+    switch (mB30[1].mUserArea) {
+        case 0: {
+            for (int i = 0; i < 2; i++) {
+                if(i == mE3C) {
+                    fopMsgM_setInitAlpha(&m9A8[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&m9A8[i]);
+                }
+            }
+            break;
+        }
+        case 3: {
+            for (int i = 0; i < 3; i++) {
+                if(i == mE3E) {
+                    fopMsgM_setInitAlpha(&mA18[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&mA18[i]);
+                }
+            }
+            break;
+        }
+        case 2: {
+            for (int i = 0; i < 2; i++) {
+                if(i == mE3F) {
+                    fopMsgM_setInitAlpha(&mAC0[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&mAC0[i]);
+                }
+            }
+            break; 
+        }
+    }
+
+    cursorScale();
 }
 
 /* 801D3F98-801D41C4       .text yazAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::yazAnime() {
-    /* Nonmatching */
-    static const u32 moveX[6] = { 0, 2, 8, 18, 8, 2};
+    static const int moveX[6] = { 0, 2, 8, 18, 8, 2};
+    float fVar1;
+    
+    if (m858[0].mUserArea < 10) {
+        fVar1 = 6.0f;
+    }
+    else {
+        fVar1 = -6.0f;
+    }
+
+    m858[0].pane->rotate(m858[0].mSize.x / 2.0f, m858[0].mSize.y / 2.0f, ROTATE_Z, 90.0f + fVar1);
+    m858[1].pane->rotate(m858[1].mSize.x / 2.0f, m858[1].mSize.y / 2.0f, ROTATE_Z, 90.0f + fVar1);
+
+    m858[0].mUserArea++;
+
+    if(m858[1].mUserArea > 0) {
+        m858[1].mUserArea--; 
+        int x = (int)(m858[1].mPosTopLeft.x + 0.5f) + moveX[m858[1].mUserArea];
+        int y = (int)(m858[1].mPosTopLeft.y + 0.5f);
+        m858[1].pane->move(x, y);
+    }
+    else if (m858[1].mUserArea < 0) {
+        m858[1].mUserArea++;
+        int x = (int)(m858[0].mPosTopLeft.x + 0.5f) - moveX[abs(m858[1].mUserArea)];
+        int y = (int)(m858[0].mPosTopLeft.y + 0.5f);
+        m858[0].pane->move(x, y);
+    }
+
+    if (m858[0].mUserArea >= 20) {
+        m858[0].mUserArea = 0;
+    }
 }
 
 /* 801D41C4-801D428C       .text ccAnime__14dMenu_Option_cFv */
 void dMenu_Option_c::ccAnime() {
-    /* Nonmatching */
+    int r29 = mB30[0].mUserArea / 7;
+    for (int i = 0; i < 3; i++) {
+        if (i == r29) {
+            fopMsgM_setInitAlpha(&mB30[(i*2)+0]);
+            fopMsgM_setInitAlpha(&mB30[(i*2)+1]);
+        }
+        else {
+            fopMsgM_setNowAlphaZero(&mB30[(i*2)+0]);
+            fopMsgM_setNowAlphaZero(&mB30[(i*2)+1]);
+        }
+    }
+
+    mB30[0].mUserArea++;
+
+    if (mB30[0].mUserArea >= 0x15) {
+      mB30[0].mUserArea = 0;
+    }
 }
 
 /* 801D428C-801D47A4       .text stickMove__14dMenu_Option_cFUc */
-void dMenu_Option_c::stickMove(u8) {
-    /* Nonmatching */
+void dMenu_Option_c::stickMove(u8 param_1) {
+    switch (param_1) {
+        case 4: {
+            if (mB30[1].mUserArea > 0) {
+                mB30[1].mUserArea--;
+                if (mB30[1].mUserArea == 1) {
+                    mB30[1].mUserArea = 0;
+                }
+                cursorMove();
+                noteSet();
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
+            }
+            break;
+        }
+        case 8: {
+            if (mB30[1].mUserArea < 3) {
+                mB30[1].mUserArea++;
+                if (mB30[1].mUserArea == 1) {
+                    mB30[1].mUserArea = 2;
+                }
+                cursorMove();
+                noteSet();
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR, NULL, 0, 0);
+            }
+            break;
+        }
+        case 2: {
+            switch (mB30[1].mUserArea) {
+                case 0: {
+                    if (mE3C) {
+                        mE3C = 0;
+                    }
+                    else {
+                        mE3C = 1;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    break;
+                }
+                case 1: {
+                    if (mE3D) {
+                        mE3D = 0;
+                    }
+                    else {
+                        mE3D = 1;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    ;
+                    break;
+                }
+                case 3: {
+                    if (mE3E < 2) {
+                        mE3E++;
+                    }
+                    else {
+                        mE3E = 0;
+                    }
+                    m858[1].mUserArea = 6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_setOutputMode(soundMode[mE3E]);
+                    setSoundMode(soundMode[mE3E]);
+                    break;
+                }
+                case 2: {
+                    if ((JUTGamePad::sRumbleSupported & 0x80000000) != 0) {
+                        if (mE3F) {
+                            mE3F = 0;
+                        }
+                        else {
+                            mE3F = 1;
+                            g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
+                        }
+                        m858[1].mUserArea = 6;
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    }
+                    break;
+                }
+            }
+            typeMove();
+            break;
+        }
+        case 1: {
+            switch (mB30[1].mUserArea) {
+                case 0: {
+                    if (mE3C) {
+                        mE3C = 0;
+                    }
+                    else {
+                        mE3C = 1;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    break;
+                }
+                case 1: {
+                    if (mE3D) {
+                        mE3D = 0;
+                    }
+                    else {
+                        mE3D = 1;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    break;
+                }
+                case 3: {
+                    if (mE3E) {
+                        mE3E--;
+                    }
+                    else {
+                        mE3E = 2;
+                    }
+                    m858[1].mUserArea = -6;
+                    mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    mDoAud_setOutputMode(soundMode[mE3E]);
+                    setSoundMode(soundMode[mE3E]);
+                    break;
+                }
+                case 2: {
+                    if ((JUTGamePad::sRumbleSupported & 0x80000000) != 0) {
+                        if (mE3F) {
+                            mE3F = 0;
+                        }
+                        else {
+                            mE3F = 1;
+                            g_mDoCPd_gamePad[0]->mRumble.startPatternedRumble(&mE38, JUTGamePad::CRumble::LOOP_ONCE, 0x3c);
+                        }
+                        m858[1].mUserArea = -6;
+                        mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW, NULL, 0, 0);
+                    }
+                    break;
+                }
+            }
+            typeMove();
+            break;
+        }
+    }
 }
 
 /* 801D47A4-801D4C00       .text noteSet__14dMenu_Option_cFv */
 void dMenu_Option_c::noteSet() {
-    /* Nonmatching */
+    /* Nonmatching - heavily inlined, Ghidra output isn't helpful */
+    fopMsgM_itemMsgGet_c msgGet;
+    fopMsgM_msgDataProc_c msgDataProc;
+
+    strcpy(mD38, "");
+    strcpy(mD3C, "");
+    strcpy(mD40, "");
+    strcpy(mD44, "");
+
+    outFontInit();
+
+    float fVar1 = m740[0].pane[1].mBounds.getHeight();
+    float fVar2 = m740[1].pane[1].mBounds.getHeight();
+
+    mesg_header* head_p = msgGet.getMesgHeader(0x262);
+    
+    JUT_ASSERT(0x313, head_p);
+
+    const char* mesg = msgGet.getMessage(head_p);
+    mesg_entry msg_entry = msgGet.getMesgEntry(head_p);
+
+    msgDataProc.dataInit();
+
+    msgDataProc.stringLength();
+    msgDataProc.stringShift();
+    msgDataProc.iconIdxRefresh();
+
+    msgDataProc.stringSet();
+
+    ((J2DTextBox*)m740[0].pane)->setString(mD38);
+    ((J2DTextBox*)m740[1].pane)->setString(mD3C);
+
+    for (int i = 0; i < 0xf; i++) {
+        if(m0B0[i].mUserArea == -1) {
+            m0B0[i].mPosTopLeft.x = m740[0].mPosTopLeft.x;
+            m0B0[i].mPosTopLeftOrig.x = m740[0].mPosTopLeftOrig.x;
+
+            m0B0[i].mPosTopLeft.y = m740[0].mPosTopLeft.y;
+            m0B0[i].mPosTopLeftOrig.y = m740[0].mPosTopLeftOrig.y;
+
+            fopMsgM_outFontSet((J2DPicture*)&m0B0[i], &m0B0[i].mUserArea, 0, 0);
+        }
+    }
 }
 
 /* 801D4C00-801D4C88       .text outFontInit__14dMenu_Option_cFv */
 void dMenu_Option_c::outFontInit() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        m0B0[i].mUserArea = -1;
+        m0B0[i].pane->rotate(0.0f);
+        fopMsgM_setNowAlphaZero(&m0B0[i]);
+    }
 }
 
 /* 801D4C88-801D4D74       .text outFontMove__14dMenu_Option_cFv */
-void dMenu_Option_c::outFontMove() {
-    /* Nonmatching */
+void dMenu_Option_c::outFontMove() {  
+    for (int i = 0; i < 15; i++) {
+        if (m0B0[i].mUserArea != -1) {
+            m3F8[i].mPosTopLeft.x = m0B0[i].mPosTopLeft.x + (m740[0].mPosTopLeft.x + (m820.mPosTopLeft.x + m7B0.mPosTopLeft.x));
+            m3F8[i].mPosTopLeft.y = m0B0[i].mPosTopLeft.y + (m740[0].mPosTopLeft.y + (m820.mPosTopLeft.y + m7B0.mPosTopLeft.y));
+
+            f32 rotation_offset_x = m820.mPosCenter.x - m3F8[i].mPosTopLeft.x;
+            f32 rotation_offset_y = m820.mPosCenter.y - m3F8[i].mPosTopLeft.y;
+            m3F8[i].pane->rotate(rotation_offset_x, rotation_offset_y, ROTATE_Z, m820.pane->mRotation);
+        }
+        else {
+            fopMsgM_setNowAlphaZero(&m0B0[i]); 
+        }
+    }
 }
 
 /* 801D4D74-801D4E34       .text outFontDraw__14dMenu_Option_cFv */
 void dMenu_Option_c::outFontDraw() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        if (m0B0[i].mUserArea != -1) {
+            m0B0[i].mNowAlpha = m740[0].pane->getAlpha();
+            fopMsgM_outFontDraw2((J2DPicture*)m0B0[i].pane, (J2DPicture*)m3F8[i].pane, m3F8[i].mPosTopLeft.x, m3F8[i].mPosTopLeft.y, 0x19, 0x19, &m0B0[i].mUserArea, m0B0[i].mNowAlpha, m0B0[i].mPosTopLeftOrig.y);
+        }
+        else {
+            fopMsgM_setAlpha(&m0B0[i]); 
+        }
+    }
 }
 
 /* 801D4E34-801D505C       .text stringlength__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+f32 dMenu_Option_c::stringlength(fopMsgM_pane_class*, char*) {
+    /* Nonmatching - also heavily inlined */
 }
 
 /* 801D505C-801D50A0       .text changeScaleCenter__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+void dMenu_Option_c::changeScaleCenter(fopMsgM_pane_class* param_1, char* i_str) {
+    f32 str_length = stringlength(param_1, i_str);
+
+    param_1->mSize.x = str_length;
+    param_1->mSizeOrig.x = str_length;
+
+    fopMsgM_cposMove(param_1);
+
+    param_1->mPosTopLeftOrig.x = param_1->mPosTopLeft.x;
 }
 
 /* 801D50A0-801D50E8       .text setSoundMode__14dMenu_Option_cFUl */
-void dMenu_Option_c::setSoundMode(u32) {
-    /* Nonmatching */
+void dMenu_Option_c::setSoundMode(u32 i_soundMode) {
+    switch(i_soundMode) {
+        case 0:
+            OSSetSoundMode(0);
+            break;
+        case 1:
+        case 2:
+            OSSetSoundMode(1);
+            break;
+        default:
+            break;
+    }
 }
 
 /* 801D50E8-801D5148       .text changeScaleRight__14dMenu_Option_cFP18fopMsgM_pane_classPc */
-void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class*, char*) {
-    /* Nonmatching */
+void dMenu_Option_c::changeScaleRight(fopMsgM_pane_class* param_1, char* i_str) {
+    float str_length = stringlength(param_1, i_str);
+    float str_pos = (param_1->mPosTopLeft.x + param_1->mSize.x);
+
+    param_1->mSize.x = str_length;
+    param_1->mSizeOrig.x = str_length;
+
+    float new_str_pos = str_pos - param_1->mSize.x / 2.0f;
+
+    param_1->mPosCenter.x = new_str_pos;
+    param_1->mPosCenterOrig.x = new_str_pos;
+    
+    fopMsgM_cposMove(param_1);
 }
 
 /* 801D5148-801D5224       .text initialize__14dMenu_Option_cFv */
 void dMenu_Option_c::initialize() {
-    /* Nonmatching */
+    mainInit();
+
+    noteInit();
+
+    titleInit();
+
+    outFontInit();
+
+    mE40 = 1;
+
+    mCF0.mUserArea = 0;
+    m7B0.mUserArea = 0;
+
+    mC80[0].mUserArea = 0;
+    mC80[1].mUserArea = 0;
+
+    mE3C = dComIfGs_getOptAttentionType();
+    mE3D = dComIfGs_getOptRuby();
+    mE3E = dComIfGs_getOptSound();
+
+    if ((JUTGamePad::sRumbleSupported & 0x80000000)) {
+        mE3F = dComIfGp_getNowVibration();
+    }
+    else {
+        mE3F = 0;
+    }
+
+    mE41 = 0;
+
+    mDoAud_setOutputMode(soundMode[mE3E]);
+    setSoundMode(soundMode[mE3E]);
 }
 
 /* 801D5224-801D53F0       .text _create__14dMenu_Option_cFv */
 void dMenu_Option_c::_create() {
-    /* Nonmatching */
+    /* Nonmatching - Code 100% */
     scrn = new J2DScreen();
     JUT_ASSERT(1074, scrn != NULL);
     scrn->set("option.blo", mpArchive);
@@ -247,25 +756,253 @@ void dMenu_Option_c::_create() {
 
 /* 801D53F0-801D546C       .text _delete__14dMenu_Option_cFv */
 void dMenu_Option_c::_delete() {
-    /* Nonmatching */
+    mpArchive->removeResourceAll();
+    delete scrn;
+    delete stick;
+    mDoHIO_deleteChild(g_moHIO.mNo);
 }
 
 /* 801D546C-801D576C       .text _move__14dMenu_Option_cFv */
 void dMenu_Option_c::_move() {
-    /* Nonmatching */
+    u8 check_trigger = stick->checkTrigger();
+
+    if (mE3F) {
+        if ((JUTGamePad::sRumbleSupported & 0x80000000U) == 0) {
+            mE3F = 0;
+
+            for(int i = 0; i < 2; i++) {
+                if (i == mE3F) {
+                    fopMsgM_setInitAlpha(&mAC0[i]);
+                }
+                else {
+                    fopMsgM_setNowAlphaZero(&mAC0[i]);
+                }
+            }
+
+            cursorScale();
+        }
+    }
+
+    if (CPad_CHECK_TRIG_A(0) && 
+        !CPad_CHECK_TRIG_START(0) && 
+        !CPad_CHECK_TRIG_B(0) && 
+        !CPad_CHECK_TRIG_UP(0) && 
+        !CPad_CHECK_TRIG_DOWN(0) && 
+        !CPad_CHECK_TRIG_LEFT(0) && 
+        !CPad_CHECK_TRIG_RIGHT(0)
+    ) {
+        mE40 = 3;
+
+        mC80[0].mUserArea = 0;
+
+        mE41 = 1;
+
+        dComIfGs_setOptAttentionType(mE3C);
+        dComIfGs_setOptRuby(mE3D);
+
+        if (JUTGamePad::sRumbleSupported & 0x80000000) {
+          dComIfGs_setOptVibration(mE3F);
+        }
+
+        dComIfGp_setNowVibration(mE3F);
+        dComIfGs_setOptSound(mE3E);
+
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
+    }
+    else if (CPad_CHECK_TRIG_B(0) && 
+            !CPad_CHECK_TRIG_START(0) && 
+            !CPad_CHECK_TRIG_A(0) && 
+            !CPad_CHECK_TRIG_UP(0) && 
+            !CPad_CHECK_TRIG_DOWN(0) && 
+            !CPad_CHECK_TRIG_LEFT(0) && 
+            !CPad_CHECK_TRIG_RIGHT(0)
+    ) {
+        mE40 = 3;
+        mE41 = 1;
+        mC80[0].mUserArea = 0;
+        mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
+    }
+    else {
+        if (!check_trigger) {
+          m7B0.mUserArea = 0;
+          mC80[1].mUserArea = 0;
+        }
+        else {
+            if (mC80[1].mUserArea == 0) {
+                stickMove(check_trigger);
+            }
+
+            int sVar2;
+            if (m7B0.mUserArea < 2) {
+                sVar2 = 10;
+            } else {
+                sVar2 = 4;
+            }
+
+            mC80[1].mUserArea++;
+
+            if (mC80[1].mUserArea > sVar2) {
+                sVar2 = m7B0.mUserArea;
+
+                if (sVar2 < 2) {
+                    m7B0.mUserArea = sVar2 + 1;
+                }
+
+                mC80[1].mUserArea = 0;
+            }
+        }
+    }
+    
+    yazAnime();
+
+    if (mB30[1].mUserArea != 2 || JUTGamePad::sRumbleSupported & 0x80000000)
+    {
+        m858[0].pane->show();
+        m858[1].pane->show();
+    }
+    else {
+        m858[0].pane->hide();
+        m858[1].pane->hide();
+    }
+
+    ccAnime();
+
+    outFontMove();
+
+    if (mE3D) {
+        m740[1].pane->hide();
+    }
+    else {
+        m740[1].pane->show();
+    }
 }
 
 /* 801D576C-801D5C04       .text _draw__14dMenu_Option_cFv */
 void dMenu_Option_c::_draw() {
-    /* Nonmatching */
+    /* Nonmatching - probably some inlining, tried using `setAlpha` and `getAlpha` but didn't work */ 
+    if (mE41 == 0) {
+        fopMsgM_setAlpha(&m008);
+        fopMsgM_setAlpha(&m040);
+        fopMsgM_setAlpha(&m078);
+
+        for (int i = 0; i < 2; i++) {
+            fopMsgM_setAlpha(&m740[i]);
+            fopMsgM_setAlpha(&m858[i]);
+            fopMsgM_setAlpha(&m9A8[i]);
+            fopMsgM_setAlpha(&mAC0[i]);
+            fopMsgM_setAlpha(&mC80[i]);
+        }
+
+        fopMsgM_setAlpha(&m7B0);
+        fopMsgM_setAlpha(&m7E8);
+        fopMsgM_setAlpha(&m820);
+
+        for (int i = 0; i < 4; i++) {
+            if (i != 1) {
+                fopMsgM_setAlpha(&m8C8[i]);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            fopMsgM_setAlpha(&mA18[i]);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            fopMsgM_setAlpha(&mB30[i]);
+        }
+        
+        fopMsgM_setAlpha(&mCF0);
+    }
+    else {
+        float alpha_scale = 1.0f - fopMsgM_valueIncrease(10, mC80[0].mUserArea, 0);
+        
+        m008.pane->mAlpha *= alpha_scale;
+        m040.pane->mAlpha *= alpha_scale;
+        m078.pane->mAlpha *= alpha_scale;
+
+        for (int i = 0; i < 2; i++) {
+            m740[i].pane->mAlpha *= alpha_scale;
+            m8C8[i].pane->mAlpha *= alpha_scale;
+            m9A8[i].pane->mAlpha *= alpha_scale;
+            mAC0[i].pane->mAlpha *= alpha_scale;
+            mC80[i].pane->mAlpha *= alpha_scale;
+        }
+
+        m7B0.pane->mAlpha *= alpha_scale;
+        m7E8.pane->mAlpha *= alpha_scale;
+        m820.pane->mAlpha *= alpha_scale;
+        
+        for (int i = 0; i < 4; i++) {
+            if (i != 1) {
+                m8C8[i].pane->mAlpha *= alpha_scale;
+            }
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            mA18[i].pane->mAlpha *= alpha_scale;
+        }
+
+        for (int i = 0; i < 6; i++) {
+            mAC0[i].pane->mAlpha = mB30[i].pane->mAlpha * alpha_scale;
+        }
+
+        mCF0.pane->mAlpha *= alpha_scale;
+    }
+
+    outFontDraw();
+
+    scrn->draw(0.0f, 0.0f, (J2DGrafContext*)dComIfGp_getCurrentGrafPort());
 }
 
 /* 801D5C04-801D5CBC       .text _open__14dMenu_Option_cFv */
-void dMenu_Option_c::_open() {
-    /* Nonmatching */
+bool dMenu_Option_c::_open() {
+    bool ret = false;
+
+    dMenu_setPushMenuButton(0);
+
+    if (mC80[0].mUserArea == 0) {
+        noteSet();
+    }
+
+    mC80[0].mUserArea++;
+
+    if (mC80[0].mUserArea <= 7) {
+        mainMove();
+    }
+    else if (mC80[0].mUserArea <= 0xe) {
+        noteMove();
+
+        titleMove();
+
+        _move();
+
+        if (mC80[0].mUserArea == 0xe) {
+          mE40 = 2;
+
+          mC80[0].mUserArea = 0;
+
+          ret = true;
+        }
+    }
+
+    return ret;
 }
 
 /* 801D5CBC-801D5D38       .text _close__14dMenu_Option_cFv */
-void dMenu_Option_c::_close() {
-    /* Nonmatching */
+bool dMenu_Option_c::_close() {
+    bool ret = false;
+    
+    int value = ++mC80[0].mUserArea;
+    
+    fopMsgM_valueIncrease(10, value, 0);
+    
+    dMenu_setPushMenuButton(2);
+
+    if (value >= 10) {
+        initialize();
+        mE40 = 0;
+        ret = true;
+    }
+
+    return ret;
 }
