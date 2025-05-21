@@ -25,7 +25,7 @@ dMc_HIO_c::dMc_HIO_c() {
     m52 = 130;
     m4E = 250;
     m50 = 20;
-    m58.set(-1, 170, 0, 0);
+    m58.set(0xFF, 0xAA, 0x00, 0x00);
     m44 = 13;
 }
 
@@ -157,13 +157,13 @@ void dMenu_Collect_c::screenSet() {
     ((J2DTextBox*)(m778).pane)->setFont(m2470);
 
     // Couple of functions missing here
-    ((J2DTextBox*)(m740).pane)->setWhite(-1);
-    ((J2DTextBox*)(m740).pane)->setCharColor(-1);
-    ((J2DTextBox*)(m740).pane)->setGradColor(-1);
+    ((J2DTextBox*)(m740).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(m740).pane)->setCharColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m740).pane)->setGradColor(0xFFFFFFFF);
 
-    ((J2DTextBox*)(m778).pane)->setWhite(-1);
-    ((J2DTextBox*)(m778).pane)->setCharColor(-1);
-    ((J2DTextBox*)(m778).pane)->setGradColor(-1);
+    ((J2DTextBox*)(m778).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(m778).pane)->setCharColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m778).pane)->setGradColor(0xFFFFFFFF);
     
 
     fopMsgM_setPaneData(&m858, m004, 'wd');

@@ -16,9 +16,19 @@ class dMenu_Option_c : public dDlst_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, f32) {}
     void getQuitStatus() {}
-    void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
-    void setTextArea(char*, char*, char*, char*) {}
+    void setArchive(JKRArchive* archive) {
+        mpArchive = archive;
+    }
+    void setFont(JUTFont* font_1, JUTFont* font_2) {
+        mD2C = font_1;
+        mD30 = font_2;
+    }
+    void setTextArea(char* param_1, char* param_2, char* param_3, char* param_4) {
+        mD38 = param_1;
+        mD3C = param_2;
+        mD40 = param_3;
+        mD44 = param_4;
+    }
 
     void screenSet();
     void mainInit();
