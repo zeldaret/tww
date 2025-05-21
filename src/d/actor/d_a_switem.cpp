@@ -6,6 +6,7 @@
 #include "d/actor/d_a_switem.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -220,7 +221,7 @@ actor_process_profile_definition g_profile_SW_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x013A,
+    /* Priority     */ PRIO_SW_ITEM,
     /* Actor SubMtd */ &daSwItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

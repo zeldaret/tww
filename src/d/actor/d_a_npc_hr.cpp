@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_hr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000A0       .text init__14daNpc_Wind_EffFv */
 void daNpc_Wind_Eff::init() {
@@ -504,7 +505,7 @@ actor_process_profile_definition g_profile_NPC_HR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0172,
+    /* Priority     */ PRIO_NPC_HR,
     /* Actor SubMtd */ &l_daNpc_Hr_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

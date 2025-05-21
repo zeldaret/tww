@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_YLzou.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
@@ -219,7 +220,7 @@ actor_process_profile_definition g_profile_Obj_YLzou = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0058,
+    /* Priority     */ PRIO_Obj_YLzou,
     /* Actor SubMtd */ &l_daObjYLzou_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

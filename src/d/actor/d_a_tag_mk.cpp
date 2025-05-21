@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tag_mk.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000084       .text getSwbit__10daTag_Mk_cFv */
 void daTag_Mk_c::getSwbit() {
@@ -204,7 +205,7 @@ actor_process_profile_definition g_profile_TAG_MK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011F,
+    /* Priority     */ PRIO_TAG_MK,
     /* Actor SubMtd */ &l_daTag_Mk_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -14,6 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_audio.h"
@@ -2260,6 +2261,6 @@ msg_process_profile_definition g_profile_MESG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ 0x01D8,
+    /* Priority     */ PRIO_MESG,
     /* Msg SubMtd   */ &l_dMesg_Method,
 };

@@ -11,6 +11,7 @@
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_bg_s_func.h"
 #include "d/res/res_link.h"
 #include "f_op/f_op_actor_mng.h"
@@ -300,7 +301,7 @@ actor_process_profile_definition g_profile_ESA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D0,
+    /* Priority     */ PRIO_ESA,
     /* Actor SubMtd */ &l_daEsa_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

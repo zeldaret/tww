@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_gy.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000003CC       .text __ct__10daGy_HIO_cFv */
 daGy_HIO_c::daGy_HIO_c() {
@@ -259,7 +260,7 @@ actor_process_profile_definition g_profile_GY = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D8,
+    /* Priority     */ PRIO_GY,
     /* Actor SubMtd */ &daGyMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

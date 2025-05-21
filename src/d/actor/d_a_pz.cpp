@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_pz.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000310       .text __ct__10daPz_HIO_cFv */
 daPz_HIO_c::daPz_HIO_c() {
@@ -414,7 +415,7 @@ actor_process_profile_definition g_profile_PZ = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C5,
+    /* Priority     */ PRIO_PZ,
     /* Actor SubMtd */ &daPzMethodTable,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

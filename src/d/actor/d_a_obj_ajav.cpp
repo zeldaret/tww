@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ajav.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000170       .text daObjAjav_make_splash__9daObjAjavF4cXyzf */
 void daObjAjav::daObjAjav_make_splash(cXyz, float) {
@@ -233,7 +234,7 @@ actor_process_profile_definition g_profile_Obj_Ajav = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0047,
+    /* Priority     */ PRIO_Obj_Ajav,
     /* Actor SubMtd */ &daObjAjav::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -7,6 +7,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 enum Action {
     ACT_ON_ALL,
@@ -271,7 +272,7 @@ actor_process_profile_definition g_profile_ANDSW2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0136,
+    /* Priority     */ PRIO_ANDSW2,
     /* Actor SubMtd */ &l_daAndsw2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

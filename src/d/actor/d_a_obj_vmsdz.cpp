@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_vmsdz.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_vmsdz.h"
 
 const char daObjVmsdz_c::M_arcname[6] = "VmsDZ";
@@ -123,7 +124,7 @@ actor_process_profile_definition g_profile_Obj_Vmsdz = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004E,
+    /* Priority     */ PRIO_Obj_Vmsdz,
     /* Actor SubMtd */ &Vmsdz_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_daiocta.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002B0       .text __ct__15daDaiocta_HIO_cFv */
 daDaiocta_HIO_c::daDaiocta_HIO_c() {
@@ -305,7 +306,7 @@ actor_process_profile_definition g_profile_DAIOCTA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D5,
+    /* Priority     */ PRIO_DAIOCTA,
     /* Actor SubMtd */ &daDaioctaMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

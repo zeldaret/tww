@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_photo.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002D0       .text __ct__12daNpcPhoto_cFv */
 daNpcPhoto_c::daNpcPhoto_c() {
@@ -355,7 +356,7 @@ actor_process_profile_definition g_profile_NPC_PHOTO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x017D,
+    /* Priority     */ PRIO_NPC_PHOTO,
     /* Actor SubMtd */ &daNpc_PhotoMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

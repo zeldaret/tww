@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 static daObj_Pbco_HIO_c l_HIO;
 const char daObj_Pbco_c::M_arcname[] = "Pbco";
@@ -144,7 +145,7 @@ actor_process_profile_definition g_profile_Obj_Pbco = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0021,
+    /* Priority     */ PRIO_Obj_Pbco,
     /* Actor SubMtd */ &daObj_PbcoMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

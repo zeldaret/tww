@@ -6,6 +6,7 @@
 #include "d/actor/d_a_swpropeller.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
@@ -95,7 +96,7 @@ actor_process_profile_definition g_profile_SW_PROPELLER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0199,
+    /* Priority     */ PRIO_SW_PROPELLER,
     /* Actor SubMtd */ &daSwPropMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

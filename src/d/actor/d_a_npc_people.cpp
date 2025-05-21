@@ -9,6 +9,7 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_dai.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
@@ -8369,7 +8370,7 @@ actor_process_profile_definition g_profile_NPC_PEOPLE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x017B,
+    /* Priority     */ PRIO_NPC_PEOPLE,
     /* Actor SubMtd */ &daNpc_PeopleMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

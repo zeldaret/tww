@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_pirate_flag.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -545,7 +546,7 @@ actor_process_profile_definition g_profile_PIRATE_FLAG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x006A,
+    /* Priority     */ PRIO_PIRATE_FLAG,
     /* Actor SubMtd */ &l_daPirate_Flag_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

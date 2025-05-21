@@ -10,6 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_kita.h"
 #include "dolphin/types.h"
@@ -481,7 +482,7 @@ actor_process_profile_definition g_profile_KITA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0093,
+    /* Priority     */ PRIO_KITA,
     /* Actor SubMtd */ &l_daKita_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

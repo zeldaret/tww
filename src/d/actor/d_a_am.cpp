@@ -9,6 +9,7 @@
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -1348,7 +1349,7 @@ actor_process_profile_definition g_profile_AM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00BD,
+    /* Priority     */ PRIO_AM,
     /* Actor SubMtd */ &l_daAM_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

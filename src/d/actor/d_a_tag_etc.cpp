@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 enum Action {
     ACT_WAIT,
@@ -259,7 +260,7 @@ actor_process_profile_definition g_profile_TAG_ETC = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0122,
+    /* Priority     */ PRIO_TAG_ETC,
     /* Actor SubMtd */ &l_daTag_Etc_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

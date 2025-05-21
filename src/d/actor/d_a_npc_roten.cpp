@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"
@@ -2923,7 +2924,7 @@ actor_process_profile_definition g_profile_NPC_ROTEN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x017A,
+    /* Priority     */ PRIO_NPC_ROTEN,
     /* Actor SubMtd */ &daNpc_RotenMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

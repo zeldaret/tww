@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -2595,7 +2596,7 @@ actor_process_profile_definition g_profile_AGBSW0 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x000D,
+    /* Priority     */ PRIO_AGBSW0,
     /* Actor SubMtd */ &l_daAgbsw0_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

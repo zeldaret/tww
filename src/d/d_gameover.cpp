@@ -6,6 +6,7 @@
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
@@ -459,6 +460,6 @@ msg_process_profile_definition g_profile_GAMEOVER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ 0x01DE,
+    /* Priority     */ PRIO_GAMEOVER,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

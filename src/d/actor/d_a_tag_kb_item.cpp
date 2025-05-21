@@ -6,6 +6,7 @@
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
@@ -102,7 +103,7 @@ actor_process_profile_definition g_profile_TAG_KB_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0127,
+    /* Priority     */ PRIO_TAG_KB_ITEM,
     /* Actor SubMtd */ &daTagKbItemMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

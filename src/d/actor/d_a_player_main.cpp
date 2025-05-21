@@ -18,6 +18,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -13084,7 +13085,7 @@ actor_process_profile_definition2 g_profile_PLAYER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0068,
+    /* Priority     */ PRIO_PLAYER,
     /* Actor SubMtd */ (actor_method_class*)&l_daPy_Method,
     /* Status       */ fopAcStts_FREEZE_e,
     /* Group        */ fopAc_PLAYER_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_msdan.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 cPhs_State daObjMsdan::Act_c::Mthd_Create() {
@@ -68,7 +69,7 @@ actor_process_profile_definition g_profile_Obj_Msdan = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0038,
+    /* Priority     */ PRIO_Obj_Msdan,
     /* Actor SubMtd */ &daObjMsdan::Mthd_Msdan,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

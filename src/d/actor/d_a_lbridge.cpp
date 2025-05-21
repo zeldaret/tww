@@ -6,6 +6,7 @@
 #include "d/actor/d_a_lbridge.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_gbrg00.h"
 
 const char daLbridge_c::m_arcname[] = "Gbrg00";
@@ -350,7 +351,7 @@ actor_process_profile_definition g_profile_LIGHTBRIDGE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0196,
+    /* Priority     */ PRIO_LIGHTBRIDGE,
     /* Actor SubMtd */ &daLbridgeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

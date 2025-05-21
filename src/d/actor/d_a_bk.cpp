@@ -9,6 +9,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_search.h"
 #include "d/actor/d_a_bridge.h"
@@ -5106,7 +5107,7 @@ actor_process_profile_definition g_profile_BK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00B0,
+    /* Priority     */ PRIO_BK,
     /* Actor SubMtd */ &l_daBk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_hcbh.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000D8       .text chk_appear__11daObjHcbh_cFv */
 void daObjHcbh_c::chk_appear() {
@@ -129,7 +130,7 @@ actor_process_profile_definition g_profile_Obj_Hcbh = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x005D,
+    /* Priority     */ PRIO_Obj_Hcbh,
     /* Actor SubMtd */ &l_daObjHcbh_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

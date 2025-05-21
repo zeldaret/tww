@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_fire.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000F8       .text _delete__8daFire_cFv */
 bool daFire_c::_delete() {
@@ -129,7 +130,7 @@ actor_process_profile_definition g_profile_Fire = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0192,
+    /* Priority     */ PRIO_Fire,
     /* Actor SubMtd */ &daFireMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

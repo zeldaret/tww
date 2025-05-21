@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_kanoke.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002F4       .text __ct__13daObjKanoke_cFv */
 daObjKanoke_c::daObjKanoke_c() {
@@ -169,7 +170,7 @@ actor_process_profile_definition g_profile_Obj_Kanoke = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0078,
+    /* Priority     */ PRIO_Obj_Kanoke,
     /* Actor SubMtd */ &daObjKanokeMethodTable,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
