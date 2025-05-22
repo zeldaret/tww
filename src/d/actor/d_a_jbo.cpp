@@ -6,6 +6,7 @@
 #include "d/actor/d_a_jbo.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000108       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -70,7 +71,7 @@ actor_process_profile_definition g_profile_JBO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C8,
+    /* Priority     */ PRIO_JBO,
     /* Actor SubMtd */ &l_daJBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,

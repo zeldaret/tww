@@ -45,16 +45,23 @@ extern int __cntlzw(uint);
 extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
 
-#define VERSION_JPN 0
-#define VERSION_USA 1
-#define VERSION_PAL 2
+#ifndef __MWERKS__
+extern void __sync();
+#endif
 
-#if VERSION == VERSION_USA
-    #define VERSION_SELECT(JPN, USA, PAL) (USA)
+#define VERSION_DEMO 0
+#define VERSION_JPN 1
+#define VERSION_USA 2
+#define VERSION_PAL 3
+
+#if VERSION == VERSION_DEMO
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (DEMO)
+#elif VERSION <= VERSION_JPN
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (JPN)
+#elif VERSION == VERSION_USA
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (USA)
 #elif VERSION == VERSION_PAL
-    #define VERSION_SELECT(JPN, USA, PAL) (PAL)
-#elif VERSION == VERSION_JPN
-    #define VERSION_SELECT(JPN, USA, PAL) (JPN)
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (PAL)
 #endif
 
 #endif

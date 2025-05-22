@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_gnd.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000023C       .text __ct__11daGnd_HIO_cFv */
 daGnd_HIO_c::daGnd_HIO_c() {
@@ -214,7 +215,7 @@ actor_process_profile_definition g_profile_GND = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00EB,
+    /* Priority     */ PRIO_GND,
     /* Actor SubMtd */ &l_daGnd_Method,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -114,7 +114,7 @@ const dCamera__Type dCamera_c::types[] = {
         "Jump",
         {dCamStyle_FN08_e, dCamStyle_FN08_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW01_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM03_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
     },
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     {
         "DungeonUp",
         {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM02_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},
@@ -168,7 +168,7 @@ const dCamera__Type dCamera_c::types[] = {
         "BoatBattle",
         {dCamStyle_BN08_e, dCamStyle_BP08_e, dCamStyle_LL17_e, dCamStyle_TT01_e, dCamStyle_SS01_e, dCamStyle_BW07_e, dCamStyle_BE07_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM07_e, dCamStyle_NONE_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD01_e},
     },
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     {
         "Water",
         {dCamStyle_FN14_e, dCamStyle_FN14_e, dCamStyle_LL02_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM14_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
@@ -258,7 +258,7 @@ const dCamera__Type dCamera_c::types[] = {
         "Restrict",
         {dCamStyle_LN01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SS01_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_NONE_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_NONE_e, dCamStyle_EN00_e, dCamStyle_NONE_e, dCamStyle_NONE_e, dCamStyle_NONE_e},
     },
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     {
         "DungeonUp",
         {dCamStyle_FN04_e, dCamStyle_FN04_e, dCamStyle_LL06_e, dCamStyle_TT02_e, dCamStyle_SS01_e, dCamStyle_LW02_e, dCamStyle_LE01_e, dCamStyle_LH02_e, dCamStyle_LA02_e, dCamStyle_LB02_e, dCamStyle_SX01_e, dCamStyle_SY01_e, dCamStyle_MM08_e, dCamStyle_CC01_e, dCamStyle_SN15_e, dCamStyle_JN05_e, dCamStyle_EN00_e, dCamStyle_HN18_e, dCamStyle_HN16_e, dCamStyle_DD02_e},

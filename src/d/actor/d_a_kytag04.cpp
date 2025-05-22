@@ -7,6 +7,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag04_Draw__FP13kytag04_class */
 static BOOL daKytag04_Draw(kytag04_class*) {
@@ -77,7 +78,7 @@ actor_process_profile_definition g_profile_KYTAG04 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A4,
+    /* Priority     */ PRIO_KYTAG04,
     /* Actor SubMtd */ &l_daKytag04_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

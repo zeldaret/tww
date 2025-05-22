@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_auction.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
 daNpcAuction_c::daNpcAuction_c() {
@@ -235,7 +236,7 @@ actor_process_profile_definition g_profile_NPC_AUCTION = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x016F,
+    /* Priority     */ PRIO_NPC_AUCTION,
     /* Actor SubMtd */ &daNpc_AuctionMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

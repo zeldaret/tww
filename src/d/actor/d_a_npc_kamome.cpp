@@ -7,6 +7,7 @@
 #include "d/res/res_kamome.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player_main.h"
@@ -449,7 +450,7 @@ void daNpc_kam_c::npcAction(void* arg) {
         speedF = 0.0f;
         offHyoiKamome();
         setNpcAction(&daNpc_kam_c::waitNpcAction, NULL);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
     }
@@ -887,7 +888,7 @@ BOOL daNpc_kam_c::checkCommandTalk() {
 void daNpc_kam_c::returnLinkPlayer() {
     changePlayer(dComIfGp_getLinkPlayer());
     offHyoiKamome();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoAud_zelAudio_c::getInterface()->field_0x0062 = 0;
 #endif
 }
@@ -1016,7 +1017,7 @@ void daNpc_kam_c::initialDescendEvent(int evtStaffId) {
     mTargetAngVelX = l_HIO.mHio1.mGlidingAngVelX;
     
     mDoAud_seStart(JA_SE_HYOI_USE_DEMO, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoAud_zelAudio_c::getInterface()->field_0x0062 = 1;
 #endif
     
@@ -1285,7 +1286,7 @@ BOOL daNpc_kam_c::execute() {
         
         if (!isNoBgCheck()) {
             mAcch.CrrPos(*dComIfG_Bgsp());
-            if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+            if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 fopAcM_SetRoomNo(this, roomNo);
                 tevStr.mRoomNo = roomNo;
@@ -1426,7 +1427,7 @@ actor_process_profile_definition g_profile_NPC_KAM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00B6,
+    /* Priority     */ PRIO_NPC_KAM,
     /* Actor SubMtd */ &l_daNpc_kam_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

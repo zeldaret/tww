@@ -4,6 +4,7 @@
 #include "d/actor/d_a_seatag.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
 static BOOL daSeatag_Draw(daSeatag_c*) {
@@ -50,7 +51,7 @@ actor_process_profile_definition g_profile_SEATAG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01DF,
+    /* Priority     */ PRIO_SEATAG,
     /* Actor SubMtd */ &l_daSeatag_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_waterfall.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000F0       .text _delete__9daWfall_cFv */
 bool daWfall_c::_delete() {
@@ -144,7 +145,7 @@ actor_process_profile_definition g_profile_WATERFALL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0195,
+    /* Priority     */ PRIO_WATERFALL,
     /* Actor SubMtd */ &daWfallMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

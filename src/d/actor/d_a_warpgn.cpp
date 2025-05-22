@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_warpgn.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000120       .text _delete__10daWarpgn_cFv */
 bool daWarpgn_c::_delete() {
@@ -194,7 +195,7 @@ actor_process_profile_definition g_profile_WARPGANON = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A7,
+    /* Priority     */ PRIO_WARPGANON,
     /* Actor SubMtd */ &daWarpgnMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

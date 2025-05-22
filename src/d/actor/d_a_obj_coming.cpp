@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_coming.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000128       .text init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::init(const daObjComing::Act_c*) {
@@ -188,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Coming = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0027,
+    /* Priority     */ PRIO_Obj_Coming,
     /* Actor SubMtd */ &daObjComing::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

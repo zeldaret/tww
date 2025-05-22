@@ -23,7 +23,7 @@ void destroyVideo() {
     VIWaitForRetrace();
 }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 int mDoRst::mResetFlag;
 int mDoRst::mResetPrepare;
 int mDoRst::m3ButtonResetFlag;
@@ -44,7 +44,7 @@ void mDoRst_reset(int param_0, u32 param_1, int param_2) {
     JUTGamePad::clearForReset();
     mDoAud_zelAudio_c::offInitFlag();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     VIWaitForRetrace();
     VIWaitForRetrace();
 #endif
@@ -64,7 +64,7 @@ void mDoRst_reset(int param_0, u32 param_1, int param_2) {
     destroyVideo();
     my_OSCancelAlarmAll();
     LCDisable();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     OSSetSaveRegion(mDoRst::mResetData, (u8*)&mDoRst::getResetData + 0x10);
 #endif
     OSResetSystem(param_0, param_1, param_2);
@@ -92,7 +92,7 @@ void mDoRst_resetCallBack(int port, void*) {
             JUTGamePad::clearForReset();
             JUTGamePad::CRumble::setEnabled(0xF0000000);
         }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if (DVDCheckDisk() == 0) {
             mDoRst_reset(1, 0x80000000, 0);
         }

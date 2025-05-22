@@ -8,6 +8,7 @@
 #include "d/d_bg_w_hf.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "dolphin/gf/GFGeometry.h"
@@ -276,7 +277,7 @@ actor_process_profile_definition g_profile_BWDG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00CE,
+    /* Priority     */ PRIO_BWDG,
     /* Actor SubMtd */ &l_daBwdg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

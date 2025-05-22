@@ -34,6 +34,8 @@ STATIC_ASSERT(sizeof(JUTExternalFB) == 0x14);
 #define JUT_PRINT_FLOAT 8
 #define JUT_PRINT_STACK 16
 
+typedef void (*JUTExceptionUserCallback)(OSError, OSContext*, u32, u32);
+
 class JUTException : public JKRThread {
 public:
     enum EInfoPage {
@@ -79,8 +81,8 @@ public:
     static void panic_f(char const*, int, char const*, ...);
     static void setFPException(u32);
     static bool searchPartialModule(u32, u32*, u32*, u32*, u32*);
-    static OSErrorHandler setPreUserCallback(OSErrorHandler);
-    static OSErrorHandler setPostUserCallback(OSErrorHandler);
+    static JUTExceptionUserCallback setPreUserCallback(JUTExceptionUserCallback);
+    static JUTExceptionUserCallback setPostUserCallback(JUTExceptionUserCallback);
     static void appendMapFile(char const*);
     static bool queryMapAddress(char*, u32, s32, u32*, u32*, char*, u32, bool, bool);
     static bool queryMapAddress_single(char*, u32, s32, u32*, u32*, char*, u32, bool,
@@ -109,8 +111,8 @@ private:
     static JSUList<JUTException::JUTExMapFile> sMapFileList;
     static OSMessage sMessageBuffer[1];
     static JUTException* sErrorManager;
-    static OSErrorHandler sPreUserCallback;
-    static OSErrorHandler sPostUserCallback;
+    static JUTExceptionUserCallback sPreUserCallback;
+    static JUTExceptionUserCallback sPostUserCallback;
     static void* sConsoleBuffer;
     static u32 sConsoleBufferSize;
     static JUTConsole* sConsole;

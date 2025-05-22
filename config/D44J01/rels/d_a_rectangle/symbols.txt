@@ -1,0 +1,12 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global
+_unresolved = .text:0x00000058; // type:function size:0x20 scope:global
+daRct_Draw__FP15RECTANGLE_class = .text:0x00000078; // type:function size:0x8 scope:local
+daRct_Execute__FP15RECTANGLE_class = .text:0x00000080; // type:function size:0x8 scope:local
+daRct_IsDelete__FP15RECTANGLE_class = .text:0x00000088; // type:function size:0x8 scope:local
+daRct_Delete__FP15RECTANGLE_class = .text:0x00000090; // type:function size:0x8 scope:local
+daRct_Create__FP10fopAc_ac_c = .text:0x00000098; // type:function size:0x8 scope:local
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+l_daRct_Method = .data:0x00000000; // type:object size:0x20 scope:local
+g_profile_RECTANGLE = .data:0x00000020; // type:object size:0x30 scope:global

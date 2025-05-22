@@ -7,6 +7,7 @@
 #include "d/res/res_lamp.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
@@ -220,7 +221,7 @@ actor_process_profile_definition g_profile_LAMP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00AE,
+    /* Priority     */ PRIO_LAMP,
     /* Actor SubMtd */ &l_daLamp_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

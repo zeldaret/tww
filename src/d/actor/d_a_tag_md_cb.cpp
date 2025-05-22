@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tag_md_cb.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000160       .text __ct__16daTag_MdCb_HIO_cFv */
 daTag_MdCb_HIO_c::daTag_MdCb_HIO_c() {
@@ -199,7 +200,7 @@ actor_process_profile_definition g_profile_TAG_MDCB = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0129,
+    /* Priority     */ PRIO_TAG_MDCB,
     /* Actor SubMtd */ &l_daTag_MdCb_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

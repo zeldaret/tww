@@ -1,0 +1,31 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+REL/global_destructor_chain.c:
+	.text       start:0x00000078 end:0x000000EC
+	.dtors      start:0x00000000 end:0x00000004
+	.bss        start:0x00000000 end:0x00000008
+
+d/actor/d_a_mozo.cpp:
+	.text       start:0x000000EC end:0x000028B4
+	.text       start:0x000028B4 end:0x000028F0
+	.text       start:0x000028F0 end:0x000028F0
+	.text       start:0x000028F0 end:0x000028F0
+	.text       start:0x000028F0 end:0x000029E0
+	.text       start:0x000029E0 end:0x00002B08
+	.text       start:0x00002B08 end:0x00002B64
+	.text       start:0x00002B64 end:0x00002BAC
+	.text       start:0x00002BAC end:0x00002BF4
+	.text       start:0x00002BF4 end:0x00002CF4
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000000F1
+	.data       start:0x00000000 end:0x00000220
+	.bss        start:0x00000008 end:0x00000148

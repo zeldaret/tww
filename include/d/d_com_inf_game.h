@@ -226,7 +226,7 @@ public:
 
 class dComIfG_play_c {
 public:
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dComIfG_play_c();
 #else
     dComIfG_play_c() { ct(); }
@@ -554,7 +554,7 @@ public:
     inline u8 getNowVibration() { return mNowVibration; }
     inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
     // dSv_player_config_c::getPalLanguage() const inline in TP debug.
     inline u8 getPalLanguage() { return mPalLanguage; }
@@ -562,10 +562,13 @@ public:
 #endif
 
     void setMsgArchive(JKRArchive * pArc) { mpMsgArchive = pArc; }
+    JKRArchive* getMsgArchive() { return mpMsgArchive; }
+#if VERSION > VERSION_DEMO
     void setDmsgArchive(JKRArchive * pArc) { mpDmsgArchive = pArc; }
     JKRArchive* getDmsgArchive() { return mpDmsgArchive; }
-    void setTmsgArchive(JKRArchive * pArc) { mpTmsgArchive = pArc; }
-    JKRArchive* getTmsgArchive() { return mpTmsgArchive; }
+#endif
+    void setTactMsgArchive(JKRArchive * pArc) { mTactMsgArchive = pArc; }
+    JKRArchive* getTactMsgArchive() { return mTactMsgArchive; }
     void setMenuArchive(JKRArchive * pArc) { mpMenuArchive = pArc; }
     JKRArchive* getMenuArchive() { return mpMenuArchive; }
     void setFont0Archive(JKRArchive * pArc) { mpFont0Archive = pArc; }
@@ -577,10 +580,10 @@ public:
     void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
     void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
     void setItemResArchive(JKRArchive * pArc) { mpItemResArchive = pArc; }
-    void setClctResArchive(JKRArchive * pArc) { mpClctResArchive = pArc; }
+    void setCollectResArchive(JKRArchive * pArc) { mpCollectResArchive = pArc; }
     void setFmapResArchive(JKRArchive * pArc) { mpFmapResArchive = pArc; }
     void setDmapResArchive(JKRArchive * pArc) { mpDmapResArchive = pArc; }
-    void setOptResArchive(JKRArchive * pArc) { mpOptResArchive = pArc; }
+    void setOptionResArchive(JKRArchive * pArc) { mpOptionResArchive = pArc; }
     JKRArchive* getClothResArchive() { return mpClothResArchive; }
     void setClothResArchive(JKRArchive * pArc) { mpClothResArchive = pArc; }
     void setSaveResArchive(JKRArchive * pArc) { mpSaveResArchive = pArc; }
@@ -591,13 +594,13 @@ public:
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
-    void setCamResArchive(JKRArchive * pArc) { mpCamResArchive = pArc; }
+    void setCameraResArchive(JKRArchive * pArc) { mpCameraResArchive = pArc; }
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
     void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
     JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
     JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
 #endif
@@ -676,8 +679,12 @@ public:
     /* 0x4700 */ dVibration_c mVibration;
     /* 0x4784 */ dDetect_c mDetect;
     /* 0x4798 */ JKRArchive* mpMsgArchive;
+#if VERSION > VERSION_DEMO
     /* 0x479C */ JKRArchive* mpDmsgArchive;
-    /* 0x47A0 */ JKRArchive* mpTmsgArchive;
+#endif
+    /* Offsets below are for retail JPN/USA/PAL */
+
+    /* 0x47A0 */ JKRArchive* mTactMsgArchive;
     /* 0x47A4 */ JKRArchive* mpMenuArchive;
     /* 0x47A8 */ JKRArchive* mpFont0Archive;
     /* 0x47AC */ JKRArchive* mpFont1Archive;
@@ -685,10 +692,10 @@ public:
     /* 0x47B4 */ JKRArchive* mpLkDArc;
     /* 0x47B8 */ JKRArchive* mpFmapArchive;
     /* 0x47BC */ JKRArchive* mpItemResArchive;
-    /* 0x47C0 */ JKRArchive* mpClctResArchive;
+    /* 0x47C0 */ JKRArchive* mpCollectResArchive;
     /* 0x47C4 */ JKRArchive* mpFmapResArchive;
     /* 0x47C8 */ JKRArchive* mpDmapResArchive;
-    /* 0x47CC */ JKRArchive* mpOptResArchive;
+    /* 0x47CC */ JKRArchive* mpOptionResArchive;
     /* 0x47D0 */ JKRArchive* mpClothResArchive;
     /* 0x47D4 */ JKRArchive* mpSaveResArchive;
     /* 0x47D8 */ JKRArchive* mpItemIconArchive;
@@ -696,11 +703,11 @@ public:
     /* 0x47E0 */ JKRArchive* mpErrorResArchive;
     /* 0x47E4 */ JKRArchive* mpActionIconArchive;
     /* 0x47E8 */ JKRArchive* mpScopeResArchive;
-    /* 0x47EC */ JKRArchive* mpCamResArchive;
+    /* 0x47EC */ JKRArchive* mpCameraResArchive;
     /* 0x47F0 */ JKRArchive* mpSwimResArchive;
     /* 0x47F4 */ JKRArchive* mpWindResArchive;
     /* 0x47F8 */ JKRArchive* mpEnglishTextArchive;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x47FC */ JKRArchive* mpHyruleTextArchive;
     /* 0x4800 */ JKRAramBlock* mPictureBoxData[3];
     /* 0x480C */ JKRAramBlock* mBossBattleData[4];
@@ -804,7 +811,7 @@ public:
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
     /* 0x4963 */ u8 mNowVibration;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x4964 */ u8 mPalLanguage;
 #endif
     /* 0x4965 */ u8 field_0x4965;
@@ -840,7 +847,7 @@ public:
 
 class dComIfG_inf_c {
 public:
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dComIfG_inf_c();
 #else
     dComIfG_inf_c() { ct(); }
@@ -858,7 +865,7 @@ public:
     /* 0x1D1C1 */ u8 mBrightness;
 };
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 STATIC_ASSERT(sizeof(dComIfG_inf_c) == 0x1D1C8);
 #endif
 
@@ -1142,6 +1149,10 @@ inline void dComIfGs_offCompleteCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().offCompleteMap(i_no - 1);
 }
 
+inline s32 dComIfGs_getCollectMapNum() {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().getCollectMapNum();
+}
+
 inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGridForAgb(i_no);
 }
@@ -1298,6 +1309,10 @@ inline s16 dComIfGs_getRestartOptionAngleY() {
     return g_dComIfG_gameInfo.save.getRestart().getRestartOptionAngleY();
 }
 
+inline f32 dComIfGs_getLastSceneSpeedF() {
+    return g_dComIfG_gameInfo.save.getRestart().getLastSpeedF();
+}
+
 inline u32 dComIfGs_getLastSceneMode() {
     return g_dComIfG_gameInfo.save.getRestart().getLastMode();
 }
@@ -1351,6 +1366,7 @@ inline s16 dComIfGs_getTurnRestartShipAngleY() {
     return g_dComIfG_gameInfo.save.getTurnRestart().getShipAngleY();
 }
 
+#if VERSION > VERSION_DEMO
 // The "HasShip" name is fake. These inlines don't exist in the demo, but must exist in the final release.
 inline BOOL dComIfGs_getTurnRestartHasShip() {
     return g_dComIfG_gameInfo.save.getTurnRestart().getHasShip();
@@ -1359,6 +1375,7 @@ inline BOOL dComIfGs_getTurnRestartHasShip() {
 inline void dComIfGs_setTurnRestartHasShip(BOOL hasShip) {
     g_dComIfG_gameInfo.save.getTurnRestart().setHasShip(hasShip);
 }
+#endif
 
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, FALSE);
@@ -2005,7 +2022,7 @@ inline s8 dComIfGp_getStartStageLayer() {
     return g_dComIfG_gameInfo.play.getStartStageLayer();
 }
 
-inline s32 dComIfGp_getStartStagePoint() {
+inline s16 dComIfGp_getStartStagePoint() {
     return g_dComIfG_gameInfo.play.getStartStagePoint();
 }
 
@@ -2235,7 +2252,7 @@ inline u8 dComIfGp_getShipId() {
     return g_dComIfG_gameInfo.play.getShipId();
 }
 
-inline u8 dComIfGp_getShipRoomId() {
+inline int dComIfGp_getShipRoomId() {
     return g_dComIfG_gameInfo.play.getShipRoomId();
 }
 
@@ -2790,7 +2807,7 @@ inline void dComIfGp_setNowVibration(u8 vibration) {
     g_dComIfG_gameInfo.play.setNowVibration(vibration);
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 // Inline name is official because while it's not present in the JPN debug maps, it is present in
 // the USA release maps because there was one TU where it failed to get inlined (f_op_msg_mng).
 inline u8 dComIfGs_getPalLanguage() {
@@ -3498,10 +3515,13 @@ inline void dComIfGd_reset() { g_dComIfG_gameInfo.drawlist.reset(); }
 inline void dComIfGp_setAnmArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setAnmArchive(pArc); }
 inline JKRArchive* dComIfGp_getAnmArchive() { return g_dComIfG_gameInfo.play.getAnmArchive(); }
 inline void dComIfGp_setMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgArchive(pArc); }
+inline JKRArchive* dComIfGp_getMsgArchive() { return g_dComIfG_gameInfo.play.getMsgArchive(); }
+#if VERSION > VERSION_DEMO
 inline void dComIfGp_setDmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmsgArchive(pArc); }
 inline JKRArchive* dComIfGp_getDmsgArchive() { return g_dComIfG_gameInfo.play.getDmsgArchive(); }
-inline void dComIfGp_setTmsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTmsgArchive(pArc); }
-inline JKRArchive* dComIfGp_getTmsgArchive() { return g_dComIfG_gameInfo.play.getTmsgArchive(); }
+#endif
+inline void dComIfGp_setTactMsgArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setTactMsgArchive(pArc); }
+inline JKRArchive* dComIfGp_getTactMsgArchive() { return g_dComIfG_gameInfo.play.getTactMsgArchive(); }
 inline void dComIfGp_setMenuArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMenuArchive(pArc); }
 inline JKRArchive* dComIfGp_getMenuArchive() { return g_dComIfG_gameInfo.play.getMenuArchive(); }
 inline void dComIfGp_setFont0Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFont0Archive(pArc); }
@@ -3511,10 +3531,10 @@ inline JKRArchive* dComIfGp_getRubyArchive() { return g_dComIfG_gameInfo.play.ge
 inline void dComIfGp_setLkDArc(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setLkDArc(pArc); }
 inline void dComIfGp_setFmapArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapArchive(pArc); }
 inline void dComIfGp_setItemResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemResArchive(pArc); }
-inline void dComIfGp_setClctResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClctResArchive(pArc); }
+inline void dComIfGp_setCollectResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCollectResArchive(pArc); }
 inline void dComIfGp_setFmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapResArchive(pArc); }
 inline void dComIfGp_setDmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmapResArchive(pArc); }
-inline void dComIfGp_setOptResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setOptResArchive(pArc); }
+inline void dComIfGp_setOptionResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setOptionResArchive(pArc); }
 inline JKRArchive* dComIfGp_getClothResArchive() { return g_dComIfG_gameInfo.play.getClothResArchive(); }
 inline void dComIfGp_setClothResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setClothResArchive(pArc); }
 inline void dComIfGp_setSaveResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSaveResArchive(pArc); }
@@ -3525,13 +3545,13 @@ inline void dComIfGp_setErrorResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
-inline void dComIfGp_setCamResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCamResArchive(pArc); }
+inline void dComIfGp_setCameraResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCameraResArchive(pArc); }
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
 inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
 #endif

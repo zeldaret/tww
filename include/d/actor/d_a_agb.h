@@ -60,7 +60,7 @@ public:
         /* 0x6 */ UpAct_UNK6,
         /* 0x7 */ UpAct_UNK7,
         /* 0x8 */ UpAct_UNK8,
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         /* 0x9 */ UpAct_UNK9,
 #endif
         /* 0xA */ UpAct_UNKA,
@@ -172,7 +172,7 @@ public:
 
     static int mEffect;
     static daAgb_ItemBuy mItemBuy;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     static daAgb_GbaFlg mGbaFlg;
     static daAgb_Switch mSwitch;
     static daAgb_Item mItem;
@@ -241,7 +241,7 @@ public:
     /* 0x628 */ f32 field_0x628;
     /* 0x62C */ f32 field_0x62c;
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     /* 0x630 */ daAgb_Switch mSwitch;
     /* 0x638 */ daAgb_Item mItem;
     /* 0x63C */ daAgb_Shop mShop;

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_swc00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
 /* 00000078-00000180       .text daSwc00_Execute__FP11swc00_class */
@@ -84,7 +85,7 @@ actor_process_profile_definition g_profile_SWC00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011A,
+    /* Priority     */ PRIO_SWC00,
     /* Actor SubMtd */ &l_daSwc00_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

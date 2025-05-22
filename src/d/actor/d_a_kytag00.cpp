@@ -8,6 +8,7 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "SSystem/SComponent/c_lib.h"
 
@@ -151,9 +152,8 @@ void raincnt_set(f32 count) {
     s32 newCount = 0;
 
     if (dKy_checkEventNightStop()) {
-        s32 newCount2;
-        if (g_env_light.mRainCount < (newCount2 = (count * count * count) * 250.0f))
-            newCount = newCount2;
+        if (g_env_light.mRainCount < (s32)((count * count * count) * 250.0f))
+            newCount = (count * count * count) * 250.0f;
     } else {
         newCount = (count * count * count) * 250.0f;
     }
@@ -415,7 +415,7 @@ actor_process_profile_definition g_profile_KYTAG00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A0,
+    /* Priority     */ PRIO_KYTAG00,
     /* Actor SubMtd */ &l_daKytag00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

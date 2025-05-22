@@ -32,7 +32,7 @@ GXColor g_whiteColor      = {0xFF, 0xFF, 0xFF, 0xFF};
 GXColor g_saftyWhiteColor = {0xA0, 0xA0, 0xA0, 0xFF};
 
 /* 80052134-800521A4       .text ct__14dComIfG_play_cFv */
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 dComIfG_play_c::dComIfG_play_c()
 #else
 void dComIfG_play_c::ct()
@@ -228,7 +228,7 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 return layer | 6;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             if (dComIfGs_isEventBit(0x2C01)) {
 #else
             if (dComIfGs_isEventBit(0x2C01) ||
@@ -238,7 +238,7 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 return layer | 6;
             } else if (dComIfGs_getTriforceNum() == 8) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, dSv_evtBit_c::COLORS_IN_HYRULE, dSv_evtBit_c::COLORS_IN_HYRULE))) {
+            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, 0x3280, dSv_evtBit_c::COLORS_IN_HYRULE, dSv_evtBit_c::COLORS_IN_HYRULE))) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "M2tower") == 0) {
@@ -265,14 +265,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(VERSION_SELECT(358, 360, 360), mParticle != NULL);
+    JUT_ASSERT(VERSION_SELECT(358, 358, 360, 360), mParticle != NULL);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(VERSION_SELECT(388, 390, 390), mDemo != NULL);
+    JUT_ASSERT(VERSION_SELECT(388, 388, 390, 390), mDemo != NULL);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -462,7 +462,7 @@ void dComIfG_play_c::drawWood() {
     }
 }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 dComIfG_inf_c::dComIfG_inf_c() {
     mBrightness = 0xFF;
 }
@@ -544,7 +544,7 @@ cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* 
 
 /* 800533D0-8005347C       .text dComIfG_resDelete__FP30request_of_phase_process_classPCc */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
-    JUT_ASSERT(VERSION_SELECT(1045, 1048, 1048), i_phase->id != 1);
+    JUT_ASSERT(VERSION_SELECT(1045, 1045, 1048, 1048), i_phase->id != 1);
 
     if (i_phase->id == 2) {
         dComIfG_deleteObjectRes(i_resName);
@@ -562,7 +562,7 @@ s8 dComIfGp_getReverb(int param_0) {
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 param_5, GXTexObj* i_tex) {
-    if (i_floorPoly.ChkSetInfo() && C_BG_MIN_HEIGHT != groundY) {
+    if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
@@ -1041,7 +1041,7 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
                        f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
                        s16 rotY, f32 param_12, GXTexObj* pTexObj) {
-    if (groundY <= C_BG_MIN_HEIGHT) {
+    if (groundY <= -G_CM3D_F_INF) {
         return 0;
     }
 
@@ -1063,12 +1063,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(VERSION_SELECT(2129, 2132, 2132), sclsInfo != NULL);
+    JUT_ASSERT(VERSION_SELECT(2129, 2129, 2132, 2132), sclsInfo != NULL);
 
-    JUT_ASSERT(VERSION_SELECT(2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
+    JUT_ASSERT(VERSION_SELECT(2131, 2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(VERSION_SELECT(2133, 2136, 2136), sclsData != NULL);
+    JUT_ASSERT(VERSION_SELECT(2133, 2133, 2136, 2136), sclsData != NULL);
 
     return &sclsData[i_no];
 }
@@ -1208,7 +1208,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(VERSION_SELECT(2359, 2362, 2362), mapInfo != NULL);
+            JUT_ASSERT(VERSION_SELECT(2359, 2359, 2362, 2362), mapInfo != NULL);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;
@@ -1265,7 +1265,7 @@ void dComIfGs_copyPlayerRecollectionData() {
 
 /* 80054E9C-80055318       .text dComIfGs_setPlayerRecollectionData__Fv */
 void dComIfGs_setPlayerRecollectionData() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
 #endif
 

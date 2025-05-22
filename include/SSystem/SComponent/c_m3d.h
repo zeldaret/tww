@@ -19,6 +19,11 @@ class cXyz;
 struct Vec;
 
 extern const f32 G_CM3D_F_ABS_MIN;
+#if VERSION == VERSION_DEMO
+extern const f32 G_CM3D_F_INF;
+#else
+#define G_CM3D_F_INF 1e+9f
+#endif
 
 extern const u32 BPCP_OUTCODE0;
 extern const u32 BPCP_OUTCODE1;

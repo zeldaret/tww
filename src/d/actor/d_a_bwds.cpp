@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bwds.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000144       .text __ct__12daBwds_HIO_cFv */
 daBwds_HIO_c::daBwds_HIO_c() {
@@ -114,7 +115,7 @@ actor_process_profile_definition g_profile_BWDS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00CD,
+    /* Priority     */ PRIO_BWDS,
     /* Actor SubMtd */ &l_daBwds_Method,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

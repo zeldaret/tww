@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_usovmc.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_usovmc.h"
 
 const char daObjUsovmc::Act_c::M_arcname[7] = "Usovmc";
@@ -130,7 +131,7 @@ actor_process_profile_definition g_profile_Obj_Usovmc = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0023,
+    /* Priority     */ PRIO_Obj_Usovmc,
     /* Actor SubMtd */ &daObjUsovmc::Mthd_Usovmc,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

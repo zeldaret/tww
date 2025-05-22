@@ -15,6 +15,7 @@
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -1020,7 +1021,7 @@ actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B3,
+    /* Priority     */ PRIO_OBJ_TORIPOST,
     /* Actor SubMtd */ &daObjTpostMethodTable,
     /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_auzu.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q29daObjAuzu5Act_cFP10fopAc_ac_c */
 void daObjAuzu::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -118,7 +119,7 @@ actor_process_profile_definition g_profile_Obj_Auzu = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x007F,
+    /* Priority     */ PRIO_Obj_Auzu,
     /* Actor SubMtd */ &daObjAuzu::Mthd_Table,
     /* Status       */ 0x06 | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

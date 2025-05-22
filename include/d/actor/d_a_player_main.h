@@ -326,7 +326,7 @@ public:
     /* 0x030 */ f32 field_0x030;
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
     /* 0x088 */ Mtx field_0x088[3];
-};
+};  // Size: 0x118
 
 struct daPy_aura_c {
 public:

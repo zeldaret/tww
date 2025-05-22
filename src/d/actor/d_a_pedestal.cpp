@@ -6,6 +6,7 @@
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_hdai1.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -484,7 +485,7 @@ actor_process_profile_definition g_profile_PEDESTAL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0091,
+    /* Priority     */ PRIO_PEDESTAL,
     /* Actor SubMtd */ &daPedestal::daActMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
