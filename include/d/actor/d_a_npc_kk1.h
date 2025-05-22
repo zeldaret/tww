@@ -132,7 +132,7 @@ public:
     bool set_action(ActionFunc, void*);
     void setStt(signed char);
     void createTama(float);
-    u32 chk_areaIN(float, cXyz);
+    bool chk_areaIN(float, cXyz);
     bool startEvent_check();
     bool chkHitPlayer();
     void set_pthPoint(unsigned char);
@@ -145,21 +145,21 @@ public:
     void setAse();
     void flwAse();
     void delAse();
-    bool wait_1();
-    bool walk_1();
-    void wait_2();
+    BOOL wait_1();
+    BOOL walk_1();
+    BOOL wait_2();
     void init_CMT_WAI();
     void move_CMT_WAI();
     void init_CMT_TRN();
     void move_CMT_TRN();
     void init_CMT_PCK();
     void move_CMT_PCK();
-    void cmmt_1();
-    void wait_3();
-    void wait_4();
-    void talk_1();
+    BOOL cmmt_1();
+    BOOL wait_3();
+    BOOL wait_4();
+    BOOL talk_1();
     int wait_action1(void*);
-    void demo();
+    u8 demo();
     void shadowDraw();
     bool _draw();
     bool _execute();
@@ -176,7 +176,8 @@ public:
     /* 0x6CD */ s8 field_0x6CD;   //ui bodyCreateHeap
     /* 0x6CE */ char mArcName;  
     /* 0x6CF */ u8 field_0x6CF;
-    /* 0x6D0 */ u8 field_0x6D0[0x6D8 - 0x6D0];
+    /* 0x6D0 */ u32 field_0x6D0;
+    /* 0x6D4 */ u32 mShadowID;  
     /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6EC*/  u8 field_0x6EC;
     /* 0x6ED*/  s8 field_0x6ED;
@@ -211,20 +212,14 @@ public:
     /* 0x798 */ s16 field_0x798;
     /* 0x79A */ s16 field_0x79A;
     /* 0x79C */ s16 field_0x79C;
-    /* 0x79E */ s8 field_0x79E;
-    /* 0x79E */ s8 field_0x79F;
+    /* 0x79E */ s16 field_0x79E;
+    ///* 0x79E */ s8 field_0x79F;
     /* 0x7A0 */ s16 field_0x7A0;
-
     /* 0x7A2 */ s16 field_0x7A2;
-
     /* 0x7A4 */ s16 field_0x7A4;
-
     /* 0x7A6 */ s16 field_0x7A6;
-
     /* 0x7A8 */ s16 field_0x7A8;
-
     /* 0x7AA */ s16 field_0x7AA;
-
     /* 0x7AC */ s16 field_0x7AC;
     /* 0x7AE */ s16 field_0x7AE;
     /* 0x7B0 */ s16 field_0x7B0;
@@ -247,7 +242,9 @@ public:
     /* 0x7C2 */ u8 field_0x7C2;
     /* 0x7C3 */ u8 field_0x7C3;
     /* 0x7C4 */ bool field_0x7C4;
-    /* 0x7C5 */ u8 field_0x7C5[0x7CF - 0x7C5];
+    /* 0x7C5 */ bool field_0x7C5;
+    /* 0x7C6 */ u8 field_0x7C6;
+    /* 0x7C5 */ u8 field_0x7C7[0x7CF - 0x7C7];
     /* 0x7CF */ u8 field_0x7CF;
     /* 0x7D0 */ anm_prm_c* field_0x7D0;
     /* 0x7D4 */ u8 field_0x7D4[0x7DC - 0x7D4];
@@ -273,7 +270,7 @@ public:
     /* 0x81A */ s8 field_0x81A;
     /* 0x81B */ s8 field_0x81B; 
     /* 0x81C */ s8 field_0x81C;
-    /* 0x81D */ u8 field_0x81D;
+    /* 0x81D */ s8 field_0x81D;
     /* 0x81E */ u8 field_0x81E;
     /* 0x81F */ s8 field_0x81F;
     /* 0x820 */ s8 field_0x820;
@@ -297,7 +294,8 @@ public:
     /* 0x11  */ u8  field_0x11[0x1E - 0x11];
     /* 0x1E  */ s16 field_0x1E;  
     /* 0x20  */ f32 field_0x20;
-    /* 0x24  */ f32 field_0x24;
+    /* 0x24  */ s16 field_0x24;
+    /* 0x26  */ s16 field_0x26;
     /* 0x28  */ s16 field_0x28;
     /* 0x28  */ s16 field_0x2A;
     /* 0x2C  */ s16 field_0x2C;
@@ -309,7 +307,7 @@ public:
     /* 0x3C  */ f32 field_0x3C;
     /* 0x40  */ f32 field_0x40;
     /* 0x44  */ f32 field_0x44;
-    ///* 0x44  */ s16 field_0x46;
+    ///* 0x46  */ s16 field_0x46;
     /* 0x48  */ f32 field_0x48;
     /* 0x4C  */ f32 field_0x4C;
     /* 0x50  */ f32 field_0x50;
