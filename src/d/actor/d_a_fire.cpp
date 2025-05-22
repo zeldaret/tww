@@ -23,7 +23,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 1,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
@@ -52,7 +52,7 @@ static dCcD_SrcCyl l_co_cyl_src = {
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 1,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
@@ -151,10 +151,7 @@ BOOL daFire_c::CreateInit() {
             scale.z = 0.0f;
             break;
         case 2:
-            // Setting seems to be in zyx order, weird.
-            scale.z = 1.25f;
-            scale.y = 1.25f;
-            scale.x = 1.25f;
+            scale.x = scale.y = scale.z = 1.25f;
 
             if (field_0x8BC) {
                 field_0x8BC->setGlobalScale(scale);
@@ -336,7 +333,7 @@ void daFire_c::demo_proc() {
     switch (act_idx) {
         case 0:
             dComIfGp_evmng_cutEnd(field_0x8F8);
-            return;
+            break;
         case 1:
             if (field_0x902 == 0) {
                 fopAcM_seStart(this, JA_SE_OBJ_BAR_FRAME_ON, 0);
@@ -344,7 +341,7 @@ void daFire_c::demo_proc() {
             execPlayFire();
             field_0x902 = 1;
             dComIfGp_evmng_cutEnd(field_0x8F8);
-            return;
+            break;
         case 2:
             if (field_0x8BC && field_0x8BC->getParticleNumber() != 0 && field_0x902) {
                 fopAcM_seStart(this, JA_SE_OBJ_BAR_FRAME_OFF, 0);
@@ -355,6 +352,7 @@ void daFire_c::demo_proc() {
             break;
         default:
             dComIfGp_evmng_cutEnd(field_0x8F8);
+            break;
     }
 }
 
