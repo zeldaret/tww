@@ -54,7 +54,7 @@ void jbo_draw_SUB(jbo_class *i_this) {
 
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */
 static BOOL daJBO_Draw(jbo_class *i_this) {
-    J3DModel *model = i_this->mpMorf->mpModel;
+    J3DModel *model = i_this->mpMorf->getModel();
     if (i_this->mParam == 3)
         return TRUE;
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
@@ -81,7 +81,7 @@ void jbo_move(jbo_class *i_this) {
                 J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", JBO_BCK_IN1);
                 i_this->mpMorf->setAnm(anm, J3DFrameCtrl::EMode_NONE, 0.0, 1.0, 0.0, -1.0, NULL);
                 fopAcM_seStart(i_this, JA_SE_OBJ_JFLOWER_IN, 0);
-                g_dComIfG_gameInfo.play.mItemMagicCount += 4;
+                dComIfGp_setItemMagicCount(4);
                 i_this->mFramesUntilJump = JUMP_ANIMATION_TIME;
                 i_this->mState += 1;
             }
@@ -91,7 +91,7 @@ void jbo_move(jbo_class *i_this) {
             i_this->mAnimationSpeed = JUMP_ANIMATION_TIME - i_this->mFramesUntilJump;
             i_this->mAnimationSpeed *= 200;
             if (i_this->mFramesUntilJump == 1) {
-                g_dComIfG_gameInfo.play.mpPlayer[0]->onForceVomitJump();
+                ((daPy_py_c *)dComIfGp_getPlayer(0))->onForceVomitJump();
             }
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80000000_e)) {
                 J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("JBO", JBO_BCK_OUT1);
@@ -101,7 +101,7 @@ void jbo_move(jbo_class *i_this) {
                 i_this->mAnimRotation = 0;
                 JPABaseEmitter *emitter = dComIfGp_particle_setToon(0xa110, &i_this->mParticlePos);
                 if (emitter != NULL) {
-                    emitter->mGlobalPrmColor.a = 100;
+                    emitter->setGlobalAlpha(100);
                 }
                 if (i_this->mParam == 2) {
                     i_this->m2BA = 1;
@@ -111,12 +111,7 @@ void jbo_move(jbo_class *i_this) {
             break;
         }
         case daJbo_State_SPAWN: {
-            J3DFrameCtrl &ctrl = i_this->mpMorf->mFrameCtrl;
-            bool var = true;
-            if (!ctrl.checkState(1) && ctrl.getRate() != 0.0f){
-                var = false;
-            }
-            if (var) {
+            if (i_this->mpMorf->isStop()) {
                 i_this->mState = daJbo_State_IDLE;
             }
             break;
@@ -146,7 +141,7 @@ static BOOL daJBO_Execute(jbo_class* i_this) {
     pos.y += 30.0;
     i_this->mSph.SetC(pos);
     i_this->mSph.SetR(55.0);
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mSph);
+    dComIfG_Ccsp()->Set(&i_this->mSph);
     jbo_draw_SUB(i_this);
     return TRUE;
 }
@@ -199,7 +194,7 @@ static cPhs_State daJBO_Create(fopAc_ac_c* i_this) {
         if (!fopAcM_entrySolidHeap(i_this, &useHeapInit, 0x1c20)) {
             return cPhs_ERROR_e;
         } else {
-            a_this->mParam = (u8)i_this->base.mParameters;
+            a_this->mParam = fopAcM_GetParam(a_this);
             if (a_this->mParam == 0xFF) {
                 a_this->mParam = 0;
             }
@@ -207,7 +202,7 @@ static cPhs_State daJBO_Create(fopAc_ac_c* i_this) {
             if (REG8_S(9) != 0) {
                 a_this->mParam = REG8_S(9);
             }
-            a_this->cullMtx = a_this->mpMorf->getModel()->getBaseTRMtx();
+            fopAcM_SetMtx(a_this, a_this->mpMorf->getModel()->getBaseTRMtx());
             a_this->attention_info.flags = 0;
             a_this->mStts.Init(0xff, 0xff, a_this);
             static dCcD_SrcSph co_sph_src = {
@@ -241,8 +236,8 @@ static cPhs_State daJBO_Create(fopAc_ac_c* i_this) {
             a_this->mSph.Set(co_sph_src);
             a_this->mSph.SetStts(&a_this->mStts);
             if (a_this->mParam == 3) {
-                a_this->actor_status &= ~fopAcStts_SHOWMAP_e;
-                a_this->mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+                fopAcM_OffStatus(a_this, fopAcStts_SHOWMAP_e);
+                a_this->mSph.ClrCoSet();
             }
             if (a_this->mParam == 1) {
                 J3DAnmTransform* pAnimRes = (J3DAnmTransform*) dComIfG_getObjectRes("JBO", JBO_BCK_UMARERU1);
