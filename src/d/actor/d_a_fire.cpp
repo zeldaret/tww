@@ -119,15 +119,10 @@ bool daFire_c::_delete() {
 
 /* 000000F8-00000518       .text CreateInit__8daFire_cFv */
 BOOL daFire_c::CreateInit() {
-    /* Nonmatching */
     mSwitchNo = daFire_prm::getSwitch(this);
     mTrboxBit = daFire_prm::getTrboxBit(this);;
 
-    u8 switchAndTboxValid = 1;
-    if (fopAcM_isSwitch(this, mSwitchNo) || !dComIfGs_isTbox(mTrboxBit)) {
-        switchAndTboxValid = 0;
-    }
-    field_0x8EC = switchAndTboxValid;
+    field_0x8EC = fopAcM_isSwitch(this, mSwitchNo) || dComIfGs_isTbox(mTrboxBit);
 
     if (dComIfGs_isTbox(mTrboxBit)) {
         return FALSE;
@@ -139,6 +134,10 @@ BOOL daFire_c::CreateInit() {
             if (mSwitchNo == 0xFF) {
                 mType = 2;
             }
+            break;
+        case 1:
+        case 2:
+        default:
             break;
     }
 
@@ -365,7 +364,6 @@ void daFire_c::normal_proc() {
 
 /* 00001030-000011A8       .text eventOrder__8daFire_cFv */
 void daFire_c::eventOrder() {
-    /* Nonmatching */
     u8 flag = dComIfGs_isTbox(mTrboxBit);
 
     if (mType == 1) {
@@ -394,7 +392,7 @@ void daFire_c::eventOrder() {
             field_0x8F4 = 1;
         }
     }
-    field_0x8ED = 1 - flag;
+    field_0x8ED = flag;
 }
 
 /* 000011A8-000012AC       .text checkOrder__8daFire_cFv */
