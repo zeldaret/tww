@@ -13,6 +13,7 @@
 #include "d/d_level_se.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 namespace daWindTag {
     dCcD_SrcCps l_cps_src = {
@@ -368,7 +369,7 @@ actor_process_profile_definition g_profile_WindTag = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A8,
+    /* Priority     */ PRIO_WindTag,
     /* Actor SubMtd */ &daWindTagMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

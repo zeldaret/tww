@@ -7,6 +7,7 @@
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -344,7 +345,7 @@ void daSail_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
 void daSail_packet_c::draw() {
     j3dSys.reinitGX();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
@@ -466,7 +467,7 @@ void daSail_packet_c::draw() {
     GXSetArray(GX_VA_NRM, getNrm() + 2 * 0x54, sizeof(cXyz));
     GXCallDisplayList(l_sail_DL, 0x200);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -709,7 +710,7 @@ static void sail_move(sail_class* i_this) {
     }
     i_this->mSailPacket.setBackNrm();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: The number of bytes (0x14AC0) passed here is way too large and causes an overflow.
     // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
     DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos) * sizeof(*i_this->mSailPacket.mNrm) / sizeof(cXyz));
@@ -827,7 +828,7 @@ actor_process_profile_definition g_profile_SAIL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0069,
+    /* Priority     */ PRIO_SAIL,
     /* Actor SubMtd */ &l_daSail_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

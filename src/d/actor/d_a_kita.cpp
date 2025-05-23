@@ -10,6 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_kita.h"
 #include "dolphin/types.h"
@@ -117,7 +118,7 @@ void kita_move(kita_class* i_this) {
                 lgc_pos.x = lgc_x; lgc_pos.y = lgc_y; lgc_pos.z = lgc_z;
                 liquid_ground_check.SetPos(&lgc_pos);
                 float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
-                if(liquid_gnd_cross != C_BG_MIN_HEIGHT && liquid_gnd_cross > i_this->field_35C){
+                if(liquid_gnd_cross != -G_CM3D_F_INF && liquid_gnd_cross > i_this->field_35C){
                     i_this->field_35C = liquid_gnd_cross + 40.0f + REG0_F(17);
                     i_this->field_360 = 1;
                 }
@@ -481,7 +482,7 @@ actor_process_profile_definition g_profile_KITA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0093,
+    /* Priority     */ PRIO_KITA,
     /* Actor SubMtd */ &l_daKita_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

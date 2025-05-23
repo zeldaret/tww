@@ -70,12 +70,12 @@ static void dKankyo_DayProc() {
 
     dComIfGs_offEventBit(0x2680);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (dComIfGs_isEventBit(0x2a20)) {
 #endif
         clamped = cLib_maxLimit(dComIfGs_getEventReg(0xa60f) + 1, 3);
         dComIfGs_setEventReg(0xa60f, clamped);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     }
 #endif
 

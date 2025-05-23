@@ -455,7 +455,7 @@ int dRes_info_c::setRes() {
 
         u32 heapSize = mDataHeap->getHeapSize();
         void* heapStartAddr = mDataHeap->getStartAddr();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(heapStartAddr, heapSize);
 #else
         DCStoreRangeNoSync(heapStartAddr, heapSize);

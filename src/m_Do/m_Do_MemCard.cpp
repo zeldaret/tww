@@ -199,7 +199,7 @@ s32 mDoMemCd_Ctrl_c::SaveSync() {
         if (field_0x1660 == 4) {
             field_0x1660 = 1;
             ret = 1;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         } else if (field_0x1660 == 1) {
             ret = 0;
 #endif

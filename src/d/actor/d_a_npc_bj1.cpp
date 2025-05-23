@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_bj1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bj1_childHIO_cFv */
 daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
@@ -644,7 +645,7 @@ actor_process_profile_definition g_profile_NPC_BJ1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0155,
+    /* Priority     */ PRIO_NPC_BJ1,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -661,7 +662,7 @@ actor_process_profile_definition g_profile_NPC_BJ2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0156,
+    /* Priority     */ PRIO_NPC_BJ2,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -678,7 +679,7 @@ actor_process_profile_definition g_profile_NPC_BJ3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0157,
+    /* Priority     */ PRIO_NPC_BJ3,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -695,7 +696,7 @@ actor_process_profile_definition g_profile_NPC_BJ4 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0158,
+    /* Priority     */ PRIO_NPC_BJ4,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -712,7 +713,7 @@ actor_process_profile_definition g_profile_NPC_BJ5 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0159,
+    /* Priority     */ PRIO_NPC_BJ5,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -729,7 +730,7 @@ actor_process_profile_definition g_profile_NPC_BJ6 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015A,
+    /* Priority     */ PRIO_NPC_BJ6,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -746,7 +747,7 @@ actor_process_profile_definition g_profile_NPC_BJ7 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015B,
+    /* Priority     */ PRIO_NPC_BJ7,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -763,7 +764,7 @@ actor_process_profile_definition g_profile_NPC_BJ8 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015C,
+    /* Priority     */ PRIO_NPC_BJ8,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -780,7 +781,7 @@ actor_process_profile_definition g_profile_NPC_BJ9 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015D,
+    /* Priority     */ PRIO_NPC_BJ9,
     /* Actor SubMtd */ &l_daNpc_Bj1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_search.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c*) {
@@ -274,7 +275,7 @@ actor_process_profile_definition g_profile_OBJ_SEARCH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B2,
+    /* Priority     */ PRIO_OBJ_SEARCH,
     /* Actor SubMtd */ &daObj_Search::Mthd::Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

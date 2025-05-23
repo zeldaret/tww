@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_gnndemotakis.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000098       .text solidHeapCB__15daObjGnntakis_cFP10fopAc_ac_c */
 void daObjGnntakis_c::solidHeapCB(fopAc_ac_c*) {
@@ -86,7 +87,7 @@ actor_process_profile_definition g_profile_Obj_Gnntakis = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0051,
+    /* Priority     */ PRIO_Obj_Gnntakis,
     /* Actor SubMtd */ &Gnntakis_Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

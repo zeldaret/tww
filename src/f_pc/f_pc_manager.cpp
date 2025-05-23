@@ -87,13 +87,13 @@ void messageSet(u32 status) {
     const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x12b, 0x141, 0x141), tpane != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x12b, 0x12b, 0x141, 0x141), tpane != NULL);
 
     J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x133, 0x149, 0x149), spane != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x133, 0x133, 0x149, 0x149), spane != NULL);
 
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
-    JUT_ASSERT(VERSION_SELECT(0x138, 0x14e, 0x14e), ppane != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x138, 0x138, 0x14e, 0x14e), ppane != NULL);
 
     J2DTextBox::TFontSize size;
     size.mSizeX = 27.0f;
@@ -113,12 +113,12 @@ void messageSet(u32 status) {
 
     ppane->setAlpha(130);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     JUTResFont * font = new JUTResFont((ResFONT*)font_data, NULL);
 #endif
 
     s16 height = 27;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     f32 maxWidth = 0.0f;
     s32 curLine = 0;
     f32 lineWidth[6];
@@ -129,18 +129,18 @@ void messageSet(u32 status) {
     for (; *msg != '\0'; msg++) {
         if (*msg == '\n') {
             height += 27;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             curLine++;
 #endif
             continue;
         }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         lineWidth[curLine] += font->JUTFont::getWidth((u8)*msg);
 #endif
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     for (s32 i = 0; i < (s32)ARRAY_SIZE(lineWidth); i++) {
         f32 width = lineWidth[i];
         if (maxWidth < width)
@@ -148,7 +148,7 @@ void messageSet(u32 status) {
     }
 #endif
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     f32 x = -9.5f;
 #else
     f32 x = (659.0f - maxWidth) / 2.0f + -9.0f;
@@ -165,11 +165,11 @@ void messageSet(u32 status) {
         tpane->draw(-9.0f, y + 10.0f, 660.0f, HBIND_CENTER);
     }
 #else
-    spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
-    tpane->draw(x, y + 10.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+    spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+    tpane->draw(x, y + 10.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
 #endif
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     delete font;
 #endif
     delete ppane;
@@ -207,11 +207,11 @@ void drawDvdCondition(long status) {
         messageSet(0);
     } else if (status == -1) {
         messageSet(5);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         JAInter::StreamLib::stop();
 #endif
     } else {
-        JUT_WARN(VERSION_SELECT(423, 481, 478), "Dvd Error !! <%d>\n", status);
+        JUT_WARN(VERSION_SELECT(423, 423, 481, 478), "Dvd Error !! <%d>\n", status);
     }
 
     JFWDisplay::getManager()->endRender();
@@ -252,10 +252,10 @@ void fpcM_Management(fpcM_ManagementFunc callBack1, fpcM_ManagementFunc callBack
     cAPIGph_Painter();
     fpcDt_Handler();
     if (!fpcPi_Handler())
-        JUT_ASSERT(VERSION_SELECT(490, 548, 547), 0);
+        JUT_ASSERT(VERSION_SELECT(490, 490, 548, 547), 0);
 
     if (!fpcCt_Handler())
-        JUT_ASSERT(VERSION_SELECT(494, 552, 551), 0);
+        JUT_ASSERT(VERSION_SELECT(494, 494, 552, 551), 0);
 
     if (callBack1 != NULL)
         callBack1();

@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 const char daThrowstone_c::M_arcname[] = "Aisi";
@@ -127,7 +128,7 @@ actor_process_profile_definition g_profile_THROWSTONE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01CE,
+    /* Priority     */ PRIO_THROWSTONE,
     /* Actor SubMtd */ &daThrowstoneMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

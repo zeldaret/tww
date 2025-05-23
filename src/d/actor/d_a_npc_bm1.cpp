@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_bm1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bm1_childHIO_cFv */
 daNpc_Bm1_childHIO_c::daNpc_Bm1_childHIO_c() {
@@ -854,7 +855,7 @@ actor_process_profile_definition g_profile_NPC_BM1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x014B,
+    /* Priority     */ PRIO_NPC_BM1,
     /* Actor SubMtd */ &l_daNpc_Bm1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -871,7 +872,7 @@ actor_process_profile_definition g_profile_NPC_BM2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x014C,
+    /* Priority     */ PRIO_NPC_BM2,
     /* Actor SubMtd */ &l_daNpc_Bm1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -888,7 +889,7 @@ actor_process_profile_definition g_profile_NPC_BM3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x014D,
+    /* Priority     */ PRIO_NPC_BM3,
     /* Actor SubMtd */ &l_daNpc_Bm1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -905,7 +906,7 @@ actor_process_profile_definition g_profile_NPC_BM4 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x014E,
+    /* Priority     */ PRIO_NPC_BM4,
     /* Actor SubMtd */ &l_daNpc_Bm1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -922,7 +923,7 @@ actor_process_profile_definition g_profile_NPC_BM5 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x014F,
+    /* Priority     */ PRIO_NPC_BM5,
     /* Actor SubMtd */ &l_daNpc_Bm1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,

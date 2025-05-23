@@ -9,6 +9,7 @@
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_hha.h"
 
 const dCcD_SrcCyl daObjHha_c::M_cyl_data = {
@@ -712,7 +713,7 @@ actor_process_profile_definition g_profile_Obj_Hha = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0049,
+    /* Priority     */ PRIO_Obj_Hha,
     /* Actor SubMtd */ &Hha_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

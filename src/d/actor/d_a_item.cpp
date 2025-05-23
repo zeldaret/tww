@@ -10,6 +10,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -1298,7 +1299,7 @@ void daItem_c::mode_wait() {
     temp.set(old.pos.x, old.pos.y, old.pos.z);
     lavaChk.SetPos(&temp);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
-    if (lavaY != C_BG_MIN_HEIGHT && lavaY > current.pos.y) {
+    if (lavaY != -G_CM3D_F_INF && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }
@@ -1511,7 +1512,7 @@ actor_process_profile_definition g_profile_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F5,
+    /* Priority     */ PRIO_ITEM,
     /* Actor SubMtd */ &l_daItem_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ACTOR_e,

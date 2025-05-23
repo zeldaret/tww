@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_hlift.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000001BC       .text CreateHeap__Q210daObjHlift5Act_cFv */
 BOOL daObjHlift::Act_c::CreateHeap() {
@@ -173,7 +174,7 @@ actor_process_profile_definition g_profile_Obj_Hlift = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0018,
+    /* Priority     */ PRIO_Obj_Hlift,
     /* Actor SubMtd */ &daObjHlift::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

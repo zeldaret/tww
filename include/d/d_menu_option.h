@@ -10,14 +10,25 @@
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
+struct mesg_entry;
 
 class dMenu_Option_c : public dDlst_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, f32) {}
     void getQuitStatus() {}
-    void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
-    void setTextArea(char*, char*, char*, char*) {}
+    void setArchive(JKRArchive* archive) {
+        mpArchive = archive;
+    }
+    void setFont(JUTFont* font_1, JUTFont* font_2) {
+        mD2C = font_1;
+        mD30 = font_2;
+    }
+    void setTextArea(char* param_1, char* param_2, char* param_3, char* param_4) {
+        mD38 = param_1;
+        mD3C = param_2;
+        mD40 = param_3;
+        mD44 = param_4;
+    }
 
     void screenSet();
     void mainInit();
@@ -36,7 +47,7 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    void stringlength(fopMsgM_pane_class*, char*);
+    f32 stringlength(fopMsgM_pane_class*, char*);
     void changeScaleCenter(fopMsgM_pane_class*, char*);
     void setSoundMode(u32);
     void changeScaleRight(fopMsgM_pane_class*, char*);
@@ -45,8 +56,8 @@ public:
     void _delete();
     void _move();
     void _draw();
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
 
 private:
     /* 0x004 */ J2DScreen* scrn;
@@ -55,31 +66,26 @@ private:
     /* 0x078 */ fopMsgM_pane_class m078;
     /* 0x0B0 */ fopMsgM_pane_class m0B0[15];
     /* 0x3F8 */ fopMsgM_pane_class m3F8[15];
-    /* 0x740 */ fopMsgM_pane_class m740;
-    /* 0x778 */ fopMsgM_pane_class m778;
+    /* 0x740 */ fopMsgM_pane_class m740[2];
     /* 0x7B0 */ fopMsgM_pane_class m7B0;
     /* 0x7E8 */ fopMsgM_pane_class m7E8;
     /* 0x820 */ fopMsgM_pane_class m820;
-    /* 0x858 */ fopMsgM_pane_class m858;
-    /* 0x890 */ fopMsgM_pane_class m890;
+    /* 0x858 */ fopMsgM_pane_class m858[2];
     /* 0x8C8 */ fopMsgM_pane_class m8C8[4];
     /* 0x9A8 */ fopMsgM_pane_class m9A8[2];
     /* 0xA18 */ fopMsgM_pane_class mA18[3];
     /* 0xAC0 */ fopMsgM_pane_class mAC0[2];
-    /* 0xB30 */ fopMsgM_pane_class mB30;
-    /* 0xB68 */ fopMsgM_pane_class mB68;
-    /* 0xBA0 */ fopMsgM_pane_class mBA0;
-    /* 0xBD8 */ fopMsgM_pane_class mBD8;
-    /* 0xC10 */ fopMsgM_pane_class mC10;
-    /* 0xC48 */ fopMsgM_pane_class mC48;
-    /* 0xC80 */ fopMsgM_pane_class mC80;
-    /* 0xCB8 */ fopMsgM_pane_class mCB8;
+    /* 0xB30 */ fopMsgM_pane_class mB30[6];
+    /* 0xC80 */ fopMsgM_pane_class mC80[2];
     /* 0xCF0 */ fopMsgM_pane_class mCF0;
     /* 0xD28 */ JKRArchive* mpArchive;
     /* 0xD2C */ JUTFont* mD2C;
     /* 0xD30 */ JUTFont* mD30;
     /* 0xD34 */ STControl* stick;
-    /* 0xD38 */ u8 mD38[0xD48 - 0xD38];
+    /* 0xD38 */ char* mD38;
+    /* 0xD3C */ char* mD3C;
+    /* 0xD40 */ char* mD40;
+    /* 0xD44 */ char* mD44;
     /* 0xD48 */ char mD48[20];
     /* 0xD5C */ char mD5C[2][20];
     /* 0xD84 */ char mD84[2][20];
@@ -89,9 +95,12 @@ private:
     /* 0xE39 */ u8 mE39;
     /* 0xE3A */ u8 mE3A;
     /* 0xE3B */ u8 mE3B;
-    /* 0xE3C */ u8 mE3C[0xE40 - 0xE3C];
+    /* 0xE3C */ u8 mE3C;
+    /* 0xE3D */ u8 mE3D;
+    /* 0xE3E */ u8 mE3E;
+    /* 0xE3F */ u8 mE3F;
     /* 0xE40 */ u8 mE40;
-    /* 0xE41 */ u8 mE41[0xE42 - 0xE41];
+    /* 0xE41 */ u8 mE41;
 };  // Size: 0xE42
 
 class dMo_HIO_c : public JORReflexible {

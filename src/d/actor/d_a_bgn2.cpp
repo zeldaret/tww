@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bgn2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000194       .text __ct__12daBgn2_HIO_cFv */
 daBgn2_HIO_c::daBgn2_HIO_c() {
@@ -164,7 +165,7 @@ actor_process_profile_definition g_profile_BGN2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00E9,
+    /* Priority     */ PRIO_BGN2,
     /* Actor SubMtd */ &l_daBgn2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

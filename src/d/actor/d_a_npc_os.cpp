@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_pedestal.h"
 #include "d/res/res_os.h"
@@ -2130,7 +2131,7 @@ BOOL daNpc_Os_c::execute() {
             mAcch.CrrPos(*dComIfG_Bgsp());
             
             field_0x784 |= 0x10;
-            if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+            if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
                 tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
                 tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
 
@@ -2207,7 +2208,7 @@ BOOL daNpc_Os_c::execute() {
             }
         }
 
-        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
             if(plane) {
                 field_0x7F0 = *plane->GetNP();
@@ -2227,7 +2228,7 @@ BOOL daNpc_Os_c::execute() {
 
         field_0x7A8 = mAcch.ChkGroundHit();
         if(!fopAcM_checkCarryNow(this)) {
-            if(mAcch.GetGroundH() == C_BG_MIN_HEIGHT || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+            if(mAcch.GetGroundH() == -G_CM3D_F_INF || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
                 if(m4E8 < 30) {
                     m4E8 += 1;
                 }
@@ -2269,7 +2270,7 @@ BOOL daNpc_Os_c::execute() {
         mAcch.CrrPos(*dComIfG_Bgsp());
 
         field_0x784 |= 0x10;
-        if(mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
@@ -2424,7 +2425,7 @@ actor_process_profile_definition g_profile_NPC_OS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x013D,
+    /* Priority     */ PRIO_NPC_OS,
     /* Actor SubMtd */ &l_daNpc_Os_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,

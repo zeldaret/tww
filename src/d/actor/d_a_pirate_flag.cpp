@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_pirate_flag.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -189,7 +190,7 @@ void daPirate_Flag_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) 
 void daPirate_Flag_packet_c::draw() {
     j3dSys.reinitGX();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
@@ -278,7 +279,7 @@ void daPirate_Flag_packet_c::draw() {
     GXSetArray(GX_VA_NRM, m4F4[m87E], sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -449,7 +450,7 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 
     i_this->mPacket.setBackNrm();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: The number of bytes (0x1D4C) passed here is way too large and causes an overflow.
     // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos) * sizeof(*i_this->mPacket.mNrm) / sizeof(cXyz));
@@ -545,7 +546,7 @@ actor_process_profile_definition g_profile_PIRATE_FLAG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x006A,
+    /* Priority     */ PRIO_PIRATE_FLAG,
     /* Actor SubMtd */ &l_daPirate_Flag_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

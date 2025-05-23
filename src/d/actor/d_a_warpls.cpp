@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_warpls.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
 bool daWarpls_c::_delete() {
@@ -119,7 +120,7 @@ actor_process_profile_definition g_profile_WARPLIGHT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A4,
+    /* Priority     */ PRIO_WARPLIGHT,
     /* Actor SubMtd */ &daWarplsMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

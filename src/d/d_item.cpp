@@ -814,7 +814,7 @@ void item_func_magic_arrow() {
     dComIfGs_onGetItem(dInvSlot_BOW_e, 1);
     dComIfGs_setItem(dInvSlot_BOW_e, dItem_MAGIC_ARROW_e);
     
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     // If the regular bow was equipped on an X/Y/Z button, force it to update.
     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
         if (dComIfGp_getSelectItem(itemBtn) == dItem_BOW_e) {
@@ -829,7 +829,7 @@ void item_func_light_arrow() {
     dComIfGs_onGetItem(dInvSlot_BOW_e, 2);
     dComIfGs_setItem(dInvSlot_BOW_e, dItem_LIGHT_ARROW_e);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     // If the fire/ice bow was equipped on an X/Y/Z button, force it to update.
     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
         if (dComIfGp_getSelectItem(itemBtn) == dItem_MAGIC_ARROW_e) {

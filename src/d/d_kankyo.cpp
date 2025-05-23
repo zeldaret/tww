@@ -503,7 +503,7 @@ void dScnKy_env_light_c::setDaytime() {
     mCurTime = dComIfGs_getTime();
     mDayOfWeek = dComIfGs_getDate();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && dComIfGp_roomControl_getStayNo() == 14)
     {
         if (dComIfGp_getStartStageLayer() == 2 || dComIfGp_getStartStageLayer() == 3) {
@@ -2551,7 +2551,7 @@ cXyz dKy_plight_near_pos() {
 
 /* 801952E0-80195364       .text dKy_plight_set__FP15LIGHT_INFLUENCE */
 void dKy_plight_set(LIGHT_INFLUENCE* param_0) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     for (int i = 0; i < 200; i++) {
         if (g_env_light.mpPLights[i] == param_0) {
             return;
@@ -2560,7 +2560,7 @@ void dKy_plight_set(LIGHT_INFLUENCE* param_0) {
 #endif
 
     for (int i = 0; i < 200; i++) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         if (g_env_light.mpPLights[i] == param_0) {
             return;
         }
@@ -2613,7 +2613,7 @@ void dKy_plight_cut(LIGHT_INFLUENCE* param_0) {
 
 /* 80195454-801954D8       .text dKy_efplight_set__FP15LIGHT_INFLUENCE */
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     for (int i = 0; i < 10; i++) {
         if (g_env_light.mpEfLights[i] == param_0) {
             return;
@@ -2622,7 +2622,7 @@ void dKy_efplight_set(LIGHT_INFLUENCE* param_0) {
 #endif
 
     for (int i = 0; i < 10; i++) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         if (g_env_light.mpEfLights[i] == param_0) {
             return;
         }

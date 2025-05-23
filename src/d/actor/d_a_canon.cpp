@@ -6,6 +6,7 @@
 #include "d/actor/d_a_canon.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000002C8       .text set_mtx__9daCanon_cFv */
 void daCanon_c::set_mtx() {
@@ -190,7 +191,7 @@ actor_process_profile_definition g_profile_Canon = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01AD,
+    /* Priority     */ PRIO_Canon,
     /* Actor SubMtd */ &daCanonMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

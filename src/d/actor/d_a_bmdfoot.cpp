@@ -6,6 +6,7 @@
 #include "d/actor/d_a_bmdfoot.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000114       .text __ct__15daBmdfoot_HIO_cFv */
 daBmdfoot_HIO_c::daBmdfoot_HIO_c() {
@@ -125,7 +126,7 @@ actor_process_profile_definition g_profile_BMDFOOT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00E1,
+    /* Priority     */ PRIO_BMDFOOT,
     /* Actor SubMtd */ &l_daBmdfoot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

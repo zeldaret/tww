@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_swhammer.h"
 #include "d/res/res_mhmrsw.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
@@ -489,7 +490,7 @@ actor_process_profile_definition g_profile_Obj_Swhammer = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0082,
+    /* Priority     */ PRIO_Obj_Swhammer,
     /* Actor SubMtd */ &daObjSwhammer::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

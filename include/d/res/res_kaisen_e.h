@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 enum KAISEN_E_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */
     KAISEN_E_BDL_AK2SH=0x4,

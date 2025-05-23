@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_tapestry.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */
 daObjTapestry_HIO_c::daObjTapestry_HIO_c() {
@@ -359,7 +360,7 @@ actor_process_profile_definition g_profile_Obj_Tapestry = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0087,
+    /* Priority     */ PRIO_Obj_Tapestry,
     /* Actor SubMtd */ &l_daObjTapestry_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

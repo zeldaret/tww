@@ -7,6 +7,7 @@
 #include "d/actor/d_a_tag_kk1.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 
 static daTag_Kk1_HIO_c l_HIO;
@@ -137,7 +138,7 @@ actor_process_profile_definition g_profile_TAG_KK1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0125,
+    /* Priority     */ PRIO_TAG_KK1,
     /* Actor SubMtd */ &l_daTag_Kk1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

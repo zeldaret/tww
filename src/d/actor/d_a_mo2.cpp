@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_mo2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E8       .text tex_anm_set__FP9mo2_classUs */
 void tex_anm_set(mo2_class*, unsigned short) {
@@ -359,7 +360,7 @@ actor_process_profile_definition g_profile_MO2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00AF,
+    /* Priority     */ PRIO_MO2,
     /* Actor SubMtd */ &l_daMo2_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,

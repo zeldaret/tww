@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_stone2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000208       .text __ct__Q28daStone25Act_cFv */
 daStone2::Act_c::Act_c() {
@@ -288,7 +289,7 @@ actor_process_profile_definition g_profile_Stone2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0105,
+    /* Priority     */ PRIO_Stone2,
     /* Actor SubMtd */ &daStone2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

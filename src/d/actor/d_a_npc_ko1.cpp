@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_ko1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000108       .text __ct__20daNpc_Ko1_childHIO_cFv */
 daNpc_Ko1_childHIO_c::daNpc_Ko1_childHIO_c() {
@@ -719,7 +720,7 @@ actor_process_profile_definition g_profile_NPC_KO1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0142,
+    /* Priority     */ PRIO_NPC_KO1,
     /* Actor SubMtd */ &l_daNpc_Ko1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,
@@ -736,7 +737,7 @@ actor_process_profile_definition g_profile_NPC_KO2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0143,
+    /* Priority     */ PRIO_NPC_KO2,
     /* Actor SubMtd */ &l_daNpc_Ko1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,

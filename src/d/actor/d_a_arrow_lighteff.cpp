@@ -8,6 +8,7 @@
 #include "d/actor/d_a_arrow.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -417,7 +418,7 @@ actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C1,
+    /* Priority     */ PRIO_ARROW_LIGHTEFF,
     /* Actor SubMtd */ &daArrow_LighteffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

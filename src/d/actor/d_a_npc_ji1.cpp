@@ -9,6 +9,7 @@
 #include "d/res/res_ji.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
@@ -3810,7 +3811,7 @@ actor_process_profile_definition g_profile_NPC_JI1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0141,
+    /* Priority     */ PRIO_NPC_JI1,
     /* Actor SubMtd */ &l_daNpc_Ji1_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
