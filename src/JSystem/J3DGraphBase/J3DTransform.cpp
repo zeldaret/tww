@@ -26,8 +26,6 @@ const Mtx j3dDefaultMtx = {
     { 0.0f, 0.0f, 1.0f, 0.0f },
 };
 
-f32 Unit01[2] = { 0.0f, 1.0f };
-
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
 void __MTGQR7(register u32 v) {
 #ifdef __MWERKS__
@@ -43,11 +41,14 @@ void J3DGQRSetup7(u32 r0, u32 r1, u32 r2, u32 r3) {
     __MTGQR7(v);
 }
 
+// Enabling scheduling optimization seems to be necessary but just for this
+// function.
+#pragma scheduling on
 /* 802DA0E8-802DA120       .text J3DCalcZValue__FPA4_f3Vec */
 f32 J3DCalcZValue(MtxP m, Vec v) {
-    /* Nonmatching */
     return m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3];
 }
+#pragma scheduling reset
 
 /* 802DA120-802DA2E0       .text J3DCalcBBoardMtx__FPA4_f */
 void J3DCalcBBoardMtx(Mtx mtx) {
@@ -70,7 +71,6 @@ void J3DCalcBBoardMtx(Mtx mtx) {
 
 /* 802DA2E0-802DA584       .text J3DCalcYBBoardMtx__FPA4_f */
 void J3DCalcYBBoardMtx(Mtx mtx) {
-    /* Nonmatching */
     f32 sx = std::sqrtf(mtx[0][0]*mtx[0][0] + mtx[1][0]*mtx[1][0] + mtx[2][0]*mtx[2][0]);
     f32 sy = std::sqrtf(mtx[0][1]*mtx[0][1] + mtx[1][1]*mtx[1][1] + mtx[2][1]*mtx[2][1]);
     f32 sz = std::sqrtf(mtx[0][2]*mtx[0][2] + mtx[1][2]*mtx[1][2] + mtx[2][2]*mtx[2][2]);
@@ -103,8 +103,61 @@ void J3DCalcYBBoardMtx(Mtx mtx) {
 }
 
 /* 802DA584-802DA64C       .text J3DPSCalcInverseTranspose__FPA4_fPA3_f */
-void J3DPSCalcInverseTranspose(Mtx src, Mtx33 dst) {
-    /* Nonmatching */
+ASM void J3DPSCalcInverseTranspose(register Mtx src, register Mtx33 dst) {
+    #ifdef __MWERKS__
+        psq_l    f0, 0(src), 1, 0
+        psq_l    f1, 4(src), 0, 0
+        psq_l    f2, 16(src), 1, 0
+        ps_merge10 f6, f1, f0
+        psq_l    f3, 20(src), 0, 0
+        psq_l    f4, 32(src), 1, 0
+        ps_merge10 f7, f3, f2
+        psq_l    f5, 36(src), 0, 0
+        ps_mul   f11, f3, f6
+        ps_merge10 f8, f5, f4
+        ps_mul   f13, f5, f7
+        ps_msub  f11, f1, f7, f11
+        ps_mul   f12, f1, f8
+        ps_msub  f13, f3, f8, f13
+        ps_msub  f12, f5, f6, f12
+        ps_mul   f10, f3, f4
+        ps_mul   f9, f0, f5
+        ps_mul   f8, f1, f2
+        ps_msub  f10, f2, f5, f10
+        ps_msub  f9, f1, f4, f9
+        ps_msub  f8, f0, f3, f8
+        ps_mul   f7, f0, f13
+        ps_sub   f1, f1, f1
+        ps_madd  f7, f2, f12, f7
+        ps_madd  f7, f4, f11, f7
+        ps_cmpo0 cr0, f7, f1
+        bne      non_zero_determinant
+        li       r3, 0
+        blr
+
+    non_zero_determinant:
+        ps_res     f0, f7
+        ps_add   f6, f0, f0
+        ps_mul   f5, f0, f0
+        ps_nmsub f0, f7, f5, f6
+        ps_add   f6, f0, f0
+        ps_mul   f5, f0, f0
+        ps_nmsub f0, f7, f5, f6
+        ps_muls0 f13, f13, f0
+        ps_muls0 f12, f12, f0
+        psq_st   f13, 0(dst), 0, 0
+        ps_muls0 f11, f11, f0
+        psq_st   f12, 12(dst), 0, 0
+        ps_muls0 f10, f10, f0
+        psq_st   f11, 24(dst), 0, 0
+        ps_muls0 f9, f9, f0
+        psq_st   f10, 8(dst), 1, 0
+        ps_muls0 f8, f8, f0
+        psq_st   f9, 20(r4), 1, 0
+        li       r3, 1
+        psq_st   f8, 32(r4), 1, 0
+        blr
+    #endif
 }
 
 /* 802DA64C-802DA724       .text J3DGetTranslateRotateMtx__FRC16J3DTransformInfoPA4_f */
@@ -328,8 +381,90 @@ asm {
 }
 
 /* 802DABBC-802DACE0       .text J3DMtxProjConcat__FPA4_fPA4_fPA4_f */
-void J3DMtxProjConcat(Mtx, Mtx, Mtx) {
+void J3DMtxProjConcat(register Mtx a, register Mtx b, register Mtx dst) {
     /* Nonmatching */
+    #ifdef __MWERKS__
+    asm {
+        psq_l      f2, 0(a), 0, 0
+        psq_l      f3, 8(a), 0, 0
+        ps_merge00 f6, f2, f2
+        ps_merge11 f7, f2, f2
+        ps_merge00 f8, f3, f3
+        ps_merge11 f9, f3, f3
+        psq_l      f10, 0(b), 0, 0
+        psq_l      f11, 0x10(b), 0, 0
+        psq_l      f12, 0x20(b), 0, 0
+        psq_l      f13, 0x30(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[0][0] and dest[0][1]
+        psq_st     f0, 0(dst), 0, 0
+        psq_l      f10, 0x8(b), 0, 0
+        psq_l      f11, 0x18(b), 0, 0
+        psq_l      f12, 0x28(b), 0, 0
+        psq_l      f13, 0x38(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[0][2] and dest[0][3]
+        psq_st     f0, 0x8(dst), 0, 0
+        psq_l      f2, 0x10(a), 0, 0
+        psq_l      f3, 0x18(a), 0, 0
+        ps_merge00 f6, f2, f2
+        ps_merge11 f7, f2, f2
+        ps_merge00 f8, f3, f3
+        ps_merge11 f9, f3, f3
+        psq_l      f10, 0(b), 0, 0
+        psq_l      f11, 0x10(b), 0, 0
+        psq_l      f12, 0x20(b), 0, 0
+        psq_l      f13, 0x30(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[1][0] and dest[1][1]
+        psq_st     f0, 0x10(dst), 0, 0
+        psq_l      f10, 0x8(b), 0, 0
+        psq_l      f11, 0x18(b), 0, 0
+        psq_l      f12, 0x28(b), 0, 0
+        psq_l      f13, 0x38(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[1][2] and dest[1][3]
+        psq_st     f0, 0x18(dst), 0, 0
+        psq_l      f2, 0x20(a), 0, 0
+        psq_l      f3, 0x28(a), 0, 0
+        ps_merge00 f6, f2, f2
+        ps_merge11 f7, f2, f2
+        ps_merge00 f8, f3, f3
+        ps_merge11 f9, f3, f3
+        psq_l      f10, 0(b), 0, 0
+        psq_l      f11, 0x10(b), 0, 0
+        psq_l      f12, 0x20(b), 0, 0
+        psq_l      f13, 0x30(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[2][0] and dest[2][1]
+        psq_st     f0, 0x20(dst), 0, 0
+        psq_l      f10, 0x8(b), 0, 0
+        psq_l      f11, 0x18(b), 0, 0
+        psq_l      f12, 0x28(b), 0, 0
+        psq_l      f13, 0x38(b), 0, 0
+        ps_mul     f0, f6, f10
+        ps_madd    f0, f7, f11, f0
+        ps_madd    f0, f8, f12, f0
+        ps_madd    f0, f9, f13, f0
+        // dest[2][2] and dest[2][3]
+        psq_st     f0, 0x28(dst), 0, 0
+        }
+    #endif
 }
 
 /* 802DACE0-802DAD0C       .text J3DPSMtx33Copy__FPA3_fPA3_f */
@@ -376,7 +511,73 @@ asm {
 #endif
 }
 
+static f32 Unit01[2] = { 0.0f, 1.0f };
+
 /* 802DAD40-802DAE1C       .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */
-void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32) {
-    /* Nonmatching */
+ASM void J3DPSMtxArrayConcat(register Mtx mA, register Mtx mB, register Mtx mAB, register u32 count) {
+#ifdef __MWERKS__
+    nofralloc
+
+    stwu sp, -0x40(sp)
+    stfd fp14, 0x08(sp)
+    addis r7, 0, Unit01@ha
+    stfd fp15, 0x10(sp)
+    addi r7, r7, Unit01@l
+    stfd fp31,  0x28(sp)
+    subi mB,  mB, 0x08
+    subi mAB, mAB, 0x08
+    mtctr count
+loop:
+    psq_l fp0, 0x00(mA), 0, 0
+    psq_l fp6, 0x08(mB), 0, 0
+    psq_l fp7, 0x10(mB), 0, 0
+    psq_l fp8, 0x18(mB), 0, 0
+    ps_muls0 fp12, fp6, fp0
+    psq_l fp2, 0x10(mA), 0, 0
+    ps_muls0 fp13, fp7, fp0
+    psq_l fp31, 0x00(r7), 0, 0
+    ps_muls0 fp14, fp6, fp2
+    psq_l fp9, 0x20(mB), 0, 0
+    ps_muls0 fp15, fp7, fp2
+    psq_l fp1, 0x08(mA), 0, 0
+    ps_madds1 fp12, fp8, fp0, fp12
+    psq_l fp3, 0x18(mA), 0, 0
+    ps_madds1 fp14, fp8, fp2, fp14
+    psq_l fp10, 0x28(mB), 0, 0
+    ps_madds1 fp13, fp9, fp0, fp13
+    psq_lu fp11, 0x30(mB), 0, 0
+    ps_madds1 fp15, fp9, fp2, fp15
+    psq_l fp4, 0x20(mA), 0, 0
+    psq_l fp5, 0x28(mA), 0, 0
+    ps_madds0 fp12, fp10, fp1, fp12
+    ps_madds0 fp13, fp11, fp1, fp13
+    ps_madds0 fp14, fp10, fp3, fp14
+    ps_madds0 fp15, fp11, fp3, fp15
+    psq_st fp12, 0x08(mAB), 0, 0
+
+    ps_muls0 fp2, fp6, fp4
+    ps_madds1 fp13, fp31, fp1, fp13
+    ps_muls0 fp0, fp7, fp4
+    psq_st fp14, 0x18(mAB), 0, 0
+    ps_madds1 fp15, fp31, fp3, fp15
+
+    psq_st fp13, 0x10(mAB), 0, 0
+
+    ps_madds1 fp2, fp8, fp4, fp2
+    ps_madds1 fp0, fp9, fp4, fp0
+    ps_madds0 fp2, fp10, fp5, fp2
+    psq_st fp15, 0x20(mAB), 0, 0
+    ps_madds0 fp0, fp11, fp5, fp0
+    psq_st fp2, 0x28(mAB), 0, 0
+    ps_madds1 fp0, fp31, fp5, fp0
+    psq_stu fp0, 0x30(mAB), 0, 0
+
+    bdnz loop
+
+    lfd fp14, 0x08(sp)
+    lfd fp15, 0x10(sp)
+    lfd fp31, 0x28(sp)
+    addi sp, sp, 0x40
+    blr
+#endif
 }
