@@ -6,6 +6,7 @@
 #include "JSystem/JAudio/JASTrack.h"
 #include "JSystem/JAudio/JASBankMgr.h"
 #include "JSystem/JAudio/JASCalc.h"
+#include "JSystem/JAudio/JASCallback.h"
 #include "JSystem/JAudio/JASChannel.h"
 #include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASPlayer.h"
@@ -24,7 +25,7 @@ JASystem::TTrack::TTrack() {
     field_0x374 = 0;
     field_0x376 = 0x78;
     field_0x378 = 0x78;
-    field_0x37a = 0;
+    mTranspose = 0;
     field_0x37b = 0;
     mPauseStatus = 0;
     mVolumeMode = 0;
@@ -73,7 +74,7 @@ void JASystem::TTrack::init() {
     field_0x376 = 0x78;
     field_0x378 = 0x30;
     updateTempo();
-    field_0x37a = 0;
+    mTranspose = 0;
     field_0x37b = 0;
     mPauseStatus = 10;
     mVolumeMode = 0;
@@ -146,7 +147,22 @@ s8 JASystem::TTrack::mainProc() {
     mIntrMgr.timerProcess();
     tryInterrupt();
     if (mIsPaused == 0 && (mPauseStatus & 2) == 0) {
-        // TODO:
+        if (mSeqCtrl.mWaitTimer == -1) {
+            if (checkNoteStop(0) & 0xFF) {
+                mSeqCtrl.mWaitTimer = 0;
+                // TODO: jumps to updateTimedParam
+            }
+        } else {
+            if (mSeqCtrl.mWaitTimer > 0) {
+                if (mSeqCtrl.waitCountDown()) {
+                    // TODO: jumps to updateTimedParam
+                } else {
+                    mNoteMgr.endProcess();
+                }
+            } else {
+                r31 = sParser.parseSeq(this);
+            }
+        }
     }
     updateSeq(0, false);
     if (r31 < 0) {
@@ -311,7 +327,6 @@ int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, 
 
 /* 802814AC-802815DC       .text overwriteOsc__Q28JASystem6TTrackFPQ28JASystem8TChannel */
 void JASystem::TTrack::overwriteOsc(TChannel* param_1) {
-    /* Nonmatching */
     u32 r28;
     for (int i = 0; i < 2; i++) {
         u32 var1 = mOscRoute[i];
@@ -383,8 +398,10 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
     if (var3) {
         field_0x2cc[var1] = Player::sEnvelopeDef;
         field_0x2cc[var1].field_0x0 = var2;
-        if (var2 == 1) {
-            field_0x2cc[var1].field_0x14 = 1.0f;
+        switch (var2) {
+            case 1:
+                field_0x2cc[var1].field_0x14 = 1.0f;
+                break;
         }
     }
     if (var4) {
@@ -459,12 +476,43 @@ void JASystem::TTrack::oscSetupSimple(u8 param_1) {
 
 /* 802819D0-80281AA4       .text updateTimedParam__Q28JASystem6TTrackFv */
 void JASystem::TTrack::updateTimedParam() {
-    /* Nonmatching */
+    for (s32 i = 0; i < TIMED_PARAMS; i++) {
+        MoveParam_& param = mTimedParam.mMoveParams[i];
+
+        if (param.mMoveTime > 0.0f) {
+            param.mCurrentValue += param.mMoveAmount;
+            param.mMoveTime -= 1.0f;
+            if (i <= 5 || i >= 11) {
+                mUpdateFlags |= (1 << i);
+            } else {
+                updateOscParam(i, param.mCurrentValue);
+            }
+        }
+    }
+    mUpdateFlags |= 2;
 }
 
 /* 80281AA4-80281E90       .text updateTrackAll__Q28JASystem6TTrackFv */
 void JASystem::TTrack::updateTrackAll() {
     /* Nonmatching */
+    if (field_0x37b == 4) {
+        return;
+    }
+
+    f32 panWeight = mRegisterParam.field_0x20[0] / 32767.0f;
+    mChannelUpdater.field_0x68 = mTimedParam.mMoveParams[TIMED_IIR_Unk2].mCurrentValue;
+    mChannelUpdater.field_0x6c = 0;
+
+    f32 delay = mTimedParam.mMoveParams[TIMED_Osc1_Rate].mCurrentValue * 128.0f;
+    panCalc(panWeight, delay, 0.0f, 1);
+
+    // if (...) {
+    //}
+    // else {
+    //
+        mChannelUpdater.field_0x61 = mChannelUpdater.field_0x61 | 0x20;
+        mChannelUpdater.field_0x4c = mTimedParam.mMoveParams[TIMED_Unk5].mCurrentValue * 32767.0f;
+    // }
 }
 
 /* 80281E90-80282364       .text updateTrack__Q28JASystem6TTrackFUl */
@@ -475,11 +523,53 @@ void JASystem::TTrack::updateTrack(u32) {
 /* 80282364-802824C0       .text updateTempo__Q28JASystem6TTrackFv */
 void JASystem::TTrack::updateTempo() {
     /* Nonmatching */
+    if (mParent == NULL) {
+        field_0x368 = (f32) field_0x378;
+        field_0x368 *= field_0x376;
+        field_0x368 /= Kernel::getDacRate();
+        field_0x368 *= 1.33333333f;
+        if (mOuterParam != NULL && mOuterParam->checkOuterSwitch(OUTERPARAM_Tempo)) {
+            field_0x368 *= mOuterParam->field_0x18;
+        }
+    } else {
+        field_0x368 = mParent->field_0x368;
+        field_0x378 = mParent->field_0x378;
+    }
+
+    for (s32 i = 0; i < MAX_CHILDREN; i++) {
+        TTrack* child = mChildren[i];
+        if (child && child->field_0x37e) {
+            JUT_ASSERT(1159, this == child->mParent);
+            child->updateTempo();
+        }
+    }
 }
 
 /* 802824C0-802825A0       .text updateSeq__Q28JASystem6TTrackFUlb */
-void JASystem::TTrack::updateSeq(u32, bool) {
-    /* Nonmatching */
+void JASystem::TTrack::updateSeq(u32 flags, bool update_children) {
+    u32 new_flags = flags | mUpdateFlags;
+    if (mOuterParam) {
+        new_flags |= mOuterParam->getOuterUpdate();
+        mOuterParam->setOuterUpdate(0);
+    }
+
+    mVibrate.incCounter();
+    mUpdateFlags = 0;
+
+    if (new_flags != 0) {
+        updateTrack(new_flags);
+    }
+
+    for (s32 i = 0; i < MAX_CHILDREN; i++) {
+        TTrack* child = mChildren[i];
+        if (child && child->field_0x37e) {
+            if (update_children) {
+                child->updateSeq(new_flags, update_children);
+            } else {
+                child->mUpdateFlags |= new_flags;
+            }
+        }
+    }
 }
 
 /* 802825A0-8028265C       .text seqTimeToDspTime__Q28JASystem6TTrackFlUc */
@@ -498,13 +588,24 @@ int JASystem::TTrack::seqTimeToDspTime(s32 param_1, u8 param_2) {
 }
 
 /* 8028265C-8028278C       .text setParam__Q28JASystem6TTrackFifi */
-void JASystem::TTrack::setParam(int, f32, int) {
-    /* Nonmatching */
+void JASystem::TTrack::setParam(int target, f32 target_value, int move_time) {
+    JUT_ASSERT(1236, target >= 0);
+    JUT_ASSERT(1237, target < TIMED_PARAMS);
+
+    MoveParam_& param = mTimedParam.mMoveParams[target];
+    param.mTargetValue = target_value;
+    if (move_time <= 0) {
+        param.mCurrentValue = param.mTargetValue;
+        param.mMoveAmount = 0.0f;
+        param.mMoveTime = 1.0f;
+    } else {
+        param.mMoveAmount = (param.mTargetValue - param.mCurrentValue) / move_time;
+        param.mMoveTime = move_time;
+    }
 }
 
 /* 8028278C-802827F0       .text setSeqData__Q28JASystem6TTrackFPUcli */
 bool JASystem::TTrack::setSeqData(u8* param_1, s32, int) {
-    /* Nonmatching */
     init();
     field_0x37b = 3;
     mSeqCtrl.start(param_1, 0);
@@ -515,12 +616,45 @@ bool JASystem::TTrack::setSeqData(u8* param_1, s32, int) {
 
 /* 802827F0-802828A8       .text startSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::startSeq() {
-    /* Nonmatching */
+    switch (field_0x37e) {
+        case 0:
+            // Not ready
+            OSReport("in Player StartSeq:   準備ができていません\n");
+            return false;
+        case 1:
+            // Already started
+            OSReport("in Player StartSeq:   既に動作中です\n");
+            return false;
+        case 3:
+            // Stopping
+            OSReport("in Player StartSeq: 停止中です\n");
+            return false;
+        case 2:
+            field_0x37e = 1;
+            break;
+    }
+
+    Kernel::registerSubFrameCallback(rootCallback, this);
+    return true;
 }
 
 /* 802828A8-80282908       .text stopSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::stopSeq() {
-    /* Nonmatching */
+    switch (field_0x37e) {
+        case 0:
+            break;
+        case 2:
+            field_0x37e = 0;
+            if (field_0x389 != 0 && this != NULL) {
+                next = sFreeList;
+                sFreeList = this;
+            }
+            break;
+        default:
+            field_0x37e = 3;
+            break;
+    }
+    return true;
 }
 
 /* 80282908-80282944       .text stopSeqMain__Q28JASystem6TTrackFv */
@@ -531,43 +665,139 @@ void JASystem::TTrack::stopSeqMain() {
 
 /* 80282944-802829DC       .text noteOffAll__Q28JASystem6TTrackFv */
 void JASystem::TTrack::noteOffAll() {
-    /* Nonmatching */
+    if (mParent == NULL) {
+        for (u8 i = 0; i < 8; i++) {
+            noteOff(i, 10);
+        }
+    } else {
+        for (u8 i = 0; i < 8; i++) {
+            noteOff(i, 0);
+        }
+    }
+    mNoteMgr.init();
 }
 
 /* 802829DC-80282A90       .text close__Q28JASystem6TTrackFv */
 int JASystem::TTrack::close() {
-    /* Nonmatching */
+    if (field_0x37e == 0) {
+        return 0;
+    }
+
+    noteOffAll();
+    field_0x37e = 0;
+
+    for (s32 i = 0; i < MAX_CHILDREN; i++) {
+        if (mChildren[i]) {
+            mChildren[i]->close();
+            mChildren[i] = NULL;
+        }
+    }
+
+    field_0x386 = 0;
+    releaseChannelAll();
+    // `this != NULL` is redundant but seems to be required, maybe this code
+    // is inlined from somewhere else.
+    if (field_0x389 != 0 && this != NULL) {
+        next = sFreeList;
+        sFreeList = this;
+    }
+    return 0;
 }
 
 /* 80282A90-80282B44       .text muteTrack__Q28JASystem6TTrackFb */
-void JASystem::TTrack::muteTrack(bool) {
-    /* Nonmatching */
+void JASystem::TTrack::muteTrack(bool mute) {
+    field_0x386 = mute;
+    mUpdateFlags |= 1;
+
+    if (field_0x386 && (mPauseStatus & 0x20)) {
+        for (u8 i = 0; i < 8; i++) {
+            noteOff(i, 10);
+        }
+    }
+
+    for (s32 i = 0; i < MAX_CHILDREN; i++) {
+        if (mChildren[i]) {
+            mChildren[i]->muteTrack(mute);
+        }
+    }
 }
 
 /* 80282B44-80282B84       .text start__Q28JASystem6TTrackFPvUl */
 bool JASystem::TTrack::start(void* param_1, u32 param_2) {
-    /* Nonmatching */
     mSeqCtrl.start(param_1, param_2);
     field_0x37e = 1;
     updateTrackAll();
     return false;
 }
 
+// Needed for the placement new operator in openChild, not sure how else it
+// would call a constructor on an existing sFreeList pointer.
+inline void* operator new (u32 size, void* ptr) {
+    return ptr;
+}
+
 /* 80282B84-80282CE8       .text openChild__Q28JASystem6TTrackFUcUc */
-JASystem::TTrack* JASystem::TTrack::openChild(u8, u8) {
+JASystem::TTrack* JASystem::TTrack::openChild(u8 trk_no, u8 param_2) {
     /* Nonmatching */
+    JUT_ASSERT(1448, trk_no < MAX_CHILDREN);
+
+    if (mChildren[trk_no]) {
+        mChildren[trk_no]->close();
+        mChildren[trk_no] = NULL;
+    }
+
+    TTrack* new_track_ptr;
+    if (sFreeList == NULL) {
+        new_track_ptr = NULL;
+    } else {
+        new_track_ptr = sFreeList;
+        sFreeList = sFreeList->next;
+    }
+
+    TTrack* new_track;
+    if (new_track_ptr != NULL) {
+        new_track = new (new_track_ptr) TTrack();
+    }
+
+    if (new_track == NULL) {
+        // JASTrack is not enough.
+        JUT_WARN(1459, "%s", "JASTrackが足りません。\n");
+        return NULL;
+    }
+
+    new_track->init();
+    new_track->field_0x389 = 1;
+    new_track->mParent = this;
+    new_track->field_0x37b = param_2;
+
+    u32 top_nibble = this->field_0x36c & 0xf0000000;
+    if (top_nibble >= 0x7FFFFFFF) {
+        // The hierarchy exceeds 8 levels and an invalid track ID is generated.
+        OSReport("JASTrack:openTrack: 階層が8段階を超えてしまい、不正なトラックIDが生成されました\n");
+    }
+    new_track->field_0x36c = (top_nibble + 0x10000000) |
+                             (this->field_0x36c & 0xffffff) << 4 |
+                             ((u32) trk_no);
+    mChildren[trk_no] = new_track;
+    new_track->inherit();
+    return new_track;
 }
 
 /* 80282CE8-80282D80       .text loadTbl__Q28JASystem6TTrackFUlUlUl */
 int JASystem::TTrack::loadTbl(u32 param_1, u32 param_2, u32 param_3) {
-    /* Nonmatching */
+    u32 param_2_times_three;
+
     switch (param_3) {
     case 4:
         return mSeqCtrl.mRawFilePtr[param_1 + param_2];
     case 5:
         return mSeqCtrl.get16(param_1 + param_2 * 2);
     case 6:
-        return mSeqCtrl.get24(param_1 + param_2 * 3);
+        // Doing (param_2 * 3) causes a multiply instruction instead of a shift
+        // and add.
+        param_2_times_three = param_2;
+        param_2_times_three += param_2 * 2;
+        return mSeqCtrl.get24(param_1 + param_2_times_three);
     case 7:
         return mSeqCtrl.get32(param_1 + param_2 * 4);
     case 8:
@@ -576,23 +806,106 @@ int JASystem::TTrack::loadTbl(u32 param_1, u32 param_2, u32 param_3) {
 }
 
 /* 80282D80-80282DC0       .text exchangeRegisterValue__Q28JASystem6TTrackFUc */
-int JASystem::TTrack::exchangeRegisterValue(u8) {
-    /* Nonmatching */
+int JASystem::TTrack::exchangeRegisterValue(u8 target) {
+    if (target < 0x40) {
+        return readReg32(target);
+    }
+
+    u8 index = target - 0x40;
+    return mTrackPort.mValue[index];
 }
 
 /* 80282DC0-80282ED4       .text readReg32__Q28JASystem6TTrackFUc */
-u32 JASystem::TTrack::readReg32(u8) {
+u32 JASystem::TTrack::readReg32(u8 target) {
     /* Nonmatching */
+    s32 index;
+
+    switch(target) {
+        case 0x2b:
+        case 0x2a:
+        case 0x29:
+        case 0x28:
+            index = target - 0x28;
+            return mRegisterParam._readReg32(index);
+        case 0x23:
+            return readReg16(0x4) << 16 | readReg16(0x5);
+        default:
+            return readReg16(target);
+    }
 }
 
 /* 80282ED4-802830AC       .text readReg16__Q28JASystem6TTrackFUc */
-u16 JASystem::TTrack::readReg16(u8) {
+u16 JASystem::TTrack::readReg16(u8 target) {
     /* Nonmatching */
+    JUT_ASSERT(1553, target != TRegisterParam::PARAM_REG_XY);
+    JUT_ASSERT(1554, target < TRegisterParam::PARAM_REG_AR0 || target > TRegisterParam::PARAM_REG_AR3);
+
+    u32 result;
+    switch (target) {
+        case 0x20:
+            result = mRegisterParam.getBankNumber() & 0xFF;
+            break;
+        case 0x21:
+            result = mRegisterParam.getProgramNumber() & 0xFF;
+            break;
+        case 0x22:
+            result = readReg16(0) & 0xFF << 8;
+            result |= readReg16(1);
+            break;
+        case 0x2C:
+            result = 0;
+            for (s32 i = MAX_CHILDREN; i >= 0; i--) {
+                result <<= 1;
+                if (mChildren[i] && mChildren[i]->field_0x37e != 0) {
+                    result |= 1;
+                }
+            }
+            break;
+        case 0x2D:
+            result = 0;
+            for (s32 i = 7; i >= 0; i--) {
+                result = ((result & 0x7FFF) << 1);
+                result |= checkNoteStop(i) & 0xFF;
+            }
+            break;
+        case 0x30:
+            result = mSeqCtrl.mLoopIndex == 0 ? 0 : mSeqCtrl.mLoopTimers[mSeqCtrl.mLoopIndex - 1];
+            break;
+        default:
+            result = mRegisterParam._readReg16(target);
+            break;
+    }
+    return result;
 }
 
 /* 802830AC-80283164       .text writeRegDirect__Q28JASystem6TTrackFUcUs */
-void JASystem::TTrack::writeRegDirect(u8, u16) {
+void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
     /* Nonmatching */
+    u16 reg_3_value;
+    u8 val_u8;
+
+    switch (target) {
+        case 0:
+        case 1:
+        case 2:
+            val_u8 = value & 0xFF;
+            value = val_u8;
+            reg_3_value = Player::extend8to16(val_u8);
+            break;
+        case 0x20:
+        case 0x21:
+            return;
+        case 0x22:
+            writeRegDirect(0, value >> 8);
+            target = 1;
+            reg_3_value = value & 0xFF;
+            break;
+        default:
+            reg_3_value = value;
+            break;
+    }
+    mRegisterParam.field_0x0[target] = value;
+    mRegisterParam.field_0x0[3] = reg_3_value;
 }
 
 /* 80283164-802836FC       .text writeRegParam__Q28JASystem6TTrackFUc */
@@ -602,74 +915,191 @@ void JASystem::TTrack::writeRegParam(u8) {
 
 /* 802836FC-80283720       .text readSelfPort__Q28JASystem6TTrackFi */
 u16 JASystem::TTrack::readSelfPort(int param_1) {
-    /* Nonmatching */
     return mTrackPort.readImport(param_1);
 }
 
 /* 80283720-80283744       .text writeSelfPort__Q28JASystem6TTrackFiUs */
 void JASystem::TTrack::writeSelfPort(int param_1, u16 param_2) {
-    /* Nonmatching */
     mTrackPort.writeExport(param_1, param_2);
 }
 
 /* 80283744-802837AC       .text writePortAppDirect__Q28JASystem6TTrackFUlUs */
-int JASystem::TTrack::writePortAppDirect(u32, u16) {
+int JASystem::TTrack::writePortAppDirect(u32 port, u16 value) {
     /* Nonmatching */
+    mTrackPort.writeImport(port, value);
+    if (port == 0 || port == 1) {
+        TIntrMgr& intrMgr = mIntrMgr;
+
+        u32 mIntrParam = 4;
+        if (port == 0) {
+            mIntrParam = 3;
+        }
+
+        intrMgr.request(mIntrParam);
+    }
+    return 1;
 }
 
 /* 802837AC-802837E4       .text readPortAppDirect__Q28JASystem6TTrackFUlPUs */
-int JASystem::TTrack::readPortAppDirect(u32, u16*) {
-    /* Nonmatching */
+int JASystem::TTrack::readPortAppDirect(u32 port, u16* read_ptr) {
+    *read_ptr = mTrackPort.readExport(port);
+    return 1;
 }
 
 /* 802837E4-8028381C       .text routeTrack__Q28JASystem6TTrackFUl */
-void JASystem::TTrack::routeTrack(u32) {
-    /* Nonmatching */
+JASystem::TTrack* JASystem::TTrack::routeTrack(u32 route) {
+    TTrack* owning_track = this;
+
+    u32 depth = route >> 28;
+    for (u32 i = 0; i < depth; i++) {
+        owning_track = owning_track->mChildren[route & 0xF];
+        if (owning_track == NULL) {
+            return NULL;
+        }
+        route >>= 4;
+    }
+    return owning_track;
 }
 
 /* 8028381C-80283870       .text writePortApp__Q28JASystem6TTrackFUlUs */
-int JASystem::TTrack::writePortApp(u32, u16) {
-    /* Nonmatching */
+int JASystem::TTrack::writePortApp(u32 route, u16 value) {
+    TTrack* track = routeTrack(route);
+    if (track == NULL) {
+        return 0;
+    }
+
+    return track->writePortAppDirect((route >> 16) & 0xFF, value);
 }
 
 /* 80283870-802838C4       .text readPortApp__Q28JASystem6TTrackFUlPUs */
-int JASystem::TTrack::readPortApp(u32, u16*) {
-    /* Nonmatching */
+int JASystem::TTrack::readPortApp(u32 route, u16* value_out) {
+    TTrack* track = routeTrack(route);
+    if (track == NULL) {
+        return 0;
+    }
+
+    return track->readPortAppDirect((route >> 16) & 0xFF, value_out);
 }
 
 /* 802838C4-80283A64       .text pause__Q28JASystem6TTrackFbb */
-void JASystem::TTrack::pause(bool, bool) {
+void JASystem::TTrack::pause(bool pause, bool pause_children) {
     /* Nonmatching */
+    mIsPaused = pause;
+
+    if (pause) {
+        if (mPauseStatus & 1) {
+            mUpdateFlags |= 1;
+        }
+
+        if (mPauseStatus & 0x4) {
+            for (u8 i = 0; i < 8; i++) {
+                noteOff(i, 10);
+            }
+        }
+
+        if (mPauseStatus & 0x8) {
+            for (s32 i = 0; i < 8; i++) {
+                TChannel* channel = mNoteMgr.getChannel(i);
+                if (channel) {
+                    channel->setPauseFlag(1);
+                }
+            }
+        }
+    } else {
+        mUpdateFlags |= 1;
+        for (s32 i = 0; i < 8; i++) {
+            TChannel* channel = mNoteMgr.getChannel(i);
+            if (channel) {
+                channel->setPauseFlag(1);
+            }
+        }
+    }
+
+    mIntrMgr.request(pause ? 0 : 1);
+
+    if (pause_children) {
+        for (s32 i = 0; i < MAX_CHILDREN; i++) {
+            TTrack* child = mChildren[i];
+            if (child && child->field_0x37e) {
+                JUT_ASSERT(2109, this == child->mParent);
+                child->pause(pause, true);
+            }
+        }
+    }
 }
 
 /* 80283A64-80283AB4       .text getTranspose__Q28JASystem6TTrackCFv */
 int JASystem::TTrack::getTranspose() const {
-    /* Nonmatching */
+    if (mParent != NULL) {
+        return mParent->getTranspose() + mTranspose;
+    }
+    return mTranspose;
 }
 
 /* 80283AB4-80283AF0       .text setTempo__Q28JASystem6TTrackFUs */
-void JASystem::TTrack::setTempo(u16) {
-    /* Nonmatching */
+void JASystem::TTrack::setTempo(u16 tempo) {
+    field_0x376 = tempo;
+    if (mParent == NULL) {
+        updateTempo();
+    } else {
+        field_0x388 = 1;
+    }
 }
 
 /* 80283AF0-80283B20       .text setTimebase__Q28JASystem6TTrackFUs */
-void JASystem::TTrack::setTimebase(u16) {
-    /* Nonmatching */
+void JASystem::TTrack::setTimebase(u16 timeBase) {
+    field_0x378 = timeBase;
+    if (mParent == NULL) {
+        updateTempo();
+    }
 }
 
 /* 80283B20-80283BBC       .text panCalc__Q28JASystem6TTrackFfffUc */
-f32 JASystem::TTrack::panCalc(f32, f32, f32, u8) {
-    /* Nonmatching */
+f32 JASystem::TTrack::panCalc(f32 a, f32 b, f32 weight, u8 type) {
+    switch (type) {
+        case 0:
+            return a;
+        case 1:
+            return b;
+        case 2:
+            return a * (1.0f - weight) + (b * weight);
+    }
+    JUT_ASSERT(2150, false);
+    return 0.0f;
 }
 
 /* 80283BBC-80283C9C       .text rootCallback__Q28JASystem6TTrackFPv */
-int JASystem::TTrack::rootCallback(void*) {
-    /* Nonmatching */
+s32 JASystem::TTrack::rootCallback(void* user_data) {
+    TTrack* i_this = (TTrack*)user_data;
+
+    if (i_this == NULL) {
+        return -1;
+    }
+    if (i_this->field_0x37e == 0) {
+        return -1;
+    }
+    if (i_this->field_0x37e == 3) {
+        i_this->stopSeqMain();
+        return -1;
+    }
+
+    i_this->field_0x364 += i_this->field_0x368;
+    if (i_this->field_0x364 < 1.0f) {
+        i_this->updateSeq(0, true);
+    } else {
+        while (i_this->field_0x364 >= 1.0f) {
+            i_this->field_0x364 -= 1.0f;
+            if (i_this->mainProc() == -1) {
+                i_this->stopSeqMain();
+                return -1;
+            }
+        }
+    }
+    return 0;
 }
 
 /* 80283C9C-80283CE8       .text registerSeqCallback__Q28JASystem6TTrackFPFPQ28JASystem6TTrackUs_Us */
 void JASystem::TTrack::registerSeqCallback(u16 (*param_1)(TTrack*, u16)) {
-    /* Nonmatching */
     if (sCallBackFunc) {
         OSReport("in Player ... overwrite callback\n");
     }
@@ -678,7 +1108,6 @@ void JASystem::TTrack::registerSeqCallback(u16 (*param_1)(TTrack*, u16)) {
 
 /* 80283CE8-80283E9C       .text newMemPool__Q28JASystem6TTrackFi */
 void JASystem::TTrack::newMemPool(int param_1) {
-    /* Nonmatching */
     TTrack* runner = (TTrack*)new (JASDram, 0) u8[sizeof(TTrack)];
     JUT_ASSERT(2218, runner);
     TOuterParam* outer = new (JASDram, 0) TOuterParam();
@@ -698,13 +1127,11 @@ void JASystem::TTrack::newMemPool(int param_1) {
 
 /* 80283E9C-80283ECC       .text __ct__Q28JASystem8TVibrateFv */
 JASystem::TVibrate::TVibrate() {
-    /* Nonmatching */
     init();
 }
 
 /* 80283ECC-80283EE4       .text init__Q28JASystem8TVibrateFv */
 void JASystem::TVibrate::init() {
-    /* Nonmatching */
     mPitch = 1.0f / 18.0f;
     mDepth = 0.0f;
     field_0x0 = 0.0f;
@@ -712,7 +1139,6 @@ void JASystem::TVibrate::init() {
 
 /* 80283EE4-80283F18       .text incCounter__Q28JASystem8TVibrateFv */
 void JASystem::TVibrate::incCounter() {
-    /* Nonmatching */
     field_0x0 += mPitch;
     if (!(field_0x0 >= 4.0)) {
         return;
@@ -722,7 +1148,31 @@ void JASystem::TVibrate::incCounter() {
 
 /* 80283F18-80283FD0       .text getValue__Q28JASystem8TVibrateCFv */
 f32 JASystem::TVibrate::getValue() const {
-    /* Nonmatching */
+    if (mDepth == 0.0f) {
+        return 1.0f;
+    }
+
+    f32 value = field_0x0;
+    bool flag = false;
+
+    if (value < 2.0) {
+        if (!(value < 1.0)) {
+            value = 2.0f - value;
+        }
+    } else {
+        flag = true;
+        if (value < 3.0) {
+            value = value - 2.0f;
+        } else {
+            value = 4.0f - value;
+        }
+    }
+
+    f32 sin_val = Calc::sinfT(value);
+    if (flag) {
+        sin_val = -sin_val;
+    }
+    return Player::pitchToCent(sin_val * mDepth, 12.0f);
 }
 
 /* 80283FE8-80284118       .text __ct__Q38JASystem6TTrack12AInnerParam_Fv */

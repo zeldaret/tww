@@ -22,10 +22,10 @@ JASystem::TRegisterParam::TRegisterParam() {
     mPanPower[2] = 0;
     mPanPower[3] = 0;
     mPanPower[4] = 0;
-    field_0x20 = 0;
-    field_0x24 = 0;
-    field_0x28 = 0;
-    field_0x2c = 0;
+    field_0x20[0] = 0;
+    field_0x20[1] = 0;
+    field_0x20[2] = 0;
+    field_0x20[3] = 0;
 }
 
 /* 8027E310-8027E378       .text init__Q28JASystem14TRegisterParamFv */
@@ -44,10 +44,10 @@ void JASystem::TRegisterParam::init() {
     mPanPower[2] = 1;
     mPanPower[3] = 0x7fff;
     mPanPower[4] = 0x4000;
-    field_0x20 = 0;
-    field_0x24 = 0;
-    field_0x28 = 0;
-    field_0x2c = 0;
+    field_0x20[0] = 0;
+    field_0x20[1] = 0;
+    field_0x20[2] = 0;
+    field_0x20[3] = 0;
 }
 
 /* 8027E378-8027E3E0       .text inherit__Q28JASystem14TRegisterParamFRCQ28JASystem14TRegisterParam */
@@ -64,10 +64,10 @@ void JASystem::TRegisterParam::inherit(const JASystem::TRegisterParam& param_1) 
     for (int i = 0; i < 5; i++) {
         mPanPower[i] = param_1.mPanPower[i];
     }
-    field_0x20 = 0;
-    field_0x24 = 0;
-    field_0x28 = 0;
-    field_0x2c = 0;
+    field_0x20[0] = 0;
+    field_0x20[1] = 0;
+    field_0x20[2] = 0;
+    field_0x20[3] = 0;
 }
 
 /* 8027E3E0-8027E3EC       .text getBankNumber__Q28JASystem14TRegisterParamCFv */
