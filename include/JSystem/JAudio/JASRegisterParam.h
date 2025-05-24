@@ -17,30 +17,23 @@ namespace JASystem {
         u8 getBankNumber() const;
         u8 getProgramNumber() const;
 
-        void getAddress(int) const {}
+        u32 getAddress(int index) const {
+            JUT_ASSERT(130, index >= 0);
+            JUT_ASSERT(131, index < 4);
+            return field_0x20[index];
+        }
+        void setAddress(int, u32) {}
+
         void getBendSense() const {}
-        u16 getFlag() const { return field_0x0[3]; }
         void getPanPowerBank() const {}
         void getPanPowerExt() const {}
         void getPanPowerOsc() const {}
         void getPanPowerParent() const {}
         void getPanPowerTrack() const {}
         void getPriority() const {}
-        void setAddress(int, u32) {}
+        u16 getFlag() const { return field_0x0[3]; }
         void setFlag(u16 flag) { field_0x0[3] = flag; }
         void setPanPower(int i, u16 power) { mPanPower[i] = power; }
-
-        inline u16 _readReg16(s32 index) {
-            return field_0x0[index];
-        }
-
-        inline u32 _readReg32(s32 index) {
-            // Name is made up but we know this function lives here because it
-            // has assertions with this file's name.
-            JUT_ASSERT(130, index >= 0);
-            JUT_ASSERT(131, index < 4);
-            return field_0x20[index];
-        }
 
         /* 0x00 */ u16 field_0x0[6];
         /* 0x0C */ u16 field_0xc;

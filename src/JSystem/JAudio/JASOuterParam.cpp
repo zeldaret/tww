@@ -9,12 +9,12 @@
 JASystem::TTrack::TOuterParam::TOuterParam() {
     field_0x0 = 0;
     field_0x2 = 0;
-    field_0x4 = 0.0f;
-    field_0x8 = 0.0f;
-    field_0xc = 0.0f;
-    field_0x10 = 0.0f;
-    field_0x14 = 0.0f;
-    field_0x18 = 0.0f;
+    mVolume = 0.0f;
+    mPitch = 0.0f;
+    mFxmix = 0.0f;
+    mDolby = 0.0f;
+    mPan = 0.0f;
+    mTempo = 0.0f;
     for (int i = 0; i < 8; i++) {
         field_0x1c[i] = 0;
     }
@@ -55,23 +55,23 @@ s16 JASystem::TTrack::TOuterParam::getIntFirFilter(u8 param_1) {
 void JASystem::TTrack::TOuterParam::setParam(u8 param_1, f32 param_2) {
     f32* var1;
     switch (param_1) {
-    case 1:
-        var1 = &field_0x4;
+    case OUTERPARAM_Volume:
+        var1 = &mVolume;
         break;
-    case 2:
-        var1 = &field_0x8;
+    case OUTERPARAM_Pitch:
+        var1 = &mPitch;
         break;
-    case 4:
-        var1 = &field_0xc;
+    case OUTERPARAM_Fxmix:
+        var1 = &mFxmix;
         break;
-    case 16:
-        var1 = &field_0x10;
+    case OUTERPARAM_Dolby:
+        var1 = &mDolby;
         break;
-    case 8:
-        var1 = &field_0x14;
+    case OUTERPARAM_Pan:
+        var1 = &mPan;
         break;
-    case 64:
-        var1 = &field_0x18;
+    case OUTERPARAM_Tempo:
+        var1 = &mTempo;
         break;
     default:
         return;

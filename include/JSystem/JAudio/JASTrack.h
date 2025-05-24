@@ -83,14 +83,21 @@ namespace JASystem {
             void onSwitch(u16);
             void setFirFilter(s16*);
 
+            f32 getVolume() const { return mVolume; }
+            f32 getPitch() const { return mPitch; }
+            f32 getFxVol() const { return mFxmix; }
+            f32 getDolby() const { return mDolby; }
+            f32 getPan() const { return mPan; }
+            f32 getTempo() const { return mTempo; }
+
             /* 0x00 */ u16 field_0x0;
             /* 0x02 */ u16 field_0x2;
-            /* 0x04 */ f32 field_0x4;
-            /* 0x08 */ f32 field_0x8;
-            /* 0x0C */ f32 field_0xc;
-            /* 0x10 */ f32 field_0x10;
-            /* 0x14 */ f32 field_0x14;
-            /* 0x18 */ f32 field_0x18;
+            /* 0x04 */ f32 mVolume;
+            /* 0x08 */ f32 mPitch;
+            /* 0x0C */ f32 mFxmix;
+            /* 0x10 */ f32 mDolby;
+            /* 0x14 */ f32 mPan;
+            /* 0x18 */ f32 mTempo;
             /* 0x1C */ s16 field_0x1c[8];
         };
 
@@ -187,7 +194,7 @@ namespace JASystem {
         void overwriteOsc(TChannel*);
         bool noteOff(u8, u16);
         int gateOn(u8, s32, s32, s32);
-        int checkNoteStop(s32);
+        bool checkNoteStop(s32);
         void oscSetupFull(u8, u32, u32);
         void oscSetupSimpleEnv(u8, u32);
         void updateOscParam(int, f32);
@@ -230,6 +237,22 @@ namespace JASystem {
         static void registerSeqCallback(u16 (*)(TTrack*, u16));
         static void newMemPool(int);
 
+        void* operator new(size_t n) {
+            TTrack* track;
+            if (sFreeList == NULL) {
+                track = NULL;
+            } else {
+                track = sFreeList;
+                sFreeList = sFreeList->next;
+            }
+            return track;
+        }
+        void operator delete(void* ptr, size_t n) {
+            TTrack* track = (TTrack*)ptr;
+            track->next = sFreeList;
+            sFreeList = track;
+        }
+
         TTrack* getParent() { return mParent; }
         TTrack* getChild(int index) {
             JUT_ASSERT(242, index >= 0);
@@ -244,8 +267,6 @@ namespace JASystem {
         void getActivity() const {}
         void getRoute() const {}
         TSeqCtrl* getSeq() { return &mSeqCtrl; }
-        // void operator delete(void*, u32) {}
-        // void* operator new(size_t) {}
         void pauseTrackAll() { pause(true, true); }
         void unPauseTrackAll() { pause(false, true); }
         void setPanPower(int i, u16 power) { mRegisterParam.setPanPower(i, power); }
