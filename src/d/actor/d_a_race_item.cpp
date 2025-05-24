@@ -8,6 +8,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -282,7 +283,7 @@ actor_process_profile_definition g_profile_RACEITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00FD,
+    /* Priority     */ PRIO_RACEITEM,
     /* Actor SubMtd */ &l_daRaceItem_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ACTOR_e,

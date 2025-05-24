@@ -56,7 +56,7 @@ dBgS_Acch::dBgS_Acch() {
     pm_pos = NULL;
     pm_old_pos = NULL;
     pm_speed = NULL;
-    m_ground_h = C_BG_MIN_HEIGHT;
+    m_ground_h = -G_CM3D_F_INF;
     m_ground_up_h = 0.0f;
     m_ground_check_offset = 60.0f;
     m_ground_up_h_diff = 0.0f;
@@ -73,7 +73,7 @@ dBgS_Acch::dBgS_Acch() {
     pm_shape_angle = NULL;
     m_my_ac = NULL;
     pm_out_poly_info = NULL;
-    m_sea_height = C_BG_MIN_HEIGHT;
+    m_sea_height = -G_CM3D_F_INF;
 }
 
 static void dummy1() {
@@ -108,7 +108,7 @@ void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, d
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundCheckInit(dBgS&) {
-    m_ground_h = C_BG_MIN_HEIGHT;
+    m_ground_h = -G_CM3D_F_INF;
     if (m_flags & GRND_NONE) {
         return;
     }
@@ -131,7 +131,7 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
     m_gnd.m_pos = pos;
 
     m_ground_h = i_bgs.GroundCross(&m_gnd);
-    if (m_ground_h != C_BG_MIN_HEIGHT) {
+    if (m_ground_h != -G_CM3D_F_INF) {
         field_0xb8 = m_ground_h + m_ground_up_h;
         if (field_0xb8 > field_0xb4) {
             pm_pos->y = field_0xb8;
@@ -155,8 +155,8 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
 f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
-    f32 y = C_BG_MIN_HEIGHT;
-    if (m_ground_h != C_BG_MIN_HEIGHT) {
+    f32 y = -G_CM3D_F_INF;
+    if (m_ground_h != -G_CM3D_F_INF) {
         // y = m_roof_height;
         // fakematch to fix load order
         if (field_0xb8 < (y = m_roof_height) && y < pm_pos->y) {
@@ -257,14 +257,14 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         LineCheck(i_bgs);
     }
 
-    m_roof_height = C_BG_MAX_HEIGHT;
+    m_roof_height = G_CM3D_F_INF;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
         ClrRoofHit();
         cXyz roofPos = *pm_pos;
         m_roof.SetPos(roofPos);
         m_roof_y = i_bgs.RoofChk(&m_roof);
-        if (m_roof_y != C_BG_MAX_HEIGHT && pm_pos->y + m_roof_crr_height > m_roof_y) {
+        if (m_roof_y != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_y) {
             m_roof_height = m_roof_y - m_roof_crr_height;
             SetRoofHit();
         }
@@ -281,10 +281,10 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     if (!(m_flags & WATER_NONE)) {
         ClrWaterHit();
         ClrWaterIn();
-        m_wtr.SetHeight(C_BG_MIN_HEIGHT);
+        m_wtr.SetHeight(-G_CM3D_F_INF);
 
         int room_no = i_bgs.GetRoomId(m_gnd);
-        if (m_ground_h != C_BG_MIN_HEIGHT && 0 <= room_no && room_no < 64) {
+        if (m_ground_h != -G_CM3D_F_INF && 0 <= room_no && room_no < 64) {
             JUT_ASSERT(693, 0 <= room_no && room_no < 64);
 
             dBgW* bgw = dComIfGp_roomControl_getBgW(room_no);
@@ -312,7 +312,7 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
 
     if (ChkSeaCheckOn()) {
         m_flags &= ~SEA_IN;
-        m_sea_height = C_BG_MIN_HEIGHT;
+        m_sea_height = -G_CM3D_F_INF;
 
         if (daSea_ChkArea(pm_pos->x, pm_pos->z)) {
             m_sea_height = daSea_calcWave(pm_pos->x, pm_pos->z);

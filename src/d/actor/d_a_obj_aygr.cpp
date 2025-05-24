@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_aygr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::CreateHeap() {
@@ -98,7 +99,7 @@ actor_process_profile_definition g_profile_Obj_Aygr = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0080,
+    /* Priority     */ PRIO_Obj_Aygr,
     /* Actor SubMtd */ &daObjAygr::Mthd_Aygr,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_kokiie.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
 static BOOL daKokiie_Draw(kokiie_class*) {
@@ -69,7 +70,7 @@ actor_process_profile_definition g_profile_KOKIIE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0094,
+    /* Priority     */ PRIO_KOKIIE,
     /* Actor SubMtd */ &l_daKokiie_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

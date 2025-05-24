@@ -78,7 +78,7 @@ volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED + 0x00D8);
 // External References:
 //
 
-extern OSErrorHandlerEx __OSErrorTable[17];
+extern OSErrorHandler __OSErrorTable[EXCEPTION_MAX];
 extern u32 __OSFpscrEnableBits;
 void _epilog();
 
@@ -932,6 +932,3 @@ void OSClearStack(u8 val) {
         *p = pattern;
     }
 }
-
-extern u8 data_804516D0[8];
-u8 data_804516D0[8] ALIGN_DECL(8);

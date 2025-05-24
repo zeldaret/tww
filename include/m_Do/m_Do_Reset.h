@@ -1,7 +1,7 @@
 #ifndef M_DO_M_DO_RESET_H
 #define M_DO_M_DO_RESET_H
 
-#include "dolphin/types.h"
+#include "global.h"
 
 void mDoRst_reset(int, u32, int);
 void mDoRst_resetCallBack(int, void*);
@@ -17,7 +17,7 @@ struct mDoRstData {
 
 class mDoRst {
 public:
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     static void set3ButtonResetPort(int port) { mResetData->m3ButtonResetPort = port; }
     static void off3ButtonReset() { mResetData->m3ButtonReset = 0; }
     static void offResetPrepare() { mResetData->mResetPrepare = 0; }

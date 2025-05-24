@@ -381,7 +381,7 @@ u32 JKRCompArchive::getExpandedResSize(const void* resource) const {
         JKRDvdToMainRam(mEntryNum, bufPtr, EXPAND_SWITCH_UNKNOWN2, sizeof(buf) / 2, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, field_0x6c + fileEntry->data_offset, NULL);
         DCInvalidateRange(bufPtr, sizeof(buf) / 2);
     } else {
-        OSPanic(__FILE__, VERSION_SELECT(948, 944, 944), "illegal resource.");
+        OSPanic(__FILE__, VERSION_SELECT(948, 948, 944, 944), "illegal resource.");
     }
     u32 expandSize = JKRDecompExpandSize(bufPtr);
     const_cast<JKRCompArchive *>(this)->setExpandSize(fileEntry, expandSize);

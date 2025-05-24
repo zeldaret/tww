@@ -15,6 +15,7 @@
 #include "d/d_snap.h"
 #include "d/d_letter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -980,205 +981,203 @@ u32 daNpc_Bs1_c::getMsg() {
         msgNo = m740;
         m740 = 0;
     }
-    else {
-        if(dComIfGp_event_chkTalkXY()) {
-            u8 itemNo = dComIfGp_event_getPreItemNo();
+    else if(dComIfGp_event_chkTalkXY()) {
+        u8 itemNo = dComIfGp_event_getPreItemNo();
 
-            if(mType == 0) {
-                if(isEmono(itemNo)) {
-                    m840 = itemNo;
-                    switch(itemNo) {
-                        case dItem_BOKOBABA_SEED_e:
-                            msgNo = 0xF78;
+        if(mType == 0) {
+            if(isEmono(itemNo)) {
+                m840 = itemNo;
+                switch(itemNo) {
+                    case dItem_BOKOBABA_SEED_e:
+                        msgNo = 0xF78;
+                        break;
+                    case dItem_SKULL_NECKLACE_e:
+                        msgNo = 0xF80;
+                        break;
+                    case dItem_RED_JELLY_e:
+                        msgNo = 0xF85;
+                        break;
+                    case dItem_GREEN_JELLY_e:
+                        msgNo = 0xF8A;
+                        break;
+                    case dItem_BLUE_JELLY_e:
+                        msgNo = 0xF8F;
+                        break;
+                    case dItem_JOY_PENDANT_e:
+                        msgNo = 0xF94;
+                        break;
+                    case dItem_GOLDEN_FEATHER_e:
+                        msgNo = 0xF99;
+                        break;
+                    default:
+                        if(dComIfGs_getEventReg(0x7F0F) < 10) {
+                            msgNo = 0xF9E;
                             break;
-                        case dItem_SKULL_NECKLACE_e:
-                            msgNo = 0xF80;
-                            break;
-                        case dItem_RED_JELLY_e:
-                            msgNo = 0xF85;
-                            break;
-                        case dItem_GREEN_JELLY_e:
-                            msgNo = 0xF8A;
-                            break;
-                        case dItem_BLUE_JELLY_e:
-                            msgNo = 0xF8F;
-                            break;
-                        case dItem_JOY_PENDANT_e:
-                            msgNo = 0xF94;
-                            break;
-                        case dItem_GOLDEN_FEATHER_e:
-                            msgNo = 0xF99;
-                            break;
-                        default:
-                            if(dComIfGs_getEventReg(0x7F0F) < 10) {
-                                msgNo = 0xF9E;
-                                break;
-                            }
+                        }
 
-                            msgNo = 0xFD4;
-                            break;
-                    }
-                }
-                else if(itemNo == KAISEN_PRESENT1) {
-                    msgNo = 0xF6F;
-                }
-                else if(itemNo == KAISEN_PRESENT2) {
-                    msgNo = 0xF73;
-                }
-                else {
-                    msgNo = 0xF75;
+                        msgNo = 0xFD4;
+                        break;
                 }
             }
-            else if(itemNo == KAISEN_PRESENT1 || itemNo == KAISEN_PRESENT2) {
-                msgNo = 0x2F56;
+            else if(itemNo == KAISEN_PRESENT1) {
+                msgNo = 0xF6F;
             }
-            else if(isEmono(itemNo)) {
-                msgNo = 0x2F79;
+            else if(itemNo == KAISEN_PRESENT2) {
+                msgNo = 0xF73;
             }
             else {
-                msgNo = 0x2F57;
+                msgNo = 0xF75;
             }
         }
-        else if(mType == 0) {
-            u8 points = dComIfGs_getEventReg(0x86FF);
-            if(mShopItems.isSoldOutItemAll()) {
-                msgNo = 0xF3D;
-            }
-            else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
-                dComIfGs_onEventBit(0x1F20);
-                m837 = 1;
-                msgNo = 0xF55;
-            }
-            else if(m837) {
-                msgNo = 0xF58;
-            }
-            else if(points >= 60) {
-                if(m836) {
-                    msgNo = 0xF5D;
-                }
-                else {
-                    msgNo = 0xF5C;
-                    m836 = 1;
-                }
-            }
-            else if(points != 0) {
-                if(m836) {
-                    msgNo = 0xF5B;
-                }
-                else {
-                    msgNo = 0xF5A;
-                    m836 = 1;
-                }
-            }
-            else if(m836) {
-                msgNo = 0xF41;
-            }
-            else {
-                m836 = 1;
-                msgNo = 0xF3D;
-            }
+        else if(itemNo == KAISEN_PRESENT1 || itemNo == KAISEN_PRESENT2) {
+            msgNo = 0x2F56;
         }
-        else if(mShopItems.isSoldOutItemAll()) {
-            msgNo = 0x2F62;
+        else if(isEmono(itemNo)) {
+            msgNo = 0x2F79;
+        }
+        else {
+            msgNo = 0x2F57;
+        }
+    }
+    else if(mType == 0) {
+        u8 points = dComIfGs_getEventReg(0x86FF);
+        if(mShopItems.isSoldOutItemAll()) {
+            msgNo = 0xF3D;
         }
         else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
             dComIfGs_onEventBit(0x1F20);
             m837 = 1;
-            msgNo = 0x2F64;
+            msgNo = 0xF55;
         }
         else if(m837) {
-            msgNo = 0x2F67;
+            msgNo = 0xF58;
         }
-        else if(dComIfGs_isEventBit(0x1F08)) {
-            if(dComIfGs_isEventBit(0x2040)) {
-                if(m838 == 1) {
-                    msgNo = 0x2F60;
-                }
-                else {
-                    msgNo = 0x2F61;
-                }
+        else if(points >= 60) {
+            if(m836) {
+                msgNo = 0xF5D;
             }
             else {
-                dComIfGs_onEventBit(0x2040);
-                msgNo = 0x2F5F;
-                m838 = 1;
+                msgNo = 0xF5C;
+                m836 = 1;
+            }
+        }
+        else if(points != 0) {
+            if(m836) {
+                msgNo = 0xF5B;
+            }
+            else {
+                msgNo = 0xF5A;
+                m836 = 1;
+            }
+        }
+        else if(m836) {
+            msgNo = 0xF41;
+        }
+        else {
+            m836 = 1;
+            msgNo = 0xF3D;
+        }
+    }
+    else if(mShopItems.isSoldOutItemAll()) {
+        msgNo = 0x2F62;
+    }
+    else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
+        dComIfGs_onEventBit(0x1F20);
+        m837 = 1;
+        msgNo = 0x2F64;
+    }
+    else if(m837) {
+        msgNo = 0x2F67;
+    }
+    else if(dComIfGs_isEventBit(0x1F08)) {
+        if(dComIfGs_isEventBit(0x2040)) {
+            if(m838 == 1) {
+                msgNo = 0x2F60;
+            }
+            else {
+                msgNo = 0x2F61;
             }
         }
         else {
-            switch(dComIfGs_getEventReg(0xBB07)) {
-                case 0:
-                    if(m836 || dComIfGs_isEventBit(0x1F10)) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    dComIfGs_onEventBit(0x1F10);
-                    msgNo = 0x2F45;
-                    break;
-                case 1:
-                    if(m836) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    msgNo = 0x2F58;
-                    break;
-                case 2:
-                    if(m836) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    msgNo = 0x2F59;
-                    break;
-                case 3:
-                    if(m836) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    msgNo = 0x2F5A;
-                    break;
-                case 4:
-                    if(m836) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    msgNo = 0x2F5B;
-                    break;
-                case 5:
-                    if(m836) {
-                        msgNo = 0x2F46;
-                        break;
-                    }
-
-                    msgNo = 0x2F5C;
-                    break;
-                case 6:
-                    if(m836) {
-                        msgNo = 0x2F69;
-                        break;
-                    }
-
-                    msgNo = 0x2F5D;
-                    break;
-                case 7:
-                    if(m836) {
-                        msgNo = 0x2F6A;
-                        break;
-                    }
-
-                    msgNo = 0x2F5E;
-                    break;
-            }
-    
-            if(dComIfGs_isEventBit(0x1F10)) {
-                dComIfGs_onEventBit(0x1F10);
-            }
-
-            m836 = 1;
+            dComIfGs_onEventBit(0x2040);
+            msgNo = 0x2F5F;
+            m838 = 1;
         }
+    }
+    else {
+        switch(dComIfGs_getEventReg(0xBB07)) {
+            case 0:
+                if(m836 || dComIfGs_isEventBit(0x1F10)) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                dComIfGs_onEventBit(0x1F10);
+                msgNo = 0x2F45;
+                break;
+            case 1:
+                if(m836) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                msgNo = 0x2F58;
+                break;
+            case 2:
+                if(m836) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                msgNo = 0x2F59;
+                break;
+            case 3:
+                if(m836) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                msgNo = 0x2F5A;
+                break;
+            case 4:
+                if(m836) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                msgNo = 0x2F5B;
+                break;
+            case 5:
+                if(m836) {
+                    msgNo = 0x2F46;
+                    break;
+                }
+
+                msgNo = 0x2F5C;
+                break;
+            case 6:
+                if(m836) {
+                    msgNo = 0x2F69;
+                    break;
+                }
+
+                msgNo = 0x2F5D;
+                break;
+            case 7:
+                if(m836) {
+                    msgNo = 0x2F6A;
+                    break;
+                }
+
+                msgNo = 0x2F5E;
+                break;
+        }
+
+        if(dComIfGs_isEventBit(0x1F10)) {
+            dComIfGs_onEventBit(0x1F10);
+        }
+
+        m836 = 1;
     }
 
     return msgNo;
@@ -2268,7 +2267,7 @@ actor_process_profile_definition g_profile_NPC_BS1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015E,
+    /* Priority     */ PRIO_NPC_BS1,
     /* Actor SubMtd */ &l_daNpc_Bs1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

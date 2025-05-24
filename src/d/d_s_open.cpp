@@ -39,7 +39,7 @@ cPhs_State dScnOpen_c::create() {
 
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
 BOOL dScnOpen_c::execute() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (mpProc->mState >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #else
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {

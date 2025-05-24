@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E8       .text smoke_set__FP8bo_class */
 void smoke_set(bo_class*) {
@@ -154,7 +155,7 @@ actor_process_profile_definition g_profile_BO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C9,
+    /* Priority     */ PRIO_BO,
     /* Actor SubMtd */ &l_daBO_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

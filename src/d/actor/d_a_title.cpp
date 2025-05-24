@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_title.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -15,7 +16,7 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "stdio.h"
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 #include "d/res/res_tlogo.h"
 #endif
 #if VERSION == VERSION_USA
@@ -26,7 +27,7 @@
 #endif
 
 // Note: For VERSION_PAL the "TlogoE0" string literal is modified at runtime.
-#define ARCNAME VERSION_SELECT("Tlogo", "TlogoE", "TlogoE0")
+#define ARCNAME VERSION_SELECT("Tlogo", "Tlogo", "TlogoE", "TlogoE0")
 
 namespace {
     struct Attr_c {
@@ -53,7 +54,7 @@ namespace {
         0.9f,
         0.1f,
         -57.0f,
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         -19.0f,
 #else
         -3.0f,
@@ -64,7 +65,7 @@ namespace {
         10.0f,
         120.0f,
         10.0f,
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         78.0f,
         8.0f,
 #else
@@ -80,50 +81,50 @@ namespace {
 void daTitle_proc_c::proc_init3D() {
     m_solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x40000U, 0x20);
 
-    J3DModelData* modelData_ship = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_TITLE_SHIP, TLOGOE_BDL_TITLE_SHIP, TLOGOE0_BDL_TITLE_SHIP));
-    JUT_ASSERT(VERSION_SELECT(0xD1, 0xFC, 0xFC), modelData_ship != NULL);
+    J3DModelData* modelData_ship = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_TITLE_SHIP, TLOGO_BDL_TITLE_SHIP, TLOGOE_BDL_TITLE_SHIP, TLOGOE0_BDL_TITLE_SHIP));
+    JUT_ASSERT(VERSION_SELECT(0xD1, 0xD1, 0xFC, 0xFC), modelData_ship != NULL);
 
     mModel_ship = mDoExt_J3DModel__create(modelData_ship, 0x80000U, 0x37441423U);
-    JUT_ASSERT(VERSION_SELECT(0xD6, 0x101, 0x101), mModel_ship != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xD6, 0xD6, 0x101, 0x101), mModel_ship != NULL);
 
-    J3DModelData* modelData_sub = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_SUBTITLE_START_ANIM, TLOGOE_BDL_SUBTITLE_START_ANIM_E, TLOGOE0_BDL_SUBTITLE_START_ANIM_E));
-    JUT_ASSERT(VERSION_SELECT(0xDA, 0x105, 0x105), modelData_sub != NULL);
+    J3DModelData* modelData_sub = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_SUBTITLE_START_ANIM, TLOGO_BDL_SUBTITLE_START_ANIM, TLOGOE_BDL_SUBTITLE_START_ANIM_E, TLOGOE0_BDL_SUBTITLE_START_ANIM_E));
+    JUT_ASSERT(VERSION_SELECT(0xDA, 0xDA, 0x105, 0x105), modelData_sub != NULL);
 
     mModel_subtitle = mDoExt_J3DModel__create(modelData_sub, 0x80000U, 0x37441422U);
-    JUT_ASSERT(VERSION_SELECT(0xDF, 0x10A, 0x10A), mModel_subtitle != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xDF, 0xDF, 0x10A, 0x10A), mModel_subtitle != NULL);
 
-    J3DModelData* modelData_kirari = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_SUBTITLE_KIRARI, TLOGOE_BDL_SUBTITLE_KIRARI_E, TLOGOE0_BDL_SUBTITLE_KIRARI_E));
-    JUT_ASSERT(VERSION_SELECT(0xE3, 0x10E, 0x10E), modelData_kirari != NULL);
+    J3DModelData* modelData_kirari = (J3DModelData*)dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BDL_SUBTITLE_KIRARI, TLOGO_BDL_SUBTITLE_KIRARI, TLOGOE_BDL_SUBTITLE_KIRARI_E, TLOGOE0_BDL_SUBTITLE_KIRARI_E));
+    JUT_ASSERT(VERSION_SELECT(0xE3, 0xE3, 0x10E, 0x10E), modelData_kirari != NULL);
 
     mModel_kirari = mDoExt_J3DModel__create(modelData_kirari, 0x80000U, 0x37441422U);
-    JUT_ASSERT(VERSION_SELECT(0xE8, 0x113, 0x113), mModel_kirari != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xE8, 0xE8, 0x113, 0x113), mModel_kirari != NULL);
 
-    J3DAnmTransform* bck_ship = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BCK_TITLE_SHIP, TLOGOE_BCK_TITLE_SHIP, TLOGOE0_BCK_TITLE_SHIP)));
-    JUT_ASSERT(VERSION_SELECT(0xED, 0x118, 0x118), bck_ship != NULL);
+    J3DAnmTransform* bck_ship = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BCK_TITLE_SHIP, TLOGO_BCK_TITLE_SHIP, TLOGOE_BCK_TITLE_SHIP, TLOGOE0_BCK_TITLE_SHIP)));
+    JUT_ASSERT(VERSION_SELECT(0xED, 0xED, 0x118, 0x118), bck_ship != NULL);
 
     BOOL ok_bck = mBckShip.init(modelData_ship, bck_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
-    JUT_ASSERT(VERSION_SELECT(0xF4, 0x11F, 0x11F), ok_bck != FALSE);
+    JUT_ASSERT(VERSION_SELECT(0xF4, 0xF4, 0x11F, 0x11F), ok_bck != FALSE);
 
-    J3DAnmColor* bpk_ship = static_cast<J3DAnmColor*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BPK_TITLE_SHIP, TLOGOE_BPK_TITLE_SHIP, TLOGOE0_BPK_TITLE_SHIP)));
-    JUT_ASSERT(VERSION_SELECT(0xF9, 0x124, 0x124), bpk_ship != NULL);
+    J3DAnmColor* bpk_ship = static_cast<J3DAnmColor*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BPK_TITLE_SHIP, TLOGO_BPK_TITLE_SHIP, TLOGOE_BPK_TITLE_SHIP, TLOGOE0_BPK_TITLE_SHIP)));
+    JUT_ASSERT(VERSION_SELECT(0xF9, 0xF9, 0x124, 0x124), bpk_ship != NULL);
 
     BOOL ok_bpk = mBpkShip.init(modelData_ship, bpk_ship, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    JUT_ASSERT(VERSION_SELECT(0xFF, 0x12A, 0x12A), ok_bpk != FALSE);
+    JUT_ASSERT(VERSION_SELECT(0xFF, 0xFF, 0x12A, 0x12A), ok_bpk != FALSE);
 
     mBpkShip.setFrame(0.0f);
     mBpkShip.setPlaySpeed(1.0f);
 
-    J3DAnmTextureSRTKey* btk_sub = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_START_ANIM, TLOGOE_BTK_SUBTITLE_START_ANIM_E, TLOGOE0_BTK_SUBTITLE_START_ANIM_E)));
-    JUT_ASSERT(VERSION_SELECT(0x106, 0x131, 0x131), btk_sub != NULL);
+    J3DAnmTextureSRTKey* btk_sub = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_START_ANIM, TLOGO_BTK_SUBTITLE_START_ANIM, TLOGOE_BTK_SUBTITLE_START_ANIM_E, TLOGOE0_BTK_SUBTITLE_START_ANIM_E)));
+    JUT_ASSERT(VERSION_SELECT(0x106, 0x106, 0x131, 0x131), btk_sub != NULL);
 
     BOOL ok_btk_subtitle = mBtkSub.init(modelData_sub, btk_sub, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
-    JUT_ASSERT(VERSION_SELECT(0x10D, 0x138, 0x138), ok_btk_subtitle != FALSE);
+    JUT_ASSERT(VERSION_SELECT(0x10D, 0x10D, 0x138, 0x138), ok_btk_subtitle != FALSE);
 
-    J3DAnmTextureSRTKey* btk_kirari = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_KIRARI, TLOGOE_BTK_SUBTITLE_KIRARI_E, TLOGOE0_BTK_SUBTITLE_KIRARI_E)));
-    JUT_ASSERT(VERSION_SELECT(0x112, 0x13D, 0x13D), btk_kirari != NULL);
+    J3DAnmTextureSRTKey* btk_kirari = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(ARCNAME, VERSION_SELECT(TLOGO_BTK_SUBTITLE_KIRARI, TLOGO_BTK_SUBTITLE_KIRARI, TLOGOE_BTK_SUBTITLE_KIRARI_E, TLOGOE0_BTK_SUBTITLE_KIRARI_E)));
+    JUT_ASSERT(VERSION_SELECT(0x112, 0x112, 0x13D, 0x13D), btk_kirari != NULL);
 
     BOOL ok_btk_kirari = mBtkKirari.init(modelData_kirari, btk_kirari, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    JUT_ASSERT(VERSION_SELECT(0x119, 0x144, 0x144), ok_btk_kirari != FALSE);
+    JUT_ASSERT(VERSION_SELECT(0x119, 0x119, 0x144, 0x144), ok_btk_kirari != FALSE);
 
     mDoExt_restoreCurrentHeap();
     set_mtx();
@@ -132,17 +133,17 @@ void daTitle_proc_c::proc_init3D() {
 /* 00000638-00000900       .text proc_init2D__14daTitle_proc_cFv */
 void daTitle_proc_c::proc_init2D() {
     m_exp_heap = fopMsgM_createExpHeap(0x30000U);
-    JUT_ASSERT(VERSION_SELECT(0x122, 0x14D, 0x14D), m_exp_heap != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x122, 0x122, 0x14D, 0x14D), m_exp_heap != NULL);
 
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(m_exp_heap);
 
     m_Screen = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(0x128, 0x153, 0x153), m_Screen != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x128, 0x128, 0x153, 0x153), m_Screen != NULL);
 
     dRes_info_c* resInfo = dComIfG_getObjectResInfo(ARCNAME);
-    JUT_ASSERT(VERSION_SELECT(0x12A, 0x155, 0x155), resInfo != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x12A, 0x12A, 0x155, 0x155), resInfo != NULL);
 
-    m_Screen->set(VERSION_SELECT("title_logo.blo", "title_logo_e.blo", "title_logo_e.blo"), resInfo->getArchive());
+    m_Screen->set(VERSION_SELECT("title_logo.blo", "title_logo.blo", "title_logo_e.blo", "title_logo_e.blo"), resInfo->getArchive());
 
     m0A0[2] = m_Screen->search('pres');
     m0A0[3] = m_Screen->search('nint');
@@ -263,7 +264,7 @@ void daTitle_proc_c::calc_2d_alpha() {
             fopMsgM_setNowAlpha(&pane[0], 1.0f);
         }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         if (m018 <= 75) {
             fopMsgM_setNowAlpha(&pane[1], 0.0f);
         } else if (m018 <= 130) {
@@ -326,7 +327,7 @@ void daTitle_proc_c::calc_2d_alpha() {
         }
 
         fopMsgM_setNowAlpha(&pane[0], 1.0f);
-        fopMsgM_setNowAlpha(&pane[1], VERSION_SELECT(1.0f, 0.0f, 0.0f));
+        fopMsgM_setNowAlpha(&pane[1], VERSION_SELECT(1.0f, 1.0f, 0.0f, 0.0f));
 
         if (mpEmitter2 != NULL) {
             mpEmitter2->becomeInvalidEmitter();
@@ -425,7 +426,7 @@ void daTitle_proc_c::proc_execute() {
 void daTitle_proc_c::model_draw() {
     dComIfGd_setList2D();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (mBtkSub.getFrame() != 0.0f) {
 #endif
         mBtkKirari.entry(mModel_kirari->getModelData());
@@ -435,11 +436,11 @@ void daTitle_proc_c::model_draw() {
         mBtkSub.entry(mModel_subtitle->getModelData());
         mDoExt_modelUpdateDL(mModel_subtitle);
         mBtkSub.remove(mModel_subtitle->getModelData());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     }
 #endif
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (mBpkShip.getFrame() != 0.0f) {
 #endif
         mBckShip.entry(mModel_ship->getModelData());
@@ -447,7 +448,7 @@ void daTitle_proc_c::model_draw() {
         mDoExt_modelUpdateDL(mModel_ship);
         mBpkShip.remove(mModel_ship->getModelData());
         mBckShip.remove(mModel_ship->getModelData());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     }
 #endif
 
@@ -513,20 +514,20 @@ BOOL daTitle_c::execute() {
             mpTitleProc->setEnterMode();
         } else if(mpTitleProc->getEnterMode() == 3) {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-            JUT_ASSERT(VERSION_SELECT(0x2B1, 0x2EF, 0x2EF), stageProc != NULL);
+            JUT_ASSERT(VERSION_SELECT(0x2B1, 0x2B1, 0x2EF, 0x2EF), stageProc != NULL);
 
             if (!m29C && fopScnM_ChangeReq(stageProc, PROC_NAME_SCENE, 0, 5)) {
                 mDoAud_seStart(JA_SE_OP_ENTER_GAME);
                 m29C = true;
             }
         } else if (
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             !mDoRst::isReset() &&
 #endif
             dComIfGp_isEnableNextStage()
         ) {
             scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-            JUT_ASSERT(VERSION_SELECT(0x2BD, 0x2FC, 0x2FC), stageProc != NULL);
+            JUT_ASSERT(VERSION_SELECT(0x2BD, 0x2BD, 0x2FC, 0x2FC), stageProc != NULL);
 
             if (!m29C) {
                 s16 procName = fpcM_GetName(stageProc) == PROC_OPENING_SCENE ? PROC_OPEN2_SCENE : PROC_TITLE_SCENE;
@@ -590,7 +591,7 @@ actor_process_profile_definition g_profile_TITLE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x000A,
+    /* Priority     */ PRIO_TITLE,
     /* Actor SubMtd */ &l_daTitle_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

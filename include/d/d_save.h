@@ -783,8 +783,8 @@ public:
     }
 
     s16 getStartPoint() { return mStartCode; }
-    u32 getLastMode() { return mLastMode; }
     f32 getLastSpeedF() { return mLastSpeedF; }
+    u32 getLastMode() { return mLastMode; }
     s8 getRoomNo() { return mRestartRoom; }
     u32 getRoomParam() { return mRestartParam; }
     cXyz& getRoomPos() { return mRestartPos; }
@@ -819,9 +819,11 @@ public:
     s8 getRoomNo() { return mRoomNo; }
     cXyz& getShipPos() { return mShipPos; }
     s16 getShipAngleY() { return mShipAngleY; }
+#if VERSION > VERSION_DEMO
     // The "HasShip" name is fake. These inlines don't exist in the demo, but probably do in the final release.
     BOOL getHasShip() { return mHasShip; }
     void setHasShip(BOOL hasShip) { mHasShip = hasShip; }
+#endif
 
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
@@ -831,7 +833,9 @@ public:
     /* 0x14 */ u8 field_0x14[0x24 - 0x14];
     /* 0x24 */ cXyz mShipPos;
     /* 0x30 */ s16 mShipAngleY;
+#if VERSION > VERSION_DEMO
     /* 0x34 */ BOOL mHasShip;
+#endif
 };  // Size: 0x38
 
 class dSv_save_c {
@@ -955,7 +959,9 @@ public:
     /* 0x1298 */ s64 field_0x1298;
 };  // Size: 0x12A0
 
+#if VERSION > VERSION_DEMO
 STATIC_ASSERT(sizeof(dSv_info_c) == 0x12A0);
+#endif
 
 #include "d/d_save_event_bit.inc"
 

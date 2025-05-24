@@ -27,7 +27,7 @@ void dLib_setCirclePath(dLib_circle_path_c* path) {
 /* 800570CC-8005716C       .text dLib_getWaterY__FR4cXyzR12dBgS_ObjAcch */
 f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch) {
     BOOL waterHit = acch.ChkWaterHit();
-    f32 waterHeight = waterHit ? acch.m_wtr.GetHeight() : C_BG_MIN_HEIGHT;
+    f32 waterHeight = waterHit ? acch.m_wtr.GetHeight() : -G_CM3D_F_INF;
     if (daSea_ChkArea(pos.x, pos.z)) {
         f32 seaHeight = daSea_calcWave(pos.x, pos.z);
         if (!waterHit || seaHeight > waterHeight) {
@@ -353,7 +353,7 @@ s16 CSTControl::getAngleStick() {
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */
-s32 STControl::checkTrigger() {
+u8 STControl::checkTrigger() {
     field_0x0d = field_0x0c;
     f32 valueStick = getValueStick();
     s16 angleStick = getAngleStick();

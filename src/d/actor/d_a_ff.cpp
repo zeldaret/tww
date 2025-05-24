@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ff.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000001E4       .text fire_fly_draw__FP8ff_class */
 void fire_fly_draw(ff_class*) {
@@ -69,7 +70,7 @@ actor_process_profile_definition g_profile_FF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00EE,
+    /* Priority     */ PRIO_FF,
     /* Actor SubMtd */ &l_daFf_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

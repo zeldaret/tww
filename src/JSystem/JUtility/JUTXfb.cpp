@@ -31,7 +31,7 @@ JUTXfb::JUTXfb(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber x
     if (pObj) {
         initiate(pObj->fb_width, pObj->xfb_height, pHeap, xfbNum);
     } else {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         GXRenderModeObj* obj = JUTVideo::getManager()->getRenderMode();
         initiate(obj->fb_width, obj->xfb_height, pHeap, xfbNum);
 #else
@@ -63,7 +63,7 @@ void JUTXfb::delXfb(int xfbIdx) {
 
 /* 802C837C-802C8410       .text createManager__6JUTXfbFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumber */
 JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
-    JUT_CONFIRM(VERSION_SELECT(198, 203, 203), sManager == 0);
+    JUT_CONFIRM(VERSION_SELECT(198, 198, 203, 203), sManager == 0);
     if (sManager == NULL) {
         sManager = new JUTXfb(pObj, pHeap, xfbNum);
     }
@@ -72,7 +72,7 @@ JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXf
 
 /* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
 void JUTXfb::destroyManager() {
-    JUT_CONFIRM(VERSION_SELECT(339, 344, 344), sManager);
+    JUT_CONFIRM(VERSION_SELECT(339, 339, 344, 344), sManager);
     delete sManager;
     sManager = NULL;
 }

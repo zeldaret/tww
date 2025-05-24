@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_tribox.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001A4       .text set_state__Q211daObjTribox5Act_cFv */
 void daObjTribox::Act_c::set_state() {
@@ -383,7 +384,7 @@ actor_process_profile_definition g_profile_Obj_Tribox = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0016,
+    /* Priority     */ PRIO_Obj_Tribox,
     /* Actor SubMtd */ &daObjTribox::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

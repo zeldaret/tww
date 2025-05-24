@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_cc.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000002AC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -184,7 +185,7 @@ actor_process_profile_definition g_profile_CC = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C1,
+    /* Priority     */ PRIO_CC,
     /* Actor SubMtd */ &l_daCC_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -8,6 +8,7 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_actor_mng.h"
@@ -74,20 +75,20 @@ void kotori_move(kt_class* i_this) {
     s16* r17;
     s16* r16;
 
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
         i_this->mSpeedFwd = kt_scale * 20.0f + 30.0f;
         if (CPad_CHECK_TRIG_LEFT(0) && fopAcM_GetParam(i_this) == 1000) {
             i_this->mTargetPos.x = player->current.pos.x;
             i_this->mTargetPos.y = player->current.pos.y + 500.0f;
             i_this->mTargetPos.z = player->current.pos.z;
-            i_this->mState = 2;
+            i_this->mMode = 2;
             i_this->mSpeedLerp = 0.0f;
             break;
         }
 
         if (i_this->mTimer[2] == 0) {
-            i_this->mState = 1;
+            i_this->mMode = 1;
             offs.x = 0.0f;
             offs.y = 0.0f;
             offs.z = REG0_F(13) * 100.0f + 3000.0f;
@@ -100,7 +101,7 @@ void kotori_move(kt_class* i_this) {
 
             gndChk.SetPos(&i_this->mTargetPosHome);
             i_this->mTargetPosHome.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (i_this->mTargetPosHome.y == C_BG_MIN_HEIGHT)
+            if (i_this->mTargetPosHome.y == -G_CM3D_F_INF)
                 i_this->mTargetPosHome = player->current.pos;
             i_this->mTargetPos = i_this->mTargetPosHome;
             i_this->mSpeedLerp = 0.0f;
@@ -117,7 +118,7 @@ void kotori_move(kt_class* i_this) {
     case 1:
         dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
-            i_this->mState = 8;
+            i_this->mMode = 8;
         }
         cLib_addCalc2(&i_this->mSpeedLerp, 3.0f, 1.0f, 0.1f);
 calc_012:
@@ -153,7 +154,7 @@ calc_012:
         cLib_addCalc2(&*r26, i_this->mGroundY, REG0_F(6) + 0.3f, REG0_F(7) + 20.0f);
         if (std::fabsf(*r26 - i_this->mGroundY) < 1.0f) {
             *r26 = i_this->mGroundY;
-            i_this->mState = 10;
+            i_this->mMode = 10;
         }
         dispWing = true;
         ret = 1;
@@ -163,7 +164,7 @@ calc_012:
         i_this->mTargetPos.y += 200.0f;
         dist = std::sqrtf(vx*vx + vy*vy + vz*vz);
         if (dist < REG0_F(1) * 10.0f + 800.0f) {
-            i_this->mState = 9;
+            i_this->mMode = 9;
         }
         cLib_addCalc2(&i_this->mSpeedLerp, 3.0f, 1.0f, 0.1f);
         goto calc_012;
@@ -184,7 +185,7 @@ calc_012:
         *r27 += pt.z;
         cLib_addCalc2(&*r26, i_this->mTargetPos.y, REG0_F(6) + 0.5f, REG0_F(7) + 20.0f);
         if (std::fabsf(*r26 - i_this->mTargetPos.y) < 1.0f) {
-            i_this->mState = 20;
+            i_this->mMode = 20;
             i_this->mSpeedLerp = 0.0f;
         }
         dispWing = true;
@@ -200,7 +201,7 @@ calc_012:
         if (std::fabsf(*r26 - i_this->mTargetPos.y) > 1.0f)
             dispWing = true;
         if (CPad_CHECK_TRIG_LEFT(0)) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
             i_this->mTimer[0] = 0;
             i_this->mLiftYTimer = cM_rndFX(10.0f) + 10.0f;
             i_this->mTargetPosHome.y += 2000.0f;
@@ -219,7 +220,7 @@ calc_012:
         cLib_addCalcAngleS2(&i_this->current.angle.y, angleX, 10, (s16)(REG0_F(10) * 10.0f + 500.0f));
         if (i_this->mTimer[1] == 0 && i_this->mLiftY <= 0.0f) {
             i_this->mTimer[1] = 20.0f + cM_rndF(20.0f);
-            i_this->mState = 11;
+            i_this->mMode = 11;
         }
         offs.x = 0.0f;
         offs.y = 0.0f;
@@ -240,14 +241,14 @@ calc_012:
         }
         if (i_this->mTimer[1] == 0) {
             i_this->mTimer[1] = 20.0f + cM_rndF(50.0f);
-            i_this->mState = 10;
+            i_this->mMode = 10;
             i_this->mTargetPos.x = i_this->mTargetPosHome.x + cM_rndFX(1000.0f);
             i_this->mTargetPos.z = i_this->mTargetPosHome.z + cM_rndFX(1000.0f);
         }
 calc_11:
         *r26 -= 5.0f;
         if (!i_this->mHitGround || dist_xz < (REG0_F(15) * 100.0f + 1500.0f)) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
             i_this->mTimer[0] = 0;
             i_this->mLiftYTimer = 10.0f + cM_rndFX(10.0f);
             i_this->mTargetPosHome.y += 2000.0f;
@@ -258,7 +259,7 @@ calc_11:
     }
 
     i_this->mHitGround = false;
-    if (i_this->mState >= 8) {
+    if (i_this->mMode >= 8) {
         Vec pos;
         pos.x = *r28;
         pos.y = *r26;
@@ -376,7 +377,7 @@ actor_process_profile_definition g_profile_KT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00AC,
+    /* Priority     */ PRIO_KT,
     /* Actor SubMtd */ &l_daKt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

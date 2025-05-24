@@ -134,7 +134,7 @@ void* JKRArchive::getGlbResource(u32 param_0, const char* path, JKRArchive* arch
 
 /* 802B8380-802B8450       .text getResource__10JKRArchiveFPCc */
 void* JKRArchive::getResource(const char* path) {
-    JUT_ASSERT(VERSION_SELECT(337, 285, 285), isMounted());
+    JUT_ASSERT(VERSION_SELECT(337, 337, 285, 285), isMounted());
 
     SDIFileEntry* fileEntry;
     if (*path == '/') {
@@ -152,7 +152,7 @@ void* JKRArchive::getResource(const char* path) {
 
 /* 802B8450-802B8528       .text getResource__10JKRArchiveFUlPCc */
 void* JKRArchive::getResource(u32 type, const char* path) {
-    JUT_ASSERT(VERSION_SELECT(384, 332, 332), isMounted());
+    JUT_ASSERT(VERSION_SELECT(384, 384, 332, 332), isMounted());
 
     SDIFileEntry* fileEntry;
     if (type == 0 || type == '\?\?\?\?') {
@@ -190,7 +190,7 @@ u32 JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const c
 
 /* 802B85F0-802B86DC       .text readResource__10JKRArchiveFPvUlUlPCc */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char* path) {
-    JUT_ASSERT(VERSION_SELECT(543, 491, 491), isMounted());
+    JUT_ASSERT(VERSION_SELECT(543, 543, 491, 491), isMounted());
 
     SDIFileEntry* fileEntry;
     if (type == 0 || type == '\?\?\?\?') {
@@ -210,7 +210,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char*
 
 /* 802B86DC-802B87C0       .text readResource__10JKRArchiveFPvUlPCc */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
-    JUT_ASSERT(VERSION_SELECT(589, 537, 537), isMounted());
+    JUT_ASSERT(VERSION_SELECT(589, 589, 537, 537), isMounted());
 
     SDIFileEntry* fileEntry;
     if (*path == '/') {
@@ -230,7 +230,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
 
 /* 802B87C0-802B8878       .text readIdxResource__10JKRArchiveFPvUlUl */
 u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
-    JUT_ASSERT(VERSION_SELECT(645, 593, 593), isMounted());
+    JUT_ASSERT(VERSION_SELECT(645, 645, 593, 593), isMounted());
 
     SDIFileEntry* fileEntry = findIdxResource(index);
     if (fileEntry) {
@@ -244,7 +244,7 @@ u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
 
 /* 802B8878-802B8930       .text readResource__10JKRArchiveFPvUlUs */
 u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
-    JUT_ASSERT(VERSION_SELECT(679, 627, 627), isMounted());
+    JUT_ASSERT(VERSION_SELECT(679, 679, 627, 627), isMounted());
 
     SDIFileEntry* fileEntry = findIdResource(id);
     if (fileEntry) {
@@ -271,7 +271,7 @@ void JKRArchive::removeResourceAll() {
 
 /* 802B89B8-802B8A54       .text removeResource__10JKRArchiveFPv */
 bool JKRArchive::removeResource(void* resource) {
-    JUT_ASSERT(VERSION_SELECT(755, 687, 687), resource != NULL);
+    JUT_ASSERT(VERSION_SELECT(755, 755, 687, 687), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
@@ -284,7 +284,7 @@ bool JKRArchive::removeResource(void* resource) {
 
 /* 802B8A54-802B8AE4       .text detachResource__10JKRArchiveFPv */
 bool JKRArchive::detachResource(void* resource) {
-    JUT_ASSERT(VERSION_SELECT(787, 719, 719), resource != NULL);
+    JUT_ASSERT(VERSION_SELECT(787, 787, 719, 719), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
@@ -296,7 +296,7 @@ bool JKRArchive::detachResource(void* resource) {
 
 /* 802B8AE4-802B8B6C       .text getResSize__10JKRArchiveCFPCv */
 u32 JKRArchive::getResSize(const void* resource) const {
-    JUT_ASSERT(VERSION_SELECT(814, 746, 746), resource != NULL);
+    JUT_ASSERT(VERSION_SELECT(814, 814, 746, 746), resource != NULL);
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
@@ -107,7 +108,7 @@ actor_process_profile_definition g_profile_TAG_SO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0065,
+    /* Priority     */ PRIO_TAG_SO,
     /* Actor SubMtd */ &daTag_SoMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

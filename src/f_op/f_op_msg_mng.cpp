@@ -7,7 +7,7 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
 #include "d/d_meter.h"
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 #include "d/d_s_play.h"
 #endif
 #include "f_op/f_op_scene_mng.h"
@@ -34,28 +34,6 @@ fpc_ProcID i_msgID = fpcM_ERROR_PROCESS_ID_e;
 
 struct mesg_header : JUTDataFileHeader {
     // first block is mesg_info
-};
-
-struct mesg_entry {
-    // mesg_entry() {} // fixes fopMsgM_selectMessageGet, but messes up getMesgEntry
-
-    /* 0x00 */ u32 mDataOffs;
-    /* 0x04 */ u16 mMesgID;
-    /* 0x06 */ s16 mItemPrice;
-    /* 0x08 */ u16 mNextMessageID;
-    /* 0x0A */ u16 field_0x0a;
-    /* 0x0C */ u8 mTextboxType;
-    /* 0x0D */ u8 mDrawType;
-    /* 0x0E */ u8 mTextboxPosition;
-    /* 0x0F */ u8 mItemImage;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 mInitialSound;
-    /* 0x12 */ u8 mInitialCamera;
-    /* 0x13 */ u8 mInitialAnimation;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
 };
 
 struct mesg_info : JUTDataBlockHeader {
@@ -617,7 +595,7 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
         if(*cursor == 0x1A) {
             if((cursor[1] & 0xFFFFFF) == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
 #else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
@@ -676,7 +654,7 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
         if(*cursor == 0x1A) {
             if((cursor[1] & 0xFFFFFF) == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
 #else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
@@ -1401,7 +1379,7 @@ mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
     mGroupID = (msg >> 16);
     mMsgID = msg;
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     char path[12];
     if (g_msgDHIO.field_0x08 == 0) {
         sprintf(path, "zel_%02d.bmg", mGroupID);
@@ -1462,12 +1440,12 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
 
 /* 8002E430-8002E4AC       .text getMesgHeader__20fopMsgM_itemMsgGet_cFUl */
 mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     u16 groupID = msg >> 16;
 #endif
     mMsgID = msg;
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     char path[12];
     if (g_msgDHIO.field_0x08 == 0) {
         sprintf(path, "zel_%02d.bmg", groupID);
@@ -2187,7 +2165,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
                 strcpy(buf, dComIfGs_getPlayerName());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if(field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE) {
 #else
                 if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE)) {
@@ -2411,7 +2389,7 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
 #else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
@@ -2475,7 +2453,7 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
 #else
                 if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {

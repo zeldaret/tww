@@ -5,15 +5,323 @@
 
 #include "d/d_menu_collect.h"
 #include "dolphin/types.h"
+#include "stdio.h"
+#include "d/d_com_inf_game.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
+
+static dMc_HIO_c g_mcHIO;
 
 /* 8019BE8C-8019BF14       .text __ct__9dMc_HIO_cFv */
 dMc_HIO_c::dMc_HIO_c() {
-    /* Nonmatching */
+    m46 = 40;
+    m48 = 10;
+    m4A = 120;
+    m4C = 100;
+    m54 = 4.0f;
+    m5C = 0xff;
+    m5D = 70;
+    m52 = 130;
+    m4E = 250;
+    m50 = 20;
+    m58.set(0xFF, 0xAA, 0x00, 0x00);
+    m44 = 13;
 }
 
 /* 8019BF14-8019CB5C       .text screenSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::screenSet() {
     /* Nonmatching */
+    char* print_format;
+
+    static const u32 l_ft[] = {
+        'ft00', 'ft01', 'ft02', 'ft03', 'ft04', 'ft05', 'ft06', 'ft07',
+        'ft08', 'ft09', 'ft10', 'ft11', 'ft12', 'ft13', 'ft14',
+    };
+    
+    static const u32 l_fd[] = {
+        'fd00', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05', 'fd06', 'fd07',
+        'fd08', 'fd09', 'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
+    };
+
+    static const u32 l_car[] = {
+        'car1', 'car2', 'car3', 'car4',
+    };
+
+    static const u32 l_tri[] = {
+        'tri0', 'tri1', 'tri2', 'tri3', 'tri4', 'tri5', 'tri6', 'tri7',
+    };
+
+    static const u32 l_sit[] = {
+        'it16', 'it14', 'it15',
+    };
+
+    static const u32 l_sik[] = {
+        'ik16', 'ik14', 'ik15',
+    };
+
+    static const u32 l_ci[] = {
+        'ci10', 'ci09', 'ci08', 'ci07', 'ci06', 'ci05',
+        'ci04', 'ci03', 'ci02', 'ci01', 'ci00',
+    };
+
+    static const u32 l_htp[] = {
+        'htp2', 'htp1', 'htp3',
+    };
+
+    static const u32 l_tit[] = {
+        'it08', 'it09', 'it10', 'it11', 'it12', 'it13',
+    };
+
+    static const u32 l_tik[] = {
+        'ik08', 'ik09', 'ik10', 'ik11', 'ik12', 'ik13'
+    };
+
+    static const u32 l_cn[] = {
+        'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06'
+    };
+
+    static const u32 l_wn[] = {
+        'wn01', 'wn02', 'wn03', 'wn04', 'wn05', 'wn06'
+    };
+
+    static const u32 l_i0[] = {
+        'i011', 'i021', 'i031', 'i041', 'i051',
+        'i061'
+    };
+
+    static const u32 l_i1[] = {
+        'i012', 'i022', 'i032', 'i042', 'i052', 'i062'
+    };
+
+    static const u32 l_bs[] = {
+        'bs01', 'bs02', 'bs03', 'bs04', 'bs05', 'bs06'
+    };
+
+    static const u32 l_hmb[] = {
+        'hmb1', 'hmb2', 'hmb3', 'hmb4', 'hmb5', 'hmb6'
+    };
+
+    static const u32 l_wit[] = {
+        'it00', 'it01', 'it02', 'it03', 'it04'
+    };
+
+    static const u32 l_wik[] = {
+        'ik00', 'ik01', 'ik02', 'ik03', 'ik04'
+    };
+
+    static const u32 l_ip[] = {
+        'ip09', 'ip07', 'ip05', 'ip03', 'ip01'
+    };
+
+    static const u32 l_wk[] = {
+        'wk00', 'wk01', 'wk02', 'wk03',
+    };
+
+    static char* triTex[8] = {
+        "triforce_00.bti", "triforce_01.bti", "triforce_02.bti", "triforce_03.bti", 
+        "triforce_04.bti", "triforce_05.bti", "triforce_06.bti", "triforce_07.bti",
+    };
+    static char* symTex[3] = {
+        "god_symbol_02.bti", "god_symbol_00.bti", "god_symbol_01.bti",
+    };
+    static char* wepTex[5] = {
+        "sword_00.bti", "shield_00.bti", "gloves_00.bti", "amulet_00.bti", "amulet_01.bti",
+    };
+
+    J2DPane* mPane = m004->search('ROOT');
+    m2478 = mPane;
+
+    fopMsgM_setPaneData(&m008, m004, 'ft15');
+    fopMsgM_setPaneData(&m040, m004, 'ft16');
+    fopMsgM_setPaneData(&m078, m004, 'ft17');
+
+    for (int i = 0; i < (s32)ARRAY_SIZE(m0B0); i++) {
+        fopMsgM_setPaneData(&m0B0[i], m004, l_ft[i]);
+        fopMsgM_setPaneData(&m3F8[i], m004, l_fd[i]);
+
+        m0B0[i].mUserArea = 0xFFFF;
+    }
+
+    fopMsgM_setPaneData(&m740, m004, 'str0');
+    fopMsgM_setPaneData(&m778, m004, 'st00');
+    fopMsgM_setPaneData(&m7B0, m004, 'nt00');
+    fopMsgM_setPaneData(&m7E8, m004, 'nk00');
+    fopMsgM_setPaneData(&m820, m004, 'no11');
+
+    m820.mUserArea = m820.pane->mRotation;
+
+    if (m820.mUserArea > 180) m820.mUserArea -= 360;
+
+    ((J2DTextBox*)(m740).pane)->setFont(m2474);
+    ((J2DTextBox*)(m778).pane)->setFont(m2470);
+
+    // Couple of functions missing here
+    ((J2DTextBox*)(m740).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(m740).pane)->setCharColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m740).pane)->setGradColor(0xFFFFFFFF);
+
+    ((J2DTextBox*)(m778).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(m778).pane)->setCharColor(0xFFFFFFFF);
+    ((J2DTextBox*)(m778).pane)->setGradColor(0xFFFFFFFF);
+    
+
+    fopMsgM_setPaneData(&m858, m004, 'wd');
+    ((J2DTextBox*)(m858).pane)->setFont(m2470);
+
+    m2460->setPane(m2470, &m858, &m008, &m040, &m078);
+
+    fopMsgM_setPaneData(&m890, m004, 'nm00');
+    ((J2DTextBox*)(m890).pane)->setFont(m2470);
+
+    fopMsgM_setPaneData(&m8C8, m004, 'nm01');
+    ((J2DTextBox*)(m8C8).pane)->setFont(m2470);
+
+    fopMsgM_setPaneData(&m900, m004, 'itnm');
+    fopMsgM_setPaneData(&m938, m004, 'itnk');
+    fopMsgM_setPaneData(&m970, m004, 'msk0');
+    fopMsgM_setPaneData(&m9A8, m004, 'tl00');
+    fopMsgM_setPaneData(&m9E0, m004, 'tk00');
+
+    for(int i = 0; i < 4; i++) {
+        fopMsgM_setPaneData(&mA18[i], m004, l_car[i]);
+    }
+
+    fopMsgM_setPaneData(&mAF8, m004, 'wdsv');
+    fopMsgM_setPaneData(&mB30, m004, 'wdop');
+
+    for(int i = 0; i < 4; i++) {
+        fopMsgM_setPaneData(&mB68[i], m004, l_wk[i]);
+    }
+    
+    fopMsgM_setPaneData(&mC48, m004, 'num1');
+    fopMsgM_setPaneData(&mC80, m004, 'num2');
+    fopMsgM_setPaneData(&mCB8, m004, 'numc');
+    fopMsgM_setPaneData(&mCF0, m004, 'cmap');
+    fopMsgM_setPaneData(&mD28, m004, 'wk1');
+    fopMsgM_setPaneData(&mD60, m004, 'wk0');
+    fopMsgM_setPaneData(&mD98, m004, 'trim');
+    fopMsgM_setPaneData(&mDD0, m004, 'tril');
+    
+    mD98.pane->mDrawAlpha = 1;
+    mDD0.pane->mDrawAlpha = 1;
+
+    for(int i = 0; i < 8; i++) {
+        fopMsgM_setPaneData(&mE08[i], m004, l_tri[i]);
+    }
+
+    fopMsgM_setPaneData(&mFC8, m004, 'trib');
+
+    for(int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&m10A8[i], m004, l_sit[i]);
+        fopMsgM_setPaneData(&m3F8[i], m004, l_sik[i]);
+    }
+    
+    if (dComIfGs_isEventBit(0x1480)) {
+        m1000[1].mInitAlpha *= 0.5f;
+        m10A8[1].mInitAlpha *= 0.5f;
+    }
+
+    if (dComIfGs_isEventBit(0x1440)) {
+        m1000[2].mInitAlpha *= 0.5f;
+        m10A8[2].mInitAlpha *= 0.5f;
+    }
+
+    if (dComIfGs_isEventBit(0x1410)) {
+        m1000[0].mInitAlpha *= 0.5f;
+        m10A8[0].mInitAlpha *= 0.5f;
+    }
+
+    for(int i = 0; i < 11; i++) {
+        fopMsgM_setPaneData(&m1150[i], m004, l_ci[i]);
+    }
+
+    for(int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&m10A8[i], m004, l_htp[i]);
+    }
+
+    fopMsgM_setPaneData(&m1460,  m004, 'htpb');
+
+    for(int i = 0; i < 6; i++) {
+        fopMsgM_setPaneData(&m1498[i], m004, l_tit[i]);
+        fopMsgM_setPaneData(&m15E8[i], m004, l_tik[i]);
+        fopMsgM_setPaneData(&m17A8[i], m004, l_cn[i]);
+        fopMsgM_pane_class* pPane = &m18F8[i];
+        fopMsgM_setPaneData(pPane, m004, l_wn[i]);
+        fopMsgM_setPaneData(&m1A48[i], m004, l_i0[i]);
+        fopMsgM_setPaneData(&m1B98[i], m004, l_i1[i]);
+        fopMsgM_setPaneData(&m1CE8[i], m004, l_bs[i]);
+        fopMsgM_setPaneData(&m1E38[i], m004, l_hmb[i]);
+
+        pPane->mPosCenterOrig.x -= 4.0f;
+        pPane->mPosCenterOrig.y -= 4.0f;
+
+        fopMsgM_paneTrans(pPane, 0.0f, 0.0f);
+    }
+
+    fopMsgM_setPaneData(&m1738, m004, 'i111');
+    fopMsgM_setPaneData(&m1770, m004, 'i122');
+    fopMsgM_setPaneData(&m1F88, m004, 'cc43');
+    fopMsgM_setPaneData(&m1FC0, m004, 'cc32');
+    fopMsgM_setPaneData(&m1FF8, m004, 'cc21');
+
+    for (int i = 0; i < 5; i++) {
+        fopMsgM_setPaneData(&m2030[i], m004, l_wit[i]);
+        fopMsgM_setPaneData(&m2148[i], m004, l_wik[i]);
+    } 
+    
+    for (int i = 0; i < 5; i++) {
+        fopMsgM_setPaneData(&m2260[i], m004, l_ip[i]);
+    }
+
+    fopMsgM_setPaneData(&m2378, m004, 'ip00');
+    fopMsgM_setPaneData(&m23B0, m004, 'cc14');
+    fopMsgM_setPaneData(&m23E8, m004, 'cc07');
+    fopMsgM_setPaneData(&m2420, m004, 'cc00');
+    
+    JKRArchive::readTypeResource(m2498, 0xc00, 'TIMG', "baton.bti", dComIfGp_getItemIconArchive());
+    DCStoreRangeNoSync(m2498, 0xc00);
+    
+    JKRArchive::readTypeResource(m249C, 0xc00, 'TIMG', "cmap_treasure2.bti", dComIfGp_getItemIconArchive());
+    DCStoreRangeNoSync(m249C, 0xc00);
+
+    for(int i = 0; i < 6; i++) {
+        ((J2DPicture*)m1498[i].pane)->changeTexture(m2498, 0);
+        ((J2DPicture*)m15E8[i].pane)->changeTexture(m2498, 0);
+    }
+
+    ((J2DPicture*)mCF0.pane)->changeTexture(m249C, 0);
+    
+    for(int i = 0; i < 8; i++) {
+        JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', triTex[i], dComIfGp_getItemIconArchive());
+        DCStoreRangeNoSync(m24A0[i], 0xc00);
+        ((J2DPicture*)mE08[i].pane)->changeTexture(m24A0[i], 0);
+    }
+
+    mE08[4].mUserArea = -1;
+    m27A8 = mE08[4].mPosCenterOrig.x - mFC8.mPosCenterOrig.x;
+    m27AC = mE08[4].mPosCenterOrig.y - mFC8.mPosCenterOrig.y;
+
+    for(int i = 0; i < 3; i++) {
+        JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', symTex[i], dComIfGp_getItemIconArchive());
+        DCStoreRangeNoSync(m24A0[i], 0xc00);
+        ((J2DPicture*)m1000[i].pane)->changeTexture(m24A0[i], 0);
+        ((J2DPicture*)m10A8[i].pane)->changeTexture(m24A0[i], 0);
+    } 
+
+    for(int i = 0; i < 5; i++) {
+        JKRArchive::readTypeResource(m24A0[i], 0xc00, 'TIMG', wepTex[i], dComIfGp_getItemIconArchive());
+        DCStoreRangeNoSync(m24A0[i], 0xc00);
+        ((J2DPicture*)m2030[i].pane)->changeTexture(m24A0[i], 0);
+        ((J2DPicture*)m2148[i].pane)->changeTexture(m24A0[i], 0);
+    } 
+
+    sprintf(print_format, "rupy_num_%02d.bti", dComIfGs_getCollectMapNum() / 10);
+    ((J2DPicture*)mC48.pane)->changeTexture(print_format, 0);
+
+    sprintf(print_format, "rupy_num_%02d.bti", dComIfGs_getCollectMapNum() % 10);
+    ((J2DPicture*)mC80.pane)->changeTexture(print_format, 0);
+    return;
 }
 
 /* 8019CB5C-8019CD40       .text initialize__15dMenu_Collect_cFv */

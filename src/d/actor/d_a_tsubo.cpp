@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000011C       .text prmZ_init__Q27daTsubo5Act_cFv */
 void daTsubo::Act_c::prmZ_init() {
@@ -629,7 +630,7 @@ actor_process_profile_definition g_profile_TSUBO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0103,
+    /* Priority     */ PRIO_TSUBO,
     /* Actor SubMtd */ &daTsubo::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -3,63 +3,122 @@
 // Translation Unit: d_a_tag_kk1.cpp
 //
 
+
 #include "d/actor/d_a_tag_kk1.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+
+
+static daTag_Kk1_HIO_c l_HIO;
+
+static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};
 
 /* 000000EC-00000120       .text __ct__15daTag_Kk1_HIO_cFv */
 daTag_Kk1_HIO_c::daTag_Kk1_HIO_c() {
-    /* Nonmatching */
+    static hio_prm_c a_prm_tbl = {
+        350.0f,
+        30.0f,
+        0,
+    };
+    prm = a_prm_tbl;
+    mNo = -1;
 }
 
 /* 00000120-00000128       .text createInit__11daTag_Kk1_cFv */
-void daTag_Kk1_c::createInit() {
-    /* Nonmatching */
+BOOL daTag_Kk1_c::createInit() {
+    return TRUE;
 }
 
 /* 00000128-00000130       .text _draw__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_draw() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_execute() {
-    /* Nonmatching */
+
+    f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
+    f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
+    mTagSet = false;
+    if (
+        (distance < l_HIO.prm.mHorizontalDistance) && (vert_distance< l_HIO.prm.mVerticalDistance)
+    ){
+        s16 angle_deviation = dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y;
+        angle_deviation =abs(angle_deviation);
+        if(angle_deviation < 0x1000){       
+            mTagSet = true;
+        }
+    }
+    return true;
 }
+
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_delete() {
-    /* Nonmatching */
+
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    return TRUE;
 }
 
 /* 000002A0-0000046C       .text _create__11daTag_Kk1_cFv */
 cPhs_State daTag_Kk1_c::_create() {
-    /* Nonmatching */
+
+    u32 name_int = 0;
+    s32 o_phsState = cPhs_COMPLEATE_e;
+
+    fopAcM_SetupActor(this, daTag_Kk1_c);
+
+    switch(fopAcM_GetName(this)){
+        case PROC_TAG_KK1:
+            mNameIsWrong = false;
+            break;
+        default:
+            return cPhs_ERROR_e;
+    }
+
+    if(l_HIO.mNo  < 0){
+        //Poor Muuru (Mila) chase startup tag
+        l_HIO.mNo = mDoHIO_createChild("貧乏ム−ル追跡起動タグ",&l_HIO); 
+    }
+
+    if(!createInit()){
+        o_phsState = cPhs_ERROR_e;
+    }
+
+    fpcM_GetName(&name_int);
+    return o_phsState;
 }
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Kk1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Kk1_Create(fopAc_ac_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_create();
 }
 
 /* 000006B4-000006D4       .text daTag_Kk1_Delete__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Delete(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Delete(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_delete();
 }
 
 /* 000006D4-000006F4       .text daTag_Kk1_Execute__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Execute(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Execute(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_execute();
 }
 
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_Draw(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_Draw(daTag_Kk1_c* obj) {
+    (static_cast<daTag_Kk1_c*>(obj))->_draw();
+
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */
-static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c* obj) {
+    return TRUE;
 }
+
 
 static actor_method_class l_daTag_Kk1_Method = {
     (process_method_func)daTag_Kk1_Create,
@@ -79,7 +138,7 @@ actor_process_profile_definition g_profile_TAG_KK1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0125,
+    /* Priority     */ PRIO_TAG_KK1,
     /* Actor SubMtd */ &l_daTag_Kk1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

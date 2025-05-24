@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ykgr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_YkgrPcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
@@ -69,7 +70,7 @@ actor_process_profile_definition g_profile_Ykgr = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0185,
+    /* Priority     */ PRIO_Ykgr,
     /* Actor SubMtd */ &daYkgrMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_wbird.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_angle.h"
@@ -233,7 +234,7 @@ actor_process_profile_definition g_profile_WBIRD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00B7,
+    /* Priority     */ PRIO_WBIRD,
     /* Actor SubMtd */ &l_daWbird_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

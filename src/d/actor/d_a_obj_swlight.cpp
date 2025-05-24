@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_swlight.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000154       .text is_switch2__Q212daObjSwlight5Act_cCFv */
 void daObjSwlight::Act_c::is_switch2() const {
@@ -188,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Swlight = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0013,
+    /* Priority     */ PRIO_Obj_Swlight,
     /* Actor SubMtd */ &daObjSwlight::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

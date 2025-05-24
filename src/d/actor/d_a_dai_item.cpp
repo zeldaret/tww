@@ -7,6 +7,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_fdai.h"
 #include "d/res/res_cloth.h"
@@ -368,7 +369,7 @@ void daStandItem_c::CreateInit() {
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
 }
@@ -816,7 +817,7 @@ actor_process_profile_definition g_profile_STANDITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0101,
+    /* Priority     */ PRIO_STANDITEM,
     /* Actor SubMtd */ &daStandItemMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -1,14 +1,13 @@
 #ifndef D_A_OBJ_MOVEBOX_H
 #define D_A_OBJ_MOVEBOX_H
 
-#include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_particle.h"
 #include "d/d_bg_w.h"
-#include "d/d_path.h"
+
+struct dPath;
 
 namespace daObjMovebox {
     class Act_c;

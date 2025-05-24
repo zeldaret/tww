@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 enum TIMER_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */
     TIMER_BLO_SHIP_RACE0=0x3,

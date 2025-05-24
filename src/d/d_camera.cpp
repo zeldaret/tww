@@ -269,9 +269,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mEventData.mStaffIdx = -1;
     mEventData.field_0x0c = -1;
     mRoomNo = -1;
-    m318 = C_BG_MIN_HEIGHT;
-    mBG.m5C.m58 = C_BG_MIN_HEIGHT;
-    mBG.m00.m58 = C_BG_MIN_HEIGHT;
+    m318 = -G_CM3D_F_INF;
+    mBG.m5C.m58 = -G_CM3D_F_INF;
+    mBG.m00.m58 = -G_CM3D_F_INF;
     mBG.m00.m04.OffNormalGrp();
     mBG.m00.m04.OnWaterGrp();
     m31D = 0;
@@ -284,7 +284,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m350 = 0;
     m364 = 0;
     m368 = 0.0f;
-    m354 = C_BG_MIN_HEIGHT;
+    m354 = -G_CM3D_F_INF;
     mRoomMapToolCameraIdx = 0xFF;
     m608 = mCamSetup.mBGChk.WallUpDistance();
 
@@ -1814,7 +1814,7 @@ f32 dCamera_c::groundHeight(cXyz* param_0) {
         wtr_y = gnd_y;
     }
 
-    if (wtr_y == C_BG_MIN_HEIGHT) {
+    if (wtr_y == -G_CM3D_F_INF) {
         gnd_y = param_0->y;
     }
     else {
@@ -2501,13 +2501,13 @@ void dCamera_c::checkGroundInfo() {
         mBG.m5C.m04 = gnd_chk;
     }
 
-    mBG.m5C.m00 = mBG.m5C.m58 != C_BG_MIN_HEIGHT;
+    mBG.m5C.m00 = mBG.m5C.m58 != -G_CM3D_F_INF;
     
     mBG.m00.m04.SetPos(&gnd_chk_pos);
 
     mBG.m00.m58 = dComIfG_Bgsp()->GroundCross(&mBG.m00.m04);
 
-    mBG.m00.m00 = mBG.m00.m58 != C_BG_MIN_HEIGHT;
+    mBG.m00.m00 = mBG.m00.m58 != -G_CM3D_F_INF;
 
     m354 = mBG.m00.m58;
     if (mpPlayerActor->current.pos.y - mBG.m5C.m58 > mCamSetup.mBGChk.FloorMargin()) {
@@ -2588,7 +2588,7 @@ void dCamera_c::checkGroundInfo() {
         m314 = 1;
     }
     else {
-        m318 = C_BG_MIN_HEIGHT;
+        m318 = -G_CM3D_F_INF;
         m314 = 0;
     }
     
@@ -4588,7 +4588,7 @@ void preparation(camera_process_class* i_this) {
 
     dDlst_window_c* window = get_window(camera_id);
     view_port_class* viewport = window->getViewPort();
-    f32 aspect = 1.3333334f * fapGmHIO_getAspectRatio();
+    f32 aspect = (4.0f/3.0f) * fapGmHIO_getAspectRatio();
 
     camera->SetWindow(viewport->mWidth, viewport->mHeight);
     fopCamM_SetAspect(a_this, aspect);
@@ -4749,7 +4749,7 @@ bool camera_draw(camera_process_class* i_this) {
     gndchk.SetPos(&i_this->mLookat.mEye);
 
     f32 ground_y = dComIfG_Bgsp()->GroundCross(&gndchk);
-    if (ground_y != C_BG_MIN_HEIGHT) {
+    if (ground_y != -G_CM3D_F_INF) {
         mDoAud_getCameraMapInfo(dComIfG_Bgsp()->GetMtrlSndId(gndchk));
         mDoAud_setCameraGroupInfo(dComIfG_Bgsp()->GetGrpSoundId(gndchk));
 

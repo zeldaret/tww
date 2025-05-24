@@ -10,6 +10,7 @@
 #include "d/res/res_pw.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_manager.h"
 
@@ -174,11 +175,11 @@ void action_dousa(pw_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     camera_class* camera = dComIfGp_getCamera(0);
     cXyz camfwd;
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
         anm_init(i_this, PW_BCK_WAIT1, 7.0, J3DFrameCtrl::EMode_LOOP, 1.0, -1);
         i_this->m346 = 0;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
     case 1:
         if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
@@ -188,7 +189,7 @@ void action_dousa(pw_class* i_this) {
             i_this->shape_angle.y = i_this->m38C;
             i_this->m3A4 = -80.0f;
             i_this->m340 = 1;
-            i_this->mState += 1;
+            i_this->mMode += 1;
         }
         break;
     case 2:
@@ -207,13 +208,13 @@ void action_dousa(pw_class* i_this) {
                 particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
             }
             i_this->attention_info.flags = 0;
-            i_this->mState = 0x0A;
+            i_this->mMode = 0x0A;
         }
         break;
     case 9:
         i_this->m39A = 0;
         i_this->m39C = 0;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
     case 10:
         if (i_this->mBehaviorType == InvisibleAtStart) {
@@ -224,15 +225,15 @@ void action_dousa(pw_class* i_this) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
             case InvisibleAtStart:
-                i_this->mState = 0xB;
+                i_this->mMode = 0xB;
                 break;
             case OnlyLanternVisibleAtStart:
                 i_this->m341 = 2;
-                i_this->mState = 8;
+                i_this->mMode = 8;
                 break;
             default:
                 i_this->m346 = 1;
-                i_this->mState = 0xD;
+                i_this->mMode = 0xD;
                 break;
             }
         }
@@ -256,7 +257,7 @@ void action_dousa(pw_class* i_this) {
                 first_mode_change(i_this);
                 i_this->m382 = 3;
                 i_this->m346 = 1;
-                i_this->mState = 0xD;
+                i_this->mMode = 0xD;
             }
         }
         break;
@@ -269,7 +270,7 @@ void action_dousa(pw_class* i_this) {
             i_this->mBehaviorType = VisibleFromStart;
             i_this->m346 = 1;
             first_mode_change(i_this);
-            i_this->mState = 0xD;
+            i_this->mMode = 0xD;
         }
         break;
     case 7:
@@ -278,7 +279,7 @@ void action_dousa(pw_class* i_this) {
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
             anm_init(i_this, PW_BCK_DERUB2, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            i_this->mState = 6;
+            i_this->mMode = 6;
         }
         break;
     case 8:
@@ -286,7 +287,7 @@ void action_dousa(pw_class* i_this) {
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
             anm_init(i_this, PW_BCK_DERUB1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            i_this->mState = 7;
+            i_this->mMode = 7;
         }
         break;
     case 13:
@@ -301,14 +302,14 @@ void action_dousa(pw_class* i_this) {
         } else if (i_this->mBckIdx != PW_BCK_WAIT2) {
             anm_init(i_this, PW_BCK_WAIT2, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
     case 14:
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->m378) {
             break;
         }
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
     case 15:
         i_this->m378 = cM_rndF(120.0f) + 120.0f;
@@ -323,9 +324,9 @@ void action_dousa(pw_class* i_this) {
         }
         i_this->m38C += (s16)cM_rndFX(16384.0f);
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
-            i_this->mState = 0x14;
+            i_this->mMode = 0x14;
         } else {
-            i_this->mState = 0x10;
+            i_this->mMode = 0x10;
         }
         break;
     case 16:
@@ -335,7 +336,7 @@ void action_dousa(pw_class* i_this) {
             if (Line_check(i_this, i_this->current.pos, 0) || hani_check(i_this)) {
                 i_this->m37A = 10;
             } else if (i_this->m378 == 0) {
-                i_this->mState = 0xF;
+                i_this->mMode = 0xF;
             }
         }
         break;
@@ -361,14 +362,14 @@ void action_dousa(pw_class* i_this) {
         i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
         anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->speedF = -2.0f;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
     case 26:
         break;
     case 27:
     case 28:
         if (!fopAcM_CheckStatus(i_this, fopAcStts_HOOK_CARRY_e)) {
-            i_this->mState = 0x5A;
+            i_this->mMode = 0x5A;
         }
         break;
     case 101:
@@ -385,12 +386,12 @@ void action_dousa(pw_class* i_this) {
         break;
     case 100:
         anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
     case 110:
         anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         // TODO
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
     case 111:
         if (i_this->m5C4.getEmitter() != NULL) {
@@ -404,30 +405,30 @@ void action_dousa(pw_class* i_this) {
         i_this->speed.setall(0.0f);
         i_this->gravity = 0.0f;
         anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        i_this->mState += 1;
+        i_this->mMode += 1;
     case 112:
         // Fall-through
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 90;
+            i_this->mMode = 90;
         }
         break;
     }
     
-    if (i_this->mState <= 11) {
+    if (i_this->mMode <= 11) {
         return;
     }
-    if (i_this->m37C == 0 && i_this->mState < 90) {
-        if (i_this->mState == 14 || i_this->mState == 16 || i_this->mState == 20) {
+    if (i_this->m37C == 0 && i_this->mMode < 90) {
+        if (i_this->mMode == 14 || i_this->mMode == 16 || i_this->mMode == 20) {
             if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
                 if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
                     i_this->mAction = 1;
-                    i_this->mState = 30;
+                    i_this->mMode = 30;
                 }
             }
         }
     }
     
-    if (i_this->mState >= 10 && i_this->mState < 90) {
+    if (i_this->mMode >= 10 && i_this->mMode < 90) {
         alpha_anime(i_this);
     }
     
@@ -505,7 +506,7 @@ actor_process_profile_definition g_profile_PW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C7,
+    /* Priority     */ PRIO_PW,
     /* Actor SubMtd */ &l_daPW_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,
