@@ -10,38 +10,22 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_swc00.h"
 #include "d/actor/d_a_tama.h"
+#include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
-
+#include "weak_bss_936_to_1036.h" //Needed to align bss
 
 #define SHORT2DEG_ANGLE(deg) ((deg) / (65536.0f / 360.0f))
 #define LINKPOS (dComIfGp_getLinkPlayer()->current.pos)
 
 
 
-//Needed to align .bss
-static u8 label3569[12];
-static u8 label1036[1];
-static u8 label1034[1];
-static u8 label1032[1];
-static u8 label1031[1];
-static u8 label1026[1];
-static u8 label1024[1];
-static u8 label1022[1];
-static u8 label1021[1];
-static u8 label984[1];
-static u8 label982[1];
-static u8 label980[1];
-static u8 label979[1];
-static u8 label941[1];
-static u8 label939[1];
-static u8 label937[1];
-static u8 label936[1];
-//
+
+
 
 
 static daNpc_Kk1_HIO_c l_HIO;
@@ -72,6 +56,17 @@ daNpc_Kk1_HIO_c::daNpc_Kk1_HIO_c() {
 char* l_evn_tbl[] = {
     "run_start", "run_start_2", "catch", "get_empty_btl", 
     "bye", "otoboke", "runaway", "bye_2",
+};
+//TODO: Declare somewhere else?
+enum EVENT_NAME {
+    RUN_START,
+    RUN_START_2,
+    CATCH,
+    GET_EMPTY_BTL,
+    BYE,
+    OTOBOKE,
+    RUNAWAY,
+    BYE_2,
 };
 
 
@@ -156,14 +151,13 @@ void* searchActor_SWC00(void* i_swc, void* i_kk1) {
 /* 000004EC-00000598       .text init_KK1_0__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::init_KK1_0() {
 
-  bool uVar2;
 
 
-
-  if ((dComIfGs_isEventBit(0x2d01) != 0) && ((dKy_daynight_check() == 0) || (dComIfGs_isEventBit(0xe08) == 0))) {
+        //Some event                            Daytime                         Sidequest not finished
+  if ((dComIfGs_isEventBit(0x2D01)) && ((dKy_daynight_check() == 0) || (dComIfGs_isEventBit(0xe08) == 0))) {
 
     set_action(&daNpc_Kk1_c::wait_action1,NULL);
-    uVar2 = 1;
+
     return true;
   }
   else {
@@ -482,12 +476,12 @@ void daNpc_Kk1_c::setAnm_anm(daNpc_Kk1_c::anm_prm_c* param_1) {
 
 
 /* 00000DDC-00000E4C       .text setAnm_NUM__11daNpc_Kk1_cFii */
-void daNpc_Kk1_c::setAnm_NUM(int param_1, int param_2) {
+void daNpc_Kk1_c::setAnm_NUM(int i_tblIdx, int param_2) {
 
     if (param_2 != 0) {
-    init_texPttrnAnm(a_anm_prm_tblNUM[param_1].field1,true);
+    init_texPttrnAnm(a_anm_prm_tblNUM[i_tblIdx].field1,true);
     }
-    setAnm_anm(&a_anm_prm_tblNUM[param_1]);
+    setAnm_anm(&a_anm_prm_tblNUM[i_tblIdx]);
     return;
 
 
@@ -513,26 +507,26 @@ void daNpc_Kk1_c::ctrlAnmTag() {
 }
 
 /* 00000EC0-00000FA0       .text chngAnmAtr__11daNpc_Kk1_cFUc */
-void daNpc_Kk1_c::chngAnmAtr(unsigned char param_1) {
-    fopAc_ac_c* iVar1;
-    int local_18[4];
+void daNpc_Kk1_c::chngAnmAtr(unsigned char i_anmNum) {
+    fopAc_ac_c* found_actor;
+    int search_failed;
     switch(mCurrMsgNo){
-        case 0x1CAC:
-            iVar1 = searchByID(mPartnerProcID,local_18);
-            if(iVar1 != 0 && local_18[0] == 0){
-                field_0x738 = iVar1->current.pos;
+        case 0x1CAC:    //Take off! Go away!
+            found_actor = searchByID(mPartnerProcID,&search_failed);
+            if(found_actor != NULL && search_failed == 0){
+                field_0x738 = found_actor->current.pos;
                 field_0x738.y += l_HIO.field_0x20 + 200.0f;
-                field_0x81E = 2;
-                field_0x7C4 = 1;
+                mWhereToLook = 2;
+                mLockBodyRotation = 1;
                 field_0x7A2 = l_HIO.field_0x2E;
             }
             break;
     }
-    if((param_1 == mAnimationNum) || (param_1 > 0xD)){
+    if((i_anmNum == mAnimationNum) || (i_anmNum > 0xD)){
         return;
     }
 
-    mAnimationNum = param_1;
+    mAnimationNum = i_anmNum;
     setAnm_ATR();
 
     return;
@@ -602,183 +596,184 @@ void daNpc_Kk1_c::anmAtr(unsigned short param_1) {
                 break;
         }
         ctrlAnmAtr();
-        ctrlAnmTag();
+        ctrlAnmTag();   //Does nothing
 
 }
 
 /* 000011A0-0000149C       .text next_msgStatus__11daNpc_Kk1_cFPUl */
 u16 daNpc_Kk1_c::next_msgStatus(unsigned long* param_1) {
 
-    u8 temp_r3;
+    s32 msg_selection;
     
-    u16 var_r0 = 0xF;
+    u16 message_outcome = 0xF;   //0xF = Continue. 0x10 = Run Away.
     switch (*param_1) { //TODO: Make Enum.
-    case 0x1C85:
+    case 0x1C85:    //Oh! Hi! We meet again! ...What?! Of course! Honestly! I'm working! How dare you suggest that! I'm done with all that sneaking around in the dark. In fact, I head off to a faraway island to work in the evenings now, so I won't be seeing you at night anymore! 
         *param_1 = 0x1C86;
         break;
-    case 0x1C86:
+    case 0x1C86:    //All right? Well, all right. Now, you're keeping me from doing my job, so could you please step aside?
         *param_1 = 0x1CA7;
         break;
-    case 0x1CA7:
+    case 0x1CA7:    //This way to the only stall with extra-fun, happy things for sale!
         *param_1 = 0x1CA8;
         break;
-    case 0x1C88:
+    case 0x1C88:    //Hey, you! Come on! Use your head! You can't just stand there like that! You're in my way! Can't you move? 
         *param_1 = 0x1C89;
         break;
-    case 0x1C89:
+    case 0x1C89:    //Oops! That won't do! That won't do at all! Already I'm back to my old habits... I'm terribly sorry! Really, I am!  
         *param_1 = 0x1C8A;
         break;
-    case 0x1C8A:
+    case 0x1C8A:    //Umm... 
         *param_1 = 0x1CA9;
         break;
-    case 0x1C8B:
-        *param_1 = 0x1CAC;
+    case 0x1C8B:    //Shh! Shhh! 
+        *param_1 = 0x1CAC;  //Take off! Go away! 
         field_0x7B8 = 1;
         break;
-    case 0x1C8D:
+    case 0x1C8D:    //Y-Y-You startled me...! Wh-Wh-What do you want? M-M-My heart is racing! You scared me! 
         *param_1 = 0x1C8E;
         break;
-    case 0x1C8E:
+    case 0x1C8E:    //Wait... Are you...? ...the kind of creep who goes around at night scaring people?! That's just plain mean! 
         *param_1 = 0x1C8F;
         break;
-    case 0x1C8F:
+    case 0x1C8F:    //Just who do you think you are, anyway?!
         switch (mpCurrMsg->mSelectNum) {                  
-        case 0:                                   
+        case 0:     //An ally of justice!                        
             *param_1 = 0x1C90;
             break;
-        case 1:                                   
+        case 1:     //A night-creeping rascal!                            
             *param_1 = 0x1CA5;
-            field_0x7AE += 1;
+            mMuuruBadResponse += 1;
             break;
         }
         break;
-    case 0x1CA5:
+    case 0x1CA5:    //...Hmph! That's not funny, you know. I can't believe you'd try to make a joke out of this! You're an awful boy!
         *param_1 = 0x1C8F;
         break;
-    case 0x1C90:
+    case 0x1C90:    //A...what!?! An... An ally of justice?! I-I'm not a thief! I swear! I haven't stolen anything! Well, yet. Please let me go! It was just an impulse! That's all! Just a bad idea!
         *param_1 = 0x1C91;
-        break;
-    case 0x1C91:
+        break;      
+    case 0x1C91:    //...Why won't you say anything? Does this mean you're mad at me? Could you at least listen to the circumstances in my life that led up to this moment? Please, you owe me that much!
         switch (mpCurrMsg->mSelectNum) {                 
-        case 0:                                  
+        case 0:     //Sure                
             *param_1 = 0x1C93;
             break;
-        case 1:                                  
+        case 1:    //Quiet, you!                             
             *param_1 = 0x1C92;
-            field_0x7AE += 1;
+            mMuuruBadResponse += 1;
             break;
         }
         break;
-    case 0x1C92:
+    case 0x1C92:    //...What?! Why, that's just cruel! You awful boy! Sometimes there are odd circumstances that make people do what they do! How could you be so close-minded? 
         *param_1 = 0x1C91;
         break;
-    case 0x1C93:
+    case 0x1C93:    //I...was once the richest little debutante in this town. Did you know that? But one day, a monstrous bird came and took me away to a terrible place called the Forsaken Fortress, where I was locked up and held captive. Oh, it was awful! My father spent every last Rupee in his coffers in an attempt to get me rescued. 
         *param_1 = 0x1C94;
         break;
-    case 0x1C94:
-        switch ((s32) mpCurrMsg->mSelectNum) {                  
-        case 0:                                    
+    case 0x1C94:    //That's right! Every last bit of our family fortune, gone... That was when my life of poverty began. Now, every day, from morning until night, I'm busy working for the open-air shop. So, as you can see, at least I'm trying to settle into my poor lifestyle. Doesn't that just tug at your heart strings? What do you say about the tragic events in my pitiable life? 
+        switch (mpCurrMsg->mSelectNum) {                  
+        case 0:     //That's terrible                                   
             *param_1 = 0x1C96;
             break;
-        case 1:                                   
+        case 1:     //That's kind of funny                              
             *param_1 = 0x1C95;
-            field_0x7AE += 1;
+            mMuuruBadResponse += 1;
             break;
         }
         break;
-    case 0x1C95:
+    case 0x1C95:    //...... 
         *param_1 = 0x1C96;
         break;
-    case 0x1C96:
+    case 0x1C96:    //And to make matters worse, for some reason I still can't figure out, that slob Maggie, who was the poorest girl in town, suddenly got filthy rich! Maggie, of all people! It makes me so mad that I want to do something terrible! Grrrr! 
         *param_1 = 0x1C97;
         break;
-    case 0x1C97:
-
+    case 0x1C97:    //Do you understand my plight? 
         switch (mpCurrMsg->mSelectNum) {             
-        case 0:                                 
+        case 0:     //Very well                      
             *param_1 = 0x1C98;
             break;
-        case 1:   
-            *param_1 = ((field_0x7AE > 1) ? 1 : 2)+0x1C99;            
+        case 1:     //Not at all
+            *param_1 = ((mMuuruBadResponse > 1) ? 1 : 2)+0x1C99;            
         }
         break;
-    case 0x1C98:
-        temp_r3 = mpCurrMsg->mSelectNum;
-        switch ((s32) temp_r3) {              
-        case 0:                                  
+    case 0x1C98:    //...Then you'll let me go?! 
+        msg_selection = mpCurrMsg->mSelectNum;
+        switch ((s32) msg_selection) {              
+        case 0:     //Unfortunately, no                         
             *param_1 = 0x1C99;
             break;
-        case 1:                               
-            var_r0 = 0x10;
+        case 1:     //I'll let you go                          
+            message_outcome = 0x10;
             break;
         }
         break;
-    case 0x1C99:
+    case 0x1C99:    //But...why not?!? 
         switch (mpCurrMsg->mSelectNum) {                
-        case 0:     
-            *param_1 = ((field_0x7AE > 1) ? 1 : 2)+0x1C9B;       
+        case 0:     //Because I'm honest 
+            *param_1 = ((mMuuruBadResponse > 1) ? 1 : 2)+0x1C9B;       
             break;
-        case 1:   
+        case 1:     //Because I like you
             *param_1 = 0x1C9A;
         }
         break;
-    case 0x1C9B:
+       //0x1C9A       ...Hah! You awful boy! I was honest with you, too! And now I'm just angry! Good-bye! 
+    case 0x1C9B:    //...Ah hee hee hee hee! I'm sorry! I guess it was a little too complicated for a KID to understand! 
         *param_1 = 0x1C9D;
         break;
-    case 0x1C9D:
+       //0x1C9C       ...Oh. That's...really annoying! You know? I just remembered! I have something very important that I'm supposed to be doing. I'll be RIGHT back, so can you just wait here for me? It'll only take a second!  
+    case 0x1C9D:    //It's true... I know I'm quibbling over nothing... But being so poor weakens a person's very soul... But...it's time I quit making silly excuses for myself!
         *param_1 = 0x1C9E;
         break;
-    case 0x1C9E:
+    case 0x1C9E:    //Thank you so much... 
         *param_1 = 0x1CAA;
         break;
-    case 0x1CAA:
+    case 0x1CAA:   //Thanks to you, I didn't have to sink down to the level of a common thief. I will never do anything like that again! Ahhhh... What an amazing feeling! I've let all of my worries out of my heart. Wow! I actually feel refreshed! 
         *param_1 = 0x1C9F;
         break;
-    case 0x1C9F:
-        var_r0 = 0x10;
+    case 0x1C9F:   //Let me at least thank you. Please take this! 
+        message_outcome = 0x10;
         break;
-    case 0x1CA1:
+    case 0x1CA1:   //Don't look at me like that! I didn't steal it! It washed up on the shore, so I picked it up. Don't tease me like that! It's a tiny bottle made of crystal-clear glass... It's so beautiful. I wish my soul could be that beautiful... 
         *param_1 = 0x1CA2;
         break;
-    case 0x1CA2:
+    case 0x1CA2:   //Oh! What am I saying? When you live in poverty, you can say the cheesiest things without blinking an eye. ...Hmph! 
         *param_1 = 0x1CA3;
         break;
-    case 0x1CA3:
+    case 0x1CA3:   //So, umm...I guess I should go soon. My father will start worrying. 
         *param_1 = 0x1CA4;
         break;
-    case 0x1CA4:
-        *param_1 = 0x1CAB;
+    case 0x1CA4:   //Good-bye, little ally of justice! ...and good luck to you. 
+        *param_1 = 0x1CAB; //'Bye! Thanks for tonight! 
         break;
     default:
-        var_r0 = 0x10;
+        message_outcome = 0x10;  
         break;
     }
-    return var_r0;
+    return message_outcome;
 }
 
 /* 0000149C-00001534       .text getMsg_KK1_0__11daNpc_Kk1_cFv */
 u32 daNpc_Kk1_c::getMsg_KK1_0() {
 
    if (dKy_daynight_check() == 1) { //If Night
-      if (field_0x7BA != 0) {
+      if (field_0x7BA) {
 
           field_0x7BA = 0;
-          return 0x1CA1;
+          return 0x1CA1;                         //Don't look at me like that! I didn't steal it! It washed up on the shore, so I picked it up. Don't tease me like that! It's a tiny bottle made of crystal-clear glass... It's so beautiful. I wish my soul could be that beautiful...
       }
       else {
-          return 0x1C8B;
+          return 0x1C8B;                         //Shh! Shhh!
       }
    }
-   else {                           
-      if (dComIfGs_isEventBit(0xE08) == 0) { //If Day
-            if(dComIfGs_isEventBit(0xE10)){
-                return 0x1C87;
-            }else{
-                return 0x1C88;
+   else {                           //If Day
+      if (!dComIfGs_isEventBit(0xE08)) {      //If Sidequest is available
+            if(dComIfGs_isEventBit(0xE10)){   //If working at shop
+                return 0x1C87;                   //This way to the only stall with extra-fun happy things for sale! Your happiness is guaranteed! Fun awaits you! Step right up! Stop by! 
+            }else{                               //If walking
+                return 0x1C88;                   //Hey, you! Come on! Use your head! You can't just stand there like that! You're in my way! Can't you move? 
             }
       }
       else {
-          return 0x1C85;
+          return 0x1C85;                         //Oh! Hi! We meet again! ...What?! Of course! Honestly! I'm working! How dare you suggest that! I'm done with all that sneaking around in the dark. In fact, I head off to a faraway island to work in the evenings now, so I won't be seeing you at night anymore! 
       }
    }
 }
@@ -796,14 +791,14 @@ u32 daNpc_Kk1_c::getMsg() {
 
 /* 00001570-000015FC       .text eventOrder__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::eventOrder() {
-    char cVar1 = field_0x81B;
-    if ((cVar1 == '\x01') || (cVar1 == '\x02')) {
+    char event_state = field_0x81B; //Event state?
+    if ((event_state == 1) || (event_state == 2)) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if(field_0x81B == '\x01'){
+        if(field_0x81B == 1){
             fopAcM_orderSpeakEvent(this);
         }
-    }else if (cVar1 >= 0x03){
-        mEvtIDIdx = (cVar1 - 3);
+    }else if (event_state >= 0x03){
+        mEvtIDIdx = (event_state - 3);
         fopAcM_orderOtherEventId(this,mEvtIDTbl[mEvtIDIdx],0x00ff,0xffff,0,1);
 
     }
@@ -812,27 +807,27 @@ void daNpc_Kk1_c::eventOrder() {
 void daNpc_Kk1_c::checkOrder() {
 
     if(eventInfo.checkCommandDemoAccrpt()){
-        if(dComIfGp_evmng_startCheck(mEvtIDTbl[mEvtIDIdx]) && (s8)field_0x81B >= 0x03){
+        if(dComIfGp_evmng_startCheck(mEvtIDTbl[mEvtIDIdx]) && field_0x81B >= 0x03){
             switch(mEvtIDIdx){
-                case 4:
+                case BYE:
                     setAnm_NUM(0,1);
                     break;
-                case 5:
-                case 3:
+                case GET_EMPTY_BTL: //TODO: Improve default case
+                case OTOBOKE:
                 default:
                     break;
             }
 
             field_0x81B = 0;
-            mAnimationNum = 0xFF;
-            field_0x818 = 0xFF;
+            mAnimationNum = -1;
+            field_0x818 = -1;
         };
 
     }
     else{
-        if((this->checkCommandTalk() != 0)&&((field_0x81B == 1) ||(field_0x81B == 2))){
-            this->field_0x81B = 0;
-            this->field_0x7C3 = 1;
+        if((checkCommandTalk())&&((field_0x81B == 1) ||(field_0x81B == 2))){
+            field_0x81B = 0;
+            field_0x7C3 = 1;
         }
     }
 
@@ -840,43 +835,43 @@ void daNpc_Kk1_c::checkOrder() {
 
 /* 000016DC-00001774       .text chk_talk__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::chk_talk() {
-    bool retval;
+    bool o_return;
     if(dComIfGp_event_chkTalkXY()){
-        retval = true;
+        o_return = true;
         if(dComIfGp_evmng_ChkPresentEnd() != 0){
             field_0x7B4 = dComIfGp_event_getPreItemNo();
-            retval = true;
+            o_return = true;
         }else{
-            retval = false;
+            o_return = false;
         }
     }else{
-        field_0x7B4 = 0xFF;
-        retval = true;
+        field_0x7B4 = -1;
+        o_return = true;
     }
-    return retval;
+    return o_return;
 }
 
 /* 00001774-000017B4       .text chk_parts_notMov__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::chk_parts_notMov() {
-    bool retval = 0;
-    if((field_0x772 != m_jnt.mAngles[0][1])||
-    (field_0x774 != m_jnt.mAngles[1][1])||
-    (mAngleY != current.angle.y)){
-        retval = 1;
+    bool o_return = false;
+    if((mLookBackHeadY != m_jnt.getHead_y())||
+    (mLookBackBackboneY != m_jnt.getBackbone_y())||
+    (mLookBackAngleY != current.angle.y)){
+        o_return = true;
     }
-    return retval;
+    return o_return;
 
 }
 
 /* 000017B4-00001808       .text searchByID__11daNpc_Kk1_cFUiPi */
-fopAc_ac_c* daNpc_Kk1_c::searchByID(fpc_ProcID param_1, int* param_2) {
-    fopAc_ac_c *fiveActors[4];
-    fiveActors[0] = NULL;
-    *param_2 = 0;
-    if(!fopAcM_SearchByID(param_1,fiveActors)){
-        *param_2 = 1;
+fopAc_ac_c* daNpc_Kk1_c::searchByID(fpc_ProcID i_actor, int* i_searchFailed) {
+    fopAc_ac_c *search_actor;
+    search_actor = NULL;
+    *i_searchFailed = 0;
+    if(!fopAcM_SearchByID(i_actor,&search_actor)){
+        *i_searchFailed = 1;
     }
-    return fiveActors[0];
+    return search_actor;
 }
 
 
@@ -885,7 +880,7 @@ fopAc_ac_c* daNpc_Kk1_c::searchByID(fpc_ProcID param_1, int* param_2) {
 /* 00001808-000018B8       .text partner_search_sub__11daNpc_Kk1_cFPFPvPv_Pv */
 bool daNpc_Kk1_c::partner_search_sub(void* (*param_1)(void*,void*)) {
 
-    bool retVal = false;
+    bool o_return = false;
     mPartnerProcID = -1;
     l_check_wrk = 0;
 
@@ -895,28 +890,29 @@ bool daNpc_Kk1_c::partner_search_sub(void* (*param_1)(void*,void*)) {
     fpcEx_Search(*param_1, this);
     if(l_check_wrk != 0){
         mPartnerProcID = fopAcM_GetID(l_check_inf[0]);
-        retVal = 1;
+        o_return = true;
+
     }
 
-    return retVal;
+    return o_return;
 }
 
 /* 000018B8-00001924       .text partner_search__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::partner_search() {
 
-    bool cVar1;
-    if(field_0x821 == '\x01'){
+    bool found_partner;
+    if(field_0x821 == 1){
 
         switch(field_0x820){
 
 
             case 0:
-                cVar1 = partner_search_sub(searchActor_SWC00);
+                found_partner = partner_search_sub(searchActor_SWC00);
                 break;
             default:
-                cVar1 = 1;
+                found_partner = 1;
         }
-        if(cVar1){
+        if(found_partner){
             field_0x821 += 1;
         }
     }
@@ -927,9 +923,9 @@ void daNpc_Kk1_c::partner_search() {
 /* 00001924-00001B10       .text lookBack__11daNpc_Kk1_cFv */
 void daNpc_Kk1_c::lookBack() {
 
-    field_0x772 = m_jnt.getHead_y();
-    field_0x774 = m_jnt.getBackbone_y();
-    mAngleY = current.angle.y;
+    mLookBackHeadY = m_jnt.getHead_y();
+    mLookBackBackboneY = m_jnt.getBackbone_y();
+    mLookBackAngleY = current.angle.y;
     cXyz vec1;
     cXyz vec2 = current.pos;
     vec2.y = eyePos.y;
@@ -940,30 +936,31 @@ void daNpc_Kk1_c::lookBack() {
     fopAc_ac_c *pActor;
     cXyz* vecPtr1 = NULL;
     s16 targetY = current.angle.y;
-    s8 state = field_0x81E;
-    bool someBool = field_0x7C4;
+    s8 state = mWhereToLook;
+    bool someBool = mLockBodyRotation;
     switch(state){
-        case 1:
+        case 1: //Look ahead
             field_0x738 = dNpc_playerEyePos(-20.0);
             vec1 = field_0x738;
             vecPtr1 = &vec1;
             break;
-        case 2:
+        case 2: //Look in same direction?
             vec1 = field_0x738;
             vecPtr1 = &vec1;
             break;
-        case 3:
+        case 3: //??
             targetY = field_0x7AC;
             break;
-        case 4:
-            if ((pActor = searchByID(field_0x700,&Int1),pActor != NULL) && Int1 == 0){
+        case 4: //??
+            pActor = searchByID(field_0x700,&Int1);
+            if (pActor != NULL && Int1 == 0){
                 field_0x738 = pActor->current.pos;
                 field_0x738.y = pActor->eyePos.y;
                 vec1 = field_0x738;
                 vecPtr1 = &vec1;      
             }
             break;
-        case 5:
+        case 5:     //Kyoroyoro
             kyorokyoro();
             vec1 = field_0x738;
             vecPtr1 = &vec1;
@@ -999,7 +996,7 @@ void daNpc_Kk1_c::setAttention(bool i_attn_flag) {
     attention_info.position.set(f3,f2,f1);
 
  
-    if((field_0x778 == 0) && !i_attn_flag){return;}
+    if(!field_0x778 && !i_attn_flag){return;}
 
     f2 = field_0x72C.z;
     f1 = field_0x72C.y;
@@ -1048,7 +1045,7 @@ bool daNpc_Kk1_c::cut_move_RUN_START() {
     daPy_py_c* pdVar2;
     cXyz runPoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
     short target = cLib_targetAngleY(&current.pos,&runPoint);
-    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
+    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
     if(current.angle.y == target){
         pdVar2 = g_dComIfG_gameInfo.play.mpPlayer[2];
         pdVar2->mDemo.setDemoType(2);
@@ -1063,10 +1060,10 @@ bool daNpc_Kk1_c::cut_move_RUN_START() {
 /* 00001DD0-00001E58       .text cut_init_RUN__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_RUN(int param_1) {
 
-    s32* somePtr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",3);
-    field_0x798 = -1;
+    s32* somePtr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
+    mTimer = -1;
     if(somePtr != NULL){
-        field_0x798 = *somePtr;
+        mTimer = *somePtr;
     }
     setAnm_NUM(4,1);
     field_0x7B6 = 1;
@@ -1079,10 +1076,10 @@ void daNpc_Kk1_c::cut_init_RUN(int param_1) {
 bool daNpc_Kk1_c::cut_move_RUN() {
     bool r3 = this->event_move(0);
 
-    if (this->field_0x798 < 0) {
+    if (this->mTimer < 0) {
         return r3;  
     }
-    return cLib_calcTimer(&this->field_0x798) == 0;
+    return cLib_calcTimer(&this->mTimer) == 0;
 }
 
 /* 00001EAC-00001F08       .text cut_init_CATCH_START__11daNpc_Kk1_cFi */
@@ -1112,8 +1109,8 @@ void daNpc_Kk1_c::cut_init_CATCH_END(int param_1) {
     current.angle.y += 0x8000;
     setAnm_NUM(0,1);
     mpMorf->setMorf(0.0);
-    field_0x81E = 1;
-    field_0x7C4 = 0;
+    mWhereToLook = 1;
+    mLockBodyRotation = 0;
     m_jnt.mbTrn = true;
     return;
 
@@ -1139,8 +1136,8 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
             };
 
             mRunPath.mCurrPointIndex = sp58[currentPoint-0x19];
-            field_0x81E = 0;
-            field_0x7C4 = 1;
+            mWhereToLook = 0;
+            mLockBodyRotation = 1;
             return;
         }
         mRunPath.setNearPathIndx(&LINKPOS,100);
@@ -1174,18 +1171,17 @@ void daNpc_Kk1_c::cut_init_TRN(int) {
             mRunPath.mbGoingForwards = (mRunPath.mbGoingForwards ^ 1);
         }
     }
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
 }
 
 /* 000022BC-00002364       .text cut_move_TRN__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::cut_move_TRN() {
-    cXyz a = mRunPath.getPoint(mRunPath.mCurrPointIndex);
-    s16 target = cLib_targetAngleY(&current.pos,&a);
-    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
-    s16 sVar1 = current.angle.y;
-    if(sVar1 == target){
-        shape_angle.y = sVar1;
+    cXyz run_point = mRunPath.getPoint(mRunPath.mCurrPointIndex);
+    s16 target = cLib_targetAngleY(&current.pos,&run_point);
+    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
+    if(current.angle.y == target){
+        shape_angle.y = current.angle.y;
         return true;
     }
     return false;
@@ -1193,7 +1189,7 @@ bool daNpc_Kk1_c::cut_move_TRN() {
 }
 
 /* 00002364-00002388       .text cut_init_BYE_START__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_BYE_START(int) {
+void daNpc_Kk1_c::cut_init_BYE_START(int i_unused_param) {
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->onPlayerNoDraw();
     field_0x7BB = 1;
@@ -1208,22 +1204,22 @@ bool daNpc_Kk1_c::cut_move_BYE_START() {
 /* 00002390-00002490       .text cut_init_BYE__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_BYE(int param_1) {
 
-    s32* somePtr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",3);
-    s32* somePtr2 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Delay",3);                   
-    s32* somePtr3 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"prm_0",3);    
+    s32* timer_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
+    s32* delay_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Delay",dEvDtData_c::TYPE_INT);                   
+    s32* prm_0_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"prm_0",dEvDtData_c::TYPE_INT);    
 
-  field_0x798 = 0x1e;
+  mTimer = 0x1E;
 
-  if(somePtr != NULL){
-    field_0x798 = *somePtr;
+  if(timer_ptr != NULL){
+    mTimer = *timer_ptr;
   }
   field_0x79A = 0xffff;
-  if(somePtr2 != NULL){
-    field_0x79A = *somePtr2;
+  if(delay_ptr != NULL){
+    field_0x79A = *delay_ptr;
   }
-  field_0x7B0 = 0;
-  if(somePtr3 != NULL){
-    field_0x7B0 = *somePtr3;
+  mPrm0 = 0;
+  if(prm_0_ptr != NULL){
+    mPrm0 = *prm_0_ptr;
   }
   setAnm_NUM(4,1);
   field_0x815 = 2;
@@ -1234,10 +1230,10 @@ void daNpc_Kk1_c::cut_init_BYE(int param_1) {
 /* 00002490-00002568       .text cut_move_BYE__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::cut_move_BYE() {
     //TODO: This can likely be written much better.
-    event_move(0);
+    event_move(false);
     if (field_0x79A > 0) {
     if (cLib_calcTimer(&field_0x79A) == 0) {
-        ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,-0x3217);
+        ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,-0x3217); //TODO: Doesn't explicitly appear in Debug Map.
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         player->mDemo.setDemoType(3);
         player->mDemo.setParam0(0);
@@ -1245,8 +1241,8 @@ bool daNpc_Kk1_c::cut_move_BYE() {
         ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setParam0(0x3217);
     }
   }
-  if (cLib_calcTimer(&field_0x798) == 0) {
-    if (field_0x7B0 == 0) {
+  if (cLib_calcTimer(&mTimer) == 0) {
+    if (mPrm0 == 0) {
       speedF = 0.0;
     }
     return true;
@@ -1258,11 +1254,12 @@ bool daNpc_Kk1_c::cut_move_BYE() {
 }
 
 /* 00002568-000025C8       .text cut_init_BYE_CONTINUE__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_BYE_CONTINUE(int param_1) {
-    s32* somePtr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",3);
-    field_0x798 = 0x1E;
-    if(somePtr != NULL){
-        field_0x798 = *somePtr;
+
+void daNpc_Kk1_c::cut_init_BYE_CONTINUE(int i_staffIdx) {
+    s32* timer_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(i_staffIdx,"Timer",dEvDtData_c::TYPE_INT);
+    mTimer = 0x1E;
+    if(timer_ptr != NULL){
+        mTimer = *timer_ptr;
     }
 
     return;
@@ -1273,7 +1270,7 @@ void daNpc_Kk1_c::cut_init_BYE_CONTINUE(int param_1) {
 bool daNpc_Kk1_c::cut_move_BYE_CONTINUE() {
 
     this->event_move(0);
-    if (cLib_calcTimer(&this->field_0x798) == 0) {
+    if (cLib_calcTimer(&this->mTimer) == 0) {
         speedF = 0.0;
         return true;  
     }
@@ -1313,13 +1310,13 @@ void daNpc_Kk1_c::cut_init_OTOBOKE(int) {
     player->changeOriginalDemo();
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(4);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS, current.angle.y);
-    field_0x798 = 2;
+    mTimer = 2;
     return;
 }
 
 /* 00002744-00002798       .text cut_move_OTOBOKE__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::cut_move_OTOBOKE() {
-    if ( cLib_calcTimer(&this->field_0x798) == 0) {
+    if ( cLib_calcTimer(&this->mTimer) == 0) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(1);
         player->mDemo.setDemoType(2);
         player->mDemo.setDemoMode(1);
@@ -1363,7 +1360,7 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
 
 
 
-    s32* puVar2 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",3);
+    s32* puVar2 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(4);
@@ -1381,7 +1378,7 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
     m_jnt.mAngles[0][0] = 0;
     m_jnt.mAngles[1][1] = 0;
     m_jnt.mAngles[1][0] = 0;
-    field_0x81E = 0;
+    mWhereToLook = 0;
     if (abs((s16)(r29 - current.angle.y)) > 0x3800) {
         current.angle.y = r29 + 0x8000;
 
@@ -1393,9 +1390,9 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
     cXyz local_28;
     local_28.set(0.0,-50.0,0.0);
 
-    field_0x798 = 0x26;
+    mTimer = 0x26;
     if (puVar2 != NULL) {
-      field_0x798 = *puVar2;
+      mTimer = *puVar2;
     }
     current.angle.y = r29;
     setAnm_NUM(0,1);
@@ -1618,20 +1615,20 @@ void daNpc_Kk1_c::event_proc(int param_1) {
                     break;
                 case 0x1c9a:
                     this->field_0x81B = 10;
-                    this->field_0x81E = 0;
-                    this->field_0x7C4 = 1;
+                    this->mWhereToLook = 0;
+                    this->mLockBodyRotation = 1;
                     break;
                 case 0x1c98:
                 case 0x1c9c:
                     this->field_0x81B = 7;
-                    this->field_0x81E = 1;
-                    this->field_0x7C4 = 1;
+                    this->mWhereToLook = 1;
+                    this->mLockBodyRotation = 1;
                     break;
                 case 0x1c9f:
                     setStt(6);
                     this->field_0x81B = 6;
-                    this->field_0x81E = 0;
-                    this->field_0x7C4 = 1;
+                    this->mWhereToLook = 0;
+                    this->mLockBodyRotation = 1;
                     break;
                 }
                 break;
@@ -1640,7 +1637,7 @@ void daNpc_Kk1_c::event_proc(int param_1) {
 
 
                 field_0x81B = 1;
-                dComIfGs_onEventBit(0xE08);
+                dComIfGs_onEventBit(0xE08); //Make sidequest available
                 field_0x7BA = 1;
                 break;
 
@@ -1771,71 +1768,65 @@ void daNpc_Kk1_c::createTama(float param_1) {
 }
 
 /* 000032D8-0000345C       .text chk_areaIN__11daNpc_Kk1_cFf4cXyz */
-bool daNpc_Kk1_c::chk_areaIN(float param_1, cXyz param_2) {
+bool daNpc_Kk1_c::chk_areaIN(float i_distanceThreshold, cXyz i_position) {
 
-    float distanceXZ = (LINKPOS - param_2).absXZ();
+    float distanceXZ = (LINKPOS - i_position).absXZ();
 
-
-    s16 angdiff = cLib_targetAngleY(&current.pos,&LINKPOS) - current.angle.y;
-    float fVar1 = param_1;
-    if (abs(angdiff) > 0x4E38) {
-    fVar1 *= 0.5f;
+    s16 angle_diff = cLib_targetAngleY(&current.pos,&LINKPOS) - current.angle.y;
+    float distance_threshold = i_distanceThreshold;
+    if (abs(angle_diff) > 0x4E38) {
+    distance_threshold *= 0.5f;
     }
-    bool result = (distanceXZ < param_1);
-    if (result && ((g_Counter.mCounter0 % 3) == 0)) {
-        createTama(fVar1);
+    bool o_result = (distanceXZ < i_distanceThreshold);
+    if (o_result && ((g_Counter.mCounter0 % 3) == 0)) {
+        createTama(distance_threshold);
 
     }
-    return result;
+    return o_result;
 }
 
 /* 0000345C-00003578       .text startEvent_check__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::startEvent_check() {
 
-    uint uVar3;
-    float fVar4;
 
 
-    uVar3 = chk_areaIN(l_HIO.field_0x5C,current.pos);
-    if ((uVar3 & 0xff) != 0) {
-    fVar4 = current.pos.abs(LINKPOS);
 
-    if ((fVar4 < g_regHIO.mChild[9].mFloatRegs[0] + 210.0f) ||
-        (field_0x6ba != 0)) {
-        return 1;
+
+    u32 is_area_in = chk_areaIN(l_HIO.field_0x5C,current.pos);
+    if (is_area_in) {
+    float dist_to_link = current.pos.abs(LINKPOS);
+        if ((dist_to_link < REG9_F(0) + 210.0f) ||
+            (field_0x6ba != 0)) {
+            return true;
+        }
     }
-    }
-    return 0;
+    return false;
 }
 
 
 /* 00003578-00003600       .text chkHitPlayer__11daNpc_Kk1_cFv */
 bool daNpc_Kk1_c::chkHitPlayer() {
 
-    cCcD_Obj *pcVar1;
-    fopAc_ac_c *pfVar2;
-    bool bVar4;
- 
-    bVar4 = false;
+    bool o_result = false;
     if (mCyl.ChkCoHit()){
-        pcVar1 = mCyl.GetCoHitObj();
-        if(pcVar1 != NULL) {
+        cCcD_Obj* hit_obj = mCyl.GetCoHitObj();
+        if(hit_obj != NULL) {
 
-            pfVar2 = pcVar1->GetAc();
+            fopAc_ac_c* hit_actor = dCc_GetAc(hit_obj);
 
-            if(pfVar2 != NULL){
-                bVar4 = pfVar2->base.mProcName == 0xA9;
+            if(hit_actor != NULL){
+                o_result = fopAcM_GetName(hit_actor) == PROC_PLAYER;
             }
         }
     }
-    return bVar4;
+    return o_result;
 }
 
 /* 00003600-000036A8       .text set_pthPoint__11daNpc_Kk1_cFUc */
-void daNpc_Kk1_c::set_pthPoint(unsigned char param_1) {
+void daNpc_Kk1_c::set_pthPoint(unsigned char i_pointIndex) {
 
     if(mRunPath.mPath != NULL){
-        mRunPath.mCurrPointIndex = param_1;
+        mRunPath.mCurrPointIndex = i_pointIndex;
         current.pos = mRunPath.getPoint(mRunPath.mCurrPointIndex);
         if(mRunPath.nextIdx()){
             cXyz runpoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
@@ -1846,32 +1837,31 @@ void daNpc_Kk1_c::set_pthPoint(unsigned char param_1) {
 
 
 /* 000036A8-00003940       .text event_move__11daNpc_Kk1_cFb */
-bool daNpc_Kk1_c::event_move(bool param_1) {
+bool daNpc_Kk1_c::event_move(bool i_param_1) {
 
-    s16 sVar2;
     f32 speed;
     dPath* path = mRunPath.mPath;
-    if(path == NULL){
-        return 1;
+    if(!path){
+        return true;
     }
 
-    if (dPath_ChkClose(path) == 0){
-        return 1;
+    if (!dPath_ChkClose(path)){
+        return true;
     }
-    if(field_0x7B6 != 0){
+    if(field_0x7B6){
         if(mRunPath.chkPointPass(current.pos,mRunPath.mbGoingForwards)){
             mRunPath.nextIdxAuto();
-            if(param_1 != 0){
-                s8 pointarg = mRunPath.pointArg(mRunPath.mCurrPointIndex);
-                if( pointarg >= 0){
-                    pointarg += 1;
+            if(i_param_1){
+                s8 point_arg = mRunPath.pointArg(mRunPath.mCurrPointIndex);
+                if( point_arg >= 0){
+                    point_arg += 1;
                 }
-                if((pointarg != 2) && (pointarg != 3)){
+                if((point_arg != 2) && (point_arg != 3)){
                     field_0x7B6 = 0;
 
                 }
                 else{
-                    field_0x815 = pointarg;
+                    field_0x815 = point_arg;
                     field_0x816 = 0;
                     field_0x7B6 = 1;
                 }
@@ -1882,41 +1872,39 @@ bool daNpc_Kk1_c::event_move(bool param_1) {
 
     cXyz runpoint = mRunPath.getPoint(mRunPath.mCurrPointIndex);
     s16 target = cLib_targetAngleY(&current.pos,&runpoint);
-    sVar2 = current.angle.y;
-    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
-    f32 targetfloat;
-    float fVar3;
+    s16 store_angle = current.angle.y;
+    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
+    f32 target_float;
+    float play_speed;
     if(field_0x815 == 2){
         if(field_0x7B6 == 0){
-            targetfloat = 0.0;
+            target_float = 0.0;
         }else{
-            targetfloat = l_HIO.field_0x44;
+            target_float = l_HIO.field_0x44;
         }
-        fVar3 = speedF * l_HIO.field_0x4C;
+        play_speed = speedF * l_HIO.field_0x4C;
         speed = l_HIO.field_0x48;
     }else{
 
         if(field_0x7B6 == 0){
-            targetfloat = 0.0;
+            target_float = 0.0;
         }else{
-            targetfloat = l_HIO.field_0x50;
+            target_float = l_HIO.field_0x50;
         }
-        fVar3 = speedF * l_HIO.field_0x58;
+        play_speed = speedF * l_HIO.field_0x58;
         speed = l_HIO.field_0x54;
     }
-    cLib_chaseF(&speedF,targetfloat,speed);
-    
-
-    mpMorf->setPlaySpeed(cLib_minLimit(fVar3,0.5f));
-    if((int)targetfloat == 0){
-        current.angle.y = sVar2;
+    cLib_chaseF(&speedF,target_float,speed);
+    mpMorf->setPlaySpeed(cLib_minLimit(play_speed,0.5f));
+    if((int)target_float == 0){
+        current.angle.y = store_angle;
         if((int)speedF == 0){
             speedF = 0.0;
-            s8 cVar6 = mRunPath.pointArg(mRunPath.mCurrPointIndex);
-            if((s32)cVar6 >= 0){
-                cVar6 += 1;
+            s8 point_arg = mRunPath.pointArg(mRunPath.mCurrPointIndex);
+            if((s32)point_arg >= 0){
+                point_arg += 1;
             }
-            field_0x816 = (u8)cVar6;
+            field_0x816 = point_arg;
             return true;
             
         }
@@ -1927,24 +1915,30 @@ bool daNpc_Kk1_c::event_move(bool param_1) {
 }
 
 /* 00003940-000039F0       .text kyoroPos__11daNpc_Kk1_cFi */
-cXyz daNpc_Kk1_c::kyoroPos(int param_1) {
+cXyz daNpc_Kk1_c::kyoroPos(int i_offset_index) {
 
-static f32 a_tgt_offst[12][3] = {0.0, 0.0, 0.0, -100.0, 0.0, 0.0, 100.0, 0.0,
-0.0, -100.0, 0.0, 100.0, 100.0, 0.0, 100.0, 0.0,
-0.0, 100.0, -100.0, 40.0, 0.0, 100.0, 40.0, 0.0,
--100.0, 40.0, 100.0, 100.0, 40.0, 100.0, 0.0, 40.0,
-100.0, -40.0, 10.0, 40.0};
-    Vec local_1c;
-    Vec local_28;
-    local_1c.x = a_tgt_offst[param_1][0];
-    local_1c.y = a_tgt_offst[param_1][1];
-    local_1c.z = a_tgt_offst[param_1][2];
+    static f32 a_tgt_offst[12][3] = {
+        0.0,    0.0,    0.0, 
+        -100.0, 0.0,    0.0, 
+        100.0,  0.0,    0.0, 
+        -100.0, 0.0,    100.0, 
+        100.0,  0.0,    100.0, 
+        0.0,    0.0,    100.0, 
+        -100.0, 40.0,   0.0, 
+        100.0,  40.0,   0.0,
+        -100.0, 40.0,   100.0, 
+        100.0,  40.0,   100.0, 
+        0.0,    40.0,  100.0, 
+        -40.0,  10.0,  40.0
+    };
+    Vec offset_vec, o_output_vec;
+    offset_vec.x = a_tgt_offst[i_offset_index][0];
+    offset_vec.y = a_tgt_offst[i_offset_index][1];
+    offset_vec.z = a_tgt_offst[i_offset_index][2];
     mDoMtx_stack_c::transS(eyePos);
-
-    mDoMtx_YrotM(mDoMtx_stack_c::get(),this->current.angle.y);
-
-    mDoMtx_stack_c::multVec(&local_1c,&local_28);
-    return (cXyz)local_28;
+    mDoMtx_stack_c::YrotM(this->current.angle.y);
+    mDoMtx_stack_c::multVec(&offset_vec,&o_output_vec);
+    return (cXyz)o_output_vec;
 
 }
 
@@ -1952,16 +1946,16 @@ static f32 a_tgt_offst[12][3] = {0.0, 0.0, 0.0, -100.0, 0.0, 0.0, 100.0, 0.0,
 bool daNpc_Kk1_c::kyorokyoro() {
 
 
-    s16 retval = cLib_calcTimer(&field_0x794);
-    if(retval){
-        field_0x738 = kyoroPos(field_0x796);
-        return 1;
+
+    if(cLib_calcTimer(&field_0x794)){
+        field_0x738 = kyoroPos(mKyoroRNG);
+        return true;
     }
     int rng = cLib_getRndValue(1,10);
-    field_0x796 = rng;
+    mKyoroRNG = rng;
     field_0x794 = l_HIO.field_0x28;
     field_0x792 = l_HIO.field_0x2A; 
-    return 0;
+    return false;   //Return value not used
 }
 
 /* 00003A84-00003C9C       .text chk_attn__11daNpc_Kk1_cFv */
@@ -1970,7 +1964,7 @@ bool daNpc_Kk1_c::chk_attn() {
     f32 distToLinkXZ = (current.pos-LINKPOS).absXZ();
     f32 heightDiff = current.pos.y - LINKPOS.y;
     s16 iVar3 = cLib_targetAngleY(&current.pos, &LINKPOS) - current.angle.y;
-    if ((s32)field_0x81E == 1) {
+    if ((s32)mWhereToLook == 1) {
         return distToLinkXZ < 200.0f && 
         SHORT2DEG_ANGLE(abs(iVar3)) < 90.0f && //TODO: Possible inline (cAngle::s2d())
         std::fabsf(heightDiff) < 300.0f;
@@ -2050,21 +2044,21 @@ BOOL daNpc_Kk1_c::wait_1() {
         if(chk_talk() != 0){
             setStt(2);
             setAnm_NUM(0,1);
-            field_0x81E = 1;
-            field_0x7C4 = 0;
+            mWhereToLook = 1;
+            mLockBodyRotation = 0;
             m_jnt.setTrn();
         }
         return 1;
     }
     field_0x81B = 2;
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
 
     cXyz sp20;
     if(field_0x7B6 != 0){
         sp20 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
         s16 temp_r3 = cLib_targetAngleY(&current.pos,&sp20);
-        cLib_addCalcAngleS(&current.angle.y,temp_r3,l_HIO.field_0x30,l_HIO.field_0x32, 0x80);
+        cLib_addCalcAngleS(&current.angle.y,temp_r3,l_HIO.mScale,l_HIO.mMaxStep, 0x80);
         temp_r3 = temp_r3 - current.angle.y;
         if(abs(temp_r3) < 0x1800){
             setStt('\x03');
@@ -2090,7 +2084,7 @@ BOOL daNpc_Kk1_c::wait_1() {
     mDoMtx_stack_c::multVec(&sp14,&sp20);
     s16 temp_r3_r2 = cLib_targetAngleY(&current.pos,&sp20);
     
-    cLib_addCalcAngleS(&current.angle.y,temp_r3_r2,l_HIO.field_0x30,l_HIO.field_0x32, 0x80);
+    cLib_addCalcAngleS(&current.angle.y,temp_r3_r2,l_HIO.mScale,l_HIO.mMaxStep, 0x80);
     temp_r3_r2 = temp_r3_r2 - current.angle.y;
     if(field_0x7B7 == 0){
 
@@ -2147,7 +2141,7 @@ BOOL daNpc_Kk1_c::walk_1() {
     target = cLib_targetAngleY(&current.pos,&local_40);
 
     sVar2 = current.angle.y;
-    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
+    cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
     fVar7 = l_HIO.field_0x38;
     if (!field_0x7B6 || field_0x7C3 || chk_attn()) {
         fVar7 = 0.0;
@@ -2163,8 +2157,8 @@ BOOL daNpc_Kk1_c::walk_1() {
                 if(chk_talk()){
                     setStt(1);
                     setAnm_NUM(0,1);
-                    field_0x81E = 1;
-                    field_0x7C4 = 0;
+                    mWhereToLook = 1;
+                    mLockBodyRotation = 0;
                     m_jnt.setTrn();
                 }
                 return 1;
@@ -2182,8 +2176,8 @@ BOOL daNpc_Kk1_c::walk_1() {
         }
     }
     field_0x81B = 2;
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
     return 1;
 }
 
@@ -2196,15 +2190,15 @@ BOOL daNpc_Kk1_c::wait_2() {
     if(field_0x7C3 != 0){
         if(chk_talk() != 0){
             setStt(2);
-            field_0x81E = 1;
-            field_0x7C4 = 0;
+            mWhereToLook = 1;
+            mLockBodyRotation = 0;
             field_0x7C5 = 0;            
             m_jnt.setTrn();
         }
         return 1;
     }
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
     s8 temp_r0 = field_0x81B;
     if(temp_r0 == 3 || temp_r0 == 4){
         return 1;
@@ -2234,8 +2228,8 @@ BOOL daNpc_Kk1_c::wait_2() {
 void daNpc_Kk1_c::init_CMT_WAI() {
 
     field_0x7A4 = cLib_getRndValue(0x5a,0xb4);
-    this->field_0x81E = 5;
-    this->field_0x7C4 = 1;
+    this->mWhereToLook = 5;
+    this->mLockBodyRotation = 1;
     setAnm_NUM(0,1);
     return;
 }
@@ -2273,11 +2267,11 @@ void daNpc_Kk1_c::init_CMT_TRN() {
     field_0x7AA = current.angle.y;
     s16 uVar1 = cLib_getRndValue(0x5A,0xB4);
     field_0x7A4 = uVar1;
-    field_0x798 = l_HIO.field_0x2C;
+    mTimer = l_HIO.field_0x2C;
     field_0x794 = l_HIO.field_0x28;
     field_0x792 = l_HIO.field_0x2A;
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
     setAnm_NUM(0,1);
     return;
 }
@@ -2293,7 +2287,7 @@ void daNpc_Kk1_c::move_CMT_TRN() {
     
     sVar1 = field_0x7AA + 0x8000;
     sVar3 = current.angle.y;
-    uVar2 = cLib_calcTimer(&field_0x798);
+    uVar2 = cLib_calcTimer(&mTimer);
     if ((short)uVar2 != 0) {
         s8 temp_r0 = field_0x81B;
         if((temp_r0 != 1) && (temp_r0 < 3) && startEvent_check() != 0){
@@ -2302,7 +2296,7 @@ void daNpc_Kk1_c::move_CMT_TRN() {
     }else if (field_0x7A4 == 0) {
         local_20 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
         sVar3 = cLib_targetAngleY(&current.pos,&local_20);
-        sVar1 = cLib_addCalcAngleS(&current.angle.y,sVar3,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
+        sVar1 = cLib_addCalcAngleS(&current.angle.y,sVar3,l_HIO.mScale,l_HIO.mMaxStep,0x80);
         uVar2 = (uint)sVar1;
         if ((field_0x81B != 1) && ((char)field_0x81B < 3)) {
 
@@ -2317,13 +2311,13 @@ void daNpc_Kk1_c::move_CMT_TRN() {
             }
         }
     }else {
-        sVar4 = cLib_addCalcAngleS(&current.angle.y,sVar1,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
-        uVar2 = (uint)sVar4;
-        sVar4 = current.angle.y;
-        if (sVar4 == sVar1) {
-            if (sVar4 != sVar3) {
-                field_0x81E = 5;
-                field_0x7C4 = 1;
+        uVar2 = cLib_addCalcAngleS(&current.angle.y,sVar1,l_HIO.mScale,l_HIO.mMaxStep,0x80);
+        //uVar2 = (uint)sVar4;
+        //sVar4 = current.angle.y;
+        if (current.angle.y == sVar1) {
+            if (current.angle.y != sVar3) {
+                mWhereToLook = 5;
+                mLockBodyRotation = true;
             }
             if (cLib_calcTimer(&field_0x7A4) == 0) {
                 if ((field_0x81B != '\x01') && ((char)field_0x81B < '\x03')) {
@@ -2331,8 +2325,8 @@ void daNpc_Kk1_c::move_CMT_TRN() {
                         field_0x81B = 8;
                     }
                 }
-                field_0x81E = 0;
-                field_0x7C4 = 1;
+                mWhereToLook = 0;
+                mLockBodyRotation = true;
             }
         }
         if (((field_0x81B != '\x01') && ((char)field_0x81B < '\x03')) &&
@@ -2347,8 +2341,8 @@ void daNpc_Kk1_c::init_CMT_PCK() {
 
     setAnm_NUM(1,1);
     field_0x7A4 = l_HIO.field_0x26;
-    field_0x81E = 0;
-    field_0x7C4 = 1;
+    mWhereToLook = 0;
+    mLockBodyRotation = 1;
     mEvtIDIdx = 2;
     eventInfo.mEventId = mEvtIDTbl[mEvtIDIdx];
 }
@@ -2365,7 +2359,7 @@ void daNpc_Kk1_c::move_CMT_PCK() {
         sp8 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
 
         temp_r3 = cLib_targetAngleY(&current.pos,&sp8);
-        cLib_addCalcAngleS(&current.angle.y, temp_r3, l_HIO.field_0x30, l_HIO.field_0x32, 0x80);
+        cLib_addCalcAngleS(&current.angle.y, temp_r3, l_HIO.mScale, l_HIO.mMaxStep, 0x80);
         temp_r0 = field_0x81B;
         if (((s8) temp_r0 != 1) && ((s8) temp_r0 < 3)) {
             if (startEvent_check() != 0) {
@@ -2416,8 +2410,8 @@ BOOL daNpc_Kk1_c::cmmt_1() {
         if ((field_0x81B != 1) && (field_0x81B < 3) && (field_0x81A != 1) && (startEvent_check() != 0)) {
             field_0x81B = 9;
         }
-        field_0x81E = 0;
-        field_0x7C4 = 1;
+        mWhereToLook = 0;
+        mLockBodyRotation = 1;
         if (event_move( 1) != 0) {
             if ((field_0x81B == 1) || (field_0x81B >= 3)) {
                 return 1;
@@ -2465,8 +2459,8 @@ BOOL daNpc_Kk1_c::wait_3() {
     if (field_0x7C3 != 0) {
         if (chk_talk()) {
             setStt(2);
-            this->field_0x81E = 1;
-            this->field_0x7C4 = 0;
+            this->mWhereToLook = 1;
+            this->mLockBodyRotation = 0;
             this->field_0x7C5 = 0;
             m_jnt.mbTrn = true;
 
@@ -2474,10 +2468,10 @@ BOOL daNpc_Kk1_c::wait_3() {
         return 1;
     }
     else {
-        field_0x81E = 0;
-        field_0x7C4 = 1;
+        mWhereToLook = 0;
+        mLockBodyRotation = 1;
         if (chk_attn()) {
-            this->field_0x81E = 1;
+            this->mWhereToLook = 1;
         }
         if ((this->field_0x81B != 1) && (field_0x81B < 3)) {
             this->field_0x81B = 2;
@@ -2501,30 +2495,30 @@ BOOL daNpc_Kk1_c::wait_4() {
         if (chk_talk()) {
             setStt('\x02');
             setAnm_NUM(0,1);
-            this->field_0x81E = 1;
-            this->field_0x7C4 = 0;
+            this->mWhereToLook = 1;
+            this->mLockBodyRotation = 0;
             m_jnt.mbTrn = true;
         }
         return 1;
     }
     else {
     this->field_0x81B = 2;
-    this->field_0x81E = 1;
-    this->field_0x7C4 = 0;
+    this->mWhereToLook = 1;
+    this->mLockBodyRotation = 0;
     this->field_0x7B6 = fVar4 > 300.0f;
     if (this->field_0x7B6) {
         local_20[0] = mRunPath.getPoint(mRunPath.mCurrPointIndex);
 
         target = cLib_targetAngleY(&current.pos,local_20);
-        cLib_addCalcAngleS(&current.angle.y,target,l_HIO.field_0x30,l_HIO.field_0x32,0x80);
+        cLib_addCalcAngleS(&current.angle.y,target,l_HIO.mScale,l_HIO.mMaxStep,0x80);
         s16 diff = target - current.angle.y;
         iVar2 = abs(diff);
         if (iVar2 < 0x1800) {
         setStt('\x03');
         field_0x7B7 = 0;
         }
-        this->field_0x81E = 0;
-        this->field_0x7C4 = 1;
+        this->mWhereToLook = 0;
+        this->mLockBodyRotation = 1;
     }
     }
     return 1;
@@ -2556,15 +2550,15 @@ BOOL daNpc_Kk1_c::talk_1() {
             field_0x79E = uVar4;
 
             switch(mCurrMsgNo){
-                case 0x1CA9:
-                    dComIfGs_onEventBit(0xE10);
+                case 0x1CA9:                        //Welcome to you, sir! This way to Windfall's outdoor shop, chock-full of fun and happy products!
+                    dComIfGs_onEventBit(0xE10); //Intro text seen
                     break;
-                case 0x1CAB:
+                case 0x1CAB:                    //'Bye! Thanks for tonight!
                     field_0x81B = 7;
                     break;
-                case 0x1CAC:
-                    field_0x81E = 1;
-                    field_0x7C4 = 0;
+                case 0x1CAC:                    //Take off! Go away!
+                    mWhereToLook = 1;
+                    mLockBodyRotation = 0;
                     field_0x7A2 = 0;
                     break;
                 default:
@@ -2575,8 +2569,8 @@ BOOL daNpc_Kk1_c::talk_1() {
     }
     sVar5 = cLib_calcTimer(&field_0x7A2);
     if ((sVar5 != 0) && (field_0x7A2 == 1)) {
-        this->field_0x81E = 1;
-        this->field_0x7C4 = 0;
+        this->mWhereToLook = 1;
+        this->mLockBodyRotation = 0;
     }
     return uVar6;
 }
@@ -2758,7 +2752,7 @@ bool daNpc_Kk1_c::_execute() {
     );
 
     if ((field_0x7BD ) && (!demoActorID)) {
-        return 1;
+        return true;
     }
     partner_search();
     checkOrder();

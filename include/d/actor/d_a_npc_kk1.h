@@ -192,9 +192,9 @@ public:
     /* 0x75C */ cXyz field_0x75C;
     /* 0x768 */ f32 field_0x768;
     /* 0x76A */ u8  field_0x76A[4];
-    /* 0x770 */ s16 mAngleY;
-    /* 0x772 */ s16 field_0x772;
-    /* 0x774 */ s16 field_0x774;
+    /* 0x770 */ s16 mLookBackAngleY;
+    /* 0x772 */ s16 mLookBackHeadY;
+    /* 0x774 */ s16 mLookBackBackboneY;
     /* 0x776 */ s16 field_0x776;
     /* 0x778 */ s32 field_0x778;  
     /* 0x77C */ s16 mEvtIDTbl[8];
@@ -202,8 +202,8 @@ public:
     /* 0x78E */ s8  field_0x78E[0x792 - 0x78E];
     /* 0x792 */ s16 field_0x792;
     /* 0x794 */ s16 field_0x794;
-    /* 0x796 */ s16 field_0x796;
-    /* 0x798 */ s16 field_0x798;
+    /* 0x796 */ s16 mKyoroRNG;
+    /* 0x798 */ s16 mTimer;
     /* 0x79A */ s16 field_0x79A;
     /* 0x79C */ s16 field_0x79C;
     /* 0x79E */ s16 field_0x79E;
@@ -214,8 +214,8 @@ public:
     /* 0x7A8 */ s16 field_0x7A8;
     /* 0x7AA */ s16 field_0x7AA;
     /* 0x7AC */ s16 field_0x7AC;
-    /* 0x7AE */ s16 field_0x7AE;
-    /* 0x7B0 */ s16 field_0x7B0;
+    /* 0x7AE */ s16 mMuuruBadResponse;
+    /* 0x7B0 */ s16 mPrm0;
     /* 0x7B2 */ s8 field_0x7B2;
     /* 0x7B3 */ u8 field_0x7B3;
     /* 0x7B4 */ u8 field_0x7B4;
@@ -234,7 +234,7 @@ public:
     /* 0x7C1 */ u8 field_0x7C1; 
     /* 0x7C2 */ u8 field_0x7C2;
     /* 0x7C3 */ u8 field_0x7C3;
-    /* 0x7C4 */ bool field_0x7C4;
+    /* 0x7C4 */ bool mLockBodyRotation;
     /* 0x7C5 */ bool field_0x7C5;
     /* 0x7C6 */ u8 field_0x7C6;
     /* 0x7C7 */ u8 field_0x7C7;
@@ -258,7 +258,7 @@ public:
     /* 0x81B */ s8 field_0x81B; 
     /* 0x81C */ s8 field_0x81C;
     /* 0x81D */ s8 field_0x81D;
-    /* 0x81E */ u8 field_0x81E;
+    /* 0x81E */ u8 mWhereToLook;
     /* 0x81F */ s8 field_0x81F;
     /* 0x820 */ s8 field_0x820;
     /* 0x821 */ s8 field_0x821;
@@ -292,8 +292,8 @@ public:
     /* 0x28  */ s16 field_0x2A;
     /* 0x2C  */ s16 field_0x2C;
     /* 0x2C  */ s16 field_0x2E;
-    /* 0x30  */ s16 field_0x30;
-    /* 0x32  */ s16 field_0x32;
+    /* 0x30  */ s16 mScale;
+    /* 0x32  */ s16 mMaxStep;
     /* 0x34  */ f32 field_0x34;
     /* 0x38  */ f32 field_0x38;
     /* 0x3C  */ f32 field_0x3C;
