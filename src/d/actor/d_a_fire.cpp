@@ -261,6 +261,8 @@ void daFire_c::search_wind() {
 
 /* 00000AD8-00000E8C       .text ctrlEffect__8daFire_cFv */
 void daFire_c::ctrlEffect() {
+    f32 f31 = 0.025f;
+
     if (field_0x902 == 0) {
         return;
     }
@@ -285,7 +287,8 @@ void daFire_c::ctrlEffect() {
                 } else if (hit_obj->ChkAtType(AT_TYPE_WIND) && wind != field_0x2CC[0].GetTgHitAc()) {
                     field_0x8E0 = *field_0x2CC[0].GetTgRVecP();
 
-                    f32 dist_sq = (field_0x8E0.x * field_0x8E0.x + field_0x8E0.z * field_0x8E0.z) / 1000.0f;
+                    f32 f2 = 1000.0f;
+                    f32 dist_sq = (field_0x8E0.x * field_0x8E0.x + field_0x8E0.z * field_0x8E0.z) / f2;
                     field_0x8E0.y = sqrt(dist_sq);
                     if (!field_0x8E0.normalizeRS()) {
                         field_0x8E0.set(0.0f, 1.0f, 0.0f);
@@ -296,9 +299,9 @@ void daFire_c::ctrlEffect() {
 
         field_0x2CC[0].ClrTgHit();
     } else {
-        cLib_chaseF(&field_0x8E0.x, 0.0f, 0.025f);
-        cLib_chaseF(&field_0x8E0.y, 1.0f, 0.025f);
-        cLib_chaseF(&field_0x8E0.z, 0.0f, 0.025f);
+        cLib_chaseF(&field_0x8E0.x, 0.0f, f31);
+        cLib_chaseF(&field_0x8E0.y, 1.0f, f31);
+        cLib_chaseF(&field_0x8E0.z, 0.0f, f31);
     }
 
     if (field_0x8D1 == 0 && field_0x8D2 != 0) {
@@ -373,7 +376,7 @@ void daFire_c::eventOrder() {
         } else {
             field_0x903 = 5;
         }
-    } else if (mType == 0 && dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
+    } else if (mType == 0 && fopAcM_isSwitch(this, mSwitchNo)) {
         flag = 1;
     }
 
@@ -467,9 +470,10 @@ void daFire_c::execPlayFire() {
 
 /* 00001408-000014E4       .text setDirParticle__8daFire_cFP4cXyz */
 void daFire_c::setDirParticle(cXyz* dir) {
-    cLib_chaseF(&field_0x8D4.x, dir->x, 1.0f);
-    cLib_chaseF(&field_0x8D4.y, dir->y, 1.0f);
-    cLib_chaseF(&field_0x8D4.z, dir->z, 1.0f);
+    f32 f31 = 1.0f;
+    cLib_chaseF(&field_0x8D4.x, dir->x, f31);
+    cLib_chaseF(&field_0x8D4.y, dir->y, f31);
+    cLib_chaseF(&field_0x8D4.z, dir->z, f31);
 
     if (field_0x8BC) {
         field_0x8BC->setDirection(JGeometry::TVec3<f32>(field_0x8D4));

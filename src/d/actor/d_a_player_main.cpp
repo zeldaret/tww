@@ -12154,7 +12154,7 @@ void daPy_lk_c::playerInit() {
         m_anm_heap_upper[i].m_buffer = reinterpret_cast<void*>(buffer_start);
     }
     
-    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed, &current.angle, &shape_angle);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, ARRAY_SIZE(mAcchCir), mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     mAcch.ClrWaterNone();
     mAcch.SetWaterCheckOffset(500.0f);
     mAcch.OnLineCheck();

@@ -77,7 +77,7 @@ BOOL daAndsw2_c::chkAllSw2() {
         return false;
     }
     for (int i = 0; i < num; i++) {
-        if (!dComIfGs_isSwitch(topSw+i, current.roomNo)) {
+        if (!dComIfGs_isSwitch(topSw+i, fopAcM_GetRoomNo(this))) {
             return false;
         }
     }
@@ -93,9 +93,7 @@ static BOOL daAndsw2_actionOnAll(daAndsw2_c* i_this) {
         } else if (i_this->mEventIdx != -1) {
             i_this->setActio(ACT_ORDER);
         } else {
-            int room = i_this->current.roomNo;
-            int sw = i_this->getSwbit();
-            dComIfGs_onSwitch(sw, room);
+            dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
 
             if (i_this->getType() == TYPE_CONTINUOUS) {
                 i_this->setActio(ACT_OFF);
@@ -116,9 +114,7 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
     } else if (i_this->mEventIdx != -1) {
         i_this->setActio(ACT_ORDER);
     } else {
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_onSwitch(sw, room);
+        dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
         
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->setActio(ACT_WAIT);
@@ -131,9 +127,7 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
 static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
     if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->setActio(ACT_EVENT);
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_onSwitch(sw, room);
+        dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
     } else if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
         i_this->setActio(ACT_ON_ALL);
     } else {
@@ -159,9 +153,7 @@ static BOOL daAndsw2_actionEvent(daAndsw2_c* i_this) {
 static BOOL daAndsw2_actionOff(daAndsw2_c* i_this) {
     if (!i_this->chkAllSw2()) {
         i_this->setActio(ACT_ON_ALL);
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_offSwitch(sw, room);
+        dComIfGs_offSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
     }
     return TRUE;
 }
@@ -191,7 +183,7 @@ cPhs_State daAndsw2_c::create() {
     
     switch (getType()) {
     case TYPE_ONE_OFF:
-        if (sw == 0xFF || dComIfGs_isSwitch(sw, current.roomNo)) {
+        if (sw == 0xFF || dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
             // Switch invalid or already set.
             setActio(ACT_WAIT);
         } else {
@@ -204,7 +196,7 @@ cPhs_State daAndsw2_c::create() {
         if (sw == 0xFF) {
             // Switch invalid.
             setActio(ACT_WAIT);
-        } else if (dComIfGs_isSwitch(sw, current.roomNo)) {
+        } else if (dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
             // Switch already set, wait for the condition to no longer be met.
             setActio(ACT_OFF);
         } else {

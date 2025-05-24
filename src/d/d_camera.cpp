@@ -2398,7 +2398,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
 /* 80168EF0-801693AC       .text getWaterSurfaceHeight__9dCamera_cFP4cXyz */
 f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
     /* Nonmatching - Code 100% */
-    f32 var_f31 = -1000000000.0f;
+    f32 var_f31 = -G_CM3D_F_INF;
 
     cXyz spF8(*param_0);
     dBgS_RoofChk roofchk;
@@ -2427,7 +2427,7 @@ f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
         }
     }
 
-    if (var_f31 == -1000000000.0f) {
+    if (var_f31 == -G_CM3D_F_INF) {
         var_f31 = param_0->y;
     }
 

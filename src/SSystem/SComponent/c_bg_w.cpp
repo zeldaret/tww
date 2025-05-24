@@ -208,8 +208,8 @@ void cBgW::MakeBlckBnd(int i, cXyz* min, cXyz* max) {
     if (!mbNeedsFullTransform) {
         MakeBlckTransMinMax(min, max);
     } else {
-        min->x = min->y = min->z = 1000000000.0f;
-        max->x = max->y = max->z = -1000000000.0f;
+        min->x = min->y = min->z = G_CM3D_F_INF;
+        max->x = max->y = max->z = -G_CM3D_F_INF;
 
         for (s32 j = startTri; j <= lastTri; j++) {
             MakeBlckMinMax(pm_bgd->m_t_tbl[j].vtx0, min, max);

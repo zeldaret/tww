@@ -2212,7 +2212,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
                                      (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
                                      l_HIO.mChild[mType].m30);

@@ -90,7 +90,7 @@ void daBoko_c::getTopPos(cXyz* ret) {
     if (mpModel != NULL) {
         cMtx_multVec(mpModel->getBaseTRMtx(), &m_top_offset[fopAcM_GetParam(this)], ret);
     } else {
-        *ret = fopAcM_GetPosition(this) + m_top_offset[fopAcM_GetParam(this)];
+        *ret = current.pos + m_top_offset[fopAcM_GetParam(this)];
     }
 }
 
@@ -99,6 +99,6 @@ void daBoko_c::getBlurRootPos(cXyz* ret) {
     if (mpModel != NULL) {
         cMtx_multVec(mpModel->getBaseTRMtx(), &m_blur_root_offset[fopAcM_GetParam(this)], ret);
     } else {
-        *ret = fopAcM_GetPosition(this) + m_blur_root_offset[fopAcM_GetParam(this)];
+        *ret = current.pos + m_blur_root_offset[fopAcM_GetParam(this)];
     }
 }

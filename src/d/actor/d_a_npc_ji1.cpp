@@ -2182,7 +2182,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                     temp.z -= field_0xC9C * cM_scos(current.angle.y);
 
                     f32 temp2 = 45.0f;
-                    if(field_0x434.ChkWallHit()) {
+                    if(mAcch.ChkWallHit()) {
                         temp2 = 10.0f;
                     }
 
@@ -3262,9 +3262,9 @@ BOOL daNpc_Ji1_c::CreateHeap() {
 
     field_0x330->getModel()->setUserArea((u32)this);
 
-    field_0x5F8.SetWall(60.0f, 50.0f);
-    field_0x434.Set(&current.pos, &old.pos, this, 1, &field_0x5F8, &speed);
-    field_0x434.OnLineCheck();
+    mAcchCir.SetWall(60.0f, 50.0f);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+    mAcch.OnLineCheck();
 
     field_0xC54[0] = dComIfGp_evmng_getEventIdx("Ji1_StartSpeak");
     field_0xC54[1] = dComIfGp_evmng_getEventIdx("Ji1_Speak");
@@ -3469,8 +3469,8 @@ BOOL daNpc_Ji1_c::_execute() {
 
     s8 roomNo = fopAcM_GetRoomNo(this);
     u32 sound;
-    if(field_0x434.ChkGroundHit()) {
-        sound = dComIfG_Bgsp()->GetMtrlSndId(field_0x434.m_gnd);
+    if(mAcch.ChkGroundHit()) {
+        sound = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
     }
     else {
         sound = 0;
@@ -3535,10 +3535,10 @@ BOOL daNpc_Ji1_c::_execute() {
     eyePos.set(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     fopAcM_posMoveF(this, field_0x638.GetCCMoveP());
     cXyz temp(current.pos);
-    field_0x434.CrrPos(*dComIfG_Bgsp());
+    mAcch.CrrPos(*dComIfG_Bgsp());
     field_0xC40 = current.pos - temp;
-    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(field_0x434.m_gnd);
-    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(field_0x434.m_gnd);
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
     set_mtx();
     field_0x6B0.SetC(current.pos);
     dComIfG_Ccsp()->Set(&field_0x6B0);
@@ -3579,7 +3579,7 @@ BOOL daNpc_Ji1_c::_draw() {
         cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
         field_0x3F0 = dComIfGd_setShadow(
             field_0x3F0, 1, field_0x330->getModel(), &temp, 800.0f, 20.0f,
-            current.pos.y, field_0x434.GetGroundH(), field_0x434.m_gnd, &tevStr
+            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
         );
         if(field_0x3F0 != 0 && field_0xD84 != 0) {
             dComIfGd_addRealShadow(field_0x3F0, mpMorf->getModel());
@@ -3730,7 +3730,7 @@ void daNpc_Ji1_c::BackSlide(f32 param_1, f32 param_2) {
     temp.x -= field_0xC9C * cM_ssin(current.angle.y);
     temp.z -= field_0xC9C * cM_scos(current.angle.y);
 
-    if(field_0x434.ChkWallHit()) {
+    if(mAcch.ChkWallHit()) {
         param_2 *= 0.35f;
     }
 

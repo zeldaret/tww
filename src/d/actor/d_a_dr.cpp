@@ -32,11 +32,16 @@ daDr_HIO_c::daDr_HIO_c() {
 
 /* 00000148-000001DC       .text daDr_Draw__FP8dr_class */
 static BOOL daDr_Draw(dr_class* i_this) {
+    fopAc_ac_c* actor = i_this;
     J3DModel* model = i_this->mpMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType(model, &actor->tevStr);
     i_this->mpMorf->entryDL();
-    dSnap_RegistFig(DSNAP_TYPE_DR, i_this, i_this->eyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
+#if VERSION == VERSION_DEMO
+    dSnap_RegistFig(DSNAP_TYPE_DR, actor, 1.0f, 1.0f, 1.0f);
+#else
+    dSnap_RegistFig(DSNAP_TYPE_DR, actor, actor->eyePos, actor->shape_angle.y, 1.0f, 1.0f, 1.0f);
+#endif
     return TRUE;
 }
 
@@ -46,12 +51,17 @@ static void anm_init(dr_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
         morf = 0.0f;
     }
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("Dr", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            dComIfG_getObjectRes("Dr", soundFileIdx)
+        );
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            NULL
+        );
     }
     i_this->mCurrBckIdx = bckFileIdx;
 }
@@ -205,7 +215,7 @@ static BOOL daDr_IsDelete(dr_class* i_this) {
 
 /* 00000A94-00000AE8       .text daDr_Delete__FP8dr_class */
 static BOOL daDr_Delete(dr_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Dr");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Dr");
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
     }
@@ -233,18 +243,24 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
-static cPhs_State daDr_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, dr_class);
+static cPhs_State daDr_Create(fopAc_ac_c* i_this) {
+    dr_class* a_this = (dr_class*)i_this;
     
-    dr_class* i_this = (dr_class*)i_actor;
-    
-    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
+#if VERSION == VERSION_DEMO
+    cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(i_this, createHeap, 0xF000)) {
+        fopAcM_SetupActor(a_this, dr_class);
+#else
+    fopAcM_SetupActor(a_this, dr_class);
+    
+    cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
+    if (phase_state == cPhs_COMPLEATE_e) {
+#endif
+        if (!fopAcM_entrySolidHeap(a_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;
         }
         
-        daDr_setMtx(i_this);
+        daDr_setMtx(a_this);
         
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"

@@ -169,6 +169,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;
+#if VERSION > VERSION_DEMO
     mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCamInfo.mID = 0;
@@ -177,6 +178,7 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < ARRAY_SIZE(mMesgCamInfo.mActor); i++) {
         mMesgCamInfo.mActor[i] = 0;
     }
+#endif
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */

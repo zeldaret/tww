@@ -886,7 +886,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     mAcchCir[0].SetWall(20.0f, 20.0f);
     mAcchCir[1].SetWall(60.0f, 20.0f);
-    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, ARRAY_SIZE(mAcchCir), mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
     mAcch.OnLineCheck();

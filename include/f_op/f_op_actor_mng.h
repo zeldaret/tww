@@ -412,10 +412,15 @@ inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
 }
 
 inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
+inline void dComIfGs_onVisitedRoom(int i_no);
 inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == dItem_BLUE_JELLY_e) {
+#if VERSION == VERSION_DEMO
+        dComIfGs_onVisitedRoom(itemBitNo);
+#else
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         dComIfGs_onSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
+#endif
     } else {
         dComIfGs_onItem(itemBitNo, roomNo);
     }

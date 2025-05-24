@@ -111,7 +111,7 @@ BOOL daObjVfan::Act_c::Delete() {
 BOOL daObjVfan::Act_c::Mthd_Delete() {
     int res = MoveBGDelete();
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return res;
 }

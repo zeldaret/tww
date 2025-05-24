@@ -297,9 +297,14 @@ cPhs_State daAuction_c::createInit() {
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */
 BOOL daAuction_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Pspl");
+    dComIfG_resDeleteDemo(&mPhs, "Pspl");
 
-    if (heap != NULL && mpEmitter != NULL) {
+#if VERSION == VERSION_DEMO
+    if (mpEmitter != NULL)
+#else
+    if (heap != NULL && mpEmitter != NULL)
+#endif
+    {
         mpEmitter->becomeInvalidEmitter();
     }
 

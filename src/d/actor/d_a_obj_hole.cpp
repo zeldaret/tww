@@ -209,7 +209,7 @@ void daObj_Hole_c::createInit() {
     fopAcM_setCullSizeFar(this, 10.0f);
 
     mAcchCir.SetWall(100.0f, 10.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
 
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
