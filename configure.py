@@ -1569,7 +1569,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lbridge", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_leaflift", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_lstair"),
-    ActorRel(NonMatching, "d_a_machine"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_machine", extra_cflags=['-sym off']),
     ActorRel(NonMatching, "d_a_mant"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_mbdoor"),
     ActorRel(NonMatching, "d_a_mgameboard"),
