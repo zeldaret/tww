@@ -79,7 +79,7 @@ void kita_move(kita_class* i_this) {
     daPy_py_c* player_actor = daPy_getPlayerActorClass();
     i_this->mMoveCounter++;
     switch(i_this->field_29A){
-        case 0:
+        case 0: {
             s32 mask = 0;
             for(int i = 0; i < 4; i++){
                 if(i_this->field_318[i] == 2){
@@ -95,7 +95,7 @@ void kita_move(kita_class* i_this) {
                 }
             }
 
-            short xa_offset, ya_offset;
+            s16 xa_offset, ya_offset;
             ya_offset = himo_off_ya[mask];
             xa_offset = himo_off_xa[mask];
             cLib_addCalc2(&i_this->mHeight, REG0_F(4) + (-static_cast<float>(himo_off_yp[mask]) * 0.3f), 0.05, i_this->field_320 * 250.0f);
@@ -108,7 +108,7 @@ void kita_move(kita_class* i_this) {
                 sgc_y -= 200.0f;
                 sgc_pos.x = sgc_c; sgc_pos.y = sgc_y; sgc_pos.z = sgc_z;
                 solid_ground_check.SetPos(&sgc_pos);
-                float solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
+                f32 solid_ground_cross = REG0_F(13) + dComIfG_Bgsp()->GroundCross(&solid_ground_check);
                 if (i_this->field_35C < solid_ground_cross) i_this->field_35C = solid_ground_cross;
 
                 dBgS_ObjGndChk_Spl liquid_ground_check;
@@ -117,7 +117,7 @@ void kita_move(kita_class* i_this) {
                 lgc_y -= 200.0f;
                 lgc_pos.x = lgc_x; lgc_pos.y = lgc_y; lgc_pos.z = lgc_z;
                 liquid_ground_check.SetPos(&lgc_pos);
-                float liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
+                f32 liquid_gnd_cross = dComIfG_Bgsp()->GroundCross(&liquid_ground_check);
                 if(liquid_gnd_cross != -G_CM3D_F_INF && liquid_gnd_cross > i_this->field_35C){
                     i_this->field_35C = liquid_gnd_cross + 40.0f + REG0_F(17);
                     i_this->field_360 = 1;
@@ -144,7 +144,7 @@ void kita_move(kita_class* i_this) {
             cLib_addCalc0(&i_this->mPosRel.y, 0.05f, REG0_F(7) + 2.0f);
             
             break;
-        
+        }
         case 1:
             if(i_this->field_360 == 2){
                 i_this->mSph.SetC(actor->current.pos);
@@ -451,7 +451,7 @@ static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMax(i_this, i_this->scale.x * 200.0f, 200.0f, i_this->scale.z * 200.0f);
     i_this->mModel->setBaseScale(i_this->scale);
     i_this->health = 1;
-    i_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &i_this->mAcchCir, &i_this->speed);
+    i_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this),  i_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(i_this));
     i_this->mAcchCir.SetWall(50.0f, 300.0f);
     i_this->mStts.Init(0xff, 0xff, i_this);
     i_this->mSph.Set(utiwa_sph_src);

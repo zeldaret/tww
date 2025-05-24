@@ -114,7 +114,7 @@ cPhs_State daObjBarrel::Act_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
             mAcchCir.SetWall(30.0f, l_l_radius);
-            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
+            mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
             mAcch.ClrWaterNone();
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             cull_set_draw();

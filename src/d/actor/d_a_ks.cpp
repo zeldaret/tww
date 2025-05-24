@@ -1555,7 +1555,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
         
         i_this->attention_info.flags = 0;
         
-        a_this->mAcch.Set(&i_this->current.pos, &i_this->old.pos, i_this, 1, &a_this->mAcchCir, &i_this->speed, NULL, NULL);
+        a_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &a_this->mAcchCir, fopAcM_GetSpeed_p(i_this), NULL, NULL);
         
         a_this->mStts.Init(2, 1, i_this);
         

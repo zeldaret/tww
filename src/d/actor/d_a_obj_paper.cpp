@@ -57,7 +57,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x1000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PPOS_BDL_PPOS,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
@@ -71,7 +75,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x8000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PIWA_BDL_PIWA,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
@@ -191,7 +199,7 @@ namespace daObjPaper {
 
     /* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_delete() {
-        dComIfG_resDelete(&mPhs, attr(mType).mResName);
+        dComIfG_resDeleteDemo(&mPhs, attr(mType).mResName);
         return TRUE;
     }
 

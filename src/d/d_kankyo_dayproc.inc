@@ -45,7 +45,9 @@ static void dKankyo_DayProc() {
     dComIfGs_offTmpBit(0x0001);
     dComIfGs_offTmpBit(0x0180);
     dComIfGs_offTmpBit(0x0140);
+#if VERSION > VERSION_DEMO
     dComIfGs_offTmpBit(0x0580);
+#endif
     dComIfGs_offTmpBit(0x0104);
 
     if (dComIfGs_getEventReg(0xc103) == 1)

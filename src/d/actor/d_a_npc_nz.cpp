@@ -848,7 +848,7 @@ BOOL daNpc_Nz_c::createInit() {
     modeProcInit(0);
 
     mAcchCir.SetWall(30.0f, 10.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.OnLineCheckNone();
     mAcch.SetWallNone();
     mAcch.SetRoofNone();

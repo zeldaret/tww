@@ -12,6 +12,7 @@
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
+#if VERSION > VERSION_DEMO
 /* 8025238C-80252624       .text SetC__8cM3dGSphFRC4cXyz */
 void cM3dGSph::SetC(const cXyz& p) {
     CHECK_FLOAT_CLASS(18, p.x);
@@ -27,6 +28,7 @@ void cM3dGSph::SetR(float r) {
     CHECK_FLOAT_RANGE(33, r);
     mRadius = r;
 }
+#endif
 
 /* 80252750-8025277C       .text cross__8cM3dGSphCFPC8cM3dGSphP4cXyz */
 bool cM3dGSph::cross(const cM3dGSph* pOther, cXyz* pOut) const {

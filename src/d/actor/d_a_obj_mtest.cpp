@@ -291,7 +291,7 @@ BOOL daObjMtest::Act_c::Delete() {
 /* 00000960-000009B8       .text Mthd_Delete__Q210daObjMtest5Act_cFv */
 BOOL daObjMtest::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
-    dComIfG_resDelete(&mPhase, M_arcname[M_type]);
+    dComIfG_resDeleteDemo(&mPhase, M_arcname[M_type]);
     return result;
 }
 

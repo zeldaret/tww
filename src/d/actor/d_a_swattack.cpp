@@ -114,7 +114,7 @@ bool daSwAt_c::_execute() {
     }
 
     if (triggered) {
-        dComIfGs_onSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
+        fopAcM_onSwitch(this, mSwitchNo);
     }
 
     mCyl.SetC(current.pos);

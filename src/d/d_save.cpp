@@ -973,6 +973,7 @@ void dSv_player_config_c::init() {
     mVibration = 1;
 }
 
+#if VERSION > VERSION_DEMO
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
 s32 dSv_player_config_c::checkVibration() {
     if (JUTGamePad::sRumbleSupported & 0x80000000)
@@ -980,6 +981,7 @@ s32 dSv_player_config_c::checkVibration() {
 
     return 0;
 }
+#endif
 
 /* 8005BFC8-8005BFD4       .text init__19dSv_player_priest_cFv */
 void dSv_player_priest_c::init() {

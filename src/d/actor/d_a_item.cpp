@@ -78,9 +78,11 @@ float daItem_c::getYOffset() {
 void daItem_c::set_mtx() {
     cXyz pos = current.pos;
     csXyz rot = current.angle;
+#if VERSION > VERSION_DEMO
     if (m_itemNo == dItem_HEART_CONTAINER_e) {
         rot.y = shape_angle.y;
     }
+#endif
     set_mtx_base(mpModel, pos, rot);
     
     if (isArrow(m_itemNo)) {
@@ -132,7 +134,7 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
 
@@ -225,7 +227,10 @@ cPhs_State daItem_c::_daItem_create() {
     }
     
     mItemBitNo = daItem_prm::getItemBitNo(this);
-    if (m_itemNo != dItem_BLUE_JELLY_e) { // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+#if VERSION > VERSION_DEMO
+    if (m_itemNo != dItem_BLUE_JELLY_e) // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+#endif
+    {
         mItemBitNo &= 0x7F;
         if (fopAcM_isItem(this, mItemBitNo) && mItemBitNo != 0x7F) {
             // Already picked up, don't create the item again.
@@ -236,8 +241,11 @@ cPhs_State daItem_c::_daItem_create() {
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
-        // Note: The demo version calls getHeapSize instead of getFieldHeapSize here.
+#if VERSION == VERSION_DEMO
+        u32 heap_size = dItem_data::getHeapSize(m_itemNo);
+#else
         u32 heap_size = dItem_data::getFieldHeapSize(m_itemNo);
+#endif
         if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, heap_size)) {
             return cPhs_ERROR_e;
         }
@@ -334,9 +342,11 @@ void daItem_c::mode_proc_call() {
         }
     }
     
+#if VERSION > VERSION_DEMO
     if (mType == daItemType_1_e && (fopAcM_checkHookCarryNow(this) || checkFlag(FLAG_BOOMERANG))) {
         mType = daItemType_3_e;
     }
+#endif
 }
 
 /* 800F59CC-800F5AFC       .text execInitNormalDirection__8daItem_cFv */
@@ -399,7 +409,7 @@ void daItem_c::execInitGetDemoDirection() {
     if (player == link) {
         fopAcM_orderItemEvent(this);
         eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
-        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo);
+        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this));
         mItemStatus = STATUS_WAIT_GET_DEMO;
     }
 }
@@ -762,10 +772,12 @@ void daItem_c::itemGetExecute() {
     
     clrFlag(FLAG_UNK04);
     
+#if VERSION > VERSION_DEMO
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
     mCyl.ClrTgHit();
     mCyl.ClrCoHit();
+#endif
 }
 
 /* 800F6D24-800F6D78       .text itemDefaultRotateY__8daItem_cFv */
@@ -832,9 +844,9 @@ BOOL daItem_c::itemActionForRupee() {
     if (mAcch.ChkGroundLanding()) {
         f32 temp2 = field_0x650 * getData()->mGroundReflect;
         if (temp2 > gravity - 0.5f) {
-            speedF = 0.0f;
+            fopAcM_SetSpeedF(this, 0.0f);
         } else {
-            speed.set(0.0f, -temp2, 0.0f);
+            fopAcM_GetSpeed(this).set(0.0f, -temp2, 0.0f);
         }
         
         mOnGroundTimer++;
@@ -845,13 +857,13 @@ BOOL daItem_c::itemActionForRupee() {
         set_bound_se();
     } else if (mAcch.ChkGroundHit()) {
         itemDefaultRotateY();
-        speedF = 0.0f;
+        fopAcM_SetSpeedF(this, 0.0f);
         clrFlag(FLAG_UNK04);
         mOnGroundTimer = 1;
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     mRotateSpeed = getData()->mRotateXSpeed;
@@ -921,8 +933,8 @@ BOOL daItem_c::itemActionForKey() {
         itemDefaultRotateY();
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     mRotateSpeed = getData()->mRotateXSpeed;
@@ -958,8 +970,8 @@ BOOL daItem_c::itemActionForEmono() {
         speedF = 0.0f;
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     return TRUE;
@@ -1068,11 +1080,15 @@ BOOL daItem_c::itemActionForArrow() {
     } else if (mAcch.ChkGroundHit()) {
         speedF = 0.0f;
         
-        if (m_itemNo != dItem_HEART_CONTAINER_e) {
+#if VERSION > VERSION_DEMO
+        if (m_itemNo != dItem_HEART_CONTAINER_e)
+#endif
+        {
             itemDefaultRotateY();
         }
     }
     
+#if VERSION > VERSION_DEMO
     if (m_itemNo == dItem_HEART_CONTAINER_e) {
         if (mOnGroundTimer != 0) {
             getData();
@@ -1082,9 +1098,10 @@ BOOL daItem_c::itemActionForArrow() {
         
         cLib_chaseAngleS(&shape_angle.y, shape_angle.y + mRotateSpeed, mRotateSpeed);
     }
+#endif
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     return TRUE;
@@ -1199,7 +1216,7 @@ BOOL daItem_c::timeCount() {
 /* 800F7F0C-800F7F50       .text mode_wait_init__8daItem_cFv */
 void daItem_c::mode_wait_init() {
     mMode = MODE_WAIT;
-    gravity = getData()->mGravity;
+    fopAcM_SetGravity(this, getData()->mGravity);
     mPtclRippleCb.remove();
 }
 
@@ -1221,16 +1238,14 @@ void daItem_c::mode_water_init() {
     
     fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
     fopAcM_SetSpeedF(this, 0.0f);
-    current.angle.z = 0;
-    current.angle.x = 0;
+    current.angle.x = current.angle.z = 0;
     mExtraZRot = 0;
     mRotateSpeed = 0;
     clrFlag(FLAG_UNK04);
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz particleScale;
-    f32 temp = dItem_data::getShadowSize(m_itemNo);
-    f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
+    f32 temp3 = (f32)dItem_data::getShadowSize(m_itemNo) / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
@@ -1268,7 +1283,9 @@ void daItem_c::mode_wait() {
         break;
     case dItem_SMALL_MAGIC_e:
     case dItem_LARGE_MAGIC_e:
+#if VERSION > VERSION_DEMO
     case dItem_JOY_PENDANT_e:
+#endif
     case dItem_SKULL_NECKLACE_e:
     case dItem_BOKOBABA_SEED_e:
     case dItem_GOLDEN_FEATHER_e:
@@ -1344,17 +1361,21 @@ BOOL daItem_c::initAction() {
             scale.setall(0.0f);
             mItemStatus = STATUS_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+#if VERSION > VERSION_DEMO
             mRotateSpeed = 0x4A8;
+#endif
             break;
         case daItemAct_BOSS_e:
             scale.setall(1.0f);
             mItemStatus = STATUS_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+#if VERSION > VERSION_DEMO
             mRotateSpeed = 0x4A8;
+#endif
             break;
         }
         
-        gravity = getData()->mGravity;
+        fopAcM_SetGravity(this, getData()->mGravity);
         clrFlag(FLAG_UNK04);
         mMode = MODE_WAIT;
         

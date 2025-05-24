@@ -327,7 +327,8 @@ bool daDitem_c::CreateInit() {
 /* 000003F0-000004AC       .text set_effect__9daDitem_cFv */
 void daDitem_c::set_effect() {
     s16 angleX = dCam_getAngleX(dComIfGp_getCamera(0)) - 0x2000;
-    s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
+    // Fakematch? Just angleY needs to be const to match the demo build. No effect on retail.
+    const s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
     for (int i = 0; i < (int)ARRAY_SIZE(mpEmitters); i++) {
         if (mpEmitters[i] == NULL) {
             continue;
