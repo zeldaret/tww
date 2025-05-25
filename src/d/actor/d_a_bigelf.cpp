@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_bigelf.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000016C       .text oct_delete__10daBigelf_cFv */
 void daBigelf_c::oct_delete() {
@@ -374,7 +375,7 @@ actor_process_profile_definition g_profile_BIGELF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x012B,
+    /* Priority     */ PRIO_BIGELF,
     /* Actor SubMtd */ &l_daBigelf_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

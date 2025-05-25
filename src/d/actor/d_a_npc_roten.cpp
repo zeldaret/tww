@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"
@@ -25,72 +26,98 @@ static const char* l_arcname_tbl[] = {
 };
 
 static sRotenAnmDat l_npc_anm_wait[] = {
-    0x00,
-    0x0E,
-    0xFF,
+    {
+        0x00,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_talk[] = {
-    0x01,
-    0x0E,
-    0xFF,
+    {
+        0x01,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_walk[] = {
-    0x02,
-    0x0E,
-    0xFF,
+    {
+        0x02,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_talk2[] = {
-    0x03,
-    0x0E,
-    0xFF,
+    {
+        0x03,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_talk3[] = {
-    0x04,
-    0x0E,
-    0xFF,
+    {
+        0x04,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_talk4[] = {
-    0x05,
-    0x06,
-    0xFF,
+    {
+        0x05,
+        0x06,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_talk5[] = {
-    0x06,
-    0x0A,
-    0xFF,
+    {
+        0x06,
+        0x0A,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_watasu[] = {
-    0x07,
-    0x0E,
-    0x01,
-    0x08,
-    0x0E,
-    0xFF,
+    {
+        0x07,
+        0x0E,
+        0x01,
+    },
+    {
+        0x08,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_itemwait[] = {
-    0x08,
-    0x0E,
-    0xFF,
+    {
+        0x08,
+        0x0E,
+        0xFF,
+    },
 };
 
 static sRotenAnmDat l_npc_anm_wind[] = {
-    0x09,
-    0x0E,
-    0x01,
-    0x00,
-    0x14,
-    0x01,
-    0x0FF,
-    0x08,
-    0x00,
+    {
+        0x09,
+        0x0E,
+        0x01,
+    },
+    {
+        0x00,
+        0x14,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
 };
 
 struct NpcDatStruct {
@@ -1682,7 +1709,7 @@ BOOL daNpcRoten_c::createHeap() {
 
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
+    mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
 
     return true;
 }
@@ -1733,7 +1760,7 @@ cPhs_State daNpcRoten_c::createInit() {
     fopAcM_setCullSizeBox(this, -200.0f, 0.0f, -200.0f, 200.0f, 300.0f, 200.0f);
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    if(C_BG_MIN_HEIGHT != mObjAcch.GetGroundH()) {
+    if(-G_CM3D_F_INF != mObjAcch.GetGroundH()) {
         current.pos.y = home.pos.y = mObjAcch.GetGroundH();
     }
 
@@ -2897,7 +2924,7 @@ actor_process_profile_definition g_profile_NPC_ROTEN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x017A,
+    /* Priority     */ PRIO_NPC_ROTEN,
     /* Actor SubMtd */ &daNpc_RotenMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

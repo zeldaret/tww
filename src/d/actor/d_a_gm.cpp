@@ -6,6 +6,7 @@
 #include "d/actor/d_a_gm.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000032C       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -150,7 +151,7 @@ actor_process_profile_definition g_profile_GM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00BF,
+    /* Priority     */ PRIO_GM,
     /* Actor SubMtd */ &l_daGM_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

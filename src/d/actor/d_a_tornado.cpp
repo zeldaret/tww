@@ -8,6 +8,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
@@ -102,8 +103,6 @@ static BOOL daTornado_Draw(daTornado_c* i_this) {
 BOOL daTornado_c::execute() {
     static cXyz wind_scale(20.0f,20.0f,20.0f);
 
-    float fVar8;
-
     mBck.play();
     mBtkFrame += 1.0f;
     if (mBtkFrame >= mBtk.getBtkAnm()->getFrameMax()) {
@@ -118,6 +117,7 @@ BOOL daTornado_c::execute() {
     mAngle1 += 500;
     m32c = 10000.0f;
     u32 param = fopAcM_GetParam(this);
+    f32 fVar8;
     if (param == 1) {
         if (dComIfGp_getShipActor() != NULL) {
             fVar8 = (dComIfGp_getShipActor()->current.pos.y - home.pos.y) / 500.0f;
@@ -137,11 +137,11 @@ BOOL daTornado_c::execute() {
         fVar8 = 1.0f;
     }
 
-    for (s32 i = 0; i < 11; i++) {
-        float sin = cM_ssin(mAngle1 - 0x1000 * i);
-        float tmp1 = fVar8 * joint_offset[i];
-        float fVar1 = tmp1 * (sin + 1.0f);
-        short angle2 = mAngle2 - 0x1800 * i;
+    for (int i = 0; i < 11; i++) {
+        f32 sin = cM_ssin(mAngle1 - 0x1000 * i);
+        f32 tmp1 = fVar8 * joint_offset[i];
+        f32 fVar1 = tmp1 * (sin + 1.0f);
+        s16 angle2 = mAngle2 - 0x1800 * i;
         mJointX[i] = cM_ssin(angle2) * fVar1 * scale.x;
         mJointZ[i] = cM_scos(angle2) * fVar1 * scale.x;
     }
@@ -149,7 +149,7 @@ BOOL daTornado_c::execute() {
     param = fopAcM_GetParam(this);
     if (param == 0) {
         if (!dComIfGp_event_runCheck()) {
-            short target = fopAcM_searchActorAngleY(this, dComIfGp_getLinkPlayer());
+            s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getLinkPlayer());
             cLib_addCalcAngleS(&current.angle.y, target, 10, 0x1000, 0x100);
             cLib_chaseF(&speedF, 20.0f, 0.2f);
         }
@@ -360,7 +360,7 @@ actor_process_profile_definition g_profile_TORNADO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0009,
+    /* Priority     */ PRIO_TORNADO,
     /* Actor SubMtd */ &l_daTornado_Method,
     /* Status       */ 0x06 | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

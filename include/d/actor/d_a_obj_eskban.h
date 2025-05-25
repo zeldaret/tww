@@ -1,11 +1,7 @@
 #ifndef D_A_OBJ_ESKBAN_H
 #define D_A_OBJ_ESKBAN_H
 
-#include "f_op/f_op_actor.h"
-
-#include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_particle.h"
 
 namespace daObjEskban {
 

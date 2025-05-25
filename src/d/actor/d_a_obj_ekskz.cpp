@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ekskz.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000368       .text CreateHeap__Q210daObjEkskz5Act_cFv */
 BOOL daObjEkskz::Act_c::CreateHeap() {
@@ -98,7 +99,7 @@ actor_process_profile_definition g_profile_Obj_Ekskz = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x007B,
+    /* Priority     */ PRIO_Obj_Ekskz,
     /* Actor SubMtd */ &daObjEkskz::Mthd_Ekskz,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

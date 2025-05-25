@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_eff.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000140       .text __ct__Q28daObjEff13BarrelSmokeCBFv */
 daObjEff::BarrelSmokeCB::BarrelSmokeCB() {
@@ -268,7 +269,7 @@ actor_process_profile_definition g_profile_Obj_Eff = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x010B,
+    /* Priority     */ PRIO_Obj_Eff,
     /* Actor SubMtd */ &daObjEff::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

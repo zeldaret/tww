@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -2297,7 +2298,7 @@ actor_process_profile_definition g_profile_NPC_PHOTO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x017D,
+    /* Priority     */ PRIO_NPC_PHOTO,
     /* Actor SubMtd */ &daNpc_PhotoMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

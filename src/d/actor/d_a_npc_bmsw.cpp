@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_bmsw.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E4       .text __ct__16daNpc_Bmsw_HIO_cFv */
 daNpc_Bmsw_HIO_c::daNpc_Bmsw_HIO_c() {
@@ -294,7 +295,7 @@ actor_process_profile_definition g_profile_NPC_BMSW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0161,
+    /* Priority     */ PRIO_NPC_BMSW,
     /* Actor SubMtd */ &l_daNpc_Bmsw_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

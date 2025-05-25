@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_leaves.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 class J3DMaterial;
 
@@ -137,7 +138,7 @@ actor_process_profile_definition g_profile_Obj_Leaves = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0057,
+    /* Priority     */ PRIO_Obj_Leaves,
     /* Actor SubMtd */ &l_daObjLeaves_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

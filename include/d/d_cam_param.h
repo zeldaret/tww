@@ -64,7 +64,7 @@ enum dCamStyle_e {
     /* 0x37 */ dCamStyle_LW01_e,
     /* 0x38 */ dCamStyle_GN01_e,
     /* 0x39 */ dCamStyle_MM01_e,
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dCamStyle_MM03_e,
 #endif
     /* Value comments below are for USA/PAL */
@@ -120,7 +120,7 @@ enum dCamStyle_e {
     /* 0x6B */ dCamStyle_FN35_e,
     /* 0x6C */ dCamStyle_LL17_e,
     /* 0x6D */ dCamStyle_FN37_e,
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     dCamStyle_FN38_e,
 #endif
     /* 0x6E */ dCamStyle_BE08_e,
@@ -155,7 +155,7 @@ enum dCamStyle_e {
     /* 0x8B */ dCamStyle_MM22_e,
     /* 0x8C */ dCamStyle_MM18_e,
     /* 0x8D */ dCamStyle_MM17_e,
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x8E */ dCamStyle_MM03_e,
     /* 0x8F */ dCamStyle_MM23_e,
     /* 0x90 */ dCamStyle_FN38_e,

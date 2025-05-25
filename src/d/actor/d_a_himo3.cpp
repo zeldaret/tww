@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_himo3.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */
 void himo3_control(himo3_class*, himo3_s*) {
@@ -79,7 +80,7 @@ actor_process_profile_definition g_profile_HIMO3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x019B,
+    /* Priority     */ PRIO_HIMO3,
     /* Actor SubMtd */ &l_daHimo3_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

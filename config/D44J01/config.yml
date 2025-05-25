@@ -1,0 +1,2773 @@
+name: framework
+object_base: orig/D44J01
+object: sys/main.dol
+hash: e706e10ff65f59f9d5773c35d0a27567e8684813
+
+# Generated from maps/framework.map
+splits: config/D44J01/splits.txt
+symbols: config/D44J01/symbols.txt
+# map: orig/D44J01/files/maps/framework.map
+
+mw_comment_version: 10 # GC Linker 1.3.2
+symbols_known: true # Very fast analysis
+fill_gaps: false # Alignments known
+
+modules:
+- object: files/RELS.arc:mmem/f_pc_profile_lst.rel
+  hash: 56ab98c92068484bdddcd0621bee778e462ffecd
+  splits: config/D44J01/rels/f_pc_profile_lst/splits.txt
+  symbols: config/D44J01/rels/f_pc_profile_lst/symbols.txt
+  # map: orig/D44J01/files/maps/f_pc_profile_lst.map
+
+- object: files/RELS.arc:mmem/d_a_agbsw0.rel
+  hash: 8e55ec80c2852b71fd7fffdb5244687aec783f83
+  splits: config/D44J01/rels/d_a_agbsw0/splits.txt
+  symbols: config/D44J01/rels/d_a_agbsw0/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_agbsw0.map
+
+- object: files/RELS.arc:mmem/d_a_andsw0.rel
+  hash: 7b8d75040c6c0fc7872c6904d4b43f841bcc5a86
+  splits: config/D44J01/rels/d_a_andsw0/splits.txt
+  symbols: config/D44J01/rels/d_a_andsw0/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_andsw0.map
+
+- object: files/RELS.arc:mmem/d_a_andsw2.rel
+  hash: 6c5685fa3a4cceb7a7e9b110cde2df1e0051da98
+  splits: config/D44J01/rels/d_a_andsw2/splits.txt
+  symbols: config/D44J01/rels/d_a_andsw2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_andsw2.map
+
+- object: files/RELS.arc:mmem/d_a_att.rel
+  hash: c11ee4ed816a4bb327560f6913e7284d70da9b25
+  splits: config/D44J01/rels/d_a_att/splits.txt
+  symbols: config/D44J01/rels/d_a_att/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_att.map
+
+- object: files/RELS.arc:mmem/d_a_bflower.rel
+  hash: c6cbdd41d8210cbe8a4a24c8d4c0f04666e74fb7
+  splits: config/D44J01/rels/d_a_bflower/splits.txt
+  symbols: config/D44J01/rels/d_a_bflower/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bflower.map
+
+- object: files/RELS.arc:mmem/d_a_bita.rel
+  hash: 02c6debce5ae0ad79d456c5610863f6859c18704
+  splits: config/D44J01/rels/d_a_bita/splits.txt
+  symbols: config/D44J01/rels/d_a_bita/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bita.map
+
+- object: files/RELS.arc:mmem/d_a_branch.rel
+  hash: fd2648099e4de8cdce412eaa9775e47db590c8ba
+  splits: config/D44J01/rels/d_a_branch/splits.txt
+  symbols: config/D44J01/rels/d_a_branch/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_branch.map
+
+- object: files/RELS.arc:mmem/d_a_bridge.rel
+  hash: 83b963e1b4e7824863544ce68af1d38273a6a08d
+  splits: config/D44J01/rels/d_a_bridge/splits.txt
+  symbols: config/D44J01/rels/d_a_bridge/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bridge.map
+
+- object: files/RELS.arc:mmem/d_a_coming2.rel
+  hash: 58a511da650ee1862d3edc5d5e52565fbf15cca9
+  splits: config/D44J01/rels/d_a_coming2/splits.txt
+  symbols: config/D44J01/rels/d_a_coming2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_coming2.map
+
+- object: files/RELS.arc:mmem/d_a_coming3.rel
+  hash: a3fac00b19cdf6630379d1659c75c4cd155d30a6
+  splits: config/D44J01/rels/d_a_coming3/splits.txt
+  symbols: config/D44J01/rels/d_a_coming3/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_coming3.map
+
+- object: files/RELS.arc:mmem/d_a_demo_dk.rel
+  hash: 3922e73059ba21e3881632238f6cdb6d4ef83758
+  splits: config/D44J01/rels/d_a_demo_dk/splits.txt
+  symbols: config/D44J01/rels/d_a_demo_dk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_demo_dk.map
+
+- object: files/RELS.arc:mmem/d_a_demo_kmm.rel
+  hash: cc5d09a55638698cba19a0e657d5afa5647b0163
+  splits: config/D44J01/rels/d_a_demo_kmm/splits.txt
+  symbols: config/D44J01/rels/d_a_demo_kmm/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_demo_kmm.map
+
+- object: files/RELS.arc:mmem/d_a_door10.rel
+  hash: 4a9a64979df7fd05f124056bfdc2d9366e57b1af
+  splits: config/D44J01/rels/d_a_door10/splits.txt
+  symbols: config/D44J01/rels/d_a_door10/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_door10.map
+
+- object: files/RELS.arc:mmem/d_a_dr.rel
+  hash: e32ac1faf4dc23e3ddda9dd3f8cb9d54466dc71e
+  splits: config/D44J01/rels/d_a_dr/splits.txt
+  symbols: config/D44J01/rels/d_a_dr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_dr.map
+
+- object: files/RELS.arc:mmem/d_a_dr2.rel
+  hash: 63e27e32df5f070bd754490a45c9754fc45fbb87
+  splits: config/D44J01/rels/d_a_dr2/splits.txt
+  symbols: config/D44J01/rels/d_a_dr2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_dr2.map
+
+- object: files/RELS.arc:mmem/d_a_ep.rel
+  hash: 8d1ec7a90f7bcccdd17d9e8a4a252e477f980b61
+  splits: config/D44J01/rels/d_a_ep/splits.txt
+  symbols: config/D44J01/rels/d_a_ep/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ep.map
+
+- object: files/RELS.arc:mmem/d_a_floor.rel
+  hash: a284c629b440fd0adc0423ad3d491d9a1cab4ced
+  splits: config/D44J01/rels/d_a_floor/splits.txt
+  symbols: config/D44J01/rels/d_a_floor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_floor.map
+
+- object: files/RELS.arc:mmem/d_a_grass.rel
+  hash: f00c5b2807200f0063df271e48b8df0c7d7f92c1
+  splits: config/D44J01/rels/d_a_grass/splits.txt
+  symbols: config/D44J01/rels/d_a_grass/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_grass.map
+
+- object: files/RELS.arc:mmem/d_a_hitobj.rel
+  hash: a8e99fb8068ea2ce7ed36185d8ddaed09ec3d4f6
+  splits: config/D44J01/rels/d_a_hitobj/splits.txt
+  symbols: config/D44J01/rels/d_a_hitobj/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_hitobj.map
+
+- object: files/RELS.arc:mmem/d_a_hot_floor.rel
+  hash: 3cee6cdaf3c7234dc8626ad85d624f143784bc77
+  splits: config/D44J01/rels/d_a_hot_floor/splits.txt
+  symbols: config/D44J01/rels/d_a_hot_floor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_hot_floor.map
+
+- object: files/RELS.arc:mmem/d_a_ikari.rel
+  hash: e20801e35a95f317ae11b521e51307fb4db70ab5
+  splits: config/D44J01/rels/d_a_ikari/splits.txt
+  symbols: config/D44J01/rels/d_a_ikari/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ikari.map
+
+- object: files/RELS.arc:mmem/d_a_jbo.rel
+  hash: 248eb7953339b0719e7b170b5efbeecd0fc521d4
+  splits: config/D44J01/rels/d_a_jbo/splits.txt
+  symbols: config/D44J01/rels/d_a_jbo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_jbo.map
+
+- object: files/RELS.arc:mmem/d_a_kaji.rel
+  hash: 026c1e8c0d285bf7048787eb88f18645748ec726
+  splits: config/D44J01/rels/d_a_kaji/splits.txt
+  symbols: config/D44J01/rels/d_a_kaji/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kaji.map
+
+- object: files/RELS.arc:mmem/d_a_kanban.rel
+  hash: 4669d811f1bba4bad536085e6dcc0cddc012494a
+  splits: config/D44J01/rels/d_a_kanban/splits.txt
+  symbols: config/D44J01/rels/d_a_kanban/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kanban.map
+
+- object: files/RELS.arc:mmem/d_a_ki.rel
+  hash: 257f68468713a12216bce089a5b3227f74c79de3
+  splits: config/D44J01/rels/d_a_ki/splits.txt
+  symbols: config/D44J01/rels/d_a_ki/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ki.map
+
+- object: files/RELS.arc:mmem/d_a_knob00.rel
+  hash: 292894b665938693781c33646425e952f1bbfed9
+  splits: config/D44J01/rels/d_a_knob00/splits.txt
+  symbols: config/D44J01/rels/d_a_knob00/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_knob00.map
+
+- object: files/RELS.arc:mmem/d_a_kui.rel
+  hash: a4d6fcc30912901e08c3edfbbbced2df8e08e739
+  splits: config/D44J01/rels/d_a_kui/splits.txt
+  symbols: config/D44J01/rels/d_a_kui/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kui.map
+
+- object: files/RELS.arc:mmem/d_a_kytag00.rel
+  hash: b64cf8fbbe2c98ce53effebd3d280ff568b511e9
+  splits: config/D44J01/rels/d_a_kytag00/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag00/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag00.map
+
+- object: files/RELS.arc:mmem/d_a_kytag01.rel
+  hash: e0d64cd4f2af282f70599921bacf1af42efe70bb
+  splits: config/D44J01/rels/d_a_kytag01/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag01/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag01.map
+
+- object: files/RELS.arc:mmem/d_a_kytag02.rel
+  hash: cb0e1ac697916833cc0b0eaacb074e8861853f0a
+  splits: config/D44J01/rels/d_a_kytag02/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag02/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag02.map
+
+- object: files/RELS.arc:mmem/d_a_kytag03.rel
+  hash: 64a93dc8ca982865e10919dd481c4d1fe6b7097d
+  splits: config/D44J01/rels/d_a_kytag03/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag03/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag03.map
+
+- object: files/RELS.arc:mmem/d_a_kytag04.rel
+  hash: 262f2d1f3a302cde7cfc22c963c8cb0d55912b53
+  splits: config/D44J01/rels/d_a_kytag04/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag04/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag04.map
+
+- object: files/RELS.arc:mmem/d_a_kytag05.rel
+  hash: 96d08f915950e65dfad588ab8b9cb54d751fa5e6
+  splits: config/D44J01/rels/d_a_kytag05/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag05/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag05.map
+
+- object: files/RELS.arc:mmem/d_a_kytag06.rel
+  hash: fe9aa0f932b84679bad52599d0bb88970219135b
+  splits: config/D44J01/rels/d_a_kytag06/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag06/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag06.map
+
+- object: files/RELS.arc:mmem/d_a_kytag07.rel
+  hash: 3041ecda3cc9e9d8ac7d8ca5060b84f6f4abac7d
+  splits: config/D44J01/rels/d_a_kytag07/splits.txt
+  symbols: config/D44J01/rels/d_a_kytag07/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kytag07.map
+
+- object: files/RELS.arc:mmem/d_a_lamp.rel
+  hash: 2d09339eedccfa070129e3c1a5a1f46491709718
+  splits: config/D44J01/rels/d_a_lamp/splits.txt
+  symbols: config/D44J01/rels/d_a_lamp/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_lamp.map
+
+- object: files/RELS.arc:mmem/d_a_lod_bg.rel
+  hash: 229267adf6b5504f22768e4c516c2d35323eb094
+  splits: config/D44J01/rels/d_a_lod_bg/splits.txt
+  symbols: config/D44J01/rels/d_a_lod_bg/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_lod_bg.map
+
+- object: files/RELS.arc:mmem/d_a_lwood.rel
+  hash: 70f55f03e7e042cb4b5556a0e5c9ef16e09ce37a
+  splits: config/D44J01/rels/d_a_lwood/splits.txt
+  symbols: config/D44J01/rels/d_a_lwood/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_lwood.map
+
+- object: files/RELS.arc:mmem/d_a_magma.rel
+  hash: 467c61d6eb5320d96bc17eb0fab151eee2d04b48
+  splits: config/D44J01/rels/d_a_magma/splits.txt
+  symbols: config/D44J01/rels/d_a_magma/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_magma.map
+
+- object: files/RELS.arc:mmem/d_a_majuu_flag.rel
+  hash: 534730d7202a3743879d083deefe74a2fc98e7a4
+  splits: config/D44J01/rels/d_a_majuu_flag/splits.txt
+  symbols: config/D44J01/rels/d_a_majuu_flag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_majuu_flag.map
+
+- object: files/RELS.arc:mmem/d_a_mdoor.rel
+  hash: 4cbaf69a22b8356c144d4343bd6bc46c27870d33
+  splits: config/D44J01/rels/d_a_mdoor/splits.txt
+  symbols: config/D44J01/rels/d_a_mdoor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mdoor.map
+
+- object: files/RELS.arc:mmem/d_a_msw.rel
+  hash: 81e5b131dd08f5190e36b79cb5baaa37d3bc79c3
+  splits: config/D44J01/rels/d_a_msw/splits.txt
+  symbols: config/D44J01/rels/d_a_msw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_msw.map
+
+- object: files/RELS.arc:mmem/d_a_mtoge.rel
+  hash: cfd2a34026771c6cc8303728e78378b67a9ff39f
+  splits: config/D44J01/rels/d_a_mtoge/splits.txt
+  symbols: config/D44J01/rels/d_a_mtoge/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mtoge.map
+
+- object: files/RELS.arc:mmem/d_a_obj_AjavW.rel
+  hash: 65914d110dfff08d8fcc8494d130a469706de69a
+  splits: config/D44J01/rels/d_a_obj_AjavW/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_AjavW/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_AjavW.map
+
+- object: files/RELS.arc:mmem/d_a_obj_akabe.rel
+  hash: 9e612e935b8b35355e5cbdfd0107e82438c40e1c
+  splits: config/D44J01/rels/d_a_obj_akabe/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_akabe/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_akabe.map
+
+- object: files/RELS.arc:mmem/d_a_obj_barrel.rel
+  hash: 6ea922965a5076dca244e4789d70857dfca9963b
+  splits: config/D44J01/rels/d_a_obj_barrel/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_barrel/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_barrel.map
+
+- object: files/RELS.arc:mmem/d_a_obj_barrel2.rel
+  hash: a0d66871e8fe481a9ee728fc7edba3750567620d
+  splits: config/D44J01/rels/d_a_obj_barrel2/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_barrel2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_barrel2.map
+
+- object: files/RELS.arc:mmem/d_a_obj_bscurtain.rel
+  hash: 84eefe6ea276bdf8239c0b2d933104dc9d562c2a
+  splits: config/D44J01/rels/d_a_obj_bscurtain/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_bscurtain/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_bscurtain.map
+
+- object: files/RELS.arc:mmem/d_a_obj_cafelmp.rel
+  hash: 050fe40230d98fe8f8d27b583b777198c0881ce0
+  splits: config/D44J01/rels/d_a_obj_cafelmp/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_cafelmp/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_cafelmp.map
+
+- object: files/RELS.arc:mmem/d_a_obj_coming.rel
+  hash: e147ec8fd5dc42f0feaa10acccde3dd5acb936c1
+  splits: config/D44J01/rels/d_a_obj_coming/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_coming/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_coming.map
+
+- object: files/RELS.arc:mmem/d_a_obj_demo_barrel.rel
+  hash: 1a725859052ce9047484c4984470dc07756f0c67
+  splits: config/D44J01/rels/d_a_obj_demo_barrel/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_demo_barrel/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_demo_barrel.map
+
+- object: files/RELS.arc:mmem/d_a_obj_doguu.rel
+  hash: 1176212bb1a8f21265393b8404eb25180cd785cc
+  splits: config/D44J01/rels/d_a_obj_doguu/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_doguu/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_doguu.map
+
+- object: files/RELS.arc:mmem/d_a_obj_doguu_demo.rel
+  hash: 9997f1aaae6ea6cfebacd674d9b5cf9d044297b8
+  splits: config/D44J01/rels/d_a_obj_doguu_demo/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_doguu_demo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_doguu_demo.map
+
+- object: files/RELS.arc:mmem/d_a_obj_gryw00.rel
+  hash: 33f908a726c9722c297dff1585ad7dbf574a83b1
+  splits: config/D44J01/rels/d_a_obj_gryw00/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gryw00/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gryw00.map
+
+- object: files/RELS.arc:mmem/d_a_obj_hfuck1.rel
+  hash: d05db302c0daab4982f72894475783273ec9b363
+  splits: config/D44J01/rels/d_a_obj_hfuck1/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hfuck1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hfuck1.map
+
+- object: files/RELS.arc:mmem/d_a_obj_hole.rel
+  hash: 10ffd733c3b0fd0daeb8aa56f736790312bc99cd
+  splits: config/D44J01/rels/d_a_obj_hole/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hole/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hole.map
+
+- object: files/RELS.arc:mmem/d_a_obj_ice.rel
+  hash: 3913eb4faab20d4cb047db6db1b827a4ce0857f6
+  splits: config/D44J01/rels/d_a_obj_ice/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ice/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ice.map
+
+- object: files/RELS.arc:mmem/d_a_obj_ikada.rel
+  hash: c35943a5504422f22ebe47836f90610c83bf2b6c
+  splits: config/D44J01/rels/d_a_obj_ikada/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ikada/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ikada.map
+
+- object: files/RELS.arc:mmem/d_a_obj_kanat.rel
+  hash: 3d565af84d9201c5be951f99cba36bb8c16c9d5f
+  splits: config/D44J01/rels/d_a_obj_kanat/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_kanat/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_kanat.map
+
+- object: files/RELS.arc:mmem/d_a_obj_leaves.rel
+  hash: be8e9c9f31e69651e740731425f76f6fed55a71e
+  splits: config/D44J01/rels/d_a_obj_leaves/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_leaves/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_leaves.map
+
+- object: files/RELS.arc:mmem/d_a_obj_lpalm.rel
+  hash: 32ea85dadb2cb059a9dd0244aac11698864a85b5
+  splits: config/D44J01/rels/d_a_obj_lpalm/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_lpalm/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_lpalm.map
+
+- object: files/RELS.arc:mmem/d_a_obj_monument.rel
+  hash: 65bf1bd7e7909d3805103a9b7976a4da6427c5dd
+  splits: config/D44J01/rels/d_a_obj_monument/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_monument/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_monument.map
+
+- object: files/RELS.arc:mmem/d_a_obj_movebox.rel
+  hash: 3111a6e5cab7dc3bbe473168b5ae0cd071d38508
+  splits: config/D44J01/rels/d_a_obj_movebox/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_movebox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_movebox.map
+
+- object: files/RELS.arc:mmem/d_a_obj_mshokki.rel
+  hash: 182bbf526792281c7a64125d574b14cd962847c0
+  splits: config/D44J01/rels/d_a_obj_mshokki/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mshokki/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mshokki.map
+
+- object: files/RELS.arc:mmem/d_a_obj_ohatch.rel
+  hash: 4d58d1a9d3dc88e94aa722919aa9cf62c43c3bfd
+  splits: config/D44J01/rels/d_a_obj_ohatch/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ohatch/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ohatch.map
+
+- object: files/RELS.arc:mmem/d_a_obj_otble.rel
+  hash: 7b106df6c9ad1c79dc186f5eafbfc98dbb642ebe
+  splits: config/D44J01/rels/d_a_obj_otble/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_otble/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_otble.map
+
+- object: files/RELS.arc:mmem/d_a_obj_pbco.rel
+  hash: 1c818bbf733a9bb5dc43faef6eed324841dcb886
+  splits: config/D44J01/rels/d_a_obj_pbco/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_pbco/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_pbco.map
+
+- object: files/RELS.arc:mmem/d_a_obj_pirateship.rel
+  hash: 4575d582679f6a7e7fa5a5508610e0f472465e9b
+  splits: config/D44J01/rels/d_a_obj_pirateship/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_pirateship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_pirateship.map
+
+- object: files/RELS.arc:mmem/d_a_obj_quake.rel
+  hash: 9c37c7573714bbf81289d5aa0b31a7bb1601fac4
+  splits: config/D44J01/rels/d_a_obj_quake/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_quake/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_quake.map
+
+- object: files/RELS.arc:mmem/d_a_obj_rcloud.rel
+  hash: bf59fbc203a96694748f373210f3ce4dbe5b2ac7
+  splits: config/D44J01/rels/d_a_obj_rcloud/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_rcloud/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_rcloud.map
+
+- object: files/RELS.arc:mmem/d_a_obj_roten.rel
+  hash: e4f461b8c67a4ed67ec650087d51e74a63e43a88
+  splits: config/D44J01/rels/d_a_obj_roten/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_roten/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_roten.map
+
+- object: files/RELS.arc:mmem/d_a_obj_shelf.rel
+  hash: 037c4bebcdf1707a5c7523b56dfbf392e7d50000
+  splits: config/D44J01/rels/d_a_obj_shelf/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_shelf/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_shelf.map
+
+- object: files/RELS.arc:mmem/d_a_obj_shmrgrd.rel
+  hash: 0ef0f667eb72748d26b3d0d4898bde3063587345
+  splits: config/D44J01/rels/d_a_obj_shmrgrd/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_shmrgrd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_shmrgrd.map
+
+- object: files/RELS.arc:mmem/d_a_obj_swpush.rel
+  hash: 8451864c417c34bab3d514b2b3997be1ff98b2e7
+  splits: config/D44J01/rels/d_a_obj_swpush/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_swpush/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_swpush.map
+
+- object: files/RELS.arc:mmem/d_a_obj_table.rel
+  hash: 974a023c2144a3acbb76edf12d1a777a6db9e84a
+  splits: config/D44J01/rels/d_a_obj_table/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_table/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_table.map
+
+- object: files/RELS.arc:mmem/d_a_obj_tenmado.rel
+  hash: 19718ba723c6a6c245519fd587c6f94fc1915513
+  splits: config/D44J01/rels/d_a_obj_tenmado/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tenmado/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tenmado.map
+
+- object: files/RELS.arc:mmem/d_a_obj_tide.rel
+  hash: 848d8220842e20cdcf6a9941c3410ebf24df5b93
+  splits: config/D44J01/rels/d_a_obj_tide/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tide/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tide.map
+
+- object: files/RELS.arc:mmem/d_a_obj_timer.rel
+  hash: 69b863c487adf9d64769b57130674569cebaeb5f
+  splits: config/D44J01/rels/d_a_obj_timer/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_timer/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_timer.map
+
+- object: files/RELS.arc:mmem/d_a_obj_toripost.rel
+  hash: 847195005b1d0074bf63c2df9f63fd1344722b3b
+  splits: config/D44J01/rels/d_a_obj_toripost/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_toripost/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_toripost.map
+
+- object: files/RELS.arc:mmem/d_a_obj_tousekiki.rel
+  hash: f1b11ab63628a2bfbdd181ef5b32b26f1be56c3d
+  splits: config/D44J01/rels/d_a_obj_tousekiki/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tousekiki/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tousekiki.map
+
+- object: files/RELS.arc:mmem/d_a_obj_warpt.rel
+  hash: fb8d540d9bbaab4988bbb4033d10b274721d160c
+  splits: config/D44J01/rels/d_a_obj_warpt/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_warpt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_warpt.map
+
+- object: files/RELS.arc:mmem/d_a_obj_wood.rel
+  hash: 847fe76630054bf3d5a6b02ecf5757af4632d558
+  splits: config/D44J01/rels/d_a_obj_wood/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_wood/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_wood.map
+
+- object: files/RELS.arc:mmem/d_a_obj_Ygush00.rel
+  hash: 3803d6cccecb85cf049a914e88e8a4d59c0d9b52
+  splits: config/D44J01/rels/d_a_obj_Ygush00/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_Ygush00/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_Ygush00.map
+
+- object: files/RELS.arc:mmem/d_a_pirate_flag.rel
+  hash: c5bf381a7b8f4879aab251ab8c7242217b2cb441
+  splits: config/D44J01/rels/d_a_pirate_flag/splits.txt
+  symbols: config/D44J01/rels/d_a_pirate_flag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_pirate_flag.map
+  extract:
+  - symbol: l_pirate_flag_DL
+    binary: assets/l_pirate_flag_DL.bin
+    header: assets/l_pirate_flag_DL.h
+  - symbol: l_pirate_flag_matDL
+    binary: assets/l_pirate_flag_matDL.bin
+    header: assets/l_pirate_flag_matDL.h
+
+- object: files/RELS.arc:mmem/d_a_race_item.rel
+  hash: 0cd29933832be473cfa590e06f4a875ab2cb88e6
+  splits: config/D44J01/rels/d_a_race_item/splits.txt
+  symbols: config/D44J01/rels/d_a_race_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_race_item.map
+
+- object: files/RELS.arc:mmem/d_a_rd.rel
+  hash: 96383e192964f7ce2dc3216c8c6bfadd8272bd09
+  splits: config/D44J01/rels/d_a_rd/splits.txt
+  symbols: config/D44J01/rels/d_a_rd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_rd.map
+
+- object: files/RELS.arc:mmem/d_a_rectangle.rel
+  hash: e55d4935911a6f50d61065944a6eb14f495fe4b1
+  splits: config/D44J01/rels/d_a_rectangle/splits.txt
+  symbols: config/D44J01/rels/d_a_rectangle/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_rectangle.map
+
+- object: files/RELS.arc:mmem/d_a_salvage.rel
+  hash: 21468697e7676059ca327b7135169a2c5b061004
+  splits: config/D44J01/rels/d_a_salvage/splits.txt
+  symbols: config/D44J01/rels/d_a_salvage/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_salvage.map
+
+- object: files/RELS.arc:mmem/d_a_sbox.rel
+  hash: 08e0fe6853c4909a848cb8db21cf47140207afe3
+  splits: config/D44J01/rels/d_a_sbox/splits.txt
+  symbols: config/D44J01/rels/d_a_sbox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sbox.map
+
+- object: files/RELS.arc:mmem/d_a_sk.rel
+  hash: 086cd25f9c7230a0a14e1358a8a1a597725144b2
+  splits: config/D44J01/rels/d_a_sk/splits.txt
+  symbols: config/D44J01/rels/d_a_sk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sk.map
+
+- object: files/RELS.arc:mmem/d_a_sk2.rel
+  hash: 6d8575bac744a95904448232306ec3f6c099bd71
+  splits: config/D44J01/rels/d_a_sk2/splits.txt
+  symbols: config/D44J01/rels/d_a_sk2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sk2.map
+
+- object: files/RELS.arc:mmem/d_a_spotbox.rel
+  hash: 94282a3dabaab0ed21c38bffe204cc1fca170238
+  splits: config/D44J01/rels/d_a_spotbox/splits.txt
+  symbols: config/D44J01/rels/d_a_spotbox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_spotbox.map
+
+- object: files/RELS.arc:mmem/d_a_ssk.rel
+  hash: 14ca2f2e47532bac8c5e941538f2c3849379728e
+  splits: config/D44J01/rels/d_a_ssk/splits.txt
+  symbols: config/D44J01/rels/d_a_ssk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ssk.map
+
+- object: files/RELS.arc:mmem/d_a_stone.rel
+  hash: 1da415c767503e80e493a4035f50586899e7da49
+  splits: config/D44J01/rels/d_a_stone/splits.txt
+  symbols: config/D44J01/rels/d_a_stone/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_stone.map
+
+- object: files/RELS.arc:mmem/d_a_stone2.rel
+  hash: 3a47dadb1f5fe324fc999033c22335d459de02fb
+  splits: config/D44J01/rels/d_a_stone2/splits.txt
+  symbols: config/D44J01/rels/d_a_stone2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_stone2.map
+
+- object: files/RELS.arc:mmem/d_a_swc00.rel
+  hash: 4e28da6c9b3d1cee0e37fe8c8c224fe8644dfa88
+  splits: config/D44J01/rels/d_a_swc00/splits.txt
+  symbols: config/D44J01/rels/d_a_swc00/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swc00.map
+
+- object: files/RELS.arc:mmem/d_a_swhit0.rel
+  hash: e89486ec8fc8750ca2370fe0aca781f0f10f265d
+  splits: config/D44J01/rels/d_a_swhit0/splits.txt
+  symbols: config/D44J01/rels/d_a_swhit0/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swhit0.map
+
+- object: files/RELS.arc:mmem/d_a_swtdoor.rel
+  hash: 5d2208b946fce2625141582c5a86b02cfe1a6a5b
+  splits: config/D44J01/rels/d_a_swtdoor/splits.txt
+  symbols: config/D44J01/rels/d_a_swtdoor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swtdoor.map
+
+- object: files/RELS.arc:mmem/d_a_tag_attention.rel
+  hash: 53a05aeb36bc88fc3a9610c6e12331484027d1b6
+  splits: config/D44J01/rels/d_a_tag_attention/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_attention/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_attention.map
+
+- object: files/RELS.arc:mmem/d_a_tag_ba1.rel
+  hash: 28beebf8d9a715b9bfe7fefd0c3a68b340086283
+  splits: config/D44J01/rels/d_a_tag_ba1/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_ba1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_ba1.map
+
+- object: files/RELS.arc:mmem/d_a_tag_event.rel
+  hash: bd1fc5db1aa048aad891609e3efa4d849f6f7752
+  splits: config/D44J01/rels/d_a_tag_event/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_event/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_event.map
+
+- object: files/RELS.arc:mmem/d_a_tag_evsw.rel
+  hash: 6f33b99a6509f055857857c099242b1d110eb2d8
+  splits: config/D44J01/rels/d_a_tag_evsw/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_evsw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_evsw.map
+
+- object: files/RELS.arc:mmem/d_a_tag_ghostship.rel
+  hash: ef32c63f6456ab8975534f707f89425b6acc175c
+  splits: config/D44J01/rels/d_a_tag_ghostship/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_ghostship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_ghostship.map
+
+- object: files/RELS.arc:mmem/d_a_tag_hint.rel
+  hash: 3f517ad257cba81f2673445ae7fba5c92805ee35
+  splits: config/D44J01/rels/d_a_tag_hint/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_hint/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_hint.map
+
+- object: files/RELS.arc:mmem/d_a_tag_kb_item.rel
+  hash: 8b70038eee16ac4ddb2b06f57e1e1d153b9935be
+  splits: config/D44J01/rels/d_a_tag_kb_item/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_kb_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_kb_item.map
+
+- object: files/RELS.arc:mmem/d_a_tag_kk1.rel
+  hash: 31d0c30f5e838fa8f984961f4598cdd9a1055517
+  splits: config/D44J01/rels/d_a_tag_kk1/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_kk1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_kk1.map
+
+- object: files/RELS.arc:mmem/d_a_tag_light.rel
+  hash: b74d804a7127cd5c235c13aa021fc8749ba22faa
+  splits: config/D44J01/rels/d_a_tag_light/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_light/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_light.map
+
+- object: files/RELS.arc:mmem/d_a_tag_msg.rel
+  hash: e1963f042fad7c82a6c745f68a73c3ccbd36dee1
+  splits: config/D44J01/rels/d_a_tag_msg/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_msg/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_msg.map
+
+- object: files/RELS.arc:mmem/d_a_tag_photo.rel
+  hash: bdcfb1951f468d75fd534ee5e7e0c8aba9031f47
+  splits: config/D44J01/rels/d_a_tag_photo/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_photo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_photo.map
+
+- object: files/RELS.arc:mmem/d_a_tag_waterlevel.rel
+  hash: 3fe814ffee5f318e841eefcb59c89d804747f469
+  splits: config/D44J01/rels/d_a_tag_waterlevel/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_waterlevel/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_waterlevel.map
+
+- object: files/RELS.arc:mmem/d_a_tama.rel
+  hash: e551edd970cc809433c65080ff4770dd5c70f6cf
+  splits: config/D44J01/rels/d_a_tama/splits.txt
+  symbols: config/D44J01/rels/d_a_tama/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tama.map
+
+- object: files/RELS.arc:mmem/d_a_tbox.rel
+  hash: a76536bd2b5792926170d59dd7e6fe66b519794c
+  splits: config/D44J01/rels/d_a_tbox/splits.txt
+  symbols: config/D44J01/rels/d_a_tbox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tbox.map
+
+- object: files/RELS.arc:mmem/d_a_tpota.rel
+  hash: 07f0c746632f14c86ccedb8882a551af576ab81e
+  splits: config/D44J01/rels/d_a_tpota/splits.txt
+  symbols: config/D44J01/rels/d_a_tpota/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tpota.map
+
+- object: files/RELS.arc:mmem/d_a_tsubo.rel
+  hash: 9fcc6819568561302c5f31b3d6637734e3742aaf
+  splits: config/D44J01/rels/d_a_tsubo/splits.txt
+  symbols: config/D44J01/rels/d_a_tsubo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tsubo.map
+
+- object: files/RELS.arc:mmem/d_a_warpdm20.rel
+  hash: f652f5eaf225611dfce3f0a84802e4d2df4a9afa
+  splits: config/D44J01/rels/d_a_warpdm20/splits.txt
+  symbols: config/D44J01/rels/d_a_warpdm20/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpdm20.map
+
+- object: files/RELS.arc:mmem/d_a_warphr.rel
+  hash: 296898c1a4693a871aa1742f21cceaed363b7f10
+  splits: config/D44J01/rels/d_a_warphr/splits.txt
+  symbols: config/D44J01/rels/d_a_warphr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warphr.map
+
+- object: files/RELS.arc:mmem/d_a_wbird.rel
+  hash: 0243447a4d3665f611d7909fe2a0e5762b887b86
+  splits: config/D44J01/rels/d_a_wbird/splits.txt
+  symbols: config/D44J01/rels/d_a_wbird/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_wbird.map
+
+- object: files/RELS.arc:mmem/d_a_ykgr.rel
+  hash: 9c72615e490eb452709e2e3e03116ac166144fca
+  splits: config/D44J01/rels/d_a_ykgr/splits.txt
+  symbols: config/D44J01/rels/d_a_ykgr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ykgr.map
+
+- object: files/RELS.arc:amem/d_a_alldie.rel
+  hash: 8e000c819c6291e6020bbb194fb82b97a44ba8d6
+  splits: config/D44J01/rels/d_a_alldie/splits.txt
+  symbols: config/D44J01/rels/d_a_alldie/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_alldie.map
+
+- object: files/RELS.arc:amem/d_a_am.rel
+  hash: 5c1fd20e3ed9ba3238ed4229d30deb32bb5a2eb4
+  splits: config/D44J01/rels/d_a_am/splits.txt
+  symbols: config/D44J01/rels/d_a_am/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_am.map
+
+- object: files/RELS.arc:amem/d_a_am2.rel
+  hash: a30c747c45513a3829bb5bfb82a13fd2d3db1b67
+  splits: config/D44J01/rels/d_a_am2/splits.txt
+  symbols: config/D44J01/rels/d_a_am2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_am2.map
+
+- object: files/RELS.arc:amem/d_a_amiprop.rel
+  hash: 6ea742931c6f8e2fcfc4ec2a51180322f460f338
+  splits: config/D44J01/rels/d_a_amiprop/splits.txt
+  symbols: config/D44J01/rels/d_a_amiprop/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_amiprop.map
+
+- object: files/RELS.arc:amem/d_a_arrow_iceeff.rel
+  hash: ce57a2a9fe8f240499959fb4e0bb806874acd0d3
+  splits: config/D44J01/rels/d_a_arrow_iceeff/splits.txt
+  symbols: config/D44J01/rels/d_a_arrow_iceeff/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_arrow_iceeff.map
+
+- object: files/RELS.arc:amem/d_a_arrow_lighteff.rel
+  hash: 310a899f0cae8d92bf016e46e5d21ca0f59c6b02
+  splits: config/D44J01/rels/d_a_arrow_lighteff/splits.txt
+  symbols: config/D44J01/rels/d_a_arrow_lighteff/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_arrow_lighteff.map
+
+- object: files/RELS.arc:amem/d_a_beam.rel
+  hash: 5b399b13e3584c07ce8237fe114cfbceba03124a
+  splits: config/D44J01/rels/d_a_beam/splits.txt
+  symbols: config/D44J01/rels/d_a_beam/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_beam.map
+
+- object: files/RELS.arc:amem/d_a_boko.rel
+  hash: 6dfb8ed570144497e22ced854c900571f3f120e8
+  splits: config/D44J01/rels/d_a_boko/splits.txt
+  symbols: config/D44J01/rels/d_a_boko/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_boko.map
+
+- object: files/RELS.arc:amem/d_a_canon.rel
+  hash: dfa3ce99d9f4d2f4418c57d356ae458feac88c21
+  splits: config/D44J01/rels/d_a_canon/splits.txt
+  symbols: config/D44J01/rels/d_a_canon/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_canon.map
+
+- object: files/RELS.arc:amem/d_a_dai.rel
+  hash: b41569b155490eb9598799f25d846529cbde9278
+  splits: config/D44J01/rels/d_a_dai/splits.txt
+  symbols: config/D44J01/rels/d_a_dai/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_dai.map
+
+- object: files/RELS.arc:amem/d_a_demo_item.rel
+  hash: cb912cc6a34f49bbc044076fe2824247d3d97492
+  splits: config/D44J01/rels/d_a_demo_item/splits.txt
+  symbols: config/D44J01/rels/d_a_demo_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_demo_item.map
+
+- object: files/RELS.arc:amem/d_a_door12.rel
+  hash: f4ab0e1286666a04a1cdc99d01b48bcf77f7c079
+  splits: config/D44J01/rels/d_a_door12/splits.txt
+  symbols: config/D44J01/rels/d_a_door12/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_door12.map
+
+- object: files/RELS.arc:amem/d_a_fallrock.rel
+  hash: 9b9ec9e193ff271bde5e3b04af4d2e8ac1ddae9b
+  splits: config/D44J01/rels/d_a_fallrock/splits.txt
+  symbols: config/D44J01/rels/d_a_fallrock/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fallrock.map
+
+- object: files/RELS.arc:amem/d_a_ff.rel
+  hash: 5d6b70bf8490a1c2c078e3f5667c902c2f0988d7
+  splits: config/D44J01/rels/d_a_ff/splits.txt
+  symbols: config/D44J01/rels/d_a_ff/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ff.map
+
+- object: files/RELS.arc:amem/d_a_gy_ctrl.rel
+  hash: fda8385a6e1c714077bbfdee6023e72c7fa8bbb1
+  splits: config/D44J01/rels/d_a_gy_ctrl/splits.txt
+  symbols: config/D44J01/rels/d_a_gy_ctrl/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_gy_ctrl.map
+
+- object: files/RELS.arc:amem/d_a_himo3.rel
+  hash: 922a86471ba69b39a82674a067eac7fa5978cd60
+  splits: config/D44J01/rels/d_a_himo3/splits.txt
+  symbols: config/D44J01/rels/d_a_himo3/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_himo3.map
+
+- object: files/RELS.arc:amem/d_a_hys.rel
+  hash: 2f1364207b53f62142f02f73c598b3ccf92e9540
+  splits: config/D44J01/rels/d_a_hys/splits.txt
+  symbols: config/D44J01/rels/d_a_hys/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_hys.map
+
+- object: files/RELS.arc:amem/d_a_kamome.rel
+  hash: 676db9b657617155445c4bff1e065bfa224d8f51
+  splits: config/D44J01/rels/d_a_kamome/splits.txt
+  symbols: config/D44J01/rels/d_a_kamome/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kamome.map
+
+- object: files/RELS.arc:amem/d_a_kamome2.rel
+  hash: 9fb2d2b0b39432bf562083fb98237d443a1aaf20
+  splits: config/D44J01/rels/d_a_kamome2/splits.txt
+  symbols: config/D44J01/rels/d_a_kamome2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kamome2.map
+
+- object: files/RELS.arc:amem/d_a_kantera.rel
+  hash: ecdc210624d6145b85d20e40b8aa01b2ab56b84e
+  splits: config/D44J01/rels/d_a_kantera/splits.txt
+  symbols: config/D44J01/rels/d_a_kantera/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kantera.map
+
+- object: files/RELS.arc:amem/d_a_kn.rel
+  hash: 0b2907191b05dd4632e4bb64a350bce4d336c84b
+  splits: config/D44J01/rels/d_a_kn/splits.txt
+  symbols: config/D44J01/rels/d_a_kn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kn.map
+
+- object: files/RELS.arc:amem/d_a_kokiie.rel
+  hash: 1298ad4e6a6a482055d00e9c15a36178f2bc97cd
+  splits: config/D44J01/rels/d_a_kokiie/splits.txt
+  symbols: config/D44J01/rels/d_a_kokiie/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kokiie.map
+
+- object: files/RELS.arc:amem/d_a_ks.rel
+  hash: 117cb0210292684b79ab1de0d178de6ff17f4954
+  splits: config/D44J01/rels/d_a_ks/splits.txt
+  symbols: config/D44J01/rels/d_a_ks/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ks.map
+
+- object: files/RELS.arc:amem/d_a_kt.rel
+  hash: be21df731e8733261769227cfe42380d6b34525a
+  splits: config/D44J01/rels/d_a_kt/splits.txt
+  symbols: config/D44J01/rels/d_a_kt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kt.map
+
+- object: files/RELS.arc:amem/d_a_mflft.rel
+  hash: 41ae29ee14244ec2dac5dc2659917d3973434452
+  splits: config/D44J01/rels/d_a_mflft/splits.txt
+  symbols: config/D44J01/rels/d_a_mflft/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mflft.map
+
+- object: files/RELS.arc:amem/d_a_npc_cb1.rel
+  hash: 2f7e0f71bf8c13a02fd379c2177515ae9188cd76
+  splits: config/D44J01/rels/d_a_npc_cb1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_cb1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_cb1.map
+
+- object: files/RELS.arc:amem/d_a_npc_md.rel
+  hash: e66a42072d09c3e653c927b0a9d8c06b1d479e20
+  splits: config/D44J01/rels/d_a_npc_md/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_md/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_md.map
+
+- object: files/RELS.arc:amem/d_a_npc_so.rel
+  hash: 9fe24a883326cd99619134d9baa9a08b288877c5
+  splits: config/D44J01/rels/d_a_npc_so/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_so/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_so.map
+
+- object: files/RELS.arc:amem/d_a_nzg.rel
+  hash: 2a2497e245e7141187c43883d26374eb948ca892
+  splits: config/D44J01/rels/d_a_nzg/splits.txt
+  symbols: config/D44J01/rels/d_a_nzg/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_nzg.map
+
+- object: files/RELS.arc:amem/d_a_obj_aygr.rel
+  hash: 08bccaaecc158e45eeb50befc1afbc0f3f86dd0b
+  splits: config/D44J01/rels/d_a_obj_aygr/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_aygr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_aygr.map
+
+- object: files/RELS.arc:amem/d_a_obj_balancelift.rel
+  hash: 11d8d675c42de055a29e765fe6d08577e5dc29d2
+  splits: config/D44J01/rels/d_a_obj_balancelift/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_balancelift/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_balancelift.map
+
+- object: files/RELS.arc:amem/d_a_obj_barrier.rel
+  hash: a54bda726b34b4bf4a6d5a2f50cebc79fab50df5
+  splits: config/D44J01/rels/d_a_obj_barrier/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_barrier/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_barrier.map
+
+- object: files/RELS.arc:amem/d_a_obj_bemos.rel
+  hash: 780dc9ed585b57d4c1445d9b781ab99e4f4db86b
+  splits: config/D44J01/rels/d_a_obj_bemos/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_bemos/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_bemos.map
+
+- object: files/RELS.arc:amem/d_a_obj_canon.rel
+  hash: 103ea38df9397d1e8799e41657cf82474fcac2cd
+  splits: config/D44J01/rels/d_a_obj_canon/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_canon/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_canon.map
+
+- object: files/RELS.arc:amem/d_a_obj_eff.rel
+  hash: de79d2b487b208cbfc32d0be7e3e28991277e53b
+  splits: config/D44J01/rels/d_a_obj_eff/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_eff/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_eff.map
+
+- object: files/RELS.arc:amem/d_a_obj_magmarock.rel
+  hash: 3ecaa539bc02ef82492ea9f176424204d36f3655
+  splits: config/D44J01/rels/d_a_obj_magmarock/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_magmarock/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_magmarock.map
+
+- object: files/RELS.arc:amem/d_a_obj_majyuu_door.rel
+  hash: b8891a7b697f432a85999de249f42b6806fb3f5a
+  splits: config/D44J01/rels/d_a_obj_majyuu_door/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_majyuu_door/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_majyuu_door.map
+
+- object: files/RELS.arc:amem/d_a_obj_stair.rel
+  hash: 1e38c3fed5982676949b237b0f77e400ac6f945e
+  splits: config/D44J01/rels/d_a_obj_stair/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_stair/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_stair.map
+
+- object: files/RELS.arc:amem/d_a_obj_swflat.rel
+  hash: 8b07a27448db66f33e368c3a2f71350cd064cbfc
+  splits: config/D44J01/rels/d_a_obj_swflat/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_swflat/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_swflat.map
+
+- object: files/RELS.arc:amem/d_a_obj_swhammer.rel
+  hash: 7f3affffb387d24b8756a5f57cc6bdd28726b026
+  splits: config/D44J01/rels/d_a_obj_swhammer/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_swhammer/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_swhammer.map
+
+- object: files/RELS.arc:amem/d_a_obj_swheavy.rel
+  hash: 744fca729dc33c3b33b3bd720d325803b258ba10
+  splits: config/D44J01/rels/d_a_obj_swheavy/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_swheavy/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_swheavy.map
+
+- object: files/RELS.arc:amem/d_a_obj_swlight.rel
+  hash: a6f91debd86fa16a131f3797433fcf7fc1979226
+  splits: config/D44J01/rels/d_a_obj_swlight/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_swlight/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_swlight.map
+
+- object: files/RELS.arc:amem/d_a_oq.rel
+  hash: 3712a99c61aa7ac98a5039e013c113166f0008cb
+  splits: config/D44J01/rels/d_a_oq/splits.txt
+  symbols: config/D44J01/rels/d_a_oq/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_oq.map
+
+- object: files/RELS.arc:amem/d_a_pedestal.rel
+  hash: 86179c139be55decfb3d1e406315c62c467c27fc
+  splits: config/D44J01/rels/d_a_pedestal/splits.txt
+  symbols: config/D44J01/rels/d_a_pedestal/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_pedestal.map
+
+- object: files/RELS.arc:amem/d_a_saku.rel
+  hash: 6e97f6c5c1c07d3e8df6934afee46295f3216a2e
+  splits: config/D44J01/rels/d_a_saku/splits.txt
+  symbols: config/D44J01/rels/d_a_saku/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_saku.map
+
+- object: files/RELS.arc:amem/d_a_shand.rel
+  hash: dc497b3ae9e7a8c0c4f4bc1ed55d70195981b161
+  splits: config/D44J01/rels/d_a_shand/splits.txt
+  symbols: config/D44J01/rels/d_a_shand/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_shand.map
+
+- object: files/RELS.arc:amem/d_a_ship.rel
+  hash: 549e56a8ada2ee6e462da8713f5fad344c3d83a9
+  splits: config/D44J01/rels/d_a_ship/splits.txt
+  symbols: config/D44J01/rels/d_a_ship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ship.map
+
+- object: files/RELS.arc:amem/d_a_shop_item.rel
+  hash: 55fc2e53d63cf4404854d6fb8acff4b2d13df191
+  splits: config/D44J01/rels/d_a_shop_item/splits.txt
+  symbols: config/D44J01/rels/d_a_shop_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_shop_item.map
+
+- object: files/RELS.arc:amem/d_a_sie_flag.rel
+  hash: ea22032c12bb36a306d138b5301210c3ba3448e4
+  splits: config/D44J01/rels/d_a_sie_flag/splits.txt
+  symbols: config/D44J01/rels/d_a_sie_flag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sie_flag.map
+
+- object: files/RELS.arc:amem/d_a_sitem.rel
+  hash: 8456fdddc1e1e36833a0133b47e9537f040409c2
+  splits: config/D44J01/rels/d_a_sitem/splits.txt
+  symbols: config/D44J01/rels/d_a_sitem/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sitem.map
+
+- object: files/RELS.arc:amem/d_a_ss.rel
+  hash: 859bddb823741a16fca76cbe4e1f95aed9574328
+  splits: config/D44J01/rels/d_a_ss/splits.txt
+  symbols: config/D44J01/rels/d_a_ss/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ss.map
+
+- object: files/RELS.arc:amem/d_a_sss.rel
+  hash: 0df64e2f9f2eee270120478f66e1f3c76485f520
+  splits: config/D44J01/rels/d_a_sss/splits.txt
+  symbols: config/D44J01/rels/d_a_sss/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sss.map
+
+- object: files/RELS.arc:amem/d_a_syan.rel
+  hash: ad8cc7bbcd2812aae10f4fc143165fe9be162182
+  splits: config/D44J01/rels/d_a_syan/splits.txt
+  symbols: config/D44J01/rels/d_a_syan/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_syan.map
+
+- object: files/RELS.arc:amem/d_a_tag_md_cb.rel
+  hash: 4bcd0fe964e6948b72d7d856210875569ff47d05
+  splits: config/D44J01/rels/d_a_tag_md_cb/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_md_cb/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_md_cb.map
+
+- object: files/RELS.arc:amem/d_a_tag_mk.rel
+  hash: 709f866a4577c683ac561e26c7dd15c3fc48784d
+  splits: config/D44J01/rels/d_a_tag_mk/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_mk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_mk.map
+
+- object: files/RELS.arc:amem/d_a_tag_so.rel
+  hash: adb72c60307163addfde66fb56953eadbf53277c
+  splits: config/D44J01/rels/d_a_tag_so/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_so/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_so.map
+
+- object: files/RELS.arc:amem/d_a_tornado.rel
+  hash: 323963531b0cc49bea90d94aeccf77f706037fe8
+  splits: config/D44J01/rels/d_a_tornado/splits.txt
+  symbols: config/D44J01/rels/d_a_tornado/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tornado.map
+
+- object: files/RELS.arc:amem/d_a_warpf.rel
+  hash: cace8a58806ce2d62842ddf84cfb8dabb680be6a
+  splits: config/D44J01/rels/d_a_warpf/splits.txt
+  symbols: config/D44J01/rels/d_a_warpf/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpf.map
+
+- object: files/RELS.arc:amem/d_a_wind_tag.rel
+  hash: c3d2f835ff13cc9a887dd5da3b947439210a4a17
+  splits: config/D44J01/rels/d_a_wind_tag/splits.txt
+  symbols: config/D44J01/rels/d_a_wind_tag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_wind_tag.map
+
+- object: files/rels/d_a_acorn_leaf.rel
+  hash: f620fe921922bfd37e147932adc8f4b2042093e9
+  splits: config/D44J01/rels/d_a_acorn_leaf/splits.txt
+  symbols: config/D44J01/rels/d_a_acorn_leaf/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_acorn_leaf.map
+
+- object: files/rels/d_a_atdoor.rel
+  hash: 10dd826b38a6e8b61bfbc750d864cc464c186219
+  splits: config/D44J01/rels/d_a_atdoor/splits.txt
+  symbols: config/D44J01/rels/d_a_atdoor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_atdoor.map
+
+- object: files/rels/d_a_auction.rel
+  hash: 689f9a8c24a6f94781e77db81804f1ea7a0f5469
+  splits: config/D44J01/rels/d_a_auction/splits.txt
+  symbols: config/D44J01/rels/d_a_auction/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_auction.map
+
+- object: files/rels/d_a_bb.rel
+  hash: 343171745150c8a9a16b72c2d4b1db573aedaf16
+  splits: config/D44J01/rels/d_a_bb/splits.txt
+  symbols: config/D44J01/rels/d_a_bb/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bb.map
+
+- object: files/rels/d_a_bdk.rel
+  hash: 72762ee6b1343f4125189e995576a68a6444447a
+  splits: config/D44J01/rels/d_a_bdk/splits.txt
+  symbols: config/D44J01/rels/d_a_bdk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bdk.map
+
+- object: files/rels/d_a_bdkobj.rel
+  hash: 749773d7353d52648f9ed1cfa4c1f37dd9cdfe05
+  splits: config/D44J01/rels/d_a_bdkobj/splits.txt
+  symbols: config/D44J01/rels/d_a_bdkobj/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bdkobj.map
+
+- object: files/rels/d_a_bgn.rel
+  hash: 16cee7a84ee691c7d9c8f233b4433ec09cbf09b6
+  splits: config/D44J01/rels/d_a_bgn/splits.txt
+  symbols: config/D44J01/rels/d_a_bgn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bgn.map
+
+- object: files/rels/d_a_bgn2.rel
+  hash: 7d5f1c6e416b6da0248d13ed8d769897d612868c
+  splits: config/D44J01/rels/d_a_bgn2/splits.txt
+  symbols: config/D44J01/rels/d_a_bgn2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bgn2.map
+
+- object: files/rels/d_a_bgn3.rel
+  hash: 05992c931d1d3804602ebe01e614cca6c5b5b4a9
+  splits: config/D44J01/rels/d_a_bgn3/splits.txt
+  symbols: config/D44J01/rels/d_a_bgn3/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bgn3.map
+
+- object: files/rels/d_a_bigelf.rel
+  hash: 4008308bd7c989f1c0eaf7349cd811a1cc3b8274
+  splits: config/D44J01/rels/d_a_bigelf/splits.txt
+  symbols: config/D44J01/rels/d_a_bigelf/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bigelf.map
+
+- object: files/rels/d_a_bk.rel
+  hash: 161c69bb47996d327a78cb9d830f2180e5c13caf
+  splits: config/D44J01/rels/d_a_bk/splits.txt
+  symbols: config/D44J01/rels/d_a_bk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bk.map
+
+- object: files/rels/d_a_bl.rel
+  hash: 40c9df9731cbaff306f31165c290da038fb25958
+  splits: config/D44J01/rels/d_a_bl/splits.txt
+  symbols: config/D44J01/rels/d_a_bl/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bl.map
+
+- object: files/rels/d_a_bmd.rel
+  hash: 175e0501d43a7344daee4529c72e7431cc3898cf
+  splits: config/D44J01/rels/d_a_bmd/splits.txt
+  symbols: config/D44J01/rels/d_a_bmd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bmd.map
+
+- object: files/rels/d_a_bmdfoot.rel
+  hash: 94bb36966ba6b17a4fe756e3052c6215105baaad
+  splits: config/D44J01/rels/d_a_bmdfoot/splits.txt
+  symbols: config/D44J01/rels/d_a_bmdfoot/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bmdfoot.map
+
+- object: files/rels/d_a_bmdhand.rel
+  hash: 3c9f19c374974949f274d1bd8d1c76f23d26c2c2
+  splits: config/D44J01/rels/d_a_bmdhand/splits.txt
+  symbols: config/D44J01/rels/d_a_bmdhand/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bmdhand.map
+
+- object: files/rels/d_a_bo.rel
+  hash: fdbab2be2b03f27de1a553f96ebc90ea30361608
+  splits: config/D44J01/rels/d_a_bo/splits.txt
+  symbols: config/D44J01/rels/d_a_bo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bo.map
+
+- object: files/rels/d_a_boss_item.rel
+  hash: 64c778ac7275dcfcef6a04f7773285445564d81a
+  splits: config/D44J01/rels/d_a_boss_item/splits.txt
+  symbols: config/D44J01/rels/d_a_boss_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_boss_item.map
+
+- object: files/rels/d_a_bpw.rel
+  hash: 21019e1b62681fb4c2a039635d8d10c06383e1b9
+  splits: config/D44J01/rels/d_a_bpw/splits.txt
+  symbols: config/D44J01/rels/d_a_bpw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bpw.map
+
+- object: files/rels/d_a_bst.rel
+  hash: 95b945c4e84c0a5d881d8390dc36cd19e8715ca1
+  splits: config/D44J01/rels/d_a_bst/splits.txt
+  symbols: config/D44J01/rels/d_a_bst/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bst.map
+
+- object: files/rels/d_a_btd.rel
+  hash: 994ff5887aa31e2ba3d1d8cdf92096a452b47dfb
+  splits: config/D44J01/rels/d_a_btd/splits.txt
+  symbols: config/D44J01/rels/d_a_btd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_btd.map
+
+- object: files/rels/d_a_bwd.rel
+  hash: e10f150d9bdda86b92636c0ac6dc1147ce62abfe
+  splits: config/D44J01/rels/d_a_bwd/splits.txt
+  symbols: config/D44J01/rels/d_a_bwd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bwd.map
+
+- object: files/rels/d_a_bwdg.rel
+  hash: 6f303faca1d61c4831f77d5187233828267657d1
+  splits: config/D44J01/rels/d_a_bwdg/splits.txt
+  symbols: config/D44J01/rels/d_a_bwdg/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bwdg.map
+  extract:
+  - symbol: l_B_sand2TEX
+    binary: assets/l_B_sand2TEX.bin
+    header: assets/l_B_sand2TEX.h
+  - symbol: l_texCoord
+    binary: assets/l_texCoord.bin
+    header: assets/l_texCoord.h
+  - symbol: l_Hsand1DL
+    binary: assets/l_Hsand1DL.bin
+    header: assets/l_Hsand1DL.h
+  - symbol: l_matDL
+    binary: assets/l_matDL__d_a_bwdg.bin
+    header: assets/l_matDL__d_a_bwdg.h
+    header_type: none
+    custom_type: matDL
+
+- object: files/rels/d_a_bwds.rel
+  hash: 61bd78c798eada4a6401b60e42946421a5211fd9
+  splits: config/D44J01/rels/d_a_bwds/splits.txt
+  symbols: config/D44J01/rels/d_a_bwds/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_bwds.map
+
+- object: files/rels/d_a_cc.rel
+  hash: af8bbeb90b551d664e8d005e542931a272dc75ae
+  splits: config/D44J01/rels/d_a_cc/splits.txt
+  symbols: config/D44J01/rels/d_a_cc/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_cc.map
+
+- object: files/rels/d_a_daiocta.rel
+  hash: 9a5528146eda1df6cb5397547a7c21a8acd8722d
+  splits: config/D44J01/rels/d_a_daiocta/splits.txt
+  symbols: config/D44J01/rels/d_a_daiocta/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_daiocta.map
+
+- object: files/rels/d_a_daiocta_eye.rel
+  hash: da6facbcd23de1554a4d71c0a4f9ea70d7dcb821
+  splits: config/D44J01/rels/d_a_daiocta_eye/splits.txt
+  symbols: config/D44J01/rels/d_a_daiocta_eye/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_daiocta_eye.map
+
+- object: files/rels/d_a_deku_item.rel
+  hash: 10129c094d6c6aedbbbaa9b56ca4fdc4edff407b
+  splits: config/D44J01/rels/d_a_deku_item/splits.txt
+  symbols: config/D44J01/rels/d_a_deku_item/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_deku_item.map
+
+- object: files/rels/d_a_dk.rel
+  hash: 5bff0f11d61dd825627124ee554dab40dd7ddc71
+  splits: config/D44J01/rels/d_a_dk/splits.txt
+  symbols: config/D44J01/rels/d_a_dk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_dk.map
+
+- object: files/rels/d_a_dummy.rel
+  hash: f82a4403b11bc532e8d648359c50d876a762cc5b
+  splits: config/D44J01/rels/d_a_dummy/splits.txt
+  symbols: config/D44J01/rels/d_a_dummy/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_dummy.map
+
+- object: files/rels/d_a_fallrock_tag.rel
+  hash: e6f06ab3bed2608f8f1787b34d257cf0e5ef5617
+  splits: config/D44J01/rels/d_a_fallrock_tag/splits.txt
+  symbols: config/D44J01/rels/d_a_fallrock_tag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fallrock_tag.map
+
+- object: files/rels/d_a_fan.rel
+  hash: d72b5f5c5848b490bcde90d87649bc2abe62bcfc
+  splits: config/D44J01/rels/d_a_fan/splits.txt
+  symbols: config/D44J01/rels/d_a_fan/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fan.map
+
+- object: files/rels/d_a_fganon.rel
+  hash: c06c1ec18f9dfd799e22f97956c5603a351163be
+  splits: config/D44J01/rels/d_a_fganon/splits.txt
+  symbols: config/D44J01/rels/d_a_fganon/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fganon.map
+
+- object: files/rels/d_a_fgmahou.rel
+  hash: 853be6b1e06980882d5d27ac224cd0ea9cf39fcd
+  splits: config/D44J01/rels/d_a_fgmahou/splits.txt
+  symbols: config/D44J01/rels/d_a_fgmahou/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fgmahou.map
+
+- object: files/rels/d_a_fire.rel
+  hash: 3cf6b5fd3bd73cf4c4c1289a0bddaa7770cf5f88
+  splits: config/D44J01/rels/d_a_fire/splits.txt
+  symbols: config/D44J01/rels/d_a_fire/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fire.map
+
+- object: files/rels/d_a_fm.rel
+  hash: b9b1e501b702f9331a240d745041038b3bd5c3c0
+  splits: config/D44J01/rels/d_a_fm/splits.txt
+  symbols: config/D44J01/rels/d_a_fm/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_fm.map
+
+- object: files/rels/d_a_gm.rel
+  hash: 31cf41a39c2d692117fb5e2cb84c5620a74c0355
+  splits: config/D44J01/rels/d_a_gm/splits.txt
+  symbols: config/D44J01/rels/d_a_gm/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_gm.map
+
+- object: files/rels/d_a_gnd.rel
+  hash: c93194f223e0cefd0377e879fbb23680b251cede
+  splits: config/D44J01/rels/d_a_gnd/splits.txt
+  symbols: config/D44J01/rels/d_a_gnd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_gnd.map
+
+- object: files/rels/d_a_goal_flag.rel
+  hash: f0df4a54526468b51c5d055c167621af9d21db0e
+  splits: config/D44J01/rels/d_a_goal_flag/splits.txt
+  symbols: config/D44J01/rels/d_a_goal_flag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_goal_flag.map
+
+- object: files/rels/d_a_gy.rel
+  hash: c211c153be3b6349186f77d84bc86b13b66aa139
+  splits: config/D44J01/rels/d_a_gy/splits.txt
+  symbols: config/D44J01/rels/d_a_gy/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_gy.map
+
+- object: files/rels/d_a_hmlif.rel
+  hash: fe8afb15b97f53f9f6041f08807515435e4e1c30
+  splits: config/D44J01/rels/d_a_hmlif/splits.txt
+  symbols: config/D44J01/rels/d_a_hmlif/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_hmlif.map
+
+- object: files/rels/d_a_icelift.rel
+  hash: db436de3fc5c42af25702a4e34035f6ef7ac3b4d
+  splits: config/D44J01/rels/d_a_icelift/splits.txt
+  symbols: config/D44J01/rels/d_a_icelift/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_icelift.map
+
+- object: files/rels/d_a_kb.rel
+  hash: 4444fadf7ac421197968ba20885719e1423049f0
+  splits: config/D44J01/rels/d_a_kb/splits.txt
+  symbols: config/D44J01/rels/d_a_kb/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kb.map
+
+- object: files/rels/d_a_kddoor.rel
+  hash: d1819c08608decda5fa71a83b9764651fec84eb5
+  splits: config/D44J01/rels/d_a_kddoor/splits.txt
+  symbols: config/D44J01/rels/d_a_kddoor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kddoor.map
+
+- object: files/rels/d_a_kita.rel
+  hash: 90424416ba6f9dd1ff7e5ab650b8f49354848774
+  splits: config/D44J01/rels/d_a_kita/splits.txt
+  symbols: config/D44J01/rels/d_a_kita/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kita.map
+
+- object: files/rels/d_a_klft.rel
+  hash: 3d3e3b14b707fa469539fed5ded4c1c87c27dae2
+  splits: config/D44J01/rels/d_a_klft/splits.txt
+  symbols: config/D44J01/rels/d_a_klft/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_klft.map
+
+- object: files/rels/d_a_kmon.rel
+  hash: 8833ba009ba64650c742337882c11a71597e544c
+  splits: config/D44J01/rels/d_a_kmon/splits.txt
+  symbols: config/D44J01/rels/d_a_kmon/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_kmon.map
+
+- object: files/rels/d_a_komore.rel
+  hash: 347bb4d65e4d99f17e5c4669c3997136fa8cc921
+  splits: config/D44J01/rels/d_a_komore/splits.txt
+  symbols: config/D44J01/rels/d_a_komore/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_komore.map
+
+- object: files/rels/d_a_lbridge.rel
+  hash: 1b4c703e69b56986403285c7f24c90206cc97aad
+  splits: config/D44J01/rels/d_a_lbridge/splits.txt
+  symbols: config/D44J01/rels/d_a_lbridge/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_lbridge.map
+
+- object: files/rels/d_a_leaflift.rel
+  hash: 295aa383999ff68e513f15eb2c72c102a4e86eed
+  splits: config/D44J01/rels/d_a_leaflift/splits.txt
+  symbols: config/D44J01/rels/d_a_leaflift/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_leaflift.map
+
+- object: files/rels/d_a_lstair.rel
+  hash: ad27a16b84378d8fafaa66298d3b1e85f1209124
+  splits: config/D44J01/rels/d_a_lstair/splits.txt
+  symbols: config/D44J01/rels/d_a_lstair/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_lstair.map
+
+- object: files/rels/d_a_machine.rel
+  hash: 37e59d1d932e0a323da871d2ddff58fcd130b411
+  splits: config/D44J01/rels/d_a_machine/splits.txt
+  symbols: config/D44J01/rels/d_a_machine/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_machine.map
+
+- object: files/rels/d_a_mant.rel
+  hash: 888aaaf2b8f8a8fcbed24cf085091da7ddf44875
+  splits: config/D44J01/rels/d_a_mant/splits.txt
+  symbols: config/D44J01/rels/d_a_mant/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mant.map
+
+- object: files/rels/d_a_mbdoor.rel
+  hash: d6ed4223c89e20853fa3d3a1ae73b0539c52f993
+  splits: config/D44J01/rels/d_a_mbdoor/splits.txt
+  symbols: config/D44J01/rels/d_a_mbdoor/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mbdoor.map
+
+- object: files/rels/d_a_mgameboard.rel
+  hash: 013a6ff61429c15892fe089969bf1cb230f233d9
+  splits: config/D44J01/rels/d_a_mgameboard/splits.txt
+  symbols: config/D44J01/rels/d_a_mgameboard/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mgameboard.map
+
+- object: files/rels/d_a_mmusic.rel
+  hash: 0b39ae34d9e307877e80efa99f8ffd54fcb5de62
+  splits: config/D44J01/rels/d_a_mmusic/splits.txt
+  symbols: config/D44J01/rels/d_a_mmusic/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mmusic.map
+
+- object: files/rels/d_a_mo2.rel
+  hash: 18307219ffa042919295ae4d6b46a1473f1564e6
+  splits: config/D44J01/rels/d_a_mo2/splits.txt
+  symbols: config/D44J01/rels/d_a_mo2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mo2.map
+
+- object: files/rels/d_a_mozo.rel
+  hash: ee404980c87fc33a582d4a9602092698413b3e7d
+  splits: config/D44J01/rels/d_a_mozo/splits.txt
+  symbols: config/D44J01/rels/d_a_mozo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mozo.map
+
+- object: files/rels/d_a_mt.rel
+  hash: 0755bcf7cb425a15a1b2f4411e814e14977188f3
+  splits: config/D44J01/rels/d_a_mt/splits.txt
+  symbols: config/D44J01/rels/d_a_mt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_mt.map
+
+- object: files/rels/d_a_npc_ac1.rel
+  hash: c81b471c964ad692f427319d66ba2d5a98b4ec43
+  splits: config/D44J01/rels/d_a_npc_ac1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ac1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ac1.map
+
+- object: files/rels/d_a_npc_ah.rel
+  hash: 7df23d71857e2841428ad820ad9617244506cdf1
+  splits: config/D44J01/rels/d_a_npc_ah/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ah/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ah.map
+
+- object: files/rels/d_a_npc_aj1.rel
+  hash: 7d47fd17d5d06f7782876b6cb3e7b20f47e9925b
+  splits: config/D44J01/rels/d_a_npc_aj1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_aj1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_aj1.map
+
+- object: files/rels/d_a_npc_auction.rel
+  hash: 6197748484ed2e13763790042e1918afe6affef1
+  splits: config/D44J01/rels/d_a_npc_auction/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_auction/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_auction.map
+
+- object: files/rels/d_a_npc_ba1.rel
+  hash: 6c101e53e721b71ec834d037382db75a3d88e3c4
+  splits: config/D44J01/rels/d_a_npc_ba1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ba1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ba1.map
+
+- object: files/rels/d_a_npc_bj1.rel
+  hash: 43ea5ca7e85a115ef0a25fea4b59eb3db9813403
+  splits: config/D44J01/rels/d_a_npc_bj1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bj1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bj1.map
+
+- object: files/rels/d_a_npc_bm1.rel
+  hash: c16336cddcc7837890948e57c9d64d2928d0fd1f
+  splits: config/D44J01/rels/d_a_npc_bm1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bm1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bm1.map
+
+- object: files/rels/d_a_npc_bmcon1.rel
+  hash: 0f99057266608243a59990f1f4aaed0c1c801f15
+  splits: config/D44J01/rels/d_a_npc_bmcon1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bmcon1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bmcon1.map
+
+- object: files/rels/d_a_npc_bms1.rel
+  hash: dfcb6dbdf7dd2f5cfc7c369e3a7b5169e8c42c62
+  splits: config/D44J01/rels/d_a_npc_bms1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bms1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bms1.map
+
+- object: files/rels/d_a_npc_bmsw.rel
+  hash: d96801363fb848e1b81d26cc95932cb70f71d168
+  splits: config/D44J01/rels/d_a_npc_bmsw/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bmsw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bmsw.map
+
+- object: files/rels/d_a_npc_bs1.rel
+  hash: f9913a368d973e06e8afa1632dcf39470e163713
+  splits: config/D44J01/rels/d_a_npc_bs1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_bs1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_bs1.map
+
+- object: files/rels/d_a_npc_btsw.rel
+  hash: d0a66c7ae54e3b6044288c0b3fb586b602b95ca0
+  splits: config/D44J01/rels/d_a_npc_btsw/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_btsw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_btsw.map
+
+- object: files/rels/d_a_npc_btsw2.rel
+  hash: bee252b01e9fa041d58b2d98042136427c90cdb3
+  splits: config/D44J01/rels/d_a_npc_btsw2/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_btsw2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_btsw2.map
+
+- object: files/rels/d_a_npc_co1.rel
+  hash: 09f9137047e1312f655887ec806a226eed64cd22
+  splits: config/D44J01/rels/d_a_npc_co1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_co1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_co1.map
+
+- object: files/rels/d_a_npc_de1.rel
+  hash: c0c15652149636714772c977536419528dd5b4f6
+  splits: config/D44J01/rels/d_a_npc_de1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_de1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_de1.map
+
+- object: files/rels/d_a_npc_ds1.rel
+  hash: 2a78759d824dc63efe5c5104cb7decb187a23986
+  splits: config/D44J01/rels/d_a_npc_ds1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ds1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ds1.map
+
+- object: files/rels/d_a_npc_gk1.rel
+  hash: 008edf357d2510b553634f1b83aa9f32156c7cc2
+  splits: config/D44J01/rels/d_a_npc_gk1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_gk1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_gk1.map
+
+- object: files/rels/d_a_npc_gp1.rel
+  hash: 18bd9b4d63ce764a05e81a654d644e96c8ca21f4
+  splits: config/D44J01/rels/d_a_npc_gp1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_gp1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_gp1.map
+
+- object: files/rels/d_a_npc_hi1.rel
+  hash: ddd804771ffa2c1f82a545a673a5fadff88beb02
+  splits: config/D44J01/rels/d_a_npc_hi1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_hi1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_hi1.map
+
+- object: files/rels/d_a_npc_ho.rel
+  hash: 2749e8254073a1a74526952e36d0abf2b949e2cb
+  splits: config/D44J01/rels/d_a_npc_ho/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ho/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ho.map
+
+- object: files/rels/d_a_npc_hr.rel
+  hash: 16cd167ccd1c8cd7e3ca91c90926300b353a1909
+  splits: config/D44J01/rels/d_a_npc_hr/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_hr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_hr.map
+
+- object: files/rels/d_a_npc_jb1.rel
+  hash: 19dbc2c64c7f21efa81b8d5c3443d645c6f676cc
+  splits: config/D44J01/rels/d_a_npc_jb1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_jb1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_jb1.map
+
+- object: files/rels/d_a_npc_ji1.rel
+  hash: f2e6b45f7a07d1f3dbb97a769c6d20e43987beaf
+  splits: config/D44J01/rels/d_a_npc_ji1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ji1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ji1.map
+
+- object: files/rels/d_a_npc_kamome.rel
+  hash: d68141456286908399a197286c81973366135706
+  splits: config/D44J01/rels/d_a_npc_kamome/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kamome/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kamome.map
+
+- object: files/rels/d_a_npc_kf1.rel
+  hash: 81cf7bc1ccf68c3f624201c8ca824e354ed80bb8
+  splits: config/D44J01/rels/d_a_npc_kf1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kf1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kf1.map
+
+- object: files/rels/d_a_npc_kg1.rel
+  hash: dd6321c2c09f720d808fa2f706bc92c4ae540ea2
+  splits: config/D44J01/rels/d_a_npc_kg1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kg1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kg1.map
+
+- object: files/rels/d_a_npc_kg2.rel
+  hash: 596787cb7f4943956d68bc07f2debac05ae4a243
+  splits: config/D44J01/rels/d_a_npc_kg2/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kg2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kg2.map
+
+- object: files/rels/d_a_npc_kk1.rel
+  hash: 67faf6b5239c892cf917a61c9999c99990360fdb
+  splits: config/D44J01/rels/d_a_npc_kk1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kk1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kk1.map
+
+- object: files/rels/d_a_npc_km1.rel
+  hash: eec703c904cb004d4a58e66afb41b09ba92950b3
+  splits: config/D44J01/rels/d_a_npc_km1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_km1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_km1.map
+
+- object: files/rels/d_a_npc_ko1.rel
+  hash: 827245721ba9ce27e0123d093c293bef50b890ff
+  splits: config/D44J01/rels/d_a_npc_ko1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ko1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ko1.map
+
+- object: files/rels/d_a_npc_kp1.rel
+  hash: 582d9d7744719c4bdb8e1b29c74dd93d629e0474
+  splits: config/D44J01/rels/d_a_npc_kp1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_kp1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_kp1.map
+
+- object: files/rels/d_a_npc_ls1.rel
+  hash: 6688f68810aa5c830166ad0dbcca022e5a8ed163
+  splits: config/D44J01/rels/d_a_npc_ls1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ls1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ls1.map
+
+- object: files/rels/d_a_npc_mk.rel
+  hash: 59320fa91ad5681260b6f114d714a02a228836eb
+  splits: config/D44J01/rels/d_a_npc_mk/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_mk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_mk.map
+
+- object: files/rels/d_a_npc_mn.rel
+  hash: 2ce14da292088efe253278af3d3cf4c7d44858a3
+  splits: config/D44J01/rels/d_a_npc_mn/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_mn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_mn.map
+
+- object: files/rels/d_a_npc_mt.rel
+  hash: f39e90fa6b4b6dc9994f3a27dbcb54c7264523b2
+  splits: config/D44J01/rels/d_a_npc_mt/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_mt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_mt.map
+
+- object: files/rels/d_a_npc_nz.rel
+  hash: 126925870261c5b95878656bb5b372f62480a612
+  splits: config/D44J01/rels/d_a_npc_nz/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_nz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_nz.map
+
+- object: files/rels/d_a_npc_ob1.rel
+  hash: aadc71f31ef61503219e8d43557d09f0860125b6
+  splits: config/D44J01/rels/d_a_npc_ob1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ob1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ob1.map
+
+- object: files/rels/d_a_npc_os.rel
+  hash: 6c1568a6d4920d46d1341708501741fd66e0e4e3
+  splits: config/D44J01/rels/d_a_npc_os/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_os/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_os.map
+
+- object: files/rels/d_a_npc_p1.rel
+  hash: de7c7344042e345c7c8f2b70e203a9a28d287eed
+  splits: config/D44J01/rels/d_a_npc_p1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_p1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_p1.map
+
+- object: files/rels/d_a_npc_p2.rel
+  hash: 86d895f16665d7499a76bfee4db32a7a63f350c3
+  splits: config/D44J01/rels/d_a_npc_p2/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_p2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_p2.map
+
+- object: files/rels/d_a_npc_people.rel
+  hash: df01a9c2c52755cc96c1558dad7f231d53e29ef5
+  splits: config/D44J01/rels/d_a_npc_people/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_people/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_people.map
+
+- object: files/rels/d_a_npc_pf1.rel
+  hash: 9c6c00cb6a8bb32ca3b2a9dfd006baf38cc26356
+  splits: config/D44J01/rels/d_a_npc_pf1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_pf1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_pf1.map
+
+- object: files/rels/d_a_npc_photo.rel
+  hash: b99c4e40d66d2add79de077cbdf94a21b0418691
+  splits: config/D44J01/rels/d_a_npc_photo/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_photo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_photo.map
+
+- object: files/rels/d_a_npc_pm1.rel
+  hash: ea4b5ae0416d235f0932db63b6712803d31bcd75
+  splits: config/D44J01/rels/d_a_npc_pm1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_pm1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_pm1.map
+
+- object: files/rels/d_a_npc_roten.rel
+  hash: b18ae0dd5adbd3c8556001aa4b85d9f164b287d8
+  splits: config/D44J01/rels/d_a_npc_roten/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_roten/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_roten.map
+
+- object: files/rels/d_a_npc_rsh1.rel
+  hash: 845e676e98a71363e53da40655c3cb47e719be17
+  splits: config/D44J01/rels/d_a_npc_rsh1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_rsh1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_rsh1.map
+
+- object: files/rels/d_a_npc_sarace.rel
+  hash: 740a9f64b759a8f90df0a6d2994e67c4bc6cc113
+  splits: config/D44J01/rels/d_a_npc_sarace/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_sarace/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_sarace.map
+
+- object: files/rels/d_a_npc_sv.rel
+  hash: 38e22c81bd68c5de1380a8a6ea044a10f60d0012
+  splits: config/D44J01/rels/d_a_npc_sv/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_sv/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_sv.map
+
+- object: files/rels/d_a_npc_tc.rel
+  hash: 2e1b9da6182d0bfbb4fdf3ea39b74abc69a98545
+  splits: config/D44J01/rels/d_a_npc_tc/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_tc/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_tc.map
+
+- object: files/rels/d_a_npc_tt.rel
+  hash: a9a5eceba0566c0bc98ca50269f8ff9106def156
+  splits: config/D44J01/rels/d_a_npc_tt/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_tt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_tt.map
+
+- object: files/rels/d_a_npc_uk.rel
+  hash: 017fa76d9e5967b8e603b825bece9317192ecd81
+  splits: config/D44J01/rels/d_a_npc_uk/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_uk/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_uk.map
+
+- object: files/rels/d_a_npc_ym1.rel
+  hash: 29ae333284e9e8ac225f904a5178c85e78c1d2cc
+  splits: config/D44J01/rels/d_a_npc_ym1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_ym1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_ym1.map
+
+- object: files/rels/d_a_npc_yw1.rel
+  hash: 0245308fc05f17fbb8833c3ea6355793d3d156ed
+  splits: config/D44J01/rels/d_a_npc_yw1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_yw1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_yw1.map
+
+- object: files/rels/d_a_npc_zk1.rel
+  hash: 655343e12b68f7eea75bfbbd466e6a250be0cec0
+  splits: config/D44J01/rels/d_a_npc_zk1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_zk1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_zk1.map
+
+- object: files/rels/d_a_npc_zl1.rel
+  hash: 71c8ed6d28c921706d6c03348b00596ca046aa39
+  splits: config/D44J01/rels/d_a_npc_zl1/splits.txt
+  symbols: config/D44J01/rels/d_a_npc_zl1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_npc_zl1.map
+
+- object: files/rels/d_a_nz.rel
+  hash: 9b0b2a09d67fb887343437a42290cc5dc42266f7
+  splits: config/D44J01/rels/d_a_nz/splits.txt
+  symbols: config/D44J01/rels/d_a_nz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_nz.map
+
+- object: files/rels/d_a_obj_adnno.rel
+  hash: 0dd3c24b026ef0ba3f7cfb8257fab86cb7ad8619
+  splits: config/D44J01/rels/d_a_obj_adnno/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_adnno/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_adnno.map
+
+- object: files/rels/d_a_obj_ajav.rel
+  hash: 1b7b387b0e9ec4673316b940e2215365b7ff5374
+  splits: config/D44J01/rels/d_a_obj_ajav/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ajav/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ajav.map
+
+- object: files/rels/d_a_obj_apzl.rel
+  hash: 2b04e21e2026bcdecc2cb8d92daf57889f7bd077
+  splits: config/D44J01/rels/d_a_obj_apzl/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_apzl/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_apzl.map
+
+- object: files/rels/d_a_obj_ashut.rel
+  hash: 0df266a709eb874977e8e541fb54dfa4c0e6e940
+  splits: config/D44J01/rels/d_a_obj_ashut/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ashut/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ashut.map
+
+- object: files/rels/d_a_obj_auzu.rel
+  hash: d86078f72b53b06f80850b193433b461cd4761ff
+  splits: config/D44J01/rels/d_a_obj_auzu/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_auzu/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_auzu.map
+
+- object: files/rels/d_a_obj_buoyflag.rel
+  hash: dda9703a5bc55d84976bb511d21def2f3a232f23
+  splits: config/D44J01/rels/d_a_obj_buoyflag/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_buoyflag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_buoyflag.map
+
+- object: files/rels/d_a_obj_buoyrace.rel
+  hash: 5765e1e93cfbd11c31c7a633dd5727bb3fdeefc9
+  splits: config/D44J01/rels/d_a_obj_buoyrace/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_buoyrace/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_buoyrace.map
+
+- object: files/rels/d_a_obj_correct.rel
+  hash: 610f0d1f67c9d13b66acfad72cc04c58476df514
+  splits: config/D44J01/rels/d_a_obj_correct/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_correct/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_correct.map
+
+- object: files/rels/d_a_obj_dmgroom.rel
+  hash: 15d11c92071d4698a9ac611a5099235003601666
+  splits: config/D44J01/rels/d_a_obj_dmgroom/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_dmgroom/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_dmgroom.map
+
+- object: files/rels/d_a_obj_dragonhead.rel
+  hash: 614966bdcdb7d972d741dcf628f7562f9b0b4f55
+  splits: config/D44J01/rels/d_a_obj_dragonhead/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_dragonhead/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_dragonhead.map
+
+- object: files/rels/d_a_obj_drift.rel
+  hash: 8ba46754c398ca0a6fd920f8909cf03145838b65
+  splits: config/D44J01/rels/d_a_obj_drift/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_drift/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_drift.map
+
+- object: files/rels/d_a_obj_eayogn.rel
+  hash: af9aa7d5bfdae8ca8b30c211ddcd3480e3e43c89
+  splits: config/D44J01/rels/d_a_obj_eayogn/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_eayogn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_eayogn.map
+
+- object: files/rels/d_a_obj_ebomzo.rel
+  hash: c688d411265c5924898bdec44f6b2a7e5fd6acd2
+  splits: config/D44J01/rels/d_a_obj_ebomzo/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ebomzo/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ebomzo.map
+
+- object: files/rels/d_a_obj_ekskz.rel
+  hash: 5c95aaddcb6b61ecc0a2a145f5d5382fbb1d0cda
+  splits: config/D44J01/rels/d_a_obj_ekskz/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ekskz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ekskz.map
+
+- object: files/rels/d_a_obj_eskban.rel
+  hash: 3b8e7d49f88108420deb8bef3132a6909c99bf30
+  splits: config/D44J01/rels/d_a_obj_eskban/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_eskban/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_eskban.map
+
+- object: files/rels/d_a_obj_ferris.rel
+  hash: af81d1fddaea842cfa3b1b5cea080d3033295a99
+  splits: config/D44J01/rels/d_a_obj_ferris/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ferris/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ferris.map
+
+- object: files/rels/d_a_obj_figure.rel
+  hash: 8ee8729fbe498dc4f51de8cee499ff6ac242cb15
+  splits: config/D44J01/rels/d_a_obj_figure/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_figure/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_figure.map
+
+- object: files/rels/d_a_obj_firewall.rel
+  hash: 1788555ef0c284e7e1ece82b97fec1b105fef7cb
+  splits: config/D44J01/rels/d_a_obj_firewall/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_firewall/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_firewall.map
+
+- object: files/rels/d_a_obj_flame.rel
+  hash: b8242401a0081e883a589a7bdc5d6159db4cefbe
+  splits: config/D44J01/rels/d_a_obj_flame/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_flame/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_flame.map
+
+- object: files/rels/d_a_obj_ftree.rel
+  hash: d574f111051d64b6ed26e8757d93ab42c9d15171
+  splits: config/D44J01/rels/d_a_obj_ftree/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ftree/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ftree.map
+
+- object: files/rels/d_a_obj_ganonbed.rel
+  hash: f7998955e7d42bd806156c66910ce4d872c5d29c
+  splits: config/D44J01/rels/d_a_obj_ganonbed/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ganonbed/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ganonbed.map
+
+- object: files/rels/d_a_obj_gaship.rel
+  hash: ad0eb5439b61fc68d746212c24c40fd6512a08a5
+  splits: config/D44J01/rels/d_a_obj_gaship/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gaship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gaship.map
+
+- object: files/rels/d_a_obj_gaship2.rel
+  hash: cbdd8287ac2c390ef7446756a8f012657932d452
+  splits: config/D44J01/rels/d_a_obj_gaship2/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gaship2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gaship2.map
+
+- object: files/rels/d_a_obj_gnnbtltaki.rel
+  hash: 29c9f648f91ea2de44a9b99acc9f2f363419fe85
+  splits: config/D44J01/rels/d_a_obj_gnnbtltaki/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gnnbtltaki/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gnnbtltaki.map
+
+- object: files/rels/d_a_obj_gnndemotakie.rel
+  hash: 7f1c47c634355ac87de4efe0c4e21b946dc09efd
+  splits: config/D44J01/rels/d_a_obj_gnndemotakie/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gnndemotakie/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gnndemotakie.map
+
+- object: files/rels/d_a_obj_gnndemotakis.rel
+  hash: 4dcc0ae5d8842938ba2a34d700163e6517aabdec
+  splits: config/D44J01/rels/d_a_obj_gnndemotakis/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gnndemotakis/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gnndemotakis.map
+
+- object: files/rels/d_a_obj_gong.rel
+  hash: 69b3974127b366924914471c7505d4ed5a8549b8
+  splits: config/D44J01/rels/d_a_obj_gong/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gong/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gong.map
+
+- object: files/rels/d_a_obj_gtaki.rel
+  hash: 9aa329f131cb253cfb305f8f958e8a71cf29f18c
+  splits: config/D44J01/rels/d_a_obj_gtaki/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_gtaki/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_gtaki.map
+
+- object: files/rels/d_a_obj_hami2.rel
+  hash: cf947424afb7858141e39a6263aef29e94c2f6b9
+  splits: config/D44J01/rels/d_a_obj_hami2/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hami2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hami2.map
+
+- object: files/rels/d_a_obj_hami3.rel
+  hash: a136d7a2c657b39c6fc2939a1c65515dc96ceee3
+  splits: config/D44J01/rels/d_a_obj_hami3/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hami3/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hami3.map
+
+- object: files/rels/d_a_obj_hami4.rel
+  hash: 72c78d85158725b44c82af514a17caf1c11b39f3
+  splits: config/D44J01/rels/d_a_obj_hami4/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hami4/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hami4.map
+
+- object: files/rels/d_a_obj_hat.rel
+  hash: bc4a61ebe46df7ac5cc39caaaa1e2d6c3a89c46f
+  splits: config/D44J01/rels/d_a_obj_hat/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hat/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hat.map
+
+- object: files/rels/d_a_obj_hbrf1.rel
+  hash: 9a2b969da1003fea2f7d7f7276739dcfef5e833c
+  splits: config/D44J01/rels/d_a_obj_hbrf1/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hbrf1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hbrf1.map
+
+- object: files/rels/d_a_obj_hcbh.rel
+  hash: 071e4f58818651812564cd8553e45a29e1c95b46
+  splits: config/D44J01/rels/d_a_obj_hcbh/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hcbh/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hcbh.map
+
+- object: files/rels/d_a_obj_hha.rel
+  hash: cf419b68ded6979b1794c79c8c7bf226cf73cb74
+  splits: config/D44J01/rels/d_a_obj_hha/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hha/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hha.map
+
+- object: files/rels/d_a_obj_hlift.rel
+  hash: c683166455c16b259935544224e26fb87d85ffbb
+  splits: config/D44J01/rels/d_a_obj_hlift/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hlift/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hlift.map
+
+- object: files/rels/d_a_obj_homen.rel
+  hash: 7ee9e4ad2a5d709b3159cee211c9811420ea3064
+  splits: config/D44J01/rels/d_a_obj_homen/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_homen/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_homen.map
+
+- object: files/rels/d_a_obj_homensmoke.rel
+  hash: 00e9b961853cdca3552b3c9f1434ecf9c1ba4937
+  splits: config/D44J01/rels/d_a_obj_homensmoke/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_homensmoke/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_homensmoke.map
+
+- object: files/rels/d_a_obj_hsehi1.rel
+  hash: f0536b0be5bf329d4d61fc0f45dd880740416f02
+  splits: config/D44J01/rels/d_a_obj_hsehi1/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_hsehi1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_hsehi1.map
+
+- object: files/rels/d_a_obj_htetu1.rel
+  hash: c682b31f40aa6ee02acf82665d9a3f782f29e878
+  splits: config/D44J01/rels/d_a_obj_htetu1/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_htetu1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_htetu1.map
+
+- object: files/rels/d_a_obj_iceisland.rel
+  hash: 21117cc6fb15b910a8a2d62c4cf672ba03da45db
+  splits: config/D44J01/rels/d_a_obj_iceisland/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_iceisland/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_iceisland.map
+
+- object: files/rels/d_a_obj_Itnak.rel
+  hash: 913efc9d59862f8da166897ac4ac9670d97b5662
+  splits: config/D44J01/rels/d_a_obj_Itnak/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_Itnak/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_Itnak.map
+
+- object: files/rels/d_a_obj_jump.rel
+  hash: 694e48b085d9c69ab6ec32efd2e09932c35a6761
+  splits: config/D44J01/rels/d_a_obj_jump/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_jump/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_jump.map
+
+- object: files/rels/d_a_obj_kanoke.rel
+  hash: 6e908780ca9683658f94e305310a7a9cd90e40af
+  splits: config/D44J01/rels/d_a_obj_kanoke/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_kanoke/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_kanoke.map
+
+- object: files/rels/d_a_obj_ladder.rel
+  hash: 87381143f591b68276b6643af00d84f252764792
+  splits: config/D44J01/rels/d_a_obj_ladder/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ladder/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ladder.map
+
+- object: files/rels/d_a_obj_light.rel
+  hash: 655d56c9de59d71c9f88cae23142ca1975cbfb5b
+  splits: config/D44J01/rels/d_a_obj_light/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_light/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_light.map
+
+- object: files/rels/d_a_obj_mkie.rel
+  hash: c12281de80cb56972e18651d3bf177ec28e003b8
+  splits: config/D44J01/rels/d_a_obj_mkie/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mkie/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mkie.map
+
+- object: files/rels/d_a_obj_mkiek.rel
+  hash: 6a49137b882dccd6b28424af31b2aa35cf65f1df
+  splits: config/D44J01/rels/d_a_obj_mkiek/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mkiek/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mkiek.map
+
+- object: files/rels/d_a_obj_mknjd.rel
+  hash: 1793e32513e5da03186fac0b74a09263f022e494
+  splits: config/D44J01/rels/d_a_obj_mknjd/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mknjd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mknjd.map
+
+- object: files/rels/d_a_obj_mmrr.rel
+  hash: b8812be7d244dc0670347c7e6ed5838f4f0f1224
+  splits: config/D44J01/rels/d_a_obj_mmrr/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mmrr/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mmrr.map
+
+- object: files/rels/d_a_obj_msdan.rel
+  hash: e6799969705eea3d60dc10d15ccf611a7d2d949b
+  splits: config/D44J01/rels/d_a_obj_msdan/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_msdan/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_msdan.map
+
+- object: files/rels/d_a_obj_msdan_sub.rel
+  hash: e9645264e4a01a70c6cd0168d0786f0ff3f7d88f
+  splits: config/D44J01/rels/d_a_obj_msdan_sub/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_msdan_sub/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_msdan_sub.map
+
+- object: files/rels/d_a_obj_msdan_sub2.rel
+  hash: 1dc316e39d6c37b6e7453ab8b2da2b3c9031707f
+  splits: config/D44J01/rels/d_a_obj_msdan_sub2/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_msdan_sub2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_msdan_sub2.map
+
+- object: files/rels/d_a_obj_msdan2.rel
+  hash: c343a7d7dad21e20e7d2f0fe196b76404fde8417
+  splits: config/D44J01/rels/d_a_obj_msdan2/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_msdan2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_msdan2.map
+
+- object: files/rels/d_a_obj_mtest.rel
+  hash: 7f73181c593da6df2a2f75902750e0e7d7994efd
+  splits: config/D44J01/rels/d_a_obj_mtest/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_mtest/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_mtest.map
+
+- object: files/rels/d_a_obj_nest.rel
+  hash: e04c4b61509b9f662190287df68cc22451437007
+  splits: config/D44J01/rels/d_a_obj_nest/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_nest/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_nest.map
+
+- object: files/rels/d_a_obj_ojtree.rel
+  hash: 83b870f0295d6b2a9489530d582a3b55ccfabf49
+  splits: config/D44J01/rels/d_a_obj_ojtree/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ojtree/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ojtree.map
+
+- object: files/rels/d_a_obj_ospbox.rel
+  hash: c083b7018e619e0f003032e51c26b6d2350bcb98
+  splits: config/D44J01/rels/d_a_obj_ospbox/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_ospbox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_ospbox.map
+
+- object: files/rels/d_a_obj_paper.rel
+  hash: 8a1e0aa0ea3d7ea8bc8171b33dfbf273ce6a205c
+  splits: config/D44J01/rels/d_a_obj_paper/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_paper/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_paper.map
+
+- object: files/rels/d_a_obj_pbka.rel
+  hash: 5db2061bd9021f46fa9bb623b76d2c9dbe10e410
+  splits: config/D44J01/rels/d_a_obj_pbka/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_pbka/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_pbka.map
+
+- object: files/rels/d_a_obj_pfall.rel
+  hash: 266715c5a643864197fba0ea4d33556a0b4d6121
+  splits: config/D44J01/rels/d_a_obj_pfall/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_pfall/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_pfall.map
+
+- object: files/rels/d_a_obj_plant.rel
+  hash: a2c0456e78d2a72abb937e7111eab8e276a29018
+  splits: config/D44J01/rels/d_a_obj_plant/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_plant/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_plant.map
+
+- object: files/rels/d_a_obj_rflw.rel
+  hash: fd9a2d1c2c074c6e2d54db16219e1826d6cd80f9
+  splits: config/D44J01/rels/d_a_obj_rflw/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_rflw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_rflw.map
+
+- object: files/rels/d_a_obj_rforce.rel
+  hash: b3913821d296a99a160c4cdeed84c75438c6f130
+  splits: config/D44J01/rels/d_a_obj_rforce/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_rforce/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_rforce.map
+
+- object: files/rels/d_a_obj_smplbg.rel
+  hash: 6dba9e1cedfe87db0a6c0484cb85805991b166a4
+  splits: config/D44J01/rels/d_a_obj_smplbg/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_smplbg/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_smplbg.map
+
+- object: files/rels/d_a_obj_tapestry.rel
+  hash: c4152eac859b37a04790f6b1ce15282f4ad599bb
+  splits: config/D44J01/rels/d_a_obj_tapestry/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tapestry/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tapestry.map
+
+- object: files/rels/d_a_obj_tntrap.rel
+  hash: 0d770ef5a4b52255e89acdfbf3311e8cf8b32be6
+  splits: config/D44J01/rels/d_a_obj_tntrap/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tntrap/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tntrap.map
+
+- object: files/rels/d_a_obj_tower.rel
+  hash: b0364013e25f6cbc723948e115311a3a2e565dab
+  splits: config/D44J01/rels/d_a_obj_tower/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tower/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tower.map
+
+- object: files/rels/d_a_obj_trap.rel
+  hash: 22c6239680865edc7b5fa48037080394a77d297b
+  splits: config/D44J01/rels/d_a_obj_trap/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_trap/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_trap.map
+
+- object: files/rels/d_a_obj_tribox.rel
+  hash: 93b8ed916839526cd20d4fbed77b0584f49508af
+  splits: config/D44J01/rels/d_a_obj_tribox/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_tribox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_tribox.map
+
+- object: files/rels/d_a_obj_try.rel
+  hash: a6605850408a74fb5476da451f65b42912f25414
+  splits: config/D44J01/rels/d_a_obj_try/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_try/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_try.map
+
+- object: files/rels/d_a_obj_usovmc.rel
+  hash: 3cd0a3aec95198be099574d7fe6bd6e03b506273
+  splits: config/D44J01/rels/d_a_obj_usovmc/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_usovmc/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_usovmc.map
+
+- object: files/rels/d_a_obj_Vds.rel
+  hash: d41bcf21a5a49ce68bbe4438f6ed24c1504e1e0e
+  splits: config/D44J01/rels/d_a_obj_Vds/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_Vds/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_Vds.map
+
+- object: files/rels/d_a_obj_vfan.rel
+  hash: fdd6869f558d922e94db89aa95c18c18a54c69a7
+  splits: config/D44J01/rels/d_a_obj_vfan/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vfan/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vfan.map
+
+- object: files/rels/d_a_obj_vgnfd.rel
+  hash: d58a83065a89b0c23d88c5ff3e28b63df81240e6
+  splits: config/D44J01/rels/d_a_obj_vgnfd/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vgnfd/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vgnfd.map
+
+- object: files/rels/d_a_obj_vmc.rel
+  hash: 1474222eee832b54c2d603a8ec5786e3b237b4d8
+  splits: config/D44J01/rels/d_a_obj_vmc/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vmc/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vmc.map
+
+- object: files/rels/d_a_obj_vmsdz.rel
+  hash: cf8273549020e6ab4b6108a015cdc7e27f41c609
+  splits: config/D44J01/rels/d_a_obj_vmsdz/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vmsdz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vmsdz.map
+
+- object: files/rels/d_a_obj_vmsms.rel
+  hash: ce4968313a1276959c09d390e051eaba425f0553
+  splits: config/D44J01/rels/d_a_obj_vmsms/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vmsms/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vmsms.map
+
+- object: files/rels/d_a_obj_volcano.rel
+  hash: 16db8c3d0dea6e4d23f2653f10a093b56ff2c9eb
+  splits: config/D44J01/rels/d_a_obj_volcano/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_volcano/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_volcano.map
+
+- object: files/rels/d_a_obj_Vteng.rel
+  hash: 020efb1bed25306e9a79278b1b1a4abc47c254ff
+  splits: config/D44J01/rels/d_a_obj_Vteng/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_Vteng/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_Vteng.map
+
+- object: files/rels/d_a_obj_vtil.rel
+  hash: 11d78d4475ec6530c6e1d3f920f7eb5ab65a9c31
+  splits: config/D44J01/rels/d_a_obj_vtil/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vtil/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vtil.map
+
+- object: files/rels/d_a_obj_vyasi.rel
+  hash: 316869c15a6ed34d36f827f863491692ba9ad545
+  splits: config/D44J01/rels/d_a_obj_vyasi/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_vyasi/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_vyasi.map
+
+- object: files/rels/d_a_obj_xfuta.rel
+  hash: 63d1aa68c8b010b4b5f0f8158248d2dce9f3f605
+  splits: config/D44J01/rels/d_a_obj_xfuta/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_xfuta/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_xfuta.map
+
+- object: files/rels/d_a_obj_Yboil.rel
+  hash: 7f615362b6cb41fb9ae46c91ce4e478ce4dad781
+  splits: config/D44J01/rels/d_a_obj_Yboil/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_Yboil/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_Yboil.map
+
+- object: files/rels/d_a_obj_YLzou.rel
+  hash: 1d7234b4597502cf7d7bab69986c2b89ce5679d2
+  splits: config/D44J01/rels/d_a_obj_YLzou/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_YLzou/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_YLzou.map
+
+- object: files/rels/d_a_obj_zouK.rel
+  hash: 6dabc1605f97b018e27a12155b5c7a4462c6e25e
+  splits: config/D44J01/rels/d_a_obj_zouK/splits.txt
+  symbols: config/D44J01/rels/d_a_obj_zouK/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_obj_zouK.map
+
+- object: files/rels/d_a_oship.rel
+  hash: 1241aeb86737d9f54a70f77b3088eeeea98243d8
+  splits: config/D44J01/rels/d_a_oship/splits.txt
+  symbols: config/D44J01/rels/d_a_oship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_oship.map
+
+- object: files/rels/d_a_ph.rel
+  hash: f65488e0f059206d612a84f22a50a3647f18d5de
+  splits: config/D44J01/rels/d_a_ph/splits.txt
+  symbols: config/D44J01/rels/d_a_ph/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ph.map
+
+- object: files/rels/d_a_pt.rel
+  hash: 44d0ca5e17c43829e4a49c43ee9b29a08e2f02f1
+  splits: config/D44J01/rels/d_a_pt/splits.txt
+  symbols: config/D44J01/rels/d_a_pt/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_pt.map
+
+- object: files/rels/d_a_pw.rel
+  hash: cca9cb833bba94a48a130400119031ac385446f8
+  splits: config/D44J01/rels/d_a_pw/splits.txt
+  symbols: config/D44J01/rels/d_a_pw/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_pw.map
+
+- object: files/rels/d_a_pz.rel
+  hash: fb8ca0f33f391214192dbddcd8b4815b7431e936
+  splits: config/D44J01/rels/d_a_pz/splits.txt
+  symbols: config/D44J01/rels/d_a_pz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_pz.map
+
+- object: files/rels/d_a_sail.rel
+  hash: 10ca048441dd9738bf1474aefca1f87b1f02f7ea
+  splits: config/D44J01/rels/d_a_sail/splits.txt
+  symbols: config/D44J01/rels/d_a_sail/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_sail.map
+  extract:
+  - symbol: l_sail_DL
+    binary: assets/l_sail_DL.bin
+    header: assets/l_sail_DL.h
+  - symbol: l_sail_matDL
+    binary: assets/l_sail_matDL.bin
+    header: assets/l_sail_matDL.h
+  - symbol: l_Txa_kizoku_mastTEX
+    binary: assets/l_Txa_kizoku_mastTEX.bin
+    header: assets/l_Txa_kizoku_mastTEX.h
+  - symbol: l_AmastDL
+    binary: assets/l_AmastDL.bin
+    header: assets/l_AmastDL.h
+
+- object: files/rels/d_a_salvage_tbox.rel
+  hash: fdc0fdb85dab575e52044c07edabaac78913c509
+  splits: config/D44J01/rels/d_a_salvage_tbox/splits.txt
+  symbols: config/D44J01/rels/d_a_salvage_tbox/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_salvage_tbox.map
+
+- object: files/rels/d_a_scene_change.rel
+  hash: 12ac81e16370c695d93de760b2a4d42a2fb64ae4
+  splits: config/D44J01/rels/d_a_scene_change/splits.txt
+  symbols: config/D44J01/rels/d_a_scene_change/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_scene_change.map
+
+- object: files/rels/d_a_seatag.rel
+  hash: fb30f1ace72d258d67b9be141c6642e35b450eed
+  splits: config/D44J01/rels/d_a_seatag/splits.txt
+  symbols: config/D44J01/rels/d_a_seatag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_seatag.map
+
+- object: files/rels/d_a_shutter.rel
+  hash: 45285874d41c2005ff2cc245792c46736170f84e
+  splits: config/D44J01/rels/d_a_shutter/splits.txt
+  symbols: config/D44J01/rels/d_a_shutter/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_shutter.map
+
+- object: files/rels/d_a_shutter2.rel
+  hash: 226957bee9208b42a24aac420ef1f837a51ff2c9
+  splits: config/D44J01/rels/d_a_shutter2/splits.txt
+  symbols: config/D44J01/rels/d_a_shutter2/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_shutter2.map
+
+- object: files/rels/d_a_st.rel
+  hash: 5c37e10a6d548b5e6f81ffcaee81cb5d3eda6c42
+  splits: config/D44J01/rels/d_a_st/splits.txt
+  symbols: config/D44J01/rels/d_a_st/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_st.map
+
+- object: files/rels/d_a_steam_tag.rel
+  hash: c219caded6c39bcb1374e2c3a3caa20ea7464bcb
+  splits: config/D44J01/rels/d_a_steam_tag/splits.txt
+  symbols: config/D44J01/rels/d_a_steam_tag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_steam_tag.map
+
+- object: files/rels/d_a_swattack.rel
+  hash: bc1cea315249a0384c975099fdf1d86b8962925e
+  splits: config/D44J01/rels/d_a_swattack/splits.txt
+  symbols: config/D44J01/rels/d_a_swattack/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swattack.map
+
+- object: files/rels/d_a_switem.rel
+  hash: 9a6d1bc1ee2d0402a6fcdaf26b11b6db7de52db5
+  splits: config/D44J01/rels/d_a_switem/splits.txt
+  symbols: config/D44J01/rels/d_a_switem/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_switem.map
+
+- object: files/rels/d_a_swpropeller.rel
+  hash: d3cb6ba85337882ab68d719a4c61c9b8c0cdb73b
+  splits: config/D44J01/rels/d_a_swpropeller/splits.txt
+  symbols: config/D44J01/rels/d_a_swpropeller/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swpropeller.map
+
+- object: files/rels/d_a_swtact.rel
+  hash: 8010b21bc15a6d33f865633c4fdfb62ee6acdca3
+  splits: config/D44J01/rels/d_a_swtact/splits.txt
+  symbols: config/D44J01/rels/d_a_swtact/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_swtact.map
+
+- object: files/rels/d_a_tag_etc.rel
+  hash: a51abe71981f4e10dd27b42bfd6cc78d629ed09f
+  splits: config/D44J01/rels/d_a_tag_etc/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_etc/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_etc.map
+
+- object: files/rels/d_a_tag_island.rel
+  hash: 288b7effd117c538367fc611e2d3698cef0498a7
+  splits: config/D44J01/rels/d_a_tag_island/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_island/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_island.map
+
+- object: files/rels/d_a_tag_kf1.rel
+  hash: f8391737de5fe72d5b8999a463153ce10a53bae6
+  splits: config/D44J01/rels/d_a_tag_kf1/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_kf1/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_kf1.map
+
+- object: files/rels/d_a_tag_ret.rel
+  hash: fed597f9237bb5d5d264ddecd8416ccc16a1d7de
+  splits: config/D44J01/rels/d_a_tag_ret/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_ret/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_ret.map
+
+- object: files/rels/d_a_tag_volcano.rel
+  hash: 11a7cffb6ef3de6ee27a37ea3f3b0019a5b49368
+  splits: config/D44J01/rels/d_a_tag_volcano/splits.txt
+  symbols: config/D44J01/rels/d_a_tag_volcano/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tag_volcano.map
+
+- object: files/rels/d_a_title.rel
+  hash: 057e4aa75319d0155d98fa0c5f5009c025488211
+  splits: config/D44J01/rels/d_a_title/splits.txt
+  symbols: config/D44J01/rels/d_a_title/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_title.map
+
+- object: files/rels/d_a_tn.rel
+  hash: 3aa8430ca87caef3f47bda0001ff5aeb7dd34ba7
+  splits: config/D44J01/rels/d_a_tn/splits.txt
+  symbols: config/D44J01/rels/d_a_tn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tn.map
+
+- object: files/rels/d_a_toge.rel
+  hash: 56b64aadce836b0134c601255be314f1c13edd7d
+  splits: config/D44J01/rels/d_a_toge/splits.txt
+  symbols: config/D44J01/rels/d_a_toge/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_toge.map
+
+- object: files/rels/d_a_tori_flag.rel
+  hash: 0baf4a1ced9ae9a2610cfa1c7df0a15bbf4c2fbd
+  splits: config/D44J01/rels/d_a_tori_flag/splits.txt
+  symbols: config/D44J01/rels/d_a_tori_flag/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_tori_flag.map
+
+- object: files/rels/d_a_wall.rel
+  hash: f44a1a4f5b22406df1170889a3ffcd13f1f01f42
+  splits: config/D44J01/rels/d_a_wall/splits.txt
+  symbols: config/D44J01/rels/d_a_wall/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_wall.map
+
+- object: files/rels/d_a_warpfout.rel
+  hash: 13dc68351957b9b562122cae5549c77cc093592a
+  splits: config/D44J01/rels/d_a_warpfout/splits.txt
+  symbols: config/D44J01/rels/d_a_warpfout/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpfout.map
+
+- object: files/rels/d_a_warpgn.rel
+  hash: 0f42faadfb6da799a0b05b1222a97d6d992e0332
+  splits: config/D44J01/rels/d_a_warpgn/splits.txt
+  symbols: config/D44J01/rels/d_a_warpgn/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpgn.map
+
+- object: files/rels/d_a_warpls.rel
+  hash: 766b89651b58ddd366ea36d0a053aa0153ccb292
+  splits: config/D44J01/rels/d_a_warpls/splits.txt
+  symbols: config/D44J01/rels/d_a_warpls/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpls.map
+
+- object: files/rels/d_a_warpmj.rel
+  hash: 02b813f24d57e07817edd9e5761e999f66633089
+  splits: config/D44J01/rels/d_a_warpmj/splits.txt
+  symbols: config/D44J01/rels/d_a_warpmj/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_warpmj.map
+
+- object: files/rels/d_a_waterfall.rel
+  hash: f4c8aa9da54a448bae31cf37645e2ce074638fe4
+  splits: config/D44J01/rels/d_a_waterfall/splits.txt
+  symbols: config/D44J01/rels/d_a_waterfall/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_waterfall.map
+
+- object: files/rels/d_a_windmill.rel
+  hash: 15346f268b98a9a74bc63fc86fdb677d80c7218d
+  splits: config/D44J01/rels/d_a_windmill/splits.txt
+  symbols: config/D44J01/rels/d_a_windmill/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_windmill.map
+
+- object: files/rels/d_a_wz.rel
+  hash: be83228e347944796d83f8bc1bd9e34615276af0
+  splits: config/D44J01/rels/d_a_wz/splits.txt
+  symbols: config/D44J01/rels/d_a_wz/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_wz.map
+
+- object: files/rels/d_a_ygcwp.rel
+  hash: a610bf4470abfac6dbf3c67fa2d1af7068353211
+  splits: config/D44J01/rels/d_a_ygcwp/splits.txt
+  symbols: config/D44J01/rels/d_a_ygcwp/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ygcwp.map
+
+- object: files/rels/d_a_yougan.rel
+  hash: a31ee656d36887d62792d6ec11fa30a1cc35b03f
+  splits: config/D44J01/rels/d_a_yougan/splits.txt
+  symbols: config/D44J01/rels/d_a_yougan/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_yougan.map
+
+- object: files/rels/d_a_ghostship.rel
+  hash: 07246352e67126b193c80d66fbb2320e02e21739
+  splits: config/D44J01/rels/d_a_ghostship/splits.txt
+  symbols: config/D44J01/rels/d_a_ghostship/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_ghostship.map
+
+- object: files/rels/d_a_movie_player.rel
+  hash: a59f29c45cc7d8fbf4ce566b8a32f7e163d571a3
+  splits: config/D44J01/rels/d_a_movie_player/splits.txt
+  symbols: config/D44J01/rels/d_a_movie_player/symbols.txt
+  # map: orig/D44J01/files/maps/d_a_movie_player.map
+
+extract:
+- symbol: black_tex
+  binary: assets/black_tex.bin
+  header: assets/black_tex.h
+- symbol: msg_data
+  binary: assets/msg_data.bin
+  header: assets/msg_data.h
+- symbol: font_data
+  binary: assets/font_data.bin
+  header: assets/font_data.h
+
+- symbol: l_backRevZMat
+  binary: assets/l_backRevZMat.bin
+  header: assets/l_backRevZMat.h
+- symbol: l_frontZMat
+  binary: assets/l_frontZMat.bin
+  header: assets/l_frontZMat.h
+- symbol: l_frontNoZSubMat
+  binary: assets/l_frontNoZSubMat.bin
+  header: assets/l_frontNoZSubMat.h
+- symbol: l_bonboriDL
+  binary: assets/l_bonboriDL.bin
+  header: assets/l_bonboriDL.h
+- symbol: l_s_beam_checkDL
+  binary: assets/l_s_beam_checkDL.bin
+  header: assets/l_s_beam_checkDL.h
+- symbol: l_cubeDL
+  binary: assets/l_cubeDL.bin
+  header: assets/l_cubeDL.h
+- symbol: l_bonbori2DL
+  binary: assets/l_bonbori2DL.bin
+  header: assets/l_bonbori2DL.h
+- symbol: l_matDL$5105
+  binary: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.bin
+  header: assets/l_matDL__draw__18dDlst_alphaModel_cFPA4_f.h
+  rename: l_matDL
+- symbol: l_shadowVolDL
+  binary: assets/l_shadowVolDL.bin
+  header: assets/l_shadowVolDL.h
+- symbol: l_shadowProjMat
+  binary: assets/l_shadowProjMat.bin
+  header: assets/l_shadowProjMat.h
+- symbol: l_shadowVolMat
+  binary: assets/l_shadowVolMat.bin
+  header: assets/l_shadowVolMat.h
+- symbol: l_clearMat
+  binary: assets/l_clearMat.bin
+  header: assets/l_clearMat.h
+- symbol: l_frontMat
+  binary: assets/l_frontMat.bin
+  header: assets/l_frontMat.h
+- symbol: l_backSubMat
+  binary: assets/l_backSubMat.bin
+  header: assets/l_backSubMat.h
+- symbol: l_shadowVolumeDL
+  binary: assets/l_shadowVolumeDL.bin
+  header: assets/l_shadowVolumeDL.h
+- symbol: l_shadowSealTexDL
+  binary: assets/l_shadowSealTexDL.bin
+  header: assets/l_shadowSealTexDL.h
+- symbol: l_shadowSealTex2DL
+  binary: assets/l_shadowSealTex2DL.bin
+  header: assets/l_shadowSealTex2DL.h
+- symbol: l_shadowSealDL
+  binary: assets/l_shadowSealDL.bin
+  header: assets/l_shadowSealDL.h
+- symbol: l_matDL$5760
+  binary: assets/l_matDL__imageDraw__21dDlst_shadowControl_cFPA4_f.bin
+  header: assets/l_matDL__imageDraw__21dDlst_shadowControl_cFPA4_f.h
+  rename: l_matDL
+- symbol: l_mirrorProjMat
+  binary: assets/l_mirrorProjMat.bin
+  header: assets/l_mirrorProjMat.h
+- symbol: l_backMat$6016
+  binary: assets/l_backMat__draw__23dDlst_alphaInvVolPacketFv.bin
+  header: assets/l_backMat__draw__23dDlst_alphaInvVolPacketFv.h
+  rename: l_backMat
+
+- symbol: l_Txa_swood_bTEX__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_Txa_swood_bTEX.bin
+  header: assets/l_Txa_swood_bTEX.h
+  rename: l_Txa_swood_bTEX
+- symbol: l_Oba_swood_bDL__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_Oba_swood_bDL.bin
+  header: assets/l_Oba_swood_bDL.h
+  rename: l_Oba_swood_bDL
+- symbol: l_Oba_swood_b_cutDL__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_Oba_swood_b_cutDL.bin
+  header: assets/l_Oba_swood_b_cutDL.h
+  rename: l_Oba_swood_b_cutDL
+- symbol: l_matDL__Q25dWood20@unnamed@d_wood_cpp@
+  binary: assets/l_matDL__d_wood.bin
+  header: assets/l_matDL__d_wood.h
+  rename: l_matDL
+  header_type: none
+  custom_type: matDL
+
+- symbol: l_Txa_swood_aTEX
+  binary: assets/l_Txa_swood_aTEX.bin
+  header: assets/l_Txa_swood_aTEX.h
+- symbol: l_Oba_swood_noneDL
+  binary: assets/l_Oba_swood_noneDL.bin
+  header: assets/l_Oba_swood_noneDL.h
+- symbol: l_Oba_swood_a_cuttDL
+  binary: assets/l_Oba_swood_a_cuttDL.bin
+  header: assets/l_Oba_swood_a_cuttDL.h
+- symbol: l_Oba_swood_a_cutuDL
+  binary: assets/l_Oba_swood_a_cutuDL.bin
+  header: assets/l_Oba_swood_a_cutuDL.h
+- symbol: l_Oba_swood_a_hapaDL
+  binary: assets/l_Oba_swood_a_hapaDL.bin
+  header: assets/l_Oba_swood_a_hapaDL.h
+- symbol: l_Oba_swood_a_mikiDL
+  binary: assets/l_Oba_swood_a_mikiDL.bin
+  header: assets/l_Oba_swood_a_mikiDL.h
+- symbol: l_matDL!.data:0x8036ecc0
+  binary: assets/l_matDL__d_tree.bin
+  header: assets/l_matDL__d_tree.h
+  header_type: none
+  custom_type: matDL
+- symbol: l_Txa_kage_32TEX
+  binary: assets/l_Txa_kage_32TEX.bin
+  header: assets/l_Txa_kage_32TEX.h
+- symbol: g_dTree_Oba_kage_32DL
+  binary: assets/g_dTree_Oba_kage_32DL.bin
+  header: assets/g_dTree_Oba_kage_32DL.h
+- symbol: g_dTree_shadowMatDL
+  binary: assets/g_dTree_shadowMatDL.bin
+  header: assets/g_dTree_shadowMatDL.h
+  header_type: none
+  custom_type: matDL
+  custom_data:
+    scope: global
+
+- symbol: l_chainS3TCTEX!.data:0x8036a960
+  binary: assets/l_chainS3TCTEX__d_chain.bin
+  header: assets/l_chainS3TCTEX__d_chain.h
+- symbol: l_chainDL!.data:0x8036ac60
+  binary: assets/l_chainDL__d_chain.bin
+  header: assets/l_chainDL__d_chain.h
+- symbol: l_matDL!.data:0x8036ace0
+  binary: assets/l_matDL__d_chain.bin
+  header: assets/l_matDL__d_chain.h
+  header_type: none
+  custom_type: matDL
+
+- symbol: l_chainS3TCTEX!.data:0x8037fec0
+  binary: assets/l_chainS3TCTEX__d_hookshot.bin
+  header: assets/l_chainS3TCTEX__d_hookshot.h
+- symbol: l_chainDL!.data:0x803801c0
+  binary: assets/l_chainDL__d_hookshot.bin
+  header: assets/l_chainDL__d_hookshot.h
+- symbol: l_matDL!.data:0x80380240
+  binary: assets/l_matDL__d_hookshot.bin
+  header: assets/l_matDL__d_hookshot.h
+  header_type: none
+  custom_type: matDL
+
+- symbol: l_YfloorDL
+  binary: assets/l_YfloorDL.bin
+  header: assets/l_YfloorDL.h
+- symbol: l_YfloorMatDL
+  binary: assets/l_YfloorMatDL.bin
+  header: assets/l_YfloorMatDL.h
+- symbol: l_YballDL
+  binary: assets/l_YballDL.bin
+  header: assets/l_YballDL.h
+- symbol: l_YballMatDL
+  binary: assets/l_YballMatDL.bin
+  header: assets/l_YballMatDL.h
+
+- symbol: l_K_kusa_00TEX
+  binary: assets/l_K_kusa_00TEX.bin
+  header: assets/l_K_kusa_00TEX.h
+- symbol: l_Vmori_00DL
+  binary: assets/l_Vmori_00DL.bin
+  header: assets/l_Vmori_00DL.h
+- symbol: l_Vmori_01DL
+  binary: assets/l_Vmori_01DL.bin
+  header: assets/l_Vmori_01DL.h
+- symbol: l_Vmori_matDL
+  binary: assets/l_Vmori_matDL.bin
+  header: assets/l_Vmori_matDL.h
+  header_type: none
+  custom_type: matDL
+- symbol: l_Txa_ob_kusa_aTEX
+  binary: assets/l_Txa_ob_kusa_aTEX.bin
+  header: assets/l_Txa_ob_kusa_aTEX.h
+- symbol: l_Oba_kusa_aDL
+  binary: assets/l_Oba_kusa_aDL.bin
+  header: assets/l_Oba_kusa_aDL.h
+- symbol: l_Oba_kusa_a_cutDL
+  binary: assets/l_Oba_kusa_a_cutDL.bin
+  header: assets/l_Oba_kusa_a_cutDL.h
+- symbol: l_matDL!.data:0x8036da60
+  binary: assets/l_matDL__d_grass.bin
+  header: assets/l_matDL__d_grass.h
+  header_type: none
+  custom_type: matDL
+
+- symbol: l_sightMatDL
+  binary: assets/l_sightMatDL.bin
+  header: assets/l_sightMatDL.h
+- symbol: l_sightDL!.data:0x8037e9e0
+  binary: assets/l_sightDL__d_a_boomerang.bin
+  header: assets/l_sightDL__d_a_boomerang.h
+
+- symbol: l_sightDL!.data:0x80383e00
+  binary: assets/l_sightDL__d_a_player_main.bin
+  header: assets/l_sightDL__d_a_player_main.h
+
+- symbol: l_invisibleMat$7188
+  binary: assets/l_invisibleMat__draw__19mDoExt_invJntPacketFv.bin
+  header: assets/l_invisibleMat__draw__19mDoExt_invJntPacketFv.h
+  rename: l_invisibleMat
+- symbol: l_matDL!.data:0x803657c0
+  binary: assets/l_matDL__m_Do_ext.bin
+  header: assets/l_matDL__m_Do_ext.h
+- symbol: l_toonMatDL
+  binary: assets/l_toonMatDL.bin
+  header: assets/l_toonMatDL.h
+- symbol: l_mat1DL
+  binary: assets/l_mat1DL.bin
+  header: assets/l_mat1DL.h
+- symbol: l_toonMat1DL
+  binary: assets/l_toonMat1DL.bin
+  header: assets/l_toonMat1DL.h

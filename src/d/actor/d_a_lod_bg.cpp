@@ -6,6 +6,7 @@
 #include "d/actor/d_a_lod_bg.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_obj_light.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_lib.h"
@@ -164,7 +165,7 @@ BOOL daLodbg_c::createModelData() {
         if (!loadModelData("/lod11/bdl/shikari.bdl", mModelData2, mDataHeap2, mDataSize2))
             return FALSE;
     }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && !dComIfGs_isEventBit(0x1820)) {
         if (!loadModelData("/lod01/bdl/model1.bdl", mModelData2, mDataHeap2, mDataSize2))
             return FALSE;
@@ -176,12 +177,12 @@ BOOL daLodbg_c::createModelData() {
 
 /* 000008B8-00000A38       .text createHeap__9daLodbg_cFv */
 BOOL daLodbg_c::createHeap() {
-    JUT_ASSERT(VERSION_SELECT(419, 436, 436), mModelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(419, 419, 436, 436), mModelData != NULL);
     mModel = mDoExt_J3DModel__create(mModelData, 0x80000, 0x11000022);
     if (mModel == NULL)
         return FALSE;
     if (getRoomNo() == dIsleRoom_WindfallIsland_e) {
-        JUT_ASSERT(VERSION_SELECT(430, 447, 447), mModelData2 != NULL);
+        JUT_ASSERT(VERSION_SELECT(430, 430, 447, 447), mModelData2 != NULL);
         for (s32 i = 0; i < 2; i++) {
             mModel2[i] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
             if (mModel2[i] == NULL) {
@@ -191,7 +192,7 @@ BOOL daLodbg_c::createHeap() {
             }
         }
     }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && mModelData2 != NULL) {
         mModel2[0] = mDoExt_J3DModel__create(mModelData2, 0x80000, 0x11000022);
         if (mModel2[0] == NULL) {
@@ -215,10 +216,10 @@ BOOL daLodbg_c::execCreateWait() {
     if (dist > scale.x)
         return TRUE;
 
-    JUT_ASSERT(VERSION_SELECT(474, 503, 503), mMountCommand == NULL);
+    JUT_ASSERT(VERSION_SELECT(474, 474, 503, 503), mMountCommand == NULL);
     mMountCommand = mDoDvdThd_mountXArchive_c::create(LodAllPath, 0, JKRArchive::MOUNT_ARAM);
     if (mMountCommand == NULL) {
-        JUT_WARN(VERSION_SELECT(478, 507, 507), "LODALL archive nothing !! <LODALL.arc>");
+        JUT_WARN(VERSION_SELECT(478, 478, 507, 507), "LODALL archive nothing !! <LODALL.arc>");
         return FALSE;
     }
 
@@ -231,7 +232,7 @@ BOOL daLodbg_c::execReadWait() {
     if (!mMountCommand->sync())
         return TRUE;
 
-    JUT_ASSERT(VERSION_SELECT(506, 535, 535), mArchive == NULL);
+    JUT_ASSERT(VERSION_SELECT(506, 506, 535, 535), mArchive == NULL);
     mArchive = mMountCommand->getArchive();
     delete mMountCommand;
     mMountCommand = NULL;
@@ -242,9 +243,9 @@ BOOL daLodbg_c::execReadWait() {
     }
 
     createModelData();
-    JUT_ASSERT(VERSION_SELECT(542, 571, 571), mModel == NULL);
-    JUT_ASSERT(VERSION_SELECT(543, 572, 572), mModel2[0] == NULL);
-    JUT_ASSERT(VERSION_SELECT(544, 573, 573), mModel2[1] == NULL);
+    JUT_ASSERT(VERSION_SELECT(542, 542, 571, 571), mModel == NULL);
+    JUT_ASSERT(VERSION_SELECT(543, 543, 572, 572), mModel2[0] == NULL);
+    JUT_ASSERT(VERSION_SELECT(544, 544, 573, 573), mModel2[1] == NULL);
 
     if (!fopAcM_entrySolidHeap(this, createHeapCallBack, 0)) {
         mModel = NULL;
@@ -284,11 +285,11 @@ BOOL daLodbg_c::execDeleteWait() {
                 mDoMtx_stack_c::transS(current.pos.x, current.pos.y + y, current.pos.z);
                 mDoMtx_stack_c::YrotM(shape_angle.y);
                 mModel->setBaseTRMtx(mDoMtx_stack_c::get());
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
                 mModel->setBaseTRMtx(mDoMtx_stack_c::get());
 #endif
                 if (mModel2[0] != NULL) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
                     if (roomNo == dIsleRoom_WindfallIsland_e) {
 #endif
                         mDrawModel2 = daObjLight::Act_c::renew_light_angle();
@@ -299,7 +300,7 @@ BOOL daLodbg_c::execDeleteWait() {
                             mDoMtx_stack_c::YrotM(-0x8000);
                             mModel2[1]->setBaseTRMtx(mDoMtx_stack_c::get());
                         }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
                     }
                     else if (roomNo == dIsleRoom_ForsakenFortress_e) {
                         mModel2[0]->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -343,7 +344,7 @@ BOOL daLodbg_c::draw() {
     mDoExt_modelEntryDL(mModel);
 
     if (mModel2[0] != NULL && mDrawModel2) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         if (roomNo == dIsleRoom_WindfallIsland_e) {
 #endif
             J3DModelData* modelData = mModel2[0]->getModelData();
@@ -355,7 +356,7 @@ BOOL daLodbg_c::draw() {
                 mDoLib_clipper::clip(mModel2[i]);
                 mDoExt_modelEntryDL(mModel2[i]);
             }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         } else if (roomNo == dIsleRoom_ForsakenFortress_e) {
             g_env_light.setLightTevColorType(mModel2[0], &tevStr);
             J3DModelData* modelData = mModel2[0]->getModelData(); // ??? was this supposed to modify mModel2?
@@ -422,7 +423,7 @@ actor_process_profile_definition g_profile_LODBG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C3,
+    /* Priority     */ PRIO_LODBG,
     /* Actor SubMtd */ &l_daLodbg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

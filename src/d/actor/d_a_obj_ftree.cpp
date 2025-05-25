@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ftree.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000DC       .text search_heart_part__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::search_heart_part() {
@@ -393,7 +394,7 @@ actor_process_profile_definition g_profile_Obj_Ftree = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0044,
+    /* Priority     */ PRIO_Obj_Ftree,
     /* Actor SubMtd */ &daObjFtree::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

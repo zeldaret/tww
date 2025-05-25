@@ -207,7 +207,7 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
-        JUT_ASSERT(VERSION_SELECT(530, 531, 531), mHeapBriefType < HeapCheckTableNum);
+        JUT_ASSERT(VERSION_SELECT(530, 530, 531, 531), mHeapBriefType < HeapCheckTableNum);
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
@@ -409,7 +409,7 @@ void main01() {
 
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
     fapGm_Create();  // init framework
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     mDisplayHeapSize = 1;
 #else
     mDisplayHeapSize = 0;
@@ -445,7 +445,7 @@ int main() {
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit();
     version_check();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);
     mDoRst::setResetData(reset_data);
 

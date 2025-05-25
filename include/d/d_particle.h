@@ -90,7 +90,6 @@ private:
     /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 mWindOff;
     /* 0x16 */ GXColor mColor;
-    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
     /* 0x1C */ dKy_tevstr_c* mTevstr;
 };  // Size: 0x20
 

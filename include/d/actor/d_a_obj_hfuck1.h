@@ -5,6 +5,9 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
+#if VERSION == VERSION_DEMO
+#include "m_Do/m_Do_hostIO.h"
+#endif
 
 class daObjHfuck1_c : public fopAc_ac_c {
 public:
@@ -25,5 +28,19 @@ public:
     /* 0x408 */ dCcD_Sph mSph;
     /* 0x40C */ fopAc_ac_c * mpHookshotActor;
 };
+
+#if VERSION == VERSION_DEMO
+class daObjHfuck1_HIO_c : public JORReflexible {
+public:
+    daObjHfuck1_HIO_c();
+    virtual ~daObjHfuck1_HIO_c() {}
+
+    /* 0x04 */ s8 mNo;
+    f32 field_0x08;
+    f32 field_0x0C;
+    f32 field_0x10;
+    f32 field_0x14;
+};
+#endif
 
 #endif /* D_A_OBJ_HFUCK1_H */

@@ -17,9 +17,11 @@ BOOL daItem_c::checkControl() {
     if (mItemStatus == STATUS_UNK4) {
         return FALSE;
     }
+#if VERSION > VERSION_DEMO
     if (mItemStatus == STATUS_INIT_NORMAL || mItemStatus == STATUS_MAIN_NORMAL) {
         return FALSE;
     }
+#endif
     return TRUE;
 }
 

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_mflft.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000170       .text setLiftUp__11mflft_classF4cXyz */
 void mflft_class::setLiftUp(cXyz) {
@@ -95,7 +96,7 @@ actor_process_profile_definition g_profile_MFLFT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x008B,
+    /* Priority     */ PRIO_MFLFT,
     /* Actor SubMtd */ &l_daMflft_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

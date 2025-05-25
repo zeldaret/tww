@@ -6,6 +6,7 @@
 #include "d/actor/d_a_komore.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 const char daKomore::Act_c::M_arcname[] = "frLt";
 
@@ -134,7 +135,7 @@ actor_process_profile_definition g_profile_Komore = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F7,
+    /* Priority     */ PRIO_Komore,
     /* Actor SubMtd */ &daKomore::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

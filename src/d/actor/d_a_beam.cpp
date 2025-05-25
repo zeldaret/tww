@@ -6,6 +6,7 @@
 #include "d/actor/d_a_beam.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */
 daBeam_HIO_c::daBeam_HIO_c() {
@@ -125,7 +126,7 @@ actor_process_profile_definition g_profile_Beam = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00DC,
+    /* Priority     */ PRIO_Beam,
     /* Actor SubMtd */ &daBeamMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_tt.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000098       .text daNpc_tt_XyCheckCB__FPvi */
 static s16 daNpc_tt_XyCheckCB(void*, int) {
@@ -272,7 +273,7 @@ actor_process_profile_definition g_profile_NPC_TT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0174,
+    /* Priority     */ PRIO_NPC_TT,
     /* Actor SubMtd */ &l_daNpc_Tt_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_NPC_e,

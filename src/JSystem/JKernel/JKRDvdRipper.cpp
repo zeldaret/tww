@@ -148,7 +148,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         else if (compression2 == COMPRESSION_YAZ0) {
             JKRDecompressFromDVD(dvdFile, dst, fileSizeAligned, dstLength, 0, offset);
         } else {
-            OSPanic(__FILE__, VERSION_SELECT(337, 314, 314), "Sorry, not prepared for SZP resource\n");
+            OSPanic(__FILE__, VERSION_SELECT(337, 337, 314, 314), "Sorry, not prepared for SZP resource\n");
         }
         return dst;
     }
@@ -157,7 +157,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         // SZP decompression
         // s32 readoffset = startOffset;
         if (offset != 0) {
-            OSPanic(__FILE__, VERSION_SELECT(347, 324, 324), ":::Not support SZP with offset read");
+            OSPanic(__FILE__, VERSION_SELECT(347, 347, 324, 324), ":::Not support SZP with offset read");
         }
         while (true) {
             int readBytes = DVDReadPrio(dvdFile->getFileInfo(), mem, fileSizeAligned, 0, 2);
@@ -221,12 +221,12 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     OSLockMutex(&decompMutex);
     int bufSize = JKRDvdRipper::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(bufSize, -0x20);
-    JUT_ASSERT(VERSION_SELECT(913, 884, 884), szpBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(913, 913, 884, 884), szpBuf != NULL);
 
     szpEnd = szpBuf + bufSize;
     if (inFileOffset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, -4);
-        JUT_ASSERT(VERSION_SELECT(922, 893, 893), refBuf != NULL);
+        JUT_ASSERT(VERSION_SELECT(922, 922, 893, 893), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     } else {
@@ -407,7 +407,7 @@ static u8* nextSrcData(u8* src) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(VERSION_SELECT(1228, 1176, 1176), transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(1228, 1228, 1176, 1176), transSize > 0);
 
     while (true) {
         s32 result = DVDReadPrio(srcFile->getFileInfo(), (buf + limit), transSize, srcOffset, 2);

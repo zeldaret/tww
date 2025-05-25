@@ -6,6 +6,7 @@
 #include "d/actor/d_a_dk.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {
@@ -95,7 +96,7 @@ actor_process_profile_definition g_profile_DK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00E2,
+    /* Priority     */ PRIO_DK,
     /* Actor SubMtd */ &l_daDk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

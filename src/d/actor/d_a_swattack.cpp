@@ -8,6 +8,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -113,7 +114,7 @@ bool daSwAt_c::_execute() {
     }
 
     if (triggered) {
-        dComIfGs_onSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this));
+        fopAcM_onSwitch(this, mSwitchNo);
     }
 
     mCyl.SetC(current.pos);
@@ -169,7 +170,7 @@ actor_process_profile_definition g_profile_SW_ATTACK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0139,
+    /* Priority     */ PRIO_SW_ATTACK,
     /* Actor SubMtd */ &daSwAtMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

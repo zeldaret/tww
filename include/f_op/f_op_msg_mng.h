@@ -17,7 +17,28 @@ class JUTFont;
 struct mesg_header;
 struct mesg_data;
 struct mesg_info;
-struct mesg_entry;
+
+struct mesg_entry {
+    // mesg_entry() {} // fixes fopMsgM_selectMessageGet, but messes up getMesgEntry
+
+    /* 0x00 */ u32 mDataOffs;
+    /* 0x04 */ u16 mMesgID;
+    /* 0x06 */ s16 mItemPrice;
+    /* 0x08 */ u16 mNextMessageID;
+    /* 0x0A */ u16 field_0x0a;
+    /* 0x0C */ u8 mTextboxType;
+    /* 0x0D */ u8 mDrawType;
+    /* 0x0E */ u8 mTextboxPosition;
+    /* 0x0F */ u8 mItemImage;
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 mInitialSound;
+    /* 0x12 */ u8 mInitialCamera;
+    /* 0x13 */ u8 mInitialAnimation;
+    /* 0x14 */ u8 field_0x14;
+    /* 0x15 */ u8 field_0x15;
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 field_0x17;
+};
 
 struct msg_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
@@ -356,6 +377,8 @@ void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
 void fopMsgM_outFontSet(J2DPicture*, J2DPicture*, s16*, u32, u8);
+void fopMsgM_outFontSet(J2DPicture*, s16*, u32, u8);
 void fopMsgM_outFontDraw(J2DPicture*, J2DPicture*, int, int, int, s16*, u8, u8);
+void fopMsgM_outFontDraw2(J2DPicture*, J2DPicture*, int, int, int, int, s16*, u8, u8);
 
 #endif /* F_OP_MSG_MNG_H */

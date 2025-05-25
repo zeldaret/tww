@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_rsh1.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
@@ -315,7 +316,7 @@ actor_process_profile_definition g_profile_NPC_RSH1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0165,
+    /* Priority     */ PRIO_NPC_RSH1,
     /* Actor SubMtd */ &l_daNpc_Rsh1_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

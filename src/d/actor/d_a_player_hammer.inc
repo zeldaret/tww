@@ -51,7 +51,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
             local_2c.set(mSwordTopPos.x, mSwordTopPos.y + 100.0f, mSwordTopPos.z);
             mGndChk.SetPos(&local_2c);
             dVar9 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (C_BG_MIN_HEIGHT != dVar9) {
+            if (-G_CM3D_F_INF != dVar9) {
                 iVar6 = dComIfG_Bgsp()->GetMtrlSndId(mGndChk);
             } else {
                 iVar6 = mMtrlSndId;
@@ -334,7 +334,7 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
                 int r26;
                 r26 = -1;
                 f32 f30 = 300.0f;
-                f32 f31 = C_BG_MIN_HEIGHT;
+                f32 f31 = -G_CM3D_F_INF;
                 for (r27 = 0; r27 < mSwBlur.field_0x014; r27++) {
                     sp08.set(mSwBlur.field_0x034[r27].x, f30 + mSwBlur.field_0x034[r27].y, mSwBlur.field_0x034[r27].z);
                     mGndChk.SetPos(&sp08);

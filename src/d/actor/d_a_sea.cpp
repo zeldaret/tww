@@ -6,6 +6,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
@@ -656,9 +657,9 @@ void daSea_packet_c::draw() {
         return;
     }
 
-    JUT_ASSERT(VERSION_SELECT(0x519, 0x518, 0x518), m_draw_vtx != NULL); // Redundant assert
+    JUT_ASSERT(VERSION_SELECT(0x519, 0x519, 0x518, 0x518), m_draw_vtx != NULL); // Redundant assert
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
 #endif
 
@@ -680,7 +681,7 @@ void daSea_packet_c::draw() {
         minZ += GRID_SIZE;
     }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     DCFlushRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
 #else
     DCStoreRange(m_draw_vtx, sizeof(cXyz) * GRID_CELLS * GRID_CELLS);
@@ -800,19 +801,19 @@ void daSea_packet_c::draw() {
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
     GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX2);
 
-    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD0,GX_TEXMAP0, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD0,GX_TEXMAP0, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
     GXSetTevColorIn(GX_TEVSTAGE0,GX_CC_C0,GX_CC_KONST,GX_CC_TEXC,GX_CC_ZERO);
     GXSetTevColorOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVREG2);
     GXSetTevAlphaIn(GX_TEVSTAGE0,GX_CA_ZERO,GX_CA_KONST,GX_CA_TEXA,GX_CA_ZERO);
     GXSetTevAlphaOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
     GXSetTevSwapMode(GX_TEVSTAGE0,GX_TEV_SWAP0,GX_TEV_SWAP0);
-    GXSetTevOrder(GX_TEVSTAGE1,GX_TEXCOORD2,GX_TEXMAP2, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
+    GXSetTevOrder(GX_TEVSTAGE1,GX_TEXCOORD2,GX_TEXMAP2, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
     GXSetTevColorIn(GX_TEVSTAGE1,GX_CC_C0,GX_CC_KONST,GX_CC_TEXC,GX_CC_ZERO);
     GXSetTevColorOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1,GX_CA_APREV,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO);
     GXSetTevAlphaOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
     GXSetTevSwapMode(GX_TEVSTAGE1,GX_TEV_SWAP0,GX_TEV_SWAP0);
-    GXSetTevOrder(GX_TEVSTAGE2,GX_TEXCOORD_NULL,GX_TEXMAP_NULL, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
+    GXSetTevOrder(GX_TEVSTAGE2,GX_TEXCOORD_NULL,GX_TEXMAP_NULL, VERSION_SELECT(GX_COLOR_ZERO, GX_COLOR_ZERO, GX_COLOR_NULL, GX_COLOR_NULL));
     GXSetTevColorIn(GX_TEVSTAGE2,GX_CC_CPREV,GX_CC_C2,GX_CC_APREV,GX_CC_ZERO);
     GXSetTevColorOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE2,GX_CA_ZERO,GX_CA_KONST,GX_CA_APREV,GX_CA_ZERO);
@@ -1131,7 +1132,7 @@ void daSea_packet_c::draw() {
     }
 
     GXSetNumIndStages(0);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -1194,7 +1195,7 @@ actor_process_profile_definition g_profile_SEA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009A,
+    /* Priority     */ PRIO_SEA,
     /* Actor SubMtd */ &l_daSea_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -885,7 +886,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     mAcchCir[0].SetWall(20.0f, 20.0f);
     mAcchCir[1].SetWall(60.0f, 20.0f);
-    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, ARRAY_SIZE(mAcchCir), mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
     mAcch.OnLineCheck();
@@ -3372,7 +3373,7 @@ actor_process_profile_definition g_profile_NPC_MD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0175,
+    /* Priority     */ PRIO_NPC_MD,
     /* Actor SubMtd */ &l_daNpc_Md_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_ACTOR_e,

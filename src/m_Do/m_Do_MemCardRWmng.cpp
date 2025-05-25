@@ -192,7 +192,7 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo* card) {
 
 /* 80019F4C-8001A0A8       .text mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData */
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     snprintf(header->comment, sizeof(header->comment), "ゼルダの伝説～風のタクト～");
 #else
     snprintf(header->comment, sizeof(header->comment), "Zelda: The Wind Waker");
@@ -200,7 +200,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     OSTime time = OSGetTime();
     OSCalendarTime cal;
     OSTicksToCalendarTime(time, &cal);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     snprintf(header->info, sizeof(header->info), "%d月%d日のセーブデータです", cal.month + 1, cal.day_of_month);
 #elif VERSION == VERSION_USA
     snprintf(header->info, sizeof(header->info), "%d/%d Save Data", cal.month + 1, cal.day_of_month);

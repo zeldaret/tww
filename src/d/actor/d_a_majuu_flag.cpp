@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_majuu_flag.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000374       .text set_mtx__FP14daMajuu_Flag_c */
 void set_mtx(daMajuu_Flag_c*) {
@@ -89,7 +90,7 @@ actor_process_profile_definition g_profile_MAJUU_FLAG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x006B,
+    /* Priority     */ PRIO_MAJUU_FLAG,
     /* Actor SubMtd */ &l_daMajuu_Flag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

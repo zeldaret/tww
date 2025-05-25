@@ -7,6 +7,7 @@
 #include "d/res/res_mhsg.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -323,6 +324,9 @@ static BOOL Mthd_Draw(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGDraw();
 }
 
+// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
+#pragma nosyminline off
+
 /* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static BOOL Mthd_IsDelete(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGIsDelete();
@@ -348,7 +352,7 @@ actor_process_profile_definition g_profile_Obj_Ladder = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0030,
+    /* Priority     */ PRIO_Obj_Ladder,
     /* Actor SubMtd */ &daObjLadder::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_flame.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000110       .text set_switch__Q210daObjFlame5Act_cFv */
 void daObjFlame::Act_c::set_switch() {
@@ -179,7 +180,7 @@ actor_process_profile_definition g_profile_Obj_Flame = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0111,
+    /* Priority     */ PRIO_Obj_Flame,
     /* Actor SubMtd */ &daObjFlame::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

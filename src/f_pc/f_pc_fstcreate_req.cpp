@@ -8,6 +8,7 @@
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_load.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "global.h"
 
 /* 80040520-80040570       .text fpcFCtRq_Do__FP19fast_create_request */
 cPhs_State fpcFCtRq_Do(fast_create_request* i_createReq) {
@@ -50,7 +51,7 @@ base_process_class* fpcFCtRq_Request(layer_class* i_layer, s16 i_procTypeID,
                     return proc;
                 }
             }
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             fpcCtRq_Delete(&request->base);
 #else
             fpcCtRq_Cancel(&request->base);

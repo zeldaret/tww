@@ -121,7 +121,7 @@ public:
         mWallRadius = 0.0f;
         pm_pos = NULL;
         pm_old_pos = NULL;
-        mGroundH = C_BG_MIN_HEIGHT;
+        mGroundH = -G_CM3D_F_INF;
         field_0x60 = 0;
         field_0x68 = 20.0f;
         field_0x58 = NULL;

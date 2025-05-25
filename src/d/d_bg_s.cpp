@@ -354,7 +354,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
 f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
-    chk->SetNowY(C_BG_MAX_HEIGHT);
+    chk->SetNowY(G_CM3D_F_INF);
     chk->ClearPi();
     cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
@@ -606,7 +606,7 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
         mGndChk.SetPos(&pos);
         f32 f31 = pm_pos->y;
         mGroundH = i_bgs.GroundCross(&mGndChk);
-        if (mGroundH != C_BG_MIN_HEIGHT && mGroundH > f31) {
+        if (mGroundH != -G_CM3D_F_INF && mGroundH > f31) {
             pm_pos->y = mGroundH;
             if (field_0x58) {
                 field_0x58->y = 0.0f;
