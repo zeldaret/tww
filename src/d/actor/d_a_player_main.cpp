@@ -1024,12 +1024,7 @@ void daPy_lk_c::playTextureAnime() {
 
 /* 8010552C-8010558C       .text checkPlayerGuard__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkPlayerGuard() const {
-    /* Nonmatching */
-    bool guard = false;
-    if (mCurProc == daPyProc_CROUCH_DEFENSE_e || checkUpperGuardAnime() || checkGuardSlip()) {
-        guard = true;
-    }
-    return guard;
+    return mCurProc == daPyProc_CROUCH_DEFENSE_e || checkUpperGuardAnime() || checkGuardSlip();
 }
 
 /* 8010558C-801056E4       .text setOutPower__9daPy_lk_cFfsi */
