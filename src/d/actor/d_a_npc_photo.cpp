@@ -8,7 +8,6 @@
 #include "d/d_priority.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_item.h"
 #include "d/d_a_obj.h"
 #include "d/d_path.h"
 #include "d/actor/d_a_player_main.h"
@@ -36,7 +35,7 @@ static sPhotoAnmDat l_npc_anm_wait[] = {
         0x00,
         0x08,
         0xFF,
-    }
+    },
 };
 
 static sPhotoAnmDat l_npc_anm_talk[] = {
@@ -44,7 +43,7 @@ static sPhotoAnmDat l_npc_anm_talk[] = {
         0x01,
         0x08,
         0xFF,
-    }
+    },
 };
 
 static sPhotoAnmDat l_npc_anm_walk[] = {
@@ -52,8 +51,7 @@ static sPhotoAnmDat l_npc_anm_walk[] = {
         0x03,
         0x08,
         0xFF,
-    }
-
+    },
 };
 
 static sPhotoAnmDat l_npc_anm_spit[] = {
@@ -66,7 +64,7 @@ static sPhotoAnmDat l_npc_anm_spit[] = {
         0x00,
         0x08,
         0xFF,
-    }
+    },
 };
 
 static sPhotoAnmDat l_npc_anm_talk2[] = {
@@ -79,7 +77,7 @@ static sPhotoAnmDat l_npc_anm_talk2[] = {
         0x00,
         0x08,
         0xFF,
-    }
+    },
 };
 
 static sPhotoAnmDat l_npc_anm_talk4[] = {
@@ -92,7 +90,7 @@ static sPhotoAnmDat l_npc_anm_talk4[] = {
         0x01,
         0x08,
         0xFF,
-    }
+    },
 };
 
 struct NpcDatStruct {
@@ -127,7 +125,6 @@ struct NpcDatStruct {
     /* 0x50 */ s16 field_0x50;
     /* 0x52 */ bool field_0x52;
     /* 0x53 */ bool field_0x53;
-    
 }; // Size: 0x54
 
 static NpcDatStruct l_npc_dat = {
@@ -533,7 +530,7 @@ struct SaveDatStruct {
     /* 0x06 */ u16 field_0x06;
 }; // Size: 0x08
 
-static const SaveDatStruct l_save_dat = {  
+static const SaveDatStruct l_save_dat = {
     0x1208,
     0x1701,
     0x1601,
@@ -550,7 +547,7 @@ struct PsoData {
     /* 0x14 */ s16 field_0x14;
     /* 0x16 */ u8 field_0x16;
     /* 0x17 */ u8 field_0x17;
-}; // Size: 0x18
+};  // Size: 0x18
 
 static PsoData l_pso_photo = {
     0.0f,
@@ -773,7 +770,7 @@ cPhs_State daNpcPhoto_c::createInit() {
     field_0x9B2 = l_npc_dat.field_0x28;
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-    if(mObjAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if(mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
         current.pos.y = home.pos.y = mObjAcch.GetGroundH();
     }
 
@@ -1427,7 +1424,7 @@ void daNpcPhoto_c::eventPosSetInit() {
                 gndChk.SetPos(&temp);
 
                 f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
-                if(floor_y != C_BG_MIN_HEIGHT){
+                if(floor_y != -G_CM3D_F_INF){
                     old.pos.y = floor_y;
                     current.pos.y = floor_y;
                 }
@@ -1694,11 +1691,11 @@ u16 daNpcPhoto_c::next_msgStatus(u32* pMsgNo) {
                     dPb_erasePicture();
                 case 1:
                 case 3:
-                case 5:
+                case 5: {
                     u8 reg = dComIfGs_getEventReg(l_save_dat.field_0x06);
                     reg++;
                     dComIfGs_setEventReg(l_save_dat.field_0x06, reg);
-                    
+                }
                 case 0:
                     field_0x980 = NULL;
                     field_0x9D0 = NULL;
@@ -1970,8 +1967,7 @@ void daNpcPhoto_c::chkAttention() {
         
         angle -= shape_angle.y;
        
-        if(temp > temp3  && temp2 > abs(angle) || field_0x9CD != NULL) {
-            cXyz idk;
+        if((temp > temp3  && temp2 > abs(angle)) || field_0x9CD != NULL) {
             mLookAtPos = dNpc_playerEyePos(l_npc_dat.field_0x00);
             field_0x9D6 = 1;
             if (field_0x9D7) {
