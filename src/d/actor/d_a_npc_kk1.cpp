@@ -36,7 +36,7 @@ s32 l_check_wrk;
 
 
 inline int daNpc_Kk1_c::getSWbit() {
-    return this->field_0x7B5;
+    return this->mSWbit;
 }
 
 
@@ -57,6 +57,7 @@ char* l_evn_tbl[] = {
     "run_start", "run_start_2", "catch", "get_empty_btl", 
     "bye", "otoboke", "runaway", "bye_2",
 };
+
 //TODO: Declare somewhere else?
 enum EVENT_NAME {
     RUN_START,
@@ -71,41 +72,41 @@ enum EVENT_NAME {
 
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
-static BOOL nodeCB_Head(J3DNode* arg0, int arg1) {
+static BOOL nodeCB_Head(J3DNode* i_node, int i_arg1) {
     daNpc_Kk1_c* temp_r3;
 
-    if (arg1 == 0) {
+    if (i_arg1 == 0) {
         temp_r3 = (daNpc_Kk1_c*)j3dSys.mModel->getUserArea();
         if (temp_r3 != NULL) {
-            temp_r3->_nodeCB_Head(arg0, j3dSys.mModel);
+            temp_r3->_nodeCB_Head(i_node, j3dSys.mModel);
         }
     }
     return 1;
 }
 
 /* 000001E4-00000304       .text _nodeCB_Head__11daNpc_Kk1_cFP7J3DNodeP8J3DModel */
-void daNpc_Kk1_c::_nodeCB_Head(J3DNode* node, J3DModel* model) {
+void daNpc_Kk1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_model) {
 
     static cXyz a_eye_pos_off(14.0f,18.0f,0.0f);
-    u16 joint_number = ((J3DJoint*)(node))->getJntNo();
-    mDoMtx_stack_c::copy(model->getAnmMtx(joint_number));
+    u16 joint_number = ((J3DJoint*)(i_node))->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(joint_number));
     mDoMtx_stack_c::multVecZero(&field_0x750);
     mDoMtx_stack_c::multVec(&a_eye_pos_off,&field_0x72C);
     mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
     mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
     cMtx_copy(mDoMtx_stack_c::get(),j3dSys.mCurrentMtx);
-    model->setAnmMtx(joint_number, mDoMtx_stack_c::now);
+    i_model->setAnmMtx(joint_number, mDoMtx_stack_c::now);
 
 }
 
 
 /* 00000340-0000038C       .text nodeCB_BackBone__FP7J3DNodei */
-static BOOL nodeCB_BackBone(J3DNode *param_1, int param_2) {
+static BOOL nodeCB_BackBone(J3DNode *i_node, int param_2) {
 
   if (param_2 == 0) {
     J3DModel* model = (J3DModel*)j3dSys.mModel;
     if ((J3DModel *)(j3dSys.mModel)->getUserArea() != (J3DModel *)0x0) {
-    ((daNpc_Kk1_c*)(model->getUserArea()))->_nodeCB_BackBone(param_1,model);
+    ((daNpc_Kk1_c*)(model->getUserArea()))->_nodeCB_BackBone(i_node,model);
 
     }
   }
@@ -113,20 +114,20 @@ static BOOL nodeCB_BackBone(J3DNode *param_1, int param_2) {
 }
 
 /* 0000038C-0000042C       .text _nodeCB_BackBone__11daNpc_Kk1_cFP7J3DNodeP8J3DModel */
-void daNpc_Kk1_c::_nodeCB_BackBone(J3DNode* node, J3DModel* model) {
-    u16 joint_number = static_cast<J3DJoint*>(node)->getJntNo();
-    MTXCopy(model->getAnmMtx(joint_number), mDoMtx_stack_c::now);
+void daNpc_Kk1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_model) {
+    u16 joint_number = static_cast<J3DJoint*>(i_node)->getJntNo();
+    MTXCopy(i_model->getAnmMtx(joint_number), mDoMtx_stack_c::now);
     mDoMtx_stack_c::XrotM(this->m_jnt.getBackbone_y());
     mDoMtx_stack_c::ZrotM(-this->m_jnt.getBackbone_x());
 
     MTXCopy(mDoMtx_stack_c::now, j3dSys.mCurrentMtx);
-    model->setAnmMtx(joint_number, mDoMtx_stack_c::now);
+    i_model->setAnmMtx(joint_number, mDoMtx_stack_c::now);
 }
 
 /* 0000042C-0000044C       .text CheckCreateHeap__FP10fopAc_ac_c */
-static int CheckCreateHeap(fopAc_ac_c* param_1) {
+static int CheckCreateHeap(fopAc_ac_c* i_npc) {
 
-  return ((daNpc_Kk1_c*)param_1)->CreateHeap();
+  return ((daNpc_Kk1_c*)i_npc)->CreateHeap();
 
 }
 
@@ -134,14 +135,15 @@ static int CheckCreateHeap(fopAc_ac_c* param_1) {
 
 /* 0000044C-000004EC       .text searchActor_SWC00__FPvPv */
 void* searchActor_SWC00(void* i_swc, void* i_kk1) {
-    swc00_class* SwcAct = static_cast<swc00_class*>(i_swc);
-    daNpc_Kk1_c* Kk1Act = static_cast<daNpc_Kk1_c*>(i_kk1);
+    //swc00_class* swc_act = static_cast<swc00_class*>(i_swc);
+    swc00_class* swc_act = (swc00_class*)(i_swc);
+    daNpc_Kk1_c* kk1_act = (daNpc_Kk1_c*)(i_kk1);
     if (
-        l_check_wrk < L_CHECK_SZ  && fopAc_IsActor(SwcAct) && 
-        fopAcM_GetName(SwcAct) == PROC_SWC00 && daSwc00_getType(SwcAct) == 0 &&
-        daSwc00_getSw1No(SwcAct) == Kk1Act->getSWbit()
+        l_check_wrk < L_CHECK_SZ  && fopAc_IsActor(swc_act) && 
+        fopAcM_GetName(swc_act) == PROC_SWC00 && daSwc00_getType(swc_act) == 0 &&
+        daSwc00_getSw1No(swc_act) == kk1_act->getSWbit()
     ){
-        l_check_inf[l_check_wrk] = SwcAct;
+        l_check_inf[l_check_wrk] = swc_act;
         l_check_wrk++;
     }
     return NULL;
@@ -179,7 +181,7 @@ bool daNpc_Kk1_c::createInit() {
         mEvtIDTbl[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xFF);
     }
     mEventCut.setActorInfo2("Kk1", this);
-    field_0x7B5 = base.mParameters >> 8;
+    mSWbit = base.mParameters >> 8;
 
     u8 params = base.mParameters >> 0x10;
     if (params != 0xff) {
@@ -224,8 +226,8 @@ bool daNpc_Kk1_c::createInit() {
     }
 
 
-    field_0x71E = current.angle;
-    shape_angle = field_0x71E;
+    mAngle = current.angle;
+    shape_angle = mAngle;
     mStts.Init(0xFF, 0xff, this);
     mCyl.SetStts(&mStts);
     mCyl.Set(dNpc_cyl_src);
@@ -244,20 +246,20 @@ bool daNpc_Kk1_c::createInit() {
 void daNpc_Kk1_c::play_animation() {
 
     cXyz floatload;
-    u32 uVar5 = 0;
+    u32 mtl_snd_id = 0;
     play_btp_anm();
 
 
     if (mObjAcch.ChkGroundHit() != 0) {
-        uVar5 = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+        mtl_snd_id = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
     }
 
-    field_0x7B2 = mpMorf->play(&eyePos,uVar5,dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-    if(mpMorf->getFrame() < field_0x768){
+    field_0x7B2 = mpMorf->play(&eyePos,mtl_snd_id,dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    if(mpMorf->getFrame() < mAnimeFrame){
         field_0x7B2 = 1;
     }
 
-    field_0x768 = mpMorf->getFrame();
+    mAnimeFrame = mpMorf->getFrame();
 
     switch(field_0x81A){
         case 8:
@@ -284,7 +286,7 @@ void daNpc_Kk1_c::setMtx(bool param_1) {
 
     mpMorf->mpModel->setBaseScale(scale);
     PSMTXTrans(mDoMtx_stack_c::get(),current.pos.x,current.pos.y,current.pos.z);
-    mDoMtx_stack_c::ZXYrotM(field_0x71E);
+    mDoMtx_stack_c::ZXYrotM(mAngle);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
     cXyz someFloat1(0.0,120.0,30.0);
@@ -332,7 +334,7 @@ bool daNpc_Kk1_c::setBtp(signed char param_1, bool param_2) {
         OSPanic("d_a_npc_kk1.cpp",0x234,"Halt");
     }
     field_0x819 = param_1;
-    field_0x6EC = 0;
+    mBtpFrame = 0;
     field_0x6EE = 0;
     return mBtpAnm.init(pJVar5->getModelData(),pJVar1,1,0,1.0,0,-1,param_2,0) != 0;
   }
@@ -348,19 +350,19 @@ bool daNpc_Kk1_c::init_texPttrnAnm(signed char param_1, bool param_2) {
 void daNpc_Kk1_c::play_btp_anm() {
 
 
-  u8 uVar1 = mBtpAnm.getBtpAnm()->getFrameMax();
+  u8 frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
   if ((field_0x819 != 0) ||
      (cLib_calcTimer(&field_0x6EE) == 0)) {
-    field_0x6EC = field_0x6EC + 1;
-    if (field_0x6EC >= uVar1) {
+    mBtpFrame += 1;
+    if (mBtpFrame >= frame_max) {
       if (field_0x819 != 0) {
-        field_0x6EC = (char)uVar1;
+        mBtpFrame = frame_max;
         return;
 
       }
       else {
         field_0x6EE = cLib_getRndValue(0x3c,0x5a);
-        field_0x6EC = 0;
+        mBtpFrame = 0;
       }
     }
   }
@@ -394,14 +396,14 @@ void daNpc_Kk1_c::play_eff_anm() {
 }
 
 /* 00000CFC-00000DDC       .text setAnm_anm__11daNpc_Kk1_cFPQ211daNpc_Kk1_c9anm_prm_c */
-void daNpc_Kk1_c::setAnm_anm(daNpc_Kk1_c::anm_prm_c* param_1) {
+void daNpc_Kk1_c::setAnm_anm(daNpc_Kk1_c::anm_prm_c* i_anm_ptr) {
 
-    if (param_1->field0 < 0 || field_0x81A == param_1->field0) {
+    if (i_anm_ptr->field0 < 0 || field_0x81A == i_anm_ptr->field0) {
         return;
     }
 
-    dNpc_setAnmIDRes(mpMorf,param_1->fieldC,param_1->field4,param_1->field8,bckResID(param_1->field0),0xFFFFFFFF,&mArcName);
-    field_0x81A = param_1->field0;
+    dNpc_setAnmIDRes(mpMorf,i_anm_ptr->fieldC,i_anm_ptr->field4,i_anm_ptr->field8,bckResID(i_anm_ptr->field0),0xFFFFFFFF,&mArcName);
+    field_0x81A = i_anm_ptr->field0;
     delBikon();
     delAse();
     field_0x7BE = 1;
@@ -416,7 +418,7 @@ void daNpc_Kk1_c::setAnm_anm(daNpc_Kk1_c::anm_prm_c* param_1) {
     }
     this->field_0x7B2 = 0;
     this->field_0x7B3 = 0;
-    this->field_0x768 = 0.0;
+    this->mAnimeFrame = 0.0;
 
 
 
@@ -1213,7 +1215,7 @@ void daNpc_Kk1_c::cut_init_BYE(int param_1) {
   if(timer_ptr != NULL){
     mTimer = *timer_ptr;
   }
-  field_0x79A = 0xffff;
+  field_0x79A = -1;
   if(delay_ptr != NULL){
     field_0x79A = *delay_ptr;
   }
@@ -1237,7 +1239,7 @@ bool daNpc_Kk1_c::cut_move_BYE() {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         player->mDemo.setDemoType(3);
         player->mDemo.setParam0(0);
-        ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setDemoMode(9);
+        ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setDemoMode(daPy_demo_c::DEMO_UNK09_e);
         ((daPy_py_c*)dComIfGp_getLinkPlayer())->mDemo.setParam0(0x3217);
     }
   }
@@ -1278,10 +1280,10 @@ bool daNpc_Kk1_c::cut_move_BYE_CONTINUE() {
 }
 
 /* 00002620-000026BC       .text cut_init_BYE_END__11daNpc_Kk1_cFi */
-void daNpc_Kk1_c::cut_init_BYE_END(int) {
+void daNpc_Kk1_c::cut_init_BYE_END(int i_unusedParam) {
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(4);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
     s16 angle_y = cLib_targetAngleY(&LINKPOS,&current.pos);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS, angle_y);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->offPlayerNoDraw();
@@ -1308,7 +1310,7 @@ bool daNpc_Kk1_c::cut_move_PLYER_TRN() {
 void daNpc_Kk1_c::cut_init_OTOBOKE(int) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(1);
     player->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(4);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS, current.angle.y);
     mTimer = 2;
     return;
@@ -1363,7 +1365,7 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
     s32* puVar2 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
-    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(4);
+    ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
 
     short sVar4 = cLib_targetAngleY(&LINKPOS,&current.pos);
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->setPlayerPosAndAngle(&LINKPOS,sVar4);
@@ -1374,10 +1376,11 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
 
     field_0x7BF = 1;
     speedF = 0.0;
-    m_jnt.mAngles[0][1] = 0;
-    m_jnt.mAngles[0][0] = 0;
-    m_jnt.mAngles[1][1] = 0;
-    m_jnt.mAngles[1][0] = 0;
+    m_jnt.setHead_y(0);
+    m_jnt.setHead_x(0);    
+    m_jnt.setBackBone_y(0);
+    m_jnt.setBackBone_x(0);
+
     mWhereToLook = 0;
     if (abs((s16)(r29 - current.angle.y)) > 0x3800) {
         current.angle.y = r29 + 0x8000;
@@ -2204,7 +2207,7 @@ BOOL daNpc_Kk1_c::wait_2() {
         return 1;
     }
     if(field_0x7B8 != 0){
-        u8 temp_r4 = field_0x7B5;
+        u8 temp_r4 = mSWbit;
         if((temp_r4 != 0xFF) && (dComIfGs_isSwitch(temp_r4,current.roomNo) != 0)){
             fopAc_ac_c* temp_r3 = searchByID(mPartnerProcID,&sp8);
             if((temp_r3 != NULL) && (sp8 == 0)){
@@ -2395,7 +2398,7 @@ BOOL daNpc_Kk1_c::cmmt_1() {
 
     u8 temp_r0_4;
 
-    switch (field_0x816) {                         /* irregular */
+    switch (field_0x816) {
     case 1:
         move_CMT_WAI();
         return 1;
@@ -2657,9 +2660,9 @@ u8 daNpc_Kk1_c::demo() {
         if (pJVar2 != NULL) {
 
             u8 cmp = pJVar2 ->getFrameMax();
-            field_0x6EC += 1;
-            if (field_0x6EC >= cmp) {
-                field_0x6EC = cmp;
+            mBtpFrame += 1;
+            if (mBtpFrame >= cmp) {
+                mBtpFrame = cmp;
             }
         }
 
@@ -2668,7 +2671,7 @@ u8 daNpc_Kk1_c::demo() {
             mBtpAnm.init(mpMorf->getModel()->getModelData(),pJVar2,1,0,1.0,0,-1,true,0);
     
             field_0x819 = 1;
-            field_0x6EC = 0;
+            mBtpFrame = 0;
         }
         dDemo_setDemoData(this,0x6A,mpMorf,&mArcName,0,0,0,0);
 
@@ -2690,24 +2693,24 @@ void daNpc_Kk1_c::shadowDraw() {
 /* 000055C4-00005798       .text _draw__11daNpc_Kk1_cFv */
 BOOL daNpc_Kk1_c::_draw() {
 
-    J3DModelData *pJVar1;
-    J3DModel *pJVar2;
+    J3DModelData *model_data;
+    J3DModel *model;
 
-    dBgS* dbgs;
+     //dbgs;
 
-    pJVar2 = mpMorf->getModel();
+    model = mpMorf->getModel();
 
-    pJVar1 = pJVar2->getModelData();
-    dbgs = dComIfG_Bgsp();
+    model_data = model->getModelData();
+    dBgS* dbgs = dComIfG_Bgsp();
     if ((field_0x7BD) || (field_0x7C0)) {
         return 1;
     }
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR,&current.pos,&tevStr);
-    g_env_light.setLightTevColorType(pJVar2,&tevStr);
+    g_env_light.setLightTevColorType(model,&tevStr);
 
-    mBtpAnm.entry(pJVar1,field_0x6EC);
+    mBtpAnm.entry(model_data,mBtpFrame);
     mpMorf->entryDL();
-    mBtpAnm.remove(pJVar1);
+    mBtpAnm.remove(model_data);
     if (!field_0x7BE) {
         field_0x7C8.entry(field_0x808->getModelData(),field_0x800);
 
@@ -2715,6 +2718,7 @@ BOOL daNpc_Kk1_c::_draw() {
         mDoExt_modelEntryDL(field_0x808);
         field_0x7DC.remove(field_0x808->getModelData());
         field_0x7C8.remove(field_0x808->getModelData());
+
     }
     shadowDraw();
     dSnap_RegistFig(0x58,(fopAc_ac_c *)this,1.0,1.0,1.0);
@@ -2781,7 +2785,7 @@ bool daNpc_Kk1_c::_execute() {
         field_0x7BD = 0;
     }
     eventOrder();
-    field_0x71E = current.angle;
+    mAngle = current.angle;
 
     if (!field_0x7BF) {
         shape_angle = current.angle;

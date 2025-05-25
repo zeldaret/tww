@@ -174,7 +174,7 @@ public:
     /* 0x6D0 */ u32 field_0x6D0;
     /* 0x6D4 */ u32 mShadowID;  
     /* 0x6D8 */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6EC*/  u8 field_0x6EC;
+    /* 0x6EC*/  u8 mBtpFrame;
     /* 0x6ED*/  s8 field_0x6ED;
     /* 0x6EE*/  s16 field_0x6EE;
     /* 0x6F0*/  ActionFunc field_0x6F0;
@@ -183,14 +183,14 @@ public:
     /* 0x704*/  dNpc_PathRun_c mRunPath;
     /* 0x70C*/  cXyz field_0x70C;
     /* 0x718*/  csXyz field_0x718;
-    /* 0x71E */ csXyz field_0x71E;
+    /* 0x71E */ csXyz mAngle;
     /* 0x724 */ u8   field_0x724[0x72C - 0x724];
     /* 0x72C */ cXyz field_0x72C;
     /* 0x738 */ cXyz field_0x738;
     /* 0x744 */ u8   field_0x744[0x750 - 0x744];
     /* 0x750 */ cXyz field_0x750;
     /* 0x75C */ cXyz field_0x75C;
-    /* 0x768 */ f32 field_0x768;
+    /* 0x768 */ f32 mAnimeFrame;
     /* 0x76A */ u8  field_0x76A[4];
     /* 0x770 */ s16 mLookBackAngleY;
     /* 0x772 */ s16 mLookBackHeadY;
@@ -219,7 +219,7 @@ public:
     /* 0x7B2 */ s8 field_0x7B2;
     /* 0x7B3 */ u8 field_0x7B3;
     /* 0x7B4 */ u8 field_0x7B4;
-    /* 0x7B5 */ u8 field_0x7B5;
+    /* 0x7B5 */ u8 mSWbit;
     /* 0x7B6 */ u8 field_0x7B6;
     /* 0x7B7 */ u8 field_0x7B7;
     /* 0x7B8 */ u8 field_0x7B8;
