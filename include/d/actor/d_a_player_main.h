@@ -209,7 +209,7 @@ public:
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
     
-    static int getTimer() { return m_timer; }
+    static s16 getTimer() { return m_timer; }
     static void setTimer(s16 timer) { m_timer = timer; }
     static void decTimer() { m_timer--; }
     
@@ -1237,7 +1237,9 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
     void setGetItemSound(u16, int);
+#if VERSION > VERSION_DEMO
     BOOL setGetDemo();
+#endif
     BOOL dProcGetItem_init();
     BOOL dProcGetItem();
     BOOL dProcUnequip_init();
@@ -1677,8 +1679,12 @@ public:
     BOOL procFoodSet();
     void setSwordModel(BOOL);
     void setLightSaver();
+#if VERSION == VERSION_DEMO
+    BOOL checkLastDemoSwordNoDraw(int);
+#else
     BOOL checkDemoShieldNoDraw();
     BOOL checkDemoSwordNoDraw(BOOL);
+#endif
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -2204,7 +2210,9 @@ public:
     /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
     /* 0x3634 */ fpc_ProcID mWhirlId;
+#if VERSION > VERSION_DEMO
     /* 0x3638 */ fpc_ProcID mMsgId;
+#endif
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;
