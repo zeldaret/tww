@@ -4,9 +4,12 @@
 //
 
 #include "d/actor/d_a_npc_km1.h"
+#include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+
+static daNpc_Km1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daNpc_Km1_HIO_cFv */
 daNpc_Km1_HIO_c::daNpc_Km1_HIO_c() {
@@ -26,31 +29,98 @@ void daNpc_Km1_c::createInit() {
 /* 0000043C-0000054C       .text setMtx__11daNpc_Km1_cFv */
 void daNpc_Km1_c::setMtx() {
     /* Nonmatching */
+ u32 uVar1;
+ char cVar2;
+ u8 bVar3;
+ 
+    if (field_0x7C7 == 0) {
+    playTexPatternAnm();
+    uVar1 = mpMorf->play(&eyePos,0,0);
+    field_0x7B4 = uVar1;
+    if (mpMorf->getFrame() < field_0x7A4) {
+        field_0x7B4 = 1;
+    }
+    field_0x7A4 = mpMorf->getFrame();
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    ;
+    }
+    cVar2 = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mRoomNo = cVar2;
+    bVar3 = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = bVar3;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    setAttention();
 }
 
+#define ANM_END 1
+static int a_anm_idx_tbl[1][2];
 /* 0000054C-00000654       .text anmResID__11daNpc_Km1_cFiPiPi */
-void daNpc_Km1_c::anmResID(int, int*, int*) {
+bool daNpc_Km1_c::anmResID(int i_num, int* o_bck_num, int* o_bas_num) {
     /* Nonmatching */
+    bool check_safe = false;
+    if(0 <= i_num && i_num < ANM_END){
+        check_safe = true;
+    }
+    if(!check_safe){
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_km1.cpp",0x11A,"0 <= i_num && i_num < ANM_END");   //ANM_END = 1
+        OSPanic("d_a_npc_km1.cpp", 0x11A, "Halt");
+    }
+    check_safe = false;
+    if(o_bck_num != NULL && o_bas_num != NULL){
+        check_safe = true;
+    }
+    if(!check_safe){
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_km1.cpp",0x11A,"o_bck_num && o_bas_num");
+        OSPanic("d_a_npc_km1.cpp", 0x11B, "Halt");
+    }
+    *o_bck_num = a_anm_idx_tbl[i_num][0];
+    *o_bas_num = a_anm_idx_tbl[i_num][1];
+    return 1;
 }
 
+static int a_btp_arc_ix_tbl[2] = {0,3};
 /* 00000654-000006F0       .text BtpNum2ResID__11daNpc_Km1_cFiPi */
-void daNpc_Km1_c::BtpNum2ResID(int, int*) {
-    /* Nonmatching */
+void daNpc_Km1_c::BtpNum2ResID(int i_num, int* o_btp_num)
+{
+    bool check_safe = false;
+    if (0 <= i_num && i_num < ANM_END) { //TODO: Possibly not this define, 1 instead.
+    check_safe = true;
+    }
+    if (!check_safe) {
+        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_km1.cpp",0x130,"0 <= i_num && i_num < TEXPATTERN_END");
+        OSPanic("d_a_npc_km1.cpp",0x130,"Halt");
+    }
+        *o_btp_num = a_btp_arc_ix_tbl[i_num];
+        return;
 }
 
 /* 000006F0-00000734       .text setAnm_tex__11daNpc_Km1_cFSc */
-void daNpc_Km1_c::setAnm_tex(signed char) {
-    /* Nonmatching */
+void daNpc_Km1_c::setAnm_tex(signed char i_param_1) {
+    if(i_param_1 >= 0 && i_param_1 != field_0x7CD){
+        field_0x7CD = i_param_1;
+        initTexPatternAnm(true);
+    }
+    return;
 }
 
 /* 00000734-00000850       .text init_btp__11daNpc_Km1_cFbi */
-void daNpc_Km1_c::init_btp(bool, int) {
+u8 daNpc_Km1_c::init_btp(bool, int) {
     /* Nonmatching */
 }
 
 /* 00000850-00000894       .text initTexPatternAnm__11daNpc_Km1_cFb */
-void daNpc_Km1_c::initTexPatternAnm(bool) {
-    /* Nonmatching */
+bool daNpc_Km1_c::initTexPatternAnm(bool param_1) {
+    
+    bool var_31 = 0;
+    if(init_btp(param_1,field_0x7CD)){
+
+        var_31 = 1;
+    }
+    return var_31;
+
 }
 
 /* 00000894-00000958       .text playTexPatternAnm__11daNpc_Km1_cFv */
@@ -104,58 +174,154 @@ void daNpc_Km1_c::setStt(signed char) {
 }
 
 /* 00000C64-00000C6C       .text next_msgStatus__11daNpc_Km1_cFPUl */
-void daNpc_Km1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Km1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
+    return 0x10;
 }
 
 /* 00000C6C-00000C74       .text getMsg__11daNpc_Km1_cFv */
-void daNpc_Km1_c::getMsg() {
+u32 daNpc_Km1_c::getMsg() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00000C74-00000CC4       .text eventOrder__11daNpc_Km1_cFv */
 void daNpc_Km1_c::eventOrder() {
-    /* Nonmatching */
+    if (((field_0x7CF == 1) || (field_0x7CF == 2))){
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if(field_0x7CF == 1){
+            fopAcM_orderSpeakEvent(this);
+        }
+    }
+    return;
 }
+
 
 /* 00000CC4-00000D04       .text checkOrder__11daNpc_Km1_cFv */
 void daNpc_Km1_c::checkOrder() {
     /* Nonmatching */
+    if(eventInfo.checkCommandDemoAccrpt()){
+        return;
+    }
+    if(!eventInfo.checkCommandTalk()){
+        return;
+    }
+    if(field_0x7CF != 1 && field_0x7CF != 2){
+        return;
+    }
+    field_0x7CF = 0;
+    field_0x7C5 = 1;
+    return;
 }
 
 /* 00000D04-00000E94       .text lookBack__11daNpc_Km1_cFv */
 void daNpc_Km1_c::lookBack() {
     /* Nonmatching */
+    // mLookBackHeadY = m_jnt.getHead_y();
+    // mLookBackBackboneY = m_jnt.getBackbone_y();
+    // mLookBackAngleY = current.angle.y;
+    cXyz vec1;
+    cXyz vec2 = current.pos;
+    vec2.y = eyePos.y;
+    
+    vec1.setall(0.0);
+    
+    int Int1;
+    fopAc_ac_c *pActor;
+    cXyz* dstPos = NULL;
+    s16 targetY = current.angle.y;
+    bool headOnlyFollow = mHeadOnlyFollow;
+    s8 state = field_0x7D2;
+
+    switch(state){
+        case 0:
+            break;
+        case 1:
+            vec1 = dNpc_playerEyePos(-20.0);
+            dstPos = &vec1;
+            vec2 = current.pos;
+            vec2.y = eyePos.y;
+            break;
+        case 2:
+            vec1 = field_0x798;
+            dstPos = &vec1;
+            vec2 = current.pos;
+            vec2.y = eyePos.y;
+            break;
+        case 3:
+            targetY = field_0x7B2;
+            break;
+    }
+    if(m_jnt.trnChk() != 0){
+        cLib_addCalcAngleS2(&field_0x7B0,l_HIO.mPrmTbl.field_12,4,0x800);
+    }else{
+        field_0x7B0 = 0;
+    }
+    m_jnt.lookAtTarget(&current.angle.y,dstPos,vec2,targetY,field_0x7B0,headOnlyFollow);
+    return;
 }
 
 /* 00000E94-00000F14       .text chkAttention__11daNpc_Km1_cFv */
-void daNpc_Km1_c::chkAttention() {
-    /* Nonmatching */
+bool daNpc_Km1_c::chkAttention() {
+
+    if(dComIfGp_getAttention().LockonTruth() != 0){
+        return this == dComIfGp_getAttention().LockonTarget(0);
+    }else{
+        return this == dComIfGp_getAttention().ActionTarget(0);
+    }
 }
 
 /* 00000F14-00000F78       .text setAttention__11daNpc_Km1_cFv */
 void daNpc_Km1_c::setAttention() {
-    /* Nonmatching */
+
+    f32 f1 = current.pos.z; 
+    f32 f2 = current.pos.y + l_HIO.mPrmTbl.mAttentionArrowYOffset;   
+
+    attention_info.position.set(current.pos.x,f2,f1);
+    if(!field_0x7BC && !field_0x7C0){return;}
+    f2 = field_0x78C.z;
+    f1 = field_0x78C.y;
+    eyePos.set(field_0x78C.x,f1,f2);
+    field_0x7BC = 0;
 }
 
 /* 00000F78-00000FA4       .text decideType__11daNpc_Km1_cFi */
-void daNpc_Km1_c::decideType(int) {
-    /* Nonmatching */
+bool daNpc_Km1_c::decideType(int param_1) {
+
+    field_0x7D3 = 0xFF;
+    switch(base.mProcName){
+        case PROC_NPC_KM1:
+            field_0x7D3 = 0;
+            field_0x7D4 = 0;  
+            break;
+    }
+
+    return true;
 }
 
 /* 00000FA4-0000102C       .text event_actionInit__11daNpc_Km1_cFi */
-void daNpc_Km1_c::event_actionInit(int) {
-    /* Nonmatching */
+void daNpc_Km1_c::event_actionInit(int param_1) {
+    int* puVar1 = dComIfGp_evmng_getMyIntegerP(param_1,"ActNo");
+    dComIfGp_evmng_getMyIntegerP(param_1,"Timer");
+    if(puVar1 != NULL){
+        field_0x7CA = *puVar1;
+    }
 }
 
 /* 0000102C-0000103C       .text event_action__11daNpc_Km1_cFv */
-void daNpc_Km1_c::event_action() {
-    /* Nonmatching */
+bool daNpc_Km1_c::event_action() {
+    switch(field_0x7CA){
+        case 0:
+            break;
+    }
+    return 1;
 }
 
 /* 0000103C-00001144       .text privateCut__11daNpc_Km1_cFv */
 void daNpc_Km1_c::privateCut() {
     /* Nonmatching */
+    // dComIfGp_evmng_getMyStringP()
+    // int staffIdx = dComIfGp_evmng_getMyStaffId()
 }
 
 /* 00001144-00001164       .text endEvent__11daNpc_Km1_cFv */
