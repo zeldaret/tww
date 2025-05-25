@@ -1062,7 +1062,7 @@ bool daNpc_Kk1_c::cut_move_RUN_START() {
 /* 00001DD0-00001E58       .text cut_init_RUN__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_RUN(int param_1) {
 
-    s32* somePtr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
+    s32* somePtr = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"Timer");
     mTimer = -1;
     if(somePtr != NULL){
         mTimer = *somePtr;
@@ -1206,9 +1206,9 @@ bool daNpc_Kk1_c::cut_move_BYE_START() {
 /* 00002390-00002490       .text cut_init_BYE__11daNpc_Kk1_cFi */
 void daNpc_Kk1_c::cut_init_BYE(int param_1) {
 
-    s32* timer_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
-    s32* delay_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Delay",dEvDtData_c::TYPE_INT);                   
-    s32* prm_0_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"prm_0",dEvDtData_c::TYPE_INT);    
+    s32* timer_ptr = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"Timer");
+    s32* delay_ptr = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"Delay");                   
+    s32* prm_0_ptr = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"prm_0");    
 
   mTimer = 0x1E;
 
@@ -1258,7 +1258,7 @@ bool daNpc_Kk1_c::cut_move_BYE() {
 /* 00002568-000025C8       .text cut_init_BYE_CONTINUE__11daNpc_Kk1_cFi */
 
 void daNpc_Kk1_c::cut_init_BYE_CONTINUE(int i_staffIdx) {
-    s32* timer_ptr = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(i_staffIdx,"Timer",dEvDtData_c::TYPE_INT);
+    s32* timer_ptr = (s32*)dComIfGp_evmng_getMyIntegerP(i_staffIdx,"Timer");
     mTimer = 0x1E;
     if(timer_ptr != NULL){
         mTimer = *timer_ptr;
@@ -1362,7 +1362,7 @@ void daNpc_Kk1_c::cut_init_RUNAWAY_START(int param_1) {
 
 
 
-    s32* puVar2 = (s32*)g_dComIfG_gameInfo.play.mEvtManager.getMySubstanceP(param_1,"Timer",dEvDtData_c::TYPE_INT);
+    s32* puVar2 = (s32*)dComIfGp_evmng_getMyIntegerP(param_1,"Timer");
 
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeOriginalDemo();
     ((daPy_py_c*)dComIfGp_getLinkPlayer())->changeDemoMode(daPy_demo_c::DEMO_UNK04_e);
