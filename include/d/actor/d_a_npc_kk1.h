@@ -167,8 +167,8 @@ public:
 public:
 
     /* 0x6C4 */ request_of_phase_process_class field_0x6C4;
-    /* 0x6CC */ s8 mAnmMtxIdx;
-    /* 0x6CD */ s8 field_0x6CD;
+    /* 0x6CC */ s8 m_hed_jnt_num;
+    /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ char mArcName;  
     /* 0x6CF */ u8 field_0x6CF;
     /* 0x6D0 */ u32 field_0x6D0;

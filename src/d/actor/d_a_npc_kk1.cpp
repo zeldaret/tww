@@ -321,22 +321,19 @@ int daNpc_Kk1_c::btpResID(int param_1) {
 /* 00000AC0-00000BC4       .text setBtp__11daNpc_Kk1_cFScb */
 bool daNpc_Kk1_c::setBtp(signed char param_1, bool param_2) {
 
-  J3DAnmTexPattern *pJVar1;  
+  J3DAnmTexPattern *a_btp;  
   J3DModel* pJVar5 = mpMorf->getModel();
   if (param_1 < 0) {
     return false;
   }
   else {
-    pJVar1 = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(&mArcName,btpResID(param_1));
-    if (pJVar1 == 0) {
-      u32 uVar2 = JUTAssertion::getSDevice();
-      JUTAssertion::showAssert(uVar2,"d_a_npc_kk1.cpp",0x234,"a_btp != 0");
-        OSPanic("d_a_npc_kk1.cpp",0x234,"Halt");
-    }
+    a_btp = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(&mArcName,btpResID(param_1));
+    JUT_ASSERT(0x234,a_btp != 0); //Line 564
+
     field_0x819 = param_1;
     mBtpFrame = 0;
     field_0x6EE = 0;
-    return mBtpAnm.init(pJVar5->getModelData(),pJVar1,1,0,1.0,0,-1,param_2,0) != 0;
+    return mBtpAnm.init(pJVar5->getModelData(),a_btp,1,0,1.0,0,-1,param_2,0) != 0;
   }
 
 }
@@ -1031,11 +1028,8 @@ void daNpc_Kk1_c::cut_init_RUN_START(int param_1) {
 
     int idArray[2];
     a_actor = searchByID(mPartnerProcID,idArray);
-    if(a_actor == NULL){
+    JUT_ASSERT(0x54F,a_actor != 0); //Line 1359
 
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0x54f,"a_actor != 0");
-        OSPanic("d_a_npc_kk1.cpp",0x54f,"Halt");
-    }
     dComIfGp_event_setItemPartner(a_actor);
     mRunPath.nextIdxAuto();
     return;
@@ -2020,7 +2014,7 @@ void daNpc_Kk1_c::flwAse() {
 
     JGeometry::TVec3<f32> out;
     if (field_0x810 != NULL) {
-        mDoMtx_stack_c::copy(mpMorf->mpModel->getAnmMtx(mAnmMtxIdx));
+        mDoMtx_stack_c::copy(mpMorf->mpModel->getAnmMtx(m_hed_jnt_num));
         mDoMtx_stack_c::multVecZero(out);
         field_0x810->setGlobalTranslation(out);
 
@@ -2861,20 +2855,17 @@ cPhs_State daNpc_Kk1_c::_create() {
 /* 00006118-0000638C       .text bodyCreateHeap__11daNpc_Kk1_cFv */
 BOOL daNpc_Kk1_c::bodyCreateHeap() {
 
-    J3DModelData *pModelData;
+    J3DModelData *a_mdl_dat;
     mDoExt_McaMorf *pmVar2;
 
     
 
-    pModelData = (J3DModelData*)dComIfG_getObjectIDRes(&mArcName,0xD);
-    pModelData->getJointName();
+    a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(&mArcName,0xD);
+    a_mdl_dat->getJointName();
+    JUT_ASSERT(0xDD6,a_mdl_dat != 0);   //Line 3542
 
-    if (pModelData == NULL) {
-    JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xdd6,"a_mdl_dat != 0");
-    OSPanic("d_a_npc_kk1.cpp",0xdd6,"Halt");
-    }
 
-    pmVar2 = new mDoExt_McaMorf(pModelData,NULL,NULL,NULL,
+    pmVar2 = new mDoExt_McaMorf(a_mdl_dat,NULL,NULL,NULL,
         -0x1,1.0,0,-1,1,NULL,0x80000,0x11020022);
  
 
@@ -2894,18 +2885,12 @@ BOOL daNpc_Kk1_c::bodyCreateHeap() {
         return 0;
     }
 
-    mAnmMtxIdx = pModelData->getJointName()->getIndex("head");
-    if (mAnmMtxIdx < 0) {
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xdea,"m_hed_jnt_num >= 0");
-        OSPanic("d_a_npc_kk1.cpp",0xdea,"Halt");
-    }
-    field_0x6CD = pModelData->getJointName()->getIndex("backbone");
-    if (field_0x6CD < 0) {
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xdec,"m_bbone_jnt_num >= 0");
-        OSPanic("d_a_npc_kk1.cpp",0xdec,"Halt");
-    }
-    mpMorf->mpModel->getModelData()->getJointNodePointer(mAnmMtxIdx)->setCallBack(nodeCB_Head);
-    mpMorf->mpModel->getModelData()->getJointNodePointer(field_0x6CD)->setCallBack(nodeCB_BackBone);
+    m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
+    JUT_ASSERT(0xDEA,m_hed_jnt_num >= 0);   //Line 3562
+    m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0xDEC,m_bbone_jnt_num >= 0); //Line 3564
+    mpMorf->mpModel->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->mpModel->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->mpModel->setUserArea((u32)this);
     return 1;
 
@@ -2916,11 +2901,11 @@ BOOL daNpc_Kk1_c::effcCreateHeap() {
 
  J3DModelData *pModel;
  J3DModel *pJVar1;
- J3DAnmColor *pvVar2;
+ J3DAnmColor *a_bpk;
 
  int iVar4;
- J3DAnmTextureSRTKey *pAnm;
- J3DAnmTransform *pJVar5;
+ J3DAnmTextureSRTKey *a_btk;
+ J3DAnmTransform *a_bck;
  
  pModel = (J3DModelData*)dComIfG_getObjectIDRes(&mArcName,0xE);
  
@@ -2928,31 +2913,23 @@ BOOL daNpc_Kk1_c::effcCreateHeap() {
     field_0x808 = pJVar1;
     if(field_0x808 != NULL){
 
-    pvVar2 = (J3DAnmColor*)dComIfG_getObjectIDRes(&mArcName,0xF);
-    if(pvVar2 == NULL){
+    a_bpk = (J3DAnmColor*)dComIfG_getObjectIDRes(&mArcName,0xF);
+    JUT_ASSERT(0xE01,0 != a_bpk);   //Line 3585
+    iVar4 = field_0x7C8.init(field_0x808->getModelData(),a_bpk,true,0,0.0,0,-1,false,0);
+    if(iVar4 == 0){
+        return 0;
+    }
+    a_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectIDRes(&mArcName,0x10);
+    JUT_ASSERT(0xE09,0 != a_btk);   //Line 3593
 
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xE01,"0 != a_bpk");
-        OSPanic("d_a_npc_kk1.cpp",0xE01,"Halt");
-    }
-    iVar4 = field_0x7C8.init(field_0x808->getModelData(),pvVar2,true,0,0.0,0,-1,false,0);
+    iVar4 = field_0x7DC.init(field_0x808->getModelData(),a_btk,true,0,0.0,0,-1,false,0);
     if(iVar4 == 0){
         return 0;
     }
-    pAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectIDRes(&mArcName,0x10);
-    if(pAnm == NULL){
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xE09,"0 != a_btk");
-        OSPanic("d_a_npc_kk1.cpp",0xE09,"Halt");
-    }
-    iVar4 = field_0x7DC.init(field_0x808->getModelData(),pAnm,true,0,0.0,0,-1,false,0);
-    if(iVar4 == 0){
-        return 0;
-    }
-    pJVar5 = (J3DAnmTransform*)dComIfG_getObjectIDRes(&mArcName,0x0);
-    if(pJVar5 == NULL){
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_npc_kk1.cpp",0xE11,"0 != a_bck");
-        OSPanic("d_a_npc_kk1.cpp",0xE11,"Halt");    
-    }
-    iVar4 = field_0x7F0.init(field_0x808->getModelData(),pJVar5,true,0,0.0,0,-1,false);
+    a_bck = (J3DAnmTransform*)dComIfG_getObjectIDRes(&mArcName,0x0);
+    JUT_ASSERT(0xE11,0 != a_bck);   //Line 3601
+
+    iVar4 = field_0x7F0.init(field_0x808->getModelData(),a_bck,true,0,0.0,0,-1,false);
     if(iVar4 == 0){
         return 0;
     }
