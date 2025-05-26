@@ -91,7 +91,7 @@ public:
              cXyz* speed = NULL, csXyz* angle = NULL, csXyz* shape_angle = NULL);
     void GroundCheckInit(dBgS&);
     void GroundCheck(dBgS&);
-    void GroundRoofProc(dBgS&);
+    f32 GroundRoofProc(dBgS&);
     void LineCheck(dBgS&);
     void CrrPos(dBgS&);
     f32 GetWallAllR();
