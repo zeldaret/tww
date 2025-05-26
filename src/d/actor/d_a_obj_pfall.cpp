@@ -169,7 +169,10 @@ BOOL daObj_Pfall_c::CreateHeap() {
     
     pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
     
-    return (mpBgW2->Set(pData, cBgW::MOVE_BG_e, &field_0x404) & 0xff) != 1 ? 1 : 0;
+    if (mpBgW2->Set(pData, cBgW::MOVE_BG_e, &field_0x404) == true) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000858-000008CC       .text CreateInit__13daObj_Pfall_cFv */
@@ -356,8 +359,8 @@ void daObj_Pfall_c::mode_event() {
 
 /* 000010A4-00001130       .text mode_proc_call__13daObj_Pfall_cFv */
 void daObj_Pfall_c::mode_proc_call() {
-        typedef void(daObj_Pfall_c::*ProcFunc)(void);
-        static const ProcFunc mode_proc[] = {
+    typedef void(daObj_Pfall_c::*ProcFunc)(void);
+    static const ProcFunc mode_proc[] = {
         &daObj_Pfall_c::mode_wait,
         &daObj_Pfall_c::mode_event,
     };
@@ -380,16 +383,16 @@ bool daObj_Pfall_c::_execute() {
             fopAcM_seStart(this, JA_SE_OBJ_TC_JAIL_STRING, 0);
         }
         f32 frame = mpMorf->getFrame();
-            if (!(frame > 0.0f && frame <= 6.0f)) {
-                if (frame > 6.0f && frame <= 10.0f) {
-                    field_0x438 += 1.0f;
+        if (!(frame > 0.0f && frame <= 6.0f)) {
+            if (frame > 6.0f && frame <= 10.0f) {
+                field_0x438 += 1.0f;
+            }
+            else {
+                if (!(frame > 10.0f && frame <= 23.0f) && frame > 23.0f && frame <= 29.0f) {
+                    field_0x438 -= 3.0f;
                 }
-                else {
-                    if (!(frame > 10.0f && frame <= 23.0f) && frame > 23.0f && frame <= 29.0f) {
-                        field_0x438 -= 3.0f;
-                    }
-                }
-            }       
+            }
+        }     
     } else {
         field_0x438 = 0.0f;
     }
