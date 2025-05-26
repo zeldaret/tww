@@ -1269,7 +1269,7 @@ static void dummy() {
     // Fakematch to fix the vtable order and weak destructor order of dDlst_shadowReal_c and dDlst_shadowTri_c.
     struct {
         dDlst_shadowReal_c temp[1];
-    }* temp;
+    }* temp = NULL;
     delete temp;
 }
 
@@ -1732,7 +1732,7 @@ void dDlst_shadowControl_c::imageDraw(Mtx mtx) {
 /* 80084EF0-800850D4       .text draw__21dDlst_shadowControl_cFPA4_f */
 void dDlst_shadowControl_c::draw(Mtx drawMtx) {
     j3dSys.reinitGX();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
     dKy_GxFog_set();
@@ -1846,7 +1846,7 @@ void dDlst_shadowControl_c::setSimpleTex(void* pImg) {
 /* 80085348-800855B4       .text draw__18dDlst_mirrorPacketFv */
 void dDlst_mirrorPacket::draw() {
     j3dSys.reinitGX();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
     dKy_GxFog_set();
@@ -1894,7 +1894,7 @@ void dDlst_mirrorPacket::draw() {
     GXCallDisplayList(l_shadowVolDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -1953,8 +1953,13 @@ void mirrorPolygonCheck(cXyz* min_p, cXyz* max_p, f32 rad, dDlst_shadowPoly_c* p
     dComIfG_Bgsp()->ShdwDraw(&shdwDraw);
 }
 
+#if VERSION == VERSION_DEMO
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha)
+#else
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad)
+#endif
+{
     mShadowPoly.mCount = 0;
     static cXyz l_p1Offset(0.0f, 0.0f, 0.0f);
     static cXyz l_p2Offset(0.0f, 0.0f, 10000.0f);
@@ -1962,7 +1967,11 @@ void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
     cXyz offs, offs2;
     mDoMtx_multVec(mtx, &l_p1Offset, &offs);
     mDoMtx_multVec(mtx, &l_p2Offset, &offs2);
+#if VERSION == VERSION_DEMO
+    mirrorPolygonCheck(&offs, &offs2, 60.0f, &mShadowPoly);
+#else
     mirrorPolygonCheck(&offs, &offs2, rad, &mShadowPoly);
+#endif
 
     Mtx viewMtx;
     mDoMtx_lookAt(viewMtx, &offs, &offs2, 0);
@@ -1995,7 +2004,7 @@ void dDlst_alphaVolPacket::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -2015,7 +2024,7 @@ void dDlst_alphaInvVolPacket::draw() {
     GXCallDisplayList(l_shadowVolumeDL, 0x40);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -2223,7 +2232,7 @@ void dDlst_list_c::wipeIn(f32 speed, GXColor& color) {
         mWipeRate = 1.0f;
     }
     ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", dComIfGp_getMenuArchive());
-    JUT_ASSERT(VERSION_SELECT(5679, 5687, 5687), texture != NULL);
+    JUT_ASSERT(VERSION_SELECT(5679, 5679, 5687, 5687), texture != NULL);
     mWipeDlst.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
 }
 

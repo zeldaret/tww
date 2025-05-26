@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_drawlist.h"
@@ -769,7 +770,7 @@ void daShip_c::getMaxWaterY(cXyz* shipPos) {
         }
     }
     else {
-        if (m03F8 != C_BG_MIN_HEIGHT) {
+        if (m03F8 != -G_CM3D_F_INF) {
             shipPos->y = m03F8;
         }
         else {
@@ -830,7 +831,7 @@ f32 daShip_c::getWaterY() {
         m03F8 = mAcch.m_wtr.GetHeight();
     }
     else {
-        m03F8 = C_BG_MIN_HEIGHT;
+        m03F8 = -G_CM3D_F_INF;
     }
     if (daSea_ChkArea(current.pos.x, current.pos.z)) {
         waterY = daSea_calcWave(current.pos.x, current.pos.z);
@@ -3023,7 +3024,7 @@ void daShip_c::setEffectData(float param_1, short param_2) {
 /* 000085D8-00008688       .text setRoomInfo__8daShip_cFv */
 void daShip_c::setRoomInfo() {
     int roomId;
-    if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT) {
+    if (mAcch.GetGroundH() != -G_CM3D_F_INF) {
         roomId = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         m03C4 = dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd);
@@ -3819,7 +3820,7 @@ BOOL daShip_c::execute() {
                     else {
                         cXyz sp108;
                         int sp18;
-                        if (mAcch.GetGroundH() != C_BG_MIN_HEIGHT && dPath_GetPolyRoomPathVec(mAcch.m_gnd, &sp108, &sp18)) {
+                        if (mAcch.GetGroundH() != -G_CM3D_F_INF && dPath_GetPolyRoomPathVec(mAcch.m_gnd, &sp108, &sp18)) {
                             sp108.normalizeZP();
                             sp108 *= sp18 >> 1;
                             cLib_addCalcPosXZ(&m1044, sp108, 0.5f, 5.0f, 1.0f);
@@ -4709,7 +4710,7 @@ actor_process_profile_definition g_profile_SHIP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009C,
+    /* Priority     */ PRIO_SHIP,
     /* Actor SubMtd */ &l_daShip_Method,
     /* Status       */ 0x02 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

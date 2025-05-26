@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_oship.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */
 daOship_HIO_c::daOship_HIO_c() {
@@ -254,7 +255,7 @@ actor_process_profile_definition g_profile_OSHIP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009D,
+    /* Priority     */ PRIO_OSHIP,
     /* Actor SubMtd */ &daOshipMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

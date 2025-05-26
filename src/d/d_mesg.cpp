@@ -14,6 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_audio.h"
@@ -465,7 +466,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             unk_messageData stack_a8 = *(unk_messageData*)messageData;
 
             strcpy(local_8c, dComIfGs_getPlayerName());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
                 if (stack_a8.field_0x4 == 0x33b ||
                     stack_a8.field_0x4 == 0xc8b ||
@@ -873,7 +874,7 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             unk_messageData stack_98 = *(unk_messageData*)messageData;
 
             strcpy(local_7c, dComIfGs_getPlayerName());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
                 if (stack_98.field_0x4 == 0x33b ||
                     stack_98.field_0x4 == 0xc8b ||
@@ -1327,7 +1328,11 @@ void dMesg_screenDataTalk_c::createScreen() {
     JUtility::TColor black(30, 30, 75, 0);
     scrn = new J2DScreen();
     JUT_ASSERT(2145, scrn != NULL);
+#if VERSION == VERSION_DEMO
+    scrn->set("hukidashi_d00.blo", dComIfGp_getMsgArchive());
+#else
     scrn->set("hukidashi_d00.blo", dComIfGp_getDmsgArchive());
+#endif
     fopMsgM_setPaneData(&field_0x18, scrn->search('dt00'));
     fopMsgM_setPaneData(&field_0x50, scrn->search('yz00'));
     fopMsgM_setPaneData(&field_0x88[0], scrn->search('tx02'));
@@ -1489,7 +1494,11 @@ void dMesg_screenDataItem_c::createScreen() {
     JUT_ASSERT(2424, texBuffer != NULL);
 
     field_0x3e4 = NULL;
+#if VERSION == VERSION_DEMO
+    scrn->set("hukidashi_d09.blo", dComIfGp_getMsgArchive());
+#else
     scrn->set("hukidashi_d09.blo", dComIfGp_getDmsgArchive());
+#endif
     fopMsgM_setPaneData(&field_0x18, scrn->search('dt90'));
     fopMsgM_setPaneData(&field_0x50, scrn->search('yz90'));
     fopMsgM_setPaneData(&field_0x88[0], scrn->search('tx92'));
@@ -1782,12 +1791,12 @@ void dMesg_finalize() {
 
 /* 801E5C8C-801E5E14       .text dMesg_parse__Fv */
 int dMesg_parse() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     headerFlag = false;
 #endif
     header = JKRGetResource('ROOT', "zel_00.bmg", dComIfGp_getMsgDtArchive());
     JUT_ASSERT(2956, header != NULL);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     header2 = JKRGetResource('ROOT', "zel_01.bmg", dComIfGp_getMsgDt2Archive());
     JUT_ASSERT(2961, header2 != NULL);
 #endif
@@ -1795,7 +1804,7 @@ int dMesg_parse() {
     JUT_ASSERT(2964, oParse != NULL);
 
     oParse->parse(header, 0);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     oParse->parse(header2, 0);
 #endif
     return 1;
@@ -2084,7 +2093,11 @@ void dMesg_closeProc(sub_mesg_class* i_Msg) {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
     if (i_Msg->screen->closeAnime()) {
         delete i_Msg->screen->scrn;
+#if VERSION == VERSION_DEMO
+        dComIfGp_getMsgArchive()->removeResourceAll();
+#else
         dComIfGp_getDmsgArchive()->removeResourceAll();
+#endif
         delete (void*)i_Msg->screen;
         i_Msg->screen = NULL;
         dMesg_reset();
@@ -2163,7 +2176,11 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
         mDoExt_setCurrentHeap(i_Msg->field_0x100);
         if (i_Msg->screen) {
             delete i_Msg->screen->scrn;
+#if VERSION == VERSION_DEMO
+            dComIfGp_getMsgArchive()->removeResourceAll();
+#else
             dComIfGp_getDmsgArchive()->removeResourceAll();
+#endif
             delete (void*)i_Msg->screen;
             i_Msg->screen = NULL;
         }
@@ -2244,6 +2261,6 @@ msg_process_profile_definition g_profile_MESG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ 0x01D8,
+    /* Priority     */ PRIO_MESG,
     /* Msg SubMtd   */ &l_dMesg_Method,
 };

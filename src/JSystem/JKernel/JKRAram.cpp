@@ -286,7 +286,7 @@ u8* JKRAram::aramToMainRam(JKRAramBlock* block, u8 *buf, u32 p3, u32 p4, JKRExpa
     }
     checkOkAddress(buf, 0, block, p4);
     if (!block) {
-        OSPanic(__FILE__, VERSION_SELECT(690, 683, 683), ":::Bad Aram Block specified.\n");
+        OSPanic(__FILE__, VERSION_SELECT(690, 690, 683, 683), ":::Bad Aram Block specified.\n");
     }
     if (p4 >= block->mSize) {
         return NULL;
@@ -330,12 +330,12 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
 
     u32 szsBufferSize = JKRAram::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(szsBufferSize, 32);
-    JUT_ASSERT(VERSION_SELECT(1091, 1077, 1077), szpBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(1091, 1091, 1077, 1077), szpBuf != NULL);
 
     szpEnd = szpBuf + szsBufferSize;
     if (offset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, 0);
-        JUT_ASSERT(VERSION_SELECT(1100, 1086, 1086), refBuf != NULL);
+        JUT_ASSERT(VERSION_SELECT(1100, 1100, 1086, 1086), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     }
@@ -523,7 +523,7 @@ static u8* nextSrcData(u8* current) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(VERSION_SELECT(1376, 1361, 1361), transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(1376, 1376, 1361, 1361), transSize > 0);
 
     JKRAramPcs(1, (u32)(srcAddress + srcOffset), ((u32)dest + left), ALIGN_NEXT(transSize, 0x20),
                NULL);

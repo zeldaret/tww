@@ -177,8 +177,8 @@ public:
     /* 0x418 */ mDoExt_btkAnm field_0x418;
     /* 0x42C */ f32 field_0x42C;
     /* 0x430 */ JPABaseEmitter* field_0x430;
-    /* 0x434 */ dBgS_ObjAcch field_0x434;
-    /* 0x5F8 */ dBgS_AcchCir field_0x5F8;
+    /* 0x434 */ dBgS_ObjAcch mAcch;
+    /* 0x5F8 */ dBgS_AcchCir mAcchCir;
     /* 0x638 */ dCcD_Stts field_0x638;
     /* 0x674 */ dCcD_Stts field_0x674;
     /* 0x6B0 */ dCcD_Cyl field_0x6B0;

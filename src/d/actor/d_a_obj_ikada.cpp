@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000254       .text __ct__17daObj_Ikada_HIO_cFv */
 daObj_Ikada_HIO_c::daObj_Ikada_HIO_c() {
@@ -319,7 +320,7 @@ actor_process_profile_definition g_profile_OBJ_IKADA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B4,
+    /* Priority     */ PRIO_OBJ_IKADA,
     /* Actor SubMtd */ &daObj_IkadaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

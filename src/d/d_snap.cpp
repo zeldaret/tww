@@ -818,7 +818,7 @@ static const CharaData l_CharaData[] = {
         /* radius    */ 60,
         /* height    */ 90,
         /* minRatio  */ 500,
-        /* cullAngle */ VERSION_SELECT(0x2000, 0x6000, 0x6000),
+        /* cullAngle */ VERSION_SELECT(0x2000, 0x2000, 0x6000, 0x6000),
         /* minPixels */ 5000,
         /* figRoom   */ 0x06,
         /* m11       */ 0x02,
@@ -1889,7 +1889,7 @@ void dSnap_packet::draw() {
     if (!ChkReleaseShutter()) {
         return;
     }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
 #endif
     ClearAlphaBuffer();
@@ -2142,7 +2142,7 @@ void dSnap_packet::SetResult() {
         if (m_tbl[col].m_obj.mCapturedPixels == 0 || m_tbl[col].m_obj.GetPhoto() == 0) {
             continue;
         }
-        JUT_ASSERT(VERSION_SELECT(2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
+        JUT_ASSERT(VERSION_SELECT(2325, 2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
         if (m_tbl[col].m_obj.GetPhoto() < (s32)ARRAY_SIZE(sp8)) {
             if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 continue;

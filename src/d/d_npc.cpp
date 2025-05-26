@@ -415,7 +415,7 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
 bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -441,8 +441,8 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
 /* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
 f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     f32 max_dist;
-    if(mPath != 0) {
-        max_dist = 1000000000.0f;
+    if(mPath != NULL) {
+        max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -465,7 +465,7 @@ bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     u8 pointIdx;
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         pointIdx = param_2;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);

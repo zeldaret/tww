@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_sss.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */
 void hand_draw(sss_class*) {
@@ -114,7 +115,7 @@ actor_process_profile_definition g_profile_SSS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F2,
+    /* Priority     */ PRIO_SSS,
     /* Actor SubMtd */ &l_daSss_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

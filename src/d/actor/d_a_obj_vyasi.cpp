@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_vyasi.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
 void daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey*, float, float) {
@@ -188,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Vyasi = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0046,
+    /* Priority     */ PRIO_Obj_Vyasi,
     /* Actor SubMtd */ &daObjVyasi::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

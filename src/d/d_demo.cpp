@@ -305,7 +305,7 @@ void dDemo_camera_c::JSGSetProjectionFovy(f32 v) {
 f32 dDemo_camera_c::JSGGetProjectionAspect() const {
     camera_class* view = getView();
     if (view == NULL)
-        return 1.3333334f;
+        return (4.0f/3.0f);
     return view->mAspect;
 }
 

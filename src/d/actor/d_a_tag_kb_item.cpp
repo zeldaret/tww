@@ -6,10 +6,11 @@
 #include "d/actor/d_a_tag_kb_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
         dComIfGs_offSwitch(field_0x2a4, home.roomNo);
     }
@@ -34,8 +35,8 @@ cPhs_State daTagKbItem_c::_create() {
     fopAcM_SetupActor(this, daTagKbItem_c);
 
     CreateInit();
-    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, home.roomNo) ||
-        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, home.roomNo))
+    if ((field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, fopAcM_GetHomeRoomNo(this))) ||
+        (field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, fopAcM_GetHomeRoomNo(this))))
     {
         return cPhs_ERROR_e;
     }
@@ -44,9 +45,9 @@ cPhs_State daTagKbItem_c::_create() {
 
 /* 000001BC-000001C4       .text _execute__13daTagKbItem_cFv */
 bool daTagKbItem_c::_execute() {
-#if VERSION == VERSION_JPN
-    if (field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, home.roomNo) ||
-        field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, home.roomNo))
+#if VERSION <= VERSION_JPN
+    if ((field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, fopAcM_GetHomeRoomNo(this))) ||
+        (field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, fopAcM_GetHomeRoomNo(this))))
     {
         fopAcM_delete(this);
     }
@@ -102,7 +103,7 @@ actor_process_profile_definition g_profile_TAG_KB_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0127,
+    /* Priority     */ PRIO_TAG_KB_ITEM,
     /* Actor SubMtd */ &daTagKbItemMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

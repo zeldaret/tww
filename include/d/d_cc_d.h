@@ -371,7 +371,7 @@ public:
     virtual ~dCcD_GObjInf();
     virtual cCcD_GObjInf* GetGObjInf();
     virtual void ClrAtHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkAtHit();
 #endif
     void ResetAtHit();
@@ -379,7 +379,7 @@ public:
     cCcD_GObjInf* GetAtHitGObj();
     u8 ChkAtNoGuard();
     virtual void ClrTgHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkTgHit();
 #endif
     void ResetTgHit();
@@ -387,7 +387,7 @@ public:
     dCcD_GObjInf* GetTgHitGObj();
     u8 GetTgHitObjSe();
     virtual void ClrCoHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkCoHit();
 #endif
     void ResetCoHit();

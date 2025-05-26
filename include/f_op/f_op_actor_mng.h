@@ -412,10 +412,15 @@ inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
 }
 
 inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
+inline void dComIfGs_onVisitedRoom(int i_no);
 inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == dItem_BLUE_JELLY_e) {
+#if VERSION == VERSION_DEMO
+        dComIfGs_onVisitedRoom(itemBitNo);
+#else
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         dComIfGs_onSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
+#endif
     } else {
         dComIfGs_onItem(itemBitNo, roomNo);
     }
@@ -425,15 +430,14 @@ inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
     return actorB->current.pos.y - actorA->current.pos.y;
 }
 
-inline u16 fopAcM_GetSetId(fopAc_ac_c* p_actor) {
+inline int fopAcM_GetSetId(fopAc_ac_c* p_actor) {
     return p_actor->setID;
 }
 
 inline void dComIfGs_onActor(int bitNo, int roomNo);
 
 inline void fopAcM_onActor(fopAc_ac_c* p_actor) {
-    int setId = fopAcM_GetSetId(p_actor);
-    dComIfGs_onActor(setId, fopAcM_GetHomeRoomNo(p_actor));
+    dComIfGs_onActor(fopAcM_GetSetId(p_actor), fopAcM_GetHomeRoomNo(p_actor));
 }
 
 inline bool fopAcM_IsFirstCreating(void* i_actor) {

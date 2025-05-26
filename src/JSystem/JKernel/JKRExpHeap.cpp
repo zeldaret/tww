@@ -955,8 +955,8 @@ static void dummy2() {
 
 /* 802B30A4-802B31D4       .text state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl */
 void JKRExpHeap::state_register(TState* p, u32 param_1) const {
-    JUT_ASSERT(VERSION_SELECT(2420, 2423, 2423), p != NULL);
-    JUT_ASSERT(VERSION_SELECT(2421, 2424, 2424), p->getHeap() == this);
+    JUT_ASSERT(VERSION_SELECT(2420, 2420, 2423, 2423), p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2421, 2421, 2424, 2424), p->getHeap() == this);
     p->mId = param_1;
     if (param_1 <= 0xff) {
         p->mUsedSize = getUsedSize(param_1);
@@ -981,7 +981,7 @@ void JKRExpHeap::state_register(TState* p, u32 param_1) const {
 
 /* 802B31D4-802B327C       .text state_compare__10JKRExpHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRExpHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-    JUT_ASSERT(VERSION_SELECT(2468, 2471, 2471), r1.getHeap() == r2.getHeap());
+    JUT_ASSERT(VERSION_SELECT(2468, 2468, 2471, 2471), r1.getHeap() == r2.getHeap());
     bool result = true;
     if (r1.mCheckCode != r2.mCheckCode) {
         result = false;

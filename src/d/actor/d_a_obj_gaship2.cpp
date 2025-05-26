@@ -9,6 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 const char daObjGaship2::Act_c::M_arcname[] = "YakeRom";
@@ -138,7 +139,7 @@ actor_process_profile_definition g_profile_Obj_Gaship2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0040,
+    /* Priority     */ PRIO_Obj_Gaship2,
     /* Actor SubMtd */ &daObjGaship2::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

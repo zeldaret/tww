@@ -7,6 +7,7 @@
 #include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -291,7 +292,7 @@ actor_process_profile_definition g_profile_DEKU_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00FF,
+    /* Priority     */ PRIO_DEKU_ITEM,
     /* Actor SubMtd */ &daDekuItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

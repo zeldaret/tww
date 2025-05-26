@@ -356,7 +356,7 @@ const dCamera__Style dCamParam_c::styles[] = {
         {0.0f, 0.0f, -99999.99f, 0.7f, 0.25f, 0.0f, 0.0f, 30.0f, 0.0f, 1.0f, 320.0f, 240.0f, 700.0f, 0.0f, 20.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.6f, 0.33f, 0.66f, -99999.99f, 0.0f, 8.0f, 55.0f, 50.0f, 60.0f, 0.0f, 0.4f},
         dCamPrmFlg_UNK002,
     },
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     {
         'MM03',
         0xA,
@@ -676,7 +676,7 @@ const dCamera__Style dCamParam_c::styles[] = {
         {1.0f, 0.0f, -99999.99f, 0.75f, 0.25f, 15.0f, -99999.99f, -99999.99f, -99999.99f, -99999.99f, 1050.0f, 950.0f, -99999.99f, 0.66f, 0.05f, 20.0f, 15.0f, 45.0f, 2.0f, 0.05f, 0.12f, -99999.99f, -99999.99f, 1.0f, 0.2f, 60.0f, -99999.99f, -99999.99f, -99999.99f, 0.05f},
         dCamPrmFlg_UNK001 | dCamPrmFlg_UNK400,
     },
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     {
         'FN38',
         0x1,
@@ -876,7 +876,7 @@ const dCamera__Style dCamParam_c::styles[] = {
         {0.0f, 0.0f, -99999.99f, 0.7f, 0.25f, 30.0f, 25.0f, 30.0f, 0.0f, 0.5f, 250.0f, 160.0f, 420.0f, 0.0f, 20.0f, 20.0f, 40.0f, 5.0f, 0.0f, 2.4f, 0.33f, 0.66f, -99999.99f, 0.0f, 8.0f, 55.0f, 55.0f, 58.0f, 0.0f, 0.45f},
         dCamPrmFlg_UNK002,
     },
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     {
         'MM03',
         0xA,

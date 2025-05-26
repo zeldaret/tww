@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_coming2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000164       .text chase_ship__Q29daComing25Act_cFv */
 void daComing2::Act_c::chase_ship() {
@@ -228,7 +229,7 @@ actor_process_profile_definition g_profile_Coming2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0028,
+    /* Priority     */ PRIO_Coming2,
     /* Actor SubMtd */ &daComing2::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

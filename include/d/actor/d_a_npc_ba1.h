@@ -108,7 +108,7 @@ public:
 
 public:
     /* 0x290 */ u8 m290[0x7F8 - 0x290];
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x7F8 */ u8 m7F8;
 #endif
     /* Offsets below are for USA/PAL */

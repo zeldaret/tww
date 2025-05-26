@@ -49,10 +49,12 @@ mDoDvdThd_mountXArchive_c * l_swimResCommand;
 mDoDvdThd_mountXArchive_c * l_windResCommand;
 mDoDvdThd_mountXArchive_c * l_nameResCommand;
 mDoDvdThd_mountXArchive_c * l_tmsgCommand;
+#if VERSION > VERSION_DEMO
 mDoDvdThd_mountXArchive_c * l_dmsgCommand;
+#endif
 mDoDvdThd_mountXArchive_c * l_errorResCommand;
 mDoDvdThd_mountXArchive_c * l_msgDtCommand;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 mDoDvdThd_mountXArchive_c * l_msgDtCommand2;
 #endif
 mDoDvdThd_mountXArchive_c * l_msgCommand;
@@ -63,7 +65,11 @@ mDoDvdThd_toMainRam_c * l_particleCommand;
 mDoDvdThd_toMainRam_c * l_itemTableCommand;
 mDoDvdThd_toMainRam_c * l_ActorDataCommand;
 mDoDvdThd_toMainRam_c * l_FmapDataCommand;
+#if VERSION == VERSION_DEMO
+mDoDvdThd_mountXArchive_c * l_DmcMountCommand;
+#else
 mDoDvdThd_mountXArchive_c * l_lodCommand;
+#endif
 
 enum {
     ACT_nintendoInDraw = 0,
@@ -168,7 +174,7 @@ BOOL progInDraw(dScnLogo_c* i_this) {
 
     if (i_this->mTimer == 0) {
         i_this->mAction = ACT_progSelDraw;
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
         i_this->mTimer = 300;
 #else
         i_this->mTimer = 600;
@@ -214,7 +220,7 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
             else
                 mDoAud_seStart(JA_SE_TALK_SEL_CANCEL);
 
-            const int temp = VERSION_SELECT(240, 540, 540);
+            const int temp = VERSION_SELECT(240, 240, 540, 540);
             if (i_this->mTimer > temp) {
                 i_this->field_0x1eb = 1;
                 i_this->field_0x1f4 = i_this->mTimer - temp;
@@ -416,10 +422,12 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
         && l_windResCommand->sync()
         && l_nameResCommand->sync()
         && l_tmsgCommand->sync()
+#if VERSION > VERSION_DEMO
         && l_dmsgCommand->sync()
+#endif
         && l_errorResCommand->sync()
         && l_msgDtCommand->sync()
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         && l_msgDtCommand2->sync()
 #endif
         && l_msgCommand->sync()
@@ -430,7 +438,10 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
         && l_itemTableCommand->sync()
         && l_ActorDataCommand->sync()
         && l_FmapDataCommand->sync()
-        && l_lodCommand->sync() && !mDoRst::isReset()) {
+#if VERSION > VERSION_DEMO
+        && l_lodCommand->sync() && !mDoRst::isReset()
+#endif
+    ) {
 
         dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
     }
@@ -491,22 +502,24 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     dComIfGp_setItemResArchive(l_itemResCommand->getArchive());
     dComIfGp_setFmapResArchive(l_fmapResCommand->getArchive());
     dComIfGp_setDmapResArchive(l_dmapResCommand->getArchive());
-    dComIfGp_setClctResArchive(l_clctResCommand->getArchive());
-    dComIfGp_setOptResArchive(l_optResCommand->getArchive());
+    dComIfGp_setCollectResArchive(l_clctResCommand->getArchive());
+    dComIfGp_setOptionResArchive(l_optResCommand->getArchive());
     dComIfGp_setSaveResArchive(l_saveResCommand->getArchive());
     dComIfGp_setClothResArchive(l_clothResCommand->getArchive());
     dComIfGp_setItemIconArchive(l_itemiconCommand->getArchive());
     dComIfGp_setActionIconArchive(l_actioniconCommand->getArchive());
     dComIfGp_setScopeResArchive(l_scopeResCommand->getArchive());
-    dComIfGp_setCamResArchive(l_camResCommand->getArchive());
+    dComIfGp_setCameraResArchive(l_camResCommand->getArchive());
     dComIfGp_setSwimResArchive(l_swimResCommand->getArchive());
     dComIfGp_setWindResArchive(l_windResCommand->getArchive());
     dComIfGp_setNameResArchive(l_nameResCommand->getArchive());
-    dComIfGp_setTmsgArchive(l_tmsgCommand->getArchive());
+    dComIfGp_setTactMsgArchive(l_tmsgCommand->getArchive());
+#if VERSION > VERSION_DEMO
     dComIfGp_setDmsgArchive(l_dmsgCommand->getArchive());
+#endif
     dComIfGp_setErrorResArchive(l_errorResCommand->getArchive());
     dComIfGp_setMsgDtArchive(l_msgDtCommand->getArchive());
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     dComIfGp_setMsgDt2Archive(l_msgDtCommand2->getArchive());
 #endif
     dComIfGp_setMsgArchive(l_msgCommand->getArchive());
@@ -531,10 +544,12 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     delete l_windResCommand;
     delete l_nameResCommand;
     delete l_tmsgCommand;
+#if VERSION > VERSION_DEMO
     delete l_dmsgCommand;
+#endif
     delete l_errorResCommand;
     delete l_msgDtCommand;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     delete l_msgDtCommand2;
 #endif
     delete l_msgCommand;
@@ -546,7 +561,7 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     mDoExt_getMesgFont();
     mDoExt_getRubyFont();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 0 && dComIfGp_getFontArchive() != NULL) {
         dComIfGp_getFontArchive()->unmount();
         dComIfGp_setFontArchive(NULL);
@@ -561,7 +576,11 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
 
     delete l_ActorDataCommand;
     delete l_FmapDataCommand;
+#if VERSION == VERSION_DEMO
+    delete l_DmcMountCommand;
+#else
     delete l_lodCommand;
+#endif
 
     ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
     dDlst_shadowControl_c::setSimpleTex(timg);
@@ -581,10 +600,16 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     g_dComIfG_gameInfo.play.field_0x4820 = JKRAllocFromAram(0xB000, JKRAramHeap::HEAD);
 #endif
 
+#if VERSION == VERSION_DEMO
+    mDoRst::offReset();
+#endif
+
+#if VERSION > VERSION_DEMO
     mDoExt_setSafeGameHeapSize();
     mDoExt_setSafeZeldaHeapSize();
     mDoExt_setSafeCommandHeapSize();
     mDoExt_setSafeArchiveHeapSize();
+#endif
 
     return TRUE;
 }
@@ -616,10 +641,10 @@ cPhs_State phase_0(dScnLogo_c* i_this) {
     
     rt = dComIfG_setObjectRes("System", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 
-    JUT_ASSERT(VERSION_SELECT(1169, 1350, 1378), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1169, 1169, 1350, 1378), rt == 1);
 
     rt = dComIfG_setObjectRes("Logo", JKRArchive::MOUNT_DIRECTION_TAIL, NULL);
-    JUT_ASSERT(VERSION_SELECT(1173, 1354, 1382), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1173, 1173, 1354, 1382), rt == 1);
 
 #if VERSION == VERSION_PAL
     g_mDoMemCd_control.load2();
@@ -658,11 +683,11 @@ cPhs_State phase_1(dScnLogo_c* i_this) {
 
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOON);
 
-    JUT_ASSERT(VERSION_SELECT(1208, 1426, 1466), toonImage != NULL);
+    JUT_ASSERT(VERSION_SELECT(1208, 1208, 1426, 1466), toonImage != NULL);
     dDlst_list_c::setToonImage(toonImage);
 
     toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOONEX);
-    JUT_ASSERT(VERSION_SELECT(1213, 1431, 1471), toonImage != NULL);
+    JUT_ASSERT(VERSION_SELECT(1213, 1213, 1431, 1471), toonImage != NULL);
     dDlst_list_c::setToonExImage(toonImage);
 
     i_this->field_0x1f8 = mDoExt_getGameHeap()->alloc(0x3c8a0, 4);
@@ -684,7 +709,7 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     s32 rt;
     
     rt = dComIfG_syncObjectRes("Logo");
-    JUT_ASSERT(VERSION_SELECT(1251, 1469, 1509), rt >= 0);
+    JUT_ASSERT(VERSION_SELECT(1251, 1251, 1469, 1509), rt >= 0);
 
     if (rt != 0)
         return cPhs_INIT_e;
@@ -694,11 +719,11 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     ResTIMG * timg;
     
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_NINTENDO_376X104);
-    JUT_ASSERT(VERSION_SELECT(1264, 1482, 1522), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1264, 1264, 1482, 1522), timg != NULL);
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
-    JUT_ASSERT(VERSION_SELECT(1267, 1485, 1525), i_this->nintendoImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1267, 1267, 1485, 1525), i_this->nintendoImg != NULL);
     i_this->nintendoImg->setAlpha(0xFF);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Blue Nintendo logo for JPN.
     i_this->nintendoImg->getPicture()->setWhite((GXColor){0x00, 0x46, 0xFF, 0xFF});
 #else
@@ -707,9 +732,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #endif
 
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_TITLE_DOLBY_MARK);
-    JUT_ASSERT(VERSION_SELECT(1276, 1498, 1538), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1276, 1276, 1498, 1538), timg != NULL);
     i_this->dolbyImg = new dDlst_2D_c(timg, 218, 166, 0);
-    JUT_ASSERT(VERSION_SELECT(1280, 1502, 1542), i_this->dolbyImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1280, 1280, 1502, 1542), i_this->dolbyImg != NULL);
     i_this->dolbyImg->setAlpha(0xFF);
 
 #if VERSION == VERSION_PAL
@@ -755,9 +780,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_CHOICE);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1286, 1565, 1605), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1286, 1286, 1565, 1605), timg != NULL);
     i_this->progchoiceImg = new dDlst_2D_c(timg, 113, 281, 0);
-    JUT_ASSERT(VERSION_SELECT(1288, 1567, 1607), i_this->progchoiceImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1288, 1288, 1567, 1607), i_this->progchoiceImg != NULL);
     i_this->progchoiceImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
@@ -765,9 +790,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_YES);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1295, 1579, 1619), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1295, 1295, 1579, 1619), timg != NULL);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1297, 1581, 1621), i_this->progyesImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1297, 1297, 1581, 1621), i_this->progyesImg != NULL);
     i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
     i_this->progyesImg->setAlpha(0x00);
 
@@ -776,9 +801,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_NO);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1305, 1594, 1634), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1305, 1305, 1594, 1634), timg != NULL);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1307, 1596, 1636), i_this->prognoImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1307, 1307, 1596, 1636), i_this->prognoImg != NULL);
     i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
     i_this->prognoImg->setAlpha(0x00);
 
@@ -787,9 +812,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_PRO);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1315, 1609, 1649), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1315, 1315, 1609, 1649), timg != NULL);
     i_this->progImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1317, 1611, 1651), i_this->progImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1317, 1317, 1611, 1651), i_this->progImg != NULL);
     i_this->progImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
@@ -797,26 +822,30 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #else
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_INTER);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1324, 1623, 1663), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1324, 1324, 1623, 1663), timg != NULL);
     i_this->interImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1326, 1625, 1665), i_this->interImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1326, 1326, 1625, 1665), i_this->interImg != NULL);
     i_this->interImg->setAlpha(0x00);
 
     JKRHeap::free(i_this->field_0x1f8, NULL);
 
+#if VERSION > VERSION_DEMO
     l_lodCommand = aramMount("/res/Stage/sea/LODALL.arc");
-    JUT_ASSERT(VERSION_SELECT(1346, 1645, 1685), l_lodCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1346, 1346, 1645, 1685), l_lodCommand != NULL);
+#endif
     
     rt = dComIfG_setObjectRes("Always", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1351, 1650, 1690), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1351, 1351, 1650, 1690), rt == 1);
 
+#if VERSION > VERSION_DEMO
     archiveHeap->dump_sort();
+#endif
 
     rt = dComIfG_setObjectRes("Link", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1356, 1655, 1695), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1356, 1356, 1655, 1695), rt == 1);
 
     rt = dComIfG_setObjectRes("Agb", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1360, 1659, 1699), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1360, 1360, 1659, 1699), rt == 1);
 
     l_anmCommand = aramMount("/res/Object/LkAnm.arc");
     l_fmapCommand = aramMount("/res/Fmap/Fmap.arc");
@@ -843,7 +872,9 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_windResCommand = aramMount("/res/Msg/windres.arc");
     l_nameResCommand = aramMount("/res/Msg/nameres.arc");
     l_tmsgCommand = aramMount("/res/Msg/tmsgres.arc");
+#if VERSION > VERSION_DEMO
     l_dmsgCommand = aramMount("/res/Msg/dmsgres.arc");
+#endif
     l_errorResCommand = aramMount("/res/Msg/errorres.arc");
     l_saveResCommand = aramMount("/res/Msg/saveres.arc");
 
@@ -854,12 +885,12 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_msgDtCommand = onMemMount("/res/Msg/bmgres.arc");
 #endif
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     l_msgDtCommand2 = onMemMount("/res/Msg/bmgresh.arc");
 #endif
     l_msgCommand = aramMount("/res/Msg/msgres.arc");
     l_menuCommand = onMemMount("/res/Msg/menures.arc");
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     l_fontCommand = mDoDvdThd_mountXArchive_c::create("/res/Msg/fontres.arc", JKRArchive::MOUNT_DIRECTION_HEAD, JKRArchive::MOUNT_MEM);
 #else
     l_fontCommand = onMemMount("/res/Msg/fontres.arc");
@@ -867,11 +898,11 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_rubyCommand = onMemMount("/res/Msg/rubyres.arc");
     l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::DEFAULT_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
     l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1418, 1743, 1783), l_itemTableCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1418, 1418, 1743, 1783), l_itemTableCommand != NULL);
     l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1422, 1747, 1787), l_ActorDataCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1422, 1422, 1747, 1787), l_ActorDataCommand != NULL);
     l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1426, 1751, 1791), l_FmapDataCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1426, 1426, 1751, 1791), l_FmapDataCommand != NULL);
 
     JAIZelBasic::getInterface()->loadStaticWaves();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
@@ -879,13 +910,16 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     mDoGph_gInf_c::startFadeIn(30);
     i_this->mTimer = 90;
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoRst::offReset();
     mDoRst::offResetPrepare();
 #endif
 
+#if VERSION > VERSION_DEMO
     JUTGamePad::clearResetOccurred();
     JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 

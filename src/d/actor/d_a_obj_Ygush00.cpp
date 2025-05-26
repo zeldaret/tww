@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_obj_gryw00.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -19,18 +20,20 @@ namespace {
     static const char l_arcname[] = "Ygush00";
 };
 
-#ifdef DEBUG
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#if VERSION == VERSION_DEMO
 static daObjYgush00_HIO_c l_HIO;
-#endif
 
 daObjYgush00_HIO_c::daObjYgush00_HIO_c() {
-    
+    mNo = -1;
+    m05 = 0;
+    m06 = 0;
+    m07 = 0;
 }
 
 void daObjYgush00_HIO_c::genMessage(JORMContext* ctx) {
     ctx->genCheckBox(NULL, NULL, 0, 0, NULL, 0, 0, 0, 0); // placeholder
 }
+#endif
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
@@ -50,7 +53,7 @@ bool daObjYgush00_c::create_heap() {
     J3DAnmTransform * pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, bck_table[mType]));
 
     if (!pModelData || !pBtk || !pBck) {
-        JUT_ASSERT(207, FALSE);
+        JUT_ASSERT(VERSION_SELECT(203, 207, 207, 207), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
@@ -87,16 +90,16 @@ cPhs_State daObjYgush00_c::_create() {
             fopAcM_setCullSizeBox(this,
                 scale.x * -80.0f, 0.0f, scale.z * -80.0f,
                 scale.x * 80.0f, scale.y * 125.0f, scale.z * 80.0f);
-
-#ifdef DEBUG
-                if (l_HIO.mNo < 0) {
-                    l_HIO.mNo = mDoHIO_createChild("", &l_HIO);
-                }
-#endif
         } else {
             ret = cPhs_ERROR_e;
         }
     }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("湧き水", &l_HIO);
+    }
+#endif
 
     return ret;
 }
@@ -105,7 +108,7 @@ cPhs_State daObjYgush00_c::_create() {
 bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname);
 
-#ifdef DEBUG
+#if VERSION == VERSION_DEMO
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -198,7 +201,7 @@ actor_process_profile_definition g_profile_Obj_Ygush00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x005E,
+    /* Priority     */ PRIO_Obj_Ygush00,
     /* Actor SubMtd */ &l_daObjYgush00_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

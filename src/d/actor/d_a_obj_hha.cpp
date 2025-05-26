@@ -9,9 +9,15 @@
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_hha.h"
 
-const dCcD_SrcCyl daObjHha_c::M_cyl_data = {
+#if VERSION == VERSION_DEMO
+dCcD_SrcCyl l_daObjHha_cyl_data =
+#else
+const dCcD_SrcCyl daObjHha_c::M_cyl_data =
+#endif
+{
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -41,6 +47,7 @@ const dCcD_SrcCyl daObjHha_c::M_cyl_data = {
     },
 };
 
+#if VERSION > VERSION_DEMO
 const dCcD_SrcSph daObjHha_c::M_sph_data = {
     // dCcD_SrcGObjInf
     {
@@ -69,6 +76,7 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
         /* Radius */ 220.0f,
     },
 };
+#endif
 
 const HHA_RES_FILE_ID l_daObjHha_bdl_idx_table[2] = {HHA_BDL_HHA1, HHA_BDL_HHA2};
 const HHA_RES_FILE_ID l_daObjHha_dzb_idx_table[2] = {HHA_DZB_HHA1, HHA_DZB_HHA2};
@@ -87,16 +95,18 @@ void daObjHhaPart_c::init_data(float yPos, float yTar, u16 speed, u8 i, u8 isMid
     mDeltaY = (yTar - yPos) / speed;
     mPosDeltaDir = mPosTarget - mPos;
     mPosDeltaDir.normalizeRS();
-    setExeProc(&daObjHhaPart_c::exe_normal);
+    mCbExec = &daObjHhaPart_c::exe_normal;
     mCbDraw = &daObjHhaPart_c::draw_normal;
     mbMid = isMiddle;
 }
 
 /* 00000170-00000224       .text set_mdl_area__14daObjHhaPart_cFPCci */
 BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
-    BOOL ret = FALSE;
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
-    JUT_ASSERT(0x1d9, mdl_data != NULL);
+    J3DModelData* mdl_data;
+    BOOL ret;
+    ret = FALSE;
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
+    JUT_ASSERT(VERSION_SELECT(410, 473, 473, 473), mdl_data != NULL);
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
         ret = TRUE;
@@ -182,6 +192,9 @@ void daObjHhaSplash_c::create_s(u16 particleID, cXyz* pPos, float offsetY, float
     mPos += calcVec;
     mBasePos = mPos;
     mAngle = *pAngle;
+#if VERSION == VERSION_DEMO
+    mpEmitter =
+#endif
     dComIfGp_particle_set(particleID, &mPos, &mAngle, NULL, 255, &mSplashCb);
     mbIsActive = true;
 }
@@ -191,19 +204,19 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
-    JUT_ASSERT(0x280, mdl_data != NULL);
+    JUT_ASSERT(VERSION_SELECT(577, 640, 640, 640), mdl_data != NULL);
     
     if(mdl_data != NULL){
         M_mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        JUT_ASSERT(0x289, M_mdl != NULL);
+        JUT_ASSERT(VERSION_SELECT(586, 649, 649, 649), M_mdl != NULL);
 
         if(M_mdl != NULL){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
-            JUT_ASSERT(0x290, btk_data != NULL);
+            JUT_ASSERT(VERSION_SELECT(593, 656, 656, 656), btk_data != NULL);
             
             if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
-                JUT_ASSERT(0x295, bck_data != NULL);
+                JUT_ASSERT(VERSION_SELECT(598, 661, 661, 661), bck_data != NULL);
                 
                 if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
                     ret = TRUE;
@@ -252,7 +265,7 @@ void daObjHhaYgush_c::draw() {
     }
 }
 
-const char daObjHha_c::M_arcname[4] = "Hha";
+const char daObjHha_c::M_arcname[] = "Hha";
 
 /* 00000C2C-00000C4C       .text solidHeapCB__10daObjHha_cFP10fopAc_ac_c */
 int daObjHha_c::solidHeapCB(fopAc_ac_c* i_this) {
@@ -364,7 +377,9 @@ cPhs_State daObjHha_c::_create() {
 /* 000018EC-000019EC       .text _delete__10daObjHha_cFv */
 bool daObjHha_c::_delete() {
     int i;
+#if VERSION > VERSION_DEMO
     if(heap != NULL){
+#endif
         for(i = 0; i < 2; i++){
             cBgW* bgw = mPartA[i].mpBgw;
             if(bgw != NULL){
@@ -378,11 +393,15 @@ bool daObjHha_c::_delete() {
 
                 if(toErase){
                     dComIfG_Bgsp()->Release(bgw);
+#if VERSION > VERSION_DEMO
                     mPartA[i].mpBgw = NULL;
+#endif
                 }
             }
         }
+#if VERSION > VERSION_DEMO
     }
+#endif
 
     for(i = 0; i < 2; i++){
         mSplashA[i].delete_s();
@@ -428,9 +447,14 @@ void daObjHha_c::init_co() {
 
     mCylStts.Init(0xff, 0xff, this);
     mCyl.SetStts(&mCylStts);
+#if VERSION == VERSION_DEMO
+    mCyl.Set(l_daObjHha_cyl_data);
+#else
     mCyl.Set(M_cyl_data);
+#endif
     mCyl.SetC(center);
 
+#if VERSION > VERSION_DEMO
     bool doSphInit = false;
     if(!check_sw() && mIsMiddle == 0){
         doSphInit = true;
@@ -444,6 +468,7 @@ void daObjHha_c::init_co() {
         mSph.SetC(center);
         mSph.SetR(220.0f);
     }
+#endif
 }
 
 /* 00001C64-00001E14       .text get_water_h__10daObjHha_cFv */
@@ -637,10 +662,12 @@ bool daObjHha_c::_execute() {
         calcVec.y = get_water_h();
         mCyl.SetC(calcVec);
         dComIfG_Ccsp()->Set(&mCyl);
+#if VERSION > VERSION_DEMO
         bool isSphActive = (!check_sw() && mIsMiddle == 0);
         if(isSphActive){
             dComIfG_Ccsp()->Set(&mSph);
         }
+#endif
     }
 
     return TRUE;
@@ -712,7 +739,7 @@ actor_process_profile_definition g_profile_Obj_Hha = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0049,
+    /* Priority     */ PRIO_Obj_Hha,
     /* Actor SubMtd */ &Hha_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

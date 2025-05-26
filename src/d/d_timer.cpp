@@ -7,6 +7,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -777,6 +778,6 @@ msg_process_profile_definition g_profile_TIMER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ 0x01D2,
+    /* Priority     */ PRIO_TIMER,
     /* Msg SubMtd   */ &l_dTimer_Method,
 };

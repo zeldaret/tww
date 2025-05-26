@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_p2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000020C       .text __ct__19daNpc_P2_childHIO_cFv */
 daNpc_P2_childHIO_c::daNpc_P2_childHIO_c() {
@@ -510,7 +511,7 @@ actor_process_profile_definition g_profile_NPC_P2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0146,
+    /* Priority     */ PRIO_NPC_P2,
     /* Actor SubMtd */ &daNpc_P2MethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
