@@ -1953,8 +1953,13 @@ void mirrorPolygonCheck(cXyz* min_p, cXyz* max_p, f32 rad, dDlst_shadowPoly_c* p
     dComIfG_Bgsp()->ShdwDraw(&shdwDraw);
 }
 
+#if VERSION == VERSION_DEMO
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha)
+#else
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad)
+#endif
+{
     mShadowPoly.mCount = 0;
     static cXyz l_p1Offset(0.0f, 0.0f, 0.0f);
     static cXyz l_p2Offset(0.0f, 0.0f, 10000.0f);
@@ -1962,7 +1967,11 @@ void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
     cXyz offs, offs2;
     mDoMtx_multVec(mtx, &l_p1Offset, &offs);
     mDoMtx_multVec(mtx, &l_p2Offset, &offs2);
+#if VERSION == VERSION_DEMO
+    mirrorPolygonCheck(&offs, &offs2, 60.0f, &mShadowPoly);
+#else
     mirrorPolygonCheck(&offs, &offs2, rad, &mShadowPoly);
+#endif
 
     Mtx viewMtx;
     mDoMtx_lookAt(viewMtx, &offs, &offs2, 0);

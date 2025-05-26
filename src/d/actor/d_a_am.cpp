@@ -57,7 +57,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         am_class* i_this = (am_class*)model->getUserArea();
         if (i_this) {
             if (jntNo >= 1 && jntNo <= 4) {
-                cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+                MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
 
             cXyz offset;
@@ -369,6 +369,7 @@ static void bomb_move_set(am_class* i_this, u8 alwaysMoveY) {
 /* 00000F04-00001138       .text bomb_nomi_check__FP8am_class */
 static BOOL bomb_nomi_check(am_class* i_this) {
     fopAc_ac_c* actor = i_this;
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     i_this->mStts.Move();
 
     if (i_this->mCurrBckIdx != AM_BCK_OPEN && i_this->mCurrBckIdx != AM_BCK_OPEN_LOOP &&
@@ -391,8 +392,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                 if (fpcM_GetName(hitActor) == PROC_BOMB) {
                     daBomb_c* bomb = (daBomb_c*)hitActor;
                     if (!bomb->getBombCheck_Flag() && bomb->getBombRestTime() > 1) {
-                        f32 offsetY = 20.0f + REG8_F(1);
-                        if (i_this->mMouthPos.y - offsetY < bomb->current.pos.y) {
+                        if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb->current.pos.y) {
                             // Swallow the bomb.
                             bomb->setBombCheck_Flag();
                             bomb->change_state((daBomb_c::State_e)2);
@@ -407,8 +407,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
                 } else if (fpcM_GetName(hitActor) == PROC_Bomb2) {
                     daBomb2::Act_c* bomb2 = (daBomb2::Act_c*)hitActor;
                     if (!bomb2->chk_eat() && bomb2->get_time() > 1) {
-                        f32 offsetY = 20.0f + REG8_F(1);
-                        if (i_this->mMouthPos.y - offsetY < bomb2->current.pos.y) {
+                        if (i_this->mMouthPos.y - (20.0f + REG8_F(1)) < bomb2->current.pos.y) {
                             // Swallow the bomb.
                             bomb2->set_eat();
                             i_this->mSwallowedActorPID = fopAcM_GetID(bomb2);
@@ -429,9 +428,7 @@ static BOOL bomb_nomi_check(am_class* i_this) {
 
 /* 00001138-000011E4       .text BG_check__FP8am_class */
 static void BG_check(am_class* i_this) {
-    f32 halfHeight = 30.0f + REG12_F(3);
-    f32 radius = 150.0f + REG12_F(4);
-    i_this->mAcchCir.SetWall(halfHeight, radius);
+    i_this->mAcchCir.SetWall(30.0f + REG12_F(3), 150.0f + REG12_F(4));
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
     i_this->old.pos.y -= i_this->mCorrectionOffsetY;
@@ -495,17 +492,20 @@ static void action_dousa(am_class* i_this) {
         anm_init(i_this, AM_BCK_SLEEP_LOOP, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         i_this->mMode += 1;
         // Fall-through
-    case 1:
+    case 1: {
         if (i_this->mStartsInactive == 1 && i_this->mSwitch != 0xFF && !dComIfGs_isSwitch(i_this->mSwitch, dComIfGp_roomControl_getStayNo())) {
             break;
         }
         fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
-        if (fopAcM_searchPlayerDistance(i_this) < 1000.0f) {
+        f32 f31 = 1000.0f;
+        if (fopAcM_searchPlayerDistance(i_this) < f31) {
+#if VERSION > VERSION_DEMO
             f32 yDist = player->current.pos.y - i_this->current.pos.y;
             yDist = std::sqrtf(yDist*yDist); // ???
             if (yDist > 300.0f) {
                 break;
             }
+#endif
             if (Line_check(i_this, player->current.pos)) {
                 anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 fopAcM_monsSeStart(i_this, JA_SE_CV_AM_AWAKE, 0);
@@ -516,6 +516,7 @@ static void action_dousa(am_class* i_this) {
             }
         }
         break;
+    }
     case MODE_DOUSA_OKIRU:
         if (!i_this->mpMorf->isStop()) {
             break;
@@ -554,16 +555,19 @@ static void action_dousa(am_class* i_this) {
                 return;
             }
         } else {
-            if (fopAcM_searchPlayerDistance(i_this) > 2000.0f) {
+            f32 f31 = 2000.0f;
+            if (fopAcM_searchPlayerDistance(i_this) > f31) {
                 i_this->mMode = MODE_DOUSA_SLEEP_INIT;
                 break;
             }
+#if VERSION > VERSION_DEMO
             f32 yDist = player->current.pos.y - i_this->current.pos.y;
             yDist = std::sqrtf(yDist*yDist); // ???
             if (yDist > 300.0f) {
                 i_this->mMode = MODE_DOUSA_SLEEP_INIT;
                 break;
             }
+#endif
         }
         s16 yRotDiff = cLib_distanceAngleS(i_this->shape_angle.y, i_this->mTargetAngleY);
         if (yRotDiff < 0x100) {
@@ -621,7 +625,16 @@ static void action_dousa(am_class* i_this) {
             fopAcM_monsSeStart(i_this, JA_SE_CV_AM_OPEN_MOUTH, 0);
             i_this->mNeedleCyl.OffAtSetBit();
             i_this->mNeedleCyl.OffAtSetBit();
-            if (i_this->mSmokeCbs[2].getEmitter() == NULL) {
+#if VERSION == VERSION_DEMO
+            if (i_this->m033C_demo == NULL)
+#else
+            if (i_this->mSmokeCbs[2].getEmitter() == NULL)
+#endif
+            {
+#if VERSION == VERSION_DEMO
+                i_this->mSmokeCbs[2].remove();
+                i_this->m033C_demo = 
+#endif
                 dComIfGp_particle_setToon(
                     dPa_name::ID_SCENE_A154, &i_this->mWaistPos, &i_this->shape_angle, NULL,
                     0xB9, &i_this->mSmokeCbs[2], fopAcM_GetRoomNo(i_this)
@@ -640,7 +653,15 @@ static void action_dousa(am_class* i_this) {
             i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(i_this);
         }
         if (i_this->mCountDownTimers[0] == 0) {
+#if VERSION == VERSION_DEMO
+            if (i_this->m033C_demo) {
+                i_this->m033C_demo->becomeInvalidEmitter();
+                i_this->m033C_demo = NULL;
+                i_this->mSmokeCbs[2].remove();
+            }
+#else
             i_this->mSmokeCbs[2].remove();
+#endif
             i_this->mMode = 3;
         }
         break;
@@ -662,9 +683,25 @@ static void action_dousa(am_class* i_this) {
     medama_move(i_this);
 
     if (i_this->mMode != 2 && medama_atari_check(i_this)) {
+#if VERSION == VERSION_DEMO
+        if (i_this->m033C_demo) {
+            i_this->m033C_demo->becomeInvalidEmitter();
+            i_this->m033C_demo = NULL;
+            i_this->mSmokeCbs[2].remove();
+        }
+#else
         i_this->mSmokeCbs[2].remove();
+#endif
     } else if (bomb_nomi_check(i_this)) {
+#if VERSION == VERSION_DEMO
+        if (i_this->m033C_demo) {
+            i_this->m033C_demo->becomeInvalidEmitter();
+            i_this->m033C_demo = NULL;
+            i_this->mSmokeCbs[2].remove();
+        }
+#else
         i_this->mSmokeCbs[2].remove();
+#endif
     }
 }
 
@@ -946,7 +983,8 @@ static BOOL daAM_Execute(am_class* i_this) {
     fopAcM_setGbaName(i_this, dItem_BOW_e, 0xC, 0x2A);
 
     if (enemy_ice(&i_this->mEnemyIce)) {
-        i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model = i_this->mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpMorf->calc();
         return TRUE;
     }
@@ -1067,8 +1105,14 @@ static BOOL daAM_Delete(am_class* i_this) {
     for (int i = 0; i < 4; i++) {
         i_this->mSmokeCbs[i].remove();
     }
+#if VERSION == VERSION_DEMO
+    if (i_this->m033C_demo) {
+        i_this->m033C_demo->becomeInvalidEmitter();
+        i_this->m033C_demo = NULL;
+    }
+#else
     i_this->mSmokeCbs[2].remove();
-
+#endif
     if (i_this->m033C) {
         i_this->m033C->becomeInvalidEmitter();
         i_this->m033C = NULL;

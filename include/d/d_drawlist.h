@@ -413,7 +413,11 @@ public:
 class dDlst_mirrorPacket : public J3DPacket {
 public:
     void init(ResTIMG*);
+#if VERSION == VERSION_DEMO
+    void update(Mtx, u8);
+#else
     void update(Mtx, u8, f32);
+#endif
     virtual void draw();
 
     /* 0x0010 */ u8 field_0x0010[0x0040 - 0x0010];
