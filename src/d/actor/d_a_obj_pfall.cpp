@@ -25,12 +25,10 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObj_Pfall_c*>(i_this)->CreateHeap();
 }
 
-
-
 /* 0000010C-00000140       .text __ct__16daObj_PfallHIO_cFv */
 daObj_PfallHIO_c::daObj_PfallHIO_c() {
     mNo = -1;
-    debug_draw = false;
+    field_0x05 = false;
     field_0x06 = 0;
     field_0x08 = 3.0f;
     field_0x0C = 0;
@@ -71,7 +69,6 @@ void daObj_Pfall_c::setAnm() {
     };
 
     dLib_bcks_setAnm("Pfall", mpMorf, &mBckIdx, &field_0x481, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, false);
-    /* Nonmatching */
 }
 
 /* 00000190-000004DC       .text set_mtx__13daObj_Pfall_cFv */
@@ -112,9 +109,8 @@ void daObj_Pfall_c::set_mtx() {
     mDoMtx_stack_c::transM(offset_pos);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_stack_c::transM(0.0f, field_0x438 + l_HIO.field_0x08, 0.0f);
-    mDoMtx_stack_c::YrotM( -0x8000);
+    mDoMtx_stack_c::YrotM(-0x8000);
     mpHimoModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    /* Nonmatching */
 }
 
 /* 00000518-00000858       .text CreateHeap__13daObj_Pfall_cFv */
@@ -164,22 +160,21 @@ BOOL daObj_Pfall_c::CreateHeap() {
     if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &field_0x3CC) == true) {
         return FALSE;
     }
-    field_0x400 = new dBgW();
+    mpBgW2 = new dBgW();
 
-    if(field_0x400 == NULL) {
+    if(mpBgW2 == NULL) {
         return FALSE;
     }
     
     pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
     
-    return (field_0x400->Set(pData, cBgW::MOVE_BG_e, &field_0x404) & 0xff) != 1 ? 1 : 0;
-    /* Nonmatching */
+    return (mpBgW2->Set(pData, cBgW::MOVE_BG_e, &field_0x404) & 0xff) != 1 ? 1 : 0;
 }
 
 /* 00000858-000008CC       .text CreateInit__13daObj_Pfall_cFv */
 void daObj_Pfall_c::CreateInit() {
     dComIfG_Bgsp()->Regist(mpBgW, this);
-    dComIfG_Bgsp()->Regist(field_0x400, this);
+    dComIfG_Bgsp()->Regist(mpBgW2, this);
     set_mtx();
     field_0x481 = 1;
     mode_wait_init();
@@ -206,8 +201,8 @@ bool daObj_Pfall_c::_delete() {
     if(mpBgW && mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
-    if(field_0x400 && field_0x400->ChkUsed()) {
-        dComIfG_Bgsp()->Release(field_0x400);
+    if(mpBgW2 && mpBgW2->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBgW2);
     }
     return true;
 }
@@ -316,8 +311,6 @@ void daObj_Pfall_c::cutHikuProc(int staffIdx) {
             field_0x481 = 1;
         }
     }
-
-    /* Nonmatching */
 }
 
 /* 00000F00-00000F1C       .text mode_wait_init__13daObj_Pfall_cFv */
@@ -330,14 +323,12 @@ void daObj_Pfall_c::mode_wait_init() {
 void daObj_Pfall_c::mode_wait() {
 
     if(dLib_checkPlayerInCircle(current.pos, 100.0f, 100.0f) 
-        && 0.0f == fopAcM_GetSpeedF(dComIfGp_getPlayer(0))
+        && dComIfGp_getPlayer(0)->speedF == 0.0f
         && cLib_calcTimer(&field_0x3B8) == 0) {
             mode_event_init();
     }
     mpBgW->Move();
-    field_0x400->Move();
-    
-    /* Nonmatching */
+    mpBgW2->Move();
 }
 
 /* 00000FC0-00000FCC       .text mode_event_init__13daObj_Pfall_cFv */
@@ -359,7 +350,7 @@ void daObj_Pfall_c::mode_event() {
         fopAcM_orderOtherEvent(this, "NZFALL");
     }
     mpBgW->Move();
-    field_0x400->Move();
+    mpBgW2->Move();
 }
 
 /* 000010A4-00001130       .text mode_proc_call__13daObj_Pfall_cFv */
@@ -375,11 +366,14 @@ void daObj_Pfall_c::mode_proc_call() {
 
 /* 00001130-000012F4       .text _execute__13daObj_Pfall_cFv */
 bool daObj_Pfall_c::_execute() {
+
     attention_info.position = current.pos;
     eyePos = current.pos;
+    
     if(dComIfGp_event_runCheck()) {
         cutProc();
     }
+
     if(field_0x481 == 2) {
         if(mpMorf->getFrame() == 6.0f) {
             fopAcM_seStart(this, JA_SE_OBJ_TC_JAIL_STRING, 0);
@@ -395,7 +389,6 @@ bool daObj_Pfall_c::_execute() {
                     }
                 }
             }       
-
     } else {
         field_0x438 = 0.0f;
     }
@@ -451,6 +444,9 @@ bool daObj_Pfall_c::_draw() {
     mDoExt_modelUpdateDL(mpHimoModel);
     return true;
 }
+
+// to match .rodata
+static const int dummy[] = {0x00FF0080};
 
 /* 000014E4-00001504       .text daObj_PfallCreate__FPv */
 static cPhs_State daObj_PfallCreate(void* i_this) {

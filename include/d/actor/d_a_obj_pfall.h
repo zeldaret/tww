@@ -51,7 +51,7 @@ public:
     /* 0x3C8 */ dBgW* mpBgW;
     /* 0x3CC */ Mtx field_0x3CC;
     /* 0x3FC */ J3DModel* field_0x3FC;
-    /* 0x400 */ dBgW* field_0x400;
+    /* 0x400 */ dBgW* mpBgW2;
     /* 0x404 */ Mtx field_0x404;
     /* 0x434 */ J3DModel* mpHimoModel;
     /* 0x438 */ f32 field_0x438;
@@ -67,11 +67,11 @@ public:
 class daObj_PfallHIO_c {
 public:
     daObj_PfallHIO_c();
-    virtual ~daObj_PfallHIO_c() {}
+    virtual ~daObj_PfallHIO_c() {mNo = -1;}
 
 public:
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ bool debug_draw;
+    /* 0x05 */ bool field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
     /* 0x08 */ f32 field_0x08;
