@@ -3211,7 +3211,11 @@ BOOL daNpc_Md_c::draw() {
         f32 temp = mCps.GetAtVecP()->abs();
         mDoMtx_stack_c::scaleM(0.1f, 0.1f, temp * (1.0f/9600.0f));
         mDoMtx_stack_c::revConcat(mtx);
+#if VERSION == VERSION_DEMO
+        m0B70.update(mDoMtx_stack_c::get(), 0xFF);
+#else
         m0B70.update(mDoMtx_stack_c::get(), 0xFF, 90.0f);
+#endif
         dComIfGd_getXluList()->entryImm(&m0B70, 0x1F);
     }
     

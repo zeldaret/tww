@@ -39,6 +39,9 @@ public:
     /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz mEyeRot;
     /* 0x0336 */ csXyz mTargetEyeRot;
+#if VERSION == VERSION_DEMO
+    /* 0x033C */ JPABaseEmitter* m033C_demo;
+#endif
     /* 0x033C */ JPABaseEmitter* m033C;
     /* 0x0340 */ JPABaseEmitter* m0340;
     /* 0x0344 */ dPa_smokeEcallBack mSmokeCbs[4];
