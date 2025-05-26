@@ -29,8 +29,6 @@ void def_se_set_p(fopAc_ac_c*, cXyz*, cCcD_Obj*, unsigned long);
 fopAc_ac_c* at_power_check(CcAtInfo*);
 fopAc_ac_c* cc_at_check(fopAc_ac_c*, CcAtInfo*);
 
-inline fopAc_ac_c* dCc_GetAc(void* i_obj) {
-    return ((cCcD_Obj*)i_obj)->GetAc();
-}
+inline void dCc_GetAc(void*) {}
 
 #endif /* D_CC_UTY_H */
