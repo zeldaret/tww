@@ -9,6 +9,7 @@
 #include "d/res/res_pfall.h"
 #include "d/d_lib.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_priority.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
