@@ -430,14 +430,15 @@ inline f32 fopAcM_searchActorDistanceY(fopAc_ac_c* actorA, fopAc_ac_c* actorB) {
     return actorB->current.pos.y - actorA->current.pos.y;
 }
 
-inline int fopAcM_GetSetId(fopAc_ac_c* p_actor) {
+inline u16 fopAcM_GetSetId(fopAc_ac_c* p_actor) {
     return p_actor->setID;
 }
 
 inline void dComIfGs_onActor(int bitNo, int roomNo);
 
 inline void fopAcM_onActor(fopAc_ac_c* p_actor) {
-    dComIfGs_onActor(fopAcM_GetSetId(p_actor), fopAcM_GetHomeRoomNo(p_actor));
+    int setId = fopAcM_GetSetId(p_actor);
+    dComIfGs_onActor(setId, fopAcM_GetHomeRoomNo(p_actor));
 }
 
 inline bool fopAcM_IsFirstCreating(void* i_actor) {

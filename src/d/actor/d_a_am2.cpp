@@ -365,7 +365,8 @@ static BOOL body_atari_check(am2_class* i_this) {
 
 /* 00000F54-00000FF4       .text BG_check__FP9am2_class */
 static void BG_check(am2_class* i_this) {
-    i_this->mAcchCir.SetWall(40.0f + REG8_F(12), i_this->mAcchRadius);
+    f32 halfHeight = 40.0f + REG8_F(12);
+    i_this->mAcchCir.SetWall(halfHeight, i_this->mAcchRadius);
 
     i_this->current.pos.y -= i_this->mCorrectionOffsetY;
     i_this->old.pos.y -= i_this->mCorrectionOffsetY;
