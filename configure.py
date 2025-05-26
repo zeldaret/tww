@@ -494,7 +494,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_attention.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_att_dist.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_bg_s.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_bg_s_acch.cpp"),
+            Object(Matching,    "d/d_bg_s_acch.cpp"),
             Object(Matching,    "d/d_bg_s_func.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_bg_s_lin_chk.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_bg_s_movebg_actor.cpp"),
@@ -1460,7 +1460,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wbird"),
     ActorRel(NonMatching, "d_a_ykgr"),
     ActorRel(Matching,    "d_a_alldie"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_am", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am2", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_amiprop"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_arrow_iceeff", extra_cflags=['-pragma "nosyminline on"']),
@@ -1605,7 +1605,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_kg1"),
     ActorRel(NonMatching, "d_a_npc_kg2"),
     ActorRel(NonMatching, "d_a_npc_kk1"),
-    ActorRel(Equivalent, "d_a_npc_km1", extra_cflags=['-pragma "nosyminline on"']), # weak func order),
+    ActorRel(Equivalent, "d_a_npc_km1", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),
     ActorRel(NonMatching, "d_a_npc_ls1"),
@@ -1619,7 +1619,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(NonMatching, "d_a_npc_people", extra_cflags=['-pragma "nosyminline on"']), # regalloc, weak func order
     ActorRel(NonMatching, "d_a_npc_pf1"),
-    ActorRel(NonMatching, "d_a_npc_photo"),
+    ActorRel(Equivalent, "d_a_npc_photo", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_npc_pm1"),
     ActorRel(Equivalent,  "d_a_npc_roten", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_npc_rsh1"),
