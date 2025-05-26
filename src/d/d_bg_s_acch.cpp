@@ -154,28 +154,22 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 }
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
-f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
-    f32 y = -G_CM3D_F_INF;
+void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     if (m_ground_h != -G_CM3D_F_INF) {
-        // y = m_roof_height;
-        // fakematch to fix load order
-        if (field_0xb8 < (y = m_roof_height) && y < pm_pos->y) {
-            pm_pos->y = y;
+        if (field_0xb8 < m_roof_height && m_roof_height < pm_pos->y) {
+            pm_pos->y = m_roof_height;
         }
 
         if (!(m_flags & ROOF_NONE)) {
-            y = m_ground_h;
-            if (y >= m_roof_y) {
+            if (m_ground_h >= m_roof_y) {
                 m_roof.SetExtChk(*this);
                 ClrRoofHit();
                 cXyz pos = *pm_pos;
                 m_roof.SetPos(pos);
-                y = i_bgs.RoofChk(&m_roof);
-                m_roof_y = y;
+                m_roof_y = i_bgs.RoofChk(&m_roof);
             }
         }
     }
-    return y;
 }
 
 /* 800A313C-800A3460       .text LineCheck__9dBgS_AcchFR4dBgS */
@@ -199,7 +193,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
 
             cM3dGPla* pla = i_bgs.GetTriPla(linChk);
             if (!cBgW_CheckBGround(pla->GetNP()->y)) {
-                VECAdd(pm_pos, pla->GetNP(), pm_pos);
+                VECAdd(GetPos(), pla->GetNP(), GetPos());
                 if (!cM3d_IsZero(std::sqrtf(pla->GetNP()->x*pla->GetNP()->x + pla->GetNP()->z*pla->GetNP()->z)))
                     pm_acch_cir[i].SetWallHDirect(pm_pos->y);
 
@@ -232,15 +226,12 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     Init();
 
     f32 lowH_R = GetWallAllLowH_R();
-    cXyz* temp9 = pm_old_pos;
-    cXyz* temp10 = pm_pos;
-    f32 distXZ2 = temp9->abs2XZ(*temp10);
-    f32 distY = pm_old_pos->y - pm_pos->y;
+    f32 distXZ2 = GetOldPos()->abs2XZ(*GetPos());
+    f32 distY = GetOldPos()->y - GetPos()->y;
     f32 lowH = GetWallAllLowH();
-    field_0xb4 = pm_pos->y;
-    f32 oldY = pm_old_pos->y;
-    f32 temp7 = lowH + oldY;
-    f32 temp8 = m_ground_check_offset + pm_pos->y;
+    field_0xb4 = GetPos()->y;
+    f32 temp7 = lowH + GetOldPos()->y;
+    f32 temp8 = m_ground_check_offset + GetPos()->y;
 
     bool ranLineCheck = false;
     OffLineCheckHit();
@@ -330,10 +321,12 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         }
     }
 
+#if VERSION > VERSION_DEMO
     CHECK_FLOAT_CLASS(780, pm_pos->x);
     CHECK_FLOAT_CLASS(781, pm_pos->y);
     CHECK_FLOAT_CLASS(782, pm_pos->z);
     CHECK_PVEC3_RANGE(786, pm_pos);
+#endif
 }
 
 /* 800A3F50-800A3F8C       .text GetWallAllR__9dBgS_AcchFv */
@@ -368,11 +361,10 @@ void dBgS_Acch::CalcWallBmdCyl() {
     f32 max_h = min_h;
     if (m_tbl_size >= 1) {
         for (s32 i = 0; i < m_tbl_size; i++) {
-            f32 h = pm_acch_cir[i].GetWallH();
-            if (min_h > h)
-                min_h = h;
-            if (max_h < h)
-                max_h = h;
+            if (min_h > pm_acch_cir[i].GetWallH())
+                min_h = pm_acch_cir[i].GetWallH();
+            if (max_h < pm_acch_cir[i].GetWallH())
+                max_h = pm_acch_cir[i].GetWallH();
         }
     }
 

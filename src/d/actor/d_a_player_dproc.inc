@@ -418,6 +418,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     }
 }
 
+#if VERSION > VERSION_DEMO
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
 BOOL daPy_lk_c::setGetDemo() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
@@ -488,6 +489,7 @@ BOOL daPy_lk_c::setGetDemo() {
     m34CE = 0;
     return FALSE;
 }
+#endif
 
 /* 8012E6B4-8012E8B0       .text dProcGetItem_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcGetItem_init() {
