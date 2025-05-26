@@ -197,7 +197,11 @@ public:
     /* 0x774 */ s16 mLookBackBackboneY;
     /* 0x776 */ s16 field_0x776;
     /* 0x778 */ s32 field_0x778;  
+#if VERSION > VERSION_JPN
     /* 0x77C */ s16 mEvtIDTbl[8];
+#else
+    /* 0x77C */ s16 mEvtIDTbl[7];
+#endif
     /* 0x78C */ s16  mEvtIDIdx;
     /* 0x78E */ s8  field_0x78E[0x792 - 0x78E];
     /* 0x792 */ s16 field_0x792;
@@ -255,7 +259,7 @@ public:
     /* 0x818 */ u8 field_0x818;
     /* 0x819 */ s8 field_0x819;
     /* 0x81A */ s8 field_0x81A;
-    /* 0x81B */ s8 field_0x81B; 
+    /* 0x81B */ s8 field_0x81B; //Likely Event Name Enum
     /* 0x81C */ s8 field_0x81C;
     /* 0x81D */ s8 field_0x81D;
     /* 0x81E */ u8 mWhereToLook;
