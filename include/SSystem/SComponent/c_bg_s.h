@@ -2,10 +2,8 @@
 #define C_BG_S_H
 
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
+#include "SSystem/SComponent/c_m3d.h"
 #include "dolphin/types.h"
-
-#define C_BG_MIN_HEIGHT (-1e+9f)
-#define C_BG_MAX_HEIGHT (1e+9f)
 
 class fopAc_ac_c;
 class cBgS_ShdwDraw;

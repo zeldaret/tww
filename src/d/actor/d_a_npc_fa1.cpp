@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_fa1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 800FAFC0-800FB004       .text __ct__16daNpc_Fa1_HIO3_cFv */
 daNpc_Fa1_HIO3_c::daNpc_Fa1_HIO3_c() {
@@ -334,7 +335,7 @@ actor_process_profile_definition g_profile_NPC_FA1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x016E,
+    /* Priority     */ PRIO_NPC_FA1,
     /* Actor SubMtd */ &l_daNpc_Fa1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_alldie.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 enum {
@@ -126,7 +127,7 @@ actor_process_profile_definition g_profile_ALLDIE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011D,
+    /* Priority     */ PRIO_ALLDIE,
     /* Actor SubMtd */ &l_daAlldie_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

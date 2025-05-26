@@ -8,6 +8,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -233,7 +234,7 @@ actor_process_profile_definition g_profile_BRANCH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0193,
+    /* Priority     */ PRIO_BRANCH,
     /* Actor SubMtd */ &l_daBranch_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

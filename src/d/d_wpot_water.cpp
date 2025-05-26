@@ -90,7 +90,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_k) {
         );
         lavaChk.SetPos(&pos);
         f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
-        if (lavaY != C_BG_MIN_HEIGHT) {
+        if (lavaY != -G_CM3D_F_INF) {
             gndChk.SetPos(&pos);
             f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
             if (lavaChk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(lavaChk) == dBgS_Attr_LAVA_e && lavaY > groundY) {
@@ -109,7 +109,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_k) {
     gndChk.SetPos(&pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
     i_this->mPos.y = groundY;
-    if (groundY != C_BG_MIN_HEIGHT) {
+    if (groundY != -G_CM3D_F_INF) {
         cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
         fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
         return i_this->create();

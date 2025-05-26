@@ -34,7 +34,7 @@ bool dBgS_SplGrpChk_In_ObjGnd(cXyz& r30, dBgS_SplGrpChk* r31, f32 f31) {
     gndChk.SetPos(&sp1c);
     f32 height = dComIfG_Bgsp()->GroundCross(&gndChk);
     r31->SetHeight(height);
-    if (height == C_BG_MIN_HEIGHT) {
+    if (height == -G_CM3D_F_INF) {
         return FALSE;
     }
     
@@ -79,7 +79,7 @@ u32 dBgS_GetGndMtrlSndId_Func(cXyz r21, f32 f1) {
     r21.y += f1;
     dBgS_ObjGndChk gndChk;
     gndChk.SetPos(&r21);
-    if (dComIfG_Bgsp()->GroundCross(&gndChk) == C_BG_MIN_HEIGHT) {
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) == -G_CM3D_F_INF) {
         return 0;
     }
     return dComIfG_Bgsp()->GetMtrlSndId(gndChk);

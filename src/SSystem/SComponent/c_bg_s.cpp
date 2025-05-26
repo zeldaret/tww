@@ -128,7 +128,7 @@ bool cBgS::LineCross(cBgS_LinChk* chk) {
 
 /* 802468E4-80246A14       .text GroundCross__4cBgSFP11cBgS_GndChk */
 f32 cBgS::GroundCross(cBgS_GndChk* chk) {
-    chk->SetNowY(C_BG_MIN_HEIGHT);
+    chk->SetNowY(-G_CM3D_F_INF);
     chk->ClearPi();
     chk->mWallPrecheck = (chk->mFlag & 0x02);
     chk->mGndPrecheck = (chk->mFlag & 0x01);

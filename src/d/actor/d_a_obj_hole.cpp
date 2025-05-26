@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -208,7 +209,7 @@ void daObj_Hole_c::createInit() {
     fopAcM_setCullSizeFar(this, 10.0f);
 
     mAcchCir.SetWall(100.0f, 10.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
 
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
@@ -319,7 +320,7 @@ actor_process_profile_definition g_profile_OBJ_HOLE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B7,
+    /* Priority     */ PRIO_OBJ_HOLE,
     /* Actor SubMtd */ &daObj_HoleMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

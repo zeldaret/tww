@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_hsehi1.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -294,7 +295,7 @@ actor_process_profile_definition g_profile_Obj_HSH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0088,
+    /* Priority     */ PRIO_Obj_HSH,
     /* Actor SubMtd */ &l_daObj_hsh_Method,
     /* Status       */ 0x04 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -7,6 +7,7 @@
 #include "d/actor/d_a_bgn2.h"
 #include "d/actor/d_a_bgn3.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 000000EC-000003F0       .text __ct__11daBgn_HIO_cFv */
@@ -293,7 +294,7 @@ actor_process_profile_definition g_profile_BGN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00E8,
+    /* Priority     */ PRIO_BGN,
     /* Actor SubMtd */ &l_daBgn_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,

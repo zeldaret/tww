@@ -7,6 +7,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
@@ -271,7 +272,7 @@ actor_process_profile_definition g_profile_NPC_SV = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0180,
+    /* Priority     */ PRIO_NPC_SV,
     /* Actor SubMtd */ &daNpc_PeopleMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -15,6 +15,7 @@
 #include "d/d_snap.h"
 #include "d/d_letter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -2211,7 +2212,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
     }
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mpShopCursor = ShopCursor_create((J3DModelData*)dComIfG_getObjectRes("Bs", BS_INDEX_BMD_SHOP_CURSOR01),
                                      (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", BS_INDEX_BRK_SHOP_CURSOR01),
                                      l_HIO.mChild[mType].m30);
@@ -2266,7 +2267,7 @@ actor_process_profile_definition g_profile_NPC_BS1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x015E,
+    /* Priority     */ PRIO_NPC_BS1,
     /* Actor SubMtd */ &l_daNpc_Bs1_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

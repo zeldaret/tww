@@ -508,7 +508,7 @@ void dMetronome_c::initialize() {
 void dMetronome_c::_create() {
     scrn = new J2DScreen();
     JUT_ASSERT(0x2db, scrn != NULL);
-    scrn->set("baton_input.blo", dComIfGp_getTmsgArchive());
+    scrn->set("baton_input.blo", dComIfGp_getTactMsgArchive());
     screenSet();
     initialize();
 }
@@ -516,7 +516,7 @@ void dMetronome_c::_create() {
 /* 8022319C-802231F4       .text _delete__12dMetronome_cFv */
 void dMetronome_c::_delete() {
     delete scrn;
-    dComIfGp_getTmsgArchive()->removeResourceAll();
+    dComIfGp_getTactMsgArchive()->removeResourceAll();
 }
 
 /* 802231F4-80223314       .text _move__12dMetronome_cFv */

@@ -49,16 +49,19 @@ extern void __dcbz(void*, int);
 extern void __sync();
 #endif
 
-#define VERSION_JPN 0
-#define VERSION_USA 1
-#define VERSION_PAL 2
+#define VERSION_DEMO 0
+#define VERSION_JPN 1
+#define VERSION_USA 2
+#define VERSION_PAL 3
 
-#if VERSION == VERSION_USA
-    #define VERSION_SELECT(JPN, USA, PAL) (USA)
+#if VERSION == VERSION_DEMO
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (DEMO)
+#elif VERSION <= VERSION_JPN
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (JPN)
+#elif VERSION == VERSION_USA
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (USA)
 #elif VERSION == VERSION_PAL
-    #define VERSION_SELECT(JPN, USA, PAL) (PAL)
-#elif VERSION == VERSION_JPN
-    #define VERSION_SELECT(JPN, USA, PAL) (JPN)
+    #define VERSION_SELECT(DEMO, JPN, USA, PAL) (PAL)
 #endif
 
 #endif

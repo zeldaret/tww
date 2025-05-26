@@ -1293,13 +1293,13 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
     pos.y = dComIfG_Bgsp()->GroundCross(&gndChk);
     s16 targetAngleX;
     int targetAngleZ;
-    if (pos.y != C_BG_MIN_HEIGHT) {
+    if (pos.y != -G_CM3D_F_INF) {
         f32 origY = pos.y + 50.0f;
         gndChk.GetPointP()->set(pos.x, origY, pos.z + 10.0f);
         f32 origX = gndChk.GetPointP()->x;
         f32 origZ = gndChk.GetPointP()->z;
         f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != C_BG_MIN_HEIGHT) {
+        if (groundY != -G_CM3D_F_INF) {
             targetAngleX = -cM_atan2s(groundY - pos.y, origZ - pos.z);
         } else {
             pos.y = pos.y; // ?? fakematch?
@@ -1311,7 +1311,7 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
         f32 tempZ = pos.z;
         gndChk.GetPointP()->set(origX, origY, tempZ);
         groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != C_BG_MIN_HEIGHT) {
+        if (groundY != -G_CM3D_F_INF) {
             targetAngleZ = cM_atan2s(groundY - pos.y, origX - pos.x);
         } else {
             ret = FALSE;
@@ -1412,7 +1412,7 @@ BOOL fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     static dBgS_WtrChk water_check;
     BOOL ret = FALSE;
 
-    *pDstWaterY = C_BG_MIN_HEIGHT;
+    *pDstWaterY = -G_CM3D_F_INF;
 
     cXyz pos;
     pos.x = pPos->x;

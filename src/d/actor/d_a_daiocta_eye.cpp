@@ -6,6 +6,7 @@
 #include "d/actor/d_a_daiocta_eye.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001B0       .text __ct__19daDaiocta_Eye_HIO_cFv */
 daDaiocta_Eye_HIO_c::daDaiocta_Eye_HIO_c() {
@@ -155,7 +156,7 @@ actor_process_profile_definition g_profile_DAIOCTA_EYE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D6,
+    /* Priority     */ PRIO_DAIOCTA_EYE,
     /* Actor SubMtd */ &daDaiocta_EyeMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

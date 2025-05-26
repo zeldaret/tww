@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_skanran.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -566,7 +567,7 @@ actor_process_profile_definition g_profile_Obj_Ferris = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003C,
+    /* Priority     */ PRIO_Obj_Ferris,
     /* Actor SubMtd */ &daObjFerris::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

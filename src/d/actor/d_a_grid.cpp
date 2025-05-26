@@ -6,6 +6,7 @@
 #include "d/actor/d_a_grid.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 static daHo_HIO_c l_HIO;
 
@@ -102,7 +103,7 @@ actor_process_profile_definition g_profile_GRID = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0102,
+    /* Priority     */ PRIO_GRID,
     /* Actor SubMtd */ &l_daGrid_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

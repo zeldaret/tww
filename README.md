@@ -20,6 +20,7 @@ All GameCube versions are supported:
 - `GZLE01`: Rev 0 (USA), Rev 48 (KOR)
 - `GZLP01`: Rev 0 (PAL)
 - `GZLJ01`: Rev 0 (JPN)
+- `D44J01`: Kiosk demo (JPN)
 
 Dependencies
 ============

@@ -354,7 +354,9 @@ u32 dStage_roomControl_c::getDarkMode() {
 
 /* 80041370-800413D4       .text createMemoryBlock__20dStage_roomControl_cFiUl */
 JKRExpHeap* dStage_roomControl_c::createMemoryBlock(int i_blockIdx, u32 i_heapSize) {
+#if VERSION > VERSION_DEMO
     archiveHeap->getCurrentGroupId();
+#endif
     mMemoryBlock[i_blockIdx] = JKRExpHeap::create(i_heapSize, mDoExt_getArchiveHeap(), false);
     return mMemoryBlock[i_blockIdx];
 }
@@ -720,7 +722,11 @@ dStage_objectNameInf l_objectName[] = {
     OBJNAME("Bmcon2", PROC_NPC_BMCON1, 1, 0),
     OBJNAME("Bmsw", PROC_NPC_BMSW, 255, 0),
     OBJNAME("Btsw", PROC_NPC_BTSW, 255, 0),
+#if VERSION == VERSION_DEMO
+    OBJNAME("Btsw2", PROC_NPC_BTSW2, 255, 0),
+#else
     OBJNAME("Btsw2", PROC_NPC_BTSW2, 255, 59),
+#endif
     OBJNAME("Zk1", PROC_NPC_ZK1, 255, 59),
     OBJNAME("Zl1", PROC_NPC_ZL1, 255, 60),
     OBJNAME("Ob1", PROC_NPC_OB1, 255, 60),
@@ -1016,7 +1022,11 @@ dStage_objectNameInf l_objectName[] = {
     OBJNAME("UkD2", PROC_NPC_UK, 7, 0),
     OBJNAME("Co1", PROC_NPC_CO1, 255, 59),
     OBJNAME("Mt", PROC_NPC_MT, 255, 0),
+#if VERSION == VERSION_DEMO
+    OBJNAME("Mn", PROC_NPC_MN, 255, 0),
+#else
     OBJNAME("Mn", PROC_NPC_MN, 255, 59),
+#endif
     OBJNAME("Ah", PROC_NPC_AH, 255, 0),
     OBJNAME("Hyuf1", PROC_Hmlif, 255, 61),
     OBJNAME("Hyuf2", PROC_Hmlif, 255, 61),
@@ -1830,6 +1840,32 @@ int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     return 1;
 }
 
+#if VERSION == VERSION_DEMO
+bool dStage_setShipPos(int param_0, int i_roomNo) {
+    /* Nonmatching */
+    i_roomNo = i_roomNo == 0xFF ? dComIfGp_roomControl_getStayNo() : i_roomNo;
+    if (param_0 != 0xFF) {
+        dStage_Ship_dt_c* ship_data_p = dComIfGp_getShip(i_roomNo, param_0);
+        if (ship_data_p != NULL) {
+            daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
+            if (ship_p != NULL) {
+                if (dComIfGp_getStartStagePoint() == -3 ) {
+                    if (dComIfGs_getTurnRestartParam() & 0x100) {
+                        ship_p = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
+                        if (ship_p != NULL) {
+                            ship_p->initStartPos(&dComIfGs_getTurnRestartShipPos(), dComIfGs_getTurnRestartShipAngleY());
+                        }
+                    }
+                } else {
+                    ship_p->initStartPos(&ship_data_p->m_pos, ship_data_p->m_angle);
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+#else
 /* 800429C0-80042B10       .text dStage_setShipPos__Fii */
 bool dStage_setShipPos(int param_0, int i_roomNo) {
     if (strcmp(dComIfGp_getStartStageName(), "GanonM") == 0 && !dComIfGs_isEventBit(0x3D02)) {
@@ -1862,6 +1898,7 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
 
     return false;
 }
+#endif
 
 /* 80042B10-80042B70       .text dStage_chkTaura__Fi */
 bool dStage_chkTaura(int i_roomNo) {
@@ -1874,19 +1911,28 @@ bool dStage_chkTaura(int i_roomNo) {
 
 /* 80042B70-80042C38       .text dStage_shipInfoInit__FP11dStage_dt_cPviPv */
 int dStage_shipInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
-    i_stage->setShip((dStage_Ship_c*)((char*)i_data + 4));
+    dStage_Ship_c* ship_p = (dStage_Ship_c*)((char*)i_data + 4);
+    i_stage->setShip(ship_p);
 
-    s32 shipId = dComIfGp_getShipId();
-    s32 roomId = dComIfGp_getShipRoomId();
+    int shipId = dComIfGp_getShipId();
+    int roomId = dComIfGp_getShipRoomId();
 
-    if (dStage_chkTaura(roomId)) {
-        if (!dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) && dStage_setShipPos(0x80, roomId)) {
+    if (dStage_chkTaura(roomId) && !dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL)) {
+        if (dStage_setShipPos(0x80, roomId)) {
             shipId = 0xFF;
             roomId = 0xFF;
             dComIfGp_setShipId(0xFF);
             dComIfGp_setShipRoomId(0xFF);
         }
     }
+#if VERSION == VERSION_DEMO
+    else if (strcmp(dComIfGp_getStartStageName(), "GanonM") == 0 && !dComIfGs_isEventBit(0x3D02)) {
+        shipId = 0xFF;
+        roomId = 0xFF;
+        dComIfGp_setShipId(0xFF);
+        dComIfGp_setShipRoomId(0xFF);
+    }
+#endif
 
     if (dStage_setShipPos(shipId, roomId)) {
         dComIfGp_setShipId(0xFF);
@@ -2345,7 +2391,8 @@ void dStage_escapeRestart() {
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
 BOOL dStage_checkRestart() {
     if (dComIfGp_isEnableNextStage()) {
-        if (dComIfGp_getStartStagePoint() == -2 || dComIfGp_getStartStagePoint() == -3) {
+        int point = dComIfGp_getStartStagePoint();
+        if (point == -2 || point == -3) {
             return FALSE;
         }
 

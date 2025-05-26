@@ -17,8 +17,12 @@
 #include "string.h"
 
 DynamicModuleControlBase * DMC[PROC_COUNT_e];
+#if VERSION == VERSION_DEMO
+JKRSolidHeap* cCc_solidHeap = NULL;
+#else
 bool DMC_initialized = false;
-BOOL cDyl_Initialized = false;
+#endif
+volatile BOOL cDyl_Initialized = false;
 mDoDvdThd_callback_c * cDyl_DVD = NULL;
 
 const DynamicNameTableEntry DynamicNameTable[] = {
@@ -186,6 +190,9 @@ const DynamicNameTableEntry DynamicNameTable[] = {
     {PROC_MANT,           "d_a_mant"},
     {PROC_KANTERA,        "d_a_kantera"},
     {PROC_KAMOME,         "d_a_kamome"},
+#if VERSION == VERSION_DEMO
+    {PROC_KAMOME2,        "d_a_kamome2"},
+#endif
     {PROC_NPC_KAM,        "d_a_npc_kamome"},
     {PROC_WBIRD,          "d_a_wbird"},
     {PROC_DEMO_KMM,       "d_a_demo_kmm"},
@@ -457,10 +464,17 @@ const DynamicNameTableEntry DynamicNameTable[] = {
 
 /* 800227A0-800229E0       .text cCc_Init__Fv */
 BOOL cCc_Init() {
+#if VERSION != VERSION_DEMO
     JUT_ASSERT(0x2a, !DMC_initialized);
+#endif
 
+#if VERSION == VERSION_DEMO
+    JKRExpHeap * pHeap = mDoExt_getArchiveHeap();
+    cCc_solidHeap = mDoExt_createSolidHeapToCurrent(0, NULL, 0);
+#else
     JKRSolidHeap * pHeap = JKRSolidHeap::create(0x5648, mDoExt_getArchiveHeap(), false);
     JKRHeap * pOldHeap = pHeap->becomeCurrentHeap();
+#endif
     memset(DMC, 0, sizeof(DMC));
 
     for (int i = 0; i < ARRAY_SIZE(DynamicNameTable); i++) {
@@ -468,8 +482,8 @@ BOOL cCc_Init() {
         if (d.name == NULL)
             continue;
 
-        JUT_ASSERT(0x39, d.mKey < ARRAY_SIZE(DMC));
-        JUT_ASSERT(0x3a, DMC[d.mKey] == NULL);
+        JUT_ASSERT(VERSION_SELECT(47, 57, 57, 57), d.mKey < ARRAY_SIZE(DMC));
+        JUT_ASSERT(VERSION_SELECT(48, 58, 58, 58), DMC[d.mKey] == NULL);
 
         for (int j = 0; j < ARRAY_SIZE(DMC); j++) {
             if (DMC[j] != NULL) {
@@ -481,18 +495,28 @@ BOOL cCc_Init() {
         }
 
         if (DMC[d.mKey] == NULL)
+#if VERSION == VERSION_DEMO
+            DMC[d.mKey] = new (pHeap, 0) DynamicModuleControl(d.name);
+#else
             DMC[d.mKey] = new DynamicModuleControl(d.name);
+#endif
     }
 
+#if VERSION == VERSION_DEMO
+    mDoExt_restoreCurrentHeap();
+    mDoExt_adjustSolidHeap(cCc_solidHeap);
+#else
     pHeap->adjustSize();
     pOldHeap->becomeCurrentHeap();
     DMC_initialized = TRUE;
+#endif
+
     return TRUE;
 }
 
 /* 800229E0-80022A80       .text cDyl_IsLinked__Fs */
 BOOL cDyl_IsLinked(s16 i_ProfName) {
-    JUT_ASSERT(0xae, cDyl_Initialized);
+    JUT_ASSERT(VERSION_SELECT(134, 174, 174, 174), cDyl_Initialized);
 
     if (DMC[i_ProfName] != NULL)
         return DMC[i_ProfName]->isLinked();
@@ -502,8 +526,8 @@ BOOL cDyl_IsLinked(s16 i_ProfName) {
 
 /* 80022A80-80022B58       .text cDyl_Unlink__Fs */
 BOOL cDyl_Unlink(s16 i_ProfName) {
-    JUT_ASSERT(0xc5, cDyl_Initialized);
-    JUT_ASSERT(0xc6, i_ProfName < ARRAY_SIZE(DMC));
+    JUT_ASSERT(VERSION_SELECT(154, 197, 197, 197), cDyl_Initialized);
+    JUT_ASSERT(VERSION_SELECT(155, 198, 198, 198), i_ProfName < ARRAY_SIZE(DMC));
 
     if (DMC[i_ProfName] != NULL)
         return DMC[i_ProfName]->unlink();
@@ -511,32 +535,62 @@ BOOL cDyl_Unlink(s16 i_ProfName) {
     return FALSE;
 }
 
-static void dummy(s16 i_ProfName) {
-    OSReport_Error("cDyl_Link i_ProfName=%d\n", i_ProfName);
+cPhs_State cDyl_Link(s16 i_ProfName) {
+    JUT_ASSERT(180, cDyl_Initialized);
+    if (i_ProfName >= ARRAY_SIZE(DMC)) {
+        OSReport_Error("cDyl_Link i_ProfName=%d\n", i_ProfName);
+        return cPhs_ERROR_e;
+    }
+    JUT_ASSERT(185, i_ProfName < ARRAY_SIZE(DMC));
+    if (DMC[i_ProfName]) {
+        if (DMC[i_ProfName]->link()) {
+            return cPhs_COMPLEATE_e;
+        } else {
+            return cPhs_ERROR_e;
+        }
+    } else {
+        return cPhs_COMPLEATE_e;
+    }
+}
+
+#if VERSION != VERSION_DEMO
+static void dummy() {
     OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
 }
+#endif
 
 /* 80022B58-80022CEC       .text cDyl_LinkASync__Fs */
 cPhs_State cDyl_LinkASync(s16 i_ProfName) {
-    JUT_ASSERT(0x101, DMC_initialized);
-
+#if VERSION == VERSION_DEMO
+    if (!cDyl_Initialized) {
+        OSReport_Error("初期化が終わってないのに呼んでもらっても困ります %d\n", i_ProfName);
+        return cPhs_INIT_e;
+    }
+    JUT_ASSERT(203, cDyl_Initialized);
+#else
+    JUT_ASSERT(257, DMC_initialized);
     if (!cDyl_Initialized)
         return cPhs_INIT_e;
+#endif
 
     if (i_ProfName >= ARRAY_SIZE(DMC)) {
         OSReport_Error("cDyl_Link i_ProfName=%d\n", i_ProfName);
         return cPhs_ERROR_e;
     }
 
-    JUT_ASSERT(0x111, i_ProfName < ARRAY_SIZE(DMC));
+    JUT_ASSERT(VERSION_SELECT(208, 273, 273, 273), i_ProfName < ARRAY_SIZE(DMC));
     DynamicModuleControlBase * d = DMC[i_ProfName];
     if (d != NULL) {
+#if VERSION != VERSION_DEMO
         JUT_ASSERT(0x115, cDyl_Initialized);
+#endif
         if (d->load_async()) {
             if (d->link()) {
                 return cPhs_COMPLEATE_e;
             } else {
+#if VERSION != VERSION_DEMO
                 OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
+#endif
                 return cPhs_ERROR_e;
             }
         }
@@ -549,25 +603,31 @@ cPhs_State cDyl_LinkASync(s16 i_ProfName) {
 
 /* 80022CEC-80022DF8       .text cDyl_InitCallback__FPv */
 BOOL cDyl_InitCallback(void*) {
-    JUT_ASSERT(0x12f, !cDyl_Initialized);
-    JKRFileLoader * pFileLoader = JKRFileCache::mount("/", mDoExt_getArchiveHeap(), NULL);
+    JUT_ASSERT(VERSION_SELECT(230, 303, 303, 303), !cDyl_Initialized);
+    JKRFileCache* loader = JKRMountDvdDrive("/", mDoExt_getArchiveHeap(), NULL);
     DynamicModuleControl::initialize();
-    void * pData = JKRFileLoader::getGlbResource("/dvd/framework.str");
-    JKRFileLoader::detachResource(pData, pFileLoader);
-    pFileLoader->unmount();
-    OSSetStringTable(pData);
+
+    void* strTbl = JKRGetResource("/dvd/framework.str");
+    JKRDetachResource(strTbl, loader);
+    JKRUnmountDvdDrive(loader);
+    OSSetStringTable(strTbl);
 
     DynamicModuleControl dmc("f_pc_profile_lst");
     dmc.link();
+#if VERSION == VERSION_DEMO
+    cCc_Init();
+#endif
     cDyl_Initialized = TRUE;
     return TRUE;
 }
 
 /* 80022DF8-80022E70       .text cDyl_InitAsync__Fv */
 void cDyl_InitAsync() {
+#if VERSION != VERSION_DEMO
     cCc_Init();
+#endif
 
-    JUT_ASSERT(0x145, cDyl_DVD == NULL);
+    JUT_ASSERT(VERSION_SELECT(252, 325, 325, 325), cDyl_DVD == NULL);
     cDyl_DVD = mDoDvdThd_callback_c::create((mDoDvdThd_callback_func) cDyl_InitCallback, NULL);
 }
 
@@ -617,7 +677,7 @@ cPhs_State cDylPhs::Link(request_of_phase_process_class* i_phase, s16 profName) 
 
 /* 80022F68-80023004       .text Unlink__7cDylPhsFP30request_of_phase_process_classs */
 BOOL cDylPhs::Unlink(request_of_phase_process_class* i_phase, s16 profName) {
-    JUT_ASSERT(0x1a6, i_phase->id != 1);
+    JUT_ASSERT(VERSION_SELECT(357, 422, 422, 422), i_phase->id != 1);
 
     BOOL ret;
     if (i_phase->id == 2) {

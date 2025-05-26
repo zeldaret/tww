@@ -1452,7 +1452,7 @@ bool mDoGph_Painter() {
     mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
     JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
     jpaDrawInfo2D.setFovy(0.0f);
-    jpaDrawInfo2D.setAspect(1.33333333f);
+    jpaDrawInfo2D.setAspect(4.0f/3.0f);
     if (!dMenu_flag())
         dComIfGp_particle_draw2Dback(&jpaDrawInfo2D);
     dComIfGp_particle_draw2DmenuBack(&jpaDrawInfo2D);

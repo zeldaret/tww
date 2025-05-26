@@ -14,7 +14,7 @@ dBgS_SplGrpChk::dBgS_SplGrpChk() {
     m_ground.x = 0.0f;
     m_ground.y = 0.0f;
     m_ground.z = 0.0f;
-    m_roof = C_BG_MAX_HEIGHT;
+    m_roof = G_CM3D_F_INF;
     m_height = 0.0f;
 }
 

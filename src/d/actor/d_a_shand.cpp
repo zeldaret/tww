@@ -10,6 +10,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 
 bool hio_set;
@@ -259,12 +260,12 @@ void hand_move(shand_class* i_this) {
                     chk_pos_y += 200.0f;
                     local_100.GetPointP()->set(chk_pos_x, chk_pos_y, chk_pos_z);
                     float spl_ground_y = dComIfG_Bgsp()->GroundCross(&local_100) + 10.0f;
-                    if(spl_ground_y != C_BG_MIN_HEIGHT){
+                    if(spl_ground_y != -G_CM3D_F_INF){
                         i_this->ground_y = spl_ground_y;
                     }
                 }
                 else {
-                    i_this->ground_y = C_BG_MIN_HEIGHT;
+                    i_this->ground_y = -G_CM3D_F_INF;
                 }
                 i_this->mState = 2;
 
@@ -531,7 +532,7 @@ actor_process_profile_definition g_profile_SHAND = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0095,
+    /* Priority     */ PRIO_SHAND,
     /* Actor SubMtd */ &l_daShand_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

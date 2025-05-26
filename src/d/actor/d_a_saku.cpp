@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_saku.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 class J3DModelData;
 class J3DMaterial;
@@ -172,7 +173,7 @@ actor_process_profile_definition g_profile_SAKU = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0186,
+    /* Priority     */ PRIO_SAKU,
     /* Actor SubMtd */ &l_daSaku_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
