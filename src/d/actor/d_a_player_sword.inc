@@ -154,12 +154,7 @@ void daPy_lk_c::setLightSaver() {
         mpEquipItemBrk->setFrame(2.0f);
     }
     mpSwordModel1->setBaseTRMtx(mpEquipItemModel->getBaseTRMtx());
-    if (
-#if VERSION == VERSION_DEMO
-        !checkLastDemoSwordNoDraw(0) &&
-#else
-        !checkDemoSwordNoDraw(0) &&
-#endif
+    if (!checkDemoSwordNoDraw(0) &&
         ((checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000)) || checkFinalMasterSwordEquip()))
     {
         simpleAnmPlay(mpSwordBtk);
@@ -226,17 +221,6 @@ void daPy_lk_c::setLightSaver() {
     }
 }
 
-#if VERSION == VERSION_DEMO
-BOOL daPy_lk_c::checkLastDemoSwordNoDraw(BOOL param_0) {
-    if ((mEquipItem == daPyItem_SWORD_e || param_0) &&
-        dComIfGs_isEventBit(0x3f40))
-    {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-#else
 /* 80155490-801554C8       .text checkDemoShieldNoDraw__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkDemoShieldNoDraw() {
     if (dComIfGs_isEventBit(0x3f40)) {
@@ -256,7 +240,6 @@ BOOL daPy_lk_c::checkDemoSwordNoDraw(BOOL param_0) {
         return false;
     }
 }
-#endif
 
 /* 80155544-80155574       .text checkChanceMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkChanceMode() {
