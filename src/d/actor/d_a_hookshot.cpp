@@ -1,6 +1,6 @@
 /**
  * d_a_hookshot.cpp
- * Hookshot
+ * Item - Hookshot
  */
 
 #include "d/actor/d_a_hookshot.h"

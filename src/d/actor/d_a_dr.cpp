@@ -1,6 +1,6 @@
 /**
  * d_a_dr.cpp
- * Valoo / ドラゴン (Dragon)
+ * NPC - Valoo (Overworld) / ドラゴン (Dragon)
  */
 
 #include "d/actor/d_a_dr.h"

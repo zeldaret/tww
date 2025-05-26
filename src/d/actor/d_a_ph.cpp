@@ -1,6 +1,6 @@
 /**
  * d_a_ph.cpp
- * Enemy - Peahat
+ * Enemy - Peahat/Seahat
  */
 
 #include "d/actor/d_a_ph.h"
