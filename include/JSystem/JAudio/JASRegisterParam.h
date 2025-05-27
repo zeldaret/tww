@@ -22,14 +22,28 @@ namespace JASystem {
             JUT_ASSERT(131, index < 4);
             return field_0x20[index];
         }
-        void setAddress(int, u32) {}
+        void setAddress(int index, u32 value) {
+            JUT_ASSERT(124, index >= 0);
+            JUT_ASSERT(125, index < 4);
+            field_0x20[index] = value;
+        }
 
         void getBendSense() const {}
-        void getPanPowerBank() const {}
-        void getPanPowerExt() const {}
-        void getPanPowerOsc() const {}
-        void getPanPowerParent() const {}
-        void getPanPowerTrack() const {}
+        u16 getPanPowerBank() const {
+            return mPanPower[0];
+        }
+        u16 getPanPowerExt() const {
+            return mPanPower[1];
+        }
+        u16 getPanPowerOsc() const {
+            return mPanPower[2];
+        }
+        u16 getPanPowerParent() const {
+            return mPanPower[3];
+        }
+        u16 getPanPowerTrack() const {
+            return mPanPower[4];
+        }
         void getPriority() const {}
         u16 getFlag() const { return field_0x0[3]; }
         void setFlag(u16 flag) { field_0x0[3] = flag; }
