@@ -1111,13 +1111,15 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
 /* 80283164-802836FC       .text writeRegParam__Q28JASystem6TTrackFUc */
 void JASystem::TTrack::writeRegParam(u8 param) {
     /* Nonmatching */
-    u32 tbl_param_3;
-    u32 iVar1;
-    u32 iVar2;
-    u32 tbl_param_1;
     u8 curr_file_byte;
     u8 bVar0;
     u8 bVar1;
+
+    u32 iVar1;
+    u32 iVar2;
+    u32 tbl_param_3;
+    u32 tbl_param_1;
+
     s16 sVar0;
     s16 sVar1;
     u32 extended_sVar1;
@@ -1200,7 +1202,7 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             mRegisterParam.setFlag(sVar1 - sVar0);
             return;
         case 0xB:
-            sVar0 -= extended_sVar1;
+            sVar0 = extended_sVar1 - (u32)sVar0;
             break;
         case 0x10:
             if (iVar1 == 4) {
