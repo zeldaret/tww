@@ -119,7 +119,24 @@ namespace JASystem {
 
         class AInnerParam_ {
         public:
-            AInnerParam_();
+                AInnerParam_()
+                : mVolume()
+                , mPitch()
+                , mFxmix()
+                , mPan()
+                , mDolby()
+                , _50()
+                , mOsc0Width()
+                , mOsc0Rate()
+                , mOsc0Vertex()
+                , mOsc1Width()
+                , mOsc1Rate()
+                , mOsc1Vertex()
+                , mIIRs()
+                , _100()
+                , _110()
+            {
+            }
 
             /* 0x000 */ MoveParam_ mVolume;
             /* 0x010 */ MoveParam_ mPitch;

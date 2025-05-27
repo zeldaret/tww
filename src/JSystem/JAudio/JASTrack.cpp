@@ -1568,23 +1568,3 @@ f32 JASystem::TVibrate::getValue() const {
     }
     return Player::pitchToCent(sin_val * mDepth, 12.0f);
 }
-
-/* 80283FE8-80284118       .text __ct__Q38JASystem6TTrack12AInnerParam_Fv */
-JASystem::TTrack::AInnerParam_::AInnerParam_()
-    : mVolume()
-    , mPitch()
-    , mFxmix()
-    , mPan()
-    , mDolby()
-    , _50()
-    , mOsc0Width()
-    , mOsc0Rate()
-    , mOsc0Vertex()
-    , mOsc1Width()
-    , mOsc1Rate()
-    , mOsc1Vertex()
-    , mIIRs()
-    , _100()
-    , _110()
-{
-}
