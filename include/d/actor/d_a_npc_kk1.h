@@ -10,7 +10,11 @@
 
 class J3DNode;
 
-
+#if VERSION > VERSION_JPN
+#define EVENTLENGTH 8   //8 Events in array for US and PAL releases
+#else
+#define EVENTLENGTH 7
+#endif
 
 static void* searchActor_SWC00(void*, void*);
 
@@ -197,11 +201,7 @@ public:
     /* 0x774 */ s16 mLookBackBackboneY;
     /* 0x776 */ s16 field_0x776;
     /* 0x778 */ s32 field_0x778;  
-#if VERSION > VERSION_JPN
-    /* 0x77C */ s16 mEvtIDTbl[8];
-#else
-    /* 0x77C */ s16 mEvtIDTbl[7];
-#endif
+    /* 0x77C */ s16 mEvtIDTbl[EVENTLENGTH];
     /* 0x78C */ s16  mEvtIDIdx;
     /* 0x78E */ s8  field_0x78E[0x792 - 0x78E];
     /* 0x792 */ s16 field_0x792;
