@@ -4,47 +4,223 @@
 //
 
 #include "d/actor/d_a_obj_tntrap.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+
+const char l_arcname[] = "TnTrap";
+
+// static const cXyz l_offset_ball[2] = {
+//     cXyz(-300,90,0),
+//     cXyz(-300,90,0)
+// };
+static const f32 l_tri_src[6][3] = {
+300.0, -70.0, 0.0, 
+-300.0, -70.0, 0.0, 
+-300.0, 55.0, 0.0, 
+300.0, 55.0, 0.0, 
+300.0, 180.0, 0.0, 
+-300.0, 180.0, 0.0,
+
+};
+static const int l_tri_vtx[7][3] = {
+    0,0x800,0x01000000,
+    5,0,0,
+    0,0xB00,0,
+    0,0,0,
+    0,0,0,
+    0,0,0,
+    0,0,0
+};
+
+
+static const f32 l_offset_ball[2][3] = {
+    -300,90,0,
+    300,90,0
+};
+static const f32 l_offset_thunder[3][3] = {
+    0,25,0,
+    0,85,0,
+    0,145,0
+
+};
+
+
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
-void daObjTnTrap_c::chk_appear() {
+BOOL daObjTnTrap_c::chk_appear() {
     /* Nonmatching */
+
+    int o_retval = 0;
+    field_0xDC8 = param_get_swSave();
+    field_0xDCC = param_get_swSave2();
+    field_0xDD0 = param_get_arg0();
+    field_0xDD4 = param_get_mapType();
+    switch(field_0xDD4){
+    case 0:
+        if(dComIfGs_isEventBit(0x3A04) == 1){
+            if(field_0xDC8 != 0xFF && dComIfGs_isSwitch(field_0xDC8,home.roomNo) == 1){
+                if(dComIfGs_getTriforceNum() == 8 && field_0xDD0 == 0){
+                    if(dComIfGs_isEventBit(0x2C01) == 1){
+                        if(field_0xDCC != 0xFF && !dComIfGs_isSwitch(field_0xDCC,home.roomNo)){
+                            field_0x298 = 2;
+                            o_retval = 1;
+                        }
+                    }else{
+                        field_0x298 = 1;
+                        o_retval = 1;
+                    }
+                }
+            }else{
+                field_0x298 = 0;
+                o_retval = 1;
+            }
+        }
+        break;
+    case 1:
+        if(field_0xDC8 != 0xFF && !dComIfGs_isSwitch(field_0xDC8,home.roomNo)){
+            field_0x298 = 3;
+            o_retval = 1;
+        }
+        break;
+    case 2:
+        if(field_0xDC8 != 0xFF){
+            if(!dComIfGs_isSwitch(field_0xDC8,home.roomNo)){
+                field_0x298 = 5;
+                o_retval = 1;
+            }
+        }else{
+            field_0x298 = 5;
+            o_retval = 1;       
+        }
+        break;
+    default:   
+        JUT_ASSERT(0x17C,0);
+        break;
+    }
+    return o_retval;
 }
+
 
 /* 000002AC-00000344       .text set_mtx__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_mtx() {
-    /* Nonmatching */
+
+    mDoMtx_stack_c::transS(home.pos);
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    mDoMtx_stack_c::transM(0.0,-9000.0,-94.0);
+    mDoMtx_stack_c::scaleM(scale.x,1000.0,scale.z);
+    cMtx_copy(mDoMtx_stack_c::get(),field_0xD5C.calcMtx);
 }
 
 /* 00000344-00000368       .text solidHeapCB__13daObjTnTrap_cFP10fopAc_ac_c */
-void daObjTnTrap_c::solidHeapCB(fopAc_ac_c*) {
+int daObjTnTrap_c::solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
+    return create_heap();
 }
 
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
-void daObjTnTrap_c::create_heap() {
+bool daObjTnTrap_c::create_heap() {
     /* Nonmatching */
+    bool o_retval = true;
+    cBgD_t* pcVar1 = (cBgD_t*)dComIfG_getObjectRes(l_arcname,0x3);
+    field_0xD58 = dBgW_NewSet(pcVar1,cBgW::MOVE_BG_e,&field_0xD5C.calcMtx);
+    if(field_0xD58 == NULL){
+        o_retval = false;
+    }
+    return o_retval;
+
+    
 }
 
+enum ZERO{
+    zero = 0
+};
+
 /* 000003E4-000005F8       .text particle_set__13daObjTnTrap_cFif */
-void daObjTnTrap_c::particle_set(int, float) {
+void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
     /* Nonmatching */
+
+   cXyz ball;
+
+    if(field_0xDE0[i_particleId] == 1){
+        if(field_0xDE4[i_particleId] != param_2){
+            particle_delete(i_particleId);
+        }else{
+            return;
+        }
+    }
+
+
+    // if(field_0xDE0[i_particleId] == 1){
+    //     if(field_0xDE4[i_particleId] == param_2){
+    //         return;
+    //     }
+    //     particle_delete(i_particleId);
+    // }else{
+    //     return;
+    // }
+    for(int i = 0; i < 2; i++){
+        if(field_0xD5C.emitterPairs[i_particleId][i] == NULL){
+            ball.x = l_offset_ball[i][0];
+            ball.y = l_offset_ball[i][1]+param_2;
+            ball.z = l_offset_ball[i][2];
+            field_0xD5C.emitterPairs[i_particleId][i] = dComIfGp_particle_set(0x82EA,&home.pos,&shape_angle);
+            field_0xD5C.emitterPairs[i_particleId][i]->setEmitterTranslation(JGeometry::TVec3<f32>(ball.x,ball.y,ball.z));
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        if(field_0xD5C.emitterPairs2[i_particleId][i] == NULL){
+            ball.x = l_offset_thunder[i][0];
+            ball.y = l_offset_thunder[i][1]+param_2;
+            ball.z = l_offset_thunder[i][2];
+            field_0xD5C.emitterPairs2[i_particleId][i] = dComIfGp_particle_set(0x82EB,&home.pos,&shape_angle);
+            field_0xD5C.emitterPairs2[i_particleId][i]->setEmitterTranslation(JGeometry::TVec3<f32>(ball.x,ball.y,ball.z));
+        }
+    }
+    field_0xDE4[i_particleId] = param_2;
+    field_0xDE0[i_particleId] = 1;
+    return;
 }
 
 /* 000005F8-000006A4       .text particle_delete__13daObjTnTrap_cFi */
-void daObjTnTrap_c::particle_delete(int) {
+void daObjTnTrap_c::particle_delete(int param_1) {
     /* Nonmatching */
+
+    if(field_0xDE0[param_1] == 1){
+        int i;
+        for(i = 0; i < 2; i++){
+            if(field_0xD5C.emitterPairs[param_1][i] != 0){
+                field_0xD5C.emitterPairs[param_1][i]->becomeInvalidEmitter();
+                field_0xD5C.emitterPairs[param_1][i] = NULL;
+            }
+        }
+        for(i = 0; i < 3; i++){
+            if(field_0xD5C.emitterPairs2[param_1][i] != 0){
+                field_0xD5C.emitterPairs2[param_1][i]->becomeInvalidEmitter();
+                field_0xD5C.emitterPairs2[param_1][i] = NULL;
+            }
+        }
+    }
+    field_0xDE0[param_1] = 0;
+    return;
+    
 }
 
 /* 000006A4-0000072C       .text set_se__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_se() {
     /* Nonmatching */
+    if(field_0xDC0 >= 5 || field_0xDC0 < 1){
+        return;
+    }
+    fopAcM_seStartCurrent(this,0x6239,0);
+
 }
 
 /* 0000072C-000008A0       .text set_tri__13daObjTnTrap_cFi */
 void daObjTnTrap_c::set_tri(int) {
     /* Nonmatching */
+    volatile f32 uvar1 = l_tri_vtx[0][0];
 }
 
 /* 000008A0-00000A10       .text chk_event_flg__13daObjTnTrap_cFv */
@@ -60,6 +236,7 @@ void daObjTnTrap_c::set_em_set_offsetY() {
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
 cPhs_State daObjTnTrap_c::_create() {
     /* Nonmatching */
+    volatile f32 uvar1 = l_tri_src[0][0];
 }
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
