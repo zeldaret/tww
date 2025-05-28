@@ -9,7 +9,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-#include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 
 
@@ -36,7 +35,6 @@ static const dCcD_SrcTri l_tri_src = {
         /* SrcGObjTg SPrm    */ 0,
         /* SrcGObjCo SPrm    */ 0,
     },
-    // cM3dGTriS
     {
         /* a */ 0.0f, 0.0f, 0.0f,
         /* b */ 0.0f, 0.0f, 0.0f,
@@ -70,7 +68,6 @@ static const f32 l_offset_thunder[3][3] = {
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 BOOL daObjTnTrap_c::chk_appear() {
-    /* Nonmatching */
 
     int o_retval = 0;
     field_0xDC8 = param_get_swSave();
@@ -80,10 +77,10 @@ BOOL daObjTnTrap_c::chk_appear() {
     switch(field_0xDD4){
     case 0:
         if(dComIfGs_isEventBit(0x3A04) == 1){
-            if(field_0xDC8 != 0xFF && dComIfGs_isSwitch(field_0xDC8,home.roomNo) == 1){
+            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
                 if(dComIfGs_getTriforceNum() == 8 && field_0xDD0 == 0){
                     if(dComIfGs_isEventBit(0x2C01) == 1){
-                        if(field_0xDCC != 0xFF && !dComIfGs_isSwitch(field_0xDCC,home.roomNo)){
+                        if(field_0xDCC != 0xFF && !fopAcM_isSwitch(this,field_0xDCC)){
                             field_0x298 = 2;
                             o_retval = 1;
                         }
@@ -99,14 +96,14 @@ BOOL daObjTnTrap_c::chk_appear() {
         }
         break;
     case 1:
-        if(field_0xDC8 != 0xFF && !dComIfGs_isSwitch(field_0xDC8,home.roomNo)){
+        if(field_0xDC8 != 0xFF && !fopAcM_isSwitch(this,field_0xDC8)){
             field_0x298 = 3;
             o_retval = 1;
         }
         break;
     case 2:
         if(field_0xDC8 != 0xFF){
-            if(!dComIfGs_isSwitch(field_0xDC8,home.roomNo)){
+            if(!fopAcM_isSwitch(this,field_0xDC8)){
                 field_0x298 = 5;
                 o_retval = 1;
             }
@@ -125,7 +122,6 @@ BOOL daObjTnTrap_c::chk_appear() {
 
 /* 000002AC-00000344       .text set_mtx__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_mtx() {
-
     mDoMtx_stack_c::transS(home.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     mDoMtx_stack_c::transM(0.0,-9000.0,-94.0);
@@ -257,7 +253,7 @@ bool daObjTnTrap_c::chk_event_flg() {
     switch(field_0x298){
         case 1:
             break;
-        case 0:                                                                     //TODO: use elsewhere
+        case 0:
             if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
                 int var_29 = 4;
                 if(field_0xDD0 == 0){
@@ -352,12 +348,9 @@ cPhs_State daObjTnTrap_c::_create() {
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::_delete() {
-    /* Nonmatching */
+
     bool bVar1;
-    uint uVar2;
-    dBgW *pdVar3;
-    int iVar4;
-  
+
     if (field_0xDC4 == 1) {
     dComIfG_resDelete(&field_0x290,l_arcname);
         if (heap != NULL){
@@ -385,7 +378,7 @@ bool daObjTnTrap_c::_delete() {
 
 /* 00001050-00001150       .text trap_off_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::trap_off_wait_act_proc() {
-    /* Nonmatching */
+
     if(daPy_getPlayerActorClass() != NULL){
         f32 fVar2 = (daPy_getPlayerActorClass()->current.pos-home.pos).absXZ();
         if(fVar2 < 500.0f){
@@ -481,7 +474,7 @@ bool daObjTnTrap_c::demo_wait2_act_proc() {
 
 /* 000015B4-000016A8       .text demo_end_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::demo_end_wait_act_proc() {
-    /* Nonmatching */
+
     bool o_retval = 1;
     if(dComIfGp_evmng_endCheck(field_0xDD8[0])){
         dComIfGp_event_reset();
@@ -527,7 +520,7 @@ void daObjTnTrap_c::dummy_proc() {
 
 /* 00001744-00001790       .text trap_off_wait_act_init_proc__13daObjTnTrap_cFv */
 void daObjTnTrap_c::trap_off_wait_act_init_proc() {
-    /* Nonmatching */
+
     for(int i = 0; i < 2; i++){
         particle_delete(i);
     }
@@ -565,29 +558,10 @@ void daObjTnTrap_c::demo_end_wait_act_init_proc() {
         particle_delete(i);
     }
     return;
-
 }
-// struct strangestruct{
-//     bool(daObjTnTrap_c::*field0)();
-//     bool(daObjTnTrap_c::*fieldC)();
-//     bool(daObjTnTrap_c::*field18)();
-//     bool(daObjTnTrap_c::*field24)();
-//     bool(daObjTnTrap_c::*field30)();
-//     bool(daObjTnTrap_c::*field3C)();
-//     bool(daObjTnTrap_c::*field48)();
-// };
-// struct strangestructinit{
-//     void(daObjTnTrap_c::*field0)();
-//     void(daObjTnTrap_c::*fieldC)();
-//     void(daObjTnTrap_c::*field18)();
-//     void(daObjTnTrap_c::*field24)();
-//     void(daObjTnTrap_c::*field30)();
-//     void(daObjTnTrap_c::*field3C)();
-//     void(daObjTnTrap_c::*field48)();
-// };
+
 /* 000018DC-00001AE4       .text setup_action__13daObjTnTrap_cFi */
 void daObjTnTrap_c::setup_action(int param_1) {
-    /* Nonmatching */
 
     static ActProcFunc act_proc[7] = {
         &daObjTnTrap_c::trap_off_wait_act_proc,
@@ -616,7 +590,6 @@ void daObjTnTrap_c::setup_action(int param_1) {
 
 /* 00001AE4-00001BE8       .text _execute__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::_execute() {
-    /* Nonmatching */
 
     if(field_0xD58 != NULL){
         if(field_0xD58->ChkUsed() != 0){
