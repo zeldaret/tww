@@ -119,7 +119,24 @@ namespace JASystem {
 
         class AInnerParam_ {
         public:
-            AInnerParam_();
+                AInnerParam_()
+                : mVolume()
+                , mPitch()
+                , mFxmix()
+                , mPan()
+                , mDolby()
+                , _50()
+                , mOsc0Width()
+                , mOsc0Rate()
+                , mOsc0Vertex()
+                , mOsc1Width()
+                , mOsc1Rate()
+                , mOsc1Vertex()
+                , mIIRs()
+                , _100()
+                , _110()
+            {
+            }
 
             /* 0x000 */ MoveParam_ mVolume;
             /* 0x010 */ MoveParam_ mPitch;
@@ -306,7 +323,7 @@ namespace JASystem {
         /* 0x37E */ u8 field_0x37e;
         /* 0x37F */ u8 mCalcTypes[3];
         /* 0x382 */ u8 mParentCalcTypes[3];
-        /* 0x385 */ u8 mIsPaused;
+        /* 0x385 */ bool mIsPaused;
         /* 0x386 */ u8 field_0x386;
         /* 0x387 */ bool field_0x387;
         /* 0x388 */ u8 field_0x388;

@@ -155,6 +155,27 @@ inline void OSf32tou8(f32* f, u8* out) {
     *out = __OSf32tou8(*f);
 }
 
+inline s8 __OSf32tos8(register f32 inF) {
+    register u8 out;
+    u32 tmp;
+    register u32* tmpPtr = &tmp;
+    // clang-format off
+#ifdef __MWERKS__
+    asm {
+        psq_st inF, 0(tmpPtr), 0x1, 4
+        lbz out, 0(tmpPtr)
+        extsb out, out
+    }
+#endif
+    // clang-format on
+
+    return out;
+}
+
+inline void OSf32tos8(f32* f, s8* out) {
+    *out = __OSf32tos8(*f);
+}
+
 static inline void OSInitFastCast(void) {
     // clang-format off
 #ifdef __MWERKS__

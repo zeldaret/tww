@@ -4,6 +4,17 @@
 #include "dolphin/types.h"
 
 namespace JASystem {
+    enum RequestId {
+        REQUEST_UNK_0 = 0,
+        REQUEST_UNK_1 = 1,
+        REQUEST_UNK_2 = 2,
+        REQUEST_UNK_3 = 3,
+        REQUEST_UNK_4 = 4,
+        REQUEST_UNK_5 = 5,
+        REQUEST_UNK_6 = 6,
+        REQUEST_UNK_7 = 7,
+    };
+
     class TIntrMgr {
     public:
         void disable() { field_0x0 = 0; }
