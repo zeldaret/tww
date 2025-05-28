@@ -6,6 +6,8 @@
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
+
+
 struct SomeStruct {
     Mtx calcMtx;
     JPABaseEmitter* emitterPairs[2][2];  
@@ -13,6 +15,10 @@ struct SomeStruct {
 };
 
 class daObjTnTrap_c : public fopAc_ac_c {
+
+typedef bool(daObjTnTrap_c::*ActProcFunc)();
+typedef void(daObjTnTrap_c::*InitProcFunc)();
+
 public:
     enum Prm_e{
         PRM_SWSAVE_W = 0x08,
@@ -44,13 +50,13 @@ public:
     void set_em_set_offsetY();
     cPhs_State _create();
     bool _delete();
-    void trap_off_wait_act_proc();
-    void trap_on_wait_act_proc();
-    void demo_regist_wait_act_proc();
-    void demo_wait_act_proc();
-    void demo_wait2_act_proc();
-    void demo_end_wait_act_proc();
-    void hide_wait_act_proc();
+    bool trap_off_wait_act_proc();
+    bool trap_on_wait_act_proc();
+    bool demo_regist_wait_act_proc();
+    bool demo_wait_act_proc();
+    bool demo_wait2_act_proc();
+    bool demo_end_wait_act_proc();
+    bool hide_wait_act_proc();
     void dummy_proc();
     void trap_off_wait_act_init_proc();
     void trap_on_wait_act_init_proc();
@@ -69,7 +75,8 @@ public:
     /* 0xD58 */ dBgW* field_0xD58;
     /* 0xD5C */ SomeStruct field_0xD5C;
     /* 0xDC0 */ int field_0xDA8; 
-    /* 0xD90 */ u8 field_0xDAX[0xDC0 - 0xDAC];
+    /* 0xD90 */ u8 field_0xDAC[0xDB4 - 0xDAC];
+    /* 0xDB8 */ ActProcFunc field_0xDB4;
     /* 0xDC0 */ s32 field_0xDC0;
     /* 0xDC4 */ u8 field_0xDC4;
     /* 0xDC8 */ int field_0xDC8;
