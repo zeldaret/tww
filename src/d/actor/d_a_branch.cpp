@@ -15,8 +15,8 @@
 
 static u16 anim_table[] = {
     KWOOD_00_BCK_SWING02, KWOOD_00_BAS_SWING02,
-    KWOOD_00_BCK_SWING, KWOOD_00_BAS_SWING,
-    KWOOD_00_BCK_BREAK, KWOOD_00_BAS_BREAK,
+    KWOOD_00_BCK_SWING,   KWOOD_00_BAS_SWING,
+    KWOOD_00_BCK_BREAK,   KWOOD_00_BAS_BREAK,
 };
 
 char daBranch_c::m_arcname[] = "Kwood_00";
@@ -51,7 +51,12 @@ void daBranch_c::set_anim(int i_animIdx, int i_bckIdx, int i_basIdx) {
 
 /* 000001E4-00000228       .text demoPlay__10daBranch_cFP14mDoExt_McaMorf */
 void daBranch_c::demoPlay(mDoExt_McaMorf* morf) {
-    dDemo_setDemoData(this, 0x20, morf, m_arcname, 3, anim_table, 0, 0);
+    dDemo_setDemoData(
+        this,
+        dDemo_actor_c::ENABLE_ANM_e,
+        morf, m_arcname,
+        ARRAY_SIZE(anim_table) / 2, anim_table
+    );
 }
 
 /* 00000228-00000248       .text solidHeapCB__10daBranch_cFP10fopAc_ac_c */

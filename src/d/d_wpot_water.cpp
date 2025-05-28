@@ -6,6 +6,7 @@
 #include "d/d_wpot_water.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -60,7 +61,7 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
 }
 
 cPhs_State dWpotWater_c::create() {
-    new(this) dWpotWater_c();
+    new (this) dWpotWater_c();
     dComIfGp_particle_set(dPa_name::ID_SCENE_8083, &mPos);
     dComIfGp_particle_set(dPa_name::ID_SCENE_8084, &mPos);
     emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
@@ -73,8 +74,8 @@ cPhs_State dWpotWater_c::create() {
 }
 
 /* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static cPhs_State dWpotWater_Create(kankyo_class* i_k) {
-    dWpotWater_c* i_this = (dWpotWater_c*)i_k;
+static cPhs_State dWpotWater_Create(kankyo_class* i_this) {
+    dWpotWater_c* a_this = (dWpotWater_c*)i_this;
     
     dBgS_GndChk gndChk;
     dBgS_ObjGndChk_Yogan lavaChk;
@@ -112,7 +113,7 @@ static cPhs_State dWpotWater_Create(kankyo_class* i_k) {
     if (groundY != -G_CM3D_F_INF) {
         cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
         fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
-        return i_this->create();
+        return a_this->create();
     }
     
     return cPhs_ERROR_e;
@@ -127,15 +128,15 @@ kankyo_method_class l_dWpotWater_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WPOT_WATER = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_WPOT_WATER,
-    &g_fpcLf_Method.base,
-    sizeof(dWpotWater_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x01CC,
-    &l_dWpotWater_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_WPOT_WATER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dWpotWater_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_WPOT_WATER,
+    /* Actor SubMtd */ &l_dWpotWater_Method,
 };

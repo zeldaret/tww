@@ -195,7 +195,7 @@ public:
 
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }
-    bool checkStatus(u32 status) { return mFlags & status; }
+    u32 checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status) { mFlags = status; }
 
     bool checkEmDataFlag(u32 mask) { return mDataFlag & mask; }

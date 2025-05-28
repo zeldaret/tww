@@ -699,7 +699,7 @@ bool daAuction_c::eventStart() {
         mpTimer = (dTimer_c*)fopMsgM_SearchByID(mTimerID);
         
         if (mpTimer != NULL) {
-            mpTimer->mpScrnDraw->setShowType(0);
+            mpTimer->setShowType(0);
         }
     }
 
@@ -929,7 +929,7 @@ void daAuction_c::eventMainKai() {
                     dComIfGp_setMessageSetNumber(mCurrBid + 1);
                     end = 0x1CFA;
                     setLinkAnm(daPy_demo_c::DEMO_UNK48_e);
-                    mpTimer->mpScrnDraw->setShowType(1);
+                    mpTimer->setShowType(1);
 
                     dAuction_screen_gaugeUp();
                     dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -1137,7 +1137,7 @@ void daAuction_c::eventMainMsgEnd() {
             m798 = l_camera_pos[m82F][1];
         }
 
-        mpTimer->mpScrnDraw->setShowType(0);
+        mpTimer->setShowType(0);
         dAuction_screen_gaugeDown();
         m834 &= ~0x29;
         dAuction_screen_talkEnd();

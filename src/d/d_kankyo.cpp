@@ -9,6 +9,7 @@
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
@@ -2451,17 +2452,17 @@ kankyo_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    fpcLy_CURRENT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_KANKYO,
-    &g_fpcLf_Method.base,
-    sizeof(sub_kankyo__class),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x002,
-    &l_dKy_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0001,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KANKYO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sub_kankyo__class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_KANKYO,
+    /* Actor SubMtd */ &l_dKy_Method,
 };
 
 /* 80194974-80194BDC       .text dKy_setLight_init__Fv */
