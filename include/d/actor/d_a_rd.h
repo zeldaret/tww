@@ -47,7 +47,13 @@ public:
     /* 0x7C */ JntHit_HIO_c m7C;
 };
 
-class daRd_c : public fopEn_enemy_c {
+class daRd_c
+#if VERSION == VERSION_DEMO
+: public fopAc_ac_c
+#else
+: public fopEn_enemy_c
+#endif
+{
 public:
     enum Proc_e {
         PROC_INIT = 0,

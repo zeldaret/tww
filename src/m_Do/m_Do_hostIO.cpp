@@ -15,7 +15,7 @@ void mDoHIO_root_c::update() {}
 /* 80017A50-80017B20       .text createChild__16mDoHIO_subRoot_cFPCcP13JORReflexible */
 s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible) {
     for (int i = 0; i < 64; i++) {
-        if (mChild[i].mReflexible == i_reflexible) {
+        if (mChild[i].getPt() == i_reflexible) {
             // "Danger: Trying to register an already registered HostIO<%s>\n"
             OSReport_Error("危険：既に登録されているホストIOをふたたび登録しようとしています<%s>\n", i_name);
             return -1;
@@ -23,9 +23,9 @@ s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible
     }
 
     for (int i = 0; i < 64; i++) {
-        if (mChild[i].mReflexible == NULL) {
-            strncpy(mChild[i].mName, i_name, sizeof(mChild[i].mName));
-            mChild[i].mReflexible = i_reflexible;
+        if (mChild[i].getPt() == NULL) {
+            mChild[i].setName(i_name);
+            mChild[i].setPt(i_reflexible);
             return i;
         }
     }
@@ -38,11 +38,40 @@ s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible
 /* 80017B20-80017B88       .text deleteChild__16mDoHIO_subRoot_cFSc */
 void mDoHIO_subRoot_c::deleteChild(s8 i_childID) {
     if (i_childID >= 0) {
-        if (mChild[i_childID].mReflexible == NULL) {
+        if (mChild[i_childID].getPt() == NULL) {
             // "Danger: Trying to delete HostIO that has already been deleted<%s>\n"
-            OSReport_Error("危険：すでに削除されているホストIOをさらに削除しようとしています<%s>\n", mChild[i_childID].mName);
+            OSReport_Error("危険：すでに削除されているホストIOをさらに削除しようとしています<%s>\n", mChild[i_childID].getName());
         } else {
-            mChild[i_childID].mReflexible = NULL;
+            mChild[i_childID].setPt(NULL);
         }
     }
 }
+
+#if VERSION == VERSION_DEMO
+mDoHIO_entry_c::mDoHIO_entry_c() {
+    mNo = 0;
+    mCount = 0;
+}
+
+mDoHIO_entry_c::~mDoHIO_entry_c() {
+    if (mCount != 0) {
+        OSReport_Error("~mDoHIO_entry_c mCount=%d mNo=%d\n", mCount, mNo);
+        mDoHIO_deleteChild(mNo);
+        mDoHIO_deleteChild(mNo);
+    }
+}
+
+void mDoHIO_entry_c::entryHIO(const char* name) {
+    if (mCount == 0) {
+        mNo = mDoHIO_createChild(name, this);
+    }
+    mCount++;
+}
+
+void mDoHIO_entry_c::removeHIO() {
+    mCount--;
+    if (mCount == 0) {
+        mDoHIO_deleteChild(mNo);
+    }
+}
+#endif

@@ -71,7 +71,11 @@ bool daObjVteng_c::create_heap() {
 bool daObjVteng_c::jokai_demo() {
     bool ret = false;
 
-    if (dDemo_setDemoData(this, 0x60, mpMorf, "Vteng", 0, NULL, 0, 0) == TRUE)
+    if (dDemo_setDemoData(
+        this,
+        dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
+        mpMorf, "Vteng"
+    ) == TRUE)
         ret = true;
 
     return ret;

@@ -15,34 +15,39 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
 u32 ShipRaceSeTable[] = {
-    0x7530, JA_SE_SGAME_TIMER_30,
-    0x4E20, JA_SE_SGAME_TIMER_30,
-    0x2710, JA_SE_SGAME_TIMER_10,
-    0x2328, JA_SE_SGAME_TIMER_10,
-    0x1F40, JA_SE_SGAME_TIMER_10,
-    0x1B58, JA_SE_SGAME_TIMER_10,
-    0x1770, JA_SE_SGAME_TIMER_10,
-    0x1388, JA_SE_SGAME_TIMER_10,
-    0x0FA0, JA_SE_SGAME_TIMER_10,
-    0x0BB8, JA_SE_SGAME_TIMER_10,
-    0x07D0, JA_SE_SGAME_TIMER_10,
-    0x03E8, JA_SE_SGAME_TIMER_10,
+    30000, JA_SE_SGAME_TIMER_30,
+    20000, JA_SE_SGAME_TIMER_30,
+    10000, JA_SE_SGAME_TIMER_10,
+    9000,  JA_SE_SGAME_TIMER_10,
+    8000,  JA_SE_SGAME_TIMER_10,
+    7000,  JA_SE_SGAME_TIMER_10,
+    6000,  JA_SE_SGAME_TIMER_10,
+    5000,  JA_SE_SGAME_TIMER_10,
+    4000,  JA_SE_SGAME_TIMER_10,
+    3000,  JA_SE_SGAME_TIMER_10,
+    2000,  JA_SE_SGAME_TIMER_10,
+    1000,  JA_SE_SGAME_TIMER_10,
     0xFFFFFFFF, 0x0000,
 };
 
 u32 VolcanoSeTable[] = {
-    0xEA60, JA_SE_MINIGAME_TIMER_30,
-    0x7530, JA_SE_MINIGAME_TIMER_30,
-    0x2710, JA_SE_MINIGAME_TIMER_10,
-    0x2328, JA_SE_MINIGAME_TIMER_10,
-    0x1F40, JA_SE_MINIGAME_TIMER_10,
-    0x1B58, JA_SE_MINIGAME_TIMER_10,
-    0x1770, JA_SE_MINIGAME_TIMER_10,
-    0x1388, JA_SE_MINIGAME_TIMER_10,
-    0x0FA0, JA_SE_MINIGAME_TIMER_10,
-    0x0BB8, JA_SE_MINIGAME_TIMER_10,
-    0x07D0, JA_SE_MINIGAME_TIMER_10,
-    0x03E8, JA_SE_MINIGAME_TIMER_10,
+    60000, JA_SE_MINIGAME_TIMER_30,
+    30000, JA_SE_MINIGAME_TIMER_30,
+#if VERSION > VERSION_DEMO
+    10000, JA_SE_MINIGAME_TIMER_10,
+#endif
+    9000,  JA_SE_MINIGAME_TIMER_10,
+    8000,  JA_SE_MINIGAME_TIMER_10,
+    7000,  JA_SE_MINIGAME_TIMER_10,
+    6000,  JA_SE_MINIGAME_TIMER_10,
+    5000,  JA_SE_MINIGAME_TIMER_10,
+    4000,  JA_SE_MINIGAME_TIMER_10,
+    3000,  JA_SE_MINIGAME_TIMER_10,
+    2000,  JA_SE_MINIGAME_TIMER_10,
+    1000,  JA_SE_MINIGAME_TIMER_10,
+#if VERSION == VERSION_DEMO
+    0,     JA_SE_ISLE_TIMER_0,
+#endif
     0xFFFFFFFF, 0x0000,
 };
 
@@ -70,7 +75,7 @@ cPhs_State dTimer_c::_create() {
             if (prm->mIconType != 0) {
                 iconTex = mpSolidHeap->alloc(0xC00, 0x20);
                 JUT_ASSERT(0x5a, iconTex != NULL);
-                mpScrnDraw->setIconType(iconTex, prm->mIconType);
+                setIconType(iconTex, prm->mIconType);
             }
 
             mDoExt_restoreCurrentHeap();
@@ -82,29 +87,29 @@ cPhs_State dTimer_c::_create() {
         return rt;
     }
 
-    mpScrnDraw->setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
-    mpScrnDraw->setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
-    mpScrnDraw->setShowType(prm->mShowType);
+    setRupeePos(prm->mRupeePos.x, prm->mRupeePos.y);
+    setTimerPos(prm->mTimerPos.x, prm->mTimerPos.y);
+    setShowType(prm->mShowType);
     mTimerMode = prm->mTimerMode;
     if (mTimerMode == 7) {
         mLimitTime = OSMillisecondsToTicks((OSTime)dComIfG_getTimerLimitTimeMs());
         OSTime curTime = OSGetTime();
         mTime = mStartTime = curTime;
         mStartTime -= OSMillisecondsToTicks((OSTime)dComIfG_getTimerNowTimeMs());
-        mState = 0;
+        mStatus = 0;
         mTimerMode = dComIfG_getTimerMode();
         dComIfG_setTimerNowTimeMs(getTimeMs());
         dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
         dComIfG_setTimerMode(mTimerMode);
         dComIfG_setTimerPtr(this);
         if (dComIfG_getTimerMode() == 3)
-            mpScrnDraw->setShowType(1);
+            setShowType(1);
         stock_start(10);
     } else {
         mLimitTime = OSSecondsToTicks((OSTime)prm->mLimitTimeMs);
         mStartTime = 0;
         mTime = 0;
-        mState = 0;
+        mStatus = 0;
         dComIfG_setTimerNowTimeMs(getTimeMs());
         dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
         dComIfG_setTimerMode(mTimerMode);
@@ -143,18 +148,18 @@ cPhs_State dTimer_c::_create() {
 BOOL dTimer_c::_execute() {
     if (field_0x162 != 1) {
         field_0x150 = getRestTimeMs();
-        if (mState == 0 || mState == 1 || mState == 3) {
+        if (mStatus == 0 || mStatus == 1 || mStatus == 3) {
             mStartTime = 0;
             mTime = 0;
-            if (mState == 1 || mState == 3) {
+            if (mStatus == 1 || mStatus == 3) {
                 if (--field_0x160 <= 0) {
-                    if (mState == 3)
+                    if (mStatus == 3)
                         stock_start();
                     else
                         start();
                 }
             }
-        } else if (mState == 2) {
+        } else if (mStatus == 2) {
             mTime = OSGetTime();
             dComIfG_setTimerNowTimeMs(getTimeMs());
             dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
@@ -170,24 +175,24 @@ BOOL dTimer_c::_execute() {
         }
     }
 
-    if (mState == 0 || mState == 2) {
+    if (mStatus == 0 || mStatus == 2) {
         if (mTimerMode == 3 || mTimerMode == 2) {
             if (dMenu_flag() || dComIfGp_event_getMode() == dEvtMode_TALK_e)
                 stop(1);
             else
                 restart(1);
         }
-    } else if (mState == 6) {
+    } else if (mStatus == 6) {
         if (mpScrnDraw->closeAnime())
             fopMsgM_Delete(this);
-    } else if (mState != 5 && mState == 4) {
+    } else if (mStatus != 5 && mStatus == 4) {
         if (field_0x158 <= 0) {
             if (mTimerMode == 3) {
                 deleteRequest();
-                mpScrnDraw->field_0x234 = 0;
+                mpScrnDraw->animeTimerReset();
             } else {
-                mpScrnDraw->field_0x234 = 0;
-                mState = 5;
+                mpScrnDraw->animeTimerReset();
+                mStatus = 5;
             }
         } else {
             field_0x158--;
@@ -218,7 +223,7 @@ BOOL dTimer_c::_delete() {
     if (mpSolidHeap != NULL)
         mDoExt_destroySolidHeap(mpSolidHeap);
 
-    if (mTimerMode == 3 && mState != 6 && mState != 5 && mState != 4) {
+    if (mTimerMode == 3 && mStatus != 6 && mStatus != 5 && mStatus != 4) {
         dComIfG_setTimerNowTimeMs(getTimeMs());
         dComIfG_setTimerLimitTimeMs(getLimitTimeMs());
         dComIfG_setTimerMode(mTimerMode);
@@ -229,7 +234,7 @@ BOOL dTimer_c::_delete() {
     }
 
     dComIfG_setTimerPtr(NULL);
-    dComIfG_resDelete(&mPhs, "Timer");
+    dComIfG_resDeleteDemo(&mPhs, "Timer");
     return TRUE;
 }
 
@@ -243,7 +248,7 @@ BOOL dTimer_c::RestTimeCheck(int time) {
 
 /* 8023C110-8023C124       .text deleteCheck__8dTimer_cFv */
 BOOL dTimer_c::deleteCheck() {
-    return mState == 5;
+    return mStatus == 5;
 }
 
 /* 8023C124-8023C268       .text SetSE__8dTimer_cFv */
@@ -268,8 +273,8 @@ void dTimer_c::SetSE() {
 
 /* 8023C268-8023C2CC       .text start__8dTimer_cFv */
 bool dTimer_c::start() {
-    if (mState == 0 || mState == 1) {
-        mState = 2;
+    if (mStatus == 0 || mStatus == 1) {
+        mStatus = 2;
         mTime = mStartTime = OSGetTime();
         return true;
     } else {
@@ -279,9 +284,9 @@ bool dTimer_c::start() {
 
 /* 8023C2CC-8023C2F4       .text start__8dTimer_cFs */
 bool dTimer_c::start(s16 param_1) {
-    if (mState == 0) {
+    if (mStatus == 0) {
         field_0x160 = param_1;
-        mState = 1;
+        mStatus = 1;
         return true;
     } else {
         return false;
@@ -290,8 +295,8 @@ bool dTimer_c::start(s16 param_1) {
 
 /* 8023C2F4-8023C3A8       .text stock_start__8dTimer_cFv */
 bool dTimer_c::stock_start() {
-    if (mState == 3) {
-        mState = 2;
+    if (mStatus == 3) {
+        mStatus = 2;
         OSTime time = OSGetTime();
         mStartTime = time;
         mTime = time;
@@ -304,9 +309,9 @@ bool dTimer_c::stock_start() {
 
 /* 8023C3A8-8023C3D0       .text stock_start__8dTimer_cFs */
 bool dTimer_c::stock_start(s16 param_1) {
-    if (mState == 0) {
+    if (mStatus == 0) {
         field_0x160 = param_1;
-        mState = 3;
+        mStatus = 3;
         return true;
     } else {
         return false;
@@ -318,7 +323,7 @@ bool dTimer_c::stop(u8 param_1) {
     if (field_0x162 == 1 || field_0x163 != 0)
         return false;
 
-    if (mState != 2)
+    if (mStatus != 2)
         return false;
 
     field_0x130 = OSGetTime();
@@ -332,11 +337,12 @@ bool dTimer_c::restart(u8 param_1) {
     if (field_0x162 != 1 || field_0x163 != param_1)
         return false;
 
-    if (mState != 2)
+    if (mStatus != 2)
         return false;
 
     mTime = OSGetTime();
-    field_0x138 += mTime - field_0x130;
+    OSTime temp = mTime - field_0x130;
+    field_0x138 += temp;
     field_0x162 = 0;
     field_0x163 = 0;
     return true;
@@ -344,11 +350,11 @@ bool dTimer_c::restart(u8 param_1) {
 
 /* 8023C500-8023C56C       .text end__8dTimer_cFi */
 bool dTimer_c::end(int param_1) {
-    if (mState != 2)
+    if (mStatus != 2)
         return false;
         
     field_0x120 = OSGetTime();
-    mState = 4;
+    mStatus = 4;
     if (param_1 != -1)
         field_0x158 = param_1;
     return true;
@@ -356,7 +362,7 @@ bool dTimer_c::end(int param_1) {
 
 /* 8023C56C-8023C57C       .text deleteRequest__8dTimer_cFv */
 bool dTimer_c::deleteRequest() {
-    mState = 6;
+    mStatus = 6;
     return true;
 }
 
@@ -607,17 +613,18 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
 /* 8023D318-8023D644       .text anime__21dDlst_TimerScrnDraw_cFv */
 void dDlst_TimerScrnDraw_c::anime() {
     static const s16 animeFrame[] = { 7, 15, 22 };
+    f32 f31 = -50.0f;
 
     if (field_0x235 == 0) {
-        if (field_0x234 < animeFrame[2]) {
-            field_0x234++;
+        if (mAnimeTimer < animeFrame[2]) {
+            mAnimeTimer++;
         } else {
             field_0x235 = 1;
         }
 
-        if (field_0x234 <= animeFrame[1]) {
-            f32 temp_f31 = acc(animeFrame[1], field_0x234, 0);
-            f32 temp_f1 = (1.0f - temp_f31) * -50.0f;
+        if (mAnimeTimer <= animeFrame[1]) {
+            f32 temp_f31 = acc(animeFrame[1], mAnimeTimer, 0);
+            f32 temp_f1 = f31 * (1.0f - temp_f31);
 
             fopMsgM_paneTrans(&mClockIcon, temp_f1, 0.0f);
             fopMsgM_paneTrans(&mClockBG, temp_f1, 0.0f);
@@ -638,9 +645,9 @@ void dDlst_TimerScrnDraw_c::anime() {
             dTm_parentPaneScale(&mTimerBGShadow, &mClockIcon, g_menuHIO.field_0x94);
         }
 
-        if (field_0x234 > animeFrame[0] && field_0x234 <= animeFrame[2]) {
-            f32 temp_f31 = acc(animeFrame[1], field_0x234 - animeFrame[0], 0);
-            f32 temp_f1 = (1.0f - temp_f31) * -50.0f;
+        if (mAnimeTimer > animeFrame[0] && mAnimeTimer <= animeFrame[2]) {
+            f32 temp_f31 = acc(animeFrame[1], mAnimeTimer - animeFrame[0], 0);
+            f32 temp_f1 = f31 * (1.0f - temp_f31);
 
             fopMsgM_paneTrans(&mRupee, temp_f1 + g_menuHIO.field_0x9a, g_menuHIO.field_0x9c);
             fopMsgM_setNowAlpha(&mRupee, temp_f31);
@@ -654,12 +661,13 @@ void dDlst_TimerScrnDraw_c::anime() {
 
 /* 8023D644-8023D848       .text closeAnime__21dDlst_TimerScrnDraw_cFv */
 BOOL dDlst_TimerScrnDraw_c::closeAnime() {
+    f32 f5 = -50.0f;
     BOOL ret = FALSE;
-    field_0x234++;
-    if (field_0x234 <= 7) {
-        f32 temp = acc(7, field_0x234, 0);
-        f32 alpha = acc(7, 7 - field_0x234, 0);
-        f32 x = temp * -50.0f;
+    mAnimeTimer++;
+    if (mAnimeTimer <= 7) {
+        f32 temp = acc(7, mAnimeTimer, 0);
+        f32 alpha = acc(7, 7 - mAnimeTimer, 0);
+        f32 x = f5 * temp;
         fopMsgM_paneTrans(&mClockIcon, x, 0.0f);
         fopMsgM_paneTrans(&mClockBG, x, 0.0f);
         fopMsgM_paneTrans(&mTimerNumberBG, x, 0.0f);
@@ -677,7 +685,7 @@ BOOL dDlst_TimerScrnDraw_c::closeAnime() {
         fopMsgM_setNowAlpha(&mRupeeShadow, alpha);
     }
 
-    if (field_0x234 >= 7)
+    if (mAnimeTimer >= 7)
         ret = TRUE;
 
     return ret;

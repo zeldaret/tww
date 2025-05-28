@@ -2,6 +2,7 @@
 #define M_DO_M_DO_HOSTIO_H
 
 #include "dolphin/types.h"
+#include <string.h>
 
 // move JOR stuff later
 class JOREventListener;
@@ -41,14 +42,19 @@ class mDoHIO_child_c {
 public:
     mDoHIO_child_c() {
         field_0x18 = 0;
-        mReflexible = NULL;
+        mPt = NULL;
     }
 
     ~mDoHIO_child_c() {}
 
+    const char* getName() { return mName; }
+    void setName(const char* i_name) { strncpy(mName, i_name, sizeof(mName)); }
+    JORReflexible* getPt() { return mPt; }
+    void setPt(JORReflexible* i_pt) { mPt = i_pt; }
+
     /* 0x00 */ char mName[24];
     /* 0x18 */ u8 field_0x18;
-    /* 0x1C */ JORReflexible* mReflexible;
+    /* 0x1C */ JORReflexible* mPt;
 };
 
 class mDoHIO_subRoot_c {
@@ -82,7 +88,18 @@ public:
 
 class mDoHIO_entry_c : public JORReflexible {
 public:
+#if VERSION == VERSION_DEMO
+    /* 0x00 */ s8 mNo;
+    /* 0x01 */ u8 mCount;
+    /* 0x04 */ /* vtable */
+
+    mDoHIO_entry_c();
+    virtual ~mDoHIO_entry_c();
+    void entryHIO(const char*);
+    void removeHIO();
+#else
     virtual ~mDoHIO_entry_c() {}
+#endif
 };
 
 extern mDoHIO_root_c mDoHIO_root;
