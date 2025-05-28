@@ -34,13 +34,13 @@ public:
 
     BOOL chk_appear();
     void set_mtx();
-    int solidHeapCB(fopAc_ac_c*);
+    static int solidHeapCB(fopAc_ac_c*);
     bool create_heap();
     void particle_set(int, float);
     void particle_delete(int);
     void set_se();
     void set_tri(int);
-    void chk_event_flg();
+    bool chk_event_flg();
     void set_em_set_offsetY();
     cPhs_State _create();
     bool _delete();
@@ -62,23 +62,23 @@ public:
     bool _draw();
 
 public:
-    /* 0x290 */ u8 field_0x290[0x298 - 0x290];
+    /* 0x290 */ request_of_phase_process_class field_0x290;
     /* 0x298 */ s32 field_0x298;
-    /* 0x29C */ u8 field_0x29C[0xD58 - 0x29C];
+    /* 0x29C */ dCcD_Stts mStts;
+    /* 0x2D8 */ dCcD_Tri field_0x2D8[2][4];
     /* 0xD58 */ dBgW* field_0xD58;
     /* 0xD5C */ SomeStruct field_0xD5C;
-    ///* 0xD8C */ JPABaseEmitter** field_0xD8C;
-    /* 0xD90 */ u8 field_0xDAB[0xDC0 - 0xDAB];
-    /* 0xDC0 */ int field_0xDC0;
-    /* 0xDC4 */ u8 field_0xDC4[0xDC8 - 0xDC4];
+    /* 0xDC0 */ int field_0xDA8; 
+    /* 0xD90 */ u8 field_0xDAX[0xDC0 - 0xDAC];
+    /* 0xDC0 */ s32 field_0xDC0;
+    /* 0xDC4 */ u8 field_0xDC4;
     /* 0xDC8 */ int field_0xDC8;
     /* 0xDCC */ int field_0xDCC;
     /* 0xDD0 */ int field_0xDD0;
     /* 0xDD4 */ s32 field_0xDD4;
-    /* 0xDD8 */ u8 field_0xDD8[0xDE0 - 0xDD8];
+    /* 0xDD8 */ s16 field_0xDD8[4];
     /* 0xDE0 */ u8 field_0xDE0[4];
     /* 0xDE4 */ f32 field_0xDE4[2];
-    /* 0xDE8 */ //u8 field_0xDE8[0xDEC - 0xDE8];
 };  // Size: 0xDEC
 
 

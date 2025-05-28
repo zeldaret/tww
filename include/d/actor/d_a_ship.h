@@ -135,7 +135,9 @@ public:
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
     void offCraneHookFlg() {}
-    void offFantomGanonBattle() {}
+    void offFantomGanonBattle() {
+        offStateFlg(daSFLG_UNK800000_e);
+    }
     void offStateFlg(daSHIP_SFLG flag) { mStateFlag &= ~flag;}
     void offTornadoFlg() {
         mTornadoID = fpcM_ERROR_PROCESS_ID_e;

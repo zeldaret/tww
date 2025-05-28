@@ -4,19 +4,46 @@
 //
 
 #include "d/actor/d_a_obj_tntrap.h"
-#include "d/d_a_obj.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "m_Do/m_Do_mtx.h"
 
 
 const char l_arcname[] = "TnTrap";
 
-// static const cXyz l_offset_ball[2] = {
-//     cXyz(-300,90,0),
-//     cXyz(-300,90,0)
-// };
-static const f32 l_tri_src[6][3] = {
+static const dCcD_SrcTri l_tri_src = {
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0x0800,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ 5,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0x00,
+        /* SrcGObjAt Spl     */ 0xB,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGTriS
+    {
+        /* a */ 0.0f, 0.0f, 0.0f,
+        /* b */ 0.0f, 0.0f, 0.0f,
+        /* c */ 0.0f, 0.0f, 0.0f,
+    },
+};
+
+static const Vec l_tri_vtx[6] = {
 300.0, -70.0, 0.0, 
 -300.0, -70.0, 0.0, 
 -300.0, 55.0, 0.0, 
@@ -25,15 +52,7 @@ static const f32 l_tri_src[6][3] = {
 -300.0, 180.0, 0.0,
 
 };
-static const int l_tri_vtx[7][3] = {
-    0,0x800,0x01000000,
-    5,0,0,
-    0,0xB00,0,
-    0,0,0,
-    0,0,0,
-    0,0,0,
-    0,0,0
-};
+
 
 
 static const f32 l_offset_ball[2][3] = {
@@ -114,14 +133,12 @@ void daObjTnTrap_c::set_mtx() {
 }
 
 /* 00000344-00000368       .text solidHeapCB__13daObjTnTrap_cFP10fopAc_ac_c */
-int daObjTnTrap_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
-    return create_heap();
+ int daObjTnTrap_c::solidHeapCB(fopAc_ac_c* actor) {
+    return ((daObjTnTrap_c*)actor)->create_heap();
 }
 
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::create_heap() {
-    /* Nonmatching */
     bool o_retval = true;
     cBgD_t* pcVar1 = (cBgD_t*)dComIfG_getObjectRes(l_arcname,0x3);
     field_0xD58 = dBgW_NewSet(pcVar1,cBgW::MOVE_BG_e,&field_0xD5C.calcMtx);
@@ -133,13 +150,9 @@ bool daObjTnTrap_c::create_heap() {
     
 }
 
-enum ZERO{
-    zero = 0
-};
 
 /* 000003E4-000005F8       .text particle_set__13daObjTnTrap_cFif */
 void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
-    /* Nonmatching */
 
    cXyz ball;
 
@@ -151,15 +164,6 @@ void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
         }
     }
 
-
-    // if(field_0xDE0[i_particleId] == 1){
-    //     if(field_0xDE4[i_particleId] == param_2){
-    //         return;
-    //     }
-    //     particle_delete(i_particleId);
-    // }else{
-    //     return;
-    // }
     for(int i = 0; i < 2; i++){
         if(field_0xD5C.emitterPairs[i_particleId][i] == NULL){
             ball.x = l_offset_ball[i][0];
@@ -185,7 +189,6 @@ void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
 
 /* 000005F8-000006A4       .text particle_delete__13daObjTnTrap_cFi */
 void daObjTnTrap_c::particle_delete(int param_1) {
-    /* Nonmatching */
 
     if(field_0xDE0[param_1] == 1){
         int i;
@@ -209,7 +212,7 @@ void daObjTnTrap_c::particle_delete(int param_1) {
 
 /* 000006A4-0000072C       .text set_se__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_se() {
-    /* Nonmatching */
+
     if(field_0xDC0 >= 5 || field_0xDC0 < 1){
         return;
     }
@@ -218,25 +221,127 @@ void daObjTnTrap_c::set_se() {
 }
 
 /* 0000072C-000008A0       .text set_tri__13daObjTnTrap_cFi */
-void daObjTnTrap_c::set_tri(int) {
-    /* Nonmatching */
-    volatile f32 uvar1 = l_tri_vtx[0][0];
-}
+void daObjTnTrap_c::set_tri(int param_1) {
+
+    cXyz local_58[3];
+    static s32 table_idx [4][3] = {
+        0,1,2,
+        0,2,3,
+        3,2,5,
+        3,5,4
+    };
+    mDoMtx_stack_c::transS(home.pos.x,home.pos.y+field_0xDE4[param_1],home.pos.z);
+    mDoMtx_stack_c::XYZrotM(shape_angle);
+    for(int i = 0; i < 4; i++){
+
+        for(int j = 0; j < 3; j++){
+            local_58[j] = l_tri_vtx[table_idx[i][j]];
+            mDoMtx_stack_c::multVec(&local_58[j],&local_58[j]);
+        }
+        field_0x2D8[param_1][i].setPos(&local_58[0],&local_58[1],&local_58[2]);
+    }
+
+
+}   
 
 /* 000008A0-00000A10       .text chk_event_flg__13daObjTnTrap_cFv */
-void daObjTnTrap_c::chk_event_flg() {
-    /* Nonmatching */
+bool daObjTnTrap_c::chk_event_flg() {
+
+    bool o_retval = 1;
+    switch(field_0x298){
+        case 1:
+            break;
+        case 0:                                                                     //TODO: use elsewhere
+            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+                int var_29 = 4;
+                if(field_0xDD0 == 0){
+                    var_29 = 2;
+                    dComIfGs_onEventBit(0x3B40);
+
+                }
+                setup_action(var_29);
+            }
+            break;
+            
+        case 2:
+            if(field_0xDC0 == 1){
+                setup_action(2);
+            }
+            break;
+        case 3:
+            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+                daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+                if(ship){
+                    ship->offFantomGanonBattle();
+                    fopAcM_delete(this);
+                    o_retval = false;
+                }
+            }
+            break;
+        case 5:
+            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+                fopAcM_delete(this);
+                o_retval = false;
+            }
+            break;
+    }
+    return o_retval;
 }
 
 /* 00000A10-00000A98       .text set_em_set_offsetY__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_em_set_offsetY() {
-    /* Nonmatching */
+
+    if(field_0x298 == 5){
+        daPy_py_c* player = daPy_getPlayerActorClass();
+        if(daPy_getPlayerActorClass() != NULL){
+            float diff = player->eyePos.y - home.pos.y;
+            field_0xDE4[0] = (int)(diff / 180.0f) * 180.0f;
+        }
+    }else{
+        field_0xDE4[0] = 0.0;
+    }
+    return; 
 }
 
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
 cPhs_State daObjTnTrap_c::_create() {
-    /* Nonmatching */
-    volatile f32 uvar1 = l_tri_src[0][0];
+
+    cPhs_State o_phs_state = cPhs_ERROR_e;
+    fopAcM_SetupActor(this,daObjTnTrap_c);
+    if(fopAcM_IsFirstCreating(this)){
+        field_0xDC4 = chk_appear();
+    }
+    if(field_0xDC4 == 1){
+        o_phs_state = dComIfG_resLoad(&field_0x290,l_arcname); 
+    }
+    if(o_phs_state == cPhs_COMPLEATE_e){
+        if(fopAcM_entrySolidHeap(this,this->solidHeapCB,0x2E0)){
+            if(field_0x298 != 3 && dComIfG_Bgsp()->Regist(field_0xD58,this) != 0){
+                o_phs_state = cPhs_ERROR_e;
+            }else{
+                set_em_set_offsetY();
+                set_mtx();
+                mStts.Init(0xFF,0xFF,this);
+
+                for(int i = 0; i < 2; i++){
+                    for(int j = 0; j < 4; j++){
+                        field_0x2D8[i][j].Set(l_tri_src);
+                        field_0x2D8[i][j].SetStts(&mStts);
+                    }
+                    set_tri(i);
+                }
+                int action_param = 0;
+                if(field_0x298 == 3){
+                    action_param=6;
+                }
+                setup_action(action_param);
+            }
+        }else{
+            o_phs_state = cPhs_ERROR_e;
+        }  
+    }
+    return o_phs_state;
+
 }
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
@@ -321,32 +426,33 @@ bool daObjTnTrap_c::_execute() {
 
 /* 00001BE8-00001BF0       .text _draw__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::_draw() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 00001BF0-00001C10       .text daObjTnTrap_Create__FP10fopAc_ac_c */
-static cPhs_State daObjTnTrap_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjTnTrap_Create(fopAc_ac_c* obj) {
+    return ((daObjTnTrap_c*)obj)->_create();
 }
 
 /* 00001C10-00001C34       .text daObjTnTrap_Delete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Delete(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Delete(daObjTnTrap_c* obj) {
+    return ((daObjTnTrap_c*)obj)->_delete();
+
 }
 
 /* 00001C34-00001C58       .text daObjTnTrap_Execute__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Execute(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Execute(daObjTnTrap_c* obj) {
+    return ((daObjTnTrap_c*)obj)->_execute();
 }
 
 /* 00001C58-00001C7C       .text daObjTnTrap_Draw__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Draw(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Draw(daObjTnTrap_c* obj) {
+    return ((daObjTnTrap_c*)obj)->_draw();
 }
 
 /* 00001C7C-00001C84       .text daObjTnTrap_IsDelete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c* obj) {
+    return TRUE;
 }
 
 static actor_method_class l_daObjTnTrap_Method = {
