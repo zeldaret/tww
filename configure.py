@@ -943,7 +943,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTResFont.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDbPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTGamePad.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JSystem/JUtility/JUTException.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTException.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDirectPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTAssert.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTVideo.cpp"),
@@ -952,7 +952,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTProcBar.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTConsole.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTDirectFile.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "JSystem/JUtility/JUTGba.cpp"),
+            Object(Matching,    "JSystem/JUtility/JUTGba.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTFontData_Ascfont_fix12.cpp"), # Originally a .s file
         ],
     ),

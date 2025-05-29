@@ -75,7 +75,7 @@ JFWDisplay::~JFWDisplay() {
 
 /* 80255354-802553EC       .text createManager__10JFWDisplayFP7JKRHeapQ26JUTXfb10EXfbNumberb */
 JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
-    JUT_CONFIRM(VERSION_SELECT(244, 244, 243, 243), sManager == 0);
+    JUT_CONFIRM(VERSION_SELECT(244, 244, 243, 243), sManager == NULL);
     if(sManager == 0) {
         sManager = new JFWDisplay(0, p_heap, xfb_num, enableAlpha);
     }

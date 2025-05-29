@@ -63,7 +63,7 @@ void JUTXfb::delXfb(int xfbIdx) {
 
 /* 802C837C-802C8410       .text createManager__6JUTXfbFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumber */
 JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
-    JUT_CONFIRM(VERSION_SELECT(198, 198, 203, 203), sManager == 0);
+    JUT_CONFIRM(VERSION_SELECT(198, 198, 203, 203), sManager == NULL);
     if (sManager == NULL) {
         sManager = new JUTXfb(pObj, pHeap, xfbNum);
     }
