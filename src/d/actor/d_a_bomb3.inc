@@ -672,9 +672,7 @@ void daBomb_c::makeWaterEffect() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -834,9 +832,7 @@ BOOL daBomb_c::procExplode_init() {
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
         dComIfG_Ccsp()->Set(&mSph);
-        //using inline breaks match
-        //dComIfG_Ccsp()->SetMass(&mSph, 3);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+        dComIfG_Ccsp_SetMass(&mSph, 3);
         field_0x782 = 1;
         mMassCounter = g_Counter.mCounter0;
     }
@@ -899,9 +895,7 @@ bool daBomb_c::procExplode() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -1088,9 +1082,7 @@ BOOL daBomb_c::execute() {
             mSph.SetR(scale.x * 30.0f);
             if(mMassCounter != g_Counter.mCounter0) {
                 dComIfG_Ccsp()->Set(&mSph);
-                //using inline breaks match
-                //dComIfG_Ccsp()->SetMass(&mSph, 3);
-                g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+                dComIfG_Ccsp_SetMass(&mSph, 3);
                 mMassCounter = g_Counter.mCounter0;
             }
         }

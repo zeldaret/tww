@@ -2134,9 +2134,7 @@ static fopAc_ac_c* yari_hit_check(bk_class* i_this) {
         i_this->m1040.MoveCAt(i_this->m11A8);
         dComIfG_Ccsp()->Set(&i_this->m1040);
         if (i_this->m02D5 != 0) {
-            // Using the dComIfG_Ccsp inline here breaks the match.
-            // dComIfG_Ccsp()->SetMass(&i_this->m1040, 3);
-            dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m1040, 3);
+            dComIfG_Ccsp_SetMass(&i_this->m1040, 3);
         }
         if (i_this->m1040.ChkAtHit()) {
             i_this->m0B78 = 5;
@@ -3334,9 +3332,7 @@ static void Bk_move(bk_class* i_this) {
             i_this->m1040.OffAtVsPlayerBit();
             i_this->m1040.SetAtSpl(dCcG_At_Spl_UNK1);
             dComIfG_Ccsp()->Set(&i_this->m1040);
-            // Using the dComIfG_Ccsp inline here breaks the match.
-            // dComIfG_Ccsp()->SetMass(&i_this->m1040, 3);
-            dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m1040, 3);
+            dComIfG_Ccsp_SetMass(&i_this->m1040, 3);
             
             if (i_this->m1040.ChkAtHit() && actor->speed.y < -50.0f) {
                 actor->speed.y = 0.0f;
@@ -4422,9 +4418,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
     MtxPosition(&sp58, &sp4C);
     i_this->m0B88.SetC(sp4C);
     dComIfG_Ccsp()->Set(&i_this->m0B88);
-    // Using the inline breaks the match.
-    // dComIfG_Ccsp()->SetMass(&i_this->m0B88, 3);
-    dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m0B88, 3);
+    dComIfG_Ccsp_SetMass(&i_this->m0B88, 3);
     
     cXyz sp40 = i_this->m116C;
     cXyz sp34 = i_this->current.pos;
