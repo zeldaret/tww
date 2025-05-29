@@ -1,6 +1,6 @@
 /**
  * d_a_tn.cpp
- * Enemy - Darknut
+ * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods)
  */
 
 #include "d/actor/d_a_tn.h"

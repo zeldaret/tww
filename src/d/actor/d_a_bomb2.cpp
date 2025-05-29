@@ -1,6 +1,6 @@
 /**
- * d_a_bomb.cpp
- * Bomb Flower Bomb
+ * d_a_bomb2.cpp
+ * Object - Bomb Flower - Bomb
  */
 
 #include "d/actor/d_a_bomb2.h"

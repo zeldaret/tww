@@ -1,6 +1,6 @@
 /**
  * d_a_fganon.cpp
- * Enemy - Phantom Ganon
+ * Mini-Boss - Phantom Ganon
  */
 
 #include "d/actor/d_a_fganon.h"

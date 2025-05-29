@@ -1,5 +1,6 @@
-/*
+/**
  * d_a_obj_pbka.cpp
+ * Object - Windfall Island - Bomb Shop - Ceiling fan
  */
 
 #include "d/actor/d_a_obj_pbka.h"

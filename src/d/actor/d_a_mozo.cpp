@@ -1,6 +1,6 @@
 /**
  * d_a_mozo.cpp
- * Moblin Statue / モ石像 (Mo Sekizou)
+ * Enemy - Moblin Statue / モ石像 (Mo Sekizou)
  */
 
 #include "d/actor/d_a_mozo.h"

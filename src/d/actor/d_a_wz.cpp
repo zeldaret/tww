@@ -1,6 +1,6 @@
 /**
  * d_a_wz.cpp
- * Enemy - Wizzrobe
+ * Enemy - Wizzrobe / Mini-Boss - Wizzrobe (Wind Temple)
  */
 
 #include "d/actor/d_a_wz.h"
