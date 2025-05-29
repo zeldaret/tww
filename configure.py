@@ -1539,7 +1539,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
     ActorRel(NonMatching, "d_a_bpw"),
-    ActorRel(NonMatching, "d_a_bst"),
+    ActorRel(NonMatching, "d_a_bst", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_btd"),
     ActorRel(NonMatching, "d_a_bwd"),
     ActorRel(Equivalent,  "d_a_bwdg", extra_cflags=['-pragma "nosyminline on"']), # weak func order
