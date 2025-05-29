@@ -4,52 +4,176 @@
 //
 
 #include "d/actor/d_a_obj_tapestry.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+daObjTapestry_HIO_c l_HIO;
+const char l_arcName[] = "Mcrtn";
+static const dCcD_SrcTri l_tri_src = {
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0x0000,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0x0,
+        /* SrcObjTg  Type    */ 0xFF3FFEFF,
+        /* SrcObjTg  SPrm    */ 9,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0x00,
+        /* SrcGObjAt Spl     */ 0x0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    {
+        /* a */ 0.0f, 0.0f, 0.0f,
+        /* b */ 0.0f, 0.0f, 0.0f,
+        /* c */ 0.0f, 0.0f, 0.0f,
+    },
+};
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */
 daObjTapestry_HIO_c::daObjTapestry_HIO_c() {
     /* Nonmatching */
 }
 
+
 /* 000001E0-00000254       .text plight_delete__21daObjTapestryPLight_cFv */
 void daObjTapestryPLight_c::plight_delete() {
     /* Nonmatching */
+    if(this->field_0 == 1){
+        dKy_plight_cut(&field_4);
+        JPABaseEmitter* pvVar1 = field_24;
+        if(pvVar1 != 0){
+            pvVar1->becomeInvalidEmitter();
+            field_24->setEmitterCallBackPtr(NULL);
+            field_24 = NULL;
+
+        }
+        field_0 = 0;
+    }
 }
 
 /* 00000254-000002B0       .text plight_move__21daObjTapestryPLight_cF4cXyz5csXyz */
-void daObjTapestryPLight_c::plight_move(cXyz, csXyz) {
+void daObjTapestryPLight_c::plight_move(cXyz param_1, csXyz param_2) {
     /* Nonmatching */
+    if(field_0 == 1){
+        setPointLight(param_1,param_2);
+    }
+    return;
 }
 
 /* 000002EC-00000324       .text plight_make__21daObjTapestryPLight_cFv */
 void daObjTapestryPLight_c::plight_make() {
     /* Nonmatching */
+    dKy_plight_set(&field_4);
+    field_0 = 1;
+    return;
 }
 
 /* 00000324-00000490       .text setPointLight__21daObjTapestryPLight_cF4cXyz5csXyz */
-void daObjTapestryPLight_c::setPointLight(cXyz, csXyz) {
+void daObjTapestryPLight_c::setPointLight(cXyz param_1, csXyz param_2) {
     /* Nonmatching */
+    cXyz local_38;
+    f32 fVar3 = cM_rndF(0.5) + 1.0f;
+    cLib_addCalc2(&field_28,fVar3,0.5,0.04);
+    field_4.mPos = param_1;
+    //field_4.mColor = GXColorS10(600,400,0x78);
+    field_4.mColor.r = 600;
+    field_4.mColor.g = 400;
+    field_4.mColor.b = 0x78;
+    s16 iVar1 = field_28 * 800.0f;
+    field_4.mPower = iVar1;
+    field_4.mFluctuation = 250.0f;
+    if(field_28 > 1.0f){
+        local_38.set(field_28 * 1.5f,field_28 * 1.5f,field_28 * 1.5f);
+        if(field_24 == NULL){
+            field_24 = dComIfGp_particle_setProjection(0x4004,&param_1,&param_2,&local_38);
+        }else{
+            field_24->setGlobalParticleScale(local_38);
+            field_24->setEmitterCallBackPtr(&dPa_control_c::mKagero);
+        }
+
+    }
+
 }
 
 /* 00000490-00000600       .text execute__22daObjTapestryFireEff_cFP14JPABaseEmitter */
-void daObjTapestryFireEff_c::execute(JPABaseEmitter*) {
+void daObjTapestryFireEff_c::execute(JPABaseEmitter* param_1) {
     /* Nonmatching */
+    cXyz a;
+    param_1->setDirection(a);
+    for(int i = 0; i <= 12; i++){
+
+    }
 }
 
 /* 00000600-00000638       .text __ct__23daObjTapestryDrawData_cFv */
 daObjTapestryDrawData_c::daObjTapestryDrawData_c() {
     /* Nonmatching */
+    ct_tex();
+    ct_dl();
+    return;
 }
 
 /* 00000638-000006C8       .text ct_tex__23daObjTapestryDrawData_cFv */
+// void daObjTapestryDrawData_c::ct_tex() {
+//     /* Nonmatching */
+//     for(int i = 0; i < 8; i++){
+//         for(int j = 0; j < 6; j++){
+//             array[2*j] = j*0.2f;
+//             array[2*j+1] = i*0.14285715f;
+//         }
+//     }
+// }
 void daObjTapestryDrawData_c::ct_tex() {
-    /* Nonmatching */
+    for(int i = 0, offset = 0; i < 8; i++){
+        f32 v = i*0.14285715f;
+        for(int j = 0; j < 6; offset += 2){
+            f32 u = j*0.2f;
+            array[offset+0] = u;
+            array[offset+1] = v;
+            j++;
+        }
+    }
 }
 
+
+const u32 l_dl_size = 0x185;
+static u32 begin_data;
+static u32 temp_clr = 0;
 /* 000006C8-00000878       .text ct_dl__23daObjTapestryDrawData_cFv */
 void daObjTapestryDrawData_c::ct_dl() {
     /* Nonmatching */
+
+    int now = 0;
+    for(int i = 0; i < 7; i++){
+        memcpy(now+m_dl,&begin_data,3);
+        now += 3;
+        for(int j = 0; j < 6; j++){
+            for(int k = 0; k < 2; k++){
+                char cVar1 = j + 4*k;
+                char local_34[2] ={cVar1,cVar1};
+                memcpy(now+m_dl,local_34,2);
+                memcpy(now+m_dl+2,&temp_clr,1);
+                memcpy(now+m_dl+3,&cVar1,1);
+                now += 4;
+
+            }
+        }
+    }
+
+    for(int i = 0; i < 0x20; i++){
+        m_dl[0][now] = 0;
+        now++;
+    }
+    JUT_ASSERT(0x25A,(reinterpret_cast<u32>(m_dl) & 0x1f) == 0);
+    JUT_ASSERT(0x25B,now == l_dl_size);
 }
 
 /* 00000878-00000C44       .text __ct__21daObjTapestryPacket_cFv */
@@ -143,7 +267,7 @@ void daObjTapestryPacket_c::set_hit(cXyz, cXyz, float, float, bool) {
 }
 
 /* 000034CC-000034F4       .text get_now_pos__21daObjTapestryPacket_cFii */
-void daObjTapestryPacket_c::get_now_pos(int, int) {
+cXyz* daObjTapestryPacket_c::get_now_pos(int, int) {
     /* Nonmatching */
 }
 
@@ -224,42 +348,145 @@ void daObjTapestry_c::chk_appear() {
 
 /* 0000461C-000046A8       .text set_mtx__15daObjTapestry_cFv */
 void daObjTapestry_c::set_mtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    unk1758->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(scale);
+    cMtx_copy(mDoMtx_stack_c::get(),unk1760);
     /* Nonmatching */
 }
 
 /* 000046A8-000046E4       .text init_mtx__15daObjTapestry_cFv */
 void daObjTapestry_c::init_mtx() {
     /* Nonmatching */
+    J3DModel* model = unk1758;
+    model->setBaseScale(scale);
+    set_mtx();
+    return;
 }
 
 /* 000046E4-00004708       .text solidHeapCB__15daObjTapestry_cFP10fopAc_ac_c */
-void daObjTapestry_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+int daObjTapestry_c::solidHeapCB(fopAc_ac_c* actor) {
+    return create_heap();
 }
 
 /* 00004708-00004800       .text create_heap__15daObjTapestry_cFv */
-void daObjTapestry_c::create_heap() {
+bool daObjTapestry_c::create_heap() {
     /* Nonmatching */
+
+
 }
 
 /* 00004800-0000482C       .text create_res_load__15daObjTapestry_cFv */
 void daObjTapestry_c::create_res_load() {
     /* Nonmatching */
+   dComIfG_resLoad(&unk290,l_arcName);
+   return;
 }
+
+
 
 /* 0000482C-000048C8       .text init_cc__15daObjTapestry_cFv */
 void daObjTapestry_c::init_cc() {
-    /* Nonmatching */
+    for(int i = 0; i < 2; i++){
+        mStts[i].Init(0xFF,0xFF,this);
+        mTris[i].Set(l_tri_src);
+        mTris[i].SetStts(&mStts[i]);
+        mTris[i].OnTgNoHitMark();
+    }
+    set_cc_pos();
+    return;
 }
-
 /* 000048C8-00004A30       .text set_cc_pos__15daObjTapestry_cFv */
 void daObjTapestry_c::set_cc_pos() {
+    static u8 idx_tbl[2][6] = {
+        0,0,0,5,7,5,
+        0,0,7,5,7,0};
+    cXyz local_40;
+    cXyz local_4C;
+    cXyz local_58;
     /* Nonmatching */
+    for(int i = 0; i < 2; i++){
+        mDoMtx_stack_c::copy(unk1758->getBaseTRMtx());
+        mDoMtx_stack_c::scaleM(1.5f,1.2f,1.5f);
+        mDoMtx_stack_c::transM(0.0f,29.700006f,0.0f);//TODO: Wtf?
+        mDoMtx_stack_c::multVec(packet.get_now_pos(idx_tbl[i][0],idx_tbl[i][1]),&local_40);
+        mDoMtx_stack_c::multVec(packet.get_now_pos(idx_tbl[i][2],idx_tbl[i][3]),&local_4C);
+        mDoMtx_stack_c::multVec(packet.get_now_pos(idx_tbl[i][4],idx_tbl[i][5]),&local_58);
+        mTris[i].setPos(&local_40,&local_4C,&local_58);
+    }
 }
 
 /* 00004A30-00004E30       .text checkCollision__15daObjTapestry_cFv */
 void daObjTapestry_c::checkCollision() {
     /* Nonmatching */
+    for(int i = 0; i < 2; i++){
+        mTris[i].ChkTgHit();
+        if(mTris[i].ChkTgHit() != 0){
+            if(mTris[i].GetTgHitObj()){
+                
+            }
+
+            // switch (temp_r30) {                 /* irregular */
+            //     case 0x200000:
+            //         sp24 = temp_r29->unkC0;
+            //         sp28 = temp_r29->unkC4;
+            //         sp2C = temp_r29->unkC8;
+            //         var_f1 = PSVECSquareMag(&sp24);
+            //         f32 var_f1 = 
+            //         if (var_f1 > temp_r3->unk1AC) {
+            //             if (var_f1 > temp_r3->unk100) {
+            //                 temp_f0 = __frsqrte(var_f1);
+            //                 temp_f4 = temp_r3->unk120;
+            //                 temp_f3 = temp_r3->unk128;
+            //                 temp_f0_2 = temp_f4 * temp_f0 * (temp_f3 - ((f64) var_f1 * (temp_f0 * temp_f0)));
+            //                 temp_f0_3 = temp_f4 * temp_f0_2 * (temp_f3 - ((f64) var_f1 * (temp_f0_2 * temp_f0_2)));
+            //                 sp8 = (f32) ((f64) var_f1 * (temp_f4 * temp_f0_3 * (temp_f3 - ((f64) var_f1 * (temp_f0_3 * temp_f0_3)))));
+            //                 var_f1 = sp8;
+            //             }
+            //             PSVECScale(&sp24, &sp24, temp_r3->unk1B0 / var_f1);
+            //         }
+            //         this->unk1660 = sp24;
+            //         this->unk1664 = sp28;
+            //         this->unk1668 = sp2C;
+            //         break;
+            //     case 0x4000000:
+            //     case 0x10000000:
+            //     case 0x1000000:
+            //     case 0x10000:
+            //     case 0x200:
+            //     case 0x1000:
+            //     case 0x2000:
+            //     case 0x800:
+            //     case 0x400:
+            //     case 0x80:
+            //     case 0x40:
+            //     case 0x8:
+            //     case 0x2:
+            //         var_f31 = temp_r3->unkB8;
+            //         var_f30 = temp_r3->unkBC;
+            //         break;
+            //     case 0x4000:
+            //     case 0x100000:
+            //     case 0x80000:
+            //     case 0x40000:
+            //     case 0x8000:
+            //         var_f31 = temp_r3->unk170;
+            //         var_f30 = temp_r3->unkE0;
+            //         break;
+            //     case 0x20000:
+            //         var_f31 = temp_r3->unk100;
+            //         var_f30 = temp_r3->unkE0;
+            //         break;
+            //     case 0x20:
+            //         var_f31 = temp_r3->unk170;
+            //         var_f30 = temp_r3->unk1B4;
+            //         break;
+            // }
+
+        }
+        mTris[i].ClrTgHit();
+    }
 }
 
 /* 00004E30-00004F2C       .text set_eye_pos__15daObjTapestry_cFv */
@@ -318,28 +545,33 @@ bool daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
-static cPhs_State daObjTapestry_Create(fopAc_ac_c*) {
+static cPhs_State daObjTapestry_Create(fopAc_ac_c* obj) {
     /* Nonmatching */
+    return ((daObjTapestry_c*)obj)->_create();
 }
 
 /* 00005C64-00005C88       .text daObjTapestry_Delete__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Delete(daObjTapestry_c*) {
+static BOOL daObjTapestry_Delete(daObjTapestry_c* obj) {
     /* Nonmatching */
+    return obj->_delete();
 }
 
 /* 00005C88-00005CAC       .text daObjTapestry_Execute__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Execute(daObjTapestry_c*) {
+static BOOL daObjTapestry_Execute(daObjTapestry_c* obj) {
     /* Nonmatching */
+    return obj->_execute();
 }
 
 /* 00005CAC-00005CD0       .text daObjTapestry_Draw__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
+static BOOL daObjTapestry_Draw(daObjTapestry_c* obj) {
     /* Nonmatching */
+    return obj->_draw();
 }
 
 /* 00005CD0-00005CD8       .text daObjTapestry_IsDelete__FP15daObjTapestry_c */
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
     /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjTapestry_Method = {
