@@ -642,9 +642,9 @@ static void head_hukki(bst_class* i_this) {
     }
 
     i_this->shape_angle.x = i_this->field_0x10F8 *
-        cM_ssin(i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 700));
+        cM_ssin(i_this->field_0x10D4 * (REG0_S(6) + 700));
     i_this->shape_angle.z = i_this->field_0x10F8 *
-        cM_ssin(i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 600));
+        cM_ssin(i_this->field_0x10D4 * (REG0_S(6) + 600));
 
     cLib_addCalc2(&i_this->current.pos.y, REG0_F(11) + 400.0f, 0.05f, i_this->field_0x10EC.y * 40.0f);
     cLib_addCalc2(&i_this->field_0x10EC.z, REG0_F(11) + 50.0f, 1.0f, 2.0f);
@@ -1597,7 +1597,7 @@ void demo_camera(bst_class* i_this) {
         camera_eye.y = i_this->field_0x2EAC.y - y;
         camera_eye.z = i_this->field_0x2EAC.z - z;
 
-        s16 bank = 7.5f * i_this->field_0x2ECC * cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x1C00);
+        s16 bank = 7.5f * i_this->field_0x2ECC * cM_scos(i_this->field_0x10D4 * 0x1C00);
         camera->mCamera.Set(
             camera_center,
             camera_eye,
@@ -1665,7 +1665,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz vec;
 
-    i_this->mUpdateLastFacingDirIfMultipleOf32++;
+    i_this->field_0x10D4++;
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->field_0x10FC); i++) {
         if (i_this->field_0x10FC[i] != 0) {
             i_this->field_0x10FC[i]--;
@@ -1742,13 +1742,13 @@ static BOOL daBst_Execute(bst_class* i_this) {
     }
 
     f32 unk1 = i_this->field_0x10EC.z * cM_ssin(
-        i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 700)
+        i_this->field_0x10D4 * (REG0_S(6) + 700)
     );
     f32 unk2 = i_this->field_0x10EC.z * cM_ssin(
-        i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 750)
+        i_this->field_0x10D4 * (REG0_S(6) + 750)
     );
     f32 unk3 = i_this->field_0x10EC.z * cM_scos(
-        i_this->mUpdateLastFacingDirIfMultipleOf32 * (REG0_S(6) + 720)
+        i_this->field_0x10D4 * (REG0_S(6) + 720)
     );
     cLib_addCalc0(&i_this->field_0x10EC.z, 1.0f, 1.0f);
     i_this->field_0x02B8->getModel()->setBaseScale(i_this->scale);
@@ -1758,16 +1758,16 @@ static BOOL daBst_Execute(bst_class* i_this) {
                            i_this->current.pos.z + unk3);
 
     f32 unk4 = i_this->mHeadHurtAngle * (REG0_F(14) + 500.0f) *
-        cM_ssin(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x2100);
+        cM_ssin(i_this->field_0x10D4 * 0x2100);
     f32 unk5 = i_this->mHeadHurtAngle * (REG0_F(14) + 500.0f) *
-        cM_scos(i_this->mUpdateLastFacingDirIfMultipleOf32 * 0x2300);
+        cM_scos(i_this->field_0x10D4 * 0x2300);
 
     f32 unk6 = i_this->field_0x112A * (REG0_F(14) + 150.0f) *
-        cM_ssin(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x3600);
+        cM_ssin(boss->field_0x10D4 * 0x3600);
     f32 unk7 = i_this->field_0x112A * (REG0_F(14) + 150.0f) *
-        cM_scos(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x4300);
+        cM_scos(boss->field_0x10D4 * 0x4300);
     f32 unk8 = i_this->field_0x112C * (REG0_F(14) + 100.0f) *
-        cM_scos(boss->mUpdateLastFacingDirIfMultipleOf32 * 0x3A00);
+        cM_scos(boss->field_0x10D4 * 0x3A00);
 
     cLib_addCalc0(&i_this->field_0x10F8, 1.0f, REG0_F(3) + 30.0f);
     mDoMtx_stack_c::YrotM(i_this->shape_angle.y + (s16)unk4 + (s16)unk6);
@@ -2176,7 +2176,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         }
     }
     f32 fVar = cM_rndFX(32768.0f);
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = fVar;
+    i_this->field_0x10D4 = fVar;
     i_this->mEnvLight = i_this->tevStr;
     i_this->field_0x2F20 = i_this->tevStr;
 

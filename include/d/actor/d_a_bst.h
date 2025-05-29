@@ -39,12 +39,12 @@ public:
     /* 0x04F0 */ dCcD_Sph mCcD_beams[10];
     /* 0x10A8 */ f32 field_0x10A8[10];
     /* 0x10D0 */ f32 field_0x10D0;
-    /* 0x10D4 */ s16 mUpdateLastFacingDirIfMultipleOf32;
+    /* 0x10D4 */ s16 field_0x10D4;
     /* 0x10D6 */ s16 field_0x10D6;
     /* 0x10D8 */ s16 field_0x10D8;
     /* 0x10DA */ s16 mDamage;
     /* 0x10DC */ cXyz mTargetPos;
-    /* 0x10E8 */ s16 mLastCheckedPlayerFacingDir;
+    /* 0x10E8 */ s16 field_0x10E8;
     /* 0x10EA */ u8 field_0x10EA[0x10EC - 0x10EA];
     /* 0x10EC */ cXyz field_0x10EC;
     /* 0x10F8 */ f32 field_0x10F8;
