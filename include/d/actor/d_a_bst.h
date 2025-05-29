@@ -38,7 +38,7 @@ public:
     /* 0x04EE */ u8 field_0x04EE[0x04F0 - 0x04EE];
     /* 0x04F0 */ dCcD_Sph mCcD_beams[10];
     /* 0x10A8 */ f32 field_0x10A8[10];
-    /* 0x10D0 */ u8 field_0x10D0[0x10D4 - 0x10D0];
+    /* 0x10D0 */ f32 field_0x10D0;
     /* 0x10D4 */ s16 mUpdateLastFacingDirIfMultipleOf32;
     /* 0x10D6 */ s16 field_0x10D6;
     /* 0x10D8 */ s16 field_0x10D8;
@@ -78,12 +78,10 @@ public:
     /* 0x2E72 */ s8 mEyeHealth[2];
     /* 0x2E74 */ s16 field_0x2E74[2];
     /* 0x2E78 */ s16 field_0x2E78[2];
-    /* 0x2E7C */ u8 field_0x2E7C;
+    /* 0x2E7C */ s8 field_0x2E7C;
     /* 0x2E7D */ u8 field_0x2E7D[0x2E7E - 0x2E7D];
-    /* 0x2E7E */ s16 field_0x2E7E;
-    /* 0x2E80 */ s16 mHeadBeamAttackTimer;
-    /* 0x2E82 */ s16 field_0x2E82;
-    /* 0x2E84 */ s16 mBombArrowDropTimer;
+    /* 0x2E7E */ s16 field_0x2E7E[3];
+    /* 0x2E84 */ s16 field_0x2E84;
     /* 0x2E86 */ u8 field_0x2E86[0x2E88 - 0x2E86];
     /* 0x2E88 */ fpc_ProcID mBombId;
     /* 0x2E8C */ fpc_ProcID mpCreatedItem;
@@ -103,7 +101,9 @@ public:
     /* 0x2ED4 */ s8 mRoomState;
     /* 0x2ED5 */ u8 field_0x2ED5[0x2ED8 - 0x2ED5];
     /* 0x2ED8 */ s32 field_0x2ED8[2];
-    /* 0x2EE0 */ u8 field_0x2EE0[0x2F00 - 0x2EE0];
+    /* 0x2EE0 */ u8 field_0x2EE0[0x2EF4 - 0x2EE0];
+    /* 0x2EF4 */ JPABaseEmitter* field_0x2EF4;
+    /* 0x2EF8 */ u8 field_0x2EF8[0x2F00 - 0x2EF8];
     /* 0x2F00 */ dPa_smokeEcallBack mPa_smokeEcallBack;
     /* 0x2F20 */ dKy_tevstr_c field_0x2F20;
     /* 0x2FD0 */ J3DModel* field_0x2FD0;
@@ -114,7 +114,7 @@ public:
     /* 0x2FE4 */ s8 field_0x2FE4;
     /* 0x2FE5 */ u8 mHioSet;
     /* 0x2FE6 */ u8 field_0x2FE6[0x2FE8 - 0x2FE6];
-};
+};  // Size: 0x2FE8
 
 class daBst_HIO_c : public JORReflexible {
 public:
