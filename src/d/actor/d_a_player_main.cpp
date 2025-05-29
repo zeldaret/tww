@@ -1332,7 +1332,7 @@ s32 daPy_lk_c::setItemModel() {
             dVar15 = mtx[1][3];
             dVar17 = mtx[2][3];
             u16 uVar10 =
-                cM_rad2s(((6.2831855f * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - 22.0f)) /
+                cM_rad2s((((2*M_PI) * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - 22.0f)) /
                           mFrameCtrlUnder[UNDER_MOVE0_e].getEnd()));
             mDoMtx_stack_c::YrotS(
                 (-5500.0f * std::abs(mVelocity / mMaxNormalSpeed) * cM_ssin(uVar10 & 0xFFFF)));

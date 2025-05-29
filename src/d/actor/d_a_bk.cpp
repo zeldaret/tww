@@ -362,7 +362,10 @@ static void search_check_draw(bk_class* i_this) {
         return;
     }
     cXyz sp14[0x10];
-    cXyz sp08(0.0f, 0.0f, l_bkHIO.m028);
+    cXyz sp08;
+    sp08.x = 0.0f;
+    sp08.y = 0.0f;
+    sp08.z = l_bkHIO.m028;
     int i;
     s16 r26 = 0;
     for (i = 0; i < 0x10; i++, r26 += 0x1000) {
@@ -493,10 +496,9 @@ static void daBk_shadowDraw(bk_class* i_this) {
             i_this->current.pos.y + 150.0f + REG8_F(18),
             i_this->current.pos.z
         );
-        f32 temp = 800.0f + REG8_F(19);
-        f32 shadowSize = 40.0f + REG8_F(17);
         i_this->mShadowId = dComIfGd_setShadow(
-            i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
+            i_this->mShadowId, 1, model, &shadowPos,
+            800.0f + REG8_F(19), 40.0f + REG8_F(17),
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
             i_this->dr.mAcch.m_gnd, &i_this->tevStr
         );
