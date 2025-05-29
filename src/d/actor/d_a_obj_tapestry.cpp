@@ -229,11 +229,95 @@ void daObjTapestryPacket_c::calc_pos_crr(int, int) {
 /* 000021F4-00002350       .text calc_pos__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_pos() {
     /* Nonmatching */
+    cXyz** bank = (cXyz**)(0x6C0*unk1060+16);
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 6; j++){
+            if(i != 0 || ((unkFD0[i][j] & 1) != 0)){
+                unk1328 = cXyz::Zero;
+                calc_acc_spring(i,j);
+                calc_acc_gravity();
+                calc_acc_wave(i,j);
+                calc_acc_hit(i,j);
+                calc_spd(i,j);
+                bank[i][j] = bank[i][j]+unkD90[i][j];
+                calc_pos_crr(i,j);
+            }
+        }
+    }
 }
 
 /* 00002350-00002874       .text calc_nrm__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_nrm() {
     /* Nonmatching */
+    cXyz** active = (cXyz**)((uint)this + unk1060*0x6C0 + 16);
+    cXyz** prev = (cXyz**)((uint)this + (unk1060^1) * 0x6C0 + 16);
+    //active += (uint)this;
+    //uint prev = active ^ 1; // flips buffer
+    //uint prev = 1;
+    //uint active = 2;
+    for (int i = 0; i < 8; ++i) { // 8 vertical strips
+        for (int j = 0; j < 6; ++j) { // 6 horizontal segments
+            cXyz& center = prev[i][j]; // base point
+
+            // Get neighbors for tangents
+            cXyz tangent;
+            if (i == 0) {
+                tangent = prev[i][j] - center;
+            } else if (i == 7) {
+                tangent = center - prev[i][j];
+            } else {
+                cXyz v1 = center - prev[i][j];
+                cXyz v2 = prev[i][j] - center;
+                cXyz smoothStart = prev[i][j] * 0.57475f;
+                //cXyz product = 
+                smoothStart += v1 * 0.358875f;
+                //PSVECAdd(&product,&smoothStart,&smoothStart);
+                smoothStart += v2 * 0.111375f;
+                smoothStart += prev[i][j]* 0.57475f;
+                //PSVECAdd(&smoothStart,&product2,&smoothStart);
+                                //  + v2 * 0.111375f
+                                //  + unk10[i+1][j] * 0.42525f;
+                cXyz smoothEnd = prev[i][j] * 0.42525f;
+                smoothEnd += v1 * 0.383625f;
+                smoothEnd += v2 * 0.136125f;
+                smoothEnd += prev[i][j] * 0.57475f;
+
+                tangent = smoothEnd - smoothStart;
+            }
+
+            // Get neighbors for bitangents
+            cXyz bitangent;
+            if (j == 0) {
+                bitangent = prev[i][j] - center;
+            } else if (j == 5) {
+                bitangent = center - prev[i][j];
+            } else {
+                cXyz v1 = center - prev[i][j];
+                cXyz v2 = prev[i][j] - center;
+
+                cXyz smoothStart = prev[i][j] * 0.57475f;
+                smoothStart += v1 * 0.358875f;
+                smoothStart += v2 * 0.111375f;
+                smoothStart += prev[i][j] * 0.42525f;
+
+                cXyz smoothEnd = prev[i][j] * 0.42525f;
+                smoothEnd += v1 * 0.383625f;
+                smoothEnd += v2 * 0.136125f;
+                smoothEnd += prev[i][j] * 0.57475f;
+
+                bitangent = smoothEnd - smoothStart;
+            }
+
+            // Calculate normal
+            cXyz normal;
+            normal = bitangent.outprod(tangent);
+            if (normal.normalizeRS()) {
+                active[i][j] = normal;
+                active[i][j] = normal;
+                active[i][j] *= -1.0;
+            }
+        }
+    }
 }
 
 /* 00002874-00002D80       .text calc_wind__21daObjTapestryPacket_cFv */
@@ -307,23 +391,65 @@ void daObjTapestryPacket_c::smoke_set() {
 }
 
 /* 00003E20-00003F8C       .text smoke_move__21daObjTapestryPacket_cFP10fopAc_ac_c */
-void daObjTapestryPacket_c::smoke_move(fopAc_ac_c*) {
-    /* Nonmatching */
+void daObjTapestryPacket_c::smoke_move(fopAc_ac_c* param_1) {
+
+  s16 yaw;
+  int iVar4;
+  cXyz *pcVar5;
+  
+  if ((unk1490 > 0) &&
+     (unk1490 = unk1490 + -1,
+     unk1490 <= 0)) {
+    smoke_set();
+  }
+  pcVar5 = &unk250[unk1060*3][int(unk145C * 7.0f)][int(unk1460 * 5.0f)];
+  yaw = cM_atan2s(pcVar5->x,-pcVar5->z);
+  f32 xzdist = std::sqrtf(pcVar5->x*pcVar5->x+pcVar5->z*pcVar5->z);
+  iVar4 = cM_atan2s(pcVar5->y,xzdist);
+  unk147C = param_1->eyePos;
+
+  unk1488 = (short)iVar4;
+  unk148A = (short)yaw;
+  unk148C = 0;
+  return;
+
 }
 
+GXColor l_color;
+u32 m_draw_data;
 /* 00003F8C-00004090       .text setup_vtx__21daObjTapestryPacket_cFP22daObjTapestryDrawVtx_c */
-void daObjTapestryPacket_c::setup_vtx(daObjTapestryDrawVtx_c*) {
+void daObjTapestryPacket_c::setup_vtx(daObjTapestryDrawVtx_c* param_1) {
     /* Nonmatching */
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM,GX_INDEX8);
+    GXSetVtxDesc(GX_VA_CLR0,GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0,GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_NRM,GX_CLR_RGB,GX_F32,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_CLR0,GX_CLR_RGBA,GX_RGBA8,0);
+    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
+    GXSetArray(GX_VA_POS,param_1,0xc);
+    GXSetArray(GX_VA_NRM,param_1->pad240,0xc);
+    GXSetArray(GX_VA_CLR0,&l_color,4);
+    GXSetArray(GX_VA_TEX0,&m_draw_data,8);
 }
-
+void* l_Txm_curtainTEX;
 /* 00004090-0000410C       .text load_tex__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::load_tex() {
-    /* Nonmatching */
+  GXTexObj GStack_28;
+  GXInitTexObj(&GStack_28,&l_Txm_curtainTEX,0x80,0x80,GX_TF_CMPR,GX_REPEAT,GX_REPEAT,false);
+  GXInitTexObjLOD(&GStack_28,GX_LINEAR,GX_LINEAR,0.0f,0.0f,0.0f,GX_FALSE,GX_FALSE,GX_ANISO_1);
+  GXLoadTexObj(&GStack_28,GX_TEXMAP0);
 }
 
 /* 0000410C-0000418C       .text setup_rendar__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::setup_rendar() {
-    /* Nonmatching */
+    GXSetChanCtrl(GX_COLOR0,false,GX_SRC_VTX,GX_SRC_REG,0,GX_DF_CLAMP,GX_AF_SPOT);
+    GXSetChanCtrl(GX_ALPHA0,false,GX_SRC_VTX,GX_SRC_REG,0,GX_DF_CLAMP,GX_AF_SPOT);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0,GX_TG_MTX2x4,GX_TG_TEX0,GX_IDENTITY,false,GX_PTIDENTITY);
+    return;
 }
 
 /* 0000418C-000042F8       .text setup_tev_stage__21daObjTapestryPacket_cFv */
@@ -418,80 +544,100 @@ void daObjTapestry_c::set_cc_pos() {
 }
 
 /* 00004A30-00004E30       .text checkCollision__15daObjTapestry_cFv */
-void daObjTapestry_c::checkCollision() {
+bool daObjTapestry_c::checkCollision() {
     /* Nonmatching */
+    cXyz local_50 = cXyz::Zero;
+    cXyz cVar6;
+    cXyz local_5c;
+    cXyz* pcVar10;
+    f32 var_f30;
+    f32 var_f31;
+    bool o_retval = false;
     for(int i = 0; i < 2; i++){
         mTris[i].ChkTgHit();
         if(mTris[i].ChkTgHit() != 0){
             if(mTris[i].GetTgHitObj()){
-                
-            }
+                u32 cVar11 = mTris[i].GetAtType();
+                pcVar10 = mTris[i].GetTgHitPosP();
+                local_50 = *mTris[i].GetTgRVecP();
+                if(local_50.normalizeRS() == 0){
+                    int uVar3 = shape_angle.y;
+                    local_50.set(cM_ssin(uVar3),0.0,cM_scos(uVar3));
+                }
+                switch(cVar11){
+                case 0x10000000:
+                case 0x200000:  //Deku leaf
+                {
+                    local_5c =*mTris[0].GetTgRVecP();
+                    f32 sqr = local_5c.abs2();
+                    if(sqr > 31684.0f){
+                        sqr = std::sqrtf(sqr); 
+                    }
+                    local_5c *= 178.0f/sqr;
+                    break;
+                }
+                case 0x4000000:
 
-            // switch (temp_r30) {                 /* irregular */
-            //     case 0x200000:
-            //         sp24 = temp_r29->unkC0;
-            //         sp28 = temp_r29->unkC4;
-            //         sp2C = temp_r29->unkC8;
-            //         var_f1 = PSVECSquareMag(&sp24);
-            //         f32 var_f1 = 
-            //         if (var_f1 > temp_r3->unk1AC) {
-            //             if (var_f1 > temp_r3->unk100) {
-            //                 temp_f0 = __frsqrte(var_f1);
-            //                 temp_f4 = temp_r3->unk120;
-            //                 temp_f3 = temp_r3->unk128;
-            //                 temp_f0_2 = temp_f4 * temp_f0 * (temp_f3 - ((f64) var_f1 * (temp_f0 * temp_f0)));
-            //                 temp_f0_3 = temp_f4 * temp_f0_2 * (temp_f3 - ((f64) var_f1 * (temp_f0_2 * temp_f0_2)));
-            //                 sp8 = (f32) ((f64) var_f1 * (temp_f4 * temp_f0_3 * (temp_f3 - ((f64) var_f1 * (temp_f0_3 * temp_f0_3)))));
-            //                 var_f1 = sp8;
-            //             }
-            //             PSVECScale(&sp24, &sp24, temp_r3->unk1B0 / var_f1);
-            //         }
-            //         this->unk1660 = sp24;
-            //         this->unk1664 = sp28;
-            //         this->unk1668 = sp2C;
-            //         break;
-            //     case 0x4000000:
-            //     case 0x10000000:
-            //     case 0x1000000:
-            //     case 0x10000:
-            //     case 0x200:
-            //     case 0x1000:
-            //     case 0x2000:
-            //     case 0x800:
-            //     case 0x400:
-            //     case 0x80:
-            //     case 0x40:
-            //     case 0x8:
-            //     case 0x2:
-            //         var_f31 = temp_r3->unkB8;
-            //         var_f30 = temp_r3->unkBC;
-            //         break;
-            //     case 0x4000:
-            //     case 0x100000:
-            //     case 0x80000:
-            //     case 0x40000:
-            //     case 0x8000:
-            //         var_f31 = temp_r3->unk170;
-            //         var_f30 = temp_r3->unkE0;
-            //         break;
-            //     case 0x20000:
-            //         var_f31 = temp_r3->unk100;
-            //         var_f30 = temp_r3->unkE0;
-            //         break;
-            //     case 0x20:
-            //         var_f31 = temp_r3->unk170;
-            //         var_f30 = temp_r3->unk1B4;
-            //         break;
-            // }
+                case 0x1000000:
+                case 0x10000:
+                    break;
+                case 0x200:
+                case 0x1000:
+                case 0x2000:
+                case 0x800:
+                case 0x400:
+                case 0x80:
+                case 0x40:
+                case 0x8:
+                case 0x2:
+                    var_f31 = 0.0f;
+                    var_f30 = 0.2f;
+                    break;
+                case 0x4000:
+                case 0x100000:
+                case 0x80000:
+                case 0x40000:
+                case 0x8000:
+                    var_f31 = 1.0f;
+                    var_f30 = 0.5f;
+                    break;
+                case 0x20000:
+                    var_f31 = 0.0f;
+                    var_f30 = 0.2f;
+                    o_retval = true;
+                    break;
+                case 0x20:
+                    var_f31 = 2.0f;
+                    var_f30 = 0.7f;
+                    break;
+                    
+                }
+                packet.unk13C8 = local_5c;
+
+            }
 
         }
         mTris[i].ClrTgHit();
     }
+    if(var_f31 >= 0.0f && pcVar10 != NULL){
+        packet.set_hit(*pcVar10,local_50,var_f31,var_f30,o_retval);
+    }
+    return o_retval;
+
 }
 
 /* 00004E30-00004F2C       .text set_eye_pos__15daObjTapestry_cFv */
 void daObjTapestry_c::set_eye_pos() {
     /* Nonmatching */
+    cXyz local_18 = (
+        *packet.get_now_pos(0,0) +
+        *packet.get_now_pos(0,5) +
+        *packet.get_now_pos(7,0) +
+        *packet.get_now_pos(7,5)
+    )*0.25f;
+    mDoMtx_multVec(unk1758->getBaseTRMtx(),&local_18,&eyePos);
+    attention_info.position = eyePos;
+    //mDoMtx_stack_c::multVec(unk1758->getBaseTRMtx(),local_18,)
 }
 
 /* 00004F2C-00005168       .text _create__15daObjTapestry_cFv */
@@ -505,17 +651,17 @@ bool daObjTapestry_c::_delete() {
 }
 
 /* 00005628-00005730       .text wait_act_proc__15daObjTapestry_cFv */
-void daObjTapestry_c::wait_act_proc() {
+bool daObjTapestry_c::wait_act_proc() {
     /* Nonmatching */
 }
 
 /* 00005730-000057B0       .text demo_request_act_proc__15daObjTapestry_cFv */
-void daObjTapestry_c::demo_request_act_proc() {
+bool daObjTapestry_c::demo_request_act_proc() {
     /* Nonmatching */
 }
 
 /* 000057B0-000058D8       .text burn_act_proc__15daObjTapestry_cFv */
-void daObjTapestry_c::burn_act_proc() {
+bool daObjTapestry_c::burn_act_proc() {
     /* Nonmatching */
 }
 
@@ -527,11 +673,33 @@ void daObjTapestry_c::burn_act_init_proc() {
 /* 00005984-00005994       .text fine_act_init_proc__15daObjTapestry_cFv */
 void daObjTapestry_c::fine_act_init_proc() {
     /* Nonmatching */
+    fopAcM_OnStatus(this,fopAcStts_NOCULLEXEC_e);
+    return;
 }
 
 /* 00005994-00005B30       .text setup_action__15daObjTapestry_cFi */
-void daObjTapestry_c::setup_action(int) {
+void daObjTapestry_c::setup_action(int param_1) {
     /* Nonmatching */
+    static InitProcFunc act_init_proc[4] = {
+        NULL,
+        NULL,
+        &daObjTapestry_c::burn_act_init_proc,
+        &daObjTapestry_c::fine_act_init_proc,
+
+
+    };
+    static ActProcFunc act_proc[4] = {
+        &daObjTapestry_c::wait_act_proc,
+        &daObjTapestry_c::demo_request_act_proc,
+        &daObjTapestry_c::burn_act_proc,
+        NULL,
+
+    };
+    if(act_init_proc[param_1]){
+        (this->*act_init_proc[param_1])();
+    }
+    unk1AB4 = act_proc[param_1];
+    unk1AC0 = param_1;
 }
 
 /* 00005B30-00005BD0       .text _execute__15daObjTapestry_cFv */

@@ -104,12 +104,14 @@ public:
     void setup_tevColReg(daObjTapestry_c*);
     void draw();
 public:
-    /* 0x0010 */ dCcD_Stts *unk10(cXyz *);      /* inferred */
-    /* 0x0010 */ char pad10[0x170];
-    ///* 0x0180 */ @unnamed@d_a_obj_tapestry_cpp@ unk180; /* inferred */
-    /* 0x0180 */ char pad180[0xC10];
-    /* 0x0D90 */ dCcD_Stts *unkD90(cXyz *);     /* inferred */
-    /* 0x0D90 */ char padD90[0x2D0];
+                cXyz unk10[8][6];
+                cXyz unk250[3][8][6];
+                //cXyz unk490[1][8][6];
+                cXyz unk6D0[2][8][6];
+                cXyz unkD90[8][6];
+                u8 unkFD0[8][6];
+
+    /* 0x0D90 */ char pad1000[0x60];
     /* 0x1060 */ s32 unk1060;                       /* inferred */
     /* 0x1064 */ dCcD_Stts *unk1064(cXyz *);    /* inferred */
     /* 0x1064 */ char pad1064[0x2C0];
@@ -124,9 +126,7 @@ public:
     /* 0x1394 */ char pad1394[0x2F];
     /* 0x13C4 */ u8 unk13C4;                        /* inferred */
     /* 0x13C5 */ char pad13C5[3];                   /* maybe part of unk13C4[4]? */
-    /* 0x13C8 */ f32 unk13C8;                       /* inferred */
-    /* 0x13CC */ f32 unk13CC;                       /* inferred */
-    /* 0x13D0 */ f32 unk13D0;                       /* inferred */
+    /* 0x13C8 */ cXyz unk13C8;                       /* inferred */
     /* 0x13D4 */ f32 unk13D4;                       /* inferred */
     /* 0x13D8 */ f32 unk13D8;                       /* inferred */
     /* 0x13DC */ f32 unk13DC;                       /* inferred */
@@ -172,10 +172,9 @@ public:
     /* 0x1466 */ u8 unk1466;                        /* inferred */
     /* 0x1467 */ char pad1467[1];
     /* 0x1468 */ dPa_followEcallBack unk1468;       /* inferred */
-    /* 0x147C */ f32 unk147C;                       /* inferred */
-    /* 0x1480 */ f32 unk1480;                       /* inferred */
-    /* 0x1484 */ f32 unk1484;                       /* inferred */
-    /* 0x1488 */ s32 unk1488;                       /* inferred */
+    /* 0x147C */ cXyz unk147C;                       /* inferred */
+    /* 0x1488 */ s16 unk1488;                       /* inferred */
+    /* 0x1488 */ s16 unk148A;                       /* inferred */
     /* 0x148C */ u16 unk148C;                       /* inferred */
     /* 0x148E */ char pad148E[2];
     /* 0x1490 */ s32 unk1490;                       /* inferred */
@@ -184,6 +183,9 @@ public:
 }; /* SIZE >= 0x14C0*/
 
 class daObjTapestry_c: public fopAc_ac_c {
+typedef bool(daObjTapestry_c::*ActProcFunc)();
+typedef void(daObjTapestry_c::*InitProcFunc)();
+
 public:
     void is_switch() const {}
     void on_switch() const {}
@@ -198,13 +200,13 @@ public:
     void create_res_load();
     void init_cc();
     void set_cc_pos();
-    void checkCollision();
+    bool checkCollision();
     void set_eye_pos();
     cPhs_State _create();
     bool _delete();
-    void wait_act_proc();
-    void demo_request_act_proc();
-    void burn_act_proc();
+    bool wait_act_proc();
+    bool demo_request_act_proc();
+    bool burn_act_proc();
     void burn_act_init_proc();
     void fine_act_init_proc();
     void setup_action(int);
@@ -217,16 +219,14 @@ public:
     /* 0x175C */ char pad175C[0x4];
     /* 0x1760 */ Mtx unk1760;
     /* 0x1790 */ dCcD_Tri mTris[2];
-    /* 0x1A30 */ dCcD_Stts mStts[2];    /* inferred */
+    /* 0x1A30 */ dCcD_Stts mStts[2];                /* inferred */
     /* 0x1AA8 */ s16 unk1AA8;                       /* inferred */
     /* 0x1AAA */ s8 unk1AAA;                        /* inferred */
     /* 0x1AAB */ char pad1AAB[1];
     /* 0x1AAC */ s16 unk1AAC;                       /* inferred */
     /* 0x1AAE */ char pad1AAE[2];
     /* 0x1AB0 */ f32 unk1AB0;                       /* inferred */
-    /* 0x1AB4 */ s32 unk1AB4;                       /* inferred */
-    /* 0x1AB8 */ s32 unk1AB8;                       /* inferred */
-    /* 0x1ABC */ s32 unk1ABC;                       /* inferred */
+    /* 0x1AB4 */ ActProcFunc unk1AB4;                       /* inferred */
     /* 0x1AC0 */ s32 unk1AC0;                       /* inferred */
 }; /* SIZE = 0x1AC4 */
 
