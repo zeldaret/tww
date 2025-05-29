@@ -614,7 +614,9 @@ u8 daNpc_Km1_c::demo() {
     }else{
         field_0x7C7 = 1;
         dComIfGp_demo_getActor(demoActorID);
+#if VERSION != VERSION_DEMO
         dDemo_setDemoData(this,0x6A,mpMorf,"Km",0,0,0,0);
+#endif
     }
     return field_0x7C7;
 }
