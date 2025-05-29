@@ -15,36 +15,26 @@ public:
     struct anm_prm_c {
         s8 field_0x0;
         s8 field_0x1;
-        u16 field_0x2;
         float field_0x4;
         float field_0x8;
         int field_0xC;
     };
-    struct prm_tbl {
-        u32 field_0x00;
-        u32 field_0x04;
-        u32 field_0x08;
-        u32 field_0x0C;
-        u32 field_0x10;    
-        f32 field_0x14;  
-        u32 field_0x18;  
-    };
 
     Vec* getAttPos() {return &field_0x780;}
     s8 getBackboneJntNum() {return m_backbone_jnt_num;}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
+    s16 getBackbone_x() {return m_jnt.getBackbone_x();}
+    s16 getBackbone_y() {return m_jnt.getBackbone_y();}
     Vec* getEyePos() {return &field_0x78C;}
     s8 getHeadJntNum() {return m_head_jnt_num;}
-    void getHead_x() {}
-    void getHead_y() {}
+    s16 getHead_x() {return m_jnt.getHead_x();}
+    s16 getHead_y() {return m_jnt.getHead_y();}
 
     bool createInit();
     void setMtx();
     bool anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
     void setAnm_tex(signed char);
-    u8 init_btp(bool, int);
+    bool init_btp(bool, int);
     bool initTexPatternAnm(bool);
     void playTexPatternAnm();
     s32 setAnm_anm(anm_prm_c*);
@@ -136,7 +126,7 @@ public:
 };  // Size: 0x7D8
 
 class daNpc_Km1_HIO_c : public JORReflexible{
-    struct daNpc_Km1_HIO__PrmTbl{
+    struct hio_prm_c{
         s16 field_0;
         s16 field_2;
         s16 field_4;
@@ -160,7 +150,7 @@ public:
     /* 0x6  */ s8  field_0x6;
     /* 0x7  */ s8  field_0x7;
     /* 0x8  */ int field_0x8;
-    /* 0xC  */ daNpc_Km1_HIO__PrmTbl mPrmTbl;
+    /* 0xC  */ hio_prm_c mPrmTbl;
 
 };
 
