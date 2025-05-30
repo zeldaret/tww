@@ -191,7 +191,7 @@ BOOL daNpc_Bs1_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes("Bs", l_btp_ix_tbl[m828]);
     JUT_ASSERT(0x1bd, m_head_tex_pattern != NULL);
-    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
         return FALSE;
     }
     mFrame = 0;
@@ -936,8 +936,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0xF4C:
         case 0xF4E: {
-            int points = dComIfGs_getEventReg(0x86FF);
-            points += 1;
+            int points = dComIfGs_getEventReg(0x86FF) + 1;
             points = cLib_maxLimit<int>(points, 0xFF);
             dComIfGs_setEventReg(0x86FF, points);
 

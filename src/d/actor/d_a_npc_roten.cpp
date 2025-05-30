@@ -2716,7 +2716,7 @@ BOOL daNpcRoten_c::initTexPatternAnm(bool modify) {
     m_head_tex_pattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_btp_ix_tbl[mNpcNo]));
     JUT_ASSERT(0xBFF, m_head_tex_pattern != NULL);
 
-    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP,  1.0f, 0, -1, modify, 0)) {
+    if(!mBtpAnm.init(modelData, m_head_tex_pattern, TRUE, J3DFrameCtrl::EMode_LOOP,  1.0f, 0, -1, modify, FALSE)) {
         return false;
     }
 

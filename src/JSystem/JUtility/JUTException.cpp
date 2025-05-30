@@ -124,7 +124,11 @@ u32 JUTException::fpscr;
 void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, u32 param_4) {
     if (error == 0x10) {
         OSReport("\x1b[41;37m");
+#if VERSION == VERSION_DEMO
+        OSReport(" FPE: 浮動小数点例外が発生しました。アドレスは %08x\n", context->srr0);
+#else
         OSReport(" FPE: 浮動小数点例外が発生しました。アドレスは %08x fpscr=%08x\n", context->srr0, context->fpscr);
+#endif
         u8 stack_38[0x20];
         u32 stack_3c;
         u32 stack_40;
@@ -993,7 +997,11 @@ void JUTException::createConsole(void* console_buffer, u32 console_buffer_size) 
         manager->setDirectConsole(sConsole);
 
         sConsole->setFontSize(10.0, 6.0);
+#if VERSION == VERSION_DEMO
+        sConsole->setPosition(15, 26);
+#else
         sConsole->setPosition(12, 40);
+#endif
         sConsole->setHeight(23);
         sConsole->setVisible(true);
         sConsole->setOutput(JUTConsole::OUTPUT_OSREPORT | JUTConsole::OUTPUT_CONSOLE);
