@@ -4,44 +4,112 @@
 //
 
 #include "d/actor/d_a_tag_attention.h"
+#include "d/d_a_obj.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+
+/* ram:8049162C-ram:804917AF  */
+static dCcD_SrcSph sph_check_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 10.0f,
+    },
+};
 
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    mStts.Init(0xFF, 0xFF, this);
+    mSph.Set(sph_check_src);
+    mSph.SetStts(&mStts);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000340-00000480       .text _execute__Q214daTagAttention5Act_cFv */
 bool daTagAttention::Act_c::_execute() {
     /* Nonmatching */
+    mSph.SetC(current.pos);
+    mSph.SetR(scale.x * 100.0f);
+    dComIfG_Ccsp()->Set(&mSph);
+    field_0x290 = 1;
+    int iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+    if (iVar1 == 1){
+        iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+        BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
+        if (bVar2 == FALSE){
+            field_0x290 = 0;
+        }
+    }else{
+        iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+        if (iVar1 == 2){
+            iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+            BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
+            if (bVar2 == FALSE){
+                field_0x290 = 0;
+            }
+        }
+    }
+
+    // TODO for matching: implement chk_inside and dComIfGp_att_Look2RequestF
+    bool cVar3 = chk_inside(&current.pos);
+    if (cVar3){
+        dComIfGp_att_Look2RequestF(this, 0x6000,1);
+    }
+
+    return true;
 }
 
 namespace daTagAttention {
 namespace {
 /* 00000480-000004A0       .text Mthd_Create__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
 }
 
 /* 000004A0-000004A8       .text Mthd_Delete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return TRUE;
 }
 
 /* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Execute(void*) {
+BOOL Mthd_Execute(void* i_this) {
     /* Nonmatching */
+    return static_cast<Act_c*>(i_this)->_execute();
 }
 
 /* 000004C8-000004D0       .text Mthd_Draw__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return TRUE;
 }
 
 /* 000004D0-000004D8       .text Mthd_IsDelete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
