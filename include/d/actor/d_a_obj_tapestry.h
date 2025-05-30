@@ -2,6 +2,7 @@
 #define D_A_OBJ_TAPESTRY_H
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
@@ -10,6 +11,7 @@
 class JPABaseEmitter;
 //class daObjTapestryDrawVtx_c;
 class daObjTapestryPacket_c;
+typedef  cXyz holdvecs[8][6];
 class daObjTapestryDrawVtx_c{
 public:
     daObjTapestryDrawVtx_c();
@@ -38,14 +40,23 @@ public:
     /* Place member variables here */
 };
 
+class daObjTapestrySmokeCB_c : public dPa_followEcallBack{
+public:
+
+};
+
 class daObjTapestryFireEff_c: public dPa_followEcallBack {
 public:
+    daObjTapestryFireEff_c(){unk14 = cXyz::Zero; unk20 = cXyz::Zero;}
     void get_pos() const {}
     void set_pos(const cXyz&) {}
     void set_spd(const cXyz&) {}
 
     void execute(JPABaseEmitter*);
-};
+public:
+    /* 0x14 */ cXyz unk14;
+    /* 0x20 */ cXyz unk20;
+}; /* SIZE 2C */
 
 class daObjTapestryDrawData_c {
 public:
@@ -61,11 +72,17 @@ public:
     //f32 array[8][6][2];
     f32 array[8*6*2];
     /* 0x180 */u32 m_dl[4][3];
+
 };
 
 class daObjTapestry_c;
 
 class daObjTapestryPacket_c : public J3DPacket{
+    struct bufferholders{
+        holdvecs unk10;
+        holdvecs unk250;
+        holdvecs unk490;
+    };
 public:
     daObjTapestryPacket_c();
 
@@ -104,26 +121,29 @@ public:
     void setup_tevColReg(daObjTapestry_c*);
     void draw();
 public:
-                cXyz unk10[8][6];
-                cXyz unk250[3][8][6];
+                bufferholders holder[2];
+                // holdvecs unk250[1];
+                // holdvecs unk490[1];
+                // holdvecs unk240;
+
+                //holdvecs unk490;
+                //char pad6D0[0x6C0];
                 //cXyz unk490[1][8][6];
-                cXyz unk6D0[2][8][6];
+                //cXyz unk910[2][8][6];
+
                 cXyz unkD90[8][6];
                 u8 unkFD0[8][6];
 
-    /* 0x0D90 */ char pad1000[0x60];
+    /* 0x1000 */ u8 unk1000[8][6];
+                 char pad1030[0x30];
     /* 0x1060 */ s32 unk1060;                       /* inferred */
-    /* 0x1064 */ dCcD_Stts *unk1064(cXyz *);    /* inferred */
-    /* 0x1064 */ char pad1064[0x2C0];
+    /* 0x1064 */ daObjTapestryFireEff_c unk1064[16];    /* inferred */
     /* 0x1324 */ s32 unk1324;                       /* inferred */
     /* 0x1328 */ cXyz unk1328;                      /* inferred */
 
-    /* 0x1334 */ mDoMtx_stack_c unk1334;            /* inferred */
-    /* 0x1334 */ char pad1334[0x2F];
-    /* 0x1364 */ mDoMtx_stack_c unk1364;            /* inferred */
-    /* 0x1364 */ char pad1364[0x2F];
-    /* 0x1394 */ mDoMtx_stack_c unk1394;            /* inferred */
-    /* 0x1394 */ char pad1394[0x2F];
+    /* 0x1334 */ Mtx unk1334;            /* inferred */
+    /* 0x1364 */ Mtx unk1364;            /* inferred */
+    /* 0x1394 */ Mtx unk1394;            /* inferred */
     /* 0x13C4 */ u8 unk13C4;                        /* inferred */
     /* 0x13C5 */ char pad13C5[3];                   /* maybe part of unk13C4[4]? */
     /* 0x13C8 */ cXyz unk13C8;                       /* inferred */
@@ -171,12 +191,13 @@ public:
     /* 0x1465 */ u8 unk1465;                        /* inferred */
     /* 0x1466 */ u8 unk1466;                        /* inferred */
     /* 0x1467 */ char pad1467[1];
-    /* 0x1468 */ dPa_followEcallBack unk1468;       /* inferred */
+    /* 0x1468 */ daObjTapestrySmokeCB_c unk1468;       /* inferred */
     /* 0x147C */ cXyz unk147C;                       /* inferred */
-    /* 0x1488 */ s16 unk1488;                       /* inferred */
-    /* 0x1488 */ s16 unk148A;                       /* inferred */
-    /* 0x148C */ u16 unk148C;                       /* inferred */
-    /* 0x148E */ char pad148E[2];
+    /* 0x1488 */ csXyz unk1488;                       /* inferred */
+    //csXyz unk148A;
+    // /* 0x1488 */ s16 unk148A;                       /* inferred */
+    // /* 0x148C */ u16 unk148C;                       /* inferred */
+    // /* 0x148E */ char pad148E[2];
     /* 0x1490 */ s32 unk1490;                       /* inferred */
     /* 0x1494 */ daObjTapestryPLight_c unk1494;     /* inferred */
     ///* 0x1494 */ char pad1494[1];
@@ -216,7 +237,7 @@ public:
     /* 0x0290 */ request_of_phase_process_class unk290; /* inferred */
     /* 0x0298 */ daObjTapestryPacket_c packet;      /* inferred */
     /* 0x1758 */ J3DModel* unk1758;
-    /* 0x175C */ char pad175C[0x4];
+    /* 0x175C */ dBgW* unk175C;
     /* 0x1760 */ Mtx unk1760;
     /* 0x1790 */ dCcD_Tri mTris[2];
     /* 0x1A30 */ dCcD_Stts mStts[2];                /* inferred */

@@ -179,20 +179,61 @@ void daObjTapestryDrawData_c::ct_dl() {
 /* 00000878-00000C44       .text __ct__21daObjTapestryPacket_cFv */
 daObjTapestryPacket_c::daObjTapestryPacket_c() {
     /* Nonmatching */
+    for(int i = 0; i < 2; i++){
+        for(int j = 0; j < 8; j++){
+            for(int k = 0; k < 6; k++){
+                holder[i].unk10[j][k] = cXyz::Zero;
+                holder[i].unk250[j][k] = cXyz::BaseZ;
+                holder[i].unk490[j][k] = cXyz::BaseZ;                
+            }
+        }
+    }
+
 }
 
 /* 00000CC0-00000F3C       .text init__21daObjTapestryPacket_cFP15daObjTapestry_c */
-void daObjTapestryPacket_c::init(daObjTapestry_c*) {
+void daObjTapestryPacket_c::init(daObjTapestry_c* param_1) {
     /* Nonmatching */
+
+        static cXyz base_z_rev(0.0,0.0,-1.0);
+        setUserArea((u32)param_1);
+
+        cXyz local_e0 = cXyz::BaseZ;
+        cXyz local_ec = base_z_rev;
+        cXyz local_f8;
+        mDoMtx_stack_c::transS(100.0f,-297.0f,10.0f);
+        mDoMtx_stack_c::scaleM(200.f,297.0,1.0);
+        
+        local_f8.z = 0.0f;
+        for(int i = 0; i < 2; i++){
+            for(int j = 0; j < 8; j++){
+                local_f8.y = (7-j)*(1.0f/7.0f);
+                for(int k = 0; k < 6; k++){
+                    local_f8.x = k*(1.0f/5.0f);
+                    //cXyz* base = ;
+                    //PSMTXMultVec(mDoMtx_stack_c::get(),&local_f8,(cXyz*)unk240 + i * 144 + j * 6 + k);
+                    //mDoMtx_stack_c::multVec(&local_f8,base);
+                // *((cXyz*)unk240 + i * 144 + j * 6 + k+0x30) = local_e0;
+                // *((cXyz*)unk240 + i * 144 + j * 6 + k+0x60) = local_ec;  
+                    //setUserArea()
+                }
+            }
+        }
+        smokeCallback_init();
+        calc(param_1);
+        return;
+
 }
 
 /* 00000F3C-00000F90       .text update__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::update() {
     /* Nonmatching */
+    cMtx_concat(j3dSys.getViewMtx(),unk1334,unk1364);
+    j3dSys.getDrawBuffer(0)->entryImm(this,0);
 }
 
 /* 00000F90-00001154       .text calc_acc_spring_sub__21daObjTapestryPacket_cFPC4cXyzPC4cXyzff */
-void daObjTapestryPacket_c::calc_acc_spring_sub(const cXyz*, const cXyz*, float, float) {
+void daObjTapestryPacket_c::calc_acc_spring_sub(const cXyz* param_1, const cXyz* param_2, float param_3, float param_4) {
     /* Nonmatching */
 }
 
@@ -245,76 +286,77 @@ void daObjTapestryPacket_c::calc_pos() {
         }
     }
 }
+Mtx a;
 
 /* 00002350-00002874       .text calc_nrm__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_nrm() {
     /* Nonmatching */
-    cXyz** active = (cXyz**)((uint)this + unk1060*0x6C0 + 16);
-    cXyz** prev = (cXyz**)((uint)this + (unk1060^1) * 0x6C0 + 16);
-    //active += (uint)this;
-    //uint prev = active ^ 1; // flips buffer
-    //uint prev = 1;
-    //uint active = 2;
-    for (int i = 0; i < 8; ++i) { // 8 vertical strips
-        for (int j = 0; j < 6; ++j) { // 6 horizontal segments
-            cXyz& center = prev[i][j]; // base point
+    int active = unk1060;
+    int prev = unk1060;
 
+    for (int i = 0; i < 8; ++i) { // 8 vertical strips
+        for (int j = 0; j < 6; j += 1) { // 6 horizontal segments
+            cXyz& center = holder[0].unk10[i][j]; // base point
+            cXyz& up = holder[0].unk10[i+1][j];
+            cXyz& down = holder[0].unk10[i-1][j];
+
+            cXyz& right = holder[0].unk10[i][j+1];
+            cXyz& left = holder[0].unk10[i][j-1];
+
+
+
+            
             // Get neighbors for tangents
             cXyz tangent;
             if (i == 0) {
-                tangent = prev[i][j] - center;
+                tangent = down - center;
             } else if (i == 7) {
-                tangent = center - prev[i][j];
+                tangent = center - up;
             } else {
-                cXyz v1 = center - prev[i][j];
-                cXyz v2 = prev[i][j] - center;
-                cXyz smoothStart = prev[i][j] * 0.57475f;
-                //cXyz product = 
+                cXyz v1 = center - up;
+                cXyz v2 = down - center;
+                cXyz smoothStart = up * 0.57475f;
                 smoothStart += v1 * 0.358875f;
-                //PSVECAdd(&product,&smoothStart,&smoothStart);
                 smoothStart += v2 * 0.111375f;
-                smoothStart += prev[i][j]* 0.57475f;
-                //PSVECAdd(&smoothStart,&product2,&smoothStart);
-                                //  + v2 * 0.111375f
-                                //  + unk10[i+1][j] * 0.42525f;
-                cXyz smoothEnd = prev[i][j] * 0.42525f;
+                smoothStart += down* 0.42525f;
+                cXyz smoothEnd = up * 0.42525f;
                 smoothEnd += v1 * 0.383625f;
                 smoothEnd += v2 * 0.136125f;
-                smoothEnd += prev[i][j] * 0.57475f;
+                smoothEnd += down * 0.57475f;
 
                 tangent = smoothEnd - smoothStart;
             }
 
-            // Get neighbors for bitangents
+            //Get neighbors for bitangents
             cXyz bitangent;
             if (j == 0) {
-                bitangent = prev[i][j] - center;
+                bitangent = right - center;
             } else if (j == 5) {
-                bitangent = center - prev[i][j];
+                bitangent = center - left;
             } else {
-                cXyz v1 = center - prev[i][j];
-                cXyz v2 = prev[i][j] - center;
+                cXyz v1 = center - left;
+                cXyz v2 = right - center;
 
-                cXyz smoothStart = prev[i][j] * 0.57475f;
+                cXyz smoothStart = left * 0.57475f;
                 smoothStart += v1 * 0.358875f;
                 smoothStart += v2 * 0.111375f;
-                smoothStart += prev[i][j] * 0.42525f;
+                smoothStart += right * 0.42525f;
 
-                cXyz smoothEnd = prev[i][j] * 0.42525f;
+                cXyz smoothEnd = left * 0.42525f;
                 smoothEnd += v1 * 0.383625f;
                 smoothEnd += v2 * 0.136125f;
-                smoothEnd += prev[i][j] * 0.57475f;
+                smoothEnd += right * 0.57475f;
 
                 bitangent = smoothEnd - smoothStart;
             }
 
-            // Calculate normal
+           // Calculate normal
             cXyz normal;
             normal = bitangent.outprod(tangent);
             if (normal.normalizeRS()) {
-                active[i][j] = normal;
-                active[i][j] = normal;
-                active[i][j] *= -1.0;
+                holder[0].unk250[i][j] = normal;
+                holder[0].unk490[i][j] = normal;
+                holder[0].unk490[i][j] *= -1.0f;
             }
         }
     }
@@ -338,11 +380,114 @@ void daObjTapestryPacket_c::calc_fire_leap(int, int) {
 /* 00003008-0000331C       .text calc_fire__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_fire() {
     /* Nonmatching */
+    u8 local_7b;
+    u8 local_d8;
+    f32 var_f31;
+    for(int i = 0; i<8; i++){
+        for(int j = 0; j<6; j++){
+            if(unk1000[i+j] != 0){
+                s32* pbVar3 = &l_HIO.field_8;
+                s32* var_r4_2 = &l_HIO.field_8;
+                for(int k = 0; k < 11; k++){
+                    cLib_checkBit(unk1000[0][0],(u8)1);
+                }
+                if((unk1000[i][j]) < local_7b){
+                    if ((i == 0) && (((j == 0) && (unk1466 == 1)) || ((j == 5) && (unk1466 == 2)))) {
+                        var_f31 = 0.4f;
+                    }else{
+                        var_f31 = 0.2f;
+                    }
+                    if(cM_rnd()<var_f31){
+                        unk1000[i][j] += 1;
+                    }
+                    for(int k = 0; k < 11; k++){
+
+                    }
+                    if(unk1000[i][j] >= local_d8){
+                        if(!cLib_checkBit(unkFD0[i][j],(u8)1)){
+                            cLib_onBit(unkFD0[i][j],(u8)1);
+                            int iPlus = i+1;
+                            int iMinus = i-1;
+                            int jPlus = j+1;
+                            int jMinus = j-1;
+                            // u32 uVar10 = jMinus >> 0x1F ^ 1;
+                            // int iVar6 = ((jPlus ^ 6) >> 1) - ((jPlus ^ 6) & 6);
+                            // int iVar7 = ((int)(jPlus ^ 8) >> 1) - ((jPlus ^ 8) & 8);
+                            // if(iMinus >= 0){
+                            //     calc_fire_leap(iMinus,j);
+                            //    //if(cLib_checkBit(iMinus,(u32)7)){
+                            //    if(uVar10 != 0){
+                            //         calc_fire_leap(iMinus,jMinus);
+                            //     }
+                            //     //if(cLib_checkBit(iMinus,(u32)7)){
+                            //     if(iVar6 < 0){
+                            //         calc_fire_leap(iMinus,jPlus);
+                            //     }
+                            // }
+                            // if(iVar7 < 0){
+                            //     calc_fire_leap(iPlus,j);
+                            //     if(cLib_checkBit(jMinus,(u32)7)){
+                            //         calc_fire_leap(iPlus,jMinus);
+                            //     }
+                            //     //if(cLib_checkBit(jPlus,7)){
+                            //     if(iVar6 < 0){
+                            //         calc_fire_leap(iPlus,jPlus);
+                            //     }
+                            // }
+                            // if(cLib_checkBit(jMinus,(u32)7)){
+                            //     calc_fire_leap(i,jMinus);
+                            // }
+                            // //if(cLib_checkBit(jPlus,6)){
+                            // if(iVar6 < 0){
+                            //     calc_fire_leap(i,jPlus);
+                            // } 
+                            if (iMinus >= 0) {
+                                calc_fire_leap( iMinus, j);
+                                if (jMinus >= 0) calc_fire_leap( iMinus, jMinus);
+                                if (jPlus < 6) calc_fire_leap( iMinus, jPlus);
+                            }
+                            if (iPlus < 8) {
+                                calc_fire_leap( iPlus, j);
+                                if (jMinus >= 0) calc_fire_leap( iPlus, jMinus);
+                                if (jPlus < 6) calc_fire_leap( iPlus, jPlus);
+                            }
+                            if (jMinus >= 0) calc_fire_leap( i, jMinus);
+                            if (jPlus < 6) calc_fire_leap( i, jPlus);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(unk1464 == 0){
+        int i;
+        for(i = 0; i < 6; i++){
+            if(!cLib_checkBit(unkFD0[0][i],(u8)1)){
+                break;
+            }
+
+        }
+        if(i >= 6){
+            unk1464 = 1;
+        }
+    }
+    return;
 }
 
 /* 0000331C-0000340C       .text calc__21daObjTapestryPacket_cFP15daObjTapestry_c */
-void daObjTapestryPacket_c::calc(daObjTapestry_c*) {
-    /* Nonmatching */
+void daObjTapestryPacket_c::calc(daObjTapestry_c* param_1) {
+    cMtx_copy(param_1->unk1758->getBaseTRMtx(),mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(),unk1334);
+    unk13C4 = PSMTXInverse(unk1334,unk1394) != 0;
+    unk1060 = unk1060^1;
+    calc_wind();
+    calc_hit();
+    calc_fire();
+    calc_pos();
+    calc_nrm();
+    eff_pos();
+    smoke_move(param_1);
+    unk1494.plight_move(unk147C,unk1488);
 }
 
 /* 0000340C-000034CC       .text set_hit__21daObjTapestryPacket_cF4cXyz4cXyzffb */
@@ -351,8 +496,9 @@ void daObjTapestryPacket_c::set_hit(cXyz, cXyz, float, float, bool) {
 }
 
 /* 000034CC-000034F4       .text get_now_pos__21daObjTapestryPacket_cFii */
-cXyz* daObjTapestryPacket_c::get_now_pos(int, int) {
+cXyz* daObjTapestryPacket_c::get_now_pos(int param_1, int param_2) {
     /* Nonmatching */
+    return &holder[unk1060].unk10[param_1][param_2];
 }
 
 /* 000034F4-000036C4       .text eff_start__21daObjTapestryPacket_cFii */
@@ -378,16 +524,28 @@ void daObjTapestryPacket_c::eff_pos() {
 /* 00003CC0-00003D3C       .text eff_delete__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::eff_delete() {
     /* Nonmatching */
+    for(int i = 0; i < 16; i++){
+        unk1064[i].end();
+    }
+    unk1468.end();
+    unk1494.plight_delete();
 }
 
 /* 00003D3C-00003D48       .text smokeCallback_init__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::smokeCallback_init() {
     /* Nonmatching */
+    unk1468.setRateOff(0);
+    return;
 }
 
 /* 00003D48-00003E20       .text smoke_set__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::smoke_set() {
     /* Nonmatching */
+    static cXyz scl(1.0,1.0,1.0);
+    unk1468.end();
+    dComIfGp_particle_setToon(0xA329,&unk147C,&unk1488,&scl,0xFF,&unk1468);
+    unk1494.plight_make();
+    return;
 }
 
 /* 00003E20-00003F8C       .text smoke_move__21daObjTapestryPacket_cFP10fopAc_ac_c */
@@ -402,15 +560,12 @@ void daObjTapestryPacket_c::smoke_move(fopAc_ac_c* param_1) {
      unk1490 <= 0)) {
     smoke_set();
   }
-  pcVar5 = &unk250[unk1060*3][int(unk145C * 7.0f)][int(unk1460 * 5.0f)];
+  //pcVar5 = &unk250[unk1060*3][int(unk145C * 7.0f)][int(unk1460 * 5.0f)];
   yaw = cM_atan2s(pcVar5->x,-pcVar5->z);
   f32 xzdist = std::sqrtf(pcVar5->x*pcVar5->x+pcVar5->z*pcVar5->z);
   iVar4 = cM_atan2s(pcVar5->y,xzdist);
   unk147C = param_1->eyePos;
-
-  unk1488 = (short)iVar4;
-  unk148A = (short)yaw;
-  unk148C = 0;
+  unk1488.set(iVar4,yaw,0);
   return;
 
 }
@@ -705,11 +860,40 @@ void daObjTapestry_c::setup_action(int param_1) {
 /* 00005B30-00005BD0       .text _execute__15daObjTapestry_cFv */
 bool daObjTapestry_c::_execute() {
     /* Nonmatching */
+    bool bVar2;
+    set_eye_pos();
+    dBgW* dbgw = unk175C;
+    if(dbgw != NULL){
+        if(dbgw->GetId() >= 0 && dbgw->GetId() < 0x100){
+            bVar2 = true;
+        }else{
+            bVar2 = false;
+        }
+        if(bVar2){
+            dbgw->Move();
+        }
+    }
+    if(unk1AB4 != NULL){
+        (this->*unk1AB4)();
+    }
+    if(unk1AC0 != 3){
+        packet.calc(this);
+    }
+    return true;
+
 }
 
 /* 00005BD0-00005C44       .text _draw__15daObjTapestry_cFv */
 bool daObjTapestry_c::_draw() {
-    /* Nonmatching */
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0,&current.pos,&tevStr);
+    g_env_light.setLightTevColorType(unk1758,&tevStr);
+    mDoExt_modelUpdateDL(unk1758);
+    if(unk1AC0 != 3){
+        packet.update();
+    }
+    return true;
+    
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
