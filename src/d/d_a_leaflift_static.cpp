@@ -18,13 +18,15 @@ BOOL daLlift_c::checkEndDownLift() {
 
 /* 80069100-800692C4       .text MoveUpLift__9daLlift_cFv */
 BOOL daLlift_c::MoveUpLift() {
+    f32 max_speed = m_max_speed;
+    f32 min_speed = m_min_speed;
     cXyz upLiftPos;
     bool res = FALSE;
     mEmitterTimer++;
     if (current.pos.y != home.pos.y + m_height) {
         m43D = TRUE;
     }
-    float upVel = cLib_addCalc(&current.pos.y, home.pos.y + m_height, 0.1f, m_max_speed, m_min_speed);
+    f32 upVel = cLib_addCalc(&current.pos.y, home.pos.y + m_height, 0.1f, max_speed, min_speed);
     if (upVel == 0.0f) {
         mbIsAscending = FALSE;
         res = TRUE;

@@ -32,9 +32,11 @@ struct J3DTexCoordScaleInfo {
 };
 
 enum J3DSysFlag {
-    J3DSysFlag_SkinPosCpu = 0x00000004,
-    J3DSysFlag_SkinNrmCpu = 0x00000008,
-    J3DSysFlag_PostTexMtx = 0x40000000,
+    J3DSysFlag_UNK2        = 0x00000002,
+    J3DSysFlag_SkinPosCpu  = 0x00000004,
+    J3DSysFlag_SkinNrmCpu  = 0x00000008,
+    J3DSysFlag_PostTexMtx  = 0x40000000,
+    J3DSysFlag_UNK80000000 = 0x80000000,
 };
 
 struct J3DSys {
@@ -75,10 +77,8 @@ public:
     void setNBTScale(Vec* scale) { mNBTScale = scale; }
 
     void onFlag(u32 flag) { mFlags |= flag; }
-
     void offFlag(u32 flag) { mFlags &= ~flag; }
-
-    bool checkFlag(u32 flag) { return mFlags & flag; }
+    bool checkFlag(u32 flag) { return (mFlags & flag) ? true : false; }
 
     void setModelDrawMtx(Mtx* pMtxArr) {
         mModelDrawMtx = pMtxArr;

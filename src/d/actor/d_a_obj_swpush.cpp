@@ -168,7 +168,7 @@ bool daObjSwpush::Act_c::create_heap() {
     if (attr().mBtpArcName != NULL) {
         J3DAnmTexPattern* btp_data = (J3DAnmTexPattern*) dComIfG_getObjectRes(attr().mBtpArcName, attr().mBtpResIndex);
         JUT_ASSERT(0x21E, btp_data != NULL);
-        btp_success = mBtpAnm.init(model_data, btp_data, 1, 0, 1.0f, 0, -1, false, 0);
+        btp_success = mBtpAnm.init(model_data, btp_data, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
     }
 
     cBgD_t* bg_data = (cBgD_t*) dComIfG_getObjectRes(attr().mBgArcName, attr().mBgResIndex);

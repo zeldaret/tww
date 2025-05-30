@@ -487,7 +487,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
+    if(!mBtpAnm1.init(pPedestalData, mpPedestalBtp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
         return false;
     }
 
