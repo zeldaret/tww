@@ -330,17 +330,273 @@ static void stay(bst_class* i_this) {
     }
 }
 
+static u16 fly_btk_d[] = {BST_BTK_BST, BST_BTK_LHAND, BST_BTK_RHAND};
+static u16 fly_brk_d[] = {BST_BRK_BST, BST_BRK_LHAND, BST_BRK_RHAND};
+
 static u16 damage_btk_d[] = {BST_BTK_BST_DAMAGE, BST_BTK_LH_DAMAGE, BST_BTK_RH_DAMAGE};
 static u16 damage_brk_d[] = {BST_BRK_BST_DAMAGE, BST_BRK_LH_DAMAGE, BST_BRK_RH_DAMAGE};
 
 /* 00000E58-000014E8       .text fly__FP9bst_class */
-static void fly(bst_class*) {
+static void fly(bst_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    if (i_this->field_0x02B4 != 0 && i_this->field_0x10D8 == 6) {
+        i_this->health = 4;
+    }
+    i_this->field_0x10D8 = 1;
+    if (i_this->mState == 0) {
+        set_hand_CO(i_this, 1);
+    }
+
+    if (boss->field_0x2E9A != 0 || (i_this->field_0x10D4 & 0x1F) == 0) {
+        if (cM_rndF(1.0f) < 0.5f) {
+            i_this->field_0x10E8 = player->shape_angle.y;
+        }
+    }
+
+    switch (i_this->mDamage) {
+        case 0: {
+            anm_init(i_this, fly_bck_d[i_this->field_0x02B4], 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+
+            J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Bst", damage_brk_d[i_this->field_0x02B4]);
+            i_this->mpTevRegAnimator->init(
+                i_this->field_0x02B8->getModel()->getModelData(),
+                reg_key, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, FALSE
+            );
+
+            i_this->mpTevRegAnimator->setFrame(REG0_S(8) + 0x1D);
+            i_this->field_0x02D4 = 1;
+            i_this->field_0x02C4 = 1;
+            i_this->mDamage++;
+            break;
+        }
+        case 1: {
+            J3DAnmTevRegKey* reg_key = (J3DAnmTevRegKey*) dComIfG_getObjectRes("Bst", fly_brk_d[i_this->field_0x02B4]);
+            i_this->mpTevRegAnimator->init(
+                i_this->field_0x02B8->getModel()->getModelData(),
+                reg_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE
+            );
+
+            J3DAnmTextureSRTKey* srt_key = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes("Bst", fly_btk_d[i_this->field_0x02B4]);
+            i_this->mpTexMtxAnimator->init(
+                i_this->field_0x02B8->getModel()->getModelData(),
+                srt_key, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE
+            );
+
+            i_this->mDamage++;
+            i_this->field_0x10EC.y = 0.0f;
+            break;
+        }
+        case 3: {
+            mDoMtx_YrotS(*calc_mtx, i_this->field_0x10E8);
+
+            cXyz vec;
+            vec.z = REG0_F(4) + 800.0f;
+            vec.y = REG0_F(3) + 200.0f;
+            if (i_this->field_0x02B4 == 0) {
+                vec.x = 0.0;
+                vec.z = REG0_F(4) + 1000.0f;
+                if (boss->field_0x2E7C == 11) {
+                    vec.y = REG0_F(3) + 350.0f;
+                }
+            } else if (i_this->field_0x02B4 == 1) {
+                vec.x = -(REG0_F(2) + 800.0f);
+            } else if (i_this->field_0x02B4 == 2) {
+                vec.x = REG0_F(2) + 800.0f;
+            }
+
+            cXyz pos_vec;
+            MtxPosition(&vec, &pos_vec);
+            i_this->mTargetPos = i_this->current.pos + pos_vec;
+
+            if (i_this->field_0x02B4 == 0) {
+                f32 dist = i_this->mTargetPos.absXZ();
+                if (dist > REG0_F(9) + 1350.0f) {
+                    dist /= REG0_F(9) + 1350.0f;
+                    i_this->mTargetPos.x *= dist;
+                    i_this->mTargetPos.z *= dist;
+                }
+            }
+
+            cXyz target_diff = i_this->mTargetPos - i_this->current.pos;
+            if (target_diff.abs() > REG0_F(12) + 300.0f) {
+                f32 speed_target;
+                if (i_this->field_0x02B4 == 0 && boss->field_0x2E7C == 11) {
+                    speed_target = 10.0f;
+                } else {
+                    speed_target = 30.0f;
+                }
+                cLib_addCalc2(&i_this->speedF, speed_target, 1.0f, REG0_F(13) + 2.0f);
+            } else {
+                cLib_addCalc0(&i_this->speedF, 1.0f, REG0_F(14) + 1.0f);
+            }
+
+            i_this->field_0x10EC.x = REG0_F(5) + 1500.0f;
+
+            cLib_addCalcAngleS2(
+                &i_this->shape_angle.y,
+                fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)),
+                10,
+                0x400
+            );
+
+            s16 target_x;
+            if (i_this->field_0x02B4 == 0 && boss->field_0x2E7C == 11) {
+                target_x = 0;
+            } else {
+                target_x = 3000;
+            }
+
+            cLib_addCalcAngleS2(&i_this->shape_angle.x, target_x, 10, 256);
+            cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 8, 512);
+            cLib_addCalc2(&i_this->field_0x10EC.z, REG0_F(11) + 50.0f, 1.0f, 2.0f);
+            break;
+        }
+    }
+
+    pos_move(i_this, 0);
+    if (i_this->field_0x02B4 == 0 && i_this->field_0x2E84 == 0
+            && (dComIfGs_getArrowNum() == 0 || dComIfGs_getBombNum() == 0)) {
+        i_this->field_0x2E84 = 600;
+        i_this->field_0x10D6 = 20;
+        i_this->mDamage = 0;
+    }
 }
 
+static u16 downa_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_GOO, BST_BCK_RH_GOO};
+
 /* 000014E8-00001C14       .text down_attack__FP9bst_class */
-static void down_attack(bst_class*) {
+static void down_attack(bst_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    s8 bVar2 = true;
+    s8 bVar4 = false;
+
+    cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 10, 0x200);
+
+    switch (i_this->mDamage) {
+        case 0:
+            i_this->mDamage = 1;
+
+            i_this->field_0x10EC.y = 0.0f;
+            i_this->mTargetPos = player->current.pos;
+            i_this->mTargetPos.y += REG0_F(7) + 300.0f;
+            i_this->field_0x10FC[0] = 100;
+            break;
+        case 1:
+            cLib_addCalc2(&i_this->speedF, 40.0f, 1.0f, REG0_F(13) + 1.0f);
+            i_this->field_0x10EC.x = REG0_F(5) + 2000.0f;
+
+            cXyz target_diff = i_this->mTargetPos - i_this->current.pos;
+            if (target_diff.abs() < REG0_F(12) + 200.0f || i_this->field_0x10FC[0] == 0) {
+                i_this->mDamage++;
+            }
+            cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 4, 0x400);
+            break;
+        case 2: {
+            bVar2 = false;
+            cLib_addCalc2(&i_this->current.pos.x, i_this->mTargetPos.x, 0.5f, std::abs(i_this->speed.x));
+            cLib_addCalc2(&i_this->current.pos.y, i_this->mTargetPos.y, 0.5f, std::abs(i_this->speed.y));
+            cLib_addCalc2(&i_this->current.pos.z, i_this->mTargetPos.z, 0.5f, std::abs(i_this->speed.z));
+
+            cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 4, 0x4000);
+
+            cXyz target_diff = i_this->mTargetPos - i_this->current.pos;
+            if (target_diff.abs() < REG0_F(13) + 50.0f) {
+                anm_init(i_this, downa_bck_d[i_this->field_0x02B4], 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                i_this->mDamage++;
+                i_this->speed.y = 0.0f;
+
+                i_this->field_0x10FC[0] = 30;
+                if (REG0_S(0) == 1) {
+                    i_this->field_0x2E6E = i_this->shape_angle.y + 0x4000;
+                } else {
+                    i_this->field_0x2E6E = i_this->shape_angle.y - 0x4000;
+                }
+
+                if (i_this->field_0x02B4 == 2) {
+                    i_this->mFacingDir = 0x4000;
+                } else {
+                    i_this->mFacingDir = -0x4000;
+                }
+                fopAcM_seStartCurrent(i_this, JA_SE_CM_BST_HAND_GRIP, 0);
+            }
+            break;
+        }
+        case 3:
+            bVar2 = false;
+            cLib_addCalc2(&i_this->field_0x1114, -200.0f, 1.0f, 25.0f);
+            cLib_addCalc2(&i_this->current.pos.x, i_this->mTargetPos.x, 0.5f, std::abs(i_this->speed.x));
+            cLib_addCalc2(&i_this->current.pos.z, i_this->mTargetPos.z, 0.5f, std::abs(i_this->speed.z));
+
+            cLib_addCalcAngleS2(&i_this->shape_angle.z, i_this->mFacingDir, 4, 0x1000);
+            cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->field_0x2E6E, 4, 0x1000);
+            i_this->current.pos.y += i_this->speed.y;
+
+            if (i_this->field_0x10FC[0] == 0) {
+                set_hand_AT(i_this, 1);
+                i_this->speed.y -= REG0_F(3) + 60.0f;
+
+                if (i_this->current.pos.y <= REG0_F(4) + 150.0f) {
+                    i_this->current.pos.y = REG0_F(4) + 150.0f;
+                    i_this->speed.y = 0.0f;
+
+                    dComIfGp_getVibration().StartShock(
+                        REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f)
+                    );
+                    i_this->field_0x112A = REG0_S(7) + 10;
+
+                    fopAcM_seStartCurrent(i_this, JA_SE_CM_BST_1_HAND_ATTACK, 0);
+                    i_this->mDamage++;
+                    i_this->field_0x10FC[0] = 30;
+
+                    cXyz particle_pos;
+                    particle_pos.x = i_this->current.pos.x;
+                    particle_pos.z = i_this->current.pos.z;
+                    particle_pos.y = 1.0f;
+
+                    dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C1D6, &particle_pos);
+                    dComIfGp_particle_setToon(
+                        dPa_name::ID_SCENE_A1D8,
+                        &particle_pos,
+                        NULL,
+                        NULL,
+                        0xB9,
+                        &i_this->mPa_smokeEcallBack,
+                        fopAcM_GetRoomNo(i_this)
+                    );
+                }
+            } else {
+                i_this->speed.y += REG0_F(14) + 0.5f;
+            }
+            break;
+        case 4:
+            bVar2 = false;
+            cLib_addCalc2(&i_this->field_0x1114, -200.0f, 1.0f, 25.0f);
+            if (i_this->field_0x10FC[0] == 0) {
+                bVar4 = true;
+            }
+            break;
+    }
+
+    if (bVar2) {
+        pos_move(i_this, 0);
+    }
+    if (bVar4 || i_this->mBgS_Acch.ChkWallHit()) {
+        i_this->field_0x10D6 = 1;
+        i_this->mDamage = 0;
+
+        fopAcM_seStartCurrent(i_this, JA_SE_CM_BST_HAND_GRIP_OPEN, 0);
+        if (!bVar4) {
+            s32 hand_index = 2 - i_this->field_0x02B4;
+            if (hand[hand_index]->field_0x10D6 == 10) {
+                hand[hand_index]->field_0x10D6 = 1;
+                hand[hand_index]->mDamage = 0;
+                hand[hand_index]->speedF = 0.0f;
+            }
+        }
+    }
 }
 
 /* 00001C14-000023C8       .text paa_attack__FP9bst_class */
@@ -445,8 +701,56 @@ static void beam_set(bst_class* i_this) {
 }
 
 /* 000035BC-00003B94       .text beam_attack__FP9bst_class */
-static void beam_attack(bst_class*) {
+static void beam_attack(bst_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    s8 bVar3 = false;
+    i_this->field_0x2E74[0] = 10;
+    i_this->field_0x2E74[1] = 10;
+    if (i_this->field_0x2E84 < 120) {
+        i_this->field_0x2E84 = 120;
+    }
+
+    cXyz actor_vec = player->current.pos - i_this->current.pos;
+    actor_vec.y += i_this->field_0x10D0;
+
+    s16 angle = cM_atan2s(actor_vec.x, actor_vec.z);
+    cLib_addCalcAngleS2(&i_this->shape_angle.y, angle, 4, 0x800);
+
+    f32 dist = fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0));
+    if (dist < REG0_F(9) + 500.0f || bVar3) {
+        i_this->mRoomState = 8;
+        i_this->field_0x10D6 = 1;
+        i_this->mDamage = 0;
+        i_this->speedF = 0.0f;
+
+        fopAcM_seStart(i_this, JA_SE_CM_BST_MOUTH_CLOSE, 0);
+        s16 sVar6;
+        if (i_this->health == 0) {
+            sVar6 = cM_rndF(50.0f) + 100.0f;
+        } else if (i_this->health == 1) {
+            sVar6 = cM_rndF(70.0f) + 120.0f;
+        } else if (i_this->health == 2) {
+            sVar6 = cM_rndF(80.0f) + 140.0f;
+        } else if (i_this->health == 3) {
+            sVar6 = cM_rndF(90.0f) + 150.0f;
+        } else {
+            sVar6 = cM_rndF(100.0f) + 150.0f;
+        }
+        i_this->field_0x2E7E[1] = sVar6;
+    }
+
+    for (s32 i = 0; i < 2; i++) {
+        JPABaseEmitter* emitter = i_this->field_0x2ED8[i];
+        if (emitter != NULL) {
+            JPASetRMtxTVecfromMtx(
+                i_this->field_0x02B8->getModel()->getAnmMtx(0),
+                emitter->mGlobalRotation,
+                emitter->mGlobalTranslation
+            );
+        }
+    }
 }
 
 /* 00003B94-00003DD8       .text damage__FP9bst_class */
@@ -848,7 +1152,7 @@ static void damage_check(bst_class* i_this) {
 
                     i_this->speedF = 0.0f;
 
-                    
+
                     cXyz* hit_pos = i_this->mBstEyeCcD_Spheres[eye_index].GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hit_pos);
 
@@ -861,6 +1165,36 @@ static void damage_check(bst_class* i_this) {
                     dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hit_pos, &angle, &scale);
 
                     dKy_SordFlush_set(*hit_pos, 1);
+                }
+            }
+        } else {
+            if (i_this->mHandHurtCollisionCcD_Cyl.ChkTgHit()) {
+                i_this->mState = 10;
+                if (player_way_check(i_this)) {
+
+                    cXyz* hit_pos = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP();
+                    
+                    cXyz scale(2.0f, 2.0f, 2.0f);
+                    csXyz angle;
+                    angle.x = angle.z = 0;
+                    angle.y = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hit_pos, &angle, &scale);
+
+                    cXyz vec;
+                    vec.x = hit_pos->x;
+                    vec.y = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP()->y;
+                    vec.z = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP()->z;
+
+                    dKy_SordFlush_set(vec, 1);
+                    i_this->field_0x10D6 = 5;
+                    i_this->mDamage = 0;
+
+                    s32 hand_index = 2 - i_this->field_0x02B4;
+                    if (hand[hand_index]->field_0x10D6 > 9) {
+                        hand[hand_index]->field_0x10D6 = 1;
+                        hand[hand_index]->mDamage = 0;
+                        hand[hand_index]->speedF = 0.0f;
+                    }
                 }
             }
         }
