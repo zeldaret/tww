@@ -97,11 +97,13 @@ enum CcG_Tg_HitMark {
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
     /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
+    /* 0xFF */ dCcG_TgHitMark_Unk255_e = 0xFF,
 };
 
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0x2 */ dCcG_At_Spl_UNK2 = 2,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
     /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
