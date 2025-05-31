@@ -10,6 +10,13 @@
 
 JUTXfb* JUTXfb::sManager;
 
+/* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
+void JUTXfb::destroyManager() {
+    JUT_CONFIRM(VERSION_SELECT(339, 344, 344), sManager);
+    delete sManager;
+    sManager = NULL;
+}
+
 /* 802C81D8-802C81EC       .text clearIndex__6JUTXfbFv */
 void JUTXfb::clearIndex() {
     mDrawingXfbIndex = -1;
@@ -68,13 +75,6 @@ JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXf
         sManager = new JUTXfb(pObj, pHeap, xfbNum);
     }
     return sManager;
-}
-
-/* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
-void JUTXfb::destroyManager() {
-    JUT_CONFIRM(VERSION_SELECT(339, 344, 344), sManager);
-    delete sManager;
-    sManager = NULL;
 }
 
 /* 802C8468-802C8544       .text initiate__6JUTXfbFUsUsP7JKRHeapQ26JUTXfb10EXfbNumber */
