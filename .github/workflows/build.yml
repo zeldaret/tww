@@ -37,76 +37,15 @@ jobs:
         cp -R /orig .
         mkdir -p /compilers/GC/1.3.2x
         cp /compilers/GC/1.3.2/* /compilers/GC/1.3.2x/
+        printf '\x0F\x0B' | dd of=/compilers/GC/1.3.2x/mwcceppc.exe bs=1 seek=$((0x433c97 - 0x401000 + 0x400)) conv=notrunc
 
     # Build the project
     - name: Build
       run: |
+        cat /proc/sys/kernel/core_pattern
+        ulimit -c unlimited
         python configure.py --map --version ${{ matrix.version }} \
             --binutils /binutils --compilers /compilers
         ninja diff
         ninja all_source build/${{ matrix.version }}/progress.json \
             build/${{ matrix.version }}/report.json
-
-    # Upload progress if we're on the main branch
-    - name: Upload progress
-      if: github.ref == 'refs/heads/main'
-      continue-on-error: true
-      env:
-        PROGRESS_SLUG: tww
-        PROGRESS_API_KEY: ${{ secrets.PROGRESS_API_KEY }}
-      run: |
-        python tools/upload_progress.py -b https://progress.decomp.club/ \
-          -p $PROGRESS_SLUG -v ${{ matrix.version }} \
-          build/${{ matrix.version }}/progress.json
-
-    # Upload map files
-    - name: Upload map
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.version }}_maps
-        path: build/${{ matrix.version }}/**/*.MAP
-
-    # Upload progress report
-    - name: Upload report
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.version }}_report
-        path: build/${{ matrix.version }}/report.json
-
-  website:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-    - name: Checkout website code
-      uses: actions/checkout@v4
-      with:
-        repository: LagoLunatic/tww-decomp-website
-
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: GZLE01_report
-        path: ./artifacts
-
-    - name: Rename artifact
-      run: |
-        mv ./artifacts/report.json ./artifacts/progress.json
-
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: "8.x.x"
-
-    - name: Build Website
-      run: |
-        python build.py
-
-    - name: Upload website artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './dist'
-
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
