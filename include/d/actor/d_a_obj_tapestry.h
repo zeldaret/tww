@@ -9,18 +9,18 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 class JPABaseEmitter;
-//class daObjTapestryDrawVtx_c;
+
+
 class daObjTapestryPacket_c;
-typedef  cXyz holdvecs[8][6];
+
+
 class daObjTapestryDrawVtx_c{
 public:
     daObjTapestryDrawVtx_c();
 public:
-     /* 0x000 */ char pad0[0x240];
-    /* 0x240 */ dCcD_Stts *unk240(cXyz*);      /* inferred */
-    /* 0x240 */ char pad240[0x240];
-    /* 0x480 */ dCcD_Stts *unk480(cXyz*);      /* inferred */
-    /* 0x480 */ char pad480[1];
+    cXyz mBufferZero[8][6];
+    cXyz mBufferOne[8][6];  
+    cXyz mBufferTwo[8][6];  
 };
 
 
@@ -78,11 +78,7 @@ public:
 class daObjTapestry_c;
 
 class daObjTapestryPacket_c : public J3DPacket{
-    struct bufferholders{
-        holdvecs unk10;
-        holdvecs unk250;
-        holdvecs unk490;
-    };
+
 public:
     daObjTapestryPacket_c();
 
@@ -107,7 +103,7 @@ public:
     void set_hit(cXyz, cXyz, float, float, bool);
     cXyz* get_now_pos(int, int);
     void eff_start(int, int);
-    void eff_start_chk(int, int);
+    u8 eff_start_chk(int, int);
     void eff_end();
     void eff_pos();
     void eff_delete();
@@ -121,20 +117,11 @@ public:
     void setup_tevColReg(daObjTapestry_c*);
     void draw();
 public:
-                bufferholders holder[2];
-                // holdvecs unk250[1];
-                // holdvecs unk490[1];
-                // holdvecs unk240;
-
-                //holdvecs unk490;
-                //char pad6D0[0x6C0];
-                //cXyz unk490[1][8][6];
-                //cXyz unk910[2][8][6];
-
+                daObjTapestryDrawVtx_c mDrawVtx[2];
                 cXyz unkD90[8][6];
-                u8 unkFD0[8][6];
+                u8 unkFD0[3][8][6];
 
-    /* 0x1000 */ u8 unk1000[8][6];
+    /* 0x1000 */ //u8 unk1000[8][6];
                  char pad1030[0x30];
     /* 0x1060 */ s32 unk1060;                       /* inferred */
     /* 0x1064 */ daObjTapestryFireEff_c unk1064[16];    /* inferred */
@@ -147,46 +134,43 @@ public:
     /* 0x13C4 */ u8 unk13C4;                        /* inferred */
     /* 0x13C5 */ char pad13C5[3];                   /* maybe part of unk13C4[4]? */
     /* 0x13C8 */ cXyz unk13C8;                       /* inferred */
-    /* 0x13D4 */ f32 unk13D4;                       /* inferred */
-    /* 0x13D8 */ f32 unk13D8;                       /* inferred */
-    /* 0x13DC */ f32 unk13DC;                       /* inferred */
+    /* 0x13D4 */ cXyz unk13D4;                       /* inferred */
+
     /* 0x13E0 */ s16 unk13E0;                       /* inferred */
     /* 0x13E2 */ char pad13E2[2];
-    /* 0x13E4 */ f32 unk13E4;                       /* inferred */
-    /* 0x13E8 */ f32 unk13E8;                       /* inferred */
-    /* 0x13EC */ f32 unk13EC;                       /* inferred */
+    /* 0x13E4 */ cXyz unk13E4;                       /* inferred */
     /* 0x13F0 */ s16 unk13F0;                       /* inferred */
     /* 0x13F2 */ s16 unk13F2;                       /* inferred */
     /* 0x13F4 */ s16 unk13F4;                       /* inferred */
     /* 0x13F6 */ char pad13F6[2];
-    /* 0x13F8 */ f32 unk13F8;                       /* inferred */
-    /* 0x13FC */ f32 unk13FC;                       /* inferred */
-    /* 0x1400 */ f32 unk1400;                       /* inferred */
-    /* 0x1404 */ f32 unk1404;                       /* inferred */
-    /* 0x1408 */ f32 unk1408;                       /* inferred */
-    /* 0x140C */ f32 unk140C;                       /* inferred */
-    /* 0x1410 */ f32 unk1410;                       /* inferred */
-    /* 0x1414 */ f32 unk1414;                       /* inferred */
-    /* 0x1418 */ f32 unk1418;                       /* inferred */
-    /* 0x141C */ f32 unk141C;                       /* inferred */
-    /* 0x1420 */ f32 unk1420;                       /* inferred */
-    /* 0x1424 */ f32 unk1424;                       /* inferred */
-    /* 0x1428 */ f32 unk1428;                       /* inferred */
-    /* 0x142C */ f32 unk142C;                       /* inferred */
-    /* 0x1430 */ f32 unk1430;                       /* inferred */
-    /* 0x1434 */ f32 unk1434;                       /* inferred */
-    /* 0x1438 */ f32 unk1438;                       /* inferred */
-    /* 0x143C */ f32 unk143C;                       /* inferred */
-    /* 0x1440 */ f32 unk1440;                       /* inferred */
-    /* 0x1444 */ f32 unk1444;                       /* inferred */
-    /* 0x1448 */ f32 unk1448;                       /* inferred */
+    /* 0x13F8 */ cXyz unk13F8;                       /* inferred */
+    // /* 0x13FC */ f32 unk13FC;                       /* inferred */
+    // /* 0x1400 */ f32 unk1400;                       /* inferred */
+    /* 0x1404 */ cXyz unk1404;                       /* inferred */
+    // /* 0x1408 */ f32 unk1408;                       /* inferred */
+    // /* 0x140C */ f32 unk140C;                       /* inferred */
+    /* 0x1410 */ cXyz unk1410;                       /* inferred */
+    // /* 0x1414 */ f32 unk1414;                       /* inferred */
+    // /* 0x1418 */ f32 unk1418;                       /* inferred */
+    /* 0x141C */ cXyz unk141C;                       /* inferred */
+    // /* 0x1420 */ f32 unk1420;                       /* inferred */
+    // /* 0x1424 */ f32 unk1424;                       /* inferred */
+    /* 0x1428 */ cXyz unk1428;                       /* inferred */
+    // /* 0x142C */ f32 unk142C;                       /* inferred */
+    // /* 0x1430 */ f32 unk1430;                       /* inferred */
+    /* 0x1434 */ cXyz unk1434;                       /* inferred */
+    // /* 0x1438 */ f32 unk1438;                       /* inferred */
+    // /* 0x143C */ f32 unk143C;                       /* inferred */
+    /* 0x1440 */ cXyz unk1440;                       /* inferred */
+    // /* 0x1444 */ f32 unk1444;                       /* inferred */
+    // /* 0x1448 */ f32 unk1448;                       /* inferred */
     /* 0x144C */ f32 unk144C;                       /* inferred */
     /* 0x1450 */ f32 unk1450;                       /* inferred */
     /* 0x1454 */ u8 unk1454;                        /* inferred */
     /* 0x1455 */ char pad1455[3];                   /* maybe part of unk1454[4]? */
-    /* 0x1458 */ f32 unk1458;                       /* inferred */
-    /* 0x145C */ f32 unk145C;                       /* inferred */
-    /* 0x1460 */ f32 unk1460;                       /* inferred */
+    /* 0x1458 */ cXyz unk1458;                       /* inferred */
+    // /* 0x145C */ f32 unk145C;                       /* inferred */
+    // /* 0x1460 */ f32 unk1460;                       /* inferred */
     /* 0x1464 */ u8 unk1464;                        /* inferred */
     /* 0x1465 */ u8 unk1465;                        /* inferred */
     /* 0x1466 */ u8 unk1466;                        /* inferred */
@@ -251,16 +235,58 @@ public:
     /* 0x1AC0 */ s32 unk1AC0;                       /* inferred */
 }; /* SIZE = 0x1AC4 */
 
+class daObjTapestryAttr_c { 
+public:
+    daObjTapestryAttr_c operator=(const daObjTapestryAttr_c& other){
+
+    this->unkC[0] = other.unkC[0];
+    unkC[1] = other.unkC[1];
+    unkC[2] = other.unkC[2];
+    unkC[3] = other.unkC[3];
+    unkC[4] = other.unkC[4];
+    unkC[5] = other.unkC[5];
+    unkC[6] = other.unkC[6];
+    unkC[7] = other.unkC[7];
+    unkC[8] = other.unkC[8];
+    unkC[9] = other.unkC[9];
+    unkC[10] = other.unkC[10];
+    unkC[11] = other.unkC[11];
+    unkC[12] = other.unkC[12];
+    unkC[13] = other.unkC[13];
+    unkC[14] = other.unkC[14];
+    unkC[15] = other.unkC[15];
+    unk4C = other.unk4C; 
+    unk4D = other.unk4D; 
+    unk50 = other.unk50; 
+    unk54 = other.unk54;
+    unk58 = other.unk58;
+    unk5C = other.unk5C;
+    unk60 = other.unk60;
+    unk64 = other.unk64;
+
+    };
+    f32 unkC[16];
+    s8 unk4C;
+    s8 unk4D;
+    float unk50;
+    s8 unk54;
+    float unk58;
+    float unk5C;
+    float unk60;
+    float unk64;
+};
+
 class daObjTapestry_HIO_c : public JORReflexible{
 public:
     daObjTapestry_HIO_c();
-    virtual ~daObjTapestry_HIO_c();
+    virtual ~daObjTapestry_HIO_c(){};
 public:
-    s32 field_4;
+    s8 field_4;
+    s8 field_5;
+    s8 field_6;
     s32 field_8;
-    s32 field_C;
-    s8  field_10[0x6C-0x10];
-    /* Place member variables here */
+    daObjTapestryAttr_c field_C;
+    s8 field_68;
 }; //Size 0x6C
 
 #endif /* D_A_OBJ_TAPESTRY_H */

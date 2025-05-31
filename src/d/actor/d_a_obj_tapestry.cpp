@@ -38,8 +38,26 @@ static const dCcD_SrcTri l_tri_src = {
     },
 };
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */
+
+const daObjTapestryAttr_c l_attr = {
+    {2.0f,0.9f,0.28f,0.35f,0.4f,0.3f,0.4f,1.0f,1.5f,2.0f,-980.0f,1.0f,1.0f,1.0f,30.0f,50.0f},
+    13,
+    100,
+    1.0f/30.0f,
+    0x78,
+    0.0f,
+    1.0f,
+    2.0f,
+    2.5f
+};
+
 daObjTapestry_HIO_c::daObjTapestry_HIO_c() {
-    /* Nonmatching */
+    field_4 = -1;
+    field_5 = 0;
+    field_6 = 0;
+    field_8 = 0;
+    field_C = l_attr;
+    field_68 = 1;
 }
 
 
@@ -108,29 +126,19 @@ void daObjTapestryFireEff_c::execute(JPABaseEmitter* param_1) {
     /* Nonmatching */
     cXyz a;
     param_1->setDirection(a);
-    for(int i = 0; i <= 12; i++){
+    for(int i = 0; i <= 10; i++){
 
     }
 }
 
 /* 00000600-00000638       .text __ct__23daObjTapestryDrawData_cFv */
 daObjTapestryDrawData_c::daObjTapestryDrawData_c() {
-    /* Nonmatching */
     ct_tex();
     ct_dl();
     return;
 }
 
 /* 00000638-000006C8       .text ct_tex__23daObjTapestryDrawData_cFv */
-// void daObjTapestryDrawData_c::ct_tex() {
-//     /* Nonmatching */
-//     for(int i = 0; i < 8; i++){
-//         for(int j = 0; j < 6; j++){
-//             array[2*j] = j*0.2f;
-//             array[2*j+1] = i*0.14285715f;
-//         }
-//     }
-// }
 void daObjTapestryDrawData_c::ct_tex() {
     for(int i = 0, offset = 0; i < 8; i++){
         f32 v = i*0.14285715f;
@@ -147,6 +155,7 @@ void daObjTapestryDrawData_c::ct_tex() {
 const u32 l_dl_size = 0x185;
 static u32 begin_data;
 static u32 temp_clr = 0;
+
 /* 000006C8-00000878       .text ct_dl__23daObjTapestryDrawData_cFv */
 void daObjTapestryDrawData_c::ct_dl() {
     /* Nonmatching */
@@ -182,12 +191,51 @@ daObjTapestryPacket_c::daObjTapestryPacket_c() {
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < 8; j++){
             for(int k = 0; k < 6; k++){
-                holder[i].unk10[j][k] = cXyz::Zero;
-                holder[i].unk250[j][k] = cXyz::BaseZ;
-                holder[i].unk490[j][k] = cXyz::BaseZ;                
+                mDrawVtx[i].mBufferZero[j][k]= cXyz::Zero;
+                mDrawVtx[i].mBufferOne[j][k] = cXyz::BaseZ;
+                mDrawVtx[i].mBufferTwo[j][k] = cXyz::BaseZ;                
             }
         }
     }
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 6; j++){
+            unkD90[i][j] = cXyz::Zero;
+            unkFD0[0][i][j] = 0;
+            unkFD0[1][i][j] = 0;
+            unkFD0[2][i][j] = 0xFF;
+        }
+    }
+    unk1060 = 0;
+    unk1324 = 0;
+    mDoMtx_identity(unk1334);
+    mDoMtx_identity(unk1364);
+    mDoMtx_identity(unk1394);    
+    unk13C4 = 1;
+    unk13C8 = cXyz::Zero;
+    unk13D4 = cXyz::Zero;
+    unk13E0 = 0;
+    unk13E4 = cXyz::Zero;
+    csXyz a;
+    unk13F0 = cM_rndF(65536.0);
+    unk13F2 = cM_rndF(65536.0);
+    unk13F4 = cM_rndF(65536.0);    
+    unk13F8 = cXyz::Zero;
+    unk1404 = cXyz::Zero;
+    unk1410 = cXyz::Zero;
+    unk141C = cXyz::Zero;
+    unk1428 = cXyz::Zero;
+    unk1434 = cXyz::Zero;
+    unk1440 = cXyz::Zero;
+    unk144C = 0;
+    unk1450 = 1.0;
+    unk1454 = 0;
+    unk1458.set(1.0,0.0,0.0);
+    unk1464 = 0;
+    unk1465 = 0;
+    unk1466 = 0;
+    unk1490 = 0;
+    return;
 
 }
 
@@ -197,7 +245,6 @@ void daObjTapestryPacket_c::init(daObjTapestry_c* param_1) {
 
         static cXyz base_z_rev(0.0,0.0,-1.0);
         setUserArea((u32)param_1);
-
         cXyz local_e0 = cXyz::BaseZ;
         cXyz local_ec = base_z_rev;
         cXyz local_f8;
@@ -210,12 +257,10 @@ void daObjTapestryPacket_c::init(daObjTapestry_c* param_1) {
                 local_f8.y = (7-j)*(1.0f/7.0f);
                 for(int k = 0; k < 6; k++){
                     local_f8.x = k*(1.0f/5.0f);
-                    //cXyz* base = ;
-                    //PSMTXMultVec(mDoMtx_stack_c::get(),&local_f8,(cXyz*)unk240 + i * 144 + j * 6 + k);
-                    //mDoMtx_stack_c::multVec(&local_f8,base);
-                // *((cXyz*)unk240 + i * 144 + j * 6 + k+0x30) = local_e0;
-                // *((cXyz*)unk240 + i * 144 + j * 6 + k+0x60) = local_ec;  
-                    //setUserArea()
+                    daObjTapestryDrawVtx_c* base = &mDrawVtx[i];
+                    PSMTXMultVec(mDoMtx_stack_c::get(),&local_f8,&base->mBufferZero[j][k]);
+                    base->mBufferOne[i][j] = local_e0;
+                    base->mBufferTwo[i][j] = local_ec;                    
                 }
             }
         }
@@ -273,7 +318,7 @@ void daObjTapestryPacket_c::calc_pos() {
     cXyz** bank = (cXyz**)(0x6C0*unk1060+16);
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 6; j++){
-            if(i != 0 || ((unkFD0[i][j] & 1) != 0)){
+            if(i != 0 || ((unkFD0[i][j][0] & 1) != 0)){
                 unk1328 = cXyz::Zero;
                 calc_acc_spring(i,j);
                 calc_acc_gravity();
@@ -296,12 +341,12 @@ void daObjTapestryPacket_c::calc_nrm() {
 
     for (int i = 0; i < 8; ++i) { // 8 vertical strips
         for (int j = 0; j < 6; j += 1) { // 6 horizontal segments
-            cXyz& center = holder[0].unk10[i][j]; // base point
-            cXyz& up = holder[0].unk10[i+1][j];
-            cXyz& down = holder[0].unk10[i-1][j];
+            cXyz& center = mDrawVtx[0].mBufferZero[i][j]; // base point
+            cXyz& up = mDrawVtx[0].mBufferZero[i+1][j];
+            cXyz& down = mDrawVtx[0].mBufferZero[i-1][j];
 
-            cXyz& right = holder[0].unk10[i][j+1];
-            cXyz& left = holder[0].unk10[i][j-1];
+            cXyz& right = mDrawVtx[0].mBufferZero[i][j+1];
+            cXyz& left = mDrawVtx[0].mBufferZero[i][j-1];
 
 
 
@@ -354,9 +399,9 @@ void daObjTapestryPacket_c::calc_nrm() {
             cXyz normal;
             normal = bitangent.outprod(tangent);
             if (normal.normalizeRS()) {
-                holder[0].unk250[i][j] = normal;
-                holder[0].unk490[i][j] = normal;
-                holder[0].unk490[i][j] *= -1.0f;
+                mDrawVtx[0].mBufferOne[i][j] = normal;
+                mDrawVtx[0].mBufferTwo[i][j] = normal;
+                mDrawVtx[0].mBufferTwo[i][j] *= -1.0f;
             }
         }
     }
@@ -381,35 +426,45 @@ void daObjTapestryPacket_c::calc_fire_leap(int, int) {
 void daObjTapestryPacket_c::calc_fire() {
     /* Nonmatching */
     u8 local_7b;
-    u8 local_d8;
+    u16 local_60;
+    u16 local_58;
+    u16 local_d8;
     f32 var_f31;
+    if(unk1454 != 0){
+        // local_60 = unk145C * 7.0f;
+        // local_58 = unk1460 * 5.0f;
+        unkFD0[1][(int)local_60][(int)local_58] += 1;
+    }
     for(int i = 0; i<8; i++){
         for(int j = 0; j<6; j++){
-            if(unk1000[i+j] != 0){
-                s32* pbVar3 = &l_HIO.field_8;
-                s32* var_r4_2 = &l_HIO.field_8;
+            if(unkFD0[1][i][j] != 0){
                 for(int k = 0; k < 11; k++){
-                    cLib_checkBit(unk1000[0][0],(u8)1);
+                    cLib_checkBit(unkFD0[1][0][0],(u8)1);
                 }
-                if((unk1000[i][j]) < local_7b){
+                if((unkFD0[1][i][j]) < local_7b){
                     if ((i == 0) && (((j == 0) && (unk1466 == 1)) || ((j == 5) && (unk1466 == 2)))) {
                         var_f31 = 0.4f;
                     }else{
-                        var_f31 = 0.2f;
+                        var_f31 = 0.8f;
                     }
                     if(cM_rnd()<var_f31){
-                        unk1000[i][j] += 1;
+                        unkFD0[1][i][j] += 1;
                     }
-                    for(int k = 0; k < 11; k++){
+                    s32 var_r5_2[8][3];
+                    //struct_8* var_r4_2 = &l_HIO.field_8;
 
+                    for(int k = 0; k < 11; k++){
+                      //  var_r5_2[k][1] = var_r4_2->arr[k][1];
+                      //  var_r5_2[k+1][2] = var_r4_2->arr[k][1];
                     }
-                    if(unk1000[i][j] >= local_d8){
-                        if(!cLib_checkBit(unkFD0[i][j],(u8)1)){
-                            cLib_onBit(unkFD0[i][j],(u8)1);
-                            int iPlus = i+1;
-                            int iMinus = i-1;
-                            int jPlus = j+1;
-                            int jMinus = j-1;
+                    //var_r5_2[0][1] = var_r4_2->arr[0][1];
+                    if(unkFD0[1][i][j] >= local_d8){
+                        if(!cLib_checkBit(unkFD0[i][j][0],(u8)1)){
+                            cLib_onBit(unkFD0[i][j][0],(u8)1);
+                            u8 iPlus = i+1;
+                            u8 iMinus = i-1;
+                            u8 jPlus = j+1;
+                            u8 jMinus = j-1;
                             // u32 uVar10 = jMinus >> 0x1F ^ 1;
                             // int iVar6 = ((jPlus ^ 6) >> 1) - ((jPlus ^ 6) & 6);
                             // int iVar7 = ((int)(jPlus ^ 8) >> 1) - ((jPlus ^ 8) & 8);
@@ -462,7 +517,7 @@ void daObjTapestryPacket_c::calc_fire() {
     if(unk1464 == 0){
         int i;
         for(i = 0; i < 6; i++){
-            if(!cLib_checkBit(unkFD0[0][i],(u8)1)){
+            if(!cLib_checkBit(unkFD0[0][i][0],(u8)1)){
                 break;
             }
 
@@ -498,16 +553,40 @@ void daObjTapestryPacket_c::set_hit(cXyz, cXyz, float, float, bool) {
 /* 000034CC-000034F4       .text get_now_pos__21daObjTapestryPacket_cFii */
 cXyz* daObjTapestryPacket_c::get_now_pos(int param_1, int param_2) {
     /* Nonmatching */
-    return &holder[unk1060].unk10[param_1][param_2];
+    return &mDrawVtx[unk1060].mBufferZero[param_1][param_2];
 }
 
+typedef struct {
+    float values[23]; // 92 bytes / 4
+} SomeParamBlock;
 /* 000034F4-000036C4       .text eff_start__21daObjTapestryPacket_cFii */
-void daObjTapestryPacket_c::eff_start(int, int) {
+void daObjTapestryPacket_c::eff_start(int param_1, int param_2) {
     /* Nonmatching */
+    cXyz local_18c;
+    SomeParamBlock floatarr;
+    if(unk1324 < 0x10){
+        if(eff_start_chk(param_1,param_2)){
+            daObjTapestryFireEff_c* pCallBack = &unk1064[unk1324];
+            //cXyz* pSrc = ;
+            cMtx_multVec(unk1334,get_now_pos(param_1,param_2),&local_18c);
+            pCallBack->unk14 = local_18c;
+            daObjTapestryAttr_c* var_r4 = &l_HIO.field_C;
+            for(int i = 0; i < 11; i++){
+
+                floatarr.values[0] = var_r4->unkC[0];
+                floatarr.values[0] = var_r4->unkC[1];
+                //temp_r3 = var_r4->unk4;
+            }
+            // for(int i = 0; i < 11; i++){
+            //     floatarr[2*i] = var_r4->unkC[2*i];
+            //     //temp_r3 = var_r4->unk4;
+            // }
+        }
+    }
 }
 
 /* 000036C4-00003934       .text eff_start_chk__21daObjTapestryPacket_cFii */
-void daObjTapestryPacket_c::eff_start_chk(int, int) {
+u8 daObjTapestryPacket_c::eff_start_chk(int, int) {
     /* Nonmatching */
 }
 
@@ -585,7 +664,7 @@ void daObjTapestryPacket_c::setup_vtx(daObjTapestryDrawVtx_c* param_1) {
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_CLR0,GX_CLR_RGBA,GX_RGBA8,0);
     GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
     GXSetArray(GX_VA_POS,param_1,0xc);
-    GXSetArray(GX_VA_NRM,param_1->pad240,0xc);
+    GXSetArray(GX_VA_NRM,param_1->mBufferOne,0xc);
     GXSetArray(GX_VA_CLR0,&l_color,4);
     GXSetArray(GX_VA_TEX0,&m_draw_data,8);
 }
