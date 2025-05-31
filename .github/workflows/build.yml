@@ -12,10 +12,9 @@ permissions:
 
 jobs:
   build:
-    container: ghcr.io/zeldaret/tww-build:main
-    # container:
-    #   image: ghcr.io/zeldaret/tww-build:main
-    #   options: --cap-add=SYS_PTRACE --security-opt seccomp=unconfined
+    container:
+      image: ghcr.io/zeldaret/tww-build:main
+      options: --cap-add=SYS_PTRACE --security-opt seccomp=unconfined
 
     runs-on: ubuntu-latest
     strategy:
