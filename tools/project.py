@@ -57,6 +57,7 @@ class Object:
             "extra_asflags": [],
             "extra_cflags": [],
             "extra_clang_flags": [],
+            "fake_mwcc": False,
             "host": None,
             "lib": None,
             "mw_version": None,
@@ -615,6 +616,9 @@ def generate_build_ninja(
     mwcc_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags -MMD -c $in -o $basedir"
     mwcc_sjis_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
 
+    fake_mwcc_cmd = f"echo 'Hello world!'"
+    fake_mwcc_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
+
     # MWLD
     mwld = compiler_path / "mwldeppc.exe"
     mwld_cmd = f"{wrapper_cmd}{mwld} $ldflags -o $out @$out.rsp"
@@ -634,6 +638,7 @@ def generate_build_ninja(
         mwcc_sjis_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_implicit.append(transform_dep)
         mwcc_sjis_implicit.append(transform_dep)
+        fake_mwcc_implicit.append(transform_dep)
 
     n.comment("Link ELF file")
     n.rule(
@@ -668,6 +673,16 @@ def generate_build_ninja(
         name="mwcc_sjis",
         command=mwcc_sjis_cmd,
         description="MWCC $out",
+        depfile="$basefile.d",
+        deps="gcc",
+    )
+    n.newline()
+
+    n.comment("Fake MWCC build with injected script")
+    n.rule(
+        name="fake_mwcc",
+        command=fake_mwcc_cmd,
+        description="FAKE MWCC $out",
         depfile="$basefile.d",
         deps="gcc",
     )
@@ -882,7 +897,7 @@ def generate_build_ninja(
             n.comment(f"{obj.name}: {lib_name} (linked {obj.completed})")
             n.build(
                 outputs=obj.src_obj_path,
-                rule="mwcc_sjis" if obj.options["shift_jis"] else "mwcc",
+                rule="fake_mwcc" if obj.options["fake_mwcc"] else "mwcc_sjis" if obj.options["shift_jis"] else "mwcc",
                 inputs=src_path,
                 variables={
                     "mw_version": Path(obj.options["mw_version"]),

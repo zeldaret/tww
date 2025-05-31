@@ -332,7 +332,7 @@ config.libs = [
         "progress_category": "core",
         "host": True,
         "objects": [
-            Object(Matching,    "m_Do/m_Do_main.cpp"),
+            Object(Matching,    "m_Do/m_Do_main.cpp", fake_mwcc=True),
             Object(Matching,    "m_Do/m_Do_printf.cpp"),
             Object(Matching,    "m_Do/m_Do_audio.cpp"),
             Object(Matching,    "m_Do/m_Do_controller_pad.cpp"),
