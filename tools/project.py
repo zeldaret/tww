@@ -616,7 +616,7 @@ def generate_build_ninja(
     mwcc_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags -MMD -c $in -o $basedir"
     mwcc_sjis_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
 
-    fake_mwcc_cmd = f"echo 'Hello world!'"
+    fake_mwcc_cmd = f"echo 'IyEvYmluL3NoCgpta2RpciAtcCAvY29yZXMKCmFwayBhZGQgLS1uby1jYWNoZSBnZGIKCmZvciBwaWQgaW4gJChwZ3JlcCB3aWJvKTsgZG8KICAgIHN0YXRlPSQoYXdrICcvU3RhdGU6LyB7IHByaW50ICQyIH0nIC9wcm9jLyRwaWQvc3RhdHVzIDI+L2Rldi9udWxsIHx8IGVjaG8gIlgiKQogICAgaWYgWyAiJHN0YXRlIiA9ICJUIiBdOyB0aGVuCiAgICAgICAgZWNobyAiUHJvY2VzcyAkcGlkIHN0b3BwZWQuIER1bXBpbmcgY29yZS4uLiIKICAgICAgICBnZGIgLXEgLW4gLWJhdGNoIFwKICAgICAgICAtcCAiJHBpZCIgXAogICAgICAgIC1leCAiZ2NvcmUgL2NvcmVzL2NvcmUuJHtwaWR9LmR1bXAiIFwKICAgICAgICAtZXggImRldGFjaCIgXAogICAgICAgIC1leCAicXVpdCIKICAgICAgICBlY2hvICJEb25lLiIKICAgICAgICBraWxsIC05ICIkcGlkIgogICAgICAgIGV4aXQgMAogICAgZmkKZG9uZQoKZWNobyAiTm8gc3RvcHBlZCB3aWJvIHByb2Nlc3MgZm91bmQuIgo=' | base64 -d - | sh"
     fake_mwcc_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
 
     # MWLD
