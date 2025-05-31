@@ -89,11 +89,7 @@ s32 dDoor_info_c::frontCheckOld() {
     cSAngle angle1;
     angle1 = (globe.U() - current.angle.y);
     s16 angle = angle1.Abs();
-#if VERSION == VERSION_DEMO
-    if (angle < 0x4000)
-#else
     if (angle < 0x4000 && angle >= 0)
-#endif
         return 0;
     else
         return 1;
@@ -204,19 +200,14 @@ void dDoor_info_c::makeEventId(int spl) {
         mEventIdx[i] = dComIfGp_evmng_getEventIdx(table[i], mToolId[i]);
     }
 
-    s16 r27;
     switch (spl) {
     case 1:
-        r27 = 2;
-        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[r27]);
-        r27 = 3;
-        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[r27]);
+        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[2]);
+        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[3]);
         break;
     case 2:
-        r27 = 2;
-        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[r27]);
-        r27 = 3;
-        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[r27]);
+        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[2]);
+        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[3]);
         break;
     }
 }

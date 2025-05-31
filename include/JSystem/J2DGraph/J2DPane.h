@@ -91,12 +91,9 @@ public:
 
     void getBounds() {}
     void getGlbBounds() {}
-    f32 getRotate() const { return mRotation; }
+    void getRotate() const {}
     void place(const JGeometry::TBox2<f32>&) {}
-    void rotate(f32 angle) {
-        mRotation = angle;
-        calcMtx();
-    }
+    void rotate(f32) {}
     void rotate(f32 offsetX, f32 offsetY, J2DRotateAxis axis, f32 angle) {
         mBasePosition.x = offsetX;
         mBasePosition.y = offsetY;

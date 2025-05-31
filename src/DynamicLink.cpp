@@ -50,46 +50,32 @@ DynamicModuleControlBase::DynamicModuleControlBase() {
 }
 
 BOOL DynamicModuleControlBase::link() {
-#if VERSION != VERSION_DEMO
     OSThread* thread = OSGetCurrentThread();
     if (thread != &mainThread) {
         OSReport_Error("DynamicModuleControlBase::link not mainthread %08x\n", thread);
     }
-#endif
 
     if (mLinkCount == 0) {
         do_load();
         if (do_link() == false) {
             return false;
         }
-#if VERSION == VERSION_DEMO
-        mDoLinkCount++;
-#else
         if (mDoLinkCount < 0xFFFF) {
             mDoLinkCount++;
         }
-#endif
     }
-#if VERSION != VERSION_DEMO
     JUT_ASSERT(100, mLinkCount < 65535);
-#endif
-#if VERSION == VERSION_DEMO
-    mLinkCount++;
-#else
     if (mLinkCount < 0xFFFF) {
         mLinkCount++;
     }
-#endif
     return true;
 }
 
 BOOL DynamicModuleControlBase::unlink() {
-#if VERSION != VERSION_DEMO
     OSThread* thread = OSGetCurrentThread();
     if (thread != &mainThread) {
         OSReport_Error("DynamicModuleControlBase::unlink not mainthread %08x\n", thread);
     }
-#endif
 
     if (mLinkCount != 0) {
         mLinkCount--;
@@ -120,19 +106,16 @@ bool DynamicModuleControlBase::force_unlink() {
 }
 
 void DynamicModuleControlBase::dump() {
+    u16 doLinkCount;
+    u16 linkCount;
     DynamicModuleControlBase* current = getFirstClass();
     size_t totalSize = 0;
     JUTReportConsole_f("\nDynamicModuleControlBase::dump()\n");
     JUTReportConsole_f("Do Ln Size      Name\n");
     while (current != NULL) {
-#if VERSION == VERSION_DEMO
-        u32 doLinkCount = current->mDoLinkCount;
-        u32 linkCount = current->mLinkCount;
-#else
-        u16 doLinkCount = current->mDoLinkCount;
-        u16 linkCount = current->mLinkCount;
-#endif
-        if (current->mDoLinkCount != 0 || current->mLinkCount != 0) {
+        doLinkCount = current->mDoLinkCount;
+        linkCount = current->mLinkCount;
+        if (doLinkCount != 0 || linkCount != 0) {
             u32 size = current->getModuleSize();
             const char* name = current->getModuleName();
             if (size < 0xFFFFFFFF) {
@@ -147,9 +130,7 @@ void DynamicModuleControlBase::dump() {
                 JUTReportConsole_f("%3d%3d ???? ????? %-4s %s\n", doLinkCount, linkCount, type,
                                    name);
             }
-#if VERSION != VERSION_DEMO
             current->dump2();
-#endif
         }
         current = current->getNextClass();
     }
@@ -162,11 +143,9 @@ DynamicModuleControl::DynamicModuleControl(char const* name) {
     unk_24 = 0;
     mName = name;
     mResourceType = 0;
-#if VERSION != VERSION_DEMO
     unk_33 = 0;
     mChecksum = 0;
     mSize = 0;
-#endif
     mAsyncLoadCallback = NULL;
 }
 
@@ -192,10 +171,6 @@ JKRArchive* DynamicModuleControl::mountCallback(void* param_0) {
     return sArchive;
 }
 
-void DynamicModuleControl::mountCreate() {
-    mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)DynamicModuleControl::mountCallback, NULL);
-}
-
 bool DynamicModuleControl::initialize() {
     sFileCache = NULL;
     sAllocBytes = 0;
@@ -219,47 +194,6 @@ static u32 calcSum2(u16 const* data, u32 size) {
     return sum;
 }
 
-#if VERSION == VERSION_DEMO
-bool DynamicModuleControl::do_load() {
-    if (mModule != NULL) {
-        return true;
-    }
-    char buffer[64];
-    snprintf(buffer, 64, "%s.rel", mName);
-    if (mModule == NULL && sArchive != NULL) {
-        if (mModule == NULL) {
-            mModule = (OSModuleHeader*)JKRGetResource('MMEM', buffer, sArchive);
-            if (mModule != NULL) {
-                mResourceType = 1;
-            }
-        }
-        if (mModule == NULL) {
-            mModule = (OSModuleHeader*)JKRGetResource('AMEM', buffer, sArchive);
-            if (mModule != NULL) {
-                mResourceType = 2;
-            }
-        }
-        if (mModule == NULL) {
-            mModule = (OSModuleHeader*)JKRGetResource('DMEM', buffer, sArchive);
-            if (mModule != NULL) {
-                mResourceType = 3;
-            }
-        }
-    }
-    if (mModule == NULL) {
-        mModule = (OSModuleHeader*)sFileCache->getResource('rels', buffer);
-        if (mModule != NULL) {
-            mResourceType = 3;
-        }
-    }
-    if (mModule == NULL) {
-        // "DynamicModuleControl::do_load() Resource load failure [%s]\n"
-        OSReport_Error("DynamicModuleControl::do_load() リソース読み込み失敗 [%s]\n", mName);
-        return false;
-    }
-    return true;
-}
-#else
 bool DynamicModuleControl::do_load() {
     if (mModule != NULL) {
         return true;
@@ -353,7 +287,6 @@ bool DynamicModuleControl::do_load() {
     }
     return true;
 }
-#endif
 
 BOOL DynamicModuleControl::do_load_async() {
     if (mAsyncLoadCallback == NULL) {
@@ -379,17 +312,12 @@ BOOL DynamicModuleControl::do_load_async() {
 
 bool DynamicModuleControl::do_unload() {
     if (mModule != NULL) {
-#if VERSION == VERSION_DEMO
-        JKRFileLoader::removeResource(mModule, NULL);
-#else
         JKRFree(mModule);
-#endif
         mModule = NULL;
     }
     return true;
 }
 
-#if VERSION != VERSION_DEMO
 void DynamicModuleControl::dump2() {
     if (mModule != NULL) {
         OSSectionInfo* section = (OSSectionInfo*)mModule->info.sectionInfoOffset;
@@ -398,7 +326,6 @@ void DynamicModuleControl::dump2() {
                  mModule->impSize);
     }
 }
-#endif
 
 BOOL DynamicModuleControl::do_link() {
     OSGetTime();
@@ -406,10 +333,8 @@ BOOL DynamicModuleControl::do_link() {
         do_load();
     }
     if (mModule != NULL) {
-        JUT_ASSERT(VERSION_SELECT(501, 613, 613, 613), mModule->info.sectionInfoOffset < 0x80000000);
-#if VERSION != VERSION_DEMO
+        JUT_ASSERT(613, mModule->info.sectionInfoOffset < 0x80000000);
         JUT_ASSERT(615, (u32)mModule + mModule->fixSize < 0x82000000);
-#endif
         OSGetTime();
         OSGetTime();
         if (mModule->info.version >= 3) {
@@ -477,7 +402,7 @@ BOOL DynamicModuleControl::do_link() {
                 }
             }
         } else {
-            JUT_ASSERT(VERSION_SELECT(610, 724, 724, 724), FALSE);
+            JUT_ASSERT(724, FALSE);
         }
         OSGetTime();
         sAllocBytes = sAllocBytes + getModuleSize();
@@ -488,19 +413,13 @@ BOOL DynamicModuleControl::do_link() {
     }
 
 error:
-#if VERSION != VERSION_DEMO
     unk_33 = 0;
-#endif
     if (mBss != NULL) {
-        JKRFree(mBss);
+        JKRHeap::free(mBss, NULL);
         mBss = NULL;
     }
     if (mModule != NULL) {
-#if VERSION == VERSION_DEMO
-        JKRFileLoader::removeResource(mModule, NULL);
-#else
         JKRHeap::free(mModule, NULL);
-#endif
         mModule = NULL;
     }
     return FALSE;
@@ -565,7 +484,7 @@ extern "C" void ModuleUnresolved() {
 }
 
 extern "C" void ModuleConstructorsX(void (**_ctors)()) {
-    JUT_ASSERT(VERSION_SELECT(726, 850, 850, 850), _ctors);
+    JUT_ASSERT(850, _ctors);
     while (*_ctors != 0) {
         (**_ctors)();
         _ctors++;
@@ -573,7 +492,7 @@ extern "C" void ModuleConstructorsX(void (**_ctors)()) {
 }
 
 extern "C" void ModuleDestructorsX(void (**_dtors)()) {
-    JUT_ASSERT(VERSION_SELECT(740, 864, 864, 864), _dtors);
+    JUT_ASSERT(864, _dtors);
     while (*_dtors != 0) {
         (**_dtors)();
         _dtors++;

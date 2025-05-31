@@ -16,9 +16,9 @@ void J3DVisibilityManager::setVisibility(J3DModelData* pModel) {
             visibility = 0;
             mAnmVisibility->getVisibility(index, &visibility);
             if (visibility != 0) {
-                pModel->getShapeNodePointer(index)->offFlag(J3DShpFlag_Hide);
+                pModel->getShapeNodePointer(index)->offFlag(1);
             } else {
-                pModel->getShapeNodePointer(index)->onFlag(J3DShpFlag_Hide);
+                pModel->getShapeNodePointer(index)->onFlag(1);
             }
         }
     }

@@ -1,6 +1,6 @@
 /**
  * d_a_mozo.cpp
- * Enemy - Moblin Statue / モ石像 (Mo Sekizou)
+ * Moblin Statue / モ石像 (Mo Sekizou)
  */
 
 #include "d/actor/d_a_mozo.h"
@@ -10,7 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
@@ -312,7 +311,7 @@ actor_process_profile_definition g_profile_MOZO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MOZO,
+    /* Priority     */ 0x00D1,
     /* Actor SubMtd */ &l_daMozo_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_fm.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000003EC       .text __ct__10daFm_HIO_cFv */
 daFm_HIO_c::daFm_HIO_c() {
@@ -585,7 +584,7 @@ actor_process_profile_definition g_profile_FM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FM,
+    /* Priority     */ 0x0067,
     /* Actor SubMtd */ &daFmMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -53,8 +53,9 @@ namespace {
     u32 randombit(s32 rounds, s32 patt_len) {
         /* Makes a random rumble pattern by enabling up to rounds random bits */
         u32 pattern = 0;
+        s32 bit = 1 << 30;
         for (int i = 0; i < rounds; i++){
-            pattern |= ((1 << 30) >> (u32)(patt_len * cM_rnd()));
+            pattern |= (bit >> (u32)(patt_len * cM_rnd()));
         }
         return pattern;
     }
@@ -63,12 +64,7 @@ namespace {
 /* 8009C73C-8009CCCC       .text Run__12dVibration_cFv */
 int dVibration_c::Run() {
     mRumbleState = RUMBLE_STATE_RUNNING;
-#if VERSION == VERSION_DEMO
-    if (dComIfGs_getOptVibration() != 1U)
-#else
-    if (dComIfGs_checkOptVibration() != 1U)
-#endif
-    {
+    if (dComIfGs_checkOptVibration() != 1U){
         mMotor.mShock.mPatternIdx = mMotor.mQuake.mPatternIdx = PATTERN_OFF;
         mMotor.mShock.mCurrentFrame = mMotor.mQuake.mCurrentFrame = RESET_FRAME;
     }
@@ -363,10 +359,7 @@ void dVibration_c::Pause() {
     if (mRumbleState == RUMBLE_STATE_PAUSED){
         return;
     }
-#if VERSION > VERSION_DEMO
-    if (mMotor.mShock.mPatternIdx != PATTERN_OFF || mMotor.mQuake.mPatternIdx != PATTERN_OFF)
-#endif
-    {
+    if (mMotor.mShock.mPatternIdx != PATTERN_OFF || mMotor.mQuake.mPatternIdx != PATTERN_OFF){
         g_mDoCPd_gamePad[0]->stopMotorWaveHard();
         g_mDoCPd_gamePad[0]->stopMotorHard();
     }
@@ -381,7 +374,6 @@ void dVibration_c::Pause() {
     mRumbleState = RUMBLE_STATE_PAUSED;
 }
 
-#if VERSION > VERSION_DEMO
 /* 8009D188-8009D1C4       .text __ct__12dVibration_cFv */
 dVibration_c::dVibration_c() {
     setDefault();
@@ -391,4 +383,3 @@ dVibration_c::dVibration_c() {
 dVibration_c::~dVibration_c() {
     Kill();
 }
-#endif

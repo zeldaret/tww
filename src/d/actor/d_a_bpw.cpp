@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_bpw.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000258       .text body_nodeCallBack__FP7J3DNodei */
 static BOOL body_nodeCallBack(J3DNode*, int) {
@@ -305,7 +304,7 @@ actor_process_profile_definition g_profile_BPW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BPW,
+    /* Priority     */ 0x00C6,
     /* Actor SubMtd */ &l_daBPW_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

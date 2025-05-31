@@ -13,7 +13,6 @@
 #include "d/d_kankyo.h"
 #include "d/d_particle.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -556,7 +555,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+        mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
 
         gravity = -2.5f;
     }
@@ -1307,7 +1306,7 @@ actor_process_profile_definition g_profile_TBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TBOX,
+    /* Priority     */ 0x0113,
     /* Actor SubMtd */ &l_daTbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

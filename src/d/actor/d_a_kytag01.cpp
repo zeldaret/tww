@@ -6,7 +6,6 @@
 #include "d/actor/d_a_kytag01.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 00000078-0000007C       .text wether_tag_move__FP13kytag01_class */
@@ -49,19 +48,11 @@ void wave_make() {
         env_light.mWaveChan.mWaveReset = 0;
         env_light.mWaveChan.mWaveScale = 300.0f;
         env_light.mWaveChan.mWaveScaleRand = 0.001f;
-#if VERSION == VERSION_DEMO
-        env_light.mWaveChan.mWaveCounterSpeedScale = 1.3f;
-#else
         env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
-#endif
         env_light.mWaveChan.field_0x2f = 0;
         env_light.mWaveChan.mWaveScaleBottom = 6.0f;
         env_light.mWaveChan.mWaveCount = 300;
-#if VERSION == VERSION_DEMO
-        env_light.mWaveChan.mWaveSpeed = 60.0f;
-#else
         env_light.mWaveChan.mWaveSpeed = 30.0f;
-#endif
         env_light.mWaveChan.mWaveFlatInter = 0.0f;
         if (strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
             env_light.mWaveChan.mWaveSpawnDist = 25000.0f;
@@ -122,7 +113,7 @@ actor_process_profile_definition g_profile_KYTAG01 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG01,
+    /* Priority     */ 0x00A1,
     /* Actor SubMtd */ &l_daKytag01_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

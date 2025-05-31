@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_level_se.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -304,7 +303,7 @@ actor_process_profile_definition g_profile_FAN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FAN,
+    /* Priority     */ 0x011B,
     /* Actor SubMtd */ &daFanMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

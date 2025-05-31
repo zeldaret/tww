@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -56,7 +55,7 @@ namespace daObjDragonhead_prm {
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
-    JUT_ASSERT(VERSION_SELECT(158, 160, 160, 160), model_data != NULL);
+    JUT_ASSERT(0xA0, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
@@ -117,7 +116,7 @@ cPhs_State daObjDragonhead_c::_create() {
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, VERSION_SELECT(0x300, 0x10500, 0x10500, 0x10500)) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10500) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -128,14 +127,8 @@ cPhs_State daObjDragonhead_c::_create() {
 }
 
 bool daObjDragonhead_c::_delete() {
-    if (
-#if VERSION > VERSION_DEMO
-        heap != NULL &&
-#endif
-        field_0x40c == 1
-    ) {
+    if (heap != NULL && field_0x40c == 1)
         dComIfG_Bgsp()->Release(mpBgW);
-    }
 
     mDoAud_seDeleteObject(&mSphCenter);
     dComIfG_resDelete(&mPhs, "Qdghd");
@@ -246,7 +239,7 @@ actor_process_profile_definition g_profile_Obj_Dragonhead = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Dragonhead,
+    /* Priority     */ 0x0025,
     /* Actor SubMtd */ &daObj_DragonheadMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

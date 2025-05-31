@@ -6,7 +6,6 @@
 #include "d/actor/d_a_rd.h"
 #include "d/res/res_rd.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -199,7 +198,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(VERSION_SELECT(502, 504, 504, 504), modelData != NULL);
+    JUT_ASSERT(504, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -220,7 +219,7 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(VERSION_SELECT(528, 525, 525, 525), btk != NULL);
+    JUT_ASSERT(525, btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -228,7 +227,7 @@ BOOL daRd_c::_createHeap() {
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(VERSION_SELECT(553, 550, 550, 550), brk != NULL);
+    JUT_ASSERT(550, brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -399,14 +398,12 @@ bool daRd_c::createArrowHeap() {
 
 /* 000009D0-00000A38       .text checkPlayerInAttack__6daRd_cFv */
 bool daRd_c::checkPlayerInAttack() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    return dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
+    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
 }
 
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -461,12 +458,7 @@ void daRd_c::lookBack() {
             mTargetPos = player->getHeadTopPos();
             break;
         case MODE_RETURN:
-#if VERSION == VERSION_DEMO
-            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 100.0f))
-#else
-            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f))
-#endif
-            {
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
                 mJntCtrl.onBackBoneLock();
@@ -501,9 +493,7 @@ bool daRd_c::checkTgHit() {
     if (mCyl.ChkTgHit()) {
         hitObj = mCyl.GetTgHitObj();
         if (hitObj->GetAtType() == AT_TYPE_LIGHT) {
-#if VERSION > VERSION_DEMO
             fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
-#endif
             modeProcInit(MODE_PARALYSIS);
             return true;
         }
@@ -656,9 +646,7 @@ bool daRd_c::checkTgHit() {
     }
     
     if (dComIfGp_getDetect().chk_light(&current.pos)) {
-#if VERSION > VERSION_DEMO
         fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
-#endif
         modeProcInit(MODE_PARALYSIS);
         return true;
     }
@@ -1070,13 +1058,9 @@ void daRd_c::modeAttack() {
         if (dist <= 20.0f + REG12_F(2)) {
             cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
             if (cLib_calcTimer(&mTimer2) == 0) {
-#if VERSION == VERSION_DEMO
-                dComIfGp_setItemLifeCount(-1.0f);
-#else
                 if (!daPy_getPlayerLinkActorClass()->checkNoDamageMode()) {
                     daPy_getPlayerLinkActorClass()->setDamagePoint(-1.0f);
                 }
-#endif
                 mTimer2 = 30;
             }
         } else if (mAcch.ChkWallHit()) {
@@ -1768,20 +1752,14 @@ void daRd_c::createInit() {
         }
     }
     
-#if VERSION > VERSION_DEMO
     setBrkAnm(0);
-#endif
     setMtx();
-#if VERSION > VERSION_DEMO
     mBtkAnm.play();
     mBrkAnm.play();
     mpMorf->play(&current.pos, 0, 0);
     mBrkAnm.setFrame(0.0f);
-#endif
     mpMorf->calc();
-#if VERSION > VERSION_DEMO
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-#endif
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
     
@@ -1859,11 +1837,9 @@ cPhs_State daRd_c::_create() {
 bool daRd_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
     enemy_fire_remove(&mEnemyFire);
-#if VERSION > VERSION_DEMO
     if (heap) {
         mpMorf->stopZelAnime();
     }
-#endif
     return true;
 }
 
@@ -1910,7 +1886,7 @@ actor_process_profile_definition g_profile_RD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_RD,
+    /* Priority     */ 0x00D4,
     /* Actor SubMtd */ &daRdMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,

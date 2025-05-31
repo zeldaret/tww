@@ -164,25 +164,25 @@ void TObject::process_sequence_() {
     switch (type) {
     case 0:
         JUT_EXPECT(u32Value == 0);
-        JUT_EXPECT(pContent == NULL);
+        JUT_EXPECT(pContent == 0);
         break;
     case 1:
-        JUT_EXPECT(pContent == NULL);
+        JUT_EXPECT(pContent == 0);
         setFlag_operation_(u32Value);
         break;
     case 2:
-        JUT_EXPECT(pContent == NULL);
+        JUT_EXPECT(pContent == 0);
         setWait(u32Value);
         break;
     case 3: {
-        JUT_EXPECT(pContent == NULL);
+        JUT_EXPECT(pContent == 0);
         s32 off = toInt32FromUInt24_(u32Value);
         void* nextseq = (void*)getSequence_offset(off);
         setSequence_next(nextseq);
         break;
     }
     case 4: {
-        JUT_EXPECT(pContent == NULL);
+        JUT_EXPECT(pContent == 0);
         u32 val = toInt32FromUInt24_(u32Value);
         suspend(val);
         break;

@@ -21,14 +21,9 @@ public:
 
     cM3dGSph() {}
     virtual ~cM3dGSph() {}
-#if VERSION == VERSION_DEMO
-    void SetC(const cXyz& p) { mCenter = p; }
-    void SetR(f32 r) { mRadius = r; }
-#else
-    void SetC(const cXyz& p);
-    void SetR(f32 r);
-#endif
-    void SetC(f32, f32, f32) {} // TODO
+    void SetC(const cXyz&);
+    void SetC(f32, f32, f32) {}
+    void SetR(f32);
     void Set(const cM3dGSphS & src) {
         SetC(src.mCenter);
         SetR(src.mRadius);

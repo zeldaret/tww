@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_warpmj.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000A8       .text _delete__10daWarpmj_cFv */
 bool daWarpmj_c::_delete() {
@@ -165,7 +164,7 @@ actor_process_profile_definition g_profile_WARPMAJYUU = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPMAJYUU,
+    /* Priority     */ 0x01A8,
     /* Actor SubMtd */ &daWarpmjMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

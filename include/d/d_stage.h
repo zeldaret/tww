@@ -895,7 +895,7 @@ public:
     static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
-    static int getStayNo() { return mStayNo; }
+    static s8 getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
     static void setProcID(fpc_ProcID id) { mProcID = id; }

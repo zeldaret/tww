@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_msdan_sub.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
 BOOL daObjMsdanSub::Act_c::CreateHeap() {
@@ -99,7 +98,7 @@ actor_process_profile_definition g_profile_Obj_MsdanSub = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MsdanSub,
+    /* Priority     */ 0x0039,
     /* Actor SubMtd */ &daObjMsdanSub::Mthd_MsdanSub,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -6,7 +6,6 @@
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #define TOTAL_FIGURE_COUNT 0x86
 
@@ -336,7 +335,7 @@ actor_process_profile_definition g_profile_NPC_MT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_MT,
+    /* Priority     */ 0x0181,
     /* Actor SubMtd */ &daNpc_MtMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

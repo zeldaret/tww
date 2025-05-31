@@ -402,16 +402,16 @@ void J3DModel::calcMaterial() {
     j3dSys.setModel(this);
     j3dSys.setTexture(mModelData->getTexture());
 
-    if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
-        j3dSys.onFlag(J3DSysFlag_SkinPosCpu);
+    if (checkFlag(4)) {
+        j3dSys.onFlag(4);
     } else {
-        j3dSys.offFlag(J3DSysFlag_SkinPosCpu);
+        j3dSys.offFlag(4);
     }
 
-    if (checkFlag(J3DMdlFlag_SkinNrmCpu)) {
-        j3dSys.onFlag(J3DSysFlag_SkinNrmCpu);
+    if (checkFlag(8)) {
+        j3dSys.onFlag(8);
     } else {
-        j3dSys.offFlag(J3DSysFlag_SkinNrmCpu);
+        j3dSys.offFlag(8);
     }
 
     for (u16 i = 0; i < getModelData()->getMaterialNum(); i++) {
@@ -755,14 +755,14 @@ void J3DModel::prepareShapePackets() {
         J3DShapePacket* pkt = getShapePacket(i);
 
         if (checkFlag(J3DMdlFlag_SkinPosCpu))
-            pShape->onFlag(J3DShpFlag_SkinPosCpu);
+            pShape->onFlag(J3DSysFlag_SkinPosCpu);
         else
-            pShape->offFlag(J3DShpFlag_SkinPosCpu);
+            pShape->offFlag(J3DSysFlag_SkinPosCpu);
 
         if (checkFlag(J3DMdlFlag_SkinNrmCpu) && !pShape->checkFlag(J3DShpFlag_EnableLod))
-            pShape->onFlag(J3DShpFlag_SkinNrmCpu);
+            pShape->onFlag(J3DSysFlag_SkinNrmCpu);
         else
-            pShape->offFlag(J3DShpFlag_SkinNrmCpu);
+            pShape->offFlag(J3DSysFlag_SkinNrmCpu);
 
         if (getMtxCalcMode() == 2)
             pkt->setBaseMtxPtr(&mViewBaseMtx);

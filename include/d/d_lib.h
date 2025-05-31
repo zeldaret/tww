@@ -25,7 +25,7 @@ public:
     void Yinit();
     virtual f32 getValueStick();
     virtual s16 getAngleStick();
-    u8 checkTrigger();
+    s32 checkTrigger();
     bool checkLeftTrigger();
     bool checkRightTrigger();
     bool checkUpTrigger();

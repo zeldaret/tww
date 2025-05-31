@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_tag_hint.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-000000F8       .text getEventNo__12daTag_Hint_cFv */
 void daTag_Hint_c::getEventNo() {
@@ -210,7 +209,7 @@ actor_process_profile_definition g_profile_TAG_HINT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_HINT,
+    /* Priority     */ 0x0120,
     /* Actor SubMtd */ &l_daTag_Hint_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_gy_ctrl.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-00000170       .text __ct__15daGy_Ctrl_HIO_cFv */
 daGy_Ctrl_HIO_c::daGy_Ctrl_HIO_c() {
@@ -190,7 +189,7 @@ actor_process_profile_definition g_profile_GY_CTRL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GY_CTRL,
+    /* Priority     */ 0x00D9,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
@@ -207,7 +206,7 @@ actor_process_profile_definition g_profile_GY_CTRLB = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GY_CTRLB,
+    /* Priority     */ 0x00DA,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

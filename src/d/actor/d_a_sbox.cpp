@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_sbox.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -155,7 +154,7 @@ actor_process_profile_definition g_profile_SBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SBOX,
+    /* Priority     */ 0x0114,
     /* Actor SubMtd */ &l_daSbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

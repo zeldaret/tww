@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_correct.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000001B0       .text _create__Q212daObjCorrect5Act_cFv */
 cPhs_State daObjCorrect::Act_c::_create() {
@@ -174,7 +173,7 @@ actor_process_profile_definition g_profile_Obj_Correct = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Correct,
+    /* Priority     */ 0x0026,
     /* Actor SubMtd */ &daObjCorrect::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

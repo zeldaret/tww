@@ -1,9 +1,10 @@
 #ifndef C_M3D_G_AAB_H
 #define C_M3D_G_AAB_H
 
+#include "SSystem/SComponent/c_bg_s.h"
+#include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_m3d_g_lin.h"
-#include "SSystem/SComponent/c_xyz.h"
 #include "global.h"
 
 // Axis aligned bounding box
@@ -53,16 +54,16 @@ public:
         VECScale(pOut, pOut, 0.5f);
     }
     void ClearForMinMax() {
-        mMin.z = G_CM3D_F_INF;
-        mMin.y = G_CM3D_F_INF;
-        mMin.x = G_CM3D_F_INF;
-        mMax.z = -G_CM3D_F_INF;
-        mMax.y = -G_CM3D_F_INF;
-        mMax.x = -G_CM3D_F_INF;
+        mMin.z = 1000000000.0f;
+        mMin.y = 1000000000.0f;
+        mMin.x = 1000000000.0f;
+        mMax.z = -1000000000.0f;
+        mMax.y = -1000000000.0f;
+        mMax.x = -1000000000.0f;
     }
     void ClearForMinMaxY() {
-        mMin.y = G_CM3D_F_INF;
-        mMax.y = -G_CM3D_F_INF;
+        mMin.y = C_BG_MAX_HEIGHT;
+        mMax.y = C_BG_MIN_HEIGHT;
     }
     void SetMinMaxY(f32 y) {
         if (mMin.y > y) {

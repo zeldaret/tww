@@ -6,7 +6,6 @@
 #include "d/actor/d_a_icelift.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 bool daIlift_c::_delete() {
@@ -116,7 +115,7 @@ actor_process_profile_definition g_profile_ICE_LIFT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ICE_LIFT,
+    /* Priority     */ 0x008F,
     /* Actor SubMtd */ &daIliftMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

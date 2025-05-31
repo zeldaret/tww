@@ -6,7 +6,6 @@
 #include "d/actor/d_a_kytag07.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag07_Draw__FP13kytag07_class */
 static BOOL daKytag07_Draw(kytag07_class*) {
@@ -75,24 +74,17 @@ static BOOL daKytag07_IsDelete(kytag07_class*) {
 
 /* 000002B0-000002C8       .text daKytag07_Delete__FP13kytag07_class */
 static BOOL daKytag07_Delete(kytag07_class*) {
-    dScnKy_env_light_c& env_light = dKy_getEnvlight();
-    env_light.mbDayNightTactStop = false;
+    dKy_getEnvlight().mbDayNightTactStop = false;
     return TRUE;
 }
 
 /* 000002C8-00000350       .text daKytag07_Create__FP10fopAc_ac_c */
-static cPhs_State daKytag07_Create(fopAc_ac_c* i_this) {
-    kytag07_class* a_this = (kytag07_class*)i_this;
-    dScnKy_env_light_c& env_light = dKy_getEnvlight();
-#if VERSION == VERSION_DEMO
+static cPhs_State daKytag07_Create(fopAc_ac_c* i_ac) {
+    dScnKy_env_light_c& envLight = dKy_getEnvlight();
+    kytag07_class* i_this = (kytag07_class*)i_ac;
+    fopAcM_SetupActor(i_this, kytag07_class);
     if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
-        env_light.mbDayNightTactStop = true;
-    fopAcM_SetupActor(a_this, kytag07_class);
-#else
-    fopAcM_SetupActor(a_this, kytag07_class);
-    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
-        env_light.mbDayNightTactStop = true;
-#endif
+        envLight.mbDayNightTactStop = true;
     return cPhs_COMPLEATE_e;
 }
 
@@ -114,7 +106,7 @@ actor_process_profile_definition g_profile_KYTAG07 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG07,
+    /* Priority     */ 0x00A7,
     /* Actor SubMtd */ &l_daKytag07_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

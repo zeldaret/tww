@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_door10.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000C8       .text chkMakeKey__10daDoor10_cFv */
 void daDoor10_c::chkMakeKey() {
@@ -205,7 +204,7 @@ actor_process_profile_definition g_profile_DOOR10 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DOOR10,
+    /* Priority     */ 0x012D,
     /* Actor SubMtd */ &l_daDoor10_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -63,7 +63,7 @@ void JASystem::TIntrMgr::timerProcess() {
     if (field_0x4 != 0) {
         return;
     }
-    request(REQUEST_UNK_6);
+    request(6);
     if (field_0x3) {
         field_0x3--;
         if (field_0x3) {

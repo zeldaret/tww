@@ -571,7 +571,8 @@ struct J3DZMode {
     u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
 
     void setZModeInfo(const J3DZModeInfo& info) {
-        mZModeID = calcZModeID(info.mCompareEnable, info.mFunc, info.mUpdateEnable);
+        u8 compareEn = info.mCompareEnable;
+        mZModeID = calcZModeID(compareEn, info.mFunc, info.mUpdateEnable);
     }
 
     void load() const {

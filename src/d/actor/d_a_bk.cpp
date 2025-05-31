@@ -9,7 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_search.h"
 #include "d/actor/d_a_bridge.h"
@@ -87,17 +86,12 @@ static void anm_init(bk_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
         return;
     }
     if (soundFileIdx >= 0) {
-        i_this->mpMorf->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx),
-            loopMode, morf, speed, 0.0f, -1.0f,
-            dComIfG_getObjectRes("Bk", soundFileIdx)
-        );
+        void* soundAnm = dComIfG_getObjectRes("Bk", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
     } else {
-        i_this->mpMorf->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx),
-            loopMode, morf, speed, 0.0f, -1.0f,
-            NULL
-        );
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bk", bckFileIdx);
+        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
 }
 
@@ -362,10 +356,7 @@ static void search_check_draw(bk_class* i_this) {
         return;
     }
     cXyz sp14[0x10];
-    cXyz sp08;
-    sp08.x = 0.0f;
-    sp08.y = 0.0f;
-    sp08.z = l_bkHIO.m028;
+    cXyz sp08(0.0f, 0.0f, l_bkHIO.m028);
     int i;
     s16 r26 = 0;
     for (i = 0; i < 0x10; i++, r26 += 0x1000) {
@@ -496,9 +487,10 @@ static void daBk_shadowDraw(bk_class* i_this) {
             i_this->current.pos.y + 150.0f + REG8_F(18),
             i_this->current.pos.z
         );
+        f32 temp = 800.0f + REG8_F(19);
+        f32 shadowSize = 40.0f + REG8_F(17);
         i_this->mShadowId = dComIfGd_setShadow(
-            i_this->mShadowId, 1, model, &shadowPos,
-            800.0f + REG8_F(19), 40.0f + REG8_F(17),
+            i_this->mShadowId, 1, model, &shadowPos, temp, shadowSize,
             i_this->current.pos.y, i_this->dr.mAcch.GetGroundH(),
             i_this->dr.mAcch.m_gnd, &i_this->tevStr
         );
@@ -634,8 +626,8 @@ static u8 ground_4_check(bk_class* i_this, int r18, s16 r20, f32 f29) {
         sp8 += i_this->current.pos;
         gndChk.SetPos(&sp8);
         sp8.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp8.y == -G_CM3D_F_INF) {
-            sp8.y = G_CM3D_F_INF;
+        if (sp8.y == C_BG_MIN_HEIGHT) {
+            sp8.y = C_BG_MAX_HEIGHT;
         }
         if (i_this->dr.mAcch.GetGroundH() - sp8.y > 200.0f) {
             r19 |= check_bit[i];
@@ -1078,7 +1070,7 @@ static void jyunkai(bk_class* i_this) {
                     }
                     if ((i_this->ppd->m_nextID & 0xFFFF) != 0xFFFF) {
                         i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(i_this));
-                        JUT_ASSERT(VERSION_SELECT(2907, 2907, 2924, 2924), i_this->ppd != NULL);
+                        JUT_ASSERT(VERSION_SELECT(2907, 2924, 2924), i_this->ppd != NULL);
                     }
                 } else if (i_this->m1216 < 0) {
                     i_this->m1217 = 1;
@@ -2134,7 +2126,9 @@ static fopAc_ac_c* yari_hit_check(bk_class* i_this) {
         i_this->m1040.MoveCAt(i_this->m11A8);
         dComIfG_Ccsp()->Set(&i_this->m1040);
         if (i_this->m02D5 != 0) {
-            dComIfG_Ccsp_SetMass(&i_this->m1040, 3);
+            // Using the dComIfG_Ccsp inline here breaks the match.
+            // dComIfG_Ccsp()->SetMass(&i_this->m1040, 3);
+            dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m1040, 3);
         }
         if (i_this->m1040.ChkAtHit()) {
             i_this->m0B78 = 5;
@@ -3332,7 +3326,9 @@ static void Bk_move(bk_class* i_this) {
             i_this->m1040.OffAtVsPlayerBit();
             i_this->m1040.SetAtSpl(dCcG_At_Spl_UNK1);
             dComIfG_Ccsp()->Set(&i_this->m1040);
-            dComIfG_Ccsp_SetMass(&i_this->m1040, 3);
+            // Using the dComIfG_Ccsp inline here breaks the match.
+            // dComIfG_Ccsp()->SetMass(&i_this->m1040, 3);
+            dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m1040, 3);
             
             if (i_this->m1040.ChkAtHit() && actor->speed.y < -50.0f) {
                 actor->speed.y = 0.0f;
@@ -4418,7 +4414,9 @@ static BOOL daBk_Execute(bk_class* i_this) {
     MtxPosition(&sp58, &sp4C);
     i_this->m0B88.SetC(sp4C);
     dComIfG_Ccsp()->Set(&i_this->m0B88);
-    dComIfG_Ccsp_SetMass(&i_this->m0B88, 3);
+    // Using the inline breaks the match.
+    // dComIfG_Ccsp()->SetMass(&i_this->m0B88, 3);
+    dComIfG_Ccsp()->mMass_Mng.Set(&i_this->m0B88, 3);
     
     cXyz sp40 = i_this->m116C;
     cXyz sp34 = i_this->current.pos;
@@ -4452,14 +4450,14 @@ static BOOL daBk_Execute(bk_class* i_this) {
         sp28.y += 50.0f - i_this->dr.m44C.y;
         gndChk.SetPos(&sp28);
         sp28.y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (sp28.y != -G_CM3D_F_INF) {
+        if (sp28.y != C_BG_MIN_HEIGHT) {
             Vec temp;
             temp.x = sp28.x;
             temp.y = 50.0f + sp28.y;
             temp.z = sp28.z + f31;
             gndChk.SetPos(&temp);
             f32 f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != -G_CM3D_F_INF) {
+            if (f1 != C_BG_MIN_HEIGHT) {
                 r21 = (s16)-cM_atan2s(f1 - sp28.y, temp.z - sp28.z);
                 if (r21 > 0x2000 || r21 < -0x2000) {
                     r21 = 0;
@@ -4470,7 +4468,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
             temp.z = sp28.z;
             gndChk.SetPos(&temp);
             f1 = dComIfG_Bgsp()->GroundCross(&gndChk);
-            if (f1 != -G_CM3D_F_INF) {
+            if (f1 != C_BG_MIN_HEIGHT) {
                 r23 = (s16)cM_atan2s(f1 - sp28.y, temp.x - sp28.x);
                 if (r23 > 0x2000 || r23 < -0x2000) {
                     r23 = 0;
@@ -4564,7 +4562,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     
     J3DModelData* modelData;
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_KB);
-    JUT_ASSERT(VERSION_SELECT(9398, 9398, 9418, 9418), modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(9398, 9418, 9418), modelData != NULL);
     if (i_this->m02D5 & 0x40) {
         J3DMaterialTable* bmt = (J3DMaterialTable*)dComIfG_getObjectRes("Bk", BK_BMT_BK_KEN);
         modelData->setMaterialTable(bmt, J3DMatCopyFlag_Material);
@@ -4583,13 +4581,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     if (i_this->m02D4 != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
         i_this->m02D0 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        JUT_ASSERT(VERSION_SELECT(9425, 9425, 9445, 9445), modelData != NULL);
+        JUT_ASSERT(VERSION_SELECT(9425, 9445, 9445), modelData != NULL);
     }
     
     if (i_this->m02DC != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BOUEN);
         i_this->m02D8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        JUT_ASSERT(VERSION_SELECT(9434, 9434, 9454, 9454), modelData != NULL);
+        JUT_ASSERT(VERSION_SELECT(9434, 9454, 9454), modelData != NULL);
     }
     
     static Vec hip_offset[] = {
@@ -5108,7 +5106,7 @@ actor_process_profile_definition g_profile_BK = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BK,
+    /* Priority     */ 0x00B0,
     /* Actor SubMtd */ &l_daBk_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

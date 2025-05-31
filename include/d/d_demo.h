@@ -352,10 +352,6 @@ private:
 };
 
 class mDoExt_McaMorf;
-#if VERSION == VERSION_DEMO
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL);
-#else
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL, u32 = 0, s8 = 0);
-#endif
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8);
 
 #endif /* D_DEMO_H */

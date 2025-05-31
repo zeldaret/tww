@@ -6,7 +6,6 @@
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
@@ -74,7 +73,7 @@ cPhs_State dGameover_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         dComIfGs_addDeathCount();
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Gover");
-        JUT_ASSERT(VERSION_SELECT(0x9c, 0x9c, 0xa0, 0xa0), resInfo != NULL);
+        JUT_ASSERT(VERSION_SELECT(0x9c, 0xa0, 0xa0), resInfo != NULL);
 
         mpHeap = dComIfGp_getExpHeap2D();
         dComIfGp_setHeapLockFlag(4);
@@ -84,12 +83,12 @@ cPhs_State dGameover_c::_create() {
         dgo_scrn_c->setScreen("gameover.blo", resInfo->getArchive());
 
         dMs_c = new dMenu_save_c();
-        JUT_ASSERT(VERSION_SELECT(0xa7, 0xa7, 0xb6, 0xb6), dMs_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xa7, 0xb6, 0xb6), dMs_c != NULL);
         dMs_c->setUseType(2);
         dMs_c->_create();
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
-        JUT_ASSERT(VERSION_SELECT(0xac, 0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
 
         mDoExt_setCurrentHeap(oldHeap);
     } else {
@@ -187,7 +186,7 @@ BOOL dGameover_c::deleteCheck() {
     return mState == 6;
 }
 
-#if VERSION <= VERSION_JPN
+#if VERSION == VERSION_JPN
 static const s16 dGover_tex_number = 8;
 #else
 static s16 dGover_tex_number = 8;
@@ -460,6 +459,6 @@ msg_process_profile_definition g_profile_GAMEOVER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_GAMEOVER,
+    /* Priority     */ 0x01DE,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

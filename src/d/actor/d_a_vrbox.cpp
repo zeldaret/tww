@@ -7,7 +7,6 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo_wether.h"
 
@@ -213,7 +212,7 @@ actor_process_profile_definition g_profile_VRBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_VRBOX,
+    /* Priority     */ 0x0007,
     /* Actor SubMtd */ &l_daVrbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

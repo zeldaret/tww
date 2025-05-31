@@ -6,7 +6,6 @@
 #include "d/actor/d_a_obj_stair.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */
 daobj_stairHIO_c::daobj_stairHIO_c() {
@@ -96,7 +95,7 @@ actor_process_profile_definition g_profile_Obj_Stair = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Stair,
+    /* Priority     */ 0x006E,
     /* Actor SubMtd */ &daObj_StairMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,

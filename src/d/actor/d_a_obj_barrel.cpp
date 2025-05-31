@@ -9,7 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
@@ -114,7 +113,7 @@ cPhs_State daObjBarrel::Act_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
             mAcchCir.SetWall(30.0f, l_l_radius);
-            mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
+            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
             mAcch.ClrWaterNone();
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             cull_set_draw();
@@ -727,7 +726,7 @@ bool daObjBarrel::Act_c::_draw() {
         float gndH = mAcch.GetGroundH();
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz *norm = gndPlane->GetNP();
-        if (gndPlane && gndH != -G_CM3D_F_INF) {
+        if (gndPlane && gndH != C_BG_MIN_HEIGHT) {
             dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
         }
     }
@@ -777,7 +776,7 @@ actor_process_profile_definition g_profile_Obj_Barrel = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrel,
+    /* Priority     */ 0x0109,
     /* Actor SubMtd */ &daObjBarrel::Method::Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e | fopAcStts_UNK8000000_e,
     /* Group        */ fopAc_ACTOR_e,

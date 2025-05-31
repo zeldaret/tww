@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_tide.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000644       .text CreateHeap__Q29daObjTide5Act_cFv */
 BOOL daObjTide::Act_c::CreateHeap() {
@@ -199,7 +198,7 @@ actor_process_profile_definition g_profile_Obj_Tide = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Tide,
+    /* Priority     */ 0x009B,
     /* Actor SubMtd */ &daObjTide::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

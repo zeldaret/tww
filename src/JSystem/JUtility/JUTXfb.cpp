@@ -10,6 +10,13 @@
 
 JUTXfb* JUTXfb::sManager;
 
+/* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
+void JUTXfb::destroyManager() {
+    JUT_CONFIRM(VERSION_SELECT(339, 344, 344), sManager);
+    delete sManager;
+    sManager = NULL;
+}
+
 /* 802C81D8-802C81EC       .text clearIndex__6JUTXfbFv */
 void JUTXfb::clearIndex() {
     mDrawingXfbIndex = -1;
@@ -31,7 +38,7 @@ JUTXfb::JUTXfb(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber x
     if (pObj) {
         initiate(pObj->fb_width, pObj->xfb_height, pHeap, xfbNum);
     } else {
-#if VERSION <= VERSION_JPN
+#if VERSION == VERSION_JPN
         GXRenderModeObj* obj = JUTVideo::getManager()->getRenderMode();
         initiate(obj->fb_width, obj->xfb_height, pHeap, xfbNum);
 #else
@@ -63,24 +70,11 @@ void JUTXfb::delXfb(int xfbIdx) {
 
 /* 802C837C-802C8410       .text createManager__6JUTXfbFPC16_GXRenderModeObjP7JKRHeapQ26JUTXfb10EXfbNumber */
 JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber xfbNum) {
-    JUT_CONFIRM(VERSION_SELECT(198, 198, 203, 203), sManager == NULL);
+    JUT_CONFIRM(VERSION_SELECT(198, 203, 203), sManager == 0);
     if (sManager == NULL) {
         sManager = new JUTXfb(pObj, pHeap, xfbNum);
     }
     return sManager;
-}
-
-/* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
-void JUTXfb::destroyManager() {
-    /* Nondeterministically nonmatching */
-    // MWCC randomly picks between two different possible codegen patterns for converting sManager
-    // to a bool for this JUT_CONFIRM call. It usually picks the longer pattern, which is required
-    // to match on all 3 retail versions. But it sometimes picks the shorter pattern, which is
-    // required to match on the demo version. There seems to be no consistent way to get it to pick
-    // one or the other.
-    JUT_CONFIRM(VERSION_SELECT(339, 339, 344, 344), sManager);
-    delete sManager;
-    sManager = NULL;
 }
 
 /* 802C8468-802C8544       .text initiate__6JUTXfbFUsUsP7JKRHeapQ26JUTXfb10EXfbNumber */

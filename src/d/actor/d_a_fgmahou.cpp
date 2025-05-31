@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_fgmahou.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
 static BOOL daFgmahou_Draw(fgmahou_class*) {
@@ -65,7 +64,7 @@ actor_process_profile_definition g_profile_FGMAHOU = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FGMAHOU,
+    /* Priority     */ 0x00E7,
     /* Actor SubMtd */ &l_daFgmahou_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -20,10 +20,10 @@ void dCcMassS_Mng::Ct() {
     mFlag = 0;
     mResultCam = 0;
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -G_CM3D_F_INF;
+    mCamTopPos.y = C_BG_MIN_HEIGHT;
     mCamTopPos.z = 0.0f;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -G_CM3D_F_INF;
+    mCamBottomPos.y = C_BG_MIN_HEIGHT;
     mCamBottomPos.z = 0.0f;
     Clear();
 }
@@ -71,13 +71,13 @@ void dCcMassS_Mng::Prepare() {
         mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.GetWorkAab(), 0);
     }
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -G_CM3D_F_INF;
+    mCamTopPos.y = C_BG_MIN_HEIGHT;
     mCamTopPos.z = 0.0f;
-    mCamTopDist = G_CM3D_F_INF;
+    mCamTopDist = C_BG_MAX_HEIGHT;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -G_CM3D_F_INF;
+    mCamBottomPos.y = C_BG_MIN_HEIGHT;
     mCamBottomPos.z = 0.0f;
-    mCamBottomDist = G_CM3D_F_INF;
+    mCamBottomDist = C_BG_MAX_HEIGHT;
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */

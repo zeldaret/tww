@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_obj_tntrap.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 void daObjTnTrap_c::chk_appear() {
@@ -190,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_TnTrap = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_TnTrap,
+    /* Priority     */ 0x0085,
     /* Actor SubMtd */ &l_daObjTnTrap_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

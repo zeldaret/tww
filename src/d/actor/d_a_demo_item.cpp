@@ -5,7 +5,6 @@
 
 #include "d/actor/d_a_demo_item.h"
 #include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_mng.h"
@@ -327,8 +326,7 @@ bool daDitem_c::CreateInit() {
 /* 000003F0-000004AC       .text set_effect__9daDitem_cFv */
 void daDitem_c::set_effect() {
     s16 angleX = dCam_getAngleX(dComIfGp_getCamera(0)) - 0x2000;
-    // Fakematch? Just angleY needs to be const to match the demo build. No effect on retail.
-    const s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
+    s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
     for (int i = 0; i < (int)ARRAY_SIZE(mpEmitters); i++) {
         if (mpEmitters[i] == NULL) {
             continue;
@@ -551,7 +549,7 @@ actor_process_profile_definition g_profile_Demo_Item = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Demo_Item,
+    /* Priority     */ 0x00FC,
     /* Actor SubMtd */ &l_daDitem_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

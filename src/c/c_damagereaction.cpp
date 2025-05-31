@@ -653,7 +653,7 @@ void dr_body_bg_check(damagereaction* dr) {
         temp.z = z;
         gndChk.SetPos(&temp);
         f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (floor_y != -G_CM3D_F_INF && dr->mpEnemy->current.pos.y <= floor_y) {
+        if (floor_y != C_BG_MIN_HEIGHT && dr->mpEnemy->current.pos.y <= floor_y) {
             dr->mpEnemy->current.pos.y = floor_y + REG0_F(13);
             dr->mMode = 0;
             dr->m47C = 0;
