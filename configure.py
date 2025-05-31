@@ -938,7 +938,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTDirectPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTAssert.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTVideo.cpp"),
-            Object(Matching,    "JSystem/JUtility/JUTXfb.cpp", mw_version="GC/2.6"),
+            Object(Matching,    "JSystem/JUtility/JUTXfb.cpp", mw_version="GC/1.3.2x"),
             Object(Matching,    "JSystem/JUtility/JUTFader.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTProcBar.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTConsole.cpp"),

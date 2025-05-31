@@ -33,7 +33,10 @@ jobs:
 
     # Copy the original files to the workspace
     - name: Prepare
-      run: cp -R /orig .
+      run: |
+        cp -R /orig .
+        mkdir -p /compilers/GC/1.3.2x
+        cp /compilers/GC/1.3.2/* /compilers/GC/1.3.2x/
 
     # Build the project
     - name: Build
