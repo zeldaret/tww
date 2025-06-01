@@ -35,9 +35,9 @@ static dCcD_SrcCps l_at_cps_src = {
     },
     // cM3dGCpsS
     {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 3.0f,
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 3.0f,
     },
 };
 

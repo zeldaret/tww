@@ -32,9 +32,9 @@ static dCcD_SrcCps cps_src = {
     },
     // cM3dGCpsS
     {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 50.0f,
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
     },
 };
 
@@ -63,9 +63,9 @@ static dCcD_SrcCps cps2_src = {
     },
     // cM3dGCpsS
     {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 50.0f,
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
     },
 };
 
