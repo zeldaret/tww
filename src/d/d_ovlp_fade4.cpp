@@ -138,7 +138,7 @@ void dDlst_2Dt_Sp_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_FALSE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     f32 x1, y1;

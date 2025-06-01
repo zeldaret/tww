@@ -9,6 +9,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
 #include "d/d_s_play.h"
+#include "dolphin/gf/GF.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_machine.h"
@@ -31,6 +32,9 @@
 #include "JSystem/JUtility/JUTXfb.h"
 #include "dolphin/base/PPCArch.h"
 
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 JUTFader * mDoGph_gInf_c::mFader;
 ResTIMG * mDoGph_gInf_c::mFrameBufferTimg;
 GXTexObj mDoGph_gInf_c::mFrameBufferTexObj;
@@ -52,9 +56,13 @@ s16 mDoGph_gInf_c::mMonotoneRateSpeed;
 mDoGph_gInf_c g_mDoGph_graphicInfo;
 
 OSThread mCaptureThread;
+#if VERSION > VERSION_DEMO
 OSAlarm mCaptureTimeOutAlarm;
+#endif
 s16 mCaptureStep;
+#if VERSION > VERSION_DEMO
 bool mCaptureCansel;
+#endif
 bool mCaptureEnableGXSetCopyFilter;
 u8* mCaptureThreadStackHead;
 u8* mCaptureCaptureBuffer;
@@ -71,10 +79,15 @@ GXColor mDoGph_gInf_c::mFadeColor = {};
 
 /* 80007BBC-80007DDC       .text create__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::create() {
-    JFWDisplay::createManager(JKRHeap::getCurrentHeap(), JUTXfb::Double, true);
+#if VERSION == VERSION_DEMO
+    JKRHeap* heap = mDoExt_getZeldaHeap();
+#else
+    JKRHeap* heap = JKRHeap::getCurrentHeap();
+#endif
+    JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
     JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
-    JUT_ASSERT(0x1a0, faderPtr != NULL);
+    JUT_ASSERT(VERSION_SELECT(414, 416, 416, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
     JUTProcBar::getManager()->setVisibleHeapBar(false);
@@ -115,10 +128,10 @@ void mDoGph_gInf_c::createHeap() {
 #endif
 
     mHeap[0] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(0x1eb, mHeap[0] != NULL);
+    JUT_ASSERT(VERSION_SELECT(488, 491, 491, 491), mHeap[0] != NULL);
 
     mHeap[1] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(0x1ed, mHeap[1] != NULL);
+    JUT_ASSERT(VERSION_SELECT(490, 493, 493, 493), mHeap[1] != NULL);
 
     mCurrentHeap = 0;
 }
@@ -143,7 +156,7 @@ void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
 
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
-    onBlure(mDoMtx_getIdentity());
+    onBlure(cMtx_getIdentity());
 }
 
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
@@ -204,7 +217,7 @@ void mDoGph_gInf_c::calcFade() {
         Mtx44 mtx;
         C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
         GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-        GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+        GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -265,6 +278,10 @@ bool mDoGph_AfterOfDraw() {
         JUTProcBar::getManager()->setVisibleHeapBar(false);
         JUTDbPrint::getManager()->setVisible(true);
     } else {
+#if VERSION == VERSION_DEMO
+        BOOL procVisible = false;
+        BOOL printVisible = false;
+#else
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
         BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).error == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
@@ -273,6 +290,7 @@ bool mDoGph_AfterOfDraw() {
             procVisible = FALSE;
             printVisible = FALSE;
         }
+#endif
         JUTProcBar::getManager()->setVisible(procVisible);
         JUTProcBar::getManager()->setVisibleHeapBar(procVisible);
         JUTDbPrint::getManager()->setVisible(printVisible);
@@ -286,7 +304,11 @@ bool mDoGph_AfterOfDraw() {
     GXSetFogRangeAdj(GX_FALSE, 0, NULL);
     GXSetCoPlanar(GX_FALSE);
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
+#if VERSION == VERSION_DEMO
+    GXSetDither(GX_FALSE);
+#else
     GXSetDither(GX_TRUE);
+#endif
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetCullMode(GX_CULL_NONE);
     mDoMch_render_c::setFbWidth(fapGmHIO_getFbWidth());
@@ -297,6 +319,38 @@ bool mDoGph_AfterOfDraw() {
     return true;
 }
 
+#if VERSION == VERSION_DEMO
+void clearAlphaBuffer(view_class* view) {
+    #include "assets/l_matDL__clearAlphaBuffer__FP10view_class.h"
+    #include "assets/l_DL__clearAlphaBuffer__FP10view_class.h"
+    static s8 l_pos[][3] = {
+        {0x00, 0x00, 0xFB},
+        {0x01, 0x00, 0xFB},
+        {0x01, 0x01, 0xFB},
+        {0x00, 0x01, 0xFB},
+    };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+
+    GXCallDisplayList(l_matDL, 0x80);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+    GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+    GFLoadPosMtxImm(cMtx_getIdentity(), 0);
+    GXCallDisplayList(l_DL, 0x20);
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+}
+#else
 /* 80008600-80008880       .text clearAlphaBuffer__FP10view_classUc */
 void clearAlphaBuffer(view_class* view, u8 alpha) {
     GXSetNumChans(1);
@@ -325,7 +379,7 @@ void clearAlphaBuffer(view_class* view, u8 alpha) {
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -340,9 +394,64 @@ void clearAlphaBuffer(view_class* view, u8 alpha) {
     GXSetAlphaUpdate(GX_FALSE);
     GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
 }
+#endif
+
+#if VERSION == VERSION_DEMO
+static void dummy() {
+    #include "assets/l_matDL__4454.h"
+    #include "assets/l_DL__4455.h"
+    static s8 l_pos[][3] = {
+        {0x00, 0x00, 0x9C},
+        {0x01, 0x00, 0x9C},
+        {0x01, 0x01, 0x9C},
+        {0x00, 0x01, 0x9C},
+    };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+}
+#endif
 
 /* 80008880-80008B0C       .text drawAlphaBuffer__FP10view_class8_GXColor */
 void drawAlphaBuffer(view_class* view, GXColor color) {
+#if VERSION == VERSION_DEMO
+    #include "assets/l_matDL__drawAlphaBuffer__FP10view_class8_GXColor.h"
+    #include "assets/l_DL__drawAlphaBuffer__FP10view_class8_GXColor.h"
+    static s8 l_pos[][3] = {
+        {0x00, 0x00, 0xFB},
+        {0x01, 0x00, 0xFB},
+        {0x01, 0x01, 0xFB},
+        {0x00, 0x01, 0xFB},
+    };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+
+    GXCallDisplayList(l_matDL, 0x80);
+    GFSetChanMatColor(GX_COLOR0, color);
+    GFSetDstAlpha(GX_TRUE, 0);
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+    GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+    GFLoadPosMtxImm(cMtx_getIdentity(), 0);
+    GXCallDisplayList(l_DL, 0x20);
+    GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
+    GFSetDstAlpha(GX_FALSE, 0);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+#else
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0, color);
@@ -368,7 +477,7 @@ void drawAlphaBuffer(view_class* view, GXColor color) {
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -383,10 +492,38 @@ void drawAlphaBuffer(view_class* view, GXColor color) {
     GXSetAlphaUpdate(GX_FALSE);
     GXSetDstAlpha(GX_FALSE, 0);
     GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+#endif
 }
 
 /* 80008B0C-80008F34       .text drawSpot__FP10view_class */
 void drawSpot(view_class* view) {
+#if VERSION == VERSION_DEMO
+    #include "assets/l_DL__drawSpot__FP10view_class.h"
+    static s8 l_pos[][3] = {
+        {0x00, 0x00, 0xFB},
+        {0x01, 0x00, 0xFB},
+        {0x01, 0x01, 0xFB},
+        {0x00, 0x01, 0xFB},
+    };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
+
+    GFSetVtxDescv(l_vtxDescList);
+    GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+    GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+    Mtx44 mtx;
+    C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
+    GFLoadPosMtxImm(cMtx_getIdentity(), 0);
+    GXCallDisplayList(l_DL, 0xE0);
+    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+#else
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetChanAmbColor(GX_COLOR0A0, g_clearColor);
@@ -412,7 +549,7 @@ void drawSpot(view_class* view) {
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -449,6 +586,7 @@ void drawSpot(view_class* view) {
     GXPosition3s8(0, 1, -5);
     GXEnd();
     GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+#endif
 }
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
@@ -586,7 +724,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     Mtx44 mtx;
     C_MTXOrtho(mtx, viewport->mYOrig, viewport->mYOrig + viewport->mHeight, viewport->mXOrig, viewport->mXOrig + viewport->mWidth, 0.0, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -673,7 +811,7 @@ void motionBlure(view_class* view) {
         Mtx44 mtx;
         C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
         GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-        GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+        GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -736,6 +874,7 @@ void mDoGph_setCaptureCaptureFormat(u8 fmt) {
     mCaptureCaptureFormat = fmt;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80009C08-80009C38       .text mDoGph_CaptureCansel__Fv */
 void mDoGph_CaptureCansel() {
     if (mCaptureStep < 0) {
@@ -745,6 +884,7 @@ void mDoGph_CaptureCansel() {
         mCaptureCansel = true;
     }
 }
+#endif
 
 #define COLOR_SQUARE_MAG(r0, g0, b0, r1, g1, b1) (r0 - r1)*(r0 - r1) + (g0 - g1)*(g0 - g1) + (b0 - b1)*(b0 - b1)
 
@@ -1022,7 +1162,7 @@ void setUpRectangle() {
     Mtx44 mtx;
     C_MTXOrtho(mtx, -21.0f, 503.0f, -9.0f, 650.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1045,6 +1185,7 @@ void drawRectangle(int x0, int y0, int x1, int y1) {
     GXEnd();
 }
 
+#if VERSION > VERSION_DEMO
 /* 8000A7F0-8000A8B8       .text mDoGph_allocFromAny__FUli */
 u8* mDoGph_allocFromAny(u32 size, int align) {
     void* mem = JKRAllocFromHeap(mDoExt_getZeldaHeap(), size, align);
@@ -1059,6 +1200,7 @@ u8* mDoGph_allocFromAny(u32 size, int align) {
     memset(mem, 0, size);
     return (u8*)mem;
 }
+#endif
 
 /* 8000A8B8-8000AAC4       .text mDoGph_screenCaptureDraw__Fv */
 void mDoGph_screenCaptureDraw() {
@@ -1130,7 +1272,7 @@ void mCaptureGXDrawSyncCallback(u16) {
     if (mCaptureStep == 2) {
 #endif
         void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
-        JUT_ASSERT(0xa5f, oldcb == mCaptureGXDrawSyncCallback);
+        JUT_ASSERT(VERSION_SELECT(2580, 2655, 2655, 2655), oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
 #if VERSION > VERSION_DEMO
@@ -1139,6 +1281,7 @@ void mCaptureGXDrawSyncCallback(u16) {
 #endif
 }
 
+#if VERSION > VERSION_DEMO
 /* 8000ABC4-8000AC3C       .text mCaptureGXDrawSyncTimeOut__FP7OSAlarmP9OSContext */
 void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
     OSReport_Error("キャプチャタイムアウト\n");
@@ -1153,6 +1296,7 @@ void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
     }
     mCaptureStep = -1;
 }
+#endif
 
 /* 8000AC3C-8000AEA4       .text mDoGph_screenCapture__Fv */
 bool mDoGph_screenCapture() {
@@ -1168,7 +1312,11 @@ bool mDoGph_screenCapture() {
     u32 left, top, width, height;
 
     mCaptureTextureSize = GXGetTexBufferSize(sizeW, sizeH, mCaptureTextureFormat, GX_FALSE, 0);
+#if VERSION == VERSION_DEMO
+    mCaptureTextureBuffer = (u8*)JKRAlloc(mCaptureTextureSize, 0x20);
+#else
     mCaptureTextureBuffer = mDoGph_allocFromAny(mCaptureTextureSize, 0x20);
+#endif
     if (mCaptureTextureBuffer == NULL) {
         mCaptureStep = -1;
         return false;
@@ -1176,7 +1324,11 @@ bool mDoGph_screenCapture() {
 
     if (mCaptureTextureFormat == GX_TF_CMPR) {
         mCaptureCaptureSize = GXGetTexBufferSize(sizeW, sizeH, mCaptureCaptureFormat, GX_FALSE, 0);
+#if VERSION == VERSION_DEMO
+        mCaptureCaptureBuffer = (u8*)JKRAlloc(mCaptureCaptureSize, 0x20);
+#else
         mCaptureCaptureBuffer = mDoGph_allocFromAny(mCaptureCaptureSize, 0x20);
+#endif
         if (mCaptureCaptureBuffer == NULL) {
             JKRFreeToHeap(NULL, mCaptureTextureBuffer);
             mCaptureTextureBuffer = NULL;
@@ -1205,7 +1357,7 @@ bool mDoGph_screenCapture() {
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
 
-    JUT_ASSERT(0xac1, mCaptureOldCB == NULL);
+    JUT_ASSERT(VERSION_SELECT(2657, 2753, 2753, 2753), mCaptureOldCB == NULL);
     mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
 #if VERSION > VERSION_DEMO
     OSCreateAlarm(&mCaptureTimeOutAlarm);
@@ -1311,7 +1463,11 @@ bool mDoGph_Painter() {
             dComIfGd_drawAlphaModel(camera->mViewMtx);
             drawAlphaBuffer(camera, dComIfGd_getAlphaModelColor());
             if (dComIfGd_getLightModelNum() != 0) {
+#if VERSION == VERSION_DEMO
+                clearAlphaBuffer(camera);
+#else
                 clearAlphaBuffer(camera, 0);
+#endif
                 dComIfGd_drawLightModel(camera->mViewMtx);
                 drawAlphaBuffer(camera, dComIfGd_getLightModelColor());
             }
@@ -1325,7 +1481,11 @@ bool mDoGph_Painter() {
             dComIfGd_drawXluListBG();
 
             if (dComIfGd_getSpotModelNum() != 0)
+#if VERSION == VERSION_DEMO
+                clearAlphaBuffer(camera);
+#else
                 clearAlphaBuffer(camera, dComIfGd_getSpotModelColor().a);
+#endif
 
             if (!dMenu_flag() && !dPa_control_c::isStatus(0x01))
                 dComIfGp_particle_drawShipTail(&jpaDrawInfo);
@@ -1356,14 +1516,20 @@ bool mDoGph_Painter() {
 
             dComIfGd_drawOpaListFilter();
 
+#if VERSION > VERSION_DEMO
             j3dSys.reinitGX();
             GXSetNumIndStages(0);
+#endif
 
             if (dComIfGd_getSpotModelNum() != 0) {
                 dComIfGd_drawAlphaModel(camera->mViewMtx);
                 dComIfGd_drawSpotModel(camera->mViewMtx);
                 drawSpot(camera);
             }
+
+#if VERSION == VERSION_DEMO
+            j3dSys.reinitGX();
+#endif
 
             GXSetClipMode(GX_CLIP_ENABLE);
             dComIfGd_drawOpaListMaskOff();
@@ -1386,13 +1552,23 @@ bool mDoGph_Painter() {
 #endif
 
                 if (mDoGph_gInf_c::isMonotone()) {
+#if VERSION == VERSION_DEMO
+                    clearAlphaBuffer(camera);
+#else
                     clearAlphaBuffer(camera, 0);
+#endif
                     dComIfGd_drawOpaListP0();
                     dComIfGd_drawOpaListP1();
                     dComIfGd_drawXluListP1();
                     dComIfGp_particle_drawP1(&jpaDrawInfo);
                     dComIfGp_particle_drawToonP1(&jpaDrawInfo);
                 }
+
+#if VERSION == VERSION_DEMO
+                if (mCaptureStep == 1) {
+                    mDoGph_screenCapture();
+                }
+#endif
 
 #if VERSION > VERSION_DEMO
                 mDoGph_gInf_c::calcFade();
@@ -1423,16 +1599,24 @@ bool mDoGph_Painter() {
 #endif
         {
             if (mCaptureTextureFormat == GX_TF_CMPR) {
+#if VERSION == VERSION_DEMO
+                mCaptureThreadStackHead = (u8*)JKRAlloc(mCaptureThreadStackSize, 0x20);
+#else
                 mCaptureThreadStackHead = mDoGph_allocFromAny(mCaptureThreadStackSize, 0x20);
+#endif
                 if (mCaptureThreadStackHead == NULL) {
                     mCaptureProc(NULL);
-                    if (mCaptureCaptureBuffer != NULL) {
+#if VERSION > VERSION_DEMO
+                    if (mCaptureCaptureBuffer != NULL)
+#endif
+                    {
                         JKRFreeToHeap(NULL, mCaptureCaptureBuffer);
                         mCaptureCaptureBuffer = NULL;
                     }
                     mCaptureStep = 5;
                 } else {
-                    OSCreateThread(&mCaptureThread, (void*)mCaptureProc, NULL, mCaptureThreadStackHead + mCaptureThreadStackSize, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
+                    u8* captureThreadStackBase = mCaptureThreadStackHead + mCaptureThreadStackSize;
+                    OSCreateThread(&mCaptureThread, (void*)mCaptureProc, NULL, captureThreadStackBase, mCaptureThreadStackSize, mCaptureThreadPriority, 0);
                     OSResumeThread(&mCaptureThread);
                     mCaptureStep++;
                 }
