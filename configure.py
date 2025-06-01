@@ -545,7 +545,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_item.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_itembase.cpp"),
             Object(Matching,    "d/actor/d_a_nh.cpp"),
-            Object(NonMatching, "d/actor/d_a_npc_fa1.cpp"),
+            Object(Equivalent,  "d/actor/d_a_npc_fa1.cpp"), # weak func order
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player.cpp"),
             Object(NonMatching, "d/actor/d_a_player_main.cpp"),

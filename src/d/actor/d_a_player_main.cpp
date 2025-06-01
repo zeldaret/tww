@@ -10,6 +10,7 @@
 
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
@@ -5517,7 +5518,7 @@ BOOL daPy_lk_c::changeDeadProc() {
         (!checkModeFlg(ModeFlg_DAMAGE)))
     {
         if (dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e)) {
-            makeFairy(&current.pos, 5);
+            makeFairy(&current.pos, daNpc_Fa1_c::Type_LINK_DOWN_e);
             dComIfGs_setBottleItemIn(dItem_FAIRY_BOTTLE_e, dItem_EMPTY_BOTTLE_e);
             return false;
         }

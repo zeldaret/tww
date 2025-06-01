@@ -6,74 +6,105 @@
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_particle.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "SSystem/SComponent/c_lib.h"
 
 class daNpc_Fa1_McaMorfCallBack1_c : public mDoExt_McaMorfCallBack1_c {
 public:
     daNpc_Fa1_McaMorfCallBack1_c();
-    bool execute(unsigned short, J3DTransformInfo*);
+    bool execute(u16 jnt_no, J3DTransformInfo*);
+
+    s16 getNeckAngle() { return mNeckAngle;}
+    void setNeckAngle(s16 angle) { mNeckAngle = angle; }
+    u16 getNeckJoint() { return mNeckJoint; }
+    void setNeckJoint(u16 joint) { mNeckJoint = joint; }
 
 public:
-    /* 0x04 */ s16 m04;
-    /* 0x06 */ u16 m06;
+    /* 0x04 */ s16 mNeckAngle;
+    /* 0x06 */ u16 mNeckJoint;
 };
 
 class daNpc_Fa1_c : public fopNpc_npc_c {
 public:
-
-    enum ActionType_e {
-        ActionType_NORMAL_MOVE_e = 0,
-        ActionType_PLAYER_MOVE_e = 1,
-        ActionType_ESCAPE_MOVE_e = 2,
-        ActionType_BOTTLE_APPEAR_MOVE_e = 3,
-        ActionType_BOTTLE_BABA_WAIT_e = 4,
-        ActionType_BOTTLE_BABA_MOVE_e = 5,
-        ActionType_BOTTLE_BABA_MOVE2_e = 6,
-        ActionType_BIGELF_CHANGE_e = 7,
-        ActionType_HOVER_MOVE_e = 8,
+    enum Type_e {
+        Type_NORMAL_e = 0,
+        Type_TIMER_e = 1,
+        Type_LINK_e = 2,
+        Type_BABA_e = 3,
+        Type_AREA_e = 4,
+        Type_LINK_DOWN_e = 5,
+        Type_HOVER_e = 6,
     };
 
-    enum MoveType_e {
-        MoveType_STRAIGHT_e = 0,
-        MoveType_TURN_e = 1,
-        MoveType_UP_e = 2,
-        MoveType_AREAOUTMOVE_e = 3,
+    enum Mode_e {
+        Mode_NORMAL_MOVE_e = 0,
+        Mode_PLAYER_MOVE_e = 1,
+        Mode_ESCAPE_MOVE_e = 2,
+        Mode_BOTTLE_APPEAR_MOVE_e = 3,
+        Mode_BOTTLE_BABA_WAIT_e = 4,
+        Mode_BOTTLE_BABA_MOVE_e = 5,
+        Mode_BOTTLE_BABA_MOVE2_e = 6,
+        Mode_BIGELF_CHANGE_e = 7,
+        Mode_HOVER_MOVE_e = 8,
     };
 
-    void checkStatus(unsigned char) {}
-    void countTime2() {}
-    void countTimer() {}
-    void getAngSpeed() {}
-    void getGroundY() {}
-    void getMode() {}
-    void getPlayerR() {}
-    void getSubMode() {}
-    void getTimer() {}
-    void getpLocalPos() {}
+    enum Normal_SubMode_e {
+        NormalSubMode_STRAIGHT_e = 0,
+        NormalSubMode_TURN_e = 1,
+        NormalSubMode_AREAMOVE_e = 2,
+        NormalSubMode_AREAOUTMOVE_e = 3,
+    };
+
+    enum Bottle_SubMode_e {
+        BottleSubMode_UP1_e = 0,
+        BottleSubMode_DOWN_e = 1,
+        BottleSubMode_UP2_e = 2,
+    };
+
+    enum BottleBaba_SubMode_e {
+        BottleBabaSubMode_BABADOWN_e = 0,
+        BottleBabaSubMode_UP2_e = 1,
+    };
+
+    u8 getMode() { return mMode; }
+    void setMode(u8 mode) { mMode = mode; }
+    bool isLinkMode() { return mMode == Mode_PLAYER_MOVE_e; }
     void isBabaMode() {}
-    void isLinkMode() {}
-    void isTypeArea() {}
-    void isTypeBaba() {}
-    void isTypeHover() {}
-    void isTypeLink() {}
-    void isTypeLinkDown() {}
-    void isTypeTimer() {}
-    void setAngSpeed(short) {}
-    void setGroundY(float) {}
-    void setLocalPos(float) {}
-    void setMode(unsigned char) {}
-    void setPlayerR(float) {}
-    void setStatus(unsigned char) {}
-    void setSubMode(unsigned char) {}
-    void setTime2(unsigned char) {}
-    void setTimer(unsigned short) {}
-    void setTypeNormal() {}
+    u8 getSubMode() { return mSubMode; }
+    void setSubMode(u8 submode) { mSubMode = submode; }
+
+    bool isTypeTimer() { return mType == Type_TIMER_e; }
+    bool isTypeLink() { return mType == Type_LINK_e; }
+    bool isTypeBaba() { return mType == Type_BABA_e; }
+    bool isTypeArea() { return mType == Type_AREA_e; }
+    bool isTypeLinkDown() { return mType == Type_LINK_DOWN_e; }
+    bool isTypeHover() { return mType == Type_HOVER_e; }
+    void setTypeNormal() { mType = Type_NORMAL_e; }
+
+    f32 getGroundY() { return mGroundY; }
+    void setGroundY(f32 y) { mGroundY = y; }
+
+    bool checkStatus(u8 bit) { return cLib_checkBit(mStatus, bit); }
+    void setStatus(u8 status) { cLib_setBit(mStatus, status); }
+
+    void getTimer() {}
+    void setTimer(u16) {}
+    void countTimer() {}
+    void setTime2(u8) {}
+    void countTime2() {}
+
+    void getAngSpeed() {}
+    void setAngSpeed(s16) {}
+    f32 getPlayerR() { return mPlayerR; }
+    void setPlayerR(f32 radius) { mPlayerR = radius; }
+    void getpLocalPos() {}
+    void setLocalPos(f32) {}
 
     void setPointLightParam();
     int createInit();
     BOOL _draw();
     BOOL _execute();
     BOOL checkBinCatch();
-    void position_move(float, float);
+    void position_move(f32, f32);
     void BGCheck();
     void init_normal_move();
     void normal_move();
@@ -133,17 +164,17 @@ public:
     /* 0x764 */ fopAc_ac_c* m764;
     /* 0x768 */ cXyz m768;
     /* 0x774 */ cXyz m774;
-    /* 0x780 */ f32 m780;
-    /* 0x784 */ f32 mGroundYPos;
+    /* 0x780 */ f32 mPlayerR;
+    /* 0x784 */ f32 mGroundY;
     /* 0x788 */ u16 mTimer;
     /* 0x78A */ s16 m78A;
     /* 0x78C */ s16 m78C;
     /* 0x78E */ s16 m78E;
-    /* 0x790 */ u8 mActionType;
+    /* 0x790 */ u8 mMode;
     /* 0x791 */ u8 mMoveTimer;
-    /* 0x792 */ u8 mMoveType;
-    /* 0x793 */ s8 m793;
-    /* 0x794 */ s8 m794;
+    /* 0x792 */ u8 mSubMode;
+    /* 0x793 */ u8 mStatus;
+    /* 0x794 */ s8 mType;
     /* 0x795 */ u8 m795[0x798 - 0x795];
     /* 0x798 */ s16 m798;
     /* 0x79A */ s16 m79A;

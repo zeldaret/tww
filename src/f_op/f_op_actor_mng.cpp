@@ -4,6 +4,7 @@
 //
 
 #include "f_op/f_op_actor_mng.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_camera.h"
@@ -986,7 +987,7 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        return fopAcM_create(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (int i = 0; i < 2; i++) {
@@ -1025,7 +1026,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        return fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
@@ -1086,7 +1087,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     csXyz prmAngle;
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
         return item;
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
