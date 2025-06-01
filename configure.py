@@ -223,6 +223,8 @@ if args.debug:
     cflags_base.extend(['-pragma "optimization_level 0"'])
 else:
     cflags_base.append("-DNDEBUG=1")
+
+# Warning flags
 if args.warn == "all":
     cflags_base.append("-W all")
 elif args.warn == "off":
