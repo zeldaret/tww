@@ -80,7 +80,7 @@ static cPhs_State daFgmahou_Create(fopAc_ac_c*) {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_UNK800,
             /* SrcObjAt  Atp     */ 8,
-            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ 0,

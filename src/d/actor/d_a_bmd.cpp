@@ -216,7 +216,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c*) {
             /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
             /* SrcGObjAt Se      */ 0,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
