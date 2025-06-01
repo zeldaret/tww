@@ -11,9 +11,7 @@
 #include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 
 static bwd_class* boss;
 

@@ -1618,7 +1618,7 @@ inline void dComIfGs_onVisitedRoom(int i_no) {
     g_dComIfG_gameInfo.save.getMemory().getBit().onVisitedRoom(i_no);
 }
 
-inline bool dComIfGs_isVisitedRoom(int i_no) {
+inline BOOL dComIfGs_isVisitedRoom(int i_no) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isVisitedRoom(i_no);
 }
 

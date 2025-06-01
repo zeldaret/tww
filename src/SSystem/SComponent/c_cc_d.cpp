@@ -204,6 +204,7 @@ void cCcD_Stts::Ct() {
     m_dmg = 0;
 }
 
+#if VERSION > VERSION_DEMO
 /* 802419C4-80241C5C       .text PlusCcMove__9cCcD_SttsFfff */
 void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
     m_cc_move.x += x;
@@ -214,6 +215,7 @@ void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
     CHECK_FLOAT_CLASS(0x1bd, m_cc_move.z);
     CHECK_VEC3_RANGE(0x1c1, m_cc_move);
 }
+#endif
 
 /* 80241C5C-80241C98       .text Set__8cCcD_ObjFRC11cCcD_SrcObj */
 void cCcD_Obj::Set(const cCcD_SrcObj& src) {

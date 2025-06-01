@@ -72,12 +72,18 @@ JUTXfb* JUTXfb::createManager(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXf
 
 /* 802C8410-802C8468       .text destroyManager__6JUTXfbFv */
 void JUTXfb::destroyManager() {
-    /* Nondeterministically nonmatching */
-    // MWCC randomly picks between two different possible codegen patterns for converting sManager
-    // to a bool for this JUT_CONFIRM call. It usually picks the longer pattern, which is required
-    // to match on all 3 retail versions. But it sometimes picks the shorter pattern, which is
-    // required to match on the demo version. There seems to be no consistent way to get it to pick
-    // one or the other.
+    /* Compiler bug: Nondeterministically nonmatching */
+    // sManager (a pointer) gets passed to a bool parameter in JUTAssertion::setConfirmMessage.
+    // MWCC is supposed to implicitly convert the pointer to a boolean (0 or 1) value, but due to a
+    // compiler bug (in RemoveRedundantMonadicOp), it sometimes removes the implicit conversion and
+    // incorrectly passes the sManager pointer as-is to the bool. This can result in incorrect
+    // behavior as setConfirmMessage actually checks if the bool is exactly equal to 1, not just
+    // that it's nonzero.
+    // Whether the compiler bug occurs or not depends on the exact memory layout of the compiler's
+    // internal state, and so it's effectively random.
+    // The kiosk demo version of TWW had the bug occur during compilation, while the three retail
+    // versions of the game did not have the bug occur.
+    // There's no consistent way to get it to pick one or the other, so this TU cannot be linked.
     JUT_CONFIRM(VERSION_SELECT(339, 339, 344, 344), sManager);
     delete sManager;
     sManager = NULL;
