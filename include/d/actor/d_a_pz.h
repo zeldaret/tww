@@ -96,6 +96,8 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    static const dCcD_SrcCyl m_cyl_src;
+
 public:
     /* 0x06C4 */ int mMode;
     /* 0x06C8 */ u8 m06C8[0x06D3 - 0x06C8];
