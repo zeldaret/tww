@@ -185,7 +185,7 @@ dOvlpFd4_c::dOvlpFd4_c() {
     first = true;
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
-    if (base.mProcName == PROC_OVERLAP4) {
+    if (fopOvlpM_GetName(this) == PROC_OVERLAP4) {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });

@@ -194,7 +194,7 @@ int stayRoomCheck(int roomCount, u8* rooms, int roomNo) {
 
 /* 80040DDC-80040E38       .text createRoomScene__Fi */
 int createRoomScene(int param_0) {
-    int* ptr = (int*)JKRHeap::alloc(4, -4, NULL);
+    int* ptr = (int*)JKRAlloc(4, -4);
     if (ptr == NULL) {
         return 0;
     }

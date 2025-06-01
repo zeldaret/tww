@@ -128,7 +128,7 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 
     pos.y += m_ground_up_h_diff + (m_ground_check_offset - m_ground_up_h);
     m_ground_up_h_diff = 0.0f;
-    m_gnd.m_pos = pos;
+    m_gnd.SetPos(&pos);
 
     m_ground_h = i_bgs.GroundCross(&m_gnd);
     if (m_ground_h != -G_CM3D_F_INF) {

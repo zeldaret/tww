@@ -31,18 +31,18 @@ u8 daAndsw2_c::getEventNo() {
 /* 00000084-00000090       .text getSwbit__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit() {
     // Switch to set.
-    return (base.mParameters & 0x00FF0000) >> 16;
+    return (fopAcM_GetParam(this) & 0x00FF0000) >> 16;
 }
 
 /* 00000090-0000009C       .text getSwbit2__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit2() {
     // First switch to check.
-    return (base.mParameters & 0xFF000000) >> 24;
+    return (fopAcM_GetParam(this) & 0xFF000000) >> 24;
 }
 
 /* 0000009C-000000A8       .text getType__10daAndsw2_cFv */
 u8 daAndsw2_c::getType() {
-    return (base.mParameters & 0x0000FF00) >> 8;
+    return (fopAcM_GetParam(this) & 0x0000FF00) >> 8;
 }
 
 /* 000000A8-000000B4       .text getTimer__10daAndsw2_cFv */
@@ -53,7 +53,7 @@ u8 daAndsw2_c::getTimer() {
 /* 000000B4-000000C0       .text getNum__10daAndsw2_cFv */
 u8 daAndsw2_c::getNum() {
     // Number of switches to check.
-    return (base.mParameters & 0x000000FF) >> 0;
+    return (fopAcM_GetParam(this) & 0x000000FF) >> 0;
 }
 
 /* 000000C0-00000130       .text getTopSw__10daAndsw2_cFv */

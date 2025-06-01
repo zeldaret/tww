@@ -135,7 +135,7 @@ static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
 
     a_this->mIndex = 0;
     a_this->mTimer = 0;
-    a_this->mUnknownParam = i_this->base.mParameters & 0xff;
+    a_this->mUnknownParam = fopAcM_GetParam(i_this) & 0xff;
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0, 0);
     g_env_light.mSnowCount = 200;
