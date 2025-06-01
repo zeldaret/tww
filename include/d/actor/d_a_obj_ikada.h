@@ -80,6 +80,8 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    const static dCcD_SrcSph m_sph_src;
+
 public:
     /* 0x0290 */ u32 mType;
     /* 0x0294 */ u32 m0294;

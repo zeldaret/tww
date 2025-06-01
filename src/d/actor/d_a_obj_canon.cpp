@@ -8,7 +8,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
-static dCcD_SrcSph m_sph_src = {
+const dCcD_SrcSph daObj_Canon_c::m_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,

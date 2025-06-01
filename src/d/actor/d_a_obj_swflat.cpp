@@ -8,6 +8,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
+namespace daObjSwflat {
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -37,6 +38,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Height */ 20.0f,
     },
 };
+}
 
 
 /* 000000EC-00000138       .text __ct__17daObjSwflat_HIO_cFv */

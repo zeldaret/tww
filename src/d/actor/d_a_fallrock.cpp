@@ -8,7 +8,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
-static dCcD_SrcCyl m_cyl_src = {
+const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,

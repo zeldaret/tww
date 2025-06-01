@@ -58,6 +58,8 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    static const dCcD_SrcCyl m_cyl_src;
+
 public:
     /* 0x290 */ u8 m290[0x2AC - 0x290];
     /* 0x2AC */ int mCurrentProc;

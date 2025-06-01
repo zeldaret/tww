@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
-static dCcD_SrcSph m_sph_src = {
+const dCcD_SrcSph daDaiocta_c::m_sph_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -38,7 +38,7 @@ static dCcD_SrcSph m_sph_src = {
 };
 
 
-static dCcD_SrcCps m_cps_src = {
+const dCcD_SrcCps daDaiocta_c::m_cps_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,

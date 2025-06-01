@@ -9,7 +9,7 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
-static dCcD_SrcCyl m_cyl_body_src = {
+const dCcD_SrcCyl daObj_Warpt_c::m_cyl_body_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -40,7 +40,7 @@ static dCcD_SrcCyl m_cyl_body_src = {
 };
 
 
-static dCcD_SrcCyl m_cyl_huta_src = {
+const dCcD_SrcCyl daObj_Warpt_c::m_cyl_huta_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
