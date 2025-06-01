@@ -26,7 +26,7 @@ static void fire_fly_draw(ff_class* i_this) {
         dComIfGd_setListMaskOff();
         mDoExt_modelUpdate(i_this->mpModel[0]);
         if (i_this->mGlowScale > 0.01f) {
-            mDoMtx_YrotM(*calc_mtx, i_this->mLiveTimer * 0x100);
+            cMtx_YrotM(*calc_mtx, i_this->mLiveTimer * 0x100);
             MtxScale(i_this->mGlowScale, i_this->mGlowScale * i_this->mGlowScaleY,
                      i_this->mGlowScale, true);
             i_this->mpModel[1]->setBaseTRMtx(*calc_mtx);
@@ -78,18 +78,11 @@ static BOOL daFf_Draw(ff_class* i_this) {
 
 /* 0000037C-00000D18       .text fire_fly_move__FP8ff_class */
 static void fire_fly_move(ff_class* i_this) {
-    /* Nonmatching - regalloc */
-    s8 cVar1;
-    f32 fVar2;
-    f32 fVar3;
-    f32 dVar7;
-    f32 dVar8;
-    f32 dVar9;
-    f32 fVar10;
-    cXyz local_cc;
-
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     dBgS_GndChk chk;
+    f32 step;
+    cXyz local_cc;
+
     i_this->mLiveTimer++;
     if (i_this->mTimers[2] == 0) {
         i_this->mTimers[1] = cM_rndF(50.0f) + 40.0f;
@@ -100,95 +93,93 @@ static void fire_fly_move(ff_class* i_this) {
     } else {
         i_this->mScaleTarget = 0.0f;
     }
+
     cLib_addCalc2(&i_this->mScale, i_this->mScaleTarget, 0.1f, 0.05f);
-    cVar1 = i_this->mState;
-    switch (cVar1) {
+    switch (i_this->mMode) {
     case 0:
         Vec pos;
         pos = i_this->current.pos;
         pos.y += 250.0f;
         chk.SetPos(&pos);
-        fVar10 = dComIfG_Bgsp()->GroundCross(&chk);
-        i_this->mGroundY = fVar10 + 12.5f;
+        i_this->mGroundY = dComIfG_Bgsp()->GroundCross(&chk) + 12.5f;
         if (i_this->mbNoUseGroundY == 0) {
             i_this->current.pos.y = i_this->mGroundY;
         }
         i_this->mHomePos = i_this->current.pos;
-        i_this->mState++;
+        i_this->mMode++;
+        // Fall-through
+    case 1: {
         cLib_addCalc2(&i_this->current.pos.x, i_this->mHomePos.x, 0.1f, std::abs(i_this->speed.x));
         cLib_addCalc2(&i_this->current.pos.y, i_this->mHomePos.y, 0.1f, std::abs(i_this->speed.y));
         cLib_addCalc2(&i_this->current.pos.z, i_this->mHomePos.z, 0.1f, std::abs(i_this->speed.z));
-        fVar10 = player->current.pos.x - i_this->current.pos.x;
-        fVar2 = player->current.pos.y - i_this->current.pos.y;
-        fVar3 = player->current.pos.z - i_this->current.pos.z;
-        fVar10 = std::sqrtf(fVar3 * fVar3 + fVar10 * fVar10 + fVar2 * fVar2);
-        if (fVar10 < 250.0f) {
-            i_this->mState++;
-            fVar10 = cM_rndF(100.0f);
-            i_this->mTimers[3] = (fVar10 + 1000.0f);
+        f32 xd = player->current.pos.x - i_this->current.pos.x;
+        f32 yd = player->current.pos.y - i_this->current.pos.y;
+        f32 zd = player->current.pos.z - i_this->current.pos.z;
+        xd = std::sqrtf(xd * xd + yd * yd + zd * zd);
+        if (xd < 250.0f) {
+            i_this->mMode++;
+            xd = cM_rndF(100.0f);
+            i_this->mTimers[3] = (xd + 1000.0f);
             i_this->current.angle.x = -0x3000;
             i_this->speedF = 10.0f;
         }
-        break;
-    case 2:
+        goto label_870;
+    }
+    case 2: {
         if (i_this->mTimers[0] == 0) {
             i_this->mScatterPos.x = i_this->mHomePos.x + cM_rndFX(750.0f);
             i_this->mScatterPos.z = i_this->mHomePos.z + cM_rndFX(750.0f);
             i_this->mScatterPos.y = i_this->mHomePos.y + cM_rndFX(225.0f) + 137.5f;
             i_this->mRotVel = 0.0f;
             i_this->mVelocityFwdTarget = cM_rndF(20.0f) + 10.0f;
-            fVar2 = i_this->mScatterPos.x - i_this->current.pos.x;
-            dVar7 = i_this->mScatterPos.y - i_this->current.pos.y;
-            fVar3 = i_this->mScatterPos.z - i_this->current.pos.z;
-            dVar9 = fVar3 * fVar3;
-            dVar8 = fVar2 * fVar2;
-            fVar10 = std::sqrtf(dVar9 + (dVar8 + (dVar7 * dVar7)));
-            i_this->mTimers[0] = fVar10 / i_this->mVelocityFwdTarget;
-            i_this->mTargetRotY = cM_atan2s(fVar2, fVar3);
-            fVar10 = std::sqrtf(dVar8 + dVar9);
-            i_this->mTargetRotX = -cM_atan2s(dVar7, fVar10);
+            f32 xd = i_this->mScatterPos.x - i_this->current.pos.x;
+            f32 yd = i_this->mScatterPos.y - i_this->current.pos.y;
+            f32 zd = i_this->mScatterPos.z - i_this->current.pos.z;
+            f32 dist = std::sqrtf(xd * xd + yd * yd + zd * zd);
+            i_this->mTimers[0] = dist / i_this->mVelocityFwdTarget;
+            i_this->mTargetRotY = cM_atan2s(xd, zd);
+            f32 xz_dist = std::sqrtf(xd * xd + zd * zd);
+            i_this->mTargetRotX = -cM_atan2s(yd, xz_dist);
         }
         if (i_this->mTimers[3] == 0) {
-            i_this->mState++;
+            i_this->mMode++;
             i_this->mScatterPos.x = i_this->mHomePos.x;
             i_this->mScatterPos.y = i_this->mHomePos.y;
             i_this->mScatterPos.z = i_this->mHomePos.z;
             i_this->mRotVel = 0.0f;
         }
         break;
-    case 4:
-        /* attacked */
-        fVar10 = i_this->mScatterPos.x - i_this->current.pos.x;
-        dVar8 = fVar10;
-        dVar7 = i_this->mScatterPos.y - i_this->current.pos.y;
-        fVar2 = i_this->mScatterPos.z - i_this->current.pos.z;
-        dVar9 = fVar2;
-        i_this->mTargetRotY = cM_atan2s(fVar10, fVar2);
-        dVar8 = dVar8 * dVar8;
-        dVar9 = dVar9 * dVar9;
-        fVar10 = std::sqrtf(dVar8 + dVar9);
-        i_this->mTargetRotX = -cM_atan2s(dVar7, fVar10);
-        if ((dVar9 + (dVar8 + (dVar7 * dVar7))) < 2500.0f) {
-            i_this->mState = 1;
+    }
+    case 3: {
+        f32 xd = i_this->mScatterPos.x - i_this->current.pos.x;
+        f32 yd = i_this->mScatterPos.y - i_this->current.pos.y;
+        f32 zd = i_this->mScatterPos.z - i_this->current.pos.z;
+        i_this->mTargetRotY = cM_atan2s(xd, zd);
+        f32 xz_dist = std::sqrtf(xd * xd + zd * zd);
+        i_this->mTargetRotX = -cM_atan2s(yd, xz_dist);
+        if (((xd * xd) + (yd * yd) + (zd * zd)) < 2500.0f) {
+            i_this->mMode = 1;
         }
         cLib_addCalc2(&i_this->mRotVel, 10.0f, 1.0f, 0.15f);
         break;
-    default:
+    }
+    case 4:
+        f32 f30;
         if (i_this->mTimers[4] == 0) {
-            i_this->mState = 2;
-            fVar10 = cM_rndF(100.0f);
-            i_this->mTimers[3] = (fVar10 + 1000.0f);
+            i_this->mMode = 2;
+            f30 = cM_rndF(100.0f);
+            i_this->mTimers[3] = (f30 + 1000.0f);
         } else {
             i_this->mVelImpulse += i_this->m2C0;
-            fVar10 = cM_rndF(1.0f);
-            if (fVar10 < REG13_F(0) + 0.1f) {
-                fVar10 = cM_rndFX(REG13_F(1) + 1.0f);
-                i_this->m2C0.x = fVar10;
+            f30 = cM_rndF(1.0f);
+            if (f30 < REG13_F(0) + 0.1f) {
+                f30 = cM_rndFX(REG13_F(1) + 1.0f);
+                i_this->m2C0.x = f30;
             }
-            fVar10 = cM_rndF(1.0f);
-            if (fVar10 < REG13_F(0) + 0.1f) {
-                fVar10 = cM_rndFX(REG13_F(1) + 1.0f);
-                i_this->m2C0.z = fVar10;
+            f30 = cM_rndF(1.0f);
+            if (f30 < REG13_F(0) + 0.1f) {
+                f30 = cM_rndFX(REG13_F(1) + 1.0f);
+                i_this->m2C0.z = f30;
             }
             i_this->m2C0.y = REG13_F(2) + 2.0f;
             if (i_this->mVelImpulse.y > REG13_F(3) + 10.0f) {
@@ -196,23 +187,29 @@ static void fire_fly_move(ff_class* i_this) {
             }
         }
         break;
+    default:
+        goto label_870;
     }
+
+    step = 500.0f;
     cLib_addCalcAngleS2(&i_this->current.angle.y, i_this->mTargetRotY, 10,
-                        i_this->mRotVel * 500.0f);
+                        step * i_this->mRotVel);
     cLib_addCalcAngleS2(&i_this->current.angle.x, i_this->mTargetRotX, 10,
-                        i_this->mRotVel * 500.0f);
+                        step * i_this->mRotVel);
     cLib_addCalc2(&i_this->mRotVel, 1.0f, 1.0f, 0.1f);
     cLib_addCalc2(&i_this->speedF, i_this->mVelocityFwdTarget, 1.0f, 3.0f);
     local_cc.x = 0.0f;
     local_cc.y = 0.0f;
     local_cc.z = i_this->speedF * 0.25f;
-    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     MtxPosition(&local_cc, &i_this->speed);
     i_this->current.pos += (i_this->speed + i_this->mVelImpulse);
     cLib_addCalc0(&i_this->mVelImpulse.x, 1.0f, 0.1f);
     cLib_addCalc0(&i_this->mVelImpulse.y, 1.0f, 0.1f);
     cLib_addCalc0(&i_this->mVelImpulse.z, 1.0f, 0.1f);
+
+label_870:
     if (i_this->current.pos.y < i_this->mGroundY + 12.5f) {
         if (i_this->current.pos.y < i_this->mGroundY) {
             i_this->current.pos.y = i_this->mGroundY;
@@ -225,18 +222,14 @@ static void fire_fly_move(ff_class* i_this) {
 
 /* 00001098-00001168       .text daFf_Execute__FP8ff_class */
 static BOOL daFf_Execute(ff_class* i_this) {
-    s16 sVar1;
-    int iVar3;
-
-    for (iVar3 = 0; iVar3 < 5; iVar3++) {
-        sVar1 = i_this->mTimers[iVar3];
-        if (sVar1 != 0) {
-            i_this->mTimers[iVar3]--;
+    for (int i = 0; i < 5; i++) {
+        if (i_this->mTimers[i] != 0) {
+            i_this->mTimers[i]--;
         }
     }
     fire_fly_move(i_this);
     if (i_this->mSph.ChkTgHit() != 0) {
-        i_this->mState = 4;
+        i_this->mMode = 4;
         i_this->mTimers[4] = REG13_F(9) + (cM_rndF(20.0f) + 30.0f);
     }
     i_this->mSph.SetC(i_this->current.pos);
@@ -251,7 +244,7 @@ static BOOL daFf_IsDelete(ff_class*) {
 
 /* 00001170-000011AC       .text daFf_Delete__FP8ff_class */
 static BOOL daFf_Delete(ff_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Ff");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Ff");
     ff_count = 0;
     return TRUE;
 }
@@ -264,10 +257,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
     for (int i = 0; i < 2; i++) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ff", ho_bmd[i]);
-        JUT_ASSERT(719, modelData != NULL);
+        JUT_ASSERT(VERSION_SELECT(717, 719, 719, 719), modelData != NULL);
+#if VERSION > VERSION_DEMO
         if (modelData == NULL) {
             return FALSE;
         }
+#endif
         a_this->mpModel[i] = mDoExt_J3DModel__create(modelData, 0x10000, 0x11020203);
         if (a_this->mpModel[i] == NULL) {
             return FALSE;
@@ -276,13 +271,16 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
         if (a_this->mBrkAnm[i] == NULL) {
             return FALSE;
         }
-        J3DAnmTevRegKey* pJVar5 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Ff", ho_brk[i]);
-        modelData = a_this->mpModel[i]->getModelData();
-        int iVar6 = a_this->mBrkAnm[i]->init(modelData, pJVar5, true, J3DFrameCtrl::EMode_LOOP,
-                                             0.9f + cM_rndF(0.15f), 0, -1, false, 0);
+        int iVar6 = a_this->mBrkAnm[i]->init(
+            a_this->mpModel[i]->getModelData(),
+            (J3DAnmTevRegKey*)dComIfG_getObjectRes("Ff", ho_brk[i]),
+            true, J3DFrameCtrl::EMode_LOOP, 0.9f + cM_rndF(0.15f), 0, -1, false, 0
+        );
+#if VERSION > VERSION_DEMO
         if (iVar6 == 0) {
             return FALSE;
         }
+#endif
     }
     return TRUE;
 }
@@ -297,7 +295,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
         if (fopAcM_entrySolidHeap(a_this, useHeapInit, 0x2320)) {
             int uVar1 = fopAcM_GetParam(a_this) & 0xFF;
             if (uVar1 != 0) {
-                a_this->base.mParameters = fopAcM_GetParam(a_this) & 0xFF00;
+                fopAcM_SetParam(a_this, fopAcM_GetParam(a_this) & 0xFF00);
                 for (int iVar7 = 0; iVar7 < uVar1; iVar7 = iVar7 + 1) {
                     fopAcM_prm_class* pfVar4 = fopAcM_CreateAppend();
                     pfVar4->base.position.x = a_this->current.pos.x + cM_rndFX(500.0f);

@@ -22,7 +22,7 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
     f32 time;
     int date;
 
-    if (!dComIfGp_event_runCheck()) {
+    if (dComIfGp_event_runCheck() == FALSE) {
         return TRUE;
     }
     if(!dComIfGp_evmng_startCheck("ARRIVAL_BRK")) {
@@ -59,13 +59,18 @@ static BOOL daKytag06_Delete(kytag06_class*) {
 
 /* 000001A4-00000224       .text daKytag06_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag06_Create(fopAc_ac_c* i_this) {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, kytag06_class);
+#endif
     kytag06_class* a_this = (kytag06_class*)i_this;
 
     cPhs_State phase_state;
     if(dComIfGs_isSymbol(0)) {
         phase_state = cPhs_ERROR_e;
     } else {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, kytag06_class);
+#endif
         a_this->field_0x294 = 0;
         phase_state = cPhs_COMPLEATE_e;
     }

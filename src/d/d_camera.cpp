@@ -2521,7 +2521,7 @@ void dCamera_c::checkGroundInfo() {
     m33C = 0;
     
     if (dComIfG_Bgsp()->ChkMoveBG(mBG.m5C.m04)) {
-        m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.m04.GetBgIndex());
+        m33C = dComIfG_Bgsp()->GetActorPointer(mBG.m5C.m04);
         if (m33C) {
             cXyz pos = positionOf(m33C);
             cSAngle angle = directionOf(m33C);
