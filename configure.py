@@ -947,7 +947,7 @@ config.libs = [
             Object(Matching,    "JSystem/JUtility/JUTDirectPrint.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTAssert.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTVideo.cpp"),
-            Object(Equivalent,  "JSystem/JUtility/JUTXfb.cpp"),
+            Object(Equivalent,  "JSystem/JUtility/JUTXfb.cpp"), # Nondeterministic compiler bug, do not link
             Object(Matching,    "JSystem/JUtility/JUTFader.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTProcBar.cpp"),
             Object(Matching,    "JSystem/JUtility/JUTConsole.cpp"),
