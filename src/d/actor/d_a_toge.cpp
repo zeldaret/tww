@@ -26,7 +26,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
         /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,

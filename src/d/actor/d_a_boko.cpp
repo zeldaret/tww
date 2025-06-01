@@ -124,7 +124,7 @@ static dCcD_SrcSph sph_src = {
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoHitMark_e,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,

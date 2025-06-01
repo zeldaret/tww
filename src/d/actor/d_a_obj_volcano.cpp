@@ -6,6 +6,38 @@
 #include "d/actor/d_a_obj_volcano.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCyl cyl_check_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ICE_ARROW,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 300.0f,
+        /* Height */ 3000.0f,
+    },
+};
+
 
 /* 00000078-000003CC       .text StartFire__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::StartFire() {

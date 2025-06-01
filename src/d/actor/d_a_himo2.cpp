@@ -6,6 +6,7 @@
 #include "d/actor/d_a_himo2.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 800EB60C-800EBABC       .text spin_draw__FP11himo2_class */
 void spin_draw(himo2_class*) {
@@ -105,6 +106,34 @@ static BOOL CallbackCreateHeap(fopAc_ac_c*) {
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
 static cPhs_State daHimo2_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcSph sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_GRAPPLING_HOOK,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_Unk1_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 20.0f,
+        },
+    };
 }
 
 /* 800F0B98-800F0BE0       .text __dt__10himo2HIO_cFv */

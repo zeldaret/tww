@@ -8,6 +8,37 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 75.0f,
+        /* Height */ 115.0f,
+    },
+};
+
+
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
