@@ -42,36 +42,36 @@ enum dCcD_ObjAtType {
 };
 
 enum dCcG_AtSPrm_e {
-    dCcG_AtSPrm_NoConHit_e         = 1 << 0,
-    dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
-    dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
-    dCcG_AtSPrm_NoMass_e           = 1 << 3,
+    /* 0x01 */ dCcG_AtSPrm_NoConHit_e         = 1 << 0,
+    /* 0x02 */ dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
+    /* 0x04 */ dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
+    /* 0x08 */ dCcG_AtSPrm_NoMass_e           = 1 << 3,
 };
 
 enum dCcG_AtRPrm_e {
-    dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
-    dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
+    /* 0x01 */ dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
+    /* 0x02 */ dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
 };
 
 enum dCcG_TgSPrm_e {
-    dCcG_TgSPrm_Shield_e           = 1 << 0,
-    dCcG_TgSPrm_NoConHit_e         = 1 << 1,
-    dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
-    dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
+    /* 0x01 */ dCcG_TgSPrm_Shield_e           = 1 << 0,
+    /* 0x02 */ dCcG_TgSPrm_NoConHit_e         = 1 << 1,
+    /* 0x04 */ dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
+    /* 0x08 */ dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
 };
 
 enum dCcG_TgRPrm_e {
-    dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
-    dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
+    /* 0x01 */ dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x02 */ dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
 };
 
 enum dCcG_CoSPrm_e {
-    dCcG_CoSPrm_AtLasso_e          = 1 << 0,
-    dCcG_CoSPrm_TgLasso_e          = 1 << 1,
+    /* 0x01 */ dCcG_CoSPrm_AtLasso_e          = 1 << 0,
+    /* 0x02 */ dCcG_CoSPrm_TgLasso_e          = 1 << 1,
 };
 
 enum dCcG_CoRPrm_e {
-    dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x01 */ dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
 };
 
 enum dCcG_hitSe {
