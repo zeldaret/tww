@@ -209,23 +209,23 @@ void daWindMill_c::CreateInit() {
     mpModel->setUserArea((u32) this);
     set_mtx();
 
-    J3DModelData* modelData = mpModel->getModelData();
-    u16 joint_count = modelData->getJointNum();
-    for (u16 i = 0; i < joint_count; i++) {
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
         if (i == 2) {
-            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
         }
-        mpModel->calc();
-        search_wind();
-        if (mpBgW != NULL) {
-            mDoMtx_stack_c::transS(current.pos);
-            mDoMtx_stack_c::YrotM(current.angle.y);
-            cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    }
 
-            dComIfG_Bgsp()->Regist(mpBgW, this);
-            mpBgW->Move();
-            return;
-        }
+    mpModel->calc();
+    search_wind();
+
+    if (mpBgW != NULL) {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+        mpBgW->Move();
     }
 }
 
