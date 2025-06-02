@@ -3,155 +3,419 @@
 // Translation Unit: d_a_obj_correct.cpp
 //
 
+// This include needs to be before d_a_obj_correct.h for ordering of the
+// daObj::PrmAbstract symbols.
+#include "d/actor/d_a_obj_movebox.h"
+
 #include "d/actor/d_a_obj_correct.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "f_op/f_op_actor_mng.h"
+
+#include "weak_data_1811.h" // IWYU pragma: keep
+
+namespace daObjCorrect {
+namespace {
+
+struct Attr_c {
+    /* 0x00 */ const char* name;
+    /* 0x04 */ f32 field_0x4;
+    /* 0x08 */ f32 field_0x8;
+    /* 0x0C */ f32 field_0xC;
+};
+
+const char L_ev_CrTrM1[] = "CrTrM1_put";
+const char L_ev_CrTrM2[] = "CrTrM2_put";
+
+const Attr_c L_attr[] = {
+    {NULL, 9.0f, 16.0f, 0.0f},
+    {NULL, 2500.0f, 2601.0f, 0.0f},
+    {NULL, 2500.0f, 2601.0f, 0.0f},
+    {NULL, 2500.0f, 2601.0f, 0.0f},
+    {L_ev_CrTrM1, 9.0f, 100.0f, 5000.0f},
+    {L_ev_CrTrM2, 9.0f, 100.0f, 5000.0f},
+    {NULL, 9.0f, 100.0f, 3600.0f},
+    {NULL, 9.0f, 100.0f, 3600.0f},
+};
+
+inline static const Attr_c& attr(daObjCorrect::Type_e type) { return L_attr[type]; }
+
+} // namespace
+} // namespace daObjCorrect
 
 /* 00000078-000001B0       .text _create__Q212daObjCorrect5Act_cFv */
 cPhs_State daObjCorrect::Act_c::_create() {
-    /* Nonmatching */
+    int swSave = prm_get_swSave();
+
+    fopAcM_SetupActor(this, daObjCorrect::Act_c);
+
+    if (swSave == 0xFF) {
+        return cPhs_ERROR_e;
+    }
+
+    mType = (daObjCorrect::Type_e) prm_get_type();
+    fopAcM_offDraw(this);
+
+    if (fopAcM_isSwitch(this, swSave)) {
+        mode_on_init();
+    } else {
+        mode_off_init();
+    }
+
+    if (attr(mType).name != 0) {
+        int evId = prm_get_evId();
+        mEventIdx = dComIfGp_evmng_getEventIdx(attr(mType).name, evId);
+    } else {
+        mEventIdx = -1;
+    }
+    demo_non_init();
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000001B0-000001B8       .text _delete__Q212daObjCorrect5Act_cFv */
 bool daObjCorrect::Act_c::_delete() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 000001B8-00000204       .text chk_try_actor0__Q212daObjCorrect5Act_cFP10fopAc_ac_c */
-void daObjCorrect::Act_c::chk_try_actor0(fopAc_ac_c*) {
-    /* Nonmatching */
+daObjTry::Act_c* daObjCorrect::Act_c::chk_try_actor0(fopAc_ac_c* actor) {
+    if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Try) {
+        return (daObjTry::Act_c*) actor;
+    }
+    return NULL;
 }
 
 /* 00000204-000002E0       .text chk_try_actor1__Q212daObjCorrect5Act_cCFPQ28daObjTry5Act_cQ28daObjTry6Type_ef */
-void daObjCorrect::Act_c::chk_try_actor1(daObjTry::Act_c*, daObjTry::Type_e, float) const {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::chk_try_actor1(daObjTry::Act_c* actor, daObjTry::Type_e type, float i_sw_r_sq) const {
+    if (type == actor->prm_get_type() && actor->current.pos.abs2(current.pos) < i_sw_r_sq) {
+        if (prm_get_swSave() == actor->prm_get_swSave()) {
+            actor->to_correct_pos(&current.pos, shape_angle.y, true, true);
+            return actor;
+        }
+    }
+    return NULL;
 }
 
 /* 000002E0-00000428       .text chk_try_actor2__Q212daObjCorrect5Act_cCFPQ28daObjTry5Act_cQ28daObjTry6Type_ebff */
-void daObjCorrect::Act_c::chk_try_actor2(daObjTry::Act_c*, daObjTry::Type_e, bool, float, float) const {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::chk_try_actor2(daObjTry::Act_c* actor, daObjTry::Type_e type, bool param_3, float i_sw_r_sq, float i_depression_r_sq) const {
+    JUT_ASSERT(346, i_sw_r_sq <= i_depression_r_sq);
+
+    if (type == actor->prm_get_type()) {
+        f32 dist = actor->current.pos.abs2(current.pos);
+        if (dist < i_depression_r_sq) {
+
+            bool should_return;
+            if (dist < i_sw_r_sq) {
+                should_return = prm_get_swSave() == actor->prm_get_swSave();
+            } else {
+                should_return = false;
+            }
+
+            actor->to_correct_pos(&current.pos, shape_angle.y, should_return, param_3);
+            if (should_return) {
+                return actor;
+            }
+        }
+    }
+    return NULL;
 }
 
 /* 00000428-00000534       .text search_movebox__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_movebox(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_movebox(void* actor, void* user_data) {
+    fopAc_ac_c* ac_actor = (fopAc_ac_c*) actor;
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    fpc_ProcID proc_id = fpcM_GetID(actor);
+    if (!fpcM_IsCreating(proc_id)) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+            daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*) actor;
+            if (ac_actor->current.pos.abs2(correct->current.pos) < correct->field_0x2A4) {
+                if (movebox->prm_get_swSave() == correct->prm_get_swSave() && movebox->prm_get_dmy() == 0) {
+                    correct->field_0x290 = 1;
+                    return ac_actor;
+                }
+            }
+            correct->field_0x290 = 0;
+        }
+    } else {
+        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
+            correct->field_0x290 = 0;
+            return NULL;
+        }
+    }
+    return NULL;
 }
 
 /* 00000534-00000580       .text search_tryColSun__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryColSun(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryColSun(void* actor, void* user_data) {
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+    if (res != NULL) {
+        return correct->chk_try_actor1(res, daObjTry::UNK_2, correct->field_0x2A4);
+    }
+
+    return NULL;
 }
 
 /* 00000580-000005CC       .text search_tryColMer__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryColMer(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryColMer(void* actor, void* user_data) {
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+    if (res != NULL) {
+        return correct->chk_try_actor1(res, daObjTry::UNK_3, correct->field_0x2A4);
+    }
+
+    return NULL;
 }
 
 /* 000005CC-00000618       .text search_tryColJup__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryColJup(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryColJup(void* actor, void* user_data) {
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+    if (res != NULL) {
+        return correct->chk_try_actor1(res, daObjTry::UNK_4, correct->field_0x2A4);
+    }
+
+    return NULL;
 }
 
 /* 00000618-000006D0       .text search_tryKeyGate__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryKeyGate(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryKeyGate(void* actor, void* user_data) {
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    fpc_ProcID proc_id = fpcM_GetID(actor);
+
+    void* return_val = NULL;
+    if (fpcM_IsCreating(proc_id)) {
+        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+            correct->field_0x290 = 0;
+        }
+    } else {
+        daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+        if (res != NULL) {
+            return_val = correct->chk_try_actor2(
+                res, daObjTry::UNK_5, true, correct->field_0x2A4, 
+                attr(correct->mType).field_0xC);
+        }
+    }
+
+    return return_val;
 }
 
 /* 000006D0-00000788       .text search_tryKeyDoor__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryKeyDoor(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryKeyDoor(void* actor, void* user_data) {
+    daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+    fpc_ProcID proc_id = fpcM_GetID(actor);
+
+    void* return_val = NULL;
+    if (fpcM_IsCreating(proc_id)) {
+        if (actor != NULL && fopAcM_GetName(actor) == PROC_Obj_Try) {
+            correct->field_0x290 = 0;
+        }
+    } else {
+        daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+        if (res != NULL) {
+            return_val = correct->chk_try_actor2(
+                res, daObjTry::UNK_6, true, correct->field_0x2A4, 
+                attr(correct->mType).field_0xC);
+        }
+    }
+
+    return return_val;
 }
 
 /* 00000788-00000834       .text search_tryColGreen__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryColGreen(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryColGreen(void* actor, void* user_data) {
+    static const daObjTry::Type_e type[] = {
+        daObjTry::UNK_7, daObjTry::UNK_8, daObjTry::UNK_9,
+        daObjTry::UNK_10, daObjTry::UNK_11, daObjTry::UNK_12
+    };
+
+    daObjTry::Act_c* res = chk_try_actor0((fopAc_ac_c*)actor);
+    if (res != NULL) {
+        daObjCorrect::Act_c* correct = (daObjCorrect::Act_c*) user_data;
+
+        void* return_val = NULL;
+        for (int i = 0; i < 6; i++) {
+            void* actor_2 = correct->chk_try_actor2(res, type[i], true, correct->field_0x2A4, attr(correct->mType).field_0xC);
+            if (actor_2) {
+                return_val = res;
+            }
+        }
+
+        return return_val;
+    }
+    return NULL;
 }
 
 /* 00000834-00000854       .text search_tryColBlue__Q212daObjCorrect5Act_cFPvPv */
-void daObjCorrect::Act_c::search_tryColBlue(void*, void*) {
-    /* Nonmatching */
+void* daObjCorrect::Act_c::search_tryColBlue(void* actor, void* user_data) {
+    return search_tryColGreen(actor, user_data);
 }
 
 /* 00000854-0000087C       .text mode_off_init__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::mode_off_init() {
-    /* Nonmatching */
+    field_0x2A4 = attr(mType).field_0x8;
+    field_0x294 = 0;
 }
+
+
+const fopAcIt_JudgeFunc daObjCorrect::Act_c::M_search_proc[] = {
+    daObjCorrect::Act_c::search_movebox,
+    daObjCorrect::Act_c::search_tryColSun,
+    daObjCorrect::Act_c::search_tryColMer,
+    daObjCorrect::Act_c::search_tryColJup,
+    daObjCorrect::Act_c::search_tryKeyGate,
+    daObjCorrect::Act_c::search_tryKeyDoor,
+    daObjCorrect::Act_c::search_tryColGreen,
+    daObjCorrect::Act_c::search_tryColBlue,
+};
 
 /* 0000087C-0000090C       .text mode_off__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::mode_off() {
-    /* Nonmatching */
+    field_0x290 = 1;
+    fopAc_ac_c* res = fopAcM_Search(M_search_proc[mType], (void*) this);
+    if (field_0x290 == 1 && res != NULL) {
+        fopAcM_onSwitch(this, prm_get_swSave());
+        mode_on_init();
+    }
 }
 
 /* 0000090C-00000934       .text mode_on_init__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::mode_on_init() {
-    /* Nonmatching */
+    field_0x2A4 = attr(mType).field_0x4;
+    field_0x294 = 1;
 }
 
 /* 00000934-000009C4       .text mode_on__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::mode_on() {
-    /* Nonmatching */
+    field_0x290 = 1;
+    fopAc_ac_c* res = fopAcM_Search(M_search_proc[mType], (void*) this);
+    if (field_0x290 == 1 && res == NULL) {
+        fopAcM_offSwitch(this, prm_get_swSave());
+        mode_off_init();
+    }
 }
 
 /* 000009C4-000009D0       .text demo_non_init__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_non_init() {
-    /* Nonmatching */
+    field_0x298 = 0;
 }
 
 /* 000009D0-00000B78       .text demo_non__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_non() {
-    /* Nonmatching */
+    if ((mType != UNK_4 && mType != UNK_5)) {
+        return;
+    }
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    if (!player->getGrabPutStart()) {
+        return;
+    }
+
+    fpc_ProcID grab_actor_id = player->getGrabActorID();
+    fopAc_ac_c* grab_actor = fopAcM_SearchByID(grab_actor_id);
+    if (grab_actor == NULL) {
+        return;
+    }
+
+    daObjTry::Act_c* try_actor = chk_try_actor0(grab_actor);
+    if (try_actor == NULL) {
+        return;
+    }
+
+    if ((try_actor->prm_get_type() == 5 && mType == UNK_4) || (try_actor->prm_get_type() == 6 && mType == UNK_5)) {
+        f32 dist = player->current.pos.abs2XZ(current.pos);
+        f32 y_diff = std::abs(player->current.pos.y - current.pos.y);
+        s16 angle = player->shape_angle.y - fopAcM_searchActorAngleY(player, this);
+    
+        if (((dist < 40000.0f && angle >= -0x4000 && angle <= 0x4000) || dist < 1600.0f) && y_diff < 60.0f) {
+            demo_req_init();
+        }
+    }
 }
 
 /* 00000B78-00000C0C       .text demo_req_init__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_req_init() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_existence(mEventIdx)) {
+        fopAcM_orderOtherEventId(this, mEventIdx, prm_get_evId());
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+        field_0x298 = 1;
+    } else {
+        demo_non_init();
+    }
 }
 
 /* 00000C0C-00000C40       .text demo_req__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_req() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        demo_run_init();
+    } else {
+        demo_non_init();
+    }
 }
 
 /* 00000C40-00000C4C       .text demo_run_init__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_run_init() {
-    /* Nonmatching */
+    field_0x298 = 2;
 }
 
 /* 00000C4C-00000CAC       .text demo_run__Q212daObjCorrect5Act_cFv */
 void daObjCorrect::Act_c::demo_run() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(mEventIdx)) {
+        dComIfGp_event_reset();
+        demo_non_init();
+    }
 }
 
 /* 00000CAC-00000DD8       .text _execute__Q212daObjCorrect5Act_cFv */
 bool daObjCorrect::Act_c::_execute() {
-    /* Nonmatching */
+    static ModeProcFunc mode_proc[] = {
+        &Act_c::mode_off,
+        &Act_c::mode_on,
+    };
+    (this->*mode_proc[field_0x294])();
+
+    static DemoProcFunc demo_proc[] = {
+        &Act_c::demo_non,
+        &Act_c::demo_req,
+        &Act_c::demo_run,
+    };
+    (this->*demo_proc[field_0x298])();
+    return true;
 }
 
 namespace daObjCorrect {
 namespace {
 /* 00000DD8-00000DF8       .text Mthd_Create__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjCorrect::Act_c*)i_this)->_create();
 }
 
 /* 00000DF8-00000E1C       .text Mthd_Delete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjCorrect::Act_c*)i_this)->_delete();
 }
 
 /* 00000E1C-00000E40       .text Mthd_Execute__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjCorrect::Act_c*)i_this)->_execute();
 }
 
 /* 00000E40-00000E48       .text Mthd_Draw__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
 BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000E48-00000E50       .text Mthd_IsDelete__Q212daObjCorrect29@unnamed@d_a_obj_correct_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
