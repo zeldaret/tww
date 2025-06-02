@@ -19,6 +19,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTReport.h"
 
 static u8 hio_set;
@@ -2398,26 +2399,28 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
     /* Nonmatching */
     static dCcD_SrcCyl cc_cyl_src = {
+        // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_UNK800,
             /* SrcObjAt  Atp     */ 1,
-            /* SrcObjAt  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
-            /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
             /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
-            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
             /* SrcGObjCo SPrm    */ 0,
         },
+        // cM3dGCylS
         {
             /* Center */ 0.0f, 0.0f, 0.0f,
             /* Radius */ 100.0f,
@@ -2425,26 +2428,28 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         },
     };
     static dCcD_SrcCyl core_cyl_src = {
+        // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ 0,
             /* SrcObjAt  Atp     */ 0,
             /* SrcObjAt  SPrm    */ 0,
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT & ~AT_TYPE_GRAPPLING_HOOK,
-            /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsOther_e,
             /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
             /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
             /* SrcGObjCo SPrm    */ 0,
         },
+        // cM3dGCylS
         {
             /* Center */ 0.0f, 0.0f, 0.0f,
             /* Radius */ 50.0f,
@@ -2452,82 +2457,88 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         },
     };
     static dCcD_SrcSph finger_sph_src = {
+        // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_UNK800,
             /* SrcObjAt  Atp     */ 1,
-            /* SrcObjAt  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
-            /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
             /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ cCcD_CoSPrm_Set_e,
+            /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
-            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
             /* SrcGObjCo SPrm    */ 0,
         },
+        // cM3dGSphS
         {
             /* Center */ 0.0f, 0.0f, 0.0f,
             /* Radius */ 30.0f,
-        }
+        },
     };
     static dCcD_SrcSph eye_sph_src = {
+        // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ 0,
             /* SrcObjAt  Atp     */ 0,
             /* SrcObjAt  SPrm    */ 0,
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT & ~AT_TYPE_GRAPPLING_HOOK,
-            /* SrcObjTg  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsEnemy_e,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ 0,
             /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ cCcD_CoSPrm_Set_e,
+            /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ cCcD_CoSPrm_IsEnemy_e,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
             /* SrcGObjCo SPrm    */ 0,
         },
+        // cM3dGSphS
         {
             /* Center */ 0.0f, 0.0f, 0.0f,
             /* Radius */ 30.0f,
-        }
+        },
     };
     static dCcD_SrcSph beam_sph_src = {
+        // dCcD_SrcGObjInf
         {
             /* Flags             */ 0,
             /* SrcObjAt  Type    */ AT_TYPE_FIRE,
             /* SrcObjAt  Atp     */ 2,
-            /* SrcObjAt  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
             /* SrcObjTg  Type    */ 0,
             /* SrcObjTg  SPrm    */ 0,
             /* SrcObjCo  SPrm    */ 0,
             /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKA,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
             /* SrcGObjTg Se      */ 0,
             /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
             /* SrcGObjTg SPrm    */ 0,
             /* SrcGObjCo SPrm    */ 0,
         },
+        // cM3dGSphS
         {
             /* Center */ 0.0f, 0.0f, 0.0f,
             /* Radius */ 60.0f,
-        }
+        },
     };
 
     fopAcM_SetupActor(a_this, bst_class);

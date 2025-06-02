@@ -340,7 +340,15 @@ public:
     virtual cCcD_GStts* GetGStts();
     void Init(int, int, void*, fpc_ProcID);
     virtual void Ct();
+#if VERSION == VERSION_DEMO
+    void PlusCcMove(f32 x, f32 y, f32 z) {
+        m_cc_move.x += x;
+        m_cc_move.y += y;
+        m_cc_move.z += z;
+    }
+#else
     void PlusCcMove(f32, f32, f32);
+#endif
     void ClrCcMove() {
         m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }

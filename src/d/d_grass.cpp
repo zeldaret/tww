@@ -15,8 +15,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
+#include "dolphin/gf/GF.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 

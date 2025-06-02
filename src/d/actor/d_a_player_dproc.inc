@@ -14,6 +14,7 @@
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_itembase.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
@@ -2002,11 +2003,9 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 daPy_HIO_bottle_c0::m.field_0xA,
                 daPy_HIO_bottle_c0::m.field_0x54
             );
-        } else {
-            if (frameCtrl.checkPass(32.0f)) {
-                m355E = 0;
-                mRightHandIdx = 8;
-            }
+        } else if (frameCtrl.checkPass(32.0f)) {
+            m355E = 0;
+            mRightHandIdx = 8;
         }
     } else if (frameCtrl.getRate() < 0.01f) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -2021,7 +2020,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAcM_fastCreate(PROC_NPC_FA1, 3, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }

@@ -11,22 +11,22 @@
 
 /* 00000078-00000180       .text daSwc00_Execute__FP11swc00_class */
 static BOOL daSwc00_Execute(swc00_class* i_this) {
-    s32 enable_sw = daSwc00_getSw2No(i_this);
     fopAc_ac_c* actor = i_this;
-    if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, fopAcM_GetRoomNo(i_this))) {
-        s32 swBit = daSwc00_getSw1No(i_this);
+    int enable_sw = daSwc00_getSw2No(i_this);
+    if(enable_sw == 0xFF || dComIfGs_isSwitch(enable_sw, fopAcM_GetRoomNo(actor))) {
+        int swBit = daSwc00_getSw1No(i_this);
 
-        f32 xz_dist2 = fopAcM_searchPlayerDistanceXZ2(i_this);
-        f32 y_diff = fopAcM_searchPlayerDistanceY(i_this);
-        if(xz_dist2 < i_this->scale.x && (-100.0f < y_diff && y_diff < i_this->scale.y)) {
-            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(i_this));
+        f32 xz_dist2 = fopAcM_searchPlayerDistanceXZ2(actor);
+        f32 y_diff = fopAcM_searchPlayerDistanceY(actor);
+        if(xz_dist2 < actor->scale.x && (-100.0f < y_diff && y_diff < actor->scale.y)) {
+            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(actor));
 
             if(daSwc00_getType(i_this) != 0) {
-                fopAcM_delete(actor);
+                fopAcM_delete(i_this);
             }
         }
         else if(daSwc00_getType(i_this) == 0) {
-            dComIfGs_offSwitch(swBit, fopAcM_GetRoomNo(i_this));
+            dComIfGs_offSwitch(swBit, fopAcM_GetRoomNo(actor));
         }
     }
 
@@ -44,20 +44,26 @@ static BOOL daSwc00_Delete(swc00_class* i_this) {
 }
 
 /* 00000190-00000274       .text daSwc00_Create__FP10fopAc_ac_c */
-static cPhs_State daSwc00_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, swc00_class);
+static cPhs_State daSwc00_Create(fopAc_ac_c* i_this) {
+#if VERSION > VERSION_DEMO
+    fopAcM_SetupActor(i_this, swc00_class);
+#endif
 
-    swc00_class* i_this = (swc00_class*)i_actor;
+    swc00_class* a_this = (swc00_class*)i_this;
 
-    if(dComIfGs_isSwitch(daSwc00_getSw1No(i_this), fopAcM_GetRoomNo(i_this))) {
-        if(daSwc00_getType(i_this) == 0) {
-            s32 swBit = daSwc00_getSw1No(i_this);
-            dComIfGs_offSwitch(swBit, fopAcM_GetRoomNo(i_this));
+    u8 swBit = daSwc00_getSw1No(a_this);
+    if(dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(i_this))) {
+        if(daSwc00_getType(a_this) == 0) {
+            dComIfGs_offSwitch(daSwc00_getSw1No(a_this), fopAcM_GetRoomNo(i_this));
         }
         else {
             return cPhs_ERROR_e;
         }
     }
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(i_this, swc00_class);
+#endif
 
     i_this->scale.x *= 100.0f;
     i_this->scale.x += 30.0f;

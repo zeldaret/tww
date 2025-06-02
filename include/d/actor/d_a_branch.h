@@ -15,7 +15,7 @@ public:
             }
         }
 
-        dComIfG_resDelete(&mPhase, m_arcname);
+        dComIfG_resDeleteDemo(&mPhase, m_arcname);
     }
     inline cPhs_State create();
     inline BOOL draw();

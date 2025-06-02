@@ -298,9 +298,7 @@ void daArrow_c::arrowShooting() {
     mAtCps.CalcAtVec();
     
     dComIfG_Ccsp()->Set(&mAtCps);
-    // Using the dComIfG_Ccsp inline here breaks the match.
-    // dComIfG_Ccsp()->SetMass(&mCps, 1);
-    g_dComIfG_gameInfo.play.mCcS.SetMass(&mAtCps, 1);
+    dComIfG_Ccsp_SetMass(&mAtCps, 1);
     
     clrAtHitNormal();
     setAtHitPosBuff(&end);
@@ -874,9 +872,7 @@ BOOL daArrow_c::procMove() {
         mAtCps.CalcAtVec();
         
         dComIfG_Ccsp()->Set(&mAtCps);
-        // Using the dComIfG_Ccsp inline here breaks the match.
-        // dComIfG_Ccsp()->SetMass(&mCps, 1);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mAtCps, 1);
+        dComIfG_Ccsp_SetMass(&mAtCps, 1);
     }
     
     return TRUE;
