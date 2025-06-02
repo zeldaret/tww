@@ -84,7 +84,7 @@ public:
     /* 0x2E84 */ s16 field_0x2E84;
     /* 0x2E86 */ u8 field_0x2E86[0x2E88 - 0x2E86];
     /* 0x2E88 */ fpc_ProcID mBombId;
-    /* 0x2E8C */ fpc_ProcID mpCreatedItem;
+    /* 0x2E8C */ fpc_ProcID mCreatedItemId;
     /* 0x2E90 */ fpc_ProcID field_0x2E90[2];
     /* 0x2E98 */ s16 field_0x2E98;
     /* 0x2E9A */ s8 field_0x2E9A;

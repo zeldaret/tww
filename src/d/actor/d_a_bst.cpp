@@ -48,7 +48,7 @@ static u16 down_bck_d[] = {BST_BCK_BST_FLY, BST_BCK_LH_DOWN, BST_BCK_RH_DOWN};
 
 /* 00000110-00000174       .text message_set__FP9bst_classUl */
 static BOOL message_set(bst_class* i_this, unsigned long msg_no) {
-    if (msg == -1) {
+    if (msg == fpcM_ERROR_PROCESS_ID_e) {
         msg = fopMsgM_messageSet(msg_no, i_this);
         msg_end = 0;
         return TRUE;
@@ -58,7 +58,7 @@ static BOOL message_set(bst_class* i_this, unsigned long msg_no) {
 
 /* 00000174-000001FC       .text message_cont__FP9bst_class */
 static void message_cont(bst_class* i_this) {
-    if (msg == -1) {
+    if (msg == fpcM_ERROR_PROCESS_ID_e) {
         return;
     }
     msg_class* msg_obj = fopMsgM_SearchByID(msg);
@@ -73,7 +73,7 @@ static void message_cont(bst_class* i_this) {
         }
     } else if (msg_obj->mStatus == fopMsgStts_BOX_CLOSED_e) {
         msg_obj->mStatus = fopMsgStts_MSG_DESTROYED_e;
-        msg = -1;
+        msg = fpcM_ERROR_PROCESS_ID_e;
     }
 }
 
@@ -227,7 +227,7 @@ static BOOL daBst_Draw(bst_class* i_this) {
             i_this->field_0x2FD4->entry(i_this->field_0x2FD0->getModelData());
             mDoExt_modelUpdateDL(i_this->field_0x2FD0);
         }
-        dSnap_RegistFig(DSNAP_TYPE_UNKC9, i_this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_BST, i_this, 1.0f, 1.0f, 1.0f);
     }
 
     return TRUE;
@@ -1243,7 +1243,7 @@ static void hana_demo(bst_class* i_this) {
 
         cXyz pos_vec;
         MtxPosition(&vec, &pos_vec);
-        i_this->mpCreatedItem = fopAcM_createItem(
+        i_this->mCreatedItemId = fopAcM_createItem(
             &pos_vec,
             itemNo,
             -1,
@@ -1642,7 +1642,6 @@ static void beam_eff_set(cXyz* pos, short y, unsigned char set_angle) {
         dComIfGp_particle_set(dPa_name::ID_SCENE_A1C0, pos);
         dComIfGp_particle_set(dPa_name::ID_SCENE_A1C1, pos);
     } else {
-        // x is -2.0
         csXyz angle(-0x4000, y, 0);
         dComIfGp_particle_set(dPa_name::ID_SCENE_81BF, pos, &angle);
         dComIfGp_particle_set(dPa_name::ID_SCENE_A1C0, pos, &angle);
@@ -1863,7 +1862,7 @@ void demo_camera(bst_class* i_this) {
                 csXyz item_angle(i_this->shape_angle.x,
                     i_this->shape_angle.y + REG0_S(7) + (-300),
                     i_this->shape_angle.z);
-                i_this->mpCreatedItem = fopAcM_createItemForBoss(
+                i_this->mCreatedItemId = fopAcM_createItemForBoss(
                     &boss_pos,
                     0,
                     fopAcM_GetRoomNo(i_this),
@@ -1889,7 +1888,7 @@ void demo_camera(bst_class* i_this) {
             }
 
             if ((s32)i_this->field_0x02B8->getFrame() > 26) {
-                fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mpCreatedItem);
+                fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mCreatedItemId);
                 if (actor != NULL) {
                     i_this->field_0x2E9A = 57;
                     actor->speedF = REG0_F(6) + 65.0f;
@@ -1897,7 +1896,7 @@ void demo_camera(bst_class* i_this) {
             }
             break;
         case 57: {
-            fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mpCreatedItem);
+            fopAc_ac_c* actor = fopAcM_SearchByID(i_this->mCreatedItemId);
             if (actor != NULL) {
                 cLib_addCalc2(&i_this->field_0x2EAC.x, actor->current.pos.x, 0.1f, 100.0f);
                 cLib_addCalc2(&i_this->field_0x2EAC.y, actor->current.pos.y, 0.1f, 100.0f);
@@ -2561,7 +2560,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             i_this->mHioSet = 1;
             hio_set = 1;
 
-            // "Deguamos"
+            // Possible bug: why is "Armos Knight" here?
             l_HIO.field_0x4 = mDoHIO_createChild("デグアモス", &l_HIO);
         }
 
@@ -2573,7 +2572,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
 
         if (i_this->field_0x02B4 == 0) {
             boss = i_this;
-            msg = -1;
+            msg = fpcM_ERROR_PROCESS_ID_e;
         }
         if (i_this->field_0x02B4 == 1) {
             hand[0] = i_this;

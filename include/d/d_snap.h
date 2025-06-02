@@ -206,7 +206,7 @@ enum {
     /* 0xC6 */ DSNAP_TYPE_UNKC6,
     /* 0xC7 */ DSNAP_TYPE_UNKC7,
     /* 0xC8 */ DSNAP_TYPE_UNKC8,
-    /* 0xC9 */ DSNAP_TYPE_UNKC9,
+    /* 0xC9 */ DSNAP_TYPE_BST,
     /* 0xCA */ DSNAP_TYPE_UNKCA,
     /* 0xCB */ DSNAP_TYPE_UNKCB,
     /* 0xCC */ DSNAP_TYPE_UNKCC,
