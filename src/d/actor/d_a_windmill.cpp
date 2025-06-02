@@ -316,12 +316,12 @@ void daWindMill_c::hane_move() {
     if (mWindTagId != fpcM_ERROR_PROCESS_ID_e) {
         daWindTag::daWindTag_c* wind_tag = (daWindTag::daWindTag_c*) fopAcM_SearchByID(mWindTagId);
         if (wind_tag != NULL) {
-            // TODO: calculated through wind tag's inlines somehow.
             wind_float = wind_tag->getCurLength() / wind_tag->getMaxLength();
         }
     }
 
-    cLib_addCalcAngleS(&mAngle[1], wind_float * 2500.0f, 0xF, 100, 10);
+    f32 temp = 2500.0f;
+    cLib_addCalcAngleS(&mAngle[1], wind_float * temp, 0xF, 100, 10);
     if (mAngle[2] <= mAngle[1] && mAngle[1] != 0) {
         if (mType == 0) {
             fopAcM_seStart(this, JA_SE_OBJ_WDUN_WMILL_L_RND, 0);
