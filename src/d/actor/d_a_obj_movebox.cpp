@@ -1016,7 +1016,7 @@ namespace daObjMovebox {
     
     /* 000012E0-00001308       .text prm_get_swSave1__Q212daObjMovebox5Act_cCFv */
     s32 Act_c::prm_get_swSave1() const {
-        return daObj::PrmAbstract(this, PRM_SWSAVE1_W, PRM_SWSAVE1_S);
+        return prm_get_swSave();
     }
     
     /* 00001308-00001380       .text prmZ_init__Q212daObjMovebox5Act_cFv */
@@ -1026,7 +1026,7 @@ namespace daObjMovebox {
         }
         mbPrmZInitialized = true;
         
-        s32 switchEnablesSpawn = prm_get_swSave();
+        s32 switchEnablesSpawn = prm_get_dmy();
         if (switchEnablesSpawn) {
             // The appearing/disappearing type of box does not take pathId or swSave2 params.
             mPrmZ = 0xFFFF;
@@ -1484,7 +1484,7 @@ namespace daObjMovebox {
         }
         
         bool switchIsSet = is_switch1();
-        bool switchEnablesSpawn = prm_get_swSave();
+        bool switchEnablesSpawn = prm_get_dmy();
         bool shouldAppear = false;
         if ((!switchIsSet && !switchEnablesSpawn) || (switchIsSet && switchEnablesSpawn)) {
             shouldAppear = true;
