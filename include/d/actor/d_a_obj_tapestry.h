@@ -87,7 +87,7 @@ public:
 
     //f32 array[8][6][2];
     f32 array[8*6*2];
-    /* 0x180 */u8 m_dl[0x20];
+    /* 0x180 */u8 m_dl[0x8][4];
     u8 pad[0x320-0x1A0];
 
 };
@@ -104,7 +104,7 @@ public:
 
     void init(daObjTapestry_c*);
     void update();
-    int calc_acc_spring_sub(const cXyz*, const cXyz*, float, float);
+    void calc_acc_spring_sub(const cXyz*, const cXyz*, float, float);
     void calc_acc_spring(int, int);
     void calc_acc_gravity();
     void calc_acc_wave(int, int);
@@ -237,24 +237,6 @@ public:
 class daObjTapestryAttr_c { 
 public:
 daObjTapestryAttr_c operator=(const daObjTapestryAttr_c& other){
-    // unk4C = other.unk4C;
-    // unkC[0] = other.unkC[0];
-    // unkC[1] = other.unkC[1];
-    // unkC[2] = other.unkC[2];
-    // unkC[3] = other.unkC[3];
-    // unkC[4] = other.unkC[4];
-    // unkC[5] = other.unkC[5];
-    // unkC[6] = other.unkC[6];
-    // unkC[7] = other.unkC[7];
-    // unkC[8] = other.unkC[8];
-    // unkC[9] = other.unkC[9];
-    // unkC[10] = other.unkC[10];
-    // unkC[11] = other.unkC[11];
-    // unkC[12] = other.unkC[12];
-    // unkC[13] = other.unkC[13];
-    // unkC[14] = other.unkC[14];
-    // unkC[15] = other.unkC[15];
-    //unk8 = other.unk8;
     unkC[0][0] = other.unkC[0][0];
     unkC[0][1] = other.unkC[0][1];
     unkC[1][0] = other.unkC[1][0];
@@ -281,23 +263,19 @@ daObjTapestryAttr_c operator=(const daObjTapestryAttr_c& other){
     unk58[1][1] = other.unk58[1][1];
 };
 public:
-    f32 unkC[8][2];
+    f32 unkC[8][2]; //[0][1] is spring stiffness. [0][0] is mass / spring scaling.
     s8 unk4C;
     s8 unk4D;
     float unk50;
     u8 unk54;
     f32 unk58[2][2];
-    // float unk58;
-    // float unk5C;
-    // float unk60;
-    // float unk64;
 };
 
 class daObjTapestry_HIO_c : public JORReflexible{
-//static const daObjTapestryAttr_c M_attr;
 
 public:
-    //inline const daObjTapestryAttr_c& attr() const { return field_C; }
+    inline const daObjTapestryAttr_c attr() const { return field_C; }
+
     daObjTapestry_HIO_c();
     virtual ~daObjTapestry_HIO_c(){};
 public:

@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "weak_bss_936_to_1036.h"
-//#include "assets/l_matDL__d_a_obj_tapestry.h"
+
 
 
 namespace{
@@ -44,6 +44,7 @@ static const dCcD_SrcTri l_tri_src = {
 
 const double doubleToSqrt = 3400.18359375;
 static f32 l_mesh_diagonal = std::sqrtf(doubleToSqrt);
+u8 unused[0x10];
 const daObjTapestryAttr_c l_attr = {
     {2.0f,0.9f,0.28f,0.35f,0.4f,0.3f,0.4f,1.0f,1.5f,2.0f,-980.0f,1.0f,1.0f,1.0f,30.0f,50.0f},
     13,
@@ -127,7 +128,9 @@ void daObjTapestryPLight_c::setPointLight(cXyz param_1, csXyz param_2) {
             field_24 = dComIfGp_particle_setProjection(0x4004,&param_1,&param_2,&local_38);
         }else{
             field_24->setGlobalParticleScale(local_38);
-            field_24->setEmitterCallBackPtr(&dPa_control_c::mKagero);
+            //field_24->setEmitterCallBackPtr(&dPa_control_c::getKageroEcallBack());
+            field_24->setEmitterCallBackPtr(dPa_control_c::getKageroEcallBack());
+
         }
 
     }
@@ -136,81 +139,17 @@ void daObjTapestryPLight_c::setPointLight(cXyz param_1, csXyz param_2) {
 
 /* 00000490-00000600       .text execute__22daObjTapestryFireEff_cFP14JPABaseEmitter */
 void daObjTapestryFireEff_c::execute(JPABaseEmitter* param_1) {
-    /* Nonmatching */
-// }
 
-    daObjTapestryAttr_c attr = l_HIO.field_C;
-    f32 local_88;
-    volatile daObjTapestryAttr_c attr2 = l_HIO.field_C; 
+    f32 fVar1 =  l_HIO.attr().unk58[0][1];
+    //f32 fVar2 = l_HIO.attr().unk58[0][0];
+    
+    cXyz local_148;
+    local_148.set(unk20*l_HIO.attr().unk58[0][0]);
+    local_148.x = cLib_minMaxLimit(local_148.x, -fVar1, fVar1);
+    local_148.z = cLib_minMaxLimit(local_148.z, -fVar1, fVar1);
 
-
-    //b.y = 0;
-//   iVar11 = 0xb;
-//   //pfVar1 = &local_134;
-//   pfVar3 = &fStack_7c;
-//   do {
-//     pfVar10 = pfVar3;
-//     pfVar8 = pfVar1;
-//     fVar6 = pfVar8[2];
-//     pfVar10[1] = pfVar8[1];
-//     pfVar10[2] = fVar6;
-//     iVar11 = iVar11 + -1;
-//     pfVar1 = pfVar8 + 2;
-//     pfVar3 = pfVar10 + 2;
-//   } while (iVar11 != 0);
-//   pfVar10[3] = pfVar8[3];
-//   iVar11 = 0xb;
-//   //pfVar1 = &local_134;
-//  // pfVar3 = &fStack_d8;
-//   do {
-//     pfVar10 = pfVar3;
-//     pfVar8 = pfVar1;
-//     fVar6 = pfVar8[2];
-//     pfVar10[1] = pfVar8[1];
-//     pfVar10[2] = fVar6;
-//     iVar11 = iVar11 + -1;
-//     pfVar1 = pfVar8 + 2;
-//     pfVar3 = pfVar10 + 2;
-//   } while (iVar11 != 0);
-   // a[1].x = 0;
-//   pfVar10[3] = pfVar8[3];
-//   local_148 = unk20*local_88;
-//   local_138 = local_148.y;
-//   local_134[0].x = -local_28;
-//   local_13c = local_134[0].x;
-//   if ((local_134[0].x <= local_148.x) && (local_13c = local_148.x, local_28 < local_148.x)) {
-//     local_13c = local_28;
-//   }
-// //   if ((local_134 <= local_148.z) && (local_134[0].x = local_148.z, local_28 < local_148.z)) {
-// //     local_134 = local_28;
-// //   }
-    local_88 = attr.unkC[0][0];
-    cXyz local_148 = unk20*local_88;
-    cXyz local_13C;
-    f32 local_28;
-    //local_13C.y = local_148.y;
-    //local_13C.z = -local_28;
-    //local_13C.x = local_13C.z;
-    local_28 = -attr.unk58[0][1];
-    if(local_28 < local_148.x){
-        local_13C.x = local_148.x;
-        if(local_28 < local_148.x){
-            local_13C.x = local_28;
-        }
-    }
-    if(local_13C.z < local_148.z){
-        local_13C.z = local_148.z;
-        if(local_28 < local_148.z){
-            local_13C.z = local_28;
-        }
-    }
-    (param_1->mEmitterDir).x = local_13C.x;
-    (param_1->mEmitterDir).y = 0.1;
-    (param_1->mEmitterDir).z = local_13C.z;
+    param_1->setDirection(JGeometry::TVec3<f32>(local_148.x,0.1f,local_148.z));
     dPa_followEcallBack::execute(param_1);
-    return;
-
-
 }
 
 /* 00000600-00000638       .text __ct__23daObjTapestryDrawData_cFv */
@@ -234,12 +173,13 @@ void daObjTapestryDrawData_c::ct_tex() {
 }
 
 
-const u32 l_dl_size = 0x185;
+const u16 l_dl_size = 0x185;
 
 
 static const u8 begin_data[3] = {0x98,0x00,0x0C};
+const u16 morefiller[5] = {};
 static const u8 temp_clr = 0;
-
+const u16 again[2] = {};
 /* 000006C8-00000878       .text ct_dl__23daObjTapestryDrawData_cFv */
 void daObjTapestryDrawData_c::ct_dl() {
     /* Nonmatching */
@@ -250,25 +190,25 @@ void daObjTapestryDrawData_c::ct_dl() {
     for(int i = 0; i < 7; ++i){
         memcpy(&m_dl[now],&begin_data,3);
         local_34[0] = 0;
-        local_34[1] =
+        local_34[1] = 0;
         now += 3;
         for(int j = 0; j < 6; j++){
             for(int k = 0; k < 2; k++){
                 char cVar1 = j + 4*k;
                 local_34[0] = cVar1;    
                 local_34[1] = cVar1;
-                memcpy(&m_dl[now+0],local_34,2);
-                memcpy(&m_dl[now+2],&temp_clr,1);
+                memcpy(&m_dl[now][0],local_34,2);
+                memcpy(&m_dl[now][2],&temp_clr,1);
                 local_38[0]=0;
                 local_38[0]=cVar1; //gets written to twice in asm?
-                memcpy(&m_dl[now+3],&local_38,1);
+                memcpy(&m_dl[now][3],&local_38,1);
                 now+=4;
             }
         }
     }
 
     for(int i = 0; i < 0x20; i++){
-        m_dl[now] = 0;
+        m_dl[0][now] = 0;
         now++;
     }
     JUT_ASSERT(0x25A,(reinterpret_cast<u32>(m_dl) & 0x1f) == 0);
@@ -336,6 +276,7 @@ daObjTapestryPacket_c::daObjTapestryPacket_c() {
 
 }
 
+
 /* 00000CC0-00000F3C       .text init__21daObjTapestryPacket_cFP15daObjTapestry_c */
 void daObjTapestryPacket_c::init(daObjTapestry_c* param_1) {
     static cXyz base_z_rev(0.0,0.0,-1.0);
@@ -375,51 +316,90 @@ void daObjTapestryPacket_c::update() {
 }
 
 /* 00000F90-00001154       .text calc_acc_spring_sub__21daObjTapestryPacket_cFPC4cXyzPC4cXyzff */
-int daObjTapestryPacket_c::calc_acc_spring_sub(const cXyz* param_1, const cXyz* param_2, float param_3, float param_4) {
-    /* Nonmatching */
+void daObjTapestryPacket_c::calc_acc_spring_sub(const cXyz* i_pointA, const cXyz* i_pointB, float i_restLength, float i_dampeningFactor) {
 
-  int iVar9;
-  float fVar10;
-  cXyz cStack_114;
-  float local_f0 [2];
-
-
-
-
-
-    cXyz diff(param_1->x-param_2->x,param_1->y-param_2->y,param_1->z-param_2->z);
-    fVar10 = diff.abs();
-    if (  fVar10 > 0.01f) {
-
-
-    volatile daObjTapestryAttr_c attr = l_HIO.field_C;
-
-    //cStack_114 = local_fc*(param_4 * (fVar10 - param_1->y) * -local_90);
-    volatile daObjTapestryAttr_c attr2 = l_HIO.field_C;
-    iVar9 = 0xb;
-    // pfVar2 = (f32 *)&l_HIO.field_C;
-
-
-    //cStack_114 = 
-    unk1328 += cStack_114/(fVar10 * attr2.unk58[1][0]);
-
-  }
-  return;
+    cXyz direction(i_pointA->x-i_pointB->x,i_pointA->y-i_pointB->y,i_pointA->z-i_pointB->z);
+    float current_length = direction.abs();
+    if (current_length > 0.01f) {
+        unk1328 += 
+            direction*((current_length-i_restLength)*-l_HIO.attr().unkC[0][1]*i_dampeningFactor) / 
+            (current_length * l_HIO.attr().unkC[0][0]);
+    }
+    return;
 }
 
 /* 00001154-000014FC       .text calc_acc_spring__21daObjTapestryPacket_cFii */
-void daObjTapestryPacket_c::calc_acc_spring(int, int) {
+void daObjTapestryPacket_c::calc_acc_spring(int param_1, int param_2) {
     /* Nonmatching */
+
+    u32 uVar3 = unk1060 ^ 1;
+    cXyz* pcVar10 = &(mDrawVtx[uVar3].mBufferVtx[param_1]+param_2)[0]; 
+    f32 someHIO = l_HIO.attr().unkC[0][0];
+    u32 uVar4 = param_1 + 1U ^ 8;
+    u32 uVar11 = param_2 - 1U >> 0x1f ^ 1;
+    u32 uVar5 = param_2 + 1U ^ 6;
+    int iVar6 = ((int)uVar5 >> 1) - (uVar5 & 6);
+    iVar6 = ((int)uVar5 >> 1) - (uVar5 & 6);
+    if(param_1 + -1 > -1){
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2],42.42857f,someHIO);
+        if(uVar11){
+            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-2][param_2+5],l_mesh_diagonal,someHIO);
+        }
+        if(iVar6 < 0){
+            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2+1],l_mesh_diagonal,someHIO);
+        }
+    }
+    if((int)(((int)uVar4 >> 1) - (uVar4 & 8)) < 0){ // param_1 < 7
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2],42.42857f,someHIO);
+        if(uVar11){ //param_2 > 0
+            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1][param_2+5],l_mesh_diagonal,someHIO);
+        }
+        if(iVar6 < 0){ //param_2 < 5
+            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],l_mesh_diagonal,someHIO);
+        }
+    } 
+    if(uVar11){
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,someHIO);
+
+    }
+    if(iVar6 < 0){
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,someHIO);
+    }
+    uVar4 = param_1 + 2U ^ 8;
+    uVar5 = param_2 + 2U ^ 6;
+    f32 someOtherHIO = l_HIO.field_C.unkC[1][1];
+    if (param_1 + -2 > -1) { //param_1 + -2 > -1
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1-2][param_2],84.85714f,someOtherHIO);
+    }
+    if((int)(((int)uVar4 >> 1) - (uVar4 & 8)) < 0) {//param_1 < 6 && param_1 > -2
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1+2][param_2],84.85714f,someOtherHIO); 
+    }
+    if (param_2 + -2 > -1) { //param_2 + -2 > -1
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1-1][param_2+4],80.0f,someOtherHIO);
+    }
+    if((int)(((int)uVar5 >> 1) - (uVar5 & 6)) < 0) {//param_2 < 6 && param_2 > -2
+        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1][param_2+2],80.0f,someOtherHIO);     
+    }
 }
+const u32 fillerone[1] = {0x3A91A2B4};
+const f32 ohpointeight[1] = {0.8f};
+const u32 fillerthreee[2] = {
+0x3CEA0EA1,0x40200000,
+};
+
 
 /* 000014FC-000015B8       .text calc_acc_gravity__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_acc_gravity() {
+    volatile f32 pointsix = 0.6f;
     /* Nonmatching */
 }
-
+const u32 fillerfourr[6] = {
+    0x3E23D70A,0x40D00000,
+0x40600000,0x40E00000,0x40A00000,0x42480000};
 /* 000015B8-00001858       .text calc_acc_wave__21daObjTapestryPacket_cFii */
 void daObjTapestryPacket_c::calc_acc_wave(int, int) {
     /* Nonmatching */
+    volatile f32 two = 2.0f;
 }
 
 /* 00001858-000019CC       .text calc_acc_hit__21daObjTapestryPacket_cFii */
@@ -435,6 +415,7 @@ void daObjTapestryPacket_c::calc_spd(int, int) {
 /* 00001AF4-00001D34       .text calc_pos_crr__21daObjTapestryPacket_cFii */
 void daObjTapestryPacket_c::calc_pos_crr(int, int) {
     /* Nonmatching */
+
 }
 
 /* 000021F4-00002350       .text calc_pos__21daObjTapestryPacket_cFv */
@@ -461,35 +442,42 @@ void daObjTapestryPacket_c::calc_pos() {
 /* 00002350-00002874       .text calc_nrm__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_nrm() {
     /* Nonmatching */
-    int active = unk1060;
-    int prev = unk1060;
-
-    for (int i = 0; i < 8; ++i) { // 8 vertical strips
-        for (int j = 0; j < 6; j += 1) { // 6 horizontal segments
-            cXyz& center = mDrawVtx[0].mBufferVtx[i][j]; // base point
-            cXyz& up = mDrawVtx[0].mBufferVtx[i+1][j];
-            cXyz& down = mDrawVtx[0].mBufferVtx[i-1][j];
-
-            cXyz& right = mDrawVtx[0].mBufferVtx[i][j+1];
-            cXyz& left = mDrawVtx[0].mBufferVtx[i][j-1];
+    //int active = unk1060;
+    daObjTapestryDrawVtx_c* prev = &mDrawVtx[unk1060];
+    daObjTapestryDrawVtx_c* active = &mDrawVtx[unk1060^1];
 
 
+    for (int i = 0; i < 8; i++) { // 8 vertical strips
+        for (int j = 0; j < 6; j++) { // 6 horizontal segments
+            cXyz& center = active->mBufferVtx[i][j]; // base point
+            cXyz& down = active->mBufferVtx[i+1][j];
+            cXyz& up = active->mBufferVtx[i-1][j];
+            cXyz& right = active->mBufferVtx[i][j+1];
+            cXyz& left = active->mBufferVtx[i][j-1];
 
-            
-            // Get neighbors for tangents
+
+
             cXyz tangent;
+            cXyz bitangent;
+            // Get neighbors for tangents
             if (i == 0) {
                 tangent = down - center;
             } else if (i == 7) {
                 tangent = center - up;
             } else {
+
                 cXyz v1 = center - up;
                 cXyz v2 = down - center;
+
+                //cXyz smoothStart;
+                //cXyz smoothEnd;                
+
+
                 cXyz smoothStart = up * 0.57475f;
                 smoothStart += v1 * 0.358875f;
                 smoothStart += v2 * 0.111375f;
-                smoothStart += down* 0.42525f;
-                cXyz smoothEnd = up * 0.42525f;
+                smoothStart += down* 0.42524996f;
+                cXyz smoothEnd = up * 0.42524996f;
                 smoothEnd += v1 * 0.383625f;
                 smoothEnd += v2 * 0.136125f;
                 smoothEnd += down * 0.57475f;
@@ -497,8 +485,8 @@ void daObjTapestryPacket_c::calc_nrm() {
                 tangent = smoothEnd - smoothStart;
             }
 
-            //Get neighbors for bitangents
-            cXyz bitangent;
+
+
             if (j == 0) {
                 bitangent = right - center;
             } else if (j == 5) {
@@ -510,9 +498,9 @@ void daObjTapestryPacket_c::calc_nrm() {
                 cXyz smoothStart = left * 0.57475f;
                 smoothStart += v1 * 0.358875f;
                 smoothStart += v2 * 0.111375f;
-                smoothStart += right * 0.42525f;
+                smoothStart += right * 0.42524996f;
 
-                cXyz smoothEnd = left * 0.42525f;
+                cXyz smoothEnd = left * 0.42524996f;
                 smoothEnd += v1 * 0.383625f;
                 smoothEnd += v2 * 0.136125f;
                 smoothEnd += right * 0.57475f;
@@ -524,17 +512,56 @@ void daObjTapestryPacket_c::calc_nrm() {
             cXyz normal;
             normal = bitangent.outprod(tangent);
             if (normal.normalizeRS()) {
-                mDrawVtx[0].mBufferNrm[i][j] = normal;
-                mDrawVtx[0].mBufferThree[i][j] = normal;
-                mDrawVtx[0].mBufferThree[i][j] *= -1.0f;
+                prev->mBufferNrm[i][j] = normal;
+                prev->mBufferThree[i][j] = normal;
+                prev->mBufferThree[i][j] *= -1.0f;
             }
         }
     }
 }
-
+u8 bssfiller2[0x64];
 /* 00002874-00002D80       .text calc_wind__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_wind() {
     /* Nonmatching */
+    unk13C8 *= 0.6f;
+
+    if(unk13C8.getSquareMag() < 0.1f){
+        unk13C8.setall(0.0f);
+    }
+    if(unk13C4 != 0){
+        mDoMtx_multVecSR(unk1394,&unk13C8,&unk13D4);
+        if(unk13D4.z < 0.0f){
+            unk13D4.z*=-0.5f;
+        }
+        if(std::fabsf(unk13D4.x) > 0.6f && std::fabsf(unk13D4.z) < 0.2f ){
+            unk13D4.x *= 0.3f;
+        }else{
+            unk13D4.x *= 0.6f;
+        }
+        unk13D4 *= l_HIO.attr().unkC[2][0];
+    }else{
+        unk13D4 = cXyz::Zero;
+    }
+
+    unk13E0 += 500;
+    if(unk13E0 > 0){
+        unk13E4 = cXyz::BaseZ*(cM_ssin(unk13E0)*l_HIO.attr().unkC[2][1]);
+    }else{
+        unk13E4 = cXyz::Zero;
+    }
+    if(unk1464 != 0){
+        static cXyz vec0_base(0.0,cM_ssin(15000),cM_scos(15000));
+        static cXyz vec1_base(0.0,cM_ssin(11000),cM_scos(11000));
+        static cXyz vec2_base(0.0,cM_ssin(5500),cM_scos(5500));
+        unk13F0 += 0x556;
+        unk13F2 += 0x46D;
+        unk13F4 += 0x32B;
+        //f32 somemult = l_HIO.attr().unk58[0][1];
+        unk13F8 = vec0_base*((cM_ssin(unk13F0)+1.0f)*l_HIO.attr().unkC[3][1]);
+        unk1404 = vec1_base*((cM_ssin(unk13F2)+1.0f)*l_HIO.attr().unkC[4][0]);
+        unk1410 = vec2_base*((cM_ssin(unk13F4)+1.0f)*l_HIO.attr().unkC[4][1]);
+    }
+    
 }
 
 /* 00002D80-00002F38       .text calc_hit__21daObjTapestryPacket_cFv */
@@ -545,6 +572,7 @@ void daObjTapestryPacket_c::calc_hit() {
 /* 00002F38-00003008       .text calc_fire_leap__21daObjTapestryPacket_cFii */
 void daObjTapestryPacket_c::calc_fire_leap(int, int) {
     /* Nonmatching */
+    volatile f32 rofiller = 8.0f;
 }
 
 /* 00003008-0000331C       .text calc_fire__21daObjTapestryPacket_cFv */
@@ -576,7 +604,7 @@ void daObjTapestryPacket_c::calc_fire() {
                     if(cM_rnd()<var_f31){
                         unkFD0[1][i][j] += 1;
                     }
-                    daObjTapestryAttr_c attr = l_HIO.field_C;
+
                     s32 var_r5_2[8][3];
                     //struct_8* var_r4_2 = &l_HIO.field_8;
 
@@ -585,7 +613,7 @@ void daObjTapestryPacket_c::calc_fire() {
                       //  var_r5_2[k+1][2] = var_r4_2->arr[k][1];
                     }
                     //var_r5_2[0][1] = var_r4_2->arr[0][1];
-                    if(unkFD0[1][i][j] >= attr.unk4C){
+                    if(unkFD0[1][i][j] >= l_HIO.attr().unk4C){
                         if(!cLib_checkBit(unkFD0[i][j][0],(u8)1)){
                             cLib_onBit(unkFD0[i][j][0],(u8)1);
                             u8 iPlus = i+1;
@@ -781,7 +809,7 @@ void daObjTapestryPacket_c::setup_vtx(daObjTapestryDrawVtx_c* param_1) {
     GXSetArray(GX_VA_POS,param_1->mBufferVtx,0xc);
     GXSetArray(GX_VA_NRM,param_1->mBufferNrm,0xc);
     GXSetArray(GX_VA_CLR0,&l_color,4);
-    GXSetArray(GX_VA_TEX0,m_draw_data.tex_coord(),8);
+    GXSetArray(GX_VA_TEX0,&m_draw_data,8);
 
 }
 
@@ -1083,10 +1111,10 @@ bool daObjTapestry_c::_delete() {
 /* 00005628-00005730       .text wait_act_proc__15daObjTapestry_cFv */
 void daObjTapestry_c::wait_act_proc() {
     /* Nonmatching */
-    char* firstStr = "0";
+
     char* nextstr = "タペストリ";
     char* fillerstr;
-    strcpy(fillerstr,firstStr);   
+
     strcpy(fillerstr,nextstr);
 }
 
@@ -1103,8 +1131,7 @@ void daObjTapestry_c::burn_act_proc() {
         return;
     }else{
         f32 fVar1 = unk1AB0;
-        daObjTapestryAttr_c pfVar1 = l_HIO.field_C;
-        int iVar7 = cLib_chaseF(&unk1AB0,0.0f,pfVar1.unk50);
+        int iVar7 = cLib_chaseF(&unk1AB0,0.0f,l_HIO.attr().unk50);
         if ((fVar1 >= 0.8f) && (this->unk1AB0 < 0.8f)) {
             on_switch();
         }
@@ -1123,8 +1150,9 @@ void daObjTapestry_c::burn_act_proc() {
 /* 000058D8-00005984       .text burn_act_init_proc__15daObjTapestry_cFv */
 void daObjTapestry_c::burn_act_init_proc() {
     /* Nonmatching */
-    daObjTapestryAttr_c pfVar1 = l_HIO.field_C;
-    unk1AA8 = pfVar1.unk54;
+    //daObjTapestryAttr_c pfVar1 = l_HIO.attr();
+    unk1AA8 = l_HIO.attr().unk54;
+    //unk1AA8 = pfVar1.unk54;
     fopAcM_seStart(this,0x69C1,0);
     return;
 }
@@ -1163,19 +1191,11 @@ void daObjTapestry_c::setup_action(int param_1) {
 
 /* 00005B30-00005BD0       .text _execute__15daObjTapestry_cFv */
 bool daObjTapestry_c::_execute() {
-    /* Nonmatching */
-    bool bVar2;
+
     set_eye_pos();
     dBgW* dbgw = unk175C;
-    if(dbgw != NULL){
-        if(dbgw->GetId() >= 0 && dbgw->GetId() < 0x100){
-            bVar2 = true;
-        }else{
-            bVar2 = false;
-        }
-        if(bVar2){
-            dbgw->Move();
-        }
+    if(dbgw != NULL && dbgw->ChkUsed()){
+        dbgw->Move();
     }
     if(unk1AB4 != NULL){
         (this->*unk1AB4)();
@@ -1202,34 +1222,34 @@ bool daObjTapestry_c::_draw() {
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
 static cPhs_State daObjTapestry_Create(fopAc_ac_c* obj) {
-    /* Nonmatching */
+
     return ((daObjTapestry_c*)obj)->_create();
 }
 
 /* 00005C64-00005C88       .text daObjTapestry_Delete__FP15daObjTapestry_c */
 static BOOL daObjTapestry_Delete(daObjTapestry_c* obj) {
-    /* Nonmatching */
+
     return obj->_delete();
 }
 
 /* 00005C88-00005CAC       .text daObjTapestry_Execute__FP15daObjTapestry_c */
 static BOOL daObjTapestry_Execute(daObjTapestry_c* obj) {
-    /* Nonmatching */
+
     return obj->_execute();
 }
 
 /* 00005CAC-00005CD0       .text daObjTapestry_Draw__FP15daObjTapestry_c */
 static BOOL daObjTapestry_Draw(daObjTapestry_c* obj) {
-    /* Nonmatching */
+
     return obj->_draw();
 }
 
 /* 00005CD0-00005CD8       .text daObjTapestry_IsDelete__FP15daObjTapestry_c */
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
-    /* Nonmatching */
+
     return TRUE;
 }
-
+const u32 lastfiller[5] = {0xC2F00000,0xC3AA0000,0xC1F00000,0x42F00000,0x42C80000};
 static actor_method_class l_daObjTapestry_Method = {
     (process_method_func)daObjTapestry_Create,
     (process_method_func)daObjTapestry_Delete,
