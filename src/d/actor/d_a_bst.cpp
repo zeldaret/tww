@@ -156,79 +156,76 @@ static BOOL daBst_Draw(bst_class* i_this) {
     cXyz temp;
     cXyz shadow_pos;
 
-    if (i_this->field_0x02B4 == 0 || boss->field_0x2E9A < 1 || boss->field_0x2E9A > 9) {
-        J3DModel* model_2B8 = i_this->field_0x02B8->getModel();
-
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-        g_env_light.setLightTevColorType(model_2B8, &i_this->tevStr);
-
-        i_this->mpTexMtxAnimator->entry(model_2B8->getModelData());
-        i_this->mpTevRegAnimator->entry(model_2B8->getModelData());
-        i_this->field_0x02B8->entryDL();
-
-        i_this->mpTexMtxAnimator->remove(model_2B8->getModelData());
-        i_this->mpTevRegAnimator->remove(model_2B8->getModelData());
-
-        J3DModel* model_388 = i_this->field_0x0388;
-        for (u16 i = 0; i < model_2B8->getModelData()->getJointNum(); i++) {
-            model_388->setAnmMtx(i, model_2B8->getAnmMtx(i));
-        }
-        for (u16 i = 0; i < model_2B8->getModelData()->getWEvlpMtxNum(); i++) {
-            model_388->setWeightAnmMtx(i, model_2B8->getWeightAnmMtx(i));
-        }
-        mDoMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(0), *calc_mtx);
-
-        shadow_pos.setall(0.0f);
-        MtxPosition(&temp, &shadow_pos);
-        shadow_pos.y += REG0_F(1) * 10.0f;
-
-        i_this->mShadowID = dComIfGd_setRealShadow(
-            i_this->mShadowID,
-            TRUE,
-            model_388,
-            &shadow_pos,
-            (REG0_F(2) * 10.0f) + 2000.0f,
-            0.0f,
-            &i_this->tevStr
-        );
-
-        J3DModel* model_2C8 = i_this->field_0x02C8;
-        i_this->mpBtkAnm->entry(model_2C8->getModelData());
-        i_this->mpBrkAnm->entry(model_2C8->getModelData());
-
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->home.pos, &i_this->mEnvLight);
-        g_env_light.setLightTevColorType(model_2C8, &i_this->mEnvLight);
-        mDoExt_modelUpdateDL(model_2C8);
-        if (i_this->field_0x02B4 == 0) {
-            switch (i_this->field_0x2E98) {
-                case 0:
-                    mDoGph_gInf_c::setBlureRate(i_this->field_0x2E98);
-                    mDoGph_gInf_c::onBlure();
-                    break;
-                case 1:
-                default:
-                    i_this->field_0x2E98 = 0;
-                    mDoGph_gInf_c::offBlure();
-                    break;
-            }
-
-            beam_draw(i_this);
-            // yup, this is a static var.
-            static cXyz center_pos(0.0f, 0.0f, 0.0f);
-
-            g_env_light.settingTevStruct(TEV_TYPE_BG0, &center_pos, &i_this->field_0x2F20);
-            g_env_light.setLightTevColorType(i_this->field_0x2FDC, &i_this->field_0x2F20);
-            i_this->field_0x2FE0->entry(i_this->field_0x2FDC->getModelData());
-
-            mDoExt_modelUpdateDL(i_this->field_0x2FDC);
-            g_env_light.setLightTevColorType(i_this->field_0x2FD0, &i_this->field_0x2F20);
-
-            i_this->field_0x2FD8->entry(i_this->field_0x2FD0->getModelData());
-            i_this->field_0x2FD4->entry(i_this->field_0x2FD0->getModelData());
-            mDoExt_modelUpdateDL(i_this->field_0x2FD0);
-        }
-        dSnap_RegistFig(DSNAP_TYPE_BST, i_this, 1.0f, 1.0f, 1.0f);
+    if (i_this->field_0x02B4 != 0 && boss->field_0x2E9A > 0 && boss->field_0x2E9A < 10) {
+        return TRUE;
     }
+    J3DModel* model_2B8 = i_this->field_0x02B8->getModel();
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(model_2B8, &i_this->tevStr);
+
+    i_this->mpTexMtxAnimator->entry(model_2B8->getModelData());
+    i_this->mpTevRegAnimator->entry(model_2B8->getModelData());
+    i_this->field_0x02B8->entryDL();
+
+    i_this->mpTexMtxAnimator->remove(model_2B8->getModelData());
+    i_this->mpTevRegAnimator->remove(model_2B8->getModelData());
+
+    J3DModel* model_388 = i_this->field_0x0388;
+    for (u16 i = 0; i < model_2B8->getModelData()->getJointNum(); i++) {
+        model_388->setAnmMtx(i, model_2B8->getAnmMtx(i));
+    }
+    for (u16 i = 0; i < model_2B8->getModelData()->getWEvlpMtxNum(); i++) {
+        model_388->setWeightAnmMtx(i, model_2B8->getWeightAnmMtx(i));
+    }
+    mDoMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(0), *calc_mtx);
+
+    shadow_pos.setall(0.0f);
+    MtxPosition(&temp, &shadow_pos);
+    shadow_pos.y += REG0_F(1) * 10.0f;
+
+    i_this->mShadowID = dComIfGd_setRealShadow(
+        i_this->mShadowID,
+        TRUE,
+        model_388,
+        &shadow_pos,
+        (REG0_F(2) * 10.0f) + 2000.0f,
+        0.0f,
+        &i_this->tevStr
+    );
+
+    J3DModel* model_2C8 = i_this->field_0x02C8;
+    i_this->mpBtkAnm->entry(model_2C8->getModelData());
+    i_this->mpBrkAnm->entry(model_2C8->getModelData());
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->home.pos, &i_this->mEnvLight);
+    g_env_light.setLightTevColorType(model_2C8, &i_this->mEnvLight);
+    mDoExt_modelUpdateDL(model_2C8);
+    if (i_this->field_0x02B4 == 0) {
+        if (i_this->field_0x2E98 > 1) {
+            mDoGph_gInf_c::setBlureRate(i_this->field_0x2E98);
+            mDoGph_gInf_c::onBlure();
+        } else if (!i_this->field_0x2E98 != 0) {
+            i_this->field_0x2E98 = 0;
+            mDoGph_gInf_c::offBlure();
+        }
+
+        beam_draw(i_this);
+        // yup, this is a static var.
+        static cXyz center_pos(0.0f, 0.0f, 0.0f);
+
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &center_pos, &i_this->field_0x2F20);
+        g_env_light.setLightTevColorType(i_this->field_0x2FDC, &i_this->field_0x2F20);
+        i_this->field_0x2FE0->entry(i_this->field_0x2FDC->getModelData());
+
+        mDoExt_modelUpdateDL(i_this->field_0x2FDC);
+        g_env_light.setLightTevColorType(i_this->field_0x2FD0, &i_this->field_0x2F20);
+
+        i_this->field_0x2FD8->entry(i_this->field_0x2FD0->getModelData());
+        i_this->field_0x2FD4->entry(i_this->field_0x2FD0->getModelData());
+        mDoExt_modelUpdateDL(i_this->field_0x2FD0);
+    }
+    dSnap_RegistFig(DSNAP_TYPE_BST, i_this, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }
@@ -268,7 +265,8 @@ static u16 start_smoke_name[] = {dPa_name::ID_SCENE_A1DE, dPa_name::ID_SCENE_A1D
 /* 00000B1C-00000E58       .text stay__FP9bst_class */
 static void stay(bst_class* i_this) {
     /* Nonmatching */
-    i_this->actor_status = i_this->actor_status;
+    fopAcM_OffStatus(i_this, 0);
+
     i_this->attention_info.flags = 0;
     i_this->mState = 10;
 
@@ -277,11 +275,11 @@ static void stay(bst_class* i_this) {
             anm_init(i_this, set_bck_d[i_this->field_0x02B4], 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mDamage++;
             break;
-        case 1:
+        case 2:
             anm_init(i_this, start_bck_d[i_this->field_0x02B4], 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mDamage++;
             break;
-        case 3: {
+        case 4: {
             cXyz vec;
             vec.x = 0.0f;
             vec.y = 0.0f;
@@ -313,13 +311,13 @@ static void stay(bst_class* i_this) {
 
             // fall-through.
         }
-        case 4:
+        case 5:
             if (i_this->field_0x02B4 != 0 && i_this->field_0x10FC[3] != 0) {
                 for (s32 i = 2; i <= 16; i++) {
                     mDoMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(i), *calc_mtx);
 
-                    cXyz vec(0.0f, 0.0f, 0.0f);
                     cXyz pos_vec;
+                    cXyz vec(0.0f, 0.0f, 0.0f);
                     MtxPosition(&vec, &pos_vec);
 
                     dComIfGp_particle_setSimple(dPa_name::ID_SCENE_81D5, &pos_vec);
@@ -328,6 +326,9 @@ static void stay(bst_class* i_this) {
             cLib_addCalc2(&i_this->current.pos.x, i_this->mTargetPos.x, 0.05f, 10.0f);
             cLib_addCalc2(&i_this->current.pos.z, i_this->mTargetPos.z, 0.05f, 10.0f);
             break;
+        case 1:
+        case 3:
+            return;
     }
 }
 
@@ -625,7 +626,7 @@ static void sleep(bst_class* i_this) {
     set_hand_CO(i_this, 1);
 
     i_this->mState = 10;
-    i_this->actor_status = i_this->actor_status;
+    fopAcM_OffStatus(i_this, 0);
     i_this->attention_info.flags = 0;
 
     cLib_addCalc2(&i_this->field_0x10EC.z, REG0_F(11) + 50.0f, 1.0f, 2.0f);
@@ -1174,7 +1175,7 @@ static void damage_check(bst_class* i_this) {
                 if (player_way_check(i_this)) {
 
                     cXyz* hit_pos = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP();
-                    
+
                     cXyz scale(2.0f, 2.0f, 2.0f);
                     csXyz angle;
                     angle.x = angle.z = 0;
@@ -1229,47 +1230,72 @@ static void hana_demo(bst_class* i_this) {
             fopAcM_seStartCurrent(i_this, JA_SE_CM_BST_HAND_STRAIN, 0);
             break;
         case 1:
+            break;
         default:
             return;
     }
 
     cXyz vec(i_this->current.pos.x, 0, i_this->current.pos.z);
+    f32 dist = vec.abs();
+    if (dist > REG0_F(9) + 1350.0f) {
+        f32 angle = (REG0_F(9) + 1350.0f) / dist;
+        cLib_addCalc2(&i_this->current.pos.x, vec.x * angle, 0.2f, 30.0f);
+        cLib_addCalc2(&i_this->current.pos.z, vec.z * angle, 0.2f, 30.0f);
+    }
+
+    if ((s32)i_this->field_0x02B8->getFrame() > 26) {
+        fopAc_ac_c* item = fopAcM_SearchByID(i_this->mCreatedItemId);
+        if (item != NULL) {
+            fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
+        }
+    }
 
     if ((s32)i_this->field_0x02B8->getFrame() == 26) {
-        cXyz vec;
-        int itemNo = 5;
+        int itemNo;
+        if (dComIfGs_getArrowNum() == 0) {
+            itemNo = dItem_ARROW_10_e;
+            cMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(6), *calc_mtx);
+            i_this->field_0x2E9E = 0;
+        } else {
+            itemNo = dItem_BOMB_5_e;
+            cMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(7), *calc_mtx);
+            i_this->field_0x2E9E = 1;
+        }
 
-        fopAcM_seStart(i_this, JA_SE_OBJ_BOMB_EXPLODE, 0);
+        vec.set(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
 
-        cXyz pos_vec;
-        MtxPosition(&vec, &pos_vec);
-        i_this->mCreatedItemId = fopAcM_createItem(
-            &pos_vec,
-            itemNo,
-            -1,
-            fopAcM_GetRoomNo(i_this),
-            0,
-            NULL,
-            0xB,
-            NULL
-        );
+        if (itemNo != -35) {
+            fopAcM_seStart(i_this, JA_SE_OBJ_BOMB_EXPLODE, 0);
 
-        fopAcM_seStart(i_this, JA_SE_CM_BST_ITEM_OUT_NOSE, 0);
-        mDoMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(0), *calc_mtx);
+            cXyz pos_vec;
+            MtxPosition(&vec, &pos_vec);
+            i_this->mCreatedItemId = fopAcM_createItem(
+                &pos_vec,
+                itemNo,
+                -1,
+                fopAcM_GetRoomNo(i_this),
+                0,
+                NULL,
+                0xB,
+                NULL
+            );
 
-        cXyz pos_vec2;
-        cXyz vec2(0.0f, 0.0f, 0.0f);
-        MtxPosition(&vec, &pos_vec2);
+            fopAcM_seStart(i_this, JA_SE_CM_BST_ITEM_OUT_NOSE, 0);
+            mDoMtx_copy(i_this->field_0x02B8->getModel()->getAnmMtx(0), *calc_mtx);
 
-        dComIfGp_particle_setToon(
-            item_smoke_name[i_this->field_0x2E9E[0]],
-            &pos_vec2,
-            &i_this->shape_angle,
-            NULL,
-            0xB9,
-            &i_this->mPa_smokeEcallBack,
-            i_this->current.roomNo
-        );
+            vec.setall(0.0f);
+            MtxPosition(&vec, &pos_vec);
+
+            dComIfGp_particle_setToon(
+                item_smoke_name[i_this->field_0x2E9E],
+                &pos_vec,
+                &i_this->shape_angle,
+                NULL,
+                0xB9,
+                &i_this->mPa_smokeEcallBack,
+                fopAcM_GetRoomNo(i_this)
+            );
+        }
     }
 }
 
@@ -1282,7 +1308,7 @@ static u16 set_za_brk_d[3] = {BST_BRK_MUNE_START, BST_BRK_UDEL_START, BST_BRK_UD
 static void end_demo(bst_class* i_this) {
     /* Nonmatching */
     i_this->mState = 10;
-    i_this->actor_status = i_this->actor_status;
+    fopAcM_OffStatus(i_this, 0);
     i_this->attention_info.flags = 0;
 
     switch (i_this->mDamage) {
@@ -2033,7 +2059,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
             }
             main_cont(i_this);
             if (i_this->field_0x10D6 != 7) {
-                i_this->actor_status = i_this->actor_status;
+                fopAcM_OffStatus(i_this, 0);
                 i_this->attention_info.flags = 0;
             }
 
@@ -2152,7 +2178,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
                     continue;
                 }
 
-                actor->actor_status = actor->actor_status;
+                fopAcM_OffStatus(i_this, 0);
                 actor->attention_info.flags = 0;
             }
         }
