@@ -4,7 +4,6 @@
 //
 
 #include "d/actor/d_a_tag_attention.h"
-#include "d/d_a_obj.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
@@ -22,13 +21,13 @@ static dCcD_SrcSph sph_check_src = {
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_NoCrr_e,
         /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0,
-        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
         /* SrcGObjTg Mtrl    */ 0,
         /* SrcGObjTg SPrm    */ 0,
         /* SrcGObjCo SPrm    */ 0,
@@ -48,8 +47,7 @@ bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
     cXyz plyrToObjVec = dComIfGp_getPlayer(0)->current.pos - current.pos;
     if (subtype == 0){
         // spherical collision check
-        f32 distance = plyrToObjVec.getSquareMag();
-        distance = std::sqrtf(distance);
+        f32 distance = plyrToObjVec.abs();
         
         if (distance > scale.x * 100.0f) {
             return false;
@@ -58,13 +56,12 @@ bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
         // box collision check
         s16 yRotAngle = current.angle.y;
         if (yRotAngle != 0){
-            u32 sinCosTableIndex = yRotAngle >> (jmaSinShift & 0xFFFF);  
             plyrToObjVec.z = 
-                plyrToObjVec.x * jmaSinTable[sinCosTableIndex] +
-                plyrToObjVec.z * jmaCosTable[sinCosTableIndex];
+                plyrToObjVec.x * cM_ssin(yRotAngle) +
+                plyrToObjVec.z * cM_scos(yRotAngle);
             plyrToObjVec.x = 
-                plyrToObjVec.x * jmaCosTable[sinCosTableIndex] -
-                plyrToObjVec.z * jmaSinTable[sinCosTableIndex];
+                plyrToObjVec.x * cM_scos(yRotAngle) -
+                plyrToObjVec.z * cM_ssin(yRotAngle);
         }
 
         f32 curScale = scale.x;
@@ -101,17 +98,17 @@ bool daTagAttention::Act_c::_execute() {
     mSph.SetR(scale.x * 100.0f);
     dComIfG_Ccsp()->Set(&mSph);
     m_b0x290 = true;
-    int iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+    int iVar1 = prm_get_Type();
     if (iVar1 == 1){
-        iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+        iVar1 = prm_get_swSave();
         BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
         if (bVar2 == FALSE){
             m_b0x290 = false;
         }
     }else{
-        iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+        iVar1 = prm_get_Type();
         if (iVar1 == 2){
-            iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+            iVar1 = prm_get_swSave();
             BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
             if (bVar2 == FALSE){
                 m_b0x290 = false;
