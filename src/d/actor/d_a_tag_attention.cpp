@@ -41,7 +41,7 @@ static dCcD_SrcSph sph_check_src = {
 };
 
 bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
-    if (!mEnabled){
+    if (!m_b0x290){
         return false;
     }
 
@@ -100,13 +100,13 @@ bool daTagAttention::Act_c::_execute() {
     mSph.SetC(current.pos);
     mSph.SetR(scale.x * 100.0f);
     dComIfG_Ccsp()->Set(&mSph);
-    mEnabled = true;
+    m_b0x290 = true;
     int iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
     if (iVar1 == 1){
         iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
         BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
         if (bVar2 == FALSE){
-            mEnabled = false;
+            m_b0x290 = false;
         }
     }else{
         iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
@@ -114,7 +114,7 @@ bool daTagAttention::Act_c::_execute() {
             iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
             BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
             if (bVar2 == FALSE){
-                mEnabled = false;
+                m_b0x290 = false;
             }
         }
     }
