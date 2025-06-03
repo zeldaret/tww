@@ -325,28 +325,28 @@ bool daDaiocta_c::_delete() {
 }
 
 /* 0000513C-0000515C       .text daDaioctaCreate__FPv */
-static s32 daDaioctaCreate(void*) {
-    /* Nonmatching */
+static s32 daDaioctaCreate(void* i_this) {
+    return ((daDaiocta_c*)i_this)->_create();
 }
 
 /* 0000515C-00005180       .text daDaioctaDelete__FPv */
-static BOOL daDaioctaDelete(void*) {
-    /* Nonmatching */
+static BOOL daDaioctaDelete(void* i_this) {
+    return ((daDaiocta_c*)i_this)->_delete();
 }
 
 /* 00005180-000051A4       .text daDaioctaExecute__FPv */
-static BOOL daDaioctaExecute(void*) {
-    /* Nonmatching */
+static BOOL daDaioctaExecute(void* i_this) {
+    return ((daDaiocta_c*)i_this)->_execute();
 }
 
 /* 000051A4-000051C8       .text daDaioctaDraw__FPv */
-static BOOL daDaioctaDraw(void*) {
-    /* Nonmatching */
+static BOOL daDaioctaDraw(void* i_this) {
+    return ((daDaiocta_c*)i_this)->_draw();
 }
 
 /* 000051C8-000051D0       .text daDaioctaIsDelete__FPv */
 static BOOL daDaioctaIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daDaioctaMethodTable = {

@@ -101,7 +101,7 @@ static BOOL daKi_Execute(ki_class*) {
 
 /* 00003E04-00003E0C       .text daKi_IsDelete__FP8ki_class */
 static BOOL daKi_IsDelete(ki_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00003E0C-00003EB8       .text daKi_Delete__FP8ki_class */

@@ -86,7 +86,7 @@ static BOOL daKanban_Execute(kanban_class*) {
 
 /* 000022A8-000022B0       .text daKanban_IsDelete__FP12kanban_class */
 static BOOL daKanban_IsDelete(kanban_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000022B0-00002300       .text daKanban_Delete__FP12kanban_class */

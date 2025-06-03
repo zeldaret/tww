@@ -60,7 +60,7 @@ static BOOL daEp_Execute(ep_class*) {
 
 /* 00002270-00002278       .text daEp_IsDelete__FP8ep_class */
 static BOOL daEp_IsDelete(ep_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002278-000022D4       .text daEp_Delete__FP8ep_class */

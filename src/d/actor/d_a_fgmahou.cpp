@@ -30,7 +30,7 @@ static BOOL daFgmahou_Execute(fgmahou_class*) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000DE0-00000E3C       .text daFgmahou_Delete__FP13fgmahou_class */

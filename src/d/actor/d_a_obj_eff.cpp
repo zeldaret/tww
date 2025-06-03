@@ -225,28 +225,28 @@ bool daObjEff::Act_c::_execute() {
 namespace daObjEff {
 namespace {
 /* 000014C0-000014E0       .text Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjEff::Act_c*)i_this)->_create();
 }
 
 /* 000014E0-00001504       .text Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjEff::Act_c*)i_this)->_delete();
 }
 
 /* 00001504-00001528       .text Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjEff::Act_c*)i_this)->_execute();
 }
 
 /* 00001528-00001530       .text Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
 BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001530-00001538       .text Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

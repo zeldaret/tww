@@ -78,13 +78,13 @@ void daWarpls_c::warp_eff_start() {
 }
 
 /* 000010C8-000010E8       .text daWarpls_Create__FPv */
-static cPhs_State daWarpls_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWarpls_Create(void* i_this) {
+    return ((daWarpls_c*)i_this)->_create();
 }
 
 /* 000010E8-0000110C       .text daWarpls_Delete__FPv */
-static BOOL daWarpls_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWarpls_Delete(void* i_this) {
+    return ((daWarpls_c*)i_this)->_delete();
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
@@ -93,13 +93,13 @@ static BOOL daWarpls_Draw(void*) {
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
-static BOOL daWarpls_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWarpls_Execute(void* i_this) {
+    return ((daWarpls_c*)i_this)->_execute();
 }
 
 /* 000011F4-000011FC       .text daWarpls_IsDelete__FPv */
 static BOOL daWarpls_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWarplsMethodTable = {

@@ -66,7 +66,7 @@ static BOOL daSs_Execute(ss_class*) {
 
 /* 00002F1C-00002F24       .text daSs_IsDelete__FP8ss_class */
 static BOOL daSs_IsDelete(ss_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002F24-00002F58       .text daSs_Delete__FP8ss_class */

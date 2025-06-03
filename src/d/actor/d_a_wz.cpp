@@ -121,7 +121,7 @@ static BOOL daWZ_Execute(wz_class*) {
 
 /* 00006108-00006110       .text daWZ_IsDelete__FP8wz_class */
 static BOOL daWZ_IsDelete(wz_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00006110-0000627C       .text daWZ_Delete__FP8wz_class */

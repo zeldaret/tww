@@ -253,7 +253,7 @@ static BOOL daBgn_Execute(bgn_class*) {
 
 /* 0000B134-0000B13C       .text daBgn_IsDelete__FP9bgn_class */
 static BOOL daBgn_IsDelete(bgn_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000B13C-0000B238       .text daBgn_Delete__FP9bgn_class */

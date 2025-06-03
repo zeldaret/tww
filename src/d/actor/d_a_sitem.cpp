@@ -65,7 +65,7 @@ static BOOL daSitem_Execute(sitem_class*) {
 
 /* 000026F4-000026FC       .text daSitem_IsDelete__FP11sitem_class */
 static BOOL daSitem_IsDelete(sitem_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000026FC-00002760       .text daSitem_Delete__FP11sitem_class */

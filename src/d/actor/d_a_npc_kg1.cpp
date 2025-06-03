@@ -146,8 +146,8 @@ void daNpc_Kg1_c::setAnm() {
 }
 
 /* 00001F8C-00001FAC       .text daNpc_Kg1Create__FPv */
-static s32 daNpc_Kg1Create(void*) {
-    /* Nonmatching */
+static s32 daNpc_Kg1Create(void* i_this) {
+    return ((daNpc_Kg1_c*)i_this)->_create();
 }
 
 /* 00001FAC-0000203C       .text _create__11daNpc_Kg1_cFv */
@@ -172,7 +172,7 @@ static BOOL daNpc_Kg1Draw(void*) {
 
 /* 000027CC-000027D4       .text daNpc_Kg1IsDelete__FPv */
 static BOOL daNpc_Kg1IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_Kg1MethodTable = {

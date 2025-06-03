@@ -18,8 +18,8 @@ void daObj_Tousekiki_c::CreateHeap() {
 }
 
 /* 000002BC-000002DC       .text daObj_TousekikiCreate__FPv */
-static s32 daObj_TousekikiCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_TousekikiCreate(void* i_this) {
+    return ((daObj_Tousekiki_c*)i_this)->_create();
 }
 
 /* 000002DC-000004F4       .text _create__17daObj_Tousekiki_cFv */
@@ -44,7 +44,7 @@ static BOOL daObj_TousekikiDraw(void*) {
 
 /* 00000934-0000093C       .text daObj_TousekikiIsDelete__FPv */
 static BOOL daObj_TousekikiIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_TousekikiMethodTable = {

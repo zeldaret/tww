@@ -96,17 +96,17 @@ void daObjKanoke_c::createInit() {
 }
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
-bool daObjKanoke_c::_delete() {
+BOOL daObjKanoke_c::_delete() {
     /* Nonmatching */
 }
 
 /* 00000C0C-00000CE0       .text _draw__13daObjKanoke_cFv */
-bool daObjKanoke_c::_draw() {
+BOOL daObjKanoke_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000CE0-00000E7C       .text _execute__13daObjKanoke_cFv */
-bool daObjKanoke_c::_execute() {
+BOOL daObjKanoke_c::_execute() {
     /* Nonmatching */
 }
 
@@ -191,28 +191,28 @@ void daObjKanoke_c::setMtxHuta(cXyz*) {
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
-static s32 daObjKanokeCreate(void*) {
-    /* Nonmatching */
+static s32 daObjKanokeCreate(void* i_this) {
+    return ((daObjKanoke_c*)i_this)->_create();
 }
 
 /* 00001E6C-00001E8C       .text daObjKanokeDelete__FPv */
-static BOOL daObjKanokeDelete(void*) {
-    /* Nonmatching */
+static BOOL daObjKanokeDelete(void* i_this) {
+    return ((daObjKanoke_c*)i_this)->_delete();
 }
 
 /* 00001E8C-00001EAC       .text daObjKanokeExecute__FPv */
-static BOOL daObjKanokeExecute(void*) {
-    /* Nonmatching */
+static BOOL daObjKanokeExecute(void* i_this) {
+    return ((daObjKanoke_c*)i_this)->_execute();
 }
 
 /* 00001EAC-00001ECC       .text daObjKanokeDraw__FPv */
-static BOOL daObjKanokeDraw(void*) {
-    /* Nonmatching */
+static BOOL daObjKanokeDraw(void* i_this) {
+    return ((daObjKanoke_c*)i_this)->_draw();
 }
 
 /* 00001ECC-00001ED4       .text daObjKanokeIsDelete__FPv */
 static BOOL daObjKanokeIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObjKanokeMethodTable = {

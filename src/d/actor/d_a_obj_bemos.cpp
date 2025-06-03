@@ -250,8 +250,8 @@ void daBemos_c::getBeamActor() {
 }
 
 /* 00003F70-00003F90       .text daBemosCreate__FPv */
-static s32 daBemosCreate(void*) {
-    /* Nonmatching */
+static s32 daBemosCreate(void* i_this) {
+    return ((daBemos_c*)i_this)->_create();
 }
 
 /* 00003F90-0000403C       .text _create__9daBemos_cFv */
@@ -276,7 +276,7 @@ static BOOL daBemosDraw(void*) {
 
 /* 00004E10-00004E18       .text daBemosIsDelete__FPv */
 static BOOL daBemosIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daBemosMethodTable = {

@@ -36,8 +36,8 @@ void daHo_packet_c::draw() {
 }
 
 /* 800E9BE8-800E9C0C       .text daGrid_Draw__FP8daGrid_c */
-static BOOL daGrid_Draw(daGrid_c*) {
-    /* Nonmatching */
+static BOOL daGrid_Draw(daGrid_c* i_this) {
+    return ((daGrid_c*)i_this)->_draw();
 }
 
 /* 800E9C0C-800EA928       .text ho_move__FP8daGrid_c */
@@ -46,23 +46,23 @@ void ho_move(daGrid_c*) {
 }
 
 /* 800EA928-800EA94C       .text daGrid_Execute__FP8daGrid_c */
-static BOOL daGrid_Execute(daGrid_c*) {
-    /* Nonmatching */
+static BOOL daGrid_Execute(daGrid_c* i_this) {
+    return ((daGrid_c*)i_this)->_execute();
 }
 
 /* 800EA94C-800EA954       .text daGrid_IsDelete__FP8daGrid_c */
 static BOOL daGrid_IsDelete(daGrid_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 800EA954-800EA978       .text daGrid_Delete__FP8daGrid_c */
-static BOOL daGrid_Delete(daGrid_c*) {
-    /* Nonmatching */
+static BOOL daGrid_Delete(daGrid_c* i_this) {
+    return ((daGrid_c*)i_this)->_delete();
 }
 
 /* 800EA978-800EA998       .text daGrid_Create__FP10fopAc_ac_c */
-static cPhs_State daGrid_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daGrid_Create(fopAc_ac_c* i_this) {
+    return ((daGrid_c*)i_this)->_create();
 }
 
 /* 800EA998-800EAEAC       .text _create__8daGrid_cFv */

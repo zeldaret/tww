@@ -151,7 +151,7 @@ static BOOL daBb_Execute(bb_class*) {
 
 /* 00007778-00007780       .text daBb_IsDelete__FP8bb_class */
 static BOOL daBb_IsDelete(bb_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00007780-000077EC       .text daBb_Delete__FP8bb_class */

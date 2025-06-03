@@ -148,28 +148,28 @@ bool daGy_Ctrl_c::_delete() {
 }
 
 /* 00001C44-00001C64       .text daGy_CtrlCreate__FPv */
-static s32 daGy_CtrlCreate(void*) {
-    /* Nonmatching */
+static s32 daGy_CtrlCreate(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_create();
 }
 
 /* 00001C64-00001C88       .text daGy_CtrlDelete__FPv */
-static BOOL daGy_CtrlDelete(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlDelete(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_delete();
 }
 
 /* 00001C88-00001CAC       .text daGy_CtrlExecute__FPv */
-static BOOL daGy_CtrlExecute(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlExecute(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_execute();
 }
 
 /* 00001CAC-00001CD0       .text daGy_CtrlDraw__FPv */
-static BOOL daGy_CtrlDraw(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlDraw(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_draw();
 }
 
 /* 00001CD0-00001CD8       .text daGy_CtrlIsDelete__FPv */
 static BOOL daGy_CtrlIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daGy_CtrlMethodTable = {

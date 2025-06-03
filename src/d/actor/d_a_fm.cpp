@@ -605,28 +605,28 @@ bool daFm_c::_delete() {
 }
 
 /* 0000A0FC-0000A11C       .text daFmCreate__FPv */
-static s32 daFmCreate(void*) {
-    /* Nonmatching */
+static s32 daFmCreate(void* i_this) {
+    return ((daFm_c*)i_this)->_create();
 }
 
 /* 0000A11C-0000A140       .text daFmDelete__FPv */
-static BOOL daFmDelete(void*) {
-    /* Nonmatching */
+static BOOL daFmDelete(void* i_this) {
+    return ((daFm_c*)i_this)->_delete();
 }
 
 /* 0000A140-0000A164       .text daFmExecute__FPv */
-static BOOL daFmExecute(void*) {
-    /* Nonmatching */
+static BOOL daFmExecute(void* i_this) {
+    return ((daFm_c*)i_this)->_execute();
 }
 
 /* 0000A164-0000A188       .text daFmDraw__FPv */
-static BOOL daFmDraw(void*) {
-    /* Nonmatching */
+static BOOL daFmDraw(void* i_this) {
+    return ((daFm_c*)i_this)->_draw();
 }
 
 /* 0000A188-0000A190       .text daFmIsDelete__FPv */
 static BOOL daFmIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daFmMethodTable = {

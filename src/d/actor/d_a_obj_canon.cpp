@@ -189,28 +189,28 @@ bool daObj_Canon_c::_delete() {
 }
 
 /* 00001C50-00001C70       .text daObj_CanonCreate__FPv */
-static s32 daObj_CanonCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_CanonCreate(void* i_this) {
+    return ((daObj_Canon_c*)i_this)->_create();
 }
 
 /* 00001C70-00001C94       .text daObj_CanonDelete__FPv */
-static BOOL daObj_CanonDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_CanonDelete(void* i_this) {
+    return ((daObj_Canon_c*)i_this)->_delete();
 }
 
 /* 00001C94-00001CB8       .text daObj_CanonExecute__FPv */
-static BOOL daObj_CanonExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_CanonExecute(void* i_this) {
+    return ((daObj_Canon_c*)i_this)->_execute();
 }
 
 /* 00001CB8-00001CDC       .text daObj_CanonDraw__FPv */
-static BOOL daObj_CanonDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_CanonDraw(void* i_this) {
+    return ((daObj_Canon_c*)i_this)->_draw();
 }
 
 /* 00001CDC-00001CE4       .text daObj_CanonIsDelete__FPv */
 static BOOL daObj_CanonIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_CanonMethodTable = {

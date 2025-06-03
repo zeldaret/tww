@@ -29,9 +29,9 @@ public:
     void TimerCountDown();
     void shiwake_game_action(void*);
     void getdemo_action(void*);
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void CreateHeap();
 

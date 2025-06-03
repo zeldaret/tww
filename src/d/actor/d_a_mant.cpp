@@ -45,12 +45,12 @@ static BOOL daMant_Execute(mant_class*) {
 
 /* 00001A3C-00001A44       .text daMant_IsDelete__FP10mant_class */
 static BOOL daMant_IsDelete(mant_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001A44-00001A4C       .text daMant_Delete__FP10mant_class */
 static BOOL daMant_Delete(mant_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001A4C-00001D18       .text daMant_Create__FP10fopAc_ac_c */

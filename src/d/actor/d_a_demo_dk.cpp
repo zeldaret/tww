@@ -34,7 +34,7 @@ static BOOL daDEMO_DK_Execute(demo_dk_class*) {
 
 /* 000004C0-000004C8       .text daDEMO_DK_IsDelete__FP13demo_dk_class */
 static BOOL daDEMO_DK_IsDelete(demo_dk_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000004C8-000004F8       .text daDEMO_DK_Delete__FP13demo_dk_class */

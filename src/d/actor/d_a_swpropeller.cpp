@@ -86,28 +86,28 @@ bool daSwProp_c::_draw() {
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
-static cPhs_State daSwProp_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daSwProp_Create(void* i_this) {
+    return ((daSwProp_c*)i_this)->_create();
 }
 
 /* 00000C20-00000C44       .text daSwProp_Delete__FPv */
-static BOOL daSwProp_Delete(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Delete(void* i_this) {
+    return ((daSwProp_c*)i_this)->_delete();
 }
 
 /* 00000C44-00000C68       .text daSwProp_Draw__FPv */
-static BOOL daSwProp_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Draw(void* i_this) {
+    return ((daSwProp_c*)i_this)->_draw();
 }
 
 /* 00000C68-00000C8C       .text daSwProp_Execute__FPv */
-static BOOL daSwProp_Execute(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Execute(void* i_this) {
+    return ((daSwProp_c*)i_this)->_execute();
 }
 
 /* 00000C8C-00000C94       .text daSwProp_IsDelete__FPv */
 static BOOL daSwProp_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSwPropMethodTable = {

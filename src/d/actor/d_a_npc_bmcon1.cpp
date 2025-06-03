@@ -278,28 +278,28 @@ void daNpcBmcon_c::isClear() {
 }
 
 /* 00003DFC-00003E1C       .text daNpc_BmconCreate__FPv */
-static s32 daNpc_BmconCreate(void*) {
-    /* Nonmatching */
+static s32 daNpc_BmconCreate(void* i_this) {
+    return ((daNpcBmcon_c*)i_this)->_create();
 }
 
 /* 00003E1C-00003E40       .text daNpc_BmconDelete__FPv */
-static BOOL daNpc_BmconDelete(void*) {
-    /* Nonmatching */
+static BOOL daNpc_BmconDelete(void* i_this) {
+    return ((daNpcBmcon_c*)i_this)->_delete();
 }
 
 /* 00003E40-00003E64       .text daNpc_BmconExecute__FPv */
-static BOOL daNpc_BmconExecute(void*) {
-    /* Nonmatching */
+static BOOL daNpc_BmconExecute(void* i_this) {
+    return ((daNpcBmcon_c*)i_this)->_execute();
 }
 
 /* 00003E64-00003E88       .text daNpc_BmconDraw__FPv */
-static BOOL daNpc_BmconDraw(void*) {
-    /* Nonmatching */
+static BOOL daNpc_BmconDraw(void* i_this) {
+    return ((daNpcBmcon_c*)i_this)->_draw();
 }
 
 /* 00003E88-00003E90       .text daNpc_BmconIsDelete__FPv */
 static BOOL daNpc_BmconIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_BmconMethodTable = {

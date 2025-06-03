@@ -245,13 +245,13 @@ bool daOship_c::_delete() {
 }
 
 /* 00003F20-00003F40       .text daOshipCreate__FPv */
-static cPhs_State daOshipCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daOshipCreate(void* i_this) {
+    return ((daOship_c*)i_this)->_create();
 }
 
 /* 00003F40-00003F64       .text daOshipDelete__FPv */
-static BOOL daOshipDelete(void*) {
-    /* Nonmatching */
+static BOOL daOshipDelete(void* i_this) {
+    return ((daOship_c*)i_this)->_delete();
 }
 
 /* 00003F64-00003F88       .text daOshipExecute__FPv */
@@ -260,13 +260,13 @@ static BOOL daOshipExecute(void*) {
 }
 
 /* 00003F88-00003FAC       .text daOshipDraw__FPv */
-static BOOL daOshipDraw(void*) {
-    /* Nonmatching */
+static BOOL daOshipDraw(void* i_this) {
+    return ((daOship_c*)i_this)->_draw();
 }
 
 /* 00003FAC-00003FB4       .text daOshipIsDelete__FPv */
 static BOOL daOshipIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daOshipMethodTable = {

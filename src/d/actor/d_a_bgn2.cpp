@@ -30,7 +30,7 @@ void bgn3_s_sub(void*, void*) {
 
 /* 00000354-0000035C       .text daBgn2_Draw__FP10bgn2_class */
 static BOOL daBgn2_Draw(bgn2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000035C-000006EC       .text gr_check__FP10bgn2_classP4cXyz */
@@ -130,7 +130,7 @@ static BOOL daBgn2_Execute(bgn2_class*) {
 
 /* 000037B0-000037B8       .text daBgn2_IsDelete__FP10bgn2_class */
 static BOOL daBgn2_IsDelete(bgn2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000037B8-00003828       .text daBgn2_Delete__FP10bgn2_class */

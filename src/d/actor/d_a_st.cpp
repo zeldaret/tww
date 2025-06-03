@@ -185,7 +185,7 @@ static BOOL daSt_Execute(st_class*) {
 
 /* 000087C8-000087D0       .text daSt_IsDelete__FP8st_class */
 static BOOL daSt_IsDelete(st_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000087D0-000088CC       .text daSt_Delete__FP8st_class */

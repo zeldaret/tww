@@ -235,7 +235,7 @@ static BOOL daBPW_Execute(bpw_class*) {
 
 /* 0000C5C0-0000C5C8       .text daBPW_IsDelete__FP9bpw_class */
 static BOOL daBPW_IsDelete(bpw_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000C5C8-0000C770       .text daBPW_Delete__FP9bpw_class */

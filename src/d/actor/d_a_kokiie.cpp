@@ -34,7 +34,7 @@ static BOOL daKokiie_Execute(kokiie_class*) {
 
 /* 0000107C-00001084       .text daKokiie_IsDelete__FP12kokiie_class */
 static BOOL daKokiie_IsDelete(kokiie_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001084-000010E4       .text daKokiie_Delete__FP12kokiie_class */

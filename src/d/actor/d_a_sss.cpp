@@ -75,7 +75,7 @@ static BOOL daSss_Execute(sss_class*) {
 
 /* 0000269C-000026A4       .text daSss_IsDelete__FP9sss_class */
 static BOOL daSss_IsDelete(sss_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000026A4-00002720       .text daSss_Delete__FP9sss_class */

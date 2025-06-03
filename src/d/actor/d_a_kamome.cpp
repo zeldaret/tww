@@ -121,7 +121,7 @@ static BOOL daKamome_Execute(kamome_class*) {
 
 /* 000049F8-00004A00       .text daKamome_IsDelete__FP12kamome_class */
 static BOOL daKamome_IsDelete(kamome_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00004A00-00004A70       .text daKamome_Delete__FP12kamome_class */

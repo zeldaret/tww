@@ -12,10 +12,10 @@ public:
     cPhs_State _create();
     void createHeap();
     void createInit();
-    bool _delete();
-    bool _draw();
+    BOOL _delete();
+    BOOL _draw();
     void setMode(unsigned char);
-    bool _execute();
+    BOOL _execute();
     void executeWait();
     void executeTalk();
     void checkOrder();

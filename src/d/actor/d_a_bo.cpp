@@ -120,7 +120,7 @@ static BOOL daBO_Execute(bo_class*) {
 
 /* 000048B0-000048B8       .text daBO_IsDelete__FP8bo_class */
 static BOOL daBO_IsDelete(bo_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000048B8-00004998       .text daBO_Delete__FP8bo_class */
