@@ -148,28 +148,28 @@ bool daObjTnTrap_c::_draw() {
 }
 
 /* 00001BF0-00001C10       .text daObjTnTrap_Create__FP10fopAc_ac_c */
-static cPhs_State daObjTnTrap_Create(fopAc_ac_c* i_this) {
-    return ((daObjTnTrap_c*)i_this)->_create();
+static cPhs_State daObjTnTrap_Create(fopAc_ac_c*) {
+    /* Nonmatching */
 }
 
 /* 00001C10-00001C34       .text daObjTnTrap_Delete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Delete(daObjTnTrap_c* i_this) {
-    return ((daObjTnTrap_c*)i_this)->_delete();
+static BOOL daObjTnTrap_Delete(daObjTnTrap_c*) {
+    /* Nonmatching */
 }
 
 /* 00001C34-00001C58       .text daObjTnTrap_Execute__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Execute(daObjTnTrap_c* i_this) {
-    return ((daObjTnTrap_c*)i_this)->_execute();
+static BOOL daObjTnTrap_Execute(daObjTnTrap_c*) {
+    /* Nonmatching */
 }
 
 /* 00001C58-00001C7C       .text daObjTnTrap_Draw__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Draw(daObjTnTrap_c* i_this) {
-    return ((daObjTnTrap_c*)i_this)->_draw();
+static BOOL daObjTnTrap_Draw(daObjTnTrap_c*) {
+    /* Nonmatching */
 }
 
 /* 00001C7C-00001C84       .text daObjTnTrap_IsDelete__FP13daObjTnTrap_c */
 static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c*) {
-    return TRUE;
+    /* Nonmatching */
 }
 
 static actor_method_class l_daObjTnTrap_Method = {

@@ -26,9 +26,9 @@ public:
     void wait01();
     void wait02();
     void wait_action1(void*);
-    BOOL _draw();
-    BOOL _execute();
-    BOOL _delete();
+    bool _draw();
+    bool _execute();
+    bool _delete();
     cPhs_State _create();
 
 public:

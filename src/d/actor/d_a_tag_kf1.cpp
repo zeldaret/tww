@@ -123,17 +123,17 @@ void daTag_Kf1_c::wait_action1(void*) {
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_draw() {
+bool daTag_Kf1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_execute() {
+bool daTag_Kf1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_delete() {
+bool daTag_Kf1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -143,28 +143,28 @@ cPhs_State daTag_Kf1_c::_create() {
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Kf1_Create(fopAc_ac_c* i_this) {
-    return ((daTag_Kf1_c*)i_this)->_create();
+static cPhs_State daTag_Kf1_Create(fopAc_ac_c*) {
+    /* Nonmatching */
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
-    return ((daTag_Kf1_c*)i_this)->_delete();
+static BOOL daTag_Kf1_Delete(daTag_Kf1_c*) {
+    /* Nonmatching */
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
-    return ((daTag_Kf1_c*)i_this)->_execute();
+static BOOL daTag_Kf1_Execute(daTag_Kf1_c*) {
+    /* Nonmatching */
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
-    return ((daTag_Kf1_c*)i_this)->_draw();
+static BOOL daTag_Kf1_Draw(daTag_Kf1_c*) {
+    /* Nonmatching */
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
 static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
-    return TRUE;
+    /* Nonmatching */
 }
 
 static actor_method_class l_daTag_Kf1_Method = {
