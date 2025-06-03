@@ -86,7 +86,7 @@ bool daObj_Pbco_c::_delete() {
     if (mpBgW != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return TRUE;
 }
 

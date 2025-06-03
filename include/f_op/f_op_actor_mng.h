@@ -132,7 +132,7 @@ inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
     return pActor->actor_status & fopAcStts_CARRY_e;
 }
 
-inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
+inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 

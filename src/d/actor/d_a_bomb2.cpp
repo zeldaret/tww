@@ -477,9 +477,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
         }
     }
 

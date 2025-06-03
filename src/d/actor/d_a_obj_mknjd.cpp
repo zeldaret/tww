@@ -4,7 +4,7 @@
  */
 
 #include "d/actor/d_a_obj_mknjd.h"
-#include "d/d_s_play.h"
+#include "d/d_s_play.h" // IWYU pragma: keep
 #include "d/res/res_mknjd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_manager.h"
