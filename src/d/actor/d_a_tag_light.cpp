@@ -100,28 +100,28 @@ bool daTagLight::Act_c::_draw() {
 namespace daTagLight {
 namespace {
 /* 00001EAC-00001ECC       .text Mthd_Create__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_create();
 }
 
 /* 00001ECC-00001EF0       .text Mthd_Delete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_delete();
 }
 
 /* 00001EF0-00001F14       .text Mthd_Execute__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_execute();
 }
 
 /* 00001F14-00001F38       .text Mthd_Draw__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_draw();
 }
 
 /* 00001F38-00001F40       .text Mthd_IsDelete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

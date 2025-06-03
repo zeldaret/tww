@@ -140,7 +140,7 @@ static BOOL daBL_Execute(bl_class*) {
 
 /* 00005504-0000550C       .text daBL_IsDelete__FP8bl_class */
 static BOOL daBL_IsDelete(bl_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000550C-0000558C       .text daBL_Delete__FP8bl_class */

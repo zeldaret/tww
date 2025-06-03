@@ -87,7 +87,7 @@ static BOOL daObjRflw_Execute(void*) {
 
 /* 000009EC-000009F4       .text daObjRflw_IsDelete__FPv */
 static BOOL daObjRflw_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_RflwMethodTable = {

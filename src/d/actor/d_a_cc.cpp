@@ -150,7 +150,7 @@ static BOOL daCC_Execute(cc_class*) {
 
 /* 00006214-0000621C       .text daCC_IsDelete__FP8cc_class */
 static BOOL daCC_IsDelete(cc_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000621C-00006290       .text daCC_Delete__FP8cc_class */

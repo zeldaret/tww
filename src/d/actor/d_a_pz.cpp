@@ -405,28 +405,28 @@ bool daPz_c::_delete() {
 }
 
 /* 00007E20-00007E40       .text daPzCreate__FPv */
-static cPhs_State daPzCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daPzCreate(void* i_this) {
+    return ((daPz_c*)i_this)->_create();
 }
 
 /* 00007E40-00007E64       .text daPzDelete__FPv */
-static BOOL daPzDelete(void*) {
-    /* Nonmatching */
+static BOOL daPzDelete(void* i_this) {
+    return ((daPz_c*)i_this)->_delete();
 }
 
 /* 00007E64-00007E88       .text daPzExecute__FPv */
-static BOOL daPzExecute(void*) {
-    /* Nonmatching */
+static BOOL daPzExecute(void* i_this) {
+    return ((daPz_c*)i_this)->_execute();
 }
 
 /* 00007E88-00007EAC       .text daPzDraw__FPv */
-static BOOL daPzDraw(void*) {
-    /* Nonmatching */
+static BOOL daPzDraw(void* i_this) {
+    return ((daPz_c*)i_this)->_draw();
 }
 
 /* 00007EAC-00007EB4       .text daPzIsDelete__FPv */
 static BOOL daPzIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daPzMethodTable = {

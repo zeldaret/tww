@@ -90,7 +90,7 @@ static BOOL daHimo2_Execute(himo2_class*) {
 
 /* 800F062C-800F0634       .text daHimo2_IsDelete__FP11himo2_class */
 static BOOL daHimo2_IsDelete(himo2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 800F0634-800F0670       .text daHimo2_Delete__FP11himo2_class */

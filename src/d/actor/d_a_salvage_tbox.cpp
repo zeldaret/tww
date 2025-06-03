@@ -113,13 +113,13 @@ void daSTBox_c::actWaitDummy(int) {
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
-static cPhs_State daSTBox_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daSTBox_Create(void* i_this) {
+    return ((daSTBox_c*)i_this)->_create();
 }
 
 /* 000013DC-00001400       .text daSTBox_Delete__FPv */
-static BOOL daSTBox_Delete(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Delete(void* i_this) {
+    return ((daSTBox_c*)i_this)->_delete();
 }
 
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
@@ -128,13 +128,13 @@ static BOOL daSTBox_Draw(void*) {
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */
-static BOOL daSTBox_Execute(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Execute(void* i_this) {
+    return ((daSTBox_c*)i_this)->_execute();
 }
 
 /* 00001490-00001498       .text daSTBox_IsDelete__FPv */
 static BOOL daSTBox_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSTBoxMethodTable = {

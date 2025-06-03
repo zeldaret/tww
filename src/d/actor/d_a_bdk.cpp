@@ -296,7 +296,7 @@ static BOOL daBdk_Execute(bdk_class*) {
 
 /* 0000BD74-0000BD7C       .text daBdk_IsDelete__FP9bdk_class */
 static BOOL daBdk_IsDelete(bdk_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000BD7C-0000BF08       .text daBdk_Delete__FP9bdk_class */

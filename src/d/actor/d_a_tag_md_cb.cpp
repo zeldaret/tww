@@ -158,28 +158,30 @@ daTag_MdCb_c::~daTag_MdCb_c() {
 }
 
 /* 0000191C-0000193C       .text daTag_MdCb_Draw__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Draw(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Draw(daTag_MdCb_c* i_this) {
+    return ((daTag_MdCb_c*)i_this)->draw();
 }
 
 /* 0000193C-00001960       .text daTag_MdCb_Execute__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Execute(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Execute(daTag_MdCb_c* i_this) {
+    ((daTag_MdCb_c*)i_this)->execute();
+    return TRUE;
 }
 
 /* 00001960-00001968       .text daTag_MdCb_IsDelete__FP12daTag_MdCb_c */
 static BOOL daTag_MdCb_IsDelete(daTag_MdCb_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001968-00001990       .text daTag_MdCb_Delete__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Delete(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Delete(daTag_MdCb_c* i_this) {
+    ((daTag_MdCb_c*)i_this)->~daTag_MdCb_c();
+    return TRUE;
 }
 
 /* 00001990-000019B0       .text daTag_MdCb_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_MdCb_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_MdCb_Create(fopAc_ac_c* i_this) {
+    return ((daTag_MdCb_c*)i_this)->create();
 }
 
 static actor_method_class l_daTag_MdCb_Method = {

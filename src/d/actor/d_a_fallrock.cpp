@@ -60,8 +60,8 @@ static BOOL daFallRock_Draw(daFallRock_c*) {
 }
 
 /* 000002B0-000002D0       .text daFallRock_Execute__FP12daFallRock_c */
-static BOOL daFallRock_Execute(daFallRock_c*) {
-    /* Nonmatching */
+static BOOL daFallRock_Execute(daFallRock_c* i_this) {
+    return ((daFallRock_c*)i_this)->execute();
 }
 
 /* 000002D0-00000810       .text execute__12daFallRock_cFv */
@@ -71,7 +71,7 @@ BOOL daFallRock_c::execute() {
 
 /* 00000E38-00000E40       .text daFallRock_IsDelete__FP12daFallRock_c */
 static BOOL daFallRock_IsDelete(daFallRock_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000E40-00000E68       .text daFallRock_Delete__FP12daFallRock_c */
@@ -80,8 +80,8 @@ static BOOL daFallRock_Delete(daFallRock_c*) {
 }
 
 /* 00001030-00001050       .text daFallRock_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRock_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daFallRock_Create(fopAc_ac_c* i_this) {
+    return ((daFallRock_c*)i_this)->create();
 }
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */

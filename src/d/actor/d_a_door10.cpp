@@ -163,8 +163,8 @@ BOOL daDoor10_c::draw() {
 }
 
 /* 00001BAC-00001BCC       .text daDoor10_Draw__FP10daDoor10_c */
-static BOOL daDoor10_Draw(daDoor10_c*) {
-    /* Nonmatching */
+static BOOL daDoor10_Draw(daDoor10_c* i_this) {
+    return ((daDoor10_c*)i_this)->draw();
 }
 
 /* 00001BCC-00001CCC       .text daDoor10_Execute__FP10daDoor10_c */
@@ -174,7 +174,7 @@ static BOOL daDoor10_Execute(daDoor10_c*) {
 
 /* 00001CCC-00001CD4       .text daDoor10_IsDelete__FP10daDoor10_c */
 static BOOL daDoor10_IsDelete(daDoor10_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001CD4-00001E18       .text daDoor10_Delete__FP10daDoor10_c */

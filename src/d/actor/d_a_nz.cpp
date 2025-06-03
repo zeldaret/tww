@@ -156,7 +156,7 @@ static BOOL daNZ_Execute(nz_class*) {
 
 /* 00007B50-00007B58       .text daNZ_IsDelete__FP8nz_class */
 static BOOL daNZ_IsDelete(nz_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00007B58-00007BE0       .text daNZ_Delete__FP8nz_class */

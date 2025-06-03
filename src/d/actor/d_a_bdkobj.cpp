@@ -51,7 +51,7 @@ static BOOL daBdkobj_Execute(bdkobj_class*) {
 
 /* 00002274-0000227C       .text daBdkobj_IsDelete__FP12bdkobj_class */
 static BOOL daBdkobj_IsDelete(bdkobj_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000227C-000022E8       .text daBdkobj_Delete__FP12bdkobj_class */

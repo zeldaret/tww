@@ -49,7 +49,7 @@ static BOOL daObj_Demo_BarrelDraw(void*) {
 
 /* 00000814-0000081C       .text daObj_Demo_BarrelIsDelete__FPv */
 static BOOL daObj_Demo_BarrelIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_Demo_BarrelMethodTable = {

@@ -59,7 +59,7 @@ static BOOL daMajuu_Flag_Execute(daMajuu_Flag_c*) {
 
 /* 000013B0-000013B8       .text daMajuu_Flag_IsDelete__FP14daMajuu_Flag_c */
 static BOOL daMajuu_Flag_IsDelete(daMajuu_Flag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000013B8-00001454       .text daMajuu_Flag_Delete__FP14daMajuu_Flag_c */

@@ -41,7 +41,7 @@ static BOOL daSsk_Execute(ssk_class*) {
 
 /* 00000C80-00000C88       .text daSsk_IsDelete__FP9ssk_class */
 static BOOL daSsk_IsDelete(ssk_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000C88-00000CD8       .text daSsk_Delete__FP9ssk_class */

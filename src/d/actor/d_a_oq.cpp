@@ -96,7 +96,7 @@ static BOOL daOQ_Execute(oq_class*) {
 
 /* 00004274-0000427C       .text daOQ_IsDelete__FP8oq_class */
 static BOOL daOQ_IsDelete(oq_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000427C-00004300       .text daOQ_Delete__FP8oq_class */

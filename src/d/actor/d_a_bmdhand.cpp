@@ -100,7 +100,7 @@ static BOOL daBmdhand_Execute(bmdhand_class*) {
 
 /* 00003028-00003030       .text daBmdhand_IsDelete__FP13bmdhand_class */
 static BOOL daBmdhand_IsDelete(bmdhand_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00003030-000030C4       .text daBmdhand_Delete__FP13bmdhand_class */

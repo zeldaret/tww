@@ -145,28 +145,28 @@ bool daObjSwlight::Act_c::_draw() {
 namespace daObjSwlight {
 namespace {
 /* 00001AC4-00001AE4       .text Mthd_Create__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_create();
 }
 
 /* 00001AE4-00001B08       .text Mthd_Delete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_delete();
 }
 
 /* 00001B08-00001B2C       .text Mthd_Execute__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_execute();
 }
 
 /* 00001B2C-00001B50       .text Mthd_Draw__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_draw();
 }
 
 /* 00001B50-00001B58       .text Mthd_IsDelete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

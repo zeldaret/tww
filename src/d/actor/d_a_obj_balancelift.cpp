@@ -96,8 +96,8 @@ static BOOL daBalanceliftDelete(void*) {
 }
 
 /* 00001318-0000133C       .text daBalanceliftExecute__FPv */
-static BOOL daBalanceliftExecute(void*) {
-    /* Nonmatching */
+static BOOL daBalanceliftExecute(void* i_this) {
+    return ((daBalancelift_c*)i_this)->_execute();
 }
 
 /* 0000133C-000016F0       .text _execute__15daBalancelift_cFv */
@@ -112,7 +112,7 @@ static BOOL daBalanceliftDraw(void*) {
 
 /* 00001774-0000177C       .text daBalanceliftIsDelete__FPv */
 static BOOL daBalanceliftIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daBalanceliftMethodTable = {

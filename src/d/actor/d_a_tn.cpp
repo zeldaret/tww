@@ -286,7 +286,7 @@ static BOOL daTn_Execute(tn_class*) {
 
 /* 0000BCE4-0000BCEC       .text daTn_IsDelete__FP8tn_class */
 static BOOL daTn_IsDelete(tn_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000BCEC-0000BE58       .text daTn_Delete__FP8tn_class */

@@ -293,8 +293,8 @@ BOOL daKddoor_c::draw() {
 }
 
 /* 000029E0-00002A00       .text daKddoor_Draw__FP10daKddoor_c */
-static BOOL daKddoor_Draw(daKddoor_c*) {
-    /* Nonmatching */
+static BOOL daKddoor_Draw(daKddoor_c* i_this) {
+    return ((daKddoor_c*)i_this)->draw();
 }
 
 /* 00002A00-00002AF4       .text daKddoor_Execute__FP10daKddoor_c */
@@ -304,7 +304,7 @@ static BOOL daKddoor_Execute(daKddoor_c*) {
 
 /* 00002AF4-00002AFC       .text daKddoor_IsDelete__FP10daKddoor_c */
 static BOOL daKddoor_IsDelete(daKddoor_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002AFC-00002C44       .text daKddoor_Delete__FP10daKddoor_c */
@@ -313,8 +313,8 @@ static BOOL daKddoor_Delete(daKddoor_c*) {
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
-static cPhs_State daKddoor_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daKddoor_Create(fopAc_ac_c* i_this) {
+    return ((daKddoor_c*)i_this)->create();
 }
 
 static actor_method_class l_daKddoor_Method = {

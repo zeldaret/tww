@@ -309,28 +309,28 @@ bool daObj_Ikada_c::_delete() {
 }
 
 /* 0000543C-0000545C       .text daObj_IkadaCreate__FPv */
-static s32 daObj_IkadaCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_IkadaCreate(void* i_this) {
+    return ((daObj_Ikada_c*)i_this)->_create();
 }
 
 /* 0000545C-00005480       .text daObj_IkadaDelete__FPv */
-static BOOL daObj_IkadaDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_IkadaDelete(void* i_this) {
+    return ((daObj_Ikada_c*)i_this)->_delete();
 }
 
 /* 00005480-000054A4       .text daObj_IkadaExecute__FPv */
-static BOOL daObj_IkadaExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_IkadaExecute(void* i_this) {
+    return ((daObj_Ikada_c*)i_this)->_execute();
 }
 
 /* 000054A4-000054C8       .text daObj_IkadaDraw__FPv */
-static BOOL daObj_IkadaDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_IkadaDraw(void* i_this) {
+    return ((daObj_Ikada_c*)i_this)->_draw();
 }
 
 /* 000054C8-000054D0       .text daObj_IkadaIsDelete__FPv */
 static BOOL daObj_IkadaIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_IkadaMethodTable = {

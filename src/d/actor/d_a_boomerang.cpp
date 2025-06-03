@@ -78,8 +78,8 @@ BOOL daBoomerang_c::draw() {
 }
 
 /* 800E1998-800E19B8       .text daBoomerang_Draw__FP13daBoomerang_c */
-static BOOL daBoomerang_Draw(daBoomerang_c*) {
-    /* Nonmatching */
+static BOOL daBoomerang_Draw(daBoomerang_c* i_this) {
+    return ((daBoomerang_c*)i_this)->draw();
 }
 
 /* 800E19B8-800E1A14       .text getFlyMax__13daBoomerang_cFv */
@@ -148,18 +148,18 @@ BOOL daBoomerang_c::execute() {
 }
 
 /* 800E2BD0-800E2BF0       .text daBoomerang_Execute__FP13daBoomerang_c */
-static BOOL daBoomerang_Execute(daBoomerang_c*) {
-    /* Nonmatching */
+static BOOL daBoomerang_Execute(daBoomerang_c* i_this) {
+    return ((daBoomerang_c*)i_this)->execute();
 }
 
 /* 800E2BF0-800E2BF8       .text daBoomerang_IsDelete__FP13daBoomerang_c */
 static BOOL daBoomerang_IsDelete(daBoomerang_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 800E2BF8-800E2C00       .text daBoomerang_Delete__FP13daBoomerang_c */
 static BOOL daBoomerang_Delete(daBoomerang_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 800E2C00-800E2CC8       .text createHeap__13daBoomerang_cFv */
@@ -178,8 +178,8 @@ cPhs_State daBoomerang_c::create() {
 }
 
 /* 800E33F0-800E3410       .text daBoomerang_Create__FP10fopAc_ac_c */
-static cPhs_State daBoomerang_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daBoomerang_Create(fopAc_ac_c* i_this) {
+    return ((daBoomerang_c*)i_this)->create();
 }
 
 static actor_method_class l_daBoomerang_Method = {

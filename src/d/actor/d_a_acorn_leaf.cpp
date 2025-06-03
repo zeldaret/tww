@@ -85,8 +85,8 @@ bool daAleaf_c::_draw() {
 }
 
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
-static cPhs_State daAleaf_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daAleaf_Create(void* i_this) {
+    return ((daAleaf_c*)i_this)->_create();
 }
 
 /* 00000CF4-00000D24       .text daAleaf_Delete__FPv */
@@ -95,18 +95,18 @@ static BOOL daAleaf_Delete(void*) {
 }
 
 /* 00000D24-00000D48       .text daAleaf_Draw__FPv */
-static BOOL daAleaf_Draw(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Draw(void* i_this) {
+    return ((daAleaf_c*)i_this)->_draw();
 }
 
 /* 00000D48-00000D6C       .text daAleaf_Execute__FPv */
-static BOOL daAleaf_Execute(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Execute(void* i_this) {
+    return ((daAleaf_c*)i_this)->_execute();
 }
 
 /* 00000D6C-00000D74       .text daAleaf_IsDelete__FPv */
 static BOOL daAleaf_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daAleafMethodTable = {

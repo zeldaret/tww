@@ -30,7 +30,7 @@ static BOOL daNZG_Execute(nzg_class*) {
 
 /* 000004D0-000004D8       .text daNZG_IsDelete__FP9nzg_class */
 static BOOL daNZG_IsDelete(nzg_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000004D8-00000508       .text daNZG_Delete__FP9nzg_class */

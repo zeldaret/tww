@@ -80,7 +80,7 @@ static BOOL daBwds_Execute(bwds_class*) {
 
 /* 000031B4-000031BC       .text daBwds_IsDelete__FP10bwds_class */
 static BOOL daBwds_IsDelete(bwds_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000031BC-00003278       .text daBwds_Delete__FP10bwds_class */

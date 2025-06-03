@@ -45,7 +45,7 @@ static BOOL daHimo3_Execute(himo3_class*) {
 
 /* 00001A3C-00001A44       .text daHimo3_IsDelete__FP11himo3_class */
 static BOOL daHimo3_IsDelete(himo3_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001A44-00001AE0       .text daHimo3_Delete__FP11himo3_class */

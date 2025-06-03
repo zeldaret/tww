@@ -54,7 +54,7 @@ static BOOL daKmonDraw(void*) {
 
 /* 00000A9C-00000AA4       .text daKmonIsDelete__FPv */
 static BOOL daKmonIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daKmonMethodTable = {

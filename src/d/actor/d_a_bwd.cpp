@@ -140,7 +140,7 @@ static BOOL daBwd_Execute(bwd_class*) {
 
 /* 00008C24-00008C2C       .text daBwd_IsDelete__FP9bwd_class */
 static BOOL daBwd_IsDelete(bwd_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00008C2C-00008E0C       .text daBwd_Delete__FP9bwd_class */

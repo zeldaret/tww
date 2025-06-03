@@ -207,8 +207,8 @@ void daCanon_c::GameInfo2DDraw() {
 }
 
 /* 00002074-00002094       .text daCanonCreate__FPv */
-static s32 daCanonCreate(void*) {
-    /* Nonmatching */
+static s32 daCanonCreate(void* i_this) {
+    return ((daCanon_c*)i_this)->_create();
 }
 
 /* 00002094-000023C0       .text _create__9daCanon_cFv */
@@ -233,7 +233,7 @@ static BOOL daCanonDraw(void*) {
 
 /* 0000283C-00002844       .text daCanonIsDelete__FPv */
 static BOOL daCanonIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daCanonMethodTable = {

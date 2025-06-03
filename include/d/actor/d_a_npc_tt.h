@@ -63,9 +63,9 @@ public:
     void wait_action(void*);
     void set_ke_root(int, int, int);
     void ke_execute();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void CreateHeap();
 

@@ -80,7 +80,7 @@ static BOOL daDr2_Execute(dr2_class*) {
 
 /* 00001B90-00001B98       .text daDr2_IsDelete__FP9dr2_class */
 static BOOL daDr2_IsDelete(dr2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001B98-00001C58       .text daDr2_Delete__FP9dr2_class */

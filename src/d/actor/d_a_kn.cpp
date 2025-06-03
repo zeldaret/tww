@@ -44,7 +44,7 @@ static BOOL daKN_Execute(kn_class*) {
 
 /* 00000F80-00000F88       .text daKN_IsDelete__FP8kn_class */
 static BOOL daKN_IsDelete(kn_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000F88-00000FD8       .text daKN_Delete__FP8kn_class */

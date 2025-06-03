@@ -125,28 +125,28 @@ void daDai_c::next_msgStatus(unsigned long*) {
 }
 
 /* 0000109C-000010BC       .text daDai_Create__FPv */
-static cPhs_State daDai_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daDai_Create(void* i_this) {
+    return ((daDai_c*)i_this)->_create();
 }
 
 /* 000010BC-000010E0       .text daDai_Delete__FPv */
-static BOOL daDai_Delete(void*) {
-    /* Nonmatching */
+static BOOL daDai_Delete(void* i_this) {
+    return ((daDai_c*)i_this)->_delete();
 }
 
 /* 000010E0-00001104       .text daDai_Draw__FPv */
-static BOOL daDai_Draw(void*) {
-    /* Nonmatching */
+static BOOL daDai_Draw(void* i_this) {
+    return ((daDai_c*)i_this)->_draw();
 }
 
 /* 00001104-00001128       .text daDai_Execute__FPv */
-static BOOL daDai_Execute(void*) {
-    /* Nonmatching */
+static BOOL daDai_Execute(void* i_this) {
+    return ((daDai_c*)i_this)->_execute();
 }
 
 /* 00001128-00001130       .text daDai_IsDelete__FPv */
 static BOOL daDai_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daDaiMethodTable = {
