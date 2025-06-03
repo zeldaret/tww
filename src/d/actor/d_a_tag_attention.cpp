@@ -40,9 +40,53 @@ static dCcD_SrcSph sph_check_src = {
     },
 };
 
+bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
+    if (!mEnabled){
+        return false;
+    }
+
+    cXyz plyrToObjVec = dComIfGp_getPlayer(0)->current.pos - current.pos;
+    if (subtype == 0){
+        // spherical collision check
+        f32 distance = plyrToObjVec.getSquareMag();
+        distance = std::sqrtf(distance);
+        
+        if (distance > scale.x * 100.0f) {
+            return false;
+        }
+    }else{
+        // box collision check
+        s16 yRotAngle = current.angle.y;
+        if (yRotAngle != 0){
+            u32 sinCosTableIndex = yRotAngle >> (jmaSinShift & 0xFFFF);  
+            plyrToObjVec.z = 
+                plyrToObjVec.x * jmaSinTable[sinCosTableIndex] +
+                plyrToObjVec.z * jmaCosTable[sinCosTableIndex];
+            plyrToObjVec.x = 
+                plyrToObjVec.x * jmaCosTable[sinCosTableIndex] -
+                plyrToObjVec.z * jmaSinTable[sinCosTableIndex];
+        }
+
+        f32 curScale = scale.x;
+        if ((plyrToObjVec.x < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.x)){
+            return false;
+        }
+        curScale = scale.y;
+        if ((plyrToObjVec.y < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.y)){
+            return false;
+        }
+        curScale = scale.z;
+        if ((plyrToObjVec.z < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.z)){
+            return false;
+        }
+    }
+
+    *pos = current.pos;
+    return true;
+}
+
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, Act_c);
     mStts.Init(0xFF, 0xFF, this);
     mSph.Set(sph_check_src);
@@ -56,13 +100,13 @@ bool daTagAttention::Act_c::_execute() {
     mSph.SetC(current.pos);
     mSph.SetR(scale.x * 100.0f);
     dComIfG_Ccsp()->Set(&mSph);
-    field_0x290 = 1;
+    mEnabled = true;
     int iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
     if (iVar1 == 1){
         iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
         BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
         if (bVar2 == FALSE){
-            field_0x290 = 0;
+            mEnabled = false;
         }
     }else{
         iVar1 = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
@@ -70,15 +114,15 @@ bool daTagAttention::Act_c::_execute() {
             iVar1 = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
             BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
             if (bVar2 == FALSE){
-                field_0x290 = 0;
+                mEnabled = false;
             }
         }
     }
 
     // TODO for matching: implement chk_inside and dComIfGp_att_Look2RequestF
-    bool cVar3 = chk_inside(&current.pos);
-    if (cVar3){
-        dComIfGp_att_Look2RequestF(this, 0x6000,1);
+    bool wasHit = chk_inside(&current.pos);
+    if (wasHit){
+        dComIfGp_att_Look2RequestF(this, 0x6000, 1);
     }
 
     return true;
@@ -92,12 +136,12 @@ cPhs_State Mthd_Create(void* i_this) {
 }
 
 /* 000004A0-000004A8       .text Mthd_Delete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Delete(void* i_this) {
+bool Mthd_Delete(void* i_this) {
     return TRUE;
 }
 
 /* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Execute(void* i_this) {
+bool Mthd_Execute(void* i_this) {
     /* Nonmatching */
     return static_cast<Act_c*>(i_this)->_execute();
 }

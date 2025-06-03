@@ -7,7 +7,7 @@
 namespace daTagAttention {
     class Act_c : public fopAc_ac_c {
     public:
-        bool chk_inside(cXyz* pos) const {}
+        bool chk_inside(cXyz*) const;
         void prm_get_Type() const {}
         void prm_get_swSave() const {}
     
@@ -23,7 +23,8 @@ namespace daTagAttention {
     
     public:
         /* Place member variables here */
-        /* 0x290 */ u8 field_0x290;
+        /* 0x290 */ bool mEnabled;
+        /* padding */ s8 mPad[8];
         /* 0x2B8 */ dCcD_Stts mStts;
         /* 0x2D8 */ dCcD_Sph mSph;
     };
