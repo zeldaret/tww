@@ -10,6 +10,7 @@
 
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_sea.h"
@@ -5517,7 +5518,7 @@ BOOL daPy_lk_c::changeDeadProc() {
         (!checkModeFlg(ModeFlg_DAMAGE)))
     {
         if (dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e)) {
-            makeFairy(&current.pos, 5);
+            makeFairy(&current.pos, daNpc_Fa1_c::Type_LINK_DOWN_e);
             dComIfGs_setBottleItemIn(dItem_FAIRY_BOTTLE_e, dItem_EMPTY_BOTTLE_e);
             return false;
         }
@@ -6907,7 +6908,7 @@ BOOL daPy_lk_c::procFrontRollCrash_init() {
     dKy_Sound_set(current.pos, 100, fopAcM_GetID(this), 5);
     if ((mAcch.ChkWallHit()) && (mAcchCir[0].ChkWallHit())) {
         daObjMovebox::Act_c* iVar1 =
-            (daObjMovebox::Act_c*)dComIfG_Bgsp()->GetActorPointer(mAcchCir[0].GetBgIndex());
+            (daObjMovebox::Act_c*)dComIfG_Bgsp()->GetActorPointer(mAcchCir[0]);
         if ((iVar1 != 0) && (fopAcM_GetName(iVar1) == PROC_Obj_Movebox) &&
             ((iVar1->mType == 0) || (iVar1->mType == 5)))
         {
@@ -11167,7 +11168,7 @@ void daPy_lk_c::checkRoofRestart() {
         {
             if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_BOSS_e &&
                  ((!dComIfG_Bgsp()->ChkMoveBG(mAcch.m_roof) ||
-                   (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof.GetBgIndex())) !=
+                   (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_roof)) !=
                     PROC_BRIDGE)))))
             {
                 f32 dVar9 = mAcch.m_roof_y;
@@ -12460,14 +12461,14 @@ cPhs_State daPy_lk_c::makeBgWait() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     if ((-G_CM3D_F_INF == mAcch.GetGroundH()) ||
         (((m352E != 0 && (dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd))) &&
-          (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd.GetBgIndex())) ==
+          (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) ==
            PROC_TBOX))))
     {
         return cPhs_INIT_e;
     }
     if (((fopAcM_GetParam(this) & 0x80) != 0) && (m352E != 0)) {
         if (!(dComIfG_Bgsp()->ChkMoveBG(mAcch.m_gnd)) ||
-            (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd.GetBgIndex())) !=
+            (fopAcM_GetName(dComIfG_Bgsp()->GetActorPointer(mAcch.m_gnd)) !=
              PROC_OBJ_IKADA))
         {
             return cPhs_INIT_e;

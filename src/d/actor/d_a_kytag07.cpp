@@ -84,15 +84,18 @@ static BOOL daKytag07_Delete(kytag07_class*) {
 static cPhs_State daKytag07_Create(fopAc_ac_c* i_this) {
     kytag07_class* a_this = (kytag07_class*)i_this;
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
-#if VERSION == VERSION_DEMO
-    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
-        env_light.mbDayNightTactStop = true;
+
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(a_this, kytag07_class);
-#else
-    fopAcM_SetupActor(a_this, kytag07_class);
-    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
-        env_light.mbDayNightTactStop = true;
 #endif
+
+    if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
+        env_light.mbDayNightTactStop = true;
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(a_this, kytag07_class);
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 

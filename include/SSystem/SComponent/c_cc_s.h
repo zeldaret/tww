@@ -51,15 +51,15 @@ public:
     void Move();
     void DrawClear();
     virtual void SetCoGObjInf(bool, bool, cCcD_GObjInf*, cCcD_GObjInf*, cCcD_Stts*, cCcD_Stts*,
-                              cCcD_GStts*, cCcD_GStts*);
+                              cCcD_GStts*, cCcD_GStts*) {}
     virtual void SetAtTgGObjInf(bool, bool, cCcD_Obj*, cCcD_Obj*, cCcD_GObjInf*, cCcD_GObjInf*,
-                                cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*, cXyz*);
-    virtual bool ChkNoHitGAtTg(cCcD_GObjInf const*, cCcD_GObjInf const*, cCcD_GStts*, cCcD_GStts*);
+                                cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*, cXyz*) {}
+    virtual bool ChkNoHitGAtTg(cCcD_GObjInf const*, cCcD_GObjInf const*, cCcD_GStts*, cCcD_GStts*) { return false; }
     virtual bool ChkAtTgHitAfterCross(bool, bool, cCcD_GObjInf const*, cCcD_GObjInf const*,
-                                      cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*);
-    virtual bool ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*);
+                                      cCcD_Stts*, cCcD_Stts*, cCcD_GStts*, cCcD_GStts*) { return false; }
+    virtual bool ChkNoHitGCo(cCcD_Obj*, cCcD_Obj*) { return false; }
     virtual ~cCcS() {}
-    virtual void MoveAfterCheck();
+    virtual void MoveAfterCheck() {}
     virtual void SetCoGCorrectProc(cCcD_Obj*, cCcD_Obj*);
 };  // Size = 0x2850
 

@@ -41,12 +41,11 @@
 #define WEAKFUNC
 #endif
 
-#ifndef __MWERKS__
+// Intrinsics
 extern int __cntlzw(uint);
 extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
 extern void __sync();
-#endif
 
 #define VERSION_DEMO 0
 #define VERSION_JPN 1

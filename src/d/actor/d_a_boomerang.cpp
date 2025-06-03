@@ -9,6 +9,38 @@
 
 #include "assets/l_sightMatDL.h"
 #include "assets/l_sightDL__d_a_boomerang.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCps l_at_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_BOOMERANG,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsEnemy_e | cCcD_AtSPrm_VsOther_e | cCcD_AtSPrm_NoTgHitInfSet_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_Unk1_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 3.0f,
+    },
+};
+
 
 /* 800E0C08-800E0D44       .text initBlur__18daBoomerang_blur_cFPA4_fs */
 void daBoomerang_blur_c::initBlur(MtxP, s16) {

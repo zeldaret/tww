@@ -199,3 +199,16 @@ void cM_initRnd2(int p0, int p1, int p2) {
     r12 = p1;
     r22 = p2;
 }
+
+#if VERSION == VERSION_DEMO
+float cM_rnd2(void) {
+    r02 = (r02 * 0xAB) % 0x763D;
+    r12 = (r12 * 0xAC) % 0x7663;
+    r22 = (r22 * 0xAA) % 0x7673;
+    return std::fabsf(std::fmodf(r02 / 30269.0f + r12 / 30307.0f + r22 / 30323.0f, 1.0));
+}
+
+float cM_rndFX2(float f) {
+    return f * (cM_rnd2() - 0.5f) * 2.0f;
+}
+#endif

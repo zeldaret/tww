@@ -514,7 +514,7 @@ cPhs_State daObjFigure_c::createInit() {
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e;
     shape_angle = current.angle;
     dKy_tevstr_init(&mTevStrBG2, fopAcM_GetHomeRoomNo(this), 0xFF);
-    cMtx_copy(mDoMtx_getIdentity(), mMtx);
+    cMtx_copy(cMtx_getIdentity(), mMtx);
     setMtx();
 
     return cPhs_COMPLEATE_e;

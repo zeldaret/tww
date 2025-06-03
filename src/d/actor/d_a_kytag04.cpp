@@ -50,8 +50,8 @@ static cPhs_State daKytag04_Create(fopAc_ac_c* i_this)  {
     fopAcM_SetupActor(i_this, kytag04_class);
     kytag04_class* a_this = (kytag04_class*)i_this;
     a_this->mState = 0;
-    a_this->mOffColPat = a_this->base.mParameters;
-    a_this->mOnColPat = a_this->base.mParameters >> 8;
+    a_this->mOffColPat = fopAcM_GetParam(a_this) & 0xFF;
+    a_this->mOnColPat = (fopAcM_GetParam(a_this) >> 8) & 0xFF;
     a_this->mSwitchNo = a_this->current.angle.x;
     a_this->mScaleX = a_this->scale.x * 100.0f;
     a_this->mScaleY = a_this->scale.y * 100.0f;

@@ -2771,3 +2771,32 @@ extract:
 - symbol: l_toonMat1DL
   binary: assets/l_toonMat1DL.bin
   header: assets/l_toonMat1DL.h
+
+- symbol: l_matDL$4443
+  binary: assets/l_matDL__clearAlphaBuffer__FP10view_class.bin
+  header: assets/l_matDL__clearAlphaBuffer__FP10view_class.h
+  rename: l_matDL
+- symbol: l_DL$4444
+  binary: assets/l_DL__clearAlphaBuffer__FP10view_class.bin
+  header: assets/l_DL__clearAlphaBuffer__FP10view_class.h
+  rename: l_DL
+- symbol: l_matDL$4454
+  binary: assets/l_matDL__4454.bin
+  header: assets/l_matDL__4454.h
+  rename: l_matDL
+- symbol: l_DL$4455
+  binary: assets/l_DL__4455.bin
+  header: assets/l_DL__4455.h
+  rename: l_DL
+- symbol: l_matDL$4465
+  binary: assets/l_matDL__drawAlphaBuffer__FP10view_class8_GXColor.bin
+  header: assets/l_matDL__drawAlphaBuffer__FP10view_class8_GXColor.h
+  rename: l_matDL
+- symbol: l_DL$4466
+  binary: assets/l_DL__drawAlphaBuffer__FP10view_class8_GXColor.bin
+  header: assets/l_DL__drawAlphaBuffer__FP10view_class8_GXColor.h
+  rename: l_DL
+- symbol: l_DL$4479
+  binary: assets/l_DL__drawSpot__FP10view_class.bin
+  header: assets/l_DL__drawSpot__FP10view_class.h
+  rename: l_DL
