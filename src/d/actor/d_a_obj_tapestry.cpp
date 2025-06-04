@@ -173,44 +173,65 @@ void daObjTapestryDrawData_c::ct_tex() {
 }
 
 
+struct begin{
+    u8 a;
+    u8 b;
+    u8 c;
+};
+
 const u16 l_dl_size = 0x185;
 
+// static const u8 begin_data[3] = {0x98,0x00,0x0C};
+static const begin begindata =
+{0x98,0x00,0x0C};
 
-static const u8 begin_data[3] = {0x98,0x00,0x0C};
 const u16 morefiller[5] = {};
-static const u8 temp_clr = 0;
-const u16 again[2] = {};
+static const u8 tmp_clr[1] = {0};
+const u8 label4192 = 0;
+
 /* 000006C8-00000878       .text ct_dl__23daObjTapestryDrawData_cFv */
 void daObjTapestryDrawData_c::ct_dl() {
     /* Nonmatching */
 
-    char local_38[4];
-    u8 local_34[2];
+
+    s8 sVar1;
     int now = 0;
-    for(int i = 0; i < 7; ++i){
-        memcpy(&m_dl[now],&begin_data,3);
-        local_34[0] = 0;
-        local_34[1] = 0;
+    int row_index = 0;
+    int base_index = 0;
+    s32 local_30[2];
+
+    for (int i = 0; i < 7; ++i) {
+        memcpy(&m_dl[now], &begindata.b, 3);
+        local_30[0] = i*6;
+        local_30[1] = (i+1)*6;
         now += 3;
-        for(int j = 0; j < 6; j++){
-            for(int k = 0; k < 2; k++){
-                char cVar1 = j + 4*k;
-                local_34[0] = cVar1;    
-                local_34[1] = cVar1;
-                memcpy(&m_dl[now][0],local_34,2);
-                memcpy(&m_dl[now][2],&temp_clr,1);
-                local_38[0]=0;
-                local_38[0]=cVar1; //gets written to twice in asm?
-                memcpy(&m_dl[now][3],&local_38,1);
-                now+=4;
+
+        for (int j = 0; j < 6; ++j) {
+            for (int k = 0; k < 2; k++) {
+                sVar1 = local_30[k];
+
+                memcpy(&m_dl[now+0], &sVar1, 2);
+                memcpy(&m_dl[now+2], &tmp_clr[1], 1); // 1 byte
+                sVar1 = begindata.a;
+                memcpy(&m_dl[now+3], &sVar1, 1);        // 1 byte
+
+                now += 4;
             }
         }
+
+        base_index += 6;
     }
 
-    for(int i = 0; i < 0x20; i++){
-        m_dl[0][now] = 0;
+    // Write 0x20 zero bytes
+    for (int i = 0; i < 0x20; ++i) {
+        *((u8*)this + 0x180 + now) = 0;
         now++;
     }
+
+    // for(int i = 0; i < 0x20; i++){
+    //     m_dl[0][now] = 0;
+    //     now++;
+    // }
     JUT_ASSERT(0x25A,(reinterpret_cast<u32>(m_dl) & 0x1f) == 0);
     JUT_ASSERT(0x25B,now == l_dl_size);
 }
@@ -894,7 +915,7 @@ void daObjTapestryPacket_c::draw() {
     setup_tevColReg(user_data);
     GXCallDisplayList(m_draw_data.dl(),m_draw_data.dl_size());
     GXLoadPosMtxImm(unk1364,0);
-    GXLoadPosMtxImm(unk1364,0); 
+    GXLoadNrmMtxImm(unk1364,0); 
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(m_draw_data.m_dl,0x180);
     GXSetCullMode(GX_CULL_FRONT);
