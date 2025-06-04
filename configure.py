@@ -475,7 +475,7 @@ config.libs = [
             Object(Matching,    "d/d_door.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_resorce.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_material.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event.cpp"),
+            Object(Matching,    "d/d_event.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_data.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_manager.cpp"),
             Object(NonMatching, "d/d_magma.cpp", extra_cflags=['-sym off']),
@@ -1676,7 +1676,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_hcbh"),
     ActorRel(Equivalent,  "d_a_obj_hha"), # weak func order
     ActorRel(NonMatching, "d_a_obj_hlift"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homen", extra_cflags=["-sym off"]),
+    ActorRel(Matching,    "d_a_obj_homen", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homensmoke", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_hsehi1"),
     ActorRel(NonMatching, "d_a_obj_htetu1"),
