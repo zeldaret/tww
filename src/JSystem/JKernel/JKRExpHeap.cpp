@@ -361,7 +361,7 @@ void JKRExpHeap::do_free(void* ptr) {
             block->free(this);
         }
     } else {
-        JUT_WARN(888, "free: memblock %x not in heap %x", ptr, this);
+        JUT_WARN(VERSION_SELECT(885, 888, 888, 888), "free: memblock %x not in heap %x", ptr, this);
     }
     unlock();
 }
@@ -548,7 +548,7 @@ static void dummy1() {
 /* 802B24EC-802B2584       .text appendUsedList__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
 void JKRExpHeap::appendUsedList(CMemBlock* newblock) {
     if (!newblock) {
-        OSPanic(__FILE__, 1466, ":::ERROR! appendUsedList\n");
+        OSPanic(__FILE__, VERSION_SELECT(1458, 1466, 1466, 1466), ":::ERROR! appendUsedList\n");
     }
 
     CMemBlock* block = mTailUsedList;
@@ -691,7 +691,7 @@ void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
         OSReport(":::: endAddr = %x\n", endAddr);
         OSReport(":::: nextAddr = %x\n", nextAddr);
         JKRGetCurrentHeap()->dump();
-        OSPanic(__FILE__, 1718, ":::: Bad Block\n");
+        OSPanic(__FILE__, VERSION_SELECT(1710, 1718, 1718, 1718), ":::: Bad Block\n");
     }
 
     if (endAddr == nextAddr) {
@@ -769,8 +769,10 @@ bool JKRExpHeap::check() {
     return ok;
 }
 
+#if VERSION > VERSION_DEMO
 /* 802B2B44-802B2B48       .text do_freeFill__10JKRExpHeapFv */
 void JKRExpHeap::do_freeFill() {}
+#endif
 
 /* 802B2B48-802B2D5C       .text dump__10JKRExpHeapFv */
 bool JKRExpHeap::dump() {
@@ -820,8 +822,69 @@ bool JKRExpHeap::dump() {
     return result;
 }
 
+#if VERSION == VERSION_DEMO
+bool JKRExpHeap::dump_sort() {
+    lock();
+    bool result = check();
+    u32 usedBytes = 0;
+    u32 usedCount = 0;
+    u32 freeCount = 0;
+
+    JUTReportConsole(" attr  address:   size    gid aln   prev_ptr next_ptr\n");
+    JUTReportConsole("(Used Blocks)\n");
+    if (!mHeadUsedList) {
+        JUTReportConsole(" NONE\n");
+    } else {
+        CMemBlock* block;
+        for (CMemBlock* nextBlock = NULL; ; nextBlock = block) {
+            block = (CMemBlock*)0xffffffff;
+
+            for (CMemBlock* iterBlock = mHeadUsedList; iterBlock; iterBlock = iterBlock->getNextBlock()) {
+                if (nextBlock < iterBlock && iterBlock < block) {
+                    block = iterBlock;
+                }
+            }
+
+            if (block == (CMemBlock*)0xffffffff) {
+                break;
+            }
+
+            if (!block->isValid()) {
+                JUTReportConsole_f("xxxxx %08x: --------  --- ---  (-------- --------)\nabort\n", nextBlock);
+                break;
+            }
+
+            JUTReportConsole_f("%s %08x: %08x  %3d %3d  (%08x %08x)\n",
+                            block->_isTempMemBlock() ? " temp" : "alloc", block->getContent(),
+                            block->size, block->mGroupId, block->getAlignment(), block->mPrev,
+                            block->mNext);
+            usedBytes += sizeof(CMemBlock) + block->size + block->getAlignment();
+            usedCount++;
+        }
+    }
+
+    JUTReportConsole("(Free Blocks)\n");
+    if (!mHeadFreeList) {
+        JUTReportConsole(" NONE\n");
+    }
+
+    for (CMemBlock* block = mHeadFreeList; block; block = block->mNext) {
+        JUTReportConsole_f("%s %08x: %08x  %3d %3d  (%08x %08x)\n", " free", block->getContent(),
+                           block->size, block->mGroupId, block->getAlignment(), block->mPrev,
+                           block->mNext);
+        freeCount++;
+    }
+
+    float percent = ((float)usedBytes / (float)mSize) * 100.0f;
+    JUTReportConsole_f("%d / %d bytes (%6.2f%%) used (U:%d F:%d)\n", usedBytes, mSize, percent,
+                       usedCount, freeCount);
+    unlock();
+    return result;
+}
+#else
 /* 802B2D5C-802B2F5C       .text dump_sort_by_address__10JKRExpHeapFv */
-bool JKRExpHeap::dump_sort_by_address() {
+bool JKRExpHeap::dump_sort_by_address()
+{
     lock();
     bool result = check();
     u32 usedBytes = 0;
@@ -878,6 +941,7 @@ bool JKRExpHeap::dump_sort_by_address() {
 bool JKRExpHeap::dump_sort() {
     return dump_sort_by_address();
 }
+#endif
 
 /* 802B2F7C-802B2F9C       .text initiate__Q210JKRExpHeap9CMemBlockFPQ210JKRExpHeap9CMemBlockPQ210JKRExpHeap9CMemBlockUlUcUc */
 void JKRExpHeap::CMemBlock::initiate(CMemBlock* prev, CMemBlock* next, u32 size, u8 groupId, u8 alignment) {
@@ -955,8 +1019,8 @@ static void dummy2() {
 
 /* 802B30A4-802B31D4       .text state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl */
 void JKRExpHeap::state_register(TState* p, u32 param_1) const {
-    JUT_ASSERT(VERSION_SELECT(2420, 2420, 2423, 2423), p != NULL);
-    JUT_ASSERT(VERSION_SELECT(2421, 2421, 2424, 2424), p->getHeap() == this);
+    JUT_ASSERT(VERSION_SELECT(2271, 2420, 2423, 2423), p != NULL);
+    JUT_ASSERT(VERSION_SELECT(2272, 2421, 2424, 2424), p->getHeap() == this);
     p->mId = param_1;
     if (param_1 <= 0xff) {
         p->mUsedSize = getUsedSize(param_1);
@@ -981,7 +1045,7 @@ void JKRExpHeap::state_register(TState* p, u32 param_1) const {
 
 /* 802B31D4-802B327C       .text state_compare__10JKRExpHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRExpHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-    JUT_ASSERT(VERSION_SELECT(2468, 2468, 2471, 2471), r1.getHeap() == r2.getHeap());
+    JUT_ASSERT(VERSION_SELECT(2319, 2468, 2471, 2471), r1.getHeap() == r2.getHeap());
     bool result = true;
     if (r1.mCheckCode != r2.mCheckCode) {
         result = false;

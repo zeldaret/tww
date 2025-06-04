@@ -142,8 +142,10 @@ void TProcessor::on_tag_() {
     size = current[1];
 
     setCurrent_((const char*)current + size);
-    u32 tag = (current[2] << 16 | (u8)current[3] << 8);
-    tag |= current[4];
+    u32 tag = 0;
+    tag |= 0xFF0000 & (current[2] << 16);
+    tag |= 0x00FF00 & (current[3] << 8);
+    tag |= 0x0000FF & (current[4] << 0);
 
     on_tag(tag, &current[5], size - 5);
 }

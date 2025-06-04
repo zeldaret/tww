@@ -86,14 +86,18 @@ void messageSet(u32 status) {
 #endif
     const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
-    J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x12b, 0x12b, 0x141, 0x141), tpane != NULL);
+    f32 f30 = 0.0f;
+    f32 f31 = 660.0f;
+    f32 f29 = 200.0f;
 
-    J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(0.0f, 0.0f, 660.0f, 200.0f), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
-    JUT_ASSERT(VERSION_SELECT(0x133, 0x133, 0x149, 0x149), spane != NULL);
+    J2DTextBox * tpane = new J2DTextBox('TXT1', JGeometry::TBox2<f32>(f30, f30, f30 + f31, f30 + f29), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
+    JUT_ASSERT(VERSION_SELECT(299, 299, 321, 321), tpane != NULL);
+
+    J2DTextBox * spane = new J2DTextBox('TXT2', JGeometry::TBox2<f32>(f30, f30, f30 + f31, f30 + f29), (ResFONT*)font_data, msg, HBIND_CENTER, VBIND_CENTER);
+    JUT_ASSERT(VERSION_SELECT(307, 307, 329, 329), spane != NULL);
 
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
-    JUT_ASSERT(VERSION_SELECT(0x138, 0x138, 0x14e, 0x14e), ppane != NULL);
+    JUT_ASSERT(VERSION_SELECT(312, 312, 334, 334), ppane != NULL);
 
     J2DTextBox::TFontSize size;
     size.mSizeX = 27.0f;
@@ -149,7 +153,7 @@ void messageSet(u32 status) {
 #endif
 
 #if VERSION <= VERSION_JPN
-    f32 x = -9.5f;
+    f32 x = -9.0f + (659.0f - f31) / 2.0f; // -9.5f;
 #else
     f32 x = (659.0f - maxWidth) / 2.0f + -9.0f;
 #endif
@@ -165,8 +169,8 @@ void messageSet(u32 status) {
         tpane->draw(-9.0f, y + 10.0f, 660.0f, HBIND_CENTER);
     }
 #else
-    spane->draw(x + 2.0f, y + 10.0f + 2.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
-    tpane->draw(x, y + 10.0f, 660.0f, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+    spane->draw(x + 2.0f, y + 10.0f + 2.0f, f31, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
+    tpane->draw(x, y + 10.0f, f31, VERSION_SELECT(HBIND_CENTER, HBIND_CENTER, HBIND_LEFT, HBIND_LEFT));
 #endif
 
 #if VERSION > VERSION_JPN
@@ -179,6 +183,7 @@ void messageSet(u32 status) {
 
 /* 8003E9F0-8003EBD4       .text drawDvdCondition__Fl */
 void drawDvdCondition(long status) {
+#if VERSION > VERSION_DEMO
 #if VERSION == VERSION_PAL
     JUtility::TColor backColor = g_clearColor;
 #else
@@ -194,6 +199,7 @@ void drawDvdCondition(long status) {
     draw2D.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, -1.0f, 1.0f);
     draw2D.setPort();
     dComIfGp_setCurrentGrafPort(&draw2D);
+#endif
 
     if (status == 4) {
         messageSet(2);
@@ -205,6 +211,11 @@ void drawDvdCondition(long status) {
         messageSet(4);
     } else if (status == 1) {
         messageSet(0);
+#if VERSION == VERSION_DEMO
+    } else {
+        messageSet(5);
+    }
+#else
     } else if (status == -1) {
         messageSet(5);
 #if VERSION > VERSION_JPN
@@ -213,10 +224,13 @@ void drawDvdCondition(long status) {
     } else {
         JUT_WARN(VERSION_SELECT(423, 423, 481, 478), "Dvd Error !! <%d>\n", status);
     }
+#endif
 
+#if VERSION > VERSION_DEMO
     JFWDisplay::getManager()->endRender();
 #if VERSION == VERSION_PAL
     JFWDisplay::getManager()->setFader(NULL);
+#endif
 #endif
 }
 
@@ -232,8 +246,13 @@ int checkDvdCondition() {
         if (status == 0) {
             l_dvdError = 0;
         } else if (mDoRst::isReset()) {
+#if VERSION == VERSION_DEMO
+            mDoRst_reset(1, 0x80000000, 1);
+            mDoRst::offReset();
+#else
             mDoRst::offReset();
             mDoRst_reset(1, 0x80000000, 0);
+#endif
         } else {
             drawDvdCondition(status);
         }
@@ -246,16 +265,22 @@ int checkDvdCondition() {
 void fpcM_Management(fpcM_ManagementFunc callBack1, fpcM_ManagementFunc callBack2) {
     MtxInit();
 
+#if VERSION == VERSION_DEMO
+    cAPIGph_Painter();
+#endif
+
     if (checkDvdCondition())
         return;
 
+#if VERSION > VERSION_DEMO
     cAPIGph_Painter();
+#endif
     fpcDt_Handler();
     if (!fpcPi_Handler())
-        JUT_ASSERT(VERSION_SELECT(490, 490, 548, 547), 0);
+        JUT_ASSERT(VERSION_SELECT(460, 490, 548, 547), 0);
 
     if (!fpcCt_Handler())
-        JUT_ASSERT(VERSION_SELECT(494, 494, 552, 551), 0);
+        JUT_ASSERT(VERSION_SELECT(464, 494, 552, 551), 0);
 
     if (callBack1 != NULL)
         callBack1();

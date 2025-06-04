@@ -68,7 +68,7 @@ BOOL daTag_Msg_c::arrivalTerms() {
     u16 eventFlag;
     swBit = (int)(getSwbit2() & 0xFF);
     eventFlag = getEventFlag();
-    if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, current.roomNo) == 0) {
+    if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this)) == 0) {
         return FALSE;
     }
     else if (eventFlag != 0xffff && dComIfGs_isEventBit(eventFlag) == 0) {
@@ -115,7 +115,9 @@ BOOL daTag_Msg_c::otherCheck() {
             return FALSE;
         }
     }
-    targetAngle = (s16)(targetAngle + 0x7FFF) - player->current.angle.y;
+
+    s16 r3 = targetAngle + 0x7FFF;
+    targetAngle = r3 - player->current.angle.y;
     if (targetAngle < 0) {
         targetAngle = -targetAngle;
     }
@@ -184,7 +186,7 @@ static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         a_this->setActio(3);
         swBit = a_this->getSwbit();
         if ((swBit & 0xff) != 0xff) {
-            dComIfGs_onSwitch(swBit,a_this->current.roomNo);
+            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(a_this));
         }
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         l_msg = 0;
@@ -241,7 +243,7 @@ cPhs_State daTag_Msg_c::create() {
     swBit = (int)(getSwbit() & 0xFF);
     if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(0x502)) {
         setActio(0);
-    } else if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, current.roomNo) != 0) {
+    } else if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this)) != 0) {
         setActio(0);
     } else {
         setActio(1);

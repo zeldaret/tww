@@ -19,7 +19,9 @@ public:
     void* do_getMaxFreeBlock();
     void state_register(JKRHeap::TState*, u32) const;
     bool state_compare(const JKRHeap::TState&, const JKRHeap::TState&) const;
+#if VERSION > VERSION_DEMO
     void do_freeFill();
+#endif
     u32 getHeapType() { return 'STDH'; }
     bool check() { return OSCheckHeap(mHeapHandle) != -1; }
     bool dump() {

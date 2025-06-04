@@ -9,25 +9,34 @@
 
 class daNpc_Km1_c : public fopNpc_npc_c {
 public:
-
     typedef int (daNpc_Km1_c::*ActionFunc)(void*);
 
     struct anm_prm_c {
         s8 field_0x0;
         s8 field_0x1;
-        float field_0x4;
-        float field_0x8;
+        f32 field_0x4;
+        f32 field_0x8;
         int field_0xC;
     };
 
-    Vec* getAttPos() {return &field_0x780;}
+    enum Animation {
+        /* 0x0 */ ANM_WAIT,
+        /* 0x1 */ ANM_END,
+    };
+
+    enum TexPattern {
+        /* 0x0 */ TEXPATTERN_MABA,
+        /* 0x1 */ TEXPATTERN_END,
+    };
+
+    s8 getHeadJntNum() {return m_head_jnt_num;}
     s8 getBackboneJntNum() {return m_backbone_jnt_num;}
     s16 getBackbone_x() {return m_jnt.getBackbone_x();}
     s16 getBackbone_y() {return m_jnt.getBackbone_y();}
-    Vec* getEyePos() {return &field_0x78C;}
-    s8 getHeadJntNum() {return m_head_jnt_num;}
     s16 getHead_x() {return m_jnt.getHead_x();}
     s16 getHead_y() {return m_jnt.getHead_y();}
+    Vec* getAttPos() {return &mAttPos;}
+    Vec* getEyePos() {return &mEyePos;}
 
     bool createInit();
     void setMtx();
@@ -87,8 +96,8 @@ public:
     /* 0x76C */ csXyz field_0x76C;
     /* 0x772 */ u8 field_0x772[0x774 - 0x772];
     /* 0x774 */ cXyz field_0x774;
-    /* 0x780 */ cXyz field_0x780;
-    /* 0x78C */ cXyz field_0x78C;
+    /* 0x780 */ cXyz mAttPos;
+    /* 0x78C */ cXyz mEyePos;
     /* 0x798 */ cXyz field_0x798;
     /* 0x7A4 */ f32 field_0x7A4;
     /* 0x7A8 */ u8 field_0x7A8[0x7AC - 0x7A8];

@@ -4711,15 +4711,16 @@ bool daNpcPeople_c::_execute() {
             if(getPrmArg0() == 0) {
                 cXyz diff = current.pos - home.pos;
                 f32 mag = diff.abs();
+                f32 f3 = 20.0f;
                 mag -= 180.0f;
                 if(mag < 0.0f) {
                     mag = 0.0f;
                 }
-                if(mag > 20.0f) {
-                    mag = 20.0f;
+                if(mag > f3) {
+                    mag = f3;
                 }
 
-                mStts.SetWeight(mag * 50.0f / 20.0f + 80.0f);
+                mStts.SetWeight(mag * 50.0f / f3 + 80.0f);
             }
     }
 

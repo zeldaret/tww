@@ -48,7 +48,9 @@ int JASystem::Kernel::registerDspCallback(s32 (*param_1)(void*), void* param_2) 
     BOOL enable = OSDisableInterrupts();
     int r30 = registerSubFrameCallback(param_1, param_2);
     if (r30 == -1) {
+#if VERSION > VERSION_DEMO
         OSRestoreInterrupts(enable);
+#endif
         return -1;
     };
     callList[r30].field_0x8 = 1;
