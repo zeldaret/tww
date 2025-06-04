@@ -98,8 +98,8 @@ void daGoal_Flag_c::RaceEnd() {
 }
 
 /* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
-static s32 daGoal_FlagCreate(void*) {
-    /* Nonmatching */
+static s32 daGoal_FlagCreate(void* i_this) {
+    return ((daGoal_Flag_c*)i_this)->_create();
 }
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
@@ -124,7 +124,7 @@ static BOOL daGoal_FlagDraw(void*) {
 
 /* 00002CA4-00002CAC       .text daGoal_FlagIsDelete__FPv */
 static BOOL daGoal_FlagIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daGoal_FlagMethodTable = {

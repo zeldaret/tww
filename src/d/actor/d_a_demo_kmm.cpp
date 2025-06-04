@@ -54,7 +54,7 @@ static BOOL daDemo_Kmm_Execute(daDemo_Kmm_c*) {
 
 /* 000004A8-000004B0       .text daDemo_Kmm_IsDelete__FP12daDemo_Kmm_c */
 static BOOL daDemo_Kmm_IsDelete(daDemo_Kmm_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000004B0-00000500       .text daDemo_Kmm_Delete__FP12daDemo_Kmm_c */
@@ -63,8 +63,8 @@ static BOOL daDemo_Kmm_Delete(daDemo_Kmm_c*) {
 }
 
 /* 00000500-00000520       .text daDemo_Kmm_Create__FP10fopAc_ac_c */
-static cPhs_State daDemo_Kmm_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daDemo_Kmm_Create(fopAc_ac_c* i_this) {
+    return ((daDemo_Kmm_c*)i_this)->create();
 }
 
 static actor_method_class l_daDemo_Kmm_Method = {

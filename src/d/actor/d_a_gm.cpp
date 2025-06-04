@@ -116,7 +116,7 @@ static BOOL daGM_Execute(gm_class*) {
 
 /* 00007770-00007778       .text daGM_IsDelete__FP8gm_class */
 static BOOL daGM_IsDelete(gm_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00007778-000078C4       .text daGM_Delete__FP8gm_class */

@@ -150,7 +150,7 @@ static BOOL daPH_Execute(ph_class*) {
 
 /* 000061A4-000061AC       .text daPH_IsDelete__FP8ph_class */
 static BOOL daPH_IsDelete(ph_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000061AC-00006224       .text daPH_Delete__FP8ph_class */

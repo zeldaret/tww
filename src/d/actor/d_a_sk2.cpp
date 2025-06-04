@@ -31,7 +31,7 @@ static BOOL daSk2_Execute(sk2_class*) {
 
 /* 00000660-00000668       .text daSk2_IsDelete__FP9sk2_class */
 static BOOL daSk2_IsDelete(sk2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000668-000006C4       .text daSk2_Delete__FP9sk2_class */

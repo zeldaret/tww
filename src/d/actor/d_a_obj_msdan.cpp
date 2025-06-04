@@ -25,28 +25,28 @@ BOOL daObjMsdan::Act_c::Mthd_Delete() {
 namespace daObjMsdan {
 namespace {
 /* 000005F0-00000610       .text Mthd_Create__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000610-00000630       .text Mthd_Delete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000630-00000650       .text Mthd_Execute__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Execute();
 }
 
 /* 00000650-00000658       .text Mthd_Draw__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
 BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000658-00000660       .text Mthd_IsDelete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Msdan = {

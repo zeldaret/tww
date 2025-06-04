@@ -130,7 +130,7 @@ static BOOL daBgn3_Execute(bgn3_class*) {
 
 /* 00004358-00004360       .text daBgn3_IsDelete__FP10bgn3_class */
 static BOOL daBgn3_IsDelete(bgn3_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00004360-000043EC       .text daBgn3_Delete__FP10bgn3_class */

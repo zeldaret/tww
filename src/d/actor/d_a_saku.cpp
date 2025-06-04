@@ -158,8 +158,8 @@ void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool) {
 }
 
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */
-static cPhs_State daSaku_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daSaku_Create(fopAc_ac_c* i_this) {
+    return ((daSaku_c*)i_this)->_daSaku_create();
 }
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
@@ -174,7 +174,7 @@ static BOOL daSaku_Delete(daSaku_c*) {
 
 /* 000023D8-000023E0       .text daSaku_IsDelete__FP8daSaku_c */
 static BOOL daSaku_IsDelete(daSaku_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000023E0-0000242C       .text daSaku_Draw__FP8daSaku_c */

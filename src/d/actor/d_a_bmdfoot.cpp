@@ -86,7 +86,7 @@ static BOOL daBmdfoot_Execute(bmdfoot_class*) {
 
 /* 00002594-0000259C       .text daBmdfoot_IsDelete__FP13bmdfoot_class */
 static BOOL daBmdfoot_IsDelete(bmdfoot_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000259C-000026B0       .text daBmdfoot_Delete__FP13bmdfoot_class */

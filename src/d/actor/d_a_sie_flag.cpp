@@ -85,28 +85,28 @@ bool daSie_Flag_c::_draw() {
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
-static s32 daSie_FlagCreate(void*) {
-    /* Nonmatching */
+static s32 daSie_FlagCreate(void* i_this) {
+    return ((daSie_Flag_c*)i_this)->_create();
 }
 
 /* 00000BB4-00000BD8       .text daSie_FlagDelete__FPv */
-static BOOL daSie_FlagDelete(void*) {
-    /* Nonmatching */
+static BOOL daSie_FlagDelete(void* i_this) {
+    return ((daSie_Flag_c*)i_this)->_delete();
 }
 
 /* 00000BD8-00000BFC       .text daSie_FlagExecute__FPv */
-static BOOL daSie_FlagExecute(void*) {
-    /* Nonmatching */
+static BOOL daSie_FlagExecute(void* i_this) {
+    return ((daSie_Flag_c*)i_this)->_execute();
 }
 
 /* 00000BFC-00000C20       .text daSie_FlagDraw__FPv */
-static BOOL daSie_FlagDraw(void*) {
-    /* Nonmatching */
+static BOOL daSie_FlagDraw(void* i_this) {
+    return ((daSie_Flag_c*)i_this)->_draw();
 }
 
 /* 00000C20-00000C28       .text daSie_FlagIsDelete__FPv */
 static BOOL daSie_FlagIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSie_FlagMethodTable = {

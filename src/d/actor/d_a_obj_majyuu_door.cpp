@@ -125,28 +125,28 @@ bool daObj_MjDoor_c::_draw() {
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
-static s32 daObj_MjDoorCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_MjDoorCreate(void* i_this) {
+    return ((daObj_MjDoor_c*)i_this)->_create();
 }
 
 /* 00000F48-00000F6C       .text daObj_MjDoorDelete__FPv */
-static BOOL daObj_MjDoorDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_MjDoorDelete(void* i_this) {
+    return ((daObj_MjDoor_c*)i_this)->_delete();
 }
 
 /* 00000F6C-00000F90       .text daObj_MjDoorExecute__FPv */
-static BOOL daObj_MjDoorExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_MjDoorExecute(void* i_this) {
+    return ((daObj_MjDoor_c*)i_this)->_execute();
 }
 
 /* 00000F90-00000FB4       .text daObj_MjDoorDraw__FPv */
-static BOOL daObj_MjDoorDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_MjDoorDraw(void* i_this) {
+    return ((daObj_MjDoor_c*)i_this)->_draw();
 }
 
 /* 00000FB4-00000FBC       .text daObj_MjDoorIsDelete__FPv */
 static BOOL daObj_MjDoorIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_MjDoorMethodTable = {

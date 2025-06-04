@@ -61,7 +61,7 @@ static BOOL daMflft_Execute(mflft_class*) {
 
 /* 00002284-0000228C       .text daMflft_IsDelete__FP11mflft_class */
 static BOOL daMflft_IsDelete(mflft_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000228C-00002310       .text daMflft_Delete__FP11mflft_class */

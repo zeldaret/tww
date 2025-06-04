@@ -146,7 +146,7 @@ static BOOL daMt_Execute(mt_class*) {
 
 /* 00007CC4-00007CCC       .text daMt_IsDelete__FP8mt_class */
 static BOOL daMt_IsDelete(mt_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00007CCC-00007E18       .text daMt_Delete__FP8mt_class */

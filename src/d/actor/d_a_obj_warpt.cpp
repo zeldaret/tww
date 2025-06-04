@@ -267,28 +267,28 @@ bool daObj_Warpt_c::_delete() {
 }
 
 /* 00002858-00002878       .text daObj_WarptCreate__FPv */
-static s32 daObj_WarptCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_WarptCreate(void* i_this) {
+    return ((daObj_Warpt_c*)i_this)->_create();
 }
 
 /* 00002878-0000289C       .text daObj_WarptDelete__FPv */
-static BOOL daObj_WarptDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_WarptDelete(void* i_this) {
+    return ((daObj_Warpt_c*)i_this)->_delete();
 }
 
 /* 0000289C-000028C0       .text daObj_WarptExecute__FPv */
-static BOOL daObj_WarptExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_WarptExecute(void* i_this) {
+    return ((daObj_Warpt_c*)i_this)->_execute();
 }
 
 /* 000028C0-000028E4       .text daObj_WarptDraw__FPv */
-static BOOL daObj_WarptDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_WarptDraw(void* i_this) {
+    return ((daObj_Warpt_c*)i_this)->_draw();
 }
 
 /* 000028E4-000028EC       .text daObj_WarptIsDelete__FPv */
 static BOOL daObj_WarptIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_WarptMethodTable = {

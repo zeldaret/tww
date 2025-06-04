@@ -141,8 +141,8 @@ void daBeam_c::wait_proc() {
 }
 
 /* 00001C84-00001CA4       .text daBeamCreate__FPv */
-static s32 daBeamCreate(void*) {
-    /* Nonmatching */
+static s32 daBeamCreate(void* i_this) {
+    return ((daBeam_c*)i_this)->_create();
 }
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
@@ -156,8 +156,8 @@ static BOOL daBeamDelete(void*) {
 }
 
 /* 0000298C-000029B0       .text daBeamExecute__FPv */
-static BOOL daBeamExecute(void*) {
-    /* Nonmatching */
+static BOOL daBeamExecute(void* i_this) {
+    return ((daBeam_c*)i_this)->_execute();
 }
 
 /* 000029B0-00002AA0       .text daBeamDraw__FPv */
@@ -167,7 +167,7 @@ static BOOL daBeamDraw(void*) {
 
 /* 00002AA0-00002AA8       .text daBeamIsDelete__FPv */
 static BOOL daBeamIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daBeamMethodTable = {

@@ -206,7 +206,7 @@ static BOOL daBtd_Execute(btd_class*) {
 
 /* 000081B8-000081C0       .text daBtd_IsDelete__FP9btd_class */
 static BOOL daBtd_IsDelete(btd_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000081C0-00008304       .text daBtd_Delete__FP9btd_class */

@@ -36,7 +36,7 @@ static BOOL daSk_Execute(sk_class*) {
 
 /* 000008D4-000008DC       .text daSk_IsDelete__FP8sk_class */
 static BOOL daSk_IsDelete(sk_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000008DC-0000090C       .text daSk_Delete__FP8sk_class */

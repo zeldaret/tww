@@ -65,8 +65,8 @@ void daObjGtaki_c::set_mtx() {
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
-static cPhs_State daObjGtaki_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjGtaki_Create(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_create();
 }
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
@@ -91,7 +91,7 @@ static BOOL daObjGtaki_Execute(void*) {
 
 /* 00000C64-00000C6C       .text daObjGtaki_IsDelete__FPv */
 static BOOL daObjGtaki_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_GtakiMethodTable = {

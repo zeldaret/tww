@@ -320,7 +320,7 @@ static BOOL daMo2_Execute(mo2_class*) {
 
 /* 0000B618-0000B620       .text daMo2_IsDelete__FP9mo2_class */
 static BOOL daMo2_IsDelete(mo2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000B620-0000B720       .text daMo2_Delete__FP9mo2_class */

@@ -76,8 +76,8 @@ BOOL daObj_Stair_c::Delete() {
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
-static s32 daObj_StairCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_StairCreate(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->_create();
 }
 
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
@@ -91,8 +91,8 @@ static BOOL daObj_StairDelete(void*) {
 }
 
 /* 00000AFC-00000B20       .text daObj_StairExecute__FPv */
-static BOOL daObj_StairExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_StairExecute(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->_execute();
 }
 
 /* 00000B20-00001364       .text _execute__13daObj_Stair_cFv */
@@ -107,7 +107,7 @@ static BOOL daObj_StairDraw(void*) {
 
 /* 0000139C-000013A4       .text daObj_StairIsDelete__FPv */
 static BOOL daObj_StairIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_StairMethodTable = {

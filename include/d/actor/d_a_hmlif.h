@@ -6,7 +6,7 @@
 class daHmlif_c : public dBgS_MoveBgActor {
 public:
     virtual BOOL Delete();
-    void daHmlifDelete();
+    BOOL daHmlifDelete();
     virtual BOOL CreateHeap();
     virtual BOOL Create();
     cPhs_State daHmlifCreate();

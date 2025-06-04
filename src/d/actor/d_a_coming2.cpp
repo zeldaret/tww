@@ -185,28 +185,28 @@ bool daComing2::Act_c::_draw() {
 namespace daComing2 {
 namespace {
 /* 000023B8-000023D8       .text Mthd_Create__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daComing2::Act_c*)i_this)->_create();
 }
 
 /* 000023D8-000023FC       .text Mthd_Delete__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daComing2::Act_c*)i_this)->_delete();
 }
 
 /* 000023FC-00002420       .text Mthd_Execute__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daComing2::Act_c*)i_this)->_execute();
 }
 
 /* 00002420-00002444       .text Mthd_Draw__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daComing2::Act_c*)i_this)->_draw();
 }
 
 /* 00002444-0000244C       .text Mthd_IsDelete__Q29daComing225@unnamed@d_a_coming2_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

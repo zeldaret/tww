@@ -142,28 +142,28 @@ BOOL daObjVolcano::Act_c::Draw() {
 namespace daObjVolcano {
 namespace {
 /* 00001B8C-00001BAC       .text Mthd_Create__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjVolcano::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00001BAC-00001BCC       .text Mthd_Delete__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjVolcano::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00001BCC-00001BEC       .text Mthd_Execute__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjVolcano::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001BEC-00001C18       .text Mthd_Draw__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjVolcano::Act_c*)i_this)->Draw();
 }
 
 /* 00001C18-00001C44       .text Mthd_IsDelete__Q212daObjVolcano29@unnamed@d_a_obj_volcano_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjVolcano::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

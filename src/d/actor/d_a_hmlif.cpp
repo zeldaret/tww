@@ -44,7 +44,7 @@ BOOL daHmlif_c::Delete() {
 }
 
 /* 00000080-000000D8       .text daHmlifDelete__9daHmlif_cFv */
-void daHmlif_c::daHmlifDelete() {
+BOOL daHmlif_c::daHmlifDelete() {
     /* Nonmatching */
 }
 
@@ -124,13 +124,13 @@ BOOL daHmlif_c::Draw() {
 }
 
 /* 00001610-00001630       .text daHmlif_Create__FPv */
-static cPhs_State daHmlif_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daHmlif_Create(void* i_this) {
+    return ((daHmlif_c*)i_this)->daHmlifCreate();
 }
 
 /* 00001630-00001650       .text daHmlif_Delete__FPv */
-static BOOL daHmlif_Delete(void*) {
-    /* Nonmatching */
+static BOOL daHmlif_Delete(void* i_this) {
+    return ((daHmlif_c*)i_this)->daHmlifDelete();
 }
 
 /* 00001650-0000167C       .text daHmlif_Draw__FPv */
@@ -145,7 +145,7 @@ static BOOL daHmlif_Execute(void*) {
 
 /* 0000169C-000016A4       .text daHmlif_IsDelete__FPv */
 static BOOL daHmlif_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daHmlifMethodTable = {

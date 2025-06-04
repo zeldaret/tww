@@ -180,7 +180,7 @@ static BOOL daGnd_Execute(gnd_class*) {
 
 /* 000076B8-000076C0       .text daGnd_IsDelete__FP9gnd_class */
 static BOOL daGnd_IsDelete(gnd_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000076C0-00007738       .text daGnd_Delete__FP9gnd_class */

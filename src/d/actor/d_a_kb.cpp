@@ -166,7 +166,7 @@ static BOOL daKb_Execute(kb_class*) {
 
 /* 00006E38-00006E40       .text daKb_IsDelete__FP8kb_class */
 static BOOL daKb_IsDelete(kb_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00006E40-00006F28       .text daKb_Delete__FP8kb_class */

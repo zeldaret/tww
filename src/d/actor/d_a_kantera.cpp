@@ -45,7 +45,7 @@ static BOOL daKantera_Execute(kantera_class*) {
 
 /* 00001ABC-00001AC4       .text daKantera_IsDelete__FP13kantera_class */
 static BOOL daKantera_IsDelete(kantera_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001AC4-00001B30       .text daKantera_Delete__FP13kantera_class */

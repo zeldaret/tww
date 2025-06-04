@@ -368,28 +368,28 @@ bool daNpc_So_c::_delete() {
 }
 
 /* 00004754-00004774       .text daNpc_SoCreate__FPv */
-static s32 daNpc_SoCreate(void*) {
-    /* Nonmatching */
+static s32 daNpc_SoCreate(void* i_this) {
+    return ((daNpc_So_c*)i_this)->_create();
 }
 
 /* 00004774-00004798       .text daNpc_SoDelete__FPv */
-static BOOL daNpc_SoDelete(void*) {
-    /* Nonmatching */
+static BOOL daNpc_SoDelete(void* i_this) {
+    return ((daNpc_So_c*)i_this)->_delete();
 }
 
 /* 00004798-000047BC       .text daNpc_SoExecute__FPv */
-static BOOL daNpc_SoExecute(void*) {
-    /* Nonmatching */
+static BOOL daNpc_SoExecute(void* i_this) {
+    return ((daNpc_So_c*)i_this)->_execute();
 }
 
 /* 000047BC-000047E0       .text daNpc_SoDraw__FPv */
-static BOOL daNpc_SoDraw(void*) {
-    /* Nonmatching */
+static BOOL daNpc_SoDraw(void* i_this) {
+    return ((daNpc_So_c*)i_this)->_draw();
 }
 
 /* 000047E0-000047E8       .text daNpc_SoIsDelete__FPv */
 static BOOL daNpc_SoIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 #include "d/actor/d_a_npc_so_cut.inc"

@@ -60,7 +60,7 @@ static BOOL daDk_Execute(dk_class*) {
 
 /* 00000D08-00000D10       .text daDk_IsDelete__FP8dk_class */
 static BOOL daDk_IsDelete(dk_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000D10-00000D7C       .text daDk_Delete__FP8dk_class */

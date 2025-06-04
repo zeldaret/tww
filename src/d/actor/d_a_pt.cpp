@@ -100,7 +100,7 @@ static BOOL daPt_Execute(pt_class*) {
 
 /* 000043C8-000043D0       .text daPt_IsDelete__FP8pt_class */
 static BOOL daPt_IsDelete(pt_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000043D0-00004540       .text daPt_Delete__FP8pt_class */

@@ -130,7 +130,7 @@ static BOOL daBmd_Execute(bmd_class*) {
 
 /* 00005BF4-00005BFC       .text daBmd_IsDelete__FP9bmd_class */
 static BOOL daBmd_IsDelete(bmd_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00005BFC-00005CF4       .text daBmd_Delete__FP9bmd_class */

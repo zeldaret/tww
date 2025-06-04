@@ -87,7 +87,7 @@ static BOOL daObjPlant_Execute(void*) {
 
 /* 00000A58-00000A60       .text daObjPlant_IsDelete__FPv */
 static BOOL daObjPlant_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_PlantMethodTable = {

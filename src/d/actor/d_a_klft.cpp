@@ -51,7 +51,7 @@ static BOOL daKlft_Execute(klft_class*) {
 
 /* 00001444-0000144C       .text daKlft_IsDelete__FP10klft_class */
 static BOOL daKlft_IsDelete(klft_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000144C-00001520       .text daKlft_Delete__FP10klft_class */
