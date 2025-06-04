@@ -278,7 +278,7 @@ struct dItem_data_item_resource {
     /* 0x18 */ u32 mUnused; // Always 0, doesn't seem to be read
     /* 0x1C */ u32 mUnknown; // Varies between items, but doesn't seem to be read. Resembles a differed dlist flag.
     /* 0x20 */ u16 mHeapSize;
-};
+};  // Size: 0x24
 
 STATIC_ASSERT(sizeof(dItem_data_item_resource) == 0x24);
 
@@ -293,7 +293,7 @@ struct dItem_data_field_item_res {
     /* 0x10 */ s8 mTevFrm; // Unused, the equivalent in item_resource is used instead.
     /* 0x14 */ u32 mUnknown;
     /* 0x18 */ u16 mHeapSize;
-};
+};  // Size: 0x1C
 
 STATIC_ASSERT(sizeof(dItem_data_field_item_res) == 0x1C);
 
