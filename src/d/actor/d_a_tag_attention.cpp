@@ -50,7 +50,6 @@ cPhs_State daTagAttention::Act_c::_create() {
 
 /* 00000340-00000480       .text _execute__Q214daTagAttention5Act_cFv */
 bool daTagAttention::Act_c::_execute() {
-    /* Nonmatching */
     mSph.SetC(current.pos);
     mSph.SetR(scale.x * 100.0f);
     dComIfG_Ccsp()->Set(&mSph);
@@ -87,7 +86,6 @@ bool Mthd_Delete(void* i_this) {
 
 /* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
 bool Mthd_Execute(void* i_this) {
-    /* Nonmatching */
     return static_cast<Act_c*>(i_this)->_execute();
 }
 
