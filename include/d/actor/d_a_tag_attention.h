@@ -53,12 +53,12 @@ namespace daTagAttention {
 
         int prm_get_Type() const 
         {
-            return daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+            return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
         }
 
         int prm_get_swSave() const 
         {
-            return daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+            return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
         }
     
         cPhs_State _create();
