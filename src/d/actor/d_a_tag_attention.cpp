@@ -56,15 +56,16 @@ bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
         // box collision check
         s16 yRotAngle = current.angle.y;
         if (yRotAngle != 0){
-        if (current.angle.y){
-            s16 yRotAngle = current.angle.y;
-            f32 temp = 
-                plyrToObjVec.x * cM_ssin(yRotAngle) +
-                plyrToObjVec.z * cM_scos(yRotAngle);
-            plyrToObjVec.x = 
-                plyrToObjVec.x * cM_scos(yRotAngle) -
-                plyrToObjVec.z * cM_ssin(yRotAngle);
-            plyrToObjVec.z = temp;
+            if (current.angle.y){
+                s16 yRotAngle = current.angle.y;
+                f32 temp = 
+                    plyrToObjVec.x * cM_ssin(yRotAngle) +
+                    plyrToObjVec.z * cM_scos(yRotAngle);
+                plyrToObjVec.x = 
+                    plyrToObjVec.x * cM_scos(yRotAngle) -
+                    plyrToObjVec.z * cM_ssin(yRotAngle);
+                plyrToObjVec.z = temp;
+            }
         }
 
         f32 curScale = scale.x;
@@ -119,7 +120,7 @@ bool daTagAttention::Act_c::_execute() {
         }
     }
 
-    // TODO for matching: implement chk_inside and dComIfGp_att_Look2RequestF
+    // TODO for matching: implement dComIfGp_att_Look2RequestF
     bool wasHit = chk_inside(&current.pos);
     if (wasHit){
         dComIfGp_att_Look2RequestF(this, 0x6000, 1);
