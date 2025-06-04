@@ -95,7 +95,7 @@ public:
     void onHold();
     void offHold();
     void resetCursor(bool);
-    bool FlashCheck();
+    BOOL FlashCheck();
     void FlagsRecv();
     void SwitchOn();
     void GbaItemUse();
