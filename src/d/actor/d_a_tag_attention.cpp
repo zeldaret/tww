@@ -9,7 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 
-/* ram:8049162C-ram:804917AF  */
 static dCcD_SrcSph sph_check_src = {
     // dCcD_SrcGObjInf
     {

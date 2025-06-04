@@ -65,14 +65,13 @@ namespace daTagAttention {
         bool _execute();
 
         enum Prm_e {
-            PRM_1_W = 0x02,
-            PRM_1_S = 0x08,
-            PRM_2_W = 0x08,
-            PRM_2_S = 0x00,
+            PRM_TYPE_W = 0x02,
+            PRM_TYPE_S = 0x08,
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x00,
         };
 
     public:
-        /* Place member variables here */
         /* 0x290 */ bool m_b0x290;
         /* padding */ s8 mPad[8];
         /* 0x2B8 */ dCcD_Stts mStts;
