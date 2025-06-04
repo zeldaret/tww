@@ -228,8 +228,9 @@ void drawDvdCondition(long status) {
 
 #if VERSION > VERSION_DEMO
     JFWDisplay::getManager()->endRender();
-#elif VERSION == VERSION_PAL
+#if VERSION == VERSION_PAL
     JFWDisplay::getManager()->setFader(NULL);
+#endif
 #endif
 }
 
