@@ -336,64 +336,72 @@ void daObjTapestryPacket_c::calc_acc_spring_sub(const cXyz* i_pointA, const cXyz
 }
 
 /* 00001154-000014FC       .text calc_acc_spring__21daObjTapestryPacket_cFii */
-void daObjTapestryPacket_c::calc_acc_spring(int param_1, int param_2) {
+void daObjTapestryPacket_c::calc_acc_spring(int i_row, int i_col) {
     /* Nonmatching */
 
-    u32 uVar3 = unk1060 ^ 1;
-    daObjTapestryDrawVtx_c* temp_r21 = &mDrawVtx[uVar3];
-    //cXyz (*pcVar9)[6] = &mDrawVtx[uVar3].mBufferVtx[param_1]; 
-    cXyz* temp_r20 = &temp_r21->mBufferVtx[param_1][param_2];
+    u32 buffer_select = unk1060 ^ 1;
+    daObjTapestryDrawVtx_c* temp_r21 = &mDrawVtx[buffer_select];
+    cXyz* point_a = &temp_r21->mBufferVtx[i_row][i_col];
 
-    volatile s32 temp_r0 = param_1 - 1;
-    s32 temp_r19 = param_1 + 1;
-    s32 temp_r18 = param_2 - 1;
-    s32 temp_r17 = param_2 + 1;
-    volatile s32 temp_r3_2 = 8 ^ temp_r19;
-    s8 temp_r31 = (temp_r18 >> 0x1F)^1;
-    s32 temp_r3_3 = 6^temp_r17;
-    volatile s32 temp_r30 = (u32) ((temp_r3_3 >> 1) - (temp_r3_3 & 6)) >> 0x1F;
-    f32 someHIO = l_HIO.attr().unk58[2][0];
-    volatile f32 otherHIO = l_HIO.attr().unkC[12][1];
+    s32 row_minus = i_row - 1;
+    s32 row_plus = i_row + 1;
+    s32 col_minus = i_col - 1;
+    s32 col_plus = i_col + 1;
 
-    if(temp_r0 >= 0){
-        calc_acc_spring_sub(temp_r20,&temp_r21->mBufferVtx[temp_r18][param_2],42.42857f,someHIO);
-        if(!temp_r31){
-            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1-2][param_2+5],l_mesh_diagonal,otherHIO);
+    bool temp_r16 = row_plus < 8;
+    bool temp_r31 = col_minus >= 0;
+    bool temp_r30 = col_plus < 6;
+
+
+    f32 dampening_1 = l_HIO.attr().unkC[5][1];
+    f32 dampening_2 = l_HIO.attr().unkC[6][1];
+
+    if(row_minus >= 0){
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_minus][i_col],42.42857f,dampening_1);
+        if(temp_r31 ){
+            calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_minus][col_minus],l_mesh_diagonal,dampening_2);
         }
-        if(temp_r30 < 0){
-            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2+1],l_mesh_diagonal,otherHIO);
+        if(temp_r30){
+            calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_minus][col_plus],l_mesh_diagonal,dampening_2);
         }
     }
-    if((int)(((int)temp_r31 >> 1) - (temp_r31 & 8)) < 0){ // param_1 < 7
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2],42.42857f,someHIO);
-        if(temp_r31){ //param_2 > 0
-            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1][param_2+5],l_mesh_diagonal,otherHIO);
+    if( temp_r16 != 0){
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_plus][i_col],42.42857f,dampening_1);
+        if(temp_r31 & 0xFF){
+            calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_plus][col_minus],l_mesh_diagonal,dampening_2);
         }
-        if(temp_r30 < 0){ //param_2 < 5
-            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],l_mesh_diagonal,otherHIO);
+        if(temp_r30){
+            calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_plus][col_plus],l_mesh_diagonal,dampening_2);
         }
     } 
     if(temp_r31){
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,otherHIO);
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[i_row][col_minus],40.0f,dampening_1);
 
     }
-    if(temp_r30 < 0){
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,otherHIO);
+    if(temp_r30){
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[i_row][col_plus],40.0f,dampening_1);
     }
-    temp_r31 = param_1 + 2U ^ 8;
-    temp_r3_3 = param_2 + 2U ^ 6;
-    f32 someOtherHIO = l_HIO.field_C.unkC[1][1];
-    if (param_1 + -2 > -1) { //param_1 + -2 > -1
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1-2][param_2],84.85714f,someOtherHIO);
+    s32 row_minus_2 = i_row - 2;
+    s32 row_plus_2 = i_row + 2;
+    s32 col_minus_2 = i_col - 2;
+    s32 col_plus_2 = i_col + 2;
+
+    bool temp_r19_2 = row_plus_2 < 8;
+    bool temp_r23 = col_minus_2 >= 0;
+    bool temp_r28 = col_plus_2 < 6;
+
+    f32 dampening_3 = l_HIO.attr().unkC[6][0];
+    if (row_minus_2 >= 0) {
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_minus_2][i_col],84.85714f,dampening_3);
     }
-    if((int)(((int)temp_r31 >> 1) - (temp_r31 & 8)) < 0) {//param_1 < 6 && param_1 > -2
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1+2][param_2],84.85714f,someOtherHIO); 
+    if(temp_r19_2) {
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[row_plus_2][i_col],84.85714f,dampening_3); 
     }
-    if (param_2 + -2 > -1) { //param_2 + -2 > -1
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1-1][param_2+4],80.0f,someOtherHIO);
+    if (temp_r23) {
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[i_row][col_minus_2],80.0f,dampening_3);
     }
-    if((int)(((int)temp_r3_3 >> 1) - (temp_r3_3 & 6)) < 0) {//param_2 < 6 && param_2 > -2
-        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1][param_2+2],80.0f,someOtherHIO);     
+    if(temp_r28) {
+        calc_acc_spring_sub(point_a,&temp_r21->mBufferVtx[i_row][col_plus_2],80.0f,dampening_3);     
     }
 }
 const u32 fillerone[1] = {0x3A91A2B4};
@@ -435,18 +443,21 @@ void daObjTapestryPacket_c::calc_pos_crr(int, int) {
 
 /* 000021F4-00002350       .text calc_pos__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_pos() {
-    /* Nonmatching */
-    cXyz** bank = (cXyz**)(0x6C0*unk1060+16);
+
+
+    daObjTapestryDrawVtx_c* bank = &mDrawVtx[unk1060];
+    daObjTapestryDrawVtx_c* altbank = &mDrawVtx[unk1060 ^ 1]; 
+
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 6; j++){
-            if(i != 0 || ((unkFD0[i][j][0] & 1) != 0)){
+            if(i != 0 || ((unkFD0[0][i][j] & 1))){
                 unk1328 = cXyz::Zero;
                 calc_acc_spring(i,j);
                 calc_acc_gravity();
                 calc_acc_wave(i,j);
                 calc_acc_hit(i,j);
                 calc_spd(i,j);
-                bank[i][j] = bank[i][j]+mMoveVtx.mBuffer[i][j];
+                bank->mBufferVtx[i][j] = altbank->mBufferVtx[i][j]+mMoveVtx.mBuffer[i][j];
                 calc_pos_crr(i,j);
             }
         }
@@ -534,7 +545,7 @@ void daObjTapestryPacket_c::calc_nrm() {
         }
     }
 }
-u8 bssfiller2[0x64];
+//u8 bssfiller2[0x64];
 /* 00002874-00002D80       .text calc_wind__21daObjTapestryPacket_cFv */
 void daObjTapestryPacket_c::calc_wind() {
     /* Nonmatching */
@@ -571,7 +582,7 @@ void daObjTapestryPacket_c::calc_wind() {
         unk13F0 += 0x556;
         unk13F2 += 0x46D;
         unk13F4 += 0x32B;
-        //f32 somemult = l_HIO.attr().unk58[0][1];
+
         unk13F8 = vec0_base*((cM_ssin(unk13F0)+1.0f)*l_HIO.attr().unkC[3][1]);
         unk1404 = vec1_base*((cM_ssin(unk13F2)+1.0f)*l_HIO.attr().unkC[4][0]);
         unk1410 = vec2_base*((cM_ssin(unk13F4)+1.0f)*l_HIO.attr().unkC[4][1]);
@@ -594,14 +605,11 @@ void daObjTapestryPacket_c::calc_fire_leap(int, int) {
 void daObjTapestryPacket_c::calc_fire() {
     /* Nonmatching */
     u8 local_7b;
-    u16 local_60;
-    u16 local_58;
-    u16 local_d8;
     f32 var_f31;
     if(unk1454 != 0){
-        // local_60 = unk145C * 7.0f;
-        // local_58 = unk1460 * 5.0f;
-        unkFD0[1][(int)local_60][(int)local_58] += 1;
+
+        unkFD0[1][(int)(unk1458.y*7.0f)][(int)(unk1458.z*5.0f)] += 1;
+        unk1454 = 0;
     }
 
     for(int i = 0; i<8; i++){
@@ -620,64 +628,34 @@ void daObjTapestryPacket_c::calc_fire() {
                         unkFD0[1][i][j] += 1;
                     }
 
-                    s32 var_r5_2[8][3];
-                    //struct_8* var_r4_2 = &l_HIO.field_8;
 
                     for(int k = 0; k < 11; k++){
-                      //  var_r5_2[k][1] = var_r4_2->arr[k][1];
-                      //  var_r5_2[k+1][2] = var_r4_2->arr[k][1];
+
                     }
-                    //var_r5_2[0][1] = var_r4_2->arr[0][1];
                     if(unkFD0[1][i][j] >= l_HIO.attr().unk4C){
                         if(!cLib_checkBit(unkFD0[i][j][0],(u8)1)){
                             cLib_onBit(unkFD0[i][j][0],(u8)1);
-                            u8 iPlus = i+1;
-                            u8 iMinus = i-1;
-                            u8 jPlus = j+1;
-                            u8 jMinus = j-1;
-                            // u32 uVar10 = jMinus >> 0x1F ^ 1;
-                            // int iVar6 = ((jPlus ^ 6) >> 1) - ((jPlus ^ 6) & 6);
-                            // int iVar7 = ((int)(jPlus ^ 8) >> 1) - ((jPlus ^ 8) & 8);
-                            // if(iMinus >= 0){
-                            //     calc_fire_leap(iMinus,j);
-                            //    //if(cLib_checkBit(iMinus,(u32)7)){
-                            //    if(uVar10 != 0){
-                            //         calc_fire_leap(iMinus,jMinus);
-                            //     }
-                            //     //if(cLib_checkBit(iMinus,(u32)7)){
-                            //     if(iVar6 < 0){
-                            //         calc_fire_leap(iMinus,jPlus);
-                            //     }
-                            // }
-                            // if(iVar7 < 0){
-                            //     calc_fire_leap(iPlus,j);
-                            //     if(cLib_checkBit(jMinus,(u32)7)){
-                            //         calc_fire_leap(iPlus,jMinus);
-                            //     }
-                            //     //if(cLib_checkBit(jPlus,7)){
-                            //     if(iVar6 < 0){
-                            //         calc_fire_leap(iPlus,jPlus);
-                            //     }
-                            // }
-                            // if(cLib_checkBit(jMinus,(u32)7)){
-                            //     calc_fire_leap(i,jMinus);
-                            // }
-                            // //if(cLib_checkBit(jPlus,6)){
-                            // if(iVar6 < 0){
-                            //     calc_fire_leap(i,jPlus);
-                            // } 
-                            if (iMinus >= 0) {
-                                calc_fire_leap( iMinus, j);
-                                if (jMinus >= 0) calc_fire_leap( iMinus, jMinus);
-                                if (jPlus < 6) calc_fire_leap( iMinus, jPlus);
+                            s32 row_plus = i+1;
+                            s32 row_minus = i-1;
+                            s32 col_minus = j-1;
+                            s32 col_plus = j+1;
+
+                            bool temp_r19 = row_plus < 8;
+                            bool temp_r23 = col_minus >= 0;
+                            bool temp_r28 = col_plus < 6;
+
+                            if (row_minus >= 0) {
+                                calc_fire_leap( row_minus, j);
+                                if (temp_r23) calc_fire_leap( row_minus, col_minus);
+                                if (temp_r28) calc_fire_leap( row_minus, col_plus);
                             }
-                            if (iPlus < 8) {
-                                calc_fire_leap( iPlus, j);
-                                if (jMinus >= 0) calc_fire_leap( iPlus, jMinus);
-                                if (jPlus < 6) calc_fire_leap( iPlus, jPlus);
+                            if (temp_r19) {
+                                calc_fire_leap( row_plus, j);
+                                if (temp_r23) calc_fire_leap( row_plus, col_minus);
+                                if (temp_r28) calc_fire_leap( row_plus, col_plus);
                             }
-                            if (jMinus >= 0) calc_fire_leap( i, jMinus);
-                            if (jPlus < 6) calc_fire_leap( i, jPlus);
+                            if (temp_r23) calc_fire_leap( i, col_minus);
+                            if (temp_r28) calc_fire_leap( i, col_plus);
                         }
                     }
                 }
@@ -800,6 +778,7 @@ void daObjTapestryPacket_c::smoke_move(fopAc_ac_c* param_1) {
     smoke_set();
   }
   //pcVar5 = &unk250[unk1060*3][int(unk145C * 7.0f)][int(unk1460 * 5.0f)];
+  pcVar5 = &mDrawVtx[unk1060].mBufferNrm[(int)(unk1458.y*7.0f)][(int)(unk1458.z*5.0f)];
   yaw = cM_atan2s(pcVar5->x,-pcVar5->z);
   f32 xzdist = std::sqrtf(pcVar5->x*pcVar5->x+pcVar5->z*pcVar5->z);
   iVar4 = cM_atan2s(pcVar5->y,xzdist);
