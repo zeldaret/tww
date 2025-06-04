@@ -191,33 +191,28 @@ const u8 label4192 = 0;
 void daObjTapestryDrawData_c::ct_dl() {
 
 
-
     int now = 0;
+    int vtxcount = 6;
     for (int i = 0; i < 7; i++) {
         static const u8 begindata[3] ={0x98,0x00,0x0C};
-        memcpy(&m_dl[now], begindata, 3);
-        u32 local_30[2] = {i*6,(i+1)*6};
+        memcpy(&m_dl[now], begindata, 3);   //Write header 0x98,0x00,0x0C
+        s32 local_30[2] = {i*vtxcount,(i+1)*vtxcount};
         now += 3;
-        for (int j = 0; j < 6; j++) {
+        for (int j = 0; j < vtxcount; j++) {
             for (int k = 0; k < 2; k++) {
-                u8 cVar1= j+local_30[k];
-                s8 sVar1[2] = {
-                    0,0
-                };
-                sVar1[0] = cVar1;
-                sVar1[1] = cVar1;
+                s32 trinum= (j+local_30[k]);
+                trinum &= 0xFF;
+                u8 sVar1[2] = {trinum,trinum};
                 memcpy(&m_dl[now+0], &sVar1, 2);
                 static const u8 tmp_clr = 0;
-                memcpy(&m_dl[now+2], &tmp_clr, 1); // 1 byte
-                u8 local_31[1] = {0};
-                local_31[0] = cVar1;
-                memcpy(&m_dl[now+3], &local_31, 1);        // 1 byte
+                memcpy(&m_dl[now+2], &tmp_clr, 1);
+                u8 local_31[1] = {trinum};
+                memcpy(&m_dl[now+3], &local_31, 1);
                 now += 4;
             }
         }
     }
-
-    // Write 0x20 zero bytes
+    // Write 0x20 padding bytes
     for (int i = 0; i < 0x20; ++i) {
         *((u8*)this + 0x180 + now) = 0;
         now++;
@@ -345,52 +340,60 @@ void daObjTapestryPacket_c::calc_acc_spring(int param_1, int param_2) {
     /* Nonmatching */
 
     u32 uVar3 = unk1060 ^ 1;
-    cXyz* pcVar10 = &(mDrawVtx[uVar3].mBufferVtx[param_1]+param_2)[0]; 
-    f32 someHIO = l_HIO.attr().unkC[0][0];
-    u32 uVar4 = param_1 + 1U ^ 8;
-    u32 uVar11 = param_2 - 1U >> 0x1f ^ 1;
-    u32 uVar5 = param_2 + 1U ^ 6;
-    int iVar6 = ((int)uVar5 >> 1) - (uVar5 & 6);
-    iVar6 = ((int)uVar5 >> 1) - (uVar5 & 6);
-    if(param_1 + -1 > -1){
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2],42.42857f,someHIO);
-        if(uVar11){
-            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-2][param_2+5],l_mesh_diagonal,someHIO);
+    daObjTapestryDrawVtx_c* temp_r21 = &mDrawVtx[uVar3];
+    //cXyz (*pcVar9)[6] = &mDrawVtx[uVar3].mBufferVtx[param_1]; 
+    cXyz* temp_r20 = &temp_r21->mBufferVtx[param_1][param_2];
+
+    volatile s32 temp_r0 = param_1 - 1;
+    s32 temp_r19 = param_1 + 1;
+    s32 temp_r18 = param_2 - 1;
+    s32 temp_r17 = param_2 + 1;
+    volatile s32 temp_r3_2 = 8 ^ temp_r19;
+    s8 temp_r31 = (temp_r18 >> 0x1F)^1;
+    s32 temp_r3_3 = 6^temp_r17;
+    volatile s32 temp_r30 = (u32) ((temp_r3_3 >> 1) - (temp_r3_3 & 6)) >> 0x1F;
+    f32 someHIO = l_HIO.attr().unk58[2][0];
+    volatile f32 otherHIO = l_HIO.attr().unkC[12][1];
+
+    if(temp_r0 >= 0){
+        calc_acc_spring_sub(temp_r20,&temp_r21->mBufferVtx[temp_r18][param_2],42.42857f,someHIO);
+        if(!temp_r31){
+            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1-2][param_2+5],l_mesh_diagonal,otherHIO);
         }
-        if(iVar6 < 0){
-            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2+1],l_mesh_diagonal,someHIO);
+        if(temp_r30 < 0){
+            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1-1][param_2+1],l_mesh_diagonal,otherHIO);
         }
     }
-    if((int)(((int)uVar4 >> 1) - (uVar4 & 8)) < 0){ // param_1 < 7
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2],42.42857f,someHIO);
-        if(uVar11){ //param_2 > 0
-            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1][param_2+5],l_mesh_diagonal,someHIO);
+    if((int)(((int)temp_r31 >> 1) - (temp_r31 & 8)) < 0){ // param_1 < 7
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2],42.42857f,someHIO);
+        if(temp_r31){ //param_2 > 0
+            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1][param_2+5],l_mesh_diagonal,otherHIO);
         }
-        if(iVar6 < 0){ //param_2 < 5
-            calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],l_mesh_diagonal,someHIO);
+        if(temp_r30 < 0){ //param_2 < 5
+            calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],l_mesh_diagonal,otherHIO);
         }
     } 
-    if(uVar11){
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,someHIO);
+    if(temp_r31){
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,otherHIO);
 
     }
-    if(iVar6 < 0){
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,someHIO);
+    if(temp_r30 < 0){
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[unk1060].mBufferVtx[param_1+1][param_2+1],40.0f,otherHIO);
     }
-    uVar4 = param_1 + 2U ^ 8;
-    uVar5 = param_2 + 2U ^ 6;
+    temp_r31 = param_1 + 2U ^ 8;
+    temp_r3_3 = param_2 + 2U ^ 6;
     f32 someOtherHIO = l_HIO.field_C.unkC[1][1];
     if (param_1 + -2 > -1) { //param_1 + -2 > -1
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1-2][param_2],84.85714f,someOtherHIO);
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1-2][param_2],84.85714f,someOtherHIO);
     }
-    if((int)(((int)uVar4 >> 1) - (uVar4 & 8)) < 0) {//param_1 < 6 && param_1 > -2
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1+2][param_2],84.85714f,someOtherHIO); 
+    if((int)(((int)temp_r31 >> 1) - (temp_r31 & 8)) < 0) {//param_1 < 6 && param_1 > -2
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1+2][param_2],84.85714f,someOtherHIO); 
     }
     if (param_2 + -2 > -1) { //param_2 + -2 > -1
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1-1][param_2+4],80.0f,someOtherHIO);
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1-1][param_2+4],80.0f,someOtherHIO);
     }
-    if((int)(((int)uVar5 >> 1) - (uVar5 & 6)) < 0) {//param_2 < 6 && param_2 > -2
-        calc_acc_spring_sub(pcVar10,&mDrawVtx[1-unk1060].mBufferNrm[param_1][param_2+2],80.0f,someOtherHIO);     
+    if((int)(((int)temp_r3_3 >> 1) - (temp_r3_3 & 6)) < 0) {//param_2 < 6 && param_2 > -2
+        calc_acc_spring_sub(temp_r20,&mDrawVtx[1-unk1060].mBufferNrm[param_1][param_2+2],80.0f,someOtherHIO);     
     }
 }
 const u32 fillerone[1] = {0x3A91A2B4};
@@ -908,10 +911,10 @@ void daObjTapestryPacket_c::draw() {
     GXLoadPosMtxImm(unk1364,0);
     GXLoadNrmMtxImm(unk1364,0); 
     GXSetCullMode(GX_CULL_BACK);
-    GXCallDisplayList(m_draw_data.m_dl,0x180);
+    GXCallDisplayList(&m_draw_data.m_dl,0x180);
     GXSetCullMode(GX_CULL_FRONT);
     GXSetArray(GX_VA_NRM,draw_vtx->mBufferThree,0xC);
-    GXCallDisplayList(m_draw_data.m_dl,0x180);
+    GXCallDisplayList(&m_draw_data.m_dl,0x180);
     J3DShape::sOldVcdVatCmd = 0;
 
 }

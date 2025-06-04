@@ -73,6 +73,14 @@ public:
 
 
 class daObjTapestryDrawData_c {
+// struct dlSegment{
+//     u8 header[3];
+//     u8 vtxlayout[12][4];
+// };
+// struct DrawDataDL{
+//     dlSegment segment[7];
+//     u8 endpad[0x20];
+// };
 public:
 
     daObjTapestryDrawData_c();
@@ -85,13 +93,12 @@ public:
     void ct_dl();
 public:
 
-    //f32 array[8][6][2];
     f32 array[8*6*2];
-    /* 0x180 */u8 m_dl[0x20];
-    u8 pad[0x320-0x1A0];
+    /* 0x180 */ u8 m_dl[0x185];
+    /* 0x180 */ u8 pad[0x18];
 
 };
-
+int a = sizeof(daObjTapestryDrawData_c);
 class daObjTapestry_c;
 
 class daObjTapestryPacket_c : public J3DPacket{
