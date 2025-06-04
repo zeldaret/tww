@@ -660,7 +660,7 @@ void OSWakeupThread(OSThreadQueue* queue) {
     OSRestoreInterrupts(enabled);
 }
 
-s32 OSSetThreadPriority(OSThread* thread, s32 priority) {
+s32 OSSetThreadPriority(OSThread* thread, OSPriority priority) {
     BOOL enabled;
 
     if (priority < 0 || priority > 31) {
@@ -668,7 +668,7 @@ s32 OSSetThreadPriority(OSThread* thread, s32 priority) {
     }
 
     enabled = OSDisableInterrupts();
-    if ((s32)thread->base_priority != priority) {
+    if ((OSPriority)thread->base_priority != priority) {
         thread->base_priority = priority;
 
         UpdatePriority(thread);

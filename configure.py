@@ -384,7 +384,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_ap/f_ap_game.cpp"),
 
             # f_op
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_op/f_op_actor.cpp", extra_cflags=["-sym off"]),
+            Object(Matching,    "f_op/f_op_actor.cpp", extra_cflags=["-sym off"]),
             Object(Matching,    "f_op/f_op_actor_iter.cpp"),
             Object(Matching,    "f_op/f_op_actor_tag.cpp"),
             Object(Equivalent,  "f_op/f_op_actor_mng.cpp", extra_cflags=['-pragma "nosyminline on"']), # weak func order
@@ -1227,7 +1227,7 @@ config.libs = [
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c"),
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/misc_io.c"),
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"),
+            Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c"),
             Object(Matching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c"),
             Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtold.c"), # Demo-only
@@ -1440,7 +1440,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_stone2"),
     ActorRel(Matching,    "d_a_swc00"),
     ActorRel(Equivalent,  "d_a_swhit0", extra_cflags=['-pragma "nosyminline on"']), # weak func order
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swtdoor"),
+    ActorRel(Matching,    "d_a_swtdoor"),
     ActorRel(NonMatching, "d_a_tag_attention"),
     ActorRel(NonMatching, "d_a_tag_ba1"),
     ActorRel(Matching,    "d_a_tag_event"),
@@ -1450,9 +1450,9 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_kb_item"),
     ActorRel(Equivalent, "d_a_tag_kk1", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_tag_light"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_msg"),
+    ActorRel(Matching,    "d_a_tag_msg"),
     ActorRel(NonMatching, "d_a_tag_photo"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_waterlevel"),
+    ActorRel(Matching,    "d_a_tag_waterlevel"),
     ActorRel(Matching,    "d_a_tama", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tbox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_tpota", extra_cflags=['-pragma "nosyminline on"']),
@@ -1683,7 +1683,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_obj_ladder", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_light"),
     ActorRel(NonMatching, "d_a_obj_mkie"),
     ActorRel(NonMatching, "d_a_obj_mkiek"),
