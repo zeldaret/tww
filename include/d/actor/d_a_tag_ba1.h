@@ -5,8 +5,8 @@
 
 class daTag_Ba1_c : public fopAc_ac_c {
 public:
-    void XyCheck_cB(int);
-    void XyEvent_cB(int);
+    BOOL XyCheck_cB(int i_itemBtn);
+    int XyEvent_cB(int);
     void createInit();
     BOOL _draw();
     BOOL _execute();
@@ -14,8 +14,9 @@ public:
     cPhs_State _create();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ s16 field_0x290;
+    /* 0x292 */ s16 field_0x292;
+};  // Size: 0x294
 
 class daTag_Ba1_HIO_c {
 public:

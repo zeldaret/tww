@@ -7,29 +7,33 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
     /* Nonmatching */
 }
 
 /* 00000144-00000164       .text daTag_Ba1_XyCheck_cB__FPvi */
-void daTag_Ba1_XyCheck_cB(void*, int) {
-    /* Nonmatching */
+void daTag_Ba1_XyCheck_cB(void* obj, int i_itemBtn) {
+    ((daTag_Ba1_c*)obj)->XyCheck_cB(i_itemBtn);
 }
 
 /* 00000164-00000184       .text XyCheck_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyCheck_cB(int) {
-    /* Nonmatching */
+BOOL daTag_Ba1_c::XyCheck_cB(int i_itemBtn) {
+    return dComIfGp_getSelectItem(i_itemBtn) == dItem_FAIRY_BOTTLE_e;
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
-void daTag_Ba1_XyEvent_cB(void*, int) {
-    /* Nonmatching */
+void daTag_Ba1_XyEvent_cB(void* obj, int param) {
+    ((daTag_Ba1_c*)obj)->XyEvent_cB(param);
 }
 
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
-void daTag_Ba1_c::XyEvent_cB(int) {
-    /* Nonmatching */
+int daTag_Ba1_c::XyEvent_cB(int) {
+    field_0x292 = 0;
+    return (int)(&field_0x290)[field_0x292];
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
