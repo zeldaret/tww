@@ -1441,7 +1441,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_swc00"),
     ActorRel(Equivalent,  "d_a_swhit0", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swtdoor"),
-    ActorRel(NonMatching, "d_a_tag_attention"),
+    ActorRel(Equivalent, "d_a_tag_attention"),
     ActorRel(NonMatching, "d_a_tag_ba1"),
     ActorRel(Matching,    "d_a_tag_event"),
     ActorRel(Matching,    "d_a_tag_evsw", extra_cflags=['-pragma "nosyminline on"']),
