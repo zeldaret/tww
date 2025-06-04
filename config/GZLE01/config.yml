@@ -1857,6 +1857,10 @@ modules:
   hash: 8be9de0693b96dcda338c0e2c0d6338aa64f9cb5
   splits: config/GZLE01/rels/d_a_obj_tntrap/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tntrap/symbols.txt
+  extract:
+  - symbol: l_arcname
+    binary: assets/l_arcname.bin
+    header: assets/l_B_sand2TEX.h
 
 - object: files/rels/d_a_obj_tower.rel
   hash: 3e21c03d0737772d7d66c31521c5a2b647e4fbc0

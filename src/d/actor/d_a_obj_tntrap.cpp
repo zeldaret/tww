@@ -10,110 +10,115 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
+#include "d/res/res_tntrap.h"
+#include "weak_data_2100_2080.h"
+#include "weak_data_1811.h"
+
+namespace{
+    const char l_arcname[] = "TnTrap";
+
+    static const dCcD_SrcTri l_tri_src = {
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ AT_TYPE_UNK0,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_UNK0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_UNK0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ 0x00,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKB,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ 0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        {
+            /* a */ 0.0f, 0.0f, 0.0f,
+            /* b */ 0.0f, 0.0f, 0.0f,
+            /* c */ 0.0f, 0.0f, 0.0f,
+        },
+    };
+
+    static const Vec l_tri_vtx[6] = {
+    300.0, -70.0, 0.0, 
+    -300.0, -70.0, 0.0, 
+    -300.0, 55.0, 0.0, 
+    300.0, 55.0, 0.0, 
+    300.0, 180.0, 0.0, 
+    -300.0, 180.0, 0.0,
+
+    };
 
 
-const char l_arcname[] = "TnTrap";
 
-static const dCcD_SrcTri l_tri_src = {
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0x0800,
-        /* SrcObjAt  Atp     */ 1,
-        /* SrcObjAt  SPrm    */ 5,
-        /* SrcObjTg  Type    */ 0,
-        /* SrcObjTg  SPrm    */ 0,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ 0x00,
-        /* SrcGObjAt Spl     */ 0xB,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ 0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 0,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    {
-        /* a */ 0.0f, 0.0f, 0.0f,
-        /* b */ 0.0f, 0.0f, 0.0f,
-        /* c */ 0.0f, 0.0f, 0.0f,
-    },
+    static const f32 l_offset_ball[2][3] = {
+        -300,90,0,
+        300,90,0
+    };
+    static const f32 l_offset_thunder[3][3] = {
+        0,25,0,
+        0,85,0,
+        0,145,0
+
+    };       
+
+        
 };
-
-static const Vec l_tri_vtx[6] = {
-300.0, -70.0, 0.0, 
--300.0, -70.0, 0.0, 
--300.0, 55.0, 0.0, 
-300.0, 55.0, 0.0, 
-300.0, 180.0, 0.0, 
--300.0, 180.0, 0.0,
-
-};
-
-
-
-static const f32 l_offset_ball[2][3] = {
-    -300,90,0,
-    300,90,0
-};
-static const f32 l_offset_thunder[3][3] = {
-    0,25,0,
-    0,85,0,
-    0,145,0
-
-};
-
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 BOOL daObjTnTrap_c::chk_appear() {
 
-    int o_retval = 0;
-    field_0xDC8 = param_get_swSave();
-    field_0xDCC = param_get_swSave2();
-    field_0xDD0 = param_get_arg0();
-    field_0xDD4 = param_get_mapType();
-    switch(field_0xDD4){
+    BOOL o_retval = FALSE;
+    mSwSave = param_get_swSave();
+    mSwSave2 = param_get_swSave2();
+    mArg0 = param_get_arg0();
+    mMapType = param_get_mapType();
+    switch(mMapType){
     case 0:
-        if(dComIfGs_isEventBit(0x3A04) == 1){
-            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
-                if(dComIfGs_getTriforceNum() == 8 && field_0xDD0 == 0){
-                    if(dComIfGs_isEventBit(0x2C01) == 1){
-                        if(field_0xDCC != 0xFF && !fopAcM_isSwitch(this,field_0xDCC)){
+        if(dComIfGs_isEventBit(dSv_evtBit_c::EVT_UNK3A04) == TRUE){
+            if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
+                if(dComIfGs_getTriforceNum() == 8 && mArg0 == 0){
+                    if(dComIfGs_isEventBit(dSv_evtBit_c::EVT_UNK2C01) == 1){
+                        if(mSwSave2 != 0xFF && !fopAcM_isSwitch(this,mSwSave2)){
                             field_0x298 = 2;
-                            o_retval = 1;
+                            o_retval = TRUE;
                         }
                     }else{
                         field_0x298 = 1;
-                        o_retval = 1;
+                        o_retval = TRUE;
                     }
                 }
             }else{
                 field_0x298 = 0;
-                o_retval = 1;
+                o_retval = TRUE;
             }
         }
         break;
     case 1:
-        if(field_0xDC8 != 0xFF && !fopAcM_isSwitch(this,field_0xDC8)){
+        if(mSwSave != 0xFF && !fopAcM_isSwitch(this,mSwSave)){
             field_0x298 = 3;
-            o_retval = 1;
+            o_retval = TRUE;
         }
         break;
     case 2:
-        if(field_0xDC8 != 0xFF){
-            if(!fopAcM_isSwitch(this,field_0xDC8)){
+        if(mSwSave != 0xFF){
+            if(!fopAcM_isSwitch(this,mSwSave)){
                 field_0x298 = 5;
-                o_retval = 1;
+                o_retval = TRUE;
             }
         }else{
             field_0x298 = 5;
-            o_retval = 1;       
+            o_retval = TRUE;       
         }
         break;
     default:   
-        JUT_ASSERT(0x17C,0);
+        JUT_ASSERT(380,0);
         break;
     }
     return o_retval;
@@ -137,7 +142,7 @@ void daObjTnTrap_c::set_mtx() {
 /* 00000368-000003E4       .text create_heap__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::create_heap() {
     bool o_retval = true;
-    cBgD_t* pcVar1 = (cBgD_t*)dComIfG_getObjectRes(l_arcname,0x3);
+    cBgD_t* pcVar1 = (cBgD_t*)dComIfG_getObjectRes(l_arcname,TNTRAP_DZB_TN_WALL01);
     field_0xD58 = dBgW_NewSet(pcVar1,cBgW::MOVE_BG_e,&field_0xD5C.calcMtx);
     if(field_0xD58 == NULL){
         o_retval = false;
@@ -213,14 +218,10 @@ void daObjTnTrap_c::set_se() {
     if(field_0xDC0 >= 5 || field_0xDC0 < 1){
         return;
     }
-    fopAcM_seStartCurrent(this,0x6239,0);
+    fopAcM_seStartCurrent(this,JA_SE_OBJ_TN_TRAP,0);
 
 }
 
-u32 fillerbytes[12] = {
-    0x3f800000,0x3f800000,0x3f800000,0x3f800000,
-    0x3f800000,0x3f800000,0x02000201,0x00000000,
-    0x40080000,0x00000000,0x3FE00000,0x00000000};
 
 /* 0000072C-000008A0       .text set_tri__13daObjTnTrap_cFi */
 void daObjTnTrap_c::set_tri(int param_1) {
@@ -240,7 +241,7 @@ void daObjTnTrap_c::set_tri(int param_1) {
             local_58[j] = l_tri_vtx[table_idx[i][j]];
             mDoMtx_stack_c::multVec(&local_58[j],&local_58[j]);
         }
-        field_0x2D8[param_1][i].setPos(&local_58[0],&local_58[1],&local_58[2]);
+        mTri[param_1][i].setPos(&local_58[0],&local_58[1],&local_58[2]);
     }
 
 
@@ -254,11 +255,11 @@ bool daObjTnTrap_c::chk_event_flg() {
         case 1:
             break;
         case 0:
-            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+            if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
                 int var_29 = 4;
-                if(field_0xDD0 == 0){
+                if(mArg0 == 0){
                     var_29 = 2;
-                    dComIfGs_onEventBit(0x3B40);
+                    dComIfGs_onEventBit(dSv_evtBit_c::EVT_UNK3B40);
 
                 }
                 setup_action(var_29);
@@ -271,7 +272,7 @@ bool daObjTnTrap_c::chk_event_flg() {
             }
             break;
         case 3:
-            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+            if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
                 daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
                 if(ship){
                     ship->offFantomGanonBattle();
@@ -281,7 +282,7 @@ bool daObjTnTrap_c::chk_event_flg() {
             }
             break;
         case 5:
-            if(field_0xDC8 != 0xFF && fopAcM_isSwitch(this,field_0xDC8) == 1){
+            if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
                 fopAcM_delete(this);
                 o_retval = false;
             }
@@ -313,8 +314,8 @@ cPhs_State daObjTnTrap_c::_create() {
     if(fopAcM_IsFirstCreating(this)){
         field_0xDC4 = chk_appear();
     }
-    if(field_0xDC4 == 1){
-        o_phs_state = dComIfG_resLoad(&field_0x290,l_arcname); 
+    if(field_0xDC4 == TRUE){
+        o_phs_state = dComIfG_resLoad(&mPhaseProcess,l_arcname); 
     }
     if(o_phs_state == cPhs_COMPLEATE_e){
         if(fopAcM_entrySolidHeap(this,this->solidHeapCB,0x2E0)){
@@ -327,8 +328,8 @@ cPhs_State daObjTnTrap_c::_create() {
 
                 for(int i = 0; i < 2; i++){
                     for(int j = 0; j < 4; j++){
-                        field_0x2D8[i][j].Set(l_tri_src);
-                        field_0x2D8[i][j].SetStts(&mStts);
+                        mTri[i][j].Set(l_tri_src);
+                        mTri[i][j].SetStts(&mStts);
                     }
                     set_tri(i);
                 }
@@ -349,19 +350,19 @@ cPhs_State daObjTnTrap_c::_create() {
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::_delete() {
 
-    bool bVar1;
+    bool release;
 
     if (field_0xDC4 == 1) {
-    dComIfG_resDelete(&field_0x290,l_arcname);
+    dComIfG_resDelete(&mPhaseProcess,l_arcname);
         if (heap != NULL){
             if(field_0xD58 != NULL) {
                 if ((field_0xD58->GetId() >= 0) && (field_0xD58->GetId() < 0x100)) {
-                    bVar1 = true;
+                    release = true;
                 }
                 else {
-                    bVar1 = false;
+                    release = false;
                 }
-                if (bVar1) {
+                if (release) {
                     dComIfG_Bgsp()->Release(field_0xD58);
                 }
                 field_0xD58 = NULL;
@@ -373,15 +374,15 @@ bool daObjTnTrap_c::_delete() {
         }
 
     }
-    return 1;
+    return true;
 }
 
 /* 00001050-00001150       .text trap_off_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::trap_off_wait_act_proc() {
 
     if(daPy_getPlayerActorClass() != NULL){
-        f32 fVar2 = (daPy_getPlayerActorClass()->current.pos-home.pos).absXZ();
-        if(fVar2 < 500.0f){
+        f32 pos_diff = (daPy_getPlayerActorClass()->current.pos-home.pos).absXZ();
+        if(pos_diff < 500.0f){
             setup_action(1);
         }
     }
@@ -475,24 +476,24 @@ bool daObjTnTrap_c::demo_wait2_act_proc() {
 /* 000015B4-000016A8       .text demo_end_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::demo_end_wait_act_proc() {
 
-    bool o_retval = 1;
+    bool o_retval = true;
     if(dComIfGp_evmng_endCheck(field_0xDD8[0])){
         dComIfGp_event_reset();
         switch(field_0x298){
             case 1:
                 break;
             case 0:
-                mDoAud_seStart(0x806);
+                mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 break;
             case 2:
-                if(field_0xDCC == 0xFF){
+                if(mSwSave2 == 0xFF){
                     break;
                 }
-                fopAcM_onSwitch(this,field_0xDCC);
+                fopAcM_onSwitch(this,mSwSave2);
                 break;
         }
         fopAcM_delete(this);
-        o_retval = 0;
+        o_retval = false;
     }
     return o_retval;
 
@@ -500,7 +501,7 @@ bool daObjTnTrap_c::demo_end_wait_act_proc() {
 
 /* 000016A8-00001740       .text hide_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::hide_wait_act_proc() {
-    if(field_0xDCC != 0xFF && fopAcM_isSwitch(this,field_0xDCC) == 1){
+    if(mSwSave2 != 0xFF && fopAcM_isSwitch(this,mSwSave2) == 1){
         daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
         if(ship){
             ship->onFantomGanonBattle();
@@ -535,8 +536,8 @@ void daObjTnTrap_c::trap_on_wait_act_init_proc() {
 
 /* 000017CC-00001860       .text demo_regist_wait_act_init_proc__13daObjTnTrap_cFv */
 void daObjTnTrap_c::demo_regist_wait_act_init_proc() {
-    field_0xDE4[0] = 0.0;
-    particle_set(0,0.0);
+    field_0xDE4[0] = 0.0f;
+    particle_set(0,0.0f);
     if(field_0x298 == 2){
         field_0xDD8[0] = dComIfGp_evmng_getEventIdx("break_tntrap2");
     }else{
@@ -547,8 +548,8 @@ void daObjTnTrap_c::demo_regist_wait_act_init_proc() {
 
 /* 00001860-00001890       .text demo_wait2_act_init_proc__13daObjTnTrap_cFv */
 void daObjTnTrap_c::demo_wait2_act_init_proc() {
-    field_0xDE4[0] = 0.0;
-    particle_set(0,0.0);
+    field_0xDE4[0] = 0.0f;
+    particle_set(0,0.0f);
     return;
 }
 
@@ -584,32 +585,30 @@ void daObjTnTrap_c::setup_action(int param_1) {
     };
 
     (this->*act_init_proc[param_1])();
-    field_0xDB4 = act_proc[param_1];
+    mActionFunc = act_proc[param_1];
     field_0xDC0 = param_1;
 }
 
 /* 00001AE4-00001BE8       .text _execute__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::_execute() {
 
-    if(field_0xD58 != NULL){
-        if(field_0xD58->ChkUsed() != 0){
-            field_0xD58->Move();
-        }
+    if(field_0xD58 && field_0xD58->ChkUsed()){
+        field_0xD58->Move();
     }
     int i;
     for(i = 0; i < 2; i++){
         set_tri(i);
     }
     mStts.Move();
-    if((this->*field_0xDB4)() == 1){
+    if((this->*mActionFunc)() == 1){
         for(i = 0; i < 2; i++){
             for(int j = 0; j < 4; j++){
-                dComIfG_Ccsp()->Set(&field_0x2D8[i][j]);
+                dComIfG_Ccsp()->Set(&mTri[i][j]);
             }
         }
         set_se();
     }
-    return 1;
+    return true;
 }
 
 /* 00001BE8-00001BF0       .text _draw__13daObjTnTrap_cFv */
