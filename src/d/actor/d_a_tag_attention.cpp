@@ -39,53 +39,6 @@ static dCcD_SrcSph sph_check_src = {
     },
 };
 
-bool daTagAttention::Act_c::chk_inside(cXyz* pos) const {
-    if (!m_b0x290){
-        return false;
-    }
-
-    cXyz plyrToObjVec = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    if (subtype == 0){
-        // spherical collision check
-        f32 distance = plyrToObjVec.abs();
-        
-        if (distance > scale.x * 100.0f) {
-            return false;
-        }
-    }else{
-        // box collision check
-        s16 yRotAngle = current.angle.y;
-        if (yRotAngle != 0){
-            if (current.angle.y){
-                s16 yRotAngle = current.angle.y;
-                f32 temp = 
-                    plyrToObjVec.x * cM_ssin(yRotAngle) +
-                    plyrToObjVec.z * cM_scos(yRotAngle);
-                plyrToObjVec.x = 
-                    plyrToObjVec.x * cM_scos(yRotAngle) -
-                    plyrToObjVec.z * cM_ssin(yRotAngle);
-                plyrToObjVec.z = temp;
-            }
-        }
-
-        f32 curScale = scale.x;
-        if ((plyrToObjVec.x < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.x)){
-            return false;
-        }
-        curScale = scale.y;
-        if ((plyrToObjVec.y < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.y)){
-            return false;
-        }
-        curScale = scale.z;
-        if ((plyrToObjVec.z < -curScale * 100.0f) || (curScale * 100.0f > plyrToObjVec.z)){
-            return false;
-        }
-    }
-
-    *pos = current.pos;
-    return true;
-}
-
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
@@ -102,27 +55,18 @@ bool daTagAttention::Act_c::_execute() {
     mSph.SetR(scale.x * 100.0f);
     dComIfG_Ccsp()->Set(&mSph);
     m_b0x290 = true;
-    int iVar1 = prm_get_Type();
-    if (iVar1 == 1){
-        iVar1 = prm_get_swSave();
-        BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
-        if (bVar2 == FALSE){
+    if (prm_get_Type() == 1){
+        if (fopAcM_isSwitch(this, prm_get_swSave()) == FALSE){
             m_b0x290 = false;
         }
-    }else{
-        iVar1 = prm_get_Type();
-        if (iVar1 == 2){
-            iVar1 = prm_get_swSave();
-            BOOL bVar2 = dComIfGs_isSwitch(iVar1, home.roomNo);
-            if (bVar2 == FALSE){
-                m_b0x290 = false;
-            }
+    }else if (prm_get_Type() == 2){
+        if (fopAcM_isSwitch(this, prm_get_swSave()) != FALSE){
+            m_b0x290 = false;
         }
     }
 
-    // TODO for matching: implement dComIfGp_att_Look2RequestF
-    bool wasHit = chk_inside(&current.pos);
-    if (wasHit){
+    cXyz unused;
+    if (chk_inside(&unused)){
         dComIfGp_att_Look2RequestF(this, 0x6000, 1);
     }
 

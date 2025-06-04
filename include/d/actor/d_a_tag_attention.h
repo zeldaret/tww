@@ -1,6 +1,7 @@
 #ifndef D_A_TAG_ATTENTION_H
 #define D_A_TAG_ATTENTION_H
 
+#include "SSystem/SComponent/c_math.h"
 #include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
@@ -8,7 +9,51 @@
 namespace daTagAttention {
     class Act_c : public fopAc_ac_c {
     public:
-        bool chk_inside(cXyz*) const;
+        bool chk_inside(cXyz* pos) const {
+            if (!m_b0x290){
+                return false;
+            }
+
+            fopAc_ac_c* player = dComIfGp_getPlayer(0);
+            cXyz plyrToObjVec = player->current.pos-current.pos;
+            if (subtype == 0){
+                // spherical collision check
+                f32 distance = plyrToObjVec.abs();
+                
+                if (distance > scale.x * 100.0f) {
+                    return false;
+                }
+            }else{
+                // box collision check
+                s16 yRotAngle = current.angle.y;
+                if (yRotAngle != 0){
+                    if (current.angle.y){
+                        s16 yRotAngle = current.angle.y;
+                        f32 temp = 
+                            plyrToObjVec.x * cM_ssin(yRotAngle) +
+                            plyrToObjVec.z * cM_scos(yRotAngle);
+                        plyrToObjVec.x = 
+                            plyrToObjVec.x * cM_scos(yRotAngle) -
+                            plyrToObjVec.z * cM_ssin(yRotAngle);
+                        plyrToObjVec.z = temp;
+                    }
+                }
+
+                if ((plyrToObjVec.x < -scale.x * 100.0f) || (plyrToObjVec.x > scale.x * 100.0f)){
+                    return false;
+                }
+                if ((plyrToObjVec.y < -scale.y * 100.0f) || (plyrToObjVec.y > scale.y * 100.0f)){
+                    return false;
+                }
+                if ((plyrToObjVec.z < -scale.z * 100.0f) || (plyrToObjVec.z > scale.z * 100.0f)){
+                    return false;
+                }
+            }
+
+            *pos = current.pos;
+            return true;
+        }
+
         int prm_get_Type() const 
         {
             return daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
