@@ -25,18 +25,15 @@ namespace daTagAttention {
                 }
             }else{
                 // box collision check
-                s16 yRotAngle = current.angle.y;
-                if (yRotAngle != 0){
-                    if (current.angle.y){
-                        s16 yRotAngle = current.angle.y;
-                        f32 temp = 
-                            plyrToObjVec.x * cM_ssin(yRotAngle) +
-                            plyrToObjVec.z * cM_scos(yRotAngle);
-                        plyrToObjVec.x = 
-                            plyrToObjVec.x * cM_scos(yRotAngle) -
-                            plyrToObjVec.z * cM_ssin(yRotAngle);
-                        plyrToObjVec.z = temp;
-                    }
+                if (current.angle.y){
+                    s16 yRotAngle = current.angle.y;
+                    f32 temp = 
+                        plyrToObjVec.x * cM_ssin(yRotAngle) +
+                        plyrToObjVec.z * cM_scos(yRotAngle);
+                    plyrToObjVec.x = 
+                        plyrToObjVec.x * cM_scos(yRotAngle) -
+                        plyrToObjVec.z * cM_ssin(yRotAngle);
+                    plyrToObjVec.z = temp;
                 }
 
                 if ((plyrToObjVec.x < -scale.x * 100.0f) || (plyrToObjVec.x > scale.x * 100.0f)){
