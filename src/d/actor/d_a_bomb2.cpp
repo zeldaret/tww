@@ -1,6 +1,6 @@
 /**
- * d_a_bomb.cpp
- * Bomb Flower Bomb
+ * d_a_bomb2.cpp
+ * Object - Bomb Flower - Bomb
  */
 
 #include "d/actor/d_a_bomb2.h"
@@ -477,9 +477,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
         }
     }
 

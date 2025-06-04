@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
+class dCcD_SrcSph;
 
 class daObj_Canon_c : public fopAc_ac_c {
 public:
@@ -40,6 +41,8 @@ public:
     void getArg();
     cPhs_State _create();
     bool _delete();
+
+    static const dCcD_SrcSph m_sph_src;
 
 public:
     /* Place member variables here */

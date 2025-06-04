@@ -1,6 +1,6 @@
 /**
  * d_a_dr.cpp
- * Valoo / ドラゴン (Dragon)
+ * NPC - Valoo (Overworld) / ドラゴン (Dragon)
  */
 
 #include "d/actor/d_a_dr.h"
@@ -245,17 +245,17 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
 static cPhs_State daDr_Create(fopAc_ac_c* i_this) {
     dr_class* a_this = (dr_class*)i_this;
-    
-#if VERSION == VERSION_DEMO
-    cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
-    if (phase_state == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, dr_class);
-#else
+
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(a_this, dr_class);
-    
+#endif
+
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(a_this, dr_class);
 #endif
+
         if (!fopAcM_entrySolidHeap(a_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;
         }

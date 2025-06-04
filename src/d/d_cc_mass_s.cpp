@@ -32,25 +32,23 @@ void dCcMassS_Mng::Ct() {
 void dCcMassS_Mng::Prepare() {
     cM3dGAab area;
     area.ClearForMinMax();
-    cCcD_ShapeAttr* attr;
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->GetObj();
         JUT_ASSERT(61, pobj != NULL);
-        attr = pobj->GetShapeAttr();
+        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
         JUT_ASSERT(73, parea != NULL);
-        attr = parea->GetShapeAttr();
+        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     if (mFlag & 1) {
         mCpsAttr.CalcAabBox();
-        attr = &mCpsAttr;
-        area.SetMinMax(attr->GetWorkAab());
+        area.SetMinMax(mCpsAttr.GetWorkAab());
     }
     mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {

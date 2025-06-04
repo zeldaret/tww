@@ -65,6 +65,22 @@ public:
     dBgS() {}
     virtual ~dBgS() {}
 
+    bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
+    fopAc_ac_c* GetActorPointer(cBgS_PolyInfo& i_poly) const {
+        return cBgS::GetActorPointer(i_poly);
+    }
+
+    // void CaptPoly(dBgS_CaptPoly&) {}
+    // void ChkDeleteActorRegist(fopAc_ac_c*) {}
+    // void DebugDrawPoly(dBgW&) {}
+    // void Draw() {}
+    // void DrawPoly(cBgS_PolyInfo&, _GXColor&) {}
+    // void GetBgWPointer(cBgS_PolyInfo&) {}
+    // void GetPolyCamId(cBgS_PolyInfo&) {}
+    // void GroundCross(cBgS_GndChk*) {}
+    // void LineCross(cBgS_LinChk*) {}
+    // void ShdwDraw(cBgS_ShdwDraw*) {}
+
     virtual void Ct();
     virtual void Dt();
     virtual void Move();
@@ -106,8 +122,6 @@ public:
     void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void RideCallBack(cBgS_PolyInfo&, fopAc_ac_c*);
     fopAc_ac_c* PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
-
-    bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
 };  // Size: 0x1404
 
 class dBgS_CrrPos : public cBgS_PolyInfo, public dBgS_Chk, public cBgS_Chk {

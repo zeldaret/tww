@@ -294,28 +294,28 @@ void daNpcMt_c::changePhotoNo(u8) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-static s32 daNpc_MtCreate(void*) {
-    /* Nonmatching */
+static s32 daNpc_MtCreate(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_create();
 }
 
 /* 00002D6C-00002D90       .text daNpc_MtDelete__FPv */
-static BOOL daNpc_MtDelete(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtDelete(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_delete();
 }
 
 /* 00002D90-00002DB4       .text daNpc_MtExecute__FPv */
-static BOOL daNpc_MtExecute(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtExecute(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_execute();
 }
 
 /* 00002DB4-00002DD8       .text daNpc_MtDraw__FPv */
-static BOOL daNpc_MtDraw(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtDraw(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_draw();
 }
 
 /* 00002DD8-00002DE0       .text daNpc_MtIsDelete__FPv */
 static BOOL daNpc_MtIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_MtMethodTable = {

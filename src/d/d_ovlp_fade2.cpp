@@ -40,7 +40,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);

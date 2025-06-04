@@ -6,6 +6,7 @@
 #include "d/actor/d_a_fgmahou.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-000000E4       .text daFgmahou_Draw__FP13fgmahou_class */
 static BOOL daFgmahou_Draw(fgmahou_class*) {
@@ -29,7 +30,7 @@ static BOOL daFgmahou_Execute(fgmahou_class*) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000DE0-00000E3C       .text daFgmahou_Delete__FP13fgmahou_class */
@@ -45,6 +46,62 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 /* 000010E4-0000135C       .text daFgmahou_Create__FP10fopAc_ac_c */
 static cPhs_State daFgmahou_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcSph tg_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ AT_TYPE_SWORD,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 60.0f,
+        },
+    };
+    static dCcD_SrcSph at_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+            /* SrcObjAt  Atp     */ 8,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNKA,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 30.0f,
+        },
+    };
 }
 
 static actor_method_class l_daFgmahou_Method = {

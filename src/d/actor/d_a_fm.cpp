@@ -6,6 +6,68 @@
 #include "d/actor/d_a_fm.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+const dCcD_SrcSph daFm_c::m_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_UNK8 & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 60.0f,
+    },
+};
+
+
+const dCcD_SrcCyl daFm_c::m_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ dCcG_SE_UNK23,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 60.0f,
+        /* Height */ 0.0f,
+    },
+};
+
 
 /* 000000EC-000003EC       .text __ct__10daFm_HIO_cFv */
 daFm_HIO_c::daFm_HIO_c() {
@@ -543,28 +605,28 @@ bool daFm_c::_delete() {
 }
 
 /* 0000A0FC-0000A11C       .text daFmCreate__FPv */
-static s32 daFmCreate(void*) {
-    /* Nonmatching */
+static s32 daFmCreate(void* i_this) {
+    return ((daFm_c*)i_this)->_create();
 }
 
 /* 0000A11C-0000A140       .text daFmDelete__FPv */
-static BOOL daFmDelete(void*) {
-    /* Nonmatching */
+static BOOL daFmDelete(void* i_this) {
+    return ((daFm_c*)i_this)->_delete();
 }
 
 /* 0000A140-0000A164       .text daFmExecute__FPv */
-static BOOL daFmExecute(void*) {
-    /* Nonmatching */
+static BOOL daFmExecute(void* i_this) {
+    return ((daFm_c*)i_this)->_execute();
 }
 
 /* 0000A164-0000A188       .text daFmDraw__FPv */
-static BOOL daFmDraw(void*) {
-    /* Nonmatching */
+static BOOL daFmDraw(void* i_this) {
+    return ((daFm_c*)i_this)->_draw();
 }
 
 /* 0000A188-0000A190       .text daFmIsDelete__FPv */
 static BOOL daFmIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daFmMethodTable = {

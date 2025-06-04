@@ -43,12 +43,12 @@ void daTagPhoto_c::createInit() {
 }
 
 /* 00000298-000002A0       .text _delete__12daTagPhoto_cFv */
-bool daTagPhoto_c::_delete() {
+BOOL daTagPhoto_c::_delete() {
     /* Nonmatching */
 }
 
 /* 000002A0-000002A8       .text _draw__12daTagPhoto_cFv */
-bool daTagPhoto_c::_draw() {
+BOOL daTagPhoto_c::_draw() {
     /* Nonmatching */
 }
 
@@ -58,7 +58,7 @@ void daTagPhoto_c::setMode(unsigned char) {
 }
 
 /* 000002CC-00000368       .text _execute__12daTagPhoto_cFv */
-bool daTagPhoto_c::_execute() {
+BOOL daTagPhoto_c::_execute() {
     /* Nonmatching */
 }
 
@@ -128,28 +128,28 @@ void daTagPhoto_c::getPrmTagNo() {
 }
 
 /* 00000928-00000948       .text daTagPhotoCreate__FPv */
-static s32 daTagPhotoCreate(void*) {
-    /* Nonmatching */
+static s32 daTagPhotoCreate(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_create();
 }
 
 /* 00000948-00000968       .text daTagPhotoDelete__FPv */
-static BOOL daTagPhotoDelete(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoDelete(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_delete();
 }
 
 /* 00000968-00000988       .text daTagPhotoExecute__FPv */
-static BOOL daTagPhotoExecute(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoExecute(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_execute();
 }
 
 /* 00000988-000009A8       .text daTagPhotoDraw__FPv */
-static BOOL daTagPhotoDraw(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoDraw(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_draw();
 }
 
 /* 000009A8-000009B0       .text daTagPhotoIsDelete__FPv */
 static BOOL daTagPhotoIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daTagPhotoMethodTable = {

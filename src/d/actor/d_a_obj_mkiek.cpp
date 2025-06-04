@@ -6,6 +6,37 @@
 #include "d/actor/d_a_obj_mkiek.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcSph sph_check_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 150.0f, 0.0f,
+        /* Radius */ 100.0f,
+    },
+};
+
 
 /* 00000078-00000240       .text CreateHeap__Q210daObjMkiek5Act_cFv */
 BOOL daObjMkiek::Act_c::CreateHeap() {
@@ -70,28 +101,28 @@ BOOL daObjMkiek::Act_c::Draw() {
 namespace daObjMkiek {
 namespace {
 /* 00000E1C-00000E3C       .text Mthd_Create__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMkiek::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000E3C-00000E5C       .text Mthd_Delete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMkiek::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000E5C-00000E7C       .text Mthd_Execute__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMkiek::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000E7C-00000EA8       .text Mthd_Draw__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMkiek::Act_c*)i_this)->Draw();
 }
 
 /* 00000EA8-00000ED4       .text Mthd_IsDelete__Q210daObjMkiek27@unnamed@d_a_obj_mkiek_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjMkiek::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

@@ -117,6 +117,12 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
     windNrmVec = *windVec;
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+#if VERSION == VERSION_DEMO
+        int windX;
+        int windY;
+        windX = g_env_light.mWind.mTactWindAngleX;
+        windY = g_env_light.mWind.mTactWindAngleY;
+#else
         s16 stageWindY = 0;
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
             stageWindY = 0x4000;
@@ -129,23 +135,24 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         else if (strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0)
             stageWindY = 0x4000;
 
-        s32 windY2;
-        s16 windY;
-        s32 windX;
+        s16 windY_s16; // Fakematch?
+        int windX;
+        int windY;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             windX = 0;
-            windY = 0;
+            windY_s16 = 0;
         } else {
             windX = g_env_light.mWind.mTactWindAngleX;
-            windY = g_env_light.mWind.mTactWindAngleY;
+            windY_s16 = g_env_light.mWind.mTactWindAngleY;
         }
 
-        windY += stageWindY;
-        windY2 = windY;
+        windY_s16 += stageWindY;
+        windY = windY_s16;
+#endif
 
-        windNrmVec.x = cM_scos(windX) * cM_scos(windY2);
+        windNrmVec.x = cM_scos(windX) * cM_scos(windY);
         windNrmVec.y = cM_ssin(windX);
-        windNrmVec.z = cM_scos(windX) * cM_ssin(windY2);
+        windNrmVec.z = cM_scos(windX) * cM_ssin(windY);
         windPow = 0.6f;
     }
 
@@ -257,7 +264,7 @@ static BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_back_cloud.bdl");
-    JUT_ASSERT(0x211, modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(511, 529, 529, 529), modelData != NULL);
     i_this->mpBackCloud = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020202);
 
     modelData = (J3DModelData*)dComIfG_getStageRes("Stage", "vr_kasumi_mae.bdl");
@@ -279,9 +286,14 @@ static cPhs_State daVrbox2_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, vrbox2_class);
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
+#if VERSION == VERSION_DEMO
+    fopAcM_entrySolidHeap(i_this, daVrbox2_solidHeapCB, 0x21a0);
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
+#else
     cPhs_State phase_state = cPhs_COMPLEATE_e;
     if (!fopAcM_entrySolidHeap(i_this, daVrbox2_solidHeapCB, 0x21a0))
         phase_state = cPhs_ERROR_e;
+#endif
 
     return phase_state;
 }

@@ -1618,7 +1618,7 @@ inline void dComIfGs_onVisitedRoom(int i_no) {
     g_dComIfG_gameInfo.save.getMemory().getBit().onVisitedRoom(i_no);
 }
 
-inline bool dComIfGs_isVisitedRoom(int i_no) {
+inline BOOL dComIfGs_isVisitedRoom(int i_no) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isVisitedRoom(i_no);
 }
 
@@ -3970,6 +3970,14 @@ inline void dComIfGp_map_clrAGBMapSendStopFlg() {
 inline dCcS* dComIfG_Ccsp() {
     return &g_dComIfG_gameInfo.play.mCcS;
 }
+
+// This should be dComIfG_Ccsp()->SetMass everywhere, but for some reason that combination of two
+// inlines consistently breaks the match on retail. But for the demo, using the proper inlines is requires to match.
+#if VERSION == VERSION_DEMO
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->SetMass
+#else
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->mMass_Mng.Set
+#endif
 
 inline void dComIfG_setTimerMode(int ms) { g_dComIfG_gameInfo.play.setTimerMode(ms); }
 inline int dComIfG_getTimerMode() { return g_dComIfG_gameInfo.play.getTimerMode(); }

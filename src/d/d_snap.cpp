@@ -1919,7 +1919,7 @@ void dSnap_packet::ClearAlphaBuffer() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);

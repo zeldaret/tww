@@ -215,7 +215,7 @@ static BOOL daNpc_AuctionDraw(void*) {
 
 /* 00002EB8-00002EC0       .text daNpc_AuctionIsDelete__FPv */
 static BOOL daNpc_AuctionIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_AuctionMethodTable = {

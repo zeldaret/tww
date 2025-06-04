@@ -1,11 +1,12 @@
 /**
  * d_a_ph.cpp
- * Enemy - Peahat
+ * Enemy - Peahat/Seahat
  */
 
 #include "d/actor/d_a_ph.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-00000158       .text nodeCallBack_UP__FP7J3DNodei */
 static BOOL nodeCallBack_UP(J3DNode*, int) {
@@ -149,7 +150,7 @@ static BOOL daPH_Execute(ph_class*) {
 
 /* 000061A4-000061AC       .text daPH_IsDelete__FP8ph_class */
 static BOOL daPH_IsDelete(ph_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000061AC-00006224       .text daPH_Delete__FP8ph_class */
@@ -170,6 +171,92 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 /* 00006700-00006D1C       .text daPH_Create__FP10fopAc_ac_c */
 static cPhs_State daPH_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcCyl at_hit_puropera_co_cyl = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK8,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+            /* Height */ 0.0f,
+        },
+    };
+    static dCcD_SrcCyl tg_hit_puropera_co_cyl = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_NoTgHitInfSet_e,
+            /* SrcObjTg  Type    */ AT_TYPE_SWORD | AT_TYPE_WIND,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsPlayer_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+            /* Height */ 0.0f,
+        },
+    };
+    static dCcD_SrcSph body_co_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_UNK2000,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK6,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+        },
+    };
 }
 
 static actor_method_class l_daPH_Method = {

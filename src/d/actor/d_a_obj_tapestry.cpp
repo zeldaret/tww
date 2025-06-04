@@ -318,28 +318,28 @@ bool daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
-static cPhs_State daObjTapestry_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjTapestry_Create(fopAc_ac_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_create();
 }
 
 /* 00005C64-00005C88       .text daObjTapestry_Delete__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Delete(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Delete(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_delete();
 }
 
 /* 00005C88-00005CAC       .text daObjTapestry_Execute__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Execute(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Execute(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_execute();
 }
 
 /* 00005CAC-00005CD0       .text daObjTapestry_Draw__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Draw(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_draw();
 }
 
 /* 00005CD0-00005CD8       .text daObjTapestry_IsDelete__FP15daObjTapestry_c */
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjTapestry_Method = {

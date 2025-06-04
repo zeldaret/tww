@@ -935,7 +935,7 @@ public:
     void set(const char*, s8, s16, s8);
     const char* getName() const { return mName; }
     s16 getPoint() const { return mPoint; }
-    int getRoomNo() const { return mRoomNo; }
+    s8 getRoomNo() const { return mRoomNo; }
     s8 getLayer() const { return mLayer; }
     void setLayer(s8 layer) { mLayer = layer; }
 

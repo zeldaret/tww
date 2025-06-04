@@ -7,6 +7,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
@@ -86,6 +87,35 @@ static BOOL daBridge_Delete(bridge_class*) {
 /* 00003D2C-00003E00       .text CreateInit__FP10fopAc_ac_c */
 void CreateInit(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcCyl himo_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ dCcG_TgHitMark_Unk255_e,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 5.0f,
+            /* Height */ 1000.0f,
+        },
+    };
 }
 
 /* 00003E00-00004310       .text CallbackCreateHeap__FP10fopAc_ac_c */

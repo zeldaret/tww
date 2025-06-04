@@ -257,7 +257,9 @@ public:
     // TODO:
     void LockEdge() {}
     void chkEnemySound() {}
-    void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
+    void LookRequest(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_5) {
+        mLook[0].request(reqActor, horizontalDist, upDist, downDist, angle, param_5);
+    }
     void Look2RequestF(fopAc_ac_c*, s16, int) {}
 
 public:

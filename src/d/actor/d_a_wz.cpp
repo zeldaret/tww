@@ -1,12 +1,13 @@
 /**
  * d_a_wz.cpp
- * Enemy - Wizzrobe
+ * Enemy - Wizzrobe / Mini-Boss - Wizzrobe (Wind Temple)
  */
 
 #include "d/actor/d_a_wz.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-00000140       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -120,7 +121,7 @@ static BOOL daWZ_Execute(wz_class*) {
 
 /* 00006108-00006110       .text daWZ_IsDelete__FP8wz_class */
 static BOOL daWZ_IsDelete(wz_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00006110-0000627C       .text daWZ_Delete__FP8wz_class */
@@ -141,6 +142,63 @@ static BOOL useHeapInit2(fopAc_ac_c*) {
 /* 00006888-000071C4       .text daWZ_Create__FP10fopAc_ac_c */
 static cPhs_State daWZ_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcCyl body_co_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+            /* Height */ 0.0f,
+        },
+    };
+    static dCcD_SrcSph ball_co_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_FIRE,
+            /* SrcObjAt  Atp     */ 2,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+        },
+    };
 }
 
 static actor_method_class l_daWZ_Method = {

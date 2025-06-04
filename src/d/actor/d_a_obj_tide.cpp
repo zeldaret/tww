@@ -155,28 +155,28 @@ BOOL daObjTide::Act_c::Draw() {
 namespace daObjTide {
 namespace {
 /* 00001DD0-00001DF0       .text Mthd_Create__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjTide::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00001DF0-00001E10       .text Mthd_Delete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjTide::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00001E10-00001E30       .text Mthd_Execute__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjTide::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001E30-00001E5C       .text Mthd_Draw__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjTide::Act_c*)i_this)->Draw();
 }
 
 /* 00001E5C-00001E88       .text Mthd_IsDelete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjTide::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

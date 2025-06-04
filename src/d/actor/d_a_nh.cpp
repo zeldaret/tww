@@ -1,6 +1,6 @@
 /**
  * d_a_nh.cpp
- * Forest Firely / 森のほたる (Mori no Hotaru)
+ * Item - Forest Firefly / 森のほたる (Mori no Hotaru)
  */
 
 #include "d/actor/d_a_nh.h"

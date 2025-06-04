@@ -7,10 +7,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 #include "d/actor/d_a_sea.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFLight.h"
-#include "dolphin/gf/GFPixel.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
@@ -177,7 +174,7 @@ void dDlst_2DT2_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     f32 x0 = mX, x1 = x0 + mW;
@@ -561,7 +558,7 @@ void dDlst_2Dm_c::draw() {
 
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);

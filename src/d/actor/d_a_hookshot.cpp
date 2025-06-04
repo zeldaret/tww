@@ -1,6 +1,6 @@
 /**
  * d_a_hookshot.cpp
- * Hookshot
+ * Item - Hookshot
  */
 
 #include "d/actor/d_a_hookshot.h"
@@ -186,9 +186,7 @@ BOOL daHookshot_c::procWait() {
             mSightCps.SetR(5.0f);
             mSightCps.CalcAtVec();
             dComIfG_Ccsp()->Set(&mSightCps);
-            // Using the inline breaks the match.
-            // dComIfG_Ccsp()->SetMass(&mSightCps, 1);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSightCps, 1);
+            dComIfG_Ccsp_SetMass(&mSightCps, 1);
             
             m2A3 = false;
             mCurrProcFunc = &daHookshot_c::procShot;
@@ -298,9 +296,7 @@ BOOL daHookshot_c::procShot() {
         mSightCps.SetR(5.0f);
         mSightCps.CalcAtVec();
         dComIfG_Ccsp()->Set(&mSightCps);
-        // Using the inline breaks the match.
-        // dComIfG_Ccsp()->SetMass(&mSightCps, 1);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mSightCps, 1);
+        dComIfG_Ccsp_SetMass(&mSightCps, 1);
         current.pos = sp8C;
     }
 

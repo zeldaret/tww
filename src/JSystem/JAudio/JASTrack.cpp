@@ -1110,7 +1110,6 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
 
 /* 80283164-802836FC       .text writeRegParam__Q28JASystem6TTrackFUc */
 void JASystem::TTrack::writeRegParam(u8 param) {
-    /* Nonmatching */
     u8 curr_file_byte;
     u8 bVar0;
     u8 bVar1;
@@ -1246,6 +1245,7 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             break;
     }
 
+    // Bug: reg_flags is uninitialized in several of these cases.
     u16 reg_flags;
     switch (bVar0) {
         case 0:
@@ -1324,7 +1324,6 @@ void JASystem::TTrack::writeSelfPort(int param_1, u16 param_2) {
 
 /* 80283744-802837AC       .text writePortAppDirect__Q28JASystem6TTrackFUlUs */
 int JASystem::TTrack::writePortAppDirect(u32 port, u16 value) {
-    /* Nonmatching */
     mTrackPort.writeImport(port, value);
     if (port == 0 || port == 1) {
         TIntrMgr& intrMgr = mIntrMgr;

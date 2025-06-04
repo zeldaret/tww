@@ -11,7 +11,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/actor/d_a_player.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
@@ -107,12 +106,14 @@ static BOOL daMsw_Draw(msw_class* i_this) {
 void msw_move(msw_class* i_this) {
     i_this->m298 += 1;
 
+#if VERSION > VERSION_DEMO
     // Branchless comparison
     // Probably something #ifdef'd out for debug
     switch (i_this->m29A) {
         case 0:
             break;
     }
+#endif
 
     cLib_addCalcAngleS2(&i_this->current.angle.x, 0, 10, 0x200);
     cLib_addCalcAngleS2(&i_this->current.angle.z, 0, 10, 0x200);
@@ -135,23 +136,23 @@ void msw_move(msw_class* i_this) {
 
 /* 0000080C-00000AD4       .text daMsw_Execute__FP9msw_class */
 static BOOL daMsw_Execute(msw_class* i_this) {
-    /* Nonmatching */
-    static f32 xd[4] = { 1.0f,  1.0f, -1.0f, -1.0f };
-    static f32 zd[4] = { 1.0f, -1.0f,  1.0f, -1.0f };
+    /* Nonmatching - retail-only regalloc */
+    fopAc_ac_c* actor = i_this;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
-    daPy_py_c* pPlayer = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     msw_move(i_this);
 
-    MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
-    cMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
-    cMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
-    MtxScale(i_this->scale.x, 1.0f, i_this->scale.z, true);
-
+    MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, false);
+    cMtx_YrotM(*calc_mtx, actor->shape_angle.y);
+    cMtx_XrotM(*calc_mtx, actor->shape_angle.x);
+    cMtx_ZrotM(*calc_mtx, actor->shape_angle.z);
+    MtxScale(actor->scale.x, 1.0f, actor->scale.z, true);
     i_this->mpModel->setBaseTRMtx(*calc_mtx);
     MtxPush();
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
+        static f32 xd[4] = { 1.0f,  1.0f, -1.0f, -1.0f };
+        static f32 zd[4] = { 1.0f, -1.0f,  1.0f, -1.0f };
         cXyz src;
         src.x = (200.0f + REG0_F(10)) * xd[chainIdx];
         src.y = 0.0f;
@@ -159,26 +160,23 @@ static BOOL daMsw_Execute(msw_class* i_this) {
         MtxPosition(&src, &i_this->m2E0[chainIdx]);
 
         if (i_this->m844 != 0) {
-            i_this->m844 -= 1;
+            i_this->m844--;
             i_this->m310[chainIdx] = i_this->m2E0[chainIdx];
             i_this->m310[chainIdx].y = i_this->m2E0[chainIdx].y + 1000.0f;
         }
 
         if (i_this->m83C[chainIdx] != 0) {
-            i_this->m83C[chainIdx] -= 1;
+            i_this->m83C[chainIdx]--;
         }
 
         if (i_this->mChainCyls[chainIdx].ChkTgHit() && i_this->m83C[chainIdx] < 10) {
-            i_this->m83C[chainIdx] = REG6_S(3) + 0xF;
+            i_this->m83C[chainIdx] = REG6_S(3) + 15;
 
-            mDoAud_seStart(JA_SE_LK_HIT_SBRIDGE_CHAIN, &i_this->m2E0[chainIdx], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            mDoAud_seStart(JA_SE_LK_HIT_SBRIDGE_CHAIN, &i_this->m2E0[chainIdx], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 
             cXyz scale;
-            scale.z = 2.0f;
-            scale.y = 2.0f;
-            scale.x = 2.0f;
-
-            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, i_this->mChainCyls[chainIdx].GetTgHitPosP(), &pPlayer->shape_angle, &scale);
+            scale.x = scale.y = scale.z = 2.0f;
+            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, i_this->mChainCyls[chainIdx].GetTgHitPosP(), &player->shape_angle, &scale);
         }
         i_this->mChainCyls[chainIdx].SetC(i_this->m2E0[chainIdx]);
 
@@ -203,7 +201,7 @@ static BOOL daMsw_IsDelete(msw_class* i_this) {
 
 /* 00000B38-00000B88       .text daMsw_Delete__FP9msw_class */
 static BOOL daMsw_Delete(msw_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Msw");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Msw");
     dComIfG_Bgsp()->Release(i_this->mpBgW);
 
     return TRUE;
@@ -221,7 +219,7 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
     }
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_OBM_CHAIN1));
-    JUT_ASSERT(0x20B, modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(519, 523, 523, 523), modelData != NULL);
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
         pActor->mpChainModels[chainIdx] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -282,62 +280,62 @@ static cPhs_State daMsw_Create(fopAc_ac_c* i_this) {
     };
 
     fopAcM_SetupActor(i_this, msw_class);
-    msw_class* pActor = static_cast<msw_class*>(i_this);
+    msw_class* a_this = static_cast<msw_class*>(i_this);
 
-    cPhs_State phase_state = dComIfG_resLoad(&pActor->mPhs, "Msw");
+    cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Msw");
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        pActor->m2A0 = (fopAcM_GetParam(pActor) >> 0) & 0xFF;
+        a_this->m2A0 = (fopAcM_GetParam(a_this) >> 0) & 0xFF;
 
-        if (pActor->m2A0 == 0xFF) {
-            pActor->m2A0 = 0;
+        if (a_this->m2A0 == 0xFF) {
+            a_this->m2A0 = 0;
         }
 
-        if (!fopAcM_entrySolidHeap(pActor, daMsw_CreateInit, 0x10040)) {
+        if (!fopAcM_entrySolidHeap(a_this, daMsw_CreateInit, 0x10040)) {
             return cPhs_ERROR_e;
         }
 
-        if (pActor->mpModel == NULL) {
+        if (a_this->mpModel == NULL) {
             return cPhs_ERROR_e;
         }
 
-        if (dComIfG_Bgsp()->Regist(pActor->mpBgW, pActor)) {
+        if (dComIfG_Bgsp()->Regist(a_this->mpBgW, a_this)) {
             return cPhs_ERROR_e;
         }
 
-        switch (pActor->m2A0) {
+        switch (a_this->m2A0) {
         case 1:
-            pActor->scale.x = 1.5f;
-            pActor->scale.z = 1.5f;
+            a_this->scale.x = 1.5f;
+            a_this->scale.z = 1.5f;
             break;
         case 2:
-            pActor->scale.x = 2.0f;
-            pActor->scale.z = 2.0f;
+            a_this->scale.x = 2.0f;
+            a_this->scale.z = 2.0f;
             break;
         case 3:
-            pActor->scale.x = 3.0f;
-            pActor->scale.z = 3.0f;
+            a_this->scale.x = 3.0f;
+            a_this->scale.z = 3.0f;
             break;
         default:
-            pActor->scale.z = 1.0f;
-            pActor->scale.x = 1.0f;
+            a_this->scale.z = 1.0f;
+            a_this->scale.x = 1.0f;
             break;
         }
 
-        pActor->scale.y = 1.0f;
-        fopAcM_SetMtx(pActor, pActor->mpModel->getBaseTRMtx());
-        fopAcM_SetMin(pActor, pActor->scale.x * -200.0f, -5000.0f, pActor->scale.z * -200.0f);
-        fopAcM_SetMax(pActor, pActor->scale.x * 200.0f, 5000.0f, pActor->scale.z * 200.0f);
+        a_this->scale.y = 1.0f;
+        fopAcM_SetMtx(a_this, a_this->mpModel->getBaseTRMtx());
+        fopAcM_SetMin(a_this, a_this->scale.x * -200.0f, -5000.0f, a_this->scale.z * -200.0f);
+        fopAcM_SetMax(a_this, a_this->scale.x * 200.0f, 5000.0f, a_this->scale.z * 200.0f);
 
-        pActor->mStts.Init(0xFF, 0xFF, pActor);
+        a_this->mStts.Init(0xFF, 0xFF, a_this);
 
         for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
-            pActor->mChainCyls[chainIdx].Set(himo_cyl_src);
-            pActor->mChainCyls[chainIdx].SetStts(&pActor->mStts);
+            a_this->mChainCyls[chainIdx].Set(himo_cyl_src);
+            a_this->mChainCyls[chainIdx].SetStts(&a_this->mStts);
         }
 
-        pActor->m844 = 10;
-        daMsw_Execute(pActor);
+        a_this->m844 = 10;
+        daMsw_Execute(a_this);
     }
 
     return phase_state;

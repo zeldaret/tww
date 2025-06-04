@@ -17,22 +17,22 @@ static u8 msg_mode;
 
 /* 00000078-00000084       .text getEventNo__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getEventNo() {
-    return base.mParameters >> 0x18;
+    return fopAcM_GetParam(this) >> 0x18;
 }
 
 /* 00000084-00000090       .text getSwbit__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit() {
-    return base.mParameters >> 8 & 0xff;
+    return (fopAcM_GetParam(this) >> 8) & 0xff;
 }
 
 /* 00000090-0000009C       .text getSwbit2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit2() {
-    return base.mParameters >> 0x10 & 0xff;
+    return (fopAcM_GetParam(this) >> 0x10) & 0xff;
 }
 
 /* 0000009C-000000A8       .text getType2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getType2() {
-    return base.mParameters >> 6 & 3;
+    return (fopAcM_GetParam(this) >> 6) & 3;
 }
 
 /* 000000A8-0000015C       .text myDemoName__11daTag_Msg_cFv */
