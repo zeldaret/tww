@@ -139,7 +139,6 @@ static f32 tial_scale[] = {
 
 /* 00000720-00000820       .text tail_draw__FP8dk_classP6tail_s */
 static void tail_draw(dk_class* a_this, tail_s* tail) {
-    /* Nonmatching */
     cXyz* trans = &tail->field_0x024[0];
     csXyz* rot = &tail->field_0x09C[0];
 
@@ -153,7 +152,7 @@ static void tail_draw(dk_class* a_this, tail_s* tail) {
 
         J3DModel* model = tail->models[i];
 
-        model->setAnmMtx(0, *calc_mtx);
+        model->setBaseTRMtx(*calc_mtx);
         g_env_light.setLightTevColorType(model, &a_this->tevStr);
         mDoExt_modelUpdate(model);
 
