@@ -140,7 +140,7 @@ BOOL daObjTnTrap_c::chk_appear() {
         }
         break;
     default:   
-        JUT_ASSERT(380,0);
+        JUT_ASSERT(VERSION_SELECT(0x178,0x17C,0x17C,0x17C),0);
         break;
     }
     return o_retval;
@@ -149,13 +149,15 @@ BOOL daObjTnTrap_c::chk_appear() {
 
 /* 000002AC-00000344       .text set_mtx__13daObjTnTrap_cFv */
 void daObjTnTrap_c::set_mtx() {
+#if VERSION == VERISON_DEMO
+#define SET_MTX_Z_TRANS l_HIO.field14
+#else
+#define SET_MTX_Z_TRANS -94.0
+#endif
     mDoMtx_stack_c::transS(home.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
-#if VERSION == VERISON_DEMO
-    mDoMtx_stack_c::transM(0.0,-9000.0,l_HIO.field8);
-#else
-    mDoMtx_stack_c::transM(0.0,-9000.0,-94.0);
-#endif
+
+    mDoMtx_stack_c::transM(0.0,-9000.0,SET_MTX_Z_TRANS);
     mDoMtx_stack_c::scaleM(scale.x,100.0,scale.z);
     cMtx_copy(mDoMtx_stack_c::get(),field_0xD5C.calcMtx);
 }
@@ -181,8 +183,14 @@ bool daObjTnTrap_c::create_heap() {
 
 /* 000003E4-000005F8       .text particle_set__13daObjTnTrap_cFif */
 void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
+   
+   
+    cXyz ball;
 
-   cXyz ball;
+#if VERSION == VERSION_DEMO
+    f32 tempf31 = cM_ssin(shape_angle.y);
+    f32 tempf30 = cM_scos(shape_angle.y);
+#endif 
 
     if(field_0xDE0[i_particleId] == 1){
         if(field_0xDE4[i_particleId] != param_2){
@@ -193,21 +201,45 @@ void daObjTnTrap_c::particle_set(int i_particleId, float param_2) {
     }
 
     for(int i = 0; i < 2; i++){
-        if(field_0xD5C.emitterPairs[i_particleId][i] == NULL){
-            ball.x = l_offset_ball[i][0];
-            ball.y = l_offset_ball[i][1]+param_2;
-            ball.z = l_offset_ball[i][2];
-            field_0xD5C.emitterPairs[i_particleId][i] = dComIfGp_particle_set(0x82EA,&home.pos,&shape_angle);
-            field_0xD5C.emitterPairs[i_particleId][i]->setEmitterTranslation(JGeometry::TVec3<f32>(ball.x,ball.y,ball.z));
+        JPABaseEmitter** emitter = &field_0xD5C.emitterPairs[i_particleId][i];
+        if(*emitter == NULL){
+#if VERSION == VERSION_DEMO
+            ball.set(
+                (tempf30*l_offset_ball[i][0]) + (tempf31*l_offset_ball[i][2]),
+                l_offset_ball[i][1]+param_2,
+                (tempf31*-l_offset_ball[i][0]) + (tempf30*l_offset_ball[i][2])
+
+            );
+#else
+            ball.set(
+            l_offset_ball[i][0],
+            l_offset_ball[i][1]+param_2,
+            l_offset_ball[i][2]        
+            );
+#endif
+            *emitter = dComIfGp_particle_set(0x82EA,&home.pos,&shape_angle);
+            JGeometry::TVec3<f32> translation = ball;
+            (*emitter)->setEmitterTranslation(translation);
         }
     }
     for(int i = 0; i < 3; i++){
-        if(field_0xD5C.emitterPairs2[i_particleId][i] == NULL){
-            ball.x = l_offset_thunder[i][0];
-            ball.y = l_offset_thunder[i][1]+param_2;
-            ball.z = l_offset_thunder[i][2];
-            field_0xD5C.emitterPairs2[i_particleId][i] = dComIfGp_particle_set(0x82EB,&home.pos,&shape_angle);
-            field_0xD5C.emitterPairs2[i_particleId][i]->setEmitterTranslation(JGeometry::TVec3<f32>(ball.x,ball.y,ball.z));
+        JPABaseEmitter** emitter = &field_0xD5C.emitterPairs2[i_particleId][i];
+        if(*emitter == NULL){
+#if VERSION == VERSION_DEMO
+            ball.set(
+            (tempf30*l_offset_thunder[i][0]) + (tempf31*l_offset_thunder[i][2]),
+            l_offset_thunder[i][1]+param_2,
+            (tempf31*-l_offset_thunder[i][0]) + (tempf30*l_offset_thunder[i][2])
+            );
+#else
+            ball.set(
+            l_offset_thunder[i][0],
+            l_offset_thunder[i][1]+param_2,
+            l_offset_thunder[i][2]        
+            );
+#endif
+            *emitter = dComIfGp_particle_set(0x82EB,&home.pos,&shape_angle);
+            (*emitter)->setEmitterTranslation(ball);
         }
     }
     field_0xDE4[i_particleId] = param_2;
@@ -259,12 +291,18 @@ void daObjTnTrap_c::set_tri(int param_1) {
         3,2,5,
         3,5,4
     };
-    mDoMtx_stack_c::transS(home.pos.x,home.pos.y+field_0xDE4[param_1],home.pos.z);
+
+    f32 f1 = field_0xDE4[param_1];
+    mDoMtx_stack_c::transS(home.pos.x,home.pos.y+f1,home.pos.z);
     mDoMtx_stack_c::XYZrotM(shape_angle);
     for(int i = 0; i < 4; i++){
 
         for(int j = 0; j < 3; j++){
             local_58[j] = l_tri_vtx[table_idx[i][j]];
+#if VERSION == VERISON__DEMO
+            local_58[j].y += l_HIO.fieldC;
+            local_58[j].z += l_HIO.field10;
+#endif
             mDoMtx_stack_c::multVec(&local_58[j],&local_58[j]);
         }
         mTri[param_1][i].setPos(&local_58[0],&local_58[1],&local_58[2]);
@@ -277,12 +315,13 @@ void daObjTnTrap_c::set_tri(int param_1) {
 bool daObjTnTrap_c::chk_event_flg() {
 
     bool o_retval = 1;
+    int var_29;
     switch(field_0x298){
         case 1:
             break;
         case 0:
             if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
-                int var_29 = 4;
+                var_29 = 4;
                 if(mArg0 == 0){
                     var_29 = 2;
                     dComIfGs_onEventBit(dSv_evtBit_c::EVT_UNK3B40);
@@ -311,9 +350,24 @@ bool daObjTnTrap_c::chk_event_flg() {
             if(mSwSave != 0xFF && fopAcM_isSwitch(this,mSwSave) == 1){
                 fopAcM_delete(this);
                 o_retval = false;
+
             }
             break;
+
     }
+#if VERSION == VERSION_DEMO
+    if(l_HIO.field20 == 1){
+        switch(field_0x298){
+            case 0:
+                var_29 = 4;
+                if(mArg0 == 0){
+                    var_29 = 2;
+                }
+                setup_action(var_29);
+                break;
+        }
+    }
+#endif
     return o_retval;
 }
 
@@ -369,8 +423,13 @@ cPhs_State daObjTnTrap_c::_create() {
             o_phs_state = cPhs_ERROR_e;
         }  
     }
-    return o_phs_state;
 
+#if VERSION == VERSION_DEMO
+    if(l_HIO.mNo < 0){
+        l_HIO.mNo = mDoHIO_createChild("タートナックトラップ",&l_HIO); //Taatonakku Trap
+    }
+#endif
+    return o_phs_state;
 }
 
 /* 00000F8C-00001050       .text _delete__13daObjTnTrap_cFv */
@@ -380,6 +439,30 @@ bool daObjTnTrap_c::_delete() {
 
     if (field_0xDC4 == 1) {
     dComIfG_resDelete(&mPhaseProcess,l_arcname);
+#if VERSION == VERSION_DEMO
+
+        if (field_0xD58 != NULL){
+            if ((field_0xD58->GetId() >= 0) && (field_0xD58->GetId() < 0x100)) {
+                release = true;
+            }
+            else {
+                release = false;
+            }
+            if (release) {
+                dComIfG_Bgsp()->Release(field_0xD58);
+            }
+        }
+
+        for(int i = 0; i < 2; i++){
+            particle_delete(i);
+        }
+
+    }
+    if(l_HIO.mNo >= 0){
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+
+#else
         if (heap != NULL){
             if(field_0xD58 != NULL) {
                 if ((field_0xD58->GetId() >= 0) && (field_0xD58->GetId() < 0x100)) {
@@ -398,17 +481,21 @@ bool daObjTnTrap_c::_delete() {
         for(int i = 0; i < 2; i++){
             particle_delete(i);
         }
-
+#endif
     }
     return true;
 }
 
 /* 00001050-00001150       .text trap_off_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::trap_off_wait_act_proc() {
-
+#if VERSION == VERSION_DEMO
+#define TRAP_OFF_WAIT_FLOAT l_HIO.field8
+#else
+#define TRAP_OFF_WAIT_FLOAT 500.0f
+#endif
     if(daPy_getPlayerActorClass() != NULL){
         f32 pos_diff = (daPy_getPlayerActorClass()->current.pos-home.pos).absXZ();
-        if(pos_diff < 500.0f){
+        if(pos_diff < TRAP_OFF_WAIT_FLOAT){
             setup_action(1);
         }
     }
@@ -418,28 +505,41 @@ bool daObjTnTrap_c::trap_off_wait_act_proc() {
 
 /* 00001150-00001384       .text trap_on_wait_act_proc__13daObjTnTrap_cFv */
 bool daObjTnTrap_c::trap_on_wait_act_proc() {
+
+
+#if VERSION == VERSION_DEMO
+#define TRAP_ON_WAIT_FLOAT_1 l_HIO.field8
+#define TRAP_ON_WAIT_FLOAT_2 l_HIO.field1C
+#define TRAP_ON_WAIT_FLOAT_3 l_HIO.field18
+#else
+#define TRAP_ON_WAIT_FLOAT_1 500.0f
+#define TRAP_ON_WAIT_FLOAT_2 150.0f
+#define TRAP_ON_WAIT_FLOAT_3 80.0f
+#endif
+
     daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
     int i;
     float local_64[2];
     if(player != NULL){
-        if((player->current.pos-home.pos).absXZ() > 500.0f){
+        f32 dist = (player->current.pos-home.pos).absXZ();
+        if(dist > TRAP_ON_WAIT_FLOAT_1){
             setup_action(0);
         }else if(field_0x298 == 5){
             for(i = 0; i < 2; i++){
                 local_64[i] = player->current.pos.y - (home.pos.y + field_0xDE4[i] +90.0f);
-                if(std::abs(local_64[i]) > 150.0f){
+                if(std::abs(local_64[i]) > TRAP_ON_WAIT_FLOAT_2){
                     particle_delete(i);
                 }
             }
             for(i = 0; i < 2; i++){
                 f32 fVar6;
-                if(std::abs(local_64[i]) > 80.0f){
+                if(std::abs(local_64[i]) > TRAP_ON_WAIT_FLOAT_3){
                     if(local_64[i] > 0.0f){
                         fVar6 = field_0xDE4[i]+180.0f;
                     }else{
                         fVar6 = field_0xDE4[i]-180.0f;
                     }
-                    if(std::abs(player->current.pos.y - (home.pos.y + fVar6 + 90.0f)) <= 150.0f){
+                    if(std::abs(player->current.pos.y - (home.pos.y + fVar6 + 90.0f)) <= TRAP_ON_WAIT_FLOAT_2){
                         particle_set(i^1,fVar6);
                     }
                 }
@@ -454,6 +554,9 @@ bool daObjTnTrap_c::trap_on_wait_act_proc() {
 bool daObjTnTrap_c::demo_regist_wait_act_proc() {
     if(field_0xDD8[0] != -1){
         if(eventInfo.checkCommandDemoAccrpt()){
+#if VERSION == VERSION_DEMO
+            l_HIO.field20 = 0;
+#endif
             setup_action(3);
         }else{
             fopAcM_orderOtherEventId(this,field_0xDD8[0],0xFF,0xFFFF,0,1);
@@ -537,6 +640,18 @@ bool daObjTnTrap_c::hide_wait_act_proc() {
         }
 
     }
+#if VERSION == VERSION_DEMO
+    if(l_HIO.field21 == 1){
+        daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+        if(ship){
+            ship->onFantomGanonBattle();
+            if(dComIfG_Bgsp()->Regist(field_0xD58,this) == 0){
+                setup_action(0);
+            }
+        }
+
+    }
+#endif
     return 0;
 }
 
