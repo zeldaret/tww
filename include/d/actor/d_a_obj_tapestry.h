@@ -19,20 +19,7 @@ l_matDL__d_a_obj_tapestry(l_matDL);
 GXColor l_color = {0x9D,0x9D,0x9D,0xFF};
 }
 
-class JPABaseEmitter;
 
-
-class daObjTapestryPacket_c;
-
-
-class daObjTapestryDrawVtx_c{
-public:
-    daObjTapestryDrawVtx_c(){};
-public:
-    cXyz mBufferVtx[8][6]; 
-    cXyz mBufferNrm[8][6];  
-    cXyz mBufferThree[8][6];
-};
 class daObjTapestryMoveVtx_c{
 
 public:
@@ -44,8 +31,12 @@ bool chk_eff(int x, int y){
     u8 unk1000[8][6];
     u8 unk1030[8][6];
 };
+
+
+
 class daObjTapestryPLight_c{
 public:
+    daObjTapestryPLight_c(){};
     void plight_delete();
     void plight_move(cXyz, csXyz);
     void plight_make();
@@ -68,6 +59,7 @@ public:
 class daObjTapestryFireEff_c: public dPa_followEcallBack {
 public:
     daObjTapestryFireEff_c(){unk14 = cXyz::Zero; unk20 = cXyz::Zero;}
+    virtual ~daObjTapestryFireEff_c(){};
     cXyz* get_pos() {return &unk14;}
     void set_pos(const cXyz& i_pos) {unk14 = i_pos;}
     void set_spd(const cXyz& i_spd) {unk20 = i_spd;}
@@ -78,6 +70,14 @@ public:
     /* 0x20 */ cXyz unk20;
 }; /* SIZE 2C */
 
+class daObjTapestryDrawVtx_c{
+public:
+    daObjTapestryDrawVtx_c(){};
+public:
+    cXyz mBufferVtx[8][6]; 
+    cXyz mBufferNrm[8][6];  
+    cXyz mBufferThree[8][6];
+};
 
 class daObjTapestryDrawData_c {
 
@@ -86,7 +86,7 @@ public:
     daObjTapestryDrawData_c();
 
     static u32* dl() {return (u32*)l_matDL;}
-    static u32 dl_size() {return 0x20;}//sizeof(l_matDL);}
+    static u32 dl_size() {return 0x20;}
     static ResTIMG* tex_coord() {return (ResTIMG*)&l_Txm_curtainTEX;}
 
     void ct_tex();
@@ -110,7 +110,7 @@ struct FD0struct{
 public:
     static daObjTapestryDrawData_c m_draw_data;
     daObjTapestryPacket_c();
-
+    ~daObjTapestryPacket_c(){};
     void set_wind_fun(const cXyz&) {}
 
     void init(daObjTapestry_c*);

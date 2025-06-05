@@ -1702,7 +1702,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_rflw"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_rforce"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_smplbg", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_obj_tapestry"),
+    ActorRel(Equivalent, "d_a_obj_tapestry"),
     ActorRel(NonMatching, "d_a_obj_tntrap"),
     ActorRel(Matching,    "d_a_obj_tower"),
     ActorRel(NonMatching, "d_a_obj_trap"),
