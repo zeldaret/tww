@@ -1119,7 +1119,9 @@ void daObjTapestryPacket_c::draw() {
     dKy_tevstr_c* tev_str = &user_data->tevStr;
     daObjTapestryDrawVtx_c* draw_vtx = &mDrawVtx[unk1060];
     j3dSys.reinitGX();
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     dKy_GxFog_tevstr_set(tev_str);
     setup_vtx(draw_vtx);
     load_tex();
@@ -1135,8 +1137,9 @@ void daObjTapestryPacket_c::draw() {
     GXSetCullMode(GX_CULL_FRONT);
     GXSetArray(GX_VA_NRM,draw_vtx->mBufferThree,0xC);
     GXCallDisplayList(&m_draw_data.m_dl,0x180);
+#if VERSION > VERSION_JPN
     J3DShape::sOldVcdVatCmd = 0;
-
+#endif
 }
 
 /* 000045C8-0000461C       .text chk_appear__15daObjTapestry_cFv */
@@ -1175,8 +1178,11 @@ bool daObjTapestry_c::create_heap() {
     bool o_retval = true;
     J3DModelData* pModel = (J3DModelData*)dComIfG_getObjectRes(l_arcName_Mcrtn,MCRTN_BDL_MCRTN1);
     if(pModel == NULL){
-        JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_obj_tapestry.cpp",0x8CD,"0");
-        OSPanic("d_a_obj_tapestry.cpp",0x8CD,"Halt");
+#if VERSION > VERSION_JPN
+        JUT_ASSERT(0x8CD,0);
+#else
+        JUT_ASSERT(0x8CA,0);
+#endif
         o_retval = false;  
     }else{
         unk1758 = mDoExt_J3DModel__create(pModel,0x80000,0x11000022);
