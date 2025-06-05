@@ -14,6 +14,12 @@
 #include "weak_data_2100_2080.h"
 #include "weak_data_1811.h"
 
+
+#if VERSION == VERSION_DEMO
+daObjTnTrap_HIO_c l_HIO;
+#endif
+
+
 namespace{
     const char l_arcname[] = "TnTrap";
 
@@ -70,6 +76,22 @@ namespace{
 
         
 };
+
+#if VERSION == VERSION_DEMO
+daObjTnTrap_HIO_c::daObjTnTrap_HIO_c(){
+    mNo = -1;
+    field8 = 500.0f;
+    fieldC = 0.0f;
+    field10 = 0.0f;
+    field14 = -94.0f;
+    field18 = 80.0f;
+    field1C = 150.0f;
+    field20 = 0;
+    field21 = 0;
+    field22 = 1;
+    field23 = 1;
+}
+#endif
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 BOOL daObjTnTrap_c::chk_appear() {
@@ -129,7 +151,11 @@ BOOL daObjTnTrap_c::chk_appear() {
 void daObjTnTrap_c::set_mtx() {
     mDoMtx_stack_c::transS(home.pos);
     mDoMtx_stack_c::XYZrotM(shape_angle);
+#if VERSION == VERISON_DEMO
+    mDoMtx_stack_c::transM(0.0,-9000.0,l_HIO.field8);
+#else
     mDoMtx_stack_c::transM(0.0,-9000.0,-94.0);
+#endif
     mDoMtx_stack_c::scaleM(scale.x,100.0,scale.z);
     cMtx_copy(mDoMtx_stack_c::get(),field_0xD5C.calcMtx);
 }

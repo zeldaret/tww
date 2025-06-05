@@ -5,6 +5,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 
 
@@ -88,5 +89,24 @@ public:
     /* 0xDE4 */ f32 field_0xDE4[2];
 };  // Size: 0xDEC
 
+#if VERSION == VERSION_DEMO
+class daObjTnTrap_HIO_c : public JORReflexible{
+public:
+    daObjTnTrap_HIO_c();
+    virtual ~daObjTnTrap_HIO_c(){};
+public:
+    s8 mNo;
+    f32 field8;
+    f32 fieldC;
+    f32 field10;
+    f32 field14;
+    f32 field18;
+    f32 field1C;
+    u8 field20;
+    u8 field21;
+    u8 field22;
+    u8 field23;
+};
+#endif
 
 #endif /* D_A_OBJ_TNTRAP_H */
