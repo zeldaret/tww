@@ -36,6 +36,9 @@ public:
 class daObjTapestryMoveVtx_c{
 public:
     cXyz mBuffer[8][6];
+    u8 unkFD0[8][6];
+    u8 unk1000[8][6];
+    u8 unk1030[8][6];
 };
 class daObjTapestryPLight_c{
 public:
@@ -61,9 +64,9 @@ public:
 class daObjTapestryFireEff_c: public dPa_followEcallBack {
 public:
     daObjTapestryFireEff_c(){unk14 = cXyz::Zero; unk20 = cXyz::Zero;}
-    void get_pos() const {}
-    void set_pos(const cXyz&) {}
-    void set_spd(const cXyz&) {}
+    cXyz* get_pos() {return &unk14;}
+    void set_pos(const cXyz& i_pos) {unk14 = i_pos;}
+    void set_spd(const cXyz& i_spd) {unk20 = i_spd;}
 
     void execute(JPABaseEmitter*);
 public:
@@ -98,11 +101,15 @@ public:
     /* 0x180 */ u8 pad[0x18];
 
 };
-int a = sizeof(daObjTapestryDrawData_c);
+
 class daObjTapestry_c;
 
 class daObjTapestryPacket_c : public J3DPacket{
-
+struct FD0struct{
+    u8 buffer1[8][6];
+    u8 buffer2[8][6];
+    u8 buffer3[8][6];
+};
 public:
     static daObjTapestryDrawData_c m_draw_data;
     daObjTapestryPacket_c();
@@ -127,8 +134,8 @@ public:
     void calc(daObjTapestry_c*);
     void set_hit(cXyz, cXyz, float, float, bool);
     cXyz* get_now_pos(int, int);
-    void eff_start(int, int);
-    u8 eff_start_chk(int, int);
+    BOOL eff_start(int, int);
+    bool eff_start_chk(int, int);
     void eff_end();
     void eff_pos();
     void eff_delete();
@@ -144,20 +151,18 @@ public:
 public:
                  daObjTapestryDrawVtx_c mDrawVtx[2];
                  daObjTapestryMoveVtx_c mMoveVtx;
-                 u8 unkFD0[3][8][6];
-    /* 0x1060 */ s32 unk1060;                       /* inferred */
-    /* 0x1064 */ daObjTapestryFireEff_c unk1064[16];    /* inferred */
-    /* 0x1324 */ s32 unk1324;                       /* inferred */
-    /* 0x1328 */ cXyz unk1328;                      /* inferred */
 
-    /* 0x1334 */ Mtx unk1334;            /* inferred */
-    /* 0x1364 */ Mtx unk1364;            /* inferred */
-    /* 0x1394 */ Mtx unk1394;            /* inferred */
-    /* 0x13C4 */ u8 unk13C4;                        /* inferred */
-    /* 0x13C5 */ char pad13C5[3];                   /* maybe part of unk13C4[4]? */
-    /* 0x13C8 */ cXyz unk13C8;                       /* inferred */
-    /* 0x13D4 */ cXyz unk13D4;                       /* inferred */
-
+    /* 0x1060 */ s32 unk1060;
+    /* 0x1064 */ daObjTapestryFireEff_c unk1064[16];
+    /* 0x1324 */ s32 mFireCount;
+    /* 0x1328 */ cXyz unk1328;
+    /* 0x1334 */ Mtx unk1334;
+    /* 0x1364 */ Mtx unk1364;
+    /* 0x1394 */ Mtx unk1394;
+    /* 0x13C4 */ u8 unk13C4;
+    /* 0x13C5 */ char pad13C5[3];
+    /* 0x13C8 */ cXyz unk13C8;
+    /* 0x13D4 */ cXyz unk13D4;
     /* 0x13E0 */ s16 unk13E0;                       /* inferred */
     /* 0x13E2 */ char pad13E2[2];
     /* 0x13E4 */ cXyz unk13E4;                       /* inferred */
@@ -174,7 +179,7 @@ public:
     /* 0x1440 */ cXyz unk1440;                       /* inferred */
     /* 0x144C */ f32 unk144C;                       /* inferred */
     /* 0x1450 */ f32 unk1450;                       /* inferred */
-    /* 0x1454 */ u8 unk1454;                        /* inferred */
+    /* 0x1454 */ bool unk1454;                        /* inferred */
     /* 0x1455 */ char pad1455[3];                   /* maybe part of unk1454[4]? */
     /* 0x1458 */ cXyz unk1458;                       /* inferred */
     /* 0x1464 */ u8 unk1464;                        /* inferred */
@@ -190,6 +195,8 @@ public:
 class daObjTapestryAttr_c;
 class daObjTapestry_c: public fopAc_ac_c {
     enum Prm_e {
+        PRM_EV_ID_S = 0x08,
+        PRM_EV_ID_W = 0x08,
         PRM_SWSAVE_W = 0x08,
         PRM_SWSAVE_S = 0x00,
     };
@@ -200,15 +207,15 @@ class daObjTapestry_c: public fopAc_ac_c {
 public:
     bool is_switch() const {return fopAcM_isSwitch((fopAc_ac_c*)this,param_get_swSave());}
     void on_switch() const {fopAcM_onSwitch((fopAc_ac_c*)this,param_get_swSave());}
-    void param_get_evId() const {}
+    u8 param_get_evId() const {return daObj::PrmAbstract(this,PRM_EV_ID_S,PRM_EV_ID_W);}
     int param_get_swSave() const {return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
 
     bool chk_appear();
     void set_mtx();
     void init_mtx();
-    int solidHeapCB(fopAc_ac_c*);
+    static int solidHeapCB(fopAc_ac_c*);
     bool create_heap();
-    void create_res_load();
+    cPhs_State create_res_load();
     void init_cc();
     void set_cc_pos();
     bool checkCollision();
@@ -244,10 +251,10 @@ public:
 class daObjTapestryAttr_c { 
 public:
 daObjTapestryAttr_c operator=(const daObjTapestryAttr_c& other){
-    unkC[0][0] = other.unkC[0][0];
-    unkC[0][1] = other.unkC[0][1];
-    unkC[1][0] = other.unkC[1][0];
-    unkC[1][1] = other.unkC[1][1];
+    unkC[0][0] = other.unkC[0][0];  //spring scaling.
+    unkC[0][1] = other.unkC[0][1];  //spring stiffness. 
+    unkC[1][0] = other.unkC[1][0];  //speed multiplier
+    unkC[1][1] = other.unkC[1][1];  //speed multiplier
     unkC[2][0] = other.unkC[2][0];
     unkC[2][1] = other.unkC[2][1];
     unkC[3][0] = other.unkC[3][0];
@@ -270,8 +277,8 @@ daObjTapestryAttr_c operator=(const daObjTapestryAttr_c& other){
     unk58[1][1] = other.unk58[1][1];
 };
 public:
-    f32 unkC[8][2]; //[0][1] is spring stiffness. [0][0] is mass / spring scaling.
-    s8 unk4C;
+    f32 unkC[8][2]; 
+    u8 unk4C;       
     s8 unk4D;
     float unk50;
     u8 unk54;
