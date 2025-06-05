@@ -173,7 +173,12 @@ void dMagma_floor_c::draw() {
 /* 80075CB8-80075DD8       .text calc__14dMagma_floor_cFi */
 void dMagma_floor_c::calc(int i_roomNo) {
     mDoMtx_stack_c::scaleS(1.0f, 0.05f, 1.0f);
-    if (strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0)
+    if (
+        strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0
+#if VERSION > VERSION_DEMO
+        || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0
+#endif
+    )
         mDoMtx_stack_c::transM(0.0f, -(mPos.y + 20.0f), 0.0f);
     else
         mDoMtx_stack_c::transM(0.0f, -(mPos.y + 30.0f), 0.0f);

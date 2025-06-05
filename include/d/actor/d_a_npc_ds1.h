@@ -58,9 +58,9 @@ public:
     void dummy_action(void*);
     void RoomEffectSet();
     void RoomEffectDelete();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void CreateHeap();
 

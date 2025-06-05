@@ -1618,7 +1618,7 @@ inline void dComIfGs_onVisitedRoom(int i_no) {
     g_dComIfG_gameInfo.save.getMemory().getBit().onVisitedRoom(i_no);
 }
 
-inline bool dComIfGs_isVisitedRoom(int i_no) {
+inline BOOL dComIfGs_isVisitedRoom(int i_no) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isVisitedRoom(i_no);
 }
 
@@ -3369,10 +3369,10 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
                        s16 rotY = 0, f32 param_12 = 1.0f,
                        GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3,
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm,
                                     s16 i_angle = 0, f32 param_5 = 1.0f,
                                     GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, param_3, i_angle,
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, floor_nrm, i_angle,
                                                        param_5, i_tex);
 }
 
@@ -3970,6 +3970,14 @@ inline void dComIfGp_map_clrAGBMapSendStopFlg() {
 inline dCcS* dComIfG_Ccsp() {
     return &g_dComIfG_gameInfo.play.mCcS;
 }
+
+// This should be dComIfG_Ccsp()->SetMass everywhere, but for some reason that combination of two
+// inlines consistently breaks the match on retail. But for the demo, using the proper inlines is requires to match.
+#if VERSION == VERSION_DEMO
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->SetMass
+#else
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->mMass_Mng.Set
+#endif
 
 inline void dComIfG_setTimerMode(int ms) { g_dComIfG_gameInfo.play.setTimerMode(ms); }
 inline int dComIfG_getTimerMode() { return g_dComIfG_gameInfo.play.getTimerMode(); }

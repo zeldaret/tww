@@ -67,7 +67,7 @@ cXyz cXyz::outprod(const Vec& vec) const {
 /* 80245874-80245918       .text norm__4cXyzCFv */
 cXyz cXyz::norm(void) const {
     Vec ret;
-    JUT_CONFIRM(233, isNearZeroSquare() == 0);
+    JUT_CONFIRM(233, isNearZeroSquare() == FALSE);
     VECNormalize(this, &ret);
     return cXyz(ret);
 }

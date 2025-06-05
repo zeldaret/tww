@@ -6,42 +6,96 @@
 #include "d/actor/d_a_tag_attention.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/d_com_inf_game.h"
+
+static dCcD_SrcSph sph_check_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 10.0f,
+    },
+};
 
 /* 00000078-00000188       .text _create__Q214daTagAttention5Act_cFv */
 cPhs_State daTagAttention::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+    mStts.Init(0xFF, 0xFF, this);
+    mSph.Set(sph_check_src);
+    mSph.SetStts(&mStts);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000340-00000480       .text _execute__Q214daTagAttention5Act_cFv */
 bool daTagAttention::Act_c::_execute() {
-    /* Nonmatching */
+    mSph.SetC(current.pos);
+    mSph.SetR(scale.x * 100.0f);
+    dComIfG_Ccsp()->Set(&mSph);
+    m_b0x290 = true;
+    if (prm_get_Type() == 1){
+        if (fopAcM_isSwitch(this, prm_get_swSave()) == FALSE){
+            m_b0x290 = false;
+        }
+    }else if (prm_get_Type() == 2){
+        if (fopAcM_isSwitch(this, prm_get_swSave()) != FALSE){
+            m_b0x290 = false;
+        }
+    }
+
+    cXyz unused;
+    if (chk_inside(&unused)){
+        dComIfGp_att_Look2RequestF(this, 0x6000, 1);
+    }
+
+    return true;
 }
 
 namespace daTagAttention {
 namespace {
 /* 00000480-000004A0       .text Mthd_Create__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
 }
 
 /* 000004A0-000004A8       .text Mthd_Delete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+bool Mthd_Delete(void* i_this) {
+    return TRUE;
 }
 
 /* 000004A8-000004C8       .text Mthd_Execute__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+bool Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_execute();
 }
 
 /* 000004C8-000004D0       .text Mthd_Draw__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return TRUE;
 }
 
 /* 000004D0-000004D8       .text Mthd_IsDelete__Q214daTagAttention31@unnamed@d_a_tag_attention_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

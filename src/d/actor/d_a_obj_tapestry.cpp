@@ -1524,6 +1524,7 @@ bool daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
+
 static cPhs_State daObjTapestry_Create(fopAc_ac_c* obj) {
 
     return ((daObjTapestry_c*)obj)->_create();

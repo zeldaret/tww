@@ -6,6 +6,69 @@
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WIND & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsPlayer_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
+
+static dCcD_SrcCyl l_wind_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsPlayer_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
 
 /* 000000EC-0000031C       .text __ct__15daNpc_Cb1_HIO_cFv */
 daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
@@ -538,28 +601,29 @@ daNpc_Cb1_c::~daNpc_Cb1_c() {
 }
 
 /* 000093A8-000093C8       .text daNpc_Cb1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Cb1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daNpc_Cb1_Create(fopAc_ac_c* i_this) {
+    return ((daNpc_Cb1_c*)i_this)->create();
 }
 
 /* 000093C8-000093F0       .text daNpc_Cb1_Delete__FP11daNpc_Cb1_c */
-static BOOL daNpc_Cb1_Delete(daNpc_Cb1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Cb1_Delete(daNpc_Cb1_c* i_this) {
+    ((daNpc_Cb1_c*)i_this)->~daNpc_Cb1_c();
+    return TRUE;
 }
 
 /* 000093F0-00009410       .text daNpc_Cb1_Execute__FP11daNpc_Cb1_c */
-static BOOL daNpc_Cb1_Execute(daNpc_Cb1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Cb1_Execute(daNpc_Cb1_c* i_this) {
+    return ((daNpc_Cb1_c*)i_this)->execute();
 }
 
 /* 00009410-00009430       .text daNpc_Cb1_Draw__FP11daNpc_Cb1_c */
-static BOOL daNpc_Cb1_Draw(daNpc_Cb1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Cb1_Draw(daNpc_Cb1_c* i_this) {
+    return ((daNpc_Cb1_c*)i_this)->draw();
 }
 
 /* 00009430-00009438       .text daNpc_Cb1_IsDelete__FP11daNpc_Cb1_c */
 static BOOL daNpc_Cb1_IsDelete(daNpc_Cb1_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daNpc_Cb1_Method = {

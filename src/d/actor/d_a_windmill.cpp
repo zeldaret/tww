@@ -4,18 +4,131 @@
 //
 
 #include "d/actor/d_a_windmill.h"
+#include "d/actor/d_a_wind_tag.h"
+#include "d/res/res_hpu1.h"
+#include "d/res/res_hpu2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+#include "d/d_bg_s_movebg_actor.h"
+
+#include "weak_data_1811.h" // IWYU pragma: keep
+
 
 const char* daWindMill_c::m_arcname[] = { "Hpu1", "Hpu2" };
 
+static dCcD_SrcSph l_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK2000,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 90.0f,
+    },
+};
+
+
+static dCcD_SrcCps l_cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 200.0f,
+    },
+};
+
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_StopNoConHit_e,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 250.0f,
+        /* Height */ 400.0f,
+    },
+};
+
+const s16 daWindMill_c::m_bmdidx[] = {HPU1_BDL_HPU1, HPU2_BDL_HPU2};
+const s16 daWindMill_c::m_dzbidx[] = {HPU1_DZB_HPU1, -1};
+const s16 daWindMill_c::m_heapsize[] = { 0x3A40, 0xA00 };
+const Vec daWindMill_c::m_cull_size[][2] = {
+    {{-1400.0f, 0.0f, -1400.0f}, {1400.0f, 500.0f, 1400.0f}},
+    {{-500.0f, -500.0f, -50.0f}, {500.0f, 500.0f, 150.0f}},
+};
+
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */
 bool daWindMill_c::_delete() {
-    if (heap != NULL && mpBgW != NULL)
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         dComIfG_Bgsp()->Release(mpBgW);
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    }
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
     return TRUE;
 }
 
@@ -26,17 +139,127 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 00000108-000002A0       .text CreateHeap__12daWindMill_cFv */
 BOOL daWindMill_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
+    JUT_ASSERT(VERSION_SELECT(399, 405, 405, 405), modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000222);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    if (m_dzbidx[mType] != -1) {
+        mpBgW = new dBgW();
+        if (mpBgW != NULL) {
+            cBgD_t* res = (cBgD_t*) dComIfG_getObjectRes(
+                m_arcname[mType], m_dzbidx[mType]);
+            if (mpBgW->Set(res, cBgW::MOVE_BG_e, &mMtx) == TRUE) {
+                return FALSE;
+            }
+            mpBgW->SetCrrFunc(&dBgS_MoveBGProc_TypicalRotY);
+        } else {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
 }
+
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 000002A0-0000050C       .text CreateInit__12daWindMill_cFv */
 void daWindMill_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+    cXyz cullMin = m_cull_size[mType][0];
+    cXyz cullMax = m_cull_size[mType][1];
+    fopAcM_setCullSizeBox(
+        this,
+        cullMin.x,
+        cullMin.y,
+        cullMin.z,
+        cullMax.x,
+        cullMax.y,
+        cullMax.z);
+
+    fopAcM_setCullSizeFar(this, 3.0f);
+    mStts.Init(0xFF, 0xFF, this);
+
+    int i;
+    switch (mType) {
+        case 1:
+            for (i = 0; i < 4; i++) {
+                mCps[i].Set(l_cps_src);
+                mCps[i].SetStts(&mStts);
+            }
+            for (i = 0; i < 9; i++) {
+                mSph[i].Set(l_sph_src);
+                mSph[i].SetStts(&mStts);
+                if (i < 4) {
+                    mSph[i].SetR(60.0f);
+                }
+            }
+            break;
+        case 0:
+            for (i = 0; i < 4; i++) {
+                mCps[i].Set(l_cps_src);
+                mCps[i].SetStts(&mStts);
+            }
+            mCyl.Set(l_cyl_src);
+            mCyl.SetStts(&mStts);
+            break;
+    }
+
+    mpModel->setUserArea((u32) this);
+    set_mtx();
+
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (i == 2) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
+        }
+    }
+
+    mpModel->calc();
+    search_wind();
+
+    if (mpBgW != NULL) {
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+        mpBgW->Move();
+    }
 }
 
 /* 0000050C-00000608       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daWindMill_c* i_this = (daWindMill_c*) model->getUserArea();
+
+        if (i_this) {
+            i_this->mAngle[0] += i_this->mAngle[1];
+
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            switch (i_this->getType()) {
+                case 0:
+                    mDoMtx_stack_c::YrotM(i_this->mAngle[0]);
+                    break;
+                case 1:
+                    mDoMtx_stack_c::ZrotM(i_this->mAngle[0]);
+                    break;
+            }
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+            cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
+
+            i_this->shape_angle.y = i_this->mAngle[0];
+        }
+    }
+    return TRUE;
 }
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
@@ -50,37 +273,200 @@ void daWindMill_c::search_wind() {
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
 cPhs_State daWindMill_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daWindMill_c);
+
+    mType = fopAcM_GetParam(this) & 0xF;
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (res == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return res;
 }
 
 /* 00000DC4-00000E4C       .text set_mtx__12daWindMill_cFv */
 void daWindMill_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000E4C-00000ECC       .text _execute__12daWindMill_cFv */
 bool daWindMill_c::_execute() {
-    /* Nonmatching */
+    hane_move();
+    set_at();
+    set_co();
+    set_mtx();
+    if (mType == 0) {
+        mpModel->calc();
+    }
+    if (mpBgW != NULL) {
+        mpBgW->Move();
+    }
+    mAngle[2] = mAngle[1];
+    return true;
 }
 
 /* 00000ECC-00001048       .text hane_move__12daWindMill_cFv */
 void daWindMill_c::hane_move() {
-    /* Nonmatching */
+    f32 wind_float = 0.0f;
+    search_wind();
+
+    if (mWindTagId != fpcM_ERROR_PROCESS_ID_e) {
+        daWindTag::daWindTag_c* wind_tag = (daWindTag::daWindTag_c*) fopAcM_SearchByID(mWindTagId);
+        if (wind_tag != NULL) {
+            wind_float = wind_tag->getCurLength() / wind_tag->getMaxLength();
+        }
+    }
+
+    s16 target_angle = 2500;
+    target_angle = wind_float * target_angle;
+    cLib_addCalcAngleS(&mAngle[1], target_angle, 0xF, 100, 10);
+    if (mAngle[2] <= mAngle[1] && mAngle[1] != 0) {
+        if (mType == 0) {
+            fopAcM_seStart(this, JA_SE_OBJ_WDUN_WMILL_L_RND, 0);
+        } else if (mType == 1) {
+            fopAcM_seStart(this, JA_SE_OBJ_WDUN_WMILL_S_RND, 0);
+        }
+    }
 }
 
 /* 00001048-000014AC       .text set_at__12daWindMill_cFv */
 void daWindMill_c::set_at() {
-    /* Nonmatching */
+    cXyz vec1(0.0f, 0.0f, 70.0f);
+    cXyz vec_array_0[4] = {
+        cXyz(450.0f, 0.0f, 70.0f),
+        cXyz(-450.0f, 0.0f, 70.0f),
+        cXyz(0.0f, 450.0f, 70.0f),
+        cXyz(0.0f, -450.0f, 70.0f),
+    };
+    cXyz vec_array_1[4] = {
+        cXyz(-1400.0f, 290.0f, 130.0f),
+        cXyz(-1400.0f, 290.0f, -130.0f),
+        cXyz(130.0f, 290.0f, -1400.0f),
+        cXyz(-130.0f, 290.0f, -1400.0f),
+    };
+    cXyz vec_array_2[4] = {
+        cXyz(1400.0f, 290.0f, 130.0f),
+        cXyz(1400.0f, 290.0f, -130.0f),
+        cXyz(130.0f, 290.0f,1400.0f),
+        cXyz(-130.0f, 290.0f, 1400.0f),
+    };
+
+    int i;
+    s16 r0;
+    switch (mType) {
+        case 1:
+            r0 = 1000;
+            if (mAngle[1] > r0) {
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
+                mDoMtx_stack_c::multVec(&vec1, &vec1);
+
+
+                for (i = 0; i < 4; i++) {
+                    mDoMtx_stack_c::multVec(&vec_array_0[i], &vec_array_0[i]);
+
+                    m1244[i].mStart = vec1;
+                    m1244[i].mEnd = vec_array_0[i];
+                    m1244[i].mRadius = 70.0f;
+
+                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
+                    mCps[i].SetR(m1244[i].mRadius);
+                }
+
+                for (i = 0; i < 4; i++) {
+                    dComIfG_Ccsp()->Set(&mCps[i]);
+                }
+            }
+            break;
+        case 0:
+            r0 = 1000;
+            if (mAngle[1] > r0) {
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::ZXYrotM(current.angle.x, mAngle[0] + mAngle[1], current.angle.z);
+
+                for (i = 0; i < 4; i++) {
+                    mDoMtx_stack_c::multVec(&vec_array_1[i], &vec_array_1[i]);
+                    mDoMtx_stack_c::multVec(&vec_array_2[i], &vec_array_2[i]);
+
+                    m1244[i].mStart = vec_array_1[i];
+                    m1244[i].mEnd = vec_array_2[i];
+                    m1244[i].mRadius = 170.0f;
+
+                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
+                    mCps[i].SetR(m1244[i].mRadius);
+                    mCps[i].SetAtSpl(dCcG_At_Spl_UNKA);
+                }
+
+                for (i = 0; i < 4; i++) {
+                    dComIfG_Ccsp()->Set(&mCps[i]);
+                }
+            }
+            break;
+    }
 }
 
 /* 000014AC-000016DC       .text set_co__12daWindMill_cFv */
 void daWindMill_c::set_co() {
-    /* Nonmatching */
+    cXyz vec_array[9] = {
+        cXyz(150.0f, 0.0f, 70.0f),
+        cXyz(-150.0f, 0.0f, 70.0f),
+        cXyz(0.0f, 150.0f, 70.0f),
+        cXyz(0.0f, -150.0f, 70.0f),
+        cXyz(0.0f, 0.0f, 70.0f),
+        cXyz(350.0f, 0.0f, 70.0f),
+        cXyz(-350.0f, 0.0f, 70.0f),
+        cXyz(0.0f, 350.0f, 70.0f),
+        cXyz(0.0f, -350.0f, 70.0f),
+    };
+
+    s16 r0;
+    switch (mType) {
+        case 1:
+            r0 = 1000;
+            if (mAngle[1] <= r0) {
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
+
+                int i;
+                for (i = 0; i < 9; i++) {
+                    mDoMtx_stack_c::multVec(&vec_array[i], &vec_array[i]);
+                }
+
+                for (i = 0; i < 9; i++) {
+                    mSph[i].SetC(vec_array[i]);
+                    dComIfG_Ccsp()->Set(&mSph[i]);
+                }
+            }
+            break;
+        case 0:
+            mCyl.SetC(current.pos);
+            dComIfG_Ccsp()->Set(&mCyl);
+            break;
+    }
 }
 
 /* 000016DC-000017A4       .text _draw__12daWindMill_cFv */
 bool daWindMill_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    switch (mType) {
+        case 0:
+            dComIfGd_setListBG();
+            mDoExt_modelEntryDL(mpModel);
+            dComIfGd_setList();
+            break;
+        case 1:
+            mDoExt_modelUpdateDL(mpModel);
+            break;
+    }
+
+    return true;
 }
 
 /* 000017A4-000017C4       .text daWindMill_Create__FPv */

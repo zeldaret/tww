@@ -77,15 +77,15 @@ public:
 
     typedef BOOL (daShip_c::*ProcFunc)();
     
-    bool checkStateFlg(daSHIP_SFLG flag) const { return mStateFlag & flag; }
-    bool getFlyFlg() { return checkStateFlg(daSFLG_FLY_e); }
-    bool getJumpFlg() const { return checkStateFlg(daSFLG_JUMP_e); }
-    bool getLandFlg() const { return checkStateFlg(daSFLG_LAND_e); }
-    bool getSailOn() { return checkStateFlg(daSFLG_SAIL_ON_e); }
+    u32 checkStateFlg(daSHIP_SFLG flag) const { return mStateFlag & flag; }
+    BOOL getFlyFlg() { return checkStateFlg(daSFLG_FLY_e); }
+    BOOL getJumpFlg() const { return checkStateFlg(daSFLG_JUMP_e); }
+    BOOL getLandFlg() const { return checkStateFlg(daSFLG_LAND_e); }
+    BOOL getSailOn() { return checkStateFlg(daSFLG_SAIL_ON_e); }
     void onJumpRideFlg() { onStateFlg(daSFLG_JUMP_RIDE_e); }
-    bool checkJumpOkFlg() const { return checkStateFlg(daSFLG_JUMP_OK_e); }
-    bool checkShootCannon() const { return checkStateFlg(daSFLG_SHOOT_CANNON_e); }
-    bool checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
+    BOOL checkJumpOkFlg() const { return checkStateFlg(daSFLG_JUMP_OK_e); }
+    BOOL checkShootCannon() const { return checkStateFlg(daSFLG_SHOOT_CANNON_e); }
+    BOOL checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
     
     void setSteerMove() { mNextMode = MODE_STEER_MOVE_e; }
     void setPaddleMove() { mNextMode = MODE_PADDLE_MOVE_e; }
@@ -108,7 +108,15 @@ public:
     
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
+#if VERSION == VERSION_DEMO
+    BOOL checkForceMove() { return getTornadoActor() || getWhirlActor(); }
+    daTornado_c* getTornadoActor() { return mTornadoActor; }
+    fopAc_ac_c* getWhirlActor() { return mWhirlActor; }
+#else
     BOOL checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
+    daTornado_c* getTornadoActor() const { return mTornadoActor; }
+    fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
+#endif
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
     void checkSalvageDemo() const {}
@@ -132,8 +140,6 @@ public:
     void getTactJntMtx() {}
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
-    daTornado_c* getTornadoActor() const { return mTornadoActor; }
-    fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
     void offCraneHookFlg() {}
     void offFantomGanonBattle() {}
     void offStateFlg(daSHIP_SFLG flag) { mStateFlag &= ~flag;}

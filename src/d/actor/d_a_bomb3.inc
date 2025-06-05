@@ -198,9 +198,10 @@ BOOL daBomb_c::draw() {
     }
 
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -G_CM3D_F_INF) {
-        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        if(pNormal) {
-            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+        cXyz* norm = triPla->GetNP();
+        if(norm) {
+            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, norm);
         }
     }
 
@@ -672,9 +673,7 @@ void daBomb_c::makeWaterEffect() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -834,9 +833,7 @@ BOOL daBomb_c::procExplode_init() {
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
         dComIfG_Ccsp()->Set(&mSph);
-        //using inline breaks match
-        //dComIfG_Ccsp()->SetMass(&mSph, 3);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+        dComIfG_Ccsp_SetMass(&mSph, 3);
         field_0x782 = 1;
         mMassCounter = g_Counter.mCounter0;
     }
@@ -899,9 +896,7 @@ bool daBomb_c::procExplode() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -1088,9 +1083,7 @@ BOOL daBomb_c::execute() {
             mSph.SetR(scale.x * 30.0f);
             if(mMassCounter != g_Counter.mCounter0) {
                 dComIfG_Ccsp()->Set(&mSph);
-                //using inline breaks match
-                //dComIfG_Ccsp()->SetMass(&mSph, 3);
-                g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+                dComIfG_Ccsp_SetMass(&mSph, 3);
                 mMassCounter = g_Counter.mCounter0;
             }
         }

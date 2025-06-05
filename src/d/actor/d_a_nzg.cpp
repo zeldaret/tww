@@ -6,6 +6,7 @@
 #include "d/actor/d_a_nzg.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-000000E4       .text daNZG_Draw__FP9nzg_class */
 static BOOL daNZG_Draw(nzg_class*) {
@@ -29,7 +30,7 @@ static BOOL daNZG_Execute(nzg_class*) {
 
 /* 000004D0-000004D8       .text daNZG_IsDelete__FP9nzg_class */
 static BOOL daNZG_IsDelete(nzg_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000004D8-00000508       .text daNZG_Delete__FP9nzg_class */
@@ -45,6 +46,35 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 /* 00000620-00000864       .text daNZG_Create__FP10fopAc_ac_c */
 static cPhs_State daNZG_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcCyl body_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e | cCcD_CoSPrm_NoCrr_e,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 50.0f,
+            /* Height */ 20.0f,
+        },
+    };
 }
 
 static actor_method_class l_daNZG_Method = {

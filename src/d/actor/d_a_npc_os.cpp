@@ -1,6 +1,6 @@
 /**
  * d_a_npc_os.cpp
- * Player - Companion Statue / Servant of the Tower
+ * Player - Servant of the Tower / お供石像 (Companion Statue)
  */
 
 #include "d/actor/d_a_npc_os.h"

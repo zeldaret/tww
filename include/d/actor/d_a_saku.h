@@ -3,6 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 
+class dCcD_SrcCyl;
+
 class daSaku_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned char) {}
@@ -35,6 +37,8 @@ public:
     void MoveBGResist(int, int);
     void setEffFire(int);
     void setEffBreak(int);
+
+    static const dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

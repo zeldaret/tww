@@ -13,7 +13,7 @@
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
-#include "dolphin/gf/GFPixel.h"
+#include "dolphin/gf/GF.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo.h"
