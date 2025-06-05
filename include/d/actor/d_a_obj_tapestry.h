@@ -76,14 +76,7 @@ public:
 
 
 class daObjTapestryDrawData_c {
-// struct dlSegment{
-//     u8 header[3];
-//     u8 vtxlayout[12][4];
-// };
-// struct DrawDataDL{
-//     dlSegment segment[7];
-//     u8 endpad[0x20];
-// };
+
 public:
 
     daObjTapestryDrawData_c();
@@ -194,7 +187,7 @@ public:
 }; /* SIZE >= 0x14C0*/
 class daObjTapestryAttr_c;
 class daObjTapestry_c: public fopAc_ac_c {
-    enum Prm_e {
+    enum Param_e {
         PRM_EV_ID_S = 0x08,
         PRM_EV_ID_W = 0x08,
         PRM_SWSAVE_W = 0x08,
