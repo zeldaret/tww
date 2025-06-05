@@ -39,7 +39,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
         dk_class* a_this = (dk_class*)model->getUserArea();
         if (a_this != NULL) {
-            mDoMtx_copy(model->getAnmMtx(jnt_no), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
 
             s32 tail_idx = ((jnt_no - 58) / 2);
 
@@ -57,6 +57,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000228-00000720       .text tail_control__FP8dk_classP6tail_s */
 static void tail_control(dk_class* a_this, tail_s* tail) {
     /* Nonmatching */
+    s32 i;
+
     cXyz vec = tail->field_0x150[1] - tail->field_0x150[0];
 
     tail->field_0x168.y = cM_atan2s(vec.x, vec.z);
@@ -66,8 +68,8 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
     vec.x = 0.0f;
     vec.y = 0.0f;
     vec.z = REG0_F(5) + 25.0f + 5.0f;
-    mDoMtx_YrotS(*calc_mtx, tail->field_0x168.y);
-    mDoMtx_XrotM(*calc_mtx, tail->field_0x168.x);
+    cMtx_YrotS(*calc_mtx, tail->field_0x168.y);
+    cMtx_XrotM(*calc_mtx, tail->field_0x168.x);
     MtxPosition(&vec, &tail->field_0x170);
 
     tail->field_0x024[0] = tail->field_0x150[1];
@@ -76,15 +78,16 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
     csXyz* field_9C_ptr = &tail->field_0x09C[1];
     cXyz* field_D8_ptr = &tail->field_0x0D8[1];
 
-    f32 unk2;
     f32 unk = REG0_F(2) + 0.77000004f;
+    f32 unk2;
     if (a_this->field_0x2B4 >= 2) {
-        unk2 = -1e9f;
+        unk2 = -G_CM3D_F_INF;
     } else {
         unk2 = a_this->field_0x900.GetGroundH() + 5.0f;
     }
 
-    for (s32 i = 1; i < 10; i++) {
+    for (i = 1; i < 10; i++) {
+        cXyz* field_24_ptr_prev = field_24_ptr - 1;
         cXyz pos_vec;
 
         f32 multiplier = 1.0f - (i - 1) * (REG0_F(4) + 0.1f);
@@ -98,30 +101,32 @@ static void tail_control(dk_class* a_this, tail_s* tail) {
             y_base = unk2;
         }
 
-        f32 y_2 = y_base - (field_24_ptr - 1)->y;
-        f32 x_2 = new_vec.x + (field_24_ptr->x - (field_24_ptr - 1)->x);
-        f32 z_2 = new_vec.z + (field_24_ptr->z - (field_24_ptr - 1)->z);
+        f32 y_2 = y_base - field_24_ptr_prev->y;
+        f32 x_2 = new_vec.x + (field_24_ptr->x - field_24_ptr_prev->x);
+        f32 z_2 = new_vec.z + (field_24_ptr->z - field_24_ptr_prev->z);
 
+        s16 new_x_angle;
         s32 new_y_angle = cM_atan2s(x_2, z_2);
         f32 xz_dist = std::sqrtf(x_2 * x_2 + z_2 * z_2);
-        s16 new_x_angle = -cM_atan2s(y_2, xz_dist);
+        new_x_angle = -cM_atan2s(y_2, xz_dist);
         (field_9C_ptr - 1)->y = new_y_angle;
         (field_9C_ptr - 1)->x = new_x_angle;
 
         vec.x = 0.0f;
         vec.y = 0.0f;
-        f32 temp = l_HIO.field_0x10 * ((i * 0.25f) + 20.0f) * 2.0f;
-        vec.z = temp * (0.03f * l_HIO.field_0x0C);
 
-        mDoMtx_YrotS(*calc_mtx, new_y_angle);
-        mDoMtx_XrotM(*calc_mtx, new_x_angle);
+        f32 temp = l_HIO.field_0x10 * ((i * 0.03f) + 0.25f) * 20.0f;
+        vec.z = temp * (2.0f * l_HIO.field_0x0C);
+
+        cMtx_YrotS(*calc_mtx, new_y_angle);
+        cMtx_XrotM(*calc_mtx, new_x_angle);
 
         MtxPosition(&vec, &pos_vec);
         *field_D8_ptr = *field_24_ptr;
 
-        field_24_ptr->x = (field_24_ptr - 1)->x + pos_vec.x;
-        field_24_ptr->y = (field_24_ptr - 1)->y + pos_vec.y;
-        field_24_ptr->z = (field_24_ptr - 1)->z + pos_vec.z;
+        field_24_ptr->x = field_24_ptr_prev->x + pos_vec.x;
+        field_24_ptr->y = field_24_ptr_prev->y + pos_vec.y;
+        field_24_ptr->z = field_24_ptr_prev->z + pos_vec.z;
 
         field_D8_ptr->x = unk * (field_24_ptr->x - field_D8_ptr->x);
         field_D8_ptr->y = unk * (field_24_ptr->y - field_D8_ptr->y);
@@ -147,8 +152,8 @@ static void tail_draw(dk_class* a_this, tail_s* tail) {
 
         MtxTrans(trans->x, trans->y, trans->z, false);
         MtxScale(scale, scale, scale, true);
-        mDoMtx_YrotM(*calc_mtx, rot->y);
-        mDoMtx_XrotM(*calc_mtx, rot->x);
+        cMtx_YrotM(*calc_mtx, rot->y);
+        cMtx_XrotM(*calc_mtx, rot->x);
 
         J3DModel* model = tail->models[i];
 
@@ -165,9 +170,9 @@ static void tail_draw(dk_class* a_this, tail_s* tail) {
 static void kamen_draw(dk_class* a_this) {
     J3DModel* model = a_this->mpModelKamen;
 
-    mDoMtx_copy(a_this->field_0x2B8->getModel()->getAnmMtx(24), *calc_mtx);
-    mDoMtx_YrotM(*calc_mtx, 0x4000);
-    mDoMtx_ZrotM(*calc_mtx, -0x4000);
+    MTXCopy(a_this->field_0x2B8->getModel()->getAnmMtx(24), *calc_mtx);
+    cMtx_YrotM(*calc_mtx, 0x4000);
+    cMtx_ZrotM(*calc_mtx, -0x4000);
     MtxTrans(REG0_F(0) * 0.01f,
              (REG0_F(1) * 0.01f) + 50.0f - 10.0f,
              (REG0_F(2) * 0.01f) + 140.0f - 15.0f,
@@ -338,19 +343,23 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_KAMEN);
     a_this->mpModelKamen = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
+#if VERSION > VERSION_DEMO
     if (a_this->mpModelKamen == NULL) {
         return FALSE;
     }
+#endif
 
     modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_TAIL);
-    JUT_ASSERT(819, modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(817, 819, 819, 819), modelData != NULL);
 
     for (s32 i = 0; i < 4; i++) {
         for (s32 j = 0; j < 9; j++) {
             a_this->tails[i].models[j] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
+#if VERSION > VERSION_DEMO
             if (a_this->tails[i].models[j] == NULL) {
                 return FALSE;
             }
+#endif
         }
     }
 
@@ -377,8 +386,8 @@ static cPhs_State daDk_Create(fopAc_ac_c* i_this) {
 
         if (a_this->field_0x2B4 < 2) {
             a_this->field_0x900.Set(
-                &a_this->current.pos, &a_this->old.pos,
-                a_this, 1, &a_this->field_0x8C0, &a_this->speed, NULL, NULL);
+                fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this),
+                a_this, 1, &a_this->field_0x8C0, fopAcM_GetSpeed_p(a_this), NULL, NULL);
         }
         a_this->field_0x8C0.SetWall(0.0f, 300.0f);
         if (a_this->field_0x2B4 == 1) {
