@@ -34,7 +34,11 @@ public:
     cXyz mBufferThree[8][6];
 };
 class daObjTapestryMoveVtx_c{
+
 public:
+bool chk_eff(int x, int y){
+    return unk1030[x][y] != 0xFF;
+}
     cXyz mBuffer[8][6];
     u8 unkFD0[8][6];
     u8 unk1000[8][6];
