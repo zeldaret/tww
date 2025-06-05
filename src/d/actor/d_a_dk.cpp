@@ -236,11 +236,7 @@ static BOOL daDk_Execute(dk_class* a_this) {
             a_this,
             dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
             a_this->field_0x2B8,
-            "Dk",
-            0,
-            0,
-            0,
-            0
+            "Dk"
         );
 
         if (demo_set) {
