@@ -267,14 +267,14 @@ u32 JKRAramArchive::fetchResource_subroutine(u32 entryNum, u32 length, JKRHeap* 
             JKRAramToMainRam(entryNum, alignHeader, sizeof(SArcHeader), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
             u32 decompressedLen = ALIGN_NEXT(JKRDecompExpandSize(alignHeader), sizeof(SArcHeader));
             buffer = (u8*)(JKRAllocFromHeap(pHeap, decompressedLen, sizeof(SArcHeader)));
-            JUT_ASSERT(VERSION_SELECT(709, 709, 688, 688), buffer);
+            JUT_ASSERT(VERSION_SELECT(702, 709, 688, 688), buffer);
             u32 readLen;
             JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN1, decompressedLen, pHeap, -1, &readLen);
             *out = buffer;
             return readLen;
         }
     default:
-        OSPanic(__FILE__, VERSION_SELECT(719, 719, 698, 698), ":::??? bad sequence\n");
+        OSPanic(__FILE__, VERSION_SELECT(712, 719, 698, 698), ":::??? bad sequence\n");
         return 0;
     }
 }

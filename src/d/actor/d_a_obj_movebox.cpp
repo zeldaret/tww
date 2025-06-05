@@ -1870,8 +1870,9 @@ namespace daObjMovebox {
             int temp = mBgc.mMaxGroundIdx;
             f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
-            if (triPla && groundH != -G_CM3D_F_INF) {
-                dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, triPla->GetNP(), shape_angle.y, 1.0f, NULL);
+            cXyz* norm = triPla->GetNP();
+            if (norm && groundH != -G_CM3D_F_INF) {
+                dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, norm, shape_angle.y, 1.0f, NULL);
             }
         }
         

@@ -111,7 +111,10 @@ cPhs_State daObjLadder::Act_c::Mthd_Create() {
 
     if (phase_state == cPhs_COMPLEATE_e) {
         mType = prm_get_type();
-        phase_state = MoveBGCreate(M_arcname, attr_type(mType).dzbId, dBgS_MoveBGProc_Trans, 0x900);
+        phase_state = MoveBGCreate(
+            M_arcname, attr_type(mType).dzbId, dBgS_MoveBGProc_Trans,
+            VERSION_SELECT(0x1700, 0x900, 0x900, 0x900)
+        );
 
         JUT_ASSERT(0x1DE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
@@ -128,7 +131,7 @@ BOOL daObjLadder::Act_c::Delete() {
 BOOL daObjLadder::Act_c::Mthd_Delete() {
     BOOL res = MoveBGDelete();
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
 
     return res;
 }
@@ -237,7 +240,8 @@ void daObjLadder::Act_c::mode_drop() {
         if (unk2DE >= 0) {
             unk2DE--;
 
-            current.pos.y = mGndY - (current.pos.y - mGndY) * 0.5f;
+            f32 temp = current.pos.y - mGndY;
+            current.pos.y = mGndY - temp * 0.5f;
             speed.y *= -0.5f;
         } else {
             current.pos.y = mGndY;

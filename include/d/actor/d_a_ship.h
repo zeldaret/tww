@@ -108,7 +108,15 @@ public:
     
     void checkCraneMode() const {}
     void checkCraneUpEnd() const {}
+#if VERSION == VERSION_DEMO
+    BOOL checkForceMove() { return getTornadoActor() || getWhirlActor(); }
+    daTornado_c* getTornadoActor() { return mTornadoActor; }
+    fopAc_ac_c* getWhirlActor() { return mWhirlActor; }
+#else
     BOOL checkForceMove() const { return getTornadoActor() || getWhirlActor(); }
+    daTornado_c* getTornadoActor() const { return mTornadoActor; }
+    fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
+#endif
     void checkRopeCntMax() const {}
     void checkRopeDownStart() const {}
     void checkSalvageDemo() const {}
@@ -132,8 +140,6 @@ public:
     void getTactJntMtx() {}
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
-    daTornado_c* getTornadoActor() const { return mTornadoActor; }
-    fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
     void offCraneHookFlg() {}
     void offFantomGanonBattle() {offStateFlg(daSFLG_UNK800000_e);}
     void offStateFlg(daSHIP_SFLG flag) { mStateFlag &= ~flag;}
