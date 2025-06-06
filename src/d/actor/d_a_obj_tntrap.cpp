@@ -140,7 +140,7 @@ BOOL daObjTnTrap_c::chk_appear() {
         }
         break;
     default:   
-        JUT_ASSERT(VERSION_SELECT(0x178,0x17C,0x17C,0x17C),0);
+        JUT_ASSERT(VERSION_SELECT(376,380,380,380),0);
         break;
     }
     return o_retval;
