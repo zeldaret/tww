@@ -9,7 +9,7 @@
 
 
 
-struct SomeStruct {
+struct ParticleData {
     Mtx calcMtx;
     JPABaseEmitter* emitterPairs[2][2];  
     JPABaseEmitter* emitterPairs2[1][3];  
@@ -70,23 +70,22 @@ public:
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhaseProcess;
-    /* 0x298 */ s32 field_0x298;
+    /* 0x298 */ s32 mEventState;
     /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Tri mTri[2][4];
-    /* 0xD58 */ dBgW* field_0xD58;
-    /* 0xD5C */ SomeStruct field_0xD5C;
-    /* 0xDC0 */ int field_0xDA8; 
-    /* 0xD90 */ u8 field_0xDAC[0xDB4 - 0xDAC];
-    /* 0xDB8 */ ActProcFunc mActionFunc;
-    /* 0xDC0 */ s32 field_0xDC0;
+    /* 0xD58 */ dBgW* mpCollision;
+    /* 0xD5C */ ParticleData mParticleData;
+    /* 0xDA8 */ u8 pad_0xDA8[0xC];          //Perhaps Unused PTMF?
+    /* 0xDB4 */ ActProcFunc mpActionFunc;
+    /* 0xDC0 */ s32 mActionIdx;
     /* 0xDC4 */ u8 field_0xDC4;
     /* 0xDC8 */ s32 mSwSave;
     /* 0xDCC */ s32 mSwSave2;
     /* 0xDD0 */ s32 mArg0;
     /* 0xDD4 */ s32 mMapType;
-    /* 0xDD8 */ s16 field_0xDD8[4];
-    /* 0xDE0 */ u8 field_0xDE0[4];
-    /* 0xDE4 */ f32 field_0xDE4[2];
+    /* 0xDD8 */ s16 mEventIdxTbl[4];
+    /* 0xDE0 */ bool mEmValidTbl[4];
+    /* 0xDE4 */ f32 mEmSetOffsetY[2];
 };  // Size: 0xDEC
 
 #if VERSION == VERSION_DEMO
@@ -95,17 +94,17 @@ public:
     daObjTnTrap_HIO_c();
     virtual ~daObjTnTrap_HIO_c(){};
 public:
-    s8 mNo;
-    f32 field8;
-    f32 fieldC;
-    f32 field10;
-    f32 field14;
-    f32 field18;
-    f32 field1C;
-    u8 field20;
-    u8 field21;
-    u8 field22;
-    u8 field23;
+    s8    mNo;
+    f32   mTrapActivateDist;
+    f32   mTriYOffset;
+    f32   mTriZOffset;
+    f32   mMtxZOffset;
+    f32   mTrapOnWaitF3;
+    f32   mTrapOnWaitF2;
+    bool  mExtraEventCheck;
+    bool  mTogglePhantomGanonFlag;
+    bool  mUnusedBool;
+    bool  mUnusedBool2;
 };
 #endif
 
