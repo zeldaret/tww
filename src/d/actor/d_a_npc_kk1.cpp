@@ -2700,7 +2700,8 @@ u8 daNpc_Kk1_c::demo() {
             field_0x819 = 1;
             mBtpFrame = 0;
         }
-        dDemo_setDemoData(this,0x6A,mpMorf,&mArcName,0,0,0,0);
+        dDemo_setDemoData(this,0x6A,mpMorf,&mArcName);
+
 
     }
     return field_0x7C6;
