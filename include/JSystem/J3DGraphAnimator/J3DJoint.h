@@ -15,7 +15,7 @@ public:
     virtual void init(const Vec&, const Mtx&) {}
     virtual void recursiveCalc(J3DNode*) {}
     virtual void calcTransform(u16, const J3DTransformInfo&) {}
-    virtual void calc(u16) {}
+    virtual void calc(u16 jnt_no) {}
 
     void initAnm() {
         for (int i = 0; i < 4; i++) {
@@ -68,7 +68,7 @@ public:
     }
     virtual void recursiveCalc(J3DNode*);
     virtual void calcTransform(u16, const J3DTransformInfo&);
-    virtual void calc(u16);
+    virtual void calc(u16 jnt_no);
 
     Mtx& getBackupMtx() { return mBackupMtx; }
     Vec& getBackupS() { return mBackupS; }

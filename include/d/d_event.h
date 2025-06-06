@@ -131,13 +131,14 @@ public:
     void reset() { onEventFlag(8); }
 
     BOOL runCheck() { return mMode != dEvtMode_NONE_e; }
-    u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
+    u8 getMode() const { return mMode; }
 
-    void checkHind(u16) {}
-    BOOL chkPhoto() { return mbInPhoto; }
-    void getMode() const {}
-    void offHindFlag(u16) {}
     void onHindFlag(u16) {}
+    void offHindFlag(u16) {}
+    void checkHind(u16) {}
+
+    BOOL chkPhoto() { return mbInPhoto; }
+
     void setDebugStb(u8) {}
 
 public:
@@ -152,7 +153,7 @@ public:
     /* 0xD0 */ fpc_ProcID mPtItem;
     /* 0xD4 */ u8 mGetItemNo;
     /* 0xD5 */ u8 field_0xD5[0xD6 - 0xD5];
-    /* 0xD6 */ s16 mHindFlag;
+    /* 0xD6 */ u16 mHindFlag;
     /* 0xD8 */ s16 mEventId;
     /* 0xDA */ u8 mEventEndSound;
     /* 0xDB */ u8 field_0xdb;

@@ -159,17 +159,18 @@ BOOL daTag_Mk_c::execute() {
 
 /* 00000E9C-00000EA4       .text daTag_Mk_Draw__FP10daTag_Mk_c */
 static BOOL daTag_Mk_Draw(daTag_Mk_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000EA4-00000EC8       .text daTag_Mk_Execute__FP10daTag_Mk_c */
-static BOOL daTag_Mk_Execute(daTag_Mk_c*) {
-    /* Nonmatching */
+static BOOL daTag_Mk_Execute(daTag_Mk_c* i_this) {
+    ((daTag_Mk_c*)i_this)->execute();
+    return TRUE;
 }
 
 /* 00000EC8-00000ED0       .text daTag_Mk_IsDelete__FP10daTag_Mk_c */
 static BOOL daTag_Mk_IsDelete(daTag_Mk_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000ED0-00000F00       .text daTag_Mk_Delete__FP10daTag_Mk_c */
@@ -178,8 +179,8 @@ static BOOL daTag_Mk_Delete(daTag_Mk_c*) {
 }
 
 /* 00000F00-00000F20       .text daTag_Mk_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Mk_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Mk_Create(fopAc_ac_c* i_this) {
+    return ((daTag_Mk_c*)i_this)->create();
 }
 
 /* 00000F20-000011E4       .text create__10daTag_Mk_cFv */

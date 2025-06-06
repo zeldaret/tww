@@ -1,7 +1,7 @@
-/*
-// d_a_npc_kk1.cpp
-// NPC - Poor Mila (Muuru)
-*/
+/**
+ * d_a_npc_kk1.cpp
+ * NPC - Mila (poor)
+ */
 
 #include "d/actor/d_a_npc_kk1.h"
 #include "SSystem/SComponent/c_counter.h"

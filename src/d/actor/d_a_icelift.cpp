@@ -74,28 +74,28 @@ bool daIlift_c::_draw() {
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */
-static cPhs_State daIlift_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daIlift_Create(void* i_this) {
+    return ((daIlift_c*)i_this)->_create();
 }
 
 /* 00001018-0000103C       .text daIlift_Delete__FPv */
-static BOOL daIlift_Delete(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Delete(void* i_this) {
+    return ((daIlift_c*)i_this)->_delete();
 }
 
 /* 0000103C-00001060       .text daIlift_Draw__FPv */
-static BOOL daIlift_Draw(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Draw(void* i_this) {
+    return ((daIlift_c*)i_this)->_draw();
 }
 
 /* 00001060-00001084       .text daIlift_Execute__FPv */
-static BOOL daIlift_Execute(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Execute(void* i_this) {
+    return ((daIlift_c*)i_this)->_execute();
 }
 
 /* 00001084-0000108C       .text daIlift_IsDelete__FPv */
 static BOOL daIlift_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daIliftMethodTable = {

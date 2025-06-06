@@ -143,28 +143,28 @@ void daSalvage_c::debugDraw() {
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */
-static s32 daSalvageCreate(void*) {
-    /* Nonmatching */
+static s32 daSalvageCreate(void* i_this) {
+    return ((daSalvage_c*)i_this)->_create();
 }
 
 /* 00002430-00002454       .text daSalvageDelete__FPv */
-static BOOL daSalvageDelete(void*) {
-    /* Nonmatching */
+static BOOL daSalvageDelete(void* i_this) {
+    return ((daSalvage_c*)i_this)->_delete();
 }
 
 /* 00002454-00002478       .text daSalvageExecute__FPv */
-static BOOL daSalvageExecute(void*) {
-    /* Nonmatching */
+static BOOL daSalvageExecute(void* i_this) {
+    return ((daSalvage_c*)i_this)->_execute();
 }
 
 /* 00002478-0000249C       .text daSalvageDraw__FPv */
-static BOOL daSalvageDraw(void*) {
-    /* Nonmatching */
+static BOOL daSalvageDraw(void* i_this) {
+    return ((daSalvage_c*)i_this)->_draw();
 }
 
 /* 0000249C-000024A4       .text daSalvageIsDelete__FPv */
 static BOOL daSalvageIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSalvageMethodTable = {

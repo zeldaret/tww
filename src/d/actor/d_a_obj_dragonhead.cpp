@@ -56,7 +56,7 @@ namespace daObjDragonhead_prm {
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
-    JUT_ASSERT(0xA0, model_data != NULL);
+    JUT_ASSERT(VERSION_SELECT(158, 160, 160, 160), model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
@@ -117,7 +117,7 @@ cPhs_State daObjDragonhead_c::_create() {
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10500) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, VERSION_SELECT(0x300, 0x10500, 0x10500, 0x10500)) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -128,8 +128,14 @@ cPhs_State daObjDragonhead_c::_create() {
 }
 
 bool daObjDragonhead_c::_delete() {
-    if (heap != NULL && field_0x40c == 1)
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        field_0x40c == 1
+    ) {
         dComIfG_Bgsp()->Release(mpBgW);
+    }
 
     mDoAud_seDeleteObject(&mSphCenter);
     dComIfG_resDelete(&mPhs, "Qdghd");

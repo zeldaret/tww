@@ -3,6 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 
+class dCcD_SrcCyl;
+
 class daObj_Warpt_c : public fopAc_ac_c {
 public:
     enum Proc_e {
@@ -47,6 +49,9 @@ public:
     void createInit();
     cPhs_State _create();
     bool _delete();
+
+    static const dCcD_SrcCyl m_cyl_body_src;
+    static const dCcD_SrcCyl m_cyl_huta_src;
 
 public:
     /* Place member variables here */

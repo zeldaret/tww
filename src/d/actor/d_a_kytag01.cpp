@@ -49,11 +49,19 @@ void wave_make() {
         env_light.mWaveChan.mWaveReset = 0;
         env_light.mWaveChan.mWaveScale = 300.0f;
         env_light.mWaveChan.mWaveScaleRand = 0.001f;
+#if VERSION == VERSION_DEMO
+        env_light.mWaveChan.mWaveCounterSpeedScale = 1.3f;
+#else
         env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
+#endif
         env_light.mWaveChan.field_0x2f = 0;
         env_light.mWaveChan.mWaveScaleBottom = 6.0f;
         env_light.mWaveChan.mWaveCount = 300;
+#if VERSION == VERSION_DEMO
+        env_light.mWaveChan.mWaveSpeed = 60.0f;
+#else
         env_light.mWaveChan.mWaveSpeed = 30.0f;
+#endif
         env_light.mWaveChan.mWaveFlatInter = 0.0f;
         if (strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
             env_light.mWaveChan.mWaveSpawnDist = 25000.0f;

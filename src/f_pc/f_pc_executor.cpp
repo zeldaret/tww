@@ -39,7 +39,8 @@ s32 fpcEx_ToLineQ(base_process_class* i_proc) {
     base_process_class* pLayerPcNode = &pLayer->mpPcNode->base;
 
     if (pLayer->mLayerID == 0 || cTg_IsUse(&pLayerPcNode->mLnTg.base) == TRUE) {
-        s32 ret = fpcLnTg_ToQueue(&i_proc->mLnTg, i_proc->mPi.mInfoCurr.mListID);
+        u16 listID = i_proc->mPi.mInfoCurr.mListID;
+        s32 ret = fpcLnTg_ToQueue(&i_proc->mLnTg, listID);
         if (ret == 0) {
             fpcLyTg_QueueTo(&i_proc->mLyTg);
             return 0;

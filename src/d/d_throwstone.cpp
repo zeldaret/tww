@@ -60,7 +60,7 @@ static s32 daThrowstoneCreate(void* ptr) {
 }
 
 bool daThrowstone_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return TRUE;
 }
 
@@ -70,13 +70,15 @@ static BOOL daThrowstoneDelete(void* ptr) {
 }
 
 bool daThrowstone_c::_execute() {
-    dDemo_setDemoData(this, 0x6a, NULL, NULL, 0, NULL, 0, 0);
+    dDemo_setDemoData(
+        this,
+        dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
+        NULL, NULL
+    );
 
     mpModel->setBaseScale(scale);
-    f32 pos_x = current.pos.x;
-    mDoMtx_stack_c::transS(pos_x, current.pos.y, current.pos.z);
-    s16 rot_x = shape_angle.x;
-    mDoMtx_stack_c::ZXYrotM(rot_x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);

@@ -14,7 +14,7 @@ public:
         ACTION_ENDING   = -1,
     };
 
-    void getAttentionBasePos() {}
+    cXyz& getAttentionBasePos() { return mAttPos; }
     void setAction(ActionFunc func, void* arg) {
         if (mCurrActionFunc != func) {
             if (mCurrActionFunc) {

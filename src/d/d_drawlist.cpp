@@ -7,10 +7,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 #include "d/actor/d_a_sea.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFLight.h"
-#include "dolphin/gf/GFPixel.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
@@ -177,7 +174,7 @@ void dDlst_2DT2_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     f32 x0 = mX, x1 = x0 + mW;
@@ -561,7 +558,7 @@ void dDlst_2Dm_c::draw() {
 
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1953,8 +1950,13 @@ void mirrorPolygonCheck(cXyz* min_p, cXyz* max_p, f32 rad, dDlst_shadowPoly_c* p
     dComIfG_Bgsp()->ShdwDraw(&shdwDraw);
 }
 
+#if VERSION == VERSION_DEMO
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha)
+#else
 /* 80085808-800859DC       .text update__18dDlst_mirrorPacketFPA4_fUcf */
-void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
+void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad)
+#endif
+{
     mShadowPoly.mCount = 0;
     static cXyz l_p1Offset(0.0f, 0.0f, 0.0f);
     static cXyz l_p2Offset(0.0f, 0.0f, 10000.0f);
@@ -1962,7 +1964,11 @@ void dDlst_mirrorPacket::update(Mtx mtx, u8 alpha, f32 rad) {
     cXyz offs, offs2;
     mDoMtx_multVec(mtx, &l_p1Offset, &offs);
     mDoMtx_multVec(mtx, &l_p2Offset, &offs2);
+#if VERSION == VERSION_DEMO
+    mirrorPolygonCheck(&offs, &offs2, 60.0f, &mShadowPoly);
+#else
     mirrorPolygonCheck(&offs, &offs2, rad, &mShadowPoly);
+#endif
 
     Mtx viewMtx;
     mDoMtx_lookAt(viewMtx, &offs, &offs2, 0);

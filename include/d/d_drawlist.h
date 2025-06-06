@@ -413,7 +413,11 @@ public:
 class dDlst_mirrorPacket : public J3DPacket {
 public:
     void init(ResTIMG*);
+#if VERSION == VERSION_DEMO
+    void update(Mtx, u8);
+#else
     void update(Mtx, u8, f32);
+#endif
     virtual void draw();
 
     /* 0x0010 */ u8 field_0x0010[0x0040 - 0x0010];
@@ -576,9 +580,9 @@ public:
     void drawXluListInvisible() { drawXluDrawList(mpXluListInvisible); }
     void drawOpaList2D() { drawOpaDrawList(mpOpaList2D); }
 
-    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3, s16 i_angle,
+    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm, s16 i_angle,
                         f32 param_5, GXTexObj* i_tex) {
-        return mShadowControl.setSimple(i_pos, groundY, param_2, param_3, i_angle, param_5,
+        return mShadowControl.setSimple(i_pos, groundY, param_2, floor_nrm, i_angle, param_5,
                                         i_tex);
     }
     int setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,

@@ -69,7 +69,7 @@ static BOOL daObjHami4_Execute(void*) {
 
 /* 00000A58-00000A60       .text daObjHami4_IsDelete__FPv */
 static BOOL daObjHami4_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_Hami4MethodTable = {

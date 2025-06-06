@@ -7,6 +7,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-000001DC       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -65,7 +66,7 @@ static BOOL daSs_Execute(ss_class*) {
 
 /* 00002F1C-00002F24       .text daSs_IsDelete__FP8ss_class */
 static BOOL daSs_IsDelete(ss_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002F24-00002F58       .text daSs_Delete__FP8ss_class */
@@ -81,6 +82,34 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 /* 000030D4-0000339C       .text daSs_Create__FP10fopAc_ac_c */
 static cPhs_State daSs_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcSph tg_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ 0,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ 0,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 15.0f,
+        },
+    };
 }
 
 static actor_method_class l_daSs_Method = {

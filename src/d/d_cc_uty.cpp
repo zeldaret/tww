@@ -86,7 +86,7 @@ void def_se_set_p(fopAc_ac_c* actor, cXyz* sePos, cCcD_Obj* obj, unsigned long r
 
 /* 800AEBCC-800AEEF8       .text at_power_check__FP8CcAtInfo */
 fopAc_ac_c* at_power_check(CcAtInfo* atInfo) {
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (atInfo->mpObj == NULL) {
         return NULL;
     }
@@ -209,7 +209,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
         
         if (fopAcM_GetName(atInfo->mpActor) == PROC_HIMO2 && tgActor->stealItemLeft != 0) {
             tgActor->stealItemLeft--;
-            fopAcM_createStealItem(&tgActor->current.pos, tgActor->itemTableIdx, tgActor->current.roomNo, NULL, tgActor->stealItemBitNo);
+            fopAcM_createStealItem(&tgActor->current.pos, tgActor->itemTableIdx, fopAcM_GetRoomNo(tgActor), NULL, tgActor->stealItemBitNo);
             tgActor->stealItemBitNo++;
             atInfo->mDamage = 0;
         }

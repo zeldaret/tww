@@ -14,7 +14,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "dolphin/gf/GFPixel.h"
+#include "dolphin/gf/GF.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
@@ -1233,7 +1233,7 @@ ERROR_EXIT:
 }
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
-void mDoExt_McaMorf::calc(u16 param_0) {
+void mDoExt_McaMorf::calc(u16 jnt_no) {
     if (!mpModel) {
         return;
     }
@@ -1243,37 +1243,37 @@ void mDoExt_McaMorf::calc(u16 param_0) {
     if (mpTransformInfo == NULL) {
         infoPtr = &info1;
     } else {
-        infoPtr = &mpTransformInfo[param_0];
+        infoPtr = &mpTransformInfo[jnt_no];
     }
     Quaternion quat1;
     Quaternion* quatPtr;
     if (mpQuat == NULL) {
         quatPtr = &quat1;
     } else {
-        quatPtr = &mpQuat[param_0];
+        quatPtr = &mpQuat[jnt_no];
     }
     if (!mpAnm) {
-        *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+        *infoPtr = mpModel->getModelData()->getJointNodePointer(jnt_no)->getTransformInfo();
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else if (mCurMorf >= 1.0f || !mpTransformInfo || !mpQuat) {
-        mpAnm->getTransform(param_0, infoPtr);
+        mpAnm->getTransform(jnt_no, infoPtr);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else {
         f32 f31 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
         f32 f30 = 1.0f - f31;
         J3DTransformInfo info2;
         Quaternion quat2;
-        mpAnm->getTransform(param_0, &info2);
+        mpAnm->getTransform(jnt_no, &info2);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, &info2);
+            mpCallback1->execute(jnt_no, &info2);
         }
         JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
         JMAQuatLerp(quatPtr, &quat2, f31, quatPtr);
@@ -1285,10 +1285,10 @@ void mDoExt_McaMorf::calc(u16 param_0) {
         infoPtr->mScale.x = infoPtr->mScale.x * f30 + info2.mScale.x * f31;
         infoPtr->mScale.y = infoPtr->mScale.y * f30 + info2.mScale.y * f31;
         infoPtr->mScale.z = infoPtr->mScale.z * f30 + info2.mScale.z * f31;
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     }
     if (mpCallback2) {
-        mpCallback2->execute(param_0);
+        mpCallback2->execute(jnt_no);
     }
 }
 
@@ -1521,7 +1521,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 }
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
-void mDoExt_McaMorf2::calc(u16 param_0) {
+void mDoExt_McaMorf2::calc(u16 jnt_no) {
     /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = mAnmRate) */
     if (!mpModel) {
         return;
@@ -1534,7 +1534,7 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     if (mpTransformInfo == NULL) {
         infoPtr = &sp88;
     } else {
-        infoPtr = &mpTransformInfo[param_0];
+        infoPtr = &mpTransformInfo[jnt_no];
     }
     Quaternion sp48[2];
     Quaternion sp28[2];
@@ -1544,29 +1544,29 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     if (mpQuat == NULL) {
         quatPtr = &sp18;
     } else {
-        quatPtr = &mpQuat[param_0];
+        quatPtr = &mpQuat[jnt_no];
     }
     Mtx mtx;
     f32 f31;
     f32 f30;
     if (!mpAnm1) {
-        *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+        *infoPtr = mpModel->getModelData()->getJointNodePointer(jnt_no)->getTransformInfo();
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else if (mCurMorf >= 1.0f || !mpTransformInfo || !mpQuat) {
-        mpAnm1->getTransform(param_0, &spD8[0]);
+        mpAnm1->getTransform(jnt_no, &spD8[0]);
         if (!mpAnm2) {
             if (mpCallback1) {
-                mpCallback1->execute(param_0, &spD8[0]);
+                mpCallback1->execute(jnt_no, &spD8[0]);
             }
             JMAEulerToQuat(spD8[0].mRotation.x, spD8[0].mRotation.y, spD8[0].mRotation.z, quatPtr);
-            calcTransform(param_0, spD8[0]);
+            calcTransform(jnt_no, spD8[0]);
             *infoPtr = spD8[0];
         } else {
-            mpAnm2->getTransform(param_0, &spD8[1]);
+            mpAnm2->getTransform(jnt_no, &spD8[1]);
             f31 = 1.0f - mAnmRate;
             f30 = mAnmRate;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
@@ -1580,14 +1580,14 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             }
             JMAQuatLerp(&sp48[0], &sp48[1], f30 / (f31 + f30), quatPtr);
             mDoMtx_quat(mtx, quatPtr);
-            mDoExt_setJ3DData(mtx, infoPtr, param_0);
+            mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
         }
     } else if (!mpAnm2) {
         f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
         f31 = 1.0f - f30;
-        mpAnm1->getTransform(param_0, &sp68);
+        mpAnm1->getTransform(jnt_no, &sp68);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, &sp68);
+            mpCallback1->execute(jnt_no, &sp68);
         }
         JMAEulerToQuat(sp68.mRotation.x, sp68.mRotation.y, sp68.mRotation.z, &sp08);
         JMAQuatLerp(quatPtr, &sp08, f30, quatPtr);
@@ -1598,10 +1598,10 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         infoPtr->mScale.x = infoPtr->mScale.x * f31 + sp68.mScale.x * f30;
         infoPtr->mScale.y = infoPtr->mScale.y * f31 + sp68.mScale.y * f30;
         infoPtr->mScale.z = infoPtr->mScale.z * f31 + sp68.mScale.z * f30;
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     } else {
-        mpAnm1->getTransform(param_0, &spD8[0]);
-        mpAnm2->getTransform(param_0, &spD8[1]);
+        mpAnm1->getTransform(jnt_no, &spD8[0]);
+        mpAnm2->getTransform(jnt_no, &spD8[1]);
         f31 = 1.0f - mAnmRate;
         f30 = mAnmRate;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
@@ -1626,10 +1626,10 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         infoPtr->mScale.y = infoPtr->mScale.y * f30 + sp68.mScale.y * f31;
         infoPtr->mScale.z = infoPtr->mScale.z * f30 + sp68.mScale.z * f31;
         mDoMtx_quat(mtx, quatPtr);
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     }
     if (mpCallback2) {
-        mpCallback2->execute(param_0);
+        mpCallback2->execute(jnt_no);
     }
 }
 
@@ -1856,7 +1856,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         GXCallDisplayList(l_matDL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 80014798-800148B4       .text draw__19mDoExt_3DlineMat0_cFv */
@@ -2119,7 +2119,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         GXCallDisplayList(l_mat1DL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */

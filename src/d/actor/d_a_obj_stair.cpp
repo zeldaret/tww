@@ -7,6 +7,38 @@
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCps cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsPlayer_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
+    },
+};
+
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */
 daobj_stairHIO_c::daobj_stairHIO_c() {
@@ -44,8 +76,8 @@ BOOL daObj_Stair_c::Delete() {
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
-static s32 daObj_StairCreate(void*) {
-    /* Nonmatching */
+static s32 daObj_StairCreate(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->_create();
 }
 
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
@@ -59,8 +91,8 @@ static BOOL daObj_StairDelete(void*) {
 }
 
 /* 00000AFC-00000B20       .text daObj_StairExecute__FPv */
-static BOOL daObj_StairExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_StairExecute(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->_execute();
 }
 
 /* 00000B20-00001364       .text _execute__13daObj_Stair_cFv */
@@ -75,7 +107,7 @@ static BOOL daObj_StairDraw(void*) {
 
 /* 0000139C-000013A4       .text daObj_StairIsDelete__FPv */
 static BOOL daObj_StairIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_StairMethodTable = {

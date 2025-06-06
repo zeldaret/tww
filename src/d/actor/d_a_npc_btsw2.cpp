@@ -108,11 +108,10 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             u16 jointNo = joint->getJntNo();
             mDoMtx_stack_c::copy(model->getAnmMtx(jointNo));
             if (jointNo == i_this->m_jnt.getHeadJntNum()) {
-                mDoMtx_stack_c::multVec(&a_att_pos_offst, &i_this->mAttPos);
+                mDoMtx_stack_c::multVec(&a_att_pos_offst, &i_this->getAttentionBasePos());
                 Mtx sp14;
                 cMtx_copy(mDoMtx_stack_c::get(), sp14);
-                cXyz sp8;
-                mDoMtx_multVecZero(sp14, &sp8);
+                cXyz sp8(sp14[0][3], sp14[1][3], sp14[2][3]);
                 sp14[0][3] = sp14[1][3] = sp14[2][3] = 0.0f;
                 mDoMtx_stack_c::transS(sp8);
                 mDoMtx_stack_c::YrotM(i_this->current.angle.y + i_this->m_jnt.getHead_y());
@@ -136,7 +135,7 @@ BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
     JUT_ASSERT(282, m_btp != NULL);
-    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
         return FALSE;
     }
     mBtpFrame = 0;
@@ -382,7 +381,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     modelData->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea((u32)this);
     mAcchCir.SetWall(30.0f, 0.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     
     return TRUE;
 }
@@ -400,7 +399,7 @@ BOOL daNpc_Btsw2_c::CreateInit() {
     setCollision(60.0f, 150.0f);
     m724 = 0;
     mPathNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x10, 8);
-    mpPath = dPath_GetRoomPath(mPathNo, current.roomNo);
+    mpPath = dPath_GetRoomPath(mPathNo, fopAcM_GetRoomNo(this));
     mFinalPathPntIdx = mpPath->m_num - 1;
     m73E = 1.0f + cM_rndF(3.0f);
     m742 = 90.0f + cM_rndF(300.0f);
@@ -555,7 +554,12 @@ cPhs_State daNpc_Btsw2_c::_create() {
 /* 00001C34-00001C8C       .text _delete__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    if (heap && mpMorf) {
+#if VERSION == VERSION_DEMO
+    if (mpMorf)
+#else
+    if (heap && mpMorf)
+#endif
+    {
         mpMorf->stopZelAnime();
     }
     return TRUE;

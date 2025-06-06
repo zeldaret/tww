@@ -14,6 +14,7 @@
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_itembase.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
@@ -418,6 +419,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     }
 }
 
+#if VERSION > VERSION_DEMO
 /* 8012E418-8012E6B4       .text setGetDemo__9daPy_lk_cFv */
 BOOL daPy_lk_c::setGetDemo() {
     int staffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
@@ -488,6 +490,7 @@ BOOL daPy_lk_c::setGetDemo() {
     m34CE = 0;
     return FALSE;
 }
+#endif
 
 /* 8012E6B4-8012E8B0       .text dProcGetItem_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcGetItem_init() {
@@ -2000,11 +2003,9 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 daPy_HIO_bottle_c0::m.field_0xA,
                 daPy_HIO_bottle_c0::m.field_0x54
             );
-        } else {
-            if (frameCtrl.checkPass(32.0f)) {
-                m355E = 0;
-                mRightHandIdx = 8;
-            }
+        } else if (frameCtrl.checkPass(32.0f)) {
+            m355E = 0;
+            mRightHandIdx = 8;
         }
     } else if (frameCtrl.getRate() < 0.01f) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -2019,7 +2020,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAcM_fastCreate(PROC_NPC_FA1, 3, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }

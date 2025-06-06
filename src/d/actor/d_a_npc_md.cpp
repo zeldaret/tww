@@ -886,7 +886,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     mAcchCir[0].SetWall(20.0f, 20.0f);
     mAcchCir[1].SetWall(60.0f, 20.0f);
-    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, ARRAY_SIZE(mAcchCir), mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
     mAcch.OnLineCheck();
@@ -2411,7 +2411,7 @@ BOOL daNpc_Md_c::initTexPatternAnm(u8 btpAnmTblIdx, bool param_2) {
     bool ret = false;
     J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpAnmTblIdx].m00);
     JUT_ASSERT(7502, eyeTexPtrn != NULL);
-    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, param_2, 0)) {
+    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, param_2, FALSE)) {
         m3112 = eyeTexPtrn->getFrameMax();
         m3133 = 0;
         m3136 = btpAnmTbl[btpAnmTblIdx].m20;
@@ -3211,7 +3211,11 @@ BOOL daNpc_Md_c::draw() {
         f32 temp = mCps.GetAtVecP()->abs();
         mDoMtx_stack_c::scaleM(0.1f, 0.1f, temp * (1.0f/9600.0f));
         mDoMtx_stack_c::revConcat(mtx);
+#if VERSION == VERSION_DEMO
+        m0B70.update(mDoMtx_stack_c::get(), 0xFF);
+#else
         m0B70.update(mDoMtx_stack_c::get(), 0xFF, 90.0f);
+#endif
         dComIfGd_getXluList()->entryImm(&m0B70, 0x1F);
     }
     

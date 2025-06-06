@@ -459,7 +459,9 @@ STATIC_ASSERT(sizeof(dSv_player_info_c) == 0x5C);
 class dSv_player_config_c {
 public:
     void init();
+#if VERSION > VERSION_DEMO
     s32 checkVibration();
+#endif
 
     u8 getRuby() { return mRuby; }
     void setRuby(u8 ruby) { mRuby = ruby; }

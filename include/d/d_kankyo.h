@@ -277,10 +277,12 @@ public:
     /* 0xB88 */ GXColorS10 mBgAddColDif;
     /* 0xB90 */ GXColorS10 mBg1AddColAmb;
     /* 0xB98 */ GXColorS10 mBg1AddColDif;
+#if VERSION > VERSION_DEMO
     /* 0xBA0 */ GXColorS10 mBg2AddColAmb;
     /* 0xBA8 */ GXColorS10 mBg2AddColDif;
     /* 0xBB0 */ GXColorS10 mBg3AddColAmb;
     /* 0xBB8 */ GXColorS10 mBg3AddColDif;
+#endif
     /* 0xBC0 */ GXColorS10 mAddColFog;
     /* 0xBC8 */ GXColorS10 mVrboxAddColSky0;
     /* 0xBD0 */ GXColorS10 mVrboxAddColKasumi;
@@ -356,7 +358,9 @@ public:
 
 extern dScnKy_env_light_c g_env_light;
 
+#if VERSION > VERSION_DEMO
 STATIC_ASSERT(sizeof(dScnKy_env_light_c) == 0xC9C);
+#endif
 
 inline dScnKy_env_light_c& dKy_getEnvlight() {
     return g_env_light;
@@ -404,6 +408,7 @@ void dKy_vrbox_addcol_kasumi_set(s16, s16, s16, f32);
 void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 void dKy_addcol_fog_set(s16, s16, s16, f32);
 void dKy_plight_set(LIGHT_INFLUENCE*);
+f32 dKy_yuragi_ratio_set(f32 param_0);
 void dKy_plight_priority_set(LIGHT_INFLUENCE*);
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0);
 void dKy_plight_cut(LIGHT_INFLUENCE* param_0);

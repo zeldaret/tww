@@ -6,6 +6,7 @@
 #include "d/actor/d_a_kantera.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 000000EC-000001E8       .text kantera_nodeCallBack__FP7J3DNodei */
 static BOOL kantera_nodeCallBack(J3DNode*, int) {
@@ -44,7 +45,7 @@ static BOOL daKantera_Execute(kantera_class*) {
 
 /* 00001ABC-00001AC4       .text daKantera_IsDelete__FP13kantera_class */
 static BOOL daKantera_IsDelete(kantera_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001AC4-00001B30       .text daKantera_Delete__FP13kantera_class */
@@ -60,6 +61,34 @@ static BOOL daKantera_CreateHeap(fopAc_ac_c*) {
 /* 00001FA4-00002304       .text daKantera_Create__FP10fopAc_ac_c */
 static cPhs_State daKantera_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcSph at_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_FIRE,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK8,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {
+            /* Center */ 0.0f, 0.0f, 0.0f,
+            /* Radius */ 40.0f,
+        },
+    };
 }
 
 static actor_method_class l_daKantera_Method = {

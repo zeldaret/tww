@@ -522,6 +522,10 @@ public:
 
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
+    void setPictureStatusGetOn(u8 to_set) { 
+        mPictureStatus = 3; 
+        field_0x495f = to_set; 
+    }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }
     void setScopeMesgStatus(u8 status) { mScopeMesgStatus = status; }
@@ -550,12 +554,14 @@ public:
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
     inline void offHeapLockFlag() { mHeapLockFlag = 0; }
 
-    // These inlines aren't present in WW JP debug maps, but are present in TP debug.
+#if VERSION > VERSION_DEMO
+    // These inlines aren't present in WW demo debug maps, but are present in TP debug.
     inline u8 getNowVibration() { return mNowVibration; }
     inline void setNowVibration(u8 vibration) { mNowVibration = vibration; }
+#endif
 
 #if VERSION > VERSION_JPN
-    // Inline name is fake (not present in JP debug maps), but was guessed based on the similar
+    // Inline name is fake (not present in demo debug maps), but was guessed based on the similar
     // dSv_player_config_c::getPalLanguage() const inline in TP debug.
     inline u8 getPalLanguage() { return mPalLanguage; }
     inline void setPalLanguage(u8 lang) { mPalLanguage = lang; }
@@ -810,7 +816,9 @@ public:
     /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 field_0x4961;
     /* 0x4962 */ u8 mHeapLockFlag;
+#if VERSION > VERSION_DEMO
     /* 0x4963 */ u8 mNowVibration;
+#endif
 #if VERSION > VERSION_JPN
     /* 0x4964 */ u8 mPalLanguage;
 #endif
@@ -1446,10 +1454,12 @@ inline void dComIfGs_setOptVibration(u8 vib) {
     g_dComIfG_gameInfo.save.getPlayer().getConfig().setVibration(vib);
 }
 
+#if VERSION > VERSION_DEMO
 /* Not present in debug maps, imitates TP version */
 inline u8 dComIfGs_checkOptVibration() {
     return g_dComIfG_gameInfo.save.getPlayer().getConfig().checkVibration();
 }
+#endif
 
 inline BOOL dComIfGs_isTbox(int i_no) {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isTbox(i_no);
@@ -1602,6 +1612,14 @@ inline void dComIfGs_onItem(int bitNo, int roomNo) {
 
 inline BOOL dComIfGs_isItem(int bitNo, int roomNo) {
     return g_dComIfG_gameInfo.save.isItem(bitNo, roomNo);
+}
+
+inline void dComIfGs_onVisitedRoom(int i_no) {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onVisitedRoom(i_no);
+}
+
+inline BOOL dComIfGs_isVisitedRoom(int i_no) {
+    return g_dComIfG_gameInfo.save.getMemory().getBit().isVisitedRoom(i_no);
 }
 
 inline void dComIfGs_clearRoomSwitch(int i_zoneNo) {
@@ -2754,6 +2772,10 @@ inline void dComIfGp_setPictureStatusOn() {
     g_dComIfG_gameInfo.play.setPictureStatusOn();
 }
 
+inline void dComIfGp_setPictureStatusGetOn(u8 to_set){
+    g_dComIfG_gameInfo.play.setPictureStatusGetOn(to_set);
+}
+
 inline s16 dComIfGp_getMiniGameRupee() {
     return g_dComIfG_gameInfo.play.getMiniGameRupee();
 }
@@ -2797,6 +2819,7 @@ inline void dComIfGp_offHeapLockFlag() {
     g_dComIfG_gameInfo.play.offHeapLockFlag();
 }
 
+#if VERSION > VERSION_DEMO
 // Inline name from TP debug.
 inline u8 dComIfGp_getNowVibration() {
     return g_dComIfG_gameInfo.play.getNowVibration();
@@ -2806,6 +2829,7 @@ inline u8 dComIfGp_getNowVibration() {
 inline void dComIfGp_setNowVibration(u8 vibration) {
     g_dComIfG_gameInfo.play.setNowVibration(vibration);
 }
+#endif
 
 #if VERSION > VERSION_JPN
 // Inline name is official because while it's not present in the JPN debug maps, it is present in
@@ -3345,10 +3369,10 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
                        s16 rotY = 0, f32 param_12 = 1.0f,
                        GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3,
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm,
                                     s16 i_angle = 0, f32 param_5 = 1.0f,
                                     GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, param_3, i_angle,
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, floor_nrm, i_angle,
                                                        param_5, i_tex);
 }
 
@@ -3588,6 +3612,14 @@ inline int dComIfG_syncAllObjectRes() {
 inline int dComIfG_syncStageRes(const char* name) {
     return g_dComIfG_gameInfo.mResControl.syncStageRes(name);
 }
+
+#if VERSION == VERSION_DEMO
+// A number of actors used dComIfG_deleteObjectRes in actor delete functions, but these were changed
+// to dComIfG_resDelete for the retail version.
+#define dComIfG_resDeleteDemo(i_phase, i_resName) dComIfG_deleteObjectRes(i_resName)
+#else
+#define dComIfG_resDeleteDemo(i_phase, i_resName) dComIfG_resDelete(i_phase, i_resName);
+#endif
 
 inline int dComIfG_deleteObjectRes(const char* res) {
     return g_dComIfG_gameInfo.mResControl.deleteObjectRes(res);
@@ -3938,6 +3970,14 @@ inline void dComIfGp_map_clrAGBMapSendStopFlg() {
 inline dCcS* dComIfG_Ccsp() {
     return &g_dComIfG_gameInfo.play.mCcS;
 }
+
+// This should be dComIfG_Ccsp()->SetMass everywhere, but for some reason that combination of two
+// inlines consistently breaks the match on retail. But for the demo, using the proper inlines is requires to match.
+#if VERSION == VERSION_DEMO
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->SetMass
+#else
+#define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->mMass_Mng.Set
+#endif
 
 inline void dComIfG_setTimerMode(int ms) { g_dComIfG_gameInfo.play.setTimerMode(ms); }
 inline int dComIfG_getTimerMode() { return g_dComIfG_gameInfo.play.getTimerMode(); }

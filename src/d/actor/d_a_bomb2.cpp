@@ -1,6 +1,6 @@
 /**
- * d_a_bomb.cpp
- * Bomb Flower Bomb
+ * d_a_bomb2.cpp
+ * Object - Bomb Flower - Bomb
  */
 
 #include "d/actor/d_a_bomb2.h"
@@ -287,7 +287,7 @@ namespace daBomb2 {
 
     void Act_c::crr_init() {
         mCir.SetWall(30.0f, 30.0f);
-        mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
@@ -477,9 +477,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
         }
     }
 

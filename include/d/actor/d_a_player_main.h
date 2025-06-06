@@ -209,7 +209,7 @@ public:
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
     
-    static int getTimer() { return m_timer; }
+    static s16 getTimer() { return m_timer; }
     static void setTimer(s16 timer) { m_timer = timer; }
     static void decTimer() { m_timer--; }
     
@@ -1237,7 +1237,9 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
     void setGetItemSound(u16, int);
+#if VERSION > VERSION_DEMO
     BOOL setGetDemo();
+#endif
     BOOL dProcGetItem_init();
     BOOL dProcGetItem();
     BOOL dProcUnequip_init();
@@ -1677,8 +1679,12 @@ public:
     BOOL procFoodSet();
     void setSwordModel(BOOL);
     void setLightSaver();
+#if VERSION == VERSION_DEMO
+    BOOL checkLastDemoSwordNoDraw(int);
+#else
     BOOL checkDemoShieldNoDraw();
     BOOL checkDemoSwordNoDraw(BOOL);
+#endif
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -1731,32 +1737,32 @@ public:
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
     
-    bool checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
-    bool checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
+    BOOL checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
+    BOOL checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
     
-    bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    bool checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
-    bool checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
-    bool checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
-    bool checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
-    bool checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
-    bool checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
-    bool checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
-    bool checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
-    bool checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
-    bool checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
-    bool checkGuardSlip() const {
+    BOOL checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
+    BOOL checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
+    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
+    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
+    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
+    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
+    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
+    BOOL checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
+    BOOL checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
+    BOOL checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
+    BOOL checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
+    BOOL checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
-    bool checkUpperGuardAnime() const {
+    BOOL checkUpperGuardAnime() const {
         return checkUpperAnime(LKANM_BCK_ATNG) ||
             checkUpperAnime(LKANM_BCK_ATNGHAM);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
-    bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    BOOL checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
     s16 checkTinkleHover() const { return mTinkleHoverTimer; }
     void setHoverBoots(s16 time) {
         onNoResetFlg0(daPyFlg0_HOVER_BOOTS);
@@ -1764,12 +1770,12 @@ public:
     }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
-    bool checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
+    BOOL checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
     void onShipDrop(s16 param_1) {
         onNoResetFlg0(daPyFlg0_SHIP_DROP);
         m3550 = param_1;
     }
-    bool checkCarryActionNow() const {
+    BOOL checkCarryActionNow() const {
         return mCurProc == daPyProc_GRAB_PUT_e ||
             mCurProc == daPyProc_GRAB_UP_e ||
             mCurProc == daPyProc_GRAB_THROW_e;
@@ -1792,7 +1798,7 @@ public:
             mActivePlayerBombs--;
         }
     }
-    bool checkSwordEquip() const {
+    BOOL checkSwordEquip() const {
         return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
@@ -1829,7 +1835,7 @@ public:
     BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
     
-    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
+    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType()  != 0; }
     void checkSpecialDemoMode() const {}
     
     void checkAttentionLock() {}
@@ -2204,7 +2210,9 @@ public:
     /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
     /* 0x3634 */ fpc_ProcID mWhirlId;
+#if VERSION > VERSION_DEMO
     /* 0x3638 */ fpc_ProcID mMsgId;
+#endif
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;

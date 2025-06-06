@@ -895,7 +895,7 @@ public:
     static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
-    static s8 getStayNo() { return mStayNo; }
+    static int getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
     static void setProcID(fpc_ProcID id) { mProcID = id; }
@@ -935,7 +935,7 @@ public:
     void set(const char*, s8, s16, s8);
     const char* getName() const { return mName; }
     s16 getPoint() const { return mPoint; }
-    int getRoomNo() const { return mRoomNo; }
+    s8 getRoomNo() const { return mRoomNo; }
     s8 getLayer() const { return mLayer; }
     void setLayer(s8 layer) { mLayer = layer; }
 

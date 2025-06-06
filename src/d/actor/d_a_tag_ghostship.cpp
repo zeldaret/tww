@@ -52,7 +52,7 @@ void daTag_Gship_c::modeClearEvent() {
 
         if(dComIfGp_evmng_endCheck("PSHIP_CLEAR")) {
             mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
-            s8 room = dComIfGs_getEventReg(0xC3FF);
+            u8 room = dComIfGs_getEventReg(0xC3FF);
             s8 spawn = dComIfGs_getEventReg(0x85FF);
             dKy_set_nexttime(120.0f);
             dComIfGp_setNextStage("sea", spawn, room, 0xFF, 0.0f, 5);
