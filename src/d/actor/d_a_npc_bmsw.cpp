@@ -888,7 +888,7 @@ BOOL daNpc_Bmsw_c::shiwake_game_action(void*) {
             return FALSE;
         }
         // Possibly wrong inline for dComIfG_TimerStart here.
-        dComIfG_TimerStart(l_HIO.field_0x32, 6);
+        dComIfG_TimerStart(6, l_HIO.field_0x32);
 
         field_0x963 = 1;
         field_0x930[0]->init();
