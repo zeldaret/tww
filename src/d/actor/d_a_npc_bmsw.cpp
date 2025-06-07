@@ -55,7 +55,6 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 000000EC-000001E4       .text __ct__16daNpc_Bmsw_HIO_cFv */
 daNpc_Bmsw_HIO_c::daNpc_Bmsw_HIO_c() {
-    /* Nonmatching */
     mNpc.m04 = -20.0f;
     mNpc.mMaxHeadX = 0x1FFE;
     mNpc.mMaxHeadY = 3000;
@@ -140,7 +139,6 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000438-00000550       .text nodeCallBackArm__FP7J3DNodei */
 static BOOL nodeCallBackArm(J3DNode* node, int calcTiming) {
-    /* Nonmatching */
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
@@ -831,7 +829,6 @@ void daNpc_Bmsw_c::setGameGetRupee(short rupees) {
 
 /* 00001DA4-00001E88       .text TimerCountDown__12daNpc_Bmsw_cFv */
 void daNpc_Bmsw_c::TimerCountDown() {
-    /* Nonmatching */
     if (field_0x9B4 > dComIfG_getTimerRestTimeMs()) {
         if (field_0x9B4 <= 10000) {
             mDoAud_seStart(JA_SE_MINIGAME_TIMER_30);
@@ -1146,7 +1143,6 @@ cPhs_State daNpc_Bmsw_c::_create() {
 
 /* 00003524-00003CB0       .text CreateHeap__12daNpc_Bmsw_cFv */
 BOOL daNpc_Bmsw_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_BM);
     JUT_ASSERT(1499, modelData != NULL);
 
@@ -1386,7 +1382,6 @@ u8 SwMail_c::getNextNo(unsigned char previous_no) {
 
 /* 00003FE8-00004074       .text init__8SwMail_cFv */
 void SwMail_c::init() {
-    /* Nonmatching */
     field_0x54 = 0;
     field_0x56 = 0;
     field_0x30 = cXyz::Zero;
@@ -1426,7 +1421,6 @@ void SwMail_c::set_mtx_throw() {
 
 /* 00004184-0000425C       .text DummyInit__8SwMail_cFv */
 void SwMail_c::DummyInit() {
-    /* Nonmatching */
     cLib_targetAngleY(field_0x58, field_0x5C);
     field_0x48.set(0, -0x4000, 0);
     field_0x24.set(field_0x5C->x - 150.0f, field_0x5C->y - 200.0f, field_0x5C->z);
@@ -1445,7 +1439,6 @@ void SwMail_c::Dummy() {
 
 /* 0000427C-0000438C       .text AppearInit__8SwMail_cFv */
 void SwMail_c::AppearInit() {
-    /* Nonmatching */
     cLib_targetAngleY(field_0x58, field_0x5C);
     field_0x48.set(0, -0x4000, 0);
     field_0x24.set(field_0x5C->x, field_0x5C->y - 200.0f, field_0x5C->z);
@@ -1461,7 +1454,6 @@ void SwMail_c::AppearInit() {
 
 /* 0000438C-000044E8       .text Appear__8SwMail_cFv */
 void SwMail_c::Appear() {
-    /* Nonmatching */
     s16 new_y = cLib_targetAngleY(field_0x58, field_0x5C);
 
     cXyz diff = *field_0x58 - *field_0x5C;
@@ -1486,7 +1478,6 @@ void SwMail_c::Appear() {
 
 /* 000044E8-0000450C       .text WaitInit__8SwMail_cFv */
 void SwMail_c::WaitInit() {
-    /* Nonmatching */
     SetProc(&SwMail_c::Wait);
 }
 
@@ -1510,7 +1501,6 @@ void SwMail_c::Wait() {
 
 /* 00004628-00004670       .text ThrowInit__8SwMail_cF4cXyzUc */
 void SwMail_c::ThrowInit(cXyz param_1, unsigned char param_2) {
-    /* Nonmatching */
     field_0x30 = param_1;
     field_0x56 = 0;
     field_0x55 = param_2;
@@ -1569,7 +1559,6 @@ void SwMail_c::Throw() {
 
 /* 00004954-000049A0       .text EndInit__8SwMail_cFv */
 void SwMail_c::EndInit() {
-    /* Nonmatching */
     field_0x30 = cXyz::Zero;
     field_0x30.z = -10.0f;
     SetProc(&SwMail_c::End);
@@ -1577,7 +1566,6 @@ void SwMail_c::EndInit() {
 
 /* 000049A0-00004B34       .text End__8SwMail_cFv */
 void SwMail_c::End() {
-    /* Nonmatching */
     if (field_0x55 == field_0x54) {
         cLib_addCalcAngleS2(&field_0x48.y, 0, 4, 0x1000);
         cXyz target = cXyz::Zero;
