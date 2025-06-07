@@ -162,61 +162,62 @@ static BOOL nodeCallBackArm(J3DNode* node, int calcTiming) {
 }
 
 /* 00000550-000006F4       .text daNpc_Bmsw_getGameEndMsg__Fs */
-fpc_ProcID daNpc_Bmsw_getGameEndMsg(short rupees) {
-    /* Nonmatching */
+u32 daNpc_Bmsw_getGameEndMsg(short rupees) {
     u8 reg_val = dComIfGs_getEventReg(0xC203);
+    u32 msgNo;
     switch (reg_val) {
         case 0:
             if (rupees == 0) {
-                return 0x1A3A;
+                msgNo = 0x1A3A;
             } else if (rupees == 1) {
-                return 0x1A3B;
+                msgNo = 0x1A3B;
             } else if (rupees < 10) {
-                return 0x1A37;
+                msgNo = 0x1A3C;
             } else {
-                return 0x1A3C;
+                msgNo = 0x1A37;
             }
+            break;
         case 1:
             if (rupees == 0) {
-                return 0x1A4F;
+                msgNo = 0x1A4F;
             } else if (rupees == 1) {
-                return 0x1A50;
+                msgNo = 0x1A50;
             } else if (rupees < 20) {
-                return 0x1A52;
+                msgNo = 0x1A52;
             } else {
-                return 0x1A4C;
+                msgNo = 0x1A4C;
             }
+            break;
         case 2:
             if (rupees == 0) {
-                return 0x1A5C;
+                msgNo = 0x1A5C;
             } else if (rupees == 1) {
-                return 0x1A5D;
+                msgNo = 0x1A5D;
             } else if (rupees < 25) {
-                return 0x1A60;
+                msgNo = 0x1A60;
             } else {
-                return 0x1A57;
+                msgNo = 0x1A57;
             }
             break;
         case 3:
         default:
+            if (dComIfGs_isEventBit(dSv_evtBit_c::UNK_2701)) {
+                if (rupees == 0) {
+                    msgNo = 0x1A69;
+                } else if (rupees == 1) {
+                    msgNo = 0x1A6A;
+                } else if (rupees <= dComIfGs_getEventReg(0x8AFF)) {
+                    msgNo = 0x1A6B;
+                } else {
+                    dComIfGs_setEventReg(0x8AFF, rupees);
+                    msgNo = 0x1A6D;
+                }
+            } else {
+                msgNo = 0x1A62;
+            }
             break;
     }
-
-    if (dComIfGs_isEventBit(dSv_evtBit_c::UNK_2701)) {
-        if (rupees == 0) {
-            return 0x1A69;
-        } else if (rupees == 1) {
-            return 0x1A6A;
-        } else {
-            if (dComIfGs_getEventReg(0x8AFF) >= rupees) {
-                return 0x1A6B;
-            } else {
-                dComIfGs_setEventReg(0x8AFF, rupees);
-                return 0x1A6D;
-            }
-        }
-    }
-    return 0x1A62;
+    return msgNo;
 }
 
 /* 000006F4-00000808       .text initTexPatternAnm__12daNpc_Bmsw_cFb */
@@ -1509,7 +1510,6 @@ void SwMail_c::ThrowInit(cXyz param_1, unsigned char param_2) {
 
 /* 00004670-00004954       .text Throw__8SwMail_cFv */
 void SwMail_c::Throw() {
-    /* Nonmatching */
     if (field_0x56 == 0) {
         s16 x_angle = cLib_targetAngleX(&field_0x30, field_0x5C);
         s16 y_angle = cLib_targetAngleY(field_0x58, field_0x5C);
@@ -1531,7 +1531,8 @@ void SwMail_c::Throw() {
     } else {
         s16 x_angle = cLib_targetAngleX(&field_0x30, field_0x5C);
         field_0x48.x = -x_angle;
-        field_0x48.y = field_0x48.y + (field_0x54 * 0x80) + 0x1000; 
+        s16 new_y = (field_0x54 * 0x80) + 0x1000;
+        field_0x48.y += new_y;
         field_0x48.z = 0;
 
         f32 pos_step = cLib_addCalcPos(&field_0x24, field_0x30, 0.5f, l_HIO.field_0x44, 1.0f);
