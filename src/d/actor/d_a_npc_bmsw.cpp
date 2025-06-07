@@ -1279,8 +1279,7 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
 
 /* 00003CB0-00003DBC       .text MailCreateInit__8SwMail_cFP4cXyzP4cXyz */
 BOOL SwMail_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
-    /* Nonmatching */    
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_QMAIL);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Bmsw", BMSW_BDL_QMAIL));
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
     if (mpModel == NULL) {
         return FALSE;
