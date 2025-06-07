@@ -581,17 +581,15 @@ BOOL daNpc_Bmsw_c::CreateInit() {
     mpMorf->calc();
     mpMorfHand->calc();
 
-    dKy_tevstr_init(&field_0x6E0, fopAcM_GetHomeRoomNo(this), 0xFF);
+    dKy_tevstr_init(&field_0x6E0, home.roomNo, 0xFF);
     if (dComIfGs_isEventBit(dSv_evtBit_c::UNK_2701)) {
-        fpc_ProcID parent_id = fopAcM_GetID(this);
-
         field_0x9E0 = fopAcM_createChild(
             "Btsw",
-            parent_id,
+            fopAcM_GetID(this),
             fopAcM_GetParam(this),
-            fopAcM_GetPosition_p(this),
+            &current.pos,
             fopAcM_GetRoomNo(this),
-            fopAcM_GetAngle_p(this)
+            &current.angle
         );
         *fopAcM_GetOldPosition_p(this) = cXyz(120.0f, 700.0f, 810.0f);
         current.pos = *fopAcM_GetOldPosition_p(this);
