@@ -155,7 +155,7 @@ enum {
     /* 0x93 */ DSNAP_TYPE_UNK93,
     /* 0x94 */ DSNAP_TYPE_UNK94,
     /* 0x95 */ DSNAP_TYPE_UNK95,
-    /* 0x96 */ DSNAP_TYPE_UNK96,
+    /* 0x96 */ DSNAP_TYPE_BMSW,
     /* 0x97 */ DSNAP_TYPE_UNK97,
     /* 0x98 */ DSNAP_TYPE_BTSW,
     /* 0x99 */ DSNAP_TYPE_DR,
