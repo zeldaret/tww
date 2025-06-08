@@ -1590,7 +1590,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_bms1"),
     ActorRel(Equivalent,  "d_a_npc_bmsw", extra_cflags=['-sym off']),
     ActorRel(NonMatching, "d_a_npc_bs1"), # regalloc, weak func order
-    ActorRel(NonMatching, "d_a_npc_btsw"),
+    ActorRel(Equivalent,  "d_a_npc_btsw", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Equivalent,  "d_a_npc_btsw2", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_npc_co1"),
     ActorRel(NonMatching, "d_a_npc_de1"),
