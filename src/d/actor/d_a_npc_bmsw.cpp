@@ -162,7 +162,7 @@ static BOOL nodeCallBackArm(J3DNode* node, int calcTiming) {
 }
 
 /* 00000550-000006F4       .text daNpc_Bmsw_getGameEndMsg__Fs */
-u32 daNpc_Bmsw_getGameEndMsg(short rupees) {
+static u32 daNpc_Bmsw_getGameEndMsg(short rupees) {
     u8 reg_val = dComIfGs_getEventReg(0xC203);
     u32 msgNo;
     switch (reg_val) {
@@ -553,7 +553,6 @@ void daNpc_Bmsw_c::anmAtr(unsigned short mesgNo) {
 
 /* 000010C0-00001340       .text CreateInit__12daNpc_Bmsw_cFv */
 BOOL daNpc_Bmsw_c::CreateInit() {
-    /* Nonmatching */
     field_0x97E = current.angle;
 
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
@@ -841,7 +840,6 @@ void daNpc_Bmsw_c::TimerCountDown() {
 
 /* 00001E88-00002950       .text shiwake_game_action__12daNpc_Bmsw_cFPv */
 BOOL daNpc_Bmsw_c::shiwake_game_action(void*) {
-    /* Nonmatching */
     static cXyz aim_pos_data[2][3] = {
         cXyz(-40.0f, 772.0f, 1035.0f),
         cXyz(-139.0f, 772.0f, 1035.0f),
