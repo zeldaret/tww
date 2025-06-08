@@ -1300,23 +1300,17 @@ BOOL SwMail_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
 
 /* 00003DBC-00003FE8       .text getNextNo__8SwMail_cFUc */
 u8 SwMail_c::getNextNo(unsigned char previous_no) {
-    /* Nonmatching */
-    int box_y;
-    int box_x;
-    f32 random;
-    f32 fVar4;
+    f32 random = cM_rndF(10.0f);
+    f32 fVar4 = 2.5f - (m_same_count * 1.25f);
 
-    random = cM_rndF(10.0f);
-    fVar4 = 2.5f - (m_same_count * 1.25f);
-
-    box_x = previous_no / 3;
-    box_y = previous_no % 3;
+    s32 box_y = previous_no % 3;
+    s32 box_x = previous_no / 3;
 
     if (random < fVar4) {
         m_same_count++;
     } else {
-        fVar4 += 2.5f;
-        if (fVar4 < random) {
+        f32 new_threshold = fVar4 + 2.5f;
+        if (random < new_threshold) {
             if (cM_rndF(1.0f) > 0.5f) {
                 if (box_y == 0 || box_y == 2) {
                     box_y = 1;
@@ -1330,7 +1324,7 @@ u8 SwMail_c::getNextNo(unsigned char previous_no) {
             }
 
             m_same_count = 0;
-        } else if (fVar4 >= random) {
+        } else if (random >= new_threshold) {
             fVar4 = cM_rndF(1.0f);
             if (fVar4 < 0.3333f) {
                 if (box_y == 0 || box_y == 2) {
@@ -1373,9 +1367,9 @@ u8 SwMail_c::getNextNo(unsigned char previous_no) {
         }
     }
 
-    box_y = box_y + (box_x * 3);
-    m_no_buff = box_y;
-    return box_y;
+    u8 res = box_y + (box_x * 3);
+    m_no_buff = res;
+    return res;
 }
 
 /* 00003FE8-00004074       .text init__8SwMail_cFv */
