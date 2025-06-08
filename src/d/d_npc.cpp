@@ -146,7 +146,7 @@ void dNpc_JntCtrl_c::setParam(s16 max_backbone_x, s16 max_backbone_y, s16 min_ba
 
 /* 8021ACA8-8021ACBC       .text setInfDrct__14dNpc_PathRun_cFP5dPath */
 bool dNpc_PathRun_c::setInfDrct(dPath* pPath) {
-    mPath = pPath;
+    mpPath = pPath;
     mCurrPointIndex = 0;
 
     return true;
@@ -156,10 +156,10 @@ bool dNpc_PathRun_c::setInfDrct(dPath* pPath) {
 bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
     bool setPath = false;
 
-    mPath = 0;
+    mpPath = 0;
     mbGoingForwards = forwards;
     if(pathIdx != 0xFF) {
-        mPath = dPath_GetRoomPath(pathIdx, roomNo);
+        mpPath = dPath_GetRoomPath(pathIdx, roomNo);
         mCurrPointIndex = 0;
 
         setPath = true;
@@ -172,8 +172,8 @@ bool dNpc_PathRun_c::setInf(u8 pathIdx, s8 roomNo, u8 forwards) {
 dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
     dPath* pPath = NULL;
 
-    if(mPath != 0) {
-        pPath = dPath_GetNextRoomPath(mPath, roomNo);
+    if(mpPath != 0) {
+        pPath = dPath_GetNextRoomPath(mpPath, roomNo);
     }
 
     return pPath;
@@ -183,8 +183,8 @@ dPath* dNpc_PathRun_c::nextPath(s8 roomNo) {
 cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
     cXyz point(0.0f, 0.0f, 0.0f);
 
-    if(mPath != 0 && pointIdx < mPath->m_num) {
-        point = mPath->m_points[pointIdx].m_position;
+    if(mpPath != 0 && pointIdx < mpPath->m_num) {
+        point = mpPath->m_points[pointIdx].m_position;
     }
 
     return point;
@@ -193,21 +193,21 @@ cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
 /* 8021ADD0-8021AFA8       .text chkPointPass__14dNpc_PathRun_cF4cXyzb */
 bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
     bool passed = false;
-    if (mPath) {
+    if (mpPath) {
         cXyz target;
-        target.x = mPath->m_points[mCurrPointIndex].m_position.x;
-        target.z = mPath->m_points[mCurrPointIndex].m_position.z;
+        target.x = mpPath->m_points[mCurrPointIndex].m_position.x;
+        target.z = mpPath->m_points[mCurrPointIndex].m_position.z;
         f32 deltaX;
         f32 deltaZ;
         if (mCurrPointIndex == 0) {
-            deltaX = mPath->m_points[1].m_position.x - mPath->m_points[0].m_position.x;
-            deltaZ = mPath->m_points[1].m_position.z - mPath->m_points[0].m_position.z;
-        } else if (mCurrPointIndex == mPath->m_num - 1) {
-            deltaX = mPath->m_points[mPath->m_num - 1].m_position.x - mPath->m_points[mPath->m_num - 2].m_position.x;
-            deltaZ = mPath->m_points[mPath->m_num - 1].m_position.z - mPath->m_points[mPath->m_num - 2].m_position.z;
+            deltaX = mpPath->m_points[1].m_position.x - mpPath->m_points[0].m_position.x;
+            deltaZ = mpPath->m_points[1].m_position.z - mpPath->m_points[0].m_position.z;
+        } else if (mCurrPointIndex == mpPath->m_num - 1) {
+            deltaX = mpPath->m_points[mpPath->m_num - 1].m_position.x - mpPath->m_points[mpPath->m_num - 2].m_position.x;
+            deltaZ = mpPath->m_points[mpPath->m_num - 1].m_position.z - mpPath->m_points[mpPath->m_num - 2].m_position.z;
         } else {
-            deltaX = mPath->m_points[mCurrPointIndex + 1].m_position.x - mPath->m_points[mCurrPointIndex - 1].m_position.x;
-            deltaZ = mPath->m_points[mCurrPointIndex + 1].m_position.z - mPath->m_points[mCurrPointIndex - 1].m_position.z;
+            deltaX = mpPath->m_points[mCurrPointIndex + 1].m_position.x - mpPath->m_points[mCurrPointIndex - 1].m_position.x;
+            deltaZ = mpPath->m_points[mCurrPointIndex + 1].m_position.z - mpPath->m_points[mCurrPointIndex - 1].m_position.z;
         }
         
         f32 f29 = cM_ssin(cM_atan2s(deltaX, deltaZ)) * (f32)0x7FFF;
@@ -227,10 +227,10 @@ bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
 bool dNpc_PathRun_c::incIdx() {
     bool ret = true;
 
-    if(mPath != 0) {
+    if(mpPath != 0) {
         mCurrPointIndex += 1;
-        if(mCurrPointIndex >= mPath->m_num) {
-            mCurrPointIndex = mPath->m_num - 1;
+        if(mCurrPointIndex >= mpPath->m_num) {
+            mCurrPointIndex = mpPath->m_num - 1;
             ret = false;
         }
     }
@@ -242,9 +242,9 @@ bool dNpc_PathRun_c::incIdx() {
 bool dNpc_PathRun_c::incIdxLoop() {
     bool ret = true;
 
-    if(mPath != 0) {
+    if(mpPath != 0) {
         mCurrPointIndex += 1;
-        if(mCurrPointIndex >= mPath->m_num) {
+        if(mCurrPointIndex >= mpPath->m_num) {
             mCurrPointIndex = 0;
             ret = false;
         }
@@ -257,17 +257,17 @@ bool dNpc_PathRun_c::incIdxLoop() {
 bool dNpc_PathRun_c::incIdxAuto() {
     bool hitEnd = true;
 
-    if(mPath != 0) {
-        if(dPath_ChkClose(mPath)) {
+    if(mpPath != 0) {
+        if(dPath_ChkClose(mpPath)) {
             mCurrPointIndex += 1;
-            if(mCurrPointIndex >= mPath->m_num) {
+            if(mCurrPointIndex >= mpPath->m_num) {
                 mCurrPointIndex = 0;
             }
         }
         else {
             mCurrPointIndex += 1;
-            if(mCurrPointIndex >= mPath->m_num) {
-                mCurrPointIndex = mPath->m_num - 1;
+            if(mCurrPointIndex >= mpPath->m_num) {
+                mCurrPointIndex = mpPath->m_num - 1;
                 hitEnd = false;
             }
         }
@@ -280,9 +280,9 @@ bool dNpc_PathRun_c::incIdxAuto() {
 bool dNpc_PathRun_c::decIdx() {
     bool ret = true;
 
-    if(mPath != 0) {
+    if(mpPath != 0) {
         mCurrPointIndex -= 1;
-        if(mCurrPointIndex >= mPath->m_num) {
+        if(mCurrPointIndex >= mpPath->m_num) {
             mCurrPointIndex = 0;
             ret = false;
         }
@@ -295,10 +295,10 @@ bool dNpc_PathRun_c::decIdx() {
 bool dNpc_PathRun_c::decIdxLoop() {
     bool ret = true;
 
-    if(mPath != 0) {
+    if(mpPath != 0) {
         mCurrPointIndex -= 1;
-        if(mCurrPointIndex >= mPath->m_num) {
-            mCurrPointIndex = mPath->m_num - 1;
+        if(mCurrPointIndex >= mpPath->m_num) {
+            mCurrPointIndex = mpPath->m_num - 1;
             ret = false;
         }
     }
@@ -310,16 +310,16 @@ bool dNpc_PathRun_c::decIdxLoop() {
 bool dNpc_PathRun_c::decIdxAuto() {
     bool hitEnd = true;
 
-    if(mPath != 0) {
-        if(dPath_ChkClose(mPath)) {
+    if(mpPath != 0) {
+        if(dPath_ChkClose(mpPath)) {
             mCurrPointIndex -= 1;
-            if(mCurrPointIndex >= mPath->m_num) {
-                mCurrPointIndex = mPath->m_num - 1;
+            if(mCurrPointIndex >= mpPath->m_num) {
+                mCurrPointIndex = mpPath->m_num - 1;
             }
         }
         else {
             mCurrPointIndex -= 1;
-            if(mCurrPointIndex >= mPath->m_num) {
+            if(mCurrPointIndex >= mpPath->m_num) {
                 mCurrPointIndex = 0;
                 hitEnd = false;
             }
@@ -371,7 +371,7 @@ bool dNpc_PathRun_c::nextIdxAuto() {
 
 /* 8021B298-8021B328       .text absIdx__14dNpc_PathRun_cFUcUc */
 s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
-    if(mPath == 0) {
+    if(mpPath == 0) {
         return 0;
     }
     
@@ -394,8 +394,8 @@ s32 dNpc_PathRun_c::absIdx(u8 startIdx, u8 lastIdx) {
 /* 8021B328-8021B348       .text maxPoint__14dNpc_PathRun_cFv */
 u8 dNpc_PathRun_c::maxPoint() {
     u8 max = 0xFF;
-    if(mPath != 0) {
-        max = mPath->m_num;
+    if(mpPath != 0) {
+        max = mpPath->m_num;
     }
 
     return max;
@@ -404,8 +404,8 @@ u8 dNpc_PathRun_c::maxPoint() {
 /* 8021B348-8021B384       .text pointArg__14dNpc_PathRun_cFUc */
 u8 dNpc_PathRun_c::pointArg(u8 idx) {
     u8 arg = 0;
-    if(mPath != 0 && idx < (u8)mPath->m_num) {
-        arg = mPath->m_points[idx].mArg3;
+    if(mpPath != 0 && idx < (u8)mpPath->m_num) {
+        arg = mpPath->m_points[idx].mArg3;
     }
 
     return arg;
@@ -414,7 +414,7 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
 /* 8021B384-8021B514       .text setNearPathIndx__14dNpc_PathRun_cFP4cXyzf */
 bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
-    if(mPath != 0) {
+    if(mpPath != 0) {
         f32 max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
@@ -441,7 +441,7 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
 /* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
 f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     f32 max_dist;
-    if(mPath != NULL) {
+    if(mpPath != NULL) {
         max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
@@ -464,7 +464,7 @@ f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
 bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     u8 pointIdx;
     bool set = false;
-    if(mPath != 0) {
+    if(mpPath != 0) {
         f32 max_dist = G_CM3D_F_INF;
         pointIdx = param_2;
         for(int i = 0; i < maxPoint(); i++) {

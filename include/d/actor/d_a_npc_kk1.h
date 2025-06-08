@@ -6,7 +6,7 @@
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
-
+#include "d/res/res_kk.h"
 
 class J3DNode;
 
