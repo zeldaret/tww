@@ -1,11 +1,19 @@
 #ifndef D_A_NPC_KO1_H
 #define D_A_NPC_KO1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_msg.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 
-class daNpc_Ko1_c : public fopAc_ac_c {
+class ko_hna_class : public fopAc_ac_c{};
+class ko_bou_class : public fopAc_ac_c{};
+class ko_ob_class : public fopAc_ac_c{};
+
+class daNpc_Ko1_c : public fopNpc_npc_c {
+
 public:
     struct anm_prm_c {
         
@@ -14,15 +22,15 @@ public:
     void nodeHedControl(J3DNode*, J3DModel*);
     void nodeBlnControl(J3DNode*, J3DModel*);
     void nodeKo1Control(J3DNode*, J3DModel*);
-    void init_HNA_0();
-    void init_HNA_1();
-    void init_HNA_2();
-    void init_HNA_3();
-    void init_HNA_4();
-    void init_BOU_0();
-    void init_BOU_1();
-    void init_BOU_2();
-    void init_BOU_3();
+    BOOL init_HNA_0();
+    BOOL init_HNA_1();
+    BOOL init_HNA_2();
+    BOOL init_HNA_3();
+    BOOL init_HNA_4();
+    BOOL init_BOU_0();
+    BOOL init_BOU_1();
+    BOOL init_BOU_2();
+    BOOL init_BOU_3();
     void createInit();
     void setMtx(bool);
     void anmNum_toResID(int);
@@ -51,7 +59,7 @@ public:
     void chk_manzai_1();
     void chk_partsNotMove();
     void lookBack();
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(unsigned long*);
     void getMsg_HNA_0();
     void getMsg_HNA_1();
     void getMsg_HNA_2();
@@ -60,7 +68,7 @@ public:
     void getMsg_BOU_1();
     void bitCount(unsigned char);
     void getMsg_BOU_2();
-    void getMsg();
+    u32 getMsg();
     void chkAttention();
     void setAttention(bool);
     void searchByID(fpc_ProcID);
@@ -116,15 +124,15 @@ public:
     void manzai();
     void neru_1();
     void neru_2();
-    void hana_action1(void*);
-    void hana_action2(void*);
-    void hana_action3(void*);
-    void hana_action4(void*);
-    void hana_action5(void*);
-    void wait_action1(void*);
-    void wait_action2(void*);
-    void wait_action3(void*);
-    void wait_action4(void*);
+    int hana_action1(void*);
+    int hana_action2(void*);
+    int hana_action3(void*);
+    int hana_action4(void*);
+    int hana_action5(void*);
+    int wait_action1(void*);
+    int wait_action2(void*);
+    int wait_action3(void*);
+    int wait_action4(void*);
     void demo();
     void shadowDraw();
     BOOL _draw();
@@ -138,22 +146,88 @@ public:
     void CreateHeap();
 
 public:
-    /* 0x6C4 */ u8 m6C4[0x8AC - 0x6C4];
+    ///* 0x6C4 */ u8 m6C4[0x8AC - 0x6C4];
+    u8 pad6C4[0x8];
+    s8 field_0x6CC;
+    s8 field_0x6CD;
+    s8 field_0x6CE;       
+    s8 field_0x6CF;
+    s8 field_0x6D0;
+    Mtx field_0x6D4;
+    u32 field_0x704;
+    u32 field_0x708;
+    u8 pad70C[0x7DC-0x70C];
+    cXyz field_0x7DC;
 };
 
-class daNpc_Ko1_childHIO_c {
+class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
 public:
     daNpc_Ko1_childHIO_c();
 
 public:
+    char pad04[0x5C-0x04];
+    u32 field5C;
     /* Place member variables here */
 };
 
-class daNpc_Ko1_HIO_c {
+class daNpc_Ko1_HIO_c: public mDoHIO_entry_c {
+    struct hio_prm_child_c{
+        u8 pad[0x58];
+    };
 public:
     daNpc_Ko1_HIO_c();
 
 public:
+    s8 mNo;
+    u32 field8;
+    daNpc_Ko1_childHIO_c children[2];
+    struct hio_prm_c {
+        hio_prm_child_c childtable[2];
+	// .4byte 0x20001F40
+	// .4byte 0xE0C0E0C0
+	// .4byte 0x00001F40
+	// .4byte 0x0000E0C0
+	// .4byte 0x07D00640
+	// .4byte 0x42B40000
+	// .4byte 0x00000004
+	// .4byte 0x08000000
+	// .4byte 0x3F666666
+	// .4byte 0x3F800000
+	// .4byte 0x3F000000
+	// .4byte 0x41A80000
+	// .4byte 0x3DCCCCCD
+	// .4byte 0x41200000
+	// .4byte 0x3E99999A
+	// .4byte 0x42200000
+	// .4byte 0x42A00000
+	// .4byte 0x43480000
+	// .4byte 0x43960000
+	// .4byte 0x43160000
+	// .4byte 0x44898000
+	// .4byte 0x44BB8000
+	// .4byte 0x20001F40
+	// .4byte 0xE0C0E0C0
+	// .4byte 0x00001F40
+	// .4byte 0x0000E0C0
+	// .4byte 0x07D00640
+	// .4byte 0x42B40000
+	// .4byte 0x00000006
+	// .4byte 0x08000000
+	// .4byte 0x3E99999A
+	// .4byte 0x40C00000
+	// .4byte 0x3ECCCCCD
+	// .4byte 0x41A80000
+	// .4byte 0x3DCCCCCD
+	// .4byte 0x41400000
+	// .4byte 0x3FC00000
+	// .4byte 0x42C80000
+	// .4byte 0x00000000
+	// .4byte 0x43AF0000
+	// .4byte 0x43FA0000
+	// .4byte 0x43160000
+	// .4byte 0x00000000
+	// .4byte 0x00000000
+    };
     /* Place member variables here */
 };
 
