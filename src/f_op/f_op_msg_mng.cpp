@@ -405,7 +405,7 @@ u32 fopMsgM_searchMessageNumber(u32 msgNo) {
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
     msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;  
+    msgGet.mResMsgIdx = 0;
 
     for(u32 i = msgNo & 0xFFFF; i < 0xFFFF; i++) {
         mesg_header* header = msgGet.getMesgHeader(i);
@@ -488,12 +488,12 @@ fpc_ProcID fopMsgM_messageSet(u32 msgNo, cXyz* lookAtPos) {
 
 /* 8002B8A4-8002B9C4       .text fopMsgM_messageSet__FUl */
 fpc_ProcID fopMsgM_messageSet(u32 msgNo) {
-    /* Nonmatching */
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    cXyz lookAtPos(0.0f, 0.0f, 0.0f);
+    cXyz lookAtPos;
+    lookAtPos.x = lookAtPos.y = lookAtPos.z = 0.0f;
     if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNo, &msgNo);
     }
@@ -540,14 +540,13 @@ fpc_ProcID fopMsgM_scopeMessageSet(u32 msgNo) {
 
 /* 8002BA4C-8002BB78       .text fopMsgM_tactMessageSet__Fv */
 u32 fopMsgM_tactMessageSet() {
-    /* Nonmatching */
-
     if (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 7 && dComIfGp_isHeapLockFlag() != 8 && dComIfGp_isHeapLockFlag() != 9) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     u32 msgNoTemp = 0x5AC;
-    cXyz lookAtPos(0.0f, 0.0f, 0.0f);
+    cXyz lookAtPos;
+    lookAtPos.x = lookAtPos.y = lookAtPos.z = 0.0f;
     if(i_msgID == fpcM_ERROR_PROCESS_ID_e) {
         i_msgID = fopMsgM_messageTypeSelect(NULL, &lookAtPos, &msgNoTemp, &msgNoTemp);
         fopMsgM_tactMsgFlagOn();
@@ -585,15 +584,20 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0x6BD, head_p);
 
-    s32 curOffset = 0;
-    s32 numRead = 0;
     const char* src = (char*)msgGet.getMessage(head_p);
+    char* dstPtr = dst;
+
     char dstBuf[24];
-    const u32* cursor;
-    s32 current;
-    while(cursor = (u32*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
-        if(*cursor == 0x1A) {
-            if((cursor[1] & 0xFFFFFF) == 0) {
+    const char* cursor = src;
+    char current;
+    while(current = *cursor, current != '\0') {
+        if(current == '\x1A') {
+            u32 next_as_int = *(u32*)++cursor;
+            if ((next_as_int & 0xFFFFFF) == 0x1E) {
+                *dstPtr = '\x1A';
+                dstPtr++;
+            }
+            else if ((next_as_int & 0xFFFFFF) == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
 #if VERSION <= VERSION_JPN
                 if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
@@ -610,26 +614,28 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                     }
                 }
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
-                    numRead++;
+                for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr++) {
+                    *dstPtr = *bufPtr;
+                    dstPtr++;
                 }
+
+                cursor = (char*)next_as_int + (next_as_int - 1);
             }
         }
-        else if((*cursor >> 4) == 8 || (*cursor >> 4) == 9) {
-            dst[numRead] = current;
-            dst[numRead + 1] = current + 1;
-            curOffset += 2;
-            numRead += 2;
+        else if((current >> 4) == 8 || (current >> 4) == 9) {
+            *dstPtr = *cursor;
+            *(dstPtr + 1) = *(cursor + 1);
+            dstPtr += 2;
+            cursor += 2;
         }
         else {
-            dst[numRead] = current;
-            curOffset++;
-            numRead++;
+            *dstPtr = *cursor;
+            dstPtr++;
+            cursor++;
         }
     }
 
-    dst[numRead] = '\0';
+    *dstPtr = '\0';
     return dst;
 }
 
@@ -733,6 +739,13 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     temp.stringShift();
     temp.iconIdxRefresh();
     temp.field_0x130 = 0;
+
+    f32 fVar2 = (2 - temp.field_0x130) * ((J2DTextBox*)param_2)->getLineSpace() * 0.5f;
+    ((J2DTextBox*) param_3)->field_0xd8 = 0.0f;
+    ((J2DTextBox*) param_3)->field_0xdc = fVar2;
+    ((J2DTextBox*) param_2)->field_0xd8 = 0.0f;
+    ((J2DTextBox*) param_2)->field_0xdc = fVar2;
+
     temp.stringSet();
     ((J2DTextBox*)param_1)->setString(param_3);
     ((J2DTextBox*)param_1)->setString(param_4);
@@ -922,7 +935,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, J2DPicture* param_2, s16* param_3, 
     param_2->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_5]);
     fopMsgM_blendDraw(param_2, fopMsgM_buttonTex[param_5]);
-    if((0xA <= param_5 && param_5 <= 0xE) || param_5 == 0x15 || param_5 == 0x17) {
+    if((u8)(param_5 - 10) <= 3 || param_5 == 0x15 || param_5 == 0x17) {
         GXColor col;
         col.r = param_4 >> 0x18;
         col.g = param_4 >> 0x10;
@@ -962,7 +975,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param
 
     param_1->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_4]);
-    if((0xA <= param_4 && param_4 <= 0xE) || param_4 == 0x15 || param_4 == 0x17) {
+    if((u8)(param_4 - 10) <= 3 || param_4 == 0x15 || param_4 == 0x17) {
         GXColor col;
         col.r = param_3 >> 0x18;
         col.g = param_3 >> 0x10;
