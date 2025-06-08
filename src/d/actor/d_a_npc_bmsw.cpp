@@ -932,10 +932,10 @@ BOOL daNpc_Bmsw_c::shiwake_game_action(void*) {
                         && checkNextMailThrowOK()) {
 
                 s32 row = field_0x9B0 + 1;
-                u8 col = (1 - field_0x9B1) * 3;
-                u8 idx = row + col;
+                u8 col = field_0x9B1;
+                u8 idx = row + (1 - col) * 3;
 
-                cXyz& aim_pos = aim_pos_data[row][col];
+                cXyz& aim_pos = aim_pos_data[field_0x9B1][row];
                 field_0x930[field_0x93C]->ThrowInit(
                     aim_pos,
                     idx
