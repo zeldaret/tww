@@ -178,7 +178,7 @@ bool daNpc_Kk1_c::createInit() {
     u8 params = base.mParameters >> 0x10;
     if (params != 0xff) {
         mRunPath.setInf(params, current.roomNo, true);
-        if (mRunPath.mpPath != NULL) {
+        if (mRunPath.mPath != NULL) {
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
             set_pthPoint(0);
         }
@@ -186,7 +186,7 @@ bool daNpc_Kk1_c::createInit() {
             return FALSE;
         }
     }
-    if (mRunPath.mpPath == NULL) {
+    if (mRunPath.mPath == NULL) {
         return FALSE;
     }
     
@@ -1802,7 +1802,7 @@ bool daNpc_Kk1_c::chkHitPlayer() {
 /* 00003600-000036A8       .text set_pthPoint__11daNpc_Kk1_cFUc */
 void daNpc_Kk1_c::set_pthPoint(unsigned char i_pointIndex) {
 
-    if(mRunPath.mpPath != NULL){
+    if(mRunPath.mPath != NULL){
         mRunPath.mCurrPointIndex = i_pointIndex;
         current.pos = mRunPath.getPoint(mRunPath.mCurrPointIndex);
         if(mRunPath.nextIdx()){
@@ -2069,7 +2069,7 @@ BOOL daNpc_Kk1_c::wait_1() {
         return TRUE;
     }
     if(cLib_calcTimer(&field_0x7A4) == 0){
-        if(mRunPath.mpPath != NULL){
+        if(mRunPath.mPath != NULL){
             u32 temp_r3_3 = mRunPath.maxPoint();
             if((temp_r3_3 > 2) && (((daObj_Roten_c*)temp_r3_3)->getCreateCount() > 1)){
                 field_0x7B6 = 1;
@@ -2092,7 +2092,7 @@ BOOL daNpc_Kk1_c::walk_1() {
     cXyz local_40;
 
     local_40 = mRunPath.getPoint(mRunPath.mCurrPointIndex);
-    if (dPath_ChkClose(mRunPath.mpPath)) {
+    if (dPath_ChkClose(mRunPath.mPath)) {
         return 1;
     }
     u8 idx;

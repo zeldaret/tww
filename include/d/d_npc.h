@@ -190,8 +190,8 @@ public:
     bool setInfDrct(dPath* pPath);
     bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
     dPath* nextPath(s8 roomNo);
-    bool isPath(){return mpPath != NULL;};
-    dPath* getPath(){return mpPath;};
+    bool isPath(){return mPath != NULL;};
+    dPath* getPath(){return mPath;};
     u8 getIdx(){return mCurrPointIndex;}
     void setIdx(u8 idx){mCurrPointIndex = idx;}
     u8 getDir(){return mbGoingForwards;}
@@ -213,7 +213,7 @@ public:
     bool setNearPathIndxMk2(cXyz*, u8, u8);
     bool chkInside(cXyz*);
 
-    /* 0x00 */ dPath* mpPath;
+    /* 0x00 */ dPath* mPath;
     /* 0x04 */ u8 field_0x04;
     /* 0x05 */ u8 mCurrPointIndex;
     /* 0x06 */ u8 mbGoingForwards;
