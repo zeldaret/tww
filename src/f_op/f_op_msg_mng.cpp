@@ -935,7 +935,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, J2DPicture* param_2, s16* param_3, 
     param_2->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_5]);
     fopMsgM_blendDraw(param_2, fopMsgM_buttonTex[param_5]);
-    if((u8)(param_5 - 10) <= 3 || param_5 == 0x15 || param_5 == 0x17) {
+    if(param_5 == 0xA || param_5 == 0xB || param_5 == 0xC || param_5 == 0xD  || param_5 == 0x15 || param_5 == 0x17) {
         GXColor col;
         col.r = param_4 >> 0x18;
         col.g = param_4 >> 0x10;
@@ -975,7 +975,7 @@ void fopMsgM_outFontSet(J2DPicture* param_1, s16* param_2, u32 param_3, u8 param
 
     param_1->show();
     fopMsgM_blendDraw(param_1, fopMsgM_buttonTex[param_4]);
-    if((u8)(param_4 - 10) <= 3 || param_4 == 0x15 || param_4 == 0x17) {
+    if(param_4 == 0xA || param_4 == 0xB || param_4 == 0xC || param_4 == 0xD || param_4 == 0x15 || param_4 == 0x17) {
         GXColor col;
         col.r = param_3 >> 0x18;
         col.g = param_3 >> 0x10;
