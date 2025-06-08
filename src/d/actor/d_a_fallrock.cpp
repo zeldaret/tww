@@ -107,7 +107,7 @@ BOOL daFallRock_c::execute() {
     fopAcM_posMoveF(this, mStts.GetCCMoveP());
     field_0x29C.CrrPos(*dComIfG_Bgsp());
 
-    field_0x610 = std::abs(speed.y) + (f64)field_0x610;
+    field_0x610 = fabs(speed.y) + (f64)field_0x610;
     if (field_0x610 > m_fallen) {
         if (deleted == FALSE) {
             deleted = fopAcM_delete(this);
