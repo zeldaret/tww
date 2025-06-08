@@ -21,7 +21,7 @@ daDk_HIO_c l_HIO;
 
 /* 000000EC-00000130       .text __ct__10daDk_HIO_cFv */
 daDk_HIO_c::daDk_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x05 = 0;
     field_0x08 = 1.0f;
     field_0x0C = 4.0f;
@@ -306,7 +306,7 @@ static BOOL daDk_IsDelete(dk_class*) {
 static BOOL daDk_Delete(dk_class* a_this) {
     dComIfG_resDelete(&a_this->mPhs, "Dk");
     a_this->field_0xACC.end();
-    mDoHIO_deleteChild(l_HIO.field_0x04);
+    mDoHIO_deleteChild(l_HIO.mNo);
     return TRUE;
 }
 
@@ -382,7 +382,7 @@ static cPhs_State daDk_Create(fopAc_ac_c* i_this) {
         fopAcM_SetMin(i_this, -1000.0f, -1000.0f, -1000.0f);
         fopAcM_SetMax(i_this, 1000.0f, 1000.0f, 1000.0f);
 
-        l_HIO.field_0x04 = mDoHIO_createChild("大怪鳥", &l_HIO);
+        l_HIO.mNo = mDoHIO_createChild("大怪鳥", &l_HIO);
 
         if (a_this->field_0x2B4 < 2) {
             a_this->field_0x900.Set(
