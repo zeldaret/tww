@@ -186,9 +186,15 @@ public:
 
 class dNpc_PathRun_c {
 public:
+
     bool setInfDrct(dPath* pPath);
     bool setInf(u8 pathIdx, s8 roomNo, u8 forwards);
     dPath* nextPath(s8 roomNo);
+    bool isPath(){return mPath != NULL;};
+    dPath* getPath(){return mPath;};
+    u8 getIdx(){return mCurrPointIndex;}
+    void setIdx(u8 idx){mCurrPointIndex = idx;}
+    u8 getDir(){return mbGoingForwards;}
     cXyz getPoint(u8 pointIdx);
     bool chkPointPass(cXyz, bool);
     bool incIdx();

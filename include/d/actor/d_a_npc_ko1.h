@@ -16,36 +16,41 @@ class daNpc_Ko1_c : public fopNpc_npc_c {
 
 public:
     struct anm_prm_c {
-        
+        s8 field0;
+        s8 field1;
+        f32 field4;
+        f32 field8;
+        s32 fieldC;
+        s32 field10;
     };
 
     void nodeHedControl(J3DNode*, J3DModel*);
     void nodeBlnControl(J3DNode*, J3DModel*);
     void nodeKo1Control(J3DNode*, J3DModel*);
-    BOOL init_HNA_0();
-    BOOL init_HNA_1();
-    BOOL init_HNA_2();
-    BOOL init_HNA_3();
-    BOOL init_HNA_4();
-    BOOL init_BOU_0();
-    BOOL init_BOU_1();
-    BOOL init_BOU_2();
-    BOOL init_BOU_3();
-    void createInit();
+    bool init_HNA_0();
+    bool init_HNA_1();
+    bool init_HNA_2();
+    bool init_HNA_3();
+    bool init_HNA_4();
+    bool init_BOU_0();
+    bool init_BOU_1();
+    bool init_BOU_2();
+    bool init_BOU_3();
+    s8 createInit();
     void setMtx(bool);
-    void anmNum_toResID(int);
-    void headAnmNum_toResID(int);
-    void balloon_anmNum_toResID(int);
-    void btpNum_toResID(int);
-    void setBtp(bool, int);
+    s32 anmNum_toResID(int);
+    s32 headAnmNum_toResID(int);
+    s32 balloon_anmNum_toResID(int);
+    s32 btpNum_toResID(int);
+    bool setBtp(bool, int);
     void iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
-    void setAnm_anm(anm_prm_c*);
-    void set_balloonAnm_anm(anm_prm_c*);
+    s32 setAnm_anm(anm_prm_c*);
+    s32 set_balloonAnm_anm(anm_prm_c*);
     void set_balloonAnm_NUM(int);
     void setAnm_NUM(int, int);
-    void setAnm();
+    bool setAnm();
     void setPlaySpd(float);
     void chg_anmTag();
     void control_anmTag();
@@ -146,7 +151,6 @@ public:
     void CreateHeap();
 
 public:
-    ///* 0x6C4 */ u8 m6C4[0x8AC - 0x6C4];
     u8 pad6C4[0x8];
     s8 field_0x6CC;
     s8 field_0x6CD;
@@ -154,10 +158,60 @@ public:
     s8 field_0x6CF;
     s8 field_0x6D0;
     Mtx field_0x6D4;
-    u32 field_0x704;
-    u32 field_0x708;
-    u8 pad70C[0x7DC-0x70C];
+    mDoExt_McaMorf* field_0x704;  
+    J3DModel* field_0x708;
+    u32 pad70C;
+    mDoExt_McaMorf* field_0x710;
+    /*0x714*/ J3DAnmTexPattern* m_hed_tex_pttrn;
+    mDoExt_btpAnm field_0x718;
+    u8 field_0x72C;
+    s16 field_0x72E;
+    u8 pad730[0xC];
+    /*0x73C*/ dNpc_PathRun_c mPathRun;
+    /*0x744*/ u32 pad744;
+    /*0x748*/ dNpc_EventCut_c mEventCut;
+    u8 pad7B4[0x10];
+    cXyz field_0x7C4;
+    csXyz field_0x7D0;
+    csXyz field_0x7D6;
     cXyz field_0x7DC;
+    cXyz field_0x7E8;
+    u8 pad7F4[0x805-0x7F4];
+    u8 field_0x805;
+    u8 pad806[0x80C-0x806];
+    cXyz field_0x80C;
+    u8 pad810[0x824 - 0x818];
+    f32 field_0x824;
+    f32 field_0x828;
+    u8 pad828[0x848 - 0x82C];
+    u32 field_0x848;
+    u8 pad84C[0x85E - 0x84C];
+    s8 field_0x85E;
+    s8 field_0x85F;
+    s8 field_0x860;
+    s8 field_0x861;
+    u8 pad862[0x865 - 0x862];
+    u8 field_0x865;
+    u8 pad866[0x86C - 0x866];   
+    u8 field_0x86C;
+    u8 pad8CD[0x876 - 0x86D];  
+    u8 field_0x876; 
+    u8 field_0x877;
+    u8 pad878[0x89C - 0x878];
+    u8 field_0x89C;
+    u8 field_0x89D;
+    s8 field_0x89E;
+    s8 field_0x89F;
+    u8 pad8A0;
+    s8 field_0x8A1;
+    u8 pad8A2;
+    s8 field_0x8A3;
+    s8 field_0x8A4;
+    s8 field_0x8A5;  
+    s8 field_0x8A6;
+    s8 field_0x8A7;
+    s32 field_0x8A8;
+
 };
 
 class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
