@@ -1384,9 +1384,9 @@ void dSv_info_c::reinit() {
     u8 sound = dComIfGs_getOptSound();
     u8 vib = dComIfGs_getOptVibration();
 
+#if VERSION > VERSION_DEMO
     u8 pictureNum = dComIfGs_getPictureNum();
 
-#if VERSION > VERSION_DEMO
     u8 r27 = dComIfGs_getEventReg(0x89FF);
 #endif
 

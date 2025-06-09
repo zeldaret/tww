@@ -370,7 +370,7 @@ BOOL progChangeDraw(dScnLogo_c* i_this) {
     }
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 3;
+        i_this->mAction = ACT_dolbyInDraw;
         i_this->mTimer = 90;
         mDoGph_gInf_c::startFadeIn(30);
     }
@@ -383,7 +383,7 @@ BOOL dolbyInDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->dolbyImg);
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 4;
+        i_this->mAction = ACT_dolbyOutDraw;
         i_this->mTimer = 30;
         mDoGph_gInf_c::startFadeOut(30);
     }
@@ -396,7 +396,7 @@ BOOL dolbyOutDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->dolbyImg);
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 10;
+        i_this->mAction = ACT_dvdWaitDraw;
     }
 
     return TRUE;

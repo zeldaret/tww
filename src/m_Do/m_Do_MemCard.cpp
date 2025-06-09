@@ -33,7 +33,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     mCardSlot = 0;
     OSInitMutex(&mMutex);
     OSInitCond(&mCond);
-    s32 priority = OSGetThreadPriority(OSGetCurrentThread());
+    OSPriority priority = OSGetThreadPriority(OSGetCurrentThread());
     OSCreateThread(&MemCardThread, (void*)mDoMemCd_main, NULL, &MemCardStack[ARRAY_SIZE(MemCardStack)], ARRAY_SIZE(MemCardStack), priority + 1, 1);
     OSResumeThread(&MemCardThread);
 }
