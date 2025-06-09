@@ -60,9 +60,9 @@ public:
     void anmAtr(unsigned short);
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void chk_manzai_1();
-    void chk_partsNotMove();
+    BOOL chk_talk();
+    bool chk_manzai_1();
+    bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(unsigned long*);
     void getMsg_HNA_0();
@@ -71,12 +71,12 @@ public:
     void getMsg_HNA_3();
     void getMsg_BOU_0();
     void getMsg_BOU_1();
-    void bitCount(unsigned char);
+    s8 bitCount(unsigned char);
     void getMsg_BOU_2();
     u32 getMsg();
     void chkAttention();
     void setAttention(bool);
-    void searchByID(fpc_ProcID);
+    fopAc_ac_c* searchByID(fpc_ProcID);
     void partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
     void check_landOn();
@@ -170,7 +170,9 @@ public:
     /*0x73C*/ dNpc_PathRun_c mPathRun;
     /*0x744*/ u32 pad744;
     /*0x748*/ dNpc_EventCut_c mEventCut;
-    u8 pad7B4[0x10];
+    fpc_ProcID field_0x7B4[2];
+    u8 field_0x7BC;
+    s32 field_0x7C0;
     cXyz field_0x7C4;
     csXyz field_0x7D0;
     csXyz field_0x7D6;
@@ -183,19 +185,29 @@ public:
     u8 pad810[0x824 - 0x818];
     f32 field_0x824;
     f32 field_0x828;
-    u8 pad828[0x848 - 0x82C];
+    u8 pad828[0x840 - 0x82C];
+    s16 field_0x840;
+    s16 field_0x842;
+    s16 field_0x844;
+    s16 field_0x846;
     u32 field_0x848;
-    u8 pad84C[0x85E - 0x84C];
+    u8 pad84C[0x856 - 0x84C];
+    s16 field_0x856;
+    s16 field_0x858;
+    u8 pad85A[4];
     s8 field_0x85E;
     s8 field_0x85F;
     s8 field_0x860;
     s8 field_0x861;
-    u8 pad862[0x865 - 0x862];
+    s8 field_0x862;
+    u8 field_0x863;
+    u8 pad864;
     u8 field_0x865;
     u8 pad866[0x86C - 0x866];   
     u8 field_0x86C;
-    u8 pad8CD[0x876 - 0x86D];  
-    u8 field_0x876; 
+    u8 pad8CD[0x875 - 0x86D];  
+    u8 field_0x875; 
+    bool field_0x876; 
     u8 field_0x877;
     u8 pad878[0x89C - 0x878];
     u8 field_0x89C;
@@ -204,14 +216,16 @@ public:
     s8 field_0x89F;
     u8 pad8A0;
     s8 field_0x8A1;
-    u8 pad8A2;
+    s8 field_0x8A2;
     s8 field_0x8A3;
     s8 field_0x8A4;
     s8 field_0x8A5;  
     s8 field_0x8A6;
     s8 field_0x8A7;
-    s32 field_0x8A8;
-
+    s8 field_0x8A8;
+    s8 field_0x8A9;
+    s8 field_0x8AA;
+    s8 field_0x8AB;
 };
 
 class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
@@ -219,7 +233,9 @@ public:
     daNpc_Ko1_childHIO_c();
 
 public:
-    char pad04[0x5C-0x04];
+    char pad04[0x16-0x04];
+    s16  field16;
+    char pad1A[0x5C-0x1A];
     u32 field5C;
     /* Place member variables here */
 };

@@ -301,6 +301,18 @@ public:
     }
     void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
     dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    void setMesgCamInfoActor(fopAc_ac_c* i_actor_1, fopAc_ac_c* i_actor_2, fopAc_ac_c* i_actor_3, fopAc_ac_c* i_actor_4, fopAc_ac_c* i_actor_5, fopAc_ac_c* i_actor_6,fopAc_ac_c* i_actor_7,fopAc_ac_c* i_actor_8,fopAc_ac_c* i_actor_9,fopAc_ac_c* i_actor_10){
+        mMesgCamInfo.mActor[0] = i_actor_1;
+        mMesgCamInfo.mActor[1] = i_actor_2;
+        mMesgCamInfo.mActor[2] = i_actor_3;
+        mMesgCamInfo.mActor[3] = i_actor_4;
+        mMesgCamInfo.mActor[4] = i_actor_5;
+        mMesgCamInfo.mActor[5] = i_actor_6;
+        mMesgCamInfo.mActor[6] = i_actor_7;
+        mMesgCamInfo.mActor[7] = i_actor_8;
+        mMesgCamInfo.mActor[8] = i_actor_9;
+        mMesgCamInfo.mActor[9] = i_actor_10;
+    }
     int getMesgCamInfoID() { return mMesgCamInfo.mID; }
     void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
     void clearMesgCamInfoID() { mMesgCamInfo.mID = -1; }
@@ -2908,9 +2920,14 @@ inline void dComIfGp_setMesgCameraAttrInfo(int param_1) {
     g_dComIfG_gameInfo.play.setMesgCamInfoBasicID(param_1);
 }
 
+inline void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* i_actor_1, fopAc_ac_c* i_actor_2, fopAc_ac_c* i_actor_3, fopAc_ac_c* i_actor_4, fopAc_ac_c* i_actor_5, fopAc_ac_c* i_actor_6,fopAc_ac_c* i_actor_7,fopAc_ac_c* i_actor_8,fopAc_ac_c* i_actor_9,fopAc_ac_c* i_actor_10){
+    g_dComIfG_gameInfo.play.setMesgCamInfoActor(i_actor_1,i_actor_2,i_actor_3,i_actor_4,i_actor_5,i_actor_6,i_actor_7,i_actor_8,i_actor_9,i_actor_10);
+}
+
 inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
     return g_dComIfG_gameInfo.play.getMesgCamInfo();
 }
+
 
 inline u8 dComIfGp_checkMesgBgm() {
     return g_dComIfG_gameInfo.play.checkMesgBgm();
