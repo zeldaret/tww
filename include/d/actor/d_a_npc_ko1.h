@@ -65,16 +65,16 @@ public:
     bool chk_partsNotMove();
     void lookBack();
     u16 next_msgStatus(unsigned long*);
-    void getMsg_HNA_0();
-    void getMsg_HNA_1();
-    void getMsg_HNA_2();
-    void getMsg_HNA_3();
-    void getMsg_BOU_0();
-    void getMsg_BOU_1();
+    s32 getMsg_HNA_0();
+    s32 getMsg_HNA_1();
+    s32 getMsg_HNA_2();
+    s32 getMsg_HNA_3();
+    s32 getMsg_BOU_0();
+    s32 getMsg_BOU_1();
     s8 bitCount(unsigned char);
-    void getMsg_BOU_2();
+    s32 getMsg_BOU_2();
     u32 getMsg();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
     void partner_srch_sub(void* (*)(void*, void*));
@@ -205,7 +205,10 @@ public:
     u8 field_0x865;
     u8 pad866[0x86C - 0x866];   
     u8 field_0x86C;
-    u8 pad8CD[0x875 - 0x86D];  
+    u8 field_0x86D;
+    u8 pad8CE[0x870 - 0x86E];  
+    s32 field_0x870;
+    u8 pad874[0x875 - 0x874];  
     u8 field_0x875; 
     bool field_0x876; 
     u8 field_0x877;
@@ -235,7 +238,8 @@ public:
 public:
     char pad04[0x16-0x04];
     s16  field16;
-    char pad1A[0x5C-0x1A];
+    f32 field18;
+    char pad1C[0x5C-0x1C];
     u32 field5C;
     /* Place member variables here */
 };

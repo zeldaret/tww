@@ -144,7 +144,7 @@ static BOOL nodeCallBack_Ko1(J3DNode* i_node, int i_param2) {
     if(i_param2 == 0){
         J3DModel* model = j3dSys.getModel();
         if(model->getUserArea() != NULL){
-            ((daNpc_Ko1_c*)model->getUserArea())->nodeBlnControl(i_node,model);
+            ((daNpc_Ko1_c*)model->getUserArea())->nodeKo1Control(i_node,model);
         }
     }
     return TRUE;
@@ -1096,63 +1096,148 @@ u16 daNpc_Ko1_c::next_msgStatus(unsigned long* i_param_1) {
 
 
 /* 00002204-00002240       .text getMsg_HNA_0__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_HNA_0() {
-    /* Nonmatching */
+s32 daNpc_Ko1_c::getMsg_HNA_0() {
+
+    return (dComIfGs_isEventBit(0x220))?0xB56:0xB55;
 }
 
 /* 00002240-0000227C       .text getMsg_HNA_1__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_HNA_1() {
-    /* Nonmatching */
+s32 daNpc_Ko1_c::getMsg_HNA_1() {
+
+    return (dComIfGs_isEventBit(0x240))?0xAF5:0xAF4;
 }
 
 /* 0000227C-000022B8       .text getMsg_HNA_2__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_HNA_2() {
-    /* Nonmatching */
+s32 daNpc_Ko1_c::getMsg_HNA_2() {
+
+    return (dComIfGs_isEventBit(0x3101))?0xB63:0xB62;
 }
 
 /* 000022B8-00002318       .text getMsg_HNA_3__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_HNA_3() {
-    /* Nonmatching */
+s32 daNpc_Ko1_c::getMsg_HNA_3() {
+
+    if(dComIfGs_isEventBit(0x2C04)){
+        if(field_0x86D != 0){
+            return 0xB5E;
+        }else{
+            return 0xB5A;
+        }
+    }
+    return 0xB59;
 }
 
 /* 00002318-0000237C       .text getMsg_BOU_0__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_BOU_0() {
-    /* Nonmatching */
+s32 daNpc_Ko1_c::getMsg_BOU_0() {
+
+    if(dComIfGs_isEventBit(0x104)){
+        return 0xAF3;
+    }
+    return (dComIfGs_isEventBit(0x210))?0xAF2:0xAF1;
+
 }
 
 /* 0000237C-000023B8       .text getMsg_BOU_1__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_BOU_1() {
+s32 daNpc_Ko1_c::getMsg_BOU_1() {
     /* Nonmatching */
+    return (dComIfGs_isEventBit(0x208))?0xAF5:0xAF4;
 }
 
 /* 000023B8-000023E8       .text bitCount__11daNpc_Ko1_cFUc */
-s8 daNpc_Ko1_c::bitCount(unsigned char) {
-    /* Nonmatching */
+s8 daNpc_Ko1_c::bitCount(unsigned char i_param_1) {
+
+    u8 param = i_param_1;
+    s8 count = 0;
+    for (int i = 0; i < 8; ++i) {
+        if (param & 1)
+            count++;
+        param = param >> 1;
+    }
+    return count;
+
 }
 
 /* 000023E8-0000248C       .text getMsg_BOU_2__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::getMsg_BOU_2() {
+s32 daNpc_Ko1_c::getMsg_BOU_2() {
     /* Nonmatching */
+//   int iVar1;
+//   undefined4 uVar2;
+//   ushort uVar3;
+//   char cVar4;
+    if(dComIfGs_isEventBit(0x3801)){
+        if(dComIfGs_isEventBit(0x3340)){
+            return 0xB08;
+        }else{
+            if(bitCount(dComIfGs_getEventReg(0xBFFF)) >= 2){
+                return 0xB07;
+            }
+            return 0xB00;
+        }   
+    }else{
+        return 0xAF6;
+    }
+
 }
 
 /* 0000248C-00002528       .text getMsg__11daNpc_Ko1_cFv */
 u32 daNpc_Ko1_c::getMsg() {
-    /* Nonmatching */
+
+
+    u32 uVar1 = 0;
+    switch(field_0x8A7) {
+    case 0:
+        uVar1 = getMsg_HNA_0();
+        break;
+    case 1:
+        uVar1 = getMsg_HNA_1();
+        break;
+    case 2:
+        uVar1 = getMsg_HNA_2();
+        break;
+    case 3:
+        uVar1 = getMsg_HNA_3();
+        break;
+    case 5:
+        uVar1 = getMsg_BOU_0();
+        break;
+    case 6:
+        uVar1 = getMsg_BOU_1();
+        break;
+    case 7:
+        uVar1 = getMsg_BOU_2();
+        break;
+    case 8:
+        break;
+    }
+  return uVar1;
 }
 
 /* 00002528-000025A8       .text chkAttention__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::chkAttention() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::chkAttention() {
+
+  if((dComIfGp_getAttention().LockonTruth() & 0xFF) != 0){
+    return this == dComIfGp_getAttention().LockonTarget(0);
+  }else{
+    return this == dComIfGp_getAttention().ActionTarget(0);
+  }
+
 }
 
 /* 000025A8-00002610       .text setAttention__11daNpc_Ko1_cFb */
-void daNpc_Ko1_c::setAttention(bool) {
-    /* Nonmatching */
+void daNpc_Ko1_c::setAttention(bool i_param_1) {
+
+    attention_info.position.set(current.pos.x,current.pos.y + l_HIO.children[field_0x8A6].field18,current.pos.z);
+    if(field_0x870 == 0 && !i_param_1){
+        return;
+    }
+    eyePos.set(field_0x7DC.x,field_0x7DC.y,field_0x7DC.z);
 }
 
 /* 00002610-00002644       .text searchByID__11daNpc_Ko1_cFUi */
-fopAc_ac_c* daNpc_Ko1_c::searchByID(fpc_ProcID) {
+fopAc_ac_c* daNpc_Ko1_c::searchByID(fpc_ProcID i_procID) {
     /* Nonmatching */
+    fopAc_ac_c* actor = NULL;
+    fopAcM_SearchByID(i_procID, &actor);
+    return actor;
 }
 
 /* 00002644-000026DC       .text partner_srch_sub__11daNpc_Ko1_cFPFPvPv_Pv */
