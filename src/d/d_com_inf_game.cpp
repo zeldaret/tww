@@ -58,9 +58,9 @@ void dComIfG_play_c::ct()
 
 /* 800521A4-800521D4       .text init__14dComIfG_play_cFv */
 void dComIfG_play_c::init() {
-    for (int i = 0; i < ARRAY_SIZE(mpPlayer); i++) {
-        mpPlayer[i] = NULL;
-        mCurCamera[i] = -1;
+    for (int i = 0; i < ARRAY_SIZE(mPlayerInfo); i++) {
+        mPlayerInfo[i].mpPlayer = NULL;
+        mPlayerInfo[i].mCameraID = -1;
     }
 
     for (int i = 0; i < ARRAY_SIZE(mpPlayerPtr); i++) {
