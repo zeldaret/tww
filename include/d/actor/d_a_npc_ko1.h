@@ -2,6 +2,7 @@
 #define D_A_NPC_KO1_H
 
 #include "d/d_npc.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_msg.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -77,23 +78,23 @@ public:
     bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
-    void partner_srch_sub(void* (*)(void*, void*));
+    fpc_ProcID  partner_srch_sub(void* (*)(void*, void*));
     void partner_srch();
-    void check_landOn();
+    bool check_landOn();
     void ko_setPthPos();
-    void set_tgtPos(cXyz);
-    void ko_movPass();
+    cXyz set_tgtPos(cXyz);
+    u32 ko_movPass();
     void ko_clcMovSpd();
     void ko_clcSwmSpd();
     void ko_nMove();
     void chk_routeAngle(cXyz&, short*);
     void routeWallCheck(cXyz&, cXyz&, short*);
-    void chk_ForwardGroundY(short);
-    void chk_wallJump(short);
-    void routeCheck(float, short*);
-    void chk_start_swim();
-    void get_crsActorID();
-    void chk_areaIn(float, cXyz);
+    f32 chk_ForwardGroundY(short);
+    f32 chk_wallJump(short);
+    s32 routeCheck(float, short*);
+    bool chk_start_swim();
+    fpc_ProcID get_crsActorID();
+    bool chk_areaIn(float, cXyz);
     void setPrtcl_Hamon(float, float);
     void setPrtcl_HanaPachi();
     void charDecide(int);
@@ -157,6 +158,7 @@ public:
     s8 field_0x6CE;       
     s8 field_0x6CF;
     s8 field_0x6D0;
+    s8 field_0x6D1;
     Mtx field_0x6D4;
     mDoExt_McaMorf* field_0x704;  
     J3DModel* field_0x708;
@@ -178,41 +180,59 @@ public:
     csXyz field_0x7D6;
     cXyz field_0x7DC;
     cXyz field_0x7E8;
-    u8 pad7F4[0x805-0x7F4];
+    cXyz field_0x7F4;
+    u8 pad800[0x805-0x800];
     u8 field_0x805;
     u8 pad806[0x80C-0x806];
     cXyz field_0x80C;
-    u8 pad810[0x824 - 0x818];
+    cXyz field_0x818;
     f32 field_0x824;
     f32 field_0x828;
-    u8 pad828[0x840 - 0x82C];
+    f32 field_0x82C;
+    f32 field_0x830;
+    f32 field_0x834;
+    f32 field_0x838;
+    f32 field_0x83C;
     s16 field_0x840;
     s16 field_0x842;
     s16 field_0x844;
     s16 field_0x846;
     u32 field_0x848;
-    u8 pad84C[0x856 - 0x84C];
+    u8 pad84C[0x850 - 0x84C];
+    s16 field_0x850;
+    s16 field_0x852;
+    s16 field_0x854;
     s16 field_0x856;
     s16 field_0x858;
-    u8 pad85A[4];
+    s16 field_0x85A;
+    s16 field_0x85C;
     s8 field_0x85E;
     s8 field_0x85F;
     s8 field_0x860;
     s8 field_0x861;
     s8 field_0x862;
     u8 field_0x863;
-    u8 pad864;
+    u8 field_0x864;
     u8 field_0x865;
-    u8 pad866[0x86C - 0x866];   
+    u8 pad866[0x869 - 0x866]; 
+    u8 field_0x869;   
+    u8 field_0x86A;   
+    u8 field_0x86B;      
     u8 field_0x86C;
     u8 field_0x86D;
-    u8 pad8CE[0x870 - 0x86E];  
     s32 field_0x870;
     u8 pad874[0x875 - 0x874];  
     u8 field_0x875; 
     bool field_0x876; 
     u8 field_0x877;
-    u8 pad878[0x89C - 0x878];
+    dPa_rippleEcallBack field_0x878;
+    JPABaseEmitter* field_0x88C;
+    JPABaseEmitter* field_0x890;
+    JPABaseEmitter* field_0x894;
+    s8 field_0x898;
+    u8 field_0x899;
+    u8 field_0x89A;
+    u8 field_0x89B;
     u8 field_0x89C;
     u8 field_0x89D;
     s8 field_0x89E;
@@ -239,7 +259,16 @@ public:
     char pad04[0x16-0x04];
     s16  field16;
     f32 field18;
-    char pad1C[0x5C-0x1C];
+    f32 field1C;
+    s16 field20;
+    s16 field22;
+    f32 field24;
+    f32 field28;
+    f32 field2C;
+    f32 field30;
+    f32 field34;
+    f32 field38;
+    char pad3C[0x5C-0x3C];
     u32 field5C;
     /* Place member variables here */
 };

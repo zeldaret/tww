@@ -194,7 +194,7 @@ public:
     dPath* getPath(){return mPath;};
     u8 getIdx(){return mCurrPointIndex;}
     void setIdx(u8 idx){mCurrPointIndex = idx;}
-    u8 getDir(){return mbGoingForwards;}
+    bool getDir(){return mbGoingForwards;}
     cXyz getPoint(u8 pointIdx);
     bool chkPointPass(cXyz, bool);
     bool incIdx();
