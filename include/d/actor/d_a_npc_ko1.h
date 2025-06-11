@@ -16,6 +16,7 @@ class ko_ob_class : public fopAc_ac_c{};
 class daNpc_Ko1_c : public fopNpc_npc_c {
 
 public:
+    typedef int (daNpc_Ko1_c::*ActionFunc)(void*);
     struct anm_prm_c {
         s8 field0;
         s8 field1;
@@ -97,14 +98,14 @@ public:
     bool chk_areaIn(float, cXyz);
     void setPrtcl_Hamon(float, float);
     void setPrtcl_HanaPachi();
-    void charDecide(int);
+    bool charDecide(int);
     void event_actionInit(int);
-    void event_action();
+    bool event_action();
     void privateCut(int);
     void endEvent();
     void isEventEntry();
     void event_proc(int);
-    void set_action(int (daNpc_Ko1_c::*)(void*), void*);
+    s32 set_action(ActionFunc, void*);
     void clrSpd();
     void setStt(signed char);
     void wait_1();
@@ -168,9 +169,9 @@ public:
     mDoExt_btpAnm field_0x718;
     u8 field_0x72C;
     s16 field_0x72E;
-    u8 pad730[0xC];
+    ActionFunc field_0x730;
     /*0x73C*/ dNpc_PathRun_c mPathRun;
-    /*0x744*/ u32 pad744;
+    /*0x744*/ void* field_0x744;
     /*0x748*/ dNpc_EventCut_c mEventCut;
     fpc_ProcID field_0x7B4[2];
     u8 field_0x7BC;
@@ -231,7 +232,7 @@ public:
     JPABaseEmitter* field_0x894;
     s8 field_0x898;
     u8 field_0x899;
-    u8 field_0x89A;
+    s8 field_0x89A;
     u8 field_0x89B;
     u8 field_0x89C;
     u8 field_0x89D;
