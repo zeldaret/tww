@@ -870,8 +870,8 @@ void daNpc_Ko1_c::checkOrder() {
 }
 
 /* 00001B2C-00001BCC       .text chk_talk__11daNpc_Ko1_cFv */
-BOOL daNpc_Ko1_c::chk_talk() {
-    BOOL o_retval = FALSE;
+bool daNpc_Ko1_c::chk_talk() {
+    bool o_retval = FALSE;
     if(dComIfGp_event_chkTalkXY()){
         if(dComIfGp_evmng_ChkPresentEnd()){
             field_0x863 = dComIfGp_event_getPreItemNo();
@@ -1397,14 +1397,14 @@ void daNpc_Ko1_c::ko_nMove() {
             ko_clcMovSpd();          
 
             if(field_0x898 == 1){
-                f32 fVar1 = speedF;
+                f32 fVar1 = fopAcM_GetSpeedF(this);
                 fVar2 = l_HIO.children[field_0x8A6].field24;
                 fVar3 = fVar1*fVar2;
                 fVar2 = l_HIO.children[field_0x8A6].field28*fVar2;
                 fVar3 = cLib_maxLimit(fVar3,fVar2);
 
             }else{
-                f32 fVar1 = speedF;
+                f32 fVar1 = fopAcM_GetSpeedF(this);
                 fVar2 = l_HIO.children[field_0x8A6].field34;
                 fVar3 = fVar1*fVar2;
                 fVar2 = l_HIO.children[field_0x8A6].field38*fVar2;
@@ -1756,22 +1756,44 @@ void daNpc_Ko1_c::clrSpd() {
 void daNpc_Ko1_c::setStt(signed char i_param_1) {
     /* Nonmatching */
     fopAc_ac_c* a_partner = searchByID(field_0x7B4[0]);
-    switch(field_0x8A3){
+    s8 temp_r30 = field_0x8A3;
+    field_0x84E = 0;
+
+    switch(temp_r30){
         case 1:
             field_0x852 = 90.0f + cM_rndF(90.0f);
             break;
         case 2:
             field_0x854 = (g_Counter.mCounter0 & 3) + 1;
+            if (temp_r30 != 3) {
+                field_0x8A5 = 3;
+                field_0x858 = field_0x7D0.y;
+                speedF = 1;
+                field_0x876 = 0;
+            }
+            field_0x8A2 = 0;
+            field_0x898 = 0;
+            clrSpd();
             break;    
+        case 3:
+            field_0x8A5 = 1;
+            m_jnt.mbTrn = 1;
+            field_0x876 = 0;
+            field_0x8A2 = 0;
+            field_0x898 = 0;
+            clrSpd();
+            field_0x89C = 0xFF;
+            field_0x89D = 0xFF;
+            field_0x8A4 = temp_r30;
+            break;
         case 12:
         case 22:
         case 29:   
-        case 3:
-            field_0x8A5 = 1;
-            m_jnt.mbTrn = true;
-            field_0x876 = 0;
-            field_0x8A2 = 0;
-            field_0x898 = 0;                        
+            // field_0x8A5 = 1;
+            // m_jnt.mbTrn = true;
+            // field_0x876 = 0;
+            // field_0x8A2 = 0;
+            // field_0x898 = 0;                        
             break;
         case 4:
             field_0x852 = 180.0f + cM_rndF(180.0f);
@@ -1796,12 +1818,18 @@ void daNpc_Ko1_c::setStt(signed char i_param_1) {
             clrSpd();
             break;
         case 6:
-            if(mPathRun.isPath()){
-                field_0x744 = mPathRun.getPath();
-                mPathRun.setInfDrct(mPathRun.getPath());
-            }
         case 13:
         case 23:
+            if(temp_r30 != 6){
+          }else{
+            if(mPathRun.isPath()){
+                field_0x744 = mPathRun.getPath();
+                mPathRun.setInfDrct(0);
+            }
+            field_0x7F4 = dComIfGp_getLinkPlayer()->current.pos;
+            
+            }
+
             //field_0x7F4 = mPathRun.getPoint(mPathRun.getIdx());
             field_0x8A5 = 0;
             field_0x876 = 1;
@@ -1814,12 +1842,23 @@ void daNpc_Ko1_c::setStt(signed char i_param_1) {
                 field_0x744 = mPathRun.getPath();
                 mPathRun.setInfDrct(mPathRun.getPath());
             }
-            break;
+
         case 8:
             if(mPathRun.isPath()){
                 field_0x744 = mPathRun.getPath();
                 mPathRun.setInfDrct(mPathRun.getPath());
             }
+            field_0x8A2 = 0;
+            field_0x898 = 3;
+            field_0x86B = 0;
+            field_0x830 = -4.0f;
+            speed.y = field_0x830;
+            speedF = 0.0f;
+            field_0x834 = 0.0f;
+            field_0x82C = 0.0f;
+            //field_0x83C = l_HIO.children[field_0x8A6].field22;
+
+            gravity = 0.0f;
             break;
         case 9:
         case 16:
@@ -1853,6 +1892,10 @@ void daNpc_Ko1_c::setStt(signed char i_param_1) {
             field_0x8A2 = 0;         
             field_0x898 = 1;
             field_0x86B = 0;
+            fopAcM_SetGravity(this,-4.5f);
+            field_0x82C =  l_HIO.children[field_0x8A6].field28;
+            field_0x834 = l_HIO.children[field_0x8A6].field2C;
+            field_0x83C = l_HIO.children[field_0x8A6].field30;
             break;
         case 17:
             JUT_ASSERT(2675,a_partner != NULL);
@@ -1863,12 +1906,31 @@ void daNpc_Ko1_c::setStt(signed char i_param_1) {
             field_0x8A5 = 1;
             field_0x876 = 0;
             field_0x8A2 = 2;         
-            field_0x898 = 0;       
+            field_0x898 = 0;     
+            fopAcM_SetGravity(this,-4.5f);
+            field_0x82C =  l_HIO.children[field_0x8A6].field38;
+            field_0x834 = l_HIO.children[field_0x8A6].field3C;
+            field_0x83C = l_HIO.children[field_0x8A6].field40;
+        break;  
             break;
         case 19:
-
+            if (a_partner != NULL) {
+                field_0x8A5 = 2;
+                field_0x7E8 = a_partner->current.pos;
+                field_0x7E8.y = a_partner->eyePos.y;
+            } else {
+                field_0x8A5 = 0;
+            }
+            field_0x876 = 0;
+            field_0x8A2 = 0;         
+            field_0x898 = 0; 
+            clrSpd();
+            break;
         case 20:
-
+            field_0x89C =  0xFF;
+            field_0x89D =  0xFF;
+            field_0x8A4 = temp_r30;
+        break;
         case 27:
         case 28:
             field_0x852 = 180.0f + cM_rndF(180.0f);
@@ -1879,62 +1941,220 @@ void daNpc_Ko1_c::setStt(signed char i_param_1) {
 }
 
 /* 00004B18-00004C70       .text wait_1__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_1() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_1() {
+
+    if(field_0x875){
+        if(chk_talk()){
+            setStt(3);
+        };
+        return 1;
+    }
+    field_0x8A2 = 2;
+    field_0x8A5 = 3;
+    field_0x858 = field_0x7D0.y;
+    if ((s32) field_0x89F == 6) {
+        if ((s8) field_0x860 != 0) {
+            cLib_calcTimer(&field_0x854);
+        }
+        if ((field_0x854 == 0) || (field_0x874 != 0)) {
+            field_0x854 = (g_Counter.mCounter0 & 3) + 1;
+            field_0x852 = (s16) (90.0f + cM_rndF(90.0f));
+            setAnm_NUM(0, 1);
+        }
+        return 1;
+    }
+    if ((u8) field_0x874 != 0) {
+        field_0x84E = 0x3C;
+    }
+    if (cLib_calcTimer(&field_0x84E) != 0) {
+        field_0x8A5 = 1;
+        return 1;
+    }
+    if (cLib_calcTimer(&field_0x852) == 0) {
+        setAnm_NUM(6, 1);
+    }
+    m_jnt.mbTrn = true;
+    return 1;
 }
 
 /* 00004C70-00004CE8       .text wait_2__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_2() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_2() {
+
+    if(field_0x860){
+        cLib_calcTimer(&field_0x854);
+        if(!field_0x854 || field_0x874 || field_0x875 ){
+            setStt(1);
+            return 1;
+        };
+    }
+    return 1;
 }
 
 /* 00004CE8-00004D1C       .text wait_3__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_3() {
+bool daNpc_Ko1_c::wait_3() {
     /* Nonmatching */
+    if (field_0x860 != 0) {
+        setStt(4);
+    }
+    return 1;
 }
 
 /* 00004D1C-00004E64       .text wait_4__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_4() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_4() {
+
+    if (field_0x875) {
+        if (chk_talk()) {
+            setStt(3);
+        }
+        return 1;
+    }
+    if (chk_start_swim()) {
+        setStt(7);
+        return 1;
+    }
+
+    if (chk_areaIn(l_HIO.children[field_0x8A6].field50,current.pos) == 0) {
+
+        if (chk_areaIn(l_HIO.children[field_0x8A6].field58, field_0x80C) == 0) {
+            setStt(0xB);
+            return 1;
+        }
+        setStt(6);
+        return 1;
+    }
+    field_0x8A2 = 2;
+    return 1;
 }
 
 /* 00004E64-00004F30       .text wait_5__11daNpc_Ko1_cFSc */
-void daNpc_Ko1_c::wait_5(signed char) {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_5(signed char i_param_1) {
+
+    if (field_0x6bc[0] == 1) {
+        field_0x6bc[0] = 2;
+        setStt(0x14);
+        field_0x8A5 = 1;
+        field_0x876 = 0;
+        field_0x8A2 = 0;
+        field_0x898 = 0;
+        clrSpd();
+        return 1;
+    }
+
+    if (chk_areaIn(l_HIO.children[field_0x8A6].field48, field_0x80C)) {
+        setStt(i_param_1);
+    }
+    return 1;
 }
 
 /* 00004F30-00005088       .text wait_6__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_6() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_6() {
+
+    if (field_0x875) {
+        if (chk_talk()) {
+            if(chk_manzai_1()){
+                setStt(3);
+            }
+        }
+        return 1;
+    }
+    if (field_0x6bc[0] == 1) {
+        field_0x6bc[0] = 2;
+        setStt(0x14);
+        return 1;
+    }
+
+    if (chk_areaIn(l_HIO.children[field_0x8A6].field50,current.pos) == 0) {
+
+        if (chk_areaIn(l_HIO.children[field_0x8A6].field4C, field_0x80C) == 0) {
+            setStt(0xF);
+            return 1;
+        }
+        setStt(0xD);
+        return 1;
+    }
+    field_0x8A2 = 2;
+    return 1;
 }
 
 /* 00005088-000052D4       .text wait_7__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_7() {
+bool daNpc_Ko1_c::wait_7() {
     /* Nonmatching */
+
+    fopAc_ac_c* a_partner = searchByID(field_0x7B4[0]);
+    JUT_ASSERT(2923,a_partner != NULL);
+    if (field_0x875) {
+        if (chk_talk()) {
+            if(chk_manzai_1()){
+                setStt(3);
+            }
+        }
+        return 1;
+    }
+    if (field_0x6bc[0] == 1) {
+        field_0x6bc[0] = 2;
+        setStt(0x14);
+        field_0x8A5 = 1;
+        field_0x876 = 0; 
+        field_0x8A2 = 0;
+        field_0x898 = 0;  
+        clrSpd(); 
+        return 1;
+    }
+    if (chk_areaIn(l_HIO.children[field_0x8A6].field50,current.pos) ) {
+        field_0x8A5 = 1;
+    }else{
+        field_0x8A5 = 2;
+        field_0x7E8 = a_partner->current.pos;
+        field_0x7E8.y = a_partner->eyePos.y;
+    }
+    if((a_partner->current.pos - current.pos).absXZ() < l_HIO.children[field_0x8A6].field50){
+        field_0x8A2 = 2;
+    }else{
+        setStt(17);
+    }
+    return 1;
 }
 
 /* 000052D4-000053F8       .text wait_9__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_9() {
-    /* Nonmatching */
+bool daNpc_Ko1_c::wait_9() {
+
+    if (field_0x875) {
+        if (chk_talk()) {
+            setStt(3);
+        }
+        return 1;
+    }
+    if (chk_areaIn(l_HIO.children[field_0x8A6].field50,current.pos) == 0) {
+
+        if (chk_areaIn(l_HIO.children[field_0x8A6].field4C, field_0x80C) == 0) {
+            setStt(0x18);
+            return 1;
+        }
+        setStt(0x17);
+        return 1;
+    }else{
+        field_0x8A2 = 2;
+        return 1;
+    }
 }
 
 /* 000053F8-00005524       .text wait_a__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::wait_a() {
+bool daNpc_Ko1_c::wait_a() {
     /* Nonmatching */
 }
 
 /* 00005524-000055F8       .text walk_1__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::walk_1() {
+bool daNpc_Ko1_c::walk_1() {
     /* Nonmatching */
 }
 
 /* 000055F8-000056D4       .text walk_2__11daNpc_Ko1_cFScSc */
-void daNpc_Ko1_c::walk_2(signed char, signed char) {
+bool daNpc_Ko1_c::walk_2(signed char, signed char) {
     /* Nonmatching */
 }
 
 /* 000056D4-000057B8       .text walk_3__11daNpc_Ko1_cFv */
-void daNpc_Ko1_c::walk_3() {
+bool daNpc_Ko1_c::walk_3() {
     /* Nonmatching */
 }
 
