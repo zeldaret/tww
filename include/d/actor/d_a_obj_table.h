@@ -19,7 +19,7 @@ namespace daObjTable {
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
         
-        s32 prm_get_mdl() const { return daObj::PrmAbstract(this, PRM_MDL_W, PRM_MDL_S); }
+        u8 prm_get_mdl() const { return daObj::PrmAbstract(this, PRM_MDL_W, PRM_MDL_S); }
         static Mtx M_tmp_mtx;
         static const char M_arcname[6];
         enum Prm_e {

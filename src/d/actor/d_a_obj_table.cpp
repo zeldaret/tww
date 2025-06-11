@@ -23,9 +23,8 @@ BOOL daObjTable::Act_c::CreateHeap() {
     J3DModelData *model_data;
     J3DModel *model;
 
-    if ((u8)prm_get_mdl() == 0) {
+    if (prm_get_mdl() == 0) {
         model_data = (J3DModelData*) dComIfG_getObjectRes(M_arcname, TABLE_BDL_YTBLE);
-        
         JUT_ASSERT(0x51, model_data != NULL);
         
         model = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
@@ -43,15 +42,10 @@ BOOL daObjTable::Act_c::CreateHeap() {
 
 /* 000001B8-00000284       .text Create__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::Create() {
-    u8 prm;
-    uint coll_id;
-    BOOL release;
-
-    cullMtx = mpModel->mBaseTransformMtx;
+	fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -80.0f, -1.0f, -80.0f, 80.0f, 205.0f, 80.0f);
-    prm = prm_get_mdl();
-    if ((uint)prm == 2 && mpBgW != NULL) {
+    if (prm_get_mdl() == 2 && mpBgW != NULL) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
@@ -62,12 +56,11 @@ BOOL daObjTable::Act_c::Create() {
 /* 00000284-000003B4       .text Mthd_Create__Q210daObjTable5Act_cFv */
 cPhs_State daObjTable::Act_c::Mthd_Create() {
     cPhs_State phase_state;
-    u8 prm;
     fopAcM_SetupActor(this, Act_c);
 
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        if ((u8)prm_get_mdl() == 0) {
+        if (prm_get_mdl() == 0) {
             phase_state = MoveBGCreate(M_arcname, TABLE_DZB_YTBLE, NULL, -1);
         } else {
             phase_state = MoveBGCreate(M_arcname, TABLE_DZB_QCFIS, NULL, -1);
@@ -93,16 +86,15 @@ BOOL daObjTable::Act_c::Mthd_Delete() {
 
 /* 00000408-00000488       .text set_mtx__Q210daObjTable5Act_cFv */
 void daObjTable::Act_c::set_mtx() {
-    mDoMtx_trans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z); 
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z); 
-    mDoMtx_copy(mDoMtx_stack_c::now, mpModel->mBaseTransformMtx);
-    mDoMtx_copy(mDoMtx_stack_c::now, M_tmp_mtx);
+	mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+	mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+	mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+	cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000488-000004C4       .text init_mtx__Q210daObjTable5Act_cFv */
 void daObjTable::Act_c::init_mtx() {
-    J3DModel *model = mpModel;
-    model->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -125,7 +117,7 @@ BOOL daObjTable::Act_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
 
-    if ((u8)prm_get_mdl() == 0) {
+    if (prm_get_mdl() == 0) {
         fVar = 120.0;
     } else {
         fVar = 30.0;
