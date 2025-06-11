@@ -1418,7 +1418,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_shelf"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_shmrgrd", extra_cflags=["-sym off"]),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swpush", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(Matching, "d_a_obj_table"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_table"),
     ActorRel(NonMatching, "d_a_obj_tenmado"),
     ActorRel(NonMatching, "d_a_obj_tide"),
     ActorRel(Matching,    "d_a_obj_timer"),
