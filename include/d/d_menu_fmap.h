@@ -6,7 +6,7 @@
 
 class JUTFont;
 class J2DScreen;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class dMenu_FmapSv_c;
 struct cursorTable_t;
 struct aramCmapDatPat_t;

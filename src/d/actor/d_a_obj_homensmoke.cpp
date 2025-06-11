@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_homensmoke.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_particle.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
@@ -19,16 +20,16 @@ namespace daObjHomensmoke {
             cXyz forwardOffset(0.0f, 0.0f, 200.0f);
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::transM(forwardOffset);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_stack_c::transM(backOffset);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         } else {
             mDoMtx_stack_c::transS(current.pos);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         }
     }
@@ -75,7 +76,12 @@ namespace daObjHomensmoke {
 
     /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_execute() {
-        if (!mbInitialized) {
+#if VERSION == VERSION_DEMO
+        if (m2D0 == NULL)
+#else
+        if (!mbInitialized)
+#endif
+        {
             static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
             static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
             if (mType == 0) {
@@ -170,7 +176,7 @@ actor_process_profile_definition g_profile_Obj_Homensmk = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0043,
+    /* Priority     */ PRIO_Obj_Homensmk,
     /* Actor SubMtd */ &daObjHomensmoke::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

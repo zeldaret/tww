@@ -184,7 +184,7 @@ struct TLinkList_factory : public TLinkList<T, I> {
     virtual T* Do_create() = 0;
     virtual void Do_destroy(T*) = 0;
     void Erase_destroy(T* elem) {
-        Erase(elem);
+        this->Erase(elem);
         Do_destroy(elem);
     }
 };
@@ -240,6 +240,23 @@ struct TContainerEnumerator_const : public TEnumerator2<typename TLinkList<T, I>
     inline TContainerEnumerator_const(const TLinkList<T, I>* param_0)
         : TEnumerator2<typename TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
 };
+
+namespace {
+
+template <typename T>
+class TPRIsEqual_pointer_ {
+public:
+    TPRIsEqual_pointer_<T>(const T* p) { this->p_ = p; }
+
+    bool operator()(const T& rSrc) const {
+        return &rSrc == this->p_;
+    }
+
+private:
+    const T* p_;
+};
+
+};  // namespace
 
 };  // namespace JGadget
 

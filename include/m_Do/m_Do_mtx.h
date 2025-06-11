@@ -143,6 +143,10 @@ inline void cMtx_inverseTranspose(const Mtx a, Mtx b) {
     mDoMtx_inverseTranspose(a, b);
 }
 
+inline void cMtx_concatProjView(const Mtx a, const Mtx b, Mtx c) {
+    mDoMtx_concatProjView(a, b, c);
+}
+
 class mDoMtx_stack_c {
 public:
     mDoMtx_stack_c() {
@@ -355,6 +359,10 @@ extern Mtx g_mDoMtx_identity;
 
 inline MtxP mDoMtx_getIdentity() {
     return g_mDoMtx_identity;
+}
+
+inline MtxP cMtx_getIdentity() {
+    return mDoMtx_getIdentity();
 }
 
 class mDoMtx_quatStack_c {

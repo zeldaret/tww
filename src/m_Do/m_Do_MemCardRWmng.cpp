@@ -13,7 +13,7 @@
 #include "dolphin/os/OS.h"
 
 #include <string.h>
-#include <printf.h>
+#include <stdio.h>
 
 static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
 static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);
@@ -23,19 +23,19 @@ static u32 sSaveCount;
 s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     s32 ret;
     mDoMemCdRWm_BuildHeader((mDoMemCdRWm_HeaderData*)sTmpBuf);
-    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x0000);
+    ret = CARDWrite(card, sTmpBuf, sizeof(card_savedata), 0 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
 
     if (!mDoMemCdRWm_CheckCardStat(card)) {
-        memset(sTmpBuf, 0, 0x2000);
-        ret = CARDWrite(card, sTmpBuf, 0x2000, 0x2000);
+        memset(sTmpBuf, 0, sizeof(sTmpBuf));
+        ret = CARDWrite(card, sTmpBuf, sizeof(card_savedata), 1 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
-        ret = CARDWrite(card, sTmpBuf, 0x2000, 0x4000);
+        ret = CARDWrite(card, sTmpBuf, sizeof(card_savedata), 2 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
         sSaveCount = 0;
     }
 
-    memset(sTmpBuf, 0, 0x2000);
+    memset(sTmpBuf, 0, sizeof(sTmpBuf));
     card_savedata* save = (card_savedata*)sTmpBuf;
     save->dataVersion = 0;
     memcpy(save->gamedata, data, size);
@@ -44,20 +44,20 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
 #else
     save->saveCount = dComIfGs_getPalLanguage();
 #endif
-    s32 csum = mDoMemCdRWm_CalcCheckSum(save, 0x1FFC);
+    s32 csum = mDoMemCdRWm_CalcCheckSum(save, sizeof(card_savedata) - sizeof(save->csum));
     save->csum = csum;
 
-    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x2000);
+    ret = CARDWrite(card, sTmpBuf, sizeof(card_savedata), 1 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
-    ret = CARDRead(card, sTmpBuf, 0x2000, 0x2000);
+    ret = CARDRead(card, sTmpBuf, sizeof(card_savedata), 1 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
-    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, 0x1FFC) != csum) return ret;
+    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, sizeof(card_savedata) - sizeof(save->csum)) != csum) return ret;
 
-    ret = CARDWrite(card, sTmpBuf, 0x2000, 0x4000);
+    ret = CARDWrite(card, sTmpBuf, sizeof(card_savedata), 2 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
-    ret = CARDRead(card, sTmpBuf, 0x2000, 0x4000);
+    ret = CARDRead(card, sTmpBuf, sizeof(card_savedata), 2 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
-    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, 0x1FFC) != csum) return ret;
+    if (mDoMemCdRWm_CalcCheckSum(sTmpBuf, sizeof(card_savedata) - sizeof(save->csum)) != csum) return ret;
 
     s32 i;
     u32 slot;
@@ -65,10 +65,10 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
         if (mDoMemCd_getCopyToPos() < 3) {
             slot = mDoMemCd_getCopyToPos() * 3 + 3;
             u8* picData = mDoMemCd_getPictWriteDataPtr();
-            for (i = 0; i < 3; i++, picData += 0x2000) {
-                ret = CARDWrite(card, picData, 0x2000, (slot + i) * 0x2000);
+            for (i = 0; i < 3; i++, picData += sizeof(card_pictdata)) {
+                ret = CARDWrite(card, picData, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
-                ret = CARDRead(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
+                ret = CARDRead(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
                 if (!mDoMemCdRWm_TestCheckSumPictData(picData)) return ret;
             }
@@ -77,15 +77,15 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
         slot = dComIfGs_getDataNum() * 3 + 3;
         for (i = 0; i < 3; i++) {
             if (dComIfGp_isPictureFlag(i)) {
-                memset(sTmpBuf, 0, 0x2000);
-                JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, 0x2000);
-                ret = CARDWrite(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
+                memset(sTmpBuf, 0, sizeof(card_pictdata));
+                JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, sizeof(card_pictdata));
+                ret = CARDWrite(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
-                ret = CARDRead(card, sTmpBuf, 0x2000, (slot + i) * 0x2000);
+                ret = CARDRead(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
             }
         }
-   }
+    }
 
     mDoMemCdRWm_SetCardStat(card);
     return ret;
@@ -108,12 +108,12 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
 
     save = (card_savedata*)sTmpBuf;
     save2 = (card_savedata*)sTmpBuf2;
-    ret = CARDRead(card, save, 0x2000, 0x2000);
+    ret = CARDRead(card, save, sizeof(card_savedata), 1 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
     csum0a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[0]);
     csum1a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[1]);
     csum2a = mDoMemCdRWm_TestCheckSumGameData(&save->gamedata[2]);
-    ret = CARDRead(card, save2, 0x2000, 0x4000);
+    ret = CARDRead(card, save2, sizeof(card_savedata), 2 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) return ret;
     csum0b = mDoMemCdRWm_TestCheckSumGameData(&save2->gamedata[0]);
     csum1b = mDoMemCdRWm_TestCheckSumGameData(&save2->gamedata[1]);
@@ -139,9 +139,9 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
         return CARD_ERROR_FATAL_ERROR;
 
     if (needsWrite) {
-        ret = CARDWrite(card, save, 0x2000, 0x2000);
+        ret = CARDWrite(card, save, sizeof(card_savedata), 1 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
-        ret = CARDWrite(card, save, 0x2000, 0x4000);
+        ret = CARDWrite(card, save, sizeof(card_savedata), 2 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
     }
 
@@ -158,7 +158,7 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
 #endif
     mDoMemCd_setDataVersion(save->dataVersion);
     if (!invalid && mDoMemCd_getPictDataPtr() != NULL) {
-        ret = CARDRead(card, mDoMemCd_getPictDataPtr(), 0x12000, 0x6000);
+        ret = CARDRead(card, mDoMemCd_getPictDataPtr(), 3 * 3 * sizeof(card_pictdata), 3 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
     }
 
@@ -173,9 +173,9 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo* card) {
     s32 ret;
     card_savedata* save;
     save = (card_savedata*)sTmpBuf;
-    ret = CARDRead(card, save, 0x2000, 0x2000);
+    ret = CARDRead(card, save, sizeof(card_savedata), 1 * sizeof(card_savedata));
     if (ret != CARD_ERROR_READY) {
-        ret = CARDRead(card, save, 0x2000, 0x4000);
+        ret = CARDRead(card, save, sizeof(card_savedata), 2 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
     }
     
@@ -192,7 +192,7 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo* card) {
 
 /* 80019F4C-8001A0A8       .text mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData */
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     snprintf(header->comment, sizeof(header->comment), "ゼルダの伝説～風のタクト～");
 #else
     snprintf(header->comment, sizeof(header->comment), "Zelda: The Wind Waker");
@@ -200,7 +200,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     OSTime time = OSGetTime();
     OSCalendarTime cal;
     OSTicksToCalendarTime(time, &cal);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     snprintf(header->info, sizeof(header->info), "%d月%d日のセーブデータです", cal.month + 1, cal.day_of_month);
 #elif VERSION == VERSION_USA
     snprintf(header->info, sizeof(header->info), "%d/%d Save Data", cal.month + 1, cal.day_of_month);
@@ -213,7 +213,6 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
         snprintf(header->info, sizeof(header->info), "%d/%d Spielstand", cal.day_of_month, cal.month + 1);
         break;
     case 2:
-        // Extended ASCII 0xE9 is: é ("Données de jeu")
         snprintf(header->info, sizeof(header->info), "Donn%ces de jeu %d/%d", 0xE9, cal.day_of_month, cal.month + 1);
         break;
     case 3:
@@ -267,7 +266,7 @@ BOOL mDoMemCdRWm_CheckCardStat(CARDFileInfo* card) {
     CARDStat stat;
     CARDGetStatus(mDoMemCd_getNowSlot(), card->fileNo, &stat);
     if (!(stat.iconAddr == 0 &&
-        stat.commentAddr == 0x1C00 &&
+        stat.commentAddr == offsetof(mDoMemCdRWm_HeaderData, comment) &&
         CARDGetBannerFormat(&stat) == 1 &&
         CARDGetIconAnim(&stat) == 0 &&
         CARDGetIconFormat(&stat, 0) == 1 &&
@@ -307,8 +306,7 @@ u32 mDoMemCdRWm_CalcCheckSum(void* p_, u32 size) {
 u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
     u16 csum = 0;
     for (int i = 0; i < size; i++) {
-        u8 v = ((u8*)p)[i];
-        csum += v;
+        csum += ((u8*)p)[i];
     }
     return csum;
 }

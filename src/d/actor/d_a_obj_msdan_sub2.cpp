@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_msdan_sub2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::CreateHeap() {
@@ -54,28 +55,28 @@ BOOL daObjMsdanSub2::Act_c::Draw() {
 namespace daObjMsdanSub2 {
 namespace {
 /* 000009AC-000009CC       .text Mthd_Create__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMsdanSub2::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 000009CC-000009EC       .text Mthd_Delete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMsdanSub2::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000009EC-00000A0C       .text Mthd_Execute__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMsdanSub2::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000A0C-00000A38       .text Mthd_Draw__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMsdanSub2::Act_c*)i_this)->Draw();
 }
 
 /* 00000A38-00000A64       .text Mthd_IsDelete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjMsdanSub2::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_MsdanSub2 = {
@@ -98,7 +99,7 @@ actor_process_profile_definition g_profile_Obj_MsdanSub2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003B,
+    /* Priority     */ PRIO_Obj_MsdanSub2,
     /* Actor SubMtd */ &daObjMsdanSub2::Mthd_MsdanSub2,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

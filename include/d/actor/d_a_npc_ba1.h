@@ -98,9 +98,9 @@ public:
     void wait_action4(void*);
     void demo();
     void shadowDraw();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void create_Anm();
     void create_itm_Mdl();
@@ -108,7 +108,7 @@ public:
 
 public:
     /* 0x290 */ u8 m290[0x7F8 - 0x290];
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     /* 0x7F8 */ u8 m7F8;
 #endif
     /* Offsets below are for USA/PAL */

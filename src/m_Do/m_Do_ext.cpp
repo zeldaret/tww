@@ -14,7 +14,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "dolphin/gf/GFPixel.h"
+#include "dolphin/gf/GF.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
@@ -24,13 +24,13 @@
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 
 /* 8000DA70-8000DCF0       .text mDoExt_setJ3DData__FPA4_fPC16J3DTransformInfoUs */
-void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param_2) {
+void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 jnt_no) {
     bool local_28;
     if (cM3d_IsZero(transformInfo->mScale.x - 1.0f) && cM3d_IsZero(transformInfo->mScale.y - 1.0f) && cM3d_IsZero(transformInfo->mScale.z - 1.0f)) {
-        j3dSys.getModel()->setScaleFlag(param_2, 1);
+        j3dSys.getModel()->setScaleFlag(jnt_no, 1);
         local_28 = true;
     } else {
-        j3dSys.getModel()->setScaleFlag(param_2, 0);
+        j3dSys.getModel()->setScaleFlag(jnt_no, 0);
         local_28 = false;
     }
     mtx[0][3] = transformInfo->mTranslate.x;
@@ -48,7 +48,7 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param
         mtx[2][1] *= transformInfo->mScale.y;
         mtx[2][2] *= transformInfo->mScale.z;
     }
-    if (j3dSys.getModel()->getModelData()->getJointNodePointer(param_2)->getScaleCompensate() == 1) {
+    if (j3dSys.getModel()->getModelData()->getJointNodePointer(jnt_no)->getScaleCompensate() == 1) {
         f32 x = 1.0f / J3DSys::mParentS.x;
         f32 y = 1.0f / J3DSys::mParentS.y;
         f32 z = 1.0f / J3DSys::mParentS.z;
@@ -63,7 +63,7 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param
         mtx[2][2] *= z;
     }
     mDoMtx_concat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
-    j3dSys.getModel()->setAnmMtx(param_2, J3DSys::mCurrentMtx);
+    j3dSys.getModel()->setAnmMtx(jnt_no, J3DSys::mCurrentMtx);
     J3DSys::mParentS.x = transformInfo->mScale.x;
     J3DSys::mParentS.y = transformInfo->mScale.y;
     J3DSys::mParentS.z = transformInfo->mScale.z;
@@ -1010,26 +1010,26 @@ s32 mDoExt_resIDToIndex(JKRArchive* p_archive, u16 id) {
 }
 
 /* 80011EE4-80012140       .text calc__25mDoExt_MtxCalcAnmBlendTblFUs */
-void mDoExt_MtxCalcAnmBlendTbl::calc(u16 param_0) {
+void mDoExt_MtxCalcAnmBlendTbl::calc(u16 jnt_no) {
     j3dSys.setCurrentMtxCalc(this);
     if (mNum == 1) {
         J3DTransformInfo info1;
-        mAnmRatio->getAnmTransform()->getTransform(param_0, &info1);
-        calcTransform(param_0, info1); // Doesn't match because J3DMtxCalcBasic's vtable is in the wrong order
+        mAnmRatio->getAnmTransform()->getTransform(jnt_no, &info1);
+        calcTransform(jnt_no, info1);
         return;
     }
     J3DTransformInfo info2;
     Quaternion quat1;
     Quaternion quat2;
     Quaternion quat3;
-    mAnmRatio->getAnmTransform()->getTransform(param_0, &info2);
+    mAnmRatio->getAnmTransform()->getTransform(jnt_no, &info2);
     JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat1);
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
         J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
         if (transform) {
             J3DTransformInfo info3;
-            transform->getTransform(param_0, &info3);
+            transform->getTransform(jnt_no, &info3);
             f32 ratio = mAnmRatio[i].getRatio();
             f32 f30 = 1.0f - ratio;
             JMAEulerToQuat(info3.mRotation.x, info3.mRotation.y, info3.mRotation.z, &quat2);
@@ -1045,24 +1045,24 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 param_0) {
     }
     Mtx mtx;
     MTXQuat(mtx, &quat3);
-    mDoExt_setJ3DData(mtx, &info2, param_0);
+    mDoExt_setJ3DData(mtx, &info2, jnt_no);
 }
 
 /* 80012140-80012548       .text calc__28mDoExt_MtxCalcAnmBlendTblOldFUs */
-void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 param_0) {
+void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 jnt_no) {
     j3dSys.setCurrentMtxCalc(this);
     J3DTransformInfo info1;
     Quaternion quat1;
     Quaternion quat2;
     Quaternion quat3;
-    mAnmRatio->getAnmTransform()->getTransform(param_0, &info1);
+    mAnmRatio->getAnmTransform()->getTransform(jnt_no, &info1);
     JMAEulerToQuat(info1.mRotation.x, info1.mRotation.y, info1.mRotation.z, &quat1);
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
         if (mAnmRatio[i].getAnmTransform()) {
             J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
             J3DTransformInfo info2;
-            transform->getTransform(param_0, &info2);
+            transform->getTransform(jnt_no, &info2);
             f32 ratio = mAnmRatio[i].getRatio();
             f32 f30 = 1.0f - ratio;
             JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
@@ -1078,10 +1078,10 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 param_0) {
     }
 
     J3DModel* model = j3dSys.getModel();
-    J3DTransformInfo* oldTransInfo = mOldFrame->getOldFrameTransInfo(param_0);
-    Quaternion* oldQuat = mOldFrame->getOldFrameQuaternion(param_0);
+    J3DTransformInfo* oldTransInfo = mOldFrame->getOldFrameTransInfo(jnt_no);
+    Quaternion* oldQuat = mOldFrame->getOldFrameQuaternion(jnt_no);
     if (mOldFrame->getOldFrameFlg()) {
-        if (mOldFrame->getOldFrameRate() > 0.0f && mOldFrame->getOldFrameStartJoint() <= param_0 && mOldFrame->getOldFrameEndJoint() > param_0) {
+        if (mOldFrame->getOldFrameRate() > 0.0f && mOldFrame->getOldFrameStartJoint() <= jnt_no && mOldFrame->getOldFrameEndJoint() > jnt_no) {
             f32 oldFrameRate = mOldFrame->getOldFrameRate();
             f32 f31 = 1.0f - oldFrameRate;
             JMAQuatLerp(oldQuat, &quat1, f31, &quat3);
@@ -1092,21 +1092,21 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 param_0) {
             info1.mScale.y = info1.mScale.y * f31 + oldTransInfo->mScale.y * oldFrameRate;
             info1.mScale.z = info1.mScale.z * f31 + oldTransInfo->mScale.z * oldFrameRate;
         }
-    } else if (param_0 == model->getModelData()->getJointNum() - 1) {
+    } else if (jnt_no == model->getModelData()->getJointNum() - 1) {
         mOldFrame->onOldFrameFlg();
     }
     Mtx mtx;
     if (mBeforeCallback) {
-        mBeforeCallback(mUserArea, param_0, &info1, &quat3);
+        mBeforeCallback(mUserArea, jnt_no, &info1, &quat3);
     }
     mDoMtx_quat(mtx, &quat3);
-    mDoExt_setJ3DData(mtx, &info1, param_0);
+    mDoExt_setJ3DData(mtx, &info1, jnt_no);
     if (mAfterCallback) {
-        mAfterCallback(mUserArea, param_0, &info1, &quat3);
+        mAfterCallback(mUserArea, jnt_no, &info1, &quat3);
     }
     *oldQuat = quat3;
     *oldTransInfo = info1;
-    if (param_0 == model->getModelData()->getJointNum() - 1) {
+    if (jnt_no == model->getModelData()->getJointNum() - 1) {
         mOldFrame->decOldFrameMorfCounter();
     }
 }
@@ -1233,7 +1233,7 @@ ERROR_EXIT:
 }
 
 /* 80012A2C-80012D78       .text calc__14mDoExt_McaMorfFUs */
-void mDoExt_McaMorf::calc(u16 param_0) {
+void mDoExt_McaMorf::calc(u16 jnt_no) {
     if (!mpModel) {
         return;
     }
@@ -1243,37 +1243,37 @@ void mDoExt_McaMorf::calc(u16 param_0) {
     if (mpTransformInfo == NULL) {
         infoPtr = &info1;
     } else {
-        infoPtr = &mpTransformInfo[param_0];
+        infoPtr = &mpTransformInfo[jnt_no];
     }
     Quaternion quat1;
     Quaternion* quatPtr;
     if (mpQuat == NULL) {
         quatPtr = &quat1;
     } else {
-        quatPtr = &mpQuat[param_0];
+        quatPtr = &mpQuat[jnt_no];
     }
     if (!mpAnm) {
-        *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+        *infoPtr = mpModel->getModelData()->getJointNodePointer(jnt_no)->getTransformInfo();
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else if (mCurMorf >= 1.0f || !mpTransformInfo || !mpQuat) {
-        mpAnm->getTransform(param_0, infoPtr);
+        mpAnm->getTransform(jnt_no, infoPtr);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else {
         f32 f31 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
         f32 f30 = 1.0f - f31;
         J3DTransformInfo info2;
         Quaternion quat2;
-        mpAnm->getTransform(param_0, &info2);
+        mpAnm->getTransform(jnt_no, &info2);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, &info2);
+            mpCallback1->execute(jnt_no, &info2);
         }
         JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat2);
         JMAQuatLerp(quatPtr, &quat2, f31, quatPtr);
@@ -1285,10 +1285,10 @@ void mDoExt_McaMorf::calc(u16 param_0) {
         infoPtr->mScale.x = infoPtr->mScale.x * f30 + info2.mScale.x * f31;
         infoPtr->mScale.y = infoPtr->mScale.y * f30 + info2.mScale.y * f31;
         infoPtr->mScale.z = infoPtr->mScale.z * f30 + info2.mScale.z * f31;
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     }
     if (mpCallback2) {
-        mpCallback2->execute(param_0);
+        mpCallback2->execute(jnt_no);
     }
 }
 
@@ -1521,7 +1521,7 @@ void mDoExt_McaMorf2::ERROR_EXIT() {
 }
 
 /* 80013770-80013E50       .text calc__15mDoExt_McaMorf2FUs */
-void mDoExt_McaMorf2::calc(u16 param_0) {
+void mDoExt_McaMorf2::calc(u16 jnt_no) {
     /* Nonmatching - regalloc (fixing the regalloc causes an instruction swap on f30 = mAnmRate) */
     if (!mpModel) {
         return;
@@ -1534,7 +1534,7 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     if (mpTransformInfo == NULL) {
         infoPtr = &sp88;
     } else {
-        infoPtr = &mpTransformInfo[param_0];
+        infoPtr = &mpTransformInfo[jnt_no];
     }
     Quaternion sp48[2];
     Quaternion sp28[2];
@@ -1544,29 +1544,29 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
     if (mpQuat == NULL) {
         quatPtr = &sp18;
     } else {
-        quatPtr = &mpQuat[param_0];
+        quatPtr = &mpQuat[jnt_no];
     }
     Mtx mtx;
     f32 f31;
     f32 f30;
     if (!mpAnm1) {
-        *infoPtr = mpModel->getModelData()->getJointNodePointer(param_0)->getTransformInfo();
+        *infoPtr = mpModel->getModelData()->getJointNodePointer(jnt_no)->getTransformInfo();
         if (mpCallback1) {
-            mpCallback1->execute(param_0, infoPtr);
+            mpCallback1->execute(jnt_no, infoPtr);
         }
         JMAEulerToQuat(infoPtr->mRotation.x, infoPtr->mRotation.y, infoPtr->mRotation.z, quatPtr);
-        calcTransform(param_0, *infoPtr);
+        calcTransform(jnt_no, *infoPtr);
     } else if (mCurMorf >= 1.0f || !mpTransformInfo || !mpQuat) {
-        mpAnm1->getTransform(param_0, &spD8[0]);
+        mpAnm1->getTransform(jnt_no, &spD8[0]);
         if (!mpAnm2) {
             if (mpCallback1) {
-                mpCallback1->execute(param_0, &spD8[0]);
+                mpCallback1->execute(jnt_no, &spD8[0]);
             }
             JMAEulerToQuat(spD8[0].mRotation.x, spD8[0].mRotation.y, spD8[0].mRotation.z, quatPtr);
-            calcTransform(param_0, spD8[0]);
+            calcTransform(jnt_no, spD8[0]);
             *infoPtr = spD8[0];
         } else {
-            mpAnm2->getTransform(param_0, &spD8[1]);
+            mpAnm2->getTransform(jnt_no, &spD8[1]);
             f31 = 1.0f - mAnmRate;
             f30 = mAnmRate;
             infoPtr->mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
@@ -1580,14 +1580,14 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
             }
             JMAQuatLerp(&sp48[0], &sp48[1], f30 / (f31 + f30), quatPtr);
             mDoMtx_quat(mtx, quatPtr);
-            mDoExt_setJ3DData(mtx, infoPtr, param_0);
+            mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
         }
     } else if (!mpAnm2) {
         f30 = (mCurMorf - mPrevMorf) / (1.0f - mPrevMorf);
         f31 = 1.0f - f30;
-        mpAnm1->getTransform(param_0, &sp68);
+        mpAnm1->getTransform(jnt_no, &sp68);
         if (mpCallback1) {
-            mpCallback1->execute(param_0, &sp68);
+            mpCallback1->execute(jnt_no, &sp68);
         }
         JMAEulerToQuat(sp68.mRotation.x, sp68.mRotation.y, sp68.mRotation.z, &sp08);
         JMAQuatLerp(quatPtr, &sp08, f30, quatPtr);
@@ -1598,10 +1598,10 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         infoPtr->mScale.x = infoPtr->mScale.x * f31 + sp68.mScale.x * f30;
         infoPtr->mScale.y = infoPtr->mScale.y * f31 + sp68.mScale.y * f30;
         infoPtr->mScale.z = infoPtr->mScale.z * f31 + sp68.mScale.z * f30;
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     } else {
-        mpAnm1->getTransform(param_0, &spD8[0]);
-        mpAnm2->getTransform(param_0, &spD8[1]);
+        mpAnm1->getTransform(jnt_no, &spD8[0]);
+        mpAnm2->getTransform(jnt_no, &spD8[1]);
         f31 = 1.0f - mAnmRate;
         f30 = mAnmRate;
         sp68.mScale.x = spD8[0].mScale.x * f31 + spD8[1].mScale.x * f30;
@@ -1626,10 +1626,10 @@ void mDoExt_McaMorf2::calc(u16 param_0) {
         infoPtr->mScale.y = infoPtr->mScale.y * f30 + sp68.mScale.y * f31;
         infoPtr->mScale.z = infoPtr->mScale.z * f30 + sp68.mScale.z * f31;
         mDoMtx_quat(mtx, quatPtr);
-        mDoExt_setJ3DData(mtx, infoPtr, param_0);
+        mDoExt_setJ3DData(mtx, infoPtr, jnt_no);
     }
     if (mpCallback2) {
-        mpCallback2->execute(param_0);
+        mpCallback2->execute(jnt_no);
     }
 }
 
@@ -1856,7 +1856,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         GXCallDisplayList(l_matDL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 80014798-800148B4       .text draw__19mDoExt_3DlineMat0_cFv */
@@ -2119,7 +2119,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         GXCallDisplayList(l_mat1DL, 0x80);
     }
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
 
 /* 800155DC-80015764       .text draw__19mDoExt_3DlineMat1_cFv */
@@ -2454,8 +2454,14 @@ s32 mDoExt_font0_getCount;
 
 /* 80016884-800168E0       .text mDoExt_initFont0__Fv */
 void mDoExt_initFont0() {
+#if VERSION == VERSION_DEMO
+    int r30 = g_msgDHIO.field_0x08;
+    static const char fontdata[] = "rock_24_20_4i_usa.bfn";
+    mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), r30, 0xB4, 0x800);
+#else
     static const char fontdata[] = "rock_24_20_4i_usa.bfn";
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), 1, 0, 0);
+#endif
 }
 
 /* 800168E0-8001691C       .text mDoExt_getMesgFont__Fv */

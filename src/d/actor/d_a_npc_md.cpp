@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -885,7 +886,7 @@ BOOL daNpc_Md_c::createHeap() {
     
     mAcchCir[0].SetWall(20.0f, 20.0f);
     mAcchCir[1].SetWall(60.0f, 20.0f);
-    mAcch.Set(&current.pos, &old.pos, this, ARRAY_SIZE(mAcchCir), mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, ARRAY_SIZE(mAcchCir), mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
     mAcch.OnLineCheck();
@@ -942,25 +943,25 @@ void daNpc_Md_c::playerAction(void* arg) {
     }
     
     if (mAcch.ChkGroundHit() && isOldLightBodyHit()) {
-        dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
+        dComIfGp_setRStatusForce(dActStts_RETURN_e);
         if (chkPlayerAction(&daNpc_Md_c::mkamaePlayerAction)) {
-            dComIfGp_setDoStatus(0x00); // Show the A button without anything on it
-            dComIfGp_setAStatus(0x08); // TODO
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
+            dComIfGp_setAStatus(dActStts_PUT_AWAY_e);
         } else {
-            dComIfGp_setDoStatus(0x2E); // TODO
-            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+            dComIfGp_setDoStatus(dActStts_ba_motu__dupe_2E);
+            dComIfGp_setAStatus(dActStts_HIDDEN_e);
             if (!m3140) {
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
         }
     } else {
-        dComIfGp_setDoStatus(0x23); // Show "Fly" on the A button
+        dComIfGp_setDoStatus(dActStts_FLY_e);
         if (chkPlayerAction(&daNpc_Md_c::flyPlayerAction)) {
-            dComIfGp_setRStatusForce(0x3E); // TODO
-            dComIfGp_setAStatus(0x06); // Show "Let Go" on the B button icon
+            dComIfGp_setRStatusForce(dActStts_HIDDEN_e);
+            dComIfGp_setAStatus(dActStts_LET_GO_e);
         } else {
-            dComIfGp_setRStatusForce(0x07); // Show "Return" on the R button
-            dComIfGp_setAStatus(0x3E); // Do not display the B button icon at all
+            dComIfGp_setRStatusForce(dActStts_RETURN_e);
+            dComIfGp_setAStatus(dActStts_HIDDEN_e);
         }
     }
     
@@ -2410,7 +2411,7 @@ BOOL daNpc_Md_c::initTexPatternAnm(u8 btpAnmTblIdx, bool param_2) {
     bool ret = false;
     J3DAnmTexPattern* eyeTexPtrn = (J3DAnmTexPattern*)dComIfG_getObjectRes(mModelArcName, btpAnmTbl[btpAnmTblIdx].m00);
     JUT_ASSERT(7502, eyeTexPtrn != NULL);
-    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, param_2, 0)) {
+    if (m0520.init(modelData, eyeTexPtrn, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, param_2, FALSE)) {
         m3112 = eyeTexPtrn->getFrameMax();
         m3133 = 0;
         m3136 = btpAnmTbl[btpAnmTblIdx].m20;
@@ -3201,7 +3202,7 @@ BOOL daNpc_Md_c::draw() {
         mDoExt_modelUpdateDL(mpHarpLightModel);
         mLightBtkAnm.remove(mpHarpLightModel->getModelData());
         
-        mDoMtx_copy(mpHarpModel->getBaseTRMtx(), mDoMtx_stack_c::get());
+        mDoMtx_stack_c::copy(mpHarpModel->getBaseTRMtx());
         mDoMtx_stack_c::transM(l_HIO.m034.m0C, l_HIO.m034.m10, l_HIO.m034.m14);
         Mtx mtx;
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx);
@@ -3210,7 +3211,11 @@ BOOL daNpc_Md_c::draw() {
         f32 temp = mCps.GetAtVecP()->abs();
         mDoMtx_stack_c::scaleM(0.1f, 0.1f, temp * (1.0f/9600.0f));
         mDoMtx_stack_c::revConcat(mtx);
+#if VERSION == VERSION_DEMO
+        m0B70.update(mDoMtx_stack_c::get(), 0xFF);
+#else
         m0B70.update(mDoMtx_stack_c::get(), 0xFF, 90.0f);
+#endif
         dComIfGd_getXluList()->entryImm(&m0B70, 0x1F);
     }
     
@@ -3372,7 +3377,7 @@ actor_process_profile_definition g_profile_NPC_MD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0175,
+    /* Priority     */ PRIO_NPC_MD,
     /* Actor SubMtd */ &l_daNpc_Md_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_FREEZE_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK2000000_e,
     /* Group        */ fopAc_ACTOR_e,

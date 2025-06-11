@@ -5,6 +5,39 @@
 
 #include "d/actor/d_a_fallrock.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK8,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsEnemy_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 30.0f,
+        /* Height */ 80.0f,
+    },
+};
+
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -27,8 +60,8 @@ static BOOL daFallRock_Draw(daFallRock_c*) {
 }
 
 /* 000002B0-000002D0       .text daFallRock_Execute__FP12daFallRock_c */
-static BOOL daFallRock_Execute(daFallRock_c*) {
-    /* Nonmatching */
+static BOOL daFallRock_Execute(daFallRock_c* i_this) {
+    return ((daFallRock_c*)i_this)->execute();
 }
 
 /* 000002D0-00000810       .text execute__12daFallRock_cFv */
@@ -38,7 +71,7 @@ BOOL daFallRock_c::execute() {
 
 /* 00000E38-00000E40       .text daFallRock_IsDelete__FP12daFallRock_c */
 static BOOL daFallRock_IsDelete(daFallRock_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000E40-00000E68       .text daFallRock_Delete__FP12daFallRock_c */
@@ -47,8 +80,8 @@ static BOOL daFallRock_Delete(daFallRock_c*) {
 }
 
 /* 00001030-00001050       .text daFallRock_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRock_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daFallRock_Create(fopAc_ac_c* i_this) {
+    return ((daFallRock_c*)i_this)->create();
 }
 
 /* 00001050-0000127C       .text create__12daFallRock_cFv */
@@ -79,7 +112,7 @@ actor_process_profile_definition g_profile_FallRock = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0190,
+    /* Priority     */ PRIO_FallRock,
     /* Actor SubMtd */ &l_daFallRock_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

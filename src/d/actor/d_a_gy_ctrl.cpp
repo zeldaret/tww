@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_gy_ctrl.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000170       .text __ct__15daGy_Ctrl_HIO_cFv */
 daGy_Ctrl_HIO_c::daGy_Ctrl_HIO_c() {
@@ -147,28 +148,28 @@ bool daGy_Ctrl_c::_delete() {
 }
 
 /* 00001C44-00001C64       .text daGy_CtrlCreate__FPv */
-static s32 daGy_CtrlCreate(void*) {
-    /* Nonmatching */
+static s32 daGy_CtrlCreate(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_create();
 }
 
 /* 00001C64-00001C88       .text daGy_CtrlDelete__FPv */
-static BOOL daGy_CtrlDelete(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlDelete(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_delete();
 }
 
 /* 00001C88-00001CAC       .text daGy_CtrlExecute__FPv */
-static BOOL daGy_CtrlExecute(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlExecute(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_execute();
 }
 
 /* 00001CAC-00001CD0       .text daGy_CtrlDraw__FPv */
-static BOOL daGy_CtrlDraw(void*) {
-    /* Nonmatching */
+static BOOL daGy_CtrlDraw(void* i_this) {
+    return ((daGy_Ctrl_c*)i_this)->_draw();
 }
 
 /* 00001CD0-00001CD8       .text daGy_CtrlIsDelete__FPv */
 static BOOL daGy_CtrlIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daGy_CtrlMethodTable = {
@@ -189,7 +190,7 @@ actor_process_profile_definition g_profile_GY_CTRL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D9,
+    /* Priority     */ PRIO_GY_CTRL,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
@@ -206,7 +207,7 @@ actor_process_profile_definition g_profile_GY_CTRLB = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00DA,
+    /* Priority     */ PRIO_GY_CTRLB,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

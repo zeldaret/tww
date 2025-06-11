@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_apzl.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */
 void daObjApzl_c::move_piece() {
@@ -92,8 +93,8 @@ static BOOL daObjApzl_Delete(void*) {
 }
 
 /* 00001894-000018B8       .text daObjApzl_Draw__FPv */
-static BOOL daObjApzl_Draw(void*) {
-    /* Nonmatching */
+static BOOL daObjApzl_Draw(void* i_this) {
+    return ((daObjApzl_c*)i_this)->_draw();
 }
 
 /* 000018B8-00001B00       .text _draw__11daObjApzl_cFv */
@@ -102,8 +103,8 @@ bool daObjApzl_c::_draw() {
 }
 
 /* 00001B00-00001B24       .text daObjApzl_Execute__FPv */
-static BOOL daObjApzl_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjApzl_Execute(void* i_this) {
+    return ((daObjApzl_c*)i_this)->_execute();
 }
 
 /* 00001B24-00001E8C       .text _execute__11daObjApzl_cFv */
@@ -113,7 +114,7 @@ bool daObjApzl_c::_execute() {
 
 /* 00001E8C-00001E94       .text daObjApzl_IsDelete__FPv */
 static BOOL daObjApzl_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_ApzlMethodTable = {
@@ -134,7 +135,7 @@ actor_process_profile_definition g_profile_Obj_Apzl = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x007D,
+    /* Priority     */ PRIO_Obj_Apzl,
     /* Actor SubMtd */ &daObj_ApzlMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

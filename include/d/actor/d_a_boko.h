@@ -17,6 +17,12 @@ struct ke_c_s {
 
 class daBoko_c : public fopAc_ac_c {
 public:
+    static u32 m_bound_se[6];
+    static s32 m_heap_size[6];
+    static char* m_arc_name[6];
+    static Vec m_cull_min[6];
+    static Vec m_cull_max[6];
+
     typedef BOOL (daBoko_c::*ProcFunc_t)();
     
     daBoko_c();
@@ -77,7 +83,7 @@ public:
     BOOL procThrow();
     BOOL procCarry();
     BOOL execute();
-    void bokoDelete();
+    BOOL bokoDelete();
     BOOL createHeap();
     cPhs_State create();
 
@@ -115,6 +121,11 @@ public:
     /* 0x848 */ u8 m848[0x8A8 - 0x848];
     /* 0x8A8 */ mDoExt_3DlineMat0_c* mpLineMat;
     /* 0x8AC */ ProcFunc_t mCurrentProc;
+};
+
+class daBoko_HIO_c {
+public:
+    // Size 1 in retail, size 0x14 in debug.
 };
 
 class daBoko_HIO_c0 {

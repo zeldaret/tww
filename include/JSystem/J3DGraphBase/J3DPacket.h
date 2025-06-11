@@ -114,7 +114,7 @@ public:
 
     virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);
-    virtual void draw();
+    virtual void draw() {}
     virtual ~J3DPacket() {}
 
 public:

@@ -111,13 +111,16 @@ void TAdaptor_sound::TVVOOn_BEGIN_FADE_IN_::operator()(f32 value, JStudio::TAdap
     JStudio_JAudio::TAdaptor_sound* adaptor_sound = (JStudio_JAudio::TAdaptor_sound*)adaptor;
     JAISound* sound = adaptor_sound->mpSound;
     u32 flags = adaptor_sound->mFlags;
-    if (flags & 0xc0000000) {
+    if (adaptor_sound->mFlags & 0xc0000000) {
         if (adaptor_sound->mpSound) {
             adaptor_sound->mpSound->start(value);
         }
     } else {
         if (adaptor_sound->mpSound) {
-            if (!adaptor_sound->mpBasic->checkEnablePrepare(adaptor_sound->mFlags)) {
+#if VERSION > VERSION_DEMO
+            if (!adaptor_sound->mpBasic->checkEnablePrepare(adaptor_sound->mFlags))
+#endif
+            {
                 adaptor_sound->mpSound->stop(0);
             }
         }

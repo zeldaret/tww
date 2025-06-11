@@ -8,11 +8,10 @@
 #include "d/d_bg_w_hf.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 
 static bwd_class* boss;
 
@@ -60,8 +59,8 @@ void daBwdg_packet_c::draw() {
     dKy_setLight_mine(mpTevStr);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GFSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GFSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GFSetArray(GX_VA_POS, &mPos[m00010 * 0x1081], sizeof(cXyz));
+    GFSetArray(GX_VA_NRM, &mNrm[m00010 * 0x1081], sizeof(cXyz));
     GFSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
     GFSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
     GFSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
@@ -207,7 +206,7 @@ static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
 
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
 static BOOL daBwdg_Delete(bwdg_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhase, "Bwdg");
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bwdg");
     if (i_this->heap) {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }
@@ -276,7 +275,7 @@ actor_process_profile_definition g_profile_BWDG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00CE,
+    /* Priority     */ PRIO_BWDG,
     /* Actor SubMtd */ &l_daBwdg_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

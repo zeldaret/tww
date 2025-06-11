@@ -179,15 +179,15 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setPos(const cXyz* pos) { mPos = *pos; }
     cXyz& getPos() { return mPos; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
-    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
 class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
@@ -209,7 +209,7 @@ public:
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
     
-    static int getTimer() { return m_timer; }
+    static s16 getTimer() { return m_timer; }
     static void setTimer(s16 timer) { m_timer = timer; }
     static void decTimer() { m_timer--; }
     
@@ -230,6 +230,7 @@ public:
         setTimer(timer);
     }
 
+private:
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
@@ -263,13 +264,14 @@ public:
     }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
-    static void getEyeMoveFlg() {}
-    static void getMabaFlg() {}
-    static void getMabaTimer() {}
+    static u8 getEyeMoveFlg() { return m_eye_move_flg; }
+    static u8 getMabaFlg() { return m_maba_flg; }
+    static u8 getMabaTimer() { return m_maba_timer; }
+    static u8 getMorfFrame() { return m_morf_frame; }
     static void getNowOffsetXP() {}
     static void getNowOffsetYP() {}
-    static void offEyeMoveFlg() {}
-    static void onEyeMoveFlg() {}
+    static void offEyeMoveFlg() { m_eye_move_flg = 0; }
+    static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
     static void setNowOffsetX(f32) {}
@@ -310,13 +312,21 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x018 - 0x000];
     // TODO: is this right?
+    /* 0x000 */ u8 field_0x000;
+    /* 0x001 */ u8 field_0x001;
+    /* 0x002 */ s16 field_0x002;
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
+    /* 0x008 */ s16 field_0x008;
+    /* 0x00A */ s16 field_0x00A;
+    /* 0x00C */ cXyz field_0x00C;
     /* 0x018 */ cXyz field_0x018;
-    /* 0x018 */ u8 field_0x024[0x034 - 0x024];
+    /* 0x024 */ cXyz field_0x024;
+    /* 0x030 */ f32 field_0x030;
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
-    /* 0x088 */ u8 field_0x088[0x118 - 0x088];
-};
+    /* 0x088 */ Mtx field_0x088[3];
+};  // Size: 0x118
 
 struct daPy_aura_c {
 public:
@@ -888,6 +898,17 @@ public:
         /* 0x40 */ BTN_R = (1 << 6),
     };
     
+    /**
+     * Moving direction calculated from an angle
+     */
+    enum daPy_lk_DIR {
+        /* 0x0 */ DIR_FORWARD,
+        /* 0x1 */ DIR_BACKWARD,
+        /* 0x2 */ DIR_LEFT,
+        /* 0x3 */ DIR_RIGHT,
+        /* 0x4 */ DIR_NONE,
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -913,7 +934,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    BOOL checkNormalFace();
+    u16 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -924,11 +945,11 @@ public:
     void playTextureAnime();
     BOOL checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
-    void setItemModel();
+    s32 setItemModel();
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
-    void setDrawHandModel();
+    s32 setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
     void hideHatAndBackle(J3DMaterial*);
@@ -951,7 +972,7 @@ public:
     void posMove();
     void setShapeAngleToAtnActor();
     BOOL cancelItemUpperReadyAnime();
-    BOOL checkBodyAngleX(s16);
+    s16 checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
@@ -980,23 +1001,23 @@ public:
     void makeItemType();
     void setScopeModel();
     void setPhotoBoxModel();
-    void changeDragonShield(int);
+    BOOL changeDragonShield(int);
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
     void checkItemAction();
-    void getSlidePolygon();
+    cM3dGPla* getSlidePolygon();
     BOOL checkJumpCutFromButton();
-    void orderTalk();
+    int orderTalk();
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
-    BOOL checkNextActionItemFly();
+    void checkNextActionItemFly();
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
     BOOL changeFrontWallTypeProc();
     int changeSlideProc();
-    void changeWaitProc();
+    BOOL changeWaitProc();
     BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
@@ -1123,7 +1144,7 @@ public:
     BOOL procNotUse_init(int);
     BOOL procNotUse();
     s16 getGroundAngle(cBgS_PolyInfo*, s16);
-    void setLegAngle(f32, int, s16*, s16*);
+    int setLegAngle(f32, int, s16*, s16*);
     void footBgCheck();
     void setWaterY();
     void autoGroundHit();
@@ -1170,7 +1191,7 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
     BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
     BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
     BOOL resetActAnimeUpper(daPy_UPPER, f32);
@@ -1216,7 +1237,9 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
     void setGetItemSound(u16, int);
+#if VERSION > VERSION_DEMO
     BOOL setGetDemo();
+#endif
     BOOL dProcGetItem_init();
     BOOL dProcGetItem();
     BOOL dProcUnequip_init();
@@ -1351,9 +1374,9 @@ public:
     void setClimbShapeOffset();
     int getClimbDirectionFromAngle();
     void changeClimbMoveProc(int);
-    int setMoveBGCorrectClimb();
-    BOOL checkBgCorrectClimbMove(cXyz*, cXyz*);
-    BOOL checkBgClimbMove();
+    BOOL setMoveBGCorrectClimb();
+    void checkBgCorrectClimbMove(cXyz*, cXyz*);
+    void checkBgClimbMove();
     void procClimbUpStart_init_sub();
     BOOL procClimbUpStart_init();
     BOOL procClimbUpStart();
@@ -1364,12 +1387,12 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    int getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
     BOOL checkWHideFrontFloor(cXyz*);
-    BOOL checkWHideModeChange(cXyz*);
+    int checkWHideModeChange(cXyz*);
     int changeWHideEndProc(cXyz*);
     BOOL procWHideReady_init(cM3dGPla*, cXyz*);
     BOOL procWHideReady();
@@ -1382,7 +1405,7 @@ public:
     f32 getCrawlMoveAnmSpeed();
     f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
-    void changeCrawlAutoMoveProc(cXyz*);
+    BOOL changeCrawlAutoMoveProc(cXyz*);
     int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);
@@ -1436,8 +1459,8 @@ public:
     BOOL procSwimWait();
     BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
-    void setSpecialBattle(int);
-    int changeSpecialBattle();
+    void setSpecialBattle(BOOL);
+    BOOL changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);
@@ -1463,7 +1486,7 @@ public:
     void setShipRidePos(int);
     void setShipAttentionAnmSpeed(f32);
     void setShipAttnetionBodyAngle();
-    int changeShipEndProc();
+    BOOL changeShipEndProc();
     void initShipBaseAnime();
     void initShipCraneAnime();
     BOOL procShipReady_init();
@@ -1492,14 +1515,14 @@ public:
     BOOL procShipRestart();
     BOOL checkRopeAnime() const;
     void freeRopeItem();
-    BOOL checkRopeRoofHit(s16);
-    void changeRopeSwingProc();
-    void changeRopeEndProc(int);
+    f32 checkRopeRoofHit(s16);
+    int changeRopeSwingProc();
+    int changeRopeEndProc(int);
     BOOL checkSpecialRope();
-    void changeRopeToHangProc();
+    int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
-    void throwRope();
+    int throwRope();
     BOOL checkNextActionRopeReady();
     BOOL checkNextRopeMode();
     BOOL checkHangRopeActorNull();
@@ -1511,7 +1534,7 @@ public:
     BOOL procRopeSwing();
     BOOL procRopeHangWait_init(int);
     BOOL procRopeHangWait();
-    void specialRopeHangUp();
+    int specialRopeHangUp();
     BOOL procRopeUp_init();
     BOOL procRopeUp();
     BOOL procRopeDown_init();
@@ -1528,9 +1551,9 @@ public:
     void throwBoomerang();
     int returnBoomerang();
     BOOL checkNextActionBoomerangReady();
-    BOOL checkNextActionBoomerangFly();
+    void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
-    int changeBoomerangCatchProc();
+    BOOL changeBoomerangCatchProc();
     BOOL procBoomerangSubject_init();
     BOOL procBoomerangSubject();
     BOOL procBoomerangMove_init();
@@ -1546,7 +1569,7 @@ public:
     void setBowReadyAnime();
     void setBowReloadAnime();
     BOOL checkNextActionBowReady();
-    BOOL checkNextActionBowFly();
+    void checkNextActionBowFly();
     BOOL checkNextBowMode();
     void setBowModel();
     BOOL procBowSubject_init();
@@ -1618,7 +1641,7 @@ public:
     BOOL procHammerFrontSwing();
     BOOL procHammerFrontSwingEnd_init();
     BOOL procHammerFrontSwingEnd();
-    int setPushPullKeepData(dBgW::PushPullLabel);
+    BOOL setPushPullKeepData(dBgW::PushPullLabel);
     BOOL procPushPullWait_init(int);
     BOOL procPushPullWait();
     BOOL procPushMove_init();
@@ -1627,7 +1650,7 @@ public:
     BOOL procPullMove();
     int changeBottleDrinkFace(int);
     void setBottleModel(u16);
-    void makeFairy(cXyz*, u32);
+    fopAc_ac_c* makeFairy(cXyz*, u32);
     BOOL procBottleDrink_init(u16);
     BOOL procBottleDrink();
     BOOL procBottleOpen_init(u16);
@@ -1656,8 +1679,12 @@ public:
     BOOL procFoodSet();
     void setSwordModel(BOOL);
     void setLightSaver();
+#if VERSION == VERSION_DEMO
+    BOOL checkLastDemoSwordNoDraw(int);
+#else
     BOOL checkDemoShieldNoDraw();
-    BOOL checkDemoSwordNoDraw(int);
+    BOOL checkDemoSwordNoDraw(BOOL);
+#endif
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
     int getSwordBlurColor();
@@ -1710,26 +1737,32 @@ public:
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
     
-    bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    bool checkGrabAnimeLight() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAIT; };
-    bool checkGrabAnimeHeavy() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAITB; };
-    bool checkBoomerangCatchAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH; };
-    bool checkBoomerangThrowAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW; };
-    bool checkBoomerangReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMWAIT; };
-    bool checkHookshotReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_HOOKSHOTWAIT; }
-    bool checkDashDamageAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH; }
-    bool checkGuardSlip() const {
+    BOOL checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
+    BOOL checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
+    
+    BOOL checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
+    BOOL checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
+    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
+    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
+    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
+    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
+    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
+    BOOL checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
+    BOOL checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
+    BOOL checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
+    BOOL checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
+    BOOL checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
-    bool checkUpperGuardAnime() const {
-        return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNG ||
-            m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNGHAM;
+    BOOL checkUpperGuardAnime() const {
+        return checkUpperAnime(LKANM_BCK_ATNG) ||
+            checkUpperAnime(LKANM_BCK_ATNGHAM);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
-    bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    BOOL checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
     s16 checkTinkleHover() const { return mTinkleHoverTimer; }
     void setHoverBoots(s16 time) {
         onNoResetFlg0(daPyFlg0_HOVER_BOOTS);
@@ -1737,12 +1770,12 @@ public:
     }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
-    bool checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
+    BOOL checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
     void onShipDrop(s16 param_1) {
         onNoResetFlg0(daPyFlg0_SHIP_DROP);
         m3550 = param_1;
     }
-    bool checkCarryActionNow() const {
+    BOOL checkCarryActionNow() const {
         return mCurProc == daPyProc_GRAB_PUT_e ||
             mCurProc == daPyProc_GRAB_UP_e ||
             mCurProc == daPyProc_GRAB_THROW_e;
@@ -1759,15 +1792,14 @@ public:
     void getShadowID() const {}
     void npcStartRestartRoom() {}
     void setDaiokutaEnd() {}
-    void setWhirlId(fpc_ProcID) {}
+    void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
         }
     }
-    bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
@@ -1792,6 +1824,7 @@ public:
     
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL spBattleTrigger() const {return mItemTrigger & BTN_A; }
     BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
     BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
     BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
@@ -1799,33 +1832,27 @@ public:
     BOOL itemTriggerZ() const { return mItemTrigger & BTN_Z; }
     BOOL spLTrigger() const { return mItemTrigger & BTN_L; }
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
-    void allTrigger() const {}
+    BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
-    void spBattleTrigger() const {}
     
-    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
+    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType()  != 0; }
     void checkSpecialDemoMode() const {}
     
     void checkAttentionLock() {}
     void checkBoomerangRock() {}
     void checkBothItemEquipAnime() const {}
-    void checkBowReloadAnime() const {}
-    void checkBowShootAnime() const {}
-    void checkBowWaitAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
-    void checkNoUpperAnime() const {}
     void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void checkUpperAnime(u16) const {}
     void getAnmSpeedStickRate(f32, f32) {}
-    void getBombWaterPillarBrk() {}
-    void getBombWaterPillarBtk() {}
+    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
+    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
     void seStartSystem(u32) {}
@@ -1868,7 +1895,7 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
@@ -1877,7 +1904,7 @@ public:
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROWWAIT; }
+    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
@@ -2026,7 +2053,7 @@ public:
     /* 0x3490 */ dAttList_c* mpAttnEntryZ;
     /* 0x3494 */ char* m3494;
     /* 0x3498 */ LIGHT_INFLUENCE mLightInfluence;
-    /* 0x34B8 */ u8 m34B8;
+    /* 0x34B8 */ u8 mDirection;
     /* 0x34B9 */ u8 mFrontWallType;
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
@@ -2127,7 +2154,13 @@ public:
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;
     /* 0x356C */ int mCameraInfoIdx;
-    /* 0x3570 */ s32 m3570;
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    union {
+        s32 m3570;
+        daPy_ANM mDamageAnm;
+        int mBottleItem;
+    } /* 0x3570  */ mProcVar0;
     /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
@@ -2174,10 +2207,12 @@ public:
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ u32 m3624;
     /* 0x3628 */ fpc_ProcID m3628;
-    /* 0x362C */ fpc_ProcID mTactZevPartnerPID;
+    /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
-    /* 0x3634 */ int m3634;
+    /* 0x3634 */ fpc_ProcID mWhirlId;
+#if VERSION > VERSION_DEMO
     /* 0x3638 */ fpc_ProcID mMsgId;
+#endif
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;

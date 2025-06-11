@@ -19,19 +19,6 @@
 #include "JSystem/JUtility/JUTDataHeader.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-class JPAEmitterArchiveLoader_v10 {
-public:
-    void load();
-    JPAEmitterResource* getEmitterResource() { return mpEmtrRes; }
-    JPATextureResource* getTextureResource() { return mpTexRes; }
-
-public:
-    /* 0x00 */ JKRHeap* pHeap;
-    /* 0x04 */ const u8* pData;
-    /* 0x08 */ JPAEmitterResource* mpEmtrRes;
-    /* 0x0C */ JPATextureResource* mpTexRes;
-};
-
 static void dummy(u32 texNum) {
     JUT_WARN(0, "%s", "This is WRONG Version File\n");
     JUT_WARN(0, "%s", "This is NO JPA File\n");

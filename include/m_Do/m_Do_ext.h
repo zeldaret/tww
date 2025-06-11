@@ -29,6 +29,7 @@ public:
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
     void setPlaySpeed(f32 speed) { mFrameCtrl->setRate(speed); }
     BOOL checkFrame(f32 frame) { return mFrameCtrl->checkPass(frame); }
+    f32 getStartFrame() { return mFrameCtrl->getStart(); }
     f32 getFrame() { return mFrameCtrl->getFrame(); }
     f32 getEndFrame() { return mFrameCtrl->getEnd(); }
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
@@ -307,7 +308,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
 class mDoExt_McaMorfCallBack1_c {
 public:
     virtual ~mDoExt_McaMorfCallBack1_c() {}
-    virtual bool execute(u16, J3DTransformInfo*) = 0;
+    virtual bool execute(u16 jnt_no, J3DTransformInfo*) = 0;
 };
 
 class mDoExt_McaMorfCallBack2_c {
@@ -333,7 +334,7 @@ public:
     virtual ~mDoExt_McaMorf();
 
     void calc();
-    void calc(u16);
+    void calc(u16 jnt_no);
     void setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 playSpeed, f32 startFrame, f32 endFrame, void* basAnm);
     void setMorf(f32);
     void update();
@@ -573,7 +574,9 @@ public:
     void setModel(J3DModel*) {}
     void update() {}
     
-    void draw();
+    void draw() {
+        /* Nonmatching */
+    }
     void setMaterial();
 };
 

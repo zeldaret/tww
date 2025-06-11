@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_kmon.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000118       .text set_mtx__8daKmon_cFv */
 void daKmon_c::set_mtx() {
@@ -53,7 +54,7 @@ static BOOL daKmonDraw(void*) {
 
 /* 00000A9C-00000AA4       .text daKmonIsDelete__FPv */
 static BOOL daKmonIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daKmonMethodTable = {
@@ -74,7 +75,7 @@ actor_process_profile_definition g_profile_Kmon = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x018B,
+    /* Priority     */ PRIO_Kmon,
     /* Actor SubMtd */ &daKmonMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

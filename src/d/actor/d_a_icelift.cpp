@@ -6,6 +6,7 @@
 #include "d/actor/d_a_icelift.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 bool daIlift_c::_delete() {
@@ -73,28 +74,28 @@ bool daIlift_c::_draw() {
 }
 
 /* 00000FF8-00001018       .text daIlift_Create__FPv */
-static cPhs_State daIlift_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daIlift_Create(void* i_this) {
+    return ((daIlift_c*)i_this)->_create();
 }
 
 /* 00001018-0000103C       .text daIlift_Delete__FPv */
-static BOOL daIlift_Delete(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Delete(void* i_this) {
+    return ((daIlift_c*)i_this)->_delete();
 }
 
 /* 0000103C-00001060       .text daIlift_Draw__FPv */
-static BOOL daIlift_Draw(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Draw(void* i_this) {
+    return ((daIlift_c*)i_this)->_draw();
 }
 
 /* 00001060-00001084       .text daIlift_Execute__FPv */
-static BOOL daIlift_Execute(void*) {
-    /* Nonmatching */
+static BOOL daIlift_Execute(void* i_this) {
+    return ((daIlift_c*)i_this)->_execute();
 }
 
 /* 00001084-0000108C       .text daIlift_IsDelete__FPv */
 static BOOL daIlift_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daIliftMethodTable = {
@@ -115,7 +116,7 @@ actor_process_profile_definition g_profile_ICE_LIFT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x008F,
+    /* Priority     */ PRIO_ICE_LIFT,
     /* Actor SubMtd */ &daIliftMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -7,6 +7,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_stptetu.h"
 
 const char daObjRforce::Act_c::M_arcname[] = "StpTetu";
@@ -18,7 +19,6 @@ BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::create_heap() {
-
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
@@ -146,7 +146,7 @@ actor_process_profile_definition g_profile_Obj_Rforce = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003E,
+    /* Priority     */ PRIO_Obj_Rforce,
     /* Actor SubMtd */ &daObjRforce::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

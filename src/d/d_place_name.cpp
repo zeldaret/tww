@@ -3,12 +3,12 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/d_place_name.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
-#include "d/d_place_name.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
@@ -67,27 +67,10 @@ const char * name_texture[] = {
 };
 #endif
 
-class dPn_c : public msg_class {
-public:
-    cPhs_State _create();
-    BOOL _execute();
-    BOOL _draw();
-    BOOL _delete();
-
-public:
-    /* 0x0FC */ JKRExpHeap * mpHeap;
-    /* 0x100 */ request_of_phase_process_class mPhs;
-    /* 0x108 */ dPlace_name_c * dPn_scrn;
-    /* 0x11C */ mDoDvdThd_toMainRam_c * dvd;
-    /* 0x114 */ ResTIMG * mpTIMG;
-    /* 0x118 */ u8 mState;
-    /* 0x119 */ u8 pad[3];
-};
-
 /* 80160F60-801610A8       .text setScreen__13dPlace_name_cFPCcP10JKRArchive */
 void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(69, 91, 91), scrn != NULL);
+    JUT_ASSERT(VERSION_SELECT(69, 69, 91, 91), scrn != NULL);
 
     scrn->set(name, arc);
     fopMsgM_setPaneData(&pane, scrn, 0x706e);
@@ -141,13 +124,13 @@ cPhs_State dPn_c::_create() {
     if (mState == 0) {
         if (rt == cPhs_COMPLEATE_e) {
             dRes_info_c * resInfo = dComIfG_getObjectResInfo("PName");
-            JUT_ASSERT(VERSION_SELECT(147, 169, 169), resInfo != NULL);
+            JUT_ASSERT(VERSION_SELECT(147, 147, 169, 169), resInfo != NULL);
 
             mpHeap = dComIfGp_getExpHeap2D();
             dComIfGp_setHeapLockFlag(10);
             JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
             dPn_scrn = new dPlace_name_c();
-            JUT_ASSERT(VERSION_SELECT(155, 177, 177), dPn_scrn != NULL);
+            JUT_ASSERT(VERSION_SELECT(155, 155, 177, 177), dPn_scrn != NULL);
             dPn_scrn->setScreen("place_name.blo", resInfo->getArchive());
             mpTIMG = (ResTIMG*)mpHeap->alloc(0x3c00, 0x20);
             mDoExt_setCurrentHeap(oldHeap);
@@ -165,7 +148,7 @@ cPhs_State dPn_c::_create() {
         }
     } else if (mState == 1) {
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
-        JUT_ASSERT(VERSION_SELECT(175, 201, 201), dComIfGp_getNowStageNum() < dPn_stage_max_e);
+        JUT_ASSERT(VERSION_SELECT(175, 175, 201, 201), dComIfGp_getNowStageNum() < dPn_stage_max_e);
 
 #if VERSION == VERSION_PAL
         u32 lang = dComIfGs_getPalLanguage();
@@ -183,7 +166,7 @@ cPhs_State dPn_c::_create() {
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(mpHeap);
         if (dvd->sync()) {
             memcpy(mpTIMG, dvd->getMemAddress(), 0x3c00);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
             DCFlushRangeNoSync(mpTIMG, 0x3c00);
 #else
             DCStoreRangeNoSync(mpTIMG, 0x3c00);

@@ -3,6 +3,6 @@
 
 #include "dolphin/dsp.h"
 
-void DSPAddPriorTask(STRUCT_DSP_TASK*);
+void DSPAddPriorTask(DSPTaskInfo*);
 
 #endif /* OSDSP_H */

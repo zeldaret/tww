@@ -75,7 +75,7 @@ JFWDisplay::~JFWDisplay() {
 
 /* 80255354-802553EC       .text createManager__10JFWDisplayFP7JKRHeapQ26JUTXfb10EXfbNumberb */
 JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
-    JUT_CONFIRM(VERSION_SELECT(244, 243, 243), sManager == 0);
+    JUT_CONFIRM(VERSION_SELECT(242, 244, 243, 243), sManager == NULL);
     if(sManager == 0) {
         sManager = new JFWDisplay(0, p_heap, xfb_num, enableAlpha);
     }
@@ -100,14 +100,14 @@ void JFWDisplay::prepareCopyDisp() {
     u16 width, height;
     JUTVideo::getManager()->getBounds(width, height);
     u16 xfb_height = JUTVideo::getManager()->getXfbHeight();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     f32 y_scaleF = GXGetYScaleFactor(height, xfb_height);
 #endif
 
     GXSetCopyClear(mClearColor, mZClear);
     GXSetDispCopySrc(0, 0, width, height);
     GXSetDispCopyDst(width, xfb_height);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     GXSetDispCopyYScale(xfb_height / (f32)height);
 #else
     GXSetDispCopyYScale(y_scaleF);
@@ -497,12 +497,12 @@ void JFWGXAbortAlarmHandler(OSAlarm*, OSContext*) {
     diagnoseGpHang();
     if(JFWAutoAbortGfx != 1) {
         OSReport("自動復帰しません\n");
-        JUT_WARN(VERSION_SELECT(1351, 1350, 1350), "GP FREEZE!");
-        JUT_ASSERT(VERSION_SELECT(1352, 1351, 1351), 0);
+        JUT_WARN(VERSION_SELECT(1349, 1351, 1350, 1350), "GP FREEZE!");
+        JUT_ASSERT(VERSION_SELECT(1350, 1352, 1351, 1351), 0);
     }
     else {
         OSReport("GXAbortFrame() を呼び出し、復帰します\n");
-        JUT_WARN(VERSION_SELECT(1356, 1355, 1355), "GP FREEZE! AUTO RESUME");
+        JUT_WARN(VERSION_SELECT(1354, 1356, 1355, 1355), "GP FREEZE! AUTO RESUME");
         GXAbortFrame();
         GXSetDrawDone();
     }

@@ -54,7 +54,7 @@ void TProcessor::pushCurrent(const char* v) {
 }
 
 /* 8029EEA4-8029EEC8       .text popCurrent__Q28JMessage10TProcessorFv */
-const char* TProcessor::popCurrent() {
+void TProcessor::popCurrent() {
     setCurrent_(mStack.top());
     mStack.pop();
 }
@@ -142,14 +142,16 @@ void TProcessor::on_tag_() {
     size = current[1];
 
     setCurrent_((const char*)current + size);
-    u32 tag = (current[2] << 16 | (u8)current[3] << 8);
-    tag |= current[4];
+    u32 tag = 0;
+    tag |= 0xFF0000 & (current[2] << 16);
+    tag |= 0x00FF00 & (current[3] << 8);
+    tag |= 0x0000FF & (current[4] << 0);
 
     on_tag(tag, &current[5], size - 5);
 }
 
 /* 8029F120-8029F248       .text do_tag___Q28JMessage10TProcessorFUlPCvUl */
-bool TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     u16 code = data::getTagCode(tag);
     u8 group = data::getTagGroup(tag);
 
@@ -421,7 +423,7 @@ void TSequenceProcessor::do_end_() {
 }
 
 /* 8029F8C8-8029F9D4       .text do_tag___Q28JMessage18TSequenceProcessorFUlPCvUl */
-bool TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     const char* datap = (const char*)data;
     u16 code = data::getTagCode(tag);
     u8 group = data::getTagGroup(tag);
@@ -490,14 +492,14 @@ bool TSequenceProcessor::process_jump_(TSequenceProcessor* proc) {
 bool TSequenceProcessor::process_branch_limited_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
     BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
+    return process_setMessage_index_(proc->mControl, ((u16*)work->mTable)[choice]);
 }
 
 /* 8029FAB8-8029FAE8       .text process_branch___Q28JMessage18TSequenceProcessorFPQ28JMessage18TSequenceProcessorUl */
 bool TSequenceProcessor::process_branch_(TSequenceProcessor* proc, u32 choice) {
     /* Nonmatching */
     BranchCallBackWork* work = (BranchCallBackWork*) &proc->mStatusData.mCallBackWork;
-    process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
+    return process_setMessage_code_(proc->mControl, ((u32*)work->mTable)[choice]);
 }
 
 /* 8029FAE8-8029FB20       .text __ct__Q28JMessage19TRenderingProcessorFPQ28JMessage8TControl */
@@ -538,7 +540,7 @@ void TRenderingProcessor::do_end_() {
 }
 
 /* 8029FC50-8029FC84       .text do_tag___Q28JMessage19TRenderingProcessorFUlPCvUl */
-bool TRenderingProcessor::do_tag_(u32 tag, const void* data, u32 size) {
+void TRenderingProcessor::do_tag_(u32 tag, const void* data, u32 size) {
     u8 group = data::getTagGroup(tag);
 
     switch (group) {

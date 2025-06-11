@@ -8,15 +8,19 @@
 #include "m_Do/m_Do_ext.h"
 
 class JPABaseEmitter;
-class dPath;
+struct dPath;
 
 namespace daWindTag {
     static BOOL CheckCreateHeap(fopAc_ac_c*);
 
     class daWindTag_c : public fopAc_ac_c {
     public:
-        void getCurLength() const {}
-        void getMaxLength() const {}
+        f32 getCurLength() const {
+            return mOffsY;
+        }
+        f32 getMaxLength() const {
+            return field_0x49c * mData[mType * 2 + 1];
+        }
     
         bool _delete();
         BOOL CreateHeap();

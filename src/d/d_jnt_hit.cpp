@@ -256,7 +256,6 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
     cXyz r1_11C;
     cXyz r1_110;
     cXyz r1_104;
-    cXyz r1_2C;
     csXyz r1_24;
     J3DModel* model = mpModel;
     f32 f31 = 10000.0f;

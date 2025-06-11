@@ -14,25 +14,27 @@
 #include "d/actor/d_a_player_main.h"
 
 /* 801514B0-80151644       .text setPushPullKeepData__9daPy_lk_cFQ24dBgW13PushPullLabel */
-int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
-    if (param_0 != dBgW::PP_UNK0_e) {
+BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
+    if (pp_label != dBgW::PPLABEL_NONE) {
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK8_e);
+            cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_HEAVY);
         }
-        if (m3570) {
-            cLib_onBit<dBgW::PushPullLabel>(param_0, dBgW::PP_UNK4_e);
+        if (mProcVar0.m3570) {
+            cLib_onBit<dBgW::PushPullLabel>(pp_label, dBgW::PPLABEL_UNK4);
         }
     }
-    fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, param_0);
+
+    fopAc_ac_c* pp_actor = dComIfG_Bgsp()->PushPullCallBack(mPolyInfo, this, shape_angle.y, pp_label);
     if (pp_actor == NULL) {
-        return 0;
+        return FALSE;
     }
-    if (param_0 != dBgW::PP_UNK0_e) {
+
+    if (pp_label != dBgW::PPLABEL_NONE) {
         if (pp_actor->shape_angle.y != m34D4) {
-            cXyz local_28 = (current.pos - m370C);
-            mDoMtx_trans(mDoMtx_stack_c::now, m370C.x, m370C.y, m370C.z);
-            mDoMtx_YrotM(mDoMtx_stack_c::now, pp_actor->shape_angle.y - m34D4);
-            mDoMtx_multVec(mDoMtx_stack_c::now, &local_28, &current.pos);
+            cXyz local_28 = current.pos - m370C;
+            mDoMtx_stack_c::transS(m370C);
+            mDoMtx_stack_c::YrotM(pp_actor->shape_angle.y - m34D4);
+            mDoMtx_stack_c::multVec(&local_28, &current.pos);
             s16 var_r28 = pp_actor->shape_angle.y - m34D4;
             shape_angle.y += var_r28;
             current.angle.y += var_r28;
@@ -42,15 +44,15 @@ int daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel param_0) {
     }
     m370C = pp_actor->current.pos;
     m34D4 = pp_actor->shape_angle.y;
-    return true;
+    return TRUE;
 }
 
 /* 80151644-801517C0       .text procPushPullWait_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
     commonProcInit(daPyProc_PUSH_PULL_WAIT_e);
-    m3570 = param_0;
+    mProcVar0.m3570 = param_0;
     mVelocity = 0.0f;
-    if ((param_0 == 0) || (mEquipItem == daPyItem_NONE_e)) {
+    if (param_0 == 0 || mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
@@ -77,34 +79,33 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
 
 /* 801517C0-8015198C       .text procPushPullWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushPullWait() {
-    /* Nonmatching - "sVar1" if statement */
-    dComIfGp_setRStatus(0x11);
+    dComIfGp_setRStatus(dActStts_GRAB_e);
     setFrontWallType();
     if (m34D6 != 0) {
-        if (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff) {
+        if (checkNoUpperAnime()) {
             setSingleMoveAnime(
                 ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
             );
             m34D6 = 0;
         }
-    } else if ((spActionButton()) && (checkResetFlg0(daPyRFlg0_UNK8))) {
-        if (m3570 != 0) {
+    } else if (spActionButton() && checkResetFlg0(daPyRFlg0_UNK8)) {
+        if (mProcVar0.m3570 != 0) {
             s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
-            f32 dVar3 = cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
-            if (((!sVar1) && ((float)(dVar2 + dVar3) < 5.0f)) && (m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xffff)) {
+            dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);
+            if (sVar1 == 0 && dVar2 < 5.0f && checkNoUpperAnime()) {
                 current.pos.x = m370C.x;
                 current.pos.z = m370C.z;
-                m3570 = 0;
+                mProcVar0.m3570 = 0;
             }
         }
-        if (m3570 == 0) {
+        if (mProcVar0.m3570 == 0) {
             if (mStickDistance > 0.05f) {
-                int iVar1 = getDirectionFromShapeAngle();
-                if (iVar1 == 0) {
+                int direction = getDirectionFromShapeAngle();
+                if (direction == DIR_FORWARD) {
                     procPushMove_init();
-                } else if (iVar1 == 1) {
+                } else if (direction == DIR_BACKWARD) {
                     procPullMove_init();
                 }
             } else {
@@ -119,75 +120,72 @@ BOOL daPy_lk_c::procPushPullWait() {
 
 /* 8015198C-80151A1C       .text procPushMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushMove_init() {
-    if (!setPushPullKeepData(dBgW::PP_UNK0_e)) {
+    if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
-    } else {
-        commonProcInit(daPyProc_PUSH_MOVE_e);
-        setSingleMoveAnime(
-            ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC
-        );
-        m3570 = 1;
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
+
+    commonProcInit(daPyProc_PUSH_MOVE_e);
+    setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
+    mProcVar0.m3570 = 1;
+    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
+
     return true;
 }
 
 /* 80151A1C-80151B38       .text procPushMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPushMove() {
-    dComIfGp_setRStatus(0x11);
-    int iVar1 = getDirectionFromShapeAngle();
+    dComIfGp_setRStatus(dActStts_GRAB_e);
+    int direction = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
+    if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
             if (mStickDistance > 0.05f) {
-                if (iVar1 == 0) {
-                    setPushPullKeepData(dBgW::PP_UNK1_e);
+                if (direction == DIR_FORWARD) {
+                    setPushPullKeepData(dBgW::PPLABEL_PUSH);
                     return true;
                 }
-                if (iVar1 == 1) {
+                if (direction == DIR_BACKWARD) {
                     return procPullMove_init();
                 }
             }
             return procPushPullWait_init(0);
         }
-        if (m3570 != 0) {
+        if (mProcVar0.m3570 != 0) {
             voiceStart(19);
         }
-        m3570 = 0;
-        setPushPullKeepData(dBgW::PP_UNK1_e);
+        mProcVar0.m3570 = 0;
+        setPushPullKeepData(dBgW::PPLABEL_PUSH);
     }
     return true;
 }
 
 /* 80151B38-80151BC8       .text procPullMove_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPullMove_init() {
-    if (!setPushPullKeepData(dBgW::PP_UNK0_e)) {
+    if (!setPushPullKeepData(dBgW::PPLABEL_NONE)) {
         return false;
-    } else {
-        commonProcInit(daPyProc_PULL_MOVE_e);
-        setSingleMoveAnime(
-            ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14
-        );
-        m3570 = 1;
-        dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     }
+
+    commonProcInit(daPyProc_PULL_MOVE_e);
+    setSingleMoveAnime(ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14);
+    mProcVar0.m3570 = 1;
+    dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
+
     return true;
 }
 
 /* 80151BC8-80151E40       .text procPullMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPullMove() {
-    /* Nonmatching - floats */
-    dComIfGp_setRStatus(0x11);
-    int iVar1 = getDirectionFromShapeAngle();
+    dComIfGp_setRStatus(dActStts_GRAB_e);
+    int direction = getDirectionFromShapeAngle();
     setFrontWallType();
-    if ((!checkResetFlg0(daPyRFlg0_UNK8)) || (!spActionButton() && (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)))) {
+    if (!checkResetFlg0(daPyRFlg0_UNK8) || (!spActionButton() && !checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP))) {
         checkNextMode(0);
     } else {
         if (!checkNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP)) {
             if (mStickDistance > 0.05f) {
-                if (iVar1 == 1) {
+                if (direction == DIR_BACKWARD) {
                     f32 dVar4 = cM_ssin(shape_angle.y);
                     f32 dVar5 = cM_scos(shape_angle.y);
                     cXyz local_3c;
@@ -213,21 +211,21 @@ BOOL daPy_lk_c::procPullMove() {
                     mGndChk.SetPos(&local_48);
                     dVar4 = dComIfG_Bgsp()->GroundCross(&mGndChk);
                     if (!((dVar4 - current.pos.y) < -30.1f)) {
-                        setPushPullKeepData(dBgW::PP_UNK2_e);
+                        setPushPullKeepData(dBgW::PPLABEL_PULL);
                     }
                     return true;
                 }
-                if (iVar1 == 0) {
+                if (direction == DIR_FORWARD) {
                     return procPushMove_init();
                 }
             }
             return procPushPullWait_init(0);
         }
-        if (m3570 == 1) {
+        if (mProcVar0.m3570 == 1) {
             voiceStart(19);
         }
-        m3570 = 0;
-        setPushPullKeepData(dBgW::PP_UNK2_e);
+        mProcVar0.m3570 = 0;
+        setPushPullKeepData(dBgW::PPLABEL_PULL);
     }
     return true;
 }

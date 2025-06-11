@@ -1,0 +1,22 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+REL/global_destructor_chain.c:
+	.text       start:0x00000078 end:0x000000EC
+	.dtors      start:0x00000000 end:0x00000004
+	.bss        start:0x00000000 end:0x00000008
+
+d/actor/d_a_npc_uk.cpp:
+	.text       start:0x000000EC end:0x000059DC
+	.text       start:0x000059DC end:0x00005A14
+	.rodata     start:0x00000000 end:0x0000026A
+	.data       start:0x00000000 end:0x00000480
+	.bss        start:0x00000008 end:0x00000078

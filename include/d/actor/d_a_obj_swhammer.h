@@ -1,9 +1,7 @@
 #ifndef D_A_OBJ_SWHAMMER_H
 #define D_A_OBJ_SWHAMMER_H
 
-#include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_particle.h"
 
 class J3DNode;
 

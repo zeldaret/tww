@@ -415,7 +415,7 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
 bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -441,8 +441,8 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
 /* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
 f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     f32 max_dist;
-    if(mPath != 0) {
-        max_dist = 1000000000.0f;
+    if(mPath != NULL) {
+        max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -465,7 +465,7 @@ bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     u8 pointIdx;
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         pointIdx = param_2;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -599,10 +599,10 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
 /* 8021BC8C-8021BD2C       .text dNpc_setShadowModel__FP8J3DModelP12J3DModelDataP8J3DModel */
 void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* param_3) {
     for(int i = 0; i < param_2->getWEvlpMtxNum(); i++) {
-        mDoMtx_copy(param_3->mpWeightEnvMtx[i], param_1->mpWeightEnvMtx[i]);
+        param_1->setWeightAnmMtx(i, param_3->getWeightAnmMtx(i));
     }
     for(int i = 0; i < param_2->getJointNum(); i++) {
-        mDoMtx_copy(param_3->mpNodeMtx[i], param_1->mpNodeMtx[i]);
+        param_1->setAnmMtx(i, param_3->getAnmMtx(i));
     }
 }
 

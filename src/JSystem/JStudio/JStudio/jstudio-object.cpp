@@ -6,6 +6,38 @@
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "dolphin/types.h"
 
+namespace JStudio {
+    namespace {
+        template<typename T>
+        struct TOutputVariableValue_BOOL_ : public TVariableValue::TOutput {
+            typedef void (T::*func_type)(data::TEOperationData, void const*, u32);
+
+            TOutputVariableValue_BOOL_(func_type func) {
+                mFunc = func;
+            }
+            virtual void operator()(f32 param_1, TAdaptor* adaptor) const {
+                u32 local_8 = 0;
+                if (param_1 >= 0.5f) {
+                    local_8 = 1;
+                }
+                (((T*)adaptor)->*mFunc)(data::TEOD_Unknown_02, &local_8, 4);
+            }
+            virtual ~TOutputVariableValue_BOOL_() {}
+
+            /* 0x04 */ func_type mFunc;
+        };
+
+        TOutputVariableValue_BOOL_<TAdaptor_actor> soovv_actor_PARENT_ENABLE_(&TAdaptor_actor::adaptor_do_PARENT_ENABLE);
+        TOutputVariableValue_BOOL_<TAdaptor_actor> soovv_actor_RELATION_ENABLE_(&TAdaptor_actor::adaptor_do_RELATION_ENABLE);
+        TOutputVariableValue_BOOL_<TAdaptor_camera> soovv_camera_PARENT_ENABLE_(&TAdaptor_camera::adaptor_do_PARENT_ENABLE);
+        TOutputVariableValue_BOOL_<TAdaptor_light> soovv_light_ENABLE_(&TAdaptor_light::adaptor_do_ENABLE);
+        TOutputVariableValue_BOOL_<TAdaptor_particle> soovv_particle_PARENT_ENABLE_(&TAdaptor_particle::adaptor_do_PARENT_ENABLE);
+        TOutputVariableValue_BOOL_<TAdaptor_sound> soovv_sound_LOCATED_(&TAdaptor_sound::adaptor_do_LOCATED);
+    }
+}
+
+JStudio::TVariableValue::TOutput_none_ JStudio::TVariableValue::soOutput_none_;
+
 /* 8026E8F8-8026E940       .text __dt__Q37JStudio14TVariableValue7TOutputFv */
 JStudio::TVariableValue::TOutput::~TOutput() {}
 
@@ -244,6 +276,10 @@ void JStudio::TObject::do_data(const void* param_0, u32 param_1, const void* par
 /* 8026F394-8026F3E0       .text __ct__Q27JStudio7TObjectFRCQ47JStudio3stb4data20TParse_TBlock_objectPQ27JStudio8TAdaptor */
 JStudio::TObject::TObject(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor* param_1) : stb::TObject(param_0), mpAdaptor(param_1) {}
 
+const u32 JStudio::TAdaptor_actor::sauVariableValue_3_TRANSLATION_XYZ[3] = {3, 4, 5};
+const u32 JStudio::TAdaptor_actor::sauVariableValue_3_ROTATION_XYZ[3] = {6, 7, 8};
+const u32 JStudio::TAdaptor_actor::sauVariableValue_3_SCALING_XYZ[3] = {9, 10, 11};
+
 /* 8026F3E0-8026F440       .text __dt__Q27JStudio14TAdaptor_actorFv */
 JStudio::TAdaptor_actor::~TAdaptor_actor() {}
 
@@ -254,6 +290,9 @@ JStudio::TObject_actor::TObject_actor(const JStudio::stb::data::TParse_TBlock_ob
 void JStudio::TObject_actor::do_paragraph(u32, const void*, u32) {
     /* Nonmatching */
 }
+
+const u32 JStudio::TAdaptor_ambientLight::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
+const u32 JStudio::TAdaptor_ambientLight::sauVariableValue_4_COLOR_RGBA[4] = {0, 1, 2, 3};
 
 /* 8026F7B0-8026F810       .text __dt__Q27JStudio21TAdaptor_ambientLightFv */
 JStudio::TAdaptor_ambientLight::~TAdaptor_ambientLight() {}
@@ -266,6 +305,10 @@ void JStudio::TObject_ambientLight::do_paragraph(u32, const void*, u32) {
     /* Nonmatching */
 }
 
+const u32 JStudio::TAdaptor_camera::sauVariableValue_3_POSITION_XYZ[3] = {0, 1, 2};
+const u32 JStudio::TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {3, 4, 5};
+const u32 JStudio::TAdaptor_camera::sauVariableValue_2_DISTANCE_NEAR_FAR[2] = {8, 9};
+
 /* 8026F928-8026F988       .text __dt__Q27JStudio15TAdaptor_cameraFv */
 JStudio::TAdaptor_camera::~TAdaptor_camera() {}
 
@@ -277,6 +320,10 @@ void JStudio::TObject_camera::do_paragraph(u32, const void*, u32) {
     /* Nonmatching */
 }
 
+const u32 JStudio::TAdaptor_fog::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
+const u32 JStudio::TAdaptor_fog::sauVariableValue_4_COLOR_RGBA[4] = {0, 1, 2, 3};
+const u32 JStudio::TAdaptor_fog::sauVariableValue_2_RANGE_BEGIN_END[2] = {4, 5};
+
 /* 8026FBFC-8026FC5C       .text __dt__Q27JStudio12TAdaptor_fogFv */
 JStudio::TAdaptor_fog::~TAdaptor_fog() {}
 
@@ -287,6 +334,12 @@ JStudio::TObject_fog::TObject_fog(const JStudio::stb::data::TParse_TBlock_object
 void JStudio::TObject_fog::do_paragraph(u32, const void*, u32) {
     /* Nonmatching */
 }
+
+const u32 JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
+const u32 JStudio::TAdaptor_light::sauVariableValue_4_COLOR_RGBA[4] = {0, 1, 2, 3};
+const u32 JStudio::TAdaptor_light::sauVariableValue_3_POSITION_XYZ[3] = {4, 5, 6};
+const u32 JStudio::TAdaptor_light::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {7, 8, 9};
+const u32 JStudio::TAdaptor_light::sauVariableValue_2_DIRECTION_THETA_PHI[2] = {10, 11};
 
 /* 8026FD80-8026FDE0       .text __dt__Q27JStudio14TAdaptor_lightFv */
 JStudio::TAdaptor_light::~TAdaptor_light() {}
@@ -324,6 +377,14 @@ void JStudio::TObject_message::do_paragraph(u32 param_1, const void* param_2, u3
     }
 }
 
+const u32 JStudio::TAdaptor_particle::sauVariableValue_3_TRANSLATION_XYZ[3] = {0, 1, 2};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_3_ROTATION_XYZ[3] = {3, 4, 5};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_3_SCALING_XYZ[3] = {6, 7, 8};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_3_COLOR_RGB[3] = {9, 10, 11};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_4_COLOR_RGBA[4] = {9, 10, 11, 12};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_3_COLOR1_RGB[3] = {9, 10, 11};
+const u32 JStudio::TAdaptor_particle::sauVariableValue_4_COLOR1_RGBA[4] = {9, 10, 11, 12};
+
 /* 80270184-802701E4       .text __dt__Q27JStudio17TAdaptor_particleFv */
 JStudio::TAdaptor_particle::~TAdaptor_particle() {}
 
@@ -334,6 +395,8 @@ JStudio::TObject_particle::TObject_particle(const JStudio::stb::data::TParse_TBl
 void JStudio::TObject_particle::do_paragraph(u32, const void*, u32) {
     /* Nonmatching */
 }
+
+const u32 JStudio::TAdaptor_sound::sauVariableValue_3_POSITION_XYZ[3] = {0, 1, 2};
 
 /* 802704E4-80270544       .text __dt__Q27JStudio14TAdaptor_soundFv */
 JStudio::TAdaptor_sound::~TAdaptor_sound() {}

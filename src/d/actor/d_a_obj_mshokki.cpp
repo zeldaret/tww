@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_mshokki.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000108       .text set_mtx__14daObjMshokki_cFv */
 void daObjMshokki_c::set_mtx() {
@@ -62,28 +63,28 @@ bool daObjMshokki_c::_draw() {
 }
 
 /* 00000E84-00000EA4       .text daObjMshokki_Create__FP10fopAc_ac_c */
-static cPhs_State daObjMshokki_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjMshokki_Create(fopAc_ac_c* i_this) {
+    return ((daObjMshokki_c*)i_this)->_create();
 }
 
 /* 00000EA4-00000EC8       .text daObjMshokki_Delete__FP14daObjMshokki_c */
-static BOOL daObjMshokki_Delete(daObjMshokki_c*) {
-    /* Nonmatching */
+static BOOL daObjMshokki_Delete(daObjMshokki_c* i_this) {
+    return ((daObjMshokki_c*)i_this)->_delete();
 }
 
 /* 00000EC8-00000EEC       .text daObjMshokki_Execute__FP14daObjMshokki_c */
-static BOOL daObjMshokki_Execute(daObjMshokki_c*) {
-    /* Nonmatching */
+static BOOL daObjMshokki_Execute(daObjMshokki_c* i_this) {
+    return ((daObjMshokki_c*)i_this)->_execute();
 }
 
 /* 00000EEC-00000F10       .text daObjMshokki_Draw__FP14daObjMshokki_c */
-static BOOL daObjMshokki_Draw(daObjMshokki_c*) {
-    /* Nonmatching */
+static BOOL daObjMshokki_Draw(daObjMshokki_c* i_this) {
+    return ((daObjMshokki_c*)i_this)->_draw();
 }
 
 /* 00000F10-00000F18       .text daObjMshokki_IsDelete__FP14daObjMshokki_c */
 static BOOL daObjMshokki_IsDelete(daObjMshokki_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjMshokki_Method = {
@@ -104,7 +105,7 @@ actor_process_profile_definition g_profile_Obj_Mshokki = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0112,
+    /* Priority     */ PRIO_Obj_Mshokki,
     /* Actor SubMtd */ &l_daObjMshokki_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

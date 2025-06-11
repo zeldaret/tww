@@ -1815,7 +1815,7 @@ void J3DPEBlockFull::reset(J3DPEBlock* pBlock) {
 
 /* 802E96C8-802E9920       .text calc__21J3DTexGenBlockPatchedFPA4_Cf */
 void J3DTexGenBlockPatched::calc(const Mtx modelMtx) {
-    if (!((j3dSys.mFlags >> 2) & 0x01) || !j3dSys.checkFlag(J3DSysFlag_SkinNrmCpu)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_SkinPosCpu) || !j3dSys.checkFlag(J3DSysFlag_SkinNrmCpu)) {
         for (s32 i = 0; i < (s32)ARRAY_SIZE(mTexMtx); i++) {
             if (mTexMtx[i] == NULL)
                 continue;

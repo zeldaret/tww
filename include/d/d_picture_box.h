@@ -4,8 +4,8 @@
 #include "dolphin/types.h"
 
 class JKRExpHeap;
-class fopMsgM_pane_class;
-class fopMsgM_pane_alpha_class;
+struct fopMsgM_pane_class;
+struct fopMsgM_pane_alpha_class;
 
 class sub_pb_class;
 
@@ -67,5 +67,5 @@ class dJle_Pb_c {
     void draw();
     void _delete(JKRExpHeap*);
 };
-
+void dPb_erasePicture();
 #endif /* D_PICTURE_BOX_H */

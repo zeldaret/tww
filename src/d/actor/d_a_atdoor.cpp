@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_atdoor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000084       .text getSwbit__10daAtdoor_cFv */
 void daAtdoor_c::getSwbit() {
@@ -73,7 +74,7 @@ static BOOL daAtdoor_Execute(daAtdoor_c*) {
 
 /* 00000694-0000069C       .text daAtdoor_IsDelete__FP10daAtdoor_c */
 static BOOL daAtdoor_IsDelete(daAtdoor_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000069C-0000070C       .text daAtdoor_Delete__FP10daAtdoor_c */
@@ -82,8 +83,8 @@ static BOOL daAtdoor_Delete(daAtdoor_c*) {
 }
 
 /* 0000070C-0000072C       .text daAtdoor_Create__FP10fopAc_ac_c */
-static cPhs_State daAtdoor_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daAtdoor_Create(fopAc_ac_c* i_this) {
+    return ((daAtdoor_c*)i_this)->create();
 }
 
 static actor_method_class l_daAtdoor_Method = {
@@ -104,7 +105,7 @@ actor_process_profile_definition g_profile_ATDOOR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x012F,
+    /* Priority     */ PRIO_ATDOOR,
     /* Actor SubMtd */ &l_daAtdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

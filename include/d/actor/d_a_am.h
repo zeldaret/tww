@@ -19,7 +19,7 @@ public:
     /* 0x02C2 */ u8 mStartsInactive;
     /* 0x02C3 */ u8 mSwitch;
     /* 0x02C4 */ u8 mAction;
-    /* 0x02C5 */ u8 mState;
+    /* 0x02C5 */ u8 mMode;
     /* 0x02C6 */ u8 mHugeKnockback;
     /* 0x02C7 */ bool mbIsBodyBeingHit;
     /* 0x02C8 */ s16 mCountDownTimers[4];
@@ -39,6 +39,9 @@ public:
     /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz mEyeRot;
     /* 0x0336 */ csXyz mTargetEyeRot;
+#if VERSION == VERSION_DEMO
+    /* 0x033C */ JPABaseEmitter* m033C_demo;
+#endif
     /* 0x033C */ JPABaseEmitter* m033C;
     /* 0x0340 */ JPABaseEmitter* m0340;
     /* 0x0344 */ dPa_smokeEcallBack mSmokeCbs[4];

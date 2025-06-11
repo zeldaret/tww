@@ -3,6 +3,7 @@
 
 #include "dolphin/os/OSMutex.h"
 #include "global.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 
 class mDoMemCd_Ctrl_c {
 public:
@@ -61,7 +62,7 @@ public:
     void getProbeStat() {}
     void setPictWriteDataPtr(u8*) {}
 
-    /* 0x0000 */ u8 mData[0x1650];
+    /* 0x0000 */ u8 mData[3 * sizeof(card_gamedata)];
     /* 0x1650 */ u8* mPictDataPtr;
     /* 0x1654 */ u8* mPictDataWritePtr;
     /* 0x1658 */ u8 mCardSlot;

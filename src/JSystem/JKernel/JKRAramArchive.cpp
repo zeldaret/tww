@@ -147,7 +147,7 @@ cleanup:
         JKRFreeToSysHeap(mem);
     }
     if (mMountMode == 0) {
-        OSReport(":::[%s: %d] Cannot alloc memory\n", __FILE__, VERSION_SELECT(407, 400, 400));
+        OSReport(":::[%s: %d] Cannot alloc memory\n", __FILE__, VERSION_SELECT(407, 407, 400, 400));
         if (mDvdFile != NULL) {
             delete mDvdFile;
         }
@@ -158,7 +158,7 @@ cleanup:
 
 /* 802BA4EC-802BA640       .text fetchResource__14JKRAramArchiveFPQ210JKRArchive12SDIFileEntryPUl */
 void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
-    JUT_ASSERT(VERSION_SELECT(434, 427, 427), isMounted());
+    JUT_ASSERT(VERSION_SELECT(434, 434, 427, 427), isMounted());
     u32 outSize;
     u8* outBuf;
     if (pOutSize == NULL) {
@@ -193,7 +193,7 @@ void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
 
 /* 802BA640-802BA788       .text fetchResource__14JKRAramArchiveFPvUlPQ210JKRArchive12SDIFileEntryPUl */
 void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* pEntry, u32* resourceSize) {
-    JUT_ASSERT(VERSION_SELECT(514, 500, 500), isMounted());
+    JUT_ASSERT(VERSION_SELECT(514, 514, 500, 500), isMounted());
     u32 size = pEntry->data_size;
     if (size > bufferSize) {
         size = bufferSize;
@@ -223,7 +223,7 @@ void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* 
 
 /* 802BA788-802BA894       .text fetchResource_subroutine__14JKRAramArchiveFUlUlPUcUli */
 u32 JKRAramArchive::fetchResource_subroutine(u32 srcAram, u32 srcLength, u8* dst, u32 dstLength, int compression) {
-    JUT_ASSERT(VERSION_SELECT(627, 613, 613), ( srcAram & 0x1f ) == 0);
+    JUT_ASSERT(VERSION_SELECT(627, 627, 613, 613), ( srcAram & 0x1f ) == 0);
     u32 outLen;
     u32 srcSize = ALIGN_NEXT(srcLength, 0x20);
     u32 dstSize = ALIGN_PREV(dstLength, 0x20);
@@ -240,7 +240,7 @@ u32 JKRAramArchive::fetchResource_subroutine(u32 srcAram, u32 srcLength, u8* dst
         JKRAramToMainRam(srcAram, dst, srcSize, EXPAND_SWITCH_UNKNOWN1, dstSize, NULL, -1, &outLen);
         return outLen;
     default:
-        OSPanic(__FILE__, VERSION_SELECT(654, 640, 640), ":::??? bad sequence\n");
+        OSPanic(__FILE__, VERSION_SELECT(654, 654, 640, 640), ":::??? bad sequence\n");
         return 0;
     }
 }
@@ -254,7 +254,7 @@ u32 JKRAramArchive::fetchResource_subroutine(u32 entryNum, u32 length, JKRHeap* 
     case COMPRESSION_NONE:
         {
             buffer = (u8*)(JKRAllocFromHeap(pHeap, alignedLen, 0x20));
-            JUT_ASSERT(VERSION_SELECT(676, 662, 662), buffer != NULL);
+            JUT_ASSERT(VERSION_SELECT(676, 676, 662, 662), buffer != NULL);
             JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN0, alignedLen, NULL, -1, NULL);
             *out = buffer;
             return length;
@@ -267,14 +267,14 @@ u32 JKRAramArchive::fetchResource_subroutine(u32 entryNum, u32 length, JKRHeap* 
             JKRAramToMainRam(entryNum, alignHeader, sizeof(SArcHeader), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
             u32 decompressedLen = ALIGN_NEXT(JKRDecompExpandSize(alignHeader), sizeof(SArcHeader));
             buffer = (u8*)(JKRAllocFromHeap(pHeap, decompressedLen, sizeof(SArcHeader)));
-            JUT_ASSERT(VERSION_SELECT(709, 688, 688), buffer);
+            JUT_ASSERT(VERSION_SELECT(702, 709, 688, 688), buffer);
             u32 readLen;
             JKRAramToMainRam(entryNum, buffer, alignedLen, EXPAND_SWITCH_UNKNOWN1, decompressedLen, pHeap, -1, &readLen);
             *out = buffer;
             return readLen;
         }
     default:
-        OSPanic(__FILE__, VERSION_SELECT(719, 698, 698), ":::??? bad sequence\n");
+        OSPanic(__FILE__, VERSION_SELECT(712, 719, 698, 698), ":::??? bad sequence\n");
         return 0;
     }
 }

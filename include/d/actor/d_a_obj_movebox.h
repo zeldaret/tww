@@ -1,14 +1,13 @@
 #ifndef D_A_OBJ_MOVEBOX_H
 #define D_A_OBJ_MOVEBOX_H
 
-#include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_particle.h"
 #include "d/d_bg_w.h"
-#include "d/d_path.h"
+
+struct dPath;
 
 namespace daObjMovebox {
     class Act_c;
@@ -145,17 +144,17 @@ namespace daObjMovebox {
             PRM_TYPE_W = 0x04,
             PRM_TYPE_S = 0x18,
             
-            PRM_SWSAVE_W = 0x01,
-            PRM_SWSAVE_S = 0x1E,
-            
-            PRM_SWSAVE1_W = 0x08,
-            PRM_SWSAVE1_S = 0x08,
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
             
             PRM_ITEMNO_W = 0x06,
             PRM_ITEMNO_S = 0x00,
             
             PRM_ITEMSAVE_W = 0x07,
             PRM_ITEMSAVE_S = 0x10,
+            
+            PRM_DMY_W = 0x01,
+            PRM_DMY_S = 0x1E,
             
             PRM_BUOY_W = 0x01,
             PRM_BUOY_S = 0x1F,
@@ -175,8 +174,8 @@ namespace daObjMovebox {
         s32 prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
         s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
+        s32 prm_get_dmy() const { return daObj::PrmAbstract(this, PRM_DMY_W, PRM_DMY_S); }
         s32 prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
-        s32 prm_get_dmy() const; // Unused?
         
         BOOL is_switch1() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
         BOOL is_switch2() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()); };
@@ -270,9 +269,9 @@ namespace daObjMovebox {
         /* 0x6B8 */ fpc_ProcID mChildPID;
         /* 0x6BC */ BOOL mbRollCrash;
         
-        static const char* const M_arcname[13];
+        static const char* const M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;
-        static const Attr_c M_attr[13];
+        static const Attr_c M_attr[];
     };
     
     STATIC_ASSERT(sizeof(Act_c) == 0x6C0);

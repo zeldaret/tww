@@ -20,10 +20,10 @@ void dCcMassS_Mng::Ct() {
     mFlag = 0;
     mResultCam = 0;
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = C_BG_MIN_HEIGHT;
+    mCamTopPos.y = -G_CM3D_F_INF;
     mCamTopPos.z = 0.0f;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = C_BG_MIN_HEIGHT;
+    mCamBottomPos.y = -G_CM3D_F_INF;
     mCamBottomPos.z = 0.0f;
     Clear();
 }
@@ -32,25 +32,23 @@ void dCcMassS_Mng::Ct() {
 void dCcMassS_Mng::Prepare() {
     cM3dGAab area;
     area.ClearForMinMax();
-    cCcD_ShapeAttr* attr;
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->GetObj();
         JUT_ASSERT(61, pobj != NULL);
-        attr = pobj->GetShapeAttr();
+        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
         JUT_ASSERT(73, parea != NULL);
-        attr = parea->GetShapeAttr();
+        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     if (mFlag & 1) {
         mCpsAttr.CalcAabBox();
-        attr = &mCpsAttr;
-        area.SetMinMax(attr->GetWorkAab());
+        area.SetMinMax(mCpsAttr.GetWorkAab());
     }
     mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
@@ -71,13 +69,13 @@ void dCcMassS_Mng::Prepare() {
         mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.GetWorkAab(), 0);
     }
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = C_BG_MIN_HEIGHT;
+    mCamTopPos.y = -G_CM3D_F_INF;
     mCamTopPos.z = 0.0f;
-    mCamTopDist = C_BG_MAX_HEIGHT;
+    mCamTopDist = G_CM3D_F_INF;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = C_BG_MIN_HEIGHT;
+    mCamBottomPos.y = -G_CM3D_F_INF;
     mCamBottomPos.z = 0.0f;
-    mCamBottomDist = C_BG_MAX_HEIGHT;
+    mCamBottomDist = G_CM3D_F_INF;
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */

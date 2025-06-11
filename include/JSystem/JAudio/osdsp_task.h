@@ -8,7 +8,11 @@ typedef struct OSContext OSContext;
 
 extern DSPTaskInfo* DSP_prior_task;
 
+#ifdef __cplusplus
 extern "C" void __DSPHandler(int, OSContext*);
+#else
+void __DSPHandler(int, OSContext*);
+#endif
 void DsyncFrame2(u32, u32, u32);
 void Dsp_Update_Request();
 BOOL Dsp_Running_Check();

@@ -3,6 +3,8 @@
 class dSv_evtBit_c {
 public:
     enum {
+        UNK_1 = 0x01,
+        UNK_310 = 0x310,
         ENDLESS_NIGHT = 0x0A02,
         MEDLI_GAVE_FATHERS_LETTER = 0x0E02,
         MET_KORL = 0x0F80,

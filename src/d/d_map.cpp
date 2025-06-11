@@ -26,6 +26,66 @@ enum {
 #define Floor_Num (Floor_5F - Floor_B5F + 1)
 #define Floor_Valid(no) (no >= 0) && (no < Floor_Num)
 
+u8 dMap_c::mCompAlpha;
+u8 dMap_c::mAlpha;
+u8 dMap_c::mDrawPointCntPlayer;
+u8 dMap_c::mDrawPointCntEnemy;
+u8 dMap_c::mDrawPointCntAgbCursor;
+u8 dMap_c::mTboxNum;
+u8 dMap_c::mDoorNum;
+u8 dMap_c::mPointFriendNum;
+u8 dMap_c::mDrawPointCntShip;
+u8 dMap_c::mDrawPointRestartCnt;
+u8 dMap_c::mCollectPointDataCnt;
+u8 dMap_c::mAGBMapSendStatus;
+u8 dMap_c::mSetCursorFlg;
+u8 dMap_c::mMapDispMode;
+u8 dMap_c::mIconDispMode;
+u8 dMap_c::mIconFreeAlpha;
+u8 dMap_c::mIconSelfAlpha;
+bool dMap_c::mAGBMapSendStopFlg;
+u8 dMap_c::mMapAGBCursorFlashFrmCnt;
+u8 dMap_c::mPlayerStayAgbMapTypeNow;
+u8 dMap_c::mPlayerStayAgbMapTypeOld;
+u8 dMap_c::mPlGridX;
+u8 dMap_c::mPlGridY;
+u8 dMap_c::mPlGridX_Old;
+u8 dMap_c::mPlGridY_Old;
+u8 dMap_c::mNowFloorNo;
+s16 dMap_c::mIconFreePosX;
+s16 dMap_c::mIconFreePosY;
+u16 dMap_c::mAGBPointValueC;
+u16 dMap_c::mAGBPointValueE;
+u16 dMap_c::mAGBPointValueAll;
+u16 dMap_c::mAGBPointValueRoomAll;
+char dMap_c::mAgbSendNowStageName[8];
+int dMap_c::mAgbSendNowRoomNo;
+u16 dMap_c::mAgbSendNowDspFloorNo;
+u8 dMap_c::mAgbSendNowAgbMapType;
+f32 dMap_c::mEnlargementSizeCenterX;
+f32 dMap_c::mEnlargementSizeCenterZ;
+f32 dMap_c::mEnlargementSizeScaleX;
+f32 dMap_c::mEnlargementSizeScaleZ;
+u8 dMap_c::mFmapChkPntValue;
+int dMap_c::mFmapChkPntData_p;
+s16 dMap_c::mDispPosLeftUpX;
+s16 dMap_c::mDispPosLeftUpY;
+s16 dMap_c::mDispSizeX;
+s16 dMap_c::mDispSizeY;
+int dMap_c::mScissorOrigY;
+int dMap_c::mScissorOrigX;
+int dMap_c::mScissorWidth;
+int dMap_c::mScissorHeight;
+f32 dMap_c::mIconFreeScale;
+f32 dMap_c::mIconSelfScale;
+f32 dMap_c::mNowCenterX;
+f32 dMap_c::mNowCenterZ;
+f32 dMap_c::mNowScaleX;
+f32 dMap_c::mNowScaleZ;
+// ? dMap_c::mGbaSendMapOceanDt;
+dMap_RoomInfoCtrl_c dMap_c::mRoomInfoCtrl;
+void* dMap_c::mNowRoomInfoP;
+
 static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
     JUT_ASSERT(0x4a4, (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
     return i_gridX + 3 + (i_gridY + 3) * 7;
@@ -65,7 +125,7 @@ f32 mapOffsetY() {
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
         if (dComIfGp_getStage().getDMap() != NULL) {
             dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
-            dStage_DMap_entry_c* entry = pinf->entry;
+            dStage_DMap_dt_c* entry = pinf->entries;
             JUT_ASSERT(0x587, pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++)
                 ret = entry->offsetY;
@@ -84,10 +144,10 @@ BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p) {
     u8 top;
 
     dStage_FloorInfo_c* floor = stag->getFloorInfo();
-    dStage_FloorInfo_entry_c* entry;
+    dStage_FloorInfo_dt_c* entry;
 
     if (floor != NULL && floor->num >= 1) {
-        entry = floor->entry;
+        entry = floor->m_entries;
         bottom = Floor_B5F;
         top = Floor_5F;
         for (int i = 0; i < floor->num; i++, entry++) {
@@ -121,13 +181,13 @@ void dMap_GetFloorInfoDtP(dStage_FloorInfo_c* floor, f32 ret) {
 }
 
 /* 80045A98-80045AEC       .text dMap_GetFloorInfoDtPFromFloorNo__FP18dStage_FloorInfo_cUc */
-dStage_FloorInfo_entry_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
+dStage_FloorInfo_dt_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
     /* Nonmatching */
-    dStage_FloorInfo_entry_c* entry;
+    dStage_FloorInfo_dt_c* entry;
     BOOL valid = FALSE;
 
     if (floor != NULL) {
-        entry = floor->entry;
+        entry = floor->m_entries;
         for (int i = 0; i < floor->num; i++, entry++) {
             if (entry->floorNo == i_floorNo) {
                 valid = TRUE;

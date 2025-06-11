@@ -213,7 +213,7 @@ void J3DMaterial::makeSharedDisplayList() {
 /* 802DEAD4-802DEB3C       .text load__11J3DMaterialFv */
 void J3DMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (!j3dSys.checkFlag(2)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         j3dSys.mMatPacket->callDL();
         loadNBTScale(*mTexGenBlock->getNBTScale());
     }
@@ -222,7 +222,7 @@ void J3DMaterial::load() {
 /* 802DEB3C-802DEBA0       .text loadSharedDL__11J3DMaterialFv */
 void J3DMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (!j3dSys.checkFlag(2)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         mSharedDLObj->callDL();
         loadNBTScale(*mTexGenBlock->getNBTScale());
     }
@@ -360,7 +360,7 @@ void J3DPatchedMaterial::makeSharedDisplayList() {}
 /* 802DF268-802DF2AC       .text load__18J3DPatchedMaterialFv */
 void J3DPatchedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (j3dSys.checkFlag(0x02)) {
+    if (j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         return;
     }
     j3dSys.mMatPacket->callDL();
@@ -369,7 +369,7 @@ void J3DPatchedMaterial::load() {
 /* 802DF2AC-802DF2EC       .text loadSharedDL__18J3DPatchedMaterialFv */
 void J3DPatchedMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (!j3dSys.checkFlag(0x02)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         mSharedDLObj->callDL();
     }
 }
@@ -402,7 +402,7 @@ void J3DLockedMaterial::makeSharedDisplayList() {}
 /* 802DF368-802DF3AC       .text load__17J3DLockedMaterialFv */
 void J3DLockedMaterial::load() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (j3dSys.checkFlag(0x02)) {
+    if (j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         return;
     }
     j3dSys.mMatPacket->callDL();
@@ -411,7 +411,7 @@ void J3DLockedMaterial::load() {
 /* 802DF3AC-802DF3EC       .text loadSharedDL__17J3DLockedMaterialFv */
 void J3DLockedMaterial::loadSharedDL() {
     j3dSys.setMaterialMode(mMaterialMode);
-    if (!j3dSys.checkFlag(0x02)) {
+    if (!j3dSys.checkFlag(J3DSysFlag_UNK2)) {
         mSharedDLObj->callDL();
     }
 }

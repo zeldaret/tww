@@ -4,7 +4,7 @@
 #include "dolphin/types.h"
 
 class JKRArchive;
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 
 class dDlst_StarterScrnDraw_c {
 public:

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_hami3.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode*, int) {
@@ -90,28 +91,28 @@ BOOL daObjHami3::Act_c::Draw() {
 namespace daObjHami3 {
 namespace {
 /* 00000A94-00000AB4       .text Mthd_Create__Q210daObjHami327@unnamed@d_a_obj_hami3_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjHami3::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000AB4-00000AD4       .text Mthd_Delete__Q210daObjHami327@unnamed@d_a_obj_hami3_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjHami3::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000AD4-00000AF4       .text Mthd_Execute__Q210daObjHami327@unnamed@d_a_obj_hami3_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjHami3::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000AF4-00000B20       .text Mthd_Draw__Q210daObjHami327@unnamed@d_a_obj_hami3_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjHami3::Act_c*)i_this)->Draw();
 }
 
 /* 00000B20-00000B4C       .text Mthd_IsDelete__Q210daObjHami327@unnamed@d_a_obj_hami3_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjHami3::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Hami3 = {
@@ -134,7 +135,7 @@ actor_process_profile_definition g_profile_Obj_Hami3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x001A,
+    /* Priority     */ PRIO_Obj_Hami3,
     /* Actor SubMtd */ &daObjHami3::Mthd_Hami3,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -33,7 +33,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     mCardSlot = 0;
     OSInitMutex(&mMutex);
     OSInitCond(&mCond);
-    s32 priority = OSGetThreadPriority(OSGetCurrentThread());
+    OSPriority priority = OSGetThreadPriority(OSGetCurrentThread());
     OSCreateThread(&MemCardThread, (void*)mDoMemCd_main, NULL, &MemCardStack[ARRAY_SIZE(MemCardStack)], ARRAY_SIZE(MemCardStack), priority + 1, 1);
     OSResumeThread(&MemCardThread);
 }
@@ -105,7 +105,7 @@ void mDoMemCd_Ctrl_c::restore() {
     CARDFileInfo cardInfo;
     s32 ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
     if (ret == CARD_ERROR_READY) {
-        if (!mDoMemCdRWm_Restore(&cardInfo, this, 0x1650)) {
+        if (!mDoMemCdRWm_Restore(&cardInfo, mData, sizeof(mData))) {
             field_0x1660 = 3;
         } else {
             setCardState(ret);
@@ -133,7 +133,7 @@ void mDoMemCd_Ctrl_c::store() {
     if (field_0x1660 == 1) {
         ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
         if (ret == CARD_ERROR_READY) {
-            ret = mDoMemCdRWm_Store(&cardInfo, this, 0x1650);
+            ret = mDoMemCdRWm_Store(&cardInfo, mData, sizeof(mData));
             if (ret != CARD_ERROR_READY)
                 setCardState(ret);
             else
@@ -199,7 +199,7 @@ s32 mDoMemCd_Ctrl_c::SaveSync() {
         if (field_0x1660 == 4) {
             field_0x1660 = 1;
             ret = 1;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         } else if (field_0x1660 == 1) {
             ret = 0;
 #endif

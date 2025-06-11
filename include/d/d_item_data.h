@@ -27,9 +27,9 @@ enum ItemTable {
     /* 0x14 */ noentry20, // Unused
     /* 0x15 */ dItem_SMALL_KEY_e,
     /* 0x16 */ dItem_RECOVER_FAIRY_e,
-    /* 0x17 */ noentry23, // Unused
-    /* 0x18 */ noentry24, // Unused
-    /* 0x19 */ noentry25, // Unused
+    /* 0x17 */ dItem_HEART_PIECE_2_e, // Not an item, used only for its msg no
+    /* 0x18 */ dItem_HEART_PIECE_3_e, // Not an item, used only for its msg no
+    /* 0x19 */ dItem_HEART_PIECE_4_e, // Not an item, used only for its msg no
     /* 0x1A */ dItem_SUB_DUN_RUPEE_e, // Used in VERSION_JPN only
     /* 0x1B */ noentry27, // Unused
     /* 0x1C */ noentry28, // Unused
@@ -262,6 +262,8 @@ enum ItemTable {
     /* 0xFF */ dItem_NONE_e,
 };
 
+#define MSG_NO_FOR_ITEM(item_no) item_no + 101
+
 struct dItem_data_item_resource {
     /* 0x00 */ char* mArcname;
     /* 0x04 */ char* mTexture; // Filename in /files/res/Msg/itemicon.arc of its inventory icon.
@@ -276,7 +278,7 @@ struct dItem_data_item_resource {
     /* 0x18 */ u32 mUnused; // Always 0, doesn't seem to be read
     /* 0x1C */ u32 mUnknown; // Varies between items, but doesn't seem to be read. Resembles a differed dlist flag.
     /* 0x20 */ u16 mHeapSize;
-};
+};  // Size: 0x24
 
 STATIC_ASSERT(sizeof(dItem_data_item_resource) == 0x24);
 
@@ -291,7 +293,7 @@ struct dItem_data_field_item_res {
     /* 0x10 */ s8 mTevFrm; // Unused, the equivalent in item_resource is used instead.
     /* 0x14 */ u32 mUnknown;
     /* 0x18 */ u16 mHeapSize;
-};
+};  // Size: 0x1C
 
 STATIC_ASSERT(sizeof(dItem_data_field_item_res) == 0x1C);
 

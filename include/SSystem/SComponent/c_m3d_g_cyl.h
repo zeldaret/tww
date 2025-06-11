@@ -25,9 +25,15 @@ public:
     cM3dGCyl() {}
     cM3dGCyl(const cXyz*, f32, f32);
     virtual ~cM3dGCyl() {}
+#if VERSION == VERSION_DEMO
+    void SetC(const cXyz& pos) { mCenter = pos; }
+    void SetH(f32 h) { mHeight = h; }
+    void SetR(f32 r) { mRadius = r; }
+#else
     void SetC(const cXyz& pos);
     void SetH(f32 h);
     void SetR(f32 r);
+#endif
     void Set(const cM3dGCylS & src) {
         SetC(src.mCenter);
         SetR(src.mRadius);

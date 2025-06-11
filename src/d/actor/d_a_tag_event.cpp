@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tag_event.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_bk.h"
 #include "d/actor/d_a_dr.h"
@@ -230,7 +231,7 @@ BOOL daTag_Event_c::actionReady() {
     } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
     } else {
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -253,7 +254,7 @@ BOOL daTag_Event_c::actionHunt() {
         setActio(ACTION_WAIT);
     } else if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -335,7 +336,7 @@ BOOL daTag_Event_c::actionSpeReady() {
         actionSpeEvent();
         dComIfGs_onEventBit(0x2740);
     } else {
-        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx);
     }
     return TRUE;
 }
@@ -349,7 +350,7 @@ BOOL daTag_Event_c::actionSpeHunt() {
     }
     if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_SPE_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx);
     }
     return TRUE;
 }
@@ -398,7 +399,7 @@ BOOL daTag_Event_c::actionMjReady() {
         } else {
             mEventIdx = dComIfGp_evmng_getEventIdx("BEAST_GATE2", getEventNo());
         }
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -425,7 +426,7 @@ BOOL daTag_Event_c::actionMjHunt() {
             mEventIdx = dComIfGp_evmng_getEventIdx("BEAST_GATE2", getEventNo());
         }
         setActio(ACTION_MJ_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -446,7 +447,7 @@ BOOL daTag_Event_c::actionHunt2() {
                 m294--;
             } else {
                 setActio(ACTION_READY);
-                fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
             }
         } else {
             m294 = 65;
@@ -571,7 +572,7 @@ actor_process_profile_definition g_profile_TAG_EVENT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011E,
+    /* Priority     */ PRIO_TAG_EVENT,
     /* Actor SubMtd */ &l_daTag_Event_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

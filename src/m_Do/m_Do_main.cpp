@@ -51,7 +51,7 @@ void HeapCheck::CheckHeap1() {
         mMaxTotalFreeSize = freeSize;
 }
 
-char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+char mDoMain::COPYDATE_STRING[18] = "\?\?/\?\?/?? ??:??:??";
 
 static HeapCheck RootHeapCheck = {
     "Root", NULL, 0, 0x7FFFFFFF, 0x1400000, 0x140, 0x10000, 0, 0,
@@ -207,7 +207,7 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
-        JUT_ASSERT(VERSION_SELECT(530, 531, 531), mHeapBriefType < HeapCheckTableNum);
+        JUT_ASSERT(VERSION_SELECT(530, 530, 531, 531), mHeapBriefType < HeapCheckTableNum);
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
@@ -307,6 +307,7 @@ bool Debug_console(JUTGamePad* i_pad) {
                 JUTReport(30, 420, 1, "SCROLL：%3d %3d %3d Output=%1x", console->getLineOffset(),
                           console->getPositionX(), console->getPositionY(), console->getOutput());
             } else {
+#if VERSION > VERSION_DEMO
                 if (i_pad->getTrigger() & CButton::DPAD_DOWN) {
                     g_HIO.mDisplayMeter ^= 1;
                 }
@@ -329,6 +330,7 @@ bool Debug_console(JUTGamePad* i_pad) {
                     gameHeap->dump_sort();
                     archiveHeap->dump_sort();
                 }
+#endif
                 JUTReport(30, 440, 1, "Press L+R trigger to control console.");
                 JUTReport(30, 450, 1, "Press [Z] trigger to close this window.");
             }
@@ -409,7 +411,7 @@ void main01() {
 
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
     fapGm_Create();  // init framework
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     mDisplayHeapSize = 1;
 #else
     mDisplayHeapSize = 0;
@@ -445,7 +447,7 @@ int main() {
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit();
     version_check();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);
     mDoRst::setResetData(reset_data);
 
@@ -477,7 +479,7 @@ int main() {
         }
     }
 
-    s32 priority = OSGetThreadPriority(current_thread);
+    OSPriority priority = OSGetThreadPriority(current_thread);
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);

@@ -11,9 +11,9 @@ class dBgW;
 
 class daObjVgnfd_c : public fopAc_ac_c {
 public:
-    void check_boss(int) {}
-    BOOL check_ev_init(int); // weak but not inlined?
-    void on_door_ev(int) {}
+    inline BOOL check_ev_init(int); // weak but not inlined
+    inline void on_door_ev(int);
+    inline BOOL check_boss(int);
 
     static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_bdl_brk(int);

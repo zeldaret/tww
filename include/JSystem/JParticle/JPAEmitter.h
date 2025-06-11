@@ -195,7 +195,7 @@ public:
 
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }
-    bool checkStatus(u32 status) { return mFlags & status; }
+    u32 checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status) { mFlags = status; }
 
     bool checkEmDataFlag(u32 mask) { return mDataFlag & mask; }
@@ -280,8 +280,6 @@ public:
         stopCreateParticle();
     }
 
-    bool isZDraw() { return mDraw.isZDraw(); }
-
     void setEmitterCallBackPtr(JPACallBackBase<JPABaseEmitter*>* callback) {
         mpEmitterCallBack = callback;
     }
@@ -293,8 +291,12 @@ public:
     JSUList<JPABaseParticle>* getParticleList() { return &mActiveParticles; }
     JSUList<JPABaseParticle>* getChildParticleList() { return &mChildParticles; }
     JSULink<JPABaseEmitter>* getLinkBufferPtr() { return &mLink; }
+
     void initDrawMgr(JPATextureResource* texRes) { mDraw.initialize(this, texRes); }
     void draw(MtxP cameraMtxP) { mDraw.draw(cameraMtxP); }
+    bool isZDraw() { return mDraw.isZDraw(); }
+    bool isChildDraw() { return mDraw.isChildDraw(); }
+    MtxP getCamMtxPtr() { return mDraw.getCamMtxPtr(); }
 
     f32 getRandomF() { return mRandomSeed.get_ufloat_1(); }
     f32 getRandomRF() { f32 x = mRandomSeed.get_ufloat_1(); return x + x - 1.0f; }
@@ -311,12 +313,10 @@ public:
     void getAxisYVec(JGeometry::TVec3<f32>&) const {}
     void getBaseEnvColor(GXColor&) {}
     void getBasePrmColor(GXColor&) {}
-    void getCamMtxPtr() {}
     void getCurrentCreateNumber() const {}
     void getFrame() {}
     void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
-    void isChildDraw() {}
     void isContinuousParticle() {}
     void loadTexture(u8, GXTexMapID) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}

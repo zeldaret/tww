@@ -91,6 +91,7 @@ public:
     virtual ~J3DModel();
 
     J3DModelData* getModelData() { return mModelData; }
+    void setModelData(J3DModelData* modelData) { mModelData = modelData; }
 
     void onFlag(u32 flag) { mFlags |= flag; }
     void offFlag(u32 flag) { mFlags &= ~flag; }
@@ -116,7 +117,7 @@ public:
     u8 getScaleFlag(int idx) const { return mpScaleFlagArr[idx]; }
     void setScaleFlag(int idx, u8 param_1) { mpScaleFlagArr[idx] = param_1; }
     u8 getEnvScaleFlag(int idx) const { return mpEvlpScaleFlagArr[idx]; }
-    J3DVertexBuffer* getVertexBuffer() { return (J3DVertexBuffer*)&mVertexBuffer; }
+    J3DVertexBuffer* getVertexBuffer() { return &mVertexBuffer; }
     void* getCurrentVtxPos() { return mVertexBuffer.getCurrentVtxPos(); }
     void setCurrentVtxPos(void* v) { mVertexBuffer.setCurrentVtxPos(v); }
     void* getCurrentVtxNrm() { return mVertexBuffer.getCurrentVtxNrm(); }
@@ -129,19 +130,15 @@ public:
     Mtx& getDrawMtx(int idx) { return getDrawMtxPtr()[idx]; }
     Mtx33* getNrmMtxPtr() { return mpNrmMtxBuf[1][mCurrentViewNo]; }
     Mtx33& getNrmMtx(int idx) { return getNrmMtxPtr()[idx]; }
+    void setNrmMtx(int idx, Mtx m) { J3DPSMtx33CopyFrom34(m, getNrmMtxPtr()[idx]); }
     Mtx33* getBumpMtxPtr(int idx) { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
+    Vec* getBaseScale() { return &mBaseScale; } // Unused in TWW
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
     void setUserArea(u32 area) { mUserArea = area; }
     u32 getUserArea() const { return mUserArea; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
 
-    // TODO
-    void setModelData(J3DModelData*) {}
-    void setNrmMtx(int, Mtx) {}
-
-    // Appears in TP debug maps but not TWW debug maps.
-    Vec* getBaseScale() { return &mBaseScale; }
-
+private:
     /* 0x000 */ /* vtable */
     /* 0x004 */ J3DModelData* mModelData;
     /* 0x008 */ u32 mFlags;

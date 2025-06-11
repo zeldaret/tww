@@ -5,6 +5,7 @@
 
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTConsole.h"
 #include "dolphin/types.h"
 
 JSUList<JKRThread> JKRThread::sThreadList;
@@ -122,7 +123,29 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
 
         if (thread->getThreadRecord() == next) {
             if (sManager->mSetNextHeap) {
-                thread->getCurrentHeap()->becomeCurrentHeap();
+                JKRHeap* next_heap = thread->getCurrentHeap();
+#if VERSION == VERSION_DEMO
+                if (!next_heap) {
+                    next_heap = JKRHeap::getCurrentHeap();
+                } else if (!JKRHeap::getRootHeap()->isSubHeap(next_heap)) {
+                    switch (thread->getCurrentHeapError()) {
+                    case 0:
+                        JUT_ASSERT(272, FALSE &&"JKRThreadSwitch: currentHeap destroyed.");
+                        break;
+                    case 1:
+                        JUTWarningConsole("JKRThreadSwitch: currentHeap destroyed.\n");
+                        next_heap = JKRHeap::getCurrentHeap();
+                        break;
+                    case 2:
+                        next_heap = JKRHeap::getCurrentHeap();
+                        break;
+                    case 3:
+                        next_heap = JKRHeap::getSystemHeap();
+                        break;
+                    }
+                }
+#endif
+                next_heap->becomeCurrentHeap();
             }
         }
     }

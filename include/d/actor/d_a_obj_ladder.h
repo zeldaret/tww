@@ -1,10 +1,8 @@
 #ifndef D_A_OBJ_LADDER_H
 #define D_A_OBJ_LADDER_H
 
-#include "d/d_a_obj.h"
-#include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "f_op/f_op_actor.h"
+#include "d/d_bg_s_gnd_chk.h"
 
 namespace daObjLadder {
     enum Type_e {

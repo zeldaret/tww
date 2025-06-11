@@ -78,7 +78,7 @@
 #include "d/res/res_vmapq.h"
 #include "d/res/res_varrl.h"
 #include "d/res/res_vbow.h"
-#include "d/res/res_fa.h"
+// #include "d/res/res_fa.h"
 #include "d/res/res_shinju_d.h"
 #include "d/res/res_shinju_f.h"
 #include "d/res/res_fwbin.h"
@@ -959,7 +959,11 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x17: noentry23
         /* mArcname     */ NULL,
+#if VERSION == VERSION_DEMO
+        /* mTexture     */ NULL,
+#else
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
+#endif
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -975,7 +979,11 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x18: noentry24
         /* mArcname     */ NULL,
+#if VERSION == VERSION_DEMO
+        /* mTexture     */ NULL,
+#else
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
+#endif
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -991,7 +999,11 @@ dItem_data_item_resource dItem_data::item_resource[0x100] = {
     {
         // 0x19: noentry25
         /* mArcname     */ NULL,
+#if VERSION == VERSION_DEMO
+        /* mTexture     */ NULL,
+#else
         /* mTexture     */ item_texture_tbl[TEXTURE_IDX_HEART_UP_02],
+#endif
         /* mBmdIdx      */ -1,
         /* mSrtIdx      */ -1,
         /* mSrtIdx2     */ -1,
@@ -4699,7 +4711,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x0B80
+#else
         /* mHeapSize */ 0x0680
+#endif
     },
     {
         // 0x01: dItem_GREEN_RUPEE_e
@@ -4712,7 +4728,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x00,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x02: dItem_BLUE_RUPEE_e
@@ -4725,7 +4745,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x01,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x03: dItem_YELLOW_RUPEE_e
@@ -4738,7 +4762,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x02,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x04: dItem_RED_RUPEE_e
@@ -4751,7 +4779,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x03,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x05: dItem_PURPLE_RUPEE_e
@@ -4764,7 +4796,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x04,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x06: dItem_ORANGE_RUPEE_e
@@ -4777,7 +4813,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x05,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x07: dItem_HEART_PIECE_e
@@ -4790,7 +4830,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2420
+#else
         /* mHeapSize */ 0x0C40
+#endif
     },
     {
         // 0x08: dItem_HEART_CONTAINER_e
@@ -4803,7 +4847,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2500
+#else
         /* mHeapSize */ 0x0C60
+#endif
     },
     {
         // 0x09: dItem_SMALL_MAGIC_e
@@ -4816,7 +4864,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x0B80
+#else
         /* mHeapSize */ 0x0700
+#endif
     },
     {
         // 0x0A: dItem_LARGE_MAGIC_e
@@ -4829,7 +4881,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x0B80
+#else
         /* mHeapSize */ 0x0700
+#endif
     },
     {
         // 0x0B: dItem_BOMB_5_e
@@ -4842,7 +4898,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3500
+#else
         /* mHeapSize */ 0x0CC0
+#endif
     },
     {
         // 0x0C: dItem_BOMB_10_e
@@ -4855,7 +4915,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3500
+#else
         /* mHeapSize */ 0x0CC0
+#endif
     },
     {
         // 0x0D: dItem_BOMB_20_e
@@ -4868,7 +4932,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3500
+#else
         /* mHeapSize */ 0x0CC0
+#endif
     },
     {
         // 0x0E: dItem_BOMB_30_e
@@ -4881,7 +4949,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3500
+#else
         /* mHeapSize */ 0x0CC0
+#endif
     },
     {
         // 0x0F: dItem_SILVER_RUPEE_e
@@ -4894,7 +4966,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ 0x06,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x17C0
+#else
         /* mHeapSize */ 0x0CA0
+#endif
     },
     {
         // 0x10: dItem_ARROW_10_e
@@ -4907,7 +4983,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0700
+#endif
     },
     {
         // 0x11: dItem_ARROW_20_e
@@ -4920,7 +5000,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2000
+#else
         /* mHeapSize */ 0x0B40
+#endif
     },
     {
         // 0x12: dItem_ARROW_30_e
@@ -4933,7 +5017,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3000
+#else
         /* mHeapSize */ 0x1000
+#endif
     },
     {
         // 0x13: noentry19
@@ -4972,7 +5060,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x3500
+#else
         /* mHeapSize */ 0x0780
+#endif
     },
     {
         // 0x16: dItem_RECOVER_FAIRY_e
@@ -5102,7 +5194,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VHAPL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0FE0
+#endif
     },
     {
         // 0x20: dItem_TELESCOPE_e
@@ -5596,7 +5692,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VDOKL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2000
+#else
         /* mHeapSize */ 0x08A0
+#endif
     },
     {
         // 0x46: dItem_BOKOBABA_SEED_e
@@ -5609,7 +5709,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VBOKL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0720
+#endif
     },
     {
         // 0x47: dItem_GOLDEN_FEATHER_e
@@ -5622,7 +5726,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VHANL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2000
+#else
         /* mHeapSize */ 0x0EC0
+#endif
     },
     {
         // 0x48: BOKO_BELT
@@ -5635,7 +5743,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VBELL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000222,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x2000
+#else
         /* mHeapSize */ 0x0760
+#endif
     },
     {
         // 0x49: dItem_RED_JELLY_e
@@ -5648,7 +5760,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x01,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0800
+#endif
     },
     {
         // 0x4A: dItem_GREEN_JELLY_e
@@ -5661,7 +5777,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x00,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0800
+#endif
     },
     {
         // 0x4B: dItem_BLUE_JELLY_e
@@ -5674,7 +5794,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VCHUL,
         /* mTevFrm   */ 0x02,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0800
+#endif
     },
     {
         // 0x4C: dItem_MAP_e
@@ -6389,7 +6513,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ ALWAYS_BCK_VESAL,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0740
+#endif
     },
     {
         // 0x83: dItem_HYOI_PEAR_e
@@ -6402,7 +6530,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0680
+#endif
     },
     {
         // 0x84: ESA1
@@ -6519,7 +6651,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ FDAI_BCK_FOBJ00,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x08E0
+#endif
     },
     {
         // 0x8D: FLOWER_2
@@ -6532,7 +6668,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ FDAI_BCK_FOBJ01,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0860
+#endif
     },
     {
         // 0x8E: FLOWER_3
@@ -6545,7 +6685,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ FDAI_BCK_FOBJ02,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0880
+#endif
     },
     {
         // 0x8F: HEROS_FLAG
@@ -6558,7 +6702,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1200
+#else
         /* mHeapSize */ 0x1100
+#endif
     },
     {
         // 0x90: TAIRYO_FLAG
@@ -6571,7 +6719,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ -1,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1200
+#else
         /* mHeapSize */ 0x1100
+#endif
     },
     {
         // 0x91: SALES_FLAG
@@ -6597,7 +6749,11 @@ dItem_data_field_item_res dItem_data::field_item_res[0x100] = {
         /* mBckIdx   */ FDAI_BCK_FOBJ06,
         /* mTevFrm   */ -1,
         /* mUnknown  */ 0x11000022,
+#if VERSION == VERSION_DEMO
+        /* mHeapSize */ 0x1000
+#else
         /* mHeapSize */ 0x0760
+#endif
     },
     {
         // 0x93: RED_FLAG

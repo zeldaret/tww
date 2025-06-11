@@ -7,6 +7,7 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
@@ -27,7 +28,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                 if (dropType == daDisItem_HEART_CONTAINER_e) {
                     fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
                 }
-                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_UNK13_e) {
+                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_NONE13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
@@ -101,7 +102,7 @@ static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
 
     fopAcM_SetupActor(dis, disappear_class);
 
-    dis->health = fopAcM_GetParam(dis) & 0xFF;
+    dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
 
     dis->mItemBitNo = (fopAcM_GetParam(dis) >> 0x10) & 0xFF;
@@ -132,7 +133,7 @@ actor_process_profile_definition g_profile_DISAPPEAR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0188,
+    /* Priority     */ PRIO_DISAPPEAR,
     /* Actor SubMtd */ &l_daDisappear_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -171,7 +171,7 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
         if (model->mInit == 0) {
             model->mInit = 1;
             J3DModel * j3dmodel = model->mModel;
-            j3dmodel->mModelData = modelData;
+            j3dmodel->setModelData(modelData);
 
             J3DShapePacket * shapePacket = j3dmodel->getShapePacket(0);
             for (u16 j = 0; j < modelData->getShapeNum(); shapePacket++, j++) {
@@ -189,7 +189,7 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
                 matPacket->setDisplayListObj(mat->getSharedDisplayListObj());
             }
 
-            j3dmodel->mVertexBuffer.setVertexData(&modelData->getVertexData());
+            j3dmodel->getVertexBuffer()->setVertexData(&modelData->getVertexData());
             return model->mModel;
         }
     }
@@ -332,7 +332,7 @@ void initiateLighting(GXColorS10& dif, GXColor& amb, GXColor& k1) {
 /* 8007B804-8007BB44       .text smokeEcallBack__FP14JPABaseEmitterP12dKy_tevstr_cSc8_GXColor */
 void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor color) {
     GXFlush();
-    GXLoadNrmMtxImm(JPADraw::cb.mDrawMtxPtr, GX_PNMTX0);
+    GXLoadNrmMtxImm(emtr->getCamMtxPtr(), GX_PNMTX0);
     GXInvalidateVtxCache();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
@@ -343,7 +343,7 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
     GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    if (!(emtr->mDraw.field_0xc2 & 1)) {
+    if (!emtr->isZDraw()) {
         GXSetNumChans(1);
         if (tevStr == NULL) {
             GXColorS10 dif;
@@ -562,6 +562,7 @@ dPa_smokePcallBack dPa_control_c::mSmokePcallback;
 dPa_singleRippleEcallBack dPa_control_c::mSingleRippleEcallBack;
 dPa_ripplePcallBack dPa_control_c::mRipplePcallBack;
 dPa_bombSmokeEcallBack dPa_control_c::mBombSmokeEcallBack;
+Mtx dPa_control_c::mWindViewMatrix;
 u8 dPa_control_c::mStatus;
 
 /* 8007C8E8-8007C9A4       .text __ct__13dPa_control_cFv */
@@ -765,7 +766,7 @@ JPABaseEmitter* dPa_control_c::setSimpleLand(int code, const cXyz* pos, const cs
         dBgS_ObjGndChk chk;
         cXyz chkPos(pos->x, pos->y + 10.0f, pos->z);
         chk.SetPos(&chkPos);
-        if (dComIfG_Bgsp()->GroundCross(&chk) != C_BG_MIN_HEIGHT) {
+        if (dComIfG_Bgsp()->GroundCross(&chk) != -G_CM3D_F_INF) {
             code = dComIfG_Bgsp()->GetAttributeCode(chk);
         }
     }
@@ -1058,7 +1059,7 @@ void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter* param_1, const cXyz* param_2,
     mpBaseEmitter = param_1;
     field_0x6 = 0;
     field_0x5 = 0;
-    field_0x4 = 0xFF;
+    mAlpha = 0xFF;
 }
 
 /* 8007E9D4-8007EAC4       .text executeAfter__22dPa_cutTurnEcallBack_cFP14JPABaseEmitter */

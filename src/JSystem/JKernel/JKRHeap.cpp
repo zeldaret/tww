@@ -240,8 +240,11 @@ u8 JKRHeap::getCurrentGroupId() {
     return do_getCurrentGroupId();
 }
 
-static void dummy2() {
-    OSReport("change heap ID into %x in heap %x");
+s32 JKRHeap::changeGroupID(u8 groupID) {
+    if (mInitFlag) {
+        JUT_WARN(545, "change heap ID into %x in heap %x", groupID, this);
+    }
+    return do_changeGroupID(groupID);
 }
 
 /* 802B0918-802B0978       .text getMaxAllocatableSize__7JKRHeapFi */
@@ -262,7 +265,12 @@ JKRHeap* JKRHeap::findFromRoot(void* ptr) {
 
 /* 802B09B0-802B0A58       .text find__7JKRHeapCFPv */
 JKRHeap* JKRHeap::find(void* memory) const {
-    if (mStart <= memory && memory < mEnd) {
+#if VERSION == VERSION_DEMO
+    if (mStart <= memory && memory <= mEnd)
+#else
+    if (mStart <= memory && memory < mEnd)
+#endif
+    {
         if (mChildTree.getNumChildren() != 0) {
             for (JSUTreeIterator<JKRHeap> iterator(mChildTree.getFirstChild());
                  iterator != mChildTree.getEndChild(); ++iterator)
@@ -366,6 +374,28 @@ JKRErrorHandler JKRHeap::setErrorHandler(JKRErrorHandler errorHandler) {
     return prev;
 }
 
+bool JKRHeap::isSubHeap(JKRHeap* heap) const {
+    if (!heap)
+        return false;
+
+    if (mChildTree.getNumChildren() != 0) {
+        JSUTreeIterator<JKRHeap> iterator;
+        for (iterator = mChildTree.getFirstChild(); iterator != mChildTree.getEndChild();
+             ++iterator)
+        {
+            if (iterator.getObject() == heap) {
+                return true;
+            }
+
+            if (iterator.getObject()->isSubHeap(heap)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 /* 802B0C38-802B0C60       .text __nw__FUl */
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
@@ -407,7 +437,7 @@ void operator delete[](void* ptr) {
 }
 
 static void dummy3() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
 #endif
     OSReport("%s");
@@ -420,13 +450,13 @@ static void dummy3() {
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
-    JUT_ASSERT(VERSION_SELECT(1034, 1090, 1090), p != NULL);
-    JUT_ASSERT(VERSION_SELECT(1035, 1091, 1091), p->getHeap() == this);
+    JUT_ASSERT(VERSION_SELECT(1034, 1034, 1090, 1090), p != NULL);
+    JUT_ASSERT(VERSION_SELECT(1035, 1035, 1091, 1091), p->getHeap() == this);
 }
 
 /* 802B0E14-802B0E9C       .text state_compare__7JKRHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
-    JUT_ASSERT(VERSION_SELECT(1043, 1099, 1099), r1.getHeap() == r2.getHeap());
+    JUT_ASSERT(VERSION_SELECT(1043, 1043, 1099, 1099), r1.getHeap() == r2.getHeap());
     return r1.getCheckCode() == r2.getCheckCode();
 }
 
@@ -439,9 +469,9 @@ static void dummy4() {
 
 /* 802B0E9C-802B0F24       .text state_dump__7JKRHeapCFRCQ27JKRHeap6TState */
 void JKRHeap::state_dump(const JKRHeap::TState& p) const {
-    JUT_LOG(VERSION_SELECT(1067, 1123, 1123), "check-code : 0x%08x", p.getCheckCode());
-    JUT_LOG(VERSION_SELECT(1068, 1124, 1124), "id         : 0x%08x", p.getId());
-    JUT_LOG(VERSION_SELECT(1069, 1125, 1125), "used size  : %u", p.getUsedSize());
+    JUT_LOG(VERSION_SELECT(1067, 1067, 1123, 1123), "check-code : 0x%08x", p.getCheckCode());
+    JUT_LOG(VERSION_SELECT(1068, 1068, 1124, 1124), "id         : 0x%08x", p.getId());
+    JUT_LOG(VERSION_SELECT(1069, 1069, 1125, 1125), "used size  : %u", p.getUsedSize());
 }
 
 /* 802B0F24-802B0F2C       .text do_changeGroupID__7JKRHeapFUc */

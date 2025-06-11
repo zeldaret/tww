@@ -114,12 +114,19 @@ bool JKRAram::checkOkAddress(u8* addr, u32 size, JKRAramBlock* block, u32 param_
 
 /* 802B4664-802B46C0       .text changeGroupIdIfNeed__7JKRAramFPUci */
 void JKRAram::changeGroupIdIfNeed(u8* data, int groupId) {
+#if VERSION > VERSION_DEMO
     if (groupId < 0) {
         return;
     }
+#endif
     JKRHeap* currentHeap = JKRHeap::getCurrentHeap();
     if (currentHeap->getHeapType() == 'EXPH') {
         JKRExpHeap::CMemBlock* block = JKRExpHeap::CMemBlock::getBlock(data);
+#if VERSION == VERSION_DEMO
+        if (groupId < 0) {
+            return;
+        }
+#endif
         block->newGroupId(groupId);
     }
 }
@@ -286,7 +293,7 @@ u8* JKRAram::aramToMainRam(JKRAramBlock* block, u8 *buf, u32 p3, u32 p4, JKRExpa
     }
     checkOkAddress(buf, 0, block, p4);
     if (!block) {
-        OSPanic(__FILE__, VERSION_SELECT(690, 683, 683), ":::Bad Aram Block specified.\n");
+        OSPanic(__FILE__, VERSION_SELECT(668, 690, 683, 683), ":::Bad Aram Block specified.\n");
     }
     if (p4 >= block->mSize) {
         return NULL;
@@ -302,7 +309,6 @@ static void dummy() {
     OSReport("---------------- BAD SYNC. you'd set callback, but now call sync.\n");
 }
 JSUList<JKRAMCommand> JKRAram::sAramCommandList;
-static OSMutex decompMutex;
 u32 JKRAram::sSzpBufferSize = 0x00000400;
 static u8* szpBuf;
 static u8* szpEnd;
@@ -316,10 +322,15 @@ static u32 srcAddress;
 static u32 fileOffset;
 static u32 readCount;
 static u32 maxDest;
+
+#if VERSION > VERSION_DEMO
+static OSMutex decompMutex;
 static bool isInitMutex;
+#endif
 
 /* 802B4D4C-802B4F20       .text JKRDecompressFromAramToMainRam__FUlPvUlUlUl */
 static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32 dstLength, u32 offset) {
+#if VERSION > VERSION_DEMO
     BOOL interrupts = OSDisableInterrupts();
     if (isInitMutex == false) {
         OSInitMutex(&decompMutex);
@@ -327,15 +338,16 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
     }
     OSRestoreInterrupts(interrupts);
     OSLockMutex(&decompMutex);
+#endif
 
     u32 szsBufferSize = JKRAram::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(szsBufferSize, 32);
-    JUT_ASSERT(VERSION_SELECT(1091, 1077, 1077), szpBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(1048, 1091, 1077, 1077), szpBuf != NULL);
 
     szpEnd = szpBuf + szsBufferSize;
     if (offset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, 0);
-        JUT_ASSERT(VERSION_SELECT(1100, 1086, 1086), refBuf != NULL);
+        JUT_ASSERT(VERSION_SELECT(1057, 1100, 1086, 1086), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     }
@@ -358,7 +370,10 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
     }
 
     DCStoreRangeNoSync(dst, decompressedSize);
+
+#if VERSION > VERSION_DEMO
     OSUnlockMutex(&decompMutex);
+#endif
 
     return 0;
 }
@@ -501,9 +516,11 @@ static u8* firstSrcData() {
 
     srcOffset += length;
     transLeft -= length;
+#if VERSION > VERSION_DEMO
     if (!transLeft) {
         srcLimit = buffer + length;
     }
+#endif
 
     return buffer;
 }
@@ -523,7 +540,7 @@ static u8* nextSrcData(u8* current) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(VERSION_SELECT(1376, 1361, 1361), transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(1321, 1376, 1361, 1361), transSize > 0);
 
     JKRAramPcs(1, (u32)(srcAddress + srcOffset), ((u32)dest + left), ALIGN_NEXT(transSize, 0x20),
                NULL);

@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_vmsms.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_vmsms.h"
 
 const char daObjVmsms_c::M_arcname[6] = "VmsMS";
@@ -132,7 +133,7 @@ actor_process_profile_definition g_profile_Obj_Vmsms = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004D,
+    /* Priority     */ PRIO_Obj_Vmsms,
     /* Actor SubMtd */ &Vmsms_Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

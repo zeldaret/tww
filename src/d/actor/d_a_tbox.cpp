@@ -13,6 +13,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_particle.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -555,7 +556,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
 
         gravity = -2.5f;
     }
@@ -740,7 +741,7 @@ void daTbox_c::demoProcAppear() {
         if (emitter != NULL) {
             emitter->setRate(100.0f);
             emitter->setSpread(1.0f);
-            emitter->mInitialVelDir = 25.0f;
+            emitter->setDirectionalSpeed(25.0f);
         }
     }
 
@@ -873,7 +874,6 @@ void daTbox_c::OpenInit_com() {
 
     s32 openSwNo = home.angle.z & 0xFF;
     if (openSwNo != 0xFF) {
-
         dComIfGs_onSwitch(openSwNo, mRoomNo);
     }
 
@@ -1233,11 +1233,7 @@ static s32 daTbox_IsDelete(daTbox_c*) {
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 static s32 daTbox_Delete(daTbox_c* i_tbox) {
-    if (i_tbox->mpBgWCurrent != NULL) {
-        dComIfG_Bgsp()->Release(i_tbox->mpBgWCurrent);
-    }
-
-    i_tbox->mSmokeCB.end();
+    i_tbox->deleteProc();
     dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mNo >= 0) {
@@ -1265,11 +1261,10 @@ static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
     };
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
-    s32 result;
 
     fopAcM_SetupActor(tbox, daTbox_c);
 
-    result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
+    cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->home.angle.x & 0x3F;
@@ -1312,7 +1307,7 @@ actor_process_profile_definition g_profile_TBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0113,
+    /* Priority     */ PRIO_TBOX,
     /* Actor SubMtd */ &l_daTbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

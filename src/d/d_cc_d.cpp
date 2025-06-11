@@ -132,7 +132,7 @@ void dCcD_GObjInf::ClrAtHit() {
     SubtractAtEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800AB81C-800AB874       .text ChkAtHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkAtHit() {
     if (!cCcD_ObjHitInf::ChkAtHit())
@@ -182,7 +182,7 @@ void dCcD_GObjInf::ClrTgHit() {
     SubtractTgEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800AB9B0-800ABA08       .text ChkTgHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkTgHit() {
     if (!cCcD_ObjHitInf::ChkTgHit())
@@ -232,7 +232,7 @@ void dCcD_GObjInf::ClrCoHit() {
     SubtractCoEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800ABB4C-800ABBA4       .text ChkCoHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkCoHit() {
     if (!cCcD_ObjHitInf::ChkCoHit())
@@ -263,7 +263,7 @@ void dCcD_GObjInf::Set(const dCcD_SrcGObjInf& src) {
 
 /* 800ABC54-800ABCC4       .text dCcD_GetGObjInf__FP8cCcD_Obj */
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
-    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != NULL);
+    JUT_ASSERT(VERSION_SELECT(466, 466, 531, 531), pobj != NULL);
     return (dCcD_GObjInf*)pobj->GetGObjInf();
 }
 

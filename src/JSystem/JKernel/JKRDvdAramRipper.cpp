@@ -112,7 +112,9 @@ JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
 
                 VIWaitForRetrace();
             }
+#if VERSION > VERSION_DEMO
             DCInvalidateRange(bufPtr, 0x20);
+#endif
 
             compression = JKRCheckCompressed(bufPtr);
             u32 expandSize = JKRDecompExpandSize(bufPtr);
@@ -207,7 +209,9 @@ bool JKRDvdAramRipper::syncAram(JKRADCommand* command, int param_1) {
 
 /* 802BE078-802BE0B8       .text __ct__12JKRADCommandFv */
 JKRADCommand::JKRADCommand() : mLink(this) {
+#if VERSION > VERSION_DEMO
     field_0x44 = 0;
+#endif
     field_0x48 = false;
 }
 
@@ -218,7 +222,6 @@ JKRADCommand::~JKRADCommand() {
     }
 }
 
-static OSMutex decompMutex;
 u32 JKRDvdAramRipper::sSzpBufferSize = 0x00000400;
 static u8* szpBuf;
 static u8* szpEnd;
@@ -235,28 +238,34 @@ static JKRDvdFile* srcFile;
 static u32 fileOffset;
 static int readCount;
 static u32 maxDest;
+
+#if VERSION > VERSION_DEMO
+static OSMutex decompMutex;
 static bool isInitMutex;
+#endif
 
 /* 802BE144-802BE34C       .text JKRDecompressFromDVDToAram__FP10JKRDvdFileUlUlUlUlUl */
 static int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 fileSize, u32 uncompressedSize, u32 param_4, u32 param_5) {
+#if VERSION > VERSION_DEMO
     BOOL level = OSDisableInterrupts();
     if (!isInitMutex) {
         OSInitMutex(&decompMutex);
         isInitMutex = true;
     }
-
     OSRestoreInterrupts(level);
     OSLockMutex(&decompMutex);
+#endif
+
     u32 bufferSize = JKRDvdAramRipper::getSzpBufferSize();
     szpBuf = (u8*)JKRAllocFromSysHeap(bufferSize, 0x20);
-    JUT_ASSERT(VERSION_SELECT(703, 693, 693), szpBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(678, 703, 693, 693), szpBuf != NULL);
     szpEnd = szpBuf + bufferSize;
     refBuf = (u8*)JKRAllocFromSysHeap(0x1120, 0);
-    JUT_ASSERT(VERSION_SELECT(711, 701, 701), refBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(686, 711, 701, 701), refBuf != NULL);
     refEnd = refBuf + 0x1120;
     refCurrent = refBuf;
     dmaBuf = (u8*)JKRAllocFromSysHeap(0x100, 0x20);
-    JUT_ASSERT(VERSION_SELECT(720, 710, 710), dmaBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(695, 720, 710, 710), dmaBuf != NULL);
     dmaEnd = dmaBuf + 0x100;
     dmaCurrent = dmaBuf;
     srcFile = dvdFile;
@@ -270,7 +279,11 @@ static int JKRDecompressFromDVDToAram(JKRDvdFile* dvdFile, u32 param_1, u32 file
     JKRHeap::free(szpBuf, 0);
     JKRHeap::free(refBuf, 0);
     JKRHeap::free(dmaBuf, 0);
+
+#if VERSION > VERSION_DEMO
     OSUnlockMutex(&decompMutex);
+#endif
+
     return result;
 }
 
@@ -398,7 +411,7 @@ static u8* nextSrcData(u8* src) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(VERSION_SELECT(979, 966, 966), transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(950, 979, 966, 966), transSize > 0);
     while (true) {
         s32 result = DVDReadPrio(&srcFile->mFileInfo, dest + size, transSize, srcOffset, 2);
         if (result >= 0) {

@@ -21,7 +21,7 @@ public:
     /* 0x2CA */ u8 mStartsInactive;
     /* 0x2CB */ u8 mSwitch;
     /* 0x2CC */ u8 mAction;
-    /* 0x2CD */ u8 mState;
+    /* 0x2CD */ u8 mMode;
     /* 0x2CE */ u8 m2CE;
     /* 0x2CF */ bool mbIsWeakBeingHit;
     /* 0x2D0 */ bool mbNotInHomeRoom;

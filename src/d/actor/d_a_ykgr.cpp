@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_ykgr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_YkgrPcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
@@ -22,8 +23,8 @@ void daYkgr_c::getPosRate() {
 }
 
 /* 00000408-00000428       .text daYkgrCreate__FPv */
-static s32 daYkgrCreate(void*) {
-    /* Nonmatching */
+static s32 daYkgrCreate(void* i_this) {
+    return ((daYkgr_c*)i_this)->_create();
 }
 
 /* 00000428-00000680       .text _create__8daYkgr_cFv */
@@ -33,7 +34,7 @@ cPhs_State daYkgr_c::_create() {
 
 /* 00000680-00000688       .text daYkgrDelete__FPv */
 static BOOL daYkgrDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000688-000007F4       .text daYkgrExecute__FPv */
@@ -48,7 +49,7 @@ static BOOL daYkgrDraw(void*) {
 
 /* 000008F4-000008FC       .text daYkgrIsDelete__FPv */
 static BOOL daYkgrIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daYkgrMethodTable = {
@@ -69,7 +70,7 @@ actor_process_profile_definition g_profile_Ykgr = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0185,
+    /* Priority     */ PRIO_Ykgr,
     /* Actor SubMtd */ &daYkgrMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

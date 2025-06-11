@@ -124,9 +124,15 @@ void* dDemo_getJaiPointer(const char* a_name, u32 bck, int num, u16* tbl) {
     return NULL;
 }
 
+#if VERSION == VERSION_DEMO
+BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, const char* i_arcName,
+                       int p5, u16* p6)
+#else
 /* 800698C0-80069BC0       .text dDemo_setDemoData__FP10fopAc_ac_cUcP14mDoExt_McaMorfPCciPUsUlSc */
 BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, const char* i_arcName,
-                       int p5, u16* p6, u32 mtrlSndId, s8 i_reverb) {
+                       int p5, u16* p6, u32 mtrlSndId, s8 i_reverb)
+#endif
+{
     dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(i_actor->demoActorID);
     if (demo_actor == NULL)
         return FALSE;
@@ -175,12 +181,20 @@ BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, 
         if (anm_frame > 1.0f) {
             anm_frame -= 1.0f;
             i_morf->setFrame(anm_frame);
+#if VERSION == VERSION_DEMO
+            i_morf->play(&i_actor->current.pos, 0, 0);
+#else
             i_morf->play(&i_actor->current.pos, mtrlSndId, i_reverb);
+#endif
         } else {
             i_morf->setFrame(anm_frame);
         }
     } else {
+#if VERSION == VERSION_DEMO
+        i_morf->play(&i_actor->current.pos, 0, 0);
+#else
         i_morf->play(&i_actor->current.pos, mtrlSndId, i_reverb);
+#endif
     }
 
     return TRUE;
@@ -305,7 +319,7 @@ void dDemo_camera_c::JSGSetProjectionFovy(f32 v) {
 f32 dDemo_camera_c::JSGGetProjectionAspect() const {
     camera_class* view = getView();
     if (view == NULL)
-        return 1.3333334f;
+        return (4.0f/3.0f);
     return view->mAspect;
 }
 
@@ -453,7 +467,7 @@ void dDemo_fog_c::JSGSetColor(GXColor color) {
 dDemo_object_c::dDemo_object_c() {
     mNumActor = 0;
     mNumLight = 0;
-    mpActiveCamera = NULL;
+    mpCamera = NULL;
     mpAmbient = NULL;
     mpFog = NULL;
 }
@@ -491,17 +505,17 @@ dDemo_actor_c* dDemo_object_c::getActor(u8 no) {
 
 /* 8006A31C-8006A398       .text createCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::createCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (mpCamera != NULL)
+        return mpCamera;
 
-    mpActiveCamera = new dDemo_camera_c();
-    return mpActiveCamera;
+    mpCamera = new dDemo_camera_c();
+    return mpCamera;
 }
 
 /* 8006A398-8006A3AC       .text getActiveCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::getActiveCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (getCamera() != NULL)
+        return getCamera();
     return NULL;
 }
 
@@ -541,9 +555,9 @@ void dDemo_object_c::remove() {
     while (mNumActor)
         delete mpActors[--mNumActor];
 
-    if (mpActiveCamera != NULL) {
-        delete mpActiveCamera;
-        mpActiveCamera = NULL;
+    if (mpCamera != NULL) {
+        delete mpCamera;
+        mpCamera = NULL;
     }
 
     if (mpAmbient != NULL) {

@@ -130,7 +130,7 @@ int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
     if (inf != 0xFF)
         return inf;
 
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return 0xFF;
     return GetGrpInf(polyInfo, grp_id) & 0xFF;
@@ -138,7 +138,7 @@ int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A07F4-800A0858       .text GetGrpSoundId__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetGrpSoundId(cBgS_PolyInfo& polyInfo) {
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return -1;
     return (GetGrpInf(polyInfo, grp_id) >> 11) & 0xFF;
@@ -146,7 +146,7 @@ s32 dBgS::GetGrpSoundId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0858-800A08C0       .text ChkGrpInf__4dBgSFR13cBgS_PolyInfoUl */
 u32 dBgS::ChkGrpInf(cBgS_PolyInfo& polyInfo, u32 mask) {
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return 0;
 
@@ -289,7 +289,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
     dBgW* bgwp = (dBgW*)m_chk_element[id].m_bgw_base_ptr;
     s32 roomNo = bgwp->mRoomNo;
     if (roomNo == 0xFFFF) {
-        s32 grp = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+        s32 grp = GetTriGrp(polyInfo);
         roomNo = GetGrpToRoomId(polyInfo.GetBgIndex(), grp);
         if (roomNo == 0xFFFF)
             return -1;
@@ -354,7 +354,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
 
 /* 800A13E0-800A14FC       .text RoofChk__4dBgSFP12dBgS_RoofChk */
 f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
-    chk->SetNowY(C_BG_MAX_HEIGHT);
+    chk->SetNowY(G_CM3D_F_INF);
     chk->ClearPi();
     cBgS_ChkElm* elm;
     for (s32 bg_index = 0; bg_index < (s32)ARRAY_SIZE(m_chk_element); bg_index++) {
@@ -606,7 +606,7 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
         mGndChk.SetPos(&pos);
         f32 f31 = pm_pos->y;
         mGroundH = i_bgs.GroundCross(&mGndChk);
-        if (mGroundH != C_BG_MIN_HEIGHT && mGroundH > f31) {
+        if (mGroundH != -G_CM3D_F_INF && mGroundH > f31) {
             pm_pos->y = mGroundH;
             if (field_0x58) {
                 field_0x58->y = 0.0f;

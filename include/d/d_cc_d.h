@@ -42,36 +42,36 @@ enum dCcD_ObjAtType {
 };
 
 enum dCcG_AtSPrm_e {
-    dCcG_AtSPrm_NoConHit_e         = 1 << 0,
-    dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
-    dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
-    dCcG_AtSPrm_NoMass_e           = 1 << 3,
+    /* 0x01 */ dCcG_AtSPrm_NoConHit_e         = 1 << 0,
+    /* 0x02 */ dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
+    /* 0x04 */ dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
+    /* 0x08 */ dCcG_AtSPrm_NoMass_e           = 1 << 3,
 };
 
 enum dCcG_AtRPrm_e {
-    dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
-    dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
+    /* 0x01 */ dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
+    /* 0x02 */ dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
 };
 
 enum dCcG_TgSPrm_e {
-    dCcG_TgSPrm_Shield_e           = 1 << 0,
-    dCcG_TgSPrm_NoConHit_e         = 1 << 1,
-    dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
-    dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
+    /* 0x01 */ dCcG_TgSPrm_Shield_e           = 1 << 0,
+    /* 0x02 */ dCcG_TgSPrm_NoConHit_e         = 1 << 1,
+    /* 0x04 */ dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
+    /* 0x08 */ dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
 };
 
 enum dCcG_TgRPrm_e {
-    dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
-    dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
+    /* 0x01 */ dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x02 */ dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
 };
 
 enum dCcG_CoSPrm_e {
-    dCcG_CoSPrm_AtLasso_e          = 1 << 0,
-    dCcG_CoSPrm_TgLasso_e          = 1 << 1,
+    /* 0x01 */ dCcG_CoSPrm_AtLasso_e          = 1 << 0,
+    /* 0x02 */ dCcG_CoSPrm_TgLasso_e          = 1 << 1,
 };
 
 enum dCcG_CoRPrm_e {
-    dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x01 */ dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
 };
 
 enum dCcG_hitSe {
@@ -97,12 +97,15 @@ enum CcG_Tg_HitMark {
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
     /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
+    /* 0xFF */ dCcG_TgHitMark_Unk255_e = 0xFF,
 };
 
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0x2 */ dCcG_At_Spl_UNK2 = 2,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
+    /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
     /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
     /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
@@ -113,6 +116,7 @@ enum dCcG_At_Spl {
 
 enum dCcG_Tg_Spl {
     /* 0x0 */ dCcG_Tg_Spl_UNK0 = 0,
+    /* 0x1 */ dCcG_Tg_Spl_UNK1 = 1,
 };
 
 struct dCcD_SrcGAtTgCoCommonBase {
@@ -369,7 +373,7 @@ public:
     virtual ~dCcD_GObjInf();
     virtual cCcD_GObjInf* GetGObjInf();
     virtual void ClrAtHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkAtHit();
 #endif
     void ResetAtHit();
@@ -377,7 +381,7 @@ public:
     cCcD_GObjInf* GetAtHitGObj();
     u8 ChkAtNoGuard();
     virtual void ClrTgHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkTgHit();
 #endif
     void ResetTgHit();
@@ -385,7 +389,7 @@ public:
     dCcD_GObjInf* GetTgHitGObj();
     u8 GetTgHitObjSe();
     virtual void ClrCoHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkCoHit();
 #endif
     void ResetCoHit();

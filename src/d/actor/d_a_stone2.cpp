@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_stone2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000208       .text __ct__Q28daStone25Act_cFv */
 daStone2::Act_c::Act_c() {
@@ -244,28 +245,28 @@ BOOL daStone2::Act_c::Draw() {
 namespace daStone2 {
 namespace {
 /* 0000273C-0000275C       .text Mthd_Create__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daStone2::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 0000275C-0000277C       .text Mthd_Delete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daStone2::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 0000277C-0000279C       .text Mthd_Execute__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daStone2::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 0000279C-000027C8       .text Mthd_Draw__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daStone2::Act_c*)i_this)->Draw();
 }
 
 /* 000027C8-000027F4       .text Mthd_IsDelete__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daStone2::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {
@@ -288,7 +289,7 @@ actor_process_profile_definition g_profile_Stone2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0105,
+    /* Priority     */ PRIO_Stone2,
     /* Actor SubMtd */ &daStone2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

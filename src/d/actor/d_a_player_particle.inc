@@ -37,7 +37,7 @@ void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* pos) {
         if (field_0x10 > pos->y) {
             pos->y = field_0x10 + 2.0f;
         }
-    } else if (field_0x10 != C_BG_MIN_HEIGHT) {
+    } else if (field_0x10 != -G_CM3D_F_INF) {
         pos->y = field_0x10 + 2.0f;
     } else {
         pos->y = field_0x0C;
@@ -192,7 +192,7 @@ void daPy_swBlur_c::initSwBlur(MtxP mtx, int idx, f32 blurTopRate, int blurColor
     mBlurTopRate = blurTopRate;
     mBlurColorType = blurColorType;
 
-    mDoMtx_multVec(mtx, mpPosBuffer + i, &field_0x034[0]);
+    mDoMtx_multVec(mtx, mpPosBuffer + i + 0, &field_0x034[0]);
     mDoMtx_multVec(mtx, mpPosBuffer + i + 1, &field_0x304[0]);
 
     field_0x034[0] += (field_0x034[0] - field_0x304[0]) * mBlurTopRate;
@@ -242,7 +242,7 @@ void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
     cXyz sp38 = field_0x028 - sp50;
     field_0x028 = sp50;
     for (i = 0; i < var_r31 && buffIdx >= 0; i++) {
-        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx, &field_0x034[i]);
+        mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 0, &field_0x034[i]);
         mDoMtx_multVec(mtx, mpPosBuffer + buffIdx + 1, &field_0x304[i]);
 
         field_0x034[i] += (field_0x034[i] - field_0x304[i]) * mBlurTopRate;
@@ -312,9 +312,9 @@ void daPy_swBlur_c::draw() {
     s16 r28 = 0x00;
     GXBegin(GX_QUADS, GX_VTXFMT0, 4 + field_0x014*4);
     for (int i = field_0x014; i >= 0; i--) {
-        GXPosition3f32(field_0x034[i].x, field_0x034[i].y, field_0x034[i].z);
+        GXPosition3f32(field_0x034[i+0].x, field_0x034[i+0].y, field_0x034[i+0].z);
         GXTexCoord2s16(r29, 0x00);
-        GXPosition3f32(field_0x304[i].x, field_0x304[i].y, field_0x304[i].z);
+        GXPosition3f32(field_0x304[i+0].x, field_0x304[i+0].y, field_0x304[i+0].z);
         GXTexCoord2s16(r29, 0xFF);
         GXPosition3f32(field_0x304[i+1].x, field_0x304[i+1].y, field_0x304[i+1].z);
         GXTexCoord2s16(r28, 0xFF);
@@ -430,25 +430,24 @@ u16 daPy_dmEcallBack_c::m_type = 3;
 
 /* 8012A160-8012A288       .text execute__18daPy_dmEcallBack_cFP14JPABaseEmitter */
 void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
-    if (m_type == 0) {
-        cXy v;
-        v.x = emitter->mGlobalTranslation.x;
-        v.y = emitter->mGlobalTranslation.z;
+    if (checkFlame()) {
+        JGeometry::TVec3<f32> pos;
+        emitter->getGlobalTranslation(pos);
 
         emitter->setGlobalTranslation(mpMtx[0][3], mpMtx[1][3], mpMtx[2][3]);
 
-        v.x = (mpMtx[0][3] - v.x) * -0.05f;
-        v.y = (mpMtx[2][3] - v.y) * -0.05f;
-        f32 sq = v.x * v.x + v.y * v.y;
+        pos.x = (mpMtx[0][3] - pos.x) * -0.05f;
+        pos.z = (mpMtx[2][3] - pos.z) * -0.05f;
+        f32 sq = pos.x * pos.x + pos.z * pos.z;
 
         if (sq > 1.0f) {
             f32 distFrac = 1.0f / std::sqrtf(sq);
 
-            v.x *= distFrac;
-            v.y *= distFrac;
+            pos.x *= distFrac;
+            pos.z *= distFrac;
         }
 
-        emitter->setDirection(JGeometry::TVec3<f32>(v.x, 0.6f, v.y));
+        emitter->setDirection(JGeometry::TVec3<f32>(pos.x, 0.6f, pos.z));
     } else {
         emitter->setGlobalRTMatrix(mpMtx);
     }
@@ -894,7 +893,7 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
     mGndChk.SetPos(&pos);
 
     pos.y = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (pos.y != C_BG_MIN_HEIGHT && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
+    if (pos.y != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(mGndChk) == dBgS_Attr_SAND_e) {
         fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
@@ -997,9 +996,9 @@ void daPy_lk_c::setFootEffect() {
         cXyz sp44 = m370C;
         mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x1), &m370C);
 
-        if (m3570 != 0) {
+        if (mProcVar0.m3570 != 0) {
             current.angle.y = shape_angle.y - 0x4000;
-            m3570 = 0;
+            mProcVar0.m3570 = 0;
         } else {
             cXyz sp38 = m370C - sp44;
             current.angle.y = cM_atan2s(sp38.x, sp38.z);
@@ -1043,7 +1042,7 @@ void daPy_lk_c::setFootEffect() {
             mGndChk.SetPos(&pos);
 
             f32 groundY = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (groundY != C_BG_MIN_HEIGHT) {
+            if (groundY != -G_CM3D_F_INF) {
                 pos.y = groundY;
             }
 
@@ -1126,7 +1125,7 @@ void daPy_lk_c::setWaterDrop() {
         daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
     }
 
-    if (mDmEcallBack->m_type == 0) {
+    if (daPy_dmEcallBack_c::checkFlame()) {
         m334C.end();
         m336C.end();
         m3460[0].end();
@@ -1134,12 +1133,12 @@ void daPy_lk_c::setWaterDrop() {
         return;
     }
 
-    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != PROC_KI && mAcch.m_roof_y == 1e9f) {
-        if (m3460[0].mpEmitter == NULL) {
+    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != daPyProc_DEMO_LAST_COMBO_e && mAcch.m_roof_y == G_CM3D_F_INF) {
+        if (m3460[0].getEmitter() == NULL) {
             m3460[0].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
         }
 
-        if (m3460[1].mpEmitter == NULL) {
+        if (m3460[1].getEmitter() == NULL) {
             m3460[1].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x02), &current.pos, NULL);
         }
 

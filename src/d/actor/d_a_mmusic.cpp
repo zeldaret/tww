@@ -7,17 +7,19 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daMmusic {
     namespace {
         struct Attr_c {
-            /* 0x00 */ u32 mTimer;
+            /* 0x00 */ u16 field_0x00;
+            /* 0x02 */ u16 field_0x02;
             /* 0x04 */ u16 field_0x04;
         };
 
         static const Attr_c L_attr = {
-            120, 180,
+            0, 120, 180,
         };
 
         inline const Attr_c & attr() { return L_attr; }
@@ -58,14 +60,16 @@ cPhs_State daMmusic::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
     cPhs_State ret = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
-        set_mtx();
-        fopAcM_SetMtx(this, mMtx);
-        field_0x298 = Macore_is_playing();
-        fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
-        init_se();
-    } else {
-        ret = cPhs_ERROR_e;
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            set_mtx();
+            fopAcM_SetMtx(this, mMtx);
+            field_0x298 = Macore_is_playing();
+            fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
+            init_se();
+        } else {
+            ret = cPhs_ERROR_e;
+        }
     }
     return ret;
 }
@@ -191,7 +195,7 @@ actor_process_profile_definition g_profile_Mmusic = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F6,
+    /* Priority     */ PRIO_Mmusic,
     /* Actor SubMtd */ &daMmusic::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

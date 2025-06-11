@@ -7,7 +7,7 @@
 #include "global.h"
 
 namespace JStudio {
-struct TObject;
+class TObject;
 namespace stb {
 
 class TControl;

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_demo_item.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_mng.h"
@@ -285,7 +286,7 @@ void daDitem_c::setParticle() {
     if (mpEmitters[0] || mpEmitters[1] || mpEmitters[2] || mpEmitters[3]) {
         return;
     }
-    if (chkArgFlag(0x02) || chkArgFlag(0x04) || chkArgFlag(0x08)) {
+    if (chkArgFlag(FLAG_UNK02) || chkArgFlag(FLAG_UNK04) || chkArgFlag(FLAG_UNK08)) {
         return;
     }
     
@@ -314,7 +315,7 @@ bool daDitem_c::CreateInit() {
     hide();
     clrFlag();
     mArgFlag = daDitem_prm::getFlag(this);
-    if (!chkArgFlag(0x02) && !chkArgFlag(0x04) && !chkArgFlag(0x08)) {
+    if (!chkArgFlag(FLAG_UNK02) && !chkArgFlag(FLAG_UNK04) && !chkArgFlag(FLAG_UNK08)) {
         current.angle.y = -0x2000;
     }
     for (int i = 0; i < ARRAY_SIZE(mpEmitters); i++) {
@@ -326,7 +327,8 @@ bool daDitem_c::CreateInit() {
 /* 000003F0-000004AC       .text set_effect__9daDitem_cFv */
 void daDitem_c::set_effect() {
     s16 angleX = dCam_getAngleX(dComIfGp_getCamera(0)) - 0x2000;
-    s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
+    // Fakematch? Just angleY needs to be const to match the demo build. No effect on retail.
+    const s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
     for (int i = 0; i < (int)ARRAY_SIZE(mpEmitters); i++) {
         if (mpEmitters[i] == NULL) {
             continue;
@@ -351,17 +353,17 @@ void daDitem_c::set_pos() {
     
     cXyz pos;
     cXyz offset;
-    if (chkArgFlag(0x02)) {
+    if (chkArgFlag(FLAG_UNK02)) {
         offset = offset_tbl[1];
-    } else if (chkArgFlag(0x04)) {
+    } else if (chkArgFlag(FLAG_UNK04)) {
         offset = offset_tbl[2];
-    } else if (chkArgFlag(0x08)) {
+    } else if (chkArgFlag(FLAG_UNK08)) {
         offset = mOffsetPos;
     } else {
         offset = offset_tbl[0];
     }
     
-    if (!chkArgFlag(0x08)) {
+    if (!chkArgFlag(FLAG_UNK08)) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         mDoMtx_stack_c::ZXYrotS(player->current.angle.x, player->shape_angle.y, player->current.angle.z);
         mDoMtx_stack_c::multVec(&offset, &offset);
@@ -410,7 +412,7 @@ void daDitem_c::set_mtx() {
     mpModel->setBaseScale(scale);
     fopAcM_addAngleY(this, current.angle.y + 0x0111, 0x0111);
     
-    if (chkArgFlag(0x02) || chkArgFlag(0x04) || chkArgFlag(0x08)) {
+    if (chkArgFlag(FLAG_UNK02) || chkArgFlag(FLAG_UNK04) || chkArgFlag(FLAG_UNK08)) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
     } else {
@@ -418,9 +420,9 @@ void daDitem_c::set_mtx() {
         mDoMtx_stack_c::ZrotM(current.angle.z);
         mDoMtx_stack_c::XrotM(0x12C0);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        mDoMtx_stack_c::now[0][3] = current.pos.x;
-        mDoMtx_stack_c::now[1][3] = current.pos.y;
-        mDoMtx_stack_c::now[2][3] = current.pos.z;
+        mDoMtx_stack_c::get()[0][3] = current.pos.x;
+        mDoMtx_stack_c::get()[1][3] = current.pos.y;
+        mDoMtx_stack_c::get()[2][3] = current.pos.z;
     }
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
@@ -437,7 +439,7 @@ void daDitem_c::setListStart() {
 }
 
 BOOL daDitem_c::Delete() {
-    if (!chkArgFlag(0x01)) {
+    if (!chkArgFlag(FLAG_UNK01)) {
         execItemGet(m_itemNo);
     }
     
@@ -549,7 +551,7 @@ actor_process_profile_definition g_profile_Demo_Item = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00FC,
+    /* Priority     */ PRIO_Demo_Item,
     /* Actor SubMtd */ &l_daDitem_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

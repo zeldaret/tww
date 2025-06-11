@@ -175,7 +175,7 @@ BOOL enemy_ice(enemyice* ei) {
     
     BOOL frozen = FALSE;
     BOOL moveAndCollide = FALSE;
-    switch (ei->mState) {
+    switch (ei->mMode) {
     case 0: // Not initialized
         // Initialize the enemyice now.
         ei->mStts.Init(250, 0xFF, ac);
@@ -183,7 +183,7 @@ BOOL enemy_ice(enemyice* ei) {
         ei->mCyl.SetStts(&ei->mStts);
         ei->mCyl.SetR(ei->mWallRadius);
         ei->mCyl.SetH(ei->mCylHeight);
-        ei->mBgAcch.Set(&ac->current.pos, &ac->old.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed);
+        ei->mBgAcch.Set(fopAcM_GetPosition_p(ac), fopAcM_GetOldPosition_p(ac), ac, 1, &ei->mBgAcchCir, &ei->mSpeed);
         ei->mBgAcchCir.SetWall(40.0f, ei->mWallRadius);
         
         if (ei->mParticleScale < 0.1f) {
@@ -192,7 +192,7 @@ BOOL enemy_ice(enemyice* ei) {
         if (std::fabsf(ei->mYOffset) < 0.1f) {
             ei->mYOffset = 80.0f;
         }
-        ei->mState = 1;
+        ei->mMode = 1;
         ei->mScaleY = 1.0f;
         ei->mScaleXZ = 1.0f;
         fopAcM_OnStatus(ac, fopAcStts_UNK8000000_e);
@@ -202,7 +202,7 @@ BOOL enemy_ice(enemyice* ei) {
             // The enemy has signaled that it wants to be frozen for some length of time.
             ei->mFreezeTimer = ei->mFreezeDuration;
             ei->mFreezeDuration = 0;
-            ei->mState = 2;
+            ei->mMode = 2;
             if (ei->m00C == 0) {
                 ei->mSpeed.y = 30.0f;
                 ei->mAngularVelY = (s16)cM_rndFX(3000.0f);
@@ -227,12 +227,17 @@ BOOL enemy_ice(enemyice* ei) {
     case 2: // Frozen
         frozen = TRUE;
         moveAndCollide = TRUE;
+#if VERSION == VERSION_DEMO
+        if (ei->mSpeedF > 19.0f) {
+            ac->shape_angle.x -= 0x300;
+        }
+#endif
         if (ei->m00C != 1) {
             cLib_onBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             ac->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x12;
             if (fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
                 cLib_offBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                ei->mState = 3;
+                ei->mMode = 3;
                 if (ei->m00C == 2) {
                     ei->m00C = 0;
                 }
@@ -250,7 +255,7 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mSpeed.y = -15.0f;
             }
             ei->mAngleY = player->shape_angle.y;
-            ei->mState = 2;
+            ei->mMode = 2;
         }
         break;
     }
@@ -349,7 +354,7 @@ BOOL enemy_ice(enemyice* ei) {
             }
             
             if (ei->mFreezeTimer == 0) {
-                ei->mState = 1;
+                ei->mMode = 1;
                 ei->mCyl.SetC(non_pos);
                 dComIfG_Ccsp()->Set(&ei->mCyl);
                 
@@ -440,39 +445,43 @@ void enemy_fire(enemyfire* ef) {
     cXyz pos;
     offset.setall(0.0f);
     
-    switch (ef->mState) {
+    switch (ef->mMode) {
     case 0: // Not on fire.
-        if (ef->mFireDuration == 0) {
-            return;
+        if (ef->mFireDuration != 0) {
+            // The enemy has signaled that it wants to be lit on fire for some length of time.
+            ef->mFireTimer = ef->mFireDuration;
+            ef->mFireDuration = 0;
+            
+            ef->mMode = 1; // On fire
+            
+            dKy_plight_set(&ef->mLight);
+            
+            for (int i = 0; i < 10; i++) {
+                if (ef->mFlameJntIdxs[i] < 0) {
+                    continue;
+                }
+                if (ef->mpFlameEmitters[i]) {
+                    continue;
+                }
+                cXyz scale;
+                scale.setall(ef->mParticleScale[i]);
+                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
+                ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
+                if (ef->mFlameTimers[i] < 10) {
+                    ef->mFlameTimers[i] = 10;
+                }
+                ef->mFlameScaleY = 2.0f;
+            }
+            
+            ef->mStts.Init(250, 0xFF, ac);
+            ef->mSph.Set(fire_at_sph_src);
+            ef->mSph.SetStts(&ef->mStts);
         }
-        // The enemy has signaled that it wants to be lit on fire for some length of time.
-        ef->mFireTimer = ef->mFireDuration;
-        ef->mFireDuration = 0;
-        
-        ef->mState = 1; // On fire
-        
-        dKy_plight_set(&ef->mLight);
-        
-        for (int i = 0; i < 10; i++) {
-            if (ef->mFlameJntIdxs[i] < 0) {
-                continue;
-            }
-            if (ef->mpFlameEmitters[i]) {
-                continue;
-            }
-            cXyz scale;
-            scale.setall(ef->mParticleScale[i]);
-            ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
-            ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
-            if (ef->mFlameTimers[i] < 10) {
-                ef->mFlameTimers[i] = 10;
-            }
-            ef->mFlameScaleY = 2.0f;
+#if VERSION == VERSION_DEMO
+        else {
+            ef->mLight.mPower = 0.0f;
         }
-        
-        ef->mStts.Init(250, 0xFF, ac);
-        ef->mSph.Set(fire_at_sph_src);
-        ef->mSph.SetStts(&ef->mStts);
+#endif
         break;
     case 1: // On fire.
         ef->mLight.mPos = ac->current.pos;
@@ -529,7 +538,7 @@ void enemy_fire(enemyfire* ef) {
             } else {
                 ef->mFlameTimers[i]--;
                 
-                cMtx_copy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
+                MTXCopy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
                 MtxPosition(&offset, &pos);
                 
                 ef->mpFlameEmitters[i]->setGlobalTranslation(pos.x, pos.y, pos.z);
@@ -562,8 +571,10 @@ void enemy_fire(enemyfire* ef) {
         fopAcM_seStart(ac, JA_SE_OBJ_TORCH_BURNING, 0);
         
         if (ef->mFireTimer == 0) {
-            ef->mState = 0; // Not on fire
+            ef->mMode = 0; // Not on fire
+#if VERSION > VERSION_DEMO
             dKy_plight_cut(&ef->mLight);
+#endif
             ef->mSph.SetC(non_pos);
             dComIfG_Ccsp()->Set(&ef->mSph);
         } else {
@@ -579,7 +590,7 @@ void enemy_fire(enemyfire* ef) {
 
 /* 8001D3B0-8001D428       .text enemy_fire_remove__FP9enemyfire */
 void enemy_fire_remove(enemyfire* ef) {
-    ef->mState = 0; // Not on fire
+    ef->mMode = 0; // Not on fire
     dKy_plight_cut(&ef->mLight);
     
     for (int i = 0; i < 10; i++) {
@@ -641,7 +652,7 @@ void dr_body_bg_check(damagereaction* dr) {
         dr->m71E--;
     }
     
-    if (dr->mState != 21 && dr->mState != 22) {
+    if (dr->mAction != 21 && dr->mAction != 22) {
         dBgS_ObjGndChk_Spl gndChk;
         f32 x = dr->mpEnemy->current.pos.x;
         f32 y = dr->mpEnemy->current.pos.y;
@@ -653,16 +664,16 @@ void dr_body_bg_check(damagereaction* dr) {
         temp.z = z;
         gndChk.SetPos(&temp);
         f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (floor_y != C_BG_MIN_HEIGHT && dr->mpEnemy->current.pos.y <= floor_y) {
+        if (floor_y != -G_CM3D_F_INF && dr->mpEnemy->current.pos.y <= floor_y) {
             dr->mpEnemy->current.pos.y = floor_y + REG0_F(13);
-            dr->m004 = 0;
+            dr->mMode = 0;
             dr->m47C = 0;
             if (dComIfG_Bgsp()->ChkGrpInf(gndChk, 0x100)) {
-                dr->mState = 22;
+                dr->mAction = 22;
                 cXyz sp14(x, floor_y, z);
                 fopKyM_createWpillar(&sp14, REG0_F(9) + 1.0f, REG0_F(10) + 1.0f, 0);
             } else {
-                dr->mState = 21;
+                dr->mAction = 21;
                 cXyz sp08(x, floor_y, z);
                 fopKyM_createMpillar(&sp08, REG0_F(14) + 0.5f);
             }
@@ -684,8 +695,7 @@ void dr_body_bg_check(damagereaction* dr) {
             bk_class* bk = (bk_class*)dr->mpEnemy;
             u8 switch_no = bk->m02B8;
             if (switch_no != 0) {
-                s8 roomNo = fopAcM_GetRoomNo(bk);
-                dComIfGs_onSwitch(switch_no, roomNo);
+                dComIfGs_onSwitch(switch_no, fopAcM_GetRoomNo(dr->mpEnemy));
             }
         }
     }

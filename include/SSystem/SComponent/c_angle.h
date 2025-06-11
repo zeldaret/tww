@@ -13,13 +13,19 @@ public:
     const static cSAngle _90;
     const static cSAngle _180;
     const static cSAngle _270;
+#ifdef __MWERKS__
     cSAngle() {}
     ~cSAngle() {}
     cSAngle(const cSAngle&);
+#else
+    cSAngle() = default;
+    ~cSAngle() = default;
+    cSAngle(const cSAngle&) = default;
+#endif
     cSAngle(s16);
     cSAngle(float);
     s16 Val() const { return mAngle; }
-    // void Set(s16 angle) { this->mAngle = angle; }
+    //void Set(s16 angle) { this->mAngle = angle; }
     void Val(const cSAngle&);
     void Val(s16);
     void Val(float);
@@ -45,7 +51,9 @@ public:
     bool operator<(const cSAngle& other) const { return mAngle < other.mAngle; }
     bool operator>(const cSAngle& other) const { return mAngle > other.mAngle; }
     operator s16() const { return mAngle; }
+#ifdef __MWERKS__
     void operator=(const cSAngle& other) { mAngle = other.mAngle; }
+#endif
     static inline cSAngle getMaxNegative() { return cSAngle((s16)-0x8000); }
     inline void mirrorAtMaxNeg() { *this = cSAngle((s16)-0x8000) - *this; }
 };
@@ -65,8 +73,14 @@ struct cAngle {
     /* Converts Radian value into Degree value */
     static f32 r2d(f32 r) { return Radian_to_Degree(r); }
 
+    /* Converts Degree value into Radian value */
+    static f32 d2r(f32 d) { return Degree_to_Radian(d); }
+
     /* Converts Degree value to s16 angle */
     static s16 d2s(f32 d) { return Degree_to_SAngle(d); }
+
+    /* Converts s16 angle to Degree value */
+    static f32 s2d(s16 a) { return SAngle_to_Degree(a); }
 
     template <typename T>
     static T Adjust(T f1, T f2, T f3);
@@ -112,6 +126,10 @@ public:
     void Val(const cXyz&);
     cXyz Xyz() const;
     void Globe(class cSGlobe*) const;
+
+    void R(f32 i_radial) { mRadial = i_radial; }
+    void U(cSAngle const& i_angle) { mAngle2 = i_angle.Val(); }
+    void V(cSAngle const& i_angle) { mAngle1 = i_angle.Val(); }
 };
 
 class cSGlobe {
@@ -121,12 +139,18 @@ private:
     cSAngle mInclination;  // original: U
 
 public:
-    cSGlobe() {};
+#ifdef __MWERKS__
+    cSGlobe() {}
+    ~cSGlobe() {}
     cSGlobe(const cSGlobe&);
+#else
+    cSGlobe() = default;
+    ~cSGlobe() = default;
+    cSGlobe(const cSGlobe&) = default;
+#endif
     cSGlobe(float, short, short);
     cSGlobe(float, const cSAngle&, const cSAngle&);
     cSGlobe(const cXyz&);
-    ~cSGlobe() {}
     cSGlobe& Formal();
     void Val(const cSGlobe&);
     void Val(float, short, short);
@@ -135,10 +159,15 @@ public:
     float R() const { return mRadius; }
     const cSAngle& V() const { return mAzimuth; }
     const cSAngle& U() const { return mInclination; }
+
+    void R(f32 i_radius) { mRadius = i_radius; }
+    void U(cSAngle const& i_azimuth) { mAzimuth = i_azimuth.Val(); }
+    void V(cSAngle const& i_inclination) { mInclination = i_inclination.Val(); }
+
     cXyz Xyz() const;
     void Polar(cSPolar*) const;
     cXyz Norm() const;
     cSGlobe& Invert();
-};
+};  // Size: 0x8
 
 #endif /* C_ANGLE_H */

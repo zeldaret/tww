@@ -1,12 +1,13 @@
 /**
  * d_a_nh.cpp
- * Forest Firely / 森のほたる (Mori no Hotaru)
+ * Item - Forest Firefly / 森のほたる (Mori no Hotaru)
  */
 
 #include "d/actor/d_a_nh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -27,7 +28,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+#if VERSION == VERSION_DEMO
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+#else
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e,
+#endif
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
@@ -37,7 +42,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
+#if VERSION == VERSION_DEMO
+        /* SrcGObjTg SPrm    */ 0,
+#else
         /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+#endif
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
@@ -103,7 +112,7 @@ void daNh_c::setBaseMtx() {
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
 BOOL daNh_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_NH);
-    JUT_ASSERT(359, modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(357, 359, 359, 359), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (!mpModel) {
@@ -273,7 +282,7 @@ void daNh_c::BGCheck() {
     dBgS_ObjGndChk_All gndChk;
     gndChk.SetPos(&current.pos);
     f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != C_BG_MIN_HEIGHT) {
+    if (groundY != -G_CM3D_F_INF) {
         mGroundY = groundY;
         tevStr.mRoomNo = current.roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(gndChk);
@@ -336,7 +345,8 @@ BOOL daNh_c::escapeAction(void*) {
                 mWobbleTimer = cLib_getRndValue(15, 20);
             }
             targetAngle += mWobbleDir ? -0x2000 : 0x2000;
-            moveProc(5.0f, 0.5f, targetAngle);
+            f32 targetSpeed = 5.0f;
+            moveProc(targetSpeed, 0.5f, targetAngle);
         }
     }
     return TRUE;
@@ -371,7 +381,8 @@ BOOL daNh_c::returnAction(void*) {
                 mWobbleTimer = cLib_getRndValue(15, 20);
             }
             targetAngle += mWobbleDir ? -0x2000 : 0x2000;
-            moveProc(5.0f, 0.5f, targetAngle);
+            f32 targetSpeed = 5.0f;
+            moveProc(targetSpeed, 0.5f, targetAngle);
         }
     }
     return TRUE;
@@ -427,7 +438,7 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     bool success = false;
     
     J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
-    JUT_ASSERT(883, a_brk != NULL);
+    JUT_ASSERT(VERSION_SELECT(881, 883, 883, 883), a_brk != NULL);
     
     if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;
@@ -516,7 +527,7 @@ actor_process_profile_definition g_profile_NH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x013C,
+    /* Priority     */ PRIO_NH,
     /* Actor SubMtd */ &l_daNh_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

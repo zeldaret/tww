@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
+class dCcD_SrcSph;
 
 class daNpc_So_c : public fopAc_ac_c {
 public:
@@ -11,7 +12,7 @@ public:
         
     };
 
-    void getMiniGameRestArrow() {}
+    int getMiniGameRestArrow() { return 10 - mB78; }
     void isAnm(signed char) {}
     void modeProcInit(int) {}
 
@@ -126,8 +127,12 @@ public:
     void initCam();
     void moveCam();
 
+    static const dCcD_SrcSph m_sph_src;
+
 public:
     /* Place member variables here */
+    /* 0x290 */ u8 m290[0xB78 - 0x290];
+    /* 0xB78 */ int mB78;
 };
 
 class daNpc_So_HIO_c {

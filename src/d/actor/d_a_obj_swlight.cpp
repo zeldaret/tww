@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_swlight.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000154       .text is_switch2__Q212daObjSwlight5Act_cCFv */
 void daObjSwlight::Act_c::is_switch2() const {
@@ -144,28 +145,28 @@ bool daObjSwlight::Act_c::_draw() {
 namespace daObjSwlight {
 namespace {
 /* 00001AC4-00001AE4       .text Mthd_Create__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_create();
 }
 
 /* 00001AE4-00001B08       .text Mthd_Delete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_delete();
 }
 
 /* 00001B08-00001B2C       .text Mthd_Execute__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_execute();
 }
 
 /* 00001B2C-00001B50       .text Mthd_Draw__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjSwlight::Act_c*)i_this)->_draw();
 }
 
 /* 00001B50-00001B58       .text Mthd_IsDelete__Q212daObjSwlight29@unnamed@d_a_obj_swlight_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
@@ -188,7 +189,7 @@ actor_process_profile_definition g_profile_Obj_Swlight = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0013,
+    /* Priority     */ PRIO_Obj_Swlight,
     /* Actor SubMtd */ &daObjSwlight::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

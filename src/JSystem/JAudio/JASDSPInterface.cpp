@@ -77,8 +77,8 @@ void JASystem::DSPInterface::initBuffer() {
 }
 
 /* 8028A368-8028A378       .text getFXHandle__Q28JASystem12DSPInterfaceFUc */
-JASystem::DSPInterface::FXBuffer* JASystem::DSPInterface::getFXHandle(u8 param_1) {
-    return FX_BUF + param_1;
+JASystem::DSPInterface::FXBuffer* JASystem::DSPInterface::getFXHandle(u8 i) {
+    return &FX_BUF[i];
 }
 
 u16 JASystem::DSPInterface::SEND_TABLE[] = {

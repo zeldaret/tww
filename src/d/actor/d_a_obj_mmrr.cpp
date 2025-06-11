@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000AC       .text end__Q29daObjMmrr5Eff_cFv */
 void daObjMmrr::Eff_c::end() {
@@ -99,28 +100,28 @@ bool daObjMmrr::Act_c::_draw() {
 namespace daObjMmrr {
 namespace {
 /* 000017E8-00001808       .text Mthd_Create__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMmrr::Act_c*)i_this)->_create();
 }
 
 /* 00001808-0000182C       .text Mthd_Delete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMmrr::Act_c*)i_this)->_delete();
 }
 
 /* 0000182C-00001850       .text Mthd_Execute__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMmrr::Act_c*)i_this)->_execute();
 }
 
 /* 00001850-00001874       .text Mthd_Draw__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMmrr::Act_c*)i_this)->_draw();
 }
 
 /* 00001874-0000187C       .text Mthd_IsDelete__Q29daObjMmrr26@unnamed@d_a_obj_mmrr_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
@@ -143,7 +144,7 @@ actor_process_profile_definition g_profile_Obj_Mmrr = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0035,
+    /* Priority     */ PRIO_Obj_Mmrr,
     /* Actor SubMtd */ &daObjMmrr::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -40,6 +40,7 @@ public:
     static u8 getBlureRate() { return mBlureRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
     static void offAutoForcus() { mAutoForcus = false; }
+    static void onAutoForcus() { mAutoForcus = true; }
     static BOOL isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
@@ -67,7 +68,7 @@ public:
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
     static void setBlureMtx(const Mtx) {}
-    static void setBlureRate(u8) {}
+    static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

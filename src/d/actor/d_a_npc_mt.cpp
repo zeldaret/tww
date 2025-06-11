@@ -6,6 +6,7 @@
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #define TOTAL_FIGURE_COUNT 0x86
 
@@ -293,28 +294,28 @@ void daNpcMt_c::changePhotoNo(u8) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-static s32 daNpc_MtCreate(void*) {
-    /* Nonmatching */
+static s32 daNpc_MtCreate(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_create();
 }
 
 /* 00002D6C-00002D90       .text daNpc_MtDelete__FPv */
-static BOOL daNpc_MtDelete(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtDelete(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_delete();
 }
 
 /* 00002D90-00002DB4       .text daNpc_MtExecute__FPv */
-static BOOL daNpc_MtExecute(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtExecute(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_execute();
 }
 
 /* 00002DB4-00002DD8       .text daNpc_MtDraw__FPv */
-static BOOL daNpc_MtDraw(void*) {
-    /* Nonmatching */
+static BOOL daNpc_MtDraw(void* i_this) {
+    return ((daNpcMt_c*)i_this)->_draw();
 }
 
 /* 00002DD8-00002DE0       .text daNpc_MtIsDelete__FPv */
 static BOOL daNpc_MtIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_MtMethodTable = {
@@ -335,7 +336,7 @@ actor_process_profile_definition g_profile_NPC_MT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0181,
+    /* Priority     */ PRIO_NPC_MT,
     /* Actor SubMtd */ &daNpc_MtMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

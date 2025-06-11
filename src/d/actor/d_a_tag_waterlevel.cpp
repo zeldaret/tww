@@ -7,6 +7,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "SSystem/SComponent/c_lib.h"
 
 namespace daTagWaterlevel {
@@ -68,7 +69,8 @@ namespace daTagWaterlevel {
         u8 sch_bit = dKy_get_schbit();
         cLib_offBit(M_state, STATE_2);
 
-        if ((prm_sch & sch_bit & 0xFF)) {
+        bool temp = prm_sch & sch_bit & 0xFF;
+        if (temp) {
             target = 1.0f;
             if (!cLib_checkBit(get_state(), STATE_1)) {
                 cLib_onBit(M_state, STATE_2);
@@ -152,7 +154,7 @@ actor_process_profile_definition g_profile_Tag_Waterlevel = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0128,
+    /* Priority     */ PRIO_Tag_Waterlevel,
     /* Actor SubMtd */ &daTagWaterlevel::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

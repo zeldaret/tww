@@ -61,7 +61,9 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
 
             VIWaitForRetrace();
         }
+#if VERSION > VERSION_DEMO
         DCInvalidateRange(bufPtr, 0x20);
+#endif
 
         compression = JKRCheckCompressed(bufPtr);
         expandSize = JKRDecompExpandSize(bufPtr);
@@ -120,7 +122,9 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
                 }
                 VIWaitForRetrace();
             }
+#if VERSION > VERSION_DEMO
             DCInvalidateRange(bufPtr, 32);
+#endif
 
             compression2 = JKRCheckCompressed(bufPtr);
         }
@@ -148,7 +152,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         else if (compression2 == COMPRESSION_YAZ0) {
             JKRDecompressFromDVD(dvdFile, dst, fileSizeAligned, dstLength, 0, offset);
         } else {
-            OSPanic(__FILE__, VERSION_SELECT(337, 314, 314), "Sorry, not prepared for SZP resource\n");
+            OSPanic(__FILE__, VERSION_SELECT(315, 337, 314, 314), "Sorry, not prepared for SZP resource\n");
         }
         return dst;
     }
@@ -157,7 +161,7 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
         // SZP decompression
         // s32 readoffset = startOffset;
         if (offset != 0) {
-            OSPanic(__FILE__, VERSION_SELECT(347, 324, 324), ":::Not support SZP with offset read");
+            OSPanic(__FILE__, VERSION_SELECT(325, 347, 324, 324), ":::Not support SZP with offset read");
         }
         while (true) {
             int readBytes = DVDReadPrio(dvdFile->getFileInfo(), mem, fileSizeAligned, 0, 2);
@@ -194,7 +198,6 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
 }
 
 JSUList<JKRDMCommand> JKRDvdRipper::sDvdAsyncList;
-static OSMutex decompMutex;
 u32 JKRDvdRipper::sSzpBufferSize = 0x00000400;
 static u8* szpBuf;
 static u8* szpEnd;
@@ -208,10 +211,15 @@ static JKRDvdFile* srcFile;
 static u32 fileOffset;
 static u32 readCount;
 static u32 maxDest;
+
+#if VERSION > VERSION_DEMO
+static OSMutex decompMutex;
 static bool isInitMutex;
+#endif
 
 /* 802BD324-802BD4F0       .text JKRDecompressFromDVD__FP10JKRDvdFilePvUlUlUlUl */
 static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u32 inMaxDest, u32 inFileOffset, u32 inSrcOffset) {
+#if VERSION > VERSION_DEMO
     BOOL interrupts = OSDisableInterrupts();
     if (isInitMutex == false) {
         OSInitMutex(&decompMutex);
@@ -219,14 +227,16 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
     }
     OSRestoreInterrupts(interrupts);
     OSLockMutex(&decompMutex);
+#endif
+
     int bufSize = JKRDvdRipper::getSzpBufferSize();
     szpBuf = (u8 *)JKRAllocFromSysHeap(bufSize, -0x20);
-    JUT_ASSERT(VERSION_SELECT(913, 884, 884), szpBuf != NULL);
+    JUT_ASSERT(VERSION_SELECT(876, 913, 884, 884), szpBuf != NULL);
 
     szpEnd = szpBuf + bufSize;
     if (inFileOffset != 0) {
         refBuf = (u8 *)JKRAllocFromSysHeap(0x1120, -4);
-        JUT_ASSERT(VERSION_SELECT(922, 893, 893), refBuf != NULL);
+        JUT_ASSERT(VERSION_SELECT(885, 922, 893, 893), refBuf != NULL);
         refEnd = refBuf + 0x1120;
         refCurrent = refBuf;
     } else {
@@ -246,7 +256,11 @@ static int JKRDecompressFromDVD(JKRDvdFile* dvdFile, void* dst, u32 fileSize, u3
         JKRFree(refBuf);
     }
     DCStoreRangeNoSync(dst, decompressedSize);
+
+#if VERSION > VERSION_DEMO
     OSUnlockMutex(&decompMutex);
+#endif
+
     return result;
 }
 
@@ -407,7 +421,7 @@ static u8* nextSrcData(u8* src) {
     if (transSize > transLeft) {
         transSize = transLeft;
     }
-    JUT_ASSERT(VERSION_SELECT(1228, 1176, 1176), transSize > 0);
+    JUT_ASSERT(VERSION_SELECT(1186, 1228, 1176, 1176), transSize > 0);
 
     while (true) {
         s32 result = DVDReadPrio(srcFile->getFileInfo(), (buf + limit), transSize, srcOffset, 2);

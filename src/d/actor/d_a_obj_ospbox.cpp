@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_ospbox.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001A0       .text CreateHeap__Q211daObjOspbox5Act_cFv */
 BOOL daObjOspbox::Act_c::CreateHeap() {
@@ -79,28 +80,28 @@ BOOL daObjOspbox::Act_c::Draw() {
 namespace daObjOspbox {
 namespace {
 /* 000011A4-000011C4       .text Mthd_Create__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjOspbox::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 000011C4-000011E4       .text Mthd_Delete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjOspbox::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000011E4-00001204       .text Mthd_Execute__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjOspbox::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001204-00001230       .text Mthd_Draw__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjOspbox::Act_c*)i_this)->Draw();
 }
 
 /* 00001230-0000125C       .text Mthd_IsDelete__Q211daObjOspbox28@unnamed@d_a_obj_ospbox_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjOspbox::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {
@@ -123,7 +124,7 @@ actor_process_profile_definition g_profile_Obj_Ospbox = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x002F,
+    /* Priority     */ PRIO_Obj_Ospbox,
     /* Actor SubMtd */ &daObjOspbox::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

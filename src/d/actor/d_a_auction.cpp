@@ -9,6 +9,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
@@ -67,8 +68,8 @@ static NpcDatStruct l_npc_dat[7] = {
     {0.3f, 0.5f, 0x4, 0x6, 450 },
     {0.3f, 0.6f, 0x3, 0x7, 500 },
     {0.4f, 0.7f, 0x2, 0x4, 250 },
-    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 990, 990) },
-    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 990, 990) },
+    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 998, 990, 990) },
+    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 998, 990, 990) },
     {0.7f, 1.2f, 0x2, 0x2, 150 },
 };
 
@@ -296,9 +297,14 @@ cPhs_State daAuction_c::createInit() {
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */
 BOOL daAuction_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Pspl");
+    dComIfG_resDeleteDemo(&mPhs, "Pspl");
 
-    if (heap != NULL && mpEmitter != NULL) {
+#if VERSION == VERSION_DEMO
+    if (mpEmitter != NULL)
+#else
+    if (heap != NULL && mpEmitter != NULL)
+#endif
+    {
         mpEmitter->becomeInvalidEmitter();
     }
 
@@ -569,8 +575,14 @@ void daAuction_c::privateCut() {
         evtRes = eventGetItem();
         break;
     case ACT_GET_ITEM_MES:
+#if BUGFIX
+        evtRes = eventMesSet();
+#elif __MWERKS__
         // @bug They probably meant to call this function
         evtRes = eventMesSet;
+#else
+        evtRes = &daAuction_c::eventMesSet;
+#endif
         break;
     case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();
@@ -687,12 +699,12 @@ bool daAuction_c::eventStart() {
         mpTimer = (dTimer_c*)fopMsgM_SearchByID(mTimerID);
         
         if (mpTimer != NULL) {
-            mpTimer->mpScrnDraw->setShowType(0);
+            mpTimer->setShowType(0);
         }
     }
 
-    dComIfGp_setDoStatusForce(0x3E);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_HIDDEN_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 
     return mpTimer != NULL;
 }
@@ -744,7 +756,7 @@ void daAuction_c::eventMainInit() {
     daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
 
     pLink->changeOriginalDemo();
-    mCurLinkAnm = daPy_demo_c::DEMO_UNK1_e;
+    mCurLinkAnm = daPy_demo_c::DEMO_UNK01_e;
     dComIfGp_event_setTalkPartner(this);
     m82F = 0;
 
@@ -769,11 +781,11 @@ bool daAuction_c::eventMain() {
 
     if (
         pLink->getBaseAnimeFrameRate() == 0.0f &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e &&
         mCurLinkAnm != daPy_demo_c::DEMO_UNK25_e
     ) {
-        setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
     }
 
     mFlags &= 4;
@@ -917,7 +929,7 @@ void daAuction_c::eventMainKai() {
                     dComIfGp_setMessageSetNumber(mCurrBid + 1);
                     end = 0x1CFA;
                     setLinkAnm(daPy_demo_c::DEMO_UNK48_e);
-                    mpTimer->mpScrnDraw->setShowType(1);
+                    mpTimer->setShowType(1);
 
                     dAuction_screen_gaugeUp();
                     dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -985,8 +997,8 @@ void daAuction_c::eventMainKai() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x25);
-    dComIfGp_setAStatusForce(0x27);
+    dComIfGp_setDoStatusForce(dActStts_BID_e);
+    dComIfGp_setAStatusForce(dActStts_CANCEL_e);
 }
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
@@ -1086,7 +1098,7 @@ void daAuction_c::eventMainUri() {
     }
 
     if (m82E != 0) {
-        dComIfGp_setDoStatusForce(0x25);
+        dComIfGp_setDoStatusForce(dActStts_BID_e);
     }
 }
 
@@ -1100,8 +1112,8 @@ void daAuction_c::eventMainMsgSet() {
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
     if (eventMesEnd()) {
-        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK01_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
 
         if (m834 & 0x20) {
@@ -1125,7 +1137,7 @@ void daAuction_c::eventMainMsgEnd() {
             m798 = l_camera_pos[m82F][1];
         }
 
-        mpTimer->mpScrnDraw->setShowType(0);
+        mpTimer->setShowType(0);
         dAuction_screen_gaugeDown();
         m834 &= ~0x29;
         dAuction_screen_talkEnd();
@@ -1172,8 +1184,8 @@ void daAuction_c::eventMainMsgBikonC() {
         eyePos = getNpcActorP(m827)->eyePos;
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */
@@ -1190,8 +1202,8 @@ void daAuction_c::eventMainMsgBikonW() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
@@ -1335,7 +1347,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         m826 = tmp;
         m824 = tmp;
         if (m826 != 0) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+            setLinkAnm(daPy_demo_c::DEMO_UNK01_e);
         }
         break;
     }
@@ -1557,7 +1569,7 @@ void daAuction_c::setCameraNpc(int idx, s16 param_2) {
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
 void daAuction_c::setLinkAnm(u8 linkAnm) {
-    if (linkAnm == daPy_demo_c::DEMO_UNK1_e && m826 == 0) {
+    if (linkAnm == daPy_demo_c::DEMO_UNK01_e && m826 == 0) {
         linkAnm = daPy_demo_c::DEMO_UNK1D_e;
     }
 
@@ -1655,7 +1667,7 @@ actor_process_profile_definition g_profile_AUCTION = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01E0,
+    /* Priority     */ PRIO_AUCTION,
     /* Actor SubMtd */ &daAuctionMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

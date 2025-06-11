@@ -39,9 +39,9 @@ public:
     void wait_action(void*);
     void event_wait_action(void*);
     cPhs_State _create();
-    bool _delete();
-    bool _execute();
-    bool _draw();
+    BOOL _delete();
+    BOOL _execute();
+    BOOL _draw();
 
     static void init() {
         canon_game_result = 0;

@@ -1,12 +1,13 @@
 /**
  * d_a_dr.cpp
- * Valoo / ドラゴン (Dragon)
+ * NPC - Valoo (Overworld) / ドラゴン (Dragon)
  */
 
 #include "d/actor/d_a_dr.h"
 #include "d/res/res_dr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -31,11 +32,16 @@ daDr_HIO_c::daDr_HIO_c() {
 
 /* 00000148-000001DC       .text daDr_Draw__FP8dr_class */
 static BOOL daDr_Draw(dr_class* i_this) {
+    fopAc_ac_c* actor = i_this;
     J3DModel* model = i_this->mpMorf->getModel();
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(model, &i_this->tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
+    g_env_light.setLightTevColorType(model, &actor->tevStr);
     i_this->mpMorf->entryDL();
-    dSnap_RegistFig(DSNAP_TYPE_DR, i_this, i_this->eyePos, i_this->shape_angle.y, 1.0f, 1.0f, 1.0f);
+#if VERSION == VERSION_DEMO
+    dSnap_RegistFig(DSNAP_TYPE_DR, actor, 1.0f, 1.0f, 1.0f);
+#else
+    dSnap_RegistFig(DSNAP_TYPE_DR, actor, actor->eyePos, actor->shape_angle.y, 1.0f, 1.0f, 1.0f);
+#endif
     return TRUE;
 }
 
@@ -45,12 +51,17 @@ static void anm_init(dr_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
         morf = 0.0f;
     }
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("Dr", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            dComIfG_getObjectRes("Dr", soundFileIdx)
+        );
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Dr", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            NULL
+        );
     }
     i_this->mCurrBckIdx = bckFileIdx;
 }
@@ -58,29 +69,29 @@ static void anm_init(dr_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f3
 /* 00000320-0000091C       .text move__FP8dr_class */
 static void move(dr_class* i_this) {
     bool isIdle = false;
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
         isIdle = true;
         anm_init(i_this, DR_BCK_DR_WAIT1, l_HIO.mWait1Morf, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-        i_this->mState++;
+        i_this->mMode++;
         i_this->mCountDownTimers[0] = (s16)(200.0f + cM_rndF(200.0f));
         break;
     case 1:
         isIdle = true;
         if (i_this->mCountDownTimers[0] == 0) {
             anm_init(i_this, DR_BCK_DR_AKUBI1, l_HIO.mAkubi1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_AKUBI1);
-            i_this->mState++;
+            i_this->mMode++;
         }
         break;
     case 2:
         isIdle = true;
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
         }
         break;
     case 10:
         anm_init(i_this, DR_BCK_DR_BIKU1, l_HIO.mBiku1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, DR_BAS_BIKU1);
-        i_this->mState++;
+        i_this->mMode++;
         i_this->mCountDownTimers[0] = l_HIO.m0E;
         i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C4, &i_this->current.pos);
         i_this->m2C9 = 0;
@@ -118,7 +129,7 @@ static void move(dr_class* i_this) {
             } else {
                 anm_init(i_this, DR_BCK_DR_HO1, l_HIO.mHo1Morf, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mpBreathEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81C6, &i_this->current.pos);
-                i_this->mState++;
+                i_this->mMode++;
             }
         }
         
@@ -138,7 +149,7 @@ static void move(dr_class* i_this) {
         }
         
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0;
+            i_this->mMode = 0;
             if (i_this->mpBreathEmitter) {
                 i_this->mpBreathEmitter->becomeInvalidEmitter();
                 i_this->mpBreathEmitter = NULL;
@@ -151,7 +162,7 @@ static void move(dr_class* i_this) {
         if ((isIdle && (l_HIO.m0C || dComIfGp_getVibration().CheckQuake())) || i_this->m2C8 != 0) {
             l_HIO.m0C = false;
             i_this->m2C8 = 0;
-            i_this->mState = 10;
+            i_this->mMode = 10;
         }
     }
     
@@ -167,9 +178,9 @@ static void daDr_setMtx(dr_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos);
-    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->current.angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->current.angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->current.angle.z);
+    mDoMtx_stack_c::YrotM(i_this->current.angle.y);
+    mDoMtx_stack_c::XrotM(i_this->current.angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->current.angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     
     i_this->mpMorf->calc();
@@ -204,7 +215,7 @@ static BOOL daDr_IsDelete(dr_class* i_this) {
 
 /* 00000A94-00000AE8       .text daDr_Delete__FP8dr_class */
 static BOOL daDr_Delete(dr_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Dr");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Dr");
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
     }
@@ -232,18 +243,24 @@ static BOOL createHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00000C08-00000CE4       .text daDr_Create__FP10fopAc_ac_c */
-static cPhs_State daDr_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, dr_class);
-    
-    dr_class* i_this = (dr_class*)i_actor;
-    
-    cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhs, "Dr");
+static cPhs_State daDr_Create(fopAc_ac_c* i_this) {
+    dr_class* a_this = (dr_class*)i_this;
+
+#if VERSION > VERSION_DEMO
+    fopAcM_SetupActor(a_this, dr_class);
+#endif
+
+    cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhs, "Dr");
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(i_this, createHeap, 0xF000)) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(a_this, dr_class);
+#endif
+
+        if (!fopAcM_entrySolidHeap(a_this, createHeap, 0xF000)) {
             return cPhs_ERROR_e;
         }
         
-        daDr_setMtx(i_this);
+        daDr_setMtx(a_this);
         
         if (l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("ドラゴン", &l_HIO); // "Dragon"
@@ -271,7 +288,7 @@ actor_process_profile_definition g_profile_DR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D2,
+    /* Priority     */ PRIO_DR,
     /* Actor SubMtd */ &l_daDr_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_coming3.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000404       .text get_water_height__Q29daComing35Act_cFPfPiPC4cXyz */
 void daComing3::Act_c::get_water_height(float*, int*, const cXyz*) {
@@ -124,28 +125,28 @@ bool daComing3::Act_c::_draw() {
 namespace daComing3 {
 namespace {
 /* 00001D14-00001D34       .text Mthd_Create__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daComing3::Act_c*)i_this)->_create();
 }
 
 /* 00001D34-00001D58       .text Mthd_Delete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daComing3::Act_c*)i_this)->_delete();
 }
 
 /* 00001D58-00001D7C       .text Mthd_Execute__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daComing3::Act_c*)i_this)->_execute();
 }
 
 /* 00001D7C-00001DA0       .text Mthd_Draw__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daComing3::Act_c*)i_this)->_draw();
 }
 
 /* 00001DA0-00001DA8       .text Mthd_IsDelete__Q29daComing325@unnamed@d_a_coming3_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
@@ -168,7 +169,7 @@ actor_process_profile_definition g_profile_Coming3 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0029,
+    /* Priority     */ PRIO_Coming3,
     /* Actor SubMtd */ &daComing3::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -142,8 +142,8 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
             seStartOnlyReverb(JA_SE_LK_HS_SHOOT);
             voiceStart(41);
             resetFootEffect();
-            if (m34B8 != 2) {
-                m34B8 = 2;
+            if (mDirection != DIR_LEFT) {
+                mDirection = DIR_LEFT;
             }
             current.angle.y = shape_angle.y + 0x4000;
             onModeFlg(ModeFlg_00000001);
@@ -187,9 +187,9 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
     if (mpAttention->Lockon()) {
-        procHookshotMove_init();
+        return procHookshotMove_init();
     } else {
-        procHookshotSubject_init();
+        return procHookshotSubject_init();
     }
 }
 
@@ -219,7 +219,7 @@ BOOL daPy_lk_c::procHookshotSubject() {
 
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
-        dComIfGp_setDoStatus(7);
+        dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
     if (mpAttention->Lockon()) {
@@ -248,10 +248,10 @@ BOOL daPy_lk_c::procHookshotMove_init() {
     }
 
     commonProcInit(daPyProc_HOOKSHOT_MOVE_e);
-    if (m34B8 == 3) {
+    if (mDirection == DIR_RIGHT) {
         current.angle.y = shape_angle.y + -0x4000;
     } else {
-        m34B8 = 2;
+        mDirection = DIR_LEFT;
         current.angle.y = shape_angle.y + 0x4000;
     }
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
@@ -284,8 +284,8 @@ BOOL daPy_lk_c::procHookshotMove() {
         f32 fVar1 = -1.0f;
         if (std::fabsf(mVelocity) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
-            if (m34B8 != 2) {
-                m34B8 = 2;
+            if (mDirection != DIR_LEFT) {
+                mDirection = DIR_LEFT;
                 fVar1 = daPy_HIO_basic_c0::m.field_0xC;
             }
             current.angle.y = shape_angle.y + 0x4000;

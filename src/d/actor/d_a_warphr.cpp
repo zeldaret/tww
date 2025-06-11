@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_warphr.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000016C       .text _delete__10daWarphr_cFv */
 bool daWarphr_c::_delete() {
@@ -142,28 +143,28 @@ bool daWarphr_c::_draw() {
 }
 
 /* 000016E0-00001700       .text daWarphr_Create__FPv */
-static cPhs_State daWarphr_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWarphr_Create(void* i_this) {
+    return ((daWarphr_c*)i_this)->_create();
 }
 
 /* 00001700-00001724       .text daWarphr_Delete__FPv */
-static BOOL daWarphr_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWarphr_Delete(void* i_this) {
+    return ((daWarphr_c*)i_this)->_delete();
 }
 
 /* 00001724-00001748       .text daWarphr_Draw__FPv */
-static BOOL daWarphr_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWarphr_Draw(void* i_this) {
+    return ((daWarphr_c*)i_this)->_draw();
 }
 
 /* 00001748-0000176C       .text daWarphr_Execute__FPv */
-static BOOL daWarphr_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWarphr_Execute(void* i_this) {
+    return ((daWarphr_c*)i_this)->_execute();
 }
 
 /* 0000176C-00001774       .text daWarphr_IsDelete__FPv */
 static BOOL daWarphr_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWarphrMethodTable = {
@@ -184,7 +185,7 @@ actor_process_profile_definition g_profile_WARPHYRULE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A5,
+    /* Priority     */ PRIO_WARPHYRULE,
     /* Actor SubMtd */ &daWarphrMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

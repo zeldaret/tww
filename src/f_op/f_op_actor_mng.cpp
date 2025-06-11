@@ -4,6 +4,7 @@
 //
 
 #include "f_op/f_op_actor_mng.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_camera.h"
@@ -30,12 +31,12 @@
 #include "weak_bss_3569.h" // IWYU pragma: keep
 
 #define MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action)                               \
-    ((itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 0x8 | switchNo2 << 0x10 | (type & 0x3) << 0x18 | (action & 0x3F) << 0x1A)
+    ((itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 8 | (switchNo2 & 0xFF) << 16 | (type & 0x3) << 24 | (action & 0x3F) << 26)
 
 /* 80024060-80024104       .text fopAcM_setStageLayer__FPv */
 void fopAcM_setStageLayer(void* pProc) {
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(0xee, stageProc != NULL);
+    JUT_ASSERT(238, stageProc != NULL);
     fpcM_ChangeLayerID(pProc, fopScnM_LayerID(stageProc));
 }
 
@@ -43,7 +44,7 @@ void fopAcM_setStageLayer(void* pProc) {
 void fopAcM_setRoomLayer(void* pProc, int room_no) {
     if (room_no >= 0) {
         scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(room_no));
-        JUT_ASSERT(0x105, roomProc != NULL);
+        JUT_ASSERT(261, roomProc != NULL);
         fpcM_ChangeLayerID(pProc, fopScnM_LayerID(roomProc));
     }
 }
@@ -80,13 +81,13 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
     fopAcM_prm_class* params = (fopAcM_prm_class*)cMl::memalignB(-4, sizeof(fopAcM_prm_class));
     if (params != NULL) {
         cLib_memSet(params, 0, sizeof(fopAcM_prm_class));
-        params->mSetId = 0xFFFF;
-        params->mRoomNo = -1;
-        params->mScale.x = 10;
-        params->mScale.y = 10;
-        params->mScale.z = 10;
-        params->mParentPcId = fpcM_ERROR_PROCESS_ID_e;
-        params->mSubtype = -1;
+        params->base.setID = 0xFFFF;
+        params->room_no = -1;
+        params->scale.x = 10;
+        params->scale.y = 10;
+        params->scale.z = 10;
+        params->parent_id = fpcM_ERROR_PROCESS_ID_e;
+        params->subtype = -1;
     }
     return params;
 }
@@ -98,30 +99,30 @@ fopAcM_prm_class * createAppend(u32 parameter, cXyz* pPos, int roomNo, csXyz* pA
         return NULL;
 
     if (pPos != NULL)
-        params->mPos = *pPos;
+        params->base.position = *pPos;
     else
-        params->mPos = cXyz::Zero;
+        params->base.position = cXyz::Zero;
 
-    params->mRoomNo = roomNo;
+    params->room_no = roomNo;
 
     if (pAngle != NULL)
-        params->mAngle = *pAngle;
+        params->base.angle = *pAngle;
     else
-        params->mAngle = csXyz::Zero;
+        params->base.angle = csXyz::Zero;
 
     if (pScale != NULL) {
-        params->mScale.x = 10.0f * pScale->x;
-        params->mScale.y = 10.0f * pScale->y;
-        params->mScale.z = 10.0f * pScale->z;
+        params->scale.x = 10.0f * pScale->x;
+        params->scale.y = 10.0f * pScale->y;
+        params->scale.z = 10.0f * pScale->z;
     } else {
-        params->mScale.x = 10.0f;
-        params->mScale.y = 10.0f;
-        params->mScale.z = 10.0f;
+        params->scale.x = 10.0f;
+        params->scale.y = 10.0f;
+        params->scale.z = 10.0f;
     }
 
-    params->mParameter = parameter;
-    params->mParentPcId = parentPcId;
-    params->mSubtype = subtype;
+    params->base.parameters = parameter;
+    params->parent_id = parentPcId;
+    params->subtype = subtype;
 
     return params;
 }
@@ -269,8 +270,8 @@ fpc_ProcID fopAcM_createChildFromOffset(char* pProcNameString, fpc_ProcID parent
 
 /* 80024B78-80024CA0       .text fopAcM_createHeap__FP10fopAc_ac_cUlUl */
 s32 fopAcM_createHeap(fopAc_ac_c* i_this, u32 size, u32 align) {
-    JUT_ASSERT(0x33b, i_this);
-    JUT_ASSERT(0x33c, i_this->heap == NULL);
+    JUT_ASSERT(827, i_this);
+    JUT_ASSERT(828, i_this->heap == NULL);
     fopAcM_Log(i_this, "アクターのヒープの生成");
     if (align == 0)
         align = 0x20;
@@ -317,8 +318,11 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
         heap = mDoExt_createSolidHeapFromGameToCurrent(estimatedHeapSize, 0x20);
         if (heap != NULL) {
             bool result = createHeapCB(i_this);
+
+#if VERSION > VERSION_DEMO
             if (heap->getFreeSize() >= 0x20)
-                JKRHeap::alloc(0x20, 0, NULL);
+                JKRAlloc(0x20, 0);
+#endif
 
             mDoExt_restoreCurrentHeap();
 
@@ -352,7 +356,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
 
     if (heap == NULL) {
         heap = mDoExt_createSolidHeapFromGameToCurrent(-1, 0x20);
-        JUT_ASSERT(0x453, heap);
+        JUT_ASSERT(VERSION_SELECT(1103, 1107, 1107, 1107), heap);
 
         bool result = createHeapCB(i_this);
         mDoExt_restoreCurrentHeap();
@@ -389,7 +393,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
                 heap = NULL;
                 bool result = createHeapCB(i_this);
                 mDoExt_restoreCurrentHeap();
-                JUT_ASSERT(0x48d, result != FALSE);
+                JUT_ASSERT(VERSION_SELECT(1161, 1165, 1165, 1165), result != FALSE);
                 if (result == FALSE) {
                     // "Entry failed with the exact size heap? (Bug)\n"
                     OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
@@ -417,7 +421,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
 
         // "Buggy!\n"
         OSReport_Error("ばぐばぐです\n");
-        JUT_ASSERT(0x4b5, FALSE);
+        JUT_ASSERT(VERSION_SELECT(1201, 1205, 1205, 1205), FALSE);
     }
 
     // "fopAcM_entrySolidHeap failed. [%s]\n"
@@ -445,7 +449,7 @@ void fopAcM_setCullSizeSphere(fopAc_ac_c* i_this, f32 x, f32 y, f32 z, f32 r) {
 
 /* 80025114-80025144       .text fopAcM_addAngleY__FP10fopAc_ac_css */
 bool fopAcM_addAngleY(fopAc_ac_c* i_this, short target, short step) {
-    return cLib_chaseAngleS(&i_this->current.angle.y, target, step);
+    return cLib_chaseAngleS(&fopAcM_GetAngle_p(i_this)->y, target, step);
 }
 
 /* 80025144-800251A0       .text fopAcM_calcSpeed__FP10fopAc_ac_c */
@@ -483,24 +487,24 @@ void fopAcM_posMoveF(fopAc_ac_c* i_this, const cXyz* move) {
 
 /* 80025250-80025278       .text fopAcM_searchActorAngleY__FP10fopAc_ac_cP10fopAc_ac_c */
 s16 fopAcM_searchActorAngleY(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    return cLib_targetAngleY(&i_this->current.pos, &i_other->current.pos);
+    return cLib_targetAngleY(fopAcM_GetPosition_p(i_this), fopAcM_GetPosition_p(i_other));
 }
 
 /* 80025278-800252BC       .text fopAcM_seenActorAngleY__FP10fopAc_ac_cP10fopAc_ac_c */
 s32 fopAcM_seenActorAngleY(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    s16 angleY = cLib_targetAngleY(&i_this->current.pos, &i_other->current.pos);
+    s16 angleY = cLib_targetAngleY(fopAcM_GetPosition_p(i_this), fopAcM_GetPosition_p(i_other));
     return abs((s16)(angleY - i_this->shape_angle.y));
 }
 
 /* 800252BC-80025370       .text fopAcM_searchActorDistance__FP10fopAc_ac_cP10fopAc_ac_c */
 f32 fopAcM_searchActorDistance(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    cXyz delta = i_other->current.pos - i_this->current.pos;
+    cXyz delta = *fopAcM_GetPosition_p(i_other) - *fopAcM_GetPosition_p(i_this);
     return delta.abs();
 }
 
 /* 80025370-800253C0       .text fopAcM_searchActorDistance2__FP10fopAc_ac_cP10fopAc_ac_c */
 f32 fopAcM_searchActorDistance2(fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    cXyz delta = i_other->current.pos - i_this->current.pos;
+    cXyz delta = *fopAcM_GetPosition_p(i_other) - *fopAcM_GetPosition_p(i_this);
     return delta.abs2();
 }
 
@@ -541,37 +545,37 @@ s32 fopAcM_checkCullingBox(Mtx pMtx, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32
     Vec p0 = { x0, y0, z0 };
     Vec p1 = { x1, y1, z1 };
     Mtx viewMtx;
-    MTXConcat(j3dSys.mViewMtx, pMtx, viewMtx);
+    MTXConcat(j3dSys.getViewMtx(), pMtx, viewMtx);
     return mDoLib_clipper::clip(viewMtx, &p1, &p0) != 0;
 }
 
 static l_HIO l_hio;
 
 static fopAc_cullSizeBox l_cullSizeBox[14] = {
-    /* fopAc_CULLBOX_0_e  */ fopAc_MakeCullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
-    /* fopAc_CULLBOX_1_e  */ fopAc_MakeCullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
-    /* fopAc_CULLBOX_2_e  */ fopAc_MakeCullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
-    /* fopAc_CULLBOX_3_e  */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
-    /* fopAc_CULLBOX_4_e  */ fopAc_MakeCullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
-    /* fopAc_CULLBOX_5_e  */ fopAc_MakeCullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
-    /* fopAc_CULLBOX_6_e  */ fopAc_MakeCullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
-    /* fopAc_CULLBOX_7_e  */ fopAc_MakeCullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
-    /* fopAc_CULLBOX_8_e  */ fopAc_MakeCullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
-    /* fopAc_CULLBOX_9_e  */ fopAc_MakeCullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
-    /* fopAc_CULLBOX_10_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
-    /* fopAc_CULLBOX_11_e */ fopAc_MakeCullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
-    /* fopAc_CULLBOX_12_e */ fopAc_MakeCullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
-    /* fopAc_CULLBOX_13_e */ fopAc_MakeCullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
+    /* fopAc_CULLBOX_0_e  */ fopAc_cullSizeBox(cXyz(-40.0f, 0.0f, -40.0f), cXyz(40.0f, 125.0f, 40.0f)),
+    /* fopAc_CULLBOX_1_e  */ fopAc_cullSizeBox(cXyz(-25.0f, 0.0f, -25.0f), cXyz(25.0f, 50.0f, 25.0f)),
+    /* fopAc_CULLBOX_2_e  */ fopAc_cullSizeBox(cXyz(-50.0f, 0.0f, -50.0f), cXyz(50.0f, 100.0f, 50.0f)),
+    /* fopAc_CULLBOX_3_e  */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 150.0f, 75.0f)),
+    /* fopAc_CULLBOX_4_e  */ fopAc_cullSizeBox(cXyz(-100.0f, 0.0f, -100.0f), cXyz(100.0f, 800.0f, 100.0f)),
+    /* fopAc_CULLBOX_5_e  */ fopAc_cullSizeBox(cXyz(-125.0f, 0.0f, -125.0f), cXyz(125.0f, 250.0f, 125.0f)),
+    /* fopAc_CULLBOX_6_e  */ fopAc_cullSizeBox(cXyz(-150.0f, 0.0f, -150.0f), cXyz(150.0f, 300.0f, 150.0f)),
+    /* fopAc_CULLBOX_7_e  */ fopAc_cullSizeBox(cXyz(-200.0f, 0.0f, -200.0f), cXyz(200.0f, 400.0f, 200.0f)),
+    /* fopAc_CULLBOX_8_e  */ fopAc_cullSizeBox(cXyz(-600.0f, 0.0f, -600.0f), cXyz(600.0f, 900.0f, 600.0f)),
+    /* fopAc_CULLBOX_9_e  */ fopAc_cullSizeBox(cXyz(-250.0f, 0.0f, -50.0f), cXyz(250.0f, 450.0f, 50.0f)),
+    /* fopAc_CULLBOX_10_e */ fopAc_cullSizeBox(cXyz(-60.0f, 0.0f, -20.0f), cXyz(40.0f, 130.0f, 150.0f)),
+    /* fopAc_CULLBOX_11_e */ fopAc_cullSizeBox(cXyz(-75.0f, 0.0f, -75.0f), cXyz(75.0f, 210.0f, 75.0f)),
+    /* fopAc_CULLBOX_12_e */ fopAc_cullSizeBox(cXyz(-70.0f, -100.0f, -80.0f), cXyz(70.0f, 240.0f, 100.0f)),
+    /* fopAc_CULLBOX_13_e */ fopAc_cullSizeBox(cXyz(-60.0f, -20.0f, -60.0f), cXyz(60.0f, 160.0f, 60.0f)),
 };
 static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
-    /* fopAc_CULLSPHERE_0_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
-    /* fopAc_CULLSPHERE_1_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
-    /* fopAc_CULLSPHERE_2_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
-    /* fopAc_CULLSPHERE_3_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
-    /* fopAc_CULLSPHERE_4_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
-    /* fopAc_CULLSPHERE_5_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
-    /* fopAc_CULLSPHERE_6_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
-    /* fopAc_CULLSPHERE_7_e */ fopAc_MakeCullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
+    /* fopAc_CULLSPHERE_0_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 80.0f),
+    /* fopAc_CULLSPHERE_1_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 50.0f),
+    /* fopAc_CULLSPHERE_2_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 100.0f),
+    /* fopAc_CULLSPHERE_3_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 150.0f),
+    /* fopAc_CULLSPHERE_4_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 200.0f),
+    /* fopAc_CULLSPHERE_5_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 250.0f),
+    /* fopAc_CULLSPHERE_6_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 300.0f),
+    /* fopAc_CULLSPHERE_7_e */ fopAc_cullSizeSphere(cXyz(0.0f, 0.0f, 0.0f), 400.0f),
 };
 
 static void dummy() {
@@ -608,14 +612,14 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
                 return mDoLib_clipper::clip(pMtx, fopAcM_getCullSizeBoxMax(i_this), fopAcM_getCullSizeBoxMin(i_this));
             }
         } else {
-            fopAc_cullSizeBox& cullBox = l_cullSizeBox[fopAcM_CULLSIZE_IDX(fopAcM_GetCullSize(i_this))];
+            fopAc_cullSizeBox* cullBox = &l_cullSizeBox[fopAcM_CULLSIZE_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                s32 ret = mDoLib_clipper::clip(pMtx, &cullBox.max, &cullBox.min);
+                s32 ret = mDoLib_clipper::clip(pMtx, &cullBox->max, &cullBox->min);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                return mDoLib_clipper::clip(pMtx, &cullBox.max, &cullBox.min);
+                return mDoLib_clipper::clip(pMtx, &cullBox->max, &cullBox->min);
             }
         }
     } else { // Sphere
@@ -632,17 +636,16 @@ s32 fopAcM_cullingCheck(fopAc_ac_c* i_this) {
                 return mDoLib_clipper::clip(pMtx, *fopAcM_getCullSizeSphereCenter(i_this), radius);
             }
         } else {
-            fopAc_cullSizeSphere& cullSphere = l_cullSizeSphere[fopAcM_CULLSIZE_Q_IDX(fopAcM_GetCullSize(i_this))];
+            fopAc_cullSizeSphere* cullSphere = &l_cullSizeSphere[fopAcM_CULLSIZE_Q_IDX(fopAcM_GetCullSize(i_this))];
             if (fopAcM_getCullSizeFar(i_this) > 0.0f) {
                 mDoLib_clipper::changeFar(cullFar * mDoLib_clipper::getFar());
-                f32 radius = cullSphere.radius;
-                Vec center = cullSphere.center;
+                f32 radius = cullSphere->radius;
+                Vec center = cullSphere->center;
                 s32 ret = mDoLib_clipper::clip(pMtx, center, radius);
                 mDoLib_clipper::resetFar();
                 return ret;
             } else {
-                f32 radius = cullSphere.radius;
-                return mDoLib_clipper::clip(pMtx, cullSphere.center, radius);
+                return mDoLib_clipper::clip(pMtx, cullSphere->center, cullSphere->radius);
             }
         }
     }
@@ -777,7 +780,7 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
 fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
-    JUT_ASSERT(2413, 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(VERSION_SELECT(2409, 2413, 2413, 2413), 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
 
@@ -790,7 +793,7 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, 
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
 fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
-    JUT_ASSERT(2458, 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(VERSION_SELECT(2454, 2458, 2458, 2458), 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
 
@@ -803,7 +806,7 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, in
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
 fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
-    JUT_ASSERT(2514, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(VERSION_SELECT(2510, 2514, 2514, 2514), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
 
     static cXyz fairy_offset_tbl[3] = {
         cXyz(40.0f, 0.0f, 0.0f),
@@ -822,9 +825,13 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
         case 0x02:
         case 0x03:
         case 0x04: {
-            int life = dComIfGs_getLife() * 100;
+            int life = dComIfGs_getLife();
+#if VERSION == VERSION_DEMO
+            int max = dComIfGs_getMaxLife();
+#else
             int max = dComIfGs_getMaxLife() & 0xFC;
-            u8 lifePercent = life / max;
+#endif
+            u8 lifePercent = (100 * life) / max;
             if (lifePercent != 0 && lifePercent <= 20) {
                 tableIdx = 4;
             } else if (lifePercent > 20 && lifePercent <= 40) {
@@ -896,13 +903,13 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
 
 /* 80026694-800267C8       .text fopAcM_createRaceItemFromTable__FP4cXyziiiP5csXyzP4cXyzi */
 fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo, csXyz* angle, cXyz* scale, int param_7) {
-    JUT_ASSERT(2660, 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(VERSION_SELECT(2654, 2660, 2660, 2660), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo >= 0x20 && i_itemNo <= 0x3E) {
+        i_itemNo -= 0x20;
         ItemTableList* itemTableList = dComIfGp_getItemTable();
         int itemIdx = (int)cM_rndF(15.9999f);
-        int tableIdx = i_itemNo - 0x20;
-        i_itemNo = itemTableList->mItemTables[tableIdx][itemIdx];
+        i_itemNo = itemTableList->mItemTables[i_itemNo][itemIdx];
     }
     
     if (i_itemNo == 0x3F || i_itemNo == 0xFF) {
@@ -917,7 +924,7 @@ fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBit
 /* 800267C8-8002688C       .text fopAcM_createShopItem__FP4cXyziP5csXyziP4cXyzPFPv_i */
 fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* angle, int roomNo, cXyz* scale,
                            createFunc createFunc) {
-    JUT_ASSERT(2716, 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(VERSION_SELECT(2710, 2716, 2716, 2716), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -927,25 +934,25 @@ fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* angle, int room
 
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
 fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, int param_7) {
-    JUT_ASSERT(2763, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(VERSION_SELECT(2757, 2763, 2763, 2763), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
     i_itemNo = check_itemno(i_itemNo);
-    u32 params = (i_itemBitNo & 0x7F) << 0x08 | (i_itemNo & 0xFF) | (param_7 & 0xF) << 0xF;
+    u32 params = (i_itemBitNo & 0x7F) << 8 | (i_itemNo & 0xFF) << 0 | (param_7 & 0xF) << 15;
     return fopAcM_create(PROC_RACEITEM, params, pos, roomNo, angle, scale);
 }
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
-fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, u8 argFlag) {
-    JUT_ASSERT(2813, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* i_angle, int i_roomNo, cXyz* i_scale, u8 i_argFlag) {
+    JUT_ASSERT(VERSION_SELECT(2807, 2813, 2813, 2813), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    u32 params = (i_itemNo & 0xFF) | (i_itemBitNo & 0x7F) << 0x08 | (argFlag & 0xFF) << 0x10;
-    return fopAcM_create(PROC_Demo_Item, params, pos, roomNo, angle, scale);
+    u32 params = (i_itemNo & 0xFF) << 0 | (i_itemBitNo & 0x7F) << 8 | (i_argFlag & 0xFF) << 16;
+    return fopAcM_create(PROC_Demo_Item, params, pos, i_roomNo, i_angle, i_scale);
 }
 
 /* 80026A68-80026ADC       .text fopAcM_createItemForBoss__FP4cXyziiP5csXyzP4cXyzi */
@@ -961,10 +968,7 @@ fpc_ProcID fopAcM_createItemForBoss(cXyz* pos, int unused, int roomNo, csXyz* an
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
 fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* angle, int action, cXyz* scale) {
-    int switchNo = 0xFF;
-    int switchNo2 = 0xFF;
-    
-    JUT_ASSERT(2915, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(VERSION_SELECT(2909, 2915, 2915, 2915), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
@@ -974,14 +978,16 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     if (angle) {
         prmAngle = *angle;
     }
+    int switchNo = 0xFF;
     prmAngle.z = switchNo;
     
     u8 itemNo = check_itemno(i_itemNo);
+    int switchNo2 = -1;
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
     
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        return fopAcM_create(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        return fopAcM_create(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (int i = 0; i < 2; i++) {
@@ -997,10 +1003,8 @@ fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type,
                              csXyz* angle, int action, cXyz* scale)
 {
-    int switchNo = 0xFF;
-    int switchNo2 = 0xFF;
-    
-    JUT_ASSERT(2995, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+
+    JUT_ASSERT(VERSION_SELECT(2989, 2995, 2995, 2995), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
 
     int i;
     
@@ -1013,14 +1017,16 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
     if (angle) {
         prmAngle = *angle;
     }
+    int switchNo = 0xFF;
     prmAngle.z = switchNo;
 
     u8 itemNo = check_itemno(i_itemNo);
+    int switchNo2 = -1;
     u32 params = MAKE_ITEM_PARAMS(itemNo, i_itemBitNo, switchNo2, type, action);
 
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        return fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        return fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
         for (i = 0; i < 2; i++) {
@@ -1034,11 +1040,12 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
 fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
-    JUT_ASSERT(0xc25, 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(VERSION_SELECT(3103, 3109, 3109, 3109), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e)
         return NULL;
 
-    fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, i_itemNo | (i_itemBitNo & 0xFFFF) << 8, pos, roomNo, angle, scale);
+    u32 params = i_itemNo | (i_itemBitNo & 0xFFFF) << 8;
+    fopAc_ac_c* ac = (fopAc_ac_c*)fopAcM_fastCreate(PROC_SPC_ITEM01, params, pos, roomNo, angle, scale);
     if (ac != NULL) {
         fopAcM_SetSpeedF(ac, speedF);
         ac->speed.y = speedY;
@@ -1058,12 +1065,7 @@ daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, cs
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
 void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale,
                             f32 speedF, f32 speedY, f32 gravity, int i_itemBitNo, createFunc createFunc) {
-    int type = daItemType_0_e;
-    int action = daItemAct_A_e;
-    int switchNo = 0xFF;
-    int switchNo2 = 0xFF;
-    
-    JUT_ASSERT(3201, 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(VERSION_SELECT(3195, 3201, 3201, 3201), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
         return NULL;
     }
@@ -1071,6 +1073,9 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     int i;
     
     u8 itemNo = check_itemno(i_itemNo);
+    int type = daItemType_0_e;
+    int action = daItemAct_A_e;
+    int switchNo2 = -1;
     u8 itemBitNo = i_itemBitNo;
     u32 params = MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action);
 
@@ -1082,7 +1087,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     csXyz prmAngle;
     switch (i_itemNo) {
     case dItem_RECOVER_FAIRY_e:
-        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, 1, pos, roomNo, angle, scale);
+        item = (daItem_c*)fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_TIMER_e, pos, roomNo, angle, scale);
         return item;
     case dItem_TRIPLE_HEART_e:
         // Make the two extra hearts first, then fall-through to make the third heart as normal.
@@ -1092,6 +1097,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
             } else {
                 prmAngle = csXyz::Zero;
             }
+            int switchNo = 0xFF;
             prmAngle.z = switchNo;
             prmAngle.y += (int)cM_rndFX(0x2000);
 
@@ -1121,6 +1127,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     }
 }
 
+#if VERSION > VERSION_DEMO
 /* 80027254-80027280       .text stealItem_CB__FPv */
 BOOL stealItem_CB(void* actor) {
     if (actor) {
@@ -1130,6 +1137,7 @@ BOOL stealItem_CB(void* actor) {
     }
     return TRUE;
 }
+#endif
 
 /* 80027280-800273D4       .text fopAcM_createStealItem__FP4cXyziiP5csXyzi */
 void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo) {
@@ -1158,7 +1166,16 @@ void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_an
         i_itemBitNo = -1;
     }
     
+#if VERSION == VERSION_DEMO
+    daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(p_pos, itemNo, i_roomNo, p_angle, NULL, 0.0f, 0.0f, -6.0f, i_itemBitNo);
+    if (item != NULL) {
+        item->scale.setall(1.0f);
+        item->setFlag(daItem_c::FLAG_HOOK);
+    }
+    return item;
+#else
     return fopAcM_fastCreateItem(p_pos, itemNo, i_roomNo, p_angle, NULL, 0.0f, 0.0f, -6.0f, i_itemBitNo, stealItem_CB);
+#endif
 }
 
 /* 800273D4-8002777C       .text fopAcM_createItemFromEnemyTable__FUsiiP4cXyzP5csXyz */
@@ -1207,7 +1224,11 @@ void* fopAcM_createItemFromEnemyTable(u16 itemTableIdx, int i_itemBitNo, int i_r
     items[itemIdx] = getItemNoByLife(items[itemIdx]);
     
     return fopAcM_fastCreateItem(
+#if VERSION == VERSION_DEMO
+        p_pos, items[itemIdx], i_roomNo, p_angle, &scale,
+#else
         p_pos, items[itemIdx], i_roomNo, NULL, &scale,
+#endif
         cM_rndFX(5.0f), 50.0f + cM_rndFX(10.0f), -6.0f, i_itemBitNo
     );
 }
@@ -1226,11 +1247,13 @@ fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int i_roomNo, csXyz
     }
     
     if (dropChance > randPercent) {
+        u32 params = (u16)itemTableIdx | (i_itemBitNo & 0xFF) << 16;
         daIball_c::remove_old();
-        void* item = fopAcM_fastCreate(
-            PROC_Iball, (u16)itemTableIdx | (i_itemBitNo & 0xFF) << 0x10,
-            p_pos, i_roomNo
-        );
+#if VERSION == VERSION_DEMO
+        void* item = fopAcM_fastCreate(PROC_Iball, params, p_pos, i_roomNo, p_angle);
+#else
+        void* item = fopAcM_fastCreate(PROC_Iball, params, p_pos, i_roomNo);
+#endif
         return fopAcM_GetID(item);
     } else {
         void* item = fopAcM_createItemFromEnemyTable(
@@ -1259,10 +1282,10 @@ fopAc_ac_c * enemySearchJugge(void* ptr, void*) {
 
 /* 80027970-80027A9C       .text fopAcM_myRoomSearchEnemy__FSc */
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
-    JUT_ASSERT(0xe07, roomNo >= 0);
+    JUT_ASSERT(VERSION_SELECT(3569, 3591, 3591, 3591), roomNo >= 0);
 
     scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
-    JUT_ASSERT(0xe0a, roomProc != NULL);
+    JUT_ASSERT(VERSION_SELECT(3572, 3594, 3594, 3594), roomProc != NULL);
 
     fpc_ProcID grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
     fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);
@@ -1273,9 +1296,13 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
 }
 
 /* 80027A9C-80027B24       .text fopAcM_createDisappear__FP10fopAc_ac_cP4cXyzUcUcUc */
-fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_health, u8 i_itemBitNo) {
-    u32 params = (i_itemBitNo & 0xFF) << 0x10 | (i_scale & 0xFF) << 0x08 | (i_health & 0xFF);
+fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_dropType, u8 i_itemBitNo) {
+    u32 params = (i_itemBitNo & 0xFF) << 16 | (i_scale & 0xFF) << 8 | (i_dropType & 0xFF) << 0;
+#if VERSION == VERSION_DEMO
+    fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor));
+#else
     fopAc_ac_c* disappear = (fopAc_ac_c*)fopAcM_fastCreate(PROC_DISAPPEAR, params, p_pos, fopAcM_GetRoomNo(i_actor), fopAcM_GetAngle_p(i_actor));
+#endif
     if (disappear) {
         disappear->itemTableIdx = i_actor->itemTableIdx;
     }
@@ -1293,26 +1320,27 @@ BOOL fopAcM_getGroundAngle(fopAc_ac_c* actor, csXyz* p_angle) {
     pos.y = dComIfG_Bgsp()->GroundCross(&gndChk);
     s16 targetAngleX;
     int targetAngleZ;
-    if (pos.y != C_BG_MIN_HEIGHT) {
-        f32 origY = pos.y + 50.0f;
-        gndChk.GetPointP()->set(pos.x, origY, pos.z + 10.0f);
-        f32 origX = gndChk.GetPointP()->x;
-        f32 origZ = gndChk.GetPointP()->z;
+    if (pos.y != -G_CM3D_F_INF) {
+        Vec chk_pos;
+        chk_pos.x = pos.x;
+        chk_pos.y = pos.y + 50.0f;
+        chk_pos.z = pos.z + 10.0f;
+        gndChk.SetPos(&chk_pos);
         f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != C_BG_MIN_HEIGHT) {
-            targetAngleX = -cM_atan2s(groundY - pos.y, origZ - pos.z);
+        if (groundY != -G_CM3D_F_INF) {
+            targetAngleX = -cM_atan2s(groundY - pos.y, chk_pos.z - pos.z);
         } else {
             pos.y = pos.y; // ?? fakematch?
             ret = FALSE;
         }
         
-        origX = pos.x + 10.0f;
-        origY = pos.y + 50.0f;
-        f32 tempZ = pos.z;
-        gndChk.GetPointP()->set(origX, origY, tempZ);
+        chk_pos.x = pos.x + 10.0f;
+        chk_pos.y = pos.y + 50.0f;
+        chk_pos.z = pos.z;
+        gndChk.SetPos(&chk_pos);
         groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-        if (groundY != C_BG_MIN_HEIGHT) {
-            targetAngleZ = cM_atan2s(groundY - pos.y, origX - pos.x);
+        if (groundY != -G_CM3D_F_INF) {
+            targetAngleZ = cM_atan2s(groundY - pos.y, chk_pos.x - pos.x);
         } else {
             ret = FALSE;
         }
@@ -1386,13 +1414,13 @@ const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
 /* 8002833C-80028410       .text fopAcM_findObjectCB__FP10fopAc_ac_cPv */
 fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
     fopAcM_search_prm* Prm = (fopAcM_search_prm*)i_prm;
-    JUT_ASSERT(4095, Prm);
+    JUT_ASSERT(VERSION_SELECT(4071, 4095, 4095, 4095), Prm);
 
-    dStage_objectNameInf *inf = dStage_searchName(Prm->mpProcName);
+    dStage_objectNameInf *inf = dStage_searchName(Prm->procname);
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->subtype && (Prm->mParamMask == 0 || Prm->mParameter == (fopAcM_GetParam(it) & Prm->mParamMask)))
+    if (inf->mProcName == fopAcM_GetProfName(it) && inf->mSubtype == it->subtype && (Prm->prm_mask == 0 || Prm->parameter == (fopAcM_GetParam(it) & Prm->prm_mask)))
         return it;
 
     return NULL;
@@ -1401,9 +1429,9 @@ fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
 /* 80028410-80028448       .text fopAcM_searchFromName__FPcUlUl */
 fopAc_ac_c* fopAcM_searchFromName(char* pProcName, u32 paramMask, u32 parameter) {
     fopAcM_search_prm param;
-    param.mpProcName = pProcName;
-    param.mParamMask = paramMask;
-    param.mParameter = parameter;
+    param.procname = pProcName;
+    param.prm_mask = paramMask;
+    param.parameter = parameter;
     return fopAcM_Search((fopAcIt_JudgeFunc)fopAcM_findObjectCB, &param);
 }
 
@@ -1412,7 +1440,7 @@ BOOL fopAcM_getWaterY(const cXyz* pPos, f32* pDstWaterY) {
     static dBgS_WtrChk water_check;
     BOOL ret = FALSE;
 
-    *pDstWaterY = C_BG_MIN_HEIGHT;
+    *pDstWaterY = -G_CM3D_F_INF;
 
     cXyz pos;
     pos.x = pPos->x;

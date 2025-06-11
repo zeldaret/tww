@@ -5,6 +5,39 @@
 
 #include "d/actor/d_a_acorn_leaf.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    },
+};
+
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -52,8 +85,8 @@ bool daAleaf_c::_draw() {
 }
 
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
-static cPhs_State daAleaf_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daAleaf_Create(void* i_this) {
+    return ((daAleaf_c*)i_this)->_create();
 }
 
 /* 00000CF4-00000D24       .text daAleaf_Delete__FPv */
@@ -62,18 +95,18 @@ static BOOL daAleaf_Delete(void*) {
 }
 
 /* 00000D24-00000D48       .text daAleaf_Draw__FPv */
-static BOOL daAleaf_Draw(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Draw(void* i_this) {
+    return ((daAleaf_c*)i_this)->_draw();
 }
 
 /* 00000D48-00000D6C       .text daAleaf_Execute__FPv */
-static BOOL daAleaf_Execute(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Execute(void* i_this) {
+    return ((daAleaf_c*)i_this)->_execute();
 }
 
 /* 00000D6C-00000D74       .text daAleaf_IsDelete__FPv */
 static BOOL daAleaf_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daAleafMethodTable = {
@@ -94,7 +127,7 @@ actor_process_profile_definition g_profile_ACORN_LEAF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0118,
+    /* Priority     */ PRIO_ACORN_LEAF,
     /* Actor SubMtd */ &daAleafMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

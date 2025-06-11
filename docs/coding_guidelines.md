@@ -54,7 +54,7 @@ If a translation unit isn't fully decompiled yet, then there's no way to know if
 
 Avoid unnecessary includes, especially in header files. clangd will give you a warning saying "Included header is not used directly (fix available)" if you aren't using a header at all.
 
-Forward declaring types where possible will reduce compile times. So instead of putting all the includes in a actor's header file, like so:
+Forward declaring types where possible will reduce compile times. So instead of putting all the includes in an actor's header file, like so:
 
 ```cpp
 #include "d/d_path.h"

@@ -138,7 +138,7 @@ JAIZelBasic::JAIZelBasic() {
     field_0x0200 = 0;
     field_0x0205 = 0;
     field_0x0066 = 0;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     field_0x00bf = 0;
     field_0x0028 = 0;
     field_0x0062 = 0;
@@ -248,7 +248,7 @@ void JAIZelBasic::resetRecover() {
     field_0x0206 = 0;
     field_0x0207 = 0;
     field_0x0201 = 0;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     field_0x00bf = 0;
 #endif
 }
@@ -995,7 +995,7 @@ void JAIZelBasic::setCameraGroupInfo(u8 param_1) {
     if (field_0x00bd) {
         return;
     }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (field_0x00bf) {
         return;
     }
@@ -1041,7 +1041,7 @@ void JAIZelBasic::changeSeaBgm() {
     if (field_0x022d == 0) { return; }
     if (field_0x01f8 != 0) { return; }
     if (mbLandingDemoStarted) { return; }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (field_0x0062) { return; }
 #endif
     if (!checkDayTime() && checkSeaBgmID() != JA_BGM_SEA_STORM) { return; }
@@ -1074,7 +1074,7 @@ void JAIZelBasic::changeSeaBgm() {
     
     switch (r3) {
     case 4:
-        field_0x0094 = 0.0f;
+        field_0x0094 = 1.0f;
         bgmStart(checkSeaBgmID(), 0x5A, 1);
         break;
     case 1:
@@ -1404,7 +1404,7 @@ void JAIZelBasic::setSceneName(char* param_1, s32 roomNo, s32 param_3) {
         }
         menuOut();
         field_0x0066 = 1;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         field_0x00bf = 0;
 #endif
     } else {
@@ -1532,8 +1532,16 @@ void JAIZelBasic::bgmMute(JAISound**, u32, s32, u32) {
 }
 
 /* 802ABBD0-802ABC3C       .text checkStreamPlaying__11JAIZelBasicFUl */
-int JAIZelBasic::checkStreamPlaying(u32) {
+int JAIZelBasic::checkStreamPlaying(u32 param_1) {
     /* Nonmatching */
+    JAISound* sound = JAInter::StreamMgr::streamUpdate->mpSound;
+    if (!sound) {
+        return false;
+    }
+    if (JAInter::StreamLib::getPlayingFlag() == 0) {
+        return false;
+    }
+    return param_1 == sound->mSoundID;
 }
 
 /* 802ABC3C-802ABC88       .text stWaterLevelUp__11JAIZelBasicFv */

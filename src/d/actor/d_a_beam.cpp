@@ -6,6 +6,69 @@
 #include "d/actor/d_a_beam.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+
+static dCcD_SrcCps cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
+    },
+};
+
+
+static dCcD_SrcCps cps2_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_UNK800,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {
+        /* Start  */ 0.0f, 0.0f, 0.0f,
+        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Radius */ 50.0f,
+    },
+};
+
 
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */
 daBeam_HIO_c::daBeam_HIO_c() {
@@ -78,8 +141,8 @@ void daBeam_c::wait_proc() {
 }
 
 /* 00001C84-00001CA4       .text daBeamCreate__FPv */
-static s32 daBeamCreate(void*) {
-    /* Nonmatching */
+static s32 daBeamCreate(void* i_this) {
+    return ((daBeam_c*)i_this)->_create();
 }
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
@@ -93,8 +156,8 @@ static BOOL daBeamDelete(void*) {
 }
 
 /* 0000298C-000029B0       .text daBeamExecute__FPv */
-static BOOL daBeamExecute(void*) {
-    /* Nonmatching */
+static BOOL daBeamExecute(void* i_this) {
+    return ((daBeam_c*)i_this)->_execute();
 }
 
 /* 000029B0-00002AA0       .text daBeamDraw__FPv */
@@ -104,7 +167,7 @@ static BOOL daBeamDraw(void*) {
 
 /* 00002AA0-00002AA8       .text daBeamIsDelete__FPv */
 static BOOL daBeamIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daBeamMethodTable = {
@@ -125,7 +188,7 @@ actor_process_profile_definition g_profile_Beam = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00DC,
+    /* Priority     */ PRIO_Beam,
     /* Actor SubMtd */ &daBeamMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

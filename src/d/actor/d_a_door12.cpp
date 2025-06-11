@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_door12.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000C0       .text chkMakeKey__10daDoor12_cFv */
 void daDoor12_c::chkMakeKey() {
@@ -172,8 +173,8 @@ BOOL daDoor12_c::draw() {
 }
 
 /* 00001AD0-00001AF0       .text daDoor12_Draw__FP10daDoor12_c */
-static BOOL daDoor12_Draw(daDoor12_c*) {
-    /* Nonmatching */
+static BOOL daDoor12_Draw(daDoor12_c* i_this) {
+    return ((daDoor12_c*)i_this)->draw();
 }
 
 /* 00001AF0-00001BC8       .text daDoor12_Execute__FP10daDoor12_c */
@@ -183,7 +184,7 @@ static BOOL daDoor12_Execute(daDoor12_c*) {
 
 /* 00001BC8-00001BD0       .text daDoor12_IsDelete__FP10daDoor12_c */
 static BOOL daDoor12_IsDelete(daDoor12_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001BD0-00001CC4       .text daDoor12_Delete__FP10daDoor12_c */
@@ -214,7 +215,7 @@ actor_process_profile_definition g_profile_DOOR12 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x012E,
+    /* Priority     */ PRIO_DOOR12,
     /* Actor SubMtd */ &l_daDoor12_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

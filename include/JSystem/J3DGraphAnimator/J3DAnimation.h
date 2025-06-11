@@ -801,16 +801,16 @@ private:
 class J3DFrameCtrl {
 public:
     enum Attribute_e {
-        EMode_NONE,
-        EMode_RESET,
-        EMode_LOOP,
-        EMode_REVERSE,
-        EMode_LOOP_REVERSE,
+        /* 0x0 */ EMode_NONE,
+        /* 0x1 */ EMode_RESET,
+        /* 0x2 */ EMode_LOOP,
+        /* 0x3 */ EMode_REVERSE,
+        /* 0x4 */ EMode_LOOP_REVERSE,
     };
 
     enum State_e {
-        STATE_STOP_E = 0x1,
-        STATE_LOOP_E = 0x2,
+        /* 0x1 */ STATE_STOP_E = 0x1,
+        /* 0x2 */ STATE_LOOP_E = 0x2,
     };
 
     J3DFrameCtrl() { this->init(0); }
@@ -837,7 +837,7 @@ public:
     f32 getFrame() const { return mFrame; }
     void setFrame(f32 frame) { mFrame = frame; }
 
-public:
+private:
     /* 0x04 */ u8 mAttribute;
     /* 0x05 */ u8 mState;
     /* 0x06 */ s16 mStart;

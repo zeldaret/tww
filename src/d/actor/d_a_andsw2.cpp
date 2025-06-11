@@ -7,6 +7,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 enum Action {
     ACT_ON_ALL,
@@ -30,18 +31,18 @@ u8 daAndsw2_c::getEventNo() {
 /* 00000084-00000090       .text getSwbit__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit() {
     // Switch to set.
-    return (base.mParameters & 0x00FF0000) >> 16;
+    return (fopAcM_GetParam(this) & 0x00FF0000) >> 16;
 }
 
 /* 00000090-0000009C       .text getSwbit2__10daAndsw2_cFv */
 u8 daAndsw2_c::getSwbit2() {
     // First switch to check.
-    return (base.mParameters & 0xFF000000) >> 24;
+    return (fopAcM_GetParam(this) & 0xFF000000) >> 24;
 }
 
 /* 0000009C-000000A8       .text getType__10daAndsw2_cFv */
 u8 daAndsw2_c::getType() {
-    return (base.mParameters & 0x0000FF00) >> 8;
+    return (fopAcM_GetParam(this) & 0x0000FF00) >> 8;
 }
 
 /* 000000A8-000000B4       .text getTimer__10daAndsw2_cFv */
@@ -52,7 +53,7 @@ u8 daAndsw2_c::getTimer() {
 /* 000000B4-000000C0       .text getNum__10daAndsw2_cFv */
 u8 daAndsw2_c::getNum() {
     // Number of switches to check.
-    return (base.mParameters & 0x000000FF) >> 0;
+    return (fopAcM_GetParam(this) & 0x000000FF) >> 0;
 }
 
 /* 000000C0-00000130       .text getTopSw__10daAndsw2_cFv */
@@ -76,7 +77,7 @@ BOOL daAndsw2_c::chkAllSw2() {
         return false;
     }
     for (int i = 0; i < num; i++) {
-        if (!dComIfGs_isSwitch(topSw+i, current.roomNo)) {
+        if (!dComIfGs_isSwitch(topSw+i, fopAcM_GetRoomNo(this))) {
             return false;
         }
     }
@@ -92,9 +93,7 @@ static BOOL daAndsw2_actionOnAll(daAndsw2_c* i_this) {
         } else if (i_this->mEventIdx != -1) {
             i_this->setActio(ACT_ORDER);
         } else {
-            int room = i_this->current.roomNo;
-            int sw = i_this->getSwbit();
-            dComIfGs_onSwitch(sw, room);
+            dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
 
             if (i_this->getType() == TYPE_CONTINUOUS) {
                 i_this->setActio(ACT_OFF);
@@ -115,9 +114,7 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
     } else if (i_this->mEventIdx != -1) {
         i_this->setActio(ACT_ORDER);
     } else {
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_onSwitch(sw, room);
+        dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
         
         if (i_this->getType() == TYPE_CONTINUOUS) {
             i_this->setActio(ACT_WAIT);
@@ -130,9 +127,7 @@ static BOOL daAndsw2_actionTimer(daAndsw2_c* i_this) {
 static BOOL daAndsw2_actionOrder(daAndsw2_c* i_this) {
     if (i_this->eventInfo.checkCommandDemoAccrpt()) {
         i_this->setActio(ACT_EVENT);
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_onSwitch(sw, room);
+        dComIfGs_onSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
     } else if (i_this->getType() == TYPE_CONTINUOUS && !i_this->chkAllSw2()) {
         i_this->setActio(ACT_ON_ALL);
     } else {
@@ -158,9 +153,7 @@ static BOOL daAndsw2_actionEvent(daAndsw2_c* i_this) {
 static BOOL daAndsw2_actionOff(daAndsw2_c* i_this) {
     if (!i_this->chkAllSw2()) {
         i_this->setActio(ACT_ON_ALL);
-        int room = i_this->current.roomNo;
-        int sw = i_this->getSwbit();
-        dComIfGs_offSwitch(sw, room);
+        dComIfGs_offSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this));
     }
     return TRUE;
 }
@@ -190,7 +183,7 @@ cPhs_State daAndsw2_c::create() {
     
     switch (getType()) {
     case TYPE_ONE_OFF:
-        if (sw == 0xFF || dComIfGs_isSwitch(sw, current.roomNo)) {
+        if (sw == 0xFF || dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
             // Switch invalid or already set.
             setActio(ACT_WAIT);
         } else {
@@ -203,7 +196,7 @@ cPhs_State daAndsw2_c::create() {
         if (sw == 0xFF) {
             // Switch invalid.
             setActio(ACT_WAIT);
-        } else if (dComIfGs_isSwitch(sw, current.roomNo)) {
+        } else if (dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
             // Switch already set, wait for the condition to no longer be met.
             setActio(ACT_OFF);
         } else {
@@ -271,7 +264,7 @@ actor_process_profile_definition g_profile_ANDSW2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0136,
+    /* Priority     */ PRIO_ANDSW2,
     /* Actor SubMtd */ &l_daAndsw2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

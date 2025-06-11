@@ -13,6 +13,7 @@
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -39,7 +40,7 @@ namespace daObjPaper {
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
-        static const Attr_c L_attr[3] = {
+        static const Attr_c L_attr[] = {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,
@@ -56,7 +57,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x1000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PPOS_BDL_PPOS,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
@@ -70,7 +75,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x8000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PIWA_BDL_PIWA,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
@@ -190,7 +199,7 @@ namespace daObjPaper {
 
     /* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_delete() {
-        dComIfG_resDelete(&mPhs, attr(mType).mResName);
+        dComIfG_resDeleteDemo(&mPhs, attr(mType).mResName);
         return TRUE;
     }
 
@@ -367,7 +376,7 @@ actor_process_profile_definition g_profile_Obj_Paper = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0108,
+    /* Priority     */ PRIO_Obj_Paper,
     /* Actor SubMtd */ &daObjPaper::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

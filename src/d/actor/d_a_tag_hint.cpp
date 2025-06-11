@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_tag_hint.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000000F8       .text getEventNo__12daTag_Hint_cFv */
 void daTag_Hint_c::getEventNo() {
@@ -168,7 +169,7 @@ void daTag_Hint_c::actionWait() {
 
 /* 00001F68-00001F70       .text daTag_Hint_Draw__FP12daTag_Hint_c */
 static BOOL daTag_Hint_Draw(daTag_Hint_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001F70-00001FE4       .text daTag_Hint_Execute__FP12daTag_Hint_c */
@@ -178,7 +179,7 @@ static BOOL daTag_Hint_Execute(daTag_Hint_c*) {
 
 /* 00001FE4-00001FEC       .text daTag_Hint_IsDelete__FP12daTag_Hint_c */
 static BOOL daTag_Hint_IsDelete(daTag_Hint_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001FEC-00002074       .text daTag_Hint_Delete__FP12daTag_Hint_c */
@@ -209,7 +210,7 @@ actor_process_profile_definition g_profile_TAG_HINT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0120,
+    /* Priority     */ PRIO_TAG_HINT,
     /* Actor SubMtd */ &l_daTag_Hint_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

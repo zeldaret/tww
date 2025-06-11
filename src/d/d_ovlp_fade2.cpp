@@ -40,7 +40,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -51,7 +51,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXEnd();
 
     Mtx44 proj;
-    C_MTXPerspective(proj, 60.0f, g_HIO.field_0x0c * 1.33333333f, 100.0f, 100000.0f);
+    C_MTXPerspective(proj, 60.0f, fapGmHIO_getAspectRatio() * (4.0f/3.0f), 100.0f, 100000.0f);
     GXSetProjection(proj, GX_PERSPECTIVE);
 
     GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), mDoGph_gInf_c::getFrameBufferTex(), 320, 240, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -235,15 +235,6 @@ static cPhs_State dOvlpFd2_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-// Fakematch. Manually define this template function here to make it non-weak, fixing the weak function ordering.
-template <>
-s8 cLib_calcTimer<s8>(s8* value) {
-    if (*(s8*)value != 0) {
-        *value = *value - 1;
-    }
-    return *value;
-}
-
 overlap_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,
     (process_method_func)dOvlpFd2_Delete,
@@ -266,7 +257,7 @@ overlap_process_profile_definition g_profile_OVERLAP2 = {
     &l_dOvlpFd2_Method,
 };
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 overlap_process_profile_definition g_profile_OVERLAP3 = {
     fpcLy_ROOT_e,
     2,
@@ -281,3 +272,6 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     &l_dOvlpFd2_Method,
 };
 #endif
+
+// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
+#pragma sym off

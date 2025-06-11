@@ -1,6 +1,6 @@
 /**
  * d_a_hookshot.cpp
- * Hookshot
+ * Item - Hookshot
  */
 
 #include "d/actor/d_a_hookshot.h"
@@ -10,6 +10,7 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h" // IWYU pragma: keep
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -185,9 +186,7 @@ BOOL daHookshot_c::procWait() {
             mSightCps.SetR(5.0f);
             mSightCps.CalcAtVec();
             dComIfG_Ccsp()->Set(&mSightCps);
-            // Using the inline breaks the match.
-            // dComIfG_Ccsp()->SetMass(&mSightCps, 1);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSightCps, 1);
+            dComIfG_Ccsp_SetMass(&mSightCps, 1);
             
             m2A3 = false;
             mCurrProcFunc = &daHookshot_c::procShot;
@@ -280,7 +279,7 @@ BOOL daHookshot_c::procShot() {
                 if (
                     strcmp(dComIfGp_getStartStageName(), "kazeB") == 0 &&
                     (
-                        (sp8C.y < 950.0f && dComIfG_Bgsp()->GetTriPla(mLinChk)->GetNP()->y >= 0.5f) ||
+                        (sp8C.y < 950.0f && cBgW_CheckBGround(dComIfG_Bgsp()->GetTriPla(mLinChk)->GetNP()->y)) ||
                         dComIfG_Bgsp()->GetAttributeCode(mLinChk) == dBgS_Attr_SAND_e
                     )
                 ) {
@@ -297,9 +296,7 @@ BOOL daHookshot_c::procShot() {
         mSightCps.SetR(5.0f);
         mSightCps.CalcAtVec();
         dComIfG_Ccsp()->Set(&mSightCps);
-        // Using the inline breaks the match.
-        // dComIfG_Ccsp()->SetMass(&mSightCps, 1);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mSightCps, 1);
+        dComIfG_Ccsp_SetMass(&mSightCps, 1);
         current.pos = sp8C;
     }
 
@@ -573,7 +570,7 @@ actor_process_profile_definition g_profile_HOOKSHOT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x019E,
+    /* Priority     */ PRIO_HOOKSHOT,
     /* Actor SubMtd */ &l_daHookshot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

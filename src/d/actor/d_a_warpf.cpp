@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_warpf.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -177,28 +178,28 @@ bool daWarpf_c::_draw() {
 }
 
 /* 00002340-00002360       .text daWarpf_Create__FPv */
-static cPhs_State daWarpf_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWarpf_Create(void* i_this) {
+    return ((daWarpf_c*)i_this)->_create();
 }
 
 /* 00002360-00002384       .text daWarpf_Delete__FPv */
-static BOOL daWarpf_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWarpf_Delete(void* i_this) {
+    return ((daWarpf_c*)i_this)->_delete();
 }
 
 /* 00002384-000023A8       .text daWarpf_Draw__FPv */
-static BOOL daWarpf_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWarpf_Draw(void* i_this) {
+    return ((daWarpf_c*)i_this)->_draw();
 }
 
 /* 000023A8-000023CC       .text daWarpf_Execute__FPv */
-static BOOL daWarpf_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWarpf_Execute(void* i_this) {
+    return ((daWarpf_c*)i_this)->_execute();
 }
 
 /* 000023CC-000023D4       .text daWarpf_IsDelete__FPv */
 static BOOL daWarpf_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWarpfMethodTable = {
@@ -219,7 +220,7 @@ actor_process_profile_definition g_profile_WARPFLOWER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A2,
+    /* Priority     */ PRIO_WARPFLOWER,
     /* Actor SubMtd */ &daWarpfMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

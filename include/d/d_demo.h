@@ -85,10 +85,10 @@ public:
         JUT_ASSERT(0x4d, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(name);
     }
-    int JSGGetNodeTransformation(u32 no, Mtx dst) const {
+    bool JSGGetNodeTransformation(u32 no, Mtx dst) const {
         JUT_ASSERT(0x52, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
-        return 1;
+        return true;
     }
     f32 JSGGetAnimationFrameMax() const { return mAnmFrameMax; }
     f32 JSGGetTextureAnimationFrameMax() const { return mTexAnimationFrameMax; }
@@ -181,11 +181,11 @@ public:
     bool checkEnable(u8 mask) { return mFlags & mask; }
     void onEnable(u8 flag) { mFlags |= flag; }
 
-    void getFovy() {}
-    void getRoll() {}
-    void getTarget() {}
-    void getTrans() {}
-    void getUp() {}
+    f32 getFovy() { return mFovy; }
+    f32 getRoll() { return mRoll; }
+    cXyz& getTarget() { return mTargetPosition; }
+    cXyz& getTrans() { return mViewPosition; }
+    cXyz& getUp() { return mUpVector; }
 
 private:
     /* 0x04 */ u8 mFlags;
@@ -291,8 +291,8 @@ public:
     dDemo_fog_c* createFog();
     void remove();
 
+    dDemo_camera_c* getCamera() { return mpCamera; }
     void createEditorCamera() {}
-    void getCamera() {}
     void getEditorCamera() {}
     void removeEditorCamera() {}
 
@@ -300,7 +300,7 @@ private:
     /* 0x00 */ u8 mNumActor;
     /* 0x01 */ u8 mNumLight;
     /* 0x04 */ dDemo_actor_c* mpActors[32];
-    /* 0x84 */ dDemo_camera_c* mpActiveCamera;
+    /* 0x84 */ dDemo_camera_c* mpCamera;
     /* 0x88 */ dDemo_ambient_c* mpAmbient;
     /* 0x8C */ dDemo_light_c* mpLight[8];
     /* 0xAC */ dDemo_fog_c* mpFog;
@@ -352,6 +352,10 @@ private:
 };
 
 class mDoExt_McaMorf;
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8);
+#if VERSION == VERSION_DEMO
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL);
+#else
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL, u32 = 0, s8 = 0);
+#endif
 
 #endif /* D_DEMO_H */

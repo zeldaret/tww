@@ -5,6 +5,7 @@
 
 #include "d/actor/d_a_obj_light.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
 void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -104,28 +105,28 @@ bool daObjLight::Act_c::_draw() {
 namespace daObjLight {
 namespace {
 /* 00001528-00001548       .text Mthd_Create__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjLight::Act_c*)i_this)->_create();
 }
 
 /* 00001548-0000156C       .text Mthd_Delete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjLight::Act_c*)i_this)->_delete();
 }
 
 /* 0000156C-00001590       .text Mthd_Execute__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjLight::Act_c*)i_this)->_execute();
 }
 
 /* 00001590-000015B4       .text Mthd_Draw__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjLight::Act_c*)i_this)->_draw();
 }
 
 /* 000015B4-000015BC       .text Mthd_IsDelete__Q210daObjLight27@unnamed@d_a_obj_light_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {
@@ -148,7 +149,7 @@ actor_process_profile_definition g_profile_Obj_Light = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0041,
+    /* Priority     */ PRIO_Obj_Light,
     /* Actor SubMtd */ &daObjLight::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

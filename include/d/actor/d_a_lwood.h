@@ -14,8 +14,8 @@ public:
     inline bool _execute();
     f32 getYureScale() const { return mScale; }
     s16 getYureTimer() const { return mTimer; }
-    void setMoveBGMtx(); // weak but not inlined?
-    void set_mtx(); // weak but not inlined?
+    inline void setMoveBGMtx(); // weak but not inlined
+    inline void set_mtx(); // weak but not inlined
 
     BOOL CreateHeap();
     void CreateInit();
