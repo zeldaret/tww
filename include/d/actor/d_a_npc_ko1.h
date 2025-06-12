@@ -108,29 +108,29 @@ public:
     s32 set_action(ActionFunc, void*);
     void clrSpd();
     void setStt(signed char);
-    bool wait_1();
-    bool wait_2();
-    bool wait_3();
-    bool wait_4();
-    bool wait_5(signed char);
-    bool wait_6();
-    bool wait_7();
-    bool wait_9();
-    bool wait_a();
-    bool walk_1();
-    bool walk_2(signed char, signed char);
-    bool walk_3();
-    void swim_1();
-    void swim_2();
-    void attk_1();
-    void attk_2(signed char, signed char);
-    void attk_3();
-    void down_1(signed char);
-    void talk_1();
-    void talk_2();
-    void manzai();
-    void neru_1();
-    void neru_2();
+    BOOL wait_1();
+    BOOL wait_2();
+    BOOL wait_3();
+    BOOL wait_4();
+    BOOL wait_5(signed char);
+    BOOL wait_6();
+    BOOL wait_7();
+    BOOL wait_9();
+    BOOL wait_a();
+    BOOL walk_1();
+    BOOL walk_2(signed char, signed char);
+    BOOL walk_3();
+    BOOL swim_1();
+    BOOL swim_2();
+    BOOL attk_1();
+    BOOL attk_2(signed char, signed char);
+    BOOL attk_3();
+    BOOL down_1(signed char);
+    BOOL talk_1();
+    BOOL talk_2();
+    BOOL manzai();
+    BOOL neru_1();
+    BOOL neru_2();
     int hana_action1(void*);
     int hana_action2(void*);
     int hana_action3(void*);
@@ -150,7 +150,7 @@ public:
     void create_hed_Anm();
     void create_bln_Anm();
     void create_itm_Mdl();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
     u8 pad6C4[0x8];
@@ -175,7 +175,7 @@ public:
     /*0x748*/ dNpc_EventCut_c mEventCut;
     fpc_ProcID field_0x7B4[2];
     u8 field_0x7BC;
-    s32 field_0x7C0;
+    fpc_ProcID field_0x7C0;
     cXyz field_0x7C4;
     csXyz field_0x7D0;
     csXyz field_0x7D6;
@@ -223,7 +223,7 @@ public:
     u8 field_0x86C;
     u8 field_0x86D;
     s32 field_0x870;
-    u8 field_0x874;
+    bool field_0x874;
     u8 field_0x875; 
     bool field_0x876; 
     u8 field_0x877;
@@ -284,7 +284,7 @@ public:
 
 class daNpc_Ko1_HIO_c: public mDoHIO_entry_c {
     struct hio_prm_child_c{
-        u8 pad[0x58];
+        u32 pad[0x16];
     };
 public:
     daNpc_Ko1_HIO_c();
