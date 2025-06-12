@@ -80,7 +80,7 @@ BOOL daObjTable::Act_c::Delete() {
 /* 000003BC-00000408       .text Mthd_Delete__Q210daObjTable5Act_cFv */
 BOOL daObjTable::Act_c::Mthd_Delete() {
     BOOL ret = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return ret;
 }
 
