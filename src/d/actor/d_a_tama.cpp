@@ -79,7 +79,7 @@ BOOL daTama_c::_execute() {
                     if (hitac != NULL) {
                         if (hitac != partner) {
                             if (fopAcM_GetName(hitac) == PROC_PLAYER) {
-                                partner->field_0x6ba = 1;
+                                partner->field_0x6BA = 1;
                             }
                         } else {
                             del = false;
