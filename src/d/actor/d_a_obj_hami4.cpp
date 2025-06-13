@@ -10,8 +10,8 @@
 #include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(daObjHami4_c* actor) {
-    actor->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
+    ((daObjHami4_c*)actor)->CreateHeap();
     /* Nonmatching */
 }
 
@@ -61,7 +61,23 @@ void daObjHami4_c::daObjHami4_open_stop() {
 }
 
 /* 000007B0-00000870       .text daObjHami4_Create__FPv */
-static cPhs_State daObjHami4_Create(void*) {
+static cPhs_State daObjHami4_Create(void* i_this) {
+    cPhs_State status;
+    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
+    
+    fopAcM_SetupActor(obj, daObjHami4_c);
+    for (int i = 0; i < 4; i++){
+        obj->mdBgW[i] = NULL;
+    }
+    status = dComIfG_resLoad(&obj->mPhs, "Hami4");
+    if (status == cPhs_COMPLEATE_e) {
+        if(!fopAcM_entrySolidHeap(obj, CheckCreateHeap, 0x4900)) {
+            status = cPhs_ERROR_e;
+        } else {
+            obj->CreateInit();
+        }
+    }
+    return status;
     /* Nonmatching */
 }
 
