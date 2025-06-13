@@ -40,35 +40,26 @@ s16 daTag_Ba1_XyEvent_cB(void* obj, int param) {
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
 int daTag_Ba1_c::XyEvent_cB(int) {
     field_0x292 = 0;
-    return (int)(&field_0x290)[field_0x292];
+    return (&field_0x290)[field_0x292];
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
-BOOL daTag_Ba1_c::createInit() {
-    /* Nonmatching */
-    uint iVar1 = dComIfGs_isEventBit(0x520);
-    BOOL bVar3;
-
-    uint iVar2 = iVar1 - 1;
-    iVar2 = iVar1 - iVar2;
-    if (!(iVar2 & 0xFF))
-        bVar3 = FALSE;
-    else {
-        iVar1 = dComIfGs_isEventBit(0x2A20);
-        
-        iVar1 = iVar1 == 0;
-        if (iVar1) {
-            attention_info.flags = AttnFlag_00000008; //Action_Talk
-            attention_info.distances[3] = 0x1A;
-            field_0x290 = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xFF);
-            eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
-            eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
-        }
-
-        bVar3 = iVar1;
+bool daTag_Ba1_c::createInit() {
+    bool r3 = dComIfGs_isEventBit(0x520);
+    if (!r3) {
+        return r3;
     }
 
-    return bVar3;
+    bool r30 = dComIfGs_isEventBit(0x2A20) == FALSE;
+    if (r30) {
+        attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
+        attention_info.distances[3] = 0x1A;
+        field_0x290 = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xFF);
+        eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
+        eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
+    }
+
+    return r30;
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
@@ -79,14 +70,15 @@ BOOL daTag_Ba1_c::_draw() {
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
 BOOL daTag_Ba1_c::_execute() {
     /* Nonmatching */
-    int iVar1 = -1;
+    int r3 = -1;
+    if (dComIfGp_event_runCheck() != FALSE && !eventInfo.checkCommandTalk())
+        r3 = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
 
-    if (dComIfGp_event_getMode() && (eventInfo.mCommand != 0x1)) //InTalk
-        iVar1 = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
-    if (iVar1 >= 0 && dComIfGp_evmng_endCheck((&field_0x290)[field_0x292])) {
+    if (r3 >= 0 && dComIfGp_evmng_endCheck((&field_0x290)[field_0x292])) {
         dComIfGp_event_reset();
         fopAcM_delete(this);
     }
+
     return TRUE;
 }
 
@@ -100,15 +92,14 @@ BOOL daTag_Ba1_c::_delete() {
 
 /* 00000394-00000454       .text _create__11daTag_Ba1_cFv */
 cPhs_State daTag_Ba1_c::_create() {
-    if (l_HIO.mRefCount < 0) {
+    if (l_HIO.mRefCount < 0) 
         l_HIO.mNo = mDoHIO_createChild("おばあちゃんタグ", &l_HIO);
-    }
     l_HIO.mRefCount++;
 
     fopAcM_SetupActor(this, daTag_Ba1_c);
 
-    u8 cVar2 = createInit();
-    if (cVar2 == FALSE)
+    bool r3 = createInit();
+    if (r3 == FALSE)
         return cPhs_ERROR_e;
     else
         return cPhs_COMPLEATE_e;

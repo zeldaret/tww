@@ -8,7 +8,7 @@ class daTag_Ba1_c : public fopAc_ac_c {
 public:
     BOOL XyCheck_cB(int i_itemBtn);
     int XyEvent_cB(int);
-    BOOL createInit();
+    bool createInit();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
