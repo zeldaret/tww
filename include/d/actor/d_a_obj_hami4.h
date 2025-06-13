@@ -25,6 +25,9 @@ public:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel * mpModels[4];
     /* 0x2A8 */ dBgW* mdBgW[4];
-};
+    /* 0x2B8 */ Mtx field_0x2B8[4];
+    /* 0x378 */ int field_0x378;
+    /* 0x37C */ f32 field_0x37C;
+};  // Size: 0x380
 
 #endif /* D_A_OBJ_HAMI4_H */

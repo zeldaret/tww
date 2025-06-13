@@ -17,6 +17,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
 void daObjHami4_c::CreateHeap() {
+    // getObjectRes()
+    int modelData;
+    JUT_ASSERT(0x5f, modelData != 0);
+    // JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_obj_hami4.cpp",0x5f,"modelData != 0");
     /* Nonmatching */
 }
 
@@ -37,6 +41,19 @@ void daObjHami4_c::CreateInit() {
 
 /* 00000420-000005B8       .text set_mtx__12daObjHami4_cFv */
 void daObjHami4_c::set_mtx() {
+    short sVar3;
+    sVar3 = 0;
+    for (int i = 0; i < 4; i++){
+        mpModels[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y + sVar3);
+        mDoMtx_stack_c::transM(-field_0x37C * JMASSin(0x2000), 0.0, -field_0x37C * JMASCos(0x2000));
+        mDoMtx_stack_c::copy(mpModels[i]->getBaseTRMtx());
+        mDoMtx_stack_c::copy(field_0x2B8[i]);
+        mdBgW[i]->Move();
+        sVar3 = sVar3 + 0x4000;
+    }
+    return;
     /* Nonmatching */
 }
 
@@ -111,7 +128,23 @@ static BOOL daObjHami4_Draw(void* i_this) {
 }
 
 /* 000009DC-00000A58       .text daObjHami4_Execute__FPv */
-static BOOL daObjHami4_Execute(void*) {
+static BOOL daObjHami4_Execute(void* i_this) {
+    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
+    switch (obj->field_0x378) {
+        case 0: 
+            obj->daObjHami4_close_stop();
+            break;
+        case 1: 
+            obj->daObjHami4_open_demo_wait();
+            break;
+        case 2: 
+            obj->daObjHami4_open_demo();
+            break;
+        case 3:
+            obj->daObjHami4_open_stop();
+    }
+    obj->set_mtx();
+    return 1;
     /* Nonmatching */
 }
 
