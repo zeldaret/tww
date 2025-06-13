@@ -59,6 +59,13 @@ void daObjHami4_c::set_mtx() {
 
 /* 000005B8-00000634       .text daObjHami4_close_stop__12daObjHami4_cFv */
 void daObjHami4_c::daObjHami4_close_stop() {
+    int switchIndex;
+    
+    switchIndex = prm_get_swSave();
+    if (fopAcM_isSwitch(this, switchIndex)) {
+        fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
+        field_0x378 = 1;
+    }
     /* Nonmatching */
 }
 

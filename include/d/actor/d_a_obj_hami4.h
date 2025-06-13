@@ -1,16 +1,27 @@
 #ifndef D_A_OBJ_HAMI4_H
 #define D_A_OBJ_HAMI4_H
 
+#include "d/d_a_obj.h"
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
 class daObjHami4_c : public fopAc_ac_c {
 public:
+
+    enum Prm_e {
+        PRM_SWITCH_W = 0x08,
+        PRM_SWITCH_S = 0x00,
+
+        PRM_TYPE_W = 0x01,
+        PRM_TYPE_S = 0x10,
+    };
+
+
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void prm_get_swSave() const {}
+    int prm_get_swSave() const {return daObj::PrmAbstract(this, PRM_SWITCH_W, PRM_SWITCH_S);}
 
     void CreateHeap();
     void CreateInit();
