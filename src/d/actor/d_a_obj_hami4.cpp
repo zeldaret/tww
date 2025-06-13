@@ -96,7 +96,17 @@ static BOOL daObjHami4_Delete(void* i_this) {
 }
 
 /* 00000918-000009DC       .text daObjHami4_Draw__FPv */
-static BOOL daObjHami4_Draw(void*) {
+static BOOL daObjHami4_Draw(void* i_this) {
+    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
+    
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &obj->current.pos, &obj->tevStr);
+    dComIfGd_setListBG();
+    for (int i = 0; i < 4; i++){
+        g_env_light.setLightTevColorType(obj->mpModels[i],&obj->tevStr);
+        mDoExt_modelUpdateDL(obj->mpModels[i]);
+    }
+    dComIfGd_setListInvisisble();
+    return TRUE;
     /* Nonmatching */
 }
 
