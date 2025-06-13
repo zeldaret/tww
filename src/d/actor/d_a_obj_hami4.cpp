@@ -82,7 +82,16 @@ static cPhs_State daObjHami4_Create(void* i_this) {
 }
 
 /* 00000870-00000918       .text daObjHami4_Delete__FPv */
-static BOOL daObjHami4_Delete(void*) {
+static BOOL daObjHami4_Delete(void* i_this) {
+    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
+    
+    for (int i = 0; i < 4; i++){
+        if (obj->mdBgW[i] != NULL && obj->mdBgW[i]->ChkUsed()) {
+            dComIfG_Bgsp()->Release(obj->mdBgW[i]);
+        }
+    }
+    dComIfG_resDelete(&obj->mPhs,"Hami4");
+    return 1;
     /* Nonmatching */
 }
 
