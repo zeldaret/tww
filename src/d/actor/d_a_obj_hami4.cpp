@@ -64,11 +64,26 @@ void daObjHami4_c::daObjHami4_close_stop() {
 
 /* 00000634-00000714       .text daObjHami4_open_demo_wait__12daObjHami4_cFv */
 void daObjHami4_c::daObjHami4_open_demo_wait() {
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        field_0x378 = 2;
+        mDoAud_seStart(0x806);
+        fopAcM_seStartCurrent(this, JA_SE_OBJ_SLIDE_AMI_OPEN, 0);
+    } else {
+        fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
+    }
     /* Nonmatching */
 }
 
 /* 00000714-000007AC       .text daObjHami4_open_demo__12daObjHami4_cFv */
 void daObjHami4_c::daObjHami4_open_demo() {
+  
+    field_0x37C += 10;
+    if (field_0x37C >= 1500) {
+        field_0x37C = 1500;
+        field_0x378 = 3;
+        dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
+        dComIfGp_event_reset();
+    }
     /* Nonmatching */
 }
 
