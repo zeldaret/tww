@@ -8,7 +8,7 @@ class daTag_Ba1_c : public fopAc_ac_c {
 public:
     BOOL XyCheck_cB(int i_itemBtn);
     int XyEvent_cB(int);
-    u8 createInit();
+    BOOL createInit();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
@@ -20,6 +20,10 @@ public:
 };  // Size: 0x294
 
 class daTag_Ba1_HIO_c : public JORReflexible {
+    struct hio_prm_c {
+        u8 field_0x00;
+        //Size: 0x01
+    };
 public:
     daTag_Ba1_HIO_c();
     virtual ~daTag_Ba1_HIO_c() {}

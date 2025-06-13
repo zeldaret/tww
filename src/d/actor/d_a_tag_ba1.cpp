@@ -10,14 +10,14 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 
-static const char* l_evn_tbl = "Use Fairy";
+static daTag_Ba1_HIO_c::hio_prm_c a_prm_tbl = { 0 };
+static const char* l_evn_tbl = "Use_Fairy";
 
 static daTag_Ba1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
 daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
-    /* Nonmatching */
-    memcpy(&field_0x0C, NULL, 1);
+    memcpy(&field_0x0C, &a_prm_tbl, 1);
     mNo = -1;
     mRefCount = -1;
 }
@@ -44,25 +44,30 @@ int daTag_Ba1_c::XyEvent_cB(int) {
 }
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
-u8 daTag_Ba1_c::createInit() {
+BOOL daTag_Ba1_c::createInit() {
     /* Nonmatching */
+    uint iVar1 = dComIfGs_isEventBit(0x520);
     BOOL bVar3;
 
-    BOOL iVar1 = dComIfGs_isEventBit(0x520);
-    iVar1--;
-    if (iVar1 == TRUE)
+    uint iVar2 = iVar1 - 1;
+    iVar2 = iVar1 - iVar2;
+    if (!(iVar2 & 0xFF))
         bVar3 = FALSE;
     else {
-        iVar1 = dComIfGs_isEventBit(0x2a20);
-        bVar3 = iVar1 == FALSE;
+        iVar1 = dComIfGs_isEventBit(0x2A20);
+        
+        iVar1 = iVar1 == 0;
         if (iVar1) {
             attention_info.flags = AttnFlag_00000008; //Action_Talk
-            attention_info.distances[3] = 0x1a;
-            field_0x290 = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xff);
+            attention_info.distances[3] = 0x1A;
+            field_0x290 = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xFF);
             eventInfo.mpCheckCB = daTag_Ba1_XyCheck_cB;
             eventInfo.mpEventCB = daTag_Ba1_XyEvent_cB;
         }
+
+        bVar3 = iVar1;
     }
+
     return bVar3;
 }
 
@@ -76,10 +81,10 @@ BOOL daTag_Ba1_c::_execute() {
     /* Nonmatching */
     int iVar1 = -1;
 
-    if ((dComIfGp_event_getMode() != 0) && (eventInfo.mCommand != 0x1)) //InTalk
+    if (dComIfGp_event_getMode() && (eventInfo.mCommand != 0x1)) //InTalk
         iVar1 = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
     if (iVar1 >= 0 && dComIfGp_evmng_endCheck((&field_0x290)[field_0x292])) {
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         fopAcM_delete(this);
     }
     return TRUE;
