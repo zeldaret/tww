@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_HAMI4_H
 #define D_A_OBJ_HAMI4_H
 
+#include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
 class daObjHami4_c : public fopAc_ac_c {
@@ -21,6 +22,9 @@ public:
 
 public:
     /* Place member variables here */
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel * mpModels[4];
+    /* 0x2A8 */ dBgW* mdBgW[4];
 };
 
 #endif /* D_A_OBJ_HAMI4_H */

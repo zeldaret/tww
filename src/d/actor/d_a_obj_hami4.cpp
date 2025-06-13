@@ -4,11 +4,14 @@
 //
 
 #include "d/actor/d_a_obj_hami4.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(daObjHami4_c* actor) {
+    actor->CreateHeap();
     /* Nonmatching */
 }
 
@@ -19,6 +22,16 @@ void daObjHami4_c::CreateHeap() {
 
 /* 00000374-00000420       .text CreateInit__12daObjHami4_cFv */
 void daObjHami4_c::CreateInit() {
+    
+    this->cullMtx = mpModels[0]->getBaseTRMtx();
+    for (int i = 0; i < 4; i++){
+        dComIfG_Bgsp()->Regist(mdBgW[i],this);
+    }
+    fopAcM_setCullSizeBox
+                (this, -10000.0,-100.0,-10000.0,10000.0,100.0,10000.0);
+    this->cullSizeFar = 1.0;
+    set_mtx();
+    return;
     /* Nonmatching */
 }
 
