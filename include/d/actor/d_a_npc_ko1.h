@@ -38,14 +38,14 @@ public:
     bool init_BOU_1();
     bool init_BOU_2();
     bool init_BOU_3();
-    s8 createInit();
+    bool createInit();
     void setMtx(bool);
     s32 anmNum_toResID(int);
     s32 headAnmNum_toResID(int);
     s32 balloon_anmNum_toResID(int);
     s32 btpNum_toResID(int);
     bool setBtp(bool, int);
-    void iniTexPttrnAnm(bool);
+    bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
     void setAnm_tex(signed char);
     s32 setAnm_anm(anm_prm_c*);
@@ -103,7 +103,7 @@ public:
     bool event_action();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
     s32 set_action(ActionFunc, void*);
     void clrSpd();
@@ -140,128 +140,135 @@ public:
     int wait_action2(void*);
     int wait_action3(void*);
     int wait_action4(void*);
-    void demo();
+    u8 demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void create_Anm();
-    void create_hed_Anm();
-    void create_bln_Anm();
-    void create_itm_Mdl();
+    J3DModelData* create_Anm();
+    J3DModelData* create_hed_Anm();
+    J3DModelData* create_bln_Anm();
+    bool create_itm_Mdl();
     BOOL CreateHeap();
 
 public:
-    u8 pad6C4[0x8];
-    s8 field_0x6CC;
-    s8 field_0x6CD;
-    s8 field_0x6CE;       
-    s8 field_0x6CF;
-    s8 field_0x6D0;
-    s8 field_0x6D1;
-    Mtx field_0x6D4;
-    mDoExt_McaMorf* field_0x704;  
-    J3DModel* field_0x708;
-    u32 pad70C;
-    mDoExt_McaMorf* field_0x710;
-    /*0x714*/ J3DAnmTexPattern* m_hed_tex_pttrn;
-    mDoExt_btpAnm field_0x718;
-    u8 field_0x72C;
-    s16 field_0x72E;
-    ActionFunc field_0x730;
-    /*0x73C*/ dNpc_PathRun_c mPathRun;
-    /*0x744*/ void* field_0x744;
-    /*0x748*/ dNpc_EventCut_c mEventCut;
-    fpc_ProcID field_0x7B4[2];
-    u8 field_0x7BC;
-    fpc_ProcID field_0x7C0;
-    cXyz field_0x7C4;
-    csXyz field_0x7D0;
-    csXyz field_0x7D6;
-    cXyz field_0x7DC;
-    cXyz field_0x7E8;
-    cXyz field_0x7F4;
-    u8 pad800[0x805-0x800];
-    u8 field_0x805;
-    u8 pad806[0x80C-0x806];
-    cXyz field_0x80C;
-    cXyz field_0x818;
-    f32 field_0x824;
-    f32 field_0x828;
-    f32 field_0x82C;
-    f32 field_0x830;
-    f32 field_0x834;
-    f32 field_0x838;
-    f32 field_0x83C;
-    s16 field_0x840;
-    s16 field_0x842;
-    s16 field_0x844;
-    s16 field_0x846;
-    u32 field_0x848;
-    u16 field_0x84C;
-    s16 field_0x84E;
-    s16 field_0x850;
-    s16 field_0x852;
-    s16 field_0x854;
-    s16 field_0x856;
-    s16 field_0x858;
-    s16 field_0x85A;
-    s16 field_0x85C;
-    s8 field_0x85E;
-    s8 field_0x85F;
-    s8 field_0x860;
-    s8 field_0x861;
-    s8 field_0x862;
-    u8 field_0x863;
-    u8 field_0x864;
-    u8 field_0x865;
-    u8 pad866[0x869 - 0x866]; 
-    u8 field_0x869;   
-    u8 field_0x86A;   
-    u8 field_0x86B;      
-    u8 field_0x86C;
-    u8 field_0x86D;
-    s32 field_0x870;
-    bool field_0x874;
-    u8 field_0x875; 
-    bool field_0x876; 
-    u8 field_0x877;
-    dPa_rippleEcallBack field_0x878;
-    JPABaseEmitter* field_0x88C;
-    JPABaseEmitter* field_0x890;
-    JPABaseEmitter* field_0x894;
-    s8 field_0x898;
-    u8 field_0x899;
-    s8 field_0x89A;
-    u8 field_0x89B;
-    u8 field_0x89C;
-    u8 field_0x89D;
-    s8 field_0x89E;
-    s8 field_0x89F;
-    u8 pad8A0;
-    s8 field_0x8A1;
-    s8 field_0x8A2;
-    s8 field_0x8A3;
-    s8 field_0x8A4;
-    s8 field_0x8A5;  
-    s8 field_0x8A6;
-    s8 field_0x8A7;
-    s8 field_0x8A8;
-    s8 field_0x8A9;
-    s8 field_0x8AA;
-    s8 field_0x8AB;
+    /*0x6C4*/   request_of_phase_process_class field_0x6C4;
+    /*0x6CC*/   s8 m_hed_jnt_num;
+    /*0x6CD*/   s8 m_bbone_jnt_num;
+    /*0x6CE*/   s8 m_armR2_jnt_num;       
+    /*0x6CF*/   s8 m_hed_2_jnt_num;
+    /*0x6D0*/   s8 m_bln_loc_jnt_num;
+    /*0x6D1*/   s8 m_bln_jnt_num;
+    /*0x6D4*/   Mtx field_0x6D4;
+    /*0x704*/   mDoExt_McaMorf* mBlnAnm;  
+    /*0x708*/   J3DModel* field_0x708;
+    /*0x70C*/   u32 mShadowID;
+    /*0x710*/   mDoExt_McaMorf* field_0x710;
+    /*0x714*/   J3DAnmTexPattern* m_hed_tex_pttrn;
+    /*0x718*/   mDoExt_btpAnm mBtpAnm;
+    /*0x72C*/   u8 mBtpFrame;
+    /*0x72E*/   s16 field_0x72E;
+    /*0x730*/   ActionFunc field_0x730;
+    /*0x73C*/   dNpc_PathRun_c mPathRun;
+    /*0x744*/   void* field_0x744;
+    /*0x748*/   dNpc_EventCut_c mEventCut;
+    /*0x7B4*/   fpc_ProcID field_0x7B4[2];
+    /*0x7BC*/   u8 field_0x7BC;
+    /*0x7C0*/   fpc_ProcID field_0x7C0;
+    /*0x7C4*/   cXyz field_0x7C4;
+    /*0x7D0*/   csXyz field_0x7D0;
+    /*0x7D6*/   csXyz field_0x7D6;
+    /*0x7DC*/   cXyz field_0x7DC;
+    /*0x7E8*/   cXyz field_0x7E8;
+    /*0x7F4*/   cXyz field_0x7F4;
+    /*0x800*/   u8 pad800[0x805-0x800];
+    /*0x805*/   u8 field_0x805;
+    /*0x806*/   u8 pad806[0x80C-0x806];
+    /*0x80C*/   cXyz field_0x80C;
+    /*0x818*/   cXyz field_0x818;
+    /*0x824*/   f32 field_0x824;
+    /*0x828*/   f32 field_0x828;
+    /*0x82C*/   f32 field_0x82C;
+    /*0x830*/   f32 field_0x830;
+    /*0x834*/   f32 field_0x834;
+    /*0x838*/   f32 field_0x838;
+    /*0x83C*/   f32 field_0x83C;
+    /*0x840*/   s16 field_0x840;
+    /*0x842*/   s16 field_0x842;
+    /*0x844*/   s16 field_0x844;
+    /*0x846*/   s16 field_0x846;
+    /*0x848*/   u32 field_0x848;
+    /*0x84C*/   u16 field_0x84C;
+    /*0x84E*/   s16 field_0x84E;
+    /*0x850*/   s16 field_0x850;
+    /*0x852*/   s16 field_0x852;
+    /*0x854*/   s16 field_0x854;
+    /*0x856*/   s16 field_0x856;
+    /*0x858*/   s16 field_0x858;
+    /*0x85A*/   s16 field_0x85A;
+    /*0x85C*/   s16 field_0x85C;
+    /*0x85E*/   s8 field_0x85E;
+    /*0x85F*/   s8 field_0x85F;
+    /*0x860*/   s8 field_0x860;
+    /*0x861*/   s8 field_0x861;
+    /*0x862*/   s8 field_0x862;
+    /*0x863*/   u8 field_0x863;
+    /*0x864*/   u8 field_0x864;
+    /*0x865*/   u8 field_0x865;
+    /*0x866*/   u8 field_0x866;
+    /*0x867*/   u8 field_0x867;
+    /*0x868*/   u8 field_0x868; 
+    /*0x869*/   u8 field_0x869;   
+    /*0x86A*/   u8 field_0x86A;   
+    /*0x86B*/   u8 field_0x86B;      
+    /*0x86C*/   u8 field_0x86C;
+    /*0x86D*/   u8 field_0x86D;
+    /*0x86E*/   u8 field_0x86E;
+    /*0x870*/   s32 field_0x870;
+    /*0x874*/   bool field_0x874;
+    /*0x875*/   u8 field_0x875; 
+    /*0x876*/   bool field_0x876; 
+    /*0x877*/   u8 field_0x877;
+    /*0x878*/   dPa_rippleEcallBack field_0x878;
+    /*0x88C*/   JPABaseEmitter* field_0x88C;
+    /*0x890*/   JPABaseEmitter* field_0x890;
+    /*0x894*/   JPABaseEmitter* field_0x894;
+    /*0x88C*/   s8 field_0x898;
+    /*0x899*/   u8 field_0x899;
+    /*0x89A*/   s8 field_0x89A;
+    /*0x89B*/   u8 field_0x89B;
+    /*0x89C*/   u8 field_0x89C;
+    /*0x89D*/   u8 field_0x89D;
+    /*0x89E*/   s8 field_0x89E;
+    /*0x89F*/   s8 field_0x89F;
+    /*0x8A0*/   u8 field_0x8A0;
+    /*0x8A1*/   s8 field_0x8A1;
+    /*0x8A2*/   s8 field_0x8A2;
+    /*0x8A3*/   s8 field_0x8A3;
+    /*0x8A4*/   s8 field_0x8A4;
+    /*0x8A5*/   s8 field_0x8A5;  
+    /*0x8A6*/   s8 field_0x8A6;
+    /*0x8A7*/   s8 field_0x8A7;
+    /*0x8A8*/   s8 field_0x8A8;
+    /*0x8A9*/   s8 field_0x8A9;
+    /*0x8AA*/   s8 field_0x8AA;
+    /*0x8AB*/   s8 field_0x8AB;
 };
-
-class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
-public:
-    daNpc_Ko1_childHIO_c();
-
-public:
-    char pad04[0x16-0x04];
-    s16  field16;
+struct hio_prm_child_c{
+    s16 mMaxHeadX;
+    s16 mMaxHeadY;
+    s16 mMinHeadX;
+    s16 mMinHeadY;
+    s16 mMaxBackboneX;
+    s16 mMaxBackboneY;
+    s16 mMinBackboneX;
+    s16 mMinBackboneY;
+    s16 mMaxTurnStep;
+    s16 field16;
     f32 field18;
-    f32 field1C;
+    u8 field1C;
+    u16 field1E;
     s16 field20;
     s16 field22;
     f32 field24;
@@ -278,14 +285,21 @@ public:
     f32 field50;
     f32 field54;
     f32 field58;
+};
+class daNpc_Ko1_childHIO_c: public mDoHIO_entry_c {
+public:
+    daNpc_Ko1_childHIO_c();
+
+public:
+
+    hio_prm_child_c hio_prm;
     u32 field5C;
     /* Place member variables here */
 };
 
 class daNpc_Ko1_HIO_c: public mDoHIO_entry_c {
-    struct hio_prm_child_c{
-        u32 pad[0x16];
-    };
+
+
 public:
     daNpc_Ko1_HIO_c();
 
@@ -293,53 +307,7 @@ public:
     s8 mNo;
     u32 field8;
     daNpc_Ko1_childHIO_c children[2];
-    struct hio_prm_c {
-        hio_prm_child_c childtable[2];
-	// .4byte 0x20001F40
-	// .4byte 0xE0C0E0C0
-	// .4byte 0x00001F40
-	// .4byte 0x0000E0C0
-	// .4byte 0x07D00640
-	// .4byte 0x42B40000
-	// .4byte 0x00000004
-	// .4byte 0x08000000
-	// .4byte 0x3F666666
-	// .4byte 0x3F800000
-	// .4byte 0x3F000000
-	// .4byte 0x41A80000
-	// .4byte 0x3DCCCCCD
-	// .4byte 0x41200000
-	// .4byte 0x3E99999A
-	// .4byte 0x42200000
-	// .4byte 0x42A00000
-	// .4byte 0x43480000
-	// .4byte 0x43960000
-	// .4byte 0x43160000
-	// .4byte 0x44898000
-	// .4byte 0x44BB8000
-	// .4byte 0x20001F40
-	// .4byte 0xE0C0E0C0
-	// .4byte 0x00001F40
-	// .4byte 0x0000E0C0
-	// .4byte 0x07D00640
-	// .4byte 0x42B40000
-	// .4byte 0x00000006
-	// .4byte 0x08000000
-	// .4byte 0x3E99999A
-	// .4byte 0x40C00000
-	// .4byte 0x3ECCCCCD
-	// .4byte 0x41A80000
-	// .4byte 0x3DCCCCCD
-	// .4byte 0x41400000
-	// .4byte 0x3FC00000
-	// .4byte 0x42C80000
-	// .4byte 0x00000000
-	// .4byte 0x43AF0000
-	// .4byte 0x43FA0000
-	// .4byte 0x43160000
-	// .4byte 0x00000000
-	// .4byte 0x00000000
-    };
+
     /* Place member variables here */
 };
 
