@@ -92,7 +92,7 @@ public:
     void setParam1(int value) { mParam1 = value; }
     void setParam2(int value) { mParam2 = value; }
 
-private:
+public:
     /* 0x00 */ u16 mDemoType;
     /* 0x02 */ s16 mDemoMoveAngle;
     /* 0x04 */ s16 mTimer;
@@ -482,21 +482,21 @@ public:
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
     void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
     u32 checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
-    bool getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
-    bool getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
-    bool getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
-    bool getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
-    bool getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
-    bool getFootOnGround() const { return getRightFootOnGround() || getLeftFootOnGround(); }
-    bool checkFrontRollCrash() const { return checkResetFlg0(daPyRFlg0_FRONT_ROLL_CRASH); }
-    bool getGrabUpStart() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_START); }
-    bool checkAttentionLock() const { return checkResetFlg0(daPyRFlg0_ATTENTION_LOCK); }
-    bool checkHammerQuake() const { return checkResetFlg0(daPyRFlg0_HAMMER_QUAKE); }
+    u32 getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
+    u32 getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
+    u32 getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
+    u32 getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
+    u32 getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
+    u32 getFootOnGround() const { return getRightFootOnGround() || getLeftFootOnGround(); }
+    u32 checkFrontRollCrash() const { return checkResetFlg0(daPyRFlg0_FRONT_ROLL_CRASH); }
+    u32 getGrabUpStart() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_START); }
+    u32 checkAttentionLock() const { return checkResetFlg0(daPyRFlg0_ATTENTION_LOCK); }
+    u32 checkHammerQuake() const { return checkResetFlg0(daPyRFlg0_HAMMER_QUAKE); }
     void onPoisonCurse() { onResetFlg0(daPyRFlg0_POISON_CURSE); }
-    bool getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
-    bool checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
-    bool checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
-    bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
+    u32 getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
+    u32 checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
+    u32 checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
+    u32 checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
     bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
     BOOL checkNormalSwordEquip() const {

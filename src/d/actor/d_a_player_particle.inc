@@ -973,7 +973,9 @@ void daPy_lk_c::setFootEffect() {
 
         if (checkHeavyStateOn()) {
             var_r29 = 5;
+#if VERSION > VERSION_DEMO
             dComIfGp_getVibration().StartShock(2, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+#endif
         } else {
             var_r29 = 2;
         }

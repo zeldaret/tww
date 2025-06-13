@@ -845,5 +845,9 @@ void dDoor_hkyo_c::onFirst() {
 
 /* 8006D7E8-8006D800       .text chkStart__12dDoor_hkyo_cFv */
 BOOL dDoor_hkyo_c::chkStart() {
-    return daPy_getPlayerActorClass()->getGrabUpEnd();
+    if (daPy_getPlayerActorClass()->getGrabUpEnd()) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
