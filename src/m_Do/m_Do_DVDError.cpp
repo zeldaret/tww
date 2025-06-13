@@ -24,7 +24,7 @@ void mDoDvdErr_ThdInit() {
     if (!mDoDvdErr_initialized) {
         OSTime time = OSGetTime();
         OSThread* curThread = OSGetCurrentThread();
-        s32 priority = OSGetThreadPriority(curThread);
+        OSPriority priority = OSGetThreadPriority(curThread);
 
         OSCreateThread(&DvdErr_thread, (void*)mDoDvdErr_Watch, NULL, DvdErr_stack + sizeof(DvdErr_stack),
                        sizeof(DvdErr_stack), priority - 3, 1);

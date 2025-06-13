@@ -115,8 +115,20 @@ void dADM::SetData(void* pData) {
         pHeader += 3;
     }
 
-    if (FindTag('ACFN', &row, &rowOffs) && FindTag('ACNA', &name, &nameOffs) && FindTag('ACDS', &dat_size, &dataOffs)) {
-        JUT_ASSERT(202, row * name == dat_size);
-        mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
+    u32 tag;
+    tag = 'ACFN';
+    if (!FindTag(tag, &row, &rowOffs)) {
+        return;
     }
+    tag = 'ACNA';
+    if (!FindTag(tag, &name, &nameOffs)) {
+        return;
+    }
+    tag = 'ACDS';
+    if (!FindTag(tag, &dat_size, &dataOffs)) {
+        return;
+    }
+
+    JUT_ASSERT(202, row * name == dat_size);
+    mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
 }

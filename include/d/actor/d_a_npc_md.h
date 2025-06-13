@@ -23,9 +23,11 @@ public:
     /* 0x20 */ s16 m20;
     /* 0x22 */ s16 m22;
     /* 0x24 */ s16 m24;
+#if VERSION > VERSION_DEMO
     /* 0x26 */ s16 m26;
     /* 0x28 */ s16 m28;
     /* 0x2A */ s16 m2A;
+#endif
 };
 
 class daNpc_Md_HIO3_c {

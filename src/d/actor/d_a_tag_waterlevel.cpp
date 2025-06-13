@@ -69,7 +69,8 @@ namespace daTagWaterlevel {
         u8 sch_bit = dKy_get_schbit();
         cLib_offBit(M_state, STATE_2);
 
-        if ((prm_sch & sch_bit & 0xFF)) {
+        bool temp = prm_sch & sch_bit & 0xFF;
+        if (temp) {
             target = 1.0f;
             if (!cLib_checkBit(get_state(), STATE_1)) {
                 cLib_onBit(M_state, STATE_2);

@@ -205,7 +205,7 @@ static BOOL daBst_Draw(bst_class* i_this) {
         if (i_this->field_0x2E98 > 1) {
             mDoGph_gInf_c::setBlureRate(i_this->field_0x2E98);
             mDoGph_gInf_c::onBlure();
-        } else if (!i_this->field_0x2E98 != 0) {
+        } else if (i_this->field_0x2E98 == 1) {
             i_this->field_0x2E98 = 0;
             mDoGph_gInf_c::offBlure();
         }
@@ -486,7 +486,7 @@ static void down_attack(bst_class* i_this) {
             i_this->mTargetPos.y += REG0_F(7) + 300.0f;
             i_this->field_0x10FC[0] = 100;
             break;
-        case 1:
+        case 1: {
             cLib_addCalc2(&i_this->speedF, 40.0f, 1.0f, REG0_F(13) + 1.0f);
             i_this->field_0x10EC.x = REG0_F(5) + 2000.0f;
 
@@ -496,6 +496,7 @@ static void down_attack(bst_class* i_this) {
             }
             cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 4, 0x400);
             break;
+        }
         case 2: {
             bVar2 = false;
             cLib_addCalc2(&i_this->current.pos.x, i_this->mTargetPos.x, 0.5f, std::abs(i_this->speed.x));
@@ -746,11 +747,7 @@ static void beam_attack(bst_class* i_this) {
     for (s32 i = 0; i < 2; i++) {
         JPABaseEmitter* emitter = i_this->field_0x2ED8[i];
         if (emitter != NULL) {
-            JPASetRMtxTVecfromMtx(
-                i_this->field_0x02B8->getModel()->getAnmMtx(0),
-                emitter->mGlobalRotation,
-                emitter->mGlobalTranslation
-            );
+            emitter->setGlobalRTMatrix(i_this->field_0x02B8->getModel()->getAnmMtx(0));
         }
     }
 }
@@ -849,7 +846,7 @@ static void head_damage(bst_class* i_this) {
     cLib_addCalc0(&i_this->field_0x10EC.z, 1.0f, 5.0f);
 
     switch (i_this->mDamage) {
-        case 0:
+        case 0: {
             i_this->mDamage++;
             i_this->field_0x10FC[0] = 40;
             i_this->speedF = 0.0f;
@@ -870,6 +867,7 @@ static void head_damage(bst_class* i_this) {
             fopAcM_seStart(i_this, JA_SE_CM_BST_HEAD_EYE_CLOSE, 0);
             mDoAud_bgmStart(JA_BGM_UNK_123);
             // fallthrough
+        }
         case 1:
             v.x = i_this->current.pos.x;
             v.z = i_this->current.pos.z;
@@ -1329,9 +1327,7 @@ static void end_demo(bst_class* i_this) {
 
             i_this->field_0x2EF4 = dComIfGp_particle_set(dPa_name::ID_SCENE_81E8, &i_this->current.pos);
             if (i_this->field_0x2EF4 != NULL) {
-                JPASetRMtxTVecfromMtx(i_this->field_0x02B8->getModel()->getAnmMtx(0),
-                    i_this->field_0x2EF4->mGlobalRotation,
-                    i_this->field_0x2EF4->mGlobalTranslation);
+                i_this->field_0x2EF4->setGlobalRTMatrix(i_this->field_0x02B8->getModel()->getAnmMtx(0));
             }
 
             break;
@@ -1489,7 +1485,7 @@ static void main_cont(bst_class* i_this) {
                 i_this->field_0x2E7C = 1;
                 break;
             case 1:
-                if (dComIfGs_isStageBossEnemy() || REG0_S(5) != 0) {
+                if (!dComIfGs_isStageBossEnemy() || REG0_S(5) != 0) {
                     i_this->actor_status |= fopAcStts_SHOWMAP_e;
                     if (dComIfGs_isStageBossDemo()) {
                         i_this->field_0x2FE4 = 1;
@@ -1656,6 +1652,8 @@ static void main_cont(bst_class* i_this) {
                     i_this->field_0x2E7C = 11;
                     i_this->field_0x2E7E[2] = 50;
                 }
+                break;
+            case 100:
                 break;
         }
     }

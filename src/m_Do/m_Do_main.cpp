@@ -307,6 +307,7 @@ bool Debug_console(JUTGamePad* i_pad) {
                 JUTReport(30, 420, 1, "SCROLL：%3d %3d %3d Output=%1x", console->getLineOffset(),
                           console->getPositionX(), console->getPositionY(), console->getOutput());
             } else {
+#if VERSION > VERSION_DEMO
                 if (i_pad->getTrigger() & CButton::DPAD_DOWN) {
                     g_HIO.mDisplayMeter ^= 1;
                 }
@@ -329,6 +330,7 @@ bool Debug_console(JUTGamePad* i_pad) {
                     gameHeap->dump_sort();
                     archiveHeap->dump_sort();
                 }
+#endif
                 JUTReport(30, 440, 1, "Press L+R trigger to control console.");
                 JUTReport(30, 450, 1, "Press [Z] trigger to close this window.");
             }
@@ -477,7 +479,7 @@ int main() {
         }
     }
 
-    s32 priority = OSGetThreadPriority(current_thread);
+    OSPriority priority = OSGetThreadPriority(current_thread);
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);

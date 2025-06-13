@@ -1677,7 +1677,11 @@ public:
     BOOL procFoodThrow();
     BOOL procFoodSet_init();
     BOOL procFoodSet();
+#if VERSION == VERSION_DEMO
+    void setSwordModel();
+#else
     void setSwordModel(BOOL);
+#endif
     void setLightSaver();
 #if VERSION == VERSION_DEMO
     BOOL checkLastDemoSwordNoDraw(int);

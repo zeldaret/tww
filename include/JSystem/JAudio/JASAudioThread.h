@@ -21,8 +21,8 @@ namespace JASystem {
         extern OSMessage saAudioMsgBuf[16];
         extern u32 sAudioprocMQInit;
         extern int sbIsPrioritySet;
-        extern s32 sDSPPrio;
-        extern s32 sDVDPrio;
+        extern OSPriority sDSPPrio;
+        extern OSPriority sDVDPrio;
         extern vs32 snIntCount;
         extern int sbIsDSPBoot;
     };

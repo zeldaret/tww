@@ -411,7 +411,7 @@ void OSYieldThread(void) {
 }
 
 BOOL OSCreateThread(OSThread* thread_, void* func, void* param, void* stackBase, u32 stackSize,
-                    s32 priority, u16 attribute) {
+                    OSPriority priority, u16 attribute) {
     BOOL enabled;
     u32 i;
     u32* stack;
@@ -660,7 +660,7 @@ void OSWakeupThread(OSThreadQueue* queue) {
     OSRestoreInterrupts(enabled);
 }
 
-s32 OSSetThreadPriority(OSThread* thread, s32 priority) {
+s32 OSSetThreadPriority(OSThread* thread, OSPriority priority) {
     BOOL enabled;
 
     if (priority < 0 || priority > 31) {
@@ -668,7 +668,7 @@ s32 OSSetThreadPriority(OSThread* thread, s32 priority) {
     }
 
     enabled = OSDisableInterrupts();
-    if ((s32)thread->base_priority != priority) {
+    if ((OSPriority)thread->base_priority != priority) {
         thread->base_priority = priority;
 
         UpdatePriority(thread);
@@ -678,7 +678,7 @@ s32 OSSetThreadPriority(OSThread* thread, s32 priority) {
     return TRUE;
 }
 
-s32 OSGetThreadPriority(OSThread* thread) {
+OSPriority OSGetThreadPriority(OSThread* thread) {
     return thread->base_priority;
 }
 

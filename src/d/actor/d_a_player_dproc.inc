@@ -1920,7 +1920,9 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     initShipRideUseItem(iVar2, 0);
     dKy_Itemgetcol_chg_on();
     setTactModel();
+#if VERSION > VERSION_DEMO
     m3574 = 0;
+#endif
     return true;
 }
 
@@ -2223,7 +2225,11 @@ BOOL daPy_lk_c::dProcLastCombo_init() {
     mVelocity = 0.0f;
     if (mEquipItem != daPyItem_SWORD_e) {
         deleteEquipItem(FALSE);
+#if VERSION == VERSION_DEMO
+        setSwordModel();
+#else
         setSwordModel(FALSE);
+#endif
     }
     bck = getItemAnimeResource(LKANM_BCK_COMBO_KEN);
     mSwordAnim.changeBckOnly(bck);

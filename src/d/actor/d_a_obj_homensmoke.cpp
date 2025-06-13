@@ -76,7 +76,12 @@ namespace daObjHomensmoke {
 
     /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_execute() {
-        if (!mbInitialized) {
+#if VERSION == VERSION_DEMO
+        if (m2D0 == NULL)
+#else
+        if (!mbInitialized)
+#endif
+        {
             static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
             static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
             if (mType == 0) {

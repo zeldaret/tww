@@ -27,13 +27,14 @@ namespace daTagAttention {
                 // box collision check
                 if (current.angle.y){
                     s16 yRotAngle = current.angle.y;
-                    f32 temp = 
-                        plyrToObjVec.x * cM_ssin(yRotAngle) +
-                        plyrToObjVec.z * cM_scos(yRotAngle);
-                    plyrToObjVec.x = 
+                    f32 x =
                         plyrToObjVec.x * cM_scos(yRotAngle) -
                         plyrToObjVec.z * cM_ssin(yRotAngle);
-                    plyrToObjVec.z = temp;
+                    f32 z =
+                        plyrToObjVec.x * cM_ssin(yRotAngle) +
+                        plyrToObjVec.z * cM_scos(yRotAngle);
+                    plyrToObjVec.x = x;
+                    plyrToObjVec.z = z;
                 }
 
                 if ((plyrToObjVec.x < -scale.x * 100.0f) || (plyrToObjVec.x > scale.x * 100.0f)){

@@ -120,9 +120,15 @@ const Vec daWindMill_c::m_cull_size[][2] = {
 
 /* 00000078-000000E8       .text _delete__12daWindMill_cFv */
 bool daWindMill_c::_delete() {
-    if (heap != NULL && mpBgW != NULL)
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         dComIfG_Bgsp()->Release(mpBgW);
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    }
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
     return TRUE;
 }
 
@@ -133,15 +139,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 
 /* 00000108-000002A0       .text CreateHeap__12daWindMill_cFv */
 BOOL daWindMill_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(
-m_arcname[mType], m_bmdidx[mType]);
-    JUT_ASSERT(405, modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
+    JUT_ASSERT(VERSION_SELECT(399, 405, 405, 405), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000222);
     if (mpModel == NULL) {
         return FALSE;
     }
-
 
     if (m_dzbidx[mType] != -1) {
         mpBgW = new dBgW();
@@ -164,7 +168,6 @@ static BOOL nodeCallBack(J3DNode*, int);
 
 /* 000002A0-0000050C       .text CreateInit__12daWindMill_cFv */
 void daWindMill_c::CreateInit() {
-    /* Nonmatching */
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
     cXyz cullMin = m_cull_size[mType][0];
@@ -309,7 +312,6 @@ bool daWindMill_c::_execute() {
 
 /* 00000ECC-00001048       .text hane_move__12daWindMill_cFv */
 void daWindMill_c::hane_move() {
-    /* Nonmatching */
     f32 wind_float = 0.0f;
     search_wind();
 
@@ -320,8 +322,9 @@ void daWindMill_c::hane_move() {
         }
     }
 
-    f32 temp = 2500.0f;
-    cLib_addCalcAngleS(&mAngle[1], wind_float * temp, 0xF, 100, 10);
+    s16 target_angle = 2500;
+    target_angle = wind_float * target_angle;
+    cLib_addCalcAngleS(&mAngle[1], target_angle, 0xF, 100, 10);
     if (mAngle[2] <= mAngle[1] && mAngle[1] != 0) {
         if (mType == 0) {
             fopAcM_seStart(this, JA_SE_OBJ_WDUN_WMILL_L_RND, 0);
@@ -354,9 +357,11 @@ void daWindMill_c::set_at() {
     };
 
     int i;
+    s16 r0;
     switch (mType) {
         case 1:
-            if (mAngle[1] > 1000) {
+            r0 = 1000;
+            if (mAngle[1] > r0) {
                 mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
                 mDoMtx_stack_c::multVec(&vec1, &vec1);
@@ -379,7 +384,8 @@ void daWindMill_c::set_at() {
             }
             break;
         case 0:
-            if (mAngle[1] > 1000) {
+            r0 = 1000;
+            if (mAngle[1] > r0) {
                 mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, mAngle[0] + mAngle[1], current.angle.z);
 
@@ -418,9 +424,11 @@ void daWindMill_c::set_co() {
         cXyz(0.0f, -350.0f, 70.0f),
     };
 
+    s16 r0;
     switch (mType) {
         case 1:
-            if (mAngle[1] <= 1000) {
+            r0 = 1000;
+            if (mAngle[1] <= r0) {
                 mDoMtx_stack_c::transS(current.pos);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
 
