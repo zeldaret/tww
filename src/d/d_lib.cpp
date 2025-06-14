@@ -17,7 +17,8 @@ Quaternion ZeroQuat = {0.0f, 0.0f, 0.0f, 1.0f};
 /* 80057000-800570CC       .text dLib_setCirclePath__FP18dLib_circle_path_c */
 void dLib_setCirclePath(dLib_circle_path_c* path) {
     path->mAngle += path->mAngleSpeed;
-    f32 rad = path->mRadius + path->mWobbleAmplitude * cM_ssin(path->mAngle);
+    f32 wobble = path->mWobbleAmplitude * cM_ssin(path->mAngle);
+    f32 rad = path->mRadius + wobble;
     mDoMtx_stack_c::transS(path->mTranslation);
     mDoMtx_stack_c::YrotM(path->mAngle);
     mDoMtx_stack_c::transM(rad, 0.0f, 0.0f);
@@ -39,15 +40,23 @@ f32 dLib_getWaterY(cXyz& pos, dBgS_ObjAcch& acch) {
 
 /* 8005716C-80057368       .text dLib_waveRot__FP3VecfP11dLib_wave_c */
 void dLib_waveRot(Vec* pos, f32 sway, dLib_wave_c* inf) {
-    f32 pt_zn, pt_zp; // probably a fakematch? maybe an inline
-    f32 wave_zn = daSea_calcWave(pos->x, (pt_zn = pos->z - 300.0f));
-    f32 wave_zp = daSea_calcWave(pos->x, (pt_zp = pos->z + 300.0f));
-    s16 az = -cM_atan2s(wave_zp - wave_zn, pt_zp - pt_zn);
+    Vec pt_n;
+    pt_n.x = pos->x;
+    pt_n.z = pos->z - 300.0f;
+    f32 wave_zn = daSea_calcWave(pt_n.x, pt_n.z);
+    Vec pt_p;
+    pt_p.x = pos->x;
+    pt_p.z = pos->z + 300.0f;
+    f32 wave_zp = daSea_calcWave(pt_p.x, pt_p.z);
+    s16 az = -cM_atan2s(wave_zp - wave_zn, pt_p.z - pt_n.z);
 
-    f32 pt_xn, pt_xp; // probably a fakematch? maybe an inline
-    f32 wave_xn = daSea_calcWave((pt_xn = pos->x - 300.0f), pos->z);
-    f32 wave_xp = daSea_calcWave((pt_xp = pos->x + 300.0f), pos->z);
-    s32 ax = cM_atan2s(wave_xp - wave_xn, pt_xp - pt_xn); // maybe a fakematch with the s32 here?
+    pt_n.x = pos->x - 300.0f;
+    pt_n.z = pos->z;
+    f32 wave_xn = daSea_calcWave(pt_n.x, pt_n.z);
+    pt_p.x = pos->x + 300.0f;
+    pt_p.z = pos->z;
+    f32 wave_xp = daSea_calcWave(pt_p.x, pt_p.z);
+    s32 ax = cM_atan2s(wave_xp - wave_xn, pt_p.x - pt_n.x); // maybe a fakematch with the s32 here?
 
     cLib_addCalcAngleS2(&inf->mAngX, az, 10, 0x200);
     cLib_addCalcAngleS2(&inf->mAngZ, ax, 10, 0x200);
@@ -61,28 +70,27 @@ void dLib_waveRot(Vec* pos, f32 sway, dLib_wave_c* inf) {
 
 /* 80057368-8005746C       .text dLib_debugDrawAxis__FRA3_A4_ff */
 void dLib_debugDrawAxis(Mtx& mtx, f32 length) {
-    cXyz r1_98(length, 0.0f, 0.0f);
-    cXyz r1_8c(0.0f, length, 0.0f);
-    cXyz r1_80(0.0f, 0.0f, length);
-    cXyz r1_74(0.0f, 0.0f, 0.0f);
-    cXyz r1_68(0.0f, 0.0f, 0.0f);
-    cXyz r1_5c(0.0f, 0.0f, 0.0f);
-    cXyz r1_50;
-    cXyz r1_4c;
-    cXyz r1_40;
-    cXyz r1_34;
-    cXyz r1_28;
-    cXyz r1_1c;
-    cXyz r1_14;
-    cXyz r1_08;
+    cXyz sp98(length, 0.0f, 0.0f);
+    cXyz sp8C(0.0f, length, 0.0f);
+    cXyz sp80(0.0f, 0.0f, length);
+    cXyz sp74(0.0f, 0.0f, 0.0f);
+    cXyz sp68(0.0f, 0.0f, 0.0f);
+    cXyz sp5C(0.0f, 0.0f, 0.0f);
+    cXyz sp50;
+    cXyz sp44;
+    cXyz sp38;
+    cXyz sp2C;
+    cXyz sp20;
+    cXyz sp14;
+    cXyz sp08;
     mDoMtx_stack_c::copy(mtx);
-    mDoMtx_stack_c::multVecZero(&r1_08);
-    mDoMtx_stack_c::multVec(&r1_98, &r1_50);
-    mDoMtx_stack_c::multVec(&r1_8c, &r1_40);
-    mDoMtx_stack_c::multVec(&r1_80, &r1_34);
-    mDoMtx_stack_c::multVec(&r1_74, &r1_28);
-    mDoMtx_stack_c::multVec(&r1_68, &r1_1c);
-    mDoMtx_stack_c::multVec(&r1_5c, &r1_14);
+    mDoMtx_stack_c::multVecZero(&sp08);
+    mDoMtx_stack_c::multVec(&sp98, &sp50);
+    mDoMtx_stack_c::multVec(&sp8C, &sp44);
+    mDoMtx_stack_c::multVec(&sp80, &sp38);
+    mDoMtx_stack_c::multVec(&sp74, &sp2C);
+    mDoMtx_stack_c::multVec(&sp68, &sp20);
+    mDoMtx_stack_c::multVec(&sp5C, &sp14);
     
     // The rest of this function may have been commented out for release builds.
 }
@@ -243,8 +251,7 @@ void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no) {
     
     stage_scls_info_class* scls_entry = &scls_data[i_sclsnum];
     s32 wipe = dStage_sclsInfo_getWipe(scls_entry);
-    wipe = wipe == 0xFF ? 0 : wipe;
-    dComIfGp_setNextStage(scls_entry->mStage, scls_entry->mStart, scls_entry->mRoom, -1, 0.0f, 0, TRUE, wipe);
+    dComIfGp_setNextStage(scls_entry->mStage, scls_entry->mStart, scls_entry->mRoom, -1, 0.0f, 0, TRUE, wipe == 0xFF ? 0 : wipe);
 }
 
 /* 80057EC0-80057F30       .text dLib_setFirstMsg__FUsUlUl */
@@ -357,35 +364,39 @@ u8 STControl::checkTrigger() {
     field_0x0d = field_0x0c;
     f32 valueStick = getValueStick();
     s16 angleStick = getAngleStick();
-        u8 newAngle = 0;
+    u8 r6 = 0;
     s16 iVar6 = (0x2000 - field_0x26) >> 1;
     if (!cM3d_IsZero(valueStick)) {
         if (angleStick < field_0x22 + -0x7000 + iVar6) {
-            newAngle |= 4;
+            r6 |= 4;
         } else if (angleStick < field_0x22 + -0x5000 - iVar6) {
-            newAngle |= 5;
+            r6 |= 4;
+            r6 |= 1;
         } else if (angleStick < field_0x22 + -0x3000 + iVar6) {
-            newAngle |= 1;
+            r6 |= 1;
         } else if (angleStick < field_0x22 + -0x1000 - iVar6) {
-            newAngle |= 9;
+            r6 |= 1;
+            r6 |= 8;
         } else if (angleStick < field_0x22 + 0x1000 + iVar6) {
-            newAngle |= 8;
+            r6 |= 8;
         } else if (angleStick < field_0x22 + 0x3000 - iVar6) {
-            newAngle |= 10;
+            r6 |= 8;
+            r6 |= 2;
         } else if (angleStick < field_0x22 + 0x5000 + iVar6) {
-            newAngle |= 2;
+            r6 |= 2;
         } else if (angleStick < field_0x22 + 0x7000 - iVar6) {
-            newAngle |= 6;
+            r6 |= 2;
+            r6 |= 4;
         } else {
-            newAngle |= 4;
+            r6 |= 4;
         }
 
         if (valueStick >= field_0x04) {
-            field_0x0c = newAngle;
+            field_0x0c = r6;
         } else if (valueStick < field_0x08) {
             field_0x0c = 0;
         } else {
-            field_0x0c &= ~newAngle;
+            field_0x0c &= ~r6;
         }
 
         if (field_0x0c != field_0x0d) {

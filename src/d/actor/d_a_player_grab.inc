@@ -236,6 +236,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
         return true;
     }
+#if VERSION > VERSION_DEMO
     if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1) ||
         (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0)))
     {
@@ -249,6 +250,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
     } else if (fopAcM_GetName(grab_actor) == PROC_BOMB && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
         return procGrabThrow_init(0);
     }
+#endif
     if (cancelTrigger() && checkSwordEquip() && iVar3 == 0) {
         if (dComIfGp_getRStatus() == dActStts_THROW_e) {
             return procGrabThrow_init(1);

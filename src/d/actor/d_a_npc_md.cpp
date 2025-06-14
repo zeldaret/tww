@@ -207,9 +207,11 @@ daNpc_Md_HIO3_c::daNpc_Md_HIO3_c() {
 
 /* 000001F4-00000274       .text __ct__15daNpc_Md_HIO2_cFv */
 daNpc_Md_HIO2_c::daNpc_Md_HIO2_c() {
+#if VERSION > VERSION_DEMO
     m26 = 0x19;
     m28 = 0x7FFF;
     m2A = 1;
+#endif
     m04 = 5.0f;
     m08 = 17.0f;
     m0C = 7.0f;
@@ -374,7 +376,9 @@ cPhs_State daNpc_Md_c::create() {
     strcpy(mModelArcName, l_arc_name);
     int heapSizeIdx = 0;
     
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daNpc_Md_c);
+#endif
     
     mType = fopAcM_GetParam(this) >> 0x08;
     if ((int)mType == -2) { // Bug: Comparing unsigned value with -2 is always false.
@@ -428,6 +432,10 @@ cPhs_State daNpc_Md_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, mModelArcName);
     m313D = 1;
     if (phase_state == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(this, daNpc_Md_c);
+#endif
+        
         if (dComIfGp_getCb1Player() != NULL) {
             return cPhs_ERROR_e;
         }
@@ -437,19 +445,23 @@ cPhs_State daNpc_Md_c::create() {
             0x61C0,
         };
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, l_heep_size[heapSizeIdx])) {
+#if VERSION > VERSION_DEMO
             mpMorf = NULL;
             mpArmMorf = NULL;
             mpWingMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
         
         if (isTypeM_Dai()) {
             u8 flag = dComIfGs_getPlayerPriestFlag();
             if (flag == 2) {
-                s8 roomNo = dComIfGs_getPlayerPriestRoomNo();
-                s16 angle = dComIfGs_getPlayerPriestRotate();
-                cXyz& pos = dComIfGs_getPlayerPriestPos();
-                dComIfGs_setRestartOption(&pos, angle, roomNo, 2);
+                dComIfGs_setRestartOption(
+                    &dComIfGs_getPlayerPriestPos(),
+                    dComIfGs_getPlayerPriestRotate(),
+                    dComIfGs_getPlayerPriestRoomNo(),
+                    2
+                );
             }
             checkRestart(2);
         }
@@ -930,7 +942,9 @@ void daNpc_Md_c::npcAction(void* arg) {
 
 /* 00003124-00003194       .text setNpcAction__10daNpc_Md_cFM10daNpc_Md_cFPCvPvPv_iPv */
 void daNpc_Md_c::setNpcAction(ActionFunc actionFunc, void* arg) {
+#if VERSION > VERSION_DEMO
     m_flying = false;
+#endif
     mCurrPlayerActionFunc = NULL;
     setAction(&mCurrNpcActionFunc, actionFunc, arg);
 }
@@ -992,16 +1006,8 @@ int daNpc_Md_c::calcStickPos(s16 param_1, cXyz* param_2) {
     
     bool r26 = attention.Lockon();
     
-    int r31;
-    if (!r26) {
-        r31 = 0;
-    } else {
-        BOOL lockon = attention.LockonTruth();
-        r31 = -1;
-        if (lockon) {
-            r31 = 1;
-        }
-    }
+    int r31 = !r26 ? 0 :
+        attention.LockonTruth() ? 1 : -1;
     
     if (attList == NULL) {
         attList = attention.GetActionList(0);
@@ -1294,7 +1300,12 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
     if (mActionStatus == ACTION_STARTING) {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         if (isTypeSea()) {
-            if (m3104 == 0x1E || m3104 == 0x29 || m312D == 0xE || m312D == 0x12 || m312D == 0x13 || m312D == 0x1A || m312D == 0x25) {
+#if VERSION == VERSION_DEMO
+            if (m3104 == 0x1E || m3104 == 0x29)
+#else
+            if (m3104 == 0x1E || m3104 == 0x29 || m312D == 0xE || m312D == 0x12 || m312D == 0x13 || m312D == 0x1A || m312D == 0x25)
+#endif
+            {
                 setHarpPlayNum(1);
             } else {
                 setAnm(0x12);
@@ -1311,11 +1322,15 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
         maxFallSpeed = -100.0f;
         gravity = l_HIO.m0F4;
         clearStatus(daMdStts_UNK1 | daMdStts_UNK2 | daMdStts_FLY);
+#if VERSION == VERSION_DEMO
+        setBitStatus(daMdStts_UNK4);
+#else
         if (!isTypeSea()) {
             setBitStatus(daMdStts_UNK4);
         } else {
             clearStatus(daMdStts_UNK4);
         }
+#endif
         shape_angle.x = 0;
         shape_angle.z = 0;
         speedF = 0.0f;
@@ -1602,9 +1617,11 @@ BOOL daNpc_Md_c::searchNpcAction(void*) {
 BOOL daNpc_Md_c::hitNpcAction(void* r29) {
     if (mActionStatus == ACTION_STARTING) {
         setDamageFogTimer(5*30);
+#if VERSION > VERSION_DEMO
         // Bug: Reverb is being passed to JAIZelBasic::monsSeStart as argument r7 when it should be argument r8.
         // The fopAcM_monsSeStart inline does not support passing reverb, but the programmer didn't realize this.
         fopAcM_monsSeStart(this, JA_SE_CV_MD_CRASH, &current.pos, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+#endif
         s16 angle = 0;
         if (r29 != NULL) {
             angle = *(s16*)r29;
@@ -1641,7 +1658,6 @@ void daNpc_Md_c::setNormalSpeedF(f32 f1, f32 f2, f32 i_scale, f32 i_maxStep, f32
     }
     f32 targetSpeed;
     f32 maxStep;
-    f32 f28;
     if (f31 < m3108) {
         f32 temp2 = m3108 - f31;
         if (temp2 > i_maxStep) {
@@ -1723,7 +1739,11 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
         dAttention_c& attention = dComIfGp_getAttention();
         if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m104 || attention.Lockon()) {
             s16 stickAngle = getStickAngY(0);
+#if VERSION == VERSION_DEMO
+            cLib_addCalcAngleS(&current.angle.y, stickAngle, 8, 0x2000, 0x400);
+#else
             cLib_addCalcAngleS(&current.angle.y, stickAngle, l_HIO.m008.m26, l_HIO.m008.m28, l_HIO.m008.m2A);
+#endif
             cXyz stickPos;
             int temp = calcStickPos(stickAngle, &stickPos);
             if (temp == 0) {
@@ -1736,7 +1756,9 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
             if (temp > 0) {
                 shape_angle.y = tempAngle;
             }
+#if VERSION > VERSION_DEMO
             current.angle.y = shape_angle.y;
+#endif
             if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m108) {
                 if (temp == 0) {
                     current.angle.y = stickAngle;
@@ -2638,11 +2660,13 @@ BOOL daNpc_Md_c::setAnm(int anmIdx) {
             ret = TRUE;
         }
         
+#if VERSION > VERSION_DEMO
         if (m3104 == 0x12 || m3104 == 0x1F) {
             fopAcM_seStartCurrent(this, JA_SE_CM_MD_HARP_SET_UP, 0);
         } else if (m3104 == 0x13 || m3104 == 0x21) {
             fopAcM_seStartCurrent(this, JA_SE_CM_MD_HARP_TAKE_OFF, 0);
         }
+#endif
     }
     
     if (prm->btpAnmTblIdx != m3137) {

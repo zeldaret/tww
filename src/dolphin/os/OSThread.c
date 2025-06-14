@@ -411,7 +411,7 @@ void OSYieldThread(void) {
 }
 
 BOOL OSCreateThread(OSThread* thread_, void* func, void* param, void* stackBase, u32 stackSize,
-                    s32 priority, u16 attribute) {
+                    OSPriority priority, u16 attribute) {
     BOOL enabled;
     u32 i;
     u32* stack;
@@ -678,7 +678,7 @@ s32 OSSetThreadPriority(OSThread* thread, OSPriority priority) {
     return TRUE;
 }
 
-s32 OSGetThreadPriority(OSThread* thread) {
+OSPriority OSGetThreadPriority(OSThread* thread) {
     return thread->base_priority;
 }
 

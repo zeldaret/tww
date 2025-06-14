@@ -479,7 +479,7 @@ int main() {
         }
     }
 
-    s32 priority = OSGetThreadPriority(current_thread);
+    OSPriority priority = OSGetThreadPriority(current_thread);
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);

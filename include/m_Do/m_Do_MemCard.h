@@ -57,7 +57,7 @@ public:
     void setCopyToPos(u8 pos) { mCopyToPos = pos; }
 
     void clearProbeStat() {}
-    void getCardSerialNo() {}
+    u64 getCardSerialNo() { return mCardSerialNo; }
     void getDataVersion() {}
     void getProbeStat() {}
     void setPictWriteDataPtr(u8*) {}

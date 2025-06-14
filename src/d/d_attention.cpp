@@ -1224,7 +1224,7 @@ bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
 bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
     // TODO: what is param_3?
-    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_3 > field_0x4) {
         return false;
     }

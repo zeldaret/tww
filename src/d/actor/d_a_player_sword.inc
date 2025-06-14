@@ -15,8 +15,13 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
+#if VERSION == VERSION_DEMO
+void daPy_lk_c::setSwordModel()
+#else
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
-void daPy_lk_c::setSwordModel(BOOL r28) {
+void daPy_lk_c::setSwordModel(BOOL r28)
+#endif
+{
     struct sword_model_tbl_s {
         /* 0x00 */ u16 bladeModel;
         /* 0x02 */ u16 glowModel;
@@ -118,10 +123,12 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     mDoAud_bgmSetSwordUsing(1);
     m355C = 0;
 
+#if VERSION > VERSION_DEMO
     if (r28) {
         onNoResetFlg1(daPyFlg1_UNK200000);
         mpSwordBtk->setFrame(mpSwordBtk->getFrameMax() - 0.001f);
     }
+#endif
 }
 
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */

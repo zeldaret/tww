@@ -68,14 +68,14 @@ void daPy_mtxFollowEcallBack_c::end() {
 /* 80102BF8-80102C84       .text makeEmitter__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC4cXyz */
 JPABaseEmitter* daPy_mtxFollowEcallBack_c::makeEmitter(u16 particleID, MtxP mtx, const cXyz* pos, const cXyz* scale) {
     end();
-    mpMtx = mtx;
+    setMatrix(mtx);
     return dComIfGp_particle_setP1(particleID, pos, NULL, scale, 0xFF, this);
 }
 
 /* 80102C84-80102D14       .text makeEmitterColor__25daPy_mtxFollowEcallBack_cFUsPA4_fPC4cXyzPC8_GXColorPC8_GXColor */
 JPABaseEmitter* daPy_mtxFollowEcallBack_c::makeEmitterColor(u16 particleID, MtxP mtx, const cXyz* pos, const GXColor* prmColor, const GXColor* envColor) {
     end();
-    mpMtx = mtx;
+    setMatrix(mtx);
     return dComIfGp_particle_setP1(particleID, pos, NULL, NULL, 0xFF, this, -1, prmColor, envColor);
 }
 

@@ -973,7 +973,9 @@ void daPy_lk_c::setFootEffect() {
 
         if (checkHeavyStateOn()) {
             var_r29 = 5;
+#if VERSION > VERSION_DEMO
             dComIfGp_getVibration().StartShock(2, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+#endif
         } else {
             var_r29 = 2;
         }
@@ -1234,7 +1236,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
     if (current.pos.y < m35D0 - 10.0f) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
             cXyz pos;
-            mDoMtx_multVecZero(mDmEcallBack[i].mpMtx, &pos);
+            mDoMtx_multVecZero(mDmEcallBack[i].getMtx(), &pos);
             pos.y = m35D0;
 
             dComIfGp_particle_set(dPa_name::ID_COMMON_035A, &pos);

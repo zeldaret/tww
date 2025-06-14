@@ -171,7 +171,7 @@ public:
     void SetGroundLanding() { m_flags |= GROUND_LANDING; }
     void SetGroundAway() { m_flags |= GROUND_AWAY; }
     const u32 MaskWaterHit() { return m_flags & WATER_HIT; }
-    const bool ChkWaterHit() { return MaskWaterHit(); }
+    const bool ChkWaterHit() { return MaskWaterHit() != 0; }
     void ClrWaterNone() { m_flags &= ~WATER_NONE; }
     void SetWaterCheckOffset(f32 offset) { m_water_check_offset = offset; }
     void OnLineCheck() { m_flags |= LINE_CHECK; }

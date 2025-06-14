@@ -73,15 +73,15 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         if (!fopAcM_getWaterY(&local_38, &local_54) || (local_54 < (5.0f + local_38.y))) {
             emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0214, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
             emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0215, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
             emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0216, &local_38);
             if (emitter != NULL) {
-                JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+                emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             }
             bVar2 = false;
         } else {
@@ -102,7 +102,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
         emitter =
             dComIfGp_particle_setSimpleLand(attrib_code, &local_38, NULL, 1.0f, 1.0f, 1.0f, &tevStr, &iStack_58, 0x1E);
         if (emitter != NULL) {
-            JPASetRMtxTVecfromMtx(mDoMtx_stack_c::get(), emitter->mGlobalRotation, emitter->mGlobalTranslation);
+            emitter->setGlobalRTMatrix(mDoMtx_stack_c::get());
             if (attrib_code == dBgS_Attr_WATER_e || attrib_code == dBgS_Attr_GRASS_e) {
                 emitter->setRate(60.0f);
                 emitter->setSpread(1.0f);
