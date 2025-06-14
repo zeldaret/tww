@@ -745,7 +745,7 @@ void daAuction_c::eventMainInit() {
     m834 = 0;
     m82E = 0;
 
-    dComIfG_TimerStart(0, 4);
+    dComIfG_TimerStart(4, 0);
 
     if (m822 == 1) {
         dAuction_screen_gaugeShow();

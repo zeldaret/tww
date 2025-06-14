@@ -89,7 +89,7 @@ bool daTagvolcano::Act_c::_execute() {
                 if (field_0x298 == 1) {
                     if (dComIfG_getTimerPtr() != NULL) {
                         if (field_0x299 == 0) {
-                            dComIfG_TimerStart(0, 3);
+                            dComIfG_TimerStart(3, 0);
                             field_0x299 = 1;
                         } else {
                             if (dComIfGp_event_runCheck()) {
