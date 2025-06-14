@@ -618,6 +618,10 @@ public:
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
     bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
+    void onPictureFlag(u8 i) {
+        u8 mask = (1 << i);
+        mPictureFlag |= mask;
+    }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
@@ -1396,6 +1400,30 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 
 inline u8 dComIfGs_getDataNum() {
     return g_dComIfG_gameInfo.save.getDataNum();
+}
+
+inline void dComIfGs_setDataNum(u8 num) {
+    g_dComIfG_gameInfo.save.setDataNum(num);
+}
+
+inline u8 dComIfGs_getNoFile() {
+    return g_dComIfG_gameInfo.save.getNoFile();
+}
+
+inline void dComIfGs_setNoFile(u8 num) {
+    g_dComIfG_gameInfo.save.setNoFile(num);
+}
+
+inline u64 dComIfGs_getMemCardCheckID() {
+    return g_dComIfG_gameInfo.save.getMemCardCheckID();
+}
+
+inline u8 dComIfGs_getNewFile() {
+    return g_dComIfG_gameInfo.save.getNewFile();
+}
+
+inline void dComIfGs_setMemCardCheckID(u64 id) {
+    g_dComIfG_gameInfo.save.setMemCardCheckID(id);
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
@@ -2938,6 +2966,10 @@ inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
 
 inline bool dComIfGp_isPictureFlag(u8 i) {
     return g_dComIfG_gameInfo.play.isPictureFlag(i);
+}
+
+inline void dComIfGp_onPictureFlag(u8 i) {
+    g_dComIfG_gameInfo.play.onPictureFlag(i);
 }
 
 inline void dComIfGp_offPictureFlag(u8 i) {
