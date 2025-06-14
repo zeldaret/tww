@@ -427,7 +427,7 @@ void main01() {
         }
 
         if (mDoDvdThd::SyncWidthSound) {
-            g_mDoMemCd_control.update();
+            mDoMemCd_UpDate();
         }
 
         mDoCPd_Read();     // read controller input

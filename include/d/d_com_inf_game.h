@@ -903,6 +903,10 @@ inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
 }
 
+inline void dComIfGs_reinit() {
+    g_dComIfG_gameInfo.save.reinit();
+}
+
 inline u8 dComIfGs_checkReserveItem(u8 i_itemNo) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItem().checkReserveItem(i_itemNo);
 }
@@ -1400,6 +1404,14 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
 }
 
+inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
+    g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
+}
+
+inline void dComIfGs_setInitDataToCard(u8* i_cardPtr, int i_dataNum) {
+    g_dComIfG_gameInfo.save.initdata_to_card((char*)i_cardPtr, i_dataNum);
+}
+
 inline u8 dComIfGs_getDataNum() {
     return g_dComIfG_gameInfo.save.getDataNum();
 }
@@ -1422,6 +1434,10 @@ inline u64 dComIfGs_getMemCardCheckID() {
 
 inline u8 dComIfGs_getNewFile() {
     return g_dComIfG_gameInfo.save.getNewFile();
+}
+
+inline void dComIfGs_setNewFile(u8 file) {
+    g_dComIfG_gameInfo.save.setNewFile(file);
 }
 
 inline void dComIfGs_setMemCardCheckID(u64 id) {

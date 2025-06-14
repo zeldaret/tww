@@ -14,7 +14,7 @@ public:
     dFs_HIO_c();
     virtual ~dFs_HIO_c() {}
 
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
     /* 0x07 */ u8 field_0x07;
@@ -109,6 +109,9 @@ public:
     dFile_select_c() {}
     void _create();
     void initial();
+#if VERSION == VERSION_DEMO
+    void _deleteSp();
+#endif
     void _delete();
     void _move();
     bool _open();
