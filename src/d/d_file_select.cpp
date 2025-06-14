@@ -595,32 +595,34 @@ void dFile_select_c::dataSelMoveSet() {
 
 /* 801824DC-801827A0       .text makeRecInfo__14dFile_select_cFUc */
 void dFile_select_c::makeRecInfo(u8 param_1) {
-    /* Nonmatching - regswap */
     static const char* amariheartTex[] = {
         "heart_03.bti",
         "heart_02.bti",
         "heart_01.bti",
     };
 
+    int i;
+
     u8* saveData = &mSaveDataPtr[param_1 * sizeof(card_gamedata)];
 
     u16 curHealth = *(u16*)(saveData + 2);
 
     int curHearts = curHealth / 4;
-    if(curHealth % 4) {
+    int healthMod4 = curHealth % 4;
+    if(healthMod4) {
         curHearts += 1;
     }
 
     // display hearts
-    for(int i = 0; i < 0x14; i++) {
+    for(i = 0; i < 0x14; i++) {
         if(i < *(u16*)saveData / 4) {
             field_0x828[i].pane->show();
             field_0xc88[i].pane->show();
 
             if(i < curHearts) {
-                if(curHealth % 4 != 0 && i == curHearts - 1) {
-                    ((J2DPicture*)field_0x828[i].pane)->changeTexture(amariheartTex[(curHealth % 4) - 1], 0);
-                    ((J2DPicture*)field_0xc88[i].pane)->changeTexture(amariheartTex[(curHealth % 4) - 1], 0);
+                if(healthMod4 != 0 && i == curHearts - 1) {
+                    ((J2DPicture*)field_0x828[i].pane)->changeTexture(amariheartTex[healthMod4 - 1], 0);
+                    ((J2DPicture*)field_0xc88[i].pane)->changeTexture(amariheartTex[healthMod4 - 1], 0);
                 }
                 else {
                     ((J2DPicture*)field_0x828[i].pane)->changeTexture("heart.bti", 0);
@@ -646,7 +648,7 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
 
         temp = *(saveData + 0xBC);
         if(temp == 0xFF) {
-            for(int i = 0; i < 8; i++) {
+            for(i = 0; i < 8; i++) {
                 field_0x630[i].pane->hide();
             }
             field_0x630[8].pane->show();
@@ -654,7 +656,7 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
         else {
             field_0x630[8].pane->hide();
             int shardBit = 1;
-            for(int i = 0; i < 8; i++) {
+            for(i = 0; i < 8; i++) {
                 if(*(saveData + 0xBC) & (shardBit & 0xFF)) {
                     field_0x630[i].pane->show();
                 }
@@ -669,14 +671,14 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
     else {
         field_0x208[2].pane->show();
         field_0x5f8.pane->hide();
-        for(int i = 0; i < 9; i++) {
+        for(i = 0; i < 9; i++) {
             field_0x630[i].pane->hide();
         }
     }
 
     // display pearls
     int pearlBit = 1;
-    for(int i = 0; i < 3; i++) {
+    for(i = 0; i < 3; i++) {
         if(*(saveData + 0xBD) & (pearlBit & 0xFF)) {
             field_0x4a8[i].pane->show();
             field_0x550[i].pane->show();
@@ -2024,7 +2026,6 @@ void dFile_select_c::nextModeWait() {
 
 /* 80188C74-80189FB4       .text screenSet__14dFile_select_cFv */
 void dFile_select_c::screenSet() {
-    /* Nonmatching - regswap */
     static u32 l_Collec[12] = {
         'ci00',
         'ci01',
@@ -2144,13 +2145,15 @@ void dFile_select_c::screenSet() {
         '3017'
     };
 
+    int i;
+
     fopMsgM_setPaneData(&field_0x10, fileSel.Scr->search('exk0'));
     fopMsgM_setPaneData(&field_0x48, fileSel.Scr->search('ex00'));
     fopMsgM_setPaneData(&field_0x80[0], fileSel.Scr->search('expl'));
     fopMsgM_setPaneData(&field_0x80[1], fileSel.Scr->search('exp2'));
 
     char str[0x30];
-    for(int i = 0; i < 0x30; i++) {
+    for(i = 0; i < 0x30; i++) {
         str[i] = 'A';
     }
     str[0x2F] = 0;
@@ -2167,7 +2170,7 @@ void dFile_select_c::screenSet() {
     ((J2DTextBox*)field_0x160.pane)->setFont(fileSel.font);
 
     char str2[0x80];
-    for(int i = 0; i < 0x80; i++) {
+    for(i = 0; i < 0x80; i++) {
         str2[i] = 'A';
     }
     str2[0x7F] = 0;
@@ -2202,11 +2205,11 @@ void dFile_select_c::screenSet() {
         'tri8'
     };
 
-    for(int i = 0; i < 9; i++) {
+    for(i = 0; i < 9; i++) {
         fopMsgM_setPaneData(&field_0x630[i], fileSel.Scr->search(temp[i]));
     }
 
-    for(int i = 0; i < 0x14; i++) {
+    for(i = 0; i < 0x14; i++) {
         fopMsgM_setPaneData(&field_0x828[i], fileSel.Scr->search(l_Heart[i]));
         fopMsgM_setPaneData(&field_0xc88[i], fileSel.Scr->search(l_HeartSdw[i]));
     }
@@ -2222,13 +2225,13 @@ void dFile_select_c::screenSet() {
     fopMsgM_setPaneData(&field_0x1238[1], fileSel.Scr->search('1dat'));
 
     u32 tag = 'a000';
-    for(int i = 2; i < 0xC; i++) {
+    for(i = 2; i < 0xC; i++) {
         fopMsgM_setPaneData(&field_0x1238[i], fileSel.Scr->search(tag));
         tag++;
     }
 
     tag = 'ak01';
-    for(int i = 0xC; i < 0x10; i++) {
+    for(i = 0xC; i < 0x10; i++) {
         fopMsgM_setPaneData(&field_0x1238[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2243,7 +2246,7 @@ void dFile_select_c::screenSet() {
     }
 
     tag = 'bk01';
-    for(int i = 0xC; i < 0x10; i++) {
+    for(i = 0xC; i < 0x10; i++) {
         fopMsgM_setPaneData(&field_0x15b8[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2252,13 +2255,13 @@ void dFile_select_c::screenSet() {
     fopMsgM_setPaneData(&field_0x1938[1], fileSel.Scr->search('3dat'));
 
     tag = 'c000';
-    for(int i = 2; i < 0xC; i++) {
+    for(i = 2; i < 0xC; i++) {
         fopMsgM_setPaneData(&field_0x1938[i], fileSel.Scr->search(tag));
         tag++;
     }
 
     tag = 'ck01';
-    for(int i = 0xC; i < 0x10; i++) {
+    for(i = 0xC; i < 0x10; i++) {
         fopMsgM_setPaneData(&field_0x1938[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2274,12 +2277,12 @@ void dFile_select_c::screenSet() {
     field_0x38f4[0] = ((J2DTextBox*)field_0x1cb8[1].pane)->getStringPtr();
     field_0x3900[0] = ((J2DTextBox*)field_0x1cb8[2].pane)->getStringPtr();
 
-    for(int i = 3; i < 0x15; i++) {
+    for(i = 3; i < 0x15; i++) {
         fopMsgM_setPaneData(&field_0x1cb8[i], fileSel.Scr->search(l_RecInfo1[i - 3]));
     }
 
     tag = '1k01';
-    for(int i = 0x15; i < 0x1D; i++) {
+    for(i = 0x15; i < 0x1D; i++) {
         fopMsgM_setPaneData(&field_0x1cb8[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2293,12 +2296,12 @@ void dFile_select_c::screenSet() {
     field_0x38f4[1] = ((J2DTextBox*)field_0x2310[1].pane)->getStringPtr();
     field_0x3900[1] = ((J2DTextBox*)field_0x2310[2].pane)->getStringPtr();
 
-    for(int i = 3; i < 0x15; i++) {
+    for(i = 3; i < 0x15; i++) {
         fopMsgM_setPaneData(&field_0x2310[i], fileSel.Scr->search(l_RecInfo2[i - 3]));
     }
 
     tag = '2k01';
-    for(int i = 0x15; i < 0x1D; i++) {
+    for(i = 0x15; i < 0x1D; i++) {
         fopMsgM_setPaneData(&field_0x2310[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2312,18 +2315,18 @@ void dFile_select_c::screenSet() {
     field_0x38f4[2] = ((J2DTextBox*)field_0x2968[1].pane)->getStringPtr();
     field_0x3900[2] = ((J2DTextBox*)field_0x2968[2].pane)->getStringPtr();
 
-    for(int i = 3; i < 0x15; i++) {
+    for(i = 3; i < 0x15; i++) {
         fopMsgM_setPaneData(&field_0x2968[i], fileSel.Scr->search(l_RecInfo3[i - 3]));
     }
 
     tag = '3k01';
-    for(int i = 0x15; i < 0x1D; i++) {
+    for(i = 0x15; i < 0x1D; i++) {
         fopMsgM_setPaneData(&field_0x2968[i], fileSel.Scr->search(tag));
         tag++;
     }
 
     tag = '2cu1';
-    for(int i = 0; i < 5; i++) {
+    for(i = 0; i < 5; i++) {
         fopMsgM_setPaneData(&field_0x2fc0[i], fileSel.Scr->search(tag));
         tag++;
     }
@@ -2980,10 +2983,10 @@ void dFile_select_c::displayInit() {
 
 /* 8018BD24-8018C0C0       .text setSaveData__14dFile_select_cFv */
 void dFile_select_c::setSaveData() {
-    /* Nonmatching - regswap */
+    int i;
     u8* data = mSaveDataPtr;
 
-    for(int i = 0; i < 3; i++) {
+    for(i = 0; i < 3; i++) {
         fopMsgM_pane_class* temp1;
 
         switch(i) {
