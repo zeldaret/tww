@@ -931,13 +931,13 @@ public:
     void initDan(s8 i_stage) { mDan.init(i_stage); }
 
     u8 getDataNum() { return mDataNum; }
-    void getMemCardCheckID() {}
-    void getNewFile() {}
-    void getNoFile() {}
+    u64 getMemCardCheckID() { return field_0x1298; }
+    u8 getNewFile() { return field_0x1292; }
+    u8 getNoFile() { return field_0x1291; }
     void setDataNum(u8 num) { mDataNum = num; }
-    void setMemCardCheckID(u64) {}
+    void setMemCardCheckID(u64 id) { field_0x1298 = id; }
     void setNewFile(u8) {}
-    void setNoFile(u8) {}
+    void setNoFile(u8 no) { field_0x1291 = no; }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;
@@ -958,7 +958,7 @@ public:
     /* 0x1290 */ u8 mDataNum;
     /* 0x1291 */ u8 field_0x1291;
     /* 0x1292 */ u8 field_0x1292;
-    /* 0x1298 */ s64 field_0x1298;
+    /* 0x1298 */ u64 field_0x1298;
 };  // Size: 0x12A0
 
 #if VERSION > VERSION_DEMO
