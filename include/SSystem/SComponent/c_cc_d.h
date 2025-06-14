@@ -145,7 +145,7 @@ public:
     void Set(const cCcD_SrcCpsAttr& pSrc) {
         cM3dGCps::Set(pSrc.mCps);
     }
-    void Set(const cXyz& pStart, const cXyz& pEnd, float radius) {
+    void Set(const cXyz& pStart, const cXyz& pEnd, f32 radius) {
         cM3dGCps::Set(pStart, pEnd, radius);
     }
 

@@ -18,6 +18,8 @@ public:
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
+    MtxP getMtx() { return mpMtx; }
+    void setMatrix(MtxP mtx) { mpMtx = mtx; }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ MtxP mpMtx;

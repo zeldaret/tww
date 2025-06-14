@@ -105,6 +105,7 @@ enum dCcG_At_Spl {
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
     /* 0x2 */ dCcG_At_Spl_UNK2 = 2,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
+    /* 0x4 */ dCcG_At_Spl_UNK4 = 4,
     /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
     /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
