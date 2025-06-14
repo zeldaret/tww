@@ -559,7 +559,7 @@ config.libs = [
             Object(NonMatching, "d/d_camera.cpp"),
             Object(Matching,    "d/d_envse.cpp"),
             Object(NonMatching, "d/d_file_error.cpp"),
-            Object(NonMatching, "d/d_file_select.cpp"),
+            Object(MatchingFor("GZLE01"), "d/d_file_select.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_gameover.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kankyo.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kyeff.cpp"),
