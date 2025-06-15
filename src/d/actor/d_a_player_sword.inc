@@ -1540,7 +1540,7 @@ BOOL daPy_lk_c::procCutRoll() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         uVar1 = current.angle.y;
-        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
             fVar2 = 25.0f + mAcchCir[0].GetWallR();
             local_48.set(current.pos.x, current.pos.y + mAcchCir[0].GetWallH(), current.pos.z);
             f32 cos = cM_scos(uVar1);
@@ -1568,7 +1568,7 @@ BOOL daPy_lk_c::procCutRoll() {
         }
         sVar3 = current.angle.y - uVar1;
         if (dComIfGp_event_runCheck() != 0) {
-            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e) {
+            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e) {
                 m34D0 = 0;
             } else {
                 m34D0 = 5;
@@ -1587,7 +1587,7 @@ BOOL daPy_lk_c::procCutRoll() {
         } else if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
             shape_angle.y = shape_angle.y + m34EC;
             current.angle.y = shape_angle.y;
-            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
                 procWait_init();
             } else {
                 procCutRollEnd_init();

@@ -852,7 +852,7 @@ f32 daShip_c::getWaterY() {
         waterY = m03F4;
 #else
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-        if (link && link->mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e ) {
+        if (link && link->mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e ) {
             waterY = 0.0f;
         }
         else {

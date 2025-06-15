@@ -631,7 +631,7 @@ BOOL daPy_lk_c::procGrabPut() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     if (grab_actor == NULL) {
-        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_GRAB_PUT_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
             return true;
         } else {
@@ -686,7 +686,7 @@ BOOL daPy_lk_c::procGrabPut() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         grab_actor->speedF = 0.0f;
         freeGrabItem();
-        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_GRAB_PUT_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             checkNextMode(0);

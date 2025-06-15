@@ -208,7 +208,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
         return true;
     }
 
-    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_BO_OPEN_e) {
         if (!dComIfGp_event_compulsory(this)) {
             return false;
         }
@@ -235,7 +235,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     } else {
         mProcVar0.m3570 = 2;
     }
-    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_BO_OPEN_e) {
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     }
     initShipRideUseItem(iVar1, 2);
