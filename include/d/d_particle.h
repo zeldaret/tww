@@ -414,6 +414,7 @@ public:
     JPABaseEmitter* setSimpleLand(cBgS_PolyInfo&, cXyz const*, csXyz const*, f32, f32, f32, dKy_tevstr_c*, int*, int);
     s32 checkAtrCodeEffect(int);
     JPABaseEmitter* setNormalStripes(u16, cXyz const*, csXyz const*, cXyz const*, u8, u16);
+    static dPa_kageroEcallBack* getKageroEcallBack(){return &mKagero;}
     bool newSimple(u16, u8);
     bool setSimple(u16, cXyz const*, u8, GXColor const&, GXColor const&, int);
     dPa_simpleEcallBack* getSimple(u16);
