@@ -22,7 +22,7 @@ void daPy_lk_c::setSpeedAndAngleSwim() {
     BOOL bVar3 = false;
 
     if (mCurProc != daPyProc_SWIM_UP_e) {
-        if (!mpAttention->Lockon()) {
+        if (!checkAttentionLock()) {
             if (mStickDistance > 0.05f) {
                 oldAngleY = shape_angle.y;
 
@@ -510,7 +510,7 @@ BOOL daPy_lk_c::procSwimMove() {
     J3DFrameCtrl* mFrameCtrl = mFrameCtrlUnder;
 
     int direction;
-    if (!mpAttention->Lockon()) {
+    if (!checkAttentionLock()) {
         direction = DIR_FORWARD;
     }
     else if (mStickDistance > 0.05f) {

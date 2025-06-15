@@ -1785,7 +1785,6 @@ public:
             mCurProc == daPyProc_GRAB_THROW_e;
     }
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
-    void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
@@ -1808,11 +1807,13 @@ public:
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
+    static int getStartModeFromParam(u32 param) { return (param >> 0x0C) & 0xF; }
     int getStartEvent() { return (fopAcM_GetParam(this) >> 0x18) & 0xFF; }
     
     void onModeFlg(u32 flag) { mModeFlg |= flag; }
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
     u32 checkModeFlg(u32 flag) const { return mModeFlg & flag; }
+    void clearDamageWait() { offModeFlg(ModeFlg_DAMAGE); }
     
     request_of_phase_process_class* getPhase() { return &mPhase; }
     
@@ -1842,8 +1843,13 @@ public:
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType()  != 0; }
     void checkSpecialDemoMode() const {}
     
-    void checkAttentionLock() {}
+    f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) {
+        return param_0 + (mStickDistance * (param_1 - param_0));
+    }
+    void seStartSystem(u32 i_seNum) { mDoAud_seStart(i_seNum); }
+    BOOL checkAttentionLock() { return mpAttention->Lockon(); }
     void checkBoomerangRock() {}
+    
     void checkBothItemEquipAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
@@ -1854,12 +1860,9 @@ public:
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void getAnmSpeedStickRate(f32, f32) {}
     void getBombWaterPillarBrk() {} // mpGwp00BrkData?
     void getBombWaterPillarBtk() {} // mpGwp00BtkData?
-    void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
-    void seStartSystem(u32) {}
     void setFootEffectPosType(u8) {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
@@ -2180,7 +2183,7 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 mStickDistance; // 
+    /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;

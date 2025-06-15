@@ -569,7 +569,7 @@ BOOL daPy_lk_c::procBottleGet() {
         m355E = 1;
     }
     if (frameCtrl.checkPass(39.0f)) {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     }
     return true;

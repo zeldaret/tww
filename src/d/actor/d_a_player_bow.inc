@@ -177,7 +177,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                 setBowReloadAnime();
                 makeArrow();
                 if (mActorKeepEquip.getActor() == NULL) {
-                    mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+                    seStartSystem(JA_SE_ITEM_TARGET_OUT);
                 }
             } else if (daArrow_c::changeArrowMp()) {
                 if (mEquipItem != dItem_BOW_e) {
@@ -208,7 +208,7 @@ void daPy_lk_c::checkNextActionBowFly() {
 
 /* 8014A680-8014A6F4       .text checkNextBowMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextBowMode() {
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procBowMove_init();
     } else {
         return procBowSubject_init();
@@ -259,7 +259,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
 BOOL daPy_lk_c::procBowSubject() {
     dComIfGp_setDoStatus(dActStts_RETURN_e);
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -296,7 +296,7 @@ BOOL daPy_lk_c::procBowMove_init() {
 BOOL daPy_lk_c::procBowMove() {
     if (mpAttnActorLockOn != NULL) {
         setSpeedAndAngleAtnActor();
-    } else if (!mpAttention->Lockon() && mActorKeepEquip.getActor() == NULL) {
+    } else if (!checkAttentionLock() && mActorKeepEquip.getActor() == NULL) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
     } else {
         setSpeedAndAngleAtn();

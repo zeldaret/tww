@@ -328,7 +328,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
             } else {
                 return true;
             }
-        } else if (!mpAttention->Lockon()) {
+        } else if (!checkAttentionLock()) {
             dComIfGp_setDoStatus(dActStts_RETURN_e);
         }
         if (((itemButton()) && (mEquipItem == getReadyItem())) && (m355C == 0)) {
@@ -363,7 +363,7 @@ BOOL daPy_lk_c::checkNextRopeMode() {
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procRopeMove_init();
     } else {
         return procRopeSubject_init();
@@ -404,7 +404,7 @@ BOOL daPy_lk_c::procRopeSubject_init() {
 
     current.angle.y = shape_angle.y;
 
-    mDoAud_seStart(JA_SE_CAMERA_L_MOVE);
+    seStartSystem(JA_SE_CAMERA_L_MOVE);
 
     mProcVar0.m3570 = 0;
     m3600 = -1.0f;
@@ -426,7 +426,7 @@ BOOL daPy_lk_c::procRopeSubject() {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -446,11 +446,11 @@ BOOL daPy_lk_c::procRopeSubject() {
                 mSightPacket.incFrame();
 
                 if (mSightPacket.checkSEFrame()) {
-                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                    seStartSystem(JA_SE_INDICATOR_1);
                 }
             } else {
                 mSightPacket.onLockFlg();
-                mDoAud_seStart(JA_SE_INDICATOR_1);
+                seStartSystem(JA_SE_INDICATOR_1);
             }
         } else {
             mSightPacket.offLockFlg();
@@ -765,7 +765,7 @@ BOOL daPy_lk_c::procRopeSwing() {
         procRopeHangWait_init(0);
     } else if (f30 > 0.6f) {
         if (cM_fcos(sp0C) > 0.77f) {
-            mDoAud_seStart(JA_SE_LK_ROPE_SWING_F, &mRopePos, NULL, mReverb);
+            mDoAud_seStart(JA_SE_LK_ROPE_SWING_F, &mRopePos, 0, mReverb);
         }
     }
 
@@ -1157,7 +1157,7 @@ BOOL daPy_lk_c::procRopeMove() {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
         } else {
-            if ((m355E == 0) && (!mpAttention->Lockon())) {
+            if ((m355E == 0) && (!checkAttentionLock())) {
                 resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             } else {
                 setSpeedAndAngleAtn();
@@ -1202,7 +1202,7 @@ BOOL daPy_lk_c::procRopeThrowCatch() {
     if (!checkItemModeActorPointer()) {
         return true;
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK40000_e);
     } else {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);

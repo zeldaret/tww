@@ -409,7 +409,7 @@ int daPy_lk_c::changeCutProc() {
     m34C4++;
     int direction = getCutDirection() - 1;
     short sVar2;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {
         sVar2 = m34E8;
@@ -434,7 +434,7 @@ int daPy_lk_c::changeCutProc() {
         } else if (direction == DIR_RIGHT) {
             procCutR_init(sVar2);
         } else if (direction == DIR_NONE) {
-            if (mpAttention->Lockon()) {
+            if (checkAttentionLock()) {
                 procCutA_init(sVar2);
             } else {
                 procCutL_init(sVar2);
@@ -1708,7 +1708,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
         }
     }
     if (m34D0 != -1) {
-        mDoAud_seStart(JA_SE_LK_SWORD_CHARGE);
+        seStartSystem(JA_SE_LK_SWORD_CHARGE);
     }
     if (changeSlideProc()) {
         return true;

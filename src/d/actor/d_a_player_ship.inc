@@ -238,7 +238,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
 
 /* 801403E0-80140480       .text setShipAttentionAnmSpeed__9daPy_lk_cFf */
 void daPy_lk_c::setShipAttentionAnmSpeed(f32 param_0) {
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
         mFrameCtrlUpper[UPPER_MOVE2_e].setRate(param_0);
     } else {
@@ -706,7 +706,7 @@ BOOL daPy_lk_c::procShipScope_init(int param_0) {
     setShipRidePos(0);
     setSingleMoveAnime(ANM_WAITS, daPy_HIO_move_c0::m.field_0x38, 0.0f, -1, 5.0f);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e);
-    mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_1);
+    seStartSystem(JA_SE_ITM_SUBMENU_IN_1);
     offNoResetFlg0(daPyFlg0_SCOPE_CANCEL);
     mEquipItem = dComIfGp_getSelectItem(mReadyItemBtn);
     if (param_0 != 0) {
@@ -785,7 +785,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
             if (checkUpperAnime(LKANM_BCK_BOOMWAIT)) {
                 setShipAttentionAnmSpeed(daPy_HIO_boom_c0::m.field_0x18);
                 checkNextActionBoomerangReady();
-                if (mpAttention->Lockon()) {
+                if (checkAttentionLock()) {
                     setShipAttnetionBodyAngle();
                 } else {
                     m34DA = 0;
@@ -835,7 +835,7 @@ BOOL daPy_lk_c::procShipHookshot_init() {
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_SHIP_RIDE_e);
     setShipRidePos(0);
     m34D4 = ship->shape_angle.y;
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         mProcVar0.m3570 = 1;
     } else {
         mProcVar0.m3570 = 0;
@@ -852,7 +852,7 @@ BOOL daPy_lk_c::procShipHookshot() {
     setShipRidePos(0);
     dComIfGp_setDoStatus(dActStts_RETURN_e);
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
-    if (doTrigger() || hookshot == NULL || (mProcVar0.m3570 != 0 && m355E == 0 && !mpAttention->Lockon())) {
+    if (doTrigger() || hookshot == NULL || (mProcVar0.m3570 != 0 && m355E == 0 && !checkAttentionLock())) {
         procShipPaddle_init();
         deleteEquipItem(TRUE);
         return true;
@@ -863,7 +863,7 @@ BOOL daPy_lk_c::procShipHookshot() {
     if (hookshot->checkWait()) {
         setShipAttentionAnmSpeed(1.0f);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         if (hookshot->checkWait()) {
             setShipAttnetionBodyAngle();
         } else {
@@ -879,7 +879,7 @@ BOOL daPy_lk_c::procShipHookshot() {
         shape_angle.y += (s16)(ship->shape_angle.y - m34D4);
     }
     if (hookshot->checkWait()) {
-        if (!mpAttention->Lockon()) {
+        if (!checkAttentionLock()) {
             setHookshotSight();
         } else {
             mSightPacket.offDrawFlg();
@@ -915,7 +915,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     setShipRidePos(0);
     m34D4 = ship->shape_angle.y;
     m34DA = 0;
-    if (mpAttention->Lockon() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
+    if (checkAttentionLock() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
         mProcVar0.m3570 = 1;
     } else {
         mProcVar0.m3570 = 0;
@@ -932,7 +932,7 @@ BOOL daPy_lk_c::procShipBow() {
     setShipRidePos(0);
     if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e) {
         dComIfGp_setDoStatus(dActStts_RETURN_e);
-        if (doTrigger() || ((!mpAttention->Lockon() && mActorKeepEquip.getActor() == NULL) && mProcVar0.m3570 != 0)) {
+        if (doTrigger() || ((!checkAttentionLock() && mActorKeepEquip.getActor() == NULL) && mProcVar0.m3570 != 0)) {
             procShipPaddle_init();
             deleteEquipItem(TRUE);
             return true;
@@ -944,7 +944,7 @@ BOOL daPy_lk_c::procShipBow() {
     if (checkBowWaitAnime()) {
         setShipAttentionAnmSpeed(1.0f);
     }
-    if (mpAttention->Lockon() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e)) {
+    if (checkAttentionLock() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK44_e)) {
         setShipAttnetionBodyAngle();
         mProcVar0.m3570 = 1;
     } else {

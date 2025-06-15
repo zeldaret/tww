@@ -102,7 +102,7 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
     if (!checkBoomerangAnime()) {
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procBoomerangMove_init();
     } else {
         return procBoomerangSubject_init();
@@ -166,7 +166,7 @@ BOOL daPy_lk_c::procBoomerangSubject() {
 
     setShapeAngleToAtnActor();
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -256,7 +256,7 @@ BOOL daPy_lk_c::procBoomerangCatch_init() {
 
 /* 80149E1C-80149ECC       .text procBoomerangCatch__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBoomerangCatch() {
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
         setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);

@@ -969,10 +969,10 @@ void dSv_player_config_c::init() {
     u32 soundMode = OSGetSoundMode();
     if (soundMode == 0) {
         mSoundMode = 0;
-        JAIZelBasic::getInterface()->setOutputMode(0);
+        mDoAud_setOutputMode(0);
     } else {
         mSoundMode = 1;
-        JAIZelBasic::getInterface()->setOutputMode(1);
+        mDoAud_setOutputMode(1);
     }
 
     mAttentionType = 0;

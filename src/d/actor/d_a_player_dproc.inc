@@ -208,7 +208,7 @@ BOOL daPy_lk_c::dProcTalk_init() {
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10_e);
     if (mDemo.getParam0() != 1) {
-        mDoAud_seStart(JA_SE_TALK_START);
+        seStartSystem(JA_SE_TALK_START);
     }
     initShipRideUseItem(iVar2, 0);
     return true;
@@ -398,7 +398,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
         param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
     {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     } else if ((param_1 == dItem_HEART_CONTAINER_e) ||
                (param_1 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
@@ -411,7 +411,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
         dComIfGp_setMesgBgmOn();
     } else if (param_2 != dItem_HEART_e) {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     } else {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
@@ -1453,7 +1453,7 @@ BOOL daPy_lk_c::dProcPresent_init() {
         dProcPresent_init_sub();
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10_e);
-    mDoAud_seStart(JA_SE_TALK_START);
+    seStartSystem(JA_SE_TALK_START);
     m3574 = 0;
     return true;
 }
@@ -1584,9 +1584,7 @@ BOOL daPy_lk_c::dProcStandItemPut() {
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
         if (grab_actor != NULL) {
-            mDoAud_seStart(
-                JA_SE_LK_W_DAIZA_ATTACH, &grab_actor->current.pos, NULL, dComIfGp_getReverb(grab_actor->current.roomNo)
-            );
+            fopAcM_seStartCurrent(grab_actor, JA_SE_LK_W_DAIZA_ATTACH, 0);
         }
         freeGrabItem();
         dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -1746,7 +1744,7 @@ BOOL daPy_lk_c::dProcAgbUse_init() {
     setAnimeEquipItem();
     mVelocity = 0.0f;
     setSingleMoveAnime(ANM_USETCEIVER, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
-    mDoAud_seStart(JA_SE_TALK_START);
+    seStartSystem(JA_SE_TALK_START);
     initShipRideUseItem(iVar2, 2);
     return true;
 }

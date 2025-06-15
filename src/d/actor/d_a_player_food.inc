@@ -34,7 +34,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         return TRUE;
     }
     if (m3630 != fpcM_ERROR_PROCESS_ID_e) {
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+        seStartSystem(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
 

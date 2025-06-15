@@ -1171,13 +1171,12 @@ void dComIfGs_setGameStartStage() {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
             point = player_p->mRestartPoint;
 
-            s8 temp_r3 = player_p->current.roomNo;
-            room_no = temp_r3;
+            room_no = fopAcM_GetRoomNo(player_p);
 
-            stage_scls_info_class* scls_p;
-            if (temp_r3 >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
+            if (fopAcM_GetRoomNo(player_p) >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
                 strcpy(stage_name, dComIfGp_getStartStageName());
             } else {
+                stage_scls_info_class* scls_p;
                 if (dComIfGp_getShipActor() != NULL) {
                     scls_p = dComIfGd_getMeshSceneList(dComIfGp_getShipActor()->current.pos);
                 } else {

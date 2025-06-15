@@ -37,7 +37,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
     float local_54;
     BOOL bVar2;
     int attrib_code;
-    int iVar6;
+    u32 iVar6;
     JPABaseEmitter* emitter;
     f32 dVar9;
     int iStack_58;
@@ -248,7 +248,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
         m34D4 = m34E8;
@@ -296,7 +296,7 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
     voiceStart(1);
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
         m34D4 = m34E8;

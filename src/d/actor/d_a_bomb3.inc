@@ -1195,7 +1195,7 @@ void daBomb_c::se_cannon_fly_set() {
 /* 800DC400-800DC44C       .text se_cannon_fly_stop__8daBomb_cFv */
 void daBomb_c::se_cannon_fly_stop() {
     if(field_0x77F) {
-        mDoAud_seStopActor(&current.pos, -1);
+        mDoAud_seStopActor(&current.pos);
         field_0x77F = 0;
     }
 }

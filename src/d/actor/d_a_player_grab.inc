@@ -222,7 +222,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         dComIfGp_setDoStatus(dActStts_OPEN_e);
     } else if (iVar3 != 0) {
         dComIfGp_setDoStatus(dActStts_DROP_e);
-    } else if (mpAttention->Lockon()) {
+    } else if (checkAttentionLock()) {
         int direction = getDirectionFromShapeAngle();
         if (mStickDistance <= 0.05f ||
             (mStickDistance > 0.05f && (direction == DIR_FORWARD || direction == DIR_BACKWARD)))
@@ -735,7 +735,7 @@ BOOL daPy_lk_c::procGrabWait() {
         return checkNextMode(0);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
         setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
@@ -755,7 +755,7 @@ BOOL daPy_lk_c::procGrabWait() {
         if (checkGrabAnime()) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         }
-    } else if (shape_angle.y != m34DE && !mpAttention->Lockon()) {
+    } else if (shape_angle.y != m34DE && !checkAttentionLock()) {
         float fVar2;
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
             fVar2 = -1.0f;
@@ -798,7 +798,7 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
         return checkNextMode(0);
     }
 
-    if (!mpAttention->Lockon() && mStickDistance > 0.05f) {
+    if (!checkAttentionLock() && mStickDistance > 0.05f) {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34E8,
