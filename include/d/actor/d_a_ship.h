@@ -35,7 +35,7 @@ public:
         daSFLG_UNK8000_e      = 0x00008000,
         daSFLG_UNK10000_e     = 0x00010000,
         daSFLG_SHOOT_CANNON_e = 0x00020000,
-        daSFLG_UNK40000_e     = 0x00040000,
+        daSFLG_CRANE_UP_END_e = 0x00040000,
         daSFLG_UNK80000_e     = 0x00080000,
         daSFLG_UNK100000_e    = 0x00100000,
         daSFLG_HEAD_NO_DRAW_e = 0x00200000,
@@ -75,6 +75,21 @@ public:
         PART_CRANE_e = 3,
     };
 
+    enum DemoMode_e {
+        DEMO_INIT_e = 0,
+        DEMO_MOVE_e = 1,
+        DEMO_SALVAGE_e = 2,
+        DEMO_UNK03_e = 3,
+        DEMO_RACE_FAIL_e = 4,
+        DEMO_KEEP_e = 5,
+        DEMO_NECK_e = 6,
+        DEMO_THROW_e = 7,
+        DEMO_OPEN_e = 8,
+        DEMO_TORNADO_S_e = 9,
+        DEMO_HWARP_UP_e = 10,
+        DEMO_HWARP_DOWN_e = 11,
+    };
+
     typedef BOOL (daShip_c::*ProcFunc)();
     
     u32 checkStateFlg(daSHIP_SFLG flag) const { return mStateFlag & flag; }
@@ -85,6 +100,7 @@ public:
     void onJumpRideFlg() { onStateFlg(daSFLG_JUMP_RIDE_e); }
     BOOL checkJumpOkFlg() const { return checkStateFlg(daSFLG_JUMP_OK_e); }
     BOOL checkShootCannon() const { return checkStateFlg(daSFLG_SHOOT_CANNON_e); }
+    BOOL checkCraneUpEnd() const { return checkStateFlg(daSFLG_CRANE_UP_END_e); }
     BOOL checkHeadNoDraw() const { return checkStateFlg(daSFLG_HEAD_NO_DRAW_e); }
     
     void setSteerMove() { mNextMode = MODE_STEER_MOVE_e; }
@@ -99,6 +115,8 @@ public:
     void setTactWarp() { mNextMode = MODE_TACT_WARP_e; }
     void setStartModeThrow() { mNextMode = MODE_START_MODE_THROW_e; }
     
+    BOOL checkSalvageDemo() const { return m0351 == DEMO_SALVAGE_e; }
+    
     int getTactWarpPosNum() const { return mTactWarpPosNum; }
     void setTactWarpPosNum(int num) { mTactWarpPosNum = num; }
     u32 getTactWarpID() { return mTactWarpID; }
@@ -107,7 +125,6 @@ public:
     Mtx& getBodyMtx() { return mpBodyAnm->getModel()->getBaseTRMtx(); }
     
     void checkCraneMode() const {}
-    void checkCraneUpEnd() const {}
 #if VERSION == VERSION_DEMO
     BOOL checkForceMove() { return getTornadoActor() || getWhirlActor(); }
     daTornado_c* getTornadoActor() { return mTornadoActor; }
@@ -117,9 +134,6 @@ public:
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
 #endif
-    void checkRopeCntMax() const {}
-    void checkRopeDownStart() const {}
-    void checkSalvageDemo() const {}
     void checkTornadoFlg() const {}
     void checkTornadoUp() const {}
     f32 getBeltSpeed() const { return m1044.absXZ(); }
@@ -136,6 +150,8 @@ public:
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
     s16 getRopeCnt() const { return mRopeCnt; }
+    BOOL checkRopeDownStart() const { return mRopeCnt > 20; }
+    BOOL checkRopeCntMax() const { return mRopeCnt == 250; }
     s16 getSailAngle() { return mSailAngle; }
     void getTactJntMtx() {}
     f32 getTillerAngleRate() { return mTillerAngleRate; }
@@ -304,7 +320,7 @@ public:
     /* 0x0392 */ u16 m0392; // file idx
     /* 0x0394 */ s16 m0394;
     /* 0x0396 */ s16 m0396;
-    /* 0x0398 */ s16 m0398;
+    /* 0x0398 */ s16 m0398; // CraneAngle
     /* 0x039A */ s16 mCraneBaseAngle;
     /* 0x039C */ s16 m039C;
     /* 0x039E */ s16 mRopeCnt;

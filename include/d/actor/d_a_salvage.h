@@ -8,6 +8,11 @@ class dSalvage_control_c;
 
 class daSalvage_c : public fopAc_ac_c {
 public:
+    static int getSalvageId() { return mSalvageId; }
+    void setSalvageId(int) {}
+    static BOOL isValidSalvageId() { return mSalvageId != -1 ? TRUE : FALSE; }
+    void getSalvageKind() {}
+    
     void checkRegist(int) {}
     void checkUsed(int) {}
     void clrFlag(int, u8) {}
@@ -24,20 +29,16 @@ public:
     void getR(int) {}
     void getRoomNo(int) {}
     void getSRoomNo() {}
-    void getSalvageId() {}
-    void getSalvageKind() {}
     void getSaveNo(int) {}
     void getScale(int) {}
     void getSwitchNo(int) {}
     void getType(int) {}
     void init_one(int) {}
-    void isValidSalvageId() {}
     void setDrawMode(int, int) {}
     void setFlag(int, u8) {}
     void setNowAlpha(int, u8) {}
     void setPos(int, cXyz) {}
     void setSRoomNo(s8) {}
-    void setSalvageId(int) {}
 
     void CreateHeap();
     void CreateInit();
@@ -76,7 +77,7 @@ public:
     static const u16 m_savelabel[];
     static dSalvage_control_c* mTagData_p;
     static s8 mNowRoomNo;
-    static s32 mSalvageId;
+    static int mSalvageId;
 
 public:
     /* Place member variables here */

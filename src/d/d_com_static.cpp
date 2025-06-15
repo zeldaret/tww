@@ -125,7 +125,7 @@ const u16 daSalvage_c::m_savelabel[] = {
 };
 dSalvage_control_c* daSalvage_c::mTagData_p;
 s8 daSalvage_c::mNowRoomNo;
-s32 daSalvage_c::mSalvageId;
+int daSalvage_c::mSalvageId;
 
 /* 80056760-80056790       .text init_room__11daSalvage_cFSc */
 void daSalvage_c::init_room(s8 roomNo) {

@@ -15,10 +15,12 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
+#include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_salvage.h"
 #include "f_op/f_op_camera_mng.h"
 
 /* 8013F848-8013F8AC       .text shipSpecialDemoStart__9daPy_lk_cFv */
@@ -1020,12 +1022,134 @@ BOOL daPy_lk_c::procShipCrane_init() {
 
 /* 80142458-80142920       .text procShipCrane__9daPy_lk_cFv */
 BOOL daPy_lk_c::procShipCrane() {
-    /* Nonmatching */
-    // The following daShip_c inlines are used in this function:
-    // checkRopeDownStart
-    // checkRopeCntMax
-    // checkCraneUpEnd
-    // checkSalvageDemo
+    daShip_c* ship = dComIfGp_getShipActor();
+    if (ship == NULL) {
+        return checkNextMode(0);
+    }
+    
+    dComIfGp_setRStatus(dActStts_CRUISE_e);
+    
+#if VERSION == VERSION_DEMO
+    if (dComIfGp_getDoStatus() == dActStts_BLANK_e && ship->speedF >= 3.0f) {
+        dComIfGp_setDoStatus(dActStts_STOP_e);
+    }
+#endif
+    
+    if (!checkNoUpperAnime()) {
+        if (changeShipEndProc()) {
+            return TRUE;
+        }
+        if (ship->getRopeCnt() != 0) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+            initShipCraneAnime();
+        }
+#if VERSION > VERSION_DEMO
+        if (dComIfGp_getDoStatus() == dActStts_BLANK_e && ship->speedF >= 3.0f) {
+            dComIfGp_setDoStatus(dActStts_STOP_e);
+        }
+#endif
+    } else if (ship->checkSalvageDemo()) {
+        if (m34D4 == 0 && ship->checkCraneUpEnd()) {
+            m34D4 = 1;
+            daPy_ANM anm;
+            if (ship->getCraneBaseAngle() > 0) {
+                // TODO: is this salvage type stuff an inline?
+                int type;
+                if (daSalvage_c::isValidSalvageId()) {
+                    type = daSalvage_c::mTagData_p->getType(daSalvage_c::getSalvageId());
+                } else {
+                    type = -1;
+                }
+                if (type == 1) {
+                    anm = ANM_SALVRGOOD;
+                } else {
+                    anm = ANM_SALVRBAD;
+                }
+            } else {
+                int type;
+                if (daSalvage_c::isValidSalvageId()) {
+                    type = daSalvage_c::mTagData_p->getType(daSalvage_c::getSalvageId());
+                } else {
+                    type = -1;
+                }
+                if (type == 1) {
+                    anm = ANM_SALVLGOOD;
+                } else {
+                    anm = ANM_SALVLBAD;
+                }
+            }
+            offModeFlg(ModeFlg_00000100);
+            onModeFlg(ModeFlg_00000400);
+            setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 5.0f);
+        } else if (mProcVar0.m3570 == 0) {
+            if (ship->getCraneBaseAngle() > 0) {
+                setSingleMoveAnime(ANM_SALVRWAIT, 1.0f, 0.0f, -1, 5.0f);
+                mProcVar0.m3570 = 3;
+            } else {
+                setSingleMoveAnime(ANM_SALVLWAIT, 1.0f, 0.0f, -1, 5.0f);
+                mProcVar0.m3570 = 2;
+            }
+        }
+    } else {
+        if (changeShipEndProc()) {
+            return TRUE;
+        }
+#if VERSION > VERSION_DEMO
+        if (dComIfGp_getDoStatus() == dActStts_BLANK_e && ship->speedF >= 3.0f) {
+            dComIfGp_setDoStatus(dActStts_STOP_e);
+        }
+#endif
+        if (mProcVar0.m3570 == 3 && ship->getCraneBaseAngle() < 0) {
+            mProcVar0.m3570 = 0;
+            setSingleMoveAnime(ANM_SALVLR, 1.0f, 0.0f, -1, 5.0f);
+            offModeFlg(ModeFlg_00000100);
+            onModeFlg(ModeFlg_00000400);
+            m3574 = 2;
+        } else if (mProcVar0.m3570 == 2 && ship->getCraneBaseAngle() > 0) {
+            mProcVar0.m3570 = 0;
+            setSingleMoveAnime(ANM_SALVLR, -1.0f, 0.0f, -1, 5.0f);
+            offModeFlg(ModeFlg_00000100);
+            onModeFlg(ModeFlg_00000400);
+            m3574 = 3;
+        } else if (mProcVar0.m3570 == 0) {
+            if (std::fabsf(mFrameCtrlUnder[UNDER_MOVE0_e].getRate()) < 0.01f) {
+                if (m3574 == 3) {
+                    setSingleMoveAnime(ANM_SALVRWAIT, 1.0f, 0.0f, -1, 5.0f);
+                    mProcVar0.m3570 = 3;
+                    onModeFlg(ModeFlg_00000100);
+                    offModeFlg(ModeFlg_00000400);
+                } else {
+                    setSingleMoveAnime(ANM_SALVLWAIT, 1.0f, 0.0f, -1, 5.0f);
+                    mProcVar0.m3570 = 2;
+                    onModeFlg(ModeFlg_00000100);
+                    offModeFlg(ModeFlg_00000400);
+                }
+            } else if ((m3574 == 3 && ship->getCraneBaseAngle() < 0) || (m3574 == 2 && ship->getCraneBaseAngle() > 0)) {
+                mFrameCtrlUnder[UNDER_MOVE0_e].setRate(-1.0f * mFrameCtrlUnder[UNDER_MOVE0_e].getRate());
+                if (m3574 == 3) {
+                    m3574 = 2;
+                } else {
+                    m3574 = 3;
+                }
+            }
+        } else if (ship->checkRopeCntMax()) {
+            setTextureAnime(9, 0);
+        } else if (ship->checkRopeDownStart()) {
+            setTextureAnime(6, 0);
+        } else {
+            setTextureAnime(0, 0);
+        }
+    }
+    
+    if (checkModeFlg(ModeFlg_00000100) || mProcVar0.m3570 == 0) {
+        onModeFlg(ModeFlg_00000080 | ModeFlg_08000000);
+    } else {
+        offModeFlg(ModeFlg_00000080 | ModeFlg_08000000);
+    }
+    
+    setShipRidePos(1);
+    
+    return TRUE;
 }
 
 /* 80142920-80142A5C       .text procShipGetOff_init__9daPy_lk_cFv */
