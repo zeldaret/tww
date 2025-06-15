@@ -1312,15 +1312,15 @@ int dFile_select_c::DataSelectPaneCopyMove(s16 param_1, s16 param_2) {
         case 0:
             temp1 = PaneTranceRecTlt2(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
             temp2 = PaneTranceRecInfo2(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
-            temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0, 0.0f, 55.0f, 1, 0);
-            temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0, 0.0f, 55.0f, 1, 0);
+            temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
+            temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
 
             break;
         case 1:
             temp1 = PaneTranceRecTlt1(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 140.0f, 0.0f, 140.0f, 1, 0);
             temp2 = PaneTranceRecInfo1(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 140.0f, 0.0f, 140.0f, 1, 0);
-            temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0, 0.0f, 55.0f, 1, 0);
-            temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0, 0.0f, 55.0f, 1, 0);
+            temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
+            temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 55.0f, 0.0f, 55.0f, 1, 0);
 
             break;
         case 2:
@@ -1347,14 +1347,14 @@ int dFile_select_c::DataSelectPaneCopyBackMove(s16 param_1, s16 param_2) {
             temp5 = 1;
             temp6 = 1;
             if(field_0x3925 == 0) {
-                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0, 0.0f, 1, 0);
-                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0, 0.0f, 1, 0);
+                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
+                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
                 temp3 = 1;
                 temp4 = 1;
             }
             else {
-                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
-                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
                 temp3 = PaneTranceRecTlt2(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
                 temp4 = PaneTranceRecInfo2(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
             }
@@ -1366,20 +1366,20 @@ int dFile_select_c::DataSelectPaneCopyBackMove(s16 param_1, s16 param_2) {
             if(field_0x3925 == 0) {
                 temp1 = PaneTranceRecTlt1(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
                 temp2 = PaneTranceRecInfo1(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
-                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0, 0.0f, 0.0f, 1, 0);
-                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0, 0.0f, 0.0f, 1, 0);
+                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
+                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
             }
             else {
-                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
-                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
                 temp3 = PaneTranceRecTlt1(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
                 temp4 = PaneTranceRecInfo1(field_0x3930 - param_2, g_fsHIO.field_0x28, g_fsHIO.field_0x40, 0.0f, 0.0f, 0.0f, 1, 0);
             }
 
             break;
         case 2:
-            temp5 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -170.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
-            temp6 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -170.0, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+            temp5 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -170.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
+            temp6 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, -170.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
             
             if(field_0x3925 == 0) {
                 temp1 = PaneTranceRecTlt1(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 85.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 2);
@@ -1412,29 +1412,29 @@ int dFile_select_c::DataSelectPaneCopyMove2(s16 param_1, s16 param_2) {
             if(field_0x3925 == 0) {
                 temp1 = PaneTranceRecTlt2(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, 0.0f, 0, 2);
                 temp2 = PaneTranceRecInfo2(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, 0.0f, 0, 2);
-                temp3 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0, g_fsHIO.field_0x40, 55.0f, 0, 1);
-                temp4 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0, g_fsHIO.field_0x40, 55.0f, 0, 1);
+                temp3 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
+                temp4 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
             }
             else {
                 temp1 = PaneTranceRecTlt2(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
                 temp2 = PaneTranceRecInfo2(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
-                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
-                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
+                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
+                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
             }
 
             break;
         case 1:
             if(field_0x3925 == 0) {
-                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0, g_fsHIO.field_0x40, 55.0f, 0, 1);
-                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0, g_fsHIO.field_0x40, 55.0f, 0, 1);
+                temp1 = PaneTranceRecTlt3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
+                temp2 = PaneTranceRecInfo3(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 55.0f, g_fsHIO.field_0x40, 55.0f, 0, 1);
                 temp3 = PaneTranceRecTlt1(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 140.0f, 0.0f, 85.0f, 0, 2);
                 temp4 = PaneTranceRecInfo1(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 140.0f, 0.0f, 85.0f, 0, 2);
             }
             else {
                 temp1 = PaneTranceRecTlt1(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 140.0f, g_fsHIO.field_0x40, 140.0f, 0, 1);
                 temp2 = PaneTranceRecInfo1(field_0x3930 - param_1, g_fsHIO.field_0x28, 0.0f, 140.0f, g_fsHIO.field_0x40, 140.0f, 0, 1);
-                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
-                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
+                temp3 = PaneTranceRecTlt3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
+                temp4 = PaneTranceRecInfo3(field_0x3930 - param_2, g_fsHIO.field_0x28, 0.0f, 55.0f, 0.0f, -85.0f, g_fsHIO.field_0x07, 2);
             }
 
             break;

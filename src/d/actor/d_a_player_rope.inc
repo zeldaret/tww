@@ -122,10 +122,57 @@ int daPy_lk_c::changeRopeToHangProc() {
 }
 
 /* 8014327C-80143694       .text checkRopeSwingWall__9daPy_lk_cFP4cXyzP4cXyzPsPf */
-BOOL daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
-    /* Nonmatching */
-    static JGeometry::TVec3<f32> dynamic_scale;
-    static JGeometry::TVec3<f32> particle_scale;
+BOOL daPy_lk_c::checkRopeSwingWall(cXyz* r4, cXyz* r5, s16* r6, f32* r7) {
+    static JGeometry::TVec3<f32> dynamic_scale(0.25f, 0.25f, 0.25f);
+    static JGeometry::TVec3<f32> particle_scale(0.75f, 0.75f, 0.75f);
+    
+    mLinkLinChk.Set(r4, r5, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+        f32 f1 = -*r6 / (f32)m34D4;
+        if (f1 > 1.0f) {
+            f1 = 1.0f;
+        } else if (f1 < -1.0f) {
+            f1 = -1.0f;
+        }
+        if (*r7 > 0.0f) {
+            *r7 = cM_atan2f(f1, -std::sqrtf(1.0f - f1*f1));
+        } else {
+            *r7 = cM_atan2f(f1, std::sqrtf(1.0f - f1*f1));
+        }
+        m35A8 = *r7 / m35A4;
+        daPy_footEffect_c* foot_effect = &mFootEffect[1];
+        if (foot_effect->getID() != -1) {
+            foot_effect->getSmokeCallBack()->remove();
+            foot_effect->getOtherCallBack()->remove();
+        }
+        
+        cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        cXyz* normal = plane->GetNP();
+        cXyz sp50 = mLinkLinChk.GetCross() + *normal * 10.0f;
+        foot_effect->setPos(&sp50);
+        csXyz angle;
+        angle.x = cM_atan2s(normal->absXZ(), normal->y);
+        angle.y = cM_atan2s(normal->x, normal->z);
+        angle.z = 0;
+        foot_effect->setAngle(&angle);
+        
+        JPABaseEmitter* emitter = dComIfGp_particle_setToonP1(
+            dPa_name::ID_COMMON_2022,
+            &foot_effect->getPos(), &foot_effect->getAngle(),
+            NULL, daPy_HIO_basic_c0::m.field_0x2, foot_effect->getSmokeCallBack(),
+            fopAcM_GetRoomNo(this)
+        );
+        if (emitter) {
+            emitter->setSpread(1.0f);
+            emitter->setRate(8.0f);
+            emitter->setGlobalDynamicsScale(dynamic_scale);
+            emitter->setGlobalParticleScale(particle_scale);
+        }
+        
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 80143694-80143A44       .text setBlendRopeMoveAnime__9daPy_lk_cFi */
