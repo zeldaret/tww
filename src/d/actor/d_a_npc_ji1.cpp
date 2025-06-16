@@ -4953,26 +4953,30 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     cXyz* windVec = dKyw_get_wind_vec();
 
     cXyz temp, temp2;
-    mDoMtx_multVecSR(i_this->field_0x330->getModel()->getAnmMtx(i_this->m_jnt.getHeadJntNum()), &l_head_front, &temp);
-    mDoMtx_multVecSR(i_this->field_0x330->getModel()->getAnmMtx(i_this->m_jnt.getHeadJntNum()), &l_head_top, &temp2);
+    J3DModel* pModel = i_this->field_0x330->getModel();
+    cMtx_multVecSR(i_this->field_0x330->getModel()->getAnmMtx(i_this->m_jnt.getHeadJntNum()), &l_head_front, &temp2);
+    cMtx_multVecSR(i_this->field_0x330->getModel()->getAnmMtx(i_this->m_jnt.getHeadJntNum()), &l_head_top, &temp);
     s16 temp3 = i_this->field_0xBA6;
     s16 temp4 = i_this->field_0xBA8;
 
-    if(temp2.y < 0) {
-        i_this->field_0xBA6 = cM_atan2s(temp.y, -temp.absXZ());
+    if(temp.y < 0) {
+        i_this->field_0xBA6 = cM_atan2s(temp2.y, -temp2.absXZ());
     }
     else {
-        i_this->field_0xBA6 = cM_atan2s(temp.y, temp.absXZ());
+        i_this->field_0xBA6 = cM_atan2s(temp2.y, temp2.absXZ());
     }
 
-    i_this->field_0xBA8 = cM_atan2s(temp.x, temp.z);
+    i_this->field_0xBA8 = cM_atan2s(temp2.x, temp2.z);
 
-    temp3 = (i_this->field_0xBA6 - temp3) * 2;
-    temp4 = (i_this->field_0xBA8 - temp4) * 2;
+    temp3 = (s16)(i_this->field_0xBA6 - temp3) >> 1;
+    temp4 = (s16)(i_this->field_0xBA8 - temp4) >> 1;
 
-    cXyz temp5;
-    mDoMtx_multVecZero(i_this->field_0x330->getModel()->getAnmMtx(i_this->hair1JointNo), &temp5);
-    cXyz temp6(i_this->field_0xBC4.x - temp5.x, i_this->field_0xBC4.y - temp5.y - 8.5f, i_this->field_0xBC4.z - temp5.z);
+    MtxP pMtx = pModel->getAnmMtx(i_this->hair1JointNo);
+    cXyz temp5(pMtx[0][3], pMtx[1][3], pMtx[2][3]);
+    cXyz temp6;
+    temp6.x = i_this->field_0xBC4.x - temp5.x;
+    temp6.y = i_this->field_0xBC4.y - temp5.y - 8.5f;
+    temp6.z = i_this->field_0xBC4.z - temp5.z;
     temp6 += *windVec * wind;
 
     if(std::fabsf(temp6.x) < 0.01f) {
@@ -4985,31 +4989,35 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     s16 temp7 = i_this->field_0xBAA;
     s16 temp8 = i_this->field_0xBAC;
 
-    f32 temp10 = -(temp6.x * cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y()) + temp6.z * cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y()));
-    s16 temp9 = cM_atan2s(temp10, -temp6.y);
+    f32 temp10 = temp6.z * cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y()) + temp6.x * cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y());
+    s16 temp9 = cM_atan2s(-temp10, -temp6.y);
     if(temp9 < 0 && temp9 > -0x6000) {
         temp9 = 0;
     }
     else if(temp9 > 0x7C00 || temp9 <= -0x6000) {
         temp9 = 0x7C00;
     }
+    temp9 += i_this->field_0xBA6;
 
-    cLib_addCalcAngleS2(&i_this->field_0xBAA, temp9 + i_this->field_0xBA6, 5, 0x400);
+    cLib_addCalcAngleS2(&i_this->field_0xBAA, temp9, 5, 0x400);
 
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3);
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3);
     i_this->field_0xBAA = cLib_minMaxLimit(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
 
-    f32 temp11 = temp6.x * cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y()) - temp6.z * cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y());
-    cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(temp11, std::sqrtf(temp11 * temp11 + temp6.y * temp6.y)), 5, 0x400);
+    f32 temp11 = cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y());
+    f32 temp12 = cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y());
+    cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(temp6.z * temp11 - temp6.x * temp12, std::sqrtf(temp10 * temp10 + temp6.y * temp6.y)), 5, 0x400);
 
     i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4);
     i_this->field_0xBAC = cLib_minMaxLimit(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
 
     i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - temp7) * 0.2f;
     i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - temp8) * 0.2f;
-    i_this->field_0xBAC -= (s16)(i_this->field_0xBAA - temp7);
-    i_this->field_0xBB8 -= (s16)(i_this->field_0xBAE - temp8);
+    s16 temp15 = i_this->field_0xBAA - temp7;
+    s16 temp16 = i_this->field_0xBAC - temp8;
+    i_this->field_0xBAE -= temp15;
+    i_this->field_0xBB0 -= temp16;
 
     temp7 = i_this->field_0xBAE;
     temp8 = i_this->field_0xBB0;
@@ -5017,7 +5025,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0xBAE, 0, 5, 0x400);
     cLib_addCalcAngleS2(&i_this->field_0xBB0, 0, 5, 0x400);
 
-    i_this->field_0xBAE += (s16)(i_this->field_0xBBA - temp4);
+    i_this->field_0xBAE += (s16)(i_this->field_0xBBA + temp3);
     i_this->field_0xBAE = cLib_minMaxLimit<s16>(i_this->field_0xBAE, l_HIO.field_0xF8 - i_this->field_0xBAA, l_HIO.field_0xFA - i_this->field_0xBAA);
 
     i_this->field_0xBB0 += (s16)(i_this->field_0xBBC - temp4);
@@ -5025,16 +5033,18 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBBA = (s16)(i_this->field_0xBAE - temp7) * 0.2f;
     i_this->field_0xBBC = (s16)(i_this->field_0xBB0 - temp8) * 0.2f;
-    i_this->field_0xBB0 -= (s16)(i_this->field_0xBAE - temp7);
-    i_this->field_0xBB2 -= (s16)(i_this->field_0xBB0 - temp8);
+    s16 temp17 = i_this->field_0xBAE - temp7;
+    s16 temp18 = i_this->field_0xBB0 - temp8;
+    i_this->field_0xBB2 -= temp17;
+    i_this->field_0xBB4 -= temp18;
 
-    temp7 = i_this->field_0xBAE;
-    temp8 = i_this->field_0xBB0;
+    temp7 = i_this->field_0xBB2;
+    temp8 = i_this->field_0xBB4;
 
     cLib_addCalcAngleS2(&i_this->field_0xBB2, 0, 5, 0x400);
     cLib_addCalcAngleS2(&i_this->field_0xBB4, 0, 5, 0x400);
 
-    i_this->field_0xBB2 += (s16)(i_this->field_0xBBE + temp4);
+    i_this->field_0xBB2 += (s16)(i_this->field_0xBBE + temp3);
     i_this->field_0xBB2 = cLib_minMaxLimit<s16>(i_this->field_0xBB2, l_HIO.field_0xFC - i_this->field_0xBAA - i_this->field_0xBAE, l_HIO.field_0xFE - i_this->field_0xBAA - i_this->field_0xBAE);
 
     i_this->field_0xBB4 += (s16)(i_this->field_0xBC0 - temp4);
@@ -5049,11 +5059,11 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     wind = cLib_maxLimit((wind + i_this->field_0xBC4.abs(temp5) * 0.65f) / 30.0f, 1.0f);
 
-    s16 temp12 = wind * 4600.0f + 1500.0f;
-    i_this->field_0xBD0 += temp12;
+    s16 temp14 = wind * 4600.0f + 1500.0f;
+    i_this->field_0xBD0 += temp14;
     i_this->field_0xBD2 = wind * 2280.0f * cM_scos(i_this->field_0xBD0);
-    i_this->field_0xBD4 = wind * 3908.0f * cM_scos(i_this->field_0xBD0 - temp12 * 3.0f);
-    i_this->field_0xBD6 = wind * 7568.0f * cM_scos(i_this->field_0xBD0 - temp12 * 6.0f);
+    i_this->field_0xBD4 = wind * 3908.0f * cM_scos(i_this->field_0xBD0 - temp14 * 3.0f);
+    i_this->field_0xBD6 = wind * 7568.0f * cM_scos(i_this->field_0xBD0 - temp14 * 6.0f);
     i_this->field_0xBC4 = temp5;
 
     return TRUE;
