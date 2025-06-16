@@ -17,29 +17,29 @@ public:
     void SpRollCutChcek() {}
 
     bool checkAction(Action_t action) {
-        return field_0x2B0 == action;
+        return mAction == action;
     }
 
     bool checkSubAction(SubAction_t subAction) {
-        return field_0x2D4 == subAction;
+        return mSubAction == subAction;
     }
 
     void setAction(Action_t action, void* arg) {
-        if(field_0x2B0 != action) {
-            if(field_0x2B0) {
+        if(mAction != action) {
+            if(mAction) {
                 field_0xC78 = 0xFF;
-                (this->*field_0x2B0)(arg);
+                (this->*mAction)(arg);
             }
 
-            field_0x2BC = field_0x2B0;
-            field_0x2B0 = action;
+            field_0x2BC = mAction;
+            mAction = action;
             field_0xC78 = 0;
-            (this->*field_0x2B0)(arg);
+            (this->*mAction)(arg);
         }
     }
 
     void setSubAction(SubAction_t subAction) {
-        field_0x2D4 = subAction;
+        mSubAction = subAction;
     }
 
     BOOL isGuardAnim();
@@ -153,29 +153,29 @@ public:
     /* 0x2A0 */ f32 field_0x2A0;
     /* 0x2A4 */ f32 field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8;
-    /* 0x2AC */ u32 field_0x2AC;
-    /* 0x2B0 */ Action_t field_0x2B0;
+    /* 0x2AC */ u32 mMsgNo;
+    /* 0x2B0 */ Action_t mAction;
     /* 0x2BC */ Action_t field_0x2BC;
     /* 0x2C8 */ Action_t field_0x2C8;
-    /* 0x2D4 */ SubAction_t field_0x2D4;
+    /* 0x2D4 */ SubAction_t mSubAction;
     /* 0x2E0 */ dPa_smokeEcallBack field_0x2E0;
     /* 0x300 */ dPa_smokeEcallBack field_0x300;
     /* 0x320 */ cXyz field_0x320;
     /* 0x32C */ s16 field_0x32C;
-    /* 0x330 */ mDoExt_McaMorf* field_0x330;
+    /* 0x330 */ mDoExt_McaMorf* mpOrcaMorf;
     /* 0x334 */ dNpc_EventCut_c mEventCut;
     /* 0x3A0 */ dNpc_JntCtrl_c m_jnt;
     /* 0x3D4 */ J3DAnmTexPattern* headTexPattern;
-    /* 0x3D8 */ mDoExt_btpAnm field_0x3D8;
-    /* 0x3EC */ u8 field_0x3EC;
-    /* 0x3EE */ s16 field_0x3EE;
-    /* 0x3F0 */ u32 field_0x3F0;
-    /* 0x3F4 */ mDoExt_McaMorf* mpMorf;
-    /* 0x3F8 */ J3DModel* field_0x3F8;
-    /* 0x3FC */ mDoExt_brkAnm field_0x3FC;
-    /* 0x414 */ f32 field_0x414;
-    /* 0x418 */ mDoExt_btkAnm field_0x418;
-    /* 0x42C */ f32 field_0x42C;
+    /* 0x3D8 */ mDoExt_btpAnm mBlinkAnim;
+    /* 0x3EC */ u8 mBlinkFrame;
+    /* 0x3EE */ s16 mBlinkTimer;
+    /* 0x3F0 */ u32 mShadowId;
+    /* 0x3F4 */ mDoExt_McaMorf* mpSpearMorf;
+    /* 0x3F8 */ J3DModel* mpTearsModel;
+    /* 0x3FC */ mDoExt_brkAnm mCryBrk;
+    /* 0x414 */ f32 mCryBrkFrame;
+    /* 0x418 */ mDoExt_btkAnm mCryBtk;
+    /* 0x42C */ f32 mCryBtkFrame;
     /* 0x430 */ JPABaseEmitter* field_0x430;
     /* 0x434 */ dBgS_ObjAcch mAcch;
     /* 0x5F8 */ dBgS_AcchCir mAcchCir;
@@ -217,7 +217,7 @@ public:
     /* 0xBD4 */ s16 field_0xBD4;
     /* 0xBD6 */ s16 field_0xBD6;
     /* 0xBD8 */ cXyz field_0xBD8[3];
-    /* 0xBFC */ dNpc_HeadAnm_c field_0xBFC;
+    /* 0xBFC */ dNpc_HeadAnm_c mHeadAnm;
     /* 0xC20 */ u32 pad_0xC20;
     /* 0xC24 */ s32 field_0xC24;
     /* 0xC28 */ u32 field_0xC28;
@@ -229,9 +229,9 @@ public:
     /* 0xC40 */ cXyz field_0xC40;
     /* 0xC4C */ f32 field_0xC4C;
     /* 0xC50 */ f32 field_0xC50;
-    /* 0xC54 */ s16 field_0xC54[0x12];
+    /* 0xC54 */ s16 mEventIdx[0x12];
     /* 0xC78 */ s8 field_0xC78;
-    /* 0xC7C */ request_of_phase_process_class field_0xC7C;
+    /* 0xC7C */ request_of_phase_process_class mPhs;
     /* 0xC84 */ u32 field_0xC84;
     /* 0xC88 */ s16 field_0xC88;
     /* 0xC8C */ s32 field_0xC8C;
@@ -255,7 +255,7 @@ public:
     /* 0xD44 */ u8 pad_0xD44[0xC];
     /* 0xD50 */ cXyz field_0xD50;
     /* 0xD5C */ csXyz field_0xD5C;
-    /* 0xD64 */ s32 field_0xD64;
+    /* 0xD64 */ s32 mAnimation;
     /* 0xD68 */ s32 field_0xD68;
     /* 0xD6C */ s32 field_0xD6C;
     /* 0xD70 */ s32 field_0xD70;
@@ -265,11 +265,11 @@ public:
     /* 0xD7A */ u8 field_0xD7A;
     /* 0xD7B */ u8 field_0xD7B;
     /* 0xD7C */ u8 field_0xD7C;
-    /* 0xD7D */ u8 field_0xD7D;
+    /* 0xD7D */ u8 mCreateItemNo;
     /* 0xD7E */ u8 field_0xD7E;
-    /* 0xD80 */ u32 field_0xD80;
+    /* 0xD80 */ u32 mEndMsgNo;
     /* 0xD84 */ u8 field_0xD84;
-    /* 0xD85 */ u8 field_0xD85;
+    /* 0xD85 */ bool mHide;
     
     static s8 game_life_point;
 }; // Size: 0xD88
