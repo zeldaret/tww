@@ -153,43 +153,69 @@ private:
     /* 0x54 */ s32 _54;
 };
 
-template <int T>
-struct TParseData {
+template <int S>
+struct TParseData : public data::TParse_TParagraph_data::TData {
     TParseData(const void* pContent) {
-        data::TParse_TParagraph_data data(pContent);
-        set(data);
+        set(data::TParse_TParagraph_data(pContent));
     }
 
     void set(const data::TParse_TParagraph_data& data) {
-        //data::TParse_TParagraph_data::TData* p = (data::TParse_TParagraph_data::TData*)this;
-        data.getData(m_data);
+        data.getData(this);
     }
 
     bool isEnd() const {
-        return m_data->status == 0;
+        return status == 0;
     }
 
     bool empty() const {
-        return m_data->fileCount == NULL;
+        return fileCount == NULL;
     }
 
     bool isValid() const {
-        return !empty() && m_data->status == 50;
+        return !empty() && status == S;
     }
 
-    data::TParse_TParagraph_data::TData* m_data;
+    u32 size() const { return _8; }
 };
 
-template <int T>
-struct TParseData_fixed : public TParseData<T> {
-    TParseData_fixed(const void* pContent) : TParseData<T>(pContent) {}
+template <int S, class Iterator=JGadget::binary::TValueIterator_raw<u8> >
+struct TParseData_fixed : public TParseData<S> {
+    TParseData_fixed(const void* pContent) : TParseData<S>(pContent) {}
 
     const void* getNext() const {
-        return this->m_data->fileCount;
+        return this->_10;
     }
 
     bool isValid() const {
-        return TParseData<T>::isValid() && getNext() != NULL;
+        return TParseData<S>::isValid() && getNext() != NULL;
+    }
+
+    Iterator begin() const {
+        return Iterator(this->fileCount);
+    }
+
+    Iterator end() const {
+        Iterator i(this->fileCount);
+        i += this->size();
+        return i;
+    }
+
+    // TODO: front and back are needed to daPy_lk_c::dProcTool
+    // these implementations are just guesses though, probably wrong
+    Iterator front() const {
+        // Iterator i = begin();
+        // i++;
+        // return i;
+        
+        // Iterator i(begin());
+        // ++i;
+        // return i;
+        
+        return Iterator(begin()) + 1;
+    }
+    Iterator back() const {
+        Iterator i = end();
+        return i + (-1);
     }
 };
 

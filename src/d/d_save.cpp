@@ -624,8 +624,8 @@ void dSv_player_bag_item_c::setReserveItemEmpty() {
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
-    setReserveItemChange(i_itemNo, dItem_NONE_e);
+void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemBtn) {
+    setReserveItemChange(i_itemBtn, dItem_NONE_e);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
