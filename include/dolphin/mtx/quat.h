@@ -13,8 +13,8 @@ typedef struct Quaternion {
 
 void C_QUATMultiply(const Quaternion* a, const Quaternion* b, Quaternion* ab);
 void PSQUATMultiply(const Quaternion* a, const Quaternion* b, Quaternion* ab);
-void C_QUATNormalize(const Quaternion* src, const Quaternion* unit);
-void PSQUATNormalize(const Quaternion* src, const Quaternion* unit);
+void C_QUATNormalize(const Quaternion* src, Quaternion* unit);
+void PSQUATNormalize(const Quaternion* src, Quaternion* unit);
 void C_QUATRotAxisRad(Quaternion* q, const Vec* axis, f32 rad);
 void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t);
 
