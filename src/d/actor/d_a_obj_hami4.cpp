@@ -41,17 +41,15 @@ void daObjHami4_c::CreateInit() {
 
 /* 00000420-000005B8       .text set_mtx__12daObjHami4_cFv */
 void daObjHami4_c::set_mtx() {
-    short sVar3;
-    sVar3 = 0;
     for (int i = 0; i < 4; i++){
+        short var = current.angle.y + i*0x4000;
         mpModels[i]->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::YrotM(current.angle.y + sVar3);
-        mDoMtx_stack_c::transM(-field_0x37C * JMASSin(0x2000), 0.0, -field_0x37C * JMASCos(0x2000));
-        mDoMtx_stack_c::copy(mpModels[i]->getBaseTRMtx());
-        mDoMtx_stack_c::copy(field_0x2B8[i]);
+        mDoMtx_stack_c::YrotM(var );
+        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0, (short)(-field_0x37C * cM_scos(0x2000)));
+        mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mdBgW[i]->Move();
-        sVar3 = sVar3 + 0x4000;
     }
     return;
     /* Nonmatching */
