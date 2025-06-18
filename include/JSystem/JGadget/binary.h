@@ -2,6 +2,7 @@
 #define BINARY_H
 
 #include "dolphin/types.h"
+#include "JSystem/JGadget/search.h"
 
 namespace JGadget {
 namespace binary {
@@ -26,11 +27,11 @@ struct TParseData {
     /* 0x0 */ const void* raw;
 };
 
-template <int T>
+template <int S>
 struct TParseData_aligned : public TParseData {
     TParseData_aligned(const void* pContent) : TParseData(pContent) {}
     void setRaw(const void* p) {
-        /* if ((u32)p % T != 0) {
+        /* if ((u32)p % S != 0) {
             JUTWarn w;
             w << "misaligned : " << (u32)p;
         } */
@@ -63,7 +64,12 @@ struct TParse_header_block {
 template <typename T>
 struct TParseValue_raw_ {
     typedef T ParseType;
-    static T parse(const void* data) { return *(T*)data; }
+    static T parse(const void* data) { return (T)*(T*)data; }
+};
+
+template <typename T>
+struct TParseValue_raw : public TParseValue_raw_<T> {
+    typedef TParseValue_raw_<T> InnerParseValueClass;
 };
 
 template <typename T>
@@ -71,36 +77,43 @@ struct TParseValue_endian_big_ : public TParseValue_raw_<T> {
     static T parse(const void* data) { return TParseValue_raw_<T>::parse(data); }
 };
 
-template <typename T, template <class> class Parser>
-struct TParseValue : public Parser<T> {
-    static T parse(const void* data) { return Parser<T>::parse(data); }
+template <class Parser>
+struct TParseValue : public Parser {
+    static typename Parser::ParseType parse(const void* data) { return Parser::parse(data); }
 
-    static T parse(const void* data, s32 advanceNum) {
-        return Parser<T>::parse(advance(data, advanceNum));
+    static typename Parser::ParseType parse(const void* data, s32 advanceNum) {
+        return Parser::parse(advance(data, advanceNum));
     }
 
     static const void* advance(const void* data, s32 advanceNum) {
-        return (char*)data + (advanceNum * sizeof(T));
+        return (char*)data + (advanceNum * sizeof(Parser::ParseType));
     }
 };
 
 template<class Parser, int size>
-struct TValueIterator {
+struct TValueIterator
+        : public JGadget::TIterator<
+            std::random_access_iterator_tag,
+            typename Parser::ParseType,
+            ptrdiff_t,
+            typename Parser::ParseType*,
+            typename Parser::ParseType&
+        >
+    {
+    typedef typename Parser::ParseType ValueType;
+
     TValueIterator(const void* begin) {
-        mBegin = begin;
+        mBegin = reinterpret_cast<const char*>(begin);
     }
-    // TValueIterator(const TValueIterator<Parser, size>& other) {
-    //     mBegin = other.mBegin;
-    // }
 
     const void* get() const { return mBegin; }
 
     typename Parser::ParseType operator*() const {
-        return Parser::parse(get());
+        return TParseValue<typename Parser::InnerParseValueClass>::parse(get());
     }
 
     TValueIterator& operator++() {
-        mBegin = reinterpret_cast<u8*>(const_cast<void*>(mBegin)) + size;
+        mBegin += size;
         return *this;
     }
 
@@ -110,13 +123,13 @@ struct TValueIterator {
         return old;
     }
 
-    TValueIterator& operator+=(s32 v) {
-        mBegin = reinterpret_cast<u8*>(const_cast<void*>(mBegin)) + size * v;
+    TValueIterator& operator+=(s32 n) {
+        mBegin += size * n;
         return *this;
     }
 
     TValueIterator& operator--() {
-        mBegin = reinterpret_cast<u8*>(const_cast<void*>(mBegin)) - size;
+        mBegin -= size;
         return *this;
     }
 
@@ -126,39 +139,55 @@ struct TValueIterator {
         return old;
     }
 
-    const void* mBegin;
+    char const* mBegin;
 };
 
 template<typename T>
-struct TValueIterator_raw : public TValueIterator<TParseValue_raw_<T>, sizeof(T)> {
-    TValueIterator_raw(const void* begin) : TValueIterator<TParseValue_raw_<T>, sizeof(T)>(begin) {}
-    // TValueIterator_raw(const TValueIterator_raw<T>& other) : TValueIterator<TValueIterator_raw<T>, sizeof(T)>(other) {}
+struct TValueIterator_raw : public TValueIterator<TParseValue_raw<T>, sizeof(T)> {
+    TValueIterator_raw(const void* begin) : TValueIterator<TParseValue_raw<T>, sizeof(T)>(begin) {}
 
-    friend bool operator==(TValueIterator<TParseValue_raw_<T>, sizeof(T)> a, TValueIterator<TParseValue_raw_<T>, sizeof(T)> b) {
+    friend bool operator==(TValueIterator<TParseValue_raw<T>, sizeof(T)> a, TValueIterator<TParseValue_raw<T>, sizeof(T)> b) {
         return a.mBegin == b.mBegin;
     }
 
-    friend T* operator+(TValueIterator<TParseValue_raw_<T>, sizeof(T)> a, s32 b) {
-        return (T*)a.mBegin + b;
+    friend bool operator!=(TValueIterator<TParseValue_raw<T>, sizeof(T)> a, TValueIterator<TParseValue_raw<T>, sizeof(T)> b) {
+        return !operator==(a, b);
+    }
+
+    friend TValueIterator<TParseValue_raw<T>, sizeof(T)> operator+(TValueIterator<TParseValue_raw<T>, sizeof(T)> a, s32 b) {
+        TValueIterator<TParseValue_raw<T>, sizeof(T)> it = a;
+        it += b;
+        return it;
     }
 };
 
 template <typename T>
-struct TParseValue_misaligned : TParseValue_raw_<T> {
-    static T parse(const void* data) { return TParseValue_raw_<T>::parse(data); }
+struct TParseValue_misaligned_ : public TParseValue_raw_<T> {
+    typedef T ParseType;
+    static T parse(const void* data) { return TParseValue<TParseValue_raw_<T> >::parse(data); }
+};
+
+template <typename T>
+struct TParseValue_misaligned : public TParseValue_raw_<T> {
+    typedef TParseValue_misaligned_<T> InnerParseValueClass;
 };
 
 template<typename T>
 struct TValueIterator_misaligned : public TValueIterator<TParseValue_misaligned<T>, sizeof(T)> {
     TValueIterator_misaligned(const void* begin) : TValueIterator<TParseValue_misaligned<T>, sizeof(T)>(begin) {}
-    // TValueIterator_misaligned(const TValueIterator_misaligned<T>& other) : TValueIterator<TParseValue_misaligned<T>, sizeof(T)>(other) {}
 
     friend bool operator==(TValueIterator<TParseValue_misaligned<T>, sizeof(T)> a, TValueIterator<TParseValue_misaligned<T>, sizeof(T)> b) {
         return a.mBegin == b.mBegin;
     }
 
-    friend T* operator+(TValueIterator<TParseValue_misaligned<T>, sizeof(T)> a, s32 b) {
-        return (T*)a.mBegin + b;
+    friend bool operator!=(TValueIterator<TParseValue_misaligned<T>, sizeof(T)> a, TValueIterator<TParseValue_misaligned<T>, sizeof(T)> b) {
+        return !operator==(a, b);
+    }
+
+    friend TValueIterator<TParseValue_misaligned<T>, sizeof(T)> operator+(TValueIterator<TParseValue_misaligned<T>, sizeof(T)> a, s32 b) {
+        TValueIterator<TParseValue_misaligned<T>, sizeof(T)> it(a);
+        it += b;
+        return it;
     }
 };
 

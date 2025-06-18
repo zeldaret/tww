@@ -47,6 +47,9 @@ public:
     daDk_HIO_c();
     virtual ~daDk_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06[0x08 - 0x06];

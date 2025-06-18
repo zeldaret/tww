@@ -813,7 +813,11 @@ public:
 
 class dSv_turnRestart_c {
 public:
+#if VERSION == VERSION_DEMO
+    void set(cXyz const&, s16, s8, u32, cXyz const&, s16);
+#else
     void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+#endif
 
     u32 getParam() { return mParam; }
     cXyz& getPos() { return mPosition; }

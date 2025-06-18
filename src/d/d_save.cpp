@@ -1336,7 +1336,11 @@ void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
 void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param,
-                            const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
+                            const cXyz& i_shipPos, s16 i_shipAngle
+#if VERSION > VERSION_DEMO
+                            , BOOL i_hasShip
+#endif
+) {
     mPosition = i_pos;
     mAngleY = i_angle;
     mRoomNo = i_roomNo;

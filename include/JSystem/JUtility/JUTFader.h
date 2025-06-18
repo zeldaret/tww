@@ -22,7 +22,7 @@ public:
     virtual void draw();
 
     s32 getStatus() const { return mStatus; }
-    void setColor(JUtility::TColor& color) { mColor.set(color); }
+    void setColor(JUtility::TColor color) { mColor.set(color); }
 
     /* 0x04 */ s32 mStatus;
     /* 0x08 */ u16 mFadeTime;

@@ -177,7 +177,6 @@ BOOL daPy_lk_c::dProcTool_init() {
 
 /* 8012D3C4-8012DA3C       .text dProcTool__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcTool() {
-    /* Nonmatching - stack/instruction ordering issues related to JStudio inlines */
     dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
     daPy_anmHeap_c* anm_heap_under = &m_anm_heap_under[0];
     m3574 = 0;
@@ -209,19 +208,15 @@ BOOL daPy_lk_c::dProcTool() {
 #endif
             ) {
                 JStudio::stb::TParseData_fixed<50, TValueIterator_misaligned<u16> > spC4(data);
-                r29 = *spC4.begin();
+                r29 = spC4.front();
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB0(spC4.getNext());
                 if (spB0.size() == 3) {
-                    mLeftHandIdx = *spB0.begin();
-                    // TValueIterator_raw<u8> it(spB0.begin());
-                    // mRightHandIdx = *++spB0.begin();
-                    // mRightHandIdx = *spB0.front();
-                    mRightHandIdx = *TValueIterator_raw<u8>(spB0.front());
-                    // mRightHandIdx = *TValueIterator_raw<u8>(spB0.begin() + 1);
-                    f30 = *--spB0.end();
+                    mLeftHandIdx = spB0.front();
+                    mRightHandIdx = *(spB0.begin() + 1);
+                    f30 = spB0.back();
                 } else {
-                    mLeftHandIdx = *spB0.begin();
-                    mRightHandIdx = *--spB0.end();
+                    mLeftHandIdx = spB0.front();
+                    mRightHandIdx = spB0.back();
                 }
 
                 if (demo_actor->getPrm()->getId() == 2) {
@@ -239,25 +234,17 @@ BOOL daPy_lk_c::dProcTool() {
 #endif
             ) {
                 JStudio::stb::TParseData_fixed<50, TValueIterator_misaligned<u16> > sp9C(data);
-                r29 = *sp9C.begin();
-                // setDemoTextureAnime(*++sp9C.begin(), *--sp9C.end(), 0, r28);
-                // setDemoTextureAnime(*(sp9C.begin() + 1), *--sp9C.end(), 0, r28);
-                // setDemoTextureAnime(*sp9C.front(), *--sp9C.end(), 0, r28);
-                // setDemoTextureAnime(*(u16*)sp9C.front().get(), *--sp9C.end(), 0, r28);
-                // TValueIterator_misaligned<u16> it1(sp9C.begin());
-                // TValueIterator_misaligned<u16> it2(sp9C.end());
-                // setDemoTextureAnime(*it1, *it2, 0, r28);
-                setDemoTextureAnime(*TValueIterator_misaligned<u16>(sp9C.front()), *--sp9C.end(), 0, r28);
+                r29 = sp9C.front();
+                // setDemoTextureAnime(*(sp9C.begin() + 1), sp9C.back(), 0, r28); // Seems more real, but doesn't match?
+                setDemoTextureAnime(*(u16*)(sp9C.begin() + 1).get(), sp9C.back(), 0, r28); // Fakematch?
                 JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > sp88(sp9C.getNext());
                 if (sp88.size() == 3) {
-                    mLeftHandIdx = *sp88.begin();
-                    // mRightHandIdx = *++sp88.begin();
-                    // mRightHandIdx = *sp88.front();
-                    mRightHandIdx = *TValueIterator_raw<u8>(sp88.front());
-                    f30 = *--sp88.end();
+                    mLeftHandIdx = sp88.front();
+                    mRightHandIdx = *(sp88.begin() + 1);
+                    f30 = sp88.back();
                 } else {
-                    mLeftHandIdx = *sp88.begin();
-                    mRightHandIdx = *--sp88.end();
+                    mLeftHandIdx = sp88.front();
+                    mRightHandIdx = sp88.back();
                 }
 
                 if (demo_actor->getPrm()->getId() == 3) {

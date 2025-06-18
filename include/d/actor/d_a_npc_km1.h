@@ -135,7 +135,8 @@ public:
 };  // Size: 0x7D8
 
 class daNpc_Km1_HIO_c : public JORReflexible{
-    struct hio_prm_c{
+public:
+    struct hio_prm_c {
         s16 field_0;
         s16 field_2;
         s16 field_4;
@@ -149,18 +150,19 @@ class daNpc_Km1_HIO_c : public JORReflexible{
         f32 mAttentionArrowYOffset;
         f32 field_18;
     };  // Size: 0x1C
-public:
-    daNpc_Km1_HIO_c();
-    virtual ~daNpc_Km1_HIO_c(){};
-public:
-    /* Place member variables here */
-    /* 0x4  */ s8  mNo;
-    /* 0x5  */ s8  field_0x5;
-    /* 0x6  */ s8  field_0x6;
-    /* 0x7  */ s8  field_0x7;
-    /* 0x8  */ int field_0x8;
-    /* 0xC  */ hio_prm_c mPrmTbl;
 
+    daNpc_Km1_HIO_c();
+    virtual ~daNpc_Km1_HIO_c() {};
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 field_0x5;
+    /* 0x06 */ s8 field_0x6;
+    /* 0x07 */ s8 field_0x7;
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ hio_prm_c mPrmTbl;
 };
 
 #endif /* D_A_NPC_KM1_H */

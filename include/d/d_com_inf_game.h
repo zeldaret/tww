@@ -1395,6 +1395,15 @@ inline void dComIfGs_setTurnRestartHasShip(BOOL hasShip) {
 }
 #endif
 
+#if VERSION == VERSION_DEMO
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle);
+}
+
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle);
+}
+#else
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, FALSE);
 }
@@ -1403,6 +1412,7 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
 }
+#endif
 
 inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
     g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);

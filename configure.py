@@ -726,7 +726,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/stb.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/stb.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
         ],

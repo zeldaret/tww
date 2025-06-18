@@ -104,8 +104,8 @@ public:
         /* 0x047 */ DEMO_SHIPOFF_e = 71,
         /* 0x048 */ DEMO_UNK_072_e = 72,
         /* 0x049 */ DEMO_FOODTHROW_e = 73,
-        /* 0x04A */ DEMO_UNK_074_e = 0x4A,
-        /* 0x04B */ DEMO_LAST_e = 0x4B,
+        /* 0x04A */ DEMO_UNK_074_e = 74,
+        /* 0x04B */ DEMO_LAST_e,
         /* 0x200 */ DEMO_NEW_ANM0_e = 0x200,
     };
 

@@ -7,6 +7,10 @@
 // in other TUs, but not here.
 #pragma dont_inline on
 
+#ifdef DEBUG
+#pragma optimization_level 1
+#endif
+
 #include "d/actor/d_a_movie_player.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"

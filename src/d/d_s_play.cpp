@@ -328,9 +328,9 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
                     ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && isNight) ||
                     ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !isNight))
                 {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_saftyWhiteColor);
                 } else {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_blackColor);
                 }
 
                 mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),

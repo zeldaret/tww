@@ -728,8 +728,10 @@ BOOL daPy_lk_c::procTactPlayEnd() {
                 fopAcM_GetRoomNo(this),
                 getDayNightParamData(),
                 ship->current.pos,
-                ship->shape_angle.y,
-                hasShip
+                ship->shape_angle.y
+#if VERSION > VERSION_DEMO
+                , hasShip
+#endif
             );
             if (dComIfG_getTimerMode() == 3 && dComIfG_getTimerPtr() != NULL) {
                 dComIfG_getTimerPtr()->deleteRequest();

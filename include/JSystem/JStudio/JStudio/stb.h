@@ -44,7 +44,7 @@ public:
 
     void setFlag_operation(u8, int);
     void reset(void const*);
-    u8 forward(u32);
+    bool forward(u32);
     virtual void do_begin();
     virtual void do_end();
     virtual void do_paragraph(u32, void const*, u32);
@@ -132,7 +132,7 @@ public:
     void destroyObject(TObject*);
     void destroyObject_all();
     TObject* getObject(void const*, u32);
-    u8 forward(u32);
+    bool forward(u32);
 
     void setStatus_(u32 status) { mStatus = status; }
     void resetStatus_() { setStatus_(0); }
@@ -142,6 +142,10 @@ public:
     TObject_control& referObject_control() { return mObject_control; }
     int getSuspend() const { return _54; }
     void setSuspend(s32 suspend) { mObject_control.setSuspend(suspend); }
+    void suspend(s32 param_0) { mObject_control.suspend(param_0); }
+    void unsuspend(s32 param_0) { suspend(-param_0); }
+    void getObjectContainer() const {}
+    void referObjectContainer() {}
 
 private:
     /* 0x04 */ u32 _4;
@@ -159,8 +163,16 @@ struct TParseData : public data::TParse_TParagraph_data::TData {
         set(data::TParse_TParagraph_data(pContent));
     }
 
+    TParseData() {
+        set(NULL);
+    }
+
     void set(const data::TParse_TParagraph_data& data) {
         data.getData(this);
+    }
+
+    void set(const void* pContent) {
+        set(data::TParse_TParagraph_data(pContent));
     }
 
     bool isEnd() const {
@@ -168,22 +180,25 @@ struct TParseData : public data::TParse_TParagraph_data::TData {
     }
 
     bool empty() const {
-        return fileCount == NULL;
+        return content == NULL;
     }
 
     bool isValid() const {
         return !empty() && status == S;
     }
 
-    u32 size() const { return _8; }
+    const void* getContent() const { return content; }
+
+    u32 size() const { return entryCount; }
 };
 
 template <int S, class Iterator=JGadget::binary::TValueIterator_raw<u8> >
 struct TParseData_fixed : public TParseData<S> {
     TParseData_fixed(const void* pContent) : TParseData<S>(pContent) {}
+    TParseData_fixed() : TParseData<S>() {}
 
     const void* getNext() const {
-        return this->_10;
+        return this->next;
     }
 
     bool isValid() const {
@@ -191,31 +206,21 @@ struct TParseData_fixed : public TParseData<S> {
     }
 
     Iterator begin() const {
-        return Iterator(this->fileCount);
+        return Iterator(this->content);
     }
 
     Iterator end() const {
-        Iterator i(this->fileCount);
+        Iterator i(this->content);
         i += this->size();
         return i;
     }
 
-    // TODO: front and back are needed to daPy_lk_c::dProcTool
-    // these implementations are just guesses though, probably wrong
-    Iterator front() const {
-        // Iterator i = begin();
-        // i++;
-        // return i;
-        
-        // Iterator i(begin());
-        // ++i;
-        // return i;
-        
-        return Iterator(begin()) + 1;
+    typename Iterator::ValueType front() const {
+        return *begin();
     }
-    Iterator back() const {
-        Iterator i = end();
-        return i + (-1);
+
+    typename Iterator::ValueType back() const {
+        return *--end();
     }
 };
 
