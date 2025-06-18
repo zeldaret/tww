@@ -96,10 +96,11 @@ public:
     void setID(s32 id) { mId = id; }
     s32 getID() const { return mId; }
     void setAngle(csXyz* angle) { mAngle = *angle; }
-    const csXyz& getAngle() { return mAngle; }
+    csXyz& getAngle() { return mAngle; }
     void setPos(const cXyz* pos) { mPos = *pos; }
-    const cXyz& getPos() { return mPos; }
+    cXyz& getPos() { return mPos; }
 
+private:
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
     /* 0x34 */ cXyz mPos;
@@ -128,7 +129,7 @@ public:
         }
     }
     
-public:
+protected:
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0xC
@@ -137,8 +138,12 @@ class daPy_waterDropPcallBack_c : public JPACallBackBase2<JPABaseEmitter*, JPABa
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
     ~daPy_waterDropPcallBack_c() {}
-    
-    /* 0x4 */ BOOL field_0x4;
+
+    void offWaterMark() { mbWaterMark = FALSE; }
+    void onWaterMark() { mbWaterMark = TRUE; }
+
+protected:
+    /* 0x4 */ BOOL mbWaterMark;
     /* 0x8 */ dBgS_ObjGndChk mGndChk;
 };
 
@@ -153,19 +158,27 @@ public:
     daPy_swimTailEcallBack_c() {}
     
     void onEnd() {
-        field_0x04 = true;
+        mbEnd = true;
         field_0x20 = NULL;
     }
+    bool getEnd() { return mbEnd; }
+
+    void onRightFlg() { field_0x05 = true; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     cXyz& getPos() { return mPos; }
     void setPos(cXyz& pos) { mPos = pos; }
 
-    /* 0x04 */ bool field_0x04;
+    void setSpeedRate(f32 rate) { mSpeedRate = rate; }
+    void setWaterY(f32 y) { mWaterY = y; }
+    void setWaterFlatY(f32 y) { mWaterFlatY = y; }
+
+protected:
+    /* 0x04 */ bool mbEnd;
     /* 0x05 */ bool field_0x05;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x08 */ f32 mSpeedRate;
+    /* 0x0C */ f32 mWaterY;
+    /* 0x10 */ f32 mWaterFlatY;
     /* 0x14 */ cXyz mPos;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
@@ -185,6 +198,7 @@ public:
     void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
+protected:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
@@ -198,6 +212,13 @@ public:
     daPy_waterDropEcallBack_c() {}
     ~daPy_waterDropEcallBack_c() {}
 
+    BOOL checkReady() { return field_0x1C; }
+    void onReady() { field_0x1C = TRUE; }
+    void offReady() { field_0x1C = FALSE; }
+
+    static daPy_waterDropPcallBack_c* getPcallBack() { return &m_pcallback; }
+
+protected:
     static daPy_waterDropPcallBack_c m_pcallback;
 
     /* 0x1C */ BOOL field_0x1C;
@@ -242,6 +263,7 @@ public:
     daPy_mtxPosFollowEcallBack_c() {}
     ~daPy_mtxPosFollowEcallBack_c() {}
 
+protected:
     /* 0xC */ const csXyz* mpAngle;
 };  // Size: 0x10
 
@@ -252,9 +274,9 @@ public:
     virtual ~daPy_matAnm_c() {}
     virtual void calc(J3DMaterial*) const;
     
+    static u8 m_maba_timer;
     static u8 m_maba_flg;
     static u8 m_eye_move_flg;
-    static u8 m_maba_timer;
     static u8 m_morf_frame;
 
     static void onMabaFlg() { m_maba_flg = 1; }
@@ -268,12 +290,14 @@ public:
     static u8 getMabaFlg() { return m_maba_flg; }
     static u8 getMabaTimer() { return m_maba_timer; }
     static u8 getMorfFrame() { return m_morf_frame; }
-    static void getNowOffsetXP() {}
-    static void getNowOffsetYP() {}
     static void offEyeMoveFlg() { m_eye_move_flg = 0; }
     static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
+
+    // TODO:
+    static void getNowOffsetXP() {}
+    static void getNowOffsetYP() {}
     static void setNowOffsetX(f32) {}
     static void setNowOffsetY(f32) {}
 
@@ -289,12 +313,13 @@ public:
         ELIXIR_SOUP_SLASH_BLUR,
         PARRYING_SLASH_BLUR,
     };
-public:
+
     void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
     ~daPy_swBlur_c() {}
 
+public:
     /* 0x010 */ ResTIMG* mpTex;
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
@@ -328,14 +353,14 @@ public:
     /* 0x088 */ Mtx field_0x088[3];
 };  // Size: 0x118
 
-struct daPy_aura_c {
+class daPy_aura_c {
 public:
     void setModel(J3DModel* model) { mpYaura00Model = model; }
     J3DModel* getModel() { return mpYaura00Model; }
     void setFrame(f32 frame) { mFrame = frame; }
     f32 getFrame() { return mFrame; }
 
-public:
+private:
     /* 0x00 */ J3DModel* mpYaura00Model;
     /* 0x04 */ f32 mFrame;
 };  // Size: 0x08

@@ -132,6 +132,7 @@ daPy_matAnm_c::daPy_matAnm_c() {
 
 /* 80102F64-80103074       .text calc__13daPy_matAnm_cCFP11J3DMaterial */
 void daPy_matAnm_c::calc(J3DMaterial* mat) const {
+    // Fakematch?
     daPy_matAnm_c* i_this = const_cast<daPy_matAnm_c*>(this);
     
     J3DMaterialAnm::calc(mat);
@@ -11131,7 +11132,7 @@ void daPy_lk_c::checkRoofRestart() {
     }
 #endif
 
-    f32 dVar9 = mAcch.m_roof_y;
+    f32 dVar9 = mAcch.GetRoofHeight();
     if (dVar9 > mAcch.GetGroundH()) {
         f32 dVar10 = mHeadTopPos.y - 10.0f;
         f32 dVar8 = 10.0f + current.pos.y;
@@ -11730,11 +11731,7 @@ BOOL daPy_lk_c::playerDelete() {
         mFootEffect[i].getSmokeCallBack()->remove();
         mFootEffect[i].getOtherCallBack()->remove();
     }
-    if (mFanSwingCb.mpEmitter) {
-        mFanSwingCb.mpEmitter->quitImmortalEmitter();
-        mFanSwingCb.mpEmitter->setEmitterCallBackPtr(NULL);
-        mFanSwingCb.mpEmitter = NULL;
-    }
+    mFanSwingCb.deleteCallBack();
     m338C.end();
     m33A8.end();
     m3280.end();
