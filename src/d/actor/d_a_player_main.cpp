@@ -1670,7 +1670,7 @@ void daPy_lk_c::onBodyEffect() {
 
 /* 80107308-80108204       .text draw__9daPy_lk_cFv */
 BOOL daPy_lk_c::draw() {
-    /* Nonmatching - regalloc (maybe the same issue as linkDraw in d_a_obj_figure.cpp?) */
+    /* Nonmatching - retail-only regalloc (maybe the same issue as linkDraw in d_a_obj_figure.cpp?) */
     if (mSightPacket.getDrawFlg()) {
         mSightPacket.setSight();
     }
@@ -1687,11 +1687,11 @@ BOOL daPy_lk_c::draw() {
         onBodyEffect();
     }
     
-    s16 origFogR, origFogG, origFogB;
+    GXColorS10 origFog;
     f32 origFogStartZ, origFogEndZ;
-    origFogR = tevStr.mFogColor.r;
-    origFogG = tevStr.mFogColor.g;
-    origFogB = tevStr.mFogColor.b;
+    origFog.r = tevStr.mFogColor.r;
+    origFog.g = tevStr.mFogColor.g;
+    origFog.b = tevStr.mFogColor.b;
     origFogStartZ = tevStr.mFogStartZ;
     origFogEndZ = tevStr.mFogEndZ;
     if (!checkFreezeState() && mCurProc != daPyProc_ELEC_DAMAGE_e &&
@@ -1713,11 +1713,12 @@ BOOL daPy_lk_c::draw() {
         tevStr.mFogEndZ = tevStr.mFogStartZ + 300.0f;
     }
     
+    J3DMaterial* mtl;
     u16 material_num = mpAnmTexPatternData->getUpdateMaterialNum();
     for (u16 i = 0; i < material_num; i++) {
         u16 matID = mpAnmTexPatternData->getUpdateMaterialID(i);
         if (matID != 0xFFFF) {
-            J3DMaterial* mtl = mpCLModelData->getMaterialNodePointer(matID);
+            mtl = mpCLModelData->getMaterialNodePointer(matID);
             J3DMaterialAnm* mtlAnm = mtl->getMaterialAnm();
             u8 texNo = mpAnmTexPatternData->getAnmTable()[i].mTexNo;
             mtlAnm->setTexNoAnm(texNo, &m_texNoAnms[i]);
@@ -1738,7 +1739,7 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x08)->getMesh()->getShape()->hide(); // cl_LhandA joint
     mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
     
-    J3DMaterial* mtl = link_root_joint->getMesh();
+    mtl = link_root_joint->getMesh();
     for (int i = 0; i < 4; i++) {
         mtl = mtl->getNext();
     }
@@ -1862,7 +1863,7 @@ BOOL daPy_lk_c::draw() {
 #if VERSION > VERSION_DEMO
             && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)
 #endif
-    ) {
+        ) {
             entryDLSetLight(mpKatsuraModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
         }
         if (checkFreezeState() && checkMaskDraw()) {
@@ -1884,9 +1885,9 @@ BOOL daPy_lk_c::draw() {
         entryDLSetLight(mpHbootsModels[1], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
     }
     
-    tevStr.mFogColor.r = origFogR;
-    tevStr.mFogColor.g = origFogG;
-    tevStr.mFogColor.b = origFogB;
+    tevStr.mFogColor.r = origFog.r;
+    tevStr.mFogColor.g = origFog.g;
+    tevStr.mFogColor.b = origFog.b;
     tevStr.mFogStartZ = origFogStartZ;
     tevStr.mFogEndZ = origFogEndZ;
     

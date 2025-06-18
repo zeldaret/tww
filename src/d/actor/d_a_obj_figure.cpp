@@ -978,7 +978,7 @@ static BOOL daSampleIsDelete(void*) {
 
 /* 00001B08-00002148       .text linkDraw__FP14mDoExt_McaMorf */
 void linkDraw(mDoExt_McaMorf* pMorf) {
-    /* Nonmatching - regalloc (maybe the same issue as daPy_lk_c::draw?) */
+    /* Nonmatching - retail-only regalloc (maybe the same issue as daPy_lk_c::draw?) */
 
     pMorf->calc();
 #if VERSION > VERSION_DEMO
