@@ -620,7 +620,10 @@ public:
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
-    u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(1578, idx < mUpdateMaterialNum, "Error : range over.");
+        return mUpdateMaterialID[idx];
+    }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
 
 protected:

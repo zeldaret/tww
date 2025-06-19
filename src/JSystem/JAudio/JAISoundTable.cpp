@@ -42,7 +42,7 @@ SoundInfo* JAInter::SoundTable::getInfoPointer(u32 param_1) {
     switch (param_1 & JAISoundID_TypeMask) {
     case JAISoundID_Type_Se:
         _category = param_1 >> 12 & 0xff;
-        JUT_ASSERT_MSG(61, (_category<JAIGlobalParameter::getParamSeCategoryMax()), "getInfoPointer 登録されていないSEカテゴリーナンバーが指定されました。\n")
+        JUT_ASSERT_MSG(61, (_category<JAIGlobalParameter::getParamSeCategoryMax()), "getInfoPointer 登録されていないSEカテゴリーナンバーが指定されました。\n");
         break;
     case JAISoundID_Type_Sequence:
         _category = 16;

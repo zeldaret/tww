@@ -18,6 +18,8 @@
         }                                                                                          \
     }
 
+#define J3D_ASSERT(LINE, COND, MSG) (void)0
+
 #define JUT_WARN(LINE, ...)                                                                        \
     JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__);    \
 

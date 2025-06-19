@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 #include "global.h"
 
@@ -21,7 +22,10 @@ public:
 
     u16 getClusterNum() const { return mClusterNum; }
     u16 getClusterKeyNum() const { return mClusterKeyNum; }
-    J3DCluster* getClusterPointer(u16 i) { return &mClusterPointer[i]; }
+    J3DCluster* getClusterPointer(u16 index) {
+        J3D_ASSERT(186, (index < mClusterNum),"Error : range over.");
+        return &mClusterPointer[index];
+    }
     J3DClusterKey* getClusterKeyPointer(u16 i) { return &mClusterKeyPointer[i]; }
     f32* getVtxPos() { return mVtxPos; }
     f32* getVtxNrm() { return mVtxNrm; }

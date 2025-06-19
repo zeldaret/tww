@@ -1671,7 +1671,6 @@ void daPy_lk_c::onBodyEffect() {
 
 /* 80107308-80108204       .text draw__9daPy_lk_cFv */
 BOOL daPy_lk_c::draw() {
-    /* Nonmatching - retail-only regalloc (maybe the same issue as linkDraw in d_a_obj_figure.cpp?) */
     if (mSightPacket.getDrawFlg()) {
         mSightPacket.setSight();
     }
