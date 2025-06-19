@@ -1,41 +1,8 @@
 #ifndef J3DSHAPEMTX_H
 #define J3DSHAPEMTX_H
 
-#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/J3DGraphBase/J3DShape.h"
 #include "dolphin/mtx/mtx.h"
-
-class J3DShapeMtx {
-public:
-    typedef void (J3DShapeMtx::*MtxLoadIndx)(int mtxNo, u16 index) const;
-
-    J3DShapeMtx(u16 useMtxIndex) : mUseMtxIndex(useMtxIndex) {}
-
-    void loadMtxIndx_PNGP(int, u16) const;
-    void loadMtxIndx_PCPU(int, u16) const;
-    void loadMtxIndx_NCPU(int, u16) const;
-    void loadMtxIndx_PNCPU(int, u16) const;
-
-    virtual ~J3DShapeMtx() {}
-    virtual u32 getType() const { return 'SMTX'; }
-    virtual u32 getUseMtxNum() const { return 1; }
-    virtual u16 getUseMtxIndex(u16) const { return mUseMtxIndex; }
-    virtual void load() const;
-    virtual void calcNBTScale(Vec const&, Mtx33*, Mtx33*);
-
-    static MtxLoadIndx sMtxLoadPipeline[4];
-    static u32 sCurrentPipeline;
-    static u8* sCurrentScaleFlag;
-    static u8 sNBTFlag;
-
-    static void setCurrentPipeline(u32 pipeline) {
-        // TODO: needs to go in J3DShape.h for assert
-        J3D_ASSERT(91, pipeline < 4, "Error : range over.");
-        sCurrentPipeline = pipeline;
-    }
-
-protected:
-    /* 0x04 */ u16 mUseMtxIndex;
-};
 
 class J3DShapeMtxImm : public J3DShapeMtx {
 public:
