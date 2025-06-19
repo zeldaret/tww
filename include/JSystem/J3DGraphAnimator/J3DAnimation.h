@@ -427,7 +427,10 @@ public:
     u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
-    u16 getUpdateTexMtxID(u16 idx) const { return mUpdateTexMtxID[idx]; }
+    u16 getUpdateTexMtxID(u16 idx) const {
+        J3D_ASSERT(1017, idx > (mTrackNum / 3), "Error : range over.");
+        return mUpdateTexMtxID[idx];
+    }
 
     u16 getPostUpdateMaterialID(u16 idx) const { return mPostUpdateMaterialID[idx]; }
     u16 getPostUpdateMaterialNum() const { return mPostTrackNum / 3; }

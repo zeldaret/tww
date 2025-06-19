@@ -53,7 +53,6 @@ s32 J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnm) {
 
 /* 802F5DC8-802F6058       .text entryTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
 s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
-    /* Nonmatching */
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 
@@ -277,7 +276,6 @@ s32 J3DMaterialTable::setTexNoAnimator(J3DAnmTexPattern* pAnm, J3DTexNoAnm* pAnm
 
 /* 802F6600-802F6798       .text setTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKeyP12J3DTexMtxAnmP12J3DTexMtxAnm */
 s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
-    /* Nonmatching - regalloc */
     s32 ret = 0;
     u16 materialNum = pAnm->getUpdateMaterialNum();
 

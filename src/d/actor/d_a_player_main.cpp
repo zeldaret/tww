@@ -11841,7 +11841,6 @@ void daPy_lk_c::initTextureAnime() {
 
 /* 80123360-80123830       .text initTextureScroll__9daPy_lk_cFv */
 void daPy_lk_c::initTextureScroll() {
-    /* Nonmatching - retail-only regalloc */
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
     JUT_ASSERT(VERSION_SELECT(20757, 20944, 20944, 20944), m_tex_scroll_heap.m_buffer != NULL);
     

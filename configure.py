@@ -1004,7 +1004,7 @@ config.libs = [
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DCluster.cpp"),
             Object(NonMatching, "JSystem/J3DGraphAnimator/J3DJoint.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DNode.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp"),
+            Object(Matching,    "JSystem/J3DGraphAnimator/J3DMaterialAttach.cpp"),
         ],
     ),
     JSystemLib(
