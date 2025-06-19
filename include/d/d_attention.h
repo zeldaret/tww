@@ -92,7 +92,7 @@ public:
     bool request(fopAc_ac_c*, f32, f32, f32, s16, int);
     bool requestF(fopAc_ac_c*, s16, int);
 
-    fpc_ProcID getLookTarget() { return mLookTargetID; }
+    fopAc_ac_c* getLookTarget() { return convPId(mLookTargetID); }
 
 private:
     /* 0x0 */ fpc_ProcID mRequestActorID;
@@ -226,8 +226,8 @@ public:
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     fopAc_ac_c* getCatghTarget() { return mCatch.getCatghTarget(); }
 
-    fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
-    fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
+    fopAc_ac_c* getLookTarget() { return mLook[0].getLookTarget(); }
+    fopAc_ac_c* getLook2Target() { return mLook[1].getLookTarget(); }
     fopAc_ac_c* getZHintTarget() { return mHint.getZHintTarget(); }
 
     int ZHintRequest(fopAc_ac_c* param_1, int param_2) {

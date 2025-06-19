@@ -40,7 +40,7 @@ const char* daTag_Msg_c::myDemoName() {
     dStage_EventInfo_c *pEventInfo;
     u32 eventNo;
 
-    pEventInfo = dComIfGp_getStageEventInfo();
+    pEventInfo = dComIfGp_getStage().getEventInfo();
     eventNo = getEventNo() & 0xff;
 
     if (getMessage() == 0x1902) {

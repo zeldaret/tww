@@ -3401,11 +3401,13 @@ void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
 
 /* 8010C100-8010C158       .text setAnimeEquipSingleItem__9daPy_lk_cFUs */
 void daPy_lk_c::setAnimeEquipSingleItem(u16 bckIdx) {
-    f32 rate = daPy_HIO_item_c0::m.field_0x14;
-    f32 start = daPy_HIO_item_c0::m.field_0x18;
-    s16 end = daPy_HIO_item_c0::m.field_0x2;
-    f32 f3 = daPy_HIO_item_c0::m.field_0x1C;
-    setActAnimeUpper(bckIdx, UPPER_MOVE2_e, rate, start, end, f3);
+    setActAnimeUpper(
+        bckIdx, UPPER_MOVE2_e,
+        daPy_HIO_item_c0::m.field_0x14,
+        daPy_HIO_item_c0::m.field_0x18,
+        daPy_HIO_item_c0::m.field_0x2,
+        daPy_HIO_item_c0::m.field_0x1C
+    );
     setPriTextureAnime(0x74, 0);
 }
 
@@ -6877,12 +6879,7 @@ BOOL daPy_lk_c::procFrontRollCrash_init() {
         fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(mAcchCir[0]);
         if (actor != 0 && fopAcM_GetName(actor) == PROC_Obj_Movebox) {
             daObjMovebox::Act_c* movebox = (daObjMovebox::Act_c*)actor;
-            if (
-                movebox->mType == daObjMovebox::Act_c::TYPE_BREAKABLE_WOODEN_CRATE ||
-                movebox->mType == daObjMovebox::Act_c::TYPE_GOLDEN_CRATE
-            ) {
-                movebox->set_rollCrash();
-            }
+            movebox->set_rollCrash();
         }
     }
     return true;
@@ -7069,7 +7066,10 @@ BOOL daPy_lk_c::procBackJumpLand() {
 
 /* 80115E88-80115EA4       .text checkAutoJumpFlying__9daPy_lk_cCFv */
 int daPy_lk_c::checkAutoJumpFlying() const {
-    return mCurProc != daPyProc_AUTO_JUMP_e ? -1 : m34D0;
+    if (mCurProc != daPyProc_AUTO_JUMP_e) {
+        return -1;
+    }
+    return m34D0;
 }
 
 /* 80115EA4-8011602C       .text procAutoJump_init__9daPy_lk_cFv */
@@ -8566,11 +8566,11 @@ s16 daPy_lk_c::getGroundAngle(cBgS_PolyInfo* param_1, s16 param_2) {
     if (plane == NULL || !cBgW_CheckBGround(plane->GetNP()->y)) {
         return 0;
     }
-    f32 cos = cM_scos((cM_atan2s(plane->GetNP()->x, plane->GetNP()->z) - param_2));
-    f32 xz =
-        (std::sqrtf(plane->GetNP()->x * plane->GetNP()->x + plane->GetNP()->z * plane->GetNP()->z));
+    cXyz* norm = plane->GetNP();
+    f32 cos = cM_scos((cM_atan2s(norm->x, norm->z) - param_2));
+    f32 xz = (std::sqrtf(norm->x * norm->x + norm->z * norm->z));
     xz *= cos;
-    return cM_atan2s(xz, plane->GetNP()->y);
+    return cM_atan2s(xz, norm->y);
 }
 
 /* 80119EBC-8011A508       .text setLegAngle__9daPy_lk_cFfiPsPs */
@@ -9212,10 +9212,10 @@ void daPy_lk_c::setNeckAngle() {
                 daPy_matAnm_c::onEyeMoveFlg();
             }
         } else {
-            m_tex_eye_scroll[0]->mEyePos.x = 0.0f;
-            m_tex_eye_scroll[1]->mEyePos.x = 0.0f;
-            m_tex_eye_scroll[0]->mEyePos.y = 0.0f;
-            m_tex_eye_scroll[1]->mEyePos.y = 0.0f;
+            m_tex_eye_scroll[0]->setNowOffsetX(0.0f);
+            m_tex_eye_scroll[1]->setNowOffsetX(0.0f);
+            m_tex_eye_scroll[0]->setNowOffsetY(0.0f);
+            m_tex_eye_scroll[1]->setNowOffsetY(0.0f);
             if (daPy_matAnm_c::getEyeMoveFlg() != 0) {
                 daPy_matAnm_c::setMorfFrame(3);
             }
@@ -11885,10 +11885,11 @@ void daPy_lk_c::initTextureScroll() {
         m_texMtxAnm[no].setAnmTransform(btk);
         m_texMtxAnm[no].setAnmIndex(no);
         
-        tmtx->getTexMtxInfo().mInfo = (tmtx->getTexMtxInfo().mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
-        tmtx->getTexMtxInfo().mCenter.x = btk->getSRTCenter(no).x;
-        tmtx->getTexMtxInfo().mCenter.y = btk->getSRTCenter(no).y;
-        tmtx->getTexMtxInfo().mCenter.z = btk->getSRTCenter(no).z;
+        J3DTexMtxInfo& tmtxinfo = tmtx->getTexMtxInfo();
+        tmtxinfo.mInfo = (tmtxinfo.mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
+        tmtxinfo.mCenter.x = btk->getSRTCenter(no).x;
+        tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
+        tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
         
         JUT_ASSERT(VERSION_SELECT(20814, 21001, 21001, 21001), mtl->getMaterialAnm() != NULL);
         

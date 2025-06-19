@@ -296,10 +296,10 @@ public:
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
 
     // TODO:
-    static void getNowOffsetXP() {}
-    static void getNowOffsetYP() {}
-    static void setNowOffsetX(f32) {}
-    static void setNowOffsetY(f32) {}
+    void getNowOffsetXP() {}
+    void getNowOffsetYP() {}
+    void setNowOffsetX(f32 x) { mEyePos.x = x; }
+    void setNowOffsetY(f32 y) { mEyePos.y = y; }
 
 public:
     /* 0x6C */ cXy mEyePosOld;

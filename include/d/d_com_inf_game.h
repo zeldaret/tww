@@ -2176,10 +2176,6 @@ inline stage_envr_info_class* dComIfGp_getStageEnvrInfo() {
     return g_dComIfG_gameInfo.play.getStage().getEnvrInfo();
 }
 
-inline dStage_EventInfo_c* dComIfGp_getStageEventInfo() {
-    return g_dComIfG_gameInfo.play.getStage().getEventInfo();
-}
-
 inline stage_palet_info_class* dComIfGp_getStagePaletteInfo() {
     return g_dComIfG_gameInfo.play.getStage().getPaletInfo();
 }
@@ -3136,15 +3132,15 @@ inline bool dComIfGp_event_chkTalkXY() {
     return g_dComIfG_gameInfo.play.getEvent().chkTalkXY();
 }
 
-inline void dComIfGp_event_onEventFlag(s16 flag) {
+inline void dComIfGp_event_onEventFlag(u16 flag) {
     g_dComIfG_gameInfo.play.getEvent().onEventFlag(flag);
 }
 
-inline void dComIfGp_event_offEventFlag(s16 flag) {
+inline void dComIfGp_event_offEventFlag(u16 flag) {
     g_dComIfG_gameInfo.play.getEvent().offEventFlag(flag);
 }
 
-inline u16 dComIfGp_event_chkEventFlag(s16 flag) {
+inline u16 dComIfGp_event_chkEventFlag(u16 flag) {
     return g_dComIfG_gameInfo.play.getEvent().chkEventFlag(flag);
 }
 
@@ -3937,7 +3933,7 @@ inline s32 dComIfGp_particle_checkAtrCodeEffect(int code) { return g_dComIfG_gam
  * === ATTENTION ===
  */
 
- inline dAttention_c& dComIfGp_getAttention() {
+inline dAttention_c& dComIfGp_getAttention() {
     return g_dComIfG_gameInfo.play.getAttention();
 }
 

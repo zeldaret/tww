@@ -1,6 +1,7 @@
 #ifndef J3DSHAPEMTX_H
 #define J3DSHAPEMTX_H
 
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/mtx/mtx.h"
 
 class J3DShapeMtx {
@@ -26,7 +27,11 @@ public:
     static u8* sCurrentScaleFlag;
     static u8 sNBTFlag;
 
-    static void setCurrentPipeline(u32 pipeline) { sCurrentPipeline = pipeline; }
+    static void setCurrentPipeline(u32 pipeline) {
+        // TODO: needs to go in J3DShape.h for assert
+        J3D_ASSERT(91, pipeline < 4, "Error : range over.");
+        sCurrentPipeline = pipeline;
+    }
 
 protected:
     /* 0x04 */ u16 mUseMtxIndex;

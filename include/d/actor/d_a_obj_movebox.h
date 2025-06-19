@@ -186,7 +186,14 @@ namespace daObjMovebox {
         
         inline void mode_proc_call();
         void chk_walk(cXyz*) { /* TODO */ }
-        void set_rollCrash() { mbRollCrash = TRUE; }
+        void set_rollCrash() {
+            if (
+                mType == daObjMovebox::Act_c::TYPE_BREAKABLE_WOODEN_CRATE ||
+                mType == daObjMovebox::Act_c::TYPE_GOLDEN_CRATE
+            ) {
+                mbRollCrash = TRUE;
+            }
+        }
         
         void prmZ_init();
         void prmX_init();

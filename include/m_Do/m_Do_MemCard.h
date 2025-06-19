@@ -91,7 +91,7 @@ inline void mDoMemCd_ThdInit() {
     g_mDoMemCd_control.ThdInit();
 }
 
-inline void mDoMemCd_save(void* i_data, u32 param_1, u32 param_2) {
+inline void mDoMemCd_Save(void* i_data, u32 param_1, u32 param_2) {
     g_mDoMemCd_control.save(i_data,param_1,param_2);
 }
 
@@ -154,7 +154,6 @@ inline u32 mDoMemCd_getStatus(u32 status) {
 inline void mDoMemCd_Format() {}
 inline void mDoMemCd_Load() {}
 inline void mDoMemCd_LoadSync(void*, u32, u32) {}
-inline void mDoMemCd_Save(void*, u32, u32) {}
 inline void mDoMemCd_clearProbeStat() {}
 inline void mDoMemCd_getDataVersion() {}
 inline void mDoMemCd_getProbeStat() {}

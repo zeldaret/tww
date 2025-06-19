@@ -83,10 +83,11 @@ s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* btk) {
                 J3DTexMtx *tmtx = pMaterial->getTexMtx(texMtxID);
                 J3DTexMtxAnm* tmtxanm = new J3DTexMtxAnm(btk, no);
 
-                tmtx->getTexMtxInfo().mInfo = ((tmtx->getTexMtxInfo().mInfo) & 0x7F) | (btk->getTexMtxCalcType() << 7);
-                tmtx->getTexMtxInfo().mCenter.x = btk->getSRTCenter(no).x;
-                tmtx->getTexMtxInfo().mCenter.y = btk->getSRTCenter(no).y;
-                tmtx->getTexMtxInfo().mCenter.z = btk->getSRTCenter(no).z;
+                J3DTexMtxInfo& tmtxinfo = tmtx->getTexMtxInfo();
+                tmtxinfo.mInfo = (tmtxinfo.mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
+                tmtxinfo.mCenter.x = btk->getSRTCenter(no).x;
+                tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
+                tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
 
                 pMatAnm->setTexMtxAnm(texMtxID, tmtxanm);
             }
@@ -291,10 +292,11 @@ s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* btk, J3DTexMtxAnm* 
                     pMaterial->getTexCoord(texMtxID)->setTexGenMtx(GX_TEXMTX0 + (texMtxID & 0xFF) * 3);
 
                 J3DTexMtx *tmtx = pMaterial->getTexMtx(texMtxID);
-                tmtx->getTexMtxInfo().mInfo = ((tmtx->getTexMtxInfo().mInfo) & 0x7F) | (btk->getTexMtxCalcType() << 7);
-                tmtx->getTexMtxInfo().mCenter.x = btk->getSRTCenter(no).x;
-                tmtx->getTexMtxInfo().mCenter.y = btk->getSRTCenter(no).y;
-                tmtx->getTexMtxInfo().mCenter.z = btk->getSRTCenter(no).z;
+                J3DTexMtxInfo& tmtxinfo = tmtx->getTexMtxInfo();
+                tmtxinfo.mInfo = (tmtxinfo.mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
+                tmtxinfo.mCenter.x = btk->getSRTCenter(no).x;
+                tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
+                tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
 
                 pMatAnm->setTexMtxAnm(texMtxID, &pTexAnm[no]);
             }

@@ -80,7 +80,7 @@ s32 dEvt_control_c::order(u16 eventType, u16 priority, u16 flag, u16 hindFlag, v
 
 /* 8007002C-8007015C       .text setParam__14dEvt_control_cFP12dEvt_order_c */
 void dEvt_control_c::setParam(dEvt_order_c* order) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     setPt1(order->mActor1);
     setPt2(order->mActor2);
     mEventId = order->mEventId;
@@ -696,7 +696,7 @@ void dEvt_control_c::remove() {
 
 /* 800714AC-80071534       .text getStageEventDt__14dEvt_control_cFv */
 dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (getMode() == dEvtMode_NONE_e)
         return NULL;
 
@@ -708,7 +708,7 @@ dStage_Event_dt_c* dEvt_control_c::getStageEventDt() {
 
 /* 80071534-800715B8       .text nextStageEventDt__14dEvt_control_cFPv */
 dStage_Event_dt_c* dEvt_control_c::nextStageEventDt(void* idxp) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (idxp == NULL)
         return NULL;
 

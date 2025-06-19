@@ -1801,7 +1801,7 @@ void dFile_select_c::CommandExec() {
         mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, saveSlot);
         mDoMemCd_setPictWriteDataPtr(mSavePicDataPtr);
         mDoMemCd_setCopyToPos(0xFF);
-        mDoMemCd_save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
         field_0x392b = 0xF;
     }
     else if(field_0x392a == 3) {
@@ -1816,7 +1816,7 @@ void dFile_select_c::CommandExec() {
         memcpy(r30, r4_2, 0x6000);
         mDoMemCd_setCopyToPos(field_0x3926);
         mDoMemCd_setPictWriteDataPtr(r30);
-        mDoMemCd_save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
         field_0x392b = 0x10;
     }
 }
@@ -3715,7 +3715,7 @@ void dFile_select_c::ExDataSave() {
     dComIfGs_setDataNum(saveSlot);
     mDoMemCd_setPictWriteDataPtr(NULL);
 #endif
-    mDoMemCd_save(mSaveDataPtr, 0x1650, 0);
+    mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
     field_0x392b = 0x20;
 }
 

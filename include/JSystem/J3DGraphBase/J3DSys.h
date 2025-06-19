@@ -63,7 +63,10 @@ public:
     void* getVtxCol() { return mVtxCol; }
     void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
 
-    void setModel(J3DModel* pModel) { mModel = pModel; }
+    void setModel(J3DModel* pModel) {
+        J3D_ASSERT(200, pModel, "Error : null pointer.");
+        mModel = pModel;
+    }
     void setShapePacket(J3DShapePacket* pPacket) { mShapePacket = pPacket; }
     void setMatPacket(J3DMatPacket* pPacket) { mMatPacket = pPacket; }
     J3DMatPacket* getMatPacket() { return mMatPacket; }

@@ -75,38 +75,39 @@ public:
     void roomDrawRoomEnlargementSize(int, int, int, int, f32, f32, f32, f32, u8);
     void roomDrawRoomRealSize(int, int, int, int, f32, f32, f32, f32, f32, f32, u8);
 
-    inline void clrUseRoom() {}
-    inline void setUseRoom() {}
-    inline void checkUseRoom() {}
-    inline void getEnableFlg() {}
-    inline void getStageMapInfoPE() {}
-    inline void getStageMapInfoCmPDot() {}
-    inline void getStageMapInfoMap0_X0() {}
-    inline void getStageMapInfoMap0_X1() {}
-    inline void getStageMapInfoMap0_Z0() {}
-    inline void getStageMapInfoMap0_Z1() {}
-    inline void getStageMapInfoMap0_XC() {}
-    inline void getStageMapInfoMap0_ZC() {}
-    inline void getStageMapInfoMap1_X0() {}
-    inline void getStageMapInfoMap1_X1() {}
-    inline void getStageMapInfoMap1_Z0() {}
-    inline void getStageMapInfoMap1_Z1() {}
-    inline void getStageMapInfoMap1_ZC() {}
-    inline void getStageMapInfoMap1_XC() {}
-    inline void getStageMapInfoAlpha() {}
-    inline void getMapDtP() {}
-    inline void getNowDspFloorNo() {}
-    inline void getMapDtSize() {}
-    inline void getMap0ScaleX() {}
-    inline void getMap0ScaleZ() {}
-    inline void getMap1ScaleX() {}
-    inline void getMap1ScaleZ() {}
-    inline void getMap1Width() {}
-    inline void getMap1Height() {}
+    void clrUseRoom() {}
+    void setUseRoom() {}
+    void checkUseRoom() {}
+    void getEnableFlg() {}
+    void getStageMapInfoPE() {}
+    void getStageMapInfoCmPDot() {}
+    void getStageMapInfoMap0_X0() {}
+    void getStageMapInfoMap0_X1() {}
+    void getStageMapInfoMap0_Z0() {}
+    void getStageMapInfoMap0_Z1() {}
+    void getStageMapInfoMap0_XC() {}
+    void getStageMapInfoMap0_ZC() {}
+    void getStageMapInfoMap1_X0() {}
+    void getStageMapInfoMap1_X1() {}
+    void getStageMapInfoMap1_Z0() {}
+    void getStageMapInfoMap1_Z1() {}
+    void getStageMapInfoMap1_ZC() {}
+    void getStageMapInfoMap1_XC() {}
+    void getStageMapInfoAlpha() {}
+    void getMapDtP() {}
+    void getNowDspFloorNo() {}
+    void getMapDtSize() {}
+    void getMap0ScaleX() {}
+    void getMap0ScaleZ() {}
+    void getMap1ScaleX() {}
+    void getMap1ScaleZ() {}
+    void getMap1Width() {}
+    void getMap1Height() {}
+    void setArgNo(int) {}
 
-    inline u8 getRoomNo() { return m_no; }
-    inline stage_map_info_class* getStageMapInfoP() { JUT_ASSERT(0x467, mStageMapInfoP != NULL); return mStageMapInfoP; }
-    inline dMap_RoomInfo_c* getNextRoomInfoP() { return m_next; }
+    u8 getRoomNo() { return m_no; }
+    stage_map_info_class* getStageMapInfoP() { JUT_ASSERT(0x467, mStageMapInfoP != NULL); return mStageMapInfoP; }
+    dMap_RoomInfo_c* getNextRoomInfoP() { return m_next; }
 
     /* 0x00 */ u8 m_exist;
     /* 0x01 */ u8 field_0x1;

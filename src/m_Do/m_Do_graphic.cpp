@@ -1047,7 +1047,7 @@ void blockenc(u8* block) {
         r6 = 30; // r6 (bit offset within r8)
         r8 = 0; // r8 (bitfield of color indexes)
         pix_idx = r8;
-        for (; pix_idx < 0x40; pix_idx += 4) {
+        for (; pix_idx < 0x40; pix_idx += 4, r6 -= 2) {
             // b2 = block[pix_idx + 2] * 11;
             // r2 = block[pix_idx + 0] * 30;
             // g2 = block[pix_idx + 1] * 59;
@@ -1068,7 +1068,6 @@ void blockenc(u8* block) {
             }
 
             r8 |= (r24 & 0x03) << r6;
-            r6 -= 2;
         }
     } else { // VERSION_DEMO only block (optimized out in retail)
         pix_idx = 0; // r10

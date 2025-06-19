@@ -182,14 +182,13 @@ void dMap_GetFloorInfoDtP(dStage_FloorInfo_c* floor, f32 ret) {
 
 /* 80045A98-80045AEC       .text dMap_GetFloorInfoDtPFromFloorNo__FP18dStage_FloorInfo_cUc */
 dStage_FloorInfo_dt_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor, u8 i_floorNo) {
-    /* Nonmatching */
     dStage_FloorInfo_dt_c* entry;
     BOOL valid = FALSE;
 
     if (floor != NULL) {
         entry = floor->m_entries;
-        for (int i = 0; i < floor->num; i++, entry++) {
-            if (entry->floorNo == i_floorNo) {
+        for (int i = 0; !valid && i < floor->num; i++, entry++) {
+            if (i_floorNo == entry->floorNo) {
                 valid = TRUE;
                 break;
             }
@@ -220,20 +219,26 @@ void dMap_GetFloorNo(dStage_dt_c*, f32) {
 u32 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
     /* Nonmatching */
     s32 no = i_no - Floor_Base;
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(0x702, Floor_Valid(no));
+#endif
 
     s32 dspFloorNo = field_0x2[no];
     if (search) {
         if (!IsFloorNo(dspFloorNo)) {
             while (!IsFloorNo(dspFloorNo) && --no >= 0) {
+#if VERSION > VERSION_DEMO
                 JUT_ASSERT(0x70f, Floor_Valid(no));
+#endif
                 dspFloorNo = field_0x2[no];
             }
         }
 
         if (!IsFloorNo(dspFloorNo)) {
             while (!IsFloorNo(dspFloorNo) && ++no <= (Floor_Num - 1)) {
+#if VERSION > VERSION_DEMO
                 JUT_ASSERT(0x718, Floor_Valid(no));
+#endif
                 dspFloorNo = field_0x2[no];
             }
         }
@@ -411,13 +416,13 @@ void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3,
 
 /* 80047C64-80047CD0       .text init__19dMap_RoomInfoCtrl_cFv */
 void dMap_RoomInfoCtrl_c::init() {
-    /* Nonmatching */
-    int no = 0;
-    dMap_RoomInfo_c* info = m_info;
+    int no;
+    int i;
     dMap_RoomInfo_c* prev = NULL;
-    for (int i = 0; i < m_num; i++, no++, info++) {
-        info->init(prev, no);
-        prev = info;
+    dMap_RoomInfo_c* info = m_info;
+    no = 0;
+    for (i = 0; i < m_num; no++, i++, info++) {
+        prev = info->init(prev, no);
     }
 }
 
