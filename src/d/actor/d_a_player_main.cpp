@@ -11886,13 +11886,9 @@ void daPy_lk_c::initTextureScroll() {
         m_texMtxAnm[no].setAnmIndex(no);
         
         tmtx->getTexMtxInfo().mInfo = (tmtx->getTexMtxInfo().mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
-        // Fakematch? The codegen doesn't match unless a temp variable is used and assigned to multiple times.
-        Vec* temp = &btk->getSRTCenter(no);
-        tmtx->getTexMtxInfo().mCenter.x = temp->x;
-        temp = &btk->getSRTCenter(no);
-        tmtx->getTexMtxInfo().mCenter.y = temp->y;
-        temp = &btk->getSRTCenter(no);
-        tmtx->getTexMtxInfo().mCenter.z = temp->z;
+        tmtx->getTexMtxInfo().mCenter.x = btk->getSRTCenter(no).x;
+        tmtx->getTexMtxInfo().mCenter.y = btk->getSRTCenter(no).y;
+        tmtx->getTexMtxInfo().mCenter.z = btk->getSRTCenter(no).z;
         
         JUT_ASSERT(VERSION_SELECT(20814, 21001, 21001, 21001), mtl->getMaterialAnm() != NULL);
         

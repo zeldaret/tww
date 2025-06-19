@@ -428,7 +428,7 @@ public:
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
     u16 getUpdateTexMtxID(u16 idx) const {
-        J3D_ASSERT(1017, idx > (mTrackNum / 3), "Error : range over.");
+        J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
         return mUpdateTexMtxID[idx];
     }
 
@@ -438,7 +438,10 @@ public:
     u16 getPostUpdateTexMtxID(u16 idx) const { return mPostUpdateTexMtxID[idx]; }
 
     u32 getTexMtxCalcType() { return mTexMtxCalcType; }
-    Vec& getSRTCenter(u16 idx) { return mSRTCenter[idx]; }
+    Vec& getSRTCenter(u16 idx) {
+        J3D_ASSERT(1047, idx < mTrackNum / 3, "Error : range over.");
+        return mSRTCenter[idx];
+    }
 
 private:
     /* 0x10 */ int mDecShift;
