@@ -47,34 +47,34 @@ void TParse_TParagraph::getData(TParse_TParagraph::TData* pData) const {
 
 /* 80275B2C-80275BAC       .text getData__Q47JStudio3stb4data22TParse_TParagraph_dataCFPQ57JStudio3stb4data22TParse_TParagraph_data5TData */
 void TParse_TParagraph_data::getData(TParse_TParagraph_data::TData* pData) const {
-    u8* set2;
-
-    int dSize = pData->dataSize = 0;
-    pData->_8                  = 0;
-    pData->fileCount            = NULL;
-    pData->_10                  = NULL;
-    u8* filedata = (u8*)getRaw();
+    // JUT_ASSERT(104, pData!=NULL);
+    pData->entrySize = 0;
+    pData->entryCount = 0;
+    pData->content = NULL;
+    pData->next = NULL;
+    u8* temp = (u8*)getRaw();
+    u8* filedata = temp;
     if (filedata == NULL)
         return;
-    u8 set       = *filedata;
-    pData->status = set & ~0x8;
-    if (!set)
+    u8 r29 = *filedata;
+    pData->status = r29 & ~0x8;
+    if (!r29)
         return;
-    int is8;
-    int set3 = 1;
-    is8 = set & 8;
-    // Probably fake match
-    if (set2 = (filedata + 1), is8) {
-        set3 = *set2++;
+    filedata++;
+    u32 r28 = 1;
+    if (r29 & 8) {
+        r28 = *filedata;
+        filedata++;
     }
-    pData->_8       = set3;
-    pData->fileCount = set2;
+    pData->entryCount = r28;
+    pData->content = filedata;
 
-    if (!(set & 7))
+    u8 r27 = r29 & 7;
+    if (r27 == 0)
         return;
-    dSize          = (gauDataSize_TEParagraph_data)[set &= 7];
-    pData->dataSize = dSize;
-    pData->_10      = (u8*)set2 + (dSize * set3);
+    u32 dataSize = (gauDataSize_TEParagraph_data)[r27];
+    pData->entrySize = dataSize;
+    pData->next = filedata + (dataSize * r28);
 }
 
 }  // namespace data

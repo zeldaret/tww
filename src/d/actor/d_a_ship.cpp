@@ -341,9 +341,11 @@ void daShip_c::setInitMessage() {
     else if (checkForceMessage()) {
         return;
     }
+#if VERSION > VERSION_DEMO
     else if (dComIfGs_isEventBit(0x2110) && !dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
         mNextMessageNo = 0x623;
     }
+#endif
     else if (checkStateFlg(daSFLG_UNK800000_e)) {
         mNextMessageNo = 0x636;
     }
@@ -612,7 +614,9 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
         }
         else if (currMessageNo == 0x1682) {
             dComIfGs_onEventBit(0x3d04);
+#if VERSION > VERSION_DEMO
             mNextMessageNo = 0;
+#endif
         }
         else if (currMessageNo == 0x1688) {
             dComIfGs_onEventBit(0x3f80);
@@ -826,7 +830,7 @@ void daShip_c::setWaveAngle(short* param1, short* param2) {
 
 /* 00002314-000023E0       .text getWaterY__8daShip_cFv */
 f32 daShip_c::getWaterY() {
-    float waterY;
+    f32 waterY;
     BOOL waterHit = mAcch.ChkWaterHit();
     if (waterHit) {
         m03F8 = mAcch.m_wtr.GetHeight();
@@ -844,13 +848,17 @@ f32 daShip_c::getWaterY() {
         waterY = m03F8;
     }
     else {
+#if VERSION == VERSION_DEMO
+        waterY = m03F4;
+#else
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-        if (link && link->mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK44_e ) {
+        if (link && link->mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e ) {
             waterY = 0.0f;
         }
         else {
             waterY = m03F4;
         }
+#endif
     }
     return waterY;
 }
@@ -864,7 +872,7 @@ void daShip_c::setYPos() {
     m03F4 = getWaterY();
     if (!checkStateFlg(daSFLG_UNK10_e)) {
         onStateFlg(daSFLG_UNK10_e);
-        if (mCurMode != MODE_START_MODE_WARP_e && mCurMode != MODE_START_MODE_THROW_e && m0351 != 11) {
+        if (mCurMode != MODE_START_MODE_WARP_e && mCurMode != MODE_START_MODE_THROW_e && m0351 != DEMO_HWARP_DOWN_e) {
             current.pos.y = m03F4;
         }
     }
@@ -1087,32 +1095,23 @@ s16 daShip_c::getAimControllAngle(short referenceAngle) {
 
 /* 00002D90-00002EE0       .text setMoveAngle__8daShip_cFs */
 void daShip_c::setMoveAngle(short moveAngle) {
-    float turnRate;
-    float maxTurnRate;
-    float minTurnRate;
-    short initialAngle;
-    bool cannotMove = FALSE;
-    if (mTornadoActor || mWhirlActor != 0) {
-        cannotMove = TRUE;
-    }
-    if (!cannotMove) {
-        initialAngle = shape_angle.y;
-        turnRate = 4.0f - std::abs(speedF) / 55.0f * 3.0f;
-        maxTurnRate = 3.6f;
-        minTurnRate = 0.1f;
-        if (turnRate > maxTurnRate) {
-            turnRate = maxTurnRate;
+    if (!checkForceMove()) {
+        s16 initialAngle = shape_angle.y;
+        f32 turnRate = 4.0f - std::abs(speedF) / 55.0f * 3.0f;
+        if (turnRate > 3.6f) {
+            turnRate = 3.6f;
         }
-        else if (turnRate < minTurnRate) {
-            turnRate = minTurnRate;
+        else if (turnRate < 0.1f) {
+            turnRate = 0.1f;
         }
         if (m0388 >= 0xF) {
-            turnRate = maxTurnRate;
+            turnRate = 3.6f;
         }
         else {
             turnRate += ((3.6f - turnRate) * m0388) / 15.0f;
         }
-        shape_angle.y += (s32)(-turnRate * (moveAngle >> 6));
+        s16 temp = -turnRate * (moveAngle >> 6);
+        shape_angle.y += temp;
         setControllAngle(getAimControllAngle(initialAngle));
         current.angle.y = shape_angle.y;
     }
@@ -1125,7 +1124,7 @@ void daShip_c::changeDemoEndProc() {
         mpHeadAnm->setPlaySpeed(-1.0f);
         offStateFlg(daSFLG_UNK80000_e);
     }
-    if ((m0351 == 8) || checkStateFlg(daSFLG_UNK4000000_e)) {
+    if (m0351 == DEMO_OPEN_e || checkStateFlg(daSFLG_UNK4000000_e)) {
         m0366 = 0;
         offStateFlg(daSFLG_UNK4000000_e);
     }
@@ -1953,12 +1952,15 @@ BOOL daShip_c::procCraneUp_init() {
 
     mRipple.setRate(1.0f);
 
-    offStateFlg(daSFLG_UNK40000_e);
+    offStateFlg(daSFLG_CRANE_UP_END_e);
 
     dComIfGp_getVibration().StartShock(7, -0x31, cXyz(0.0f, 1.0f, 0.0f));
     dComIfGp_getVibration().StartQuake(4, 1, cXyz(0.0f, 1.0f, 0.0f));
 
+#if VERSION > VERSION_DEMO
     speedF = 0.0f;
+#endif
+
     return TRUE;
 }
 
@@ -1975,7 +1977,7 @@ BOOL daShip_c::procCraneUp() {
     cLib_addCalcAngleS(&m039C, sVar1, 5, 0x1800, 0x100);
     if (mRipple.getEmitter() == NULL) {
         setControllAngle(0);
-        onStateFlg(daSFLG_UNK40000_e);
+        onStateFlg(daSFLG_CRANE_UP_END_e);
         dComIfGp_getVibration().StopQuake(-1);
     }
     else {
@@ -2093,7 +2095,7 @@ BOOL daShip_c::procZevDemo() {
             m0428 = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "atn_pos");
         }
 
-        if (m0351 && partP && (m0350 == 4 || m0350 != *partP)) {
+        if (m0351 != DEMO_INIT_e && partP && (m0350 == 4 || m0350 != *partP)) {
             m0350 = *partP;
             setPartAnimeInit(*partP);
         }
@@ -2117,7 +2119,7 @@ BOOL daShip_c::procZevDemo() {
             daPy_getPlayerLinkActorClass()->offNoResetFlg1(daPy_py_c::daPyFlg1_SHIP_TACT);
         }
 
-        if (m0351 == 0 || m0351 == 8) {
+        if (m0351 == DEMO_INIT_e || m0351 == DEMO_OPEN_e) {
             if (angleP) {
                 sVar15 = (s16)*angleP;
             }
@@ -2136,8 +2138,8 @@ BOOL daShip_c::procZevDemo() {
                 speedF = *speedP;
             }
 
-            if (partP || m0351 == 8) {
-                if (m0351 == 8) {
+            if (partP || m0351 == DEMO_OPEN_e) {
+                if (m0351 == DEMO_OPEN_e) {
                     m0350 = 0;
                 }
                 else {
@@ -2166,12 +2168,12 @@ BOOL daShip_c::procZevDemo() {
             setControllAngle(0);
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
-        else if (m0351 == 1 || m0351 == 3) {
+        else if (m0351 == DEMO_MOVE_e || m0351 == DEMO_UNK03_e) {
             if (posP == NULL) {
                 posP = dComIfGp_evmng_getGoal();
             }
             
-            if (m0351 == 1) {
+            if (m0351 == DEMO_MOVE_e) {
                 local_7c = *posP - current.pos;
             }
             else {
@@ -2180,7 +2182,7 @@ BOOL daShip_c::procZevDemo() {
                 fVar17 = local_70.absXZ();
 
                 if (!dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad")) {
-                    JUT_ASSERT(0xE9D, 0);
+                    JUT_ASSERT(VERSION_SELECT(3722, 3741, 3741, 3741), 0);
                 }
 
                 fVar3 = *dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad");
@@ -2255,7 +2257,7 @@ BOOL daShip_c::procZevDemo() {
                 setControllAngle(0);
             }
         }
-        else if (m0351 == 4) {
+        else if (m0351 == DEMO_RACE_FAIL_e) {
             if (!checkStateFlg(daSFLG_UNK10000_e)) {
                 mpHeadAnm->setAnm((J3DAnmTransform *)dComIfG_getObjectRes(l_arcName, SHIP_BCK_FN_LOSE1), J3DFrameCtrl::EMode_NONE, 5.0f, 1.0f, 0.0f, -1.0f, NULL);
                 onStateFlg(daSFLG_UNK10000_e);
@@ -2269,14 +2271,14 @@ BOOL daShip_c::procZevDemo() {
                 dComIfGp_evmng_cutEnd(mEvtStaffId);
             }
         }
-        else if (m0351 == 5) {
+        else if (m0351 == DEMO_KEEP_e) {
             if (speedP) {
                 firstDecrementShipSpeed(*speedP);
             }
             setControllAngle(0);
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
-        else if (m0351 == 6) {
+        else if (m0351 == DEMO_NECK_e) {
             partP = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "prm0");
 
             u16 fileIndex;
@@ -2310,7 +2312,7 @@ BOOL daShip_c::procZevDemo() {
                 dComIfGp_evmng_cutEnd(mEvtStaffId);
             }
         }
-        else if (m0351 == 7) {
+        else if (m0351 == DEMO_THROW_e) {
             speedF = 150.0f;
             speedP = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "gravity");
             if (speedP) {
@@ -2327,7 +2329,7 @@ BOOL daShip_c::procZevDemo() {
             shape_angle.y += 4500;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
-        else if (m0351 == 10) {
+        else if (m0351 == DEMO_HWARP_UP_e) {
             cLib_addCalcAngleS(&m0370, 0, 10, 0x1000, 0x200);
             cLib_addCalcAngleS(&m0372, 0, 10, 0x1000, 0x200);
             cLib_addCalcAngleS(&m0384, 0, 10, 0x1000, 0x200);
@@ -2349,7 +2351,7 @@ BOOL daShip_c::procZevDemo() {
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         else {
-            if (m0351 == 11) {
+            if (m0351 == DEMO_HWARP_DOWN_e) {
                 if (m03F4 > current.pos.y && gravity >= 0.0f) {
                     offStateFlg(daSFLG_FLY_e);
                     m03F4 = current.pos.y;
@@ -3449,7 +3451,10 @@ void daShip_c::setHeadAnm() {
             mCurMode == 9) {
             newFileIndex = SHIP_BCK_KYAKKAN1;
         } 
-        else if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+        else if (
+#if VERSION > VERSION_DEMO
+                (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+#endif
                  (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
                   mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
             m03B4 = SHIP_BCK_FN_LOOK_L;
@@ -3460,7 +3465,10 @@ void daShip_c::setHeadAnm() {
         }
     } 
     else {
-        if ((!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+        if (
+#if VERSION > VERSION_DEMO
+            (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+#endif
             (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
              mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
             m03B4 = SHIP_BCK_FN_LOOK_L;
@@ -3474,7 +3482,9 @@ void daShip_c::setHeadAnm() {
         else if ((m03B4 == SHIP_BCK_FN_LOOK_L || m03B4 == SHIP_BCK_FN_LOOK_R) && 
                  std::fabsf(mpHeadAnm->getPlaySpeed()) < 0.01f && 
                  cM_rnd() < 0.4f && (g_Counter.mTimer & 0x1FF) == 0x1FF && 
+#if VERSION > VERSION_DEMO
                  (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+#endif
                  !checkStateFlg(daSFLG_UNK40000000_e)) {
             newFileIndex = SHIP_BCK_AKIBI1;
         } 
@@ -3510,7 +3520,7 @@ BOOL daShip_c::execute() {
 
     f32 prev_fwdvel = mFwdVel;
     f32 prev_speedF = speedF;
-    m0351 = 0xFF;
+    m0351 = -1;
     m0404 = 0.0f;
     m0428 = NULL;
 
@@ -3614,10 +3624,10 @@ BOOL daShip_c::execute() {
     if (demoActor) {
         procToolDemo_init();
     }
-    else if(mEvtStaffId != -1 && m0351 != 2 && m0351 != 9) {
+    else if(mEvtStaffId != -1 && m0351 != DEMO_SALVAGE_e && m0351 != DEMO_TORNADO_S_e) {
         procZevDemo_init();
     }
-    else if (m0351 == 2) {
+    else if (m0351 == DEMO_SALVAGE_e) {
         procCraneUp_init();
     }
 
@@ -3633,7 +3643,7 @@ BOOL daShip_c::execute() {
     }
     
     BOOL r24;
-    if (m0351 == 8 || checkStateFlg(daSFLG_UNK4000000_e)) {
+    if (m0351 == DEMO_OPEN_e || checkStateFlg(daSFLG_UNK4000000_e)) {
         r24 = TRUE;
     }
     else {
@@ -3644,7 +3654,7 @@ BOOL daShip_c::execute() {
         (this->*mProc)();
     }
 
-    if (m0351 == 8 || checkStateFlg(daSFLG_UNK4000000_e)) {
+    if (m0351 == DEMO_OPEN_e || checkStateFlg(daSFLG_UNK4000000_e)) {
         m0366 = -0x2000;
         sVar26 = m0366;
     }
@@ -3859,7 +3869,7 @@ BOOL daShip_c::execute() {
             }
             else {
                 speed.x = (speedF * cM_ssin(current.angle.y)) * cM_scos(m0370);
-                if (m0351 != 7 && m0351 != 10 && m0351 != 11) {
+                if (m0351 != DEMO_THROW_e && m0351 != DEMO_HWARP_UP_e && m0351 != DEMO_HWARP_DOWN_e) {
                     speed.y = -speedF * cM_ssin(m0370);
                 }
                 speed.z = (speedF * cM_scos(current.angle.y)) * cM_scos(m0370);
@@ -4373,7 +4383,7 @@ BOOL daShip_c::createHeap() {
         m0392 = SHIP_BCK_FN_MAST_OFF2;
     }
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_BODY);
-    JUT_ASSERT(0x1B5C, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(6969, 7004, 7004, 7004), modelData != 0);
 
     mpBodyAnm = new mDoExt_McaMorf(
         modelData, NULL, NULL,
@@ -4398,7 +4408,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCN);
-    JUT_ASSERT(0x1B81, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(7006, 7041, 7041, 7041), modelData != 0);
     mpCannonModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     
     if (mpCannonModel == NULL) {
@@ -4406,7 +4416,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCR);
-    JUT_ASSERT(0x1B8E, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(7019, 7054, 7054, 7054), modelData != 0);
     mpSalvageArmModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpSalvageArmModel == NULL) {
@@ -4414,7 +4424,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
-    JUT_ASSERT(0x1B9B, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(7032, 7067, 7067, 7067), modelData != 0);
     mpLinkModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpLinkModel == NULL) {
@@ -4422,7 +4432,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_HEAD_H);
-    JUT_ASSERT(0x1BA8, modelData != 0);
+    JUT_ASSERT(VERSION_SELECT(7045, 7080, 7080, 7080), modelData != 0);
 
     m03B4 = SHIP_BCK_FN_LOOK_L;
 
@@ -4602,9 +4612,13 @@ cPhs_State daShip_c::create() {
         mWhirlID = fpcM_ERROR_PROCESS_ID_e;
         mWhirlActor = NULL;
         
+#if VERSION == VERSION_DEMO
+        mTactWarpID = fpcM_ERROR_PROCESS_ID_e;
+#else
         if (mNextMode != MODE_START_MODE_WARP_e) {
             mTactWarpID = fpcM_ERROR_PROCESS_ID_e;
         }
+#endif
         
         if (checkStateFlg(daSFLG_SAIL_ON_e) != 0) {
             mPart = PART_STEER_e;
@@ -4625,7 +4639,13 @@ cPhs_State daShip_c::create() {
             }
         }
 
-        if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) || !strcmp(dComIfGp_getStartStageName(), "Hyrule") || !strcmp(dComIfGp_getStartStageName(), "Ocean")) {
+        if (
+            (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e)
+            || !strcmp(dComIfGp_getStartStageName(), "Hyrule")
+#if VERSION > VERSION_DEMO
+            || !strcmp(dComIfGp_getStartStageName(), "Ocean")
+#endif
+        ) {
             m03CC = 4;
         }
         else {

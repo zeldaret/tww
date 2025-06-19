@@ -9,25 +9,34 @@
 
 class daNpc_Km1_c : public fopNpc_npc_c {
 public:
-
     typedef int (daNpc_Km1_c::*ActionFunc)(void*);
 
     struct anm_prm_c {
         s8 field_0x0;
         s8 field_0x1;
-        float field_0x4;
-        float field_0x8;
+        f32 field_0x4;
+        f32 field_0x8;
         int field_0xC;
     };
 
-    Vec* getAttPos() {return &field_0x780;}
+    enum Animation {
+        /* 0x0 */ ANM_WAIT,
+        /* 0x1 */ ANM_END,
+    };
+
+    enum TexPattern {
+        /* 0x0 */ TEXPATTERN_MABA,
+        /* 0x1 */ TEXPATTERN_END,
+    };
+
+    s8 getHeadJntNum() {return m_head_jnt_num;}
     s8 getBackboneJntNum() {return m_backbone_jnt_num;}
     s16 getBackbone_x() {return m_jnt.getBackbone_x();}
     s16 getBackbone_y() {return m_jnt.getBackbone_y();}
-    Vec* getEyePos() {return &field_0x78C;}
-    s8 getHeadJntNum() {return m_head_jnt_num;}
     s16 getHead_x() {return m_jnt.getHead_x();}
     s16 getHead_y() {return m_jnt.getHead_y();}
+    Vec* getAttPos() {return &mAttPos;}
+    Vec* getEyePos() {return &mEyePos;}
 
     bool createInit();
     void setMtx();
@@ -87,8 +96,8 @@ public:
     /* 0x76C */ csXyz field_0x76C;
     /* 0x772 */ u8 field_0x772[0x774 - 0x772];
     /* 0x774 */ cXyz field_0x774;
-    /* 0x780 */ cXyz field_0x780;
-    /* 0x78C */ cXyz field_0x78C;
+    /* 0x780 */ cXyz mAttPos;
+    /* 0x78C */ cXyz mEyePos;
     /* 0x798 */ cXyz field_0x798;
     /* 0x7A4 */ f32 field_0x7A4;
     /* 0x7A8 */ u8 field_0x7A8[0x7AC - 0x7A8];
@@ -126,7 +135,8 @@ public:
 };  // Size: 0x7D8
 
 class daNpc_Km1_HIO_c : public JORReflexible{
-    struct hio_prm_c{
+public:
+    struct hio_prm_c {
         s16 field_0;
         s16 field_2;
         s16 field_4;
@@ -140,18 +150,19 @@ class daNpc_Km1_HIO_c : public JORReflexible{
         f32 mAttentionArrowYOffset;
         f32 field_18;
     };  // Size: 0x1C
-public:
-    daNpc_Km1_HIO_c();
-    virtual ~daNpc_Km1_HIO_c(){};
-public:
-    /* Place member variables here */
-    /* 0x4  */ s8  mNo;
-    /* 0x5  */ s8  field_0x5;
-    /* 0x6  */ s8  field_0x6;
-    /* 0x7  */ s8  field_0x7;
-    /* 0x8  */ int field_0x8;
-    /* 0xC  */ hio_prm_c mPrmTbl;
 
+    daNpc_Km1_HIO_c();
+    virtual ~daNpc_Km1_HIO_c() {};
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 field_0x5;
+    /* 0x06 */ s8 field_0x6;
+    /* 0x07 */ s8 field_0x7;
+    /* 0x08 */ int field_0x8;
+    /* 0x0C */ hio_prm_c mPrmTbl;
 };
 
 #endif /* D_A_NPC_KM1_H */

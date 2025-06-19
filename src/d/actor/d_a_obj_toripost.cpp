@@ -723,7 +723,7 @@ void daObjTpost_c::modeTalkXY() {
 
         if(field_0x8E4 != -1 && cLib_calcTimer(&field_0x8E4) == 0) {
             player->changeOriginalDemo();
-            player->changeDemoMode(daPy_demo_c::DEMO_UNK18_e);
+            player->changeDemoMode(daPy_demo_c::DEMO_SURPRISED_e);
 
             field_0x8E4 = -1;
         }
@@ -735,7 +735,7 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
                     player->changeOriginalDemo();
-                    player->changeDemoMode(daPy_demo_c::DEMO_UNK01_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
                 }
 
                 break;

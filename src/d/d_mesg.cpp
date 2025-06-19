@@ -2117,7 +2117,7 @@ void dMesg_closeProc(sub_mesg_class* i_Msg) {
         i_Msg->field_0x100->destroy();
         i_Msg->field_0x100 = NULL;
         i_Msg->field_0x164 = 0;
-        dComIfGp_demo_get()->getControl()->referObject_control().suspend(-1);
+        dComIfGp_demo_get()->getControl()->unsuspend(1);
     } else {
         for (int i = 0; i < 18; i++) {
             if (i_Msg->outfont[i]) {

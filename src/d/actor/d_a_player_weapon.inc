@@ -57,7 +57,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     m3700 = cXyz::Zero;
     m34C2 = 1;
     voiceStart(1);
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
         m34D4 = m34E8;
@@ -238,7 +238,7 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
         m34D4 = m34E8;
@@ -287,7 +287,7 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
     voiceStart(1);
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         m34D4 = shape_angle.y;
     } else {
         m34D4 = m34E8;

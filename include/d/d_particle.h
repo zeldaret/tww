@@ -382,17 +382,17 @@ public:
     dPa_control_c();
 
     enum {
-        dPtclGroup_Normal_e,
-        dPtclGroup_NormalP1_e,
-        dPtclGroup_Toon_e,
-        dPtclGroup_ToonP1_e,
-        dPtclGroup_Projection_e,
-        dPtclGroup_ShipTail_e,
-        dPtclGroup_Wind_e,
-        dPtclGroup_2Dfore_e,
-        dPtclGroup_2Dback_e,
-        dPtclGroup_2DmenuFore_e,
-        dPtclGroup_2DmenuBack_e,
+        /* 0x0 */ dPtclGroup_Normal_e,
+        /* 0x1 */ dPtclGroup_NormalP1_e,
+        /* 0x2 */ dPtclGroup_Toon_e,
+        /* 0x3 */ dPtclGroup_ToonP1_e,
+        /* 0x4 */ dPtclGroup_Projection_e,
+        /* 0x5 */ dPtclGroup_ShipTail_e,
+        /* 0x6 */ dPtclGroup_Wind_e,
+        /* 0x7 */ dPtclGroup_2Dfore_e,
+        /* 0x8 */ dPtclGroup_2Dback_e,
+        /* 0x9 */ dPtclGroup_2DmenuFore_e,
+        /* 0xA */ dPtclGroup_2DmenuBack_e,
     };
 
     static u8 getRM_ID(u16);

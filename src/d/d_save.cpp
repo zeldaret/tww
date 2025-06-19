@@ -624,8 +624,8 @@ void dSv_player_bag_item_c::setReserveItemEmpty() {
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
-    setReserveItemChange(i_itemNo, dItem_NONE_e);
+void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemBtn) {
+    setReserveItemChange(i_itemBtn, dItem_NONE_e);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
@@ -969,10 +969,10 @@ void dSv_player_config_c::init() {
     u32 soundMode = OSGetSoundMode();
     if (soundMode == 0) {
         mSoundMode = 0;
-        JAIZelBasic::getInterface()->setOutputMode(0);
+        mDoAud_setOutputMode(0);
     } else {
         mSoundMode = 1;
-        JAIZelBasic::getInterface()->setOutputMode(1);
+        mDoAud_setOutputMode(1);
     }
 
     mAttentionType = 0;
@@ -1336,7 +1336,11 @@ void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
 void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param,
-                            const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
+                            const cXyz& i_shipPos, s16 i_shipAngle
+#if VERSION > VERSION_DEMO
+                            , BOOL i_hasShip
+#endif
+) {
     mPosition = i_pos;
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
@@ -1384,9 +1388,9 @@ void dSv_info_c::reinit() {
     u8 sound = dComIfGs_getOptSound();
     u8 vib = dComIfGs_getOptVibration();
 
+#if VERSION > VERSION_DEMO
     u8 pictureNum = dComIfGs_getPictureNum();
 
-#if VERSION > VERSION_DEMO
     u8 r27 = dComIfGs_getEventReg(0x89FF);
 #endif
 

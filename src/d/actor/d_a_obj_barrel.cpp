@@ -727,7 +727,7 @@ bool daObjBarrel::Act_c::_draw() {
         float gndH = mAcch.GetGroundH();
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz *norm = gndPlane->GetNP();
-        if (gndPlane && gndH != -G_CM3D_F_INF) {
+        if (norm && gndH != -G_CM3D_F_INF) {
             dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
         }
     }

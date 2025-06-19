@@ -44,7 +44,7 @@ public:
 
     void setFlag_operation(u8, int);
     void reset(void const*);
-    u8 forward(u32);
+    bool forward(u32);
     virtual void do_begin();
     virtual void do_end();
     virtual void do_paragraph(u32, void const*, u32);
@@ -132,7 +132,7 @@ public:
     void destroyObject(TObject*);
     void destroyObject_all();
     TObject* getObject(void const*, u32);
-    u8 forward(u32);
+    bool forward(u32);
 
     void setStatus_(u32 status) { mStatus = status; }
     void resetStatus_() { setStatus_(0); }
@@ -142,6 +142,10 @@ public:
     TObject_control& referObject_control() { return mObject_control; }
     int getSuspend() const { return _54; }
     void setSuspend(s32 suspend) { mObject_control.setSuspend(suspend); }
+    void suspend(s32 param_0) { mObject_control.suspend(param_0); }
+    void unsuspend(s32 param_0) { suspend(-param_0); }
+    void getObjectContainer() const {}
+    void referObjectContainer() {}
 
 private:
     /* 0x04 */ u32 _4;
@@ -153,43 +157,70 @@ private:
     /* 0x54 */ s32 _54;
 };
 
-template <int T>
-struct TParseData {
+template <int S>
+struct TParseData : public data::TParse_TParagraph_data::TData {
     TParseData(const void* pContent) {
-        data::TParse_TParagraph_data data(pContent);
-        set(data);
+        set(data::TParse_TParagraph_data(pContent));
+    }
+
+    TParseData() {
+        set(NULL);
     }
 
     void set(const data::TParse_TParagraph_data& data) {
-        //data::TParse_TParagraph_data::TData* p = (data::TParse_TParagraph_data::TData*)this;
-        data.getData(m_data);
+        data.getData(this);
+    }
+
+    void set(const void* pContent) {
+        set(data::TParse_TParagraph_data(pContent));
     }
 
     bool isEnd() const {
-        return m_data->status == 0;
+        return status == 0;
     }
 
     bool empty() const {
-        return m_data->fileCount == NULL;
+        return content == NULL;
     }
 
     bool isValid() const {
-        return !empty() && m_data->status == 50;
+        return !empty() && status == S;
     }
 
-    data::TParse_TParagraph_data::TData* m_data;
+    const void* getContent() const { return content; }
+
+    u32 size() const { return entryCount; }
 };
 
-template <int T>
-struct TParseData_fixed : public TParseData<T> {
-    TParseData_fixed(const void* pContent) : TParseData<T>(pContent) {}
+template <int S, class Iterator=JGadget::binary::TValueIterator_raw<u8> >
+struct TParseData_fixed : public TParseData<S> {
+    TParseData_fixed(const void* pContent) : TParseData<S>(pContent) {}
+    TParseData_fixed() : TParseData<S>() {}
 
     const void* getNext() const {
-        return this->m_data->fileCount;
+        return this->next;
     }
 
     bool isValid() const {
-        return TParseData<T>::isValid() && getNext() != NULL;
+        return TParseData<S>::isValid() && getNext() != NULL;
+    }
+
+    Iterator begin() const {
+        return Iterator(this->content);
+    }
+
+    Iterator end() const {
+        Iterator i(this->content);
+        i += this->size();
+        return i;
+    }
+
+    typename Iterator::ValueType front() const {
+        return *begin();
+    }
+
+    typename Iterator::ValueType back() const {
+        return *--end();
     }
 };
 

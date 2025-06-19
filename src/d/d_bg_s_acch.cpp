@@ -65,10 +65,10 @@ dBgS_Acch::dBgS_Acch() {
     field_0xb8 = 0.0f;
     m_tbl_size = 0;
     pm_acch_cir = NULL;
-    m_roof_y = 0.0f;
-    m_roof_crr_height = 0.0f;
     m_roof_height = 0.0f;
-    m_water_check_offset = 200.0f;
+    m_roof_crr_height = 0.0f;
+    field_0xC4 = 0.0f;
+    m_wtr_check_offset = 200.0f;
     pm_angle = NULL;
     pm_shape_angle = NULL;
     m_my_ac = NULL;
@@ -156,17 +156,17 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
     if (m_ground_h != -G_CM3D_F_INF) {
-        if (field_0xb8 < m_roof_height && m_roof_height < pm_pos->y) {
-            pm_pos->y = m_roof_height;
+        if (field_0xb8 < field_0xC4 && field_0xC4 < pm_pos->y) {
+            pm_pos->y = field_0xC4;
         }
 
         if (!(m_flags & ROOF_NONE)) {
-            if (m_ground_h >= m_roof_y) {
+            if (m_ground_h >= m_roof_height) {
                 m_roof.SetExtChk(*this);
                 ClrRoofHit();
                 cXyz pos = *pm_pos;
                 m_roof.SetPos(pos);
-                m_roof_y = i_bgs.RoofChk(&m_roof);
+                m_roof_height = i_bgs.RoofChk(&m_roof);
             }
         }
     }
@@ -248,15 +248,15 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         LineCheck(i_bgs);
     }
 
-    m_roof_height = G_CM3D_F_INF;
+    field_0xC4 = G_CM3D_F_INF;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
         ClrRoofHit();
         cXyz roofPos = *pm_pos;
         m_roof.SetPos(roofPos);
-        m_roof_y = i_bgs.RoofChk(&m_roof);
-        if (m_roof_y != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_y) {
-            m_roof_height = m_roof_y - m_roof_crr_height;
+        m_roof_height = i_bgs.RoofChk(&m_roof);
+        if (m_roof_height != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_height) {
+            field_0xC4 = m_roof_height - m_roof_crr_height;
             SetRoofHit();
         }
     }
@@ -265,8 +265,8 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         ClrGroundFind();
         GroundCheck(i_bgs);
         GroundRoofProc(i_bgs);
-    } else if (m_roof_height < pm_pos->y) {
-        pm_pos->y = m_roof_height;
+    } else if (field_0xC4 < pm_pos->y) {
+        pm_pos->y = field_0xC4;
     }
 
     if (!(m_flags & WATER_NONE)) {

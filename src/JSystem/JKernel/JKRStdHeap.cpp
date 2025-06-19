@@ -143,5 +143,7 @@ bool JKRStdHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState&
     return result;
 }
 
+#if VERSION > VERSION_DEMO
 /* 802B1490-802B1494       .text do_freeFill__10JKRStdHeapFv */
 void JKRStdHeap::do_freeFill() {}
+#endif

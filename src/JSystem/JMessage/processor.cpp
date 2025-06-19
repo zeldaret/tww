@@ -142,8 +142,10 @@ void TProcessor::on_tag_() {
     size = current[1];
 
     setCurrent_((const char*)current + size);
-    u32 tag = (current[2] << 16 | (u8)current[3] << 8);
-    tag |= current[4];
+    u32 tag = 0;
+    tag |= 0xFF0000 & (current[2] << 16);
+    tag |= 0x00FF00 & (current[3] << 8);
+    tag |= 0x0000FF & (current[4] << 0);
 
     on_tag(tag, &current[5], size - 5);
 }
@@ -178,7 +180,7 @@ void TProcessor::do_tag_(u32 tag, const void* data, u32 size) {
 void TProcessor::do_systemTagCode_(u16 code, const void* data, u32 size) {
     switch (code) {
     case 0x05:
-        pushCurrent(mControl->on_message(JGadget::binary::TParseValue<u32, JGadget::binary::TParseValue_endian_big_>::parse(data)));
+        pushCurrent(mControl->on_message(JGadget::binary::TParseValue<JGadget::binary::TParseValue_endian_big_<u32> >::parse(data)));
         break;
     }
 }
@@ -440,11 +442,11 @@ void TSequenceProcessor::do_tag_(u32 tag, const void* data, u32 size) {
         on_branch_query(code);
         break;
     case 0xF8:
-        on_branch_register(process_branch_limited_, datap + 2, JGadget::binary::TParseValue<u16, JGadget::binary::TParseValue_endian_big_>::parse(datap));
+        on_branch_register(process_branch_limited_, datap + 2, JGadget::binary::TParseValue<JGadget::binary::TParseValue_endian_big_<u16> >::parse(datap));
         on_branch_query(code);
         break;
     case 0xF7:
-        on_branch_register(process_branch_, datap + 2, JGadget::binary::TParseValue<u16, JGadget::binary::TParseValue_endian_big_>::parse(datap));
+        on_branch_register(process_branch_, datap + 2, JGadget::binary::TParseValue<JGadget::binary::TParseValue_endian_big_<u16> >::parse(datap));
         on_branch_query(code);
         break;
     default:
@@ -462,7 +464,7 @@ void TSequenceProcessor::do_systemTagCode_(u16 code, const void* data, u32 size)
     case 3:
         break;
     case 6: {
-        u32 target = JGadget::binary::TParseValue<u32, JGadget::binary::TParseValue_endian_big_>::parse(data);
+        u32 target = JGadget::binary::TParseValue<JGadget::binary::TParseValue_endian_big_<u32> >::parse(data);
         on_jump_register(process_jump_, target);
         break;
     }

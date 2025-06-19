@@ -35,7 +35,7 @@ public:
     void setMessage(u32);
     u8 getPrmFigureNo();
     void setMtx();
-    BOOL isFigureGet(u8);
+    u8 isFigureGet(u8);
     int getFigureBmd(u8);
     
     enum Prm_e {

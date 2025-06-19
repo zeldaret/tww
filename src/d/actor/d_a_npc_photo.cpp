@@ -831,7 +831,7 @@ bool daNpcPhoto_c::_draw() {
         obj.SetGeo(temp, l_pso_photo.field_0x0C, l_pso_photo.field_0x10, l_pso_photo.field_0x14 + current.angle.y);
         dSnap_RegistSnapObj(obj);
     } else {
-        dSnap_RegistFig(DSNAP_TYPE_UNK5E, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_PHOTO, this, 1.0f, 1.0f, 1.0f);
     }
     return true;
 }

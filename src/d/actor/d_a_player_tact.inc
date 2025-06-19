@@ -117,7 +117,7 @@ BOOL daPy_lk_c::checkTactLastInput() {
 /* 8014D9F8-8014DA78       .text setTactZev__9daPy_lk_cFUiiPc */
 void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerId, int r30, char* r31) {
     if (tactZevPartnerId != fpcM_ERROR_PROCESS_ID_e) {
-        mDoAud_seStart(JA_SE_PRE_TAKT);
+        seStartSystem(JA_SE_PRE_TAKT);
     }
     mTactZevPartnerId = tactZevPartnerId;
     m34CC = r30;
@@ -256,7 +256,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
 
     if (r30 == -1) {
         dCam_getBody()->StartEventCamera(0xC, fopAcM_GetID(this), 0);
-        mDoAud_seStart(JA_SE_TAKT_USE_BEGIN);
+        seStartSystem(JA_SE_TAKT_USE_BEGIN);
     }
 
     mDoAud_tact_reset();
@@ -333,7 +333,7 @@ BOOL daPy_lk_c::procTactWait() {
         if (m34D2 != 0) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
-            mDoAud_seStart(JA_SE_TAKT_USE_CANCEL);
+            seStartSystem(JA_SE_TAKT_USE_CANCEL);
         }
 
         g_dComIfG_gameInfo.play.field_0x4947 = 0;
@@ -461,7 +461,7 @@ BOOL daPy_lk_c::procTactWait() {
             ((mProcVar0.m3570 == -1 || mProcVar0.m3570 == -3) && (m3574 >= 0 && m3574 != 6 && m3574 != 7 && dComIfGs_isTact(m3574))))
         {
             m34D2 = 30;
-            mDoAud_seStart(JA_SE_WTAKT_MATCH_SIGNAL);
+            seStartSystem(JA_SE_WTAKT_MATCH_SIGNAL);
             m35A0 = 0.0f;
         } else {
             m3574 = -1;
@@ -650,7 +650,7 @@ BOOL daPy_lk_c::procTactPlay() {
             }
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
-        mDoAud_seStart(JA_SE_TAKT_MATCHED);
+        seStartSystem(JA_SE_TAKT_MATCHED);
         fopMsgM_messageSendOn();
         m34D0 = 1;
 
@@ -685,7 +685,7 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());
         fopAcM_orderChangeEvent(this, dComIfGp_getCb1Player(), l_tact_event_label, 0, -1);
-        mDoAud_seStart(JA_SE_CTRL_LINK_TO_NPC);
+        seStartSystem(JA_SE_CTRL_LINK_TO_NPC);
     } else if (r30 == 5) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_orderChangeEvent(this, l_tact_night_event_label, 0, -1);
@@ -728,8 +728,10 @@ BOOL daPy_lk_c::procTactPlayEnd() {
                 fopAcM_GetRoomNo(this),
                 getDayNightParamData(),
                 ship->current.pos,
-                ship->shape_angle.y,
-                hasShip
+                ship->shape_angle.y
+#if VERSION > VERSION_DEMO
+                , hasShip
+#endif
             );
             if (dComIfG_getTimerMode() == 3 && dComIfG_getTimerPtr() != NULL) {
                 dComIfG_getTimerPtr()->deleteRequest();
@@ -806,7 +808,7 @@ BOOL daPy_lk_c::procTactPlayOriginal_init() {
 
 /* 8014F690-8014F8A0       .text procTactPlayOriginal__9daPy_lk_cFv */
 BOOL daPy_lk_c::procTactPlayOriginal() {
-    mDoAud_seStart(JA_SE_LK_WTAKT_USING);
+    seStartSystem(JA_SE_LK_WTAKT_USING);
 
     if (m_old_fdata->getOldFrameRate() < 0.01f) {
         if (m34D6 > 0) {

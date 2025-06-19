@@ -356,18 +356,19 @@ public:
 
     void setGameoverStatus(u8 stts) { mGameoverStatus = stts; }
 
+    fopAc_ac_c* getPlayer(int idx) { return mPlayerInfo[idx].mpPlayer; }
+    void setPlayer(int idx, fopAc_ac_c* player) { mPlayerInfo[idx].mpPlayer = player; }
+    s8 getPlayerCameraID(int idx) { return mPlayerInfo[idx].mCameraID; }
+    void setPlayerInfo(int idx, fopAc_ac_c* player, int cam) {
+        mPlayerInfo[idx].mpPlayer = player;
+        mPlayerInfo[idx].mCameraID = cam;
+    }
+    
     fopAc_ac_c* getPlayerPtr(int idx) { return (fopAc_ac_c*)mpPlayerPtr[idx]; }
-    fopAc_ac_c* getPlayer(int idx) { return (fopAc_ac_c*)mpPlayer[idx * 2]; }
-    void setPlayer(int idx, fopAc_ac_c* player) { mpPlayer[idx] = (daPy_py_c*)player; }
     void setPlayerPtr(int idx, fopAc_ac_c* playerPtr) { mpPlayerPtr[idx] = playerPtr; }
-    s8 getPlayerCameraID(int idx) { return mCurCamera[idx]; }
     int getCameraPlayer1ID(int i) { return mCameraInfo[i].mCamP1Id; }
     int getCameraPlayer2ID(int i) { return mCameraInfo[i].mCamP2Id; }
     int getCameraWinID(int i) { return mCameraInfo[i].mDlstWindowIdx; }
-    void setPlayerInfo(int idx, fopAc_ac_c* player, int cam) {
-        mpPlayer[idx] = (daPy_py_c*)player;
-        mCurCamera[idx] = cam;
-    }
 
     int getItemTimer() { return mItemTimer; }
     void resetItemTimer(s16 timer) {
@@ -618,6 +619,10 @@ public:
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
     bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
+    void onPictureFlag(u8 i) {
+        u8 mask = (1 << i);
+        mPictureFlag |= mask;
+    }
     void offPictureFlag(u8 i) {
         u8 mask = (1 << i);
         mPictureFlag &= ~mask;
@@ -737,9 +742,10 @@ public:
     /* 0x4842 */ u16 mStatus;
     /* 0x4844 */ dDlst_window_c mDlstWindow[1];
     /* 0x4870 */ dComIfG_camera_info_class mCameraInfo[1];
-    /* 0x48A4 */ daPy_py_c* mpPlayer[1];
-    /* 0x48A8 */ s8 mCurCamera[1];
-    /* 0x48A9 */ u8 field_0x48A9[0x48AC - 0x48A9];
+    /* 0x48A4 */ struct {
+        /* 0x0 */ fopAc_ac_c* mpPlayer;
+        /* 0x4 */ s8 mCameraID;
+    } mPlayerInfo[1];
     /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
     /* 0x48B8 */ f32 field_0x48b8;
     /* 0x48BC */ f32 mItemLifeCount;
@@ -895,6 +901,10 @@ u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
+}
+
+inline void dComIfGs_reinit() {
+    g_dComIfG_gameInfo.save.reinit();
 }
 
 inline u8 dComIfGs_checkReserveItem(u8 i_itemNo) {
@@ -1385,6 +1395,15 @@ inline void dComIfGs_setTurnRestartHasShip(BOOL hasShip) {
 }
 #endif
 
+#if VERSION == VERSION_DEMO
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle);
+}
+
+inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle) {
+    g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle);
+}
+#else
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_pos, i_angle, FALSE);
 }
@@ -1393,9 +1412,46 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param, const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
     g_dComIfG_gameInfo.save.getTurnRestart().set(i_pos, i_angle, i_roomNo, i_param, i_shipPos, i_shipAngle, i_hasShip);
 }
+#endif
+
+inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
+    g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
+}
+
+inline void dComIfGs_setInitDataToCard(u8* i_cardPtr, int i_dataNum) {
+    g_dComIfG_gameInfo.save.initdata_to_card((char*)i_cardPtr, i_dataNum);
+}
 
 inline u8 dComIfGs_getDataNum() {
     return g_dComIfG_gameInfo.save.getDataNum();
+}
+
+inline void dComIfGs_setDataNum(u8 num) {
+    g_dComIfG_gameInfo.save.setDataNum(num);
+}
+
+inline u8 dComIfGs_getNoFile() {
+    return g_dComIfG_gameInfo.save.getNoFile();
+}
+
+inline void dComIfGs_setNoFile(u8 num) {
+    g_dComIfG_gameInfo.save.setNoFile(num);
+}
+
+inline u64 dComIfGs_getMemCardCheckID() {
+    return g_dComIfG_gameInfo.save.getMemCardCheckID();
+}
+
+inline u8 dComIfGs_getNewFile() {
+    return g_dComIfG_gameInfo.save.getNewFile();
+}
+
+inline void dComIfGs_setNewFile(u8 file) {
+    g_dComIfG_gameInfo.save.setNewFile(file);
+}
+
+inline void dComIfGs_setMemCardCheckID(u64 id) {
+    g_dComIfG_gameInfo.save.setMemCardCheckID(id);
 }
 
 inline u8 dComIfGs_getPlayerPriestFlag() {
@@ -2940,6 +2996,10 @@ inline bool dComIfGp_isPictureFlag(u8 i) {
     return g_dComIfG_gameInfo.play.isPictureFlag(i);
 }
 
+inline void dComIfGp_onPictureFlag(u8 i) {
+    g_dComIfG_gameInfo.play.onPictureFlag(i);
+}
+
 inline void dComIfGp_offPictureFlag(u8 i) {
     g_dComIfG_gameInfo.play.offPictureFlag(i);
 }
@@ -3369,10 +3429,10 @@ int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 par
                        s16 rotY = 0, f32 param_12 = 1.0f,
                        GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* param_3,
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm,
                                     s16 i_angle = 0, f32 param_5 = 1.0f,
                                     GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, param_3, i_angle,
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, floor_nrm, i_angle,
                                                        param_5, i_tex);
 }
 
@@ -4006,12 +4066,12 @@ inline void dComIfG_TimerDeleteRequest() {
     if (dComIfG_getTimerPtr() != NULL)
         dComIfG_getTimerPtr()->deleteRequest();
 }
-inline void dComIfG_TimerStart(int timer, s16 mode) {
+inline void dComIfG_TimerStart(int mode, s16 timer) {
     if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL) {
-        if (timer != 0)
-            dComIfG_getTimerPtr()->start(timer);
-        else
+        if (!timer)
             dComIfG_getTimerPtr()->start();
+        else
+            dComIfG_getTimerPtr()->start(timer);
     }
 }
 inline void dComIfG_TimerReStart(int timer) {

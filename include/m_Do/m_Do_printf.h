@@ -19,4 +19,6 @@ extern "C" {
 
 void OSReportInit();
 
+extern u32 print_errors;
+
 #endif /* M_DO_M_DO_PRINTF_H */

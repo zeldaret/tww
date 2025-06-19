@@ -19,19 +19,14 @@
 /* 801387A4-801387EC       .text getCrawlMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getCrawlMoveAnmSpeed() {
     if (mProcVar0.m3570 != 0) {
-        f32 fVar1 = 1.5f;
-        f32 fVar2 = 0.5f;
-        return (mStickDistance * fVar1) + fVar2;
+        return getAnmSpeedStickRate(0.5f, 2.0f);
     }
-    return daPy_HIO_crouch_c0::m.field_0x34 +
-           (mStickDistance * (daPy_HIO_crouch_c0::m.field_0x30 - daPy_HIO_crouch_c0::m.field_0x34));
+    return getAnmSpeedStickRate(daPy_HIO_crouch_c0::m.field_0x34, daPy_HIO_crouch_c0::m.field_0x30);
 }
 
 /* 801387EC-80138868       .text getCrawlMoveSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getCrawlMoveSpeed() {
-    float fVar1;
-
-    fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
+    f32 fVar1 = mFrameCtrlUnder[UNDER_MOVE0_e].getFrame();
     if (fVar1 >= 17.0f) {
         fVar1 = fVar1 - 17.0f;
     }
@@ -466,7 +461,7 @@ BOOL daPy_lk_c::procCrawlMove() {
                        checkCrawlSideWall(&spF4, &spDC, &spC4, &spD0, &sp08, &sp0A)))
         {
             mProcVar0.m3570 = 1;
-            mResetFlg0 = mResetFlg0 | 0x1000;
+            onResetFlg0(daPyRFlg0_UNK1000);
             m370C = ((spD0 + spC4) * 0.5f) - spB8;
             m34D4 = sp0A + 0x4000;
         }

@@ -134,7 +134,7 @@ public:
     cXyz* GetPos() { return pm_pos; }
     cXyz* GetOldPos() { return pm_old_pos; }
     f32 GetGroundH() { return m_ground_h; }
-    f32 GetRoofHeight() { return m_roof_crr_height; }
+    f32 GetRoofHeight() { return m_roof_height; }
     f32 GetSeaHeight() { return m_sea_height; }
     void SetLin() { m_lin.SetStartEnd(*pm_old_pos, *pm_pos); }
     bool ChkGroundFind() { return m_flags & GROUND_FIND; }
@@ -171,9 +171,9 @@ public:
     void SetGroundLanding() { m_flags |= GROUND_LANDING; }
     void SetGroundAway() { m_flags |= GROUND_AWAY; }
     const u32 MaskWaterHit() { return m_flags & WATER_HIT; }
-    const bool ChkWaterHit() { return MaskWaterHit(); }
+    const bool ChkWaterHit() { return MaskWaterHit() != 0; }
     void ClrWaterNone() { m_flags &= ~WATER_NONE; }
-    void SetWaterCheckOffset(f32 offset) { m_water_check_offset = offset; }
+    void SetWaterCheckOffset(f32 offset) { m_wtr_check_offset = offset; }
     void OnLineCheck() { m_flags |= LINE_CHECK; }
     void ClrRoofNone() { m_flags &= ~ROOF_NONE; }
     void SetRoofCrrHeight(f32 height) { m_roof_crr_height = height; }
@@ -236,10 +236,10 @@ public:
     /* 0x0B0 */ u8 field_0xb0;
     /* 0x0B4 */ f32 field_0xb4;
     /* 0x0B8 */ f32 field_0xb8;
-    /* 0x0BC */ f32 m_roof_y;
+    /* 0x0BC */ f32 m_roof_height;
     /* 0x0C0 */ f32 m_roof_crr_height;
-    /* 0x0C4 */ f32 m_roof_height;
-    /* 0x0C8 */ f32 m_water_check_offset;
+    /* 0x0C4 */ f32 field_0xC4;
+    /* 0x0C8 */ f32 m_wtr_check_offset;
     /* 0x0CC */ cBgS_PolyInfo* pm_out_poly_info;
     /* 0x0D0 */ f32 m_sea_height;
     /* 0x0D4 */ dBgS_GndChk m_gnd;

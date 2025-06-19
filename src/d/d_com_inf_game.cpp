@@ -58,9 +58,9 @@ void dComIfG_play_c::ct()
 
 /* 800521A4-800521D4       .text init__14dComIfG_play_cFv */
 void dComIfG_play_c::init() {
-    for (int i = 0; i < ARRAY_SIZE(mpPlayer); i++) {
-        mpPlayer[i] = NULL;
-        mCurCamera[i] = -1;
+    for (int i = 0; i < ARRAY_SIZE(mPlayerInfo); i++) {
+        mPlayerInfo[i].mpPlayer = NULL;
+        mPlayerInfo[i].mCameraID = -1;
     }
 
     for (int i = 0; i < ARRAY_SIZE(mpPlayerPtr); i++) {
@@ -1171,13 +1171,12 @@ void dComIfGs_setGameStartStage() {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
             point = player_p->mRestartPoint;
 
-            s8 temp_r3 = player_p->current.roomNo;
-            room_no = temp_r3;
+            room_no = fopAcM_GetRoomNo(player_p);
 
-            stage_scls_info_class* scls_p;
-            if (temp_r3 >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
+            if (fopAcM_GetRoomNo(player_p) >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
                 strcpy(stage_name, dComIfGp_getStartStageName());
             } else {
+                stage_scls_info_class* scls_p;
                 if (dComIfGp_getShipActor() != NULL) {
                     scls_p = dComIfGd_getMeshSceneList(dComIfGp_getShipActor()->current.pos);
                 } else {
@@ -1291,7 +1290,7 @@ void dComIfGs_setPlayerRecollectionData() {
         return;
     }
 
-    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[0] != dItem_TELESCOPE_e) {
+    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[dInvSlot_TELESCOPE_e] != dItem_TELESCOPE_e) {
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);

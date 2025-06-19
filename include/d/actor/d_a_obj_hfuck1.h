@@ -35,11 +35,14 @@ public:
     daObjHfuck1_HIO_c();
     virtual ~daObjHfuck1_HIO_c() {}
 
+    void genMessage(JORMContext* ctx);
+
+public:
     /* 0x04 */ s8 mNo;
-    f32 field_0x08;
-    f32 field_0x0C;
-    f32 field_0x10;
-    f32 field_0x14;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
 };
 #endif
 

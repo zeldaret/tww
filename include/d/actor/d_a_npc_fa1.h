@@ -256,6 +256,8 @@ public:
     daNpc_Fa1_HIO_c();
     virtual ~daNpc_Fa1_HIO_c() {};
 
+    void genMessage(JORMContext* ctx);
+
 public:
     /* 0x04 */ s8 mNo;
     /* 0x08 */ hio_prm_c prm;

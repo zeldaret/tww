@@ -130,8 +130,8 @@ cPhs_State dScnName_c::create() {
             JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
-            g_dComIfG_gameInfo.save.field_0x1291 = 0;
-            g_dComIfG_gameInfo.save.field_0x1292 = 0;
+            dComIfGs_setNoFile(0);
+            dComIfGs_setNewFile(0);
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
             dComIfGs_setClearCount(1);
@@ -442,8 +442,7 @@ void dScnName_c::MemCardErrMsgWaitFormatSel2() {
 
 /* 8023106C-802310C0       .text MemCardFormat__10dScnName_cFv */
 void dScnName_c::MemCardFormat() {
-    /* Nonmatching */
-    field_0x1bbc = g_mDoMemCd_control.FormatSync();
+    field_0x1bbc = mDoMemCd_FormatSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 8;
@@ -462,7 +461,7 @@ void dScnName_c::MemCardMakeGameFileSel() {
 
 /* 80231284-802312D8       .text MemCardMakeGameFile__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFile() {
-    field_0x1bbc = g_mDoMemCd_control.SaveSync();
+    field_0x1bbc = mDoMemCd_SaveSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 11;

@@ -15,8 +15,13 @@
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
+#if VERSION == VERSION_DEMO
+void daPy_lk_c::setSwordModel()
+#else
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
-void daPy_lk_c::setSwordModel(BOOL r28) {
+void daPy_lk_c::setSwordModel(BOOL r28)
+#endif
+{
     struct sword_model_tbl_s {
         /* 0x00 */ u16 bladeModel;
         /* 0x02 */ u16 glowModel;
@@ -118,10 +123,12 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     mDoAud_bgmSetSwordUsing(1);
     m355C = 0;
 
+#if VERSION > VERSION_DEMO
     if (r28) {
         onNoResetFlg1(daPyFlg1_UNK200000);
         mpSwordBtk->setFrame(mpSwordBtk->getFrameMax() - 0.001f);
     }
+#endif
 }
 
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */
@@ -402,7 +409,7 @@ int daPy_lk_c::changeCutProc() {
     m34C4++;
     int direction = getCutDirection() - 1;
     short sVar2;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {
         sVar2 = m34E8;
@@ -427,7 +434,7 @@ int daPy_lk_c::changeCutProc() {
         } else if (direction == DIR_RIGHT) {
             procCutR_init(sVar2);
         } else if (direction == DIR_NONE) {
-            if (mpAttention->Lockon()) {
+            if (checkAttentionLock()) {
                 procCutA_init(sVar2);
             } else {
                 procCutL_init(sVar2);
@@ -1533,7 +1540,7 @@ BOOL daPy_lk_c::procCutRoll() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         uVar1 = current.angle.y;
-        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
             fVar2 = 25.0f + mAcchCir[0].GetWallR();
             local_48.set(current.pos.x, current.pos.y + mAcchCir[0].GetWallH(), current.pos.z);
             f32 cos = cM_scos(uVar1);
@@ -1561,7 +1568,7 @@ BOOL daPy_lk_c::procCutRoll() {
         }
         sVar3 = current.angle.y - uVar1;
         if (dComIfGp_event_runCheck() != 0) {
-            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e) {
+            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e) {
                 m34D0 = 0;
             } else {
                 m34D0 = 5;
@@ -1580,7 +1587,7 @@ BOOL daPy_lk_c::procCutRoll() {
         } else if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
             shape_angle.y = shape_angle.y + m34EC;
             current.angle.y = shape_angle.y;
-            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
                 procWait_init();
             } else {
                 procCutRollEnd_init();
@@ -1701,7 +1708,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
         }
     }
     if (m34D0 != -1) {
-        mDoAud_seStart(JA_SE_LK_SWORD_CHARGE);
+        seStartSystem(JA_SE_LK_SWORD_CHARGE);
     }
     if (changeSlideProc()) {
         return true;

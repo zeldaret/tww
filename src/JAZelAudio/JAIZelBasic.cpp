@@ -1577,7 +1577,7 @@ void JAIZelBasic::stSkyCloistersProcess() {
 u32 JAIZelBasic::getRandomU32(u32 param_1) {
     u32 tmp = jai_rng_seed;
     jai_rng_seed = tmp * 2;
-    jai_rng_seed += (tmp >> 0x1f ^ tmp >> 6 & 0x10);
+    jai_rng_seed += (tmp >> 0x1f ^ (tmp >> 6 & 0x10));
     tmp = (jai_rng_seed / param_1);
     return jai_rng_seed - tmp * param_1;
 }

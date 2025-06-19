@@ -1477,7 +1477,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
         appen->base.angle = player_data->base.angle;
         appen->base.setID = player_data->base.setID;
 
-        if (roomParam != 0 && (int)((appen->base.parameters >> 0xC) & 0xF) != 2) {
+        if (roomParam != 0 && daPy_lk_c::getStartModeFromParam(appen->base.parameters) != 2) {
             appen->base.parameters = (roomParam & 0xFFFFFFC0) | (appen->base.parameters & 0x3F);
         }
     }

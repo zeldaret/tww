@@ -122,10 +122,57 @@ int daPy_lk_c::changeRopeToHangProc() {
 }
 
 /* 8014327C-80143694       .text checkRopeSwingWall__9daPy_lk_cFP4cXyzP4cXyzPsPf */
-BOOL daPy_lk_c::checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*) {
-    /* Nonmatching */
-    static JGeometry::TVec3<f32> dynamic_scale;
-    static JGeometry::TVec3<f32> particle_scale;
+BOOL daPy_lk_c::checkRopeSwingWall(cXyz* r4, cXyz* r5, s16* r6, f32* r7) {
+    static JGeometry::TVec3<f32> dynamic_scale(0.25f, 0.25f, 0.25f);
+    static JGeometry::TVec3<f32> particle_scale(0.75f, 0.75f, 0.75f);
+    
+    mLinkLinChk.Set(r4, r5, this);
+    if (dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
+        f32 f1 = -*r6 / (f32)m34D4;
+        if (f1 > 1.0f) {
+            f1 = 1.0f;
+        } else if (f1 < -1.0f) {
+            f1 = -1.0f;
+        }
+        if (*r7 > 0.0f) {
+            *r7 = cM_atan2f(f1, -std::sqrtf(1.0f - f1*f1));
+        } else {
+            *r7 = cM_atan2f(f1, std::sqrtf(1.0f - f1*f1));
+        }
+        m35A8 = *r7 / m35A4;
+        daPy_footEffect_c* foot_effect = &mFootEffect[1];
+        if (foot_effect->getID() != -1) {
+            foot_effect->getSmokeCallBack()->remove();
+            foot_effect->getOtherCallBack()->remove();
+        }
+        
+        cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinkLinChk);
+        cXyz* normal = plane->GetNP();
+        cXyz sp50 = mLinkLinChk.GetCross() + *normal * 10.0f;
+        foot_effect->setPos(&sp50);
+        csXyz angle;
+        angle.x = cM_atan2s(normal->absXZ(), normal->y);
+        angle.y = cM_atan2s(normal->x, normal->z);
+        angle.z = 0;
+        foot_effect->setAngle(&angle);
+        
+        JPABaseEmitter* emitter = dComIfGp_particle_setToonP1(
+            dPa_name::ID_COMMON_2022,
+            &foot_effect->getPos(), &foot_effect->getAngle(),
+            NULL, daPy_HIO_basic_c0::m.field_0x2, foot_effect->getSmokeCallBack(),
+            fopAcM_GetRoomNo(this)
+        );
+        if (emitter) {
+            emitter->setSpread(1.0f);
+            emitter->setRate(8.0f);
+            emitter->setGlobalDynamicsScale(dynamic_scale);
+            emitter->setGlobalParticleScale(particle_scale);
+        }
+        
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 80143694-80143A44       .text setBlendRopeMoveAnime__9daPy_lk_cFi */
@@ -281,7 +328,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
             } else {
                 return true;
             }
-        } else if (!mpAttention->Lockon()) {
+        } else if (!checkAttentionLock()) {
             dComIfGp_setDoStatus(dActStts_RETURN_e);
         }
         if (((itemButton()) && (mEquipItem == getReadyItem())) && (m355C == 0)) {
@@ -316,7 +363,7 @@ BOOL daPy_lk_c::checkNextRopeMode() {
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procRopeMove_init();
     } else {
         return procRopeSubject_init();
@@ -357,7 +404,7 @@ BOOL daPy_lk_c::procRopeSubject_init() {
 
     current.angle.y = shape_angle.y;
 
-    mDoAud_seStart(JA_SE_CAMERA_L_MOVE);
+    seStartSystem(JA_SE_CAMERA_L_MOVE);
 
     mProcVar0.m3570 = 0;
     m3600 = -1.0f;
@@ -379,7 +426,7 @@ BOOL daPy_lk_c::procRopeSubject() {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -399,11 +446,11 @@ BOOL daPy_lk_c::procRopeSubject() {
                 mSightPacket.incFrame();
 
                 if (mSightPacket.checkSEFrame()) {
-                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                    seStartSystem(JA_SE_INDICATOR_1);
                 }
             } else {
                 mSightPacket.onLockFlg();
-                mDoAud_seStart(JA_SE_INDICATOR_1);
+                seStartSystem(JA_SE_INDICATOR_1);
             }
         } else {
             mSightPacket.offLockFlg();
@@ -718,7 +765,7 @@ BOOL daPy_lk_c::procRopeSwing() {
         procRopeHangWait_init(0);
     } else if (f30 > 0.6f) {
         if (cM_fcos(sp0C) > 0.77f) {
-            mDoAud_seStart(JA_SE_LK_ROPE_SWING_F, &mRopePos, NULL, mReverb);
+            mDoAud_seStart(JA_SE_LK_ROPE_SWING_F, &mRopePos, 0, mReverb);
         }
     }
 
@@ -1110,7 +1157,7 @@ BOOL daPy_lk_c::procRopeMove() {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
         } else {
-            if ((m355E == 0) && (!mpAttention->Lockon())) {
+            if ((m355E == 0) && (!checkAttentionLock())) {
                 resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             } else {
                 setSpeedAndAngleAtn();
@@ -1155,7 +1202,7 @@ BOOL daPy_lk_c::procRopeThrowCatch() {
     if (!checkItemModeActorPointer()) {
         return true;
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK40000_e);
     } else {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);

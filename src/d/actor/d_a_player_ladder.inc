@@ -15,8 +15,7 @@
 
 /* 80132F34-80132F58       .text getLadderMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getLadderMoveAnmSpeed() {
-    return daPy_HIO_ladder_c0::m.field_0x28 +
-           (mStickDistance * (daPy_HIO_ladder_c0::m.field_0x24 - daPy_HIO_ladder_c0::m.field_0x28));
+    return getAnmSpeedStickRate(daPy_HIO_ladder_c0::m.field_0x28, daPy_HIO_ladder_c0::m.field_0x24);
 }
 
 /* 80132F58-80133058       .text setLadderFootSe__9daPy_lk_cFv */

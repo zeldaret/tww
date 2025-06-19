@@ -30,11 +30,13 @@ static const char* l_arcname_tbl[] = {
     "Figure5",
     "Figure3",
     "Figure4",
+#if VERSION > VERSION_DEMO
     "Figure2a",
     "Figure2b",
     "Figure6a",
     "Figure6b",
     "Figure6c",
+#endif
 };
 
 static u16 l_figure_comp[] = {
@@ -96,14 +98,14 @@ struct FigureData {
 }; // Size: 0x0C
 
 #if VERSION == VERSION_DEMO
-#define FIGUREDAT(bmdIdx, dlistFlags, roomId)                                                      \
+#define FIGUREDAT(bmdId, dlistFlags, roomId)                                                       \
     {                                                                                              \
-        bmdIdx, dlistFlags                                                                         \
+        bmdId, dlistFlags                                                                          \
     }
 #else
-#define FIGUREDAT(bmdIdx, dlistFlags, roomId)                                                      \
+#define FIGUREDAT(bmdId, dlistFlags, roomId)                                                       \
     {                                                                                              \
-        bmdIdx, dlistFlags, roomId                                                                 \
+        bmdId, dlistFlags, roomId                                                                  \
     }
 #endif
 
@@ -149,7 +151,9 @@ static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x1A, 0x37441422, -1),
     FIGUREDAT(0x1B, 0x37441422, -1),
     FIGUREDAT(0x1C, 0x37441422, -1),
+#if VERSION > VERSION_DEMO
     FIGUREDAT(0x00, 0x37441422, 8),
+#endif
     FIGUREDAT(0x01, 0x37441422, 8),
     FIGUREDAT(0x02, 0x37441422, 8),
     FIGUREDAT(0x03, 0x37441422, 8),
@@ -162,8 +166,22 @@ static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x0A, 0x37441422, 8),
     FIGUREDAT(0x0B, 0x37441422, 8),
     FIGUREDAT(0x0C, 0x37441422, 8),
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x17, 0x37441422, -1),
+#endif
     FIGUREDAT(0x0D, 0x37441422, 8),
     FIGUREDAT(0x0E, 0x37441422, 8),
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x18, 0x37441422, 8),
+    FIGUREDAT(0x0F, 0x37441422, 8),
+    FIGUREDAT(0x10, 0x37441422, 8),
+    FIGUREDAT(0x11, 0x37441422, 8),
+    FIGUREDAT(0x12, 0x37441422, 8),
+    FIGUREDAT(0x19, 0x37441422, 9),
+    FIGUREDAT(0x13, 0x37441422, 9),
+    FIGUREDAT(0x14, 0x37441422, 9),
+    FIGUREDAT(0x16, 0x37441422, 9),
+#else
     FIGUREDAT(0x0F, 0x37441422, 8),
     FIGUREDAT(0x10, 0x37441422, 8),
     FIGUREDAT(0x11, 0x37441422, 8),
@@ -173,6 +191,7 @@ static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x01, 0x37441422, 9),
     FIGUREDAT(0x02, 0x37441422, 9),
     FIGUREDAT(0x05, 0x37441422, 9),
+#endif
     FIGUREDAT(0x00, 0x11001222, -1),
     FIGUREDAT(0x01, 0x37441422, -1),
     FIGUREDAT(0x02, 0x37441422, -1),
@@ -225,13 +244,29 @@ static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x10, 0x37441422, -1),
     FIGUREDAT(0x11, 0x37441422, -1),
     FIGUREDAT(0x00, 0x37441422, 0xA),
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x10, 0x37441422, 0xA),
+#else
     FIGUREDAT(0x01, 0x37441422, 0xA),
+#endif
     FIGUREDAT(0x02, 0x11001222, 0xA),
     FIGUREDAT(0x03, 0x11001222, 0xA),
     FIGUREDAT(0x04, 0x11001222, 0xA),
     FIGUREDAT(0x05, 0x37441422, 0xA),
     FIGUREDAT(0x06, 0x37441422, 0xA),
     FIGUREDAT(0x07, 0x37441422, 0xA),
+#if VERSION == VERSION_DEMO
+    FIGUREDAT(0x08, 0x37441422, 0xB),
+    FIGUREDAT(0x09, 0x11001222, 0xB),
+    FIGUREDAT(0x01, 0x11001222, 0xB),
+    FIGUREDAT(0x0A, 0x37441422, 0xB),
+    FIGUREDAT(0x0B, 0x37441422, 0xB),
+    FIGUREDAT(0x0C, 0x11001222, 0xC),
+    FIGUREDAT(0x0D, 0x37441422, 0xC),
+    FIGUREDAT(0x0E, 0x11001222, 0xC),
+    FIGUREDAT(0x11, 0x11001222, 0xC),
+    FIGUREDAT(0x0F, 0x37441422, 0xC),
+#else
     FIGUREDAT(0x00, 0x37441422, 0xB),
     FIGUREDAT(0x01, 0x11001222, 0xB),
     FIGUREDAT(0x02, 0x11001222, 0xB),
@@ -242,6 +277,7 @@ static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x02, 0x11001222, 0xC),
     FIGUREDAT(0x03, 0x11001222, 0xC),
     FIGUREDAT(0x04, 0x37441422, 0xC),
+#endif
 };
 
 struct FigureCheckTbl {
@@ -388,7 +424,12 @@ static cPhs_State phase_2(daObjFigure_c* i_this) {
     cPhs_State status = dComIfG_resLoad(i_this->getPhase2P(), l_arcname_tbl[id]);
 
     if(status == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, figureNo == 0x40 ? 0x25000 : 0xCD90)) {
+#if VERSION == VERSION_DEMO
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0))
+#else
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, figureNo == 0x40 ? 0x25000 : 0xCD90))
+#endif
+        {
             return i_this->createInit();
         }
         else {
@@ -412,15 +453,15 @@ cPhs_State daObjFigure_c::_create() {
 
 /* 00000720-00000A90       .text createHeap__13daObjFigure_cFv */
 BOOL daObjFigure_c::createHeap() {
-    int id = dSnap_GetFigRoomId(getFigureNo());
+    int roomId = dSnap_GetFigRoomId(getFigureNo());
 #if VERSION > VERSION_DEMO
     if(l_figure_dat_tbl[getFigureNo()].mRoomId >= 0) {
-        id = l_figure_dat_tbl[getFigureNo()].mRoomId;
+        roomId = l_figure_dat_tbl[getFigureNo()].mRoomId;
     }
 #endif
 
     J3DModelData* pModelData;
-    const char* arcname = l_arcname_tbl[id];
+    const char* arcname = l_arcname_tbl[roomId];
     pModelData = (J3DModelData*)(dComIfG_getObjectIDRes(arcname, getFigureBmd(mFigureNo)));
     if(pModelData == NULL) {
         return false;
@@ -446,22 +487,28 @@ BOOL daObjFigure_c::createHeap() {
             return false;
         }
     }
+    J3DModelData* pPedestalData;
     if(mFigureNo == 0x40) {
-        J3DModelData* p1 = (J3DModelData*)dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_044);
+        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(arcname, FIGURE2_BDL_VF_044);
         mpMorf = new mDoExt_McaMorf(
-            p1,
+            pPedestalData,
             NULL, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectIDRes(arcname, FIGURE2_BCK_VF_064L),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
+#if VERSION == VERSION_DEMO
+            0x11000022
+#else
             0x11001222
+#endif
         );
 
         if(mpMorf == NULL || mpMorf->getModel() == NULL) {
             return false;
         }
 
+#if VERSION > VERSION_DEMO
         J3DSkinDeform* pDeform = new J3DSkinDeform;
         if(pDeform == NULL) {
             return false;
@@ -470,9 +517,10 @@ BOOL daObjFigure_c::createHeap() {
         if(mpMorf->getModel()->setSkinDeform(pDeform, 1) != J3DErrType_Success) {
             return false;
         }
+#endif
     }
 
-    J3DModelData* pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
+    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
     if(pPedestalData == NULL) {
         return false;
     }
@@ -520,21 +568,34 @@ cPhs_State daObjFigure_c::createInit() {
     return cPhs_COMPLEATE_e;
 }
 
+#if VERSION == VERSION_DEMO
+BOOL daObjFigure_c::_delete() {
+    if (mLoadFlags & 1) {
+        dComIfG_resDeleteDemo(getPhase1P(), "Figure");
+    }
+
+    if (mLoadFlags & 2) {
+        int id = dSnap_GetFigRoomId(getFigureNo());
+        dComIfG_resDeleteDemo(getPhase2P(), l_arcname_tbl[id]);
+    }
+
+    return true;
+}
+#else
 /* 00000BF4-00000C78       .text _delete__13daObjFigure_cFv */
 BOOL daObjFigure_c::_delete() {
     dComIfG_resDeleteDemo(getPhase1P(), "Figure");
 
     int id = dSnap_GetFigRoomId(getFigureNo());
-#if VERSION > VERSION_DEMO
     if(l_figure_dat_tbl[getFigureNo()].mRoomId >= 0) {
         id = l_figure_dat_tbl[getFigureNo()].mRoomId;
     }
-#endif
 
-    dComIfG_resDeleteDemo(getPhase2P(), l_arcname_tbl[id]);
+    dComIfG_resDelete(getPhase2P(), l_arcname_tbl[id]);
 
     return true;
 }
+#endif
 
 void linkDraw(mDoExt_McaMorf*);
 
@@ -542,6 +603,11 @@ void linkDraw(mDoExt_McaMorf*);
 BOOL daObjFigure_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG2, &current.pos, &mTevStrBG2);
     g_env_light.setLightTevColorType(mpModel, &mTevStrBG2);
+#if VERSION == VERSION_DEMO
+    if(mpMorf) {
+        g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStrBG2);
+    }
+#endif
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpPedestalModel, &tevStr);
 
@@ -562,7 +628,9 @@ BOOL daObjFigure_c::_draw() {
         }
 
         if(mpMorf) {
+#if VERSION > VERSION_DEMO
             g_env_light.setLightTevColorType(mpMorf->getModel(), &mTevStrBG2);
+#endif
             linkDraw(mpMorf);
         }
     }
@@ -615,12 +683,14 @@ void daObjFigure_c::executeNormal() {
     if(mbDisplay) {
         fopAc_ac_c* pLink = dComIfGp_getLinkPlayer();
 
+        f32 f31 = 150.0f;
+        int r31 = 13000;
         f32 temp1;
         s16 temp2;
         dNpc_calc_DisXZ_AngY(current.pos, pLink->current.pos, &temp1, &temp2);
         temp2 -= current.angle.y;
 
-        if(150.0f > temp1 && abs(temp2) < 0x32C8) {
+        if(f31 > temp1 && r31 > abs(temp2)) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
     }
@@ -918,11 +988,12 @@ void daObjFigure_c::setMtx() {
 }
 
 /* 00001954-000019DC       .text isFigureGet__13daObjFigure_cFUc */
-BOOL daObjFigure_c::isFigureGet(u8 figureNo) {
+u8 daObjFigure_c::isFigureGet(u8 figureNo) {
     if(figureNo / 8 < 0x11) {
+        int r31 = (figureNo % 8);
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figureNo / 8]);
-        u32 ret = reg & (1 << figureNo % 8);
-        return (u8)ret; // Fakematch for the clrlwi
+        u32 ret = reg & (1 << r31);
+        return ret;
     }
 
     return false;
@@ -978,8 +1049,6 @@ static BOOL daSampleIsDelete(void*) {
 
 /* 00001B08-00002148       .text linkDraw__FP14mDoExt_McaMorf */
 void linkDraw(mDoExt_McaMorf* pMorf) {
-    /* Nonmatching - regalloc (maybe the same issue as daPy_lk_c::draw?) */
-
     pMorf->calc();
 #if VERSION > VERSION_DEMO
     J3DModel* model = pMorf->getModel();

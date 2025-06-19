@@ -107,7 +107,7 @@ BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+        seStartSystem(JA_SE_ITEM_TARGET_OUT);
     }
     return false;
 }

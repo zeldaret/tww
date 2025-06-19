@@ -370,7 +370,7 @@ BOOL progChangeDraw(dScnLogo_c* i_this) {
     }
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 3;
+        i_this->mAction = ACT_dolbyInDraw;
         i_this->mTimer = 90;
         mDoGph_gInf_c::startFadeIn(30);
     }
@@ -383,7 +383,7 @@ BOOL dolbyInDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->dolbyImg);
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 4;
+        i_this->mAction = ACT_dolbyOutDraw;
         i_this->mTimer = 30;
         mDoGph_gInf_c::startFadeOut(30);
     }
@@ -396,7 +396,7 @@ BOOL dolbyOutDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->dolbyImg);
 
     if (i_this->mTimer == 0) {
-        i_this->mAction = 10;
+        i_this->mAction = ACT_dvdWaitDraw;
     }
 
     return TRUE;
@@ -629,7 +629,7 @@ cPhs_State phase_0(dScnLogo_c* i_this) {
     if (!cDyl_InitAsyncIsDone())
         return cPhs_INIT_e;
 
-    if (mDoAud_zelAudio_c::isInitFlag() && JAIZelBasic::getInterface()->checkFirstWaves())
+    if (mDoAud_zelAudio_c::isInitFlag() && mDoAud_checkFirstWaves())
         return cPhs_INIT_e;
 
 #if VERSION == VERSION_PAL
@@ -904,7 +904,7 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(1426, 1426, 1751, 1791), l_FmapDataCommand != NULL);
 
-    JAIZelBasic::getInterface()->loadStaticWaves();
+    mDoAud_loadStaticWaves();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
     mDoGph_gInf_c::waitBlanking(0);
     mDoGph_gInf_c::startFadeIn(30);

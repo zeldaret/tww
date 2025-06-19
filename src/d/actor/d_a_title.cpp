@@ -508,7 +508,9 @@ BOOL daTitle_c::draw() {
 
 BOOL daTitle_c::execute() {
     if (!fopOvlpM_IsPeek()) {
-        mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+#if VERSION > VERSION_DEMO
+        mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_blackColor);
+#endif
 
         if ((CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) && mpTitleProc->getEnterMode() == 1) {
             mpTitleProc->setEnterMode();

@@ -198,9 +198,10 @@ BOOL daBomb_c::draw() {
     }
 
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -G_CM3D_F_INF) {
-        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        if(pNormal) {
-            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+        cXyz* norm = triPla->GetNP();
+        if(norm) {
+            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, norm);
         }
     }
 
@@ -1194,7 +1195,7 @@ void daBomb_c::se_cannon_fly_set() {
 /* 800DC400-800DC44C       .text se_cannon_fly_stop__8daBomb_cFv */
 void daBomb_c::se_cannon_fly_stop() {
     if(field_0x77F) {
-        mDoAud_seStopActor(&current.pos, -1);
+        mDoAud_seStopActor(&current.pos);
         field_0x77F = 0;
     }
 }

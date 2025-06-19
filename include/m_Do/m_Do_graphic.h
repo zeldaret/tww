@@ -7,6 +7,7 @@
 bool mDoGph_Create();
 
 struct ResTIMG;
+
 class mDoGph_gInf_c {
 public:
     static void create();
@@ -27,9 +28,9 @@ public:
         mFader = fader;
     }
 
-    static BOOL startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
-    static BOOL startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
-    static void setFadeColor(JUtility::TColor color) { mFader->mColor.set(color); }
+    static BOOL startFadeOut(int fadeTime) { return JFWDisplay::getManager()->startFadeOut(fadeTime); }
+    static BOOL startFadeIn(int fadeTime) { return JFWDisplay::getManager()->startFadeIn(fadeTime); }
+    static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
     static void setBackColor(GXColor& color) { mBackColor = color; }
     static void endFrame() { JFWDisplay::getManager()->endFrame(); }
