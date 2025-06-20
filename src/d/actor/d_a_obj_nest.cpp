@@ -23,7 +23,6 @@ namespace daObjNest{
             /* 0x20 */ const s16 field_0x20;
             /* 0x20 */ const s16 field_0x22;
             /* 0x24 */ const s16 field_0x24;
-            /* 0x26 */ const s16 field_0x26; /* padding only? */
             /* 0x28 */ const f32 field_0x28;
             /* 0x2C */ const f32 field_0x2C;
         };
@@ -40,7 +39,6 @@ namespace daObjNest{
             /* field_0x20 */ 0x4650, 
             /* field_0x22 */ 0x4650, 
             /* field_0x24 */ 0x4650,
-            /* field_0x26 */ 0x0,
             /* field_0x28 */ 0.92f,
             /* field_0x2C */ 100.0f,
         };
@@ -98,7 +96,6 @@ BOOL daObjNest::Act_c::Mthd_Delete() {
 
 /* 0000033C-000003D4       .text set_mtx__Q29daObjNest5Act_cFv */
 void daObjNest::Act_c::set_mtx() {
-    /* Nonmatching */
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
@@ -114,12 +111,11 @@ void daObjNest::Act_c::init_mtx() {
 
 /* 00000410-00000498       .text rideCB__Q29daObjNest5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjNest::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
-    /* Nonmatching */
-    daObjNest::Act_c * i_this = ((daObjNest::Act_c *)i_ac);
-    f32 dVar2 = fopAcM_searchActorDistanceXZ2(i_this,i_pt);
-    if (dVar2 > attr().field_0x04 * attr().field_0x04) {
-        f32 fVar1 = i_pt->speedF * (1.0f / attr().field_0x00);
-        i_this->vib_set(cLib_maxLimit(fVar1, 1.0f));
+    daObjNest::Act_c * i_this = (daObjNest::Act_c *)i_ac;
+    f32 actorDistXZ2 = fopAcM_searchActorDistanceXZ2(i_this,i_pt);
+    if (actorDistXZ2 > attr().field_0x04 * attr().field_0x04) {
+        f32 fVar = i_pt->speedF * (1.0f / attr().field_0x00);
+        i_this->vib_set(cLib_maxLimit(fVar, 1.0f));
     }
 }
 
@@ -136,7 +132,6 @@ void daObjNest::Act_c::vib_set(float param) {
 
 /* 00000544-0000070C       .text vib_proc__Q29daObjNest5Act_cFv */
 void daObjNest::Act_c::vib_proc() {
-    /* Nonmatching */
     mcsXyz_0x2E0.x += attr().field_0x20;
     mcsXyz_0x2E0.y += attr().field_0x22;
     mcsXyz_0x2E0.z += attr().field_0x24;
