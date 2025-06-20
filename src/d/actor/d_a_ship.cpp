@@ -346,7 +346,7 @@ void daShip_c::setInitMessage() {
         mNextMessageNo = 0x623;
     }
 #endif
-    else if (checkStateFlg(daSFLG_UNK800000_e)) {
+    else if (checkStateFlg(daSFLG_PHANTOM_GANON_BATTLE)) {
         mNextMessageNo = 0x636;
     }
     else if (dComIfGs_isEventBit(0x3D02)) {
@@ -4130,7 +4130,7 @@ BOOL daShip_c::execute() {
     }
     else {
         attention_info.position = current.pos;
-        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(0x908) && !checkStateFlg(daSFLG_UNK800000_e)) {
+        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(0x908) && !checkStateFlg(daSFLG_PHANTOM_GANON_BATTLE)) {
             if (dComIfGs_isEventBit(0x1980) || !dComIfGs_isEventBit(0x902)) {
                 attention_info.flags = fopAc_Attn_ACTION_SHIP_e;
             }
