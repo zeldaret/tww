@@ -347,7 +347,7 @@ public:
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }
-    u8 getPlayMode() { return mFrameCtrl.getAttribute(); }
+    int getPlayMode() { return mFrameCtrl.getAttribute(); }
     void setPlayMode(int mode) { mFrameCtrl.setAttribute(mode); }
     f32 getStartFrame() { return mFrameCtrl.getStart(); }
     void setStartFrame(f32 frame) { mFrameCtrl.setStart(frame); }

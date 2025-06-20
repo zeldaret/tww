@@ -48,8 +48,8 @@ public:
     BOOL isItemWaitAnim();
     BOOL isClearRecord(short);
     void setClearRecord(short);
-    BOOL normalSubActionHarpoonGuard(short);
-    BOOL normalSubActionGuard(short);
+    void normalSubActionHarpoonGuard(short);
+    void normalSubActionGuard(short);
     BOOL normalAction(void*);
     BOOL kaitenExpAction(void*);
     BOOL kaitenspeakAction(void*);
@@ -160,6 +160,10 @@ public:
     /* 0x2D4 */ SubAction_t mSubAction;
     /* 0x2E0 */ dPa_smokeEcallBack field_0x2E0;
     /* 0x300 */ dPa_smokeEcallBack field_0x300;
+#if VERSION == VERSION_DEMO
+    /* 0x320 */ JPABaseEmitter* field_0x320_demo;
+    /* 0x324 */ JPABaseEmitter* field_0x324_demo;
+#endif
     /* 0x320 */ cXyz field_0x320;
     /* 0x32C */ s16 field_0x32C;
     /* 0x330 */ mDoExt_McaMorf* mpOrcaMorf;
@@ -282,7 +286,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x004 */ s8 field_0x04;
+    /* 0x004 */ s8 mNo;
     /* 0x008 */ f32 field_0x08;
     /* 0x00C */ s16 field_0x0C;
     /* 0x00E */ s16 field_0x0E;

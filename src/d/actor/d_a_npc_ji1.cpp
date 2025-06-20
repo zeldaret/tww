@@ -1,6 +1,6 @@
 /**
  * d_a_npc_ji1.cpp
- * NPC - Orca
+ * NPC - Orca / 爺さん (Jiisan)
  */
 
 #include "d/actor/d_a_npc_ji1.h"
@@ -15,7 +15,6 @@
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
-#include "d/actor/d_a_player_main.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
@@ -149,7 +148,7 @@ static dCcD_SrcCps l_cpsAt_src = {
 
 /* 000000EC-00000380       .text __ct__15daNpc_Ji1_HIO_cFv */
 daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x08 = 100.0f;
     field_0x0C = 7000;
     field_0x0E = 4000;
@@ -368,9 +367,7 @@ static BOOL daNpc_Ji1_plRoomOutCheck() {
 }
 
 /* 00000864-00000E98       .text normalSubActionHarpoonGuard__11daNpc_Ji1_cFs */
-BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
-    /* Nonmatching - regalloc */
-
+void daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
     if(field_0xD6C == 0) {
         if(field_0x7E0.ChkTgHit()) {
             field_0xD6C = 1;
@@ -444,9 +441,7 @@ BOOL daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
 }
 
 /* 00000E98-00001294       .text normalSubActionGuard__11daNpc_Ji1_cFs */
-BOOL daNpc_Ji1_c::normalSubActionGuard(s16 param_1) {
-    /* Nonmatching - regalloc */
-
+void daNpc_Ji1_c::normalSubActionGuard(s16 param_1) {
     if(field_0xD6C == 0) {
         if(field_0x7E0.ChkTgHit()) {
             field_0xD6C = 1;
@@ -854,9 +849,15 @@ u32 daNpc_Ji1_c::getMsg2ndType() {
             dComIfGs_onEventBit(0xD80);
             msgNo = 0x9AE;
         }
+#if VERSION == VERSION_DEMO
+        else if(dComIfGs_getBeastNum(3) < 3) {
+            msgNo = 0x9BB;
+        }
+#else
         else if(dComIfGs_getBeastNum(3) < 10) {
             msgNo = 0x9BB;
         }
+#endif
         else if(dComIfGs_isEventBit(0xB20)) {
             msgNo = 0x9BC;
         }
@@ -953,9 +954,16 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
 
             break;
         case 0x9AF:
+#if VERSION == VERSION_DEMO
+            if(dComIfGs_getBeastNum(3) >= 3) {
+                dComIfGp_setItemBeastNumCount(3, -3);
+                mMsgNo = 0x9B0;
+            }
+#else
             if(dComIfGs_getBeastNum(3) >= 10) {
                 mMsgNo = 0x9B0;
             }
+#endif
             else {
                 mMsgNo = 0x9BB;
             }
@@ -1458,9 +1466,11 @@ void daNpc_Ji1_c::set_mtx() {
         cXyz temp(0.0f, 0.0f, 100.0f);
         cXyz temp2(0.0f, 0.0f, -100.0f);
 
+#if VERSION > VERSION_DEMO
         if(mAnimation == 0x14) {
             temp.z = 70.0f;
         }
+#endif
 
         field_0xB90 = field_0xB78;
         mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(1));
@@ -1916,8 +1926,8 @@ u32 daNpc_Ji1_c::evn_hide_init(int staffIdx) {
 
 /* 00005508-000055E4       .text AnimeControlToWait__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::AnimeControlToWait() {
-    /* Nonmatching */
-    if(mpOrcaMorf->getPlayMode() == J3DFrameCtrl::EMode_NONE) {
+    u8 play_mode = mpOrcaMorf->getPlayMode();
+    if(play_mode == J3DFrameCtrl::EMode_NONE) {
         if(mpOrcaMorf->checkFrame(mpOrcaMorf->getEndFrame() - 1.0f)) {
             if(isAttackAnim() || isGuardAnim()) {
                 setAnm(5, 4.0f, 0);
@@ -2040,6 +2050,8 @@ u32 daNpc_Ji1_c::privateCut() {
 
 /* 000057DC-000058B8       .text setParticle__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
+#if VERSION == VERSION_DEMO
+#endif
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
@@ -2989,7 +3001,11 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if(field_0xC78 == 0) {
+#if VERSION == VERSION_DEMO
+        dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic() - dComIfGs_getMagic());
+#else
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
+#endif
         setAnm(5, 0.0f, 0);
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_MISC_e);
         field_0xC90 = 0;
@@ -3000,7 +3016,9 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
         field_0xC78++;
     }
     else if(field_0xC78 != -1) {
+#if VERSION > VERSION_DEMO
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
+#endif
         if(daNpc_Ji1_plRoomOutCheck()) {
             field_0xC84 = 9;
             setAction(&daNpc_Ji1_c::eventAction, 0);
@@ -3014,11 +3032,18 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             f32 what = temp.absXZ();
 
             s32 cutType = player->getCutType();
+#if VERSION == VERSION_DEMO
+            if(cutType == 9)
+#else
             f32 y_diff = std::fabsf(temp.y);
-            if(cutType == 9 && y_diff < 20.0f) {
+            if(cutType == 9 && y_diff < 20.0f)
+#endif
+            {
                 dComIfGs_onEventBit(0xB20);
                 dComIfGs_offTmpBit(0x402);
+#if VERSION > VERSION_DEMO
                 dComIfGp_setItemBeastNumCount(3, -10);
+#endif
                 field_0x7E0.OffTgShield();
                 field_0xC84 = 10;
 
@@ -4522,13 +4547,13 @@ cPhs_State daNpc_Ji1_c::_create() {
 
 /* 0000E864-0000F324       .text CreateHeap__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::CreateHeap() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI));
     mpOrcaMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
         0x00000000,
@@ -4559,9 +4584,9 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     JUT_ASSERT(0x15BA, handRJointNo >= 0);
 
     mpSpearMorf = new mDoExt_McaMorf(
-        static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
+        (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
         J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1,
         0,
         0x00000000,
@@ -4573,47 +4598,50 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ji", JI_BDL_YJITR00));
-    mpTearsModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_YJITR00));
+    mpTearsModel = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
 
-    J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
     JUT_ASSERT(0x15CD, a_brk != NULL);
 
-    J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
+    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = mCryBrk.init(modelData, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    int temp2 = mCryBtk.init(modelData, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
 
     if(mpTearsModel == 0 || temp1 == 0 || temp2 == 0) {
         return false;
     }
 
-    headTexPattern = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Ji", JI_BTP_JI));
+    headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    if(mBlinkAnim.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+#if VERSION > VERSION_DEMO
+    if(temp2 == 0) {
         return false;
     }
+#endif
 
-    hair1JointNo = modelData->getJointName()->getIndex("hair1");
+    hair1JointNo = modelData2->getJointName()->getIndex("hair1");
     JUT_ASSERT(0x15DF, hair1JointNo >= 0);
-    hair2JointNo = modelData->getJointName()->getIndex("hair2");
+    hair2JointNo = modelData2->getJointName()->getIndex("hair2");
     JUT_ASSERT(0x15E1, hair2JointNo >= 0);
-    hair3JointNo = modelData->getJointName()->getIndex("hair3");
+    hair3JointNo = modelData2->getJointName()->getIndex("hair3");
     JUT_ASSERT(0x15E3, hair3JointNo >= 0);
 
-    for(u16 i = 0; i < modelData->getJointNum(); i++) {
+    for(u16 i = 0; i < modelData2->getJointNum(); i++) {
         if(i == hair1JointNo || i == hair2JointNo || i == hair3JointNo) {
-            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack2);
+            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack2);
         }
     }
-    for(u16 i = 0; i < modelData->getJointNum(); i++) {
+    for(u16 i = 0; i < modelData2->getJointNum(); i++) {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
-            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack1);
+            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack1);
         }
         else if(i == armLJointNo || i == armRJointNo) {
-            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack3);
+            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack3);
         }
     }
 
@@ -4659,6 +4687,12 @@ BOOL daNpc_Ji1_c::CreateInit() {
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     gravity = -30.0f;
     attention_info.flags = fopAc_Attn_LOCKON_MISC_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("爺さん", &l_HIO);
+    }
+#endif
 
     field_0x638.Init(0xFF, 0xFF, this);
     field_0x674.Init(0xFF, 0xFF, this);
@@ -4790,14 +4824,26 @@ BOOL daNpc_Ji1_c::_delete() {
         dComIfGp_endMiniGame(6);
     }
 
-    dComIfG_resDelete(&mPhs, "Ji");
-    if(heap && mpOrcaMorf) {
+    dComIfG_resDeleteDemo(&mPhs, "Ji");
+#if VERSION == VERSION_DEMO
+    if(mpOrcaMorf)
+#else
+    if(heap && mpOrcaMorf)
+#endif
+    {
         mpOrcaMorf->stopZelAnime();
     }
 
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+#else
     mDoAud_seDeleteObject(&field_0xB78);
     mDoAud_seDeleteObject(&field_0xB84);
-    
+#endif
+
     dComIfGp_att_revivalAleart();
 
     field_0x2E0.remove();
@@ -4822,14 +4868,16 @@ BOOL daNpc_Ji1_c::_execute() {
 
     s8 roomNo = fopAcM_GetRoomNo(this);
     u32 sound;
-    if(mAcch.ChkGroundHit()) {
+    if(mAcch.ChkGroundHit() != false) {
         sound = dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd);
     }
     else {
         sound = 0;
     }
     mpOrcaMorf->play(&current.pos, sound, dComIfGp_getReverb(roomNo));
+#if VERSION > VERSION_DEMO
     mpOrcaMorf->calc();
+#endif
 
     if(isItemWaitAnim()) {
         static cXyz aim_offset(-13.0f, -4.0f, 10.0f);
@@ -4854,7 +4902,9 @@ BOOL daNpc_Ji1_c::_execute() {
         mpSpearMorf->setPlaySpeed(0.0f);
     }
 
+#if VERSION > VERSION_DEMO
     mpSpearMorf->calc();
+#endif
 
     mHeadAnm.move();
 
@@ -4947,7 +4997,7 @@ static cXyz l_head_top(1.0f, 0.0f, 0.0f);
 
 /* 0001031C-00010E3C       .text daNpc_Ji1_setHairAngle__FP11daNpc_Ji1_c */
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - stack */
     f32 wind = *dKyw_get_wind_power() * *dKyw_get_wind_power() * 25.0f;
     cXyz* windVec = dKyw_get_wind_vec();
 
@@ -4967,29 +5017,30 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBA8 = cM_atan2s(temp2.x, temp2.z);
 
-    temp3 = (s16)(i_this->field_0xBA6 - temp3) >> 1;
-    temp4 = (s16)(i_this->field_0xBA8 - temp4) >> 1;
+    s16 temp3_2 = (s16)(i_this->field_0xBA6 - temp3) >> 1;
+    s16 temp4_2 = (s16)(i_this->field_0xBA8 - temp4) >> 1;
 
     MtxP pMtx = pModel->getAnmMtx(i_this->hair1JointNo);
-    cXyz temp5(pMtx[0][3], pMtx[1][3], pMtx[2][3]);
-    cXyz temp6;
-    temp6.x = i_this->field_0xBC4.x - temp5.x;
-    temp6.y = i_this->field_0xBC4.y - temp5.y - 8.5f;
-    temp6.z = i_this->field_0xBC4.z - temp5.z;
-    temp6 += *windVec * wind;
+    cXyz sp48(pMtx[0][3], pMtx[1][3], pMtx[2][3]);
+    cXyz sp3C;
+    sp3C.x = i_this->field_0xBC4.x - sp48.x;
+    sp3C.y = i_this->field_0xBC4.y - sp48.y - 8.5f;
+    sp3C.z = i_this->field_0xBC4.z - sp48.z;
+    sp3C += *windVec * wind;
 
-    if(std::fabsf(temp6.x) < 0.01f) {
-        temp6.x = 0.0f;
+    if(std::fabsf(sp3C.x) < 0.01f) {
+        sp3C.x = 0.0f;
     }
-    if(std::fabsf(temp6.z) < 0.01f) {
-        temp6.z = 0.0f;
+    if(std::fabsf(sp3C.z) < 0.01f) {
+        sp3C.z = 0.0f;
     }
 
-    s16 temp7 = i_this->field_0xBAA;
-    s16 temp8 = i_this->field_0xBAC;
+    s16 r26 = i_this->field_0xBAA;
+    s16 r25 = i_this->field_0xBAC;
 
-    f32 temp10 = temp6.z * cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y()) + temp6.x * cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y());
-    s16 temp9 = cM_atan2s(-temp10, -temp6.y);
+    s16 r4 = i_this->current.angle.y + i_this->m_jnt.getHead_y();
+    f32 temp10 = sp3C.z * cM_scos(r4) + sp3C.x * cM_ssin(r4);
+    s16 temp9 = cM_atan2s(-temp10, -sp3C.y);
     if(temp9 < 0 && temp9 > -0x6000) {
         temp9 = 0;
     }
@@ -5000,70 +5051,73 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     cLib_addCalcAngleS2(&i_this->field_0xBAA, temp9, 5, 0x400);
 
-    i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3);
-    i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3);
+    i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
+    i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
     i_this->field_0xBAA = cLib_minMaxLimit(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
 
-    f32 temp11 = cM_ssin(i_this->current.angle.y + i_this->m_jnt.getHead_y());
-    f32 temp12 = cM_scos(i_this->current.angle.y + i_this->m_jnt.getHead_y());
-    cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(temp6.z * temp11 - temp6.x * temp12, std::sqrtf(temp10 * temp10 + temp6.y * temp6.y)), 5, 0x400);
+    s16 r4_2 = i_this->current.angle.y + i_this->m_jnt.getHead_y();
+    f32 f5 = cM_ssin(r4_2);
+    f32 f6 = cM_scos(r4_2);
+    cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(sp3C.z * f5 - sp3C.x * f6, std::sqrtf(temp10 * temp10 + sp3C.y * sp3C.y)), 5, 0x400);
 
-    i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4);
+    i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4_2);
     i_this->field_0xBAC = cLib_minMaxLimit(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
 
-    i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - temp7) * 0.2f;
-    i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - temp8) * 0.2f;
-    s16 temp15 = i_this->field_0xBAA - temp7;
-    s16 temp16 = i_this->field_0xBAC - temp8;
+    i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - r26) * 0.2f;
+    i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - r25) * 0.2f;
+    s16 temp15 = i_this->field_0xBAA - r26;
+    s16 temp16 = i_this->field_0xBAC - r25;
     i_this->field_0xBAE -= temp15;
     i_this->field_0xBB0 -= temp16;
 
-    temp7 = i_this->field_0xBAE;
-    temp8 = i_this->field_0xBB0;
+    r26 = i_this->field_0xBAE;
+    r25 = i_this->field_0xBB0;
 
     cLib_addCalcAngleS2(&i_this->field_0xBAE, 0, 5, 0x400);
     cLib_addCalcAngleS2(&i_this->field_0xBB0, 0, 5, 0x400);
 
-    i_this->field_0xBAE += (s16)(i_this->field_0xBBA + temp3);
+    i_this->field_0xBAE += (s16)(i_this->field_0xBBA + temp3_2);
     i_this->field_0xBAE = cLib_minMaxLimit<s16>(i_this->field_0xBAE, l_HIO.field_0xF8 - i_this->field_0xBAA, l_HIO.field_0xFA - i_this->field_0xBAA);
 
-    i_this->field_0xBB0 += (s16)(i_this->field_0xBBC - temp4);
+    i_this->field_0xBB0 += (s16)(i_this->field_0xBBC - temp4_2);
     i_this->field_0xBB0 = cLib_minMaxLimit<s16>(i_this->field_0xBB0, l_HIO.field_0xEC - i_this->field_0xBAC, l_HIO.field_0xEE - i_this->field_0xBAC);
 
-    i_this->field_0xBBA = (s16)(i_this->field_0xBAE - temp7) * 0.2f;
-    i_this->field_0xBBC = (s16)(i_this->field_0xBB0 - temp8) * 0.2f;
-    s16 temp17 = i_this->field_0xBAE - temp7;
-    s16 temp18 = i_this->field_0xBB0 - temp8;
+    i_this->field_0xBBA = (s16)(i_this->field_0xBAE - r26) * 0.2f;
+    i_this->field_0xBBC = (s16)(i_this->field_0xBB0 - r25) * 0.2f;
+    s16 temp17 = i_this->field_0xBAE - r26;
+    s16 temp18 = i_this->field_0xBB0 - r25;
     i_this->field_0xBB2 -= temp17;
     i_this->field_0xBB4 -= temp18;
 
-    temp7 = i_this->field_0xBB2;
-    temp8 = i_this->field_0xBB4;
+    r26 = i_this->field_0xBB2;
+    r25 = i_this->field_0xBB4;
 
     cLib_addCalcAngleS2(&i_this->field_0xBB2, 0, 5, 0x400);
     cLib_addCalcAngleS2(&i_this->field_0xBB4, 0, 5, 0x400);
 
-    i_this->field_0xBB2 += (s16)(i_this->field_0xBBE + temp3);
+    i_this->field_0xBB2 += (s16)(i_this->field_0xBBE + temp3_2);
     i_this->field_0xBB2 = cLib_minMaxLimit<s16>(i_this->field_0xBB2, l_HIO.field_0xFC - i_this->field_0xBAA - i_this->field_0xBAE, l_HIO.field_0xFE - i_this->field_0xBAA - i_this->field_0xBAE);
 
-    i_this->field_0xBB4 += (s16)(i_this->field_0xBC0 - temp4);
+    i_this->field_0xBB4 += (s16)(i_this->field_0xBC0 - temp4_2);
     i_this->field_0xBB4 = cLib_minMaxLimit<s16>(i_this->field_0xBB4, l_HIO.field_0xF0 - i_this->field_0xBB0 - i_this->field_0xBAC, l_HIO.field_0xF2 - i_this->field_0xBB0 - i_this->field_0xBAC);
 
-    i_this->field_0xBBE = (s16)(i_this->field_0xBB2 - temp7) * 0.2f;
-    i_this->field_0xBC0 = (s16)(i_this->field_0xBB4 - temp8) * 0.2f;
+    i_this->field_0xBBE = (s16)(i_this->field_0xBB2 - r26) * 0.2f;
+    i_this->field_0xBC0 = (s16)(i_this->field_0xBB4 - r25) * 0.2f;
 
-    temp7 = i_this->field_0xBAE;
-    temp8 = i_this->field_0xBB0;
+    r26 = i_this->field_0xBAE;
+    r25 = i_this->field_0xBB0;
 
-
-    wind = cLib_maxLimit((wind + i_this->field_0xBC4.abs(temp5) * 0.65f) / 30.0f, 1.0f);
+    wind = (wind + i_this->field_0xBC4.abs(sp48) * 0.65f) / 30.0f;
+    if (wind > 1.0f) {
+        wind = 1.0f;
+    }
 
     s16 temp14 = wind * 4600.0f + 1500.0f;
     i_this->field_0xBD0 += temp14;
     i_this->field_0xBD2 = wind * 2280.0f * cM_scos(i_this->field_0xBD0);
     i_this->field_0xBD4 = wind * 3908.0f * cM_scos(i_this->field_0xBD0 - temp14 * 3.0f);
     i_this->field_0xBD6 = wind * 7568.0f * cM_scos(i_this->field_0xBD0 - temp14 * 6.0f);
-    i_this->field_0xBC4 = temp5;
+    i_this->field_0xBC4 = sp48;
 
     return TRUE;
 }
@@ -5096,9 +5150,9 @@ BOOL daNpc_Ji1_c::chkAttention(cXyz param_1, s16 param_2) {
 BOOL daNpc_Ji1_c::lookBack() {
     BOOL ret = false;
 
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
-    cXyz temp = fopAcM_GetPosition(player) - fopAcM_GetPosition(this);
+    cXyz temp = player->current.pos - current.pos;
     f32 dist = temp.absXZ();
 
     bool temp2 = true;

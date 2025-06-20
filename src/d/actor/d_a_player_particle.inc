@@ -617,7 +617,15 @@ void daPy_lk_c::setWaterRipple() {
 
     // Probably fakematch (May use inlines?)
     if ((var_r3 && m34D6 != 0) ||
-        (mCurProc != daPyProc_VOMIT_WAIT_e && !var_r3 && (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) && ((checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) || (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())))
+        (
+            mCurProc != daPyProc_VOMIT_WAIT_e &&
+            !var_r3 &&
+            (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) &&
+            (
+                (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) ||
+                (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())
+            )
+        )
     ) {
 
         if (m3280.getEmitter() == NULL) {

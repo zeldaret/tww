@@ -20,7 +20,7 @@ public:
     void setParticle(int, cXyz*);
 
     static char m_arcname[];
-    static f32 m_fallen;
+    static f32 m_falllen;
     static s16 m_rot_speed;
 
     static const dCcD_SrcCyl m_cyl_src;

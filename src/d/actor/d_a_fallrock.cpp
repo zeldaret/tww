@@ -14,7 +14,7 @@
 
 
 char daFallRock_c::m_arcname[] = "Always";
-f32 daFallRock_c::m_fallen = 7000.0f;
+f32 daFallRock_c::m_falllen = 7000.0f;
 s16 daFallRock_c::m_rot_speed = 0x3E8;
 
 const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
@@ -108,7 +108,7 @@ BOOL daFallRock_c::execute() {
     field_0x29C.CrrPos(*dComIfG_Bgsp());
 
     field_0x610 = fabs(speed.y) + (f64)field_0x610;
-    if (field_0x610 > m_fallen) {
+    if (field_0x610 > m_falllen) {
         if (deleted == FALSE) {
             deleted = fopAcM_delete(this);
         }
