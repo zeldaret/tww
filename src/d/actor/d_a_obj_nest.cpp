@@ -76,7 +76,7 @@ cPhs_State daObjNest::Act_c::Mthd_Create() {
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, 0x7, NULL, 0xAA0);
+        phase_state = MoveBGCreate(M_arcname, MTORISU_DZB_MTORISU, NULL, 0xAA0);
         JUT_ASSERT(329, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
