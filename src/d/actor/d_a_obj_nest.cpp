@@ -4,11 +4,11 @@
  */
 
 #include "d/actor/d_a_obj_nest.h"
+#include "d/res/res_mtorisu.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_bg_w.h"
-
 namespace daObjNest{
     namespace{
         struct Attr_c {
@@ -49,8 +49,6 @@ namespace daObjNest{
 
 Mtx daObjNest::Act_c::M_tmp_mtx;
 const char daObjNest::Act_c::M_arcname[] = "MtoriSU";
-const int MTORISU_BDL_MTORISU = 0x4;
-const int MTORISU_DZB_MTORISU = 0x7;
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */
 BOOL daObjNest::Act_c::CreateHeap() {
