@@ -3,6 +3,38 @@
 
 #include "global.h"
 
+//TODO: Declare somewhere else?
+enum EVENT_NAME {
+    RUN_START,
+#if VERSION > VERSION_JPN
+    RUN_START_2,
+#endif
+    CATCH,
+    GET_EMPTY_BTL,
+    BYE,
+    OTOBOKE,
+    RUNAWAY,
+    BYE_2,
+};
+
+enum KK_CUT_ID{  //TODO: Declare somewhere else?
+
+    CUT_RUN_START,
+    CUT_RUN,
+    CUT_CATCH_START,
+    CUT_CATCH_END,
+    CUT_TRN,
+    CUT_BYE_START,
+    CUT_BYE,
+    CUT_BYE_END,
+    CUT_PLYER_TRN,
+    CUT_OTOBOKE,
+    CUT_PLYER_MOV,
+    CUT_RUNAWAY_START,
+    CUT_RUNAWAY_END,
+    CUT_BYE_CONTINUE,
+    CUT_END = -1,
+};
 enum KK_RES_FILE_ID {
     /* BCKS */
     KK_BCK_GFKDS00=0x0,
