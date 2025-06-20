@@ -1694,7 +1694,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_msdan_sub"),
     ActorRel(NonMatching, "d_a_obj_msdan_sub2"),
     ActorRel(Matching,    "d_a_obj_mtest", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_obj_nest"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_nest"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ojtree"),
     ActorRel(NonMatching, "d_a_obj_ospbox"),
     ActorRel(Matching,    "d_a_obj_paper", extra_cflags=['-pragma "nosyminline on"']),
