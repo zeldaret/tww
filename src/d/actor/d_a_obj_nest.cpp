@@ -52,7 +52,7 @@ const char daObjNest::Act_c::M_arcname[] = "MtoriSU";
 
 /* 00000078-0000012C       .text CreateHeap__Q29daObjNest5Act_cFv */
 BOOL daObjNest::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x4);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MTORISU_BDL_MTORISU);
     JUT_ASSERT(281, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000,0x11000022);
     return mpModel != NULL;
