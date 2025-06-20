@@ -63,7 +63,9 @@ inline void mDoAud_subBgmStop() {
     mDoAud_zelAudio_c::getInterface()->subBgmStop();
 }
 
-inline void mDoAud_changeBgmStatus(s32 status) {}
+inline void mDoAud_changeBgmStatus(s32 status) {
+    mDoAud_zelAudio_c::getInterface()->changeBgmStatus(status);
+}
 
 inline void mDoAud_changeSubBgmStatus(s32 status) {
     mDoAud_zelAudio_c::getInterface()->changeSubBgmStatus(status);
