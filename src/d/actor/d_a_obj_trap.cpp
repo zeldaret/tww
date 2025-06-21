@@ -5,15 +5,46 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_trap.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JUtility/JUTGamePad.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/res/res_trap.h"
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */
 void daObjTrap_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+    create_heap();
 }
 
+const char daObjTrap_c::M_arcname[] = "Trap";
+
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
-void daObjTrap_c::create_heap() {
+bool daObjTrap_c::create_heap() {
     /* Nonmatching */
+    bool result = false;
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, TRAP_BDL_HTORA1);
+    JUT_ASSERT(355, mdl_data != NULL);
+    if (mdl_data){
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
+        if (mpModel != NULL){
+            J3DAnmTextureSRTKey* btk_data = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(M_arcname, TRAP_BTK_HTORA1);
+            JUT_ASSERT(364, btk_data != NULL);
+            if (btk_data){
+                int btk_anm_init_result = mBtkAnm.init(mdl_data, btk_data, true, JUTGamePad::CRumble::LOOP_ONCE, 1.0, 0, -1, false, FALSE);
+                if (btk_anm_init_result){
+                    Mtx &mdl_tr_mtx = mpModel->getBaseTRMtx();
+                    cBgD_t* dzb_data = (cBgD_t *)dComIfG_getObjectRes(M_arcname, TRAP_DZB_HTORA1);
+                    mpcBgW = D_BG_W_H::dBgW_NewSet(dzb_data, cBgW::MOVE_BG_e, &mdl_tr_mtx);
+                    if (mpcBgW != NULL){
+                        result = true;
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 /* 000002A4-00000510       .text _create__11daObjTrap_cFv */

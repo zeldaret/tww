@@ -1,7 +1,9 @@
 #ifndef D_A_OBJ_TRAP_H
 #define D_A_OBJ_TRAP_H
 
+#include "SSystem/SComponent/c_bg_w.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
 
 class daObjTrap_c : public fopAc_ac_c {
 public:
@@ -10,7 +12,7 @@ public:
     void stop_shine() {}
 
     void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    bool create_heap();
     cPhs_State _create();
     bool _delete();
     void init_mtx();
@@ -30,8 +32,13 @@ public:
     bool _execute();
     bool _draw();
 
+    static const char M_arcname[];
+
 public:
     /* Place member variables here */
+    /* 0x290 */ J3DModel *mpModel;
+    /* 0x294 */ mDoExt_btkAnm mBtkAnm;
+    /* 0x4EC */ cBgW *mpcBgW;
 };
 
 #endif /* D_A_OBJ_TRAP_H */
