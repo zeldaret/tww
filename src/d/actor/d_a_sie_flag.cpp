@@ -43,7 +43,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 const char daSie_Flag_c::M_arcname[] = "Eshata";
 
-static cXyz l_flag_offset(0.0f, 0.0f, 0.0f);
+static cXyz l_flag_offset(0.0f, 350.0f, 0.0f);
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
