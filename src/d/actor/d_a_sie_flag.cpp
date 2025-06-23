@@ -3,7 +3,9 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
+// TODO: organize imports
 #include "d/actor/d_a_sie_flag.h"
+#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -61,9 +63,9 @@ void daSie_Flag_c::set_mtx() {
   model->getBaseScale()->y = scale.y;
   model->getBaseScale()->z = scale.z;
 
-  PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+  MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
   mDoMtx_stack_c::ZXYrotM(shape_angle);
-  PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
+  MTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
   mDoMtx_stack_c::transM(l_flag_offset);
   mpClothPacket->setMtx(mDoMtx_stack_c::get());
 }
@@ -127,7 +129,49 @@ bool daSie_Flag_c::_delete() {
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
 bool daSie_Flag_c::_execute() {
-    /* Nonmatching */
+    set_mtx();
+    mStts.Move();
+
+    if (mCyl.ChkTgHit() != 0) {
+        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x0B);
+    }
+
+    fopAcM_rollPlayerCrash(this, 40.0f, 7);
+
+    cXyz position_plus_offset = current.pos + l_flag_offset;
+    cXyz allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
+
+    f32 allwind_magnitude = VECSquareMag(&allwind);
+    if (allwind_magnitude > 0.0f) {
+        f32 inverted_square = 1.0f / std::sqrtf(allwind_magnitude);
+        inverted_square = inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
+        inverted_square = inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
+        allwind_magnitude = allwind_magnitude * inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
+    }
+
+    // TODO: Apparently, this block is similar to the upper one. However, if I try making an inline function, the result obj mismatches
+    f32 m_windvec_magnitude = VECSquareMag(&mWindvec);
+    if (m_windvec_magnitude > 0.0f) {
+        f32 inverted_square = 1.0f / std::sqrtf(m_windvec_magnitude);
+        inverted_square = inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
+        inverted_square = inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
+        m_windvec_magnitude = m_windvec_magnitude * inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
+    }
+    
+    if (allwind_magnitude > m_windvec_magnitude) {
+        mWindvec = allwind;
+    } else {
+        cLib_addCalcPos2(&mWindvec, allwind, 0.1f, 0.1f);
+    }
+
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+  
+    mpClothPacket->setParam(0.4f, -0.75f, 0.9f, 1.0f, 1.0f, 0x400, 0, 900, -800, 7.0f, 6.0f);
+    mpClothPacket->setWindPower(13.0f, 8.0f);
+    mpClothPacket->setGlobalWind(&mWindvec);
+    //(**(code **)((this->mpClothPacket->parent).vtbl + 0x1c))(); // TODO: Call of an unknown function
+    return FALSE;
 }
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
