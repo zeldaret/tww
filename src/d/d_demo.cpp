@@ -582,7 +582,7 @@ void* dDemo_system_c::JSGFindObject(const char* name, JStage::TEObject type) con
     if (type == JStage::TOBJ_ACTOR || type == JStage::TOBJ_ACTOR_UNK) {
         fopAc_ac_c* ac = fopAcM_searchFromName((char*)name, 0, 0);
         if (ac == NULL) {
-            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", 5) == 0) {
+            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", sizeof("d_act")-1) == 0) {
                 ac = (fopAc_ac_c*)fopAcM_fastCreate((char*)name, 0);
                 if (ac == NULL)
                     return NULL;
