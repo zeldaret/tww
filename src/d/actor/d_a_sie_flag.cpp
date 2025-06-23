@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
+#include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -76,8 +77,19 @@ BOOL daSie_Flag_c::CreateHeap() {
 }
 
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
-void daSie_Flag_c::CreateInit() {
-    /* Nonmatching */
+cPhs_State daSie_Flag_c::CreateInit() {
+ mStts.Init(0xff, 0xff, this);
+ //mCyl.Set((dCcD_SrcCyl *)0x80557166); // TODO: Where's this constant?
+ mCyl.SetStts(&mStts);
+
+ mWindvec = *dKyw_get_wind_vec();
+ 
+ set_mtx();
+ cullMtx = mpModel->getBaseTRMtx();
+ fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
+ dKy_tevstr_init(&mTevStr, current.roomNo, 0xFF);
+
+ return cPhs_COMPLEATE_e;
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */

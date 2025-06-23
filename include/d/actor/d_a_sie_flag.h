@@ -10,7 +10,7 @@ class daSie_Flag_c : public fopAc_ac_c {
 public:
     void set_mtx();
     BOOL CreateHeap();
-    void CreateInit();
+    cPhs_State CreateInit();
     cPhs_State _create();
     bool _delete();
     bool _execute();
