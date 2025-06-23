@@ -75,10 +75,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::CreateHeap() {
-  J3DModelData *model_data = (J3DModelData *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
-  JUT_ASSERT(0x109, model_data != NULL);
+  J3DModelData *modelData = (J3DModelData *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
+  JUT_ASSERT(0x109, modelData != NULL);
 
-  this->mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+  this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
   if (this->mpModel == NULL) {
     return false;
   } else {
