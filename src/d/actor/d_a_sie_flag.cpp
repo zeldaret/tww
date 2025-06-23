@@ -11,6 +11,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_ext.h"
+#include "f_op/f_op_actor_mng.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -94,7 +95,15 @@ cPhs_State daSie_Flag_c::CreateInit() {
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::_create() {
-    /* Nonmatching */
+  fopAcM_SetupActor(this, daSie_Flag_c);
+
+  cPhs_State state = dComIfG_resLoad(&mPhsEshata, M_arcname);
+  if ((state == cPhs_COMPLEATE_e) && (state = dComIfG_resLoad(&mPhsCloth, "Cloth"), state == cPhs_COMPLEATE_e)) {
+    return fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)
+      ? CreateInit()
+      : cPhs_ERROR_e;
+  }
+  return state;
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
