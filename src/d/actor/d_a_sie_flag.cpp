@@ -43,6 +43,8 @@ static dCcD_SrcCyl l_cyl_src = {
 
 const char daSie_Flag_c::M_arcname[] = "Eshata";
 
+static cXyz l_flag_offset(0.0f, 0.0f, 0.0f);
+
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
     /* Nonmatching */
@@ -50,7 +52,16 @@ daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
 
 /* 00000118-000001C4       .text set_mtx__12daSie_Flag_cFv */
 void daSie_Flag_c::set_mtx() {
-    /* Nonmatching */
+  J3DModel *model = this->mpModel;
+  model->getBaseScale()->x = scale.x;
+  model->getBaseScale()->y = scale.y;
+  model->getBaseScale()->z = scale.z;
+
+  PSMTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+  mDoMtx_stack_c::ZXYrotM(shape_angle);
+  PSMTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
+  mDoMtx_stack_c::transM(l_flag_offset);
+  mpClothPacket->setMtx(mDoMtx_stack_c::get());
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */
