@@ -8,6 +8,8 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -86,7 +88,12 @@ bool daSie_Flag_c::_execute() {
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
 bool daSie_Flag_c::_draw() {
-    /* Nonmatching */
+  g_env_light.settingTevStruct(TEV_TYPE_BG0,&current.pos,&tevStr);
+  g_env_light.settingTevStruct(TEV_TYPE_ACTOR,&current.pos,&mTevStr);
+  g_env_light.setLightTevColorType(mpModel,&tevStr);
+  mDoExt_modelUpdateDL(this->mpModel);
+  mpClothPacket->cloth_draw();
+  return true;
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
