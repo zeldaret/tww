@@ -4,16 +4,16 @@
 //
 
 #include "d/actor/d_a_sie_flag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "m_Do/m_Do_ext.h"
-#include "f_op/f_op_actor_mng.h"
+#include "d/d_priority.h"
+#include "d/d_procname.h"
 #include "d/res/res_cloth.h"
 #include "d/res/res_sieflag.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -56,7 +56,7 @@ daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
 
 /* 00000118-000001C4       .text set_mtx__12daSie_Flag_cFv */
 void daSie_Flag_c::set_mtx() {
-  J3DModel *model = this->mpModel;
+  J3DModel* model = this->mpModel;
   model->getBaseScale()->x = scale.x;
   model->getBaseScale()->y = scale.y;
   model->getBaseScale()->z = scale.z;
@@ -75,54 +75,54 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::CreateHeap() {
-  J3DModelData *modelData = (J3DModelData *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
-  JUT_ASSERT(0x109, modelData != NULL);
+    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
+    JUT_ASSERT(0x109, modelData != NULL);
 
-  this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-  if (this->mpModel == NULL) {
-    return false;
-  } else {
-    ResTIMG *eshata_timg = (ResTIMG *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BTI_ETHATA);
-    ResTIMG *cloth_timg = (ResTIMG *) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
-    this->mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
-    return this->mpClothPacket != NULL;
-  }
+    this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (this->mpModel == NULL) {
+        return FALSE;
+    } else {
+        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, SIEFLAG_BTI_ETHATA);
+        ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        this->mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
+        return this->mpClothPacket != NULL ? TRUE : FALSE;
+    }
 }
 
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::CreateInit() {
- mStts.Init(0xff, 0xff, this);
- //mCyl.Set((dCcD_SrcCyl *)0x80557166); // TODO: Where's this constant?
- mCyl.SetStts(&mStts);
+    mStts.Init(0xFF, 0xFF, this);
+    // mCyl.Set((dCcD_SrcCyl *)0x80557166); // TODO: Where's this constant?
+    mCyl.SetStts(&mStts);
 
- mWindvec = *dKyw_get_wind_vec();
- 
- set_mtx();
- cullMtx = mpModel->getBaseTRMtx();
- fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
- dKy_tevstr_init(&mTevStr, current.roomNo, 0xFF);
+    mWindvec = *dKyw_get_wind_vec();
 
- return cPhs_COMPLEATE_e;
+    set_mtx();
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
+    dKy_tevstr_init(&mTevStr, current.roomNo, 0xFF);
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::_create() {
-  fopAcM_SetupActor(this, daSie_Flag_c);
+    fopAcM_SetupActor(this, daSie_Flag_c);
 
-  cPhs_State state = dComIfG_resLoad(&mPhsEshata, M_arcname);
-  if ((state == cPhs_COMPLEATE_e) && (state = dComIfG_resLoad(&mPhsCloth, "Cloth"), state == cPhs_COMPLEATE_e)) {
-    return fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)
-      ? CreateInit()
-      : cPhs_ERROR_e;
-  }
-  return state;
+    cPhs_State state = dComIfG_resLoad(&mPhsEshata, M_arcname);
+    if ((state == cPhs_COMPLEATE_e) && (state = dComIfG_resLoad(&mPhsCloth, "Cloth"), state == cPhs_COMPLEATE_e)) {
+        return fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)
+            ? CreateInit()
+            : cPhs_ERROR_e;
+    }
+    return state;
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
 bool daSie_Flag_c::_delete() {
-  dComIfG_resDelete(&mPhsEshata, M_arcname);
-  dComIfG_resDelete(&mPhsCloth, "Cloth");
-  return TRUE;
+    dComIfG_resDelete(&mPhsEshata, M_arcname);
+    dComIfG_resDelete(&mPhsCloth, "Cloth");
+    return TRUE;
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
@@ -132,12 +132,12 @@ bool daSie_Flag_c::_execute() {
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
 bool daSie_Flag_c::_draw() {
-  g_env_light.settingTevStruct(TEV_TYPE_BG0,&current.pos,&tevStr);
-  g_env_light.settingTevStruct(TEV_TYPE_ACTOR,&current.pos,&mTevStr);
-  g_env_light.setLightTevColorType(mpModel,&tevStr);
-  mDoExt_modelUpdateDL(this->mpModel);
-  mpClothPacket->cloth_draw();
-  return true;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(this->mpModel);
+    mpClothPacket->cloth_draw();
+    return true;
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
