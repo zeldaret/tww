@@ -7,6 +7,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -38,6 +39,7 @@ static dCcD_SrcCyl l_cyl_src = {
     },
 };
 
+const char daSie_Flag_c::M_arcname[] = "Eshata";
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
@@ -50,13 +52,14 @@ void daSie_Flag_c::set_mtx() {
 }
 
 /* 000001C4-000001E4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return static_cast<daSie_Flag_c*>(i_actor)->CreateHeap();
 }
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
-void daSie_Flag_c::CreateHeap() {
+BOOL daSie_Flag_c::CreateHeap() {
     /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
@@ -71,7 +74,9 @@ cPhs_State daSie_Flag_c::_create() {
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
 bool daSie_Flag_c::_delete() {
-    /* Nonmatching */
+  dComIfG_resDelete(&mPhsEshata, M_arcname);
+  dComIfG_resDelete(&mPhsCloth, "Cloth");
+  return TRUE;
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */

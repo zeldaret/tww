@@ -9,12 +9,14 @@
 class daSie_Flag_c : public fopAc_ac_c {
 public:
     void set_mtx();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     cPhs_State _create();
     bool _delete();
     bool _execute();
     bool _draw();
+
+    static const char M_arcname[];
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhsEshata;
