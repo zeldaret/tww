@@ -12,6 +12,8 @@
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_ext.h"
 #include "f_op/f_op_actor_mng.h"
+#include "d/res/res_cloth.h"
+#include "d/res/res_sieflag.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -73,8 +75,18 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::CreateHeap() {
-    /* Nonmatching */
-    return TRUE;
+  J3DModelData *model_data = (J3DModelData *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
+  JUT_ASSERT(0x109, model_data != NULL);
+
+  this->mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+  if (this->mpModel == NULL) {
+    return false;
+  } else {
+    ResTIMG *eshata_timg = (ResTIMG *) dComIfG_getObjectRes(M_arcname, SIEFLAG_BTI_ETHATA);
+    ResTIMG *cloth_timg = (ResTIMG *) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    this->mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
+    return this->mpClothPacket != NULL;
+  }
 }
 
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
