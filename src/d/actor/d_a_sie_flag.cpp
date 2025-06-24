@@ -94,11 +94,12 @@ BOOL daSie_Flag_c::CreateHeap() {
 /* 0000030C-000003D4       .text CreateInit__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::CreateInit() {
     mStts.Init(0xFF, 0xFF, this);
-    // mCyl.Set((dCcD_SrcCyl *)0x80557166); // TODO: Where's this constant?
+
+    mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
     mWindvec = *dKyw_get_wind_vec();
-
+    
     set_mtx();
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
