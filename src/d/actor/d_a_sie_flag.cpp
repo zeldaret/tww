@@ -58,14 +58,12 @@ daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
 
 /* 00000118-000001C4       .text set_mtx__12daSie_Flag_cFv */
 void daSie_Flag_c::set_mtx() {
-  J3DModel* model = this->mpModel;
-  model->getBaseScale()->x = scale.x;
-  model->getBaseScale()->y = scale.y;
-  model->getBaseScale()->z = scale.z;
+  mpModel->setBaseScale(scale);
 
   MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
   mDoMtx_stack_c::ZXYrotM(shape_angle);
-  MTXCopy(mDoMtx_stack_c::get(), model->getBaseTRMtx());
+
+  MTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
   mDoMtx_stack_c::transM(l_flag_offset);
   mpClothPacket->setMtx(mDoMtx_stack_c::get());
 }
