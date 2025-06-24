@@ -343,7 +343,7 @@ config.libs = [
         "progress_category": "core",
         "host": True,
         "objects": [
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_main.cpp"),
+            Object(Matching,    "m_Do/m_Do_main.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_printf.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_audio.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_controller_pad.cpp"),
