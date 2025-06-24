@@ -33,8 +33,13 @@ class daSie_Flag_HIO_c {
 public:
     daSie_Flag_HIO_c();
 
+    virtual ~daSie_Flag_HIO_c();
+
 public:
-    /* Place member variables here */
+    /* 0x00 */ //vtable
+    /* 0x04 */ s8 m04;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ s16 m0c; // TODO: Please double-check whether it's signed or unsigned
 };
 
 #endif /* D_A_SIE_FLAG_H */
