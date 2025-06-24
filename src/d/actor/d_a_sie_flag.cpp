@@ -15,6 +15,7 @@
 #include "d/res/res_sieflag.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -104,7 +105,7 @@ cPhs_State daSie_Flag_c::CreateInit() {
     
     set_mtx();
     cullMtx = mpModel->getBaseTRMtx();
-    fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
+    fopAcM_setCullSizeBox(this, -700.0f, 0.0, -700.0f, 700.0f, 1100.0f, 700.0f);
     dKy_tevstr_init(&mTevStr, current.roomNo, 0xFF);
 
     return cPhs_COMPLEATE_e;
