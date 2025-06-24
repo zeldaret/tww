@@ -27,6 +27,7 @@ public:
     /* 0x2B4 */ dKy_tevstr_c mTevStr;
     /* 0x364 */ dCcD_Stts mStts;
     /* 0x3A0 */ dCcD_Cyl mCyl;
+    /* 0x4D0 */ dCcD_Cyl mCyl2; // TODO: Please double-check the offset
 };
 
 class daSie_Flag_HIO_c {

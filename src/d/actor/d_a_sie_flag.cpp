@@ -115,13 +115,21 @@ cPhs_State daSie_Flag_c::CreateInit() {
 cPhs_State daSie_Flag_c::_create() {
     fopAcM_SetupActor(this, daSie_Flag_c);
 
-    cPhs_State state = dComIfG_resLoad(&mPhsEshata, M_arcname);
-    if ((state == cPhs_COMPLEATE_e) && (state = dComIfG_resLoad(&mPhsCloth, "Cloth"), state == cPhs_COMPLEATE_e)) {
-        return fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)
-            ? CreateInit()
-            : cPhs_ERROR_e;
+    cPhs_State result = dComIfG_resLoad(&mPhsEshata, M_arcname);
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
     }
-    return state;
+
+    result = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
+        return CreateInit();
+    } else {
+        return cPhs_ERROR_e;
+    }
 }
 
 /* 00000814-00000864       .text _delete__12daSie_Flag_cFv */
