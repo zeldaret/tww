@@ -17,7 +17,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 }
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
-bool daObjHami4_c::CreateHeap() {
+BOOL daObjHami4_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", 0x4);
     JUT_ASSERT(0x5f, modelData != NULL);
 
@@ -42,13 +42,13 @@ bool daObjHami4_c::CreateHeap() {
         MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         mdBgW[i] = new dBgW();
-        if (mdBgW[i] == NULL) {
-            return false;
+        if (mdBgW[i] != NULL) {
+            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", 0x7);
+            if(!mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
+                continue;
+            }
         }
-        cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", 0x7);
-        if(mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
-            return false;
-        }
+        return false;
     }
     return true;
     /* Nonmatching */
