@@ -12,7 +12,7 @@
 #include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/res/res_cloth.h"
-#include "d/res/res_sieflag.h"
+#include "d/res/res_eshata.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "weak_bss_936_to_1036.h" // IWYU pragma: keep
@@ -80,14 +80,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 000001E4-0000030C       .text CreateHeap__12daSie_Flag_cFv */
 BOOL daSie_Flag_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, SIEFLAG_BDL_ETHATA);
+    J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ESHATA_BDL_ESHATA);
     JUT_ASSERT(0x109, modelData != NULL);
 
     this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (this->mpModel == NULL) {
         return FALSE;
     } else {
-        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, SIEFLAG_BTI_ETHATA);
+        ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, ESHATA_BTI_ESHATA);
         ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
         this->mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
         return this->mpClothPacket != NULL ? TRUE : FALSE;
