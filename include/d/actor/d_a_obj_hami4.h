@@ -23,7 +23,7 @@ public:
     inline bool _execute();
     int prm_get_swSave() const {return daObj::PrmAbstract(this, PRM_SWITCH_W, PRM_SWITCH_S);}
 
-    void CreateHeap();
+    bool CreateHeap();
     void CreateInit();
     void set_mtx();
     void daObjHami4_close_stop();

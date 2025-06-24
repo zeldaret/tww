@@ -8,19 +8,49 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_lwood.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
-    ((daObjHami4_c*)actor)->CreateHeap();
+    return ((daObjHami4_c*)actor)->CreateHeap();
     /* Nonmatching */
 }
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
-void daObjHami4_c::CreateHeap() {
-    // getObjectRes()
-    int modelData;
-    JUT_ASSERT(0x5f, modelData != 0);
-    // JUTAssertion::showAssert(JUTAssertion::getSDevice(),"d_a_obj_hami4.cpp",0x5f,"modelData != 0");
+bool daObjHami4_c::CreateHeap() {
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", 0x4);
+    JUT_ASSERT(0x5f, modelData != NULL);
+
+    if (fopAcM_isSwitch(this, daObj::PrmAbstract(this, 8, 0))) {
+        this->field_0x378 = 3;
+        this->field_0x37C = 1500.0;
+    }
+    else {
+        this->field_0x378 = 0;
+        this->field_0x37C = 0.0;
+    }
+    for (int i = 0; i < 4; i++){
+        mpModels[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpModels[i] == NULL){
+            return false;
+        }
+        short var = current.angle.y + i*0x4000;
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(var );
+        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0, (short)(-field_0x37C * cM_scos(0x2000)));
+        mDoMtx_stack_c::scaleM(scale);
+        MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
+        mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mdBgW[i] = new dBgW();
+        if (mdBgW[i] == NULL) {
+            return false;
+        }
+        cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", 0x7);
+        if(mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
+            return false;
+        }
+    }
+    return true;
     /* Nonmatching */
 }
 
@@ -51,7 +81,6 @@ void daObjHami4_c::set_mtx() {
         MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mdBgW[i]->Move();
     }
-    return;
     /* Nonmatching */
 }
 
