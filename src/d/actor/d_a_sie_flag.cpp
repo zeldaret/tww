@@ -148,28 +148,12 @@ bool daSie_Flag_c::_execute() {
         daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x0B);
     }
 
-    fopAcM_rollPlayerCrash(this, 40.0f, 7);
+    fopAcM_rollPlayerCrash(this, 40.0f, 0x07);
 
     cXyz position_plus_offset = current.pos + l_flag_offset;
     cXyz allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
-
-    f32 allwind_magnitude = VECSquareMag(&allwind);
-    if (allwind_magnitude > 0.0f) {
-        f32 inverted_square = 1.0f / std::sqrtf(allwind_magnitude);
-        inverted_square = inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
-        inverted_square = inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
-        allwind_magnitude = allwind_magnitude * inverted_square * 0.5f * (3.0f - allwind_magnitude * inverted_square * inverted_square);
-    }
-
-    // TODO: Apparently, this block is similar to the upper one. However, if I try making an inline function, the result obj mismatches
-    f32 m_windvec_magnitude = VECSquareMag(&mWindvec);
-    if (m_windvec_magnitude > 0.0f) {
-        f32 inverted_square = 1.0f / std::sqrtf(m_windvec_magnitude);
-        inverted_square = inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
-        inverted_square = inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
-        m_windvec_magnitude = m_windvec_magnitude * inverted_square * 0.5f * (3.0f - m_windvec_magnitude * inverted_square * inverted_square);
-    }
-    
+    f32 allwind_magnitude = std::sqrtf(VECSquareMag(&allwind));
+    f32 m_windvec_magnitude = std::sqrtf(VECSquareMag(&mWindvec));
     if (allwind_magnitude > m_windvec_magnitude) {
         mWindvec = allwind;
     } else {
