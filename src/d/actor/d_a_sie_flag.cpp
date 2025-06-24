@@ -3,7 +3,6 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
-// TODO: organize imports
 #include "d/actor/d_a_sie_flag.h"
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
@@ -68,7 +67,7 @@ void daSie_Flag_c::set_mtx() {
   MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
   mDoMtx_stack_c::ZXYrotM(shape_angle);
 
-  MTXCopy(mDoMtx_stack_c::get(), mpModel->getBaseTRMtx());
+  mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
   mDoMtx_stack_c::transM(l_flag_offset);
   mpClothPacket->setMtx(mDoMtx_stack_c::get());
 }
