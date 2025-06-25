@@ -27,20 +27,20 @@ public:
     /* 0x2B4 */ dKy_tevstr_c mTevStr;
     /* 0x364 */ dCcD_Stts mStts;
     /* 0x3A0 */ dCcD_Cyl mCyl;
-    /* 0x4D0 */ dCcD_Cyl mCyl2; // TODO: Please double-check the offset
+    /* 0x4D0 */ dCcD_Cyl mCyl2;
 };
 
 class daSie_Flag_HIO_c {
 public:
     daSie_Flag_HIO_c();
 
-    virtual ~daSie_Flag_HIO_c();
+    virtual ~daSie_Flag_HIO_c() {};
 
 public:
     /* 0x00 */ //vtable
     /* 0x04 */ s8 m04;
     /* 0x08 */ f32 m08;
-    /* 0x0C */ s16 m0c; // TODO: Please double-check whether it's signed or unsigned
+    /* 0x0C */ s16 m0c;
 };
 
 #endif /* D_A_SIE_FLAG_H */
