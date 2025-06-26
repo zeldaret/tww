@@ -136,7 +136,7 @@ cPhs_State daSie_Flag_c::_create() {
 bool daSie_Flag_c::_delete() {
     dComIfG_resDelete(&mPhsEshata, M_arcname);
     dComIfG_resDelete(&mPhsCloth, "Cloth");
-    return TRUE;
+    return true;
 }
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
@@ -169,7 +169,7 @@ bool daSie_Flag_c::_execute() {
     mpClothPacket->setGlobalWind(&mWindvec);
     mpClothPacket->cloth_move();
 
-    return FALSE;
+    return false;
 }
 
 /* 00000B08-00000B94       .text _draw__12daSie_Flag_cFv */
