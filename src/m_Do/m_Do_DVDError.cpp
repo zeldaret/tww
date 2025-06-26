@@ -47,12 +47,14 @@ void mDoDvdErr_ThdCleanup() {
 
 /* 80018CE8-80018D44       .text mDoDvdErr_Watch__FPv */
 void mDoDvdErr_Watch(void*) {
+#if VERSION > VERSION_DEMO
     {
         JKRThread thread(OSGetCurrentThread(), 0);
     }
 
     JKRHeap* heap = NULL;
     heap->becomeCurrentHeap();
+#endif
 
     do {
         if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {

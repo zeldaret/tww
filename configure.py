@@ -106,6 +106,12 @@ parser.add_argument(
     help="path to sjiswrap.exe (optional)",
 )
 parser.add_argument(
+    "--ninja",
+    metavar="BINARY",
+    type=Path,
+    help="path to ninja binary (optional)"
+)
+parser.add_argument(
     "--verbose",
     action="store_true",
     help="print verbose output",
@@ -143,6 +149,7 @@ config.compilers_path = args.compilers
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.ninja_path = args.ninja
 config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
@@ -152,8 +159,8 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20250520"
-config.dtk_tag = "v1.5.1"
-config.objdiff_tag = "v3.0.0-beta.8"
+config.dtk_tag = "v1.6.2"
+config.objdiff_tag = "v3.0.0-beta.10"
 config.sjiswrap_tag = "v1.2.1"
 config.wibo_tag = "0.6.16"
 
@@ -343,7 +350,7 @@ config.libs = [
         "progress_category": "core",
         "host": True,
         "objects": [
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_main.cpp"),
+            Object(Matching,    "m_Do/m_Do_main.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_printf.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_audio.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_controller_pad.cpp"),
@@ -355,7 +362,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_dvd_thread.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_DVDError.cpp"),
+            Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_MemCard.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_MemCardRWmng.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_gba_com.cpp"),

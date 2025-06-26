@@ -83,6 +83,11 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
                 if (ret != CARD_ERROR_READY) return ret;
                 ret = CARDRead(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
+#if VERSION == VERSION_DEMO
+                if (!mDoMemCdRWm_TestCheckSumPictData(sTmpBuf)) {
+                    return ret;
+                }
+#endif
             }
         }
     }
