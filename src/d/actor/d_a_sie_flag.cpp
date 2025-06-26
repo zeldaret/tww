@@ -83,14 +83,14 @@ BOOL daSie_Flag_c::CreateHeap() {
     J3DModelData *modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, ESHATA_BDL_ESHATA);
     JUT_ASSERT(0x109, modelData != NULL);
 
-    this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (this->mpModel == NULL) {
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
         return FALSE;
     } else {
         ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, ESHATA_BTI_ESHATA);
         ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
-        this->mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
-        return this->mpClothPacket != NULL ? TRUE : FALSE;
+        mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
+        return mpClothPacket != NULL ? TRUE : FALSE;
     }
 }
 
@@ -106,7 +106,7 @@ cPhs_State daSie_Flag_c::CreateInit() {
     set_mtx();
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -700.0f, 0.0, -700.0f, 700.0f, 1100.0f, 700.0f);
-    dKy_tevstr_init(&mTevStr, current.roomNo, 0xFF);
+    dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xFF);
 
     return cPhs_COMPLEATE_e;
 }
@@ -141,17 +141,20 @@ bool daSie_Flag_c::_delete() {
 
 /* 00000864-00000B08       .text _execute__12daSie_Flag_cFv */
 bool daSie_Flag_c::_execute() {
+    cXyz allwind;
+    cXyz position_plus_offset;
+
     set_mtx();
     mStts.Move();
 
     if (mCyl.ChkTgHit() != 0) {
-        daObj::HitSeStart(&current.pos, current.roomNo, &mCyl, 0x0B);
+        daObj::HitSeStart(fopAcM_GetPosition_p(this), fopAcM_GetRoomNo(this), &mCyl, 0x0B);
     }
 
     fopAcM_rollPlayerCrash(this, 40.0f, 0x07);
 
-    cXyz position_plus_offset = current.pos + l_flag_offset;
-    cXyz allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
+    position_plus_offset = fopAcM_GetPosition(this) + l_flag_offset;
+    allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
     if (allwind.abs() > mWindvec.abs()) {
         mWindvec = allwind;
     } else {
@@ -174,7 +177,7 @@ bool daSie_Flag_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &mTevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    mDoExt_modelUpdateDL(this->mpModel);
+    mDoExt_modelUpdateDL(mpModel);
     mpClothPacket->cloth_draw();
     return true;
 }
