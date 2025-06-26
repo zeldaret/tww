@@ -156,22 +156,23 @@ static BOOL daObjHami4_Delete(void* i_this) {
             dComIfG_Bgsp()->Release(obj->mdBgW[i]);
         }
     }
-    dComIfG_resDelete(&obj->mPhs,"Hami4");
-    return 1;
+    dComIfG_resDeleteDemo(&obj->mPhs,"Hami4");
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000918-000009DC       .text daObjHami4_Draw__FPv */
 static BOOL daObjHami4_Draw(void* i_this) {
+    dKy_tevstr_c* tevStr;
     daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
-    
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &obj->current.pos, &obj->tevStr);
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &obj->current.pos, tevStr = &obj->tevStr);
     dComIfGd_setListBG();
     for (int i = 0; i < 4; i++){
-        g_env_light.setLightTevColorType(obj->mpModels[i],&obj->tevStr);
+        g_env_light.setLightTevColorType(obj->mpModels[i], tevStr);
         mDoExt_modelUpdateDL(obj->mpModels[i]);
     }
-    dComIfGd_setListInvisisble();
+    dComIfGd_setList();
     return TRUE;
     /* Nonmatching */
 }
