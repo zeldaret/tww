@@ -47,7 +47,7 @@ jobs:
       run: |
         python configure.py --map --version ${{ matrix.version }} \
             --binutils /binutils --compilers /compilers
-        ninja all_source progress build/${{ matrix.version }}/report.json
+        ninja -d explain all_source progress build/${{ matrix.version }}/report.json
 
     # Upload map files
     - name: Upload map
