@@ -574,7 +574,6 @@ s16 daNpc_kam_c::getAngleX() {
         angle = mAngVelX;
         mLockAngleXTimer = 30;
     } else {
-        angle = g_mDoCPd_cpadInfo[0].mMainStickPosY * mAngVelX;
     }
     return angle;
 }
