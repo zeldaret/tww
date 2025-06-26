@@ -1519,7 +1519,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shand", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_ship", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_shop_item"), # weak func order
-    ActorRel(NonMatching, "d_a_sie_flag"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_sie_flag", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_sitem"),
     ActorRel(NonMatching, "d_a_ss"),
     ActorRel(NonMatching, "d_a_sss"),
