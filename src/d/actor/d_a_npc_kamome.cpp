@@ -583,6 +583,7 @@ int daNpc_kam_c::wallHitCheck() {
     if (mAcch.ChkWallHit()) {
         for (int i = 0; i < ARRAY_SIZE(mAcchCirs); i++) {
             if (mAcchCirs[i].ChkWallHit()) {
+                return i;
             }
         }
     }
