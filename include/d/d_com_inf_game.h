@@ -659,6 +659,7 @@ public:
     void setBaseAnimeID(u8 id) { mMesgAnime = id; }
     void clearBaseAnimeID() { mMesgAnime = 0xFF; }
     u8 getNowAnimeID() { return mMesgAnimeTagInfo; }
+    void setNowAnimeID(u8 id) { mMesgAnimeTagInfo = id; }
     void clearNowAnimeID() { mMesgAnimeTagInfo = 0xFF; }
     u8 getMesgStatus() { return mMesgStatus; }
     void setMesgStatus(u8 status) { mMesgStatus = status; }
@@ -2930,6 +2931,10 @@ inline void dComIfGp_clearMesgAnimeAttrInfo() {
 
 inline u8 dComIfGp_getMesgAnimeTagInfo() {
     return g_dComIfG_gameInfo.play.getNowAnimeID();
+}
+
+inline void dComIfGp_setMesgAnimeTagInfo(u8 id) {
+    g_dComIfG_gameInfo.play.setNowAnimeID(id);
 }
 
 inline void dComIfGp_clearMesgAnimeTagInfo() {

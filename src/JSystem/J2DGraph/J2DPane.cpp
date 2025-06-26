@@ -158,17 +158,17 @@ void J2DPane::draw(f32 x, f32 y, const J2DGrafContext* pCtx, bool clip) {
         pParentPane = pParent->getObject();
 
     if (mVisible && mBounds.isValid()) {
-        mScreenBounds = mBounds;
+        mGlobalBounds = mBounds;
         mDrawBounds = mBounds;
 
         if (pParentPane != NULL) {
-            JGeometry::TBox2<f32> screenBounds = pParentPane->mScreenBounds;
-            mScreenBounds.addPos(screenBounds.i.x, screenBounds.i.y);
+            JGeometry::TBox2<f32> globalBounds = pParentPane->mGlobalBounds;
+            mGlobalBounds.addPos(globalBounds.i.x, globalBounds.i.y);
             MTXConcat(pParentPane->mDrawMtx, mMtx, mDrawMtx);
 
             if (clip) {
-                JGeometry::TBox2<f32> screenBounds = pParentPane->mScreenBounds;
-                mDrawBounds.addPos(screenBounds.i.x, screenBounds.i.y);
+                JGeometry::TBox2<f32> globalBounds = pParentPane->mGlobalBounds;
+                mDrawBounds.addPos(globalBounds.i.x, globalBounds.i.y);
                 mDrawBounds.intersect(pParentPane->mDrawBounds);
             }
 
@@ -176,10 +176,10 @@ void J2DPane::draw(f32 x, f32 y, const J2DGrafContext* pCtx, bool clip) {
             if (mInheritAlpha)
                 mDrawAlpha = (mAlpha * pParentPane->mDrawAlpha) / 0xFF;
         } else {
-            mScreenBounds.addPos(x, y);
+            mGlobalBounds.addPos(x, y);
             makeMatrix(mBounds.i.x + x, mBounds.i.y + y);
             MTXCopy(mMtx, mDrawMtx);
-            mDrawBounds.set(mScreenBounds);
+            mDrawBounds.set(mGlobalBounds);
             mDrawAlpha = mAlpha;
         }
 
@@ -188,7 +188,7 @@ void J2DPane::draw(f32 x, f32 y, const J2DGrafContext* pCtx, bool clip) {
             ((J2DOrthoGraph*)pCtx)->scissorBounds(&clipBounds, &mDrawBounds);
 
         if (mDrawBounds.isValid() || !clip) {
-            ctx.place(mScreenBounds);
+            ctx.place(mGlobalBounds);
             if (clip) {
                 ctx.scissor(clipBounds);
                 ctx.setScissor();
@@ -219,7 +219,7 @@ void J2DPane::add(f32 px, f32 py) {
 /* 802D0604-802D0680       .text clip__7J2DPaneFRCQ29JGeometry8TBox2<f> */
 void J2DPane::clip(const JGeometry::TBox2<f32>& bounds) {
     JGeometry::TBox2<f32> boxA(bounds);
-    JGeometry::TBox2<f32> boxB(mScreenBounds);
+    JGeometry::TBox2<f32> boxB(mGlobalBounds);
     boxA.addPos(boxB.i);
     mDrawBounds.intersect(boxA);
 }

@@ -232,7 +232,7 @@ void J2DPicture::drawSelf(f32 x, f32 y, Mtx* mtx) {
     if (!mpTexture[0]) {
         return;
     }
-    drawFullSet(mScreenBounds.i.x + x, mScreenBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
+    drawFullSet(mGlobalBounds.i.x + x, mGlobalBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
 }
 
 /* 802D3D54-802D4074       .text drawFullSet__10J2DPictureFffff10J2DBinding9J2DMirrorbPA3_A4_f */

@@ -38,9 +38,7 @@ JMessage::TResource* JMessage::TControl::getResource_groupID(u16 groupID) const 
 
 /* 8029EA34-8029EAC8       .text getMessageData__Q28JMessage8TControlCFUsUs */
 const char* JMessage::TControl::getMessageData(u16 groupID, u16 messageIndex) const {
-    TResource* resource = getResource_groupID(groupID);
-    // this seems like an inline
-    void *messageEntry = resource == NULL ? NULL : resource->getMessageData_messageIndex(messageIndex);
+    void* messageEntry = getMessageEntry(groupID, messageIndex);
     if (messageEntry == NULL)
         return NULL;
     u32 offs = *(u32*)messageEntry;
@@ -100,10 +98,7 @@ const char* JMessage::TControl::do_word(u32) {
 /* 8029ECD4-8029ED88       .text setMessageCode_flush___Q28JMessage8TControlFv */
 bool JMessage::TControl::setMessageCode_flush_() {
     reset_();
-    u16 messageIndex = mMessageIndex;
-    TResource* resource = getResource_groupID(mGroupID);
-    void *messageEntry = resource == NULL ? NULL : resource->getMessageData_messageIndex(messageIndex);
-    mMessageEntry = messageEntry;
+    mMessageEntry = getMessageEntry(mGroupID, mMessageIndex);
     if (mMessageEntry == NULL)
         return false;
 

@@ -41,11 +41,11 @@ struct mesg_info : JUTDataBlockHeader {
     /* 0x0A */ u16 mEntrySize;
     /* 0x0C */ u16 mGroupID;
     /* 0x10 */ u8 mColor;
-    /* 0x14 */ mesg_entry mEntries[1]; // variable-length array
+    /* 0x14 */ mesg_entry mEntries[];
 };
 
 struct mesg_data : JUTDataBlockHeader {
-    char mData[1]; // variable-length array
+    char mData[];
 };
 
 static bool pushButton;
@@ -140,7 +140,7 @@ void MyPicture::drawSelf(f32 x, f32 y) {
 /* 8002AC1C-8002AC90       .text drawSelf__9MyPictureFffPA3_A4_f */
 void MyPicture::drawSelf(f32 x, f32 y, Mtx* mtx) {
     if(mpTexture[0]) {
-        drawFullSet2(mScreenBounds.i.x + x, mScreenBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
+        drawFullSet2(mGlobalBounds.i.x + x, mGlobalBounds.i.y + y, mBounds.getWidth(), mBounds.getHeight(), J2DBinding(mBinding), getMirror(), isTumble(), mtx);
     }
 }
 
@@ -352,8 +352,8 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* param_1, cXyz* param_2, u32* pa
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;  
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;  
 
     fpc_ProcID pcId;
     if(*param_3 >> 0x10 == 0x63) {
@@ -404,8 +404,8 @@ u32 fopMsgM_searchMessageNumber(u32 msgNo) {
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
 
     for(u32 i = msgNo & 0xFFFF; i < 0xFFFF; i++) {
         mesg_header* header = msgGet.getMesgHeader(i);
@@ -578,8 +578,8 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
     /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0x6BD, head_p);
@@ -644,8 +644,8 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
     /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0x735, head_p);
@@ -703,8 +703,8 @@ void fopMsgM_selectMessageGet(J2DPane* param_1, J2DPane* param_2, char* param_3,
     fopMsgM_msgDataProc_c temp;
     fopMsgM_itemMsgGet_c msgGet;
     msgGet.mMsgIdx = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
 
     strcpy(param_3, "\x1B""CC[000000FF]\x1B""GM[0]");
     strcpy(param_4, "");
@@ -1390,7 +1390,7 @@ fpc_ProcID fopMsgM_Create(s16 param_1, fopMsgCreateFunc param_2, void* param_3) 
 /* 8002E254-8002E2D8       .text getMesgHeader__16fopMsgM_msgGet_cFUl */
 mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 msg) {
     mGroupID = (msg >> 16);
-    mMsgID = msg;
+    mMsgNo = msg;
 
 #if VERSION <= VERSION_JPN
     char path[12];
@@ -1440,9 +1440,9 @@ const char* fopMsgM_msgGet_c::getMessage(mesg_header* msg) {
             continue;
 
         mMsgIdx = i;
-        if (mMsgID == info->mEntries[i].mMesgID) {
+        if (mMsgNo == info->mEntries[i].mMsgNo) {
             mesg_entry* entry = &info->mEntries[mMsgIdx];
-            mResMsgIdx = entry->mMesgID;
+            mResMsgNo = entry->mMsgNo;
             ret = &data[entry->mDataOffs];
             break;
         }
@@ -1456,7 +1456,7 @@ mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 msg) {
 #if VERSION <= VERSION_JPN
     u16 groupID = msg >> 16;
 #endif
-    mMsgID = msg;
+    mMsgNo = msg;
 
 #if VERSION <= VERSION_JPN
     char path[12];
@@ -1504,9 +1504,9 @@ const char* fopMsgM_itemMsgGet_c::getMessage(mesg_header* msg) {
             continue;
 
         mMsgIdx = i;
-        if (mMsgID == info->mEntries[i].mMesgID) {
+        if (mMsgNo == info->mEntries[i].mMsgNo) {
             mesg_entry* entry = &info->mEntries[i];
-            mResMsgIdx = entry->mMesgID;
+            mResMsgNo = entry->mMsgNo;
             return &data[entry->mDataOffs];
         }
     }
@@ -1963,8 +1963,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             if(fopMsgM_nextMsgFlagCheck()) {
-                if(field_0x0C->mNextMessageID != 0) {
-                    fopMsgM_messageSet(field_0x0C->mNextMessageID);
+                if(field_0x0C->mNextMsgNo != 0) {
+                    fopMsgM_messageSet(field_0x0C->mNextMsgNo);
                     field_0x27C = 0xF;
                 }
                 else {
@@ -2020,8 +2020,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 if(fopMsgM_nextMsgFlagCheck()) {
-                    if(field_0x0C->mNextMessageID != 0) {
-                        fopMsgM_messageSet(field_0x0C->mNextMessageID);
+                    if(field_0x0C->mNextMsgNo != 0) {
+                        fopMsgM_messageSet(field_0x0C->mNextMsgNo);
                         field_0x27C = 0xF;
                     }
                     else {
@@ -2057,7 +2057,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             const char* temp = &field_0x3C[origOffset];
             if(*temp != 0x1A) break;
             if(temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
-                if(field_0x0C->mMesgID == 0x42 || field_0x0C->mMesgID == 0x43 || field_0x0C->mMesgID == 0x44 || field_0x0C->mMesgID == 0x45 || field_0x0C->mMesgID == 0x46 || field_0x0C->mMesgID == 0x47 || field_0x0C->mMesgID == 0x48 || field_0x0C->mMesgID == 0x49 || field_0x0C->mMesgID == 0x4A || field_0x0C->mMesgID == 0x4B) {
+                if(field_0x0C->mMsgNo == 0x42 || field_0x0C->mMsgNo == 0x43 || field_0x0C->mMsgNo == 0x44 || field_0x0C->mMsgNo == 0x45 || field_0x0C->mMsgNo == 0x46 || field_0x0C->mMsgNo == 0x47 || field_0x0C->mMsgNo == 0x48 || field_0x0C->mMsgNo == 0x49 || field_0x0C->mMsgNo == 0x4A || field_0x0C->mMsgNo == 0x4B) {
                     static const u32 colorTable[9] = {
                         0x000000FF,
                         0xB40000FF,
@@ -2178,11 +2178,19 @@ void fopMsgM_msgDataProc_c::stringSet() {
             else if(temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
                 strcpy(buf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (field_0x0C->mMesgID == 0x33B || field_0x0C->mMesgID == 0xC8B || field_0x0C->mMesgID == 0x1D21 || field_0x0C->mMesgID == 0x31D7 || field_0x0C->mMesgID == 0x37DD || field_0x0C->mMesgID == 0x37DE)) {
+                if (
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (
+                        field_0x0C->mMsgNo == 0x33B ||
+                        field_0x0C->mMsgNo == 0xC8B ||
+                        field_0x0C->mMsgNo == 0x1D21 ||
+                        field_0x0C->mMsgNo == 0x31D7 ||
+                        field_0x0C->mMsgNo == 0x37DD ||
+                        field_0x0C->mMsgNo == 0x37DE
+                    )
+                ) {
                     s32 bufLen = strlen(buf);
                     char current = (buf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -2377,8 +2385,8 @@ void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
     static const char* name = "no name";
 
     s32 curOffset = 0;
@@ -2441,8 +2449,8 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
-    msgGet.mMsgID = 0;
-    msgGet.mResMsgIdx = 0;
+    msgGet.mMsgNo = 0;
+    msgGet.mResMsgNo = 0;
     static const char* name = "no name";
 
     s32 curOffset = 0;

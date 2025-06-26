@@ -2000,7 +2000,7 @@ s32 daNpcRoten_c::executeTurnInit() {
         ret = 2;
 
         setAnmTbl(l_npc_anm_walk);
-        field_0x9A6 = l_npc_dat[mNpcNo].field_0x50 + cM_rndF(l_npc_dat[mNpcNo].field_0x52 - l_npc_dat[mNpcNo].field_0x50);\
+        field_0x9A6 = l_npc_dat[mNpcNo].field_0x50 + cM_rndF(l_npc_dat[mNpcNo].field_0x52 - l_npc_dat[mNpcNo].field_0x50);
     }
 
     return ret;

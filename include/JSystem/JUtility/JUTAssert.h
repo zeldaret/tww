@@ -20,8 +20,10 @@
 
 #ifdef DEBUG
 #define J3D_ASSERT(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
+#define JUT_ASSERT_DEBUG(LINE, COND) (COND) ? (void)0 : (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"));
 #else
 #define J3D_ASSERT(LINE, COND, MSG) (void)0
+#define JUT_ASSERT_DEBUG(LINE, COND) (void)0
 #endif
 
 #define JUT_WARN(LINE, ...)                                                                        \

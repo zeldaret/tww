@@ -42,19 +42,6 @@ int retFlag;
 JMessage::TParse* oParse;
 s16 linemax = 4;
 
-struct unk_messageData {
-    u8 field_0x0[0x4 - 0x0];
-    u16 field_0x4;
-    u8 field_0x6[0xc - 0x6];
-    u8 field_0xc;
-    u8 field_0xd;
-    u8 field_0xe;
-    u8 field_0xf[0x10 - 0xf];
-    u8 field_0x10;
-    u8 field_0x11;
-    u8 field_0x12[0x18 - 0x12];
-};
-
 void dMesg_fontsizeCenter(sub_mesg_class*, int, int);
 void dMesg_fontsizeCenter(sub_mesg_class*, int, int, int, int);
 
@@ -78,20 +65,17 @@ void dMesg_outFont_c::_delete() {
 
 /* 801E0074-801E0120       .text _initialize__15dMesg_outFont_cFv */
 void dMesg_outFont_c::_initialize() {
-    /* Nonmatching */
     field_0xc = 0;
     field_0x14 = 0;
     field_0x12 = 0;
     field_0x10 = 0;
-    field_0x16 = -1;
+    mTimer = -1;
     field_0x19 = -1;
     icon->hide();
-    icon->mRotation = 0.0f;
-    icon->calcMtx();
+    icon->rotate(0.0f);
     icon->setAlpha(0);
     kage->hide();
-    kage->mRotation = 0.0f;
-    kage->calcMtx();
+    kage->rotate(0.0f);
     kage->setAlpha(0);
 }
 
@@ -103,7 +87,7 @@ bool dMesg_outFont_c::_set(s16 param_1, s16 param_2, s16 param_3, u32 param_4, u
         field_0x14 = param_3;
         field_0xc = param_4;
         field_0x19 = param_5;
-        fopMsgM_outFontSet(icon, kage, &field_0x16, field_0xc, field_0x19);
+        fopMsgM_outFontSet(icon, kage, &mTimer, field_0xc, field_0x19);
         return true;
     }
     return false;
@@ -112,7 +96,7 @@ bool dMesg_outFont_c::_set(s16 param_1, s16 param_2, s16 param_3, u32 param_4, u
 /* 801E0184-801E01D0       .text _draw__15dMesg_outFont_cFv */
 void dMesg_outFont_c::_draw() {
     if (field_0x19 != 0xFF) {
-        fopMsgM_outFontDraw(icon, kage, field_0x10, field_0x12, field_0x14, &field_0x16, mAlpha, field_0x19);
+        fopMsgM_outFontDraw(icon, kage, field_0x10, field_0x12, field_0x14, &mTimer, mAlpha, field_0x19);
     }
 }
 
@@ -127,19 +111,19 @@ void dMesg_outFont_c::_setAlpha(u8 alpha) {
 /* 801E01E4-801E0274       .text __ct__14dMesg_tControlFv */
 dMesg_tControl::dMesg_tControl() {
     mMainFont = NULL;
-    field_0x54 = 0;
-    field_0x58 = 0;
-    field_0x5c = g_msgHIO.field_0x70;
-    field_0x60 = g_msgHIO.field_0x70;
-    field_0x64 = 0;
-    field_0x68 = 0;
-    field_0x6c = 486;
-    field_0x70 = 0;
-    field_0x71 = 0;
-    field_0x44[3] = 0.0f;
-    field_0x44[2] = 0.0f;
-    field_0x44[1] = 0.0f;
-    field_0x44[0] = 0.0f;
+    mLineCount = 0;
+    mLineStart = 0;
+    mInitFontSize = g_msgHIO.field_0x70;
+    mNowFontSize = g_msgHIO.field_0x70;
+    mCharSpace = 0;
+    mCharCode = 0;
+    mTextBoxWidth = 486;
+    mbHeader = 0;
+    mCode16Fg = 0;
+    mLineLength[3] = 0.0f;
+    mLineLength[2] = 0.0f;
+    mLineLength[1] = 0.0f;
+    mLineLength[0] = 0.0f;
 }
 
 /* 801E0274-801E0288       .text do_word__14dMesg_tControlFUl */
@@ -160,14 +144,14 @@ dMesg_tSequenceProcessor::dMesg_tSequenceProcessor(JMessage::TControl* param_1) 
     field_0x4c = 0.0;
     field_0x50 = 0.0;
     field_0x54 = 0.0;
-    field_0x6c = 0xffffffff;
+    mNowColor = 0xffffffff;
     field_0x70 = 0;
     field_0x74 = 0;
     field_0x8c = 1;
-    field_0x90 = 0;
-    field_0x15f = 0;
+    mWaitRest = 0;
+    mStopFlag = 0;
     field_0x160 = 0;
-    field_0x161 = 0;
+    mShortCutFlag = 0;
     field_0x162 = 0;
     field_0x163 = 0;
     field_0x96 = 0;
@@ -187,47 +171,36 @@ dMesg_tSequenceProcessor::dMesg_tSequenceProcessor(JMessage::TControl* param_1) 
 
 /* 801E0364-801E061C       .text initialize__24dMesg_tSequenceProcessorFi */
 void dMesg_tSequenceProcessor::initialize(int param_1) {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     if (retFlag) {
         retFlag = 0;
     }
     s_strSizeFlag = false;
     m_strSizeFlag = false;
-    dMesg_tMeasureProcessor processor(mControl, param_1);
-    const char* r28 = field_0x40;
-    const void* r31 = field_0x3c;
-    processor.reset_(r28);
-    processor.do_begin_(r31, r28);
+    dMesg_tMeasureProcessor processor(getControl(), param_1);
+    processor.setBegin(field_0x3c, field_0x40);
     processor.process(NULL);
 
-    int r31_2 = mesgControl->field_0x54;
-    u32 r28_2 = nowMesgCode;
-    JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r28_2 >> 16);
-    void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r28_2);
-    unk_messageData stack_8c = *(unk_messageData*)messageData;
+    int r31_2 = mesgControl->getLineCount();
+    mesg_entry stack_8c = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
 
-    int i1 = 0;
-    int i2 = 0;
-    if (stack_8c.field_0x10 != 3) {
-        for (; i1 < r31_2; i1++) {
-            field_0x7c[i1] = 0;
-        }
-    } else {
-        for (; i2 < r31_2; i2++) {
-            field_0x7c[i2] = mesgControl->field_0x44[i2];
+    for (int i = 0; i < r31_2; i++) {
+        if (stack_8c.mTextAlignment != 3) {
+            field_0x7c[i] = 0;
+        } else {
+            field_0x7c[i] = mesgControl->getLineLength(i);
         }
     }
 
-    mesgControl->field_0x60 = mesgControl->field_0x5c;
-    mesgControl->field_0x68 = 0;
-    mesgControl->field_0x70 = 0;
-    mesgControl->field_0x71 = 0;
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setCharCode(0);
+    mesgControl->setHeaderOff();
+    mesgControl->setCode16FgOff();
     field_0x44 = 0.0f;
     field_0x50 = 0.0f;
     field_0x70 = 0;
-    field_0x161 = 0;
-    field_0x15f = 0;
+    mShortCutFlag = 0;
+    mStopFlag = 0;
     field_0x160 = 0;
     field_0x162 = 0;
     field_0x163 = 0;
@@ -238,14 +211,14 @@ void dMesg_tSequenceProcessor::initialize(int param_1) {
     if (m_strSizeFlag) {
         retFlag--;
     }
-    mMesg->screen->shiftSet(0, g_msgHIO.field_0x5e * (4 - (mesgControl->field_0x54 - retFlag)) / 2);
-    char buffer[12];
+    mMesg->screen->shiftSet(0, g_msgHIO.field_0x5e * (4 - (mesgControl->getLineCount() - retFlag)) / 2);
+    char buffer[16];
     sprintf(buffer, "\x1b" "CR[%d]", field_0x7c[field_0x70]);
     strcat(mMesg->text[0], buffer);
     strcat(mMesg->text[2], buffer);
     field_0x44 = field_0x7c[field_0x70];
     field_0x8c = 1;
-    field_0x90 = 0;
+    resetWaitRest();
 }
 
 /* 801E067C-801E06A8       .text do_begin__24dMesg_tSequenceProcessorFPCvPCc */
@@ -263,33 +236,36 @@ void dMesg_tSequenceProcessor::do_end() {
 /* 801E06C8-801E0834       .text do_isReady__24dMesg_tSequenceProcessorFv */
 bool dMesg_tSequenceProcessor::do_isReady() {
     bool ret = false;
-    if (field_0x15f == 0) {
-        u32 r29 = nowMesgCode;
-        JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r29 >> 16);
-        void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r29);
-        unk_messageData stack_2c = *(unk_messageData*)messageData;
-        if (stack_2c.field_0xd == 1) {
-            field_0x161 = 1;
+    if (mStopFlag == 0) {
+        mesg_entry stack_2c = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
+        if (stack_2c.mDrawType == 1) {
+            mShortCutFlag = 1;
+#if VERSION > VERSION_DEMO
             if (field_0x160) {
-                field_0x161 = 0;
+                mShortCutFlag = 0;
             }
-        } else if (stack_2c.field_0xd == 2) {
-            field_0x161 = 0;
+        } else if (stack_2c.mDrawType == 2) {
+            mShortCutFlag = 0;
+            #endif
         }
         if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
-            if (stack_2c.field_0xd != 2 && field_0x160 == 0) {
-                field_0x161 = 1;
+            if (stack_2c.mDrawType != 2 && field_0x160 == 0) {
+                mShortCutFlag = 1;
             }
         }
-        if (field_0x90 <= 0 || field_0x161) {
+        if (mWaitRest <= 0 || mShortCutFlag) {
             ret = true;
+#if VERSION > VERSION_DEMO
             field_0x160 = 0;
+#endif
         } else {
-            field_0x90--;
+            mWaitRest--;
         }
+#if VERSION > VERSION_DEMO
         if (zenkaku) {
             ret = true;
         }
+#endif
     }
     return ret;
 }
@@ -304,7 +280,7 @@ bool dMesg_tSequenceProcessor::do_jump_isReady() {
 
 /* 801E0864-801E0870       .text do_jump__24dMesg_tSequenceProcessorFPCvPCc */
 void dMesg_tSequenceProcessor::do_jump(const void*, const char*) {
-    field_0x90 = 0;
+    mWaitRest = 0;
 }
 
 /* 801E0870-801E0874       .text do_branch_query__24dMesg_tSequenceProcessorFUs */
@@ -318,13 +294,12 @@ int dMesg_tSequenceProcessor::do_branch_queryResult() {
 
 /* 801E087C-801E0888       .text do_branch__24dMesg_tSequenceProcessorFPCvPCc */
 void dMesg_tSequenceProcessor::do_branch(const void*, const char*) {
-    field_0x90 = 0;
+    mWaitRest = 0;
 }
 
 /* 801E0888-801E0DE8       .text do_character__24dMesg_tSequenceProcessorFi */
 void dMesg_tSequenceProcessor::do_character(int param_1) {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     u8 r30 = 0;
     setCharacter();
     if (headerFlag) {
@@ -337,16 +312,19 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
                 zenkakuCode |= u16(param_1);
                 zenkaku = 0;
                 for (int i = 0; i < 97; i++) {
-                    // TODO: zfont
+                    if (zfont[i][0] == zenkakuCode) {
+                        param_1 = zfont[i][1];
+                        break;
+                    }
                 }
-                mesgControl->field_0x68 = param_1;
-                field_0x94 = param_1 >> 8;
-                field_0x95 = param_1;
+                mesgControl->setCharCode(param_1);
+                field_0x94 = (param_1 >> 8) & 0xFF;
+                field_0x95 = (param_1) & 0xFF;
             }
         } else {
             field_0x94 = param_1;
             field_0x95 = 0;
-            mesgControl->field_0x68 = param_1;
+            mesgControl->setCharCode(param_1);
             if (param_1 == 10) {
                 r30 = 1;
             } else if (param_1 == 0) {
@@ -354,33 +332,35 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
             }
             zenkaku = 0;
         }
-
+#if VERSION > VERSION_DEMO
     } else {
         field_0x94 = param_1;
         field_0x95 = 0;
-        mesgControl->field_0x68 = param_1;
+        mesgControl->setCharCode(param_1);
         if (param_1 == 10) {
             r30 = 1;
         } else if (param_1 == 0) {
             r30 = 2;
         }
+#endif
     }
     JUTFont::TWidth twidth;
-    int r29 = mesgControl->field_0x60;
-    f32 f31 = f32(r29) / f32(mesgControl->mMainFont->getCellWidth());
-    mesgControl->mMainFont->getWidthEntry(mesgControl->field_0x68, &twidth);
+    f32 f31 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+    
+    int char_code = mesgControl->getCharCode();
+    mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
     int tmp = twidth.field_0x1;
-    if (mesgControl->field_0x70 == 0) {
+    if (!mesgControl->isHeader()) {
         field_0x44 += tmp * f31;
-        mesgControl->field_0x70 = 1;
+        mesgControl->setHeaderOn();
     } else {
-        field_0x44 += tmp * f31 + mesgControl->field_0x64;
+        field_0x44 += tmp * f31 + mesgControl->getCharSpace();
     }
     if (field_0x74 > 0) {
         field_0x74--;
         if (field_0x74 == 0) {
-            f31 = (field_0x48 + (field_0x44 - field_0x48) * 0.5f) - field_0x54 * 0.5f;
-            char buffer[12];
+            f31 = (field_0x48 + (field_0x44 - field_0x48) / 2.0f) - field_0x54 / 2.0f;
+            char buffer[16];
             buffer[0] = 0;
             if (field_0x163) {
                 mMesg->text[1][field_0x60] = '\0';
@@ -390,12 +370,14 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
                 field_0x163 = 0;
             }
             if (field_0x50 < f31) {
-                sprintf(buffer, "\x1b" "CR[%d]", (f31 - field_0x50) + 0.5f);
-                field_0x50 += (f31 - field_0x50);
+                f31 -= field_0x50;
+                sprintf(buffer, "\x1b" "CR[%d]", int(f31 + 0.5f));
+                field_0x50 += f31;
             } else {
                 if (0.0f == field_0x50) {
-                    sprintf(buffer, "\x1b" "CL[%d]", (field_0x50 - f31) + 0.5f);
-                    field_0x50 += (field_0x50 - f31);
+                    f31 = field_0x50 - f31;
+                    sprintf(buffer, "\x1b" "CL[%d]", int(f31 + 0.5f));
+                    field_0x50 -= f31;
                 }
             }
             field_0x50 += field_0x54;
@@ -414,11 +396,12 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
         field_0x44 = 0.0f;
         field_0x50 = 0.0f;
         field_0x70 += 1;
-        if (field_0x70 == mesgControl->field_0x54) {
-            field_0x15f = 1;
+        if (field_0x70 == mesgControl->getLineCount()) {
+            mStopFlag = 1;
+            return;
         } else {
-            mesgControl->field_0x70 = 0;
-            char buffer[12];
+            mesgControl->setHeaderOff();
+            char buffer[16];
             sprintf(buffer, "\x1b" "CR[%d]", field_0x7c[field_0x70]);
             strcat(mMesg->text[0], buffer);
             strcat(mMesg->text[2], buffer);
@@ -428,19 +411,21 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
         strcat(mMesg->text[0], &field_0x94);
         strcat(mMesg->text[2], &field_0x94);
     }
-    if (mesgControl->field_0x68 == 0x8140 || mesgControl->field_0x68 == 0x8141 || mesgControl->field_0x68 == 0x20 || r30 == 1) {
-        if (field_0x8c) {
-            field_0x90 = 1;
+    // 0x8140: '　' (Ideographic space)
+    // 0x8141: '、' (Ideographic comma)
+    // 0x20: ' ' (Space)
+    if (mesgControl->getCharCode() == 0x8140 || mesgControl->getCharCode() == 0x8141 || mesgControl->getCharCode() == 0x20 || r30 == 1) {
+        if (field_0x8c != 0) {
+            mWaitRest = 1;
         }
     } else {
-        field_0x90 = field_0x8c;
+        mWaitRest = field_0x8c;
     }
 }
 
 /* 801E0DE8-801E161C       .text do_tag__24dMesg_tSequenceProcessorFUlPCvUl */
 bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 param_3) {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int r30 = param_1 & 0xFF0000;
     bool r29 = false;
     if (field_0x162) {
@@ -453,67 +438,66 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
         field_0x95 = 0;
         field_0x94 = 0;
     }
+
     switch (r30) {
     case 0:
         switch (param_1) {
         case 0: {
             r29 = true;
-            r30 = 0;
-            u32 r25 = nowMesgCode;
-            JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r25 >> 16);
-            void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r25);
-            char local_8c[17];
-            unk_messageData stack_a8 = *(unk_messageData*)messageData;
+            int r30 = 0;
+            char sp54[17];
+            mesg_entry sp38 = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
 
-            strcpy(local_8c, dComIfGs_getPlayerName());
+            strcpy(sp54, dComIfGs_getPlayerName());
 #if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
-                if (stack_a8.field_0x4 == 0x33b ||
-                    stack_a8.field_0x4 == 0xc8b ||
-                    stack_a8.field_0x4 == 0x1d21 ||
-                    stack_a8.field_0x4 == 0x31d7 ||
-                    stack_a8.field_0x4 == 0x37dd ||
-                    stack_a8.field_0x4 == 0x37de
+                // Specific msg nos that have the 's possessive after the player's name.
+                if (sp38.mMsgNo == 0x33b ||
+                    sp38.mMsgNo == 0xc8b ||
+                    sp38.mMsgNo == 0x1d21 ||
+                    sp38.mMsgNo == 0x31d7 ||
+                    sp38.mMsgNo == 0x37dd ||
+                    sp38.mMsgNo == 0x37de
                 ) {
-                    char c = local_8c[strlen(local_8c) - 1];
+                    char c = sp54[strlen(sp54) - 1];
                     if (c == 's' || c == 'S' || c == 'z' || c == 'Z' || c == 'x' || c == 'X') {
-                        strcat(local_8c, "'");
+                        strcat(sp54, "'");
                     } else {
-                        strcat(local_8c, "s");
+                        strcat(sp54, "s");
                     }
                 }
             }
 #endif
 
-            char* r27 = local_8c;
-            char local_cc[3];
-            while (*r27) {
-                u32 r24;
-                if (*r27 >> 4 == 8 || *r27 >> 4 == 9) {
-                    local_cc[0] = local_8c[r30++];
-                    r24 = ((*r27 << 8) & ~0xFF) | (local_8c[r30] & 0xFF);
-                    local_cc[1] = local_8c[r30];
-                    local_cc[0] = 0;
-                    r30++;
-                    r27 += 2;
+            char sp14[3];
+            while (sp54[r30]) {
+                int r24;
+                u8 byte = sp54[r30];
+                if (byte >> 4 == 8 || byte >> 4 == 9) {
+                    sp14[0] = sp54[r30++];
+                    r24 = ((byte << 8) & ~0xFF);
+                    byte = sp54[r30];
+                    r24 |= (byte & 0xFF);
+                    sp14[1] = sp54[r30++];
+                    sp14[2] = 0;
                 } else {
-                    r24 = *r27;
-                    local_cc[0] = local_8c[r30];
-                    local_cc[1] = 0;
-                    r30++;
-                    r27++;
+                    r24 = byte;
+                    sp14[0] = sp54[r30++];
+                    sp14[1] = 0;
                 }
                 JUTFont::TWidth twidth;
-                int r25 = mesgControl->field_0x60;
-                f32 f29 = f32(r25) / f32(mesgControl->mRubyFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(r24, &twidth);
+                f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(r24, &twidth);
+                int temp = twidth.field_0x1;
                 if (field_0x44 == 0.0f) {
-                    field_0x44 = (int)twidth.field_0x1 * f29;
+                    f32 temp2 = temp * f29;
+                    field_0x44 = temp2;
                 } else {
-                    field_0x44 = (int)twidth.field_0x1 * f29 + mesgControl->field_0x64;
+                    f32 temp2 = temp * f29;
+                    field_0x44 += temp2 + mesgControl->getCharSpace();
                 }
-                strcat(mMesg->text[0], local_cc);
-                strcat(mMesg->text[2], local_cc);
+                strcat(mMesg->text[0], sp14);
+                strcat(mMesg->text[2], sp14);
             };
             break;
         }
@@ -530,9 +514,9 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             break;
         case 4:
             r29 = true;
-            field_0x90 = *(u16*)param_2;
+            mWaitRest = *(u16*)param_2;
             field_0x160 = 1;
-            field_0x15f = 2;
+            mStopFlag = 2;
             break;
         case 5:
         case 6:
@@ -540,7 +524,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             break;
         case 7:
             r29 = true;
-            field_0x90 = *(u16*)param_2;
+            mWaitRest = *(u16*)param_2;
             field_0x160 = 1;
             break;
         case 8:
@@ -568,59 +552,59 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
         case 27:
         case 28:
         case 29: {
-            r30 = field_0x44 + mMesg->screen->field_0x88[0].mPosTopLeftOrig.x + 0.5f;
-            int r24 = field_0x70 * g_msgHIO.field_0x5e + mMesg->screen->field_0x88[0].mPosTopLeftOrig.y + (g_msgHIO.field_0x5e * (4 - mesgControl->field_0x54)) / 2;
+            u8 r29_2 = param_1 - 10;
+            s16 r30 = field_0x44 + mMesg->screen->getTextPosX(0) + 0.5f;
+            s16 r24 = field_0x70 * g_msgHIO.field_0x5e + (mMesg->screen->getTextPosY(0) + (g_msgHIO.field_0x5e * (4 - mesgControl->getLineCount())) / 2);
             setCharacter();
             for (int i = 0; i < 18; i++) {
-                if (mMesg->outfont[i]->_set(r30, r24, mesgControl->field_0x60, field_0x6c, param_1 - 10)) {
+                if (mMesg->outfont[i]->_set(r30, r24, mesgControl->getNowFontSize(), mNowColor, r29_2)) {
                     mMesg->outfont[i]->_setAlpha(255);
                     break;
                 }
             }
-            field_0x44 += (mesgControl->field_0x60 + mesgControl->field_0x64);
-            char buffer[16];
-            sprintf(buffer, "\x1b" "CR[%d]", mesgControl->field_0x60);
-            strcat(mMesg->text[0], buffer);
-            strcat(mMesg->text[2], buffer);
-            field_0x90 = field_0x8c;
+            field_0x44 += (mesgControl->getNowFontSize() + mesgControl->getCharSpace());
+            char sp18[16];
+            sprintf(sp18, "\x1b" "CR[%d]", mesgControl->getNowFontSize());
+            strcat(mMesg->text[0], sp18);
+            strcat(mMesg->text[2], sp18);
+            mWaitRest = field_0x8c;
             r29 = true;
             break;
         }
         case 41: {
             r29 = true;
-            r30 = 0;
-            char local_b8[16];
-            fopMsgM_passwordGet(local_b8, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
-            char* r27 = local_b8;
-            char local_d0[3];
-            while (*r27) {
-                u32 r24;
-                if (*r27 >> 4 == 8 || *r27 >> 4 == 9) {
-                    local_d0[0] = local_b8[r30++];
-                    r24 = ((*r27 << 8) & ~0xFF) | (local_b8[r30] & 0xFF);
-                    local_d0[1] = local_b8[r30];
-                    local_d0[0] = 0;
-                    r30++;
-                    r27 += 2;
+            int r30 = 0;
+            char sp28[17];
+            fopMsgM_passwordGet(sp28, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
+            char sp10[3];
+            while (sp28[r30]) {
+                int r24;
+                u8 byte = sp28[r30];
+                if (byte >> 4 == 8 || byte >> 4 == 9) {
+                    sp10[0] = sp28[r30++];
+                    r24 = ((byte << 8) & ~0xFF);
+                    byte = sp28[r30];
+                    r24 |= (byte & 0xFF);
+                    sp10[1] = sp28[r30++];
+                    sp10[2] = 0;
                 } else {
-                    r24 = *r27;
-                    local_d0[0] = local_b8[r30];
-                    local_d0[1] = 0;
-                    r30++;
-                    r27++;
+                    r24 = byte;
+                    sp10[0] = sp28[r30++];
+                    sp10[1] = 0;
                 }
 
                 JUTFont::TWidth twidth;
-                int r25 = mesgControl->field_0x60;
-                f32 f29 = f32(r25) / f32(mesgControl->mMainFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(r24, &twidth);
+                int r25 = mesgControl->getNowFontSize();
+                f32 f29 = f32(r25) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(r24, &twidth);
+                int tmp = twidth.field_0x1;
                 if (field_0x44 == 0.0f) {
-                    field_0x44 = (int)twidth.field_0x1 * f29;
+                    field_0x44 = tmp * f29;
                 } else {
-                    field_0x44 = (int)twidth.field_0x1 * f29 + mesgControl->field_0x64;
+                    field_0x44 += tmp * f29 + mesgControl->getCharSpace();
                 }
-                strcat(mMesg->text[0], local_d0);
-                strcat(mMesg->text[2], local_d0);
+                strcat(mMesg->text[0], sp10);
+                strcat(mMesg->text[2], sp10);
             }
         }
         }
@@ -636,12 +620,14 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
         r29 = true;
         break;
     }
-    case 0x20000:
-        dComIfGp_setMesgCameraTagInfo(u16(param_1));
+    case 0x20000: {
+        u16 temp = param_1 & 0xFFFF;
+        dComIfGp_setMesgCameraTagInfo(temp);
         r29 = true;
         break;
+    }
     case 0x30000:
-        g_dComIfG_gameInfo.play.mMesgAnimeTagInfo = param_1;
+        dComIfGp_setMesgAnimeTagInfo(param_1);
         r29 = true;
         break;
     }
@@ -668,18 +654,20 @@ void dMesg_tSequenceProcessor::setCharacter() {
 
 /* 801E16F4-801E1858       .text ruby_character__24dMesg_tSequenceProcessorFPci */
 char* dMesg_tSequenceProcessor::ruby_character(char* param_1, int param_2) {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
-    JUTFont::TWidth twidth;
-    f32 f31 = f32(g_msgHIO.field_0x68) / f32(mesgControl->mRubyFont->getCellWidth());
-    u8 buffer[3];
-    u8* src = (u8*)(param_1 + param_2);
+    /* Nonmatching - regalloc */
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
+    f32 f31 = f32(g_msgHIO.field_0x68) / f32(mesgControl->getRubyFont()->getCellWidth());
+    char buffer[3];
+    char* src = param_1 + param_2;
     buffer[0] = src[0];
     buffer[1] = src[1];
     buffer[2] = 0;
-    int tmp2 = (src[1]);
-    tmp2 |= ((src[0] << 8));
-    mesgControl->mRubyFont->getWidthEntry(tmp2, &twidth);
+    u8 byte = src[0];
+    int tmp2 = (byte << 8);
+    byte = src[1];
+    tmp2 |= byte;
+    JUTFont::TWidth twidth;
+    mesgControl->getRubyFont()->getWidthEntry(tmp2, &twidth);
     f32 tmp = (int)twidth.field_0x1;
     if (param_2 == 1) {
         if (field_0x50 == 0.0f) {
@@ -690,7 +678,7 @@ char* dMesg_tSequenceProcessor::ruby_character(char* param_1, int param_2) {
     } else {
         field_0x54 += g_msgHIO.field_0x5c + tmp * f31;
     }
-    return (char*)buffer;
+    return buffer;
 }
 
 /* 801E1858-801E1B5C       .text do_systemTagCode__24dMesg_tSequenceProcessorFUsPCvUl */
@@ -708,19 +696,22 @@ bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2
         0xFF8200FF,
     };
 
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
+
+#if VERSION > VERSION_DEMO
     if (field_0x162) {
         mMesg->text[0][field_0x5c] = 0;
         mMesg->text[2][field_0x64] = 0;
         field_0x162 = 0;
     }
+#endif
 
     switch (param_1) {
     case 0:
         if (param_3 == 1) {
-            field_0x6c = colorTable[u8(*(u8*)param_2)];
+            mNowColor = colorTable[u8(*(u8*)param_2)];
             char buffer[32];
-            sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GM[0]", field_0x6c);
+            sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GM[0]", mNowColor);
             strcat(mMesg->text[0], buffer);
         }
         return true;
@@ -728,9 +719,9 @@ bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2
     case 6:
         if (param_3 == 2) {
             u16 tmp = *(u16*)param_2;
-            int r31 = mesgControl->field_0x60;
-            int r29 = (tmp * mesgControl->field_0x5c) / 100.0f + 0.5f;
-            mesgControl->field_0x60 = r29;
+            int r31 = mesgControl->getNowFontSize();
+            int r29 = (tmp * mesgControl->getInitFontSize()) / 100.0f + 0.5f;
+            mesgControl->setNowFontSize(r29);
             if (field_0x70 == 0) {
                 dMesg_fontsizeCenter(mMesg, r31, r29);
             } else {
@@ -745,7 +736,7 @@ bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2
                     strcat(mMesg->text[2], buffer);
                     s_strSizeFlag = true;
                 }
-                dMesg_fontsizeCenter(mMesg, r31, r29, mesgControl->field_0x5c, g_msgHIO.field_0x5e);
+                dMesg_fontsizeCenter(mMesg, r31, r29, mesgControl->getInitFontSize(), g_msgHIO.field_0x5e);
             }
         }
         return true;
@@ -753,7 +744,7 @@ bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2
         if (field_0x44 == 0.0f) {
             field_0x48 = field_0x44;
         } else {
-            field_0x48 = field_0x44 + mesgControl->field_0x64;
+            field_0x48 = field_0x44 + mesgControl->getCharSpace();
         }
         field_0x54 = 0.0f;
         strcpy(field_0x97, "");
@@ -775,22 +766,21 @@ dMesg_tMeasureProcessor::dMesg_tMeasureProcessor(JMessage::TControl* param_1, in
     field_0x50 = 0;
     field_0x54 = 0;
     linemax = 4;
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
-    mesgControl->field_0x60 = mesgControl->field_0x5c;
-    mesgControl->field_0x54 = 0;
-    mesgControl->field_0x68 = 0;
-    mesgControl->field_0x70 = 0;
-    mesgControl->field_0x71 = 0;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setLineCount(0);
+    mesgControl->setCharCode(0);
+    mesgControl->setHeaderOff();
+    mesgControl->setCode16FgOff();
     for (int i = 0; i < 4; i++) {
         field_0x38[i] = 0.0f;
-        mesgControl->field_0x44[i] = 0.0f;
+        mesgControl->setLineLength(i, 0.0f);
     }
 }
 
 /* 801E1C00-801E1EC0       .text do_character__23dMesg_tMeasureProcessorFi */
 void dMesg_tMeasureProcessor::do_character(int param_1) {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int r30 = field_0x50 - field_0x4c;
     bool r29 = false;
     JUTFont::TWidth twidth;
@@ -799,47 +789,46 @@ void dMesg_tMeasureProcessor::do_character(int param_1) {
             retFlag++;
         }
         field_0x50++;
-        mesgControl->field_0x70 = 0;
+        mesgControl->setHeaderOff();
     } else {
         if (retFlag && r30 >= 0 && r30 < linemax) {
             retFlag = 0;
         }
         r29 = true;
-        u32 r26 = nowMesgCode;
-        JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r26 >> 16);
-        void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r26);
-        unk_messageData stack_58 = *(unk_messageData*)messageData;
-        if (dComIfGs_getClearCount() == 0 && stack_58.field_0xc == 12) {
+        mesg_entry stack_58 = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
+        if (dComIfGs_getClearCount() == 0 && stack_58.mTextboxType == 12) {
             for (int i = 0; i < 97; i++) {
-                // TODO: zfont
+                if (zfont[i][0] == u16(param_1)) {
+                    param_1 = zfont[i][1];
+                    break;
+                }
             }
         }
-        mesgControl->field_0x68 = param_1;
+        mesgControl->setCharCode(param_1);
     }
     if (r29 && r30 >= 0 && r30 <= linemax) {
-        int r28 = mesgControl->field_0x60;
-        f32 f31 =  f32(r28) / f32(mesgControl->mMainFont->getCellWidth());
-        mesgControl->mMainFont->getWidthEntry(mesgControl->field_0x68, &twidth);
+        f32 f31 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+        int char_code = mesgControl->getCharCode();
+        mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
         int tmp = twidth.field_0x1;
-        if (mesgControl->field_0x70 == 0) {
+        if (!mesgControl->isHeader()) {
             field_0x38[r30] += tmp * f31;
-            mesgControl->field_0x70 = 1;
+            mesgControl->setHeaderOn();
         } else {
-            field_0x38[r30] += mesgControl->field_0x64 + tmp * f31;
+            field_0x38[r30] += mesgControl->getCharSpace() + tmp * f31;
         }
     }
 }
 
 /* 801E1EC0-801E1F9C       .text do_end__23dMesg_tMeasureProcessorFv */
 void dMesg_tMeasureProcessor::do_end() {
-    /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int var2 = (field_0x50 - field_0x4c) + 1;
     if (var2 > linemax) {
         var2 = linemax;
     }
-    mesgControl->field_0x54 = var2;
-    mesgControl->field_0x58 = field_0x4c + var2;
+    mesgControl->setLineCount(var2);
+    mesgControl->setLineStart(field_0x4c + var2);
 
     for (int i = 0; i < 4; i++) {
         f32 var1;
@@ -848,17 +837,16 @@ void dMesg_tMeasureProcessor::do_end() {
         } else if (field_0x54 == 3 && (i == 0 || i == 1 || i == 2)) {
             var1 = field_0x48;
         } else {
-            var1 = (mesgControl->field_0x6c - field_0x38[i]);
-            var1 *= 0.5f;
+            var1 = (mesgControl->getTextBoxWidth() - field_0x38[i]) / 2.0f;
         }
-        mesgControl->field_0x44[i] = var1;
+        mesgControl->setLineLength(i, var1);
     }
 }
 
 /* 801E1F9C-801E27BC       .text do_tag__23dMesg_tMeasureProcessorFUlPCvUl */
 bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param_3) {
     /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int r27 = field_0x50 - field_0x4c;
     bool r26 = false;
     switch(param_1 & 0xFF0000) {
@@ -867,27 +855,25 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
         case 0: {
             r26 = true;
             int r25 = 0;
-            char local_7c[17];
-            u32 r23 = nowMesgCode;
-            JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r23 >> 16);
-            void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r23);
-            unk_messageData stack_98 = *(unk_messageData*)messageData;
+            char sp44[17];
+            mesg_entry stack_98 = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
 
-            strcpy(local_7c, dComIfGs_getPlayerName());
+            strcpy(sp44, dComIfGs_getPlayerName());
 #if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
-                if (stack_98.field_0x4 == 0x33b ||
-                    stack_98.field_0x4 == 0xc8b ||
-                    stack_98.field_0x4 == 0x1d21 ||
-                    stack_98.field_0x4 == 0x31d7 ||
-                    stack_98.field_0x4 == 0x37dd ||
-                    stack_98.field_0x4 == 0x37de
+                // Specific msg nos that have the 's possessive after the player's name.
+                if (stack_98.mMsgNo == 0x33b ||
+                    stack_98.mMsgNo == 0xc8b ||
+                    stack_98.mMsgNo == 0x1d21 ||
+                    stack_98.mMsgNo == 0x31d7 ||
+                    stack_98.mMsgNo == 0x37dd ||
+                    stack_98.mMsgNo == 0x37de
                 ) {
-                    char c = local_7c[strlen(local_7c) - 1];
+                    char c = sp44[strlen(sp44) - 1];
                     if (c == 's' || c == 'S' || c == 'z' || c == 'Z' || c == 'x' || c == 'X') {
-                        strcat(local_7c, "'");
+                        strcat(sp44, "'");
                     } else {
-                        strcat(local_7c, "s");
+                        strcat(sp44, "s");
                     }
                 }
             }
@@ -895,28 +881,29 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             if (retFlag && r27 >= 0 && r27 < linemax) {
                 retFlag = 0;
             }
-            char* r24 = local_7c;
-            while (*r24) {
-                u32 r22;
-                if (*r24 >> 4 == 8 || *r24 >> 4 == 9) {
-                    r22 = ((local_7c[r25++] << 8) & ~0xFF) | (local_7c[r25] & 0xFF);
-                    r25++;
-                    r24 += 2;
+            while (sp44[r25]) {
+                int r22;
+                u8 byte = sp44[r25];
+                if (byte >> 4 == 8 || byte >> 4 == 9) {
+                    byte = sp44[r25++];
+                    r22 = ((byte << 8) & ~0xFF);
+                    byte = sp44[r25++];
+                    r22 |= (byte & 0xFF);
                 } else {
-                    r22 = local_7c[r25];
-                    r25++;
-                    r24++;
+                    byte = sp44[r25++];
+                    r22 = byte;
                 }
 
                 JUTFont::TWidth twidth;
-                int r23 = mesgControl->field_0x60;
-                f32 f30 = f32(r23) / f32(mesgControl->mMainFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(r22, &twidth);
+                int r23 = mesgControl->getNowFontSize();
+                f32 f30 = f32(r23) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(r22, &twidth);
+                int tmp = twidth.field_0x1;
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
-                        field_0x38[r27] = (int)twidth.field_0x1 * f30;
+                        field_0x38[r27] = tmp * f30;
                     } else {
-                        field_0x38[r27] += (int)twidth.field_0x1 * f30 + mesgControl->field_0x64;
+                        field_0x38[r27] += tmp * f30 + mesgControl->getCharSpace();
                     }
                 }
             }
@@ -947,7 +934,7 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
                 retFlag = 0;
             }
             if (r27 >= 0 && r27 <= 3) {
-                field_0x38[r27] += (mesgControl->field_0x60 + mesgControl->field_0x64);
+                field_0x38[r27] += (mesgControl->getNowFontSize() + mesgControl->getCharSpace());
             }
             r26 = true;
             break;
@@ -964,14 +951,13 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             field_0x54 = 2;
             for (int i = 0; i < 2; i++) {
                 JUTFont::TWidth twidth;
-                int r23 = mesgControl->field_0x60;
-                f32 f29 =  f32(r23) / f32(mesgControl->mMainFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(72, &twidth);
+                f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(72, &twidth);
                 int tmp = twidth.field_0x1;
                 if (field_0x48 == 0.0f) {
-                    field_0x48 += tmp * f29;
+                    field_0x48 = tmp * f29;
                 } else {
-                    field_0x48 += mesgControl->field_0x64 + tmp * f29;
+                    field_0x48 += mesgControl->getCharSpace() + tmp * f29;
                 }
             }
             r26 = true;
@@ -980,14 +966,13 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             field_0x54 = 3;
             for (int i = 0; i < 2; i++) {
                 JUTFont::TWidth twidth;
-                int r23 = mesgControl->field_0x60;
-                f32 f29 =  f32(r23) / f32(mesgControl->mMainFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(72, &twidth);
+                f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(72, &twidth);
                 int tmp = twidth.field_0x1;
                 if (field_0x48 == 0.0f) {
-                    field_0x48 += tmp * f29;
+                    field_0x48 = tmp * f29;
                 } else {
-                    field_0x48 += mesgControl->field_0x64 + tmp * f29;
+                    field_0x48 += mesgControl->getCharSpace() + tmp * f29;
                 }
             }
             r26 = true;
@@ -995,33 +980,33 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
         case 41: {
             r26 = true;
             int r25 = 0;
-            char local_a8[16];
-            fopMsgM_passwordGet(local_a8, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
+            char sp18[17];
+            fopMsgM_passwordGet(sp18, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
             if (retFlag && r27 >= 0 && r27 < linemax) {
                 retFlag = 0;
             }
 
-            char* r24 = local_a8;
-            while (*r24) {
-                u32 r22;
-                if (*r24 >> 4 == 8 || *r24 >> 4 == 9) {
-                    r22 = ((local_a8[r25++] << 8) & ~0xFF) | (local_a8[r25] & 0xFF);
-                    r25++;
-                    r24 += 2;
+            while (sp18[r25]) {
+                int r22;
+                u8 byte = sp18[r25];
+                if (byte >> 4 == 8 || byte >> 4 == 9) {
+                    byte = sp18[r25++];
+                    r22 = ((byte << 8) & ~0xFF);
+                    byte = sp18[r25++];
+                    r22 |= (byte & 0xFF);
                 } else {
-                    r22 = local_a8[r25];
-                    r25++;
-                    r24++;
+                    byte = sp18[r25++];
+                    r22 = byte;
                 }
                 JUTFont::TWidth twidth;
-                int r23 = mesgControl->field_0x60;
-                f32 f30 = f32(r23) / f32(mesgControl->mMainFont->getCellWidth());
-                mesgControl->mMainFont->getWidthEntry(r22, &twidth);
+                f32 f30 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
+                mesgControl->getMainFont()->getWidthEntry(r22, &twidth);
+                int tmp = twidth.field_0x1;
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
-                        field_0x38[r27] = (int)twidth.field_0x1 * f30;
+                        field_0x38[r27] = tmp * f30;
                     } else {
-                        field_0x38[r27] += (int)twidth.field_0x1 * f30 + mesgControl->field_0x64;
+                        field_0x38[r27] += tmp * f30 + mesgControl->getCharSpace();
                     }
                 }
             }
@@ -1046,13 +1031,13 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
 /* 801E27BC-801E28A8       .text do_systemTagCode__23dMesg_tMeasureProcessorFUsPCvUl */
 bool dMesg_tMeasureProcessor::do_systemTagCode(u16 param_1, const void* param_2, u32 param_3) {
     /* Nonmatching */
-    dMesg_tControl* mesgControl = (dMesg_tControl*)mControl;
+    dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int var2 = field_0x50 - field_0x4c;
     switch (param_1) {
     case 1:
         if (param_3 == 2) {
             u16 var1 = *(u16*)param_2;
-            mesgControl->field_0x60 = (var1 * mesgControl->field_0x5c) / 100.0f + 0.5f;
+            mesgControl->setNowFontSize((var1 * mesgControl->getInitFontSize()) / 100.0f + 0.5f);
             if (var2 >= 1 && var2 <= 2 && var1 > 100 && m_strSizeFlag == 0) {
                 linemax--;
                 m_strSizeFlag = true;
@@ -1153,15 +1138,16 @@ bool dMesg_tRenderingProcessor::do_systemTagCode(u16 param_1, const void*, u32) 
 
 /* 801E29A4-801E2C04       .text setCommonData__18dMesg_screenData_cFv */
 void dMesg_screenData_c::setCommonData() {
-    /* Nonmatching */
     ((J2DTextBox*)field_0x88[0].pane)->setFont(field_0x10);
     ((J2DTextBox*)field_0x88[1].pane)->setFont(field_0x14);
     ((J2DTextBox*)field_0x88[2].pane)->setFont(field_0x10);
     ((J2DTextBox*)field_0x88[3].pane)->setFont(field_0x14);
 
-    f32 tmp = g_msgHIO.field_0x70;
-    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(tmp, tmp);
-    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(tmp, tmp);
+    J2DTextBox::TFontSize size;
+    size.mSizeX = g_msgHIO.field_0x70;
+    size.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(size);
+    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(size);
 
     ((J2DTextBox*)field_0x88[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)field_0x88[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
@@ -1170,7 +1156,7 @@ void dMesg_screenData_c::setCommonData() {
 
     ((J2DTextBox*)field_0x88[0].pane)->setLineSpace(g_msgHIO.field_0x5e);
     ((J2DTextBox*)field_0x88[2].pane)->setLineSpace(g_msgHIO.field_0x5e);
-    field_0x1a8 = 0;
+    mTimer = 0;
     field_0x1b0.set(((J2DPicture*)field_0x18.pane)->getBlack());
     field_0x1ac.set(((J2DPicture*)field_0x18.pane)->getWhite());
 }
@@ -1179,11 +1165,11 @@ void dMesg_screenData_c::setCommonData() {
 void dMesg_screenData_c::initString(char* param_1, int param_2) {
     char buffer[24];
 
-    u32 tmp = dMesg_gpSequenceProcessor->field_0x6c;
+    u32 color = dMesg_gpSequenceProcessor->getNowColor();
 
     switch (param_2){
     case 0:
-        sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GM[0]", tmp);
+        sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GM[0]", color);
         strcpy(param_1, buffer);
         break;
     case 1:
@@ -1215,53 +1201,52 @@ void dMesg_screenData_c::arwAnimeInit() {
     fopMsgM_setNowAlphaZero(&field_0x50);
     field_0x50.mPosCenter = field_0x50.mPosCenterOrig;
     field_0x50.mSize = field_0x50.mSizeOrig;
-    field_0x1a8 = 0;
+    resetTimer();
 }
 
 /* 801E2D98-801E315C       .text arwAnime__18dMesg_screenData_cFv */
 void dMesg_screenData_c::arwAnime() {
-    /* Nonmatching */
     static const f32 scaleX[] = {1.0f, 1.3f, 0.8f, 1.2f, 1.0f};
     static const f32 scaleY[] = {1.0f, 0.3f, 1.1f, 0.8f, 1.0f};
     static const s16 step[] = {60, 67, 71, 74, 76};
 
-    field_0x1a8++;
+    mTimer++;
     if (field_0x50.mNowAlpha < field_0x50.mInitAlpha) {
-        fopMsgM_setNowAlpha(&field_0x50, fopMsgM_valueIncrease(10, field_0x1a8, 0));
-        if (field_0x1a8 == 10) {
-            field_0x1a8 = 0;
+        fopMsgM_setNowAlpha(&field_0x50, fopMsgM_valueIncrease(10, mTimer, 0));
+        if (mTimer == 10) {
+            resetTimer();
         }
     } else {
-        f32 var1, var3;
-        if (field_0x1a8 <= step[0]) {
-            var1 = var3 = 1.0f;
-        } else if (field_0x1a8 <= step[1]) {
-            var3 = f32(field_0x1a8) - f32(step[0]);
-            var1 = (var3 * var3) / (f32(step[1] - step[0]) * f32(step[1] - step[0]));
-            var3 = var1 * (scaleX[0] - scaleX[1]) + scaleX[0];
-            var1 = var1 * (scaleY[0] - scaleY[1]) + scaleY[0];
-        } else if (field_0x1a8 <= step[2]) {
-            var3 = f32(field_0x1a8) - f32(step[0]);
-            var1 = (var3 * var3) / (f32(step[2] - step[1]) * f32(step[2] - step[1]));
-            var3 = var1 * (scaleX[1] - scaleX[2]) + scaleX[1];
-            var1 = var1 * (scaleY[1] - scaleY[2]) + scaleY[1];
-        } else if (field_0x1a8 <= step[3]) {
-            var3 = f32(field_0x1a8) - f32(step[0]);
-            var1 = (var3 * var3) / (f32(step[3] - step[2]) * f32(step[3] - step[2]));
-            var3 = var1 * (scaleX[2] - scaleX[3]) + scaleX[2];
-            var1 = var1 * (scaleY[2] - scaleY[3]) + scaleY[2];
-        } else if (field_0x1a8 <= step[4]) {
-            var3 = f32(field_0x1a8) - f32(step[0]);
-            var1 = (var3 * var3) / (f32(step[4] - step[3]) * f32(step[4] - step[3]));
-            var3 = var1 * (scaleX[3] - scaleX[4]) + scaleX[3];
-            var1 = var1 * (scaleY[3] - scaleY[4]) + scaleY[3];
+        f32 f1, f3;
+        if (mTimer <= step[0]) {
+            f1 = f3 = 1.0f;
+        } else if (mTimer <= step[1]) {
+            f32 temp = f32(mTimer) - f32(step[0]);
+            temp = (temp * temp) / (f32(step[1] - step[0]) * f32(step[1] - step[0]));
+            f3 = temp * (scaleX[1] - scaleX[0]) + scaleX[0];
+            f1 = temp * (scaleY[1] - scaleY[0]) + scaleY[0];
+        } else if (mTimer <= step[2]) {
+            f32 temp = f32(mTimer) - f32(step[1]);
+            temp = (temp * temp) / (f32(step[2] - step[1]) * f32(step[2] - step[1]));
+            f3 = temp * (scaleX[2] - scaleX[1]) + scaleX[1];
+            f1 = temp * (scaleY[2] - scaleY[1]) + scaleY[1];
+        } else if (mTimer <= step[3]) {
+            f32 temp = f32(mTimer) - f32(step[2]);
+            temp = (temp * temp) / (f32(step[3] - step[2]) * f32(step[3] - step[2]));
+            f3 = temp * (scaleX[3] - scaleX[2]) + scaleX[2];
+            f1 = temp * (scaleY[3] - scaleY[2]) + scaleY[2];
+        } else if (mTimer <= step[4]) {
+            f32 temp = f32(mTimer) - f32(step[3]);
+            temp = (temp * temp) / (f32(step[4] - step[3]) * f32(step[4] - step[3]));
+            f3 = temp * (scaleX[4] - scaleX[3]) + scaleX[3];
+            f1 = temp * (scaleY[4] - scaleY[3]) + scaleY[3];
         } else {
-            var1 = var3 = 1.0f;
-            field_0x1a8 = 0;
+            f1 = f3 = 1.0f;
+            resetTimer();
         }
-        field_0x50.mSize.x = field_0x50.mSizeOrig.x * var3;
-        field_0x50.mSize.y = field_0x50.mSizeOrig.y * var1;
-        field_0x50.mPosCenter.y = f32(g_msgHIO.field_0x66) + (f32(field_0x1a4) - field_0x50.mSize.y * 0.5f);
+        field_0x50.mSize.x = field_0x50.mSizeOrig.x * f3;
+        field_0x50.mSize.y = field_0x50.mSizeOrig.y * f1;
+        field_0x50.mPosCenter.y = f32(g_msgHIO.field_0x66) + (f32(field_0x1a4) - field_0x50.mSize.y / 2.0f);
         fopMsgM_cposMove(&field_0x50);
     }
 }
@@ -1269,7 +1254,7 @@ void dMesg_screenData_c::arwAnime() {
 /* 801E315C-801E3194       .text dotAnimeInit__18dMesg_screenData_cFv */
 void dMesg_screenData_c::dotAnimeInit() {
     fopMsgM_setNowAlphaZero(&field_0x18);
-    field_0x1a8 = 0;
+    resetTimer();
 }
 
 /* 801E3194-801E36A8       .text dotAnime__18dMesg_screenData_cFv */
@@ -1284,22 +1269,22 @@ void dMesg_screenData_c::dotAnime() {
     f32 f25 = 255.0f - field_0x18.mInitAlpha;
     JUtility::TColor black;
     JUtility::TColor white;
-    field_0x1a8++;
+    mTimer++;
     black.a = field_0x1b0.a;
     white.a = field_0x1ac.a;
     if (field_0x18.mNowAlpha < field_0x18.mInitAlpha) {
-        fopMsgM_setNowAlpha(&field_0x18, fopMsgM_valueIncrease(10, field_0x1a8, 0));
-        if (field_0x1a8 == 10) {
-            field_0x1a8 = 0;
+        fopMsgM_setNowAlpha(&field_0x18, fopMsgM_valueIncrease(10, mTimer, 0));
+        if (mTimer == 10) {
+            resetTimer();
         }
     } else {
-        if (field_0x1a8 >= 60) {
+        if (mTimer >= 60) {
             black = field_0x1b0;
             white = field_0x1ac;
             fopMsgM_setInitAlpha(&field_0x18);
-            field_0x1a8 = 0;
-        } else if (field_0x1a8 > 30) {
-            f32 tmp = fopMsgM_valueIncrease(30, 60 - field_0x1a8, 0);
+            resetTimer();
+        } else if (mTimer > 30) {
+            f32 tmp = fopMsgM_valueIncrease(30, 60 - mTimer, 0);
             black.r = field_0x1b0.r + f31 * tmp;
             black.g = field_0x1b0.g + f30 * tmp;
             black.b = field_0x1b0.b + f29 * tmp;
@@ -1308,7 +1293,7 @@ void dMesg_screenData_c::dotAnime() {
             white.b = field_0x1ac.b + f26 * tmp;
             field_0x18.mNowAlpha = field_0x18.mInitAlpha + f25 * tmp;
         } else {
-            f32 tmp = fopMsgM_valueIncrease(30, field_0x1a8, 0);
+            f32 tmp = fopMsgM_valueIncrease(30, mTimer, 0);
             black.r = field_0x1b0.r + f31 * tmp;
             black.g = field_0x1b0.g + f30 * tmp;
             black.b = field_0x1b0.b + f29 * tmp;
@@ -1367,8 +1352,8 @@ bool dMesg_screenDataTalk_c::openAnime() {
     /* Nonmatching */
     f32 f31, f30, f29, f28, tmp;
     bool ret = false;
-    field_0x1a8++;
-    if (field_0x1a8 >= 13) {
+    mTimer++;
+    if (mTimer >= 13) {
         field_0x168.mPosCenter = field_0x168.mPosCenterOrig;
         fopMsgM_paneScaleXY(&field_0x168, 1.0f);
         fopMsgM_setInitAlpha(&field_0x168);
@@ -1377,23 +1362,23 @@ bool dMesg_screenDataTalk_c::openAnime() {
         }
         ret = true;
     } else {
-        if (field_0x1a8 < 10) {
+        if (mTimer < 10) {
             f31 = 100.0f;
             f30 = (f31 * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
             f29 = field_0x168.mSizeOrig.x - f31;
             f28 = field_0x168.mSizeOrig.y - f30;
-            tmp = fopMsgM_valueIncrease(10, field_0x1a8, 0);
+            tmp = fopMsgM_valueIncrease(10, mTimer, 0);
         } else {
             f31 = field_0x168.mSizeOrig.x;
             f30 = field_0x168.mSizeOrig.y;
             f29 = 580.0f - f31;
             f28 = (f30 * 580.0f) / f31 - f30;
-            tmp = JMASSin((field_0x1a8 - 10) * (0x10000 / 6.0f));
+            tmp = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
         }
         field_0x168.mSize.x = f31 + f29 * tmp;
         field_0x168.mSize.y = f30 + f28 * tmp;
         fopMsgM_cposMove(&field_0x168);
-        field_0x1b4 = fopMsgM_valueIncrease(13, field_0x1a8, 0);
+        field_0x1b4 = fopMsgM_valueIncrease(13, mTimer, 0);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
     }
     return ret;
@@ -1401,25 +1386,26 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     bool ret = false;
-    if (field_0x1a8 == 0) {
+    if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
             fopMsgM_setNowAlphaZero(&field_0x88[i]);
         }
     }
-    field_0x1a8++;
-    if (field_0x1a8 >= 10) {
+    mTimer++;
+    if (mTimer >= 10) {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
         f32 f31 = field_0x168.mSizeOrig.x;
         f32 f30 = field_0x168.mSizeOrig.y;
-        f32 f29 = (f30 / f31) * 620.0f - f30;
-        f32 tmp = fopMsgM_valueIncrease(10, field_0x1a8, 0);
-        field_0x168.mSize.x = f31 + (620.0f - f31) * tmp;
-        field_0x168.mSize.y = f30 + f29 * tmp;
-        field_0x1b4 = 1.0f - tmp;
+        f32 tmp2 = 620.0f - f31;
+        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
+        field_0x168.mSize.x = f31 + tmp2 * f1;
+        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x1b4 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
     }
@@ -1428,7 +1414,6 @@ bool dMesg_screenDataTalk_c::closeAnime() {
 
 /* 801E3CE0-801E402C       .text setTextPosition__22dMesg_screenDataTalk_cFUc */
 void dMesg_screenDataTalk_c::setTextPosition(u8 param_1) {
-    /* Nonmatching */
     if (param_1 == 1) {
         field_0x168.mPosTopLeftOrig.y = 21.0f;
         field_0x50.mPosTopLeftOrig.y = 180.0f;
@@ -1436,7 +1421,7 @@ void dMesg_screenDataTalk_c::setTextPosition(u8 param_1) {
         field_0x88[0].mPosTopLeftOrig.y = messageOffsetY + 64;
         field_0x88[1].mPosTopLeftOrig.y = messageOffsetY + 51;
         field_0x88[2].mPosTopLeftOrig.y = messageOffsetY + 66;
-        field_0x88[3].mPosTopLeftOrig.y = messageOffsetY + 63;
+        field_0x88[3].mPosTopLeftOrig.y = messageOffsetY + 53;
     } else if (param_1 == 2) {
         field_0x168.mPosTopLeftOrig.y = 144.0f;
         field_0x50.mPosTopLeftOrig.y = 303.0f;
@@ -1454,19 +1439,19 @@ void dMesg_screenDataTalk_c::setTextPosition(u8 param_1) {
         field_0x88[2].mPosTopLeftOrig.y = messageOffsetY + 320;
         field_0x88[3].mPosTopLeftOrig.y = messageOffsetY + 307;
     }
-    field_0x168.mPosCenterOrig.y = field_0x168.mPosTopLeftOrig.y + field_0x168.mSizeOrig.y * 0.5f;
+    field_0x168.mPosCenterOrig.y = field_0x168.mPosTopLeftOrig.y + field_0x168.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x168, 0.0f, 0.0f);
-    field_0x50.mPosCenterOrig.y = field_0x50.mPosTopLeftOrig.y + field_0x50.mSizeOrig.y * 0.5f;
+    field_0x50.mPosCenterOrig.y = field_0x50.mPosTopLeftOrig.y + field_0x50.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x50, 0.0f, 0.0f);
-    field_0x18.mPosCenterOrig.y = field_0x18.mPosTopLeftOrig.y + field_0x18.mSizeOrig.y * 0.5f;
+    field_0x18.mPosCenterOrig.y = field_0x18.mPosTopLeftOrig.y + field_0x18.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x18, 0.0f, 0.0f);
-    field_0x88[0].mPosCenterOrig.y = field_0x88[0].mPosTopLeftOrig.y + field_0x88[0].mSizeOrig.y * 0.5f;
+    field_0x88[0].mPosCenterOrig.y = field_0x88[0].mPosTopLeftOrig.y + field_0x88[0].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[0], 0.0f, 0.0f);
-    field_0x88[1].mPosCenterOrig.y = field_0x88[1].mPosTopLeftOrig.y + field_0x88[1].mSizeOrig.y * 0.5f;
+    field_0x88[1].mPosCenterOrig.y = field_0x88[1].mPosTopLeftOrig.y + field_0x88[1].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[1], 0.0f, 0.0f);
-    field_0x88[2].mPosCenterOrig.y = field_0x88[2].mPosTopLeftOrig.y + field_0x88[2].mSizeOrig.y * 0.5f;
+    field_0x88[2].mPosCenterOrig.y = field_0x88[2].mPosTopLeftOrig.y + field_0x88[2].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[2], 0.0f, 0.0f);
-    field_0x88[3].mPosCenterOrig.y = field_0x88[3].mPosTopLeftOrig.y + field_0x88[3].mSizeOrig.y * 0.5f;
+    field_0x88[3].mPosCenterOrig.y = field_0x88[3].mPosTopLeftOrig.y + field_0x88[3].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[3], 0.0f, 0.0f);
     field_0x1a4 = field_0x50.mPosTopLeft.y + field_0x50.mSizeOrig.y;
 }
@@ -1486,7 +1471,6 @@ void dMesg_screenDataTalk_c::draw() {
 
 /* 801E40CC-801E48D0       .text createScreen__22dMesg_screenDataItem_cFv */
 void dMesg_screenDataItem_c::createScreen() {
-    /* Nonmatching */
     scrn = new J2DScreen();
     JUT_ASSERT(2421, scrn != NULL);
 
@@ -1525,43 +1509,40 @@ void dMesg_screenDataItem_c::createScreen() {
         field_0x88[3].pane->show();
         messageOffsetY = 0;
     }
-    u32 r30 = nowMesgCode;
-    JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r30 >> 16);
-    void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r30);
-    unk_messageData stack_message = *(unk_messageData*)messageData;
-    if (dItem_data::getTexture(stack_message.field_0x4 - 101)) {
-        JKRArchive::readTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.field_0x4 - 101), dComIfGp_getItemIconArchive());
+    mesg_entry stack_message = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
+    if (dItem_data::getTexture(stack_message.mMsgNo - 101)) {
+        JKRArchive* archive = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
         ((J2DPicture*)field_0x1b4.pane)->changeTexture(texBuffer, 0);
     }
     field_0x168.mPosTopLeftOrig.y += 1.0f;
-    field_0x168.mPosCenterOrig.y = field_0x168.mPosTopLeftOrig.y + field_0x168.mPosCenterOrig.y * 0.5f;
+    field_0x168.mPosCenterOrig.y = field_0x168.mPosTopLeftOrig.y + field_0x168.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x168, 0.0f, 0.0f);
     field_0x50.mPosTopLeftOrig.y += 1.0f;
-    field_0x50.mPosCenterOrig.y = field_0x50.mPosTopLeftOrig.y + field_0x50.mPosCenterOrig.y * 0.5f;
+    field_0x50.mPosCenterOrig.y = field_0x50.mPosTopLeftOrig.y + field_0x50.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x50, 0.0f, 0.0f);
     field_0x18.mPosTopLeftOrig.y += 1.0f;
-    field_0x18.mPosCenterOrig.y = field_0x18.mPosTopLeftOrig.y + field_0x18.mPosCenterOrig.y * 0.5f;
+    field_0x18.mPosCenterOrig.y = field_0x18.mPosTopLeftOrig.y + field_0x18.mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x18, 0.0f, 0.0f);
     field_0x88[0].mPosTopLeftOrig.y -= (messageOffsetY + 5);
-    field_0x88[0].mPosCenterOrig.y = field_0x88[0].mPosTopLeftOrig.y + field_0x88[0].mPosCenterOrig.y * 0.5f;
+    field_0x88[0].mPosCenterOrig.y = field_0x88[0].mPosTopLeftOrig.y + field_0x88[0].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[0], 0.0f, 0.0f);
     field_0x88[1].mPosTopLeftOrig.y -= (messageOffsetY + 8);
-    field_0x88[1].mPosCenterOrig.y = field_0x88[1].mPosTopLeftOrig.y + field_0x88[1].mPosCenterOrig.y * 0.5f;
+    field_0x88[1].mPosCenterOrig.y = field_0x88[1].mPosTopLeftOrig.y + field_0x88[1].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[1], 0.0f, 0.0f);
     field_0x88[2].mPosTopLeftOrig.y -= (messageOffsetY + 5);
-    field_0x88[2].mPosCenterOrig.y = field_0x88[2].mPosTopLeftOrig.y + field_0x88[2].mPosCenterOrig.y * 0.5f;
+    field_0x88[2].mPosCenterOrig.y = field_0x88[2].mPosTopLeftOrig.y + field_0x88[2].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[2], 0.0f, 0.0f);
     field_0x88[3].mPosTopLeftOrig.y -= (messageOffsetY + 8);
-    field_0x88[3].mPosCenterOrig.y = field_0x88[3].mPosTopLeftOrig.y + field_0x88[3].mPosCenterOrig.y * 0.5f;
+    field_0x88[3].mPosCenterOrig.y = field_0x88[3].mPosTopLeftOrig.y + field_0x88[3].mSizeOrig.y / 2.0f;
     fopMsgM_paneTrans(&field_0x88[3], 0.0f, 0.0f);
     setCommonData();
     field_0x1a4 = field_0x50.mPosTopLeft.y + field_0x50.mSizeOrig.y;
     if (nowMesgCode == 0x113A) {
         field_0x1b4.pane->hide();
     } else if (nowMesgCode == 0x7f) {
-        J2DPane* pane = field_0x1b4.pane;
-        f32 y = (field_0x1b4.mSize.y * 0.5f + pane->mScreenBounds.i.y - 240.0f) - 10.0f;
-        f32 x = (field_0x1b4.mSize.x * 0.5f + pane->mScreenBounds.i.x - 320.0f) + 10.0f;
+        f32 y = (field_0x1b4.mSize.y / 2.0f + field_0x1b4.pane->getGlbBounds().i.y - 240.0f) - 10.0f;
+        f32 x = (field_0x1b4.mSize.x / 2.0f + field_0x1b4.pane->getGlbBounds().i.x - 320.0f) + 10.0f;
         cXyz pos(x, y, 0.0f);
         field_0x3e4 = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_02E1, &pos);
     }
@@ -1587,12 +1568,12 @@ void dMesg_screenDataItem_c::deleteScreen() {
 
 /* 801E49B4-801E4AE8       .text openAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::openAnime() {
-    /* Nonmatching */
+    /* Nonmatching - retail-only instruction ordering */
     static const f32 frameScale[] = {0.6f, 1.1f, 1.0f};
 
     bool ret = false;
-    field_0x1a8++;
-    if (field_0x1a8 >= 8) {
+    mTimer++;
+    if (mTimer >= 8) {
         field_0x168.mPosCenter.x = field_0x168.mPosCenterOrig.x;
         field_0x168.mPosCenter.y = field_0x168.mPosCenterOrig.y;
         fopMsgM_paneScaleXY(&field_0x168, 1.0f);
@@ -1601,14 +1582,15 @@ bool dMesg_screenDataItem_c::openAnime() {
             fopMsgM_setInitAlpha(&field_0x88[i]);
         }
         ret = true;
-    } else if (field_0x1a8 <= 5) {
-        f32 f31 = fopMsgM_valueIncrease(5, field_0x1a8, 0);
-        f32 tmp = (frameScale[1] - frameScale[0]) + frameScale[0];
-        fopMsgM_paneScaleXY(&field_0x168, f31 * (frameScale[1] - frameScale[0]) + frameScale[0]);
+    } else if (mTimer <= 5) {
+        f32 f31 = fopMsgM_valueIncrease(5, mTimer, 0);
+        f32 tmp = f31 * (frameScale[1] - frameScale[0]) + frameScale[0];
+        fopMsgM_paneScaleXY(&field_0x168, tmp);
         fopMsgM_setNowAlpha(&field_0x168, f31);
     } else {
-        f32 tmp = fopMsgM_valueIncrease(3, field_0x1a8 - 5, 0);
-        fopMsgM_paneScaleXY(&field_0x168, tmp * (frameScale[2] - frameScale[1]) + frameScale[1]);
+        f32 f1 = fopMsgM_valueIncrease(3, mTimer - 5, 0);
+        f32 tmp = f1 * (frameScale[2] - frameScale[1]) + frameScale[1];
+        fopMsgM_paneScaleXY(&field_0x168, tmp);
         fopMsgM_setInitAlpha(&field_0x168);
     }
     return ret;
@@ -1616,9 +1598,9 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     bool ret = false;
-    if (field_0x1a8 == 0) {
+    if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
             fopMsgM_setNowAlphaZero(&field_0x88[i]);
         }
@@ -1628,18 +1610,19 @@ bool dMesg_screenDataItem_c::closeAnime() {
             fopMsgM_setNowAlphaZero(&field_0x224[i]);
         }
     }
-    field_0x1a8++;
-    if (field_0x1a8 >= 10) {
+    mTimer++;
+    if (mTimer >= 10) {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
         f32 f31 = field_0x168.mSizeOrig.x;
         f32 f30 = field_0x168.mSizeOrig.y;
-        f32 f29 = (f30 / f31) * 620.0f - f30;
-        f32 tmp = fopMsgM_valueIncrease(10, field_0x1a8, 0);
-        field_0x168.mSize.x = f31 + (620.0f - f31) * tmp;
-        field_0x168.mSize.y = f30 + f29 * tmp;
-        field_0x3e8 = 1.0f - tmp;
+        f32 tmp2 = 620.0f - f31;
+        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
+        field_0x168.mSize.x = f31 + tmp2 * f1;
+        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x3e8 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x3e8);
     }
@@ -1648,17 +1631,16 @@ bool dMesg_screenDataItem_c::closeAnime() {
 
 /* 801E4C40-801E4D04       .text move__22dMesg_screenDataItem_cFv */
 void dMesg_screenDataItem_c::move() {
-    /* Nonmatching */
     ringMove();
     lightMove();
     cornerMove();
     if (field_0x3e4) {
-        J2DPane* pane = field_0x1b4.pane;
-        JGeometry::TVec3<f32> vec;
-        vec.x = (field_0x1b4.mSize.x * 0.5f + pane->mScreenBounds.i.x - 320.0f) + 10.0f;
-        vec.y = (field_0x1b4.mSize.y * 0.5f + pane->mScreenBounds.i.y - 240.0f) - 10.0f;
-        vec.z = 0.0f;
-        field_0x3e4->setGlobalTranslation(vec);
+        cXyz sp08(
+            (field_0x1b4.mSize.x / 2.0f + field_0x1b4.pane->getGlbBounds().i.x - 320.0f) + 10.0f,
+            (field_0x1b4.mSize.y / 2.0f + field_0x1b4.pane->getGlbBounds().i.y - 240.0f) - 10.0f,
+            0.0f
+        );
+        field_0x3e4->setGlobalTranslation(sp08);
         field_0x3e4->playDrawParticle();
         field_0x3e4->setGlobalAlpha(field_0x1b4.mNowAlpha);
     }
@@ -1681,7 +1663,7 @@ void dMesg_screenDataItem_c::draw() {
     graph->setPort();
     scrn->draw(0.0f, 0.0f, graph);
     for (int i = 0; i < 18; i++) {
-        if (mMesg->outfont[i] && mMesg->outfont[i]->field_0x16 != -1) {
+        if (mMesg->outfont[i] && mMesg->outfont[i]->getTimer() != -1) {
             mMesg->outfont[i]->_draw();
         }
     }
@@ -1706,7 +1688,6 @@ void dMesg_screenDataItem_c::ringMove() {
 
 /* 801E4EBC-801E524C       .text lightMove__22dMesg_screenDataItem_cFv */
 void dMesg_screenDataItem_c::lightMove() {
-    /* Nonmatching */
     field_0x224[0].mUserArea++;
     if (field_0x224[0].mUserArea >= 800) {
         field_0x224[0].mUserArea = 0;
@@ -1717,7 +1698,7 @@ void dMesg_screenDataItem_c::lightMove() {
     field_0x224[2].pane->rotate((int)field_0x224[2].mSize.x, (int)field_0x224[2].mSize.y, ROTATE_Z, -f31);
     field_0x224[3].pane->rotate(0.0f, (int)field_0x224[3].mSize.y, ROTATE_Z, -f31);
     field_0x224[4].pane->rotate((int)field_0x224[4].mSize.x, 0.0f, ROTATE_Z, f31);
-    field_0x224[5].pane->rotate(0.0f, 0.0f, ROTATE_Z, -f31);
+    field_0x224[5].pane->rotate(0.0f, 0.0f, ROTATE_Z, f31);
     field_0x224[6].pane->rotate((int)field_0x224[6].mSize.x, (int)field_0x224[6].mSize.y, ROTATE_Z, f31);
     field_0x224[7].pane->rotate(0.0f, (int)field_0x224[7].mSize.y, ROTATE_Z, f31);
     if (field_0x168.mNowAlpha == field_0x168.mInitAlpha && field_0x168.mSize.x == field_0x168.mSizeOrig.x) {
@@ -1730,15 +1711,16 @@ void dMesg_screenDataItem_c::lightMove() {
 
 /* 801E524C-801E5938       .text cornerMove__22dMesg_screenDataItem_cFv */
 void dMesg_screenDataItem_c::cornerMove() {
-    /* Nonmatching */
     static const u8 cc_r[] = {200, 0, 0, 0};
     static const u8 cc_g[] = {128, 0, 0, 0};
     static const u8 cc_b[] = {255, 0, 255, 0};
 
-    if (g_msgHIO.field_0x7f << 2 >= ++field_0x168.mUserArea) {
+    int r4 = g_msgHIO.field_0x7f * 4;
+    field_0x168.mUserArea++;
+    if (field_0x168.mUserArea >= r4) {
         field_0x168.mUserArea = 0;
     }
-    f32 tmp = fopMsgM_valueIncrease(g_msgHIO.field_0x7f, field_0x168.mUserArea - field_0x168.mUserArea % g_msgHIO.field_0x7f, 2);
+    f32 tmp = fopMsgM_valueIncrease(g_msgHIO.field_0x7f, field_0x168.mUserArea % g_msgHIO.field_0x7f, 2);
     GXColor local_68[4];
     for (int i = 0; i < 4; i++) {
         int r9 = i + 1;
@@ -1923,20 +1905,19 @@ void dMesg_fontsizeCenter(sub_mesg_class* i_Msg, int param_2, int param_3, int p
 
 /* 801E62F8-801E6760       .text dMesg_waitProc__FP14sub_mesg_class */
 void dMesg_waitProc(sub_mesg_class* i_Msg) {
-    /* Nonmatching */
-    nowMesgCode = (dMesg_gpControl->mGroupID << 16) | dMesg_gpControl->mMessageIndex;
+    nowMesgCode = dMesg_gpControl->getMessageCode();
     zenkaku = 0;
     zenkakuCode = 0;
     if (oldMesgCode != nowMesgCode) {
-        if (dMesg_hyrule_language_check((dMesg_gpControl->mGroupID << 16) | dMesg_gpControl->mMessageIndex)) {
-            nowMesgCode = (dMesg_gpControl->mGroupID << 16) | dMesg_gpControl->mMessageIndex;
+        if (dMesg_hyrule_language_check(dMesg_gpControl->getMessageCode())) {
+            nowMesgCode = dMesg_gpControl->getMessageCode();
             if (!headerFlag) {
-                dMesg_gpControl->mMainFont = dMesg_gpRFont;
+                dMesg_gpControl->setMainFont(dMesg_gpRFont);
                 headerFlag = true;
             }
         } else {
             if (headerFlag) {
-                dMesg_gpControl->mMainFont = dMesg_gpFont;
+                dMesg_gpControl->setMainFont(dMesg_gpFont);
                 headerFlag = false;
             }
         }
@@ -1949,28 +1930,25 @@ void dMesg_waitProc(sub_mesg_class* i_Msg) {
             }
         }
         if (!i_Msg->screen) {
-            u32 r28 = nowMesgCode;
-            JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r28 >> 16);
-            void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r28);
-            unk_messageData stack_3c = *(unk_messageData*)messageData;
-            if (stack_3c.field_0xc == 9) {
+            mesg_entry stack_3c = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
+            if (stack_3c.mTextboxType == 9) {
                 i_Msg->screen = new dMesg_screenDataItem_c();
             } else {
                 i_Msg->screen = new dMesg_screenDataTalk_c();
             }
             JUT_ASSERT(3317, i_Msg->screen != NULL);
-            i_Msg->screen->mMesg = i_Msg;
-            i_Msg->screen->mHeap = i_Msg->field_0x100;
+            i_Msg->screen->setMesg(i_Msg);
+            i_Msg->screen->setHeap(i_Msg->field_0x100);
             if (headerFlag) {
                 i_Msg->screen->setFont(dMesg_gpRFont, dMesg_gpRFont);
             } else {
                 i_Msg->screen->setFont(dMesg_gpFont, dMesg_gpRFont);
             }
             i_Msg->screen->createScreen();
-            i_Msg->screen->setTextPosition(stack_3c.field_0xe);
+            i_Msg->screen->setTextPosition(stack_3c.mTextboxPosition);
             dMesg_gbUpdate = true;
             i_Msg->field_0x164 = 2;
-            dMesg_gpSequenceProcessor->field_0x6c = -1;
+            dMesg_gpSequenceProcessor->setNowColor(0xFFFFFFFF);
             mDoAud_talkIn();
             mDoAud_seStart(JA_SE_TALK_WIN_OPEN);
         } else if (headerFlag) {
@@ -1999,12 +1977,9 @@ void dMesg_openProc(sub_mesg_class* i_Msg) {
             i_Msg->screen->setString(i_Msg->text[i], i);
         }
         i_Msg->field_0x164 = 6;
-        u32 r29 = nowMesgCode;
-        JMessage::TResource* resource = dMesg_gpControl->getResource_groupID(r29 >> 16);
-        void* messageData = resource == NULL ? NULL : resource->getMessageData_messageIndex(r29);
-        unk_messageData stack_3c = *(unk_messageData*)messageData;
-        if (stack_3c.field_0x11) {
-            mDoAud_messageSePlay(stack_3c.field_0x11, NULL, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
+        mesg_entry stack_3c = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
+        if (stack_3c.mInitialSound) {
+            mDoAud_messageSePlay(stack_3c.mInitialSound, NULL, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
         }
     }
     mDoExt_setCurrentHeap(oldHeap);
@@ -2018,10 +1993,10 @@ void dMesg_outnowProc(sub_mesg_class* i_Msg) {
     for (int i = 0; i < 4; i++) {
         i_Msg->screen->setString(i_Msg->text[i], i);
     }
-    if (dMesg_gpSequenceProcessor->field_0x15f == 1) {
+    if (dMesg_gpSequenceProcessor->getStopFlag() == 1) {
         i_Msg->screen->arwAnimeInit();
         i_Msg->field_0x164 = 5;
-    } else if (dMesg_gpSequenceProcessor->field_0x15f == 2) {
+    } else if (dMesg_gpSequenceProcessor->getStopFlag() == 2) {
         i_Msg->field_0x164 = 7;
     } else if (dMesg_gbUpdate == 0) {
         i_Msg->screen->dotAnimeInit();
@@ -2032,7 +2007,6 @@ void dMesg_outnowProc(sub_mesg_class* i_Msg) {
 
 /* 801E69D4-801E6B10       .text dMesg_outwaitProc__FP14sub_mesg_class */
 void dMesg_outwaitProc(sub_mesg_class* i_Msg) {
-    /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
     if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
         for (int i = 0; i < 4; i++) {
@@ -2040,9 +2014,9 @@ void dMesg_outwaitProc(sub_mesg_class* i_Msg) {
             i_Msg->screen->setString(i_Msg->text[i], i);
         }
         i_Msg->screen->arwAnimeInit();
-        dMesg_gpSequenceProcessor->initialize(dMesg_gpControl->field_0x58);
+        dMesg_gpSequenceProcessor->initialize(dMesg_gpControl->getLineStart());
         if (CPad_CHECK_TRIG_B(0)) {
-            dMesg_gpSequenceProcessor->field_0x161 = 1;
+            dMesg_gpSequenceProcessor->setShortCutFlag();
         }
         for (int i = 0; i < 18; i++) {
             i_Msg->outfont[i]->_initialize();
@@ -2057,15 +2031,8 @@ void dMesg_outwaitProc(sub_mesg_class* i_Msg) {
 
 /* 801E6B10-801E6BB8       .text dMesg_stopProc__FP14sub_mesg_class */
 void dMesg_stopProc(sub_mesg_class* i_Msg) {
-    /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
-    int var1 = dMesg_gpSequenceProcessor->field_0x90;
-    if (var1 > 0) {
-        dMesg_gpSequenceProcessor->field_0x90 = var1 - 1;
-    } else {
-        var1 = 0;
-    }
-    if (var1 == 0) {
+    if (dMesg_gpSequenceProcessor->decWaitRest() == 0) {
         i_Msg->field_0x164 = 18;
         mDoAud_talkOut();
         mDoAud_seStart(JA_SE_TALK_WIN_CLOSE);
@@ -2075,7 +2042,6 @@ void dMesg_stopProc(sub_mesg_class* i_Msg) {
 
 /* 801E6BB8-801E6C6C       .text dMesg_closewaitProc__FP14sub_mesg_class */
 void dMesg_closewaitProc(sub_mesg_class* i_Msg) {
-    /* Nonmatching */
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
     if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
         i_Msg->screen->dotAnimeInit();
@@ -2092,7 +2058,7 @@ void dMesg_closewaitProc(sub_mesg_class* i_Msg) {
 void dMesg_closeProc(sub_mesg_class* i_Msg) {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->field_0x100);
     if (i_Msg->screen->closeAnime()) {
-        delete i_Msg->screen->scrn;
+        i_Msg->screen->deleteScreen();
 #if VERSION == VERSION_DEMO
         dComIfGp_getMsgArchive()->removeResourceAll();
 #else
@@ -2168,14 +2134,13 @@ static BOOL dMsg_IsDelete(sub_mesg_class*) {
 
 /* 801E6F40-801E7130       .text dMsg_Delete__FP14sub_mesg_class */
 static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
-    /* Nonmatching */
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Msg->heap);
     mDoExt_removeMesgFont();
     mDoExt_removeRubyFont();
     if (i_Msg->field_0x100) {
         mDoExt_setCurrentHeap(i_Msg->field_0x100);
         if (i_Msg->screen) {
-            delete i_Msg->screen->scrn;
+            i_Msg->screen->deleteScreen();
 #if VERSION == VERSION_DEMO
             dComIfGp_getMsgArchive()->removeResourceAll();
 #else
@@ -2202,7 +2167,7 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
         }
     }
 
-    // TODO: JGadget::TLinkList_factory<JMessage::TResource, 0>::Clear_destroy()
+    dMesg_gpResourceContainer->Clear_destroy();
 
     dMesg_finalize();
     if (header) {
