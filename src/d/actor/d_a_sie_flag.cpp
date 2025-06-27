@@ -65,7 +65,7 @@ const char daSie_Flag_c::M_arcname[] = "Eshata";
 void daSie_Flag_c::set_mtx() {
   mpModel->setBaseScale(scale);
 
-  MTXTrans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+  mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
   mDoMtx_stack_c::ZXYrotM(shape_angle);
 
   mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -105,7 +105,7 @@ cPhs_State daSie_Flag_c::CreateInit() {
     
     set_mtx();
     cullMtx = mpModel->getBaseTRMtx();
-    fopAcM_setCullSizeBox(this, -700.0f, 0.0, -700.0f, 700.0f, 1100.0f, 700.0f);
+    fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
     dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xFF);
 
     return cPhs_COMPLEATE_e;
