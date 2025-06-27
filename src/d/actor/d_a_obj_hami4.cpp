@@ -13,7 +13,6 @@
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
     return ((daObjHami4_c*)actor)->CreateHeap();
-    /* Nonmatching */
 }
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
@@ -51,7 +50,6 @@ BOOL daObjHami4_c::CreateHeap() {
         return false;
     }
     return true;
-    /* Nonmatching */
 }
 
 /* 00000374-00000420       .text CreateInit__12daObjHami4_cFv */
@@ -65,8 +63,6 @@ void daObjHami4_c::CreateInit() {
                 (this, -10000.0,-100.0,-10000.0,10000.0,100.0,10000.0);
     this->cullSizeFar = 1.0;
     set_mtx();
-    return;
-    /* Nonmatching */
 }
 
 /* 00000420-000005B8       .text set_mtx__12daObjHami4_cFv */
@@ -81,7 +77,6 @@ void daObjHami4_c::set_mtx() {
         MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mdBgW[i]->Move();
     }
-    /* Nonmatching */
 }
 
 /* 000005B8-00000634       .text daObjHami4_close_stop__12daObjHami4_cFv */
@@ -93,7 +88,6 @@ void daObjHami4_c::daObjHami4_close_stop() {
         fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
         field_0x378 = 1;
     }
-    /* Nonmatching */
 }
 
 /* 00000634-00000714       .text daObjHami4_open_demo_wait__12daObjHami4_cFv */
@@ -105,7 +99,6 @@ void daObjHami4_c::daObjHami4_open_demo_wait() {
     } else {
         fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
     }
-    /* Nonmatching */
 }
 
 /* 00000714-000007AC       .text daObjHami4_open_demo__12daObjHami4_cFv */
@@ -118,13 +111,10 @@ void daObjHami4_c::daObjHami4_open_demo() {
         dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
         dComIfGp_event_reset();
     }
-    /* Nonmatching */
 }
 
 /* 000007AC-000007B0       .text daObjHami4_open_stop__12daObjHami4_cFv */
-void daObjHami4_c::daObjHami4_open_stop() {
-    /* Nonmatching */
-}
+void daObjHami4_c::daObjHami4_open_stop() {}
 
 cPhs_State daObjHami4_c::_create() {
     fopAcM_SetupActor(this, daObjHami4_c);
@@ -161,7 +151,6 @@ bool daObjHami4_c::_delete() {
 /* 00000870-00000918       .text daObjHami4_Delete__FPv */
 static BOOL daObjHami4_Delete(void* i_this) {
     return ((daObjHami4_c*)i_this)->_delete();
-    /* Nonmatching */
 }
 
 bool daObjHami4_c::_draw() {
@@ -178,7 +167,6 @@ bool daObjHami4_c::_draw() {
 /* 00000918-000009DC       .text daObjHami4_Draw__FPv */
 static BOOL daObjHami4_Draw(void* i_this) {
     return ((daObjHami4_c*)i_this)->_draw();
-    /* Nonmatching */
 }
 
 bool daObjHami4_c::_execute() {
