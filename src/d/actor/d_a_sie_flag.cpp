@@ -11,6 +11,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_priority.h"
 #include "d/d_procname.h"
+#include "d/d_s_play.h"
 #include "d/res/res_cloth.h"
 #include "d/res/res_eshata.h"
 #include "f_op/f_op_actor_mng.h"
@@ -89,7 +90,16 @@ BOOL daSie_Flag_c::CreateHeap() {
     } else {
         ResTIMG* eshata_timg = (ResTIMG*)dComIfG_getObjectRes(M_arcname, ESHATA_BTI_ESHATA);
         ResTIMG* cloth_timg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
-        mpClothPacket = dCloth_packet_create(eshata_timg, cloth_timg, 5, 5, 700.0f, 350.0, &mTevStr, NULL);
+        mpClothPacket = dCloth_packet_create(
+            eshata_timg, cloth_timg,
+#if VERSION == VERSION_DEMO
+            5 + REG10_S(0), 5 + REG10_S(1),
+#else
+            5, 5,
+#endif
+            700.0f, 350.0,
+            &mTevStr, NULL
+        );
         return mpClothPacket != NULL ? TRUE : FALSE;
     }
 }
@@ -106,24 +116,43 @@ cPhs_State daSie_Flag_c::CreateInit() {
     set_mtx();
     cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -700.0f, 0.0f, -700.0f, 700.0f, 1100.0f, 700.0f);
+
+#if VERSION > VERSION_DEMO
     dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xFF);
+#endif
 
     return cPhs_COMPLEATE_e;
 }
 
 /* 000003D4-00000488       .text _create__12daSie_Flag_cFv */
 cPhs_State daSie_Flag_c::_create() {
-    fopAcM_SetupActor(this, daSie_Flag_c);
+#if VERSION == VERSION_DEMO
+    cPhs_State rt1 = dComIfG_resLoad(&mPhsEshata, M_arcname);
+    cPhs_State rt2 = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    if (rt1 == cPhs_ERROR_e || rt2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (rt1 != cPhs_COMPLEATE_e) {
+        return rt1;
+    }
+    if (rt2 != cPhs_COMPLEATE_e) {
+        return rt2;
+    }
 
+    fopAcM_SetupActor(this, daSie_Flag_c);
+#else
+    fopAcM_SetupActor(this, daSie_Flag_c);
+    
     cPhs_State result = dComIfG_resLoad(&mPhsEshata, M_arcname);
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }
-
+    
     result = dComIfG_resLoad(&mPhsCloth, "Cloth");
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }
+#endif
 
     if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1020)) {
         return CreateInit();
@@ -148,12 +177,12 @@ bool daSie_Flag_c::_execute() {
     mStts.Move();
 
     if (mCyl.ChkTgHit() != 0) {
-        daObj::HitSeStart(fopAcM_GetPosition_p(this), fopAcM_GetRoomNo(this), &mCyl, 0x0B);
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 0x0B);
     }
 
     fopAcM_rollPlayerCrash(this, 40.0f, 0x07);
 
-    position_plus_offset = fopAcM_GetPosition(this) + l_flag_offset;
+    position_plus_offset = current.pos + l_flag_offset;
     allwind = dKyw_get_AllWind_vecpow(&position_plus_offset);
     if (allwind.abs() > mWindvec.abs()) {
         mWindvec = allwind;
@@ -164,8 +193,36 @@ bool daSie_Flag_c::_execute() {
     mCyl.SetC(current.pos);
     dComIfG_Ccsp()->Set(&mCyl);
   
-    mpClothPacket->setParam(0.4f, -0.75f, 0.9f, 1.0f, 1.0f, 0x400, 0, 900, -800, 7.0f, 6.0f);
-    mpClothPacket->setWindPower(13.0f, 8.0f);
+    mpClothPacket->setParam(
+#if VERSION == VERSION_DEMO
+        0.4f + REG10_F(25),
+        -0.75f + REG10_F(26),
+        0.9f + REG10_F(27),
+        1.0f + REG10_F(28),
+        1.0f + REG10_F(29),
+#else
+        0.4f,
+        -0.75f,
+        0.9f,
+        1.0f,
+        1.0f,
+#endif
+        0x400,
+        0,
+        900,
+        -800,
+        7.0f,
+        6.0f
+    );
+    mpClothPacket->setWindPower(
+#if VERSION == VERSION_DEMO
+        13.0f + REG10_F(0),
+        8.0f + REG10_F(1)
+#else
+        13.0f,
+        8.0f
+#endif
+    );
     mpClothPacket->setGlobalWind(&mWindvec);
     mpClothPacket->cloth_move();
 
