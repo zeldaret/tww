@@ -181,25 +181,28 @@ static BOOL daObjHami4_Draw(void* i_this) {
     /* Nonmatching */
 }
 
-/* 000009DC-00000A58       .text daObjHami4_Execute__FPv */
-static BOOL daObjHami4_Execute(void* i_this) {
-    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
-    switch (obj->field_0x378) {
+bool daObjHami4_c::_execute() {
+    switch (field_0x378) {
         case 0: 
-            obj->daObjHami4_close_stop();
+            daObjHami4_close_stop();
             break;
         case 1: 
-            obj->daObjHami4_open_demo_wait();
+            daObjHami4_open_demo_wait();
             break;
         case 2: 
-            obj->daObjHami4_open_demo();
+            daObjHami4_open_demo();
             break;
         case 3:
-            obj->daObjHami4_open_stop();
+            daObjHami4_open_stop();
     }
-    obj->set_mtx();
-    return 1;
-    /* Nonmatching */
+    set_mtx();
+    return true;
+
+}
+
+/* 000009DC-00000A58       .text daObjHami4_Execute__FPv */
+static BOOL daObjHami4_Execute(void* i_this) {
+    return ((daObjHami4_c*)i_this)->_execute();
 }
 
 /* 00000A58-00000A60       .text daObjHami4_IsDelete__FPv */
