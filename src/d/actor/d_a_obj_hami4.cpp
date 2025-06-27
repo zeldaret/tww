@@ -164,19 +164,20 @@ static BOOL daObjHami4_Delete(void* i_this) {
     /* Nonmatching */
 }
 
-/* 00000918-000009DC       .text daObjHami4_Draw__FPv */
-static BOOL daObjHami4_Draw(void* i_this) {
-    dKy_tevstr_c* tevStr;
-    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
-
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &obj->current.pos, tevStr = &obj->tevStr);
+bool daObjHami4_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     dComIfGd_setListBG();
     for (int i = 0; i < 4; i++){
-        g_env_light.setLightTevColorType(obj->mpModels[i], tevStr);
-        mDoExt_modelUpdateDL(obj->mpModels[i]);
+        g_env_light.setLightTevColorType(mpModels[i], &tevStr);
+        mDoExt_modelUpdateDL(mpModels[i]);
     }
     dComIfGd_setList();
     return TRUE;
+}
+
+/* 00000918-000009DC       .text daObjHami4_Draw__FPv */
+static BOOL daObjHami4_Draw(void* i_this) {
+    return ((daObjHami4_c*)i_this)->_draw();
     /* Nonmatching */
 }
 
