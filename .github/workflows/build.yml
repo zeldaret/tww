@@ -39,7 +39,9 @@ jobs:
       id: cache-build
       uses: actions/cache@v4
       with:
-        path: build/
+        path: |
+          build/
+          .ninja_deps
         key: ${{ matrix.version }}-build
 
     # Build the project
