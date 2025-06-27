@@ -126,25 +126,25 @@ void daObjHami4_c::daObjHami4_open_stop() {
     /* Nonmatching */
 }
 
-/* 000007B0-00000870       .text daObjHami4_Create__FPv */
-static cPhs_State daObjHami4_Create(void* i_this) {
-    cPhs_State status;
-    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
-    
-    fopAcM_SetupActor(obj, daObjHami4_c);
+cPhs_State daObjHami4_c::_create() {
+    fopAcM_SetupActor(this, daObjHami4_c);
     for (int i = 0; i < 4; i++){
-        obj->mdBgW[i] = NULL;
+        mdBgW[i] = NULL;
     }
-    status = dComIfG_resLoad(&obj->mPhs, "Hami4");
+    cPhs_State status = dComIfG_resLoad(&mPhs, "Hami4");
     if (status == cPhs_COMPLEATE_e) {
-        if(!fopAcM_entrySolidHeap(obj, CheckCreateHeap, 0x4900)) {
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4900)) {
             status = cPhs_ERROR_e;
         } else {
-            obj->CreateInit();
+            CreateInit();
         }
     }
     return status;
-    /* Nonmatching */
+}
+
+/* 000007B0-00000870       .text daObjHami4_Create__FPv */
+static cPhs_State daObjHami4_Create(void* i_this) {
+    return ((daObjHami4_c*)i_this)->_create();
 }
 
 /* 00000870-00000918       .text daObjHami4_Delete__FPv */
