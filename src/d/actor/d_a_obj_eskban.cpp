@@ -277,7 +277,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
             if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
-                cXyz dist = fopAcM_GetPosition(hitAct) - fopAcM_GetPosition(this);
+                cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
                     dist *= 10;

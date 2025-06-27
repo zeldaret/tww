@@ -244,8 +244,8 @@ void daWall_c::set_tri() {
     vertex[0] = m_tri_vtx[mType][0];
     vertex[1] = m_tri_vtx[mType][1];
     vertex[2] = m_tri_vtx[mType][2];
-    mDoMtx_stack_c::transS(fopAcM_GetPosition(this));
-    mDoMtx_stack_c::YrotM(fopAcM_GetAngle_p(this)->y);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
 
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::multVec(&vertex[i], &vertex[i]);

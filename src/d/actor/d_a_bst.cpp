@@ -250,11 +250,11 @@ static void pos_move(bst_class* i_this, unsigned char param_2) {
 
     vec.x = 0.0f;
     vec.y = 0.0f;
-    vec.z = fopAcM_GetSpeedF(i_this);
+    vec.z = i_this->speedF;
 
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    MtxPosition(&vec, &fopAcM_GetSpeed(i_this));
+    MtxPosition(&vec, &i_this->speed);
     i_this->current.pos += i_this->speed;
 }
 
@@ -2572,7 +2572,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
     res = dComIfG_resLoad(&i_this->mPhs, "Bst");
     if (res == cPhs_COMPLEATE_e) {
         i_this->mPa_smokeEcallBack.setFollowOff();
-        i_this->field_0x02B4 = (u8) fopAcM_GetParam(i_this);
+        i_this->field_0x02B4 = fopAcM_GetParam(i_this) & 0xFF;
 
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;

@@ -138,7 +138,7 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
     OffsetData * offset = &l_offsetData[grp];
     const csXyz * ofpos = offset->pos;
     u32 kind = daGrass_prm::getKind(i_this);
-    cXyz & acpos = fopAcM_GetPosition(i_this);
+    cXyz * acpos = &i_this->current.pos;
 
     if (kind == 0) {
         // grass
@@ -149,9 +149,9 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
                 cXyz pos;
-                pos.x = acpos.x + ofpos->x;
-                pos.y = acpos.y;
-                pos.z = acpos.z + ofpos->z;
+                pos.x = acpos->x + ofpos->x;
+                pos.y = acpos->y;
+                pos.z = acpos->z + ofpos->z;
                 dComIfGp_getGrass()->newData(pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
@@ -160,12 +160,12 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
         if (dComIfGp_createTree() != NULL) {
             f32 cosR = cM_scos(i_this->current.angle.y), sinR = cM_ssin(i_this->current.angle.y);
             cXyz pos;
-            pos.y = acpos.y;
+            pos.y = acpos->y;
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
-                pos.x = acpos.x + (ofpos->x * cosR + ofpos->z * sinR);
-                pos.y = acpos.y;
-                pos.z = acpos.z + (ofpos->z * cosR - ofpos->x * sinR);
+                pos.x = acpos->x + (ofpos->x * cosR + ofpos->z * sinR);
+                pos.y = acpos->y;
+                pos.z = acpos->z + (ofpos->z * cosR - ofpos->x * sinR);
                 dComIfGp_getTree()->newData(pos, 0, fopAcM_GetRoomNo(i_this));
             }
         }
@@ -184,9 +184,9 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
                 cXyz pos;
-                pos.x = acpos.x + ofpos->x;
-                pos.y = acpos.y;
-                pos.z = acpos.z + ofpos->z;
+                pos.x = acpos->x + ofpos->x;
+                pos.y = acpos->y;
+                pos.z = acpos->z + ofpos->z;
                 dComIfGp_getFlower()->newData(flowerType, pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
