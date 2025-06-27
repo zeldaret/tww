@@ -147,17 +147,20 @@ static cPhs_State daObjHami4_Create(void* i_this) {
     return ((daObjHami4_c*)i_this)->_create();
 }
 
-/* 00000870-00000918       .text daObjHami4_Delete__FPv */
-static BOOL daObjHami4_Delete(void* i_this) {
-    daObjHami4_c* obj = static_cast<daObjHami4_c*>(i_this);
-    
+
+bool daObjHami4_c::_delete() {
     for (int i = 0; i < 4; i++){
-        if (obj->mdBgW[i] != NULL && obj->mdBgW[i]->ChkUsed()) {
-            dComIfG_Bgsp()->Release(obj->mdBgW[i]);
+        if (mdBgW[i] != NULL && mdBgW[i]->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mdBgW[i]);
         }
     }
-    dComIfG_resDeleteDemo(&obj->mPhs,"Hami4");
+    dComIfG_resDeleteDemo(&mPhs,"Hami4");
     return TRUE;
+}
+
+/* 00000870-00000918       .text daObjHami4_Delete__FPv */
+static BOOL daObjHami4_Delete(void* i_this) {
+    return ((daObjHami4_c*)i_this)->_delete();
     /* Nonmatching */
 }
 
