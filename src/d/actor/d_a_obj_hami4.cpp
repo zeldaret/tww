@@ -19,7 +19,7 @@ BOOL daObjHami4_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", 0x4);
     JUT_ASSERT(0x5f, modelData != NULL);
 
-    if (fopAcM_isSwitch(this, daObj::PrmAbstract(this, 8, 0))) {
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
         this->field_0x378 = 3;
         this->field_0x37C = 1500.0;
     }

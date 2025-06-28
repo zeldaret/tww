@@ -18,7 +18,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    int prm_get_swSave() const {return daObj::PrmAbstract(this, PRM_W, PRM_S);}
+    s32 prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_W, PRM_S);}
 
     BOOL CreateHeap();
     void CreateInit();
@@ -33,7 +33,7 @@ public:
     /* 0x298 */ J3DModel * mpModels[4];
     /* 0x2A8 */ dBgW* mdBgW[4];
     /* 0x2B8 */ Mtx field_0x2B8[4];
-    /* 0x378 */ int field_0x378;
+    /* 0x378 */ s32 field_0x378;
     /* 0x37C */ f32 field_0x37C;
 };  // Size: 0x380
 
