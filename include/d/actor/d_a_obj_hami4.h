@@ -9,8 +9,8 @@ class daObjHami4_c : public fopAc_ac_c {
 public:
 
     enum Prm_e {
-        PRM_W = 0x08,
-        PRM_S = 0x00,
+        PRM_SWSAVE_W = 0x08,
+        PRM_SWSAVE_S = 0x00,
     };
 
 
@@ -18,7 +18,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_W, PRM_S);}
+    int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
 
     BOOL CreateHeap();
     void CreateInit();

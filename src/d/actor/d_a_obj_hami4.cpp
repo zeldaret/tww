@@ -8,6 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_hami4.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
@@ -16,16 +17,16 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000098-00000374       .text CreateHeap__12daObjHami4_cFv */
 BOOL daObjHami4_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", 0x4);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Hami4", HAMI4_BDL_HAMI4);
     JUT_ASSERT(0x5f, modelData != NULL);
 
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         this->field_0x378 = 3;
-        this->field_0x37C = 1500.0;
+        this->field_0x37C = 1500.0f;
     }
     else {
         this->field_0x378 = 0;
-        this->field_0x37C = 0.0;
+        this->field_0x37C = 0.0f;
     }
     for (int i = 0; i < 4; i++){
         mpModels[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -35,13 +36,13 @@ BOOL daObjHami4_c::CreateHeap() {
         short var = current.angle.y + i*0x4000;
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(var );
-        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0, (short)(-field_0x37C * cM_scos(0x2000)));
+        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0f, (short)(-field_0x37C * cM_scos(0x2000)));
         mDoMtx_stack_c::scaleM(scale);
         MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         mdBgW[i] = new dBgW();
         if (mdBgW[i] != NULL) {
-            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", 0x7);
+            cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes("Hami4", HAMI4_DZB_HAMI4);
             if(!mdBgW[i]->Set(bgp, dBgW::MOVE_BG_e, &field_0x2B8[i])){
                 continue;
             }
@@ -53,14 +54,13 @@ BOOL daObjHami4_c::CreateHeap() {
 
 /* 00000374-00000420       .text CreateInit__12daObjHami4_cFv */
 void daObjHami4_c::CreateInit() {
-    
-    this->cullMtx = mpModels[0]->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModels[0]->getBaseTRMtx());
     for (int i = 0; i < 4; i++){
         dComIfG_Bgsp()->Regist(mdBgW[i],this);
     }
     fopAcM_setCullSizeBox
-                (this, -10000.0,-100.0,-10000.0,10000.0,100.0,10000.0);
-    this->cullSizeFar = 1.0;
+                (this, -10000.0f,-100.0f,-10000.0f,10000.0f,100.0f,10000.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
 }
 
@@ -71,7 +71,7 @@ void daObjHami4_c::set_mtx() {
         mpModels[i]->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(var );
-        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0, (short)(-field_0x37C * cM_scos(0x2000)));
+        mDoMtx_stack_c::transM((short)(-field_0x37C * cM_ssin(0x2000)), 0.0f, (short)(-field_0x37C * cM_scos(0x2000)));
         mpModels[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         MTXCopy(mDoMtx_stack_c::get(), field_0x2B8[i]);
         mdBgW[i]->Move();
@@ -104,8 +104,8 @@ void daObjHami4_c::daObjHami4_open_demo_wait() {
 void daObjHami4_c::daObjHami4_open_demo() {
   
     field_0x37C += 10;
-    if (field_0x37C >= 1500) {
-        field_0x37C = 1500;
+    if (field_0x37C >= 1500.0f) {
+        field_0x37C = 1500.0f;
         field_0x378 = 3;
         dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
         dComIfGp_event_reset();
