@@ -9,11 +9,8 @@ class daObjHami4_c : public fopAc_ac_c {
 public:
 
     enum Prm_e {
-        PRM_SWITCH_W = 0x08,
-        PRM_SWITCH_S = 0x00,
-
-        PRM_TYPE_W = 0x01,
-        PRM_TYPE_S = 0x10,
+        PRM_W = 0x08,
+        PRM_S = 0x00,
     };
 
 
@@ -21,7 +18,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    int prm_get_swSave() const {return daObj::PrmAbstract(this, PRM_SWITCH_W, PRM_SWITCH_S);}
+    int prm_get_swSave() const {return daObj::PrmAbstract(this, PRM_W, PRM_S);}
 
     BOOL CreateHeap();
     void CreateInit();
@@ -32,7 +29,6 @@ public:
     void daObjHami4_open_stop();
 
 public:
-    /* Place member variables here */
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel * mpModels[4];
     /* 0x2A8 */ dBgW* mdBgW[4];
