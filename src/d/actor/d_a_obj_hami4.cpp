@@ -80,9 +80,7 @@ void daObjHami4_c::set_mtx() {
 
 /* 000005B8-00000634       .text daObjHami4_close_stop__12daObjHami4_cFv */
 void daObjHami4_c::daObjHami4_close_stop() {
-    int switchIndex;
-    
-    switchIndex = prm_get_swSave();
+    int switchIndex = prm_get_swSave();
     if (fopAcM_isSwitch(this, switchIndex)) {
         fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
         field_0x378 = 1;
@@ -93,7 +91,7 @@ void daObjHami4_c::daObjHami4_close_stop() {
 void daObjHami4_c::daObjHami4_open_demo_wait() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         field_0x378 = 2;
-        mDoAud_seStart(0x806);
+        mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SLIDE_AMI_OPEN, 0);
     } else {
         fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
@@ -181,6 +179,7 @@ bool daObjHami4_c::_execute() {
             break;
         case 3:
             daObjHami4_open_stop();
+            break;
     }
     set_mtx();
     return true;
