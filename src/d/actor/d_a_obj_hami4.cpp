@@ -100,12 +100,13 @@ void daObjHami4_c::daObjHami4_open_demo_wait() {
 
 /* 00000714-000007AC       .text daObjHami4_open_demo__12daObjHami4_cFv */
 void daObjHami4_c::daObjHami4_open_demo() {
-  
     field_0x37C += 10;
     if (field_0x37C >= 1500.0f) {
         field_0x37C = 1500.0f;
         field_0x378 = 3;
+#if VERSION > VERSION_DEMO
         dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
+#endif
         dComIfGp_event_reset();
     }
 }
