@@ -17,6 +17,7 @@
 #include "d/d_cc_d.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_s_play.h"
+#include "d/res/res_wallbom.h"
 
 #include "weak_data_1811.h" // IWYU pragma: keep
 
@@ -98,20 +99,20 @@ void daObj_Canon_c::_nodeControl(J3DNode* node, J3DModel* model) {
     s32 jntNo = joint->getJntNo();
     mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     csXyz temp(0, 0, 0);
-    if(g_regHIO.mChild[12].mShortRegs[1]) {
-        temp.set(g_regHIO.mChild[12].mShortRegs[2], g_regHIO.mChild[12].mShortRegs[3], g_regHIO.mChild[12].mShortRegs[4]);
+    if(REG12_S(1)) {
+        temp.set(REG12_S(2), REG12_S(3), REG12_S(4));
     }
     else {
         temp.x = -field_0x2CA;
         temp.z = -field_0x2C6;
     }
     mDoMtx_stack_c::ZXYrotM(temp);
-    field_0x468 += g_regHIO.mChild[12].mShortRegs[2] + 0x1830;
-    mDoMtx_stack_c::XrotM(field_0x46A * (g_regHIO.mChild[12].mShortRegs[5] + 5) * cM_ssin(field_0x468));
+    field_0x468 += REG12_S(2) + 0x1830;
+    mDoMtx_stack_c::XrotM(field_0x46A * (REG12_S(5) + 5) * cM_ssin(field_0x468));
     cXyz temp2;
-    temp2.x = g_regHIO.mChild[12].mFloatRegs[3];
+    temp2.x = REG12_F(3);
     temp2.y = -field_0x46C;
-    temp2.z = g_regHIO.mChild[12].mFloatRegs[5];
+    temp2.z = REG12_F(5);
     mDoMtx_stack_c::transM(temp2);
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
@@ -124,7 +125,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000003F8-000004CC       .text _createHeap__13daObj_Canon_cFv */
 BOOL daObj_Canon_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, 3);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, WALLBOM_BDL_WALLBOM);
     JUT_ASSERT(0x115, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -253,7 +254,7 @@ void daObj_Canon_c::setAttention() {
 
 /* 00000BA8-00000C2C       .text setCollision__13daObj_Canon_cFv */
 void daObj_Canon_c::setCollision() {
-    mSph.SetR((80.0f + g_regHIO.mChild[12].mFloatRegs[0]) * scale.x);
+    mSph.SetR((80.0f + REG12_F(0)) * scale.x);
     mSph.SetC(field_0x45C);
 
     if(mCurMode != 2 && mCurMode != 3) {
@@ -461,9 +462,9 @@ bool daObj_Canon_c::_execute() {
     temp.z = l_HIO.field_0x1C;
     mDoMtx_multVec(mpModel->getAnmMtx(3), &temp, &field_0x450);
     Vec temp2 = {0.0f, 0.0f, 0.0f};
-    temp2.x = g_regHIO.mChild[12].mFloatRegs[0];
-    temp2.y = (g_regHIO.mChild[12].mFloatRegs[1] + 60.0f) * scale.x;
-    temp2.z = g_regHIO.mChild[12].mFloatRegs[2];
+    temp2.x = REG12_F(0);
+    temp2.y = (REG12_F(1) + 60.0f) * scale.x;
+    temp2.z = REG12_F(2);
     mDoMtx_multVec(mpModel->getAnmMtx(3), &temp2, &field_0x45C);
 
     if(field_0x470.getEmitter()) {
