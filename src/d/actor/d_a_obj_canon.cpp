@@ -100,7 +100,9 @@ void daObj_Canon_c::_nodeControl(J3DNode* node, J3DModel* model) {
     mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     csXyz temp(0, 0, 0);
     if(REG12_S(1)) {
-        temp.set(REG12_S(2), REG12_S(3), REG12_S(4));
+        temp.x = REG12_S(2);
+        temp.y = REG12_S(3);
+        temp.z = REG12_S(4);
     }
     else {
         temp.x = -field_0x2CA;
@@ -129,9 +131,11 @@ BOOL daObj_Canon_c::_createHeap() {
     JUT_ASSERT(0x115, modelData != 0);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+#if VERSION > VERSION_DEMO
     if(mpModel == NULL) {
         return FALSE;
     }
+#endif
 
     mpModel->setUserArea((u32)this);
     modelData->getJointNodePointer(3)->setCallBack(nodeControl_CB);
@@ -141,6 +145,10 @@ BOOL daObj_Canon_c::_createHeap() {
 
 /* 000004CC-000005AC       .text setEffect__13daObj_Canon_cFUs */
 void daObj_Canon_c::setEffect(u16 param_1) {
+#if VERSION == VERSION_DEMO
+    csXyz sp18 = shape_angle;
+#endif
+
     GXColor* prmColor = NULL, *envColor = NULL;
     if(param_1 == dPa_name::ID_SCENE_82E4) {
         prmColor = &tevStr.mColorK0;
@@ -148,11 +156,29 @@ void daObj_Canon_c::setEffect(u16 param_1) {
     }
 
     if(param_1 == dPa_name::ID_COMMON_03E1) {
-        dComIfGp_particle_set(param_1, &current.pos, &shape_angle, &scale, 0xFF, &field_0x470, -1, prmColor, envColor);
+        dComIfGp_particle_set(
+            param_1,
+#if VERSION == VERSION_DEMO
+            &current.pos, &sp18, &scale,
+#else
+            &current.pos, &shape_angle, &scale,
+#endif
+            0xFF, &field_0x470, -1,
+            prmColor, envColor
+        );
         field_0x484 = 0xE6;
     }
     else {
-        dComIfGp_particle_set(param_1, &current.pos, &shape_angle, &scale, 0xFF, NULL, -1, prmColor, envColor);
+        dComIfGp_particle_set(
+            param_1,
+#if VERSION == VERSION_DEMO
+            &current.pos, &sp18, &scale,
+#else
+            &current.pos, &shape_angle, &scale,
+#endif
+            0xFF, NULL, -1,
+            prmColor, envColor
+        );
     }
 }
 
@@ -304,10 +330,12 @@ void daObj_Canon_c::modeWait() {
                 if(field_0x298.chkInside(&field_0x2CC)) {
                     if(dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK1000000_e | daPyStts0_SWIM_e)) {
                         field_0x488 = 0;
-                        temp += 3000.0f;
+                        f32 tmp = 3000.0f; 
+                        temp += tmp;
                     }
                     else if(abs > l_HIO.field_0x40 && field_0x488 < 6) {
-                        temp += 200.0f * (6 - field_0x488);
+                        f32 tmp = 200.0f * (6 - field_0x488);
+                        temp += tmp;
                     }
 
                     s16 temp2 = fopAcM_searchActorAngleY(this, daPy_getPlayerActorClass());
@@ -521,7 +549,7 @@ void daObj_Canon_c::createInit() {
     max_health = 2;
     health = max_health;
     
-    field_0x2B0 = dPath_GetRoomPath(field_0x294, fopAcM_GetRoomNo(this));
+    field_0x2B0 = dPath_GetRoomPath(field_0x294, current.roomNo);
     field_0x298.setInfDrct(field_0x2B0);
 
     setMtx();
@@ -558,9 +586,11 @@ cPhs_State daObj_Canon_c::_create() {
     if(result == cPhs_COMPLEATE_e) {
         getArg();
 
+#if VERSION > VERSION_DEMO
         if(field_0x294 == 0xFF) {
             return cPhs_ERROR_e;
         }
+#endif
 
         if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x8C0)) {
             return cPhs_ERROR_e;
@@ -576,7 +606,9 @@ cPhs_State daObj_Canon_c::_create() {
 bool daObj_Canon_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
     field_0x470.end();
+#if VERSION > VERSION_DEMO
     mDoAud_seDeleteObject(&field_0x450);
+#endif
 
     return true;
 }

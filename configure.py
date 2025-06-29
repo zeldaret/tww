@@ -1503,7 +1503,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_balancelift"),
     ActorRel(Equivalent,  "d_a_obj_barrier", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_obj_bemos"),
-    ActorRel(NonMatching, "d_a_obj_canon", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_obj_canon", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_eff"),
     ActorRel(NonMatching, "d_a_obj_magmarock"),
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
