@@ -6,6 +6,7 @@
 #include "d/actor/d_a_obj_ospbox.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
+#include "d/d_particle_name.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_ospbox.h"
@@ -67,7 +68,7 @@ BOOL daObjOspbox::Act_c::Create() {
     mCyl.SetTgVec((cXyz&)cXyz::Zero);
     mCyl.OnTgNoHitMark();
 
-    attention_info.position.y = fopAcM_GetPosition_p(this)->y + 75.0f;
+    attention_info.position.y = current.pos.y + 75.0f;
     eyePos = attention_info.position;
 
     init_ground();
@@ -76,8 +77,22 @@ BOOL daObjOspbox::Act_c::Create() {
     return TRUE;
 }
 
-const s16 pf_name[] = {0x56, 0xDD, 0xDD, 0xDD, 0x56, 0x56, 0x56, 0x56}; // TODO: double-check
-const u32 prm[] = {0x00000000, 0x01FF0000, 0x01FF0001, 0x01FF0002}; // TODO: double-check
+const s16 pf_name[] = {
+    PROC_Obj_Ospbox,
+    PROC_KB,
+    PROC_KB,
+    PROC_KB,
+    PROC_Obj_Ospbox,
+    PROC_Obj_Ospbox,
+    PROC_Obj_Ospbox,
+    PROC_Obj_Ospbox
+};
+const u32 prm[] = {
+    0x00000000,
+    0x01FF0000,
+    0x01FF0001,
+    0x01FF0002
+};
 
 Mtx daObjOspbox::Act_c::M_tmp_mtx;
 
@@ -107,9 +122,9 @@ BOOL daObjOspbox::Act_c::Mthd_Delete() {
 /* 00000C04-00000C84       .text set_mtx__Q211daObjOspbox5Act_cFv */
 void daObjOspbox::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::get(), shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    PSMTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 00000C84-00000CC0       .text init_mtx__Q211daObjOspbox5Act_cFv */
@@ -121,15 +136,15 @@ void daObjOspbox::Act_c::init_mtx() {
 /* 00000CC0-00000D7C       .text make_item__Q211daObjOspbox5Act_cFv */
 void daObjOspbox::Act_c::make_item() {
     int prm_index = prm_get_spec();
-    if (pf_name[prm_index] == 0x56) {
-        prm_index = prm_get_itemNo();
+    if (pf_name[prm_index] == PROC_Obj_Ospbox) {
+        int item_no = prm_get_itemNo();
         fopAcM_createItemFromTable(fopAcM_GetPosition_p(this),
-        prm_index, 0x7F,
-        fopAcM_GetHomeRoomNo(this),
-        daItemType_0_e,
-        fopAcM_GetAngle_p(this),
-        daItemAct_7_e,
-        NULL);
+            item_no, 0x7F,
+            fopAcM_GetHomeRoomNo(this),
+            daItemType_0_e,
+            fopAcM_GetAngle_p(this),
+            daItemAct_7_e,
+            NULL);
     } else {
         fopAcM_create(pf_name[prm_index], prm[prm_index],
             fopAcM_GetPosition_p(this),
@@ -146,7 +161,7 @@ void daObjOspbox::Act_c::eff_break() {
     static cXyz particle_scale(2.0f, 2.0f, 1.0f);
     cXyz particle_pos(current.pos.x, current.pos.y + 75.0f, current.pos.z);
     JPABaseEmitter* emitter = dComIfGp_particle_set(
-        0x3e6, // TODO: Do we need a const in d_particle_name.h ?
+        dPa_name::ID_COMMON_03E6,
         &particle_pos,
         NULL, NULL, 0xFF,
         NULL,
@@ -164,9 +179,7 @@ void daObjOspbox::Act_c::sound_break() {
     if (bg_index >= 0 && bg_index < 0x100) {
         sound_id = dComIfG_Bgsp()->GetMtrlSndId(mObjGndChk);
     }
-
-    s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
-    JAIZelBasic::getInterface()->seStart(JA_SE_OBJ_SURP_BOX_BREAK, &eyePos, sound_id, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    fopAcM_seStart(this, JA_SE_OBJ_SURP_BOX_BREAK, sound_id);
 }
 
 /* 00000F20-00000FE0       .text set_ground__Q211daObjOspbox5Act_cFv */
@@ -177,7 +190,7 @@ void daObjOspbox::Act_c::set_ground() {
 
     cXyz pos(current.pos.x, current.pos.y + 100.0f, current.pos.z);
     mObjGndChk.SetPos(&pos);
-    mObjGndChk.SetActorPid(this != NULL ? base.mBsPcId : fpcM_ERROR_PROCESS_ID_e);
+    mObjGndChk.SetActorPid(fopAcM_GetID(this));
     
     m494 = dComIfG_Bgsp()->GroundCross(&mObjGndChk);
     if (m494 > -1000000000.0f) {
