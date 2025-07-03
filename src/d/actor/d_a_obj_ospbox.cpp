@@ -138,7 +138,7 @@ void daObjOspbox::Act_c::make_item() {
     int prm_index = prm_get_spec();
     if (pf_name[prm_index] == PROC_Obj_Ospbox) {
         int item_no = prm_get_itemNo();
-        fopAcM_createItemFromTable(fopAcM_GetPosition_p(this),
+        fopAcM_createItemFromTable(&current.pos,
             item_no, 0x7F,
             fopAcM_GetHomeRoomNo(this),
             daItemType_0_e,
@@ -147,7 +147,7 @@ void daObjOspbox::Act_c::make_item() {
             NULL);
     } else {
         fopAcM_create(pf_name[prm_index], prm[prm_index],
-            fopAcM_GetPosition_p(this),
+            &current.pos,
             fopAcM_GetHomeRoomNo(this),
             fopAcM_GetAngle_p(this),
             NULL,
@@ -217,7 +217,7 @@ BOOL daObjOspbox::Act_c::Execute(Mtx** o_mtx) {
         if (m49A != 0 && --m49A == 0) {
             mpBgW->SetLock();
         }
-        mCyl.MoveCAtTg(*fopAcM_GetPosition_p(this));
+        mCyl.MoveCAtTg(*&current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 
