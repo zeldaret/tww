@@ -228,6 +228,9 @@ public:
         mGlobalDynamicsScale.set(scale);
         mGlobalParticleScale.set(scale);
     }
+    void getGlobalParticleScale(JGeometry::TVec3<f32>& out) const {
+        out.set(mGlobalParticleScale);
+    }
     void setGlobalParticleScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalParticleScale.set(scale);
     }
@@ -315,7 +318,6 @@ public:
     void getBasePrmColor(GXColor&) {}
     void getCurrentCreateNumber() const {}
     void getFrame() {}
-    void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
     void loadTexture(u8, GXTexMapID) {}

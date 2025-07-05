@@ -168,39 +168,44 @@ void JPADrawExecLoadTexture::exec(const JPADrawContext* pDC) {
 
 /* 80260364-802603A4       .text exec__23JPADrawExecSetPointSizeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecSetPointSize::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    GXSetPointSize(JPADrawContext::pcb->mGlobalScaleX * ptcl->mScaleX, GX_TO_ONE);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    GXSetPointSize(JPADrawContext::pcb->mGlobalScaleX * params->mScaleX, GX_TO_ONE);
 }
 
 /* 802603A4-802603E4       .text exec__23JPADrawExecSetLineWidthFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecSetLineWidth::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    GXSetLineWidth(JPADrawContext::pcb->mGlobalScaleX * ptcl->mScaleX, GX_TO_ONE);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    GXSetLineWidth(JPADrawContext::pcb->mGlobalScaleX * params->mScaleX, GX_TO_ONE);
 }
 
 /* 802603E4-802604AC       .text exec__30JPADrawExecRegisterPrmColorAnmFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRegisterPrmColorAnm::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    GXColor prm = ptcl->mPrmColor;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    GXColor prm = params->mPrmColor;
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
     u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
-    prm.a = ptcl->mAlphaOut * a;
+    prm.a = params->mAlphaOut * a;
     GXSetTevColor(GX_TEVREG0, prm);
 }
 
 /* 802604AC-80260578       .text exec__30JPADrawExecRegisterPrmAlphaAnmFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRegisterPrmAlphaAnm::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     GXColor prm = pDC->mpDraw->mPrmColor;
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
     u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
-    prm.a = ptcl->mAlphaOut * a;
+    prm.a = params->mAlphaOut * a;
     GXSetTevColor(GX_TEVREG0, prm);
 }
 
 /* 80260578-802605FC       .text exec__30JPADrawExecRegisterEnvColorAnmFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRegisterEnvColorAnm::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    GXColor env = ptcl->mEnvColor;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    GXColor env = params->mEnvColor;
     env.r = JPA_U8_THRE(env.r, JPADrawContext::pcb->mEnvColor.r);
     env.g = JPA_U8_THRE(env.g, JPADrawContext::pcb->mEnvColor.g);
     env.b = JPA_U8_THRE(env.b, JPADrawContext::pcb->mEnvColor.b);
@@ -209,13 +214,14 @@ void JPADrawExecRegisterEnvColorAnm::exec(const JPADrawContext* pDC, JPABasePart
 
 /* 802605FC-80260728       .text exec__26JPADrawExecRegisterPrmCEnvFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRegisterPrmCEnv::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    GXColor prm = ptcl->mPrmColor;
-    GXColor env = ptcl->mEnvColor;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    GXColor prm = params->mPrmColor;
+    GXColor env = params->mEnvColor;
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
     u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
-    prm.a = ptcl->mAlphaOut * a;
+    prm.a = params->mAlphaOut * a;
     env.r = JPA_U8_THRE(env.r, JPADrawContext::pcb->mEnvColor.r);
     env.g = JPA_U8_THRE(env.g, JPADrawContext::pcb->mEnvColor.g);
     env.b = JPA_U8_THRE(env.b, JPADrawContext::pcb->mEnvColor.b);
@@ -225,13 +231,14 @@ void JPADrawExecRegisterPrmCEnv::exec(const JPADrawContext* pDC, JPABaseParticle
 
 /* 80260728-80260858       .text exec__26JPADrawExecRegisterPrmAEnvFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     GXColor prm = pDC->mpDraw->mPrmColor;
-    GXColor env = ptcl->mEnvColor;
+    GXColor env = params->mEnvColor;
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
     u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
-    prm.a = ptcl->mAlphaOut * a;
+    prm.a = params->mAlphaOut * a;
     env.r = JPA_U8_THRE(env.r, JPADrawContext::pcb->mEnvColor.r);
     env.g = JPA_U8_THRE(env.g, JPADrawContext::pcb->mEnvColor.g);
     env.b = JPA_U8_THRE(env.b, JPADrawContext::pcb->mEnvColor.b);
@@ -273,7 +280,8 @@ void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
 
 /* 80260B68-80260BAC       .text exec__22JPADrawExecLoadTextureFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecLoadTexture::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    pDC->mpTextureResource->load(ptcl->mTexIdx, GX_TEXMAP0);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    pDC->mpTextureResource->load(params->mTexIdx, GX_TEXMAP0);
 }
 
 /* 80260BAC-80260D24       .text exec__20JPADrawExecBillBoardFPC14JPADrawContextP15JPABaseParticle */
@@ -281,8 +289,9 @@ void JPADrawExecBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
     if (ptcl->isInvisibleParticle())
         return;
 
-    f32 scaleX = ptcl->mScaleX;
-    f32 scaleY = ptcl->mScaleY;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 scaleX = params->mScaleX;
+    f32 scaleY = params->mScaleY;
 
     f32 x0 = scaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
     f32 y0 = scaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
@@ -311,16 +320,17 @@ void JPADrawExecRotBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
     if (ptcl->isInvisibleParticle())
         return;
 
-    f32 sin = JMASSin(ptcl->mRotateAngle);
-    f32 cos = JMASCos(ptcl->mRotateAngle);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 sin = JMASSin(params->mRotateAngle);
+    f32 cos = JMASCos(params->mRotateAngle);
 
-    f32 scaleX = ptcl->mScaleX;
-    f32 scaleY = ptcl->mScaleY;
+    f32 scaleX = params->mScaleX;
+    f32 scaleY = params->mScaleY;
 
-    f32 x0 = -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
-    f32 y0 = +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
-    f32 x1 = +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
-    f32 y1 = -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
+    f32 x0 = -params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
+    f32 y0 = +params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
+    f32 x1 = +params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
+    f32 y1 = -params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
 
     JGeometry::TVec3<f32> pt;
     ptcl->getGlobalPosition(pt);
@@ -350,7 +360,7 @@ void JPADrawExecRotYBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* 
 
 /* 8026134C-80261368       .text dirTypeVel__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
 void dirTypeVel(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
-    out.set(ptcl->mVelocity);
+    ptcl->getVelVec(out);
 }
 
 /* 80261368-80261384       .text dirTypePos__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
@@ -526,33 +536,33 @@ void JPADrawExecRotation::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl)
     if (ptcl->isInvisibleParticle())
         return;
 
-    f32 sin = JMASSin(ptcl->mRotateAngle);
-    f32 cos = JMASCos(ptcl->mRotateAngle);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 sin = JMASSin(params->mRotateAngle);
+    f32 cos = JMASCos(params->mRotateAngle);
 
     Mtx rotMtx;
     JGeometry::TVec3<f32> pt[4];
     JPADrawContext::pcb->mBasePlaneTypeFunc(
-        -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX),
-        +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX),
-        +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY),
-        -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY),
+        -params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX),
+        +params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX),
+        +params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY),
+        -params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY),
         pt
     );
     JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
 
     MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
-    f32 x = ptcl->mGlobalPosition.x;
-    f32 y = ptcl->mGlobalPosition.y;
-    f32 z = ptcl->mGlobalPosition.z;
+    JGeometry::TVec3<f32> pos;
+    ptcl->getGlobalPosition(pos);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
+    GXPosition3f32(pt[0].x + pos.x, pt[0].y + pos.y, pt[0].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[0].x, JPADrawContext::pcb->mTexCoordPt[0].y);
-    GXPosition3f32(pt[1].x + x, pt[1].y + y, pt[1].z + z);
+    GXPosition3f32(pt[1].x + pos.x, pt[1].y + pos.y, pt[1].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[1].x, JPADrawContext::pcb->mTexCoordPt[1].y);
-    GXPosition3f32(pt[2].x + x, pt[2].y + y, pt[2].z + z);
+    GXPosition3f32(pt[2].x + pos.x, pt[2].y + pos.y, pt[2].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[2].x, JPADrawContext::pcb->mTexCoordPt[2].y);
-    GXPosition3f32(pt[3].x + x, pt[3].y + y, pt[3].z + z);
+    GXPosition3f32(pt[3].x + pos.x, pt[3].y + pos.y, pt[3].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[3].x, JPADrawContext::pcb->mTexCoordPt[3].y);
     GXEnd();
 }
@@ -563,13 +573,14 @@ void JPADrawExecRotationCross::exec(const JPADrawContext* pDC, JPABaseParticle* 
     if (ptcl->isInvisibleParticle())
         return;
 
-    f32 sin = JMASSin(ptcl->mRotateAngle);
-    f32 cos = JMASCos(ptcl->mRotateAngle);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 sin = JMASSin(params->mRotateAngle);
+    f32 cos = JMASCos(params->mRotateAngle);
 
-    f32 x0 = -ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
-    f32 y0 = +ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
-    f32 x1 = +ptcl->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
-    f32 y1 = -ptcl->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
+    f32 x0 = -params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX + JPADrawContext::pcb->mPivotX);
+    f32 y0 = +params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY + JPADrawContext::pcb->mPivotY);
+    f32 x1 = +params->mScaleX * (JPADrawContext::pcb->mGlobalScaleX - JPADrawContext::pcb->mPivotX);
+    f32 y1 = -params->mScaleY * (JPADrawContext::pcb->mGlobalScaleY - JPADrawContext::pcb->mPivotY);
 
     JGeometry::TVec3<f32> pt[8];
     pt[0].set(x0, y0, 0.0f);
@@ -589,26 +600,25 @@ void JPADrawExecRotationCross::exec(const JPADrawContext* pDC, JPABaseParticle* 
     JPADrawContext::pcb->mRotTypeFunc(sin, cos, rotMtx);
 
     MTXMultVecArray(rotMtx, pt, pt, ARRAY_SIZE(pt));
-    f32 x = ptcl->mGlobalPosition.x;
-    f32 y = ptcl->mGlobalPosition.y;
-    f32 z = ptcl->mGlobalPosition.z;
+    JGeometry::TVec3<f32> pos;
+    ptcl->getGlobalPosition(pos);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 8);
-    GXPosition3f32(pt[0].x + x, pt[0].y + y, pt[0].z + z);
+    GXPosition3f32(pt[0].x + pos.x, pt[0].y + pos.y, pt[0].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[0].x, JPADrawContext::pcb->mTexCoordPt[0].y);
-    GXPosition3f32(pt[1].x + x, pt[1].y + y, pt[1].z + z);
+    GXPosition3f32(pt[1].x + pos.x, pt[1].y + pos.y, pt[1].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[1].x, JPADrawContext::pcb->mTexCoordPt[1].y);
-    GXPosition3f32(pt[2].x + x, pt[2].y + y, pt[2].z + z);
+    GXPosition3f32(pt[2].x + pos.x, pt[2].y + pos.y, pt[2].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[2].x, JPADrawContext::pcb->mTexCoordPt[2].y);
-    GXPosition3f32(pt[3].x + x, pt[3].y + y, pt[3].z + z);
+    GXPosition3f32(pt[3].x + pos.x, pt[3].y + pos.y, pt[3].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[3].x, JPADrawContext::pcb->mTexCoordPt[3].y);
-    GXPosition3f32(pt[4].x + x, pt[4].y + y, pt[4].z + z);
+    GXPosition3f32(pt[4].x + pos.x, pt[4].y + pos.y, pt[4].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[0].x, JPADrawContext::pcb->mTexCoordPt[0].y);
-    GXPosition3f32(pt[5].x + x, pt[5].y + y, pt[5].z + z);
+    GXPosition3f32(pt[5].x + pos.x, pt[5].y + pos.y, pt[5].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[1].x, JPADrawContext::pcb->mTexCoordPt[1].y);
-    GXPosition3f32(pt[6].x + x, pt[6].y + y, pt[6].z + z);
+    GXPosition3f32(pt[6].x + pos.x, pt[6].y + pos.y, pt[6].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[2].x, JPADrawContext::pcb->mTexCoordPt[2].y);
-    GXPosition3f32(pt[7].x + x, pt[7].y + y, pt[7].z + z);
+    GXPosition3f32(pt[7].x + pos.x, pt[7].y + pos.y, pt[7].z + pos.z);
     GXTexCoord2f32(JPADrawContext::pcb->mTexCoordPt[3].x, JPADrawContext::pcb->mTexCoordPt[3].y);
     GXEnd();
 }
@@ -631,15 +641,16 @@ void JPADrawExecLine::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     if (ptcl->isInvisibleParticle())
         return;
 
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     JGeometry::TVec3<f32> pt0;
     JGeometry::TVec3<f32> vel;
 
     ptcl->getGlobalPosition(pt0);
-    vel.set(ptcl->mVelocity);
+    ptcl->getVelVec(vel);
     if (!vel.isZero()) {
         vel.normalize();
 
-        f32 size = JPADrawContext::pcb->mGlobalScaleY * ptcl->mScaleY;
+        f32 size = JPADrawContext::pcb->mGlobalScaleY * params->mScaleY;
         vel.scale(size);
         JGeometry::TVec3<f32> pt1;
         pt1.sub(pt0, vel);
@@ -811,57 +822,62 @@ void JPADrawExecCallBack::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl)
 
 /* 80264C88-80264DB8       .text calc__17JPADrawCalcScaleXFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleX::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
-        ptcl->mScaleX = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        ptcl->mScaleX = ptcl->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
-        ptcl->mScaleX = ptcl->mScaleOut;
+        params->mScaleX = params->mScaleOut;
     }
 }
 
 /* 80264DB8-80264EE8       .text calc__17JPADrawCalcScaleYFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
-        ptcl->mScaleY = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        ptcl->mScaleY = ptcl->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
-        ptcl->mScaleY = ptcl->mScaleOut;
+        params->mScaleY = params->mScaleOut;
     }
 }
 
 /* 80264EE8-802650B8       .text calc__24JPADrawCalcScaleXBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     JGeometry::TVec3<f32> vel;
-    vel.set(ptcl->mVelocity);
+    ptcl->getVelVec(vel);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
-        ptcl->mScaleX = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        ptcl->mScaleX = ptcl->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
-        ptcl->mScaleX = ptcl->mScaleOut;
+        params->mScaleX = params->mScaleOut;
     }
-    ptcl->mScaleX *= vel.length() * 0.01f;
+    params->mScaleX *= vel.length() * 0.01f;
 }
 
 /* 802650B8-80265288       .text calc__24JPADrawCalcScaleYBySpeedFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     JGeometry::TVec3<f32> vel;
-    vel.set(ptcl->mVelocity);
+    ptcl->getVelVec(vel);
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
-        ptcl->mScaleY = ptcl->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        ptcl->mScaleY = ptcl->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
-        ptcl->mScaleY = ptcl->mScaleOut;
+        params->mScaleY = params->mScaleOut;
     }
-    ptcl->mScaleY *= vel.length() * 0.01f;
+    params->mScaleY *= vel.length() * 0.01f;
 }
 
 /* 80265288-80265294       .text calc__23JPADrawCalcScaleCopyX2YFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcScaleCopyX2Y::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mScaleY = ptcl->mScaleX;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mScaleY = params->mScaleX;
 }
 
 /* 80265294-802652A4       .text calc__31JPADrawCalcScaleAnmTimingNormalFPC14JPADrawContextP15JPABaseParticle */
@@ -895,18 +911,21 @@ void JPADrawCalcScaleAnmTimingReverseY::calc(const JPADrawContext* pDC, JPABaseP
 
 /* 802656CC-80265734       .text calc__19JPADrawCalcColorPrmFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorPrm::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mPrmColor = pDC->pbsp->getPrmColor(JPADrawContext::pcb->mColorAnmFrame);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mPrmColor = pDC->pbsp->getPrmColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 80265734-8026579C       .text calc__19JPADrawCalcColorEnvFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorEnv::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mEnvColor = pDC->pbsp->getEnvColor(JPADrawContext::pcb->mColorAnmFrame);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mEnvColor = pDC->pbsp->getEnvColor(JPADrawContext::pcb->mColorAnmFrame);
 }
 
 /* 8026579C-802657E8       .text calc__31JPADrawCalcColorCopyFromEmitterFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mPrmColor = pDC->mpDraw->mPrmColor;
-    ptcl->mEnvColor = pDC->mpDraw->mEnvColor;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mPrmColor = pDC->mpDraw->mPrmColor;
+    params->mEnvColor = pDC->mpDraw->mEnvColor;
 }
 
 /* 802657E8-80265880       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
@@ -917,15 +936,17 @@ void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* pDC, JPABasePart
 
 /* 80265880-80265918       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 tick = ptcl->getAge();
-    s32 frame = ((ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset()) + tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    s32 frame = ((params->mLoopOffset & pDC->pbsp->getColLoopOffset()) + tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265918-802659C4       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 loopOffset = pDC->pbsp->getColLoopOffset();
-    loopOffset = ptcl->mLoopOffset & loopOffset;
+    loopOffset = params->mLoopOffset & loopOffset;
     s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
     s32 t = loopOffset + ptcl->getAge();
     s32 odd = (t / maxFrame) & 1;
@@ -935,7 +956,8 @@ void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC, JPABasePar
 
 /* 802659C4-80265A90       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 start = ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset();
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    s32 start = params->mLoopOffset & pDC->pbsp->getColLoopOffset();
     s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm() + 1;
     s32 frame = (s32)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
     JPADrawContext::pcb->mColorAnmFrame = frame;
@@ -943,12 +965,14 @@ void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* pDC, JPABaseParti
 
 /* 80265A90-80265B14       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 frame = (ptcl->mLoopOffset & pDC->pbsp->getColLoopOffset()) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    s32 frame = (params->mLoopOffset & pDC->pbsp->getColLoopOffset()) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265B14-80265C40       .text calc__16JPADrawCalcAlphaFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlpha::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     f32 time = ptcl->mCurNormTime;
     f32 alpha;
     if (time < pDC->pesp->getAlphaInTiming()) {
@@ -958,83 +982,93 @@ void JPADrawCalcAlpha::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     } else {
         alpha = pDC->pesp->getAlphaBaseValue();
     }
-    ptcl->mAlphaOut = alpha;
+    params->mAlphaOut = alpha;
 }
 
 /* 80265C40-80265D54       .text calc__27JPADrawCalcAlphaFlickNrmSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    f32 sin = JMASSin((ptcl->getAge() * 16384) * ptcl->mAlphaWaveRandom * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= ptcl->mAlphaWaveRandom * (((sin - 1.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 1.0f;
-    if (ptcl->mAlphaOut < 0.0f)
-        ptcl->mAlphaOut = 0.0f;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 sin = JMASSin((ptcl->getAge() * 16384) * params->mAlphaWaveRandom * (1.0f - pDC->pesp->getAlphaWaveParam1()));
+    params->mAlphaOut *= params->mAlphaWaveRandom * (((sin - 1.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 1.0f;
+    if (params->mAlphaOut < 0.0f)
+        params->mAlphaOut = 0.0f;
 }
 
 /* 80265D54-80265EC4       .text calc__27JPADrawCalcAlphaFlickAddSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching - operand swap */
-    f32 theta = (ptcl->getAge() * 16384) * ptcl->mAlphaWaveRandom;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 theta = (ptcl->getAge() * 16384) * params->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= (ptcl->mAlphaWaveRandom * ((((sin1 + sin2) - 2.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 2.0f) * 0.5f;
-    if (ptcl->mAlphaOut < 0.0f)
-        ptcl->mAlphaOut = 0.0f;
+    params->mAlphaOut *= (params->mAlphaWaveRandom * ((((sin1 + sin2) - 2.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 2.0f) * 0.5f;
+    if (params->mAlphaOut < 0.0f)
+        params->mAlphaOut = 0.0f;
 }
 
 /* 80265EC4-80266048       .text calc__28JPADrawCalcAlphaFlickMultSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickMultSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    f32 theta = (ptcl->getAge() * 16384) * ptcl->mAlphaWaveRandom;
-    f32 mul3 = (pDC->pesp->getAlphaWaveParam3() * 0.5f) * ptcl->mAlphaWaveRandom;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    f32 theta = (ptcl->getAge() * 16384) * params->mAlphaWaveRandom;
+    f32 mul3 = (pDC->pesp->getAlphaWaveParam3() * 0.5f) * params->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));
-    ptcl->mAlphaOut *= ((mul3 * (sin1 - 1.0f)) + 1.0f) * ((mul3 * (sin2 - 1.0f)) + 1.0f);
-    if (ptcl->mAlphaOut < 0.0f)
-        ptcl->mAlphaOut = 0.0f;
+    params->mAlphaOut *= ((mul3 * (sin1 - 1.0f)) + 1.0f) * ((mul3 * (sin2 - 1.0f)) + 1.0f);
+    if (params->mAlphaOut < 0.0f)
+        params->mAlphaOut = 0.0f;
 }
 
 /* 80266048-80266100       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < (s32)ptcl->getAge()) ? (pDC->pbsp->getTextureAnmKeyNum() - 1) : ptcl->getAge();
-    ptcl->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(idx)];
+    params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(idx)];
 }
 
 /* 80266100-802661B4       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 tick = ptcl->getAge();
-    ptcl->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(((ptcl->mLoopOffset & pDC->pbsp->getTexLoopOffset()) + tick) % pDC->pbsp->getTextureAnmKeyNum())];
+    params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(((params->mLoopOffset & pDC->pbsp->getTexLoopOffset()) + tick) % pDC->pbsp->getTextureAnmKeyNum())];
 }
 
 /* 802661B4-80266284       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 loopOffset = pDC->pbsp->getTexLoopOffset();
-    loopOffset = ptcl->mLoopOffset & loopOffset;
+    loopOffset = params->mLoopOffset & loopOffset;
     s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
     s32 t = loopOffset + ptcl->getAge();
     s32 odd = (t / maxFrame) & 1;
     s32 frame = t % maxFrame;
-    ptcl->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame + (odd * maxFrame) - 2 * (odd * frame))];
+    params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame + (odd * maxFrame) - 2 * (odd * frame))];
 }
 
 /* 80266284-8026636C       .text calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
     s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum();
-    s32 start = ptcl->mLoopOffset & pDC->pbsp->getTexLoopOffset();
+    s32 start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
     s32 frame = (s32)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
-    ptcl->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame)];
+    params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame)];
 }
 
 /* 8026636C-8026640C       .text calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 start = ptcl->mLoopOffset & pDC->pbsp->getTexLoopOffset();
-    ptcl->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(start % pDC->pbsp->getTextureAnmKeyNum())];
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    s32 start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
+    params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(start % pDC->pbsp->getTextureAnmKeyNum())];
 }
 
 /* 8026640C-80266420       .text calc__24JPADrawCalcChildAlphaOutFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcChildAlphaOut::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mAlphaOut = 1.0f - ptcl->mCurNormTime;
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mAlphaOut = 1.0f - ptcl->mCurNormTime;
 }
 
 /* 80266420-80266450       .text calc__24JPADrawCalcChildScaleOutFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcChildScaleOut::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    ptcl->mScaleX = ptcl->mScaleOut * (1.0f - ptcl->mCurNormTime);
-    ptcl->mScaleY = ptcl->mAlphaWaveRandom * (1.0f - ptcl->mCurNormTime);
+    JPADrawParams* params = ptcl->getDrawParamPPtr();
+    params->mScaleX = params->mScaleOut * (1.0f - ptcl->mCurNormTime);
+    params->mScaleY = params->mAlphaWaveRandom * (1.0f - ptcl->mCurNormTime);
 }

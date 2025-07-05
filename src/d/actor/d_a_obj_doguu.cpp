@@ -585,7 +585,7 @@ bool daObjDoguu_c::_draw() {
         field_0x6CC->getModelData()->setMaterialTable(bmt, J3DMatCopyFlag_All);
         mBrk.entry(field_0x6CC->getModelData());
         mDoExt_modelUpdateDL(field_0x6CC);
-        field_0x6CC->getModelData()->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+        mBrk.remove(field_0x6CC->getModelData());
     }
     if (field_0x8A0 == true) {
         mBckCrystal.entry(field_0x6D8->getModelData());

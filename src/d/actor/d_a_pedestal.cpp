@@ -400,7 +400,7 @@ bool daPds_c::_draw() {
 
     mBrk.entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
-    modelData->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+    mBrk.remove(modelData);
 
     dComIfGd_setList();
 

@@ -460,7 +460,7 @@ BOOL daNh_c::draw() {
     
     mBrkAnm.entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
-    modelData->getMaterialTable().removeTevRegAnimator(mBrkAnm.getBrkAnm());
+    mBrkAnm.remove(modelData);
     
     J3DMaterial* mat = modelData->getMaterialNodePointer(0);
     if (mat) {
