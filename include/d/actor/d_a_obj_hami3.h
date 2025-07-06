@@ -10,13 +10,16 @@ namespace daObjHami3 {
         enum Prm_e {
             PRM_SWSAVE_W = 0x08,
             PRM_SWSAVE_S = 0x00,
+            
+            PRM_SWSAVE2_W = 0x08,
+            PRM_SWSAVE2_S = 0x08,
 
             PRM_SOUND_W = 0x01,
             PRM_SOUND_S = 0x10,
         };
         int prm_get_sound() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SOUND_W, PRM_SOUND_S);}
         int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
-        int prm_get_swSave2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_W);}
+        int prm_get_swSave2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S);}
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
