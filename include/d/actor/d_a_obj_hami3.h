@@ -10,10 +10,13 @@ namespace daObjHami3 {
         enum Prm_e {
             PRM_SWSAVE_W = 0x08,
             PRM_SWSAVE_S = 0x00,
+
+            PRM_SOUND_W = 0x01,
+            PRM_SOUND_S = 0x10,
         };
-        void prm_get_sound() const {}
+        int prm_get_sound() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SOUND_W, PRM_SOUND_S);}
         int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
-        void prm_get_swSave2() const {}
+        int prm_get_swSave2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_W);}
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
@@ -33,6 +36,7 @@ namespace daObjHami3 {
 
         static Mtx M_tmp_mtx;
         static const char M_arcname[];
+        static const char M_evname[];
     
     public:
             /* 0x2C8 */ s16 field_0x2C8;

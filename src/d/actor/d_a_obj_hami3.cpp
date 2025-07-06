@@ -13,6 +13,7 @@
 #include "d/res/res_hami3.h"
 
 const char daObjHami3::Act_c::M_arcname[] = "Hami3";
+const char daObjHami3::Act_c::M_evname[] = "ami_cam";
 Mtx daObjHami3::Act_c::M_tmp_mtx;
 
 
@@ -119,46 +120,123 @@ void daObjHami3::Act_c::set_mtx() {
 
 /* 00000524-00000560       .text init_mtx__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::init_mtx() {
+    field_0x2D4->setBaseScale(scale);
+    set_mtx();
     /* Nonmatching */
 }
 
 /* 00000560-000005DC       .text daObjHami3_close_stop__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_close_stop() {
+    int switchIndex = prm_get_swSave();
+    if (fopAcM_isSwitch(this, switchIndex)) {
+        fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
+        field_0x2D8 = 1;
+    }
     /* Nonmatching */
 }
 
 /* 000005DC-00000688       .text daObjHami3_open_demo_wait__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_open_demo_wait() {
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if(prm_get_sound() == 0){
+            mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+        }
+        field_0x2D8 = 2;
+    } else {
+        fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
+    }
     /* Nonmatching */
 }
 
 /* 00000688-0000078C       .text daObjHami3_open_demo__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_open_demo() {
+    field_0x2C8 += 0x100;
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_KAITEN_AMI3_MOVE, 0);
+    if (field_0x2C8 >= 0x4000) {
+        field_0x2C8 = 0x4000;
+#if VERSION > VERSION_DEMO
+        dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
+#endif
+        dComIfGp_event_reset();
+        int switchNo = prm_get_swSave2();
+        fopAcM_onSwitch(this, switchNo);
+        field_0x2D8 = 3;
+    }
+        
     /* Nonmatching */
 }
 
 /* 0000078C-00000808       .text daObjHami3_open_stop__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_open_stop() {
+    int switchIndex = prm_get_swSave();
+    if(!fopAcM_isSwitch(this, switchIndex)){
+        fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
+        field_0x2D8 = 4;
+    }
     /* Nonmatching */
 }
 
 /* 00000808-00000858       .text daObjHami3_close_demo_wait__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_close_demo_wait() {
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        field_0x2D8 = 5;
+    } else {
+        fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
+    }
     /* Nonmatching */
 }
 
 /* 00000858-00000934       .text daObjHami3_close_demo__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::daObjHami3_close_demo() {
+    field_0x2C8 -= 0x100;
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_KAITEN_AMI3_MOVE, 0);
+
+    if (field_0x2C8 <= 0) {
+        field_0x2C8 = 0;
+        dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
+        dComIfGp_event_reset();
+        field_0x2D8 = 0;
+    }
     /* Nonmatching */
 }
 
 /* 00000934-000009F4       .text Execute__Q210daObjHami35Act_cFPPA3_A4_f */
-BOOL daObjHami3::Act_c::Execute(Mtx**) {
+BOOL daObjHami3::Act_c::Execute(Mtx** mtx) {
+    switch (field_0x2D8) {
+        case 0: 
+            daObjHami3_close_stop();
+            break;
+        case 1: 
+            daObjHami3_open_demo_wait();
+            break;
+        case 2: 
+            daObjHami3_open_demo();
+            break;
+        case 3:
+            daObjHami3_open_stop();
+            break;
+        case 4: 
+            daObjHami3_close_demo_wait();
+            break;
+        case 5: 
+            daObjHami3_close_demo();
+            break;
+    }
+    shape_angle.x = home.angle.x + field_0x2C8;
+    set_mtx();
+    *mtx = &M_tmp_mtx;
+    return true; 
     /* Nonmatching */
 }
 
 /* 000009F4-00000A94       .text Draw__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x2D4, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(field_0x2D4);
+    dComIfGd_setList();
+    return TRUE;
     /* Nonmatching */
 }
 
