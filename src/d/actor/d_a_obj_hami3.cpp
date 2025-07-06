@@ -13,7 +13,10 @@
 #include "d/res/res_hami3.h"
 
 const char daObjHami3::Act_c::M_arcname[] = "Hami3";
+
+#if VERSION > VERSION_DEMO
 const char daObjHami3::Act_c::M_evname[] = "ami_cam";
+#endif
 Mtx daObjHami3::Act_c::M_tmp_mtx;
 
 
@@ -38,7 +41,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, HAMI3_BDL_HAMI3);
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(0x71, modelData != NULL);
+#else
+    JUT_ASSERT(0x70, modelData != NULL);
+#endif
+
 
     field_0x2D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (field_0x2D4 != NULL) {
@@ -89,7 +97,13 @@ cPhs_State daObjHami3::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2CC, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_Typical, 0x1fc0);
+
+#if VERSION > VERSION_DEMO
         JUT_ASSERT(0xb7, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+#else 
+        JUT_ASSERT(0xb6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+#endif
+
     }
     return phase_state;
     /* Nonmatching */
@@ -104,7 +118,11 @@ BOOL daObjHami3::Act_c::Delete() {
 /* 00000458-000004A4       .text Mthd_Delete__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Mthd_Delete() {
     u32 result = MoveBGDelete();
+#if VERSION > VERSION_DEMO
     dComIfG_resDelete(&field_0x2CC, M_arcname);
+#else
+    dComIfG_deleteObjectRes(M_arcname);
+#endif
     return result;
     /* Nonmatching */
 }
@@ -193,7 +211,9 @@ void daObjHami3::Act_c::daObjHami3_close_demo() {
 
     if (field_0x2C8 <= 0) {
         field_0x2C8 = 0;
+#if VERSION > VERSION_DEMO
         dComIfGp_getVibration().StartShock(4,-0x21,cXyz(0.0f, 1.0f, 0.0f));
+#endif
         dComIfGp_event_reset();
         field_0x2D8 = 0;
     }
