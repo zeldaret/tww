@@ -4,42 +4,116 @@
 //
 
 #include "d/actor/d_a_obj_hami3.h"
+#include "SSystem/SComponent/c_lib.h"
+#include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "m_Do/m_Do_mtx.h"
+#include "d/res/res_hami3.h"
+
+const char daObjHami3::Act_c::M_arcname[] = "Hami3";
+Mtx daObjHami3::Act_c::M_tmp_mtx;
+
 
 /* 00000078-0000012C       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daObjHami3::Act_c* userArea = (daObjHami3::Act_c*)model->getUserArea();
+        if (userArea != NULL) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_YrotM(*calc_mtx, userArea->field_0x2C8);
+            model->setAnmMtx(jntNo, *calc_mtx);
+            cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::CreateHeap() {
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, HAMI3_BDL_HAMI3);
+    JUT_ASSERT(0x71, modelData != NULL);
+
+    field_0x2D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (field_0x2D4 != NULL) {
+        const char* jointName;
+        JUTNameTab* jointNameTab = field_0x2D4->getModelData()->getJointName();
+        for (u16 i = 0; i < field_0x2D4->getModelData()->getJointNum(); i++){
+            jointName = jointNameTab->getName(i);
+            if (strcmp("mono1", jointName) == 0) {
+                field_0x2D4->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+                break;
+            }
+        }
+        field_0x2D4->setUserArea((u32)this);
+    } else {
+        return FALSE;
+    }
+    return TRUE;
+
+
     /* Nonmatching */
 }
 
 /* 0000026C-00000354       .text Create__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Create() {
+    fopAcM_SetMtx(this, field_0x2D4->getBaseTRMtx());
+    
+    int switchIndex = prm_get_swSave();
+    if (fopAcM_isSwitch(this, switchIndex)) {
+        field_0x2D8 = 3;
+        field_0x2C8 = 0x4000;
+    } else {
+        field_0x2D8 = 0;
+        field_0x2C8 = 0;
+    }
+    shape_angle.x = home.angle.x + field_0x2C8;
+    init_mtx();
+
+    fopAcM_setCullSizeBox
+                (this, -1200.0f,-1200.0f,-1200.0f,1200.0f,1200.0f,1200.0f);
+    field_0x2DC = dComIfGp_evmng_getEventIdx("AMI3");
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000354-00000450       .text Mthd_Create__Q210daObjHami35Act_cFv */
 cPhs_State daObjHami3::Act_c::Mthd_Create() {
+    fopAcM_SetupActor(this, daObjHami3::Act_c);
+    cPhs_State phase_state = dComIfG_resLoad(&field_0x2CC, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_Typical, 0x1fc0);
+        JUT_ASSERT(0xb7, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+    }
+    return phase_state;
     /* Nonmatching */
 }
 
 /* 00000450-00000458       .text Delete__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Delete() {
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000458-000004A4       .text Mthd_Delete__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Mthd_Delete() {
+    u32 result = MoveBGDelete();
+    dComIfG_resDelete(&field_0x2CC, M_arcname);
+    return result;
     /* Nonmatching */
 }
 
 /* 000004A4-00000524       .text set_mtx__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::set_mtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    field_0x2D4->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
     /* Nonmatching */
 }
 
