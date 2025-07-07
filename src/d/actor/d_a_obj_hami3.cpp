@@ -35,18 +35,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         }
     }
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, HAMI3_BDL_HAMI3);
-#if VERSION > VERSION_DEMO
-    JUT_ASSERT(0x71, modelData != NULL);
-#else
-    JUT_ASSERT(0x70, modelData != NULL);
-#endif
-
+    JUT_ASSERT(VERSION_SELECT(112, 113, 113, 113), modelData != NULL);
 
     field_0x2D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (field_0x2D4 != NULL) {
@@ -64,9 +58,6 @@ BOOL daObjHami3::Act_c::CreateHeap() {
         return FALSE;
     }
     return TRUE;
-
-
-    /* Nonmatching */
 }
 
 /* 0000026C-00000354       .text Create__Q210daObjHami35Act_cFv */
@@ -88,7 +79,6 @@ BOOL daObjHami3::Act_c::Create() {
                 (this, -1200.0f,-1200.0f,-1200.0f,1200.0f,1200.0f,1200.0f);
     field_0x2DC = dComIfGp_evmng_getEventIdx("AMI3");
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000354-00000450       .text Mthd_Create__Q210daObjHami35Act_cFv */
@@ -96,35 +86,23 @@ cPhs_State daObjHami3::Act_c::Mthd_Create() {
     fopAcM_SetupActor(this, daObjHami3::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2CC, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, 7, dBgS_MoveBGProc_Typical, 0x1fc0);
+        phase_state = MoveBGCreate(M_arcname, HAMI3_DZB_HAMI3, dBgS_MoveBGProc_Typical, 0x1fc0);
 
-#if VERSION > VERSION_DEMO
-        JUT_ASSERT(0xb7, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
-#else 
-        JUT_ASSERT(0xb6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
-#endif
-
+        JUT_ASSERT(VERSION_SELECT(182, 183, 183, 183), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
-    /* Nonmatching */
 }
 
 /* 00000450-00000458       .text Delete__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Delete() {
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000458-000004A4       .text Mthd_Delete__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::Mthd_Delete() {
     u32 result = MoveBGDelete();
-#if VERSION > VERSION_DEMO
-    dComIfG_resDelete(&field_0x2CC, M_arcname);
-#else
-    dComIfG_deleteObjectRes(M_arcname);
-#endif
+    dComIfG_resDeleteDemo(&field_0x2CC, M_arcname);
     return result;
-    /* Nonmatching */
 }
 
 /* 000004A4-00000524       .text set_mtx__Q210daObjHami35Act_cFv */
@@ -133,14 +111,12 @@ void daObjHami3::Act_c::set_mtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     field_0x2D4->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
-    /* Nonmatching */
 }
 
 /* 00000524-00000560       .text init_mtx__Q210daObjHami35Act_cFv */
 void daObjHami3::Act_c::init_mtx() {
     field_0x2D4->setBaseScale(scale);
     set_mtx();
-    /* Nonmatching */
 }
 
 /* 00000560-000005DC       .text daObjHami3_close_stop__Q210daObjHami35Act_cFv */
@@ -150,7 +126,6 @@ void daObjHami3::Act_c::daObjHami3_close_stop() {
         fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
         field_0x2D8 = 1;
     }
-    /* Nonmatching */
 }
 
 /* 000005DC-00000688       .text daObjHami3_open_demo_wait__Q210daObjHami35Act_cFv */
@@ -163,7 +138,6 @@ void daObjHami3::Act_c::daObjHami3_open_demo_wait() {
     } else {
         fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
     }
-    /* Nonmatching */
 }
 
 /* 00000688-0000078C       .text daObjHami3_open_demo__Q210daObjHami35Act_cFv */
@@ -180,8 +154,6 @@ void daObjHami3::Act_c::daObjHami3_open_demo() {
         fopAcM_onSwitch(this, switchNo);
         field_0x2D8 = 3;
     }
-        
-    /* Nonmatching */
 }
 
 /* 0000078C-00000808       .text daObjHami3_open_stop__Q210daObjHami35Act_cFv */
@@ -191,7 +163,6 @@ void daObjHami3::Act_c::daObjHami3_open_stop() {
         fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
         field_0x2D8 = 4;
     }
-    /* Nonmatching */
 }
 
 /* 00000808-00000858       .text daObjHami3_close_demo_wait__Q210daObjHami35Act_cFv */
@@ -201,7 +172,6 @@ void daObjHami3::Act_c::daObjHami3_close_demo_wait() {
     } else {
         fopAcM_orderOtherEventId(this,field_0x2DC,0xff);
     }
-    /* Nonmatching */
 }
 
 /* 00000858-00000934       .text daObjHami3_close_demo__Q210daObjHami35Act_cFv */
@@ -217,7 +187,6 @@ void daObjHami3::Act_c::daObjHami3_close_demo() {
         dComIfGp_event_reset();
         field_0x2D8 = 0;
     }
-    /* Nonmatching */
 }
 
 /* 00000934-000009F4       .text Execute__Q210daObjHami35Act_cFPPA3_A4_f */
@@ -245,8 +214,7 @@ BOOL daObjHami3::Act_c::Execute(Mtx** mtx) {
     shape_angle.x = home.angle.x + field_0x2C8;
     set_mtx();
     *mtx = &M_tmp_mtx;
-    return true; 
-    /* Nonmatching */
+    return true;
 }
 
 /* 000009F4-00000A94       .text Draw__Q210daObjHami35Act_cFv */
@@ -257,7 +225,6 @@ BOOL daObjHami3::Act_c::Draw() {
     mDoExt_modelUpdateDL(field_0x2D4);
     dComIfGd_setList();
     return TRUE;
-    /* Nonmatching */
 }
 
 namespace daObjHami3 {
