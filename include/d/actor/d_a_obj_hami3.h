@@ -17,9 +17,9 @@ namespace daObjHami3 {
             PRM_SOUND_W = 0x01,
             PRM_SOUND_S = 0x10,
         };
-        int prm_get_sound() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SOUND_W, PRM_SOUND_S);}
-        int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
-        int prm_get_swSave2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S);}
+        int prm_get_sound() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SOUND_W, PRM_SOUND_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        int prm_get_swSave2() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE2_W, PRM_SWSAVE2_S); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
@@ -39,16 +39,18 @@ namespace daObjHami3 {
 
         static Mtx M_tmp_mtx;
         static const char M_arcname[];
+#if VERSION > VERSION_DEMO
         static const char M_evname[];
+#endif
     
     public:
-            /* 0x2C8 */ s16 field_0x2C8;
-            /* 0x2CA */ s16 field_0x2CA;
-            /* 0x2CC */ request_of_phase_process_class field_0x2CC;
-            /* 0x2D4 */ J3DModel* field_0x2D4;
-            /* 0x2D8 */ int field_0x2D8;
-            /* 0x2DC */ s16 field_0x2DC;
-            /* 0x2DE */ s16 field_0x2DE;
+        /* 0x2C8 */ s16 field_0x2C8;
+        /* 0x2CA */ s16 field_0x2CA;
+        /* 0x2CC */ request_of_phase_process_class field_0x2CC;
+        /* 0x2D4 */ J3DModel* field_0x2D4;
+        /* 0x2D8 */ int field_0x2D8;
+        /* 0x2DC */ s16 field_0x2DC;
+        /* 0x2DE */ s16 field_0x2DE;
     };  // Size: 0x2E0
 };
 

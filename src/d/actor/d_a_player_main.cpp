@@ -1509,7 +1509,7 @@ void daPy_lk_c::updateDLSetLight(J3DModel* model, u32 param_2) {
 /* 80106CB0-80106D8C       .text hideHatAndBackle__9daPy_lk_cFP11J3DMaterial */
 void daPy_lk_c::hideHatAndBackle(J3DMaterial* param_1) {
     for (int i = 0; param_1 != NULL; i++) {
-        if ((!checkNoResetFlg1(daPyFlg1_FREEZE_STATE) && (i == 2 || i == 5)) ||
+        if ((!checkFreezeState() && (i == 2 || i == 5)) ||
             (i == 4 && (checkCaughtShapeHide() || checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES))))
         {
             param_1->getShape()->hide();
@@ -1810,7 +1810,7 @@ BOOL daPy_lk_c::draw() {
             }
             link_root_joint->entryIn();
             if (checkMaskDraw()) {
-                entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpYamuModel, checkFreezeState());
             }
             j3dSys.setModel(mpCLModel);
             j3dSys.setTexture(mpCLModelData->getTexture());
@@ -1858,31 +1858,31 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
     mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
     if (!r24) {
-        entryDLSetLight(mpHandsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+        entryDLSetLight(mpHandsModel, checkFreezeState());
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()
 #if VERSION > VERSION_DEMO
             && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)
 #endif
         ) {
-            entryDLSetLight(mpKatsuraModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpKatsuraModel, checkFreezeState());
         }
         if (checkFreezeState() && checkMaskDraw()) {
-            entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpYamuModel, checkFreezeState());
         }
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            entryDLSetLight(mpPringModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpPringModel, checkFreezeState());
         }
         if (checkMasterSwordEquip() && !checkCaughtShapeHide()
 #if VERSION > VERSION_DEMO
             && !checkDemoShieldNoDraw()
 #endif
         ) {
-            updateDLSetLight(mpPodmsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            updateDLSetLight(mpPodmsModel, checkFreezeState());
         }
     }
     if (checkEquipHeavyBoots()) {
-        entryDLSetLight(mpHbootsModels[0], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
-        entryDLSetLight(mpHbootsModels[1], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+        entryDLSetLight(mpHbootsModels[0], checkFreezeState());
+        entryDLSetLight(mpHbootsModels[1], checkFreezeState());
     }
     
     tevStr.mFogColor.r = origFog.r;
@@ -1916,7 +1916,7 @@ BOOL daPy_lk_c::draw() {
                 && !checkDemoSwordNoDraw(1)
 #endif
             ) {
-                entryDLSetLight(mpEquippedSwordModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpEquippedSwordModel, checkFreezeState());
             }
         }
         if (dComIfGs_getSelectEquip(1) != dItem_NONE_e && !checkCaughtShapeHide()
@@ -1926,7 +1926,7 @@ BOOL daPy_lk_c::draw() {
             && !checkDemoShieldNoDraw()
 #endif
         ) {
-            entryDLSetLight(mpEquippedShieldModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpEquippedShieldModel, checkFreezeState());
         }
         dComIfGd_setList();
         drawMirrorLightModel();
@@ -1949,7 +1949,7 @@ BOOL daPy_lk_c::draw() {
                         mpEquipItemModel->setAnmMtx(4, hookshot->getMtxTop());
                     }
                 }
-                entryDLSetLight(mpEquipItemModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpEquipItemModel, checkFreezeState());
                 if (mpSwordModel1 != NULL) {
                     if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
@@ -9246,7 +9246,7 @@ void daPy_lk_c::checkOriginalHatAnimation() {
 
 /* 8011BEA4-8011CBA4       .text setHatAngle__9daPy_lk_cFv */
 void daPy_lk_c::setHatAngle() {
-    if (m_old_fdata->getOldFrameFlg() == false || checkNoResetFlg1(daPyFlg1_FREEZE_STATE)) {
+    if (m_old_fdata->getOldFrameFlg() == false || checkFreezeState()) {
         return;
     }
 

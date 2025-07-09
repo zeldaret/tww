@@ -13,14 +13,14 @@ namespace daObjVfan {
 class Act_c : public dBgS_MoveBgActor {
 public:
     enum Prm_e {
-        PRM_W = 8,
-        PRM_S = 0,
+        PRM_SWSAVE_W = 8,
+        PRM_SWSAVE_S = 0,
     };
 
     static Mtx M_tmp_mtx;
     static const char M_arcname[];
 
-    s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_W, PRM_S); }
+    s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
 
     virtual BOOL CreateHeap();
     virtual BOOL Create();
