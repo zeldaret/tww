@@ -1507,18 +1507,25 @@ void daPy_lk_c::updateDLSetLight(J3DModel* model, u32 param_2) {
 }
 
 /* 80106CB0-80106D8C       .text hideHatAndBackle__9daPy_lk_cFP11J3DMaterial */
-void daPy_lk_c::hideHatAndBackle(J3DMaterial* param_1) {
-    for (int i = 0; param_1 != NULL; i++) {
+void daPy_lk_c::hideHatAndBackle(J3DMaterial* mtl) {
+    for (int i = 0; mtl != NULL; i++) {
+        // If NOT frozen, hide materials that were already drawn earlier:
+        // * "face"
+        // * "ear(2)" (hair)
+        // If CaughtShapeHide or wearing casual clothes, hide material:
+        // * "ear(3)" (hat)
         if ((!checkFreezeState() && (i == 2 || i == 5)) ||
             (i == 4 && (checkCaughtShapeHide() || checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES))))
         {
-            param_1->getShape()->hide();
+            mtl->getShape()->hide();
         } else {
-            param_1->getShape()->show();
+            mtl->getShape()->show();
         }
-        param_1 = param_1->getNext();
+        mtl = mtl->getNext();
     }
     if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
+        // Hide material:
+        // * "ear(8)" (belt buckle)
         mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->hide();
     }
 }
@@ -1541,7 +1548,7 @@ void daPy_lk_c::drawMirrorLightModel() {
 
 /* 80106E50-80107210       .text drawShadow__9daPy_lk_cFv */
 void daPy_lk_c::drawShadow() {
-    J3DJoint* ppJVar6 = mpCLModelData->getJointNodePointer(0);
+    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00);
     MtxP pMVar3 = mpCLModel->getAnmMtx(0);
     cXyz local_30;
 
@@ -1558,7 +1565,9 @@ void daPy_lk_c::drawShadow() {
         pJVar7->getMesh()->getShape()->show();
         mpCLModelData->getJointNodePointer(0xC)->getMesh()->getShape()->show();
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
-            J3DMaterial* mtl = ppJVar6->getMesh();
+            J3DMaterial* mtl = link_root_joint->getMesh();
+            // Hide material:
+            // * "ear(3)" (hat)
             for (int i = 0; i < 4; i++) {
                 mtl = mtl->getNext();
             }
@@ -1740,6 +1749,8 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
     
     mtl = link_root_joint->getMesh();
+    // Show material:
+    // * "ear(3)" (hat)
     for (int i = 0; i < 4; i++) {
         mtl = mtl->getNext();
     }
@@ -1764,8 +1775,17 @@ BOOL daPy_lk_c::draw() {
         mtl = link_root_joint->getMesh();
         for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
             if (i != 3) {
+                // Hide materials:
+                // * "sleeve" (arms and tunic bottom)
+                // * "mouth"
+                // * "face"
+                // * "ear(3)" (hat)
+                // * "ear(2)" (hair)
+                // * "ear" (torso and ears)
                 mtl->getShape()->hide();
             } else {
+                // Show materials:
+                // * "ear(4)" (legs)
                 mtl->getShape()->show();
             }
         }
@@ -1778,8 +1798,17 @@ BOOL daPy_lk_c::draw() {
         mtl = link_root_joint->getMesh();
         for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
             if (i != 0 && i != 3) {
+                // Hide materials:
+                // * "mouth"
+                // * "face"
+                // * "ear(3)" (hat)
+                // * "ear(2)" (hair)
+                // * "ear" (torso and ears)
                 mtl->getShape()->hide();
             } else {
+                // Show materials:
+                // * "sleeve" (arms and tunic bottom)
+                // * "ear(4)" (legs)
                 mtl->getShape()->show();
             }
         }
@@ -1805,6 +1834,15 @@ BOOL daPy_lk_c::draw() {
             mtl = link_root_joint->getMesh();
             for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
                 if (i != 2 && i != 5) {
+                    // Hide materials:
+                    // * "sleeve" (arms and tunic bottom)
+                    // * "mouth"
+                    // * "ear(4)" (legs)
+                    // * "ear(3)" (hat)
+                    // * "ear" (torso and ears)
+                    // This leaves the following materials of the link_root joint visible:
+                    // * "face"
+                    // * "ear(2)" (hair)
                     mtl->getShape()->hide();
                 }
             }
@@ -1843,7 +1881,6 @@ BOOL daPy_lk_c::draw() {
         }
     }
     
-    // regalloc issues with j3dSys from here on
     dComIfGd_setListP1();
     if (checkFreezeState()) {
         dMat_control_c::iceEntryDL(mpCLModel, -1, NULL);
