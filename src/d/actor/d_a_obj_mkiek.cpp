@@ -77,7 +77,7 @@ BOOL daObjMkiek::Act_c::Create() {
 
     m458 = false;
     mDieEventIdx = dComIfGp_evmng_getEventIdx("MkieK_die");
-    m45C = 0;
+    mState = STATE_0;
     m460 = 0;
 
     return TRUE;
@@ -137,7 +137,7 @@ void daObjMkiek::Act_c::check() {
         m460++;
         if (m460 >= 0x14) {
           fopAcM_orderOtherEventId(this,mDieEventIdx);
-          this->m45C = 1;
+          mState = STATE_1;
         }
     } else {
       m460 = 0;
@@ -182,7 +182,7 @@ void daObjMkiek::Act_c::demo_wait() {
 
             fopAcM_seStartCurrent(this, JA_SE_OBJ_L_OBJ_BRK_TAME, 0);
             m458 = true;
-            m45C = 2;
+            mState = STATE_2;
         }
     } else {
         fopAcM_orderOtherEventId(this, mDieEventIdx);
@@ -211,7 +211,7 @@ BOOL daObjMkiek::Act_c::Execute(Mtx** o_mtx) {
     mSph.SetC(current.pos + sph_pos_offset);
     dComIfG_Ccsp()->Set(&mSph);
 
-    switch(m45C) {
+    switch(mState) {
         case 0:
             check();
             break;

@@ -5,6 +5,13 @@
 #include "m_Do/m_Do_ext.h"
 
 namespace daObjMkiek {
+
+    enum daObjMkiek_State {
+        STATE_0 = 0,
+        STATE_1 = 1,
+        STATE_2 = 2,
+    };
+
     class Act_c : public dBgS_MoveBgActor {
     public:
         int prm_get_sound() const;
@@ -46,7 +53,7 @@ namespace daObjMkiek {
         /* 0x32C */ dCcD_Sph mSph;
         /* 0x458 */ bool m458;
         /* 0x45A */ s16 mDieEventIdx;
-        /* 0x45C */ u32 m45C;
+        /* 0x45C */ daObjMkiek_State mState;
         /* 0x460 */ s32 m460;
     };
 };
