@@ -46,7 +46,7 @@ namespace daObjMkiek {
         /* 0x32C */ dCcD_Sph mSph;
         /* 0x458 */ bool m458;
         /* 0x45A */ s16 mDieEventIdx;
-        /* 0x45C */ s32 m45C;
+        /* 0x45C */ u32 m45C;
         /* 0x460 */ s32 m460;
     };
 };

@@ -211,14 +211,15 @@ BOOL daObjMkiek::Act_c::Execute(Mtx** o_mtx) {
     mSph.SetC(current.pos + sph_pos_offset);
     dComIfG_Ccsp()->Set(&mSph);
 
-    if (m45C == 1) {
-        demo_wait();
-    } else if (m45C < 1) {
-        if (m45C > -1) {
+    switch(m45C) {
+        case 0:
             check();
-        }
-    } else if (m45C < 3) {
-        demo();
+            break;
+        case 1:
+            demo_wait();
+            break;
+        case 2:
+            demo();
     }
 
     set_mtx();
