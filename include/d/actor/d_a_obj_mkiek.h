@@ -14,8 +14,16 @@ namespace daObjMkiek {
 
     class Act_c : public dBgS_MoveBgActor {
     public:
-        int prm_get_sound() const;
-        int prm_get_swSave() const;
+        enum Prm_e {
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x00,
+
+            PRM_SOUND_W = 0x01,
+            PRM_SOUND_S = 0x08
+        };
+
+        int prm_get_sound() const { return daObj::PrmAbstract(this, PRM_SOUND_W, PRM_SOUND_S); }
+        int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
@@ -29,14 +37,6 @@ namespace daObjMkiek {
         void demo();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-
-        enum Prm_e {
-            PRM_SWSAVE_W = 0x08,
-            PRM_SWSAVE_S = 0x00,
-
-            PRM_SOUND_W = 0x01,
-            PRM_SOUND_S = 0x08
-        };
 
         static const char M_arcname[];
         static const char M_envname[];

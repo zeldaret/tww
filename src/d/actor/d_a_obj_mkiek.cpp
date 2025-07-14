@@ -144,14 +144,6 @@ void daObjMkiek::Act_c::check() {
   }
 }
 
-inline int daObjMkiek::Act_c::prm_get_sound() const {
-    return daObj::PrmAbstract(this, PRM_SOUND_W, PRM_SOUND_S);
-}
-
-inline int daObjMkiek::Act_c::prm_get_swSave() const {
-    return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
-}
-
 /* 00000940-00000B28       .text demo_wait__Q210daObjMkiek5Act_cFv */
 void daObjMkiek::Act_c::demo_wait() {
     if (eventInfo.checkCommandDemoAccrpt()) {
@@ -212,14 +204,15 @@ BOOL daObjMkiek::Act_c::Execute(Mtx** o_mtx) {
     dComIfG_Ccsp()->Set(&mSph);
 
     switch(mState) {
-        case 0:
+        case STATE_0:
             check();
             break;
-        case 1:
+        case STATE_1:
             demo_wait();
             break;
-        case 2:
+        case STATE_2:
             demo();
+            break;
     }
 
     set_mtx();
