@@ -50,15 +50,15 @@ Mtx daObjMkiek::Act_c::M_tmp_mtx;
 /* 00000078-00000240       .text CreateHeap__Q210daObjMkiek5Act_cFv */
 BOOL daObjMkiek::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEK_BDL_MKIEK);
-    JUT_ASSERT(0x96, model_data != 0);
+    JUT_ASSERT(0x96, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 
     J3DModelData* model_data_v = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEK_BDL_YLSMK00);
-    JUT_ASSERT(0x9C, model_data_v != 0);
+    JUT_ASSERT(0x9C, model_data_v != NULL);
     mpModelV = mDoExt_J3DModel__create(model_data_v, 0, 0x11020203);
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEK_BRK_YLSMK00);
-    JUT_ASSERT(0xA2, brk != 0);
+    JUT_ASSERT(0xA2, brk != NULL);
 
     int result = mBrkAnm.init(model_data_v, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
     return result == 0 ? FALSE : mpModel != NULL && mpModelV != NULL;
@@ -169,8 +169,7 @@ void daObjMkiek::Act_c::demo_wait() {
                 &tevStr.mColorK0, &color,
                 NULL);
 
-            int prm = prm_get_swSave();
-            dComIfGs_onSwitch(prm, fopAcM_GetHomeRoomNo(this));
+            fopAcM_onSwitch(this, prm_get_swSave());
 
             fopAcM_seStartCurrent(this, JA_SE_OBJ_L_OBJ_BRK_TAME, 0);
             m458 = true;
@@ -189,8 +188,7 @@ void daObjMkiek::Act_c::demo() {
     }
 
     dComIfGp_event_onEventFlag(8);
-    mDoAud_seStart(JA_SE_OBJ_L_WALL_BREAK, &current.pos, 0,
-        dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    fopAcM_seStartCurrent(this, JA_SE_OBJ_L_WALL_BREAK, 0);
     dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
     fopAcM_delete(this);
 }
