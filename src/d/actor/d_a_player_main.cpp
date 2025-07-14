@@ -2612,7 +2612,7 @@ void daPy_lk_c::posMove() {
         }
     }
     m3644 = 0.0f;
-    mStts.GetCCMoveP()->zero();
+    mStts.GetCCMoveP()->x = mStts.GetCCMoveP()->y = mStts.GetCCMoveP()->z = 0.0f;
     if (m34C2 == 1 || m34C2 == 8 || m34C2 == 9 || m34C2 == 5) {
         cXyz sp5C;
         if (m34C2 == 1 || m34C2 == 5) {

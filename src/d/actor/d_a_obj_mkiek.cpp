@@ -109,7 +109,7 @@ BOOL daObjMkiek::Act_c::Delete() {
 BOOL daObjMkiek::Act_c::Mthd_Delete() {
     BOOL result = this->MoveBGDelete();
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return result;
 }
@@ -150,6 +150,9 @@ void daObjMkiek::Act_c::demo_wait() {
         if (prm_get_sound() == 0) {
             mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         }
+#if VERSION == VERSION_DEMO
+        dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+#endif
         if (m460 < 0x14) {
             m460++;
         } else {

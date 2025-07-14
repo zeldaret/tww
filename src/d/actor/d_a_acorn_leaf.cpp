@@ -9,7 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "JSystem/J3DGraphANimator/J3DModel.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_vigah.h"
@@ -151,8 +151,7 @@ void daAleaf_c::set_mtx() {
 /* 000008D0-00000C44       .text _execute__9daAleaf_cFv */
 bool daAleaf_c::_execute() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    fpc_ProcID sp14 = unk_424;
-    fopAc_ac_c* actor = fopAcM_Search(fpcSch_JudgeByID, &sp14);
+    fopAc_ac_c* actor = fopAcM_SearchByID(unk_424);
     
     bool var_r29 = false;
 
@@ -180,7 +179,7 @@ bool daAleaf_c::_execute() {
         unk_408.setPlaySpeed(1.0f);
     }
 
-    f32 var_f31 = std::sqrtf((player->current.pos - current.pos).getMagXZ());
+    f32 var_f31 = (player->current.pos - current.pos).absXZ();
 
     if (var_f31 < 50.0f && (unk_42C - var_f31) > 3.0f && std::fabsf(player->current.pos.y - current.pos.y) < 5.0f) {
         unk_418 = true;
@@ -188,11 +187,10 @@ bool daAleaf_c::_execute() {
     }
 
     if (var_f31 < 200.0f && unk_428 != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
-        fpc_ProcID sp14 = unk_428;
-        fopAc_ac_c* actor = fopAcM_Search(fpcSch_JudgeByID, &sp14);
+        fopAc_ac_c* actor = fopAcM_SearchByID(unk_428);
 
         if (actor != NULL) {
-            f32 var_f1 = std::sqrtf((actor->current.pos - current.pos).getMagXZ());
+            f32 var_f1 = (actor->current.pos - current.pos).absXZ();
             
             if (var_f1 < 70.0f) {
                 unk_418 = true;
