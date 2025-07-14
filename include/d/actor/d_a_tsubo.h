@@ -16,8 +16,10 @@ namespace daTsubo {
     class Act_c : public fopAc_ac_c {
     public:
         enum Prm_e {
+            PRM_TYPE_1 = 0x01,
             PRM_TYPE_W = 0x04,
             PRM_TYPE_S = 0x18,
+            PRM_TYPE_1F = 0x1F,
         };
         
         enum Type {
@@ -58,7 +60,18 @@ namespace daTsubo {
         void prm_get_moveBg() const {}
         void prm_get_spec() const {}
         void prm_get_stick() const {}
-        void prm_make_acorn(bool, int, int) {}
+        
+        static s32 prm_make_acorn(bool arg1, int item_no, int bit_no) {
+            s32 a1 = (arg1 ? 0x4 : 0x3F);
+            s32 param = 0;
+
+            param |= ((bit_no & 0x7F) << 16);
+            param |= ((item_no & 0x3F) << 0) | (a1 << 8);
+            param |= ((7 << 24) | (1 << 31));
+
+            return param;
+        }
+
         void prm_make_skull() {}
         void prm_make_yw1() {}
         void prm_off_moveBg() {}
