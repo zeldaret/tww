@@ -12,6 +12,7 @@
 #include "JSystem/J3DGraphANimator/J3DModel.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_player.h"
+#include "d/res/res_vigah.h"
 
 static cXyz acorn_offset(0.0f, 15.0f, 0.0f);
 
@@ -64,24 +65,16 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 0000010C-00000258       .text CreateHeap__9daAleaf_cFv */
 BOOL daAleaf_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, 7);
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x102, modelData != NULL);
-#else
-    JUT_ASSERT(0x106, modelData != NULL);
-#endif
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BDL_VIGAH);
+    JUT_ASSERT(VERSION_SELECT(258, 262, 262, 262), modelData != NULL);
 
     unk_298 = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000022U);
     if (unk_298 == NULL) {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, 4);
-#if VERSION == VERSION_DEMO
-    JUT_ASSERT(0x111, pbck != NULL);
-#else
-    JUT_ASSERT(0x115, pbck != NULL);
-#endif
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BCK_VIGAH);
+    JUT_ASSERT(VERSION_SELECT(273, 277, 277, 277), pbck != NULL);
 
     if (!unk_408.init(modelData, pbck, 1, 1, 1.0f, 0, -1, 0)) {
         return FALSE;
@@ -98,8 +91,8 @@ void daAleaf_c::CreateInit() {
     unk_2D8.Set(l_cyl_src);
     unk_2D8.SetStts(&unk_29C);
     current.angle = home.angle;
-    unk_428 = -1;
-    unk_424 = -1;
+    unk_428 = fpcM_ERROR_PROCESS_ID_e;
+    unk_424 = fpcM_ERROR_PROCESS_ID_e;
     set_mtx();
     create_acorn_sub(false);
 }
@@ -150,22 +143,21 @@ cPhs_State daAleaf_c::_create() {
 /* 00000848-000008D0       .text set_mtx__9daAleaf_cFv */
 void daAleaf_c::set_mtx() {
     unk_298->setBaseScale(scale);
-    mDoMtx_trans(mDoMtx_stack_c::get(), current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     unk_298->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000008D0-00000C44       .text _execute__9daAleaf_cFv */
 bool daAleaf_c::_execute() {
-    daPy_py_c* player = (daPy_py_c*)g_dComIfG_gameInfo.play.getPlayer(0);
-
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fpc_ProcID sp14 = unk_424;
     fopAc_ac_c* actor = fopAcM_Search(fpcSch_JudgeByID, &sp14);
     
     bool var_r29 = false;
 
     if (actor != NULL) {
-        var_r29 = daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(actor, daTsubo::Act_c::PRM_TYPE_1, daTsubo::Act_c::PRM_TYPE_1F);
+        var_r29 = ((daTsubo::Act_c*)actor)->prm_get_stick();
     }
 
     create_acorn();
@@ -196,11 +188,11 @@ bool daAleaf_c::_execute() {
     }
 
     if (var_f31 < 200.0f && unk_428 != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
-        fpc_ProcID sp10 = unk_428;
-        fopAc_ac_c* actor2 = fopAcM_Search(fpcSch_JudgeByID, &sp10);
+        fpc_ProcID sp14 = unk_428;
+        fopAc_ac_c* actor = fopAcM_Search(fpcSch_JudgeByID, &sp14);
 
-        if (actor2 != NULL) {
-            f32 var_f1 = std::sqrtf((actor2->current.pos - current.pos).getMagXZ());
+        if (actor != NULL) {
+            f32 var_f1 = std::sqrtf((actor->current.pos - current.pos).getMagXZ());
             
             if (var_f1 < 70.0f) {
                 unk_418 = true;
@@ -234,6 +226,11 @@ bool daAleaf_c::_draw() {
     return true;
 }
 
+bool daAleaf_c::_delete() {
+    dComIfG_resDeleteDemo(&unk_290, daAleaf_c::m_arcname);
+    return true;
+}
+
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
 static cPhs_State daAleaf_Create(void* i_this) {
     return ((daAleaf_c*)i_this)->_create();
@@ -241,8 +238,7 @@ static cPhs_State daAleaf_Create(void* i_this) {
 
 /* 00000CF4-00000D24       .text daAleaf_Delete__FPv */
 static BOOL daAleaf_Delete(void* i_this) {
-    dComIfG_resDeleteDemo(&((daAleaf_c*)i_this)->unk_290, daAleaf_c::m_arcname);
-    return TRUE;
+    return ((daAleaf_c*)i_this)->_delete();
 }
 
 /* 00000D24-00000D48       .text daAleaf_Draw__FPv */

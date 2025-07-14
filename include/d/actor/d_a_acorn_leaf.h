@@ -7,8 +7,6 @@
 
 class daAleaf_c : public fopAc_ac_c {
 public:
-    inline bool _delete();
-
     BOOL CreateHeap();
     void CreateInit();
     void create_acorn();
@@ -17,6 +15,7 @@ public:
     void set_mtx();
     bool _execute();
     bool _draw();
+    inline bool _delete();
 
     static const char m_arcname[];
 
