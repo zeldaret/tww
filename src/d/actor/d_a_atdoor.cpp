@@ -6,70 +6,173 @@
 #include "d/actor/d_a_atdoor.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_com_inf_game.h"
+#include "d/res/res_atdoor.h"
+
+const char daAtdoor_c::M_arcname[] = "Atdoor";
 
 /* 00000078-00000084       .text getSwbit__10daAtdoor_cFv */
-void daAtdoor_c::getSwbit() {
-    /* Nonmatching */
+u8 daAtdoor_c::getSwbit() {
+    return (fopAcM_GetParam(this) >> 0) & 0xFF;
 }
 
 /* 00000084-000000A4       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daAtdoor_c*)i_this)->CreateHeap();
 }
 
 /* 000000A4-000001E8       .text CreateHeap__10daAtdoor_cFv */
-void daAtdoor_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daAtdoor_c::CreateHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daAtdoor_c::M_arcname, ATDOOR_BDL_SDOOR01));
+    JUT_ASSERT(VERSION_SELECT(112, 112, 112, 112), modelData != NULL);
+
+    unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (unk_298 == NULL) {
+        return FALSE;
+    }
+
+    unk_29C = new dBgW();
+    if (unk_29C == NULL) {
+        return FALSE;
+    }
+
+    cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(daAtdoor_c::M_arcname, ATDOOR_DZB_SDOOR01);
+    if (dzb == NULL) {
+        return FALSE;
+    }
+
+    calcMtx();
+
+    if (unk_29C->Set(dzb, cBgW::MOVE_BG_e, &unk_298->getBaseTRMtx()) == true) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 000001E8-00000258       .text calcMtx__10daAtdoor_cFv */
 void daAtdoor_c::calcMtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(home.angle.y - unk_2A2);
+    unk_298->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000258-0000036C       .text CreateInit__10daAtdoor_cFv */
-void daAtdoor_c::CreateInit() {
-    /* Nonmatching */
+bool daAtdoor_c::CreateInit() {
+    s32 swBit = getSwbit();
+    if (dComIfG_Bgsp()->Regist(unk_29C, this)) {
+        JUT_ASSERT(VERSION_SELECT(170, 170, 170, 170), NULL);
+    }
+    
+    tevStr.mRoomNo = current.roomNo;
+
+    if (swBit == 0xFF) {
+        unk_2A0 = 0;
+    } else if (dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this))) {
+        unk_2A0 = 3;
+        unk_2A2 = 0x4000;
+    } else {
+        unk_2A0 = 1;
+    }
+
+    attention_info.position.y += 150.0f;
+    eyePos.y += 150.0f;
+    calcMtx();
+    unk_29C->Move();
+    return true;
 }
 
 /* 0000036C-00000418       .text create__10daAtdoor_cFv */
 cPhs_State daAtdoor_c::create() {
-    /* Nonmatching */
+    cPhs_State ret = dComIfG_resLoad(&unk_290, daAtdoor_c::M_arcname);
+#if VERSION == VERSION_DEMO
+    if (ret != cPhs_COMPLEATE_e) {
+        return ret;
+    }
+    fopAcM_SetupActor(this, daAtdoor_c);
+#else
+    fopAcM_SetupActor(this, daAtdoor_c);
+    if (ret != cPhs_COMPLEATE_e) {
+        return ret;
+    }
+#endif
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1580)) {
+        return cPhs_ERROR_e;
+    }
+
+    CreateInit();
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000418-00000420       .text daAtdoor_actionWait__FP10daAtdoor_c */
-void daAtdoor_actionWait(daAtdoor_c*) {
-    /* Nonmatching */
+bool daAtdoor_actionWait(daAtdoor_c* i_this) {
+    return true;
 }
 
 /* 00000420-000004CC       .text daAtdoor_actionCloseWait__FP10daAtdoor_c */
-void daAtdoor_actionCloseWait(daAtdoor_c*) {
-    /* Nonmatching */
+bool daAtdoor_actionCloseWait(daAtdoor_c* i_this) {
+    if (dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this))) {
+        fopAcM_seStart(i_this, JA_SE_OBJ_TC_JAIL_DOOR_OP, 0);
+        i_this->unk_2A0 = 4;
+    }
+    return true;
 }
 
 /* 000004CC-00000530       .text daAtdoor_actionClose__FP10daAtdoor_c */
-void daAtdoor_actionClose(daAtdoor_c*) {
-    /* Nonmatching */
+bool daAtdoor_actionClose(daAtdoor_c* i_this) {
+    i_this->unk_2A2 -= 0x400;
+    if (i_this->unk_2A2 <= 0) {
+        i_this->unk_2A0 = 1;
+        i_this->unk_2A2 = 0;
+    }
+
+    i_this->calcMtx();
+    i_this->unk_29C->Move();
+    return true;
 }
 
 /* 00000530-00000594       .text daAtdoor_actionOpenWait__FP10daAtdoor_c */
-void daAtdoor_actionOpenWait(daAtdoor_c*) {
-    /* Nonmatching */
+bool daAtdoor_actionOpenWait(daAtdoor_c* i_this) {
+    if (!dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this))) {
+        i_this->unk_2A0 = 2;
+    }
+    return true;
 }
 
 /* 00000594-000005F8       .text daAtdoor_actionOpen__FP10daAtdoor_c */
-void daAtdoor_actionOpen(daAtdoor_c*) {
-    /* Nonmatching */
+bool daAtdoor_actionOpen(daAtdoor_c* i_this) {
+    i_this->unk_2A2 += 0x400;
+    if (i_this->unk_2A2 >= 0x4000) {
+        i_this->unk_2A0 = 3;
+        i_this->unk_2A2 = 0x4000;
+    }
+
+    i_this->calcMtx();
+    i_this->unk_29C->Move();
+    return true;
 }
 
 /* 000005F8-00000658       .text daAtdoor_Draw__FP10daAtdoor_c */
-static BOOL daAtdoor_Draw(daAtdoor_c*) {
-    /* Nonmatching */
+static BOOL daAtdoor_Draw(daAtdoor_c* i_this) {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
+    g_env_light.setLightTevColorType(i_this->unk_298, &i_this->tevStr);
+    mDoExt_modelUpdateDL(i_this->unk_298);
+    return TRUE;
 }
 
 /* 00000658-00000694       .text daAtdoor_Execute__FP10daAtdoor_c */
-static BOOL daAtdoor_Execute(daAtdoor_c*) {
-    /* Nonmatching */
+static BOOL daAtdoor_Execute(daAtdoor_c* i_this) {
+    typedef bool (*actionFuncs)(daAtdoor_c*);
+    static actionFuncs l_action[] = {
+        daAtdoor_actionWait,
+        daAtdoor_actionCloseWait,
+        daAtdoor_actionClose,
+        daAtdoor_actionOpenWait,
+        daAtdoor_actionOpen,
+    };
+
+    l_action[i_this->unk_2A0](i_this);
+    return true;
 }
 
 /* 00000694-0000069C       .text daAtdoor_IsDelete__FP10daAtdoor_c */
@@ -78,8 +181,19 @@ static BOOL daAtdoor_IsDelete(daAtdoor_c*) {
 }
 
 /* 0000069C-0000070C       .text daAtdoor_Delete__FP10daAtdoor_c */
-static BOOL daAtdoor_Delete(daAtdoor_c*) {
-    /* Nonmatching */
+static BOOL daAtdoor_Delete(daAtdoor_c* i_this) {
+#if VERSION == VERSION_DEMO
+    dComIfG_Bgsp()->Release(i_this->unk_29C);
+#else
+    if (i_this->heap != NULL) {
+        dComIfG_Bgsp()->Release(i_this->unk_29C);
+    }
+#endif
+
+    dComIfG_resDeleteDemo(&i_this->unk_290, daAtdoor_c::M_arcname);
+    i_this->~daAtdoor_c();
+
+    return TRUE;
 }
 
 /* 0000070C-0000072C       .text daAtdoor_Create__FP10fopAc_ac_c */
