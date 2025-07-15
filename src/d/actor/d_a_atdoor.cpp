@@ -9,6 +9,14 @@
 #include "d/d_com_inf_game.h"
 #include "d/res/res_atdoor.h"
 
+enum Action_e {
+    ACT_WAIT_e = 0,
+    ACT_CLOSE_WAIT_e = 1,
+    ACT_CLOSE_e = 2,
+    ACT_OPEN_WAIT_e = 3,
+    ACT_OPEN_e = 4,
+};
+
 const char daAtdoor_c::M_arcname[] = "Atdoor";
 
 /* 00000078-00000084       .text getSwbit__10daAtdoor_cFv */
@@ -24,15 +32,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000000A4-000001E8       .text CreateHeap__10daAtdoor_cFv */
 BOOL daAtdoor_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daAtdoor_c::M_arcname, ATDOOR_BDL_SDOOR01));
-    JUT_ASSERT(VERSION_SELECT(112, 112, 112, 112), modelData != NULL);
+    JUT_ASSERT(112, modelData != NULL);
 
-    unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-    if (unk_298 == NULL) {
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
         return FALSE;
     }
 
-    unk_29C = new dBgW();
-    if (unk_29C == NULL) {
+    mpBgW = new dBgW();
+    if (mpBgW == NULL) {
         return FALSE;
     }
 
@@ -43,7 +51,7 @@ BOOL daAtdoor_c::CreateHeap() {
 
     calcMtx();
 
-    if (unk_29C->Set(dzb, cBgW::MOVE_BG_e, &unk_298->getBaseTRMtx()) == true) {
+    if (mpBgW->Set(dzb, cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx()) == true) {
         return FALSE;
     }
     return TRUE;
@@ -53,37 +61,37 @@ BOOL daAtdoor_c::CreateHeap() {
 void daAtdoor_c::calcMtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(home.angle.y - unk_2A2);
-    unk_298->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000258-0000036C       .text CreateInit__10daAtdoor_cFv */
 bool daAtdoor_c::CreateInit() {
     s32 swBit = getSwbit();
-    if (dComIfG_Bgsp()->Regist(unk_29C, this)) {
-        JUT_ASSERT(VERSION_SELECT(170, 170, 170, 170), NULL);
+    if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
+        JUT_ASSERT(170, FALSE);
     }
     
     tevStr.mRoomNo = current.roomNo;
 
     if (swBit == 0xFF) {
-        unk_2A0 = 0;
+        mAction = ACT_WAIT_e;
     } else if (dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this))) {
-        unk_2A0 = 3;
+        mAction = ACT_OPEN_WAIT_e;
         unk_2A2 = 0x4000;
     } else {
-        unk_2A0 = 1;
+        mAction = ACT_CLOSE_WAIT_e;
     }
 
     attention_info.position.y += 150.0f;
     eyePos.y += 150.0f;
     calcMtx();
-    unk_29C->Move();
+    mpBgW->Move();
     return true;
 }
 
 /* 0000036C-00000418       .text create__10daAtdoor_cFv */
 cPhs_State daAtdoor_c::create() {
-    cPhs_State ret = dComIfG_resLoad(&unk_290, daAtdoor_c::M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, daAtdoor_c::M_arcname);
 #if VERSION == VERSION_DEMO
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
@@ -113,7 +121,7 @@ bool daAtdoor_actionWait(daAtdoor_c* i_this) {
 bool daAtdoor_actionCloseWait(daAtdoor_c* i_this) {
     if (dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this))) {
         fopAcM_seStart(i_this, JA_SE_OBJ_TC_JAIL_DOOR_OP, 0);
-        i_this->unk_2A0 = 4;
+        i_this->setAction(ACT_OPEN_e);
     }
     return true;
 }
@@ -122,19 +130,19 @@ bool daAtdoor_actionCloseWait(daAtdoor_c* i_this) {
 bool daAtdoor_actionClose(daAtdoor_c* i_this) {
     i_this->unk_2A2 -= 0x400;
     if (i_this->unk_2A2 <= 0) {
-        i_this->unk_2A0 = 1;
+        i_this->setAction(ACT_CLOSE_WAIT_e);
         i_this->unk_2A2 = 0;
     }
 
     i_this->calcMtx();
-    i_this->unk_29C->Move();
+    i_this->mpBgW->Move();
     return true;
 }
 
 /* 00000530-00000594       .text daAtdoor_actionOpenWait__FP10daAtdoor_c */
 bool daAtdoor_actionOpenWait(daAtdoor_c* i_this) {
     if (!dComIfGs_isSwitch(i_this->getSwbit(), fopAcM_GetRoomNo(i_this))) {
-        i_this->unk_2A0 = 2;
+        i_this->setAction(ACT_CLOSE_e);
     }
     return true;
 }
@@ -143,25 +151,28 @@ bool daAtdoor_actionOpenWait(daAtdoor_c* i_this) {
 bool daAtdoor_actionOpen(daAtdoor_c* i_this) {
     i_this->unk_2A2 += 0x400;
     if (i_this->unk_2A2 >= 0x4000) {
-        i_this->unk_2A0 = 3;
+        i_this->setAction(ACT_OPEN_WAIT_e);
         i_this->unk_2A2 = 0x4000;
     }
 
     i_this->calcMtx();
-    i_this->unk_29C->Move();
+    i_this->mpBgW->Move();
     return true;
+}
+
+BOOL daAtdoor_c::draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 000005F8-00000658       .text daAtdoor_Draw__FP10daAtdoor_c */
 static BOOL daAtdoor_Draw(daAtdoor_c* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
-    g_env_light.setLightTevColorType(i_this->unk_298, &i_this->tevStr);
-    mDoExt_modelUpdateDL(i_this->unk_298);
-    return TRUE;
+    return i_this->draw();
 }
 
-/* 00000658-00000694       .text daAtdoor_Execute__FP10daAtdoor_c */
-static BOOL daAtdoor_Execute(daAtdoor_c* i_this) {
+BOOL daAtdoor_c::execute() {
     typedef bool (*actionFuncs)(daAtdoor_c*);
     static actionFuncs l_action[] = {
         daAtdoor_actionWait,
@@ -171,8 +182,13 @@ static BOOL daAtdoor_Execute(daAtdoor_c* i_this) {
         daAtdoor_actionOpen,
     };
 
-    l_action[i_this->unk_2A0](i_this);
+    l_action[mAction](this);
     return true;
+}
+
+/* 00000658-00000694       .text daAtdoor_Execute__FP10daAtdoor_c */
+static BOOL daAtdoor_Execute(daAtdoor_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00000694-0000069C       .text daAtdoor_IsDelete__FP10daAtdoor_c */
@@ -182,15 +198,14 @@ static BOOL daAtdoor_IsDelete(daAtdoor_c*) {
 
 /* 0000069C-0000070C       .text daAtdoor_Delete__FP10daAtdoor_c */
 static BOOL daAtdoor_Delete(daAtdoor_c* i_this) {
-#if VERSION == VERSION_DEMO
-    dComIfG_Bgsp()->Release(i_this->unk_29C);
-#else
-    if (i_this->heap != NULL) {
-        dComIfG_Bgsp()->Release(i_this->unk_29C);
-    }
+#if VERSION > VERSION_DEMO
+    if (i_this->heap != NULL)
 #endif
+    {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
 
-    dComIfG_resDeleteDemo(&i_this->unk_290, daAtdoor_c::M_arcname);
+    dComIfG_resDeleteDemo(&i_this->mPhase, daAtdoor_c::M_arcname);
     i_this->~daAtdoor_c();
 
     return TRUE;

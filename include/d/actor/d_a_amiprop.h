@@ -19,11 +19,11 @@ public:
     static const char m_arcname[];
 
 public:
-    /* 0x290 */ request_of_phase_process_class unk_290;
-    /* 0x298 */ J3DModel* unk_298;
-    /* 0x29C */ dCcD_Stts unk_29C;
-    /* 0x2D8 */ dCcD_Cyl unk_2D8;
-    /* 0x408 */ dBgW* unk_408;
+    /* 0x290 */ request_of_phase_process_class mPhase;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ dCcD_Stts mStts;
+    /* 0x2D8 */ dCcD_Cyl mCyl;
+    /* 0x408 */ dBgW* mpBgW;
     /* 0x40C */ Mtx unk_40C;
     /* 0x43C */ u32 unk_43C;
     /* 0x440 */ s32 unk_440;
