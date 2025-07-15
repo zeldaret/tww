@@ -230,7 +230,7 @@ void daNpcSv_c::isTalkOK() {
 }
 
 /* 00002958-00002978       .text daNpc_PeopleCreate__FPv */
-static s32 daNpc_PeopleCreate(void* i_this) {
+static cPhs_State daNpc_PeopleCreate(void* i_this) {
     return ((daNpcSv_c*)i_this)->_create();
 }
 

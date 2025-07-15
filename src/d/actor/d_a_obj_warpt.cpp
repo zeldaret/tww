@@ -267,7 +267,7 @@ bool daObj_Warpt_c::_delete() {
 }
 
 /* 00002858-00002878       .text daObj_WarptCreate__FPv */
-static s32 daObj_WarptCreate(void* i_this) {
+static cPhs_State daObj_WarptCreate(void* i_this) {
     return ((daObj_Warpt_c*)i_this)->_create();
 }
 

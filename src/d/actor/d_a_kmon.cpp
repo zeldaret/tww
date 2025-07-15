@@ -33,7 +33,7 @@ void daKmon_c::checkTalk() {
 }
 
 /* 000006E8-000007F8       .text daKmonCreate__FPv */
-static s32 daKmonCreate(void*) {
+static cPhs_State daKmonCreate(void*) {
     /* Nonmatching */
 }
 

@@ -1868,7 +1868,7 @@ bool daRd_c::_delete() {
 }
 
 /* 00004FB8-00004FD8       .text daRdCreate__FPv */
-static s32 daRdCreate(void* i_this) {
+static cPhs_State daRdCreate(void* i_this) {
     return static_cast<daRd_c*>(i_this)->_create();
 }
 

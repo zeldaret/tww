@@ -66,7 +66,7 @@ bool daTag_So_c::_delete() {
 }
 
 /* 00000284-000002A4       .text daTag_SoCreate__FPv */
-static s32 daTag_SoCreate(void* i_this) {
+static cPhs_State daTag_SoCreate(void* i_this) {
     return ((daTag_So_c*)i_this)->_create();
 }
 

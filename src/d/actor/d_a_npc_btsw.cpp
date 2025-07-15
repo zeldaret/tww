@@ -448,8 +448,8 @@ BOOL daNpc_Btsw_c::CreateInit() {
     eventInfo.setXyCheckCB(daNpc_Btsw_XyCheckCB);
     mEventCut.setActorInfo2("Btsw", this);
 
-    attention_info.distances[1] = 0x6F;
-    attention_info.distances[3] = 0x6F;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6F;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6F;
     field_0x9C8 = -1;
     field_0x952 = 0;
     field_0x953 = 0;

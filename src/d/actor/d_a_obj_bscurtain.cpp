@@ -97,7 +97,7 @@ bool daObj_Bscurtain_c::_draw() {
 }
 
 /* 00000370-00000400       .text daObj_BscurtainCreate__FPv */
-static s32 daObj_BscurtainCreate(void* i_this) {
+static cPhs_State daObj_BscurtainCreate(void* i_this) {
     return ((daObj_Bscurtain_c*)i_this)->_create();
 }
 

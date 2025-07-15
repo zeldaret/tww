@@ -1023,7 +1023,7 @@ int daObjFigure_c::getFigureBmd(u8 figureNo) {
 }
 
 /* 00001A80-00001AA0       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* i_this) {
+static cPhs_State daSampleCreate(void* i_this) {
     return static_cast<daObjFigure_c*>(i_this)->_create();
 }
 

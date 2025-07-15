@@ -952,7 +952,7 @@ bool daNpc_Nz_c::_delete() {
 }
 
 /* 00002E6C-00002E8C       .text daNpc_NzCreate__FPv */
-static s32 daNpc_NzCreate(void* i_this) {
+static cPhs_State daNpc_NzCreate(void* i_this) {
     return static_cast<daNpc_Nz_c*>(i_this)->_create();
 }
 

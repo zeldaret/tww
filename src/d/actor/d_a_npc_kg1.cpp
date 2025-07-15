@@ -146,7 +146,7 @@ void daNpc_Kg1_c::setAnm() {
 }
 
 /* 00001F8C-00001FAC       .text daNpc_Kg1Create__FPv */
-static s32 daNpc_Kg1Create(void* i_this) {
+static cPhs_State daNpc_Kg1Create(void* i_this) {
     return ((daNpc_Kg1_c*)i_this)->_create();
 }
 

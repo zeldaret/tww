@@ -614,7 +614,7 @@ bool daObj_Canon_c::_delete() {
 }
 
 /* 00001C50-00001C70       .text daObj_CanonCreate__FPv */
-static s32 daObj_CanonCreate(void* i_this) {
+static cPhs_State daObj_CanonCreate(void* i_this) {
     return ((daObj_Canon_c*)i_this)->_create();
 }
 

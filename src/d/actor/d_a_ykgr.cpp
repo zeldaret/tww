@@ -23,7 +23,7 @@ void daYkgr_c::getPosRate() {
 }
 
 /* 00000408-00000428       .text daYkgrCreate__FPv */
-static s32 daYkgrCreate(void* i_this) {
+static cPhs_State daYkgrCreate(void* i_this) {
     return ((daYkgr_c*)i_this)->_create();
 }
 

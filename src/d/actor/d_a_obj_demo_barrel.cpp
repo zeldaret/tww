@@ -28,7 +28,7 @@ void daObj_Demo_Barrel_c::CreateHeap() {
 }
 
 /* 00000538-000005EC       .text daObj_Demo_BarrelCreate__FPv */
-static s32 daObj_Demo_BarrelCreate(void*) {
+static cPhs_State daObj_Demo_BarrelCreate(void*) {
     /* Nonmatching */
 }
 

@@ -100,7 +100,7 @@ bool daKaji_c::_draw() {
 }
 
 /* 000001F4-00000344       .text daKajiCreate__FPv */
-static s32 daKajiCreate(void* i_this) {
+static cPhs_State daKajiCreate(void* i_this) {
     return ((daKaji_c*)i_this)->_create();
 }
 

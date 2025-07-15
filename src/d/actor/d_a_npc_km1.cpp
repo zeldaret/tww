@@ -70,8 +70,8 @@ bool daNpc_Km1_c::createInit() {
 
     mEventCut.setActorInfo2("Km1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
-    attention_info.distances[1] = 0xAB;
-    attention_info.distances[3] = 0xA9;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     gravity = -4.0f;
     field_0x798 = current.pos;
     set_action(&daNpc_Km1_c::wait_action1,NULL);

@@ -2252,7 +2252,7 @@ void daNpcPhoto_c::setCollision(dCcD_Cyl* cyl, cXyz center, f32 radius, f32 heig
 }
 
 /* 00004D44-00004D64       .text daNpc_PhotoCreate__FPv */
-static s32 daNpc_PhotoCreate(void* i_this) {
+static cPhs_State daNpc_PhotoCreate(void* i_this) {
     return static_cast<daNpcPhoto_c*>(i_this)->_create();
 }
 

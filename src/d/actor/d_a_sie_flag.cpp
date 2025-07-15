@@ -240,7 +240,7 @@ bool daSie_Flag_c::_draw() {
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
-static s32 daSie_FlagCreate(void* i_this) {
+static cPhs_State daSie_FlagCreate(void* i_this) {
     return ((daSie_Flag_c*)i_this)->_create();
 }
 

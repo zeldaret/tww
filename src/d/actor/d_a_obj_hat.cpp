@@ -212,7 +212,7 @@ void daObjHat_c::setSpeed(cXyz speed) {
 }
 
 /* 00000A20-00000A40       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* i_this) {
+static cPhs_State daSampleCreate(void* i_this) {
     return static_cast<daObjHat_c*>(i_this)->_create();
 }
 

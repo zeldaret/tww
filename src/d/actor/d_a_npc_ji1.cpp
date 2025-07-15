@@ -1183,7 +1183,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x983;
                         attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 3;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
                     }
                     else {
                         mMsgNo = 0x980;
@@ -1198,7 +1198,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x96C;
                         attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 0xB5;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
                     }
                     else {
                         mMsgNo = 0x985;

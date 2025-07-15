@@ -325,7 +325,7 @@ bool daDaiocta_c::_delete() {
 }
 
 /* 0000513C-0000515C       .text daDaioctaCreate__FPv */
-static s32 daDaioctaCreate(void* i_this) {
+static cPhs_State daDaioctaCreate(void* i_this) {
     return ((daDaiocta_c*)i_this)->_create();
 }
 

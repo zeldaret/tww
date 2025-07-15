@@ -1237,7 +1237,7 @@ BOOL daArrow_c::_delete() {
 }
 
 /* 800D8200-800D8220       .text daArrowCreate__FPv */
-static s32 daArrowCreate(void* i_this) {
+static cPhs_State daArrowCreate(void* i_this) {
     return static_cast<daArrow_c*>(i_this)->_create();
 }
 

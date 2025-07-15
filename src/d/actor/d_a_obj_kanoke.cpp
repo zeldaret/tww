@@ -191,7 +191,7 @@ void daObjKanoke_c::setMtxHuta(cXyz*) {
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
-static s32 daObjKanokeCreate(void* i_this) {
+static cPhs_State daObjKanokeCreate(void* i_this) {
     return ((daObjKanoke_c*)i_this)->_create();
 }
 

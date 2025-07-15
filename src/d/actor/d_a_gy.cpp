@@ -310,7 +310,7 @@ bool daGy_c::_delete() {
 }
 
 /* 00005AD4-00005AF4       .text daGyCreate__FPv */
-static s32 daGyCreate(void* i_this) {
+static cPhs_State daGyCreate(void* i_this) {
     return ((daGy_c*)i_this)->_create();
 }
 

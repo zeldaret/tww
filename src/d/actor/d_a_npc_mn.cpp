@@ -379,7 +379,7 @@ void daNpcMn_c::isChangePos(unsigned char) {
 }
 
 /* 00003CE8-00003D08       .text daNpc_MnCreate__FPv */
-static s32 daNpc_MnCreate(void* i_this) {
+static cPhs_State daNpc_MnCreate(void* i_this) {
     return ((daNpcMn_c*)i_this)->_create();
 }
 

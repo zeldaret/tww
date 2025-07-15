@@ -148,7 +148,7 @@ bool daGy_Ctrl_c::_delete() {
 }
 
 /* 00001C44-00001C64       .text daGy_CtrlCreate__FPv */
-static s32 daGy_CtrlCreate(void* i_this) {
+static cPhs_State daGy_CtrlCreate(void* i_this) {
     return ((daGy_Ctrl_c*)i_this)->_create();
 }
 

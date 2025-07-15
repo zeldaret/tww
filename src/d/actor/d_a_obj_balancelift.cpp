@@ -86,7 +86,7 @@ void daBalancelift_c::CreateInit() {
 }
 
 /* 00000F34-000010E0       .text daBalanceliftCreate__FPv */
-static s32 daBalanceliftCreate(void*) {
+static cPhs_State daBalanceliftCreate(void*) {
     /* Nonmatching */
 }
 
