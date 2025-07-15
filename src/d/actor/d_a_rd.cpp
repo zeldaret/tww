@@ -1845,7 +1845,7 @@ cPhs_State daRd_c::_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();
         
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2520)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         

@@ -236,33 +236,37 @@ void daGhostship_c::getArg() {
     moonPhase = fopAcM_GetParamBit(param, 0, 8);
 }
 
-/* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
-static cPhs_State daGhostshipCreate(void* i_actor) {
-    daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
-    fopAcM_SetupActor(i_this, daGhostship_c);
+cPhs_State daGhostship_c::_create() {
+    fopAcM_SetupActor(this, daGhostship_c);
 
-    cPhs_State result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
 
-    result = dComIfG_resLoad(&i_this->mClothPhs, daGhostship_c::m_cloth_arc_name);
+    result = dComIfG_resLoad(&mClothPhs, m_cloth_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
 
-    i_this->getArg();
+    getArg();
+
     if((s32)dComIfGs_getEventReg(0x8803) == 3) {
         return cPhs_ERROR_e;
     }
 
-    if (!fopAcM_entrySolidHeap(i_this, createHeap_CB, 0x1EA0)) {
+    if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
         return cPhs_ERROR_e;
     }
 
-    i_this->createInit();
+    createInit();
 
     return cPhs_COMPLEATE_e;
+}
+
+/* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
+static cPhs_State daGhostshipCreate(void* i_this) {
+    return ((daGhostship_c*)i_this)->_create();
 }
 
 /* 00000FD8-00001024 .text daGhostshipDelete__FPv */
@@ -461,9 +465,13 @@ bool daGhostship_c::_draw() {
     return true;
 }
 
-/* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
-static BOOL daGhostshipIsDelete(void*) {
+bool daGhostship_c::_delete() {
     return true;
+}
+
+/* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
+static BOOL daGhostshipIsDelete(void* i_this) {
+    return ((daGhostship_c*)i_this)->_delete();
 }
 
 static actor_method_class daGhostshipMethodTable = {

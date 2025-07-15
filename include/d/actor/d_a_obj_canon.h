@@ -43,7 +43,7 @@ public:
     void debugDraw();
     bool _draw();
     void createInit();
-    u8 getArg();
+    void getArg();
     cPhs_State _create();
     bool _delete();
 

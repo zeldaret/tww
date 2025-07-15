@@ -73,12 +73,12 @@ static dCcD_SrcSph l_sph_src_col = {
 
 const char daMachine_c::m_arcname[8] = "Hkikai1";
 
-const f32 daMachine_c::static_float1 = 300.0f;
-const f32 daMachine_c::static_float2 = 800.0f;
+const f32 daMachine_c::m_search_r = 300.0f;
+const f32 daMachine_c::m_search_l = 800.0f;
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
 bool daMachine_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
     return true;
 }
 
@@ -169,7 +169,7 @@ void daMachine_c::CreateInit() {
     mpModel->calc();
     field_0xc14 = fopAcM_GetParam(this);
     if (field_0xc14 != 0xff){
-        field_0xc18 = dPath_GetRoomPath(field_0xc14, current.roomNo);
+        field_0xc18 = dPath_GetRoomPath(field_0xc14, fopAcM_GetRoomNo(this));
         if(field_0xc18 != NULL){
             field_0xc16 = 1;
             field_0xc15 = 1;
@@ -233,22 +233,20 @@ daWindMill_c* daMachine_c::search_wind_mill() {
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
 void daMachine_c::set_speed() {
-    f32 new_speed;
+    f32 f31 = 5.0f;
     daWindMill_c* windmill = search_wind_mill();
-    f32 local_1;
     
-    
+    f32 f1;
     if(windmill != NULL) {
-        new_speed = (f32)windmill->mAngle[1]/(f32)daWindMill_c::m_max_rot_speed[windmill->mType];
-        
+        s16 max_rot_speed = daWindMill_c::m_max_rot_speed[windmill->mType];;
+        f1 = (f32)windmill->mAngle[1]/(f32)max_rot_speed;
     } else {
-        new_speed = 0.0f;
+        f1 = 0.0f;
     }
 
-    local_1 = speedF;
-    new_speed = cLib_addCalc(&local_1, new_speed * 5.0f,0.1f,1.0f,0.5f);
-    speedF = local_1;
-
+    f32 old_speedF = speedF;
+    cLib_addCalc(&old_speedF, f31 * f1, 0.1f, 1.0f, 0.5f);
+    speedF = old_speedF;
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */

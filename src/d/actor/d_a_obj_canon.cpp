@@ -567,7 +567,7 @@ void daObj_Canon_c::createInit() {
 }
 
 /* 00001804-00001880       .text getArg__13daObj_Canon_cFv */
-u8 daObj_Canon_c::getArg() {
+void daObj_Canon_c::getArg() {
     u32 param = fopAcM_GetParam(this);
     field_0x297 = fopAcM_GetParamBit(param, 0, 0xFF);
     field_0x296 = fopAcM_GetParamBit(param, 8, 0xFF);
@@ -592,7 +592,7 @@ cPhs_State daObj_Canon_c::_create() {
         }
 #endif
 
-        if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x8C0)) {
+        if(!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
 

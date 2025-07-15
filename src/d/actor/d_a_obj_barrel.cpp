@@ -22,7 +22,7 @@ const short daObjBarrel::Act_c::l_gnd_deg = 0xf;
 const float daObjBarrel::Act_c::l_viscous_resist = 0.006f;
 const float daObjBarrel::Act_c::l_inert_resist = 0.001f;
 const float daObjBarrel::Act_c::l_max_move = 30.0f;
-const short daObjBarrel::Act_c::l_max_vib_angl = 2048;
+const short daObjBarrel::Act_c::l_max_vib_angl = 0x800;
 const float daObjBarrel::Act_c::l_min_move_dir = 5.0f;
 const float daObjBarrel::Act_c::l_wind_max = 178.0f;
 const float daObjBarrel::Act_c::l_shape_vec = 25.0f;
@@ -457,7 +457,7 @@ void daObjBarrel::Act_c::set_walk_rot() {
     if (mag > l_min_move_dir || (mMode == MODE_WAIT && mag > l_min_move_dir / 2)) {
         cLib_chaseAngleS(&shape_angle.y, targetAngle, 0x600);
     }
-    float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 65535.0f;
+    float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 0xFFFF;
     if (!negAngle) {
         m612 -= (short)(fVar2 * 3.0f);
         m630 -= (short)fVar2;
