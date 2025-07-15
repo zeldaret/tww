@@ -68,7 +68,7 @@ BOOL daAleaf_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BDL_VIGAH);
     JUT_ASSERT(VERSION_SELECT(258, 262, 262, 262), modelData != NULL);
 
-    unk_298 = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000022U);
+    unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (unk_298 == NULL) {
         return FALSE;
     }
