@@ -92,14 +92,14 @@ dFs_HIO_c::dFs_HIO_c() {
 /* 8017FA20-8017FCC0       .text _create__14dFile_select_cFv */
 void dFile_select_c::_create() {
     fileSel.Scr = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(297, 297, 356, 356), fileSel.Scr != 0);
+    JUT_ASSERT(VERSION_SELECT(297, 297, 356, 356), fileSel.Scr != NULL);
     stick = new STControl(5, 2, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(302, 302, 361, 361), stick != 0);
+    JUT_ASSERT(VERSION_SELECT(302, 302, 361, 361), stick != NULL);
     stick2 = new STControl(3, 1, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(305, 305, 364, 364), stick2 != 0);
+    JUT_ASSERT(VERSION_SELECT(305, 305, 364, 364), stick2 != NULL);
     fileSel.Scr->set("file_select.blo", (JKRArchive*)field_0x0);
     fileSel.font = mDoExt_getMesgFont();
-    JUT_ASSERT(VERSION_SELECT(311, 311, 370, 370), fileSel.font != 0);
+    JUT_ASSERT(VERSION_SELECT(311, 311, 370, 370), fileSel.font != NULL);
     g_fsHIO.mNo = mDoHIO_createChild("ファイルセレクト画面", &g_fsHIO);
     mSaveDataPtr = NULL;
     mSavePicDataPtr = NULL;

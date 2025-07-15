@@ -128,7 +128,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000003F8-000004CC       .text _createHeap__13daObj_Canon_cFv */
 BOOL daObj_Canon_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, WALLBOM_BDL_WALLBOM);
-    JUT_ASSERT(0x115, modelData != 0);
+    JUT_ASSERT(0x115, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 #if VERSION > VERSION_DEMO
