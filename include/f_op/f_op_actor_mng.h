@@ -40,7 +40,7 @@ struct fopAcM_prm_class {
     /* 0x1C */ fpc_ProcID parent_id;
     /* 0x20 */ s8 subtype;
     /* 0x21 */ s8 room_no;
-};
+}; // size = 0x24
 
 struct fopAcM_search4ev_prm {
     fopAcM_search4ev_prm() { clear(); }
