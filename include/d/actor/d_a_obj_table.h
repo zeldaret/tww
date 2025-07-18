@@ -8,7 +8,7 @@
 
 namespace daObjTable {
     class Act_c : public dBgS_MoveBgActor {
-    public: 
+    public:
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();

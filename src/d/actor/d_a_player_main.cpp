@@ -8435,7 +8435,6 @@ BOOL daPy_lk_c::procIceSlipFallUp() {
 
 /* 8011970C-801197D4       .text procIceSlipAlmostFall_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procIceSlipAlmostFall_init() {
-
     commonProcInit(daPyProc_ICE_SLIP_ALMOST_FALL_e);
     current.angle.y = cM_atan2s(m36AC.x, m36AC.z);
     int direction = getDirectionFromAngle(current.angle.y - shape_angle.y);

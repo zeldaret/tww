@@ -1102,8 +1102,8 @@ BOOL daArrow_c::_execute() {
         
         cXyz offset;
         offset.x = 0.0f;
-        offset.y = 45.0f + g_regHIO.mChild->mFloatRegs[8];
-        offset.z = 30.0f + g_regHIO.mChild->mFloatRegs[9];
+        offset.y = 45.0f + REG0_F(8);
+        offset.z = 30.0f + REG0_F(9);
         mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
         cXyz offsetOut;
         MtxPosition(&offset, &offsetOut);

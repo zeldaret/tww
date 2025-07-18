@@ -350,11 +350,11 @@ void envcolor_init() {
     stage_vrbox_info_class* vrbox = dComIfGp_getStageVrboxInfo();
 
     for (int i = 0; i < 20; i++) {
-        g_regHIO.mChild[3].mFloatRegs[i] = 0.0f;
+        REG3_F(i) = 0.0f;
     }
 
     for (int i = 0; i < 10; i++) {
-        g_regHIO.mChild[3].mShortRegs[i] = 0;
+        REG3_S(i) = 0;
     }
 
 #if VERSION > VERSION_DEMO

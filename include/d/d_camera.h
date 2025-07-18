@@ -165,7 +165,7 @@ public:
             /* 0x1C */ cSAngle mBank;
             /* 0x1E */ s16 m1E;
         } m00;
-    } 
+    }
     /* 0x0A4 */ m0A4[2];
     /* 0x0E4 */ int mStageMapToolCameraIdx;
     /* 0x0E8 */ int m0E8;

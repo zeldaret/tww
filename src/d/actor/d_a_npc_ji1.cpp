@@ -3750,8 +3750,8 @@ BOOL daNpc_Ji1_c::battleAtSet() {
     f32 cos = cM_scos(current.angle.y);
 
     if(mAnimation == 0x14) {
-        field_0xA40.SetR(g_regHIO.mChild[10].mFloatRegs[9] + 85.0f);
-        field_0xB90.y = field_0xB78.y = g_regHIO.mChild[10].mFloatRegs[10] + 40.0f;
+        field_0xA40.SetR(REG10_F(9) + 85.0f);
+        field_0xB90.y = field_0xB78.y = REG10_F(10) + 40.0f;
         field_0xA40.SetStartEnd(field_0xB90, field_0xB78);
         field_0xA40.CalcVec(&temp);
         if(!temp.normalizeRS()) {

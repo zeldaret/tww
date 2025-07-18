@@ -523,9 +523,9 @@ public:
 
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
-    void setPictureStatusGetOn(u8 to_set) { 
-        mPictureStatus = 3; 
-        field_0x495f = to_set; 
+    void setPictureStatusGetOn(u8 to_set) {
+        mPictureStatus = 3;
+        field_0x495f = to_set;
     }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }

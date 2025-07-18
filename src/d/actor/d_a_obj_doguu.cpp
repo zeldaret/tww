@@ -222,7 +222,6 @@ void daObjDoguu_c::CreateInit() {
         field_0x8A2 = true;
         field_0x8AC = 14;
     } else if (dComIfGs_isEventBit(0x1480) && dComIfGs_isEventBit(0x1440) && dComIfGs_isEventBit(0x1410)) {
-
         mBckHead.setFrame(mBckHead.getEndFrame());
         mBckBody.setFrame(mBckBody.getEndFrame());
         mBckCrystal.setFrame(mBckCrystal.getEndFrame());
@@ -230,7 +229,6 @@ void daObjDoguu_c::CreateInit() {
         field_0x8A1 = true;
         field_0x8A2 = false;
         field_0x8AC = 14;
-        
     } else {
         field_0x8A1 = false;
         if (

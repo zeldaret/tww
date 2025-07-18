@@ -514,12 +514,10 @@ cPhs_State daTag_Event_c::create() {
 
     if (getType() == 0xD) {
         setActio(ACTION_SPE_ARRIVAL);
+    } else if (mEventIdx != -1 && (swbit == 0xFF || !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this)))) {
+        setActio(ACTION_ARRIVAL);
     } else {
-        if (mEventIdx != -1 && (swbit == 0xFF || !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this)))) {
-            setActio(ACTION_ARRIVAL);
-        } else {
-            setActio(ACTION_WAIT);
-        }
+        setActio(ACTION_WAIT);
     }
 
     shape_angle.x = shape_angle.z = 0;

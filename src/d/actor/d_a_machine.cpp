@@ -205,7 +205,6 @@ void daMachine_c::set_next_pnt() {
     field_0xc15 += field_0xc16;
 
     if(dPath_ChkClose(field_0xc18) != 0) {
-
         if (field_0xc15 > (s8)field_0xc18->m_num - 1) {
             field_0xc15 = 0;
         } else if (field_0xc15 < 0) {
@@ -378,7 +377,6 @@ void daMachine_c::set_at() {
   
     fVar1 = field_0xc04.getFrameCtrl()->getFrame();
     if ((5.0f < fVar1) && (25.0f > fVar1)) {
-
         field_0xc6c.set(field_0xc3c[0][3],
                         field_0xc3c[1][3],
                         field_0xc3c[2][3]);

@@ -798,7 +798,6 @@ bool daNpcPhoto_c::_delete() {
 
 /* 000010A4-0000125C       .text _draw__12daNpcPhoto_cFv */
 bool daNpcPhoto_c::_draw() {
-
     J3DModel* model = mpMorf->getModel();
     J3DModelData *model_data = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
@@ -1939,7 +1938,6 @@ void daNpcPhoto_c::setMtx() {
 
 /* 000040B8-0000432C       .text chkAttention__12daNpcPhoto_cFv */
 void daNpcPhoto_c::chkAttention() {
-
     if(mEventCut.getAttnFlag()) {
         mLookAtPos = mEventCut.getAttnPos();
         field_0x9D6 = 1;
