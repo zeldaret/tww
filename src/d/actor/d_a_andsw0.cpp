@@ -237,9 +237,9 @@ static void hajimarinomori_check(andsw0_class* i_this) {
 
         if (dComIfGs_isEventBit(4)) {
             bb_class* kargaroc = (bb_class*)ac[5];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             kargaroc = (bb_class*)ac[6];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             
             bk_class* bokoblin = (bk_class*)ac[3];
             bokoblin->m121C = 1;
