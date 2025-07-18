@@ -191,9 +191,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     i_this->mMode = 2;
                 } else {
                     dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &hitPos, &player->shape_angle);
-                    // Using the fopAcM_seStart inline breaks the codegen.
-                    // fopAcM_seStart(actor, JA_SE_CM_AM2_PARALYZED, 0);
-                    mDoAud_seStart(JA_SE_CM_AM2_PARALYZED, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+                    fopAcM_seStart(actor, JA_SE_CM_AM2_PARALYZED, 0);
                     fopAcM_monsSeStart(actor, JA_SE_CV_AM2_PARALYZED, 0x42);
                     i_this->mAction = ACTION_MAHI;
                     i_this->mMode = 10;
@@ -555,9 +553,7 @@ static void action_dousa(am2_class* i_this) {
         if (i_this->mAcch.ChkGroundHit()) {
             fopAcM_seStart(actor, JA_SE_CM_AM2_LANDING, 0);
             i_this->mSmokeCb.remove();
-            // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_S, 0);
-            mDoAud_seStart(JA_SE_CM_AM_JUMP_S, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_S, 0);
             
             dComIfGp_particle_setToon(dPa_name::ID_SCENE_A125, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
             if (i_this->mSmokeCb.getEmitter()) {
@@ -922,9 +918,7 @@ static void action_itai(am2_class* i_this) {
                 i_this->mSmokeCb.getEmitter()->setGlobalScale(scale);
             }
             
-            // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM2_JUMP2, 0);
-            mDoAud_seStart(JA_SE_CM_AM2_JUMP2, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM2_JUMP2, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_JITABATA, 0x42);
             
             actor->speed.y = 25.0f;

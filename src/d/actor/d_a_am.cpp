@@ -286,9 +286,7 @@ static BOOL medama_atari_check(am_class* i_this) {
     case AT_TYPE_NORMAL_ARROW:
     case AT_TYPE_FIRE_ARROW:
     case AT_TYPE_ICE_ARROW:
-        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-        // fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x42);
-        mDoAud_seStart(JA_SE_LK_MS_WEP_HIT, &actor->eyePos, 0x42, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        fopAcM_seStart(actor, JA_SE_LK_MS_WEP_HIT, 0x42);
         ret = true;
         if (i_this->mCurrBckIdx == AM_BCK_SLEEP || i_this->mCurrBckIdx == AM_BCK_SLEEP_LOOP) {
             anm_init(i_this, AM_BCK_OKIRU, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -299,8 +297,7 @@ static BOOL medama_atari_check(am_class* i_this) {
             i_this->mMode = MODE_DOUSA_OKIRU;
         } else {
             dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->mEyeballPos, &player->shape_angle);
-            // fopAcM_seStart(actor, JA_SE_CM_AM_EYE_DAMAGE, 0);
-            mDoAud_seStart(JA_SE_CM_AM_EYE_DAMAGE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_EYE_DAMAGE, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_EYE_DAMAGE, 0x42);
             i_this->mAction = ACTION_ITAI_MOVE;
             i_this->mMode = MODE_ITAI_MOVE_INIT;
@@ -538,9 +535,7 @@ static void action_dousa(am_class* i_this) {
         if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
             if (i_this->mCurrBckIdx != AM_BCK_DAMAGE_END) {
                 fopAcM_seStart(actor, JA_SE_CM_AM_NEEDLE_OUT, 0);
-                // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-                // fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-                mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+                fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
             }
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mCountDownTimers[2] = 6;
@@ -628,11 +623,8 @@ static void action_dousa(am_class* i_this) {
             i_this->mCountDownTimers[0] = 100;
             i_this->mCountUpTimers[0] = 0;
             anm_init(i_this, AM_BCK_DAMAGE, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_NEEDLE_IN, 0);
-            mDoAud_seStart(JA_SE_CM_AM_NEEDLE_IN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            // fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_OPEN, 0);
-            mDoAud_seStart(JA_SE_CM_AM_MOUTH_OPEN, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_NEEDLE_IN, 0);
+            fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_OPEN, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_OPEN_MOUTH, 0);
             i_this->mNeedleCyl.OffAtSetBit();
             i_this->mNeedleCyl.OffAtSetBit();
@@ -746,9 +738,7 @@ static void action_modoru_move(am_class* i_this) {
             );
 
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-            // The fopAcM_seStart inline makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
-            mDoAud_seStart(JA_SE_CM_AM_JUMP, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_JUMP, 0x42);
 
             actor->speed.y = 40.0f;
@@ -794,9 +784,7 @@ static void action_handou_move(am_class* i_this) {
         i_this->mTargetAngleY = actor->current.angle.y;
         if (i_this->mCurrBckIdx != AM_BCK_CLOSE && i_this->mCurrBckIdx != AM_BCK_CLOSE_LOOP) {
             fopAcM_seStart(actor, JA_SE_CM_AM_NEEDLE_OUT, 0);
-            // Using the fopAcM_seStart inline multiple times makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-            mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
             anm_init(i_this, AM_BCK_CLOSE, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         }
         i_this->mMode += 1;
@@ -847,9 +835,7 @@ static void action_itai_move(am_class* i_this) {
         }
         anm_init(i_this, AM_BCK_DAMAGE_END, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         fopAcM_seStart(actor, JA_SE_CM_AM_NEEDLE_OUT, 0);
-        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-        // fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
-        mDoAud_seStart(JA_SE_CM_AM_MOUTH_CLOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        fopAcM_seStart(actor, JA_SE_CM_AM_MOUTH_CLOSE, 0);
         i_this->mMode += 1;
         break;
     case 43:
@@ -881,9 +867,7 @@ static void action_itai_move(am_class* i_this) {
     case 45:
         bomb_move_set(i_this, 0);
         if (i_this->mpMorf->checkFrame(3.0f)) {
-            // The fopAcM_seStart inline makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_EAT_BOMB, 0);
-            mDoAud_seStart(JA_SE_CM_AM_EAT_BOMB, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_EAT_BOMB, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_EAT_BOMB, 0);
         }
         if (i_this->mpMorf->checkFrame(6.0f)) {
@@ -910,17 +894,13 @@ static void action_itai_move(am_class* i_this) {
         actor->shape_angle.y += 0x1000;
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCbs[0].remove();
-            // The fopAcM_seStart inline makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
-            mDoAud_seStart(JA_SE_CM_AM_JUMP, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_JUMP, 0);
             dComIfGp_particle_setToon(
                 dPa_name::ID_SCENE_A125, &i_this->mWaistPos, &actor->shape_angle, NULL,
                 0xB9, &i_this->mSmokeCbs[0], fopAcM_GetRoomNo(actor)
             );
             dComIfGp_getVibration().StartShock(1, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-            // The fopAcM_seStart inline makes the codegen not match.
-            // fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_L, 0);
-            mDoAud_seStart(JA_SE_CM_AM_JUMP_L, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_L, 0);
             fopAcM_monsSeStart(actor, JA_SE_CV_AM_JITABATA, 0);
             actor->speed.y = 25.0f;
             actor->gravity = -10.0f;
@@ -970,9 +950,7 @@ static void action_itai_move(am_class* i_this) {
         }
 
         fopAcM_seStart(actor, JA_SE_CM_AM_EXPLODE, 0);
-        // Using the fopAcM_seStart inline multiple times in a single case makes the codegen not match.
-        // fopAcM_seStart(actor, JA_SE_LK_LAST_HIT, 0);
-        mDoAud_seStart(JA_SE_LK_LAST_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        fopAcM_seStart(actor, JA_SE_LK_LAST_HIT, 0);
 
         fopAcM_createDisappear(actor, &centerPos, 5, daDisItem_IBALL_e);
         fopAcM_onActor(actor);
