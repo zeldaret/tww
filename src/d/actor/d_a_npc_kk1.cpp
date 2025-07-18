@@ -533,17 +533,17 @@ void daNpc_Kk1_c::shadowDraw() {
 }
 
 /* 000055C4-00005798       .text _draw__11daNpc_Kk1_cFv */
-bool daNpc_Kk1_c::_draw() {
+BOOL daNpc_Kk1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00005798-000059EC       .text _execute__11daNpc_Kk1_cFv */
-bool daNpc_Kk1_c::_execute() {
+BOOL daNpc_Kk1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 000059EC-00005A58       .text _delete__11daNpc_Kk1_cFv */
-bool daNpc_Kk1_c::_delete() {
+BOOL daNpc_Kk1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -568,28 +568,28 @@ void daNpc_Kk1_c::CreateHeap() {
 }
 
 /* 00006684-000066A4       .text daNpc_Kk1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Kk1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daNpc_Kk1_Create(fopAc_ac_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_create();
 }
 
 /* 000066A4-000066C4       .text daNpc_Kk1_Delete__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Delete(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_delete();
 }
 
 /* 000066C4-000066E4       .text daNpc_Kk1_Execute__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Execute(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_execute();
 }
 
 /* 000066E4-00006704       .text daNpc_Kk1_Draw__FP11daNpc_Kk1_c */
-static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c*) {
-    /* Nonmatching */
+static BOOL daNpc_Kk1_Draw(daNpc_Kk1_c* i_this) {
+    return ((daNpc_Kk1_c*)i_this)->_draw();
 }
 
 /* 00006704-0000670C       .text daNpc_Kk1_IsDelete__FP11daNpc_Kk1_c */
 static BOOL daNpc_Kk1_IsDelete(daNpc_Kk1_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daNpc_Kk1_Method = {

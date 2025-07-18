@@ -135,27 +135,27 @@ namespace daObjTable {
 namespace {
 /* 00000608-00000628       .text Mthd_Create__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {
-    return ((Act_c*) i_this)->Mthd_Create();
+    return ((daObjTable::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000628-00000648       .text Mthd_Delete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
 BOOL Mthd_Delete(void* i_this) {
-    return ((Act_c*) i_this)->Mthd_Delete(); 
+    return ((daObjTable::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000648-00000668       .text Mthd_Execute__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
 BOOL Mthd_Execute(void* i_this) {
-    return ((Act_c*) i_this)->MoveBGExecute();
+    return ((daObjTable::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000668-00000694       .text Mthd_Draw__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return ((Act_c*) i_this)->Draw();
+    return ((daObjTable::Act_c*)i_this)->Draw();
 }
 
 /* 00000694-000006C0       .text Mthd_IsDelete__Q210daObjTable27@unnamed@d_a_obj_table_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return ((Act_c*) i_this)->IsDelete(); 
+    return ((daObjTable::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

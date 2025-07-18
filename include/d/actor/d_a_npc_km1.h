@@ -73,9 +73,9 @@ public:
     BOOL talk01();
     int wait_action1(void*);
     u8 demo();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     BOOL CreateHeap();
 

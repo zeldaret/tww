@@ -618,7 +618,7 @@ u8 daNpc_Km1_c::demo() {
 }
 
 /* 00001548-000016AC       .text _draw__11daNpc_Km1_cFv */
-bool daNpc_Km1_c::_draw() {
+BOOL daNpc_Km1_c::_draw() {
     J3DModel *model = mpMorf->getModel();
     J3DModelData *model_data = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR,&current.pos,&tevStr);
@@ -648,7 +648,7 @@ bool daNpc_Km1_c::_draw() {
 }
 
 /* 000016AC-00001808       .text _execute__11daNpc_Km1_cFv */
-bool daNpc_Km1_c::_execute() {
+BOOL daNpc_Km1_c::_execute() {
 
     if(field_0x7B8 == 0){
         field_0x774 = current.pos;
@@ -679,7 +679,7 @@ bool daNpc_Km1_c::_execute() {
 }
 
 /* 00001808-0000188C       .text _delete__11daNpc_Km1_cFv */
-bool daNpc_Km1_c::_delete() {
+BOOL daNpc_Km1_c::_delete() {
 
     fopAcM_GetID(this);
     dComIfG_resDeleteDemo(&field_0x6C4,"Km");
@@ -787,23 +787,23 @@ BOOL daNpc_Km1_c::CreateHeap() {
     return FALSE;
 }
 /* 00002158-00002178       .text daNpc_Km1_Create__FP10fopAc_ac_c */
-static cPhs_State daNpc_Km1_Create(fopAc_ac_c* obj) {
-    (static_cast<daNpc_Km1_c*>(obj))->_create();
+static cPhs_State daNpc_Km1_Create(fopAc_ac_c* i_this) {
+    return ((daNpc_Km1_c*)i_this)->_create();
 }
 
 /* 00002178-00002198       .text daNpc_Km1_Delete__FP11daNpc_Km1_c */
-static BOOL daNpc_Km1_Delete(daNpc_Km1_c* obj) {
-    (static_cast<daNpc_Km1_c*>(obj))->_delete();
+static BOOL daNpc_Km1_Delete(daNpc_Km1_c* i_this) {
+    return ((daNpc_Km1_c*)i_this)->_delete();
 }
 
 /* 00002198-000021B8       .text daNpc_Km1_Execute__FP11daNpc_Km1_c */
-static BOOL daNpc_Km1_Execute(daNpc_Km1_c* obj) {
-    (static_cast<daNpc_Km1_c*>(obj))->_execute();    
+static BOOL daNpc_Km1_Execute(daNpc_Km1_c* i_this) {
+    return ((daNpc_Km1_c*)i_this)->_execute();
 }
 
 /* 000021B8-000021D8       .text daNpc_Km1_Draw__FP11daNpc_Km1_c */
-static BOOL daNpc_Km1_Draw(daNpc_Km1_c* obj) {
-    (static_cast<daNpc_Km1_c*>(obj))->_draw();
+static BOOL daNpc_Km1_Draw(daNpc_Km1_c* i_this) {
+    return ((daNpc_Km1_c*)i_this)->_draw();
 }
 
 /* 000021D8-000021E0       .text daNpc_Km1_IsDelete__FP11daNpc_Km1_c */
