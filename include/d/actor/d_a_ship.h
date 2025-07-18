@@ -40,7 +40,7 @@ public:
         daSFLG_UNK100000_e    = 0x00100000,
         daSFLG_HEAD_NO_DRAW_e = 0x00200000,
         daSFLG_UNK400000_e    = 0x00400000,
-        daSFLG_UNK800000_e    = 0x00800000,
+        daSFLG_PHANTOM_GANON_BATTLE    = 0x00800000,
         daSFLG_UNK1000000_e   = 0x01000000,
         daSFLG_UNK2000000_e   = 0x02000000,
         daSFLG_UNK4000000_e   = 0x04000000,
@@ -157,7 +157,7 @@ public:
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
     void offCraneHookFlg() {}
-    void offFantomGanonBattle() {}
+    void offFantomGanonBattle() {offStateFlg(daSFLG_PHANTOM_GANON_BATTLE);}
     void offStateFlg(daSHIP_SFLG flag) { mStateFlag &= ~flag;}
     void offTornadoFlg() {
         mTornadoID = fpcM_ERROR_PROCESS_ID_e;
@@ -171,7 +171,7 @@ public:
     void onCb1Ride() {}
     void onCraneHookFlg() {}
     void onCrashFlg() {}
-    void onFantomGanonBattle() {}
+    void onFantomGanonBattle() {onStateFlg(daSFLG_PHANTOM_GANON_BATTLE);}
     //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
