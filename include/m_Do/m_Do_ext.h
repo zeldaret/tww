@@ -596,6 +596,8 @@ public:
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
+    ~mDoExt_3DlineMat0_c() {}
+
     BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
     void setMaterial();
     void draw();
@@ -618,6 +620,8 @@ public:
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
+    ~mDoExt_3DlineMat1_c() {}
+    
     BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
     void setMaterial();
     void draw();
