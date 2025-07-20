@@ -143,7 +143,7 @@ private:
     /* 0x08 */ J3DAnmTexPattern* mpAnm;
     /* 0x0C */ J3DTexNoAnm* field_0xc;
     /* 0x10 */ u16 mUpdateMaterialNum;
-};
+}; // size = 0x14
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
 public:
