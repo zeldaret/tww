@@ -11,8 +11,7 @@
 #include "c/c_damagereaction.h"
 
 struct bb_class {
-    /* 0x0000 */ fopAc_ac_c actor;
-    /* 0x0290 */ char unk290[0x1C];
+    /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x02AC */ request_of_phase_process_class mPhase;
     /* 0x02B4 */ mDoExt_McaMorf* mpMorf;
     /* 0x02B8 */ mDoExt_btpAnm mBtpAnm;
@@ -106,7 +105,6 @@ struct bb_class {
     /* 0x0C7E */ u8 unk_C7E;
     /* 0x0C80 */ enemyice mEnemyIce;
     /* 0x1038 */ enemyfire mEnemyFire;
-};
-STATIC_ASSERT(sizeof(bb_class) == 0x1260);
+}; // size = 0x1260
 
 #endif /* D_A_BB_H */

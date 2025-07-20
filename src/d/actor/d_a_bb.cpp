@@ -113,17 +113,13 @@ public:
     /* 0x7C */ f32 unk_7C;
 }; // size = 0x80
 
-static f32 unused_2100[] = {1.0f, 1.0f, 1.0f};
-static f32 unused_2080[] = {1.0f, 1.0f, 1.0f};
-static u8 unused_1811[] = {2, 0, 2, 1};
-static f64 unused_1812 = 3.0;
-static f64 unused_1813 = 0.5;
+#include "weak_data_1811.h" // IWYU pragma: keep
 static s8 callback_check_index[] = {0xFF, 0xFF, 0xFF, 0x64, 0xFF, 0xFF, 0xFF, 0xFF, 0x64, 0xFF, 0xFF, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x64, 0x64, 0x64, 0xFF, 0xFF, 0xFF, 0xFF, 0x64, 0x64};
 static f32 tial_scale[] = {
     0.25f, 0.275f, 0.2875f, 0.3f, 0.325f, 0.375f, 0.4625f, 0.575f, 0.8f, 
 };
 static u16 bb_tex_anm_idx[] = {
-    0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E,
+    BB_BTP_TATACK, BB_BTP_TCLOSE, BB_BTP_TDAMAGE, BB_BTP_TKAIJO, BB_BTP_TMABATAKI, BB_BTP_TOPEN,
 };
 static u16 bb_tex_max_frame[] = {
     5, 3, 40, 5, 7, 3,
