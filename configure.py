@@ -1358,7 +1358,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bita", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_branch"),
     ActorRel(NonMatching, "d_a_bridge"),
-    ActorRel(NonMatching, "d_a_coming2"),
+    ActorRel(Matching, "d_a_coming2", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_coming3"),
     ActorRel(NonMatching, "d_a_demo_dk"),
     ActorRel(NonMatching, "d_a_demo_kmm"),

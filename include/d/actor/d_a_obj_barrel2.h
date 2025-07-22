@@ -7,19 +7,30 @@
 
 namespace daObjBarrel2 {
     enum Type_e {
-        
+        Type_00_e,
+        Type_01_e,
     };
 
     class Act_c : public fopAc_ac_c {
     public:
     
         void attr() const {}
-        void chk_item_give() const {}
+        u8 chk_item_give() const {
+            return unk_476;
+        }
         void delete_req() {}
         void exit_req() {}
         void get_item_id() {}
-        void make_coming(cXyz*, int, Type_e, int, bool, short, daObjBuoyflag::Texture_e) {}
-        void make_prm(Type_e, int, bool, bool, daObjBuoyflag::Texture_e) {}
+        static fpc_ProcID make_coming(cXyz* pos, int flagType, Type_e type, int droppedItem, bool hasFlag, short angleY, daObjBuoyflag::Texture_e arg6) {
+            csXyz angle(0, angleY, 0);
+            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, flagType ? 1 : 0, arg6), pos, -1, &angle);
+        }
+        static u32 make_prm(Type_e arg0, int droppedItem, bool hasFlag, bool flagType, daObjBuoyflag::Texture_e arg4) {
+            s32 item = (droppedItem & 0x3F);
+            s32 tmp = hasFlag ? 0 : 1;
+            s32 a6 = arg4;
+            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | (flagType << 10) | (a6 << 28);
+        }
         void prm_get_buoy() const {}
         void prm_get_coming() const {}
         void prm_get_itemNo() const {}
@@ -77,7 +88,10 @@ namespace daObjBarrel2 {
         bool _draw();
     
     public:
-        /* Place member variables here */
+        /* 0x290 */ char unk290[0x1E4];
+        /* 0x474 */ u8 unk_474;
+        /* 0x475 */ char unk475[0x1];
+        /* 0x476 */ u8 unk_476;
     };
     
     namespace Method {
