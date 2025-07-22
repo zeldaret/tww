@@ -3213,14 +3213,14 @@ static void b_hang(bk_class* i_this) {
     actor->speed.x = 0.0f;
     actor->speedF = 0.0f;
     actor->speed.y = 0.0f;
-    cMtx_YrotS(*calc_mtx, i_this->dr.m7AE);
+    cMtx_YrotS(*calc_mtx, i_this->dr.m7AC.y);
     cXyz sp18;
     sp18.x = 0.0f;
     sp18.y = REG12_F(10) + 25.0f;
     sp18.z = REG12_F(11) + 50.0f;
     cXyz sp0C;
     MtxPosition(&sp18, &sp0C);
-    cLib_addCalcAngleS2(&actor->current.angle.y, i_this->dr.m7AE, 1, 0x1000);
+    cLib_addCalcAngleS2(&actor->current.angle.y, i_this->dr.m7AC.y, 1, 0x1000);
     if (i_this->dr.m7B8 != fpcM_ERROR_PROCESS_ID_e) {
         cLib_addCalc2(&actor->current.pos.x, i_this->dr.m79C->x + sp0C.x, 1.0f, i_this->dr.m798);
         cLib_addCalc2(&actor->current.pos.y, i_this->dr.m79C->y + sp0C.y, 1.0f, i_this->dr.m798);
