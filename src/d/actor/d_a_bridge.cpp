@@ -20,23 +20,7 @@
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera.h"
 
-static char unused_00[0xC];
-static char unused_0C[0x1];
-static char unused_10[0x1];
-static char unused_14[0x1];
-static char unused_18[0x1];
-static char unused_1C[0x1];
-static char unused_20[0x1];
-static char unused_24[0x1];
-static char unused_28[0x1];
-static char unused_2C[0x1];
-static char unused_30[0x1];
-static char unused_34[0x1];
-static char unused_38[0x1];
-static char unused_3C[0x1];
-static char unused_40[0x1];
-static char unused_44[0x1];
-static char unused_48[0x1];
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 static cXyz* wind_vec;
 static s16 wy;
 static f32* wp;
@@ -143,8 +127,8 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 
 /* 00000540-00000614       .text kikuzu_set__FP12bridge_classP4cXyz */
 void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
-    daPy_py_c* player = daPy_getPlayerActorClass();
-    csXyz shapeAngle = *fopAcM_GetShapeAngle_p((fopAc_ac_c*)player);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    csXyz shapeAngle = player->shape_angle;
     shapeAngle.y -= -0x8000;
 
     JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_002B, pPos, &shapeAngle, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
@@ -1477,13 +1461,9 @@ static cPhs_State daBridge_Create(fopAc_ac_c* a_this) {
         dPath* dPath = dPath_GetRoomPath(i_this->mPathId, fopAcM_GetRoomNo(a_this));
         if (dPath != NULL) {
             dPnt* point = &dPath->m_points[0];
-            a_this->home.pos.x = point->m_position.x;
-            a_this->home.pos.y = point->m_position.y;
-            a_this->home.pos.z = point->m_position.z;
+            a_this->home.pos = point->m_position;
             point++;
-            i_this->mEndPos.x = point->m_position.x;
-            i_this->mEndPos.y = point->m_position.y;
-            i_this->mEndPos.z = point->m_position.z;
+            i_this->mEndPos = point->m_position;
             
             cXyz delta = i_this->mEndPos - a_this->home.pos;
             
@@ -1511,7 +1491,7 @@ static cPhs_State daBridge_Create(fopAc_ac_c* a_this) {
 
         CreateInit(a_this);
 
-        if (i_this->mpBgW != NULL && dComIfG_Bgsp()->Regist((cBgW*)i_this->mpBgW, a_this)) {
+        if (i_this->mpBgW != NULL && dComIfG_Bgsp()->Regist(i_this->mpBgW, a_this)) {
             return cPhs_ERROR_e;
         }
 
