@@ -97,7 +97,7 @@ BOOL daDemo_Kmm_c::execute() {
     l_action[unk_29C](this);
     calcMtx();
 
-    if (!dDemo_setDemoData(this, 0x6a, mpMorf, M_arcname)) {
+    if (!dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e, mpMorf, M_arcname)) {
         mpMorf->play(&eyePos,0,0);
     }
     mpMorf->calc();
