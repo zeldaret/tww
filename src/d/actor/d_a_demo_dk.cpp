@@ -33,17 +33,17 @@ void anm_init(demo_dk_class* i_this, int bckAnmIdx, float morf, unsigned char lo
 /* 00000210-000002EC       .text mode_wait__FP13demo_dk_class */
 void mode_wait(demo_dk_class* i_this) {
     if (i_this->mpMorf->isStop()) {
-        f32 tmp = 0.09999999403953552f;
+        f32 tmp = 0.099999995f;
 
         if (i_this->unk_2C0 > 0) {
             i_this->unk_2C0--;
         }
 
         if (i_this->unk_2C0 == 0 && cM_rnd() < tmp) {
-            anm_init(i_this, 4, 5.0f, 0, 1.0f, 0);
+            anm_init(i_this, DEMO_DK_BCK_DK_L_AKUBI1, 5.0f, 0, 1.0f, 0);
             i_this->unk_2B6 = 1;
         } else {
-            anm_init(i_this, 5, 0.0f, 0, 1.0f, 0);
+            anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
         }
     }
 }
@@ -51,7 +51,7 @@ void mode_wait(demo_dk_class* i_this) {
 /* 000002EC-00000378       .text mode_akubi__FP13demo_dk_class */
 void mode_akubi(demo_dk_class* i_this) {
     if (i_this->mpMorf->isStop()) {
-        anm_init(i_this, 5, 5.0f, 0, 2.0f, 0);
+        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 5.0f, 0, 2.0f, 0);
         i_this->unk_2C0 = 3;
         i_this->unk_2B6 = 0;
     }
@@ -142,7 +142,7 @@ static cPhs_State daDEMO_DK_Create(fopAc_ac_c* a_this) {
         a_this->scale.x = 1.0f;
         a_this->scale.y = 1.0f;
         a_this->scale.z = 1.0f;
-        anm_init(i_this, 5, 0.0f, 0, 1.0f, 0);
+        anm_init(i_this, DEMO_DK_BCK_DK_L_WAIT1, 0.0f, 0, 1.0f, 0);
     }
     return ret;
 }
