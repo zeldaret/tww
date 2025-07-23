@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-const cXyz cXyz::Zero(0, 0, 0);
+cXyz cXyz::Zero(0, 0, 0);
 const cXyz cXyz::BaseX(1, 0, 0);
 const cXyz cXyz::BaseY(0, 1, 0);
 const cXyz cXyz::BaseZ(0, 0, 1);
