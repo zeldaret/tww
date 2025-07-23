@@ -7,8 +7,7 @@
 
 namespace daObjBarrel2 {
     enum Type_e {
-        Type_00_e,
-        Type_01_e,
+        Type_01_e = 0x1,
     };
 
     class Act_c : public fopAc_ac_c {

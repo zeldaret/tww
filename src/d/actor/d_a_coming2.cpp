@@ -26,6 +26,14 @@ static s32 coming_make_item_no_table[] = {
 };
 static GXColor colorR = {255, 100, 100, 255};
 
+namespace daComing2 {
+    namespace {
+        const static u8 L_attr[] = {
+            0, 0, 0, 0xC, 0x2, 0x58, 0x00, 0x87, 0x05, 0x46,
+        };
+    }
+}
+
 /* 000000EC-00000164       .text chase_ship__Q29daComing25Act_cFv */
 void daComing2::Act_c::chase_ship() {
     fpc_ProcID proc = fopAcM_GetLinkId(this);
@@ -38,9 +46,6 @@ void daComing2::Act_c::chase_ship() {
 
 /* 00000164-00000200       .text get_speed__9daComing2FP10fopAc_ac_c */
 f32 daComing2::get_speed(fopAc_ac_c* actor) {
-    const static u8 L_attr[] = {
-        0, 0, 0, 0xC, 0x2, 0x58, 0x00, 0x87, 0x05, 0x46,
-    };
     f32 x = actor->current.pos.x - actor->old.pos.x;
     f32 z = actor->current.pos.z - actor->old.pos.z;
     return std::sqrtf(x * x + z * z);
@@ -211,7 +216,7 @@ BOOL daComing2::Act_c::make_coming_param(cXyz* outPos, daObjBarrel2::Type_e* out
     if (get_water_height(&sp0C.y, &sp0C)) {
         *outPos = sp0C;
 
-        *outType = daObjBarrel2::Type_e(1);
+        *outType = daObjBarrel2::Type_01_e;
         *outHasFlag = false;
 
         *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItem_RECOVER_FAIRY_e;
@@ -430,10 +435,10 @@ void daComing2::Act_c::coming_setF_main() {
             if (get_water_height(&sp28.y, &sp28) && check_in_large_sea(&sp28) && 
                 position_is_none_obj(&sp28) && no_ship_obstacle(&sp28)) {
 #if VERSION == VERSION_DEMO
-                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, daObjBarrel2::Type_01_e, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_e(1));
+                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, daObjBarrel2::Type_01_e, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
 #else
                 daObjBarrel2::Type_e type(daObjBarrel2::Type_01_e);
-                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, type, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_e(1));
+                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, type, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
 #endif
                 mStartBuoy[i].unk_00 = barrel;
                 if (barrel != fpcM_ERROR_PROCESS_ID_e) {
@@ -498,7 +503,7 @@ void daComing2::Act_c::coming_game_main() {
         if ((mBarrelInfo[unk_2A4].unk_00 == fpcM_ERROR_PROCESS_ID_e && make_coming_param(&sp1C, &type, &droppedItem, &hasFlag))) {
             if (check_in_large_sea(&sp1C) != 0) {
                 if (position_is_none_obj(&sp1C) && no_ship_obstacle(&sp1C)) {
-                    fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp1C, 0, type, droppedItem, hasFlag, mStartStat.unk_00, daObjBuoyflag::Texture_e(1));
+                    fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp1C, 0, type, droppedItem, hasFlag, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
                     mBarrelInfo[unk_2A4].unk_00 = barrel;
                     if (barrel != fpcM_ERROR_PROCESS_ID_e) {
                         unk_29A = 0;

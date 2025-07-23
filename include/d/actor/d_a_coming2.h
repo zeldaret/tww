@@ -13,9 +13,6 @@ namespace daComing2 {
 
     class _barrel_info_ {
     public:
-        _barrel_info_() {}
-        ~_barrel_info_() {}
-        
         /* 0x00 */ fpc_ProcID unk_00;
         /* 0x04 */ s16 unk_04;
         /* 0x06 */ u8 unk_06;
@@ -29,9 +26,6 @@ namespace daComing2 {
     class Act_c : public fopAc_ac_c {
         class _start_buoy_ {
         public:
-            _start_buoy_() {}
-            ~_start_buoy_() {}
-
             /* 0x00 */ fpc_ProcID unk_00;
             /* 0x04 */ cXyz unk_04;
         }; // size = 0x10
