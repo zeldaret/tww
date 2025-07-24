@@ -13,15 +13,16 @@
 /* 00000078-000000C8       .text chkMakeKey__10daDoor10_cFv */
 s32 daDoor10_c::chkMakeKey() {
     u8 cVar1 = getType();
-    s32 ret;
-    s32 v = 2;
 
     if (cVar1 == 4 || cVar1 == 5) {
-        ret = 1;
-    } else {
-        ret = cVar1 == 1 ? 2 : 0;
+        return 1;
     }
-    return ret;
+
+    if (cVar1 == 1) {
+        return 2;
+    }
+
+    return 0;
 }
 
 /* 000000C8-000001A8       .text setKey__10daDoor10_cFv */
@@ -252,9 +253,9 @@ const char* daDoor10_c::getDzbName() {
 f32 daDoor10_c::getSize2X() {
     switch (getType()) {
         case 3:
-            return 225.0f;
+            return 15.0f * 15.0f;
     }
-    return 12100.0f;
+    return 110.0f * 110.0f;
 }
 
 static const char daDoor10_c::M_arcname[] = "door10";
@@ -381,7 +382,7 @@ void daDoor10_c::setEventPrm() {
         }
     }
 
-    if (checkArea(getSize2X(), 12100.0f, 62500.0f)) {
+    if (checkArea(getSize2X(), 110.0f * 110.0f, 250.0f * 250.0f)) {
         eventInfo.setEventId(mEventIdx[m2C6]);
         eventInfo.setToolId(mToolId[m2C6]);
         eventInfo.onCondition(dEvtCnd_CANDOOR_e);
@@ -845,7 +846,7 @@ static BOOL daDoor10_IsDelete(daDoor10_c*) {
 /* 00001CD4-00001E18       .text daDoor10_Delete__FP10daDoor10_c */
 static BOOL daDoor10_Delete(daDoor10_c* i_this) {
     fpc_ProcID proc = fopAcM_GetID(i_this);
-    
+
 #if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
 #endif
