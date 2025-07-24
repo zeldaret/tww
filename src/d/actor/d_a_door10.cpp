@@ -844,6 +844,8 @@ static BOOL daDoor10_IsDelete(daDoor10_c*) {
 
 /* 00001CD4-00001E18       .text daDoor10_Delete__FP10daDoor10_c */
 static BOOL daDoor10_Delete(daDoor10_c* i_this) {
+    fpc_ProcID proc = fopAcM_GetID(i_this);
+    
 #if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
 #endif

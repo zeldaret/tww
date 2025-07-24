@@ -98,6 +98,9 @@ public:
 
 class dDoor_stop_c {
 public:
+    dDoor_stop_c() {}
+    ~dDoor_stop_c() {}
+
     void calcMtx(dDoor_info_c*);
     void closeInit(dDoor_info_c*);
     s32 closeProc(dDoor_info_c*);
@@ -128,9 +131,10 @@ public:
 
 class dDoor_hkyo_c {
 public:
-    bool chkUse() const {
-        return m11 != 0;
-    }
+    dDoor_hkyo_c() {}
+    ~dDoor_hkyo_c() {}
+
+    bool chkUse() { return m11 != 0; }
     void offUse() { m11 = 0; }
     void onUse(u8 arg0) { m11 = arg0; }
 

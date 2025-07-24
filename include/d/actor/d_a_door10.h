@@ -7,7 +7,7 @@
 
 class daDoor10_c : public dDoor_info_c {
 public:
-    bool checkFlag(unsigned short flag) const { return m356 & flag; }
+    bool checkFlag(unsigned short flag) { return m356 & flag; }
     inline BOOL execute();
     void offFlag(unsigned short flag) { m356 &= ~flag; }
     void onFlag(unsigned short flag) { m356 |= flag; }

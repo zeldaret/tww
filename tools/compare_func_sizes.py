@@ -12,21 +12,17 @@ args = arg_parse.parse_args()
 project_root = Path(__file__).parent.parent
 rel_name = args.name
 
-if True:
-  target_map_path = Path(project_root / "orig" / "debug_maps" /  f"{rel_name}D.map")
-  base_map_path = Path(project_root / "build" / "D44J01" / rel_name / f"{rel_name}.plf.MAP")
+target_map_path = project_root / "orig" / "debug_maps" /  f"{rel_name}D.map"
+if Path.exists(target_map_path):
+  base_map_path = project_root / "build" / "D44J01" / rel_name / f"{rel_name}.plf.MAP"
 else:
-  target_map_path = Path(project_root / "orig" / "debug_maps" / "frameworkD.map")
-  base_map_path = Path(project_root / "build" / "D44J01" / "framework.elf.MAP")
-
-print(f"Root: {project_root}")
-print(f"rel_name: {rel_name}")
-print(f"target_map_path: {target_map_path}")
-print(f"base_map_path: {base_map_path}")
+  target_map_path = project_root / "orig" / "debug_maps" / "frameworkD.map"
+  base_map_path = project_root / "build" / "D44J01" / "framework.elf.MAP"
 
 retcode = subprocess.call(["python", "configure.py", "--version", "D44J01", "--debug", "--map"], cwd=project_root)
+assert retcode == 0, "Failed to configure"
 retcode = subprocess.call(["ninja", base_map_path.relative_to(project_root)], cwd=project_root)
-assert retcode == 0
+assert retcode == 0, "Ninja build call failed"
 
 def get_main_symbols(framework_map_contents: str, valid_obj_names = None):
   symbols = {}
@@ -82,7 +78,7 @@ def get_rel_symbols(rel_map_data: str):
       symbol_offset = int(symbol_offset, 16)
       symbol_name = symbol_entry_match.group(3)
       symbols[symbol_name] = symbol_size
-      #print("%08X  %s" % (symbol_offset, symbol_name))
+      print("%08X  %s" % (symbol_offset, symbol_name))
   
   #print(rel_symbol_names)
   
@@ -96,8 +92,6 @@ else:
   obj_names = None
   target_symbols = get_main_symbols(target_map_path.read_text(), valid_obj_names=obj_names)
   base_symbols = get_main_symbols(base_map_path.read_text(), valid_obj_names=obj_names)
-
-print(len(target_symbols), len(base_symbols))
 
 symbol_size_diffs = []
 for symbol_name, target_size in target_symbols.items():
@@ -127,7 +121,7 @@ for symbol_name, target_size, base_size, ratio in symbol_size_diffs:
   prefix = ""
   if base_size == 0:
     prefix = "MISSING: "
-  print(prefix + symbol_name, "0x%X" % target_size, "0x%X" % base_size, ratio)
+    print(prefix + symbol_name, "0x%X" % target_size, "0x%X" % base_size, ratio)
   
 for symbol_name, base_size in base_symbols.items():
   if symbol_name in target_symbols:
