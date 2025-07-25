@@ -218,9 +218,9 @@ static BOOL daKui_Execute(kui_class* i_this) {
         btd_class* btd = search_btd(i_this);
 
         if (dragon_tail != NULL && btd != NULL) {
-            if ((dragon_tail->field_0x4BA == 0 || dragon_tail->field_0x4BA >= 10) && btd->field_0x2e4 < 10) {
-                actor->current.pos = dragon_tail->field_0x3B0;
-                actor->current.angle = dragon_tail->current.angle;
+            if ((dragon_tail->unk_4BA == 0 || dragon_tail->unk_4BA >= 10) && btd->field_0x2e4 < 10) {
+                actor->current.pos = dragon_tail->unk_3B0;
+                actor->current.angle = dragon_tail->actor.current.angle;
             } else {
                 actor->current.pos.set(0.0f, -10000.0f, 0.0f);
             }
