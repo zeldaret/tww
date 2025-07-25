@@ -142,7 +142,7 @@ s32 dDoor_info_c::drawCheck_local() {
 }
 
 /* 8006B824-8006B8AC       .text drawCheck__12dDoor_info_cFi */
-u8 dDoor_info_c::drawCheck(int mode) {
+s32 dDoor_info_c::drawCheck(int mode) {
     s32 rt = drawCheck_local();
     if (rt != 0) {
         if (mode) {
@@ -157,7 +157,7 @@ u8 dDoor_info_c::drawCheck(int mode) {
 }
 
 /* 8006B8AC-8006B954       .text checkExecute__12dDoor_info_cFv */
-u8 dDoor_info_c::checkExecute() {
+s32 dDoor_info_c::checkExecute() {
     mFrontCheck = frontCheck();
     if (fopAcM_CheckStatus(this, fopAcStts_UNK1000_e))
         return 1;
@@ -234,7 +234,7 @@ void dDoor_info_c::initProc(int spl) {
 
 /* 8006BBB0-8006BC50       .text initOpenDemo__12dDoor_info_cFi */
 void dDoor_info_c::initOpenDemo(int evt) {
-    if (field_0x2c6 != 9)
+    if (m2C6 != 9)
         dComIfGp_map_setAGBMapSendStopFlg();
 
     shape_angle.y = current.angle.y;
