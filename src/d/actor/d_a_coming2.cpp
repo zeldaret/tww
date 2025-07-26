@@ -435,10 +435,10 @@ void daComing2::Act_c::coming_setF_main() {
             if (get_water_height(&sp28.y, &sp28) && check_in_large_sea(&sp28) && 
                 position_is_none_obj(&sp28) && no_ship_obstacle(&sp28)) {
 #if VERSION == VERSION_DEMO
-                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, daObjBarrel2::Type_01_e, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
+                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, -1, daObjBarrel2::Type_01_e, 0x3F, false, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
 #else
                 daObjBarrel2::Type_e type(daObjBarrel2::Type_01_e);
-                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, 1, type, 0x3F, true, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
+                fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp28, -1, type, 0x3F, false, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
 #endif
                 mStartBuoy[i].unk_00 = barrel;
                 if (barrel != fpcM_ERROR_PROCESS_ID_e) {
@@ -503,7 +503,7 @@ void daComing2::Act_c::coming_game_main() {
         if ((mBarrelInfo[unk_2A4].unk_00 == fpcM_ERROR_PROCESS_ID_e && make_coming_param(&sp1C, &type, &droppedItem, &hasFlag))) {
             if (check_in_large_sea(&sp1C) != 0) {
                 if (position_is_none_obj(&sp1C) && no_ship_obstacle(&sp1C)) {
-                    fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp1C, 0, type, droppedItem, hasFlag, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
+                    fpc_ProcID barrel = daObjBarrel2::Act_c::make_coming(&sp1C, -1, type, droppedItem, hasFlag, mStartStat.unk_00, daObjBuoyflag::Texture_01_e);
                     mBarrelInfo[unk_2A4].unk_00 = barrel;
                     if (barrel != fpcM_ERROR_PROCESS_ID_e) {
                         unk_29A = 0;

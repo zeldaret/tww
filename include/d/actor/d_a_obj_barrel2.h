@@ -20,15 +20,15 @@ namespace daObjBarrel2 {
         void delete_req() {}
         void exit_req() {}
         void get_item_id() {}
-        static fpc_ProcID make_coming(cXyz* pos, int flagType, Type_e type, int droppedItem, bool hasFlag, short angleY, daObjBuoyflag::Texture_e arg6) {
+        static fpc_ProcID make_coming(cXyz* pos, int roomNo, Type_e type, int droppedItem, bool hasFlag, short angleY, daObjBuoyflag::Texture_e arg6) {
             csXyz angle(0, angleY, 0);
-            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, flagType ? 1 : 0, arg6), pos, -1, &angle);
+            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, hasFlag, arg6), pos, roomNo, &angle);
         }
         static u32 make_prm(Type_e arg0, int droppedItem, bool hasFlag, bool flagType, daObjBuoyflag::Texture_e arg4) {
             s32 item = (droppedItem & 0x3F);
-            s32 tmp = hasFlag ? 0 : 1;
+            s32 tmp = hasFlag ? 1 : 0;
             s32 a6 = arg4;
-            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | (flagType << 10) | (a6 << 28);
+            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | ((hasFlag ? 0 : 1) << 10) | (a6 << 28);
         }
         void prm_get_buoy() const {}
         void prm_get_coming() const {}
@@ -87,7 +87,9 @@ namespace daObjBarrel2 {
         bool _draw();
     
     public:
-        /* 0x290 */ char unk290[0x1E4];
+        /* 0x290 */ char unk290[0x1C8];
+        /* 0x458 */ fpc_ProcID unk_458;
+        /* 0x45C */ char unk45C[0x18];
         /* 0x474 */ u8 unk_474;
         /* 0x475 */ char unk475[0x1];
         /* 0x476 */ u8 unk_476;
