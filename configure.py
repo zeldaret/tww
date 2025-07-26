@@ -1365,7 +1365,7 @@ config.libs = [
     ActorRel(Equivalent, "d_a_door10", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_dr"),
     ActorRel(Equivalent, "d_a_dr2"),
-    ActorRel(NonMatching, "d_a_ep"),
+    ActorRel(Matching, "d_a_ep", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_floor"),
     ActorRel(Matching,    "d_a_grass"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_hitobj", extra_cflags=['-pragma "nosyminline on"']),
