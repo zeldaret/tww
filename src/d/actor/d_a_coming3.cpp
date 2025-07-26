@@ -200,7 +200,7 @@ void daComing3::Act_c::coming_start_main() {
                 static s32 make_item_table[] = {
                     dItem_BLUE_RUPEE_e, dItem_YELLOW_RUPEE_e,
                 };
-                unk_400 = daObjBarrel2::Act_c::make_coming(&sp18, fopAcM_GetRoomNo(this), daObjBarrel2::Type_e(1), make_item_table[get_challenge_id()], true, shape_angle.y, daObjBuoyflag::Texture_e(1));
+                unk_400 = daObjBarrel2::Act_c::make_coming(&sp18, fopAcM_GetRoomNo(this), daObjBarrel2::Type_01_e, make_item_table[get_challenge_id()], true, shape_angle.y, daObjBuoyflag::Texture_01_e);
             }
 
             if (unk_400 != fpcM_ERROR_PROCESS_ID_e) {
@@ -387,7 +387,7 @@ void daComing3::Act_c::collision_init() {
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(M_cyl_src);
     mCyl.SetStts(&mStts);
-    mCyl.SetTgVec(cXyz::Zero);
+    mCyl.SetTgVec((cXyz&)cXyz::Zero);
     mCyl.OnTgNoHitMark();
 }
 

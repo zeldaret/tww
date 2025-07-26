@@ -10,7 +10,7 @@ struct cXy {
 };
 
 struct cXyz : Vec {
-    static cXyz Zero;
+    static const cXyz Zero;
     static const cXyz BaseX;
     static const cXyz BaseY;
     static const cXyz BaseZ;
