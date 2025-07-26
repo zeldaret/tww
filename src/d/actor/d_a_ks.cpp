@@ -75,11 +75,14 @@ void draw_SUB(ks_class* i_this) {
 
 /* 000002CC-00000568       .text daKS_Draw__FP8ks_class */
 static BOOL daKS_Draw(ks_class* i_this) {
-    cXyz local_24 = i_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye;
+    fopAc_ac_c* actor = i_this;
 
+#if VERSION > VERSION_DEMO
+    cXyz local_24 = i_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye;
     if (local_24.abs() < REG0_F(10) + 100.0f) {
         return TRUE;
     }
+#endif
 
     J3DModel* pBodyModel = i_this->mpBodyMorf->getModel();
     J3DModel* pEyeModel = i_this->mpEyeMorf->getModel();
@@ -87,7 +90,7 @@ static BOOL daKS_Draw(ks_class* i_this) {
     cXyz local_18 = i_this->current.pos;
     local_18.y += 40.0f;
 
-    dSnap_RegistFig(DSNAP_TYPE_KS, i_this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KS, actor, 1.0f, 1.0f, 1.0f);
 
     if (i_this->m2C8 == 6) {
         return TRUE;
@@ -246,6 +249,7 @@ BOOL shock_damage_check(ks_class* i_this) {
 
 /* 00000A98-00000DE8       .text body_atari_check__FP8ks_class */
 BOOL body_atari_check(ks_class* i_this) {
+    daPy_py_c* player = daPy_getPlayerActorClass();
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     cXyz mTgHitPos;
     cXyz mParticleScale;
@@ -253,7 +257,7 @@ BOOL body_atari_check(ks_class* i_this) {
     i_this->mStts.Move();
     
     if (i_this->mSph.ChkTgHit()) {
-        daPy_py_c* mpCurPlayerActor = (daPy_py_c*)daPy_getPlayerActorClass();
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
         cCcD_Obj* mTgHitObj = i_this->mSph.GetTgHitObj();
 
@@ -276,6 +280,7 @@ BOOL body_atari_check(ks_class* i_this) {
 
                 return FALSE;
             }
+#if VERSION > VERSION_DEMO
             case AT_TYPE_UNK8: {
                 i_this->mMode = 32;
 
@@ -285,19 +290,22 @@ BOOL body_atari_check(ks_class* i_this) {
 
                 return FALSE;
             }
+#endif
             case AT_TYPE_SWORD: {
                 if (i_this->mMode != 43 || i_this->m2CE) {
                     dScnPly_ply_c::setPauseTimer(2);
+#if VERSION > VERSION_DEMO
                     a_this->stealItemBitNo = 1;
+#endif
                 }
                 
                 mParticleScale.setall(REG8_F(0) + 0.8f); 
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &mpCurPlayerActor->shape_angle, &mParticleScale);     
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &player->shape_angle, &mParticleScale);     
                 
                 break;
             }
             case AT_TYPE_SKULL_HAMMER: {
-                if (mpCurPlayerActor->getCutType() == 0x12 || mpCurPlayerActor->getCutType() == 0x13) {
+                if (player->getCutType() == 0x12 || player->getCutType() == 0x13) {
                     a_this->speedF = 0.0f;
                     a_this->gravity = 0.0f;
                     a_this->speed.setall(0.0f);
@@ -306,7 +314,9 @@ BOOL body_atari_check(ks_class* i_this) {
 
                     dScnPly_ply_c::setPauseTimer(2);
 
+#if VERSION > VERSION_DEMO
                     a_this->stealItemBitNo = 1;
+#endif
 
                     i_this->mMode = 32;
 
@@ -344,7 +354,7 @@ BOOL body_atari_check(ks_class* i_this) {
             }
             default: {
                 mParticleScale.setall(REG8_F(0) + 0.8f);
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &mpCurPlayerActor->shape_angle, &mParticleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &mTgHitPos, &player->shape_angle, &mParticleScale);
                 break;
             }
         }
@@ -397,7 +407,7 @@ void action_dousa_move(ks_class* i_this) {
         case 1:
             cLib_addCalcAngleS2(&i_this->shape_angle.z, 0, 1, 0x1000);
             
-            if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) > 10000.0f) {
+            if (fopAcM_searchPlayerDistance(i_this) > 10000.0f) {
                 break;
             }
             
@@ -427,7 +437,7 @@ void action_dousa_move(ks_class* i_this) {
 
             if (KUTTUKU_ALL_COUNT >= 0 && KUTTUKU_ALL_COUNT < 0x14 && 
                 (link->getSpeedF() > 12.0f || HEAVY_IN) && 
-                fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f &&
+                fopAcM_searchPlayerDistance(i_this) < 500.0f &&
                 !dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e) &&
                 tyaku_check(i_this)) {
                 
@@ -470,7 +480,7 @@ void action_dousa_move(ks_class* i_this) {
             }
             break;
         case 3:
-            if (fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0)) < 500.0f) {
+            if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
                 i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
             }
             break;
@@ -487,11 +497,12 @@ void action_dousa_move(ks_class* i_this) {
 
 /* 00001314-00001630       .text action_kougeki_move__FP8ks_class */
 void action_kougeki_move(ks_class* i_this) {    
+    fopAc_ac_c* actor = i_this;
     cXyz head_top_pos = daPy_getPlayerActorClass()->getHeadTopPos();
 
     i_this->m31C = 20.0f;
 
-    if (head_top_pos.y > i_this->current.pos.y) {
+    if (head_top_pos.y > actor->current.pos.y) {
         i_this->m31C = 60.0f;
     }
 
@@ -499,9 +510,9 @@ void action_kougeki_move(ks_class* i_this) {
         case 10: {
             i_this->mSph.OffCoSetBit();
 
-            i_this->speedF = 26.0f;
-            i_this->gravity = -4.0f;
-            i_this->speed.y = 28.0f;
+            actor->speedF = 26.0f;
+            actor->gravity = -4.0f;
+            actor->speed.y = 28.0f;
 
             for (int i = 0; i < 5; i++) {
                 i_this->m2F0[i] = 0;
@@ -509,21 +520,21 @@ void action_kougeki_move(ks_class* i_this) {
 
             i_this->m30C = 0.0f;
 
-            i_this->current.angle.y = fopAcM_searchPlayerAngleY(i_this);
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
             
-            mDoAud_seStart(JA_SE_CM_KS_ATTACK, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+            fopAcM_seStart(actor, JA_SE_CM_KS_ATTACK, 0);
             
-            fopAcM_monsSeStart(i_this, JA_SE_CV_KS_ATTACK, 0);
+            fopAcM_monsSeStart(actor, JA_SE_CV_KS_ATTACK, 0);
             
             i_this->mMode++;
             
             break;
         }
         case 11: {
-            if (i_this->speedF > 0.0f && i_this->m2F0[1] == 0 && i_this->mSph.ChkAtShieldHit()) {
-                i_this->gravity = -4.0f;
-                i_this->speed.y = 25.0f;
-                i_this->speedF *= -0.5f;
+            if (actor->speedF > 0.0f && i_this->m2F0[1] == 0 && i_this->mSph.ChkAtShieldHit()) {
+                actor->gravity = -4.0f;
+                actor->speed.y = 25.0f;
+                actor->speedF *= -0.5f;
                 
                 i_this->m2F0[1] = 1;
             }
@@ -547,14 +558,14 @@ void action_kougeki_move(ks_class* i_this) {
             ks_kuttuki_check(i_this);
 
             if (tyaku_check(i_this)) {
-                i_this->gravity = -4.0f;
-                i_this->speed.y = 1.0f;
-                i_this->speed.y += cM_rndF(5.0f);
-                i_this->speedF = 16.0f;
+                actor->gravity = -4.0f;
+                actor->speed.y = 1.0f;
+                actor->speed.y += cM_rndF(5.0f);
+                actor->speedF = 16.0f;
             }
         
             if (i_this->m2E8[2] == 0) {
-                i_this->speedF = 0.0f;
+                actor->speedF = 0.0f;
                 i_this->m31C = 20.0f;
                 i_this->mAction = 0;
                 i_this->mMode = 0;
@@ -562,10 +573,10 @@ void action_kougeki_move(ks_class* i_this) {
             break;
     }
 
-    cLib_addCalcAngleS2(&i_this->shape_angle.y, i_this->current.angle.y, 1, 0x1000);
+    cLib_addCalcAngleS2(&actor->shape_angle.y, actor->current.angle.y, 1, 0x1000);
     
     if (body_atari_check(i_this)) {
-        fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
+        fopAcM_seStart(actor, JA_SE_LK_LAST_HIT, 0);
     }
 }
 
@@ -1108,7 +1119,7 @@ void action_tubo_search(ks_class* i_this) {
                     return;
                 }
 
-                if (fopAcM_searchActorDistance(a_this, daPy_getPlayerActorClass()) > i_this->m318) {
+                if (fopAcM_searchPlayerDistance(a_this) > i_this->m318) {
                     return;
                 }
             }
@@ -1359,7 +1370,7 @@ static BOOL daKS_IsDelete(ks_class* i_this) {
 
 /* 0000305C-000030F4       .text daKS_Delete__FP8ks_class */
 static BOOL daKS_Delete(ks_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "KS");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "KS");
 
     i_this->m52C.remove();
 
