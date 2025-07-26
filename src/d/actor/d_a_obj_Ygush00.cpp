@@ -53,7 +53,7 @@ bool daObjYgush00_c::create_heap() {
     J3DAnmTransform * pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, bck_table[mType]));
 
     if (!pModelData || !pBtk || !pBck) {
-        JUT_ASSERT(VERSION_SELECT(203, 207, 207, 207), FALSE);
+        JUT_ASSERT(DEMO_SELECT(203, 207), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);

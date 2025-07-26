@@ -87,7 +87,7 @@ bool daObjHfuck1_c::create_heap() {
     J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, HFUCK1_BDL_HFUCK1));
 
     if (!pModelData) {
-        JUT_ASSERT(VERSION_SELECT(241, 245, 245, 245), FALSE);
+        JUT_ASSERT(DEMO_SELECT(241, 245), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);

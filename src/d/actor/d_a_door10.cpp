@@ -275,7 +275,7 @@ BOOL daDoor10_c::CreateHeap() {
         modelData = (J3DModelData*)dComIfG_getStageRes("Stage", getBdlName());
     }
 
-    JUT_ASSERT(VERSION_SELECT(354, 356, 356, 356), modelData);
+    JUT_ASSERT(DEMO_SELECT(354, 356), modelData);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -425,7 +425,7 @@ void daDoor10_c::openEnd() {
 void daDoor10_c::closeInit() {
     onFlag(2);
     bool rt = dComIfG_Bgsp()->Regist(mpBgW, this);
-    JUT_ASSERT(VERSION_SELECT(539, 541, 541, 541), !rt);
+    JUT_ASSERT(DEMO_SELECT(539, 541), !rt);
     dComIfGp_map_clrAGBMapSendStopFlg();
     fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_MOVE_D, 0);
 }
@@ -463,7 +463,7 @@ void daDoor10_c::calcMtx() {
 /* 000010FC-0000125C       .text CreateInit__10daDoor10_cFv */
 BOOL daDoor10_c::CreateInit() {
     if (dComIfG_Bgsp()->Regist(mpBgW, this)) {
-        JUT_ASSERT(VERSION_SELECT(605, 607, 607, 607), NULL);
+        JUT_ASSERT(DEMO_SELECT(605, 607), NULL);
     }
 
     tevStr.mRoomNo = current.roomNo;
@@ -823,7 +823,7 @@ BOOL daDoor10_c::execute() {
             break;
 
         default:
-            JUT_ASSERT(VERSION_SELECT(1028, 1032, 1032, 1032), NULL);
+            JUT_ASSERT(DEMO_SELECT(1028, 1032), NULL);
             break;
     }
 

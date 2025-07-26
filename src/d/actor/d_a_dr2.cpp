@@ -664,7 +664,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     i_this->mpMorf1->getModel()->setUserArea((u32)i_this);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BDL_IWA00);
-    JUT_ASSERT(VERSION_SELECT(1347, 1361, 1361, 1361), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1347, 1361), modelData != NULL);
 
     i_this->unk_418 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->unk_418 == NULL) {
@@ -672,7 +672,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_GAN_MAGMA);
-    JUT_ASSERT(VERSION_SELECT(1356, 1370, 1370, 1370), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1356, 1370), modelData != NULL);
 
     i_this->unk_41C = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->unk_41C == NULL) {
@@ -711,7 +711,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_MBYO1);
-    JUT_ASSERT(VERSION_SELECT(1405, 1429, 1429, 1429), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1405, 1429), modelData != NULL);
 
     i_this->unk_428 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->unk_428 == NULL) {
@@ -719,7 +719,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_MBYO2);
-    JUT_ASSERT(VERSION_SELECT(1412, 1436, 1436, 1436), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1412, 1436), modelData != NULL);
 
     i_this->unk_42C = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if (i_this->unk_42C == NULL) {

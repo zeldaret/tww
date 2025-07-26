@@ -35,7 +35,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 00000118-0000032C .text _createHeap__13daGhostship_cFv */
 BOOL daGhostship_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BDL_AYUSH));
-    JUT_ASSERT(VERSION_SELECT(80, 88, 88, 88), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(80, 88), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(!mpModel) {
@@ -43,7 +43,7 @@ BOOL daGhostship_c::_createHeap() {
     }
 
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
-    JUT_ASSERT(VERSION_SELECT(87, 95, 95, 95), btk != NULL);
+    JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
     if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
@@ -369,7 +369,7 @@ bool daGhostship_c::_execute() {
         ) {
             mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
             stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
-            JUT_ASSERT(VERSION_SELECT(457, 463, 463, 463), scls_data != NULL)
+            JUT_ASSERT(DEMO_SELECT(457, 463), scls_data != NULL)
 
             u8 startCode = scls_data->mStart;
             dComIfGs_setEventReg(0xC3FF, scls_data->mRoom);

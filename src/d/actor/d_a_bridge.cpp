@@ -1315,12 +1315,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     }
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bridge", bridge_bmd[modelNum]);
-    JUT_ASSERT(VERSION_SELECT(2334, 2336, 2336, 2336), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(2334, 2336), modelData != NULL);
 
     J3DModelData* modelData2;
     if (modelNum == 1) {
         modelData2 = (J3DModelData*)dComIfG_getObjectRes("Bridge", BRIDGE_BDL_OBM_CHAIN1);
-        JUT_ASSERT(VERSION_SELECT(2340, 2342, 2342, 2342), modelData2 != NULL);
+        JUT_ASSERT(DEMO_SELECT(2340, 2342), modelData2 != NULL);
     }
 
     br_s* pBr = i_this->mBr;

@@ -112,7 +112,7 @@ void daNh_c::setBaseMtx() {
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
 BOOL daNh_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_NH);
-    JUT_ASSERT(VERSION_SELECT(357, 359, 359, 359), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(357, 359), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (!mpModel) {
@@ -438,7 +438,7 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     bool success = false;
     
     J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
-    JUT_ASSERT(VERSION_SELECT(881, 883, 883, 883), a_brk != NULL);
+    JUT_ASSERT(DEMO_SELECT(881, 883), a_brk != NULL);
     
     if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;

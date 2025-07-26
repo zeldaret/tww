@@ -1377,16 +1377,16 @@ int cM3d_Cross_LinSph_CrossPos(const cM3dGSph& sph, const cM3dGLin& line, Vec* p
 /* 8024D378-8024DB34       .text cM3d_Cross_CylSph__FPC8cM3dGCylPC8cM3dGSphP3VecPf */
 bool cM3d_Cross_CylSph(const cM3dGCyl* pcyl, const cM3dGSph* psph, Vec* param_2, f32* pcross_len) {
     const Vec* pnow_sph_center = psph->GetCP();
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2499, 2498, 2498, 2498), pnow_sph_center->x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2500, 2499, 2499, 2499), pnow_sph_center->y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2501, 2500, 2500, 2500), pnow_sph_center->z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2502, 2501, 2501, 2501), psph->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2499, 2498), pnow_sph_center->x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2500, 2499), pnow_sph_center->y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2501, 2500), pnow_sph_center->z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2502, 2501), psph->GetR());
     const Vec* pnow_cyl_center = pcyl->GetCP();
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2504, 2503, 2503, 2503), pnow_cyl_center->x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2505, 2504, 2504, 2504), pnow_cyl_center->y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2506, 2505, 2505, 2505), pnow_cyl_center->z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2507, 2506, 2506, 2506), pcyl->GetH());
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2508, 2507, 2507, 2507), pcyl->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2504, 2503), pnow_cyl_center->x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2505, 2504), pnow_cyl_center->y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2506, 2505), pnow_cyl_center->z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2507, 2506), pcyl->GetH());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2508, 2507), pcyl->GetR());
     f32 radius_sum = pcyl->GetR() + psph->GetR();
     f32 dist = std::sqrtf(cM3d_Len2dSq(pnow_sph_center->x, pnow_sph_center->z, pnow_cyl_center->x, pnow_cyl_center->z));
 
@@ -1422,26 +1422,26 @@ bool cM3d_Cross_CylSph(const cM3dGCyl* pcyl, const cM3dGSph* psph, Vec* param_2,
 
 /* 8024DB34-8024E1B4       .text cM3d_Cross_SphSph__FPC8cM3dGSphPC8cM3dGSphPfPf */
 bool cM3d_Cross_SphSph(const cM3dGSph* i_a, const cM3dGSph* i_b, f32* param_2, f32* i_pcc_crosslen) {
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2566, 2565, 2565, 2565), i_a->GetCP()->x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2567, 2566, 2566, 2566), i_a->GetCP()->y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2568, 2567, 2567, 2567), i_a->GetCP()->z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2569, 2568, 2568, 2568), i_a->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2566, 2565), i_a->GetCP()->x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2567, 2566), i_a->GetCP()->y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2568, 2567), i_a->GetCP()->z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2569, 2568), i_a->GetR());
 
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2570, 2569, 2569, 2569), i_b->GetCP()->x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2571, 2570, 2570, 2570), i_b->GetCP()->y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2572, 2571, 2571, 2571), i_b->GetCP()->z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2573, 2572, 2572, 2572), i_b->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2570, 2569), i_b->GetCP()->x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2571, 2570), i_b->GetCP()->y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2572, 2571), i_b->GetCP()->z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2573, 2572), i_b->GetR());
 
     Vec delta;
     VECSubtract(i_a->GetCP(), i_b->GetCP(), &delta);
     *param_2 = VECMag(&delta);
     *i_pcc_crosslen = i_a->GetR() + i_b->GetR() - *param_2;
     if (*i_pcc_crosslen > G_CM3D_F_ABS_MIN) {
-        CHECK_FLOAT_CLASS(VERSION_SELECT(2583, 2582, 2582, 2582), *i_pcc_crosslen);
+        CHECK_FLOAT_CLASS(DEMO_SELECT(2583, 2582), *i_pcc_crosslen);
         return true;
     } else {
         *i_pcc_crosslen = 0.0f;
-        CHECK_FLOAT_CLASS(VERSION_SELECT(2588, 2587, 2587, 2587), *i_pcc_crosslen);
+        CHECK_FLOAT_CLASS(DEMO_SELECT(2588, 2587), *i_pcc_crosslen);
         return false;
     }
 }
@@ -1554,17 +1554,17 @@ bool cM3d_Cross_SphTri(const cM3dGSph* sph, const cM3dGTri* tri, Vec* param_2) {
 /* 8024E694-8024EF80       .text cM3d_Cross_CylCyl__FPC8cM3dGCylPC8cM3dGCylPf */
 bool cM3d_Cross_CylCyl(const cM3dGCyl* i_cyl1, const cM3dGCyl* i_cyl2, f32* i_pcross_len) {
     const Vec& c1 = i_cyl1->GetC();
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2827, 2826, 2826, 2826), c1.x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2828, 2827, 2827, 2827), c1.y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2829, 2828, 2828, 2828), c1.z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2830, 2829, 2829, 2829), i_cyl1->GetR());
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2831, 2830, 2830, 2830), i_cyl1->GetH());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2827, 2826), c1.x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2828, 2827), c1.y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2829, 2828), c1.z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2830, 2829), i_cyl1->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2831, 2830), i_cyl1->GetH());
     const Vec& c2 = i_cyl2->GetC();
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2833, 2832, 2832, 2832), c2.x);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2834, 2833, 2833, 2833), c2.y);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2835, 2834, 2834, 2834), c2.z);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2836, 2835, 2835, 2835), i_cyl2->GetR());
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2837, 2836, 2836, 2836), i_cyl2->GetH());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2833, 2832), c2.x);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2834, 2833), c2.y);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2835, 2834), c2.z);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2836, 2835), i_cyl2->GetR());
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2837, 2836), i_cyl2->GetH());
     
     f32 delta_x = c1.x - c2.x;
     f32 delta_z = c1.z - c2.z;
@@ -1573,18 +1573,18 @@ bool cM3d_Cross_CylCyl(const cM3dGCyl* i_cyl1, const cM3dGCyl* i_cyl2, f32* i_pc
     
     if (dist_sq > radius_sum * radius_sum) {
         *i_pcross_len = 0.0f;
-        CHECK_FLOAT_CLASS(VERSION_SELECT(2850, 2849, 2849, 2849), *i_pcross_len);
+        CHECK_FLOAT_CLASS(DEMO_SELECT(2850, 2849), *i_pcross_len);
         return false;
     }
 
     if (c1.y + i_cyl1->GetH() < c2.y || c1.y > c2.y + i_cyl2->GetH()) {
         *i_pcross_len = 0.0f;
-        CHECK_FLOAT_CLASS(VERSION_SELECT(2858, 2857, 2857, 2857), *i_pcross_len);
+        CHECK_FLOAT_CLASS(DEMO_SELECT(2858, 2857), *i_pcross_len);
         return false;
     }
 
     *i_pcross_len = radius_sum - std::sqrtf(dist_sq);
-    CHECK_FLOAT_CLASS(VERSION_SELECT(2865, 2864, 2864, 2864), *i_pcross_len);
+    CHECK_FLOAT_CLASS(DEMO_SELECT(2865, 2864), *i_pcross_len);
     return true;
 }
 

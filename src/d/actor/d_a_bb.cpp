@@ -744,7 +744,7 @@ void bb_path_move(bb_class* i_this) {
 
                 if (i_this->ppd->m_nextID + 0 != 0xFFFF) {
                     i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(a_this));
-                    JUT_ASSERT(VERSION_SELECT(1476, 1479, 1479, 1479), i_this->ppd != NULL);
+                    JUT_ASSERT(DEMO_SELECT(1476, 1479), i_this->ppd != NULL);
                 }
             } else if (i_this->unk_35E < 0) {
                 i_this->unk_35F = 1;
@@ -2525,7 +2525,7 @@ static BOOL useHeapInit(fopAc_ac_c* ac) {
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Bb", BB_BDL_BB_TAIL));
-    JUT_ASSERT(VERSION_SELECT(4508, 4535, 4535, 4535), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(4508, 4535), modelData != NULL);
     
     for (s32 i = 0; i < 9; i++) {
         i_this->unk_A84[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x33221202);
@@ -2535,7 +2535,7 @@ static BOOL useHeapInit(fopAc_ac_c* ac) {
     }
 
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Bb", bb_tex_anm_idx[4]));
-    JUT_ASSERT(VERSION_SELECT(4529, 4556, 4556, 4556), btp);
+    JUT_ASSERT(DEMO_SELECT(4529, 4556), btp);
 
     s32 ret = i_this->mBtpAnm.init(i_this->mpMorf->getModel()->getModelData(), btp, 0, 2, 1.0f, 0, -1, false, 0);
     if (ret == 0) {

@@ -76,7 +76,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000000F4-00000244       .text CreateHeap__11daAmiProp_cFv */
 BOOL daAmiProp_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAmiProp_c::m_arcname, HAMI1_BDL_HAMI1);
-    JUT_ASSERT(VERSION_SELECT(250, 255, 255, 255), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(250, 255), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {

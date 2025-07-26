@@ -514,7 +514,7 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
     } else {
         modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_OBM_SHOKUDAI1));
     }
-    JUT_ASSERT(VERSION_SELECT(996, 997, 997, 997), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(996, 997), modelData != NULL);
 
 #if VERSION == VERSION_DEMO
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
@@ -527,7 +527,7 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
 
     if (i_this->mbHasGa != 0) {
         modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_EP_GA));
-        JUT_ASSERT(VERSION_SELECT(1007, 1010, 1010, 1010), modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(1007, 1010), modelData != NULL);
         
         for (s32 i = 0; i < 2; i++) {
 #if VERSION == VERSION_DEMO

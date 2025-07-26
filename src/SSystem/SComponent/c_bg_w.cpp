@@ -657,7 +657,7 @@ void cBgW::RwgShdwDraw(int index, cBgS_ShdwDraw* shdw) {
         if (rwg->next == 0xFFFF)
             break;
         index = rwg->next;
-        JUT_ASSERT(VERSION_SELECT(3013, 3014, 3014, 3014), 0 <= index && index < pm_bgd->m_t_num);
+        JUT_ASSERT(DEMO_SELECT(3013, 3014), 0 <= index && index < pm_bgd->m_t_num);
     }
 }
 
@@ -730,7 +730,7 @@ bool cBgW::ChkGrpThrough(int, cBgS_GrpPassChk*, int) {
 
 /* 80249940-80249A18       .text GetGrpToRoomIndex__4cBgWCFi */
 u32 cBgW::GetGrpToRoomIndex(int grp_index) const {
-    JUT_ASSERT(VERSION_SELECT(3190, 3191, 3191, 3191), 0 <= grp_index && grp_index < pm_bgd->m_g_num);
+    JUT_ASSERT(DEMO_SELECT(3190, 3191), 0 <= grp_index && grp_index < pm_bgd->m_g_num);
     cBgD_Grp_t * g_tbl = pm_bgd->m_g_tbl;
     if (g_tbl[grp_index].m_parent == 0xFFFF || g_tbl[g_tbl[grp_index].m_parent].m_parent == 0xFFFF)
         return 0xFFFF;
@@ -746,7 +746,7 @@ void cBgW::GetTrans(cXyz* dst) const {
 
 /* 80249A58-80249B64       .text GetTriPnt__4cBgWCFiP4cXyzP4cXyzP4cXyz */
 void cBgW::GetTriPnt(int i_no, cXyz* p0, cXyz* p1, cXyz* p2) const {
-    JUT_ASSERT(VERSION_SELECT(3250, 3251, 3251, 3251), pm_bgd != NULL);
+    JUT_ASSERT(DEMO_SELECT(3250, 3251), pm_bgd != NULL);
 
     cBgD_Tri_t * tri = &pm_bgd->m_t_tbl[i_no];
     p0->set(pm_vtx_tbl[tri->vtx0]);

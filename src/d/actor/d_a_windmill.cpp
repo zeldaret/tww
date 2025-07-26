@@ -140,7 +140,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 /* 00000108-000002A0       .text CreateHeap__12daWindMill_cFv */
 BOOL daWindMill_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
-    JUT_ASSERT(VERSION_SELECT(399, 405, 405, 405), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(399, 405), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000222);
     if (mpModel == NULL) {

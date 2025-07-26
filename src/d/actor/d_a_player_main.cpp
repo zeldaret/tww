@@ -11878,16 +11878,16 @@ void daPy_lk_c::initTextureAnime() {
 /* 80123360-80123830       .text initTextureScroll__9daPy_lk_cFv */
 void daPy_lk_c::initTextureScroll() {
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
-    JUT_ASSERT(VERSION_SELECT(20757, 20944, 20944, 20944), m_tex_scroll_heap.m_buffer != NULL);
+    JUT_ASSERT(DEMO_SELECT(20757, 20944), m_tex_scroll_heap.m_buffer != NULL);
     
     JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
     btk->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btk->getUpdateMaterialNum();
-    JUT_ASSERT(VERSION_SELECT(20771, 20958, 20958, 20958), material_num == 2);
+    JUT_ASSERT(DEMO_SELECT(20771, 20958), material_num == 2);
     
     m_texMtxAnm = new J3DTexMtxAnm[material_num];
-    JUT_ASSERT(VERSION_SELECT(20774, 20961, 20961, 20961), m_texMtxAnm != NULL);
+    JUT_ASSERT(DEMO_SELECT(20774, 20961), m_texMtxAnm != NULL);
     
     for (u16 no = 0; no < material_num; no++) {
         u16 matID = btk->getUpdateMaterialID(no);
@@ -11896,7 +11896,7 @@ void daPy_lk_c::initTextureScroll() {
         }
         
         m_tex_eye_scroll[no] = new daPy_matAnm_c();
-        JUT_ASSERT(VERSION_SELECT(20785, 20972, 20972, 20972), m_tex_eye_scroll[no] != NULL);
+        JUT_ASSERT(DEMO_SELECT(20785, 20972), m_tex_eye_scroll[no] != NULL);
         
         mpCLModelData->getMaterialNodePointer(matID)->change();
         mpCLModelData->getMaterialNodePointer(matID)->setMaterialAnm(m_tex_eye_scroll[no]);
@@ -11910,7 +11910,7 @@ void daPy_lk_c::initTextureScroll() {
         J3DTexMtx* tmtx;
         if (mtl->getTexMtx(texMtxID) == NULL) {
             tmtx = new J3DTexMtx();
-            JUT_ASSERT(VERSION_SELECT(20797, 20984, 20984, 20984), tmtx != NULL);
+            JUT_ASSERT(DEMO_SELECT(20797, 20984), tmtx != NULL);
             mtl->setTexMtx(texMtxID, tmtx);
         }
         if (mtl->getTexCoord(texMtxID) != NULL) {
@@ -11927,7 +11927,7 @@ void daPy_lk_c::initTextureScroll() {
         tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
         tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
         
-        JUT_ASSERT(VERSION_SELECT(20814, 21001, 21001, 21001), mtl->getMaterialAnm() != NULL);
+        JUT_ASSERT(DEMO_SELECT(20814, 21001), mtl->getMaterialAnm() != NULL);
         
         mtl->getMaterialAnm()->setTexMtxAnm(texMtxID, &m_texMtxAnm[no]);
     }

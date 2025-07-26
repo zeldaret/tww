@@ -1387,7 +1387,7 @@ stage_actor_data_class* dStage_decodeSearchIkada(void* i_file, int ikadaShipId) 
 /* 8004184C-800419D0       .text dStage_playerInitIkada__FP16fopAcM_prm_classPv */
 void dStage_playerInitIkada(fopAcM_prm_class* player_prm, void* i_file) {
     stage_actor_data_class* ikada_data = dStage_decodeSearchIkada(i_file, dComIfGp_getIkadaShipId());
-    JUT_ASSERT(VERSION_SELECT(1560, 1590, 1590, 1590), ikada_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(1560, 1590), ikada_data != NULL);
     
     u8 roomNo = dComIfGp_getIkadaShipBeforeRoomId();
     player_prm->base.parameters = 0xFF000000 | roomNo;
@@ -1419,7 +1419,7 @@ bool dStage_chkPlayerId(int playerId, int room_no) {
     if (room_no == -1) {
         player = dComIfGp_getStage().getPlayer();
     } else {
-        JUT_ASSERT(VERSION_SELECT(1643, 1673, 1673, 1673), 0 <= room_no && room_no < 64);
+        JUT_ASSERT(DEMO_SELECT(1643, 1673), 0 <= room_no && room_no < 64);
         player = dComIfGp_roomControl_getStatusRoomDt(room_no)->getPlayer();
     }
 
@@ -1447,7 +1447,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     i_stage->setPlayerNum(num);
 
     fopAcM_prm_class* appen = fopAcM_CreateAppend();
-    JUT_ASSERT(VERSION_SELECT(1705, 1735, 1735, 1735), appen != NULL);
+    JUT_ASSERT(DEMO_SELECT(1705, 1735), appen != NULL);
 
     int point = dComIfGp_getStartStagePoint();
     u32 roomParam = dComIfGs_getRestartRoomParam();
@@ -1470,7 +1470,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
             player_data++;
         }
 
-        JUT_ASSERT(VERSION_SELECT(1757, 1787, 1787, 1787), i != num);
+        JUT_ASSERT(DEMO_SELECT(1757, 1787), i != num);
 
         appen->base.parameters = player_data->base.parameters;
         appen->base.position = player_data->base.position;
@@ -1494,7 +1494,7 @@ int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* i_file)
     dStage_actorCreate(player_data, appen);
 
     scene_class* stageProc = fopScnM_SearchByID(dStage_roomControl_c::getProcID());
-    JUT_ASSERT(VERSION_SELECT(1812, 1842, 1842, 1842), stageProc != NULL);
+    JUT_ASSERT(DEMO_SELECT(1812, 1842), stageProc != NULL);
 
     if (stageProc->base.base.mProcName != PROC_PLAY_SCENE) {
         fopAcM_create(PROC_TITLE, 0);
@@ -1829,7 +1829,7 @@ int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
         for (int i = 0; i < pd->num; i++) {
             JKRExpHeap* heap = dStage_roomControl_c::createMemoryBlock(i, *entry_p + 0x300);
-            JUT_ASSERT(VERSION_SELECT(2903, 2932, 2932, 2932), heap != NULL);
+            JUT_ASSERT(DEMO_SELECT(2903, 2932), heap != NULL);
             entry_p++;
         }
     }
@@ -2069,8 +2069,8 @@ void dStage_dt_c_offsetToPtr(void* i_data) {
 void dStage_dt_c_stageInitLoader(void* i_data, dStage_dt_c* i_stage) {
     static FuncTable l_funcTable[] = {"STAG", dStage_stagInfoInit};
 
-    JUT_ASSERT(VERSION_SELECT(3529, 3557, 3557, 3557), i_data != NULL);
-    JUT_ASSERT(VERSION_SELECT(3530, 3558, 3558, 3558), i_stage != NULL);
+    JUT_ASSERT(DEMO_SELECT(3529, 3557), i_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(3530, 3558), i_stage != NULL);
 
     dStage_dt_c_offsetToPtr(i_data);
     i_stage->init();
@@ -2223,7 +2223,7 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
 /* 8004324C-800432EC       .text dStage_infoCreate__Fv */
 void dStage_infoCreate() {
     void* stageRsrc = dComIfG_getStageRes("Stage", "stage.dzs");
-    JUT_ASSERT(VERSION_SELECT(3806, 3834, 3834, 3834), stageRsrc != NULL)
+    JUT_ASSERT(DEMO_SELECT(3806, 3834), stageRsrc != NULL)
 
     dStage_dt_c_stageInitLoader(stageRsrc, &dComIfGp_getStage());
 }
@@ -2233,14 +2233,14 @@ void dStage_Create() {
     dKankyo_create();
 
     void* stageRsrc = dComIfG_getStageRes("Stage", "stage.dzs");
-    JUT_ASSERT(VERSION_SELECT(3834, 3862, 3862, 3862), stageRsrc != NULL)
+    JUT_ASSERT(DEMO_SELECT(3834, 3862), stageRsrc != NULL)
 
     dComIfGp_roomControl_init();
     dStage_dt_c_stageLoader(stageRsrc, &dComIfGp_getStage());
 
     if (dComIfGp_getStartStageRoomNo() >= 0) {
         int status = dStage_roomInit(dComIfGp_getStartStageRoomNo());
-        JUT_ASSERT(VERSION_SELECT(3845, 3873, 3873, 3873), status);
+        JUT_ASSERT(DEMO_SELECT(3845, 3873), status);
     }
 
     dMap_c::create();
@@ -2325,7 +2325,7 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
         dComIfGp_setIkadaShipBeforePos(actor_p->current.pos);
         return 1;
     } else if (exit_id == 0x3D) {
-        JUT_ASSERT(VERSION_SELECT(4106, 4134, 4134, 4134), dComIfGp_getIkadaShipBeforeRoomId() >= 0 &&
+        JUT_ASSERT(DEMO_SELECT(4106, 4134), dComIfGp_getIkadaShipBeforeRoomId() >= 0 &&
                              dComIfGp_getIkadaShipBeforeRoomId() < 64);
         dComIfGp_setNextStage("sea", -2, dComIfGp_getIkadaShipBeforeRoomId(), -1, i_speed, i_mode);
         return 1;
@@ -2356,7 +2356,7 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no) {
     if (room_no == -1) {
         scls = dComIfGp_getStageSclsInfo();
     } else {
-        JUT_ASSERT(VERSION_SELECT(4164, 4192, 4192, 4192), 0 <= room_no && room_no < 64);
+        JUT_ASSERT(DEMO_SELECT(4164, 4192), 0 <= room_no && room_no < 64);
         scls = dComIfGp_roomControl_getStatusRoomDt(room_no)->getSclsInfo();
     }
 
@@ -2364,7 +2364,7 @@ int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no) {
         return 0;
     }
 
-    JUT_ASSERT(VERSION_SELECT(4174, 4202, 4202, 4202), 0 <= i_exitId && i_exitId < scls->num);
+    JUT_ASSERT(DEMO_SELECT(4174, 4202), 0 <= i_exitId && i_exitId < scls->num);
 
     stage_scls_info_class* scls_info = &scls->m_entries[i_exitId];
     s32 wipe = dStage_sclsInfo_getWipe(scls_info);

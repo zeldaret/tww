@@ -39,7 +39,7 @@ static BOOL nodeCallBack(J3DNode *node, int calcTiming) {
 /* 0000012C-0000026C       .text CreateHeap__Q210daObjHami35Act_cFv */
 BOOL daObjHami3::Act_c::CreateHeap() {
     J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes(M_arcname, HAMI3_BDL_HAMI3);
-    JUT_ASSERT(VERSION_SELECT(112, 113, 113, 113), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(112, 113), modelData != NULL);
 
     field_0x2D4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (field_0x2D4 != NULL) {
@@ -86,7 +86,7 @@ cPhs_State daObjHami3::Act_c::Mthd_Create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, HAMI3_DZB_HAMI3, dBgS_MoveBGProc_Typical, 0x1fc0);
 
-        JUT_ASSERT(VERSION_SELECT(182, 183, 183, 183),
+        JUT_ASSERT(DEMO_SELECT(182, 183),
                    (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

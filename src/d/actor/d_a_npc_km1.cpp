@@ -724,7 +724,7 @@ BOOL daNpc_Km1_c::CreateHeap() {
 
  
     a_mdl_data = (J3DModelData*)dComIfG_getObjectIDRes("Km",KM_BDL_KM);
-    JUT_ASSERT(VERSION_SELECT(1316, 1325, 1325, 1325) ,a_mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(1316, 1325) ,a_mdl_data != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_data,
         NULL, NULL,
@@ -735,9 +735,9 @@ BOOL daNpc_Km1_c::CreateHeap() {
     if (mpMorf){
         if(mpMorf->getModel()) {
             m_head_jnt_num = a_mdl_data->getJointName()->getIndex("head");
-            JUT_ASSERT(VERSION_SELECT(1335, 1344, 1344, 1344), m_head_jnt_num >= 0);
+            JUT_ASSERT(DEMO_SELECT(1335, 1344), m_head_jnt_num >= 0);
             m_backbone_jnt_num = a_mdl_data->getJointName()->getIndex("backbone");
-            JUT_ASSERT(VERSION_SELECT(1337, 1346, 1346, 1346), m_backbone_jnt_num >= 0);
+            JUT_ASSERT(DEMO_SELECT(1337, 1346), m_backbone_jnt_num >= 0);
             field_0x7CD = a_tex_pattern_num_tbl[field_0x7D3];
             if (initTexPatternAnm(false) != 0) {
                 field_0x6D4 = mDoExt_J3DModel__create(a_mdl_data,0x20000,0x11020203);

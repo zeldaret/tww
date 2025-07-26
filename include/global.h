@@ -54,12 +54,16 @@ extern void __sync();
 
 #if VERSION == VERSION_DEMO
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (DEMO)
+    #define DEMO_SELECT(DEMO, RETAIL) (DEMO)
 #elif VERSION <= VERSION_JPN
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (JPN)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #elif VERSION == VERSION_USA
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (USA)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #elif VERSION == VERSION_PAL
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (PAL)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #endif
 
 #endif

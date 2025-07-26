@@ -2183,7 +2183,7 @@ BOOL daShip_c::procZevDemo() {
                 fVar17 = local_70.absXZ();
 
                 if (!dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad")) {
-                    JUT_ASSERT(VERSION_SELECT(3722, 3741, 3741, 3741), 0);
+                    JUT_ASSERT(DEMO_SELECT(3722, 3741), 0);
                 }
 
                 fVar3 = *dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad");
@@ -4384,7 +4384,7 @@ BOOL daShip_c::createHeap() {
         m0392 = SHIP_BCK_FN_MAST_OFF2;
     }
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_BODY);
-    JUT_ASSERT(VERSION_SELECT(6969, 7004, 7004, 7004), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(6969, 7004), modelData != NULL);
 
     mpBodyAnm = new mDoExt_McaMorf(
         modelData, NULL, NULL,
@@ -4409,7 +4409,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCN);
-    JUT_ASSERT(VERSION_SELECT(7006, 7041, 7041, 7041), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(7006, 7041), modelData != NULL);
     mpCannonModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     
     if (mpCannonModel == NULL) {
@@ -4417,7 +4417,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCR);
-    JUT_ASSERT(VERSION_SELECT(7019, 7054, 7054, 7054), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(7019, 7054), modelData != NULL);
     mpSalvageArmModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpSalvageArmModel == NULL) {
@@ -4425,7 +4425,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
-    JUT_ASSERT(VERSION_SELECT(7032, 7067, 7067, 7067), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(7032, 7067), modelData != NULL);
     mpLinkModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpLinkModel == NULL) {
@@ -4433,7 +4433,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_HEAD_H);
-    JUT_ASSERT(VERSION_SELECT(7045, 7080, 7080, 7080), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(7045, 7080), modelData != NULL);
 
     m03B4 = SHIP_BCK_FN_LOOK_L;
 

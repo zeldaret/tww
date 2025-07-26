@@ -66,7 +66,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 /* 0000010C-00000258       .text CreateHeap__9daAleaf_cFv */
 BOOL daAleaf_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BDL_VIGAH);
-    JUT_ASSERT(VERSION_SELECT(258, 262, 262, 262), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(258, 262), modelData != NULL);
 
     unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (unk_298 == NULL) {
@@ -74,7 +74,7 @@ BOOL daAleaf_c::CreateHeap() {
     }
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BCK_VIGAH);
-    JUT_ASSERT(VERSION_SELECT(273, 277, 277, 277), pbck != NULL);
+    JUT_ASSERT(DEMO_SELECT(273, 277), pbck != NULL);
 
     if (!unk_408.init(modelData, pbck, 1, 1, 1.0f, 0, -1, 0)) {
         return FALSE;

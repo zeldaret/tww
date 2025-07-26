@@ -356,7 +356,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
 
     if (heap == NULL) {
         heap = mDoExt_createSolidHeapFromGameToCurrent(-1, 0x20);
-        JUT_ASSERT(VERSION_SELECT(1103, 1107, 1107, 1107), heap);
+        JUT_ASSERT(DEMO_SELECT(1103, 1107), heap);
 
         bool result = createHeapCB(i_this);
         mDoExt_restoreCurrentHeap();
@@ -393,7 +393,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
                 heap = NULL;
                 bool result = createHeapCB(i_this);
                 mDoExt_restoreCurrentHeap();
-                JUT_ASSERT(VERSION_SELECT(1161, 1165, 1165, 1165), result != FALSE);
+                JUT_ASSERT(DEMO_SELECT(1161, 1165), result != FALSE);
                 if (result == FALSE) {
                     // "Entry failed with the exact size heap? (Bug)\n"
                     OSReport_Error("ぴったりサイズで、登録失敗？(バグ)\n");
@@ -421,7 +421,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
 
         // "Buggy!\n"
         OSReport_Error("ばぐばぐです\n");
-        JUT_ASSERT(VERSION_SELECT(1201, 1205, 1205, 1205), FALSE);
+        JUT_ASSERT(DEMO_SELECT(1201, 1205), FALSE);
     }
 
     // "fopAcM_entrySolidHeap failed. [%s]\n"
@@ -776,7 +776,7 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c* i_this) {
 
 /* 80026118-800261E8       .text fopAcM_createItemForPresentDemo__FP4cXyziUciiP5csXyzP4cXyz */
 fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
-    JUT_ASSERT(VERSION_SELECT(2409, 2413, 2413, 2413), 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(DEMO_SELECT(2409, 2413), 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
 
@@ -789,7 +789,7 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz* pos, int i_itemNo, u8 argFlag, 
 
 /* 800261E8-800262B4       .text fopAcM_createItemForTrBoxDemo__FP4cXyziiiP5csXyzP4cXyz */
 fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, int param_5, csXyz* angle, cXyz* scale) {
-    JUT_ASSERT(VERSION_SELECT(2454, 2458, 2458, 2458), 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(DEMO_SELECT(2454, 2458), 0 <= i_itemNo && i_itemNo < 256);
 
     dComIfGp_event_setGtItm(i_itemNo);
 
@@ -802,7 +802,7 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz* pos, int i_itemNo, int roomNo, in
 
 /* 800262B4-80026694       .text fopAcM_createItemFromTable__FP4cXyziiiiP5csXyziP4cXyz */
 fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* p_angle, int action, cXyz* p_scale) {
-    JUT_ASSERT(VERSION_SELECT(2510, 2514, 2514, 2514), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2510, 2514), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
 
     static cXyz fairy_offset_tbl[3] = {
         cXyz(40.0f, 0.0f, 0.0f),
@@ -899,7 +899,7 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz* p_pos, int i_itemNo, int i_itemBitNo
 
 /* 80026694-800267C8       .text fopAcM_createRaceItemFromTable__FP4cXyziiiP5csXyzP4cXyzi */
 fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBitNo, int i_roomNo, csXyz* angle, cXyz* scale, int param_7) {
-    JUT_ASSERT(VERSION_SELECT(2654, 2660, 2660, 2660), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2654, 2660), 0 <= i_itemNo && i_itemNo < 64 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo >= 0x20 && i_itemNo <= 0x3E) {
         i_itemNo -= 0x20;
@@ -920,7 +920,7 @@ fpc_ProcID fopAcM_createRaceItemFromTable(cXyz* pos, int i_itemNo, int i_itemBit
 /* 800267C8-8002688C       .text fopAcM_createShopItem__FP4cXyziP5csXyziP4cXyzPFPv_i */
 fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* angle, int roomNo, cXyz* scale,
                            createFunc createFunc) {
-    JUT_ASSERT(VERSION_SELECT(2710, 2716, 2716, 2716), 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(DEMO_SELECT(2710, 2716), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -930,7 +930,7 @@ fpc_ProcID fopAcM_createShopItem(cXyz* pos, int i_itemNo, csXyz* angle, int room
 
 /* 8002688C-80026980       .text fopAcM_createRaceItem__FP4cXyziiP5csXyziP4cXyzi */
 fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* angle, int roomNo, cXyz* scale, int param_7) {
-    JUT_ASSERT(VERSION_SELECT(2757, 2763, 2763, 2763), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2757, 2763), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -942,7 +942,7 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz
 
 /* 80026980-80026A68       .text fopAcM_createDemoItem__FP4cXyziiP5csXyziP4cXyzUc */
 fpc_ProcID fopAcM_createDemoItem(cXyz* pos, int i_itemNo, int i_itemBitNo, csXyz* i_angle, int i_roomNo, cXyz* i_scale, u8 i_argFlag) {
-    JUT_ASSERT(VERSION_SELECT(2807, 2813, 2813, 2813), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2807, 2813), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -964,7 +964,7 @@ fpc_ProcID fopAcM_createItemForBoss(cXyz* pos, int unused, int roomNo, csXyz* an
 
 /* 80026ADC-80026C90       .text fopAcM_createItem__FP4cXyziiiiP5csXyziP4cXyz */
 fpc_ProcID fopAcM_createItem(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomNo, int type, csXyz* angle, int action, cXyz* scale) {
-    JUT_ASSERT(VERSION_SELECT(2909, 2915, 2915, 2915), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2909, 2915), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
     
     if (i_itemNo == dItem_NONE_e) {
         return fpcM_ERROR_PROCESS_ID_e;
@@ -1000,7 +1000,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
                              csXyz* angle, int action, cXyz* scale)
 {
 
-    JUT_ASSERT(VERSION_SELECT(2989, 2995, 2995, 2995), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
+    JUT_ASSERT(DEMO_SELECT(2989, 2995), 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo <= 79) || i_itemBitNo == 127);
 
     int i;
     
@@ -1036,7 +1036,7 @@ void* fopAcM_fastCreateItem2(cXyz* pos, int i_itemNo, int i_itemBitNo, int roomN
 
 /* 80026E5C-80026F5C       .text fopAcM_createItemForKP2__FP4cXyziiP5csXyzP4cXyzfffUs */
 fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY, f32 gravity, u16 i_itemBitNo) {
-    JUT_ASSERT(VERSION_SELECT(3103, 3109, 3109, 3109), 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(DEMO_SELECT(3103, 3109), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e)
         return NULL;
 
@@ -1061,7 +1061,7 @@ daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, cs
 /* 80026F98-80027254       .text fopAcM_fastCreateItem__FP4cXyziiP5csXyzP4cXyzfffiPFPv_i */
 void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale,
                             f32 speedF, f32 speedY, f32 gravity, int i_itemBitNo, createFunc createFunc) {
-    JUT_ASSERT(VERSION_SELECT(3195, 3201, 3201, 3201), 0 <= i_itemNo && i_itemNo < 256);
+    JUT_ASSERT(DEMO_SELECT(3195, 3201), 0 <= i_itemNo && i_itemNo < 256);
     if (i_itemNo == dItem_NONE_e) {
         return NULL;
     }
@@ -1278,10 +1278,10 @@ fopAc_ac_c * enemySearchJugge(void* ptr, void*) {
 
 /* 80027970-80027A9C       .text fopAcM_myRoomSearchEnemy__FSc */
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3569, 3591, 3591, 3591), roomNo >= 0);
+    JUT_ASSERT(DEMO_SELECT(3569, 3591), roomNo >= 0);
 
     scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
-    JUT_ASSERT(VERSION_SELECT(3572, 3594, 3594, 3594), roomProc != NULL);
+    JUT_ASSERT(DEMO_SELECT(3572, 3594), roomProc != NULL);
 
     fpc_ProcID grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
     fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);
@@ -1410,7 +1410,7 @@ const char * fopAcM_getProcNameString(fopAc_ac_c* i_this) {
 /* 8002833C-80028410       .text fopAcM_findObjectCB__FP10fopAc_ac_cPv */
 fopAc_ac_c* fopAcM_findObjectCB(fopAc_ac_c* it, void* i_prm) {
     fopAcM_search_prm* Prm = (fopAcM_search_prm*)i_prm;
-    JUT_ASSERT(VERSION_SELECT(4071, 4095, 4095, 4095), Prm);
+    JUT_ASSERT(DEMO_SELECT(4071, 4095), Prm);
 
     dStage_objectNameInf *inf = dStage_searchName(Prm->procname);
     if (inf == NULL)
