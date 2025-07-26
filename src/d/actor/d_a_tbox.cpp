@@ -825,7 +825,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = true;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
@@ -837,7 +837,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);

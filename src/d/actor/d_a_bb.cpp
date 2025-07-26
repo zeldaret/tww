@@ -20,7 +20,9 @@
 #include "d/actor/d_a_mo2.h"
 #include "d/actor/d_a_bk.h"
 #include "d/actor/d_a_player.h"
+#if VERSION == VERSION_DEMO
 #include "m_Do/m_Do_controller_pad.h"
+#endif
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_cc_uty.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -1000,7 +1002,7 @@ void bb_auto_move(bb_class* i_this) {
             break;
         
         case 10:
-        case 11:
+        case 11: {
             i_this->unk_C60 = 0;
 
             fopAc_ac_c* ac = fopAcM_SearchByID(i_this->unk_330);
@@ -1039,8 +1041,8 @@ void bb_auto_move(bb_class* i_this) {
                 i_this->unk_2F1 = 0;
             }
             break;
-
-        case 20:
+        }
+        case 20: {
             r29 = -1;
             i_this->unk_C60 = 0;
 
@@ -1067,8 +1069,8 @@ void bb_auto_move(bb_class* i_this) {
                 i_this->unk_318[2] = 50;
             }
             break;
-
-        case 21:
+        }
+        case 21: {
             r29 = 1;
             fopAc_ac_c* esa = search_esa(i_this);
             if (esa == NULL) {
@@ -1077,7 +1079,7 @@ void bb_auto_move(bb_class* i_this) {
                 i_this->unk_2F1 = 22;
             }
             break;
-
+        }
         case 22:
             r29 = 1;
             i_this->unk_300 = 0.0f;
@@ -1099,7 +1101,7 @@ void bb_auto_move(bb_class* i_this) {
             }
             break;
 
-        case 23:
+        case 23: {
             r29 = 1;
             i_this->unk_C60 = 0;
             i_this->unk_300 = l_bbHIO.unk_54;
@@ -1117,8 +1119,8 @@ void bb_auto_move(bb_class* i_this) {
                 i_this->unk_2F1 = 24;
             }
             break;
-
-        case 24:
+        }
+        case 24: {
             r29 = 1;
             i_this->unk_C50 = 0;
             i_this->unk_C60 = 0;
@@ -1139,7 +1141,7 @@ void bb_auto_move(bb_class* i_this) {
                 anm_init(i_this, 0x21, 5.0f, 2, 1.0f, 0x11);
             }
             break;
-        
+        }
         case 25:
             r29 = 1;
             i_this->unk_2F1 = 0;
@@ -1243,21 +1245,21 @@ void bb_kamome_attack(bb_class* i_this) {
     i_this->unk_C60 = 1;
 
     switch (i_this->unk_2F0) {
-        case 0:
+        case 0: {
             s32 frame = i_this->mpMorf->getFrame();
             if ((i_this->actor.current.pos.y > i_this->unk_2F4.y) && (frame == REG0_S(0) + 9)) {
                 i_this->unk_2F0 = 1;
                 anm_init(i_this, 0x19, REG0_F(0) + 12.0f, 2, 1.0f, 9);
             }
             break;
-
-        case 1:
+        }
+        case 1: {
             if (i_this->actor.current.pos.y <= i_this->unk_2F4.y) {
                 i_this->unk_2F0 = 0;
                 anm_init(i_this, 0x18, 5.0f, 2, l_bbHIO.unk_24, 8);
             }
             break;
-
+        }
         default:
             i_this->unk_2F0 = 0;
             break;
@@ -1268,7 +1270,7 @@ void bb_kamome_attack(bb_class* i_this) {
             anm_init(i_this, 0x19, 10.0f, 2, 1.0f, 9);
             i_this->unk_2F1 = 1;
 
-        case 1:
+        case 1: {
             cXyz v;
             v.x = (REG0_F(5) + 300.0f) * cM_ssin(i_this->unk_352 * (REG0_S(5) + 400));
             v.y = (REG0_F(3) + 100.0f) * cM_ssin(i_this->unk_352 * (REG0_S(5) + 300));
@@ -1278,7 +1280,7 @@ void bb_kamome_attack(bb_class* i_this) {
             MtxPosition(&v, &v2);
             i_this->unk_2F4 = v2 + player->current.pos;
             break;
-
+        }
         default:
             i_this->unk_2F1 = 0;
             break;
@@ -1488,7 +1490,7 @@ void bb_atack_move(bb_class* i_this) {
             }
             break;
 
-        case 6:
+        case 6: {
             i_this->unk_2D0 = 2;
             i_this->unk_C60 = 0;
 
@@ -1539,7 +1541,7 @@ void bb_atack_move(bb_class* i_this) {
                 }
             }
             break;
-
+        }
         case 10:
         case 11:
             i_this->unk_2D0 = 2;
@@ -1701,7 +1703,7 @@ void bb_wait_move(bb_class* i_this) {
 
         case 10:
         case 11:
-        case 12:
+        case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
             v.x = 0.0;
@@ -1746,8 +1748,8 @@ void bb_wait_move(bb_class* i_this) {
                 r30 = -1;
             }
             break;
-
-        case 20:
+        }
+        case 20: {
             i_this->unk_57C = 1;
             i_this->unk_C60 = 0;
             s16 old_354 = i_this->unk_354;
@@ -1773,7 +1775,7 @@ void bb_wait_move(bb_class* i_this) {
                 }
             }
             break;
-
+        }
     }
 
     switch (r30) {
@@ -1862,7 +1864,7 @@ void bb_su_wait_move(bb_class* i_this) {
 
         case 10:
         case 11:
-        case 12:
+        case 12: {
             r30 = 0;
             i_this->unk_C60 = 0;
             v.x = 0.0;
@@ -1907,8 +1909,8 @@ void bb_su_wait_move(bb_class* i_this) {
                 r30 = -1;
             }
             break;
-
-        case 20:
+        }
+        case 20: {
             i_this->unk_57C = 1;
             i_this->unk_C60 = 0;
             s16 old_354 = i_this->unk_354;
@@ -1935,7 +1937,7 @@ void bb_su_wait_move(bb_class* i_this) {
                 }
             }
             break;
-
+        }
     }
 
     switch (r30) {
@@ -1957,7 +1959,7 @@ void bb_key_move(bb_class* i_this) {
     f32 stickY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
 
     switch (i_this->unk_2F0) {
-        case 0:
+        case 0: {
             s32 frame = i_this->mpMorf->getFrame();
             i_this->unk_300 = 30.0f;
             i_this->unk_304 = 0.5f;
@@ -1967,7 +1969,7 @@ void bb_key_move(bb_class* i_this) {
                 anm_init(i_this, 25, REG0_F(0) + 12.0f, 2, 1.0f, 9);
             }
             break;
-
+        }
         case 1:
             if (CPad_CHECK_HOLD_X(0)) {
                 i_this->unk_300 = 5.0f;

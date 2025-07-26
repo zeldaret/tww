@@ -110,7 +110,7 @@ int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_
 }
 
 /* 8000DF24-8000DFC4       .text play__14mDoExt_baseAnmFv */
-int mDoExt_baseAnm::play() {
+BOOL mDoExt_baseAnm::play() {
     JUT_ASSERT(462, mFrameCtrl != NULL);
     mFrameCtrl->update();
     return isStop();

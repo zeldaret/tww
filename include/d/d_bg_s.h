@@ -75,7 +75,7 @@ public:
     // void DebugDrawPoly(dBgW&) {}
     // void Draw() {}
     // void DrawPoly(cBgS_PolyInfo&, _GXColor&) {}
-    // void GetBgWPointer(cBgS_PolyInfo&) {}
+    dBgW* GetBgWPointer(cBgS_PolyInfo& i_poly) { return (dBgW*)cBgS::GetBgWPointer(i_poly); }
     // void GetPolyCamId(cBgS_PolyInfo&) {}
     // void GroundCross(cBgS_GndChk*) {}
     // void LineCross(cBgS_LinChk*) {}
