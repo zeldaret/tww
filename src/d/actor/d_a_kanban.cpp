@@ -795,8 +795,8 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
                         }
                     } else {
                         msg_class* pmVar3 = fopMsgM_SearchByID(l_msgId);
-                        if (pmVar3 != NULL && pmVar3->mStatus == 0x12) {
-                            pmVar3->mStatus = 0x13;
+                        if (pmVar3 != NULL && pmVar3->mStatus == fopMsgStts_BOX_CLOSED_e) {
+                            pmVar3->mStatus = fopMsgStts_MSG_DESTROYED_e;
                             dComIfGp_event_reset();
                             l_msgId = -1;
                         }
