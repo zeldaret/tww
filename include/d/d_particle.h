@@ -216,7 +216,7 @@ public:
     /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ u32 mFlags;
     /* 0x10 */ f32 mRate;
-};
+}; // size = 0x14
 
 class dPa_modelEmitter_c : public node_class {
 public:

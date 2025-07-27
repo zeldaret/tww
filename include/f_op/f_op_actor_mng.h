@@ -132,6 +132,10 @@ inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
     return pActor->actor_status & fopAcStts_CARRY_e;
 }
 
+inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
+    pActor->actor_status &= ~0x3F;
+}
+
 inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
@@ -383,7 +387,7 @@ inline fopAc_ac_c* fopAcM_SearchByName(s16 procName) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &procName);
 }
 
-inline fpc_ProcID fopAcM_GetLinkId(const fopAc_ac_c* pActor) {
+inline fpc_ProcID fopAcM_GetLinkId(fopAc_ac_c* pActor) {
     return pActor->parentActorID;
 }
 
