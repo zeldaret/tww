@@ -507,6 +507,7 @@ public:
     static u8 mStatus;
 
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
+    static void forceDeleteEmitter(JPABaseEmitter* emitter) { mEmitterMng->forceDeleteEmitter(emitter); }
     static JPAEmitterManager* mEmitterMng;
 
     static dPa_stripesEcallBack mStripes;

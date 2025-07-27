@@ -11,7 +11,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/res/res_demo_kmm.h"
 
-static const char daDemo_Kmm_c::M_arcname[] = "Demo_Kmm";
+const char daDemo_Kmm_c::M_arcname[] = "Demo_Kmm";
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {

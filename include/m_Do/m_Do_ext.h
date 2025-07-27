@@ -23,7 +23,7 @@ public:
     virtual ~mDoExt_baseAnm() {}
 
     int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
-    int play();
+    BOOL play();
 
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
@@ -574,9 +574,7 @@ public:
     void setModel(J3DModel*) {}
     void update() {}
     
-    void draw() {
-        /* Nonmatching */
-    }
+    void draw();
     void setMaterial();
 };
 

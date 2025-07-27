@@ -3854,6 +3854,10 @@ inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int code, const cXyz* par
     return pParticle->setSimpleLand(code, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
 }
 
+inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
+    dPa_control_c::forceDeleteEmitter(emitter);
+}
+
 // TODO
 inline void dComIfGp_particle_setSimpleLand(cBgS_PolyInfo&, const cXyz*, const csXyz*, f32, f32, f32, dKy_tevstr_c*, int*, int) {}
 
