@@ -377,7 +377,6 @@ void ki_wait_move(ki_class* i_this) {
     }
 
     cLib_addCalcAngleS2(&i_this->actor.shape_angle.y, i_this->actor.current.angle.y, 1, 0x1000);
-    return;
 }
 
 /* 0000171C-00001A34       .text ki_fly_move__FP8ki_class */
@@ -834,7 +833,7 @@ void* bgn_s_sub(void* ac1, void*) {
 /* 00003114-00003278       .text ki_fail_move__FP8ki_class */
 void ki_fail_move(ki_class* i_this) {
     fopEn_enemy_c* a_this = (fopEn_enemy_c*)&i_this->actor;
-    u8 uVar1;
+    u8 dropType;
 
 #if VERSION == VERSION_DEMO
     if (fpcM_Search(bgn_s_sub, &i_this->actor) != NULL) {
@@ -847,37 +846,37 @@ void ki_fail_move(ki_class* i_this) {
 #else
             if (dComIfGs_getLife() <= 8) {
 #endif
-                uVar1 = 10;
+                dropType = daDisItem_HEART_e;
             } else if (cM_rndF(1.0f) < 0.5f) {
 #if VERSION == VERSION_DEMO
                 if (dComIfGs_getMagic() <= 16) {
-                    uVar1 = 0xb;
+                    dropType = daDisItem_MAGIC_e;
                 } else if (dComIfGs_getArrowNum() <= 10) {
-                    uVar1 = 0xc;
+                    dropType = daDisItem_ARROW_e;
                 } else {
-                    uVar1 = 0xA;
+                    dropType = daDisItem_HEART_e;
                 }
 #else
                 if (dComIfGs_getArrowNum() == 0) {
-                    uVar1 = 0xc;
+                    dropType = daDisItem_ARROW_e;
                 } else if (dComIfGs_getMagic() < dComIfGs_getMaxMagic() / 2) {
-                    uVar1 = 0xb;
+                    dropType = daDisItem_MAGIC_e;
                 } else if (dComIfGs_getArrowNum() < 10) {
-                    uVar1 = 0xc;
+                    dropType = daDisItem_ARROW_e;
                 } else {
-                    static u8 item_tbl[] = {10, 11, 12, 10};
-                    uVar1 = item_tbl[(s32)cM_rndF(2.99f)];
+                    static u8 item_tbl[] = {daDisItem_HEART_e, daDisItem_MAGIC_e, daDisItem_ARROW_e, daDisItem_HEART_e};
+                    dropType = item_tbl[(s32)cM_rndF(2.99f)];
                 }
 #endif
             } else {
-                uVar1 = 0xd;
+                dropType = daDisItem_NONE13_e;
             }
         } else {
-            uVar1 = 13;
+            dropType = daDisItem_NONE13_e;
         }
-        fopAcM_createDisappear(a_this, &a_this->current.pos, 5, uVar1, 0xFF);
+        fopAcM_createDisappear(a_this, &a_this->current.pos, 5, dropType, 0xFF);
     } else {
-        fopAcM_createDisappear(a_this, &a_this->current.pos, 5, 0, 0xFF);
+        fopAcM_createDisappear(a_this, &a_this->current.pos, 5, daDisItem_IBALL_e, 0xFF);
     }
     fopAcM_delete(a_this);
     fopAcM_onActor(a_this);
