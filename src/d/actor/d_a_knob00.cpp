@@ -13,7 +13,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include/ctype.h"
+#include "ctype.h"
 
 static const char daKnob00_c::M_arcname[] = "knob";
 
