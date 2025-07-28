@@ -288,7 +288,7 @@ void iwa_move(dr2_class* i_this) {
             }
             break;
 
-        case 1:
+        case 1: {
             i_this->unk_4A8.y += a_this->speed.y;
             a_this->speed.y -= REG0_F(2) + 10.0f;
 
@@ -302,7 +302,7 @@ void iwa_move(dr2_class* i_this) {
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
             break;
-
+        }
         case 2:
             i_this->unk_40A = 3;
             cLib_addCalc2(&i_this->unk_414, 2000.0f, 0.5f, 100.0f);
@@ -364,7 +364,7 @@ void iwa_move(dr2_class* i_this) {
             }
             break;
 
-        case 10:
+        case 10: {
             i_this->unk_4BA++;
 
             iwa_hahen_s* fragment = &i_this->mRockFragments[0];
@@ -381,7 +381,7 @@ void iwa_move(dr2_class* i_this) {
                     MtxPosition(&sp58, &fragment->unk_14);
                 }
             }
-
+        }
         case 11:
             i_this->unk_40A = 0;
             break;
@@ -453,8 +453,6 @@ void move(dr2_class* i_this) {
     fopAc_ac_c* a_this = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* foundActor = fopAcM_SearchByID(i_this->unk_3FC);
-    s16 atan;
-    f32 atanF;
 
     if (i_this->unk_40A == 3) {
         for (s32 i = 2; i < 12; i++) {

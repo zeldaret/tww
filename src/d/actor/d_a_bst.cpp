@@ -1486,7 +1486,7 @@ static void main_cont(bst_class* i_this) {
                 break;
             case 1:
                 if (!dComIfGs_isStageBossEnemy() || REG0_S(5) != 0) {
-                    i_this->actor_status |= fopAcStts_SHOWMAP_e;
+                    fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                     if (dComIfGs_isStageBossDemo()) {
                         i_this->field_0x2FE4 = 1;
                         mDoAud_bgmStart(JA_BGM_BST_BATTLE);

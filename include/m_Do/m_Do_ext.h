@@ -109,6 +109,7 @@ STATIC_ASSERT(sizeof(mDoExt_brkAnm) == 0x18);
 class mDoExt_bckAnm : public mDoExt_baseAnm {
 public:
     mDoExt_bckAnm() { mAnm = NULL; }
+    virtual ~mDoExt_bckAnm() {}
     int init(J3DModelData * i_model, J3DAnmTransform* i_bck, int i_play, int i_attr,
                             f32 i_rate, s16 i_startF, s16 i_endF1, bool i_modify);
     void changeBckOnly(J3DAnmTransform* i_bck);

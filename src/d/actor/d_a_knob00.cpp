@@ -15,7 +15,7 @@
 #include "d/d_com_inf_game.h"
 #include "ctype.h"
 
-static const char daKnob00_c::M_arcname[] = "knob";
+const char daKnob00_c::M_arcname[] = "knob";
 
 /* 00000078-000000B4       .text daKnob00_charactorExchange__FPc */
 void daKnob00_charactorExchange(char* password) {
@@ -34,7 +34,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 /* 000000D4-000003B8       .text CreateHeap__10daKnob00_cFv */
 BOOL daKnob00_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KNOB_BDL_DOOR);
-    JUT_ASSERT(DEMO_SELECT(145, 163), modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(145, 145, 163, 163), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
@@ -62,7 +62,7 @@ BOOL daKnob00_c::CreateHeap() {
     }
 
     m_jnt = modelData->getJointName()->getIndex("DoorDummy");
-    JUT_ASSERT(DEMO_SELECT(169, 187), m_jnt >= 0);
+    JUT_ASSERT(VERSION_SELECT(169, 169, 187, 187), m_jnt >= 0);
 
     s32 fileIndex;
     switch (getShapeType()) {
@@ -164,7 +164,7 @@ s32 daKnob00_c::chkPassward() {
     char acStack_24[17];
     char acStack_38[17];
     
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     char* password = dComIfGp_getInputPassword();
 #else
     strcpy(acStack_24, dComIfGp_getInputPassword());
@@ -176,12 +176,12 @@ s32 daKnob00_c::chkPassward() {
 
     s32 uVar3 = dComIfGs_getEventReg(0xba0f);
     fopMsgM_passwordGet(acStack_38, uVar3 + 0x1b37);
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     daKnob00_charactorExchange(acStack_38);
     daKnob00_charactorExchange(acStack_24);
 #endif
 
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     if (strcmp(acStack_38, password) != 0) {
 #else
     if (strcmp(acStack_38, acStack_24) != 0) {
@@ -214,7 +214,7 @@ void daKnob00_c::openInit(int arg1) {
     J3DModelData* modelData = mpModel->getModelData();
     s32 iVar2 = mBckAnm.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes(M_arcname, bck_table[arg1]), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
     if (iVar2 == 0) {
-        JUT_ASSERT(DEMO_SELECT(382, 396), FALSE);
+        JUT_ASSERT(VERSION_SELECT(382, 382, 396, 396), FALSE);
     }
 
     openInitCom(0);
@@ -277,7 +277,7 @@ BOOL daKnob00_c::openProc(int arg1) {
 void daKnob00_c::openEnd() {
     offFlag(1);
     bool rt = dComIfG_Bgsp()->Regist(mpBgW, this);
-    JUT_ASSERT(DEMO_SELECT(473, 487), !rt);
+    JUT_ASSERT(VERSION_SELECT(473, 473, 487, 487), !rt);
 
     dComIfGp_map_clrAGBMapSendStopFlg();
     closeEndCom();
@@ -882,7 +882,7 @@ BOOL daKnob00_c::execute() {
             break;
     
         default:    
-            JUT_ASSERT(DEMO_SELECT(1169, 1183), FALSE);
+            JUT_ASSERT(VERSION_SELECT(1169, 1169, 1183, 1183), FALSE);
             break;
     
     }
