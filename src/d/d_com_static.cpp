@@ -142,7 +142,7 @@ u8 daObjLight::Act_c::M_S_lod_access;
 /* 80056790-800567F8       .text renew_light_angle__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::renew_light_angle() {
     M_S_lod_access = 1;
-    if (dKy_daynight_check() == 1) {
+    if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
         if (dComIfGs_isEventBit(0x1C02) == 1) {
             set_light_dif_angle_LOD(get_light_dif_angle() + 0x80);
             return true;

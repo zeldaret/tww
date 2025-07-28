@@ -102,7 +102,7 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     case 4:
         if (saveNo != 31 && dComIfGs_isOceanSvBit(cmapNo, saveNo))
             return;
-        if (!dKy_daynight_check())
+        if (dKy_daynight_check() == dKy_TIME_DAY_e)
             mInfo[no].setFlag(1);
         break;
     case 6:

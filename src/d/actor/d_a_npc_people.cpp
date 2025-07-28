@@ -4197,7 +4197,7 @@ daNpcPeople_c::daNpcPeople_c() {
     m794 = 0;
     mEtcFlag = 0;
     m7A1 = 0;
-    mbIsNight = dKy_daynight_check() & 0x1; // this is weird but it generates the clrlwi
+    mbIsNight = dKy_daynight_check() & dKy_TIME_NIGHT_e; // this is weird but it generates the clrlwi
     mpNpcDat = l_npc_dat[mNpcType][mbIsNight];
     m730 = NULL;
 }

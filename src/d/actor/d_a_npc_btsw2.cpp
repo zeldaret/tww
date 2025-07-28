@@ -283,7 +283,7 @@ u32 daNpc_Btsw2_c::getMsg() {
     if (!dComIfGs_isEventBit(0x3102)) {
         dComIfGs_onEventBit(0x3102);
         msgNo = 0x1AB0;
-    } else if (dKy_daynight_check()) {
+    } else if (dKy_daynight_check() != dKy_TIME_DAY_e) {
         msgNo = 0x1AB2;
     } else {
         msgNo = 0x1AB1;

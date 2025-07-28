@@ -368,7 +368,7 @@ int daObjTpost_c::getMsgNormal() {
         field_0x8EB = 0;
     }
     else {
-        if(dKy_daynight_check() == false) {
+        if(dKy_daynight_check() == dKy_TIME_DAY_e) {
             msgId = 0xCE5;
         }
         else {

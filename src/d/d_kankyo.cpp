@@ -533,7 +533,7 @@ void dScnKy_env_light_c::setDaytime() {
                 mDayOfWeek++;
                 dKankyo_DayProc();
             }
-        } else if (!dKy_daynight_check()) {
+        } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
             if (mCurTime < 165.0f) {
                 mCurTime += mTimeAdv;
             }
@@ -627,13 +627,13 @@ int dKy_getdaytime_minute() {
 }
 
 /* 80190CBC-80190CF8       .text dKy_daynight_check__Fv */
-BOOL dKy_daynight_check() {
+int dKy_daynight_check() {
     s32 hour = dKy_getdaytime_hour();
 
     if (hour >= 6 && hour < 18) {
-        return 0;  // day time
+        return dKy_TIME_DAY_e;
     } else {
-        return 1;  // night time
+        return dKy_TIME_NIGHT_e;
     }
 }
 
