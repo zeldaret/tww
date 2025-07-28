@@ -250,7 +250,7 @@ cPhs_State daNpc_Cb1_c::create() {
         }
 
         if(isTypeKazeBoss() || isTypeForest() || isTypeWaterFall() || isTypeEkaze() || isTypeKaze()) {
-            m_status |= 0x10;
+            onMusic();
         }
 
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x9400)) {
@@ -287,13 +287,11 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
             s32 jnt_no = joint->getJntNo();
             mDoMtx_stack_c::copy(model->getAnmMtx(jnt_no));
-            mDoMtx_stack_c::XrotM(a_this->mJntCtrl.getBackbone_y());
-            mDoMtx_stack_c::ZrotM(-a_this->mJntCtrl.getBackbone_x());
-            mDoMtx_stack_c::multVec(&l_offsetEyePos, &a_this->m880);
+            mDoMtx_stack_c::XrotM(a_this->getBackbone_y());
+            mDoMtx_stack_c::ZrotM(-a_this->getBackbone_x());
+            mDoMtx_stack_c::multVec(&l_offsetEyePos, &a_this->getEyePos());
 
-            if(a_this->m8D9 != 0xFF) {
-                a_this->m8D9 += 1;
-            }
+            a_this->incAttnSetCount();
 
             cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
             model->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
@@ -318,22 +316,22 @@ static BOOL nutNodeCallBack(J3DNode* node, int calcTiming) {
             s32 jnt_no = joint->getJntNo();
 
             cXyz temp2(model->getAnmMtx(jnt_no)[0][3], model->getAnmMtx(jnt_no)[1][3], model->getAnmMtx(jnt_no)[2][3]);
-            a_this->m898 += a_this->getNusSpeed();
-            cXyz temp = a_this->m898 - temp2;
+            a_this->getNutPos() += a_this->getNusSpeed();
+            cXyz temp = a_this->getNutPos() - temp2;
 
             f32 temp4 = temp.abs();
             if(!cM3d_IsZero(temp4)) {
                 temp *= 14.0f / temp4;
             }
 
-            a_this->m898 = temp2 + temp;
+            a_this->getNutPos() = temp2 + temp;
 
-            a_this->m8A4 += temp * -0.15f;
-            a_this->m8A4.y += -1.3f;
+            a_this->getNusSpeed() += temp * -0.15f;
+            a_this->getNusSpeed().y += -1.3f;
 
-            f32 temp5 = a_this->m8A4.abs();
+            f32 temp5 = a_this->getNusSpeed().abs();
             if(!cM3d_IsZero(temp5)) {
-                a_this->m8A4 *= 5.8f / temp5;
+                a_this->getNusSpeed() *= 5.8f / temp5;
             }
 
             Mtx temp3;
@@ -413,7 +411,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         return false;
     }
 
-    if(m_status & 0x10) {
+    if(isMusic()) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_STICK);
         JUT_ASSERT(0x3CC, modelData != 0);
         mpStickModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
@@ -442,8 +440,8 @@ BOOL daNpc_Cb1_c::createHeap() {
         return false;
     }
 
-    mCenterJointIdx = modelData->getJointName()->getIndex("center");
-    modelData->getJointNodePointer(mCenterJointIdx)->setCallBack(ppNodeCallBack);
+    m_center_jnt_num = modelData->getJointName()->getIndex("center");
+    modelData->getJointNodePointer(m_center_jnt_num)->setCallBack(ppNodeCallBack);
 
     mpPropellerModel->setUserArea((u32)this);
 
@@ -474,8 +472,8 @@ BOOL daNpc_Cb1_c::createHeap() {
 
 /* 00001458-0000155C       .text setAction__11daNpc_Cb1_cFPM11daNpc_Cb1_cFPCvPvPv_iM11daNpc_Cb1_cFPCvPvPv_iPv */
 BOOL daNpc_Cb1_c::setAction(daNpc_Cb1_c::ActionFunc_t* param_1, daNpc_Cb1_c::ActionFunc_t param_2, void* param_3) {
-    m_flyingTimer = 0;
-    m_flying = false;
+    setFlyingTimer(0);
+    offFlying();
 
     if(*param_1 != param_2) {
         if(*param_1) {
@@ -644,7 +642,7 @@ BOOL daNpc_Cb1_c::flyAction(int param_1, f32 param_2, s16 param_3, int param_4) 
                 fopAcM_monsSeStart(this, JA_SE_CV_CB_FLY_END, 0);
             }
 
-            m_flying = true;
+            onFlying();
         }
 
         m900 = 0.0f;
@@ -734,12 +732,12 @@ BOOL daNpc_Cb1_c::flyAction(int param_1, f32 param_2, s16 param_3, int param_4) 
             fopAcM_seStart(this, JA_SE_CM_PRAPELLO_OPEN, 0);
             JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_830B, &current.pos);
             if(emitter) {
-                emitter->setGlobalRTMatrix(mpPropellerModel->getAnmMtx(mCenterJointIdx));
+                emitter->setGlobalRTMatrix(mpPropellerModel->getAnmMtx(m_center_jnt_num));
             }
         }
     }
     else if(m8F0 == 2) {
-        if(isMakarPlayer && (temp4 || m_flyingTimer < l_HIO.field_0xCE)) {
+        if(isMakarPlayer && (temp4 || getFlyingTimer() < l_HIO.field_0xCE)) {
             if(setAnm(0x15) && temp4) {
                 fopAcM_monsSeStart(this, JA_SE_CV_CB_FLY_END, 0);
             }
@@ -748,7 +746,7 @@ BOOL daNpc_Cb1_c::flyAction(int param_1, f32 param_2, s16 param_3, int param_4) 
             setAnm(7);
         }
 
-        if(m_flyingTimer && param_1) {
+        if(getFlyingTimer() != 0 && param_1) {
             cLib_chaseS(&m8F8, l_HIO.field_0xD0, l_HIO.field_0xD4);
             m8F6 = 0;
         }
@@ -771,7 +769,7 @@ BOOL daNpc_Cb1_c::flyAction(int param_1, f32 param_2, s16 param_3, int param_4) 
             setAnm(6);
             mpMorf->setFrame(8.0f);
             m8F0++;
-            m_flying = false;
+            offFlying();
         }
         else if(mAcch.ChkGroundHit() && m8DC == 6) {
             setAnm(5);
@@ -833,7 +831,7 @@ BOOL daNpc_Cb1_c::walkAction(f32 param_1, f32 param_2, s16 param_3) {
 /* 00002818-00002868       .text returnLinkPlayer__11daNpc_Cb1_cFv */
 void daNpc_Cb1_c::returnLinkPlayer() {
     changePlayer(dComIfGp_getLinkPlayer());
-    m_flying = false;
+    offFlying();
     setWaitNpcAction(NULL);
 }
 
@@ -875,7 +873,7 @@ BOOL daNpc_Cb1_c::sowCheck() {
 BOOL daNpc_Cb1_c::shipRideCheck() {
     if(dComIfGs_isEventBit(0x1604) && dComIfGp_getShipActor()) {
         setNpcAction(&daNpc_Cb1_c::shipNpcAction, NULL);
-        m_status |= 0x40;
+        onShipRide();
         fopDwTg_DrawQTo(&draw_tag);
 
         return true;
@@ -1008,7 +1006,7 @@ BOOL daNpc_Cb1_c::eventProc() {
 
 
         if(m4E4 & 2) {
-            if(dComIfGp_evmng_endCheck(m8E4[m8E3])) {
+            if(dComIfGp_evmng_endCheck(mEventIdx[m8E3])) {
                 dComIfGp_event_reset();
                 m4E4 &= ~2;
 
@@ -1328,7 +1326,7 @@ void daNpc_Cb1_c::evInitCelloPlay(int) {
 }
 
 /* 00003A50-00003A84       .text evActCelloPlay__11daNpc_Cb1_cFi */
-int daNpc_Cb1_c::evActCelloPlay(int) {
+BOOL daNpc_Cb1_c::evActCelloPlay(int) {
     return daPy_getPlayerLinkActorClass()->checkEndTactMusic() ? TRUE : FALSE;
 }
 
@@ -1376,7 +1374,7 @@ void daNpc_Cb1_c::evInitSow(int staffIdx) {
     setAnm(0xC);
 
     mNutBckAnim.initPlay(mNutBckAnim.getBckAnm()->getFrameMax(), J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true);
-    m_status |= 0x20;
+    onNut();
 
     int* timer_p = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
     JUT_ASSERT(0x943, timer_p != NULL);
@@ -1773,7 +1771,7 @@ BOOL daNpc_Cb1_c::flyNpcAction(void*) {
 
         setAnm(4);
 
-        m_flyingTimer = l_HIO.field_0xDC;
+        setFlyingTimer(l_HIO.field_0xDC);
 
         m8FC = l_HIO.field_0xD8 + 1;
 
@@ -2279,7 +2277,7 @@ BOOL daNpc_Cb1_c::flyPlayerAction(void*) {
         
         setAnm(4);
 
-        m_flyingTimer = l_HIO.field_0xCA;
+        setFlyingTimer(l_HIO.field_0xCA);
 
         fopAcM_monsSeStart(this, JA_SE_CV_CB_LEAF_OUT, 0);
     }
@@ -2314,7 +2312,7 @@ static s16 daNpc_Cb1_XyEventCB(void* param_1, int param_2) {
 
 /* 000070D8-0000711C       .text calcFlyingTimer__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::calcFlyingTimer() {
-    if(m_flyingTimer && !cLib_calcTimer(&m_flyingTimer)) {
+    if(getFlyingTimer() != 0 && !cLib_calcTimer(&m_flyingTimer)) {
         return true;
     }
 
@@ -2458,7 +2456,7 @@ BOOL daNpc_Cb1_c::chkAttention(f32 param_1, s32 param_2) {
         param_2 += 0x71C;
     }
 
-    s16 temp2 = shape_angle.y + mJntCtrl.getHead_y() + mJntCtrl.getBackbone_y();
+    s16 temp2 = shape_angle.y + getHead_y() + getBackbone_y();
     angle -= temp2;
 
     BOOL result = false;
@@ -2491,8 +2489,8 @@ void daNpc_Cb1_c::eventOrder() {
     }
     else if(m8DD != -1 && m8DD < 5) {
         m8E3 = m8DD;
-        if(m8E3 != -1 && m8E4[m8E3] != -1) {
-            fopAcM_orderOtherEventId(this, m8E4[m8E3]);
+        if(m8E3 != -1 && mEventIdx[m8E3] != -1) {
+            fopAcM_orderOtherEventId(this, mEventIdx[m8E3]);
         }
     }
 }
@@ -2503,7 +2501,7 @@ void daNpc_Cb1_c::checkOrder() {
         if(m8DD == 5 || m8DD == 6 || m8DD == 7) {
             m8DD = -1;
             if(dComIfGp_event_chkTalkXY()) {
-                m_status |= 2;
+                onTact();
             }
             else {
                 setNpcAction(&daNpc_Cb1_c::talkNpcAction, NULL);
@@ -2522,7 +2520,7 @@ BOOL daNpc_Cb1_c::checkCommandTalk() {
                 m8DD = -1;
             }
 
-            m_status |= 2;
+            onTact();
 
             return false;
         }
@@ -2684,9 +2682,9 @@ BOOL daNpc_Cb1_c::init() {
 
     gravity = l_HIO.field_0x70;
 
-    m_playerRoom = 0;
-    m_flying = false;
-    m_flyingTimer = 0;
+    offPlayerRoom();
+    offFlying();
+    setFlyingTimer(0);
     m_status = 0;
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
@@ -2694,7 +2692,7 @@ BOOL daNpc_Cb1_c::init() {
     attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 8;
 
     for(int i = 0; i < 5; i++) {
-        m8E4[i] = dComIfGp_evmng_getEventIdx(l_eventNameTbl[i]);
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_eventNameTbl[i]);
     }
 
     m8E3 = -1;
@@ -2836,7 +2834,12 @@ BOOL daNpc_Cb1_c::execute() {
 
     fopAcM_setStageLayer(this);
 
-    m_playerRoom = fopAcM_GetRoomNo(this) == dComIfGp_roomControl_getStayNo();
+    if(fopAcM_GetRoomNo(this) == dComIfGp_roomControl_getStayNo()) {
+        onPlayerRoom();
+    }
+    else {
+        offPlayerRoom();
+    }
     
     m_status &= ~0x100;
 
@@ -3064,8 +3067,8 @@ daNpc_Cb1_c::~daNpc_Cb1_c() {
         l_HIO.field_0x04 = -1;
     }
 
-    m_flying = false;
-    m_playerRoom = 0;
+    offFlying();
+    offPlayerRoom();
 
     musicStop();
 }

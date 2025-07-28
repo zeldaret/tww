@@ -33,6 +33,12 @@ public:
         /* 0x05 */ s8 field_0x05;
     }; // Size: 0x06
 
+    // daPy_py_c virtuals
+    f32 getBaseAnimeFrame() { return 0.0f; }
+    f32 getBaseAnimeFrameRate() { return 1.0f; }
+    MtxP getLeftHandMatrix() { return cullMtx; }
+    MtxP getRightHandMatrix() { return cullMtx; }
+
     s16 XyCheckCB(int i_itemBtn) {
         if(dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e && dComIfGs_isEventBit(0x1880)) {
             return true;
@@ -40,71 +46,72 @@ public:
 
         return false;
     }
-    s16 XyEventCB(int) { return m8E8; }
+    s16 XyEventCB(int) { return mEventIdx[2]; }
     BOOL chkNpcAction(ActionFunc_t action) { return mNpcAction == action; }
     BOOL chkPlayerAction(ActionFunc_t action) { return mPlayerAction == action; }
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
-    f32 getBaseAnimeFrame() { return 0.0f; }
-    f32 getBaseAnimeFrameRate() { return 1.0f; }
-    void getEyePos() {}
-    void getFlyingTimer() {}
+    s16 getHead_y() { return mJntCtrl.getHead_y(); }
+    cXyz& getEyePos() { return m880; }
     f32 getGroundY() { return mAcch.GetGroundH(); }
-    void getHead_y() {}
-    MtxP getLeftHandMatrix() { return cullMtx; }
-    cXyz& getNusSpeed() { return m8A4; }
-    void getNutPos() {}
-    MtxP getRightHandMatrix() { return cullMtx; }
+    cXyz& getNusSpeed() { return m8A4; } // not entirely sure about this one
+    cXyz& getNutPos() { return m898; } // not entirely sure about this one
     s16 getWork3() { return m8FA; }
-    void incAttnSetCount() {}
+    void incAttnSetCount() {
+        if(m8D9 != 0xFF) {
+            m8D9 += 1;
+        }
+    }
+    BOOL isTypeBossDie() { return fopAcM_GetParam(this) == 0; }
+    BOOL isTypeForest() { return fopAcM_GetParam(this) == 1; }
+    BOOL isTypeWaterFall() { return fopAcM_GetParam(this) == 2; }
+    BOOL isTypeEkaze() { return fopAcM_GetParam(this) == 3; }
+    BOOL isTypeKaze() { return fopAcM_GetParam(this) == 4; }
+    BOOL isTypeKazeBoss() { return fopAcM_GetParam(this) == 5; }
+    BOOL isNoCarryAction() { return m_status & 0x01; }
+    BOOL isTact() { return m_status & 0x02; }
+    BOOL isTactCorrect() { return m_status & 0x04; }
+    BOOL isTactCancel() { return m_status & 0x08; }
     BOOL isMusic() { return m_status & 0x10; }
-    BOOL isNoCarryAction() { return m_status & 1; }
     BOOL isNut() { return m_status & 0x20; }
-    BOOL isPlayerFind() { return m_status & 0x80; }
     BOOL isShipRide() { return m_status & 0x40; }
-    BOOL isTact() { return m_status & 2; }
-    BOOL isTactCancel() { return m_status & 8; }
-    BOOL isTactCorrect() { return m_status & 4; }
-    bool isTypeBossDie() { return fopAcM_GetParam(this) == 0; }
-    bool isTypeEkaze() { return fopAcM_GetParam(this) == 3; }
-    bool isTypeForest() { return fopAcM_GetParam(this) == 1; }
-    bool isTypeKaze() { return fopAcM_GetParam(this) == 4; }
-    bool isTypeKazeBoss() { return fopAcM_GetParam(this) == 5; }
-    bool isTypeWaterFall() { return fopAcM_GetParam(this) == 2; }
-    void noCarryAction() {}
-    void offFlying() {}
+    BOOL isPlayerFind() { return m_status & 0x80; }
+    void offNoCarryAction() { m_status &= ~0x01; }
+    void offTact() { m_status &= ~0x02; }
+    void offTactCorrect() { m_status &= ~0x04; }
+    void offTactCancel() { m_status &= ~0x08; }
     void offMusic() { m_status &= ~0x10; }
-    void offNoCarryAction() { m_status &= ~1; }
     void offNut() { m_status &= ~0x20; }
-    void offPlayerFind() { m_status &= ~0x80; }
-    void offPlayerRoom() {}
     void offShipRide() { m_status &= ~0x40; }
-    void offTact() { m_status &= ~2; }
-    void offTactCancel() { m_status &= ~8; }
-    void offTactCorrect() { m_status &= ~4; }
-    void onFlying() {}
+    void offPlayerFind() { m_status &= ~0x80; }
+    void noCarryAction() { m_status |= 0x01; }
+    void onTact() { m_status |= 0x02; }
+    void onTactCorrect() { m_status |= 0x04; }
+    void onTactCancel() { m_status |= 0x08; }
     void onMusic() { m_status |= 0x10; }
-    void onNut() {}
-    void onPlayerFind() { m_status |= 0x80; }
-    void onPlayerRoom() {}
+    void onNut() { m_status |= 0x20; }
     void onShipRide() { m_status |= 0x40; }
-    void onTact() { m_status |= 2; }
-    void onTactCancel() { m_status |= 8; }
-    void onTactCorrect() { m_status |= 4; }
+    void onPlayerFind() { m_status |= 0x80; }
     void restartPoint(s16 point) {
         setPointRestart(point, 1);
         setWaitNpcAction(NULL);
     }
-    void setFlyingTimer(s16) {}
     
     static bool m_playerRoom;
     static bool m_flying;
     static s16 m_flyingTimer;
     static u16 m_status;
-    
-    static bool isFlying() { return m_flying; }
+
     static s16 getMaxFlyingTimer();
+    
+    s16 getFlyingTimer() { return m_flyingTimer; }
+    void setFlyingTimer(s16 time) { m_flyingTimer = time; }
+    static bool isFlying() { return m_flying; }
+    void onFlying() { m_flying = true; }
+    void offFlying() { m_flying = false; }
     static bool isPlayerRoom() { return m_playerRoom; }
+    void onPlayerRoom() { m_playerRoom = true; }
+    void offPlayerRoom() { m_playerRoom = false; }
     
     daNpc_Cb1_c() {
         m8DB = 0xFF;
@@ -209,7 +216,7 @@ public:
     BOOL draw();
     BOOL execute();
 
-public:
+private:
     /* 0x4EC */ request_of_phase_process_class mPhs;
     /* 0x4F4 */ mDoExt_McaMorf* mpMorf;
     /* 0x4F8 */ u32 mShadowId;
@@ -238,7 +245,7 @@ public:
     /* 0x8D3 */ s8 m_armRend_jnt_num;
     /* 0x8D4 */ s8 m_armL2_jnt_num;
     /* 0x8D5 */ s8 m_nut_jnt_num;
-    /* 0x8D6 */ s8 mCenterJointIdx;
+    /* 0x8D6 */ s8 m_center_jnt_num;
     /* 0x8D7 */ s8 m8D7;
     /* 0x8D8 */ s8 m8D8;
     /* 0x8D9 */ u8 m8D9;
@@ -252,12 +259,7 @@ public:
     /* 0x8E1 */ s8 m8E1;
     /* 0x8E2 */ u8 m8E2;
     /* 0x8E3 */ s8 m8E3;
-    /* 0x8E4 */ s16 m8E4[2];
-    /* 0x8E8 */ s16 m8E8;
-    /* 0x8EA */ u8 m8EA;
-    /* 0x8EB */ u8 m8EB;
-    /* 0x8EC */ u8 m8EC;
-    /* 0x8ED */ u8 m8ED;
+    /* 0x8E4 */ s16 mEventIdx[5];
     /* 0x8EE */ s16 m8EE;
     /* 0x8F0 */ s8 m8F0;
     /* 0x8F1 */ s8 m8F1;
