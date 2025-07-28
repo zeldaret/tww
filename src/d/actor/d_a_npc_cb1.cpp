@@ -2907,7 +2907,7 @@ BOOL daNpc_Cb1_c::execute() {
                 fopAcM_seStart(this, JA_SE_CV_CB_LEFT_ALONE, 0);
             }
             else {
-                daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
             }
         }
         else {
@@ -2923,7 +2923,7 @@ BOOL daNpc_Cb1_c::execute() {
                     maxFallSpeed = -4.0f - (1.0f - m910.y) * 100.0f;
 
                     if(dComIfG_Bgsp()->GetSpecialCode(mAcch.m_gnd) == 1) {
-                        f32 temp = m910.getMagXZ();
+                        f32 temp = m910.abs2XZ();
                         temp2.x = m910.x * 40.0f;
                         temp2.z = m910.z * 40.0f;
                         speed.y = std::sqrtf(1.0f - temp) * -40.0f;
@@ -2936,7 +2936,7 @@ BOOL daNpc_Cb1_c::execute() {
             }
 
             s8 roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-            current.roomNo = roomNo;
+            fopAcM_SetRoomNo(this, roomNo);
             tevStr.mRoomNo = roomNo;
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
             m5B0.SetRoomId(roomNo);

@@ -1818,7 +1818,7 @@ public:
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
     void getShadowID() const {}
-    void npcStartRestartRoom() {}
+    void npcStartRestartRoom() { startRestartRoom(5, 0xC9, -1.0f, 0); }
     void setDaiokutaEnd() {}
     void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
