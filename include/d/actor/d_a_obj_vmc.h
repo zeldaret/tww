@@ -18,7 +18,7 @@ namespace daObjVmc {
             PRM_SWSAVE_S = 8,
         };
 
-        void daObjVmc_ChangeGrow() {}
+        void daObjVmc_ChangeGrow() { mHasTree = true; }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         static BOOL solidHeapCB(fopAc_ac_c*);
