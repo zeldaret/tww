@@ -15,23 +15,7 @@
 
 class daNpc_Cb1_c : public daPy_npc_c {
 public:
-    typedef int (daNpc_Cb1_c::*ActionFunc_t)(void*);
-
-    enum {
-        ANM_00 = 0x00,
-        ANM_08 = 0x08,
-        ANM_0D = 0x0D,
-    };
-
-    class AnmData {
-    public:
-        /* 0x00 */ s8 field_0x00;
-        /* 0x01 */ u8 field_0x01;
-        /* 0x02 */ s8 field_0x02;
-        /* 0x03 */ s8 field_0x03;
-        /* 0x04 */ s8 field_0x04;
-        /* 0x05 */ s8 field_0x05;
-    }; // Size: 0x06
+    typedef BOOL (daNpc_Cb1_c::*ActionFunc_t)(void*);
 
     // daPy_py_c virtuals
     f32 getBaseAnimeFrame() { return 0.0f; }
@@ -52,14 +36,14 @@ public:
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
-    cXyz& getEyePos() { return m880; }
+    cXyz& getEyePos() { return mEyePos; }
     f32 getGroundY() { return mAcch.GetGroundH(); }
-    cXyz& getNusSpeed() { return m8A4; } // not entirely sure about this one
-    cXyz& getNutPos() { return m898; } // not entirely sure about this one
+    cXyz& getNusSpeed() { return mNusSpeed; } // not entirely sure about this one
+    cXyz& getNutPos() { return mNutPos; } // not entirely sure about this one
     s16 getWork3() { return m8FA; }
     void incAttnSetCount() {
-        if(m8D9 != 0xFF) {
-            m8D9 += 1;
+        if(mAttnSetCount != 0xFF) {
+            mAttnSetCount += 1;
         }
     }
     BOOL isTypeBossDie() { return fopAcM_GetParam(this) == 0; }
@@ -133,7 +117,7 @@ public:
     BOOL flyCheck();
     void checkLanding();
     void breaking();
-    BOOL flyAction(int, f32, s16, int);
+    BOOL flyAction(BOOL, f32, s16, BOOL);
     BOOL walkAction(f32, f32, s16);
     void returnLinkPlayer();
     BOOL isFlyAction();
@@ -173,7 +157,7 @@ public:
     BOOL evActEnd(int);
     u8 getAnmType(int);
     BOOL initTalk();
-    BOOL execTalk(int);
+    BOOL execTalk(BOOL);
     BOOL waitNpcAction(void*);
     BOOL talkNpcAction(void*);
     BOOL carryNpcAction(void*);
@@ -197,7 +181,7 @@ public:
     BOOL flyPlayerAction(void*);
     BOOL carryPlayerAction(void*);
     BOOL calcFlyingTimer();
-    void initAnm(s8, int);
+    void initAnm(s8, BOOL);
     void musicPlay();
     void musicStop();
     BOOL setAnm(u8);
@@ -210,7 +194,7 @@ public:
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void setCollision();
-    void lookBack(int);
+    void lookBack(BOOL);
     void setBaseMtx();
     BOOL init();
     BOOL draw();
@@ -228,18 +212,18 @@ private:
     /* 0x510 */ mDoExt_bckAnm mPropellerBckAnim;
     /* 0x520 */ mDoExt_bckAnm mNutBckAnim;
     /* 0x530 */ dBgS_AcchCir mAcchCir[2];
-    /* 0x5B0 */ dCcD_Stts m5B0;
-    /* 0x5EC */ dCcD_Cyl m5EC;
-    /* 0x71C */ dCcD_Cyl field_0x71C;
+    /* 0x5B0 */ dCcD_Stts mStts;
+    /* 0x5EC */ dCcD_Cyl mCyl;
+    /* 0x71C */ dCcD_Cyl mWindCyl;
     /* 0x84C */ dNpc_JntCtrl_c mJntCtrl;
-    /* 0x880 */ cXyz m880;
+    /* 0x880 */ cXyz mEyePos;
     /* 0x88C */ cXyz m88C;
-    /* 0x898 */ cXyz m898;
-    /* 0x8A4 */ cXyz m8A4;
+    /* 0x898 */ cXyz mNutPos;
+    /* 0x8A4 */ cXyz mNusSpeed;
     /* 0x8B0 */ f32 m8B0;
     /* 0x8B4 */ ActionFunc_t mPlayerAction;
     /* 0x8C0 */ ActionFunc_t mNpcAction;
-    /* 0x8CC */ u32 m8CC;
+    /* 0x8CC */ u32 mMsgNo;
     /* 0x8D0 */ s16 m8D0;
     /* 0x8D2 */ s8 m_backbone_jnt_num;
     /* 0x8D3 */ s8 m_armRend_jnt_num;
@@ -248,8 +232,8 @@ private:
     /* 0x8D6 */ s8 m_center_jnt_num;
     /* 0x8D7 */ s8 m8D7;
     /* 0x8D8 */ s8 m8D8;
-    /* 0x8D9 */ u8 m8D9;
-    /* 0x8DA */ u8 m8DA;
+    /* 0x8D9 */ u8 mAttnSetCount;
+    /* 0x8DA */ u8 mHasAttention;
     /* 0x8DB */ u8 m8DB;
     /* 0x8DC */ s8 m8DC;
     /* 0x8DD */ s8 m8DD;
@@ -274,7 +258,44 @@ private:
     /* 0x904 */ cXyz m904;
     /* 0x910 */ cXyz m910;
     /* 0x91C */ cXyz m91C;
-    /* 0x928 */ cBgS_PolyInfo m928;
+    /* 0x928 */ cBgS_PolyInfo mPolyInfo;
+
+    enum {
+        ANM_00 = 0x00,
+        ANM_01 = 0x01,
+        ANM_02 = 0x02,
+        ANM_03 = 0x03,
+        ANM_04 = 0x04,
+        ANM_05 = 0x05,
+        ANM_06 = 0x06,
+        ANM_07 = 0x07,
+        ANM_08 = 0x08,
+        ANM_09 = 0x09,
+        ANM_0A = 0x0A,
+        ANM_0B = 0x0B,
+        ANM_0C = 0x0C,
+        ANM_0D = 0x0D,
+        ANM_0E = 0x0E,
+        ANM_0F = 0x0F,
+        ANM_10 = 0x10,
+        ANM_11 = 0x11,
+        ANM_12 = 0x12,
+        ANM_13 = 0x13,
+        ANM_14 = 0x14,
+        ANM_15 = 0x15,
+        ANM_16 = 0x16,
+        ANM_17 = 0x17
+    };
+
+    class AnmData {
+    public:
+        /* 0x00 */ s8 mAnmFileIdx;
+        /* 0x01 */ u8 mLoopMode;
+        /* 0x02 */ s8 field_0x02;
+        /* 0x03 */ s8 mSpeed;
+        /* 0x04 */ s8 field_0x04;
+        /* 0x05 */ s8 field_0x05;
+    }; // Size: 0x06
 
     static AnmData anmTblData[];
     static s8 anmPrmData[];
@@ -295,8 +316,8 @@ public:
     virtual ~daNpc_Cb1_HIO_c() {}
 
 public:
-    /* 0x04 */ s8 field_0x04;
-    /* 0x08 */ dNpc_HIO_c field_0x08;
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ dNpc_HIO_c mNpc;
     /* 0x30 */ f32 field_0x30;
     /* 0x34 */ f32 field_0x34;
     /* 0x38 */ f32 field_0x38;
