@@ -72,58 +72,93 @@ dPa_J3DmodelEmitter_c::~dPa_J3DmodelEmitter_c()  {
 
 /* 8007A8C8-8007ADC4       .text draw__21dPa_J3DmodelEmitter_cFv */
 void dPa_J3DmodelEmitter_c::draw() {
-    /* Nonmatching */
-    mpBaseEmitter->quitImmortalEmitter();
+    mpBaseEmitter->playDrawParticle();
 
     JSUList<JPABaseParticle>* list = mpBaseEmitter->getParticleList();
     if (list != NULL) {
-        Mtx mtx1, mtx2;
-        mDoMtx_identity(mtx1);
-        mDoMtx_identity(mtx2);
+        Mtx sp44, sp14;
+        mDoMtx_identity(sp44);
+        mDoMtx_identity(sp14);
         for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL; link = link->getNext()) {
-            JPABaseParticle* ptcl = link->getObject();
             J3DModel* model = dPa_modelControl_c::newModel(modelData);
             if (model == NULL)
                 return;
 
-            mtx1[0][1] = ptcl->mVelocity.x;
-            mtx1[1][1] = ptcl->mVelocity.y;
-            mtx1[2][1] = ptcl->mVelocity.z;
-            f32 sq = mtx1[0][1]*mtx1[0][1] + mtx1[1][1]*mtx1[1][1] + mtx1[2][1]*mtx1[2][1];
-            if (!cM3d_IsZero(sq)) {
-                if (!cM3d_IsZero(sq)) {
-                    f32 mag = std::sqrtf(sq);
-                    mtx1[0][1] *= mag;
-                    mtx1[1][1] *= mag;
-                    mtx1[2][1] *= mag;
-                }
+            JPABaseParticle* ptcl = link->getObject();
+            JPADrawParams* params = ptcl->getDrawParamPPtr();
+            JGeometry::TVec3<f32> vel;
+            ptcl->getVelVec(vel);
+            if (vel.isZero()) {
+                vel.set(0.0f, 1.0f, 0.0f);
             } else {
-                mtx1[0][1] = 0.0f;
-                mtx1[1][1] = 1.0f;
-                mtx1[2][1] = 0.0f;
+                vel.normalize();
             }
+            JGeometry::TVec3<f32> tmp;
+            tmp.cross_hack(params->mAxis, vel); // fake inline
+            if (tmp.isZero()) {
+                tmp.set(0.0f, 0.0f, 1.0f);
+            } else {
+                tmp.normalize();
+            }
+            params->mAxis.cross(vel, tmp);
+            params->mAxis.normalize();
+            sp44[0][0] = params->mAxis.x;
+            sp44[0][1] = vel.x;
+            sp44[0][2] = tmp.x;
+            sp44[1][0] = params->mAxis.y;
+            sp44[1][1] = vel.y;
+            sp44[1][2] = tmp.y;
+            sp44[2][0] = params->mAxis.z;
+            sp44[2][1] = vel.z;
+            sp44[2][2] = tmp.z;
+            
+            f32 f1 = params->mRotateAngle * 0.005493164f; // SAngle -> Degree conversion
+            if (f1) {
+                switch (field_0x26) {
+                case 0:
+                    MTXRotRad(sp14, 'y', f1 * 0.017453292f); // Degree -> Radian conversion
+                    break;
+                case 1:
+                    MTXRotRad(sp14, 'x', f1 * 0.017453292f); // Degree -> Radian conversion
+                    break;
+                case 2:
+                    MTXRotRad(sp14, 'z', f1 * 0.017453292f); // Degree -> Radian conversion
+                    break;
+                case 3:
+                    Vec sp08 = {1.0f, 1.0f, 1.0f};
+                    MTXRotAxisRad(sp14, &sp08, f1 * 0.017453292f); // Degree -> Radian conversion
+                    break;
+                }
+                MTXConcat(sp44, sp14, sp44);
+            }
+            
+            MTXConcat(sp44, sp14, sp44);
 
-            // TODO: all the math
-            mtx1[0][3] = ptcl->mGlobalPosition.x;
-            mtx1[1][3] = ptcl->mGlobalPosition.y;
-            mtx1[2][3] = ptcl->mGlobalPosition.z;
+            JGeometry::TVec3<f32> temp;
+            ptcl->getGlobalPosition(temp);
+            sp44[0][3] = temp.x;
+            sp44[1][3] = temp.y;
+            sp44[2][3] = temp.z;
+
+            JGeometry::TVec3<f32> scale;
+            mpBaseEmitter->getGlobalParticleScale(scale);
+            
+            scale.x *= params->mScaleX;
+            scale.y *= params->mScaleY;
+            scale.z *= params->mScaleX;
+
             g_env_light.setLightTevColorType(model, &tevStr);
 
             if (field_0x1c != NULL && field_0x20 != NULL) {
                 field_0x1c->setFrame(field_0x24);
-                modelData->getMaterialTable().setTexNoAnimator(field_0x1c, field_0x20);
+                modelData->setTexNoAnimator(field_0x1c, field_0x20);
             }
 
-            cXyz scale;
-            scale.x = mpBaseEmitter->mGlobalParticleScale.x * ptcl->mScaleX;
-            scale.y = mpBaseEmitter->mGlobalParticleScale.y * ptcl->mScaleY;
-            scale.z = mpBaseEmitter->mGlobalParticleScale.z * ptcl->mScaleX;
-
             model->setBaseScale(scale);
-            model->setBaseTRMtx(mtx1);
-            mDoExt_modelUpdate(model);
+            model->setBaseTRMtx(sp44);
+            mDoExt_modelUpdateDL(model);
             if (field_0x1c != NULL) {
-                modelData->getMaterialTable().removeTexNoAnimator(field_0x1c);
+                modelData->removeTexNoAnimator(field_0x1c);
             }
         }
     }

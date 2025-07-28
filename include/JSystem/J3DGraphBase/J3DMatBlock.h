@@ -610,24 +610,15 @@ struct J3DBlend : public J3DBlendInfo {
     void setBlendInfo(const J3DBlendInfo& info) { *(J3DBlendInfo*)this = info; }
 
     GXBlendMode getType() const { return (GXBlendMode)mBlendMode; }
+    void setType(u8 i_type) { mBlendMode = i_type; }
     GXBlendFactor getSrcFactor() const { return (GXBlendFactor)mSrcFactor; }
+    void setSrcFactor(u8 i_src) { mSrcFactor = i_src; }
     GXBlendFactor getDstFactor() const { return (GXBlendFactor)mDstFactor; }
+    void setDstFactor(u8 i_dst) { mDstFactor = i_dst; }
     GXLogicOp getOp() const { return (GXLogicOp)mLogicOp; }
 
     void load(u8 ditherEnable) {
         J3DGDSetBlendMode(getType(), getSrcFactor(), getDstFactor(), getOp(), ditherEnable);
-    }
-
-    void setType(u8 i_type) {
-        mBlendMode = i_type;
-    }
-
-    void setSrcFactor(u8 i_src) {
-        mSrcFactor = i_src;
-    }
-
-    void setDstFactor(u8 i_dst) {
-        mDstFactor = i_dst;
     }
 
     // void operator=(const J3DBlend&) {}

@@ -278,7 +278,7 @@ void daNpcBmcon_c::isClear() {
 }
 
 /* 00003DFC-00003E1C       .text daNpc_BmconCreate__FPv */
-static s32 daNpc_BmconCreate(void* i_this) {
+static cPhs_State daNpc_BmconCreate(void* i_this) {
     return ((daNpcBmcon_c*)i_this)->_create();
 }
 

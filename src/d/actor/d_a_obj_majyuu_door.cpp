@@ -125,7 +125,7 @@ bool daObj_MjDoor_c::_draw() {
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
-static s32 daObj_MjDoorCreate(void* i_this) {
+static cPhs_State daObj_MjDoorCreate(void* i_this) {
     return ((daObj_MjDoor_c*)i_this)->_create();
 }
 

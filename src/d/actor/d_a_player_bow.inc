@@ -226,10 +226,10 @@ void daPy_lk_c::setBowModel() {
     }
     mDoExt_setCurrentHeap(oldHeap);
     m35EC = 0.0f;
-    J3DMaterial* r3 = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
-    J3DMaterial* r4 = r3->getNext();
-    r3->getShape()->show();
-    r4->getShape()->hide();
+    J3DMaterial* lineMat_mtl = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+    J3DMaterial* lineDamMAT_mtl = lineMat_mtl->getNext();
+    lineMat_mtl->getShape()->show();
+    lineDamMAT_mtl->getShape()->hide();
     tmp_modelData->getJointNodePointer(6)->setCallBack(daPy_bowJointCB);
     tmp_modelData->getJointNodePointer(11)->setCallBack(daPy_bowJointCB);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));

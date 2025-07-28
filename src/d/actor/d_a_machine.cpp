@@ -73,12 +73,12 @@ static dCcD_SrcSph l_sph_src_col = {
 
 const char daMachine_c::m_arcname[8] = "Hkikai1";
 
-const f32 daMachine_c::static_float1 = 300.0f;
-const f32 daMachine_c::static_float2 = 800.0f;
+const f32 daMachine_c::m_search_r = 300.0f;
+const f32 daMachine_c::m_search_l = 800.0f;
 
 /* 00000078-000000A8       .text _delete__11daMachine_cFv */
 bool daMachine_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
     return true;
 }
 
@@ -92,14 +92,14 @@ BOOL daMachine_c::CreateHeap() {
     BOOL success;
 
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BDL_HKIKAI1);
-    JUT_ASSERT(0x159, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(340, 345), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if(mpModel == NULL) {
         success = false;   
     } else{
         J3DAnmTransform * pbck = (J3DAnmTransform *)dComIfG_getObjectRes(m_arcname, HKIKAI1_BCK_HKIKAI1);
-        JUT_ASSERT(0x169, pbck != NULL)
+        JUT_ASSERT(DEMO_SELECT(356, 361), pbck != NULL)
 
         int initRet = field_0xc04.init(modelData,pbck, true, 0,1.0f,0,-1,false);
         if(initRet == NULL)
@@ -169,7 +169,7 @@ void daMachine_c::CreateInit() {
     mpModel->calc();
     field_0xc14 = fopAcM_GetParam(this);
     if (field_0xc14 != 0xff){
-        field_0xc18 = dPath_GetRoomPath(field_0xc14, current.roomNo);
+        field_0xc18 = dPath_GetRoomPath(field_0xc14, fopAcM_GetRoomNo(this));
         if(field_0xc18 != NULL){
             field_0xc16 = 1;
             field_0xc15 = 1;
@@ -191,9 +191,11 @@ void daMachine_c::CreateInit() {
 /* 00000520-00000604       .text path_move__11daMachine_cFv */
 void daMachine_c::path_move() {
     if (field_0xc14 != 0xFF){
-        cLib_chasePos(&current.pos, field_0xc1c, speedF);
+        f32 temp2 = speedF;
+        cLib_chasePos(&current.pos, field_0xc1c, temp2);
         
-        if((field_0xc1c - current.pos).abs() < 80.0f)
+        f32 temp = (field_0xc1c - current.pos).abs();
+        if(temp < 80.0f)
             set_next_pnt();
     }
 }
@@ -204,8 +206,7 @@ void daMachine_c::set_next_pnt() {
     
     field_0xc15 += field_0xc16;
 
-    if(dPath_ChkClose(field_0xc18) != 0) {
-
+    if(dPath_ChkClose(field_0xc18)) {
         if (field_0xc15 > (s8)field_0xc18->m_num - 1) {
             field_0xc15 = 0;
         } else if (field_0xc15 < 0) {
@@ -233,22 +234,20 @@ daWindMill_c* daMachine_c::search_wind_mill() {
 
 /* 00000734-000007F8       .text set_speed__11daMachine_cFv */
 void daMachine_c::set_speed() {
-    f32 new_speed;
+    f32 f31 = 5.0f;
     daWindMill_c* windmill = search_wind_mill();
-    f32 local_1;
     
-    
+    f32 f1;
     if(windmill != NULL) {
-        new_speed = (f32)windmill->mAngle[1]/(f32)daWindMill_c::m_max_rot_speed[windmill->mType];
-        
+        s16 max_rot_speed = daWindMill_c::m_max_rot_speed[windmill->mType];;
+        f1 = (f32)windmill->mAngle[1]/(f32)max_rot_speed;
     } else {
-        new_speed = 0.0f;
+        f1 = 0.0f;
     }
 
-    local_1 = speedF;
-    new_speed = cLib_addCalc(&local_1, new_speed * 5.0f,0.1f,1.0f,0.5f);
-    speedF = local_1;
-
+    f32 old_speedF = speedF;
+    cLib_addCalc(&old_speedF, f31 * f1, 0.1f, 1.0f, 0.5f);
+    speedF = old_speedF;
 }
 
 /* 000007F8-00000898       .text _create__11daMachine_cFv */
@@ -292,7 +291,8 @@ bool daMachine_c::_execute() {
     set_at();
     set_mtx();
 
-    if(speedF != 0.0f) {
+    f32 temp = speedF;
+    if(temp != 0.0f) {
         fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_MOVE, 0);
     }
 
@@ -301,39 +301,37 @@ bool daMachine_c::_execute() {
 
 /* 000010F8-0000124C       .text attack__11daMachine_cFv */
 void daMachine_c::attack() {
-    daPy_py_c* player;
+    f32 f31 = 1.0f;
+    daPy_py_c* player = daPy_getPlayerActorClass();
 
-    if( (player = daPy_getPlayerActorClass()) == NULL)
+    if(player == NULL)
         return;
 
     set_cube();
-    cXyz player_pos;
-    cXyz xyz;
-    f32 unk_float = 60.0f;
     
-    player_pos.x = player->current.pos.x;
-    player_pos.y = player->current.pos.y;
-    player_pos.z = player->current.pos.z;
-    player_pos.y = player_pos.y + unk_float;
+    cXyz player_pos = player->current.pos;
+    player_pos.y += 60.0f;
 
     field_0xbf0.SetC(player_pos);
     field_0xbf0.SetR(90.0f);
 
     switch (field_0xc78) {
-    case 0:
-        if(field_0xab8.Cross(&field_0xbf0,&xyz) !=0) {
+    case 0: {
+        cXyz unused;
+        if(field_0xab8.Cross(&field_0xbf0, &unused)) {
             field_0xc78 = 1;
             return;
         }
         break;
+    }
     case 1:
         fopAcM_seStart(this, JA_SE_OBJ_JAMA_MECHA_OUT,0);
         field_0xc04.setFrame(0.0f);
-        field_0xc04.setPlaySpeed(1.0f);
+        field_0xc04.setPlaySpeed(f31);
         field_0xc78 += 1;
         // Fall through
     case 2:
-        if(field_0xc04.play() != 0) {
+        if(field_0xc04.play()) {
             field_0xc78 = NULL;
         }
         break;
@@ -342,15 +340,17 @@ void daMachine_c::attack() {
 
 /* 0000124C-00001330       .text set_cube__11daMachine_cFv */
 void daMachine_c::set_cube() {
-    cXyz xyz1(0.0f,0.0f,350.0f);
-    cXyz xyz2(0.0f,0.0f,500.0f);
+    f32 f2 = 500.0f;
+    f32 f31 = 200.0f;
+    cXyz xyz1(0.0f, 0.0f, f31 + 150.0f);
+    cXyz xyz2(0.0f, 0.0f, f2);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::multVec(&xyz2, &xyz2);
     mDoMtx_stack_c::multVec(&xyz1, &xyz1);
     field_0xab8.GetStart() = xyz1;
     field_0xab8.GetEnd() = xyz2;
-    field_0xab8.SetR(200.0f);
+    field_0xab8.SetR(f31);
 }
 
 /* 00001330-0000144C       .text set_body__11daMachine_cFv */
@@ -376,11 +376,10 @@ void daMachine_c::set_body() {
 
 /* 0000144C-000014D4       .text set_at__11daMachine_cFv */
 void daMachine_c::set_at() {
-    f32 fVar1;
-  
-    fVar1 = field_0xc04.getFrameCtrl()->getFrame();
-    if ((5.0f < fVar1) && (25.0f > fVar1)) {
-
+    f32 f1 = 5.0f;
+    f32 f2 = 25.0f;
+    f32 frame = field_0xc04.getFrameCtrl()->getFrame();
+    if (f1 < frame && f2 > frame) {
         field_0xc6c.set(field_0xc3c[0][3],
                         field_0xc3c[1][3],
                         field_0xc3c[2][3]);

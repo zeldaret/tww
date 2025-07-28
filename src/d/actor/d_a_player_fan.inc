@@ -80,22 +80,25 @@ BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
 
 /* 8014BD4C-8014BE50       .text setShapeFanLeaf__9daPy_lk_cFv */
 int daPy_lk_c::setShapeFanLeaf() {
-    J3DMaterial* mesh;
-
+    J3DMaterial* mtl;
     if (mpEquipItemModel != NULL) {
-        mesh = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+        mtl = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
     }
     m355C = m355C + 0x82f;
     m3558 = 1536.0f * cM_ssin(m355C);
     m355A = 2048.0f * cM_ssin(m355C - 0xe00U);
     if (dComIfGs_getMagic() >= 1) {
-        for (; mesh != NULL; mesh = mesh->getNext()) {
-            mesh->getShape()->show();
+        // Show material:
+        // * "leafAMat"
+        for (; mtl != NULL; mtl = mtl->getNext()) {
+            mtl->getShape()->show();
         }
         return true;
     } else {
-        for (; mesh != NULL; mesh = mesh->getNext()) {
-            mesh->getShape()->hide();
+        // Hide material:
+        // * "leafAMat"
+        for (; mtl != NULL; mtl = mtl->getNext()) {
+            mtl->getShape()->hide();
         }
         return false;
     }

@@ -199,7 +199,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(VERSION_SELECT(502, 504, 504, 504), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -220,7 +220,7 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(VERSION_SELECT(528, 525, 525, 525), btk != NULL);
+    JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -228,7 +228,7 @@ BOOL daRd_c::_createHeap() {
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(VERSION_SELECT(553, 550, 550, 550), brk != NULL);
+    JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -1845,7 +1845,7 @@ cPhs_State daRd_c::_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();
         
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2520)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         
@@ -1868,7 +1868,7 @@ bool daRd_c::_delete() {
 }
 
 /* 00004FB8-00004FD8       .text daRdCreate__FPv */
-static s32 daRdCreate(void* i_this) {
+static cPhs_State daRdCreate(void* i_this) {
     return static_cast<daRd_c*>(i_this)->_create();
 }
 

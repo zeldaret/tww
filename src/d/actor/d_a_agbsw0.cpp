@@ -1882,7 +1882,8 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x1D:
-            if(dComIfGs_getMaxMagic() != 0 && !dComIfGs_getMagic) {
+            // @bug They meant to call this function
+            if(dComIfGs_getMaxMagic() != 0 && dComIfGs_getMagic == 0) {
                 return FALSE;
             }
 

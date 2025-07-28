@@ -128,7 +128,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000003F8-000004CC       .text _createHeap__13daObj_Canon_cFv */
 BOOL daObj_Canon_c::_createHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, WALLBOM_BDL_WALLBOM);
-    JUT_ASSERT(0x115, modelData != 0);
+    JUT_ASSERT(0x115, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 #if VERSION > VERSION_DEMO
@@ -567,7 +567,7 @@ void daObj_Canon_c::createInit() {
 }
 
 /* 00001804-00001880       .text getArg__13daObj_Canon_cFv */
-u8 daObj_Canon_c::getArg() {
+void daObj_Canon_c::getArg() {
     u32 param = fopAcM_GetParam(this);
     field_0x297 = fopAcM_GetParamBit(param, 0, 0xFF);
     field_0x296 = fopAcM_GetParamBit(param, 8, 0xFF);
@@ -592,7 +592,7 @@ cPhs_State daObj_Canon_c::_create() {
         }
 #endif
 
-        if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x8C0)) {
+        if(!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
 
@@ -614,7 +614,7 @@ bool daObj_Canon_c::_delete() {
 }
 
 /* 00001C50-00001C70       .text daObj_CanonCreate__FPv */
-static s32 daObj_CanonCreate(void* i_this) {
+static cPhs_State daObj_CanonCreate(void* i_this) {
     return ((daObj_Canon_c*)i_this)->_create();
 }
 

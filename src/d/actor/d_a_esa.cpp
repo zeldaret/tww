@@ -250,7 +250,7 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
 
     i_this->field_0x2B9 = fopAcM_GetParam(i_this) & 0xFF;
     i_this->field_0x2BA = fopAcM_GetParam(i_this) >> 8 & 0xFF;
-    if(g_regHIO.mChild->mShortRegs[0] != 0) {
+    if(REG0_S(0) != 0) {
         i_this->field_0x2BA = 1;
     }
 
@@ -274,8 +274,8 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
         }
     }
 
-    f32 temp = g_regHIO.mChild->mFloatRegs[6] + 0.65f;
-    f32 scaleF = temp + cM_rndF(g_regHIO.mChild->mFloatRegs[5] + 1.0f - temp);
+    f32 temp = REG0_F(6) + 0.65f;
+    f32 scaleF = temp + cM_rndF(REG0_F(5) + 1.0f - temp);
     cXyz scale(scaleF, scaleF, scaleF);
     i_this->mpModel->setBaseScale(scale);
     fopAcM_SetMtx(i_this, i_this->mpModel->getBaseTRMtx());

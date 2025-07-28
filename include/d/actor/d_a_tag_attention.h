@@ -52,12 +52,12 @@ namespace daTagAttention {
             return true;
         }
 
-        int prm_get_Type() const 
+        int prm_get_Type() const
         {
             return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
         }
 
-        int prm_get_swSave() const 
+        int prm_get_swSave() const
         {
             return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
         }

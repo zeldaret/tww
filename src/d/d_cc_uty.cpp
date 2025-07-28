@@ -223,7 +223,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
             
             fopAcM_seStart(tgActor, JA_SE_LK_LAST_HIT, 0);
             
-            pauseTime = 6 + g_regHIO.mChild->mShortRegs[7];
+            pauseTime = 6 + REG0_S(7);
             
             if (atInfo->pParticlePos) {
                 dComIfGp_particle_set(dPa_name::ID_COMMON_0010, atInfo->pParticlePos);
@@ -241,7 +241,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
                 if (atInfo->mResultingAttackType == 9) {
                     pauseTime = 6;
                 } else {
-                    pauseTime = 4 + g_regHIO.mChild->mShortRegs[6];
+                    pauseTime = 4 + REG0_S(6);
                 }
             } else {
                 if (fopAcM_GetName(tgActor) == PROC_MT) {
@@ -254,7 +254,7 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* tgActor, CcAtInfo* atInfo) {
                 } else {
                     fopAcM_seStart(tgActor, at_se_get(atInfo->mpObj), r29);
                 }
-                pauseTime = 1 + g_regHIO.mChild->mShortRegs[5];
+                pauseTime = 1 + REG0_S(5);
             }
         }
         

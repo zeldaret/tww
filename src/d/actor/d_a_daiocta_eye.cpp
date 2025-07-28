@@ -144,7 +144,7 @@ bool daDaiocta_Eye_c::_delete() {
 }
 
 /* 000017B4-000017D4       .text daDaiocta_EyeCreate__FPv */
-static s32 daDaiocta_EyeCreate(void* i_this) {
+static cPhs_State daDaiocta_EyeCreate(void* i_this) {
     return ((daDaiocta_Eye_c*)i_this)->_create();
 }
 

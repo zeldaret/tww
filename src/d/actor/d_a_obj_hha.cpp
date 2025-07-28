@@ -106,7 +106,7 @@ BOOL daObjHhaPart_c::set_mdl_area(const char* arcname, int index) {
     BOOL ret;
     ret = FALSE;
     mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, index));
-    JUT_ASSERT(VERSION_SELECT(410, 473, 473, 473), mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(410, 473), mdl_data != NULL);
     if(mdl_data != NULL){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203); 
         ret = TRUE;
@@ -204,19 +204,19 @@ BOOL daObjHhaYgush_c::create_area(const char* arcname) {
     BOOL ret = FALSE;
 
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, HHA_BDL_YGSTP00));
-    JUT_ASSERT(VERSION_SELECT(577, 640, 640, 640), mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(577, 640), mdl_data != NULL);
     
     if(mdl_data != NULL){
         M_mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        JUT_ASSERT(VERSION_SELECT(586, 649, 649, 649), M_mdl != NULL);
+        JUT_ASSERT(DEMO_SELECT(586, 649), M_mdl != NULL);
 
         if(M_mdl != NULL){
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, HHA_BTK_YGSTP00));
-            JUT_ASSERT(VERSION_SELECT(593, 656, 656, 656), btk_data != NULL);
+            JUT_ASSERT(DEMO_SELECT(593, 656), btk_data != NULL);
             
             if(mBtk.init(M_mdl->getModelData(), btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, false) != false){  
                 J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, HHA_BCK_YGSTP00));
-                JUT_ASSERT(VERSION_SELECT(598, 661, 661, 661), bck_data != NULL);
+                JUT_ASSERT(DEMO_SELECT(598, 661), bck_data != NULL);
                 
                 if(mBck.init(M_mdl->getModelData(), bck_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false) != false){
                     ret = TRUE;

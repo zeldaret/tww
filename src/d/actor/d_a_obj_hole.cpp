@@ -278,7 +278,7 @@ bool daObj_Hole_c::_delete() {
 }
 
 /* 0000125C-0000127C       .text daObj_HoleCreate__FPv */
-static s32 daObj_HoleCreate(void* i_actor) {
+static cPhs_State daObj_HoleCreate(void* i_actor) {
     return static_cast<daObj_Hole_c*>(i_actor)->_create();
 }
 

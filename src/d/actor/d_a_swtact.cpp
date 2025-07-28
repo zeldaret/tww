@@ -78,7 +78,7 @@ cPhs_State daSwTact_c::_create() {
         result = dComIfG_resLoad(&mPhs, m_arcname);
 
         if (result == cPhs_COMPLEATE_e) {
-            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3000)) {
+            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize)) {
                 return cPhs_ERROR_e;
             }
         }

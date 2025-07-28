@@ -368,7 +368,7 @@ bool daNpc_So_c::_delete() {
 }
 
 /* 00004754-00004774       .text daNpc_SoCreate__FPv */
-static s32 daNpc_SoCreate(void* i_this) {
+static cPhs_State daNpc_SoCreate(void* i_this) {
     return ((daNpc_So_c*)i_this)->_create();
 }
 

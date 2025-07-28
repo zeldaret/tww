@@ -257,7 +257,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
     for (int i = 0; i < 2; i++) {
         J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Ff", ho_bmd[i]);
-        JUT_ASSERT(VERSION_SELECT(717, 719, 719, 719), modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(717, 719), modelData != NULL);
 #if VERSION > VERSION_DEMO
         if (modelData == NULL) {
             return FALSE;

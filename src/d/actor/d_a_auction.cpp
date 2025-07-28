@@ -1625,7 +1625,7 @@ int daAuction_c::getRand(int max) {
 }
 
 /* 00003C08-00003C28       .text daAuctionCreate__FPv */
-static s32 daAuctionCreate(void* i_this) {
+static cPhs_State daAuctionCreate(void* i_this) {
     return static_cast<daAuction_c*>(i_this)->_create();
 }
 

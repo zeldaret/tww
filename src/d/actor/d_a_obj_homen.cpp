@@ -224,7 +224,7 @@ bool Act_c::create_heap() {
     };
     
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, bdl_idx[mType]);
-    JUT_ASSERT(VERSION_SELECT(578, 615, 615, 615), mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(578, 615), mdl_data != NULL);
 #if VERSION > VERSION_DEMO
     if (mdl_data != NULL)
 #endif
@@ -239,7 +239,7 @@ bool Act_c::create_heap() {
 #endif
     
     cBgD_t* bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dzb_idx[mType]);
-    JUT_ASSERT(VERSION_SELECT(590, 628, 628, 628), bgw_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(590, 628), bgw_data != NULL);
 #if VERSION > VERSION_DEMO
     if (bgw_data != NULL)
 #endif

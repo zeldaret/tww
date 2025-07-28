@@ -350,7 +350,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 #endif
 
     modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_TAIL);
-    JUT_ASSERT(VERSION_SELECT(817, 819, 819, 819), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(817, 819), modelData != NULL);
 
     for (s32 i = 0; i < 4; i++) {
         for (s32 j = 0; j < 9; j++) {

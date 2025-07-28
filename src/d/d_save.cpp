@@ -67,7 +67,7 @@ void dSv_player_return_place_c::init() {
 
 /* 80058BC8-80058C60       .text set__25dSv_player_return_place_cFPCcScUc */
 void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status) {
-    JUT_ASSERT(VERSION_SELECT(173, 179, 179, 179), strlen(i_name) <= 7);
+    JUT_ASSERT(DEMO_SELECT(173, 179), strlen(i_name) <= 7);
 
     strcpy(mName, i_name);
     mRoomNo = i_roomNo;
@@ -201,14 +201,14 @@ void dSv_player_get_item_c::init() {
 
 /* 800594C4-8005955C       .text onItem__21dSv_player_get_item_cFiUc */
 void dSv_player_get_item_c::onItem(int i_field, u8 i_item) {
-    JUT_ASSERT(VERSION_SELECT(393, 399, 399, 399), 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(393, 399), 0 <= i_item && i_item < 8);
 
     mItemFlags[i_field] |= (u8)(1 << i_item);
 }
 
 /* 8005955C-800595F8       .text isItem__21dSv_player_get_item_cFiUc */
 BOOL dSv_player_get_item_c::isItem(int i_field, u8 i_item) {
-    JUT_ASSERT(VERSION_SELECT(423, 429, 429, 429), 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(423, 429), 0 <= i_item && i_item < 8);
 
     return mItemFlags[i_field] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
@@ -667,37 +667,37 @@ void dSv_player_get_bag_item_c::init() {
 
 /* 8005A8CC-8005A960       .text onBeast__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onBeast(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1229, 1235, 1235, 1235), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1229, 1235), 0 <= i_no && i_no < 8);
     mBeastFlags |= (u8)(1 << i_no);
 }
 
 /* 8005A960-8005A9F8       .text isBeast__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBeast(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1259, 1265, 1265, 1265), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1259, 1265), 0 <= i_no && i_no < 8);
     return mBeastFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005A9F8-8005AA8C       .text onBait__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onBait(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1274, 1280, 1280, 1280), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1274, 1280), 0 <= i_no && i_no < 8);
     mBaitFlags |= (u8)(1 << i_no);
 }
 
 /* 8005AA8C-8005AB24       .text isBait__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBait(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1304, 1310, 1310, 1310), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1304, 1310), 0 <= i_no && i_no < 8);
     return mBaitFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AB24-8005ABB4       .text onReserve__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1319, 1325, 1325, 1325), 0 <= i_no && i_no < 32);
+    JUT_ASSERT(DEMO_SELECT(1319, 1325), 0 <= i_no && i_no < 32);
     mReserveFlags |= (1 << i_no);
 }
 
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1349, 1355, 1355, 1355), 0 <= i_no && i_no < 32);
+    JUT_ASSERT(DEMO_SELECT(1349, 1355), 0 <= i_no && i_no < 32);
     return mReserveFlags & (1 << i_no) ? TRUE : FALSE;
 }
 
@@ -731,55 +731,55 @@ void dSv_player_collect_c::init() {
 
 /* 8005ACE0-8005AD78       .text onCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::onCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(VERSION_SELECT(1406, 1412, 1412, 1412), 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1406, 1412), 0 <= i_item && i_item < 8);
     mCollect[i_idx] |= (u8)(1 << i_item);
 }
 
 /* 8005AD78-8005AE10       .text offCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::offCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(VERSION_SELECT(1421, 1427, 1427, 1427), 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1421, 1427), 0 <= i_item && i_item < 8);
     mCollect[i_idx] &= ~(u8)(1 << i_item);
 }
 
 /* 8005AE10-8005AEAC       .text isCollect__20dSv_player_collect_cFiUc */
 BOOL dSv_player_collect_c::isCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(VERSION_SELECT(1436, 1442, 1442, 1442), 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1436, 1442), 0 <= i_item && i_item < 8);
     return mCollect[i_idx] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
 /* 8005AEAC-8005AF40       .text onTact__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onTact(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1496, 1502, 1502, 1502), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1496, 1502), 0 <= i_no && i_no < 8);
     mTact |= (u8)(1 << i_no);
 }
 
 /* 8005AF40-8005AFD8       .text isTact__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTact(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1526, 1532, 1532, 1532), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1526, 1532), 0 <= i_no && i_no < 8);
     return mTact & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AFD8-8005B06C       .text onTriforce__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onTriforce(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1541, 1547, 1547, 1547), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1541, 1547), 0 <= i_no && i_no < 8);
     mTriforce |= (u8)(1 << i_no);
 }
 
 /* 8005B06C-8005B104       .text isTriforce__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTriforce(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1571, 1577, 1577, 1577), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1571, 1577), 0 <= i_no && i_no < 8);
     return mTriforce & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005B104-8005B198       .text onSymbol__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onSymbol(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1586, 1592, 1592, 1592), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1586, 1592), 0 <= i_no && i_no < 8);
     mSymbol |= (u8)(1 << i_no);
 }
 
 /* 8005B198-8005B230       .text isSymbol__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isSymbol(u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1616, 1622, 1622, 1622), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1616, 1622), 0 <= i_no && i_no < 8);
     return mSymbol & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
@@ -823,67 +823,67 @@ void dSv_player_map_c::init() {
 
 /* 8005B320-8005B3CC       .text onGetMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onGetMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1680, 1690, 1690, 1690), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1680, 1690), 0 <= i_no && i_no < 128);
     field_0x0[1][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B3CC-8005B47C       .text isGetMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isGetMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1708, 1718, 1718, 1718), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1708, 1718), 0 <= i_no && i_no < 128);
     return field_0x0[1][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B47C-8005B528       .text onOpenMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onOpenMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1741, 1751, 1751, 1751), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1741, 1751), 0 <= i_no && i_no < 128);
     field_0x0[2][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B528-8005B5D4       .text offOpenMap__16dSv_player_map_cFi */
 void dSv_player_map_c::offOpenMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(0, 1765, 1765, 1765), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(0, 1765), 0 <= i_no && i_no < 128);
     field_0x0[2][i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005B5D4-8005B684       .text isOpenMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isOpenMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1769, 1779, 1779, 1779), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1769, 1779), 0 <= i_no && i_no < 128);
     return field_0x0[2][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B684-8005B730       .text onCompleteMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onCompleteMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1802, 1812, 1812, 1812), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1802, 1812), 0 <= i_no && i_no < 128);
     field_0x0[3][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B730-8005B7DC       .text offCompleteMap__16dSv_player_map_cFi */
 void dSv_player_map_c::offCompleteMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(0, 1826, 1826, 1826), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(0, 1826), 0 <= i_no && i_no < 128);
     field_0x0[3][i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005B7DC-8005B88C       .text isCompleteMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isCompleteMap(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1830, 1840, 1840, 1840), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1830, 1840), 0 <= i_no && i_no < 128);
     return field_0x0[3][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B88C-8005B92C       .text onTriforce__16dSv_player_map_cFi */
 void dSv_player_map_c::onTriforce(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1864, 1874, 1874, 1874), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1864, 1874), 0 <= i_no && i_no < 8);
     field_0x81 |= (u8)(1 << i_no);
 }
 
 /* 8005B92C-8005B9CC       .text offTriforce__16dSv_player_map_cFi */
 void dSv_player_map_c::offTriforce(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(0, 1888, 1888, 1888), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(0, 1888), 0 <= i_no && i_no < 8);
     field_0x81 &= ~(u8)(1 << i_no);
 }
 
 /* 8005B9CC-8005BA70       .text isTriforce__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isTriforce(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(1892, 1902, 1902, 1902), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1892, 1902), 0 <= i_no && i_no < 8);
     return field_0x81 & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
@@ -901,37 +901,37 @@ int dSv_player_map_c::getCollectMapNum() {
 
 /* 8005BAE8-8005BB84       .text onFmapBit__16dSv_player_map_cFiUc */
 void dSv_player_map_c::onFmapBit(int i_idx, u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1947, 1957, 1957, 1957), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1947, 1957), 0 <= i_no && i_no < 8);
     mFmapBits[i_idx] |= (u8)(1 << i_no);
 }
 
 /* 8005BB84-8005BC24       .text isFmapBit__16dSv_player_map_cFiUc */
 BOOL dSv_player_map_c::isFmapBit(int i_idx, u8 i_no) {
-    JUT_ASSERT(VERSION_SELECT(1977, 1987, 1987, 1987), 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1977, 1987), 0 <= i_no && i_no < 8);
     return mFmapBits[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005BC24-8005BCBC       .text onSaveArriveGrid__16dSv_player_map_cFi */
 void dSv_player_map_c::onSaveArriveGrid(int no) {
-    JUT_ASSERT(VERSION_SELECT(1986, 1996, 1996, 1996), (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(1986, 1996), (no >= 0) && (no < 49));
     onFmapBit(no, 0);
 }
 
 /* 8005BCBC-8005BD54       .text isSaveArriveGrid__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isSaveArriveGrid(int no) {
-    JUT_ASSERT(VERSION_SELECT(2000, 2010, 2010, 2010), (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2000, 2010), (no >= 0) && (no < 49));
     return isFmapBit(no, 0);
 }
 
 /* 8005BD54-8005BDEC       .text onSaveArriveGridForAgb__16dSv_player_map_cFi */
 void dSv_player_map_c::onSaveArriveGridForAgb(int no) {
-    JUT_ASSERT(VERSION_SELECT(2007, 2017, 2017, 2017), (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2007, 2017), (no >= 0) && (no < 49));
     onFmapBit(no, 1);
 }
 
 /* 8005BDEC-8005BE84       .text isSaveArriveGridForAgb__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isSaveArriveGridForAgb(int no) {
-    JUT_ASSERT(VERSION_SELECT(2019, 2029, 2029, 2029), (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2019, 2029), (no >= 0) && (no < 49));
     return isFmapBit(no, 1);
 }
 

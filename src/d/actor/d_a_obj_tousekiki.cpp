@@ -18,7 +18,7 @@ void daObj_Tousekiki_c::CreateHeap() {
 }
 
 /* 000002BC-000002DC       .text daObj_TousekikiCreate__FPv */
-static s32 daObj_TousekikiCreate(void* i_this) {
+static cPhs_State daObj_TousekikiCreate(void* i_this) {
     return ((daObj_Tousekiki_c*)i_this)->_create();
 }
 

@@ -28,8 +28,8 @@ public:
     bool _draw();
 
     static const char m_arcname[];
-    static const f32 static_float1;
-    static const f32 static_float2;
+    static const f32 m_search_r;
+    static const f32 m_search_l;
     
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

@@ -74,7 +74,6 @@ void daObj_Pfall_c::setAnm() {
 
 /* 00000190-000004DC       .text set_mtx__13daObj_Pfall_cFv */
 void daObj_Pfall_c::set_mtx() {
-
     static cXyz offset_pos_left(-35.0f, 0.0f, 105.0f);
     static cXyz offset_pos_right(35.0f, 0.0f, -105.0f);
 
@@ -325,7 +324,6 @@ void daObj_Pfall_c::mode_wait_init() {
 
 /* 00000F1C-00000FC0       .text mode_wait__13daObj_Pfall_cFv */
 void daObj_Pfall_c::mode_wait() {
-
     if(dLib_checkPlayerInCircle(current.pos, 100.0f, 100.0f) 
         && dComIfGp_getPlayer(0)->speedF == 0.0f
         && cLib_calcTimer(&field_0x3B8) == 0) {
@@ -370,7 +368,6 @@ void daObj_Pfall_c::mode_proc_call() {
 
 /* 00001130-000012F4       .text _execute__13daObj_Pfall_cFv */
 bool daObj_Pfall_c::_execute() {
-
     attention_info.position = current.pos;
     eyePos = current.pos;
     

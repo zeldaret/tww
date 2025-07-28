@@ -207,7 +207,7 @@ void daCanon_c::GameInfo2DDraw() {
 }
 
 /* 00002074-00002094       .text daCanonCreate__FPv */
-static s32 daCanonCreate(void* i_this) {
+static cPhs_State daCanonCreate(void* i_this) {
     return ((daCanon_c*)i_this)->_create();
 }
 

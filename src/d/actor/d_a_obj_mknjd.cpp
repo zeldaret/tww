@@ -967,7 +967,7 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
                 i_mat->getZMode()->setUpdateEnable(1);
                 i_mat->getZMode()->setCompareEnable(1);
 
-                i_mat->getBlend()->setType(0);
+                i_mat->getBlend()->setType(GX_BM_NONE);
             }
             else {
                 i_mat->setMaterialMode(1);
@@ -975,9 +975,9 @@ void daObjMknjD::setMaterial(J3DMaterial* i_mat, u8 i_alpha) {
                 i_mat->getZMode()->setUpdateEnable(0);
                 i_mat->getZMode()->setCompareEnable(0);
 
-                i_mat->getBlend()->setType(1);
-                i_mat->getBlend()->setSrcFactor(4);
-                i_mat->getBlend()->setDstFactor(5);
+                i_mat->getBlend()->setType(GX_BM_BLEND);
+                i_mat->getBlend()->setSrcFactor(GX_BL_SRC_ALPHA);
+                i_mat->getBlend()->setDstFactor(GX_BL_INV_SRC_ALPHA);
             }
 
             i_mat->getTevKColor(3)->mColor.a = i_alpha;

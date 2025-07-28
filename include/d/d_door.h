@@ -25,8 +25,8 @@ public:
     s32 frontCheckOld();
     s32 frontCheck();
     s32 drawCheck_local();
-    u8 drawCheck(int);
-    u8 checkExecute();
+    s32 drawCheck(int);
+    s32 checkExecute();
     void startDemoProc();
     void makeEventId(int);
     void initProc(int);
@@ -48,10 +48,10 @@ public:
     /* 0x294 */ cXyz mAngleVec;
     /* 0x2A0 */ u8 mFrontCheck;
     /* 0x2A1 */ u8 m2A1;
-    /* 0x2A2 */ u16 mEventIdx[12];
+    /* 0x2A2 */ s16 mEventIdx[12];
     /* 0x2BA */ u8 mToolId[12];
-    /* 0x2C6 */ u8 field_0x2c6;
-    /* 0x2C7 */ u8 field_0x2c7;
+    /* 0x2C6 */ u8 m2C6;
+    /* 0x2C7 */ u8 m2C7;
     /* 0x2C8 */ int mStaffId;
     /* 0x2CC */ s8 mRoomNo;
     /* 0x2CD */ u8 m2CD[0x2D0 - 0x2CD];
@@ -98,6 +98,9 @@ public:
 
 class dDoor_stop_c {
 public:
+    dDoor_stop_c() {}
+    ~dDoor_stop_c() {}
+
     void calcMtx(dDoor_info_c*);
     void closeInit(dDoor_info_c*);
     s32 closeProc(dDoor_info_c*);
@@ -128,9 +131,12 @@ public:
 
 class dDoor_hkyo_c {
 public:
-    void chkUse() {}
-    void offUse() {}
-    void onUse(u8) {}
+    dDoor_hkyo_c() {}
+    ~dDoor_hkyo_c() {}
+
+    bool chkUse() { return m11 != 0; }
+    void offUse() { m11 = 0; }
+    void onUse(u8 arg0) { m11 = arg0; }
 
     cPhs_State resLoad();
     void resDelete();

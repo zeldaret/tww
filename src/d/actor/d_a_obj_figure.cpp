@@ -1023,7 +1023,7 @@ int daObjFigure_c::getFigureBmd(u8 figureNo) {
 }
 
 /* 00001A80-00001AA0       .text daSampleCreate__FPv */
-static s32 daSampleCreate(void* i_this) {
+static cPhs_State daSampleCreate(void* i_this) {
     return static_cast<daObjFigure_c*>(i_this)->_create();
 }
 
@@ -1088,14 +1088,14 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
             if (mtl->getZMode()->getCompareEnable() == 0) {
                 if ((u8)mtl->getBlend()->getType() == GX_BM_BLEND) {
                     ZOffBlendShape[zoff_blend_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(1713, 1767, 1767, 1767), zoff_blend_cnt <= 4);
+                    JUT_ASSERT(DEMO_SELECT(1713, 1767), zoff_blend_cnt <= 4);
                 } else {
                     ZOffNoneShape[zoff_none_cnt++] = mtl->getShape();
-                    JUT_ASSERT(VERSION_SELECT(1717, 1770, 1770, 1770), zoff_none_cnt <= 4);
+                    JUT_ASSERT(DEMO_SELECT(1717, 1770), zoff_none_cnt <= 4);
                 }
             } else {
                 ZOnShape[zon_cnt++] = mtl->getShape();
-                JUT_ASSERT(VERSION_SELECT(1722, 1774, 1774, 1774), zon_cnt <= 4);
+                JUT_ASSERT(DEMO_SELECT(1722, 1774), zon_cnt <= 4);
             }
             mtl = mtl->getNext();
         }

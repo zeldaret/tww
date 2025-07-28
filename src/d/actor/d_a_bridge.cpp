@@ -8,85 +8,1254 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_path.h"
+#include "d/d_com_inf_game.h"
+#include "d/res/res_bridge.h"
+#include "d/d_bg_w_sv.h"
+#include "d/d_s_play.h"
+#include "d/d_cc_uty.h"
+#include "d/actor/d_a_bk.h"
+#include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_player.h"
+#include "d/d_kankyo_wether.h"
+#include "f_op/f_op_camera.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+static cXyz* wind_vec;
+static s16 wy;
+static f32* wp;
+
+static f32 ita_z_p[] = { 0.1f, 0.3f, 0.5f, 0.75f, 0.9f, 1.0f, 0.9f, 0.75f, 0.5f, 0.3f, 0.1f };
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    /* Nonmatching */
+void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+    bridge_class* i_this = (bridge_class*)i_ac;
+
+    cXyz pos = i_this->mBr[0].mPosition - i_pt->current.pos;
+    s32 brIdx = std::sqrtf(pos.x * pos.x + pos.z * pos.z) / 76.5f - -0.5f;
+    if (brIdx > i_this->mBrCount - 1) {
+        brIdx = i_this->mBrCount - 1;
+    } else if (brIdx < 0) {
+        brIdx = 0;
+    }
+
+    br_s* pBr = &i_this->mBr[brIdx];
+    f32 fVar2 = ((i_this->mTypeBits & 5) != 0) ? 0.85f : 1.0f;
+    cMtx_YrotS(*calc_mtx, -pBr->mRotation.y);
+
+    cXyz posDiff = i_pt->current.pos - pBr->mPosition;
+    cXyz sp4C;
+    MtxPosition(&posDiff, &sp4C);
+
+    posDiff = i_pt->old.pos - pBr->mPosition;
+    cXyz sp40;
+    MtxPosition(&posDiff, &sp40);
+
+    i_pt->speed.y = -5.0f;
+
+    f32 fVar7;
+    if (fpcM_GetName(i_pt) == PROC_PLAYER) {
+        fVar7 = 100.0f;
+        pBr->m3F4 = -31.0f;
+        i_this->m033C = 5;
+    } else if (fpcM_GetName(i_pt) == PROC_MO2) {
+        fVar7 = 150.0f;
+        pBr->m3F4 = -40.0f;
+        i_pt->speed.y = -20.0f;
+    } else if (fpcM_GetName(i_pt) == PROC_BK) {
+        bk_class* bk = (bk_class*)i_pt;
+        bk->speed.y = -20.0f;
+        fVar7 = 100.0f;
+        pBr->m3F4 = -25.0f;
+        bk->dr.m7B8 = fpcM_GetID(i_ac);
+        bk->dr.m7B2 = 8;
+        bk->dr.m7AC = pBr->mRotation;
+        
+        if (sp4C.x > 0.0f) {
+            bk->dr.m79C = pBr->m11C + 1;
+            bk->dr.m7AC.y -= 0x4000;
+            bk->dr.m7B4 = -0x2000;
+        } else {
+            bk->dr.m79C = pBr->m0F8 + 1;
+            bk->dr.m7AC.y += 0x4000;
+            bk->dr.m7B4 = 0x2000;
+        }
+        bk->m0B2C = pBr;
+    } else {
+        fVar7 = 50.0f;
+        pBr->m3F4 = -10.0f;
+        if (fpcM_GetName(i_pt) == PROC_BOMB) {
+            daBomb_c* bomb = (daBomb_c*)i_pt;
+
+            if (bomb->getBombRestTime() <= 1) {
+                pBr->m3F4 = -300.0f;
+                i_this->m02E0 = 20.0f;
+                return;
+            }
+        }
+    }
+
+    fVar7 *= fVar2;
+
+    pBr->m3F4 *= fVar2;
+    pBr->m3F4 = pBr->m3F4 +
+                i_this->m02FC *
+                cM_ssin(i_this->m0300) * 0.03f * fVar7;
+    pBr->m400 = -sp4C.x * fVar7;
+    pBr->m406 = 2;
+
+    pos = sp4C - sp40;
+
+    f32 fVar3 = pos.abs() * 0.3f * fVar2;
+    if (fVar3 > 20.0f) {
+        fVar3 = 20.0f;
+    }
+
+    if (i_this->m02E0 <= fVar3) {
+        i_this->m02E0 = fVar3;
+    }
+
+    f32 tmp = fVar2 * std::fabsf(pos.x);
+    if (tmp > 50.0f) {
+        tmp = 50.0f;
+    }
+
+    if (i_this->m02E4 <= tmp) {
+        i_this->m02E4 += 0.5f;
+    }
 }
 
 /* 00000540-00000614       .text kikuzu_set__FP12bridge_classP4cXyz */
-void kikuzu_set(bridge_class*, cXyz*) {
-    /* Nonmatching */
+void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    csXyz shapeAngle = player->shape_angle;
+    shapeAngle.y -= -0x8000;
+
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_002B, pPos, &shapeAngle, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+    if (emitter != NULL) {
+        emitter->setRate(10.0f);
+        emitter->setMaxFrame(1);
+        emitter->setSpread(0.2f);
+        emitter->setVolumeSweep(0.15f);
+        JGeometry::TVec3<f32> scale(0.7f, 0.7f, 0.7f);
+        emitter->setGlobalParticleScale(scale);
+    }
 }
 
 /* 00000614-000011EC       .text daBridge_Draw__FP12bridge_class */
-static BOOL daBridge_Draw(bridge_class*) {
-    /* Nonmatching */
+static BOOL daBridge_Draw(bridge_class* i_this) {
+    s16 atan;
+    s32 atan2;
+    s16 sVar7;
+    s16 sVar8;
+
+    if (i_this->mbStopDraw) {
+        return TRUE;
+    }
+
+    br_s* pBr = &i_this->mBr[0];
+    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+        g_env_light.setLightTevColorType(pBr->mpModel, &i_this->actor.tevStr);
+
+        dComIfGd_setListBG();
+        mDoExt_modelUpdateDL(pBr->mpModel);
+        dComIfGd_setList();
+
+        if ((pBr->m408 & 4) == 0) {
+            continue;
+        }
+
+        cMtx_YrotS(*calc_mtx, i_this->m0300);
+        cXyz sp84(0.0f, 0.0f, 1.0f);
+        cXyz sp78;
+        MtxPosition(&sp84, &sp78);
+        cXyz sp6C = pBr->m11C[0] - pBr->m11C[1];
+        cXyz sp60 = pBr->m0F8[0] - pBr->m0F8[1];
+                    
+        if ((i_this->mTypeBits & 1) == 0) {
+            s32 uVar16 = (i_this->mTypeBits & 8) ? 5 : 3;
+            cXyz* segment0;
+            cXyz* segment1;
+            u8* size0 = pBr->mLineMat1.getSize(0);
+            u8* size1 = pBr->mLineMat1.getSize(2);
+
+            if ((pBr->m408 & 1) == 0) {
+                for (s32 j = 0; j < 5; j++) {
+                    *size0++ = *size1++ = uVar16;
+                }
+            } else {
+                segment0 = pBr->mLineMat1.getPos(0);
+                segment1 = pBr->mLineMat1.getPos(2);
+
+                sp6C.x /= 4.0f;
+                sp6C.y /= 4.0f;
+                sp6C.z /= 4.0f;
+
+                f32 fVar3 = pBr->m3A0[0] * cM_ssin(i_this->m0300 * 5);
+                
+                for (s32 j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
+                    *size0 = uVar16;
+
+                    f32 fVar2;
+                    if (j == 2) {
+                        fVar2 = 1.0f;
+                        if (pBr->m3A4 <= 1) {
+                            *size0 = 0;
+                        } else if (pBr->m3A4 == 2) {
+                            *size0 = 1;
+                        }
+                        pBr->m3A8[0] = *segment0;
+                    } else if (j == 1 || j == 3) {
+                        fVar2 = 0.7f;
+                    } else {
+                        fVar2 = 0.0f;
+                    }
+
+                    sp84.x = sp6C.x * j + fVar3 * (fVar2 * sp78.x);
+                    sp84.y = sp6C.y * j;
+                    sp84.z = sp6C.z * j + fVar3 * (fVar2 * sp78.z);
+
+                    *segment0 = pBr->m11C[1] + sp84;
+                    *segment1 = pBr->m11C[0];
+                    *size1 = 0;
+                }
+            }
+
+            size0 = pBr->mLineMat1.getSize(1);
+            size1 = pBr->mLineMat1.getSize(3);
+            if ((pBr->m408 & 2) == 0) {
+                for (s32 j = 0; j < 5; j++) {
+                    *size0++ = *size1++ = uVar16;
+                }
+            } else {
+                segment0 = pBr->mLineMat1.getPos(1);
+                segment1 = pBr->mLineMat1.getPos(3);
+
+                sp60.x /= 4.0f;
+                sp60.y /= 4.0f;
+                sp60.z /= 4.0f;
+
+                f32 fVar3 = pBr->m3A0[1] * cM_ssin(i_this->m0300 * 5);
+                
+                for (s32 j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
+                    *size0 = uVar16;
+
+                    f32 fVar2;
+                    if (j == 2) {
+                        fVar2 = 1.0f;
+                        if (pBr->m3A5 <= 1) {
+                            *size0 = 0;
+                        } else if (pBr->m3A5 == 2) {
+                            *size0 = 1;
+                        }
+                        pBr->m3A8[1] = *segment0;
+                    } else if (j == 1 || j == 3) {
+                        fVar2 = 0.7f;
+                    } else {
+                        fVar2 = 0.0f;
+                    }
+
+                    sp84.x = sp60.x * j + fVar3 * (fVar2 * sp78.x);
+                    sp84.y = sp60.y * j;
+                    sp84.z = sp60.z * j + fVar3 * (fVar2 * sp78.z);
+
+                    *segment0 = pBr->m0F8[1] + sp84;
+                    *segment1 = pBr->m0F8[0];
+                    *size1 = 0;
+                }
+            }
+
+            pBr->mLineMat1.update(5, (GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
+            dComIfGd_set3DlineMat(&pBr->mLineMat1);
+            continue;
+        }
+    
+        if ((pBr->m408 & 1) != 0) {
+            atan = -cM_atan2s(sp6C.y, sp6C.z);
+            atan2 = cM_atan2s(sp6C.x, std::sqrtf(sp6C.y * sp6C.y + sp6C.z * sp6C.z));
+            MtxTrans(pBr->m11C[1].x, pBr->m11C[1].y, pBr->m11C[1].z, false);
+            s16 sVar8;
+            if (pBr->m3A0[0] != 0) {
+                sVar8 = pBr->m3A0[0] * cM_ssin(i_this->m0300 * 6) * 100.0f;
+                sVar7 = i_this->m0300;
+            } else {
+                sVar8 = sVar7 = 0;
+            }
+            cMtx_YrotM(*calc_mtx, sVar7);
+            cMtx_XrotM(*calc_mtx, atan + sVar8);
+            cMtx_YrotM(*calc_mtx, atan2);
+            pBr->mpModelRope0->setBaseTRMtx(*calc_mtx);
+            g_env_light.setLightTevColorType(pBr->mpModelRope0,&i_this->actor.tevStr);
+            mDoExt_modelUpdateDL(pBr->mpModelRope0);
+        }
+        
+        if ((pBr->m408 & 2) != 0) {
+            atan = cM_atan2s(sp60.y, sp60.z);
+            atan = -atan;
+            atan2 = cM_atan2s(sp60.x, std::sqrtf(sp60.y * sp60.y + sp60.z * sp60.z));
+            MtxTrans(pBr->m0F8[1].x, pBr->m0F8[1].y, pBr->m0F8[1].z, false);
+            if (pBr->m3A0[1] != 0) {
+                sVar8 = pBr->m3A0[1] * cM_ssin(i_this->m0300 * 6) * 100.0f;
+                sVar7 = i_this->m0300;
+            } else {
+                sVar8 = sVar7 = 0;
+            }
+            cMtx_YrotM(*calc_mtx, sVar7);
+            cMtx_XrotM(*calc_mtx, atan + sVar8);
+            cMtx_YrotM(*calc_mtx, atan2);
+            pBr->mpModelRope1->setBaseTRMtx(*calc_mtx);
+            g_env_light.setLightTevColorType(pBr->mpModelRope1,&i_this->actor.tevStr);
+            mDoExt_modelUpdateDL(pBr->mpModelRope1);
+        }
+    }
+
+    if ((i_this->mTypeBits & 5) == 0) {
+        cXyz sp54(-120.0f, 350.0f, -40.0f);
+        cXyz sp48;
+
+        cMtx_YrotS(*calc_mtx, i_this->actor.home.angle.y);
+        MtxPosition(&sp54, &sp48);
+
+        cXyz* segment1 = i_this->mLineMat.getPos(0);
+        segment1->x = i_this->actor.home.pos.x + sp48.x;
+        segment1->y = i_this->actor.home.pos.y + sp48.y;
+        segment1->z = i_this->actor.home.pos.z + sp48.z;
+        sp54.z *= -1.0f;
+
+        segment1 = &i_this->mLineMat.getPos(0)[i_this->m030C] + 1;
+        if ((i_this->mTypeBits & 2) != 0) {
+            bridge_class * aite = i_this->mpAite;
+            if (aite != NULL) {
+                segment1->x = aite->m032C.x;
+                segment1->y = aite->m032C.y;
+                segment1->z = aite->m032C.z;
+            }
+        } else {
+            MtxPosition(&sp54, &sp48);
+            segment1->x = i_this->mEndPos.x + sp48.x;
+            segment1->y = i_this->mEndPos.y + sp48.y;
+            segment1->z = i_this->mEndPos.z + sp48.z;
+        }
+        sp54.x *= -1.0f;
+        sp54.z *= -1.0f;
+        MtxPosition(&sp54, &sp48);
+
+        segment1 = i_this->mLineMat.getPos(1);
+        segment1->x = i_this->actor.home.pos.x + sp48.x;
+        segment1->y = i_this->actor.home.pos.y + sp48.y;
+        segment1->z = i_this->actor.home.pos.z + sp48.z;
+
+        sp54.z *= -1.0f;
+
+        segment1 = &i_this->mLineMat.getPos(1)[i_this->m030C] + 1;
+
+        if ((i_this->mTypeBits & 2) != 0) {
+            bridge_class * aite = i_this->mpAite;
+            if (aite != NULL) {
+                segment1->x = aite->m0320.x;
+                segment1->y = aite->m0320.y;
+                segment1->z = aite->m0320.z;
+            }
+        } else {
+            MtxPosition(&sp54, &sp48);
+            segment1->x = i_this->mEndPos.x + sp48.x;
+            segment1->y = i_this->mEndPos.y + sp48.y;
+            segment1->z = i_this->mEndPos.z + sp48.z;
+        }
+
+        f32 tmp;
+        if ((i_this->mTypeBits & 8) != 0) {
+            tmp = 6.5f;
+        } else {
+            tmp = 4.0f;
+        }
+
+        i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
+        dComIfGd_set3DlineMat(&i_this->mLineMat);
+    }
+
+    return TRUE;
 }
 
 /* 000011EC-00001580       .text control1__FP12bridge_classP4br_s */
-void control1(bridge_class*, br_s*) {
-    /* Nonmatching */
+void control1(bridge_class* i_this, br_s* pBr) {
+    cXyz sp3C;
+    cXyz sp30;
+    cXyz sp24;
+    cXyz sp18;
+    cXyz sp0C;
+
+    pBr++;
+
+    i_this->m02EC += i_this->m02F0;
+    i_this->m02EE += i_this->m02F2;
+    
+    s16 sVar13;
+    if (i_this->mBrCount > 10) {
+        sVar13 = 4000;
+    } else {
+        sVar13 = 8000;
+    }
+
+    sp3C.x = i_this->m02F8 * cM_scos(i_this->m02EC);
+    sp3C.y = 0.0f;
+    sp3C.z = 0.0f;
+    cMtx_YrotS(*calc_mtx, i_this->actor.home.angle.y);
+    MtxPosition(&sp3C, &sp24);
+    sp3C.x = 1.0f;
+    MtxPosition(&sp3C, &sp18);
+    sp3C.x = 0.0f;
+    sp3C.z = *wp * 5.0f;
+    cMtx_YrotS(*calc_mtx, wy);
+    MtxPosition(&sp3C, &sp0C);
+    sp3C.x = 0.0f;
+    sp3C.z = 75.0f;
+
+    for (s32 i = 1; i < i_this->mBrCount; i++, pBr++) {
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 tmp = pBr->m3F8 * 0.5f + (pBr->m3FC * pBr->m3F0 * 0.5f + pBr->m3CC.y);
+        f32 fVar8 = i_this->m02F4 * cM_ssin(i_this->m02EC + i * sVar13) * pBr->m3F0;
+        f32 fVar7 = i_this->m02FC * cM_ssin(i_this->m02EE + i * (sVar13 + 1000)) * pBr->m3F0;
+
+        x = (pBr->m3CC.x - pBr[-1].m3CC.x) + fVar8 * sp18.x + sp24.x * pBr->m3F0 + sp0C.x;
+        y = fVar7 + (tmp - pBr[-1].m3CC.y);
+        z = (pBr->m3CC.z - pBr[-1].m3CC.z) + fVar8 * sp18.z + sp24.z * pBr->m3F0 + sp0C.z;
+        
+        s16 atan2;
+        s16 atan;
+        atan = (s16)cM_atan2s(x, z);
+        atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
+
+        cMtx_YrotS(*calc_mtx, atan);
+        cMtx_XrotM(*calc_mtx, atan2);
+        MtxPosition(&sp3C, &sp30);
+
+        pBr->m3CC.x = pBr[-1].m3CC.x + sp30.x;
+        pBr->m3CC.y = pBr[-1].m3CC.y + sp30.y;
+        pBr->m3CC.z = pBr[-1].m3CC.z + sp30.z;
+    }
 }
 
 /* 00001580-0000178C       .text control2__FP12bridge_classP4br_s */
-void control2(bridge_class*, br_s*) {
-    /* Nonmatching */
+void control2(bridge_class* i_this, br_s* pBr) {
+    cXyz sp18;
+    cXyz sp0C;
+
+    pBr += i_this->mBrCount - 2;
+    sp18.x = 0.0f;
+    sp18.y = 0.0f;
+    sp18.z = 75.0f;
+
+    for (s32 i = 0; i < i_this->mBrCount - 1; i++, pBr--) {
+        f32 tmp = pBr->m3F8 * 0.5f + (pBr->m3FC * pBr->m3F0 * 0.5f + pBr->m3CC.y);
+        f32 y = tmp - pBr[1].m3CC.y;
+        
+        f32 x = pBr->m3CC.x - pBr[1].m3CC.x;
+        f32 z = pBr->m3CC.z - pBr[1].m3CC.z;
+
+        s16 atan2;
+        s16 atan;
+        atan = (s16)cM_atan2s(x, z);
+        atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
+
+        pBr[1].mRotation.y = atan;
+        pBr[1].mRotation.x = atan2;
+
+        cMtx_YrotS(*calc_mtx, atan);
+        cMtx_XrotM(*calc_mtx, atan2);
+        MtxPosition(&sp18, &sp0C);
+
+        pBr->m3CC.x = pBr[1].m3CC.x + sp0C.x;
+        pBr->m3CC.y = pBr[1].m3CC.y + sp0C.y;
+        pBr->m3CC.z = pBr[1].m3CC.z + sp0C.z;
+    }
 }
 
 /* 0000178C-000018A8       .text control3__FP12bridge_classP4br_s */
-void control3(bridge_class*, br_s*) {
-    /* Nonmatching */
+void control3(bridge_class* i_this, br_s* pBr) {
+    f32 x = pBr->m3CC.x - pBr[1].m3CC.x;
+    f32 y = pBr->m3CC.y - pBr[1].m3CC.y;
+    f32 z = pBr->m3CC.z - pBr[1].m3CC.z;
+
+    pBr->mRotation.y = cM_atan2s(x, z);
+    pBr->mRotation.x = -cM_atan2s(y, std::sqrtf(x * x + z * z));
 }
 
 /* 000018A8-00001B08       .text cut_control1__FP12bridge_classP4br_s */
-void cut_control1(bridge_class*, br_s*) {
-    /* Nonmatching */
+void cut_control1(bridge_class* i_this, br_s* pBr) {
+    cXyz sp24;
+    cXyz sp18;
+    cXyz spC;
+
+    pBr++;
+    cMtx_YrotS(*calc_mtx, i_this->actor.home.angle.y);
+    sp24.x = 0.0f;
+    sp24.y = 0.0f;
+    sp24.z = 1.0f;
+    MtxPosition(&sp24, &spC);
+    sp24.z = 75.0f;
+
+    for (s32 i = 1; i < i_this->m0304; i++, pBr++) {
+        f32 fVar2 = pBr->m3CC.y + pBr->m3FC;
+        f32 fVar1 = pBr->m3EC + 30.0f;
+        if (fVar2 < fVar1) {
+            fVar2 = fVar1;
+            pBr->m407++;
+        }
+        
+        f32 y = fVar2 - pBr[-1].m3CC.y;
+        f32 x = spC.x + (pBr->m3CC.x - pBr[-1].m3CC.x);
+        f32 z = spC.z + (pBr->m3CC.z - pBr[-1].m3CC.z);
+        s16 atan2;
+        s16 atan;
+
+        atan = (s16)cM_atan2s(x, z);
+        atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
+
+        pBr[-1].mRotation.y = atan + 0x8000;
+        pBr[-1].mRotation.x = -atan2;
+        
+        if (i == i_this->m0304 - 1) {
+            pBr[0].mRotation.y = atan + 0x8000;
+            pBr[0].mRotation.x = -atan2;
+        }
+
+        cMtx_YrotS(*calc_mtx, atan);
+        cMtx_XrotM(*calc_mtx, atan2);
+        MtxPosition(&sp24, &sp18);
+
+        pBr[0].m3CC.x = pBr[-1].m3CC.x + sp18.x;
+        pBr[0].m3CC.y = pBr[-1].m3CC.y + sp18.y;
+        pBr[0].m3CC.z = pBr[-1].m3CC.z + sp18.z;
+    }
 }
 
 /* 00001B08-00001D84       .text cut_control2__FP12bridge_classP4br_s */
-void cut_control2(bridge_class*, br_s*) {
-    /* Nonmatching */
+void cut_control2(bridge_class* i_this, br_s* pBr) {
+    cXyz sp24;
+    cXyz sp18;
+    cXyz spC;
+
+    pBr += i_this->mBrCount - 2;
+    cMtx_YrotS(*calc_mtx, i_this->actor.home.angle.y);
+    sp24.x = 0.0f;
+    sp24.y = 0.0f;
+    sp24.z = -1.0f;
+    MtxPosition(&sp24, &spC);
+    sp24.z = 75.0f;
+
+    for (s32 i = 0; i < (i_this->mBrCount - 1) - i_this->m0304; i++, pBr--) {
+        f32 fVar2 = pBr->m3CC.y + pBr->m3FC;
+        f32 fVar1 = pBr->m3EC + 30.0f;
+        if (fVar2 < fVar1) {
+            fVar2 = fVar1;
+            pBr->m407++;
+        }
+        f32 y = fVar2 - pBr[1].m3CC.y;
+        f32 x = spC.x + (pBr->m3CC.x - pBr[1].m3CC.x);
+        f32 z = spC.z + (pBr->m3CC.z - pBr[1].m3CC.z);
+        s16 atan2;
+        s32 atan;
+        atan = cM_atan2s(x, z);
+        atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
+        pBr[1].mRotation.y = atan;
+        pBr[1].mRotation.x = atan2;
+        if (i == (i_this->mBrCount - 2) - i_this->m0304) {
+            pBr[0].mRotation.y = atan;
+            pBr[0].mRotation.x = atan2;
+        }
+        cMtx_YrotS(*calc_mtx, atan);
+        cMtx_XrotM(*calc_mtx, atan2);
+        MtxPosition(&sp24, &sp18);
+        pBr[0].m3CC.x = pBr[1].m3CC.x + sp18.x;
+        pBr[0].m3CC.y = pBr[1].m3CC.y + sp18.y;
+        pBr[0].m3CC.z = pBr[1].m3CC.z + sp18.z;
+    }
 }
 
 /* 00001D84-00001FAC       .text himo_cut_control1__FP4cXyz */
-void himo_cut_control1(cXyz*) {
-    /* Nonmatching */
+void himo_cut_control1(cXyz* pPos) {
+    cXyz pos;
+    cXyz sp18;
+    cXyz transformedPos;
+
+    pos.x = 0.0f;
+    pos.y = 0.0f;
+    pos.z = *wp * 7.0f;
+    cMtx_YrotS(*calc_mtx, wy);
+    MtxPosition(&pos, &transformedPos);
+    pos.x = 0.0f;
+    pos.y = 0.0f;
+    pos.z = 23.0f;
+
+    pPos++;
+    for (s32 i = 1; i < 5; i++, pPos++) {
+        f32 x = transformedPos.x + (pPos[0].x - pPos[-1].x);
+        f32 y = (pPos[0].y - pPos[-1].y) - 10.0f;
+        f32 z = transformedPos.z + (pPos[0].z - pPos[-1].z);
+        s16 atan2;
+        s32 atan;
+
+        atan = cM_atan2s(x, z);
+        atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
+        cMtx_YrotS(*calc_mtx, atan);
+        cMtx_XrotM(*calc_mtx, atan2);
+        MtxPosition(&pos, &sp18);
+        pPos[0].x = pPos[-1].x + sp18.x;
+        pPos[0].y = pPos[-1].y + sp18.y;
+        pPos[0].z = pPos[-1].z + sp18.z;
+    }
 }
 
 /* 00001FAC-00002A1C       .text bridge_move__FP12bridge_class */
-void bridge_move(bridge_class*) {
+void bridge_move(bridge_class* i_this) {
     /* Nonmatching */
+    daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
+    s32 i;
+    s32 j;
+    br_s* pBr = &i_this->mBr[0];
+    cXyz sp38;
+    cXyz sp2C;
+    cXyz sp14;
+    s16 my_tgt;
+    f32 fVar14;
+    f32 fVar2;
+    f32 tmpf;
+    s32 iVar11;
+
+    switch (i_this->mMoveProcMode) {
+        case 1:
+            break;
+
+        case 0:
+            i_this->m02D9 = 0;
+            i_this->mMoveProcMode = 2;
+            fopAcM_OffStatus(&i_this->actor, fopAcStts_CULL_e);
+
+        case 2:
+            for (i = 0; i < i_this->mBrCount; i++) {
+                if ((i_this->mTypeBits & 1) == 1) {
+                    i_this->mBr[i].m3F0 = 1.0f;
+                } else {
+                    tmpf = ((f32)i / (i_this->mBrCount - 1)) * M_PI;
+                    i_this->mBr[i].m3F0 = std::fabsf(std::sinf(tmpf));
+                }
+                i_this->mBr[i].m3A4 = i_this->mBr[i].m3A5 = 3;
+            }
+            i_this->mMoveProcMode = 3;
+
+        case 3:
+            i_this->m0300 += 3000;
+            pBr->m3CC = i_this->actor.home.pos;
+            
+            if ((i_this->mTypeBits & 1) == 1) {
+                cMtx_YrotS(*calc_mtx, i_this->actor.home.angle.y);
+
+                sp38.x = i_this->m02F8 * cM_scos(i_this->m02EC) * -2.0f;
+                sp38.y = sp38.z = 0.0f;
+                MtxPosition(&sp38, &sp2C);
+                pBr->m3CC += sp2C;
+            }
+
+            control1(i_this, pBr);
+
+            (pBr + i_this->mBrCount - 1)->m3CC = i_this->mEndPos;
+            if ((i_this->mTypeBits & 1) == 1) {
+                (pBr + i_this->mBrCount - 1)->m3CC -= sp2C;
+            }
+
+            control2(i_this, pBr);
+            control3(i_this, pBr);
+
+            sp14 = i_this->actor.home.pos - pBr->m3CC;
+
+            i_this->actor.current.pos = pBr->m3CC;
+            i_this->actor.current.angle = pBr->mRotation;
+
+            for (i = 0; i < i_this->mBrCount; i++, pBr++) {
+                pBr->mPosition = pBr->m3CC;
+                tmpf = (((f32)(i_this->mBrCount - i) / (f32)i_this->mBrCount) * 0.75f);
+                pBr->mPosition.x += sp14.x * tmpf;
+                pBr->mPosition.y += sp14.y * tmpf;
+                pBr->mPosition.z += sp14.z * tmpf;
+
+                if (pBr->m406 != 0) {
+                    for (j = -5; j <= 5; j++) {
+                        iVar11 = i + j;
+                        if ((iVar11 < 0) || (iVar11 >= i_this->mBrCount)) {
+                            continue;
+                        }
+
+                        my_tgt = (f32)pBr->m400 * ita_z_p[5 + j] * pBr[j].m3F0;
+                        cLib_addCalcAngleS2(&pBr[j].m402, my_tgt, 4, 0x800);
+                        cLib_addCalc2(&pBr[j].m3F8, pBr->m3F4 * ita_z_p[5 + j], 1.0f, 10.0f);
+                    }
+                }
+
+                if (((pBr->m408 & 4) != 0) && (pBr->m408 & 3) != 3) {
+                    fVar14 = 0.0f;
+                    fVar2 = -80.0f;
+                    if ((pBr->m408 & 3) == 1) {
+                        fVar14 = 7000.0f;
+                        fVar2 = -30.0f;
+                    } else if ((pBr->m408 & 3) == 2) {
+                        fVar14 = -7000.0f;
+                        fVar2 = -30.0f;
+                    }
+
+                    for (j = -5; j <= 5; j++) {
+                        iVar11 = i + j;
+                        if ((iVar11 < 0) || (iVar11 >= i_this->mBrCount)) {
+                            continue;
+                        }
+
+                        my_tgt = fVar14 * ita_z_p[5 + j] * pBr[j].m3F0;
+                        cLib_addCalcAngleS2(&pBr[j].m404, my_tgt, 4, 0x800);
+                        cLib_addCalc2(&pBr[j].m3F8, fVar2 * ita_z_p[5 + j], 1.0f, 15.0f);
+
+                        if (((pBr->m408 & 3) == 0) && ((i_this->mTypeBits & 4) == 0 && (j >= -2) && (j <= 2) && (pBr[j].m406 != 0))) {
+                            if (dComIfGp_event_runCheck()) {
+                                i_this->m0308 = 0;
+                            } else {
+                                i_this->m0308 += 2;
+                            }
+
+                            if (i_this->m0308 > 100) {
+                                i_this->mMoveProcMode = 4;
+                                i_this->m0304 = iVar11;
+                                if (i_this->m033C != 0) {
+                                    dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+                                }
+                                break;
+                            }
+                        }
+
+                        if (pBr[j].m3F4 < -200.0f) {
+                            i_this->mMoveProcMode = 4;
+                            i_this->m0304 = iVar11;
+                            break;
+                        }
+                    }
+                }
+
+                if (((pBr->m408 & 4) != 0) && (pBr->m3A0[0] != 0 || (pBr->m3A0[1] != 0))) {
+                    f32 fVar141 = (pBr->m3A0[0] | pBr->m3A0[1]) * 150.0f;
+                    fVar14 = fVar141 * cM_ssin(i_this->m0300 * 4);
+                    for (j = -5; j <= 5; j++) {
+                        iVar11 = i + j;
+                        if (iVar11 < 0 || iVar11 >= i_this->mBrCount) {
+                            continue;
+                        }
+
+                        my_tgt = fVar14 * ita_z_p[5 + j] * pBr[j].m3F0;
+                        pBr[j].m404 += my_tgt;
+                    }
+                }
+
+                if (pBr->m406 != 0) {
+                    pBr->m406--;
+                }
+                pBr->m400 = 0;
+                pBr->mRotation.z = pBr->m402 + pBr->m404;
+                cLib_addCalcAngleS2(&pBr->m402, 0, 4, 0x400);
+                cLib_addCalcAngleS2(&pBr->m404, 0, 4, 0x400);
+                cLib_addCalc2(&pBr->m3FC, -15.0f, 1.0f, 5.0f);
+                cLib_addCalc0(&pBr->m3F8, 1.0f, 5.0f);
+            }
+
+            if (i_this->m0308 != 0) {
+                i_this->m0308--;
+            }
+
+            i_this->m02FC = i_this->m02E0;
+            i_this->m02F4 = i_this->m02E0;
+            i_this->m02F8 = i_this->m02E4;
+            i_this->m02F2 = 3000;
+            i_this->m02F0 = 0x578;
+
+            if (*wp > 0.1f) {
+                tmpf = 2.0f;
+            } else {
+                tmpf = 0.0f;
+            }
+            cLib_addCalc2(&i_this->m02E0, tmpf, 0.1f, 0.1f);
+            cLib_addCalc2(&i_this->m02E4, tmpf * 0.3f, 0.1f, 0.05f);
+            break;
+
+        case 4:
+            for (i = 0; i < i_this->mBrCount; i++, pBr++) {
+                pBr->m3FC = 0.0f;
+                if ((i == i_this->m0304) || (i == i_this->m0304 + -1) || (i == i_this->m0304 + 1)) {
+                    sp38 = pBr->mPosition;
+                    sp38.x += cM_rndFX(50.0f);
+                    sp38.z += cM_rndFX(50.0f);
+
+                    kikuzu_set(i_this, &sp38);
+
+                    sp38 = pBr->mPosition;
+                    sp38.x += cM_rndFX(50.0f);
+                    sp38.z += cM_rndFX(50.0f);
+
+                    kikuzu_set(i_this, &sp38);
+                }
+            }
+            i_this->mMoveProcMode = 5;
+            i_this->m0312 = 50;
+
+            fopAcM_seStart(player, JA_SE_OBJ_SBRIDGE_BREAK, 0);
+
+        case 5:
+            pBr = &i_this->mBr[0];
+            if (i_this->m0312 != 0) {
+                i_this->m0312--;
+            }
+            i_this->m0300 += 4000;
+            pBr->m3CC = i_this->actor.home.pos;
+
+            cut_control1(i_this, pBr);
+            (pBr + i_this->mBrCount - 1)->m3CC = i_this->mEndPos;
+            cut_control2(i_this, pBr);
+
+            for (i = 0; i < i_this->mBrCount; i++, pBr++) {
+                pBr->mPosition = pBr->m3CC;
+                cLib_addCalc2(&pBr->m3FC, -50.0f, 1.0f, 5.0f);
+                pBr->m3EC = -10000.0f;
+            }
+            break;
+    }
 }
 
 /* 00002A1C-00002A8C       .text s_a_b_sub__FPvPv */
-void s_a_b_sub(void*, void*) {
-    /* Nonmatching */
+void* s_a_b_sub(void* ac1, void* ac2) {
+    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_BRIDGE && ac1 != ac2) {
+        bridge_class* bridge = (bridge_class*)ac1;
+        if ((bridge->mTypeBits & 0x82) == 2) {
+            return ac1;
+        }
+    }
+    return NULL;
 }
 
 /* 00002A8C-00002AB8       .text search_aite__FP12bridge_class */
-void search_aite(bridge_class*) {
-    /* Nonmatching */
+bridge_class* search_aite(bridge_class* i_this) {
+    return (bridge_class*)fpcEx_Search(s_a_b_sub, &i_this->actor);
 }
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */
-static BOOL daBridge_Execute(bridge_class*) {
+static BOOL daBridge_Execute(bridge_class* i_this) {
     /* Nonmatching */
+    fopAc_ac_c* a_player = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
+    daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
+    camera_class* pCam = dComIfGp_getCamera(0);
+    s32 i;
+
+    cXyz eyeDir = i_this->actor.current.pos - pCam->mLookat.mEye;
+    cXyz spCC;
+
+    if (i_this->m033C != 0) {
+        i_this->m033C--;
+    }
+    
+    if (eyeDir.abs() > 5000.0f) {
+        spCC = pCam->mLookat.mCenter - pCam->mLookat.mEye;
+        s16 atan = cM_atan2s(spCC.x, spCC.z);
+        cMtx_YrotS(*calc_mtx, -atan);
+        MtxPosition(&eyeDir, &spCC);
+        if (spCC.z < 0.0f) {
+            i_this->mbStopDraw = 1;
+            return 1;
+        }
+    }
+
+    i_this->mbStopDraw = 0;
+    wind_vec = dKyw_get_wind_vec();
+    wy = cM_atan2s(wind_vec->x, wind_vec->z);
+    wp = dKyw_get_wind_power();
+    i_this->m0302++;
+
+    if (((i_this->mTypeBits & 2) != 0) && (i_this->mpAite == NULL)) {
+        i_this->mpAite = search_aite(i_this);
+    }
+
+    bridge_move(i_this);
+
+    i_this->m030C = 0;
+    cXyz spC0;
+    br_s* pBr = &i_this->mBr[0];
+
+    bool bGotFlamePos = false;
+    if (player->getBokoFlamePos(&spC0) != FALSE) {
+        bGotFlamePos = true;
+    }
+
+    for (i = 0; i < i_this->mBrCount; i++, pBr++) {
+        MtxTrans(pBr->mPosition.x, pBr->mPosition.y, pBr->mPosition.z, false);
+        cMtx_YrotM(*calc_mtx, pBr->mRotation.y);
+        cMtx_XrotM(*calc_mtx, pBr->mRotation.x);
+        cMtx_ZrotM(*calc_mtx, pBr->mRotation.z);
+
+        if (i_this->m0304 != 0) {
+            MtxTrans(0.0f, 0.0f, (i > i_this->m0304) ? 30.0f : -30.0f, true);
+        }
+
+        eyeDir.x = pBr->mScale.x * 99.0f;
+        eyeDir.y = 0.0f;
+        eyeDir.z = 0.0f;
+        MtxPosition(&eyeDir, &pBr->m11C[1]);
+        eyeDir.x *= -1.0f;
+        MtxPosition(&eyeDir, &pBr->m0F8[1]);
+        eyeDir.y = REG0_F(4) + -30.0f;
+        MtxPosition(&eyeDir, &pBr->m0F8[2]);
+        eyeDir.x *= -1.0f;
+        MtxPosition(&eyeDir, &pBr->m11C[2]);
+
+        if ((pBr->m408 & 4) != 0) {
+            if (pBr->m418 != 0) {
+                if (pBr->m418 > 0) {
+                    pBr->m418--;
+                }
+
+                f32 fVar19 = (i_this->mTypeBits & 1) ? 1000.0f : 200.0f;
+                pBr->m11C[0] = pBr->m11C[1];
+                pBr->m11C[0].y += fVar19;
+                pBr->m0F8[0] = pBr->m0F8[1];
+                pBr->m0F8[0].y += fVar19;
+
+                if (((i_this->mTypeBits & 2) != 0) && (i == i_this->m02DD - 1)) {
+                    i_this->m0320 = pBr->m11C[0];
+                    i_this->m032C = pBr->m0F8[0];
+                }
+            }
+
+            u32 soundId = 0;
+            bool bVar1 = false;
+
+            if ((i_this->mTypeBits & 9) == 0) {
+                if (i_this->mBrCount - i < 3) {
+                    pBr->m408 = 0;
+                }
+
+                if (i_this->m0304 != 0) {
+                    pBr->m408 = pBr->m408 & 0xc;
+                }
+
+                CcAtInfo atInfo;
+                if (pBr->mCyl[0].ChkTgHit() && (pBr->m3A0[0] < 10)) {
+                    pBr->mCyl[0].OnTgNoConHit();
+                    pBr->m3A0[0] = 20;
+
+                    soundId = JA_SE_LK_CUT_SBRIDGE_ROPE;
+
+                    atInfo.mpObj = pBr->mCyl[0].GetTgHitObj();
+                    at_power_check(&atInfo);
+
+                    if (atInfo.mDamage > 1) {
+                        atInfo.mDamage = 4;
+                    }
+                    pBr->m3A4 -= atInfo.mDamage;
+
+                    if (pBr->m3A4 <= 0) {
+                        pBr->m408 &= 0xE;
+                    } else {
+                        bVar1 = true;
+                    }
+
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pBr->m3A8[0], &a_player->shape_angle);
+                    kikuzu_set(i_this, &pBr->m3A8[0]);
+                }
+
+                if (pBr->mCyl[1].ChkTgHit() && (pBr->m3A0[1] < 10)) {
+                    pBr->mCyl[1].OnTgNoConHit();
+                    pBr->m3A0[1] = 20;
+
+                    soundId = JA_SE_LK_CUT_SBRIDGE_ROPE;
+
+                    atInfo.mpObj = pBr->mCyl[1].GetTgHitObj();
+                    at_power_check(&atInfo);
+
+                    if (atInfo.mDamage > 1) {
+                        atInfo.mDamage = 4;
+                    }
+                    pBr->m3A5 -= atInfo.mDamage;
+
+                    if (pBr->m3A5 <= 0) {
+                        pBr->m408 &= 0xD;
+                    } else {
+                        bVar1 = true;
+                    }
+
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pBr->m3A8[1], &a_player->shape_angle);
+                    kikuzu_set(i_this, &pBr->m3A8[1]);
+                }
+            } else {
+                cXyz spB4;
+                spB4.x = spB4.y = spB4.z = 2.0f;
+                if (pBr->mCyl[0].ChkTgHit() && (pBr->m3A0[0] < 10)) {
+                    pBr->mCyl[0].OnTgNoConHit();
+                    pBr->m3A0[0] = 15;
+                    soundId = JA_SE_LK_HIT_SBRIDGE_CHAIN;
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, pBr->mCyl[0].GetTgHitPosP(), &a_player->shape_angle, &spB4);
+                }
+
+                if (pBr->mCyl[1].ChkTgHit() && (pBr->m3A0[1] < 10)) {
+                    pBr->mCyl[1].OnTgNoConHit();
+                    pBr->m3A0[1] = 15;
+                    soundId = JA_SE_LK_HIT_SBRIDGE_CHAIN;
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, pBr->mCyl[1].GetTgHitPosP(), &a_player->shape_angle, &spB4);
+                }
+            }
+
+            if (soundId != 0) {
+                if (((i_this->mTypeBits & 8) != 0) || bVar1) {
+                    soundId = JA_SE_LK_HIT_SBRIDGE_ROPE;
+                }
+
+                mDoAud_seStart(soundId, &pBr->m3CC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&i_this->actor)));
+            }
+
+            cXyz spA8 = pBr->m11C[1];
+            if ((pBr->m408 & 1) == 0) {
+                spA8.y -= 10000.0f;
+            }
+            pBr->mCyl[0].SetC(spA8);
+
+            if (pBr->m3C0 != 0) {
+                pBr->m3C0--;
+                if (pBr->m3C4 != NULL) {
+                    mDoMtx_stack_c::transS(pBr->m11C[1].x, pBr->m11C[1].y + 100.0f, pBr->m11C[1].z);
+                    pBr->m3C4->setGlobalRTMatrix(mDoMtx_stack_c::get());
+                    if (pBr->m3C0 == 0) {
+                        JPABaseEmitter* emitter = pBr->m3C4;
+                        emitter->becomeInvalidEmitter();
+                        pBr->m3C4 = NULL;
+                    }
+                }
+
+                if (pBr->m3C0 == 0) {
+                    pBr->m408 &= 0xE;
+                }
+            } else if ((bGotFlamePos != 0)  && ((i_this->mTypeBits & 9) == 0)) {
+                spA8.y += 100.0f;
+                cXyz sp48 = spA8 - spC0;
+                sp48.y *= 0.4f;
+
+                if (sp48.abs() < 50.0f) {
+                    pBr->m3C0 = 30;
+                    pBr->m3C4 = dComIfGp_particle_set(dPa_name::ID_SCENE_80EA, &spA8);
+                }
+            }
+
+            spA8 = pBr->m0F8[1];
+            if ((pBr->m408 & 2) == 0) {
+                spA8.y -= 10000.0f;
+            }
+            pBr->mCyl[1].SetC(spA8);
+
+            if (pBr->m3C2 != 0) {
+                pBr->m3C2--;
+                if (pBr->m3C8 != NULL) {
+                    mDoMtx_stack_c::transS(pBr->m0F8[1].x, pBr->m0F8[1].y + 100.0f, pBr->m0F8[1].z);
+                    pBr->m3C8->setGlobalRTMatrix(mDoMtx_stack_c::get());
+                    if (pBr->m3C2 == 0) {
+                        JPABaseEmitter* emitter = pBr->m3C8;
+                        emitter->becomeInvalidEmitter();
+                        pBr->m3C8 = NULL;
+                    }
+                }
+
+                if (pBr->m3C2 == 0) {
+                    pBr->m408 &= 0xD;
+                }
+            } else if ((bGotFlamePos != 0)  && ((i_this->mTypeBits & 9) == 0)) {
+                spA8.y += 100.0f;
+                cXyz sp48 = spA8 - spC0;
+                sp48.y *= 0.4f;
+
+                if (sp48.abs() < 50.0f) {
+                    pBr->m3C2 = 30;
+                    pBr->m3C8 = dComIfGp_particle_set(dPa_name::ID_SCENE_80EA, &spA8);
+                }
+            }
+
+            dComIfG_Ccsp()->Set(&pBr->mCyl[0]);
+            dComIfG_Ccsp()->Set(&pBr->mCyl[1]);
+        }
+
+        for (s32 i = 0; i < 2; i++) {
+            if (pBr->m3A0[i] != 0) {
+                pBr->m3A0[i]--;
+            }
+        }
+
+        cMtx_YrotM(*calc_mtx, pBr->mRotationYExtra);
+        if (i >= i_this->m02DD) {
+            pBr->mScale.z = 0.0f;
+            pBr->mScale.y = 0.0f;
+            pBr->mScale.x = 0.0f;
+            pBr->mpModel->setBaseScale(pBr->mScale);
+            pBr->m408 = 0;
+        }
+
+        pBr->mpModel->setBaseTRMtx(*calc_mtx);
+
+        if (((i_this->mTypeBits & 1) == 0) && ((pBr->m408 & 4) != 0)) {
+            s32 idx;
+            cXyz* segment0 = i_this->mLineMat.getPos(0);
+            cXyz* segment1 = i_this->mLineMat.getPos(1);
+            cXyz* segment00;
+            cXyz* segment01;
+            idx = i_this->m030C + 1;
+            cXyz sp84;
+            
+            eyeDir.x = 0.0f;
+            s16 tmpS = i_this->m02D9 * 0x5DC;
+            eyeDir.z = *wp + 0.3f;
+            eyeDir.z *= cM_ssin(tmpS + i_this->m0302 * 0x578) * 2.0f + 5.0f;
+            
+            cMtx_YrotS(*calc_mtx, wy);
+            MtxPosition(&eyeDir, &sp84);
+
+            if (pBr->m408 & 1) {
+                segment0[idx] = pBr->m11C[0];
+            } else {
+                cXyz sp30 = *(segment0 + idx - 1) - *(segment0 + idx + 1);
+                f32 tmpF = pBr->m3A0[0] * cM_ssin(i_this->m0300 * 6);
+
+                segment0[idx].x = sp84.x + (sp30.x * 0.5f + (*(segment0 + idx + 1)).x);
+                segment0[idx].y = (tmpF + (sp30.y * 0.5f + (*(segment0 + idx + 1)).y)) - 10.0f;
+                segment0[idx].z = sp84.z + (sp30.z * 0.5f + (*(segment0 + idx + 1)).z);
+
+                segment00 = pBr->mLineMat1.getPos(0);
+                segment01 = pBr->mLineMat1.getPos(2);
+
+                *segment00 = segment0[idx];
+                himo_cut_control1(segment00);
+                *segment01 = pBr->m11C[1];
+                himo_cut_control1(segment01);
+            }
+
+            if (pBr->m408 & 2) {
+                segment1[idx] = pBr->m0F8[0];
+            } else {
+                cXyz sp30 = *(segment1 + idx - 1) - *(segment1 + idx + 1);
+                f32 tmpF = pBr->m3A0[1] * cM_ssin(i_this->m0300 * 6);
+
+                segment1[idx].x = sp84.x + (sp30.x * 0.5f + (*(segment1 + idx + 1)).x);
+                segment1[idx].y = (tmpF + (sp30.y * 0.5f + (*(segment1 + idx + 1)).y)) - 10.0f;
+                segment1[idx].z = sp84.z + (sp30.z * 0.5f + (*(segment1 + idx + 1)).z);
+
+                segment00 = pBr->mLineMat1.getPos(1);
+                segment01 = pBr->mLineMat1.getPos(3);
+
+                *segment00 = segment1[idx];
+                himo_cut_control1(segment00);
+                *segment01 = pBr->m0F8[1];
+                himo_cut_control1(segment01);
+            }
+            i_this->m030C++;
+        }
+    }
+
+    i_this->mpBgW->CopyBackVtx();
+
+    cBgD_Vtx_t* vtxTbl = i_this->mpBgW->GetVtxTbl();
+    
+    s32 idx;
+    s32 sw;
+    s32 other_i = 0;
+    for (i = 0; i < i_this->mpBgW->GetVtxNum(); i++, pBr++) {
+        sw = i & 3;
+        idx = i;
+        idx >>= 2;
+
+        if (idx < i_this->m02DD) {
+            br_s* pBr = &i_this->mBr[idx];
+
+            switch (sw) {
+                case 0:
+                    vtxTbl[i].x = pBr->m11C[2].x;
+                    vtxTbl[i].y = pBr->m11C[2].y;
+                    vtxTbl[i].z = pBr->m11C[2].z;
+                    break;
+
+                case 1:
+                    vtxTbl[i].x = pBr->m0F8[2].x;
+                    vtxTbl[i].y = pBr->m0F8[2].y;
+                    vtxTbl[i].z = pBr->m0F8[2].z;
+                    break;
+
+                case 2:
+                    vtxTbl[i].x = pBr->m11C[1].x;
+                    vtxTbl[i].y = pBr->m11C[1].y;
+                    vtxTbl[i].z = pBr->m11C[1].z;
+                    break;
+
+                case 3:
+                    vtxTbl[i].x = pBr->m0F8[1].x;
+                    vtxTbl[i].y = pBr->m0F8[1].y;
+                    vtxTbl[i].z = pBr->m0F8[1].z;
+                    break;
+            }
+
+
+            if ((idx == 0) || (idx == i_this->m02DD - 1)) {
+                cMtx_YrotS(*calc_mtx, pBr->mRotation.y);
+                cMtx_XrotM(*calc_mtx, pBr->mRotation.x);
+                eyeDir.y = 0.0f;
+                eyeDir.x = 0.0f;
+                if (idx == 0) {
+                    eyeDir.z = 50.0f;
+                } else if (i_this->m02DD == i_this->mBrCount) {
+                    eyeDir.z = -50.0f;
+                } else {
+                    eyeDir.z = -40.0f;
+                }
+
+                MtxPosition(&eyeDir, &spCC);
+
+                vtxTbl[i].x += spCC.x;
+                vtxTbl[i].y += spCC.y;
+                vtxTbl[i].z += spCC.z;
+            }
+            other_i = i;
+        } else {
+            vtxTbl[i].x = vtxTbl[other_i].x;
+            vtxTbl[i].y = vtxTbl[other_i].y;
+            vtxTbl[i].z = vtxTbl[other_i].z;
+        }
+
+        if (i_this->mMoveProcMode >= 4) {
+            vtxTbl[i].y = 10000.0f;
+        }
+    }
+
+    i_this->mpBgW->Move();
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->actor.current.pos, &i_this->actor.tevStr);
+    return TRUE;
 }
 
 /* 00003C68-00003CD4       .text daBridge_IsDelete__FP12bridge_class */
-static BOOL daBridge_IsDelete(bridge_class*) {
-    /* Nonmatching */
+static BOOL daBridge_IsDelete(bridge_class* i_this) {
+    br_s* pBr = &i_this->mBr[0];
+    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+        mDoAud_seDeleteObject(&pBr->m3CC);
+    }
+    return TRUE;
 }
 
 /* 00003CD4-00003D2C       .text daBridge_Delete__FP12bridge_class */
-static BOOL daBridge_Delete(bridge_class*) {
-    /* Nonmatching */
+static BOOL daBridge_Delete(bridge_class* i_this) {
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bridge");
+    if (i_this->mpBgW != NULL) {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
+    return TRUE;
 }
 
 /* 00003D2C-00003E00       .text CreateInit__FP10fopAc_ac_c */
-void CreateInit(fopAc_ac_c*) {
-    /* Nonmatching */
+void CreateInit(fopAc_ac_c* a_this) {
     static dCcD_SrcCyl himo_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -116,16 +1285,234 @@ void CreateInit(fopAc_ac_c*) {
             /* Height */ 1000.0f,
         },
     };
+
+    bridge_class* i_this = (bridge_class*)a_this;
+
+    i_this->mStts.Init(0xFF, 0xFF, a_this);
+
+    br_s* pBr = i_this->mBr;
+    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+        for (s32 j = 0; j < 2; j++) {
+            pBr->mCyl[j].Set(himo_cyl_src);
+            pBr->mCyl[j].SetStts(&i_this->mStts);
+            if ((i_this->mTypeBits & 1) == 0) {
+                pBr->mCyl[j].SetH(200.0f);
+                pBr->mCyl[j].OffTgShield();
+            }
+        }
+    }
 }
 
 /* 00003E00-00004310       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
+    static const s32 bridge_bmd[] = { BRIDGE_BDL_OBM_BRIDGE, BRIDGE_BDL_OBM_BRIDGE2 };
+    
+    bridge_class* i_this = (bridge_class*)a_this;
+
+    s32 modelNum = i_this->mTypeBits & 1;
+    if (i_this->mTypeBits & 4) {
+        modelNum = 1;
+    }
+
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bridge", bridge_bmd[modelNum]);
+    JUT_ASSERT(DEMO_SELECT(2334, 2336), modelData != NULL);
+
+    J3DModelData* modelData2;
+    if (modelNum == 1) {
+        modelData2 = (J3DModelData*)dComIfG_getObjectRes("Bridge", BRIDGE_BDL_OBM_CHAIN1);
+        JUT_ASSERT(DEMO_SELECT(2340, 2342), modelData2 != NULL);
+    }
+
+    br_s* pBr = i_this->mBr;
+
+    s32 iVar8 = 2;
+    if (i_this->mTypeBits & 1) {
+        iVar8 = 0;
+    }
+
+    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+        pBr->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
+        if (pBr->mpModel == NULL) {
+            return FALSE;
+        }
+
+        if ((i_this->mTypeBits & 4) == 0) {
+            if (((i + iVar8) & 3) == 0) {
+                pBr->m408 = 7;
+                if ((i_this->mTypeBits & 1) == 1) {
+                    pBr->m418 = 0x32;
+                    pBr->mpModelRope0 = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11020002);
+                    pBr->mpModelRope1 = mDoExt_J3DModel__create(modelData2, 0x80000, 0x11020002);
+                    if ((pBr->mpModelRope0 == NULL) || (pBr->mpModelRope1 == NULL)) {
+                        return FALSE;
+                    }
+                } else {
+                    pBr->m418 = -1;
+
+                    BOOL res;
+                    if (i_this->mTypeBits & 8) {
+                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXM_ROPE1), 1);
+                    } else {
+                        res = pBr->mLineMat1.init(4, 5, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 1);
+                    }
+
+                    if (!res) {
+                        return FALSE;
+                    }
+                }
+            }
+
+            if (i == 0) {
+                BOOL res;
+                if (i_this->mTypeBits & 8) {
+                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXM_ROPE1), 0);
+                } else {
+                    res = i_this->mLineMat.init(2, 14, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 0);
+                }
+
+                if (!res) {
+                    return FALSE;
+                }
+            }
+        }
+
+        if ((i_this->mTypeBits & 1) == 0) {
+            pBr->mScale.y = cM_rndF(0.3f) + 1.0f;
+            if (((i + iVar8) & 3) == 0) {
+                pBr->mScale.x = 1.05f;
+            } else {
+                pBr->mScale.x = cM_rndF(0.1f) + 1.0f;
+            }
+        } else {
+            pBr->mScale.y = 1.0f;
+            pBr->mScale.x = 1.0f;
+        }
+
+        pBr->mScale.z = 1.5f;
+        pBr->mpModel->setBaseScale(pBr->mScale);
+        
+        if (cM_rndF(1.0f) < 0.5f) {
+            pBr->mRotationYExtra = -0x8000;
+        }
+    }
+
+    i_this->mpBgW = new dBgWSv();
+    if (i_this->mpBgW == NULL) {
+        return FALSE;
+    }
+
+    if ((i_this->mTypeBits & 1) == 1) {
+        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", BRIDGE_DZB_MBRDG2);
+#if VERSION == VERSION_DEMO
+        i_this->mpBgW->Set(cBgD, 0);
+#else
+        if (i_this->mpBgW->Set(cBgD, 0)) {
+            return FALSE;
+        }
+#endif
+    } else {
+        cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes("Bridge", BRIDGE_DZB_MBRDG);
+#if VERSION == VERSION_DEMO
+        i_this->mpBgW->Set(cBgD, 0);
+#else
+        if (i_this->mpBgW->Set(cBgD, 0)) {
+            return FALSE;
+        }
+#endif
+    }
+
+    i_this->mpBgW->SetRideCallback(ride_call_back);
+    i_this->mpBgW->CopyBackVtx();
+    cBgD_Vtx_t* vtxTbl = i_this->mpBgW->GetVtxTbl();
+    for (s32 i = 0; i < i_this->mpBgW->GetVtxNum(); i++) {
+        vtxTbl[i].x = i_this->actor.current.pos.x;
+        vtxTbl[i].y = i_this->actor.current.pos.y;
+        vtxTbl[i].z = i_this->actor.current.pos.z;
+    }
+
+    i_this->mpBgW->Move();
+    return TRUE;
 }
 
 /* 00004310-00004770       .text daBridge_Create__FP10fopAc_ac_c */
-static cPhs_State daBridge_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daBridge_Create(fopAc_ac_c* a_this) {
+    bridge_class* i_this = (bridge_class*)a_this;
+
+#if VERSION == VERSION_DEMO
+    cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
+    if (ret == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(&i_this->actor, bridge_class);
+#else
+    fopAcM_SetupActor(&i_this->actor, bridge_class);
+    cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Bridge");
+    if (ret == cPhs_COMPLEATE_e) {
+#endif
+        i_this->mTypeBits = fopAcM_GetParam(a_this);
+        if (i_this->mTypeBits == 0xFF) {
+            i_this->mTypeBits = 0;
+        }
+        
+        i_this->m02D9 = (fopAcM_GetParam(a_this) >> 8) & 0xFF;
+        i_this->mPathId = (fopAcM_GetParam(a_this) >> 0x10) & 0xFF;
+        if (i_this->mPathId == 0xFF) {
+            return cPhs_ERROR_e;
+        }
+
+        dPath* dPath = dPath_GetRoomPath(i_this->mPathId, fopAcM_GetRoomNo(a_this));
+        if (dPath != NULL) {
+            dPnt* point = &dPath->m_points[0];
+            a_this->home.pos = point->m_position;
+            point++;
+            i_this->mEndPos = point->m_position;
+            
+            cXyz delta = i_this->mEndPos - a_this->home.pos;
+            
+            a_this->home.angle.y = cM_atan2s(delta.x, delta.z);
+            a_this->home.angle.x = -cM_atan2s(delta.y, std::sqrtf(delta.x * delta.x + delta.z * delta.z));
+            
+            f32 fVar1 = 0.0f;
+            if (delta.abs() > 1300.0f) {
+                fVar1 = 3.0f;
+            }
+            
+            i_this->mBrCount = delta.abs() / ((fVar1 + 47.0f) * 1.5f);
+            i_this->mPathIdP = i_this->mPathId + 1;
+        } else {
+            return cPhs_ERROR_e;
+        }
+
+        if (i_this->mBrCount >= 50) {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(a_this, CallbackCreateHeap, 0x2FB60)) {
+            return cPhs_ERROR_e;
+        }
+
+        CreateInit(a_this);
+
+        if (i_this->mpBgW != NULL && dComIfG_Bgsp()->Regist(i_this->mpBgW, a_this)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(a_this, i_this->mBr[0].mpModel->getBaseTRMtx());
+        fopAcM_setCullSizeBox(a_this, -120.0f, -30.0f, -60.0f, 120.0f, 30.0f, 60.0f);
+        fopAcM_setCullSizeFar(a_this, 10.0f);
+
+        if ((i_this->mTypeBits & 2) != 0) {
+            if (i_this->mBrCount >= 16) {
+                i_this->m02DD = 15;
+            } else if (i_this->mBrCount >= 12) {
+                i_this->m02DD = 11;
+            } else {
+                i_this->m02DD = 7;
+            }
+        } else {
+            i_this->m02DD = i_this->mBrCount;
+        }
+    }
+
+    return ret;
 }
 
 static actor_method_class l_daBridge_Method = {

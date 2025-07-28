@@ -79,15 +79,15 @@ BOOL daMtoge_c::CreateInit() {
     tevStr.mRoomNo = fopAcM_GetRoomNo(this);
 
     if (sw == 0xFF) {
-        mState = ACT_WAIT;
+        mAction = ACT_WAIT;
     } else if (dComIfGs_isSwitch(sw + 1, fopAcM_GetRoomNo(this))) {
-        mState = ACT_WAIT;
+        mAction = ACT_WAIT;
         mHeightOffset = -300.0f;
     } else if (!dComIfGs_isSwitch(sw, fopAcM_GetRoomNo(this))) {
-        mState = ACT_HIND;
+        mAction = ACT_HIND;
         mHeightOffset = -300.0f;
     } else {
-        mState = ACT_ARRIVAL;
+        mAction = ACT_ARRIVAL;
     }
 
     calcMtx();
@@ -184,7 +184,7 @@ BOOL daMtoge_c::execute() {
         daMtoge_actionDown,
     };
 
-    l_action[mState](this);
+    l_action[mAction](this);
 
     return TRUE;
 }

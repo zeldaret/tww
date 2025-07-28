@@ -2882,7 +2882,7 @@ void daNpcRoten_c::setCollisionH() {
 }
 
 /* 00003F08-00003F28       .text daNpc_RotenCreate__FPv */
-static s32 daNpc_RotenCreate(void* i_this) {
+static cPhs_State daNpc_RotenCreate(void* i_this) {
     return static_cast<daNpcRoten_c*>(i_this)->_create();
 }
 

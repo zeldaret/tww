@@ -141,7 +141,7 @@ void daBeam_c::wait_proc() {
 }
 
 /* 00001C84-00001CA4       .text daBeamCreate__FPv */
-static s32 daBeamCreate(void* i_this) {
+static cPhs_State daBeamCreate(void* i_this) {
     return ((daBeam_c*)i_this)->_create();
 }
 

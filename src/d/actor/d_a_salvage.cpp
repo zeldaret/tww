@@ -143,7 +143,7 @@ void daSalvage_c::debugDraw() {
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */
-static s32 daSalvageCreate(void* i_this) {
+static cPhs_State daSalvageCreate(void* i_this) {
     return ((daSalvage_c*)i_this)->_create();
 }
 

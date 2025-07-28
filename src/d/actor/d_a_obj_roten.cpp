@@ -131,7 +131,7 @@ cPhs_State daObj_Roten_c::_create() {
 }
 
 /* 00000410-00000530       .text daObj_RotenCreate__FPv */
-static s32 daObj_RotenCreate(void* i_actor) {
+static cPhs_State daObj_RotenCreate(void* i_actor) {
     return static_cast<daObj_Roten_c*>(i_actor)->_create();
 }
 

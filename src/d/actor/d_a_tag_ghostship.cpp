@@ -134,7 +134,7 @@ bool daTag_Gship_c::_delete() {
 }
 
 /* 000005F4-00000614 .text daTag_GshipCreate__FPv */
-static s32 daTag_GshipCreate(void* i_this) {
+static cPhs_State daTag_GshipCreate(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_create();
 }
 

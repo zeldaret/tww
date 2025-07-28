@@ -76,7 +76,7 @@ BOOL daObj_Stair_c::Delete() {
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
-static s32 daObj_StairCreate(void* i_this) {
+static cPhs_State daObj_StairCreate(void* i_this) {
     return ((daObj_Stair_c*)i_this)->_create();
 }
 

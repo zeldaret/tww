@@ -73,9 +73,9 @@ public:
     BOOL talk01();
     int wait_action1(void*);
     u8 demo();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     BOOL CreateHeap();
 
@@ -89,7 +89,7 @@ public:
     /* 0x6D8 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 mBtpFrame;
-    /* 0x6F1 */ u8 field_0x6F1;    
+    /* 0x6F1 */ u8 field_0x6F1;
     /* 0x6F2 */ s16 field_0x6F2;
     /* 0x6F4 */ ActionFunc field_0x6F4;
     /* 0x700 */ dNpc_EventCut_c mEventCut;
@@ -104,14 +104,14 @@ public:
     /* 0x7AC */ f32 field_0x7AC;
     /* 0x7B0 */ s16 field_0x7B0;
     /* 0x7B2 */ s16 field_0x7B2;
-    /* 0x7B4 */ s8 field_0x7B4; 
+    /* 0x7B4 */ s8 field_0x7B4;
     /* 0x7B5 */ s8 field_0x7B5;
     /* 0x7B6 */ u8 field_0x7B6;
     /* 0x7B7 */ u8 field_0x7B7;
     /* 0x7B8 */ u8 field_0x7B8;
     /* 0x7B9 */ u8 field_0x7B9[0x7BC - 0x7B9];
-    /* 0x7BC */ s32 field_0x7BC; 
-    /* 0x7C0 */ s32 field_0x7C0; 
+    /* 0x7BC */ s32 field_0x7BC;
+    /* 0x7C0 */ s32 field_0x7C0;
     /* 0x7C4 */ u8 field_0x7C4;
     /* 0x7C5 */ u8 field_0x7C5;
     /* 0x7C6 */ bool mHeadOnlyFollow;

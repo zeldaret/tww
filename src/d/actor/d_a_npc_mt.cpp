@@ -294,7 +294,7 @@ void daNpcMt_c::changePhotoNo(u8) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-static s32 daNpc_MtCreate(void* i_this) {
+static cPhs_State daNpc_MtCreate(void* i_this) {
     return ((daNpcMt_c*)i_this)->_create();
 }
 

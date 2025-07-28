@@ -194,7 +194,7 @@ void daNpcAuction_c::clrEmitter() {
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-static s32 daNpc_AuctionCreate(void*) {
+static cPhs_State daNpc_AuctionCreate(void*) {
     /* Nonmatching */
 }
 

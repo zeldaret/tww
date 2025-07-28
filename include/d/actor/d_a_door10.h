@@ -7,41 +7,42 @@
 
 class daDoor10_c : public dDoor_info_c {
 public:
-    void checkFlag(unsigned short) {}
+    bool checkFlag(unsigned short flag) { return m356 & flag; }
     inline BOOL execute();
-    void offFlag(unsigned short) {}
-    void onFlag(unsigned short) {}
-    void setAction(unsigned char) {}
+    void offFlag(unsigned short flag) { m356 &= ~flag; }
+    void onFlag(unsigned short flag) { m356 |= flag; }
+    void setAction(u8 action) { m354 = action; }
 
-    void chkMakeKey();
+    s32 chkMakeKey();
     void setKey();
-    void chkMakeStop();
-    void chkStopF();
-    void chkStopB();
+    BOOL chkMakeStop();
+    s32 chkStopF();
+    s32 chkStopB();
     void setStop();
-    void chkStopOpen();
+    BOOL chkStopOpen();
     void setStopDemo();
-    void chkStopClose();
-    void getBdlName();
-    void getDzbName();
-    void getSize2X();
-    void CreateHeap();
+    BOOL chkStopClose();
+    const char* getBdlName();
+    const char* getDzbName();
+    f32 getSize2X();
+    BOOL CreateHeap();
     void setEventPrm();
     void openInit();
-    void openProc();
+    BOOL openProc();
     void openEnd();
     void closeInit();
-    void closeProc();
+    BOOL closeProc();
     void closeEnd();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void demoProc();
     BOOL draw();
 
+    static const char M_arcname[];
+
 public:
     /* 0x2D0 */ dDoor_smoke_c m2D0;
-    /* 0x306 */ u8 m306[0x308 - 0x306];
     /* 0x308 */ dDoor_key2_c mKeyLock;
     /* 0x32C */ dDoor_stop_c mStopBars;
     /* 0x338 */ dDoor_hkyo_c mHkyo;
@@ -50,8 +51,9 @@ public:
     /* 0x354 */ u8 m354;
     /* 0x355 */ u8 m355[0x356 - 0x355];
     /* 0x356 */ u16 m356;
-    /* 0x358 */ u8 m358[0x364 - 0x358];
+    /* 0x358 */ f32 m358;
+    /* 0x35C */ request_of_phase_process_class mPhase;
     /* 0x364 */ int m364;
-};
+}; // size = 0x368
 
 #endif /* D_A_DOOR10_H */

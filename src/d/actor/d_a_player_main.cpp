@@ -1507,18 +1507,25 @@ void daPy_lk_c::updateDLSetLight(J3DModel* model, u32 param_2) {
 }
 
 /* 80106CB0-80106D8C       .text hideHatAndBackle__9daPy_lk_cFP11J3DMaterial */
-void daPy_lk_c::hideHatAndBackle(J3DMaterial* param_1) {
-    for (int i = 0; param_1 != NULL; i++) {
-        if ((!checkNoResetFlg1(daPyFlg1_FREEZE_STATE) && (i == 2 || i == 5)) ||
+void daPy_lk_c::hideHatAndBackle(J3DMaterial* mtl) {
+    for (int i = 0; mtl != NULL; i++) {
+        // If NOT frozen, hide materials that were already drawn earlier:
+        // * "face"
+        // * "ear(2)" (hair)
+        // If CaughtShapeHide or wearing casual clothes, hide material:
+        // * "ear(3)" (hat)
+        if ((!checkFreezeState() && (i == 2 || i == 5)) ||
             (i == 4 && (checkCaughtShapeHide() || checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES))))
         {
-            param_1->getShape()->hide();
+            mtl->getShape()->hide();
         } else {
-            param_1->getShape()->show();
+            mtl->getShape()->show();
         }
-        param_1 = param_1->getNext();
+        mtl = mtl->getNext();
     }
     if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
+        // Hide material:
+        // * "ear(8)" (belt buckle)
         mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->hide();
     }
 }
@@ -1541,7 +1548,7 @@ void daPy_lk_c::drawMirrorLightModel() {
 
 /* 80106E50-80107210       .text drawShadow__9daPy_lk_cFv */
 void daPy_lk_c::drawShadow() {
-    J3DJoint* ppJVar6 = mpCLModelData->getJointNodePointer(0);
+    J3DJoint* link_root_joint = mpCLModelData->getJointNodePointer(0x00);
     MtxP pMVar3 = mpCLModel->getAnmMtx(0);
     cXyz local_30;
 
@@ -1558,7 +1565,9 @@ void daPy_lk_c::drawShadow() {
         pJVar7->getMesh()->getShape()->show();
         mpCLModelData->getJointNodePointer(0xC)->getMesh()->getShape()->show();
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
-            J3DMaterial* mtl = ppJVar6->getMesh();
+            J3DMaterial* mtl = link_root_joint->getMesh();
+            // Hide material:
+            // * "ear(3)" (hat)
             for (int i = 0; i < 4; i++) {
                 mtl = mtl->getNext();
             }
@@ -1740,6 +1749,8 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x0C)->getMesh()->getShape()->hide(); // cl_RhandA joint
     
     mtl = link_root_joint->getMesh();
+    // Show material:
+    // * "ear(3)" (hat)
     for (int i = 0; i < 4; i++) {
         mtl = mtl->getNext();
     }
@@ -1764,8 +1775,17 @@ BOOL daPy_lk_c::draw() {
         mtl = link_root_joint->getMesh();
         for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
             if (i != 3) {
+                // Hide materials:
+                // * "sleeve" (arms and tunic bottom)
+                // * "mouth"
+                // * "face"
+                // * "ear(3)" (hat)
+                // * "ear(2)" (hair)
+                // * "ear" (torso and ears)
                 mtl->getShape()->hide();
             } else {
+                // Show materials:
+                // * "ear(4)" (legs)
                 mtl->getShape()->show();
             }
         }
@@ -1778,8 +1798,17 @@ BOOL daPy_lk_c::draw() {
         mtl = link_root_joint->getMesh();
         for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
             if (i != 0 && i != 3) {
+                // Hide materials:
+                // * "mouth"
+                // * "face"
+                // * "ear(3)" (hat)
+                // * "ear(2)" (hair)
+                // * "ear" (torso and ears)
                 mtl->getShape()->hide();
             } else {
+                // Show materials:
+                // * "sleeve" (arms and tunic bottom)
+                // * "ear(4)" (legs)
                 mtl->getShape()->show();
             }
         }
@@ -1805,12 +1834,21 @@ BOOL daPy_lk_c::draw() {
             mtl = link_root_joint->getMesh();
             for (int i = 0; mtl != NULL; i++, mtl = mtl->getNext()) {
                 if (i != 2 && i != 5) {
+                    // Hide materials:
+                    // * "sleeve" (arms and tunic bottom)
+                    // * "mouth"
+                    // * "ear(4)" (legs)
+                    // * "ear(3)" (hat)
+                    // * "ear" (torso and ears)
+                    // This leaves the following materials of the link_root joint visible:
+                    // * "face"
+                    // * "ear(2)" (hair)
                     mtl->getShape()->hide();
                 }
             }
             link_root_joint->entryIn();
             if (checkMaskDraw()) {
-                entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpYamuModel, checkFreezeState());
             }
             j3dSys.setModel(mpCLModel);
             j3dSys.setTexture(mpCLModelData->getTexture());
@@ -1843,7 +1881,6 @@ BOOL daPy_lk_c::draw() {
         }
     }
     
-    // regalloc issues with j3dSys from here on
     dComIfGd_setListP1();
     if (checkFreezeState()) {
         dMat_control_c::iceEntryDL(mpCLModel, -1, NULL);
@@ -1858,31 +1895,31 @@ BOOL daPy_lk_c::draw() {
     mpCLModelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
     mpCLModelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
     if (!r24) {
-        entryDLSetLight(mpHandsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+        entryDLSetLight(mpHandsModel, checkFreezeState());
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()
 #if VERSION > VERSION_DEMO
             && !dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x20)
 #endif
         ) {
-            entryDLSetLight(mpKatsuraModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpKatsuraModel, checkFreezeState());
         }
         if (checkFreezeState() && checkMaskDraw()) {
-            entryDLSetLight(mpYamuModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpYamuModel, checkFreezeState());
         }
         if (dComIfGs_getSelectEquip(2) == dItem_POWER_BRACELETS_e) {
-            entryDLSetLight(mpPringModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpPringModel, checkFreezeState());
         }
         if (checkMasterSwordEquip() && !checkCaughtShapeHide()
 #if VERSION > VERSION_DEMO
             && !checkDemoShieldNoDraw()
 #endif
         ) {
-            updateDLSetLight(mpPodmsModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            updateDLSetLight(mpPodmsModel, checkFreezeState());
         }
     }
     if (checkEquipHeavyBoots()) {
-        entryDLSetLight(mpHbootsModels[0], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
-        entryDLSetLight(mpHbootsModels[1], checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+        entryDLSetLight(mpHbootsModels[0], checkFreezeState());
+        entryDLSetLight(mpHbootsModels[1], checkFreezeState());
     }
     
     tevStr.mFogColor.r = origFog.r;
@@ -1916,7 +1953,7 @@ BOOL daPy_lk_c::draw() {
                 && !checkDemoSwordNoDraw(1)
 #endif
             ) {
-                entryDLSetLight(mpEquippedSwordModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpEquippedSwordModel, checkFreezeState());
             }
         }
         if (dComIfGs_getSelectEquip(1) != dItem_NONE_e && !checkCaughtShapeHide()
@@ -1926,7 +1963,7 @@ BOOL daPy_lk_c::draw() {
             && !checkDemoShieldNoDraw()
 #endif
         ) {
-            entryDLSetLight(mpEquippedShieldModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+            entryDLSetLight(mpEquippedShieldModel, checkFreezeState());
         }
         dComIfGd_setList();
         drawMirrorLightModel();
@@ -1949,7 +1986,7 @@ BOOL daPy_lk_c::draw() {
                         mpEquipItemModel->setAnmMtx(4, hookshot->getMtxTop());
                     }
                 }
-                entryDLSetLight(mpEquipItemModel, checkNoResetFlg1(daPyFlg1_FREEZE_STATE));
+                entryDLSetLight(mpEquipItemModel, checkFreezeState());
                 if (mpSwordModel1 != NULL) {
                     if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
@@ -2575,7 +2612,7 @@ void daPy_lk_c::posMove() {
         }
     }
     m3644 = 0.0f;
-    mStts.GetCCMoveP()->zero();
+    mStts.GetCCMoveP()->x = mStts.GetCCMoveP()->y = mStts.GetCCMoveP()->z = 0.0f;
     if (m34C2 == 1 || m34C2 == 8 || m34C2 == 9 || m34C2 == 5) {
         cXyz sp5C;
         if (m34C2 == 1 || m34C2 == 5) {
@@ -8398,7 +8435,6 @@ BOOL daPy_lk_c::procIceSlipFallUp() {
 
 /* 8011970C-801197D4       .text procIceSlipAlmostFall_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procIceSlipAlmostFall_init() {
-
     commonProcInit(daPyProc_ICE_SLIP_ALMOST_FALL_e);
     current.angle.y = cM_atan2s(m36AC.x, m36AC.z);
     int direction = getDirectionFromAngle(current.angle.y - shape_angle.y);
@@ -9246,7 +9282,7 @@ void daPy_lk_c::checkOriginalHatAnimation() {
 
 /* 8011BEA4-8011CBA4       .text setHatAngle__9daPy_lk_cFv */
 void daPy_lk_c::setHatAngle() {
-    if (m_old_fdata->getOldFrameFlg() == false || checkNoResetFlg1(daPyFlg1_FREEZE_STATE)) {
+    if (m_old_fdata->getOldFrameFlg() == false || checkFreezeState()) {
         return;
     }
 
@@ -11842,16 +11878,16 @@ void daPy_lk_c::initTextureAnime() {
 /* 80123360-80123830       .text initTextureScroll__9daPy_lk_cFv */
 void daPy_lk_c::initTextureScroll() {
     m_tex_scroll_heap.m_buffer = new(0x20) u8[0x800];
-    JUT_ASSERT(VERSION_SELECT(20757, 20944, 20944, 20944), m_tex_scroll_heap.m_buffer != NULL);
+    JUT_ASSERT(DEMO_SELECT(20757, 20944), m_tex_scroll_heap.m_buffer != NULL);
     
     JKRReadIdxResource(m_tex_scroll_heap.m_buffer, 0x800, LKANM_BTK_TMABA, dComIfGp_getAnmArchive());
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(J3DAnmLoaderDataBase::load(m_tex_scroll_heap.m_buffer));
     btk->searchUpdateMaterialID(mpCLModelData);
     u16 material_num = btk->getUpdateMaterialNum();
-    JUT_ASSERT(VERSION_SELECT(20771, 20958, 20958, 20958), material_num == 2);
+    JUT_ASSERT(DEMO_SELECT(20771, 20958), material_num == 2);
     
     m_texMtxAnm = new J3DTexMtxAnm[material_num];
-    JUT_ASSERT(VERSION_SELECT(20774, 20961, 20961, 20961), m_texMtxAnm != NULL);
+    JUT_ASSERT(DEMO_SELECT(20774, 20961), m_texMtxAnm != NULL);
     
     for (u16 no = 0; no < material_num; no++) {
         u16 matID = btk->getUpdateMaterialID(no);
@@ -11860,7 +11896,7 @@ void daPy_lk_c::initTextureScroll() {
         }
         
         m_tex_eye_scroll[no] = new daPy_matAnm_c();
-        JUT_ASSERT(VERSION_SELECT(20785, 20972, 20972, 20972), m_tex_eye_scroll[no] != NULL);
+        JUT_ASSERT(DEMO_SELECT(20785, 20972), m_tex_eye_scroll[no] != NULL);
         
         mpCLModelData->getMaterialNodePointer(matID)->change();
         mpCLModelData->getMaterialNodePointer(matID)->setMaterialAnm(m_tex_eye_scroll[no]);
@@ -11874,7 +11910,7 @@ void daPy_lk_c::initTextureScroll() {
         J3DTexMtx* tmtx;
         if (mtl->getTexMtx(texMtxID) == NULL) {
             tmtx = new J3DTexMtx();
-            JUT_ASSERT(VERSION_SELECT(20797, 20984, 20984, 20984), tmtx != NULL);
+            JUT_ASSERT(DEMO_SELECT(20797, 20984), tmtx != NULL);
             mtl->setTexMtx(texMtxID, tmtx);
         }
         if (mtl->getTexCoord(texMtxID) != NULL) {
@@ -11891,7 +11927,7 @@ void daPy_lk_c::initTextureScroll() {
         tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
         tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
         
-        JUT_ASSERT(VERSION_SELECT(20814, 21001, 21001, 21001), mtl->getMaterialAnm() != NULL);
+        JUT_ASSERT(DEMO_SELECT(20814, 21001), mtl->getMaterialAnm() != NULL);
         
         mtl->getMaterialAnm()->setTexMtxAnm(texMtxID, &m_texMtxAnm[no]);
     }
@@ -12072,7 +12108,7 @@ J3DModelData* daPy_lk_c::initModel(J3DModel** i_model, int i_fileIndex, u32 i_di
 J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData* param_1, int param_2) {
     J3DAnmTextureSRTKey* btk_anm =
         static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcName, param_2));
-    JUT_ASSERT(21373, btk_anm != 0);
+    JUT_ASSERT(21373, btk_anm != NULL);
     btk_anm->searchUpdateMaterialID(param_1);
     param_1->entryTexMtxAnimator(btk_anm);
     btk_anm->setFrame(0.0f);
@@ -12083,7 +12119,7 @@ J3DAnmTextureSRTKey* daPy_lk_c::entryBtk(J3DModelData* param_1, int param_2) {
 J3DAnmTevRegKey* daPy_lk_c::entryBrk(J3DModelData* param_1, int param_2) {
     J3DAnmTevRegKey* brk_anm =
         static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcName, param_2));
-    JUT_ASSERT(21395, brk_anm != 0);
+    JUT_ASSERT(21395, brk_anm != NULL);
     brk_anm->searchUpdateMaterialID(param_1);
     param_1->entryTevRegAnimator(brk_anm);
     brk_anm->setFrame(0.0f);

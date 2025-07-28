@@ -2170,7 +2170,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
 
                 if (i_this->mEyeHealth[j] > 0 && i_this->field_0x10D6 != 7) {
                     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-                    actor->attention_info.distances[2] = 4;
+                    actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
 
                     fopAcM_seStart(i_this, JA_SE_CM_BST_HEAD_WORKING, 0);
                     continue;
@@ -2579,7 +2579,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         }
 
         i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-        i_this->attention_info.distances[2] = 4;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
         if (hio_set == 0) {
             i_this->mHioSet = 1;
             hio_set = 1;

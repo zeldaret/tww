@@ -113,7 +113,7 @@ cPhs_State daObjLadder::Act_c::Mthd_Create() {
         mType = prm_get_type();
         phase_state = MoveBGCreate(
             M_arcname, attr_type(mType).dzbId, dBgS_MoveBGProc_Trans,
-            VERSION_SELECT(0x1700, 0x900, 0x900, 0x900)
+            DEMO_SELECT(0x1700, 0x900)
         );
 
         JUT_ASSERT(0x1DE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));

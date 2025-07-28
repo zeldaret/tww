@@ -97,7 +97,7 @@ bool daHot_Floor_c::_draw() {
 }
 
 /* 00000264-000002F8       .text daHot_FloorCreate__FPv */
-static s32 daHot_FloorCreate(void* i_this) {
+static cPhs_State daHot_FloorCreate(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_create();
 }
 

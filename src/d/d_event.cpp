@@ -300,7 +300,7 @@ BOOL dEvt_control_c::demoCheck(dEvt_order_c* order) {
     s16 eventId = order->mEventId;
 
     if (actor2 == NULL) {
-        JUT_ASSERT(VERSION_SELECT(541, 543, 543, 543), FALSE);
+        JUT_ASSERT(DEMO_SELECT(541, 543), FALSE);
         return FALSE;
     }
 
@@ -348,7 +348,7 @@ BOOL dEvt_control_c::potentialCheck(dEvt_order_c* order) {
     fopAc_ac_c* actor1 = order->mActor1;
     fopAc_ac_c* actor2 = order->mActor2;
     if (actor1 == NULL || actor2 == NULL)
-        JUT_ASSERT(VERSION_SELECT(638, 640, 640, 640), FALSE);
+        JUT_ASSERT(DEMO_SELECT(638, 640), FALSE);
 
     if (!beforeFlagProc(order))
         return FALSE;
@@ -369,7 +369,7 @@ BOOL dEvt_control_c::doorCheck(dEvt_order_c* order) {
             mEventId = actor2->eventInfo.getEventId();
         if (mEventId != -1 && dComIfGp_getPEvtManager()->getEventData(mEventId) != NULL) {
             if (!dComIfGp_evmng_order(mEventId))
-                JUT_ASSERT(VERSION_SELECT(702, 704, 704, 704), FALSE);
+                JUT_ASSERT(DEMO_SELECT(702, 704), FALSE);
         } else {
             mEventId = -1;
             reset();
@@ -391,7 +391,7 @@ BOOL dEvt_control_c::itemCheck(dEvt_order_c* order) {
         mMode = dEvtMode_DEMO_e;
         mEventId = dComIfGp_evmng_getEventIdx(defaultEventName);
         if (!dComIfGp_evmng_order(mEventId))
-            JUT_ASSERT(VERSION_SELECT(744, 746, 746, 746), FALSE);
+            JUT_ASSERT(DEMO_SELECT(744, 746), FALSE);
         return TRUE;
     } else {
         return FALSE;
@@ -410,7 +410,7 @@ BOOL dEvt_control_c::endProc() {
     case dEvtMode_COMPULSORY_e:
         break;
     default:
-        JUT_ASSERT(VERSION_SELECT(787, 789, 789, 789), FALSE);
+        JUT_ASSERT(DEMO_SELECT(787, 789), FALSE);
     }
 
     mMode = dEvtMode_NONE_e;
@@ -518,7 +518,7 @@ BOOL dEvt_control_c::checkStart() {
             case dEvtType_CHANGE_e:
                 break;
             default:
-                JUT_ASSERT(VERSION_SELECT(922, 924, 924, 924), FALSE);
+                JUT_ASSERT(DEMO_SELECT(922, 924), FALSE);
                 break;
             }
 

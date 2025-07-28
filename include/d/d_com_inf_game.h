@@ -523,9 +523,9 @@ public:
 
     u8 getPictureStatus() { return mPictureStatus; }
     void setPictureStatusOn() { mPictureStatus = 2; }
-    void setPictureStatusGetOn(u8 to_set) { 
-        mPictureStatus = 3; 
-        field_0x495f = to_set; 
+    void setPictureStatusGetOn(u8 to_set) {
+        mPictureStatus = 3;
+        field_0x495f = to_set;
     }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }
@@ -3857,6 +3857,10 @@ inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(int code, const cXyz* par
 inline JPABaseEmitter* dComIfGp_particle_setSimpleLand(cBgS_PolyInfo& param_1, const cXyz* pos, const csXyz* angle, f32 param_4, f32 param_5, f32 param_6, dKy_tevstr_c* param_7, int* param_8, int param_9) {
     dPa_control_c* pParticle = g_dComIfG_gameInfo.play.getParticle();
     return pParticle->setSimpleLand(param_1, pos, angle, param_4, param_5, param_6, param_7, param_8, param_9);
+}
+
+inline void dComIfGp_particle_forceDeleteEmitter(JPABaseEmitter* emitter) {
+    dPa_control_c::forceDeleteEmitter(emitter);
 }
 
 inline JPABaseEmitter* dComIfGp_particle_setBombSmoke(u16 particleID, const cXyz* pos,

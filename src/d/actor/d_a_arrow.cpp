@@ -1102,8 +1102,8 @@ BOOL daArrow_c::_execute() {
         
         cXyz offset;
         offset.x = 0.0f;
-        offset.y = 45.0f + g_regHIO.mChild->mFloatRegs[8];
-        offset.z = 30.0f + g_regHIO.mChild->mFloatRegs[9];
+        offset.y = 45.0f + REG0_F(8);
+        offset.z = 30.0f + REG0_F(9);
         mDoMtx_YrotS(*calc_mtx, player->shape_angle.y);
         cXyz offsetOut;
         MtxPosition(&offset, &offsetOut);
@@ -1237,7 +1237,7 @@ BOOL daArrow_c::_delete() {
 }
 
 /* 800D8200-800D8220       .text daArrowCreate__FPv */
-static s32 daArrowCreate(void* i_this) {
+static cPhs_State daArrowCreate(void* i_this) {
     return static_cast<daArrow_c*>(i_this)->_create();
 }
 

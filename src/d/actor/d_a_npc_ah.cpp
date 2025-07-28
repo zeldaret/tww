@@ -219,7 +219,7 @@ void daNpcAh_c::chkEndEvent() {
 }
 
 /* 00002338-00002358       .text daNpc_AhCreate__FPv */
-static s32 daNpc_AhCreate(void* i_this) {
+static cPhs_State daNpc_AhCreate(void* i_this) {
     return ((daNpcAh_c*)i_this)->_create();
 }
 

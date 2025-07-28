@@ -309,7 +309,7 @@ bool daObj_Ikada_c::_delete() {
 }
 
 /* 0000543C-0000545C       .text daObj_IkadaCreate__FPv */
-static s32 daObj_IkadaCreate(void* i_this) {
+static cPhs_State daObj_IkadaCreate(void* i_this) {
     return ((daObj_Ikada_c*)i_this)->_create();
 }
 

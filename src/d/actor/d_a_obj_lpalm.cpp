@@ -108,7 +108,7 @@ bool daObjLpalm_c::_delete() {
 }
 
 /* 00000404-000004A4       .text daObjLpalmCreate__FPv */
-static s32 daObjLpalmCreate(void* i_this) {
+static cPhs_State daObjLpalmCreate(void* i_this) {
     return ((daObjLpalm_c*)i_this)->_create();
 }
 

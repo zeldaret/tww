@@ -475,46 +475,46 @@ public:
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
     u32 checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
-    BOOL getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
+    u32 getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
     void onPushPullKeep() { onNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
     void offPushPullKeep() { offNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
-    bool checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
+    u32 checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
     void onNoFallVoice() { onNoResetFlg0(daPyFlg0_NO_FALL_VOICE); }
     void onScopeCancel() { onNoResetFlg0(daPyFlg0_SCOPE_CANCEL); }
     void onPhotoBoxCancel() { onNoResetFlg0(daPyFlg0_PHOTO_BOX_CANCEL); }
-    bool checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
+    u32 checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
     void onPlayerNoDraw() { onNoResetFlg0(daPyFlg0_NO_DRAW); }
     void offPlayerNoDraw() { offNoResetFlg0(daPyFlg0_NO_DRAW); }
     void onHeavyState() { onNoResetFlg0(daPyFlg0_HEAVY_STATE); }
     void offHeavyState() { offNoResetFlg0(daPyFlg0_HEAVY_STATE); }
-    bool getHeavyState() { return checkNoResetFlg0(daPyFlg0_HEAVY_STATE); }
-    bool getHeavyStateAndBoots() { return checkNoResetFlg0(static_cast<daPy_FLG0>(daPyFlg0_HEAVY_STATE | daPyFlg0_EQUIP_HEAVY_BOOTS)); }
+    u32 getHeavyState() { return checkNoResetFlg0(daPyFlg0_HEAVY_STATE); }
+    u32 getHeavyStateAndBoots() { return checkNoResetFlg0(static_cast<daPy_FLG0>(daPyFlg0_HEAVY_STATE | daPyFlg0_EQUIP_HEAVY_BOOTS)); }
     
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
     u32 checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
-    bool checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
+    u32 checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
     void onNpcCallCommand() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onNpcCall() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void offNpcCallCommand() { offNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
-    bool checkNpcCallCommand() const { return checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
+    u32 checkNpcCallCommand() const { return checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onForceVomitJump() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP); }
     void onNpcNotChange() { onNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
     void offNpcNotChange() { offNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
-    bool checkNpcNotChange() const { return checkNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
+    u32 checkNpcNotChange() const { return checkNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
     void onConfuse() { onNoResetFlg1(daPyFlg1_CONFUSE); }
     void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
-    bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
-    bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
-    bool checkUseArrowEffect() const { return checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
+    u32 checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
+    u32 checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    u32 checkUseArrowEffect() const { return checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
     void onForceVomitJumpShort() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP_SHORT); }
-    bool checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
+    u32 checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
     void onWaterDrop() { onNoResetFlg1(daPyFlg1_WATER_DROP); }
     void onVineCatch() { onNoResetFlg1(daPyFlg1_VINE_CATCH); }
-    bool checkLastComboWait() const { return checkNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT); }
+    u32 checkLastComboWait() const { return checkNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT); }
     
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
     void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
@@ -535,7 +535,7 @@ public:
     u32 checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
     u32 checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
-    bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
+    BOOL checkGrabWear() const { return field_0x2b0 < 0.0f; }
     BOOL checkNormalSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }

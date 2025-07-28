@@ -970,7 +970,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
         J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
-        modeldata->getMaterialTable().removeMatColorAnimator(color);
+        modeldata->removeMatColorAnimator(color);
     } else {
         mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
         J3DMatColorAnm *p = mpAnmMatClr;
@@ -979,7 +979,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
             p->setAnmIndex(i);
             p++;
         }
-        modeldata->getMaterialTable().setMatColorAnimator(mpAnmClr, mpAnmMatClr);
+        modeldata->setMatColorAnimator(mpAnmClr, mpAnmMatClr);
     }
 
     if (mDoGph_gInf_c::isMonotone()) {

@@ -98,7 +98,7 @@ void daGoal_Flag_c::RaceEnd() {
 }
 
 /* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
-static s32 daGoal_FlagCreate(void* i_this) {
+static cPhs_State daGoal_FlagCreate(void* i_this) {
     return ((daGoal_Flag_c*)i_this)->_create();
 }
 

@@ -191,7 +191,7 @@ s32 daObjQuake_c::getPrmPower() {
 }
 
 /* 000006F8-00000718       .text daObjQuakeCreate__FPv */
-static s32 daObjQuakeCreate(void* i_this) {
+static cPhs_State daObjQuakeCreate(void* i_this) {
     return static_cast<daObjQuake_c*>(i_this)->_create();
 }
 

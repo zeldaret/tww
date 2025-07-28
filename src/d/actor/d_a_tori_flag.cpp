@@ -129,7 +129,7 @@ cPhs_State daTori_Flag_c::_create() {
 }
 
 /* 000003A4-000003C4       .text daTori_FlagCreate__FPv */
-static s32 daTori_FlagCreate(void* i_this) {
+static cPhs_State daTori_FlagCreate(void* i_this) {
     return ((daTori_Flag_c*)i_this)->_create();
 }
 

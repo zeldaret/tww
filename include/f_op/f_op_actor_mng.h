@@ -40,7 +40,7 @@ struct fopAcM_prm_class {
     /* 0x1C */ fpc_ProcID parent_id;
     /* 0x20 */ s8 subtype;
     /* 0x21 */ s8 room_no;
-};
+}; // size = 0x24
 
 struct fopAcM_search4ev_prm {
     fopAcM_search4ev_prm() { clear(); }
@@ -130,6 +130,10 @@ inline bool fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
 
 inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
     return pActor->actor_status & fopAcStts_CARRY_e;
+}
+
+inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
+    pActor->actor_status &= ~0x3F;
 }
 
 inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
@@ -383,7 +387,7 @@ inline fopAc_ac_c* fopAcM_SearchByName(s16 procName) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &procName);
 }
 
-inline fpc_ProcID fopAcM_GetLinkId(const fopAc_ac_c* pActor) {
+inline fpc_ProcID fopAcM_GetLinkId(fopAc_ac_c* pActor) {
     return pActor->parentActorID;
 }
 

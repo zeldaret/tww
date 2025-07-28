@@ -1183,7 +1183,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x983;
                         attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 3;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
                     }
                     else {
                         mMsgNo = 0x980;
@@ -1198,7 +1198,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x96C;
                         attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 0xB5;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
                     }
                     else {
                         mMsgNo = 0x985;
@@ -3750,8 +3750,8 @@ BOOL daNpc_Ji1_c::battleAtSet() {
     f32 cos = cM_scos(current.angle.y);
 
     if(mAnimation == 0x14) {
-        field_0xA40.SetR(g_regHIO.mChild[10].mFloatRegs[9] + 85.0f);
-        field_0xB90.y = field_0xB78.y = g_regHIO.mChild[10].mFloatRegs[10] + 40.0f;
+        field_0xA40.SetR(REG10_F(9) + 85.0f);
+        field_0xB90.y = field_0xB78.y = REG10_F(10) + 40.0f;
         field_0xA40.SetStartEnd(field_0xB90, field_0xB78);
         field_0xA40.CalcVec(&temp);
         if(!temp.normalizeRS()) {

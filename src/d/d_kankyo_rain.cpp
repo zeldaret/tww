@@ -883,7 +883,7 @@ void wave_move() {
     }
 
     dKy_set_eyevect_calc2(pCamera, &eyevect, g_env_light.mWaveChan.mWaveSpawnDist, 0.0f);
-    d0.zero();
+    d0.x = d0.y = d0.z = 0.0f;
 
     windVecP = dKyw_get_wind_vec();
     windPow = dKyw_get_wind_pow();
@@ -924,7 +924,7 @@ void wave_move() {
         windPow = 0.6f;
     }
 
-    d0.zero();
+    d0.x = d0.y = d0.z = 0.0f;
 
     deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
     deltaXZ.y = 0.0f;

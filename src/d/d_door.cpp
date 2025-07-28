@@ -142,7 +142,7 @@ s32 dDoor_info_c::drawCheck_local() {
 }
 
 /* 8006B824-8006B8AC       .text drawCheck__12dDoor_info_cFi */
-u8 dDoor_info_c::drawCheck(int mode) {
+s32 dDoor_info_c::drawCheck(int mode) {
     s32 rt = drawCheck_local();
     if (rt != 0) {
         if (mode) {
@@ -157,7 +157,7 @@ u8 dDoor_info_c::drawCheck(int mode) {
 }
 
 /* 8006B8AC-8006B954       .text checkExecute__12dDoor_info_cFv */
-u8 dDoor_info_c::checkExecute() {
+s32 dDoor_info_c::checkExecute() {
     mFrontCheck = frontCheck();
     if (fopAcM_CheckStatus(this, fopAcStts_UNK1000_e))
         return 1;
@@ -179,7 +179,7 @@ void dDoor_info_c::startDemoProc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
     shape_angle.y = current.angle.y;
-    JUT_ASSERT(VERSION_SELECT(271, 274, 274, 274), player);
+    JUT_ASSERT(DEMO_SELECT(271, 274), player);
     s16 delta = player->home.angle.y - home.angle.y;
     if (delta < 0)
         delta = -delta;
@@ -234,7 +234,7 @@ void dDoor_info_c::initProc(int spl) {
 
 /* 8006BBB0-8006BC50       .text initOpenDemo__12dDoor_info_cFi */
 void dDoor_info_c::initOpenDemo(int evt) {
-    if (field_0x2c6 != 9)
+    if (m2C6 != 9)
         dComIfGp_map_setAGBMapSendStopFlg();
 
     shape_angle.y = current.angle.y;
@@ -469,7 +469,7 @@ BOOL dDoor_key2_c::keyProc() {
 /* 8006C650-8006C764       .text keyCreate_Nkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Nkey() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCN);
-    JUT_ASSERT(VERSION_SELECT(713, 716, 716, 716), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(713, 716), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
@@ -485,7 +485,7 @@ BOOL dDoor_key2_c::keyCreate_Nkey() {
 /* 8006C764-8006C910       .text keyCreate_Bkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Bkey() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCB);
-    JUT_ASSERT(VERSION_SELECT(737, 740, 740, 740), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(737, 740), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
@@ -503,7 +503,7 @@ BOOL dDoor_key2_c::keyCreate_Bkey() {
     case J3DErrType_OutOfMemory:
         return FALSE;
     default:
-        JUT_ASSERT(VERSION_SELECT(771, 774, 774, 774), FALSE);
+        JUT_ASSERT(DEMO_SELECT(771, 774), FALSE);
     case J3DErrType_Success:
         return TRUE;
     }
@@ -650,7 +650,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
             mState++;
         break;
     case 2:
-        JUT_ASSERT(VERSION_SELECT(951, 954, 954, 954), m_msg);
+        JUT_ASSERT(DEMO_SELECT(951, 954), m_msg);
         if (m_msg->mStatus == fopMsgStts_MSG_TYPING_e) {
             switch (mMsgId) {
             case 0x1BBD:
@@ -662,7 +662,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
         }
         break;
     case 3:
-        JUT_ASSERT(VERSION_SELECT(967, 970, 970, 970), m_msg);
+        JUT_ASSERT(DEMO_SELECT(967, 970), m_msg);
         if (m_msg->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
             switch (mMsgId) {
             case 0x1BBD:
@@ -712,7 +712,7 @@ BOOL dDoor_hkyo_c::create() {
         return TRUE;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hkyo", HKYO_BDL_HKYO1);
-    JUT_ASSERT(VERSION_SELECT(1049, 1052, 1052, 1052), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1049, 1052), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (mpModel == NULL)

@@ -229,7 +229,7 @@ void J3DJoint::entryIn() {
     MtxP anmMtx = j3dSys.getModel()->getAnmMtx(mJntNo);
     j3dSys.getDrawBuffer(0)->setZMtx(anmMtx);
     j3dSys.getDrawBuffer(1)->setZMtx(anmMtx);
-    for  (J3DMaterial* mesh = mMesh; mesh != NULL; ) {
+    for (J3DMaterial* mesh = mMesh; mesh != NULL; ) {
         if (mesh->getShape()->checkFlag(J3DShpFlag_Hide)) {
             mesh = mesh->getNext();
         } else {

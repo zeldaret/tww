@@ -237,7 +237,7 @@ calc_012:
             i_this->mTimer[0] = cM_rndF(2.0f) + 10.0f + REG0_F(12);
         }
         if (i_this->mTimer[0] > (s16)(REG0_S(1) + 8)) {
-            cLib_addCalcAngleS2(&i_this->mAngleRoll, g_regHIO.mChild->mShortRegs[2] + 0x3000, 2, g_regHIO.mChild->mShortRegs[3] + 0x2000);
+            cLib_addCalcAngleS2(&i_this->mAngleRoll, REG0_S(2) + 0x3000, 2, REG0_S(3) + 0x2000);
         }
         if (i_this->mTimer[1] == 0) {
             i_this->mTimer[1] = 20.0f + cM_rndF(50.0f);

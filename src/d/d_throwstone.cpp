@@ -55,7 +55,7 @@ cPhs_State daThrowstone_c::_create() {
 }
 
 /* 8023B5DC-8023B6DC       .text daThrowstoneCreate__FPv */
-static s32 daThrowstoneCreate(void* ptr) {
+static cPhs_State daThrowstoneCreate(void* ptr) {
     return ((daThrowstone_c*)ptr)->_create();
 }
 

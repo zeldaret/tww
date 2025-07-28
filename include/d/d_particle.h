@@ -129,7 +129,7 @@ public:
     void setSpeed (f32 vel) { mVelFade1 = vel; }
     void setPitch (f32 pitch) { mVelFade2 = pitch; }
     void setMaxSpeed (f32 vel) { mMaxParticleVelocity = vel; }
-    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; } 
+    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; }
     void setAnchor (cXyz* anchorPos1, cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
 
     virtual ~dPa_waveEcallBack() {}
@@ -216,7 +216,7 @@ public:
     /* 0x08 */ const cXyz* mPos;
     /* 0x0C */ u32 mFlags;
     /* 0x10 */ f32 mRate;
-};
+}; // size = 0x14
 
 class dPa_modelEmitter_c : public node_class {
 public:
@@ -489,8 +489,8 @@ public:
     void draw2DmenuFore(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuFore_e); }
     void draw2DmenuBack(JPADrawInfo* inf) { draw(inf, dPtclGroup_2DmenuBack_e); }
 
-    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); } 
-    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); } 
+    u32 getParticleNum() { return mEmitterMng->getParticleNumber(); }
+    u32 getEmitterNum() { return mEmitterMng->getEmitterNumber(); }
 
     int addModelEmitter(dPa_modelEmitter_c *emitter) { return mModelControl->add(emitter); }
     void drawModelParticle() { mModelControl->draw(); }
@@ -507,6 +507,7 @@ public:
     static u8 mStatus;
 
     static JPAEmitterManager* getEmitterManager() { return mEmitterMng; }
+    static void forceDeleteEmitter(JPABaseEmitter* emitter) { mEmitterMng->forceDeleteEmitter(emitter); }
     static JPAEmitterManager* mEmitterMng;
 
     static dPa_stripesEcallBack mStripes;

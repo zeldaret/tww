@@ -23,7 +23,7 @@ public:
     virtual ~mDoExt_baseAnm() {}
 
     int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
-    int play();
+    BOOL play();
 
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
@@ -143,7 +143,7 @@ private:
     /* 0x08 */ J3DAnmTexPattern* mpAnm;
     /* 0x0C */ J3DTexNoAnm* field_0xc;
     /* 0x10 */ u16 mUpdateMaterialNum;
-};
+}; // size = 0x14
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
 public:
@@ -574,9 +574,7 @@ public:
     void setModel(J3DModel*) {}
     void update() {}
     
-    void draw() {
-        /* Nonmatching */
-    }
+    void draw();
     void setMaterial();
 };
 
@@ -596,6 +594,8 @@ public:
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
+    ~mDoExt_3DlineMat0_c() {}
+
     BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
     void setMaterial();
     void draw();
@@ -618,6 +618,8 @@ public:
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
+    ~mDoExt_3DlineMat1_c() {}
+    
     BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
     void setMaterial();
     void draw();

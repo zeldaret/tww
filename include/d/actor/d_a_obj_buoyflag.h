@@ -10,10 +10,10 @@ namespace daObjBuoyflag {
     class Act_c;
     
     enum Type_e {
-        
+
     };
     enum Texture_e {
-        
+        Texture_01_e = 0x1,
     };
     
     class Packet_c {
