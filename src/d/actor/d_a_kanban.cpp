@@ -784,7 +784,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
 
     switch (i_this->m2BE) {
         case 0:
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
             mother_move(i_this);
             if (i_this->m2C2 == 0 && i_this->m2C0 != 20 && i_this->m2C0 != 21) 
 #endif
@@ -803,7 +803,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
                         }
                     }
                 } else {
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
                     i_this->actor.eventInfo.onCondition(dEvtCnd_CANTALK_e);
 #else
                     if (i_this->m2C2 == 0 && i_this->m2C0 != 0x14 && i_this->m2C0 != 0x15) {
@@ -973,7 +973,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             };
 
             J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kanban", kanban_bdl[i]);
-            JUT_ASSERT(DEMO_SELECT(1920, 1919), modelData != NULL);
+            JUT_ASSERT(VERSION_SELECT(1920, 1920, 1919, 1919), modelData != NULL);
 
             setTex(modelData);
 
