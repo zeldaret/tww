@@ -1373,7 +1373,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ikari"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_jbo", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_kaji"),
-    ActorRel(NonMatching, "d_a_kanban", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Equivalent, "d_a_kanban", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Matching, "d_a_ki", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching, "d_a_knob00"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),   "d_a_kui"),

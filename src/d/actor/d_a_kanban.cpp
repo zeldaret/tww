@@ -124,8 +124,9 @@ void shibuki_set(kanban_class* i_this, cXyz pos, float scaleXZ) {
 /* 0000055C-00000884       .text sea_water_check__FP12kanban_class */
 BOOL sea_water_check(kanban_class* i_this) {
     u8 iVar3 = 0;
-    f32 fVar4;
-    f32 tmp1;
+    f32 f4;
+    f32 f0;
+    f32 f1;
 
     if (REG8_S(1) != 0) {
         return FALSE;
@@ -135,39 +136,39 @@ BOOL sea_water_check(kanban_class* i_this) {
     i_this->actor.gravity = -3.0f;
 
     if (daSea_ChkArea(i_this->actor.current.pos.x, i_this->actor.current.pos.z)) {
-        fVar4 = daSea_calcWave(i_this->actor.current.pos.x, i_this->actor.current.pos.z);
-        i_this->m528.y = fVar4;
+        f1 = daSea_calcWave(i_this->actor.current.pos.x, i_this->actor.current.pos.z);
+        i_this->m528.y = f1;
         if (i_this->m2C4 == 1) {
             i_this->m2A0 = 7.0f;
         }
 
-        if (i_this->actor.current.pos.y < (fVar4 - 120.0f) + REG8_F(6)) {
+        if (i_this->actor.current.pos.y < (f1 - 120.0f) + REG8_F(6)) {
             i_this->actor.gravity = 0.0f;
             i_this->actor.speedF = 0.0f;
             i_this->actor.speed.setall(0.0f);
             i_this->m2BC += (s16)(REG8_F(7) + 1000.0f);
 
-            tmp1 = (REG8_F(8) + 147.0f) + (REG8_F(9) + 2.0f) * cM_ssin(i_this->m2BC);
-            cLib_addCalc2(&i_this->actor.current.pos.y, fVar4 - tmp1, 1.0f, 30.0f);
+            f0 = (REG8_F(8) + 147.0f) + (REG8_F(9) + 2.0f) * cM_ssin(i_this->m2BC);
+            cLib_addCalc2(&i_this->actor.current.pos.y, f1 - f0, 1.0f, 30.0f);
             iVar3 = 1;
         }
     } else if (i_this->m350.MaskWaterIn()) {
         iVar3 = 2;
-        fVar4 = i_this->m350.m_wtr.GetHeight();
-        i_this->m528.y = fVar4;
+        f4 = i_this->m350.m_wtr.GetHeight();
+        i_this->m528.y = i_this->m350.m_wtr.GetHeight();
         if (i_this->m2C4 == 1) {
             i_this->m2A0 = 7.0f;
         }
 
         i_this->actor.gravity = -3.0f;
-        if (i_this->actor.current.pos.y < fVar4) {
+        if (i_this->actor.current.pos.y < f4) {
             i_this->actor.gravity = 0.0f;
             i_this->actor.speedF = 0.0f;
             i_this->actor.speed.setall(0.0f);
             i_this->m2BC += (s16)(REG8_F(7) + 1000.0f);
 
-            tmp1 = (REG8_F(8) + 147.0f) + (REG8_F(9) + 2.0f) * cM_ssin(i_this->m2BC);
-            cLib_addCalc2(&i_this->actor.current.pos.y, fVar4 - tmp1, 1.0f, 30.0f);
+            f0 = (REG8_F(8) + 147.0f) + (REG8_F(9) + 2.0f) * cM_ssin(i_this->m2BC);
+            cLib_addCalc2(&i_this->actor.current.pos.y, f4 - f0, 1.0f, 30.0f);
             iVar3 = 1;
         }
     }
@@ -359,7 +360,7 @@ void mother_move(kanban_class* i_this) {
                                 return;
                             }
 
-                        case AT_TYPE_SWORD:
+                        case AT_TYPE_SWORD: {
                             s32 i = 0;
                             for (; i < 32; i++) {
                                 if (pl_cut_real_no_dt[i] == player->getCutType()) {
@@ -372,7 +373,7 @@ void mother_move(kanban_class* i_this) {
                                 cut_point_check(i_this);
                             }
                             break;
-
+                        }
                         default:
                             i_this->m2C4 = 4;
                             cut_point_check(i_this);
@@ -545,7 +546,7 @@ void mother_return_move(kanban_class* i_this) {
             }
             break;
 
-        case 32:
+        case 32: {
             cLib_addCalcAngleS2(&a_this->current.angle.y, i_this->m2F0.y, 1, 0x1000);
             s16 sVar2 = cLib_distanceAngleS(a_this->current.angle.y, i_this->m2F0.y);
             if (sVar2 < 0x100) {
@@ -553,7 +554,7 @@ void mother_return_move(kanban_class* i_this) {
                 i_this->m2C0++;
             }
             break;
-
+        }
         case 33:
             if (i_this->m294 == 0x7FE) {
                 i_this->m2C2 = 0;
@@ -717,7 +718,7 @@ void chield_parts_move(kanban_class* i_this) {
             }
             break;
 
-        case 0x84:
+        case 0x84: {
             cLib_addCalcAngleS2(&i_this->actor.current.angle.y, i_this->m2F0.y, 1, 0x1000);
             s16 sVar3 = cLib_distanceAngleS(i_this->actor.current.angle.y, i_this->m2F0.y);
             if (sVar3 < 0x100) {
@@ -729,7 +730,7 @@ void chield_parts_move(kanban_class* i_this) {
                 }
             }
             break;
-        
+        }
         case 0x85:
             kanban_class* kanban = (kanban_class*)fopAcM_SearchByID(i_this->m2C8);
             if (kanban != NULL) {
