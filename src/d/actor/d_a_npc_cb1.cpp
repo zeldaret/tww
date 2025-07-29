@@ -104,33 +104,33 @@ daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
     mNpc.m22 = 0;
     mNpc.mMaxAttnDistXZ = 180.0f;
     field_0x30 = 50.0f;
-    field_0x34 = 140.0f;
-    field_0x38 = 0.05f;
-    field_0x3C = 9.0f;
-    field_0x40 = 3.0f;
-    field_0x44 = 0.4f;
+    mPlayerChaseDistance = 140.0f;
+    mChaseDistScale = 0.05f;
+    mMaxWalkSpeed = 9.0f;
+    mMinWalkSpeed = 3.0f;
+    mForwardAccel = 0.4f;
     field_0xE8 = 0x8FC;
     field_0xEA = 0x320;
     field_0xEC = 0x3;
-    field_0x48 = 0.9f;
-    field_0x4C = 1.0f;
-    field_0x50 = 1.0f;
-    field_0x54 = 0.45f;
-    field_0x58 = 0.9f;
-    field_0x5C = 50.0f;
-    field_0x60 = 20.0f;
+    mDecelScale = 0.9f;
+    mMaxDecel = 1.0f;
+    mDecel = 1.0f;
+    mWalkAnmSpeedScale = 0.45f;
+    mMaxWalkAnmSpeed = 0.9f;
+    mNpcFlyLaunchSpeedF = 50.0f;
+    mNpcFlyLaunchSpeedY = 20.0f;
     field_0x64 = 8.0f;
-    field_0x68 = -1.0f;
-    field_0x6C = 3.5f;
+    mHitSpeedScaleF = -1.0f;
+    mHitSpeedScaleY = 3.5f;
     field_0x70 = -4.0f;
     field_0x74 = -1.5f;
     field_0x78 = -6.0f;
     field_0x7C = -7.6f;
     field_0x80 = 0.1f;
     field_0x84 = 0.2f;
-    field_0x88 = 10.0f;
+    mStickWalkSpeedScale = 10.0f;
     field_0xC8 = -0x1000;
-    field_0xCA = 0x1C2;
+    mPlayerFlyTimer = 0x1C2;
     field_0xCC = 0x64;
     field_0xCE = 0xF;
     field_0xD0 = 0x4E20;
@@ -146,20 +146,20 @@ daNpc_Cb1_HIO_c::daNpc_Cb1_HIO_c() {
     field_0xA4 = 100.0f;
     field_0xA8 = 6000.0f;
     field_0xE0 = 0xC8;
-    field_0xAC = 0.5f;
+    mStickFlySpeedScale = 0.5f;
     field_0xDA = 0x2968;
     field_0xB0 = 34.0f;
     field_0xB4 = 2.0f;
-    field_0xDC = 0x3C;
+    mNpcFlyTimer = 0x3C;
     field_0xDE = 0xD;
     field_0xB8 = 2.0f;
-    field_0xBC = 50.0f;
+    mFlyLaunchSpeedY = 50.0f;
     field_0xC0 = 400.0f;
     field_0xE2 = 0x5;
     field_0xE4 = 0x14;
     field_0xE6 = 0xBB8;
     field_0xC4 = 20.0f;
-    field_0xEE = 0x3C;
+    mDamageTimer = 0x3C;
     field_0xEF = 0;
     mNo = -1;
 }
@@ -616,7 +616,7 @@ void daNpc_Cb1_c::checkLanding() {
 
 /* 00001B28-00001B68       .text breaking__11daNpc_Cb1_cFv */
 void daNpc_Cb1_c::breaking() {
-    cLib_addCalc(&speedF, 0.0f, l_HIO.field_0x48, l_HIO.field_0x4C, l_HIO.field_0x50);
+    cLib_addCalc(&speedF, 0.0f, l_HIO.mDecelScale, l_HIO.mMaxDecel, l_HIO.mDecel);
 }
 
 /* 00001B68-0000270C       .text flyAction__11daNpc_Cb1_cFifsi */
@@ -651,8 +651,8 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
         f32 temp5 = l_HIO.field_0x9C;
 
         if(m8F2) {
-            temp.x = param_2 * cM_ssin(param_3) + temp.x;
-            temp.z = param_2 * cM_scos(param_3) + temp.z;
+            temp.x += param_2 * cM_ssin(param_3);
+            temp.z += param_2 * cM_scos(param_3);
         }
 
         if(!isMusic() && mWindCyl.ChkTgHit()) {
@@ -762,7 +762,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
 
         fopAcM_seStart(this, JA_SE_CM_PRAPELLO_ROLLING, m8F8 * (100.0f / l_HIO.field_0xD0));
 
-        if((param_4 || (!isMakarPlayer && mAcch.ChkWallHit()) || (!mAcch.ChkGroundHit() && m8F8 == 0)) ||
+        if(param_4 || (!isMakarPlayer && mAcch.ChkWallHit()) || (!mAcch.ChkGroundHit() && m8F8 == 0) ||
             (mAcch.ChkGroundHit() && m8F8 <= l_HIO.field_0xD2 && (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x80 || ++m8F6 > l_HIO.field_0xCC))
         ) {
             setAnm(ANM_06);
@@ -810,18 +810,18 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
 }
 
 /* 0000270C-00002818       .text walkAction__11daNpc_Cb1_cFffs */
-BOOL daNpc_Cb1_c::walkAction(f32 param_1, f32 param_2, s16 param_3) {
-    cLib_chaseAngleS(&current.angle.y, param_3, 0x400);
+BOOL daNpc_Cb1_c::walkAction(f32 targetSpeed, f32 accel, s16 targetAngle) {
+    cLib_chaseAngleS(&current.angle.y, targetAngle, 0x400);
     lookBack(1);
     shape_angle.y = current.angle.y;
-    if(cLib_chaseF(&speedF, param_1, param_2) && param_1 == 0.0f) {
+    if(cLib_chaseF(&speedF, targetSpeed, accel) && targetSpeed == 0.0f) {
         setNpcAction(&daNpc_Cb1_c::waitNpcAction, NULL);
 
         return TRUE;
     }
 
-    f32 playSpeed = std::fabsf(speedF) * l_HIO.field_0x54;
-    playSpeed = cLib_minLimit(playSpeed, l_HIO.field_0x58);
+    f32 playSpeed = std::fabsf(speedF) * l_HIO.mWalkAnmSpeedScale;
+    playSpeed = cLib_minLimit(playSpeed, l_HIO.mMaxWalkAnmSpeed);
     mpMorf->setPlaySpeed(playSpeed);
 
     return FALSE;
@@ -1238,7 +1238,7 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
     }
 
     if(mAcch.ChkGroundHit()) {
-        walkAction(walkSpeed, l_HIO.field_0x44, angle);
+        walkAction(walkSpeed, l_HIO.mForwardAccel, angle);
     }
     else if(m8E0) {
         speed.y = 10.0f;
@@ -1269,7 +1269,7 @@ BOOL daNpc_Cb1_c::evActToLink(int staffIdx) {
         return TRUE;
     }
     else {
-        walkAction(*speed_p, l_HIO.field_0x44, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
+        walkAction(*speed_p, l_HIO.mForwardAccel, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
     }
 
     return FALSE;
@@ -1621,7 +1621,7 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
 
             f32 dist = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
 
-            if(!checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND)) {
+            if(!checkNpcCallCommand()) {
                 if(dComIfGs_isEventBit(0x1610) && dist < l_HIO.field_0xC0 * l_HIO.field_0xC0) {
                     daPy_getPlayerLinkActorClass()->onNpcCall();
 
@@ -1629,7 +1629,7 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
                 }
             }
             else {
-                if(dist >= l_HIO.field_0x34 * l_HIO.field_0x34) {
+                if(dist >= l_HIO.mPlayerChaseDistance * l_HIO.mPlayerChaseDistance) {
                     setNpcAction(&daNpc_Cb1_c::searchNpcAction, NULL);
                 }
 
@@ -1769,12 +1769,12 @@ BOOL daNpc_Cb1_c::carryNpcAction(void*) {
 BOOL daNpc_Cb1_c::flyNpcAction(void*) {
     s8 temp = m8F0;
     if(temp == 0) {
-        speedF = l_HIO.field_0x5C;
-        speed.y = l_HIO.field_0x60;
+        speedF = l_HIO.mNpcFlyLaunchSpeedF;
+        speed.y = l_HIO.mNpcFlyLaunchSpeedY;
 
         setAnm(ANM_04);
 
-        setFlyingTimer(l_HIO.field_0xDC);
+        setFlyingTimer(l_HIO.mNpcFlyTimer);
 
         m8FC = l_HIO.field_0xD8 + 1;
 
@@ -1945,12 +1945,12 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                 f32 dist1 = fopAcM_searchPlayerDistance2(this);
                 f32 dist2 = fopAcM_searchPlayerDistanceXZ2(this);
 
-                if(!door && dist1 < l_HIO.field_0x34 * l_HIO.field_0x34) {
+                if(!door && dist1 < l_HIO.mPlayerChaseDistance * l_HIO.mPlayerChaseDistance) {
                     temp2 = 0.0f;
                 }
                 else {
-                    temp2 = l_HIO.field_0x38 * std::sqrtf(dist2);
-                    temp2 = cLib_maxLimit(temp2, l_HIO.field_0x3C);
+                    temp2 = l_HIO.mChaseDistScale * std::sqrtf(dist2);
+                    temp2 = cLib_maxLimit(temp2, l_HIO.mMaxWalkSpeed);
                 }
 
                 temp = fopAcM_searchPlayerAngleY(this);
@@ -1986,7 +1986,7 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
             setNpcAction(&daNpc_Cb1_c::hitNpcAction, NULL);
         }
         else {
-            walkAction(temp2, l_HIO.field_0x44, temp);
+            walkAction(temp2, l_HIO.mForwardAccel, temp);
         }
     }
 
@@ -1998,9 +1998,9 @@ BOOL daNpc_Cb1_c::hitNpcAction(void*) {
     if(m8F0 == 0) {
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-        speedF = cLib_maxLimit(speedF, l_HIO.field_0x3C * 0.5f);
-        speed.y = l_HIO.field_0x6C * std::fabsf(speedF);
-        speedF *= l_HIO.field_0x68;
+        speedF = cLib_maxLimit(speedF, l_HIO.mMaxWalkSpeed * 0.5f);
+        speed.y = l_HIO.mHitSpeedScaleY * std::fabsf(speedF);
+        speedF *= l_HIO.mHitSpeedScaleF;
 
         fopAcM_seStart(this, JA_SE_CM_CB_BOUND, 0);
 
@@ -2168,18 +2168,18 @@ BOOL daNpc_Cb1_c::walkPlayerAction(void*) {
         cLib_onBit<u32>(attention_info.flags, ~0);
     }
     else if(m8F0 != -1 && !sowCheck()) {
-        f32 temp = g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.field_0x88;
+        f32 temp = g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickWalkSpeedScale;
         s16 temp7 = getStickAngY();
         s32 temp2 = cLib_distanceAngleS(temp7, current.angle.y);
-        f32 temp6 = l_HIO.field_0x44;
+        f32 temp6 = l_HIO.mForwardAccel;
 
         if(temp > speedF) {
-            if(temp < l_HIO.field_0x40) {
-                temp = l_HIO.field_0x40;
+            if(temp < l_HIO.mMinWalkSpeed) {
+                temp = l_HIO.mMinWalkSpeed;
             }
         }
         else {
-            temp6 = l_HIO.field_0x50;
+            temp6 = l_HIO.mDecel;
         }
 
         if(temp2 > 0x6000) {
@@ -2206,14 +2206,14 @@ BOOL daNpc_Cb1_c::walkPlayerAction(void*) {
             shape_angle.y = temp3;
         }
 
-        temp = cLib_maxLimit(temp, l_HIO.field_0x3C);
+        temp = cLib_maxLimit(temp, l_HIO.mMaxWalkSpeed);
 
         if(cLib_chaseF(&speedF, temp, temp6) && temp == 0) {
             setPlayerAction(&daNpc_Cb1_c::waitPlayerAction, NULL);
         }
         else {
-            f32 temp8 = speedF * l_HIO.field_0x54;
-            mpMorf->setPlaySpeed(cLib_minLimit(temp8, l_HIO.field_0x58));
+            f32 temp8 = speedF * l_HIO.mWalkAnmSpeedScale;
+            mpMorf->setPlaySpeed(cLib_minLimit(temp8, l_HIO.mMaxWalkAnmSpeed));
 
             if(!mAcch.ChkGroundHit()) {
                 setPlayerAction(&daNpc_Cb1_c::jumpPlayerAction, NULL);
@@ -2235,9 +2235,9 @@ BOOL daNpc_Cb1_c::walkPlayerAction(void*) {
 /* 00006D00-00006E20       .text hitPlayerAction__11daNpc_Cb1_cFPv */
 BOOL daNpc_Cb1_c::hitPlayerAction(void*) {
     if(m8F0 == 0) {
-        speedF = cLib_maxLimit(speedF, 0.5f * l_HIO.field_0x3C);
-        speed.y = l_HIO.field_0x6C * std::fabsf(speedF);
-        speedF *= l_HIO.field_0x68;
+        speedF = cLib_maxLimit(speedF, 0.5f * l_HIO.mMaxWalkSpeed);
+        speed.y = l_HIO.mHitSpeedScaleY * std::fabsf(speedF);
+        speedF *= l_HIO.mHitSpeedScaleF;
 
         fopAcM_seStart(this, JA_SE_CM_CB_BOUND, 0);
 
@@ -2276,17 +2276,17 @@ BOOL daNpc_Cb1_c::jumpPlayerAction(void* param_1) {
 /* 00006EFC-00006FFC       .text flyPlayerAction__11daNpc_Cb1_cFPv */
 BOOL daNpc_Cb1_c::flyPlayerAction(void*) {
     if(m8F0 == 0) {
-        speed.y = l_HIO.field_0xBC;
+        speed.y = l_HIO.mFlyLaunchSpeedY;
         
         setAnm(ANM_04);
 
-        setFlyingTimer(l_HIO.field_0xCA);
+        setFlyingTimer(l_HIO.mPlayerFlyTimer);
 
         fopAcM_monsSeStart(this, JA_SE_CV_CB_LEAF_OUT, 0);
     }
     else if(m8F0 != -1) {
         dComIfGp_setAStatus(dActStts_LET_GO_e);
-        flyAction(CPad_CHECK_TRIG_A(0), g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.field_0xAC, getStickAngY(), CPad_CHECK_TRIG_B(0));
+        flyAction(CPad_CHECK_TRIG_A(0), g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickFlySpeedScale, getStickAngY(), CPad_CHECK_TRIG_B(0));
     }
 
     return TRUE;
@@ -2834,7 +2834,7 @@ BOOL daNpc_Cb1_c::draw() {
 BOOL daNpc_Cb1_c::execute() {
     cLib_offBit<u32>(actor_status, fopAcStts_SHOWMAP_e);
 
-    cLib_calcTimer(&mDamageFogTimer);
+    executeDamageFog();
 
     fopAcM_setStageLayer(this);
 
@@ -3004,12 +3004,12 @@ BOOL daNpc_Cb1_c::execute() {
 
                 playerAction(NULL);
 
-                if(mDamageFogTimer == 0 && !isMusic() && mCyl.ChkTgHit() && mCyl.GetTgHitObj()) {
+                if(getDamageFogTimer() == 0 && !isMusic() && mCyl.ChkTgHit() && mCyl.GetTgHitObj()) {
                     cXyz temp = current.pos - *mCyl.GetTgHitPosP();
                     current.angle.y = cM_atan2s(temp.x, temp.z);
                     speedF = l_HIO.field_0xC4;
                     setPlayerAction(&daNpc_Cb1_c::hitPlayerAction, NULL);
-                    mDamageFogTimer = l_HIO.field_0xEE;
+                    setDamageFogTimer(l_HIO.mDamageTimer);
                     fopAcM_monsSeStart(this, JA_SE_CV_CB_DAMAGE, 0);
                 }
             }
@@ -3034,12 +3034,12 @@ BOOL daNpc_Cb1_c::execute() {
                 current.angle.y = shape_angle.y;
             }
 
-            if(mDamageFogTimer == 0 && !isMusic() && mCyl.ChkTgHit() && mCyl.GetTgHitObj()) {
+            if(getDamageFogTimer() == 0 && !isMusic() && mCyl.ChkTgHit() && mCyl.GetTgHitObj()) {
                 cXyz temp = current.pos - *mCyl.GetTgHitPosP();
                 current.angle.y = cM_atan2s(temp.x, temp.z);
                 speedF = l_HIO.field_0xC4;
                 setNpcAction(&daNpc_Cb1_c::hitNpcAction, NULL);
-                mDamageFogTimer = l_HIO.field_0xEE;
+                setDamageFogTimer(l_HIO.mDamageTimer);
                 fopAcM_monsSeStart(this, JA_SE_CV_CB_DAMAGE, 0);
             }
 
