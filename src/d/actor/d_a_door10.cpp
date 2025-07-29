@@ -132,7 +132,7 @@ BOOL daDoor10_c::chkStopOpen() {
 
     if ((mFrontCheck == 0 && cVar3 == 2) || (mFrontCheck == 1 && cVar3 == 5)) {
 #if VERSION == VERSION_DEMO
-        if (!dComIfGp_event_runCheck() != FALSE) {
+        if (dComIfGp_event_runCheck() == FALSE) {
             if (dComIfGp_roomControl_checkRoomDisp(roomNo)) {
                 if (fopAcM_myRoomSearchEnemy(roomNo) == NULL) {
                     if (m2A1 != 0) {
@@ -154,7 +154,7 @@ BOOL daDoor10_c::chkStopOpen() {
             m2A1 = 0x41;
         }
 #else
-        if (!dComIfGp_event_runCheck() != FALSE || m2A1 == 0) {
+        if (dComIfGp_event_runCheck() == FALSE || m2A1 == 0) {
             if (dComIfGp_roomControl_checkRoomDisp(roomNo)) {
                 if (fopAcM_myRoomSearchEnemy(roomNo) == NULL) {
                     if (m2A1 != 0) {
@@ -258,7 +258,7 @@ f32 daDoor10_c::getSize2X() {
     return 110.0f * 110.0f;
 }
 
-static const char daDoor10_c::M_arcname[] = "door10";
+const char daDoor10_c::M_arcname[] = "door10";
 
 /* 000007CC-000007EC       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {

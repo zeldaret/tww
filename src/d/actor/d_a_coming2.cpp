@@ -13,18 +13,20 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_barrel2.h"
-#include "d/actor/d_a_obj_doguu.h"
 
 #include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
-#include "weak_data_2100_2080.h"  // IWYU pragma: keep
 #include "weak_data_1811.h"  // IWYU pragma: keep
 
-static s32 coming_make_item_no_table[] = {
+s32 daComing2::coming_make_item_no_table[] = {
     dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, 
     dItem_BLUE_RUPEE_e, dItem_BLUE_RUPEE_e, dItem_BLUE_RUPEE_e, dItem_BLUE_RUPEE_e, dItem_BLUE_RUPEE_e, 
     dItem_YELLOW_RUPEE_e, dItem_YELLOW_RUPEE_e, dItem_YELLOW_RUPEE_e, dItem_YELLOW_RUPEE_e, dItem_YELLOW_RUPEE_e
 };
-static GXColor colorR = {255, 100, 100, 255};
+
+static void dummy() {
+    // This may have been used in some debug drawing function.
+    static GXColor colorR = {255, 100, 100, 255};
+}
 
 namespace daComing2 {
     namespace {

@@ -11,6 +11,8 @@ namespace daComing2 {
     static BOOL position_is_none_obj(cXyz*);
     static BOOL checkLineCrossXZ(cXyz*, cXyz*, cXyz*, cXyz*);
 
+    extern s32 coming_make_item_no_table[];
+
     class _barrel_info_ {
     public:
         /* 0x00 */ fpc_ProcID unk_00;

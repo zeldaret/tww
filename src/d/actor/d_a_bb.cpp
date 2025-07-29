@@ -1323,8 +1323,8 @@ void bb_kamome_attack(bb_class* i_this) {
 
 /* 000044EC-00005534       .text bb_atack_move__FP8bb_class */
 void bb_atack_move(bb_class* i_this) {
-    fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(&i_this->actor);
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    fopAc_ac_c* a_this = &i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     s8 r29 = 0;
     s8 r28 = 0;
     f32 x;
@@ -1347,10 +1347,11 @@ void bb_atack_move(bb_class* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    if (&player->base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0) {
+    if (&player->base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
 #else
-    if (&player->base == fpcM_Search(pl_name_check, i_this)) {
+    if (&player->base == fpcM_Search(pl_name_check, i_this))
 #endif
+    {
         bb_kamome_attack(i_this);
         return;
     }
@@ -1524,7 +1525,7 @@ void bb_atack_move(bb_class* i_this) {
                     cXyz scale;
                     scale.x = scale.y = scale.z = 4.0f;
                     
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &i_this->actor.eyePos, NULL, &scale);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, &a_this->eyePos, NULL, &scale);
 
                     i_this->unk_2F1 = 10;
                     i_this->unk_318[0] = l_bbHIO.unk_30;
