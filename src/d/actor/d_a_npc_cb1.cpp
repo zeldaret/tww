@@ -377,7 +377,7 @@ static BOOL ppNodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000D9C-00001458       .text createHeap__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB);
-    JUT_ASSERT(0x3A8, modelData != 0);
+    JUT_ASSERT(0x3A8, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
             modelData,
@@ -413,7 +413,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     if(isMusic()) {
         modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_STICK);
-        JUT_ASSERT(0x3CC, modelData != 0);
+        JUT_ASSERT(0x3CC, modelData != NULL);
         mpStickModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpStickModel == NULL) {
             return FALSE;
@@ -426,7 +426,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         mpStickModel->setUserArea((u32)this);
 
         modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_CELLO);
-        JUT_ASSERT(0x3DD, modelData != 0);
+        JUT_ASSERT(0x3DD, modelData != NULL);
         mpCelloModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
         if(mpCelloModel == NULL) {
             return FALSE;
@@ -434,7 +434,7 @@ BOOL daNpc_Cb1_c::createHeap() {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_PP);
-    JUT_ASSERT(0x3E9, modelData != 0);
+    JUT_ASSERT(0x3E9, modelData != NULL);
     mpPropellerModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpPropellerModel == NULL) {
         return FALSE;
@@ -450,7 +450,7 @@ BOOL daNpc_Cb1_c::createHeap() {
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", CB_BDL_CB_NUT);
-    JUT_ASSERT(0x401, modelData != 0);
+    JUT_ASSERT(0x401, modelData != NULL);
     mpNutModel = mDoExt_J3DModel__create(modelData, 0x00080000, 0x11000022);
     if(mpNutModel == NULL) {
         return FALSE;
@@ -1892,7 +1892,7 @@ BOOL daNpc_Cb1_c::routeCheck(f32 param_1, s16* param_2) {
                 return TRUE;
             }
 
-            if(param_1 > 360000.0f) {
+            if(param_1 > (600.0f * 600.0f)) {
                 return FALSE;
             }
 
@@ -1969,7 +1969,7 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                     temp = current.angle.y;
                 }
 
-                if(dist2 < 160000.0f && cLib_distanceAngleS(shape_angle.y, temp) < 0x2000 && std::fabsf(fopAcM_searchPlayerDistanceY(this)) < 100.0f) {
+                if(dist2 < (400.0f * 400.0f) && cLib_distanceAngleS(shape_angle.y, temp) < 0x2000 && std::fabsf(fopAcM_searchPlayerDistanceY(this)) < 100.0f) {
                     onPlayerFind();
                 }
 
