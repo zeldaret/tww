@@ -170,12 +170,12 @@ public:
 
     void onCb1Ride() {}
     void onCraneHookFlg() {}
-    void onCrashFlg() {}
+    void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
     //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
-    void onShortHitFlg() {}
+    void onShortHitFlg() { onStateFlg(daSFLG_UNK20_e); }
     void onStateFlg(daSHIP_SFLG flag) { mStateFlag |= flag; }
     void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
     void onWhirlFlg(u32, s16) {}

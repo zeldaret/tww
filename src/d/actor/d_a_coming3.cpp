@@ -255,7 +255,7 @@ void daComing3::Act_c::coming_game_main() {
                 unk_404 = 3;
                 eff_break_tsubo();
             } else if ((unk_478 <= get_limit_dist()) && (barrel != NULL)) {
-                barrel->unk_474 = 1;
+                barrel->m474 = 1;
                 unk_404 = 2;
             }
             break;
@@ -286,8 +286,8 @@ void daComing3::Act_c::coming_wait_main() {
 
     fopAcM_SearchByID(unk_400, &ac1);
     daObjBarrel2::Act_c* barrel = (daObjBarrel2::Act_c*)ac1;
-    if (barrel != NULL && !fopAcM_SearchByID(barrel->unk_458, &ac2)) {
-        barrel->unk_474 = 1;
+    if (barrel != NULL && !fopAcM_SearchByID(barrel->m458, &ac2)) {
+        barrel->m474 = 1;
         fopAcM_delete(this);
     }
 }
