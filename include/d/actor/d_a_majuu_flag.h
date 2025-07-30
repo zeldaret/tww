@@ -22,7 +22,7 @@ public:
     GXTexObj* getImageTexObj() { return &mFlagTex; }
     Mtx* getMtx() { return &mPosMtx; }
     cXyz* getNrm() { return mpNrmArr[mCurArr]; }
-    cXyz* getNrmBack() { return mpNrmArrBack[mCurArr]; }
+    cXyz* getBackNrm() { return mpNrmArrBack[mCurArr]; }
     cXyz* getOffsetVec() { return mSpeed; }
     cXyz* getPos() { return mpPosArr[mCurArr]; }
     GXTexObj* getToonTexObj() { return &mToonTex; }

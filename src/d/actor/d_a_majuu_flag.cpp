@@ -20,60 +20,64 @@
 
 class daMajuu_Flag_HIO_c : public mDoHIO_entry_c {
 public:
-    daMajuu_Flag_HIO_c() {
-        mbUseToonTex = true;
-        m06 = 0;
-        m05 = 0;
-        mWaveSpeed = 0x400;
-        mWindSpeed1 = 20.0f;
-        mWindSpeed2 = 10.0f;
-        mFlagScale = 1.0f;
-        mbHasCustomRotation = false;
-        mRotX = -0x5DC;
-        mTransZ = 50.0f;
-        mGravity = -1.25f;
-        mSpring = 0.45f;
-        m07 = 0;
-        m08 = 0;
-    }
-    virtual ~daMajuu_Flag_HIO_c() {}
+  daMajuu_Flag_HIO_c() {
+    mbUseToonTex = true;
+    m06 = 0;
+    m05 = 0;
+    mWaveSpeed = 0x400;
+    mWindSpeed1 = 20.0f;
+    mWindSpeed2 = 10.0f;
+    mFlagScale = 1.0f;
+    mbHasCustomRotation = false;
+    mRotX = -0x5DC;
+    mTransZ = 50.0f;
+    mGravity = -1.25f;
+    mSpring = 0.45f;
+    m07 = 0;
+    m08 = 0;
+  }
+  virtual ~daMajuu_Flag_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+  void genMessage(JORMContext *ctx);
 
 public:
-    /* 0x04 */ bool mbUseToonTex;
-    /* 0x05 */ s8 m05;
-    /* 0x06 */ s8 m06;
-    /* 0x07 */ s8 m07;
-    /* 0x08 */ s8 m08;
-    /* 0x0C */ s32 mWaveSpeed;
-    /* 0x10 */ f32 mWindSpeed1;
-    /* 0x14 */ f32 mWindSpeed2;
-    /* 0x18 */ f32 mGravity;
-    /* 0x1C */ f32 mSpring;
-    /* 0x20 */ f32 mFlagScale;
-    /* 0x24 */ bool mbHasCustomRotation;
-    /* 0x28 */ cXyz mCustomRotation;
-    /* 0x34 */ s32 mRotX;
-    /* 0x38 */ f32 mTransZ;
+  /* 0x04 */ bool mbUseToonTex;
+  /* 0x05 */ s8 m05;
+  /* 0x06 */ s8 m06;
+  /* 0x07 */ s8 m07;
+  /* 0x08 */ s8 m08;
+  /* 0x0C */ s32 mWaveSpeed;
+  /* 0x10 */ f32 mWindSpeed1;
+  /* 0x14 */ f32 mWindSpeed2;
+  /* 0x18 */ f32 mGravity;
+  /* 0x1C */ f32 mSpring;
+  /* 0x20 */ f32 mFlagScale;
+  /* 0x24 */ bool mbHasCustomRotation;
+  /* 0x28 */ cXyz mCustomRotation;
+  /* 0x34 */ s32 mRotX;
+  /* 0x38 */ f32 mTransZ;
 };
 
 static daMajuu_Flag_HIO_c l_HIO;
 
-#include "weak_data_1811.h"  // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u8 unused1[16] = {0};
 
 #include "assets/l_flag02TEX.h"
 
 static Vec l_majuu_flag_pos[] = {
-    {0.0f, -255.0f, 1300.0f}, {0.0f, -306.0f, 1040.0f}, {0.0f, -204.0f, 1040.0f},
-    {0.0f, -357.0f, 780.0f},  {0.0f, -255.0f, 780.0f},  {0.0f, -153.0f, 780.0f},
-    {0.0f, -408.0f, 520.0f},  {0.0f, -306.0f, 520.0f},  {0.0f, -204.0f, 520.0f},
-    {0.0f, -102.0f, 520.0f},  {0.0f, -459.0f, 260.0f},  {0.0f, -357.0f, 260.0f},
-    {0.0f, -255.0f, 260.0f},  {0.0f, -153.0f, 260.0f},  {0.0f, -51.0f, 260.0f},
-    {0.0f, -510.0f, 0.0f},    {0.0f, -408.0f, 0.0f},    {0.0f, -306.0f, 0.0f},
-    {0.0f, -204.0f, 0.0f},    {0.0f, -102.0f, 0.0f},    {0.0f, 0.0f, 0.0f},
+    {0.0f, -255.0f, 1300.0f}, {0.0f, -306.0f, 1040.0f},
+    {0.0f, -204.0f, 1040.0f}, {0.0f, -357.0f, 780.0f},
+    {0.0f, -255.0f, 780.0f},  {0.0f, -153.0f, 780.0f},
+    {0.0f, -408.0f, 520.0f},  {0.0f, -306.0f, 520.0f},
+    {0.0f, -204.0f, 520.0f},  {0.0f, -102.0f, 520.0f},
+    {0.0f, -459.0f, 260.0f},  {0.0f, -357.0f, 260.0f},
+    {0.0f, -255.0f, 260.0f},  {0.0f, -153.0f, 260.0f},
+    {0.0f, -51.0f, 260.0f},   {0.0f, -510.0f, 0.0f},
+    {0.0f, -408.0f, 0.0f},    {0.0f, -306.0f, 0.0f},
+    {0.0f, -204.0f, 0.0f},    {0.0f, -102.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
 };
 static f32 l_texCoord[][2] = {
     {
@@ -166,899 +170,933 @@ static f32 l_texCoord[][2] = {
 #include "assets/l_majuu_flag_matDL.h"
 
 /* 000000EC-00000374       .text set_mtx__FP14daMajuu_Flag_c */
-void set_mtx(daMajuu_Flag_c* i_this) {
-    if (i_this->mpParentMtx != NULL && i_this->mpParentPos != NULL) {
-        cMtx_copy(i_this->mpParentMtx, mDoMtx_stack_c::get());
-        mDoMtx_stack_c::transM(i_this->mpParentPos->x, i_this->mpParentPos->y,
-                               i_this->mpParentPos->z);
-        mDoMtx_stack_c::YrotM(i_this->current.angle.y);
+void set_mtx(daMajuu_Flag_c *i_this) {
+  if (i_this->mpParentMtx != NULL && i_this->mpParentPos != NULL) {
+    cMtx_copy(i_this->mpParentMtx, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::transM(i_this->mpParentPos->x, i_this->mpParentPos->y,
+                           i_this->mpParentPos->z);
+    mDoMtx_stack_c::YrotM(i_this->current.angle.y);
 #if VERSION == VERSION_DEMO
-        mDoMtx_stack_c::transM(0.0f, 0.0f, REG10_F(10) + 6.0f);
+    mDoMtx_stack_c::transM(0.0f, 0.0f, REG10_F(10) + 6.0f);
 #else
-        mDoMtx_stack_c::transM(0.0f, 0.0f, 6.0f);
+    mDoMtx_stack_c::transM(0.0f, 0.0f, 6.0f);
 #endif
-        mDoMtx_stack_c::scaleM(i_this->mFlagScale * l_HIO.mFlagScale,
-                               i_this->mFlagScale * l_HIO.mFlagScale,
-                               i_this->mFlagScale * l_HIO.mFlagScale);
-        cXyz sp08 = cXyz::Zero;
-        mDoMtx_stack_c::multVec(&sp08, &i_this->current.pos);
-        cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
+    mDoMtx_stack_c::scaleM(i_this->mFlagScale * l_HIO.mFlagScale,
+                           i_this->mFlagScale * l_HIO.mFlagScale,
+                           i_this->mFlagScale * l_HIO.mFlagScale);
+    cXyz sp08 = cXyz::Zero;
+    mDoMtx_stack_c::multVec(&sp08, &i_this->current.pos);
+    cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
+  } else {
+    MtxTrans(i_this->current.pos.x, i_this->current.pos.y,
+             i_this->current.pos.z, false);
+    if (l_HIO.mbHasCustomRotation) {
+      cMtx_ZrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.z));
+      cMtx_XrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.x));
+      cMtx_YrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.y));
     } else {
-        MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
-        if (l_HIO.mbHasCustomRotation) {
-            cMtx_ZrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.z));
-            cMtx_XrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.x));
-            cMtx_YrotM(*calc_mtx, cM_deg2s(l_HIO.mCustomRotation.y));
-        } else {
-            cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
-            cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-            cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-            if (i_this->mFlagType == 4 || i_this->mTexType != 0) {
+      cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+      cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+      cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+      if (i_this->mFlagType == 4 || i_this->mTexType != 0) {
 #if VERSION == VERSION_DEMO
-                MtxTrans(0.0f, 0.0f, REG10_F(10) + 5.0f, true);
+        MtxTrans(0.0f, 0.0f, REG10_F(10) + 5.0f, true);
 #else
-                MtxTrans(0.0f, 0.0f, 5.0f, true);
+        MtxTrans(0.0f, 0.0f, 5.0f, true);
 #endif
-            } else {
-                cMtx_XrotM(*calc_mtx, l_HIO.mRotX);
-                MtxTrans(0.0f, 0.0f, l_HIO.mTransZ, true);
-            }
-        }
-        MtxScale(i_this->mFlagScale * l_HIO.mFlagScale, i_this->mFlagScale * l_HIO.mFlagScale,
-                 i_this->mFlagScale * l_HIO.mFlagScale, true);
-        cMtx_copy(*calc_mtx, i_this->mMtx);
+      } else {
+        cMtx_XrotM(*calc_mtx, l_HIO.mRotX);
+        MtxTrans(0.0f, 0.0f, l_HIO.mTransZ, true);
+      }
     }
+    MtxScale(i_this->mFlagScale * l_HIO.mFlagScale,
+             i_this->mFlagScale * l_HIO.mFlagScale,
+             i_this->mFlagScale * l_HIO.mFlagScale, true);
+    cMtx_copy(*calc_mtx, i_this->mMtx);
+  }
 }
 
 /* 000003B0-000003E4       .text setNrmMtx__21daMajuu_Flag_packet_cFv */
-void daMajuu_Flag_packet_c::setNrmMtx() {
-    cMtx_YrotS(*calc_mtx, mRotateY);
-}
+void daMajuu_Flag_packet_c::setNrmMtx() { cMtx_YrotS(*calc_mtx, mRotateY); }
 
 /* 000003E4-0000046C       .text setBackNrm__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::setBackNrm() {
 #if VERSION == VERSION_DEMO
-    cXyz* nrm = mpNrmArr[mCurArr];
-    cXyz* nrmBack = mpNrmArrBack[mCurArr];
+  cXyz *nrm = mpNrmArr[mCurArr];
+  cXyz *nrmBack = mpNrmArrBack[mCurArr];
 #else
-    cXyz* nrm = getNrm();
-    cXyz* nrmBack = getNrmBack();
+  cXyz *nrm = getNrm();
+  cXyz *nrmBack = getBackNrm();
 #endif
 
-    for (s32 i = 0; i < 21; i++, nrm++, nrmBack++) {
-        *nrmBack = cXyz::Zero;
-        *nrmBack -= *nrm;
-    }
+  for (s32 i = 0; i < 21; i++, nrm++, nrmBack++) {
+    *nrmBack = cXyz::Zero;
+    *nrmBack -= *nrm;
+  }
 }
 
 /* 0000046C-000006E8       .text setNrmVtx__21daMajuu_Flag_packet_cFP4cXyzi */
-void daMajuu_Flag_packet_c::setNrmVtx(cXyz* pDst, int index) {
-    static s32 rel_pos_idx_tbl[][7] = {
-        {
-            1,
-            2,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            3,
-            4,
-            2,
-            0,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            0,
-            1,
-            4,
-            5,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            6,
-            7,
-            4,
-            1,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            1,
-            3,
-            7,
-            8,
-            5,
-            2,
-            1,
-        },
-        {
-            2,
-            4,
-            8,
-            9,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            10,
-            11,
-            7,
-            3,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            3,
-            6,
-            11,
-            12,
-            8,
-            4,
-            3,
-        },
-        {
-            4,
-            7,
-            12,
-            13,
-            9,
-            5,
-            4,
-        },
-        {
-            5,
-            8,
-            13,
-            14,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            15,
-            16,
-            11,
-            6,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            6,
-            10,
-            16,
-            17,
-            12,
-            7,
-            6,
-        },
-        {
-            7,
-            11,
-            17,
-            18,
-            13,
-            8,
-            7,
-        },
-        {
-            8,
-            12,
-            18,
-            19,
-            14,
-            9,
-            8,
-        },
-        {
-            9,
-            13,
-            19,
-            20,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            16,
-            10,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            17,
-            11,
-            10,
-            15,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            18,
-            12,
-            11,
-            16,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            19,
-            13,
-            12,
-            17,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            20,
-            14,
-            13,
-            18,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            14,
-            19,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-    };
-    cXyz sp80;
-    cXyz sp74;
-    cXyz sp68;
-    cXyz sp5C;
-    cXyz sp50;
-    cXyz* pos = getPos();
+void daMajuu_Flag_packet_c::setNrmVtx(cXyz *pDst, int index) {
+  static s32 rel_pos_idx_tbl[][7] = {
+      {
+          1,
+          2,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          3,
+          4,
+          2,
+          0,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          0,
+          1,
+          4,
+          5,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          6,
+          7,
+          4,
+          1,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          1,
+          3,
+          7,
+          8,
+          5,
+          2,
+          1,
+      },
+      {
+          2,
+          4,
+          8,
+          9,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          10,
+          11,
+          7,
+          3,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          3,
+          6,
+          11,
+          12,
+          8,
+          4,
+          3,
+      },
+      {
+          4,
+          7,
+          12,
+          13,
+          9,
+          5,
+          4,
+      },
+      {
+          5,
+          8,
+          13,
+          14,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          15,
+          16,
+          11,
+          6,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          6,
+          10,
+          16,
+          17,
+          12,
+          7,
+          6,
+      },
+      {
+          7,
+          11,
+          17,
+          18,
+          13,
+          8,
+          7,
+      },
+      {
+          8,
+          12,
+          18,
+          19,
+          14,
+          9,
+          8,
+      },
+      {
+          9,
+          13,
+          19,
+          20,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          16,
+          10,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          17,
+          11,
+          10,
+          15,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          18,
+          12,
+          11,
+          16,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          19,
+          13,
+          12,
+          17,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          20,
+          14,
+          13,
+          18,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          14,
+          19,
+          -1,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+  };
+  cXyz sp80;
+  cXyz sp74;
+  cXyz sp68;
+  cXyz sp5C;
+  cXyz sp50;
+  cXyz *pos = getPos();
 
-    sp50 = pos[index];
+  sp50 = pos[index];
 
-    sp5C.setall(0.0f);
-    s32* relPos = rel_pos_idx_tbl[index];
+  sp5C.setall(0.0f);
+  s32 *relPos = rel_pos_idx_tbl[index];
 
-    for (s32 i = 0; i < 6; i++, relPos++) {
-        if (relPos[1] == -1) {
-            break;
-        }
-
-        sp80 = pos[relPos[0]] - sp50;
-        sp74 = pos[relPos[1]] - sp50;
-        sp68 = sp74.outprod(sp80);
-        sp68 = sp68.normZC();
-
-        sp5C += sp68;
+  for (s32 i = 0; i < 6; i++, relPos++) {
+    if (relPos[1] == -1) {
+      break;
     }
 
-    sp5C = sp5C.normZC();
+    sp80 = pos[relPos[0]] - sp50;
+    sp74 = pos[relPos[1]] - sp50;
+    sp68 = sp74.outprod(sp80);
+    sp68 = sp68.normZC();
 
-    s32 iVar2;
-    s32 iVar4;
-    if (index == 0) {
-        iVar4 = 0;
-        iVar2 = 0;
-    } else if (index < 3) {
-        iVar4 = 1;
-        iVar2 = index + -1;
-    } else if (index < 6) {
-        iVar4 = 2;
-        iVar2 = index + -3;
-    } else if (index < 10) {
-        iVar4 = 3;
-        iVar2 = index + -6;
-    } else if (index < 0xf) {
-        iVar4 = 4;
-        iVar2 = index + -10;
-    } else {
-        iVar4 = 5;
-        iVar2 = index + -0xf;
-    }
+    sp5C += sp68;
+  }
 
-    MtxPush();
+  sp5C = sp5C.normZC();
+
+  s32 iVar2;
+  s32 iVar4;
+  if (index == 0) {
+    iVar4 = 0;
+    iVar2 = 0;
+  } else if (index < 3) {
+    iVar4 = 1;
+    iVar2 = index + -1;
+  } else if (index < 6) {
+    iVar4 = 2;
+    iVar2 = index + -3;
+  } else if (index < 10) {
+    iVar4 = 3;
+    iVar2 = index + -6;
+  } else if (index < 0xf) {
+    iVar4 = 4;
+    iVar2 = index + -10;
+  } else {
+    iVar4 = 5;
+    iVar2 = index + -0xf;
+  }
+
+  MtxPush();
 #if VERSION == VERSION_DEMO
-    cMtx_YrotM(*calc_mtx, (cM_ssin((iVar2 + iVar4) * (REG10_S(3) - 800)) * (REG9_S(74) + 900)));
+  cMtx_YrotM(*calc_mtx, (cM_ssin((iVar2 + iVar4) * (REG10_S(3) - 800)) *
+                         (REG9_S(74) + 900)));
 #else
-    cMtx_YrotM(*calc_mtx, cM_ssin((iVar2 + iVar4) * -800) * 900.0f);
+  cMtx_YrotM(*calc_mtx, cM_ssin((iVar2 + iVar4) * -800) * 900.0f);
 #endif
-    MtxPosition(&sp5C, &sp68);
-    *pDst = sp68.normZC();
-    MtxPull();
+  MtxPosition(&sp5C, &sp68);
+  *pDst = sp68.normZC();
+  MtxPull();
 }
 
 /* 000006E8-00000D30       .text draw__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::draw() {
-    j3dSys.reinitGX();
+  j3dSys.reinitGX();
 #if VERSION > VERSION_DEMO
-    GXSetNumIndStages(0);
+  GXSetNumIndStages(0);
 #endif
-    dKy_GxFog_tevstr_set(mpTevStr);
-    dKy_setLight_mine(mpTevStr);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz) * 1);
-    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz) * 1);
-    GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(l_texCoord[0]));
-    GXLoadTexObj(getImageTexObj(), GX_TEXMAP0);
-    GXLoadTexObj(getToonTexObj(), GX_TEXMAP1);
-    GXSetNumChans(1);
+  dKy_GxFog_tevstr_set(mpTevStr);
+  dKy_setLight_mine(mpTevStr);
+  GXClearVtxDesc();
+  GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+  GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+  GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+  GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+  GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+  GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+  GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz) * 1);
+  GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz) * 1);
+  GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(l_texCoord[0]));
+  GXLoadTexObj(getImageTexObj(), GX_TEXMAP0);
+  GXLoadTexObj(getToonTexObj(), GX_TEXMAP1);
+  GXSetNumChans(1);
 
-    u8 iVar2;
-    u8 lightMask;
-    if (mpTevStr->mColorK1.a != 0) {
-        iVar2 = 3;
-        lightMask = 3;
-    } else {
-        iVar2 = 2;
-        lightMask = 1;
+  u8 iVar2;
+  u8 lightMask;
+  if (mpTevStr->mColorK1.a != 0) {
+    iVar2 = 3;
+    lightMask = 3;
+  } else {
+    iVar2 = 2;
+    lightMask = 1;
+  }
+
+  if (l_HIO.mbUseToonTex) {
+    GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask,
+                  GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
+    GXSetNumTevStages(iVar2);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                    GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV,
+                    GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                    GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+
+    if (iVar2 == 3) {
+      GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
+      GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+      GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC,
+                      GX_CC_CPREV);
+      GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                      GX_TRUE, GX_TEVPREV);
+      GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                      GX_CA_TEXA);
+      GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                      GX_TRUE, GX_TEVPREV);
     }
+  } else {
+    GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask,
+                  GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetNumTevStages(iVar2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_RASC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                    GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC,
+                    GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                    GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                    GX_TRUE, GX_TEVPREV);
 
-    if (l_HIO.mbUseToonTex) {
-        GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
-                      GX_AF_NONE);
-        GXSetNumTexGens(2);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
-        GXSetNumTevStages(iVar2);
-        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-
-        if (iVar2 == 3) {
-            GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
-            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
-            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
-                            GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
-                            GX_TEVPREV);
-        }
-    } else {
-        GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP,
-                      GX_AF_NONE);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetNumTevStages(iVar2);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_RASC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-
-        if (iVar2 == 3) {
-            GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP2, GX_TEV_SWAP0);
-            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_RASC, GX_CC_CPREV);
-            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
-                            GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
-                            GX_TEVPREV);
-        }
+    if (iVar2 == 3) {
+      GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP2, GX_TEV_SWAP0);
+      GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL,
+                    GX_COLOR_NULL);
+      GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_RASC,
+                      GX_CC_CPREV);
+      GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                      GX_TRUE, GX_TEVPREV);
+      GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO,
+                      GX_CA_TEXA);
+      GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1,
+                      GX_TRUE, GX_TEVPREV);
     }
+  }
 
-    GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
-    GXSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
-    GXSetTevColor(GX_TEVREG2, mpTevStr->mColorK1);
-    GXCallDisplayList(l_majuu_flag_matDL, 0x20);
-    GXLoadPosMtxImm(*getMtx(), 0);
-    GXLoadNrmMtxImm(*getMtx(), 0);
-    GXSetCullMode(GX_CULL_BACK);
-    GXCallDisplayList(l_majuu_flagDL, 0x80);
-    GXSetCullMode(GX_CULL_FRONT);
+  GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
+  GXSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
+  GXSetTevColor(GX_TEVREG2, mpTevStr->mColorK1);
+  GXCallDisplayList(l_majuu_flag_matDL, 0x20);
+  GXLoadPosMtxImm(*getMtx(), 0);
+  GXLoadNrmMtxImm(*getMtx(), 0);
+  GXSetCullMode(GX_CULL_BACK);
+  GXCallDisplayList(l_majuu_flagDL, 0x80);
+  GXSetCullMode(GX_CULL_FRONT);
 #if VERSION == VERSION_DEMO
-    GXSetArray(GX_VA_NRM, mpNrmArrBack[mCurArr], sizeof(cXyz) * 1);
+  GXSetArray(GX_VA_NRM, mpNrmArrBack[mCurArr], sizeof(cXyz) * 1);
 #else
-    GXSetArray(GX_VA_NRM, getNrmBack(), sizeof(cXyz) * 1);
+  GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz) * 1);
 #endif
-    GXCallDisplayList(l_majuu_flagDL, 0x80);
+  GXCallDisplayList(l_majuu_flagDL, 0x80);
 #if VERSION > VERSION_DEMO
-    J3DShape::resetVcdVatCache();
+  J3DShape::resetVcdVatCache();
 #endif
 }
 
 /* 00000D30-00000DCC       .text daMajuu_Flag_Draw__FP14daMajuu_Flag_c */
-static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c* i_this) {
-    cMtx_concat(j3dSys.getViewMtx(), i_this->mMtx, *i_this->mPacket.getMtx());
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
-    if (i_this->mbUsePlayerTevStr == 1) {
-        i_this->mPacket.setTevStr(&dComIfGp_getPlayer(0)->tevStr);
-    } else {
-        i_this->mPacket.setTevStr(&i_this->tevStr);
-    }
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
-    return TRUE;
+static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c *i_this) {
+  cMtx_concat(j3dSys.getViewMtx(), i_this->mMtx, *i_this->mPacket.getMtx());
+  g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos,
+                               &i_this->tevStr);
+  if (i_this->mbUsePlayerTevStr == 1) {
+    i_this->mPacket.setTevStr(&dComIfGp_getPlayer(0)->tevStr);
+  } else {
+    i_this->mPacket.setTevStr(&i_this->tevStr);
+  }
+  j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+  return TRUE;
 }
 
-/* 00000DCC-00000F00       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float distIdeal) {
-    cXyz sp30 = *pOther - *pPos;
-    cXyz sp24 = sp30.normZC();
+/* 00000DCC-00000F00       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf
+ */
+void get_cloth_anim_sub_factor(cXyz *pPos, cXyz *pOther, cXyz *pDst,
+                               float distIdeal) {
+  cXyz sp30 = *pOther - *pPos;
+  cXyz sp24 = sp30.normZC();
 
-    f32 tmp = sp30.abs() - distIdeal;
-    tmp *= l_HIO.mSpring;
-    sp24 *= tmp;
+  f32 tmp = sp30.abs() - distIdeal;
+  tmp *= l_HIO.mSpring;
+  sp24 *= tmp;
 
-    *pDst += sp24;
+  *pDst += sp24;
 }
 
 /* 00000F00-00001064       .text get_cloth_anim_factor__FP4cXyzP4cXyzP4cXyzi */
-cXyz get_cloth_anim_factor(cXyz* pos, cXyz* nrm, cXyz* wind, int index) {
-    static s32 rel_pos_idx_tbl[][6] = {
-        {
-            1,
-            2,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            3,
-            4,
-            2,
-            0,
-            -1,
-            -1,
-        },
-        {
-            0,
-            1,
-            4,
-            5,
-            -1,
-            -1,
-        },
-        {
-            6,
-            7,
-            4,
-            1,
-            -1,
-            -1,
-        },
-        {
-            1,
-            3,
-            7,
-            8,
-            5,
-            2,
-        },
-        {
-            2,
-            4,
-            8,
-            9,
-            -1,
-            -1,
-        },
-        {
-            10,
-            11,
-            7,
-            3,
-            -1,
-            -1,
-        },
-        {
-            3,
-            6,
-            11,
-            12,
-            8,
-            4,
-        },
-        {
-            4,
-            7,
-            12,
-            13,
-            9,
-            5,
-        },
-        {
-            5,
-            8,
-            13,
-            14,
-            -1,
-            -1,
-        },
-        {
-            15,
-            16,
-            11,
-            6,
-            -1,
-            -1,
-        },
-        {
-            6,
-            10,
-            16,
-            17,
-            12,
-            7,
-        },
-        {
-            7,
-            11,
-            17,
-            18,
-            13,
-            8,
-        },
-        {
-            8,
-            12,
-            18,
-            19,
-            14,
-            9,
-        },
-        {
-            9,
-            13,
-            19,
-            20,
-            -1,
-            -1,
-        },
-        {
-            16,
-            10,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-        {
-            17,
-            11,
-            10,
-            15,
-            -1,
-            -1,
-        },
-        {
-            18,
-            12,
-            11,
-            16,
-            -1,
-            -1,
-        },
-        {
-            19,
-            13,
-            12,
-            17,
-            -1,
-            -1,
-        },
-        {
-            20,
-            14,
-            13,
-            18,
-            -1,
-            -1,
-        },
-        {
-            14,
-            19,
-            -1,
-            -1,
-            -1,
-            -1,
-        },
-    };
-    cXyz sp20 = pos[index];
-    s32* relPos = rel_pos_idx_tbl[index];
-    f32 fVar4 = wind->inprod(nrm[index]);
+cXyz get_cloth_anim_factor(cXyz *pos, cXyz *nrm, cXyz *wind, int index) {
+  static s32 rel_pos_idx_tbl[][6] = {
+      {
+          1,
+          2,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          3,
+          4,
+          2,
+          0,
+          -1,
+          -1,
+      },
+      {
+          0,
+          1,
+          4,
+          5,
+          -1,
+          -1,
+      },
+      {
+          6,
+          7,
+          4,
+          1,
+          -1,
+          -1,
+      },
+      {
+          1,
+          3,
+          7,
+          8,
+          5,
+          2,
+      },
+      {
+          2,
+          4,
+          8,
+          9,
+          -1,
+          -1,
+      },
+      {
+          10,
+          11,
+          7,
+          3,
+          -1,
+          -1,
+      },
+      {
+          3,
+          6,
+          11,
+          12,
+          8,
+          4,
+      },
+      {
+          4,
+          7,
+          12,
+          13,
+          9,
+          5,
+      },
+      {
+          5,
+          8,
+          13,
+          14,
+          -1,
+          -1,
+      },
+      {
+          15,
+          16,
+          11,
+          6,
+          -1,
+          -1,
+      },
+      {
+          6,
+          10,
+          16,
+          17,
+          12,
+          7,
+      },
+      {
+          7,
+          11,
+          17,
+          18,
+          13,
+          8,
+      },
+      {
+          8,
+          12,
+          18,
+          19,
+          14,
+          9,
+      },
+      {
+          9,
+          13,
+          19,
+          20,
+          -1,
+          -1,
+      },
+      {
+          16,
+          10,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+      {
+          17,
+          11,
+          10,
+          15,
+          -1,
+          -1,
+      },
+      {
+          18,
+          12,
+          11,
+          16,
+          -1,
+          -1,
+      },
+      {
+          19,
+          13,
+          12,
+          17,
+          -1,
+          -1,
+      },
+      {
+          20,
+          14,
+          13,
+          18,
+          -1,
+          -1,
+      },
+      {
+          14,
+          19,
+          -1,
+          -1,
+          -1,
+          -1,
+      },
+  };
+  cXyz sp20 = pos[index];
+  s32 *relPos = rel_pos_idx_tbl[index];
+  f32 fVar4 = wind->inprod(nrm[index]);
 
-    if ((index == 15) || (index == 20)) {
-        return cXyz::Zero;
+  if ((index == 15) || (index == 20)) {
+    return cXyz::Zero;
+  }
+
+  cXyz sp14 = nrm[index] * fVar4;
+  sp14.y += l_HIO.mGravity;
+
+  for (s32 i = 0; i < 5; i++, relPos++) {
+    if (*relPos == -1) {
+      break;
     }
 
-    cXyz sp14 = nrm[index] * fVar4;
-    sp14.y += l_HIO.mGravity;
-
-    for (s32 i = 0; i < 5; i++, relPos++) {
-        if (*relPos == -1) {
-            break;
-        }
-
-        if (*relPos == 0 || index == 0 || abs(*relPos - index) > 1) {
-            fVar4 = 264.9547f;
-        } else {
-            fVar4 = 102.0f;
-        }
-
-        get_cloth_anim_sub_factor(&sp20, &pos[*relPos], &sp14, fVar4);
+    if (*relPos == 0 || index == 0 || abs(*relPos - index) > 1) {
+      fVar4 = 264.9547f;
+    } else {
+      fVar4 = 102.0f;
     }
 
-    return sp14;
+    get_cloth_anim_sub_factor(&sp20, &pos[*relPos], &sp14, fVar4);
+  }
+
+  return sp14;
 }
 
 /* 00001064-000012C8       .text majuu_flag_move__FP14daMajuu_Flag_c */
-void majuu_flag_move(daMajuu_Flag_c* i_this) {
-    cXyz sp2C;
-    cXyz sp20;
+void majuu_flag_move(daMajuu_Flag_c *i_this) {
+  cXyz sp2C;
+  cXyz sp20;
 
-    dKyw_get_wind_vec();
+  dKyw_get_wind_vec();
 
-    cXyz* pPosArr1 = i_this->mPacket.getPos();
-    cXyz* nrmArr = i_this->mPacket.getNrm();
+  cXyz *pPosArr1 = i_this->mPacket.getPos();
+  cXyz *nrmArr = i_this->mPacket.getNrm();
 
-    i_this->mPacket.changeCurrentPos();
-    i_this->mWave += l_HIO.mWaveSpeed;
+  i_this->mPacket.changeCurrentPos();
+  i_this->mWave += l_HIO.mWaveSpeed;
 
-    cXyz* pPosArr2 = i_this->mPacket.getPos();
-    cXyz* pSpeed = i_this->mPacket.getOffsetVec();
+  cXyz *pPosArr2 = i_this->mPacket.getPos();
+  cXyz *pSpeed = i_this->mPacket.getOffsetVec();
 
-    f32 fVar5 = cM_ssin(i_this->mWave) * 0.5f + 0.5f;
-    sp20.set(0.0f, 0.0f, l_HIO.mWindSpeed1 * fVar5 + l_HIO.mWindSpeed2 * (1.0f - fVar5));
-    sp20 *= dKyw_get_wind_pow() * 2.0f;
-    cMtx_ZrotS(*calc_mtx, -i_this->current.angle.z);
-    cMtx_XrotM(*calc_mtx, -i_this->current.angle.x);
-    cXyz wind;
-    MtxPosition(&sp20, &wind);
+  f32 fVar5 = cM_ssin(i_this->mWave) * 0.5f + 0.5f;
+  sp20.set(0.0f, 0.0f,
+           l_HIO.mWindSpeed1 * fVar5 + l_HIO.mWindSpeed2 * (1.0f - fVar5));
+  sp20 *= dKyw_get_wind_pow() * 2.0f;
+  cMtx_ZrotS(*calc_mtx, -i_this->current.angle.z);
+  cMtx_XrotM(*calc_mtx, -i_this->current.angle.x);
+  cXyz wind;
+  MtxPosition(&sp20, &wind);
 
-    for (s32 i = 0; i < 21; i++) {
-        f32 tmp = 0.85f;
+  for (s32 i = 0; i < 21; i++) {
+    f32 tmp = 0.85f;
 
-        pPosArr2[i] = pPosArr1[i];
-        sp2C = get_cloth_anim_factor(pPosArr1, nrmArr, &wind, i);
+    pPosArr2[i] = pPosArr1[i];
+    sp2C = get_cloth_anim_factor(pPosArr1, nrmArr, &wind, i);
 
-        pSpeed[i] += sp2C;
+    pSpeed[i] += sp2C;
 #if VERSION == VERSION_DEMO
-        pSpeed[i] *= tmp - REG10_F(25);
+    pSpeed[i] *= tmp - REG10_F(25);
 #else
-        pSpeed[i] *= tmp;
+    pSpeed[i] *= tmp;
 #endif
-        pPosArr2[i] += pSpeed[i];
-    }
+    pPosArr2[i] += pSpeed[i];
+  }
 
-    cXyz* nrmArr2 = i_this->mPacket.getNrm();
-    i_this->mPacket.setNrmMtx();
+  cXyz *nrmArr2 = i_this->mPacket.getNrm();
+  i_this->mPacket.setNrmMtx();
 
-    for (s32 i = 0; i < 21; i++, nrmArr2++) {
-        i_this->mPacket.setNrmVtx(nrmArr2, i);
-    }
+  for (s32 i = 0; i < 21; i++, nrmArr2++) {
+    i_this->mPacket.setNrmVtx(nrmArr2, i);
+  }
 
-    i_this->mPacket.setBackNrm();
+  i_this->mPacket.setBackNrm();
 
-#if VERSION == VERSION_DEMO
-    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mpPosArr[0]) * 21);
-
+#if VERSION <= VERSION_JPN
+  DCStoreRangeNoSync(i_this->mPacket.getPos(),
+                     sizeof(i_this->mPacket.mpPosArr[0]) * 21);
 #else
-    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mpPosArr[0]));
-    DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(i_this->mPacket.mpNrmArr[0]));
-    DCStoreRangeNoSync(i_this->mPacket.getNrmBack(), sizeof(i_this->mPacket.mpNrmArrBack[0]));
+  DCStoreRangeNoSync(i_this->mPacket.getPos(),
+                     sizeof(i_this->mPacket.mpPosArr[0]));
+  DCStoreRangeNoSync(i_this->mPacket.getNrm(),
+                     sizeof(i_this->mPacket.mpNrmArr[0]));
+  DCStoreRangeNoSync(i_this->mPacket.getBackNrm(),
+                     sizeof(i_this->mPacket.mpNrmArrBack[0]));
 #endif
 }
 
 /* 000012C8-000013B0       .text daMajuu_Flag_Execute__FP14daMajuu_Flag_c */
-static BOOL daMajuu_Flag_Execute(daMajuu_Flag_c* i_this) {
-    if (mDoGph_gInf_c::isMonotone()) {
-        return TRUE;
-    }
-
-    cXyz* wind = dKyw_get_wind_vec();
-    s16 target = cM_atan2s(wind->x, wind->z);
-    if (i_this->mpParentMtx != NULL && i_this->mpParentPos != NULL) {
-        cXyz sp14 = cXyz::BaseZ;
-        cXyz sp08;
-        mDoMtx_stack_c::copy(i_this->mpParentMtx);
-        mDoMtx_stack_c::multVecSR(&sp14, &sp08);
-        target -= cM_atan2s(sp08.x, sp08.z);
-    }
-    cLib_addCalcAngleS2(&i_this->current.angle.y, target, 8, 0x400);
-    majuu_flag_move(i_this);
-    set_mtx(i_this);
+static BOOL daMajuu_Flag_Execute(daMajuu_Flag_c *i_this) {
+  if (mDoGph_gInf_c::isMonotone()) {
     return TRUE;
+  }
+
+  cXyz *wind = dKyw_get_wind_vec();
+  s16 target = cM_atan2s(wind->x, wind->z);
+  if (i_this->mpParentMtx != NULL && i_this->mpParentPos != NULL) {
+    cXyz sp14 = cXyz::BaseZ;
+    cXyz sp08;
+    mDoMtx_stack_c::copy(i_this->mpParentMtx);
+    mDoMtx_stack_c::multVecSR(&sp14, &sp08);
+    target -= cM_atan2s(sp08.x, sp08.z);
+  }
+  cLib_addCalcAngleS2(&i_this->current.angle.y, target, 8, 0x400);
+  majuu_flag_move(i_this);
+  set_mtx(i_this);
+  return TRUE;
 }
 
 /* 000013B0-000013B8       .text daMajuu_Flag_IsDelete__FP14daMajuu_Flag_c */
-static BOOL daMajuu_Flag_IsDelete(daMajuu_Flag_c*) {
-    return TRUE;
-}
+static BOOL daMajuu_Flag_IsDelete(daMajuu_Flag_c *) { return TRUE; }
 
 /* 000013B8-00001454       .text daMajuu_Flag_Delete__FP14daMajuu_Flag_c */
-static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c* i_this) {
-    dComIfG_resDeleteDemo(&i_this->mPhsCloth, "Cloth");
-    if (i_this->mTexType == 1) {
-        dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Matif");
-    } else if (i_this->mTexType == 2) {
-        dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Vsvfg");
-    } else if (i_this->mTexType == 3) {
-        dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Xhcf");
-    }
-    return TRUE;
+static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c *i_this) {
+  dComIfG_resDeleteDemo(&i_this->mPhsCloth, "Cloth");
+  if (i_this->mTexType == 1) {
+    dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Matif");
+  } else if (i_this->mTexType == 2) {
+    dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Vsvfg");
+  } else if (i_this->mTexType == 3) {
+    dComIfG_resDeleteDemo(&i_this->mPhsFlag, "Xhcf");
+  }
+  return TRUE;
 }
 
 /* 00001454-00001AE0       .text daMajuu_Flag_Create__FP10fopAc_ac_c */
-static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
-    daMajuu_Flag_c* i_this = (daMajuu_Flag_c*)a_this;
+static cPhs_State daMajuu_Flag_Create(fopAc_ac_c *a_this) {
+  daMajuu_Flag_c *i_this = (daMajuu_Flag_c *)a_this;
 
-    fopAcM_SetupActor(a_this, daMajuu_Flag_c);
+  fopAcM_SetupActor(a_this, daMajuu_Flag_c);
 
-    u32 uVar3 = fopAcM_GetParam(a_this);
-    u32 uVar2 = uVar3 & 0xFF;
-    i_this->mTexType = (uVar3 >> 0x18) & 0xFF;
-    cPhs_State ret = dComIfG_resLoad(&i_this->mPhsCloth, "Cloth");
+  u32 uVar3 = fopAcM_GetParam(a_this);
+  u32 uVar2 = uVar3 & 0xFF;
+  i_this->mTexType = (uVar3 >> 0x18) & 0xFF;
+  cPhs_State ret = dComIfG_resLoad(&i_this->mPhsCloth, "Cloth");
 #if VERSION > VERSION_DEMO
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
+  if (ret != cPhs_COMPLEATE_e) {
+    return ret;
+  }
 #endif
 
-    cPhs_State ret2;
-    if (i_this->mTexType == 0) {
-        ret2 = cPhs_COMPLEATE_e;
-    } else if (i_this->mTexType == 1) {
-        ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Matif");
-    } else if (i_this->mTexType == 2) {
-        ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Vsvfg");
-    } else if (i_this->mTexType == 3) {
-        ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Xhcf");
-    }
+  cPhs_State ret2;
+  if (i_this->mTexType == 0) {
+    ret2 = cPhs_COMPLEATE_e;
+  } else if (i_this->mTexType == 1) {
+    ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Matif");
+  } else if (i_this->mTexType == 2) {
+    ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Vsvfg");
+  } else if (i_this->mTexType == 3) {
+    ret2 = dComIfG_resLoad(&i_this->mPhsFlag, "Xhcf");
+  }
 
 #if VERSION == VERSION_DEMO
-    s32 r;
-    if (ret == cPhs_ERROR_e || ret2 == cPhs_ERROR_e) {
-        return cPhs_ERROR_e;
-    } else if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    } else if (ret2 != cPhs_COMPLEATE_e) {
-        return ret2;
-    } else {
-        r = cPhs_COMPLEATE_e;
-    }
+  s32 r;
+  if (ret == cPhs_ERROR_e || ret2 == cPhs_ERROR_e) {
+    return cPhs_ERROR_e;
+  } else if (ret != cPhs_COMPLEATE_e) {
+    return ret;
+  } else if (ret2 != cPhs_COMPLEATE_e) {
+    return ret2;
+  } else {
+    r = cPhs_COMPLEATE_e;
+  }
 
-    if (r == cPhs_COMPLEATE_e)
+  if (r == cPhs_COMPLEATE_e)
 #else
-    if (ret2 != cPhs_COMPLEATE_e) {
-        return ret2;
-    }
+  if (ret2 != cPhs_COMPLEATE_e) {
+    return ret2;
+  }
 #endif
 
-    {
-        i_this->mFlagType = uVar2;
-        cXyz* posArr = i_this->mPacket.getPos();
-        cXyz* nrmArr = i_this->mPacket.getNrm();
-        cXyz* speedArr = i_this->mPacket.getOffsetVec();
+  {
+    i_this->mFlagType = uVar2;
+    cXyz *posArr = i_this->mPacket.getPos();
+    cXyz *nrmArr = i_this->mPacket.getNrm();
+    cXyz *speedArr = i_this->mPacket.getOffsetVec();
 
-        for (s32 i = 0; i < 21; i++, posArr++, speedArr++) {
-            *posArr = l_majuu_flag_pos[i];
-            nrmArr->x = 1.0f;
-            nrmArr->y = 0.0f;
-            nrmArr->z = 0.0f;
-            speedArr->setall(0.0f);
-            if (i != 15 && i != 20) {
-                posArr->x += cM_rndFX(10.0f);
-                posArr->y += cM_rndFX(10.0f);
-                posArr->z += cM_rndFX(10.0f);
-            }
-        }
-
-        i_this->mPacket.setBackNrm();
-        i_this->mbUsePlayerTevStr = 0;
-
-        if (i_this->mTexType == 0) {
-            if (uVar2 == 2) {
-                i_this->mFlagScale = 2.0f;
-            } else if (uVar2 == 3) {
-                i_this->mFlagScale = 1.27f;
-                i_this->mbUsePlayerTevStr = 1;
-            } else if (uVar2 == 4) {
-                i_this->mFlagScale = 0.3f;
-            } else {
-                i_this->mFlagScale = 1.0f;
-            }
-        } else if (uVar2 == 0xff) {
-            i_this->mFlagScale = 0.3f;
-        } else {
-            i_this->mFlagScale = uVar2 * 0.05f + 0.3f;
-        }
-
-        set_mtx(i_this);
-        fopAcM_SetMtx(a_this, i_this->mMtx);
-        fopAcM_setCullSizeBox(a_this, -300.0f, -1500.0f, -100.0f, 300.0f, 100.0f, 1200.0f);
-        fopAcM_setCullSizeFar(a_this, 5.0f);
-        cXyz* wind = dKyw_get_wind_vec();
-        i_this->current.angle.y = cM_atan2s(wind->x, wind->z);
-
-        const ResTIMG* texInfo;
-        GXBool mip;
-
-        if (i_this->mTexType != 0) {
-            if (i_this->mTexType == 1) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Matif", MATIF_BTI_FLAG_MATI);
-            } else if (i_this->mTexType == 2) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Vsvfg", VSVFG_BTI_VSVFG);
-            } else if (i_this->mTexType == 3) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", XHCF_BTI_X_HC_FLAG00);
-            }
-            mip = GXBool(texInfo->mipmapCount > 1);
-            GXInitTexObj(i_this->mPacket.getImageTexObj(), (u8*)texInfo + texInfo->imageOffset,
-                         texInfo->width, texInfo->height, GXTexFmt(texInfo->format),
-                         GXTexWrapMode(texInfo->wrapS), GXTexWrapMode(texInfo->wrapT), mip);
-            GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GXTexFilter(texInfo->minFilter),
-                            GXTexFilter(texInfo->magFilter), texInfo->minLOD * 0.125f,
-                            texInfo->maxLOD * 0.125f, texInfo->LODBias * 0.01f, texInfo->biasClamp,
-                            texInfo->doEdgeLOD, GXAnisotropy(texInfo->maxAnisotropy));
-        } else {
-            GXInitTexObj(i_this->mPacket.getImageTexObj(), l_flag02TEX, 0x40, 0x40, GX_TF_CMPR,
-                         GX_CLAMP, GX_CLAMP, false);
-            GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f,
-                            0.0f, 0, 0, GX_ANISO_1);
-        }
-
-        texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
-        mip = GXBool(texInfo->mipmapCount > 1);
-        GXInitTexObj(i_this->mPacket.getToonTexObj(), (u8*)texInfo + texInfo->imageOffset,
-                     texInfo->width, texInfo->height, GXTexFmt(texInfo->format),
-                     GXTexWrapMode(texInfo->wrapS), GXTexWrapMode(texInfo->wrapT), mip);
-        GXInitTexObjLOD(i_this->mPacket.getToonTexObj(), GXTexFilter(texInfo->minFilter),
-                        GXTexFilter(texInfo->magFilter), texInfo->minLOD * 0.125f,
-                        texInfo->maxLOD * 0.125f, texInfo->LODBias * 0.01f, texInfo->biasClamp,
-                        texInfo->doEdgeLOD, GXAnisotropy(texInfo->maxAnisotropy));
-
-        if (i_this->mTexType == 3) {
-            for (s32 i = 0; i < 20; i++) {
-                majuu_flag_move(i_this);
-            }
-        }
+    for (s32 i = 0; i < 21; i++, posArr++, speedArr++) {
+      *posArr = l_majuu_flag_pos[i];
+      nrmArr->x = 1.0f;
+      nrmArr->y = 0.0f;
+      nrmArr->z = 0.0f;
+      speedArr->setall(0.0f);
+      if (i != 15 && i != 20) {
+        posArr->x += cM_rndFX(10.0f);
+        posArr->y += cM_rndFX(10.0f);
+        posArr->z += cM_rndFX(10.0f);
+      }
     }
-    return cPhs_COMPLEATE_e;
+
+    i_this->mPacket.setBackNrm();
+    i_this->mbUsePlayerTevStr = 0;
+
+    if (i_this->mTexType == 0) {
+      if (uVar2 == 2) {
+        i_this->mFlagScale = 2.0f;
+      } else if (uVar2 == 3) {
+        i_this->mFlagScale = 1.27f;
+        i_this->mbUsePlayerTevStr = 1;
+      } else if (uVar2 == 4) {
+        i_this->mFlagScale = 0.3f;
+      } else {
+        i_this->mFlagScale = 1.0f;
+      }
+    } else if (uVar2 == 0xff) {
+      i_this->mFlagScale = 0.3f;
+    } else {
+      i_this->mFlagScale = uVar2 * 0.05f + 0.3f;
+    }
+
+    set_mtx(i_this);
+    fopAcM_SetMtx(a_this, i_this->mMtx);
+    fopAcM_setCullSizeBox(a_this, -300.0f, -1500.0f, -100.0f, 300.0f, 100.0f,
+                          1200.0f);
+    fopAcM_setCullSizeFar(a_this, 5.0f);
+    cXyz *wind = dKyw_get_wind_vec();
+    i_this->current.angle.y = cM_atan2s(wind->x, wind->z);
+
+    const ResTIMG *texInfo;
+    GXBool mip;
+
+    if (i_this->mTexType != 0) {
+      if (i_this->mTexType == 1) {
+        texInfo = (ResTIMG *)dComIfG_getObjectRes("Matif", MATIF_BTI_FLAG_MATI);
+      } else if (i_this->mTexType == 2) {
+        texInfo = (ResTIMG *)dComIfG_getObjectRes("Vsvfg", VSVFG_BTI_VSVFG);
+      } else if (i_this->mTexType == 3) {
+        texInfo = (ResTIMG *)dComIfG_getObjectRes("Xhcf", XHCF_BTI_X_HC_FLAG00);
+      }
+      mip = GXBool(texInfo->mipmapCount > 1);
+      GXInitTexObj(i_this->mPacket.getImageTexObj(),
+                   (u8 *)texInfo + texInfo->imageOffset, texInfo->width,
+                   texInfo->height, GXTexFmt(texInfo->format),
+                   GXTexWrapMode(texInfo->wrapS), GXTexWrapMode(texInfo->wrapT),
+                   mip);
+      GXInitTexObjLOD(i_this->mPacket.getImageTexObj(),
+                      GXTexFilter(texInfo->minFilter),
+                      GXTexFilter(texInfo->magFilter), texInfo->minLOD * 0.125f,
+                      texInfo->maxLOD * 0.125f, texInfo->LODBias * 0.01f,
+                      texInfo->biasClamp, texInfo->doEdgeLOD,
+                      GXAnisotropy(texInfo->maxAnisotropy));
+    } else {
+      GXInitTexObj(i_this->mPacket.getImageTexObj(), l_flag02TEX, 0x40, 0x40,
+                   GX_TF_CMPR, GX_CLAMP, GX_CLAMP, false);
+      GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GX_LINEAR, GX_LINEAR,
+                      0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    }
+
+    texInfo = (ResTIMG *)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    mip = GXBool(texInfo->mipmapCount > 1);
+    GXInitTexObj(
+        i_this->mPacket.getToonTexObj(), (u8 *)texInfo + texInfo->imageOffset,
+        texInfo->width, texInfo->height, GXTexFmt(texInfo->format),
+        GXTexWrapMode(texInfo->wrapS), GXTexWrapMode(texInfo->wrapT), mip);
+    GXInitTexObjLOD(
+        i_this->mPacket.getToonTexObj(), GXTexFilter(texInfo->minFilter),
+        GXTexFilter(texInfo->magFilter), texInfo->minLOD * 0.125f,
+        texInfo->maxLOD * 0.125f, texInfo->LODBias * 0.01f, texInfo->biasClamp,
+        texInfo->doEdgeLOD, GXAnisotropy(texInfo->maxAnisotropy));
+
+    if (i_this->mTexType == 3) {
+      for (s32 i = 0; i < 20; i++) {
+        majuu_flag_move(i_this);
+      }
+    }
+  }
+  return cPhs_COMPLEATE_e;
 }
 
 static actor_method_class l_daMajuu_Flag_Method = {
-    (process_method_func)daMajuu_Flag_Create,  (process_method_func)daMajuu_Flag_Delete,
-    (process_method_func)daMajuu_Flag_Execute, (process_method_func)daMajuu_Flag_IsDelete,
+    (process_method_func)daMajuu_Flag_Create,
+    (process_method_func)daMajuu_Flag_Delete,
+    (process_method_func)daMajuu_Flag_Execute,
+    (process_method_func)daMajuu_Flag_IsDelete,
     (process_method_func)daMajuu_Flag_Draw,
 };
 
