@@ -146,7 +146,7 @@ public:
     void getCraneRipplePosY() const {}
     void getCraneRipplePosZ() const {}
     void getCraneTop() {}
-    void getHeadJntMtx() {}
+    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(8); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
     s16 getRopeCnt() const { return mRopeCnt; }
@@ -168,7 +168,7 @@ public:
         mWhirlActor = NULL;
     }
 
-    void onCb1Ride() {}
+    void onCb1Ride() { mStateFlag |= 0x40000000; }
     void onCraneHookFlg() {}
     void onCrashFlg() {}
     void onFantomGanonBattle() {}
@@ -180,7 +180,10 @@ public:
     void onTornadoFlg(u32 tornadoID) { mTornadoID = tornadoID; }
     void onWhirlFlg(u32, s16) {}
     void onWhirlFlgDirect(u32, s16) {}
-    void setAtnPos(const cXyz*) {}
+    void setAtnPos(const cXyz* pPos) {
+        onStateFlg(daSFLG_UNK1000000_e);
+        m1068 = *pPos;
+    }
 
     BOOL bodyJointCallBack(int);
     BOOL cannonJointCallBack(int);

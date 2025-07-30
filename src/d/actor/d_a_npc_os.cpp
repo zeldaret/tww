@@ -2239,7 +2239,7 @@ BOOL daNpc_Os_c::execute() {
                     m4E8 = 0;
                 }
                 else {
-                    daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                    daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
                 }
             }
             else {
@@ -2247,7 +2247,7 @@ BOOL daNpc_Os_c::execute() {
             }
             
             if(mAcch.ChkWaterIn()) {
-                daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
 
                 if(!isWaterHit()) {
                     onWaterHit();
