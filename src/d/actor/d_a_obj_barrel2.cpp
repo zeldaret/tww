@@ -5,19 +5,19 @@
 
 #include "d/actor/d_a_obj_barrel2.h"
 #include "d/actor/d_a_obj_buoyflag.h"
-#include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_race_item.h"
 #include "d/actor/d_a_sea.h"
-#include "d/d_procname.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_priority.h"
+#include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
 daRaceItem_c* daObjBarrel2::Act_c::M_tmp_item_actor;
 
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include "weak_data_1811.h"  // IWYU pragma: keep
 
 const char daObjBarrel2::Act_c::M_arcname[] = "Ktaru_00";
 const char daObjBarrel2::Act_c::M_evname_brk[] = "barrel2_brk";
@@ -28,9 +28,11 @@ const dCcD_SrcCyl daObjBarrel2::Act_c::M_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER &
+            ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e |
+            cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
@@ -45,139 +47,34 @@ const dCcD_SrcCyl daObjBarrel2::Act_c::M_cyl_src = {
     },
     // cM3dGCylS
     {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+        /* Center */ 0.0f,
+        0.0f,
+        0.0f,
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
     },
 };
 const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
     {
-        0x5,
-        0x9,
-        0x520,
-        200.0f,
-        300.0f,
-        800.0f,
-        100.0f,
-        50.0f,
-        0.0099999998f,
-        4.0f,
-        1.0f,
-        3.0f,
-        1.0f,
-        500.0f,
-        300.0f,
-        25.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.55f,
-        0.5f,
-        0x3E8,
-        0.3f,
-        0.02f,
-        0.039999999f,
-        0.34999999f,
-        1.0f,
-        1.0f,
+        0x5,  0x9,   0x520, 200.0f, 300.0f, 800.0f, 100.0f,       50.0f,       0.0099999998f, 4.0f,
+        1.0f, 3.0f,  1.0f,  500.0f, 300.0f, 25.0f,  0.0f,         0.0f,        0.0f,          0.0f,
+        0.0f, 0.55f, 0.5f,  0x3E8,  0.3f,   0.02f,  0.039999999f, 0.34999999f, 1.0f,          1.0f,
     },
     {
-        0x5,
-        0x9,
-        0x520,
-        200.0f,
-        400.0f,
-        300.0f,
-        100.0f,
-        50.0f,
-        0.0099999998f,
-        4.0f,
-        1.0f,
-        3.0f,
-        1.0f,
-        450.0f,
-        300.0f,
-        25.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.75f,
-        0.5f,
-        0x3E8,
-        0.3f,
-        0.02f,
-        0.039999999f,
-        0.34999999f,
-        1.0f,
-        1.0f,
+        0x5,  0x9,   0x520, 200.0f, 400.0f, 300.0f, 100.0f,       50.0f,       0.0099999998f, 4.0f,
+        1.0f, 3.0f,  1.0f,  450.0f, 300.0f, 25.0f,  0.0f,         0.0f,        0.0f,          0.0f,
+        0.0f, 0.75f, 0.5f,  0x3E8,  0.3f,   0.02f,  0.039999999f, 0.34999999f, 1.0f,          1.0f,
     },
     {
-        0x4,
-        0x8,
-        0x880,
-        288.0f,
-        432.0f,
-        4500.0f,
-        100.0f,
-        50.0f,
-        0.0099999998f,
-        5.76f,
-        1.0f,
-        3.0f,
-        1.0f,
-        500.0f,
-        300.0f,
-        25.0f,
-        400.0f,
-        7500.0f,
-        900.0f,
-        700.0f,
-        250.0f,
-        0.3f,
-        0.5f,
-        0x3E8,
-        0.3f,
-        0.02f,
-        0.039999999f,
-        0.34999999f,
-        5.0f,
-        1.0f,
+        0x4,           0x8,     0x880,        288.0f,      432.0f, 4500.0f, 100.0f, 50.0f,
+        0.0099999998f, 5.76f,   1.0f,         3.0f,        1.0f,   500.0f,  300.0f, 25.0f,
+        400.0f,        7500.0f, 900.0f,       700.0f,      250.0f, 0.3f,    0.5f,   0x3E8,
+        0.3f,          0.02f,   0.039999999f, 0.34999999f, 5.0f,   1.0f,
     },
     {
-        0x5,
-        0x9,
-        0x520,
-        288.0f,
-        576.0f,
-        800.0f,
-        100.0f,
-        50.0f,
-        0.0099999998f,
-        5.76f,
-        1.0f,
-        3.0f,
-        1.0f,
-        500.0f,
-        300.0f,
-        25.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.55f,
-        0.5f,
-        0x3E8,
-        0.3f,
-        0.02f,
-        0.039999999f,
-        0.34999999f,
-        1.0f,
-        1.0f,
+        0x5,  0x9,   0x520, 288.0f, 576.0f, 800.0f, 100.0f,       50.0f,       0.0099999998f, 5.76f,
+        1.0f, 3.0f,  1.0f,  500.0f, 300.0f, 25.0f,  0.0f,         0.0f,        0.0f,          0.0f,
+        0.0f, 0.55f, 0.5f,  0x3E8,  0.3f,   0.02f,  0.039999999f, 0.34999999f, 1.0f,          1.0f,
     },
 };
 
@@ -203,7 +100,8 @@ bool daObjBarrel2::Act_c::create_heap() {
 
     s32 iVar5 = 0;
     if (m29C != NULL) {
-        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        iVar5 =
+            m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
     }
 
     if (m298 != NULL && iVar5 != 0) {
@@ -266,31 +164,36 @@ cPhs_State daObjBarrel2::Act_c::_create() {
             attention_info.position.z = current.pos.z;
             eyePos = attention_info.position;
 
-            fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, 300.0f);
-            
+            fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
+                                     300.0f);
+
             cXyz sp30 = current.pos;
             cXyz sp24;
             csXyz sp10(0, home.angle.y, 0);
             sp24.setall(attr()->m28 * attr()->m2C);
 
-            m458 = fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(), fopAcM_GetHomeRoomNo(this), &sp10, &sp24, prm_get_coming() ? 1 : 0);
+            m458 = fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(),
+                                                  fopAcM_GetHomeRoomNo(this), &sp10, &sp24,
+                                                  prm_get_coming() ? 1 : 0);
             m45C = 3.4028235e+38f;
             m468 = 0;
             m470 = 0;
             m460 = fpcM_ERROR_PROCESS_ID_e;
 
             if (prm_get_buoy() == 0) {
-                cXyz sp18(
-                    current.pos.x,
-                    current.pos.y + attr()->m24 * attr()->m20 * (attr()->m14 - 5.0f),
-                    current.pos.z
-                );
+                cXyz sp18(current.pos.x,
+                          current.pos.y + attr()->m24 * attr()->m20 * (attr()->m14 - 5.0f),
+                          current.pos.z);
 
                 if (m410 == 2 || m410 == 3) {
                     bool flag = m410 == 3;
-                    m460 = daObjBuoyflag::Act_c::make_barrel2_mine(fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle, prm_get_texture(), flag);
+                    m460 = daObjBuoyflag::Act_c::make_barrel2_mine(
+                        fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle,
+                        prm_get_texture(), flag);
                 } else {
-                    m460 = daObjBuoyflag::Act_c::make_barrel2_norm(fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle, prm_get_texture());
+                    m460 = daObjBuoyflag::Act_c::make_barrel2_norm(fopAcM_GetID(this), &sp18,
+                                                                   fopAcM_GetRoomNo(this),
+                                                                   &shape_angle, prm_get_texture());
                 }
             }
 
@@ -310,36 +213,33 @@ bool daObjBarrel2::Act_c::_delete() {
     return TRUE;
 }
 
-/* 00000AE0-00000B2C       .text tg_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc_ac_c*, dCcD_GObjInf*) {
+/* 00000AE0-00000B2C       .text
+ * tg_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
+void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc_ac_c*,
+                                   dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
-    
+
     cCcD_Obj* pcVar1 = arg2->GetTgHitObj();
     if (pcVar1 != NULL && pcVar1->ChkAtType(AT_TYPE_BOMB)) {
         i_this->m470 = 3;
     }
 }
 
-/* 00000B2C-00000C9C       .text co_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
+/* 00000B2C-00000C9C       .text
+ * co_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
+void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship,
+                                   dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
-    
+
     if (fopAcM_GetProfName(a_ship) == PROC_SHIP) {
         daShip_c* ship = (daShip_c*)a_ship;
         const s32 index = i_this->m410;
 
         if (index == 0) {
             if (ship->speedF > i_this->attr()->m38) {
-                cXyz sp14(
-                    ship->current.pos.x - i_this->current.pos.x,
-                    0.0f,
-                    ship->current.pos.z - i_this->current.pos.z
-                );
-                cXyz sp08(
-                    ship->speed.x,
-                    0.0f,
-                    ship->speed.z
-                );
+                cXyz sp14(ship->current.pos.x - i_this->current.pos.x, 0.0f,
+                          ship->current.pos.z - i_this->current.pos.z);
+                cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
                 f32 sq = i_this->attr()->m3C * i_this->attr()->m3C;
 
@@ -361,19 +261,19 @@ void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c
 
 /* 00000C9C-00000CFC       .text cull_set_draw__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::cull_set_draw() {
-    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, attr()->m24 * 75.0f * attr()->m20);
-
+    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
+                             attr()->m24 * 75.0f * attr()->m20);
 }
 
 /* 00000CFC-00000D54       .text cull_set_move__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::cull_set_move() {
-    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, attr()->m10);
+    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
+                             attr()->m10);
 }
 
 /* 00000D54-00000DA0       .text demo_mode_chk__Q212daObjBarrel25Act_cCFv */
 bool daObjBarrel2::Act_c::demo_mode_chk() const {
-    return m40C == 5 || m40C == 6 || m40C == 7 || m40C == 8 || 
-           m40C == 1 || m40C == 2 || m40C == 3;
+    return m40C == 5 || m40C == 6 || m40C == 7 || m40C == 8 || m40C == 1 || m40C == 2 || m40C == 3;
 }
 
 /* 00000DA0-00000DAC       .text mode_afl_init__Q212daObjBarrel25Act_cFv */
@@ -382,7 +282,7 @@ void daObjBarrel2::Act_c::mode_afl_init() {
 }
 
 /* 00000DAC-00000FE4       .text mode_afl__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_afl() {
+bool daObjBarrel2::Act_c::mode_afl() {
     if (prm_get_coming()) {
         if (m450 > 0.0f) {
             m454 += m450 * -0.02f;
@@ -418,7 +318,7 @@ BOOL daObjBarrel2::Act_c::mode_afl() {
 
     afl_sway();
     set_item_position();
-    return TRUE;
+    return true;
 }
 
 /* 00000FE4-00001004       .text mode_exit_v_init__Q212daObjBarrel25Act_cFv */
@@ -429,7 +329,7 @@ void daObjBarrel2::Act_c::mode_exit_v_init() {
 }
 
 /* 00001004-000010D8       .text mode_exit_v__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_exit_v() {
+bool daObjBarrel2::Act_c::mode_exit_v() {
     m454 -= 5.0f;
     m454 *= 0.96f;
     m450 += m454;
@@ -438,12 +338,12 @@ BOOL daObjBarrel2::Act_c::mode_exit_v() {
     set_item_position();
 
     if (m450 > -(attr()->m18 * attr()->m20 * attr()->m24) - attr()->m30) {
-        return TRUE;
+        return true;
     }
 
     item_drop_init(0.0f);
     buoy_jump(0.0f);
-    return FALSE;
+    return false;
 }
 
 /* 000010D8-000010F0       .text mode_exit_h_init__Q212daObjBarrel25Act_cFv */
@@ -453,7 +353,7 @@ void daObjBarrel2::Act_c::mode_exit_h_init() {
 }
 
 /* 000010F0-000011C4       .text mode_exit_h__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_exit_h() {
+bool daObjBarrel2::Act_c::mode_exit_h() {
     m454 -= 5.0f;
     m454 *= 0.94f;
     m450 += m454;
@@ -462,12 +362,12 @@ BOOL daObjBarrel2::Act_c::mode_exit_h() {
     set_item_position();
 
     if (m450 > -(attr()->m18 * attr()->m20 * attr()->m24) - attr()->m30) {
-        return TRUE;
+        return true;
     }
 
     item_drop_init(0.0f);
     buoy_jump(0.0f);
-    return FALSE;
+    return false;
 }
 
 /* 000011C4-000011DC       .text mode_exit_mine_init__Q212daObjBarrel25Act_cFv */
@@ -477,18 +377,18 @@ void daObjBarrel2::Act_c::mode_exit_mine_init() {
 }
 
 /* 000011DC-000012B0       .text mode_exit_mine__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_exit_mine() {
+bool daObjBarrel2::Act_c::mode_exit_mine() {
     m454 -= 5.0f;
     m454 *= 0.94f;
     m450 += m454;
     set_pos_y();
     set_item_position();
     if (m450 > -(attr()->m18 * attr()->m20 * attr()->m24) - 50.0f) {
-        return TRUE;
+        return true;
     }
     item_drop_init(0.0f);
     buoy_jump(0.0f);
-    return FALSE;
+    return false;
 }
 
 /* 000012B0-00001318       .text mode_explode_init__Q212daObjBarrel25Act_cFv */
@@ -504,25 +404,22 @@ void daObjBarrel2::Act_c::mode_explode_init() {
 }
 
 /* 00001318-0000143C       .text mode_explode__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_explode() {
-    BOOL uVar3;
+bool daObjBarrel2::Act_c::mode_explode() {
     if (--m464 >= 0) {
         m454 += m450 * -0.01f;
         m454 *= 0.94f;
         m450 += m454;
-        
+
         if (m450 > attr()->m14 * 0.2f) {
             m450 = attr()->m14 * 0.2f;
         }
         m43C += (s32)(attr()->m58 * (cM_rnd() + 1.0f));
         set_pos_y();
         item_drop();
-        uVar3 = TRUE;
-    } else {
-        item_drop();
-        uVar3 = FALSE;
+        return true;
     }
-    return uVar3;
+    item_drop();
+    return false;
 }
 
 /* 0000143C-00001484       .text mode_demo_break0_init__Q212daObjBarrel25Act_cFv */
@@ -535,8 +432,8 @@ void daObjBarrel2::Act_c::mode_demo_break0_init() {
 }
 
 /* 00001484-00001568       .text mode_demo_break0__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_demo_break0() {
-    BOOL uVar3 = TRUE;
+bool daObjBarrel2::Act_c::mode_demo_break0() {
+    bool uVar3 = true;
 
     if (dComIfGp_evmng_existence(M_evname_brk)) {
         if (eventInfo.checkCommandDemoAccrpt()) {
@@ -547,11 +444,11 @@ BOOL daObjBarrel2::Act_c::mode_demo_break0() {
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         } else {
             item_give();
-            uVar3 = FALSE;
+            uVar3 = false;
         }
     } else {
         item_give();
-        uVar3 = FALSE;
+        uVar3 = false;
     }
     return uVar3;
 }
@@ -562,12 +459,12 @@ void daObjBarrel2::Act_c::mode_demo_break1_init() {
 }
 
 /* 00001574-000015D0       .text mode_demo_break1__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_demo_break1() {
+bool daObjBarrel2::Act_c::mode_demo_break1() {
     if (dComIfGp_evmng_endCheck(M_evname_brk)) {
         dComIfGp_event_reset();
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 /* 000015D0-000015FC       .text mode_demo_explode0_init__Q212daObjBarrel25Act_cFv */
@@ -579,8 +476,8 @@ void daObjBarrel2::Act_c::mode_demo_explode0_init() {
 }
 
 /* 000015FC-000016D8       .text mode_demo_explode0__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_demo_explode0() {
-    BOOL uVar2 = TRUE;
+bool daObjBarrel2::Act_c::mode_demo_explode0() {
+    bool uVar2 = TRUE;
 
     item_drop();
 
@@ -593,11 +490,11 @@ BOOL daObjBarrel2::Act_c::mode_demo_explode0() {
                 fopAcM_orderOtherEvent(this, const_cast<char*>(M_evname_brk));
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
             } else if (m464 < 0) {
-                uVar2 = FALSE;
+                uVar2 = false;
             }
         }
     } else {
-        uVar2 = FALSE;
+        uVar2 = false;
     }
     return uVar2;
 }
@@ -608,27 +505,23 @@ void daObjBarrel2::Act_c::mode_demo_explode1_init() {
 }
 
 /* 000016E4-00001744       .text mode_demo_explode1__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_demo_explode1() {
+bool daObjBarrel2::Act_c::mode_demo_explode1() {
     item_drop();
     if (dComIfGp_evmng_endCheck(M_evname_brk)) {
         dComIfGp_event_reset();
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 /* 00001744-00001898       .text mode_proc_call__Q212daObjBarrel25Act_cFv */
-BOOL daObjBarrel2::Act_c::mode_proc_call() {
-    typedef BOOL (daObjBarrel2::Act_c::*modeProcFunc)();
+bool daObjBarrel2::Act_c::mode_proc_call() {
+    typedef bool (daObjBarrel2::Act_c::*modeProcFunc)();
     static modeProcFunc mode_proc[] = {
-        &daObjBarrel2::Act_c::mode_afl,
-        &daObjBarrel2::Act_c::mode_exit_v, 
-        &daObjBarrel2::Act_c::mode_exit_h,
-        &daObjBarrel2::Act_c::mode_exit_mine,
-        &daObjBarrel2::Act_c::mode_explode,
-        &daObjBarrel2::Act_c::mode_demo_break0,
-        &daObjBarrel2::Act_c::mode_demo_break1,
-        &daObjBarrel2::Act_c::mode_demo_explode0,
+        &daObjBarrel2::Act_c::mode_afl,           &daObjBarrel2::Act_c::mode_exit_v,
+        &daObjBarrel2::Act_c::mode_exit_h,        &daObjBarrel2::Act_c::mode_exit_mine,
+        &daObjBarrel2::Act_c::mode_explode,       &daObjBarrel2::Act_c::mode_demo_break0,
+        &daObjBarrel2::Act_c::mode_demo_break1,   &daObjBarrel2::Act_c::mode_demo_explode0,
         &daObjBarrel2::Act_c::mode_demo_explode1,
     };
     set_water_pos();
@@ -637,12 +530,14 @@ BOOL daObjBarrel2::Act_c::mode_proc_call() {
 
 /* 00001898-00001914       .text set_pos_y__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::set_pos_y() {
-    current.pos.y = m41C + m450 + (attr()->m50 * -attr()->m14 + attr()->m54 * cM_ssin(m43C)) * attr()->m20 * attr()->m24;
+    current.pos.y =
+        m41C + m450 +
+        (attr()->m50 * -attr()->m14 + attr()->m54 * cM_ssin(m43C)) * attr()->m20 * attr()->m24;
 }
 
 /* 00001914-00001BDC       .text set_mtx__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::set_mtx() {
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     bool bVar3 = (m410 == 0) || (m410 == 2) || (m410 == 3);
 #else
     bool bVar3 = true;
@@ -652,7 +547,7 @@ void daObjBarrel2::Act_c::set_mtx() {
     if ((idx == 0) || (idx == 2)) {
         bVar2 = true;
     }
-    
+
     if ((!bVar2) && (idx != 3)) {
         bVar3 = false;
     }
@@ -677,7 +572,8 @@ void daObjBarrel2::Act_c::set_mtx() {
     Quaternion sp30;
     daObj::quat_rotBaseY(&sp30, sp40);
     mDoMtx_stack_c::quatM(&sp30);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, (bVar3) ? shape_angle.z : shape_angle.z + 0x4000);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y,
+                            (bVar3) ? shape_angle.z : shape_angle.z + 0x4000);
     mDoMtx_stack_c::transM(0.0f, fVar1 * -attr()->m18, 0.0f);
     m298->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), m478);
@@ -712,16 +608,14 @@ void daObjBarrel2::Act_c::eff_break() {
     fopAcM_seStart(this, JA_SE_OBJ_COL_SHIP_BARREL, 0);
 
     f32 tmp = attr()->m24 * attr()->m20;
-    sp20.set(
-        current.pos.x,
-        current.pos.y + attr()->m14 * attr()->m50 * tmp,
-        current.pos.z
-    );
+    sp20.set(current.pos.x, current.pos.y + attr()->m14 * attr()->m50 * tmp, current.pos.z);
     sp2C.setall(tmp);
 
-    dComIfGp_particle_set(0x460, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(0x45f, &sp20, NULL, &sp2C);
-    JPABaseEmitter* emitter = dComIfGp_particle_set(0x3e6, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_0460, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_045F, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter =
+        dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C, 0xFF, NULL, -1,
+                              &tevStr.mColorK0, &tevStr.mColorK0);
 
     if (emitter != NULL) {
         emitter->setLifeTime(30);
@@ -736,13 +630,9 @@ void daObjBarrel2::Act_c::eff_explode() {
     cXyz sp2C;
     f32 tmp = attr()->m24 * attr()->m20;
 
-    sp20.set(
-        current.pos.x,
-        current.pos.y + attr()->m14 * attr()->m50 * tmp,
-        current.pos.z
-    );
+    sp20.set(current.pos.x, current.pos.y + attr()->m14 * attr()->m50 * tmp, current.pos.z);
     sp2C.setall(tmp);
-    
+
     fopAcM_seStart(this, JA_SE_OBJ_BARREL_BOMB, 0);
 
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -751,13 +641,13 @@ void daObjBarrel2::Act_c::eff_explode() {
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;
     sp18.z = 0;
 
-    dComIfGp_particle_set(0xb, &sp20, &sp18, &sp2C);
-    dComIfGp_particle_setBombSmoke(0x200a, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_LIGHT_FLASH, &sp20, &sp18, &sp2C);
+    dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &sp20, NULL, &sp2C);
     fopKyM_createWpillar(&current.pos, attr()->m6C, attr()->m70, 1);
-    dComIfGp_particle_setToon(0x2041, &sp20, NULL, &sp2C);
-    dComIfGp_particle_set(0x3c, &sp20, NULL, &sp2C);
+    dComIfGp_particle_setToon(dPa_name::ID_COMMON_2041, &sp20, NULL, &sp2C);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &sp20, NULL, &sp2C);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(0x3e6, &sp20, NULL, &sp2C);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C);
     if (emitter != NULL) {
         emitter->setLifeTime(40);
         emitter->setAwayFromAxisSpeed(10.0f);
@@ -772,11 +662,7 @@ void daObjBarrel2::Act_c::set_item_position() {
 
     if (raceItem != NULL) {
         if (m46C != 0) {
-            cXyz sp08(
-                current.pos.x,
-                current.pos.y + attr()->m30,
-                current.pos.z
-            );
+            cXyz sp08(current.pos.x, current.pos.y + attr()->m30, current.pos.z);
             raceItem->set_mtx(&sp08);
         } else {
             raceItem->current.pos.x = current.pos.x;
@@ -879,27 +765,15 @@ void daObjBarrel2::Act_c::set_water_pos() {
         f32 fVar4 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z - 32.0f);
         f32 fVar5 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z + 32.0f);
         f32 fVar6 = daSea_calcWave(current.pos.x + 32.0f, current.pos.z - 32.0f);
-        cXyz sp44(
-            0.0f,
-            fVar5 - fVar4,
-            32.0f
-        );
-        cXyz sp38(
-            32.0f,
-            fVar6 - fVar4,
-            0.0f
-        );
+        cXyz sp44(0.0f, fVar5 - fVar4, 32.0f);
+        cXyz sp38(32.0f, fVar6 - fVar4, 0.0f);
         m41C = (fVar4 + fVar5 + fVar6) * 0.33333334f;
         m420 = sp44.outprod(sp38);
         m420.normalizeZP();
     } else {
         static dBgS_WtrChk wtr;
 
-        cXyz sp2C(
-            current.pos.x,
-            current.pos.y - 1000.0f,
-            current.pos.z
-        );
+        cXyz sp2C(current.pos.x, current.pos.y - 1000.0f, current.pos.z);
         wtr.Set(sp2C, current.pos.y + 1000.0f);
 
         if (dComIfG_Bgsp()->SplGrpChk(&wtr)) {
@@ -949,7 +823,7 @@ void daObjBarrel2::Act_c::afl_sway() {
 
     x3 = -m448 * attr()->m64;
     z3 = -m44C * attr()->m64;
-    
+
     m448 += x + x3;
     m44C += z + z3;
 #else
@@ -973,11 +847,11 @@ void daObjBarrel2::Act_c::afl_sway() {
     z1 = -(m444 - z);
     z2 = z1 * attr()->m60;
     z3 = -m44C * attr()->m64;
-    
+
     x3 = -m448 * attr()->m64;
     x1 = -(m440 - x);
     x2 = x1 * attr()->m60;
-    
+
     m448 += x2 + x3;
     m44C += z2 + z3;
 #endif
@@ -1001,7 +875,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_flash() {
 /* 00002984-00002A00       .text mine_chk_range_explode__Q212daObjBarrel25Act_cFv */
 bool daObjBarrel2::Act_c::mine_chk_range_explode() {
     daShip_c* ship = dComIfGp_getShipActor();
-    
+
     f32 fVar1 = attr()->m44 * attr()->m44;
     bool uVar2 = false;
     if (ship && fopAcM_searchActorDistanceXZ2(this, ship) < fVar1) {
@@ -1018,16 +892,9 @@ bool daObjBarrel2::Act_c::mine_chk_range_damage() {
     if (ship != NULL && fopAcM_searchActorDistanceXZ2(this, ship) < sq) {
         if (ship->current.pos.y < current.pos.y + attr()->m4C) {
             if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
-                cXyz sp14(
-                    ship->current.pos.x - current.pos.x,
-                    0.0f,
-                    ship->current.pos.z - current.pos.z
-                );
-                cXyz sp08(
-                    ship->speed.x,
-                    0.0f,
-                    ship->speed.z
-                );
+                cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f,
+                          ship->current.pos.z - current.pos.z);
+                cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
                 sq = attr()->m3C * attr()->m3C;
                 if (sp14.inprod(sp08) < sq) {
@@ -1090,7 +957,7 @@ void daObjBarrel2::Act_c::execute_sub() {
         buoy_jump(300.0f);
         item_drop_init(130.0f);
         bVar1 = true;
-    } else if ((u8)mode_proc_call()) {
+    } else if (mode_proc_call()) {
         set_mtx();
         mCyl.SetC(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
@@ -1124,7 +991,7 @@ void daObjBarrel2::Act_c::execute_sub() {
 bool daObjBarrel2::Act_c::_execute() {
     cull_set_move();
     item_connect_check();
-    
+
     s32 uVar2 = 0;
     if (m46A != 1 && dComIfGp_event_runCheck() != 0) {
         uVar2 = 1;
@@ -1195,7 +1062,8 @@ actor_process_profile_definition g_profile_Obj_Barrel2 = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ PRIO_Obj_Barrel2,
     /* Actor SubMtd */ &daObjBarrel2::Method::Table,
-    /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e |
+        fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
 };
