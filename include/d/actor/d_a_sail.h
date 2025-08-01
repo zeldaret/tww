@@ -23,6 +23,7 @@ public:
     cXyz* getPos() { return mPos[m1C3A]; }
     cXyz* getPosSpd() { return m0884; }
     cXyz* getNrm() { return mNrm[m1C3A]; }
+    cXyz* getBackNrm() { return m1454[m1C3A]; }
 
     void setCorrectNrmAngle(s16, f32);
     void setNrmMtx();

@@ -182,7 +182,17 @@ modules:
 - object: files/RELS.arc:rels/mmem/d_a_majuu_flag.rel
   splits: config/GZLJ01/rels/d_a_majuu_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_majuu_flag/symbols.txt
-
+  extract:
+    - symbol: l_flag02TEX
+      binary: assets/l_flag02TEX.bin
+      header: assets/l_flag02TEX.h
+    - symbol: l_majuu_flag_matDL
+      binary: assets/l_majuu_flag_matDL.bin
+      header: assets/l_majuu_flag_matDL.h
+    - symbol: l_majuu_flagDL
+      binary: assets/l_majuu_flagDL.bin
+      header: assets/l_majuu_flagDL.h
+      
 - object: files/RELS.arc:rels/mmem/d_a_mdoor.rel
   splits: config/GZLJ01/rels/d_a_mdoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_mdoor/symbols.txt

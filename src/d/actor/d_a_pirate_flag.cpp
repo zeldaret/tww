@@ -122,7 +122,7 @@ void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 /* 00000364-000003F0       .text setBackNrm__22daPirate_Flag_packet_cFv */
 void daPirate_Flag_packet_c::setBackNrm() {
     cXyz* a = getNrm();
-    cXyz* b = m4F4[m87E];
+    cXyz* b = getBackNrm();
     for (int i = 0; i < (s32)ARRAY_SIZE(*mNrm); i++) {
         b->setall(0.0f);
         *b -= *a;
@@ -276,7 +276,7 @@ void daPirate_Flag_packet_c::draw() {
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
     GXSetCullMode(GX_CULL_FRONT);
-    GXSetArray(GX_VA_NRM, m4F4[m87E], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
 #if VERSION > VERSION_JPN
@@ -457,7 +457,7 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 #else
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
     DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));
-    DCStoreRangeNoSync(i_this->mPacket.getNrm() + sizeof(i_this->mPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mPacket.m4F4)); // Fakematch?
+    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(*i_this->mPacket.m4F4));
 #endif
 }
 

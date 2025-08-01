@@ -24,13 +24,14 @@ void mDoMtx_concatProjView(f32 const (*param_0)[4], f32 const (*param_1)[4], f32
 void mDoMtx_ZrotM(Mtx mtx, s16 z);
 bool mDoMtx_inverseTranspose(f32 const (*param_0)[4], f32 (*param_1)[4]);
 void mDoMtx_QuatConcat(Quaternion const* param_0, Quaternion const* param_1, Quaternion* param_2);
+void mDoMtx_concat(const Mtx a, const Mtx b, Mtx c);
 
 inline void mDoMtx_multVecSR(const Mtx m, const Vec* src, Vec* dst) {
     MTXMultVecSR(m, src, dst);
 }
 
 inline void cMtx_concat(const Mtx a, const Mtx b, Mtx ab) {
-    MTXConcat(a, b, ab);
+    mDoMtx_concat(a, b, ab);
 }
 
 inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
