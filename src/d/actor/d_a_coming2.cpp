@@ -234,7 +234,7 @@ BOOL daComing2::Act_c::request_barrel_exitN(int idx) {
 
     if (barrelProc != fpcM_ERROR_PROCESS_ID_e) {
         if (fopAcM_SearchByID(barrelProc, (fopAc_ac_c**)&barrel) != NULL && barrel != NULL) {
-            barrel->unk_474 = 1;
+            barrel->m474 = 1;
             return TRUE;
         } else {
             return FALSE;
@@ -283,7 +283,7 @@ BOOL daComing2::Act_c::request_all_flag_exit() {
         daObjBarrel2::Act_c* buoy;
 
         if (buoyProc != fpcM_ERROR_PROCESS_ID_e && fopAcM_SearchByID(buoyProc, (fopAc_ac_c**)&buoy) != NULL && buoy != NULL) {
-             buoy->unk_474 = 1;
+             buoy->m474 = 1;
              mStartBuoy[i].unk_00 = fpcM_ERROR_PROCESS_ID_e;
         }
     }
