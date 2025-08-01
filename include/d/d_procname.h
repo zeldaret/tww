@@ -469,6 +469,7 @@ enum {
     /* 0x01CD */ PROC_Stone2,
     /* 0x01CE */ PROC_Obj_Barrel,
     /* 0x01CF */ PROC_Obj_Barrel2,
+    /* 0x01CF */ tk_Obj_Barrel2_e = PROC_Obj_Barrel2,
     /* 0x01D0 */ PROC_Obj_Try,
     /* 0x01D1 */ PROC_Obj_Vtil,
     /* 0x01D2 */ PROC_Obj_Ice,

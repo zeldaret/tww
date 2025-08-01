@@ -22,13 +22,13 @@ namespace daObjBarrel2 {
         void get_item_id() {}
         static fpc_ProcID make_coming(cXyz* pos, int roomNo, Type_e type, int droppedItem, bool hasFlag, short angleY, daObjBuoyflag::Texture_e arg6) {
             csXyz angle(0, angleY, 0);
-            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, hasFlag, arg6), pos, roomNo, &angle);
+            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, hasFlag, false, arg6), pos, roomNo, &angle);
         }
         static u32 make_prm(Type_e arg0, int droppedItem, bool hasFlag, bool flagType, daObjBuoyflag::Texture_e arg4) {
             s32 item = (droppedItem & 0x3F);
             s32 tmp = hasFlag ? 1 : 0;
             s32 a6 = arg4;
-            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | ((hasFlag ? 0 : 1) << 10) | (a6 << 28);
+            return (item | (0x7F << 16)) | (arg0 << 24) | (tmp << 8) | ((flagType ? 1 : 0) << 10) | (a6 << 28);
         }
         void prm_get_buoy() const {}
         void prm_get_coming() const {}
