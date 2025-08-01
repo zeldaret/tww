@@ -17,6 +17,18 @@ class daNpc_Cb1_c : public daPy_npc_c {
 public:
     typedef BOOL (daNpc_Cb1_c::*ActionFunc_t)(void*);
 
+    enum daNpc_Cb1_StatusBit_e {
+        daCbStts_NO_CARRY_ACTION = 0x0001,
+        daCbStts_TACT = 0x0002,
+        daCbStts_TACT_CORRECT = 0x0004,
+        daCbStts_TACT_CANCEL = 0x0008,
+        daCbStts_MUSIC = 0x0010,
+        daCbStts_NUT = 0x0020,
+        daCbStts_SHIP_RIDE = 0x0040,
+        daCbStts_PLAYER_FIND = 0x0080,
+        daCbStts_UNK_0100 = 0x0100,
+    };
+
     // daPy_py_c virtuals
     f32 getBaseAnimeFrame() { return 0.0f; }
     f32 getBaseAnimeFrameRate() { return 1.0f; }
@@ -52,30 +64,30 @@ public:
     BOOL isTypeEkaze() { return fopAcM_GetParam(this) == 3; }
     BOOL isTypeKaze() { return fopAcM_GetParam(this) == 4; }
     BOOL isTypeKazeBoss() { return fopAcM_GetParam(this) == 5; }
-    BOOL isNoCarryAction() { return m_status & 0x01; }
-    BOOL isTact() { return m_status & 0x02; }
-    BOOL isTactCorrect() { return m_status & 0x04; }
-    BOOL isTactCancel() { return m_status & 0x08; }
-    BOOL isMusic() { return m_status & 0x10; }
-    BOOL isNut() { return m_status & 0x20; }
-    BOOL isShipRide() { return m_status & 0x40; }
-    BOOL isPlayerFind() { return m_status & 0x80; }
-    void offNoCarryAction() { m_status &= ~0x01; }
-    void offTact() { m_status &= ~0x02; }
-    void offTactCorrect() { m_status &= ~0x04; }
-    void offTactCancel() { m_status &= ~0x08; }
-    void offMusic() { m_status &= ~0x10; }
-    void offNut() { m_status &= ~0x20; }
-    void offShipRide() { m_status &= ~0x40; }
-    void offPlayerFind() { m_status &= ~0x80; }
-    void noCarryAction() { m_status |= 0x01; }
-    void onTact() { m_status |= 0x02; }
-    void onTactCorrect() { m_status |= 0x04; }
-    void onTactCancel() { m_status |= 0x08; }
-    void onMusic() { m_status |= 0x10; }
-    void onNut() { m_status |= 0x20; }
-    void onShipRide() { m_status |= 0x40; }
-    void onPlayerFind() { m_status |= 0x80; }
+    BOOL isNoCarryAction() { return m_status & daCbStts_NO_CARRY_ACTION; }
+    BOOL isTact() { return m_status & daCbStts_TACT; }
+    BOOL isTactCorrect() { return m_status & daCbStts_TACT_CORRECT; }
+    BOOL isTactCancel() { return m_status & daCbStts_TACT_CANCEL; }
+    BOOL isMusic() { return m_status & daCbStts_MUSIC; }
+    BOOL isNut() { return m_status & daCbStts_NUT; }
+    BOOL isShipRide() { return m_status & daCbStts_SHIP_RIDE; }
+    BOOL isPlayerFind() { return m_status & daCbStts_PLAYER_FIND; }
+    void offNoCarryAction() { m_status &= ~daCbStts_NO_CARRY_ACTION; }
+    void offTact() { m_status &= ~daCbStts_TACT; }
+    void offTactCorrect() { m_status &= ~daCbStts_TACT_CORRECT; }
+    void offTactCancel() { m_status &= ~daCbStts_TACT_CANCEL; }
+    void offMusic() { m_status &= ~daCbStts_MUSIC; }
+    void offNut() { m_status &= ~daCbStts_NUT; }
+    void offShipRide() { m_status &= ~daCbStts_SHIP_RIDE; }
+    void offPlayerFind() { m_status &= ~daCbStts_PLAYER_FIND; }
+    void noCarryAction() { m_status |= daCbStts_NO_CARRY_ACTION; }
+    void onTact() { m_status |= daCbStts_TACT; }
+    void onTactCorrect() { m_status |= daCbStts_TACT_CORRECT; }
+    void onTactCancel() { m_status |= daCbStts_TACT_CANCEL; }
+    void onMusic() { m_status |= daCbStts_MUSIC; }
+    void onNut() { m_status |= daCbStts_NUT; }
+    void onShipRide() { m_status |= daCbStts_SHIP_RIDE; }
+    void onPlayerFind() { m_status |= daCbStts_PLAYER_FIND; }
     void restartPoint(s16 point) {
         setPointRestart(point, 1);
         setWaitNpcAction(NULL);
@@ -88,7 +100,7 @@ public:
 
     static s16 getMaxFlyingTimer();
     
-    s16 getFlyingTimer() { return m_flyingTimer; }
+    int getFlyingTimer() { return m_flyingTimer; }
     void setFlyingTimer(s16 time) { m_flyingTimer = time; }
     static bool isFlying() { return m_flying; }
     void onFlying() { m_flying = true; }

@@ -70,6 +70,10 @@ const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
         /* Height */ 0.0f,
     },
 };
+
+#ifdef __MWERKS__
+static
+#endif
 const s32 daObjTpost_c::m_send_price[] = {
     0x05,
     0x0A,
