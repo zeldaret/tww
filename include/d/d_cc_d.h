@@ -189,6 +189,7 @@ public:
     u8 GetRoomId() { return mRoomId; }
     void SetRoomId(int id) { mRoomId = id; }
     fpc_ProcID GetAtOldApid() { return mAtOldApid; }
+    fpc_ProcID GetTgApid() { return mTgApid; }
     fpc_ProcID GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return mFlag & 1; }
     bool ChkNoneActorPerfTblId() { return mActorPerfTblId == 0xFFFF; }
