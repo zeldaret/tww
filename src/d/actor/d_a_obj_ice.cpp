@@ -136,7 +136,7 @@ void daObjIce_c::init_mtx() {
 }
 
 /* 000001C8-000001EC       .text solidHeapCB__10daObjIce_cFP10fopAc_ac_c */
-int daObjIce_c::solidHeapCB(fopAc_ac_c* a_this) {
+BOOL daObjIce_c::solidHeapCB(fopAc_ac_c* a_this) {
     return ((daObjIce_c*)a_this)->create_heap();
 }
 
@@ -341,8 +341,7 @@ void daObjIce_c::wait_act_proc() {
 #if VERSION == VERSION_DEMO
             JGeometry::TVec3<f32> s(scale.x, scale.y, scale.z);
 #else
-            JGeometry::TVec3<f32> s;
-            s.set(scale);
+            JGeometry::TVec3<f32> s(scale);
 #endif
             emitter->setGlobalDynamicsScale(s);
             s.x = scale.x;

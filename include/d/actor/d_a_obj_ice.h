@@ -24,7 +24,7 @@ public:
     u8 chk_appear();
     void set_mtx();
     void init_mtx();
-    static int solidHeapCB(fopAc_ac_c*);
+    static BOOL solidHeapCB(fopAc_ac_c*);
     bool create_heap();
     static void tg_hitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     cPhs_State _create();
