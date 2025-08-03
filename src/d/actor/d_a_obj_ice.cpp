@@ -40,15 +40,15 @@ public:
     /* 0x39 */ u8 m39;
     /* 0x3A */ u8 m3A;
     /* 0x3B */ u8 m3B;
-};  // size = 0x3C
+}; // size = 0x3C
 
 static daObjIce_HIO_c l_HIO;
 #endif
 
 namespace {
 static const char l_arcname[] = "Ikori";
-static const f32 l_co_radius_table[] = { 40.0f, 65.0f, 75.0f };
-static const f32 l_co_height_table[] = { 120.0f, 90.0f, 60.0f };
+static const f32 l_co_radius_table[] = {40.0f, 65.0f, 75.0f};
+static const f32 l_co_height_table[] = {120.0f, 90.0f, 60.0f};
 static const dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -56,8 +56,7 @@ static const dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 &
-            ~AT_TYPE_LIGHT,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
@@ -73,15 +72,13 @@ static const dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 65.0f,
         /* Height */ 140.0f,
-    },
+    }},
 };
-}  // namespace
+} // namespace
 
 #if VERSION == VERSION_DEMO
 daObjIce_HIO_c::daObjIce_HIO_c() {
@@ -162,10 +159,7 @@ bool daObjIce_c::create_heap() {
 }
 
 /* 000002E4-000005F4       .text tg_hitCallback__10daObjIce_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this,
-                                dCcD_GObjInf* arg1,
-                                fopAc_ac_c* arg2,
-                                dCcD_GObjInf* arg3) {
+void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
     daObjIce_c* i_this = (daObjIce_c*)a_this;
     cCcD_Obj* pcVar8 = arg1->GetTgHitObj();
 
@@ -198,7 +192,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this,
                     i_this->m45C = 2;
                     break;
 
-                default:
+                default: {
 #if VERSION == VERSION_DEMO
                     i_this->m44C -= l_HIO.m24;
 #else
@@ -212,14 +206,11 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this,
                         i_this->m45C = 1;
                     }
                     csXyz sp18(0, 0, 0);
-                    sp18.x = cM_atan2s(-pPos->y + i_this->current.pos.y,
-                                       pPos->z - i_this->current.pos.z);
-                    sp18.y =
-                        cM_atan2s(pPos->x - i_this->current.pos.x, pPos->z - i_this->current.pos.z);
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0465, pPos, &sp18, NULL, 0xFF, NULL,
-                                          -1, &i_this->tevStr.mColorK0);
+                    sp18.x = cM_atan2s(-pPos->y + i_this->current.pos.y, pPos->z - i_this->current.pos.z);
+                    sp18.y = cM_atan2s(pPos->x - i_this->current.pos.x, pPos->z - i_this->current.pos.z);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0465, pPos, &sp18, NULL, 0xFF, NULL, -1, &i_this->tevStr.mColorK0);
                     break;
-
+                }
                 case AT_TYPE_BOMB:
                     break;
                 }
@@ -271,8 +262,7 @@ cPhs_State daObjIce_c::_create() {
                 mCyl.OnTgNoAtHitInfSet();
                 mCyl.SetTgHitCallback(tg_hitCallback);
                 m454 = 255.0f;
-                fopAcM_setCullSizeBox(this, scale.x * -80.0f, 0.0f, scale.z * -80.0f,
-                                      scale.x * 80.0f, scale.y * 150.0f, scale.z * 80.0f);
+                fopAcM_setCullSizeBox(this, scale.x * -80.0f, 0.0f, scale.z * -80.0f, scale.x * 80.0f, scale.y * 150.0f, scale.z * 80.0f);
                 attention_info.position.x = current.pos.x;
                 attention_info.position.y = current.pos.y + scale.y * 60.0f;
                 attention_info.position.z = current.pos.z;
@@ -333,10 +323,9 @@ void daObjIce_c::wait_act_proc() {
     case 2:
         fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ROCK_MELT, 0);
 
-    case 1:
+    case 1: {
         m458 = 0x5a;
-        JPABaseEmitter* emitter = dComIfGp_particle_set(
-            dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
         if (emitter != NULL) {
 #if VERSION == VERSION_DEMO
             JGeometry::TVec3<f32> s;
@@ -354,7 +343,7 @@ void daObjIce_c::wait_act_proc() {
 
         m43C = &daObjIce_c::fade_out_retire_act_proc;
         break;
-
+    }
     default:
 #if VERSION == VERSION_DEMO
         if (l_HIO.m3B == 1) {
@@ -366,8 +355,7 @@ void daObjIce_c::wait_act_proc() {
                 dComIfG_Bgsp()->Release(mBgw);
             }
             m458 = 0x5A;
-            dComIfGp_particle_set(dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL,
-                                  -1, &tevStr.mColorK0);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
             m43C = &daObjIce_c::fade_out_retire_act_proc;
         }
 #else
@@ -420,8 +408,7 @@ bool daObjIce_c::_execute() {
         mModel->setBaseScale(scale);
         mCyl.SetR(l_HIO.m18 * l_HIO.m20 * m44C);
         mCyl.SetH(l_HIO.m0C * l_HIO.m20 * m450);
-        fopAcM_setCullSizeBox(this, -l_HIO.m28 * scale.x, 0.0f, -l_HIO.m28 * scale.z,
-                              l_HIO.m28 * scale.x, l_HIO.m2C * scale.y, l_HIO.m28 * scale.z);
+        fopAcM_setCullSizeBox(this, -l_HIO.m28 * scale.x, 0.0f, -l_HIO.m28 * scale.z, l_HIO.m28 * scale.x, l_HIO.m2C * scale.y, l_HIO.m28 * scale.z);
     } else {
         mCyl.SetR(m44C * (l_HIO.m18 * scale.x));
         mCyl.SetH(m450 * (l_HIO.m0C * scale.y));
@@ -475,9 +462,9 @@ bool daObjIce_c::_draw() {
 /* 00001070-000013A0       .text setEffectMtx__10daObjIce_cFv */
 void daObjIce_c::setEffectMtx() {
     static Mtx mtx_adj = {
-        { 0.5f, 0.0f, 0.0f, 0.5f },
-        { 0.0f, -0.5f, 0.0f, 0.5f },
-        { 0.0f, 0.0f, 1.0f, 0.0f },
+        {0.5f, 0.0f, 0.0f, 0.5f},
+        {0.0f, -0.5f, 0.0f, 0.5f},
+        {0.0f, 0.0f, 1.0f, 0.0f},
     };
 
     Mtx sp98;
@@ -572,8 +559,10 @@ static BOOL daObjIce_IsDelete(daObjIce_c*) {
 }
 
 static actor_method_class l_daObjIce_Method = {
-    (process_method_func)daObjIce_Create,  (process_method_func)daObjIce_Delete,
-    (process_method_func)daObjIce_Execute, (process_method_func)daObjIce_IsDelete,
+    (process_method_func)daObjIce_Create,
+    (process_method_func)daObjIce_Delete,
+    (process_method_func)daObjIce_Execute,
+    (process_method_func)daObjIce_IsDelete,
     (process_method_func)daObjIce_Draw,
 };
 
