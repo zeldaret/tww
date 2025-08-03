@@ -14,10 +14,10 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 daRaceItem_c* daObjBarrel2::Act_c::M_tmp_item_actor;
 
-#include "weak_data_1811.h"  // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjBarrel2::Act_c::M_arcname[] = "Ktaru_00";
 const char daObjBarrel2::Act_c::M_evname_brk[] = "barrel2_brk";
@@ -28,11 +28,9 @@ const dCcD_SrcCyl daObjBarrel2::Act_c::M_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER &
-            ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e |
-            cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
         /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
@@ -46,142 +44,142 @@ const dCcD_SrcCyl daObjBarrel2::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
+
 const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
     {
-        0x5,
-		0x9,
-		0x520,
-		200.0f,
-		300.0f,
-		800.0f,
-		100.0f,
-		50.0f,
-		0.0099999998f,
-		4.0f,
-        1.0f,
-		3.0f,
-		1.0f,
-		500.0f,
-		300.0f,
-		25.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-        0.0f,
-		0.55f,
-		0.5f,
-		0x3E8,
-		0.3f,
-		0.02f,
-		0.039999999f,
-		0.34999999f,
-		1.0f,
-		1.0f,
+        /* m00 */ 0x5,
+        /* m02 */ 0x9,
+        /* m04 */ 0x520,
+        /* m08 */ 200.0f,
+        /* m0C */ 300.0f,
+        /* m10 */ 800.0f,
+        /* m14 */ 100.0f,
+        /* m18 */ 50.0f,
+        /* m1C */ 0.0099999998f,
+        /* m20 */ 4.0f,
+        /* m24 */ 1.0f,
+        /* m28 */ 3.0f,
+        /* m2C */ 1.0f,
+        /* m30 */ 500.0f,
+        /* m34 */ 300.0f,
+        /* m38 */ 25.0f,
+        /* m3C */ 0.0f,
+        /* m40 */ 0.0f,
+        /* m44 */ 0.0f,
+        /* m48 */ 0.0f,
+        /* m4C */ 0.0f,
+        /* m50 */ 0.55f,
+        /* m54 */ 0.5f,
+        /* m58 */ 0x3E8,
+        /* m5C */ 0.3f,
+        /* m60 */ 0.02f,
+        /* m64 */ 0.039999999f,
+        /* m68 */ 0.34999999f,
+        /* m6C */ 1.0f,
+        /* m70 */ 1.0f,
     },
     {
-        0x5,
-		0x9,
-		0x520,
-		200.0f,
-		400.0f,
-		300.0f,
-		100.0f,
-		50.0f,
-		0.0099999998f,
-		4.0f,
-        1.0f,
-		3.0f,
-		1.0f,
-		450.0f,
-		300.0f,
-		25.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-        0.0f,
-		0.75f,
-		0.5f,
-		0x3E8,
-		0.3f,
-		0.02f,
-		0.039999999f,
-		0.34999999f,
-		1.0f,
-		1.0f,
-		
+        /* m00 */ 0x5,
+        /* m02 */ 0x9,
+        /* m04 */ 0x520,
+        /* m08 */ 200.0f,
+        /* m0C */ 400.0f,
+        /* m10 */ 300.0f,
+        /* m14 */ 100.0f,
+        /* m18 */ 50.0f,
+        /* m1C */ 0.0099999998f,
+        /* m20 */ 4.0f,
+        /* m24 */ 1.0f,
+        /* m28 */ 3.0f,
+        /* m2C */ 1.0f,
+        /* m30 */ 450.0f,
+        /* m34 */ 300.0f,
+        /* m38 */ 25.0f,
+        /* m3C */ 0.0f,
+        /* m40 */ 0.0f,
+        /* m44 */ 0.0f,
+        /* m48 */ 0.0f,
+        /* m4C */ 0.0f,
+        /* m50 */ 0.75f,
+        /* m54 */ 0.5f,
+        /* m58 */ 0x3E8,
+        /* m5C */ 0.3f,
+        /* m60 */ 0.02f,
+        /* m64 */ 0.039999999f,
+        /* m68 */ 0.34999999f,
+        /* m6C */ 1.0f,
+        /* m70 */ 1.0f,
     },
     {
-        0x4,
-		0x8,
-		0x880,
-		288.0f,
-		432.0f,
-		4500.0f,
-		100.0f,
-		50.0f,
-        0.0099999998f,
-		5.76f,
-		1.0f,
-		3.0f,
-		1.0f,
-		500.0f,
-		300.0f,
-		25.0f,
-        400.0f,
-		7500.0f,
-		900.0f,
-		700.0f,
-		250.0f,
-		0.3f,
-		0.5f,
-		0x3E8,
-        0.3f,
-		0.02f,
-		0.039999999f,
-		0.34999999f,
-		5.0f,
-		1.0f,
+        /* m00 */ 0x4,
+        /* m02 */ 0x8,
+        /* m04 */ 0x880,
+        /* m08 */ 288.0f,
+        /* m0C */ 432.0f,
+        /* m10 */ 4500.0f,
+        /* m14 */ 100.0f,
+        /* m18 */ 50.0f,
+        /* m1C */ 0.0099999998f,
+        /* m20 */ 5.76f,
+        /* m24 */ 1.0f,
+        /* m28 */ 3.0f,
+        /* m2C */ 1.0f,
+        /* m30 */ 500.0f,
+        /* m34 */ 300.0f,
+        /* m38 */ 25.0f,
+        /* m3C */ 400.0f,
+        /* m40 */ 7500.0f,
+        /* m44 */ 900.0f,
+        /* m48 */ 700.0f,
+        /* m4C */ 250.0f,
+        /* m50 */ 0.3f,
+        /* m54 */ 0.5f,
+        /* m58 */ 0x3E8,
+        /* m5C */ 0.3f,
+        /* m60 */ 0.02f,
+        /* m64 */ 0.039999999f,
+        /* m68 */ 0.34999999f,
+        /* m6C */ 5.0f,
+        /* m70 */ 1.0f,
     },
-		
+
     {
-        0x5,
-		0x9,
-		0x520,
-		288.0f,
-		576.0f,
-		800.0f,
-		100.0f,
-		50.0f,
-		0.0099999998f,
-		5.76f,
-        1.0f,
-		3.0f,
-		1.0f,
-		500.0f,
-		300.0f,
-		25.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-		0.0f,
-        0.0f,
-		0.55f,
-		0.5f,
-		0x3E8,
-		0.3f,
-		0.02f,
-		0.039999999f,
-		0.34999999f,
-		1.0f,
-		1.0f,
+        /* m00 */ 0x5,
+        /* m02 */ 0x9,
+        /* m04 */ 0x520,
+        /* m08 */ 288.0f,
+        /* m0C */ 576.0f,
+        /* m10 */ 800.0f,
+        /* m14 */ 100.0f,
+        /* m18 */ 50.0f,
+        /* m1C */ 0.0099999998f,
+        /* m20 */ 5.76f,
+        /* m24 */ 1.0f,
+        /* m28 */ 3.0f,
+        /* m2C */ 1.0f,
+        /* m30 */ 500.0f,
+        /* m34 */ 300.0f,
+        /* m38 */ 25.0f,
+        /* m3C */ 0.0f,
+        /* m40 */ 0.0f,
+        /* m44 */ 0.0f,
+        /* m48 */ 0.0f,
+        /* m4C */ 0.0f,
+        /* m50 */ 0.55f,
+        /* m54 */ 0.5f,
+        /* m58 */ 0x3E8,
+        /* m5C */ 0.3f,
+        /* m60 */ 0.02f,
+        /* m64 */ 0.039999999f,
+        /* m68 */ 0.34999999f,
+        /* m6C */ 1.0f,
+        /* m70 */ 1.0f,
     },
 };
 
@@ -207,8 +205,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
     s32 iVar5 = 0;
     if (m29C != NULL) {
-        iVar5 =
-            m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+        iVar5 = m29C->init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
     }
 
     if (m298 != NULL && iVar5 != 0) {
@@ -271,36 +268,28 @@ cPhs_State daObjBarrel2::Act_c::_create() {
             attention_info.position.z = current.pos.z;
             eyePos = attention_info.position;
 
-            fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
-                                     300.0f);
+            fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, 300.0f);
 
             cXyz sp30 = current.pos;
             cXyz sp24;
             csXyz sp10(0, home.angle.y, 0);
             sp24.setall(attr()->m28 * attr()->m2C);
 
-            m458 = fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(),
-                                                  fopAcM_GetHomeRoomNo(this), &sp10, &sp24,
-                                                  prm_get_coming() ? 1 : 0);
+            m458 =
+                fopAcM_createRaceItemFromTable(&sp30, prm_get_itemNo(), prm_get_itemSave(), fopAcM_GetHomeRoomNo(this), &sp10, &sp24, prm_get_coming() ? 1 : 0);
             m45C = 3.4028235e+38f;
             m468 = 0;
             m470 = 0;
             m460 = fpcM_ERROR_PROCESS_ID_e;
 
             if (prm_get_buoy() == 0) {
-                cXyz sp18(current.pos.x,
-                          current.pos.y + attr()->m24 * attr()->m20 * (attr()->m14 - 5.0f),
-                          current.pos.z);
+                cXyz sp18(current.pos.x, current.pos.y + attr()->m24 * attr()->m20 * (attr()->m14 - 5.0f), current.pos.z);
 
                 if (m410 == 2 || m410 == 3) {
                     bool flag = m410 == 3;
-                    m460 = daObjBuoyflag::Act_c::make_barrel2_mine(
-                        fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle,
-                        prm_get_texture(), flag);
+                    m460 = daObjBuoyflag::Act_c::make_barrel2_mine(fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle, prm_get_texture(), flag);
                 } else {
-                    m460 = daObjBuoyflag::Act_c::make_barrel2_norm(fopAcM_GetID(this), &sp18,
-                                                                   fopAcM_GetRoomNo(this),
-                                                                   &shape_angle, prm_get_texture());
+                    m460 = daObjBuoyflag::Act_c::make_barrel2_norm(fopAcM_GetID(this), &sp18, fopAcM_GetRoomNo(this), &shape_angle, prm_get_texture());
                 }
             }
 
@@ -322,8 +311,7 @@ bool daObjBarrel2::Act_c::_delete() {
 
 /* 00000AE0-00000B2C       .text
  * tg_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc_ac_c*,
-                                   dCcD_GObjInf*) {
+void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc_ac_c*, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
     cCcD_Obj* pcVar1 = arg2->GetTgHitObj();
@@ -334,8 +322,7 @@ void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc
 
 /* 00000B2C-00000C9C       .text
  * co_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship,
-                                   dCcD_GObjInf*) {
+void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
     if (fopAcM_GetProfName(a_ship) == PROC_SHIP) {
@@ -344,8 +331,7 @@ void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c
 
         if (index == 0) {
             if (ship->speedF > i_this->attr()->m38) {
-                cXyz sp14(ship->current.pos.x - i_this->current.pos.x, 0.0f,
-                          ship->current.pos.z - i_this->current.pos.z);
+                cXyz sp14(ship->current.pos.x - i_this->current.pos.x, 0.0f, ship->current.pos.z - i_this->current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
                 f32 sq = i_this->attr()->m3C * i_this->attr()->m3C;
@@ -368,14 +354,12 @@ void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c
 
 /* 00000C9C-00000CFC       .text cull_set_draw__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::cull_set_draw() {
-    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
-                             attr()->m24 * 75.0f * attr()->m20);
+    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, attr()->m24 * 75.0f * attr()->m20);
 }
 
 /* 00000CFC-00000D54       .text cull_set_move__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::cull_set_move() {
-    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f,
-                             attr()->m10);
+    fopAcM_setCullSizeSphere(this, 0.0f, attr()->m18 * attr()->m24 * attr()->m20, 0.0f, attr()->m10);
 }
 
 /* 00000D54-00000DA0       .text demo_mode_chk__Q212daObjBarrel25Act_cCFv */
@@ -625,10 +609,14 @@ bool daObjBarrel2::Act_c::mode_demo_explode1() {
 bool daObjBarrel2::Act_c::mode_proc_call() {
     typedef bool (daObjBarrel2::Act_c::*modeProcFunc)();
     static modeProcFunc mode_proc[] = {
-        &daObjBarrel2::Act_c::mode_afl,           &daObjBarrel2::Act_c::mode_exit_v,
-        &daObjBarrel2::Act_c::mode_exit_h,        &daObjBarrel2::Act_c::mode_exit_mine,
-        &daObjBarrel2::Act_c::mode_explode,       &daObjBarrel2::Act_c::mode_demo_break0,
-        &daObjBarrel2::Act_c::mode_demo_break1,   &daObjBarrel2::Act_c::mode_demo_explode0,
+        &daObjBarrel2::Act_c::mode_afl,
+        &daObjBarrel2::Act_c::mode_exit_v,
+        &daObjBarrel2::Act_c::mode_exit_h,
+        &daObjBarrel2::Act_c::mode_exit_mine,
+        &daObjBarrel2::Act_c::mode_explode,
+        &daObjBarrel2::Act_c::mode_demo_break0,
+        &daObjBarrel2::Act_c::mode_demo_break1,
+        &daObjBarrel2::Act_c::mode_demo_explode0,
         &daObjBarrel2::Act_c::mode_demo_explode1,
     };
     set_water_pos();
@@ -637,9 +625,7 @@ bool daObjBarrel2::Act_c::mode_proc_call() {
 
 /* 00001898-00001914       .text set_pos_y__Q212daObjBarrel25Act_cFv */
 void daObjBarrel2::Act_c::set_pos_y() {
-    current.pos.y =
-        m41C + m450 +
-        (attr()->m50 * -attr()->m14 + attr()->m54 * cM_ssin(m43C)) * attr()->m20 * attr()->m24;
+    current.pos.y = m41C + m450 + (attr()->m50 * -attr()->m14 + attr()->m54 * cM_ssin(m43C)) * attr()->m20 * attr()->m24;
 }
 
 /* 00001914-00001BDC       .text set_mtx__Q212daObjBarrel25Act_cFv */
@@ -679,8 +665,7 @@ void daObjBarrel2::Act_c::set_mtx() {
     Quaternion sp30;
     daObj::quat_rotBaseY(&sp30, sp40);
     mDoMtx_stack_c::quatM(&sp30);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y,
-                            (bVar3) ? shape_angle.z : shape_angle.z + 0x4000);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, (bVar3) ? shape_angle.z : shape_angle.z + 0x4000);
     mDoMtx_stack_c::transM(0.0f, fVar1 * -attr()->m18, 0.0f);
     m298->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), m478);
@@ -720,9 +705,7 @@ void daObjBarrel2::Act_c::eff_break() {
 
     dComIfGp_particle_set(dPa_name::ID_COMMON_0460, &sp20, NULL, &sp2C);
     dComIfGp_particle_set(dPa_name::ID_COMMON_045F, &sp20, NULL, &sp2C);
-    JPABaseEmitter* emitter =
-        dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C, 0xFF, NULL, -1,
-                              &tevStr.mColorK0, &tevStr.mColorK0);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03E6, &sp20, NULL, &sp2C, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
 
     if (emitter != NULL) {
         emitter->setLifeTime(30);
@@ -999,8 +982,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_damage() {
     if (ship != NULL && fopAcM_searchActorDistanceXZ2(this, ship) < sq) {
         if (ship->current.pos.y < current.pos.y + attr()->m4C) {
             if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
-                cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f,
-                          ship->current.pos.z - current.pos.z);
+                cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f, ship->current.pos.z - current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
                 sq = attr()->m3C * attr()->m3C;
@@ -1169,8 +1151,7 @@ actor_process_profile_definition g_profile_Obj_Barrel2 = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ PRIO_Obj_Barrel2,
     /* Actor SubMtd */ &daObjBarrel2::Method::Table,
-    /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e |
-        fopAcStts_UNK40000_e,
+    /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
 };
