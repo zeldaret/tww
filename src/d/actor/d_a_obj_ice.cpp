@@ -339,9 +339,11 @@ void daObjIce_c::wait_act_proc() {
             dPa_name::ID_COMMON_0464, &current.pos, NULL, &scale, 0xFF, NULL, -1, &tevStr.mColorK0);
         if (emitter != NULL) {
 #if VERSION == VERSION_DEMO
-            JGeometry::TVec3<f32> s(scale.x, scale.y, scale.z);
+            JGeometry::TVec3<f32> s;
+            s.set(scale.x, scale.y, scale.z);
 #else
-            JGeometry::TVec3<f32> s(scale);
+            JGeometry::TVec3<f32> s;
+            s.set(scale);
 #endif
             emitter->setGlobalDynamicsScale(s);
             s.x = scale.x;
