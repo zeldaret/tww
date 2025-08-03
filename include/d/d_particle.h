@@ -125,12 +125,12 @@ public:
     void draw(JPABaseEmitter*);
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
-    void setTimer (s16 timerVal) { mFadeTimer = timerVal; }
-    void setSpeed (f32 vel) { mVelFade1 = vel; }
-    void setPitch (f32 pitch) { mVelFade2 = pitch; }
-    void setMaxSpeed (f32 vel) { mMaxParticleVelocity = vel; }
-    void setMaxDisSpeed (f32 vel) { mVelSpeed = vel; }
-    void setAnchor (cXyz* anchorPos1, cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
+    void setTimer(s16 timerVal) { mFadeTimer = timerVal; }
+    void setSpeed(f32 vel) { mVelFade1 = vel; }
+    void setPitch(f32 pitch) { mVelFade2 = pitch; }
+    void setMaxSpeed(f32 vel) { mMaxParticleVelocity = vel; }
+    void setMaxDisSpeed(f32 vel) { mVelSpeed = vel; }
+    void setAnchor(const cXyz* anchorPos1, const cXyz* anchorPos2) { mCollapsePos[0].set(*anchorPos1); mCollapsePos[1].set(*anchorPos2); }
 
     virtual ~dPa_waveEcallBack() {}
 
@@ -175,10 +175,14 @@ public:
     void remove();
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
+    void stop() { mState = 1; }
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
-    void setIndirectTexData (f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
-    void setSpeed (f32 vel) { mVel = vel; }
+    void setIndirectTexData(f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
+    void setSpeed(f32 vel) { mVel = vel; }
+    void setLimitSpeed(f32 vel) { mMinVel = vel; }
+    void setWaterY(f32 y) { mBaseY = y; }
+    void setWaterFlatY(f32 y) { mMinY = y; }
 
     virtual ~dPa_trackEcallBack() {}
 

@@ -23,14 +23,14 @@ public:
 
 class daMajuu_Flag_c : public fopAc_ac_c {
 public:
-    void setBaseScale(float) {}
-    void setOtherMatrix(Mtx*) {}
-    void setOtherOffset(cXyz*) {}
+    void setBaseScale(float scale) { mFlagScale = scale; }
+    void setOtherMatrix(Mtx* mtx) { mpParentMtx = *mtx; }
+    void setOtherOffset(cXyz* pos) { mpParentPos = pos; }
 
 public:
     /* 0x290 */ u8 m290[0x2A0 - 0x290];
     /* 0x2A0 */ daMajuu_Flag_packet_c mPacket;
-    /* 0xA3D */ u8 mA3D[0xA40 - 0xA3D];
+    /* 0x2A4 */ u8 mA3D[0xA40 - 0x2A4];
     /* 0xA40 */ request_of_phase_process_class mPhsCloth;
     /* 0xA48 */ request_of_phase_process_class mPhsFlag;
     /* 0xA50 */ u8 mA50[0xA58 - 0xA50];
@@ -44,7 +44,6 @@ public:
     /* 0xA68 */ Mtx mMtx;
     /* 0xA98 */ MtxP mpParentMtx;
     /* 0xA9C */ cXyz* mpParentPos;
-    /* 0xAA0 */ u8 mAA0[0xB00 - 0xAA0];
 };
 
 #endif /* D_A_MAJUU_FLAG_H */
