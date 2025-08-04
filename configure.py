@@ -339,6 +339,8 @@ Equivalent = config.non_matching  # Object should be linked when configured with
 def MatchingFor(*versions):
     return config.version in versions
 
+def EquivalentFor(*versions):
+    return False
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -1385,11 +1387,11 @@ config.libs = [
     ActorRel(Matching,    "d_a_kytag05"),
     ActorRel(Matching,    "d_a_kytag06"),
     ActorRel(Matching,    "d_a_kytag07"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp" , extra_cflags=['-sym off']),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp", extra_cflags=['-sym off']),
     ActorRel(NonMatching, "d_a_lod_bg"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lwood"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_magma"),
-    ActorRel(NonMatching, "d_a_majuu_flag"),
+    ActorRel(NonMatching, "d_a_majuu_flag", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mdoor", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("D44J01"), "d_a_msw", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_mtoge"),
@@ -1397,17 +1399,17 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_Ygush00", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_akabe"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_barrel", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_obj_barrel2"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_barrel2", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_bscurtain", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_cafelmp"),
     ActorRel(NonMatching, "d_a_obj_coming"),
-    ActorRel(NonMatching, "d_a_obj_demo_barrel"),
+    ActorRel(Matching, "d_a_obj_demo_barrel"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_doguu", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_doguu_demo"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gryw00", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_hfuck1", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_hole", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_obj_ice"),
+    ActorRel(Matching, "d_a_obj_ice", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_ikada", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_kanat"),
     ActorRel(NonMatching, "d_a_obj_leaves"),
