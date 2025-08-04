@@ -364,7 +364,7 @@ BOOL daComing2::Act_c::coming_wait_init() {
 void daComing2::Act_c::coming_wait_main() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     if (player != NULL) {
-        if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             if (unk_2A0 > 35.0f && get_coming_point() >= 2) {
                 if (unk_2A6 > 0) {
                     unk_2A6--;

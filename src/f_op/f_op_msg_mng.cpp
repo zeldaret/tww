@@ -526,8 +526,8 @@ fpc_ProcID fopMsgM_scopeMessageSet(u32 msgNo) {
             i_msgID = fpcM_ERROR_PROCESS_ID_e;
         }
         else {
-            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == 0xB) {
-                dComIfGp_setScopeMesgStatus(0x2);
+            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e) {
+                dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_OPENING_e);
             }
 
             pMsg->mMsgNo = msgNo;
@@ -794,12 +794,12 @@ bool fopMsgM_nextMsgFlagCheck() {
 
 /* 8002C5BC-8002C624       .text fopMsgM_getScopeMode__Fv */
 bool fopMsgM_getScopeMode() {
-    if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == 0xB && !dComIfGp_event_runCheck()) {
-        dComIfGp_setScopeMesgStatus(0xD);
+    if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) && dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKB_e && !dComIfGp_event_runCheck()) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKD_e);
         return true;
     }
-    if(dComIfGp_getScopeMesgStatus() == 0x11) {
-        dComIfGp_setMesgStatus(0xD);
+    if(dComIfGp_getScopeMesgStatus() == fopMsgStts_BOX_CLOSING_e) {
+        dComIfGp_setMesgStatus(fopMsgStts_UNKD_e);
         return true;
     }
 
@@ -808,7 +808,7 @@ bool fopMsgM_getScopeMode() {
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
 bool fopMsgM_forceSendOn() {
-    if (dComIfGp_getScopeMesgStatus() == 10) {
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKA_e) {
         pushButton = true;
         return true;
     }
@@ -843,8 +843,8 @@ bool fopMsgM_checkMessageSend() {
 
 /* 8002C684-8002C6B0       .text fopMsgM_releaseScopeMode__Fv */
 bool fopMsgM_releaseScopeMode() {
-    if (dComIfGp_getScopeMesgStatus() == 13) {
-        dComIfGp_setScopeMesgStatus(11);
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKD_e) {
+        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
         return true;
     }
 

@@ -11,6 +11,8 @@ enum fopMsg_MessageStatus_e {
     fopMsgStts_BOX_OPENING_e = 0x02,
     fopMsgStts_MSG_TYPING_e = 0x06,
     fopMsgStts_UNKA_e = 0x0A,
+    fopMsgStts_UNKB_e = 0x0B,
+    fopMsgStts_UNKD_e = 0x0D,
     fopMsgStts_MSG_DISPLAYED_e = 0x0E,
     fopMsgStts_MSG_CONTINUES_e = 0x0F,
     fopMsgStts_MSG_ENDS_e = 0x10,

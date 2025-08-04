@@ -139,7 +139,7 @@ void daWbird_c::actionSelect() {
                 sVar2 = current.angle.y + 0x7fff;
                 mAngle = player->shape_angle.y;
                 player->setPlayerPosAndAngle(&player->current.pos, sVar2);
-                if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
+                if(dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)){
                     mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
                 } else{
                     mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");

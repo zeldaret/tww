@@ -979,7 +979,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_damage() {
 
     if (ship != NULL && fopAcM_searchActorDistanceXZ2(this, ship) < sq) {
         if (ship->current.pos.y < current.pos.y + attr()->m4C) {
-            if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f, ship->current.pos.z - current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
