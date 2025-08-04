@@ -3362,8 +3362,7 @@ inline void dComIfGp_evmng_cancelStartDemo() {
 }
 
 inline BOOL dComIfGp_evmng_existence(const char* pName) {
-    s16 eventIdx = dComIfGp_evmng_getEventIdx(pName);
-    return g_dComIfG_gameInfo.play.getEvtManager().getEventData(eventIdx) != NULL;
+    return g_dComIfG_gameInfo.play.getEvtManager().getEventData(dComIfGp_evmng_getEventIdx(pName)) != NULL;
 }
 
 inline BOOL dComIfGp_evmng_existence(s16 eventIdx) {

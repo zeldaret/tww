@@ -566,7 +566,7 @@ void daObjBarrel2::Act_c::mode_demo_explode0_init() {
 
 /* 000015FC-000016D8       .text mode_demo_explode0__Q212daObjBarrel25Act_cFv */
 bool daObjBarrel2::Act_c::mode_demo_explode0() {
-    bool uVar2 = TRUE;
+    bool uVar2 = true;
 
     item_drop();
 
