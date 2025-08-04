@@ -26,7 +26,7 @@ public:
     bool isBonbori() { return mType == 3 || mType == 1; }
     bool isCrane() {return mType == 4; }
     bool isFlag() { return mType == 0 || mType == 4; }
-    bool isWave() {}
+    bool isWave() { return mType == 4 || mType == 3 || mType == 1; }
     void modeProcInit(int idx) { modeProc(PROC_00_e, idx); }
     void setInitPos() {}
     void setStart() {}

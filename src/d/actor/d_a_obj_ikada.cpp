@@ -134,7 +134,7 @@ void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
     mDoMtx_stack_c::copy(model->getAnmMtx(uVar1));
     mDoMtx_stack_c::ZXYrotM(mJointRot[uVar1].x, mJointRot[uVar1].y, mJointRot[uVar1].z);
     if (uVar1 == 1) {
-        mDoMtx_stack_c::XrotM(m115A + this->m115E * (REG12_S(5) + 5) * cM_ssin(m115C));
+        mDoMtx_stack_c::XrotM(m115A + m115E * (REG12_S(5) + 5) * cM_ssin(m115C));
     }
     MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     model->setAnmMtx(uVar1, mDoMtx_stack_c::get());
@@ -627,8 +627,7 @@ void daObj_Ikada_c::setMtx() {
 
     cMtx_copy(mDoMtx_stack_c::get(), mMtx);
 
-    bool bIsTerry = (mType == 3) || (mType == 1);
-    if (bIsTerry) {
+    if (isBonbori()) {
         mLightRotY += 0xd0;
         mLightRotX += 0x100;
 #if VERSION == VERSION_DEMO
@@ -656,7 +655,7 @@ void daObj_Ikada_c::setMtx() {
         mPLight.mFluctuation = 250.0f;
     }
 
-    if ((this->mType == 1) || (this->mType == 3)) {
+    if ((mType == 1) || (mType == 3)) {
 #if VERSION == VERSION_DEMO
         cXyz sp18;
         sp18.x = REG12_F(2) - 105.0f;
@@ -669,8 +668,7 @@ void daObj_Ikada_c::setMtx() {
         mDoMtx_stack_c::multVec(&sp18, &mSePos);
     }
 
-    bool bIsShip = (mType == 4) || (mType == 3) || (mType == 1);
-    if (bIsShip) {
+    if (isWave()) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
@@ -786,7 +784,7 @@ void daObj_Ikada_c::modeCraneDown() {
     cLib_addCalcAngleS2(&m115E, 0, 10, 10);
     if (m115E < 0x14) {
         HandleLeft();
-        if (this->m07D8 < l_HIO.m1E) {
+        if (m07D8 < l_HIO.m1E) {
             incRopeCnt(1, 0);
         } else {
             modeProcInit(7);
@@ -1165,8 +1163,7 @@ bool daObj_Ikada_c::_execute() {
     setMtx();
     mpModel->calc();
 
-    bool bVar2 = (mType == 4) || (mType == 3) || (mType == 1);
-    if (bVar2) {
+    if (isWave()) {
         f32 s = scale.x;
         s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
         if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
@@ -1358,13 +1355,11 @@ void daObj_Ikada_c::createInit() {
     mObjAcch.SetWallNone();
     mObjAcch.SetRoofNone();
 
-    bool bVar1 = (mType == 4) || (mType == 3) || (mType == 1);
-    if (bVar1) {
+    if (isWave()) {
         createWave();
     }
 
-    bVar1 = (mType == 3) || (mType == 1);
-    if (bVar1) {
+    if (isBonbori()) {
         dKy_plight_set(&mPLight);
     }
 
@@ -1374,8 +1369,7 @@ void daObj_Ikada_c::createInit() {
     fopAcM_setCullSizeBox(this, scale.x * -1000.0f, scale.x * -50.0f, scale.x * -1000.0f, scale.x * 1000.0f, scale.x * 1000.0f, scale.x * 1000.0f);
     fopAcM_setCullSizeFar(this, 10.0f);
 
-    bVar1 = mType == 0 || mType == 4;
-    if (bVar1) {
+    if (isFlag()) {
         static const cXyz flag_offset[] = {
             cXyz(0.0f, 700.0f, 0.0f),
             cXyz(0.0f, 0.0f, 0.0f),
@@ -1545,8 +1539,7 @@ bool daObj_Ikada_c::_delete() {
     mDoAud_seDeleteObject(&mSePos);
 #endif
 
-    bool bVar1 = (mType == 3) || (mType == 1);
-    if (bVar1) {
+    if (isBonbori()) {
         dKy_plight_cut(&mPLight);
     }
 
