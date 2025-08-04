@@ -1412,7 +1412,7 @@ config.libs = [
     ActorRel(Matching, "d_a_obj_ice", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_ikada", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_kanat"),
-    ActorRel(NonMatching, "d_a_obj_leaves"),
+    ActorRel(Matching, "d_a_obj_leaves", extra_cflags=["-sym off"]),
     ActorRel(NonMatching, "d_a_obj_lpalm"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_monument"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_movebox", extra_cflags=['-pragma "nosyminline on"']),

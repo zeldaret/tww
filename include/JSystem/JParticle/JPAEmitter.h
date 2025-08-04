@@ -317,7 +317,7 @@ public:
     void getBaseEnvColor(GXColor&) {}
     void getBasePrmColor(GXColor&) {}
     void getCurrentCreateNumber() const {}
-    void getFrame() {}
+    f32 getFrame() { return mTick.getFrame(); }
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
     void loadTexture(u8, GXTexMapID) {}
