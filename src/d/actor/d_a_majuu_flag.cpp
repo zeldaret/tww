@@ -60,20 +60,17 @@ public:
 
 static daMajuu_Flag_HIO_c l_HIO;
 
-#include "weak_data_1811.h"  // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
-static u8 unused1[16] = { 0 };  // IWYU pragma: keep
+static u8 unused1[16] = {0}; // IWYU pragma: keep
 
 #include "assets/l_flag02TEX.h"
 
 static Vec l_majuu_flag_pos[] = {
-    { 0.0f, -255.0f, 1300.0f }, { 0.0f, -306.0f, 1040.0f }, { 0.0f, -204.0f, 1040.0f },
-    { 0.0f, -357.0f, 780.0f },  { 0.0f, -255.0f, 780.0f },  { 0.0f, -153.0f, 780.0f },
-    { 0.0f, -408.0f, 520.0f },  { 0.0f, -306.0f, 520.0f },  { 0.0f, -204.0f, 520.0f },
-    { 0.0f, -102.0f, 520.0f },  { 0.0f, -459.0f, 260.0f },  { 0.0f, -357.0f, 260.0f },
-    { 0.0f, -255.0f, 260.0f },  { 0.0f, -153.0f, 260.0f },  { 0.0f, -51.0f, 260.0f },
-    { 0.0f, -510.0f, 0.0f },    { 0.0f, -408.0f, 0.0f },    { 0.0f, -306.0f, 0.0f },
-    { 0.0f, -204.0f, 0.0f },    { 0.0f, -102.0f, 0.0f },    { 0.0f, 0.0f, 0.0f },
+    {0.0f, -255.0f, 1300.0f}, {0.0f, -306.0f, 1040.0f}, {0.0f, -204.0f, 1040.0f}, {0.0f, -357.0f, 780.0f}, {0.0f, -255.0f, 780.0f}, {0.0f, -153.0f, 780.0f},
+    {0.0f, -408.0f, 520.0f},  {0.0f, -306.0f, 520.0f},  {0.0f, -204.0f, 520.0f},  {0.0f, -102.0f, 520.0f}, {0.0f, -459.0f, 260.0f}, {0.0f, -357.0f, 260.0f},
+    {0.0f, -255.0f, 260.0f},  {0.0f, -153.0f, 260.0f},  {0.0f, -51.0f, 260.0f},   {0.0f, -510.0f, 0.0f},   {0.0f, -408.0f, 0.0f},   {0.0f, -306.0f, 0.0f},
+    {0.0f, -204.0f, 0.0f},    {0.0f, -102.0f, 0.0f},    {0.0f, 0.0f, 0.0f},
 };
 static f32 l_texCoord[][2] = {
     {
@@ -169,17 +166,14 @@ static f32 l_texCoord[][2] = {
 void set_mtx(daMajuu_Flag_c* i_this) {
     if (i_this->mpParentMtx != NULL && i_this->mpParentPos != NULL) {
         cMtx_copy(i_this->mpParentMtx, mDoMtx_stack_c::get());
-        mDoMtx_stack_c::transM(
-            i_this->mpParentPos->x, i_this->mpParentPos->y, i_this->mpParentPos->z);
+        mDoMtx_stack_c::transM(i_this->mpParentPos->x, i_this->mpParentPos->y, i_this->mpParentPos->z);
         mDoMtx_stack_c::YrotM(i_this->current.angle.y);
 #if VERSION == VERSION_DEMO
         mDoMtx_stack_c::transM(0.0f, 0.0f, REG10_F(10) + 6.0f);
 #else
         mDoMtx_stack_c::transM(0.0f, 0.0f, 6.0f);
 #endif
-        mDoMtx_stack_c::scaleM(i_this->mFlagScale * l_HIO.mFlagScale,
-                               i_this->mFlagScale * l_HIO.mFlagScale,
-                               i_this->mFlagScale * l_HIO.mFlagScale);
+        mDoMtx_stack_c::scaleM(i_this->mFlagScale * l_HIO.mFlagScale, i_this->mFlagScale * l_HIO.mFlagScale, i_this->mFlagScale * l_HIO.mFlagScale);
         cXyz sp08 = cXyz::Zero;
         mDoMtx_stack_c::multVec(&sp08, &i_this->current.pos);
         cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
@@ -204,10 +198,7 @@ void set_mtx(daMajuu_Flag_c* i_this) {
                 MtxTrans(0.0f, 0.0f, l_HIO.mTransZ, true);
             }
         }
-        MtxScale(i_this->mFlagScale * l_HIO.mFlagScale,
-                 i_this->mFlagScale * l_HIO.mFlagScale,
-                 i_this->mFlagScale * l_HIO.mFlagScale,
-                 true);
+        MtxScale(i_this->mFlagScale * l_HIO.mFlagScale, i_this->mFlagScale * l_HIO.mFlagScale, i_this->mFlagScale * l_HIO.mFlagScale, true);
         cMtx_copy(*calc_mtx, i_this->mMtx);
     }
 }
@@ -519,8 +510,7 @@ void daMajuu_Flag_packet_c::draw() {
     }
 
     if (l_HIO.mbUseToonTex) {
-        GXSetChanCtrl(
-            GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(2);
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
@@ -542,15 +532,12 @@ void daMajuu_Flag_packet_c::draw() {
             GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
             GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
             GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
-            GXSetTevColorOp(
-                GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
             GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-            GXSetTevAlphaOp(
-                GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         }
     } else {
-        GXSetChanCtrl(
-            GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(1);
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetNumTevStages(iVar2);
@@ -571,11 +558,9 @@ void daMajuu_Flag_packet_c::draw() {
             GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP2, GX_TEV_SWAP0);
             GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
             GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_RASC, GX_CC_CPREV);
-            GXSetTevColorOp(
-                GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
             GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-            GXSetTevAlphaOp(
-                GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         }
     }
 
@@ -1025,62 +1010,55 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
                 texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", XHCF_BTI_X_HC_FLAG00);
             }
             mip = GXBool(texInfo->mipmapCount > 1);
-            GXInitTexObj(i_this->mPacket.getImageTexObj(),
-                         (u8*)texInfo + texInfo->imageOffset,
-                         texInfo->width,
-                         texInfo->height,
-                         GXTexFmt(texInfo->format),
-                         GXTexWrapMode(texInfo->wrapS),
-                         GXTexWrapMode(texInfo->wrapT),
-                         mip);
-            GXInitTexObjLOD(i_this->mPacket.getImageTexObj(),
-                            GXTexFilter(texInfo->minFilter),
-                            GXTexFilter(texInfo->magFilter),
-                            texInfo->minLOD * 0.125f,
-                            texInfo->maxLOD * 0.125f,
-                            texInfo->LODBias * 0.01f,
-                            texInfo->biasClamp,
-                            texInfo->doEdgeLOD,
-                            GXAnisotropy(texInfo->maxAnisotropy));
+            GXInitTexObj(
+                i_this->mPacket.getImageTexObj(),
+                (u8*)texInfo + texInfo->imageOffset,
+                texInfo->width,
+                texInfo->height,
+                GXTexFmt(texInfo->format),
+                GXTexWrapMode(texInfo->wrapS),
+                GXTexWrapMode(texInfo->wrapT),
+                mip
+            );
+            GXInitTexObjLOD(
+                i_this->mPacket.getImageTexObj(),
+                GXTexFilter(texInfo->minFilter),
+                GXTexFilter(texInfo->magFilter),
+                texInfo->minLOD * 0.125f,
+                texInfo->maxLOD * 0.125f,
+                texInfo->LODBias * 0.01f,
+                texInfo->biasClamp,
+                texInfo->doEdgeLOD,
+                GXAnisotropy(texInfo->maxAnisotropy)
+            );
         } else {
-            GXInitTexObj(i_this->mPacket.getImageTexObj(),
-                         l_flag02TEX,
-                         0x40,
-                         0x40,
-                         GX_TF_CMPR,
-                         GX_CLAMP,
-                         GX_CLAMP,
-                         false);
-            GXInitTexObjLOD(i_this->mPacket.getImageTexObj(),
-                            GX_LINEAR,
-                            GX_LINEAR,
-                            0.0f,
-                            0.0f,
-                            0.0f,
-                            0,
-                            0,
-                            GX_ANISO_1);
+            GXInitTexObj(i_this->mPacket.getImageTexObj(), l_flag02TEX, 0x40, 0x40, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, false);
+            GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
         }
 
         texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
         mip = GXBool(texInfo->mipmapCount > 1);
-        GXInitTexObj(i_this->mPacket.getToonTexObj(),
-                     (u8*)texInfo + texInfo->imageOffset,
-                     texInfo->width,
-                     texInfo->height,
-                     GXTexFmt(texInfo->format),
-                     GXTexWrapMode(texInfo->wrapS),
-                     GXTexWrapMode(texInfo->wrapT),
-                     mip);
-        GXInitTexObjLOD(i_this->mPacket.getToonTexObj(),
-                        GXTexFilter(texInfo->minFilter),
-                        GXTexFilter(texInfo->magFilter),
-                        texInfo->minLOD * 0.125f,
-                        texInfo->maxLOD * 0.125f,
-                        texInfo->LODBias * 0.01f,
-                        texInfo->biasClamp,
-                        texInfo->doEdgeLOD,
-                        GXAnisotropy(texInfo->maxAnisotropy));
+        GXInitTexObj(
+            i_this->mPacket.getToonTexObj(),
+            (u8*)texInfo + texInfo->imageOffset,
+            texInfo->width,
+            texInfo->height,
+            GXTexFmt(texInfo->format),
+            GXTexWrapMode(texInfo->wrapS),
+            GXTexWrapMode(texInfo->wrapT),
+            mip
+        );
+        GXInitTexObjLOD(
+            i_this->mPacket.getToonTexObj(),
+            GXTexFilter(texInfo->minFilter),
+            GXTexFilter(texInfo->magFilter),
+            texInfo->minLOD * 0.125f,
+            texInfo->maxLOD * 0.125f,
+            texInfo->LODBias * 0.01f,
+            texInfo->biasClamp,
+            texInfo->doEdgeLOD,
+            GXAnisotropy(texInfo->maxAnisotropy)
+        );
 
         if (i_this->mTexType == 3) {
             for (s32 i = 0; i < 20; i++) {
@@ -1092,8 +1070,10 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
 }
 
 static actor_method_class l_daMajuu_Flag_Method = {
-    (process_method_func)daMajuu_Flag_Create,  (process_method_func)daMajuu_Flag_Delete,
-    (process_method_func)daMajuu_Flag_Execute, (process_method_func)daMajuu_Flag_IsDelete,
+    (process_method_func)daMajuu_Flag_Create,
+    (process_method_func)daMajuu_Flag_Delete,
+    (process_method_func)daMajuu_Flag_Execute,
+    (process_method_func)daMajuu_Flag_IsDelete,
     (process_method_func)daMajuu_Flag_Draw,
 };
 
