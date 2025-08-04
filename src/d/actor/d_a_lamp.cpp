@@ -179,10 +179,10 @@ static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
                     /* SrcGObjCo SPrm    */ 0,
                 },
                 // cM3dGSphS
-                {
-                    /* Center */ 0.0f, 0.0f, 0.0f,
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
                     /* Radius */ 30.0f,
-                },
+                }},
             };
 
             i_this->mSph.Set(sph_src);

@@ -338,10 +338,10 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     /* SrcGObjCo SPrm    */ 0,
                 },
                 // cM3dGSphS
-                {
-                    /* Center */ 0.0f, 0.0f, 0.0f,
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
                     /* Radius */ 60.0f,
-                },
+                }},
             };
             a_this->mStts.Init(200, 0, a_this);
             a_this->mSph.Set(cc_sph_src);

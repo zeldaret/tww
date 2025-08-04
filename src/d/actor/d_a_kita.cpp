@@ -394,10 +394,10 @@ static cPhs_State daKita_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 400.0f,
-        },
+        }},
     };
     
     kita_class* i_this = static_cast<kita_class*>(a_this);

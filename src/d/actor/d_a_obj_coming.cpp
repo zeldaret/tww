@@ -35,37 +35,32 @@ inline static const Attr_c* attr() {
 }
 } // namespace
 
-/* 000000EC-00000128       .text
- * init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 000000EC-00000128       .text init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::init(const daObjComing::Act_c* actor) {
     init_timer(actor);
     m00 = 0;
     m08 = fpcM_ERROR_PROCESS_ID_e;
 }
 
-/* 00000128-000001A8       .text
- * init_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 00000128-000001A8       .text init_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::init_timer(const daObjComing::Act_c* actor) {
     s32 waitTime = actor->prm_get_waitTime() * 2;
     m04 = (s32)cM_rndF(attr()->m00[4 + waitTime] + attr()->m00[5 + waitTime]);
 }
 
-/* 000001A8-00000230       .text
- * set_wait_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 000001A8-00000230       .text set_wait_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::set_wait_timer(const daObjComing::Act_c* actor) {
     s32 waitTime = actor->prm_get_waitTime() * 2;
     s32 attr2 = attr()->m00[4 + waitTime];
     m04 = (s32)cM_rndF(attr()->m00[5 + waitTime]) + attr2;
 }
 
-/* 00000230-000002A8       .text
- * set_retry_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 00000230-000002A8       .text set_retry_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::set_retry_timer(const daObjComing::Act_c*) {
     m04 = attr()->m00[12] + (s32)cM_rndF(attr()->m00[13]);
 }
 
-/* 000002A8-00000320       .text
- * set_appear_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 000002A8-00000320       .text set_appear_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::set_appear_timer(const daObjComing::Act_c*) {
     m04 = attr()->m00[14] + (s32)cM_rndF(attr()->m00[15]);
 }
@@ -257,8 +252,7 @@ f32 daObjComing::Act_c::get_aqua_y(const cXyz* pos) {
     return dVar3;
 }
 
-/* 000006E0-000007EC       .text
- * chk_ship_range__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
+/* 000006E0-000007EC       .text chk_ship_range__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
 bool daObjComing::Act_c::chk_ship_range(const fopAc_ac_c* ship) const {
     if (prm_get_range()) {
         return true;
@@ -267,8 +261,7 @@ bool daObjComing::Act_c::chk_ship_range(const fopAc_ac_c* ship) const {
     return ship->current.pos.absXZ(current.pos) < scale.x * 10000.0f;
 }
 
-/* 000007EC-0000080C       .text
- * chk_ship_spd__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
+/* 000007EC-0000080C       .text chk_ship_spd__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
 bool daObjComing::Act_c::chk_ship_spd(const fopAc_ac_c* ship) const {
     if (ship->speedF > attr()->L_Hio[0]) {
         return true;
@@ -276,8 +269,7 @@ bool daObjComing::Act_c::chk_ship_spd(const fopAc_ac_c* ship) const {
     return false;
 }
 
-/* 0000080C-000008F4       .text
- * get_make_pos__Q211daObjComing5Act_cCFPC10fopAc_ac_cP4cXyz */
+/* 0000080C-000008F4       .text get_make_pos__Q211daObjComing5Act_cCFPC10fopAc_ac_cP4cXyz */
 void daObjComing::Act_c::get_make_pos(const fopAc_ac_c* ship, cXyz* outPos) const {
     mDoMtx_stack_c::transS(ship->current.pos.x, ship->current.pos.y, ship->current.pos.z);
     mDoMtx_stack_c::YrotM(ship->shape_angle.y);
@@ -296,8 +288,7 @@ void daObjComing::Act_c::get_make_pos(const fopAc_ac_c* ship, cXyz* outPos) cons
     outPos->z = sp08.z;
 }
 
-/* 000008F4-00000A9C       .text
- * chk_make_pos_gnd__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
+/* 000008F4-00000A9C       .text chk_make_pos_gnd__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
 bool daObjComing::Act_c::chk_make_pos_gnd(const daObjComing::Act_c::MakeTmp_c* tmp) const {
     bool ret = true;
     f32 end = tmp->m18 + 100.0f;
@@ -355,8 +346,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
     return NULL;
 }
 
-/* 00000C30-00000CB8       .text
- * chk_make_pos__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
+/* 00000C30-00000CB8       .text chk_make_pos__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
 bool daObjComing::Act_c::chk_make_pos(const daObjComing::Act_c::MakeTmp_c* tmp) const {
     return chk_make_pos_gnd(tmp) && chk_make_pos_wall(tmp) && fopAcM_Search(chk_make_pos_act, (void*)tmp) == NULL;
 }
@@ -415,8 +405,7 @@ bool daObjComing::Act_c::barrel2_get_buoy(daObjComing::Act_c::Ptn_e ptn) {
     return buoy[(s32)ptn];
 }
 
-/* 00000DC0-00000F00       .text
- * barrel2_get_param__Q211daObjComing5Act_cFPQ211daObjComing12PrmBarrel2_c */
+/* 00000DC0-00000F00       .text barrel2_get_param__Q211daObjComing5Act_cFPQ211daObjComing12PrmBarrel2_c */
 bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
     daShip_c* ship = dComIfGp_getShipActor();
     if (ship != NULL && chk_ship_spd(ship) && chk_ship_range(ship)) {
@@ -441,8 +430,7 @@ bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
     return false;
 }
 
-/* 00000F00-00001030       .text
- * mode_barrel2_wait__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
+/* 00000F00-00001030       .text mode_barrel2_wait__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
 void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c* ctrl) {
     s32 bVar1 = dComIfGp_roomControl_getStayNo();
     if (chk_switch() && (fopAcM_GetHomeRoomNo(this) == bVar1 || mRoomId == bVar1 || prm_get_always())) {
@@ -478,7 +466,7 @@ void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c* ctrl) {
                 if (ac != NULL) {
                     daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                     JUT_ASSERT(1119, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                    barrel2_act->unk_474 = 1;
+                    barrel2_act->m474 = 1;
                 }
             } else {
                 ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
@@ -502,7 +490,7 @@ void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c* ctrl) {
             if (ac != NULL) {
                 daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
                 JUT_ASSERT(1145, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
-                barrel2_act->unk_474 = 1;
+                barrel2_act->m474 = 1;
             }
         } else {
             ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
@@ -550,32 +538,27 @@ bool daObjComing::Act_c::_draw() {
 
 namespace daObjComing {
 namespace {
-/* 00001318-00001338       .text
- * Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001318-00001338       .text Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_create();
 }
 
-/* 00001338-0000135C       .text
- * Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001338-0000135C       .text Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Delete(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_delete();
 }
 
-/* 0000135C-00001380       .text
- * Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 0000135C-00001380       .text Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Execute(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_execute();
 }
 
-/* 00001380-000013A4       .text
- * Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001380-000013A4       .text Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_draw();
 }
 
-/* 000013A4-000013AC       .text
- * Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 000013A4-000013AC       .text Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
     return TRUE;
 }

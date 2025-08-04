@@ -36,10 +36,10 @@ static dCcD_SrcSph sph_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 150.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 150.0f, 0.0f},
         /* Radius */ 100.0f,
-    },
+    }},
 };
 
 const char daObjMkiek::Act_c::M_arcname[] = "MkieK";

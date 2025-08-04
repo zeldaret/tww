@@ -2663,11 +2663,11 @@ static dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, -150.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, -150.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph wepon_sph_src = {
@@ -2693,10 +2693,10 @@ static dCcD_SrcSph wepon_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph ball_tg_sph_src = {
@@ -2722,10 +2722,10 @@ static dCcD_SrcSph ball_tg_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph ball_at_sph_src = {
@@ -2751,10 +2751,10 @@ static dCcD_SrcSph ball_at_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
-    },
+    }},
 };
 
 /* 00009844-00009C70       .text daFganon_Create__FP10fopAc_ac_c */

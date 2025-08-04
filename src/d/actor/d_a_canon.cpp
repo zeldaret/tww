@@ -32,11 +32,11 @@ static dCcD_SrcCyl canon_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 75.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 
@@ -63,11 +63,11 @@ static dCcD_SrcCyl canon_cyl2_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 300.0f,
         /* Height */ 500.0f,
-    },
+    }},
 };
 
 

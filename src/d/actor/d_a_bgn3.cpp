@@ -169,10 +169,10 @@ static cPhs_State daBgn3_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
-        },
+        }},
     };
     static dCcD_SrcSph core_sph_src = {
         // dCcD_SrcGObjInf
@@ -197,10 +197,10 @@ static cPhs_State daBgn3_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 70.0f,
-        },
+        }},
     };
 }
 

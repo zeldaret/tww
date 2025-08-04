@@ -40,11 +40,11 @@ const dCcD_SrcCyl daObjHha_c::M_cyl_data =
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 570.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 #if VERSION > VERSION_DEMO
@@ -71,10 +71,10 @@ const dCcD_SrcSph daObjHha_c::M_sph_data = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 220.0f,
-    },
+    }},
 };
 #endif
 

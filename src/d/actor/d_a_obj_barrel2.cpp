@@ -309,8 +309,7 @@ bool daObjBarrel2::Act_c::_delete() {
     return TRUE;
 }
 
-/* 00000AE0-00000B2C       .text
- * tg_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
+/* 00000AE0-00000B2C       .text tg_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc_ac_c*, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
@@ -320,8 +319,7 @@ void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc
     }
 }
 
-/* 00000B2C-00000C9C       .text
- * co_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
+/* 00000B2C-00000C9C       .text co_hitCB__Q212daObjBarrel25Act_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 

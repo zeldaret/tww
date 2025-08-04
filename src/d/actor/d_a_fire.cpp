@@ -34,11 +34,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 150.0f,
         /* Height */ 150.0f,
-    },
+    }},
 };
 static dCcD_SrcCyl l_co_cyl_src = {
     // dCcD_SrcGObjInf
@@ -63,11 +63,11 @@ static dCcD_SrcCyl l_co_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 130.0f,
         /* Height */ 170.0f,
-    }
+    }}
 };
 static dCcD_SrcCyl at_cyl_src = {
     // dCcD_SrcGObjInf
@@ -92,11 +92,11 @@ static dCcD_SrcCyl at_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 150.0f,
         /* Height */ 150.0f,
-    }
+    }}
 };
 
 

@@ -97,11 +97,11 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 250.0f,
         /* Height */ 400.0f,
-    },
+    }},
 };
 
 /* 8001C0B4-8001CD7C       .text enemy_ice__FP8enemyice */
@@ -432,10 +432,10 @@ dCcD_SrcSph fire_at_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 /* 8001CDB8-8001D3B0       .text enemy_fire__FP9enemyfire */

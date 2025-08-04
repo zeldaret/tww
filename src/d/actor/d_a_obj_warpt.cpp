@@ -32,11 +32,11 @@ const dCcD_SrcCyl daObj_Warpt_c::m_cyl_body_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 85.0f,
         /* Height */ 150.0f,
-    },
+    }},
 };
 
 
@@ -63,11 +63,11 @@ const dCcD_SrcCyl daObj_Warpt_c::m_cyl_huta_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
         /* Height */ 20.0f,
-    },
+    }},
 };
 
 

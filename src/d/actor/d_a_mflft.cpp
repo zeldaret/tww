@@ -100,11 +100,11 @@ static cPhs_State daMflft_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 10.0f,
             /* Height */ 1000.0f,
-        },
+        }},
     };
 }
 

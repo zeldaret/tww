@@ -38,10 +38,10 @@ static dCcD_SrcSph sph_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
-    },
+    }},
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */

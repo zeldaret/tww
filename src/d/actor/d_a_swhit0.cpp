@@ -34,10 +34,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 35.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -63,11 +63,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 00000078-00000084       .text getSwNo__10daSwhit0_cFv */

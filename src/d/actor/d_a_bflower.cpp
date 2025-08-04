@@ -68,10 +68,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph l_sph_src2 = {
@@ -97,10 +97,10 @@ static dCcD_SrcSph l_sph_src2 = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 15.0f,
-    },
+    }},
 };
 
 const char daBFlower_c::m_arcname[] = "VbakH";

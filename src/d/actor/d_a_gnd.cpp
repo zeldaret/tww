@@ -219,11 +219,11 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, -150.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, -150.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 100.0f,
-        },
+        }},
     };
     static dCcD_SrcSph head_sph_src = {
         // dCcD_SrcGObjInf
@@ -248,10 +248,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcSph chest_sph_src = {
         // dCcD_SrcGObjInf
@@ -276,10 +276,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
-        },
+        }},
     };
     static dCcD_SrcSph wepon_sph_src = {
         // dCcD_SrcGObjInf
@@ -304,10 +304,10 @@ static cPhs_State daGnd_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 70.0f,
-        },
+        }},
     };
 }
 

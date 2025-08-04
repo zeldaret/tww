@@ -601,10 +601,10 @@ static cPhs_State daEp_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 40.0f,
-        },
+        }},
     };
     static dCcD_SrcCyl co_cyl_src = {
         // dCcD_SrcGObjInf
@@ -629,11 +629,11 @@ static cPhs_State daEp_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 35.0f,
             /* Height */ 120.0f,
-        },
+        }},
     };
 
     ep_class* i_this = (ep_class*)a_this;

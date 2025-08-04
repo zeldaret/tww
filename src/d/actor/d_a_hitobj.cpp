@@ -74,10 +74,10 @@ static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 100.0f,
-            },
+            }},
         };
         i_this->mStts.Init(0xFF, 0xFF, i_this);
         i_this->mSph.Set(cc_sph_src);

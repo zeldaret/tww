@@ -4490,11 +4490,11 @@ cPhs_State daShip_c::create() {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 75.0f,
             /* Height */ 115.0f,
-        },
+        }},
     };
     
     static dCcD_SrcSph sph_src = {
@@ -4520,10 +4520,10 @@ cPhs_State daShip_c::create() {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 75.0f,
-        },
+        }},
     };
     
     fopAcM_SetupActor(this, daShip_c);

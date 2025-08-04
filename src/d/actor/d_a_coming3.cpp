@@ -50,11 +50,11 @@ namespace daComing3 {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
             /* Height */ 60.0f,
-        },
+        }},
     };
 }
 

@@ -133,10 +133,10 @@ static dCcD_SrcSph sph_src = {
 
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 20.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps at_cps_src = {

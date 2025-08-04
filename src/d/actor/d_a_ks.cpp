@@ -1458,10 +1458,10 @@ static dCcD_SrcSph body_co_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 15.0f,
-    },
+    }},
 };
 
 static s8 fire_j[10] = {

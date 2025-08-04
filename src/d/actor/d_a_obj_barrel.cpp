@@ -51,11 +51,11 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ l_l_radius,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
