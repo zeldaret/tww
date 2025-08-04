@@ -13,12 +13,12 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 dBgS_ObjGndChk daObjComing::Act_c::M_gnd_work;
 dBgS_ObjLinChk daObjComing::Act_c::M_wall_work;
 
-#include "weak_data_1811.h"  // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjComing {
 namespace {
@@ -27,13 +27,13 @@ struct Attr_c {
     /* 0x20 */ f32 L_Hio[6];
 };
 static const Attr_c L_Attr = {
-    { 2, 3, 4, 5, 20, 60, 40, 80, 80, 80, 100, 100, 30, 30, 300, 30 },
-    { 25.0f, 5000.0f, 6000.0f, 5000.0f, 0.05f, 0.05f },
+    {2, 3, 4, 5, 20, 60, 40, 80, 80, 80, 100, 100, 30, 30, 300, 30},
+    {25.0f, 5000.0f, 6000.0f, 5000.0f, 0.05f, 0.05f},
 };
 inline static const Attr_c* attr() {
     return &L_Attr;
 }
-}  // namespace
+} // namespace
 
 /* 000000EC-00000128       .text
  * init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
@@ -69,7 +69,7 @@ void daObjComing::Ctrl_c::set_retry_timer(const daObjComing::Act_c*) {
 void daObjComing::Ctrl_c::set_appear_timer(const daObjComing::Act_c*) {
     m04 = attr()->m00[14] + (s32)cM_rndF(attr()->m00[15]);
 }
-}  // namespace daObjComing
+} // namespace daObjComing
 
 const u8 daObjComing::Act_c::M_item_tbl[7][16] = {
     {
@@ -346,8 +346,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
 
     if (fopAc_IsActor(i_this)) {
         s16 proc = fopAcM_GetName(i_this);
-        if (proc != PROC_SHIP && proc != PROC_PLAYER &&
-            (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
+        if (proc != PROC_SHIP && proc != PROC_PLAYER && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
             if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {
                 return i_this;
             }
@@ -359,8 +358,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
 /* 00000C30-00000CB8       .text
  * chk_make_pos__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
 bool daObjComing::Act_c::chk_make_pos(const daObjComing::Act_c::MakeTmp_c* tmp) const {
-    return chk_make_pos_gnd(tmp) && chk_make_pos_wall(tmp) &&
-           fopAcM_Search(chk_make_pos_act, (void*)tmp) == NULL;
+    return chk_make_pos_gnd(tmp) && chk_make_pos_wall(tmp) && fopAcM_Search(chk_make_pos_act, (void*)tmp) == NULL;
 }
 
 /* 00000CB8-00000D7C       .text barrel2_get_ptn__Q211daObjComing5Act_cCFv */
@@ -396,7 +394,7 @@ s32 daObjComing::Act_c::barrel2_get_type(daObjComing::Act_c::Ptn_e ptn) {
     static const u8 a[] = {
         1, 0, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0,
     };
-    static const s32 b[] = { 0, 1, 2 };
+    static const s32 b[] = {0, 1, 2};
     return b[a[(s32)ptn]];
 }
 
@@ -404,8 +402,7 @@ s32 daObjComing::Act_c::barrel2_get_type(daObjComing::Act_c::Ptn_e ptn) {
  * barrel2_get_item__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e
  */
 s32 daObjComing::Act_c::barrel2_get_item(daObjComing::Act_c::Ptn_e ptn) {
-    static const s8 item_data[] = { 255, 255, 255, 1,  2,  3,  4,  0, 0,  11, 12,
-                                    13,  14,  14,  16, 17, 18, 18, 9, 10, 10 };
+    static const s8 item_data[] = {255, 255, 255, 1, 2, 3, 4, 0, 0, 11, 12, 13, 14, 14, 16, 17, 18, 18, 9, 10, 10};
     return item_data[(s32)ptn] & 0x3F;
 }
 
@@ -413,9 +410,8 @@ s32 daObjComing::Act_c::barrel2_get_item(daObjComing::Act_c::Ptn_e ptn) {
  * barrel2_get_buoy__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e
  */
 bool daObjComing::Act_c::barrel2_get_buoy(daObjComing::Act_c::Ptn_e ptn) {
-    static const bool buoy[] = { false, false, true,  false, false, false, false,
-                                 false, false, false, false, false, false, false,
-                                 false, false, false, false, false, false, false };
+    static const bool buoy[] = {false, false, true,  false, false, false, false, false, false, false, false,
+                                false, false, false, false, false, false, false, false, false, false};
     return buoy[(s32)ptn];
 }
 
@@ -449,18 +445,19 @@ bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
  * mode_barrel2_wait__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
 void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c* ctrl) {
     s32 bVar1 = dComIfGp_roomControl_getStayNo();
-    if (chk_switch() &&
-        (fopAcM_GetHomeRoomNo(this) == bVar1 || mRoomId == bVar1 || prm_get_always())) {
+    if (chk_switch() && (fopAcM_GetHomeRoomNo(this) == bVar1 || mRoomId == bVar1 || prm_get_always())) {
         if (ctrl->m04 <= 0) {
             PrmBarrel2_c barrel2;
             if (barrel2_get_param(&barrel2)) {
-                ctrl->m08 = daObjBarrel2::Act_c::make_coming((cXyz*)&barrel2.mPos,
-                                                             fopAcM_GetHomeRoomNo(this),
-                                                             daObjBarrel2::Type_e(barrel2.mType),
-                                                             barrel2.mItem,
-                                                             barrel2.m14,
-                                                             barrel2.mAngleY,
-                                                             daObjBuoyflag::Texture_01_e);
+                ctrl->m08 = daObjBarrel2::Act_c::make_coming(
+                    (cXyz*)&barrel2.mPos,
+                    fopAcM_GetHomeRoomNo(this),
+                    daObjBarrel2::Type_e(barrel2.mType),
+                    barrel2.mItem,
+                    barrel2.m14,
+                    barrel2.mAngleY,
+                    daObjBuoyflag::Texture_01_e
+                );
                 ctrl->set_appear_timer(this);
                 ctrl->m00 = 1;
             } else {
@@ -584,12 +581,14 @@ BOOL Mthd_IsDelete(void*) {
 }
 
 static actor_method_class Mthd_Table = {
-    (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
 };
-};  // namespace
-};  // namespace daObjComing
+}; // namespace
+}; // namespace daObjComing
 
 actor_process_profile_definition g_profile_Obj_Coming = {
     /* LayerID      */ fpcLy_CURRENT_e,
