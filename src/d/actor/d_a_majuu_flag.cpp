@@ -16,7 +16,8 @@
 #include "dolphin/gx/GXTexture.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
-#include "m_Do/m_Do_hostIO.h"
+
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 class daMajuu_Flag_HIO_c : public mDoHIO_entry_c {
 public:
@@ -36,7 +37,6 @@ public:
         m07 = 0;
         m08 = 0;
     }
-    virtual ~daMajuu_Flag_HIO_c() {}
 
     void genMessage(JORMContext* ctx);
 
@@ -59,8 +59,6 @@ public:
 };
 
 static daMajuu_Flag_HIO_c l_HIO;
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u8 unused1[16] = {0}; // IWYU pragma: keep
 
