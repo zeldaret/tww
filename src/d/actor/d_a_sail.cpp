@@ -280,7 +280,7 @@ void daSail_packet_c::setNrmMtx() {
 /* 00000398-00000424       .text setBackNrm__15daSail_packet_cFv */
 void daSail_packet_c::setBackNrm() {
     cXyz* vtxNrm1 = getNrm();
-    cXyz* vtxNrm2 = m1454[m1C3A];
+    cXyz* vtxNrm2 = getBackNrm();
     for (int i = 0; i < 0x54; i++) {
         vtxNrm2->setall(0.0f);
         *vtxNrm2 -= *vtxNrm1;
@@ -717,7 +717,7 @@ static void sail_move(sail_class* i_this) {
 #else
     DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos));
     DCStoreRangeNoSync(i_this->mSailPacket.getNrm(), sizeof(*i_this->mSailPacket.mNrm));
-    DCStoreRangeNoSync(i_this->mSailPacket.getNrm() + sizeof(i_this->mSailPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mSailPacket.m1454)); // Fakematch?
+    DCStoreRangeNoSync(i_this->mSailPacket.getBackNrm(), sizeof(*i_this->mSailPacket.m1454));
 #endif
 }
 
