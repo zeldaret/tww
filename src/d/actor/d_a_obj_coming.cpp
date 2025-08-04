@@ -480,8 +480,7 @@ void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c* ctrl) {
             if (fopAcM_SearchByID(ctrl->m08, &ac)) {
                 if (ac != NULL) {
                     daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
-                    JUT_ASSERT(DEMO_SELECT(1119, 1119),
-                               fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
+                    JUT_ASSERT(1119, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
                     barrel2_act->unk_474 = 1;
                 }
             } else {
@@ -505,8 +504,7 @@ void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c* ctrl) {
         if (fopAcM_SearchByID(ctrl->m08, &ac)) {
             if (ac != NULL) {
                 daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
-                JUT_ASSERT(DEMO_SELECT(1145, 1145),
-                           fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
+                JUT_ASSERT(1145, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
                 barrel2_act->unk_474 = 1;
             }
         } else {
