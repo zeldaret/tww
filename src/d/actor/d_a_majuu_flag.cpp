@@ -210,13 +210,8 @@ void daMajuu_Flag_packet_c::setNrmMtx() {
 
 /* 000003E4-0000046C       .text setBackNrm__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::setBackNrm() {
-#if VERSION == VERSION_DEMO
     cXyz* nrm = mpNrmArr[mCurArr];
     cXyz* nrmBack = mpNrmArrBack[mCurArr];
-#else
-    cXyz* nrm = getNrm();
-    cXyz* nrmBack = getBackNrm();
-#endif
 
     for (s32 i = 0; i < 21; i++, nrm++, nrmBack++) {
         *nrmBack = cXyz::Zero;
@@ -480,7 +475,7 @@ void daMajuu_Flag_packet_c::setNrmVtx(cXyz* pDst, int index) {
 /* 000006E8-00000D30       .text draw__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::draw() {
     j3dSys.reinitGX();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
     dKy_GxFog_tevstr_set(mpTevStr);
@@ -573,13 +568,9 @@ void daMajuu_Flag_packet_c::draw() {
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(l_majuu_flagDL, 0x80);
     GXSetCullMode(GX_CULL_FRONT);
-#if VERSION == VERSION_DEMO
     GXSetArray(GX_VA_NRM, mpNrmArrBack[mCurArr], sizeof(cXyz) * 1);
-#else
-    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz) * 1);
-#endif
     GXCallDisplayList(l_majuu_flagDL, 0x80);
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }

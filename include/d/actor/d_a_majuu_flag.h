@@ -19,13 +19,13 @@ public:
     void changeCurrentPos() {
         mCurArr ^= 1;
     }
-    GXTexObj* getImageTexObj() { return &mFlagTex; }
     Mtx* getMtx() { return &mPosMtx; }
+    GXTexObj* getToonTexObj() { return &mToonTex; }
+    GXTexObj* getImageTexObj() { return &mFlagTex; }
+    cXyz* getPos() { return mpPosArr[mCurArr]; }
     cXyz* getNrm() { return mpNrmArr[mCurArr]; }
     cXyz* getBackNrm() { return mpNrmArrBack[mCurArr]; }
     cXyz* getOffsetVec() { return mSpeed; }
-    cXyz* getPos() { return mpPosArr[mCurArr]; }
-    GXTexObj* getToonTexObj() { return &mToonTex; }
 
     void setTevStr(dKy_tevstr_c* tevStr) { mpTevStr = tevStr; }
     void setNrmMtx();
