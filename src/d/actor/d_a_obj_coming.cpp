@@ -4,167 +4,578 @@
 //
 
 #include "d/actor/d_a_obj_coming.h"
-#include "d/d_procname.h"
+#include "d/actor/d_a_obj_barrel2.h"
+#include "d/actor/d_a_obj_buoyflag.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_ship.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_priority.h"
+#include "d/d_procname.h"
+#include "f_op/f_op_actor_mng.h"
 
-/* 000000EC-00000128       .text init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
-void daObjComing::Ctrl_c::init(const daObjComing::Act_c*) {
-    /* Nonmatching */
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
+dBgS_ObjGndChk daObjComing::Act_c::M_gnd_work;
+dBgS_ObjLinChk daObjComing::Act_c::M_wall_work;
+
+#include "weak_data_1811.h" // IWYU pragma: keep
+
+namespace daObjComing {
+namespace {
+struct Attr_c {
+    /* 0x00 */ s16 m00[16];
+    /* 0x20 */ f32 L_Hio[6];
+};
+static const Attr_c L_Attr = {
+    {2, 3, 4, 5, 20, 60, 40, 80, 80, 80, 100, 100, 30, 30, 300, 30},
+    {25.0f, 5000.0f, 6000.0f, 5000.0f, 0.05f, 0.05f},
+};
+inline static const Attr_c* attr() {
+    return &L_Attr;
+}
+} // namespace
+
+/* 000000EC-00000128       .text
+ * init__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+void daObjComing::Ctrl_c::init(const daObjComing::Act_c* actor) {
+    init_timer(actor);
+    m00 = 0;
+    m08 = fpcM_ERROR_PROCESS_ID_e;
 }
 
-/* 00000128-000001A8       .text init_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
-void daObjComing::Ctrl_c::init_timer(const daObjComing::Act_c*) {
-    /* Nonmatching */
+/* 00000128-000001A8       .text
+ * init_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+void daObjComing::Ctrl_c::init_timer(const daObjComing::Act_c* actor) {
+    s32 waitTime = actor->prm_get_waitTime() * 2;
+    m04 = (s32)cM_rndF(attr()->m00[4 + waitTime] + attr()->m00[5 + waitTime]);
 }
 
-/* 000001A8-00000230       .text set_wait_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
-void daObjComing::Ctrl_c::set_wait_timer(const daObjComing::Act_c*) {
-    /* Nonmatching */
+/* 000001A8-00000230       .text
+ * set_wait_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+void daObjComing::Ctrl_c::set_wait_timer(const daObjComing::Act_c* actor) {
+    s32 waitTime = actor->prm_get_waitTime() * 2;
+    s32 attr2 = attr()->m00[4 + waitTime];
+    m04 = (s32)cM_rndF(attr()->m00[5 + waitTime]) + attr2;
 }
 
-/* 00000230-000002A8       .text set_retry_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 00000230-000002A8       .text
+ * set_retry_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::set_retry_timer(const daObjComing::Act_c*) {
-    /* Nonmatching */
+    m04 = attr()->m00[12] + (s32)cM_rndF(attr()->m00[13]);
 }
 
-/* 000002A8-00000320       .text set_appear_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
+/* 000002A8-00000320       .text
+ * set_appear_timer__Q211daObjComing6Ctrl_cFPCQ211daObjComing5Act_c */
 void daObjComing::Ctrl_c::set_appear_timer(const daObjComing::Act_c*) {
-    /* Nonmatching */
+    m04 = attr()->m00[14] + (s32)cM_rndF(attr()->m00[15]);
 }
+} // namespace daObjComing
+
+const u8 daObjComing::Act_c::M_item_tbl[7][16] = {
+    {
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_06_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_06_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_03_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_04_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_06_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_02_e,
+        Act_c::PTN_01_e,
+        Act_c::PTN_01_e,
+        Act_c::PTN_01_e,
+        Act_c::PTN_01_e,
+        Act_c::PTN_01_e,
+        Act_c::PTN_05_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0A_e,
+        Act_c::PTN_0B_e,
+        Act_c::PTN_0B_e,
+        Act_c::PTN_0B_e,
+        Act_c::PTN_0D_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0E_e,
+        Act_c::PTN_0F_e,
+        Act_c::PTN_0F_e,
+        Act_c::PTN_0F_e,
+        Act_c::PTN_0F_e,
+        Act_c::PTN_0F_e,
+        Act_c::PTN_10_e,
+        Act_c::PTN_11_e,
+        Act_c::PTN_11_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+    {
+        Act_c::PTN_14_e,
+        Act_c::PTN_14_e,
+        Act_c::PTN_13_e,
+        Act_c::PTN_13_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_12_e,
+        Act_c::PTN_08_e,
+        Act_c::PTN_08_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+        Act_c::PTN_07_e,
+    },
+};
 
 /* 00000320-00000348       .text prm_get_waitTime__Q211daObjComing5Act_cCFv */
-void daObjComing::Act_c::prm_get_waitTime() const {
-    /* Nonmatching */
+s32 daObjComing::Act_c::prm_get_waitTime() const {
+    return daObj::PrmAbstract(this, PRM_WAIT_TIME_W, PRM_WAIT_TIME_S);
 }
 
 /* 00000348-000003B0       .text chk_switch__Q211daObjComing5Act_cFv */
-void daObjComing::Act_c::chk_switch() {
-    /* Nonmatching */
+bool daObjComing::Act_c::chk_switch() {
+    s32 switchIndex = prm_get_swSave();
+    if (switchIndex == 0xFF) {
+        return true;
+    } else if (fopAcM_isSwitch(this, switchIndex)) {
+        return true;
+    }
+    return false;
 }
 
 /* 000003B0-000004B0       .text _create__Q211daObjComing5Act_cFv */
 cPhs_State daObjComing::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjComing::Act_c);
+
+    m290 = prm_get_type();
+    fopAcM_offDraw(this);
+
+    for (s32 i = 0; i < 5; i++) {
+        m294[i].init(this);
+    }
+
+    cXyz sp08(current.pos.x, current.pos.y + 500.0f, current.pos.z);
+    M_gnd_work.SetPos(&sp08);
+
+    dComIfG_Bgsp()->GroundCross(&M_gnd_work);
+    mRoomId = dComIfG_Bgsp()->GetRoomId(M_gnd_work);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000004B0-000004B8       .text _delete__Q211daObjComing5Act_cFv */
 bool daObjComing::Act_c::_delete() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 000004B8-000005BC       .text get_aqua_y__Q211daObjComing5Act_cFPC4cXyz */
-void daObjComing::Act_c::get_aqua_y(const cXyz*) {
-    /* Nonmatching */
+f32 daObjComing::Act_c::get_aqua_y(const cXyz* pos) {
+    f32 dVar3 = -G_CM3D_F_INF;
+    if (daSea_ChkArea(pos->x, pos->z)) {
+        dVar3 = daSea_calcWave(pos->x, pos->z);
+    } else {
+        static dBgS_WtrChk wtr;
+
+        cXyz sp08(pos->x, pos->y - 1000.0f, pos->z);
+        wtr.Set(sp08, pos->y + 1000.0f);
+        if (dComIfG_Bgsp()->WaterChk(&wtr)) {
+            dVar3 = wtr.GetHeight();
+        }
+    }
+    return dVar3;
 }
 
-/* 000006E0-000007EC       .text chk_ship_range__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
-void daObjComing::Act_c::chk_ship_range(const fopAc_ac_c*) const {
-    /* Nonmatching */
+/* 000006E0-000007EC       .text
+ * chk_ship_range__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
+bool daObjComing::Act_c::chk_ship_range(const fopAc_ac_c* ship) const {
+    if (prm_get_range()) {
+        return true;
+    }
+
+    return ship->current.pos.absXZ(current.pos) < scale.x * 10000.0f;
 }
 
-/* 000007EC-0000080C       .text chk_ship_spd__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
-void daObjComing::Act_c::chk_ship_spd(const fopAc_ac_c*) const {
-    /* Nonmatching */
+/* 000007EC-0000080C       .text
+ * chk_ship_spd__Q211daObjComing5Act_cCFPC10fopAc_ac_c */
+bool daObjComing::Act_c::chk_ship_spd(const fopAc_ac_c* ship) const {
+    if (ship->speedF > attr()->L_Hio[0]) {
+        return true;
+    }
+    return false;
 }
 
-/* 0000080C-000008F4       .text get_make_pos__Q211daObjComing5Act_cCFPC10fopAc_ac_cP4cXyz */
-void daObjComing::Act_c::get_make_pos(const fopAc_ac_c*, cXyz*) const {
-    /* Nonmatching */
+/* 0000080C-000008F4       .text
+ * get_make_pos__Q211daObjComing5Act_cCFPC10fopAc_ac_cP4cXyz */
+void daObjComing::Act_c::get_make_pos(const fopAc_ac_c* ship, cXyz* outPos) const {
+    mDoMtx_stack_c::transS(ship->current.pos.x, ship->current.pos.y, ship->current.pos.z);
+    mDoMtx_stack_c::YrotM(ship->shape_angle.y);
+
+    f32 tmp1 = cM_rndF(attr()->L_Hio[2]);
+    tmp1 += attr()->L_Hio[1];
+    f32 tmp2 = (cM_rnd() - 0.5f);
+    tmp2 *= attr()->L_Hio[3];
+    mDoMtx_stack_c::transM(tmp2, 0.0f, tmp1);
+
+    cXyz sp08;
+    mDoMtx_stack_c::multVec(&cXyz::Zero, &sp08);
+
+    outPos->x = sp08.x;
+    outPos->y = daSea_calcWave(sp08.x, sp08.z);
+    outPos->z = sp08.z;
 }
 
-/* 000008F4-00000A9C       .text chk_make_pos_gnd__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
-void daObjComing::Act_c::chk_make_pos_gnd(const daObjComing::Act_c::MakeTmp_c*) const {
-    /* Nonmatching */
+/* 000008F4-00000A9C       .text
+ * chk_make_pos_gnd__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
+bool daObjComing::Act_c::chk_make_pos_gnd(const daObjComing::Act_c::MakeTmp_c* tmp) const {
+    bool ret = true;
+    f32 end = tmp->m18 + 100.0f;
+    s16 sVar4 = 0;
+    f32 fVar2 = 0.0f;
+
+    while (fVar2 < end) {
+        mDoMtx_stack_c::transS(tmp->m0C.x, tmp->m0C.y, tmp->m0C.z);
+        mDoMtx_stack_c::YrotM(sVar4);
+        mDoMtx_stack_c::transM(0.0f, 0.0f, fVar2);
+
+        cXyz sp08;
+        mDoMtx_stack_c::multVec(&cXyz::Zero, &sp08);
+
+        f32 dVar5 = get_aqua_y(&sp08);
+        if (dVar5 > -G_CM3D_F_INF) {
+            sp08.y += 20000.0f;
+            M_gnd_work.SetPos(&sp08);
+            if (dComIfG_Bgsp()->GroundCross(&M_gnd_work) > dVar5 - 100.0f) {
+                ret = false;
+                break;
+            }
+        } else {
+            ret = false;
+            break;
+        }
+        fVar2 += 20.0f;
+        sVar4 += 20000;
+    }
+
+    return ret;
 }
 
-/* 00000A9C-00000AF0       .text chk_make_pos_wall__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
-void daObjComing::Act_c::chk_make_pos_wall(const daObjComing::Act_c::MakeTmp_c*) const {
-    /* Nonmatching */
+/* 00000A9C-00000AF0       .text
+ * chk_make_pos_wall__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c
+ */
+bool daObjComing::Act_c::chk_make_pos_wall(const daObjComing::Act_c::MakeTmp_c* tmp) const {
+    M_wall_work.Set((cXyz*)&tmp->m00, (cXyz*)&tmp->m0C, NULL);
+    return !dComIfG_Bgsp()->LineCross(&M_wall_work);
 }
 
 /* 00000AF0-00000C30       .text chk_make_pos_act__Q211daObjComing5Act_cFPvPv */
-void daObjComing::Act_c::chk_make_pos_act(void*, void*) {
-    /* Nonmatching */
+void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
+    daObjComing::Act_c* i_this = (daObjComing::Act_c*)actor;
+    daObjComing::Act_c::MakeTmp_c* tmp = (daObjComing::Act_c::MakeTmp_c*)data;
+
+    if (fopAc_IsActor(i_this)) {
+        s16 proc = fopAcM_GetName(i_this);
+        if (proc != PROC_SHIP && proc != PROC_PLAYER && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
+            if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {
+                return i_this;
+            }
+        }
+    }
+    return NULL;
 }
 
-/* 00000C30-00000CB8       .text chk_make_pos__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
-void daObjComing::Act_c::chk_make_pos(const daObjComing::Act_c::MakeTmp_c*) const {
-    /* Nonmatching */
+/* 00000C30-00000CB8       .text
+ * chk_make_pos__Q211daObjComing5Act_cCFPCQ311daObjComing5Act_c9MakeTmp_c */
+bool daObjComing::Act_c::chk_make_pos(const daObjComing::Act_c::MakeTmp_c* tmp) const {
+    return chk_make_pos_gnd(tmp) && chk_make_pos_wall(tmp) && fopAcM_Search(chk_make_pos_act, (void*)tmp) == NULL;
 }
 
 /* 00000CB8-00000D7C       .text barrel2_get_ptn__Q211daObjComing5Act_cCFv */
-void daObjComing::Act_c::barrel2_get_ptn() const {
-    /* Nonmatching */
+daObjComing::Act_c::Ptn_e daObjComing::Act_c::barrel2_get_ptn() const {
+    daObjComing::Act_c::Ptn_e cVar2 = PTN_15_e;
+
+    f32 dVar2 = cM_rnd();
+    f32 tmp = attr()->L_Hio[4] + attr()->L_Hio[5];
+
+    if (tmp > 0.0f) {
+        if (dVar2 < attr()->L_Hio[4]) {
+            cVar2 = PTN_01_e;
+        } else if (dVar2 < tmp) {
+            cVar2 = PTN_00_e;
+        }
+    }
+
+    if (cVar2 == PTN_15_e) {
+        s32 fVar3 = cM_rndF(16.0f);
+        s32 iVar1 = prm_get_tblNum();
+        if (iVar1 >= 7) {
+            iVar1 = 0;
+        }
+        cVar2 = daObjComing::Act_c::Ptn_e(M_item_tbl[iVar1][fVar3]);
+    }
+    return cVar2;
 }
 
-/* 00000D7C-00000D9C       .text barrel2_get_type__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e */
-void daObjComing::Act_c::barrel2_get_type(daObjComing::Act_c::Ptn_e) {
-    /* Nonmatching */
+/* 00000D7C-00000D9C       .text
+ * barrel2_get_type__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e
+ */
+s32 daObjComing::Act_c::barrel2_get_type(daObjComing::Act_c::Ptn_e ptn) {
+    static const u8 a[] = {
+        1, 0, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0,
+    };
+    static const s32 b[] = {0, 1, 2};
+    return b[a[(s32)ptn]];
 }
 
-/* 00000D9C-00000DB0       .text barrel2_get_item__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e */
-void daObjComing::Act_c::barrel2_get_item(daObjComing::Act_c::Ptn_e) {
-    /* Nonmatching */
+/* 00000D9C-00000DB0       .text
+ * barrel2_get_item__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e
+ */
+s32 daObjComing::Act_c::barrel2_get_item(daObjComing::Act_c::Ptn_e ptn) {
+    static const s8 item_data[] = {255, 255, 255, 1, 2, 3, 4, 0, 0, 11, 12, 13, 14, 14, 16, 17, 18, 18, 9, 10, 10};
+    return item_data[(s32)ptn] & 0x3F;
 }
 
-/* 00000DB0-00000DC0       .text barrel2_get_buoy__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e */
-void daObjComing::Act_c::barrel2_get_buoy(daObjComing::Act_c::Ptn_e) {
-    /* Nonmatching */
+/* 00000DB0-00000DC0       .text
+ * barrel2_get_buoy__Q211daObjComing5Act_cFQ311daObjComing5Act_c5Ptn_e
+ */
+bool daObjComing::Act_c::barrel2_get_buoy(daObjComing::Act_c::Ptn_e ptn) {
+    static const bool buoy[] = {false, false, true,  false, false, false, false, false, false, false, false,
+                                false, false, false, false, false, false, false, false, false, false};
+    return buoy[(s32)ptn];
 }
 
-/* 00000DC0-00000F00       .text barrel2_get_param__Q211daObjComing5Act_cFPQ211daObjComing12PrmBarrel2_c */
-void daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c*) {
-    /* Nonmatching */
+/* 00000DC0-00000F00       .text
+ * barrel2_get_param__Q211daObjComing5Act_cFPQ211daObjComing12PrmBarrel2_c */
+bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
+    daShip_c* ship = dComIfGp_getShipActor();
+    if (ship != NULL && chk_ship_spd(ship) && chk_ship_range(ship)) {
+        MakeTmp_c sp08;
+        sp08.m00 = ship->current.pos;
+        get_make_pos(ship, (cXyz*)&sp08.m0C);
+        sp08.m18 = 200.0f;
+        sp08.m1C = 400.0f;
+        if (chk_make_pos(&sp08)) {
+            barrel2->mPos = sp08.m0C;
+            daObjComing::Act_c::Ptn_e uVar5 = barrel2_get_ptn();
+            barrel2->mType = barrel2_get_type(uVar5);
+            barrel2->mItem = barrel2_get_item(uVar5);
+            barrel2->m14 = barrel2_get_buoy(uVar5);
+
+            s16 angle = cLib_targetAngleY(fopAcM_GetPosition_p(ship), (cXyz*)&sp08.m0C);
+            s16 rnd = cM_rndFX(8192.0f);
+            barrel2->mAngleY = angle + rnd;
+            return true;
+        }
+    }
+    return false;
 }
 
-/* 00000F00-00001030       .text mode_barrel2_wait__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
-void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c*) {
-    /* Nonmatching */
+/* 00000F00-00001030       .text
+ * mode_barrel2_wait__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
+void daObjComing::Act_c::mode_barrel2_wait(daObjComing::Ctrl_c* ctrl) {
+    s32 bVar1 = dComIfGp_roomControl_getStayNo();
+    if (chk_switch() && (fopAcM_GetHomeRoomNo(this) == bVar1 || mRoomId == bVar1 || prm_get_always())) {
+        if (ctrl->m04 <= 0) {
+            PrmBarrel2_c barrel2;
+            if (barrel2_get_param(&barrel2)) {
+                ctrl->m08 = daObjBarrel2::Act_c::make_coming(
+                    (cXyz*)&barrel2.mPos,
+                    fopAcM_GetHomeRoomNo(this),
+                    daObjBarrel2::Type_e(barrel2.mType),
+                    barrel2.mItem,
+                    barrel2.m14,
+                    barrel2.mAngleY,
+                    daObjBuoyflag::Texture_01_e
+                );
+                ctrl->set_appear_timer(this);
+                ctrl->m00 = 1;
+            } else {
+                ctrl->set_retry_timer(this);
+            }
+        }
+    }
 }
 
-/* 00001030-00001110       .text mode_barrel2_appear__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
-void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c*) {
-    /* Nonmatching */
+/* 00001030-00001110       .text
+ * mode_barrel2_appear__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c
+ */
+void daObjComing::Act_c::mode_barrel2_appear(daObjComing::Ctrl_c* ctrl) {
+    if (ctrl->m04 <= 0) {
+        if (ctrl->m08 != fpcM_ERROR_PROCESS_ID_e) {
+            fopAc_ac_c* ac;
+            if (fopAcM_SearchByID(ctrl->m08, &ac)) {
+                if (ac != NULL) {
+                    daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
+                    JUT_ASSERT(1119, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
+                    barrel2_act->unk_474 = 1;
+                }
+            } else {
+                ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
+            }
+        }
+
+        if (ctrl->m08 != fpcM_ERROR_PROCESS_ID_e) {
+            ctrl->set_wait_timer(this);
+            ctrl->m00 = 0;
+        }
+    }
 }
 
-/* 00001110-000011B4       .text mode_barrel2_leave__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c */
-void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c*) {
-    /* Nonmatching */
+/* 00001110-000011B4       .text
+ * mode_barrel2_leave__Q211daObjComing5Act_cFPQ211daObjComing6Ctrl_c
+ */
+void daObjComing::Act_c::mode_barrel2_leave(daObjComing::Ctrl_c* ctrl) {
+    if (ctrl->m08 != fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* ac;
+        if (fopAcM_SearchByID(ctrl->m08, &ac)) {
+            if (ac != NULL) {
+                daObjBarrel2::Act_c* barrel2_act = (daObjBarrel2::Act_c*)ac;
+                JUT_ASSERT(1145, fopAcM_GetName(barrel2_act) == tk_Obj_Barrel2_e);
+                barrel2_act->unk_474 = 1;
+            }
+        } else {
+            ctrl->m08 = fpcM_ERROR_PROCESS_ID_e;
+        }
+    }
 }
 
 /* 000011B4-00001310       .text _execute__Q211daObjComing5Act_cFv */
 bool daObjComing::Act_c::_execute() {
-    /* Nonmatching */
+    typedef void (daObjComing::Act_c::*modeFunc)(Ctrl_c*);
+    static modeFunc mode_proc[][3] = {
+        {
+            &daObjComing::Act_c::mode_barrel2_wait,
+            &daObjComing::Act_c::mode_barrel2_appear,
+            &daObjComing::Act_c::mode_barrel2_leave,
+        },
+    };
+
+    s32 end = attr()->m00[prm_get_makeNum()];
+    bool bVar2 = true;
+    for (s32 i = 0; i < end; i++) {
+        Ctrl_c* ctrl = &m294[i];
+
+        if (ctrl->m04 > 0) {
+            ctrl->m04--;
+        }
+
+        (this->*mode_proc[m290][ctrl->m00])(ctrl);
+
+        if ((ctrl->m00 != 2) || (ctrl->m08 != fpcM_ERROR_PROCESS_ID_e)) {
+            bVar2 = false;
+        }
+    }
+
+    if (bVar2) {
+        fopAcM_delete(this);
+    }
+    return true;
 }
 
 /* 00001310-00001318       .text _draw__Q211daObjComing5Act_cFv */
 bool daObjComing::Act_c::_draw() {
-    /* Nonmatching */
+    return true;
 }
 
 namespace daObjComing {
 namespace {
-/* 00001318-00001338       .text Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001318-00001338       .text
+ * Mthd_Create__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_create();
 }
 
-/* 00001338-0000135C       .text Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001338-0000135C       .text
+ * Mthd_Delete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Delete(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_delete();
 }
 
-/* 0000135C-00001380       .text Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 0000135C-00001380       .text
+ * Mthd_Execute__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Execute(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_execute();
 }
 
-/* 00001380-000013A4       .text Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 00001380-000013A4       .text
+ * Mthd_Draw__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
     return ((daObjComing::Act_c*)i_this)->_draw();
 }
 
-/* 000013A4-000013AC       .text Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
+/* 000013A4-000013AC       .text
+ * Mthd_IsDelete__Q211daObjComing28@unnamed@d_a_obj_coming_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
     return TRUE;
 }
