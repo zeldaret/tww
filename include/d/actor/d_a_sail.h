@@ -21,9 +21,9 @@ public:
     Mtx* getStickMtx() { return &mStickMtx; }
     void setTevStr(dKy_tevstr_c* tevStr) { mTevStr = tevStr; }
     cXyz* getPos() { return mPos[m1C3A]; }
-    cXyz* getPosSpd() { return m0884; }
+    cXyz* getPosSpd() { return mPosSpd; }
     cXyz* getNrm() { return mNrm[m1C3A]; }
-    cXyz* getBackNrm() { return m1454[m1C3A]; }
+    cXyz* getBackNrm() { return mBackNrm[m1C3A]; }
 
     void setCorrectNrmAngle(s16, f32);
     void setNrmMtx();
@@ -38,9 +38,9 @@ public:
     /* 0x0070 */ Mtx mStickMtx;
     /* 0x00A0 */ dKy_tevstr_c* mTevStr;
     /* 0x00A4 */ cXyz mPos[2][0x54];
-    /* 0x0884 */ cXyz m0884[0x54];
+    /* 0x0884 */ cXyz mPosSpd[0x54];
     /* 0x0C74 */ cXyz mNrm[2][0x54];
-    /* 0x1454 */ cXyz m1454[2][0x54];
+    /* 0x1454 */ cXyz mBackNrm[2][0x54];
     /* 0x1C34 */ s16 m1C34;
     /* 0x1C36 */ s16 m1C36;
     /* 0x1C38 */ s16 m1C38;
