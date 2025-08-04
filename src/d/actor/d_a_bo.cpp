@@ -159,10 +159,10 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcSph foot_co_sph_src = {
         // dCcD_SrcGObjInf
@@ -187,10 +187,10 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
-        },
+        }},
     };
     static dCcD_SrcCyl body_cyl_src = {
         // dCcD_SrcGObjInf
@@ -215,11 +215,11 @@ static cPhs_State daBO_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 0.0f,
             /* Height */ 0.0f,
-        },
+        }},
     };
 }
 

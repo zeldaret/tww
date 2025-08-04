@@ -46,11 +46,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 /* 000000EC-000001E4       .text __ct__16daNpc_Bmsw_HIO_cFv */

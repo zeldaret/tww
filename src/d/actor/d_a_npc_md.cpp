@@ -65,11 +65,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_light_cyl_src = {
@@ -95,11 +95,11 @@ static dCcD_SrcCyl l_light_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_fan_light_cps_src = {
@@ -155,11 +155,11 @@ static dCcD_SrcCyl l_wind_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 

@@ -41,11 +41,11 @@ static const dCcD_SrcCyl l_cyl_at_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
         /* Height */ 10000.0f,
-    },
+    }},
 };
 
 static const dCcD_SrcCyl l_cyl_tg_src = {
@@ -71,11 +71,11 @@ static const dCcD_SrcCyl l_cyl_tg_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
         /* Height */ 10000.0f,
-    },
+    }},
 };
 
 static cXyz l_ef_scale(1.0f, 1.0f, 1.0f);

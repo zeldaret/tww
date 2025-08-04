@@ -2444,11 +2444,11 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 400.0f,
-        },
+        }},
     };
     static dCcD_SrcCyl core_cyl_src = {
         // dCcD_SrcGObjInf
@@ -2473,11 +2473,11 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
             /* Height */ 200.0f,
-        },
+        }},
     };
     static dCcD_SrcSph finger_sph_src = {
         // dCcD_SrcGObjInf
@@ -2502,10 +2502,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
     static dCcD_SrcSph eye_sph_src = {
         // dCcD_SrcGObjInf
@@ -2530,10 +2530,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
     static dCcD_SrcSph beam_sph_src = {
         // dCcD_SrcGObjInf
@@ -2558,10 +2558,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 60.0f,
-        },
+        }},
     };
 
     fopAcM_SetupActor(a_this, bst_class);

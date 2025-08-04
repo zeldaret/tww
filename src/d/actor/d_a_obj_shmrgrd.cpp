@@ -69,11 +69,11 @@ const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_co = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 79.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_at = {
     // dCcD_SrcGObjInf
@@ -98,11 +98,11 @@ const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_at = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 80.0f,
         /* Height */ 260.0f,
-    },
+    }},
 };
 const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_tg = {
     // dCcD_SrcGObjInf
@@ -127,11 +127,11 @@ const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_tg = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_gap_co = {
     // dCcD_SrcGObjInf
@@ -156,11 +156,11 @@ const dCcD_SrcCyl daObjShmrgrd_c::M_cyl_src_gap_co = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
         /* Height */ 260.0f,
-    },
+    }},
 };
 
 const char daObjShmrgrd_c::M_arcname[] = "Shmrgrd";

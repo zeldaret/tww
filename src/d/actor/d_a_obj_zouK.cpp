@@ -49,11 +49,11 @@ namespace daObjZouk {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 200.0f,
-        },
+        }},
     };
 }
 

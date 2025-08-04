@@ -84,11 +84,11 @@ static cPhs_State daHimo3_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
             /* Height */ 4000.0f,
-        },
+        }},
     };
     static dCcD_SrcSph sph_src = {
         // dCcD_SrcGObjInf
@@ -113,10 +113,10 @@ static cPhs_State daHimo3_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
-        },
+        }},
     };
     static dCcD_SrcSph sph2_src = {
         // dCcD_SrcGObjInf
@@ -141,10 +141,10 @@ static cPhs_State daHimo3_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 80.0f,
-        },
+        }},
     };
 }
 

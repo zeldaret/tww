@@ -73,11 +73,11 @@ const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_co = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_tg = {
     // dCcD_SrcGObjInf
@@ -102,11 +102,11 @@ const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_tg = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 112.5f,
-    },
+    }},
 };
 const GXColor color = {0xA0, 0xA0, 0x80, 0xFF};
 

@@ -40,11 +40,11 @@ const dCcD_SrcCyl daObjOspbox::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 75.0f,
         /* Height */ 150.0f,
-    },
+    }},
 };
 
 /* 000000EC-000001A0       .text CreateHeap__Q211daObjOspbox5Act_cFv */

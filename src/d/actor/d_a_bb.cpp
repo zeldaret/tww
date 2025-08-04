@@ -2572,10 +2572,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 62.5f,
-        },
+        }},
     };
     static dCcD_SrcSph head_tg_sph_src = {
         // dCcD_SrcGObjInf
@@ -2608,10 +2608,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 62.5f,
-        },
+        }},
     };
     static dCcD_SrcSph body_tg_sph_src = {
         // dCcD_SrcGObjInf
@@ -2644,10 +2644,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 62.5f,
-        },
+        }},
     };
     static dCcD_SrcSph body_co_sph_src = {
         // dCcD_SrcGObjInf
@@ -2672,10 +2672,10 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 87.5f,
-        },
+        }},
     };
 
     bb_class* i_this = (bb_class*)a_this;

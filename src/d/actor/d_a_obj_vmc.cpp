@@ -39,11 +39,11 @@ static dCcD_SrcCyl cyl_src_base = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 10.0f,
-    },
+    }},
 };
 
 #if VERSION == VERSION_DEMO
@@ -70,11 +70,11 @@ static dCcD_SrcCyl cyl_src_tree = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 300.0f,
-    },
+    }},
 };
 #endif
 

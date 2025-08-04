@@ -139,11 +139,11 @@ void dDoor_ssk_sub_c::init() {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 15.0f,
             /* Height */ 300.0f,
-        },
+        }},
     };
 }
 

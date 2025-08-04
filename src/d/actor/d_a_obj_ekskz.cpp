@@ -31,11 +31,11 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 300.0f,
-    },
+    }},
 };
 
 

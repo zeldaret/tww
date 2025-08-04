@@ -4913,11 +4913,11 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 62.5f,
                 /* Height */ 100.0f,
-            },
+            }},
         };
         i_this->m0B88.Set(co_cyl_src);
         i_this->m0B88.SetStts(&i_this->dr.mStts);
@@ -4944,11 +4944,11 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGCylS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 30.0f,
                 /* Height */ 112.5f,
-            },
+            }},
         };
         i_this->m0CB8.Set(tg_cyl_src);
         i_this->m0CB8.SetStts(&i_this->dr.mStts);
@@ -4975,10 +4975,10 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 37.5f,
-            },
+            }},
         };
         i_this->m0DE8.Set(head_sph_src);
         i_this->m0DE8.SetStts(&i_this->dr.mStts);
@@ -5005,10 +5005,10 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 100.0f,
-            },
+            }},
         };
         i_this->m1040.Set(wepon_sph_src);
         i_this->m1040.SetStts(&i_this->dr.mStts);
@@ -5035,10 +5035,10 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 62.5f,
-            },
+            }},
         };
         i_this->m0F14.Set(defence_sph_src);
         i_this->m0F14.SetStts(&i_this->dr.mStts);

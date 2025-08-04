@@ -49,11 +49,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
         /* Height */ 170.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cyl2_src = {
@@ -79,11 +79,11 @@ static dCcD_SrcCyl l_cyl2_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
         /* Height */ 200.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cylAt_src = {
@@ -109,11 +109,11 @@ static dCcD_SrcCyl l_cylAt_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 150.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_cpsAt_src = {

@@ -331,11 +331,11 @@ namespace daObjMovebox {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 75.0f,
             /* Height */ 150.0f,
-        },
+        }},
     };
     
     const Attr_c Act_c::M_attr[] = {

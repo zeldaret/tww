@@ -1021,11 +1021,11 @@ static cPhs_State daKanban_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 0.0f,
             /* Height */ 0.0f,
-        },
+        }},
     };
 
     u32 maxHeapSize = 0;

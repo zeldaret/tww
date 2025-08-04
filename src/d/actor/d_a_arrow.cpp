@@ -75,10 +75,10 @@ const dCcD_SrcSph daArrow_c::m_co_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
-    },
+    }},
 };
 
 /* 800D455C-800D457C       .text createHeap_CB__FP10fopAc_ac_c */

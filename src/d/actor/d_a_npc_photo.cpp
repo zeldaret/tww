@@ -499,11 +499,11 @@ static dCcD_SrcCyl l_cyl_src2 = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 40.0f,
         /* Height */ 160.0f,
-    },
+    }},
 };
 
 static char* l_npc_staff_id = {

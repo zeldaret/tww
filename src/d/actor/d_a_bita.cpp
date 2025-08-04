@@ -227,11 +227,11 @@ static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
             /* Height */ 20.0f,
-        },
+        }},
     };
 
     fopAcM_SetupActor(i_ac, bita_class);

@@ -138,10 +138,10 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 90.0f,
-        },
+        }},
     };
 #endif
     static dCcD_SrcCyl cc_cyl_src = {
@@ -167,11 +167,11 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
             /* Height */ 2000.0f,
-        },
+        }},
     };
     static dCcD_SrcSph bm_sph_src = {
         // dCcD_SrcGObjInf
@@ -196,10 +196,10 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
-        },
+        }},
     };
     
     att_class* a_this = (att_class*)i_this;

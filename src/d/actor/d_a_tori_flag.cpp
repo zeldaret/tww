@@ -40,11 +40,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 400.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000118       .text __ct__17daTori_Flag_HIO_cFv */

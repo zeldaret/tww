@@ -112,10 +112,10 @@ const dCcD_SrcSph Act_c::M_sph_srcS = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 35.0f,
-    },
+    }},
 };
 
 const dCcD_SrcSph Act_c::M_sph_srcL = {
@@ -141,10 +141,10 @@ const dCcD_SrcSph Act_c::M_sph_srcL = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 const dCcD_SrcCps Act_c::M_cps_srcL = {

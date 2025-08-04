@@ -61,11 +61,11 @@ const dCcD_SrcCyl daObjMtest::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000198       .text chk_appear__Q210daObjMtest5Act_cFv */

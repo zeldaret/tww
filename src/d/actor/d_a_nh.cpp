@@ -50,11 +50,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 20.0f,
-    },
+    }},
 };
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
