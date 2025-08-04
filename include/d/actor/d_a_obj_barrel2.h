@@ -165,7 +165,7 @@ namespace daObjBarrel2 {
         /* 0x2A0 */ dCcD_Stts mStts;
         /* 0x2DC */ dCcD_Cyl mCyl;
         /* 0x40C */ s32 m40C;
-        /* 0x410 */ s32 m410;
+        /* 0x410 */ int m410;
         /* 0x414 */ f32 m414;
         /* 0x418 */ f32 m418;
         /* 0x41C */ f32 m41C;
