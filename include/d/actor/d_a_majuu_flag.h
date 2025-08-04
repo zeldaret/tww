@@ -51,18 +51,18 @@ public:
     /* 0x798 */ s16 m798;
     /* 0x79A */ u8 mCurArr;
     /* 0x79B */ u8 m79B;
-}; // size >= 0x7A0
+}; // size = 0x79C
 
 class daMajuu_Flag_c : public fopAc_ac_c {
 public:
-    void setBaseScale(float) {}
-    void setOtherMatrix(Mtx*) {}
-    void setOtherOffset(cXyz*) {}
+    void setBaseScale(float scale) { mFlagScale = scale; }
+    void setOtherMatrix(Mtx* mtx) { mpParentMtx = *mtx; }
+    void setOtherOffset(cXyz* pos) { mpParentPos = pos; }
 
 public:
     /* 0x290 */ u8 m290[0x2A0 - 0x290];
     /* 0x2A0 */ daMajuu_Flag_packet_c mPacket;
-    /* 0xA3D */ u8 mA3D[0xA40 - 0xA3D];
+    /* 0xA3C */ u8 mA3C[0xA40 - 0xA3C];
     /* 0xA40 */ request_of_phase_process_class mPhsCloth;
     /* 0xA48 */ request_of_phase_process_class mPhsFlag;
     /* 0xA50 */ u8 mA50[0xA58 - 0xA50];
