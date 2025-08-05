@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_a_obj.h"
+#include "f_op/f_op_actor_mng.h"
 
 class dBgW;
 class dBgS;
@@ -18,7 +19,12 @@ class daObjIce_c : public fopAc_ac_c {
 
 public:
     s32 param_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-    void param_on_swSave() const { }
+    void param_on_swSave() const {
+        const s32 sw = param_get_swSave();
+        if (sw != 0xFF) {
+            fopAcM_onSwitch((fopAc_ac_c*)this, sw);
+        }
+    }
     inline void setEffectMtx();
 
     u8 chk_appear();

@@ -96,15 +96,14 @@ static const dCcD_SrcCyl l_fire_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 #endif
+} // namespace
 
 #if VERSION == VERSION_DEMO
 daObjLeaves_HIO_c::daObjLeaves_HIO_c() {
@@ -122,7 +121,6 @@ daObjLeaves_HIO_c::daObjLeaves_HIO_c() {
     m24 = 0;
 }
 #endif
-} // namespace
 
 #if VERSION >= VERSION_USA
 namespace {
@@ -311,7 +309,7 @@ bool daObjLeaves_c::checkCollision() {
         if (hitObj != NULL) {
             u32 cVar5 = hitObj->GetAtType();
             switch (cVar5) {
-            case AT_TYPE_WIND:
+            case AT_TYPE_WIND: {
                 fopAc_ac_c* player = dComIfGp_getPlayer(0);
                 s16 iVar3 = cM_atan2s(current.pos.x - player->current.pos.x, current.pos.z - player->current.pos.z);
                 csXyz sp0C;
@@ -323,7 +321,7 @@ bool daObjLeaves_c::checkCollision() {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OCHIBA_BLOW, 0);
                 ret = true;
                 break;
-
+            }
             case AT_TYPE_BOMB:
                 birthEffect(5, &current.pos, NULL, &tevStr.mColorK0);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_OCHIBA_BLOW, 0);
@@ -333,12 +331,13 @@ bool daObjLeaves_c::checkCollision() {
             default:
                 f32 abs = (*mSph.GetTgHitPosP() - current.pos).absXZ();
 #if VERSION == VERSION_DEMO
-                if (abs < l_HIO.m10) {
+                if (abs < l_HIO.m10)
 #elif VERSION == VERSION_JPN
-                if (abs < 95.0f) {
+                if (abs < 95.0f)
 #else
-                if (abs < 110.0f) {
+                if (abs < 110.0f)
 #endif
+                {
                     switch (cVar5) {
                     case AT_TYPE_HOOKSHOT:
                     case AT_TYPE_MACHETE:
@@ -400,7 +399,7 @@ void daObjLeaves_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc
 
     u32 cVar5 = hitObj->GetAtType();
     switch (cVar5) {
-    case AT_TYPE_WIND:
+    case AT_TYPE_WIND: {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         s16 iVar3 = cM_atan2s(a_this->current.pos.x - player->current.pos.x, a_this->current.pos.z - player->current.pos.z);
         csXyz sp0C;
@@ -412,7 +411,7 @@ void daObjLeaves_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc
         fopAcM_seStartCurrent(a_this, JA_SE_OBJ_OCHIBA_BLOW, 0);
         i_this->m44C = true;
         break;
-
+    }
     case AT_TYPE_BOMB:
         i_this->birthEffect(5, &a_this->current.pos, NULL, &a_this->tevStr.mColorK0);
         fopAcM_seStartCurrent(a_this, JA_SE_OBJ_OCHIBA_BLOW, 0);
@@ -541,10 +540,11 @@ bool daObjLeaves_c::_delete() {
             mSmokeCallback.remove();
         }
 #if VERSION > VERSION_DEMO
-        if (heap != NULL && mpBgW != NULL) {
+        if (heap != NULL && mpBgW != NULL)
 #else
-        if (mpBgW != NULL) {
+        if (mpBgW != NULL)
 #endif
+        {
             if (mpBgW->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW);
             }
@@ -583,10 +583,6 @@ void daObjLeaves_c::wait_proc() {
         dComIfG_Ccsp()->Set(&mSph);
     } else {
         param_on_swSave();
-        s32 swSave = param_get_swSave();
-        if (swSave != 0xFF) {
-            fopAcM_onSwitch((fopAc_ac_c*)this, swSave);
-        }
         fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
 
         if (mpBgW != NULL && mpBgW->ChkUsed()) {
@@ -638,10 +634,11 @@ void daObjLeaves_c::item_set_wait_proc() {
 #endif
     m408 += m40C;
 #if VERSION == VERSION_DEMO
-    if (m408 <= l_HIO.m1C) {
+    if (m408 <= l_HIO.m1C)
 #else
-    if (m408 <= 200.0f) {
+    if (m408 <= 200.0f)
 #endif
+    {
         s32 item = param_get_itemNo();
         s32 itemSaveBit = param_get_itemSaveBitNo();
 

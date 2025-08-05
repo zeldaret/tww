@@ -27,7 +27,12 @@ public:
     s32 param_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEM_NO_W, PRM_ITEM_NO_S); }
     s32 param_get_itemSaveBitNo() const { return daObj::PrmAbstract(this, PRM_ITEM_SAVE_BIT_NO_W, PRM_ITEM_SAVE_BIT_NO_S); }
     s32 param_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-    void param_on_swSave() const { }
+    void param_on_swSave() const {
+        const s32 swSave = param_get_swSave();
+        if (swSave != 0xFF) {
+            fopAcM_onSwitch((fopAc_ac_c*)this, swSave);
+        }
+    }
 
     bool chk_appear();
     void setPEmitter(JPABaseEmitter*);

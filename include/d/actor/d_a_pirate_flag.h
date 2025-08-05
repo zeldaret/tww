@@ -24,7 +24,7 @@ public:
     void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
     cXyz* getPos() { return mPos[m87E]; }
     cXyz* getNrm() { return mNrm[m87E]; }
-    cXyz* getBackNrm() { return m4F4[m87E]; }
+    cXyz* getBackNrm() { return mBackNrm[m87E]; }
     cXyz* getOffsetVec() { return m74C; } // Guessed based on size in debug maps
     s16 getEscapeNrmAngle() { return m87A; }
     void changeCurrentPos() { m87E ^= 1; }
@@ -41,7 +41,7 @@ public:
     /* 0x040 */ dKy_tevstr_c* mTevStr;
     /* 0x044 */ cXyz mPos[2][25];
     /* 0x29C */ cXyz mNrm[2][25];
-    /* 0x4F4 */ cXyz m4F4[2][25];
+    /* 0x4F4 */ cXyz mBackNrm[2][25];
     /* 0x74C */ cXyz m74C[25];
     /* 0x878 */ s16 m878;
     /* 0x87A */ s16 m87A;

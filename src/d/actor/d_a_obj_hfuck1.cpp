@@ -13,7 +13,9 @@
 #include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
+#if VERSION == VERSION_DEMO
 #include "m_Do/m_Do_hostIO.h"
+#endif
 #include "m_Do/m_Do_mtx.h"
 
 namespace {
@@ -42,14 +44,14 @@ namespace {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
 #if VERSION == VERSION_DEMO
             /* Radius */ 35.0f,
 #else
             /* Radius */ 90.0f,
 #endif
-        },
+        }},
     };
 
     static const Vec l_hook_offset = { 0.0f, 0.0f, 0.0f };

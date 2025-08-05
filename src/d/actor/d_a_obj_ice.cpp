@@ -386,11 +386,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
     if (m44C < 0.4f && mBgw != NULL) {
         if (mBgw->ChkUsed()) {
             dComIfG_Bgsp()->Release(mBgw);
-            s32 sw = param_get_swSave();
-            if (sw != 0xFF) {
-                param_on_swSave();
-                fopAcM_onSwitch((fopAc_ac_c*)this, sw);
-            }
+            param_on_swSave();
         }
     }
 

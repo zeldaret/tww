@@ -121,14 +121,14 @@ void daPirate_Flag_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 
 /* 00000364-000003F0       .text setBackNrm__22daPirate_Flag_packet_cFv */
 void daPirate_Flag_packet_c::setBackNrm() {
-    cXyz* a = getNrm();
-    cXyz* b = getBackNrm();
+    cXyz* nrm = mNrm[m87E];
+    cXyz* nrmBack = mBackNrm[m87E];
     for (int i = 0; i < (s32)ARRAY_SIZE(*mNrm); i++) {
-        b->setall(0.0f);
-        *b -= *a;
+        nrmBack->setall(0.0f);
+        *nrmBack -= *nrm;
 
-        a++;
-        b++;
+        nrm++;
+        nrmBack++;
     }
 }
 
@@ -203,8 +203,8 @@ void daPirate_Flag_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_POS_XY, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0);
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GXSetArray(GX_VA_POS, mPos[m87E], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mNrm[m87E], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
     GXTexObj texObj;
     ResTIMG* timg = static_cast<ResTIMG*>(dComIfG_getObjectRes("Kaizokusen", KAIZOKUSEN_INDEX_BTI_TXA_KAIZOKU_HATA));
@@ -276,7 +276,7 @@ void daPirate_Flag_packet_c::draw() {
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
     GXSetCullMode(GX_CULL_FRONT);
-    GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mBackNrm[m87E], sizeof(cXyz));
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
 #if VERSION > VERSION_JPN
@@ -457,7 +457,7 @@ static void pirate_flag_move(pirate_flag_class* i_this) {
 #else
     DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(*i_this->mPacket.mPos));
     DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(*i_this->mPacket.mNrm));
-    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(*i_this->mPacket.m4F4));
+    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(*i_this->mPacket.mBackNrm));
 #endif
 }
 
