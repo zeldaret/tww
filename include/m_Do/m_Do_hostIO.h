@@ -12,6 +12,12 @@ class JORGenEvent;
 class JOREvent;
 class JORServer;
 
+#if VERSION == VERSION_DEMO
+#define HIO(name) l_HIO.##name
+#else
+#define HIO(name) L_HIO::##name
+#endif
+
 class JORMContext {
 public:
     void genCheckBox(const char* param_1, u8* param_2, u8 param_3, u32 param_4, JOREventListener* param_5, u16 param_6, u16 param_7, u16 param_8, u16 param_9) {

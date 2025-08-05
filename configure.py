@@ -1417,7 +1417,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_monument"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_movebox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_obj_mshokki"),
-    ActorRel(NonMatching, "d_a_obj_ohatch"),
+    ActorRel(Matching, "d_a_obj_ohatch"),
     ActorRel(NonMatching, "d_a_obj_otble"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbco"),
     ActorRel(NonMatching, "d_a_obj_pirateship"),
