@@ -12,7 +12,7 @@
 #include "m_Do/m_Do_ext.h"
 
 const char daObjLpalm_c::M_arcname[7] = "Oyashi";
-daObjLpalm_c::Attr_c const daObjLpalm_c::M_attr = { 0, 0 };
+daObjLpalm_c::Attr_c const daObjLpalm_c::M_attr = {0, 0};
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -52,9 +52,7 @@ BOOL daObjLpalm_c::CreateHeap() {
         return false;
 
     mModel->setUserArea((u32)this);
-    Mtx* mtx = &mModel->getBaseTRMtx();
-    cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(M_arcname, OYASHI_DZB_OYASHI);
-    mpBgW = dBgW_NewSet(bgp, dBgW::MOVE_BG_e, mtx);
+    mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, OYASHI_DZB_OYASHI), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;
 
@@ -63,17 +61,16 @@ BOOL daObjLpalm_c::CreateHeap() {
 
 /* 00000268-00000404       .text CreateInit__12daObjLpalm_cFv */
 void daObjLpalm_c::CreateInit() {
-    /* Nonmatching */
-    Quaternion q = { 0.0f, 0.0f, 0.0f, 1.0f };
-    mBaseQuatTarget = q;
-    mBaseQuat = q;
-    mAnmMtxQuat[1] = mAnmMtxQuat[0] = q;
+    Quaternion q = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    mBaseQuat = mBaseQuatTarget = q;
+    mAnmMtxQuat[0] = mAnmMtxQuat[1] = q;
     mAnimDir[0] = 0;
     mAnimDir[1] = 0;
     mAnimWave[0] = 0;
     mAnimWave[1] = cM_rndFX(32768.0f);
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this,-350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
+    fopAcM_setCullSizeBox(this, -350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
     dComIfG_Bgsp()->Regist(mpBgW, this);
     mModel->setBaseScale(scale);
@@ -83,11 +80,15 @@ void daObjLpalm_c::CreateInit() {
 }
 
 cPhs_State daObjLpalm_c::_create() {
-    fopAcM_SetupActor(this, daObjLpalm_c);
-
+#if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
-
     if (ret == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(this, daObjLpalm_c);
+#else
+    fopAcM_SetupActor(this, daObjLpalm_c);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+#endif
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xf00) == 0) {
             ret = cPhs_ERROR_e;
         } else {
@@ -99,11 +100,14 @@ cPhs_State daObjLpalm_c::_create() {
 }
 
 bool daObjLpalm_c::_delete() {
-    if (heap != NULL && mpBgW->ChkUsed()) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL && mpBgW->ChkUsed())
+#endif
+    {
         dComIfG_Bgsp()->Release(mpBgW);
     }
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
@@ -132,7 +136,7 @@ bool daObjLpalm_c::_execute() {
     cXyz up(0.0f, 1.0f, 0.0f);
     cXyz windDir;
 
-    mDoMtx_YrotS(*calc_mtx, -current.angle.y);
+    cMtx_YrotS(*calc_mtx, -current.angle.y);
     MtxPosition(dKyw_get_wind_vec(), &windDir);
     f32 windPow = dKyw_get_wind_pow();
     s16 angle = windPow * 0x600;
