@@ -1418,7 +1418,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_movebox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_mshokki", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching, "d_a_obj_ohatch"),
-    ActorRel(NonMatching, "d_a_obj_otble"),
+    ActorRel(Matching, "d_a_obj_otble", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbco"),
     ActorRel(NonMatching, "d_a_obj_pirateship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_quake"),
