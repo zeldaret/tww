@@ -25,7 +25,7 @@ public:
     void genMessage(JORMContext*);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ f32 m0C;
     /* 0x10 */ f32 m10;
@@ -44,7 +44,7 @@ public:
 static daObjOhatch_HIO_c l_HIO;
 
 daObjOhatch_HIO_c::daObjOhatch_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = -4096.0f;
     m0C = -16384.0f;
     m10 = 0.0f;
@@ -61,7 +61,6 @@ daObjOhatch_HIO_c::daObjOhatch_HIO_c() {
 }
 #else
 namespace L_HIO {
-static const f32 m04 = -1;
 static const f32 m08 = -4096.0f;
 static const f32 m0C = -16384.0f;
 static const f32 m10 = 0.0f;
@@ -74,7 +73,7 @@ static const f32 m28 = 6.0f;
 static const f32 m2C = -64.0f;
 static const f32 m30 = 1024.0f;
 static const f32 m34 = 8192.0f;
-static const f32 m38 = 0;
+static const u8 m38 = 0;
 } // namespace L_HIO
 #endif
 
@@ -155,8 +154,8 @@ cPhs_State daObjOhatch_c::_create() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 < 0) {
-        l_HIO.m04 = mDoHIO_createChild("フィギュア屋の入口", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("フィギュア屋の入口", &l_HIO);
     }
 #endif
     return ret;
@@ -189,9 +188,9 @@ bool daObjOhatch_c::_delete() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.m04);
-        l_HIO.m04 = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
     return true;
@@ -217,10 +216,7 @@ void daObjOhatch_c::close_wait_act_proc() {
                 }
             }
         }
-    }
-#if VERSION == VERSION_DEMO
-    else if (l_HIO.m38 == 1)
-    {
+    } else if (HIO(m38) == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIG_HATCH_OPEN, 0);
         if (mBgW1 != NULL && mBgW1->ChkUsed()) {
             dComIfG_Bgsp()->Release(mBgW1);
@@ -231,7 +227,6 @@ void daObjOhatch_c::close_wait_act_proc() {
         dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
         mActionFunc = &daObjOhatch_c::tremor_act_proc;
     }
-#endif
 }
 
 /* 00000810-000008A4       .text tremor_act_proc__13daObjOhatch_cFv */
@@ -282,7 +277,7 @@ void daObjOhatch_c::vibrate_act_proc() {
 /* 00000A4C-00000A50       .text open_wait_act_proc__13daObjOhatch_cFv */
 void daObjOhatch_c::open_wait_act_proc() {
 #if VERSION == VERSION_DEMO
-    if ((m29C == 0xff || fopAcM_isSwitch(this, m29C) != 1) && HIO(m38) == 0) {
+    if ((m29C == 0xff || fopAcM_isSwitch(this, m29C) != TRUE) && HIO(m38) == 0) {
         m2D8 = 0;
         m2E8 = 0.0f;
         m2EC = 0;
