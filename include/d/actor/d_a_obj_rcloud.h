@@ -2,18 +2,26 @@
 #define D_A_OBJ_RCLOUD_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
-#include "SSystem/SComponent/c_phase.h"
 
 class daObjRcloud_c : public fopAc_ac_c {
 public:
-    void param_get_arg() const {}
+    typedef void (daObjRcloud_c::*ProcFunc)();
+
+    enum Param_e {
+        PRM_TYPE_W = 1,
+        PRM_TYPE_S = 0,
+    };
+    int param_get_arg() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+
 
     void init_mtx();
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
+
+    u8 create_heap();
     cPhs_State _create();
-    bool _delete();
+    u8 _delete();
     void wait_act_proc();
     void clouds_lift_start_wait_act_proc();
     void clouds_lift_act_proc();
@@ -23,15 +31,14 @@ public:
     bool _draw();
 
 public:
-    /* 0x290 */ request_of_phase_process_class mPhsBVkumo;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ mDoExt_btkAnm mBtkAnm;
-    /* 0x2B0 */ u8 m2B0[0x2BC - 0x2B0];
+    /* 0x2B0 */ ProcFunc mCurrentActProc;
     /* 0x2BC */ int m2BC;
-    /* 0x2C0 */ int m2C0;
-    /* 0x2C4 */ u8 m2C4;
+    /* 0x2C0 */ int mDemoNameIndex;
+    /* 0x2C4 */ u8 mResourceLoadedFlag;
     /* 0x2C5 */ u8 m2C5[0x2C8 - 0x2C5];
-    /* 0x2C8 */ f32 m2C8;
+    /* 0x2C8 */ f32 mCloudAnimProgress;
 };
-
 #endif /* D_A_OBJ_RCLOUD_H */
