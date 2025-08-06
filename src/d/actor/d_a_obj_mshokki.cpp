@@ -21,7 +21,7 @@ public:
     void genMessage(JORMContext*);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ f32 m0C;
     /* 0x10 */ f32 m10;
@@ -84,13 +84,11 @@ static const dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f,
-        0.0f,
-        0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 35.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 struct LData {
@@ -109,7 +107,7 @@ static const LData l_data[] = {
 
 #if VERSION == VERSION_DEMO
 daObjMshokki_HIO_c::daObjMshokki_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 20.0f;
     m0C = 20.0f;
     m10 = 128.0f;
@@ -238,11 +236,7 @@ void daObjMshokki_c::set_se() {
     static s32 se_flag[] = {JA_SE_OBJ_CUP_SWING, JA_SE_OBJ_DISH_SWING, JA_SE_OBJ_CUP_SWING};
 
     s16 tmp = shape_angle.y - m61C;
-#if VERSION == VERSION_DEMO
-    if (abs(tmp) < l_HIO.m18) {
-#else
-    if (abs(tmp) < 0x1000) {
-#endif
+    if (abs(tmp) < (s32)HIO(m18)) {
         s16 uVar4 = (shape_angle.x / l_data[m60C].m0C) * 16384.0f;
         if (uVar4 > 0x4000) {
             uVar4 = 0x4000;
@@ -298,8 +292,8 @@ cPhs_State daObjMshokki_c::_create() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 < 0) {
-        l_HIO.m04 = mDoHIO_createChild("魔獣島内部の食器", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("魔獣島内部の食器", &l_HIO);
     }
 #endif
     return ret;
@@ -310,9 +304,9 @@ bool daObjMshokki_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname);
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.m04);
-        l_HIO.m04 = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
     return true;
@@ -329,25 +323,15 @@ bool daObjMshokki_c::_execute() {
     }
 
     if (mAcch.ChkGroundHit()) {
-#if VERSION == VERSION_DEMO
-        if (abs(shape_angle.x) > (s32)l_HIO.m10) {
-            shape_angle.x += -(s16)l_HIO.m10;
-            shape_angle.y += (s32)l_HIO.m18;
-#else
-        if (abs(shape_angle.x) > 0x80) {
-            shape_angle.x += -0x80;
-            shape_angle.y += 0x1000;
-#endif
+        if (abs(shape_angle.x) > (s32)HIO(m10)) {
+            shape_angle.x += -(s32)HIO(m10);
+            shape_angle.y += (s32)HIO(m18);
             set_se();
         } else {
             shape_angle.x = 0;
         }
     } else {
-#if VERSION == VERSION_DEMO
-        shape_angle.x += -(s32)l_HIO.m14;
-#else
-        shape_angle.x += -0xC00;
-#endif
+        shape_angle.x += -(s32)HIO(m14);
     }
 
 #if VERSION == VERSION_DEMO
