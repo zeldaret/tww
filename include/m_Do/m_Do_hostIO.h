@@ -13,9 +13,9 @@ class JOREvent;
 class JORServer;
 
 #if VERSION == VERSION_DEMO
-#define HIO(name) l_HIO.##name
+#define HIO(name) l_HIO.name
 #else
-#define HIO(name) L_HIO::##name
+#define HIO(name) L_HIO::name
 #endif
 
 class JORMContext {
