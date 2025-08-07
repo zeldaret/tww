@@ -76,7 +76,7 @@ bool daKaji_c::_execute() {
     cXyz offset(0.0f, 740.0f, -858.0f);
     offset.y += REG10_F(10);
     offset.z += REG10_F(11);
-    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &offset, &current.pos);
+    cMtx_multVec(l_p_ship->mModel->getBaseTRMtx(), &offset, &current.pos);
     
     daObjPirateship::Act_c* ship = l_p_ship;
     shape_angle = ship->shape_angle;

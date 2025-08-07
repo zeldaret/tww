@@ -741,7 +741,7 @@ static void sail_move(sail_class* i_this) {
 /* 00002094-00002154       .text daSail_Execute__FP10sail_class */
 static BOOL daSail_Execute(sail_class* i_this) {
     static cXyz sail_offset(0.0f, 2100.0f, 100.0f);
-    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &sail_offset, &i_this->current.pos);
+    cMtx_multVec(l_p_ship->mModel->getBaseTRMtx(), &sail_offset, &i_this->current.pos);
     i_this->current.angle = l_p_ship->shape_angle;
     sail_move(i_this);
     return TRUE;
