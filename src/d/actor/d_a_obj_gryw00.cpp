@@ -156,7 +156,7 @@ cPhs_State daObjGryw00_c::Mthd_Create() {
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, l_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(l_arcname, 0xf, dBgS_MoveBGProc_Trans, 0x9a0);
+        phase_state = MoveBGCreate(l_arcname, GRYW00_DZB_EWATER, dBgS_MoveBGProc_Trans, 0x9a0);
         JUT_ASSERT(519, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;

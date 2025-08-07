@@ -678,7 +678,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkUpperAnime(LKANM_BCK_GRABWAIT)) {
         return daPyFace_TMABAE;
     }
-    if ((daPy_dmEcallBack_c::checkCurse()) || checkRestHPAnime()) {
+    if (daPy_dmEcallBack_c::checkCurse() || checkRestHPAnime()) {
         return daPyFace_TMABAF;
     }
     if (checkNoDamageMode()) {

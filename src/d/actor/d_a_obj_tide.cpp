@@ -57,7 +57,7 @@ Mtx Act_c::M_tmp_mtx;
 BOOL Act_c::CreateHeap() {
     const char* arcname = attr(M_type).arcName;
 
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(arcname, attr(M_type).m04);
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).m04));
     JUT_ASSERT(438, model_data != NULL);
 
     if (attr(M_type).m10 != 0) {
@@ -71,7 +71,7 @@ BOOL Act_c::CreateHeap() {
     bool bVar4 = true;
 
     if (attr(M_type).m08 >= 0) {
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(arcname, attr(M_type).m08);
+        J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, attr(M_type).m08));
         JUT_ASSERT(455, bck != NULL);
 
         mBck1 = new mDoExt_bckAnm();
@@ -81,7 +81,7 @@ BOOL Act_c::CreateHeap() {
     }
 
     if (attr(M_type).m0A >= 0) {
-        J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcname, attr(M_type).m0A);
+        J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m0A));
         JUT_ASSERT(474, brk != NULL);
 
         mBrk1 = new mDoExt_brkAnm();
@@ -91,7 +91,7 @@ BOOL Act_c::CreateHeap() {
     }
 
     if (attr(M_type).m0C >= 0) {
-        J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcname, attr(M_type).m0C);
+        J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m0C));
         JUT_ASSERT(487, btk != NULL);
 
         mBtk = new mDoExt_btkAnm();
@@ -104,7 +104,7 @@ BOOL Act_c::CreateHeap() {
     bool bVar5 = true;
 
     if (attr(M_type).m14 >= 0 && attr(M_type).m16 >= 0) {
-        J3DModelData* mdl_nure_data = (J3DModelData*)dComIfG_getObjectRes(arcname, attr(M_type).m14);
+        J3DModelData* mdl_nure_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).m14));
         JUT_ASSERT(504, mdl_nure_data != NULL);
 
         mModel2 = mDoExt_J3DModel__create(mdl_nure_data, 0x80000, attr(M_type).m18);
@@ -112,7 +112,7 @@ BOOL Act_c::CreateHeap() {
             bVar1 = false;
         }
 
-        J3DAnmTevRegKey* brk_nure = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcname, attr(M_type).m16);
+        J3DAnmTevRegKey* brk_nure = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m16));
         JUT_ASSERT(515, brk_nure != NULL);
 
         mBrk2 = new mDoExt_brkAnm();
@@ -683,7 +683,7 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 00001E30-00001E5C       .text Mthd_Draw__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return ((Act_c*)i_this)->Draw();
+    return ((Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00001E5C-00001E88       .text Mthd_IsDelete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
