@@ -323,7 +323,13 @@ void daObjPirateship::Act_c::SetWave() {
         m4AC.setWaterY(m6C8.y);
         m4AC.setIndirectTexData(l_HIO.m28, l_HIO.m2C);
         m4AC.setSpeed(l_HIO.m30);
-        m4AC.setWaterFlatY(m504.ChkWaterHit() ? m504.m_wtr.GetHeight() : m6C8.y);
+        f32 water_y;
+        if (m504.ChkWaterHit()) {
+            water_y = m504.m_wtr.GetHeight();
+        } else {
+            water_y = m6C8.y;
+        }
+        m4AC.setWaterFlatY(water_y);
         m4AC.setLimitSpeed(l_HIO.m34);
         m4AC.getEmitter()->setDirectionalSpeed(l_HIO.m38);
     }
@@ -502,7 +508,7 @@ bool daObjPirateship::Act_c::_delete() {
 }
 
 bool daObjPirateship::Act_c::_draw() {
-    return Draw();
+    return MoveBGDraw();
 }
 
 /* 000012A4-000017E0       .text _execute__Q215daObjPirateship5Act_cFv */
