@@ -70,7 +70,7 @@ f32 daObjPirateship::getShipOffsetY(s16* param_1, s16* param_2, f32 param_3) {
 }
 
 f32 daTagWaterlevel::Act_c::M_now;
-daTagWaterlevel::Act_c::State_e daTagWaterlevel::Act_c::M_state;
+daTagWaterlevel::State_e daTagWaterlevel::Act_c::M_state;
 
 daAgb_c::daAgb_Flags daAgb_c::mFlags;
 u8 daAgbsw0_c::mFigureDispose;
