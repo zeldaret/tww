@@ -57,7 +57,7 @@ cPhs_State daObjTenmado::Act_c::Mthd_Create() {
 
     phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, 8, NULL, 0xF00);
+        phase_state = MoveBGCreate(M_arcname, TENMADO_DZB_MMADO, NULL, 0xF00);
         JUT_ASSERT(146, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
     }
     return phase_state;
