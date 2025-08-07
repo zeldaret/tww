@@ -1429,7 +1429,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swpush", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_table"),
     ActorRel(NonMatching, "d_a_obj_tenmado"),
-    ActorRel(NonMatching, "d_a_obj_tide"),
+    ActorRel(Equivalent, "d_a_obj_tide"),
     ActorRel(Matching,    "d_a_obj_timer"),
     ActorRel(Equivalent,  "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_obj_tousekiki"),
