@@ -16,16 +16,6 @@ public:
         PROC_RUN_e,
     };
 
-    inline u8 onEventReg(u8 arg0){
-        u8 tmp = dComIfGs_getEventReg(m_event_reg[m2B8]);
-        return tmp | arg0;
-    }
-
-    inline u8 isEventReg(u8 arg0){
-        u8 tmp = (u8)dComIfGs_getEventReg(m_event_reg[m2B8]);
-        return tmp & arg0;
-    }
-
     void modeProcInit(int) {}
 
     BOOL _createHeap();
@@ -37,8 +27,8 @@ public:
     bool isOtherHuta();
     bool isRealHuta();
     void warp(int);
-    void onWarpBit(unsigned char);
-    bool isWarpBit(unsigned char);
+    void onWarpBit(u8);
+    bool isWarpBit(u8);
     void setMtx();
     void initCollision();
     void setCollision();

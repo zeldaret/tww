@@ -276,13 +276,16 @@ void daObj_Warpt_c::warp(int sclsnum) {
 }
 
 /* 000008E8-00000968       .text onWarpBit__13daObj_Warpt_cFUc */
-void daObj_Warpt_c::onWarpBit(unsigned char arg1) {
-    dComIfGs_setEventReg(m_event_reg[m2B8], onEventReg(arg1));
+void daObj_Warpt_c::onWarpBit(u8 bit) {
+    u8 tmp = dComIfGs_getEventReg(m_event_reg[m2B8]);
+    cLib_onBit<u8>(tmp, bit);
+    dComIfGs_setEventReg(m_event_reg[m2B8], tmp);
 }
 
 /* 00000968-000009D0       .text isWarpBit__13daObj_Warpt_cFUc */
-bool daObj_Warpt_c::isWarpBit(unsigned char arg1) {
-    return isEventReg(arg1);
+bool daObj_Warpt_c::isWarpBit(u8 bit) {
+    u8 tmp = (u8)dComIfGs_getEventReg(m_event_reg[m2B8]);
+    return cLib_checkBit(tmp, bit);
 }
 
 /* 000009D0-00000BB8       .text setMtx__13daObj_Warpt_cFv */
