@@ -1433,7 +1433,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_timer"),
     ActorRel(Equivalent,  "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Matching,    "d_a_obj_tousekiki", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(Equivalent,  "d_a_obj_warpt", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_obj_warpt", extra_cflags=["-sym off"]),
     ActorRel(Matching,    "d_a_obj_wood", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_pirate_flag"), # weak func order
     ActorRel(Equivalent,  "d_a_race_item", extra_cflags=['-pragma "nosyminline on"']), # weak func order
