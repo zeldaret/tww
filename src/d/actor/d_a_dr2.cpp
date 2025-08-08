@@ -25,7 +25,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
 }; // size = 0xC
 
@@ -36,7 +36,7 @@ static f32 hsz[] = { -7.0f, 7.0f, 12.0f, 7.0f, -7.0f, -12.0f };
 
 /* 000000EC-00000110       .text __ct__11daDr2_HIO_cFv */
 daDr2_HIO_c::daDr2_HIO_c()  {
-    m04 = -1;
+    mNo = -1;
     m08 = 1.0f;
 }
 
@@ -635,7 +635,7 @@ static BOOL daDr2_IsDelete(dr2_class*) {
 /* 00001B98-00001C58       .text daDr2_Delete__FP9dr2_class */
 static BOOL daDr2_Delete(dr2_class* i_this) {
     dComIfG_resDeleteDemo(&i_this->mPhase, "Dr2");
-    mDoHIO_deleteChild(l_HIO.m04);
+    mDoHIO_deleteChild(l_HIO.mNo);
     i_this->unk_4D8.remove();
     i_this->unk_4EC.remove();
 #if VERSION > VERSION_DEMO
@@ -796,7 +796,7 @@ static cPhs_State daDr2_Create(fopAc_ac_c* a_this) {
             return cPhs_ERROR_e;
         }
 
-        l_HIO.m04 = mDoHIO_createChild("ドラゴンシッポ", &l_HIO);
+        l_HIO.mNo = mDoHIO_createChild("ドラゴンシッポ", &l_HIO);
         fopAcM_prm_class* params = fopAcM_CreateAppend();
         params->base.parameters = 0x511;
         params->room_no = a_this->current.roomNo;

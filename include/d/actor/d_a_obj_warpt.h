@@ -5,7 +5,6 @@
 #include "d/d_particle.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
-#include "d/d_com_inf_game.h"
 
 class dBgW;
 

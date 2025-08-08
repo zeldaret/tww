@@ -23,7 +23,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ f32 m0C;
     /* 0x10 */ f32 m10;
@@ -82,7 +82,7 @@ static const dCcD_SrcCyl l_cyl_src = {
 
 #if VERSION == VERSION_DEMO
 daObjIce_HIO_c::daObjIce_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 40.0f;
     m0C = 120.0f;
     m10 = 65.0f;
@@ -275,8 +275,8 @@ cPhs_State daObjIce_c::_create() {
     }
 
 #if VERSION == VERISON_DEMO
-    if (l_HIO.m04 < 0) {
-        l_HIO.m04 = mDoHIO_createChild("汎用氷", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("汎用氷", &l_HIO);
     }
 #endif
 
@@ -302,9 +302,9 @@ bool daObjIce_c::_delete() {
     }
 
 #if VERSION == VERISON_DEMO
-    if (l_HIO.m04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.m04);
-        l_HIO.m04 = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
     return true;

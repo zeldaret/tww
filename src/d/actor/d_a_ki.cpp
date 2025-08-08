@@ -58,7 +58,7 @@ public:
 
     void genMessage(JORMContext*);
 
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
     /* 0x06 */ u8 m06;
     /* 0x07 */ u8 m07;
@@ -1188,7 +1188,7 @@ static BOOL daKi_Delete(ki_class* i_this) {
     
     if (i_this->m339 != 0) {
         hio_set = false;
-        mDoHIO_deleteChild(l_kiHIO.m04);
+        mDoHIO_deleteChild(l_kiHIO.mNo);
     }
 
 #if VERSION > VERSION_DEMO
@@ -1459,7 +1459,7 @@ static cPhs_State daKi_Create(fopAc_ac_c* a_this) {
         a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
 
         if (!hio_set) {
-            l_kiHIO.m04 = mDoHIO_createChild("キース", &l_kiHIO);
+            l_kiHIO.mNo = mDoHIO_createChild("キース", &l_kiHIO);
             i_this->m339 = 1;
             hio_set = true;
         }
