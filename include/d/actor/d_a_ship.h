@@ -124,7 +124,15 @@ public:
     
     Mtx& getBodyMtx() { return mpBodyAnm->getModel()->getBaseTRMtx(); }
     
-    void checkCraneMode() const {}
+#if VERSION <= VERSION_JPN
+    bool checkCraneMode() const {
+        return mCurMode == 10 && mNextMode == 10;
+    }
+#else
+    bool checkCraneMode() const {
+        return mCurMode == 10 && mNextMode == 10 && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
+    }
+#endif
 #if VERSION == VERSION_DEMO
     BOOL checkForceMove() { return getTornadoActor() || getWhirlActor(); }
     daTornado_c* getTornadoActor() { return mTornadoActor; }
@@ -139,13 +147,13 @@ public:
     f32 getBeltSpeed() const { return m1044.absXZ(); }
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
-    void getCraneAngle() const {}
+    s16 getCraneAngle() const { return m0398; }
     s16 getCraneBaseAngle() const { return mCraneBaseAngle; }
     void getCraneHookAngleY() const {}
     void getCraneRipplePosX() const {}
     void getCraneRipplePosY() const {}
     void getCraneRipplePosZ() const {}
-    void getCraneTop() {}
+    cXyz* getCraneTop() { return m0434; }
     MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(8); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
@@ -156,7 +164,7 @@ public:
     void getTactJntMtx() {}
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
-    void offCraneHookFlg() {}
+    void offCraneHookFlg() { offStateFlg(daSFLG_UNK800_e);}
     void offFantomGanonBattle() {}
     void offStateFlg(daSHIP_SFLG flag) { mStateFlag &= ~flag;}
     void offTornadoFlg() {
@@ -169,7 +177,7 @@ public:
     }
 
     void onCb1Ride() { mStateFlag |= 0x40000000; }
-    void onCraneHookFlg() {}
+    void onCraneHookFlg() { onStateFlg(daSFLG_UNK800_e); }
     void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
     //TODO: Is this right?
