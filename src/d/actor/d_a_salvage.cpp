@@ -4,137 +4,716 @@
 //
 
 #include "d/actor/d_a_salvage.h"
+#include "d/actor/d_a_ship.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_daiocta.h"
+#include "d/res/res_yslvg00.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_map.h"
+#include "d/d_kankyo.h"
+#include "d/d_kankyo_rain.h"
+#include "d/d_item.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+
+char* daSalvage_c::m_arcname = "Yslvg00";
+
+const f32 daSalvage_c::m_outersea_near = 20.0f;
+const f32 daSalvage_c::m_inside_near = 10.0f;
+const f32 daSalvage_c::m_cmap_near = 80.0f;
+const u8 daSalvage_c::m_disappear_frame = 20;
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
+    return ((daSalvage_c*)a_this)->CreateHeap();
 }
 
 /* 00000098-0000039C       .text CreateHeap__11daSalvage_cFv */
-void daSalvage_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSalvage_c::CreateHeap() {
+    mTagData_p = new dSalvage_control_c();
+    if (mTagData_p == NULL) {
+        return false;
+    }
+    mTagData_p->init();
+
+    mModelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, YSLVG00_BDL_YSLVG00);
+    JUT_ASSERT(326, mModelData != NULL);
+
+    for (s32 i = 0; i < 16; i++) {
+        mModels[i] = mDoExt_J3DModel__create(mModelData, 0x80000, 0x11000222);
+        if (mModels[i] == NULL) {
+            return false;
+        }
+    }
+
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BRK_YSLVG00);
+    JUT_ASSERT(347, pbrk != NULL);
+
+    mpBrk = new mDoExt_brkAnm();
+    if (mpBrk == NULL || !mpBrk->init(mModelData, pbrk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return false;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, YSLVG00_BTK_YSLVG00);
+    JUT_ASSERT(361, pbtk != NULL);
+
+    mpBtk = new mDoExt_btkAnm();
+    if (mpBtk == NULL || !mpBtk->init(mModelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return false;
+    }
+    return true;
 }
 
 /* 00000424-00000570       .text CreateInit__11daSalvage_cFv */
-void daSalvage_c::CreateInit() {
-    /* Nonmatching */
+bool daSalvage_c::CreateInit() {
+    setSRoomNo(fopAcM_GetRoomNo(this));
+    m2E8 = getSRoomNo();
+    mProc = &daSalvage_c::proc_wait_init;
+    fopAcM_setStageLayer(this);
+    m2EA = true;
+    mSalvageGetItemEventIdx = dComIfGp_evmng_getEventIdx("SALVAGE_GETITEM", 0xff);
+    mSalvageHazureEventIdx = dComIfGp_evmng_getEventIdx("SALVAGE_HAZURE", 0xff);
+    mSlvgGetItemLeftEventIdx = dComIfGp_evmng_getEventIdx("SLVG_GETITEM_LEFT", 0xff);
+    mEventIdx = dComIfGp_evmng_getEventIdx("SLVG_HAZURE_LEFT", 0xff);
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_0437, &current.pos);
+    if (mEmitter != NULL) {
+        mEmitter->setStatus(1);
+    }
+    return true;
 }
 
 /* 00000570-00000728       .text _create__11daSalvage_cFv */
 cPhs_State daSalvage_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daSalvage_c);
+
+    cPhs_State PVar3 = dComIfG_resLoad(&mPhase, m_arcname);
+    if (PVar3 == cPhs_COMPLEATE_e) {
+        if (mTagData_p == NULL) {
+            if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xB000)) {
+                return cPhs_ERROR_e;
+            }
+            CreateInit();
+            mTagData_p->entry(this, NULL);
+            PVar3 = cPhs_COMPLEATE_e;
+        } else {
+            s8 bVar2 = getSRoomNo();
+            s8 bVar1 = current.roomNo;
+            if (bVar2 != bVar1 && bVar1 != 0) {
+#if VERSION > VERSION_DEMO
+                for (s32 i = 128; i < 160; i++) {
+                    if (checkRegist(i) && isEffectKind(i) && checkUsed(i)) {
+                        mDoAud_seDeleteObject(getPosP(i));
+                    }
+                }
+#endif
+                mTagData_p->init_room(bVar2);
+                m2E8 = getSRoomNo();
+                setSRoomNo(current.roomNo);
+            }
+            mTagData_p->entry(this, NULL);
+            PVar3 = cPhs_ERROR_e;
+        }
+    }
+    return PVar3;
 }
 
 /* 00000728-00000824       .text _delete__11daSalvage_cFv */
 bool daSalvage_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhase, m_arcname);
+
+    if (m2EA) {
+        if (mTagData_p != NULL) {
+            mTagData_p->init_end();
+        }
+
+        if (mEmitter != NULL) {
+            mEmitter->becomeInvalidEmitter();
+            mEmitter = NULL;
+        }
+
+#if VERSION > VERSION_DEMO
+        for (s32 i = 0; i < 160; i++) {
+            if (isEffectKind(i) && checkUsed(i)) {
+                mDoAud_seDeleteObject(getPosP(i));
+            }
+        }
+#endif
+    }
+    return true;
 }
 
 /* 00000824-000008A4       .text _execute__11daSalvage_cFv */
 bool daSalvage_c::_execute() {
-    /* Nonmatching */
+    mTagData_p->calcDistanceXZ();
+    checkOrder();
+
+    if (mProc) {
+        (this->*mProc)();
+    }
+    eventOrder();
+    mStayNo = dComIfGp_roomControl_getStayNo();
+    debug_print2();
+    return true;
 }
 
 /* 000008A4-000008B8       .text salvage_createCB__FPv */
-void salvage_createCB(void*) {
-    /* Nonmatching */
+cPhs_State salvage_createCB(void* v_this) {
+    fopAcM_OnStatus((fopAc_ac_c*)v_this, fopAcStts_FORCEMOVE_e);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000008B8-00000C58       .text checkOrder__11daSalvage_cFv */
 void daSalvage_c::checkOrder() {
-    /* Nonmatching */
+    daShip_c* ship = dComIfGp_getShipActor();
+    u32 uVar2 = getType(getSalvageId());
+    u8 uVar7 = getKind(getSalvageId());
+
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        return;
+    }
+
+    if ((dComIfGp_evmng_startCheck(mSalvageGetItemEventIdx) && m2E9 == 2) || (dComIfGp_evmng_startCheck(mSlvgGetItemLeftEventIdx) && m2E9 == 1) ||
+        (dComIfGp_evmng_startCheck(mSalvageHazureEventIdx) && m2E9 == 4) || (dComIfGp_evmng_startCheck(mEventIdx) && m2E9 == 3))
+    {
+        ship->onCraneHookFlg();
+        cXyz* pPos = ship->getCraneTop();
+        m304 = fpcM_ERROR_PROCESS_ID_e;
+        uVar2 = 1;
+        if (m2E9 == 3 || m2E9 == 4) {
+            uVar2 = 0;
+            m301 = false;
+        } else {
+            m304 = fopAcM_create(PROC_SBOX, 0, pPos, getSRoomNo(), &current.angle, NULL, 0xff, salvage_createCB);
+            m301 = true;
+            if (uVar7 == 0) {
+                uVar2 = 2;
+            }
+        }
+
+        u8 itemNo = getItemNo(getSalvageId());
+        m2EC = fopAcM_create(PROC_SALVAGE_TBOX, (uVar2 << 8) | itemNo, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
+        m2E9 = 0;
+        if (m2EC == fpcM_ERROR_PROCESS_ID_e || (m304 == fpcM_ERROR_PROCESS_ID_e && m301)) {
+            dComIfGp_event_reset();
+        } else {
+            mProc = &daSalvage_c::proc_salvage_init;
+            m302 = 100;
+        }
+    }
+
+    if (m302 == 0) {
+        fopAc_ac_c* actor1;
+        fopAc_ac_c* actor2;
+        BOOL tmp = fopAcM_SearchByID(m2EC, &actor1);
+        if (m301) {
+            tmp &= fopAcM_SearchByID(m304, &actor2);
+        }
+
+        if (!tmp) {
+            fopAcM_delete(m2EC);
+            fopAcM_delete(m304);
+            m301 = 0;
+            dComIfGp_event_reset();
+        }
+    }
+
+    m302--;
+
+    if (dComIfGp_evmng_endCheck(mSalvageGetItemEventIdx) || dComIfGp_evmng_endCheck(mSalvageHazureEventIdx) ||
+        dComIfGp_evmng_endCheck(mSlvgGetItemLeftEventIdx) || dComIfGp_evmng_endCheck(mEventIdx))
+    {
+        ship->offCraneHookFlg();
+        fopAcM_delete(m2EC);
+        m301 = false;
+        end_salvage();
+        dComIfGp_event_reset();
+
+        if ((dComIfGp_evmng_endCheck(mSalvageHazureEventIdx) || dComIfGp_evmng_endCheck(mEventIdx)) && (uVar2 == 2 || uVar7 == 5)) {
+            createEnemy();
+        }
+        proc_wait_init();
+    }
 }
 
 /* 00000C58-00000D64       .text eventOrder__11daSalvage_cFv */
 void daSalvage_c::eventOrder() {
-    /* Nonmatching */
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+        if (m2E9 == 2) {
+            fopAcM_orderOtherEventId(this, mSalvageGetItemEventIdx, 0xff, 0xffff, 0, 1);
+            eventInfo.onCondition(2);
+        } else if (m2E9 == 1) {
+            fopAcM_orderOtherEventId(this, mSlvgGetItemLeftEventIdx, 0xff, 0xffff, 0, 1);
+            eventInfo.onCondition(2);
+        } else if (m2E9 == 4) {
+            fopAcM_orderOtherEventId(this, mSalvageHazureEventIdx, 0xff, 0xffff, 0, 1);
+            eventInfo.onCondition(2);
+        } else if (m2E9 == 3) {
+            fopAcM_orderOtherEventId(this, mEventIdx, 0xff, 0xffff, 0, 1);
+            eventInfo.onCondition(2);
+        }
+    }
 }
 
 /* 00000D64-00000D94       .text proc_wait_init__11daSalvage_cFv */
-void daSalvage_c::proc_wait_init() {
-    /* Nonmatching */
+bool daSalvage_c::proc_wait_init() {
+    m2EC = fpcM_ERROR_PROCESS_ID_e;
+    mProc = &daSalvage_c::proc_wait;
+    return true;
 }
 
 /* 00000D94-0000132C       .text proc_wait__11daSalvage_cFv */
-void daSalvage_c::proc_wait() {
-    /* Nonmatching */
+bool daSalvage_c::proc_wait() {
+    daShip_c* ship = dComIfGp_getShipActor();
+
+    if (dComIfGp_getShipActor() == NULL) {
+        return true;
+    }
+
+    for (s32 i = 0; i < 160; i++) {
+        s32 switchIndex = getSwitchNo(i);
+        u8 uVar2 = getSaveNo(i);
+        u8 roomNo = getRoomNo(i);
+
+        getPos(i);
+        u8 uVar6 = getKind(i);
+
+        if (checkRegist(i)) {
+            f32 sp0C;
+            getDistance(i, &sp0C);
+
+            if (uVar6 == 2) {
+                if (roomNo != 0xff && switchIndex != 0xff && !checkUsed(i) && dComIfGs_isSwitch(switchIndex, roomNo) && !dComIfGs_isOceanSvBit(roomNo, uVar2)) {
+                    clrFlag(i, 1);
+                }
+
+                if (roomNo != 0xff && switchIndex != 0xff && !dComIfGs_isSwitch(switchIndex, roomNo) && !dComIfGs_isOceanSvBit(roomNo, uVar2)) {
+                    daDaiocta_c* bigOcto = (daDaiocta_c*)fopAcM_SearchByName(PROC_DAIOCTA);
+
+                    if (bigOcto != NULL && switchIndex == bigOcto->getSw()) {
+                        cXyz sp40 = getPos(i);
+                        sp40.x = bigOcto->current.pos.x;
+                        sp40.z = bigOcto->current.pos.z;
+
+                        setPos(i, sp40);
+                    }
+                }
+            }
+
+            if (uVar6 == 0) {
+                if (dComIfGs_isOpenCollectMap(uVar2) && !dComIfGs_isCompleteCollectMap(uVar2)) {
+                    u8 iVar3 = getItemNo(i);
+                    bool bVar7 = true;
+
+                    if (isTriforce(iVar3)) {
+                        iVar3 -= 0x60;
+                        if (!dComIfGs_isCollectMapTriforce(iVar3)) {
+                            bVar7 = false;
+                        }
+                    }
+
+                    if (bVar7) {
+                        clrFlag(i, 1);
+                    }
+                }
+            }
+
+            if (uVar6 == 4) {
+                if (dKy_daynight_check() != dKy_TIME_DAY_e) {
+                    if (!dComIfGs_isOceanSvBit(roomNo, uVar2)) {
+                        clrFlag(i, 1);
+                    }
+                } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
+                    setFlag(i, 1);
+                }
+            }
+
+            if (uVar6 == 6) {
+                if (!dKy_moon_type_chk() && dKyr_moon_arrival_check() && !dComIfGs_isEventBit(m_savelabel[uVar2])) {
+                    clrFlag(i, 1);
+                } else {
+                    setFlag(i, 1);
+                }
+            }
+
+            if (isEffectKind(i) && checkUsed(i) && sp0C < 5000.0f) {
+                mDoAud_seStart(JA_SE_OBJ_SALVAGE_TAG, getPosP(i), 0, dComIfGp_getReverb(mStayNo));
+            }
+        }
+    }
+
+    if (checkXZDistance() == -1) {
+        s32 iVar10 = cM_rndF(10000.0f);
+        mRndDepthIdx = iVar10 % 3;
+    }
+
+    setSalvageId(checkDistance());
+    if (isValidSalvageId() && !dComIfGp_event_runCheck()) {
+        u8 cVar11 = getType(getSalvageId());
+        u8 uVar6 = getKind(getSalvageId());
+        attention_info.position = getPos(getSalvageId());
+
+        if (cVar11 == 1) {
+            if (ship->getCraneAngle() < 0) {
+                m2E9 = 1;
+            } else {
+                m2E9 = 2;
+            }
+        } else if (uVar6 == 5 || cVar11 == 0 || cVar11 == 2 || cVar11 == 3) {
+            if (ship->getCraneAngle() < 0) {
+                m2E9 = 3;
+            } else {
+                m2E9 = 4;
+            }
+        }
+    }
+    return true;
 }
 
 /* 0000132C-0000138C       .text proc_salvage_init__11daSalvage_cFv */
-void daSalvage_c::proc_salvage_init() {
-    /* Nonmatching */
+bool daSalvage_c::proc_salvage_init() {
+    mProc = &daSalvage_c::proc_salvage;
+    setFlag(getSalvageId(), 1);
+    return true;
 }
 
 /* 0000138C-00001394       .text proc_salvage__11daSalvage_cFv */
-void daSalvage_c::proc_salvage() {
-    /* Nonmatching */
+bool daSalvage_c::proc_salvage() {
+    return true;
 }
 
 /* 00001394-00001650       .text calcAlpha__11daSalvage_cFv */
 void daSalvage_c::calcAlpha() {
-    /* Nonmatching */
+    f32 cmapNear = m_cmap_near;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    f32 fVar1;
+    if (daSea_ChkArea(player->current.pos.x, player->current.pos.z)) {
+        fVar1 = m_outersea_near;
+    } else {
+        fVar1 = m_inside_near;
+    }
+
+    for (s32 i = 0; i < 160; i++) {
+        s32 disappearFrame = m_disappear_frame;
+
+        if (!checkRegist(i)) {
+            continue;
+        }
+
+        f32 sp08;
+        BOOL iVar3 = getDistance(i, &sp08);
+        f32 fVar2 = fVar1;
+        u8 uVar8 = getKind(i);
+
+        if (uVar8 == 0) {
+            fVar2 = cmapNear;
+        }
+
+        if (checkUsed(i) && iVar3 && sp08 <= 25000.0f && iVar3 && sp08 >= fVar2 * 100.0f) {
+            if (!dComIfGp_event_runCheck() && m2FC > 0) {
+                m2FC--;
+            }
+
+            if (getKind(i) != 2 || m2FC == 0) {
+                cLib_chaseUC(getAlphaP(i), 0xff, 0xff / disappearFrame);
+                setDrawMode(i, 1);
+                if (getKind(i) == 0 && mEmitter != NULL) {
+                    mEmitter->playCreateParticle();
+                    mEmitter->setGlobalTranslation(getPos(i));
+                }
+            }
+        } else {
+            if (cLib_chaseUC(getAlphaP(i), 0, 0xff / disappearFrame)) {
+                setDrawMode(i, 0);
+            } else {
+                setDrawMode(i, 1);
+            }
+
+            if (getKind(i) == 0 && mEmitter != NULL) {
+                mEmitter->stopCreateParticle();
+            }
+        }
+    }
 }
 
 /* 00001650-00001814       .text checkArea__11daSalvage_cF4cXyzi */
-void daSalvage_c::checkArea(cXyz, int) {
-    /* Nonmatching */
+BOOL daSalvage_c::checkArea(cXyz crane_pos, int salvage_id) {
+    static const f32 l_salvage_depth[] = {1000.0f, 1500.0f, 2000.0f};
+
+    getH(salvage_id);
+    f32 dVar3 = GetR(salvage_id);
+    cXyz salvage_pos = getPos(salvage_id);
+    f32 abs = (crane_pos - salvage_pos).absXZ();
+    if (abs < dVar3) {
+        daShip_c* ship = dComIfGp_getShipActor();
+        if (daSea_ChkArea(crane_pos.x, crane_pos.z)) {
+            dVar3 = daSea_calcWave(crane_pos.x, crane_pos.z);
+        } else {
+            cXyz sp30(crane_pos.x, ship->current.pos.y + 100.0f, crane_pos.z);
+            dVar3 = dBgS_ObjGndChk_Wtr_Func(sp30);
+        }
+
+        if (crane_pos.y < dVar3 - l_salvage_depth[mRndDepthIdx]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001814-00001860       .text createEnemy__11daSalvage_cFv */
 void daSalvage_c::createEnemy() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    fopAcM_create(PROC_OQ, 2, &player->current.pos);
 }
 
 /* 00001860-000019FC       .text onSalvageForOship__11daSalvage_cFP9daOship_c */
-void daSalvage_c::onSalvageForOship(daOship_c*) {
-    /* Nonmatching */
+bool daSalvage_c::onSalvageForOship(daOship_c* oship) {
+    if (oship == NULL || oship->getSw() == 0xff) {
+        return false;
+    }
+
+    for (s32 i = 128; i < 160; i++) {
+        if (checkRegist(i)) {
+            s32 uVar2 = getSwitchNo(i);
+            u8 uVar3 = getSaveNo(i);
+            u8 uVar4 = getRoomNo(i);
+
+            getPos(i);
+            getKind(i);
+
+            if (uVar2 != 0xff && uVar2 == oship->getSw() && !dComIfGs_isOceanSvBit(uVar4, uVar3)) {
+                cXyz sp14 = getPos(i);
+                sp14.x = oship->current.pos.x;
+                sp14.z = oship->current.pos.z;
+
+                setPos(i, sp14);
+                setNowAlpha(i, 0xff);
+                m2FC = 0x5a;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /* 000019FC-00001B58       .text end_salvage__11daSalvage_cFv */
-void daSalvage_c::end_salvage() {
-    /* Nonmatching */
+bool daSalvage_c::end_salvage() {
+    u8 uVar4 = getRoomNo(getSalvageId());
+    u8 uVar2 = getKind(getSalvageId());
+    u16 uVar1 = getSaveNo(getSalvageId());
+
+    switch (uVar2) {
+    case 0:
+        dComIfGs_onCompleteCollectMap(uVar1);
+        dComIfGs_onEventBit(0x3e02);
+        break;
+
+    case 2:
+    case 3:
+    case 4:
+        dComIfGs_onOceanSvBit(uVar4, uVar1);
+        break;
+
+    case 6:
+        dComIfGs_onEventBit(m_savelabel[uVar1]);
+        break;
+    }
+
+    if (uVar2 != 6) {
+        init_one(getSalvageId());
+    }
+
+    setSalvageId(-1);
+    return true;
 }
 
 /* 00001B58-00001CEC       .text checkDistance__11daSalvage_cFv */
-void daSalvage_c::checkDistance() {
-    /* Nonmatching */
+int daSalvage_c::checkDistance() {
+    daShip_c* ship = dComIfGp_getShipActor();
+
+    if (ship == NULL) {
+        return -1;
+    }
+
+    cXyz* pcVar6 = ship->getCraneTop();
+    if (pcVar6 == NULL) {
+        return -1;
+    }
+
+    if (!ship->checkCraneMode()) {
+        return -1;
+    }
+
+    s32 iVar5 = -1;
+    for (s32 i = 0; i < 160; i++) {
+        if (checkRegist(i) && checkUsed(i)) {
+            if (checkArea(*pcVar6, i)) {
+                if (getKind(i) == 5) {
+                    iVar5 = i;
+                } else {
+                    return i;
+                }
+            }
+        }
+    }
+
+    if (iVar5 == -1) {
+        return -1;
+    }
+    return iVar5;
 }
 
 /* 00001CEC-00001DD8       .text checkXZDistance__11daSalvage_cFv */
-void daSalvage_c::checkXZDistance() {
-    /* Nonmatching */
+int daSalvage_c::checkXZDistance() {
+    daShip_c* ship = dComIfGp_getShipActor();
+
+    if (ship == NULL) {
+        return -1;
+    }
+
+    cXyz* pcVar6 = ship->getCraneTop();
+    if (pcVar6 == NULL) {
+        return -1;
+    }
+
+    for (s32 i = 0; i < 160; i++) {
+        if (checkRegist(i) && checkUsed(i)) {
+            f32 sp08;
+            if (getDistance(i, &sp08) && sp08 < GetR(i)) {
+                return i;
+            }
+        }
+    }
+
+    return -1;
 }
 
 /* 00001DD8-00001E48       .text getDistance__11daSalvage_cFiPf */
-void daSalvage_c::getDistance(int, float*) {
-    /* Nonmatching */
+BOOL daSalvage_c::getDistance(int salvageId, float* outDist) {
+    if (!checkRegist(salvageId)) {
+        return FALSE;
+    }
+
+    *outDist = getDistance_sub(salvageId);
+    return TRUE;
 }
 
 /* 00001E48-00001FA8       .text send_agb__11daSalvage_cFv */
 void daSalvage_c::send_agb() {
-    /* Nonmatching */
+    u8 bVar5 = 0;
+    fopAcM_setGbaName(this, dItem_GRAPPLING_HOOK_e, 0x40, 0x3f);
+    for (s32 i = 0; i < 160; i++) {
+        if (getKind(i) != 5 && getKind(i) && checkRegist(i) && checkUsed(i) && getRoomNo(i) == dComIfGp_roomControl_getStayNo()) {
+            cXyz sp14 = getPos(i);
+            dMap_drawPoint(0x10, sp14.x, sp14.y, sp14.z, getRoomNo(i), -0x8000, bVar5, gbaName, 0);
+            bVar5++;
+        }
+    }
 }
 
 /* 00001FA8-00001FAC       .text debug_print2__11daSalvage_cFv */
 void daSalvage_c::debug_print2() {
-    /* Nonmatching */
 }
 
 /* 00001FAC-00002158       .text _draw__11daSalvage_cFv */
 bool daSalvage_c::_draw() {
-    /* Nonmatching */
+    static const GXColor unused_5277 = {255, 0, 0, 255};
+
+    debugDraw();
+    calcAlpha();
+
+    s32 iVar10 = 0;
+    for (s32 i = 0; i < 160; i++) {
+        if (checkRegist(i) && checkUsed(i) && isEffectKind(i) && getDrawMode(i) != 0) {
+            J3DMaterial* material = mModelData->getMaterialNodePointer(0);
+
+            u8 tmpAlpha = *getAlphaP(i);
+            if (material == NULL) {
+                break;
+            }
+
+            u8 oldAlpha = material->getTevKColor(3)->mColor.a;
+            material->getTevKColor(3)->mColor.a = tmpAlpha;
+
+            set_mtx(mModels[iVar10], i);
+            mpBrk->entry(mModelData);
+            mpBtk->entry(mModelData);
+            mDoExt_modelUpdateDL(mModels[iVar10]);
+
+            material->getTevKColor(3)->mColor.a = oldAlpha;
+
+            if (++iVar10 >= 16) {
+                break;
+            }
+        }
+    }
+
+    mpBrk->play();
+    mpBtk->play();
+    send_agb();
+    return true;
 }
 
 /* 00002158-000023B0       .text set_mtx__11daSalvage_cFP8J3DModeli */
-void daSalvage_c::set_mtx(J3DModel*, int) {
-    /* Nonmatching */
-}
+void daSalvage_c::set_mtx(J3DModel* model, int arg2) {
+    cXyz sp58 = getPos(arg2);
+    JGeometry::TVec3<s16> rot(0, 0, 0);
 
+    if (daSea_ChkArea(sp58.x, sp58.z)) {
+        f32 pcVar3 = daSea_calcWave(sp58.x - 50.0f, sp58.z - 50.0f);
+        f32 pnVar4 = daSea_calcWave(sp58.x - 50.0f, sp58.z + 50.0f);
+        f32 pnVar5 = daSea_calcWave(sp58.x + 50.0f, sp58.z - 50.0f);
+
+        cXyz sp4C(sp58.x - 50.0f, pcVar3, sp58.z - 50.0f);
+        cXyz sp40(sp58.x - 50.0f, pnVar4, sp58.z + 50.0f);
+        cXyz sp34(sp58.x + 50.0f, pnVar5, sp58.z - 50.0f);
+
+        cM3dGTri sp64(&sp4C, &sp40, &sp34);
+        cM3d_CalcVecAngle(sp64.mNormal, &rot.x, &rot.z);
+        if (mEmitter != NULL) {
+            mEmitter->setGlobalRotation(rot);
+        }
+        sp58.y = daSea_calcWave(sp58.x, sp58.z);
+    } else {
+        f32 dVar2 = dBgS_ObjGndChk_Wtr_Func(sp58);
+        if (dVar2 != -G_CM3D_F_INF) {
+            sp58.y = dVar2;
+        }
+    }
+#if VERSION > VERSION_DEMO
+    setPos(arg2, sp58);
+#endif
+    model->setBaseScale(getScale(arg2));
+    mDoMtx_stack_c::transS(sp58.x, sp58.y, sp58.z);
+    mDoMtx_stack_c::XYZrotM(rot.x, rot.y, rot.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+}
+#if VERSION > VERSION_DEMO
+static const f32 unused_5483[1] = {1000.0f};
+#endif
 /* 000023B0-0000240C       .text isEffectKind__11daSalvage_cFi */
-void daSalvage_c::isEffectKind(int) {
-    /* Nonmatching */
+BOOL daSalvage_c::isEffectKind(int salvageId) {
+    u8 uVar1 = getKind(salvageId);
+    BOOL ret = FALSE;
+
+    switch (uVar1) {
+    case 5:
+        break;
+
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 6:
+        ret = TRUE;
+        break;
+    }
+    return ret;
 }
 
 /* 0000240C-00002410       .text debugDraw__11daSalvage_cFv */

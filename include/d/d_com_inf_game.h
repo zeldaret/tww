@@ -1140,6 +1140,10 @@ inline BOOL dComIfGs_isGetCollectMap(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_no - 1);
 }
 
+inline void dComIfGs_onCompleteCollectMap(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onCompleteMap(i_no - 1);
+}
+
 inline void dComIfGs_onGetCollectMap(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onGetMap(i_no - 1);
 }
@@ -1262,6 +1266,10 @@ inline u8 dComIfGs_getEventReg(u16 i_reg) {
 
 inline BOOL dComIfGs_isOceanSvBit(u8 i_grid, u16 i_bit) {
     return g_dComIfG_gameInfo.save.getOcean().isOceanSvBit(i_grid, i_bit);
+}
+
+inline void dComIfGs_onOceanSvBit(u8 i_grid, u16 i_bit) {
+    g_dComIfG_gameInfo.save.getOcean().onOceanSvBit(i_grid, i_bit);
 }
 
 inline BOOL dComIfGs_isEventBit(u16 id) {
