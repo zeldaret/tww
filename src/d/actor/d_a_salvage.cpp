@@ -321,11 +321,11 @@ bool daSalvage_c::proc_wait() {
             }
 
             if (uVar6 == 4) {
-                if (dKy_daynight_check()) {
+                if (dKy_daynight_check() != dKy_TIME_DAY_e) {
                     if (!dComIfGs_isOceanSvBit(roomNo, uVar2)) {
                         clrFlag(i, 1);
                     }
-                } else if (!dKy_daynight_check()) {
+                } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
                     setFlag(i, 1);
                 }
             }
