@@ -167,7 +167,7 @@ cPhs_State salvage_createCB(void* v_this) {
 
 /* 000008B8-00000C58       .text checkOrder__11daSalvage_cFv */
 void daSalvage_c::checkOrder() {
-    daShip_c* ship = dComIfGp_getShipActor();
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     u32 uVar2 = getType(getSalvageId());
     u8 uVar7 = getKind(getSalvageId());
 
@@ -194,7 +194,8 @@ void daSalvage_c::checkOrder() {
         }
 
         u8 itemNo = getItemNo(getSalvageId());
-        m2EC = fopAcM_create(PROC_SALVAGE_TBOX, (uVar2 << 8) | itemNo, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
+        u32 params = (uVar2 << 8) | itemNo;
+        m2EC = fopAcM_create(PROC_SALVAGE_TBOX, params, pPos, getSRoomNo(), &current.angle, &scale, 0xff, salvage_createCB);
         m2E9 = 0;
         if (m2EC == fpcM_ERROR_PROCESS_ID_e || (m304 == fpcM_ERROR_PROCESS_ID_e && m301)) {
             dComIfGp_event_reset();
@@ -272,7 +273,7 @@ bool daSalvage_c::proc_wait() {
         return true;
     }
 
-    for (s32 i = 0; i < 160; i++) {
+    for (int i = 0; i < 160; i++) {
         s32 switchIndex = getSwitchNo(i);
         u8 uVar2 = getSaveNo(i);
         u8 roomNo = getRoomNo(i);
@@ -386,19 +387,18 @@ bool daSalvage_c::proc_salvage() {
 
 /* 00001394-00001650       .text calcAlpha__11daSalvage_cFv */
 void daSalvage_c::calcAlpha() {
+    f32 fVar1;
     f32 cmapNear = m_cmap_near;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    f32 fVar1;
     if (daSea_ChkArea(player->current.pos.x, player->current.pos.z)) {
         fVar1 = m_outersea_near;
     } else {
         fVar1 = m_inside_near;
     }
 
+    u8 disappearFrame = m_disappear_frame;
     for (s32 i = 0; i < 160; i++) {
-        s32 disappearFrame = m_disappear_frame;
-
         if (!checkRegist(i)) {
             continue;
         }
