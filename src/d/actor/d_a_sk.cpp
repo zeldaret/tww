@@ -4,34 +4,192 @@
 //
 
 #include "d/actor/d_a_sk.h"
+#include "d/res/res_sk.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_jnt_hit.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
 
 /* 00000078-00000240       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 uVar4 = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        sk_class* i_this = (sk_class*)model->getUserArea();
+        cXyz sp08;
+
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+
+            cMtx_YrotM(*calc_mtx, i_this->m2C2[uVar4].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2C2[uVar4].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2C2[uVar4].z);
+
+            switch (uVar4) {
+            case 0:
+                sp08.x = 0.0f;
+                sp08.y = 0.0f;
+                sp08.z = 180.0f;
+                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+                break;
+
+            case 1:
+                sp08.x = 0.0f;
+                sp08.y = 0.0f;
+                sp08.z = 250.0f;
+                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+                break;
+
+            case 2:
+                sp08.x = 0.0f;
+                sp08.y = 0.0f;
+                sp08.z = 250.0f;
+                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+                break;
+
+            case 3:
+                sp08.x = 0.0f;
+                sp08.y = 0.0f;
+                sp08.z = 180.0f;
+                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+                break;
+            }
+
+            model->setAnmMtx(uVar4, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 0000027C-000002EC       .text daSk_Draw__FP8sk_class */
-static BOOL daSk_Draw(sk_class*) {
-    /* Nonmatching */
+static BOOL daSk_Draw(sk_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+
+    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT, &i_this->actor.current.pos, &i_this->actor.tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->actor.tevStr);
+    i_this->mpMorf->entryDL();
+    return TRUE;
 }
 
 /* 000002EC-00000498       .text dousa_move__FP8sk_class */
-void dousa_move(sk_class*) {
-    /* Nonmatching */
+void dousa_move(sk_class* i_this) {
+    for (s32 i = 1; i < 4; i++) {
+        i_this->m2C2[i].x = cM_ssin(i_this->m2BE * 2000 + (i * 20000)) * 2000.0f;
+        i_this->m2C2[i].y = cM_ssin(i_this->m2BE * 1300 + (i * 12000)) * 2000.0f;
+        i_this->m2C2[i].z = cM_ssin(i_this->m2BE * 1000 + (i * 15000)) * 4000.0f;
+    }
+
+    s16 angle = cLib_distanceAngleS(i_this->m2C2[1].z, 0x1000);
+    if (angle < 0x1000) {
+        if (!i_this->m2BC) {
+            fopAcM_seStart(&i_this->actor, JA_SE_OBJ_SHOKU_LIFT_MOVE, 0);
+            i_this->m2BC = true;
+        }
+    } else {
+        i_this->m2BC = false;
+    }
+    i_this->m2BE++;
 }
 
+#if VERSION > VERSION_DEMO
 /* 00000498-00000758       .text body_atari_check__FP8sk_class */
-void body_atari_check(sk_class*) {
-    /* Nonmatching */
+void body_atari_check(sk_class* i_this) {
+    fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
+
+    if (i_this->m2C0 > 0) {
+        i_this->m2C0--;
+        return;
+    }
+
+    for (s32 i = 0; i < 4; i++) {
+        if (i_this->m348[i].ChkTgHit()) {
+            cCcD_Obj* hitObj = i_this->m348[i].GetTgHitObj();
+            if (hitObj == NULL) {
+                break;
+            }
+            i_this->m2C0 = 8;
+
+            switch (hitObj->GetAtType()) {
+            case AT_TYPE_MACHETE:
+            case AT_TYPE_SWORD:
+            case AT_TYPE_UNK800:
+            case AT_TYPE_DARKNUT_SWORD:
+            case AT_TYPE_MOBLIN_SPEAR:
+            case AT_TYPE_PGANON_SWORD:
+                fopAcM_seStart(a_this, JA_SE_LK_SW_HIT_S, 0x44);
+                break;
+
+            case AT_TYPE_BOOMERANG:
+            case AT_TYPE_BOKO_STICK:
+            case AT_TYPE_UNK2000:
+            case AT_TYPE_STALFOS_MACE:
+                fopAcM_seStart(a_this, JA_SE_LK_W_WEP_HIT, 0x44);
+                break;
+
+            case AT_TYPE_SKULL_HAMMER:
+                fopAcM_seStart(a_this, JA_SE_LK_HAMMER_HIT, 0x44);
+                break;
+
+            case AT_TYPE_FIRE_ARROW:
+            case AT_TYPE_NORMAL_ARROW:
+            case AT_TYPE_LIGHT_ARROW:
+            case AT_TYPE_ICE_ARROW:
+            case AT_TYPE_GRAPPLING_HOOK:
+                fopAcM_seStart(a_this, JA_SE_LK_MS_WEP_HIT, 0x44);
+                break;
+
+            case AT_TYPE_BOMB:
+            case AT_TYPE_WIND:
+                break;
+            }
+        }
+    }
 }
+#endif
 
 /* 00000758-000008D4       .text daSk_Execute__FP8sk_class */
-static BOOL daSk_Execute(sk_class*) {
-    /* Nonmatching */
+static BOOL daSk_Execute(sk_class* i_this) {
+    dousa_move(i_this);
+
+    J3DModel* model = i_this->mpMorf->getModel();
+    model->setBaseScale(i_this->actor.scale);
+    mDoMtx_stack_c::transS(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z);
+    mDoMtx_stack_c::YrotM(i_this->actor.current.angle.y);
+    mDoMtx_stack_c::XrotM(i_this->actor.current.angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->actor.current.angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    i_this->mpMorf->calc();
+
+    for (s32 i = 0; i < 4; i++) {
+        i_this->m348[i].SetC(i_this->m2DC[i]);
+        switch (i) {
+        case 0:
+            i_this->m348[i].SetR(220.0f);
+            break;
+
+        case 1:
+            i_this->m348[i].SetR(180.0f);
+            break;
+
+        case 2:
+            i_this->m348[i].SetR(120.0f);
+            break;
+
+        case 3:
+            i_this->m348[i].SetR(70.0f);
+            break;
+        }
+        dComIfG_Ccsp()->Set(&i_this->m348[i]);
+    }
+#if VERSION > VERSION_DEMO
+    body_atari_check(i_this);
+#endif
+    return TRUE;
 }
 
 /* 000008D4-000008DC       .text daSk_IsDelete__FP8sk_class */
@@ -40,17 +198,48 @@ static BOOL daSk_IsDelete(sk_class*) {
 }
 
 /* 000008DC-0000090C       .text daSk_Delete__FP8sk_class */
-static BOOL daSk_Delete(sk_class*) {
-    /* Nonmatching */
+static BOOL daSk_Delete(sk_class* i_this) {
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Sk");
+    return TRUE;
 }
 
 /* 0000090C-00000A6C       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* a_this) {
+    sk_class* i_this = (sk_class*)a_this;
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", SK_BDL_TURU_00);
+
+    i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
+    if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+
+    for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    }
+
+#if VERSION > VERSION_DEMO
+    static Vec sph_offset = {0.0f, 0.0f, 0.0f};
+    static __jnt_hit_data_c search_data[] = {
+        {8, 1, 140.0f, &sph_offset},
+        {8, 2, 90.0f, &sph_offset},
+        {8, 3, 50.0f, &sph_offset},
+    };
+
+    i_this->m924 = JntHit_create(i_this->mpMorf->getModel(), search_data, 3);
+    if (i_this->m924 != NULL) {
+        i_this->actor.jntHit = i_this->m924;
+    } else {
+        return FALSE;
+    }
+#endif
+
+    return TRUE;
 }
 
 /* 00000A6C-00000E30       .text daSk_Create__FP10fopAc_ac_c */
-static cPhs_State daSk_Create(fopAc_ac_c*) {
+static cPhs_State daSk_Create(fopAc_ac_c* a_this) {
     /* Nonmatching */
     static dCcD_SrcSph body_co_sph_src = {
         // dCcD_SrcGObjInf
@@ -80,6 +269,70 @@ static cPhs_State daSk_Create(fopAc_ac_c*) {
             /* Radius */ 15.0f,
         }},
     };
+
+    sk_class* i_this = (sk_class*)a_this;
+
+#if VERSION == VERSION_DEMO
+    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
+    if (PVar2 == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(a_this, sk_class);
+#else
+    fopAcM_SetupActor(a_this, sk_class);
+
+    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
+    if (PVar2 == cPhs_COMPLEATE_e) {
+#endif
+        i_this->m2B4 = fopAcM_GetParam(i_this);
+        if (i_this->m2B4 == 0xff) {
+            i_this->m2B4 = 0;
+        }
+
+        i_this->m2B5 = fopAcM_GetParam(i_this) >> 0x18;
+        if (i_this->m2B5 != 0xff && fopAcM_isSwitch(a_this, i_this->m2B5)) {
+            return cPhs_ERROR_e;
+        }
+
+#if VERSION == VERSION_DEMO
+        u32 heapSize = 0xC80;
+#else
+        u32 heapSize = 0xD00;
+#endif
+        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, heapSize)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
+        fopAcM_SetMin(a_this, -800.0f, -200.0f, -400.0f);
+        fopAcM_SetMax(a_this, 500.0f, 1000.0f, 1000.0f);
+        a_this->attention_info.flags = 0;
+        i_this->m2BE = (u8)fopAcM_GetID(a_this) << 0xCu;
+
+        for (s32 i = 1; i < 4; i++) {
+            i_this->m2C2[i].x = cM_ssin(i_this->m2BE * 2000 + (i * 20000)) * 2000.0f;
+            i_this->m2C2[i].y = cM_ssin(i_this->m2BE * 1300 + (i * 12000)) * 2000.0f;
+            i_this->m2C2[i].z = cM_ssin(i_this->m2BE * 1000 + (i * 15000)) * 4000.0f;
+        }
+
+        J3DModel* model = i_this->mpMorf->getModel();
+        model->setBaseScale(a_this->scale);
+        mDoMtx_stack_c::transS(a_this->current.pos.x, a_this->current.pos.y, a_this->current.pos.z);
+        i_this->mStts.Init(0x32, 0, a_this);
+#if VERSION > VERSION_DEMO
+        i_this->m2C0 = 8;
+#endif
+        mDoMtx_stack_c::YrotM(a_this->current.angle.y);
+        mDoMtx_stack_c::XrotM(a_this->current.angle.x);
+        mDoMtx_stack_c::ZrotM(a_this->current.angle.z);
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
+        i_this->mpMorf->calc();
+
+        for (s32 i = 0; i <= 4; i++) {
+            i_this->m348[i].Set(body_co_sph_src);
+            i_this->m348[i].SetStts(&i_this->mStts);
+            dComIfG_Ccsp()->Set(&i_this->m348[i]);
+        }
+    }
+    return PVar2;
 }
 
 static actor_method_class l_daSk_Method = {

@@ -11,7 +11,7 @@ public:
     /* 0x2 */ s16 mJointIndex;
     /* 0x4 */ f32 mRadius;
     /* 0x8 */ Vec* mpOffsets;
-};
+}; // size = 0xC
 
 class JntHit_c {
 public:
