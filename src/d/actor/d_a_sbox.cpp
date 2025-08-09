@@ -4,122 +4,503 @@
 //
 
 #include "d/actor/d_a_sbox.h"
+#include "d/actor/d_a_ship.h"
+#include "d/res/res_dalways.h"
 #include "d/d_procname.h"
+#include "d/d_kankyo.h"
 #include "d/d_priority.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+
+const char daSbox_c::M_arcname[] = "Dalways";
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
+    return ((daSbox_c*)a_this)->CreateHeap();
 }
 
 /* 00000098-0000034C       .text CreateHeap__8daSbox_cFv */
-void daSbox_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSbox_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_BOXSEA));
+    JUT_ASSERT(113, modelData != NULL);
+
+    if (!mBck1.init(modelData, (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_BOXOPENBOX)), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
+    {
+        return FALSE;
+    }
+
+    mpModel1 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel1 == NULL) {
+        return FALSE;
+    }
+
+    J3DModelData* flashModelData = (J3DModelData*)(dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH));
+    JUT_ASSERT(140, flashModelData != NULL);
+
+    mpModel2 = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
+    if (mpModel2 == NULL) {
+        return FALSE;
+    }
+
+    if (!mBck2.init(
+            flashModelData,
+            (J3DAnmTransform*)(dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2)),
+            true,
+            J3DFrameCtrl::EMode_NONE,
+            1.0f,
+            0,
+            -1,
+            false
+        ))
+    {
+        return FALSE;
+    }
+
+    if (!mBtk.init(
+            flashModelData,
+            (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH)),
+            true,
+            J3DFrameCtrl::EMode_NONE,
+            1.0f,
+            0,
+            -1,
+            false,
+            0
+        ))
+    {
+        return FALSE;
+    }
+
+    if (!mBrk.init(
+            flashModelData,
+            (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH)),
+            true,
+            J3DFrameCtrl::EMode_NONE,
+            1.0f,
+            0,
+            -1,
+            false,
+            0
+        ))
+    {
+        return FALSE;
+    }
+
+    calcMtx();
+    return TRUE;
 }
 
 /* 0000034C-00000430       .text calcMtx__8daSbox_cFv */
 void daSbox_c::calcMtx() {
-    /* Nonmatching */
+    mpModel1->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mpModel2->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000430-00000598       .text shipMtx__8daSbox_cFv */
 void daSbox_c::shipMtx() {
-    /* Nonmatching */
+    daShip_c* ship = dComIfGp_getShipActor();
+    if (ship == NULL) {
+        JUT_ASSERT(220, FALSE);
+    }
+    mDoMtx_stack_c::copy(ship->getBodyMtx());
+    mDoMtx_stack_c::transM(0.0f, 22.35f, 20.0f);
+    mDoMtx_stack_c::YrotM(0x7fff);
+    mpModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &current.pos);
+
+    attention_info.position = current.pos;
+    eyePos = current.pos;
+    current.angle.y = ship->shape_angle.y + 0x7fff;
+    shape_angle.y = ship->shape_angle.y;
+
+    mDoMtx_stack_c::copy(ship->getBodyMtx());
+    mDoMtx_stack_c::transM(0.0f, 72.35f, 20.0f);
+    mpModel2->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000598-0000062C       .text volmProc__8daSbox_cFv */
-void daSbox_c::volmProc() {
-    /* Nonmatching */
+BOOL daSbox_c::volmProc() {
+    if (mEmitter == NULL) {
+        return TRUE;
+    }
+    m300++;
+    if (m300 == 0x24) {
+        mEmitter->setGlobalAlpha(0xff);
+    } else {
+        if (m300 >= 0xb5) {
+            mEmitter->setGlobalAlpha(0);
+            mEmitter->becomeInvalidEmitter();
+            mEmitter = NULL;
+            return TRUE;
+        }
+
+        if (m300 > 0x9c) {
+            u8 tmp = 10;
+            mEmitter->setGlobalAlpha((0xB5 - m300) * tmp);
+        }
+    }
+    return FALSE;
 }
 
 /* 0000062C-00000700       .text darkProc__8daSbox_cFv */
-void daSbox_c::darkProc() {
-    /* Nonmatching */
+BOOL daSbox_c::darkProc() {
+    BOOL ret;
+
+    if (!chkFlag(0x10)) {
+        return TRUE;
+    }
+
+    m308++;
+    if (m308 > 0x96) {
+        m304 = 1.0f;
+        dKy_set_allcol_ratio(1.0f);
+        clrFlag(0x10);
+        ret = 1;
+    } else {
+        if (m308 > 0x78) {
+            f32 tmp = (m308 - 120.0f) / 30.0f;
+            m304 = tmp * 0.6f + 0.4f;
+        }
+        dKy_set_allcol_ratio(m304);
+        ret = 0;
+    }
+    return ret;
 }
 
 /* 00000700-000007F4       .text lightProc__8daSbox_cFv */
-void daSbox_c::lightProc() {
-    /* Nonmatching */
+BOOL daSbox_c::lightProc() {
+    if (!chkFlag(0x20)) {
+        return TRUE;
+    }
+
+    m34C++;
+    if (m34C < 0x9c) {
+        if (m30C.mPower < 130.0f) {
+            m30C.mPower += 13.0f;
+        }
+
+        if (m32C.mPower < 120.0f) {
+            m32C.mPower += 12.0f;
+        }
+    } else {
+        if (m30C.mPower > 5.2f) {
+            m30C.mPower -= 5.2f;
+        } else {
+            m30C.mPower = 0.0f;
+        }
+
+        if (m32C.mPower > 4.8f) {
+            m32C.mPower -= 4.8f;
+        } else {
+            m32C.mPower = 0.0f;
+        }
+
+        if (m30C.mPower == 0.0f && m32C.mPower == 0.0f) {
+            clrFlag(0x20);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 000007F4-000008BC       .text lightInit__8daSbox_cFv */
 void daSbox_c::lightInit() {
-    /* Nonmatching */
+    m30C.mPos.set(current.pos.x, current.pos.y + 55.0f, current.pos.z);
+    m30C.mColor.r = 0xff;
+    m30C.mColor.g = 0xff;
+    m30C.mColor.b = 0xff;
+    m30C.mPower = 0.0f;
+    m30C.mFluctuation = 0.0f;
+
+    m32C.mPos.set(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    m32C.mColor.r = 0xff;
+    m32C.mColor.g = 0xff;
+    m32C.mColor.b = 100;
+    m32C.mPower = 0.0f;
+    m32C.mFluctuation = 0.0f;
+
+    setFlag(0x20);
+    m34C = 0;
+    dKy_plight_priority_set(&m30C);
+    dKy_efplight_set(&m32C);
 }
 
 /* 000008BC-000008F0       .text CreateInit__8daSbox_cFv */
-void daSbox_c::CreateInit() {
-    /* Nonmatching */
+BOOL daSbox_c::CreateInit() {
+    tevStr.mRoomNo = current.roomNo;
+    setAction(0);
+    calcMtx();
+    return TRUE;
 }
 
 /* 000008F0-000009F0       .text create__8daSbox_cFv */
 cPhs_State daSbox_c::create() {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
+    if (PVar1 != cPhs_COMPLEATE_e) {
+        return PVar1;
+    }
+    fopAcM_SetupActor(this, daSbox_c);
+#else
+    fopAcM_SetupActor(this, daSbox_c);
+    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
+    if (PVar1 != cPhs_COMPLEATE_e) {
+        return PVar1;
+    }
+#endif
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x15C0)) {
+        return cPhs_ERROR_e;
+    }
+
+    CreateInit();
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000B4C-00000BB4       .text demoInitWait__8daSbox_cFv */
 void daSbox_c::demoInitWait() {
-    /* Nonmatching */
+    int* puVar1 = dComIfGp_evmng_getMyIntegerP(m2F8, "Timer");
+    if (puVar1 != NULL) {
+        m2F4 = *puVar1;
+    } else {
+        m2F4 = 0;
+    }
 }
 
 /* 00000BB4-00000C04       .text demoProcWait__8daSbox_cFv */
-void daSbox_c::demoProcWait() {
-    /* Nonmatching */
+BOOL daSbox_c::demoProcWait() {
+    if (m2F4 > 0) {
+        m2F4--;
+    } else {
+        dComIfGp_evmng_cutEnd(m2F8);
+    }
+    return FALSE;
 }
 
 /* 00000C04-00000F1C       .text demoInitOpen__8daSbox_cFv */
 void daSbox_c::demoInitOpen() {
-    /* Nonmatching */
+    mBck1.setPlaySpeed(1.0f);
+    mBck2.setPlaySpeed(1.0f);
+    mBtk.setPlaySpeed(1.0f);
+    mBrk.setPlaySpeed(1.0f);
+
+    fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S1, 0);
+    fopAcM_seStart(this, JA_SE_OBJ_TBOX_UNLOCK, 0);
+
+    mDoAud_subBgmStart(0x80000009);
+    setFlag(2);
+
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
+
+    cXyz scale;
+    scale.set(0.7f, 1.0f, 1.0f);
+
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
+    if (pJVar1 != NULL) {
+        pJVar1->setEmitterScale(scale);
+    }
+
+    JPABaseEmitter* pJVar2 = dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
+    if (pJVar2 != NULL) {
+        pJVar2->setEmitterScale(scale);
+    }
+
+    mEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
+    if (mEmitter != NULL) {
+        m300 = 0;
+        mEmitter->setGlobalAlpha(0);
+        mEmitter->setGlobalParticleHeightScale(0.7f);
+    }
+
+    setFlag(0x10);
+    m304 = 0.4f;
+    m308 = 0;
+    lightInit();
 }
 
 /* 00000F1C-00000FE4       .text demoProcOpen__8daSbox_cFv */
 void daSbox_c::demoProcOpen() {
-    /* Nonmatching */
+    if (chkFlag(1)) {
+        if (mBck1.play()) {
+            fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
+            dComIfGp_evmng_cutEnd(m2F8);
+            clrFlag(1);
+        }
+    } else {
+        dComIfGp_evmng_cutEnd(m2F8);
+    }
 }
 
 /* 00000FE4-0000107C       .text demoInitDelete__8daSbox_cFv */
 void daSbox_c::demoInitDelete() {
-    /* Nonmatching */
+    if (chkFlag(2)) {
+        if (mEmitter != NULL) {
+            mEmitter->becomeInvalidEmitter();
+            mEmitter = NULL;
+        }
+
+        if (chkFlag(0x10)) {
+            dKy_set_allcol_ratio(1.0f);
+            clrFlag(0x10);
+        }
+    }
+
+    dKy_plight_cut(&m30C);
+    dKy_efplight_cut(&m32C);
 }
 
 /* 0000107C-000010B0       .text demoProcDelete__8daSbox_cFv */
 void daSbox_c::demoProcDelete() {
-    /* Nonmatching */
+    dComIfGp_evmng_cutEnd(m2F8);
 }
 
 /* 000010B0-00001110       .text demoInitCom__8daSbox_cFv */
 void daSbox_c::demoInitCom() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_getMyIntegerP(m2F8, "DISP") != NULL) {
+        setFlag(8);
+    }
 }
 
 /* 00001110-000011F8       .text demoProcCom__8daSbox_cFv */
 void daSbox_c::demoProcCom() {
-    /* Nonmatching */
+    if (chkFlag(2)) {
+        BOOL iVar1 = mBck2.play();
+        BOOL iVar2 = mBtk.play();
+        BOOL iVar3 = mBrk.play();
+
+        if ((s32)mBck2.getFrame() == 36) {
+            setFlag(4);
+        }
+
+        BOOL iVar4 = volmProc();
+        BOOL iVar5 = darkProc();
+        BOOL iVar6 = lightProc();
+        if (iVar1 && iVar2 && iVar3 && iVar4 && iVar5 && iVar6) {
+            clrFlag(2 | 4);
+        }
+    }
 }
 
 /* 000011F8-00001240       .text getNowEventAction__8daSbox_cFv */
-void daSbox_c::getNowEventAction() {
-    /* Nonmatching */
+s32 daSbox_c::getNowEventAction() {
+    static char* action_table[] = {"WAIT", "OPEN", "DELETE"};
+
+    return dComIfGp_evmng_getMyActIdx(m2F8, action_table, 3, 0, 1);
 }
 
 /* 00001240-00001388       .text demoProc__8daSbox_cFv */
-void daSbox_c::demoProc() {
-    /* Nonmatching */
+BOOL daSbox_c::demoProc() {
+    m2F8 = dComIfGp_evmng_getMyStaffId("tkrSlv");
+    if (m2F8 == -1) {
+        return FALSE;
+    }
+
+    s32 iVar1 = getNowEventAction();
+
+    if (dComIfGp_evmng_getIsAddvance(m2F8)) {
+        setFlag(1);
+        demoInitCom();
+
+        switch (iVar1) {
+        case 0:
+            demoInitWait();
+            break;
+
+        case 1:
+            demoInitOpen();
+            break;
+
+        case 2:
+            demoInitDelete();
+            break;
+        }
+    }
+
+    switch (iVar1) {
+    case 0:
+        demoProcWait();
+        break;
+
+    case 1:
+        demoProcOpen();
+        break;
+
+    case 2:
+        demoProcDelete();
+        break;
+
+    default:
+        dComIfGp_evmng_cutEnd(m2F8);
+        break;
+    }
+
+    demoProcCom();
+    return TRUE;
 }
 
 /* 00001388-000013D0       .text actionWait__8daSbox_cFv */
-void daSbox_c::actionWait() {
-    /* Nonmatching */
+BOOL daSbox_c::actionWait() {
+    shipMtx();
+    if (!demoProc()) {
+        fopAcM_delete(this);
+    }
+    return TRUE;
+}
+
+BOOL daSbox_c::draw() {
+    fopAc_ac_c* a_this = this;
+
+    J3DModelData* pJVar1 = mpModel1->getModelData();
+    if (!chkFlag(8)) {
+        return TRUE;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &a_this->tevStr);
+    g_env_light.setLightTevColorType(mpModel1, &a_this->tevStr);
+
+    mBck1.entry(pJVar1);
+    mDoExt_modelUpdateDL(mpModel1);
+
+    if (chkFlag(4)) {
+        pJVar1 = mpModel2->getModelData();
+        mBck2.entry(pJVar1);
+        mBtk.entry(pJVar1);
+        mBrk.entry(pJVar1);
+
+        dComIfGd_setListMaskOff();
+        mDoExt_modelUpdateDL(mpModel2);
+        dComIfGd_setList();
+    }
+    return TRUE;
 }
 
 /* 000013D0-00001500       .text daSbox_Draw__FP8daSbox_c */
-static BOOL daSbox_Draw(daSbox_c*) {
-    /* Nonmatching */
+static BOOL daSbox_Draw(daSbox_c* i_this) {
+    return ((daSbox_c*)i_this)->draw();
+}
+
+BOOL daSbox_c::execute() {
+    switch (m2EC) {
+    case 0:
+        actionWait();
+        break;
+    }
+    return TRUE;
 }
 
 /* 00001500-00001534       .text daSbox_Execute__FP8daSbox_c */
-static BOOL daSbox_Execute(daSbox_c*) {
-    /* Nonmatching */
+static BOOL daSbox_Execute(daSbox_c* i_this) {
+    return ((daSbox_c*)i_this)->execute();
 }
 
 /* 00001534-0000153C       .text daSbox_IsDelete__FP8daSbox_c */
@@ -128,13 +509,16 @@ static BOOL daSbox_IsDelete(daSbox_c*) {
 }
 
 /* 0000153C-00001640       .text daSbox_Delete__FP8daSbox_c */
-static BOOL daSbox_Delete(daSbox_c*) {
-    /* Nonmatching */
+static BOOL daSbox_Delete(daSbox_c* i_this) {
+    dComIfG_resDeleteDemo(&i_this->mPhase, daSbox_c::M_arcname);
+    mDoAud_seDeleteObject(&i_this->eyePos);
+    i_this->~daSbox_c();
+    return TRUE;
 }
 
 /* 00001640-00001660       .text daSbox_Create__FP10fopAc_ac_c */
-static cPhs_State daSbox_Create(fopAc_ac_c* i_this) {
-    return ((daSbox_c*)i_this)->create();
+static cPhs_State daSbox_Create(fopAc_ac_c* a_this) {
+    return ((daSbox_c*)a_this)->create();
 }
 
 static actor_method_class l_daSbox_Method = {
