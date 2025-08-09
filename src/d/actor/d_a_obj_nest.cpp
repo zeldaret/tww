@@ -122,7 +122,7 @@ void daObjNest::Act_c::init_mtx() {
 void daObjNest::Act_c::rideCB(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     daObjNest::Act_c * i_this = (daObjNest::Act_c *)i_ac;
     f32 actorDistXZ2 = fopAcM_searchActorDistanceXZ2(i_this,i_pt);
-    if (actorDistXZ2 > attr().field_0x04 * attr().field_0x04) {
+    if (actorDistXZ2 > SQUARE(attr().field_0x04)) {
         f32 fVar = i_pt->speedF * (1.0f / attr().field_0x00);
         i_this->vib_set(cLib_maxLimit(fVar, 1.0f));
     }

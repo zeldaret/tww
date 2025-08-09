@@ -95,7 +95,7 @@ void dDetect_c::set_quake(const cXyz* pos) {
 /* 8009C254-8009C32C       .text chk_quake_area__9dDetect_cCFPC4cXyz */
 bool dDetect_c::chk_quake_area(const cXyz* pos) const {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    f32 maxDist2XZ = attr().maxDistXZ * attr().maxDistXZ;
+    f32 maxDist2XZ = SQUARE(attr().maxDistXZ);
     f32 dist2XZ = player->current.pos.abs2XZ(*pos);
     f32 diffY = pos->y - player->current.pos.y;
     return dist2XZ <= maxDist2XZ && diffY <= attr().maxY && diffY >= attr().minY;

@@ -42,7 +42,7 @@ BOOL daPy_lk_c::checkJumpRideShip() {
             cXyz sp20;
             mDoMtx_multVec(ship->getBodyMtx(), &l_ship_offset, &sp20);
             sp20 = old.pos - sp20;
-            if (sp20.y > 5.0f && sp20.abs2XZ() < 10000.0f) {
+            if (sp20.y > 5.0f && sp20.abs2XZ() < SQUARE(100.0f)) {
                 return procShipJumpRide_init();
             }
         }

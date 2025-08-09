@@ -253,9 +253,9 @@ const char* daDoor10_c::getDzbName() {
 f32 daDoor10_c::getSize2X() {
     switch (getType()) {
         case 3:
-            return 15.0f * 15.0f;
+            return SQUARE(15.0f);
     }
-    return 110.0f * 110.0f;
+    return SQUARE(110.0f);
 }
 
 const char daDoor10_c::M_arcname[] = "door10";
@@ -382,7 +382,7 @@ void daDoor10_c::setEventPrm() {
         }
     }
 
-    if (checkArea(getSize2X(), 110.0f * 110.0f, 250.0f * 250.0f)) {
+    if (checkArea(getSize2X(), SQUARE(110.0f), SQUARE(250.0f))) {
         eventInfo.setEventId(mEventIdx[m2C6]);
         eventInfo.setToolId(mToolId[m2C6]);
         eventInfo.onCondition(dEvtCnd_CANDOOR_e);

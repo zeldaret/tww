@@ -36,7 +36,7 @@ void draw_SUB(ks_class* i_this) {
     cXyz local_24 = dComIfGp_getCamera(0)->mLookat.mEye - i_this->current.pos;
 
     int iVar3 = cM_atan2s(local_24.x, local_24.z);
-    int iVar4 = (s16)-cM_atan2s(local_24.y, std::sqrtf(local_24.x * local_24.x + local_24.z * local_24.z));
+    int iVar4 = (s16)-cM_atan2s(local_24.y, std::sqrtf(SQUARE(local_24.x) + SQUARE(local_24.z)));
     
     f32 fVar1 = 0.0f;
     if (i_this->m2D0) {
@@ -233,10 +233,10 @@ BOOL shock_damage_check(ks_class* i_this) {
         mSwordTopPos.y -= i_this->current.pos.y;
         mSwordTopPos.z -= i_this->current.pos.z;
         
-        float distXZ = std::sqrtf(mSwordTopPos.x * mSwordTopPos.x + mSwordTopPos.z * mSwordTopPos.z);
+        float distXZ = std::sqrtf(SQUARE(mSwordTopPos.x) + SQUARE(mSwordTopPos.z));
         
         if (distXZ < 200.0f) {
-            if (std::sqrtf(mSwordTopPos.y * mSwordTopPos.y) < 40.0f) {
+            if (std::sqrtf(SQUARE(mSwordTopPos.y)) < 40.0f) {
                 i_this->mAction = 3;
                 i_this->mMode = 32;
 
@@ -883,7 +883,7 @@ void action_omoi(ks_class* i_this) {
                 local_1c.z = REG12_F(16) + 10.0f;
             }
 
-            if (std::sqrtf(mpCurPlayerActor->speed.x * mpCurPlayerActor->speed.x + mpCurPlayerActor->speed.y * mpCurPlayerActor->speed.y + mpCurPlayerActor->speed.z * mpCurPlayerActor->speed.z) < REG12_F(17) + 8.0f) {
+            if (std::sqrtf(SQUARE(mpCurPlayerActor->speed.x) + SQUARE(mpCurPlayerActor->speed.y) + SQUARE(mpCurPlayerActor->speed.z)) < REG12_F(17) + 8.0f) {
                 local_1c.setall(REG12_F(18) + 8.0f);
 
                 f32 x = a_this->current.pos.x - local_10.x;

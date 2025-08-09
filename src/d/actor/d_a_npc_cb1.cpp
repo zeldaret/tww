@@ -701,7 +701,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
 
         s16 angle = cM_atan2s(temp.x, temp.z);
 
-        f32 temp6 = std::sqrtf(temp.x * temp.x + temp.z * temp.z);
+        f32 temp6 = std::sqrtf(SQUARE(temp.x) + SQUARE(temp.z));
         if (temp6 > temp5) {
             temp6 = temp5;
         }
@@ -732,7 +732,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
 
         current.angle.y = cM_atan2s(speed.x, speed.z);
 
-        speedF = std::sqrtf(speed.x * speed.x + speed.z * speed.z);
+        speedF = std::sqrtf(SQUARE(speed.x) + SQUARE(speed.z));
         if(speed.y > ySpeedLimit) {
             speed.y = ySpeedLimit;
         }
@@ -1663,17 +1663,17 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
                 cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
             }
 
-            f32 dist = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
+            f32 dist_sq = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
 
             if(!checkNpcCallCommand()) {
-                if(dComIfGs_isEventBit(0x1610) && dist < l_HIO.field_0xC0 * l_HIO.field_0xC0) {
+                if(dComIfGs_isEventBit(0x1610) && dist_sq < SQUARE(l_HIO.field_0xC0)) {
                     daPy_getPlayerLinkActorClass()->onNpcCall();
 
                     temp = TRUE;
                 }
             }
             else {
-                if(dist >= l_HIO.mPlayerChaseDistance * l_HIO.mPlayerChaseDistance) {
+                if(dist_sq >= SQUARE(l_HIO.mPlayerChaseDistance)) {
                     setNpcAction(&daNpc_Cb1_c::searchNpcAction, NULL);
                 }
 
@@ -1935,7 +1935,7 @@ BOOL daNpc_Cb1_c::routeCheck(f32 param_1, s16* param_2) {
                 return TRUE;
             }
 
-            if(param_1 > (600.0f * 600.0f)) {
+            if(param_1 > SQUARE(600.0f)) {
                 return FALSE;
             }
 
@@ -1985,19 +1985,19 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                 fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
 
                 BOOL door = pPlayer->eventInfo.checkCommandDoor();
-                f32 dist1 = fopAcM_searchPlayerDistance2(this);
-                f32 dist2 = fopAcM_searchPlayerDistanceXZ2(this);
+                f32 dist_sq = fopAcM_searchPlayerDistance2(this);
+                f32 dist_xz_sq = fopAcM_searchPlayerDistanceXZ2(this);
 
-                if(!door && dist1 < l_HIO.mPlayerChaseDistance * l_HIO.mPlayerChaseDistance) {
+                if(!door && dist_sq < SQUARE(l_HIO.mPlayerChaseDistance)) {
                     temp2 = 0.0f;
                 }
                 else {
-                    temp2 = l_HIO.mChaseDistScale * std::sqrtf(dist2);
+                    temp2 = l_HIO.mChaseDistScale * std::sqrtf(dist_xz_sq);
                     temp2 = cLib_maxLimit(temp2, l_HIO.mMaxWalkSpeed);
                 }
 
                 temp = fopAcM_searchPlayerAngleY(this);
-                if(door || !routeCheck(dist2, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
+                if(door || !routeCheck(dist_xz_sq, &temp) || dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || ((daPy_py_c*)pPlayer)->checkAttentionLock()) {
                     temp2 = 0.0f;
 
                     if(speedF == 0.0f) {
@@ -2012,7 +2012,7 @@ BOOL daNpc_Cb1_c::searchNpcAction(void*) {
                     temp = current.angle.y;
                 }
 
-                if(dist2 < (400.0f * 400.0f) && cLib_distanceAngleS(shape_angle.y, temp) < 0x2000 && std::fabsf(fopAcM_searchPlayerDistanceY(this)) < 100.0f) {
+                if(dist_xz_sq < SQUARE(400.0f) && cLib_distanceAngleS(shape_angle.y, temp) < 0x2000 && std::fabsf(fopAcM_searchPlayerDistanceY(this)) < 100.0f) {
                     onPlayerFind();
                 }
 
@@ -2537,7 +2537,7 @@ BOOL daNpc_Cb1_c::chkAttention(f32 param_1, s32 param_2) {
     temp.x = dComIfGp_getPlayer(0)->current.pos.x - current.pos.x;
     temp.z = dComIfGp_getPlayer(0)->current.pos.z - current.pos.z;
 
-    f32 diff = std::sqrtf(temp.x * temp.x + temp.z * temp.z);
+    f32 diff = std::sqrtf(SQUARE(temp.x) + SQUARE(temp.z));
     s16 angle = cM_atan2s(temp.x, temp.z);
 
     if(mHasAttention) {

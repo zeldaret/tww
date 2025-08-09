@@ -579,9 +579,9 @@ static void sail_pos_move(sail_class* i_this) {
             // these explicit casts are necessary
             u32 r22 = (i_this->mSailPacket.m1C50 * (s32)f23) + (i_this->mSailPacket.m1C52 * (s32)f12);
 
-            f20 = (1750.0f + REG_SAIL_F(13)) * ((f0 * f0) + 0.05f) * cM_ssin(-i_this->mSailPacket.m1C40 + r22) * f31;
-            f22 = (550.0f + REG_SAIL_F(12)) * ((f0 * f0) + 0.1f) * cM_scos(i_this->mSailPacket.m1C40 + r22) * f31;
-            f21 = std::sqrtf((f22 * f22) + (f20 * f20)) * 0.1f;
+            f20 = (1750.0f + REG_SAIL_F(13)) * (SQUARE(f0) + 0.05f) * cM_ssin(-i_this->mSailPacket.m1C40 + r22) * f31;
+            f22 = (550.0f + REG_SAIL_F(12)) * (SQUARE(f0) + 0.1f) * cM_scos(i_this->mSailPacket.m1C40 + r22) * f31;
+            f21 = std::sqrtf(SQUARE(f22) + SQUARE(f20)) * 0.1f;
 
             f24 = (f25 * ((10.0f * f17) + (-f17 * f23 * f23)));
             f24 += ((sp10.z * (18.0f - f23 * f23)) / 18.0f);
@@ -602,7 +602,7 @@ static void sail_pos_move(sail_class* i_this) {
                 }
             }
 
-            f32 f14 = 100.0f - std::sqrtf((125.0f * 125.0f) - (f16 * f16));
+            f32 f14 = 100.0f - std::sqrtf(SQUARE(125.0f) - SQUARE(f16));
             sp6C[j] += f14 > -10.0f ? f14 : -10.0f;
 
             sp10.x = 0.0f;
@@ -618,21 +618,21 @@ static void sail_pos_move(sail_class* i_this) {
             }
 
             vtxPos->x = sp10.x + f22;
-            vtxPos->y = ((sp6C[j] + sp10.y + f21) - (i * 1.25f * (f23 * f23)));
+            vtxPos->y = ((sp6C[j] + sp10.y + f21) - (i * 1.25f * SQUARE(f23)));
             vtxPos->z = f24 + f20;
 
             vtxPos->x += l_pos[i * 7 + j].x;
             vtxPos->y += l_pos[i * 7 + j].y;
             vtxPos->z += l_pos[i * 7 + j].z;
 
-            vtxPos->y *= (1.0f - ((i_this->mSailPacket.m1C44 * (f13 * f13)) / 30.25f));
+            vtxPos->y *= (1.0f - ((i_this->mSailPacket.m1C44 * SQUARE(f13)) / 30.25f));
             vtxPos->y *= ((11.0f - (i_this->mSailPacket.m1C44 * i)) / 11.0f);
-            vtxPos->z *= (1.0f - ((i_this->mSailPacket.m1C44 * (f13 * f13)) / 30.25f));
+            vtxPos->z *= (1.0f - ((i_this->mSailPacket.m1C44 * SQUARE(f13)) / 30.25f));
             vtxPos->z *= ((11.0f - (i_this->mSailPacket.m1C44 * i)) / 11.0f);
 
             if (i_this->mSailPacket.m1C44 > 0.0f && i < 6) {
                 f32 f15_2 = i - 3;
-                f32 f20 = (9.0f - (f15_2 * f15_2)) / 9.0f;
+                f32 f20 = (9.0f - SQUARE(f15_2)) / 9.0f;
                 vtxPos->z += ((REG_SAIL_F(26) * 10.0f + 3.5f) * 200.0f * f20 * i_this->mSailPacket.m1C44);
                 vtxPos->y -= ((REG_SAIL_F(29) * 10.0f + 1.5f) * 100.0f * f20 * i_this->mSailPacket.m1C44);
             }

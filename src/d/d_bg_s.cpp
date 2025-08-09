@@ -555,9 +555,9 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
     CHECK_PVEC3_RANGE(2280, pm_pos);
     
     if (!(mFlag & 4)) {
-        f32 dist2 = GetOldPos()->abs2(*pm_pos);
+        f32 dist_sq = GetOldPos()->abs2(*pm_pos);
         bool inWall = false;
-        if (dist2 > (0.65f*0.65f * GetWallR()*GetWallR())) {
+        if (dist_sq > (SQUARE(0.65f) * GetWallR()*GetWallR())) {
             inWall = true;
             
             cBgS_LinChk linChk;

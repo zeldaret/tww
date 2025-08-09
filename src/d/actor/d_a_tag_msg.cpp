@@ -90,7 +90,7 @@ BOOL daTag_Msg_c::rangeCheck() {
     if (diff.y < 0.0f) {
         diff.y = -diff.y;
     }
-    if (diff.abs2XZ() < scale.x * scale.x * 10000.0f) {
+    if (diff.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f)) {
         if(diff.y <= scale.y * 100.0f) {
             return TRUE;
         }

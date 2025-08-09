@@ -3203,7 +3203,7 @@ void daShip_c::setRopePos() {
             mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
             spE0 -= *r4;
 
-            if (spE0.abs2XZ() < 2500.0f) {
+            if (spE0.abs2XZ() < SQUARE(50.0f)) {
                 currentRopeSegment = mRopeLineSegments;
                 f32 f2 = cM_scos(shape_angle.x) * 16.0f;
 
@@ -4120,7 +4120,7 @@ BOOL daShip_c::execute() {
 #if VERSION == VERSION_DEMO
             attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
 #endif
-            if (fopAcM_searchPlayerDistanceXZ2(this) < 250000.0f) {
+            if (fopAcM_searchPlayerDistanceXZ2(this) < SQUARE(500.0f)) {
                 spC0 = link->eyePos - eyePos;
                 r23_2 = TRUE;
 #if VERSION > VERSION_DEMO
@@ -4190,7 +4190,7 @@ BOOL daShip_c::execute() {
             (!dComIfGp_event_runCheck() && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) ||
             (
                 std::fabsf(current.pos.y - link->current.pos.y) < 50.0f &&
-                spB4.abs2XZ() < 62500.0f &&
+                spB4.abs2XZ() < SQUARE(250.0f) &&
                 fopAcM_seenPlayerAngleY(this) < 0x6000 &&
                 mNextMessageNo != 0xD65
             )

@@ -288,7 +288,7 @@ void daFire_c::ctrlEffect() {
                     field_0x8E0 = *field_0x2CC[0].GetTgRVecP();
 
                     f32 f2 = 1000.0f;
-                    f32 dist_sq = (field_0x8E0.x * field_0x8E0.x + field_0x8E0.z * field_0x8E0.z) / f2;
+                    f32 dist_sq = (SQUARE(field_0x8E0.x) + SQUARE(field_0x8E0.z)) / f2;
                     field_0x8E0.y = sqrt(dist_sq);
                     if (!field_0x8E0.normalizeRS()) {
                         field_0x8E0.set(0.0f, 1.0f, 0.0f);

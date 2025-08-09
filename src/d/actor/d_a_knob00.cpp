@@ -145,7 +145,7 @@ void daKnob00_c::setEventPrm() {
         m2C6 = 9;
     }
 
-    if (!checkArea(80.0f * 80.0f, 110.0 * 110.0f, 250.0f * 250.0f)) {
+    if (!checkArea(SQUARE(80.0f), SQUARE(110.0f), SQUARE(250.0f))) {
         offFlag(4);
     } else {
         eventInfo.setEventId(mEventIdx[m2C6]);

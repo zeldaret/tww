@@ -1046,7 +1046,7 @@ BOOL daNpc_kam_c::actionDescendEvent(int evtStaffId) {
     }
     
     cXyz delta = linkHeadTopPos - current.pos;
-    if (delta.abs2XZ() < 100.0f*100.0f) {
+    if (delta.abs2XZ() < SQUARE(100.0f)) {
         return TRUE;
     }
     

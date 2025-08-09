@@ -713,15 +713,15 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
 
         cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
 
-        f32 dist = fopAcM_searchPlayerDistance2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
-            if(dist < l_HIO.field_0x64 * l_HIO.field_0x64) {
+            if(dist_sq < SQUARE(l_HIO.field_0x64)) {
                 daPy_getPlayerLinkActorClass()->onNpcCallCommand();
             }
         }
         else {
             if(wakeupCheck()) {
-                if(dist >= l_HIO.field_0x60 * l_HIO.field_0x60) {
+                if(dist_sq >= SQUARE(l_HIO.field_0x60)) {
                     setNpcAction(&daNpc_Os_c::searchNpcAction, 0);
                 }
             }
@@ -1064,16 +1064,16 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
         daPy_py_c* player = daPy_getPlayerActorClass();
 
         BOOL door = player->eventInfo.checkCommandDoor();
-        f32 dist = fopAcM_searchPlayerDistanceXZ2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistanceXZ2(this);
         f32 temp;
-        if (dist < l_HIO.field_0x60 * l_HIO.field_0x60) {
+        if (dist_sq < SQUARE(l_HIO.field_0x60)) {
             temp = 0.0f;
         } else {
             temp = l_HIO.field_0xA8;
         }
         s16 angle, adjustedAngle;
         angle = adjustedAngle = fopAcM_searchPlayerAngleY(this);
-        BOOL temp3 = routeCheck(dist, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
+        BOOL temp3 = routeCheck(dist_sq, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
         if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
             temp = 0.0f;
             offNpcCallCommand();

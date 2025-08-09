@@ -1147,8 +1147,8 @@ static void damage_check(bst_class* i_this) {
                     cXyz player_vec = i_this->current.pos - player->current.pos;
                     i_this->mHurtRecoilAngle1 = cM_atan2s(player_vec.x, player_vec.z);
 
-                    f32 xz = player_vec.x * player_vec.x + player_vec.z * player_vec.z;
-                    i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(xz));
+                    f32 xz2 = SQUARE(player_vec.x) + SQUARE(player_vec.z);
+                    i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(xz2));
 
                     i_this->speedF = 0.0f;
 

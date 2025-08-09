@@ -50,8 +50,7 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
         if (!ChkPolyThrough(i_poly_idx, pwi->GetPolyPassChk())) {
             cBgW_TriElm* tri = &pm_tri[i_poly_idx];
 
-            f32 sp68 = std::sqrtf(tri->m_plane.GetNP()->x * tri->m_plane.GetNP()->x +
-                                  tri->m_plane.GetNP()->z * tri->m_plane.GetNP()->z);
+            f32 sp68 = std::sqrtf(SQUARE(tri->m_plane.GetNP()->x) + SQUARE(tri->m_plane.GetNP()->z));
             if (cM3d_IsZero(sp68)) {
                 if (rwg_elm->next != 0xFFFF) {
                     i_poly_idx = rwg_elm->next;

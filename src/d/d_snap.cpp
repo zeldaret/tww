@@ -1817,12 +1817,12 @@ int dSnap_packet::Regist(const dSnap_Obj& obj) {
         if (!r6) {
             return 0;
         }
-        f32 dist2 = player->current.pos.abs2(obj.mCenter);
-        if (obj.GetPhoto() >= 0x48 && dist2 > f30) {
+        f32 dist_sq = player->current.pos.abs2(obj.mCenter);
+        if (obj.GetPhoto() >= 0x48 && dist_sq > f30) {
             return 0;
         }
         m_tbl[r29].Regist(obj);
-        m_tbl[r29].field_0x34 = dist2;
+        m_tbl[r29].field_0x34 = dist_sq;
         return 0;
     } else {
         m_tbl[field_0x14].Regist(obj);

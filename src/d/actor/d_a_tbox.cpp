@@ -569,7 +569,7 @@ s32 daTbox_c::boxCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz playerChestDiff = player->current.pos - home.pos;
 
-    if (playerChestDiff.abs2XZ() < 10000.0f) {
+    if (playerChestDiff.abs2XZ() < SQUARE(100.0f)) {
         if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
             return TRUE;
         }

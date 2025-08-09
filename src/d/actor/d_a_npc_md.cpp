@@ -1197,15 +1197,15 @@ void daNpc_Md_c::NpcCall(int* r31) {
     if (!dComIfGs_isEventBit(0x1620)) {
         return;
     }
-    f32 dist2 = fopAcM_searchPlayerDistance2(this);
+    f32 dist_sq = fopAcM_searchPlayerDistance2(this);
     if (!checkNpcCallCommand()) {
-        if (dist2 < l_HIO.m0C8*l_HIO.m0C8) {
+        if (dist_sq < SQUARE(l_HIO.m0C8)) {
             daPy_getPlayerLinkActorClass()->onNpcCallCommand();
             *r31 = 1;
         }
     } else {
         f32 temp = 2.0f*l_HIO.m0C4;
-        if (dist2 >= temp*temp) {
+        if (dist_sq >= temp*temp) {
             setNpcAction(&daNpc_Md_c::searchNpcAction);
         }
         *r31 = 1;
@@ -1362,7 +1362,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             f32 playerDistY = link->current.pos.y - current.pos.y;
             f32 f3 = l_HIO.m0BC;
             f32 f4 = l_HIO.m0C0;
-            if (playerDistXZ2 < l_HIO.m0CC * l_HIO.m0CC && playerDistY < f3 && playerDistY > f4) {
+            if (playerDistXZ2 < SQUARE(l_HIO.m0CC) && playerDistY < f3 && playerDistY > f4) {
                 mCurEventMode = 0xB;
             }
         } else {

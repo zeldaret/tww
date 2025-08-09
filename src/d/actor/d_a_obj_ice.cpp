@@ -184,7 +184,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
             f32 fVar6 = i_this->m44C * (i_this->scale.x * l_co_radius_table[i]);
             f32 fVar7 = i_this->m450 * (i_this->scale.y * l_co_height_table[i]);
             f32 fVar5 = i_this->m44C * (i_this->scale.z * l_co_radius_table[i]);
-            if (y < fVar7 && ((x2 * x2) / (fVar6 * fVar6) + (z2 * z2) / (fVar5 * fVar5) < 1.0f)) {
+            if (y < fVar7 && (SQUARE(x2) / SQUARE(fVar6) + SQUARE(z2) / SQUARE(fVar5) < 1.0f)) {
                 switch (pcVar8->GetAtType()) {
                 case AT_TYPE_UNK20000:
                 case AT_TYPE_FIRE:

@@ -189,9 +189,9 @@ namespace daObjMovebox {
             M_wall_work[i].SetActorPid(movebox->base.mBsPcId);
             if (dComIfG_Bgsp()->LineCross(&M_wall_work[i])) {
                 mWallPos[i] = M_wall_work[i].GetCross();
-                f32 dist = startPos.abs2(mWallPos[i]);
-                if (dist < mNearestWallDist) {
-                    mNearestWallDist = dist;
+                f32 dist_sq = startPos.abs2(mWallPos[i]);
+                if (dist_sq < mNearestWallDist) {
+                    mNearestWallDist = dist_sq;
                     mWallIdx = i;
                 }
             } else {
@@ -1089,18 +1089,18 @@ namespace daObjMovebox {
             }
             if (mType == TYPE_METAL_BOX_WITH_SPRING) {
                 daObjJump::Act_c* jump = (daObjJump::Act_c*)childActor;
-                if (jump->current.pos.abs2(current.pos) > 0.0001f) {
+                if (jump->current.pos.abs2(current.pos) > SQUARE(0.01f)) {
                     jump->setup(&current.pos);
                 }
             } else if (mType == TYPE_MIRROR) {
                 daObjMmrr::Act_c* mmrr = (daObjMmrr::Act_c*)childActor;
-                if (mmrr->current.pos.abs2(current.pos) > 0.0001f) {
+                if (mmrr->current.pos.abs2(current.pos) > SQUARE(0.01f)) {
                     mmrr->setup(&current.pos);
                 }
             } else if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
                 daObjMkie::Act_c* mkie = (daObjMkie::Act_c*)childActor;
                 cXyz targetPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-                if (mkie->current.pos.abs2(targetPos) > 0.0001f) {
+                if (mkie->current.pos.abs2(targetPos) > SQUARE(0.01f)) {
                     mkie->setup(&targetPos);
                 }
             } else {
@@ -1182,7 +1182,7 @@ namespace daObjMovebox {
             s32 pntIdx;
             for (pntIdx = 0; pntIdx < numPnts; pntIdx++) {
                 cXyz pntPos = dPath_GetPnt(mpPath, pntIdx)->m_position;
-                if (current.pos.abs2(pntPos) < 9.0f) {
+                if (current.pos.abs2(pntPos) < SQUARE(3.0f)) {
                     break;
                 }
             }

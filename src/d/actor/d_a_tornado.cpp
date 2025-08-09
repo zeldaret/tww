@@ -156,7 +156,7 @@ BOOL daTornado_c::execute() {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getShipActor() != NULL) {
             daShip_c* ship = dComIfGp_getShipActor();
             cXyz diff = ship->current.pos - current.pos;
-            if (diff.abs2XZ() < 10000.0f*10000.0f) {
+            if (diff.abs2XZ() < SQUARE(10000.0f)) {
                 ship->onTornadoFlg(fopAcM_GetID(this));
                 speedF = 0.0f;
             }
@@ -166,7 +166,7 @@ BOOL daTornado_c::execute() {
             fopAcM_posMoveF(this, NULL);
             cXyz diff = current.pos - home.pos;
             diff.y = 0;
-            if (diff.abs2XZ() > 7500.0f*7500.0f) {
+            if (diff.abs2XZ() > SQUARE(7500.0f)) {
                 diff.normalize();
                 current.pos = home.pos + diff * 7500.0f;
             }

@@ -332,7 +332,7 @@ void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c
                 cXyz sp14(ship->current.pos.x - i_this->current.pos.x, 0.0f, ship->current.pos.z - i_this->current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
-                f32 sq = i_this->attr()->m3C * i_this->attr()->m3C;
+                f32 sq = SQUARE(i_this->attr()->m3C);
 
                 if (sp14.inprod(sp08) < sq) {
                     i_this->m470 = 1;
@@ -892,7 +892,7 @@ void daObjBarrel2::Act_c::afl_sway() {
 #if VERSION == VERSION_DEMO
     f32 x3;
     f32 z3;
-    f32 sq2 = attr()->m5C * attr()->m5C;
+    f32 sq2 = SQUARE(attr()->m5C);
     f32 x = m420.x * attr()->m68;
     f32 z = m420.z * attr()->m68;
     f32 sq = x * x + z * z;
@@ -923,7 +923,7 @@ void daObjBarrel2::Act_c::afl_sway() {
     f32 z3;
     f32 x = m420.x * attr()->m68;
     f32 z = m420.z * attr()->m68;
-    f32 sq2 = attr()->m5C * attr()->m5C;
+    f32 sq2 = SQUARE(attr()->m5C);
     f32 sq = x * x + z * z;
 
     if (sq > sq2) {
@@ -952,7 +952,7 @@ void daObjBarrel2::Act_c::afl_sway() {
 bool daObjBarrel2::Act_c::mine_chk_range_flash() {
     daShip_c* ship = dComIfGp_getShipActor();
 
-    f32 fVar1 = attr()->m40 * attr()->m40;
+    f32 fVar1 = SQUARE(attr()->m40);
     bool uVar2 = false;
     if (ship && fopAcM_searchActorDistanceXZ2(this, ship) < fVar1) {
         uVar2 = true;
@@ -964,7 +964,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_flash() {
 bool daObjBarrel2::Act_c::mine_chk_range_explode() {
     daShip_c* ship = dComIfGp_getShipActor();
 
-    f32 fVar1 = attr()->m44 * attr()->m44;
+    f32 fVar1 = SQUARE(attr()->m44);
     bool uVar2 = false;
     if (ship && fopAcM_searchActorDistanceXZ2(this, ship) < fVar1) {
         uVar2 = true;
@@ -975,7 +975,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_explode() {
 /* 00002A00-00002B34       .text mine_chk_range_damage__Q212daObjBarrel25Act_cFv */
 bool daObjBarrel2::Act_c::mine_chk_range_damage() {
     daShip_c* ship = dComIfGp_getShipActor();
-    f32 sq = attr()->m48 * attr()->m48;
+    f32 sq = SQUARE(attr()->m48);
 
     if (ship != NULL && fopAcM_searchActorDistanceXZ2(this, ship) < sq) {
         if (ship->current.pos.y < current.pos.y + attr()->m4C) {
@@ -983,7 +983,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_damage() {
                 cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f, ship->current.pos.z - current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
-                sq = attr()->m3C * attr()->m3C;
+                sq = SQUARE(attr()->m3C);
                 if (sp14.inprod(sp08) < sq) {
                     ship->onCrashFlg();
                     return true;
@@ -1024,7 +1024,7 @@ void daObjBarrel2::Act_c::execute_sub() {
         m46D--;
     }
 
-    if (m45C < attr()->m34 * attr()->m34) {
+    if (m45C < SQUARE(attr()->m34)) {
         item_give();
     }
 

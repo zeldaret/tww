@@ -2218,7 +2218,7 @@ static BOOL daBb_Execute(bb_class* i_this) {
     f32 yDiff = (player->current.pos.y + 100.0f) - i_this->actor.current.pos.y;
     f32 zDiff = player->current.pos.z - i_this->actor.current.pos.z;
 
-    i_this->unk_33C = std::sqrtf(xDiff * xDiff + zDiff * zDiff);
+    i_this->unk_33C = std::sqrtf(SQUARE(xDiff) + SQUARE(zDiff));
     i_this->unk_336 = cM_atan2s(xDiff, zDiff);
     i_this->unk_338 = -cM_atan2s(yDiff, i_this->unk_33C);
 

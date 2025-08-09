@@ -23,6 +23,8 @@
 #define offsetof(type, member) ((size_t) & (((type*)0)->member))
 #endif
 
+#define SQUARE(x) ((x) * (x))
+
 #ifdef __MWERKS__
 #define GLUE(a, b) a##b
 #define GLUE2(a, b) GLUE(a, b)
