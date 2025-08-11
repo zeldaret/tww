@@ -708,4 +708,7 @@ inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 hind = -1) {
     fopAcM_orderOtherEvent2(ac, event, dEvtFlag_NOPARTNER_e, hind);
 }
 
+s32 fopAcM_createHeap(fopAc_ac_c* i_this, u32 size, u32 align);
+void fopAcM_adjustHeap(fopAc_ac_c* i_this);
+
 #endif

@@ -1445,7 +1445,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_sk2"),
     ActorRel(Matching,    "d_a_spotbox"),
     ActorRel(NonMatching, "d_a_ssk"),
-    ActorRel(NonMatching, "d_a_stone"),
+    ActorRel(Equivalent,  "d_a_stone", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_stone2", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_swc00"),
     ActorRel(Equivalent,  "d_a_swhit0", extra_cflags=['-pragma "nosyminline on"']), # weak func order

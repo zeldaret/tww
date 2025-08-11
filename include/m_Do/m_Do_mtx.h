@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx/quat.h"
 #include "dolphin/types.h"
 
 void mDoMtx_XYZrotS(Mtx, s16, s16, s16);
@@ -376,11 +377,21 @@ public:
 
     ~mDoMtx_quatStack_c() {}
 
+    inline static Quaternion* get();
+
+    static void rotAxisRadS(const Vec* axis, f32 rad) {
+        QUATRotAxisRad(get(), axis, rad);
+    }
+
     /* 0x000 */ Quaternion* field_0x0;
     /* 0x004 */ Quaternion field_0x4;
     /* 0x014 */ Quaternion field_0x14[16];
     /* 0x114 */ Quaternion* field_0x114;
     /* 0x118 */ Quaternion** field_0x118;
 };  // Size: 0x11C
+
+extern mDoMtx_quatStack_c mDoMtx_quatStack;
+
+Quaternion* mDoMtx_quatStack_c::get() { return mDoMtx_quatStack.field_0x0; }
 
 #endif /* M_DO_M_DO_MTX_H */
