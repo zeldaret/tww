@@ -596,7 +596,6 @@ bool Act_c::damage_bg_proc() {
 
 /* 000021F4-000023F4       .text damage_bg_proc_directly__Q27daStone5Act_cFv */
 bool Act_c::damage_bg_proc_directly() {
-    fopAc_ac_c* a_this = (fopAc_ac_c*)this;
     bool uVar7 = mAcch.ChkGroundHit();
     bool iVar9 = false;
     bool cVar4;
@@ -636,7 +635,7 @@ bool Act_c::damage_bg_proc_directly() {
     } else if (uVar7) {
         if (m678 == 0 && m674 == 0) {
             if (!iVar9) {
-                fopAcM_seStart(a_this, data().m90, dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd));
+                fopAcM_seStart(this, data().m90, dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd));
                 eff_land_smoke();
             }
             m678 = 1;
