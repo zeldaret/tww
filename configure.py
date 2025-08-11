@@ -1455,7 +1455,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_event"),
     ActorRel(Matching,    "d_a_tag_evsw", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_ghostship"),
-    ActorRel(NonMatching, "d_a_tag_hint"),
+    ActorRel(Equivalent,  "d_a_tag_hint", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_tag_kb_item"),
     ActorRel(Equivalent, "d_a_tag_kk1", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(NonMatching, "d_a_tag_light"),
