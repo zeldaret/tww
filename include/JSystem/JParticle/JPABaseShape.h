@@ -131,7 +131,7 @@ struct JPABaseShapeData {
     /* 0x48 */ f32 mTexScrollScaleX;
     /* 0x4c */ f32 mTexScrollScaleY;
     /* 0x50 */ f32 mTexScrollRotate;
-};
+};  // Size: 0x54
 
 class JPABaseShapeArc : public JPABaseShape {
 public:
