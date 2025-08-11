@@ -142,9 +142,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
     J3DModelData* pModelData;
     if (i_this->m2B4 == 0) {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", 9);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_00);
     } else {
-        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", 10);
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_01);
     }
 
     i_this->mpMorf = new mDoExt_McaMorf(
