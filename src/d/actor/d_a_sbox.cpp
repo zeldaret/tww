@@ -295,7 +295,7 @@ void daSbox_c::demoInitOpen() {
     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S1, 0);
     fopAcM_seStart(this, JA_SE_OBJ_TBOX_UNLOCK, 0);
 
-    mDoAud_subBgmStart(0x80000009);
+    mDoAud_subBgmStart(JA_BGM_OPEN_BOX);
     setFlag(2);
 
     dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
@@ -395,7 +395,7 @@ void daSbox_c::demoProcCom() {
 s32 daSbox_c::getNowEventAction() {
     static char* action_table[] = {"WAIT", "OPEN", "DELETE"};
 
-    return dComIfGp_evmng_getMyActIdx(m2F8, action_table, 3, 0, 1);
+    return dComIfGp_evmng_getMyActIdx(m2F8, action_table, ARRAY_SIZE(action_table), 0, 1);
 }
 
 /* 00001240-00001388       .text demoProc__8daSbox_cFv */
