@@ -1444,7 +1444,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_sk"),
     ActorRel(Matching,    "d_a_sk2", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_spotbox"),
-    ActorRel(NonMatching, "d_a_ssk"),
+    ActorRel(Matching,    "d_a_ssk", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_stone", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Equivalent,  "d_a_stone2", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_swc00"),
