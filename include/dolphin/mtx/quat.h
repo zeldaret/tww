@@ -27,6 +27,8 @@ void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t)
 #define QUATNormalize PSQUATNormalize
 #endif
 
+#define QUATRotAxisRad C_QUATRotAxisRad
+
 #ifdef __cplusplus
 };
 #endif

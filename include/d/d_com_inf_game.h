@@ -4050,7 +4050,7 @@ inline dCcS* dComIfG_Ccsp() {
 }
 
 // This should be dComIfG_Ccsp()->SetMass everywhere, but for some reason that combination of two
-// inlines consistently breaks the match on retail. But for the demo, using the proper inlines is requires to match.
+// inlines consistently breaks the match on retail. But for the demo, using the proper inlines is required to match.
 #if VERSION == VERSION_DEMO
 #define dComIfG_Ccsp_SetMass dComIfG_Ccsp()->SetMass
 #else
