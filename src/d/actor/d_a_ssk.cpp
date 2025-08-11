@@ -302,7 +302,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         {8, 3, 20.0f, &sph_offset},
     };
 
-    i_this->m708 = JntHit_create(i_this->mpMorf1->getModel(), search_data, 3);
+    i_this->m708 = JntHit_create(i_this->mpMorf1->getModel(), search_data, ARRAY_SIZE(search_data));
     if (i_this->m708 != NULL) {
         i_this->actor.jntHit = i_this->m708;
     } else {
