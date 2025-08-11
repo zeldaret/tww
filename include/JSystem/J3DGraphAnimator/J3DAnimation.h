@@ -822,6 +822,7 @@ private:
 class J3DFrameCtrl {
 public:
     enum Attribute_e {
+        /*  -1 */ EMode_NULL = -1,
         /* 0x0 */ EMode_NONE,
         /* 0x1 */ EMode_RESET,
         /* 0x2 */ EMode_LOOP,

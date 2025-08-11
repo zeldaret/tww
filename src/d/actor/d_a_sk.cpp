@@ -208,7 +208,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     sk_class* i_this = (sk_class*)a_this;
     J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", SK_BDL_TURU_00);
 
-    i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
+    i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
         return FALSE;
     }
@@ -227,7 +227,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         {8, 3, 50.0f, &sph_offset},
     };
 
-    i_this->m924 = JntHit_create(i_this->mpMorf->getModel(), search_data, 3);
+    i_this->m924 = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (i_this->m924 != NULL) {
         i_this->actor.jntHit = i_this->m924;
     } else {
