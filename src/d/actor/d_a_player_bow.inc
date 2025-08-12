@@ -48,7 +48,7 @@ static BOOL daPy_bowJointCB(J3DNode* node, int calcTiming) {
 
 /* 80149FD0-8014A008       .text bowButton__9daPy_lk_cCFv */
 BOOL daPy_lk_c::bowButton() const {
-    if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e) {
+    if (checkBowMiniGame()) {
         return doButton();
     } else {
         return itemButton();
@@ -67,15 +67,12 @@ BOOL daPy_lk_c::checkBowAnime() const {
 
 /* 8014A080-8014A180       .text makeArrow__9daPy_lk_cFv */
 void daPy_lk_c::makeArrow() {
-    // Fakematch: The first call to getPt1 needs to load gameinfo differently from the other two.
-    // Adding a redundant (dEvt_control_c*) cast to just that one fixes it.
-    BOOL r4 = mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e;
-    if ((!r4 && dComIfGs_getArrowNum() != 0) ||
-        (r4 && ((dEvt_control_c*)&g_dComIfG_gameInfo.play.getEvent())->getPt1() != NULL &&
+    if ((!checkBowMiniGame() && dComIfGs_getArrowNum() != 0) ||
+        (checkBowMiniGame() && dComIfGp_event_getPt1() &&
          fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
          ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
-        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, current.roomNo);
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, fopAcM_GetRoomNo(this));
         mActorKeepEquip.setData(arrow_p);
     }
     m355C = 0;
@@ -143,7 +140,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         } else if (bowButton() == NULL) {
             if (arrow != NULL) {
                 fopAcM_SetParam(arrow, 1);
-                if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_068_e) {
+                if (!checkBowMiniGame()) {
                     dComIfGp_setItemArrowNumCount(-1);
                 }
                 mActorKeepEquip.clearData();
@@ -171,7 +168,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
     } else if (checkBowShootAnime()) {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
             if (m355E == 0 && bowButton() &&
-                (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e || mEquipItem == getReadyItem()) &&
+                (checkBowMiniGame() || mEquipItem == getReadyItem()) &&
                 !checkUseArrowEffect())
             {
                 setBowReloadAnime();

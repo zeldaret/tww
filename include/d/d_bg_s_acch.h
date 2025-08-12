@@ -63,6 +63,7 @@ class dBgS;
 class dBgS_Acch : public cBgS_Chk, public dBgS_Chk {
 public:
     enum {
+        /* 0x000001 */ UNK_1 = (1 << 0),
         /* 0x000002 */ GRND_NONE = (1 << 1),
         /* 0x000004 */ WALL_NONE = (1 << 2),
         /* 0x000008 */ ROOF_NONE = (1 << 3),
@@ -137,9 +138,9 @@ public:
     f32 GetRoofHeight() { return m_roof_height; }
     f32 GetSeaHeight() { return m_sea_height; }
     void SetLin() { m_lin.SetStartEnd(*pm_old_pos, *pm_pos); }
-    bool ChkGroundFind() { return m_flags & GROUND_FIND; }
-    bool ChkGroundHit() { return m_flags & GROUND_HIT; }
-    bool ChkGroundLanding() { return m_flags & GROUND_LANDING; }
+    bool ChkGroundFind() { return (m_flags & GROUND_FIND) != 0; }
+    bool ChkGroundHit() { return (m_flags & GROUND_HIT) != 0; }
+    bool ChkGroundLanding() { return (m_flags & GROUND_LANDING) != 0; }
     void ClrGroundLanding() { m_flags &= ~GROUND_LANDING; }
     void ClrGroundAway() { m_flags &= ~GROUND_AWAY; }
     void ClrWallHit() { m_flags &= ~WALL_HIT; }
@@ -149,6 +150,7 @@ public:
     void SetWaterNone() { m_flags |= WATER_NONE; }
     bool ChkWallHit() { return m_flags & WALL_HIT; }
     void OffLineCheckHit() { m_flags &= ~LINE_CHECK_HIT; }
+    void OnLineCheckHit() { m_flags |= LINE_CHECK_HIT; }
     void OffLineCheck() { m_flags &= ~LINE_CHECK; }
     void OffLineCheckNone() { m_flags &= ~LINE_CHECK_NONE; }
     void OnLineCheckNone() { m_flags |= LINE_CHECK_NONE; }
@@ -160,11 +162,11 @@ public:
     void ClrWaterIn() { m_flags &= ~WATER_IN; }
     void SetWaterIn() { m_flags |= WATER_IN; }
     const u32 MaskWaterIn() { return m_flags & WATER_IN; }
-    const bool ChkWaterIn() { return MaskWaterIn();}
+    const bool ChkWaterIn() { return MaskWaterIn() != 0; }
     void ClrGroundFind() { m_flags &= ~GROUND_FIND; }
     u32 MaskRoofHit() { return m_flags & ROOF_HIT; }
-    bool ChkRoofHit() { return MaskRoofHit(); }
-    bool ChkClrSpeedY() { return m_flags & CLR_SPEED_Y; }
+    bool ChkRoofHit() { return MaskRoofHit() != 0; }
+    bool ChkClrSpeedY() { return (m_flags & CLR_SPEED_Y) != 0; }
     void SetGroundFind() { m_flags |= GROUND_FIND; }
     void SetGroundHit() { m_flags |= GROUND_HIT; }
     void ClrGroundHit() { m_flags &= ~GROUND_HIT; }
@@ -183,10 +185,10 @@ public:
     void SetWallHit() { m_flags |= WALL_HIT; }
     void ClrWallNone() { m_flags &= ~WALL_NONE; }
     void OnSeaCheckOn() { m_flags |= SEA_CHECK; }
-    bool ChkSeaCheckOn() { return m_flags & SEA_CHECK;}
+    bool ChkSeaCheckOn() { return m_flags & SEA_CHECK; }
     void OnSeaWaterHeight() { m_flags |= SEA_WATER_HEIGHT; }
     bool ChkSeaWaterHeight() { return m_flags & SEA_WATER_HEIGHT; }
-    bool ChkSeaIn() { return m_flags & SEA_IN;}
+    bool ChkSeaIn() { return m_flags & SEA_IN; }
     cM3dGCyl* GetWallBmdCylP() { return &m_wall_cyl; }
 
     cM3dGCir* GetWallCirP(int index) {
@@ -204,13 +206,12 @@ public:
     void SetWallCirHit(int i_no) { pm_acch_cir[i_no].SetWallHit(); }
     void SetWallAngleY(int i_no, s16 i_angle) { pm_acch_cir[i_no].SetWallAngleY(i_angle); }
 
-    f32 GetCx() const { return pm_pos->x; }
-    f32 GetCz() const { return pm_pos->z; }
+    f32 GetCx() { return pm_pos->x; }
+    f32 GetCz() { return pm_pos->z; }
 
     // TODO
     void ChkGroundAway() {}
     void DrawWall(dBgS&) {}
-    void OnLineCheckHit() {}
     void SetOld() {}
 
 public:

@@ -251,21 +251,31 @@ void daObj_Hole_c::getArg() {
 
 /* 0000096C-00000BA8       .text _create__12daObj_Hole_cFv */
 cPhs_State daObj_Hole_c::_create() {
-    fopAcM_SetupActor(this, daObj_Hole_c);
+    cPhs_State result;
+#if VERSION == VERSION_DEMO
+    result = dComIfG_resLoad(&mPhs, m_arc_name);
+    if (result == cPhs_COMPLEATE_e)
+#endif
+    {
+        fopAcM_SetupActor(this, daObj_Hole_c);
 
-    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
-    if (result == cPhs_COMPLEATE_e) {
-        getArg();
+#if VERSION > VERSION_DEMO
+        result = dComIfG_resLoad(&mPhs, m_arc_name);
+        if (result == cPhs_COMPLEATE_e)
+#endif
+        {
+            getArg();
 
-        if (mHasModel == 0xFF) {
-            u32 heapResult = fopAcM_entrySolidHeap(this, createHeap_CB, 0x1000);
+            if (mHasModel == 0xFF) {
+                u32 heapResult = fopAcM_entrySolidHeap(this, createHeap_CB, 0x1000);
 
-            if (heapResult == 0) {
-                return cPhs_ERROR_e;
+                if (heapResult == 0) {
+                    return cPhs_ERROR_e;
+                }
             }
-        }
 
-        createInit();
+            createInit();
+        }
     }
 
     return result;
@@ -273,7 +283,7 @@ cPhs_State daObj_Hole_c::_create() {
 
 /* 0000122C-0000125C       .text _delete__12daObj_Hole_cFv */
 bool daObj_Hole_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arc_name);
+    dComIfG_resDeleteDemo(&mPhs, m_arc_name);
     return true;
 }
 

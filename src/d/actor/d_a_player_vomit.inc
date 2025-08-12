@@ -87,6 +87,9 @@ BOOL daPy_lk_c::procVomitWait_init() {
     mVelocity = 0.0f;
     m34D4 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK80_e);
+#if VERSION == VERSION_PAL
+    m34D0 = 0;
+#endif
     return true;
 }
 
@@ -94,9 +97,20 @@ BOOL daPy_lk_c::procVomitWait_init() {
 BOOL daPy_lk_c::procVomitWait() {
     s16 r30 = 0;
 
+#if VERSION < VERSION_PAL
     if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP)) {
         procVomitJump_init(0);
-    } else {
+    }
+#else
+    if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP) || m34D0) {
+        if (!dComIfGp_event_runCheck()) {
+            procVomitJump_init(0);
+        } else {
+            m34D0 = 1;
+        }
+    }
+#endif
+    else {
         if (mStickDistance > 0.05f) {
             int direction = getDirectionFromAngle(m34DC);
             if (direction == DIR_LEFT) {

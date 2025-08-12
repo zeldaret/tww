@@ -1782,7 +1782,7 @@ cPhs_State daNpcRoten_c::createInit() {
 
 /* 000011C8-0000122C       .text _delete__12daNpcRoten_cFv */
 bool daNpcRoten_c::_delete() {
-    dComIfG_resDelete(getPhaseP(), l_arcname_tbl[mNpcNo]);
+    dComIfG_resDeleteDemo(getPhaseP(), l_arcname_tbl[mNpcNo]);
     if(heap && mpMorf) {
         mpMorf->stopZelAnime();
     }

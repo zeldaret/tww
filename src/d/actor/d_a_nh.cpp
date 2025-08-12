@@ -321,7 +321,7 @@ BOOL daNh_c::checkEscapeEnd() {
             setAction(&daNh_c::waitAction, NULL);
             return TRUE;
         }
-        if (homeDelta.abs2XZ() > l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+        if (homeDelta.abs2XZ() > SQUARE(l_HIO.prm.mMaxHomeDist)) {
             setAction(&daNh_c::returnAction, NULL);
             return TRUE;
         }
@@ -366,7 +366,7 @@ BOOL daNh_c::returnAction(void*) {
         } else {
             s16 targetAngle = cLib_targetAngleY(&current.pos, &home.pos);
             cXyz homeDelta = home.pos - current.pos;
-            if (homeDelta.abs2XZ() < l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+            if (homeDelta.abs2XZ() < SQUARE(l_HIO.prm.mMaxHomeDist)) {
                 s16 angle = targetAngle - fopAcM_searchPlayerAngleY(this);
                 if (abs(angle) < 0x1000) {
                     if (angle < 0) {

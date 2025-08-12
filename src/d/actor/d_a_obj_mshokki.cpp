@@ -206,16 +206,14 @@ void daObjMshokki_c::co_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_
         if (fVar1 > 1.0f) {
             fVar1 = 1.0f;
         }
+        s16 angle_x = l_data[i_this->m60C].m0C * fVar1;
+        s16 angle_y = other_actor->current.angle.y;
+        i_this->shape_angle.x = angle_x;
+        i_this->shape_angle.y = angle_y;
 #if VERSION == VERSION_DEMO
-        i_this->shape_angle.x = l_data[i_this->m60C].m0C * fVar1;
-        s32 sVar3 = other_actor->current.angle.y;
-        i_this->shape_angle.y = sVar3;
-        i_this->m61C = sVar3 + HIO(m18) * 2.0f;
+        i_this->m61C = angle_y + HIO(m18) * 2.0f;
 #else
-        s16 sVar3 = other_actor->current.angle.y;
-        i_this->shape_angle.x = l_data[i_this->m60C].m0C * fVar1;
-        i_this->shape_angle.y = sVar3;
-        i_this->m61C = sVar3 + (s16)(HIO(m18) * 2.0f);
+        i_this->m61C = angle_y + (s16)(HIO(m18) * 2.0f);
 #endif
     }
 }

@@ -233,7 +233,7 @@ static BOOL daFf_Execute(ff_class* i_this) {
         i_this->mTimers[4] = REG13_F(9) + (cM_rndF(20.0f) + 30.0f);
     }
     i_this->mSph.SetC(i_this->current.pos);
-    g_dComIfG_gameInfo.play.mCcS.Set(&i_this->mSph);
+    dComIfG_Ccsp()->Set(&i_this->mSph);
     return TRUE;
 }
 

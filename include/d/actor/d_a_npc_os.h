@@ -72,7 +72,7 @@ public:
     void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
-    static bool isPlayerRoom_Goat() { return isPlayerRoom(1); }
+    static bool isPlayerRoom_Goat() { return isPlayerRoom(1) == true; }
 
     cPhs_State create();
     BOOL createHeap();

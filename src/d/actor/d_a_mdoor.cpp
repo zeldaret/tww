@@ -202,7 +202,7 @@ void daMdoor_c::demoProc() {
         "WAIT", "CLOSE", "STOP_OPEN",
     };
 
-    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, 3, 0, 0);
+    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, ARRAY_SIZE(action_table), 0, 0);
 
     if (dComIfGp_evmng_getIsAddvance(m2C0)) {
         switch (actIdx) {

@@ -252,7 +252,7 @@ BOOL daTag_Event_c::actionHunt() {
 
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
-    } else if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    } else if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_READY);
         fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
@@ -348,7 +348,7 @@ BOOL daTag_Event_c::actionSpeHunt() {
     if (sp20.y < 0.0f) {
         sp20.y = -sp20.y;
     }
-    if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_SPE_READY);
         fopAcM_orderOtherEventId(this, mEventIdx);
     }
@@ -419,7 +419,7 @@ BOOL daTag_Event_c::actionMjHunt() {
 
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
-    } else if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    } else if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         } else {

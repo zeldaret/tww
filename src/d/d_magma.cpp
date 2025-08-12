@@ -89,9 +89,9 @@ void dMagma_ball_c::draw() {
 BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
     f32 distSq = mPos.abs2XZ(pos);
     f32 rad1 = mScale * 243.6414f;
-    if (distSq < rad1*rad1) {
+    if (distSq < SQUARE(rad1)) {
         f32 rad2 = mScale * 800.0f;
-        f32 dist = std::sqrtf(rad2 * rad2 - distSq);
+        f32 dist = std::sqrtf(SQUARE(rad2) - distSq);
         f32 temp = (mPos.y - (rad2 - 47.999146f));
         temp += dist;
         *dst = temp;

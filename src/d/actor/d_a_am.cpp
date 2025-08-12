@@ -746,7 +746,7 @@ static void action_modoru_move(am_class* i_this) {
             i_this->mTargetAngleY = cM_atan2s(xDistToSpawn, zDistToSpawn);
         }
 
-        f32 xzDist = std::sqrtf(xDistToSpawn*xDistToSpawn + zDistToSpawn*zDistToSpawn);
+        f32 xzDist = std::sqrtf(SQUARE(xDistToSpawn) + SQUARE(zDistToSpawn));
         if (xzDist < 20.0f) {
             i_this->mTargetAngleY = i_this->mSpawnRotY;
             actor->speedF = 0.0f;

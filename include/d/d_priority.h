@@ -495,6 +495,10 @@ enum {
     /* 0x01E7 */ PRIO_OVERLAP6,
     /* 0x01E8 */ PRIO_OVERLAP7,
     /* 0x01E9 */ PRIO_OVERLAP8,
+#if VERSION > VERSION_DEMO
+    /* 0x01EA */ PRIO_1EA,
+#endif
+    /* 0x01FF */ PRIO_1FF = 0x1FF,
 };
 
 #endif /* D_PRIORITY_H */

@@ -469,7 +469,7 @@ static BOOL daPirate_Flag_Execute(pirate_flag_class* i_this) {
 
     static cXyz flag_offset(0.0f, 1000.0f, 100.0f);
 
-    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &flag_offset, &i_this->current.pos);
+    cMtx_multVec(l_p_ship->mModel->getBaseTRMtx(), &flag_offset, &i_this->current.pos);
 
     i_this->current.angle = l_p_ship->shape_angle;
     cXyz* windVec = dKyw_get_wind_vec();

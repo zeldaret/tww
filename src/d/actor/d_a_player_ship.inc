@@ -42,7 +42,7 @@ BOOL daPy_lk_c::checkJumpRideShip() {
             cXyz sp20;
             mDoMtx_multVec(ship->getBodyMtx(), &l_ship_offset, &sp20);
             sp20 = old.pos - sp20;
-            if (sp20.y > 5.0f && sp20.abs2XZ() < 10000.0f) {
+            if (sp20.y > 5.0f && sp20.abs2XZ() < SQUARE(100.0f)) {
                 return procShipJumpRide_init();
             }
         }
@@ -655,7 +655,7 @@ BOOL daPy_lk_c::procShipPaddle() {
         }
     } else {
         onResetFlg0(daPyRFlg0_UNK4000000);
-        if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && dComIfGp_event_runCheck() == 0) {
+        if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             setSubjectMode();
         }
     }
@@ -905,7 +905,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     deleteEquipItem(TRUE);
     gravity = 0.0f;
     ship->setPaddleMove();
-    if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e) {
+    if (checkBowMiniGame()) {
         mEquipItem = dItem_BOW_e;
     } else {
         mEquipItem = dComIfGp_getSelectItem(mReadyItemBtn);
@@ -917,7 +917,7 @@ BOOL daPy_lk_c::procShipBow_init() {
     setShipRidePos(0);
     m34D4 = ship->shape_angle.y;
     m34DA = 0;
-    if (checkAttentionLock() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_068_e) {
+    if (checkAttentionLock() && !checkBowMiniGame()) {
         mProcVar0.m3570 = 1;
     } else {
         mProcVar0.m3570 = 0;
@@ -928,11 +928,11 @@ BOOL daPy_lk_c::procShipBow_init() {
 
 /* 80142084-80142250       .text procShipBow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procShipBow() {
-    if ((mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_068_e) && changeShipEndProc()) {
+    if (!checkBowMiniGame() && changeShipEndProc()) {
         return true;
     }
     setShipRidePos(0);
-    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_068_e) {
+    if (!checkBowMiniGame()) {
         dComIfGp_setDoStatus(dActStts_RETURN_e);
         if (doTrigger() || ((!checkAttentionLock() && mActorKeepEquip.getActor() == NULL) && mProcVar0.m3570 != 0)) {
             procShipPaddle_init();
@@ -946,7 +946,7 @@ BOOL daPy_lk_c::procShipBow() {
     if (checkBowWaitAnime()) {
         setShipAttentionAnmSpeed(1.0f);
     }
-    if (checkAttentionLock() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_068_e)) {
+    if (checkAttentionLock() && !checkBowMiniGame()) {
         setShipAttnetionBodyAngle();
         mProcVar0.m3570 = 1;
     } else {

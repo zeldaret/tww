@@ -43,9 +43,9 @@ BOOL daPy_lk_c::fanJointCB(int param_0) {
 BOOL daPy_fanJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->fanJointCB(jntNo);
     }
     return TRUE;
@@ -70,9 +70,9 @@ BOOL daPy_lk_c::parachuteJointCB(int param_0) {
 BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->parachuteJointCB(jntNo);
     }
     return TRUE;
@@ -171,10 +171,10 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
     mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
-    modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Lroot joint
-    modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Rroot joint
-    modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_LarmB joint
-    modelData->getJointNodePointer(0x09)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_RarmB joint
+    modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // Lroot joint
+    modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // Rroot joint
+    modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // LarmB joint
+    modelData->getJointNodePointer(0x09)->setCallBack(daPy_parachuteJointCallback); // RarmB joint
 }
 
 /* 8014C254-8014C34C       .text procFanSwing_init__9daPy_lk_cFv */
@@ -414,7 +414,7 @@ BOOL daPy_lk_c::procFanGlide() {
         } else {
             if (!dComIfGp_event_runCheck()) {
                 m3574--;
-                if (m3574 == 0 && (!(dComIfGs_getMagic() < 1))) {
+                if (m3574 == 0 && dComIfGs_getMagic() >= 1) {
                     dComIfGp_setItemMagicCount(-1);
                     m3574 = daPy_HIO_fan_c0::m.field_0x8;
                 }

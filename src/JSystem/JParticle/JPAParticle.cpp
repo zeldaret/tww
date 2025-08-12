@@ -4,6 +4,7 @@
 //
 
 #include "JSystem/JParticle/JPAParticle.h"
+#include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "dolphin/mtx/mtxvec.h"
@@ -23,8 +24,8 @@ void JPABaseParticle::initParticle() {
     mFieldDrag = 1.0f;
     mDrag = 1.0f;
     MTXMultVec(emtrInfo.mEmitterGlobalSR, emtrInfo.mVolumePos, mLocalPosition);
-    if ((emtr->mDataFlag & 0x08) != 0)
-        setStatus(0x20);
+    if ((emtr->mDataFlag & JPADynFlag_FollowEmtr) != 0)
+        setStatus(JPAPtclStts_UNK_20);
 
     mOffsetPosition.set(emtrInfo.mEmitterGlobalCenter);
 
@@ -69,7 +70,7 @@ void JPABaseParticle::initParticle() {
         velRatio * (velOmni.z + velAxis.z + velDir.z + velRndm.z)
     );
 
-    if (emtr->checkEmDataFlag(0x04))
+    if (emtr->checkEmDataFlag(JPADynFlag_InheritScale))
         mBaseVel.mul(emtr->mEmitterScale);
 
     MTXMultVec(emtrInfo.mEmitterGlobalRot, mBaseVel, mBaseVel);
@@ -106,7 +107,7 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     initStatus(JPAPtclStts_FirstFrame | JPAPtlcStts_Child);
 
     if (!sweep->isEnableField()) {
-        setStatus(0x40);
+        setStatus(JPAPtclStts_UNK_40);
         mFieldDrag = 1.0f;
         mDrag = 1.0f;
     } else {
@@ -139,8 +140,8 @@ void JPABaseParticle::initChild(JPABaseParticle* parent) {
     vel.z = (mBaseVel.z + mFieldVel.z) * velScale;
     mVelocity = vel;
 
-    if (emtr->checkEmDataFlag(0x10))
-        setStatus(0x20);
+    if (emtr->checkEmDataFlag(JPADynFlag_FollowEmtrChld))
+        setStatus(JPAPtclStts_UNK_20);
 
     mOffsetPosition.set(parent->mOffsetPosition);
     mLocalPosition.set(parent->mLocalPosition);
@@ -167,7 +168,7 @@ void JPABaseParticle::incFrame() {
 
     if (mCurFrame >= mLifeTime) {
         mCurNormTime = 1.0f;
-        setStatus(0x02); // setDeleteParticleFlag?
+        setStatus(JPAPtclStts_Delete);
     } else {
         mCurNormTime = mCurFrame / mLifeTime;
     }
@@ -176,10 +177,10 @@ void JPABaseParticle::incFrame() {
 /* 8025EB90-8025ECE8       .text calcVelocity__15JPABaseParticleFv */
 void JPABaseParticle::calcVelocity() {
     mFieldVel.zero();
-    if (checkStatus(0x20))
+    if (checkStatus(JPAPtclStts_UNK_20))
         mOffsetPosition.set(JPABaseEmitter::emtrInfo.mEmitterGlobalCenter);
     mBaseVel.add(mAccel);
-    if (!checkStatus(0x40))
+    if (!checkStatus(JPAPtclStts_UNK_40))
         JPABaseEmitter::emtrInfo.mpCurEmitter->mFieldManager.calc(this);
     mFieldVel.add(mFieldAccel);
 

@@ -55,7 +55,7 @@ static cXyz l_wind_offset(0.0f, 725.0f, 0.0f);
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 0.0f;
     m0c = 0;
 }

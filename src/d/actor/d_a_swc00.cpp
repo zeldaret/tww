@@ -67,7 +67,7 @@ static cPhs_State daSwc00_Create(fopAc_ac_c* i_this) {
 
     i_this->scale.x *= 100.0f;
     i_this->scale.x += 30.0f;
-    i_this->scale.x *= i_this->scale.x;
+    i_this->scale.x = SQUARE(i_this->scale.x);
     i_this->scale.y *= 100.0f;
 
     return cPhs_COMPLEATE_e;

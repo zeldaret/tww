@@ -23,7 +23,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ f32 m0C;
     /* 0x10 */ f32 m10;
@@ -82,7 +82,7 @@ static const dCcD_SrcCyl l_cyl_src = {
 
 #if VERSION == VERSION_DEMO
 daObjIce_HIO_c::daObjIce_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 40.0f;
     m0C = 120.0f;
     m10 = 65.0f;
@@ -184,7 +184,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
             f32 fVar6 = i_this->m44C * (i_this->scale.x * l_co_radius_table[i]);
             f32 fVar7 = i_this->m450 * (i_this->scale.y * l_co_height_table[i]);
             f32 fVar5 = i_this->m44C * (i_this->scale.z * l_co_radius_table[i]);
-            if (y < fVar7 && ((x2 * x2) / (fVar6 * fVar6) + (z2 * z2) / (fVar5 * fVar5) < 1.0f)) {
+            if (y < fVar7 && (SQUARE(x2) / SQUARE(fVar6) + SQUARE(z2) / SQUARE(fVar5) < 1.0f)) {
                 switch (pcVar8->GetAtType()) {
                 case AT_TYPE_UNK20000:
                 case AT_TYPE_FIRE:
@@ -275,8 +275,8 @@ cPhs_State daObjIce_c::_create() {
     }
 
 #if VERSION == VERISON_DEMO
-    if (l_HIO.m04 < 0) {
-        l_HIO.m04 = mDoHIO_createChild("汎用氷", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("汎用氷", &l_HIO);
     }
 #endif
 
@@ -302,9 +302,9 @@ bool daObjIce_c::_delete() {
     }
 
 #if VERSION == VERISON_DEMO
-    if (l_HIO.m04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.m04);
-        l_HIO.m04 = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
     return true;

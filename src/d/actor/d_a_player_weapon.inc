@@ -394,7 +394,7 @@ BOOL daPy_lk_c::procWeaponThrow() {
                 uVar2 = cM_atan2s(-local_34.y, dVar5);
             }
         }
-        boko->m2BA = 1;
+        boko->setThrow(1);
         boko->m2CA = uVar2;
         voiceStart(0);
         deleteEquipItem(FALSE);

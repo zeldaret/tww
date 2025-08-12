@@ -527,7 +527,7 @@ s32 fopAcM_rollPlayerCrash(fopAc_ac_c* i_this, f32 distAdjust, u32 flag) {
     f32 maxDist = distAdjust + 40.0f;
     f32 xzDist2 = fopAcM_searchPlayerDistanceXZ2(i_this);
     f32 yDist = fopAcM_searchPlayerDistanceY(i_this);
-    if (xzDist2 < maxDist*maxDist && yDist > -100.0f && yDist < 200.0f) {
+    if (xzDist2 < SQUARE(maxDist) && yDist > -100.0f && yDist < 200.0f) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
         s16 angle = fopAcM_searchPlayerAngleY(i_this);
         if (cM_scos(player->current.angle.y - angle) < -0.9f) {

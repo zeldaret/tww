@@ -19,10 +19,13 @@ fapGm_HIO_c g_HIO;
 fapGm_HIO_c::fapGm_HIO_c() {
     field_0x05 = 1;
 
+#if VERSION > VERSION_DEMO
     if (mDoMain::developmentMode) {
         mDisplayMeter = true;
         mDisplayFlag = 1;
-    } else {
+    } else
+#endif
+    {
         mDisplayMeter = false;
         mDisplayFlag = 0;
     }

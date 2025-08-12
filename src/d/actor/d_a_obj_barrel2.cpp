@@ -61,7 +61,7 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m10 */ 800.0f,
         /* m14 */ 100.0f,
         /* m18 */ 50.0f,
-        /* m1C */ 0.0099999998f,
+        /* m1C */ 0.01f,
         /* m20 */ 4.0f,
         /* m24 */ 1.0f,
         /* m28 */ 3.0f,
@@ -79,8 +79,8 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m58 */ 0x3E8,
         /* m5C */ 0.3f,
         /* m60 */ 0.02f,
-        /* m64 */ 0.039999999f,
-        /* m68 */ 0.34999999f,
+        /* m64 */ 0.04f,
+        /* m68 */ 0.35f,
         /* m6C */ 1.0f,
         /* m70 */ 1.0f,
     },
@@ -93,7 +93,7 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m10 */ 300.0f,
         /* m14 */ 100.0f,
         /* m18 */ 50.0f,
-        /* m1C */ 0.0099999998f,
+        /* m1C */ 0.01f,
         /* m20 */ 4.0f,
         /* m24 */ 1.0f,
         /* m28 */ 3.0f,
@@ -111,8 +111,8 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m58 */ 0x3E8,
         /* m5C */ 0.3f,
         /* m60 */ 0.02f,
-        /* m64 */ 0.039999999f,
-        /* m68 */ 0.34999999f,
+        /* m64 */ 0.04f,
+        /* m68 */ 0.35f,
         /* m6C */ 1.0f,
         /* m70 */ 1.0f,
     },
@@ -125,7 +125,7 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m10 */ 4500.0f,
         /* m14 */ 100.0f,
         /* m18 */ 50.0f,
-        /* m1C */ 0.0099999998f,
+        /* m1C */ 0.01f,
         /* m20 */ 5.76f,
         /* m24 */ 1.0f,
         /* m28 */ 3.0f,
@@ -143,8 +143,8 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m58 */ 0x3E8,
         /* m5C */ 0.3f,
         /* m60 */ 0.02f,
-        /* m64 */ 0.039999999f,
-        /* m68 */ 0.34999999f,
+        /* m64 */ 0.04f,
+        /* m68 */ 0.35f,
         /* m6C */ 5.0f,
         /* m70 */ 1.0f,
     },
@@ -152,13 +152,13 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
     {
         /* m00 */ 0x5,
         /* m02 */ 0x9,
-        /* m04 */ 0x520,
+        /* m04 */ DEMO_SELECT(0x12A0, 0x520),
         /* m08 */ 288.0f,
         /* m0C */ 576.0f,
         /* m10 */ 800.0f,
         /* m14 */ 100.0f,
         /* m18 */ 50.0f,
-        /* m1C */ 0.0099999998f,
+        /* m1C */ 0.01f,
         /* m20 */ 5.76f,
         /* m24 */ 1.0f,
         /* m28 */ 3.0f,
@@ -176,8 +176,8 @@ const daObjBarrel2::Attr_c daObjBarrel2::Act_c::M_attr[] = {
         /* m58 */ 0x3E8,
         /* m5C */ 0.3f,
         /* m60 */ 0.02f,
-        /* m64 */ 0.039999999f,
-        /* m68 */ 0.34999999f,
+        /* m64 */ 0.04f,
+        /* m68 */ 0.35f,
         /* m6C */ 1.0f,
         /* m70 */ 1.0f,
     },
@@ -332,7 +332,7 @@ void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c
                 cXyz sp14(ship->current.pos.x - i_this->current.pos.x, 0.0f, ship->current.pos.z - i_this->current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
-                f32 sq = i_this->attr()->m3C * i_this->attr()->m3C;
+                f32 sq = SQUARE(i_this->attr()->m3C);
 
                 if (sp14.inprod(sp08) < sq) {
                     i_this->m470 = 1;
@@ -892,7 +892,7 @@ void daObjBarrel2::Act_c::afl_sway() {
 #if VERSION == VERSION_DEMO
     f32 x3;
     f32 z3;
-    f32 sq2 = attr()->m5C * attr()->m5C;
+    f32 sq2 = SQUARE(attr()->m5C);
     f32 x = m420.x * attr()->m68;
     f32 z = m420.z * attr()->m68;
     f32 sq = x * x + z * z;
@@ -923,7 +923,7 @@ void daObjBarrel2::Act_c::afl_sway() {
     f32 z3;
     f32 x = m420.x * attr()->m68;
     f32 z = m420.z * attr()->m68;
-    f32 sq2 = attr()->m5C * attr()->m5C;
+    f32 sq2 = SQUARE(attr()->m5C);
     f32 sq = x * x + z * z;
 
     if (sq > sq2) {
@@ -952,7 +952,7 @@ void daObjBarrel2::Act_c::afl_sway() {
 bool daObjBarrel2::Act_c::mine_chk_range_flash() {
     daShip_c* ship = dComIfGp_getShipActor();
 
-    f32 fVar1 = attr()->m40 * attr()->m40;
+    f32 fVar1 = SQUARE(attr()->m40);
     bool uVar2 = false;
     if (ship && fopAcM_searchActorDistanceXZ2(this, ship) < fVar1) {
         uVar2 = true;
@@ -964,7 +964,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_flash() {
 bool daObjBarrel2::Act_c::mine_chk_range_explode() {
     daShip_c* ship = dComIfGp_getShipActor();
 
-    f32 fVar1 = attr()->m44 * attr()->m44;
+    f32 fVar1 = SQUARE(attr()->m44);
     bool uVar2 = false;
     if (ship && fopAcM_searchActorDistanceXZ2(this, ship) < fVar1) {
         uVar2 = true;
@@ -975,7 +975,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_explode() {
 /* 00002A00-00002B34       .text mine_chk_range_damage__Q212daObjBarrel25Act_cFv */
 bool daObjBarrel2::Act_c::mine_chk_range_damage() {
     daShip_c* ship = dComIfGp_getShipActor();
-    f32 sq = attr()->m48 * attr()->m48;
+    f32 sq = SQUARE(attr()->m48);
 
     if (ship != NULL && fopAcM_searchActorDistanceXZ2(this, ship) < sq) {
         if (ship->current.pos.y < current.pos.y + attr()->m4C) {
@@ -983,7 +983,7 @@ bool daObjBarrel2::Act_c::mine_chk_range_damage() {
                 cXyz sp14(ship->current.pos.x - current.pos.x, 0.0f, ship->current.pos.z - current.pos.z);
                 cXyz sp08(ship->speed.x, 0.0f, ship->speed.z);
 
-                sq = attr()->m3C * attr()->m3C;
+                sq = SQUARE(attr()->m3C);
                 if (sp14.inprod(sp08) < sq) {
                     ship->onCrashFlg();
                     return true;
@@ -1024,7 +1024,7 @@ void daObjBarrel2::Act_c::execute_sub() {
         m46D--;
     }
 
-    if (m45C < attr()->m34 * attr()->m34) {
+    if (m45C < SQUARE(attr()->m34)) {
         item_give();
     }
 
@@ -1080,7 +1080,7 @@ bool daObjBarrel2::Act_c::_execute() {
     item_connect_check();
 
     s32 uVar2 = 0;
-    if (m46A != 1 && dComIfGp_event_runCheck() != 0) {
+    if (m46A != 1 && dComIfGp_event_runCheck() != FALSE) {
         uVar2 = 1;
     }
     m46C = uVar2;

@@ -1660,7 +1660,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
             f32 x_diff = std::abs(param_1->current.pos.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1->current.pos.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }
@@ -1685,7 +1685,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
             f32 x_diff = fabs(param_1.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }

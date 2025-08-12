@@ -23,7 +23,7 @@ void JPABaseEmitter::calcVolumePoint() {
 
 /* 8025C254-8025C394       .text calcVolumeLine__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeLine() {
-    if (checkEmDataFlag(0x02)) {
+    if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
         emtrInfo.mVolumePos.set(0.0f, 0.0f, emtrInfo.mVolumeSize * ((f32)emtrInfo.mVolumeEmitIdx / ((f32)emtrInfo.mVolumeEmitCount - 1.0f) - 0.5f));
         emtrInfo.mVolumeEmitIdx++;
     } else {
@@ -37,7 +37,7 @@ void JPABaseEmitter::calcVolumeLine() {
 /* 8025C394-8025C538       .text calcVolumeCircle__14JPABaseEmitterFv */
 void JPABaseEmitter::calcVolumeCircle() {
     s16 angle;
-    if (checkEmDataFlag(0x02)) {
+    if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
         s16 idx = (0x10000 * emtrInfo.mVolumeEmitIdx / emtrInfo.mVolumeEmitCount);
         angle = idx * mVolumeSweep;
         emtrInfo.mVolumeEmitIdx++;
@@ -46,7 +46,7 @@ void JPABaseEmitter::calcVolumeCircle() {
     }
 
     f32 rad = getRandomF();
-    if (checkEmDataFlag(0x01))
+    if (checkEmDataFlag(JPADynFlag_FixedDensity))
         rad = 1.0f - rad * rad;
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
 
@@ -66,7 +66,7 @@ void JPABaseEmitter::calcVolumeCube() {
 void JPABaseEmitter::calcVolumeSphere() {
     s16 x;
     s16 angle;
-    if (checkEmDataFlag(0x02)) {
+    if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
         u16 angleNo = (emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax;
         x = (u16)((emtrInfo.mVolumeEmitXCount * 0x8000) / (emtrInfo.mDivNumber - 1) + 0x4000);
         angle = (f32)angleNo * mVolumeSweep + 32768.0f;
@@ -86,7 +86,7 @@ void JPABaseEmitter::calcVolumeSphere() {
     }
 
     f32 rad = getRandomF();
-    if (checkEmDataFlag(0x01)) {
+    if (checkEmDataFlag(JPADynFlag_FixedDensity)) {
         rad = 1.0f - rad * rad * rad;
     }
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
@@ -104,7 +104,7 @@ void JPABaseEmitter::calcVolumeSphere() {
 void JPABaseEmitter::calcVolumeCylinder() {
     s16 angle = mVolumeSweep * getRandomSS();
     f32 rad = getRandomF();
-    if (checkEmDataFlag(0x01))
+    if (checkEmDataFlag(JPADynFlag_FixedDensity))
         rad = 1.0f - rad * rad;
     rad = emtrInfo.mVolumeSize * (mVolumeMinRad + rad * (1.0f - mVolumeMinRad));
 
@@ -249,7 +249,7 @@ void JPABaseEmitter::calc() {
 void JPABaseEmitter::calcCreatePtcls() {
     if (checkStatus(JPAEmtrStts_RateStepEmit)) {
         s32 emitCount = 0;
-        if (checkEmDataFlag(0x02)) { // Fixed interval
+        if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
             emitCount = (mVolumeType == 1) ?
                 (mDivNumber + 1) * (mDivNumber - 1) * 4 + 6 : // Sphere
                 mDivNumber;
@@ -319,20 +319,20 @@ void JPABaseEmitter::calcParticle() {
         JSULink<JPABaseParticle> * next = link->getNext();
         JPABaseParticle * ptcl = (JPABaseParticle *) link->getObjectPtr();
         ptcl->incFrame();
-        if (!ptcl->checkStatus(0x80)) {
+        if (!ptcl->checkStatus(JPAPtclStts_UNK_80)) {
             ptcl->calcVelocity();
             ptcl->calcCB(this);
-            if (!ptcl->checkStatus(0x02)) {
+            if (!ptcl->checkStatus(JPAPtclStts_Delete)) {
                 mDraw.calcParticle(ptcl);
                 if (getEmitterDataBlockInfoPtr()->getSweepShape() != NULL && ptcl->checkCreateChild())
                     createChildren(ptcl);
                 ptcl->calcPosition();
             }
         } else {
-            ptcl->setStatus(0x02);
+            ptcl->setStatus(JPAPtclStts_Delete);
         }
 
-        if (ptcl->checkStatus(0x02))
+        if (ptcl->checkStatus(JPAPtclStts_Delete))
             deleteParticle(ptcl, &mActiveParticles);
 
         link = next;
@@ -345,19 +345,19 @@ void JPABaseEmitter::calcChild() {
         JSULink<JPABaseParticle> * next = link->getNext();
         JPABaseParticle * ptcl = (JPABaseParticle *) link->getObjectPtr();
         ptcl->incFrame();
-        if (!ptcl->checkStatus(0x80)) {
+        if (!ptcl->checkStatus(JPAPtclStts_UNK_80)) {
             if (ptcl->getAge() != 0)
                 ptcl->calcVelocity();
             ptcl->calcCB(this);
-            if (!ptcl->checkStatus(0x02)) {
+            if (!ptcl->checkStatus(JPAPtclStts_Delete)) {
                 mDraw.calcChild(ptcl);
                 ptcl->calcPosition();
             }
         } else {
-            ptcl->setStatus(0x02);
+            ptcl->setStatus(JPAPtclStts_Delete);
         }
 
-        if (ptcl->checkStatus(0x02))
+        if (ptcl->checkStatus(JPAPtclStts_Delete))
             deleteParticle(ptcl, &mChildParticles);
 
         link = next;

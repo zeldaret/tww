@@ -23,7 +23,7 @@ public:
     void genMessage(JORMContext*);
 
 public:
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ f32 m0C;
     /* 0x10 */ f32 m10;
@@ -107,7 +107,7 @@ static const dCcD_SrcCyl l_fire_cyl_src = {
 
 #if VERSION == VERSION_DEMO
 daObjLeaves_HIO_c::daObjLeaves_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 150.0f;
     m0C = 115.0f;
     m10 = 95.0f;
@@ -522,8 +522,8 @@ cPhs_State daObjLeaves_c::_create() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 < 0) {
-        l_HIO.m04 = mDoHIO_createChild("落ち葉", &l_HIO);
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("落ち葉", &l_HIO);
     }
 #endif
     return PVar4;
@@ -555,9 +555,9 @@ bool daObjLeaves_c::_delete() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (l_HIO.m04 >= 0) {
-        mDoHIO_deleteChild(l_HIO.m04);
-        l_HIO.m04 = -1;
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
     }
 #endif
 

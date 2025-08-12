@@ -23,8 +23,13 @@ class JPACallBackBase2;
 
 enum JPAParticleStatus {
     JPAPtclStts_FirstFrame = 0x01,
+    JPAPtclStts_Delete = 0x02,
     JPAPtlcStts_Child = 0x04,
     JPAPtclStts_Invisible = 0x08,
+    JPAPtclStts_UNK_10 = 0x10,
+    JPAPtclStts_UNK_20 = 0x20,
+    JPAPtclStts_UNK_40 = 0x40,
+    JPAPtclStts_UNK_80 = 0x80,
 };
 
 // fake name
@@ -72,6 +77,7 @@ public:
     void initStatus(u32 flag) { mStatus = flag; }
     void setStatus(u32 flag) { mStatus |= flag; }
     void clearStatus(u32 flag) { mStatus &= ~flag; }
+    void setDeleteParticleFlag() { setStatus(JPAPtclStts_Delete); }
     bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
     void setInvisibleParticleFlag() { setStatus(JPAPtclStts_Invisible); }
 
@@ -81,7 +87,6 @@ public:
     void getWidth() {}
     void getHeight() {}
     void getLifeTime() const {}
-    void setDeleteParticleFlag() {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;

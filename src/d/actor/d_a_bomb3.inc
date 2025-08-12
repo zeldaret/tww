@@ -1119,7 +1119,7 @@ void daBomb_c::set_wind_vec() {
         return;
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();
-    if (f31 > 180.0f*180.0f) {
+    if (f31 > SQUARE(180.0f)) {
         sp48 *= 180.0f / std::sqrtf(f31);
     }
     cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();

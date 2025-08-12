@@ -38,7 +38,7 @@ public:
 
 public:
     /* 0x00 */ //vtable
-    /* 0x04 */ s8 m04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 m08;
     /* 0x0C */ s16 m0c;
 };
