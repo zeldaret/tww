@@ -407,7 +407,7 @@ void daTag_Hint_c::setPlayerAngle() {
     cXyz sp14 = player->attention_info.position;
 
     s16 uVar3;
-    for (s32 i = 0; i < ARRAY_SIZE(search_angle_table); i++) {
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(search_angle_table); i++) {
         if (!m2A3) {
             uVar3 = player->shape_angle.y + search_angle_table[i];
         } else {
