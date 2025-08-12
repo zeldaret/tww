@@ -1868,10 +1868,6 @@ public:
     BOOL checkPlayerDemoMode() const { return mDemo.getDemoType() != 0; }
     void checkSpecialDemoMode() const {}
     
-    // This inline seems necessary to match daPy_lk_c::makeArrow on demo.
-    // TODO: What's the actual name of the inline? Or can the function be matched without an inline?
-    BOOL checkDemoUnk068_fake() const { return mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e; }
-    
     f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) {
         return param_0 + (mStickDistance * (param_1 - param_0));
     }

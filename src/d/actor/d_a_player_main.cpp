@@ -10578,7 +10578,7 @@ void daPy_lk_c::setStickData() {
         mStickDistance = 0.0f;
         m34E8 = 0;
     } else {
-        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e) {
+        if (checkBowMiniGame()) {
             mStickDistance = g_mDoCPd_cpadInfo[0].mMainStickValue;
             m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
             m34E8 = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));

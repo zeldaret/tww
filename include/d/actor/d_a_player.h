@@ -98,7 +98,7 @@ public:
         /* 0x041 */ DEMO_FOODSET_e = 65,
         /* 0x042 */ DEMO_SWAIT_e = 66,
         /* 0x043 */ DEMO_PWAIT_067_e = 67,
-        /* 0x044 */ DEMO_UNK_068_e = 68,
+        /* 0x044 */ DEMO_BOW_MINIGAME_e = 68,
         /* 0x045 */ DEMO_SHIPSIT_e = 69,
         /* 0x046 */ DEMO_UNK_070_e = 70,
         /* 0x047 */ DEMO_SHIPOFF_e = 71,
@@ -551,7 +551,7 @@ public:
     void setFace(daPy_FACE face) { mFace = face; }
     
     BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
-    void checkBowMiniGame() const {}
+    BOOL checkBowMiniGame() const { return mDemo.getDemoMode() == daPy_demo_c::DEMO_BOW_MINIGAME_e; }
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
     void getRopeJumpLand() const {}
