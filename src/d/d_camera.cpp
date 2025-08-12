@@ -643,13 +643,13 @@ void dCamera_c::updateMonitor() {
 
 /* 801628DC-80163020       .text calcPeepAngle__9dCamera_cFv */
 cSAngle dCamera_c::calcPeepAngle() {
+    f32 temp_50 = 50.0f;
+    f32 temp_30 = 30.0f;
     cSAngle res(cSAngle::_0);
     
     if (check_owner_action(mPadId, daPyStts0_UNK20_e)) {
-        f32 temp_30 = 30.0f;
         cXyz local_b8(0.0f, 0.0f, -temp_30);
 
-        f32 temp_50 = 50.0f;
         cXyz local_ac(-temp_50, 0.0f, -temp_30);
 
         cXyz local_a0(relationalPos(mpPlayerActor, &local_b8));
@@ -663,10 +663,9 @@ cSAngle dCamera_c::calcPeepAngle() {
         }
     }
     else if (check_owner_action(mPadId, daPyStts0_UNK40_e)) {
-        f32 temp_30 = 30.0f;
         cXyz local_88(0.0f, 0.0f, -temp_30);
 
-        cXyz local_7c(50.0f, 0.0f, -temp_30);
+        cXyz local_7c(temp_50, 0.0f, -temp_30);
 
         cXyz local_70(relationalPos(mpPlayerActor, &local_88));
         cXyz local_64(relationalPos(mpPlayerActor, &local_7c));
@@ -1239,7 +1238,12 @@ int dCamera_c::nextMode(s32 i_curMode) {
 
     if (next_mode == 12 && types[mCurType].mStyles[next_mode] < 0) {
         next_mode = i_curMode;
-        if (mCurType != mCamTypeEvent && mCurType != mCamTypeBoat && mCurType != mCamTypeBoatBattle && mCurType != mCamTypeRestrict) {
+#if VERSION == VERSION_DEMO
+        if (mCurType != mCamTypeEvent && mCurType != mCamTypeBoat && mCurType != GetCameraTypeFromCameraName("BoatBattle"))
+#else
+        if (mCurType != mCamTypeEvent && mCurType != mCamTypeBoat && mCurType != mCamTypeBoatBattle && mCurType != mCamTypeRestrict)
+#endif
+        {
             m254 |= 1;
         }
         m144 = 1;

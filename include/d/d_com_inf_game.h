@@ -354,6 +354,7 @@ public:
     void setStageNameDelete() { mPlacenameState = 0; }
     void setStageNameOff() { mPlacenameState = 1; }
 
+    u8 getGameoverStatus() { return mGameoverStatus; }
     void setGameoverStatus(u8 stts) { mGameoverStatus = stts; }
 
     fopAc_ac_c* getPlayer(int idx) { return mPlayerInfo[idx].mpPlayer; }
@@ -375,6 +376,7 @@ public:
         mItemTimer = timer;
         mStartItemTimer = false;
     }
+    void startItemTimer() { mStartItemTimer = true; }
 
     int getMessageRupee() { return mMessageRupee; }
     void setMessageRupee(s16 count) { mMessageRupee = count; }
@@ -497,7 +499,7 @@ public:
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
-    BOOL checkPlayerStatus(int param_0, int i, u32 flag) { return mPlayerStatus[param_0][i] & flag; }
+    u32 checkPlayerStatus(int param_0, int i, u32 flag) { return mPlayerStatus[param_0][i] & flag; }
 
     u8 getSelectItem(int idx) { return mSelectItem[idx]; }
     void setSelectItem(int idx, u8 itemNo) { mSelectItem[idx] = itemNo; }
@@ -632,8 +634,7 @@ public:
     u8 getPictureResultDetail() { return mPictureResultDetail; }
     void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
 
-    void startItemTimer() { mStartItemTimer = true; }
-
+    void startFwaterTimer() { mFwaterTimer = 1; }
     void stopFwaterTimer() { mFwaterTimer = 0; }
     u8 checkFwaterTimer() { return mFwaterTimer; }
 
@@ -942,12 +943,20 @@ inline int dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
+inline void dComIfGp_startItemTimer() {
+    g_dComIfG_gameInfo.play.startItemTimer();
+}
+
 inline int dComIfGp_getItemTimer() {
     return g_dComIfG_gameInfo.play.getItemTimer();
 }
 
 inline void dComIfGp_resetItemTimer(s16 timer) {
     g_dComIfG_gameInfo.play.resetItemTimer(timer);
+}
+
+inline void dComIfGp_decItemTimer() {
+    // TODO
 }
 
 inline int dComIfGp_getMessageRupee() {
@@ -1212,10 +1221,6 @@ inline void dComIfGs_setPictureNum(u8 num) {
     g_dComIfG_gameInfo.save.getPlayer().getItemRecord().setPictureNum(num);
 }
 
-inline u16 dComIfGs_getFwaterTimer() {
-    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getTimer();
-}
-
 inline u8 dComIfGs_getBeastNum(int i_idx) {
     return g_dComIfG_gameInfo.save.getPlayer().getBagItemRecord().getBeastNum(i_idx);
 }
@@ -1250,6 +1255,10 @@ inline u8 dComIfGs_checkReserveItemEmpty() {
 
 inline void dComIfGs_setReserveItemEmpty() {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty();
+}
+
+inline void dComIfGs_setReserveItemEmpty(u8 i_itemBtn) {
+    g_dComIfG_gameInfo.save.getPlayer().getBagItem().setReserveItemEmpty(i_itemBtn);
 }
 
 inline void dComIfGs_setReserveBaitEmpty(u8 i_itemBtn) {
@@ -2037,8 +2046,12 @@ stage_scls_info_class* dComIfGd_getMeshSceneList(Vec& vec);
 
 BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo);
 
-inline void dComIfGp_startItemTimer() {
-    g_dComIfG_gameInfo.play.startItemTimer();
+inline u16 dComIfGs_getFwaterTimer() {
+    return g_dComIfG_gameInfo.save.getPlayer().getItemRecord().getTimer();
+}
+
+inline void dComIfGs_startFwaterTimer() {
+    g_dComIfG_gameInfo.play.startFwaterTimer();
 }
 
 inline void dComIfGs_stopFwaterTimer() {
@@ -2047,6 +2060,14 @@ inline void dComIfGs_stopFwaterTimer() {
 
 inline u8 dComIfGs_checkFwaterTimer() {
     return g_dComIfG_gameInfo.play.checkFwaterTimer();
+}
+
+inline void dComIfGs_resetFwaterTimer(u16) {
+    // TODO
+}
+
+inline void dComIfGs_decFwaterTimer() {
+    // TODO
 }
 
 void dComIfGs_setPlayerRecollectionData();
@@ -2095,6 +2116,10 @@ inline void dComIfGp_setStageNameDelete() {
 
 inline void dComIfGp_setStageNameOff() {
     g_dComIfG_gameInfo.play.setStageNameOff();
+}
+
+inline u8 dComIfGp_getGameoverStatus() {
+    return g_dComIfG_gameInfo.play.getGameoverStatus();
 }
 
 inline void dComIfGp_setGameoverStatus(u8 stts) {
@@ -3967,8 +3992,8 @@ inline void dComIfGp_att_offAleart() {
     dComIfGp_getAttention().offAleart();
 }
 
-inline int dComIfGp_att_ZHintRequest(fopAc_ac_c* param_1, int param_2) {
-    return dComIfGp_getAttention().ZHintRequest(param_1, param_2);
+inline int dComIfGp_att_ZHintRequest(fopAc_ac_c* i_actor, int priority) {
+    return dComIfGp_getAttention().ZHintRequest(i_actor, priority);
 }
 
 inline void dComIfGp_att_LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist,

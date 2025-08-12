@@ -138,7 +138,7 @@ static cPhs_State daObj_RotenCreate(void* i_actor) {
 bool daObj_Roten_c::_delete() {
     if(field_0x2D1 == 0) {
         dComIfG_Bgsp()->Release(mpBgW);
-        dComIfG_resDelete(&mPhs, daObj_Roten_c::M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, daObj_Roten_c::M_arcname);
     }
 
     return true;

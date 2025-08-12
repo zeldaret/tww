@@ -230,8 +230,8 @@ public:
     fopAc_ac_c* getLook2Target() { return mLook[1].getLookTarget(); }
     fopAc_ac_c* getZHintTarget() { return mHint.getZHintTarget(); }
 
-    int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
-        return mHint.request(param_1, param_2);
+    int ZHintRequest(fopAc_ac_c* i_actor, int priority) {
+        return mHint.request(i_actor, priority);
     }
 
     int GetLockonCount() { return mLockonCount; }

@@ -47,7 +47,7 @@ public:
     f32 getBlurRate() { return m_blur_rate[fopAcM_GetParam(this)]; }
     u8 getSeType() { return m_se_type[fopAcM_GetParam(this)]; }
     
-    void getFlameTimer() {}
+    int getFlameTimer() { return m2C4; }
     void getNowMode() {}
     void setNowMode(int) {}
     void moveStateInit(f32 speedForward, f32 speedY, s16 angleY) {
@@ -62,7 +62,7 @@ public:
         }
     }
     void setRotAngleSpeed(s16 speed) { m2C2 = speed; }
-    void setThrow(s16) {} // maybe m2BA
+    void setThrow(s16 param_0) { m2BA = param_0; }
 
     void getTopPos(cXyz*);
     void getBlurRootPos(cXyz*);

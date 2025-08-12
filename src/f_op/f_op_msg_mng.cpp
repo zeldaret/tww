@@ -598,12 +598,14 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                 dstPtr++;
             }
             else if ((next_as_int & 0xFFFFFF) == 0) {
+#if VERSION > VERSION_DEMO
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+                if(
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -613,6 +615,7 @@ char* fopMsgM_messageGet(char* dst, u32 msgNo) {
                         strcat(dstBuf, "s");
                     }
                 }
+#endif
 
                 for (char* bufPtr = dstBuf; *bufPtr != '\0'; bufPtr++) {
                     *dstPtr = *bufPtr;
@@ -659,12 +662,14 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
     while(cursor = (u32*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
         if(*cursor == 0x1A) {
             if((cursor[1] & 0xFFFFFF) == 0) {
+#if VERSION > VERSION_DEMO
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+                if(
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
@@ -674,6 +679,7 @@ void fopMsgM_passwordGet(char* dst, u32 msgNo) {
                         strcat(dstBuf, "s");
                     }
                 }
+#endif
 
                 for(s32 i = 0; dstBuf[i] != '\0'; i++) {
                     dst[numRead] = dstBuf[i];
@@ -2382,51 +2388,69 @@ void fopMsgM_int_to_char2(char* dst, int num) {
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* dst, u32 msgNo) {
     /* Nonmatching */
+    s32 i;
     fopMsgM_msgGet_c msgGet;
     msgGet.mMsgIdx = 0;
     msgGet.mGroupID = 0;
     msgGet.mMsgNo = 0;
     msgGet.mResMsgNo = 0;
+#if VERSION > VERSION_DEMO
     static const char* name = "no name";
+#endif
 
+#if VERSION > VERSION_DEMO
     s32 curOffset = 0;
     s32 numRead = 0;
+#endif
 
     mesg_header* header;
     const char* src;
+#if VERSION > VERSION_DEMO
     if(msgNo == 0) {
         src = name;
     }
-    else {
+    else
+#endif
+    {
         header = msgGet.getMesgHeader(msgNo);
         src = msgGet.getMessage(header);
     }
 
-    char dstBuf[24];
+#if VERSION == VERSION_DEMO
+    s32 curOffset = 0;
+    s32 numRead = 0;
+#endif
+
     const u8* cursor;
     s32 current;
     while(cursor = (u8*)src + curOffset, current = *cursor, (s8)*cursor != '\0') {
         if(*cursor == 0x1A) {
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
-                strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
+#if VERSION == VERSION_DEMO
+                const char* str = dComIfGs_getPlayerName();
 #else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+                char str[24];
+                strcpy(str, dComIfGs_getPlayerName());
+                if(
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
-                    s32 bufLen = strlen(dstBuf);
-                    current = (dstBuf)[bufLen - 1];
+                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                ) {
+                    s32 bufLen = strlen(str);
+                    current = (str)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
-                        strcat(dstBuf, "\'");
+                        strcat(str, "\'");
                     }
                     else {
-                        strcat(dstBuf, "s");
+                        strcat(str, "s");
                     }
                 }
+#endif
 
-                for(s32 i = 0; dstBuf[i] != '\0'; i++) {
-                    dst[numRead] = dstBuf[i];
+                for(i = 0; str[i] != '\0'; i++) {
+                    dst[numRead] = str[i];
                     numRead++;
                 }
             }
@@ -2474,11 +2498,12 @@ void fopMsgM_msgDataProc_c::getString(char* dst, char*, char*, char*, u32 msgNo,
             int codeLen = cursor[1];
             if(cursor[2] == 0 && cursor[3] == 0 && cursor[4] == 0) {
                 strcpy(dstBuf, dComIfGs_getPlayerName());
-#if VERSION <= VERSION_JPN
-                if(msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE) {
-#else
-                if(dComIfGs_getPalLanguage() == 1 && (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)) {
+                if(
+#if VERSION > VERSION_JPN
+                    dComIfGs_getPalLanguage() == 1 &&
 #endif
+                    (msgNo == 0x33B || msgNo == 0xC8B || msgNo == 0x1D21 || msgNo == 0x31D7 || msgNo == 0x37DD || msgNo == 0x37DE)
+                ) {
                     s32 bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if(current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {

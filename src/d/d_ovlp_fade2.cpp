@@ -5,6 +5,7 @@
 
 #include "d/d_ovlp_fade2.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
@@ -253,7 +254,7 @@ overlap_process_profile_definition g_profile_OVERLAP2 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E3,
+    PRIO_OVERLAP2,
     &l_dOvlpFd2_Method,
 };
 
@@ -268,7 +269,7 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E4,
+    PRIO_OVERLAP3,
     &l_dOvlpFd2_Method,
 };
 #endif

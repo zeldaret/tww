@@ -45,6 +45,12 @@ void mDoMemCd_Ctrl_c::main() {
         while (mCommand == CARD_NO_COMMAND)
             OSWaitCond(&mCond, &mMutex);
 
+#if VERSION == VERSION_DEMO
+        if (mDoRst::isReset()) {
+            mCommand = CARD_NO_COMMAND;
+        }
+#endif
+
         switch (mCommand) {
         case CARD_RESTORE:
             restore();
@@ -75,13 +81,16 @@ void mDoMemCd_Ctrl_c::main() {
 
 /* 80018EC8-80018FD8       .text update__15mDoMemCd_Ctrl_cFv */
 void mDoMemCd_Ctrl_c::update() {
+#if VERSION > VERSION_DEMO
     if (mDoRst::isReset()) {
         OSLockMutex(&mMutex);
         mCommand = CARD_DETACH;
         field_0x165A = 3;
         OSUnlockMutex(&mMutex);
         OSSignalCond(&mCond);
-    } else {
+    } else
+#endif
+    {
         if (getStatus(0) != 14) {
             if (CARDProbe(0) && getStatus(0) == 0) {
                 OSLockMutex(&mMutex);
@@ -423,10 +432,12 @@ void mDoMemCd_Ctrl_c::setCardState(s32 state) {
 
 /* 800198C4-80019918       .text mDoMemCd_main__FPv */
 int mDoMemCd_main(void*) {
+#if VERSION > VERSION_DEMO
     { JKRThread thread(OSGetCurrentThread(), 0); }
 
     JKRHeap* heap = NULL;
     heap->becomeCurrentHeap();
+#endif
 
     g_mDoMemCd_control.main();
     return 0;

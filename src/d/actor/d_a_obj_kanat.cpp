@@ -59,7 +59,7 @@ BOOL daObjKanat::Act_c::Delete() {
 BOOL daObjKanat::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return result;
 }
