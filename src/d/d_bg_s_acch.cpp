@@ -148,8 +148,8 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
         }
     }
 
-    if (field_0xb0 && !(m_flags & GROUND_HIT)) {
-        m_flags |= GROUND_AWAY;
+    if (field_0xb0 && !ChkGroundHit()) {
+        SetGroundAway();
     }
 }
 
@@ -186,7 +186,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         linChk.SetExtChk(*this);
         if (i_bgs.LineCross(&linChk)) {
             *pm_pos = linChk.GetLinP()->GetEnd();
-            m_flags |= LINE_CHECK_HIT;
+            OnLineCheckHit();
 
             if (pm_out_poly_info != NULL)
                 pm_out_poly_info->SetPolyInfo(linChk);
@@ -208,7 +208,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
 
 /* 800A3460-800A3F50       .text CrrPos__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::CrrPos(dBgS& i_bgs) {
-    if (m_flags & 0x1) {
+    if (m_flags & UNK_1) {
         return;
     }
 
