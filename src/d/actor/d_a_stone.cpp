@@ -605,7 +605,8 @@ bool Act_c::damage_bg_proc_directly() {
 
     if (m674 == 0) {
         if (uVar7) {
-            if (mAcch.ChkGroundLanding() != false && m688 - current.pos.y > data().m38) {
+            bool groundLanding = mAcch.ChkGroundLanding();
+            if (groundLanding && m688 - current.pos.y > data().m38) {
                 damaged(2);
                 iVar9 = true;
             }
