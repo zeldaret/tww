@@ -236,7 +236,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
         return true;
     }
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1) ||
         (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0)))
     {
@@ -854,7 +854,9 @@ BOOL daPy_lk_c::procGrabRebound() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     if (grab_actor == NULL) {
+#if VERSION > VERSION_DEMO
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+#endif
         return checkNextMode(0);
     }
 

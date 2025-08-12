@@ -1075,7 +1075,7 @@ BOOL daPy_lk_c::dProcDead() {
                     m3574 = 1;
                 }
             }
-            if ((m3574 != 0) && (g_dComIfG_gameInfo.play.mGameoverStatus == 2)) {
+            if (m3574 != 0 && dComIfGp_getGameoverStatus() == 2) {
                 dComIfGs_setGameStartStage();
                 dComIfGs_gameStart();
             }
@@ -2078,7 +2078,7 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     initShipRideUseItem(iVar2, 0);
     dKy_Itemgetcol_chg_on();
     setTactModel();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     m3574 = 0;
 #endif
     return true;

@@ -249,7 +249,7 @@ void Act_c::move_to_aim(float arg1, bool arg2) {
 /* 00000D04-00000D64       .text chk_demo_rescue__Q29daObjTide5Act_cCFv */
 bool Act_c::chk_demo_rescue() const {
     bool ret = false;
-    if (dComIfGp_event_runCheck() != 0 && dComIfGp_evmng_startCheck("rescue")) {
+    if (dComIfGp_event_runCheck() != FALSE && dComIfGp_evmng_startCheck("rescue")) {
         ret = true;
     }
     return ret;

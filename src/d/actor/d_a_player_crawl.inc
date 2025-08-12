@@ -625,7 +625,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
                 m34D0 = -1;
             }
             if (m34D0 == -1) {
-                g_dComIfG_gameInfo.play.mDirection = 0;
+                dComIfGp_setAdvanceDirection(0);
                 if (shape_angle.y == current.angle.y) {
                     frameCtrl.setRate(2.0f);
                     frameCtrl.setLoop(0);

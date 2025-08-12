@@ -641,42 +641,58 @@ BOOL daPy_lk_c::procRopeSwing() {
     cXyz sp28;
     mDoMtx_stack_c::multVec(&sp34, &sp28);
 
-    if (checkSpecialRope()) {
-        f30 = 0.0f;
-        dVar13 = 0.0f;
-    } else {
+    f32 f30_2;
+#if VERSION == VERSION_DEMO
+    if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
         if ((0.0f <= f30) && (f30 <= M_PI / 2)) {
-            f30 = -0.45f * cM_fsin(f30);
+            f30_2 = -0.1f * cM_fsin(f30);
+        } else if (f30 <= -M_PI / 2) {
+            f30_2 = 0.1f * cM_fsin(f30);
         } else {
-            if (f30 <= -M_PI / 2) {
-                f30 = 0.45f * cM_fsin(f30);
-            } else {
-                f30 = 0.0f;
-            }
+            f30_2 = 0.25f;
+        }
+        if ((0.0f <= dVar13) && (dVar13 <= M_PI / 2)) {
+            dVar13 = -0.1f * cM_fsin(dVar13);
+        } else if (dVar13 <= -M_PI / 2) {
+            dVar13 = 0.1f * cM_fsin(dVar13);
+        } else {
+            dVar13 = 0.25f;
+        }
+    }
+#else
+    if (checkSpecialRope()) {
+        f30_2 = 0.0f;
+        dVar13 = 0.0f;
+    }
+#endif
+    else {
+        if ((0.0f <= f30) && (f30 <= M_PI / 2)) {
+            f30_2 = -0.45f * cM_fsin(f30);
+        } else if (f30 <= -M_PI / 2) {
+            f30_2 = 0.45f * cM_fsin(f30);
+        } else {
+            f30_2 = 0.0f;
         }
         if ((0.0f <= dVar13) && (dVar13 <= M_PI / 2)) {
             dVar13 = -0.45f * cM_fsin(dVar13);
+        } else if (dVar13 <= -M_PI / 2) {
+            dVar13 = 0.45f * cM_fsin(dVar13);
         } else {
-            if (dVar13 <= -M_PI / 2) {
-                dVar13 = 0.45f * cM_fsin(dVar13);
-            } else {
-                dVar13 = 0.0f;
-            }
+            dVar13 = 0.0f;
         }
     }
 
-    f32 dVar11 = 1.0f;
-    m35A8 = m35A8 + (dVar11 + f30);
-    m35AC = m35AC + (dVar11 + dVar13);
+    m35A8 = m35A8 + (1.0f + f30_2);
+    m35AC = m35AC + (1.0f + dVar13);
     f32 sp0C = m35A8 * m35A4;
-    f30 = m35AC * m35A4;
+    f30_2 = m35AC * m35A4;
     if (sp0C >= M_PI) {
         sp0C = sp0C - M_PI * 2;
         m35A8 = sp0C / m35A4;
     }
-    if (f30 >= M_PI) {
-        f30 = f30 - M_PI * 2;
-        m35AC = f30 / m35A4;
+    if (f30_2 >= M_PI) {
+        f30_2 = f30_2 - M_PI * 2;
+        m35AC = f30_2 / m35A4;
     }
     if ((checkModeFlg(ModeFlg_00000400)) && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f)) {
         offModeFlg(ModeFlg_00000400);
@@ -688,15 +704,25 @@ BOOL daPy_lk_c::procRopeSwing() {
     s16 r30;
     s16 r28;
     s16 r29;
+#if VERSION == VERSION_DEMO
+    if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
+        r30 = daPy_HIO_rope_c0::m.field_0x0 / 3;
+        r28 = 0xA;
+        r29 = 0x15;
+    }
+#else
     if (checkSpecialRope()) {
         r30 = daPy_HIO_rope_c0::m.field_0x0 / 8.0f;
         r28 = 4;
         r29 = 8;
-    } else {
+    }
+#endif
+    else {
         r30 = daPy_HIO_rope_c0::m.field_0x0;
         r28 = 0x20;
         r29 = 0x40;
     }
+
     if (spActionButton()) {
         cLib_chaseS(&m34D4, 0, r28 * 10);
         cLib_chaseS(&m34D6, 0, r28 * 10);
@@ -714,20 +740,20 @@ BOOL daPy_lk_c::procRopeSwing() {
     }
 
     s16 sp08 = -m34D4 * cM_fsin(sp0C);
-    s16 r29_2 = m34D6 * cM_fsin(f30);
+    s16 r29_2 = m34D6 * cM_fsin(f30_2);
     s16 r28_2;
     if (m34D0 != 0) {
-        dVar13 = m_pbCalc[PART_UNDER_e]->getRatio(1);
+        f32 f1 = m_pbCalc[PART_UNDER_e]->getRatio(1);
         f32 f2 = -m34D4 * cM_fsin(sp0C);
         f32 f0 = 0.5f * m34D4 * m34D0;
-        r28_2 = f2 + (f0 * dVar13);
+        r28_2 = f2 + (f0 * f1);
     } else {
         r28_2 = -m34D4 * cM_fsin(sp0C - (M_PI / 5));
     }
     cLib_addCalcAngleS(&shape_angle.x, r28_2, 8, 0xc00, 0x100);
-    dVar13 = cM_fcos(f30);
+    dVar13 = cM_fcos(f30_2);
     cLib_addCalcAngleS(
-        &shape_angle.z, m34D6 * cM_fsin(f30 - 1.0995574f), 8, 0x400 + (0x800 * dVar13), 0x80 + (0x80 * dVar13)
+        &shape_angle.z, m34D6 * cM_fsin(f30_2 - 1.0995574f), 8, 0x400 + (0x800 * dVar13), 0x80 + (0x80 * dVar13)
     );
     cXyz sp1C(0.0f, -m35A0, 0.0f);
     mDoMtx_stack_c::transS(mRopePos.x, mRopePos.y, mRopePos.z);
@@ -747,23 +773,23 @@ BOOL daPy_lk_c::procRopeSwing() {
         }
     }
 
-    f30 = ((f32)m34D4 / r30);
+    f32 f30_3 = ((f32)m34D4 / r30);
     if (changeRopeEndProc(0)) {
         dVar13 = (m35A0 / (100.0f * daPy_HIO_rope_c0::m.field_0x14));
         if (dVar13 < 1.0f) {
             dVar13 = 1.0f;
         }
-        f30 *= dVar13;
-        mVelocity = daPy_HIO_rope_c0::m.field_0xC * f30;
+        f30_3 *= dVar13;
+        mVelocity = daPy_HIO_rope_c0::m.field_0xC * f30_3;
         if (std::abs(sp0C) > M_PI / 2) {
             current.angle.y = shape_angle.y + 0x8000;
         }
-        speed.y = daPy_HIO_rope_c0::m.field_0x10 * f30;
+        speed.y = daPy_HIO_rope_c0::m.field_0x10 * f30_3;
         procFall_init(0, daPy_HIO_wallCatch_c0::m.field_0x54);
         onNoResetFlg1(daPyFlg1_UNK8000000);
     } else if ((m34D4 == 0) && (m34D6 == 0)) {
         procRopeHangWait_init(0);
-    } else if (f30 > 0.6f) {
+    } else if (f30_3 > 0.6f) {
         if (cM_fcos(sp0C) > 0.77f) {
             mDoAud_seStart(JA_SE_LK_ROPE_SWING_F, &mRopePos, 0, mReverb);
         }

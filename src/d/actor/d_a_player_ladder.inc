@@ -81,7 +81,7 @@ int daPy_lk_c::setMoveBGLadderCorrect() {
         }
     }
     cXyz local_18(m370C.x + cM_ssin(current.angle.y) * 50.0f, m370C.y, m370C.z + cM_scos(current.angle.y) * 50.0f);
-    mLinkLinChk.Set(&m370C, (cXyz*)&local_18, this);
+    mLinkLinChk.Set(&m370C, &local_18, this);
     if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     } else {

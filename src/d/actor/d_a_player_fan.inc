@@ -43,9 +43,9 @@ BOOL daPy_lk_c::fanJointCB(int param_0) {
 BOOL daPy_fanJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->fanJointCB(jntNo);
     }
     return TRUE;
@@ -70,9 +70,9 @@ BOOL daPy_lk_c::parachuteJointCB(int param_0) {
 BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->parachuteJointCB(jntNo);
     }
     return TRUE;

@@ -273,7 +273,7 @@ s32 daSwhit0_c::actionOffWait() {
 
 /* 00000D8C-00000E24       .text actionToOnReady__10daSwhit0_cFv */
 s32 daSwhit0_c::actionToOnReady() {
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         return TRUE;
     }
 
