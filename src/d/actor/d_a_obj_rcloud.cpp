@@ -88,7 +88,7 @@ cPhs_State daObjRcloud_c::_create() {
     fopAcM_SetupActor(this, daObjRcloud_c);
 #else
     fopAcM_SetupActor(this, daObjRcloud_c);
-    cPhs_State o_phase = cPhs_ERROR_e;
+    cPhs_State phase = cPhs_ERROR_e;
 #endif
 
     if (fopAcM_IsFirstCreating(this)) {
