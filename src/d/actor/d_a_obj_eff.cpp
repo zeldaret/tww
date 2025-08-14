@@ -6,115 +6,231 @@
 #include "d/actor/d_a_obj_eff.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "weak_data_1811.h"
+#include "weak_data_2100_2080.h"
+#include "d/d_com_inf_game.h"
+
+
+const GXColor daObjEff::StoolSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
+const GXColor daObjEff::SkullSmokeCB::original_color = {0xA0, 0xA0, 0x80, 0xFF};
+const GXColor daObjEff::PineconeSmokeCB::original_color = {0x96, 0x78, 0x3C, 0xFF};
+const GXColor daObjEff::WoodBoxSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
+const GXColor daObjEff::BarrelSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
 
 /* 000000EC-00000140       .text __ct__Q28daObjEff13BarrelSmokeCBFv */
-daObjEff::BarrelSmokeCB::BarrelSmokeCB() {
-    /* Nonmatching */
+daObjEff::BarrelSmokeCB::BarrelSmokeCB() : dPa_smokeEcallBack(original_color, 0, 0) {
+    something = 0x3c;
 }
 
 /* 00000140-000001CC       .text execute__Q28daObjEff13BarrelSmokeCBFP14JPABaseEmitter */
-void daObjEff::BarrelSmokeCB::execute(JPABaseEmitter*) {
+void daObjEff::BarrelSmokeCB::execute(JPABaseEmitter *i_emitter) {
     /* Nonmatching */
+
+    something -= 1;
+    if (something <= 0) {
+        end();
+    } else if (something < 0x32) {
+        i_emitter->mGlobalPrmColor.a = (u8) ((float) something * 3.6f);
+    }
 }
 
 /* 000001CC-00000220       .text __ct__Q28daObjEff12StoolSmokeCBFv */
-daObjEff::StoolSmokeCB::StoolSmokeCB() {
-    /* Nonmatching */
+
+daObjEff::StoolSmokeCB::StoolSmokeCB() : dPa_smokeEcallBack(original_color, 0, 0) {
+    something = 0x3c;
 }
 
 /* 00000220-000002AC       .text execute__Q28daObjEff12StoolSmokeCBFP14JPABaseEmitter */
-void daObjEff::StoolSmokeCB::execute(JPABaseEmitter*) {
+void daObjEff::StoolSmokeCB::execute(JPABaseEmitter *i_emitter) {
     /* Nonmatching */
+    something -= 1;
+    if (something <= 0) {
+        end();
+    } else if (something < 0x32) {
+        i_emitter->mGlobalPrmColor.a = (u8) ((float) something * 3.6f);
+    }
 }
 
 /* 000002AC-00000300       .text __ct__Q28daObjEff12SkullSmokeCBFv */
-daObjEff::SkullSmokeCB::SkullSmokeCB() {
-    /* Nonmatching */
+
+daObjEff::SkullSmokeCB::SkullSmokeCB() : dPa_smokeEcallBack(original_color, 0, 0) {
+    something = 0x3c;
 }
 
 /* 00000300-0000038C       .text execute__Q28daObjEff12SkullSmokeCBFP14JPABaseEmitter */
-void daObjEff::SkullSmokeCB::execute(JPABaseEmitter*) {
+void daObjEff::SkullSmokeCB::execute(JPABaseEmitter *i_emitter) {
     /* Nonmatching */
+    something -= 1;
+    if (something <= 0) {
+        end();
+    } else if (something < 0x32) {
+        i_emitter->mGlobalPrmColor.a = (u8) ((float) something * 3.6f);
+    }
 }
 
 /* 0000038C-000003CC       .text __ct__Q28daObjEff11LandSmokeCBFv */
-daObjEff::LandSmokeCB::LandSmokeCB() {
-    /* Nonmatching */
+daObjEff::LandSmokeCB::LandSmokeCB() : dPa_smokeEcallBack(0) {
 }
 
 /* 000003CC-00000420       .text __ct__Q28daObjEff15PineconeSmokeCBFv */
-daObjEff::PineconeSmokeCB::PineconeSmokeCB() {
-    /* Nonmatching */
+daObjEff::PineconeSmokeCB::PineconeSmokeCB() : dPa_smokeEcallBack(original_color, 0, 0) {
+    something = 0x3c;
 }
 
 /* 00000420-000004AC       .text execute__Q28daObjEff15PineconeSmokeCBFP14JPABaseEmitter */
-void daObjEff::PineconeSmokeCB::execute(JPABaseEmitter*) {
+void daObjEff::PineconeSmokeCB::execute(JPABaseEmitter *i_emitter) {
     /* Nonmatching */
+    something -= 1;
+    if (something <= 0) {
+        end();
+    } else if (something < 0x32) {
+        i_emitter->mGlobalPrmColor.a = (u8) ((float) something * 3.6f);
+    }
 }
 
 /* 000004AC-00000500       .text __ct__Q28daObjEff14WoodBoxSmokeCBFv */
-daObjEff::WoodBoxSmokeCB::WoodBoxSmokeCB() {
-    /* Nonmatching */
+daObjEff::WoodBoxSmokeCB::WoodBoxSmokeCB() : dPa_smokeEcallBack(original_color, 0, 0) {
+    something = 0x3c;
 }
 
 /* 00000500-0000058C       .text execute__Q28daObjEff14WoodBoxSmokeCBFP14JPABaseEmitter */
-void daObjEff::WoodBoxSmokeCB::execute(JPABaseEmitter*) {
+void daObjEff::WoodBoxSmokeCB::execute(JPABaseEmitter *i_emitter) {
     /* Nonmatching */
+    something -= 1;
+    if (something <= 0) {
+        end();
+    } else if (something < 0x32) {
+        i_emitter->mGlobalPrmColor.a = (u8) ((float) something * 3.6f);
+    }
 }
 
 /* 0000058C-000005B0       .text solidHeapCB__Q28daObjEff5Act_cFP10fopAc_ac_c */
-void daObjEff::Act_c::solidHeapCB(fopAc_ac_c*) {
+BOOL daObjEff::Act_c::solidHeapCB(fopAc_ac_c *i_this) {
     /* Nonmatching */
+    return create_heap();
 }
 
 /* 000005B0-00000600       .text create_heap_barrel_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_barrel_smoke() {
+bool daObjEff::Act_c::create_heap_barrel_smoke() {
     /* Nonmatching */
+    BarrelSmokeCB *barrel_smoke_cb = new BarrelSmokeCB();
+    mProcPtr = barrel_smoke_cb;  // Store the callback object pointer
+    return mProcPtr != NULL;
 }
 
 /* 00000600-00000650       .text create_heap_stool_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_stool_smoke() {
+bool daObjEff::Act_c::create_heap_stool_smoke() {
     /* Nonmatching */
+    StoolSmokeCB *stool_smoke_cb = new StoolSmokeCB();
+    mProcPtr = stool_smoke_cb;
+    return mProcPtr != NULL;
 }
 
 /* 00000650-000006A0       .text create_heap_skull_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_skull_smoke() {
+bool daObjEff::Act_c::create_heap_skull_smoke() {
     /* Nonmatching */
+    SkullSmokeCB *skull_smoke_cb = new SkullSmokeCB();
+    mProcPtr = skull_smoke_cb;
+    return mProcPtr != NULL;
 }
 
 /* 000006A0-000006F0       .text create_heap_land_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_land_smoke() {
+bool daObjEff::Act_c::create_heap_land_smoke() {
     /* Nonmatching */
+    LandSmokeCB *land_smoke_cb = new LandSmokeCB();
+    mProcPtr = land_smoke_cb;
+    return mProcPtr != NULL;
 }
 
 /* 000006F0-00000740       .text create_heap_pinecone_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_pinecone_smoke() {
-    /* Nonmatching */
+bool daObjEff::Act_c::create_heap_pinecone_smoke() {
+    PineconeSmokeCB *pinecone_smoke_cb = new PineconeSmokeCB();
+    mProcPtr = pinecone_smoke_cb;
+    return mProcPtr != NULL;
 }
 
 /* 00000740-00000790       .text create_heap_woodBox_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap_woodBox_smoke() {
-    /* Nonmatching */
+bool daObjEff::Act_c::create_heap_woodBox_smoke() {
+    WoodBoxSmokeCB *woodbox_smoke_cb = new WoodBoxSmokeCB();
+    mProcPtr = woodbox_smoke_cb;
+    return mProcPtr != NULL;
 }
 
+/* Nonmatching */
 /* 00000790-00000898       .text create_heap__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::create_heap() {
+bool daObjEff::Act_c::create_heap() {
     /* Nonmatching */
+    static HeapProc proc[] = {
+        &create_heap_barrel_smoke,
+        &create_heap_stool_smoke,
+        &create_heap_skull_smoke,
+        &create_heap_land_smoke,
+        &create_heap_pinecone_smoke,
+        &create_heap_woodBox_smoke
+    };
+
+    bool ret = false;
+    if ((this->*proc[mProcIndex])()) {
+        ret = true;
+    }
+
+    return ret;
 }
+
 
 /* 00000898-00000998       .text eff_set_barrel_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::eff_set_barrel_smoke() {
+bool daObjEff::Act_c::eff_set_barrel_smoke() {
     /* Nonmatching */
+    static cXyz particle_scl(2.5f,2.5f,1.0f);
+    dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
+    JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos, NULL, NULL, 0xb4, mProcPtr, -1, NULL, NULL, &particle_scl);
+
+    if (emitter != NULL) {
+        emitter->mVolumeSize = 0x28;
+        emitter->mRate = 20.0f;
+        emitter->mMaxFrame = 1;
+        emitter->mInitialVelOmni = 15.0f;
+        emitter->mInitialVelAxis = 10.0f;
+        return true;
+    }
+
+    return false;
 }
 
 /* 000009D4-00000AD0       .text eff_set_stool_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::eff_set_stool_smoke() {
+bool daObjEff::Act_c::eff_set_stool_smoke() {
     /* Nonmatching */
+    static cXyz particle_scl(2.5f,2.5f,1.0f);
+    dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
+    JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos, NULL, NULL, 0xb4, mProcPtr, -1, NULL, NULL, &particle_scl);
+
+    if (emitter != NULL) {
+        emitter->mVolumeSize = 0x1E;
+        emitter->mRate = 15.0f;
+        emitter->mMaxFrame = 1;
+        emitter->mInitialVelOmni = 15.0f;
+        emitter->mInitialVelAxis = 10.0f;
+        return true;
+    }
+
+    return false;
 }
 
 /* 00000AD0-00000BC0       .text eff_set_skull_smoke__Q28daObjEff5Act_cFv */
-void daObjEff::Act_c::eff_set_skull_smoke() {
+bool daObjEff::Act_c::eff_set_skull_smoke() {
     /* Nonmatching */
+    static cXyz particle_scl(1.6f,1.6f,1.0f);
+    dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
+    JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos, NULL, NULL, 0xb4, mProcPtr, -1, NULL, NULL, &particle_scl);
+
+    if (emitter != NULL) {
+        emitter->mRate = 10.0f;
+        emitter->mMaxFrame = 1;
+        emitter->mInitialVelOmni = 8.0f;
+        return true;
+    }
+
+    return false;
 }
 
 /* 00000BC0-00000D24       .text eff_set_land_smoke__Q28daObjEff5Act_cFv */
@@ -140,6 +256,7 @@ void daObjEff::Act_c::eff_set() {
 /* 00000F6C-00001030       .text _create__Q28daObjEff5Act_cFv */
 cPhs_State daObjEff::Act_c::_create() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 00001030-00001068       .text remove_barrel_smoke__Q28daObjEff5Act_cFv */
@@ -170,93 +287,139 @@ void daObjEff::Act_c::remove_pinecone_smoke() {
 /* 00001148-00001180       .text remove_woodBox_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::remove_woodBox_smoke() {
     /* Nonmatching */
+    if ((int *)this->mProcPtr != NULL) {
+        //(void*)(this->mProcPtr());
+    }
+
 }
 
 /* 00001180-0000126C       .text remove__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::remove() {
     /* Nonmatching */
+    static Proc proc[] = {
+        &remove_barrel_smoke,
+        &remove_stool_smoke,
+        &remove_skull_smoke,
+        &remove_land_smoke,
+        &remove_pinecone_smoke,
+        &remove_woodBox_smoke
+    };
+    (this->*proc[mProcIndex])();
 }
 
 /* 0000126C-00001290       .text _delete__Q28daObjEff5Act_cFv */
 bool daObjEff::Act_c::_delete() {
     /* Nonmatching */
+    remove();
+    return TRUE;
 }
 
 /* 00001290-000012C0       .text die_barrel_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_barrel_smoke() {
     /* Nonmatching */
+    if (((BarrelSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 000012C0-000012F0       .text die_stool_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_stool_smoke() {
     /* Nonmatching */
+    if (((StoolSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 000012F0-00001320       .text die_skull_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_skull_smoke() {
     /* Nonmatching */
+    if (((SkullSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 00001320-00001350       .text die_land_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_land_smoke() {
     /* Nonmatching */
+    if (((LandSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 00001350-00001380       .text die_pinecone_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_pinecone_smoke() {
     /* Nonmatching */
+    if (((PineconeSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 00001380-000013B0       .text die_woodBox_smoke__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die_woodBox_smoke() {
     /* Nonmatching */
+    if (((WoodBoxSmokeCB*)mProcPtr)->isEnd()) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 000013B0-0000149C       .text die__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die() {
     /* Nonmatching */
+
+    static Proc procCock[] = {
+        &die_barrel_smoke,
+        &die_stool_smoke,
+        &die_skull_smoke,
+        &die_land_smoke,
+        &die_pinecone_smoke,
+        &die_woodBox_smoke
+    };
+
+    (this->*procCock[mProcIndex])();
 }
 
 /* 0000149C-000014C0       .text _execute__Q28daObjEff5Act_cFv */
 bool daObjEff::Act_c::_execute() {
     /* Nonmatching */
+    die();
+    return TRUE;
 }
 
 namespace daObjEff {
-namespace {
-/* 000014C0-000014E0       .text Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-cPhs_State Mthd_Create(void* i_this) {
-    return ((daObjEff::Act_c*)i_this)->_create();
-}
+    namespace {
+        /* 000014C0-000014E0       .text Mthd_Create__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
+        cPhs_State Mthd_Create(void *i_this) {
+            return ((daObjEff::Act_c *) i_this)->_create();
+        }
 
-/* 000014E0-00001504       .text Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_Delete(void* i_this) {
-    return ((daObjEff::Act_c*)i_this)->_delete();
-}
+        /* 000014E0-00001504       .text Mthd_Delete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
+        BOOL Mthd_Delete(void *i_this) {
+            return ((daObjEff::Act_c *) i_this)->_delete();
+        }
 
-/* 00001504-00001528       .text Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_Execute(void* i_this) {
-    return ((daObjEff::Act_c*)i_this)->_execute();
-}
+        /* 00001504-00001528       .text Mthd_Execute__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
+        BOOL Mthd_Execute(void *i_this) {
+            return ((daObjEff::Act_c *) i_this)->_execute();
+        }
 
-/* 00001528-00001530       .text Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    return TRUE;
-}
+        /* 00001528-00001530       .text Mthd_Draw__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
+        BOOL Mthd_Draw(void *) {
+            return TRUE;
+        }
 
-/* 00001530-00001538       .text Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    return TRUE;
-}
+        /* 00001530-00001538       .text Mthd_IsDelete__Q28daObjEff25@unnamed@d_a_obj_eff_cpp@FPv */
+        BOOL Mthd_IsDelete(void *) {
+            return TRUE;
+        }
 
-static actor_method_class Mthd_Table = {
-    (process_method_func)Mthd_Create,
-    (process_method_func)Mthd_Delete,
-    (process_method_func)Mthd_Execute,
-    (process_method_func)Mthd_IsDelete,
-    (process_method_func)Mthd_Draw,
-};
-}; // namespace
+        static actor_method_class Mthd_Table = {
+            (process_method_func) Mthd_Create,
+            (process_method_func) Mthd_Delete,
+            (process_method_func) Mthd_Execute,
+            (process_method_func) Mthd_IsDelete,
+            (process_method_func) Mthd_Draw,
+        };
+    }; // namespace
 }; // namespace daObjEff
 
 actor_process_profile_definition g_profile_Obj_Eff = {
