@@ -74,8 +74,7 @@ public:
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
     void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
 
-    // TODO
-    void getTextureSRT() {}
+    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
