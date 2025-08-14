@@ -8,7 +8,7 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
-
+#include "d/res/res_bvkumo.h"
 #include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {
@@ -16,9 +16,8 @@ const char l_arcname[] = "BVkumo";
 const char l_demo41_name[] = "demo41";
 const char l_dummy_name[] = "demo41";
 const char* l_demo_name[] = {l_demo41_name, l_dummy_name};
-const f32 i_rate = 1.0f;
 const f32 maxDemoFrame = 428.0f;
-const f32 i_end = -1.0f;
+const f32 endCloudAnimProgress = -1.0f;
 } // namespace
 
 #if VERSION == VERSION_DEMO
@@ -62,17 +61,17 @@ BOOL daObjRcloud_c::solidHeapCB(fopAc_ac_c* i_this) {
 }
 
 /* 0000010C-00000238       .text create_heap__13daObjRcloud_cFv */
-u8 daObjRcloud_c::create_heap() {
-    u8 result = 1;
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 4));
-    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 7));
+bool daObjRcloud_c::create_heap() {
+    bool result = true;;
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BDL_BVKUMO));
+    J3DAnmTextureSRTKey* pAnm = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, BVKUMO_BTK_BVKUMO));
 
     if (modelData == NULL || pAnm == FALSE) {
         JUT_ASSERT(DEMO_SELECT(216, 220), FALSE);
         result = 0;
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(modelData, pAnm, TRUE, J3DFrameCtrl::EMode_LOOP, i_rate, 0, i_end, FALSE, 0);
+        s32 btkRet = mBtkAnm.init(modelData, pAnm, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1.0f, FALSE, 0);
 
         if (mpModel == NULL || btkRet == 0) {
             result = 0;
@@ -85,7 +84,7 @@ u8 daObjRcloud_c::create_heap() {
 /* 00000238-000003B4       .text _create__13daObjRcloud_cFv */
 cPhs_State daObjRcloud_c::_create() {
 #if VERSION == VERSION_DEMO
-    cPhs_State o_phase = cPhs_ERROR_e;
+    cPhs_State phase = cPhs_ERROR_e;
     fopAcM_SetupActor(this, daObjRcloud_c);
 #else
     fopAcM_SetupActor(this, daObjRcloud_c);
@@ -99,13 +98,13 @@ cPhs_State daObjRcloud_c::_create() {
     switch (mDemoNameIndex) {
     case 0:
         if (dComIfGs_isEventBit(0x3908) == 0) {
-            o_phase = dComIfG_resLoad(&mPhase, l_arcname);
+            phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }
         break;
     case 1:
         if (dComIfGs_isSymbol(0) == 0) {
-            o_phase = dComIfG_resLoad(&mPhase, l_arcname);
+            phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }
         break;
@@ -113,13 +112,13 @@ cPhs_State daObjRcloud_c::_create() {
         break;
     }
 
-    if (o_phase == cPhs_COMPLEATE_e) {
+    if (phase == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x5a0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
             setup_action(0);
         } else {
-            o_phase = cPhs_ERROR_e;
+            phase = cPhs_ERROR_e;
         }
     }
 
@@ -129,11 +128,11 @@ cPhs_State daObjRcloud_c::_create() {
     }
 #endif
 
-    return o_phase;
+    return phase;
 }
 
 /* 00000458-00000494       .text _delete__13daObjRcloud_cFv */
-u8 daObjRcloud_c::_delete() {
+bool daObjRcloud_c::_delete() {
     if (mResourceLoadedFlag == 1) {
         dComIfG_resDelete(&mPhase, l_arcname);
     }
@@ -174,7 +173,7 @@ void daObjRcloud_c::clouds_lift_start_wait_act_proc() {
 /* 00000568-000005DC       .text clouds_lift_act_proc__13daObjRcloud_cFv */
 void daObjRcloud_c::clouds_lift_act_proc() {
     mCloudAnimProgress += HIO(m08);
-    if (mCloudAnimProgress < i_end) {
+    if (mCloudAnimProgress < endCloudAnimProgress) {
         mCloudAnimProgress = -1.0f;
         dComIfGs_onEventBit(0x3908);
         fopAcM_delete(this);
@@ -191,13 +190,12 @@ void daObjRcloud_c::setup_action(int i_actionIndex) {
 
 /* 00000678-000006BC       .text _execute__13daObjRcloud_cFv */
 bool daObjRcloud_c::_execute() {
-    /* Nonmatching */
     mBtkAnm.play();
     (this->*mCurrentActProc)();
     return TRUE;
 }
 
-// Move related code from Context tab to here/* 000006BC-00000778       .text setTexMtx__13daObjRcloud_cFv */
+/* 000006BC-00000778       .text setTexMtx__13daObjRcloud_cFv */
 void daObjRcloud_c::setTexMtx() {
     const J3DModelData* modelData = mpModel->getModelData();
 
@@ -266,7 +264,7 @@ static actor_method_class l_daObjRcloud_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Rcloud = {
-    /* LayerID      */ fpcLy_CURRENT_e, // should be a uint, ensure this is a valid value
+    /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0003,
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Rcloud,

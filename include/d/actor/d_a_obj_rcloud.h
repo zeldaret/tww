@@ -10,18 +10,18 @@ public:
     typedef void (daObjRcloud_c::*ProcFunc)();
 
     enum Param_e {
-        PRM_TYPE_W = 1,
-        PRM_TYPE_S = 0,
+        PRM_ARG_W = 1,
+        PRM_ARG_S = 0,
     };
-    int param_get_arg() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+    int param_get_arg() const { return daObj::PrmAbstract(this, PRM_ARG_W, PRM_ARG_S); }
 
 
     void init_mtx();
     static BOOL solidHeapCB(fopAc_ac_c*);
 
-    u8 create_heap();
+    bool create_heap();
     cPhs_State _create();
-    u8 _delete();
+    bool _delete();
     void wait_act_proc();
     void clouds_lift_start_wait_act_proc();
     void clouds_lift_act_proc();
