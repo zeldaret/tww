@@ -49,7 +49,7 @@ jobs:
           .ninja_deps
           .ninja_log
         key: ${{ runner.os }}-${{ matrix.version }}-${{ github.sha }}
-        restore-keys: ${{ runner.os }}-${{ matrix.version }}
+        restore-keys: ${{ runner.os }}-${{ matrix.version }}-
 
     # Build the project
     - name: Build
