@@ -767,11 +767,11 @@ def generate_build_ninja(
         n.newline()
 
     def write_custom_step(step: str, prev_step: Optional[str] = None) -> None:
-        implicit: List[str | Path] = []
+        implicit: List[Union[str, Path]] = []
         if config.custom_build_steps and step in config.custom_build_steps:
             n.comment(f"Custom build steps ({step})")
             for custom_step in config.custom_build_steps[step]:
-                outputs = cast(List[str | Path], custom_step.get("outputs"))
+                outputs = cast(List[Union[str, Path]], custom_step.get("outputs"))
 
                 if isinstance(outputs, list):
                     implicit.extend(outputs)
@@ -1589,7 +1589,7 @@ def generate_objdiff_config(
                         "build_ctx": True,
                     }
                 )
-        category_opt: List[str] | str = obj.options["progress_category"]
+        category_opt: Union[List[str], str] = obj.options["progress_category"]
         if isinstance(category_opt, list):
             progress_categories.extend(category_opt)
         elif category_opt is not None:
