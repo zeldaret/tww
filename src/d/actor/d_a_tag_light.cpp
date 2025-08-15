@@ -292,6 +292,7 @@ void Act_c::get_base_model_light_start_offset(cXyz* outPos) {
 
 /* 00000BCC-0000111C       .text get_projection_info__Q210daTagLight5Act_cFP4cXyzP4cXyzP4cXyzPC4cXyzPC4cXyz */
 void Act_c::get_projection_info(cXyz* outArg1, cXyz* outArg2, cXyz* outArg3, const cXyz* arg4, const cXyz* arg5) {
+    /* Nonmatching - stack order */
     *outArg3 = current.pos;
 
     f32 ratio = prm_get_coneRatio();
@@ -510,6 +511,7 @@ void Act_c::set_material(J3DMaterial* material, unsigned char alpha) {
 
 /* 00001D20-00001EAC       .text _draw__Q210daTagLight5Act_cFv */
 bool Act_c::_draw() {
+    /* Nonmatching - regalloc */
     if (m2A0 == 1 && m308 > 0.0f) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);

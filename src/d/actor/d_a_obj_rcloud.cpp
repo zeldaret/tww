@@ -68,13 +68,13 @@ bool daObjRcloud_c::create_heap() {
 
     if (modelData == NULL || pAnm == FALSE) {
         JUT_ASSERT(DEMO_SELECT(216, 220), FALSE);
-        result = 0;
+        result = false;
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
         s32 btkRet = mBtkAnm.init(modelData, pAnm, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1.0f, FALSE, 0);
 
         if (mpModel == NULL || btkRet == 0) {
-            result = 0;
+            result = false;
         }
     }
 

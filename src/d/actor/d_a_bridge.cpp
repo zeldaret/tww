@@ -265,7 +265,12 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
                 }
             }
 
+#ifdef __MWERKS__
             pBr->mLineMat1.update(5, (GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
+#else
+            GXColor color = (GXColor){150, 150, 150, 255};
+            pBr->mLineMat1.update(5, color, &i_this->actor.tevStr);
+#endif
             dComIfGd_set3DlineMat(&pBr->mLineMat1);
             continue;
         }
@@ -370,7 +375,12 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
             tmp = 4.0f;
         }
 
-        i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
+#ifdef __MWERKS__
+            i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
+#else
+            GXColor color = (GXColor){150, 150, 150, 255};
+            i_this->mLineMat.update(i_this->m030C + 2, tmp, color, 0, &i_this->actor.tevStr);
+#endif
         dComIfGd_set3DlineMat(&i_this->mLineMat);
     }
 
