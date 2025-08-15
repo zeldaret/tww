@@ -16,48 +16,48 @@ const GXColor daObjEff::BarrelSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF}
 
 /* 000000EC-00000140       .text __ct__Q28daObjEff13BarrelSmokeCBFv */
 daObjEff::BarrelSmokeCB::BarrelSmokeCB() : dPa_smokeEcallBack(original_color, NULL, 0) {
-    mColorModifier = 0x3c;
+    field_0x20 = 0x3c;
 }
 
 /* 00000140-000001CC       .text execute__Q28daObjEff13BarrelSmokeCBFP14JPABaseEmitter */
 void daObjEff::BarrelSmokeCB::execute(JPABaseEmitter *i_emitter) {
-    mColorModifier -= 1;
-    if (mColorModifier <= 0) {
+    field_0x20 -= 1;
+    if (field_0x20 <= 0) {
         end();
-    } else if (mColorModifier < 0x32) {
-        i_emitter->mGlobalPrmColor.a = mColorModifier * 3.6f;
+    } else if (field_0x20 < 0x32) {
+        i_emitter->mGlobalPrmColor.a = field_0x20 * 3.6f;
     }
 }
 
 const GXColor daObjEff::StoolSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
 /* 000001CC-00000220       .text __ct__Q28daObjEff12StoolSmokeCBFv */
 daObjEff::StoolSmokeCB::StoolSmokeCB() : dPa_smokeEcallBack(original_color, NULL, 0) {
-    mColorModifier = 0x3c;
+    field_0x20 = 0x3c;
 }
 
 /* 00000220-000002AC       .text execute__Q28daObjEff12StoolSmokeCBFP14JPABaseEmitter */
 void daObjEff::StoolSmokeCB::execute(JPABaseEmitter *i_emitter) {
-    mColorModifier -= 1;
-    if (mColorModifier <= 0) {
+    field_0x20 -= 1;
+    if (field_0x20 <= 0) {
         end();
-    } else if (mColorModifier < 0x32) {
-        i_emitter->mGlobalPrmColor.a = mColorModifier * 3.6f;
+    } else if (field_0x20 < 0x32) {
+        i_emitter->mGlobalPrmColor.a = field_0x20 * 3.6f;
     }
 }
 
 const GXColor daObjEff::SkullSmokeCB::original_color = {0xA0, 0xA0, 0x80, 0xFF};
 /* 000002AC-00000300       .text __ct__Q28daObjEff12SkullSmokeCBFv */
 daObjEff::SkullSmokeCB::SkullSmokeCB() : dPa_smokeEcallBack(original_color, NULL, 0) {
-    mColorModifier = 0x3c;
+    field_0x20 = 0x3c;
 }
 
 /* 00000300-0000038C       .text execute__Q28daObjEff12SkullSmokeCBFP14JPABaseEmitter */
 void daObjEff::SkullSmokeCB::execute(JPABaseEmitter *i_emitter) {
-    mColorModifier -= 1;
-    if (mColorModifier <= 0) {
+    field_0x20 -= 1;
+    if (field_0x20 <= 0) {
         end();
-    } else if (mColorModifier < 0x32) {
-        i_emitter->mGlobalPrmColor.a = mColorModifier * 3.6f;
+    } else if (field_0x20 < 0x32) {
+        i_emitter->mGlobalPrmColor.a = field_0x20 * 3.6f;
     }
 }
 
@@ -68,32 +68,32 @@ daObjEff::LandSmokeCB::LandSmokeCB() : dPa_smokeEcallBack(0) {
 const GXColor daObjEff::PineconeSmokeCB::original_color = {0x96, 0x78, 0x3C, 0xFF};
 /* 000003CC-00000420       .text __ct__Q28daObjEff15PineconeSmokeCBFv */
 daObjEff::PineconeSmokeCB::PineconeSmokeCB() : dPa_smokeEcallBack(original_color, NULL, 0) {
-    mColorModifier = 0x3c;
+    field_0x20 = 0x3c;
 }
 
 /* 00000420-000004AC       .text execute__Q28daObjEff15PineconeSmokeCBFP14JPABaseEmitter */
 void daObjEff::PineconeSmokeCB::execute(JPABaseEmitter *i_emitter) {
-    mColorModifier -= 1;
-    if (mColorModifier <= 0) {
+    field_0x20 -= 1;
+    if (field_0x20 <= 0) {
         end();
-    } else if (mColorModifier < 0x32) {
-        i_emitter->mGlobalPrmColor.a = mColorModifier * 3.6f;
+    } else if (field_0x20 < 0x32) {
+        i_emitter->mGlobalPrmColor.a = field_0x20 * 3.6f;
     }
 }
 
 const GXColor daObjEff::WoodBoxSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
 /* 000004AC-00000500       .text __ct__Q28daObjEff14WoodBoxSmokeCBFv */
 daObjEff::WoodBoxSmokeCB::WoodBoxSmokeCB() : dPa_smokeEcallBack(original_color, NULL, 0) {
-    mColorModifier = 0x3c;
+    field_0x20 = 0x3c;
 }
 
 /* 00000500-0000058C       .text execute__Q28daObjEff14WoodBoxSmokeCBFP14JPABaseEmitter */
 void daObjEff::WoodBoxSmokeCB::execute(JPABaseEmitter *i_emitter) {
-    mColorModifier -= 1;
-    if (mColorModifier <= 0) {
+    field_0x20 -= 1;
+    if (field_0x20 <= 0) {
         end();
-    } else if (mColorModifier < 0x32) {
-        i_emitter->mGlobalPrmColor.a = mColorModifier * 3.6f;
+    } else if (field_0x20 < 0x32) {
+        i_emitter->mGlobalPrmColor.a = field_0x20 * 3.6f;
     }
 }
 

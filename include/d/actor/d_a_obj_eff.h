@@ -70,7 +70,7 @@ namespace daObjEff {
         BarrelSmokeCB();
         void execute(JPABaseEmitter*);
     public:
-        /* 0x20 */ int mColorModifier;
+        /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
 
     };
@@ -80,7 +80,7 @@ namespace daObjEff {
         StoolSmokeCB();
         void execute(JPABaseEmitter*);
     public:
-        /* 0x20 */ int mColorModifier;
+        /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
     };
 
@@ -89,7 +89,7 @@ namespace daObjEff {
         SkullSmokeCB();
         void execute(JPABaseEmitter*);
     public:
-        /* 0x20 */ int mColorModifier;
+        /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
     };
 
@@ -103,7 +103,7 @@ namespace daObjEff {
         PineconeSmokeCB();
         void execute(JPABaseEmitter*);
     public:
-        /* 0x20 */ int mColorModifier;
+        /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
     };
 
@@ -112,7 +112,7 @@ namespace daObjEff {
         WoodBoxSmokeCB();
         void execute(JPABaseEmitter*);
     public:
-        /* 0x20 */ int mColorModifier;
+        /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
     };
 };
