@@ -97,6 +97,12 @@ jobs:
       with:
         dotnet-version: "8.x.x"
 
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
     - name: Build Website
       run: |
         python build.py
