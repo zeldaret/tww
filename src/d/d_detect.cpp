@@ -45,6 +45,7 @@ void dDetect_c::proc() {
     } else if (mPlace[0].mTimer < 0) {
         mPlace[0].mTimer = 1;
     }
+
     if (mTimer > 0) {
         mTimer--;
     } else if (mTimer < 0) {
@@ -103,12 +104,12 @@ bool dDetect_c::chk_quake_area(const cXyz* pos) const {
 
 /* 8009C32C-8009C588       .text search_tag_light__9dDetect_cFPvPv */
 void* dDetect_c::search_tag_light(void* i_proc, void* i_pos) {
-    /* Nonmatching - chk_inside */
-    if (fopAc_IsActor(i_proc) && fopAcM_GetProfName(i_proc) == PROC_Tag_Light) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_Tag_Light) {
         daTagLight::Act_c* light = (daTagLight::Act_c*)i_proc;
         const cXyz* pos = (const cXyz*)i_pos;
-        light->chk_inside(pos); // TODO
-        return light;
+        if (light->chk_inside(pos)) {
+            return light;
+        }
     }
     return NULL;
 }

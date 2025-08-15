@@ -91,7 +91,7 @@ inline void cMtx_lookAt(Mtx param_0, const Vec* param_1, const Vec* param_2, con
     mDoMtx_lookAt(param_0,param_1,param_2,param_3,param_4);
 }
 
-inline void cMtx_copy(const Mtx src, Mtx dst) {
+inline void cMtx_copy(CMtxP src, MtxP dst) {
     mDoMtx_copy(src, dst);
 }
 
