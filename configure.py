@@ -465,7 +465,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_save.cpp", extra_cflags=['-pragma "nosyminline on"']),
             Object(Matching,    "d/d_save_init.cpp"),
             Object(Matching,    "d/d_shop.cpp", extra_cflags=['-pragma "nosyminline on"']),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_jnt_hit.cpp"),
+            Object(Matching,    "d/d_jnt_hit.cpp"),
             Object(Matching,    "d/d_chain.cpp"),
             Object(NonMatching, "d/d_cloth_packet.cpp"),
             Object(NonMatching, "d/d_a_obj.cpp"),
