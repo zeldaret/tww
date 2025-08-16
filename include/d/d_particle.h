@@ -211,8 +211,8 @@ public:
 
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
     void isStatus(u8) {}
-    void offStatus(int) {}
-    void onStatus(int) {}
+    void offStatus(int flag) { mFlags &= ~flag; }
+    void onStatus(int flag) { mFlags |= flag;}
     void remove() { end(); }
     void setRate(f32 rate) { mRate = rate; }
 
