@@ -590,7 +590,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e | DATA_FLAG_20_e),
 #if VERSION == VERSION_DEMO
-        0xA,
+        SITEM_BDL_KMI_00,
 #else
         KMI00X_BDL_KMI_00X,
 #endif
@@ -731,11 +731,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-#if VERSION == VERSION_DEMO
-        0xD,
-#else
         HSEKI_BDL_HMON1,
-#endif
         0x48,
         0x38,
         0x96,
@@ -800,11 +796,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-#if VERSION == VERSION_DEMO
-        0xD,
-#else
         HSEKI_BDL_HMON1,
-#endif
         0x48,
         0x38,
         0x96,
@@ -869,11 +861,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-#if VERSION == VERSION_DEMO
-        0xD,
-#else
         HSEKI_BDL_HMON1,
-#endif
         0x48,
         0x38,
         0x96,
@@ -938,11 +926,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_4_e),
-#if VERSION == VERSION_DEMO
-        0xD,
-#else
         HSEKI_BDL_HMON1,
-#endif
         0x48,
         0x38,
         0x96,
@@ -1007,11 +991,7 @@ const Act_c::Data_c Act_c::M_data[] = {
         0x7D,
         0x5,
         (DataFlag_e)(DATA_FLAG_2_e | DATA_FLAG_10_e),
-#if VERSION == VERSION_DEMO
-        0x7,
-#else
         SITEM_BDL_KMI_02,
-#endif
         0x2D,
         0x32,
         0x64,
@@ -1254,7 +1234,7 @@ bool Act_c::create_heap() {
     bool ret = false;
     if (mType == 7) {
 #if VERSION == VERSION_DEMO
-        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], 13));
+        J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], SITEM_BRK_KMI_00));
 #else
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname[mType], KMI00X_BRK_KMI_00X));
 #endif
@@ -3566,7 +3546,7 @@ bool Act_c::_execute() {
 
     bool bVar4;
     if (prm_get_spec() == 5) {
-        bVar4 = !is_switch();
+        bVar4 = is_switch() == FALSE;
     } else {
         bVar4 = false;
     }
