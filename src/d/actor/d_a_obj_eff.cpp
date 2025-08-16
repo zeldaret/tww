@@ -105,7 +105,7 @@ BOOL daObjEff::Act_c::solidHeapCB(fopAc_ac_c *i_this) {
 /* 000005B0-00000600       .text create_heap_barrel_smoke__Q28daObjEff5Act_cFv */
 bool daObjEff::Act_c::create_heap_barrel_smoke() {
     BarrelSmokeCB *barrel_smoke_cb = new BarrelSmokeCB();
-    mParticleCallback = barrel_smoke_cb; // Store the callback object pointer
+    mParticleCallback = barrel_smoke_cb;
     return mParticleCallback != NULL;
 }
 
