@@ -1,7 +1,7 @@
 #ifndef RES_DAIOCTA_H
 #define RES_DAIOCTA_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DAIOCTA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

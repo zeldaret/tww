@@ -1,7 +1,7 @@
 #ifndef RES_SITEM_H
 #define RES_SITEM_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum SITEM_RES_FILE_ID { // IDs and indexes are synced

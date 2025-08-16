@@ -1,7 +1,7 @@
 #ifndef RES_IKARI_H
 #define RES_IKARI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum IKARI_RES_FILE_ID { // IDs and indexes are synced

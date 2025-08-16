@@ -1,7 +1,7 @@
 #ifndef RES_DOOR13_H
 #define RES_DOOR13_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DOOR13_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

@@ -1,7 +1,7 @@
 #ifndef RES_YWARP00_H
 #define RES_YWARP00_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum YWARP00_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

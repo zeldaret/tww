@@ -1,7 +1,7 @@
 #ifndef RES_RD_H
 #define RES_RD_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum RD_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */

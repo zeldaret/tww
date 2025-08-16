@@ -1,7 +1,7 @@
 #ifndef RES_RFLW_H
 #define RES_RFLW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum RFLW_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

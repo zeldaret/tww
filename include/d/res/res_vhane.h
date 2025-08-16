@@ -1,7 +1,7 @@
 #ifndef RES_VHANE_H
 #define RES_VHANE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VHANE_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

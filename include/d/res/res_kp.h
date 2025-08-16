@@ -1,7 +1,7 @@
 #ifndef RES_KP_H
 #define RES_KP_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KP_RES_FILE_ID {
     /* BCKS */

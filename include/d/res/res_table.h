@@ -1,7 +1,7 @@
 #ifndef RES_TABLE_H
 #define RES_TABLE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum TABLE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

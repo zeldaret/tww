@@ -1,7 +1,7 @@
 #ifndef RES_FIGURE2A_H
 #define RES_FIGURE2A_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION > VERSION_DEMO
 enum FIGURE2A_RES_FILE_ID {

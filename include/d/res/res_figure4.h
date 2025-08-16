@@ -1,7 +1,7 @@
 #ifndef RES_FIGURE4_H
 #define RES_FIGURE4_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum FIGURE4_RES_FILE_ID {
     /* BDL */

@@ -1,7 +1,7 @@
 #ifndef RES_BOMBER_H
 #define RES_BOMBER_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum BOMBER_RES_FILE_ID {

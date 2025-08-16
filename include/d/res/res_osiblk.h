@@ -1,7 +1,7 @@
 #ifndef RES_OSIBLK_H
 #define RES_OSIBLK_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum OSIBLK_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

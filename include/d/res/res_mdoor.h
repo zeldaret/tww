@@ -1,7 +1,7 @@
 #ifndef RES_MDOOR_H
 #define RES_MDOOR_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MDOOR_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

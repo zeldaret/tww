@@ -1,7 +1,7 @@
 #ifndef RES_VHYOI_H
 #define RES_VHYOI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VHYOI_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

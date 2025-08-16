@@ -1,7 +1,7 @@
 #ifndef RES_SPEAR_H
 #define RES_SPEAR_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SPEAR_RES_FILE_ID { // IDs and indexes are synced
     /* BDLC */

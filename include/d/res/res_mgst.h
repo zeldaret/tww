@@ -1,7 +1,7 @@
 #ifndef RES_MGST_H
 #define RES_MGST_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_PAL
 enum MGST_RES_FILE_ID { // IDs and indexes are synced

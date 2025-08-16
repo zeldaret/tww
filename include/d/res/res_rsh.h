@@ -1,7 +1,7 @@
 #ifndef RES_RSH_H
 #define RES_RSH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum RSH_RES_FILE_ID {

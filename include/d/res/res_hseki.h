@@ -1,7 +1,7 @@
 #ifndef RES_HSEKI_H
 #define RES_HSEKI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum HSEKI_RES_FILE_ID { // IDs and indexes are synced

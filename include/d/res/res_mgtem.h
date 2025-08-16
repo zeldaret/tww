@@ -1,7 +1,7 @@
 #ifndef RES_MGTEM_H
 #define RES_MGTEM_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum MGTEM_RES_FILE_ID { // IDs and indexes are synced

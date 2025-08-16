@@ -1,7 +1,7 @@
 #ifndef RES_HTEN1_H
 #define RES_HTEN1_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum HTEN1_RES_FILE_ID {

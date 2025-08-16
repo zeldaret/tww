@@ -1,7 +1,7 @@
 #ifndef RES_SHINJU_F_H
 #define RES_SHINJU_F_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SHINJU_F_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

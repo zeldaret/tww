@@ -1,7 +1,7 @@
 #ifndef RES_GOVER_H
 #define RES_GOVER_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 enum GOVER_RES_FILE_ID { // IDs and indexes are synced

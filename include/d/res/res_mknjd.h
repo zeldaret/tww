@@ -1,7 +1,7 @@
 #ifndef RES_MKNJD_H
 #define RES_MKNJD_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MKNJD_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

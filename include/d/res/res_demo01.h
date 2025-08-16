@@ -1,7 +1,7 @@
 #ifndef RES_DEMO01_H
 #define RES_DEMO01_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DEMO01_RES_FILE_ID {
     /* STB */

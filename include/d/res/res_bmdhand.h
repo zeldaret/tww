@@ -1,7 +1,7 @@
 #ifndef RES_BMDHAND_H
 #define RES_BMDHAND_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BMDHAND_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

@@ -1,7 +1,7 @@
 #ifndef RES_LKD01_H
 #define RES_LKD01_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum LKD01_RES_FILE_ID {
     /* BCKS */
