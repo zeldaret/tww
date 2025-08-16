@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#if VERSION > VERSION_DEMO
 enum FIGURE2B_RES_FILE_ID {
     /* BCK */
     FIGURE2B_BCK_VF_064L=0x0,
@@ -38,5 +39,6 @@ enum FIGURE2B_RES_FILE_INDEX {
     /* BRK */
     FIGURE2B_INDEX_BRK_VF_061=0x13,
 };
+#endif
 
 #endif /* RES_FIGURE2B_H */

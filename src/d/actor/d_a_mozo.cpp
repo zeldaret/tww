@@ -105,13 +105,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_BDL_MOZ);
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BDL_MOZ);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
         mdlData,
         0,
         0,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_INDEX_BCK_MOZ)),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -124,10 +124,10 @@ BOOL daMozo_c::CreateHeap() {
     
     mAnimMorf = newMorf;
 
-    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_BRK_MOZ);
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BRK_MOZ);
     JUT_ASSERT(0x16A, m_brk != NULL);
 
-    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
     int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);

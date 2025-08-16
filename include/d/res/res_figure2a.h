@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#if VERSION > VERSION_DEMO
 enum FIGURE2A_RES_FILE_ID {
     /* BDL */
     FIGURE2A_BDL_VF_041=0x0,
@@ -50,5 +51,6 @@ enum FIGURE2A_RES_FILE_INDEX {
     FIGURE2A_INDEX_BDL_VF_059=0x15,
     FIGURE2A_INDEX_BDL_VF_060=0x16,
 };
+#endif
 
 #endif /* RES_FIGURE2A_H */

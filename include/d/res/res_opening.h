@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#if VERSION > VERSION_DEMO
 enum OPENING_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */
     OPENING_BLO_OPENING=0x4,
@@ -17,5 +18,6 @@ enum OPENING_RES_FILE_ID { // IDs and indexes are synced
     OPENING_BTI_DEMO_5=0xD,
     OPENING_BTI_DEMO_6=0xE,
 };
+#endif
 
 #endif /* RES_OPENING_H */
