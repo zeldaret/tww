@@ -525,6 +525,8 @@ public:
     static MtxP getWindViewMatrix() { return mWindViewMatrix; }
     static Mtx mWindViewMatrix;
 
+    static dPa_selectTexEcallBack* getTsuboSelectTexEcallBack(int index) { return &mTsubo[index]; }
+
     /* 0x0000 */ JKRSolidHeap* mHeap;
     /* 0x0004 */ JPAResourceManager* mCommonResMng;
     /* 0x0008 */ dPa_modelControl_c* mModelControl;

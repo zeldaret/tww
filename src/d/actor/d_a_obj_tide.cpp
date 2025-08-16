@@ -277,8 +277,8 @@ void Act_c::mode_norm_init() {
 /* 00000DD8-00000FAC       .text mode_norm__Q29daObjTide5Act_cFv */
 void Act_c::mode_norm() {
     bool uVar1;
-    daTagWaterlevel::State_e uVar3;
     f32 fVar2;
+    daTagWaterlevel::State_e uVar3;
 
     fVar2 = daTagWaterlevel::Act_c::get_now();
     uVar3 = daTagWaterlevel::Act_c::get_state();
