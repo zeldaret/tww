@@ -9,12 +9,12 @@
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
     public:
-        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, NULL, pos); }
-        void make_land_smoke(cXyz*, float) {}
-        void make_pinecone_smoke(cXyz*) {}
-        void make_skull_smoke(cXyz*) {}
-        void make_stool_smoke(cXyz*) {}
-        void make_woodBox_smoke(cXyz*) {}
+        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 0, pos); }
+        static void make_land_smoke(cXyz*, float) {}
+        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 4, pos); }
+        static void make_skull_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 2, pos); }
+        static void make_stool_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 1, pos); }
+        static void make_woodBox_smoke(cXyz*) {}
         void prm_get_type() const {}
     
         void solidHeapCB(fopAc_ac_c*);
