@@ -1147,7 +1147,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     };
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 2, // Cylinder
+            /* mShapeType  */ JntHitType_CYL2_e,
             /* mJointIndex */ 0x05, // hitomi (pupil) joint
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ cyl2_eye_offset,

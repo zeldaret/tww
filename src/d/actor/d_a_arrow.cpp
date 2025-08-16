@@ -692,7 +692,7 @@ BOOL daArrow_c::procMove() {
                         field_0x6e6 = temp11;
                         field_0x618 = temp12;
                         hitType = 2; // Hit a joint
-                    } else if (mHitJointIndex == -3) {
+                    } else if (mHitJointIndex == JntHitIdx_DELETE_e) {
                         fopAcM_delete(this);
                         return TRUE;
                     }

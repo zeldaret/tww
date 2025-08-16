@@ -376,10 +376,10 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
         }
 
 #ifdef __MWERKS__
-            i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
+        i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
 #else
-            GXColor color = (GXColor){150, 150, 150, 255};
-            i_this->mLineMat.update(i_this->m030C + 2, tmp, color, 0, &i_this->actor.tevStr);
+        GXColor color = (GXColor){150, 150, 150, 255};
+        i_this->mLineMat.update(i_this->m030C + 2, tmp, color, 0, &i_this->actor.tevStr);
 #endif
         dComIfGd_set3DlineMat(&i_this->mLineMat);
     }

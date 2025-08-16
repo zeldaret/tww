@@ -1238,13 +1238,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     };
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 2, // Cylinder
+            /* mShapeType  */ JntHitType_CYL2_e,
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ cyl_eye_offset,
         },
         {
-            /* mShapeType  */ 1, // Sphere
+            /* mShapeType  */ JntHitType_SPH_e,
             /* mJointIndex */ 0x00, // body joint
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ sph_offset,

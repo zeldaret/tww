@@ -222,9 +222,24 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 #if VERSION > VERSION_DEMO
     static Vec sph_offset = {0.0f, 0.0f, 0.0f};
     static __jnt_hit_data_c search_data[] = {
-        {8, 1, 140.0f, &sph_offset},
-        {8, 2, 90.0f, &sph_offset},
-        {8, 3, 50.0f, &sph_offset},
+        {
+            /* mShapeType  */ JntHitType_SPH_DELETE_e,
+            /* mJointIndex */ 1,
+            /* mRadius     */ 140.0f,
+            /* mpOffsets   */ &sph_offset,
+        },
+        {
+            /* mShapeType  */ JntHitType_SPH_DELETE_e,
+            /* mJointIndex */ 2,
+            /* mRadius     */ 90.0f,
+            /* mpOffsets   */ &sph_offset,
+        },
+        {
+            /* mShapeType  */ JntHitType_SPH_DELETE_e,
+            /* mJointIndex */ 3,
+            /* mRadius     */ 50.0f,
+            /* mpOffsets   */ &sph_offset,
+        },
     };
 
     i_this->m924 = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));

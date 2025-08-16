@@ -4625,91 +4625,91 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     };
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 1, // Sphere
+            /* mShapeType  */ JntHitType_SPH_e,
             /* mJointIndex */ 0x01, // hip1 joint
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ hip_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x03, // momoL joint
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x04, // suneL1 joint
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x08, // momorR joint
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09, // suneR1 joint
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ sune_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0C, // sippo1 joint
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ shipo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0D, // sippo2 joint
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0E, // sippo3 joint
             /* mRadius     */ 1.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0F, // sippo4 joint
             /* mRadius     */ 2.5f,
             /* mpOffsets   */ shipo_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x10, // mune joint
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ mune1_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x10, // mune joint
             /* mRadius     */ 15.0f,
             /* mpOffsets   */ mune2_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x21, // udeL2 joint
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x22, // udeL3 joint
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeL_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x29, // udeR2 joint
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ udeR_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x2A, // udeR3 joint
             /* mRadius     */ 3.0f,
             /* mpOffsets   */ udeR_offset,
