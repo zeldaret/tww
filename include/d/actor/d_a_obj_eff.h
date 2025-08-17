@@ -15,8 +15,8 @@ namespace daObjEff {
         typedef bool (Act_c::*HeapProc)();
 
         enum Prm_e {
-            PRM_ARG_W = 8,
-            PRM_ARG_S = 0,
+            PRM_TYPE_W = 8,
+            PRM_TYPE_S = 0,
         };
 
         static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, NULL, pos); }
@@ -25,7 +25,9 @@ namespace daObjEff {
         void make_skull_smoke(cXyz*) {}
         void make_stool_smoke(cXyz*) {}
         void make_woodBox_smoke(cXyz*) {}
-        void prm_get_type() const {}
+        int prm_get_type() const {
+            return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
+        }
     
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap_barrel_smoke();
@@ -62,7 +64,7 @@ namespace daObjEff {
     
     public:
         /* 0x290 */ int mProcIndex;
-        /* 0x294 */ dPa_levelEcallBack* mParticleCallback;
+        /* 0x294 */ dPa_followEcallBack* mParticleCallback;
     };
 
     class BarrelSmokeCB : public dPa_smokeEcallBack {
