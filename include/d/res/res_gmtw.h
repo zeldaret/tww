@@ -1,7 +1,7 @@
 #ifndef RES_GMTW_H
 #define RES_GMTW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum GMTW_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

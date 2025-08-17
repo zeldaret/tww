@@ -37,14 +37,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001A8-000002E4       .text CreateHeap__13daObj_Roten_cFv */
 BOOL daObj_Roten_c::CreateHeap() {
     static u32 bdl_arc_idx[] = {
-        ROTEN_BDL_ROTEN02,
-        ROTEN_BDL_ROTEN03,
-        ROTEN_BDL_ROTEN04
+        ROTEN_INDEX_BDL_ROTEN02,
+        ROTEN_INDEX_BDL_ROTEN03,
+        ROTEN_INDEX_BDL_ROTEN04
     };
     static u32 dzb_arc_idx[] = {
-        ROTEN_DZB_ROTEN02,
-        ROTEN_DZB_ROTEN03,
-        ROTEN_DZB_ROTEN04
+        ROTEN_INDEX_DZB_ROTEN02,
+        ROTEN_INDEX_DZB_ROTEN03,
+        ROTEN_INDEX_DZB_ROTEN04
     };
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, bdl_arc_idx[mType]));

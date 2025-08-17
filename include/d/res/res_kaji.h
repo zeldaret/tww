@@ -1,7 +1,7 @@
 #ifndef RES_KAJI_H
 #define RES_KAJI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KAJI_RES_FILE_ID {
     /* BAS */

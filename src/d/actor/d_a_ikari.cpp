@@ -36,11 +36,19 @@ void daIkari_c::setMtx() {
 /* 000001C4-00000290       .text _createHeap__9daIkari_cFv */
 BOOL daIkari_c::_createHeap() {
     static int ikari_bdl[5] = {
+#if VERSION == VERSION_DEMO
+        IKARI_BMD_S_IKARI2,
+        IKARI_BMD_S_IKARI2,
+        IKARI_BMD_S_IKARI2,
+        IKARI_BMD_S_IKARI3,
+        IKARI_BMD_S_IKARI4,
+#else
         IKARI_BDL_S_IKARI2,
         IKARI_BDL_S_IKARI2,
         IKARI_BDL_S_IKARI2,
         IKARI_BDL_S_IKARI3,
         IKARI_BDL_S_IKARI4,
+#endif
     };
 
     J3DModelData* modelData =

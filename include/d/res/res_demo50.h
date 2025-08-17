@@ -1,7 +1,7 @@
 #ifndef RES_DEMO50_H
 #define RES_DEMO50_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DEMO50_RES_FILE_ID {
     /* BCKS */

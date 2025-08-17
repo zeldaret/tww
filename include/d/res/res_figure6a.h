@@ -1,8 +1,9 @@
 #ifndef RES_FIGURE6A_H
 #define RES_FIGURE6A_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
+#if VERSION > VERSION_DEMO
 enum FIGURE6A_RES_FILE_ID {
     /* BDL */
     FIGURE6A_BDL_VF_116=0x0,
@@ -26,5 +27,6 @@ enum FIGURE6A_RES_FILE_INDEX {
     FIGURE6A_INDEX_BDL_VF_122=0x9,
     FIGURE6A_INDEX_BDL_VF_123=0xA,
 };
+#endif
 
 #endif /* RES_FIGURE6A_H */

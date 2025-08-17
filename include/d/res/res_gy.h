@@ -1,7 +1,7 @@
 #ifndef RES_GY_H
 #define RES_GY_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum GY_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

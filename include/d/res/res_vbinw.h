@@ -1,7 +1,7 @@
 #ifndef RES_VBINW_H
 #define RES_VBINW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VBINW_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

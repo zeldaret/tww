@@ -1,7 +1,7 @@
 #ifndef RES_VTRI8_H
 #define RES_VTRI8_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VTRI8_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

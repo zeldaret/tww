@@ -1,7 +1,7 @@
 #ifndef RES_HHA_H
 #define RES_HHA_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum HHA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

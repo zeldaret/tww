@@ -1,7 +1,7 @@
 #ifndef RES_MKIEB_H
 #define RES_MKIEB_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MKIEB_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

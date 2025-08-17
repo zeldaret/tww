@@ -1,8 +1,43 @@
 #ifndef RES_BGN_H
 #define RES_BGN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
+#if VERSION == VERSION_DEMO
+enum BGN_RES_FILE_ID { // IDs and indexes are synced
+    /* BCK */
+    BGN_BCK_BGN_HEAD1=0x6,
+    BGN_BCK_BGN_HEAD2=0x7,
+    BGN_BCK_DAMAGE1=0x8,
+    BGN_BCK_DERU1=0x9,
+    BGN_BCK_JUMP1=0xA,
+    BGN_BCK_MODORU1=0xB,
+    BGN_BCK_RAKKA1=0xC,
+    BGN_BCK_RAKKA2=0xD,
+    BGN_BCK_SETTI1=0xE,
+    BGN_BCK_WAIT1=0xF,
+    BGN_BCK_WAIT2=0x10,
+    
+    /* BDLM */
+    BGN_BDL_BGN_BODY1=0x13,
+    BGN_BDL_BGN_DEKU1=0x14,
+    BGN_BDL_BGN_HEAD1=0x15,
+    BGN_BDL_BGN_JYAKUTENA=0x16,
+    BGN_BDL_BGN_JYAKUTENB=0x17,
+    BGN_BDL_BGN_JYAKUTENC=0x18,
+    BGN_BDL_BGN_KUMO1=0x19,
+    BGN_BDL_BGN_MAIN1=0x1A,
+    BGN_BDL_R00=0x1B,
+    BGN_BDL_R0E_A=0x1C,
+    
+    /* BRK */
+    BGN_BRK_BGN_JYAKUTENBC=0x1F,
+    
+    /* TEX */
+    BGN_BTI_HIMO=0x22,
+    BGN_BTI_NOT_CUT1=0x23,
+};
+#else
 enum BGN_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
     BGN_BCK_BGN_HEAD1=0x6,
@@ -47,5 +82,6 @@ enum BGN_RES_FILE_ID { // IDs and indexes are synced
     BGN_BTI_HIMO=0x2D,
     BGN_BTI_NOT_CUT1=0x2E,
 };
+#endif
 
 #endif /* RES_BGN_H */

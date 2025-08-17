@@ -1,10 +1,14 @@
 #ifndef RES_IKADAH_H
 #define RES_IKADAH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum IKADAH_RES_FILE_ID { // IDs and indexes are synced
+#if VERSION == VERSION_DEMO
+    /* BCKS */
+#else
     /* BCK */
+#endif
     IKADAH_BCK_SVSHIP_KAITEN=0x5,
     
     /* BDL */
