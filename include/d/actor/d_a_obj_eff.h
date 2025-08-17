@@ -74,7 +74,6 @@ namespace daObjEff {
     public:
         /* 0x20 */ int field_0x20;
         /* 0x24 */ static const GXColor original_color;
-
     };
 
     class StoolSmokeCB : public dPa_smokeEcallBack {

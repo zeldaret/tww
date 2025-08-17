@@ -164,13 +164,16 @@ bool daObjEff::Act_c::create_heap() {
     return ret;
 }
 
-/* 00000898-00000998       .text eff_set_barrel_smoke__Q28daObjEff5Act_cFv */
+
 BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos,
                                             NULL, NULL, 0xb4, mParticleCallback, -1, NULL, NULL, &particle_scl);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(0x2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+#endif
     if (emitter != NULL) {
         emitter->mVolumeSize = 0x28;
         emitter->mRate = 20.0f;
@@ -186,10 +189,13 @@ BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
 /* 000009D4-00000AD0       .text eff_set_stool_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_stool_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos,
                                             NULL, NULL, 0xb4, mParticleCallback, -1, NULL, NULL, &particle_scl);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(0x2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+#endif
     if (emitter != NULL) {
         emitter->mVolumeSize = 0x1E;
         emitter->mRate = 15.0f;
@@ -205,10 +211,13 @@ BOOL daObjEff::Act_c::eff_set_stool_smoke() {
 /* 00000AD0-00000BC0       .text eff_set_skull_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_skull_smoke() {
     static cXyz particle_scl(1.6f, 1.6f, 1.0f);
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos,
                                             NULL, NULL, 0xb4, mParticleCallback, -1, NULL, NULL, &particle_scl);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(0x2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+#endif
     if (emitter != NULL) {
         emitter->mRate = 10.0f;
         emitter->mMaxFrame = 1;
@@ -227,11 +236,14 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
     pScale.y = scale.y;
     pScale.z = scale.z;
 
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter =
             particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos, NULL, &pScale, 0xb4,
                           mParticleCallback, -1, NULL, NULL, NULL);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(0x2027, &current.pos, NULL,  &pScale, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
+#endif
     if (emitter != NULL) {
         emitter->mVolumeSize = 0x1E;
         emitter->mLifeTime = 0x23;
@@ -252,21 +264,27 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
 
 /* 00000D24-00000D98       .text eff_set_pinecone_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_pinecone_smoke() {
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter =
             particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_SCENE_A16B, &current.pos, NULL, NULL, 0xb4,
                           mParticleCallback, -1, NULL, NULL, NULL);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(-0x5e95, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
+#endif
     return emitter != NULL;
 }
 
 /* 00000D98-00000E80       .text eff_set_woodBox_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
+#if VERSION != VERSION_DEMO
     dPa_control_c *particle = g_dComIfG_gameInfo.play.getParticle();
     JPABaseEmitter *emitter = particle->set(dPa_control_c::dPtclGroup_Toon_e, dPa_name::ID_COMMON_2027, &current.pos,
                                             NULL, NULL, 0xb4, mParticleCallback, -1, NULL, NULL, &particle_scl);
-
+#else
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(0x2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+#endif
     if (emitter != NULL) {
         emitter->mRate = 30.0f;
         emitter->mMaxFrame = 1;
