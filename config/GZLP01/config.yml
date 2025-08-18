@@ -1499,6 +1499,20 @@ modules:
 - object: files/rels/d_a_obj_tapestry.rel
   splits: config/GZLP01/rels/d_a_obj_tapestry/splits.txt
   symbols: config/GZLP01/rels/d_a_obj_tapestry/symbols.txt
+  extract:
+  - symbol: l_Txm_curtainTEX__30@unnamed@d_a_obj_tapestry_cpp@
+    binary: assets/l_Txm_curtainTEX.bin
+    header: assets/l_Txm_curtainTEX.h
+    rename: l_Txm_curtainTEX
+  - symbol: l_matDL__30@unnamed@d_a_obj_tapestry_cpp@
+    binary: assets/l_matDL__d_a_obj_tapestry.bin
+    header: assets/l_matDL__d_a_obj_tapestry.h
+    rename: l_matDL
+    header_type: none
+    custom_type: matDL
+
+
+
 
 - object: files/rels/d_a_obj_tntrap.rel
   splits: config/GZLP01/rels/d_a_obj_tntrap/splits.txt

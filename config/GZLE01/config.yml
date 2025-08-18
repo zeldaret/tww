@@ -1862,6 +1862,17 @@ modules:
   hash: 43cc17f0e803e418a1dba775eaa2af517f3509f6
   splits: config/GZLE01/rels/d_a_obj_tapestry/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tapestry/symbols.txt
+  extract:
+  - symbol: l_Txm_curtainTEX__30@unnamed@d_a_obj_tapestry_cpp@
+    binary: assets/l_Txm_curtainTEX.bin
+    header: assets/l_Txm_curtainTEX.h
+    rename: l_Txm_curtainTEX
+  - symbol: l_matDL__30@unnamed@d_a_obj_tapestry_cpp@
+    binary: assets/l_matDL__d_a_obj_tapestry.bin
+    header: assets/l_matDL__d_a_obj_tapestry.h
+    rename: l_matDL
+    header_type: none
+    custom_type: matDL
 
 - object: files/rels/d_a_obj_tntrap.rel
   hash: 8be9de0693b96dcda338c0e2c0d6338aa64f9cb5
