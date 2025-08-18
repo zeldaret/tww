@@ -1467,7 +1467,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tpota", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(NonMatching, "d_a_tsubo"),
     ActorRel(NonMatching, "d_a_warpdm20"),
-    ActorRel(NonMatching, "d_a_warphr"),
+    ActorRel(Matching,    "d_a_warphr", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wbird"),
     ActorRel(NonMatching, "d_a_ykgr"),
     ActorRel(Matching,    "d_a_alldie"),

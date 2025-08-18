@@ -144,7 +144,7 @@ private:
     /* 0x60 */ s32 mBtpId;
     /* 0x64 */ s32 mBtkId;
     /* 0x68 */ s32 mBrkId;
-};
+}; // size = 0x6C
 
 class dDemo_camera_c : public JStage::TCamera {
 public:
