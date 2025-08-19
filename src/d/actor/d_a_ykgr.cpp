@@ -4,22 +4,119 @@
 //
 
 #include "d/actor/d_a_ykgr.h"
+#include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_path.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_hostIO.h"
+
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+
+class daYkgr_HIO_c :
+#if VERSION == VERSION_DEMO
+    public JORReflexible
+#else
+    public mDoHIO_entry_c
+#endif
+{
+public:
+    daYkgr_HIO_c() {
+#if VERSION == VERSION_DEMO
+        mNo = -1;
+        m05 = 0;
+#else
+        mNo = 0;
+#endif
+        m08 = 0xFF;
+        m0C = 3;
+        m10 = -16.0f;
+        m14 = -5.0f;
+        m18 = -3.0f;
+        m1C = 0.0f;
+        m20 = 1500.0f;
+        m24 = 500.0f;
+    }
+
+    virtual ~daYkgr_HIO_c() {
+#if VERSION == VERSION_DEMO
+        mNo = -1;
+#endif
+    }
+
+    void genMessage(JORMContext*);
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 m05;
+    /* 0x08 */ s32 m08;
+    /* 0x0C */ s32 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ f32 m18;
+    /* 0x1C */ f32 m1C;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ f32 m24;
+}; // size = 0x28
+
+static daYkgr_HIO_c l_HIO;
+static dPa_YkgrPcallBack YkgrCB;
 
 /* 000000EC-00000134       .text draw__17dPa_YkgrPcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_YkgrPcallBack::draw(JPABaseEmitter*, JPABaseParticle*) {
-    /* Nonmatching */
+    GXSetIndTexMtx(GX_ITM_0, &m04, m1C);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
 /* 00000134-00000234       .text setParam__17dPa_YkgrPcallBackFf */
-void dPa_YkgrPcallBack::setParam(float) {
-    /* Nonmatching */
+void dPa_YkgrPcallBack::setParam(float arg1) {
+    if ((arg1 <= -17.0f) || (arg1 >= 47.0f)) {
+        return;
+    }
+
+    if (arg1 >= 0.0f) {
+        m1C = arg1;
+        m04 = m14 = (arg1 - m1C) * 0.5f + 0.5f;
+    } else {
+        f32 tmp = arg1 - 1.0f;
+        m1C = tmp;
+        m04 = m14 = (tmp - m1C) * 0.5f + 1.0f;
+    }
+
+    m08 = 0.0f;
+    m0C = 0.0f;
+    m10 = 0.0f;
+    m18 = 0.0f;
 }
 
 /* 00000234-00000408       .text getPosRate__8daYkgr_cFv */
-void daYkgr_c::getPosRate() {
-    /* Nonmatching */
+f32 daYkgr_c::getPosRate() {
+    if (m_path == NULL) {
+        return 0.0f;
+    }
+
+    f32 fVar4 = 3.4028235e+38;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    cXyz sp30 = player->current.pos;
+    dPnt* pdVar7 = m_path->m_points;
+    s32 num = m_path->m_num;
+
+    for (s32 i = 0; i < num; i++, pdVar7++) {
+        cXyz sp24(pdVar7->m_position.x, pdVar7->m_position.y, pdVar7->m_position.z);
+        f32 abs = sp30.absXZ(sp24);
+        if (abs < fVar4) {
+            fVar4 = abs;
+        }
+    }
+
+    if (fVar4 > l_HIO.m20) {
+        fVar4 = l_HIO.m20;
+    } else if (fVar4 < l_HIO.m24) {
+        fVar4 = l_HIO.m24;
+    }
+
+    fVar4 = (fVar4 - l_HIO.m24) / (l_HIO.m20 - l_HIO.m24);
+    return 1.0f - fVar4;
 }
 
 /* 00000408-00000428       .text daYkgrCreate__FPv */
@@ -29,22 +126,130 @@ static cPhs_State daYkgrCreate(void* i_this) {
 
 /* 00000428-00000680       .text _create__8daYkgr_cFv */
 cPhs_State daYkgr_c::_create() {
-    /* Nonmatching */
+    u8 uVar4 = fopAcM_GetParam(this) >> 0x14 & 0xF;
+
+    fopAcM_SetupActor(this, daYkgr_c);
+
+    u8 pathIndex = fopAcM_GetParam(this) >> 8 & 0xFF;
+    if (pathIndex != 0xff) {
+        m_path = dPath_GetRoomPath(pathIndex, fopAcM_GetRoomNo(this));
+    } else {
+        m_path = NULL;
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(1)) {
+        return cPhs_STOP_e;
+    }
+
+    if (m_emitter == NULL) {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        current.pos = player->current.pos;
+        m_emitter = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C06D, &current.pos);
+        if (m_emitter != NULL) {
+            m_emitter->setParticleCallBackPtr(&YkgrCB);
+            YkgrCB.setParam(-3.0f);
+        } else {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_setStageLayer(this);
+
+        if ((s32)uVar4 == 1) {
+            setAlpha(0xFF);
+            m_emitter->setGlobalAlpha(0xFF);
+            m2CC = 0.5f;
+            m2D0 = 0.0f;
+            start();
+        } else {
+            setAlpha(0);
+            m_emitter->setGlobalAlpha(0);
+            m2CC = 0.5f;
+            m2D0 = 0.0f;
+            stop();
+        }
+
+#if VERSION == VERSION_DEMO
+        if (l_HIO.mNo < 0) {
+            l_HIO.mNo = mDoHIO_createChild("竜の山陽炎", &l_HIO);
+        }
+#endif
+    } else {
+        if ((s32)uVar4 == 1) {
+            start();
+        } else {
+            stop();
+        }
+        return cPhs_STOP_e;
+    }
+
+    return cPhs_COMPLEATE_e;
+}
+
+bool daYkgr_c::_delete() {
+    return true;
 }
 
 /* 00000680-00000688       .text daYkgrDelete__FPv */
-static BOOL daYkgrDelete(void*) {
-    return TRUE;
+static BOOL daYkgrDelete(void* v_this) {
+    return ((daYkgr_c*)v_this)->_delete();
+}
+
+bool daYkgr_c::_execute() {
+    cLib_addCalc2(&m2CC, m_aim_rate, 0.25f, 0.05f);
+    cLib_addCalc2(&daYkgr_c::m_aim_rate, l_HIO.m1C, 0.25f, 0.05f);
+    cLib_addCalc2(&m2D0, getPosRate(), 0.25f, 0.05f);
+
+    f32 fVar1 = m2CC * 0.5f + m2D0 * 0.5f;
+    f32 tmp2 = fVar1 * l_HIO.m18 + (1.0f - fVar1) * l_HIO.m14;
+    YkgrCB.setParam(tmp2);
+
+    if (m_alpha_flag == 0) {
+        if (m_alpha != 0) {
+            if (m_alpha > l_HIO.m0C) {
+                m_alpha -= l_HIO.m0C;
+            } else {
+                m_alpha = 0;
+            }
+        }
+    } else if (m_alpha < 0xff) {
+        if (m_alpha < 0xff - l_HIO.m0C) {
+            m_alpha += l_HIO.m0C;
+        } else {
+            m_alpha = 0xff;
+        }
+    }
+    return true;
 }
 
 /* 00000688-000007F4       .text daYkgrExecute__FPv */
-static BOOL daYkgrExecute(void*) {
-    /* Nonmatching */
+static BOOL daYkgrExecute(void* v_this) {
+    return ((daYkgr_c*)v_this)->_execute();
+}
+
+bool daYkgr_c::_draw() {
+    if (m_alpha == 0) {
+        return true;
+    }
+
+    set_mtx();
+
+#if VERSION == VERSION_DEMO
+    m_emitter->setGlobalRTMatrix(mMtx);
+    if (m_emitter != NULL) {
+        m_emitter->setGlobalAlpha(m_alpha);
+    }
+#else
+    if (m_emitter != NULL) {
+        m_emitter->setGlobalRTMatrix(mMtx);
+        m_emitter->setGlobalAlpha(m_alpha);
+    }
+#endif
+    return true;
 }
 
 /* 000007F4-000008F4       .text daYkgrDraw__FPv */
-static BOOL daYkgrDraw(void*) {
-    /* Nonmatching */
+static BOOL daYkgrDraw(void* v_this) {
+    return ((daYkgr_c*)v_this)->_draw();
 }
 
 /* 000008F4-000008FC       .text daYkgrIsDelete__FPv */
