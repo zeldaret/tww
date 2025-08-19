@@ -224,8 +224,9 @@ BOOL daNpc_Fa1_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(pJVar1, &tevStr);
     mpDoExt_McaMorf->entryDL();
-    if (mGroundY != -G_CM3D_F_INF) {
-        dComIfGd_setSimpleShadow(&current.pos, mGroundY, 10.0f, &m774, 0, 1.0f,
+    f32 ground_y = mGroundY;
+    if (ground_y != -G_CM3D_F_INF) {
+        dComIfGd_setSimpleShadow(&current.pos, ground_y, 10.0f, &m774, 0, 1.0f,
                                  dDlst_shadowControl_c::getSimpleTex());
     }
     dSnap_RegistFig(DSNAP_TYPE_FA, this, 1.0f, 1.0f, 1.0f);
