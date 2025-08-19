@@ -11,6 +11,7 @@
 #include "d/d_map.h"
 #include "d/d_particle.h"
 #include "d/d_resorce.h"
+#include "d/d_s_actor_data_mng.h"
 #include "d/d_save.h"
 #include "d/d_stage.h"
 #include "d/d_vibration.h"
@@ -114,78 +115,6 @@ public:
     /* 0x08 */ int mTimerLimitTimeMs;
     /* 0x0C */ int mTimerMode;
     /* 0x10 */ u16 mWaveFrame;
-};
-
-class dADM_CharTbl : public cDT {
-public:
-    s32 GetNITEM0()  { return mIndex_N_ITEM0; }
-    s32 GetNITEM1()  { return mIndex_N_ITEM1; }
-    s32 GetNITEM2()  { return mIndex_N_ITEM2; }
-    s32 GetNITEM3()  { return mIndex_N_ITEM3; }
-    s32 GetNITEM4()  { return mIndex_N_ITEM4; }
-    s32 GetNITEM5()  { return mIndex_N_ITEM5; }
-    s32 GetNITEM6()  { return mIndex_N_ITEM6; }
-    s32 GetNITEM7()  { return mIndex_N_ITEM7; }
-    s32 GetNITEM8()  { return mIndex_N_ITEM8; }
-    s32 GetNITEM9()  { return mIndex_N_ITEM9; }
-    s32 GetNITEM10() { return mIndex_N_ITEM10; }
-    s32 GetNITEM11() { return mIndex_N_ITEM11; }
-    s32 GetNITEM12() { return mIndex_N_ITEM12; }
-    s32 GetNITEM13() { return mIndex_N_ITEM13; }
-    s32 GetNITEM14() { return mIndex_N_ITEM14; }
-    s32 GetNITEM15() { return mIndex_N_ITEM15; }
-    s32 GetPercent() { return mIndex_percent; }
-    s32 GetITEM0() { return mIndex_ITEM0; }
-    s32 GetITEM1() { return mIndex_ITEM1; }
-    s32 GetITEM2() { return mIndex_ITEM2; }
-    s32 GetITEM3() { return mIndex_ITEM3; }
-    s32 GetITEM4() { return mIndex_ITEM4; }
-    s32 GetITEM5() { return mIndex_ITEM5; }
-    s32 GetITEM6() { return mIndex_ITEM6; }
-    s32 GetITEM7() { return mIndex_ITEM7; }
-
-private:
-    /* 0x28 */ s32 mIndex_ARG;
-    /* 0x2C */ s32 mIndex_N_ITEM0;
-    /* 0x30 */ s32 mIndex_N_ITEM1;
-    /* 0x34 */ s32 mIndex_N_ITEM2;
-    /* 0x38 */ s32 mIndex_N_ITEM3;
-    /* 0x3C */ s32 mIndex_N_ITEM4;
-    /* 0x40 */ s32 mIndex_N_ITEM5;
-    /* 0x44 */ s32 mIndex_N_ITEM6;
-    /* 0x48 */ s32 mIndex_N_ITEM7;
-    /* 0x4C */ s32 mIndex_N_ITEM8;
-    /* 0x50 */ s32 mIndex_N_ITEM9;
-    /* 0x54 */ s32 mIndex_N_ITEM10;
-    /* 0x58 */ s32 mIndex_N_ITEM11;
-    /* 0x5C */ s32 mIndex_N_ITEM12;
-    /* 0x60 */ s32 mIndex_N_ITEM13;
-    /* 0x64 */ s32 mIndex_N_ITEM14;
-    /* 0x68 */ s32 mIndex_N_ITEM15;
-    /* 0x6C */ s32 mIndex_percent;
-    /* 0x70 */ s32 mIndex_ITEM0;
-    /* 0x74 */ s32 mIndex_ITEM1;
-    /* 0x78 */ s32 mIndex_ITEM2;
-    /* 0x7C */ s32 mIndex_ITEM3;
-    /* 0x80 */ s32 mIndex_ITEM4;
-    /* 0x84 */ s32 mIndex_ITEM5;
-    /* 0x88 */ s32 mIndex_ITEM6;
-    /* 0x8C */ s32 mIndex_ITEM7;
-};
-STATIC_ASSERT(sizeof(dADM_CharTbl) == 0x90);
-
-class dADM {
-public:
-    /* 0x00 */ int mBlockCount;
-    /* 0x04 */ void* mpData;
-    /* 0x08 */ dADM_CharTbl mCharTbl;
-
-public:
-    dADM();
-    void FindTag(u32, u32*, u32*);
-    void SetData(void*);
-
-    virtual ~dADM();
 };
 
 class dComIfG_camera_info_class {
