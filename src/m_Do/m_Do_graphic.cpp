@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_graphic.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
@@ -31,10 +32,6 @@
 #include "JSystem/JUtility/JUTVideo.h"
 #include "JSystem/JUtility/JUTXfb.h"
 #include "dolphin/base/PPCArch.h"
-
-#if VERSION == VERSION_DEMO
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
-#endif
 
 JUTFader * mDoGph_gInf_c::mFader;
 ResTIMG * mDoGph_gInf_c::mFrameBufferTimg;

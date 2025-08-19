@@ -3,6 +3,7 @@
  * NPC - Salvage Corp group members
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sv.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_obj_ikada.h"

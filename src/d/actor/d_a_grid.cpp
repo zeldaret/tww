@@ -3,6 +3,7 @@
 // Translation Unit: d_a_grid.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grid.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "d/d_procname.h"

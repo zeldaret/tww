@@ -3,14 +3,12 @@
  * Object - Enemy weapons
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_bg_s_lin_chk.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 u32 daBoko_c::m_bound_se[6] = {
     JA_SE_CM_BOKOBOU_BOUND,

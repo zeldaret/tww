@@ -3,6 +3,7 @@
  * Object - Windfall Island - Ferris wheel
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ferris.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
@@ -12,8 +13,6 @@
 #include "d/res/res_skanran.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daObjFerris {
     namespace {

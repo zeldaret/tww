@@ -3,6 +3,7 @@
  * Enemy - Magtail
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mt.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

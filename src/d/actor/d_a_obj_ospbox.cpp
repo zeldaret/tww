@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_ospbox.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ospbox.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -13,8 +14,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 const char daObjOspbox::Act_c::M_arcname[] = "Ospbox";
 const dCcD_SrcCyl daObjOspbox::Act_c::M_cyl_src = {

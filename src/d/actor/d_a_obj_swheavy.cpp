@@ -3,14 +3,13 @@
  * Object - Wind Temple - Iron Boots switch
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swheavy.h"
 #include "d/res/res_hhbot.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjSwheavy::Act_c::M_arcname[] = "Hhbot";
 const daObjSwheavy::Attr_c daObjSwheavy::Act_c::M_attr[] = {

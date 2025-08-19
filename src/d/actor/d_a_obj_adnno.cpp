@@ -3,6 +3,7 @@
  * Object - Unused - Triforce prayer mural
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_adnno.h"
 #include "d/res/res_adnno.h"
 #include "f_op/f_op_actor_mng.h"

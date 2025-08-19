@@ -3,6 +3,7 @@
  * Object - Firefly (not collectable)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ff.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_gnd_chk.h"

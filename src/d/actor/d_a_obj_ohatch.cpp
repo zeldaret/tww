@@ -3,6 +3,7 @@
  * Object - Hatch door leading to the Nintendo Gallery
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ohatch.h"
 #include "d/res/res_ohatch.h"
 #include "d/d_procname.h"

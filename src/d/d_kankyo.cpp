@@ -3,6 +3,7 @@
 // Translation Unit: d_kankyo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
@@ -22,8 +23,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 #include "d/d_kankyo_dayproc.inc"
 

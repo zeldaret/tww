@@ -3,6 +3,7 @@
  * Object - Ship's wheel (Tetra's Ship)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kaji.h"
 #include "d/res/res_kaji.h"
 #include "f_op/f_op_actor_mng.h"

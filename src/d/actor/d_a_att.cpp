@@ -3,16 +3,13 @@
 // Translation Unit: d_a_att.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
-
-#if VERSION == VERSION_USA
-#include "weak_data_1811.h" // IWYU pragma: keep
-#endif
 
 static bgn_class* boss;
 static cXyz non_pos(-30000.0f, -30000.0f, -30000.0f);

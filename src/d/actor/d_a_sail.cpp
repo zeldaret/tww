@@ -3,6 +3,7 @@
 // Translation Unit: d_a_sail.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sail.h"
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
@@ -18,9 +19,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_angle.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_DEMO
 #define REG_SAIL_F(i) REG10_F(i)

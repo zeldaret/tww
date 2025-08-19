@@ -5,8 +5,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class daNpc_Km1_c : public fopNpc_npc_c {
 public:
     typedef int (daNpc_Km1_c::*ActionFunc)(void*);

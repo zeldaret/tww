@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_btsw2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw2.h"
 #include "d/res/res_btsw.h"
 #include "d/d_com_inf_game.h"
@@ -14,9 +15,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_angle.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daNpc_Btsw2_HIO_c l_HIO;
 

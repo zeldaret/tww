@@ -3,6 +3,7 @@
  * NPC - Beedle / ボ−トショップ店員 (Boat shopkeeper)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bs1.h"
 #include "d/res/res_bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -21,8 +22,6 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;

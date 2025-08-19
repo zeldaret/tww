@@ -3,6 +3,7 @@
 // Translation Unit: d_a_vrbox.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_vrbox.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "d/d_com_inf_game.h"

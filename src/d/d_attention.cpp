@@ -3,6 +3,7 @@
 // Translation Unit: d_attention.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_attention.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"

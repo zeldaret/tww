@@ -3,6 +3,7 @@
  * Tingle Tuner Cursor
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
 #include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -24,9 +25,6 @@
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_bomb.h"
 #include "stdio.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 

@@ -684,7 +684,7 @@ config.libs = [
         "J3DU",
         [
             Object(Matching,    "JSystem/J3DU/J3DUClipper.cpp"),
-            Object(NonMatching, "JSystem/J3DU/J3DUMotion.cpp"),
+            Object(Matching,    "JSystem/J3DU/J3DUMotion.cpp"),
             Object(Matching,    "JSystem/J3DU/J3DUDL.cpp"),
         ],
     ),

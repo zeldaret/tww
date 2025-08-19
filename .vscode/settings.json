@@ -11,6 +11,7 @@
   "files.trimFinalNewlines": true,
   "files.associations": {
     "*.inc": "cpp",
+    "*.pch": "cpp",
     ".clangd": "yaml",
     "*.json": "json",
     "dspproc.c": "cpp",
@@ -26,6 +27,7 @@
     "build/*/report.json": true,
     "build/**/*.MAP": true,
     "build/*/include/assets/**": true,
+    "build/*/include/pch/**": true,
     "build.ninja": true,
     ".ninja_*": true,
     "objdiff.json": true,

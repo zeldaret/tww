@@ -3,6 +3,7 @@
 // Translation Unit: d_a_mgameboard_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mgameboard.h"
 
 /* 800685F8-80068608       .text checkClearGame__11daMgBoard_cFv */

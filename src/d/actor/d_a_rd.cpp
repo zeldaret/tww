@@ -3,6 +3,7 @@
  * Enemy - ReDead
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
 #include "d/res/res_rd.h"
 #include "d/d_procname.h"
@@ -19,9 +20,6 @@
 #include "d/d_s_play.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daRd_HIO_c l_HIO;
 

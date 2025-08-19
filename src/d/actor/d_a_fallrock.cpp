@@ -3,6 +3,7 @@
 // Translation Unit: d_a_fallrock.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock.h"
 #include "d/res/res_always.h"
 #include "d/d_com_inf_game.h"
@@ -11,7 +12,6 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
-
 
 char daFallRock_c::m_arcname[] = "Always";
 f32 daFallRock_c::m_falllen = 7000.0f;

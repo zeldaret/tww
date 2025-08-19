@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_barrel.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_obj_eff.h"
 #include "d/res/res_ktaru_01.h"
@@ -11,8 +12,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
 const float daObjBarrel::Act_c::l_s_radius = 45.0f;

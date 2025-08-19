@@ -11,10 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-// Needed for the .rodata section to match.
-static const f32 dummy_2080[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy_2100[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy_3599[3] = {0.0f, 0.0f, 0.0f};
+#include "weak_bss_3569.h"  // IWYU pragma: keep
 
 int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     NULL,

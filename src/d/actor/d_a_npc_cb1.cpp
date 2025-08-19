@@ -3,6 +3,7 @@
  * Player - Makar
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_obj_vmc.h"
 #include "d/actor/d_a_ship.h"
@@ -18,9 +19,6 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/res/res_cb.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 daNpc_Cb1_HIO_c l_HIO;
 

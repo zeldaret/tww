@@ -3,6 +3,7 @@
  * Item - Field Item
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_item.h"
@@ -14,8 +15,6 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 

@@ -3,6 +3,7 @@
  * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tn.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

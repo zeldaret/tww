@@ -3,6 +3,7 @@
  * NPC - Rat (shopkeeper)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_nz.h"
 #include "d/res/res_nz.h"
 #include "d/res/res_npcnz.h"
@@ -12,9 +13,6 @@
 #include "d/d_item.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";

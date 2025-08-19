@@ -3,6 +3,7 @@
  * Object - Forsaken Fortress - Anchors
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ikari.h"
 #include "d/res/res_ikari.h"
 #include "d/d_kankyo_wether.h"

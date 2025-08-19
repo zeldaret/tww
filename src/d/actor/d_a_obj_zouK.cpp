@@ -3,6 +3,7 @@
  * Object - Hyrule Castle - Knight statues (Master Sword chamber)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_zouK.h"
 #include "d/res/res_vzouk.h"
 #include "f_op/f_op_actor_mng.h"

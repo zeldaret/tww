@@ -3,6 +3,7 @@
 // Translation Unit: d_a_majuu_flag.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_majuu_flag.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
@@ -16,8 +17,6 @@
 #include "dolphin/gx/GXTexture.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 class daMajuu_Flag_HIO_c : public mDoHIO_entry_c {
 public:

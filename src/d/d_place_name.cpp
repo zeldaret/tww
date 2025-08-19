@@ -3,6 +3,7 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_place_name.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_msg.h"

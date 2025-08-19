@@ -3,6 +3,7 @@
 // Translation Unit: d_a_stone2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_stone2.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_always.h"
@@ -11,9 +12,6 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h"       // IWYU pragma: keep
 
 namespace daStone2 {
 Mtx daStone2::Act_c::M_tmp_mtx;

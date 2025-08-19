@@ -8,7 +8,6 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "SSystem/SComponent/c_phase.h"
 
-
 class dDlst_Gameover_CAPTURE_c : public dDlst_base_c {
 public:
     virtual ~dDlst_Gameover_CAPTURE_c() {}

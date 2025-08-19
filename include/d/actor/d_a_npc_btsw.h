@@ -7,8 +7,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class SwMail2_c {
 public:
     typedef void (SwMail2_c::*SwMail_Func)();

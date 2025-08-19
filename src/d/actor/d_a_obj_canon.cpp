@@ -3,6 +3,7 @@
  * Object - Great Sea enemy cannon
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_canon.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DNode.h"
@@ -18,8 +19,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/d_s_play.h"
 #include "d/res/res_wallbom.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 daObj_Canon_HIO_c l_HIO;
 

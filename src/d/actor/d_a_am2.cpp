@@ -3,6 +3,7 @@
  * Enemy - Armos
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_am2.h"
 #include "d/res/res_am2.h"
 #include "f_op/f_op_actor_mng.h"
@@ -22,8 +23,6 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 enum Action {
     ACTION_DOUSA       = 0x0,

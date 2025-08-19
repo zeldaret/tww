@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_mtest.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mtest.h"
 #include "d/res/res_mtest.h"
 #include "d/res/res_owater.h"
@@ -12,9 +13,6 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",

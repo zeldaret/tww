@@ -3,6 +3,7 @@
  * Enemy - Morth
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 // Fakematch? Having sym off before d_a_ks.h but then turning it on before
 // d_a_player_main.h fixes the weak function ordering of
 // `daPy_py_c::getSwordTopPos() const` and `daPy_py_c::getHeadTopPos() const`
@@ -19,9 +20,6 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_gm.h"
 #include "d/res/res_ks.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static int KS_ALL_COUNT = 0;
 static int KUTTUKU_ALL_COUNT = 0;

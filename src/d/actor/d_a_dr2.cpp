@@ -3,6 +3,7 @@
  * NPC - Gohma fight - Valoo (body & tail) + lava pit & ceiling rock
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dr2.h"
 #include "d/res/res_dr2.h"
 #include "m_Do/m_Do_ext.h"

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_beam.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_beam.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"

@@ -3,6 +3,7 @@
  * Enemy - Blade Trap (biting) (Wind Temple - giant fan room)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_machine.h"
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_actor_mng.h"

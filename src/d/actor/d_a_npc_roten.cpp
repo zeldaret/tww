@@ -3,6 +3,7 @@
  * NPC - Traveling Merchants
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_roten.h"
 #include "d/res/res_ro.h"
 #include "m_Do/m_Do_ext.h"
@@ -14,8 +15,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 

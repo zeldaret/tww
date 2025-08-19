@@ -3,6 +3,7 @@
  * Object - Bomb Flower - Bomb
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
@@ -15,8 +16,6 @@
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daBomb2 {
     namespace {

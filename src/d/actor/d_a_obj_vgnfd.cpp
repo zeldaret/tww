@@ -3,14 +3,13 @@
  * Object - Ganon's Tower - Trials door
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vgnfd.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_vgnfd.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const s32 daObjVgnfd_c::M_bdl_table[] = {
     VGNFD_BDL_VGNFD0,

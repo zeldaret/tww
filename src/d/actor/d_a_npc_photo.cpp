@@ -3,6 +3,7 @@
  * NPC - Lenzo
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -17,9 +18,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_picture_box.h"
 #include "d/actor/d_a_tag_photo.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 

@@ -3,6 +3,7 @@
  * Object - Wind Temple - Face stone Hookshot target
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #pragma sym off
 #include "d/actor/d_a_obj_homen.h"
 #pragma sym on
@@ -12,9 +13,6 @@
 #include "d/d_priority.h"
 #include "d/res/res_homen.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjHomen {
 

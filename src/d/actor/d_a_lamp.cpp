@@ -3,14 +3,13 @@
  * Object - Generic wall lamp
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_lamp.h"
 #include "d/res/res_lamp.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 /* 000000EC-00000158       .text daLamp_Draw__FP10lamp_class */
 static BOOL daLamp_Draw(lamp_class* i_this) {

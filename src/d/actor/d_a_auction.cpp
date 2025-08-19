@@ -3,6 +3,7 @@
 // Translation Unit: d_a_auction.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_auction.h"
 #include "d/actor/d_a_npc_auction.h"
 #include "d/actor/d_a_player.h"
@@ -11,9 +12,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;

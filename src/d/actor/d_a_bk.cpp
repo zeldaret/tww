@@ -3,6 +3,7 @@
  * Enemy - Bokoblin
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bk.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/res/res_bk.h"
@@ -28,9 +29,6 @@
 #include "d/d_material.h"
 #include "d/d_snap.h"
 #include "JSystem/JUtility/JUTReport.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u8 hio_set;
 static u8 another_hit;

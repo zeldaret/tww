@@ -3,6 +3,7 @@
  * Object - Wind Temple - Floor spikes
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_toge.h"
 #include "d/res/res_htoge1.h"
 #include "d/actor/d_a_wind_tag.h"

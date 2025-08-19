@@ -3,6 +3,7 @@
  * Object - Gong (Tetra's Ship)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gong.h"
 #include "d/res/res_vdora.h"
 #include "f_op/f_op_actor_mng.h"

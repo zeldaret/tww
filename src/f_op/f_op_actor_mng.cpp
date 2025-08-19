@@ -3,6 +3,7 @@
 // Translation Unit: f_op_actor_mng.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_npc_fa1.h"
 #include "f_op/f_op_actor.h"
@@ -27,8 +28,6 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_malloc.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 #define MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action)                               \
     ((itemNo & 0xFF) << 0 | (itemBitNo & 0xFF) << 8 | (switchNo2 & 0xFF) << 16 | (type & 0x3) << 24 | (action & 0x3F) << 26)

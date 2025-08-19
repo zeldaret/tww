@@ -3,6 +3,7 @@
  * Object - Cuttable sign
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kanban.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_bomb.h"

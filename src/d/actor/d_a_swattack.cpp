@@ -3,6 +3,7 @@
 // Translation Unit: d_a_swattack.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swattack.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"

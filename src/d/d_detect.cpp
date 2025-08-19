@@ -3,6 +3,7 @@
 // Translation Unit: d_detect.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_detect.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"

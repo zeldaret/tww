@@ -3,6 +3,7 @@
 // Translation Unit: d_particle.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_particle.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -22,9 +23,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include "stdio.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 8007A4D8-8007A514       .text __ct__18dPa_modelEmitter_cFv */
 dPa_modelEmitter_c::dPa_modelEmitter_c() {

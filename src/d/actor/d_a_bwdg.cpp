@@ -3,6 +3,7 @@
 // Translation Unit: d_a_bwdg.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bwdg.h"
 #include "d/res/res_bwdg.h"
 #include "d/d_bg_w_hf.h"

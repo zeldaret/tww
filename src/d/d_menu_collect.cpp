@@ -3,13 +3,11 @@
 // Translation Unit: d_menu_collect.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_collect.h"
 #include "dolphin/types.h"
 #include "stdio.h"
 #include "d/d_com_inf_game.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static dMc_HIO_c g_mcHIO;
 

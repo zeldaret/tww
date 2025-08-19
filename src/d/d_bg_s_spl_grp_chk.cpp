@@ -3,6 +3,7 @@
 // Translation Unit: d_bg_s_spl_grp_chk.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_bg_s_spl_grp_chk.h"
 #include "SSystem/SComponent/c_bg_s.h"
 

@@ -8,10 +8,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "math.h"
 
-// Needed for the .rodata section to match.
-static const f32 dummy1[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy2[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy3[3] = {0.0f, 0.0f, 0.0f};
+#include "weak_bss_3569.h"  // IWYU pragma: keep
 
 static const f32 Deg2Rad = 0.017453292f;
 

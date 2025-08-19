@@ -3,6 +3,7 @@
  * NPC - Baito
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw.h"
 #include "d/d_letter.h"
 #include "d/d_snap.h"
@@ -14,9 +15,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 daNpc_Btsw_HIO_c l_HIO;
 

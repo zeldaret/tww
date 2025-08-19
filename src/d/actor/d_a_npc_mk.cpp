@@ -3,6 +3,7 @@
  * NPC - Ivan
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mk.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

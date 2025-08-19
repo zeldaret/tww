@@ -3,6 +3,7 @@
  * Object - Rito Postbox
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_toripost.h"
 #include "d/res/res_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -18,8 +19,6 @@
 #include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dScnPly_reg_HIO_c g_regHIO;
 

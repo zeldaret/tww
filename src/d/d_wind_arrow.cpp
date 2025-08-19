@@ -3,6 +3,7 @@
 // Translation Unit: d_wind_arrow.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wind_arrow.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_priority.h"

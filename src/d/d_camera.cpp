@@ -3,6 +3,7 @@
 // Translation Unit: d_camera.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -29,10 +30,6 @@
 #include "d/d_a_obj.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_npc_cb1.h"
-
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {  
     static f32 limitf(f32 value, f32 min, f32 max) {

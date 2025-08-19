@@ -3,6 +3,7 @@
  * Boating Course - "3-2-1 GO!" text
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_minigame_starter.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"

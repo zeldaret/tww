@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_player_HIO.h"

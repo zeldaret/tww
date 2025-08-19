@@ -3,6 +3,7 @@
  * Player - Hyoi Seagull
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kamome.h"
 #include "d/res/res_kamome.h"
 #include "d/d_com_inf_game.h"
@@ -16,9 +17,6 @@
 #include "d/d_npc.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static char* l_staff_name = "HyoiKam";
 static daNpc_kam_HIO_c l_HIO;

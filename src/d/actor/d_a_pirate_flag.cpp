@@ -3,6 +3,7 @@
 // Translation Unit: d_a_pirate_flag.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pirate_flag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -10,9 +11,6 @@
 #include "d/res/res_cloth.h"
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static Vec l_pos[25] = {
     {0.0f, 2200.0f, 0.0f},

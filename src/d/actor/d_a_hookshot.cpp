@@ -3,6 +3,7 @@
  * Item - Hookshot
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hookshot.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -11,8 +12,6 @@
 #include "d/actor/d_a_ship.h" // IWYU pragma: keep
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_chainS3TCTEX__d_hookshot.h"
 const u16 l_chainS3TCTEX__width = 32;

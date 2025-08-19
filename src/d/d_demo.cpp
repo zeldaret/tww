@@ -3,6 +3,7 @@
 // Translation Unit: d_demo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_demo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"

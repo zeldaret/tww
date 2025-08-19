@@ -3,6 +3,7 @@
  * Object - Various Great Sea ships (Beedle, Submarines, Skull Platforms/Rafts, and Salvage Corp.)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_majuu_flag.h"
@@ -21,13 +22,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
 cXyz daObj_Ikada_c::m_rope_base_vec(0.0f, -10.0f, 0.0f);
 cXyz daObj_Ikada_c::m_crane_offset(200.0f, -340.0f, 0.0f);
 static daObj_Ikada_HIO_c l_HIO;
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const u32 daObj_Ikada_c::m_heapsize[] = {0x1D00, 0x2F60, 0x2E20, 0x32E0, 0x6D60};
 const char daObj_Ikada_c::m_arc_name[] = "IkadaH";

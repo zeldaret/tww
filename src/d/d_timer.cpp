@@ -3,6 +3,7 @@
 // Translation Unit: d_timer.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_timer.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"

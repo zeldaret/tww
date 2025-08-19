@@ -3,6 +3,7 @@
 // Translation Unit: d_wood.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wood.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -21,8 +22,6 @@
 #include "dolphin/types.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 //-----------------------------------------
 // Types

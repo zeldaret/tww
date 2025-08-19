@@ -3,6 +3,7 @@
 // Translation Unit: d_a_boko_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_dai_item.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dai_item.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
@@ -11,10 +12,6 @@
 #include "d/d_s_play.h"
 #include "d/res/res_fdai.h"
 #include "d/res/res_cloth.h"
-
-#include "f_op/f_op_actor.h"
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daStandItem_c::m_arcname[] = "Fdai";
 const s16 daStandItem_c::m_bmdidx[] = {

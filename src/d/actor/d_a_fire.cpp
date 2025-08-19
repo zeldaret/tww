@@ -3,13 +3,12 @@
 // Translation Unit: d_a_fire.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fire.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf

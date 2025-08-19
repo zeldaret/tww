@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_auction.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_auction.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

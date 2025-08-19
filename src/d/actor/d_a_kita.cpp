@@ -3,6 +3,7 @@
  * Object - Forbidden Woods - Hanging flower platform
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kita.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/actor/d_a_player.h"
@@ -17,9 +18,6 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_movebg_actor.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 
 /* 00000078-0000032C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {

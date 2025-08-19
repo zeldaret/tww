@@ -3,6 +3,7 @@
  * Object - Bombable walls
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wall.h"
 #include "d/res/res_hbw1.h"
 #include "d/res/res_htw1.h"
@@ -13,8 +14,6 @@
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const s16 daWall_c::m_heapsize[3] = {
     0x1160,

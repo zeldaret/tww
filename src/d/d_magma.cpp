@@ -3,6 +3,7 @@
 // Translation Unit: d_magma.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_magma.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
@@ -11,9 +12,6 @@
 #include "m_Do/m_Do_lib.h"
 
 // #pragma sym on
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;

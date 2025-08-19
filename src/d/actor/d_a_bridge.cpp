@@ -3,6 +3,7 @@
 // Translation Unit: d_a_bridge.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bridge.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
@@ -20,7 +21,6 @@
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 static cXyz* wind_vec;
 static s16 wy;
 static f32* wp;

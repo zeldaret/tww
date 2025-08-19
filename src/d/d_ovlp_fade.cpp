@@ -3,6 +3,7 @@
 // Translation Unit: d_ovlp_fade.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_overlap.h"

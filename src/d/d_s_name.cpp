@@ -3,6 +3,7 @@
 // Translation Unit: d_s_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_name.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
@@ -31,8 +32,6 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 dSn_HIO_c g_snHIO;
 

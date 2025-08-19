@@ -3,6 +3,7 @@
  * Game - Shared Runtime Data ("Common Info Game")
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"

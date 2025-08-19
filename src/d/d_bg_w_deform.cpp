@@ -3,6 +3,7 @@
 // Translation Unit: d_bg_w_deform.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_bg_w_deform.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"

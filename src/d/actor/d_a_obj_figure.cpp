@@ -3,6 +3,7 @@
  * Object - Nintendo Gallery figurines + stand
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_figure.h"
 #include "d/res/res_figure.h"
 #include "d/res/res_figure2.h"
@@ -16,8 +17,6 @@
 #include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 #define TOTAL_FIGURE_COUNT 0x86
 

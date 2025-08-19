@@ -8,7 +8,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
 class daNpc_Bs1_c : public fopAc_ac_c {
 public:
     typedef BOOL (daNpc_Bs1_c::*ActionFunc)(void*);

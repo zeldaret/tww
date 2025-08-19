@@ -3,6 +3,7 @@
 // Translation Unit: d_a_stone.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_stone.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
@@ -15,11 +16,6 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
-
-#if VERSION == VERSION_DEMO
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#endif
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daStone {
 cXyz Act_c::M_axis = cXyz::BaseZ;

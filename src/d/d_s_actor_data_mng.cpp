@@ -3,6 +3,7 @@
 // Translation Unit: d_s_actor_data_mng.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_actor_data_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 

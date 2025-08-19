@@ -3,6 +3,7 @@
  * Treasure Chest / 宝箱 (Takarabako)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
 #include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -20,7 +21,6 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 
-
 #define FUNC_TYPE_NORMAL 0
 #define FUNC_TYPE_SWITCH 1
 #define FUNC_TYPE_ENEMIES 2
@@ -30,8 +30,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 

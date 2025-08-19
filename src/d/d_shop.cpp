@@ -3,6 +3,7 @@
 // Translation Unit: d_shop.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_shop.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_msg.h"

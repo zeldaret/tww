@@ -3,6 +3,7 @@
 // Translation Unit: d_file_error.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_file_error.h"
 #include "dolphin/types.h"
 

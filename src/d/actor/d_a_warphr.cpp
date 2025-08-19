@@ -3,6 +3,7 @@
 // Translation Unit: d_a_warphr.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warphr.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
@@ -12,9 +13,6 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h"       // IWYU pragma: keep
 
 namespace daWarphr_prm {
 static inline u8 getType(daWarphr_c* i_this) {

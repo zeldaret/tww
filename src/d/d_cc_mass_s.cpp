@@ -3,6 +3,7 @@
 // Translation Unit: d_cc_mass_s.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cc_mass_s.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"

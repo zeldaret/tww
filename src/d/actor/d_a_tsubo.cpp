@@ -3,6 +3,7 @@
  * Small, carriable objects (pots, skulls, etc.)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_player.h"
@@ -28,9 +29,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h"       // IWYU pragma: keep
 
 namespace daTsubo {
 

@@ -3,6 +3,7 @@
 // Translation Unit: d_grass.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_grass.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -16,8 +17,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "dolphin/gf/GF.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_K_kusa_00TEX.h"
 const u32 l_K_kusa_00TEX__width = 64;

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_coming3.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_coming3.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_sea.h"
@@ -12,9 +13,6 @@
 #include "d/res/res_always.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
-
-#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
-#include "weak_data_1811.h"  // IWYU pragma: keep
 
 namespace daComing3 {
     namespace {

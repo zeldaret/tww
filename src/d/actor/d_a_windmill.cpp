@@ -3,6 +3,7 @@
 // Translation Unit: d_a_windmill.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/res/res_hpu1.h"
@@ -13,9 +14,6 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 
 const char* daWindMill_c::m_arcname[] = { "Hpu1", "Hpu2" };
 

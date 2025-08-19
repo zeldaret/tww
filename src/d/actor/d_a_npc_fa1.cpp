@@ -3,6 +3,7 @@
  * Item - Fairy / 回復妖精 (Recovery fairy)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_fa1.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
@@ -11,9 +12,6 @@
 #include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
-
 
 /* 800FAFC0-800FB004       .text __ct__16daNpc_Fa1_HIO3_cFv */
 daNpc_Fa1_HIO3_c::daNpc_Fa1_HIO3_c() {

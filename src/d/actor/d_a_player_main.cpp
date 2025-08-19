@@ -8,6 +8,7 @@
  * The original split locations are indicated in the map file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_npc_fa1.h"
@@ -42,8 +43,6 @@
 #include "d/actor/d_a_boomerang.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_graphic.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 JGeometry::TVec3<f32> l_hammer_splash_particle_scale(0.67f, 0.67f, 0.67f);
 

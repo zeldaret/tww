@@ -3,6 +3,7 @@
  * Enemy - Dexivine (Forbidden Woods, Wind Temple)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sss.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

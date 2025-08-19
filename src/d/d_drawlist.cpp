@@ -3,6 +3,7 @@
 // Translation Unit: d_drawlist.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_drawlist.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
@@ -17,9 +18,6 @@
 #include "SSystem/SComponent/c_rnd.h"
 #include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "global.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 GXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 

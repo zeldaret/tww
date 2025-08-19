@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_demo_item.h"

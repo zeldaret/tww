@@ -3,6 +3,7 @@
 // Translation Unit: d_bg_s_lin_chk.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_bg_s_lin_chk.h"
 #include "f_op/f_op_actor_mng.h"
 
