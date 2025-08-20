@@ -162,16 +162,10 @@ namespace daTsubo {
         const AttrSpine_c& attrSpine() { return M_attrSpine; }
         const Data_c& data() const { return M_data[mType]; }
         const SpecBokoData& data_spec_boko(int index) { return M_data_spec_boko[index]; }
-        #if VERSION == VERSION_DEMO
-        bool is_switch() const { 
-            return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave());
-        }
-        #else
         BOOL is_switch() const { 
             int sw = prmZ_get_swSave();
             return fopAcM_isSwitch(const_cast<Act_c*>(this), sw);
         }
-        #endif
 
         bool pos_init() {
             if (m678 == 2) {

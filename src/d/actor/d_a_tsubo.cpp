@@ -1948,7 +1948,7 @@ void Act_c::mode_carry_init() {
 
 /* 00002EF8-0000310C       .text mode_carry__Q27daTsubo5Act_cFv */
 void Act_c::mode_carry() {
-    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = daPy_getPlayerActorClass();
     u8 tmp = m685;
 
     if (tmp == 0) {
@@ -1972,15 +1972,7 @@ void Act_c::mode_carry() {
         shape_angle.z = 0;
     }
 
-#if VERSION == VERSION_DEMO
-    bool bVar2 = true;
-    if (!player->getGrabUpEnd() && player->getRightFootOnGround() == 0) {
-        bVar2 = false;
-    }
-#else
     bool bVar2 = player->getGrabUpEnd() || player->getRightFootOnGround();
-#endif
-
     if (bVar2 && mType == 2) {
         eff_drop_water();
         fopAcM_seStart(this, JA_SE_LK_CONVEY_WPOT, 0);
@@ -2770,16 +2762,8 @@ void Act_c::bound(float arg1) {
                 }
             }
         }
-    } else {
-#if VERSION == VERSION_DEMO
-        bool hitWall = mAcch.ChkWallHit();
-        if (hitWall)
-#else
-        if (mAcch.ChkWallHit())
-#endif
-        {
-            speedF *= 0.9f;
-        }
+    } else if (mAcch.ChkWallHit()) {
+        speedF *= 0.9f;
     }
 }
 
@@ -2902,21 +2886,12 @@ void Act_c::set_wind_vec() {
             m7F4.getSquareMag();
             fopAc_ac_c* pfVar4 = mCyl.GetTgHitAc();
             if (pfVar4 != NULL && fopAcM_GetProfName(pfVar4) == PROC_PLAYER) {
-#if VERSION == VERSION_DEMO
-                s16 iVar5 = pfVar4->shape_angle.y - cM_atan2s(sp3C.x, sp3C.z);
-                if (cM_scos(iVar5) > 0.866f) {
-                    fVar1 = cM_scos(iVar5) * 2.0f + 1.0f;
-                } else {
-                    fVar1 = 0.0f;
-                }
-#else
                 s16 iVar5 = cM_atan2s(sp3C.x, sp3C.z);
                 if (cM_scos(pfVar4->shape_angle.y - iVar5) > 0.866f) {
                     fVar1 = cM_scos(pfVar4->shape_angle.y - iVar5) * 2.0f + 1.0f;
                 } else {
                     fVar1 = 0.0f;
                 }
-#endif
             }
         }
 
