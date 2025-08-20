@@ -1469,7 +1469,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_warpdm20", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_warphr", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wbird"),
-    ActorRel(NonMatching, "d_a_ykgr"),
+    ActorRel(Equivalent,  "d_a_ykgr", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_alldie"),
     ActorRel(Matching,    "d_a_am", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am2", extra_cflags=["-sym off"]),
