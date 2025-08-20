@@ -20,6 +20,22 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+class daObjTpost_HIO_c {
+public:
+    daObjTpost_HIO_c();
+    virtual ~daObjTpost_HIO_c() {}
+
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ bool debug_draw;
+    /* 0x06 */ s8 field_0x06;
+    /* 0x07 */ u8 field_0x07;
+    /* 0x08 */ f32 attn_pos_offset;
+    /* 0x0C */ f32 eye_pos_offset;
+    /* 0x10 */ f32 talk_distance;
+    /* 0x14 */ s16 field_0x14;
+    /* 0x16 */ s16 field_0x16;
+};
+
 extern dScnPly_reg_HIO_c g_regHIO;
 
 const char daObjTpost_c::m_arc_name[] = "Toripost";

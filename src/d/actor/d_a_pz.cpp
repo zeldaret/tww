@@ -46,7 +46,7 @@ daPz_HIO_c::daPz_HIO_c() {
 }
 
 /* 00000310-00000340       .text stealItem_CB__FPv */
-void stealItem_CB(void*) {
+static void stealItem_CB(void*) {
     /* Nonmatching */
 }
 

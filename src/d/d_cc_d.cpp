@@ -3,7 +3,6 @@
 // Translation Unit: d_cc_d.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "dolphin/types.h"

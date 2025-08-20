@@ -9,6 +9,24 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+class daTag_Kk1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x08  */ f32 mHorizontalDistance;
+        /* 0x0C  */ f32 mVerticalDistance;
+        /* 0x10  */ u8  field_0x10;
+    };
+
+    daTag_Kk1_HIO_c();
+    virtual ~daTag_Kk1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04  */ s8 mNo;
+    /* 0x08  */ hio_prm_c prm;
+};
+
 static daTag_Kk1_HIO_c l_HIO;
 
 static const u8 dummy5[] = { 0x00, 0xFF, 0x00, 0x80};

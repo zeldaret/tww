@@ -3,7 +3,6 @@
 // Translation Unit: d_cc_s.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cc_s.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"

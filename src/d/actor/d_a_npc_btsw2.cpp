@@ -16,6 +16,22 @@
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_angle.h"
 
+class daNpc_Btsw2_HIO_c {
+public:
+    daNpc_Btsw2_HIO_c();
+    virtual ~daNpc_Btsw2_HIO_c() {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ dNpc_HIO_c mNpc;
+    /* 0x30 */ s16 m30;
+    /* 0x32 */ s16 m32;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ f32 m38;
+    /* 0x3C */ s16 m3C;
+    /* 0x3E */ s16 m3E;
+};
+
 static daNpc_Btsw2_HIO_c l_HIO;
 
 static dCcD_SrcCyl l_cyl_src = {

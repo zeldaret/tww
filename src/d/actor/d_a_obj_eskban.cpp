@@ -407,9 +407,6 @@ BOOL Mthd_Draw(void* i_this) {
     return ((Act_c*)i_this)->MoveBGDraw();
 }
 
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
-
 /* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
     return ((Act_c*)i_this)->MoveBGIsDelete();

@@ -66,7 +66,7 @@ public:
     /* 0x2FC */ s8 m_jnt;
     /* 0x2FD */ u8 m2FD[0x300 - 0x2FD];
     /* 0x300 */ dBgW* mpBgW;
-    /* 0x304 */ u8 m304[0x310 - 0x304];
+    /* 0x304 */ dDoor_stop_c mStopBars;
     /* 0x310 */ u8 mAction;
     /* 0x311 */ u8 m311[0x312 - 0x311];
     /* 0x312 */ u16 m312;

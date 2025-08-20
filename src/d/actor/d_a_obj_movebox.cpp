@@ -1892,10 +1892,6 @@ namespace daObjMovebox {
         cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->Mthd_Create();
         }
-
-// Fakematch to fix weak func order/.text section splitting of daObjMovebox::EffSmokeCB's ctor and dtor.
-// Also fixes weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
         
         /* 000044E0-00004544       .text Mthd_Delete__Q212daObjMovebox29@unnamed@d_a_obj_movebox_cpp@FPv */
         BOOL Mthd_Delete(void* i_this) {

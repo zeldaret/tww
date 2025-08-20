@@ -12,6 +12,39 @@
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/d_kankyo_wether.h"
 
+class daPirate_Flag_HIO_c : public JORReflexible {
+public:
+    daPirate_Flag_HIO_c() {
+        mNo = -1;
+        m06 = 0;
+        m1C = 0.0f;
+        m05 = 0;
+        m07 = 0;
+        m08 = 0x40;
+        m0C = 13.0f;
+        m10 = 7.0f;
+        m14 = -3.5f;
+        m18 = 0.45f;
+    }
+    virtual ~daPirate_Flag_HIO_c() {
+        mNo = -1;
+    }
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ s32 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ f32 m18;
+    /* 0x1C */ f32 m1C;
+};
+
 static Vec l_pos[25] = {
     {0.0f, 2200.0f, 0.0f},
     {0.0f, 2200.0f, 200.0f},
@@ -282,9 +315,11 @@ void daPirate_Flag_packet_c::draw() {
 #endif
 }
 
-const u8 dummy_4241[] = {0x00, 0xFF, 0x00, 0x80};
-const u8 dummy_4243[] = {0x00, 0x00, 0xFF, 0x80};
-const u8 dummy_4245[] = {0xFF, 0x00, 0x00, 0x80};
+static void dummy() {
+    (GXColor){0x00, 0xFF, 0x00, 0x80};
+    (GXColor){0x00, 0x00, 0xFF, 0x80};
+    (GXColor){0xFF, 0x00, 0x00, 0x80};
+}
 
 /* 00000E44-000011A0       .text daPirate_Flag_Draw__FP17pirate_flag_class */
 static BOOL daPirate_Flag_Draw(pirate_flag_class* i_this) {

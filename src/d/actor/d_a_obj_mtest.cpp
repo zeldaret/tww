@@ -365,9 +365,6 @@ namespace daObjMtest {
             return ((Act_c*)i_this)->MoveBGDraw();
         }
         
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
-        
         BOOL Mthd_IsDelete(void* i_this) {
             return ((Act_c*)i_this)->MoveBGIsDelete();
         }

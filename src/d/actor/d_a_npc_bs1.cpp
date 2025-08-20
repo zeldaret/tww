@@ -23,6 +23,37 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
 
+class daNpc_Bs1_childHIO_c {
+public:
+    daNpc_Bs1_childHIO_c();
+    virtual ~daNpc_Bs1_childHIO_c() {}
+
+public:
+    /* 0x000 */ // this.__vt
+    /* 0x004 */ dNpc_HIO_c mNpc;
+    /* 0x02C */ u8 m2C;
+    /* 0x02D */ u8 m2D[0x3];
+    /* 0x030 */ f32 m30;
+    /* 0x034 */ f32 m34;
+    /* 0x038 */ f32 m38;
+    /* 0x03C */ f32 m3C;
+    /* 0x040 */ f32 m40;
+};  // Size: 0x44
+
+class daNpc_Bs1_HIO_c : public JORReflexible {
+public:
+    daNpc_Bs1_HIO_c();
+    virtual ~daNpc_Bs1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x000 */ // this.__vt
+    /* 0x004 */ s8 mNo;
+    /* 0x008 */ int m8;
+    /* 0x00C */ daNpc_Bs1_childHIO_c mChild[2];
+};  // Size: 0x94
+
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
 static daNpc_Bs1_HIO_c l_HIO;

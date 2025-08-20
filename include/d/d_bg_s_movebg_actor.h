@@ -3,13 +3,7 @@
 
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "f_op/f_op_actor.h"
-// Fakematch to fix weak func order/.text section splitting of some TUs that include this header.
-// Some affected TUs: d_a_hys, d_a_obj_swhammer, d_a_obj_eskban, d_a_obj_mtest, d_a_obj_movebox.
-#pragma push
-#pragma sym off
 #include "d/d_a_obj.h"
-#include "d/d_particle.h"
-#pragma pop
 
 class dBgW;
 typedef void (*MoveBGActor_SetFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);

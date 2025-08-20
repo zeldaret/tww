@@ -767,8 +767,6 @@ BOOL Act_c::Draw() {
     return TRUE;
 }
 
-#pragma nosyminline off
-
 namespace {
 /* 0000273C-0000275C       .text Mthd_Create__Q28daStone224@unnamed@d_a_stone2_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {

@@ -3,6 +3,7 @@
 
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_bg_s_acch.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_gnd_chk.h"
 

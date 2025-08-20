@@ -40,8 +40,6 @@ public:
 
 class daObjHhaSplash_c {
 public:
-    daObjHhaSplash_c() {}
-    ~daObjHhaSplash_c() {}
     cXyz get_base_pos() { return mBasePos; };
     cXyz get_pos() { return mPos; };
 

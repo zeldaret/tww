@@ -10,7 +10,6 @@
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
     public:
-
         typedef BOOL (Act_c::*Proc)();
         typedef void (Act_c::*voidProc)();
         typedef bool (Act_c::*HeapProc)();

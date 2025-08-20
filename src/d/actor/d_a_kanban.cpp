@@ -19,9 +19,23 @@
 #include "d/d_com_inf_game.h"
 #include "d/res/res_kanban.h"
 
+class daKanban_HIO_c : public mDoHIO_entry_c {
+public:
+    daKanban_HIO_c();
+    virtual ~daKanban_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ f32 m04;
+    /* 0x08 */ s16 m08;
+    /* 0x0A */ s16 m0A;
+    /* 0x0C */ f32 m0C;
+}; // size = 0x10
+
 static daKanban_HIO_c l_HIO;
-static s32 target_info_count;
 static fopAc_ac_c* target_info[10];
+static s32 target_info_count;
 
 static s16 pl_cut_real_no_dt[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 static s16 pl_cut_no_dt[] = {255, 0, 4, 3, 3, 1, 0, 4, 4, 4, 1, 3, 1, 3, 1, 1, 1, 3, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4, 0, 1, 1, 1};

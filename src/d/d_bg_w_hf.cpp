@@ -3,7 +3,6 @@
 // Translation Unit: d_bg_w_hf.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_bg_w_hf.h"
 #include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
