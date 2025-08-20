@@ -95,7 +95,7 @@ f32 daYkgr_c::getPosRate() {
         return 0.0f;
     }
 
-    f32 fVar4 = 3.4028235e+38;
+    f32 fVar4 = FLOAT_MAX;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp30 = player->current.pos;
     dPnt* pdVar7 = m_path->m_points;
@@ -224,6 +224,19 @@ bool daYkgr_c::_execute() {
 /* 00000688-000007F4       .text daYkgrExecute__FPv */
 static BOOL daYkgrExecute(void* v_this) {
     return ((daYkgr_c*)v_this)->_execute();
+}
+
+void daYkgr_c::set_mtx() {
+    camera_class* camera = dComIfGp_getCamera(0);
+    current.pos = *fopCamM_GetEye_p(camera);
+    current.angle.y = fopCamM_GetAngleY(camera);
+    current.angle.x = fopCamM_GetAngleX(camera);
+
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mDoMtx_stack_c::XrotM(current.angle.x);
+
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
 bool daYkgr_c::_draw() {

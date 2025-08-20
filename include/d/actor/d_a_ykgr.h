@@ -40,18 +40,7 @@ public:
     void hide() {}
     void setAimRate(float) {}
     void setAlpha(unsigned char alpha) { m_alpha = alpha; }
-    void set_mtx() {
-        camera_class* camera = dComIfGp_getCamera(0);
-        current.pos = *fopCamM_GetEye_p(camera);
-        current.angle.y = fopCamM_GetAngleY(camera);
-        current.angle.x = fopCamM_GetAngleX(camera);
-    
-        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-        mDoMtx_stack_c::YrotM(current.angle.y);
-        mDoMtx_stack_c::XrotM(current.angle.x);
-    
-        MTXCopy(mDoMtx_stack_c::get(), mMtx);
-    }
+    inline void set_mtx();
     void show() {}
     void start() {
         if (m_emitter != NULL) {
