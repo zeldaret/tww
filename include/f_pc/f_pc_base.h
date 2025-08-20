@@ -20,7 +20,7 @@ typedef struct base_process_class {
     /* 0x0D */ s8 mCreateResult;
     /* 0x0E */ s16 mProfName;
     /* 0x10 */ process_profile_definition* mpProf;
-    /* 0x14 */ struct create_request* mpCtRq;\
+    /* 0x14 */ struct create_request* mpCtRq;
     /* 0x18 */ layer_management_tag_class mLyTg;
     /* 0x34 */ line_tag mLnTg;
     /* 0x4C */ delete_tag_class mDtTg;
