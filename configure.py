@@ -1429,7 +1429,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swpush", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_obj_table"),
     ActorRel(Matching,    "d_a_obj_tenmado"),
-    ActorRel(Matching,    "d_a_obj_tide"),
+    ActorRel(Equivalent,  "d_a_obj_tide"),
     ActorRel(Matching,    "d_a_obj_timer"),
     ActorRel(Equivalent,  "d_a_obj_toripost", extra_cflags=['-pragma "nosyminline on"']), # weak func order
     ActorRel(Matching,    "d_a_obj_tousekiki", extra_cflags=['-pragma "nosyminline on"']),
@@ -1465,7 +1465,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tama", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tbox", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_tpota", extra_cflags=['-pragma "nosyminline on"']),
-    ActorRel(NonMatching, "d_a_tsubo"),
+    ActorRel(Equivalent,  "d_a_tsubo", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_warpdm20", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_warphr", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wbird"),
