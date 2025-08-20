@@ -1,7 +1,7 @@
 #include "dolphin/types.h"
 #include "string.h"
 
-void* memcpy(void* dst, const void* src, size_t n)
+SECTION_INIT void* memcpy(void* dst, const void* src, size_t n)
 {
 	const char* p;
 	char* q;
@@ -19,7 +19,7 @@ void* memcpy(void* dst, const void* src, size_t n)
 	return (dst);
 }
 
-void __fill_mem(void* dst, int val, u32 n)
+SECTION_INIT void __fill_mem(void* dst, int val, u32 n)
 {
 	u32 v = (u8)val;
 	u32 i;
@@ -76,7 +76,7 @@ void __fill_mem(void* dst, int val, u32 n)
 	return;
 }
 
-void* memset(void* dst, int val, size_t n)
+SECTION_INIT void* memset(void* dst, int val, size_t n)
 {
 	__fill_mem(dst, val, n);
 
