@@ -441,6 +441,8 @@ public:
     bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OnTgShieldFrontRange() { mGObjTg.OnSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OffTgShieldFrontRange() { mGObjTg.OffSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
+    void OnAtStopNoConHit() { mGObjAt.OnSPrm(dCcG_AtSPrm_StopNoConHit_e); }
+    void OffAtStopNoConHit() { mGObjAt.OffSPrm(dCcG_AtSPrm_StopNoConHit_e); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
     bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_AtLasso_e); }
     bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_TgLasso_e); }

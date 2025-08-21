@@ -31,7 +31,7 @@ void daHot_Floor_c::set_mtx() {
         mDoMtx_copy(mtx[i - 1], mtx[i]);
     if (mtx_p != NULL) {
         cXyz pos = cXyz::Zero;
-        mDoMtx_stack_c::copy(*mtx_p);
+        mDoMtx_stack_c::copy(mtx_p);
         mDoMtx_stack_c::transM(0.0f, 5.0f, -5.0f);
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[0]);
         mDoMtx_stack_c::multVec(&pos, &current.pos);

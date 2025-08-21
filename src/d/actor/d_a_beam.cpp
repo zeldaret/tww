@@ -5,9 +5,21 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_beam.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_hot_floor.h"
+#include "d/res/res_ylesr00.h"
 #include "d/d_cc_d.h"
+#include "d/d_lib.h"
+#include "d/d_particle.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_a_obj.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_actor_mng.h"
+
+#include "weak_data_1811.h" // IWYU pragma: keep
+
+static daBeam_HIO_c l_HIO;
 
 static dCcD_SrcCps cps_src = {
     // dCcD_SrcGObjInf
@@ -33,12 +45,15 @@ static dCcD_SrcCps cps_src = {
     },
     // cM3dGCpsS
     {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Start  */ 0.0f,
+        0.0f,
+        0.0f,
+        /* End    */ 0.0f,
+        0.0f,
+        0.0f,
         /* Radius */ 50.0f,
     },
 };
-
 
 static dCcD_SrcCps cps2_src = {
     // dCcD_SrcGObjInf
@@ -64,81 +79,538 @@ static dCcD_SrcCps cps2_src = {
     },
     // cM3dGCpsS
     {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+        /* Start  */ 0.0f,
+        0.0f,
+        0.0f,
+        /* End    */ 0.0f,
+        0.0f,
+        0.0f,
         /* Radius */ 50.0f,
     },
 };
 
-
 /* 000000EC-00000118       .text __ct__12daBeam_HIO_cFv */
 daBeam_HIO_c::daBeam_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    m08 = 0.0f;
+    m0C = 0;
 }
+
+const char daBeam_c::M_arcname[] = "Ylesr00";
 
 /* 00000118-000003B0       .text set_mtx__8daBeam_cFv */
 void daBeam_c::set_mtx() {
-    /* Nonmatching */
+    f32 fVar1 = scale.z * 100.0f;
+    cXyz sp18 = m668 - current.pos;
+    f32 abs = sp18.abs() / fVar1;
+    f32 fVar2 = (m588 * (5.0f - m5A8)) / 50.0f + 0.5f;
+
+    M_mdl->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+    mDoMtx_stack_c::scaleM(fVar2, fVar2, abs);
+    M_mdl->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    if (m690 != NULL) {
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+        mDoMtx_stack_c::transM(0.0f, 0.0f, m694);
+        m690->setGlobalRTMatrix(mDoMtx_stack_c::get());
+        JGeometry::TVec3<f32> s(scale.x, scale.x, scale.x);
+        m690->setGlobalScale(s);
+    }
+
+    if (m68C != NULL) {
+        mDoMtx_stack_c::transS(m668.x, m668.y, m668.z);
+        mDoMtx_stack_c::quatM(&m674);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        mDoMtx_stack_c::scaleM(1.0f, 1.0f, m688);
+        MTXCopy(mDoMtx_stack_c::get(), m5C4);
+
+        m68C->setAimMtx(m5C4);
+    }
 }
 
 /* 000003B0-000003D0       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
+    return ((daBeam_c*)a_this)->CreateHeap();
 }
 
 /* 000003D0-00000688       .text CreateHeap__8daBeam_cFv */
-void daBeam_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daBeam_c::CreateHeap() {
+#if VERSION == VERSION_DEMO
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BMD_YLESR00));
+#else
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_BMD_YLESR00));
+#endif
+    JUT_ASSERT(304, modelData != NULL);
+
+    M_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    JUT_ASSERT(306, M_mdl != NULL);
+
+#if VERSION == VERSION_DEMO
+    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BCK_YLESR00));
+#else
+    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_BCK_YLESR00));
+#endif
+    JUT_ASSERT(310, M_bck != NULL);
+
+#if VERSION == VERSION_DEMO
+    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BRK_YLESR00));
+#else
+    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_BRK_YLESR00));
+#endif
+    JUT_ASSERT(314, M_brk != NULL);
+
+#if VERSION == VERSION_DEMO
+    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
+#else
+    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_BTK_YLESR00));
+#endif
+    JUT_ASSERT(318, M_brk != NULL);
+
+    BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
+    BOOL tmp2 = mBrkAnm.init(modelData, M_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    BOOL tmp3 = mBtkAnm.init(modelData, M_btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+
+    if (M_mdl == NULL || !tmp1 || !tmp2 || !tmp3) {
+        return false;
+    }
+    return true;
 }
 
 /* 00000688-00000864       .text daBeam_AtHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daBeam_AtHitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void daBeam_AtHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
+    daBeam_c* i_this = (daBeam_c*)arg0;
+
+    if (fopAcM_IsActor(arg2)) {
+        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+            fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
+
+            if (i_this->m54C != 0) {
+                cXyz sp20(-cM_scos(i_this->current.angle.y), 0.0f, cM_ssin(i_this->current.angle.y));
+
+                cXyz sp14 = arg2->current.pos - i_this->current.pos;
+                if (sp20.inprod(sp14) < 0.0f) {
+                    sp20.x = -sp20.x;
+                    sp20.z = -sp20.z;
+                }
+
+                arg1->SetAtVec(sp20);
+                arg3->SetTgRVec(sp20);
+            }
+        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+            arg3->ClrTgHit();
+        }
+
+        if (i_this->parentActorID != fopAcM_GetID(arg2)) {
+            i_this->m540 = *i_this->mCps1.GetAtHitPosP();
+            i_this->m53C = true;
+        }
+    }
 }
 
 /* 00000864-00000A00       .text daBeam_AtHitDummyCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daBeam_AtHitDummyCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
+    daBeam_c* i_this = (daBeam_c*)arg0;
+
+    if (fopAcM_IsActor(arg2)) {
+        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+            fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
+
+            if (i_this->m54C != 0) {
+                cXyz sp20(-cM_scos(i_this->current.angle.y), 0.0f, cM_ssin(i_this->current.angle.y));
+
+                cXyz sp14 = arg2->current.pos - i_this->current.pos;
+                if (sp20.inprod(sp14) < 0.0f) {
+                    sp20.x = -sp20.x;
+                    sp20.z = -sp20.z;
+                }
+                arg1->SetAtVec(sp20);
+                arg3->SetTgRVec(sp20);
+            }
+        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+            arg3->ClrTgHit();
+        }
+    }
 }
 
 /* 00000A00-00000AA0       .text daBeam_checkHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void daBeam_checkHitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void daBeam_checkHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
+    if (fopAcM_IsActor(arg2) && arg0->parentActorID != fopAcM_GetID(arg2)) {
+        if (fopAcM_GetName(arg2) != PROC_PLAYER || arg1->ChkAtShieldHit()) {
+            daBeam_c* i_this = (daBeam_c*)arg0;
+            i_this->m540 = *i_this->mCps2.GetAtHitPosP();
+            i_this->m53C = true;
+        }
+    }
 }
 
 /* 00000AA0-00000F24       .text CreateInit__8daBeam_cFv */
-void daBeam_c::CreateInit() {
-    /* Nonmatching */
+cPhs_State daBeam_c::CreateInit() {
+    mStts.Init(0xff, 0xff, this);
+    u8 uVar11 = fopAcM_GetParam(this) >> 0x1e;
+    mCps1.Set(cps_src);
+    mCps1.SetStts(&mStts);
+
+    cXyz fVar2 = current.pos;
+    fVar2.x += (scale.z * 100.0f) * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
+    fVar2.y -= (scale.z * 100.0f) * cM_ssin(current.angle.x);
+    fVar2.z += (scale.z * 100.0f) * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+
+    mCps1.SetStartEnd(current.pos, fVar2);
+    mCps1.SetR(25.0f);
+
+    if (uVar11 == 0) {
+        mCps1.SetAtHitCallback(daBeam_AtHitCallback);
+    } else {
+        mCps1.SetAtHitCallback(daBeam_AtHitDummyCallback);
+    }
+
+    mCps1.OnAtStopNoConHit();
+    mCps1.OnAtNoHitMark();
+
+    mCps2.Set(cps2_src);
+    mCps2.SetStts(&mStts);
+    mCps2.SetStartEnd(current.pos, fVar2);
+    mCps2.SetR(25.0f);
+
+    mCps2.OnAtNoTgHitInfSet();
+    if (uVar11 == 0) {
+        mCps2.SetAtHitCallback(daBeam_checkHitCallback);
+    }
+
+    m674 = ZeroQuat;
+    m684 = fpcM_ERROR_PROCESS_ID_e;
+    m68C = NULL;
+
+    set_mtx();
+
+    fopAcM_SetMtx(this, M_mdl->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -50.0f, -50.0f, 0.0f, 50.0f, 50.0f, 2000.0f);
+
+    if (parentActorID == -1) {
+        u8 params1 = fopAcM_GetParam(this) & 0xFF;
+        s8 params2 = (fopAcM_GetParam(this) >> 8) & 0xFF;
+        params1 = cLib_maxLimit<u8>(params1, 2);
+        params2 = cLib_minMaxLimit<s8>(params2, -30, 60);
+
+        switch (params1) {
+        case 0:
+            setSearchProc(&daBeam_c::fix_search);
+            setDefaultProc(&daBeam_c::fix_search);
+            break;
+
+        case 1:
+            setSearchProc(&daBeam_c::move_search);
+            setDefaultProc(&daBeam_c::move_search);
+            break;
+
+        case 2:
+            actor_status = 0;
+            m5F6 = params2;
+            setSearchProc(&daBeam_c::timer_change);
+            setDefaultProc(&daBeam_c::timer_change);
+            break;
+
+        default:
+            setSearchProc(&daBeam_c::move_search);
+            break;
+        }
+
+        scale.set(2.5f, 2.5f, 20.0f);
+        m694 = REG10_F(10) * 0.001f;
+        m690 = NULL;
+        m698 = fopAcM_GetParam(this) >> 0x10 & 0xff;
+        if (m698 != 0xff && fopAcM_isSwitch(this, m698)) {
+            setSearchProc(&daBeam_c::wait_proc);
+        }
+        m54C = 0;
+    } else {
+        m694 = 0.0f;
+        m690 = NULL;
+        m54C = fopAcM_GetParam(this) >> 0x18 & 0xf;
+
+        u8 smoke = ((fopAcM_GetParam(this) >> 0x1C) & 3);
+        bool floor = ((fopAcM_GetParam(this) >> 0x1C) & 1);
+
+        if (floor) {
+            offHFloorParticle();
+        } else {
+            onHFloorParticle();
+        }
+
+        if (smoke & 2) {
+            offSmokeParticle();
+        } else {
+            onSmokeParticle();
+        }
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000F24-000015A4       .text _execute__8daBeam_cFv */
 bool daBeam_c::_execute() {
-    /* Nonmatching */
+    if (m550) {
+        (this->*m550)();
+        if (m698 != 0xff) {
+            if (fopAcM_isSwitch(this, m698)) {
+                setSearchProc(&daBeam_c::wait_proc);
+            } else {
+                setSearchProc(m55C);
+            }
+        }
+    }
+
+    mBtkAnm.play();
+
+    f32 tmp = scale.z * 100.0f;
+    cXyz sp64 = current.pos;
+    sp64.x += tmp * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
+    sp64.y -= tmp * cM_ssin(current.angle.x);
+    sp64.z += tmp * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+
+    mCps2.SetStartEnd(current.pos, sp64);
+    mCps2.SetR(25.0f);
+    dComIfG_Ccsp()->Set(&mCps2);
+
+    if (m5F4 == 1) {
+        f32 fVar15 = scale.z * 100.0f;
+        if (m53C == 1) {
+            cXyz sp58 = m540 - current.pos;
+            fVar15 = sp58.abs();
+        }
+
+        cXyz sp4C = current.pos;
+        sp4C.x += fVar15 * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
+        sp4C.y -= fVar15 * cM_ssin(current.angle.x);
+        sp4C.z += fVar15 * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+
+        cXyz sp40 = sp4C - current.pos;
+        if (!sp40.normalizeRS()) {
+            sp40 = cXyz::Zero;
+        }
+
+        mCps1.SetStartEnd(current.pos, sp4C);
+        mCps1.SetR(25.0f);
+        mCps1.SetAtVec(sp40);
+        dComIfG_Ccsp()->Set(&mCps1);
+    }
+
+    if (m588 > 0.0f) {
+        cXyz sp34 = current.pos;
+        f32 tmp = m588 * 20.0f * scale.z;
+        sp34.x += tmp * cM_scos(current.angle.x) * cM_ssin(current.angle.y);
+        sp34.y -= tmp * cM_ssin(current.angle.x);
+        sp34.z += tmp * cM_scos(current.angle.x) * cM_scos(current.angle.y);
+
+        mLinChk.OffBackFlag();
+        mLinChk.Set(&current.pos, &sp34, this);
+
+        if (m53C == 1) {
+            m668 = m540;
+            m688 = 1.0f;
+            m684 = fpcM_ERROR_PROCESS_ID_e;
+            m68C = NULL;
+        } else if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
+            cM3dGPla* pcVar9 = dComIfG_Bgsp()->GetTriPla(mLinChk);
+            m668 = mLinChk.GetCross();
+            cXyz sp28(pcVar9->mNormal.x, pcVar9->mNormal.y, pcVar9->mNormal.z);
+            daObj::quat_rotBaseY2(&m674, sp28);
+
+            if (m684 == fpcM_ERROR_PROCESS_ID_e) {
+                u32 parameters = 0;
+                if (checkHFloorParticle()) {
+                    parameters |= 1;
+                }
+
+                if (checkSmokeParticle()) {
+                    parameters |= 2;
+                }
+
+                m684 = fopAcM_create(PROC_Hot_Floor, parameters, &m668);
+            }
+            m688 = 1.0f;
+        } else {
+            m668 = sp34;
+            m688 = 1.0f;
+            m684 = fpcM_ERROR_PROCESS_ID_e;
+            m68C = NULL;
+        }
+
+        if (m684 != fpcM_ERROR_PROCESS_ID_e && m68C == NULL) {
+            m68C = (daHot_Floor_c*)fopAcM_SearchByID(m684);
+        }
+
+        mDoAud_seStart(JA_SE_OBJ_STATUE_BEAM, &m668, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    } else {
+        m684 = fpcM_ERROR_PROCESS_ID_e;
+        m68C = NULL;
+    }
+
+    m53C = 0;
+    return false;
 }
 
 /* 000015A4-000017EC       .text checkRange__8daBeam_cFP5csXyz */
-void daBeam_c::checkRange(csXyz*) {
-    /* Nonmatching */
+BOOL daBeam_c::checkRange(csXyz* o_arg1) {
+    cXyz sp54(cM_ssin(home.angle.y), 0.0f, cM_scos(home.angle.y));
+    cXyz sp48(cM_scos(home.angle.y), 0.0f, -cM_ssin(home.angle.y));
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    cXyz sp3C = player->current.pos;
+    sp3C.y = player->getGroundY();
+    cXyz sp30 = sp3C - current.pos;
+    cXyz sp24(sp48.inprod(sp30), -sp30.y, sp54.inprod(sp30));
+
+    if (sp24.z < 500.0f && sp24.z > 0.0f && std::fabsf(sp24.x) < 150.0f && fabs(sp24.y) < 250.0f) {
+        if (o_arg1 != NULL) {
+            o_arg1->x = cM_atan2s(sp24.y, sp24.absXZ());
+            o_arg1->y = cM_atan2s(sp30.x, sp30.z);
+        }
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 000017EC-00001A10       .text move_search__8daBeam_cFv */
 void daBeam_c::move_search() {
-    /* Nonmatching */
+    csXyz sp18;
+
+    if (checkRange(&sp18)) {
+        s16 sVar3 = cLib_addCalcAngleS(&current.angle.x, sp18.x, 2, 0x400, 0);
+        cLib_addCalcAngleS2(&current.angle.y, sp18.y, 4, 0x400);
+
+        if (abs(sVar3) < 0x400 && m5F4 == 0) {
+            if (!beamCheck()) {
+                beamOn();
+            }
+
+            if (m5F4 == 0) {
+                m5A8 = 0.0f;
+                if (m588 < 5.0f) {
+                    m588 += 1.0f;
+                } else {
+                    m5A8 = 0.0f;
+                    m588 = 5.0f;
+                    m5F4 = 1;
+                }
+            } else {
+                m5A8 = 0.0f;
+                m588 = 5.0f;
+            }
+        }
+    } else {
+        if (m5F4 == 0 || m588 <= 0.4f) {
+            cLib_addCalcAngleS2(&current.angle.y, home.angle.y, 4, 0x400);
+            cLib_addCalcAngleS2(&current.angle.x, home.angle.x, 4, 0x400);
+        }
+
+        if (beamCheck()) {
+            beamOff();
+        }
+
+        if (m5F4 == 1) {
+            if (m588 < 5.0f) {
+                m588 += 1.0f;
+            }
+
+            if (m5A8 < 4.0f) {
+                m5A8 += 1.0f;
+            } else {
+                m5A8 = 0.0f;
+                m588 = 0.0f;
+                m5F4 = 0;
+            }
+        } else {
+            m588 = 0.0f;
+            m5A8 = 0.0f;
+        }
+    }
 }
 
 /* 00001A10-00001A14       .text fix_search__8daBeam_cFv */
 void daBeam_c::fix_search() {
-    /* Nonmatching */
 }
 
 /* 00001A14-00001BC0       .text timer_change__8daBeam_cFv */
 void daBeam_c::timer_change() {
-    /* Nonmatching */
+    m5F6--;
+    if (m5F6 > 0) {
+        if (m690 == NULL) {
+            m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_8121, &current.pos);
+        }
+
+        if (m5F4 == 0) {
+            m5A8 = 0.0f;
+            if (m588 < 5.0f) {
+                m588 += 1.0f;
+            } else {
+                m5A8 = 0.0f;
+                m588 = 5.0f;
+                m5F4 = 1;
+            }
+        } else {
+            m5A8 = 0.0f;
+            m588 = 5.0f;
+        }
+    } else {
+        if (m690 != NULL) {
+            m690->becomeInvalidEmitter();
+            m690 = NULL;
+        }
+
+        if (m5F4 == 1) {
+            if (m588 < 5.0f) {
+                m588 += 1.0f;
+            }
+
+            if (m5A8 < 4.0f) {
+                m5A8 += 1.0f;
+            } else {
+                m5A8 = 0.0f;
+                m588 = 0.0f;
+                m5F4 = 0;
+            }
+        } else {
+            m588 = 0.0f;
+            m5A8 = 0.0f;
+        }
+
+        if (m5F6 < -30) {
+            m5F6 = 60;
+        }
+    }
 }
 
 /* 00001BC0-00001C84       .text wait_proc__8daBeam_cFv */
 void daBeam_c::wait_proc() {
-    /* Nonmatching */
+    if (m690 != NULL) {
+        m690->becomeInvalidEmitter();
+        m690 = NULL;
+    }
+
+    if (m5F4 == 1) {
+        if (m588 < 5.0f) {
+            m588 += 1.0f;
+        }
+
+        if (m5A8 < 4.0f) {
+            m5A8 += 1.0f;
+        } else {
+            m5A8 = 0.0f;
+            m588 = 0.0f;
+            m5F4 = 0;
+        }
+    } else {
+        m588 = 0.0f;
+        m5A8 = 0.0f;
+    }
+
+    if (m5F4 == 0) {
+        current.angle = home.angle;
+    }
 }
 
 /* 00001C84-00001CA4       .text daBeamCreate__FPv */
@@ -148,12 +620,35 @@ static cPhs_State daBeamCreate(void* i_this) {
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
 cPhs_State daBeam_c::_create() {
-    /* Nonmatching */
+#if VERSION == VERSION_DEMO
+    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
+    if (PVar1 == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(this, daBeam_c);
+#else
+    fopAcM_SetupActor(this, daBeam_c);
+    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
+    if (PVar1 == cPhs_COMPLEATE_e) {
+#endif
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22A0)) {
+            return CreateInit();
+        }
+        return cPhs_ERROR_e;
+    }
+    return PVar1;
+}
+
+bool daBeam_c::_delete() {
+    mDoAud_seDeleteObject(&m668);
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
+    if (m690 != NULL) {
+        m690->becomeInvalidEmitter();
+    }
+    return true;
 }
 
 /* 0000291C-0000298C       .text daBeamDelete__FPv */
-static BOOL daBeamDelete(void*) {
-    /* Nonmatching */
+static BOOL daBeamDelete(void* i_this) {
+    return ((daBeam_c*)i_this)->_delete();
 }
 
 /* 0000298C-000029B0       .text daBeamExecute__FPv */
@@ -161,9 +656,23 @@ static BOOL daBeamExecute(void* i_this) {
     return ((daBeam_c*)i_this)->_execute();
 }
 
+bool daBeam_c::_draw() {
+    if (m5F4 == 0) {
+        return true;
+    }
+
+    set_mtx();
+
+    mBtkAnm.entry(M_mdl->getModelData());
+    mBrkAnm.entry(M_mdl->getModelData(), (s16)m5A8);
+    mBckAnm.entry(M_mdl->getModelData(), (s16)m588);
+    mDoExt_modelUpdateDL(M_mdl);
+    return true;
+}
+
 /* 000029B0-00002AA0       .text daBeamDraw__FPv */
-static BOOL daBeamDraw(void*) {
-    /* Nonmatching */
+static BOOL daBeamDraw(void* i_this) {
+    return ((daBeam_c*)i_this)->_draw();
 }
 
 /* 00002AA0-00002AA8       .text daBeamIsDelete__FPv */
