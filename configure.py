@@ -344,6 +344,13 @@ def EquivalentFor(*versions):
 
 config.warn_missing_config = True
 config.warn_missing_source = False
+config.precompiled_headers = [
+    {
+        "source": "d/dolzel.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_dolzel],
+    }
+]
 config.libs = [
     {
         "lib": "machine",

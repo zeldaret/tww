@@ -2,7 +2,7 @@
 #define DOLZEL_H
 
 #ifdef __MWERKS__
-#include "pch/dolzel.mch"
+#include "d/dolzel.mch"
 #else
 #include "d/dolzel.pch"
 #endif
