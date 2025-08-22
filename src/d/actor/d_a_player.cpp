@@ -3,6 +3,7 @@
  * Player - Base Player Class
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "dolphin/types.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"

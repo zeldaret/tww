@@ -3,6 +3,7 @@
 // Translation Unit: d_kyeff2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff2.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"

@@ -3,6 +3,7 @@
  * Debug Map Select menu
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_menu.h"
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/JFramework/JFWSystem.h"

@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_open.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"

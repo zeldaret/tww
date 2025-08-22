@@ -3,6 +3,7 @@
  * Main Initialization
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_main.h"
 #include "DynamicLink.h"
 #include "JSystem/JFramework/JFWSystem.h"
@@ -26,8 +27,6 @@
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
 #include <stdio.h>
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 /* 800056E0-80005748       .text version_check__Fv */
 void version_check() {

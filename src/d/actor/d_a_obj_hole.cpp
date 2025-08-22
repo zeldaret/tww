@@ -3,6 +3,7 @@
  * Object - Grotto
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hole.h"
 #include "d/res/res_aana.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -16,8 +17,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daObj_Hole_HIO_c l_HIO;
 

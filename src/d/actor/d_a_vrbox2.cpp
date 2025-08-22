@@ -3,6 +3,7 @@
 // Translation Unit: d_a_vrbox2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_vrbox2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"

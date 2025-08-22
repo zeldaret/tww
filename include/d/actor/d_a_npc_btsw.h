@@ -7,8 +7,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class SwMail2_c {
 public:
     typedef void (SwMail2_c::*SwMail_Func)();
@@ -212,36 +210,5 @@ public:
     /* 0x9CD */ s8 mActionStatus;
     /* 0x9CE */ u8 field_0x9CE[0x9D0 - 0x9CE];
 };  // Size: 0x9D0
-
-class daNpc_Btsw_HIO_c : public JORReflexible {
-public:
-    daNpc_Btsw_HIO_c();
-    virtual ~daNpc_Btsw_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
-    /* 0x08 */ dNpc_HIO_c mNpc;
-    /* 0x30 */ s16 field_0x30;
-    /* 0x32 */ s16 field_0x32;
-    /* 0x34 */ s16 field_0x34;
-    /* 0x36 */ s16 r_1;
-    /* 0x38 */ s16 g_1;
-    /* 0x3A */ s16 b_1;
-    /* 0x3C */ s16 r_2;
-    /* 0x3E */ s16 g_2;
-    /* 0x40 */ s16 b_2;
-    /* 0x42 */ u8 field_0x42[0x44 - 0x42];
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ f32 field_0x4C;
-    /* 0x50 */ f32 field_0x50;
-    /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ u8 field_0x58;
-    /* 0x59 */ u8 field_0x59[0x5C - 0x59];
-    /* 0x5C */ f32 field_0x5C;
-};  // Size: 0x60
 
 #endif /* D_A_NPC_BTSW_H */

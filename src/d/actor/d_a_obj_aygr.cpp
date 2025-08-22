@@ -3,6 +3,7 @@
  * Object - Lookout Platform
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_aygr.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

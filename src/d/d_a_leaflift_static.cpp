@@ -3,6 +3,7 @@
 // Translation Unit: d_a_leaflift_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_leaflift.h"
 #include "d/d_com_inf_game.h"
 #include "dolphin/types.h"

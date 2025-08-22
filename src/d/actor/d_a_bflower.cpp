@@ -3,6 +3,7 @@
  * Object - Bomb Flower - Flower
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bflower.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -10,8 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb2.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static cXyz bomb_offset(0.0f, 0.0f, 0.0f);
 

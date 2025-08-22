@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_window.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_window.h"
 #include "f_op/f_op_msg.h"
 

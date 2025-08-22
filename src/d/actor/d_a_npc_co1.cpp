@@ -3,6 +3,7 @@
  * NPC - Prince Komali (before Dragon Roost Cavern)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_co1.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

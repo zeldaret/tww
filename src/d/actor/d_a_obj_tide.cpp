@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_tide.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tide.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_procname.h"
@@ -50,8 +51,6 @@ inline const Attr_c& attr(Type_e type) {
 } // namespace
 
 Mtx Act_c::M_tmp_mtx;
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 00000078-00000644       .text CreateHeap__Q29daObjTide5Act_cFv */
 BOOL Act_c::CreateHeap() {

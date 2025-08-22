@@ -3,6 +3,7 @@
 // Translation Unit: d_point_wind.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_point_wind.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
@@ -57,4 +58,3 @@ void dPointWind_c::set_pwind_move() {
 void dPointWind_c::set_pwind_delete() {
     dKyw_pntwind_cut(&mWind);
 }
-

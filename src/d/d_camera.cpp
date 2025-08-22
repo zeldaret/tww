@@ -3,6 +3,7 @@
 // Translation Unit: d_camera.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -29,10 +30,6 @@
 #include "d/d_a_obj.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/actor/d_a_npc_cb1.h"
-
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {  
     static f32 limitf(f32 value, f32 min, f32 max) {
@@ -249,9 +246,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mTrimSize = 0;
     mTrimTypeForce = -1;
 
-    dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
+    dStage_dt_c* stage_dt = &dComIfGp_getStage();
     if (stage_dt != NULL) {
-        stage_stag_info_class*  stag_info = stage_dt->getStagInfo();
+        stage_stag_info_class* stag_info = stage_dt->getStagInfo();
         if (stag_info && stag_info->mCameraMapToolID != -1) { // Bug, comparing unsigned value with -1 
             mapToolType = GetCameraTypeFromMapToolID(stag_info->mCameraMapToolID, -1);
             if (mapToolType != 0xFF && Chtyp(mapToolType)) {
@@ -1513,7 +1510,7 @@ bool dCamera_c::onStyleChange(s32 i_style1, s32 i_style2) {
 
 /* 80164F5C-8016513C       .text GetCameraTypeFromMapToolID__9dCamera_cFll */
 int dCamera_c::GetCameraTypeFromMapToolID(s32 r27, s32 i_roomNo) {
-    dStage_stageDt_c& stage_dt = *(dStage_stageDt_c*)&dComIfGp_getStage();
+    dStage_dt_c& stage_dt = *(dStage_dt_c*)&dComIfGp_getStage();
     
     int cam_type_num;
     int arrowIdx;
@@ -4636,7 +4633,7 @@ void store(camera_process_class* i_this) {
 
     int camera_id = get_camera_id(a_this);
     
-    dStage_stageDt_c* stage = &dComIfGp_getStage();
+    dStage_dt_c* stage = &dComIfGp_getStage();
 
     cXyz oldCenter = *fopCamM_GetCenter_p(a_this);
     cXyz oldEye = *fopCamM_GetEye_p(a_this);
@@ -4837,7 +4834,7 @@ cPhs_State init_phase2(camera_class* i_this) {
     float farPlane = 160000.0f;
 
     if (dComIfGp_getStage().getStagInfo() != NULL) {
-        dStage_stageDt_c* stage_dt = &dComIfGp_getStage();
+        dStage_dt_c* stage_dt = &dComIfGp_getStage();
         stage_dt->getStagInfo();
 
         farPlane = stage_dt->getStagInfo()->mFarPlane;

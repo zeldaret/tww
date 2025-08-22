@@ -3,6 +3,8 @@
 
 #include "d/d_bg_s_movebg_actor.h"
 
+class dPa_smokeEcallBack;
+
 namespace daObjEskban {
 
     static const int DESTROY_VIBRATION_LEN = 35;

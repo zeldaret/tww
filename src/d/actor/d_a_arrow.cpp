@@ -3,6 +3,7 @@
  * Item - Arrow
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
@@ -15,8 +16,6 @@
 #include "d/d_jnt_hit.h"
 #include "d/d_s_play.h"
 #include "d/res/res_link.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 s16 daArrow_c::m_count;
 

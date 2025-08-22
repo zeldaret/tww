@@ -3,6 +3,7 @@
 // Translation Unit: d_map.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_map.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"

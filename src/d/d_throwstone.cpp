@@ -3,6 +3,7 @@
 // Translation Unit: d_throwstone.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_throwstone.h"
 #include "d/res/res_aisi.h"
 #include "f_op/f_op_actor.h"

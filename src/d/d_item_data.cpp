@@ -3,6 +3,7 @@
 // Translation Unit: d_item_data.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_item_data.h"
 #include "d/d_particle_name.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -113,8 +114,6 @@
 #include "d/res/res_vtin4.h"
 #include "d/res/res_vtin5.h"
 #include "d/res/res_vbeso.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 80383F20-803840E0       .data item_arcname_tbl__10dItem_data */
 char* dItem_data::item_arcname_tbl[0x70] = {

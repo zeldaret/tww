@@ -3,7 +3,6 @@
 
 #include "f_op/f_op_actor.h"
 
-
 class JPABaseEmitter;
 class JPABaseParticle;
 

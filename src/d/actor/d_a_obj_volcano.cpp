@@ -3,6 +3,7 @@
  * Object - Fire Mountain Exterior - Lava
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_volcano.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

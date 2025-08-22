@@ -3,6 +3,7 @@
  *
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_npc_kg1.h"

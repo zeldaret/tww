@@ -3,13 +3,12 @@
 // Translation Unit: m_Do_mtx.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 Mtx mDoMtx_stack_c::now;
 Mtx mDoMtx_stack_c::buffer[16];

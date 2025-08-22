@@ -3,6 +3,7 @@
 // Translation Unit: d_a_coming2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_coming2.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -13,9 +14,6 @@
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_obj_barrel2.h"
-
-#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
-#include "weak_data_1811.h"  // IWYU pragma: keep
 
 s32 daComing2::coming_make_item_no_table[] = {
     dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, dItem_GREEN_RUPEE_e, 

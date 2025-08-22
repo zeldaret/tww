@@ -3,6 +3,7 @@
  * Object - Windfall Island - Bomb Shop - Ceiling fan
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbka.h"
 #include "d/res/res_pbka.h"
 #include "f_op/f_op_actor_mng.h"

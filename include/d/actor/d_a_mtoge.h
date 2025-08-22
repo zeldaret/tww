@@ -5,7 +5,6 @@
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
-
 class daMtoge_c : public fopAc_ac_c {
 public:
     inline BOOL draw();

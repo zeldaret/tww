@@ -3,6 +3,7 @@
 // Translation Unit: d_com_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
@@ -38,8 +39,6 @@
 #include "d/actor/d_a_npc_ji1.h"
 #include "d/actor/d_a_npc_bs1.h"
 #include "SSystem/SComponent/c_counter.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 s32 daLodbg_c::sObjectCount;
 JKRExpHeap* daLodbg_c::sLocalHeap;

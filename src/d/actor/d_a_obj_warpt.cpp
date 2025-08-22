@@ -3,6 +3,7 @@
  * Object - Warp pot
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_warpt.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_ltubw.h"
@@ -15,8 +16,6 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 class daObj_Warpt_HIO_c : public mDoHIO_entry_c {
 public:

@@ -3,13 +3,14 @@
  * Item - Boomerang
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boomerang.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 #include "assets/l_sightMatDL.h"
 #include "assets/l_sightDL__d_a_boomerang.h"
-#include "d/d_cc_d.h"
 
 static dCcD_SrcCps l_at_cps_src = {
     // dCcD_SrcGObjInf

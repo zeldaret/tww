@@ -3,6 +3,7 @@
 // Translation Unit: d_lib.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"

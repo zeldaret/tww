@@ -3,6 +3,7 @@
  * Object - Ganon Room exterior (Forsaken Fortress)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gaship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -10,8 +11,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/res/res_gaship.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 const char daObjGaship::Act_c::M_arcname[7] = "GaShip";
 

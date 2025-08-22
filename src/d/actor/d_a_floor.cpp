@@ -3,6 +3,7 @@
  * Object - Wind Temple - Breakable floor (Iron Boots, Bombs, etc.)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_floor.h"
 #include "d/res/res_hhyu1.h"
 #include "d/d_com_inf_game.h"

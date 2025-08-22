@@ -3,6 +3,7 @@
  * NPC - Generic Koroks
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bj1.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

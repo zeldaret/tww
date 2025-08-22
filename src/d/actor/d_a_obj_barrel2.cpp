@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_barrel2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel2.h"
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/actor/d_a_race_item.h"
@@ -14,10 +15,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 daRaceItem_c* daObjBarrel2::Act_c::M_tmp_item_actor;
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjBarrel2::Act_c::M_arcname[] = "Ktaru_00";
 const char daObjBarrel2::Act_c::M_evname_brk[] = "barrel2_brk";

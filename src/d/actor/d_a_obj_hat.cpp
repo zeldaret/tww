@@ -3,6 +3,7 @@
  * Object - Hats (Traveling Merchants)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hat.h"
 #include "d/actor/d_a_npc_roten.h"
 #include "d/d_a_obj.h"

@@ -3,6 +3,7 @@
  * Enemy - Moblin Statue / モ石像 (Mo Sekizou)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mozo.h"
 #include "d/res/res_mozo.h"
 #include "f_op/f_op_actor_mng.h"

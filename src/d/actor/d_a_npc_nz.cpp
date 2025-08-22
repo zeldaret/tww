@@ -3,6 +3,7 @@
  * NPC - Rat (shopkeeper)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_nz.h"
 #include "d/res/res_nz.h"
 #include "d/res/res_npcnz.h"
@@ -13,8 +14,31 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daNpc_Nz_HIO_c : public JORReflexible {
+public:
+    daNpc_Nz_HIO_c();
+    virtual ~daNpc_Nz_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x00 - vtable */
+    /* 0x04 */ s8 mNo;
+    /* 0x06 */ s16 field_0x06;
+    /* 0x08 */ s16 field_0x08;
+    /* 0x0A */ s16 field_0x0A;
+    /* 0x0C */ s16 field_0x0C;
+    /* 0x0E */ s16 field_0x0E;
+    /* 0x10 */ s16 field_0x10;
+    /* 0x12 */ s16 field_0x12;
+    /* 0x14 */ s16 field_0x14;
+    /* 0x16 */ s16 field_0x16;
+    /* 0x18 */ s16 field_0x18;
+    /* 0x1A */ s8 field_0x1A;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+}; // Size: 0x28
 
 const char daNpc_Nz_c::m_arc_name[] = "NZ";
 const char daNpc_Nz_c::m_bdl_arc_name[] = "Npcnz";

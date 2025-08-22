@@ -65,30 +65,4 @@ public:
     /* 0x02A0 */ daSail_packet_c mSailPacket;
 };
 
-class daSail_HIO_c : public JORReflexible {
-public:
-    daSail_HIO_c() {
-        mNo = -1;
-        m05 = 1;
-        m06 = 1;
-        m10 = 0.0f;
-        m07 = 0;
-    }
-    virtual ~daSail_HIO_c() {
-        mNo = -1;
-    }
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 m05;
-    /* 0x06 */ u8 m06;
-    /* 0x07 */ u8 m07;
-    /* 0x08 */ u8 m08;
-    /* 0x09 */ u8 m09[0x0C - 0x09];
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-};
-
 #endif /* D_A_SAIL_H */

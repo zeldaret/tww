@@ -3,6 +3,7 @@
 // Translation Unit: d_jnt_hit.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_jnt_hit.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_math.h"

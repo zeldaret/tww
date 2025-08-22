@@ -3,6 +3,7 @@
  * Object - Tower of the Gods - Pillar with Companion Statue's face on it.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hcbh.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

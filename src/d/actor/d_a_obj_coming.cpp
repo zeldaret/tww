@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_coming.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_coming.h"
 #include "d/actor/d_a_obj_barrel2.h"
 #include "d/actor/d_a_obj_buoyflag.h"
@@ -13,12 +14,8 @@
 #include "d/d_procname.h"
 #include "f_op/f_op_actor_mng.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
 dBgS_ObjGndChk daObjComing::Act_c::M_gnd_work;
 dBgS_ObjLinChk daObjComing::Act_c::M_wall_work;
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjComing {
 namespace {

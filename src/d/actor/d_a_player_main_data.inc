@@ -1,8 +1,7 @@
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 char l_arcName[] = "Link";
 

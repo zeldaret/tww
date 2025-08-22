@@ -3,6 +3,7 @@
  * Object - Ganon Room (destroyed) (Forsaken Fortress 3)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gaship2.h"
 #include "d/res/res_yakerom.h"
 #include "SSystem/SComponent/c_bg_w.h"

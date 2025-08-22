@@ -3,6 +3,7 @@
 // Translation Unit: d_wpot_water.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wpot_water.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"

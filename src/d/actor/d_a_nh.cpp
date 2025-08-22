@@ -3,6 +3,7 @@
  * Item - Forest Firefly / 森のほたる (Mori no Hotaru)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_nh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"

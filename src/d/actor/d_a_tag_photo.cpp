@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_photo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_photo.h"
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_a_obj.h"
@@ -11,8 +12,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u32 l_msg_talk[] = {
     0x2A6D,

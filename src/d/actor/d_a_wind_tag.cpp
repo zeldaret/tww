@@ -3,6 +3,7 @@
 // Translation Unit: d_a_wind_tag.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wind_tag.h"
 #include "d/res/res_yaflw00.h"
 #include "d/res/res_ybgaf00.h"

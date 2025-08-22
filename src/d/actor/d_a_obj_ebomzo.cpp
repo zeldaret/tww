@@ -3,6 +3,7 @@
  * Object - Bombable statues (outside Dragon Roost Cavern entrance)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ebomzo.h"
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"

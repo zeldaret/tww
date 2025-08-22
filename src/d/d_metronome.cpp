@@ -3,6 +3,7 @@
 // Translation Unit: d_metronome.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_metronome.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"

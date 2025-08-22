@@ -3,6 +3,7 @@
  * Object - Tower of the Gods - Entrance waterfall
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hha.h"
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_bg_s_func.h"

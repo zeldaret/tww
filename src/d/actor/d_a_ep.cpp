@@ -3,6 +3,7 @@
  * Object - Torches
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ep.h"
 #include "d/res/res_ep.h"
 #include "d/d_procname.h"
@@ -15,7 +16,6 @@
 #include "d/d_s_play.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "m_Do/m_Do_lib.h"
-
 
 void daEp_ToFore(ep_class* i_this) {
 }

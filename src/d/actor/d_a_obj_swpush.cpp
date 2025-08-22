@@ -3,6 +3,7 @@
  * Object - Yellow switch (activated by stepping on it)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swpush.h"
 #include "d/res/res_kbota_00.h"
 #include "d/res/res_hhbot.h"
@@ -11,9 +12,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w_sv.h"
 #include "d/actor/d_a_player.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daObjSwpush::Act_c::M_arcname_kbota[] = "Kbota_00";
 const char daObjSwpush::Act_c::M_arcname_hhbot[] = "Hhbot";

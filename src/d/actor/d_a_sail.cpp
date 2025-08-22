@@ -3,6 +3,7 @@
 // Translation Unit: d_a_sail.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sail.h"
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
@@ -19,8 +20,31 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_angle.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daSail_HIO_c : public JORReflexible {
+public:
+    daSail_HIO_c() {
+        mNo = -1;
+        m05 = 1;
+        m06 = 1;
+        m10 = 0.0f;
+        m07 = 0;
+    }
+    virtual ~daSail_HIO_c() {
+        mNo = -1;
+    }
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ u8 m08;
+    /* 0x09 */ u8 m09[0x0C - 0x09];
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+};
 
 #if VERSION == VERSION_DEMO
 #define REG_SAIL_F(i) REG10_F(i)

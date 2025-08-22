@@ -3,6 +3,7 @@
  * NPC - Orca / 爺さん (Jiisan)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ji1.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tsubo.h"
@@ -15,9 +16,6 @@
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c*);
 

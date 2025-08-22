@@ -3,6 +3,7 @@
  * NPC - Manny
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

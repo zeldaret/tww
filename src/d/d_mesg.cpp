@@ -3,6 +3,7 @@
 // Translation Unit: d_mesg.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_mesg.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DPicture.h"

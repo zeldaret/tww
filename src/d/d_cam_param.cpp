@@ -3,6 +3,7 @@
 // Translation Unit: d_cam_param.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cam_param.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"

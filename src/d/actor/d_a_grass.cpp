@@ -3,6 +3,7 @@
 // Translation Unit: d_a_grass.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grass.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -13,8 +14,6 @@
 #include "d/d_priority.h"
 #include "d/d_tree.h"
 #include "SSystem/SComponent/c_sxyz.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daGrass_prm {
     inline s8 getItemNo(grass_class* ac) { return (fopAcM_GetParam(ac) >> 6) & 0x3F; }

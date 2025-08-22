@@ -3,6 +3,7 @@
  * Object - Wooden shelf
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shelf.h"
 #include "d/res/res_otana.h"
 #include "d/d_procname.h"
@@ -10,8 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_npc_ba1.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx daObjShelf::Act_c::M_tmp_mtx;
 

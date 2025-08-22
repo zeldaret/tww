@@ -3,6 +3,7 @@
  * Object - Curtains (Beedle's Shop)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_bscurtain.h"
 #include "d/res/res_ptc.h"
 #include "f_op/f_op_actor_mng.h"
@@ -13,8 +14,6 @@
 #include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 daObj_Bscurtain_HIO_c l_HIO;
 

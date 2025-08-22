@@ -3,6 +3,7 @@
  * Enemy - Poe
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pw.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_lin_chk.h"

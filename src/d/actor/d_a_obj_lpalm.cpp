@@ -3,6 +3,7 @@
  * Object - Palm tree
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_lpalm.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"

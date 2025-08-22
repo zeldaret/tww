@@ -3,6 +3,7 @@
 // Translation Unit: d_a_ghostship.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
 #include "d/res/res_ayush.h"
 #include "SSystem/SComponent/c_math.h"
@@ -13,8 +14,6 @@
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
 #include "d/res/res_cloth.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const u32 daGhostship_c::m_heapsize = 0x1EA0;
 const char daGhostship_c::m_arc_name[] = "Ayush";

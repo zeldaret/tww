@@ -3,6 +3,7 @@
 // Translation Unit: d_gameover.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
@@ -11,7 +12,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-
 
 /* 8018E1CC-8018E4B4       .text draw__24dDlst_Gameover_CAPTURE_cFv */
 void dDlst_Gameover_CAPTURE_c::draw() {

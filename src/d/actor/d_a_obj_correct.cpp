@@ -3,6 +3,8 @@
 // Translation Unit: d_a_obj_correct.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
+
 // This include needs to be before d_a_obj_correct.h for ordering of the
 // daObj::PrmAbstract symbols.
 #include "d/actor/d_a_obj_movebox.h"
@@ -13,8 +15,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjCorrect {
 namespace {

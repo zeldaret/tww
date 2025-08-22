@@ -3,6 +3,7 @@
 // Translation Unit: d_a_wbird.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wbird.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -10,7 +11,6 @@
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "d/actor/d_a_player.h"
-
 
 const char daWbird_c::M_arcname[] = "Wbird";
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */

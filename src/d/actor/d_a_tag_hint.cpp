@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_hint.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_hint.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_npc_os.h"
@@ -12,8 +13,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static LIGHT_INFLUENCE plight;
 static LIGHT_INFLUENCE elight;

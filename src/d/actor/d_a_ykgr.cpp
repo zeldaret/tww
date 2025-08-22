@@ -3,6 +3,7 @@
 // Translation Unit: d_a_ykgr.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"
@@ -10,8 +11,6 @@
 #include "d/d_path.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 class daYkgr_HIO_c :
 #if VERSION == VERSION_DEMO

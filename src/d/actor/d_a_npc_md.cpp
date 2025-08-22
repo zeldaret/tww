@@ -3,6 +3,7 @@
  * Player - Medli
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -16,9 +17,6 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_camera.h"
 #include "d/d_detect.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static daNpc_Md_HIO_c l_HIO;
 

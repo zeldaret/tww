@@ -86,8 +86,8 @@ inline float tanf(float x) { return tan(x); }
 namespace std {
 #endif
 extern inline float sqrtf(float x) {
-    const double _half = .5;
-    const double _three = 3.0;
+    static const double _half = .5;
+    static const double _three = 3.0;
     volatile float y;
     if (x > 0.0f) {
         double guess = __frsqrte((double)x);                   // returns an approximation to

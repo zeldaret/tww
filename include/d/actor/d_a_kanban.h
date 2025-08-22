@@ -48,18 +48,4 @@ struct kanban_class {
     /* 0x5B0 */ dCcD_Cyl m5B0;
 }; // size = 0x6E0
 
-class daKanban_HIO_c : public mDoHIO_entry_c {
-public:
-    daKanban_HIO_c();
-    virtual ~daKanban_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ f32 m04;
-    /* 0x08 */ s16 m08;
-    /* 0x0A */ s16 m0A;
-    /* 0x0C */ f32 m0C;
-}; // size = 0x10
-
 #endif /* D_A_KANBAN_H */

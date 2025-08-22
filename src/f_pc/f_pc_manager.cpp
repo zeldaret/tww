@@ -3,6 +3,7 @@
 // Translation Unit: f_pc_manager.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_creator.h"
 #include "f_pc/f_pc_draw.h"

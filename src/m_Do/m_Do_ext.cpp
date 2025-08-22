@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_ext.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -128,7 +129,6 @@ void mDoExt_bpkAnm::entry(J3DModelData* i_modelData, f32 param_1) {
 
 /* 8000E014-8000E2A8       .text init__13mDoExt_bpkAnmFP16J3DMaterialTableP11J3DAnmColoriifssbi */
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
-
     JUT_ASSERT(531, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(533, i_matTable != NULL && i_bpk != NULL);
     mpAnm = i_bpk;

@@ -3,6 +3,7 @@
  * Object - Zunari's Shop models (wooden posts and curtains on top)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_roten.h"
 #include "d/res/res_roten.h"
 #include "m_Do/m_Do_mtx.h"

@@ -3,6 +3,7 @@
  * Enemy - Keese
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ki.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
@@ -20,9 +21,6 @@
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "JSystem/JUtility/JUTReport.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 class kiHIO_c : public JORReflexible {
 public:

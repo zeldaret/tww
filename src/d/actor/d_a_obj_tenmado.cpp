@@ -3,6 +3,7 @@
  * Object - Earth Temple - Doors blocking ceiling light beam
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tenmado.h"
 #include "d/res/res_tenmado.h"
 #include "d/d_procname.h"

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sie_flag.h"
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
@@ -16,7 +17,6 @@
 #include "d/res/res_eshata.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf

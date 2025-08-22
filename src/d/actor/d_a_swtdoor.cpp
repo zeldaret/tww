@@ -3,6 +3,7 @@
  * Object - Forsaken Fortress tower (Helmaroc King fight) - gray "doors" blocking windows
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swtdoor.h"
 #include "d/res/res_swtdoor.h"
 #include "f_op/f_op_actor_mng.h"

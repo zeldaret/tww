@@ -3,6 +3,7 @@
  * Tingle Tuner Cursor
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
 #include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -25,8 +26,39 @@
 #include "d/actor/d_a_bomb.h"
 #include "stdio.h"
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daAgb_HIO_c : public mDoHIO_entry_c {
+public:
+    daAgb_HIO_c();
+    virtual ~daAgb_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ J3DGXColorS10 field_0x04[2];
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
+    /* 0x30 */ f32 field_0x30;
+};
+
+class dMsgCtrl_c {
+public:
+    int init(u16);
+    int execute();
+    ~dMsgCtrl_c() {}
+
+    int getSelectNum() { return mpMsg->mSelectNum; }
+    void setMsgStatus(u16 status) { mpMsg->mStatus = status; }
+
+public:
+    /* 0x00 */ u16 field_0x0;
+    /* 0x04 */ fpc_ProcID mMsgID;
+    /* 0x08 */ msg_class* mpMsg;
+};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 

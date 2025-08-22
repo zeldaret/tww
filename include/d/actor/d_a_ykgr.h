@@ -2,7 +2,7 @@
 #define D_A_YKGR_H
 
 #include "f_op/f_op_actor.h"
-#include "Jsystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -69,6 +69,7 @@ public:
         m18 = 0.0f;
         m1C = true;
     }
+    ~dPa_YkgrPcallBack() {}
 
     void draw(JPABaseEmitter*, JPABaseParticle*);
     void setParam(float);

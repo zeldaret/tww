@@ -3,6 +3,7 @@
 // Translation Unit: d_a_ss.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ss.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

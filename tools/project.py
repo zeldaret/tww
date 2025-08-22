@@ -45,6 +45,9 @@ if sys.platform == "cygwin":
 Library = Dict[str, Any]
 
 
+PrecompiledHeader = Dict[str, Any]
+
+
 class Object:
     def __init__(self, completed: bool, name: str, **options: Any) -> None:
         self.name = name
@@ -164,6 +167,7 @@ class ProjectConfig:
         self.asflags: Optional[List[str]] = None  # Assembler flags
         self.ldflags: Optional[List[str]] = None  # Linker flags
         self.libs: Optional[List[Library]] = None  # List of libraries
+        self.precompiled_headers: Optional[List[PrecompiledHeader]] = None  # List of precompiled headers
         self.linker_version: Optional[str] = None  # mwld version
         self.version: Optional[str] = None  # Version name
         self.warn_missing_config: bool = False  # Warn on missing unit configuration
@@ -298,7 +302,7 @@ def file_is_c(path: Path) -> bool:
 
 
 def file_is_cpp(path: Path) -> bool:
-    return path.suffix.lower() in (".cc", ".cp", ".cpp", ".cxx")
+    return path.suffix.lower() in (".cc", ".cp", ".cpp", ".cxx", ".pch++")
 
 
 def file_is_c_cpp(path: Path) -> bool:
@@ -342,6 +346,16 @@ def make_flags_str(flags: Optional[List[str]]) -> str:
     if flags is None:
         return ""
     return " ".join(flags)
+
+
+def get_pch_out_name(config: ProjectConfig, pch: PrecompiledHeader) -> str:
+    pch_rel_path = Path(pch["source"])
+    pch_out_name = pch_rel_path.with_suffix(".mch")
+    # Use absolute path as a workaround to allow this target to be matched with absolute paths in depfiles.
+    #
+    # Without this any object which includes the PCH would depend on the .mch filesystem entry but not the
+    # corresponding Ninja task, so the MCH would not be implicitly rebuilt when the PCH is modified.
+    return os.path.abspath(config.out_path() / "include" / pch_out_name)
 
 
 # Unit configuration
@@ -649,6 +663,14 @@ def generate_build_ninja(
     mwcc_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags -MMD -c $in -o $basedir"
     mwcc_sjis_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
 
+    # MWCC for precompiled headers
+    mwcc_pch_cmd = f"{wrapper_cmd}{mwcc} $cflags -MMD -c $in -o $basedir -precompile $basefilestem.mch"
+    mwcc_pch_implicit: List[Optional[Path]] = [*mwcc_implicit]
+
+    # MWCC for precompiled headers with UTF-8 to Shift JIS wrapper
+    mwcc_pch_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags -MMD -c $in -o $basedir -precompile $basefilestem.mch"
+    mwcc_pch_sjis_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
+
     # MWCC with extab post-processing
     mwcc_extab_cmd = f"{CHAIN}{mwcc_cmd} && {dtk} extab clean --padding \"$extab_padding\" $out $out"
     mwcc_extab_implicit: List[Optional[Path]] = [*mwcc_implicit, dtk]
@@ -674,10 +696,14 @@ def generate_build_ninja(
         transform_dep = config.tools_dir / "transform_dep.py"
         mwcc_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_sjis_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
+        mwcc_pch_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
+        mwcc_pch_sjis_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_extab_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_sjis_extab_cmd += f" && $python {transform_dep} $basefile.d $basefile.d"
         mwcc_implicit.append(transform_dep)
         mwcc_sjis_implicit.append(transform_dep)
+        mwcc_pch_implicit.append(transform_dep)
+        mwcc_pch_sjis_implicit.append(transform_dep)
         mwcc_extab_implicit.append(transform_dep)
         mwcc_sjis_extab_implicit.append(transform_dep)
 
@@ -749,6 +775,26 @@ def generate_build_ninja(
     )
     n.newline()
 
+    n.comment("Build precompiled header")
+    n.rule(
+        name="mwcc_pch",
+        command=mwcc_pch_cmd,
+        description="PCH $out",
+        depfile="$basefile.d",
+        deps="gcc",
+    )
+    n.newline()
+
+    n.comment("Build precompiled header (with UTF-8 to Shift JIS wrapper)")
+    n.rule(
+        name="mwcc_pch_sjis",
+        command=mwcc_pch_sjis_cmd,
+        description="PCH $out",
+        depfile="$basefile.d",
+        deps="gcc",
+    )
+    n.newline()
+
     if len(config.custom_build_rules or {}) > 0:
         n.comment("Custom project build rules (pre/post-processing)")
     for rule in config.custom_build_rules or {}:
@@ -766,7 +812,7 @@ def generate_build_ninja(
         )
         n.newline()
 
-    def write_custom_step(step: str, prev_step: Optional[str] = None) -> None:
+    def write_custom_step(step: str, prev_step: Optional[str] = None, extra_inputs: Optional[List[str]] = None) -> None:
         implicit: List[Union[str, Path]] = []
         if config.custom_build_steps and step in config.custom_build_steps:
             n.comment(f"Custom build steps ({step})")
@@ -790,15 +836,18 @@ def generate_build_ninja(
                     dyndep=custom_step.get("dyndep", None),
                 )
                 n.newline()
+
         n.build(
             outputs=step,
             rule="phony",
             inputs=implicit,
             order_only=prev_step,
+            implicit=extra_inputs,
         )
 
     # Add all build steps needed before we compile (e.g. processing assets)
-    write_custom_step("pre-compile")
+    pch_out_names = [get_pch_out_name(config, pch) for pch in config.precompiled_headers or []]
+    write_custom_step("pre-compile", extra_inputs=pch_out_names)
 
     ###
     # Source files
@@ -897,6 +946,38 @@ def generate_build_ninja(
         used_compiler_versions: Set[str] = set()
         source_inputs: List[Path] = []
         source_added: Set[Path] = set()
+
+        if config.precompiled_headers:
+            for pch in config.precompiled_headers:
+                src_path_rel_str = Path(pch["source"])
+                src_path_rel = Path(src_path_rel_str)
+                pch_out_name = src_path_rel.with_suffix(".mch")
+                pch_out_abs_path = Path(get_pch_out_name(config, pch))
+                # Add appropriate language flag if it doesn't exist already
+                cflags = pch["cflags"]
+                if not any(flag.startswith("-lang") for flag in cflags):
+                    if file_is_cpp(src_path_rel):
+                        cflags.insert(0, "-lang=c++")
+                    else:
+                        cflags.insert(0, "-lang=c")
+
+                cflags_str = make_flags_str(cflags)
+
+                n.comment(f"Precompiled header {pch_out_name}")
+                n.build(
+                    outputs=pch_out_abs_path,
+                    rule="mwcc_pch_sjis" if pch.get("shift_jis", config.shift_jis) else "mwcc_pch",
+                    inputs=f"include/{src_path_rel_str}",
+                    variables={
+                        "mw_version": Path(pch["mw_version"]),
+                        "cflags": cflags_str,
+                        "basedir": os.path.dirname(pch_out_abs_path),
+                        "basefile": pch_out_abs_path.with_suffix(""),
+                        "basefilestem": pch_out_abs_path.stem,
+                    },
+                    implicit=[*mwcc_implicit],
+                )
+                n.newline()
 
         def c_build(obj: Object, src_path: Path) -> Optional[Path]:
             # Avoid creating duplicate build rules
@@ -1469,6 +1550,8 @@ def generate_objdiff_config(
             "*.h",
             "*.hpp",
             "*.inc",
+            "*.pch",
+            "*.pch++",
             "*.py",
             "*.yml",
             "*.txt",

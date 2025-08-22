@@ -3,6 +3,7 @@
  * NPC - Koboli (Rito mail sorter)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bmsw.h"
 #include "d/res/res_bmsw.h"
 #include "d/d_shop.h"
@@ -15,10 +16,6 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_hostIO.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 
 daNpc_Bmsw_HIO_c l_HIO;
 

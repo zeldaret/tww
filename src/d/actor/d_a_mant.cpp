@@ -3,6 +3,7 @@
  * Object - Phantom Ganon's cape/Darknut cape
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mant.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

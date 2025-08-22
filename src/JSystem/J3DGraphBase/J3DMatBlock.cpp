@@ -14,11 +14,6 @@
 #include "dolphin/types.h"
 #include "string.h"
 
-inline GXAttnFn J3DColorChan::getAttnFn() {
-    u8 attnFnTbl[] = { GX_AF_NONE, GX_AF_SPEC, GX_AF_NONE, GX_AF_SPOT };
-    return GXAttnFn(attnFnTbl[mChanCtrl >> 9 & 0x03]);
-}
-
 extern bool isTexNoReg(void*);
 extern u16 getTexNoReg(void*);
 extern void loadTexNo(u32, const u16 &);

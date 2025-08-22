@@ -3,6 +3,7 @@
  * Object - Forbidden Woods - Ceiling tentacle / 汎用触手 (general purpose tentacle)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shand.h"
 #include "d/res/res_shand.h"
 #include "d/d_bg_s_gnd_chk.h"

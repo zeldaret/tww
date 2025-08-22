@@ -2,6 +2,7 @@
 // Furthermore, the symbol maps show that d_a_bomb.o's first .text section is 0 bytes large, with everything going in
 // its second .text section, which suggests that d_a_bomb.cpp is empty except including d_a_bomb3.inc.
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_a_obj.h"
@@ -16,8 +17,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_vbakh.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {
     enum AttrSt_e {

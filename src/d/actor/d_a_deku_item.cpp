@@ -3,13 +3,12 @@
  * Item - Deku Leaf (collectable)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_deku_item.h"
 #include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daDekuItem_c::m_arcname[] = "Deku";
 

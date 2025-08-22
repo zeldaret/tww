@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_rflw.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rflw.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

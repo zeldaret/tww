@@ -3,6 +3,7 @@
 // Translation Unit: d_file_select.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_file_select.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -14,8 +15,6 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include <stdio.h>
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 dFs_HIO_c g_fsHIO;
 

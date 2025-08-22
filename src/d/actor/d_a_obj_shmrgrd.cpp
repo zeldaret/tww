@@ -3,6 +3,7 @@
  * Object - Skull Hammer switch (spiked) 
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shmrgrd.h"
 #include "d/res/res_shmrgrd.h"
 #include "d/d_procname.h"
@@ -10,9 +11,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct Attr_c {
     /* 0x00 */ f32 mVSpring;

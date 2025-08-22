@@ -3,6 +3,7 @@
  * Object - Earth God's Lyric/Wind God's Aria statues
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mknjd.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
 #include "d/res/res_mknjd.h"
@@ -24,7 +25,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
 
 #define ACT_SETGOAL 0
 #define ACT_SETANGLE 1

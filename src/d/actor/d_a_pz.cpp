@@ -3,6 +3,7 @@
  * NPC - Princess Zelda
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pz.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -45,7 +46,7 @@ daPz_HIO_c::daPz_HIO_c() {
 }
 
 /* 00000310-00000340       .text stealItem_CB__FPv */
-void stealItem_CB(void*) {
+static void stealItem_CB(void*) {
     /* Nonmatching */
 }
 

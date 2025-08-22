@@ -3,6 +3,7 @@
 // Translation Unit: d_s_logo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_logo.h"
 #include "d/res/res_logo.h"
 #include "d/res/res_system.h"

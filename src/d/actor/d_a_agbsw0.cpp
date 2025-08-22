@@ -3,12 +3,10 @@
 // Translation Unit: d_a_agbsw0.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "global.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 #include "d/actor/d_a_agbsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"

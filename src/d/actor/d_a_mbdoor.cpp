@@ -3,6 +3,7 @@
  * Object - Double doors (Forsaken Fortress tower & Puppet Ganon boss rooms)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mbdoor.h"
 #include "d/res/res_mbdoor.h"
 #include "d/res/res_gbdoor.h"

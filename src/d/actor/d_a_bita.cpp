@@ -3,6 +3,7 @@
  * Object - Wooden platforms (Gohma fight)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bita.h"
 #include "d/res/res_bita.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,8 +16,6 @@
 #include "d/actor/d_a_btd.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static btd_class* btd = NULL;
 

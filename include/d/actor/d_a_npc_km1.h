@@ -5,8 +5,6 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
 
-
-
 class daNpc_Km1_c : public fopNpc_npc_c {
 public:
     typedef int (daNpc_Km1_c::*ActionFunc)(void*);
@@ -133,36 +131,5 @@ public:
     /* 0x7D6 */ s8 field_0x7D6;
     /* 0x7D7 */ s8 field_0x7D7;
 };  // Size: 0x7D8
-
-class daNpc_Km1_HIO_c : public JORReflexible{
-public:
-    struct hio_prm_c {
-        s16 field_0;
-        s16 field_2;
-        s16 field_4;
-        s16 field_6;
-        s16 field_8;
-        s16 field_A;
-        s16 field_C;
-        s16 field_E;
-        s16 field_10;
-        s16 field_12;
-        f32 mAttentionArrowYOffset;
-        f32 field_18;
-    };  // Size: 0x1C
-
-    daNpc_Km1_HIO_c();
-    virtual ~daNpc_Km1_HIO_c() {};
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ s8 field_0x5;
-    /* 0x06 */ s8 field_0x6;
-    /* 0x07 */ s8 field_0x7;
-    /* 0x08 */ int field_0x8;
-    /* 0x0C */ hio_prm_c mPrmTbl;
-};
 
 #endif /* D_A_NPC_KM1_H */
