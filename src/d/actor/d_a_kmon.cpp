@@ -13,7 +13,6 @@ const char daKmon_c::m_arcname[] = "Always";
 
 /* 00000078-00000118       .text set_mtx__8daKmon_cFv */
 void daKmon_c::set_mtx() {
-    /* Nonmatching */
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -23,13 +22,11 @@ void daKmon_c::set_mtx() {
 
 /* 00000118-00000138       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    /* Nonmatching */
     return ((daKmon_c*)i_this)->CreateHeap();
 }
 
 /* 00000138-00000324       .text CreateHeap__8daKmon_cFv */
 BOOL daKmon_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BDL_VBELL));
     JUT_ASSERT(166, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -56,7 +53,6 @@ BOOL daKmon_c::CreateHeap() {
 
 /* 00000324-000003FC       .text CreateInit__8daKmon_cFv */
 cPhs_State daKmon_c::CreateInit() {
-    /* Nonmatching */
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mAcchCir.SetWall(30.0f, 30.0f);
@@ -75,7 +71,6 @@ cPhs_State daKmon_c::CreateInit() {
 
 /* 000003FC-000006E8       .text checkTalk__8daKmon_cFv */
 void daKmon_c::checkTalk() {
-    /* Nonmatching */
     cXyz player_pos = dComIfGp_getPlayer(0)->current.pos;
     cXyz vec_from_player = current.pos - player_pos;
     f32 distance_to_player = vec_from_player.absXZ();
@@ -101,7 +96,6 @@ void daKmon_c::checkTalk() {
 
 /* 000006E8-000007F8       .text daKmonCreate__FPv */
 static cPhs_State daKmonCreate(void* i_this) {
-    /* Nonmatching */
     daKmon_c* pKmon = static_cast<daKmon_c*>(i_this);
 
     fopAcM_SetupActor(pKmon, daKmon_c);
@@ -119,7 +113,6 @@ static cPhs_State daKmonCreate(void* i_this) {
 
 /* 00000968-00000998       .text daKmonDelete__FPv */
 static BOOL daKmonDelete(void* i_this) {
-    /* Nonmatching */
     daKmon_c* actor = static_cast<daKmon_c*>(i_this);
     dComIfG_resDelete(&actor->mPhase, daKmon_c::m_arcname);
     return TRUE;
@@ -127,7 +120,6 @@ static BOOL daKmonDelete(void* i_this) {
 
 /* 00000998-00000A00       .text daKmonExecute__FPv */
 static BOOL daKmonExecute(void* i_this) {
-    /* Nonmatching */
     daKmon_c* actor = static_cast<daKmon_c*>(i_this);
     actor->checkTalk();
     fopAcM_posMoveF(actor, NULL);
@@ -140,7 +132,6 @@ static BOOL daKmonExecute(void* i_this) {
 
 /* 00000A00-00000A9C       .text daKmonDraw__FPv */
 static BOOL daKmonDraw(void* i_this) {
-    /* Nonmatching */
     daKmon_c* actor = static_cast<daKmon_c*>(i_this);
     dKy_tevstr_c* pTev;
     g_env_light.settingTevStruct(TEV_TYPE_BG1_PLIGHT, &actor->current.pos, (pTev = &actor->tevStr));
