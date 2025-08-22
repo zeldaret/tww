@@ -29,7 +29,7 @@ namespace daObjPirateship {
         inline cPhs_State _create();
         inline bool _delete();
         inline bool _draw();
-        bool _execute();
+        inline bool _execute();
         void getKajiID() {}
     
         void set_mtx();

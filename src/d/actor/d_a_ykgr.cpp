@@ -12,8 +12,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-
 class daYkgr_HIO_c :
 #if VERSION == VERSION_DEMO
     public JORReflexible

@@ -1427,7 +1427,7 @@ config.libs = [
     ActorRel(Matching, "d_a_obj_ohatch"),
     ActorRel(Matching, "d_a_obj_otble"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbco"),
-    ActorRel(Equivalent, "d_a_obj_pirateship"), # weak func order
+    ActorRel(Matching,    "d_a_obj_pirateship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_quake"),
     ActorRel(Matching, "d_a_obj_rcloud"),
     ActorRel(Matching,    "d_a_obj_roten"),
@@ -1476,7 +1476,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_warpdm20", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(Matching,    "d_a_warphr", extra_cflags=['-pragma "nosyminline on"']),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wbird"),
-    ActorRel(Equivalent,  "d_a_ykgr", extra_cflags=['-pragma "nosyminline on"']),
+    ActorRel(Matching,    "d_a_ykgr"),
     ActorRel(Matching,    "d_a_alldie"),
     ActorRel(Matching,    "d_a_am"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am2"),
@@ -1510,7 +1510,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_nzg"),
     ActorRel(NonMatching, "d_a_obj_aygr"),
     ActorRel(NonMatching, "d_a_obj_balancelift"),
-    ActorRel(Equivalent,  "d_a_obj_barrier"), # weak func order
+    ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_obj_barrier"),
     ActorRel(NonMatching, "d_a_obj_bemos"),
     ActorRel(Matching,    "d_a_obj_canon"),
     ActorRel(Matching,    "d_a_obj_eff"),
@@ -1637,7 +1637,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(NonMatching, "d_a_npc_people"), # regalloc
     ActorRel(NonMatching, "d_a_npc_pf1"),
-    ActorRel(Equivalent,  "d_a_npc_photo"),
+    ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_roten"),
     ActorRel(NonMatching, "d_a_npc_rsh1"),

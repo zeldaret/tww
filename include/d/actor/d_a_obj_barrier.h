@@ -28,6 +28,11 @@ public:
 
 class daObjBarrier_ef_c {
 public:
+    daObjBarrier_ef_c() {
+        mActiveEffFlags = 0;
+    }
+    ~daObjBarrier_ef_c() {}
+
     void setDummyTexture(int);
     bool checkHitActor(fopAc_ac_c*);
     void birth(fopAc_ac_c*, f32, cXyz, cXyz, int);
@@ -61,10 +66,6 @@ public:
         PRM_MOYA_W = 0x01,
         PRM_MOYA_S = 0x08,
     };
-
-    daObjBarrier_c() {
-        mEffect.mActiveEffFlags = 0;
-    }
 
     void init_mtx();
     static int solidHeapCB(fopAc_ac_c*);

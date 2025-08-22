@@ -403,6 +403,63 @@ cPhs_State daObjPirateship::Method::Create(void* v_this) {
     return ((daObjPirateship::Act_c*)v_this)->_create();
 }
 
+/* 000012A4-000017E0       .text _execute__Q215daObjPirateship5Act_cFv */
+bool daObjPirateship::Act_c::_execute() {
+    dBgS_GndChk gndChk;
+    cXyz sp14(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+    gndChk.SetPos(&sp14);
+    gndChk.OffWall();
+    if (dComIfG_Bgsp()->GroundCross(&gndChk) > -G_CM3D_F_INF) {
+        s32 roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
+        JUT_ASSERT(VERSION_SELECT(717, 720, 739, 739), 0 <= roomNo && roomNo < 64)
+        fopAcM_SetRoomNo(this, roomNo);
+    }
+
+    if (!demo_move()) {
+        if (l_HIO.m05 == 0 && m4A8 != NULL) {
+            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, (void*)this);
+            if (m32E > 0x4000 || m32E < -0x4000) {
+                cLib_addCalcAngleS2(&m330, l_HIO.m12, 0x10, 0x300);
+            } else {
+                cLib_addCalcAngleS2(&m330, l_HIO.m10, 0x10, 0x300);
+            }
+            m32E += m330;
+            current.pos.y = home.pos.y + (l_HIO.m0C + 10.0f) * cM_ssin(m32E);
+        }
+        m2CA = l_HIO.m06;
+    }
+
+    if (m2CC == 0) {
+        if (dComIfGs_isEventBit(0x310)) {
+#if VERSION > VERSION_JPN
+            if (!dComIfGs_isEventBit(1)) {
+                CreateWave();
+            }
+#endif
+            m2CC = 1;
+        } else {
+            return false;
+        }
+    } else if (m2CD == 0 && dComIfGs_isEventBit(1)) {
+        m2CD = 1;
+        pirateCreate(create_idx_tbl_1stIsland_demo);
+#if VERSION > VERSION_JPN
+        DeleteWave();
+#endif
+    }
+
+    m2E4 = NULL;
+    m2E4 = fopAcM_SearchByID(m_sail_id);
+    m2EC = NULL;
+    m2EC = fopAcM_SearchByID(m2F0);
+    m2FC = NULL;
+    m2FC = fopAcM_SearchByID(m300);
+    set_mtx();
+    sound_proc();
+    SetWave();
+    return MoveBGExecute() != FALSE;
+}
+
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
 cPhs_State daObjPirateship::Act_c::_create() {
     fopAcM_SetupActor(this, daObjPirateship::Act_c);
@@ -507,63 +564,6 @@ bool daObjPirateship::Act_c::_delete() {
 
 bool daObjPirateship::Act_c::_draw() {
     return MoveBGDraw();
-}
-
-/* 000012A4-000017E0       .text _execute__Q215daObjPirateship5Act_cFv */
-bool daObjPirateship::Act_c::_execute() {
-    dBgS_GndChk gndChk;
-    cXyz sp14(current.pos.x, current.pos.y + 50.0f, current.pos.z);
-    gndChk.SetPos(&sp14);
-    gndChk.OffWall();
-    if (dComIfG_Bgsp()->GroundCross(&gndChk) > -G_CM3D_F_INF) {
-        s32 roomNo = dComIfG_Bgsp()->GetRoomId(gndChk);
-        JUT_ASSERT(VERSION_SELECT(717, 720, 739, 739), 0 <= roomNo && roomNo < 64)
-        fopAcM_SetRoomNo(this, roomNo);
-    }
-
-    if (!demo_move()) {
-        if (l_HIO.m05 == 0 && m4A8 != NULL) {
-            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, (void*)this);
-            if (m32E > 0x4000 || m32E < -0x4000) {
-                cLib_addCalcAngleS2(&m330, l_HIO.m12, 0x10, 0x300);
-            } else {
-                cLib_addCalcAngleS2(&m330, l_HIO.m10, 0x10, 0x300);
-            }
-            m32E += m330;
-            current.pos.y = home.pos.y + (l_HIO.m0C + 10.0f) * cM_ssin(m32E);
-        }
-        m2CA = l_HIO.m06;
-    }
-
-    if (m2CC == 0) {
-        if (dComIfGs_isEventBit(0x310)) {
-#if VERSION > VERSION_JPN
-            if (!dComIfGs_isEventBit(1)) {
-                CreateWave();
-            }
-#endif
-            m2CC = 1;
-        } else {
-            return false;
-        }
-    } else if (m2CD == 0 && dComIfGs_isEventBit(1)) {
-        m2CD = 1;
-        pirateCreate(create_idx_tbl_1stIsland_demo);
-#if VERSION > VERSION_JPN
-        DeleteWave();
-#endif
-    }
-
-    m2E4 = NULL;
-    m2E4 = fopAcM_SearchByID(m_sail_id);
-    m2EC = NULL;
-    m2EC = fopAcM_SearchByID(m2F0);
-    m2FC = NULL;
-    m2FC = fopAcM_SearchByID(m300);
-    set_mtx();
-    sound_proc();
-    SetWave();
-    return MoveBGExecute() != FALSE;
 }
 
 /* 00001E8C-00001F50       .text Delete__Q215daObjPirateship6MethodFPv */
