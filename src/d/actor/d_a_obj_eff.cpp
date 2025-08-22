@@ -250,8 +250,8 @@ BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
     JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
-        emitter->mRate = 30.0f;
-        emitter->mMaxFrame = 1;
+        emitter->setRate(30.0f);
+        emitter->setMaxFrame(1);
         return true;
     }
 

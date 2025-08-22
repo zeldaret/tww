@@ -633,8 +633,6 @@ void daNpc_Cb1_c::breaking() {
 
 /* 00001B68-0000270C       .text flyAction__11daNpc_Cb1_cFifsi */
 BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4) {
-    /* Nonmatching */
-
     bool isMakarPlayer = dComIfGp_getPlayer(0) == this;
     f32 ySpeedLimit = l_HIO.field_0x98;
     f32 temp3 = m8F8 * l_HIO.field_0x8C;
@@ -699,12 +697,9 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
 
         s16 angle = cM_atan2s(temp.x, temp.z);
 
-        f32 temp6 = std::sqrtf(SQUARE(temp.x) + SQUARE(temp.z));
-        if (temp6 > temp5) {
-            temp6 = temp5;
-        }
+        f32 temp6_2 = cLib_maxLimit(std::sqrtf(SQUARE(temp.x) + SQUARE(temp.z)), temp5);
         angle = angle - shape_angle.y;
-        temp6 *= l_HIO.field_0xA8;
+        f32 temp6 = temp6_2 * l_HIO.field_0xA8;
         if (temp6 > 14000.0f) {
             temp6 = 14000.0f;
         }
@@ -1072,7 +1067,7 @@ BOOL daNpc_Cb1_c::eventProc() {
 }
 
 /* 00002DC8-00002E5C       .text evCheckDisp__11daNpc_Cb1_cFi */
-BOOL daNpc_Cb1_c::evCheckDisp(int staffIdx) {
+void daNpc_Cb1_c::evCheckDisp(int staffIdx) {
     int* pDisp = dComIfGp_evmng_getMyIntegerP(staffIdx, "Disp");
     if(pDisp) {
         if(*pDisp) {

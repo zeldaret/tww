@@ -136,7 +136,7 @@ public:
     BOOL sowCheck();
     BOOL shipRideCheck();
     BOOL eventProc();
-    BOOL evCheckDisp(int);
+    void evCheckDisp(int);
     void evInitWait(int);
     BOOL evActWait(int);
     void evInitMsgSet(int);
