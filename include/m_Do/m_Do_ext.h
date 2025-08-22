@@ -293,7 +293,6 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
         mAfterCallback = NULL;
         mUserArea = 0;
     }
-    virtual ~mDoExt_MtxCalcAnmBlendTblOld();
     virtual void calc(u16);
 
     void setUserArea(u32 area)  { mUserArea = area; }
@@ -332,7 +331,6 @@ public:
                    mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
                    int loopMode, f32 param_5, int param_6, int param_7, int param_8,
                    void* basAnm, u32 modelFlag, u32 differedDlistFlag);
-    virtual ~mDoExt_McaMorf();
 
     void calc();
     void calc(u16 jnt_no);
@@ -392,7 +390,6 @@ public:
                     J3DAnmTransform* anmTransform1, J3DAnmTransform* anmTransform2,
                     int loopMode, f32 param_5, int param_6, int param_7, int param_8,
                     void* basAnm, u32 modelFlag, u32 differedDlistFlag);
-    ~mDoExt_McaMorf2();
 
     void ERROR_EXIT();
     void calc(u16);

@@ -19,8 +19,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 
-// #pragma sym on
-
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
 
@@ -68,6 +66,15 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 jnt_n
     J3DSys::mParentS.x = transformInfo->mScale.x;
     J3DSys::mParentS.y = transformInfo->mScale.y;
     J3DSys::mParentS.z = transformInfo->mScale.z;
+}
+
+static void dummy1() {
+    // Fix the weak function order of J3DAnmTransform::getTransform.
+    // There was most likely an unused function here that got stripped out.
+    j3dSys.setCurrentMtxCalc(NULL);
+    J3DJoint* joint;
+    J3DAnmTransform* anmTransform;
+    anmTransform->getTransform(0, &joint->getTransformInfo());
 }
 
 /* 8000DCF4-8000DD4C       .text isCurrentSolidHeap__Fv */
@@ -2590,12 +2597,3 @@ int mDoExt_3DlineMat1_c::getMaterialID() {
 int mDoExt_3DlineMat0_c::getMaterialID() {
     return 0;
 }
-
-/* 80016E40-80016F14       .text __dt__15mDoExt_McaMorf2Fv */
-mDoExt_McaMorf2::~mDoExt_McaMorf2() {}
-
-/* 80017000-800170D4       .text __dt__14mDoExt_McaMorfFv */
-mDoExt_McaMorf::~mDoExt_McaMorf() {}
-
-/* 800170D4-800171BC       .text __dt__28mDoExt_MtxCalcAnmBlendTblOldFv */
-mDoExt_MtxCalcAnmBlendTblOld::~mDoExt_MtxCalcAnmBlendTblOld() {}
