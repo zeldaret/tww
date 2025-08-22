@@ -117,17 +117,4 @@ public:
     /* 0x2FE6 */ u8 field_0x2FE6[0x2FE8 - 0x2FE6];
 };  // Size: 0x2FE8
 
-class daBst_HIO_c : public JORReflexible {
-public:
-    daBst_HIO_c();
-    virtual ~daBst_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x4 */ s8 field_0x4;
-    /* 0x5 */ u8 field_0x5;
-    /* 0x6 */ u8 field_0x6;
-};
-
 #endif /* D_A_BST_H */

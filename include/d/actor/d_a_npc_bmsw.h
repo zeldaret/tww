@@ -229,32 +229,4 @@ public:
     /* 0x9E0 */ fpc_ProcID field_0x9E0;
 };  // Size: 0x9E4
 
-class daNpc_Bmsw_HIO_c : public JORReflexible {
-public:
-    daNpc_Bmsw_HIO_c();
-    virtual ~daNpc_Bmsw_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
-    /* 0x08 */ dNpc_HIO_c mNpc;
-    /* 0x30 */ s16 field_0x30;
-    /* 0x32 */ s16 field_0x32;
-    /* 0x34 */ s16 field_0x34;
-    /* 0x36 */ s16 r_1;
-    /* 0x38 */ s16 g_1;
-    /* 0x3A */ s16 b_1;
-    /* 0x3C */ s16 r_2;
-    /* 0x3E */ s16 g_2;
-    /* 0x40 */ s16 b_2;
-    /* 0x42 */ u8 field_0x42[0x44 - 0x42];
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ f32 field_0x4C;
-    /* 0x50 */ f32 field_0x50;
-    /* 0x54 */ f32 field_0x54;
-};  // Size: 0x58
-
 #endif /* D_A_NPC_BMSW_H */

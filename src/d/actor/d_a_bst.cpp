@@ -23,6 +23,19 @@
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTReport.h"
 
+class daBst_HIO_c : public JORReflexible {
+public:
+    daBst_HIO_c();
+    virtual ~daBst_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x4 */ s8 field_0x4;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+};
+
 static u8 hio_set;
 static daBst_HIO_c l_HIO;
 

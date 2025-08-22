@@ -1,10 +1,7 @@
 #ifndef D_A_JBO_H
 #define D_A_JBO_H
 
-#pragma push
-#pragma sym off
 #include "d/d_cc_d.h"
-#pragma pop
 #include "f_op/f_op_actor.h"
 
 class mDoExt_McaMorf;

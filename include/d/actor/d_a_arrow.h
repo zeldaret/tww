@@ -21,7 +21,6 @@ public:
     
     typedef BOOL (daArrow_c::*daArrow_c_ProcFunc)();
     
-    daArrow_c() {}
     BOOL _createHeap();
     void _atHit(dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     void checkCreater();

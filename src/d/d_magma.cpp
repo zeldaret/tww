@@ -11,8 +11,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 
-// #pragma sym on
-
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;
 GXTexObj dMagma_packet_c::mKuroTexObj;
