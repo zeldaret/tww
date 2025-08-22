@@ -275,8 +275,6 @@ public:
     cPhs_State create();
     void initStartPos(cXyz const*, s16);
 
-    static cXyz l_rope_base_vec;
-
 public:
     /* 0x0290 */ request_of_phase_process_class mPhs;
     /* 0x0298 */ mDoExt_McaMorf* mpBodyAnm;

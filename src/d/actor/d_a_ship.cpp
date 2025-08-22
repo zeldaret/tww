@@ -67,7 +67,7 @@ const f32 daShip_HIO_c0::throw_start_speedF = 150.0f;
 const f32 daShip_HIO_c0::throw_start_speed_y = 50.0f;
 
 static daShip_HIO_c0 l_HIO;
-cXyz daShip_c::l_rope_base_vec(0.0f, -10.0f, 0.0f);
+static cXyz l_rope_base_vec(0.0f, -10.0f, 0.0f);
 
 /* 000000EC-0000023C       .text bodyJointCallBack__8daShip_cFi */
 BOOL daShip_c::bodyJointCallBack(int jno) {
