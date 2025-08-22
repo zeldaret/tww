@@ -3,6 +3,7 @@
 // Translation Unit: f_op_actor.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_tag.h"

@@ -400,7 +400,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_ap/f_ap_game.cpp"),
 
             # f_op
-            Object(Matching,    "f_op/f_op_actor.cpp", extra_cflags=["-sym off"]),
+            Object(Matching,    "f_op/f_op_actor.cpp"),
             Object(Matching,    "f_op/f_op_actor_iter.cpp"),
             Object(Matching,    "f_op/f_op_actor_tag.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_op/f_op_actor_mng.cpp"),
