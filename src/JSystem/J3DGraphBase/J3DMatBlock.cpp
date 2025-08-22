@@ -341,7 +341,6 @@ void J3DColorBlockLightOff::load() {
     mColorChan[2].load();
     mColorChan[1].load();
     mColorChan[3].load();
-    /* Nonmatching */
 }
 
 /* 802E0438-802E0AC0       .text load__22J3DColorBlockAmbientOnFv */
@@ -356,7 +355,6 @@ void J3DColorBlockAmbientOn::load() {
     mColorChan[2].load();
     mColorChan[1].load();
     mColorChan[3].load();
-    /* Nonmatching */
 }
 
 /* 802E0AC0-802E1180       .text load__20J3DColorBlockLightOnFv */
@@ -376,7 +374,6 @@ void J3DColorBlockLightOn::load() {
             mLight[i]->load(i);
         }
     }
-    /* Nonmatching */
 }
 
 /* 802E1180-802E11CC       .text patch__21J3DColorBlockLightOffFv */
@@ -407,7 +404,6 @@ void J3DColorBlockLightOff::patchLight() {
     mColorChan[3].load();
     u8* end = GDGetCurrPointer();
     DCFlushRange(start, end - start);
-    /* Nonmatching */
 }
 
 /* 802E17B4-802E1800       .text patch__20J3DColorBlockLightOnFv */
@@ -428,7 +424,6 @@ void J3DColorBlockLightOn::patchMatColor() {
 
 /* 802E19AC-802E1E18       .text patchLight__20J3DColorBlockLightOnFv */
 void J3DColorBlockLightOn::patchLight() {
-    /* Nonmatching */
     GDSetCurrOffset(mColorChanOffset);
     u8* start = GDGetCurrPointer();
     GDOverflowCheck(SizeOfLoadColorChans);
@@ -444,7 +439,6 @@ void J3DColorBlockLightOn::patchLight() {
     }
     u8* end = GDGetCurrPointer();
     DCFlushRange(start, end - start);
-    /* Nonmatching */
 }
 
 /* 802E1E18-802E1E80       .text diff__21J3DColorBlockLightOffFUl */
@@ -469,7 +463,6 @@ void J3DColorBlockLightOff::diffLight() {
     mColorChan[2].load();
     mColorChan[1].load();
     mColorChan[3].load();
-    /* Nonmatching */
 }
 
 /* 802E2408-802E2478       .text diff__20J3DColorBlockLightOnFUl */
@@ -1414,7 +1407,7 @@ void J3DTevBlock::indexToPtr_private(u32 offs) {
 
 /* 802E6298-802E6494       .text load__15J3DIndBlockFullFv */
 void J3DIndBlockFull::load() {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     u8 indTexStageNum = mIndTexStageNum;
     for (u32 i = 0; i < indTexStageNum; i++) {
         mIndTexMtx[i].load(i);
@@ -1447,7 +1440,7 @@ void J3DIndBlockFull::load() {
 
 /* 802E6494-802E657C       .text diff__15J3DIndBlockFullFUl */
 void J3DIndBlockFull::diff(u32 flag) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     if ((flag & 0x08000000) == 0) {
         return;
     }
@@ -1455,7 +1448,7 @@ void J3DIndBlockFull::diff(u32 flag) {
     J3DGDSetIndTexStageNum(indTexStageNum);
     mIndTexMtx[0].load(0);
     J3DGDSetIndTexCoordScale(
-        GXIndTexStageID(0),
+        GX_INDTEXSTAGE0,
         GXIndTexScale(mIndTexCoordScale[0].getScaleS()),
         GXIndTexScale(mIndTexCoordScale[0].getScaleT()),
         GXIndTexScale(mIndTexCoordScale[1].getScaleS()),
@@ -1509,7 +1502,6 @@ void J3DPEBlockFogOff::load() {
     mBlend.load(mDither);
     mZMode.load();
     loadZCompLoc(mZCompLoc);
-    /* Nonmatching */
 }
 
 /* 802E7250-802E7538       .text diffBlend__16J3DPEBlockFogOffFv */
@@ -1517,7 +1509,6 @@ void J3DPEBlockFogOff::diffBlend() {
     GDOverflowCheck(0xf);
     mBlend.load(mDither);
     mZMode.load();
-    /* Nonmatching */
 }
 
 /* 802E7538-802E7A1C       .text load__14J3DPEBlockFullFv */
@@ -1531,7 +1522,6 @@ void J3DPEBlockFull::load() {
     mBlend.load(mDither);
     mZMode.load();
     loadZCompLoc(mZCompLoc);
-    /* Nonmatching */
 }
 
 /* 802E7A1C-802E7AD8       .text patch__14J3DPEBlockFullFv */
@@ -1544,7 +1534,6 @@ void J3DPEBlockFull::patch() {
     }
     u8* end = GDGetCurrPointer();
     DCFlushRange(start, end - start);
-    /* Nonmatching */
 }
 
 /* 802E7AD8-802E7B5C       .text diffFog__14J3DPEBlockFullFv */
@@ -1560,7 +1549,6 @@ void J3DPEBlockFull::diffBlend() {
     GDOverflowCheck(0xf);
     mBlend.load(mDither);
     mZMode.load();
-    /* Nonmatching */
 }
 
 /* 802E7E44-802E7EAC       .text diff__14J3DPEBlockFullFUl */
