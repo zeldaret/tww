@@ -947,30 +947,27 @@ def generate_build_ninja(
         source_inputs: List[Path] = []
         source_added: Set[Path] = set()
 
-        all_pch_outputs = []
         if config.precompiled_headers:
             for pch in config.precompiled_headers:
-                src_path_rel = Path(pch["source"])
+                src_path_rel_str = Path(pch["source"])
+                src_path_rel = Path(src_path_rel_str)
                 pch_out_name = src_path_rel.with_suffix(".mch")
                 pch_out_abs_path = Path(get_pch_out_name(config, pch))
                 # Add appropriate language flag if it doesn't exist already
                 cflags = pch["cflags"]
-                extra_cflags = []
                 if not any(flag.startswith("-lang") for flag in cflags):
                     if file_is_cpp(src_path_rel):
                         cflags.insert(0, "-lang=c++")
                     else:
                         cflags.insert(0, "-lang=c")
 
-                all_cflags = cflags + extra_cflags
-                cflags_str = make_flags_str(all_cflags)
-                print(cflags_str)
+                cflags_str = make_flags_str(cflags)
 
                 n.comment(f"Precompiled header {pch_out_name}")
                 n.build(
                     outputs=pch_out_abs_path,
                     rule="mwcc_pch_sjis" if pch.get("shift_jis", config.shift_jis) else "mwcc_pch",
-                    inputs=f"include/{pch["source"]}",
+                    inputs=f"include/{src_path_rel_str}",
                     variables={
                         "mw_version": Path(pch["mw_version"]),
                         "cflags": cflags_str,
@@ -981,12 +978,6 @@ def generate_build_ninja(
                     implicit=[*mwcc_implicit],
                 )
                 n.newline()
-                all_pch_outputs.append(pch_out_abs_path)
-        n.build(
-            outputs="all_pch",
-            rule="phony",
-            inputs=all_pch_outputs,
-        )
 
         def c_build(obj: Object, src_path: Path) -> Optional[Path]:
             # Avoid creating duplicate build rules
