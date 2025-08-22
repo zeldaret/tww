@@ -997,11 +997,9 @@ void daNpcPhoto_c::executeWait() {
                 eventInfo.setEventId(-1);
                 field_0x9C7 = true;
 
-                dCcD_GObjInf* pGObjInf;
                 for (int i = 0; i < 2; i++) {
-                    pGObjInf = &field_0x6F8[i];
-                    if (pGObjInf->ChkCoHit()) {
-                        daNpcPhoto_c* pActor = (daNpcPhoto_c*)pGObjInf->GetCoHitAc();
+                    if (field_0x6F8[i].ChkCoHit()) {
+                        daNpcPhoto_c* pActor = (daNpcPhoto_c*)field_0x6F8[i].GetCoHitAc();
                         if(pActor != NULL && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
                             field_0x9CD = true;
                             break;
