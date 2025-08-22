@@ -5,6 +5,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_a_obj.h"
+#include "d/d_particle.h"
 
 namespace daStone2 {
     struct Attr_c {
