@@ -60,7 +60,10 @@ cPhs_State daKmon_c::CreateInit() {
     set_mtx();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    cXyz* p_speed = &speed;
+    cXyz* p_old_pos = &old.pos;
+    cXyz* p_current_pos = &current.pos;
+    mAcch.Set(p_current_pos, p_old_pos, this, 1, &mAcchCir, p_speed);
     gravity = -4.0f;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6e;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6c;
