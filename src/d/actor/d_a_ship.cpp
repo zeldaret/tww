@@ -29,6 +29,45 @@ static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
 static Vec l_tiller_top_offset = {34.0f, 0.0f, 15.0f};
 
+class daShip_HIO_c0 {
+public:
+    ~daShip_HIO_c0() {}
+
+    /* 0x00 */ static const s16 tiller_speed;
+    /* 0x02 */ static const s16 cannon_no_gravity_timer;
+    /* 0x04 */ static const s16 throw_start_angle_speed;
+    /* 0x06 */ static const s16 throw_return_angle_speed;
+    /* 0x08 */ static const f32 paddle_speed;
+    /* 0x0C */ static const f32 min_speed;
+    /* 0x10 */ static const f32 wind_inc_speed;
+    /* 0x14 */ static const f32 r_inc_speed;
+    /* 0x18 */ static const f32 r_wind_inc_speed;
+    /* 0x1C */ static const f32 fly_rate;
+    /* 0x20 */ static const f32 wind_rate;
+    /* 0x24 */ static const f32 ef_dis_speed;
+    /* 0x28 */ static const f32 ef_speed_rate;
+    /* 0x2C */ static const f32 ef_front_x;
+    /* 0x30 */ static const f32 ef_front_y;
+    /* 0x34 */ static const f32 ef_front_z;
+    /* 0x38 */ static const f32 ef_back_x;
+    /* 0x3C */ static const f32 ef_back_y;
+    /* 0x40 */ static const f32 ef_back_z;
+    /* 0x44 */ static const f32 ef_sp_max_speed;
+    /* 0x48 */ static const f32 ef_pitch;
+    /* 0x4C */ static const f32 ef_ind_scroll;
+    /* 0x50 */ static const f32 ef_ind_scale;
+    /* 0x54 */ static const f32 cannon_speed;
+    /* 0x58 */ static const f32 cannon_gravity;
+    /* 0x5C */ static const f32 whirl_init_speed;
+    /* 0x60 */ static const f32 whirl_inc_speed;
+    /* 0x64 */ static const f32 whirl_distance;
+    /* 0x68 */ static const f32 tornado_init_speed;
+    /* 0x6C */ static const f32 tornado_inc_speed;
+    /* 0x70 */ static const f32 tornado_distance;
+    /* 0x74 */ static const f32 tornado_pull_speed;
+    /* 0x78 */ static const f32 throw_start_speedF;
+    /* 0x7C */ static const f32 throw_start_speed_y;
+};
 
 // TODO: Use these named constants in the code instead of literals
 const s16 daShip_HIO_c0::tiller_speed = 700;
