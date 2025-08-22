@@ -410,8 +410,6 @@ public:
 
 class daShip_HIO_c0 {
     public:
-        ~daShip_HIO_c0() {}
-
         /* 0x00 */ static const s16 tiller_speed;
         /* 0x02 */ static const s16 cannon_no_gravity_timer;
         /* 0x04 */ static const s16 throw_start_angle_speed;
