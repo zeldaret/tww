@@ -341,7 +341,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
-u32 dStage_roomControl_c::getDarkMode() {
+s32 dStage_roomControl_c::getDarkMode() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
     dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
@@ -2435,8 +2435,8 @@ dStage_roomStatus_c dStage_roomControl_c::mStatus[64];
 JKRExpHeap* dStage_roomControl_c::mMemoryBlock[16];
 dStage_darkStatus_c dStage_roomControl_c::mDarkStatus[8] = {
     // TODO: member names need to be documented
-    {0x19, 0x06, 0x06, 0.8f, 0.8f, 0x08080206, 0.8f, 1.0f, 2.0f, 5.0f},
-    {0x32, 0x06, 0x06, 0.8f, 2.6f, 0x08080309, 0.8f, 2.6f, 4.0f, 11.0f},
+    {0x19, 0x06, 0x06, 0.8f, 0.8f, {0x08, 0x08, 0x02, 0x06}, 0.8f, 1.0f, 2.0f, 5.0f},
+    {0x32, 0x06, 0x06, 0.8f, 2.6f, {0x08, 0x08, 0x03, 0x09}, 0.8f, 2.6f, 4.0f, 11.0f},
     {},
     {},
     {},
