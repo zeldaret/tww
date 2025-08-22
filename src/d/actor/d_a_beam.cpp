@@ -17,8 +17,6 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 static daBeam_HIO_c l_HIO;
 
 static dCcD_SrcCps cps_src = {
@@ -138,35 +136,19 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000003D0-00000688       .text CreateHeap__8daBeam_cFv */
 BOOL daBeam_c::CreateHeap() {
-#if VERSION == VERSION_DEMO
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BMD_YLESR00));
-#else
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_BMD_YLESR00));
-#endif
     JUT_ASSERT(304, modelData != NULL);
 
     M_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     JUT_ASSERT(306, M_mdl != NULL);
 
-#if VERSION == VERSION_DEMO
     M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BCK_YLESR00));
-#else
-    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_BCK_YLESR00));
-#endif
     JUT_ASSERT(310, M_bck != NULL);
 
-#if VERSION == VERSION_DEMO
     M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BRK_YLESR00));
-#else
-    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_BRK_YLESR00));
-#endif
     JUT_ASSERT(314, M_brk != NULL);
 
-#if VERSION == VERSION_DEMO
     M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
-#else
-    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_BTK_YLESR00));
-#endif
     JUT_ASSERT(318, M_brk != NULL);
 
     BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
