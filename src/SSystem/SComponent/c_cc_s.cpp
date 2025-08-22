@@ -3,12 +3,11 @@
 // Translation Unit: c_cc_s.cpp
 //
 
+#if VERSION == VERSION_DEMO
+#include "d/dolzel.h"
+#endif
 #include "SSystem/SComponent/c_cc_s.h"
 #include "JSystem/JUtility/JUTAssert.h"
-
-#if VERSION == VERSION_DEMO
-#pragma nosyminline on
-#endif
 
 #define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);

@@ -274,6 +274,3 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     &l_dOvlpFd2_Method,
 };
 #endif
-
-// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
-#pragma sym off

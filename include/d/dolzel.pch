@@ -13,6 +13,7 @@
 // Fixes weak function ordering
 #include "d/d_com_inf_game.h" // IWYU pragma: export
 #include "SSystem/SComponent/c_xyz.h" // IWYU pragma: export
+#include "SSystem/SComponent/c_angle.h" // IWYU pragma: export
 #include "d/d_cc_d.h" // IWYU pragma: export
 #include "d/d_bg_s_acch.h" // IWYU pragma: export
 #include "SSystem/SComponent/c_lib.h" // IWYU pragma: export

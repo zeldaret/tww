@@ -84,9 +84,6 @@ u16 lightMaskData[] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
 
-// Fakematch? Fixes weak function order.
-#pragma sym off
-
 /**
  * Returns true if toon lighting and shadow should be reversed.
  */

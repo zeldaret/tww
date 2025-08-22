@@ -10,12 +10,7 @@
 #include "d/res/res_key.h"
 #include "d/res/res_hkyo.h"
 #include "d/actor/d_a_player.h"
-
-// Fakematch to fix weak function ordering of cSAngle::~cSAngle() and cSGlobe::~cSGlobe().
-#pragma sym off
 #include "SSystem/SComponent/c_angle.h"
-#pragma sym on
-#pragma nosyminline off
 
 /* 8006B39C-8006B3A8       .text getSwbit__12dDoor_info_cFv */
 u8 dDoor_info_c::getSwbit() {

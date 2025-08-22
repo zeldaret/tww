@@ -3,6 +3,9 @@
 // Translation Unit: c_bg_w.cpp
 //
 
+#if VERSION == VERSION_DEMO
+#include "d/dolzel.h"
+#endif
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_bg_s_gnd_chk.h"
 #include "SSystem/SComponent/c_bg_s_lin_chk.h"
@@ -15,10 +18,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/mtx/mtxvec.h"
 #include "dolphin/types.h"
-
-#if VERSION == VERSION_DEMO
-#pragma nosyminline on
-#endif
 
 /* 80247500-8024754C       .text ASSERT_SOLDHEAP__Fv */
 void ASSERT_SOLDHEAP() {
