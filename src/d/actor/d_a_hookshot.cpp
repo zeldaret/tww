@@ -60,8 +60,11 @@ void daHookshot_shape::draw() {
         return;
     }
     
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
+#endif
+    
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
@@ -95,7 +98,9 @@ void daHookshot_shape::draw() {
         chain_pos += chain_offset;
     }
     
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800F12C8-800F1324       .text draw__12daHookshot_cFv */
@@ -117,7 +122,12 @@ void daHookshot_rockLineCallback(fopAc_ac_c* hookshot_actor, dCcD_GObjInf* objIn
     f32 f1 = i_this->getObjSightCrossPos()->abs2(i_this->current.pos);
     if (f1 > f31) {
         i_this->setObjSightCrossPos(objInf->GetAtHitPosP());
-        if (fopAcM_CheckStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e | fopAcStts_UNK10000000_e)) {
+#if VERSION == VERSION_USA
+        if (fopAcM_CheckStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e | fopAcStts_UNK10000000_e))
+#else
+        if (fopAcM_CheckStatus(collided_actor, fopAcStts_UNK80000_e | fopAcStts_UNK200000_e))
+#endif
+        {
             i_this->onObjHookFlg();
         } else {
             i_this->offObjHookFlg();
@@ -152,8 +162,8 @@ BOOL daHookshot_c::procWait() {
     mObjHookFlg = FALSE;
     
     if (fopAcM_GetParam(this) == Mode_Shot) {
-        int angleY = link->getBodyAngleY() + link->shape_angle.y;
-        int angleX = link->getBodyAngleX();
+        s16 angleY = link->getBodyAngleY() + link->shape_angle.y;
+        s16 angleX = link->getBodyAngleX();
         mMoveVec.x = cM_ssin(angleY) * cM_scos(angleX);
         mMoveVec.y = -cM_ssin(angleX);
         mMoveVec.z = cM_scos(angleY) * cM_scos(angleX);
@@ -222,7 +232,9 @@ BOOL daHookshot_c::procShot() {
                 fopAcM_setHookCarryNow(hit_ac);
                 mCarryOffset = hit_ac->current.pos - current.pos;
                 fopAcM_seStartCurrent(this, JA_SE_LK_HS_SPIKE, 0);
+#if VERSION > VERSION_DEMO
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+#endif
             } else if (fopAcM_CheckStatus(hit_ac, fopAcStts_UNK200000_e)) {
                 current.pos = *mSightCps.GetAtHitPosP();
                 mCarryOffset = current.pos - hit_ac->current.pos;
@@ -235,7 +247,9 @@ BOOL daHookshot_c::procShot() {
                 mShipRideFlg = false;
                 mCurrProcFunc = &daHookshot_c::procPlayerPull;
                 fopAcM_seStartCurrent(this, JA_SE_LK_HS_SPIKE, 0);
+#if VERSION > VERSION_DEMO
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+#endif
                 return TRUE;
             } else if (mSightCps.ChkAtShieldHit()) {
                 fopAcM_seStartCurrent(this, JA_SE_LK_HS_REBOUND, 0x20);
@@ -271,7 +285,9 @@ BOOL daHookshot_c::procShot() {
                 mMoveVec = cXyz::Zero;
                 
                 fopAcM_seStartCurrent(this, JA_SE_LK_HS_SPIKE, dComIfG_Bgsp()->GetMtrlSndId(mLinChk));
+#if VERSION > VERSION_DEMO
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+#endif
             } else {
                 cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mLinChk);
                 cM3d_CalcVecZAngle(*plane->GetNP(), &m2BA);
