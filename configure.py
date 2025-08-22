@@ -463,7 +463,7 @@ config.libs = [
         "progress_category": "game",
         "host": True,
         "objects": [
-            Object(Equivalent,  "d/d_stage.cpp"), # weak func order
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_stage.cpp"),
             Object(NonMatching, "d/d_map.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_com_inf_game.cpp", extra_cflags=['-sym off']),
             Object(Matching,    "d/d_com_lib_game.cpp"),

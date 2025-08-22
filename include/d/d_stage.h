@@ -597,6 +597,7 @@ public:
 
 class dStage_roomDt_c : public dStage_dt_c {
 public:
+    void setRoomNo(int roomNo) { mRoomNo = roomNo; }
     /* vt[ 2] */ virtual void init();
     /* vt[ 3] */ virtual int getRoomNo() const { return mRoomNo; }
     /* vt[ 4] */ virtual void setCamera(stage_camera_class* i_camera) { mpCamera = i_camera; }

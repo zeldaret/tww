@@ -237,7 +237,7 @@ public:
     ~dComIfG_play_c() {}
 
     dStage_roomControl_c* getRoomControl() { return &mRoomCtrl; }
-    dStage_stageDt_c& getStage() { return mStageData; }
+    dStage_dt_c& getStage() { return mStageData; }
     dEvt_control_c& getEvent() { return mEvtCtrl; }
     dEvent_manager_c& getEvtManager() { return mEvtManager; }
     dPa_control_c* getParticle() { return mParticle; }
@@ -2131,6 +2131,10 @@ inline void dComIfGp_setCb1Player(fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayerPtr(1, player);
 }
 
+inline dStage_dt_c& dComIfGp_getStage() {
+    return g_dComIfG_gameInfo.play.getStage();
+}
+
 inline roomRead_class* dComIfGp_getStageRoom() {
     return g_dComIfG_gameInfo.play.getStage().getRoom();
 }
@@ -2175,6 +2179,10 @@ inline u16 dComIfGp_getStagePlayerNum() {
     return g_dComIfG_gameInfo.play.getStage().getPlayerNum();
 }
 
+inline stage_scls_info_dummy_class* dComIfGp_getStageSclsInfo() {
+    return g_dComIfG_gameInfo.play.getStage().getSclsInfo();
+}
+
 inline daShip_c* dComIfGp_getShipActor() {
     return (daShip_c*)g_dComIfG_gameInfo.play.getPlayerPtr(2);
 }
@@ -2205,14 +2213,6 @@ inline u8 dComIfGp_getIkadaShipId() {
 
 inline u8 dComIfGp_getIkadaShipBeforeRoomId() {
     return g_dComIfG_gameInfo.play.getIkadaShipBeforeRoomId();
-}
-
-inline stage_scls_info_dummy_class* dComIfGp_getStageSclsInfo() {
-    return g_dComIfG_gameInfo.play.getStage().getSclsInfo();
-}
-
-inline dStage_stageDt_c& dComIfGp_getStage() {
-    return g_dComIfG_gameInfo.play.getStage();
 }
 
 inline dVibration_c& dComIfGp_getVibration() {

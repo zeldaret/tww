@@ -191,7 +191,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
-    i_this->mpRoomDt->mRoomNo = roomNo;
+    i_this->mpRoomDt->setRoomNo(roomNo);
     i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
 
     if (i_this->mpRoomData != NULL) {
