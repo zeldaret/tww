@@ -1510,7 +1510,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_nzg"),
     ActorRel(NonMatching, "d_a_obj_aygr"),
     ActorRel(NonMatching, "d_a_obj_balancelift"),
-    ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_obj_barrier"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_barrier"),
     ActorRel(NonMatching, "d_a_obj_bemos"),
     ActorRel(Matching,    "d_a_obj_canon"),
     ActorRel(Matching,    "d_a_obj_eff"),

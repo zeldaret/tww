@@ -97,8 +97,10 @@ public:
     /* 0x5D8 */ daObjBarrier_ef_c mEffect;
     /* 0x724 */ u8 mBarrierActive;
     /* 0x728 */ int mMoya;
+#if VERSION > VERSION_JPN
     /* 0x72C */ s16 mEventID;
     /* 0x730 */ int mBarrierProc;
+#endif
 };
 
 #endif /* D_A_OBJ_BARRIER_H */
