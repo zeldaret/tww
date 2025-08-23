@@ -134,13 +134,18 @@ struct stage_palet_info_class {
 
 // 2Dma / 2DMA
 struct stage_map_info_class {
-    /* 0x00 */ u8 field_0x00[0x18 - 0x00];
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;
     /* 0x1C */ f32 field_0x1C;
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ u32 field_0x28;
-    /* 0x2C */ u32 field_0x2c;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
     /* 0x30 */ f32 field_0x30;
     /* 0x34 */ u8 field_0x34;
     /* 0x35 */ u8 field_0x35;
@@ -290,7 +295,7 @@ struct dStage_FileList_dt_c {
 
 // FLOR
 struct dStage_FloorInfo_dt_c {
-    /* 0x00 */ int field_0x00;
+    /* 0x00 */ f32 field_0x00;
     /* 0x04 */ u8 floorNo;
     /* 0x05 */ s8 field_0x05[14];
 }; // Size: 0x14
