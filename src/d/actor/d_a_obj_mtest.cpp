@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_mtest.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mtest.h"
 #include "d/res/res_mtest.h"
 #include "d/res/res_owater.h"

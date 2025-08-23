@@ -3,7 +3,7 @@
 // Translation Unit: d_a_beam.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_beam.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_hot_floor.h"

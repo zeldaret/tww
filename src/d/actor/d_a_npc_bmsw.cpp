@@ -3,7 +3,7 @@
  * NPC - Koboli (Rito mail sorter)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bmsw.h"
 #include "d/res/res_bmsw.h"
 #include "d/d_shop.h"

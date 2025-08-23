@@ -3,7 +3,7 @@
  * Object - Forbidden Woods - Solid vine floor (blocks entry to B1)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_kanat.h"
 #include "d/res/res_kanat.h"
 #include "d/d_procname.h"

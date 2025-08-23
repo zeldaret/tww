@@ -3,7 +3,7 @@
  * Object - Regular doors (with knobs, not sliding)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_knob00.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_obj_pirateship.h"

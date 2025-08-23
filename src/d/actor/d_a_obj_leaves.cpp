@@ -3,7 +3,7 @@
  * Object - Pile of orange leaves (fades away when blown with Deku Leaf)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_leaves.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_vochi.h"

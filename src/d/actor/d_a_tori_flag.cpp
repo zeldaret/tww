@@ -3,7 +3,7 @@
  * Object - Great Sea - Small red flag (Flight Control Platform, Horseshoe Island)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tori_flag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

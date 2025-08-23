@@ -349,7 +349,12 @@ config.precompiled_headers = [
         "source": "d/dolzel.pch",
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_dolzel],
-    }
+    },
+    {
+        "source": "d/dolzel_rel.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_rel],
+    },
 ]
 config.libs = [
     {

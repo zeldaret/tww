@@ -3,7 +3,7 @@
  * Object - Bombable walls
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wall.h"
 #include "d/res/res_hbw1.h"
 #include "d/res/res_htw1.h"

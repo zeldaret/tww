@@ -3,7 +3,7 @@
 // Translation Unit: d_a_warphr.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warphr.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"

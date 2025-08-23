@@ -3,7 +3,7 @@
 // Translation Unit: d_a_windmill.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/res/res_hpu1.h"

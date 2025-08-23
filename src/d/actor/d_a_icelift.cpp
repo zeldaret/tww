@@ -3,7 +3,7 @@
 // Translation Unit: d_a_icelift.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_icelift.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"

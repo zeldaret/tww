@@ -3,7 +3,7 @@
  * Object - Palm tree blowing in the wind (Gale Isle)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vyasi.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

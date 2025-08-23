@@ -3,7 +3,7 @@
 // Translation Unit: d_a_stone.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_stone.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"

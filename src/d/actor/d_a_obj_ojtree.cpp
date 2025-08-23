@@ -3,7 +3,7 @@
  * Object - Tall thin poles leading to the Deku Leaf (Forest Haven interior)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/res/res_ojtree.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"

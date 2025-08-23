@@ -3,7 +3,7 @@
  * NPC - Orca / 爺さん (Jiisan)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ji1.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tsubo.h"

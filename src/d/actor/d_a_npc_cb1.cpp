@@ -3,7 +3,7 @@
  * Player - Makar
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_obj_vmc.h"
 #include "d/actor/d_a_ship.h"

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sbox.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sbox.h"
 #include "d/actor/d_a_ship.h"
 #include "d/res/res_dalways.h"

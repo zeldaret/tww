@@ -3,7 +3,7 @@
  * Item - Field Item
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_item.h"

@@ -3,7 +3,7 @@
  * Object - Pushable Box
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_movebox.h"
 #include "d/res/res_ecube.h"
 #include "d/res/res_hbox2.h"

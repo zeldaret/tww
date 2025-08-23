@@ -3,7 +3,7 @@
 // Translation Unit: d_a_sk2.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk2.h"
 #include "d/res/res_sk2.h"
 #include "m_Do/m_Do_ext.h"

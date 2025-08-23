@@ -3,7 +3,7 @@
  * NPC - Traveling Merchants
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_roten.h"
 #include "d/res/res_ro.h"
 #include "m_Do/m_Do_ext.h"

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_photo.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_photo.h"
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_a_obj.h"

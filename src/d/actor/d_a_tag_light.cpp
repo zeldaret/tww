@@ -3,7 +3,7 @@
 // Translation Unit: d_a_tag_light.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_light.h"
 #include "d/res/res_mspot.h"
 #include "d/d_s_play.h"

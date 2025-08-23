@@ -3,7 +3,7 @@
 // Translation Unit: d_a_fan.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fan.h"
 #include "d/res/res_hsen1.h"
 #include "d/res/res_hsen3.h"

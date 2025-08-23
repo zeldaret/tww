@@ -3,7 +3,7 @@
 // Translation Unit: d_a_npc_people.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_people.h"
 #include "d/actor/d_a_kb.h"
 #include "d/actor/d_a_player.h"

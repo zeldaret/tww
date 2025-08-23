@@ -3,7 +3,7 @@
  * Object - Grappling Hook objects
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kui.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_btd.h"

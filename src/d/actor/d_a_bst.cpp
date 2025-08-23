@@ -3,7 +3,7 @@
  * Boss - Gohdan
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bst.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_bg_s_lin_chk.h"

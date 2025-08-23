@@ -3,7 +3,7 @@
  * Object - Forest of Fairies - Tree branch (Tetra)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_branch.h"
 #include "d/res/res_kwood_00.h"
 #include "JSystem/JUtility/JUTAssert.h"

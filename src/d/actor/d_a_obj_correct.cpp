@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_correct.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 
 // This include needs to be before d_a_obj_correct.h for ordering of the
 // daObj::PrmAbstract symbols.

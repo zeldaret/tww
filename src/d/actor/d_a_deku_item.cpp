@@ -3,7 +3,7 @@
  * Item - Deku Leaf (collectable)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_deku_item.h"
 #include "d/res/res_deku.h"
 #include "d/d_com_inf_game.h"

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_auction.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_auction.h"
 #include "d/actor/d_a_npc_auction.h"
 #include "d/actor/d_a_player.h"

@@ -3,7 +3,7 @@
  * Treasure Chest / 宝箱 (Takarabako)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
 #include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"

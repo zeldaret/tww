@@ -3,7 +3,7 @@
  * Object - Wind Crest (Wind's Requiem blue floor decoration)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swtact.h"
 #include "d/res/res_itact.h"
 #include "f_op/f_op_actor_mng.h"

@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_hami4.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hami4.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"

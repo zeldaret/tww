@@ -3,7 +3,7 @@
  * NPC - Tingle, Ankle, David Jr. & Knuckle
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_tc.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

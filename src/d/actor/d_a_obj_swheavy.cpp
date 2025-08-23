@@ -3,7 +3,7 @@
  * Object - Wind Temple - Iron Boots switch
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swheavy.h"
 #include "d/res/res_hhbot.h"
 #include "d/d_com_inf_game.h"

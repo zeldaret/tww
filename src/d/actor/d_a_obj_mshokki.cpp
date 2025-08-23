@@ -3,7 +3,7 @@
  * Object - Dishes and cutlery inside Forsaken Fortress
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mshokki.h"
 #include "d/res/res_mshokki.h"
 #include "d/d_procname.h"

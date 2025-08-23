@@ -3,7 +3,7 @@
  * NPC - Loot the Sailor (Boating Course)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sarace.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

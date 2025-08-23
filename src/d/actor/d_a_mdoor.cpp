@@ -3,7 +3,7 @@
  * Object - Wooden/Metal bars (Forbidden Woods, Cabana Maze, Dragon Roost Cavern, Earth Temple, etc.)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mdoor.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

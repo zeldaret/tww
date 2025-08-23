@@ -3,7 +3,7 @@
  * Object - Wooden shelf
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_shelf.h"
 #include "d/res/res_otana.h"
 #include "d/d_procname.h"

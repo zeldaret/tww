@@ -3,7 +3,7 @@
  * Object - Various Great Sea ships (Beedle, Submarines, Skull Platforms/Rafts, and Salvage Corp.)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_majuu_flag.h"

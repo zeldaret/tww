@@ -3,7 +3,7 @@
 // Translation Unit: d_a_andsw0.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_andsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"

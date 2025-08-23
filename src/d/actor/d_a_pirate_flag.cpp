@@ -3,7 +3,7 @@
 // Translation Unit: d_a_pirate_flag.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pirate_flag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

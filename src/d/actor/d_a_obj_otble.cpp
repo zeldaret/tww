@@ -3,7 +3,7 @@
  * Object - Generic brown wooden tables
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_otble.h"
 #include "d/res/res_okmono.h"
 #include "d/d_procname.h"

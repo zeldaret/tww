@@ -3,7 +3,7 @@
  * Boss - Puppet Ganon (Phase 2)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bgn2.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

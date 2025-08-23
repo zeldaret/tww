@@ -3,7 +3,7 @@
  * Object - Helmaroc King fight objects (wooden bridges, wooden planks floating in water, etc.).
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bdkobj.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"

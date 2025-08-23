@@ -3,7 +3,7 @@
  * Object - Yellow switch (activated by stepping on it)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swpush.h"
 #include "d/res/res_kbota_00.h"
 #include "d/res/res_hhbot.h"

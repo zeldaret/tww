@@ -3,7 +3,7 @@
  * Item - Barrel Item
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_race_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"

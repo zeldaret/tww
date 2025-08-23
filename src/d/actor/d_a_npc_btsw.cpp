@@ -3,7 +3,7 @@
  * NPC - Baito
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw.h"
 #include "d/d_letter.h"
 #include "d/d_snap.h"

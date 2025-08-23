@@ -3,7 +3,7 @@
  * Tag - Weather Tag 6
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag06.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

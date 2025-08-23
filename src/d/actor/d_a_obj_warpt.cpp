@@ -3,7 +3,7 @@
  * Object - Warp pot
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_warpt.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_ltubw.h"

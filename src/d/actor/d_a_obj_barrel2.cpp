@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_barrel2.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel2.h"
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/actor/d_a_race_item.h"

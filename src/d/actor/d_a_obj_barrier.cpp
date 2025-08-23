@@ -3,7 +3,7 @@
  * Object - Hyrule barrier
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrier.h"
 #include "d/res/res_ycage.h"
 #include "JSystem/JUtility/JUTAssert.h"

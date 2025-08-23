@@ -3,7 +3,7 @@
  * Mini-Boss - Big Octo (eye)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta_eye.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"

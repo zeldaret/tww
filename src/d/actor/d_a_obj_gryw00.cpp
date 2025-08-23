@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_gryw00.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/d_com_inf_game.h"
 #include "d/d_particle.h"
 #include "d/d_procname.h"

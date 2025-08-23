@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ghostship.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
 #include "d/res/res_ayush.h"
 #include "SSystem/SComponent/c_math.h"

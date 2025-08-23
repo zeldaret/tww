@@ -3,7 +3,7 @@
  * Object - Rito Postbox
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_toripost.h"
 #include "d/res/res_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"

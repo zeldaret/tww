@@ -3,7 +3,7 @@
  * NPC - Beedle / ボ−トショップ店員 (Boat shopkeeper)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bs1.h"
 #include "d/res/res_bs.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"

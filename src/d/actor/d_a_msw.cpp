@@ -3,7 +3,7 @@
 // Translation Unit: d_a_msw.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_msw.h"
 #include "d/res/res_msw.h"
 #include "d/d_bg_s_movebg_actor.h"

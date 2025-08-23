@@ -3,7 +3,7 @@
  * Player - Servant of the Tower / お供石像 (Companion Statue)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

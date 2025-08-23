@@ -3,7 +3,7 @@
  * Object - Dragon Roost Cavern - Flame lift (platform lifted up by lava plume)
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mflft.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"

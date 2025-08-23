@@ -3,7 +3,7 @@
  * NPC - Tetra
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_zl1.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"

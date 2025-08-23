@@ -3,7 +3,7 @@
 // Translation Unit: d_a_ykgr.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_procname.h"

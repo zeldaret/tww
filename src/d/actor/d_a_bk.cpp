@@ -3,7 +3,7 @@
  * Enemy - Bokoblin
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bk.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/res/res_bk.h"

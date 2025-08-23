@@ -3,7 +3,7 @@
 // Translation Unit: d_a_obj_barrel.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_obj_eff.h"
 #include "d/res/res_ktaru_01.h"
