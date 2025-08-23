@@ -51,11 +51,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
-    },
+    }},
 };
 
 /* 00000078-000000F0       .text Delete__7daFan_cFv */

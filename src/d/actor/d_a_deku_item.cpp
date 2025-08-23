@@ -34,12 +34,13 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
-    // cCcD_SrcCylAttr
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
-    }};
+    }},
+};
 
 /* 00000078-000000D0       .text _delete__12daDekuItem_cFv */
 bool daDekuItem_c::_delete() {

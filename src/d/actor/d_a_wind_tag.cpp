@@ -40,11 +40,11 @@ namespace daWindTag {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCpsS
-        {
-            /* P0 */ 0.0f, 0.0f, 0.0f,
-            /* P1 */ 0.0f, 0.0f, 0.0f,
-            /* Height */ 200.0f,
-        },
+        {{
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 200.0f,
+        }},
     };
 }
 

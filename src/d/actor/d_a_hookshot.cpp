@@ -534,11 +534,11 @@ static dCcD_SrcCps l_at_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 5.0f,
-    },
+    }},
 };
 
 /* 800F2C14-800F2CC8       .text create__12daHookshot_cFv */

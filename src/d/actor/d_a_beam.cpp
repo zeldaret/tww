@@ -42,15 +42,11 @@ static dCcD_SrcCps cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f,
-        0.0f,
-        0.0f,
-        /* End    */ 0.0f,
-        0.0f,
-        0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps cps2_src = {

@@ -36,12 +36,12 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg SPrm    */ cCcD_TgSPrm_IsPlayer_e,
         /* SrcGObjCo SPrm    */ 0,
     },
-    // cCcD_SrcCylAttr
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
         /* Height */ 200.0f,
-    }
+    }},
 };
 
 const struct {

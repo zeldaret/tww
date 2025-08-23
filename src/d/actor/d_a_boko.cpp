@@ -161,11 +161,11 @@ static dCcD_SrcCps at_cps_src = {
 
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 20.0f,
-    },
+    }},
 };
 
 const s16 daBoko_HIO_c0::throw_timer = 2;

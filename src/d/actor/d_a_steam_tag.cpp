@@ -37,11 +37,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start */ 0.0f, 0.0f, 0.0f,
-        /* End */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
-    },
+    }},
 };
 
 daSteamTag_mData daSteamTag_c::mData = {

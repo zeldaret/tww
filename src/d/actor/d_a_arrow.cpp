@@ -44,11 +44,11 @@ const dCcD_SrcCps daArrow_c::m_at_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 5.0f,
-    },
+    }},
 };
 
 const dCcD_SrcSph daArrow_c::m_co_sph_src = {

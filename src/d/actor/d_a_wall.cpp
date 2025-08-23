@@ -76,11 +76,11 @@ static dCcD_SrcTri l_tri_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGTriS
-    {
-        /* a */ 0.0f, 0.0f, 0.0f,
-        /* b */ 0.0f, 0.0f, 0.0f,
-        /* c */ 0.0f, 0.0f, 0.0f,
-    },
+    {{
+        /* a */ {0.0f, 0.0f, 0.0f},
+        /* b */ {0.0f, 0.0f, 0.0f},
+        /* c */ {0.0f, 0.0f, 0.0f},
+    }},
 };
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */

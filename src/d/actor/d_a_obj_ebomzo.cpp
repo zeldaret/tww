@@ -43,12 +43,11 @@ dCcD_SrcSph sph_check_src = {
         /* SrcGObjTg SPrm    */ 0,
         /* SrcGObjCo SPrm    */ 0,
     },
-
-    //cCcD_SrcSphAttr
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
-    }
+    }},
 };
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */

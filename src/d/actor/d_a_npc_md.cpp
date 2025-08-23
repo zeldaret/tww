@@ -123,11 +123,11 @@ static dCcD_SrcCps l_fan_light_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_wind_cyl_src = {

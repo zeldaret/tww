@@ -153,11 +153,11 @@ static dCcD_SrcCps l_at_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 20.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_fan_wind_cps_src = {
@@ -183,11 +183,11 @@ static dCcD_SrcCps l_fan_wind_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph l_fan_wind_sph_src = {

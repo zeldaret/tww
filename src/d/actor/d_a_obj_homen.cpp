@@ -166,11 +166,11 @@ const dCcD_SrcCps Act_c::M_cps_srcL = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 135.0f,
-    },
+    }},
 };
 
 const dCcD_SrcCps Act_c::M_cps_srcS = {
@@ -196,11 +196,11 @@ const dCcD_SrcCps Act_c::M_cps_srcS = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 45.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjHomen5Act_cFP10fopAc_ac_c */
