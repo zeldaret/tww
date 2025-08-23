@@ -176,7 +176,7 @@ public:
         mWhirlActor = NULL;
     }
 
-    void onCb1Ride() { mStateFlag |= 0x40000000; }
+    void onCb1Ride() { onStateFlg(daSFLG_UNK40000000_e); }
     void onCraneHookFlg() { onStateFlg(daSFLG_UNK800_e); }
     void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
