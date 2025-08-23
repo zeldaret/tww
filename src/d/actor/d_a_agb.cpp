@@ -768,7 +768,7 @@ void daAgb_c::resetCursor(bool param_0) {
 }
 
 /* 800D070C-800D0734       .text FlashCheck__7daAgb_cFv */
-bool daAgb_c::FlashCheck() {
+BOOL daAgb_c::FlashCheck() {
     if (mIsFree || mFollowTarget == true) {
         return true;
     }
