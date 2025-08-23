@@ -770,7 +770,7 @@ BOOL daBoko_c::execute() {
                 bVar4 = TRUE;
             } else if (m2C4 == 0 && pcVar2->ChkAtType(AT_TYPE_UNK20000 | AT_TYPE_FIRE)) {
                 mDoAud_seStart(JA_SE_OBJ_TORCH_IGNITION, &m2D0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-                fopAcM_SetCullSize(this, 0x15);
+                fopAcM_SetCullSize(this, fopAc_CULLSPHERE_6_e);
                 m2C4 = 900;
             }
         }
@@ -795,7 +795,7 @@ BOOL daBoko_c::execute() {
         if (m2C4 != 0) {
             setFlameEffect();
         } else {
-            fopAcM_SetCullSize(this, 0xE);
+            fopAcM_SetCullSize(this, fopAc_CULLBOX_CUSTOM_e);
             m7E4 = 0.0f;
             if (mParticleCallBack.getEmitter() != NULL) {
                 mDoAud_seStart(JA_SE_OBJ_TORCH_OFF, &m2D0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
@@ -976,7 +976,7 @@ cPhs_State daBoko_c::create() {
     if (uVar4 == 7) {
         uVar4 = 0;
         fopAcM_SetParam(this, uVar4);
-        fopAcM_SetCullSize(this, 0x15);
+        fopAcM_SetCullSize(this, fopAc_CULLSPHERE_6_e);
         m2C4 = 900;
     }
 
@@ -1015,7 +1015,7 @@ cPhs_State daBoko_c::create() {
         );
 
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-        attention_info.distances[4] = 0x11;
+        attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x11;
         fopAcM_SetGravity(this, -3.0f);
         fopAcM_SetMaxFallSpeed(this, -100.0f);
         mStts.Init(10, 0xff, this);
