@@ -1483,7 +1483,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_amiprop"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_arrow_iceeff"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_arrow_lighteff"),
-    ActorRel(NonMatching, "d_a_beam"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_beam"),
     ActorRel(NonMatching, "d_a_boko"),
     ActorRel(NonMatching, "d_a_canon"),
     ActorRel(NonMatching, "d_a_cc"),

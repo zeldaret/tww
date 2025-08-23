@@ -20,7 +20,7 @@ void daObj_Demo_Barrel_c::setParticleHahen() {
         dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &current.pos, NULL, NULL, 0xFF, NULL, -1,
                               &tevStr.mColorK0, &tevStr.mColorK0, NULL);
     if (emitter != NULL) {
-        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8, 1.0f);
+        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
         emitter->setEmitterScale(em_scl);
     }
 }
