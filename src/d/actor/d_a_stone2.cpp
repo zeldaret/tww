@@ -158,7 +158,7 @@ BOOL Act_c::Create() {
     mAcch.ClrGroundLanding();
     current.pos.set(home.pos);
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    attention_info.distances[4] = attr().m0C;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = attr().m0C;
     fopAcM_OnStatus(this, fopAcStts_UNK10000_e);
 
     attention_info.position.x = current.pos.x;
@@ -658,7 +658,8 @@ void Act_c::demo_non() {
 /* 000021AC-00002214       .text demo_req_init__Q28daStone25Act_cFv */
 void Act_c::demo_req_init() {
     if (prmZ_get_evId() == 0) {
-        fopAcM_orderOtherEventId(this, m650, m652);
+        u8 evno = m652;
+        fopAcM_orderOtherEventId(this, m650, evno);
         eventInfo.onCondition(dEvtCmd_INDEMO_e);
         m64C = 1;
     }
@@ -670,7 +671,8 @@ void Act_c::demo_req() {
         if (eventInfo.checkCommandDemoAccrpt()) {
             demo_run_init();
         } else {
-            fopAcM_orderOtherEventId(this, m650, m652);
+            u8 evno = m652;
+            fopAcM_orderOtherEventId(this, m650, evno);
             eventInfo.onCondition(dEvtCmd_INDEMO_e);
         }
     } else {

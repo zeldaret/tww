@@ -1452,7 +1452,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_sk2"),
     ActorRel(Matching,    "d_a_spotbox"),
     ActorRel(Matching,    "d_a_ssk"),
-    ActorRel(Equivalent,  "d_a_stone"),
+    ActorRel(Matching,    "d_a_stone"),
     ActorRel(Equivalent,  "d_a_stone2"),
     ActorRel(Matching,    "d_a_swc00"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_swhit0"),

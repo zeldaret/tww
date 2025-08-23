@@ -65,7 +65,7 @@ const Data_c Act_c::M_data[] = {
         0.0f,   0.0f,   0.0f,   0x9C4,  0x9C4, 0x3E8, 0.006f,
         0.001f, 200.0f, 0.6f,   0x0,    5.4f,  0.04f, 0.014f,
         0.04f,  0.015f, 30.0f,  0.5f,   1.0f,  0.3f,  0x96,
-        0x5,    0x64,   0x4,    0x7D,   0x5,   0x0,   M_arcname_Always,
+        0x5,    0x64,   0x4,    0x7D,   0x5,   DATAFLG_0_e,   M_arcname_Always,
 #if VERSION == VERSION_DEMO
         0x1240,
 #else
@@ -80,7 +80,7 @@ const Data_c Act_c::M_data[] = {
         0.0f,   0.0f,   0.0f,   0x7D0,  0x7D0, 0x0,   0.006f,
         0.001f, 200.0f, 0.6f,   0x2,    6.5f,  0.04f, 0.014f,
         0.04f,  0.015f, 30.0f,  0.5f,   1.0f,  0.3f,  0x96,
-        0x5,    0x64,   0x4,    0x7D,   0x5,   0x2,   M_arcname_Always,
+        0x5,    0x64,   0x4,    0x7D,   0x5,   DATAFLG_2_e,   M_arcname_Always,
 #if VERSION == VERSION_DEMO
         0x1240,
 #else
@@ -95,7 +95,7 @@ const Data_c Act_c::M_data[] = {
         0.0f,    0.0f,   0.0f,   0x9C4,  0x9C4,  0x3E8, 0.006f,
         0.001f,  200.0f, 3.0f,   0x6,    5.4f,   0.04f, 0.014f,
         0.04f,   0.015f, 30.0f,  2.5f,   1.0f,   1.5f,  0xFF,
-        0xA,     0x64,   0x4,    0xFF,   0xA,    0xF,   M_arcname_Ebrock,
+        0xA,     0x64,   0x4,    0xFF,   0xA,    DataFlag_e(DATAFLG_1_e | DATAFLG_2_e | DATAFLG_4_e | DATAFLG_8_e),   M_arcname_Ebrock,
         0xB80,   0x4,    0x19,   0x140,  0x118,  0x1C6, 0x12C,
         0x0,     0x696A, 0x692A, 0x691A, 0x691D, 0xD,   0x0,
         0xC8,    0x0,    0x258,  0x0,    0xC8,   0x0,   0x190,
@@ -103,7 +103,7 @@ const Data_c Act_c::M_data[] = {
     },
     {
         -6.0f, 120.0f, 175.0f, 1.0f,   0xFF,  27.0f,  36.0f,  0.0f,   0.0f,   0.0f, 0x9C4, 0x9C4, 0x3E8, 0.006f, 0.001f, 200.0f,         3.0f,  0x6,   5.4f,
-        0.04f, 0.014f, 0.04f,  0.015f, 30.0f, 2.5f,   1.0f,   1.5f,   0xFF,   0xA,  0x64,  0x4,   0xFF,  0xA,    0x1F,   M_arcname_Ekao, 0xD40, 0x4,   0x18,
+        0.04f, 0.014f, 0.04f,  0.015f, 30.0f, 2.5f,   1.0f,   1.5f,   0xFF,   0xA,  0x64,  0x4,   0xFF,  0xA,    DataFlag_e(DATAFLG_1_e | DATAFLG_2_e | DATAFLG_4_e | DATAFLG_8_e | DATAFLG_10_e),   M_arcname_Ekao, 0xD40, 0x4,   0x18,
         0x144, 0x113,  0x15E,  0x1AE,  0x0,   0x6969, 0x692A, 0x691A, 0x691D, 0xD,  0x0,   0x78,  0x0,   0x212,  0x0,    0x78,           0x0,   0x15E, 6000.0f,
     },
     {
@@ -111,7 +111,7 @@ const Data_c Act_c::M_data[] = {
         0.0f,    0.0f,   0.0f,   0x9C4,  0x9C4,  0x3E8, 0.006f,
         0.001f,  200.0f, 2.0f,   0x4,    5.4f,   0.04f, 0.014f,
         0.04f,   0.015f, 30.0f,  1.5f,   1.0f,   1.0f,  0xFF,
-        0xA,     0x64,   0x4,    0xFF,   0xA,    0xF,   M_arcname_Ebrock,
+        0xA,     0x64,   0x4,    0xFF,   0xA,    DataFlag_e(DATAFLG_1_e | DATAFLG_2_e | DATAFLG_4_e | DATAFLG_8_e),   M_arcname_Ebrock,
         0x620,   0x5,    0xE,    0x87,   0x6E,   0x96,  0xAA,
         0x0,     0x696B, 0x692A, 0x691A, 0x691D, 0xD,   0x0,
         0x32,    0x0,    0x1C2,  0x0,    0x32,   0x0,   0x96,
@@ -232,7 +232,7 @@ cPhs_State Act_c::_create() {
                 mAcch.CrrPos(*dComIfG_Bgsp());
                 mAcch.ClrGroundLanding();
 
-                if (prm_get_moveBg() == 1) {
+                if (prm_get_moveBg()) {
                     current.pos = home.pos;
                     if (dComIfG_Bgsp()->ChkMoveBG_NoDABg(mAcch.m_gnd)) {
                         prm_off_moveBg();
@@ -248,7 +248,7 @@ cPhs_State Act_c::_create() {
                 mode_wait_init();
 
                 cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                attention_info.distances[4] = data().m7E;
+                attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = data().m7E;
 
                 if (data().m70 & 2) {
                     fopAcM_OnStatus(this, fopAcStts_UNK10000_e);
@@ -427,7 +427,7 @@ bool Act_c::mode_proc_call() {
         mode_carry_init();
     }
 
-    bool uVar7 = prm_get_moveBg() == 1;
+    bool uVar7 = prm_get_moveBg();
     cXyz sp08 = current.pos;
 
     (this->*mode_proc[m674])();
@@ -448,7 +448,7 @@ bool Act_c::mode_proc_call() {
             m67A = 1;
         }
 
-        if (prm_get_moveBg() == 1) {
+        if (prm_get_moveBg()) {
             prm_off_moveBg();
             sp08.y = mAcch.GetGroundH();
             m688 = sp08.y;
@@ -920,7 +920,7 @@ void Act_c::cam_lockoff() const {
 bool Act_c::_execute() {
     cull_set_move();
     if (m67A != 0 || m674 != 0 || mAcch.ChkGroundHit() == false || mAcch.ChkGroundLanding() || prm_get_cull() == 0 || !fopAcM_cullingCheck(this) ||
-        prm_get_moveBg() == DATAFLG_1_e)
+        prm_get_moveBg())
     {
         m67A = 0;
         BOOL bVar1 = TRUE;
@@ -958,8 +958,14 @@ bool Act_c::_execute() {
 
 /* 00003358-0000344C       .text _draw__Q27daStone5Act_cFv */
 bool Act_c::_draw() {
-    if (prm_get_moveBg() != 1) {
-        g_env_light.settingTevStruct(cLib_checkBit(DataFlag_e(data().m70), DATAFLG_4_e), &current.pos, &tevStr);
+    if (!prm_get_moveBg()) {
+        int light_type;
+        if (cLib_checkBit(DataFlag_e(data().m70), DATAFLG_4_e)) {
+            light_type = TEV_TYPE_BG0;
+        } else {
+            light_type = TEV_TYPE_ACTOR;
+        }
+        g_env_light.settingTevStruct(light_type, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
         if (fopAcM_GetModel(this) == NULL) {

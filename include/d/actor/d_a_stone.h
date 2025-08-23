@@ -11,10 +11,12 @@ namespace daStone {
     static BOOL CreateHeapCB(fopAc_ac_c*);
 
     enum DataFlag_e {
-        DATAFLG_1_e = 1 << 0,
-        DATAFLG_2_e = 1 << 1,
-        DATAFLG_4_e = 1 << 2,
-        DATAFLG_8_e = 1 << 3,
+        DATAFLG_0_e  = 0,
+        DATAFLG_1_e  = 1 << 0,
+        DATAFLG_2_e  = 1 << 1,
+        DATAFLG_4_e  = 1 << 2,
+        DATAFLG_8_e  = 1 << 3,
+        DATAFLG_10_e = 1 << 4,
     };
     
     struct Data_c {
@@ -103,7 +105,7 @@ namespace daStone {
         s32 prm_get_cull() const { return daObj::PrmAbstract(this,PRM_CULL_W, PRM_CULL_S); }
         s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
-        u32 prm_get_moveBg() const { return daObj::PrmAbstract(this, PRM_MOVEBG_W, PRM_MOVEBG_S); }
+        bool prm_get_moveBg() const { return daObj::PrmAbstract(this, PRM_MOVEBG_W, PRM_MOVEBG_S) == 1UL; }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
         void prm_off_moveBg() { fopAcM_SetParam(this, fopAcM_GetParam(this) | 0xC0); }

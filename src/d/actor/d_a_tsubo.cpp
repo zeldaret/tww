@@ -1360,7 +1360,7 @@ cPhs_State Act_c::_create() {
             m6EC = 0.0f;
             m6F0 = cXyz::Zero;
             cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-            attention_info.distances[4] = data().mAttnDist;
+            attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = data().mAttnDist;
             attention_info.position.x = current.pos.x;
             attention_info.position.y = current.pos.y + data().mAttnY;
             attention_info.position.z = current.pos.z;
@@ -2760,7 +2760,7 @@ void Act_c::bound(float arg1) {
                 }
             }
         }
-    } else if (mAcch.ChkWallHit()) {
+    } else if (mAcch.ChkWallHit() != false) {
         speedF *= 0.9f;
     }
 }
@@ -2885,8 +2885,9 @@ void Act_c::set_wind_vec() {
             fopAc_ac_c* pfVar4 = mCyl.GetTgHitAc();
             if (pfVar4 != NULL && fopAcM_GetProfName(pfVar4) == PROC_PLAYER) {
                 s16 iVar5 = cM_atan2s(sp3C.x, sp3C.z);
-                if (cM_scos(pfVar4->shape_angle.y - iVar5) > 0.866f) {
-                    fVar1 = cM_scos(pfVar4->shape_angle.y - iVar5) * 2.0f + 1.0f;
+                f32 cos = cM_scos(pfVar4->shape_angle.y - iVar5);
+                if (cos > 0.866f) {
+                    fVar1 = cos * 2.0f + 1.0f;
                 } else {
                     fVar1 = 0.0f;
                 }

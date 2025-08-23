@@ -279,7 +279,6 @@ bool daObjBarrier_c::break_check() {
     bool chk = false;
 
 #if VERSION <= VERSION_JPN
-
     if (mMoya == 0) {
         if (dComIfGs_isEventBit(0x3980) == true) {
             daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();

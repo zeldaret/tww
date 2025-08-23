@@ -1088,8 +1088,8 @@ static cPhs_State daKanban_Create(fopAc_ac_c* a_this) {
         a_this->attention_info.position.y = a_this->eyePos.y + 60.0f;
         a_this->attention_info.position.z = a_this->eyePos.z;
 
-        a_this->attention_info.distances[1] = 5;
-        a_this->attention_info.distances[3] = 6;
+        a_this->attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 5;
+        a_this->attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 6;
         a_this->attention_info.flags = fopAc_Attn_TALKFLAG_READ_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
         
         i_this->m350.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &i_this->m310,
