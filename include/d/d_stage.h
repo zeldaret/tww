@@ -834,12 +834,16 @@ public:
     /* 0x50 */ int mVrboxNum;
 };
 
+struct dStage_darkStatus_c_0C {
+    /* 0x00 */ u8 m00[4];
+}; // size = 0x4;
+
 class dStage_darkStatus_c {
 public:
     /* 0x00 */ u8 mEnvAlpha;
     /* 0x01 */ u8 mBokoAlpha[2];
     /* 0x04 */ f32 mBokoScale[2];
-    /* 0x0C */ int field_0xc;
+    /* 0x0C */ dStage_darkStatus_c_0C field_0xc;
     /* 0x10 */ f32 field_0x10[2];
     /* 0x18 */ f32 field_0x18[2];
 
@@ -848,7 +852,7 @@ public:
     f32 getBokoScale(int i) const { return mBokoScale[i]; }
     // void getNonAlpha(int i) const {}
     // void getNonScale(int i) const {}
-};
+}; // size = 0x20
 
 class dBgW;
 
@@ -882,8 +886,8 @@ public:
     int loadRoom(int, u8*);
     void zoneCountCheck(int) const;
     void checkDrawArea() const;
-    dStage_darkStatus_c* getDarkStatus();
-    u32 getDarkMode();
+    static dStage_darkStatus_c* getDarkStatus();
+    static s32 getDarkMode();
 
     dKy_tevstr_c* getTevStr(int i_roomNo) { return &mStatus[i_roomNo].mTevStr; }
     BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }

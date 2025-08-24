@@ -12,13 +12,20 @@
 class dBgS_ObjLinChk;
 
 struct ke_c_s {
-    
-};
+    /* 0x000 */ cXyz m000[10];
+    /* 0x078 */ cXyz m078[10];
+    /* 0x0F0 */ u8 m0F0[0x124 - 0x0F0];
+}; // size = 0x124
+
+struct LineKe {
+    /* 0x0000 */ mDoExt_3DlineMat0_c lineMat;
+    /* 0x001C */ ke_c_s m001C[16];
+}; // size = 0x125C
 
 class daBoko_c : public fopAc_ac_c {
 public:
     static u32 m_bound_se[6];
-    static s32 m_heap_size[6];
+    static u32 m_heap_size[6];
     static char* m_arc_name[6];
     static Vec m_cull_min[6];
     static Vec m_cull_max[6];
@@ -88,10 +95,12 @@ public:
     cPhs_State create();
 
 public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ mDoExt_brkAnm mBrkAnm;
-    /* 0x2B4 */ u8 m2B4[0x2B8 - 0x2B4];
+#if VERSION > VERSION_DEMO
+    /* 0x2B4 */ u32 m2B4;
+#endif
     /* 0x2B8 */ u8 mCurrentAction;
     /* 0x2B9 */ u8 m2B9;
     /* 0x2BA */ u8 m2BA;
@@ -106,7 +115,8 @@ public:
     /* 0x2CA */ s16 m2CA;
     /* 0x2CC */ u8 m2CC[0x2D0 - 0x2CC];
     /* 0x2D0 */ cXyz m2D0;
-    /* 0x2DC */ u8 m2DC[0x2F4 - 0x2DC];
+    /* 0x2DC */ cXyz m2DC;
+    /* 0x2E8 */ u8 m2E8[0x2F4 - 0x2E8];
     /* 0x2F4 */ cXyz m2F4;
     /* 0x300 */ LIGHT_INFLUENCE mLight;
     /* 0x320 */ cXyz m320;
@@ -119,9 +129,9 @@ public:
     /* 0x7E4 */ f32 m7E4;
     /* 0x7E8 */ Mtx mAlphaModelMtx[2];
     /* 0x848 */ u8 m848[0x8A8 - 0x848];
-    /* 0x8A8 */ mDoExt_3DlineMat0_c* mpLineMat;
+    /* 0x8A8 */ LineKe* mpLineKe;
     /* 0x8AC */ ProcFunc_t mCurrentProc;
-};
+}; // size = 0x8B8
 
 class daBoko_HIO_c {
 public:

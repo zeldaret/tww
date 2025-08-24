@@ -612,7 +612,7 @@ public:
     /* 0x14 */ u16 mNumSegments;
     /* 0x16 */ u8 mCurArr;
     /* 0x18 */ mDoExt_3Dline_c* mpLines;
-};
+}; // size = 0x1C
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
