@@ -272,7 +272,7 @@ int daNpc_Fa1_c::createInit() {
         if (isTypeTimer()) {
             setStatus(1);
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
-            current.angle.y += (s16)(cLib_getRndValue((u16)0, (u16)0xFF) * 0x100);
+            current.angle.y += (s16)(cLib_getRndValue<u16>(0, 0xFF) * 0x100);
         } else {
             setTypeNormal();
         }
@@ -396,7 +396,7 @@ void daNpc_Fa1_c::init_normal_move() {
     speedF = l_HIO.prm.m08;
     gravity = 0.1f;
     maxFallSpeed = -1.0f;
-    mTimer = cLib_getRndValue((u16)l_HIO.prm.m44, (u16)60);
+    mTimer = cLib_getRndValue<u16>(l_HIO.prm.m44, 60);
     if (isTypeArea()) {
         init_areaMove();
     } else {
@@ -423,7 +423,7 @@ void daNpc_Fa1_c::normal_move() {
 /* 800FBA68-800FBAB0       .text init_straight__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::init_straight() {
     setSubMode(NormalSubMode_STRAIGHT_e);
-    mMoveTimer = cLib_getRndValue((u8)60, (u8)60);
+    mMoveTimer = cLib_getRndValue<u8>(60, 60);
     gravity = 0.1f;
 }
 
@@ -448,7 +448,7 @@ void daNpc_Fa1_c::straight() {
 /* 800FBBC8-800FBC10       .text init_turn__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::init_turn() {
     setSubMode(NormalSubMode_TURN_e);
-    mMoveTimer = cLib_getRndValue((u8)60, (u8)60);
+    mMoveTimer = cLib_getRndValue<u8>(60, 60);
     gravity = 0.1f;
 }
 
@@ -937,7 +937,7 @@ cPhs_State daNpc_Fa1_c::_create() {
         return cPhs_ERROR_e;
     }
     if (l_HIO.mNo < 0) {
-        l_HIO.mNo = mDoHIO_createChild("回復妖精", &l_HIO);  // Recovery Fairy
+        l_HIO.mNo = mDoHIO_createChild("回復妖精", &l_HIO); // Recovery Fairy
         l_hio_counter = 1;
     } else {
         l_hio_counter++;

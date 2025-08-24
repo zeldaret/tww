@@ -37,11 +37,23 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void hide() {}
+    void hide() {
+        if (m_emitter == NULL) {
+            return;
+        }
+        m_emitter->setStatus(JPAEmtrStts_StopDraw);
+        return;
+    }
     void setAimRate(float) {}
     void setAlpha(unsigned char alpha) { m_alpha = alpha; }
     inline void set_mtx();
-    void show() {}
+    void show() {
+        if (m_emitter == NULL) {
+            return;
+        }
+        m_emitter->clearStatus(JPAEmtrStts_StopDraw);
+        return;
+    }
     void start() {
         if (m_emitter != NULL) {
             m_alpha_flag = 1;

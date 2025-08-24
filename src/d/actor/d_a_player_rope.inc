@@ -345,7 +345,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
         if (cancelItemUpperReadyAnime()) {
             return true;
         }
-    } else if (((rope->field_0x2DC == 5) || (rope->field_0x2DC == 8)) || (rope->field_0x2DC == 9)) {
+    } else if (((rope->m02DC == 5) || (rope->m02DC == 8)) || (rope->m02DC == 9)) {
         return procRopeThrowCatch_init();
     } else {
         checkNextRopeMode();
@@ -543,7 +543,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
             mEquipItem = dItem_GRAPPLING_HOOK_e;
             local_84 = param_0->current.pos - current.pos;
             dVar8 = (local_84.abs() - 95.0f);
-            dVar9 = ((himo2_class*)param_0)->field_0x15F8.y;
+            dVar9 = ((himo2_class*)param_0)->m1120[34].m10.y;
             if (dVar8 > dVar9) {
                 dVar8 = dVar9;
             }
@@ -1047,7 +1047,7 @@ BOOL daPy_lk_c::procRopeDown_init() {
         }
     } else {
         himo2_class* rope = (himo2_class*)mActorKeepRope.getActor();
-        m35A4 = mRopePos.y - rope->field_0x15F8.y;
+        m35A4 = mRopePos.y - rope->m1120[34].m10.y;
     }
     if (current.pos.y <= m35A4) {
         return procRopeHangWait_init(1);
@@ -1237,7 +1237,7 @@ BOOL daPy_lk_c::procRopeThrowCatch() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         m34D0--;
         himo2_class* rope = (himo2_class*)mActorKeepEquip.getActor();
-        if (rope->field_0x2DC == 0 || (m34D0 == 0)) {
+        if (rope->m02DC == 0 || (m34D0 == 0)) {
             checkNextRopeMode();
         }
     }

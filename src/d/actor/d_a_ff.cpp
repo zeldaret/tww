@@ -297,7 +297,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             int uVar1 = fopAcM_GetParam(a_this) & 0xFF;
             if (uVar1 != 0) {
                 fopAcM_SetParam(a_this, fopAcM_GetParam(a_this) & 0xFF00);
-                for (int iVar7 = 0; iVar7 < uVar1; iVar7 = iVar7 + 1) {
+                for (int i = 0; i < uVar1; i++) {
                     fopAcM_prm_class* pfVar4 = fopAcM_CreateAppend();
                     pfVar4->base.position.x = a_this->current.pos.x + cM_rndFX(500.0f);
                     pfVar4->base.position.y = a_this->current.pos.y;
