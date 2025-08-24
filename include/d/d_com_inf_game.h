@@ -576,7 +576,10 @@ public:
     void endMiniGame(u16 i_gameType) {
         mMiniGameType = 0;
         mMinigameFlags ^= 1 << (i_gameType - 1); // toggle Nth bit
-        field_0x4A3E = 0;
+        mMinigameResult = 0;
+    }
+    void setMiniGameResult(u8 i_result) {
+        mMinigameResult = i_result;
     }
 
     void show2dOn() { m2dShow = true; }
@@ -780,7 +783,7 @@ public:
     /* 0x4A38 */ u16 mMinigameFlags;
     /* 0x4A3A */ u8 mMiniGameType;
     /* 0x4A3C */ s16 mMiniGameRupee;
-    /* 0x4A3E */ u8 field_0x4A3E;
+    /* 0x4A3E */ u8 mMinigameResult;
     /* 0x4A40 */ __d_timer_info_c mTimerInfo;
     /* 0x4A54 */ dDlst_window_c* mCurrentWindow;
     /* 0x4A58 */ view_class* mCurrentView;
@@ -2655,6 +2658,10 @@ inline void dComIfGp_startMiniGame(u8 i_gameType) {
 
 inline void dComIfGp_endMiniGame(u16 i_gameType) {
     g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
+}
+
+inline u8 dComIfGp_setMiniGameResult(u8 result) {
+    g_dComIfG_gameInfo.play.setMiniGameResult(result);
 }
 
 enum dActionStatus_e {

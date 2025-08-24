@@ -9,7 +9,7 @@ public:
     void getEyePos() {}
     void seStart(u32) {}
     void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
-    void setCanonGameResult(u8) {}
+    static void setCanonGameResult(u8 result) { canon_game_result = result; }
 
     void set_mtx();
     void initTexPatternAnm(bool);
