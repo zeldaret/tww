@@ -161,7 +161,7 @@ config.binutils_tag = "2.42-1"
 config.compilers_tag = "20250812"
 config.dtk_tag = "v1.6.2"
 config.objdiff_tag = "v3.0.0-beta.14"
-config.sjiswrap_tag = "v1.2.1"
+config.sjiswrap_tag = "v1.2.2"
 config.wibo_tag = "0.7.0"
 
 # Project
