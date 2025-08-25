@@ -337,7 +337,6 @@ public:
     daPy_footData_c();
 
 public:
-    // TODO: is this right?
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
     /* 0x002 */ s16 field_0x002;
