@@ -16,3 +16,6 @@ AccessModifierOffset: -4
 # BreakBeforeTernaryOperators: true
 # AlignConsecutiveAssignments: false
 PackConstructorInitializers: Never
+IncludeCategories:
+  - Regex: '"d/dolzel\.h"'
+    Priority: -1000
