@@ -167,7 +167,7 @@ static BOOL daYougan_Delete(daYougan_c* i_this) {
 /* 0000059C-00000600       .text _daYougan_delete__10daYougan_cFv */
 BOOL daYougan_c::_daYougan_delete() {
     /* Nonmatching */
-    dComIfG_resDelete(&mPhase, m_arcname);
+    dComIfG_resDeleteDemo(&mPhase, m_arcname);
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -179,20 +179,22 @@ BOOL daYougan_c::_daYougan_delete() {
 BOOL daYougan_c::useHeapInit() {
     /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, YOUGAN_BMD_YOUGAN_AWA);
-    JUT_ASSERT(464, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(462, 464), modelData != NULL);
     J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, YOUGAN_BCK_YOUGAN_AWA);
-    JUT_ASSERT(469, anmKey != NULL);
+    JUT_ASSERT(DEMO_SELECT(467,469), anmKey != NULL);
     J3DAnmTextureSRTKey* srtKey = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, YOUGAN_BTK_YOUGAN_AWA);
-    JUT_ASSERT(474, srtKey != NULL);
+    JUT_ASSERT(DEMO_SELECT(472, 474), srtKey != NULL);
 
     yg_awa_num = l_HIO.field_0x06;
     for(s32 i = 0; i < yg_awa_num; i++) {
         field_0x298[i].field_0x00 = 0;
         J3DModel* p_model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         field_0x298[i].field_0x04 = p_model;
+#if VERSION != VERSION_DEMO
         if(field_0x298[i].field_0x04 == NULL) {
             return FALSE;
         }
+#endif
     }
     for(s32 i = 0; i < yg_awa_num; i++) {
         if(!field_0x298[i].field_0x08.init(modelData, anmKey, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
