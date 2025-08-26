@@ -22,6 +22,7 @@
 #include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
+#include "d/actor/d_a_boko.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -1985,13 +1986,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x2D:
-            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2E:
-            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 

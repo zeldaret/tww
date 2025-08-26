@@ -337,7 +337,7 @@ BOOL daPy_lk_c::procGrabReady_init() {
     }
     if (fopAcM_GetName(mpAttnActorA) == PROC_BOKO) {
         daBoko_c* boko = static_cast<daBoko_c*>(mpAttnActorA);
-        boko->mCurrentAction = 3;
+        boko->setNowMode(daBoko_c::Mode_PLAYER_CARRY_e);
     }
     shape_angle.y = fopAcM_searchActorAngleY(this, mpAttnActorA);
     current.angle.y = shape_angle.y;

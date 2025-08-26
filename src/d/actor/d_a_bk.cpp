@@ -669,8 +669,7 @@ static s32 target_info_count;
 static void* s_w_sub(void* param_1, void*) {
     if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BOKO) {
         daBoko_c* boko = (daBoko_c*)param_1;
-        // TODO: enum for boko type
-        if (fopAcM_GetParam(boko) != 4 && !fopAcM_checkCarryNow(boko)) {
+        if (fopAcM_GetParam(boko) != daBoko_c::Type_MOBLIN_SPEAR_e && !fopAcM_checkCarryNow(boko)) {
             if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
                 target_info[target_info_count] = boko;
                 target_info_count++;
@@ -2816,7 +2815,7 @@ static void wepon_search(bk_class* i_this) {
         if (i_this->m0300[1] == 24) {
             if (boko != NULL && !fopAcM_checkCarryNow(boko)) {
                 i_this->m0B30 = 2;
-                if (fopAcM_GetParam(boko) == 0) {
+                if (fopAcM_GetParam(boko) == daBoko_c::Type_BOKO_STICK_e) {
                     i_this->m02D5 = 0;
                     i_this->m1040.SetAtType(AT_TYPE_UNK2000);
                     i_this->m1040.SetAtSe(dCcG_SE_UNK4);
@@ -4207,13 +4206,13 @@ static BOOL daBk_Execute(bk_class* i_this) {
         }
         
         if (i_this->m1214 != 0) {
-            daBoko_c* temp = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
-            if (temp != NULL) {
+            daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
+            if (boko != NULL) {
                 i_this->m1214 = 0;
                 i_this->m0B30 = 1;
-                fopAcM_setCarryNow(temp, FALSE);
+                fopAcM_setCarryNow(boko, FALSE);
                 MtxTrans(-10000.0f, -10000.0f, 0.0f, 0);
-                temp->setMatrix(*calc_mtx);
+                boko->setMatrix(*calc_mtx);
             }
         }
         
@@ -4359,9 +4358,9 @@ static BOOL daBk_Execute(bk_class* i_this) {
     enemy_fire(&i_this->mEnemyFire);
     
     if (i_this->m0B30 != 0) {
-        daBoko_c* r29 = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
-        if (r29 != NULL) {
-            if (fopAcM_checkCarryNow(r29)) {
+        daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->m1200);
+        if (boko != NULL) {
+            if (fopAcM_checkCarryNow(boko)) {
                 if (i_this->m0B7B == 0) {
                     int jointIdx = 0x2C; // buki joint
                     MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(jointIdx), *calc_mtx);
@@ -4394,7 +4393,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
                     s16 angleX = 0x5B1B + REG8_S(5);
                     cMtx_XrotM(*calc_mtx, angleX);
                 }
-                r29->setMatrix(*calc_mtx);
+                boko->setMatrix(*calc_mtx);
                 cXyz sp64;
                 sp64.x = REG8_F(12);
                 sp64.y = REG8_F(13);

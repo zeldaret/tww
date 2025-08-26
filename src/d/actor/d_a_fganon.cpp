@@ -1026,21 +1026,21 @@ void fail(fganon_class* i_this) {
                 kieru_brk(i_this, 2);
                 i_this->m3A4[0] = 10;
                 i_this->mMode = 4;
-                i_this->mBokoID = fopAcM_create(PROC_BOKO, 5, &i_this->current.pos, i_this->current.roomNo);
+                i_this->mBokoID = fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &i_this->current.pos, i_this->current.roomNo);
             }
             break;
         }
         case 4: {
-            daBoko_c* act = (daBoko_c*)fopAcM_SearchByID(i_this->mBokoID);
-            if (act != NULL) {
-                if (!fopAcM_checkCarryNow(act)) {
-                    fopAcM_setCarryNow(act, 0);
+            daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->mBokoID);
+            if (boko != NULL) {
+                if (!fopAcM_checkCarryNow(boko)) {
+                    fopAcM_setCarryNow(boko, 0);
                 }
-                act->setMatrix(i_this->mpKenModel->getBaseTRMtx());
+                boko->setMatrix(i_this->mpKenModel->getBaseTRMtx());
                 if (i_this->m3A4[0] == 0) {
                     fopAcM_delete(i_this);
-                    act->m2BC = 1;
-                    fopAcM_cancelCarryNow(act);
+                    boko->onFloorFlg();
+                    fopAcM_cancelCarryNow(boko);
                 }
             }
             break;
@@ -1261,17 +1261,17 @@ void last_end(fganon_class* i_this) {
         case 4: {
             if (i_this->m3A4[1] <= 4) {
                 if (i_this->m3A4[1] == 4) {
-                    i_this->mBokoID = fopAcM_create(PROC_BOKO, 5, &i_this->current.pos, i_this->current.roomNo);
+                    i_this->mBokoID = fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &i_this->current.pos, i_this->current.roomNo);
                 }
-                daBoko_c* mBoko = (daBoko_c*)fopAcM_SearchByID(i_this->mBokoID);
-                if (mBoko != NULL) {
+                daBoko_c* boko = (daBoko_c*)fopAcM_SearchByID(i_this->mBokoID);
+                if (boko != NULL) {
                     i_this->m2D0 = 2;
-                    if (!fopAcM_checkCarryNow(mBoko)) {
-                        fopAcM_setCarryNow(mBoko, 0);
+                    if (!fopAcM_checkCarryNow(boko)) {
+                        fopAcM_setCarryNow(boko, 0);
                     }
-                    mBoko->setMatrix(i_this->mpKenModel->getBaseTRMtx());
+                    boko->setMatrix(i_this->mpKenModel->getBaseTRMtx());
                     if (i_this->m3A4[1] == 1) {
-                        fopAcM_cancelCarryNow(mBoko);
+                        fopAcM_cancelCarryNow(boko);
                         i_this->mMode = 5;
                         i_this->mB54++;
                         i_this->mB56 = 0;
@@ -2768,7 +2768,7 @@ static cPhs_State daFganon_Create(fopAc_ac_c* i_act) {
     
     if ((i_this->mSwitchNo != 0xFF) && (dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo()) != 0)) {
         if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(0x3A08))) { // Probably a flag to do with beating FF1 so PG spawns?
-            fopAcM_create(PROC_BOKO, 5, &i_this->current.pos, i_this->current.roomNo);
+            fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &i_this->current.pos, i_this->current.roomNo);
         }
         return cPhs_ERROR_e;
     }

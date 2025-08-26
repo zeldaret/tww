@@ -321,10 +321,10 @@ void dStage_roomControl_c::checkDrawArea() const {
     static Mtx l_m[2];
     for (int i = 0; i < 2; i++) {
         mDoMtx_stack_c::transS(pos);
-        f32 scale = darkStatus.getBokoScale(i);
+        f32 scale = darkStatus.getNonScale(i);
         mDoMtx_stack_c::scaleM(scale, scale, scale);
         cMtx_copy(mDoMtx_stack_c::get(), l_m[i]);
-        dComIfGd_setSpotModel(0, l_m[i], darkStatus.getBokoAlpha(i));
+        dComIfGd_setSpotModel(0, l_m[i], darkStatus.getNonAlpha(i));
     }
 }
 

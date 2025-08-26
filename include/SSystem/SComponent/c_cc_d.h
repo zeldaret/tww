@@ -430,7 +430,7 @@ public:
 
 protected:
     /* 0x10 */ u32 mType;
-    /* 0x14 */ u8 mAtp;
+    /* 0x14 */ u8 mAtp; // AtPoint, amount of damage done when attacking
 }; // size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(cCcD_ObjAt));

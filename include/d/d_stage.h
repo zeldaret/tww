@@ -834,24 +834,20 @@ public:
     /* 0x50 */ int mVrboxNum;
 };
 
-struct dStage_darkStatus_c_0C {
-    /* 0x00 */ u8 m00[4];
-}; // size = 0x4;
-
 class dStage_darkStatus_c {
 public:
     /* 0x00 */ u8 mEnvAlpha;
-    /* 0x01 */ u8 mBokoAlpha[2];
-    /* 0x04 */ f32 mBokoScale[2];
-    /* 0x0C */ dStage_darkStatus_c_0C field_0xc;
-    /* 0x10 */ f32 field_0x10[2];
+    /* 0x01 */ u8 mNonAlpha[2];
+    /* 0x04 */ f32 mNonScale[2];
+    /* 0x0C */ u8 mBokoAlpha[4];
+    /* 0x10 */ f32 mBokoScale[2];
     /* 0x18 */ f32 field_0x18[2];
 
     u8 getEnvAlpha() const { return mEnvAlpha; }
+    u8 getNonAlpha(int i) const { return mNonAlpha[i]; }
+    f32 getNonScale(int i) const { return mNonScale[i]; }
     u8 getBokoAlpha(int i) const { return mBokoAlpha[i]; }
     f32 getBokoScale(int i) const { return mBokoScale[i]; }
-    // void getNonAlpha(int i) const {}
-    // void getNonScale(int i) const {}
 }; // size = 0x20
 
 class dBgW;

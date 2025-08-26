@@ -1451,7 +1451,7 @@ bool Act_c::_delete() {
 void Act_c::spec_make_boko(int arg1) {
     M7A0* ptr = &m7A0[0];
     for (s32 i = 0; i < arg1; i++, ptr++) {
-        ptr->m00 = fopAcM_create(PROC_BOKO, 0, &current.pos, fopAcM_GetHomeRoomNo(this));
+        ptr->m00 = fopAcM_create(PROC_BOKO, daBoko_c::Type_BOKO_STICK_e, &current.pos, fopAcM_GetHomeRoomNo(this));
         ptr->m06 = data_spec_boko(i).m00;
         ptr->m08 = ptr->m06;
         ptr->m10 = data_spec_boko(i).m04;

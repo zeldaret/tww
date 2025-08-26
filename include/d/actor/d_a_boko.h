@@ -24,6 +24,27 @@ struct LineKe {
 
 class daBoko_c : public fopAc_ac_c {
 public:
+    enum {
+        /* 0x0 */ Type_BOKO_STICK_e = 0x0,
+        /* 0x1 */ Type_MACHETE_e = 0x1,
+        /* 0x2 */ Type_STALFOS_MACE_e = 0x2,
+        /* 0x3 */ Type_DARKNUT_SWORD_e = 0x3,
+        /* 0x4 */ Type_MOBLIN_SPEAR_e = 0x4,
+        /* 0x5 */ Type_PGANON_SWORD_e = 0x5,
+        Type_COUNT_e,
+        /* 0x7 */ Type_UNK_7_e = 0x7, // TODO: What is this supposed to be? Lit torch? Is this ever set or only read?
+    };
+
+    enum {
+        /* 0x0 */ Mode_WAIT_e = 0x0,
+        /* 0x1 */ Mode_MOVE_e = 0x1,
+        /* 0x2 */ Mode_ENEMY_CARRY_e = 0x2,
+        /* 0x3 */ Mode_PLAYER_CARRY_e = 0x3,
+        /* 0x4 */ Mode_4_e = 0x4,
+        /* 0x5 */ Mode_5_e = 0x5,
+        /* 0x6 */ Mode_THROW_e = 0x6,
+    };
+
     static u32 m_bound_se[6];
     static u32 m_heap_size[6];
     static char* m_arc_name[6];
@@ -31,7 +52,7 @@ public:
     static Vec m_cull_max[6];
 
     typedef BOOL (daBoko_c::*ProcFunc_t)();
-    
+
     daBoko_c();
 
     static Vec m_top_offset[6];
@@ -54,22 +75,25 @@ public:
     f32 getBlurRate() { return m_blur_rate[fopAcM_GetParam(this)]; }
     u8 getSeType() { return m_se_type[fopAcM_GetParam(this)]; }
     
-    int getFlameTimer() { return m2C4; }
-    void getNowMode() {}
-    void setNowMode(int) {}
+    int getFlameTimer() { return mFlameTimer; }
+    u8 getNowMode() { return mNowMode; }
+    void setNowMode(int mode) { mNowMode = mode; }
     void moveStateInit(f32 speedForward, f32 speedY, s16 angleY) {
         speed.y = speedY;
         speedF = speedForward;
         current.angle.y = angleY;
     }
-    void onFloorFlg() {} // maybe: m2BC = 1;
+    void onFloorFlg() { mbFloorFlg = true; }
     void setMatrix(Mtx mtx) {
         if (mpModel) {
             mpModel->setBaseTRMtx(mtx);
         }
     }
     void setRotAngleSpeed(s16 speed) { m2C2 = speed; }
-    void setThrow(s16 param_0) { m2BA = param_0; }
+    void setThrow(s16 param_0) {
+        mbThrow = true;
+        m2CA = param_0;
+    }
 
     void getTopPos(cXyz*);
     void getBlurRootPos(cXyz*);
@@ -94,22 +118,22 @@ public:
     BOOL createHeap();
     cPhs_State create();
 
-public:
+private:
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ mDoExt_brkAnm mBrkAnm;
 #if VERSION > VERSION_DEMO
     /* 0x2B4 */ u32 m2B4;
 #endif
-    /* 0x2B8 */ u8 mCurrentAction;
+    /* 0x2B8 */ u8 mNowMode;
     /* 0x2B9 */ u8 m2B9;
-    /* 0x2BA */ u8 m2BA;
+    /* 0x2BA */ u8 mbThrow;
     /* 0x2BB */ u8 m2BB;
-    /* 0x2BC */ u8 m2BC;
+    /* 0x2BC */ u8 mbFloorFlg;
     /* 0x2BD */ u8 m2BD[0x2C0 - 0x2BD];
     /* 0x2C0 */ s16 m2C0;
     /* 0x2C2 */ s16 m2C2;
-    /* 0x2C4 */ s16 m2C4;
+    /* 0x2C4 */ s16 mFlameTimer;
     /* 0x2C6 */ u8 m2C6[0x2C8 - 0x2C6];
     /* 0x2C8 */ s16 m2C8;
     /* 0x2CA */ s16 m2CA;

@@ -527,10 +527,7 @@ BOOL daPy_lk_c::dProcOpenTreasure_init() {
         if (boko != NULL) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + 0x2000);
-            MtxP mtx = mDoMtx_stack_c::get();
-            if (boko->mpModel != NULL) {
-                boko->mpModel->setBaseTRMtx(mtx);
-            }
+            boko->setMatrix(mDoMtx_stack_c::get());
         }
     }
     fopAc_ac_c* partner_p = fopAcM_getEventPartner(this);

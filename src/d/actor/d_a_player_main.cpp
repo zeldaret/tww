@@ -1103,20 +1103,20 @@ s32 daPy_lk_c::setItemModel() {
     MtxP pMVar14 = mpCLModel->getAnmMtx(0xD);
     MtxP pMVar13 = mpCLModel->getAnmMtx(0x8);
     MtxP pMVar6 = mpCLModel->getAnmMtx(0xC);
-    daBoko_c* pfVar11 = (daBoko_c*)mActorKeepEquip.getActor();
-    if (pfVar11 != NULL && mEquipItem == daPyItem_BOKO_e) {
+    daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+    if (boko != NULL && mEquipItem == daPyItem_BOKO_e) {
         mDoMtx_stack_c::transS(40.0f, 47.0f, 2.1f);
         mDoMtx_stack_c::XYZrotM(0x3E38, -0x5D4, 0x66F8);
-        if (fopAcM_GetParam(pfVar11) == 2 || fopAcM_GetParam(pfVar11) == 3) {
+        if (fopAcM_GetParam(boko) == daBoko_c::Type_STALFOS_MACE_e || fopAcM_GetParam(boko) == daBoko_c::Type_DARKNUT_SWORD_e) {
             mDoMtx_stack_c::transM(0.0f, 0.0f, 20.0f);
-        } else if (fopAcM_GetParam(pfVar11) == 4) {
+        } else if (fopAcM_GetParam(boko) == daBoko_c::Type_MOBLIN_SPEAR_e) {
             mDoMtx_stack_c::transM(0.0f, 0.0f, 70.0f);
-        } else if (fopAcM_GetParam(pfVar11) == 5) {
+        } else if (fopAcM_GetParam(boko) == daBoko_c::Type_PGANON_SWORD_e) {
             mDoMtx_stack_c::transM(0.0f, 0.0f, 30.0f);
         }
         mDoMtx_stack_c::revConcat(pMVar13);
         MtxP mtx = mDoMtx_stack_c::now;
-        pfVar11->setMatrix(mtx);
+        boko->setMatrix(mtx);
     }
     if (mpEquipItemBtk != NULL) {
         dVar16 = mpEquipItemBtk->getFrame();
@@ -1185,9 +1185,9 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleCapModel != NULL) {
                     mpBottleCapModel->setBaseTRMtx(pMVar13);
                 }
-            } else if (mEquipItem == dItem_HOOKSHOT_e && pfVar11 != NULL) {
-                if (fopAcM_GetParam(pfVar11) != 0) {
-                    if (fopAcM_GetParam(pfVar11) == 1) {
+            } else if (mEquipItem == dItem_HOOKSHOT_e && boko != NULL) {
+                if (fopAcM_GetParam(boko) != daBoko_c::Type_BOKO_STICK_e) {
+                    if (fopAcM_GetParam(boko) == daBoko_c::Type_MACHETE_e) {
                         m35EC += 1.0f;
                     } else {
                         m35EC -= 1.0f;
@@ -13027,7 +13027,7 @@ const daPy_anmIndex_c* daPy_lk_c::getAnmData(daPy_ANM anm) const {
 BOOL daPy_lk_c::checkGrabWeapon(int r4) {
     if (mEquipItem == daPyItem_BOKO_e && mActorKeepEquip.getActor() != NULL) {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
-        if (r4 == 6 || fopAcM_GetParam(boko) == r4) {
+        if (r4 == daBoko_c::Type_COUNT_e || fopAcM_GetParam(boko) == r4) {
             return TRUE;
         }
     }

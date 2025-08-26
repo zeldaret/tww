@@ -20,95 +20,48 @@
 #include "SSystem/SComponent/c_counter.h"
 
 u32 daBoko_c::m_bound_se[] = {
-    JA_SE_CM_BOKOBOU_BOUND, JA_SE_CM_NATA_BOUND, JA_SE_OBJ_ST_CLUB_FALL, JA_SE_OBJ_TN_SWORD_FALL, JA_SE_CM_LANCE_BOUND, JA_SE_OBJ_TN_SWORD_FALL
+    /* Type_BOKO_STICK_e    */ JA_SE_CM_BOKOBOU_BOUND,
+    /* Type_MACHETE_e       */ JA_SE_CM_NATA_BOUND,
+    /* Type_STALFOS_MACE_e  */ JA_SE_OBJ_ST_CLUB_FALL,
+    /* Type_DARKNUT_SWORD_e */ JA_SE_OBJ_TN_SWORD_FALL,
+    /* Type_MOBLIN_SPEAR_e  */ JA_SE_CM_LANCE_BOUND,
+    /* Type_PGANON_SWORD_e  */ JA_SE_OBJ_TN_SWORD_FALL,
 };
 
 u32 daBoko_c::m_heap_size[] = {
-    0x2300,
-    0x1240,
-    0x1240,
-    0x1240,
-#if VERSION == VERSION_DEMO
-    0x3000,
-#else
-    0x4200,
-#endif
-    0x2000
+    /* Type_BOKO_STICK_e    */ 0x2300,
+    /* Type_MACHETE_e       */ 0x1240,
+    /* Type_STALFOS_MACE_e  */ 0x1240,
+    /* Type_DARKNUT_SWORD_e */ 0x1240,
+    /* Type_MOBLIN_SPEAR_e  */ DEMO_SELECT(0x3000, 0x4200),
+    /* Type_PGANON_SWORD_e  */ 0x2000
 };
 
 char* daBoko_c::m_arc_name[] = {
-    "Boko",  /* Boko stick */
-    "Nata",  /* Bokoblin machete */
-    "Club",  /* Stalfos mace/club */
-    "Tkwn",  /* Darknut sword */
-    "Spear", /* Moblin spear */
-    "Pgsw"   /* Phantom Ganon's sword */
+    /* Type_BOKO_STICK_e    */ "Boko",
+    /* Type_MACHETE_e       */ "Nata",
+    /* Type_STALFOS_MACE_e  */ "Club",
+    /* Type_DARKNUT_SWORD_e */ "Tkwn",
+    /* Type_MOBLIN_SPEAR_e  */ "Spear",
+    /* Type_PGANON_SWORD_e  */ "Pgsw"
 };
 
-Vec daBoko_c::m_cull_min[6] = {
-    {
-        -20.0f,
-        -10.0f,
-        -95.0f,
-    },
-    {
-        -20.0f,
-        -10.0f,
-        -95.0f,
-    },
-    {
-        -35.0f,
-        -35.0f,
-        -125.0f,
-    },
-    {
-        -45.0f,
-        -10.0f,
-        -145.0f,
-    },
-    {
-        -20.0f,
-        -20.0f,
-        -180.0f,
-    },
-    {
-        -50.0f,
-        -20.0f,
-        -140.0f,
-    },
+Vec daBoko_c::m_cull_min[] = {
+    /* Type_BOKO_STICK_e    */ {-20.0f, -10.0f, -95.0f},
+    /* Type_MACHETE_e       */ {-20.0f, -10.0f, -95.0f},
+    /* Type_STALFOS_MACE_e  */ {-35.0f, -35.0f, -125.0f},
+    /* Type_DARKNUT_SWORD_e */ {-45.0f, -10.0f, -145.0f},
+    /* Type_MOBLIN_SPEAR_e  */ {-20.0f, -20.0f, -180.0f},
+    /* Type_PGANON_SWORD_e  */ {-50.0f, -20.0f, -140.0f},
 };
 
-Vec daBoko_c::m_cull_max[6] = {
-    {
-        20.0f,
-        10.0f,
-        95.0f,
-    },
-    {
-        20.0f,
-        10.0f,
-        95.0f,
-    },
-    {
-        35.0f,
-        35.0f,
-        120.0f,
-    },
-    {
-        45.0f,
-        10.0f,
-        130.0f,
-    },
-    {
-        20.0f,
-        20.0f,
-        200.0f,
-    },
-    {
-        50.0f,
-        20.0f,
-        120.0f,
-    },
+Vec daBoko_c::m_cull_max[] = {
+    /* Type_BOKO_STICK_e    */ {20.0f, 10.0f, 95.0f},
+    /* Type_MACHETE_e       */ {20.0f, 10.0f, 95.0f},
+    /* Type_STALFOS_MACE_e  */ {35.0f, 35.0f, 120.0f},
+    /* Type_DARKNUT_SWORD_e */ {45.0f, 10.0f, 130.0f},
+    /* Type_MOBLIN_SPEAR_e  */ {20.0f, 20.0f, 200.0f},
+    /* Type_PGANON_SWORD_e  */ {50.0f, 20.0f, 120.0f},
 };
 
 static cXyz l_break_particle_offset(0.0f, 0.0f, 30.0f);
@@ -122,8 +75,12 @@ static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
+#ifdef __MWERKS__
+    mpLineKe->lineMat.update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
+#else
     GXColor color = {0xFF, 0x64, 0x00, 0xFF};
     mpLineKe->lineMat.update(0xA, 1.25f, color, 2, &tevStr);
+#endif
     dComIfGd_set3DlineMat(&mpLineKe->lineMat);
 }
 
@@ -223,49 +180,49 @@ BOOL daBoko_c::draw() {
         mParticleCallBack.getEmitter()->clearStatus(4);
     }
 
-    if (m2C4 != 0) {
-        dStage_darkStatus_c* pdVar4 = dStage_roomControl_c::getDarkStatus();
-        if (pdVar4 != NULL) {
+    if (mFlameTimer != 0) {
+        dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
+        if (dark_stts != NULL) {
             GXColor color = {0xEB, 0x7D, 0, 0};
             dComIfGd_setAlphaModelColor(color);
 
             s32 i;
             for (i = 0; i < 2; i++) {
-                dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], pdVar4->field_0xc.m00[i]);
+                dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], dark_stts->getBokoAlpha(i));
             }
 
-            if (mCurrentAction == 3 && dStage_roomControl_c::getDarkMode() != 0) {
+            if (getNowMode() == Mode_PLAYER_CARRY_e && dStage_roomControl_c::getDarkMode() != 0) {
                 for (s32 j = i; j < 4; j++) {
-                    dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], pdVar4->field_0xc.m00[j]);
+                    dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], dark_stts->getBokoAlpha(j));
                 }
             }
         }
     }
 
-    if (mCurrentAction == 3 && player->checkPlayerNoDraw()) {
+    if (getNowMode() == Mode_PLAYER_CARRY_e && player->checkPlayerNoDraw()) {
         return TRUE;
     }
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    if (fopAcM_GetParam(this) == 5) {
+    if (fopAcM_GetParam(this) == Type_PGANON_SWORD_e) {
         mBrkAnm.entry(mpModel->getModelData());
     }
 
     mDoExt_modelEntryDL(mpModel);
 
-    if (fopAcM_GetParam(this) == 5) {
+    if (fopAcM_GetParam(this) == Type_PGANON_SWORD_e) {
         mBrkAnm.remove(mpModel->getModelData());
     }
 
 #if VERSION > VERSION_DEMO
-    if (fopAcM_GetParam(this) == 2 && mCurrentAction != 3 && mCurrentAction != 2) {
+    if (fopAcM_GetParam(this) == Type_STALFOS_MACE_e && getNowMode() != Mode_PLAYER_CARRY_e && getNowMode() != Mode_ENEMY_CARRY_e) {
         cXyz sp0C(current.pos.x, current.pos.y + 100.0f, current.pos.z);
         m2B4 = dComIfGd_setShadow(m2B4, 1, mpModel, &sp0C, 400.0f, 0.0f, current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr);
     }
 #endif
 
-    if (&mpLineKe->lineMat != NULL) {
+    if (mpLineKe != NULL) {
         keDraw();
     }
     return TRUE;
@@ -278,15 +235,15 @@ static BOOL daBoko_Draw(daBoko_c* i_this) {
 
 /* 00000DE4-00000EB0       .text setTopRootPos__8daBoko_cFi */
 void daBoko_c::setTopRootPos(int arg1) {
-    s32 iVar1 = fopAcM_GetParam(this);
+    s32 type = fopAcM_GetParam(this);
     if (arg1 != 0) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 5.0f, current.pos.z);
         mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     } else {
         mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     }
-    mDoMtx_stack_c::multVec(m_top_offset + iVar1, &m2D0);
-    mDoMtx_stack_c::multVec(m_root_offset + iVar1, &m2DC);
+    mDoMtx_stack_c::multVec(&m_top_offset[type], &m2D0);
+    mDoMtx_stack_c::multVec(&m_root_offset[type], &m2DC);
 }
 
 /* 00000EB0-00000F60       .text setBaseMatrix__8daBoko_cFv */
@@ -294,7 +251,7 @@ void daBoko_c::setBaseMatrix() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 5.0f, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 #if VERSION > VERSION_DEMO
-    if (fopAcM_GetParam(this) == 2) {
+    if (fopAcM_GetParam(this) == Type_STALFOS_MACE_e) {
         mDoMtx_stack_c::XrotM(-1000);
         mDoMtx_stack_c::transM(0.0f, 10.0f, 0.0f);
     }
@@ -304,23 +261,24 @@ void daBoko_c::setBaseMatrix() {
 
 /* 00000F60-00000FA4       .text checkNoDraw__8daBoko_cFv */
 BOOL daBoko_c::checkNoDraw() {
-    return m2B9 || mCurrentAction == 4 || (mCurrentAction == 3 && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e));
+    return m2B9 || getNowMode() == Mode_4_e || (getNowMode() == Mode_PLAYER_CARRY_e && dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK80_e));
 }
 
 /* 00000FA4-00001340       .text setFlameEffect__8daBoko_cFv */
 void daBoko_c::setFlameEffect() {
+    /* Nonmatching */
     static const s16 base_angle[] = {150, 200, 180, 120};
 
-    dStage_darkStatus_c* pdVar3 = dStage_roomControl_c::getDarkStatus();
+    dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
 
-    if (pdVar3 != NULL) {
+    if (dark_stts != NULL) {
         for (s32 i = 0; i < 4; i++) {
             cLib_addCalc2(&m7E4, cM_rndF(0.2f) + 1.0f, 0.5f, 0.01f);
-            f32 fVar10 = m7E4 * pdVar3->field_0x10[i];
+            f32 scale = m7E4 * dark_stts->getBokoScale(i);
             s16 y = g_Counter.mTimer * base_angle[i];
             mDoMtx_stack_c::transS(m2D0.x, m2D0.y, m2D0.z);
             mDoMtx_stack_c::ZXYrotM(0, y, y);
-            mDoMtx_stack_c::scaleM(fVar10, fVar10, fVar10);
+            mDoMtx_stack_c::scaleM(scale, scale, scale);
             MTXCopy(mDoMtx_stack_c::get(), mAlphaModelMtx[i]);
         }
     }
@@ -413,7 +371,7 @@ BOOL daBoko_c::procWait_init() {
     m2C2 = 0;
     mCurrentProc = &daBoko_c::procWait;
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    mCurrentAction = 0;
+    setNowMode(Mode_WAIT_e);
     fopAcM_cancelCarryNow(this);
     gravity = -3.0f;
     return TRUE;
@@ -426,13 +384,13 @@ BOOL daBoko_c::procWait() {
         mCurrentProc = &daBoko_c::procCarry;
         speedF = 0.0f;
         speed = cXyz::Zero;
-        if (mCurrentAction != 3) {
-            mCurrentAction = 2;
+        if (getNowMode() != Mode_PLAYER_CARRY_e) {
+            setNowMode(Mode_ENEMY_CARRY_e);
         }
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-        m2BC = 0;
+        mbFloorFlg = false;
         procCarry();
-    } else if (m2BC == 0) {
+    } else if (!mbFloorFlg) {
         fopAcM_posMoveF(this, NULL);
         mAcch.CrrPos(*dComIfG_Bgsp());
         if (!mAcch.ChkGroundHit()) {
@@ -447,34 +405,35 @@ BOOL daBoko_c::procWait() {
 /* 000016E4-0000175C       .text procMove_init__8daBoko_cFv */
 BOOL daBoko_c::procMove_init() {
     mCurrentProc = &daBoko_c::procMove;
-    mCurrentAction = 1;
+    setNowMode(Mode_MOVE_e);
     fopAcM_setCarryNow(this, FALSE);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     m2BB = 0x14;
-    m2BC = 0;
+    mbFloorFlg = false;
     return TRUE;
 }
 
 /* 0000175C-00001E94       .text procMove__8daBoko_cFv */
 BOOL daBoko_c::procMove() {
+    /* Nonmatching - fpr regswap */
     BOOL bVar4 = FALSE;
     fopAcM_posMoveF(this, NULL);
-    f32 fVar14 = m2DC.y;
-    f32 fVar15 = m2D0.y;
+    f32 fVar14_2 = m2DC.y;
+    f32 fVar15_2 = m2D0.y;
     setTopRootPos(1);
 
-    cXyz sp1C(m2DC.x, fVar14, m2DC.z);
+    cXyz sp1C(m2DC.x, fVar14_2, m2DC.z);
     m_ground_check.SetPos(&sp1C);
 
-    fVar14 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
+    f32 fVar14 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
     if (fVar14 == -G_CM3D_F_INF) {
         fVar14 = mAcch.GetGroundH();
     }
     f32 fVar2 = m2DC.y - fVar14;
-    sp1C.set(m2D0.x, fVar15, m2D0.z);
+    sp1C.set(m2D0.x, fVar15_2, m2D0.z);
     m_ground_check.SetPos(&sp1C);
 
-    fVar15 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
+    f32 fVar15 = dComIfG_Bgsp()->GroundCross(&m_ground_check);
     if (fVar15 == -G_CM3D_F_INF) {
         fVar15 = mAcch.GetGroundH();
     }
@@ -547,10 +506,16 @@ BOOL daBoko_c::procMove() {
     }
 
     if (m2C0 != 0) {
-        cLib_addCalcAngleS(&shape_angle.z, -0x4000 - abs(shape_angle.z), 5, 0x1000, 0x100);
+        s16 target_angle_z;
+        if (abs(shape_angle.z) <= 0x4000) {
+            target_angle_z = 0;
+        } else {
+            target_angle_z = -0x8000;
+        }
+        cLib_addCalcAngleS(&shape_angle.z, target_angle_z, 5, 0x1000, 0x100);
     }
 
-    fVar14 = speed.y;
+    f32 fVar14_3 = speed.y;
     mAcch.CrrPos(*dComIfG_Bgsp());
     setRoomInfo();
 
@@ -596,7 +561,7 @@ BOOL daBoko_c::procMove() {
             speedF *= 0.7f;
         }
     } else {
-        speed.y = fVar14;
+        speed.y = fVar14_3;
     }
     setBaseMatrix();
     return TRUE;
@@ -671,7 +636,7 @@ BOOL daBoko_c::procThrow() {
 
 /* 000021B8-00002624       .text procCarry__8daBoko_cFv */
 BOOL daBoko_c::procCarry() {
-    if (fopAcM_checkCarryNow(this) || m2BA == 0) {
+    if (fopAcM_checkCarryNow(this) || !mbThrow) {
         mDoMtx_multVecZero(mpModel->getBaseTRMtx(), &current.pos);
         mDoMtx_MtxToRot(mpModel->getBaseTRMtx(), &shape_angle);
     }
@@ -683,9 +648,9 @@ BOOL daBoko_c::procCarry() {
         fopAcM_setCarryNow(this, FALSE);
         setTopRootPos(1);
 
-        if (m2BA != 0) {
+        if (mbThrow) {
             mCurrentProc = &daBoko_c::procThrow;
-            mCurrentAction = 6;
+            setNowMode(Mode_THROW_e);
             gravity = 0.0f;
             shape_angle.x = m2CA;
             shape_angle.y = link->shape_angle.y;
@@ -693,7 +658,7 @@ BOOL daBoko_c::procCarry() {
             speedF = 70.0f * cM_scos(shape_angle.x);
             speed.y = -70.0f * cM_ssin(shape_angle.x);
             m2C8 = 2;
-            m2BA = 0;
+            mbThrow = false;
             mCps.ResetAtHit();
             m_line_check.Set(&linkFootPos, &current.pos, this);
 
@@ -709,7 +674,7 @@ BOOL daBoko_c::procCarry() {
             } else {
                 procThrow();
             }
-        } else if (m2BC != 0) {
+        } else if (mbFloorFlg) {
             if (shape_angle.z >= 0x4000) {
                 shape_angle.z = 0;
                 shape_angle.x += 0x8000;
@@ -718,7 +683,7 @@ BOOL daBoko_c::procCarry() {
             procWait_init();
         } else {
             current.angle.y = shape_angle.y + 0x8000;
-            if (mCurrentAction == 3) {
+            if (getNowMode() == Mode_PLAYER_CARRY_e) {
                 m_line_check.Set(&linkFootPos, &current.pos, this);
                 if (dComIfG_Bgsp()->LineCross(&m_line_check)) {
                     current.pos = m_line_check.GetCross();
@@ -765,13 +730,13 @@ BOOL daBoko_c::execute() {
     if (mSph.ChkTgHit()) {
         cCcD_Obj* pcVar2 = mSph.GetTgHitObj();
         if (pcVar2 != NULL) {
-            if (m2C4 > 0 && pcVar2->ChkAtType(AT_TYPE_WATER)) {
-                m2C4 = 1;
+            if (mFlameTimer > 0 && pcVar2->ChkAtType(AT_TYPE_WATER)) {
+                mFlameTimer = 1;
                 bVar4 = TRUE;
-            } else if (m2C4 == 0 && pcVar2->ChkAtType(AT_TYPE_UNK20000 | AT_TYPE_FIRE)) {
+            } else if (mFlameTimer == 0 && pcVar2->ChkAtType(AT_TYPE_UNK20000 | AT_TYPE_FIRE)) {
                 mDoAud_seStart(JA_SE_OBJ_TORCH_IGNITION, &m2D0, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
                 fopAcM_SetCullSize(this, fopAc_CULLSPHERE_6_e);
-                m2C4 = 900;
+                mFlameTimer = 900;
             }
         }
     }
@@ -779,20 +744,20 @@ BOOL daBoko_c::execute() {
     mpModel->calc();
     setTopRootPos(0);
 
-    if (m2C4 != 0) {
-        if (mCurrentAction != 2) {
-            m2C4--;
+    if (mFlameTimer != 0) {
+        if (getNowMode() != Mode_ENEMY_CARRY_e) {
+            mFlameTimer--;
         }
 
         f32 waterY;
         if (bVar4 || (fopAcM_getWaterY(&m2D0, &waterY) && waterY >= m2D0.y)) {
-            if (m2C4 != 0) {
+            if (mFlameTimer != 0) {
                 dComIfGp_particle_set(dPa_name::ID_COMMON_035A, &m2D0);
             }
-            m2C4 = 0;
+            mFlameTimer = 0;
         }
 
-        if (m2C4 != 0) {
+        if (mFlameTimer != 0) {
             setFlameEffect();
         } else {
             fopAcM_SetCullSize(this, fopAc_CULLBOX_CUSTOM_e);
@@ -810,26 +775,26 @@ BOOL daBoko_c::execute() {
         mLight.mPower = 0.0f;
     }
 
-    if (fopAcM_GetParam(this) == 0) {
-        if (m2C4 > 0) {
+    if (fopAcM_GetParam(this) == Type_BOKO_STICK_e) {
+        if (mFlameTimer > 0) {
             mSph.OnAtSPrmBit(cCcD_TgSPrm_Set_e);
         } else {
             mSph.OffAtSPrmBit(cCcD_TgSPrm_Set_e);
         }
         mSph.SetC(m2D0);
         dComIfG_Ccsp()->Set(&mSph);
-        if (mCurrentAction == 3) {
+        if (getNowMode() == Mode_PLAYER_CARRY_e) {
             dComIfG_Ccsp_SetMass(&mSph, 1);
         } else {
             dComIfG_Ccsp_SetMass(&mSph, 4);
         }
     }
 
-    if (&mpLineKe->lineMat != NULL) {
+    if (mpLineKe != NULL) {
         keCalc();
     }
 
-    if (fopAcM_GetParam(this) == 5) {
+    if (fopAcM_GetParam(this) == Type_PGANON_SWORD_e) {
         if (dComIfGs_isEventBit(0x3a08)) {
             mBrkAnm.play();
             bVar4 = true;
@@ -875,14 +840,14 @@ static BOOL daBoko_createHeap(fopAc_ac_c* i_this) {
 BOOL daBoko_c::createHeap() {
     static const s32 model_idx[] = {BOKO_BDL_BOKO, NATA_BDL_BK_NATA, CLUB_BDL_ST_BUKI, TKWN_BDL_TN_KEN1, SPEAR_BDL_MO_YARI, PGSW_BDL_BPG_KEN1};
 
-    u32 uVar5 = fopAcM_GetParam(this);
-    if (uVar5 >= 6) {
+    u32 type = fopAcM_GetParam(this);
+    if (type >= Type_COUNT_e) {
         JUT_ASSERT(DEMO_SELECT(1702, 1740), FALSE);
     }
 
-    u32 unused = uVar5 == 5;
+    u32 unused = type == Type_PGANON_SWORD_e;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name[uVar5], model_idx[uVar5]);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name[type], model_idx[type]));
     JUT_ASSERT(DEMO_SELECT(1708, 1746), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -890,7 +855,7 @@ BOOL daBoko_c::createHeap() {
         return FALSE;
     }
 
-    if (uVar5 == 4) {
+    if (type == 4) {
         mpLineKe = new LineKe();
         if (mpLineKe == NULL) {
             return FALSE;
@@ -899,9 +864,11 @@ BOOL daBoko_c::createHeap() {
         if (!mpLineKe->lineMat.init(0x10, 10, 0)) {
             return FALSE;
         }
-    } else if (uVar5 == 5 &&
+    } else if (type == 5 &&
                !mBrkAnm.init(
-                   modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1), true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
+                   modelData,
+                   static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Pgsw", PGSW_BRK_KIERU_KEN1)),
+                   true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE
                ))
     {
         return FALSE;
@@ -972,21 +939,21 @@ cPhs_State daBoko_c::create() {
 
     fopAcM_SetupActor(this, daBoko_c);
 
-    u32 uVar4 = fopAcM_GetParam(this);
-    if (uVar4 == 7) {
-        uVar4 = 0;
-        fopAcM_SetParam(this, uVar4);
+    u32 type = fopAcM_GetParam(this);
+    if (type == Type_UNK_7_e) {
+        type = Type_BOKO_STICK_e;
+        fopAcM_SetParam(this, type);
         fopAcM_SetCullSize(this, fopAc_CULLSPHERE_6_e);
-        m2C4 = 900;
+        mFlameTimer = 900;
     }
 
-    cPhs_State PVar5 = dComIfG_resLoad(&mPhase, m_arc_name[uVar4]);
+    cPhs_State PVar5 = dComIfG_resLoad(&mPhase, m_arc_name[type]);
     if (PVar5 == cPhs_COMPLEATE_e) {
-        if (uVar4 >= 6) {
+        if (type >= Type_COUNT_e) {
             return cPhs_ERROR_e;
         }
 
-        if (!fopAcM_entrySolidHeap(this, daBoko_createHeap, m_heap_size[uVar4])) {
+        if (!fopAcM_entrySolidHeap(this, daBoko_createHeap, m_heap_size[type])) {
             return cPhs_ERROR_e;
         }
 
@@ -997,9 +964,9 @@ cPhs_State daBoko_c::create() {
         mpModel->setBaseScale(scale);
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
 
-        Vec* min = &m_cull_min[uVar4];
+        Vec* min = &m_cull_min[type];
         fopAcM_SetMin(this, min->x, min->y, min->z);
-        Vec* max = &m_cull_max[uVar4];
+        Vec* max = &m_cull_max[type];
         fopAcM_SetMax(this, max->x, max->y, max->z);
 
         mAcchCir.SetWall(10.0f, 60.0f);
@@ -1020,24 +987,24 @@ cPhs_State daBoko_c::create() {
         fopAcM_SetMaxFallSpeed(this, -100.0f);
         mStts.Init(10, 0xff, this);
 
-        if (uVar4 == 0) {
+        if (type == Type_BOKO_STICK_e) {
             mpModel->getModelData()->getJointTree().getJointNodePointer(2)->getMesh()->getShape()->hide();
         }
         mSph.Set(sph_src);
         mSph.SetStts(&mStts);
         mCps.Set(at_cps_src);
         mCps.SetStts(&mStts);
-        mCps.SetAtType(m_at_type[fopAcM_GetParam(this)]);
-        mCps.SetAtAtp(m_at_point[fopAcM_GetParam(this)]);
-        mCps.SetAtSe(m_se_type[fopAcM_GetParam(this)]);
-        mCps.SetR(m_cps_r[fopAcM_GetParam(this)]);
+        mCps.SetAtType(getAtType());
+        mCps.SetAtAtp(getAtPoint());
+        mCps.SetAtSe(getSeType());
+        mCps.SetR(getCpsR());
 
         mCurrentProc = &daBoko_c::procWait;
 
         setBaseMatrix();
         setTopRootPos(0);
 
-        if (m2C4 != 0) {
+        if (mFlameTimer != 0) {
             m7E4 = 1.0f;
             setFlameEffect();
         }
@@ -1048,7 +1015,7 @@ cPhs_State daBoko_c::create() {
 
         mpModel->calc();
 
-        if (uVar4 == 0) {
+        if (type == Type_BOKO_STICK_e) {
             dKy_plight_set(&mLight);
             mLight.mColor.r = 600;
             mLight.mColor.g = 400;

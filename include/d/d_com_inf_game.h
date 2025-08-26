@@ -43,7 +43,7 @@ enum daPy__PlayerStatus0 {
     daPyStts0_UNK10_e          = 0x00000010,
     daPyStts0_UNK20_e          = 0x00000020,
     daPyStts0_UNK40_e          = 0x00000040,
-    daPyStts0_UNK80_e          = 0x00000080,
+    daPyStts0_UNK80_e          = 0x00000080, // Maybe inside a Baba Bud before being spat out?
     daPyStts0_UNK100_e         = 0x00000100,
     daPyStts0_UNK200_e         = 0x00000200,
     daPyStts0_UNK400_e         = 0x00000400,
