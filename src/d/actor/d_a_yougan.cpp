@@ -35,7 +35,6 @@ char daYougan_c::m_arcname[] = "Yougan";
 
 /* 000000EC-00000158       .text __ct__14daYOUGAN_HIO_cFv */
 daYOUGAN_HIO_c::daYOUGAN_HIO_c() {
-    /* Nonmatching */
     mNo = -1;
     field_0x22 = 0;
     field_0x06 = 16;
@@ -56,7 +55,6 @@ static BOOL daYougan_Draw(daYougan_c* i_this) {
 
 /* 00000178-000002A8       .text _daYougan_draw__10daYougan_cFv */
 BOOL daYougan_c::_daYougan_draw() {
-    /* Nonmatching */
     yg_awa_num = l_HIO.field_0x06;
     for (s32 i = 0; i < yg_awa_num; i++) {
         if (l_HIO.field_0x20) {
@@ -92,7 +90,6 @@ static BOOL daYougan_Execute(daYougan_c* i_this) {
 
 /* 000002C8-00000554       .text _daYougan_execute__10daYougan_cFv */
 BOOL daYougan_c::_daYougan_execute() {
-    /* Nonmatching */
     yg_awa_num = l_HIO.field_0x06;
 
     for (s32 i = 0; i < yg_awa_num; i++) {
@@ -155,7 +152,6 @@ static BOOL daYougan_IsDelete(daYougan_c* i_this) {
 
 /* 00000574-0000057C       .text _daYougan_isdelete__10daYougan_cFv */
 BOOL daYougan_c::_daYougan_isdelete() {
-    /* Nonmatching */
     return TRUE;
 }
 
@@ -166,7 +162,6 @@ static BOOL daYougan_Delete(daYougan_c* i_this) {
 
 /* 0000059C-00000600       .text _daYougan_delete__10daYougan_cFv */
 BOOL daYougan_c::_daYougan_delete() {
-    /* Nonmatching */
     dComIfG_resDeleteDemo(&mPhase, m_arcname);
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
@@ -177,7 +172,6 @@ BOOL daYougan_c::_daYougan_delete() {
 
 /* 00000600-00000884       .text useHeapInit__10daYougan_cFv */
 BOOL daYougan_c::useHeapInit() {
-    /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, YOUGAN_BMD_YOUGAN_AWA);
     JUT_ASSERT(DEMO_SELECT(462, 464), modelData != NULL);
     J3DAnmTransform* anmKey = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, YOUGAN_BCK_YOUGAN_AWA);
@@ -211,7 +205,6 @@ BOOL daYougan_c::useHeapInit() {
 
 /* 00000884-000008A4       .text daYougan_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daYougan_solidHeapCB(fopAc_ac_c* i_this) {
-    /* Nonmatching */
     return ((daYougan_c*)i_this)->useHeapInit();
 
 }
@@ -223,7 +216,6 @@ static cPhs_State daYougan_Create(fopAc_ac_c* i_this) {
 
 /* 000008C4-000009C8       .text _daYougan_create__10daYougan_cFv */
 cPhs_State daYougan_c::_daYougan_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daYougan_c);
 
     cPhs_State state = dComIfG_resLoad(&this->mPhase, m_arcname);
