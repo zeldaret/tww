@@ -32,7 +32,7 @@ public:
         /* 0x4 */ Type_MOBLIN_SPEAR_e = 0x4,
         /* 0x5 */ Type_PGANON_SWORD_e = 0x5,
         Type_COUNT_e,
-        /* 0x7 */ Type_UNK_7_e = 0x7, // TODO: What is this supposed to be? Lit torch? Is this ever set or only read?
+        Type_UNK_7_e, // TODO: Seems like a special value and not an index? Seems like it may represent a torch that starts lit. Is this ever set or only read?
     };
 
     enum {
