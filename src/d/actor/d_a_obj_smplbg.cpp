@@ -23,7 +23,7 @@ const daObjSmplbg::Act_c::Attr_c daObjSmplbg::Act_c::M_attr[] = {
     /* mCullMaxX     */ 750,
     /* mCullMaxY     */ 0,
     /* mCullMaxZ     */ 0,
-    /* mEyeOffset    */ 1687.0f
+    /* mEyeOffset    */ 1687.0f,
 };
 
 Mtx daObjSmplbg::Act_c::M_tmp_mtx;

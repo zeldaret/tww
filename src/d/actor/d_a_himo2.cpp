@@ -1762,12 +1762,10 @@ static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f,
-                0.0f,
-                0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 20.0f,
-            },
+            }},
         };
         a_this->m2014.Init(0xFF, 0xFF, a_this);
         a_this->m2050.Set(sph_src);

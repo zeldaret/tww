@@ -35,7 +35,7 @@ const Attr_c L_attr = {
     /* mCrushDuration     */ 18,
     /* m1C                */ 0.0f, 
     /* m20                */ 0.8f,
-    /* m24                */ 0.45f
+    /* m24                */ 0.45f,
 };
 
 inline const Attr_c & attr() { return L_attr; }

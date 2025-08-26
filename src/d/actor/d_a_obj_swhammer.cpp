@@ -36,7 +36,7 @@ namespace daObjSwhammer {
             /* mCrushDuration     */ 18,
             /* mUncrushSpeed0     */ 0.0f,
             /* mUncrushSpring     */ 0.8f,
-            /* mUncrushSpeedDecay */ 0.45f
+            /* mUncrushSpeedDecay */ 0.45f,
         };
 
         inline const Attr_c & attr() { return L_attr; }

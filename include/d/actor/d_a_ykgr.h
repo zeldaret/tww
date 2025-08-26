@@ -41,7 +41,7 @@ public:
         if (m_emitter == NULL) {
             return;
         }
-        m_emitter->setStatus(JPAEmtrStts_StopDraw);
+        m_emitter->stopDrawParticle();
         return;
     }
     void setAimRate(float) {}
@@ -51,7 +51,7 @@ public:
         if (m_emitter == NULL) {
             return;
         }
-        m_emitter->clearStatus(JPAEmtrStts_StopDraw);
+        m_emitter->playDrawParticle();
         return;
     }
     void start() {

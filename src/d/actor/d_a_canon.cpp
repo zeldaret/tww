@@ -5,11 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_canon.h"
-#include "/d/actor/d_a_npc_kg2.h"
-#include "/d/actor/d_a_player.h"
-#include "/d/actor/d_a_bomb.h"
-#include "/d/actor/d_a_sea.h"
-#include "/d/res/res_bomber.h"
+#include "d/actor/d_a_npc_kg2.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_bomb.h"
+#include "d/actor/d_a_sea.h"
+#include "d/res/res_bomber.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_2dnumber.h"
@@ -645,7 +645,7 @@ static BOOL daCanonDelete(void* i_this) {
 
 bool daCanon_c::_execute() {
     if (m664) {
-        dKy_actor_addcol_set(0, 0, 0, 0.0);
+        dKy_actor_addcol_set(0, 0, 0, 0.0f);
         dKy_efplight_cut(&plight);
         dKyw_pntwind_cut(&pwind);
         m664 = false;
