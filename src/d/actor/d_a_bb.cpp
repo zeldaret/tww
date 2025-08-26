@@ -612,7 +612,7 @@ static BOOL daBb_Draw(bb_class* i_this) {
     i_this->mpMorf->entryDL();
 
     J3DModelData* modelData = model->getModelData();
-    modelData->getMaterialTable().removeTexNoAnimator(i_this->mBtpAnm.getBtpAnm());
+    i_this->mBtpAnm.remove(modelData);
     daBb_shadowDraw(i_this);
     tail_draw(i_this);
 #if VERSION == VERSION_DEMO
@@ -2715,7 +2715,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
 
         for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
             if (callback_check_index[i] >= 0) {
-                model->getModelData()->getJointTree().getJointNodePointer(i)->setCallBack(nodeCallBack);
+                model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             }
         }
 

@@ -484,14 +484,14 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
 /* 802EE5D8-802EE67C       .text calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
     j3dSys.setModel(this);
-    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
+    j3dSys.setCurrentMtxCalc(getModelData()->getBasicMtxCalc());
 
     if (checkFlag(J3DMdlFlag_Unk00002))
         j3dSys.getCurrentMtxCalc()->init(j3dDefaultScale, j3dDefaultMtx);
     else
         j3dSys.getCurrentMtxCalc()->init(mBaseScale, mBaseTransformMtx);
 
-    getModelData()->getJointTree().getBasicMtxCalc()->recursiveCalc(getModelData()->getJointTree().getRootNode());
+    getModelData()->getBasicMtxCalc()->recursiveCalc(getModelData()->getRootNode());
 }
 
 /* 802EE67C-802EE874       .text calcWeightEnvelopeMtx__8J3DModelFv */

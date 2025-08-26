@@ -159,7 +159,7 @@ bool daShopItem_c::_draw() {
     if(!chkDraw()) return true;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
-        mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
     

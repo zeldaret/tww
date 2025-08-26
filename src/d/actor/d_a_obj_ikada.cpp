@@ -1467,7 +1467,7 @@ BOOL daObj_Ikada_c::_createHeap() {
             case 1:
             case 2:
             case 3:
-                modelData->getJointTree().getJointNodePointer(i)->setCallBack(nodeControl_CB);
+                modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             }
         }

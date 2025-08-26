@@ -71,8 +71,10 @@ public:
     u32 getModelDataType() const { return mJointTree.getModelDataType(); }
     const J3DModelHierarchy* getHierarchy() const { return mJointTree.getHierarchy(); }
     void setHierarchy(J3DModelHierarchy* hierarchy) { mJointTree.setHierarchy(hierarchy); }
+    J3DMtxCalc* getBasicMtxCalc() { return mJointTree.getBasicMtxCalc(); }
     void setBasicMtxCalc(J3DMtxCalc* calc) { mJointTree.setBasicMtxCalc(calc); }
     void setModelDataType(u32 type) { mJointTree.setModelDataType(type); }
+    J3DJoint* getRootNode() { return mJointTree.getRootNode(); }
     GXColor* getVtxColorArray(u8 idx) const { return mVertexData.getVtxColorArray(idx); }
     bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
     u32 getFlag() const { return mFlags; }
@@ -108,10 +110,6 @@ public:
         initShapeNodes();
     }
     const void* getBinary() { return mBinary; }
-
-    // TODO
-    void getBasicMtxCalc() {}
-    void getRootNode() {}
 
 private:
     friend class J3DModelLoader;

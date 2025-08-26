@@ -4596,7 +4596,7 @@ cPhs_State daShip_c::create() {
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if ((jno == 10) || (jno == 5) || (jno == 7) || (jno == 6)) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_bodyJointCallBack);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_bodyJointCallBack);
             }
         }
 
@@ -4621,7 +4621,7 @@ cPhs_State daShip_c::create() {
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if (jno == 8 || jno == 10) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack0);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack0);
             }
             else if (
                 !(jno != 2 && jno != 3 && jno != 4 && jno != 5 && jno != 6) || (jno == 7)
@@ -4629,7 +4629,7 @@ cPhs_State daShip_c::create() {
                 // jno == 2 || jno == 3 || jno == 4 || jno == 5 || jno == 6 || jno == 7
                 // But the compiler optimizes that differently
             ) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack1);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack1);
             }
         }
         
@@ -4637,11 +4637,11 @@ cPhs_State daShip_c::create() {
         
         pModelData = mpCannonModel->getModelData();
         
-        pModelData->getJointTree().getJointNodePointer(1)->setCallBack(daShip_cannonJointCallBack);
-        pModelData->getJointTree().getJointNodePointer(2)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(1)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(2)->setCallBack(daShip_cannonJointCallBack);
         
         mpSalvageArmModel->setUserArea(reinterpret_cast<u32>(this));
-        mpSalvageArmModel->getModelData()->getJointTree().getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
+        mpSalvageArmModel->getModelData()->getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
         
         m034B = fopAcM_GetParam(this);
         mPart = PART_WAIT_e;
