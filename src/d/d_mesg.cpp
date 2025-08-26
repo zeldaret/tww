@@ -16,6 +16,9 @@
 #include "d/d_meter.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#if VERSION == VERSION_DEMO
+#include "d/d_s_play.h"
+#endif
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_audio.h"
@@ -472,23 +475,23 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
 
             char sp14[3];
             while (sp54[r30]) {
-                int r24;
+                int char_code;
                 u8 byte = sp54[r30];
                 if (byte >> 4 == 8 || byte >> 4 == 9) {
                     sp14[0] = sp54[r30++];
-                    r24 = ((byte << 8) & ~0xFF);
+                    char_code = ((byte << 8) & ~0xFF);
                     byte = sp54[r30];
-                    r24 |= (byte & 0xFF);
+                    char_code |= (byte & 0xFF);
                     sp14[1] = sp54[r30++];
                     sp14[2] = 0;
                 } else {
-                    r24 = byte;
+                    char_code = byte;
                     sp14[0] = sp54[r30++];
                     sp14[1] = 0;
                 }
                 JUTFont::TWidth twidth;
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(r24, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int temp = twidth.field_0x1;
                 if (field_0x44 == 0.0f) {
                     f32 temp2 = temp * f29;
@@ -579,17 +582,17 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             fopMsgM_passwordGet(sp28, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
             char sp10[3];
             while (sp28[r30]) {
-                int r24;
+                int char_code;
                 u8 byte = sp28[r30];
                 if (byte >> 4 == 8 || byte >> 4 == 9) {
                     sp10[0] = sp28[r30++];
-                    r24 = ((byte << 8) & ~0xFF);
+                    char_code = ((byte << 8) & ~0xFF);
                     byte = sp28[r30];
-                    r24 |= (byte & 0xFF);
+                    char_code |= (byte & 0xFF);
                     sp10[1] = sp28[r30++];
                     sp10[2] = 0;
                 } else {
-                    r24 = byte;
+                    char_code = byte;
                     sp10[0] = sp28[r30++];
                     sp10[1] = 0;
                 }
@@ -597,7 +600,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
                 JUTFont::TWidth twidth;
                 int r25 = mesgControl->getNowFontSize();
                 f32 f29 = f32(r25) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(r24, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int tmp = twidth.field_0x1;
                 if (field_0x44 == 0.0f) {
                     field_0x44 = tmp * f29;
@@ -655,20 +658,19 @@ void dMesg_tSequenceProcessor::setCharacter() {
 
 /* 801E16F4-801E1858       .text ruby_character__24dMesg_tSequenceProcessorFPci */
 char* dMesg_tSequenceProcessor::ruby_character(char* param_1, int param_2) {
-    /* Nonmatching - regalloc */
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
-    f32 f31 = f32(g_msgHIO.field_0x68) / f32(mesgControl->getRubyFont()->getCellWidth());
+    f32 f31 = f32(g_msgHIO.field_0x68) / f32(((dMesg_tControl*)getControl())->getRubyFont()->getCellWidth());
     char buffer[3];
     char* src = param_1 + param_2;
     buffer[0] = src[0];
     buffer[1] = src[1];
     buffer[2] = 0;
     u8 byte = src[0];
-    int tmp2 = (byte << 8);
+    int char_code = (byte << 8);
     byte = src[1];
-    tmp2 |= byte;
+    char_code |= byte;
     JUTFont::TWidth twidth;
-    mesgControl->getRubyFont()->getWidthEntry(tmp2, &twidth);
+    mesgControl->getRubyFont()->getWidthEntry(char_code, &twidth);
     f32 tmp = (int)twidth.field_0x1;
     if (param_2 == 1) {
         if (field_0x50 == 0.0f) {
@@ -848,18 +850,21 @@ void dMesg_tMeasureProcessor::do_end() {
 bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param_3) {
     /* Nonmatching */
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
+    u32 r6 = param_1 & 0xFF0000;
     int r27 = field_0x50 - field_0x4c;
     bool r26 = false;
-    switch(param_1 & 0xFF0000) {
+    switch(r6) {
     case 0:
         switch(param_1) {
         case 0: {
             r26 = true;
             int r25 = 0;
             char sp44[17];
+#if VERSION > VERSION_DEMO
             mesg_entry stack_98 = *(mesg_entry*)dMesg_gpControl->getMessageEntry(nowMesgCode);
 
             strcpy(sp44, dComIfGs_getPlayerName());
+#endif
 #if VERSION > VERSION_JPN
             if (dComIfGs_getPalLanguage() == 1) {
                 // Specific msg nos that have the 's possessive after the player's name.
@@ -879,26 +884,28 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
                 }
             }
 #endif
+#if VERSION > VERSION_DEMO
             if (retFlag && r27 >= 0 && r27 < linemax) {
                 retFlag = 0;
             }
+#endif
             while (sp44[r25]) {
-                int r22;
+                int char_code;
                 u8 byte = sp44[r25];
                 if (byte >> 4 == 8 || byte >> 4 == 9) {
                     byte = sp44[r25++];
-                    r22 = ((byte << 8) & ~0xFF);
+                    char_code = ((byte << 8) & ~0xFF);
                     byte = sp44[r25++];
-                    r22 |= (byte & 0xFF);
+                    char_code |= (byte & 0xFF);
                 } else {
                     byte = sp44[r25++];
-                    r22 = byte;
+                    char_code = byte;
                 }
 
                 JUTFont::TWidth twidth;
                 int r23 = mesgControl->getNowFontSize();
                 f32 f30 = f32(r23) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(r22, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int tmp = twidth.field_0x1;
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
@@ -931,9 +938,11 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
         case 27:
         case 28:
         case 29:
+#if VERSION > VERSION_DEMO
             if (retFlag && r27 >= 0 && r27 < linemax) {
                 retFlag = 0;
             }
+#endif
             if (r27 >= 0 && r27 <= 3) {
                 field_0x38[r27] += (mesgControl->getNowFontSize() + mesgControl->getCharSpace());
             }
@@ -951,9 +960,15 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
         case 8:
             field_0x54 = 2;
             for (int i = 0; i < 2; i++) {
+#if VERSION == VERSION_DEMO
+                // 0x8267: 'Ｈ' (Fullwidth capital H)
+                int char_code = g_msgDHIO.field_0x08 == 0 ? 0x8267 : 'H';
+#else
+                int char_code = 'H';
+#endif
                 JUTFont::TWidth twidth;
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(72, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int tmp = twidth.field_0x1;
                 if (field_0x48 == 0.0f) {
                     field_0x48 = tmp * f29;
@@ -966,9 +981,15 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
         case 9:
             field_0x54 = 3;
             for (int i = 0; i < 2; i++) {
+#if VERSION == VERSION_DEMO
+                // 0x8267: 'Ｈ' (Fullwidth capital H)
+                int char_code = g_msgDHIO.field_0x08 == 0 ? 0x8267 : 'H';
+#else
+                int char_code = 'H';
+#endif
                 JUTFont::TWidth twidth;
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(72, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int tmp = twidth.field_0x1;
                 if (field_0x48 == 0.0f) {
                     field_0x48 = tmp * f29;
@@ -982,26 +1003,29 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             r26 = true;
             int r25 = 0;
             char sp18[17];
-            fopMsgM_passwordGet(sp18, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
+            u32 tmp = dComIfGs_getEventReg(0xBA0F);
+            fopMsgM_passwordGet(sp18, tmp + 0x1B37);
+#if VERSION > VERSION_DEMO
             if (retFlag && r27 >= 0 && r27 < linemax) {
                 retFlag = 0;
             }
+#endif
 
             while (sp18[r25]) {
-                int r22;
+                int char_code;
                 u8 byte = sp18[r25];
                 if (byte >> 4 == 8 || byte >> 4 == 9) {
                     byte = sp18[r25++];
-                    r22 = ((byte << 8) & ~0xFF);
+                    char_code = ((byte << 8) & ~0xFF);
                     byte = sp18[r25++];
-                    r22 |= (byte & 0xFF);
+                    char_code |= (byte & 0xFF);
                 } else {
                     byte = sp18[r25++];
-                    r22 = byte;
+                    char_code = byte;
                 }
                 JUTFont::TWidth twidth;
                 f32 f30 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(r22, &twidth);
+                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
                 int tmp = twidth.field_0x1;
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
@@ -1350,7 +1374,7 @@ void dMesg_screenDataTalk_c::changeFont(JUTFont* font) {
 
 /* 801E39F8-801E3BBC       .text openAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::openAnime() {
-    /* Nonmatching */
+    /* Nonmatching - fpr regswap */
     f32 f31, f30, f29, f28, tmp;
     bool ret = false;
     mTimer++;
@@ -1370,8 +1394,10 @@ bool dMesg_screenDataTalk_c::openAnime() {
             f28 = field_0x168.mSizeOrig.y - f30;
             tmp = fopMsgM_valueIncrease(10, mTimer, 0);
         } else {
-            f31 = field_0x168.mSizeOrig.x;
-            f30 = field_0x168.mSizeOrig.y;
+            f32 tmp2 = field_0x168.mSizeOrig.x;
+            f31 = tmp2;
+            f32 tmp3 = field_0x168.mSizeOrig.y;
+            f30 = tmp3;
             f29 = 580.0f - f31;
             f28 = (f30 * 580.0f) / f31 - f30;
             tmp = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
@@ -1387,7 +1413,7 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1569,7 +1595,6 @@ void dMesg_screenDataItem_c::deleteScreen() {
 
 /* 801E49B4-801E4AE8       .text openAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::openAnime() {
-    /* Nonmatching - retail-only instruction ordering */
     static const f32 frameScale[] = {0.6f, 1.1f, 1.0f};
 
     bool ret = false;
@@ -1584,13 +1609,15 @@ bool dMesg_screenDataItem_c::openAnime() {
         }
         ret = true;
     } else if (mTimer <= 5) {
-        f32 f31 = fopMsgM_valueIncrease(5, mTimer, 0);
-        f32 tmp = f31 * (frameScale[1] - frameScale[0]) + frameScale[0];
-        fopMsgM_paneScaleXY(&field_0x168, tmp);
-        fopMsgM_setNowAlpha(&field_0x168, f31);
+        f32 f31, tmp;
+        f31 = tmp = fopMsgM_valueIncrease(5, mTimer, 0);
+        f31 = f31 * (frameScale[1] - frameScale[0]) + frameScale[0];
+        fopMsgM_paneScaleXY(&field_0x168, f31);
+        fopMsgM_setNowAlpha(&field_0x168, tmp);
     } else {
-        f32 f1 = fopMsgM_valueIncrease(3, mTimer - 5, 0);
-        f32 tmp = f1 * (frameScale[2] - frameScale[1]) + frameScale[1];
+        f32 f1, tmp;
+        f1 = tmp = fopMsgM_valueIncrease(3, mTimer - 5, 0);
+        tmp = tmp * (frameScale[2] - frameScale[1]) + frameScale[1];
         fopMsgM_paneScaleXY(&field_0x168, tmp);
         fopMsgM_setInitAlpha(&field_0x168);
     }
@@ -1599,7 +1626,7 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
