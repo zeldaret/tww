@@ -24,37 +24,25 @@ const u16 l_B_sand2TEX__height = 256;
 #include "assets/l_matDL__d_a_bwdg.h"
 l_matDL__d_a_bwdg(l_B_sand2TEX);
 
-// Fakematch: These are supposed to be in-function statics inside daBwdg_packet_c::draw().
-// But for some reason, defining them inside the function causes the function to load them as well
-// as l_matDL and l_Hsand1DL (but not l_texCoord) with different codegen than the original function.
-// Defining them above the function also results in the same thing.
-// But forward declaring them as externs, and then defining them after the function works correctly.
-extern GXVtxDescList l_vtxDescList[];
-extern GXVtxAttrFmtList l_vtxAttrFmtList[];
-
-// Another way of matching the function's codegen is to keep these as in-function statics, but move
-// the d_a_bwdg_data.inc include until after the function, and forward declare the included data.
-// But this method breaks the order of the variables in the .data section as the in-function data
-// would then appear above the included data.
-// extern u8 l_B_sand2TEX[0x10000] ALIGN_DECL(32);
-// extern u8 l_texCoord[0x8408];
-// extern u8 l_Hsand1DL[0xC3E0] ALIGN_DECL(32);
-// extern u8 l_matDL[0xBA] ALIGN_DECL(32);
+// Fakematch: For some reason daBwdg_packet_c::draw needs to have .data pooling disabled, but the in-function statics cause .data pooling to be used.
+// Disabling data pooling for the entire TU breaks wave_cont, which uses ...rodata pooling, so instead disable it for just this one function.
+#pragma push
+#pragma pool_data off
 
 /* 00000078-000001C4       .text draw__15daBwdg_packet_cFv */
 void daBwdg_packet_c::draw() {
-    // static GXVtxDescList l_vtxDescList[] = {
-    //     {GX_VA_POS, GX_INDEX16},
-    //     {GX_VA_NRM, GX_INDEX16},
-    //     {GX_VA_TEX0, GX_INDEX16},
-    //     {GX_VA_NULL, GX_NONE},
-    // };
-    // static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    //     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    //     {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-    // };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX16},
+        {GX_VA_NRM, GX_INDEX16},
+        {GX_VA_TEX0, GX_INDEX16},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
     j3dSys.reinitGX();
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
@@ -74,19 +62,7 @@ void daBwdg_packet_c::draw() {
     m00010 ^= 0x01;
 }
 
-// Fakematch (see above comment)
-GXVtxDescList l_vtxDescList[] = {
-    {GX_VA_POS, GX_INDEX16},
-    {GX_VA_NRM, GX_INDEX16},
-    {GX_VA_TEX0, GX_INDEX16},
-    {GX_VA_NULL, GX_NONE},
-};
-GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-};
+#pragma pop
 
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
 static BOOL daBwdg_Draw(bwdg_class* i_this) {
