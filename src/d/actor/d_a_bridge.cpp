@@ -785,13 +785,14 @@ void bridge_move(bridge_class* i_this) {
             i_this->m02F2 = 3000;
             i_this->m02F0 = 0x578;
 
+            f32 tmpf2;
             if (*wp > 0.1f) {
-                tmpf = 2.0f;
+                tmpf2 = 2.0f;
             } else {
-                tmpf = 0.0f;
+                tmpf2 = 0.0f;
             }
-            cLib_addCalc2(&i_this->m02E0, tmpf, 0.1f, 0.1f);
-            cLib_addCalc2(&i_this->m02E4, tmpf * 0.3f, 0.1f, 0.05f);
+            cLib_addCalc2(&i_this->m02E0, tmpf2, 0.1f, 0.1f);
+            cLib_addCalc2(&i_this->m02E4, tmpf2 * 0.3f, 0.1f, 0.05f);
             break;
 
         case 4:
@@ -855,7 +856,7 @@ bridge_class* search_aite(bridge_class* i_this) {
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */
 static BOOL daBridge_Execute(bridge_class* i_this) {
-    /* Nonmatching */
+    /* Nonmatching - regswap */
     fopAc_ac_c* a_player = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
     camera_class* pCam = dComIfGp_getCamera(0);
@@ -1111,7 +1112,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
         pBr->mpModel->setBaseTRMtx(*calc_mtx);
 
         if (((i_this->mTypeBits & 1) == 0) && ((pBr->m408 & 4) != 0)) {
-            s32 idx;
+            int idx;
             cXyz* segment0 = i_this->mLineMat.getPos(0);
             cXyz* segment1 = i_this->mLineMat.getPos(1);
             cXyz* segment00;
@@ -1172,9 +1173,9 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 
     cBgD_Vtx_t* vtxTbl = i_this->mpBgW->GetVtxTbl();
     
-    s32 idx;
-    s32 sw;
-    s32 other_i = 0;
+    int idx;
+    int sw;
+    int other_i = 0;
     for (i = 0; i < i_this->mpBgW->GetVtxNum(); i++, pBr++) {
         sw = i & 3;
         idx = i;
