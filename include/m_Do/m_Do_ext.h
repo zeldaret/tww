@@ -574,7 +574,7 @@ public:
     
     void draw();
     void setMaterial();
-};
+}; // Size: 0x10
 
 class mDoExt_3Dline_c {
 public:
