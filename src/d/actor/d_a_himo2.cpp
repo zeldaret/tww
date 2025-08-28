@@ -994,7 +994,7 @@ void new_himo2_move(himo2_class* param_1) {
                 param_1->m24D9 = 0xFF;
                 param_1->m24D8 = 1;
                 if (btd != 0) {
-                    fopAcM_OffStatus(btd, 0x4000);
+                    fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
                 }
             } else if ((param_1->m02A2 == 0) && param_1->m2050.ChkAtHit()) {
                 param_1->m02DC = 9;
@@ -1314,7 +1314,7 @@ void new_himo2_move(himo2_class* param_1) {
         cLib_addCalc2(&param_1->m24E8.y, param_1->m217C->home.pos.y + 2500.0f + REG0_F(14), 0.3f, 100.0f);
         cLib_addCalc2(&param_1->m24F4, REG0_F(13) + 80.0f, 1.0f, 2.0f);
         if (param_1->m029C < 30) {
-            btd->field_0x6e15 = 0xB4;
+            btd->m6E15 = 0xB4;
         }
         if (param_1->m029C == 30) {
             fopAcM_seStartCurrent((fopAc_ac_c*)dr, JA_SE_CM_BTD_ROPE_SET, 0);
@@ -1325,7 +1325,7 @@ void new_himo2_move(himo2_class* param_1) {
         if ((param_1->m029C != 0) || (REG0_S(8) != 0)) {
             break;
         }
-        btd->field_0x6e15 = 1;
+        btd->m6E15 = 1;
         param_1->m24D9 = 4;
         if ((dComIfGp_getStartStageName()[0] == 'X') || (dComIfGs_isEventBit(0x420))) {
             param_1->m029C = 0;
@@ -1494,17 +1494,17 @@ void new_himo2_move(himo2_class* param_1) {
             cLib_addCalc2(&param_1->m24DC.y, 0.0f, 0.5f, 100.0f);
             if (param_1->m029C == (s16)(REG0_S(4) + 0x6E)) {
                 param_1->m2520 = REG0_F(11) + 50.0f;
-                btd->field_0x6e15 = 0xB4;
+                btd->m6E15 = 0xB4;
             }
             if (param_1->m029C < 81) {
                 cLib_addCalc2(&param_1->m24F4, REG0_F(14) + 40.0f, 0.5f, 2.0f);
             }
         }
         if (param_1->m029C == 2) {
-            btd->field_0x6e15 = 1;
+            btd->m6E15 = 1;
         }
         if (param_1->m029C == 0) {
-            if (btd->field_0x6190 >= 3) {
+            if (btd->m6190 >= 3) {
                 param_1->m24D9 = 9;
                 param_1->m029C = 220;
             } else {
@@ -1515,7 +1515,7 @@ void new_himo2_move(himo2_class* param_1) {
                 camera->mCamera.Reset(param_1->eyePos, local_164);
                 camera->mCamera.Start();
                 camera->mCamera.SetTrimSize(0);
-                fopAcM_OffStatus(btd, 0x4000);
+                fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
                 dComIfGp_event_reset();
             }
             dr->unk_40A = 0;
@@ -1534,10 +1534,10 @@ void new_himo2_move(himo2_class* param_1) {
         cLib_addCalc2(&param_1->m24DC.y, local_11c.y, 0.1f, 50.0f);
         cLib_addCalc2(&param_1->m24DC.z, local_11c.z, 0.1f, 50.0f);
         if (param_1->m029C == 99) {
-            btd->field_0x6e15 = 0xB4;
+            btd->m6E15 = 0xB4;
         }
         if (param_1->m029C == 40) {
-            btd->field_0x6e15 = 1;
+            btd->m6E15 = 1;
         }
         if (param_1->m029C == 0) {
             param_1->m24D9 = 0;
@@ -1547,7 +1547,7 @@ void new_himo2_move(himo2_class* param_1) {
             camera->mCamera.Reset(param_1->eyePos, local_170);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
-            fopAcM_OffStatus(btd, 0x4000);
+            fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
             dComIfGp_event_reset();
         }
         break;
