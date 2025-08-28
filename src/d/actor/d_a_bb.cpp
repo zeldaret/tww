@@ -744,7 +744,7 @@ void bb_path_move(bb_class* i_this) {
                     i_this->unk_35E = i_this->ppd->m_num - 2;
                 }
 
-                if (i_this->ppd->m_nextID + 0 != 0xFFFF) {
+                if ((s32)i_this->ppd->m_nextID != 0xFFFF) {
                     i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(a_this));
                     JUT_ASSERT(DEMO_SELECT(1476, 1479), i_this->ppd != NULL);
                 }

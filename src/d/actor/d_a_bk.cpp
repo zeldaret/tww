@@ -1073,7 +1073,7 @@ static void jyunkai(bk_class* i_this) {
                         i_this->m1217 = -1;
                         i_this->m1216 = i_this->ppd->m_num - 2;
                     }
-                    if ((i_this->ppd->m_nextID & 0xFFFF) != 0xFFFF) {
+                    if ((s32)i_this->ppd->m_nextID != 0xFFFF) {
                         i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(i_this));
                         JUT_ASSERT(VERSION_SELECT(2907, 2907, 2924, 2924), i_this->ppd != NULL);
                     }
