@@ -181,7 +181,7 @@ enum {
     /* 0xAD */ DSNAP_TYPE_UNKAD,
     /* 0xAE */ DSNAP_TYPE_UNKAE,
     /* 0xAF */ DSNAP_TYPE_UNKAF,
-    /* 0xB0 */ DSNAP_TYPE_UNKB0,
+    /* 0xB0 */ DSNAP_TYPE_BB,
     /* 0xB1 */ DSNAP_TYPE_UNKB1,
     /* 0xB2 */ DSNAP_TYPE_UNKB2,
     /* 0xB3 */ DSNAP_TYPE_KS,
@@ -273,13 +273,14 @@ class dSnap_RegistObjElm {
 public:
     /* 0x00 */ dSnap_Obj m_obj;
     /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ /* vtable */
 
 public:
     dSnap_RegistObjElm() {}
     virtual ~dSnap_RegistObjElm() {}
     void Init();
     void Regist(const dSnap_Obj&);
-};
+};  // Size: 0x3C
 
 class dSnap_packet : public J3DPacket {
 public:

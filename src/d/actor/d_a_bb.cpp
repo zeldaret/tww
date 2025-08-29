@@ -616,9 +616,9 @@ static BOOL daBb_Draw(bb_class* i_this) {
     daBb_shadowDraw(i_this);
     tail_draw(i_this);
 #if VERSION == VERSION_DEMO
-    dSnap_RegistFig(DSNAP_TYPE_UNKB0, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BB, &i_this->actor, 1.0f, 1.0f, 1.0f);
 #else
-    dSnap_RegistFig(DSNAP_TYPE_UNKB0, &i_this->actor, i_this->actor.eyePos, i_this->actor.shape_angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BB, &i_this->actor, i_this->actor.eyePos, i_this->actor.shape_angle.y, 1.0f, 1.0f, 1.0f);
 #endif
     return TRUE;
 }
