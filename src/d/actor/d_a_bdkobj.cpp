@@ -33,12 +33,14 @@ static void ride_call_back(dBgW* param1, fopAc_ac_c* param2, fopAc_ac_c* param3)
 
 /* 00000104-00000184       .text hahen_draw__FP12bdkobj_class */
 static void hahen_draw(bdkobj_class* i_this) {
-    J3DModel* model;
     bdo_eff_s* fragment = i_this->mEffs;
     for (s32 i = 0; i < 3; i++, fragment++) {
-        if (fragment->m000 != 0 && (model = fragment->mpModel)) {
-            g_env_light.setLightTevColorType(model, &i_this->tevStr);
-            mDoExt_modelUpdateDL(model);
+        if (fragment->m000 != 0) {
+            if (fragment->mpModel != NULL) {
+                J3DModel* model = fragment->mpModel;
+                g_env_light.setLightTevColorType(model, &i_this->tevStr);
+                mDoExt_modelUpdateDL(model);
+            }
         }
     }
 }
@@ -47,17 +49,19 @@ static void hahen_draw(bdkobj_class* i_this) {
 static BOOL daBdkobj_Draw(bdkobj_class* i_this) {
     fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(i_this);
     J3DModel* model;
-    cXyz vec;
     if (i_this->model) {
         model = a_this->model;
         g_env_light.setLightTevColorType(model, &a_this->tevStr);
-
+        
+#if VERSION > VERSION_DEMO
         if (i_this->m298 < 2) {
-            vec = (a_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye);
+            cXyz vec = (a_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye);
             if (vec.abs() > REG8_F(10) + 300.0f) {
                 mDoExt_modelUpdateDL(model);
             }
-        } else {
+        } else
+#endif
+        {
             mDoExt_modelUpdateDL(model);
         }
     }
@@ -75,7 +79,7 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
 
     i_eff->m014 = i_eff->m008;
 
-    if (i_eff->m1A4 > 0.1f){
+    if (i_eff->m1A4 > 0.1f) {
         f32 dVar8 = i_eff->m1A4;
         f32 dVar9 = (1.0f - i_eff->m028) * 20.0f;
         if (i_eff->m1A4 > dVar9) {
@@ -83,19 +87,18 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
         }
         cMtx_YrotS(*calc_mtx, i_eff->m1A8);
 
-        local_14c.set(0.0f,0.0f,dVar8);
+        local_14c.set(0.0f, 0.0f, dVar8);
 
         MtxPosition(&local_14c, &cStack344);
-        i_eff->m008 += cStack344;   
+        i_eff->m008 += cStack344;
         i_eff->m030.y += i_eff->m1AA;
     }
-    cLib_addCalc0(&i_eff->m1A4,1.0f,REG0_F(18) + 0.2f);
+    cLib_addCalc0(&i_eff->m1A4, 1.0f, REG0_F(18) + 0.2f);
     cMtx_YrotS(*calc_mtx, i_eff->m030.y);
 
     local_14c.x = 0.0f;
     local_14c.y = i_eff->m024;
     local_14c.z = i_eff->m020;
-
 
     MtxPosition(&local_14c, &cStack344);
     i_eff->m008 += cStack344;
@@ -116,12 +119,12 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
     if (i_eff->m008.y <= fVar10) {
         i_eff->m008.y = fVar10;
         if (i_eff->m024 < REG8_F(9) + -20.0f) {
-            i_eff->m024 = i_eff->m024 * - (REG8_F(10) + 0.3f);
+            i_eff->m024 = i_eff->m024 * -(REG8_F(10) + 0.3f);
             i_eff->m030.y += (s16)cM_rndFX(8000.0f);
             i_eff->m02C = cM_rndFX(200.0f);
         } else {
             i_eff->m024 = 0.0f;
-            cLib_addCalc0(&i_eff->m020,1.0f,REG8_F(12) + 0.75f);
+            cLib_addCalc0(&i_eff->m020, 1.0f, REG8_F(12) + 0.75f);
             i_eff->m036.z = 0;
             i_eff->m036.x = (s16)(i_eff->m020 * (REG8_F(8) + 300.0f));
             i_eff->m036.y = (s16)(i_eff->m020 * i_eff->m02C);
@@ -132,14 +135,14 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
 
     if (local_14c.abs() > 0.0f) {
         cMtx_YrotS(*calc_mtx, cM_atan2s(local_14c.x, local_14c.z));
-        local_14c.x = 0.0f; 
+        local_14c.x = 0.0f;
         local_14c.y = 30.0f;
         local_14c.z = i_eff->m028 * 70.0f;
 
         MtxPosition(&local_14c, &cStack344);
         local_14c.set(i_eff->m008);
         local_14c.y += 30.0f;
-        
+
         cStack344 += i_eff->m008;
 
         linChk.Set(&local_14c, &cStack344, pActor);
@@ -156,12 +159,13 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
     cMtx_ZrotM(*calc_mtx, i_eff->m030.z);
     f32 scale = i_eff->m028;
     MtxScale(scale, scale, scale, TRUE);
-    i_eff->mpModel->setBaseTRMtx(*calc_mtx);
-    
+    J3DModel* model = i_eff->mpModel;
+    model->setBaseTRMtx(*calc_mtx);
+
     i_eff->mSph.SetC(i_eff->m008);
     i_eff->mSph.SetR((REG8_F(15) + 85.0f) * i_eff->m028);
     dComIfG_Ccsp()->Set(&i_eff->mSph);
-    if (i_eff->mSph.ChkTgHit() != NULL && i_eff->m1A4 < 1.0f){
+    if (i_eff->mSph.ChkTgHit() != NULL && i_eff->m1A4 < 1.0f) {
         CcAtInfo hit_atInfo;
         hit_atInfo.mpObj = i_eff->mSph.GetTgHitObj();
         hit_atInfo.mpActor = at_power_check(&hit_atInfo);
@@ -175,7 +179,7 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
         }
     }
 
-    if (i_eff->m008.y < 8500.0f){
+    if (i_eff->m008.y < 8500.0f) {
         i_eff->m000 = 0;
     }
     return;
@@ -185,8 +189,8 @@ static void top_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
 static void kaidan_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
     dBgS_ObjGndChk_Spl gndChk;
     cXyz local_78;
-    
-    i_eff->m030 += i_eff->m036;    
+
+    i_eff->m030 += i_eff->m036;
     i_eff->m008.y += i_eff->m024;
     i_eff->m024 -= 3.0f;
 
@@ -197,40 +201,39 @@ static void kaidan_hahen_move(bdkobj_class* i_this, bdo_eff_s* i_eff) {
 
     f32 fVal1 = dComIfG_Bgsp()->GroundCross(&gndChk);
     f32 fVal2 = 0.0f;
-    if (-1000000000.0f != fVal1) {
+    if (fVal1 != -G_CM3D_F_INF) {
         if (i_eff->m008.y <= fVal1) {
             i_eff->m008.y = fVal1;
             i_eff->m024 = fVal2;
             cLib_addCalcAngleS2(&i_eff->m036.y, 0, 1, 10);
             cLib_addCalcAngleS2(&i_eff->m036.z, 0, 1, 10);
 
-            fVal2 = cM_ssin((i_eff->m1AC * (REG0_S(7) + 1800)));
-            cLib_addCalcAngleS2(&i_eff->m030.x,
-            (REG0_F(11) + 950.0f) * fVal2,
-            10, 400);
+            fVal2 = cM_ssin(i_eff->m1AC * (REG0_S(7) + 1800));
+            cLib_addCalcAngleS2(&i_eff->m030.x, (REG0_F(11) + 950.0f) * fVal2, 10, 400);
 
-            fVal2 =  cM_ssin(i_eff->m1AC * (REG0_S(6) + 2000)) * (5.0f + REG0_F(10));
+            fVal2 = cM_ssin(i_eff->m1AC * (REG0_S(6) + 2000)) * (5.0f + REG0_F(10));
         }
     } else {
         i_eff->m000 = 0;
     }
 
     MtxTrans(i_eff->m008.x, i_eff->m008.y + fVal2, i_eff->m008.z, 0);
-    mDoMtx_YrotM(*calc_mtx, i_eff->m030.y);
-    mDoMtx_XrotM(*calc_mtx, i_eff->m030.x);
-    mDoMtx_ZrotM(*calc_mtx, i_eff->m030.z);
+    cMtx_YrotM(*calc_mtx, i_eff->m030.y);
+    cMtx_XrotM(*calc_mtx, i_eff->m030.x);
+    cMtx_ZrotM(*calc_mtx, i_eff->m030.z);
 
     f32 scale = i_eff->m028;
     MtxScale(scale, scale, scale, TRUE);
-    i_eff->mpModel->setBaseTRMtx(*calc_mtx);
-    
+    J3DModel* model = i_eff->mpModel;
+    model->setBaseTRMtx(*calc_mtx);
+
     return;
 }
 
 /* 000018E8-00001970       .text hahen_move__FP12bdkobj_class */
 static void hahen_move(bdkobj_class* i_this) {
     bdo_eff_s* fragment = i_this->mEffs;
-    for (s32 i = 0; i < 3; i++,fragment++) {
+    for (s32 i = 0; i < 3; i++, fragment++) {
         if (fragment->m000 != 0) {
             fragment->m1AC++;
             if (fragment->m000 == 1) {
@@ -254,25 +257,33 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             i_this->model = NULL;
             i_this->m299 = 100;
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8143,&i_this->current.pos,&i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8144,&i_this->current.pos,&i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8145,&i_this->current.pos,&i_this->current.angle);
-            i_this->m918.remove();
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8143, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8144, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8145, &i_this->current.pos, &i_this->current.angle);
             GXColor prim_col;
             prim_col.r = 0x46;
             prim_col.g = 0x3C;
             prim_col.b = 0x28;
             prim_col.a = 0xB4;
+            i_this->m918.remove();
             i_this->m918.setColor(prim_col);
-            dComIfGp_particle_setToon(dPa_name::ID_SCENE_A146,&i_this->current.pos,&i_this->current.angle,NULL,
-            0xB4,&i_this->m918,(s8)fopAcM_GetRoomNo(i_this));
+#if VERSION == VERSION_DEMO
+            i_this->m938_demo =
+#endif
+                dComIfGp_particle_setToon(
+                    dPa_name::ID_SCENE_A146, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this)
+                );
+#if VERSION == VERSION_DEMO
+            JPABaseEmitter* emitter = i_this->m938_demo;
+#else
             JPABaseEmitter* emitter = i_this->m918.getEmitter();
+#endif
             if (emitter != NULL) {
                 emitter->becomeImmortalEmitter();
                 i_this->m938 = 0xB4;
             }
 
-            fopAcM_seStartCurrent(i_this,JA_SE_OBJ_MJ_WBOARD_BRK,0);
+            fopAcM_seStartCurrent(i_this, JA_SE_OBJ_MJ_WBOARD_BRK, 0);
             for (s32 i = 0; i < 2; i++) {
                 i_this->mEffs[i].m000 = 2;
                 i_this->mEffs[i].m1AC = cM_rndF(65536.0f);
@@ -286,15 +297,29 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
                 i_this->mEffs[i].m030.x = cM_rndFX(10000.0f);
                 i_this->mEffs[i].m036.z = cM_rndFX(800.0f);
             }
-            fopAcM_OffStatus(i_this,fopAcStts_CULL_e);
+            fopAcM_OffStatus(i_this, fopAcStts_CULL_e);
         }
     } else {
+#if VERSION == VERSION_DEMO
+        if (i_this->m938_demo != NULL) {
+            if ((i_this->m299 <= 0x5A) && (i_this->m938 != 0)) {
+                i_this->m938 -= 2;
+            }
+
+            i_this->m938_demo->setGlobalAlpha(i_this->m938);
+
+            if (i_this->m299 == 1) {
+                i_this->m938_demo->becomeInvalidEmitter();
+            }
+        }
+#else
         if (i_this->m918.getEmitter() != NULL) {
             if ((i_this->m299 <= 0x5A) && (i_this->m938 != 0)) {
                 i_this->m938 -= 2;
             }
             i_this->m918.getEmitter()->setGlobalAlpha(i_this->m938);
         }
+#endif
     }
 }
 
@@ -302,10 +327,10 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
 static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
     /* Nonmatching */
     if (i_this->m298 == 2) {
-        g_env_light.settingTevStruct(TEV_TYPE_BG0,&i_this->current.pos, &i_this->tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->current.pos, &i_this->tevStr);
         tower_kaidan_move(i_this);
     } else {
-        g_env_light.settingTevStruct(TEV_TYPE_BG3,&i_this->current.pos, &i_this->tevStr);
+        g_env_light.settingTevStruct(TEV_TYPE_BG3, &i_this->current.pos, &i_this->tevStr);
     }
 
     if (i_this->m299 != 0) {
@@ -315,9 +340,9 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
     if (i_this->m298 == 2) {
         if (i_this->model != NULL) {
             MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, 0);
-            mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-            mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-            mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+            cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+            cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+            cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
             i_this->model->setBaseTRMtx(*calc_mtx);
             if (i_this->pm_bgw != NULL) {
                 MTXCopy(*calc_mtx, i_this->mMtx);
@@ -334,14 +359,14 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
                 i_this->mCyl.SetH(REG6_F(2) + 900.0f);
                 i_this->mCyl.SetR(REG6_F(3) + 100.0f);
             }
-            
+
             if (i_this->mCyl.ChkTgHit()) {
                 CcAtInfo hit_atInfo;
                 hit_atInfo.mpObj = i_this->mCyl.GetTgHitObj();
-                fopAc_ac_c * at = at_power_check(&hit_atInfo);
+                fopAc_ac_c* at = at_power_check(&hit_atInfo);
                 if (at != NULL && hit_atInfo.mResultingAttackType == 0xB) {
                     i_this->eyePos = i_this->current.pos;
-                    
+
                     u16 uVar8;
                     u16 uVar6;
                     u16 uVar4;
@@ -359,19 +384,36 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
                     eff_ang.x = 0;
 
                     i_this->m918.remove();
-                    dComIfGp_particle_setToon(uVar8,&i_this->current.pos,&eff_ang,NULL,
-                    0xB9,&i_this->m918,(s8)fopAcM_GetRoomNo(i_this));
-                    dComIfGp_particle_set(uVar6, &i_this->current.pos, &eff_ang,NULL,
-                        0xFF,NULL,(s8)fopAcM_GetRoomNo(i_this),&i_this->tevStr.mColorK0,&i_this->tevStr.mColorK0);
-                    dComIfGp_particle_set(uVar4, &i_this->current.pos, &at->shape_angle,NULL,
-                        0xFF,NULL,(s8)fopAcM_GetRoomNo(i_this),&i_this->tevStr.mColorK0,&i_this->tevStr.mColorK0);
+                    dComIfGp_particle_setToon(uVar8, &i_this->current.pos, &eff_ang, NULL, 0xB9, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this));
+                    dComIfGp_particle_set(
+                        uVar6,
+                        &i_this->current.pos,
+                        &eff_ang,
+                        NULL,
+                        0xFF,
+                        NULL,
+                        (s8)fopAcM_GetRoomNo(i_this),
+                        &i_this->tevStr.mColorK0,
+                        &i_this->tevStr.mColorK0
+                    );
+                    dComIfGp_particle_set(
+                        uVar4,
+                        &i_this->current.pos,
+                        &at->shape_angle,
+                        NULL,
+                        0xFF,
+                        NULL,
+                        (s8)fopAcM_GetRoomNo(i_this),
+                        &i_this->tevStr.mColorK0,
+                        &i_this->tevStr.mColorK0
+                    );
 
                     i_this->model = NULL;
                     for (int i = 0; i < 3; i++) {
                         i_this->mEffs[i].m000 = 1;
                         i_this->mEffs[i].m028 = cM_rndFX(0.25f) + 0.7f;
                         i_this->mEffs[i].m008 = i_this->current.pos;
-                        i_this->mEffs[i].m008.y += REG8_F(12)  + 100.0f;
+                        i_this->mEffs[i].m008.y += REG8_F(12) + 100.0f;
                         i_this->mEffs[i].m024 = REG8_F(16) + (cM_rndF(20.0f) + 60.0f);
                         i_this->mEffs[i].m030.y = at->shape_angle.y + (s16)cM_rndFX(10000.0f);
                         i_this->mEffs[i].m020 = REG8_F(14) + (cM_rndF(15.0f) + 20.0f);
@@ -388,9 +430,9 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
 
         if (i_this->model != NULL) {
             MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, 0);
-            mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-            mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-            mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+            cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+            cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+            cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
             i_this->model->setBaseTRMtx(*calc_mtx);
             dComIfG_Ccsp()->Set(&i_this->mCyl);
         }
@@ -406,9 +448,9 @@ static BOOL daBdkobj_IsDelete(bdkobj_class*) {
 
 /* 0000227C-000022E8       .text daBdkobj_Delete__FP12bdkobj_class */
 static BOOL daBdkobj_Delete(bdkobj_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhase, "Bdkobj");
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bdkobj");
     i_this->m918.remove();
-    if (i_this->pm_bgw != NULL){
+    if (i_this->pm_bgw != NULL) {
         dComIfG_Bgsp()->Release(i_this->pm_bgw);
     }
     return TRUE;
@@ -430,16 +472,16 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     bdkobj_class* i_this = (bdkobj_class*)a_this;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bdkobj", bdl_data[i_this->m298]);
-    i_this->model = mDoExt_J3DModel__create(modelData,0x80000,0x11000022);
-    
-    if (a_this->model == NULL){
+    i_this->model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+
+    if (a_this->model == NULL) {
         return FALSE;
     }
     iVar4 = 0;
     if (i_this->m298 == 2) {
         i_this->pm_bgw = new dBgW();
 
-        JUT_ASSERT(0x321,i_this->pm_bgw != 0);
+        JUT_ASSERT(DEMO_SELECT(0x30D, 0x321), i_this->pm_bgw != 0);
         cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", BDKOBJ_DZB_S_TOWER_BRIDGE);
         if (i_this->pm_bgw->Set(dzb, cBgW::MOVE_BG_e, &i_this->mMtx) == TRUE) {
             return FALSE;
@@ -450,7 +492,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
     for (s32 i = 0; i < iVar4 + 3; i++) {
         J3DModelData* hahen_modelData = (J3DModelData*)dComIfG_getObjectRes("Bdkobj", hahen_bdl_data[i_this->m298]);
-        i_this->mEffs[i].mpModel = mDoExt_J3DModel__create(hahen_modelData,0x80000,0x11000022);
+        i_this->mEffs[i].mpModel = mDoExt_J3DModel__create(hahen_modelData, 0x80000, 0x11000022);
         if (i_this->mEffs[i].mpModel == NULL) {
             return FALSE;
         }

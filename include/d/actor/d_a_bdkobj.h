@@ -7,6 +7,7 @@
 #include "f_op/f_op_actor.h"
 
 class dBgW;
+
 struct bdo_eff_s {
     /* 0x000 */ s8 m000;
     /* 0x004 */ J3DModel* mpModel;
@@ -35,6 +36,9 @@ public:
     /* 0x7AC */ dCcD_Stts mStts;
     /* 0x7E8 */ dCcD_Cyl mCyl;
     /* 0x918 */ dPa_smokeEcallBack m918;
+#if VERSION == VERSION_DEMO
+    /* 0x938 */ JPABaseEmitter* m938_demo;
+#endif
     /* 0x938 */ u8 m938;
     /* 0x93C */ Mtx mMtx;
     /* 0x96C */ dBgW* pm_bgw;
