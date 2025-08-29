@@ -84,7 +84,7 @@ struct TVec3<s16> : public SVec {
 template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
-    
+
     template<typename f32>
     TVec3(const f32 x, const f32 y, const f32 z) { set(x, y, z); }
 
