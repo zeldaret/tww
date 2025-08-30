@@ -564,16 +564,16 @@ void move(bmdfoot_class* i_this) {
 
     if (boss != NULL) {
         sVar1 = (u16)(fopAcM_GetParam(actor) & 0xF) << 13;
-        cMtx_YrotS(*calc_mtx, boss->shape_angle.y);
-        cMtx_XrotM(*calc_mtx, boss->shape_angle.x);
-        cMtx_ZrotM(*calc_mtx, boss->shape_angle.z);
+        cMtx_YrotS(*calc_mtx, boss->actor.shape_angle.y);
+        cMtx_XrotM(*calc_mtx, boss->actor.shape_angle.x);
+        cMtx_ZrotM(*calc_mtx, boss->actor.shape_angle.z);
         cMtx_YrotM(*calc_mtx, sVar1);
-        actor->current.angle.y = sVar1 + boss->shape_angle.y;
+        actor->current.angle.y = sVar1 + boss->actor.shape_angle.y;
         local_20.x = 0.0f;
         local_20.y = REG14_F(3);
         local_20.z = REG14_F(4) + 180.0f;
         MtxPosition(&local_20, &cStack_2c);
-        actor->current.pos = boss->current.pos + cStack_2c;
+        actor->current.pos = boss->actor.current.pos + cStack_2c;
         switch (i_this->m2BA) {
         case 0:
             wait(i_this);
