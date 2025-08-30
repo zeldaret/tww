@@ -1,7 +1,7 @@
 #ifndef RES_HOMEN_H
 #define RES_HOMEN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum HOMEN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

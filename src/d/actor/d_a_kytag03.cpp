@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kytag03.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag03.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -90,7 +91,7 @@ static BOOL daKytag03_Execute(kytag03_class* i_this) {
         if (!i_this->mbIsActive && dKy_contrast_flg_get()) {
             if (!i_this->mbVisible) {
                 cXyz pos;
-                s16 y = player->shape_angle.y;
+                const s16 y = player->shape_angle.y;
                 pos.x = cM_scos(0) * cM_ssin(y);
                 pos.y = cM_ssin(0);
                 pos.z = cM_scos(0) * cM_scos(y);
@@ -124,15 +125,17 @@ static BOOL daKytag03_Delete(kytag03_class* i_this) {
 /* 00000544-00000604       .text daKytag03_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
-#if VERSION == VERSION_DEMO
-    cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
-    if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(i_this, kytag03_class);
-#else
+
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, kytag03_class);
+#endif
+
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, kytag03_class);
 #endif
+
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;
         }

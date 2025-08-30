@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_mtest.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mtest.h"
 #include "d/res/res_mtest.h"
 #include "d/res/res_owater.h"
@@ -12,9 +13,6 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",
@@ -61,11 +59,11 @@ const dCcD_SrcCyl daObjMtest::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000198       .text chk_appear__Q210daObjMtest5Act_cFv */
@@ -366,9 +364,6 @@ namespace daObjMtest {
         BOOL Mthd_Draw(void* i_this) {
             return ((Act_c*)i_this)->MoveBGDraw();
         }
-        
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
         
         BOOL Mthd_IsDelete(void* i_this) {
             return ((Act_c*)i_this)->MoveBGIsDelete();

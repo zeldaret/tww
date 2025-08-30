@@ -1,7 +1,7 @@
 #ifndef RES_VLEOF_H
 #define RES_VLEOF_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VLEOF_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

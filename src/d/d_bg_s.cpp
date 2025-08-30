@@ -64,7 +64,7 @@ bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
 
 /* 800A03C4-800A0420       .text ChkMoveBG__4dBgSFR13cBgS_PolyInfo */
 bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
-    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    dBgW* bgwp = dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
         if (bgwp->ChkLock())
             return false;
@@ -76,7 +76,7 @@ bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0420-800A046C       .text ChkMoveBG_NoDABg__4dBgSFR13cBgS_PolyInfo */
 bool dBgS::ChkMoveBG_NoDABg(cBgS_PolyInfo& polyInfo) {
-    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    dBgW* bgwp = dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
         if (bgwp->ChkMoveBg())
             return true;
@@ -130,7 +130,7 @@ int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
     if (inf != 0xFF)
         return inf;
 
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return 0xFF;
     return GetGrpInf(polyInfo, grp_id) & 0xFF;
@@ -138,7 +138,7 @@ int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A07F4-800A0858       .text GetGrpSoundId__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetGrpSoundId(cBgS_PolyInfo& polyInfo) {
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return -1;
     return (GetGrpInf(polyInfo, grp_id) >> 11) & 0xFF;
@@ -146,7 +146,7 @@ s32 dBgS::GetGrpSoundId(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0858-800A08C0       .text ChkGrpInf__4dBgSFR13cBgS_PolyInfoUl */
 u32 dBgS::ChkGrpInf(cBgS_PolyInfo& polyInfo, u32 mask) {
-    s32 grp_id = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    s32 grp_id = GetTriGrp(polyInfo);
     if (grp_id == -1)
         return 0;
 
@@ -289,7 +289,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
     dBgW* bgwp = (dBgW*)m_chk_element[id].m_bgw_base_ptr;
     s32 roomNo = bgwp->mRoomNo;
     if (roomNo == 0xFFFF) {
-        s32 grp = GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+        s32 grp = GetTriGrp(polyInfo);
         roomNo = GetGrpToRoomId(polyInfo.GetBgIndex(), grp);
         if (roomNo == 0xFFFF)
             return -1;
@@ -555,9 +555,9 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
     CHECK_PVEC3_RANGE(2280, pm_pos);
     
     if (!(mFlag & 4)) {
-        f32 dist2 = GetOldPos()->abs2(*pm_pos);
+        f32 dist_sq = GetOldPos()->abs2(*pm_pos);
         bool inWall = false;
-        if (dist2 > (0.65f*0.65f * GetWallR()*GetWallR())) {
+        if (dist_sq > (SQUARE(0.65f) * GetWallR()*GetWallR())) {
             inWall = true;
             
             cBgS_LinChk linChk;

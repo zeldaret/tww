@@ -3,7 +3,9 @@
 // Translation Unit: d_place_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_place_name.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
@@ -83,7 +85,8 @@ void dPlace_name_c::setScreen(const char* name, JKRArchive* arc) {
 BOOL dPlace_name_c::_openAnime() {
     if (pane.mUserArea < 10) {
         pane.mUserArea++;
-        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+        s16 tmp = pane.mUserArea;
+        f32 alpha = fopMsgM_valueIncrease(10, tmp, 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
@@ -96,7 +99,8 @@ BOOL dPlace_name_c::_closeAnime() {
 
     if (pane.mUserArea > 0) {
         pane.mUserArea--;
-        f32 alpha = fopMsgM_valueIncrease(10, pane.mUserArea, 0);
+        s16 tmp = pane.mUserArea;
+        f32 alpha = fopMsgM_valueIncrease(10, tmp, 0);
         fopMsgM_setNowAlpha(&pane, alpha);
     }
 
@@ -213,7 +217,7 @@ BOOL dPn_c::_delete() {
     mpHeap->freeAll();
     dComIfGp_offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
-    dComIfG_resDelete(&mPhs, "PName");
+    dComIfG_resDeleteDemo(&mPhs, "PName");
     return TRUE;
 }
 
@@ -261,6 +265,6 @@ msg_process_profile_definition g_profile_PLACE_NAME = {
     0,
     0,
     &g_fopMsg_Method,
-    0x1DD,
+    PRIO_PLACE_NAME,
     &l_dPlace_name_Method,
 };

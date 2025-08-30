@@ -3,6 +3,7 @@
 // Translation Unit: d_kankyo_rain.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo_rain.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_bg_s_roof_chk.h"
@@ -883,7 +884,7 @@ void wave_move() {
     }
 
     dKy_set_eyevect_calc2(pCamera, &eyevect, g_env_light.mWaveChan.mWaveSpawnDist, 0.0f);
-    d0.zero();
+    d0.x = d0.y = d0.z = 0.0f;
 
     windVecP = dKyw_get_wind_vec();
     windPow = dKyw_get_wind_pow();
@@ -924,7 +925,7 @@ void wave_move() {
         windPow = 0.6f;
     }
 
-    d0.zero();
+    d0.x = d0.y = d0.z = 0.0f;
 
     deltaXZ.x = pCamera->mLookat.mCenter.x - pCamera->mLookat.mEye.x;
     deltaXZ.y = 0.0f;

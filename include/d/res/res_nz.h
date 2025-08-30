@@ -1,7 +1,7 @@
 #ifndef RES_NZ_H
 #define RES_NZ_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum NZ_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */

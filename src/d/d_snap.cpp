@@ -11,10 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-// Needed for the .rodata section to match.
-static const f32 dummy_2080[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy_2100[3] = {1.0f, 1.0f, 1.0f};
-static const f32 dummy_3599[3] = {0.0f, 0.0f, 0.0f};
+#include "weak_bss_3569.h"  // IWYU pragma: keep
 
 int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     NULL,
@@ -23,12 +20,17 @@ int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     &dSnap_packet::JudgeCoupleLook,
     &dSnap_packet::JudgeGF,
     &dSnap_packet::JudgeGenzo,
+#if VERSION == VERSION_DEMO
+    &dSnap_packet::JudgeGene,
+#else
     &dSnap_packet::JudgeObasan4,
+#endif
     &dSnap_packet::JudgeGene,
     &dSnap_packet::JudgeGene,
     &dSnap_packet::JudgeGene,
     &dSnap_packet::JudgeTestM,
 };
+
 dSnap_packet l_snap;
 
 struct CharaData {
@@ -94,11 +96,11 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x02,
     },
     {   // 0x05
-        /* offset    */ {0, -30, 0},
-        /* radius    */ 30,
+        /* offset    */ {0, DEMO_SELECT(40, -30), DEMO_SELECT(120, 0)},
+        /* radius    */ DEMO_SELECT(40, 30),
         /* height    */ 60,
-        /* minRatio  */ 500,
-        /* cullAngle */ 0x3FFF,
+        /* minRatio  */ DEMO_SELECT(200, 500),
+        /* cullAngle */ DEMO_SELECT(15000, 0x3FFF),
         /* minPixels */ 2000,
         /* figRoom   */ 0x03,
         /* m11       */ 0x02,
@@ -157,7 +159,7 @@ static const CharaData l_CharaData[] = {
         /* offset    */ {0, 0, 0},
         /* radius    */ 50,
         /* height    */ 60,
-        /* minRatio  */ 400,
+        /* minRatio  */ DEMO_SELECT(550, 400),
         /* cullAngle */ 0x3E80,
         /* minPixels */ 4000,
         /* figRoom   */ 0x03,
@@ -184,12 +186,12 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x00,
     },
     {   // 0x0E
-        /* offset    */ {0, 30, 0},
-        /* radius    */ 50,
-        /* height    */ 120,
-        /* minRatio  */ 200,
+        /* offset    */ {0, DEMO_SELECT(20, 30), 0},
+        /* radius    */ DEMO_SELECT(60, 50),
+        /* height    */ DEMO_SELECT(130, 120),
+        /* minRatio  */ DEMO_SELECT(550, 200),
         /* cullAngle */ 0x4650,
-        /* minPixels */ 3000,
+        /* minPixels */ DEMO_SELECT(4000, 3000),
         /* figRoom   */ 0x02,
         /* m11       */ 0x02,
     },
@@ -335,10 +337,10 @@ static const CharaData l_CharaData[] = {
     },
     {   // 0x1D
         /* offset    */ {0, 80, 0},
-        /* radius    */ 35,
-        /* height    */ 80,
-        /* minRatio  */ 500,
-        /* cullAngle */ 0x4650,
+        /* radius    */ DEMO_SELECT(40, 35),
+        /* height    */ DEMO_SELECT(85, 80),
+        /* minRatio  */ DEMO_SELECT(550, 500),
+        /* cullAngle */ DEMO_SELECT(10000, 18000),
         /* minPixels */ 5000,
         /* figRoom   */ 0x02,
         /* m11       */ 0x02,
@@ -468,7 +470,7 @@ static const CharaData l_CharaData[] = {
         /* radius    */ 50,
         /* height    */ 160,
         /* minRatio  */ 500,
-        /* cullAngle */ 0x2EE0,
+        /* cullAngle */ DEMO_SELECT(10000, 12000),
         /* minPixels */ 4500,
         /* figRoom   */ 0x01,
         /* m11       */ 0x02,
@@ -478,7 +480,7 @@ static const CharaData l_CharaData[] = {
         /* radius    */ 50,
         /* height    */ 160,
         /* minRatio  */ 500,
-        /* cullAngle */ 0x2EE0,
+        /* cullAngle */ DEMO_SELECT(10000, 12000),
         /* minPixels */ 4500,
         /* figRoom   */ 0x01,
         /* m11       */ 0x02,
@@ -498,18 +500,18 @@ static const CharaData l_CharaData[] = {
         /* radius    */ 50,
         /* height    */ 80,
         /* minRatio  */ 500,
-        /* cullAngle */ 0x2EE0,
+        /* cullAngle */ DEMO_SELECT(10000, 12000),
         /* minPixels */ 4500,
         /* figRoom   */ 0x01,
         /* m11       */ 0x02,
     },
     {   // 0x2E
-        /* offset    */ {0, 10, 0},
+        /* offset    */ {0, DEMO_SELECT(20, 10), DEMO_SELECT(10, 0)},
         /* radius    */ 50,
-        /* height    */ 90,
+        /* height    */ DEMO_SELECT(80, 90),
         /* minRatio  */ 500,
-        /* cullAngle */ 0x32C8,
-        /* minPixels */ 5000,
+        /* cullAngle */ DEMO_SELECT(10000, 13000),
+        /* minPixels */ DEMO_SELECT(4500, 5000),
         /* figRoom   */ 0x01,
         /* m11       */ 0x02,
     },
@@ -518,7 +520,7 @@ static const CharaData l_CharaData[] = {
         /* radius    */ 50,
         /* height    */ 80,
         /* minRatio  */ 500,
-        /* cullAngle */ 0x2EE0,
+        /* cullAngle */ DEMO_SELECT(10000, 12000),
         /* minPixels */ 4500,
         /* figRoom   */ 0x01,
         /* m11       */ 0x02,
@@ -724,11 +726,11 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x02,
     },
     {   // 0x44
-        /* offset    */ {0, 20, 0},
-        /* radius    */ 50,
-        /* height    */ 150,
+        /* offset    */ {0, 20, DEMO_SELECT(25, 0)},
+        /* radius    */ DEMO_SELECT(70, 50),
+        /* height    */ DEMO_SELECT(170, 150),
         /* minRatio  */ 500,
-        /* cullAngle */ 0x2EE0,
+        /* cullAngle */ DEMO_SELECT(0x2000, 12000),
         /* minPixels */ 5000,
         /* figRoom   */ 0x06,
         /* m11       */ 0x02,
@@ -844,11 +846,11 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x02,
     },
     {   // 0x50
-        /* offset    */ {0, -300, 0},
-        /* radius    */ 870,
-        /* height    */ 700,
-        /* minRatio  */ 100,
-        /* cullAngle */ 0x6000,
+        /* offset    */ {0, DEMO_SELECT(1000, -300), DEMO_SELECT(100, 0)},
+        /* radius    */ DEMO_SELECT(2000, 870),
+        /* height    */ DEMO_SELECT(2000, 700),
+        /* minRatio  */ DEMO_SELECT(300, 100),
+        /* cullAngle */ DEMO_SELECT(18000, 0x6000),
         /* minPixels */ 3000,
         /* figRoom   */ 0x06,
         /* m11       */ 0x00,
@@ -874,9 +876,9 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x0E,
     },
     {   // 0x53
-        /* offset    */ {0, 0, 0},
+        /* offset    */ {0, DEMO_SELECT(15, 0), 0},
         /* radius    */ 40,
-        /* height    */ 55,
+        /* height    */ DEMO_SELECT(100, 55),
         /* minRatio  */ 500,
         /* cullAngle */ 0x2AF8,
         /* minPixels */ 4000,
@@ -1074,11 +1076,11 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x00,
     },
     {   // 0x67
-        /* offset    */ {0, -50, 0},
-        /* radius    */ 50,
-        /* height    */ 100,
+        /* offset    */ {0, DEMO_SELECT(0, -50), DEMO_SELECT(50, 0)},
+        /* radius    */ DEMO_SELECT(40, 50),
+        /* height    */ DEMO_SELECT(80, 100),
         /* minRatio  */ 200,
-        /* cullAngle */ 0x4000,
+        /* cullAngle */ DEMO_SELECT(12000, 0x4000),
         /* minPixels */ 3000,
         /* figRoom   */ 0x05,
         /* m11       */ 0x00,
@@ -1304,10 +1306,10 @@ static const CharaData l_CharaData[] = {
         /* m11       */ 0x00,
     },
     {   // 0x7E
-        /* offset    */ {0, -200, 0},
-        /* radius    */ 360,
-        /* height    */ 450,
-        /* minRatio  */ 500,
+        /* offset    */ {0, DEMO_SELECT(300, -200), 0},
+        /* radius    */ DEMO_SELECT(600, 360),
+        /* height    */ DEMO_SELECT(900, 450),
+        /* minRatio  */ DEMO_SELECT(100, 500),
         /* cullAngle */ 0x4E20,
         /* minPixels */ 500,
         /* figRoom   */ 0x04,
@@ -1790,7 +1792,7 @@ void dSnap_packet::Execute() {
     if (ChkReleaseShutter()) {
         for (int col = 0; col < (s32)ARRAY_SIZE(m_tbl); col++) {
             m_tbl[col].Init();
-            m_tbl[col].field_0x34 = 1e9f;
+            m_tbl[col].field_0x34 = G_CM3D_F_INF;
         }
         field_0x14 = 0;
     }
@@ -1806,7 +1808,7 @@ int dSnap_packet::Regist(const dSnap_Obj& obj) {
         int col;
         bool r6 = false;
         int r29;
-        f32 f30 = -1e9f;
+        f32 f30 = -G_CM3D_F_INF;
         for (col = 0; col < ARRAY_SIZE(m_tbl); col++) {
             if (f30 < m_tbl[col].field_0x34 && m_tbl[col].m_obj.GetPhoto() >= 0x48) {
                 r6 = true;
@@ -1817,12 +1819,12 @@ int dSnap_packet::Regist(const dSnap_Obj& obj) {
         if (!r6) {
             return 0;
         }
-        f32 dist2 = player->current.pos.abs2(obj.mCenter);
-        if (obj.GetPhoto() >= 0x48 && dist2 > f30) {
+        f32 dist_sq = player->current.pos.abs2(obj.mCenter);
+        if (obj.GetPhoto() >= 0x48 && dist_sq > f30) {
             return 0;
         }
         m_tbl[r29].Regist(obj);
-        m_tbl[r29].field_0x34 = dist2;
+        m_tbl[r29].field_0x34 = dist_sq;
         return 0;
     } else {
         m_tbl[field_0x14].Regist(obj);
@@ -1919,7 +1921,7 @@ void dSnap_packet::ClearAlphaBuffer() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -2047,12 +2049,16 @@ int dSnap_packet::JudgeGenzo() {
     if (col1 == -1) {
         return 0;
     }
+#if VERSION == VERSION_DEMO
+    if (m_tbl[col1].m_obj.ChkSuccess(2000, 0.3f))
+#else
     int col2 = FindPhoto(0, 6);
     if (col2 == -1) {
         return 0;
     }
     if (m_tbl[col1].m_obj.ChkSuccess(1500, 0.2f) &&
         m_tbl[col2].m_obj.ChkSuccess(1500, 0.2f))
+#endif
     {
         return 5;
     } else {
@@ -2097,6 +2103,13 @@ int dSnap_packet::JudgeGene() {
 
 /* 800CEA80-800CEB80       .text JudgeFigure__12dSnap_packetFi */
 int dSnap_packet::JudgeFigure(int col) {
+#if VERSION == VERSION_DEMO
+    // Fakematch?
+    // Something that uses m_tbl[col] but doesn't produce any code needs to be up here in order to match on demo.
+    // This breaks retail though, so maybe something else like a compiler flag is needed instead.
+    m_tbl[col].m_obj.mActorPID = m_tbl[col].m_obj.mActorPID;
+#endif
+    
     if (field_0x10 >= 0xD0) {
         return 0;
     }
@@ -2142,7 +2155,7 @@ void dSnap_packet::SetResult() {
         if (m_tbl[col].m_obj.mCapturedPixels == 0 || m_tbl[col].m_obj.GetPhoto() == 0) {
             continue;
         }
-        JUT_ASSERT(VERSION_SELECT(2325, 2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
+        JUT_ASSERT(VERSION_SELECT(2273, 2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
         if (m_tbl[col].m_obj.GetPhoto() < (s32)ARRAY_SIZE(sp8)) {
             if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
                 continue;
@@ -2224,8 +2237,9 @@ void dSnap_RegistFig(u8 r3, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f
     mDoMtx_stack_c::multVec(&sp8, &sp14);
     sp14 += pos;
     
+    int angY = angleY;
     dSnap_Obj sp20;
-    sp20.SetGeo(sp14, chara.radius*f2, chara.height*f1, (int)angleY);
+    sp20.SetGeo(sp14, chara.radius*f2, chara.height*f1, angY);
     sp20.SetInf(r3, actor, 0, 4, chara.cullAngle);
     dSnap_RegistSnapObj(sp20);
 }

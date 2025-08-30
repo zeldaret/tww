@@ -1,7 +1,7 @@
 #ifndef RES_VROPE_H
 #define RES_VROPE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VROPE_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

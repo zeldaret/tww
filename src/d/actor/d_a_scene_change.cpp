@@ -3,6 +3,7 @@
 // Translation Unit: d_a_scene_change.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_scene_change.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

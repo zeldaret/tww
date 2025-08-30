@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Yboil.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Yboil.h"
 #include "d/res/res_yboil.h"
 #include "d/d_a_obj.h"

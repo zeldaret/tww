@@ -1,7 +1,7 @@
 #ifndef RES_S_MSPDO_H
 #define RES_S_MSPDO_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum S_MSPDO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

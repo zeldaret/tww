@@ -3,6 +3,7 @@
  * Enemy - ReDead
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
 #include "d/res/res_rd.h"
 #include "d/d_procname.h"
@@ -20,8 +21,45 @@
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daRd_HIO_c : public mDoHIO_entry_c {
+public:
+    daRd_HIO_c();
+    virtual ~daRd_HIO_c() {}
+    
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04 */ dNpc_HIO_c mNpc;
+    /* 0x2C */ u8 m2C;
+    /* 0x2D */ u8 m2D[0x30 - 0x2D];
+    /* 0x30 */ f32 m30;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ f32 mCryRadius;
+    /* 0x3C */ f32 mAttackRadius;
+    /* 0x40 */ s16 m40;
+    /* 0x42 */ s16 mCrySpreadAngle;
+    /* 0x44 */ s16 mAttackSpreadAngle;
+    /* 0x46 */ s16 m46;
+    /* 0x48 */ s16 m48;
+    /* 0x4A */ s16 m4A;
+    /* 0x4C */ s16 m4C;
+    /* 0x4E */ s16 m4E;
+    /* 0x50 */ s16 m50;
+    /* 0x52 */ s16 m52;
+    /* 0x54 */ s16 m54;
+    /* 0x56 */ u8 m56[0x58 - 0x56];
+    /* 0x58 */ f32 m58;
+    /* 0x5C */ f32 m5C;
+    /* 0x60 */ f32 m60;
+    /* 0x64 */ f32 m64;
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 mReturnWalkSpeed;
+    /* 0x70 */ f32 m70;
+    /* 0x74 */ f32 m74;
+    /* 0x78 */ s16 m78;
+    /* 0x7A */ s16 mParalysisDuration;
+    /* 0x7C */ JntHit_HIO_c m7C;
+};
 
 static daRd_HIO_c l_HIO;
 
@@ -50,11 +88,11 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 /* 000000EC-0000027C       .text __ct__10daRd_HIO_cFv */
@@ -199,7 +237,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(504, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -220,7 +258,7 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(525, btk != NULL);
+    JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -228,7 +266,7 @@ BOOL daRd_c::_createHeap() {
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(550, brk != NULL);
+    JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
@@ -256,133 +294,133 @@ bool daRd_c::createArrowHeap() {
     static Vec yubi_cyl_offset[]   = {{0.0f, 0.0f, 0.0f},    {17.0f, 0.0f, 0.0f}};
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x02,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x03,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x04,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x05,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x06,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x07,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x08,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ sebone_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ muneA_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0F,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x10,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x11,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x12,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x13,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x14,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x15,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x16,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
@@ -399,12 +437,14 @@ bool daRd_c::createArrowHeap() {
 
 /* 000009D0-00000A38       .text checkPlayerInAttack__6daRd_cFv */
 bool daRd_c::checkPlayerInAttack() {
-    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    return dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
 }
 
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
-    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -459,7 +499,12 @@ void daRd_c::lookBack() {
             mTargetPos = player->getHeadTopPos();
             break;
         case MODE_RETURN:
-            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+#if VERSION == VERSION_DEMO
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 100.0f))
+#else
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f))
+#endif
+            {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
                 mJntCtrl.onBackBoneLock();
@@ -494,7 +539,9 @@ bool daRd_c::checkTgHit() {
     if (mCyl.ChkTgHit()) {
         hitObj = mCyl.GetTgHitObj();
         if (hitObj->GetAtType() == AT_TYPE_LIGHT) {
+#if VERSION > VERSION_DEMO
             fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+#endif
             modeProcInit(MODE_PARALYSIS);
             return true;
         }
@@ -647,7 +694,9 @@ bool daRd_c::checkTgHit() {
     }
     
     if (dComIfGp_getDetect().chk_light(&current.pos)) {
+#if VERSION > VERSION_DEMO
         fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+#endif
         modeProcInit(MODE_PARALYSIS);
         return true;
     }
@@ -1059,9 +1108,13 @@ void daRd_c::modeAttack() {
         if (dist <= 20.0f + REG12_F(2)) {
             cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
             if (cLib_calcTimer(&mTimer2) == 0) {
+#if VERSION == VERSION_DEMO
+                dComIfGp_setItemLifeCount(-1.0f);
+#else
                 if (!daPy_getPlayerLinkActorClass()->checkNoDamageMode()) {
                     daPy_getPlayerLinkActorClass()->setDamagePoint(-1.0f);
                 }
+#endif
                 mTimer2 = 30;
             }
         } else if (mAcch.ChkWallHit()) {
@@ -1753,14 +1806,20 @@ void daRd_c::createInit() {
         }
     }
     
+#if VERSION > VERSION_DEMO
     setBrkAnm(0);
+#endif
     setMtx();
+#if VERSION > VERSION_DEMO
     mBtkAnm.play();
     mBrkAnm.play();
     mpMorf->play(&current.pos, 0, 0);
     mBrkAnm.setFrame(0.0f);
+#endif
     mpMorf->calc();
+#if VERSION > VERSION_DEMO
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+#endif
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
     
@@ -1824,7 +1883,7 @@ cPhs_State daRd_c::_create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();
         
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2520)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         
@@ -1838,14 +1897,16 @@ cPhs_State daRd_c::_create() {
 bool daRd_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
     enemy_fire_remove(&mEnemyFire);
+#if VERSION > VERSION_DEMO
     if (heap) {
         mpMorf->stopZelAnime();
     }
+#endif
     return true;
 }
 
 /* 00004FB8-00004FD8       .text daRdCreate__FPv */
-static s32 daRdCreate(void* i_this) {
+static cPhs_State daRdCreate(void* i_this) {
     return static_cast<daRd_c*>(i_this)->_create();
 }
 

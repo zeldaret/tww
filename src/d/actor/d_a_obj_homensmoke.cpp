@@ -3,14 +3,13 @@
 // Translation Unit: d_a_obj_homensmoke.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_homensmoke.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_particle.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daObjHomensmoke {
     /* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */
@@ -76,7 +75,12 @@ namespace daObjHomensmoke {
 
     /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_execute() {
-        if (!mbInitialized) {
+#if VERSION == VERSION_DEMO
+        if (m2D0 == NULL)
+#else
+        if (!mbInitialized)
+#endif
+        {
             static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
             static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
             if (mType == 0) {

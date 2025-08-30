@@ -224,7 +224,9 @@ BOOL JUTGba::resultGetStatus(int param_1, u8* param_2) {
 void* JUTGba::gbaThreadMain(void* param_1) {
     JUTGbaParam* param = (JUTGbaParam*)param_1;
     { JKRThread jkrThread(OSGetCurrentThread(), 0); }
+#if VERSION > VERSION_DEMO
     JKRSetCurrentHeap(NULL);
+#endif
     JUTGbaThreadVar threadVar;
     threadVar.field_0x0 = param;
     while (true) {
@@ -279,7 +281,7 @@ void* JUTGba::gbaThreadMain(void* param_1) {
                 sManager->gbaThread_GetStatus(&threadVar);
                 break;
             default:
-                OSPanic(__FILE__, 623, "UNKNOWN GBA COMMAND.");
+                OSPanic(__FILE__, DEMO_SELECT(622, 623), "UNKNOWN GBA COMMAND.");
                 break;
             }
             if (threadVar.field_0x14) {

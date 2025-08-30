@@ -3,6 +3,7 @@
 // Translation Unit: d_meter.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_meter.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
@@ -14,8 +15,6 @@
 #include "d/d_procname.h"
 #include "d/d_timer.h"
 #include "stdio.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 dMeter_info_c dMeter_Info;
 fopMsgM_pane_class item_parts;

@@ -2,6 +2,7 @@
 // Furthermore, the symbol maps show that d_a_bomb.o's first .text section is 0 bytes large, with everything going in
 // its second .text section, which suggests that d_a_bomb.cpp is empty except including d_a_bomb3.inc.
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_a_obj.h"
@@ -16,8 +17,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/res/res_vbakh.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace {
     enum AttrSt_e {
@@ -198,9 +197,10 @@ BOOL daBomb_c::draw() {
     }
 
     if(fopAcM_GetModel(this) == 0 && mAcch.GetGroundH() != -G_CM3D_F_INF) {
-        cM3dGPla* pNormal = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        if(pNormal) {
-            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, pNormal->GetNP());
+        cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+        cXyz* norm = triPla->GetNP();
+        if(norm) {
+            dComIfGd_setSimpleShadow(&current.pos, mAcch.GetGroundH(), 25.0f, norm);
         }
     }
 
@@ -672,9 +672,7 @@ void daBomb_c::makeWaterEffect() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -834,9 +832,7 @@ BOOL daBomb_c::procExplode_init() {
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
         dComIfG_Ccsp()->Set(&mSph);
-        //using inline breaks match
-        //dComIfG_Ccsp()->SetMass(&mSph, 3);
-        g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+        dComIfG_Ccsp_SetMass(&mSph, 3);
         field_0x782 = 1;
         mMassCounter = g_Counter.mCounter0;
     }
@@ -899,9 +895,7 @@ bool daBomb_c::procExplode() {
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp_SetMass(&mSph, 3);
             mMassCounter = g_Counter.mCounter0;
             field_0x782 = 1;
         }
@@ -1088,9 +1082,7 @@ BOOL daBomb_c::execute() {
             mSph.SetR(scale.x * 30.0f);
             if(mMassCounter != g_Counter.mCounter0) {
                 dComIfG_Ccsp()->Set(&mSph);
-                //using inline breaks match
-                //dComIfG_Ccsp()->SetMass(&mSph, 3);
-                g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+                dComIfG_Ccsp_SetMass(&mSph, 3);
                 mMassCounter = g_Counter.mCounter0;
             }
         }
@@ -1126,7 +1118,7 @@ void daBomb_c::set_wind_vec() {
         return;
     cXyz sp48 = *mSph.GetTgRVecP();
     f32 f31 = sp48.abs2();
-    if (f31 > 180.0f*180.0f) {
+    if (f31 > SQUARE(180.0f)) {
         sp48 *= 180.0f / std::sqrtf(f31);
     }
     cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
@@ -1202,7 +1194,7 @@ void daBomb_c::se_cannon_fly_set() {
 /* 800DC400-800DC44C       .text se_cannon_fly_stop__8daBomb_cFv */
 void daBomb_c::se_cannon_fly_stop() {
     if(field_0x77F) {
-        mDoAud_seStopActor(&current.pos, -1);
+        mDoAud_seStopActor(&current.pos);
         field_0x77F = 0;
     }
 }
@@ -1383,10 +1375,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
-    },
+    }},
 };
 
 /* 800DCF18-800DD1A4       .text create_init__8daBomb_cFv */

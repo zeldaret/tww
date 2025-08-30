@@ -47,7 +47,6 @@ extern mDoAud_zelAudio_c g_mDoAud_zelAudio;
 void mDoAud_setSceneName(const char*, s32, s32);
 void mDoAud_Execute();
 BOOL mDoAud_isUsedHeapForStreamBuffer();
-int mDoAud_load1stDynamicWave();
 int mDoAud_getTactDirection(int stick, int ret);
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;
@@ -64,7 +63,11 @@ inline void mDoAud_subBgmStop() {
     mDoAud_zelAudio_c::getInterface()->subBgmStop();
 }
 
-inline void mDoAud_changeSubBgmStatus(u32 status) {
+inline void mDoAud_changeBgmStatus(s32 status) {
+    mDoAud_zelAudio_c::getInterface()->changeBgmStatus(status);
+}
+
+inline void mDoAud_changeSubBgmStatus(s32 status) {
     mDoAud_zelAudio_c::getInterface()->changeSubBgmStatus(status);
 }
 
@@ -92,7 +95,27 @@ inline int mDoAud_checkPlayingSubBgmFlag() {
     return mDoAud_zelAudio_c::getInterface()->checkPlayingSubBgmFlag();
 }
 
-inline void mDoAud_prepareLandingDemo(u32 idx) {
+inline s32 mDoAud_checkFirstWaves() {
+    return mDoAud_zelAudio_c::getInterface()->checkFirstWaves();
+}
+
+inline void mDoAud_loadStaticWaves() {
+    mDoAud_zelAudio_c::getInterface()->loadStaticWaves();
+}
+
+int mDoAud_load1stDynamicWave();
+
+inline void mDoAud_load2ndDynamicWave() {
+    mDoAud_zelAudio_c::getInterface()->load2ndDynamicWave();
+}
+
+inline void mDoAud_check1stDynamicWave() {}
+
+inline bool mDoAud_checkAllWaveLoadStatus() {
+    return mDoAud_zelAudio_c::getInterface()->checkAllWaveLoadStatus();
+}
+
+inline void mDoAud_prepareLandingDemo(s32 idx) {
     mDoAud_zelAudio_c::getInterface()->prepareLandingDemo(idx);
 }
 
@@ -106,10 +129,6 @@ inline void mDoAud_endLandingDemo() {
 
 inline void mDoAud_sceneBgmStart() {
     mDoAud_zelAudio_c::getInterface()->sceneBgmStart();
-}
-
-inline void mDoAud_load2ndDynamicWave() {
-    mDoAud_zelAudio_c::getInterface()->load2ndDynamicWave();
 }
 
 inline void mDoAud_taktModeMute() {
@@ -131,10 +150,6 @@ inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos, u32 param_2, s8 i_reverb) 
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, param_2, i_reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
-inline void mDoAud_messageSePlay(u16 i_seNum, Vec* i_sePos = NULL, s8 i_reverb = 0) {
-    mDoAud_zelAudio_c::getInterface()->messageSePlay(i_seNum, i_sePos, i_reverb);
-}
-
 inline void mDoAud_seStart(u32 i_seNum, Vec* i_sePos, u32 param_2) {
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, i_sePos, param_2, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
@@ -147,6 +162,10 @@ inline void mDoAud_seStart(u32 i_seNum) {
     mDoAud_zelAudio_c::getInterface()->seStart(i_seNum, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
 }
 
+inline void mDoAud_messageSePlay(u16 i_seNum, Vec* i_sePos = NULL, s8 i_reverb = 0) {
+    mDoAud_zelAudio_c::getInterface()->messageSePlay(i_seNum, i_sePos, i_reverb);
+}
+
 inline void mDoAud_bgmSetSwordUsing(s32 param_1) {
     mDoAud_zelAudio_c::getInterface()->bgmSetSwordUsing(param_1);
 }
@@ -155,8 +174,16 @@ inline void mDoAud_seStop(u32 i_seNum, s32 param_2) {
     mDoAud_zelAudio_c::getInterface()->seStop(i_seNum, param_2);
 }
 
+inline void mDoAud_seStop(u32 i_seNum) {
+    mDoAud_zelAudio_c::getInterface()->seStop(i_seNum, 0);
+}
+
 inline void mDoAud_seStopActor(Vec* param_1, u32 param_2) {
     mDoAud_zelAudio_c::getInterface()->seStopActor(param_1, param_2);
+}
+
+inline void mDoAud_seStopActor(Vec* param_0) {
+    mDoAud_zelAudio_c::getInterface()->seStopActor(param_0, -1);
 }
 
 inline void mDoAud_seDeleteObject(Vec* i_sePos) {
@@ -171,16 +198,16 @@ inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 para
     mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
 }
 
-inline void mDoAud_getCameraMapInfo(u32 param_0) {
-    mDoAud_zelAudio_c::getInterface()->getCameraMapInfo(param_0);
+inline void mDoAud_setLinkSwordType(s32 param_0, s32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->setLinkSwordType(param_0, param_1);
 }
 
-inline void mDoAud_setCameraGroupInfo(u8 param_0) {
-    mDoAud_zelAudio_c::getInterface()->setCameraGroupInfo(param_0);
+inline void mDoAud_setLinkShieldType(s32 param_0, s32 param_1) {
+    mDoAud_zelAudio_c::getInterface()->setLinkShieldType(param_0, param_1);
 }
 
-inline void mDoAud_getCameraInfo(Vec* param_0, MtxP param_1, u32 param_2) {
-    mDoAud_zelAudio_c::getInterface()->getCameraInfo(param_0, param_1, param_2);
+inline void mDoAud_setLinkBootsType(s32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->setLinkBootsType(param_0);
 }
 
 inline void mDoAud_setLinkGroupInfo(u8 param_0) {
@@ -195,11 +222,27 @@ inline void mDoAud_setLinkHp(s32 param_0, s32 param_1) {
     mDoAud_zelAudio_c::getInterface()->setLinkHp(param_0, param_1);
 }
 
+inline void mDoAud_bgmNowKaitengiri() {
+    mDoAud_zelAudio_c::getInterface()->bgmNowKaitengiri();
+}
+
+inline void mDoAud_getCameraMapInfo(u32 param_0) {
+    mDoAud_zelAudio_c::getInterface()->getCameraMapInfo(param_0);
+}
+
+inline void mDoAud_setCameraGroupInfo(u8 param_0) {
+    mDoAud_zelAudio_c::getInterface()->setCameraGroupInfo(param_0);
+}
+
+inline void mDoAud_getCameraInfo(Vec* param_0, MtxP param_1, u32 param_2) {
+    mDoAud_zelAudio_c::getInterface()->getCameraInfo(param_0, param_1, param_2);
+}
+
 inline void mDoAud_setShipSailState(s32 state) {
     mDoAud_zelAudio_c::getInterface()->setShipSailState(state);
 }
 
-inline void mDoAud_shipCruiseSePlay(Vec* i_sePos, f32 param_1) {
+inline void mDoAud_shipCruiseSePlay(cXyz* i_sePos, f32 param_1) {
     mDoAud_zelAudio_c::getInterface()->shipCruiseSePlay(i_sePos, param_1);
 }
 
@@ -337,10 +380,6 @@ inline void mDoAud_bgmNowBattle(f32 distance) {
     mDoAud_zelAudio_c::getInterface()->bgmNowBattle(distance);
 }
 
-inline bool mDoAud_checkAllWaveLoadStatus() {
-    return mDoAud_zelAudio_c::getInterface()->checkAllWaveLoadStatus();
-}
-
 inline void mDoAud_initSeaEnvPos() {
     mDoAud_zelAudio_c::getInterface()->initSeaEnvPos();
 }
@@ -392,5 +431,9 @@ inline void mDoAud_talkIn() {
 inline void mDoAud_talkOut() {
     mDoAud_zelAudio_c::getInterface()->talkOut();
 }
+
+inline void mDoAud_checkSePlaying(u32 param_0) {}
+inline void mDoAud_heartGaugeOn() {}
+inline void mDoAud_resetRecover() {}
 
 #endif /* M_DO_AUDIO_H */

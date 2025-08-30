@@ -96,10 +96,11 @@ public:
     void setID(s32 id) { mId = id; }
     s32 getID() const { return mId; }
     void setAngle(csXyz* angle) { mAngle = *angle; }
-    const csXyz& getAngle() { return mAngle; }
+    csXyz& getAngle() { return mAngle; }
     void setPos(const cXyz* pos) { mPos = *pos; }
-    const cXyz& getPos() { return mPos; }
+    cXyz& getPos() { return mPos; }
 
+private:
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
     /* 0x34 */ cXyz mPos;
@@ -128,7 +129,7 @@ public:
         }
     }
     
-public:
+protected:
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0xC
@@ -137,8 +138,12 @@ class daPy_waterDropPcallBack_c : public JPACallBackBase2<JPABaseEmitter*, JPABa
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
     ~daPy_waterDropPcallBack_c() {}
-    
-    /* 0x4 */ BOOL field_0x4;
+
+    void offWaterMark() { mbWaterMark = FALSE; }
+    void onWaterMark() { mbWaterMark = TRUE; }
+
+protected:
+    /* 0x4 */ BOOL mbWaterMark;
     /* 0x8 */ dBgS_ObjGndChk mGndChk;
 };
 
@@ -153,19 +158,27 @@ public:
     daPy_swimTailEcallBack_c() {}
     
     void onEnd() {
-        field_0x04 = true;
+        mbEnd = true;
         field_0x20 = NULL;
     }
+    bool getEnd() { return mbEnd; }
+
+    void onRightFlg() { field_0x05 = true; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     cXyz& getPos() { return mPos; }
     void setPos(cXyz& pos) { mPos = pos; }
 
-    /* 0x04 */ bool field_0x04;
+    void setSpeedRate(f32 rate) { mSpeedRate = rate; }
+    void setWaterY(f32 y) { mWaterY = y; }
+    void setWaterFlatY(f32 y) { mWaterFlatY = y; }
+
+protected:
+    /* 0x04 */ bool mbEnd;
     /* 0x05 */ bool field_0x05;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x08 */ f32 mSpeedRate;
+    /* 0x0C */ f32 mWaterY;
+    /* 0x10 */ f32 mWaterFlatY;
     /* 0x14 */ cXyz mPos;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
@@ -185,6 +198,7 @@ public:
     void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
+protected:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
@@ -198,6 +212,13 @@ public:
     daPy_waterDropEcallBack_c() {}
     ~daPy_waterDropEcallBack_c() {}
 
+    BOOL checkReady() { return field_0x1C; }
+    void onReady() { field_0x1C = TRUE; }
+    void offReady() { field_0x1C = FALSE; }
+
+    static daPy_waterDropPcallBack_c* getPcallBack() { return &m_pcallback; }
+
+protected:
     static daPy_waterDropPcallBack_c m_pcallback;
 
     /* 0x1C */ BOOL field_0x1C;
@@ -242,6 +263,7 @@ public:
     daPy_mtxPosFollowEcallBack_c() {}
     ~daPy_mtxPosFollowEcallBack_c() {}
 
+protected:
     /* 0xC */ const csXyz* mpAngle;
 };  // Size: 0x10
 
@@ -252,9 +274,9 @@ public:
     virtual ~daPy_matAnm_c() {}
     virtual void calc(J3DMaterial*) const;
     
+    static u8 m_maba_timer;
     static u8 m_maba_flg;
     static u8 m_eye_move_flg;
-    static u8 m_maba_timer;
     static u8 m_morf_frame;
 
     static void onMabaFlg() { m_maba_flg = 1; }
@@ -268,14 +290,16 @@ public:
     static u8 getMabaFlg() { return m_maba_flg; }
     static u8 getMabaTimer() { return m_maba_timer; }
     static u8 getMorfFrame() { return m_morf_frame; }
-    static void getNowOffsetXP() {}
-    static void getNowOffsetYP() {}
     static void offEyeMoveFlg() { m_eye_move_flg = 0; }
     static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
-    static void setNowOffsetX(f32) {}
-    static void setNowOffsetY(f32) {}
+
+    // TODO:
+    void getNowOffsetXP() {}
+    void getNowOffsetYP() {}
+    void setNowOffsetX(f32 x) { mEyePos.x = x; }
+    void setNowOffsetY(f32 y) { mEyePos.y = y; }
 
 public:
     /* 0x6C */ cXy mEyePosOld;
@@ -289,12 +313,13 @@ public:
         ELIXIR_SOUP_SLASH_BLUR,
         PARRYING_SLASH_BLUR,
     };
-public:
+
     void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
     ~daPy_swBlur_c() {}
 
+public:
     /* 0x010 */ ResTIMG* mpTex;
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
@@ -312,7 +337,6 @@ public:
     daPy_footData_c();
 
 public:
-    // TODO: is this right?
     /* 0x000 */ u8 field_0x000;
     /* 0x001 */ u8 field_0x001;
     /* 0x002 */ s16 field_0x002;
@@ -328,14 +352,14 @@ public:
     /* 0x088 */ Mtx field_0x088[3];
 };  // Size: 0x118
 
-struct daPy_aura_c {
+class daPy_aura_c {
 public:
     void setModel(J3DModel* model) { mpYaura00Model = model; }
     J3DModel* getModel() { return mpYaura00Model; }
     void setFrame(f32 frame) { mFrame = frame; }
     f32 getFrame() { return mFrame; }
 
-public:
+private:
     /* 0x00 */ J3DModel* mpYaura00Model;
     /* 0x04 */ f32 mFrame;
 };  // Size: 0x08
@@ -1677,7 +1701,11 @@ public:
     BOOL procFoodThrow();
     BOOL procFoodSet_init();
     BOOL procFoodSet();
+#if VERSION == VERSION_DEMO
+    void setSwordModel();
+#else
     void setSwordModel(BOOL);
+#endif
     void setLightSaver();
 #if VERSION == VERSION_DEMO
     BOOL checkLastDemoSwordNoDraw(int);
@@ -1781,7 +1809,6 @@ public:
             mCurProc == daPyProc_GRAB_THROW_e;
     }
     BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
-    void clearDamageWait() {}
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
@@ -1790,7 +1817,7 @@ public:
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
     void getShadowID() const {}
-    void npcStartRestartRoom() {}
+    void npcStartRestartRoom() { startRestartRoom(5, 0xC9, -1.0f, 0); }
     void setDaiokutaEnd() {}
     void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
@@ -1804,11 +1831,13 @@ public:
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
+    static int getStartModeFromParam(u32 param) { return (param >> 0x0C) & 0xF; }
     int getStartEvent() { return (fopAcM_GetParam(this) >> 0x18) & 0xFF; }
     
     void onModeFlg(u32 flag) { mModeFlg |= flag; }
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
     u32 checkModeFlg(u32 flag) const { return mModeFlg & flag; }
+    void clearDamageWait() { offModeFlg(ModeFlg_DAMAGE); }
     
     request_of_phase_process_class* getPhase() { return &mPhase; }
     
@@ -1835,11 +1864,16 @@ public:
     BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
     
-    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType(); }
+    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType() != 0; }
     void checkSpecialDemoMode() const {}
     
-    void checkAttentionLock() {}
+    f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) {
+        return param_0 + (mStickDistance * (param_1 - param_0));
+    }
+    void seStartSystem(u32 i_seNum) { mDoAud_seStart(i_seNum); }
+    BOOL checkAttentionLock() { return mpAttention->Lockon(); }
     void checkBoomerangRock() {}
+    
     void checkBothItemEquipAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
@@ -1850,12 +1884,9 @@ public:
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void getAnmSpeedStickRate(f32, f32) {}
     void getBombWaterPillarBrk() {} // mpGwp00BrkData?
     void getBombWaterPillarBtk() {} // mpGwp00BtkData?
-    void getStartModeFromParam(u32) {}
     void getTactLeftHandPos() const {}
-    void seStartSystem(u32) {}
     void setFootEffectPosType(u8) {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
@@ -1868,9 +1899,9 @@ public:
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
     virtual void changeTextureAnime(u16, u16, int);
     
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
-    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     virtual s32 getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
@@ -1895,7 +1926,6 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
@@ -1911,6 +1941,7 @@ public:
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
@@ -2176,7 +2207,7 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 mStickDistance; // 
+    /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;

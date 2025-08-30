@@ -3,12 +3,29 @@
 // Translation Unit: d_a_tag_kk1.cpp
 //
 
-
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kk1.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+class daTag_Kk1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x08  */ f32 mHorizontalDistance;
+        /* 0x0C  */ f32 mVerticalDistance;
+        /* 0x10  */ u8  field_0x10;
+    };
+
+    daTag_Kk1_HIO_c();
+    virtual ~daTag_Kk1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x04  */ s8 mNo;
+    /* 0x08  */ hio_prm_c prm;
+};
 
 static daTag_Kk1_HIO_c l_HIO;
 

@@ -476,7 +476,10 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
 
     for (s32 i = 0; i < vtxNum; i++) {
         Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
+// TODO: this line doesn't compile on debug
+#ifndef DEBUG
         J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
+#endif
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(SVec));

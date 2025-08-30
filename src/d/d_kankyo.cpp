@@ -3,16 +3,18 @@
 // Translation Unit: d_kankyo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
-#include "dolphin/gf/GFPixel.h"
+#include "dolphin/gf/GF.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo.h"
@@ -21,8 +23,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 #include "d/d_kankyo_dayproc.inc"
 
@@ -83,9 +83,6 @@ dKy_setLight__Status lightStatusBase = {
 u16 lightMaskData[] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
-
-// Fakematch? Fixes weak function order.
-#pragma sym off
 
 /**
  * Returns true if toon lighting and shadow should be reversed.
@@ -349,11 +346,11 @@ void envcolor_init() {
     stage_vrbox_info_class* vrbox = dComIfGp_getStageVrboxInfo();
 
     for (int i = 0; i < 20; i++) {
-        g_regHIO.mChild[3].mFloatRegs[i] = 0.0f;
+        REG3_F(i) = 0.0f;
     }
 
     for (int i = 0; i < 10; i++) {
-        g_regHIO.mChild[3].mShortRegs[i] = 0;
+        REG3_S(i) = 0;
     }
 
 #if VERSION > VERSION_DEMO
@@ -532,7 +529,7 @@ void dScnKy_env_light_c::setDaytime() {
                 mDayOfWeek++;
                 dKankyo_DayProc();
             }
-        } else if (!dKy_daynight_check()) {
+        } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
             if (mCurTime < 165.0f) {
                 mCurTime += mTimeAdv;
             }
@@ -626,13 +623,13 @@ int dKy_getdaytime_minute() {
 }
 
 /* 80190CBC-80190CF8       .text dKy_daynight_check__Fv */
-BOOL dKy_daynight_check() {
+int dKy_daynight_check() {
     s32 hour = dKy_getdaytime_hour();
 
     if (hour >= 6 && hour < 18) {
-        return 0;  // day time
+        return dKy_TIME_DAY_e;
     } else {
-        return 1;  // night time
+        return dKy_TIME_NIGHT_e;
     }
 }
 
@@ -2451,17 +2448,17 @@ kankyo_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    fpcLy_CURRENT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_KANKYO,
-    &g_fpcLf_Method.base,
-    sizeof(sub_kankyo__class),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x002,
-    &l_dKy_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0001,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KANKYO,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sub_kankyo__class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_KANKYO,
+    /* Actor SubMtd */ &l_dKy_Method,
 };
 
 /* 80194974-80194BDC       .text dKy_setLight_init__Fv */

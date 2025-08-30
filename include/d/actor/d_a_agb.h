@@ -10,40 +10,6 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "f_op/f_op_msg.h"
 
-class daAgb_HIO_c : public mDoHIO_entry_c {
-public:
-    daAgb_HIO_c();
-    virtual ~daAgb_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ J3DGXColorS10 field_0x04[2];
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1c;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ f32 field_0x28;
-    /* 0x2C */ f32 field_0x2c;
-    /* 0x30 */ f32 field_0x30;
-};
-
-class dMsgCtrl_c {
-public:
-    int init(u16);
-    int execute();
-    ~dMsgCtrl_c() {}
-
-    int getSelectNum() { return mpMsg->mSelectNum; }
-    void setMsgStatus(u16 status) { mpMsg->mStatus = status; }
-
-public:
-    /* 0x00 */ u16 field_0x0;
-    /* 0x04 */ fpc_ProcID mMsgID;
-    /* 0x08 */ msg_class* mpMsg;
-};
-
 class daAgb_c : public fopAc_ac_c {
 public:
     struct daAgb_BmRp_c {
@@ -95,7 +61,7 @@ public:
     void onHold();
     void offHold();
     void resetCursor(bool);
-    bool FlashCheck();
+    BOOL FlashCheck();
     void FlagsRecv();
     void SwitchOn();
     void GbaItemUse();

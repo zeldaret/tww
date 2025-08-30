@@ -50,6 +50,7 @@ public:
     u8 getNowSlot() { return mCardSlot; }
     u8* getPictDataPtr() { return mPictDataPtr; }
     u8* getPictWriteDataPtr() { return mPictDataWritePtr; }
+    void setPictWriteDataPtr(u8* v) { mPictDataWritePtr = v; }
     void setPictDataPtr(u8* v) { mPictDataPtr = v; }
     void setCardSerialNo(u64 v) { mCardSerialNo = v; }
     void setDataVersion(u32 v) { mDataVersion = v; }
@@ -57,10 +58,9 @@ public:
     void setCopyToPos(u8 pos) { mCopyToPos = pos; }
 
     void clearProbeStat() {}
-    void getCardSerialNo() {}
+    u64 getCardSerialNo() { return mCardSerialNo; }
     void getDataVersion() {}
     void getProbeStat() {}
-    void setPictWriteDataPtr(u8*) {}
 
     /* 0x0000 */ u8 mData[3 * sizeof(card_gamedata)];
     /* 0x1650 */ u8* mPictDataPtr;
@@ -91,12 +91,16 @@ inline void mDoMemCd_ThdInit() {
     g_mDoMemCd_control.ThdInit();
 }
 
-inline void mDoMemCd_save(void* i_data, u32 param_1, u32 param_2) {
+inline void mDoMemCd_Save(void* i_data, u32 param_1, u32 param_2) {
     g_mDoMemCd_control.save(i_data,param_1,param_2);
 }
 
 inline u8 mDoMemCd_getNowSlot() {
     return g_mDoMemCd_control.getNowSlot();
+}
+
+inline u64 mDoMemCd_getCardSerialNo() {
+    return g_mDoMemCd_control.getCardSerialNo();
 }
 
 inline void mDoMemCd_setCardSerialNo(u64 v) {
@@ -119,6 +123,10 @@ inline u8* mDoMemCd_getPictWriteDataPtr() {
     return g_mDoMemCd_control.getPictWriteDataPtr();
 }
 
+inline void mDoMemCd_setPictWriteDataPtr(u8* v) {
+    g_mDoMemCd_control.setPictWriteDataPtr(v);
+}
+
 inline u8 mDoMemCd_getCopyToPos() {
     return g_mDoMemCd_control.getCopyToPos();
 }
@@ -126,5 +134,28 @@ inline u8 mDoMemCd_getCopyToPos() {
 inline void mDoMemCd_setCopyToPos(u8 pos) {
     g_mDoMemCd_control.setCopyToPos(pos);
 }
+
+inline s32 mDoMemCd_SaveSync() {
+    return g_mDoMemCd_control.SaveSync();
+}
+
+inline s32 mDoMemCd_FormatSync() {
+    return g_mDoMemCd_control.FormatSync();
+}
+
+inline void mDoMemCd_UpDate() {
+    g_mDoMemCd_control.update();
+}
+
+inline u32 mDoMemCd_getStatus(u32 status) {
+    return g_mDoMemCd_control.getStatus(status);
+}
+
+inline void mDoMemCd_Format() {}
+inline void mDoMemCd_Load() {}
+inline void mDoMemCd_LoadSync(void*, u32, u32) {}
+inline void mDoMemCd_clearProbeStat() {}
+inline void mDoMemCd_getDataVersion() {}
+inline void mDoMemCd_getProbeStat() {}
 
 #endif /* M_DO_M_DO_MEMCARD_H */

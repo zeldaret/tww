@@ -3,6 +3,7 @@
  * Item - Shop Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shop_item.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -158,7 +159,7 @@ bool daShopItem_c::_draw() {
     if(!chkDraw()) return true;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
-        mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
     

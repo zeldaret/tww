@@ -106,7 +106,7 @@ JAInter::SeParameter::SeParameter() {}
 void JAInter::SeMgr::startSeSequence() {
     seHandle = NULL;
     JAIBasic::msBasic->startSoundActor(0x80000800, &seHandle, NULL, 1, 4);
-    JUT_ASSERT_MSG(149, JAISeMgr::seHandle, "SEシーケンスの再生に失敗しました。\n")
+    JUT_ASSERT_MSG(149, JAISeMgr::seHandle, "SEシーケンスの再生に失敗しました。\n");
 }
 
 /* 80293508-80293530       .text processGFrameSe__Q27JAInter5SeMgrFv */

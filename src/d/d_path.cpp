@@ -3,6 +3,7 @@
 // Translation Unit: d_path.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"

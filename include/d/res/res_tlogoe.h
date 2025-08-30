@@ -1,7 +1,7 @@
 #ifndef RES_TLOGOE_H
 #define RES_TLOGOE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_USA
 enum TLOGOE_RES_FILE_ID { // IDs and indexes are synced

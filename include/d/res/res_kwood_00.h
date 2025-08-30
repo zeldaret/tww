@@ -1,7 +1,7 @@
 #ifndef RES_KWOOD_00_H
 #define RES_KWOOD_00_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KWOOD_00_RES_FILE_ID {
     /* BAS */

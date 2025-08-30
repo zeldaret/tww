@@ -1,7 +1,7 @@
 #ifndef RES_JI_H
 #define RES_JI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum JI_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */

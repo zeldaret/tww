@@ -52,20 +52,19 @@ s32 J3DMaterialTable::entryMatColorAnimator(J3DAnmColor* pAnm) {
 }
 
 /* 802F5DC8-802F6058       .text entryTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKey */
-s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
-    /* Nonmatching */
+s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* btk) {
     s32 ret = 0;
-    u16 materialNum = pAnm->getUpdateMaterialNum();
+    u16 materialNum = btk->getUpdateMaterialNum();
 
     if (isLocked())
         return J3DErrType_Locked;
 
-    for (u16 i = 0; i < materialNum; i++) {
-        u16 materialID = pAnm->getUpdateMaterialID(i);
+    for (u16 no = 0; no < materialNum; no++) {
+        u16 materialID = btk->getUpdateMaterialID(no);
         if (materialID != 0xFFFF) {
             J3DMaterial * pMaterial = getMaterialNodePointer(materialID);
             J3DMaterialAnm * pMatAnm = pMaterial->getMaterialAnm();
-            u8 texMtxID = pAnm->getUpdateTexMtxID(i);
+            u8 texMtxID = btk->getUpdateTexMtxID(no);
 
             if (pMatAnm == NULL) {
                 ret = 1;
@@ -81,19 +80,16 @@ s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* pAnm) {
                 if (pMaterial->getTexCoord(texMtxID) != NULL)
                     pMaterial->getTexCoord(texMtxID)->setTexGenMtx(GX_TEXMTX0 + (texMtxID & 0xFF) * 3);
 
-                J3DTexMtx *pTexMtx = pMaterial->getTexMtx(texMtxID);
-                J3DTexMtxAnm* pTexMtxAnm = new J3DTexMtxAnm(pAnm, i);
+                J3DTexMtx *tmtx = pMaterial->getTexMtx(texMtxID);
+                J3DTexMtxAnm* tmtxanm = new J3DTexMtxAnm(btk, no);
 
-                pTexMtx->getTexMtxInfo().mInfo = ((pTexMtx->getTexMtxInfo().mInfo) & 0x7F) | (pAnm->getTexMtxCalcType() << 7);
-                // Fakematch? The codegen doesn't match unless a temp variable is used and assigned to multiple times.
-                Vec* temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.x = temp->x;
-                temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.y = temp->y;
-                temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.z = temp->z;
+                J3DTexMtxInfo& tmtxinfo = tmtx->getTexMtxInfo();
+                tmtxinfo.mInfo = (tmtxinfo.mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
+                tmtxinfo.mCenter.x = btk->getSRTCenter(no).x;
+                tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
+                tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
 
-                pMatAnm->setTexMtxAnm(texMtxID, pTexMtxAnm);
+                pMatAnm->setTexMtxAnm(texMtxID, tmtxanm);
             }
         }
     }
@@ -276,37 +272,33 @@ s32 J3DMaterialTable::setTexNoAnimator(J3DAnmTexPattern* pAnm, J3DTexNoAnm* pAnm
 }
 
 /* 802F6600-802F6798       .text setTexMtxAnimator__16J3DMaterialTableFP19J3DAnmTextureSRTKeyP12J3DTexMtxAnmP12J3DTexMtxAnm */
-s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
-    /* Nonmatching - regalloc */
+s32 J3DMaterialTable::setTexMtxAnimator(J3DAnmTextureSRTKey* btk, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
     s32 ret = 0;
-    u16 materialNum = pAnm->getUpdateMaterialNum();
+    u16 materialNum = btk->getUpdateMaterialNum();
 
     if (isLocked())
         return J3DErrType_Locked;
 
-    for (u16 i = 0; i < materialNum; i++) {
-        u16 materialID = pAnm->getUpdateMaterialID(i);
+    for (u16 no = 0; no < materialNum; no++) {
+        u16 materialID = btk->getUpdateMaterialID(no);
         if (materialID != 0xFFFF) {
             J3DMaterial * pMaterial = getMaterialNodePointer(materialID);
             J3DMaterialAnm * pMatAnm = pMaterial->getMaterialAnm();
-            u8 texMtxID = pAnm->getUpdateTexMtxID(i);
+            u8 texMtxID = btk->getUpdateTexMtxID(no);
             if (pMatAnm == NULL) {
                 ret = 1;
             } else if (texMtxID != 0xFF) {
                 if (pMaterial->getTexCoord(texMtxID) != NULL)
                     pMaterial->getTexCoord(texMtxID)->setTexGenMtx(GX_TEXMTX0 + (texMtxID & 0xFF) * 3);
 
-                J3DTexMtx *pTexMtx = pMaterial->getTexMtx(texMtxID);
-                pTexMtx->getTexMtxInfo().mInfo = ((pTexMtx->getTexMtxInfo().mInfo) & 0x7F) | (pAnm->getTexMtxCalcType() << 7);
-                // Fakematch? The codegen doesn't match unless a temp variable is used and assigned to multiple times.
-                Vec* temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.x = temp->x;
-                temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.y = temp->y;
-                temp = &pAnm->getSRTCenter(i);
-                pTexMtx->getTexMtxInfo().mCenter.z = temp->z;
+                J3DTexMtx *tmtx = pMaterial->getTexMtx(texMtxID);
+                J3DTexMtxInfo& tmtxinfo = tmtx->getTexMtxInfo();
+                tmtxinfo.mInfo = (tmtxinfo.mInfo & 0x7F) | btk->getTexMtxCalcType() << 7;
+                tmtxinfo.mCenter.x = btk->getSRTCenter(no).x;
+                tmtxinfo.mCenter.y = btk->getSRTCenter(no).y;
+                tmtxinfo.mCenter.z = btk->getSRTCenter(no).z;
 
-                pMatAnm->setTexMtxAnm(texMtxID, &pTexAnm[i]);
+                pMatAnm->setTexMtxAnm(texMtxID, &pTexAnm[no]);
             }
         }
     }

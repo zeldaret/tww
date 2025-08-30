@@ -7,6 +7,11 @@
 // in other TUs, but not here.
 #pragma dont_inline on
 
+#ifdef DEBUG
+#pragma optimization_level 1
+#endif
+
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_movie_player.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -15,8 +20,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/os/OSMessage.h"
 #include "dolphin/base/PPCArch.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static u8 THPStatistics[0x460]; // TODO
 

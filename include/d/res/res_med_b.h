@@ -1,7 +1,7 @@
 #ifndef RES_MED_B_H
 #define RES_MED_B_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MED_B_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

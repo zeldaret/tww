@@ -3,7 +3,9 @@
 // Translation Unit: d_kyeff2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kyeff2.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_kankyo_wether.h"
@@ -52,15 +54,15 @@ kankyo_method_class l_dKyeff2_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KYEFF2 = {
-    fpcLy_CURRENT_e,
-    12,
-    fpcPi_CURRENT_e,
-    PROC_KYEFF2,
-    &g_fpcLf_Method.base,
-    sizeof(dKyeff2_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x003,
-    &l_dKyeff2_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x000C,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KYEFF2,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dKyeff2_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_KYEFF2,
+    /* Actor SubMtd */ &l_dKyeff2_Method,
 };

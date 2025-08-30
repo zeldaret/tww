@@ -10,10 +10,12 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_itembase.h"
+#include "d/actor/d_a_npc_fa1.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
@@ -24,6 +26,7 @@
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_graphic.h"
+#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
 /* 8012CD60-8012CDD4       .text getDemoLookActor__9daPy_lk_cFv */
 fopAc_ac_c* daPy_lk_c::getDemoLookActor() {
@@ -175,7 +178,166 @@ BOOL daPy_lk_c::dProcTool_init() {
 
 /* 8012D3C4-8012DA3C       .text dProcTool__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcTool() {
-    /* Nonmatching */
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    daPy_anmHeap_c* anm_heap_under = &m_anm_heap_under[0];
+    m3574 = 0;
+#if VERSION > VERSION_DEMO
+    m34D6 = 0;
+#endif
+
+    if (demo_actor) {
+        u16 r29 = 0xFFFF;
+        u16 r28 = (mDemo.getDemoMode() / daPy_demo_c::DEMO_NEW_ANM0_e) - 1;
+        f32 f31 = 0.0f;
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_TRANS_e)) {
+            current.pos = *demo_actor->getTrans();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ROTATE_e)) {
+            current.angle = shape_angle = *demo_actor->getRatate();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+            f31 = demo_actor->getAnmFrame();
+        }
+        f32 f30 = -1.0f;
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+            dDemo_prm_data* data = demo_actor->getPrm()->getData();
+            u32 id = demo_actor->getPrm()->getId();
+            if (
+                id == 0 || id == 2
+#if VERSION > VERSION_DEMO
+                || id == 4
+#endif
+            ) {
+                JStudio::stb::TParseData_fixed<50, TValueIterator_misaligned<u16> > spC4(data);
+                r29 = spC4.front();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB0(spC4.getNext());
+                if (spB0.size() == 3) {
+                    mLeftHandIdx = spB0.front();
+                    mRightHandIdx = *(spB0.begin() + 1);
+                    f30 = spB0.back();
+                } else {
+                    mLeftHandIdx = spB0.front();
+                    mRightHandIdx = spB0.back();
+                }
+
+                if (demo_actor->getPrm()->getId() == 2) {
+                    m3574 = 1;
+                }
+#if VERSION > VERSION_DEMO
+                else if (demo_actor->getPrm()->getId() == 4) {
+                    m34D6 = 1;
+                }
+#endif
+            } else if (
+                id == 1 || id == 3
+#if VERSION > VERSION_DEMO
+                || id == 5
+#endif
+            ) {
+                JStudio::stb::TParseData_fixed<50, TValueIterator_misaligned<u16> > sp9C(data);
+                r29 = sp9C.front();
+                // setDemoTextureAnime(*(sp9C.begin() + 1), sp9C.back(), 0, r28); // Seems more real, but doesn't match?
+                setDemoTextureAnime(*(u16*)(sp9C.begin() + 1).get(), sp9C.back(), 0, r28); // Fakematch?
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > sp88(sp9C.getNext());
+                if (sp88.size() == 3) {
+                    mLeftHandIdx = sp88.front();
+                    mRightHandIdx = *(sp88.begin() + 1);
+                    f30 = sp88.back();
+                } else {
+                    mLeftHandIdx = sp88.front();
+                    mRightHandIdx = sp88.back();
+                }
+
+                if (demo_actor->getPrm()->getId() == 3) {
+                    m3574 = 1;
+                }
+#if VERSION > VERSION_DEMO
+                else if (demo_actor->getPrm()->getId() == 5) {
+                    m34D6 = 1;
+                }
+#endif
+            }
+            
+            u8 itemNo = dItem_NONE_e;
+            if (mLeftHandIdx == 0xC8) {
+                itemNo = dItem_SWORD_e;
+            } else if (mLeftHandIdx == 0xC9) {
+                itemNo = dItem_MASTER_SWORD_1_e;
+            } else if (mLeftHandIdx == 0xCA) {
+                itemNo = dItem_MASTER_SWORD_2_e;
+            } else if (mLeftHandIdx == 0xCB) {
+                itemNo = dItem_MASTER_SWORD_3_e;
+            }
+            if (itemNo != dItem_NONE_e) {
+                mLeftHandIdx = 3;
+                if (mEquipItem != daPyItem_SWORD_e || itemNo != dComIfGs_getSelectEquip(0)) {
+                    dComIfGs_setSelectEquip(0, itemNo);
+                    deleteEquipItem(FALSE);
+#if VERSION == VERSION_DEMO
+                    setSwordModel();
+#else
+                    setSwordModel(TRUE);
+#endif
+                }
+            } else {
+                if (mLeftHandIdx == 0xCC) {
+                    if (mEquipItem != dItem_WIND_WAKER_e) {
+                        deleteEquipItem(FALSE);
+                    }
+                    mLeftHandIdx = 5;
+                    setTactModel();
+                } else if (mEquipItem != daPyItem_NONE_e) {
+                    deleteEquipItem(FALSE);
+                }
+            }
+            
+            if (mRightHandIdx == 0xC8 || mRightHandIdx == 0xC9) {
+                m34D4 = 1;
+                if (mRightHandIdx == 0xC8) {
+                    dComIfGs_setSelectEquip(1, dItem_SHIELD_e);
+                } else {
+                    dComIfGs_setSelectEquip(1, dItem_MIRROR_SHIELD_e);
+                }
+                mRightHandIdx = 0x08;
+            } else {
+                m34D4 = 0;
+                if (mRightHandIdx != 0) {
+                    mRightHandIdx += 6;
+                }
+            }
+        }
+        
+        if (r29 != 0xFFFF && (anm_heap_under->field_0x4 != r29 || anm_heap_under->field_0x6 != r28)) {
+            JKRReadIdResource(anm_heap_under->m_buffer, 0xB400, r29, dComIfGp_getLkDemoAnmArchive());
+            JKRHeap* oldHeap = setAnimeHeap(anm_heap_under->mpAnimeHeap);
+            J3DAnmTransform* r26 = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(anm_heap_under->m_buffer);
+            mDoExt_setCurrentHeap(oldHeap);
+            
+            setFrameCtrl(&mFrameCtrlUnder[UNDER_MOVE0_e], r26->getAttribute(), 0, r26->getFrameMax(), 1.0f, f31);
+            r26->setFrame(f31);
+            anm_heap_under->mIdx = 0xFFFF;
+            anm_heap_under->field_0x4 = r29;
+            anm_heap_under->field_0x6 = r28;
+            mAnmRatioUnder[UNDER_MOVE0_e].setAnmTransform(r26);
+            mAnmRatioUpper[UPPER_MOVE0_e].setAnmTransform(r26);
+            m34C3 = 0;
+            if (f30 >= 0.0f) {
+                m_old_fdata->initOldFrameMorf(f30, 0, 0x2A);
+            }
+            demo_actor->setAnmFrameMax(r26->getFrameMax());
+            setSeAnime(anm_heap_under, &mFrameCtrlUnder[UNDER_MOVE0_e]);
+        } else {
+            if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+                mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(f31);
+                demo_actor->setAnmFrameMax(mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->getFrameMax());
+                mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(f31);
+            }
+        }
+    } else {
+        checkNextMode(0);
+    }
+    
+    return TRUE;
 }
 
 /* 8012DA3C-8012DBD0       .text dProcTalk_init__9daPy_lk_cFv */
@@ -207,7 +369,7 @@ BOOL daPy_lk_c::dProcTalk_init() {
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10_e);
     if (mDemo.getParam0() != 1) {
-        mDoAud_seStart(JA_SE_TALK_START);
+        seStartSystem(JA_SE_TALK_START);
     }
     initShipRideUseItem(iVar2, 0);
     return true;
@@ -365,10 +527,7 @@ BOOL daPy_lk_c::dProcOpenTreasure_init() {
         if (boko != NULL) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(shape_angle.y + 0x2000);
-            MtxP mtx = mDoMtx_stack_c::get();
-            if (boko->mpModel != NULL) {
-                boko->mpModel->setBaseTRMtx(mtx);
-            }
+            boko->setMatrix(mDoMtx_stack_c::get());
         }
     }
     fopAc_ac_c* partner_p = fopAcM_getEventPartner(this);
@@ -397,7 +556,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
     if (param_1 == dItem_GREEN_RUPEE_e || param_1 == dItem_BLUE_RUPEE_e || param_1 == dItem_YELLOW_RUPEE_e ||
         param_1 == dItem_RED_RUPEE_e || param_1 == dItem_PURPLE_RUPEE_e || param_1 == TINCLE_RUPEE1)
     {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     } else if ((param_1 == dItem_HEART_CONTAINER_e) ||
                (param_1 == dItem_HEART_PIECE_e && ((dComIfGs_getMaxLife() % 4) == 3)))
@@ -410,7 +569,7 @@ void daPy_lk_c::setGetItemSound(u16 param_1, int param_2) {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET_S);
         dComIfGp_setMesgBgmOn();
     } else if (param_2 != dItem_HEART_e) {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     } else {
         mDoAud_subBgmStart(JA_BGM_ITEM_GET);
@@ -914,7 +1073,7 @@ BOOL daPy_lk_c::dProcDead() {
                     m3574 = 1;
                 }
             }
-            if ((m3574 != 0) && (g_dComIfG_gameInfo.play.mGameoverStatus == 2)) {
+            if (m3574 != 0 && dComIfGp_getGameoverStatus() == 2) {
                 dComIfGs_setGameStartStage();
                 dComIfGs_gameStart();
             }
@@ -1452,7 +1611,7 @@ BOOL daPy_lk_c::dProcPresent_init() {
         dProcPresent_init_sub();
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10_e);
-    mDoAud_seStart(JA_SE_TALK_START);
+    seStartSystem(JA_SE_TALK_START);
     m3574 = 0;
     return true;
 }
@@ -1583,9 +1742,7 @@ BOOL daPy_lk_c::dProcStandItemPut() {
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
         if (grab_actor != NULL) {
-            mDoAud_seStart(
-                JA_SE_LK_W_DAIZA_ATTACH, &grab_actor->current.pos, NULL, dComIfGp_getReverb(grab_actor->current.roomNo)
-            );
+            fopAcM_seStartCurrent(grab_actor, JA_SE_LK_W_DAIZA_ATTACH, 0);
         }
         freeGrabItem();
         dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -1745,7 +1902,7 @@ BOOL daPy_lk_c::dProcAgbUse_init() {
     setAnimeEquipItem();
     mVelocity = 0.0f;
     setSingleMoveAnime(ANM_USETCEIVER, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
-    mDoAud_seStart(JA_SE_TALK_START);
+    seStartSystem(JA_SE_TALK_START);
     initShipRideUseItem(iVar2, 2);
     return true;
 }
@@ -1919,7 +2076,9 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     initShipRideUseItem(iVar2, 0);
     dKy_Itemgetcol_chg_on();
     setTactModel();
+#if VERSION > VERSION_JPN
     m3574 = 0;
+#endif
     return true;
 }
 
@@ -2002,11 +2161,9 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 daPy_HIO_bottle_c0::m.field_0xA,
                 daPy_HIO_bottle_c0::m.field_0x54
             );
-        } else {
-            if (frameCtrl.checkPass(32.0f)) {
-                m355E = 0;
-                mRightHandIdx = 8;
-            }
+        } else if (frameCtrl.checkPass(32.0f)) {
+            m355E = 0;
+            mRightHandIdx = 8;
         }
     } else if (frameCtrl.getRate() < 0.01f) {
         dComIfGp_evmng_cutEnd(mStaffIdx);
@@ -2021,7 +2178,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
                 } else {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
                 }
-                fopAcM_fastCreate(PROC_NPC_FA1, 3, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                fopAcM_fastCreate(PROC_NPC_FA1, daNpc_Fa1_c::Type_BABA_e, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
             }
         }
     }
@@ -2224,7 +2381,11 @@ BOOL daPy_lk_c::dProcLastCombo_init() {
     mVelocity = 0.0f;
     if (mEquipItem != daPyItem_SWORD_e) {
         deleteEquipItem(FALSE);
+#if VERSION == VERSION_DEMO
+        setSwordModel();
+#else
         setSwordModel(FALSE);
+#endif
     }
     bck = getItemAnimeResource(LKANM_BCK_COMBO_KEN);
     mSwordAnim.changeBckOnly(bck);

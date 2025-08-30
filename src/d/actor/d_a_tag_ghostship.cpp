@@ -3,12 +3,11 @@
 // Translation Unit: d_a_tag_ghostship.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ghostship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static daTag_Gship_HIO_c l_HIO;
 
@@ -134,7 +133,7 @@ bool daTag_Gship_c::_delete() {
 }
 
 /* 000005F4-00000614 .text daTag_GshipCreate__FPv */
-static s32 daTag_GshipCreate(void* i_this) {
+static cPhs_State daTag_GshipCreate(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_create();
 }
 

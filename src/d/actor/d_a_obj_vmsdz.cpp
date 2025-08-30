@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_vmsdz.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsdz.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"

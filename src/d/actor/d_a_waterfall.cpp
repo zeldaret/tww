@@ -3,6 +3,7 @@
 // Translation Unit: d_a_waterfall.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -103,13 +104,13 @@ void daWfall_c::set_se() {
 }
 
 /* 000013E0-00001400       .text daWfall_Create__FPv */
-static cPhs_State daWfall_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWfall_Create(void* i_this) {
+    return ((daWfall_c*)i_this)->_create();
 }
 
 /* 00001400-00001424       .text daWfall_Delete__FPv */
-static BOOL daWfall_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWfall_Delete(void* i_this) {
+    return ((daWfall_c*)i_this)->_delete();
 }
 
 /* 00001424-00001550       .text daWfall_Draw__FPv */
@@ -118,13 +119,13 @@ static BOOL daWfall_Draw(void*) {
 }
 
 /* 00001550-00001574       .text daWfall_Execute__FPv */
-static BOOL daWfall_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWfall_Execute(void* i_this) {
+    return ((daWfall_c*)i_this)->_execute();
 }
 
 /* 00001574-0000157C       .text daWfall_IsDelete__FPv */
 static BOOL daWfall_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWfallMethodTable = {

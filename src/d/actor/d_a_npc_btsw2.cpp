@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_btsw2.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw2.h"
 #include "d/res/res_btsw.h"
 #include "d/d_com_inf_game.h"
@@ -15,8 +16,21 @@
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_angle.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daNpc_Btsw2_HIO_c {
+public:
+    daNpc_Btsw2_HIO_c();
+    virtual ~daNpc_Btsw2_HIO_c() {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ dNpc_HIO_c mNpc;
+    /* 0x30 */ s16 m30;
+    /* 0x32 */ s16 m32;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ f32 m38;
+    /* 0x3C */ s16 m3C;
+    /* 0x3E */ s16 m3E;
+};
 
 static daNpc_Btsw2_HIO_c l_HIO;
 
@@ -43,11 +57,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 /* 000000EC-000001A8       .text __ct__17daNpc_Btsw2_HIO_cFv */
@@ -135,7 +149,7 @@ BOOL daNpc_Btsw2_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     m_btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, l_btp_ix_tbl[m744]));
     JUT_ASSERT(282, m_btp != NULL);
-    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, 0)) {
+    if (!mBtpAnm.init(modelData, m_btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, FALSE)) {
         return FALSE;
     }
     mBtpFrame = 0;
@@ -283,7 +297,7 @@ u32 daNpc_Btsw2_c::getMsg() {
     if (!dComIfGs_isEventBit(0x3102)) {
         dComIfGs_onEventBit(0x3102);
         msgNo = 0x1AB0;
-    } else if (dKy_daynight_check()) {
+    } else if (dKy_daynight_check() != dKy_TIME_DAY_e) {
         msgNo = 0x1AB2;
     } else {
         msgNo = 0x1AB1;

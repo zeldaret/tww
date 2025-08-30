@@ -3,6 +3,7 @@
 // Translation Unit: d_jnt_hit.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_jnt_hit.h"
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_math.h"
@@ -85,9 +86,9 @@ BOOL JntHit_c::CylHitPosAngleOffset(cXyz* r27, csXyz* r28, cXyz* r29, csXyz* r30
     
     f32 sinX = cM_ssin(r28->x);
     f32 cosX = cM_scos(r28->x);
-    f32 x = cM_ssin(r28->y) * cosX;
-    f32 z = cM_scos(r28->y) * cosX;
-    cXyz r1_C4(x, -sinX, z);
+    f32 sinY = cM_ssin(r28->y);
+    f32 cosY = cM_scos(r28->y);
+    cXyz r1_C4(cosX * sinY, -sinX, cosX * cosY);
     f1 = r1_C4.inprod(r1_F4);
     cXyz r1_B8 = r1_C4;
     r1_D0 = r1_F4;
@@ -98,7 +99,8 @@ BOOL JntHit_c::CylHitPosAngleOffset(cXyz* r27, csXyz* r28, cXyz* r29, csXyz* r30
         f32 temp = f31*f31 + f28*f28 - r1_DC.abs2();
         if (temp < 0.0f)
             temp = 0.0f;
-        r1_E8 = r1_C4 * (-f31 - std::sqrtf(temp));
+        f32 temp2 = (-f31 - std::sqrtf(temp));
+        r1_E8 = r1_C4 * temp2;
         r1_E8 += *r27;
         if (temp == 0.0f) {
             cXyz r1_AC = r1_E8;
@@ -142,13 +144,13 @@ BOOL JntHit_c::Cyl2HitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r3
     cXyz r1_88 = r1_94.normZP();
     f32 f29 = r1_94.abs();
     f32 f30 = r27->inprod(r1_88);
-    
+
     f32 sinX = cM_ssin(r29->x);
     f32 cosX = cM_scos(r29->x);
-    f32 x = cM_ssin(r29->y) * cosX;
-    f32 z = cM_scos(r29->y) * cosX;
+    f32 sinY = cM_ssin(r29->y);
+    f32 cosY = cM_scos(r29->y);
     cXyz r1_7C;
-    cXyz r1_70(x, -sinX, z);
+    cXyz r1_70(cosX * sinY, -sinX, cosX * cosY);
     f32 f1 = r1_70.inprod(r1_88);
     if (!cLib_IsZero(f1)) {
         if (f1 > 0.0f) {
@@ -189,15 +191,15 @@ BOOL JntHit_c::Cyl2HitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r3
 BOOL JntHit_c::SphHitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r31, cXyz r28, f32 f30) {
     f32 sinX = cM_ssin(r29->x);
     f32 cosX = cM_scos(r29->x);
-    f32 x = cM_ssin(r29->y) * cosX;
-    f32 z = cM_scos(r29->y) * cosX;
-    cXyz r1_34(x, -sinX, z);
+    f32 sinY = cM_ssin(r29->y);
+    f32 cosY = cM_scos(r29->y);
+    cXyz r1_34(cosX * sinY, -sinX, cosX * cosY);
     f32 f31 = r27->inprod(r1_34);
     f32 temp = f31*f31 + f30*f30 - r27->abs2();
     if (temp < 0.0f)
         temp = 0.0f;
-    
-    cXyz r1_28 = r1_34 * (-f31 - std::sqrtf(temp));
+    f32 temp2 = (-f31 - std::sqrtf(temp));
+    cXyz r1_28 = r1_34 * temp2;
     r1_28 += *r27;
     if (r1_28.abs() > f30) {
         r1_28.normalizeZP();
@@ -260,7 +262,7 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
     J3DModel* model = mpModel;
     f32 f31 = 10000.0f;
     int j = 0;
-    int jointIndex = -1;
+    int jointIndex = JntHitIdx_NONE_e;
     s16* pShapeType = mpShapeTypes;
     s16* pJointIndex = mpJointIndexes;
     f32* pRadius = mpRadiuses;
@@ -269,7 +271,8 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
     int posIndex = 0;
     int hitIndex = 0;
     int hitPosIndex = 0;
-    int r1_20 = -1;
+    int tmp = JntHitIdx_NONE_e;
+    int r1_20 = tmp;
     for (; j++ < mMaxNum; i++) {
         mDoMtx_stack_c::copy(model->getAnmMtx(*pJointIndex));
         
@@ -316,13 +319,13 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
                     hitPosIndex = posIndex;
                     if (cLib_IsZero(f5) && cLib_IsZero(f29)) {
                         if (!isThrow(*pShapeType)) {
-                            if (*pShapeType == 0) {
+                            if (*pShapeType == JntHitType_CYL_e) {
                                 CylHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, r1_170, *pRadius);
-                            } else if (*pShapeType == 2) {
+                            } else if (*pShapeType == JntHitType_CYL2_e) {
                                 Cyl2HitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_17C, r1_170, *pRadius);
                             }
                             if (isDelete(*pShapeType)) {
-                                return -3;
+                                return JntHitIdx_DELETE_e;
                             }
                             if (HitBufferUpdate(&r1_20, &r1_194, jointIndex, r28, r29)) {
                                 r1_188 = *r29;
@@ -346,7 +349,7 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
                 if (cLib_IsZero(f31)) {
                     SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_140, *pRadius);
                     if (isDelete(*pShapeType)) {
-                        jointIndex = -3;
+                        jointIndex = JntHitIdx_DELETE_e;
                         return jointIndex;
                     } else if (isThrow(*pShapeType)) {
                         // Do nothing
@@ -377,19 +380,19 @@ s32 JntHit_c::searchJntHitPosAngleOffset(cXyz* r18, csXyz* r28, cXyz* r29, csXyz
     
     mDoMtx_stack_c::copy(model->getAnmMtx(jointIndex));
     if (isThrow(pShapeType[hitIndex])) {
-        jointIndex = -1;
+        jointIndex = JntHitIdx_NONE_e;
     } else if (isDelete(pShapeType[hitIndex])) {
-        jointIndex = -3;
-    } else if (pShapeType[hitIndex] == 0) {
+        jointIndex = JntHitIdx_DELETE_e;
+    } else if (pShapeType[hitIndex] == JntHitType_CYL_e) {
         mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_134);
         mDoMtx_stack_c::multVec(&pOffset[hitPosIndex+1], &r1_128);
         r1_1A0 = *r18 - r1_134;
         CylHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_134, r1_128, pRadius[hitIndex]);
-    } else if (pShapeType[hitIndex] == 1) {
+    } else if (pShapeType[hitIndex] == JntHitType_SPH_e) {
         mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_11C);
         r1_1A0 = *r18 - r1_11C;
         SphHitPosAngleOffset(&r1_1A0, r28, r29, r30, r1_11C, pRadius[hitIndex]);
-    } else {
+    } else { // JntHitType_CYL2_e
         mDoMtx_stack_c::multVec(&pOffset[hitPosIndex], &r1_110);
         mDoMtx_stack_c::multVec(&pOffset[hitPosIndex+1], &r1_104);
         r1_1A0 = *r18 - r1_110;

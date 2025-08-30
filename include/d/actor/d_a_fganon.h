@@ -123,7 +123,7 @@ public:
     virtual ~daFganon_HIO_c() {}
 
 public:
-    /* 0x00 */ // vtable  
+    /* 0x00 */ // vtable
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
     /* 0x06 */ u8 m06;

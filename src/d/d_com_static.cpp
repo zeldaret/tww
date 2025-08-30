@@ -3,6 +3,7 @@
 // Translation Unit: d_com_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
@@ -39,8 +40,6 @@
 #include "d/actor/d_a_npc_bs1.h"
 #include "SSystem/SComponent/c_counter.h"
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
-
 s32 daLodbg_c::sObjectCount;
 JKRExpHeap* daLodbg_c::sLocalHeap;
 
@@ -70,7 +69,7 @@ f32 daObjPirateship::getShipOffsetY(s16* param_1, s16* param_2, f32 param_3) {
 }
 
 f32 daTagWaterlevel::Act_c::M_now;
-daTagWaterlevel::Act_c::State_e daTagWaterlevel::Act_c::M_state;
+daTagWaterlevel::State_e daTagWaterlevel::Act_c::M_state;
 
 daAgb_c::daAgb_Flags daAgb_c::mFlags;
 u8 daAgbsw0_c::mFigureDispose;
@@ -125,7 +124,7 @@ const u16 daSalvage_c::m_savelabel[] = {
 };
 dSalvage_control_c* daSalvage_c::mTagData_p;
 s8 daSalvage_c::mNowRoomNo;
-s32 daSalvage_c::mSalvageId;
+int daSalvage_c::mSalvageId;
 
 /* 80056760-80056790       .text init_room__11daSalvage_cFSc */
 void daSalvage_c::init_room(s8 roomNo) {
@@ -142,7 +141,7 @@ u8 daObjLight::Act_c::M_S_lod_access;
 /* 80056790-800567F8       .text renew_light_angle__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::renew_light_angle() {
     M_S_lod_access = 1;
-    if (dKy_daynight_check() == 1) {
+    if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
         if (dComIfGs_isEventBit(0x1C02) == 1) {
             set_light_dif_angle_LOD(get_light_dif_angle() + 0x80);
             return true;

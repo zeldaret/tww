@@ -40,7 +40,7 @@ struct fopAcM_prm_class {
     /* 0x1C */ fpc_ProcID parent_id;
     /* 0x20 */ s8 subtype;
     /* 0x21 */ s8 room_no;
-};
+}; // size = 0x24
 
 struct fopAcM_search4ev_prm {
     fopAcM_search4ev_prm() { clear(); }
@@ -132,7 +132,11 @@ inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
     return pActor->actor_status & fopAcStts_CARRY_e;
 }
 
-inline u32 fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
+inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
+    pActor->actor_status &= ~0x3F;
+}
+
+inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
     return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 
@@ -195,10 +199,6 @@ inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
 
 inline cXyz* fopAcM_GetPosition_p(fopAc_ac_c* pActor) {
     return &pActor->current.pos;
-}
-
-inline cXyz& fopAcM_GetPosition(fopAc_ac_c* pActor) {
-    return pActor->current.pos;
 }
 
 inline cXyz* fopAcM_GetOldPosition_p(fopAc_ac_c* pActor) {
@@ -387,7 +387,7 @@ inline fopAc_ac_c* fopAcM_SearchByName(s16 procName) {
     return (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &procName);
 }
 
-inline fpc_ProcID fopAcM_GetLinkId(const fopAc_ac_c* pActor) {
+inline fpc_ProcID fopAcM_GetLinkId(fopAc_ac_c* pActor) {
     return pActor->parentActorID;
 }
 
@@ -401,18 +401,23 @@ inline BOOL fopAcM_isItem(fopAc_ac_c* item, int bitNo) {
     return dComIfGs_isItem(bitNo, fopAcM_GetHomeRoomNo(item));
 }
 
+inline BOOL dComIfGs_isVisitedRoom(int i_no);
 inline BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
 inline BOOL fopAcM_isItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == dItem_BLUE_JELLY_e) {
+#if VERSION == VERSION_DEMO
+        return dComIfGs_isVisitedRoom(itemBitNo);
+#else
         // Blue Chu Jelly uses itemBitNo as if it was a switch in stageNo 0xE.
         return dComIfGs_isSaveSwitch(dSv_save_c::STAGE_BLUE_CHU_JELLY, itemBitNo);
+#endif
     } else {
         return dComIfGs_isItem(itemBitNo, roomNo);
     }
 }
 
-inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
 inline void dComIfGs_onVisitedRoom(int i_no);
+inline void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
 inline void fopAcM_onItemForIb(int itemBitNo, u8 itemNo, s8 roomNo) {
     if (itemNo == dItem_BLUE_JELLY_e) {
 #if VERSION == VERSION_DEMO
@@ -585,6 +590,8 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csX
 
 fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* p_angle, int itemStealNum);
 
+void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param_4);
+
 fpc_ProcID fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                            int roomNo, cXyz* scale, u8 argFlag);
 
@@ -605,8 +612,6 @@ void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_an
                             int i_itemBitNo = -1, createFunc p_createFunc = NULL);
 
 void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo);
-
-BOOL stealItem_CB(void* actor);
 
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
@@ -640,6 +645,14 @@ inline s16 fopAcM_searchPlayerAngleY(fopAc_ac_c* actor) {
 
 inline s32 fopAcM_seenPlayerAngleY(fopAc_ac_c* actor) {
     return fopAcM_seenActorAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
+}
+
+inline s32 fopAcM_toActorShapeAngleY(fopAc_ac_c* actor1, fopAc_ac_c* actor2) {
+    return actor1->shape_angle.y - actor2->shape_angle.y;
+}
+
+inline s32 fopAcM_toPlayerShapeAngleY(fopAc_ac_c* actor) {
+    return fopAcM_toActorShapeAngleY(actor, (fopAc_ac_c*)dComIfGp_getPlayer(0));
 }
 
 inline f32 fopAcM_searchPlayerDistanceY(fopAc_ac_c* actor) {
@@ -694,5 +707,8 @@ inline void fopAcM_offDraw(fopAc_ac_c* actor) {
 inline void fopAcM_orderOtherEvent(fopAc_ac_c* ac, char* event, u16 hind = -1) {
     fopAcM_orderOtherEvent2(ac, event, dEvtFlag_NOPARTNER_e, hind);
 }
+
+s32 fopAcM_createHeap(fopAc_ac_c* i_this, u32 size, u32 align);
+void fopAcM_adjustHeap(fopAc_ac_c* i_this);
 
 #endif

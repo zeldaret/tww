@@ -3,6 +3,7 @@
 // Translation Unit: d_a_steam_tag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_steam_tag.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_cc_d.h"
@@ -36,11 +37,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start */ 0.0f, 0.0f, 0.0f,
-        /* End */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
-    },
+    }},
 };
 
 daSteamTag_mData daSteamTag_c::mData = {

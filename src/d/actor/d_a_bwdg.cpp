@@ -3,6 +3,7 @@
 // Translation Unit: d_a_bwdg.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bwdg.h"
 #include "d/res/res_bwdg.h"
 #include "d/d_bg_w_hf.h"
@@ -11,9 +12,7 @@
 #include "d/d_priority.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 
 static bwd_class* boss;
 
@@ -25,44 +24,32 @@ const u16 l_B_sand2TEX__height = 256;
 #include "assets/l_matDL__d_a_bwdg.h"
 l_matDL__d_a_bwdg(l_B_sand2TEX);
 
-// Fakematch: These are supposed to be in-function statics inside daBwdg_packet_c::draw().
-// But for some reason, defining them inside the function causes the function to load them as well
-// as l_matDL and l_Hsand1DL (but not l_texCoord) with different codegen than the original function.
-// Defining them above the function also results in the same thing.
-// But forward declaring them as externs, and then defining them after the function works correctly.
-extern GXVtxDescList l_vtxDescList[];
-extern GXVtxAttrFmtList l_vtxAttrFmtList[];
-
-// Another way of matching the function's codegen is to keep these as in-function statics, but move
-// the d_a_bwdg_data.inc include until after the function, and forward declare the included data.
-// But this method breaks the order of the variables in the .data section as the in-function data
-// would then appear above the included data.
-// extern u8 l_B_sand2TEX[0x10000] ALIGN_DECL(32);
-// extern u8 l_texCoord[0x8408];
-// extern u8 l_Hsand1DL[0xC3E0] ALIGN_DECL(32);
-// extern u8 l_matDL[0xBA] ALIGN_DECL(32);
+// Fakematch: For some reason daBwdg_packet_c::draw needs to have .data pooling disabled, but the in-function statics cause .data pooling to be used.
+// Disabling data pooling for the entire TU breaks wave_cont, which uses ...rodata pooling, so instead disable it for just this one function.
+#pragma push
+#pragma pool_data off
 
 /* 00000078-000001C4       .text draw__15daBwdg_packet_cFv */
 void daBwdg_packet_c::draw() {
-    // static GXVtxDescList l_vtxDescList[] = {
-    //     {GX_VA_POS, GX_INDEX16},
-    //     {GX_VA_NRM, GX_INDEX16},
-    //     {GX_VA_TEX0, GX_INDEX16},
-    //     {GX_VA_NULL, GX_NONE},
-    // };
-    // static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    //     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    //     {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    //     {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-    // };
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX16},
+        {GX_VA_NRM, GX_INDEX16},
+        {GX_VA_TEX0, GX_INDEX16},
+        {GX_VA_NULL, GX_NONE},
+    };
+    static GXVtxAttrFmtList l_vtxAttrFmtList[] = {
+        {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
+        {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
+        {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
+    };
     j3dSys.reinitGX();
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GFSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GFSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GFSetArray(GX_VA_POS, &mPos[m00010 * 0x1081], sizeof(cXyz));
+    GFSetArray(GX_VA_NRM, &mNrm[m00010 * 0x1081], sizeof(cXyz));
     GFSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
     GFSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
     GFSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
@@ -75,19 +62,7 @@ void daBwdg_packet_c::draw() {
     m00010 ^= 0x01;
 }
 
-// Fakematch (see above comment)
-GXVtxDescList l_vtxDescList[] = {
-    {GX_VA_POS, GX_INDEX16},
-    {GX_VA_NRM, GX_INDEX16},
-    {GX_VA_TEX0, GX_INDEX16},
-    {GX_VA_NULL, GX_NONE},
-};
-GXVtxAttrFmtList l_vtxAttrFmtList[] = {
-    {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NRM, GX_POS_XY, GX_F32, 0x00},
-    {GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0x00},
-    {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
-};
+#pragma pop
 
 /* 000001C4-00000260       .text daBwdg_Draw__FP10bwdg_class */
 static BOOL daBwdg_Draw(bwdg_class* i_this) {
@@ -208,7 +183,7 @@ static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
 
 /* 00000854-000008B0       .text daBwdg_Delete__FP10bwdg_class */
 static BOOL daBwdg_Delete(bwdg_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhase, "Bwdg");
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bwdg");
     if (i_this->heap) {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
     }

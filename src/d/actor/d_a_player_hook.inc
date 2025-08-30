@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_hookshot.h"
 #include "d/actor/d_a_player_HIO.h"
@@ -94,11 +95,11 @@ void daPy_lk_c::setHookshotSight() {
             if (mSightPacket.getLockFlg()) {
                 mSightPacket.incFrame();
                 if (mSightPacket.checkSEFrame()) {
-                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                    seStartSystem(JA_SE_INDICATOR_1);
                 }
             } else {
                 mSightPacket.onLockFlg();
-                mDoAud_seStart(JA_SE_INDICATOR_1);
+                seStartSystem(JA_SE_INDICATOR_1);
             }
         } else {
             mSightPacket.offLockFlg();
@@ -186,7 +187,7 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procHookshotMove_init();
     } else {
         return procHookshotSubject_init();
@@ -222,7 +223,7 @@ BOOL daPy_lk_c::procHookshotSubject() {
         dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -274,7 +275,7 @@ BOOL daPy_lk_c::procHookshotMove() {
     if (hookshot->checkWait()) {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
-        } else if (m355E == 0 && !mpAttention->Lockon()) {
+        } else if (m355E == 0 && !checkAttentionLock()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         } else {
             setSpeedAndAngleAtn();

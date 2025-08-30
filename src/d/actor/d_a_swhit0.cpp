@@ -3,6 +3,7 @@
 // Translation Unit: d_a_swhit0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swhit0.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -34,10 +35,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 35.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -63,11 +64,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 00000078-00000084       .text getSwNo__10daSwhit0_cFv */
@@ -273,7 +274,7 @@ s32 daSwhit0_c::actionOffWait() {
 
 /* 00000D8C-00000E24       .text actionToOnReady__10daSwhit0_cFv */
 s32 daSwhit0_c::actionToOnReady() {
-    if (dComIfGp_event_runCheck() != 0) {
+    if (dComIfGp_event_runCheck()) {
         return TRUE;
     }
 

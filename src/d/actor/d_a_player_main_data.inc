@@ -1,8 +1,7 @@
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 char l_arcName[] = "Link";
 
@@ -64,11 +63,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 125.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_wind_cyl_src = {
@@ -94,11 +93,11 @@ static dCcD_SrcCyl l_wind_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 125.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_at_cyl_src = {
@@ -124,11 +123,11 @@ static dCcD_SrcCyl l_at_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 180.0f,
         /* Height */ 75.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_at_cps_src = {
@@ -154,11 +153,11 @@ static dCcD_SrcCps l_at_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 20.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_fan_wind_cps_src = {
@@ -184,11 +183,11 @@ static dCcD_SrcCps l_fan_wind_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
-    },
+    }},
 };
 
 static dCcD_SrcSph l_fan_wind_sph_src = {
@@ -214,10 +213,10 @@ static dCcD_SrcSph l_fan_wind_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 150.0f,
-    },
+    }},
 };
 
 daPy_lk_c::ProcInitTableEntry daPy_lk_c::mProcInitTable[] = {

@@ -240,8 +240,11 @@ u8 JKRHeap::getCurrentGroupId() {
     return do_getCurrentGroupId();
 }
 
-static void dummy2() {
-    OSReport("change heap ID into %x in heap %x");
+s32 JKRHeap::changeGroupID(u8 groupID) {
+    if (mInitFlag) {
+        JUT_WARN(545, "change heap ID into %x in heap %x", groupID, this);
+    }
+    return do_changeGroupID(groupID);
 }
 
 /* 802B0918-802B0978       .text getMaxAllocatableSize__7JKRHeapFi */
@@ -262,7 +265,12 @@ JKRHeap* JKRHeap::findFromRoot(void* ptr) {
 
 /* 802B09B0-802B0A58       .text find__7JKRHeapCFPv */
 JKRHeap* JKRHeap::find(void* memory) const {
-    if (mStart <= memory && memory < mEnd) {
+#if VERSION == VERSION_DEMO
+    if (mStart <= memory && memory <= mEnd)
+#else
+    if (mStart <= memory && memory < mEnd)
+#endif
+    {
         if (mChildTree.getNumChildren() != 0) {
             for (JSUTreeIterator<JKRHeap> iterator(mChildTree.getFirstChild());
                  iterator != mChildTree.getEndChild(); ++iterator)
@@ -366,6 +374,28 @@ JKRErrorHandler JKRHeap::setErrorHandler(JKRErrorHandler errorHandler) {
     return prev;
 }
 
+bool JKRHeap::isSubHeap(JKRHeap* heap) const {
+    if (!heap)
+        return false;
+
+    if (mChildTree.getNumChildren() != 0) {
+        JSUTreeIterator<JKRHeap> iterator;
+        for (iterator = mChildTree.getFirstChild(); iterator != mChildTree.getEndChild();
+             ++iterator)
+        {
+            if (iterator.getObject() == heap) {
+                return true;
+            }
+
+            if (iterator.getObject()->isSubHeap(heap)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 /* 802B0C38-802B0C60       .text __nw__FUl */
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
@@ -454,7 +484,7 @@ u8 JKRHeap::do_getCurrentGroupId() {
     return 0;
 }
 
-#if VERSION <= VERSION_JPN
+#if VERSION == VERSION_JPN
 static void dummy5() {
     OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
 }

@@ -3,7 +3,9 @@
 // Translation Unit: d_envse.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_envse.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -189,15 +191,15 @@ kankyo_method_class l_dEnvSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_ENVSE = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_ENVSE,
-    &g_fpcLf_Method.base,
-    sizeof(dEnvSe_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0xA9,
-    &l_dEnvSe_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ENVSE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dEnvSe_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_ENVSE,
+    /* Actor SubMtd */ &l_dEnvSe_Method,
 };

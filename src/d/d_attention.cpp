@@ -3,6 +3,7 @@
 // Translation Unit: d_attention.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_attention.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
@@ -970,7 +971,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
         J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
-        modeldata->getMaterialTable().removeMatColorAnimator(color);
+        modeldata->removeMatColorAnimator(color);
     } else {
         mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
         J3DMatColorAnm *p = mpAnmMatClr;
@@ -979,7 +980,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
             p->setAnmIndex(i);
             p++;
         }
-        modeldata->getMaterialTable().setMatColorAnimator(mpAnmClr, mpAnmMatClr);
+        modeldata->setMatColorAnimator(mpAnmClr, mpAnmMatClr);
     }
 
     if (mDoGph_gInf_c::isMonotone()) {
@@ -1224,7 +1225,7 @@ bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
 bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
     // TODO: what is param_3?
-    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_3 > field_0x4) {
         return false;
     }

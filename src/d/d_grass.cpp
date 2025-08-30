@@ -3,6 +3,7 @@
 // Translation Unit: d_grass.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_grass.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -15,10 +16,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include "dolphin/gf/GF.h"
 
 #include "assets/l_K_kusa_00TEX.h"
 const u32 l_K_kusa_00TEX__width = 64;
@@ -145,8 +143,15 @@ static bool l_CutSoundFlag;
 
 /* 80077048-8007712C       .text setBatta__FP4cXyzP8_GXColor */
 void setBatta(cXyz* pos, GXColor* color) {
-    if (!dKy_rain_check() && !dComIfGp_event_runCheck() && strncmp(dComIfGp_getStartStageName(), "kin", 3) != 0 && strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 && cM_rnd() > 0.99f)
+    if (
+        !dKy_rain_check() &&
+        !dComIfGp_event_runCheck() &&
+        strncmp(dComIfGp_getStartStageName(), "kin", sizeof("kin")-1) != 0 &&
+        strcmp(dComIfGp_getStartStageName(), "Xboss1") != 0 &&
+        cM_rnd() > 0.99f
+    ) {
         dComIfGp_particle_set(dPa_name::ID_COMMON_0453, pos, NULL, NULL, 0xFF, NULL, -1, color, color);
+    }
 }
 
 /* 8007712C-8007734C       .text WorkCo__13dGrass_data_cFP10fopAc_ac_cUli */
@@ -314,7 +319,7 @@ dGrass_packet_c::dGrass_packet_c() {
     s16 angle = 0;
     for (s32 i = 0; i < 8; i++, angle += 0x2000)
         setAnm(i, angle);
-    if (strncmp(dComIfGp_getStartStageName(), "kin", 3) == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) {
+    if (strncmp(dComIfGp_getStartStageName(), "kin", sizeof("kin")-1) == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) {
         mpPosArr = (f32*)l_Vmori_pos;
         mpColorArr = l_Vmori_color;
         mpTexCoordArr = (f32*)l_Vmori_texCoord;

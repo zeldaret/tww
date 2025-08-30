@@ -24,426 +24,521 @@ modules:
   hash: 88e37cb6fc7280b344e4e8383a7a5496181245a1
   splits: config/GZLE01/rels/f_pc_profile_lst/splits.txt
   symbols: config/GZLE01/rels/f_pc_profile_lst/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_agbsw0.rel
   hash: 46f8efd5b8d0d0dc70aa88d9cbfe8181dcb75f3a
   splits: config/GZLE01/rels/d_a_agbsw0/splits.txt
   symbols: config/GZLE01/rels/d_a_agbsw0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_andsw0.rel
   hash: c1b8c1bea65fdf243c56f5b104e925f08fc4fb0d
   splits: config/GZLE01/rels/d_a_andsw0/splits.txt
   symbols: config/GZLE01/rels/d_a_andsw0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_andsw2.rel
   hash: ed7cda2668195efeb1986b1ba586b1db1321eb9c
   splits: config/GZLE01/rels/d_a_andsw2/splits.txt
   symbols: config/GZLE01/rels/d_a_andsw2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_att.rel
   hash: 8c9310474c4ca4655d499d103cc4fa7d0b33fc7e
   splits: config/GZLE01/rels/d_a_att/splits.txt
   symbols: config/GZLE01/rels/d_a_att/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bflower.rel
   hash: f3171c83865f382bbd5e67b3935e5c35fb5678e5
   splits: config/GZLE01/rels/d_a_bflower/splits.txt
   symbols: config/GZLE01/rels/d_a_bflower/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bita.rel
   hash: 0a9f84bb36f828add14f7198c6ef182d87117b4c
   splits: config/GZLE01/rels/d_a_bita/splits.txt
   symbols: config/GZLE01/rels/d_a_bita/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_branch.rel
   hash: 12daa00f847eec7db0edcc418f2f4dfef8562870
   splits: config/GZLE01/rels/d_a_branch/splits.txt
   symbols: config/GZLE01/rels/d_a_branch/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bridge.rel
   hash: bcd11fd25408471035c53d2efa70ce015c6fe024
   splits: config/GZLE01/rels/d_a_bridge/splits.txt
   symbols: config/GZLE01/rels/d_a_bridge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_coming2.rel
   hash: 87771c55aac8782b1fd12c16318bdbdab061dfc9
   splits: config/GZLE01/rels/d_a_coming2/splits.txt
   symbols: config/GZLE01/rels/d_a_coming2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_coming3.rel
   hash: 1b83c61c813f1f67722f41ed85cf0182c856a89a
   splits: config/GZLE01/rels/d_a_coming3/splits.txt
   symbols: config/GZLE01/rels/d_a_coming3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_demo_dk.rel
   hash: 508143bca9d7eacfdca12ec4ba93e5897b173d24
   splits: config/GZLE01/rels/d_a_demo_dk/splits.txt
   symbols: config/GZLE01/rels/d_a_demo_dk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_demo_kmm.rel
   hash: 18c2ab3b5bb174d00eeec078448ac60cdd4bed12
   splits: config/GZLE01/rels/d_a_demo_kmm/splits.txt
   symbols: config/GZLE01/rels/d_a_demo_kmm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_door10.rel
   hash: ccb4de128449762f76c2e35c984b2753f1ac7327
   splits: config/GZLE01/rels/d_a_door10/splits.txt
   symbols: config/GZLE01/rels/d_a_door10/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_dr.rel
   hash: dd9b37905e681215f03560d824628854979b23d5
   splits: config/GZLE01/rels/d_a_dr/splits.txt
   symbols: config/GZLE01/rels/d_a_dr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_dr2.rel
   hash: 4113384ee623a70de33d55ea533ba0c58fb43699
   splits: config/GZLE01/rels/d_a_dr2/splits.txt
   symbols: config/GZLE01/rels/d_a_dr2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ep.rel
   hash: 4dfff23d54256ef2f6ab20626a424cff885e3b39
   splits: config/GZLE01/rels/d_a_ep/splits.txt
   symbols: config/GZLE01/rels/d_a_ep/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_floor.rel
   hash: e83432de30b4b80295159b1d6eb5737b7e890e81
   splits: config/GZLE01/rels/d_a_floor/splits.txt
   symbols: config/GZLE01/rels/d_a_floor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_grass.rel
   hash: 3d88e2a6f51373a6a2458ce0d58d846abeb94eb6
   splits: config/GZLE01/rels/d_a_grass/splits.txt
   symbols: config/GZLE01/rels/d_a_grass/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_hitobj.rel
   hash: c2e2ea31103aeafe0a8bc2c7463023b9593d58a7
   splits: config/GZLE01/rels/d_a_hitobj/splits.txt
   symbols: config/GZLE01/rels/d_a_hitobj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_hot_floor.rel
   hash: 8d8cb52e73990b1d29466cdda6f36ecfe7956a06
   splits: config/GZLE01/rels/d_a_hot_floor/splits.txt
   symbols: config/GZLE01/rels/d_a_hot_floor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ikari.rel
   hash: 243211fd67f5fbd211de0dc653251b2856f3d83c
   splits: config/GZLE01/rels/d_a_ikari/splits.txt
   symbols: config/GZLE01/rels/d_a_ikari/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_jbo.rel
   hash: eac83a9d4a485d48ce40b70b0e725af418088e2d
   splits: config/GZLE01/rels/d_a_jbo/splits.txt
   symbols: config/GZLE01/rels/d_a_jbo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kaji.rel
   hash: 92bf3dc43768bd80688aeae0e952c75d0e3bbf40
   splits: config/GZLE01/rels/d_a_kaji/splits.txt
   symbols: config/GZLE01/rels/d_a_kaji/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kanban.rel
   hash: 2f00570dc71416e3e33ef2520bcba8a32f4f49f1
   splits: config/GZLE01/rels/d_a_kanban/splits.txt
   symbols: config/GZLE01/rels/d_a_kanban/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ki.rel
   hash: 7d0bbad3d3c29dd78c108ed6a278f9ec530230ba
   splits: config/GZLE01/rels/d_a_ki/splits.txt
   symbols: config/GZLE01/rels/d_a_ki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_knob00.rel
   hash: c4de9b1e6e7fc661afe932617939a0c0734a5ed2
   splits: config/GZLE01/rels/d_a_knob00/splits.txt
   symbols: config/GZLE01/rels/d_a_knob00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kui.rel
   hash: 9e9d7a1258144e9e39dbe5f09546b315975df2a2
   splits: config/GZLE01/rels/d_a_kui/splits.txt
   symbols: config/GZLE01/rels/d_a_kui/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag00.rel
   hash: 1dfcb08008de037a2dc20466fcd437b1f7345e98
   splits: config/GZLE01/rels/d_a_kytag00/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag01.rel
   hash: 3808602b8a5e88593aad4e860236e85beaa575b6
   splits: config/GZLE01/rels/d_a_kytag01/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag01/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag02.rel
   hash: c027b7bec5d02675be19c6c281f637992790c786
   splits: config/GZLE01/rels/d_a_kytag02/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag02/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag03.rel
   hash: 40608efd87b1810889bac297c54270df997f755d
   splits: config/GZLE01/rels/d_a_kytag03/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag03/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag04.rel
   hash: e3dbc9b0b3605fd4aad17b9d8e2dc47451847220
   splits: config/GZLE01/rels/d_a_kytag04/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag04/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag05.rel
   hash: 8ae1cfaeab68d94a6dfab68469db3cba65679468
   splits: config/GZLE01/rels/d_a_kytag05/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag05/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag06.rel
   hash: fae0697ec01e4294b264b2e81c1cf34dcd7cc4b5
   splits: config/GZLE01/rels/d_a_kytag06/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag06/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag07.rel
   hash: 8ab573b67a4c760c4c7af87a13e55010712469f3
   splits: config/GZLE01/rels/d_a_kytag07/splits.txt
   symbols: config/GZLE01/rels/d_a_kytag07/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lamp.rel
   hash: 6c7724634674381cddd83fbf5048e890084527a1
   splits: config/GZLE01/rels/d_a_lamp/splits.txt
   symbols: config/GZLE01/rels/d_a_lamp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lod_bg.rel
   hash: 18fc91dbef845d2268dc14d4822855f64bacb23f
   splits: config/GZLE01/rels/d_a_lod_bg/splits.txt
   symbols: config/GZLE01/rels/d_a_lod_bg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lwood.rel
   hash: 0044dab2ff6ccc8833de46f70db2334d3ee86491
   splits: config/GZLE01/rels/d_a_lwood/splits.txt
   symbols: config/GZLE01/rels/d_a_lwood/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_magma.rel
   hash: d617acaec65f3aed50e92541cd32754576006e9c
   splits: config/GZLE01/rels/d_a_magma/splits.txt
   symbols: config/GZLE01/rels/d_a_magma/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_majuu_flag.rel
   hash: 9844a606bcebcceaeff329256665eea72d5aa970
   splits: config/GZLE01/rels/d_a_majuu_flag/splits.txt
   symbols: config/GZLE01/rels/d_a_majuu_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
+  extract:
+    - symbol: l_flag02TEX
+      binary: assets/l_flag02TEX.bin
+      header: assets/l_flag02TEX.h
+    - symbol: l_majuu_flag_matDL
+      binary: assets/l_majuu_flag_matDL.bin
+      header: assets/l_majuu_flag_matDL.h
+    - symbol: l_majuu_flagDL
+      binary: assets/l_majuu_flagDL.bin
+      header: assets/l_majuu_flagDL.h
 
 - object: files/RELS.arc:rels/mmem/d_a_mdoor.rel
   hash: 8ae182c9556fdcd2c21205738af5d83acc903b4a
   splits: config/GZLE01/rels/d_a_mdoor/splits.txt
   symbols: config/GZLE01/rels/d_a_mdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_msw.rel
   hash: f84e086e3a678a4cdb976cf4ea9e2a18d7ed6b16
   splits: config/GZLE01/rels/d_a_msw/splits.txt
   symbols: config/GZLE01/rels/d_a_msw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_mtoge.rel
   hash: 253a46fafb2e16748ef70fadf753ea71d73b1b3d
   splits: config/GZLE01/rels/d_a_mtoge/splits.txt
   symbols: config/GZLE01/rels/d_a_mtoge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_AjavW.rel
   hash: 0ec3788868bd4a0c84a10777db24926ced958ec4
   splits: config/GZLE01/rels/d_a_obj_AjavW/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_AjavW/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_Ygush00.rel
   hash: 7e1fbf08ae77f1933e5a69566a3d1700d4c8e218
   splits: config/GZLE01/rels/d_a_obj_Ygush00/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_Ygush00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_akabe.rel
   hash: 9ece9189f94dcd504e4613d5217edc704561b28b
   splits: config/GZLE01/rels/d_a_obj_akabe/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_akabe/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_barrel.rel
   hash: 9984919bf2255e285eaeb1ef47b17a9f50300318
   splits: config/GZLE01/rels/d_a_obj_barrel/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_barrel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_barrel2.rel
   hash: 09bd4c40ed03efaef46dfad42ebcdc93dfe0fb8e
   splits: config/GZLE01/rels/d_a_obj_barrel2/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_barrel2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_bscurtain.rel
   hash: 7a2e7ffac861b0720e6c8b0ee9d01f7b87e9fd62
   splits: config/GZLE01/rels/d_a_obj_bscurtain/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_bscurtain/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_cafelmp.rel
   hash: f6f87b761dd845d15ea10d7770e52b3a130577aa
   splits: config/GZLE01/rels/d_a_obj_cafelmp/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_cafelmp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_coming.rel
   hash: f2d4fe3f575dbbf3d203256f4d453712b35c0341
   splits: config/GZLE01/rels/d_a_obj_coming/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_coming/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_demo_barrel.rel
   hash: 34e59a7cfdf5562cac9c8eccb5f5124de2aabd52
   splits: config/GZLE01/rels/d_a_obj_demo_barrel/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_demo_barrel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_doguu.rel
   hash: 355bb910ece0f6ecaf9b3a44b76f4b7d31c21dd0
   splits: config/GZLE01/rels/d_a_obj_doguu/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_doguu/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_doguu_demo.rel
   hash: 5d1aa2493e202c31be4063335291ad7e4b9ef2a6
   splits: config/GZLE01/rels/d_a_obj_doguu_demo/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_doguu_demo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_gryw00.rel
   hash: b9846f6357afcec5fca98e02e1b14a2c2203607e
   splits: config/GZLE01/rels/d_a_obj_gryw00/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gryw00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_hfuck1.rel
   hash: 116bb34ea5dd99416f68370048d848b219ef3f40
   splits: config/GZLE01/rels/d_a_obj_hfuck1/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hfuck1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_hole.rel
   hash: 92dbbbfee57404eb6d800764634cb251c96c10c9
   splits: config/GZLE01/rels/d_a_obj_hole/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hole/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ice.rel
   hash: 5a8614b64ab870e40edd3fd108ee807f117e3b51
   splits: config/GZLE01/rels/d_a_obj_ice/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ice/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ikada.rel
   hash: 5bb6e6dcd7b7be0800b40d79043669f5b0713bb7
   splits: config/GZLE01/rels/d_a_obj_ikada/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ikada/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_kanat.rel
   hash: 017e5e39fc4bd42e3a183b47b8036e1bc4161a87
   splits: config/GZLE01/rels/d_a_obj_kanat/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_kanat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_leaves.rel
   hash: e3c2ba80eb3f2956d41ae40ba9ce516035cdcf47
   splits: config/GZLE01/rels/d_a_obj_leaves/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_leaves/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_lpalm.rel
   hash: 56e749f499e0d7baf8cc038913ea79aefc254c57
   splits: config/GZLE01/rels/d_a_obj_lpalm/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_lpalm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_monument.rel
   hash: 633cdff4f5bce18d8a03bdcb282c4471b5b87128
   splits: config/GZLE01/rels/d_a_obj_monument/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_monument/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_movebox.rel
   hash: 700571e3ea76cb6d78fdbb3e801942eb5c78087a
   splits: config/GZLE01/rels/d_a_obj_movebox/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_movebox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_mshokki.rel
   hash: 088c50569aae59b069b4a1492d6ddd9cdef7ceeb
   splits: config/GZLE01/rels/d_a_obj_mshokki/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mshokki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ohatch.rel
   hash: c5952a0baf99c6b3e86933010c9786f58a232c92
   splits: config/GZLE01/rels/d_a_obj_ohatch/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ohatch/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_otble.rel
   hash: 8e73abf039b30c8679410ccae45e7eb05625d0ea
   splits: config/GZLE01/rels/d_a_obj_otble/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_otble/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_pbco.rel
   hash: efc72db2087bd71ab86cf81d32228019d7037973
   splits: config/GZLE01/rels/d_a_obj_pbco/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_pbco/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_pirateship.rel
   hash: 2b0fc024ac3c96932a1e8d3f73bdaf1defed2dcd
   splits: config/GZLE01/rels/d_a_obj_pirateship/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_pirateship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_quake.rel
   hash: 404ed0bdda38e5a2107a878bf5a839aeecfa78f5
   splits: config/GZLE01/rels/d_a_obj_quake/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_quake/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_rcloud.rel
   hash: 5eb5ba609adc975a33a719d7db2ef6decf76c46a
   splits: config/GZLE01/rels/d_a_obj_rcloud/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_rcloud/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_roten.rel
   hash: 95aae2f0583bc33d269e36e348fc6d75e20e49c9
   splits: config/GZLE01/rels/d_a_obj_roten/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_roten/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_shelf.rel
   hash: be793572fbc664316a161ac018bfae423adbaece
   splits: config/GZLE01/rels/d_a_obj_shelf/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_shelf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_shmrgrd.rel
   hash: eb2977a7e69685133ed4e278ce7767f0a2b315ec
   splits: config/GZLE01/rels/d_a_obj_shmrgrd/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_shmrgrd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_swpush.rel
   hash: 8cd8acf7f5a41ca881c75c6be38741b8b5c00bc3
   splits: config/GZLE01/rels/d_a_obj_swpush/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_swpush/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_table.rel
   hash: b1989778ba9b2ed48f0d65309bb29be8e97053a5
   splits: config/GZLE01/rels/d_a_obj_table/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_table/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tenmado.rel
   hash: 12ffe1e53fac154580ded398ab2b6e82855bedf0
   splits: config/GZLE01/rels/d_a_obj_tenmado/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tenmado/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tide.rel
   hash: db86a48088a74a306deddbb3f5a07be0c716cb38
   splits: config/GZLE01/rels/d_a_obj_tide/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tide/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_timer.rel
   hash: 0404822dc26698ec0019b3e211adfca53994746a
   splits: config/GZLE01/rels/d_a_obj_timer/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_timer/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_toripost.rel
   hash: b87a681642c8cab52b1aa06ee8fc1d8db38bdab4
   splits: config/GZLE01/rels/d_a_obj_toripost/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_toripost/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tousekiki.rel
   hash: 7e59ea5c79c12a947a641a54508c96aa63ad226d
   splits: config/GZLE01/rels/d_a_obj_tousekiki/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tousekiki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_warpt.rel
   hash: e9d4cc1d0363ed67cce917d3c8b203c1ea9b59a3
   splits: config/GZLE01/rels/d_a_obj_warpt/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_warpt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_wood.rel
   hash: d0521f34e2895997d5ed1886092fe0262e6da8a3
   splits: config/GZLE01/rels/d_a_obj_wood/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_wood/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_pirate_flag.rel
   hash: ad8581d91ce176c711a4db6a7862e2be510c0645
   splits: config/GZLE01/rels/d_a_pirate_flag/splits.txt
   symbols: config/GZLE01/rels/d_a_pirate_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_pirate_flag_DL
     binary: assets/l_pirate_flag_DL.bin
@@ -456,586 +551,703 @@ modules:
   hash: b553b2f13391ba3a3d24f4e41458ab3b46734a6d
   splits: config/GZLE01/rels/d_a_race_item/splits.txt
   symbols: config/GZLE01/rels/d_a_race_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_rd.rel
   hash: c83f0aa65ddc40a757907d0352e4f933e9a6cd89
   splits: config/GZLE01/rels/d_a_rd/splits.txt
   symbols: config/GZLE01/rels/d_a_rd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_rectangle.rel
   hash: 3b941a6b059cf80f97b54fd17eea1063da36d5ac
   splits: config/GZLE01/rels/d_a_rectangle/splits.txt
   symbols: config/GZLE01/rels/d_a_rectangle/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_salvage.rel
   hash: 25bb12a9db4a9be0361d54c47aaedb23ba6ae030
   splits: config/GZLE01/rels/d_a_salvage/splits.txt
   symbols: config/GZLE01/rels/d_a_salvage/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sbox.rel
   hash: e5b13d07cd1f1a3eff730f8f6536e194cabee513
   splits: config/GZLE01/rels/d_a_sbox/splits.txt
   symbols: config/GZLE01/rels/d_a_sbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sk.rel
   hash: 05057f35479ffc59693d65c1753431827c63c48e
   splits: config/GZLE01/rels/d_a_sk/splits.txt
   symbols: config/GZLE01/rels/d_a_sk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sk2.rel
   hash: 97c0859d0c889721fd33a4e88a0b7e6accb657ba
   splits: config/GZLE01/rels/d_a_sk2/splits.txt
   symbols: config/GZLE01/rels/d_a_sk2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_spotbox.rel
   hash: 89bd9a406e154bba90c1d1bf8b5ebf64559135bf
   splits: config/GZLE01/rels/d_a_spotbox/splits.txt
   symbols: config/GZLE01/rels/d_a_spotbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ssk.rel
   hash: 7364b473efb8e083f86d68863730d5ec6521f689
   splits: config/GZLE01/rels/d_a_ssk/splits.txt
   symbols: config/GZLE01/rels/d_a_ssk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_stone.rel
   hash: df3983a2706c20b2b2108ded08a33cc85049bb4f
   splits: config/GZLE01/rels/d_a_stone/splits.txt
   symbols: config/GZLE01/rels/d_a_stone/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_stone2.rel
   hash: bbed8c9bd485864128acff77be2764d5bf455e71
   splits: config/GZLE01/rels/d_a_stone2/splits.txt
   symbols: config/GZLE01/rels/d_a_stone2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swc00.rel
   hash: f38ee2786180be0b6b99e40f844db724e026de26
   splits: config/GZLE01/rels/d_a_swc00/splits.txt
   symbols: config/GZLE01/rels/d_a_swc00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swhit0.rel
   hash: d3ff83786e2a851775a9743670faa60519b232f5
   splits: config/GZLE01/rels/d_a_swhit0/splits.txt
   symbols: config/GZLE01/rels/d_a_swhit0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swtdoor.rel
   hash: 15d6b9023d2974eb0440cff8312fb1c0b78a71e5
   splits: config/GZLE01/rels/d_a_swtdoor/splits.txt
   symbols: config/GZLE01/rels/d_a_swtdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_attention.rel
   hash: 2a5189f5c7f413559f14529a91476f2ec787cd37
   splits: config/GZLE01/rels/d_a_tag_attention/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_attention/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_ba1.rel
   hash: 51aec7a67f533910bc0cdf45eb93362a2338cf5b
   splits: config/GZLE01/rels/d_a_tag_ba1/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_ba1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_event.rel
   hash: d1c848de8f94ba2543394aa244992fd859492fa5
   splits: config/GZLE01/rels/d_a_tag_event/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_event/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_evsw.rel
   hash: f46aa9549ea3944fae5f80b80e82e9a31cb9b9e3
   splits: config/GZLE01/rels/d_a_tag_evsw/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_evsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_ghostship.rel
   hash: 46d4ccc46f6c8dee1d985363459479d6772d52eb
   splits: config/GZLE01/rels/d_a_tag_ghostship/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_ghostship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_hint.rel
   hash: 59fe00c4461fa6f05c9e8e60588d66790a7040fc
   splits: config/GZLE01/rels/d_a_tag_hint/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_hint/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_kb_item.rel
   hash: f671de17e1e3224c114c3842b951ff501e3daf6f
   splits: config/GZLE01/rels/d_a_tag_kb_item/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_kb_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_kk1.rel
   hash: 865e98076501ceec1272ab8f62d03c13b84c5310
   splits: config/GZLE01/rels/d_a_tag_kk1/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_kk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_light.rel
   hash: f21112f85a3d8715ac43a6abd61153d31f4ce5c7
   splits: config/GZLE01/rels/d_a_tag_light/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_light/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_msg.rel
   hash: 15522ab00f7235d6e518695062fe80fdb28eae85
   splits: config/GZLE01/rels/d_a_tag_msg/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_msg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_photo.rel
   hash: a8c2de0f5dccab3cf2b107de8e1a8bbc47f6fc69
   splits: config/GZLE01/rels/d_a_tag_photo/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_photo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_waterlevel.rel
   hash: 76c60b5d66462719c07cd1c23cad877354e8098e
   splits: config/GZLE01/rels/d_a_tag_waterlevel/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_waterlevel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tama.rel
   hash: 29a16689a11b5306f70a98549d1822ea5cc2e46d
   splits: config/GZLE01/rels/d_a_tama/splits.txt
   symbols: config/GZLE01/rels/d_a_tama/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tbox.rel
   hash: b7414851aebfc41929ac82aa09343117831fbc57
   splits: config/GZLE01/rels/d_a_tbox/splits.txt
   symbols: config/GZLE01/rels/d_a_tbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tpota.rel
   hash: 230a1afc76e65d8118d7654f7e7d3abf1efd0f8f
   splits: config/GZLE01/rels/d_a_tpota/splits.txt
   symbols: config/GZLE01/rels/d_a_tpota/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tsubo.rel
   hash: 9df15d56d53c2653d02d960c50f373defde4334e
   splits: config/GZLE01/rels/d_a_tsubo/splits.txt
   symbols: config/GZLE01/rels/d_a_tsubo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_warpdm20.rel
   hash: d413c95b71b768929d2dfdf3e9cd6a5509d38764
   splits: config/GZLE01/rels/d_a_warpdm20/splits.txt
   symbols: config/GZLE01/rels/d_a_warpdm20/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_warphr.rel
   hash: 54ea41665df8cac46f13d228d2a6aec3e2f0836e
   splits: config/GZLE01/rels/d_a_warphr/splits.txt
   symbols: config/GZLE01/rels/d_a_warphr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_wbird.rel
   hash: 559b8dd224f8e07eec4d9fc893cf4383ebee5595
   splits: config/GZLE01/rels/d_a_wbird/splits.txt
   symbols: config/GZLE01/rels/d_a_wbird/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ykgr.rel
   hash: a8c10fec3f1d7118c04643e64a26ab1c53f758be
   splits: config/GZLE01/rels/d_a_ykgr/splits.txt
   symbols: config/GZLE01/rels/d_a_ykgr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_alldie.rel
   hash: 875766bb690bfd89e6831d33d70fe460cda99b15
   splits: config/GZLE01/rels/d_a_alldie/splits.txt
   symbols: config/GZLE01/rels/d_a_alldie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_am.rel
   hash: 68dcecd70230f8f35120ad8ce169054bd6276223
   splits: config/GZLE01/rels/d_a_am/splits.txt
   symbols: config/GZLE01/rels/d_a_am/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_am2.rel
   hash: 155357f82808b60b57757a7244cf441de07f2aa8
   splits: config/GZLE01/rels/d_a_am2/splits.txt
   symbols: config/GZLE01/rels/d_a_am2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_amiprop.rel
   hash: 8e30a63dd742a1b7b90ea88caa825195d53fd15f
   splits: config/GZLE01/rels/d_a_amiprop/splits.txt
   symbols: config/GZLE01/rels/d_a_amiprop/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_arrow_iceeff.rel
   hash: 762d362ade2f502f045aa8a6b4d2a2e74133bcee
   splits: config/GZLE01/rels/d_a_arrow_iceeff/splits.txt
   symbols: config/GZLE01/rels/d_a_arrow_iceeff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_arrow_lighteff.rel
   hash: 49ae2623f911ab1360045bd9f076847d01d19807
   splits: config/GZLE01/rels/d_a_arrow_lighteff/splits.txt
   symbols: config/GZLE01/rels/d_a_arrow_lighteff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_beam.rel
   hash: ae23acf6f515e8772cd179324dcd7d35b8b372a9
   splits: config/GZLE01/rels/d_a_beam/splits.txt
   symbols: config/GZLE01/rels/d_a_beam/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_boko.rel
   hash: 3d8283b9ca65975cd519d07eabd81dc36a328831
   splits: config/GZLE01/rels/d_a_boko/splits.txt
   symbols: config/GZLE01/rels/d_a_boko/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_canon.rel
   hash: 043d2c0c12874d7859673353762f0c8a66c7d00a
   splits: config/GZLE01/rels/d_a_canon/splits.txt
   symbols: config/GZLE01/rels/d_a_canon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_cc.rel
   hash: 7b421a49d69206df3384784c62757f866417963f
   splits: config/GZLE01/rels/d_a_cc/splits.txt
   symbols: config/GZLE01/rels/d_a_cc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_dai.rel
   hash: 69141723b6dfff95499bf4279cc2d256eb4d0f49
   splits: config/GZLE01/rels/d_a_dai/splits.txt
   symbols: config/GZLE01/rels/d_a_dai/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_demo_item.rel
   hash: 1bd373f3fd6b4698719065144185f162d5381ff2
   splits: config/GZLE01/rels/d_a_demo_item/splits.txt
   symbols: config/GZLE01/rels/d_a_demo_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_door12.rel
   hash: 013c2be3ac965e59abebaf0d5a61fbcccccc3b4f
   splits: config/GZLE01/rels/d_a_door12/splits.txt
   symbols: config/GZLE01/rels/d_a_door12/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_fallrock.rel
   hash: e122ced607436ba12ecf7e6009c46b1dd5fc7b9d
   splits: config/GZLE01/rels/d_a_fallrock/splits.txt
   symbols: config/GZLE01/rels/d_a_fallrock/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ff.rel
   hash: a25ce9dc73f33cbbedb471621d9f689c644ae85c
   splits: config/GZLE01/rels/d_a_ff/splits.txt
   symbols: config/GZLE01/rels/d_a_ff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_gy_ctrl.rel
   hash: e48b1f5dfe6110d49424136528a36beb9b2635a9
   splits: config/GZLE01/rels/d_a_gy_ctrl/splits.txt
   symbols: config/GZLE01/rels/d_a_gy_ctrl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_himo3.rel
   hash: 6162dd3beca421c7b1e6bcaa12a90dac04e89cd1
   splits: config/GZLE01/rels/d_a_himo3/splits.txt
   symbols: config/GZLE01/rels/d_a_himo3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_hmlif.rel
   hash: 3a44137c88b7dbea282fbed70d700652104e860a
   splits: config/GZLE01/rels/d_a_hmlif/splits.txt
   symbols: config/GZLE01/rels/d_a_hmlif/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_hys.rel
   hash: b3fbd35249333ba1d091e525723559d0729bf496
   splits: config/GZLE01/rels/d_a_hys/splits.txt
   symbols: config/GZLE01/rels/d_a_hys/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kamome.rel
   hash: cd56b6248c5f2694638f619fa0e944934eb2221d
   splits: config/GZLE01/rels/d_a_kamome/splits.txt
   symbols: config/GZLE01/rels/d_a_kamome/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kantera.rel
   hash: f785fc26465e1f085bc74dde942d2cc15e5f07ba
   splits: config/GZLE01/rels/d_a_kantera/splits.txt
   symbols: config/GZLE01/rels/d_a_kantera/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kn.rel
   hash: f21d6e22490cae447c742a37d52a5724d033af9c
   splits: config/GZLE01/rels/d_a_kn/splits.txt
   symbols: config/GZLE01/rels/d_a_kn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kokiie.rel
   hash: 9ccea792ba908cf43f9a198f19dd76b6f06fcf53
   splits: config/GZLE01/rels/d_a_kokiie/splits.txt
   symbols: config/GZLE01/rels/d_a_kokiie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ks.rel
   hash: 9b50d4be7cc08103452ac05808abacfcf03e4991
   splits: config/GZLE01/rels/d_a_ks/splits.txt
   symbols: config/GZLE01/rels/d_a_ks/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kt.rel
   hash: e1a45001d430dcdeaf66cafab0e4fd899d6d8a82
   splits: config/GZLE01/rels/d_a_kt/splits.txt
   symbols: config/GZLE01/rels/d_a_kt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_mflft.rel
   hash: b7f0196df617ce65e85771c16b2c4fb1c2c6aa9f
   splits: config/GZLE01/rels/d_a_mflft/splits.txt
   symbols: config/GZLE01/rels/d_a_mflft/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_cb1.rel
   hash: 0c68c357feecaf5d314c30fea0290d5832714a5b
   splits: config/GZLE01/rels/d_a_npc_cb1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_cb1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_md.rel
   hash: a14227eaf82b67fc532e03fe850181f0d66b6d58
   splits: config/GZLE01/rels/d_a_npc_md/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_md/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_so.rel
   hash: dad717a5da27e7c168e18fb5af8bbd85b8c71200
   splits: config/GZLE01/rels/d_a_npc_so/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_so/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_nzg.rel
   hash: 75d436f2002bd2e271e631974a95e1dbd67c0b34
   splits: config/GZLE01/rels/d_a_nzg/splits.txt
   symbols: config/GZLE01/rels/d_a_nzg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_aygr.rel
   hash: 99bb50cf45aeb620ac05e843cad0ae79a5c7a63b
   splits: config/GZLE01/rels/d_a_obj_aygr/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_aygr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_balancelift.rel
   hash: 0d081173f9f0b87a2f3729184a453c72a2901477
   splits: config/GZLE01/rels/d_a_obj_balancelift/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_balancelift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_barrier.rel
   hash: 2ef931af8dbfc5ce1969415ae4801c9e62886b45
   splits: config/GZLE01/rels/d_a_obj_barrier/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_barrier/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_bemos.rel
   hash: 9c9b3636b859aa4dd022c88e53cf995a17d38660
   splits: config/GZLE01/rels/d_a_obj_bemos/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_bemos/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_canon.rel
   hash: ffcf102ba8f937b796b3968fd38c3d044fffc1df
   splits: config/GZLE01/rels/d_a_obj_canon/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_canon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_eff.rel
   hash: 13922592d35c32e44749082a08b07df4bf531b52
   splits: config/GZLE01/rels/d_a_obj_eff/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_eff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_magmarock.rel
   hash: 037485a8659fd1455d9852875fde1f4c88444aa4
   splits: config/GZLE01/rels/d_a_obj_magmarock/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_magmarock/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_majyuu_door.rel
   hash: e07e9497a2090f8df53c54455591bd07de11d862
   splits: config/GZLE01/rels/d_a_obj_majyuu_door/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_majyuu_door/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_stair.rel
   hash: a99dbbcd3054921bb5d395d7dfad1ca7f6a498b8
   splits: config/GZLE01/rels/d_a_obj_stair/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_stair/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swflat.rel
   hash: 42c863754e7fc75bdf1ac07fdc3fcdfd3dd8b724
   splits: config/GZLE01/rels/d_a_obj_swflat/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_swflat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swhammer.rel
   hash: bc4ada62a90538a59f0334dd572b5bb12926e3ab
   splits: config/GZLE01/rels/d_a_obj_swhammer/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_swhammer/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swheavy.rel
   hash: 01d2a8e7c3da867bc5cc4dd05ff2aa41053cdb48
   splits: config/GZLE01/rels/d_a_obj_swheavy/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_swheavy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swlight.rel
   hash: 5e549be0b9a44ed559c37f26fdba17d26b5e07a4
   splits: config/GZLE01/rels/d_a_obj_swlight/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_swlight/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_oq.rel
   hash: 51b036fd99f22ea8e24b92d554367f6e166e0d53
   splits: config/GZLE01/rels/d_a_oq/splits.txt
   symbols: config/GZLE01/rels/d_a_oq/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_pedestal.rel
   hash: 2f74b85ca38160269aa238e711d1ba19eb8ab7ee
   splits: config/GZLE01/rels/d_a_pedestal/splits.txt
   symbols: config/GZLE01/rels/d_a_pedestal/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_saku.rel
   hash: 75567b90c0ea4c8d1d321bd099682aed1b471b6b
   splits: config/GZLE01/rels/d_a_saku/splits.txt
   symbols: config/GZLE01/rels/d_a_saku/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_seatag.rel
   hash: f49d24ec93f2b2817b1924d1d316181bfcd9514d
   splits: config/GZLE01/rels/d_a_seatag/splits.txt
   symbols: config/GZLE01/rels/d_a_seatag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_shand.rel
   hash: 9adf981c1ec6ab396427bdb35f384821fc23d72f
   splits: config/GZLE01/rels/d_a_shand/splits.txt
   symbols: config/GZLE01/rels/d_a_shand/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ship.rel
   hash: 3011cb92707b33bc1431e42627e7cf3685735826
   splits: config/GZLE01/rels/d_a_ship/splits.txt
   symbols: config/GZLE01/rels/d_a_ship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_shop_item.rel
   hash: 9614ced240f1f7d2e22b9248fbfe4c6657c67471
   splits: config/GZLE01/rels/d_a_shop_item/splits.txt
   symbols: config/GZLE01/rels/d_a_shop_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sie_flag.rel
   hash: 0711ab6c6273685edf644866c3ed3454fb515e10
   splits: config/GZLE01/rels/d_a_sie_flag/splits.txt
   symbols: config/GZLE01/rels/d_a_sie_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sitem.rel
   hash: 69e3cc28beb7d91281cacff950fa06ceadd905e2
   splits: config/GZLE01/rels/d_a_sitem/splits.txt
   symbols: config/GZLE01/rels/d_a_sitem/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ss.rel
   hash: ae5a109955e92595367eb93e174a864e5efd3aa6
   splits: config/GZLE01/rels/d_a_ss/splits.txt
   symbols: config/GZLE01/rels/d_a_ss/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sss.rel
   hash: bdbfeb4e24df7cfcc6cb3b4c8aa73758cc341632
   splits: config/GZLE01/rels/d_a_sss/splits.txt
   symbols: config/GZLE01/rels/d_a_sss/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_syan.rel
   hash: ba627c968c339a9225a2199e02d5815db0456b69
   splits: config/GZLE01/rels/d_a_syan/splits.txt
   symbols: config/GZLE01/rels/d_a_syan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_md_cb.rel
   hash: e8e40bf899de6599014fcb17e771b9aa76a91e14
   splits: config/GZLE01/rels/d_a_tag_md_cb/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_md_cb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_mk.rel
   hash: 88a42b17ae35c44316b6e1fb774c93889714cf84
   splits: config/GZLE01/rels/d_a_tag_mk/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_mk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_so.rel
   hash: c5f1f683bc0985bfcfdccfe874e83b8935018b90
   splits: config/GZLE01/rels/d_a_tag_so/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_so/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tornado.rel
   hash: db442c028ee83078db892385a43a47b7af01c042
   splits: config/GZLE01/rels/d_a_tornado/splits.txt
   symbols: config/GZLE01/rels/d_a_tornado/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_warpf.rel
   hash: ed92bdca118823b9f33db84ead3a8c6a33862f0b
   splits: config/GZLE01/rels/d_a_warpf/splits.txt
   symbols: config/GZLE01/rels/d_a_warpf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_wind_tag.rel
   hash: 39edcd1b125ed5cb901f167da67570e5d8d8693d
   splits: config/GZLE01/rels/d_a_wind_tag/splits.txt
   symbols: config/GZLE01/rels/d_a_wind_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_acorn_leaf.rel
   hash: 12fd13f95ddb65a54f869d85cbb463e3ee2f0e06
   splits: config/GZLE01/rels/d_a_acorn_leaf/splits.txt
   symbols: config/GZLE01/rels/d_a_acorn_leaf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_atdoor.rel
   hash: af6619547236a2597ecb869e04c14e268b7d4e4b
   splits: config/GZLE01/rels/d_a_atdoor/splits.txt
   symbols: config/GZLE01/rels/d_a_atdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_auction.rel
   hash: a1dfdef7fa2c830ff7c6dc77e07a7e79523ab94d
   splits: config/GZLE01/rels/d_a_auction/splits.txt
   symbols: config/GZLE01/rels/d_a_auction/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bb.rel
   hash: 4271e18f447d7b2d2b052a1ae4e0f0862052269f
   splits: config/GZLE01/rels/d_a_bb/splits.txt
   symbols: config/GZLE01/rels/d_a_bb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bdk.rel
   hash: 05100a1b95433f4c5469482fc5d37d3c361d12cf
   splits: config/GZLE01/rels/d_a_bdk/splits.txt
   symbols: config/GZLE01/rels/d_a_bdk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bdkobj.rel
   hash: d4c82614b7aa52da203955ed36c49e3e8fab9042
   splits: config/GZLE01/rels/d_a_bdkobj/splits.txt
   symbols: config/GZLE01/rels/d_a_bdkobj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn.rel
   hash: 15f2795d5262d293c4f91e49db7637c096a8cbbb
   splits: config/GZLE01/rels/d_a_bgn/splits.txt
   symbols: config/GZLE01/rels/d_a_bgn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn2.rel
   hash: b9dc1b897cfe9355d63eafbc6b53bf4f617beea5
   splits: config/GZLE01/rels/d_a_bgn2/splits.txt
   symbols: config/GZLE01/rels/d_a_bgn2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn3.rel
   hash: 00d848da04655d1f2fbac2a23d25eacbab89f93c
   splits: config/GZLE01/rels/d_a_bgn3/splits.txt
   symbols: config/GZLE01/rels/d_a_bgn3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bigelf.rel
   hash: 613af7b8121aaa027dcf25639915e8b9c4e85f71
   splits: config/GZLE01/rels/d_a_bigelf/splits.txt
   symbols: config/GZLE01/rels/d_a_bigelf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bk.rel
   hash: fda389bf39e075e55a2db7dd3d75fc4a20c4ee7d
   splits: config/GZLE01/rels/d_a_bk/splits.txt
   symbols: config/GZLE01/rels/d_a_bk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bl.rel
   hash: 2c3c191c7bd3a0240314de5b9a1fd210eac95d32
   splits: config/GZLE01/rels/d_a_bl/splits.txt
   symbols: config/GZLE01/rels/d_a_bl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmd.rel
   hash: 76a3d64509395e971bce6ceb026bfc28a675e15e
   splits: config/GZLE01/rels/d_a_bmd/splits.txt
   symbols: config/GZLE01/rels/d_a_bmd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmdfoot.rel
   hash: c61dc3b7979476aa5fb26ab6ed895fc7ee72e487
   splits: config/GZLE01/rels/d_a_bmdfoot/splits.txt
   symbols: config/GZLE01/rels/d_a_bmdfoot/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmdhand.rel
   hash: 3456d704ae979b9d4abb0772f0cad88f205d0368
   splits: config/GZLE01/rels/d_a_bmdhand/splits.txt
   symbols: config/GZLE01/rels/d_a_bmdhand/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bo.rel
   hash: 6b3c04a17f3bd2e369a2a95237351524a5d87f74
   splits: config/GZLE01/rels/d_a_bo/splits.txt
   symbols: config/GZLE01/rels/d_a_bo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_boss_item.rel
   hash: 016a3fb3472b981ca1eeeb69696e9a1f68a93e25
   splits: config/GZLE01/rels/d_a_boss_item/splits.txt
   symbols: config/GZLE01/rels/d_a_boss_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bpw.rel
   hash: a4ba3b520dda8b196ad4a8a493d171dae4f85288
   splits: config/GZLE01/rels/d_a_bpw/splits.txt
   symbols: config/GZLE01/rels/d_a_bpw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bst.rel
   hash: 6579192cc5bc34e8fb2ee44ed81da3ff1db5b827
   splits: config/GZLE01/rels/d_a_bst/splits.txt
   symbols: config/GZLE01/rels/d_a_bst/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_btd.rel
   hash: df178b3f94fd3689d450c36582c91d7b08062402
   splits: config/GZLE01/rels/d_a_btd/splits.txt
   symbols: config/GZLE01/rels/d_a_btd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bwd.rel
   hash: b2eaaba784ddd95e392fd1a337406478981eaa46
   splits: config/GZLE01/rels/d_a_bwd/splits.txt
   symbols: config/GZLE01/rels/d_a_bwd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bwdg.rel
   hash: 7cef0d0967ffbdae93dfc4a28ef0b8a672b052c9
   splits: config/GZLE01/rels/d_a_bwdg/splits.txt
   symbols: config/GZLE01/rels/d_a_bwdg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_B_sand2TEX
     binary: assets/l_B_sand2TEX.bin
@@ -1056,912 +1268,1094 @@ modules:
   hash: 8b66ae454ccfa973424e666bc6f4e9d9e1521263
   splits: config/GZLE01/rels/d_a_bwds/splits.txt
   symbols: config/GZLE01/rels/d_a_bwds/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_daiocta.rel
   hash: adc0c5c5cc5eb184efe0f6c0106d01dbe2a31430
   splits: config/GZLE01/rels/d_a_daiocta/splits.txt
   symbols: config/GZLE01/rels/d_a_daiocta/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_daiocta_eye.rel
   hash: 10ed583f4c931321cc11d873e64f17b94b9aa30a
   splits: config/GZLE01/rels/d_a_daiocta_eye/splits.txt
   symbols: config/GZLE01/rels/d_a_daiocta_eye/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_deku_item.rel
   hash: 0d8a8209a52451800a0a494ef8a3389d5e4b451c
   splits: config/GZLE01/rels/d_a_deku_item/splits.txt
   symbols: config/GZLE01/rels/d_a_deku_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_dk.rel
   hash: ab4e9fb93b70ebb628b22a19bc4d16e12cbc9423
   splits: config/GZLE01/rels/d_a_dk/splits.txt
   symbols: config/GZLE01/rels/d_a_dk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_dummy.rel
   hash: 5a7b98114d4eb6e575bc1a29f70b12e278288adb
   splits: config/GZLE01/rels/d_a_dummy/splits.txt
   symbols: config/GZLE01/rels/d_a_dummy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fallrock_tag.rel
   hash: ae78eca4828ab787daf458f18f26eb46e2c9938d
   splits: config/GZLE01/rels/d_a_fallrock_tag/splits.txt
   symbols: config/GZLE01/rels/d_a_fallrock_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fan.rel
   hash: 3908bb08f7632f51473f989812d112d491c44d1a
   splits: config/GZLE01/rels/d_a_fan/splits.txt
   symbols: config/GZLE01/rels/d_a_fan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fganon.rel
   hash: 6c2e45cbb86f5344313374344239f5e636239be1
   splits: config/GZLE01/rels/d_a_fganon/splits.txt
   symbols: config/GZLE01/rels/d_a_fganon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fgmahou.rel
   hash: cf93508645c20cebd1e71584d95d3e1fa7a7b6c6
   splits: config/GZLE01/rels/d_a_fgmahou/splits.txt
   symbols: config/GZLE01/rels/d_a_fgmahou/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fire.rel
   hash: 89d3d1d0445c47165f2dcfdac1ec3885b20c93c1
   splits: config/GZLE01/rels/d_a_fire/splits.txt
   symbols: config/GZLE01/rels/d_a_fire/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fm.rel
   hash: 9f23fbd14486f28a9d99967df78155dc1d76b89e
   splits: config/GZLE01/rels/d_a_fm/splits.txt
   symbols: config/GZLE01/rels/d_a_fm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gm.rel
   hash: 5af6759c654039e50885d527bc5d4fd07043fc06
   splits: config/GZLE01/rels/d_a_gm/splits.txt
   symbols: config/GZLE01/rels/d_a_gm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gnd.rel
   hash: 2f417c5f7fd5e968ad8e7d3dd02bbc0629334213
   splits: config/GZLE01/rels/d_a_gnd/splits.txt
   symbols: config/GZLE01/rels/d_a_gnd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_goal_flag.rel
   hash: 360285b55c8d8d9353c8c027bcfcc90c368f86b4
   splits: config/GZLE01/rels/d_a_goal_flag/splits.txt
   symbols: config/GZLE01/rels/d_a_goal_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gy.rel
   hash: 6acc3205358c2770f479b59e282a84e1826874ab
   splits: config/GZLE01/rels/d_a_gy/splits.txt
   symbols: config/GZLE01/rels/d_a_gy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_icelift.rel
   hash: 0ed2e45794dc2f68c9c51ce97e0fdcd31b143174
   splits: config/GZLE01/rels/d_a_icelift/splits.txt
   symbols: config/GZLE01/rels/d_a_icelift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kb.rel
   hash: d72d6433bc16550c1f518dd82d54c6c8bf21c555
   splits: config/GZLE01/rels/d_a_kb/splits.txt
   symbols: config/GZLE01/rels/d_a_kb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kddoor.rel
   hash: 9e7416aa212ba5385444fd4773bbe4d268dd59eb
   splits: config/GZLE01/rels/d_a_kddoor/splits.txt
   symbols: config/GZLE01/rels/d_a_kddoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kita.rel
   hash: 69c8760f94682b546017a12527fd644bd1203550
   splits: config/GZLE01/rels/d_a_kita/splits.txt
   symbols: config/GZLE01/rels/d_a_kita/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_klft.rel
   hash: 7b9bc0c8561c2bd9b823b04379f21f4d458f6b2f
   splits: config/GZLE01/rels/d_a_klft/splits.txt
   symbols: config/GZLE01/rels/d_a_klft/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kmon.rel
   hash: bc1d9a0129932c6654345968ee3fb4dd9c48eca8
   splits: config/GZLE01/rels/d_a_kmon/splits.txt
   symbols: config/GZLE01/rels/d_a_kmon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_komore.rel
   hash: abc58acb47ede6b1ade63b71f15e374f8ff77c9b
   splits: config/GZLE01/rels/d_a_komore/splits.txt
   symbols: config/GZLE01/rels/d_a_komore/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_lbridge.rel
   hash: c945922ab23b413bdde05da08abcdf15f57edc8b
   splits: config/GZLE01/rels/d_a_lbridge/splits.txt
   symbols: config/GZLE01/rels/d_a_lbridge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_leaflift.rel
   hash: 302f618b1c678611f1c3e232c2ff43c7d82fb909
   splits: config/GZLE01/rels/d_a_leaflift/splits.txt
   symbols: config/GZLE01/rels/d_a_leaflift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_lstair.rel
   hash: c22728306e2a8e5d07485c1bcfd3562a9defa0ee
   splits: config/GZLE01/rels/d_a_lstair/splits.txt
   symbols: config/GZLE01/rels/d_a_lstair/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_machine.rel
   hash: 1794e6e83f8b841128f16c2d88f974a7e73f2b49
   splits: config/GZLE01/rels/d_a_machine/splits.txt
   symbols: config/GZLE01/rels/d_a_machine/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mant.rel
   hash: a565cdff34a1346c7db964d795179b81ece22ef8
   splits: config/GZLE01/rels/d_a_mant/splits.txt
   symbols: config/GZLE01/rels/d_a_mant/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mbdoor.rel
   hash: f07a1af7794a199099020a4112ea538a3aa6731c
   splits: config/GZLE01/rels/d_a_mbdoor/splits.txt
   symbols: config/GZLE01/rels/d_a_mbdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mgameboard.rel
   hash: acfece5ca2eb54b87c8aa581e5722fbc8f6a6c52
   splits: config/GZLE01/rels/d_a_mgameboard/splits.txt
   symbols: config/GZLE01/rels/d_a_mgameboard/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mmusic.rel
   hash: c7633a66fe7dd485276416cc00b375147f494079
   splits: config/GZLE01/rels/d_a_mmusic/splits.txt
   symbols: config/GZLE01/rels/d_a_mmusic/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mo2.rel
   hash: abeeca78ea5d4fe979eb04395020fb02a5902024
   splits: config/GZLE01/rels/d_a_mo2/splits.txt
   symbols: config/GZLE01/rels/d_a_mo2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mozo.rel
   hash: dbb8c7b1836212b8ac327595d06dc8182cdf8cf5
   splits: config/GZLE01/rels/d_a_mozo/splits.txt
   symbols: config/GZLE01/rels/d_a_mozo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mt.rel
   hash: 9d7de8625389ef01cb34539efc782f2a0d0aeda1
   splits: config/GZLE01/rels/d_a_mt/splits.txt
   symbols: config/GZLE01/rels/d_a_mt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ac1.rel
   hash: 3d4d7da43dde47d8de9538c3434f5edff05fa193
   splits: config/GZLE01/rels/d_a_npc_ac1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ac1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ah.rel
   hash: 735b9ca1c78f892e19c918bdadbff72c076598c6
   splits: config/GZLE01/rels/d_a_npc_ah/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ah/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_aj1.rel
   hash: 5f4efe2ab0e1aee2cb460d262fbf9b06d369e0f1
   splits: config/GZLE01/rels/d_a_npc_aj1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_aj1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_auction.rel
   hash: 08e0d7a1a0989ad3e84b8643168f9434f67c2c78
   splits: config/GZLE01/rels/d_a_npc_auction/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_auction/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ba1.rel
   hash: 7f75a2ebc8a8ee6db432f427d7968866ba7ab42e
   splits: config/GZLE01/rels/d_a_npc_ba1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ba1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bj1.rel
   hash: 853c12800f9e9819a444528fb7e711fe7ad83265
   splits: config/GZLE01/rels/d_a_npc_bj1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bj1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bm1.rel
   hash: 4633f6bcdfed7afde122081e8d95decd23701fbe
   splits: config/GZLE01/rels/d_a_npc_bm1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bm1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bmcon1.rel
   hash: 9505dfa62acefdd1f4ccf8debc8a331ef5dfffba
   splits: config/GZLE01/rels/d_a_npc_bmcon1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bmcon1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bms1.rel
   hash: f3f6584dfe4be210348d34e9a0f5e84672c5fed7
   splits: config/GZLE01/rels/d_a_npc_bms1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bms1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bmsw.rel
   hash: 00a818918b0603448887f64e03d2241466a7e8c1
   splits: config/GZLE01/rels/d_a_npc_bmsw/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bmsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bs1.rel
   hash: babd7102e1bb5d15d214b849bfe780b36c297595
   splits: config/GZLE01/rels/d_a_npc_bs1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_bs1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_btsw.rel
   hash: e7eaf3c72df6ace4cac7df2a347844bb192a86ec
   splits: config/GZLE01/rels/d_a_npc_btsw/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_btsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_btsw2.rel
   hash: ecc751a2de3407bd4208953f58630085009eaa9b
   splits: config/GZLE01/rels/d_a_npc_btsw2/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_btsw2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_co1.rel
   hash: 4bb2b119cc9c58dcaf591d66eb94a1db964c5120
   splits: config/GZLE01/rels/d_a_npc_co1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_co1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_de1.rel
   hash: 4ab1a0a2e2c941005588f296ef1667637471c9d0
   splits: config/GZLE01/rels/d_a_npc_de1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_de1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ds1.rel
   hash: 61b13ea0a94800717398b123307e462868af343b
   splits: config/GZLE01/rels/d_a_npc_ds1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ds1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_gk1.rel
   hash: 92242dab744acb6b4913401f97bd1fb3caadf29c
   splits: config/GZLE01/rels/d_a_npc_gk1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_gk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_gp1.rel
   hash: d7b3c1b99a37f12370d5f0adc8a35c17b17ae76b
   splits: config/GZLE01/rels/d_a_npc_gp1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_gp1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_hi1.rel
   hash: b7615cb5be0c2cf0cbfee9b661599a35717f79ca
   splits: config/GZLE01/rels/d_a_npc_hi1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_hi1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ho.rel
   hash: f672ebfce63a8ae9a50aca2f27197d38e114ae6c
   splits: config/GZLE01/rels/d_a_npc_ho/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ho/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_hr.rel
   hash: 8a8d78519dfb6f2b8c10b56a8da519272845167c
   splits: config/GZLE01/rels/d_a_npc_hr/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_hr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_jb1.rel
   hash: d95d1915c292fe7269c0b79b89d4965e754dc4a1
   splits: config/GZLE01/rels/d_a_npc_jb1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_jb1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ji1.rel
   hash: 15c7701d3ad1029835db127e90b93ff40586a096
   splits: config/GZLE01/rels/d_a_npc_ji1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ji1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kamome.rel
   hash: 6422280d2f80ef13fed632b3ef1bfb411fe99777
   splits: config/GZLE01/rels/d_a_npc_kamome/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kamome/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kf1.rel
   hash: 9b219f658b887591784a4b9f168f3c8e954b8c6d
   splits: config/GZLE01/rels/d_a_npc_kf1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kg1.rel
   hash: 4a93d6c2c52d1092a84bffefb931f3ae420bb7da
   splits: config/GZLE01/rels/d_a_npc_kg1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kg1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kg2.rel
   hash: da1d8fa5d3e425145c6bb1a07020fa924beedd69
   splits: config/GZLE01/rels/d_a_npc_kg2/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kg2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kk1.rel
   hash: 4277973fc6fb8dbbe471ff2401e2159a25b9a69e
   splits: config/GZLE01/rels/d_a_npc_kk1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_km1.rel
   hash: 06154726d5ff028d1a3e6761db853e5fa798962b
   splits: config/GZLE01/rels/d_a_npc_km1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_km1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ko1.rel
   hash: 82f9531de272a8101a6a1d54db137fda24b8ff9a
   splits: config/GZLE01/rels/d_a_npc_ko1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ko1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kp1.rel
   hash: 0117ed66a815e539d63f50d79d3d35c431feb3cb
   splits: config/GZLE01/rels/d_a_npc_kp1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_kp1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ls1.rel
   hash: eb10a1fea7765f31baaf645d65fcfacdfc2323f9
   splits: config/GZLE01/rels/d_a_npc_ls1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ls1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mk.rel
   hash: 7739746d38260e48055219fc012c1e69beb9b5d6
   splits: config/GZLE01/rels/d_a_npc_mk/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_mk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mn.rel
   hash: af5d2bb56fe66331b32df22361dc70709a2cf461
   splits: config/GZLE01/rels/d_a_npc_mn/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_mn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mt.rel
   hash: a1db6eb3f3f2ea448dc9e77955bc803e61b2feb7
   splits: config/GZLE01/rels/d_a_npc_mt/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_mt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_nz.rel
   hash: 3c3f81a0effe776446db8df021b6882694a5d548
   splits: config/GZLE01/rels/d_a_npc_nz/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_nz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ob1.rel
   hash: a1f385eff7e3ab4f0c154eb5dd98e251e0981e62
   splits: config/GZLE01/rels/d_a_npc_ob1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ob1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_os.rel
   hash: 05827c5abde17f897bc0f3fc92fdbf521a7835f7
   splits: config/GZLE01/rels/d_a_npc_os/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_os/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_p1.rel
   hash: 343f381025d7a30e3e45fc0bf5e713dbf084aec7
   splits: config/GZLE01/rels/d_a_npc_p1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_p1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_p2.rel
   hash: 0edeed200522ab838be151fbdc7d56cd37426d6d
   splits: config/GZLE01/rels/d_a_npc_p2/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_p2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_people.rel
   hash: eeaf48bb9fd2fc743c35f8fd5054b35109b83b00
   splits: config/GZLE01/rels/d_a_npc_people/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_people/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_pf1.rel
   hash: 8533eca3d31212e7debef92c572d417914796a92
   splits: config/GZLE01/rels/d_a_npc_pf1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_pf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_photo.rel
   hash: 96185fdbc36e025b15142112bd0949a2b02cac7f
   splits: config/GZLE01/rels/d_a_npc_photo/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_photo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_pm1.rel
   hash: cf4d1f43629b26fa032b20811637eaa240975e9c
   splits: config/GZLE01/rels/d_a_npc_pm1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_pm1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_roten.rel
   hash: 7cdcff3323306f14b8a35a3b8c1e80bebe141160
   splits: config/GZLE01/rels/d_a_npc_roten/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_roten/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_rsh1.rel
   hash: 944af3de38c5488983c0a69ecc570035c7ba0478
   splits: config/GZLE01/rels/d_a_npc_rsh1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_rsh1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_sarace.rel
   hash: 4025d1e266f188b604f04b915f2ff47594dc26a0
   splits: config/GZLE01/rels/d_a_npc_sarace/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_sarace/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_sv.rel
   hash: 4a591d552e8a6378fcb2e7159d9483919ad178ce
   splits: config/GZLE01/rels/d_a_npc_sv/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_sv/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_tc.rel
   hash: c5f975667b7d9536d3e72ac7d87536fa4a622851
   splits: config/GZLE01/rels/d_a_npc_tc/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_tc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_tt.rel
   hash: f8223a819c110088d6c498e6cff5e1af60320712
   splits: config/GZLE01/rels/d_a_npc_tt/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_tt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_uk.rel
   hash: 9c25075e53936bdfbe469f2d55847b649cec26ac
   splits: config/GZLE01/rels/d_a_npc_uk/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_uk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   force_active: [__register_global_object] # TODO why does this get stripped?
 
 - object: files/rels/d_a_npc_ym1.rel
   hash: b503b8d448de0902a5bee0bd727ed021e0199255
   splits: config/GZLE01/rels/d_a_npc_ym1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_ym1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_yw1.rel
   hash: 1d75bb55f265f6a4dc59cedbef8731f1d54f5d88
   splits: config/GZLE01/rels/d_a_npc_yw1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_yw1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_zk1.rel
   hash: 146a9e95fa1ac8124deb1be301f17352da0a717f
   splits: config/GZLE01/rels/d_a_npc_zk1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_zk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_zl1.rel
   hash: cfc5cffcde35d53dea121f12cf4448914d883bfb
   splits: config/GZLE01/rels/d_a_npc_zl1/splits.txt
   symbols: config/GZLE01/rels/d_a_npc_zl1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_nz.rel
   hash: 928e1d4ed848e63814032155d7f5b9393c4a7919
   splits: config/GZLE01/rels/d_a_nz/splits.txt
   symbols: config/GZLE01/rels/d_a_nz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Itnak.rel
   hash: 48adc21f619cc9dd046598a4fee6790c912cdb69
   splits: config/GZLE01/rels/d_a_obj_Itnak/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_Itnak/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Vds.rel
   hash: aec57286d833182415f7fec89f847320a954935a
   splits: config/GZLE01/rels/d_a_obj_Vds/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_Vds/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Vteng.rel
   hash: 9d4afaa5df250835c22bf3c01f2a8307d8faab60
   splits: config/GZLE01/rels/d_a_obj_Vteng/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_Vteng/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_YLzou.rel
   hash: e8bb88e17e42b2390c304c907c95c21ee53497cb
   splits: config/GZLE01/rels/d_a_obj_YLzou/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_YLzou/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Yboil.rel
   hash: 98cdbde3467512c8b7dc29ab3bfbca2c96861212
   splits: config/GZLE01/rels/d_a_obj_Yboil/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_Yboil/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_adnno.rel
   hash: 1279270042967358dd521bc0918594c94f303359
   splits: config/GZLE01/rels/d_a_obj_adnno/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_adnno/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ajav.rel
   hash: 88cf68cf15a5f0c302ca3a3769612bbf8a3ea8cf
   splits: config/GZLE01/rels/d_a_obj_ajav/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ajav/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_apzl.rel
   hash: 92a9aada67205d41d76cff6702667744b89d42c3
   splits: config/GZLE01/rels/d_a_obj_apzl/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_apzl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ashut.rel
   hash: 21af49715e17f25684a3ca76f9f9be51dfbbf6d6
   splits: config/GZLE01/rels/d_a_obj_ashut/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ashut/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_auzu.rel
   hash: 6275b3db68d6c95a81add912801d028403ec88ed
   splits: config/GZLE01/rels/d_a_obj_auzu/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_auzu/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_buoyflag.rel
   hash: a4db26857f985f6a3c963e183e6be28bf37e46c3
   splits: config/GZLE01/rels/d_a_obj_buoyflag/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_buoyflag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_buoyrace.rel
   hash: ed1ff984da5d16f78e940ee60b44f32892193ec7
   splits: config/GZLE01/rels/d_a_obj_buoyrace/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_buoyrace/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_correct.rel
   hash: bee1e391e6671de26e973729ea60ef8cc6b932d9
   splits: config/GZLE01/rels/d_a_obj_correct/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_correct/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_dmgroom.rel
   hash: e3b5fa60b321c1a096fe93e7814b3a3502623124
   splits: config/GZLE01/rels/d_a_obj_dmgroom/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_dmgroom/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_dragonhead.rel
   hash: bd06b54258b5e8635f6c8480e7f97d3f400d69af
   splits: config/GZLE01/rels/d_a_obj_dragonhead/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_dragonhead/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_drift.rel
   hash: c4bc8cc042e00dc6113ee693184d06bfbf5abf3b
   splits: config/GZLE01/rels/d_a_obj_drift/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_drift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_eayogn.rel
   hash: 81ed380359959d9fd9ac1f9e28e0cbb71a9550f1
   splits: config/GZLE01/rels/d_a_obj_eayogn/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_eayogn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ebomzo.rel
   hash: bafe3dd7c56e1c5ae6b508f4a89043602af9af9e
   splits: config/GZLE01/rels/d_a_obj_ebomzo/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ebomzo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ekskz.rel
   hash: 43001f802a72aa39022283d84e5dc36de0ca6238
   splits: config/GZLE01/rels/d_a_obj_ekskz/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ekskz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_eskban.rel
   hash: f847bae767ce79d7e6aa03d8e4b26a9ac0ffa729
   splits: config/GZLE01/rels/d_a_obj_eskban/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_eskban/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ferris.rel
   hash: 8fdb4f40e99df651bdb83eed1feb61f7114d9acc
   splits: config/GZLE01/rels/d_a_obj_ferris/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ferris/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_figure.rel
   hash: 64b48e34bb28e90c01dbed53768f23df07ace619
   splits: config/GZLE01/rels/d_a_obj_figure/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_figure/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_firewall.rel
   hash: 9b14aae34b27948771d22487cd9e7ca204d0701b
   splits: config/GZLE01/rels/d_a_obj_firewall/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_firewall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_flame.rel
   hash: f539c704bd9cdc9da4a2d22cb68bf2c088379092
   splits: config/GZLE01/rels/d_a_obj_flame/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_flame/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ftree.rel
   hash: 1cef407af87cb0b38a1f31f6488c32221edcc8e1
   splits: config/GZLE01/rels/d_a_obj_ftree/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ftree/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ganonbed.rel
   hash: 94efc1dd774acb134037d63ada64c3bb7da573ca
   splits: config/GZLE01/rels/d_a_obj_ganonbed/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ganonbed/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gaship.rel
   hash: c23053cba0b8633f4f3ee87ac5248d0508400068
   splits: config/GZLE01/rels/d_a_obj_gaship/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gaship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gaship2.rel
   hash: b651baa88a5d923ad6c014eb765e15ad96f850c0
   splits: config/GZLE01/rels/d_a_obj_gaship2/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gaship2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnnbtltaki.rel
   hash: 2a6b9b275206bb5ae5e2f143a678154eaa09037b
   splits: config/GZLE01/rels/d_a_obj_gnnbtltaki/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gnnbtltaki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnndemotakie.rel
   hash: d3af5871f38cffa1041dbac2a4488ffbf62eb0ba
   splits: config/GZLE01/rels/d_a_obj_gnndemotakie/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gnndemotakie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnndemotakis.rel
   hash: aa7342a2fa81a804df0f81d286c637b674e76366
   splits: config/GZLE01/rels/d_a_obj_gnndemotakis/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gnndemotakis/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gong.rel
   hash: 62824e31f36d1d55ba192af534bc3d4d4d42105e
   splits: config/GZLE01/rels/d_a_obj_gong/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gong/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gtaki.rel
   hash: bbe9c6ef8c2a41851c1fc0e1c1c23191a308163f
   splits: config/GZLE01/rels/d_a_obj_gtaki/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_gtaki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami2.rel
   hash: de364dda26847a39e8570d030efb587284e70c7e
   splits: config/GZLE01/rels/d_a_obj_hami2/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hami2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami3.rel
   hash: 3109df9e8b56c32db34bfd1bd354452ff7a10b59
   splits: config/GZLE01/rels/d_a_obj_hami3/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hami3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami4.rel
   hash: 208abe439dd7e83181362ee5b185b6d7530e38d9
   splits: config/GZLE01/rels/d_a_obj_hami4/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hami4/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hat.rel
   hash: 89dafc8ffcbc023e1138631d16d71c27cec29e8f
   splits: config/GZLE01/rels/d_a_obj_hat/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hbrf1.rel
   hash: 6b04b06646081cf291cdf9e73e11782c7802a2ac
   splits: config/GZLE01/rels/d_a_obj_hbrf1/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hbrf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hcbh.rel
   hash: 026335caaa145c0e89a1dd0ae1ebfbb5e561b2c6
   splits: config/GZLE01/rels/d_a_obj_hcbh/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hcbh/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hha.rel
   hash: f3d6309eba148bf150f258118c2bf6353bf1dddb
   splits: config/GZLE01/rels/d_a_obj_hha/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hha/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hlift.rel
   hash: ce66b98067082761874fb507347cdfc8966aa36c
   splits: config/GZLE01/rels/d_a_obj_hlift/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hlift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_homen.rel
   hash: 58d8b08b0881d03e2786cab518b9d811b5dbbf57
   splits: config/GZLE01/rels/d_a_obj_homen/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_homen/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_homensmoke.rel
   hash: 5789866cdf66188879324d097937fcacb4892cad
   splits: config/GZLE01/rels/d_a_obj_homensmoke/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_homensmoke/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hsehi1.rel
   hash: 5407db478a0c2160b9c85fa36d840245d71b57e3
   splits: config/GZLE01/rels/d_a_obj_hsehi1/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_hsehi1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_htetu1.rel
   hash: 2c48c0104108867da4fcd521ac74285c307e4175
   splits: config/GZLE01/rels/d_a_obj_htetu1/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_htetu1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_iceisland.rel
   hash: 8216670f38dd0271c37e29e6ed24b84b876823c8
   splits: config/GZLE01/rels/d_a_obj_iceisland/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_iceisland/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_jump.rel
   hash: a200eb8786cbb5c3e0f5a0bb70b75d4f8ebadd9e
   splits: config/GZLE01/rels/d_a_obj_jump/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_jump/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_kanoke.rel
   hash: f13c4a9eeef0a8b96e984973fbe22628c52c2c6e
   splits: config/GZLE01/rels/d_a_obj_kanoke/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_kanoke/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ladder.rel
   hash: 6edbfd512563c2a8e5371de58a0d1ec692392e28
   splits: config/GZLE01/rels/d_a_obj_ladder/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ladder/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_light.rel
   hash: 335a7a8a99ea899b3a85e81ecb6f91b10e681f3a
   splits: config/GZLE01/rels/d_a_obj_light/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_light/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mkie.rel
   hash: bf150b85727f601083d9ab506372edd9d7d35d21
   splits: config/GZLE01/rels/d_a_obj_mkie/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mkie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mkiek.rel
   hash: 4d8fb6f41d5b7da8a8cd9ca9c887732cd47bcb9d
   splits: config/GZLE01/rels/d_a_obj_mkiek/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mkiek/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mknjd.rel
   hash: ffbfe6bc4471b266d22b2ed0b16fcbddf5a6991c
   splits: config/GZLE01/rels/d_a_obj_mknjd/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mknjd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mmrr.rel
   hash: 0fd5e77e9f86d7844d184e5a29fbda1481902434
   splits: config/GZLE01/rels/d_a_obj_mmrr/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mmrr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan.rel
   hash: 901659310b8de8bff55a0faf0d9ee93a04c7224a
   splits: config/GZLE01/rels/d_a_obj_msdan/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_msdan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan2.rel
   hash: 416e1c4b893d5986f42b67246700df8266f1407d
   splits: config/GZLE01/rels/d_a_obj_msdan2/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_msdan2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan_sub.rel
   hash: 144a9c6ef6227130b8aa8a02239d796d98e91a56
   splits: config/GZLE01/rels/d_a_obj_msdan_sub/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_msdan_sub/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan_sub2.rel
   hash: 78b670a883570475fae7ed68f8fb58921464c885
   splits: config/GZLE01/rels/d_a_obj_msdan_sub2/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_msdan_sub2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mtest.rel
   hash: dd392435c1adffda5265534d512d16a2d242d1ae
   splits: config/GZLE01/rels/d_a_obj_mtest/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_mtest/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_nest.rel
   hash: afecbe8a001e4733da6ebc59cc7970eac80f160a
   splits: config/GZLE01/rels/d_a_obj_nest/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_nest/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ojtree.rel
   hash: 98623f19bcbc31d3af0f81964aa45792a8b1884c
   splits: config/GZLE01/rels/d_a_obj_ojtree/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ojtree/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ospbox.rel
   hash: 6c5e97942000bcf1779c32464877a993de7b13fb
   splits: config/GZLE01/rels/d_a_obj_ospbox/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_ospbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_paper.rel
   hash: 8f907fbc06f707bccf83a8fb62d26c8623dbdbb0
   splits: config/GZLE01/rels/d_a_obj_paper/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_paper/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_pbka.rel
   hash: 04b1153cf00d4a7d363a7086d886544356c5f25a
   splits: config/GZLE01/rels/d_a_obj_pbka/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_pbka/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_pfall.rel
   hash: 4507e19914083f8c59c4421aff0944107730c255
   splits: config/GZLE01/rels/d_a_obj_pfall/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_pfall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_plant.rel
   hash: 38529c26124fcee8a730539db264ed5d73f4b36a
   splits: config/GZLE01/rels/d_a_obj_plant/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_plant/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_rflw.rel
   hash: d29fc0bee80aa56282cbaa09d0d8e85fd9a574dc
   splits: config/GZLE01/rels/d_a_obj_rflw/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_rflw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_rforce.rel
   hash: f513bd687d177b7bbaaac1f14568d25e05dab89c
   splits: config/GZLE01/rels/d_a_obj_rforce/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_rforce/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_smplbg.rel
   hash: bb0c5cf90d88a33d1164cc30d35ec70677f14fc2
   splits: config/GZLE01/rels/d_a_obj_smplbg/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_smplbg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tapestry.rel
   hash: 43cc17f0e803e418a1dba775eaa2af517f3509f6
   splits: config/GZLE01/rels/d_a_obj_tapestry/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tapestry/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tntrap.rel
   hash: 8be9de0693b96dcda338c0e2c0d6338aa64f9cb5
   splits: config/GZLE01/rels/d_a_obj_tntrap/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tntrap/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tower.rel
   hash: 3e21c03d0737772d7d66c31521c5a2b647e4fbc0
   splits: config/GZLE01/rels/d_a_obj_tower/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tower/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_trap.rel
   hash: 29256627e979860ad4756472d9368c74f2bb332f
   splits: config/GZLE01/rels/d_a_obj_trap/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_trap/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tribox.rel
   hash: 64ad90ab03feb5f19895cf48dae1bb242159e556
   splits: config/GZLE01/rels/d_a_obj_tribox/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_tribox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_try.rel
   hash: 2790400362a927f308cec6323534a9193c7e0c4b
   splits: config/GZLE01/rels/d_a_obj_try/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_try/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_usovmc.rel
   hash: 76f34cf9b59bbf5033448388af3c7e6c005cf0d2
   splits: config/GZLE01/rels/d_a_obj_usovmc/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_usovmc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vfan.rel
   hash: 9d2aee2736c02368e82669c55069e39b36a0a159
   splits: config/GZLE01/rels/d_a_obj_vfan/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vfan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vgnfd.rel
   hash: 921293ff0b39fb220caa2dd8fe277505a1fed060
   splits: config/GZLE01/rels/d_a_obj_vgnfd/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vgnfd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmc.rel
   hash: 06e88ae618ae74402c10c8046a5f420bcd0eca14
   splits: config/GZLE01/rels/d_a_obj_vmc/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vmc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmsdz.rel
   hash: 198a39cab99d1aaeb12a50abe9141d45fd15fc5f
   splits: config/GZLE01/rels/d_a_obj_vmsdz/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vmsdz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmsms.rel
   hash: 92353482881a8b3f401ebcf8875d539352118cde
   splits: config/GZLE01/rels/d_a_obj_vmsms/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vmsms/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_volcano.rel
   hash: 8c0239e67db4eb16f7d3aed43153d57e7fea1ba0
   splits: config/GZLE01/rels/d_a_obj_volcano/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_volcano/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vtil.rel
   hash: 748ec69efd5f81a182bab9add54e32ac73e2b983
   splits: config/GZLE01/rels/d_a_obj_vtil/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vtil/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vyasi.rel
   hash: 932017be1d70156d2dea96a44459f2970fc40d0c
   splits: config/GZLE01/rels/d_a_obj_vyasi/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_vyasi/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_xfuta.rel
   hash: cc099bf1101486adefa4cb7e23560d4a97f9d901
   splits: config/GZLE01/rels/d_a_obj_xfuta/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_xfuta/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_zouK.rel
   hash: 6dbeff2905f9fb3a66c268d1396c1c2e274279fe
   splits: config/GZLE01/rels/d_a_obj_zouK/splits.txt
   symbols: config/GZLE01/rels/d_a_obj_zouK/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_oship.rel
   hash: 4b32d1f4973742ebab9b645deac5356a34e9078e
   splits: config/GZLE01/rels/d_a_oship/splits.txt
   symbols: config/GZLE01/rels/d_a_oship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ph.rel
   hash: 205faa75fe13067a936361aabf24589735bb75a3
   splits: config/GZLE01/rels/d_a_ph/splits.txt
   symbols: config/GZLE01/rels/d_a_ph/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pt.rel
   hash: a2172cb77d308341d1d70d8dedf9a236ebf60e33
   splits: config/GZLE01/rels/d_a_pt/splits.txt
   symbols: config/GZLE01/rels/d_a_pt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pw.rel
   hash: b823448e1d6da8fe6c6a9c7ce4db4f483b32f1c0
   splits: config/GZLE01/rels/d_a_pw/splits.txt
   symbols: config/GZLE01/rels/d_a_pw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pz.rel
   hash: 2c2a96a7daec16ba00c4e42cbc62396bc8c1bd75
   splits: config/GZLE01/rels/d_a_pz/splits.txt
   symbols: config/GZLE01/rels/d_a_pz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_sail.rel
   hash: 36cd36d17a50769045c087cbb56b26f4ad3a2b6e
   splits: config/GZLE01/rels/d_a_sail/splits.txt
   symbols: config/GZLE01/rels/d_a_sail/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_sail_DL
     binary: assets/l_sail_DL.bin
@@ -1980,156 +2374,187 @@ modules:
   hash: 2ba5fbbd1af3135c5cdd0d97ad68899bb2627908
   splits: config/GZLE01/rels/d_a_salvage_tbox/splits.txt
   symbols: config/GZLE01/rels/d_a_salvage_tbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_scene_change.rel
   hash: 62d5980d333aa5688084e49fe110713c569bdf39
   splits: config/GZLE01/rels/d_a_scene_change/splits.txt
   symbols: config/GZLE01/rels/d_a_scene_change/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_shutter.rel
   hash: 51061d0170f643fe628b59734fa7fb5d54b9049d
   splits: config/GZLE01/rels/d_a_shutter/splits.txt
   symbols: config/GZLE01/rels/d_a_shutter/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_shutter2.rel
   hash: 8db2e5849bdb724a498027f0418fdf623064b9dc
   splits: config/GZLE01/rels/d_a_shutter2/splits.txt
   symbols: config/GZLE01/rels/d_a_shutter2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_st.rel
   hash: c7a00643f8708eee9b561e2d8a80c2ffefa56998
   splits: config/GZLE01/rels/d_a_st/splits.txt
   symbols: config/GZLE01/rels/d_a_st/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_steam_tag.rel
   hash: e744b4d5a06c740b2049cebe862b5c51be6aae34
   splits: config/GZLE01/rels/d_a_steam_tag/splits.txt
   symbols: config/GZLE01/rels/d_a_steam_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swattack.rel
   hash: 4bffe7757828a9d48ab108617143d9478c43961a
   splits: config/GZLE01/rels/d_a_swattack/splits.txt
   symbols: config/GZLE01/rels/d_a_swattack/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_switem.rel
   hash: 37280b1efc33c425e1aa410c0c82e04d0f212ff8
   splits: config/GZLE01/rels/d_a_switem/splits.txt
   symbols: config/GZLE01/rels/d_a_switem/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swpropeller.rel
   hash: 8c115c8ecd15c400e8ddc3fb5a0d34b40bc0565f
   splits: config/GZLE01/rels/d_a_swpropeller/splits.txt
   symbols: config/GZLE01/rels/d_a_swpropeller/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swtact.rel
   hash: 677c9cbaafe5140707a3a6f2211f1fcbf0f312dd
   splits: config/GZLE01/rels/d_a_swtact/splits.txt
   symbols: config/GZLE01/rels/d_a_swtact/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_etc.rel
   hash: 3bd45b64a43096ae1f2172b32accc30ee9a8bb6e
   splits: config/GZLE01/rels/d_a_tag_etc/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_etc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_island.rel
   hash: 8d8f34589b299b26f3c7365b50625f6d5b617cbe
   splits: config/GZLE01/rels/d_a_tag_island/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_island/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_kf1.rel
   hash: 3f8f26169c45a904f6a6bcae4e4cb9d8071f1b0f
   splits: config/GZLE01/rels/d_a_tag_kf1/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_kf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_ret.rel
   hash: 0fba4da0b508859b6165670bcbca3fbfdab329b9
   splits: config/GZLE01/rels/d_a_tag_ret/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_ret/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_volcano.rel
   hash: af02b4c7176abadde2197ca554fd0b5d070cfb07
   splits: config/GZLE01/rels/d_a_tag_volcano/splits.txt
   symbols: config/GZLE01/rels/d_a_tag_volcano/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_title.rel
   hash: b1698d5c701aab068888a246f58820499bfa64b2
   splits: config/GZLE01/rels/d_a_title/splits.txt
   symbols: config/GZLE01/rels/d_a_title/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tn.rel
   hash: 328ee61c878624d79a42b4966f4ec4edb4eef7d0
   splits: config/GZLE01/rels/d_a_tn/splits.txt
   symbols: config/GZLE01/rels/d_a_tn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_toge.rel
   hash: 6a40d8115129f2eff0f1094418d780a9574cb288
   splits: config/GZLE01/rels/d_a_toge/splits.txt
   symbols: config/GZLE01/rels/d_a_toge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tori_flag.rel
   hash: 73727efd1e85fef3cee564b4e59d808cf0bd12e8
   splits: config/GZLE01/rels/d_a_tori_flag/splits.txt
   symbols: config/GZLE01/rels/d_a_tori_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_wall.rel
   hash: 50556391409a653dda18599d08d3c7d58063806e
   splits: config/GZLE01/rels/d_a_wall/splits.txt
   symbols: config/GZLE01/rels/d_a_wall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpfout.rel
   hash: e78123e432dff3c8f40d9a10f22816d7c815c4b8
   splits: config/GZLE01/rels/d_a_warpfout/splits.txt
   symbols: config/GZLE01/rels/d_a_warpfout/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpgn.rel
   hash: cff903653ff8f147e2ab496319845a02fab9a078
   splits: config/GZLE01/rels/d_a_warpgn/splits.txt
   symbols: config/GZLE01/rels/d_a_warpgn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpls.rel
   hash: 208b0fd59aa1f4cd33ea16094690e6ee4ab6d9ca
   splits: config/GZLE01/rels/d_a_warpls/splits.txt
   symbols: config/GZLE01/rels/d_a_warpls/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpmj.rel
   hash: aee92de01f8c2df33a4b20e995603312cbe2d0cd
   splits: config/GZLE01/rels/d_a_warpmj/splits.txt
   symbols: config/GZLE01/rels/d_a_warpmj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_waterfall.rel
   hash: 2da79875b3861c3d32d1f3020e6a2b7d737bd5eb
   splits: config/GZLE01/rels/d_a_waterfall/splits.txt
   symbols: config/GZLE01/rels/d_a_waterfall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_windmill.rel
   hash: 1b8ea0eb28a5499ca45bcfc4a7578e8d2944b53f
   splits: config/GZLE01/rels/d_a_windmill/splits.txt
   symbols: config/GZLE01/rels/d_a_windmill/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_wz.rel
   hash: 7c8a260cd4ead7063253f06e46ebc5494134d68d
   splits: config/GZLE01/rels/d_a_wz/splits.txt
   symbols: config/GZLE01/rels/d_a_wz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ygcwp.rel
   hash: 07a662db559e0c5758e6c38a222b69e2be502b9a
   splits: config/GZLE01/rels/d_a_ygcwp/splits.txt
   symbols: config/GZLE01/rels/d_a_ygcwp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_yougan.rel
   hash: b22f9708a8ed5acd7d4b17e863be0fb1ae9abb04
   splits: config/GZLE01/rels/d_a_yougan/splits.txt
   symbols: config/GZLE01/rels/d_a_yougan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ghostship.rel
   hash: fd0d1d16939ecddbd366a0aa387e3127d2092cd3
   splits: config/GZLE01/rels/d_a_ghostship/splits.txt
   symbols: config/GZLE01/rels/d_a_ghostship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_movie_player.rel
   hash: 1f790bd560c059ec35b0945de91ad326335e3ece
   splits: config/GZLE01/rels/d_a_movie_player/splits.txt
   symbols: config/GZLE01/rels/d_a_movie_player/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 extract:
 - symbol: black_tex

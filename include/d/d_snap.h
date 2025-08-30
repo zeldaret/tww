@@ -93,13 +93,13 @@ enum {
     /* 0x55 */ DSNAP_TYPE_KAMOME,
     /* 0x56 */ DSNAP_TYPE_UNK56,
     /* 0x57 */ DSNAP_TYPE_UNK57,
-    /* 0x58 */ DSNAP_TYPE_UNK58,
+    /* 0x58 */ DSNAP_TYPE_KM1,
     /* 0x59 */ DSNAP_TYPE_UNK59,
     /* 0x5A */ DSNAP_TYPE_UNK5A,
     /* 0x5B */ DSNAP_TYPE_UNK5B,
     /* 0x5C */ DSNAP_TYPE_UNK5C,
     /* 0x5D */ DSNAP_TYPE_UNK5D,
-    /* 0x5E */ DSNAP_TYPE_UNK5E,
+    /* 0x5E */ DSNAP_TYPE_NPC_PHOTO,
     /* 0x5F */ DSNAP_TYPE_UNK5F,
     /* 0x60 */ DSNAP_TYPE_UNK60,
     /* 0x61 */ DSNAP_TYPE_UNK61,
@@ -137,7 +137,7 @@ enum {
     /* 0x81 */ DSNAP_TYPE_UNK81,
     /* 0x82 */ DSNAP_TYPE_UNK82,
     /* 0x83 */ DSNAP_TYPE_UNK83,
-    /* 0x84 */ DSNAP_TYPE_UNK84,
+    /* 0x84 */ DSNAP_TYPE_FA,
     /* 0x85 */ DSNAP_TYPE_UNK85,
     /* 0x86 */ DSNAP_TYPE_UNK86,
     /* 0x87 */ DSNAP_TYPE_UNK87,
@@ -155,13 +155,13 @@ enum {
     /* 0x93 */ DSNAP_TYPE_UNK93,
     /* 0x94 */ DSNAP_TYPE_UNK94,
     /* 0x95 */ DSNAP_TYPE_UNK95,
-    /* 0x96 */ DSNAP_TYPE_UNK96,
+    /* 0x96 */ DSNAP_TYPE_BMSW,
     /* 0x97 */ DSNAP_TYPE_UNK97,
     /* 0x98 */ DSNAP_TYPE_BTSW,
     /* 0x99 */ DSNAP_TYPE_DR,
     /* 0x9A */ DSNAP_TYPE_UNK9A,
     /* 0x9B */ DSNAP_TYPE_UNK9B,
-    /* 0x9C */ DSNAP_TYPE_UNK9C,
+    /* 0x9C */ DSNAP_TYPE_CB1,
     /* 0x9D */ DSNAP_TYPE_UNK9D,
     /* 0x9E */ DSNAP_TYPE_UNK9E,
     /* 0x9F */ DSNAP_TYPE_UNK9F,
@@ -181,7 +181,7 @@ enum {
     /* 0xAD */ DSNAP_TYPE_UNKAD,
     /* 0xAE */ DSNAP_TYPE_UNKAE,
     /* 0xAF */ DSNAP_TYPE_UNKAF,
-    /* 0xB0 */ DSNAP_TYPE_UNKB0,
+    /* 0xB0 */ DSNAP_TYPE_BB,
     /* 0xB1 */ DSNAP_TYPE_UNKB1,
     /* 0xB2 */ DSNAP_TYPE_UNKB2,
     /* 0xB3 */ DSNAP_TYPE_KS,
@@ -204,9 +204,9 @@ enum {
     /* 0xC4 */ DSNAP_TYPE_UNKC4,
     /* 0xC5 */ DSNAP_TYPE_UNKC5,
     /* 0xC6 */ DSNAP_TYPE_UNKC6,
-    /* 0xC7 */ DSNAP_TYPE_UNKC7,
+    /* 0xC7 */ DSNAP_TYPE_BTD,
     /* 0xC8 */ DSNAP_TYPE_UNKC8,
-    /* 0xC9 */ DSNAP_TYPE_UNKC9,
+    /* 0xC9 */ DSNAP_TYPE_BST,
     /* 0xCA */ DSNAP_TYPE_UNKCA,
     /* 0xCB */ DSNAP_TYPE_UNKCB,
     /* 0xCC */ DSNAP_TYPE_UNKCC,
@@ -273,13 +273,14 @@ class dSnap_RegistObjElm {
 public:
     /* 0x00 */ dSnap_Obj m_obj;
     /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ /* vtable */
 
 public:
     dSnap_RegistObjElm() {}
     virtual ~dSnap_RegistObjElm() {}
     void Init();
     void Regist(const dSnap_Obj&);
-};
+};  // Size: 0x3C
 
 class dSnap_packet : public J3DPacket {
 public:

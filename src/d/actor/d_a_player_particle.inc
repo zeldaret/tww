@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_main_data.h"
 #include "d/actor/d_a_player_HIO.h"
@@ -25,7 +26,7 @@
 /* 8012901C-80129034       .text setup__24daPy_swimTailEcallBack_cFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz* angle, s8) {
     mpEmitter = emitter;
-    field_0x04 = false;
+    mbEnd = false;
     field_0x20 = angle;
     field_0x05 = false;
 }
@@ -34,13 +35,13 @@ void daPy_swimTailEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, c
 void daPy_swimTailEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* pos) {
     if (daSea_ChkArea(pos->x, pos->z)) {
         pos->y = daSea_calcWave(pos->x, pos->z) + 2.0f;
-        if (field_0x10 > pos->y) {
-            pos->y = field_0x10 + 2.0f;
+        if (mWaterFlatY > pos->y) {
+            pos->y = mWaterFlatY + 2.0f;
         }
-    } else if (field_0x10 != -G_CM3D_F_INF) {
-        pos->y = field_0x10 + 2.0f;
+    } else if (mWaterFlatY != -G_CM3D_F_INF) {
+        pos->y = mWaterFlatY + 2.0f;
     } else {
-        pos->y = field_0x0C;
+        pos->y = mWaterY;
     }
 }
 
@@ -62,7 +63,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
     dKy_get_seacolor(&ambColor, &difColor);
     emitter->setGlobalPrmColor(ambColor.r, ambColor.g, ambColor.b);
 
-    if (field_0x04) {
+    if (mbEnd) {
         s16 sp8 = emitter->getGlobalAlpha();
         cLib_chaseS(&sp8, 0, 0x14);
         emitter->setGlobalAlpha(sp8);
@@ -84,10 +85,10 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
         emitter->getGlobalTranslation(sp20);
         getMaxWaterY(&sp20);
         emitter->setGlobalTranslation(sp20);
-        cLib_chaseF(&field_0x08, 0.0f, 0.08f);
+        cLib_chaseF(&mSpeedRate, 0.0f, 0.08f);
     }
 
-    emitter->setDirectionalSpeed(1.0f + 12.0f * field_0x08);
+    emitter->setDirectionalSpeed(1.0f + 12.0f * mSpeedRate);
 
     if (field_0x05) {
         emitter->setDirection(right_dir);
@@ -115,8 +116,10 @@ void daPy_swimTailEcallBack_c::draw(JPABaseEmitter*) {
 
 /* 80129348-8012952C       .text draw__18daPy_sightPacket_cFv */
 void daPy_sightPacket_c::draw() {
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
+#endif
 
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -152,7 +155,10 @@ void daPy_sightPacket_c::draw() {
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXCallDisplayList(&l_sightDL, sizeof(l_sightDL) - 0x09);
+
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 8012952C-801296FC       .text setSight__18daPy_sightPacket_cFv */
@@ -260,8 +266,10 @@ void daPy_swBlur_c::copySwBlur(MtxP mtx, int param_2) {
 
 /* 80129A78-80129DD0       .text draw__13daPy_swBlur_cFv */
 void daPy_swBlur_c::draw() {
+#if VERSION > VERSION_JPN
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
+#endif
 
     static GXTexObj texObj;
     u16 texWidth = 16;
@@ -323,7 +331,10 @@ void daPy_swBlur_c::draw() {
         r28 = r29;
         r29 += r30;
     }
+
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80129DD0-80129E9C       .text execute__24daPy_fanSwingEcallBack_cFP14JPABaseEmitter */
@@ -347,7 +358,7 @@ void daPy_fanSwingEcallBack_c::execute(JPABaseEmitter* emitter) {
 
 /* 80129E9C-80129F48       .text execute__25daPy_waterDropPcallBack_cFP14JPABaseEmitterP15JPABaseParticle */
 void daPy_waterDropPcallBack_c::execute(JPABaseEmitter* emitter, JPABaseParticle* ptcl) {
-    if (field_0x4) {
+    if (mbWaterMark) {
         JGeometry::TVec3<f32> ptclPos;
         ptcl->getGlobalPosition(ptclPos);
 
@@ -438,6 +449,7 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
 
         pos.x = (mpMtx[0][3] - pos.x) * -0.05f;
         pos.z = (mpMtx[2][3] - pos.z) * -0.05f;
+        f32 f6 = 0.6f;
         f32 sq = pos.x * pos.x + pos.z * pos.z;
 
         if (sq > 1.0f) {
@@ -447,7 +459,7 @@ void daPy_dmEcallBack_c::execute(JPABaseEmitter* emitter) {
             pos.z *= distFrac;
         }
 
-        emitter->setDirection(JGeometry::TVec3<f32>(pos.x, 0.6f, pos.z));
+        emitter->setDirection(JGeometry::TVec3<f32>(pos.x, f6, pos.z));
     } else {
         emitter->setGlobalRTMatrix(mpMtx);
     }
@@ -617,7 +629,15 @@ void daPy_lk_c::setWaterRipple() {
 
     // Probably fakematch (May use inlines?)
     if ((var_r3 && m34D6 != 0) ||
-        (mCurProc != daPyProc_VOMIT_WAIT_e && !var_r3 && (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) && ((checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) || (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())))
+        (
+            mCurProc != daPyProc_VOMIT_WAIT_e &&
+            !var_r3 &&
+            (!checkModeFlg(ModeFlg_IN_SHIP | ModeFlg_HANG) || checkModeFlg(ModeFlg_SWIM)) &&
+            (
+                (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 5.0f + mCyl.GetC().y && m35D0 < mCyl.GetC().y + mCyl.GetH()) ||
+                (mCurrAttributeCode == dBgS_Attr_WATER_e && mAcch.ChkGroundHit())
+            )
+        )
     ) {
 
         if (m3280.getEmitter() == NULL) {
@@ -651,35 +671,29 @@ void daPy_lk_c::setWaterRipple() {
     }
 
     if (checkModeFlg(ModeFlg_SWIM)) {
-        if (!mSwimTailEcallBack[0].field_0x04) {
-            mSwimTailEcallBack[0].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
+        if (!mSwimTailEcallBack[0].getEnd()) {
+            mSwimTailEcallBack[0].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
         }
 
-        if (!mSwimTailEcallBack[1].field_0x04) {
-            mSwimTailEcallBack[1].field_0x08 = std::fabsf(mVelocity / mMaxNormalSpeed);
+        if (!mSwimTailEcallBack[1].getEnd()) {
+            mSwimTailEcallBack[1].setSpeedRate(std::fabsf(mVelocity / mMaxNormalSpeed));
         }
         cXyz local_1c;
         cMtx_multVec(mpCLModel->getAnmMtx(15), &wave_offset, &local_1c);
 
-        cXyz local_20;
-        cXyz local_28;
         local_1c.y = m35D0;
 
         f32 cos = cM_scos(shape_angle.y) * 5.0f;
         f32 sin = cM_ssin(shape_angle.y) * 5.0f;
 
-        local_20.x = local_1c.x + cos;
-        local_20.y = local_1c.y;
-        local_20.z = local_1c.z - sin;
-        local_28.x = local_1c.x - cos;
-        local_28.y = local_1c.y;
-        local_28.z = local_1c.z + sin;
-        mSwimTailEcallBack[0].mPos.set(local_20);
-        mSwimTailEcallBack[0].field_0x0C = m35D0 + 2.0f;
-        mSwimTailEcallBack[0].field_0x10 = mAcch.m_wtr.GetHeight();
-        mSwimTailEcallBack[1].mPos.set(local_28);
-        mSwimTailEcallBack[1].field_0x0C = m35D0 + 2.0f;
-        mSwimTailEcallBack[1].field_0x10 = mAcch.m_wtr.GetHeight();
+        cXyz local_20(local_1c.x + cos, local_1c.y, local_1c.z - sin);
+        cXyz local_28(local_1c.x - cos, local_1c.y, local_1c.z + sin);
+        mSwimTailEcallBack[0].setPos(local_20);
+        mSwimTailEcallBack[0].setWaterY(m35D0 + 2.0f);
+        mSwimTailEcallBack[0].setWaterFlatY(mAcch.m_wtr.GetHeight());
+        mSwimTailEcallBack[1].setPos(local_28);
+        mSwimTailEcallBack[1].setWaterY(m35D0 + 2.0f);
+        mSwimTailEcallBack[1].setWaterFlatY(mAcch.m_wtr.GetHeight());
 
         cXyz local_40;
         cMtx_multVec(mpCLModel->getAnmMtx(15), &swim_offset, &local_40);
@@ -808,7 +822,7 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
     footEffect->setAngle(&angle);
     if (effectID == dPa_name::ID_COMMON_0023) {
         if (checkNoResetFlg0(daPyFlg0_UNK80) && m35D0 > 10.0f + i_pos->y) {
-            footEffect->mPos.y = m35D0 - 10.0f;
+            footEffect->getPos().y = m35D0 - 10.0f;
         }
     } else if (mCurProc == daPyProc_CUT_ROLL_e && effectID == dPa_name::ID_COMMON_2022) {
         effectID = -2;
@@ -897,7 +911,7 @@ void daPy_lk_c::setFootMark(cXyz* i_pos) {
         fopKyM_create(PROC_WATER_MARK, (shape_angle.y << 16) | 2, &pos, &scale, NULL);
     }
 
-    if (m336C.mpEmitter != NULL) {
+    if (m336C.getEmitter() != NULL) {
         fopKyM_create(PROC_WATER_MARK, shape_angle.y << 16, i_pos, &scale);
     }
 }
@@ -931,7 +945,7 @@ void daPy_lk_c::setFootEffect() {
 
         m3410.setAngle(0, current.angle.y + 0x8000, 0);
 
-        if (m3410.mpEmitter == NULL) {
+        if (m3410.getEmitter() == NULL) {
             GXColor amb, dif;
             dKy_get_seacolor(&amb, &dif);
 
@@ -973,7 +987,9 @@ void daPy_lk_c::setFootEffect() {
 
         if (checkHeavyStateOn()) {
             var_r29 = 5;
+#if VERSION > VERSION_DEMO
             dComIfGp_getVibration().StartShock(2, -0x31, cXyz(0.0f, 1.0f, 0.0f));
+#endif
         } else {
             var_r29 = 2;
         }
@@ -1069,7 +1085,7 @@ void daPy_lk_c::setSwimTail() {
 
     if (mSwimTailEcallBack[0].getEmitter() == NULL) {
         dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_003A, &mSwimTailEcallBack[0].getPos(), &current.angle, &scale, 0xFF, &mSwimTailEcallBack[0]);
-        mSwimTailEcallBack[0].field_0x05 = true;
+        mSwimTailEcallBack[0].onRightFlg();
     }
 
     if (mSwimTailEcallBack[1].getEmitter() == NULL) {
@@ -1091,20 +1107,20 @@ void daPy_lk_c::setCutWaterSplash() {
 void daPy_lk_c::setSwimWaterDrop(daPy_waterDropEcallBack_c* callBack) {
     f32 tmp = m35D0 + 10.0f;
     if (checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP) || !checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) || (callBack->getPos().y > tmp && !checkModeFlg(ModeFlg_SWIM))) {
-        if (callBack->getEmitter() == NULL && (callBack->field_0x1C || checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP))) {
+        if (callBack->getEmitter() == NULL && (callBack->checkReady() || checkNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP))) {
             JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, &callBack->getPos(), NULL, NULL, 0xFF, callBack);
 
             if (emitter != NULL) {
-                emitter->setParticleCallBackPtr(&daPy_waterDropEcallBack_c::m_pcallback);
+                emitter->setParticleCallBackPtr(daPy_waterDropEcallBack_c::getPcallBack());
             }
         }
 
-        callBack->field_0x1C = FALSE;
+        callBack->offReady();
         offNoResetFlg1(daPy_lk_c::daPyFlg1_WATER_DROP);
     } else if (checkNoResetFlg0(daPy_lk_c::daPyFlg0_UNK80) && callBack->getPos().y < m35D0) {
         callBack->end();
         if (mCurProc != daPyProc_VOMIT_WAIT_e) {
-            callBack->field_0x1C = TRUE;
+            callBack->onReady();
         }
     }
 }
@@ -1120,9 +1136,9 @@ void daPy_lk_c::setWaterDrop() {
     m336C.setPos(&tmp);
 
     if (checkModeFlg(ModeFlg_00000001)) {
-        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = TRUE;
+        daPy_waterDropEcallBack_c::getPcallBack()->onWaterMark();
     } else {
-        daPy_waterDropEcallBack_c::m_pcallback.field_0x4 = FALSE;
+        daPy_waterDropEcallBack_c::getPcallBack()->offWaterMark();
     }
 
     if (daPy_dmEcallBack_c::checkFlame()) {
@@ -1133,7 +1149,12 @@ void daPy_lk_c::setWaterDrop() {
         return;
     }
 
-    if (dKyr_player_overhead_bg_chk() && dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e && mCurProc != daPyProc_DEMO_LAST_COMBO_e && mAcch.m_roof_y == G_CM3D_F_INF) {
+    if (
+        dKyr_player_overhead_bg_chk() &&
+        dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) != dStageType_MISC_e &&
+        mCurProc != daPyProc_DEMO_LAST_COMBO_e &&
+        mAcch.GetRoofHeight() == G_CM3D_F_INF
+    ) {
         if (m3460[0].getEmitter() == NULL) {
             m3460[0].makeEmitter(dPa_name::ID_COMMON_0432, mpCLModel->getAnmMtx(0x0E), &current.pos, NULL);
         }
@@ -1234,7 +1255,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
     if (current.pos.y < m35D0 - 10.0f) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
             cXyz pos;
-            mDoMtx_multVecZero(mDmEcallBack[i].mpMtx, &pos);
+            mDoMtx_multVecZero(mDmEcallBack[i].getMtx(), &pos);
             pos.y = m35D0;
 
             dComIfGp_particle_set(dPa_name::ID_COMMON_035A, &pos);

@@ -10,13 +10,13 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 
 /* 80132F34-80132F58       .text getLadderMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getLadderMoveAnmSpeed() {
-    return daPy_HIO_ladder_c0::m.field_0x28 +
-           (mStickDistance * (daPy_HIO_ladder_c0::m.field_0x24 - daPy_HIO_ladder_c0::m.field_0x28));
+    return getAnmSpeedStickRate(daPy_HIO_ladder_c0::m.field_0x28, daPy_HIO_ladder_c0::m.field_0x24);
 }
 
 /* 80132F58-80133058       .text setLadderFootSe__9daPy_lk_cFv */
@@ -82,7 +82,7 @@ int daPy_lk_c::setMoveBGLadderCorrect() {
         }
     }
     cXyz local_18(m370C.x + cM_ssin(current.angle.y) * 50.0f, m370C.y, m370C.z + cM_scos(current.angle.y) * 50.0f);
-    mLinkLinChk.Set(&m370C, (cXyz*)&local_18, this);
+    mLinkLinChk.Set(&m370C, &local_18, this);
     if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
         return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
     } else {

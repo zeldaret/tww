@@ -3,6 +3,7 @@
  * Treasure Chest / 宝箱 (Takarabako)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
 #include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -20,7 +21,6 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
 
-
 #define FUNC_TYPE_NORMAL 0
 #define FUNC_TYPE_SWITCH 1
 #define FUNC_TYPE_ENEMIES 2
@@ -30,8 +30,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -569,7 +567,7 @@ s32 daTbox_c::boxCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz playerChestDiff = player->current.pos - home.pos;
 
-    if (playerChestDiff.abs2XZ() < 10000.0f) {
+    if (playerChestDiff.abs2XZ() < SQUARE(100.0f)) {
         if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
             return TRUE;
         }
@@ -825,7 +823,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = true;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
@@ -837,7 +835,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);

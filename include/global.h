@@ -4,6 +4,7 @@
 #include "dolphin/types.h"
 
 #define ARRAY_SIZE(o) (sizeof(o) / sizeof(o[0]))
+#define ARRAY_SSIZE(o) ((s32)(sizeof(o) / sizeof(o[0])))
 
 // Align X to the previous N bytes (N must be power of two)
 #define ALIGN_PREV(X, N) ((X) & ~((N)-1))
@@ -23,6 +24,8 @@
 #define offsetof(type, member) ((size_t) & (((type*)0)->member))
 #endif
 
+#define SQUARE(x) ((x) * (x))
+
 #ifdef __MWERKS__
 #define GLUE(a, b) a##b
 #define GLUE2(a, b) GLUE(a, b)
@@ -41,13 +44,11 @@
 #define WEAKFUNC
 #endif
 
+// Intrinsics
 extern int __cntlzw(uint);
 extern int __rlwimi(int, int, int, int, int);
 extern void __dcbz(void*, int);
-
-#ifndef __MWERKS__
 extern void __sync();
-#endif
 
 #define VERSION_DEMO 0
 #define VERSION_JPN 1
@@ -56,12 +57,16 @@ extern void __sync();
 
 #if VERSION == VERSION_DEMO
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (DEMO)
+    #define DEMO_SELECT(DEMO, RETAIL) (DEMO)
 #elif VERSION <= VERSION_JPN
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (JPN)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #elif VERSION == VERSION_USA
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (USA)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #elif VERSION == VERSION_PAL
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (PAL)
+    #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #endif
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef RES_UO_H
 #define RES_UO_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum UO_RES_FILE_ID {
     /* BCKS */

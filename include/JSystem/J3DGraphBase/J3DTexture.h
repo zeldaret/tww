@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
@@ -42,7 +43,10 @@ public:
     void addResTIMG(u16, ResTIMG const*);
 
     u16 getNum() const { return mNum; }
-    ResTIMG* getResTIMG(u16 entry) const { return &mpRes[entry]; }
+    ResTIMG* getResTIMG(u16 entry) const {
+        J3D_ASSERT(72, entry < mNum, "Error : range over.");
+        return &mpRes[entry];   
+    }
     void setResTIMG(u16 entry, const ResTIMG& timg) {
         mpRes[entry] = timg;
         mpRes[entry].imageOffset = ((mpRes[entry].imageOffset + (u32)&timg - (u32)(mpRes + entry)));
@@ -70,8 +74,7 @@ public:
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
     void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
 
-    // TODO
-    void getTextureSRT() {}
+    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;

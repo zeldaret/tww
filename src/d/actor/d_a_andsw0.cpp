@@ -3,6 +3,7 @@
 // Translation Unit: d_a_andsw0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_andsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -237,9 +238,9 @@ static void hajimarinomori_check(andsw0_class* i_this) {
 
         if (dComIfGs_isEventBit(4)) {
             bb_class* kargaroc = (bb_class*)ac[5];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             kargaroc = (bb_class*)ac[6];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             
             bk_class* bokoblin = (bk_class*)ac[3];
             bokoblin->m121C = 1;

@@ -1,6 +1,7 @@
 #ifndef D_MESG_H
 #define D_MESG_H
 
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "dolphin/types.h"
 #include "JSystem/JMessage/control.h"
 #include "d/d_drawlist.h"
@@ -16,19 +17,19 @@ class dMesg_outFont_c;
 class dMesg_screenData_c;
 
 class sub_mesg_class : public msg_class {
-    public:
-        /* 0x0FC */ JKRExpHeap* heap;
-        /* 0x100 */ JKRExpHeap* field_0x100;
-        /* 0x104 */ dMesg_outFont_c* outfont[18];
-        /* 0x14C */ dMesg_screenData_c* screen;
-        /* 0x150 */ u8 field_0x150[0x154 - 0x150];
-        /* 0x154 */ char* text[4];
-        /* 0x164 */ u8 field_0x164;
-    };
+public:
+    /* 0x0FC */ JKRExpHeap* heap;
+    /* 0x100 */ JKRExpHeap* field_0x100;
+    /* 0x104 */ dMesg_outFont_c* outfont[18];
+    /* 0x14C */ dMesg_screenData_c* screen;
+    /* 0x150 */ u8 field_0x150[0x154 - 0x150];
+    /* 0x154 */ char* text[4];
+    /* 0x164 */ u8 field_0x164;
+};
 
 class dMesg_outFont_c {
 public:
-    void getTimer() {}
+    s16 getTimer() { return mTimer; }
 
     virtual ~dMesg_outFont_c();
     void _create();
@@ -38,69 +39,87 @@ public:
     void _draw();
     void _setAlpha(u8);
 
+protected:
     /* 0x04 */ J2DPicture* icon;
     /* 0x08 */ J2DPicture* kage;
     /* 0x0C */ int field_0xc;
     /* 0x10 */ s16 field_0x10;
     /* 0x12 */ s16 field_0x12;
     /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ s16 field_0x16;
+    /* 0x16 */ s16 mTimer;
     /* 0x18 */ u8 mAlpha;
     /* 0x19 */ u8 field_0x19;
 };
 
 class dMesg_tControl : public JMessage::TControl {
 public:
-    void getCharCode() {}
-    void getCharSpace() {}
-    void getInitFontSize() {}
-    void getLineCount() {}
-    void getLineLength(int) {}
-    void getLineStart() {}
-    void getMainFont() {}
-    void getNowFontSize() {}
-    void getRubyFont() {}
-    void getTextBoxWidth() {}
-    void isHeader() {}
-    void setCharCode(int) {}
-    void setCode16FgOff() {}
-    void setHeaderOff() {}
-    void setHeaderOn() {}
-    void setLineCount(int) {}
-    void setLineLength(int, f32) {}
-    void setLineStart(int) {}
+    JUTFont* getMainFont() { return mMainFont; }
     void setMainFont(JUTFont* font) { mMainFont = font; }
-    void setNowFontSize(int) {}
+
+    JUTFont* getRubyFont() { return mRubyFont; }
     void setRubyFont(JUTFont* font) { mRubyFont = font; }
+
+    f32 getLineLength(int i) { return mLineLength[i]; }
+    void setLineLength(int i, f32 length) { mLineLength[i] = length; }
+
+    int getLineCount() { return mLineCount; }
+    void setLineCount(int count) { mLineCount = count; }
+
+    int getLineStart() { return mLineStart; }
+    void setLineStart(int start) { mLineStart = start; }
+
+    int getInitFontSize() { return mInitFontSize; }
+
+    int getNowFontSize() { return mNowFontSize; }
+    void setNowFontSize(int size) { mNowFontSize = size; }
+
+    int getCharSpace() { return mCharSpace; }
+
+    int getCharCode() { return mCharCode; }
+    void setCharCode(int code) { mCharCode = code; }
+
+    int getTextBoxWidth() { return mTextBoxWidth; }
+
+    bool isHeader() { return mbHeader; }
+    void setHeaderOn() { mbHeader = 1; }
+    void setHeaderOff() { mbHeader = 0; }
+
+    void setCode16FgOff() { mCode16Fg = 0; }
 
     dMesg_tControl();
     const char* do_word(u32);
 
-public:
+protected:
     /* 0x3C */ JUTFont* mMainFont;
     /* 0x40 */ JUTFont* mRubyFont;
-    /* 0x44 */ f32 field_0x44[4];
-    /* 0x54 */ int field_0x54;
-    /* 0x58 */ int field_0x58;
-    /* 0x5C */ int field_0x5c;
-    /* 0x60 */ int field_0x60;
-    /* 0x64 */ int field_0x64;
-    /* 0x68 */ int field_0x68;
-    /* 0x6C */ int field_0x6c;
-    /* 0x70 */ u8 field_0x70;
-    /* 0x71 */ u8 field_0x71;
+    /* 0x44 */ f32 mLineLength[4];
+    /* 0x54 */ int mLineCount;
+    /* 0x58 */ int mLineStart;
+    /* 0x5C */ int mInitFontSize;
+    /* 0x60 */ int mNowFontSize;
+    /* 0x64 */ int mCharSpace;
+    /* 0x68 */ int mCharCode;
+    /* 0x6C */ int mTextBoxWidth;
+    /* 0x70 */ u8 mbHeader;
+    /* 0x71 */ u8 mCode16Fg;
 };
 
 class dMesg_tSequenceProcessor : public JMessage::TSequenceProcessor {
 public:
-    void decWaitRest() {}
-    void getNowColor() {}
-    void getStopFlag() {}
-    void resetWaitRest() {}
+    void resetWaitRest() { mWaitRest = 0; }
+    void setWaitRest() {} // TODO
+    int decWaitRest() {
+        if (mWaitRest > 0) {
+            return mWaitRest--;
+        } else {
+            return 0;
+        }
+    }
+    u32 getNowColor() { return mNowColor; }
+    void setNowColor(u32 col) { mNowColor = col; }
+    u8 getStopFlag() { return mStopFlag; }
     void setMesg(sub_mesg_class* mesg) { mMesg = mesg; }
-    void setNowColor(u32) {}
-    void setShortCutFlag() {}
-    void setWaitRest() {}
+    void setShortCutFlag() { mShortCutFlag = 1; }
 
     dMesg_tSequenceProcessor(JMessage::TControl*);
     virtual ~dMesg_tSequenceProcessor() {}
@@ -119,6 +138,7 @@ public:
     char* ruby_character(char*, int);
     virtual bool do_systemTagCode(u16, const void*, u32);
 
+protected:
     /* 0x038 */ sub_mesg_class* mMesg;
     /* 0x03C */ const void* field_0x3c;
     /* 0x040 */ const char* field_0x40;
@@ -132,21 +152,21 @@ public:
     /* 0x060 */ int field_0x60;
     /* 0x064 */ int field_0x64;
     /* 0x068 */ int field_0x68;
-    /* 0x06C */ u32 field_0x6c;
+    /* 0x06C */ u32 mNowColor;
     /* 0x070 */ int field_0x70;
     /* 0x074 */ int field_0x74;
     /* 0x078 */ int field_0x78;
     /* 0x07C */ int field_0x7c[4];
     /* 0x08C */ int field_0x8c;
-    /* 0x090 */ int field_0x90;
+    /* 0x090 */ int mWaitRest;
     /* 0x094 */ char field_0x94;
     /* 0x095 */ u8 field_0x95;
     /* 0x096 */ u8 field_0x96;
     /* 0x097 */ char field_0x97[100];
     /* 0x0FB */ char field_0xfb[100];
-    /* 0x15F */ u8 field_0x15f;
+    /* 0x15F */ u8 mStopFlag;
     /* 0x160 */ u8 field_0x160;
-    /* 0x161 */ u8 field_0x161;
+    /* 0x161 */ u8 mShortCutFlag;
     /* 0x162 */ u8 field_0x162;
     /* 0x163 */ u8 field_0x163;
 };
@@ -160,6 +180,7 @@ public:
     virtual bool do_tag(u32, const void*, u32);
     virtual bool do_systemTagCode(u16, const void*, u32);
 
+protected:
     /* 0x38 */ f32 field_0x38[4];
     /* 0x48 */ f32 field_0x48;
     /* 0x4C */ int field_0x4c;
@@ -180,10 +201,10 @@ public:
 
 class dMesg_screenData_c : public dDlst_base_c {
 public:
-    void deleteScreen() {}
-    void getTextPosX(int) {}
-    void getTextPosY(int) {}
-    void resetTimer() {}
+    void deleteScreen() { delete scrn; }
+    f32 getTextPosX(int i) { return field_0x88[i].mPosTopLeftOrig.x; }
+    f32 getTextPosY(int i) { return field_0x88[i].mPosTopLeftOrig.y; }
+    void resetTimer() { mTimer = 0; }
     void setFont(JUTFont* font1, JUTFont* font2) {
         field_0x10 = font1;
         field_0x14 = font2;
@@ -208,6 +229,7 @@ public:
     void dotAnimeInit();
     void dotAnime();
 
+protected:
     /* 0x004 */ JKRExpHeap* mHeap;
     /* 0x008 */ sub_mesg_class* mMesg;
     /* 0x00C */ J2DScreen* scrn;
@@ -219,7 +241,7 @@ public:
     /* 0x168 */ fopMsgM_pane_class field_0x168;
     /* 0x1A0 */ u8 field_0x1a0[0x1A4 - 0x1A0];
     /* 0x1A4 */ int field_0x1a4;
-    /* 0x1A8 */ s16 field_0x1a8;
+    /* 0x1A8 */ s16 mTimer;
     /* 0x1AA */ u8 field_0x1aa[0x1AC - 0x1AA];
     /* 0x1AC */ JUtility::TColor field_0x1ac;
     /* 0x1B0 */ JUtility::TColor field_0x1b0;
@@ -235,6 +257,7 @@ public:
     virtual void setTextPosition(u8);
     virtual void draw();
 
+protected:
     /* 0x1B4*/ f32 field_0x1b4;
 };
 
@@ -252,6 +275,7 @@ public:
     void lightMove();
     void cornerMove();
 
+protected:
     /* 0x1B4 */ fopMsgM_pane_class field_0x1b4;
     /* 0x1EC */ fopMsgM_pane_class field_0x1ec;
     /* 0x224 */ fopMsgM_pane_class field_0x224[8];

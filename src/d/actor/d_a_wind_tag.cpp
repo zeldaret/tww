@@ -3,6 +3,7 @@
 // Translation Unit: d_a_wind_tag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wind_tag.h"
 #include "d/res/res_yaflw00.h"
 #include "d/res/res_ybgaf00.h"
@@ -39,11 +40,11 @@ namespace daWindTag {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCpsS
-        {
-            /* P0 */ 0.0f, 0.0f, 0.0f,
-            /* P1 */ 0.0f, 0.0f, 0.0f,
-            /* Height */ 200.0f,
-        },
+        {{
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 200.0f,
+        }},
     };
 }
 

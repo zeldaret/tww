@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/d_camera.h"
@@ -34,7 +35,7 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         return TRUE;
     }
     if (m3630 != fpcM_ERROR_PROCESS_ID_e) {
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+        seStartSystem(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
 

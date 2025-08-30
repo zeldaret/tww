@@ -3,6 +3,7 @@
  * Bomb - Static
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_bomb2.h"
 #include "d/d_a_obj.h"
@@ -109,7 +110,9 @@ bool daBomb_c::chk_state(daBomb_c::State_e state) const {
 
 /* 800682C0-800682F0       .text change_state__8daBomb_cFQ28daBomb_c7State_e */
 void daBomb_c::change_state(daBomb_c::State_e new_state) {
-    base.mParameters = (base.mParameters & ~(((1 << PRM_STATE_W) - 1) << PRM_STATE_S)) | (new_state << PRM_STATE_S); // & 0xFF000000
+    u32 params = fopAcM_GetParam(this) & ~(((1 << PRM_STATE_W) - 1) << PRM_STATE_S);
+    params |= (new_state << PRM_STATE_S);
+    fopAcM_SetParam(this, params);
 
     _prm_chk_version();
 }

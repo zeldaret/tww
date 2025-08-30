@@ -3,6 +3,7 @@
 // Translation Unit: d_event_manager.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -22,7 +23,7 @@ void dEvent_exception_c::init() {
 
 /* 800737F4-80073900       .text setStartDemo__18dEvent_exception_cFi */
 int dEvent_exception_c::setStartDemo(int eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (eventInfoIdx == 0xFF) {
         mEventInfoIdx = 206;
         return 0xFF;
@@ -67,7 +68,7 @@ const char* dEvent_exception_c::getEventName() {
         "FALL_START",
     };
 
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
     if (mEventInfoIdx == -1)
         return NULL;
@@ -339,7 +340,7 @@ dEvDtEvent_c* dEvent_manager_c::getEventData(s16 eventIdx) {
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
 s16 dEvent_manager_c::getEventIdx(const char* eventName, u8 eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (mList.mHeaderP == NULL)
         return -1;
 
@@ -733,7 +734,7 @@ void dEvent_manager_c::setPrmStaff(void* work, int staffIdx) {
 
 /* 80075288-8007537C       .text getToolId__16dEvent_manager_cFUci */
 u8 dEvent_manager_c::getToolId(u8 r4, int r31) {
-    dStage_EventInfo_c* eventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* eventInfo = dComIfGp_getStage().getEventInfo();
     int r5 = r31;
     if (r4 == 0xFF) {
         return 0xFF;

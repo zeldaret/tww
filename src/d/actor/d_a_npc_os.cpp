@@ -1,8 +1,9 @@
 /**
  * d_a_npc_os.cpp
- * Player - Companion Statue / Servant of the Tower
+ * Player - Servant of the Tower / お供石像 (Companion Statue)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_os.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -14,8 +15,67 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daNpc_Os_HIO2_c : public JORReflexible {
+public:
+    daNpc_Os_HIO2_c();
+    virtual ~daNpc_Os_HIO2_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x00 - vtable */
+
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ s16 field_0x24;
+    /* 0x26 */ s16 field_0x26;
+    /* 0x28 */ s16 field_0x28;
+}; // Size: 0x2A
+
+class daNpc_Os_HIO_c : public JORReflexible {
+public:
+    daNpc_Os_HIO_c();
+    virtual ~daNpc_Os_HIO_c() {}
+
+    void genMessage(JORMContext* ctx);
+
+public:
+    /* 0x00 - vtable*/
+
+    /* 0x04 */ s8 mNo;
+
+    /* 0x08 */ daNpc_Os_HIO2_c mOs2;
+    /* 0x34 */ dNpc_HIO_c mNpc;
+
+    /* 0x5C */ daNpc_Os_c* field_0x5C;
+    /* 0x60 */ f32 field_0x60;
+    /* 0x64 */ f32 field_0x64;
+    /* 0x68 */ f32 field_0x68;
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ f32 field_0x74;
+    /* 0x78 */ f32 field_0x78;
+    /* 0x7C */ f32 field_0x7C;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ f32 field_0x84;
+    /* 0x88 */ f32 field_0x88;
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ f32 field_0x9C;
+    /* 0xA0 */ f32 field_0xA0;
+    /* 0xA4 */ f32 field_0xA4;
+    /* 0xA8 */ f32 field_0xA8;
+    /* 0xAC */ f32 field_0xAC;
+    /* 0xB0 */ f32 field_0xB0;
+}; // Size: 0xB4
 
 static daNpc_Os_HIO_c l_HIO;
 static s32 l_hio_counter = 0;
@@ -44,11 +104,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static const char* l_staff_name[] = {
@@ -290,7 +350,7 @@ BOOL daNpc_Os_c::createHeap() {
 
     mAcchCir[0].SetWall(20.0f, 40.0f);
     mAcchCir[1].SetWall(60.0f, 40.0f);
-    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 2, &mAcchCir[0], fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 2, &mAcchCir[0], fopAcM_GetSpeed_p(this));
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(120.0f);
@@ -713,15 +773,15 @@ BOOL daNpc_Os_c::waitNpcAction(void*) {
 
         cLib_offBit<u32>(attention_info.flags, (fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e));
 
-        f32 dist = fopAcM_searchPlayerDistance2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistance2(this);
         if(!checkNpcCallCommand()) {
-            if(dist < l_HIO.field_0x64 * l_HIO.field_0x64) {
+            if(dist_sq < SQUARE(l_HIO.field_0x64)) {
                 daPy_getPlayerLinkActorClass()->onNpcCallCommand();
             }
         }
         else {
             if(wakeupCheck()) {
-                if(dist >= l_HIO.field_0x60 * l_HIO.field_0x60) {
+                if(dist_sq >= SQUARE(l_HIO.field_0x60)) {
                     setNpcAction(&daNpc_Os_c::searchNpcAction, 0);
                 }
             }
@@ -1064,16 +1124,16 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
         daPy_py_c* player = daPy_getPlayerActorClass();
 
         BOOL door = player->eventInfo.checkCommandDoor();
-        f32 dist = fopAcM_searchPlayerDistanceXZ2(this);
+        f32 dist_sq = fopAcM_searchPlayerDistanceXZ2(this);
         f32 temp;
-        if (dist < l_HIO.field_0x60 * l_HIO.field_0x60) {
+        if (dist_sq < SQUARE(l_HIO.field_0x60)) {
             temp = 0.0f;
         } else {
             temp = l_HIO.field_0xA8;
         }
         s16 angle, adjustedAngle;
         angle = adjustedAngle = fopAcM_searchPlayerAngleY(this);
-        BOOL temp3 = routeCheck(dist, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
+        BOOL temp3 = routeCheck(dist_sq, &adjustedAngle) && cLib_distanceAngleS(angle, adjustedAngle) <= 0x2000;
         if(door || !temp3 || (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000000_e | daPyStts0_UNK100_e | daPyStts0_UNK1_e) || player->checkAttentionLock())) {
             temp = 0.0f;
             offNpcCallCommand();
@@ -2239,7 +2299,7 @@ BOOL daNpc_Os_c::execute() {
                     m4E8 = 0;
                 }
                 else {
-                    daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                    daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
                 }
             }
             else {
@@ -2247,7 +2307,7 @@ BOOL daNpc_Os_c::execute() {
             }
             
             if(mAcch.ChkWaterIn()) {
-                daPy_getPlayerLinkActorClass()->startRestartRoom(5, 0xC9, -1.0f, 0);
+                daPy_getPlayerLinkActorClass()->npcStartRestartRoom();
 
                 if(!isWaterHit()) {
                     onWaterHit();

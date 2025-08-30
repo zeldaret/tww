@@ -15,8 +15,11 @@ public:
     enum Proc_e {
         
     };
-
-    void getSw() {}
+#if VERSION == VERSION_DEMO
+    u8 getSw() { return m295; }
+#else
+    u8 getSw() { return mSwitchA; }
+#endif
     void isSpecial() {}
     void modeProcInit(int) {}
 
@@ -58,8 +61,12 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    static const dCcD_SrcCyl m_cyl_src;
+
 public:
-    /* 0x290 */ u8 m290[0x2AC - 0x290];
+    /* 0x290 */ u8 m290[0x295 - 0x290];
+    /* 0x295 */ u8 m295;
+    /* 0x296 */ u8 m296[0x2AC - 0x296];
     /* 0x2AC */ int mCurrentProc;
     /* 0x2B0 */ u8 mSubMode;
     /* 0x2B1 */ u8 mSwitchA;

@@ -1,7 +1,7 @@
 #ifndef RES_KIRI_H
 #define RES_KIRI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KIRI_RES_FILE_ID {
     /* BCK */

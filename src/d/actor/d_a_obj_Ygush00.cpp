@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Ygush00.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Ygush00.h"
 #include "d/res/res_ygush00.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,7 +16,6 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
@@ -53,7 +53,7 @@ bool daObjYgush00_c::create_heap() {
     J3DAnmTransform * pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, bck_table[mType]));
 
     if (!pModelData || !pBtk || !pBck) {
-        JUT_ASSERT(VERSION_SELECT(203, 207, 207, 207), FALSE);
+        JUT_ASSERT(DEMO_SELECT(203, 207), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);

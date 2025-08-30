@@ -83,6 +83,11 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
                 if (ret != CARD_ERROR_READY) return ret;
                 ret = CARDRead(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
+#if VERSION == VERSION_DEMO
+                if (!mDoMemCdRWm_TestCheckSumPictData(sTmpBuf)) {
+                    return ret;
+                }
+#endif
             }
         }
     }
@@ -306,8 +311,7 @@ u32 mDoMemCdRWm_CalcCheckSum(void* p_, u32 size) {
 u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
     u16 csum = 0;
     for (int i = 0; i < size; i++) {
-        u8 v = ((u8*)p)[i];
-        csum += v;
+        csum += ((u8*)p)[i];
     }
     return csum;
 }

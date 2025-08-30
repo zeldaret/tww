@@ -3,6 +3,7 @@
 // Translation Unit: d_a_hot_floor.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hot_floor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -30,7 +31,7 @@ void daHot_Floor_c::set_mtx() {
         mDoMtx_copy(mtx[i - 1], mtx[i]);
     if (mtx_p != NULL) {
         cXyz pos = cXyz::Zero;
-        mDoMtx_stack_c::copy(*mtx_p);
+        mDoMtx_stack_c::copy(mtx_p);
         mDoMtx_stack_c::transM(0.0f, 5.0f, -5.0f);
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[0]);
         mDoMtx_stack_c::multVec(&pos, &current.pos);
@@ -52,7 +53,10 @@ cPhs_State daHot_Floor_c::CreateInit() {
 }
 
 cPhs_State daHot_Floor_c::_create() {
+#if VERSION > VERSION_DEMO
+    // Bug: This actor is never initialized in the demo.
     fopAcM_SetupActor(this, daHot_Floor_c);
+#endif
     return CreateInit();
 }
 
@@ -97,7 +101,7 @@ bool daHot_Floor_c::_draw() {
 }
 
 /* 00000264-000002F8       .text daHot_FloorCreate__FPv */
-static s32 daHot_FloorCreate(void* i_this) {
+static cPhs_State daHot_FloorCreate(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_create();
 }
 

@@ -10,13 +10,13 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 
 /* 80133F1C-80133F40       .text getHangMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getHangMoveAnmSpeed() {
-    return daPy_HIO_hang_c0::m.field_0x24 +
-           (mStickDistance * (daPy_HIO_hang_c0::m.field_0x28 - daPy_HIO_hang_c0::m.field_0x24));
+    return getAnmSpeedStickRate(daPy_HIO_hang_c0::m.field_0x24, daPy_HIO_hang_c0::m.field_0x28);
 }
 
 /* 80133F40-80133FB4       .text getHangDirectionFromAngle__9daPy_lk_cFv */

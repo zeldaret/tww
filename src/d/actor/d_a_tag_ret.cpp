@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_ret.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ret.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
@@ -35,11 +36,11 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 namespace daTagRet {

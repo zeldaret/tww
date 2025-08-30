@@ -52,8 +52,8 @@ void TObject::reset(const void* arg1) {
 }
 
 /* 80274D64-80274F74       .text forward__Q37JStudio3stb7TObjectFUl */
-u8 TObject::forward(u32 arg1) {
-    u8 temp = false;
+bool TObject::forward(u32 arg1) {
+    bool temp = false;
 
     while (true) {
         if (mFlag & 0x8000) {
@@ -67,7 +67,7 @@ u8 TObject::forward(u32 arg1) {
             case STATUS_INACTIVE:
                 break;
             }
-            return 1;
+            return true;
         }
 
         if (getStatus() == STATUS_INACTIVE) {
@@ -84,7 +84,7 @@ u8 TObject::forward(u32 arg1) {
                 setStatus_(STATUS_SUSPEND);
                 on_wait(arg1);
             }
-            return 1;
+            return true;
         }
 
         while (true) {
@@ -101,7 +101,7 @@ u8 TObject::forward(u32 arg1) {
                     setStatus_(STATUS_END);
                     on_end();
                 }
-                return 0;
+                return false;
             }
 
             if (!bSequence_) {
@@ -127,7 +127,7 @@ u8 TObject::forward(u32 arg1) {
             } else {
                 u32Wait_ -= arg1;
                 on_wait(arg1);
-                return 1;
+                return true;
             }
         }
     }
@@ -164,25 +164,25 @@ void TObject::process_sequence_() {
     switch (type) {
     case 0:
         JUT_EXPECT(u32Value == 0);
-        JUT_EXPECT(pContent == 0);
+        JUT_EXPECT(pContent == NULL);
         break;
     case 1:
-        JUT_EXPECT(pContent == 0);
+        JUT_EXPECT(pContent == NULL);
         setFlag_operation_(u32Value);
         break;
     case 2:
-        JUT_EXPECT(pContent == 0);
+        JUT_EXPECT(pContent == NULL);
         setWait(u32Value);
         break;
     case 3: {
-        JUT_EXPECT(pContent == 0);
+        JUT_EXPECT(pContent == NULL);
         s32 off = toInt32FromUInt24_(u32Value);
         void* nextseq = (void*)getSequence_offset(off);
         setSequence_next(nextseq);
         break;
     }
     case 4: {
-        JUT_EXPECT(pContent == 0);
+        JUT_EXPECT(pContent == NULL);
         u32 val = toInt32FromUInt24_(u32Value);
         suspend(val);
         break;
@@ -282,7 +282,6 @@ void TControl::destroyObject_all() {
 
 /* 802754C0-80275560       .text getObject__Q37JStudio3stb8TControlFPCvUl */
 TObject* TControl::getObject(const void* param_0, u32 param_1) {
-    /* Nonmatching - TPRObject_ID_equal copy issue */
     JGadget::TLinkList<TObject, -12>::iterator begin = mObjectContainer.begin();
     JGadget::TLinkList<TObject, -12>::iterator end = mObjectContainer.end();
     JGadget::TLinkList<TObject, -12>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
@@ -293,21 +292,15 @@ TObject* TControl::getObject(const void* param_0, u32 param_1) {
 }
 
 /* 80275560-8027565C       .text forward__Q37JStudio3stb8TControlFUl */
-u8 TControl::forward(u32 param_0) {
-    /* Nonmatching - regalloc */
+bool TControl::forward(u32 param_0) {
     _54 = mObject_control.getSuspend();
-    u8 rv = mObject_control.forward(param_0);
+    bool rv = mObject_control.forward(param_0);
     int uVar7 = 0xf;
     int uVar6 = 0;
     JGadget::TContainerEnumerator<JStudio::stb::TObject, -12> aTStack_38(&mObjectContainer);
     while (aTStack_38) {
         JStudio::stb::TObject& this_00 = *aTStack_38;
-        u8 iVar5 = 0;
-        u8 iVar4 = this_00.forward(param_0);
-        if (iVar4 != 0 || rv != 0) {
-            iVar5 = 1;
-        }
-        rv = iVar5;
+        rv = this_00.forward(param_0) || rv;
         int uVar3 = this_00.getStatus();
         uVar7 &= uVar3;
         uVar6 |= uVar3;

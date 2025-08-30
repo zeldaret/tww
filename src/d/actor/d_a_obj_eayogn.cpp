@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_eayogn.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eayogn.h"
 #include "d/res/res_eayogn.h"
 #include "f_op/f_op_actor_mng.h"

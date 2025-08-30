@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_akabe.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_akabe.h"
 #include "d/res/res_akabe.h"
 #include "d/res/res_akabed.h"

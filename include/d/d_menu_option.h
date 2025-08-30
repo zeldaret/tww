@@ -10,7 +10,6 @@
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
-struct mesg_entry;
 
 class dMenu_Option_c : public dDlst_base_c {
 public:

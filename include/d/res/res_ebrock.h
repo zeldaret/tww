@@ -1,7 +1,7 @@
 #ifndef RES_EBROCK_H
 #define RES_EBROCK_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum EBROCK_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

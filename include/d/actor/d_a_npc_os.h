@@ -14,6 +14,8 @@ namespace daPedestal { class daPds_c; }
 
 class daNpc_Os_infiniteEcallBack_c : public dPa_levelEcallBack {
 public:
+    ~daNpc_Os_infiniteEcallBack_c() {}
+
     void end();
     void makeEmitter(u16, const cXyz*, const csXyz*, const cXyz*);
     void execute(JPABaseEmitter*) {}
@@ -31,7 +33,6 @@ class daNpc_Os_c : public daPy_npc_c {
 public:
     typedef int(daNpc_Os_c::*ActionFunc_t)(void*);
 
-    daNpc_Os_c() {}
     ~daNpc_Os_c();
     BOOL chkNpcAction(ActionFunc_t action) {
         return mNpcAction == action;
@@ -72,7 +73,7 @@ public:
     void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
-    static bool isPlayerRoom_Goat() { return isPlayerRoom(1); }
+    static bool isPlayerRoom_Goat() { return isPlayerRoom(1) == true; }
 
     cPhs_State create();
     BOOL createHeap();
@@ -225,67 +226,5 @@ private:
     /* 0x7F0 */ cXyz field_0x7F0;
     /* 0x7FC */ cBgS_PolyInfo field_0x7FC;
 }; // Size: 0x80C
-
-class daNpc_Os_HIO2_c : public JORReflexible {
-public:
-    daNpc_Os_HIO2_c();
-    virtual ~daNpc_Os_HIO2_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x00 - vtable */
-
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1C;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ s16 field_0x24;
-    /* 0x26 */ s16 field_0x26;
-    /* 0x28 */ s16 field_0x28;
-}; // Size: 0x2A
-
-class daNpc_Os_HIO_c : public JORReflexible {
-public:
-    daNpc_Os_HIO_c();
-    virtual ~daNpc_Os_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x00 - vtable*/
-
-    /* 0x04 */ s8 mNo;
-
-    /* 0x08 */ daNpc_Os_HIO2_c mOs2;
-    /* 0x34 */ dNpc_HIO_c mNpc;
-
-    /* 0x5C */ daNpc_Os_c* field_0x5C;
-    /* 0x60 */ f32 field_0x60;
-    /* 0x64 */ f32 field_0x64;
-    /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6C;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ f32 field_0x74;
-    /* 0x78 */ f32 field_0x78;
-    /* 0x7C */ f32 field_0x7C;
-    /* 0x80 */ f32 field_0x80;
-    /* 0x84 */ f32 field_0x84;
-    /* 0x88 */ f32 field_0x88;
-    /* 0x8C */ f32 field_0x8C;
-    /* 0x90 */ f32 field_0x90;
-    /* 0x94 */ f32 field_0x94;
-    /* 0x98 */ f32 field_0x98;
-    /* 0x9C */ f32 field_0x9C;
-    /* 0xA0 */ f32 field_0xA0;
-    /* 0xA4 */ f32 field_0xA4;
-    /* 0xA8 */ f32 field_0xA8;
-    /* 0xAC */ f32 field_0xAC;
-    /* 0xB0 */ f32 field_0xB0;
-}; // Size: 0xB4
 
 #endif /* D_A_NPC_OS_H */

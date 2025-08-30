@@ -10,13 +10,19 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
+#if VERSION == VERSION_DEMO
+void daPy_lk_c::setSwordModel()
+#else
 /* 80154B80-80154FBC       .text setSwordModel__9daPy_lk_cFi */
-void daPy_lk_c::setSwordModel(BOOL r28) {
+void daPy_lk_c::setSwordModel(BOOL r28)
+#endif
+{
     struct sword_model_tbl_s {
         /* 0x00 */ u16 bladeModel;
         /* 0x02 */ u16 glowModel;
@@ -118,10 +124,12 @@ void daPy_lk_c::setSwordModel(BOOL r28) {
     mDoAud_bgmSetSwordUsing(1);
     m355C = 0;
 
+#if VERSION > VERSION_DEMO
     if (r28) {
         onNoResetFlg1(daPyFlg1_UNK200000);
         mpSwordBtk->setFrame(mpSwordBtk->getFrameMax() - 0.001f);
     }
+#endif
 }
 
 /* 80154FBC-80155490       .text setLightSaver__9daPy_lk_cFv */
@@ -402,7 +410,7 @@ int daPy_lk_c::changeCutProc() {
     m34C4++;
     int direction = getCutDirection() - 1;
     short sVar2;
-    if (mpAttention->Lockon() || mStickDistance <= 0.05f) {
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {
         sVar2 = m34E8;
@@ -427,7 +435,7 @@ int daPy_lk_c::changeCutProc() {
         } else if (direction == DIR_RIGHT) {
             procCutR_init(sVar2);
         } else if (direction == DIR_NONE) {
-            if (mpAttention->Lockon()) {
+            if (checkAttentionLock()) {
                 procCutA_init(sVar2);
             } else {
                 procCutL_init(sVar2);
@@ -1344,23 +1352,23 @@ BOOL daPy_lk_c::procCutTurn_init(int param_0) {
         setBlurPosResource(LKANM__CUTTURN_POS);
     } else {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
-        u32 uVar5;
+        u32 boko_type;
         if (boko == NULL) {
-            uVar5 = 0;
+            boko_type = daBoko_c::Type_BOKO_STICK_e;
             mAtCyl.SetAtAtp(1);
         } else {
-            uVar5 = fopAcM_GetParam(boko);
+            boko_type = fopAcM_GetParam(boko);
             mAtCyl.SetAtAtp(boko->getAtPoint());
         }
-        if (uVar5 == 0) {
+        if (boko_type == daBoko_c::Type_BOKO_STICK_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x60;
-        } else if (uVar5 == 1) {
+        } else if (boko_type == daBoko_c::Type_MACHETE_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x64;
-        } else if (uVar5 == 2) {
+        } else if (boko_type == daBoko_c::Type_STALFOS_MACE_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x68;
-        } else if (uVar5 == 3) {
+        } else if (boko_type == daBoko_c::Type_DARKNUT_SWORD_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x6C;
-        } else if (uVar5 == 4) {
+        } else if (boko_type == daBoko_c::Type_MOBLIN_SPEAR_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x70;
         } else {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x74;
@@ -1533,7 +1541,7 @@ BOOL daPy_lk_c::procCutRoll() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         uVar1 = current.angle.y;
-        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+        if (mAcch.ChkWallHit() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
             fVar2 = 25.0f + mAcchCir[0].GetWallR();
             local_48.set(current.pos.x, current.pos.y + mAcchCir[0].GetWallH(), current.pos.z);
             f32 cos = cM_scos(uVar1);
@@ -1560,8 +1568,8 @@ BOOL daPy_lk_c::procCutRoll() {
             shape_angle.y = current.angle.y;
         }
         sVar3 = current.angle.y - uVar1;
-        if (dComIfGp_event_runCheck() != 0) {
-            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e) {
+        if (dComIfGp_event_runCheck()) {
+            if (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e) {
                 m34D0 = 0;
             } else {
                 m34D0 = 5;
@@ -1580,7 +1588,7 @@ BOOL daPy_lk_c::procCutRoll() {
         } else if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
             shape_angle.y = shape_angle.y + m34EC;
             current.angle.y = shape_angle.y;
-            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK2B_e)) {
+            if (dComIfGp_event_runCheck() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
                 procWait_init();
             } else {
                 procCutRollEnd_init();
@@ -1701,7 +1709,7 @@ BOOL daPy_lk_c::procCutTurnMove() {
         }
     }
     if (m34D0 != -1) {
-        mDoAud_seStart(JA_SE_LK_SWORD_CHARGE);
+        seStartSystem(JA_SE_LK_SWORD_CHARGE);
     }
     if (changeSlideProc()) {
         return true;

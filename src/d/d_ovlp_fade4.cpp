@@ -3,8 +3,10 @@
 // Translation Unit: d_ovlp_fade4.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade4.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_overlap.h"
 #include "m_Do/m_Do_graphic.h"
@@ -138,7 +140,7 @@ void dDlst_2Dt_Sp_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_FALSE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     f32 x1, y1;
@@ -185,7 +187,7 @@ dOvlpFd4_c::dOvlpFd4_c() {
     first = true;
     setExecute(&dOvlpFd4_c::execFirstSnap);
     setDraw(&dOvlpFd4_c::drawFadeOut);
-    if (base.mProcName == PROC_OVERLAP4) {
+    if (fopOvlpM_GetName(this) == PROC_OVERLAP4) {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
     } else {
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
@@ -385,7 +387,7 @@ overlap_process_profile_definition g_profile_OVERLAP4 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E5,
+    PRIO_OVERLAP4,
     &l_dOvlpFd4_Method,
 };
 
@@ -399,6 +401,6 @@ overlap_process_profile_definition g_profile_OVERLAP5 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E6,
+    PRIO_OVERLAP5,
     &l_dOvlpFd4_Method,
 };

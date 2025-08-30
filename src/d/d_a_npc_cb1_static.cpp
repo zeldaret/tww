@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_cb1_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_cb1.h"
 #include "dolphin/types.h"
 
@@ -15,4 +16,3 @@ u16 daNpc_Cb1_c::m_status;
 s16 daNpc_Cb1_c::getMaxFlyingTimer() {
     return 15*30;
 }
-

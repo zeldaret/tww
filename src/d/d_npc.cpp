@@ -3,6 +3,7 @@
 // Translation Unit: d_npc.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_npc.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -11,8 +12,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_item_data.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
 bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
@@ -104,7 +103,7 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 def
         delta.x = pDstPos->x - srcPos.x;
         delta.y = pDstPos->y - srcPos.y;
         delta.z = pDstPos->z - srcPos.z;
-        f32 distXZ = std::sqrtf(delta.x * delta.x + delta.z * delta.z);
+        f32 distXZ = std::sqrtf(SQUARE(delta.x) + SQUARE(delta.z));
         targetY = cM_atan2s(delta.x, delta.z);
         r23 = cM_atan2s(delta.y, distXZ);
     } else {
@@ -422,7 +421,7 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     
             cXyz diff = (*param_1 - point);
             f32 xz_mag = diff.abs2XZ();
-            f32 y_mag = param_2 * (diff.y * diff.y);
+            f32 y_mag = param_2 * SQUARE(diff.y);
             f32 dist = std::sqrtf(y_mag + xz_mag);
 
             if(max_dist > dist) {
@@ -629,7 +628,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
     diff.z = param_2.z - param_1.z;
 
     if(param_3 != 0) {
-        f32 dist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
+        f32 dist = std::sqrtf(SQUARE(diff.x) + SQUARE(diff.z));
         *param_3 = dist;
     }
 
@@ -964,9 +963,9 @@ dCcD_SrcCyl dNpc_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };

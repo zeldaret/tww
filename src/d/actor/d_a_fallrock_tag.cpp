@@ -3,13 +3,14 @@
 // Translation Unit: d_a_fallrock_tag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
@@ -19,7 +20,7 @@ static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
 static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */

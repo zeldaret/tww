@@ -443,7 +443,7 @@ Next, find where the assembly loads the jump table. It will look something like 
 .endobj "@7298"
 ```
 
-Copy the table, and paste it at the top of "Assembly" field in m2c (above the function itself). Then, replace the compiler-generated name (e.g. `@7298`) with the name `jtbl` (both the ones inside the function and the one before jump table itself).  
+Copy the table, and paste it at the top of "Assembly" field in m2c (above the function itself). Then, replace the compiler-generated name (e.g. `@7298`) with the name `jtbl` (both the ones inside the function and the one before the jump table itself).  
 Finally, add a new line `.section .data` before the jump table, as well as a new line `.section .text` after the table, before the function. It will look like this:
 
 ![Jump table switch assembly for m2c](images/m2c_jump_table_switch.png)

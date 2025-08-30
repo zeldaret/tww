@@ -3,7 +3,9 @@
 // Translation Unit: d_ky_thunder.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ky_thunder.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -87,8 +89,10 @@ static BOOL dThunder_IsDelete(dThunder_c* i_this) {
 
 /* 80198ABC-80198B68       .text dThunder_Delete__FP10dThunder_c */
 static BOOL dThunder_Delete(dThunder_c* i_this) {
+#if VERSION > VERSION_DEMO
     mDoAud_seDeleteObject(&i_this->mPos);
     mDoAud_seDeleteObject(&i_this->mPosNeg);
+#endif
     i_this->~dThunder_c();
     return TRUE;
 }
@@ -109,9 +113,9 @@ cPhs_State dThunder_c::create() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
 
-    new(this) dThunder_c();
+    new (this) dThunder_c();
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YTHDR00);
-    JUT_ASSERT(0x6e, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(111, 110), modelData != NULL);
 
     mModelInfo.mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x01000200);
     if (mModelInfo.mpModel == NULL)
@@ -121,29 +125,35 @@ cPhs_State dThunder_c::create() {
         return cPhs_ERROR_e;
 
     J3DAnmTextureSRTKey * anm = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("Always", ALWAYS_BTK_YTHDR00);
-    JUT_ASSERT(0x7d, anm != NULL);
+    JUT_ASSERT(DEMO_SELECT(126, 125), anm != NULL);
     if (!mModelInfo.mBtk.init(modelData, anm, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     J3DAnmTevRegKey * canm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Always", ALWAYS_BRK_YTHDR00);
-    JUT_ASSERT(0x8c, canm != NULL);
+    JUT_ASSERT(DEMO_SELECT(141, 140), canm != NULL);
     if (!mModelInfo.mBrk.init(modelData, canm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return cPhs_ERROR_e;
 
     mBtkTime = cM_rndF(1.0f);
 
+    f32 f31;
+    f32 f30;
+    f32 f29;
     f32 size = envLight.mThunderEff.mState < 10 ? 1.0f : 0.5f;
     cXyz fwd;
+    f31 = 5.0f;
+    f30 = 20.0f;
+    f29 = 80.0f;
     cXyz offs(120000.0f, 2000.0f, 0.0f);
 
     mRot = 4000.0f;
     mRot = size * cM_rndFX(mRot);
-    f32 f1 = cM_rndF(15.0f);
-    mScale.x = size * (f1 + 5.0f);
+    f32 f1 = cM_rndF(f30 - f31);
+    mScale.x = size * (f31 + f1);
     if (cM_rndFX(1.0f) >= 0.5)
         mScale.x *= -1.0f;
-    f1 = cM_rndF(60.0f);
-    mScale.y = size * (f1 + 20.0f);
+    f1 = cM_rndF(f29 - f30);
+    mScale.y = size * (f30 + f1);
     mScale.z = 1.0f;
 
     dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
@@ -168,10 +178,18 @@ cPhs_State dThunder_c::create() {
     mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
 
     if (cM_rndF(1.0f) < 0.3f) {
+#if VERSION == VERSION_DEMO
+        cXyz sp14;
+        sp14.x = -mPos.x;
+        sp14.y = -mPos.y;
+        sp14.z = -mPos.z;
+        mDoAud_seStart(JA_SE_OBJ_THUNDER_FAR, &sp14);
+#else
         mPosNeg.x = -mPos.x;
         mPosNeg.y = -mPos.y;
         mPosNeg.z = -mPos.z;
         mDoAud_seStart(JA_SE_OBJ_THUNDER_FAR, &mPosNeg);
+#endif
     }
 
     return cPhs_COMPLEATE_e;
@@ -186,15 +204,15 @@ kankyo_method_class l_dThunder_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KY_THUNDER = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_KY_THUNDER,
-    &g_fpcLf_Method.base,
-    sizeof(dThunder_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x006,
-    &l_dThunder_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0007,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_KY_THUNDER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dThunder_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_KY_THUNDER,
+    /* Actor SubMtd */ &l_dThunder_Method,
 };

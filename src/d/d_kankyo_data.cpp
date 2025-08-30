@@ -3,6 +3,7 @@
  * Environment Data
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo_data.h"
 #include "d/d_stage.h"
 

@@ -3,6 +3,7 @@
 // Translation Unit: d_s_play.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_play.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -39,8 +40,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include <stdio.h>
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;
@@ -328,9 +327,9 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
                     ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && isNight) ||
                     ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !isNight))
                 {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_saftyWhiteColor);
                 } else {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_blackColor);
                 }
 
                 mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),

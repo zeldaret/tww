@@ -205,14 +205,14 @@ void J2DWindow::drawSelf(f32 x, f32 y) {
 
 /* 802D2190-802D2288       .text drawSelf__9J2DWindowFffPA3_A4_f */
 void J2DWindow::drawSelf(f32 x, f32 y, Mtx *pMtx) {
-    JGeometry::TBox2<f32> screenBounds = mScreenBounds;
-    screenBounds.addPos(JGeometry::TVec2<f32>(x, y));
+    JGeometry::TBox2<f32> globalBounds = mGlobalBounds;
+    globalBounds.addPos(JGeometry::TVec2<f32>(x, y));
 
-    if (screenBounds.getWidth() >= mTextureWidth && screenBounds.getHeight() >= mTextureHeight) {
+    if (globalBounds.getWidth() >= mTextureWidth && globalBounds.getHeight() >= mTextureHeight) {
         Mtx m;
         MTXConcat(*pMtx, mDrawMtx, m);
         GXLoadPosMtxImm(m, GX_PNMTX0);
-        draw_private(screenBounds, mWindowBox);
+        draw_private(globalBounds, mWindowBox);
     }
 
     clip(mWindowBox);

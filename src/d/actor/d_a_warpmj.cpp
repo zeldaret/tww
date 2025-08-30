@@ -3,6 +3,7 @@
 // Translation Unit: d_a_warpmj.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpmj.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -123,28 +124,28 @@ bool daWarpmj_c::_draw() {
 }
 
 /* 0000114C-0000116C       .text daWarpmj_Create__FPv */
-static cPhs_State daWarpmj_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWarpmj_Create(void* i_this) {
+    return ((daWarpmj_c*)i_this)->_create();
 }
 
 /* 0000116C-00001190       .text daWarpmj_Delete__FPv */
-static BOOL daWarpmj_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWarpmj_Delete(void* i_this) {
+    return ((daWarpmj_c*)i_this)->_delete();
 }
 
 /* 00001190-000011B4       .text daWarpmj_Draw__FPv */
-static BOOL daWarpmj_Draw(void*) {
-    /* Nonmatching */
+static BOOL daWarpmj_Draw(void* i_this) {
+    return ((daWarpmj_c*)i_this)->_draw();
 }
 
 /* 000011B4-000011D8       .text daWarpmj_Execute__FPv */
-static BOOL daWarpmj_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWarpmj_Execute(void* i_this) {
+    return ((daWarpmj_c*)i_this)->_execute();
 }
 
 /* 000011D8-000011E0       .text daWarpmj_IsDelete__FPv */
 static BOOL daWarpmj_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWarpmjMethodTable = {

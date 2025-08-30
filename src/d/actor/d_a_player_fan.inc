@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_kankyo_wether.h"
@@ -43,9 +44,9 @@ BOOL daPy_lk_c::fanJointCB(int param_0) {
 BOOL daPy_fanJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->fanJointCB(jntNo);
     }
     return TRUE;
@@ -70,9 +71,9 @@ BOOL daPy_lk_c::parachuteJointCB(int param_0) {
 BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = static_cast<J3DJoint*>(node);
-        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daPy_lk_c* i_this = reinterpret_cast<daPy_lk_c*>(model->getUserArea());
+        s32 jntNo = joint->getJntNo();
         i_this->parachuteJointCB(jntNo);
     }
     return TRUE;
@@ -80,22 +81,25 @@ BOOL daPy_parachuteJointCallback(J3DNode* node, int calcTiming) {
 
 /* 8014BD4C-8014BE50       .text setShapeFanLeaf__9daPy_lk_cFv */
 int daPy_lk_c::setShapeFanLeaf() {
-    J3DMaterial* mesh;
-
+    J3DMaterial* mtl;
     if (mpEquipItemModel != NULL) {
-        mesh = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+        mtl = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
     }
     m355C = m355C + 0x82f;
     m3558 = 1536.0f * cM_ssin(m355C);
     m355A = 2048.0f * cM_ssin(m355C - 0xe00U);
     if (dComIfGs_getMagic() >= 1) {
-        for (; mesh != NULL; mesh = mesh->getNext()) {
-            mesh->getShape()->show();
+        // Show material:
+        // * "leafAMat"
+        for (; mtl != NULL; mtl = mtl->getNext()) {
+            mtl->getShape()->show();
         }
         return true;
     } else {
-        for (; mesh != NULL; mesh = mesh->getNext()) {
-            mesh->getShape()->hide();
+        // Hide material:
+        // * "leafAMat"
+        for (; mtl != NULL; mtl = mtl->getNext()) {
+            mtl->getShape()->hide();
         }
         return false;
     }
@@ -107,7 +111,7 @@ BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+        seStartSystem(JA_SE_ITEM_TARGET_OUT);
     }
     return false;
 }
@@ -168,10 +172,10 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
     mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
-    modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Lroot joint
-    modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_Rroot joint
-    modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_LarmB joint
-    modelData->getJointNodePointer(0x09)->setCallBack(daPy_parachuteJointCallback); // skeleton_root_RarmB joint
+    modelData->getJointNodePointer(0x01)->setCallBack(daPy_parachuteJointCallback); // Lroot joint
+    modelData->getJointNodePointer(0x07)->setCallBack(daPy_parachuteJointCallback); // Rroot joint
+    modelData->getJointNodePointer(0x03)->setCallBack(daPy_parachuteJointCallback); // LarmB joint
+    modelData->getJointNodePointer(0x09)->setCallBack(daPy_parachuteJointCallback); // RarmB joint
 }
 
 /* 8014C254-8014C34C       .text procFanSwing_init__9daPy_lk_cFv */
@@ -411,7 +415,7 @@ BOOL daPy_lk_c::procFanGlide() {
         } else {
             if (!dComIfGp_event_runCheck()) {
                 m3574--;
-                if (m3574 == 0 && (!(dComIfGs_getMagic() < 1))) {
+                if (m3574 == 0 && dComIfGs_getMagic() >= 1) {
                     dComIfGp_setItemMagicCount(-1);
                     m3574 = daPy_HIO_fan_c0::m.field_0x8;
                 }

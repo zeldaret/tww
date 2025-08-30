@@ -3,6 +3,7 @@
  * Unused Dummy Actor
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rectangle.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_procname.h"

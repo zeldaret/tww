@@ -253,7 +253,7 @@ s32 J3DModel::createMatPacket(J3DModelData* pModelData, u32 flag) {
         J3DShapePacket* shapePacket = getShapePacket(pModelData->getMaterialNodePointer(i)->getShape()->getIndex());
         mpMatPacket[i].setInitShapePacket(shapePacket);
         mpMatPacket[i].addShapePacket(shapePacket);
-        mpMatPacket[i].setTexture(pModelData->getMaterialTable().getTexture());
+        mpMatPacket[i].setTexture(pModelData->getTexture());
         mpMatPacket[i].mDiffFlag = pModelData->getMaterialNodePointer(i)->mDiffFlag;
 
         if (pModelData->getModelDataType() == 1)
@@ -402,16 +402,16 @@ void J3DModel::calcMaterial() {
     j3dSys.setModel(this);
     j3dSys.setTexture(mModelData->getTexture());
 
-    if (checkFlag(4)) {
-        j3dSys.onFlag(4);
+    if (checkFlag(J3DMdlFlag_SkinPosCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinPosCpu);
     } else {
-        j3dSys.offFlag(4);
+        j3dSys.offFlag(J3DSysFlag_SkinPosCpu);
     }
 
-    if (checkFlag(8)) {
-        j3dSys.onFlag(8);
+    if (checkFlag(J3DMdlFlag_SkinNrmCpu)) {
+        j3dSys.onFlag(J3DSysFlag_SkinNrmCpu);
     } else {
-        j3dSys.offFlag(8);
+        j3dSys.offFlag(J3DSysFlag_SkinNrmCpu);
     }
 
     for (u16 i = 0; i < getModelData()->getMaterialNum(); i++) {
@@ -484,14 +484,14 @@ s32 J3DModel::setSkinDeform(J3DSkinDeform* pSkinDeform, u32 flags) {
 /* 802EE5D8-802EE67C       .text calcAnmMtx__8J3DModelFv */
 void J3DModel::calcAnmMtx() {
     j3dSys.setModel(this);
-    j3dSys.setCurrentMtxCalc(getModelData()->getJointTree().getBasicMtxCalc());
+    j3dSys.setCurrentMtxCalc(getModelData()->getBasicMtxCalc());
 
     if (checkFlag(J3DMdlFlag_Unk00002))
         j3dSys.getCurrentMtxCalc()->init(j3dDefaultScale, j3dDefaultMtx);
     else
         j3dSys.getCurrentMtxCalc()->init(mBaseScale, mBaseTransformMtx);
 
-    getModelData()->getJointTree().getBasicMtxCalc()->recursiveCalc(getModelData()->getJointTree().getRootNode());
+    getModelData()->getBasicMtxCalc()->recursiveCalc(getModelData()->getRootNode());
 }
 
 /* 802EE67C-802EE874       .text calcWeightEnvelopeMtx__8J3DModelFv */
@@ -755,14 +755,14 @@ void J3DModel::prepareShapePackets() {
         J3DShapePacket* pkt = getShapePacket(i);
 
         if (checkFlag(J3DMdlFlag_SkinPosCpu))
-            pShape->onFlag(J3DSysFlag_SkinPosCpu);
+            pShape->onFlag(J3DShpFlag_SkinPosCpu);
         else
-            pShape->offFlag(J3DSysFlag_SkinPosCpu);
+            pShape->offFlag(J3DShpFlag_SkinPosCpu);
 
         if (checkFlag(J3DMdlFlag_SkinNrmCpu) && !pShape->checkFlag(J3DShpFlag_EnableLod))
-            pShape->onFlag(J3DSysFlag_SkinNrmCpu);
+            pShape->onFlag(J3DShpFlag_SkinNrmCpu);
         else
-            pShape->offFlag(J3DSysFlag_SkinNrmCpu);
+            pShape->offFlag(J3DShpFlag_SkinNrmCpu);
 
         if (getMtxCalcMode() == 2)
             pkt->setBaseMtxPtr(&mViewBaseMtx);

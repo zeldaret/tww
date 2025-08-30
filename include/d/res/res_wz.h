@@ -1,7 +1,7 @@
 #ifndef RES_WZ_H
 #define RES_WZ_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum WZ_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

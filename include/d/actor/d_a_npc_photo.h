@@ -23,7 +23,7 @@ public:
 
     request_of_phase_process_class* getPhaseP() { return &mPhs1; }
     void incMsgTbl() {}
-    void isDate() {}
+    bool isDate() { return field_0x9C1 == 4; }
     void nullMsgTbl() {}
     void setMsgTbl(unsigned long*, signed char*) {}
     void setPosFlag(unsigned char) {}

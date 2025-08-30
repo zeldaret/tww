@@ -3,6 +3,7 @@
 // Translation Unit: d_a_arrow_lighteff.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow_lighteff.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_msdan_sub.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -55,28 +56,28 @@ BOOL daObjMsdanSub::Act_c::Draw() {
 namespace daObjMsdanSub {
 namespace {
 /* 00000C54-00000C74       .text Mthd_Create__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000C74-00000C94       .text Mthd_Delete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000C94-00000CB4       .text Mthd_Execute__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000CB4-00000CE0       .text Mthd_Draw__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Draw();
 }
 
 /* 00000CE0-00000D0C       .text Mthd_IsDelete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_MsdanSub = {

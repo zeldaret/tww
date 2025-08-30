@@ -66,7 +66,7 @@ public:
     dEvDtFlag_c& getFlags() { return mFlag; }
 
     int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
-    void cancelStartDemo() { /* TODO */ }
+    void cancelStartDemo() { mException.init(); }
     void setCameraPlay(int v) { mCameraPlay = v; }
     int cameraPlay() { return mCameraPlay; }
 

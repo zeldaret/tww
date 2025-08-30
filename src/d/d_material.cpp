@@ -3,6 +3,7 @@
 // Translation Unit: d_material.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_material.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"

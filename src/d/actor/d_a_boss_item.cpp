@@ -3,6 +3,7 @@
 // Translation Unit: d_a_boss_item.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boss_item.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"

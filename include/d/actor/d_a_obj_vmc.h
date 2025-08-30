@@ -18,7 +18,7 @@ namespace daObjVmc {
             PRM_SWSAVE_S = 8,
         };
 
-        void daObjVmc_ChangeGrow() {}
+        void daObjVmc_ChangeGrow() { mHasTree = true; }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         static BOOL solidHeapCB(fopAc_ac_c*);
@@ -51,6 +51,9 @@ namespace daObjVmc {
         /* 0x434 */ Mtx mMtxBase;
         /* 0x434 */ Mtx mMtxTree;
         /* 0x494 */ dPa_smokeEcallBack mSmoke;
+#if VERSION == VERSION_DEMO
+        /* 0x4B4 */ JPABaseEmitter* m4B4_demo;
+#endif
         /* 0x4B4 */ u8 mLinkRangeCheck;
         /* 0x4B8 */ s32 mState;
         /* 0x4BC */ s32 mTimer;

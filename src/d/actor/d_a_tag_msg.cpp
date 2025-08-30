@@ -3,13 +3,12 @@
 // Translation Unit: d_a_tag_msg.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_msg.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -17,22 +16,22 @@ static u8 msg_mode;
 
 /* 00000078-00000084       .text getEventNo__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getEventNo() {
-    return base.mParameters >> 0x18;
+    return fopAcM_GetParam(this) >> 0x18;
 }
 
 /* 00000084-00000090       .text getSwbit__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit() {
-    return base.mParameters >> 8 & 0xff;
+    return (fopAcM_GetParam(this) >> 8) & 0xff;
 }
 
 /* 00000090-0000009C       .text getSwbit2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getSwbit2() {
-    return base.mParameters >> 0x10 & 0xff;
+    return (fopAcM_GetParam(this) >> 0x10) & 0xff;
 }
 
 /* 0000009C-000000A8       .text getType2__11daTag_Msg_cFv */
 u32 daTag_Msg_c::getType2() {
-    return base.mParameters >> 6 & 3;
+    return (fopAcM_GetParam(this) >> 6) & 3;
 }
 
 /* 000000A8-0000015C       .text myDemoName__11daTag_Msg_cFv */
@@ -40,7 +39,7 @@ const char* daTag_Msg_c::myDemoName() {
     dStage_EventInfo_c *pEventInfo;
     u32 eventNo;
 
-    pEventInfo = dComIfGp_getStageEventInfo();
+    pEventInfo = dComIfGp_getStage().getEventInfo();
     eventNo = getEventNo() & 0xff;
 
     if (getMessage() == 0x1902) {
@@ -68,7 +67,7 @@ BOOL daTag_Msg_c::arrivalTerms() {
     u16 eventFlag;
     swBit = (int)(getSwbit2() & 0xFF);
     eventFlag = getEventFlag();
-    if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, current.roomNo) == 0) {
+    if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this)) == 0) {
         return FALSE;
     }
     else if (eventFlag != 0xffff && dComIfGs_isEventBit(eventFlag) == 0) {
@@ -90,7 +89,7 @@ BOOL daTag_Msg_c::rangeCheck() {
     if (diff.y < 0.0f) {
         diff.y = -diff.y;
     }
-    if (diff.abs2XZ() < scale.x * scale.x * 10000.0f) {
+    if (diff.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f)) {
         if(diff.y <= scale.y * 100.0f) {
             return TRUE;
         }
@@ -115,7 +114,9 @@ BOOL daTag_Msg_c::otherCheck() {
             return FALSE;
         }
     }
-    targetAngle = (s16)(targetAngle + 0x7FFF) - player->current.angle.y;
+
+    s16 r3 = targetAngle + 0x7FFF;
+    targetAngle = r3 - player->current.angle.y;
     if (targetAngle < 0) {
         targetAngle = -targetAngle;
     }
@@ -184,7 +185,7 @@ static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
         a_this->setActio(3);
         swBit = a_this->getSwbit();
         if ((swBit & 0xff) != 0xff) {
-            dComIfGs_onSwitch(swBit,a_this->current.roomNo);
+            dComIfGs_onSwitch(swBit, fopAcM_GetRoomNo(a_this));
         }
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         l_msg = 0;
@@ -241,7 +242,7 @@ cPhs_State daTag_Msg_c::create() {
     swBit = (int)(getSwbit() & 0xFF);
     if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(0x502)) {
         setActio(0);
-    } else if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, current.roomNo) != 0) {
+    } else if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this)) != 0) {
         setActio(0);
     } else {
         setActio(1);

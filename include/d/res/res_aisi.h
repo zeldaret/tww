@@ -1,7 +1,7 @@
 #ifndef RES_AISI_H
 #define RES_AISI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum AISI_RES_FILE_ID {
     /* BDLM */

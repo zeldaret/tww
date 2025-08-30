@@ -3,10 +3,10 @@
 // Translation Unit: d_a_spc_item01.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spc_item01.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -44,11 +44,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */

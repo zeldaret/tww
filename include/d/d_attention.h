@@ -92,7 +92,7 @@ public:
     bool request(fopAc_ac_c*, f32, f32, f32, s16, int);
     bool requestF(fopAc_ac_c*, s16, int);
 
-    fpc_ProcID getLookTarget() { return mLookTargetID; }
+    fopAc_ac_c* getLookTarget() { return convPId(mLookTargetID); }
 
 private:
     /* 0x0 */ fpc_ProcID mRequestActorID;
@@ -226,12 +226,12 @@ public:
     u8 getCatchChgItem() { return mCatch.getChangeItem(); }
     fopAc_ac_c* getCatghTarget() { return mCatch.getCatghTarget(); }
 
-    fopAc_ac_c* getLookTarget() { return mLook[0].convPId(mLook[0].getLookTarget()); }
-    fopAc_ac_c* getLook2Target() { return mLook[1].convPId(mLook[1].getLookTarget()); }
+    fopAc_ac_c* getLookTarget() { return mLook[0].getLookTarget(); }
+    fopAc_ac_c* getLook2Target() { return mLook[1].getLookTarget(); }
     fopAc_ac_c* getZHintTarget() { return mHint.getZHintTarget(); }
 
-    int ZHintRequest(fopAc_ac_c* param_1, int param_2) {
-        return mHint.request(param_1, param_2);
+    int ZHintRequest(fopAc_ac_c* i_actor, int priority) {
+        return mHint.request(i_actor, priority);
     }
 
     int GetLockonCount() { return mLockonCount; }
@@ -257,8 +257,10 @@ public:
     // TODO:
     void LockEdge() {}
     void chkEnemySound() {}
-    void LookRequest(fopAc_ac_c*, f32, f32, f32, s16, int) {}
-    void Look2RequestF(fopAc_ac_c*, s16, int) {}
+    void LookRequest(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_5) {
+        mLook[0].request(reqActor, horizontalDist, upDist, downDist, angle, param_5);
+    }
+    void Look2RequestF(fopAc_ac_c* param_1, s16 param_2, int param_3) {mLook[1].requestF(param_1,param_2,param_3);}
 
 public:
     /* 0x000 */ daPy_lk_c* mpPlayer;

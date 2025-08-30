@@ -3,6 +3,7 @@
 // Translation Unit: d_a_hitobj.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hitobj.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
@@ -74,10 +75,10 @@ static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 100.0f,
-            },
+            }},
         };
         i_this->mStts.Init(0xFF, 0xFF, i_this);
         i_this->mSph.Set(cc_sph_src);

@@ -3,6 +3,7 @@
 // Translation Unit: d_particle_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_particle_name.h"
 
 namespace dPa_name {

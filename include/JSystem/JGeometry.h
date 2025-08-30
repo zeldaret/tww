@@ -42,8 +42,10 @@ struct TVec3 {
 
     TVec3() {}
 
+    template<T>
     TVec3(const T x, const T y, const T z) { set(x, y, z); }
 
+    template <T>
     void set(T x_, T y_, T z_) {
         x = x_;
         y = y_;
@@ -82,12 +84,16 @@ struct TVec3<s16> : public SVec {
 template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
+
+    template<typename f32>
     TVec3(const f32 x, const f32 y, const f32 z) { set(x, y, z); }
+
     TVec3(const Vec& b) { set(b); }
 
     operator Vec*() { return (Vec*)&x; }
     operator const Vec*() const { return (Vec*)&x; }
 
+    template<typename f32>
     void set(const TVec3<f32>& other) {
         x = other.x;
         y = other.y;
@@ -100,6 +106,7 @@ struct TVec3<f32> : public Vec {
         z = vec.z;
     }
 
+    template<typename f32>
     void set(f32 x_, f32 y_, f32 z_) {
         x = x_;
         y = y_;

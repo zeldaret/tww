@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_doguu_demo.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_doguu_demo.h"
 #include "d/res/res_doguud.h"
 #include "d/d_bg_w.h"

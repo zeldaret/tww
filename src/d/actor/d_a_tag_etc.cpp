@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_etc.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_etc.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"

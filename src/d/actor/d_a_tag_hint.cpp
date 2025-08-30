@@ -3,193 +3,773 @@
 // Translation Unit: d_a_tag_hint.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_hint.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_npc_os.h"
 #include "d/d_procname.h"
+#include "d/d_kankyo.h"
 #include "d/d_priority.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "f_op/f_op_actor_mng.h"
+
+static LIGHT_INFLUENCE plight;
+static LIGHT_INFLUENCE elight;
+static fpc_ProcID l_msgId;
+static msg_class* l_msg;
 
 /* 000000EC-000000F8       .text getEventNo__12daTag_Hint_cFv */
-void daTag_Hint_c::getEventNo() {
-    /* Nonmatching */
+u8 daTag_Hint_c::getEventNo() {
+    return (fopAcM_GetParam(this) >> 24) & 0xFF;
 }
 
 /* 000000F8-00000104       .text getSwbit__12daTag_Hint_cFv */
-void daTag_Hint_c::getSwbit() {
-    /* Nonmatching */
+u8 daTag_Hint_c::getSwbit() {
+    return (fopAcM_GetParam(this) >> 8) & 0xFF;
 }
 
 /* 00000104-00000110       .text getSwbit2__12daTag_Hint_cFv */
-void daTag_Hint_c::getSwbit2() {
-    /* Nonmatching */
+u8 daTag_Hint_c::getSwbit2() {
+    return (fopAcM_GetParam(this) >> 16) & 0xFF;
 }
 
 /* 00000110-0000011C       .text getType__12daTag_Hint_cFv */
-void daTag_Hint_c::getType() {
-    /* Nonmatching */
+u8 daTag_Hint_c::getType() {
+    return (fopAcM_GetParam(this) >> 0) & 0x3F;
 }
 
 /* 0000011C-00000128       .text getType2__12daTag_Hint_cFv */
-void daTag_Hint_c::getType2() {
-    /* Nonmatching */
+u8 daTag_Hint_c::getType2() {
+    return (fopAcM_GetParam(this) >> 6) & 3;
 }
 
 /* 00000128-00000134       .text getMessage__12daTag_Hint_cFv */
-void daTag_Hint_c::getMessage() {
-    /* Nonmatching */
+u16 daTag_Hint_c::getMessage() {
+    return home.angle.x;
 }
 
 /* 00000134-00000140       .text getEventFlag__12daTag_Hint_cFv */
-void daTag_Hint_c::getEventFlag() {
-    /* Nonmatching */
+u16 daTag_Hint_c::getEventFlag() {
+    return home.angle.z;
 }
 
 /* 00000140-00000330       .text arrivalTerms__12daTag_Hint_cFv */
-void daTag_Hint_c::arrivalTerms() {
-    /* Nonmatching */
+s32 daTag_Hint_c::arrivalTerms() {
+    s32 uVar1 = getSwbit2();
+    u16 uVar4 = getEventFlag();
+    u8 uVar2 = getType();
+
+    switch (uVar2) {
+    case 8:
+    case 10:
+    case 16:
+        break;
+
+    default:
+        if (uVar1 != 0xff && !dComIfGs_isSwitch(uVar1, fopAcM_GetRoomNo(this))) {
+            return 0;
+        }
+        break;
+    }
+
+    switch (uVar2) {
+    case 2:
+    case 8:
+    case 10:
+        if (uVar4 != 0xffff && !dComIfGs_isEventBit(uVar4)) {
+            return 0;
+        }
+        break;
+    case 0x11:
+        if (!dComIfGs_isEventBit(0x4020)) {
+            return 0;
+        }
+    }
+
+    switch (uVar2) {
+    case 1:
+        m2A0 = 600;
+        break;
+    case 4:
+        m2A0 = 0xe10;
+        break;
+    case 8:
+        m2A0 = 0xe10;
+        break;
+    case 9:
+        if (!dComIfGs_isTmpBit(0x308)) {
+            return 0;
+        }
+        m2A0 = 600;
+        break;
+    case 0xb:
+        if (!daNpc_Os_c::isPlayerRoom_Goat() || dComIfGp_roomControl_getStayNo() != fopAcM_GetRoomNo(this)) {
+            return 0;
+        }
+        break;
+    case 0xc:
+        m2A0 = 0x708;
+        break;
+    case 0xe:
+        m2A0 = 0x708;
+        break;
+    case 0xf:
+        m2A0 = 900;
+        break;
+
+    default:
+        m2A0 = 0;
+        break;
+    }
+    return TRUE;
 }
 
 /* 00000330-000005E8       .text waitTerms__12daTag_Hint_cFv */
-void daTag_Hint_c::waitTerms() {
-    /* Nonmatching */
+s32 daTag_Hint_c::waitTerms() {
+    s32 uVar1 = getSwbit();
+    s32 uVar2 = getSwbit2();
+    u16 uVar5 = getEventFlag();
+    u8 uVar3 = getType();
+
+    if (uVar1 != 0xff && dComIfGs_isSwitch(uVar1, fopAcM_GetRoomNo(this))) {
+        return 1;
+    }
+
+    switch (uVar3) {
+    case 0:
+    case 3:
+    case 4:
+    case 5:
+        if (uVar5 != 0xffff && dComIfGs_isEventBit(uVar5)) {
+            return 1;
+        }
+        break;
+    }
+
+    switch (uVar3) {
+    case 1:
+        if (moveBoxCheck()) {
+            if (uVar1 != 0xff) {
+                dComIfGs_onSwitch(uVar1, fopAcM_GetRoomNo(this));
+            }
+            dComIfGs_onEventBit(0x404);
+            return 1;
+        }
+        break;
+    case 6:
+        if (dComIfGs_isEventBit(0x2a10)) {
+#if VERSION == VERSION_DEMO
+            if (uVar1 != 0xFF) {
+                dComIfGs_onSwitch(uVar1, fopAcM_GetRoomNo(this));
+            }
+#endif
+            return 1;
+        }
+        break;
+    case 7:
+        if (uVar2 != 0xff && !dComIfGs_isSwitch(uVar2, fopAcM_GetRoomNo(this))) {
+            return 1;
+        }
+        break;
+    case 9:
+        if (dComIfGs_isTmpBit(0x304)) {
+            return 1;
+        }
+
+        if (dComIfGs_isEventBit(0x1801)) {
+            return 1;
+        }
+        break;
+
+    case 8:
+    case 10:
+    case 0x10:
+        if ((uVar2 != 0xff) && dComIfGs_isSwitch(uVar2, fopAcM_GetRoomNo(this))) {
+            return 1;
+        }
+        break;
+
+    case 0xb:
+        if (dComIfGs_getItem(dItem_BOMB_10_e) != dItem_NONE_e) {
+            return 1;
+        }
+        break;
+    case 0xd:
+        if (dComIfGs_isStageBossEnemy()) {
+            return 1;
+        }
+        break;
+    case 0xe:
+        if (dComIfGs_isEventBit(0x3c01)) {
+            return 1;
+        }
+        break;
+    case 0xf:
+        if (dComIfGs_isEventBit(0x3f20)) {
+            return 1;
+        }
+        break;
+    case 0x11:
+        if (dComIfGs_checkGetItem(dItem_POWER_BRACELETS_e)) {
+            return 1;
+        }
+        break;
+    }
+    return 0;
 }
 
 /* 000005E8-0000069C       .text rangeCheck_local__12daTag_Hint_cFP4cXyz */
-void daTag_Hint_c::rangeCheck_local(cXyz*) {
-    /* Nonmatching */
+BOOL daTag_Hint_c::rangeCheck_local(cXyz* pos) {
+    cXyz sp20 = *pos - current.pos;
+    if (sp20.y < 0.0f) {
+        sp20.y = -sp20.y;
+    }
+
+    if (sp20.abs2XZ() < m2A8 && sp20.y <= m2AC) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 0000069C-000006CC       .text rangeCheck__12daTag_Hint_cFv */
-void daTag_Hint_c::rangeCheck() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::rangeCheck() {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+
+    return rangeCheck_local(&player->current.pos);
 }
 
 /* 000006CC-0000087C       .text otherCheck__12daTag_Hint_cFv */
-void daTag_Hint_c::otherCheck() {
-    /* Nonmatching */
+s32 daTag_Hint_c::otherCheck() {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    u8 type = getType();
+
+    switch (type) {
+    case 4:
+    case 8:
+    case 9:
+    case 12:
+        if (m2A0 > 0) {
+            m2A0--;
+            return 0;
+        }
+        break;
+    }
+
+    if (!rangeCheck()) {
+        return 0;
+    }
+
+    switch (type) {
+    case 0:
+        if (player->checkGrabBarrel() || player->checkGrabWear()) {
+            return 0;
+        }
+        break;
+
+    case 1:
+        dComIfGs_onEventBit(0x404);
+        if (dComIfGs_isEventBit(0x401) == 0) {
+            return 0;
+        }
+        break;
+
+    case 6:
+        if (dComIfGs_getEventReg(0xa507) < 3) {
+            return 0;
+        }
+        break;
+
+    case 14:
+    case 15:
+        if (dComIfGp_event_runCheck()) {
+            return 0;
+        }
+        break;
+    }
+
+    BOOL uVar3;
+    if (m2A0 > 0) {
+        m2A0--;
+        uVar3 = 0;
+    } else {
+        uVar3 = 1;
+    }
+    return uVar3;
 }
 
 /* 0000087C-000008B8       .text getPriority__12daTag_Hint_cFv */
-void daTag_Hint_c::getPriority() {
-    /* Nonmatching */
+s32 daTag_Hint_c::getPriority() {
+    u32 uVar2;
+    switch (getType()) {
+    case 2:
+#if VERSION == VERSION_DEMO
+        uVar2 = PRIO_OVERLAP8;
+#else
+        uVar2 = PRIO_1EA;
+#endif
+        break;
+    default:
+        uVar2 = PRIO_1FF;
+        break;
+    }
+    return uVar2;
 }
 
 /* 000008B8-000009D8       .text makeEventId__12daTag_Hint_cFv */
 void daTag_Hint_c::makeEventId() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+
+    fpc_ProcID uVar1 = player->getGrabActorID();
+    u8 uVar2 = getType();
+    if (uVar2 == 10) {
+        m2A4 = dComIfGp_evmng_getEventIdx("HIRL_HINT", getEventNo());
+        m2A3 = false;
+    } else if (fopAcM_SearchByID(uVar1) != NULL) {
+        m2A4 = dComIfGp_evmng_getEventIdx("DEFAULT_HINT2", getEventNo());
+        m2A3 = true;
+    } else {
+        m2A4 = dComIfGp_evmng_getEventIdx("DEFAULT_HINT", getEventNo());
+        m2A3 = false;
+    }
 }
 
 /* 000009D8-00000A38       .text initLight__12daTag_Hint_cFv */
 void daTag_Hint_c::initLight() {
-    /* Nonmatching */
+    plight.mColor.r = 0x5c;
+    plight.mColor.g = 0xae;
+    plight.mColor.b = 0xff;
+    plight.mPower = 139.7f;
+    plight.mFluctuation = 93.8f;
+    elight.mColor.r = 0xba;
+    elight.mColor.g = 0xff;
+    elight.mColor.b = 0xff;
+    elight.mPower = 270.7f;
+    elight.mFluctuation = 93.8f;
 }
 
 /* 00000A38-00000B50       .text setLightPos__12daTag_Hint_cFv */
 void daTag_Hint_c::setLightPos() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+
+    plight.mPos.set(player->getRightHandPos().x, player->getRightHandPos().y, player->getRightHandPos().z);
+
+    plight.mPos.y += 5.66f;
+    plight.mPos.x += cM_scos(player->shape_angle.y) * 10.25f + cM_ssin(player->shape_angle.y) * 11.13f;
+    plight.mPos.z += -cM_ssin(player->shape_angle.y) * 10.25f + cM_scos(player->shape_angle.y) * 11.13f;
+
+    elight.mPos.set(plight.mPos);
 }
 
 /* 00000B50-00000B9C       .text makeLight__12daTag_Hint_cFv */
 void daTag_Hint_c::makeLight() {
-    /* Nonmatching */
+    initLight();
+    setLightPos();
+    dKy_plight_priority_set(&plight);
+    dKy_efplight_set(&elight);
 }
 
 /* 00000B9C-00000BD0       .text deleteLight__12daTag_Hint_cFv */
 void daTag_Hint_c::deleteLight() {
-    /* Nonmatching */
+    dKy_plight_cut(&plight);
+    dKy_efplight_cut(&elight);
 }
 
 /* 00000BD0-00000C78       .text findObjectCallBack__FP10fopAc_ac_cPv */
-void findObjectCallBack(fopAc_ac_c*, void*) {
-    /* Nonmatching */
+void* findObjectCallBack(fopAc_ac_c* actor, void* v_this) {
+    daTag_Hint_c* i_this = (daTag_Hint_c*)v_this;
+
+    if (fopAcM_GetProfName(actor) == PROC_Obj_Movebox && i_this->rangeCheck_local(&actor->home.pos)) {
+        cXyz sp14 = actor->current.pos - actor->home.pos;
+        if (sp14.abs2XZ() > 0.0f) {
+            return actor;
+        }
+    }
+    return NULL;
 }
 
 /* 00000C78-00000CAC       .text moveBoxCheck__12daTag_Hint_cFv */
-void daTag_Hint_c::moveBoxCheck() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::moveBoxCheck() {
+    if (fopAcM_Search((void* (*)(void*, void*))findObjectCallBack, (void*)this) != NULL) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000CAC-000010F0       .text setPlayerAngle__12daTag_Hint_cFv */
 void daTag_Hint_c::setPlayerAngle() {
-    /* Nonmatching */
+    static s16 search_angle_table[] = {0x00, 0x2000, 0xE000, 0x4000, 0xC000, 0x6000, 0xA000, 0x7FFF};
+    static s16 search_angle_table_grab[] = {0x4000, 0xC000, 0x6000, 0xA000, 0x7FFF, 0xE000, 0x2000, 0x00};
+
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    dBgS_CamLinChk camLinChk;
+    cXyz sp14 = player->attention_info.position;
+
+    s16 uVar3;
+    for (s32 i = 0; i < (s32)ARRAY_SIZE(search_angle_table); i++) {
+        if (!m2A3) {
+            uVar3 = player->shape_angle.y + search_angle_table[i];
+        } else {
+            uVar3 = player->shape_angle.y + search_angle_table_grab[i];
+        }
+
+        cXyz sp08 = sp14;
+
+        sp08.x += cM_ssin(uVar3) * 120.0f;
+        sp08.z += cM_scos(uVar3) * 120.0f;
+        camLinChk.Set(&sp14, &sp08, NULL);
+
+        if (!dComIfG_Bgsp()->LineCross(&camLinChk)) {
+            player->changeDemoMoveAngle(uVar3);
+            return;
+        }
+    }
+    player->changeDemoMoveAngle(player->shape_angle.y);
 }
 
 /* 0000167C-00001744       .text darkProc__12daTag_Hint_cFv */
 void daTag_Hint_c::darkProc() {
-    /* Nonmatching */
+    dKy_set_vrboxcol_ratio(m2B0);
+    dKy_set_fogcol_ratio(m2B0);
+
+    f32 fVar1 = (m2B0 - 0.15f) * 1.1764705f;
+    if (fVar1 > 0.5f) {
+        f32 tmp = 2.0f - fVar1 * 2.0f;
+        dKy_fog_startendz_set(300.0f, 2000.0f, tmp);
+    } else {
+        dKy_set_bgcol_ratio(fVar1 * 0.85f * 2.0f + 0.15f);
+        dKy_fog_startendz_set(300.0f, fVar1 * 3000.0f + 500.0f, 1.0f);
+    }
 }
 
 /* 00001744-000018A4       .text startProc__12daTag_Hint_cFv */
 void daTag_Hint_c::startProc() {
-    /* Nonmatching */
+    s32 uVar2 = getSwbit();
+    u8 type = getType();
+    switch (type) {
+    case 0:
+        dComIfGs_onEventBit(0x401);
+        break;
+#if VERSION > VERSION_DEMO
+    case 6:
+#endif
+    case 12:
+        break;
+
+    default:
+        if (uVar2 != 0xff) {
+            dComIfGs_onSwitch(uVar2, fopAcM_GetRoomNo(this));
+        }
+        break;
+    }
+
+    m29C = dComIfGp_evmng_getMyStaffId("TAGHINT", NULL, 0);
+    m2B0 = 1.0f;
+
+    if (type != 10 && !(getType2() & 1)) {
+        mDoAud_seStart(JA_SE_ITM_OMAMORI_ST_TALK);
+        setPlayerAngle();
+    }
+
+    u16 uVar5 = getEventFlag();
+    switch (type) {
+    case 5:
+        dComIfGs_onEventBit(uVar5);
+        break;
+    }
 }
 
 /* 000018A4-000018AC       .text next_msgStatus__12daTag_Hint_cFPUl */
-void daTag_Hint_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daTag_Hint_c::next_msgStatus(unsigned long*) {
+    return 16;
 }
 
 /* 000018AC-000018B4       .text getMsg__12daTag_Hint_cFv */
-void daTag_Hint_c::getMsg() {
-    /* Nonmatching */
+u32 daTag_Hint_c::getMsg() {
+    return mMsgNo;
 }
 
 /* 000018B4-000018C0       .text talkInit__12daTag_Hint_cFv */
 void daTag_Hint_c::talkInit() {
-    /* Nonmatching */
+    m294 = 0;
 }
 
 /* 000018C0-00001A00       .text talk__12daTag_Hint_cFv */
-void daTag_Hint_c::talk() {
-    /* Nonmatching */
+u16 daTag_Hint_c::talk() {
+    u16 sVar3 = 0xff;
+    if (m294 == 0) {
+        l_msgId = fpcM_ERROR_PROCESS_ID_e;
+        m290 = getMsg();
+        m294 = 1;
+    } else if (m294 != -1) {
+        if (l_msgId == fpcM_ERROR_PROCESS_ID_e) {
+            l_msgId = fopMsgM_messageSet(m290, this);
+        } else {
+            switch (m294) {
+            case 1:
+                l_msg = fopMsgM_SearchByID(l_msgId);
+                if (l_msg != NULL) {
+                    m294 = 2;
+                }
+                break;
+            case 2:
+                sVar3 = l_msg->mStatus;
+                if (sVar3 == 0xe) {
+                    l_msg->mStatus = next_msgStatus(&m290);
+                    if (l_msg->mStatus == 0xf) {
+                        fopMsgM_messageSet(m290);
+                    }
+                } else if (sVar3 == 0x12) {
+                    l_msg->mStatus = 0x13;
+                    m294 = -1;
+                }
+                break;
+            }
+        }
+    }
+    return sVar3;
 }
 
 /* 00001A00-00001D98       .text actionEvent__12daTag_Hint_cFv */
-void daTag_Hint_c::actionEvent() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::actionEvent() {
+    static char* action_table[] = {
+        "WAIT",
+        "MESSAGE",
+        "MESSAGE2",
+        "SURPRIS",
+        "MESSAGE3",
+    };
+
+    s32 iVar2 = dComIfGp_evmng_getMyActIdx(m29C, action_table, ARRAY_SIZE(action_table), 0, 0);
+    if (dComIfGp_evmng_getIsAddvance(m29C)) {
+        setFlag(1);
+
+        switch (iVar2) {
+        case 1:
+            talkInit();
+            makeLight();
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_TETLA);
+            break;
+
+        case 2:
+            talkInit();
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_ST_TALK);
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_TETLA);
+            break;
+
+        case 3:
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_BLINK);
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->voiceStart(0x1c);
+            break;
+
+        case 4:
+            talkInit();
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_TETLA);
+            break;
+        }
+    }
+
+    u16 sVar3;
+    switch (iVar2) {
+    case 1:
+        sVar3 = talk();
+        if (sVar3 == 0x12) {
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_ED_TALK);
+            dComIfGp_evmng_cutEnd(m29C);
+            setActio(1);
+            deleteLight();
+            dComIfGp_event_reset();
+        }
+
+        if (m2B0 > 0.15f && iVar2 == 1) {
+            if (m2B0 > 0.2f) {
+                m2B0 -= 0.05f;
+            } else {
+                m2B0 = 0.15f;
+            }
+        }
+        darkProc();
+        break;
+
+    case 2:
+        sVar3 = talk();
+        if (chkFlag(1)) {
+            if (sVar3 != 0x12) {
+                break;
+            }
+            mDoAud_seStart(JA_SE_ITM_OMAMORI_ED_TALK);
+            mMsgNo = 0x454;
+            dComIfGp_evmng_cutEnd(m29C);
+        } else {
+            dComIfGp_evmng_cutEnd(m29C);
+        }
+        break;
+
+    case 4:
+        sVar3 = talk();
+        if (sVar3 != 0x12) {
+            break;
+        }
+        setActio(0);
+        dComIfGp_event_reset();
+        break;
+
+    default:
+        dComIfGp_evmng_cutEnd(m29C);
+        break;
+    }
+
+    return TRUE;
 }
 
 /* 00001D98-00001E7C       .text actionHunt__12daTag_Hint_cFv */
-void daTag_Hint_c::actionHunt() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::actionHunt() {
+    if (eventInfo.checkCommandTalk()) {
+        setActio(4);
+        startProc();
+        mMsgNo = getMessage();
+    } else {
+        if (waitTerms()) {
+            setActio(0);
+        } else if (otherCheck()) {
+            makeEventId();
+            eventInfo.setEventId(m2A4);
+            eventInfo.setToolId(getEventNo());
+            if (getType2() & 1) {
+                fopAcM_orderSpeakEvent(this);
+            } else {
+                dComIfGp_att_ZHintRequest(this, getPriority());
+            }
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        }
+    }
+    return TRUE;
 }
 
 /* 00001E7C-00001F04       .text actionArrival__12daTag_Hint_cFv */
-void daTag_Hint_c::actionArrival() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::actionArrival() {
+    getSwbit();
+    if (waitTerms()) {
+        setActio(0);
+    } else if (arrivalTerms()) {
+        makeEventId();
+        eventInfo.setEventId(m2A4);
+        eventInfo.setToolId(getEventNo());
+        setActio(3);
+        actionHunt();
+    }
+    return TRUE;
 }
 
 /* 00001F04-00001F60       .text actionLight__12daTag_Hint_cFv */
-void daTag_Hint_c::actionLight() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::actionLight() {
+    if (m2B0 < 0.95f) {
+        m2B0 += 0.05f;
+    } else {
+        m2B0 = 1.0f;
+        setActio(0);
+    }
+    darkProc();
+    return TRUE;
 }
 
 /* 00001F60-00001F68       .text actionWait__12daTag_Hint_cFv */
-void daTag_Hint_c::actionWait() {
-    /* Nonmatching */
+BOOL daTag_Hint_c::actionWait() {
+    return TRUE;
+}
+
+BOOL daTag_Hint_c::draw() {
+    return TRUE;
 }
 
 /* 00001F68-00001F70       .text daTag_Hint_Draw__FP12daTag_Hint_c */
-static BOOL daTag_Hint_Draw(daTag_Hint_c*) {
-    /* Nonmatching */
+static BOOL daTag_Hint_Draw(daTag_Hint_c* i_this) {
+    return i_this->draw();
+}
+
+BOOL daTag_Hint_c::execute() {
+    switch (mCurProc) {
+    case 0:
+        actionWait();
+        break;
+
+    case 1:
+        actionLight();
+        break;
+
+    case 2:
+        actionArrival();
+        break;
+
+    case 3:
+        actionHunt();
+        break;
+
+    case 4:
+        actionEvent();
+        break;
+    }
+    return TRUE;
 }
 
 /* 00001F70-00001FE4       .text daTag_Hint_Execute__FP12daTag_Hint_c */
-static BOOL daTag_Hint_Execute(daTag_Hint_c*) {
-    /* Nonmatching */
+static BOOL daTag_Hint_Execute(daTag_Hint_c* i_this) {
+    return i_this->execute();
 }
 
 /* 00001FE4-00001FEC       .text daTag_Hint_IsDelete__FP12daTag_Hint_c */
 static BOOL daTag_Hint_IsDelete(daTag_Hint_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001FEC-00002074       .text daTag_Hint_Delete__FP12daTag_Hint_c */
-static BOOL daTag_Hint_Delete(daTag_Hint_c*) {
-    /* Nonmatching */
+static BOOL daTag_Hint_Delete(daTag_Hint_c* i_this) {
+    i_this->~daTag_Hint_c();
+
+    switch (i_this->getType()) {
+    case 9:
+        dComIfGs_offTmpBit(0x308);
+        break;
+
+    case 17:
+        dComIfGs_offEventBit(0x4020);
+        break;
+    }
+    return TRUE;
+}
+
+cPhs_State daTag_Hint_c::create() {
+    fopAcM_SetupActor(this, daTag_Hint_c);
+
+    m2A8 = SQUARE(scale.x) * SQUARE(100.0f);
+    m2AC = scale.y * 100.0f;
+
+    s32 uVar2 = getSwbit();
+    switch (getType()) {
+    case 1:
+        if (dComIfGs_isEventBit(0x404) && uVar2 != 0xff) {
+            dComIfGs_onSwitch(uVar2, fopAcM_GetRoomNo(this));
+        }
+        break;
+    }
+
+    if (waitTerms()) {
+        setActio(0);
+    } else {
+        setActio(2);
+    }
+
+    shape_angle.z = 0;
+    shape_angle.x = 0;
+    current.angle.z = 0;
+    current.angle.x = 0;
+    m2A0 = 0;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00002074-00002194       .text daTag_Hint_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Hint_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Hint_Create(fopAc_ac_c* a_this) {
+    return ((daTag_Hint_c*)a_this)->create();
 }
 
 static actor_method_class l_daTag_Hint_Method = {

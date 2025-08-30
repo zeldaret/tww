@@ -9,7 +9,7 @@ public:
     void getEyePos() {}
     void seStart(u32) {}
     void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
-    void setCanonGameResult(u8) {}
+    static void setCanonGameResult(u8 result) { canon_game_result = result; }
 
     void set_mtx();
     void initTexPatternAnm(bool);
@@ -39,9 +39,9 @@ public:
     void wait_action(void*);
     void event_wait_action(void*);
     cPhs_State _create();
-    bool _delete();
-    bool _execute();
-    bool _draw();
+    BOOL _delete();
+    BOOL _execute();
+    BOOL _draw();
 
     static void init() {
         canon_game_result = 0;

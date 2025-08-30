@@ -3,6 +3,7 @@
 // Translation Unit: d_letter.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_letter.h"
 #include "d/d_com_inf_game.h"
 
@@ -64,4 +65,3 @@ void dLetter_autoStock(u16 idx) {
 bool dLetter_isDelivery(u16 idx) {
     return !dLetter_isNoSend(idx);
 }
-

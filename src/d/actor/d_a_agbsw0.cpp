@@ -3,12 +3,10 @@
 // Translation Unit: d_a_agbsw0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "global.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 #include "d/actor/d_a_agbsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -24,6 +22,7 @@
 #include "d/actor/d_a_npc_os.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
+#include "d/actor/d_a_boko.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -48,11 +47,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 100.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 /* 00004838-00004B2C       .text draw__10daAgbsw0_cFv */
@@ -1660,7 +1659,7 @@ BOOL daAgbsw0_c::HitCheck(fopAc_ac_c* param_1) {
             f32 x_diff = std::abs(param_1->current.pos.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1->current.pos.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }
@@ -1685,7 +1684,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
             f32 x_diff = fabs(param_1.x - current.pos.x);
             if(x_diff < scale.x) {
                 f32 z_diff = fabs(param_1.z - current.pos.z);
-                if(z_diff < scale.x && x_diff * x_diff + z_diff * z_diff < scale.x * scale.x) {
+                if(z_diff < scale.x && SQUARE(x_diff) + SQUARE(z_diff) < SQUARE(scale.x)) {
                     return true;
                 }
             }
@@ -1882,7 +1881,8 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x1D:
-            if(dComIfGs_getMaxMagic() != 0 && !dComIfGs_getMagic) {
+            // @bug They meant to call this function
+            if(dComIfGs_getMaxMagic() != 0 && dComIfGs_getMagic == 0) {
                 return FALSE;
             }
 
@@ -1986,13 +1986,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x2D:
-            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(!daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 
             break;
         case 0x2E:
-            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(1)) {
+            if(daPy_getPlayerLinkActorClass()->checkGrabWeapon(daBoko_c::Type_MACHETE_e)) {
                 return FALSE;
             }
 

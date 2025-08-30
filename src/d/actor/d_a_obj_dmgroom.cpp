@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dmgroom.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dmgroom.h"
 #include "d/res/res_dmgroom.h"
 #include "f_op/f_op_actor_mng.h"

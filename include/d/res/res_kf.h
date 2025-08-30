@@ -1,7 +1,7 @@
 #ifndef RES_KF_H
 #define RES_KF_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KF_RES_FILE_ID {
     /* BDL */

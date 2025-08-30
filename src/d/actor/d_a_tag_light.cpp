@@ -3,125 +3,569 @@
 // Translation Unit: d_a_tag_light.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_light.h"
+#include "d/res/res_mspot.h"
+#include "d/d_s_play.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-/* 00000078-000000D0       .text get_cc_r__Q210daTagLight5Act_cCFv */
-void daTagLight::Act_c::get_cc_r() const {
-    /* Nonmatching */
-}
-
-/* 000000D0-000000F4       .text solidHeapCB__Q210daTagLight5Act_cFP10fopAc_ac_c */
-void daTagLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
-}
-
-/* 000000F4-00000314       .text create_heap__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::create_heap() {
-    /* Nonmatching */
-}
-
-/* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
-cPhs_State daTagLight::Act_c::_create() {
-    /* Nonmatching */
-}
-
-/* 000008A8-000008E4       .text _delete__Q210daTagLight5Act_cFv */
-bool daTagLight::Act_c::_delete() {
-    /* Nonmatching */
-}
-
-/* 000008E4-000009B8       .text chk_sw__Q210daTagLight5Act_cCFv */
-void daTagLight::Act_c::chk_sw() const {
-    /* Nonmatching */
-}
-
-/* 000009B8-00000A10       .text chk_sch__Q210daTagLight5Act_cCFv */
-void daTagLight::Act_c::chk_sch() const {
-    /* Nonmatching */
-}
-
-/* 00000A10-00000A88       .text chk_light__Q210daTagLight5Act_cCFv */
-void daTagLight::Act_c::chk_light() const {
-    /* Nonmatching */
-}
-
-/* 00000A88-00000B08       .text get_cross_plane_line__10daTagLightFP4cXyzffffffffff */
-void daTagLight::get_cross_plane_line(cXyz*, float, float, float, float, float, float, float, float, float, float) {
-    /* Nonmatching */
-}
-
-/* 00000B08-00000BCC       .text get_base_model_light_start_offset__Q210daTagLight5Act_cFP4cXyz */
-void daTagLight::Act_c::get_base_model_light_start_offset(cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00000BCC-0000111C       .text get_projection_info__Q210daTagLight5Act_cFP4cXyzP4cXyzP4cXyzPC4cXyzPC4cXyz */
-void daTagLight::Act_c::get_projection_info(cXyz*, cXyz*, cXyz*, const cXyz*, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 000016A8-00001A30       .text make_projection_mtx__Q210daTagLight5Act_cFPC4cXyzPC4cXyzPC4cXyzPC4cXyz */
-void daTagLight::Act_c::make_projection_mtx(const cXyz*, const cXyz*, const cXyz*, const cXyz*) {
-    /* Nonmatching */
-}
-
-/* 00001A30-00001AE0       .text set_spot_mtx__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::set_spot_mtx() {
-    /* Nonmatching */
-}
-
-/* 00001AE0-00001B00       .text set_spot__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::set_spot() {
-    /* Nonmatching */
-}
-
-/* 00001B00-00001B20       .text init_spot__Q210daTagLight5Act_cFv */
-void daTagLight::Act_c::init_spot() {
-    /* Nonmatching */
-}
-
-/* 00001B20-00001C90       .text _execute__Q210daTagLight5Act_cFv */
-bool daTagLight::Act_c::_execute() {
-    /* Nonmatching */
-}
-
-/* 00001C90-00001D20       .text set_material__Q210daTagLight5Act_cFP11J3DMaterialUc */
-void daTagLight::Act_c::set_material(J3DMaterial*, unsigned char) {
-    /* Nonmatching */
-}
-
-/* 00001D20-00001EAC       .text _draw__Q210daTagLight5Act_cFv */
-bool daTagLight::Act_c::_draw() {
-    /* Nonmatching */
-}
+#include "d/d_kankyo.h"
+#include "d/d_bg_s_lin_chk.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
 
 namespace daTagLight {
 namespace {
+struct Attr_c {
+    /* 0x00 */ u8 m00;
+    /* 0x01 */ u8 m01;
+    /* 0x02 */ u8 m02;
+    /* 0x03 */ u8 m03;
+    /* 0x04 */ u8 m04;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ u8 m0C;
+    /* 0x0D */ u8 m0D[0x20 - 0x0D];
+    /* 0x20 */ f32 m20;
+}; // size = 0x24
+
+static const Attr_c L_attr = {
+    0xFF,
+    0xFF,
+    0xFF,
+    0x04,
+    0x04,
+    1.05f,
+    0x08,
+};
+
+inline const Attr_c& attr() {
+    return L_attr;
+}
+} // namespace
+
+const char Act_c::M_arcname[] = "Mspot";
+
+const dCcD_SrcSph Act_c::M_sph_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_LIGHT,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 4.0f,
+    }},
+};
+
+const f32 Act_c::M_alpha_spd[] = {0.06666667f, 0.033333335f, 0.016666668f, 1.0f};
+const s16 Act_c::M_cc_r[] = {20, 40, 60, 4};
+
+/* 00000078-000000D0       .text get_cc_r__Q210daTagLight5Act_cCFv */
+f32 Act_c::get_cc_r() const {
+    return M_cc_r[prm_get_ccR()];
+}
+
+/* 000000D0-000000F4       .text solidHeapCB__Q210daTagLight5Act_cFP10fopAc_ac_c */
+BOOL Act_c::solidHeapCB(fopAc_ac_c* a_this) {
+    return ((Act_c*)a_this)->create_heap();
+}
+
+/* 000000F4-00000314       .text create_heap__Q210daTagLight5Act_cFv */
+bool Act_c::create_heap() {
+    f32 tmp = (attr().m0C + 0.5f) * 0.06666667f;
+    f32 ratio = prm_get_coneRatio();
+    ratio = ratio * 0.06666667f;
+    s16 sVar2;
+    s16 sVar8;
+
+    if (ratio < tmp) {
+        sVar2 = MSPOT_BDL_MSPOCN;
+        sVar8 = MSPOT_BTK_MSPOCN;
+    } else {
+        sVar2 = MSPOT_BDL_MSPOT;
+        sVar8 = MSPOT_BTK_MSPOT;
+    }
+
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, sVar2));
+    JUT_ASSERT(463, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+
+    BOOL bVar1 = FALSE;
+    J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, sVar8));
+    JUT_ASSERT(475, btk_data != NULL);
+
+    mpBtk = new mDoExt_btkAnm();
+    if (mpBtk != NULL && mpBtk->init(modelData, btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        bVar1 = TRUE;
+    }
+
+    bool ret = false;
+    if (mpModel != NULL && bVar1) {
+        ret = true;
+    }
+    return ret;
+}
+
+/* 0000035C-000006F0       .text _create__Q210daTagLight5Act_cFv */
+cPhs_State Act_c::_create() {
+#if VERSION > VERSION_DEMO
+    fopAcM_SetupActor(this, Act_c);
+#endif
+
+    m2A0 = prm_get_type();
+    cXyz sp08;
+    if (m2A0 == 1) {
+        sp08.set(scale.x, scale.y * 2.0f, scale.z);
+    } else if (m2A0 == 0) {
+        sp08.set(scale.x * 2.0f, scale.y * 2.0f, scale.z * 2.0f);
+    } else {
+        sp08.set(scale);
+    }
+    m4A4.x = sp08.x;
+    m4A4.y = sp08.y;
+    m4A4.z = sp08.z;
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(this, Act_c);
+#endif
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::scaleM(sp08);
+    cMtx_copy(mDoMtx_stack_c::get(), m2A4);
+    MTXInverse(m2A4, m2D4);
+
+    cPhs_State PVar2;
+    if (m2A0 == 1) {
+        PVar2 = dComIfG_resLoad(&mPhase, M_arcname);
+        if (PVar2 == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+            u32 heapSize = 0x0;
+#else
+            u32 heapSize = 0xAC0;
+#endif
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, heapSize)) {
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::ZXYrotM(shape_angle);
+                mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+                mpModel->setBaseScale(sp08);
+                init_spot();
+            } else {
+                PVar2 = cPhs_ERROR_e;
+            }
+        }
+    } else {
+        PVar2 = cPhs_COMPLEATE_e;
+    }
+
+    if (PVar2 == cPhs_COMPLEATE_e) {
+        fopAcM_SetMtx(this, m2A4);
+        fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);
+        if (m2A0 == 2) {
+            m304 = false;
+        } else {
+            m304 = chk_sw() && chk_sch();
+        }
+
+        if (m304) {
+            m308 = 1.0f;
+        } else {
+            m308 = 0.0f;
+        }
+        m306 = 0;
+
+        if (m2A0 == 2) {
+            mStts.Init(0xff, 0xff, this);
+            mSph.Set(M_sph_src);
+            mSph.SetStts(&mStts);
+            mSph.SetC(current.pos);
+            mSph.SetR(get_cc_r());
+        }
+    }
+    return PVar2;
+}
+
+/* 000008A8-000008E4       .text _delete__Q210daTagLight5Act_cFv */
+bool Act_c::_delete() {
+    if (m2A0 == 1) {
+        dComIfG_resDelete(&mPhase, M_arcname);
+    }
+    return true;
+}
+
+/* 000008E4-000009B8       .text chk_sw__Q210daTagLight5Act_cCFv */
+bool Act_c::chk_sw() const {
+    s32 switchIndex = prm_get_swSave();
+    s32 switchIndex_00 = prm_get_swSave2();
+    bool cVar2;
+    if (switchIndex == 0xff) {
+        cVar2 = true;
+    } else {
+        cVar2 = fopAcM_isSwitch((fopAc_ac_c*)this, switchIndex);
+    }
+
+    bool bVar1;
+    if (switchIndex_00 == 0xff) {
+        bVar1 = false;
+    } else {
+        bVar1 = fopAcM_isSwitch((fopAc_ac_c*)this, switchIndex_00);
+    }
+
+    if (bVar1) {
+        return false;
+    }
+    return cVar2;
+}
+
+/* 000009B8-00000A10       .text chk_sch__Q210daTagLight5Act_cCFv */
+bool Act_c::chk_sch() const {
+    u8 bVar1 = prm_get_sch();
+    u8 bVar2 = dKy_get_schbit();
+    bool ret;
+
+    if (bVar1) {
+        ret = (bVar1 & bVar2) != 0;
+    } else {
+        ret = true;
+    }
+    return ret;
+}
+
+/* 00000A10-00000A88       .text chk_light__Q210daTagLight5Act_cCFv */
+bool Act_c::chk_light() const {
+    if (const_cast<dCcD_Sph*>(&mSph)->ChkTgHit()) {
+        const_cast<dCcD_Sph*>(&mSph)->ClrTgHit();
+        return true;
+    }
+
+    if (dComIfGp_getDetect().chk_light(&current.pos)) {
+        return true;
+    }
+    return false;
+}
+
+/* 00000A88-00000B08       .text get_cross_plane_line__10daTagLightFP4cXyzffffffffff */
+bool get_cross_plane_line(
+    cXyz* outPos, float arg1, float arg2, float arg3, float arg4, float arg5, float arg6, float arg7, float arg8, float arg9, float arg10
+) {
+    f32 fVar1 = arg1 * arg5 + arg2 * arg6 + arg3 * arg7;
+    if (fVar1 != 0.0f) {
+        f32 tmp2 = arg1 * arg8 + arg2 * arg9 + arg3 * arg10 + arg4;
+        fVar1 = -tmp2 / fVar1;
+        outPos->x = arg8 + arg5 * fVar1;
+        outPos->y = arg9 + arg6 * fVar1;
+        outPos->z = arg10 + arg7 * fVar1;
+        return true;
+    }
+    return false;
+}
+
+/* 00000B08-00000BCC       .text get_base_model_light_start_offset__Q210daTagLight5Act_cFP4cXyz */
+void Act_c::get_base_model_light_start_offset(cXyz* outPos) {
+    f32 ratio = prm_get_coneRatio();
+    ratio = ratio * 0.06666667f;
+
+    BOOL tmp = ratio < 0.5f ? true : false;
+    if (tmp == TRUE) {
+        outPos->set(0.0f, attr().m20 + 135.0f, 0.0f);
+    } else {
+        outPos->set(0.0f, 100.0f, 0.0f);
+    }
+}
+
+/* 00000BCC-0000111C       .text get_projection_info__Q210daTagLight5Act_cFP4cXyzP4cXyzP4cXyzPC4cXyzPC4cXyz */
+void Act_c::get_projection_info(cXyz* outArg1, cXyz* outArg2, cXyz* outArg3, const cXyz* arg4, const cXyz* arg5) {
+    /* Nonmatching - stack order */
+    *outArg3 = current.pos;
+
+    f32 ratio = prm_get_coneRatio();
+    ratio = ratio * 0.06666667f;
+    BOOL tmp = ratio < 0.5f ? true : false;
+    dBgS_ObjLinChk linChk;
+
+    *outArg1 = current.pos;
+    *outArg2 = cXyz::BaseY;
+    linChk.Set((cXyz*)arg4, (cXyz*)arg5, this);
+
+    if (dComIfG_Bgsp()->LineCrossNonMoveBG(&linChk)) {
+        *outArg1 = linChk.GetCross();
+
+        cM3dGPla* pcVar4 = dComIfG_Bgsp()->GetTriPla(linChk);
+        if (pcVar4 != NULL) {
+            *outArg2 = pcVar4->mNormal;
+
+            if (tmp == TRUE) {
+                f32 fVar1 = m4A4.x * 12.0f;
+                f32 fVar2 = m4A4.z * 12.0f;
+
+                cXyz sp7C[4];
+                cXyz sp4C[4];
+                cXyz sp40;
+
+                for (s32 i = 0; i < 4; i++) {
+                    /*
+                    Mtx sp10;
+                    sp10[2][0] = fVar1;
+                    sp10[2][1] = 0.0f;
+                    sp10[2][2] = 0.0f;
+                    sp10[2][3] = -fVar1;
+                    sp10[1][0] = 0.0f;
+                    sp10[1][1] = 0.0f;
+                    sp10[1][2] = 0.0f;
+                    sp10[1][3] = 0.0f;
+                    sp10[2][0] = fVar2;
+                    sp10[2][1] = 0.0f;
+                    sp10[2][2] = 0.0f;
+                    sp10[2][3] = -fVar2;
+                    sp4C[0].set(sp10[2][0], sp10[2][1], sp10[2][2]);
+                    sp4C[1].set(sp10[2][3], sp10[1][0], sp10[1][1]);
+                    sp4C[2].set(sp10[1][2], sp10[1][3], sp10[2][0]);
+                    sp4C[3].set(sp10[2][1], sp10[2][2], sp10[2][3]);
+                    */
+                    cXyz sp10[4];
+                    sp10[3].set(fVar1, 0.0f, 0.0f);
+                    sp4C[0].set(sp10[3]);
+
+                    sp10[2].set(-fVar1, 0.0f, 0.0f);
+                    sp4C[1].set(sp10[2]);
+
+                    sp10[1].set(0.0f, 0.0f, fVar2);
+                    sp4C[2].set(sp10[1]);
+
+                    sp10[0].set(0.0f, 0.0f, -fVar2);
+                    sp4C[3].set(sp10[0]);
+
+                    sp7C[i] = *outArg1;
+                    mDoMtx_multVec(m2A4, &sp4C[i], &sp40);
+                    get_cross_plane_line(
+                        &sp7C[i],
+                        pcVar4->mNormal.x,
+                        pcVar4->mNormal.y,
+                        pcVar4->mNormal.z,
+                        pcVar4->mD,
+                        sp40.x - arg4->x,
+                        sp40.y - arg4->y,
+                        sp40.z - arg4->z,
+                        arg4->x,
+                        arg4->y,
+                        arg4->z
+                    );
+                }
+
+                outArg3->x = (sp7C[0].x + sp7C[1].x + sp7C[2].x + sp7C[3].x) * 0.25f;
+                outArg3->y = (sp7C[0].y + sp7C[1].y + sp7C[2].y + sp7C[3].y) * 0.25f;
+                outArg3->z = (sp7C[0].z + sp7C[1].z + sp7C[2].z + sp7C[3].z) * 0.25f;
+            }
+        }
+    }
+}
+
+/* 000016A8-00001A30       .text make_projection_mtx__Q210daTagLight5Act_cFPC4cXyzPC4cXyzPC4cXyzPC4cXyz */
+void Act_c::make_projection_mtx(const cXyz* arg1, const cXyz* arg2, const cXyz* arg3, const cXyz* arg4) {
+    f32 ratio = prm_get_coneRatio();
+    ratio = ratio * 0.06666667f;
+    BOOL tmp = ratio < 0.5f ? true : false;
+    Mtx sp3C;
+    cXyz sp30 = *arg2;
+    cXyz sp24;
+    cXyz sp18;
+    cXyz sp0C;
+
+    mDoMtx_stack_c::ZXYrotS(shape_angle);
+    cMtx_copy(mDoMtx_stack_c::get(), sp3C);
+    mDoMtx_multVec(sp3C, &sp30, &sp24);
+
+    s16 iVar5 = cM_atan2s(sp24.z, sp24.x);
+    f32 sqrt = std::sqrtf(sp24.x * sp24.x + sp24.z * sp24.z);
+    s16 uVar6 = cM_atan2s(sqrt, std::fabsf(sp24.y));
+
+#if VERSION >= VERSION_USA
+    if (std::fabsf(cM_scos(uVar6)) < 0.001f) {
+        m305 = false;
+    } else {
+        m305 = true;
+#endif
+        if (!tmp) {
+            f32 fVar1 = (m4A4.x / cM_scos(uVar6)) * 0.5f;
+            f32 fVar2 = m4A4.z * 0.5f;
+            f32 y = (fVar1 + fVar2) * 0.5f;
+
+#if VERSION == VERSION_DEMO
+            sp18.set(fVar1 * (REG20_F(0) + 1.035f), y * (REG20_F(0) + 1.035f), fVar2 * (REG20_F(0) + 1.035f));
+#else
+        sp18.set(fVar1 * 1.035f, y * 1.035f, fVar2 * 1.035f);
+#endif
+            mDoMtx_stack_c::transS(*arg1);
+            mDoMtx_stack_c::YrotM(shape_angle.y - iVar5);
+            mDoMtx_stack_c::YrotM(-shape_angle.y);
+            mDoMtx_stack_c::scaleM(sp18);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+        } else {
+            f32 fVar1 = (arg1->y - arg4->y) / (current.pos.y - arg4->y);
+            f32 fVar2 = fVar1 * (m4A4.x / cM_scos(uVar6) * 0.5f);
+            fVar1 = (m4A4.z * 0.5f) * fVar1;
+            f32 y = (fVar2 + fVar1) * 0.5f;
+
+            sp0C.set(fVar2 * (REG20_F(0) + 0.97f), y * (REG20_F(0) + 0.97f), fVar1 * (REG20_F(0) + 0.97f));
+
+            mDoMtx_stack_c::transS(*arg3);
+            mDoMtx_stack_c::YrotM(shape_angle.y - iVar5);
+            mDoMtx_stack_c::YrotM(-shape_angle.y);
+            mDoMtx_stack_c::scaleM(sp0C);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+        }
+        cMtx_copy(mDoMtx_stack_c::get(), m474);
+#if VERSION >= VERSION_USA
+    }
+#endif
+}
+
+/* 00001A30-00001AE0       .text set_spot_mtx__Q210daTagLight5Act_cFv */
+void Act_c::set_spot_mtx() {
+    cXyz sp50;
+
+    prm_get_coneRatio();
+    cXyz sp44;
+    get_base_model_light_start_offset(&sp44);
+    cXyz sp38(0.0f, -50.0f, 0.0f);
+    cXyz sp2C;
+    mDoMtx_multVec(m2A4, &sp44, &sp2C);
+    cXyz sp20;
+    mDoMtx_multVec(m2A4, &sp38, &sp20);
+    cXyz sp14;
+    cXyz sp08;
+    get_projection_info(&sp14, &sp08, &sp50, &sp2C, &sp20);
+    make_projection_mtx(&sp14, &sp08, &sp50, &sp2C);
+}
+
+/* 00001AE0-00001B00       .text set_spot__Q210daTagLight5Act_cFv */
+void Act_c::set_spot() {
+    set_spot_mtx();
+}
+
+/* 00001B00-00001B20       .text init_spot__Q210daTagLight5Act_cFv */
+void Act_c::init_spot() {
+    set_spot();
+}
+
+/* 00001B20-00001C90       .text _execute__Q210daTagLight5Act_cFv */
+bool Act_c::_execute() {
+    if (m2A0 == 2) {
+        if (chk_light()) {
+            m306++;
+        } else {
+            m306--;
+        }
+
+        m306 = cLib_minMaxLimit<s16>(m306, 0, 20);
+        if (m306 > 10) {
+            fopAcM_onSwitch(this, prm_get_swSave());
+        }
+        dComIfG_Ccsp()->Set(&mSph);
+    } else {
+        m304 = chk_sw() && chk_sch();
+        f32 target;
+        if (m304) {
+            target = 1.0f;
+        } else {
+            target = 0.0f;
+        }
+        f32 alpha = M_alpha_spd[prm_get_fadeType()];
+        cLib_chaseF(&m308, target, alpha);
+        if (mpBtk != NULL) {
+            mpBtk->play();
+        }
+    }
+    return true;
+}
+
+/* 00001C90-00001D20       .text set_material__Q210daTagLight5Act_cFP11J3DMaterialUc */
+void Act_c::set_material(J3DMaterial* material, unsigned char alpha) {
+    while (material != NULL) {
+        if (alpha == 0) {
+            material->getShape()->hide();
+        } else {
+            material->getShape()->show();
+            material->getTevKColor(3)->mColor.a = alpha;
+        }
+        material = material->getNext();
+    }
+}
+
+/* 00001D20-00001EAC       .text _draw__Q210daTagLight5Act_cFv */
+bool Act_c::_draw() {
+    /* Nonmatching - regalloc */
+    if (m2A0 == 1 && m308 > 0.0f) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpModel, &tevStr);
+#if VERSION >= VERSION_USA
+        if (m305)
+#endif
+        {
+            GXColor color = {};
+            color.r = attr().m00;
+            color.g = attr().m01;
+            color.b = attr().m02;
+            color.a = attr().m03;
+            dComIfGd_setLightModelColor(color);
+            dComIfGd_setLightModel(attr().m04, m474, (s8)(m308 * attr().m03));
+        }
+
+        if (mpBtk != NULL) {
+            mpBtk->entry(mpModel->getModelData());
+        }
+
+        J3DModelData* modelData = mpModel->getModelData();
+        u8 tmp = (s8)(m308 * 255.5f);
+        set_material(modelData->getJointNodePointer(1)->getMesh(), tmp);
+        set_material(modelData->getJointNodePointer(2)->getMesh(), tmp);
+        mDoExt_modelUpdateDL(mpModel);
+    }
+    return true;
+}
+
+namespace {
 /* 00001EAC-00001ECC       .text Mthd_Create__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_create();
 }
 
 /* 00001ECC-00001EF0       .text Mthd_Delete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_delete();
 }
 
 /* 00001EF0-00001F14       .text Mthd_Execute__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_execute();
 }
 
 /* 00001F14-00001F38       .text Mthd_Draw__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daTagLight::Act_c*)i_this)->_draw();
 }
 
 /* 00001F38-00001F40       .text Mthd_IsDelete__Q210daTagLight27@unnamed@d_a_tag_light_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

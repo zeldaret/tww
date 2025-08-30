@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dragonhead.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dragonhead.h"
 #include "d/res/res_qdghd.h"
 #include "f_op/f_op_actor_mng.h"
@@ -38,10 +39,10 @@ static dCcD_SrcSph sph_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
-    },
+    }},
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -56,7 +57,7 @@ namespace daObjDragonhead_prm {
 /* 00000098-00000228       .text CreateHeap__17daObjDragonhead_cFv */
 BOOL daObjDragonhead_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)(dComIfG_getObjectRes("Qdghd", QDGHD_BDL_QDGHD));
-    JUT_ASSERT(VERSION_SELECT(158, 160, 160, 160), model_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(158, 160), model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0x00, 0x11020203);
     if (!mpModel)
         return FALSE;
@@ -117,7 +118,7 @@ cPhs_State daObjDragonhead_c::_create() {
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Qdghd");
 
     if (ret == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, VERSION_SELECT(0x300, 0x10500, 0x10500, 0x10500)) == 0) {
+        if (fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0x300, 0x10500)) == 0) {
             ret = cPhs_ERROR_e;
         } else {
             CreateInit();

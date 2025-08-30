@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_island.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_island.h"
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_player_main.h"

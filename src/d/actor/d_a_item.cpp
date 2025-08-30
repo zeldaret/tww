@@ -3,6 +3,7 @@
  * Item - Field Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_item.h"
@@ -14,8 +15,6 @@
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 
@@ -1508,11 +1507,11 @@ dCcD_SrcCyl daItem_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 static actor_method_class l_daItem_Method = {

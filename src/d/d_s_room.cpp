@@ -3,6 +3,7 @@
 // Translation Unit: d_s_room.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_room.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
@@ -190,7 +191,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
-    i_this->mpRoomDt->mRoomNo = roomNo;
+    i_this->mpRoomDt->setRoomNo(roomNo);
     i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
 
     if (i_this->mpRoomData != NULL) {

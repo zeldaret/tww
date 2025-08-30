@@ -13,7 +13,6 @@
 // any of these weak bss objects. So that constructor is moved to functionvalue.cpp and this fake
 // header should be included where necessary instead.
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
 #include "JSystem/JStudio/JStudio/functionvalue.h" // IWYU pragma: keep
 
 // They each have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.

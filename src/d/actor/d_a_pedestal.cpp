@@ -3,13 +3,12 @@
 // Translation Unit: d_a_pedestal.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pedestal.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_hdai1.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daPedestal {
 
@@ -400,7 +399,7 @@ bool daPds_c::_draw() {
 
     mBrk.entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
-    modelData->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+    mBrk.remove(modelData);
 
     dComIfGd_setList();
 

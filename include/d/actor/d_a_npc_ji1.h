@@ -17,29 +17,29 @@ public:
     void SpRollCutChcek() {}
 
     bool checkAction(Action_t action) {
-        return field_0x2B0 == action;
+        return mAction == action;
     }
 
     bool checkSubAction(SubAction_t subAction) {
-        return field_0x2D4 == subAction;
+        return mSubAction == subAction;
     }
 
     void setAction(Action_t action, void* arg) {
-        if(field_0x2B0 != action) {
-            if(field_0x2B0) {
+        if(mAction != action) {
+            if(mAction) {
                 field_0xC78 = 0xFF;
-                (this->*field_0x2B0)(arg);
+                (this->*mAction)(arg);
             }
 
-            field_0x2BC = field_0x2B0;
-            field_0x2B0 = action;
+            field_0x2BC = mAction;
+            mAction = action;
             field_0xC78 = 0;
-            (this->*field_0x2B0)(arg);
+            (this->*mAction)(arg);
         }
     }
 
     void setSubAction(SubAction_t subAction) {
-        field_0x2D4 = subAction;
+        mSubAction = subAction;
     }
 
     BOOL isGuardAnim();
@@ -48,8 +48,8 @@ public:
     BOOL isItemWaitAnim();
     BOOL isClearRecord(short);
     void setClearRecord(short);
-    BOOL normalSubActionHarpoonGuard(short);
-    BOOL normalSubActionGuard(short);
+    void normalSubActionHarpoonGuard(short);
+    void normalSubActionGuard(short);
     BOOL normalAction(void*);
     BOOL kaitenExpAction(void*);
     BOOL kaitenspeakAction(void*);
@@ -93,10 +93,10 @@ public:
     BOOL endspeakAction(void*);
     BOOL reiAction(void*);
     BOOL plmoveAction(void*);
-    void teachMove(f32);
+    BOOL teachMove(f32);
     BOOL teachSpRollCutMove(f32);
-    void calcCoCorrectValue();
-    void calcBgCorrectValue();
+    f32 calcCoCorrectValue();
+    f32 calcBgCorrectValue();
     BOOL MoveToPlayer(f32, u8);
     void teachSubActionAttackInit();
     BOOL teachSubActionAttack();
@@ -105,7 +105,7 @@ public:
     BOOL teachAction(void*);
     BOOL teachSPRollCutAction(void*);
     void battleGameSetTimer();
-    void battleMove(f32);
+    BOOL battleMove(f32);
     void battleSubActionWaitInit();
     BOOL battleSubActionWait();
     void battleSubActionNockBackInit(int);
@@ -124,7 +124,7 @@ public:
     BOOL battleSubActionJpGuard();
     void battleSubActionGuardInit();
     BOOL battleSubActionGuard();
-    void battleAtSet();
+    BOOL battleAtSet();
     BOOL battleGuardCheck();
     BOOL battleAction(void*);
     BOOL checkCutType(int, int);
@@ -153,29 +153,33 @@ public:
     /* 0x2A0 */ f32 field_0x2A0;
     /* 0x2A4 */ f32 field_0x2A4;
     /* 0x2A8 */ u8 field_0x2A8;
-    /* 0x2AC */ u32 field_0x2AC;
-    /* 0x2B0 */ Action_t field_0x2B0;
+    /* 0x2AC */ u32 mMsgNo;
+    /* 0x2B0 */ Action_t mAction;
     /* 0x2BC */ Action_t field_0x2BC;
     /* 0x2C8 */ Action_t field_0x2C8;
-    /* 0x2D4 */ SubAction_t field_0x2D4;
+    /* 0x2D4 */ SubAction_t mSubAction;
     /* 0x2E0 */ dPa_smokeEcallBack field_0x2E0;
     /* 0x300 */ dPa_smokeEcallBack field_0x300;
+#if VERSION == VERSION_DEMO
+    /* 0x320 */ JPABaseEmitter* field_0x320_demo;
+    /* 0x324 */ JPABaseEmitter* field_0x324_demo;
+#endif
     /* 0x320 */ cXyz field_0x320;
     /* 0x32C */ s16 field_0x32C;
-    /* 0x330 */ mDoExt_McaMorf* field_0x330;
+    /* 0x330 */ mDoExt_McaMorf* mpOrcaMorf;
     /* 0x334 */ dNpc_EventCut_c mEventCut;
     /* 0x3A0 */ dNpc_JntCtrl_c m_jnt;
     /* 0x3D4 */ J3DAnmTexPattern* headTexPattern;
-    /* 0x3D8 */ mDoExt_btpAnm field_0x3D8;
-    /* 0x3EC */ u8 field_0x3EC;
-    /* 0x3EE */ s16 field_0x3EE;
-    /* 0x3F0 */ u32 field_0x3F0;
-    /* 0x3F4 */ mDoExt_McaMorf* mpMorf;
-    /* 0x3F8 */ J3DModel* field_0x3F8;
-    /* 0x3FC */ mDoExt_brkAnm field_0x3FC;
-    /* 0x414 */ f32 field_0x414;
-    /* 0x418 */ mDoExt_btkAnm field_0x418;
-    /* 0x42C */ f32 field_0x42C;
+    /* 0x3D8 */ mDoExt_btpAnm mBlinkAnim;
+    /* 0x3EC */ u8 mBlinkFrame;
+    /* 0x3EE */ s16 mBlinkTimer;
+    /* 0x3F0 */ u32 mShadowId;
+    /* 0x3F4 */ mDoExt_McaMorf* mpSpearMorf;
+    /* 0x3F8 */ J3DModel* mpTearsModel;
+    /* 0x3FC */ mDoExt_brkAnm mCryBrk;
+    /* 0x414 */ f32 mCryBrkFrame;
+    /* 0x418 */ mDoExt_btkAnm mCryBtk;
+    /* 0x42C */ f32 mCryBtkFrame;
     /* 0x430 */ JPABaseEmitter* field_0x430;
     /* 0x434 */ dBgS_ObjAcch mAcch;
     /* 0x5F8 */ dBgS_AcchCir mAcchCir;
@@ -205,65 +209,57 @@ public:
     /* 0xBB2 */ s16 field_0xBB2;
     /* 0xBB4 */ s16 field_0xBB4;
     /* 0xBB6 */ s16 field_0xBB6;
-    /* 0xBB8 */ s16 field_0xB86;
+    /* 0xBB8 */ s16 field_0xBB8;
     /* 0xBBA */ s16 field_0xBBA;
     /* 0xBBC */ s16 field_0xBBC;
     /* 0xBBE */ s16 field_0xBBE;
     /* 0xBC0 */ s16 field_0xBC0;
     /* 0xBC2 */ s16 field_0xBC2;
-    /* 0xBC4 */ s16 field_0xBC4;
-    /* 0xBC6 */ s16 field_0xBC6;
-    /* 0xBC8 */ s16 field_0xBC8;
-    /* 0xBCA */ s16 field_0xBCA;
-    /* 0xBCC */ s16 field_0xBCC;
-    /* 0xBCE */ s16 field_0xBCE;
+    /* 0xBC4 */ cXyz field_0xBC4;
     /* 0xBD0 */ s16 field_0xBD0;
     /* 0xBD2 */ s16 field_0xBD2;
     /* 0xBD4 */ s16 field_0xBD4;
     /* 0xBD6 */ s16 field_0xBD6;
     /* 0xBD8 */ cXyz field_0xBD8[3];
-    /* 0xBFC */ dNpc_HeadAnm_c field_0xBFC;
+    /* 0xBFC */ dNpc_HeadAnm_c mHeadAnm;
     /* 0xC20 */ u32 pad_0xC20;
     /* 0xC24 */ s32 field_0xC24;
     /* 0xC28 */ u32 field_0xC28;
-    /* 0xC2C */ u32 field_0xC2C;
+    /* 0xC2C */ s32 field_0xC2C;
     /* 0xC30 */ s32 field_0xC30;
-    /* 0xC34 */ s32 field_0xC34;
+    /* 0xC34 */ int field_0xC34;
     /* 0xC38 */ s32 field_0xC38;
     /* 0xC3C */ int field_0xC3C;
     /* 0xC40 */ cXyz field_0xC40;
     /* 0xC4C */ f32 field_0xC4C;
     /* 0xC50 */ f32 field_0xC50;
-    /* 0xC54 */ s16 field_0xC54[0x12];
+    /* 0xC54 */ s16 mEventIdx[0x12];
     /* 0xC78 */ s8 field_0xC78;
-    /* 0xC7C */ request_of_phase_process_class field_0xC7C;
+    /* 0xC7C */ request_of_phase_process_class mPhs;
     /* 0xC84 */ u32 field_0xC84;
     /* 0xC88 */ s16 field_0xC88;
     /* 0xC8C */ s32 field_0xC8C;
     /* 0xC90 */ s32 field_0xC90;
-    /* 0xC94 */ u32 field_0xC94;
-    /* 0xC98 */ u32 field_0xC98;
+    /* 0xC94 */ s32 field_0xC94;
+    /* 0xC98 */ s32 field_0xC98;
     /* 0xC9C */ f32 field_0xC9C;
     /* 0xCA0 */ Mtx field_0xCA0;
     /* 0xCD0 */ cXyz field_0xCD0;
     /* 0xCDC */ cXyz field_0xCDC;
     /* 0xCE8 */ u8 pad_0xCE8[0xC];
     /* 0xCF4 */ Quaternion field_0xCF4;
-    /* 0xD04 */ f32 field_0xD04;
-    /* 0xD08 */ f32 field_0xD08;
-    /* 0xD0C */ f32 field_0xD0C;
-    /* 0xD10 */ f32 field_0xD10;
+    /* 0xD04 */ Quaternion field_0xD04;
     /* 0xD14 */ s16 field_0xD14;
     /* 0xD16 */ s16 field_0xD16;
     /* 0xD18 */ f32 field_0xD18;
     /* 0xD1C */ cXyz field_0xD1C;
     /* 0xD28 */ cXyz field_0xD28;
-    /* 0xD34 */ u32 field_0xD34;
+    /* 0xD34 */ s32 field_0xD34;
     /* 0xD38 */ cXyz field_0xD38;
     /* 0xD44 */ u8 pad_0xD44[0xC];
     /* 0xD50 */ cXyz field_0xD50;
     /* 0xD5C */ csXyz field_0xD5C;
-    /* 0xD64 */ s32 field_0xD64;
+    /* 0xD64 */ s32 mAnimation;
     /* 0xD68 */ s32 field_0xD68;
     /* 0xD6C */ s32 field_0xD6C;
     /* 0xD70 */ s32 field_0xD70;
@@ -273,11 +269,11 @@ public:
     /* 0xD7A */ u8 field_0xD7A;
     /* 0xD7B */ u8 field_0xD7B;
     /* 0xD7C */ u8 field_0xD7C;
-    /* 0xD7D */ u8 field_0xD7D;
+    /* 0xD7D */ u8 mCreateItemNo;
     /* 0xD7E */ u8 field_0xD7E;
-    /* 0xD80 */ u32 field_0xD80;
+    /* 0xD80 */ u32 mEndMsgNo;
     /* 0xD84 */ u8 field_0xD84;
-    /* 0xD85 */ u8 field_0xD85;
+    /* 0xD85 */ bool mHide;
     
     static s8 game_life_point;
 }; // Size: 0xD88
@@ -290,7 +286,7 @@ public:
     void genMessage(JORMContext* ctx);
 
 public:
-    /* 0x004 */ s8 field_0x04;
+    /* 0x004 */ s8 mNo;
     /* 0x008 */ f32 field_0x08;
     /* 0x00C */ s16 field_0x0C;
     /* 0x00E */ s16 field_0x0E;
@@ -324,19 +320,19 @@ public:
     /* 0x07C */ f32 field_0x7C;
     /* 0x080 */ f32 field_0x80;
     /* 0x084 */ f32 field_0x84;
-    /* 0x088 */ u16 field_0x88;
-    /* 0x08A */ u16 field_0x8A;
-    /* 0x08C */ u16 field_0x8C;
-    /* 0x08E */ u16 field_0x8E;
-    /* 0x090 */ u16 field_0x90;
-    /* 0x092 */ u16 field_0x92;
-    /* 0x094 */ u16 field_0x94;
-    /* 0x096 */ u16 field_0x96;
-    /* 0x098 */ u16 field_0x98;
-    /* 0x09A */ u16 field_0x9A;
-    /* 0x09C */ u16 field_0x9C;
-    /* 0x09E */ u16 field_0x9E;
-    /* 0x0A0 */ u16 field_0xA0;
+    /* 0x088 */ s16 field_0x88;
+    /* 0x08A */ s16 field_0x8A;
+    /* 0x08C */ s16 field_0x8C;
+    /* 0x08E */ s16 field_0x8E;
+    /* 0x090 */ s16 field_0x90;
+    /* 0x092 */ s16 field_0x92;
+    /* 0x094 */ s16 field_0x94;
+    /* 0x096 */ s16 field_0x96;
+    /* 0x098 */ s16 field_0x98;
+    /* 0x09A */ s16 field_0x9A;
+    /* 0x09C */ s16 field_0x9C;
+    /* 0x09E */ s16 field_0x9E;
+    /* 0x0A0 */ s16 field_0xA0;
     /* 0x0A2 */ u8 field_0xA2;
     /* 0x0A4 */ f32 field_0xA4;
     /* 0x0A8 */ f32 field_0xA8;

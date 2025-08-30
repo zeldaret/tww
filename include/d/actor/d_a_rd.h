@@ -7,47 +7,13 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "c/c_damagereaction.h"
 
-class daRd_HIO_c : public mDoHIO_entry_c {
-public:
-    daRd_HIO_c();
-    virtual ~daRd_HIO_c() {}
-    
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ dNpc_HIO_c mNpc;
-    /* 0x2C */ u8 m2C;
-    /* 0x2D */ u8 m2D[0x30 - 0x2D];
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ f32 m34;
-    /* 0x38 */ f32 mCryRadius;
-    /* 0x3C */ f32 mAttackRadius;
-    /* 0x40 */ s16 m40;
-    /* 0x42 */ s16 mCrySpreadAngle;
-    /* 0x44 */ s16 mAttackSpreadAngle;
-    /* 0x46 */ s16 m46;
-    /* 0x48 */ s16 m48;
-    /* 0x4A */ s16 m4A;
-    /* 0x4C */ s16 m4C;
-    /* 0x4E */ s16 m4E;
-    /* 0x50 */ s16 m50;
-    /* 0x52 */ s16 m52;
-    /* 0x54 */ s16 m54;
-    /* 0x56 */ u8 m56[0x58 - 0x56];
-    /* 0x58 */ f32 m58;
-    /* 0x5C */ f32 m5C;
-    /* 0x60 */ f32 m60;
-    /* 0x64 */ f32 m64;
-    /* 0x68 */ f32 m68;
-    /* 0x6C */ f32 mReturnWalkSpeed;
-    /* 0x70 */ f32 m70;
-    /* 0x74 */ f32 m74;
-    /* 0x78 */ s16 m78;
-    /* 0x7A */ s16 mParalysisDuration;
-    /* 0x7C */ JntHit_HIO_c m7C;
-};
-
-class daRd_c : public fopEn_enemy_c {
+class daRd_c
+#if VERSION == VERSION_DEMO
+: public fopAc_ac_c
+#else
+: public fopEn_enemy_c
+#endif
+{
 public:
     enum Proc_e {
         PROC_INIT = 0,
@@ -112,7 +78,6 @@ public:
     static const char m_arc_name[];
     static const dCcD_SrcCyl m_cyl_src;
     
-    daRd_c() {}
     bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
     void onIkari() { mbIkari = true; }
     void offIkari() { mbIkari = false; }

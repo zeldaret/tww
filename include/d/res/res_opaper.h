@@ -1,7 +1,7 @@
 #ifndef RES_OPAPER_H
 #define RES_OPAPER_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum OPAPER_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

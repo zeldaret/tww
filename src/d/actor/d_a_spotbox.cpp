@@ -3,6 +3,7 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spotbox.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"

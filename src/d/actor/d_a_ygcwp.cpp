@@ -3,6 +3,7 @@
 // Translation Unit: d_a_ygcwp.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ygcwp.h"
 #include "d/actor/d_a_player.h"
 #include "d/res/res_ygcwp.h"

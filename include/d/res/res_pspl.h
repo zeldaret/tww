@@ -1,7 +1,7 @@
 #ifndef RES_PSPL_H
 #define RES_PSPL_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PSPL_RES_FILE_ID {
     /* BDL */

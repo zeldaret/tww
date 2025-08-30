@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_player_main.h"
@@ -222,7 +223,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         dComIfGp_setDoStatus(dActStts_OPEN_e);
     } else if (iVar3 != 0) {
         dComIfGp_setDoStatus(dActStts_DROP_e);
-    } else if (mpAttention->Lockon()) {
+    } else if (checkAttentionLock()) {
         int direction = getDirectionFromShapeAngle();
         if (mStickDistance <= 0.05f ||
             (mStickDistance > 0.05f && (direction == DIR_FORWARD || direction == DIR_BACKWARD)))
@@ -236,6 +237,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         fopAcM_orderZHintEvent(this, dComIfGp_att_getZHint());
         return true;
     }
+#if VERSION > VERSION_JPN
     if (checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 1) ||
         (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItem_MAGIC_ARMOR_e, 0)))
     {
@@ -249,6 +251,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
     } else if (fopAcM_GetName(grab_actor) == PROC_BOMB && checkSetItemTrigger(dItem_BOMB_BAG_e, 0)) {
         return procGrabThrow_init(0);
     }
+#endif
     if (cancelTrigger() && checkSwordEquip() && iVar3 == 0) {
         if (dComIfGp_getRStatus() == dActStts_THROW_e) {
             return procGrabThrow_init(1);
@@ -334,7 +337,7 @@ BOOL daPy_lk_c::procGrabReady_init() {
     }
     if (fopAcM_GetName(mpAttnActorA) == PROC_BOKO) {
         daBoko_c* boko = static_cast<daBoko_c*>(mpAttnActorA);
-        boko->mCurrentAction = 3;
+        boko->setNowMode(daBoko_c::Mode_PLAYER_CARRY_e);
     }
     shape_angle.y = fopAcM_searchActorAngleY(this, mpAttnActorA);
     current.angle.y = shape_angle.y;
@@ -629,7 +632,7 @@ BOOL daPy_lk_c::procGrabPut() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     if (grab_actor == NULL) {
-        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_GRAB_PUT_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
             return true;
         } else {
@@ -684,7 +687,7 @@ BOOL daPy_lk_c::procGrabPut() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() > -0.01f) {
         grab_actor->speedF = 0.0f;
         freeGrabItem();
-        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK38_e) {
+        if (mDemo.getDemoMode() == daPy_demo_c::DEMO_GRAB_PUT_e) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         } else {
             checkNextMode(0);
@@ -733,7 +736,7 @@ BOOL daPy_lk_c::procGrabWait() {
         return checkNextMode(0);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
         setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
@@ -753,7 +756,7 @@ BOOL daPy_lk_c::procGrabWait() {
         if (checkGrabAnime()) {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         }
-    } else if (shape_angle.y != m34DE && !mpAttention->Lockon()) {
+    } else if (shape_angle.y != m34DE && !checkAttentionLock()) {
         float fVar2;
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
             fVar2 = -1.0f;
@@ -796,7 +799,7 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
         return checkNextMode(0);
     }
 
-    if (!mpAttention->Lockon() && mStickDistance > 0.05f) {
+    if (!checkAttentionLock() && mStickDistance > 0.05f) {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34E8,
@@ -852,7 +855,9 @@ BOOL daPy_lk_c::procGrabRebound() {
     fopAc_ac_c* grab_actor = mActorKeepGrab.getActor();
 
     if (grab_actor == NULL) {
+#if VERSION > VERSION_DEMO
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
+#endif
         return checkNextMode(0);
     }
 

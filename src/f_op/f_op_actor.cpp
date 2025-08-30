@@ -3,6 +3,7 @@
 // Translation Unit: f_op_actor.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_actor_tag.h"
@@ -13,6 +14,93 @@
 #include "d/d_meter.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
+
+#if VERSION == VERSION_DEMO
+#include "m_Do/m_Do_printf.h"
+
+class print_error_check_c {
+public:
+    struct param_s {
+        const char* m00;
+        u32 m04;
+    };
+    print_error_check_c(fopAc_ac_c* actor, const param_s& prm);
+    ~print_error_check_c();
+    void start();
+    void check();
+    
+    static u8 mPriorityMaximum;
+    static bool mPrintDisable;
+    
+    static param_s sEXECUTE;
+    static param_s sCREATE;
+    static param_s sDELETE;
+    static param_s sIS_DELETE;
+    static param_s sDRAW;
+
+private:
+    fopAc_ac_c* mpActor;
+    param_s mParam;
+    u32 mNumErrors;
+    OSTick mTick;
+    OSPriority mPriority;
+    u32 mReportDisable;
+};
+
+u8 print_error_check_c::mPriorityMaximum = 0;
+bool print_error_check_c::mPrintDisable = false;
+
+print_error_check_c::param_s print_error_check_c::sEXECUTE = {
+    "EXECUTE", 0xBB8,
+};
+print_error_check_c::param_s print_error_check_c::sCREATE = {
+    "CREATE", 0xBB8,
+};
+print_error_check_c::param_s print_error_check_c::sDELETE = {
+    "DELETE", 0xBB8,
+};
+print_error_check_c::param_s print_error_check_c::sIS_DELETE = {
+    "IS_DELETE", 0x1E,
+};
+print_error_check_c::param_s print_error_check_c::sDRAW = {
+    "DRAW", 0xBB8,
+};
+
+print_error_check_c::print_error_check_c(fopAc_ac_c* actor, const param_s& prm) {
+    mpActor = actor;
+    mParam = prm;
+    start();
+}
+
+print_error_check_c::~print_error_check_c() {
+    check();
+}
+
+void print_error_check_c::start() {
+    mNumErrors = print_errors;
+
+    if (mPrintDisable) {
+        mReportDisable = __OSReport_disable;
+        OSReportDisable();
+    } else {
+        mReportDisable = -1;
+    }
+
+    if (mPriorityMaximum > 0) {
+        OSThread* currentThread = OSGetCurrentThread();
+        mPriority = OSGetThreadPriority(currentThread);
+        OSSetThreadPriority(currentThread, 0);
+    } else {
+        mPriority = -1;
+    }
+
+    mTick = OSGetTick();
+}
+
+void print_error_check_c::check() {
+    /* Empty in non-debug builds */
+}
+#endif
 
 /* 8002330C-800233C4       .text __ct__10fopAc_ac_cFv */
 fopAc_ac_c::fopAc_ac_c() {
@@ -26,7 +114,8 @@ u32 fopAc_ac_c::stopStatus;
 
 /* 80023514-80023540       .text fopAc_IsActor__FPv */
 s32 fopAc_IsActor(void* pProc) {
-    return fpcBs_Is_JustOfType(g_fopAc_type, ((fopAc_ac_c*)pProc)->actor_type);
+    int actor_type = ((fopAc_ac_c*)pProc)->actor_type;
+    return fpcBs_Is_JustOfType(g_fopAc_type, actor_type);
 }
 
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
@@ -50,6 +139,9 @@ s32 fopAc_Draw(void* pProc) {
             ) && !fopAcM_CheckStatus(actor, fopAcStts_NODRAW_e)
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NODRAW_e);
+#if VERSION == VERSION_DEMO
+            print_error_check_c sp08(actor, print_error_check_c::sDRAW);
+#endif
             ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->sub_method, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NODRAW_e);
@@ -57,7 +149,9 @@ s32 fopAc_Draw(void* pProc) {
 
         fopAcM_OffStatus(actor, fopAcStts_NODRAW_e);
 
+#if VERSION > VERSION_DEMO
         if (dComIfGp_roomControl_getStayNo() >= 0 && fopAcM_CheckStatus(actor, fopAcStts_SHOWMAP_e))
+#endif
             dMap_drawActorPointMiniMap(actor);
     }
 
@@ -72,10 +166,12 @@ BOOL fopAc_Execute(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
     BOOL ret = TRUE;
 
+#if VERSION > VERSION_DEMO
     CHECK_FLOAT_CLASS(0x27d, actor->current.pos.x);
     CHECK_FLOAT_CLASS(0x27e, actor->current.pos.y);
     CHECK_FLOAT_CLASS(0x27f, actor->current.pos.z);
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
+#endif
 
     if (fopAcM_CheckStatus(actor, fopAcStts_NOPAUSE_e) || (!dMenu_flag() && !dScnPly_ply_c::isPause())) {
         actor->eventInfo.beforeProc();
@@ -99,15 +195,20 @@ BOOL fopAc_Execute(void* pProc) {
         ) {
             fopAcM_OffCondition(actor, fopAcCnd_NOEXEC_e);
             actor->old = actor->current;
+#if VERSION == VERSION_DEMO
+            print_error_check_c sp08(actor, print_error_check_c::sEXECUTE);
+#endif
             ret = fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
         } else {
             fopAcM_OnCondition(actor, fopAcCnd_NOEXEC_e);
         }
 
+#if VERSION > VERSION_DEMO
         CHECK_FLOAT_CLASS(0x2b4, actor->current.pos.x);
         CHECK_FLOAT_CLASS(0x2b5, actor->current.pos.y);
         CHECK_FLOAT_CLASS(0x2b6, actor->current.pos.z);
         CHECK_VEC3_RANGE(0x2bd, actor->current.pos);
+#endif
     }
 
     return ret;
@@ -116,7 +217,13 @@ BOOL fopAc_Execute(void* pProc) {
 /* 80023BDC-80023C30       .text fopAc_IsDelete__FPv */
 BOOL fopAc_IsDelete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    BOOL ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
+    BOOL ret;
+    {
+#if VERSION == VERSION_DEMO
+        print_error_check_c sp08(actor, print_error_check_c::sIS_DELETE);
+#endif
+        ret = fpcMtd_IsDelete((process_method_class*)actor->sub_method, actor);
+    }
     if (ret == TRUE)
         fopDwTg_DrawQTo(&actor->draw_tag);
     return ret;
@@ -125,7 +232,13 @@ BOOL fopAc_IsDelete(void* pProc) {
 /* 80023C30-80023CD4       .text fopAc_Delete__FPv */
 BOOL fopAc_Delete(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
-    BOOL ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
+    BOOL ret;
+    {
+#if VERSION == VERSION_DEMO
+        print_error_check_c sp08(actor, print_error_check_c::sDELETE);
+#endif
+        ret = fpcMtd_Delete((process_method_class*)actor->sub_method, actor);
+    }
     if (ret == TRUE) {
         fopAcTg_ActorQTo(&actor->actor_tag);
         fopDwTg_DrawQTo(&actor->draw_tag);
