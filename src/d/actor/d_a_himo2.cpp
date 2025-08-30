@@ -1692,7 +1692,6 @@ static BOOL daHimo2_Delete(himo2_class*) {
 
 /* 800F0670-800F07F4       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static int CallbackCreateHeap(fopAc_ac_c* i_this) {
-    /* Nonmatching - "a_this->m1FD8.init" */
     ResTIMG* pRVar1;
     J3DModelData* modelData;
     himo2_class* a_this = (himo2_class*)i_this;
@@ -1712,7 +1711,10 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
                 return FALSE;
             } else {
                 pRVar1 = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
-                return a_this->m1FD8.init(1, 16, pRVar1, 0) != FALSE;
+                if (!a_this->m1FD8.init(1, 16, pRVar1, 0)) {
+                    return FALSE;
+                }
+                return TRUE;
             }
         }
     }
