@@ -3967,7 +3967,7 @@ inline fopAc_ac_c* dComIfGp_att_getZHint() {
     return dComIfGp_getAttention().getZHintTarget();
 }
 
-inline void dComIfGp_att_chkEnemySound() {
+inline bool dComIfGp_att_chkEnemySound() {
     return dComIfGp_getAttention().chkEnemySound();
 }
 
