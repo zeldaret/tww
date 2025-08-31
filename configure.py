@@ -1502,7 +1502,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_hmlif"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),   "d_a_hys"),
     ActorRel(Equivalent,  "d_a_kamome"),
-    ActorRel(NonMatching, "d_a_kamome2"), # Demo-only
+    ActorRel(Matching,    "d_a_kamome2"), # Demo-only
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(NonMatching, "d_a_kn"),
     ActorRel(NonMatching, "d_a_kokiie"),
