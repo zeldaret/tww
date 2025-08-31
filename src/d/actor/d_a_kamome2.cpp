@@ -269,7 +269,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         NULL,
         NULL,
         (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
-        2,
+        J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
