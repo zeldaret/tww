@@ -2,7 +2,6 @@
 #define D_A_GY_CTRL_H
 
 #include "f_op/f_op_actor.h"
-#include "d/d_cc_d.h"
 #include "d/d_bg_s_lin_chk.h"
 
 class daGy_Ctrl_c : public fopAc_ac_c {

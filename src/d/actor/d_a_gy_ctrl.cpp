@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_gy_ctrl.h"
 #include "d/actor/d_a_ship.h"
-#include "d/actor/d_a_gy.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-#include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_camera.h"
@@ -172,7 +170,7 @@ bool daGy_Ctrl_c::setPathTargetPos() {
 /* 00000674-000006AC       .text getWaterY__11daGy_Ctrl_cFR4cXyz */
 f32 daGy_Ctrl_c::getWaterY(cXyz& arg1) {
     arg1.y += 1000.0f;
-    dBgS_GetWaterHeight(arg1);
+    return dBgS_GetWaterHeight(arg1);
 }
 
 /* 000006AC-0000072C       .text lineCheck__11daGy_Ctrl_cFP4cXyzP4cXyz */
@@ -202,7 +200,6 @@ bool daGy_Ctrl_c::checkPath() {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(tmp2);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
-
         mDoMtx_stack_c::multVecZero(&m3EC[i]);
 
 #if VERSION == VERSION_DEMO
@@ -239,7 +236,6 @@ void daGy_Ctrl_c::setPathPos() {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(uVar1);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
-
         mDoMtx_stack_c::multVecZero(&m290[i]);
 
         m290[i].y = getWaterY(m290[i]);
@@ -248,7 +244,6 @@ void daGy_Ctrl_c::setPathPos() {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(uVar2);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
-
         mDoMtx_stack_c::multVecZero(&m2CC[i]);
 
         cXyz sp08 = m2CC[i];
