@@ -19,7 +19,7 @@
 class daGy_Ctrl_HIO_c : public mDoHIO_entry_c {
 public:
     daGy_Ctrl_HIO_c();
-    virtual ~daGy_Ctrl_HIO_c();
+    virtual ~daGy_Ctrl_HIO_c() {}
 
     void genMessage(JORMContext*);
 
@@ -203,9 +203,7 @@ bool daGy_Ctrl_c::checkPath() {
         mDoMtx_stack_c::YrotM(tmp2);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
 
-        m3EC[i].x = mDoMtx_stack_c::get()[0][3];
-        m3EC[i].y = mDoMtx_stack_c::get()[1][3];
-        m3EC[i].z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m3EC[i]);
 
 #if VERSION == VERSION_DEMO
         m3EC[i].y = getWaterY(m3EC[i]);
@@ -233,12 +231,8 @@ void daGy_Ctrl_c::setPathPos() {
         m308[i] = m34C + tmp3;
         s16 uVar1 = m308[i];
         s16 uVar2 = uVar1 + 0x500;
-#if VERSION == VERSION_DEMO
-        f32 tmp = l_HIO.m10 * cM_ssin(uVar1);
-        tmp = m348 + tmp;
-#else
-        f32 tmp = m348 + l_HIO.m10 * cM_ssin(uVar1);
-#endif
+        f32 tmp4 = l_HIO.m10 * cM_ssin(uVar1);
+        f32 tmp = m348 + tmp4;
         cXyz sp14;
 
         sp14.set(tmp, 0.0f, 0.0f);
@@ -246,9 +240,7 @@ void daGy_Ctrl_c::setPathPos() {
         mDoMtx_stack_c::YrotM(uVar1);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
 
-        m290[i].x = mDoMtx_stack_c::get()[0][3];
-        m290[i].y = mDoMtx_stack_c::get()[1][3];
-        m290[i].z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m290[i]);
 
         m290[i].y = getWaterY(m290[i]);
 
@@ -257,9 +249,7 @@ void daGy_Ctrl_c::setPathPos() {
         mDoMtx_stack_c::YrotM(uVar2);
         mDoMtx_stack_c::transM(sp14.x, sp14.y, sp14.z);
 
-        m2CC[i].x = mDoMtx_stack_c::get()[0][3];
-        m2CC[i].y = mDoMtx_stack_c::get()[1][3];
-        m2CC[i].z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m2CC[i]);
 
         cXyz sp08 = m2CC[i];
         sp08.y += l_HIO.m24;

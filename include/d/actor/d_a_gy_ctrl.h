@@ -71,8 +71,10 @@ public:
     /* 0x37C */ dBgS_ObjLinChk mLinChk;
     /* 0x3E8 */ u8 m3E8;
     /* 0x3EC */ cXyz m3EC[16];
+#if VERSION > VERSION_DEMO
     /* 0x4AC */ bool m4AC;
     /* 0x4B0 */ int m4B0;
+#endif
 }; // size = 0x4B4
 
 #endif /* D_A_GY_CTRL_H */
