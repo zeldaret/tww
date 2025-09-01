@@ -17,7 +17,6 @@
 #include "d/d_vibration.h"
 #include "d/d_demo.h"
 #include "d/d_timer.h"
-#include "SSystem/SComponent/c_data_tbl.h"
 
 #include "d/res/res_always.h" // IWYU pragma: export
 
@@ -3968,7 +3967,7 @@ inline fopAc_ac_c* dComIfGp_att_getZHint() {
     return dComIfGp_getAttention().getZHintTarget();
 }
 
-inline void dComIfGp_att_chkEnemySound() {
+inline bool dComIfGp_att_chkEnemySound() {
     return dComIfGp_getAttention().chkEnemySound();
 }
 

@@ -590,6 +590,8 @@ fpc_ProcID fopAcM_createRaceItem(cXyz* p_pos, int i_itemNo, int i_itemBitNo, csX
 
 fpc_ProcID fopAcM_createIball(cXyz* p_pos, int itemTableIdx, int roomNo, csXyz* p_angle, int itemStealNum);
 
+void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param_4);
+
 fpc_ProcID fopAcM_createDemoItem(cXyz* p_pos, int itemNo, int itemBitNo, csXyz* p_angle,
                            int roomNo, cXyz* scale, u8 argFlag);
 

@@ -616,9 +616,9 @@ static BOOL daBb_Draw(bb_class* i_this) {
     daBb_shadowDraw(i_this);
     tail_draw(i_this);
 #if VERSION == VERSION_DEMO
-    dSnap_RegistFig(DSNAP_TYPE_UNKB0, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BB, &i_this->actor, 1.0f, 1.0f, 1.0f);
 #else
-    dSnap_RegistFig(DSNAP_TYPE_UNKB0, &i_this->actor, i_this->actor.eyePos, i_this->actor.shape_angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BB, &i_this->actor, i_this->actor.eyePos, i_this->actor.shape_angle.y, 1.0f, 1.0f, 1.0f);
 #endif
     return TRUE;
 }
@@ -744,7 +744,7 @@ void bb_path_move(bb_class* i_this) {
                     i_this->unk_35E = i_this->ppd->m_num - 2;
                 }
 
-                if (i_this->ppd->m_nextID + 0 != 0xFFFF) {
+                if ((s32)i_this->ppd->m_nextID != 0xFFFF) {
                     i_this->ppd = dPath_GetRoomPath(i_this->ppd->m_nextID, fopAcM_GetRoomNo(a_this));
                     JUT_ASSERT(DEMO_SELECT(1476, 1479), i_this->ppd != NULL);
                 }

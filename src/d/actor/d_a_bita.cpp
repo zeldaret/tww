@@ -49,7 +49,7 @@ static BOOL daBita_Draw(bita_class* i_this) {
 /* 0000018C-000002D0       .text mode_normal__FP10bita_class */
 static void mode_normal(bita_class* i_this) {
     if (btd != NULL) {
-        if (btd->field_0x6e16 >= 100) {
+        if (btd->m6E16 >= 100) {
             cXyz delta = dComIfGp_getCamera(0)->mLookat.mEye - i_this->current.pos;
             if (delta.abs() < 1500.0f) {
                 fopAcM_delete(i_this);

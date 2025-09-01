@@ -293,12 +293,12 @@ void iwa_move(dr2_class* i_this) {
             i_this->unk_4A8.y += a_this->speed.y;
             a_this->speed.y -= REG0_F(2) + 10.0f;
 
-            f32 fVar11 = btd->field_0x320.y + REG0_F(3);
+            f32 fVar11 = btd->m02FC[3].y + REG0_F(3);
             if (i_this->unk_4A8.y < fVar11) {
                 i_this->unk_4A8.y = fVar11;
                 i_this->unk_4BA = 2;
                 i_this->unk_400[0] = 0x32;
-                btd->field_0x2F6 = true;
+                btd->m02F6 = true;
                 fopAcM_seStartCurrent(a_this, JA_SE_CM_BTD_ROCK_HIT, 0);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
@@ -308,19 +308,19 @@ void iwa_move(dr2_class* i_this) {
             i_this->unk_40A = 3;
             cLib_addCalc2(&i_this->unk_414, 2000.0f, 0.5f, 100.0f);
 
-            i_this->unk_4A8.y = btd->field_0x320.y + REG0_F(3);
+            i_this->unk_4A8.y = btd->m02FC[3].y + REG0_F(3);
             i_this->unk_4B4.y = i_this->unk_514->current.angle.y;
             
-            if (btd->field_0x320.y < REG0_F(6) + 100.0f) {
-                i_this->unk_4C0 = (REG0_F(6) + 100.0f) - btd->field_0x320.y;
+            if (btd->m02FC[3].y < REG0_F(6) + 100.0f) {
+                i_this->unk_4C0 = (REG0_F(6) + 100.0f) - btd->m02FC[3].y;
                 i_this->unk_4C0 *= REG0_F(7) + 0.3f;
             }
 
-            sp4C = btd->field_0x320 - btd->field_0x32C;
+            sp4C = btd->m02FC[3] - btd->m02FC[4];
             sp4C.y += REG0_F(5) + -330.0f + i_this->unk_4C0;
             cLib_addCalcAngleS2(&i_this->unk_4B4.x, -cM_atan2s(sp4C.y, std::sqrtf(sp4C.x * sp4C.x + sp4C.z * sp4C.z)), 1, 0x200);
 
-            if (!btd->field_0x2F6) {
+            if (!btd->m02F6) {
                 i_this->unk_4BA = 3;
 #if VERSION == VERSION_DEMO
                 i_this->unk_4D4_demo = 
@@ -331,7 +331,7 @@ void iwa_move(dr2_class* i_this) {
             break;
 
         case 3:
-            i_this->unk_4A8.y = btd->field_0x360 + 100.0f + REG0_F(9);
+            i_this->unk_4A8.y = btd->m02FC[8].y + 100.0f + REG0_F(9);
             cLib_addCalcAngleS2(&i_this->unk_4B4.x, 0, 1, 0x100);
             cLib_addCalcAngleS2(&i_this->unk_4B4.y, 0, 1, 0x100);
 

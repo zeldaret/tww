@@ -14,7 +14,7 @@ struct himo2_s {
     /* 0x1C */ s16 m1C;
     /* 0x1E */ s16 m1E;
     /* 0x20 */ u8 m20[0x24 - 0x20];
-};  // Size: 0x24
+}; // Size: 0x24
 
 class himo2_class : public fopAc_ac_c {
 public:
@@ -96,6 +96,6 @@ public:
     /* 0x2530 */ f32 m2530;
     /* 0x2534 */ dBgS_AcchCir m2534;
     /* 0x2574 */ dBgS_ObjAcch m2574;
-};
+}; // Size: 0x2738
 
 #endif /* D_A_HIMO2_H */
