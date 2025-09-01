@@ -6,8 +6,14 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_gy_ctrl.h"
 #include "d/actor/d_a_ship.h"
+#if VERSION > VERSION_DEMO
+#include "d/actor/d_a_gy.h"
+#endif
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#if VERSION > VERSION_DEMO
+#include "d/d_s_play.h"
+#endif
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_camera.h"
