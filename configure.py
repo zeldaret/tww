@@ -1504,7 +1504,7 @@ config.libs = [
     ActorRel(Equivalent,  "d_a_kamome"),
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only
     ActorRel(NonMatching, "d_a_kantera"),
-    ActorRel(NonMatching, "d_a_kn"),
+    ActorRel(Matching,    "d_a_kn"),
     ActorRel(NonMatching, "d_a_kokiie"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ks"),
     ActorRel(NonMatching, "d_a_kt"), # regalloc
