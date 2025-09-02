@@ -63,12 +63,13 @@ void spin_draw(himo2_class* param_1) {
     s16 sVar2;
     s16 sVar3;
     s16 sVar4;
+    f32 fVar5;
     int iVar6;
     cXyz* pcVar7;
     s16 sVar8;
     s16 sVar9;
+    f32 fVar10;
     int iVar11;
-    f32 dVar12;
     cXyz local_504;
     cXyz local_510;
     cXyz local_51c;
@@ -76,15 +77,15 @@ void spin_draw(himo2_class* param_1) {
 
     sVar4 = 0;
     sVar2 = param_1->m2510;
-    local_504.y = (param_1->m217C->scale.y - 1.0f) * 8.0f;
-    local_504.z *= -7.0f;
+    fVar5 = (param_1->m217C->scale.y - 1.0f) * 8.0f;
+    fVar10 *= -7.0f;
     fVar1 = param_1->m217C->scale.y;
     if ((fopAcM_GetParam(param_1->m217C) & 0x0F) == 3) {
-        local_504.y += REG8_F(8) + -3.0f;
-        local_504.z += REG8_F(9) + 1.5f;
+        fVar5 += REG8_F(8) + -3.0f;
+        fVar10 += REG8_F(9) + 1.5f;
     }
     if (fVar1 < 0.7f) {
-        local_504.y += 3.0f;
+        fVar5 += 3.0f;
     }
     if (param_1->m251C != 0) {
         sVar9 = 700;
@@ -94,8 +95,8 @@ void spin_draw(himo2_class* param_1) {
         local_504.x = REG0_F(0) * 10.0f + 15.0f;
     }
     local_504.x = local_504.x + param_1->m24B8;
-    local_504.y = local_504.y + -152.5f;
-    local_504.z = param_1->m24B4 + 26.0f + local_504.z;
+    local_504.y = fVar5 + -152.5f;
+    local_504.z = param_1->m24B4 + 26.0f + fVar10;
     mDoMtx_YrotS(*calc_mtx, sVar2);
     MtxPosition(&local_504, &local_510);
     local_51c.x = param_1->m217C->current.pos.x + local_510.x;
@@ -106,17 +107,14 @@ void spin_draw(himo2_class* param_1) {
     local_504.z = 3.90625f;
     sVar8 = -0x30d4;
     pcVar7 = param_1->m1F30.mpLines->mpSegments + param_1->m1F6C;
-    iVar11 = 0;
-    iVar6 = 0;
-    dVar12 = -200000.0f;
     cXyz local_4f8[100];
-    for (; iVar11 < 100; iVar11++, iVar6 += 12) {
-        local_4f8[iVar6].y = dVar12;
+    for (iVar11 = 0, iVar6 = 0; iVar11 < 100; iVar11++, iVar6 += 12) {
+        local_4f8[iVar6].y = -200000.0f;
         if (iVar11 < 50) {
             sVar3 = sVar8 + REG0_S(2) + 100;
         } else if ((iVar11 >= 50) && (param_1->m24BC + 49 <= iVar11)) {
             sVar3 = sVar8 + param_1->m24C8;
-            if (100 - (REG0_S(4) + 5) >= iVar11) {
+            if (iVar11 >= 100 - (REG0_S(4) + 5)) {
                 sVar3 = REG0_S(5) + sVar3 + -1000;
             }
             if ((param_1->m217C != NULL) && (fopAcM_GetParam(param_1->m217C) != 0)) {
@@ -165,7 +163,7 @@ void spin_draw(himo2_class* param_1) {
         sVar8 = sVar3;
     }
     iVar6 = 99;
-    for (iVar11 = 0; iVar11 < 100; iVar11++, iVar6++) {
+    for (iVar11 = 0; iVar11 < 100; iVar11++, iVar6--) {
         if (local_4f8[iVar6].y > -100000.0f) {
             pcVar7->x = local_4f8[iVar6].x;
             pcVar7->y = local_4f8[iVar6].y;
@@ -178,19 +176,12 @@ void spin_draw(himo2_class* param_1) {
 
 /* 800EBABC-800EBCD0       .text himo2_control__FP11himo2_classP7himo2_s */
 void himo2_control(himo2_class* param_1, himo2_s* param_2) {
-    /* Nonmatching - for loop, regalloc */
+    /* Nonmatching - regalloc */
     f32 fVar1;
     f32 fVar2;
-    int i;
-    int iVar4;
-    int iVar5;
-    himo2_s* puVar5;
-    f32 dVar6;
-    f32 dVar7;
     f32 dVar8;
-    f32 dVar9;
-    cXyz local_74;
     cXyz local_68;
+    cXyz local_74;
 
     local_68.x = 0.0f;
     local_68.y = 0.0f;
@@ -199,33 +190,28 @@ void himo2_control(himo2_class* param_1, himo2_s* param_2) {
     } else {
         local_68.z = param_1->m2188 * 15.625f * (REG0_F(1) + 0.0007f);
     }
-    i = param_1->m02CC + 1;
-    puVar5 = param_2 + i;
-    dVar9 = 0.0f;
-    for (; i < 100; i++) {
+    s32 i = param_1->m02CC + 1;
+    himo2_s* puVar5 = param_2 + i;
+    for (; i < 100; i++, puVar5++) {
         dVar8 = ((puVar5->m10.y + param_1->m02E4) - puVar5[-1].m10.y);
         fVar1 = puVar5->m10.x - puVar5[-1].m10.x;
-        dVar7 = fVar1;
         fVar2 = puVar5->m10.z - puVar5[-1].m10.z;
-        dVar6 = fVar2;
-        iVar4 = cM_atan2s(fVar1, fVar2);
-        dVar6 = std::sqrtf((dVar7 * dVar7) + (dVar6 * dVar6));
-        iVar5 = cM_atan2s(dVar8, dVar6);
+        int iVar4 = cM_atan2s(fVar1, fVar2);
+        s16 iVar5 = -cM_atan2s(dVar8, std::sqrtf((fVar1 * fVar1) + (fVar2 * fVar2)));
         mDoMtx_YrotS(*calc_mtx, iVar4);
-        mDoMtx_XrotM(*calc_mtx, -iVar5);
+        mDoMtx_XrotM(*calc_mtx, iVar5);
         MtxPosition(&local_68, &local_74);
         puVar5->m10.x = puVar5[-1].m10.x + local_74.x;
         puVar5->m10.y = puVar5[-1].m10.y + local_74.y;
         puVar5->m10.z = puVar5[-1].m10.z + local_74.z;
-        puVar5++;
     }
 }
 
 /* 800EBCD0-800EBFEC       .text himo2_control2__FP11himo2_classP7himo2_s */
 void himo2_control2(himo2_class* param_1, himo2_s* param_2) {
     /* Nonmatching - for loop, regalloc */
-    cXyz local_b4;
     cXyz local_a8;
+    cXyz local_b4;
 
     local_a8.x = 0.0f;
     local_a8.y = 0.0f;
@@ -239,16 +225,15 @@ void himo2_control2(himo2_class* param_1, himo2_s* param_2) {
     f32 dVar8 = (REG8_F(17) + 10.0f);
     int iVar4 = param_1->m02CC;
     f32 dVar10 = dVar9;
-    for (; ++iVar4 < 100;) {
+    for (; iVar4 < 100; iVar4++, puVar6--) {
         f32 dVar11 = (puVar6->m10.y - puVar6[1].m10.y);
         int iVar3 = param_1->m02DC;
-        if ((iVar3 >= 0) && (iVar3 < 4)) {
+        if ((iVar3 >= 0) && (iVar3 <= 3)) {
             if (iVar3 != 0) {
-                int uStack_94 = 99 - iVar4 ^ 0x80000000;
-                dVar8 = (param_1->m2530 * uStack_94) * 0.01f;
+                dVar8 = (param_1->m2530 * (s32)(99 - iVar4)) * 0.01f;
             }
-            dVar10 = dVar8 * cM_ssin((param_1->m02D8 * (REG0_S(5) + 700) + iVar4 * (REG0_S(6) + 2000)) & 0xFFFF);
-            dVar9 = dVar8 * cM_scos((param_1->m02D8 * (REG0_S(7) + 500) + iVar4 * (REG0_S(8) + 2000)) & 0xFFFF);
+            dVar10 = dVar8 * cM_ssin(param_1->m02D8 * (REG0_S(5) + 700) + iVar4 * (REG0_S(6) + 2000));
+            dVar9 = dVar8 * cM_scos(param_1->m02D8 * (REG0_S(7) + 500) + iVar4 * (REG0_S(8) + 2000));
         }
         f32 fVar1 = dVar10 + (puVar6->m10.x - puVar6[1].m10.x);
         f32 dVar7 = fVar1;
@@ -256,16 +241,15 @@ void himo2_control2(himo2_class* param_1, himo2_s* param_2) {
         f32 dVar6 = fVar2;
         iVar3 = cM_atan2s(fVar1, fVar2);
         dVar6 = std::sqrtf((dVar7 * dVar7) + (dVar6 * dVar6));
-        int iVar5 = cM_atan2s(dVar11, dVar6);
+        s16 iVar5 = -cM_atan2s(dVar11, dVar6);
         puVar6[1].m1E = iVar3;
-        puVar6[1].m1C = -iVar5;
+        puVar6[1].m1C = iVar5;
         mDoMtx_YrotS(*calc_mtx, iVar3);
-        mDoMtx_XrotM(*calc_mtx, -iVar5);
+        mDoMtx_XrotM(*calc_mtx, iVar5);
         MtxPosition(&local_a8, &local_b4);
         puVar6->m10.x = puVar6[1].m10.x + local_b4.x;
         puVar6->m10.y = puVar6[1].m10.y + local_b4.y;
         puVar6->m10.z = puVar6[1].m10.z + local_b4.z;
-        puVar6++;
     }
 }
 
@@ -317,13 +301,16 @@ void himo2_draw(himo2_class* param_1, himo2_s* param_2) {
 
 /* 800EC1E4-800EC300       .text himo_hang_draw__FP11himo2_class */
 void himo_hang_draw(himo2_class* param_1) {
-    /* Nonmatching - for loop */
-    cXyz* pcVar3 = param_1->m1F30.mpLines->mpSegments + param_1->m1F6C;
+    /* Nonmatching - regalloc */
+    cXyz* pcVar3 = param_1->m1F30.getPos(0) + param_1->m1F6C;
     cXyz local_38 = param_1->m02EC[0] - param_1->m2504;
+    local_38.x *= 0.25f;
+    local_38.y *= 0.25f;
+    local_38.z *= 0.25f;
     for (int uVar2 = 0; uVar2 < 5; uVar2++, pcVar3++, param_1->m1F6C++) {
-        pcVar3->x = param_1->m2504.x + local_38.x * 0.25f * uVar2;
-        pcVar3->y = param_1->m2504.y + local_38.y * 0.25f * uVar2;
-        pcVar3->z = param_1->m2504.z + local_38.z * 0.25f * uVar2;
+        pcVar3->x = param_1->m2504.x + local_38.x * uVar2;
+        pcVar3->y = param_1->m2504.y + local_38.y * uVar2;
+        pcVar3->z = param_1->m2504.z + local_38.z * uVar2;
     }
 }
 
@@ -479,7 +466,7 @@ static BOOL daHimo2_Draw(himo2_class* param_1) {
             int uVar6 = 0;
             int uVar4 = 0;
             for (int i = 0; i < 16; i++) {
-                f32 fVar1 = cM_ssin(uVar4 & 0xFFFF);
+                f32 fVar1 = cM_ssin(uVar4);
                 pcVar7->x = param_1->m02EC[0].x + local_a34.x * uVar6 + local_a28.x * fVar1;
                 pcVar7->y = param_1->m02EC[0].y + local_a34.y * uVar6 + local_a28.y * fVar1;
                 pcVar7->z = param_1->m02EC[0].z + local_a34.z * uVar6 + local_a28.z * fVar1;
@@ -1203,33 +1190,37 @@ void new_himo2_move(himo2_class* param_1) {
             param_1->m24FC = REG0_F(16) + 3.5f;
         } else {
             param_1->m24B8 = 0.0f;
-            if (l_himo2HIO.m06 == 2) {
+            switch (l_himo2HIO.m06) {
+            case 0:
+                fVar26 = cM_rndF(1.0f);
+                if (fVar26 < 0.5f) {
+                    param_1->m2514 = 1.0f;
+                } else {
+                    param_1->m2514 = -1.0f;
+                }
+                fVar26 = cM_rndF(1.0f);
+                if (fVar26 < 0.5f) {
+                    param_1->m2518 = 1.0f;
+                } else {
+                    param_1->m2518 = -1.0f;
+                }
+                break;
+            case 1:
+                param_1->m2514 = 1.0f;
+                param_1->m2518 = 1.0f;
+                break;
+            case 2:
                 param_1->m2514 = 1.0f;
                 param_1->m2518 = -1.0f;
-            } else if (l_himo2HIO.m06 < 2) {
-                if (l_himo2HIO.m06 == 0) {
-                    fVar26 = cM_rndF(1.0f);
-                    if (fVar26 < 0.5f) {
-                        param_1->m2514 = 1.0f;
-                    } else {
-                        param_1->m2514 = -1.0f;
-                    }
-                    fVar26 = cM_rndF(1.0f);
-                    if (fVar26 < 0.5f) {
-                        param_1->m2518 = 1.0f;
-                    } else {
-                        param_1->m2518 = -1.0f;
-                    }
-                } else if (l_himo2HIO.m06 < -1) {
-                    param_1->m2514 = 1.0f;
-                    param_1->m2518 = 1.0f;
-                }
-            } else if (l_himo2HIO.m06 == 4) {
-                param_1->m2514 = -1.0f;
-                param_1->m2518 = -1.0f;
-            } else if (l_himo2HIO.m06 < 4) {
+                break;
+            case 3:
                 param_1->m2514 = -1.0f;
                 param_1->m2518 = 1.0f;
+                break;
+            case 4:
+                param_1->m2514 = -1.0f;
+                param_1->m2518 = -1.0f;
+                break;
             }
             if (param_1->m2518 < 0.0f) {
                 param_1->m24FC = REG0_F(6) + 3.0f;
@@ -1244,34 +1235,32 @@ void new_himo2_move(himo2_class* param_1) {
         cLib_addCalc2(&param_1->m24B4, -144.0f, 1.0f, 10.0f);
         if (param_1->m24B4 > -145.0f) {
             if (param_1->m24BC < 400) {
-                fVar26 = 20.0f - ((param_1->m217C->scale).y - 1.0f) * 17.0f;
+                fVar26 = 20.0f - (param_1->m217C->scale.y - 1.0f) * 17.0f;
                 if (fVar26 < 0.5f) {
                     fVar26 = 0.5f;
                 }
                 iVar8 = (param_1->m24C4 / fVar26);
-                param_1->m24C0 = param_1->m24BC;
+                param_1->m24C0 = iVar8 + 1;
                 param_1->m24BC += iVar8;
                 param_1->m24C4 += 1.0f;
-                iVar9 = param_1->m24C0;
-                if (iVar9 == 0) {
+                if (param_1->m24C0 == 0) {
                     fopAcM_seStart(param_1, JA_SE_LK_ROPE_COIL_1, 0);
-                } else if ((iVar9 >= 13) && (param_1->m24BC <= iVar8 + 13)) {
+                } else if ((param_1->m24C0 >= 13) && (param_1->m24BC <= iVar8 + 13)) {
                     fopAcM_seStart(param_1, JA_SE_LK_ROPE_COIL_2, 0);
-                } else if ((iVar9 >= 26) && (param_1->m24BC <= iVar8 + 26)) {
+                } else if ((param_1->m24C0 >= 26) && (param_1->m24BC <= iVar8 + 26)) {
                     fopAcM_seStart(param_1, JA_SE_LK_ROPE_COIL_3, 0);
-                } else if ((iVar9 >= 39) && (param_1->m24BC <= iVar8 + 39)) {
+                } else if ((param_1->m24C0 >= 39) && (param_1->m24BC <= iVar8 + 39)) {
                     fopAcM_seStart(param_1, JA_SE_LK_ROPE_COIL_3, 0);
                 }
             }
             if ((fopAcM_GetParam(param_1->m217C) & 0x0F) == 3) {
-                fVar26 = ((param_1->m217C->scale).y - 0.14f) + REG8_F(7);
+                fVar26 = (param_1->m217C->scale.y - 0.14f) + REG8_F(7);
             } else {
-                fVar26 = (param_1->m217C->scale).y;
+                fVar26 = param_1->m217C->scale.y;
             }
-            uVar6 = (uint)(4000.0f - (fVar26 - 1.0f) * 2000.0f);
-            sVar15 = uVar6;
-            cLib_addCalcAngleS2(&param_1->m24C8, sVar15, 1, (sVar15 >> 3) + (u16)(sVar15 < 0 && (uVar6 & 7) != 0));
-            if (param_1->m24BC < 49) {
+            sVar15 = (4000.0f - (fVar26 - 1.0f) * 2000.0f);
+            cLib_addCalcAngleS2(&param_1->m24C8, sVar15, 1, (sVar15 / 8));
+            if (param_1->m24BC > 49) {
                 if (param_1->m24CA == 9000) {
                     param_1->m24CA = 0x238c;
                 } else if (param_1->m24CA < 9000) {
@@ -1301,6 +1290,7 @@ void new_himo2_move(himo2_class* param_1) {
         } else {
             cLib_addCalc2(&param_1->m24FC, 1.0f, REG0_F(4) + 0.2f, REG0_F(5) + 0.1f);
         }
+        break;
     }
     case 3: {
         param_1->m217C->health = 2;
@@ -1402,15 +1392,12 @@ void new_himo2_move(himo2_class* param_1) {
         dVar21 = g_mDoCPd_cpadInfo[0].mCStickPosY;
     }
     case 6: {
-        iVar8 = g_mDoCPd_cpadInfo[0].mCStickPosX * (REG0_F(6) + 1000.0f);
-        param_1->m2512 += iVar8;
+        param_1->m2512 += (s16)(g_mDoCPd_cpadInfo[0].mCStickPosX * (REG0_F(6) + 1000.0f));
         cLib_addCalcAngleS2(&param_1->m2510, param_1->m2512, 4, 0x1000);
         if (dVar21 <= -0.1f) {
-            fVar26 = std::fabsf(dVar21);
-            cLib_addCalc2(&param_1->m24F8, REG0_F(7) + 70.0f, 1.0f, fVar26 * 3.0f);
+            cLib_addCalc2(&param_1->m24F8, REG0_F(7) + 70.0f, 1.0f, std::fabsf(dVar21) * 3.0f);
         } else if (dVar21 >= 0.1f) {
-            fVar26 = ::std::fabsf(dVar21);
-            cLib_addCalc2(&param_1->m24F8, REG0_F(8) + 20.0f, 1.0f, fVar26 * 3.0f);
+            cLib_addCalc2(&param_1->m24F8, REG0_F(8) + 20.0f, 1.0f, std::fabsf(dVar21) * 3.0f);
         }
         cLib_addCalc2(&param_1->m24F4, param_1->m24F8, 0.1f, 10.0f);
         mDoMtx_YrotS(*calc_mtx, param_1->m2510);
@@ -1435,7 +1422,7 @@ void new_himo2_move(himo2_class* param_1) {
         break;
     }
     case 7: {
-        if (player->getRopeJumpLand() || (param_1->m029C == 0)) {
+        if (!player->getRopeJumpLand() && (param_1->m029C != 0)) {
             if (!param_1->eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderPotentialEvent(param_1, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
                 param_1->eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -1449,9 +1436,9 @@ void new_himo2_move(himo2_class* param_1) {
         if (param_1->m029C != 0) {
             break;
         }
-        if (dr->unk_4BA < 9) {
+        if (dr->unk_4BA >= 10) {
             param_1->m24D9 = 0;
-            camera->mCamera.Reset(param_1->m24DC, param_1->m24E8);
+            camera->mCamera.Reset(param_1->m24E8, param_1->m24DC);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
             dComIfGp_event_reset();
@@ -1497,7 +1484,7 @@ void new_himo2_move(himo2_class* param_1) {
                 param_1->m2520 = REG0_F(11) + 50.0f;
                 btd->m6E15 = 0xB4;
             }
-            if (param_1->m029C < 81) {
+            if (param_1->m029C <= 80) {
                 cLib_addCalc2(&param_1->m24F4, REG0_F(14) + 40.0f, 0.5f, 2.0f);
             }
         }
@@ -1568,33 +1555,35 @@ void new_himo2_move(himo2_class* param_1) {
         local_188.y = param_1->m24E8.y + local_188.y;
         local_188.z = param_1->m24E8.z;
         dVar21 = cM_scos(param_1->m02D8 * 0x1C00);
-        iVar8 = ((param_1->m2520 * dVar21) * 7.5f);
+        iVar8 = (param_1->m2520 * (dVar21 * 7.5f));
         camera->mCamera.Set(local_188, local_17c, iVar8, param_1->m24F4);
         cLib_addCalc0(&param_1->m2520, (REG0_F(16) + 2.0f), dVar19);
         sVar15 = 0;
         if ((param_1->m217C != NULL) && ((fopAcM_GetParam(param_1->m217C) & 0xF0) != 0)) {
             sVar15 = -50;
         }
-        if (((sVar15 + 0x82) < param_1->m24BC) && (REG0_S(8) == 0)) {
+        if ((param_1->m24BC > sVar15 + 0x82) && (REG0_S(8) == 0)) {
             if ((fopAcM_GetParam(param_1->m217C) & 0xF0) == 0) {
-                if (dr->unk_4BA < 10) {
-                    param_1->m24D9 = 4;
-                    param_1->m24D8 = 2;
-                    param_1->m029C = 0;
-                    if (btd != 0) {
-                        fopAcM_OnStatus(btd, 0x4000);
+                if (param_1->m24D9 == 2) {
+                    if (dr->unk_4BA < 10) {
+                        param_1->m24D9 = 4;
+                        param_1->m24D8 = 2;
+                        param_1->m029C = 0;
+                        if (btd != 0) {
+                            fopAcM_OnStatus(btd, 0x4000);
+                        }
+                    } else {
+                        param_1->m24D9 = 3;
+                        param_1->m029C = REG0_S(2) + 65;
                     }
+                    param_1->m24D8 = 2;
                 } else {
-                    param_1->m24D9 = 3;
-                    param_1->m029C = REG0_S(2) + 65;
+                    camera->mCamera.Start();
+                    param_1->m24D9 = 0;
+                    param_1->m24D8 = 2;
+                    fopAcM_SetParam(param_1, 2);
+                    dComIfGp_event_reset();
                 }
-                param_1->m24D8 = 2;
-            } else if (param_1->m24D9 == 2) {
-                camera->mCamera.Start();
-                param_1->m24D9 = 0;
-                param_1->m24D8 = 2;
-                fopAcM_SetParam(param_1, 2);
-                dComIfGp_event_reset();
             }
         }
     }
@@ -1606,17 +1595,11 @@ void new_himo2_move(himo2_class* param_1) {
 /* 800F01BC-800F062C       .text daHimo2_Execute__FP11himo2_class */
 static BOOL daHimo2_Execute(himo2_class* param_1) {
     /* Nonmatching - last for loop, regalloc */
-    daPy_py_c* apdVar1;
-    himo2_s* phVar3;
     int iVar4;
     int iVar5;
-    f32 dVar7;
-    f32 dVar8;
-    f32 dVar9;
-    f32 fVar10;
     cXyz local_c8;
 
-    apdVar1 = daPy_getPlayerActorClass();
+    daPy_py_c* apdVar1 = daPy_getPlayerActorClass();
     if (btd == NULL) {
         btd = (btd_class*)fpcEx_Search(b_a_sub, param_1);
     }
@@ -1645,21 +1628,14 @@ static BOOL daHimo2_Execute(himo2_class* param_1) {
         iVar5 = 3;
     }
     dBgS_GndChk local_bc;
-    phVar3 = &param_1->m1120[0];
-    dVar7 = 60.0f;
-    dVar8 = 5.0f;
-    dVar9 = -100000.0f;
-    for (iVar4 = 0; iVar4 < iVar5; iVar4++) {
+    himo2_s* phVar3 = &param_1->m1120[0];
+    for (iVar4 = 0; iVar4 < iVar5; iVar4++, phVar3++) {
         if (param_1->m02DC != 2) {
-            local_bc.m_pos.x = phVar3->m10.x;
-            local_bc.m_pos.y = phVar3->m10.y + dVar7;
-            local_bc.m_pos.z = phVar3->m10.z;
-            fVar10 = dComIfG_Bgsp()->GroundCross(&local_bc);
-            phVar3->m0C = (dVar8 + fVar10);
+            local_bc.GetPointP()->set(phVar3->m10.x, phVar3->m10.y + 60.0f, phVar3->m10.z);
+            phVar3->m0C = (5.0f + dComIfG_Bgsp()->GroundCross(&local_bc));
         } else {
-            phVar3->m0C = dVar9;
+            phVar3->m0C = -100000.0f;
         }
-        phVar3++;
     }
     new_himo2_move(param_1);
     phVar3 = &param_1->m0310[0];
@@ -1721,10 +1697,10 @@ static int CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 800F07F4-800F0B08       .text daHimo2_Create__FP10fopAc_ac_c */
 static cPhs_State daHimo2_Create(fopAc_ac_c* i_this) {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - .data */
     cPhs_State phase_state;
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     himo2_class* a_this = (himo2_class*)i_this;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     fopAcM_SetupActor(i_this, himo2_class);
     if (!fopAcM_entrySolidHeap(a_this, CallbackCreateHeap, REG0_S(9) + 0x9050)) {
