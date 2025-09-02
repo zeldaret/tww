@@ -19,7 +19,7 @@ public:
     daNpc_Nz_HIO_c();
     virtual ~daNpc_Nz_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x00 - vtable */

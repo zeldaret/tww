@@ -34,7 +34,8 @@ public:
         m1C = 2.3f;
         m20 = 1.9f;
     }
-    virtual ~himo2HIO_c() {};
+    virtual ~himo2HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

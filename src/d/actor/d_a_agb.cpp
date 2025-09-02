@@ -31,7 +31,7 @@ public:
     daAgb_HIO_c();
     virtual ~daAgb_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ J3DGXColorS10 field_0x04[2];

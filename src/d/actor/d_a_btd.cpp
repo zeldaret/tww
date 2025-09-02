@@ -27,6 +27,7 @@ class daBtd_HIO_c : public JORReflexible {
 public:
     daBtd_HIO_c();
     virtual ~daBtd_HIO_c() {};
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

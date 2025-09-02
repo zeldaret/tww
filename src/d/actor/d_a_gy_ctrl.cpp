@@ -25,7 +25,7 @@ public:
     daGy_Ctrl_HIO_c();
     virtual ~daGy_Ctrl_HIO_c() {}
 
-    void genMessage(JORMContext*);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ u8 m04;
