@@ -987,8 +987,12 @@ struct J3DColorChan {
     }
     J3DColorChan(u16 id) : mChanCtrl(id) {}
     u8 getAttnFn() const {
+#ifdef DECOMPCTX // Hack, see comment in dolzel.pch for details
+        return 0;
+#else
         u8 attnFnTbl[] = { GX_AF_NONE, GX_AF_SPEC, GX_AF_NONE, GX_AF_SPOT };
         return attnFnTbl[(u32)(mChanCtrl & (3 << 9)) >> 9];
+#endif
     }
     u8 getDiffuseFn() const { return ((u32)(mChanCtrl & (3 << 7)) >> 7); }
     u8 getLightMask() const { return ((mChanCtrl >> 2) & 0x0f) | ((mChanCtrl >> 11) & 0x0f) << 4; }

@@ -191,6 +191,13 @@ config.reconfig_deps = []
 # Can be overridden in libraries or objects
 config.scratch_preset_id = 72 # The Wind Waker (DOL)
 
+# Globs to exclude from context files
+# *.mch excludes precompiled header output (which cannot be parsed)
+config.context_exclude_globs = ["*.mch"]
+
+# Macro definitions to inject into context files
+config.context_defines = ["DECOMPCTX"]
+
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
 cflags_base = [
