@@ -17,7 +17,7 @@ public:
     /* Place member variables here */
     /* 0x290 */ J3DModel* mJ3DModel;
     /* 0x294 */ request_of_phase_process_class mPhase;
-    /* 0x29C */ mDoExt_btkAnm field_0x29C;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
     /* 0x2B0 */ u8 field_0x2B0;
     /* 0x2B1 */ u8 field_0x2B1;
 };

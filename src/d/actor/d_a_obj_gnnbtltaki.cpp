@@ -8,8 +8,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/res/res_kamome.h"
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_bss_3569.h"
 
 const char daObjGnnbtaki_c::M_arcname[] = "Gnnbtltaki";
 
@@ -29,17 +27,15 @@ BOOL daObjGnnbtaki_c::create_heap() {
     if (mdl_data != NULL) {
         mJ3DModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mJ3DModel != NULL) {
-            J3DAnmTextureSRTKey *btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, KAMOME_BAS_KA_MOVE1));
-
+            J3DAnmTextureSRTKey *btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, 7));
             JUT_ASSERT(0x61, btk_data != NULL);
             if (btk_data != NULL) {
-                if (field_0x29C.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
+                if (mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
                     ret = TRUE;
                 }
             }
         }
     }
-
     return ret;
 }
 
@@ -56,18 +52,17 @@ cPhs_State daObjGnnbtaki_c::_create() {
             }
             cullMtx = mJ3DModel->getBaseTRMtx();
             init_mtx();
-            field_0x29C.getFrameCtrl()->setFrame(field_0x29C.getStartFrame());
+            mBtkAnm.getFrameCtrl()->setFrame(mBtkAnm.getStartFrame());
             if (field_0x2B1 == 1) {
-                field_0x29C.setPlaySpeed(0.0);
+                mBtkAnm.setPlaySpeed(0.0);
                 field_0x2B0 = 0;
             } else {
-                field_0x29C.setPlaySpeed(1.0);
+                mBtkAnm.setPlaySpeed(1.0);
                 field_0x2B0 = 1;
             }
             state = cPhs_COMPLEATE_e;
         }
     }
-
     return state;
 }
 
@@ -84,8 +79,6 @@ void daObjGnnbtaki_c::init_mtx() {
 
 /* 0000043C-00000548       .text _execute__15daObjGnnbtaki_cFv */
 bool daObjGnnbtaki_c::_execute() {
-    /* Nonmatching */
-
     if (field_0x2B1 == 1 &&
         !strcmp(dComIfGp_getStartStageName(), "GTower") &&
         dComIfGp_event_runCheck() != FALSE &&
@@ -93,13 +86,12 @@ bool daObjGnnbtaki_c::_execute() {
         dComIfGp_demo_get() != NULL &&
         field_0x2B0 == 0 &&
         dComIfGp_demo_get()->getFrameNoMsg() >= 0x126F) {
-        f32 startFrame = field_0x29C.getStartFrame();
-        field_0x29C.setFrame(startFrame);
-        field_0x29C.setPlaySpeed(1.0f);
+        f32 startFrame = mBtkAnm.getStartFrame();
+        mBtkAnm.setFrame(startFrame);
+        mBtkAnm.setPlaySpeed(1.0f);
         field_0x2B0 = 1;
     }
-
-    field_0x29C.play();
+    mBtkAnm.play();
     return true;
 }
 
@@ -108,7 +100,7 @@ bool daObjGnnbtaki_c::_draw() {
     if (field_0x2B0 != NULL) {
         g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mJ3DModel, &tevStr);
-        field_0x29C.entry(mJ3DModel->getModelData());
+        mBtkAnm.entry(mJ3DModel->getModelData());
         mDoExt_modelUpdateDL(mJ3DModel);
     }
     return true;
