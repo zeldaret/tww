@@ -2,7 +2,6 @@
  * d_a_obj_gnnbtltaki.cpp
  * Object - Ganondorf Fight - Background waterfalls (during fight)
  */
-
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gnnbtltaki.h"
 #include "d/d_procname.h"
@@ -68,7 +67,11 @@ cPhs_State daObjGnnbtaki_c::_create() {
 
 /* 000003EC-0000041C       .text _delete__15daObjGnnbtaki_cFv */
 bool daObjGnnbtaki_c::_delete() {
+#if VERSION == VERSION_DEMO
+    dComIfG_deleteObjectRes(M_arcname);
+#else
     dComIfG_resDelete(&mPhase, M_arcname);
+#endif
     return true;
 }
 
