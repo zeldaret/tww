@@ -18,13 +18,24 @@ BOOL daObjGnnbtaki_c::solidHeapCB(fopAc_ac_c *i_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnnbtaki_cFv */
 BOOL daObjGnnbtaki_c::create_heap() {
+#if VERSION == VERSION_DEMO
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
+    BOOL ret = FALSE;
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 4);
+#else
     BOOL ret = FALSE;
     J3DModelData *mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
+#endif
     JUT_ASSERT(0x5A, mdl_data != NULL);
     if (mdl_data != NULL) {
         mJ3DModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mJ3DModel != NULL) {
+#if VERSION == VERSION_DEMO
+            btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, 7);
+#else
             J3DAnmTextureSRTKey *btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, 7));
+#endif
             JUT_ASSERT(0x61, btk_data != NULL);
             if (btk_data != NULL) {
                 if (mBtkAnm.init(mdl_data, btk_data, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, FALSE)) {
