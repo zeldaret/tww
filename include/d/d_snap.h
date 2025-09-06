@@ -207,7 +207,7 @@ enum {
     /* 0xC7 */ DSNAP_TYPE_BTD,
     /* 0xC8 */ DSNAP_TYPE_UNKC8,
     /* 0xC9 */ DSNAP_TYPE_BST,
-    /* 0xCA */ DSNAP_TYPE_UNKCA,
+    /* 0xCA */ DSNAP_TYPE_BDK,
     /* 0xCB */ DSNAP_TYPE_UNKCB,
     /* 0xCC */ DSNAP_TYPE_UNKCC,
     /* 0xCD */ DSNAP_TYPE_UNKCD,
