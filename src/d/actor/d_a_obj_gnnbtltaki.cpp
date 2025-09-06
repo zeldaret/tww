@@ -12,14 +12,12 @@ const char daObjGnnbtaki_c::M_arcname[] = "Gnnbtltaki";
 
 /* 00000078-00000098       .text solidHeapCB__15daObjGnnbtaki_cFP10fopAc_ac_c */
 BOOL daObjGnnbtaki_c::solidHeapCB(fopAc_ac_c *i_this) {
-    /* Nonmatching */
     daObjGnnbtaki_c *a_this = (daObjGnnbtaki_c *) i_this;
     return a_this->create_heap();
 }
 
 /* 00000098-000001F4       .text create_heap__15daObjGnnbtaki_cFv */
 BOOL daObjGnnbtaki_c::create_heap() {
-    /* Nonmatching */
     BOOL ret = FALSE;
     J3DModelData *mdl_data =  static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 4));
     JUT_ASSERT(0x5A, mdl_data != NULL);
