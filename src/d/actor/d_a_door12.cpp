@@ -428,7 +428,7 @@ void daDoor12_c::setEventPrm() {
             }
         }
 
-        if (checkArea(12100.0f, 12100.0f, 62500.0f)) {
+        if (checkArea(SQUARE(110.0f), SQUARE(110.0f), SQUARE(250.0f))) {
             eventInfo.setEventId(mEventIdx[m2C6]);
             eventInfo.setToolId(mToolId[m2C6]);
             eventInfo.onCondition(dEvtCnd_CANDOOR_e);

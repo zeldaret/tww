@@ -1300,7 +1300,7 @@ bool daAuction_c::eventCameraTest() {
 
 /* 00002F6C-0000369C       .text next_msgStatus__11daAuction_cFPUl */
 u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
-    u16 ret = 0xF;
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*pMsgNo) {
     case 0x1CF2:
@@ -1337,7 +1337,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
                 *pMsgNo = l_npc_msg_dat[getAucMdlNo(m824)].field_0x02;
             }
         } else {
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
 
         m825 = m824;
@@ -1395,7 +1395,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         if (mpCurrMsg->mSelectNum == 0) {
             *pMsgNo = 0x1D1F;
         } else {
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
         break;
     case 0x1D1A:
@@ -1403,14 +1403,14 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             m82B = 1;
         }
 
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D1F:
         dComIfGp_setNextStage("sea", 3, 11);
     case 0x1D24:
         m82B = 1;
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D20:
@@ -1435,7 +1435,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
     case 0x1D3C:
         this->m834 |= 2;
         this->m808 = 0;
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D05:
@@ -1451,12 +1451,12 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             }
 
             fopAcM_delete(mCurrAuctionItemPID);
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
         break;
     case 0x1D1C:
         dComIfGp_setItemRupeeCount(mCurrBid);
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x1D07:
         dComIfGp_setItemRupeeCount(-mCurrBid);
@@ -1468,17 +1468,17 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         break;
     
     default:
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     }
 
-    if (ret == 0xF) {
+    if (msgStatus == fopMsgStts_MSG_CONTINUES_e) {
         m7EC = *pMsgNo;
     } else {
         m7EC = 0;
     }
 
-    return ret;
+    return msgStatus;
 }
 
 /* 0000369C-000036AC       .text setMessage__11daAuction_cFUl */

@@ -84,8 +84,8 @@ void daDai_c::CreateInit() {
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
 
-    if (mDoLib_clipper::mSystemFar > 1.0f) {
-        fopAcM_setCullSizeFar(this, 5000.0f / mDoLib_clipper::mSystemFar);
+    if (mDoLib_clipper::getFar() > 1.0f) {
+        fopAcM_setCullSizeFar(this, 5000.0f / mDoLib_clipper::getFar());
     }
 
     set_mtx();
@@ -116,7 +116,7 @@ void daDai_c::CreateInit() {
 cPhs_State daDai_c::_create() {
     fopAcM_SetupActor(this, daDai_c);
 
-    if (!checkItemGet(0x30, 1)) {
+    if (!checkItemGet(dItem_DELIVERY_BAG_e, TRUE)) {
         return cPhs_ERROR_e;
     }
 
@@ -296,12 +296,12 @@ u32 daDai_c::getMsg() {
 }
 
 /* 00000EDC-0000109C       .text next_msgStatus__7daDai_cFPUl */
-u16 daDai_c::next_msgStatus(unsigned long* arg1) {
-    u16 uVar8 = 0xf;
+u16 daDai_c::next_msgStatus(u32* pMsgNo) {
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
-    switch (*arg1) {
+    switch (*pMsgNo) {
     case 0xF11:
-        *arg1 = 0xf12;
+        *pMsgNo = 0xf12;
         break;
 
     case 0xF0D:
@@ -309,7 +309,7 @@ u16 daDai_c::next_msgStatus(unsigned long* arg1) {
         case 0:
             if (dComIfGs_checkReserveItemEmpty() && getRotenItemNumInBag() < 3) {
                 fopAcM_seStart(this, JA_SE_LK_W_DAIZA_TAKEOFF, 0);
-                *arg1 = 0xf0f;
+                *pMsgNo = 0xf0f;
 
                 fopAc_ac_c* pfVar4 = fopAcM_SearchByID(m850);
                 if (pfVar4 != NULL) {
@@ -322,13 +322,13 @@ u16 daDai_c::next_msgStatus(unsigned long* arg1) {
                 decNowItemNum();
                 m84A = 0;
             } else {
-                *arg1 = 0xf0e;
+                *pMsgNo = 0xf0e;
             }
             break;
 
         case 1:
         default:
-            uVar8 = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
             break;
         }
         break;
@@ -336,11 +336,11 @@ u16 daDai_c::next_msgStatus(unsigned long* arg1) {
     case 0xF0E:
     case 0xF12:
     default:
-        uVar8 = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     }
 
-    return uVar8;
+    return msgStatus;
 }
 
 /* 0000109C-000010BC       .text daDai_Create__FPv */

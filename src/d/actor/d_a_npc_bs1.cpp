@@ -865,7 +865,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 }
 
                 int itemNo = mShopItems.getSelectItemNo();
-                if(!checkItemGet(itemNo, 0)) {
+                if(!checkItemGet(itemNo, FALSE)) {
                     m82A = 3;
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
@@ -940,7 +940,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 }
 
                 // these int casts are probably fake
-                if(!checkItemGet((int)mShopItems.getSelectItemNo(), 0)) {
+                if(!checkItemGet((int)mShopItems.getSelectItemNo(), FALSE)) {
                     m82A = 3;
                     msgStatus = fopMsgStts_MSG_ENDS_e;
                     break;
@@ -1869,7 +1869,7 @@ BOOL daNpc_Bs1_c::evn_talk() {
                 l_msgId = fpcM_ERROR_PROCESS_ID_e;
                 return TRUE;
             }
-            if ((msgStatus == 2 || msgStatus == 6) && (m738 == m744)) {
+            if ((msgStatus == fopMsgStts_BOX_OPENING_e || msgStatus == fopMsgStts_MSG_TYPING_e) && (m738 == m744)) {
                 m744 = 0;
                 return TRUE;
             }
