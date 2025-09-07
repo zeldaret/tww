@@ -13,6 +13,26 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
+enum Mode {
+#if VERSION == VERSION_DEMO
+    Mode_0_e = 0,
+    Mode_1_e = 1,
+    Mode_10_e = 10,
+#else
+    Mode_10_e = 0,
+#endif
+    Mode_11_e,
+    Mode_12_e,
+    Mode_13_e,
+    Mode_14_e,
+    Mode_15_e,
+    Mode_16_e,
+    Mode_17_e,
+    Mode_18_e,
+    Mode_19_e,
+    Mode_20_e,
+};
+
 static const GXColor unused_color = {0xFF, 0, 0, 0x40};
 #if VERSION == VERSION_DEMO
 static const GXColor unused_colors[] = {
@@ -20,7 +40,6 @@ static const GXColor unused_colors[] = {
     {0, 0xFF, 0, 0xFF},
     {0, 0, 0xFF, 0xFF},
 };
-
 #endif
 
 /* 00000078-00000120       .text daKN_Draw__FP8kn_class */
@@ -103,7 +122,6 @@ void shibuki_set(kn_class* i_this) {
     }
 }
 
-#if VERSION == VERSION_DEMO
 /* 00000440-00000CE8       .text kn_move__FP8kn_class */
 void kn_move(kn_class* i_this) {
     f32 fVar8;
@@ -121,14 +139,15 @@ void kn_move(kn_class* i_this) {
     s32 idx2;
 
     switch (i_this->m2BD) {
-    case 0:
-        anm_init(i_this, 7, 5.0f, 2, 1.0f, -1);
+#if VERSION == VERSION_DEMO
+    case Mode_0_e:
+        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
         i_this->m2CC = -25.0f;
         i_this->actor.current.angle.z = -0x2000;
         i_this->m2BD++;
         break;
 
-    case 1:
+    case Mode_1_e:
         cLib_addCalc0(&i_this->m2CC, 0.3f, 1.0f);
         if (i_this->m2CC > -10.0f) {
             cLib_addCalcAngleS2(&i_this->actor.current.angle.z, 0, 2, 0x200);
@@ -137,11 +156,11 @@ void kn_move(kn_class* i_this) {
         if (abs(i_this->actor.shape_angle.z) < 0x100) {
             i_this->actor.current.angle.z = 0;
             i_this->actor.shape_angle.z = 0;
-            i_this->m2BD = 0xc;
+            i_this->m2BD = Mode_12_e;
         }
         break;
-
-    case 10:
+#endif
+    case Mode_10_e:
         if (cM_rnd() < 0.5f) {
             anm_init(i_this, KN_BCK_WAIT01, 5.0f, 2, 1.0f, -1);
         } else {
@@ -151,21 +170,21 @@ void kn_move(kn_class* i_this) {
         i_this->m2CA = cM_rndF(2.0f) + 1.0f;
         i_this->m2BD++;
 
-    case 11:
+    case Mode_11_e:
         cLib_addCalc0(&i_this->actor.speedF, 1.0f, 2.0f);
         if (i_this->mpMorf->checkFrame(43.0f)) {
             i_this->m2CA--;
             if (i_this->m2CA <= 0) {
-                i_this->m2BD = 12;
+                i_this->m2BD = Mode_12_e;
             }
         }
 
         if ((i_this->m2C2[2] == 0) && fopAcM_searchPlayerDistance(&i_this->actor) < f28) {
-            i_this->m2BD = 18;
+            i_this->m2BD = Mode_18_e;
         }
         break;
 
-    case 12:
+    case Mode_12_e:
         anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
         i_this->m2D0 = i_this->actor.current.angle.y + cM_rndFX(10752.0f);
         i_this->m2E8 = f26;
@@ -178,46 +197,53 @@ void kn_move(kn_class* i_this) {
             i_this->m2E8 = f26;
         }
 
+#if VERSION == VERSION_DEMO
+        // Fakematch?
         idx = 40;
         rand = cM_rndF(idx);
         idx2 = 20;
         i_this->m2C2[0] = idx2 + rand;
+#else
+        idx = 40;
+        idx2 = 20;
+        i_this->m2C2[0] = cM_rndF(idx) + idx2;
+#endif
         i_this->m2E4 = i_this->m2E8;
         i_this->m2D2 = 0x800;
         i_this->m2BE = 0;
         i_this->m2BD++;
 
-    case 13:
+    case Mode_13_e:
         if (fopAcM_searchPlayerDistance(&i_this->actor) < f28) {
-            i_this->m2BD = 18;
+            i_this->m2BD = Mode_18_e;
         } else if (i_this->m2C2[2] == 0) {
             if (i_this->m2BE != 0) {
                 shibuki_set(i_this);
                 i_this->m2BF = 0;
-                i_this->m2BD = 15;
+                i_this->m2BD = Mode_15_e;
             } else if (std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > f29) {
                 i_this->m2C2[1] = 0x14;
                 i_this->m2E4 = i_this->m2E8 * -1.0f;
-                i_this->m2BD = 14;
+                i_this->m2BD = Mode_14_e;
             } else if (i_this->m2C2[0] == 0) {
-                i_this->m2BD = 10;
+                i_this->m2BD = Mode_10_e;
             }
         }
         break;
 
-    case 14:
+    case Mode_14_e:
         if (i_this->m2C2[1] == 0) {
             if (std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > f29) {
                 i_this->m2D0 = cM_atan2s(fVar8, fVar1);
                 i_this->m2E4 = std::fabsf(i_this->m2E8);
                 i_this->m2C2[1] = 8;
             } else {
-                i_this->m2BD = 10;
+                i_this->m2BD = Mode_10_e;
             }
         }
         break;
 
-    case 15:
+    case Mode_15_e:
         i_this->actor.speedF = 0.0f;
         i_this->m2E4 = 0.0;
         i_this->m2C0 = 0;
@@ -225,7 +251,7 @@ void kn_move(kn_class* i_this) {
         anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
         i_this->m2BD++;
 
-    case 16:
+    case Mode_16_e:
         if (i_this->m2C2[0] == 0) {
             f32 fVar9 = -7.0f;
             if (i_this->actor.scale.x > 1.5f) {
@@ -254,12 +280,12 @@ void kn_move(kn_class* i_this) {
                     shibuki_set(i_this);
                 }
                 anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
-                i_this->m2BD = 17;
+                i_this->m2BD = Mode_17_e;
             }
         }
         break;
 
-    case 17:
+    case Mode_17_e:
         cLib_addCalc0(&i_this->m2CC, 0.1f, 1.0f);
         if (i_this->m2CC < 0.2f) {
             if (i_this->m2BF != 0) {
@@ -267,11 +293,11 @@ void kn_move(kn_class* i_this) {
             }
             i_this->m2CC = 0.0f;
             i_this->m2C2[2] = 0x28;
-            i_this->m2BD = 12;
+            i_this->m2BD = Mode_12_e;
         }
         break;
 
-    case 18:
+    case Mode_18_e:
         anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 2.0f, -1);
         i_this->m2E8 = 40.0;
         i_this->m2C2[0] = 0;
@@ -293,214 +319,29 @@ void kn_move(kn_class* i_this) {
         }
         i_this->m2BD++;
 
-    case 19:
+    case Mode_19_e:
         if (i_this->mAcchCir.ChkWallHit() || std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > f29) {
-            i_this->m300 = i_this->actor.current.pos;
-            i_this->m2BF = 1;
-            smoke_set(i_this);
-            i_this->m2BD = 15;
-        } else if (i_this->m2BE != 0) {
-            i_this->m2BF = 0;
-            shibuki_set(i_this);
-            i_this->m2BD = 15;
-        }
-        break;
-    }
-
-    if (i_this->m2BD >= 13) {
-        if (i_this->m2BD < 18) {
-            i_this->m2E0 = 1.0f;
-            if ((s16)cLib_distanceAngleS(i_this->actor.current.angle.y, i_this->m2D0) > 0x100) {
-                i_this->m2E0 = 2.0f;
-            }
-            cLib_addCalc2(&i_this->m2DC, i_this->m2E0, 0.5f, 1.0f);
-            i_this->mpMorf->setPlaySpeed(i_this->m2DC);
-        }
-        cLib_addCalcAngleS2(&i_this->actor.current.angle.y, i_this->m2D0, 1, i_this->m2D2);
-        cLib_addCalc2(&i_this->actor.speedF, i_this->m2E4, 0.3f, 1.0f);
-    }
-
-    i_this->actor.shape_angle.y = i_this->actor.current.angle.y + 0x4000;
-}
-#else
-/* 00000440-00000CE8       .text kn_move__FP8kn_class */
-void kn_move(kn_class* i_this) {
-    f32 fVar8 = i_this->m2EC.x - i_this->actor.current.pos.x;
-    f32 fVar1 = i_this->m2EC.z - i_this->actor.current.pos.z;
-    s16 sVar5;
-
-    switch (i_this->m2BD) {
-    case 0:
-        if (cM_rnd() < 0.5f) {
-            anm_init(i_this, KN_BCK_WAIT01, 5.0f, 2, 1.0f, -1);
-        } else {
-            anm_init(i_this, KN_BCK_WAIT02, 5.0f, 2, 1.0f, -1);
-        }
-        i_this->m2D2 = 0x800;
-        i_this->m2CA = cM_rndF(2.0f) + 1.0f;
-        i_this->m2BD++;
-
-    case 1:
-        cLib_addCalc0(&i_this->actor.speedF, 1.0f, 2.0f);
-        if (i_this->mpMorf->checkFrame(43.0f)) {
-            i_this->m2CA--;
-            if (i_this->m2CA <= 0) {
-                i_this->m2BD = 2;
-            }
-        }
-
-        if ((i_this->m2C2[2] == 0) && fopAcM_searchPlayerDistance(&i_this->actor) < 300.0f) {
-            i_this->m2BD = 8;
-        }
-        break;
-
-    case 2:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 1.0f, -1);
-        i_this->m2D0 = i_this->actor.current.angle.y + cM_rndFX(10752.0f);
-        i_this->m2E8 = 3.0f;
-        if (cM_rnd() < 0.5f) {
-            f32 tmp = 3.0f;
-            i_this->m2E8 = -tmp;
-        }
-
-        if (i_this->m2C2[2] != 0) {
-            i_this->m2D0 = cM_atan2s(fVar8, fVar1);
-            i_this->m2E8 = 3.0f;
-        }
-
-        i_this->m2C2[0] = cM_rndF(40.0f) + 20.0f;
-        i_this->m2E4 = i_this->m2E8;
-        i_this->m2D2 = 0x800;
-        i_this->m2BE = 0;
-        i_this->m2BD++;
-
-    case 3:
-        if (fopAcM_searchPlayerDistance(&i_this->actor) < 300.0f) {
-            i_this->m2BD = 8;
-        } else if (i_this->m2C2[2] == 0) {
-            if (i_this->m2BE != 0) {
-                shibuki_set(i_this);
-                i_this->m2BF = 0;
-                i_this->m2BD = 5;
-            } else if (std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > 200.0f) {
-                i_this->m2C2[1] = 0x14;
-                i_this->m2E4 = i_this->m2E8 * -1.0f;
-                i_this->m2BD = 4;
-            } else if (i_this->m2C2[0] == 0) {
-                i_this->m2BD = 0;
-            }
-        }
-        break;
-
-    case 4:
-        if (i_this->m2C2[1] == 0) {
-            if (std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > 200.0f) {
-                i_this->m2D0 = cM_atan2s(fVar8, fVar1);
-                i_this->m2E4 = std::fabsf(i_this->m2E8);
-                i_this->m2C2[1] = 8;
-            } else {
-                i_this->m2BD = 0;
-            }
-        }
-        break;
-
-    case 5:
-        i_this->actor.speedF = 0.0f;
-        i_this->m2E4 = 0.0;
-        i_this->m2C0 = 0;
-        i_this->m2C2[0] = 0x14;
-        anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
-        i_this->m2BD++;
-
-    case 6:
-        if (i_this->m2C2[0] == 0) {
-            fVar8 = -7.0f;
-            if (i_this->actor.scale.x > 1.5f) {
-                fVar8 = -11.0f;
-            }
-
-            if (i_this->m2C0 == 0) {
-                if (std::fabsf(i_this->m2CC - fVar8) <= 1.0f) {
-                    if (i_this->m2BF != 0) {
-                        i_this->m314.remove();
-                    }
-                    i_this->m2CC = fVar8;
-                    i_this->m2C0 = 1;
-                    i_this->m2C2[3] = cM_rndF(30.0f) + 30.0f;
-                } else {
-                    cLib_addCalc2(&i_this->m2CC, fVar8, 0.1f, 1.0f);
-                }
-            }
-
-            if ((i_this->m2C0 != 0) && (i_this->m2C2[3] == 0) && fopAcM_searchPlayerDistance(&i_this->actor) > 500.0f) {
-                if (i_this->m2BF != 0) {
-                    i_this->m300 = i_this->actor.current.pos;
-                    i_this->m300.y += 20.0f;
-                    smoke_set(i_this);
-                } else {
-                    shibuki_set(i_this);
-                }
-                anm_init(i_this, KN_BCK_PATA, 5.0f, 2, 1.0f, -1);
-                i_this->m2BD = 7;
-            }
-        }
-        break;
-
-    case 7:
-        cLib_addCalc0(&i_this->m2CC, 0.1f, 1.0f);
-        if (i_this->m2CC < 0.2f) {
-            if (i_this->m2BF != 0) {
-                i_this->m314.remove();
-            }
-            i_this->m2CC = 0.0f;
-            i_this->m2C2[2] = 0x28;
-            i_this->m2BD = 2;
-        }
-        break;
-
-    case 8:
-        anm_init(i_this, KN_BCK_WALK, 5.0f, 2, 2.0f, -1);
-        i_this->m2E8 = 40.0;
-        i_this->m2C2[0] = 0;
-        i_this->m2C2[1] = 0;
-        i_this->m2C2[2] = 0;
-        i_this->m2D2 = 0x100;
-        i_this->m2E4 = i_this->m2E8;
-        i_this->m2BE = 0;
-        i_this->m2E4 = i_this->m2E8;
-
-        sVar5 = fopAcM_searchPlayerAngleY(&i_this->actor) - -0x8000;
-        if ((s16)cLib_distanceAngleS(sVar5, i_this->actor.current.angle.y) < 0x4000) {
-            i_this->m2D0 = sVar5;
-        } else {
-            i_this->m2D0 = i_this->actor.current.angle.y;
-            if ((s16)cLib_distanceAngleS(sVar5, i_this->actor.current.angle.y) > (s16)(cLib_distanceAngleS(sVar5, i_this->actor.current.angle.y) - -0x8000)) {
-                i_this->m2E4 = i_this->m2E8 * -1.0f;
-            }
-        }
-        i_this->m2BD++;
-
-    case 9:
-        if (i_this->mAcchCir.ChkWallHit() || std::sqrtf(SQUARE(fVar8) + SQUARE(fVar1)) > 200.0f) {
+#if VERSION > VERSION_DEMO
             i_this->actor.speedF = 0.0f;
             i_this->m2E4 = 0.0f;
             i_this->actor.speed.x = 0.0f;
             i_this->actor.speed.y = 0.0f;
             i_this->actor.speed.z = 0.0f;
+#endif
             i_this->m300 = i_this->actor.current.pos;
             i_this->m2BF = 1;
             smoke_set(i_this);
-            i_this->m2BD = 5;
+            i_this->m2BD = Mode_15_e;
         } else if (i_this->m2BE != 0) {
             i_this->m2BF = 0;
             shibuki_set(i_this);
-            i_this->m2BD = 5;
+            i_this->m2BD = Mode_15_e;
         }
         break;
     }
 
-    if (i_this->m2BD >= 3) {
-        if (i_this->m2BD < 8) {
+    if (i_this->m2BD >= Mode_13_e) {
+        if (i_this->m2BD < Mode_18_e) {
             i_this->m2E0 = 1.0f;
             if ((s16)cLib_distanceAngleS(i_this->actor.current.angle.y, i_this->m2D0) > 0x100) {
                 i_this->m2E0 = 2.0f;
@@ -514,7 +355,6 @@ void kn_move(kn_class* i_this) {
 
     i_this->actor.shape_angle.y = i_this->actor.current.angle.y + 0x4000;
 }
-#endif
 
 void oya_kn_move(kn_class* i_this) {
     f32 tmp1 = 300.0f;
@@ -610,12 +450,12 @@ static BOOL daKN_Execute(kn_class* i_this) {
 
     if (i_this->mAcch.ChkGroundHit()) {
         fopAcM_getGroundAngle(a_this, &i_this->m2F8);
+        if (
 #if VERSION == VERSION_DEMO
-        if (i_this->m2BC == 0 && ((i_this->m2BD == 13) || (i_this->m2BD == 19)) &&
-#else
-        if (((i_this->m2BD == 3) || (i_this->m2BD == 9)) &&
+            i_this->m2BC == 0 &&
 #endif
-            i_this->mAcch.GetGroundH() != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == 0x13)
+            ((i_this->m2BD == Mode_13_e) || (i_this->m2BD == Mode_19_e)) &&
+            i_this->mAcch.GetGroundH() != -G_CM3D_F_INF && dComIfG_Bgsp()->GetAttributeCode(i_this->mAcch.m_gnd) == dBgS_Attr_WATER_e)
         {
             i_this->m2BE = 1;
         }
@@ -695,7 +535,7 @@ static cPhs_State daKN_Create(fopAc_ac_c* a_this) {
                 i_this->m2D4 = 100;
             }
             i_this->m2BC = 1;
-            i_this->m2BD = 0x14;
+            i_this->m2BD = Mode_20_e;
             return PVar1;
         }
 #endif
@@ -720,7 +560,7 @@ static cPhs_State daKN_Create(fopAc_ac_c* a_this) {
             a_this->current.angle.z = -0x2000;
             i_this->m2CC = -25.0f;
             i_this->m2BC = 0;
-            i_this->m2BD = 0;
+            i_this->m2BD = Mode_0_e;
         } else
 #endif
         {
@@ -732,13 +572,12 @@ static cPhs_State daKN_Create(fopAc_ac_c* a_this) {
             }
 #if VERSION == VERSION_DEMO
             i_this->m2BC = 0;
-            i_this->m2BD = 10;
+#endif
+            i_this->m2BD = Mode_10_e;
+#if VERSION > VERSION_DEMO
+            daKN_Execute(i_this);
 #endif
         }
-#if VERSION > VERSION_DEMO
-        i_this->m2BD = 0;
-        daKN_Execute(i_this);
-#endif
     }
     return PVar1;
 }
