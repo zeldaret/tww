@@ -5,8 +5,9 @@
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
-class bmdfoot_class : public fopAc_ac_c {
+class bmdfoot_class {
 public:
+    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ u8 m290[0x2AC - 0x290];
     /* 0x2AC */ request_of_phase_process_class m2AC;
     /* 0x2B4 */ mDoExt_McaMorf* m2B4;
