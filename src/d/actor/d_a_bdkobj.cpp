@@ -481,7 +481,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (i_this->m298 == 2) {
         i_this->pm_bgw = new dBgW();
 
-        JUT_ASSERT(DEMO_SELECT(0x30D, 0x321), i_this->pm_bgw != 0);
+        JUT_ASSERT(DEMO_SELECT(781, 801), i_this->pm_bgw != NULL);
         cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", BDKOBJ_DZB_S_TOWER_BRIDGE);
         if (i_this->pm_bgw->Set(dzb, cBgW::MOVE_BG_e, &i_this->mMtx) == TRUE) {
             return FALSE;

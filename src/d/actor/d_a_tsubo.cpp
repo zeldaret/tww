@@ -2760,8 +2760,11 @@ void Act_c::bound(float arg1) {
                 }
             }
         }
-    } else if (mAcch.ChkWallHit() != false) {
-        speedF *= 0.9f;
+    } else {
+        bool tmp = mAcch.ChkWallHit();
+        if (tmp) {
+            speedF *= 0.9f;
+        }
     }
 }
 
