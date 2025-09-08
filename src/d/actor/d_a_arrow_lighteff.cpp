@@ -235,9 +235,13 @@ static BOOL daArrow_Lighteff_Delete(void* i_this) {
 }
 
 bool daArrow_Lighteff_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if(field_0x2E9 != 0) {
+#else
     if(field_0x2E9 == 0) {
         return true;
     }
+#endif
 
     J3DModelData* modelData = field_0x298->getModelData();
     if(mDoGph_gInf_c::isMonotone()) {
@@ -255,6 +259,10 @@ bool daArrow_Lighteff_c::_draw() {
     
     dComIfGd_setList();
 
+#if VERSION == VERSION_DEMO
+    }
+#endif
+    
     return true;
 }
 
