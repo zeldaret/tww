@@ -5,43 +5,268 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kantera.h"
+#include "d/res/res_kantera.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-#include "d/d_cc_d.h"
+#include "d/d_kankyo.h"
+#include "d/d_s_play.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_lib.h"
 
 /* 000000EC-000001E8       .text kantera_nodeCallBack__FP7J3DNodei */
-static BOOL kantera_nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 uVar2 = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        kantera_class* i_this = (kantera_class*)model->getUserArea();
+
+        if ((i_this != NULL) && (uVar2 == 0 || (uVar2 == 1))) {
+            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, i_this->mJointBaseRot.x + i_this->mJointRot[uVar2].x);
+            cMtx_ZrotM(*calc_mtx, i_this->mJointBaseRot.z + i_this->mJointRot[uVar2].z);
+            model->setAnmMtx(uVar2, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 000001E8-000002C8       .text ga_draw__FP13kantera_class */
-void ga_draw(kantera_class*) {
-    /* Nonmatching */
+void ga_draw(kantera_class* i_this) {
+    mo_ga_s* pGa = &i_this->mGa[0];
+
+    for (s32 i = 0; i < ARRAY_SSIZE(i_this->mGa); i++, pGa++) {
+        if (pGa->m2E != 0) {
+            MtxTrans(pGa->mPos.x, pGa->mPos.y, pGa->mPos.z, 0);
+            cMtx_YrotM(*calc_mtx, pGa->mRotY);
+            cMtx_XrotM(*calc_mtx, pGa->mRotX);
+            MtxScale(pGa->mScale, pGa->mScale * pGa->mScaleY, pGa->mScale, 1);
+            MtxTrans(0.0f, -18.0f, 0.0f, 1);
+            pGa->mpModel->setBaseTRMtx(*calc_mtx);
+            mDoExt_modelUpdateDL(pGa->mpModel);
+        }
+    }
 }
 
 /* 000002C8-00000584       .text daKantera_Draw__FP13kantera_class */
-static BOOL daKantera_Draw(kantera_class*) {
-    /* Nonmatching */
+static BOOL daKantera_Draw(kantera_class* i_this) {
+    if (i_this->mState >= 10) {
+        MtxTrans(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z, 0);
+        f32 fVar2 = i_this->mBonScale * (REG17_F(0) + 0.8f);
+        cMtx_YrotM(*calc_mtx, i_this->mBonRot);
+        MtxScale(fVar2, fVar2, fVar2, true);
+        MTXCopy(*calc_mtx, i_this->mAlphaModelMtx);
+        GXColor color;
+        color.r = REG0_S(4) + 0xEB;
+        color.g = REG0_S(5) + 0x7D;
+        color.b = REG0_S(6);
+        color.a = REG0_S(7);
+        dComIfGd_setAlphaModelColor(color);
+        dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_THREE_SPHERES, i_this->mAlphaModelMtx, i_this->mBonAlpha);
+    } else {
+        if (i_this->mSwitchNo != 0) {
+            return TRUE;
+        }
+
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->actor.current.pos, &i_this->actor.tevStr);
+        J3DModel* pModel2 = i_this->mpModel1;
+        g_env_light.setLightTevColorType(pModel2, &i_this->actor.tevStr);
+        i_this->mpBrkAnm1->entry(pModel2->getModelData());
+        mDoExt_modelEntryDL(pModel2);
+
+        MtxTrans(i_this->mBonPos.x, i_this->mBonPos.y, i_this->mBonPos.z, 0);
+        f32 fVar2 = i_this->mBonScale * 4.06f * 0.25f;
+        MtxScale(fVar2, fVar2, fVar2, true);
+        cMtx_YrotM(*calc_mtx, i_this->mBonRot);
+        cMtx_XrotM(*calc_mtx, i_this->mBonRot / 2);
+        MTXCopy(*calc_mtx, i_this->mAlphaModelMtx);
+
+        GXColor color;
+        color.r = REG0_S(4) + 0xEB;
+        color.g = REG0_S(5) + 0x7D;
+        color.b = REG0_S(6);
+        color.a = REG0_S(7);
+        dComIfGd_setAlphaModelColor(color);
+        dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_TWO_SPHERES, i_this->mAlphaModelMtx, i_this->mBonAlpha);
+        f32 fVar3 = i_this->mModel2Scale * 0.35909086f;
+        MtxScale(fVar3, fVar3, fVar3, true);
+        pModel2 = i_this->mpModel2;
+        pModel2->setBaseTRMtx(*calc_mtx);
+        i_this->mpBrkAnm2->entry(pModel2->getModelData());
+        mDoExt_modelUpdate(pModel2);
+        ga_draw(i_this);
+    }
+    return TRUE;
 }
 
 /* 00000584-00000828       .text ga_move__FP13kantera_class */
-void ga_move(kantera_class*) {
-    /* Nonmatching */
+void ga_move(kantera_class* i_this) {
+    mo_ga_s* pmVar4 = &i_this->mGa[0];
+    cXyz sp3C;
+    cXyz sp30;
+    cXyz sp24;
+
+    sp24.x = (i_this->mBonPos.x - i_this->m2E4.x) * 0.3f;
+    sp24.y = (i_this->mBonPos.y - i_this->m2E4.y) * 0.3f;
+    sp24.z = (i_this->mBonPos.z - i_this->m2E4.z) * 0.3f;
+
+    sp3C.x = 0.0f;
+    sp3C.y = 0.0f;
+    sp3C.z = 10.0f;
+
+    for (s32 i = 0; i < ARRAY_SSIZE(i_this->mGa); i++, pmVar4++) {
+        if (pmVar4->m2E != 0) {
+            if (pmVar4->m2F != 0) {
+                pmVar4->m2F--;
+            } else {
+                pmVar4->m2F = cM_rndF(5.0f);
+                pmVar4->m10.x = i_this->mBonPos.x + cM_rndFX(150.0f);
+                pmVar4->m10.y = i_this->mBonPos.y + cM_rndFX(30.0f);
+                pmVar4->m10.z = i_this->mBonPos.z + cM_rndFX(150.0f);
+            }
+
+            cXyz sp18 = pmVar4->m10 - pmVar4->mPos;
+            s16 iVar2 = cM_atan2s(sp18.x, sp18.z);
+            cLib_addCalcAngleS2(&pmVar4->mRotY, iVar2, 2, 0x1000);
+            s16 iVar3 = -cM_atan2s(sp18.y, std::sqrtf(SQUARE(sp18.x) + SQUARE(sp18.z)));
+            cLib_addCalcAngleS2(&pmVar4->mRotX, iVar3, 2, 0x1000);
+            cMtx_YrotS(*calc_mtx, pmVar4->mRotY);
+            cMtx_XrotM(*calc_mtx, pmVar4->mRotX);
+            MtxPosition(&sp3C, &sp30);
+            pmVar4->mPos.x += sp30.x + sp24.x;
+            pmVar4->mPos.y += sp30.y + sp24.y;
+            pmVar4->mPos.z += sp30.z + sp24.z;
+            pmVar4->mScaleY = cM_ssin(pmVar4->m2C);
+            pmVar4->m2C = pmVar4->m2C + 0x3e00;
+        }
+    }
 }
 
 /* 00000864-00000B68       .text bon_move__FP13kantera_class */
-void bon_move(kantera_class*) {
-    /* Nonmatching */
+void bon_move(kantera_class* i_this) {
+    cXyz sp14;
+    mDoLib_project(&i_this->mBonPos, &sp14);
+    bool bVar2;
+
+    if (sp14.x < 0.0f || sp14.x > 638.99f || sp14.y < 0.0f || sp14.y > 526.99f || sp14.z >= 0.0f) {
+        bVar2 = true;
+    } else {
+        dComIfGd_peekZ(sp14.x, sp14.y, &i_this->mPeekZResult);
+        f32 fVar5 = 0.5f - sp14.z * -1.0f;
+        if (fVar5 < 0.0f) {
+            fVar5 = 0.0f;
+        }
+        u32 iVar3 = fVar5 * ((REG0_F(1) + 33.553f) * 1e+06f);
+        cXyz sp08;
+        MTXMultVec(*(Mtx*)dComIfGd_getProjViewMtx(), &i_this->mBonPos, &sp08);
+
+        s32 iVar4 = 0;
+        if (sp08.z < -4.97f) {
+            iVar4 = -0x46;
+        } else if (sp08.z < -4.95f) {
+            iVar4 = -0x3c;
+        } else if (sp08.z < -4.925f) {
+            iVar4 = -0x32;
+        } else if (sp08.z < -4.9f) {
+            iVar4 = -10;
+        } else if (sp08.z < -4.88f) {
+            iVar4 = -3;
+        }
+
+        if (iVar3 + (iVar4 + REG0_S(1)) * 100 > i_this->mPeekZResult) {
+            bVar2 = true;
+        } else {
+            bVar2 = false;
+        }
+    }
+
+    if (bVar2) {
+        cLib_addCalc0(&i_this->mModel2Scale, 1.0f, 0.3333300054073334f);
+    } else {
+        cLib_addCalc2(&i_this->mModel2Scale, 1.0f, 1.0f, 0.3333f);
+    }
+
+    for (s32 i = 0; i < ARRAY_SSIZE(i_this->mAnimCounters); i++) {
+        if (i_this->mAnimCounters[i] != 0) {
+            i_this->mAnimCounters[i]--;
+        }
+    }
+
+    if (i_this->mAnimCounters[0] == 0) {
+        i_this->mAnimCounters[0] = cM_rndF(10.0f) + 2.0f;
+        i_this->mBonAlphaTarget = cM_rndF(5.0f) + 4.0f;
+    }
+
+    if (i_this->mAnimCounters[1] == 0) {
+        i_this->mAnimCounters[1] = cM_rndF(6.0f) + 3.0f;
+        i_this->mBonScaleTarget = cM_rndF(0.075f) + 0.75f;
+    }
+
+    cLib_addCalc2(&i_this->mBonAlpha, i_this->mBonAlphaTarget, 1.0f, 0.35f);
+    cLib_addCalc2(&i_this->mBonScale, i_this->mBonScaleTarget, 0.4f, 0.04f);
+
+    i_this->mPlight.mPos = i_this->mBonPos;
+    i_this->mPlight.mColor.r = 600;
+    i_this->mPlight.mColor.g = 400;
+    i_this->mPlight.mColor.b = 0x78;
+    i_this->mPlight.mPower = 375.0f;
+    i_this->mPlight.mFluctuation = 250.0f;
 }
 
 /* 00000B68-0000153C       .text kantera_move__FP13kantera_class */
-void kantera_move(kantera_class*) {
-    /* Nonmatching */
+void kantera_move(kantera_class* i_this) {
 }
 
 /* 000018BC-00001ABC       .text daKantera_Execute__FP13kantera_class */
-static BOOL daKantera_Execute(kantera_class*) {
-    /* Nonmatching */
+static BOOL daKantera_Execute(kantera_class* i_this) {
+    if (i_this->mSwitchNo != 0) {
+        if (dComIfGs_isSwitch(i_this->mSwitchNo - 1, fopAcM_GetRoomNo(&i_this->actor))) {
+            i_this->mSwitchNo = 0;
+        } else {
+            return TRUE;
+        }
+    }
+
+    if (i_this->m35C != 0) {
+        i_this->m35C--;
+        if (i_this->m35C == 30) {
+            i_this->mPtclCallBack0.remove();
+            i_this->mPtclCallBack1.remove();
+        }
+
+        if (i_this->m35C == 0) {
+            fopAcM_delete(&i_this->actor);
+        }
+    }
+
+    kantera_move(i_this);
+
+    if (i_this->mState < 10) {
+        i_this->mpModel1->calc();
+        MtxTrans(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z, 0);
+        cMtx_YrotM(*calc_mtx, i_this->actor.current.angle.y);
+        cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x);
+        MtxTrans(0.0f, i_this->mOffsY, 0.0f, 1);
+
+        J3DModel* model = i_this->mpModel1;
+        model->setBaseScale(i_this->actor.scale);
+        model->setBaseTRMtx(*calc_mtx);
+
+        i_this->actor.eyePos = i_this->actor.current.pos;
+
+        MTXCopy(model->getAnmMtx(1), *calc_mtx);
+
+        i_this->m2E4 = i_this->mBonPos;
+
+        cXyz sp08(0.0f, -40.0f, 0.0f);
+        MtxPosition(&sp08, &i_this->mBonPos);
+
+        i_this->mpBrkAnm1->play();
+        i_this->mpBrkAnm2->play();
+    }
+    return TRUE;
 }
 
 /* 00001ABC-00001AC4       .text daKantera_IsDelete__FP13kantera_class */
@@ -50,18 +275,79 @@ static BOOL daKantera_IsDelete(kantera_class*) {
 }
 
 /* 00001AC4-00001B30       .text daKantera_Delete__FP13kantera_class */
-static BOOL daKantera_Delete(kantera_class*) {
-    /* Nonmatching */
+static BOOL daKantera_Delete(kantera_class* i_this) {
+    i_this->mPtclCallBack0.remove();
+    i_this->mPtclCallBack1.remove();
+    dComIfG_resDelete(&i_this->mPhase, "Kantera");
+    dKy_plight_cut(&i_this->mPlight);
+    return TRUE;
 }
 
 /* 00001B30-00001F5C       .text daKantera_CreateHeap__FP10fopAc_ac_c */
-static BOOL daKantera_CreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL daKantera_CreateHeap(fopAc_ac_c* a_this) {
+    kantera_class* i_this = (kantera_class*)a_this;
+
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_MK_KANTERA));
+    JUT_ASSERT(1014, modelData != NULL);
+
+    i_this->mpModel1 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (i_this->mpModel1 == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTevRegKey* anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_MK_KANTERA));
+    JUT_ASSERT(1036, anm_res_brk != NULL);
+
+    i_this->mpBrkAnm1 = new mDoExt_brkAnm();
+    if (i_this->mpBrkAnm1 == NULL) {
+        return FALSE;
+    }
+
+    if (!i_this->mpBrkAnm1->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return FALSE;
+    }
+
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_LF));
+    JUT_ASSERT(1048, modelData != NULL);
+
+    i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (i_this->mpModel2 == NULL) {
+        return FALSE;
+    }
+
+    anm_res_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Kantera", KANTERA_BRK_LF));
+    JUT_ASSERT(1058, anm_res_brk != NULL);
+
+    i_this->mpBrkAnm2 = new mDoExt_brkAnm();
+    if (i_this->mpBrkAnm2 == NULL) {
+        return FALSE;
+    }
+
+    if (!i_this->mpBrkAnm2->init(modelData, anm_res_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return FALSE;
+    }
+
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Kantera", KANTERA_BMD_GA));
+    JUT_ASSERT(1125, modelData != NULL);
+
+    for (s32 i = 0; i < ARRAY_SSIZE(i_this->mGa); i++) {
+        i_this->mGa[i].mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (i_this->mGa[i].mpModel == NULL) {
+            return FALSE;
+        }
+
+        if (cM_rndF(1.0) < 0.5f) {
+            i_this->mGa[i].m2E = 1;
+            i_this->mGa[i].mPos = i_this->actor.current.pos;
+            i_this->mGa[i].mScale = cM_rndF(0.3f) + 0.3f;
+            i_this->mGa[i].m2C = cM_rndF(30000.0f);
+        }
+    }
+    return TRUE;
 }
 
 /* 00001FA4-00002304       .text daKantera_Create__FP10fopAc_ac_c */
-static cPhs_State daKantera_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daKantera_Create(fopAc_ac_c* a_this) {
     static dCcD_SrcSph at_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -90,6 +376,54 @@ static cPhs_State daKantera_Create(fopAc_ac_c*) {
             /* Radius */ 40.0f,
         }},
     };
+
+    kantera_class* i_this = (kantera_class*)a_this;
+
+    fopAcM_SetupActor(a_this, kantera_class);
+
+    i_this->mParam0 = fopAcM_GetParam(a_this);
+    i_this->mParam1 = fopAcM_GetParam(a_this) >> 8;
+    i_this->mParam2 = fopAcM_GetParam(a_this) >> 0x18;
+
+    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kantera");
+    if (PVar1 == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(a_this, daKantera_CreateHeap, 0x10000)) {
+            return cPhs_ERROR_e;
+        }
+
+        J3DModel* model = i_this->mpModel1;
+        for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+            model->getModelData()->getJointNodePointer(i)->setCallBack(kantera_nodeCallBack);
+        }
+
+        fopAcM_OffStatus(a_this, 0x00000000);
+
+        i_this->mpModel2->setBaseScale(a_this->scale);
+        if (i_this->mParam2 != 0xff) {
+            i_this->mSwitchNo = i_this->mParam2 + 1;
+        }
+
+        fopAcM_SetMtx(a_this, i_this->mpModel1->getBaseTRMtx());
+        fopAcM_setCullSizeBox(a_this, -60.0f, -100.0f, -60.0f, 60.0f, 50.0f, 60.0f);
+        model->setUserArea((u32)a_this);
+        i_this->m2B0 = (s16)cM_rndF(100.0f);
+        i_this->m2B4 = (s16)cM_rndF(100.0f);
+        dKy_plight_set(&i_this->mPlight);
+        i_this->mAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(a_this));
+        i_this->mAcchCir.SetWall(0.0f, 30.0f);
+        i_this->mStts.Init(0xe6, 0xff, a_this);
+
+        if (i_this->mParam0 == 7) {
+            a_this->scale.x = 0.0f;
+            a_this->scale.y = 0.0f;
+            a_this->scale.z = 0.0f;
+            i_this->mParam0 = 1;
+        }
+        i_this->mSph.Set(at_sph_src);
+        i_this->mSph.SetStts(&i_this->mStts);
+        daKantera_Execute(i_this);
+    }
+    return PVar1;
 }
 
 static actor_method_class l_daKantera_Method = {
