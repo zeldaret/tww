@@ -2395,7 +2395,7 @@ void demo_camera(bst_class* i_this) {
             i_this->mDamage = 10;
             i_this->mRoomState = 4;
             i_this->m2ED0 = 1.0f;
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
             local_40.x = 0.0f;
             local_40.y = 0.0f;
             local_40.z = 0.0f;

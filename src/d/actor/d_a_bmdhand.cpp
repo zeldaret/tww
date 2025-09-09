@@ -796,7 +796,7 @@ static cPhs_State daBmdhand_Create(fopAc_ac_c* a_this) {
     i_this->m6F8.Set(cc_sph_src);
     i_this->m6F8.SetStts(&i_this->m590);
     i_this->m5CC.SetR(90.0f);
-    if (!(g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
         i_this->m2BA = 3;
     }
     return cPhs_COMPLEATE_e;
