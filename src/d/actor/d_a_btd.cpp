@@ -2100,7 +2100,7 @@ void demo_camera(btd_class* i_this) {
         }
         if (i_this->m6E1A == 0x118) {
             static_center_pos.set(0.0f, -50.0f, 0.0f);
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
             fopAcM_createWarpFlower(&static_center_pos, 0, fopAcM_GetRoomNo(i_this), 0);
             i_this->m6E90 = 0;
         }
