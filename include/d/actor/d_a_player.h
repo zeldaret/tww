@@ -555,7 +555,7 @@ public:
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
     u32 getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_UNK200); }
-    BOOL checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_UNK40000000); }
+    u32 checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_UNK40000000); }
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;

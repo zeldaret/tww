@@ -560,9 +560,15 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
     dVar11 = M_PI / 2 / m35A4;
     if (pfVar7 != NULL) {
         m34D4 = daPy_HIO_rope_c0::m.field_0x0;
+        #if VERSION == VERSION_DEMO
+        if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
+            m34D4 /= 3;
+        }
+        #else
         if (checkSpecialRope()) {
             m34D4 *= 0.125f;
         }
+        #endif
         f32 fVar1 = cM_ssin(shape_angle.y);
         f32 fVar2 = cM_scos(shape_angle.y);
         local_78.x = fVar2 * local_84.x - fVar1 * local_84.z;
