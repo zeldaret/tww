@@ -554,7 +554,7 @@ public:
     BOOL checkBowMiniGame() const { return mDemo.getDemoMode() == daPy_demo_c::DEMO_BOW_MINIGAME_e; }
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    BOOL getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_UNK200); }
+    u32 getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_UNK200); }
     BOOL checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_UNK40000000); }
     
     virtual MtxP getLeftHandMatrix() = 0;
