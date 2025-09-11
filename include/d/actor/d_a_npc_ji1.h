@@ -283,7 +283,7 @@ public:
     daNpc_Ji1_HIO_c();
     virtual ~daNpc_Ji1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x004 */ s8 mNo;

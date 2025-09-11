@@ -50,7 +50,7 @@ void jbo_draw_SUB(jbo_class *i_this) {
         mDoMtx_stack_c::scaleM(scale);
         mDoMtx_stack_c::YrotM(-i_this->mAnimRotation);
     }
-    MTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */

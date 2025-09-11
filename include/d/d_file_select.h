@@ -14,7 +14,7 @@ public:
     dFs_HIO_c();
     virtual ~dFs_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

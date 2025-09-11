@@ -88,6 +88,7 @@ class daBeam_HIO_c : public JORReflexible {
 public:
     daBeam_HIO_c();
     virtual ~daBeam_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

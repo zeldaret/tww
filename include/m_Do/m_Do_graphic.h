@@ -39,6 +39,7 @@ public:
     static void offBlure() { mBlureFlag = false; }
     static bool isBlure() { return mBlureFlag; }
     static u8 getBlureRate() { return mBlureRate; }
+    static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
     static void offAutoForcus() { mAutoForcus = false; }
     static void onAutoForcus() { mAutoForcus = true; }
@@ -69,7 +70,6 @@ public:
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
     static void setBlureMtx(const Mtx) {}
-    static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

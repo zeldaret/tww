@@ -33,32 +33,33 @@ public:
     static dPath* m_path;
     static JPABaseEmitter* m_emitter;
 
-    inline cPhs_State _create();
-    inline bool _delete();
-    inline bool _draw();
-    inline bool _execute();
-    void hide() {
-        if (m_emitter == NULL) {
-            return;
-        }
-        m_emitter->stopDrawParticle();
-        return;
-    }
-    void setAimRate(float) {}
-    void setAlpha(unsigned char alpha) { m_alpha = alpha; }
-    inline void set_mtx();
-    void show() {
+    static void show() {
         if (m_emitter == NULL) {
             return;
         }
         m_emitter->playDrawParticle();
         return;
     }
-    void start() {
+    static void hide() {
+        if (m_emitter == NULL) {
+            return;
+        }
+        m_emitter->stopDrawParticle();
+        return;
+    }
+    static void start() {
         if (m_emitter != NULL) {
             m_alpha_flag = 1;
         }
     }
+
+    inline cPhs_State _create();
+    inline bool _delete();
+    inline bool _draw();
+    inline bool _execute();
+    void setAimRate(float) {}
+    void setAlpha(unsigned char alpha) { m_alpha = alpha; }
+    inline void set_mtx();
 
     f32 getPosRate();
 
