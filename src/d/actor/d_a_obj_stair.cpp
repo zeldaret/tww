@@ -9,7 +9,11 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/res/res_mkdan.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_meter.h"
 
+const char daObj_Stair_c::M_arcname[] = "Mkdan";
 static dCcD_SrcCps cps_src = {
     // dCcD_SrcGObjInf
     {
@@ -39,40 +43,93 @@ static dCcD_SrcCps cps_src = {
         /* Radius */ 50.0f,
     }},
 };
+static daobj_stairHIO_c l_HIO;
 
 
 /* 000000EC-00000130       .text __ct__16daobj_stairHIO_cFv */
 daobj_stairHIO_c::daobj_stairHIO_c() {
+    mNo = -1;
+    m08 = 2.5f;
+    m0C = -70.0f;
+    m10 = 5.0f;
+    m14 = 2.5f;
+    m18 = 6;
     /* Nonmatching */
 }
 
 /* 00000130-000001D8       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
+void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
+    daObj_Stair_c* i_this = (daObj_Stair_c*)i_arg1;
+    if (fopAcM_GetProfName(i_arg2) == PROC_PLAYER && i_this->field_0x2E0 < l_HIO.m18){
+        i_this->field_0x2E4 = 1;
+        i_this->field_0x2C8.set(i_arg2->current.pos - i_arg1->current.pos);
+        i_this->field_0x2D4.set(0.0f, -1.0f, 0.0f);
+        i_this->field_0x2EC = 1.0f;
+    }
     /* Nonmatching */
 }
 
 /* 000001D8-000002C4       .text CreateHeap__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKDAN_BDL_MKDAN1);
+    JUT_ASSERT(0xcc, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if(l_HIO.mNo < 0){
+        l_HIO.mNo = mDoHIO_createChild("崩れる階段", (JORReflexible *)&l_HIO);
+    }
+    return mpModel != NULL;
+
     /* Nonmatching */
 }
 
 /* 000002C4-000002D8       .text Create__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::Create() {
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    return TRUE;
+    /* Nonmatching */
+}
+
+void daObj_Stair_c::set_mtx() {
+        Quaternion quat;
+        mDoMtx_quatMultiply(&field_0x4A0, &field_0x4B0, &quat);
+        field_0x4A0 = quat;
+
+        mpModel->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + field_0x2E8, current.pos.z);
+        mDoMtx_stack_c::quatM(&field_0x4A0);
+        if (field_0x2E4 == 1) {
+            cXyz temp(0.0f, 0.0f, 0.0f);
+            temp.x += cM_rndFX(175.0f);
+            temp.z += cM_rndFX(40.0f);
+            mDoMtx_stack_c::multVec(&temp, &field_0x4C0);
+        }
+        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), field_0x2FC);
     /* Nonmatching */
 }
 
 /* 000002D8-00000410       .text Execute__13daObj_Stair_cFPPA3_A4_f */
-BOOL daObj_Stair_c::Execute(Mtx**) {
+BOOL daObj_Stair_c::Execute(Mtx** mtx) {
+    set_mtx();
+    *mtx = &field_0x2FC;
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 00000410-000004B0       .text Draw__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::Draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return TRUE;
     /* Nonmatching */
 }
 
 /* 000004B0-000004B8       .text Delete__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::Delete() {
+    return TRUE;
     /* Nonmatching */
 }
 
@@ -83,11 +140,72 @@ static cPhs_State daObj_StairCreate(void* i_this) {
 
 /* 000004D8-00000854       .text _create__13daObj_Stair_cFv */
 cPhs_State daObj_Stair_c::_create() {
+    cPhs_State phase_state;
+    fopAcM_SetupActor(this, daObj_Stair_c);
+    u32 switchIdx = fopAcM_GetParam(this) & 0xFF;
+    if(switchIdx != 0xff && fopAcM_isSwitch(this, switchIdx)) {
+        return cPhs_STOP_e;
+    } else {
+        phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+        
+        if (phase_state == cPhs_COMPLEATE_e) {
+            Quaternion quat = {0.0f, 0.0f, 0.0f, 1.0f};
+            f32 sin = cM_ssin(current.angle.y >> 1);
+            f32 cos = cM_scos(current.angle.y >> 1);
+            phase_state = MoveBGCreate(M_arcname, MKDAN_DZB_MKDAN1, NULL, 0x8A0);
+            JUT_ASSERT(0x10f, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+
+            field_0x4A0.x = 0.0f;
+            field_0x4A0.y = sin;
+            field_0x4A0.z = 0.0f;
+            field_0x4A0.w = cos;
+
+            field_0x4B0 = quat;
+            
+            field_0x2E0 = 0;
+            mpBgW->SetRideCallback(ride_call_back);
+            mStts.Init(0xff, 0xFF, this);
+            mCps.Set(cps_src);
+            mCps.SetStts(&mStts);
+
+            cXyz start;
+            cXyz end;
+
+            start = end = current.pos;
+
+            cos = cM_scos(current.angle.y);
+            
+            start.x += cos * 125.0f;
+            sin = cM_ssin(current.angle.y);
+            start.z +=  sin * -125.0f;
+            end.x += cos * -125.0f;
+            end.z += sin * 125.0f;
+
+
+
+            mCps.SetStartEnd(start, end);
+            mCps.SetR(50.0f);
+            field_0x2E8 = 0.0f;
+            field_0x2EC = 0.0f;
+        }
+    }
+
+    return phase_state;
     /* Nonmatching */
 }
 
+bool daObj_Stair_c::_delete() {
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return MoveBGDelete();
+}
+
 /* 00000A7C-00000AFC       .text daObj_StairDelete__FPv */
-static BOOL daObj_StairDelete(void*) {
+static BOOL daObj_StairDelete(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->_delete();
     /* Nonmatching */
 }
 
@@ -98,11 +216,125 @@ static BOOL daObj_StairExecute(void* i_this) {
 
 /* 00000B20-00001364       .text _execute__13daObj_Stair_cFv */
 bool daObj_Stair_c::_execute() {
+    f32 sin;
+    f32 cos;
+    if (field_0x2E4 == 1) {
+        if (field_0x2E0 == l_HIO.m18) {
+            cXyz temp = field_0x2C8.normZP();
+            cXyz temp2 = temp.outprod(field_0x2D4);
+
+            if(temp2.abs() > 8e-11f){
+                cXyz temp3 = temp2.normZP();
+                f32 temp4 = l_HIO.m10  * 0.5f * field_0x2C8.abs() * 0.01f * field_0x2EC;
+                sin = cM_ssin(temp4 * 182.04445f);
+                cos = cM_scos(temp4 * 182.04445f);
+                // misses inline cM_deg2s
+                
+                field_0x4B0.x = sin * temp3.x;
+                field_0x4B0.y = sin * temp3.y;
+                field_0x4B0.z = sin * temp3.z;
+                field_0x4B0.w = cos;
+
+                speed.x = l_HIO.m14 * cos * field_0x2EC * field_0x2D4.x;
+                speed.y = l_HIO.m14 * cos * field_0x2EC * field_0x2D4.y;
+                speed.z = l_HIO.m14 * cos * field_0x2EC * field_0x2D4.z;
+
+            } else {
+                field_0x4B0.x = 0.0f;
+                field_0x4B0.y = 0.0f;
+                field_0x4B0.z = 0.0f;
+                field_0x4B0.w = 1.0f;
+
+                speed.x = field_0x2EC * l_HIO.m14 * field_0x2D4.x;
+                speed.y = field_0x2EC * l_HIO.m14 * field_0x2D4.y;
+                speed.z = field_0x2EC * l_HIO.m14 * field_0x2D4.z;
+            }
+            fopAcM_seStart(this, JA_SE_OBJ_BREAK_STEPS, 0);
+        }
+
+        field_0x2E0++;
+
+        if (field_0x2E0 > l_HIO.m18) {
+            cLib_addCalc2(&speed.y, l_HIO.m0C, 0.5f, l_HIO.m08);
+            current.pos.y += speed.y;
+        }
+        if (field_0x2E0 > l_HIO.m18 + 0xf0) {
+            fopAcM_delete(this);
+        }
+    } else {
+        dComIfG_Ccsp()->Set(&mCps);
+
+        if(mCps.ChkTgHit()) {
+            fopAc_ac_c* ac = mCps.GetTgHitAc();
+            if(ac) {
+                if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == PROC_BOMB){
+                    sin = cM_ssin(current.angle.y);
+                    cos = cM_scos(current.angle.y);
+                    field_0x2E4 = 1;
+                    field_0x2C8 = ac->current.pos - current.pos;
+                    field_0x2D4 = current.pos - ac->current.pos;
+                    cXyz temp4(cos, 0.0f, -sin);
+                    cXyz temp5(sin, 0.0f, cos);
+                    f32 dot1 = temp4.inprod(field_0x2D4);
+                    f32 dot2 = temp5.inprod(field_0x2D4);
+                    if(dot1 > 175.0f) {
+                        field_0x2D4.x -= cos * 175.0f;
+                        field_0x2D4.z -= sin * -175.0f;
+                    } else {
+                        if(dot1 < -175.0f) {
+                            field_0x2D4.x += cos * 175.0f;
+                            field_0x2D4.z += sin * -175.0f;
+                        } else {
+                            field_0x2D4.x -= dot1 * cos;
+                            field_0x2D4.z -= -dot1 * sin;
+                        }
+                    }
+
+                    if(dot2 > 40.0f) {
+                        field_0x2D4.x -= sin * 40.0f;
+                        field_0x2D4.z -= cos* 40.0f;
+                    } else {
+                        if(dot2 < -40.0f) {
+                            field_0x2D4.x += sin * 40.0f;
+                            field_0x2D4.z += cos * 40.0f;
+                        } else {
+                            field_0x2D4.x -= dot2 * sin;
+                            field_0x2D4.z -= dot2 * cos;
+
+                        }
+                    }
+                    field_0x2D4 = field_0x2D4.normZP();
+                    field_0x2E0 = l_HIO.m18 - (s16)(field_0x2C8.abs2() * 0.0002f);
+                    if(field_0x2C8.abs() < 80.f) {
+                        field_0x2EC = 0.7f;
+                    } else {
+                        field_0x2EC = 56.0f / field_0x2C8.abs();
+                    }
+                } else {
+                    field_0x2E4 = 1;
+                    field_0x2C8 = *mCps.GetTgHitPosP() - current.pos;
+                    field_0x2D4 = *mCps.GetTgRVecP();
+
+                    field_0x2D4 = field_0x2D4.normZP();
+
+                    field_0x2E0 = l_HIO.m18 - 2;
+                    field_0x2EC = 1.0f;
+                }
+            }
+        }
+    }
+    int temp5 = field_0x2E0;
+    if (temp5 > l_HIO.m18 - 10 && temp5 < l_HIO.m18) {
+        f32 sinResult = cM_ssin((((temp5 - l_HIO.m18) + 10) & 0x3) << 14);
+        field_0x2E8 = sinResult * 1.5f;
+    }
+    return MoveBGExecute() != 0;
     /* Nonmatching */
 }
 
 /* 00001364-0000139C       .text daObj_StairDraw__FPv */
-static BOOL daObj_StairDraw(void*) {
+static BOOL daObj_StairDraw(void* i_this) {
+    return ((daObj_Stair_c*)i_this)->Draw() != NULL;
     /* Nonmatching */
 }
 
