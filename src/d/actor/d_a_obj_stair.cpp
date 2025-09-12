@@ -54,7 +54,6 @@ daobj_stairHIO_c::daobj_stairHIO_c() {
     m10 = 5.0f;
     m14 = 2.5f;
     m18 = 6;
-    /* Nonmatching */
 }
 
 /* 00000130-000001D8       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
@@ -66,7 +65,6 @@ void ride_call_back(dBgW* i_arg0, fopAc_ac_c* i_arg1, fopAc_ac_c* i_arg2) {
         i_this->field_0x2D4.set(0.0f, -1.0f, 0.0f);
         i_this->field_0x2EC = 1.0f;
     }
-    /* Nonmatching */
 }
 
 /* 000001D8-000002C4       .text CreateHeap__13daObj_Stair_cFv */
@@ -78,15 +76,12 @@ BOOL daObj_Stair_c::CreateHeap() {
         l_HIO.mNo = mDoHIO_createChild("崩れる階段", (JORReflexible *)&l_HIO);
     }
     return mpModel != NULL;
-
-    /* Nonmatching */
 }
 
 /* 000002C4-000002D8       .text Create__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     return TRUE;
-    /* Nonmatching */
 }
 
 void daObj_Stair_c::set_mtx() {
@@ -105,7 +100,6 @@ void daObj_Stair_c::set_mtx() {
         }
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         MTXCopy(mDoMtx_stack_c::get(), field_0x2FC);
-    /* Nonmatching */
 }
 
 /* 000002D8-00000410       .text Execute__13daObj_Stair_cFPPA3_A4_f */
@@ -113,7 +107,6 @@ BOOL daObj_Stair_c::Execute(Mtx** mtx) {
     set_mtx();
     *mtx = &field_0x2FC;
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00000410-000004B0       .text Draw__13daObj_Stair_cFv */
@@ -124,13 +117,11 @@ BOOL daObj_Stair_c::Draw() {
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 000004B0-000004B8       .text Delete__13daObj_Stair_cFv */
 BOOL daObj_Stair_c::Delete() {
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
@@ -143,6 +134,7 @@ cPhs_State daObj_Stair_c::_create() {
     cPhs_State phase_state;
     fopAcM_SetupActor(this, daObj_Stair_c);
     u32 switchIdx = fopAcM_GetParam(this) & 0xFF;
+
     if(switchIdx != 0xff && fopAcM_isSwitch(this, switchIdx)) {
         return cPhs_STOP_e;
     } else {
@@ -161,8 +153,8 @@ cPhs_State daObj_Stair_c::_create() {
             field_0x4A0.w = cos;
 
             field_0x4B0 = quat;
-            
             field_0x2E0 = 0;
+
             mpBgW->SetRideCallback(ride_call_back);
             mStts.Init(0xff, 0xFF, this);
             mCps.Set(cps_src);
@@ -172,16 +164,15 @@ cPhs_State daObj_Stair_c::_create() {
             cXyz end;
 
             start = end = current.pos;
-
             cos = cM_scos(current.angle.y);
             
             start.x += cos * 125.0f;
+
             sin = cM_ssin(current.angle.y);
+
             start.z +=  sin * -125.0f;
             end.x += cos * -125.0f;
             end.z += sin * 125.0f;
-
-
 
             mCps.SetStartEnd(start, end);
             mCps.SetR(50.0f);
@@ -191,7 +182,6 @@ cPhs_State daObj_Stair_c::_create() {
     }
 
     return phase_state;
-    /* Nonmatching */
 }
 
 bool daObj_Stair_c::_delete() {
@@ -206,7 +196,6 @@ bool daObj_Stair_c::_delete() {
 /* 00000A7C-00000AFC       .text daObj_StairDelete__FPv */
 static BOOL daObj_StairDelete(void* i_this) {
     return ((daObj_Stair_c*)i_this)->_delete();
-    /* Nonmatching */
 }
 
 /* 00000AFC-00000B20       .text daObj_StairExecute__FPv */
@@ -228,7 +217,7 @@ bool daObj_Stair_c::_execute() {
                 f32 temp4 = l_HIO.m10  * 0.5f * field_0x2C8.abs() * 0.01f * field_0x2EC;
                 sin = cM_ssin(temp4 * 182.04445f);
                 cos = cM_scos(temp4 * 182.04445f);
-                // misses inline cM_deg2s
+                // misses inline cM_deg2s?
                 
                 field_0x4B0.x = sin * temp3.x;
                 field_0x4B0.y = sin * temp3.y;
@@ -329,13 +318,15 @@ bool daObj_Stair_c::_execute() {
         field_0x2E8 = sinResult * 1.5f;
     }
     return MoveBGExecute() != 0;
-    /* Nonmatching */
+}
+
+bool daObj_Stair_c::_draw() {
+    return MoveBGDraw() != FALSE;
 }
 
 /* 00001364-0000139C       .text daObj_StairDraw__FPv */
 static BOOL daObj_StairDraw(void* i_this) {
-    return ((daObj_Stair_c*)i_this)->Draw() != NULL;
-    /* Nonmatching */
+    return ((daObj_Stair_c*)i_this)->_draw();
 }
 
 /* 0000139C-000013A4       .text daObj_StairIsDelete__FPv */
