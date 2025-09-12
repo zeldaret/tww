@@ -36,19 +36,4 @@ public:
     /* 0x4C0 */ cXyz field_0x4C0;
 };  // Size: 0x4CC
 
-
-class daobj_stairHIO_c {
-public:
-    daobj_stairHIO_c();
-    virtual ~daobj_stairHIO_c() {}
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x08 */ f32 m08;
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-    /* 0x14 */ f32 m14;
-    /* 0x18 */ s16 m18;
-    /* Place member variables here */
-};
-
 #endif /* D_A_OBJ_STAIR_H */

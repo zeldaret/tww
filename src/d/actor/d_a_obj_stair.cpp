@@ -43,6 +43,21 @@ static dCcD_SrcCps cps_src = {
         /* Radius */ 50.0f,
     }},
 };
+
+class daobj_stairHIO_c {
+public:
+    daobj_stairHIO_c();
+    virtual ~daobj_stairHIO_c() {}
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ f32 m08;
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+    /* 0x14 */ f32 m14;
+    /* 0x18 */ s16 m18;
+    /* Place member variables here */
+};
+
 static daobj_stairHIO_c l_HIO;
 
 

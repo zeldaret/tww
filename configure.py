@@ -1528,7 +1528,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_eff"),
     ActorRel(NonMatching, "d_a_obj_magmarock"),
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
-    ActorRel(NonMatching, "d_a_obj_stair"),
+    ActorRel(Matching, "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swhammer"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swheavy"),
