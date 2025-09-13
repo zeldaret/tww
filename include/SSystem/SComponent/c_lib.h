@@ -102,6 +102,7 @@ void MtxRotX(f32 rot, u8 concat);
 void MtxRotY(f32 rot, u8 concat);
 void MtxRotZ(f32 rot, u8 concat);
 
+extern Mtx mtx[10];
 extern Mtx* calc_mtx;
 
 #endif
