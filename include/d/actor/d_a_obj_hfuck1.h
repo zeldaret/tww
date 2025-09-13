@@ -35,7 +35,7 @@ public:
     daObjHfuck1_HIO_c();
     virtual ~daObjHfuck1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

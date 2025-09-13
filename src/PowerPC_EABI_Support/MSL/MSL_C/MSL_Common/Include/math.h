@@ -86,8 +86,13 @@ inline float tanf(float x) { return tan(x); }
 namespace std {
 #endif
 extern inline float sqrtf(float x) {
+#ifdef DECOMPCTX // Hack, see comment in dolzel.pch for details
+    const double _half = .5;
+    const double _three = 3.0;
+#else
     static const double _half = .5;
     static const double _three = 3.0;
+#endif
     volatile float y;
     if (x > 0.0f) {
         double guess = __frsqrte((double)x);                   // returns an approximation to

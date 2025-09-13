@@ -20,7 +20,7 @@ public:
     daNpc_Os_HIO2_c();
     virtual ~daNpc_Os_HIO2_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x00 - vtable */
@@ -43,7 +43,7 @@ public:
     daNpc_Os_HIO_c();
     virtual ~daNpc_Os_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x00 - vtable*/

@@ -29,10 +29,6 @@ daObjYgush00_HIO_c::daObjYgush00_HIO_c() {
     m06 = 0;
     m07 = 0;
 }
-
-void daObjYgush00_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genCheckBox(NULL, NULL, 0, 0, NULL, 0, 0, 0, 0); // placeholder
-}
 #endif
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */

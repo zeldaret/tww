@@ -465,10 +465,7 @@ void daObj_Ikada_c::setRopePos() {
 
     mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
     mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
-
-    pcVar6->x = mDoMtx_stack_c::get()[0][3];
-    pcVar6->y = mDoMtx_stack_c::get()[1][3];
-    pcVar6->z = mDoMtx_stack_c::get()[2][3];
+    mDoMtx_stack_c::multVecZero(pcVar6);
 
     if (mCurMode == 1) {
         ropeEndMtx = mpRopeEnd->getBaseTRMtx();
@@ -534,10 +531,7 @@ void daObj_Ikada_c::setRopePos() {
 
     mDoMtx_stack_c::ZXYrotM(cM_atan2s(sp98.z, sp98.y) + iVar3, shape_angle.y, cM_atan2s(-sp98.x, std::sqrtf(sp98.y * sp98.y + sp98.z * sp98.z)) + iVar4);
     mDoMtx_stack_c::XrotM(-0x4000);
-
-    m0474.x = mDoMtx_stack_c::get()[0][3];
-    m0474.y = mDoMtx_stack_c::get()[1][3];
-    m0474.z = mDoMtx_stack_c::get()[2][3];
+    mDoMtx_stack_c::multVecZero(&m0474);
 
     mpRopeEnd->setBaseTRMtx(mDoMtx_stack_c::get());
     f32 fVar9 = pcVar7->y;
@@ -643,9 +637,7 @@ void daObj_Ikada_c::setMtx() {
         mDoMtx_stack_c::XrotM(mLightRotX);
         mDoMtx_stack_c::scaleM(mLightPower, mLightPower, mLightPower);
         cMtx_copy(mDoMtx_stack_c::get(), mLightMtx);
-        mPLight.mPos.x = mDoMtx_stack_c::get()[0][3];
-        mPLight.mPos.y = mDoMtx_stack_c::get()[1][3];
-        mPLight.mPos.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&mPLight.mPos);
         mPLight.mColor.r = 600;
         mPLight.mColor.g = 400;
         mPLight.mColor.b = 120;
@@ -1394,9 +1386,7 @@ void daObj_Ikada_c::createInit() {
 
         mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
         mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
-        pcVar8->x = mDoMtx_stack_c::get()[0][3];
-        pcVar8->y = mDoMtx_stack_c::get()[1][3];
-        pcVar8->z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(pcVar8);
 
         cXyz sp80(0.0f, -1.0f, 0.0f);
         sp80 *= 10.0f;
@@ -1426,9 +1416,7 @@ void daObj_Ikada_c::createInit() {
         mDoMtx_stack_c::transS(pcVar8->x, pcVar8->y, pcVar8->z);
         mDoMtx_stack_c::ZXYrotM((s16)cM_atan2s(sp68.z, sp68.y), shape_angle.y, (s16)cM_atan2s(-sp68.x, std::sqrtf(sp68.y * sp68.y + sp68.z * sp68.z)));
         mDoMtx_stack_c::XrotM(-0x4000);
-        m0474.x = mDoMtx_stack_c::get()[0][3];
-        m0474.y = mDoMtx_stack_c::get()[1][3];
-        m0474.z = mDoMtx_stack_c::get()[2][3];
+        mDoMtx_stack_c::multVecZero(&m0474);
         mpRopeEnd->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 

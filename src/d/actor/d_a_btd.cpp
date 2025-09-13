@@ -27,6 +27,7 @@ class daBtd_HIO_c : public JORReflexible {
 public:
     daBtd_HIO_c();
     virtual ~daBtd_HIO_c() {};
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;
@@ -556,7 +557,7 @@ void kubi_calc(btd_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, i_this->m6E74.x);
     mDoMtx_ZrotM(*calc_mtx, i_this->m6E74.z);
     J3DModel* model = i_this->m02D4->getModel();
-    MTXCopy(*calc_mtx, model->getBaseTRMtx());
+    model->setBaseTRMtx(*calc_mtx);
     i_this->m02D4->calc();
     i_this->m02D8->play();
     i_this->m02DC->play();

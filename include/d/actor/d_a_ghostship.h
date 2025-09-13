@@ -80,7 +80,7 @@ public:
     daGhostship_HIO_c();
     ~daGhostship_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ u8 field_0x04;

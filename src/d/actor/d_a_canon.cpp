@@ -24,8 +24,8 @@
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-static LIGHT_INFLUENCE plight;
-static WIND_INFLUENCE pwind;
+LIGHT_INFLUENCE plight;
+WIND_INFLUENCE pwind;
 
 const char daCanon_c::M_arcname[] = "Bomber";
 static const s16 angle_x_tbl[] = {0xF000, 0xF24A, 0xF493, 0xF6DC, 0xF925, 0xFB6E, 0xFDB7, 0x0000};

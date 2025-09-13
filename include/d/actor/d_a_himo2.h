@@ -16,18 +16,21 @@ struct himo2_s {
     /* 0x20 */ u8 m20[0x24 - 0x20];
 }; // Size: 0x24
 
-class himo2_class : public fopAc_ac_c {
-public:
+struct himo2_class {
     BOOL setTargetPos(cXyz*, float*, float*);
 
-public:
+    /* 0x0000 */ fopAc_ac_c actor;
     /* 0x0290 */ u8 m0290[0x029C - 0x0290];
     /* 0x029C */ s16 m029C;
     /* 0x029E */ s16 m029E;
     /* 0x02A0 */ s16 m02A0;
     /* 0x02A2 */ s16 m02A2;
+#if VERSION == VERSION_DEMO
+    /* 0x02A6 */ u8 m02A6[0xC];
+#else
     /* 0x02A2 */ s16 m02A4;
     /* 0x02A6 */ u8 m02A6[0x02B4 - 0x02A6];
+#endif
     /* 0x02B4 */ cXyz m02B4;
     /* 0x02C0 */ u8 m02C0[0x02CC - 0x02C0];
     /* 0x02CC */ s32 m02CC;
@@ -69,8 +72,8 @@ public:
     /* 0x24B0 */ J3DModel* m24B0;
     /* 0x24B4 */ f32 m24B4;
     /* 0x24B8 */ f32 m24B8;
-    /* 0x24BC */ s32 m24BC;
-    /* 0x24C0 */ s32 m24C0;
+    /* 0x24BC */ int m24BC;
+    /* 0x24C0 */ int m24C0;
     /* 0x24C4 */ f32 m24C4;
     /* 0x24C8 */ s16 m24C8;
     /* 0x24CA */ s16 m24CA;

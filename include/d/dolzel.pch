@@ -1,6 +1,14 @@
 #ifndef DOLZEL_PCH
 #define DOLZEL_PCH
 
+#ifdef DECOMPCTX
+// Hack to mitigate fake mismatches when building from decompctx output
+// (which doesn't support precompiled headers).
+// When built without a PCH, these constants would end up .rodata instead of .data
+// which causes a variety of knock-on effects in individual functions' assembly.
+#include "weak_data.h" // IWYU pragma: export
+#endif
+
 // Fixes weak .data
 #include "math.h" // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export

@@ -20,7 +20,7 @@ public:
     daTag_Kk1_HIO_c();
     virtual ~daTag_Kk1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04  */ s8 mNo;

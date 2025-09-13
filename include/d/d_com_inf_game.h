@@ -287,7 +287,7 @@ public:
 
     fopAc_ac_c* getPlayer(int idx) { return mPlayerInfo[idx].mpPlayer; }
     void setPlayer(int idx, fopAc_ac_c* player) { mPlayerInfo[idx].mpPlayer = player; }
-    s8 getPlayerCameraID(int idx) { return mPlayerInfo[idx].mCameraID; }
+    int getPlayerCameraID(int idx) { return mPlayerInfo[idx].mCameraID; }
     void setPlayerInfo(int idx, fopAc_ac_c* player, int cam) {
         mPlayerInfo[idx].mpPlayer = player;
         mPlayerInfo[idx].mCameraID = cam;
@@ -3967,7 +3967,7 @@ inline fopAc_ac_c* dComIfGp_att_getZHint() {
     return dComIfGp_getAttention().getZHintTarget();
 }
 
-inline void dComIfGp_att_chkEnemySound() {
+inline bool dComIfGp_att_chkEnemySound() {
     return dComIfGp_getAttention().chkEnemySound();
 }
 

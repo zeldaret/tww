@@ -37,7 +37,7 @@ public:
     }
     virtual ~daObjPirateShipHIO_c() {}
 
-    void genMessage(JORMContext*);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

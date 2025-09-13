@@ -28,7 +28,7 @@ public:
     daBst_HIO_c();
     virtual ~daBst_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x4 */ s8 field_0x4;

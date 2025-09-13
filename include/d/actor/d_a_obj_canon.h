@@ -86,6 +86,7 @@ public:
 class daObj_Canon_HIO_c : public mDoHIO_entry_c {
 public:
     daObj_Canon_HIO_c();
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ bool debug_draw;

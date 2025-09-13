@@ -256,7 +256,7 @@ public:
 
     // TODO:
     void LockEdge() {}
-    void chkEnemySound() {}
+    bool chkEnemySound() { return chkFlag(AttnFlag_00000100); }
     void LookRequest(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f32 downDist, s16 angle, int param_5) {
         mLook[0].request(reqActor, horizontalDist, upDist, downDist, angle, param_5);
     }

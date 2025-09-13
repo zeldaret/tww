@@ -21,6 +21,7 @@ class daObj_Warpt_HIO_c : public mDoHIO_entry_c {
 public:
     daObj_Warpt_HIO_c();
     virtual ~daObj_Warpt_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
     /* 0x04 */ u8 m04;
     /* 0x05 */ u8 m05;

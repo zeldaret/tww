@@ -148,14 +148,14 @@ public:
     void SetRoofNone() { m_flags |= ROOF_NONE; }
     void SetRoofHit() { m_flags |= ROOF_HIT; }
     void SetWaterNone() { m_flags |= WATER_NONE; }
-    bool ChkWallHit() { return m_flags & WALL_HIT; }
+    u32 ChkWallHit() { return m_flags & WALL_HIT; }
     void OffLineCheckHit() { m_flags &= ~LINE_CHECK_HIT; }
     void OnLineCheckHit() { m_flags |= LINE_CHECK_HIT; }
     void OffLineCheck() { m_flags &= ~LINE_CHECK; }
     void OffLineCheckNone() { m_flags &= ~LINE_CHECK_NONE; }
     void OnLineCheckNone() { m_flags |= LINE_CHECK_NONE; }
-    bool ChkLineCheckNone() { return m_flags & LINE_CHECK_NONE; }
-    bool ChkLineCheck() { return m_flags & LINE_CHECK; }
+    u32 ChkLineCheckNone() { return m_flags & LINE_CHECK_NONE; }
+    u32 ChkLineCheck() { return m_flags & LINE_CHECK; }
     void ClrRoofHit() { m_flags &= ~ROOF_HIT; }
     void ClrWaterHit() { m_flags &= ~WATER_HIT; }
     void SetWaterHit() { m_flags |= WATER_HIT; }
