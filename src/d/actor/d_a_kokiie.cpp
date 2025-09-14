@@ -11,6 +11,7 @@
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
+#include "d/res/res_kokiie.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"
@@ -331,7 +332,7 @@ static BOOL daKokiie_Delete(kokiie_class* i_this) {
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     kokiie_class* actor = (kokiie_class*)a_this;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kokiie", 4);
+J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kokiie", KOKIIE_BDL_KOKI_00);
     actor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (actor->mpModel == NULL) {
         return FALSE;
@@ -342,7 +343,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     actor->pm_bgw = new dBgW();
     JUT_ASSERT(DEMO_SELECT(929, 950), actor->pm_bgw != NULL);
 
-    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Kokiie", 7), dBgW::MOVE_BG_e, &actor->m340);
+    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Kokiie", KOKIIE_DZB_KOKI_00), dBgW::MOVE_BG_e, &actor->m340);
     actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
     return TRUE;
 }
