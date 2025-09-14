@@ -160,7 +160,7 @@ if args.no_asm:
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20250812"
 config.dtk_tag = "v1.6.2"
-config.objdiff_tag = "v3.0.0-beta.14"
+config.objdiff_tag = "v3.0.1"
 config.sjiswrap_tag = "v1.2.2"
 config.wibo_tag = "0.7.0"
 
@@ -190,6 +190,13 @@ config.reconfig_deps = []
 # Optional numeric ID for decomp.me preset
 # Can be overridden in libraries or objects
 config.scratch_preset_id = 72 # The Wind Waker (DOL)
+
+# Globs to exclude from context files
+# *.mch excludes precompiled header output (which cannot be parsed)
+config.context_exclude_globs = ["*.mch"]
+
+# Macro definitions to inject into context files
+config.context_defines = ["DECOMPCTX"]
 
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
@@ -550,7 +557,7 @@ config.libs = [
             Object(Matching,    "d/d_snap.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_point_wind.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_agb.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_arrow.cpp"),
+            Object(Matching,    "d/actor/d_a_arrow.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bg.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_bomb.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
@@ -1486,15 +1493,15 @@ config.libs = [
     ActorRel(Matching,    "d_a_am"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am2"),
     ActorRel(Matching,    "d_a_amiprop"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_arrow_iceeff"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_arrow_lighteff"),
+    ActorRel(Matching,    "d_a_arrow_iceeff"),
+    ActorRel(Matching,    "d_a_arrow_lighteff"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_beam"),
     ActorRel(NonMatching, "d_a_boko"),
     ActorRel(Matching,    "d_a_canon"),
     ActorRel(Matching,    "d_a_cc"),
-    ActorRel(NonMatching, "d_a_dai"),
+    ActorRel(Matching,    "d_a_dai"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_demo_item"),
-    ActorRel(NonMatching, "d_a_door12"),
+    ActorRel(Matching,    "d_a_door12"),
     ActorRel(Matching,    "d_a_fallrock"),
     ActorRel(Matching,    "d_a_ff"),
     ActorRel(Matching,    "d_a_gy_ctrl"),
@@ -1504,11 +1511,11 @@ config.libs = [
     ActorRel(Equivalent,  "d_a_kamome"),
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only
     ActorRel(NonMatching, "d_a_kantera"),
-    ActorRel(NonMatching, "d_a_kn"),
+    ActorRel(Matching,    "d_a_kn"),
     ActorRel(Equivalent,  "d_a_kokiie"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ks"),
     ActorRel(NonMatching, "d_a_kt"), # regalloc
-    ActorRel(NonMatching, "d_a_mflft"),
+    ActorRel(Matching,    "d_a_mflft"),
     ActorRel(NonMatching, "d_a_npc_cb1"),
     ActorRel(NonMatching, "d_a_npc_md"),
     ActorRel(NonMatching, "d_a_npc_so"),
@@ -1521,7 +1528,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_eff"),
     ActorRel(NonMatching, "d_a_obj_magmarock"),
     ActorRel(NonMatching, "d_a_obj_majyuu_door"),
-    ActorRel(NonMatching, "d_a_obj_stair"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swhammer"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swheavy"),
@@ -1549,7 +1556,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_auction"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_bb"),
     ActorRel(NonMatching, "d_a_bdk"),
-    ActorRel(NonMatching, "d_a_bdkobj"),
+    ActorRel(Matching, "d_a_bdkobj"),
     ActorRel(NonMatching, "d_a_bgn"),
     ActorRel(NonMatching, "d_a_bgn2"),
     ActorRel(NonMatching, "d_a_bgn3"),

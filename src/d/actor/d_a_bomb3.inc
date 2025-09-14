@@ -58,17 +58,16 @@ namespace {
 }
 
 const daBomb_c::Attr_c daBomb_c::m_attrType[] = {
-    {"Link", 0x8E0},
+    {"Link",  DEMO_SELECT(0x2500, 0x08E0)},
     {"VbakH", 0x8000},
-    {"Link", 0x8E0},
+    {"Link",  DEMO_SELECT(0x2500, 0x08E0)},
 };
 
 /* 800D9364-800D977C       .text executeAfter__25daBomb_fuseSmokeEcallBackFP14JPABaseEmitter */
 void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> vec1;
-    vec1.set(*field_0x0C);
-    JGeometry::TVec3<f32> vec2;
-    vec2.set(*mpPos);
+    JGeometry::TVec3<f32> vec1(field_0x0C->x, field_0x0C->y, field_0x0C->z);
+    JGeometry::TVec3<f32> vec2(mpPos->x, mpPos->y, mpPos->z);
+    f32 f21 = 0.5f;
     emitter->setGlobalTranslation(vec2);
     f32 temp = mpPos->abs(*field_0x0C);
     s16 temp2 = (20.0f - temp) * 0.5f + 10.0f;
@@ -79,14 +78,14 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
     emitter->setLifeTime(temp2);
     
     JGeometry::TVec3<f32> vec3;
-    vec3.z = 0.5f * (vec2.x - vec1.x);
-    vec3.y = 0.5f * (vec2.y - vec1.y);
-    vec3.x = 0.5f * (vec2.z - vec1.z);
+    vec3.z = f21 * (vec2.x - vec1.x);
+    vec3.y = f21 * (vec2.y - vec1.y);
+    vec3.x = f21 * (vec2.z - vec1.z);
     
     JGeometry::TVec3<f32> vec4;
-    vec4.x = 0.5f * (vec1.x - field_0x10->x);
-    vec4.y = 0.5f * (vec1.y - field_0x10->y);
-    vec4.z = 0.5f * (vec1.z - field_0x10->z);
+    vec4.x = f21 * (vec1.x - field_0x10->x);
+    vec4.y = f21 * (vec1.y - field_0x10->y);
+    vec4.z = f21 * (vec1.z - field_0x10->z);
     
     f32 temp5 = mpPos->abs(*field_0x0C);
 
@@ -112,7 +111,7 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
 
 /* 800D977C-800D97C4       .text execute__26daBomb_fuseSparksEcallBackFP14JPABaseEmitter */
 void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(*mpPos);
+    JGeometry::TVec3<f32> pos(mpPos->x, mpPos->y, mpPos->z);
     emitter->setGlobalTranslation(pos);
     
     JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
@@ -405,7 +404,9 @@ bool daBomb_c::checkExplodeBg_cannon() {
 
     bool hit = mAcch.ChkWallHit() || mAcch.ChkGroundHit() || mAcch.ChkRoofHit();
 
+#if VERSION > VERSION_DEMO
     bool dead = chk_dead_zone();
+#endif
     bool ret = false;
     if(burn || hit) {
         ret = procExplode_init();
@@ -415,9 +416,11 @@ bool daBomb_c::checkExplodeBg_cannon() {
             makeWaterEffect();
             field_0x781 = true;
         }
+#if VERSION > VERSION_DEMO
         else if(dead) {
             field_0x781 = true;
         }
+#endif
     }
     
     return ret;
@@ -435,6 +438,7 @@ bool daBomb_c::checkExplodeBg() {
     return (this->*proc[mType])();
 }
 
+#if VERSION > VERSION_DEMO
 /* 800DA320-800DA3A0       .text water_tention__8daBomb_cFv */
 void daBomb_c::water_tention() {
     if(chk_water_in()) {
@@ -444,6 +448,7 @@ void daBomb_c::water_tention() {
         }
     }
 }
+#endif
 
 /* 800DA3A0-800DA520       .text posMoveF__8daBomb_cFv */
 void daBomb_c::posMoveF() {
@@ -461,7 +466,9 @@ void daBomb_c::posMoveF() {
     }
 
     if(!chk_state(STATE_5) && !chk_state(STATE_6) && field_0x6F3 != 1) {
+#if VERSION > VERSION_DEMO
         water_tention();
+#endif
         tri = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
 
         if(mWindVec.abs2() > 0.01f) {
@@ -510,6 +517,24 @@ void daBomb_c::bgCrrPos_lava() {
 
 /* 800DA5E0-800DA700       .text bgCrrPos_water__8daBomb_cFv */
 void daBomb_c::bgCrrPos_water() {
+#if VERSION == VERSION_DEMO
+    bool r4 = mAcch.ChkWaterIn();
+    bool r5 = false;
+    field_0x558 = -G_CM3D_F_INF;
+    if (r4) {
+        r5 = true;
+        field_0x558 = mAcch.m_wtr.GetHeight();
+    } else {
+        bool r31 = daSea_ChkArea(current.pos.x, current.pos.z);
+        f32 f1 = daSea_calcWave(current.pos.x, current.pos.z);
+        if (r31 && current.pos.y < f1) {
+            r5 = true;
+            field_0x558 = f1;
+        }
+    }
+    field_0x560 = r5 && !mbWaterIn;
+    mbWaterIn = r5;
+#else
     f32 f31 = mAcch.m_wtr.GetHeight();
     bool r31 = daSea_ChkArea(current.pos.x, current.pos.z);
     f32 f1 = daSea_calcWave(current.pos.x, current.pos.z);
@@ -538,6 +563,7 @@ void daBomb_c::bgCrrPos_water() {
     }
     field_0x560 = r5 && !mbWaterIn;
     mbWaterIn = r5;
+#endif
 }
 
 /* 800DA700-800DA708       .text chk_water_land__8daBomb_cFv */
@@ -606,13 +632,20 @@ void daBomb_c::set_real_shadow_flag() {
     bool r31 = chk_state(STATE_2);
     bool r3 = chk_state(STATE_3);
     bool r30 = false;
-    if (field_0x7C8 <= 1 && (r31 || r3)) {
+    if (
+#if VERSION > VERSION_DEMO
+        field_0x7C8 <= 1 &&
+#endif
+        (r31 || r3)
+    ) {
         if (model) {
             r30 = true;
         } else if (r3) {
             r30 = true;
+#if VERSION > VERSION_DEMO
         } else if (field_0x7C8 == 1) {
             r30 = true;
+#endif
         } else {
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             if (player->getGrabActorID() == fopAcM_GetID(this) && player->getGrabUpStart()) {
@@ -620,9 +653,11 @@ void daBomb_c::set_real_shadow_flag() {
             }
         }
     }
+#if VERSION > VERSION_DEMO
     if (field_0x7C8 > 0) {
         field_0x7C8--;
     }
+#endif
     model = r30 ? mpModel : NULL;
 }
 
@@ -711,20 +746,20 @@ void daBomb_c::eff_explode_normal(const csXyz* rotation) {
 void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
     JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_LIGHT_FLASH, &current.pos, rotation, &scale);
     if(emitter) {
-        emitter->setLifeTime(0xC);
-        JGeometry::TVec3<f32> vec(0.5f, 0.67f, 1.0f);
-        emitter->setGlobalParticleScale(vec);
+        emitter->setLifeTime(12);
+        emitter->setGlobalParticleScale(0.5f, 0.67f);
     }
 
     dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_232A, &current.pos, NULL, &scale);
+    
     emitter = dComIfGp_particle_setBombSmoke(dPa_name::ID_COMMON_SMOKE_CIRCLE, &current.pos, NULL, &scale);
     if(emitter) {
-        emitter->setLifeTime(0x46);
+        emitter->setLifeTime(70);
     }
     
     emitter = dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_SMOKE_DEBRIS, &current.pos, NULL, &scale);
     if(emitter) {
-        emitter->setLifeTime(0x46);
+        emitter->setLifeTime(70);
         emitter->setAwayFromAxisSpeed(25.0f);
         emitter->setDirectionalSpeed(35.0f);
     }
@@ -859,14 +894,17 @@ BOOL daBomb_c::procExplode_init() {
 /* 800DB630-800DB880       .text procExplode__8daBomb_cFv */
 bool daBomb_c::procExplode() {
     camera_class* camera = dComIfGp_getCamera(0);
-    f32 temp2 = 0.0f;
+    f32 f31;
+    f32 temp2;
+    temp2 = 0.0f;
+    f31 = 1500.0f;
 
-    mPntLight.mPower = field_0x778 * 1500.0f;
+    mPntLight.mPower = f31 * field_0x778;
     mPntWind.mStrength = field_0x778;
     f32 temp = current.pos.abs(camera->mLookat.mEye);
 
-    if(temp < 1500.0f) {
-        temp2 = 1.0f - (temp / 1500.0f);
+    if(temp < f31) {
+        temp2 = 1.0f - (temp / f31);
     }
 
     dKy_actor_addcol_amb_set(200, 180, 100, field_0x778 * temp2);
@@ -1050,6 +1088,12 @@ BOOL daBomb_c::execute() {
         makeFireEffect(pos, shape_angle);
     }
     
+#if VERSION == VERSION_DEMO
+    if (field_0x7C8 > 0) {
+        field_0x7C8--;
+    }
+#endif
+    
     set_wind_vec();
     if(mFunc) {
         (this->*mFunc)();
@@ -1201,18 +1245,24 @@ void daBomb_c::se_cannon_fly_stop() {
 
 /* 800DC44C-800DC568       .text eff_water_splash__8daBomb_cFv */
 void daBomb_c::eff_water_splash() {
+#if VERSION == VERSION_DEMO
+    cXyz pos(current.pos.x, mAcch.m_wtr.GetHeight(), current.pos.z);
+#else
     cXyz pos(current.pos.x, field_0x558, current.pos.z);
+#endif
     fopKyM_createWpillar(&pos, 0.5f, 0.75f, 0);
 
     cBgS_PolyInfo* temp[2] = {
-        field_0x562 ? NULL : &mAcch.m_wtr,
+        DEMO_SELECT(&mAcch.m_wtr, field_0x562 ? NULL : &mAcch.m_wtr),
         &mAcch.m_gnd,
     };
     
     u32 mtrlSndId = 0x13;
     for (int i = 0; i < ARRAY_SIZE(temp); i++) {
+#if VERSION > VERSION_DEMO
         if (temp[i] == NULL)
             continue;
+#endif
         int bg_index = temp[i]->GetBgIndex();
         if (bg_index >= 0 && bg_index < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(*temp[i]);
@@ -1248,7 +1298,7 @@ bool daBomb_c::bombDelete() {
 
     se_cannon_fly_stop();
     if(mType == 1) {
-        dComIfG_resDelete(&mPhase, m_attrType[mType].resName);
+        dComIfG_resDeleteDemo(&mPhase, m_attrType[mType].resName);
     }
 
     dKy_actor_addcol_set(0, 0, 0, 0.0f);
@@ -1269,30 +1319,30 @@ BOOL daBomb_c::createHeap() {
     BOOL ret;
     if(mType == 1) {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BDL_VBAKM));
-        JUT_ASSERT(0x9A5, modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(2416, 2469), modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         
         J3DAnmTransform* bck0_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAMX));
-        JUT_ASSERT(0x9AE, bck0_data != NULL);
+        JUT_ASSERT(DEMO_SELECT(2425, 2478), bck0_data != NULL);
         int temp = mBck0.init(modelData, bck0_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
         
         J3DAnmTransform* bck1_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BCK_VBAKM));
-        JUT_ASSERT(0x9B4, bck1_data != NULL);
+        JUT_ASSERT(DEMO_SELECT(2431, 2484), bck1_data != NULL);
         int temp2 = mBck1.init(modelData, bck1_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
         
         J3DAnmTevRegKey* brk0_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAMX));
-        JUT_ASSERT(0x9BB, brk0_data != NULL);
+        JUT_ASSERT(DEMO_SELECT(2438, 2491), brk0_data != NULL);
         int temp3 = mBrk0.init(modelData, brk0_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
         
         J3DAnmTevRegKey* brk1_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_attrType[mType].resName, VBAKH_BRK_VBAKM));
-        JUT_ASSERT(0x9C1, brk1_data != NULL);
+        JUT_ASSERT(DEMO_SELECT(2444, 2497), brk1_data != NULL);
         int temp4 = mBrk1.init(modelData, brk1_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp2 && temp3 && temp4;
     }
     else {
         J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_attrType[mType].resName, LINK_BDL_BOMB));
-        JUT_ASSERT(0x9CE, modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(2457, 2510), modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
         if(!mpModel) {
@@ -1327,13 +1377,7 @@ cPhs_State daBomb_c::create() {
 
     fopAcM_SetupActor(this, daBomb_c);
 
-    cPhs_State status;
-    if(mType == 1) {
-        status = dComIfG_resLoad(&mPhase, m_attrType[mType].resName);
-    }
-    else {
-        status = cPhs_COMPLEATE_e;
-    }
+    cPhs_State status = mType == 1 ? dComIfG_resLoad(&mPhase, attrType().resName) : cPhs_COMPLEATE_e;
 
     if(status == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, daBomb_createHeap, attrType().heapSize)) {
@@ -1390,12 +1434,14 @@ void daBomb_c::create_init() {
     mAcch.m_roof_crr_height = 50.0f;
     mAcch.OnLineCheck();
 
+#if VERSION > VERSION_DEMO
     field_0x554 = -G_CM3D_F_INF;
     field_0x558 = -G_CM3D_F_INF;
     field_0x55C = -G_CM3D_F_INF;
     field_0x560 = 0;
     mbWaterIn = 0;
     field_0x562 = 0;
+#endif
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     
     mStts.Init(200, 0xFF, this);
@@ -1439,6 +1485,9 @@ void daBomb_c::create_init() {
     if(chk_state(STATE_3)) {
         field_0x6F0 = 1;
         field_0x7C8 = 2;
+#if VERSION == VERSION_DEMO
+        model = mpModel;
+#endif
     }
     else {
         field_0x7C8 = 0;

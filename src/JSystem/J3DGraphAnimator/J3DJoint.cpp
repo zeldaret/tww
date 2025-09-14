@@ -79,7 +79,7 @@ void J3DMtxCalcBasic::calcTransform(u16 jnt_no, const J3DTransformInfo& info) {
     }
     MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
     J3DModel* model = j3dSys.getModel();
-    MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(jnt_no));
+    model->setAnmMtx(jnt_no, J3DSys::mCurrentMtx);
 }
 
 /* 802F525C-802F52BC       .text calc__15J3DMtxCalcBasicFUs */
@@ -127,10 +127,10 @@ void J3DMtxCalcSoftimage::calcTransform(u16 jnt_no, const J3DTransformInfo& info
         mtx[2][2] = J3DSys::mCurrentMtx[2][2] * J3DSys::mCurrentS.z;
         mtx[2][3] = J3DSys::mCurrentMtx[2][3];
         J3DModel* model = j3dSys.getModel();
-        MTXCopy(mtx, model->getAnmMtx(jnt_no));
+        model->setAnmMtx(jnt_no, mtx);
     } else {
         J3DModel* model = j3dSys.getModel();
-        MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(jnt_no));
+        model->setAnmMtx(jnt_no, J3DSys::mCurrentMtx);
     }
 }
 
@@ -175,7 +175,7 @@ void J3DMtxCalcMaya::calcTransform(u16 jnt_no, const J3DTransformInfo& param_2) 
     }
     MTXConcat(J3DSys::mCurrentMtx, mtx, J3DSys::mCurrentMtx);
     model = j3dSys.getModel();
-    MTXCopy(J3DSys::mCurrentMtx, model->getAnmMtx(jnt_no));
+    model->setAnmMtx(jnt_no, J3DSys::mCurrentMtx);
     J3DSys::mParentS.x = param_2.mScale.x;
     J3DSys::mParentS.y = param_2.mScale.y;
     J3DSys::mParentS.z = param_2.mScale.z;

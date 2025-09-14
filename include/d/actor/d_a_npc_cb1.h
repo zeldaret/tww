@@ -326,6 +326,7 @@ class daNpc_Cb1_HIO_c : public JORReflexible {
 public:
     daNpc_Cb1_HIO_c();
     virtual ~daNpc_Cb1_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

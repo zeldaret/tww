@@ -43,7 +43,7 @@ public:
 #endif
     }
 
-    void genMessage(JORMContext*);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

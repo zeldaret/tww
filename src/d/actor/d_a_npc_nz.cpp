@@ -19,7 +19,7 @@ public:
     daNpc_Nz_HIO_c();
     virtual ~daNpc_Nz_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x00 - vtable */
@@ -539,7 +539,7 @@ static u32 daNpcNz_getShopBoughtMsg(u8 itemNo) {
     }
 
     int itemTemp = itemNo; // probably fake
-    if(checkItemGet(itemTemp, 0)) {
+    if(checkItemGet(itemTemp, FALSE)) {
         dComIfGp_setItemRupeeCount(-messageRupee);
         execItemGet(itemTemp);
         return 0x3403;

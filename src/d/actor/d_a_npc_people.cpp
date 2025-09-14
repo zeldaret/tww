@@ -4533,7 +4533,7 @@ cPhs_State daNpcPeople_c::createInit() {
 
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
-    fopAcM_setCullSizeFar(this, mpNpcDat->field_0x30 / mDoLib_clipper::mSystemFar);
+    fopAcM_setCullSizeFar(this, mpNpcDat->field_0x30 / mDoLib_clipper::getFar());
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = l_npc_dist_tbl[mNpcType][mbIsNight];
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = l_npc_dist_tbl[mNpcType][mbIsNight];
     attention_info.flags = fopAc_Attn_UNK1000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;

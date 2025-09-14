@@ -54,7 +54,7 @@ public:
     }
     virtual ~kiHIO_c() {}
 
-    void genMessage(JORMContext*);
+    void genMessage(JORMContext* ctx) {}
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;

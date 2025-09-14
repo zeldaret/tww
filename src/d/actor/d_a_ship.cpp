@@ -3358,7 +3358,7 @@ void daShip_c::setRopePos() {
                     emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
                     if(emitter) {
-                        emitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f));
+                        emitter->setGlobalParticleScale(1.5f, 1.5f);
                         emitter->setEmitterScale(water_drop_scale);
                         emitter->setLifeTime(30);
                     }
