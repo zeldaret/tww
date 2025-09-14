@@ -37,8 +37,9 @@ struct bdk_eff_s {
     /* 0x048 */ dCcD_Sph m048;
 };  // Size:0x174
 
-class bdk_class : public fopEn_enemy_c {
+class bdk_class {
 public:
+    /* 0x000 */ fopEn_enemy_c actor;
     /* 0x02AC */ request_of_phase_process_class mPhase;
     /* 0x02B4 */ u8 m2B4;
     /* 0x02B8 */ mDoExt_McaMorf* mpMorf;
