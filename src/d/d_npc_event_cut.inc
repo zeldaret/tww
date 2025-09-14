@@ -366,7 +366,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
                 return 0;
             }
             else {
-                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->subtype) {
+                if(obj->procname == fopAcM_GetProfName(pActor) && obj->argument == pActor->argument) {
                     if(cut->mTargetActorPos.abs() == 0.0f) {
                         cut->mTargetActorPos = pActor->current.pos;
                         cut->mpTargetActor = pActor;

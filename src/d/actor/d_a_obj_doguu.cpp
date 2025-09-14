@@ -213,7 +213,7 @@ void daObjDoguu_c::CreateInit() {
     }
     mCyl.SetStts(&mStts);
     dKy_plight_set(&mLightInfluence);
-    if (subtype >= 1) {
+    if (argument >= 1) {
         mBckHead.setFrame(mBckHead.getStartFrame());
         mBckBody.setFrame(mBckBody.getStartFrame());
         mBckCrystal.setFrame(mBckCrystal.getStartFrame());
@@ -525,8 +525,8 @@ static cPhs_State daObjDoguu_Create(void* i_this) {
 /* 000016C4-0000178C       .text _create__12daObjDoguu_cFv */
 cPhs_State daObjDoguu_c::_create() {
     fopAcM_SetupActor(this, daObjDoguu_c);
-    if(subtype >= 1) {
-        field_0x894 = subtype - 1;
+    if(argument >= 1) {
+        field_0x894 = argument - 1;
     } else {
         field_0x894 = fopAcM_GetParam(this) & 0xFF;
     }
