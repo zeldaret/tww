@@ -112,7 +112,7 @@ void spin_draw(himo2_class* i_this) {
     local_504.y = 0.0f;
     local_504.z = 3.90625f;
     sVar8 = -0x30d4;
-    pcVar7 = i_this->m1F30.mpLines->mpSegments + i_this->m1F6C;
+    pcVar7 = i_this->m1F30.getPos(0) + i_this->m1F6C;
     cXyz local_4f8[100];
     for (iVar11 = 0, iVar6 = 0; iVar11 < 100; iVar11++, iVar6 += 12) {
         local_4f8[iVar6].y = -200000.0f;
@@ -270,7 +270,7 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* apdVar1 = (daPy_py_c*)dComIfGp_getPlayer(0);
-    cXyz* pcVar6 = i_this->m1F30.mpLines->mpSegments + i_this->m1F6C;
+    cXyz* pcVar6 = i_this->m1F30.getPos(0) + i_this->m1F6C;
     pcVar6->x = i_this->m02B4.x;
     pcVar6->y = i_this->m02B4.y;
     pcVar6->z = i_this->m02B4.z;
@@ -387,7 +387,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             dComIfGd_setList();
             return TRUE;
         } else {
-            pcVar7 = i_this->m1F30.mpLines->mpSegments;
+            pcVar7 = i_this->m1F30.getPos(0);
             cXyz local_a10[200];
             iVar3 = 0;
             for (iVar5 = 0; iVar5 < i_this->m1F6C; iVar5++) {
@@ -447,7 +447,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             dVar11 = 1.0f;
             dVar12 = -20000.0f;
             for (int iVar9 = 0; iVar9 < 5; iVar9++) {
-                pcVar7 = i_this->m1F98.mpLines->mPosArr[iVar3 + -8];
+                pcVar7 = i_this->m1F98.getPos(iVar3);
 
                 if (dVar13 > (dVar14 * (4 - iVar9))) {
                     cLib_addCalc0(&i_this->m1F70, dVar11, (REG0_F(11) + 0.2f));
@@ -465,7 +465,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 for (int j = 0; j < 32; j++, pcVar7++) {
                     cMtx_XrotM(*calc_mtx, 0x800);
                     MtxPosition(&local_a1c, pcVar7);
-                    i_this->m02EC[1] += *pcVar7;
+                    *pcVar7 += i_this->m02EC[1];
                 }
                 iVar5 += 4;
                 iVar3 += 24;
@@ -473,7 +473,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             GXColor local_a54 = {200, 0x96, 50, 0xFF};
             i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
             dComIfGd_set3DlineMat(&i_this->m1F98);
-            pcVar7 = ((i_this->m1FD8).mpLines)->mpSegments;
+            pcVar7 = i_this->m1FD8.getPos(0);
             local_a8 = i_this->m2188;
             if (((int)i_this->m2188 & REG0_S(4) + 64) != 0) {
                 fVar1 = REG0_F(14) + 15.0f;

@@ -141,7 +141,7 @@ void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
         pcVar10->z = fVar1 * (pcVar11->z - pcVar10->z);
     }
 
-    cXyz* segments = mpLineKe->lineMat.mpLines[arg2].mpSegments;
+    cXyz* segments = mpLineKe->lineMat.getPos(arg2);
     for (s32 i = 0; i < 10; i++) {
         *segments++ = arg1->m000[i];
     }

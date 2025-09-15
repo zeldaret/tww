@@ -34,7 +34,7 @@ static BOOL nodeCallBack(J3DNode *i_node, int i_calcTiming) {
 
 /* 00000108-00000240       .text jbo_draw_SUB__FP9jbo_class */
 void jbo_draw_SUB(jbo_class *i_this) {
-    J3DModel *model = i_this->mpMorf->mpModel;
+    J3DModel *model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z);
     mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
@@ -176,7 +176,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
         /*differedDlistFlag=*/ 0x11020203
     );
     a_this->mpMorf = morf;
-    if (a_this->mpMorf == NULL || a_this->mpMorf->mpModel == NULL) {
+    if (a_this->mpMorf == NULL || a_this->mpMorf->getModel() == NULL) {
         return FALSE;
     }
     a_this->mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(a_this));

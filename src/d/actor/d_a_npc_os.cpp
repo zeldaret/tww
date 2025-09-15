@@ -226,7 +226,7 @@ cPhs_State daNpc_Os_c::create() {
         }
 
         setBaseMtx();
-        fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         if(l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;

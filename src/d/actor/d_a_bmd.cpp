@@ -188,12 +188,11 @@ void damage(bmd_class* i_this) {
         }
         break;
     case 2:
-        if (((s16)(REG0_S(1) + 10) == (s16)i_this->mpMorf->mFrameCtrl.getFrame()) && (fopAcM_searchPlayerDistance(actor) < (REG0_F(8) + 400.0f))) {
+        if (((s16)(REG0_S(1) + 10) == (s16)i_this->mpMorf->getFrame()) && (fopAcM_searchPlayerDistance(actor) < (REG0_F(8) + 400.0f))) {
             i_this->m904 = REG0_S(2) + 0x14;
             i_this->m314 = 0x1e;
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
-        if ((s16)iVar7 == 30) {
+        if ((s16)i_this->mpMorf->getFrame() == 30) {
             for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
                 pJVar4 = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0F4, &actor->current.pos, NULL, NULL, 0xB9, &i_this->mA90[i], fopAcM_GetRoomNo(actor));
                 if (pJVar4 != NULL) {
@@ -201,8 +200,7 @@ void damage(bmd_class* i_this) {
                 }
             }
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
-        if ((s16)iVar7 == 10) {
+        if ((s16)i_this->mpMorf->getFrame() == 10) {
             i_this->mBD8 = 2000.0f;
         }
         if (i_this->mpMorf->isStop()) {
@@ -211,8 +209,7 @@ void damage(bmd_class* i_this) {
             i_this->m308[0] = l_HIO.m14;
             i_this->m940 = 0;
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
-        if ((s16)iVar7 > 25) {
+        if ((s16)i_this->mpMorf->getFrame() > 25) {
             cLib_addCalc2(&i_this->mBDC, 1.0f, 1.0f, 0.1f);
         }
         break;
@@ -227,12 +224,10 @@ void damage(bmd_class* i_this) {
         cLib_addCalc2(&i_this->mBDC, 1.0f, 1.0f, 0.1f);
         break;
     case 4:
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
-        if ((s16)iVar7 == 23) {
+        if ((s16)i_this->mpMorf->getFrame() == 23) {
             mDoAud_seStart(JA_SE_CM_BKM_BODY_CLOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
-        if ((s16)iVar7 == 27) {
+        if ((s16)i_this->mpMorf->getFrame() == 27) {
             dComIfGp_particle_set(dPa_name::ID_SCENE_8100, &actor->current.pos);
             if (dComIfGp_getStartStageName()[0] == 'X') {
                 mDoAud_bgmStart(JA_BGM_PAST_BKM);
@@ -240,14 +235,14 @@ void damage(bmd_class* i_this) {
                 mDoAud_bgmStart(JA_BGM_KINDAN_BOSS);
             }
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
+        iVar7 = i_this->mpMorf->getFrame();
         if ((s16)iVar7 <= 15) {
             cLib_addCalc2(&i_this->mBDC, 1.0f, 1.0f, 0.1f);
         }
-        if ((s16)i_this->mpMorf->mFrameCtrl.getFrame() == 15) {
+        if ((s16)i_this->mpMorf->getFrame() == 15) {
             i_this->mBD8 = 2000.0f;
         }
-        iVar7 = i_this->mpMorf->mFrameCtrl.getFrame();
+        iVar7 = i_this->mpMorf->getFrame();
         if ((s16)iVar7 < (s16)(REG0_S(5) + 0x14)) {
             sVar3 = REG0_S(3) + 200;
             i_this->m942 = 0;
@@ -521,7 +516,6 @@ void start(bmd_class* i_this) {
 
 /* 00001B48-00001EFC       .text end__FP9bmd_class */
 void end(bmd_class* i_this) {
-    /* Nonmatching - switch case */
     fopAc_ac_c* actor = &i_this->actor;
     JPABaseEmitter* pJVar3;
     static s32 jno[] = {0x19, 0x22, 0x2B, 0x34, 0x3D};
@@ -531,9 +525,6 @@ void end(bmd_class* i_this) {
     i_this->m304 = 1;
     switch (i_this->m302) {
     case 0:
-        return;
-        break;
-    case 1:
         if (dComIfGp_getStartStageName()[0] == 'X') {
             dLib_setNextStageBySclsNum(0, actor->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -548,38 +539,41 @@ void end(bmd_class* i_this) {
         i_this->m302 = 1;
         i_this->m332 = 8;
         i_this->m314 = 30000;
-        break;
-    }
-    if (i_this->mB76 < 0x1a4) {
-        i_this->mBDC = 1.0;
-    }
-    if (i_this->mB76 == REG0_S(2) + 300) {
-        player->changeDemoMode(daPy_demo_c::DEMO_UNK_029_e);
-    }
-    if (i_this->mB76 == REG0_S(4) + 0x17c) {
-        anm_init(i_this, BMD_BCK_HANA_DEAD2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-        mDoAud_seStart(JA_SE_CM_BKM_END_FLW_WAVING, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-    }
-    if (i_this->mB76 == REG0_S(5) + 0x1c2) {
-        anm_init(i_this, BMD_BCK_HANA_DEAD3, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-        mDoAud_seStart(JA_SE_CM_BKM_END_FLW_LIFTUP, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-        i_this->mBD8 = 2000.0f;
-        i_this->m332 = 9;
-        for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
-            pJVar3 = dComIfGp_particle_set(dPa_name::ID_SCENE_80FF, &actor->current.pos);
-            if (pJVar3 != NULL) {
-                pJVar3->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
+        // Fall-through
+    case 1:
+        if (i_this->mB76 < 0x1a4) {
+            i_this->mBDC = 1.0;
+        }
+        if (i_this->mB76 == REG0_S(2) + 300) {
+            player->changeDemoMode(daPy_demo_c::DEMO_UNK_029_e);
+        }
+        if (i_this->mB76 == REG0_S(4) + 0x17c) {
+            anm_init(i_this, BMD_BCK_HANA_DEAD2, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            mDoAud_seStart(JA_SE_CM_BKM_END_FLW_WAVING, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        if (i_this->mB76 == REG0_S(5) + 0x1c2) {
+            anm_init(i_this, BMD_BCK_HANA_DEAD3, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            mDoAud_seStart(JA_SE_CM_BKM_END_FLW_LIFTUP, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            i_this->mBD8 = 2000.0f;
+            i_this->m332 = 9;
+            for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
+                pJVar3 = dComIfGp_particle_set(dPa_name::ID_SCENE_80FF, &actor->current.pos);
+                if (pJVar3 != NULL) {
+                    pJVar3->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
+                }
             }
         }
-    }
-    if (i_this->mB76 == 0x230) {
-        mDoAud_seStart(JA_SE_CM_BKM_END_FLW_DIE, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-    }
-    if (i_this->mB76 == REG0_S(6) + 0x276) {
-        g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
-        fopAcM_createWarpFlower(&actor->current.pos, 0, fopAcM_GetRoomNo(actor), 0);
-        i_this->m302 = 2;
-        i_this->mB71 = 0;
+        if (i_this->mB76 == 0x230) {
+            mDoAud_seStart(JA_SE_CM_BKM_END_FLW_DIE, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+        }
+        if (i_this->mB76 == REG0_S(6) + 0x276) {
+            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            fopAcM_createWarpFlower(&actor->current.pos, 0, fopAcM_GetRoomNo(actor), 0);
+            i_this->m302 = 2;
+            i_this->mB71 = 0;
+        }
+    case 2:
+        break;
     }
 }
 
@@ -700,7 +694,7 @@ void core_move(bmd_class* i_this) {
         }
         break;
     case 102:
-        iVar1 = i_this->m2C4->mFrameCtrl.getFrame();
+        iVar1 = i_this->m2C4->getFrame();
         if (iVar1 == 14) {
             bVar5 = true;
             fopAcM_monsSeStart(actor, JA_SE_CV_BKM_JITABATA, 0);
@@ -715,7 +709,7 @@ void core_move(bmd_class* i_this) {
         }
         break;
     case 103:
-        iVar1 = i_this->m2C4->mFrameCtrl.getFrame();
+        iVar1 = i_this->m2C4->getFrame();
         if (iVar1 == 18) {
             bVar5 = true;
             fopAcM_monsSeStart(actor, JA_SE_CV_BKM_JITABATA, 0);
@@ -727,8 +721,7 @@ void core_move(bmd_class* i_this) {
         }
         break;
     case 104:
-        iVar1 = i_this->m2C4->mFrameCtrl.getFrame();
-        if ((iVar1 == 17) || (iVar1 == 37)) {
+        if ((int)i_this->m2C4->getFrame() == 17 || (int)i_this->m2C4->getFrame() == 37) {
             bVar5 = true;
             fopAcM_monsSeStart(actor, JA_SE_CV_BKM_JITABATA, 0);
         }
@@ -741,8 +734,7 @@ void core_move(bmd_class* i_this) {
         }
         break;
     case 105:
-        iVar1 = i_this->m2C4->mFrameCtrl.getFrame();
-        if (iVar1 == 37) {
+        if ((s16)i_this->m2C4->getFrame() == 37) {
             pJVar7 = dComIfGp_particle_set(dPa_name::ID_SCENE_80FE, &actor->current.pos);
             if (pJVar7 != NULL) {
                 pJVar7->setGlobalRTMatrix(i_this->m2C4->getModel()->getAnmMtx(5));
@@ -751,7 +743,7 @@ void core_move(bmd_class* i_this) {
         }
         if (i_this->m2C4->isStop()) {
             local_58 = i_this->m924;
-            local_58.z += REG0_F(2) + 80.0f;
+            local_58.y += REG0_F(2) + 80.0f;
             fopAcM_createDisappear(actor, &local_58, 0xF, daDisItem_HEART_CONTAINER_e, 0xFF);
             i_this->m306 = 0x6e;
             i_this->m308[2] = 0xaa;
@@ -895,8 +887,7 @@ void mk_move(bmd_class* i_this) {
         case 9:
             break;
         case 10:
-            iVar1 = i_this->m2C8->mFrameCtrl.getFrame();
-            if (iVar1 == 6) {
+            if ((int)i_this->m2C8->getFrame() == 6) {
                 local_28 = i_this->m2E0;
                 local_28.y += 10.0f;
                 pJVar3 = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A0FD, &local_28, NULL, NULL, 0xB9, &i_this->mA90[6], (u8)actor->current.roomNo);
@@ -1159,55 +1150,57 @@ void demo_camera(bmd_class* i_this) {
     /* Nonmatching - switch case, regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     s16 sVar2;
-    camera_class* pcVar4;
     int iVar6;
-    camera_class* pcVar11;
     cXyz local_44;
     cXyz local_50;
     cXyz local_a4;
     cXyz local_b0;
-
+    
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    pcVar11 = dComIfGp_getCamera(0);
+    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mB74) {
-    case 1:
+    case 0:
+        break;
+    case 1: {
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             i_this->mB76 = 0;
             i_this->mB78 = 0;
-            return;
+            break;
         }
-        i_this->mB74 = 2;
-        pcVar4 = dComIfGp_getCamera(0);
-        i_this->mB7C = pcVar4->mLookat.mEye;
-        i_this->mB88 = pcVar4->mLookat.mCenter;
-        local_44 = player->current.pos - i_this->mB7C;
+        i_this->mB74++;
+        camera_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->mLookat.mEye;
+        i_this->mB88 = camera2->mLookat.mCenter;
+        local_44 = player_actor->current.pos - i_this->mB7C;
         i_this->mB96 = cM_atan2s(local_44.x, local_44.z);
-        pcVar4->mCamera.Stop();
-        pcVar4->mCamera.SetTrimSize(2);
+        camera->mCamera.Stop();
+        camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;
         player->changeOriginalDemo();
         // fallthrough
-    case 3:
+    }
+    case 2:
         cMtx_YrotS(*calc_mtx, (int)i_this->mB96);
         if ((int)i_this->mB78 < REG0_S(0) + 0x55) {
             cLib_addCalc2(&i_this->mB88.x, actor->current.pos.x, 0.1f, 200.0f);
-            cLib_addCalc2(&i_this->mB88.y, player->current.pos.y + 300.0f + REG0_F(5), 0.2f, 200.0f);
+            cLib_addCalc2(&i_this->mB88.y, player_actor->current.pos.y + 300.0f + REG0_F(5), 0.2f, 200.0f);
             cLib_addCalc2(&i_this->mB88.z, actor->current.pos.z, 0.2f, 200.0f);
             local_44.x = 0.0f;
             local_44.y = REG0_F(7) + 100.0f;
             local_44.z = REG0_F(6) - 1100.0f;
             MtxPosition(&local_44, &local_50);
             cLib_addCalc2(&i_this->mB7C.x, actor->current.pos.x + local_50.x, 0.1f, 200.0f);
-            cLib_addCalc2(&i_this->mB7C.y, player->current.pos.y + local_50.y, 0.1f, 200.0f);
+            cLib_addCalc2(&i_this->mB7C.y, player_actor->current.pos.y + local_50.y, 0.1f, 200.0f);
             cLib_addCalc2(&i_this->mB7C.z, actor->current.pos.z + local_50.z, 0.1f, 200.0f);
         } else if ((int)i_this->mB78 < REG0_S(1) + 100) {
             cLib_addCalc2(&i_this->mB88.y, actor->current.pos.y + 1200.0f + REG0_F(5), 0.2f, REG0_F(6) + 100.0f);
         } else {
-            cLib_addCalc2(&i_this->mB88.x, player->current.pos.x, 0.3f, 300.0f);
-            cLib_addCalc2(&i_this->mB88.y, player->current.pos.y + 70.0f + REG0_F(5), 0.3f, 300.0f);
-            cLib_addCalc2(&i_this->mB88.z, player->current.pos.z, 0.3f, 300.0f);
+            cLib_addCalc2(&i_this->mB88.x, player_actor->current.pos.x, 0.3f, 300.0f);
+            cLib_addCalc2(&i_this->mB88.y, player_actor->current.pos.y + 70.0f + REG0_F(5), 0.3f, 300.0f);
+            cLib_addCalc2(&i_this->mB88.z, player_actor->current.pos.z, 0.3f, 300.0f);
         }
         break;
     case 5:
@@ -1216,14 +1209,15 @@ void demo_camera(bmd_class* i_this) {
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             i_this->mB76 = 0;
             i_this->mB78 = 0;
+            break;
         }
-        break;
-    case 7:
-        i_this->mB74++;
-        pcVar4->mCamera.Stop();
-        pcVar4->mCamera.SetTrimSize(2);
+        i_this->mB74 = i_this->mB74 + 1;
+        camera->mCamera.Stop();
+        camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 60.0f;
         player->changeOriginalDemo();
+        // Fall-through
+    case 6:
         i_this->mB7C.x = 74.0f;
         i_this->mB7C.y = 283.0f;
         i_this->mB7C.z = 745.0f;
@@ -1240,7 +1234,7 @@ void demo_camera(bmd_class* i_this) {
             i_this->m2DC = 3;
         }
         break;
-    case 8:
+    case 7:
         i_this->mB7C.x = -47.0f;
         i_this->mB7C.y = 115.0f;
         i_this->mB7C.z = 263.0f;
@@ -1252,7 +1246,7 @@ void demo_camera(bmd_class* i_this) {
             i_this->mB74++;
         }
         break;
-    case 0xA:
+    case 8:
         i_this->mB7C.x = 2.0f;
         i_this->mB7C.y = 75.0f;
         i_this->mB7C.z = 403.0f;
@@ -1274,6 +1268,7 @@ void demo_camera(bmd_class* i_this) {
         i_this->mB88 = actor->eyePos;
         i_this->mB88.y += REG0_F(11) + 30.0f;
         i_this->m2DC = 4;
+    case 9:
         cLib_addCalc2(&i_this->mB88.y, actor->eyePos.y + 30.0f, 0.2f, REG0_F(4) + 5.0f);
         if (i_this->mB78 == 0x1e) {
             i_this->m2C0->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bmd", BMD_BCK_NEW_SDEMO1), J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
@@ -1290,7 +1285,7 @@ void demo_camera(bmd_class* i_this) {
             }
         }
         break;
-    case 0xB:
+    case 10:
         i_this->mB7C.x = 2.0f;
         i_this->mB7C.y = 75.0f;
         i_this->mB7C.z = 403.0f;
@@ -1308,6 +1303,7 @@ void demo_camera(bmd_class* i_this) {
         i_this->mB74++;
         i_this->mB88 = actor->eyePos;
         i_this->mB88.y += REG0_F(11) + 30.0f;
+    case 11:
         i_this->mB7C.x = -139.0f;
         i_this->mB7C.y = 125.0f;
         i_this->mB7C.z = 475.0f;
@@ -1333,7 +1329,7 @@ void demo_camera(bmd_class* i_this) {
             }
         }
         break;
-    case 0xD:
+    case 12:
         if ((i_this->mB78 >= 0x14) && (i_this->mB78 <= 0x28)) {
             i_this->mB7C.x = 2.0f;
             i_this->mB7C.y = 75.0f;
@@ -1345,14 +1341,14 @@ void demo_camera(bmd_class* i_this) {
                 player->changeDemoMode(daPy_demo_c::DEMO_SURPRISED_e);
                 player->voiceStart(0x31);
             }
-            i_this->m2C0->mFrameCtrl.setRate(0.0f);
+            i_this->m2C0->setPlaySpeed(0.0f);
             if (i_this->mB78 == 0x28) {
                 i_this->mB7C.x = -139.0f;
                 i_this->mB7C.y = 125.0f;
                 i_this->mB7C.z = 475.0f;
                 i_this->mB88 = actor->eyePos;
                 i_this->mB88.y += REG0_F(15) + 60.0f;
-                i_this->m2C0->mFrameCtrl.setRate(1.0f);
+                i_this->m2C0->setPlaySpeed(1.0f);
             }
         } else {
             cLib_addCalc2(&i_this->mB9C, REG0_F(12) + 35.0f, 0.2f, REG0_F(13) + 1.0f);
@@ -1381,7 +1377,7 @@ void demo_camera(bmd_class* i_this) {
             }
         }
         break;
-    case 0xF:
+    case 15:
         if ((int)i_this->mB78 == REG0_S(6) + 0x37) {
             player->changeDemoMode(daPy_demo_c::DEMO_SURPRISED_e);
         }
@@ -1417,24 +1413,22 @@ void demo_camera(bmd_class* i_this) {
             g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
         }
         break;
-    case 0x64:
+    case 100:
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             i_this->mB76 = 0;
             i_this->mB78 = 0;
         }
-        break;
-    case 0x65:
         i_this->mB74 = sVar2 + 1;
-        pcVar4 = dComIfGp_getCamera(0);
-        i_this->mB7C = pcVar4->mLookat.mEye;
-        i_this->mB88 = pcVar4->mLookat.mCenter;
-        pcVar4->mCamera.Stop();
-        pcVar4->mCamera.SetTrimSize(2);
+        camera = dComIfGp_getCamera(0);
+        i_this->mB7C = camera->mLookat.mEye;
+        i_this->mB88 = camera->mLookat.mCenter;
+        camera->mCamera.Stop();
+        camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;
         player->changeOriginalDemo();
-    case 0x66:
+    case 101:
         if ((i_this->mB78 >= 0x140) && (cLib_addCalc2(&i_this->mB9C, REG0_F(8) + 85.0f, 0.2f, 1.0f), i_this->mB78 == 0x140)) {
             i_this->m2DC = 5;
         }
@@ -1475,7 +1469,7 @@ void demo_camera(bmd_class* i_this) {
         i_this->m2E0 += actor->current.pos;
         i_this->m2FA = actor->shape_angle.y + (REG0_S(4) + 3000);
         break;
-    case 0x67: {
+    case 102: {
         i_this->mB9C = REG0_F(8) + 55.0f;
         i_this->mB96 = actor->shape_angle.y + REG0_S(2);
         i_this->mB94 = -8000;
@@ -1487,10 +1481,12 @@ void demo_camera(bmd_class* i_this) {
         cStack_b8.y = actor->shape_angle.y + 0x8BB8;
         fopAcM_create(PROC_NPC_CB1, 0, &i_this->m2E0, fopAcM_GetRoomNo(actor), &cStack_b8);
         i_this->m2DC = 0;
+        // Fall-through
+    }
+    case 103: {
         iVar6 = (int)(i_this->mBA0 * 22384.0f);
-        cLib_addCalcAngleS2(&i_this->mB96, actor->shape_angle.y + REG0_S(2) + 0x5770, 0x10, (s16)iVar6);
-        iVar6 = (int)(i_this->mBA0 * 3000.0f);
-        cLib_addCalcAngleS2(&i_this->mB94, -5000, 0x10, (s16)iVar6);
+        cLib_addCalcAngleS2(&i_this->mB96, actor->shape_angle.y + REG0_S(2) + 0x5770, 0x10, iVar6);
+        cLib_addCalcAngleS2(&i_this->mB94, -5000, 0x10, (int)(i_this->mBA0 * 3000.0f));
         cLib_addCalc2(&i_this->mBA4, 500.0f, 0.0625f, i_this->mBA0 * 1000.0f);
         cLib_addCalc2(&i_this->mBA0, REG0_F(10) + 0.0048f, 0.1f, 4.8e-05f);
         cMtx_YrotS(*calc_mtx, (int)i_this->mB96);
@@ -1510,11 +1506,11 @@ void demo_camera(bmd_class* i_this) {
         }
         break;
     }
-    case 0x96:
+    case 150:
         i_this->mB74 = 0;
-        pcVar11->mCamera.Reset(i_this->mB88, i_this->mB7C);
-        pcVar11->mCamera.Start();
-        pcVar11->mCamera.SetTrimSize(0);
+        camera->mCamera.Reset(i_this->mB88, i_this->mB7C);
+        camera->mCamera.Start();
+        camera->mCamera.SetTrimSize(0);
         break;
     }
     if (i_this->mB74 != 0) {
@@ -1525,7 +1521,7 @@ void demo_camera(bmd_class* i_this) {
         local_a4.y = i_this->mB88.y + i_this->mBA8 * cM_scos(i_this->mB78 * 0x3000);
         local_a4.z = i_this->mB88.z;
         iVar6 = (int)(i_this->mBA8 * cM_scos(i_this->m2FE * 0x1c00) * 7.5f);
-        pcVar4->mCamera.Set(local_a4, local_b0, (s16)iVar6, i_this->mB9C);
+        camera->mCamera.Set(local_a4, local_b0, (s16)iVar6, i_this->mB9C);
         cLib_addCalc0(&i_this->mBA8, 1.0f, (REG0_F(16) + 2.0f));
         JUTReport(0x1e, 0x1ae, "K MAIN COUNT  %d", (int)i_this->mB76);
         JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", (int)i_this->mB78);

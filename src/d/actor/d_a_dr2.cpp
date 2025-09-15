@@ -653,7 +653,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
     i_this->mpMorf1 = new mDoExt_McaMorf((J3DModelData*)dComIfG_getObjectRes("Dr2", DR2_BMD_DR_SIPPO), NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
     
-    if ((i_this->mpMorf1 == NULL) || (i_this->mpMorf1->mpModel == NULL)) {
+    if ((i_this->mpMorf1 == NULL) || (i_this->mpMorf1->getModel() == NULL)) {
         return FALSE;
     }
 
@@ -705,7 +705,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
                             NULL, NULL, (J3DAnmTransformKey*)dComIfG_getObjectRes("Dr2", DR2_BCK_DR_BOSS_DEMO1), 
                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
 
-    if (i_this->mpMorf2 == NULL || i_this->mpMorf2->mpModel == NULL) {
+    if (i_this->mpMorf2 == NULL || i_this->mpMorf2->getModel() == NULL) {
         return FALSE;
     }
 

@@ -1328,7 +1328,7 @@ static void end_demo(bst_class* i_this) {
             i_this->mDamage++;
             // fall-through
         case 1:
-            if ((s32)i_this->field_0x02B8->mFrameCtrl.getFrame() == 20) {
+            if ((s32)i_this->field_0x02B8->getFrame() == 20) {
                 fopAcM_seStart(i_this, JA_SE_CM_BST_JUMP_L, 0);
             }
             break;

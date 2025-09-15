@@ -411,7 +411,7 @@ void daObj_Ikada_c::setWave() {
 
 /* 00001528-00001690       .text incRopeCnt__13daObj_Ikada_cFii */
 void daObj_Ikada_c::incRopeCnt(int arg1, int arg2) {
-    cXyz* pcVar5 = &mRopeLine.mpLines->mpSegments[0];
+    cXyz* pcVar5 = &mRopeLine.getPos(0)[0];
     cXyz* pcVar4 = &m07DC[m07D8];
     s32 i;
 
@@ -454,10 +454,10 @@ void daObj_Ikada_c::setRopePos() {
     cXyz* pcVar7;
 
     if (m07D8 == 0) {
-        pcVar6 = &mRopeLine.mpLines->mpSegments[0];
+        pcVar6 = mRopeLine.getPos(0);
         pcVar7 = &m07DC[0];
     } else {
-        pcVar6 = &mRopeLine.mpLines->mpSegments[m07D8] - 1;
+        pcVar6 = mRopeLine.getPos(0) + m07D8 - 1;
         pcVar7 = &m07DC[m07D8 - 1];
     }
 
@@ -507,7 +507,7 @@ void daObj_Ikada_c::setRopePos() {
 
     s16 iVar3;
     s16 iVar4;
-    pcVar7 = mRopeLine.mpLines->mpSegments;
+    pcVar7 = mRopeLine.getPos(0);
     if (m07D8 > 1) {
         spA4 = pcVar7[0] - pcVar7[1];
         iVar3 = 0;
@@ -1381,7 +1381,7 @@ void daObj_Ikada_c::createInit() {
         mpModel->calc();
         m07D8 = 15;
 
-        cXyz* pcVar8 = &mRopeLine.mpLines->mpSegments[m07D8] - 1;
+        cXyz* pcVar8 = &mRopeLine.getPos(0)[m07D8] - 1;
         cXyz* pcVar7 = &m07DC[m07D8 - 1];
 
         mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
@@ -1399,8 +1399,8 @@ void daObj_Ikada_c::createInit() {
             *pcVar7 = cXyz::Zero;
         }
 
-        pcVar8 = &mRopeLine.mpLines->mpSegments[0];
-        cXyz sp74 = mRopeLine.mpLines->mpSegments[0] - mRopeLine.mpLines->mpSegments[1];
+        pcVar8 = &mRopeLine.getPos(0)[0];
+        cXyz sp74 = mRopeLine.getPos(0)[0] - mRopeLine.getPos(0)[1];
 
         f32 sin = cM_ssin(shape_angle.y);
         f32 cos = cM_scos(shape_angle.y);

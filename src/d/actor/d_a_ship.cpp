@@ -196,7 +196,7 @@ BOOL daShip_c::headJointCallBack0() {
     J3DAnmTransform* tempAnmTransform;
     if (mAnmTransform) {
         tempAnmTransform = mpHeadAnm->getAnm();
-        mpHeadAnm->mpAnm = mAnmTransform;
+        mpHeadAnm->changeAnm(mAnmTransform);
         mAnmTransform = tempAnmTransform;
     }
     return TRUE;
@@ -1647,7 +1647,7 @@ BOOL daShip_c::procSteerMove() {
         }
         windPower *= windFactor * 55.0f;
         
-        if (mpBodyAnm->mFrameCtrl.checkPass(7.0f)) {
+        if (mpBodyAnm->checkFrame(7.0f)) {
             float targetSpeed = windPower * 2.0f;
             if (targetSpeed > 80.0f) {
                 targetSpeed = 80.0f;
