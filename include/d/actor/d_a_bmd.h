@@ -79,11 +79,12 @@ struct bmd_class {
     /* 0xA90 */ dPa_smokeEcallBack mA90[7];
     /* 0xB70 */ u8 mB70;
     /* 0xB71 */ s8 mB71;
+    #if VERSION > VERSION_DEMO
     /* 0xB72 */ s16 mB72;
+    #endif
     /* 0xB74 */ s16 mB74;
     /* 0xB76 */ s16 mB76;
     /* 0xB78 */ s16 mB78;
-    /* 0xB7A */ u8 mB7A[0xB7C - 0xB7A];
     /* 0xB7C */ cXyz mB7C;
     /* 0xB88 */ cXyz mB88;
     /* 0xB94 */ s16 mB94;

@@ -16,7 +16,17 @@
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"
 
-static const f32 unused_4154[] = {10.0f};
+static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
+    // There was an unused function here that got stripped out, but it still affected literal ordering.
+    f32* dummy;
+    *dummy = 10.0f;
+    *dummy = 50.0f;
+    *dummy = 5.0f;
+    *dummy = 1.0f;
+    *dummy = 1.2f;
+    *dummy = -100.0f;
+    *dummy = 0.1f;
+}
 
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
 static BOOL daKokiie_Draw(kokiie_class* i_this) {
@@ -332,7 +342,7 @@ static BOOL daKokiie_Delete(kokiie_class* i_this) {
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     kokiie_class* actor = (kokiie_class*)a_this;
 
-J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kokiie", KOKIIE_BDL_KOKI_00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kokiie", KOKIIE_BDL_KOKI_00);
     actor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (actor->mpModel == NULL) {
         return FALSE;

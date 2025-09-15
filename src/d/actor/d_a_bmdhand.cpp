@@ -467,7 +467,7 @@ void hand_move(bmdhand_class* i_this) {
 
     hand_s* pcVar9 = i_this->m324;
     if (boss != NULL) {
-        actor->current.angle.y = ((u16)actor->base.mParameters & 0x1f) * -0xccc + REG8_S(4) + -13000 + boss->actor.shape_angle.y;
+        actor->current.angle.y = (fopAcM_GetParam(actor) & 0x1f) * -0xccc + REG8_S(4) + -13000 + boss->actor.shape_angle.y;
         MTXCopy(boss->mpMorf->mpModel->getAnmMtx(boss_joint_d[(actor->base.mParameters & 0x1fU)]), *calc_mtx);
         local_40.x = REG14_F(6);
         local_40.y = REG14_F(7);
