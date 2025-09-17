@@ -117,10 +117,10 @@ public:
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     void remove(J3DModelData* i_modelData) { i_modelData->getJointNodePointer(0)->setMtxCalc(NULL); }
-    J3DAnmTransform* getBckAnm() const { return mAnmTransform; }
+    J3DAnmTransform* getBckAnm() const { return mpAnm; }
 
 private:
-    /* 0x08 */ J3DAnmTransform* mAnmTransform;
+    /* 0x08 */ J3DAnmTransform* mpAnm;
     /* 0x0C */ J3DMtxCalcMayaAnm* mAnm;
 };  // Size: 0x10
 
@@ -686,6 +686,7 @@ JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
+#if VERSION > VERSION_DEMO
 s32 mDoExt_getSafeArchiveHeapSize();
 s32 mDoExt_getSafeGameHeapSize();
 s32 mDoExt_getSafeZeldaHeapSize();
@@ -695,6 +696,7 @@ void mDoExt_setSafeArchiveHeapSize();
 void mDoExt_setSafeGameHeapSize();
 void mDoExt_setSafeZeldaHeapSize();
 void mDoExt_setSafeCommandHeapSize();
+#endif
 
 s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 

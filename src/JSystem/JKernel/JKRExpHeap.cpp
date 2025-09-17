@@ -395,7 +395,7 @@ void JKRExpHeap::do_freeTail() {
 }
 
 /* 802B2048-802B2098       .text do_changeGroupID__10JKRExpHeapFUc */
-s32 JKRExpHeap::do_changeGroupID(u8 groupId) {
+u8 JKRExpHeap::do_changeGroupID(u8 groupId) {
     lock();
     u8 prev = mCurrentGroupId;
     mCurrentGroupId = groupId;

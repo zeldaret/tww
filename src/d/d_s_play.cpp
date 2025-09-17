@@ -1140,6 +1140,7 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     return TRUE;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80235364-802355A8       .text heapSizeCheck__Fv */
 BOOL heapSizeCheck() {
     int archive_free = mDoExt_getArchiveHeap()->getFreeSize();
@@ -1176,6 +1177,7 @@ BOOL heapSizeCheck() {
 
     return TRUE;
 }
+#endif
 
 /* 802355A8-802356B0       .text phase_00__FP13dScnPly_ply_c */
 cPhs_State phase_00(dScnPly_ply_c* i_this) {
@@ -1186,9 +1188,11 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
     mDoGph_gInf_c::offBlure();
 
     if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
+        #endif
 
         if (mDoRst::isReset()) {
             if (mDoAud_zelAudio_c::isResetFlag()) {
@@ -1206,9 +1210,11 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
 
         dComIfGs_init();
     } else {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             JUT_WARN(VERSION_SELECT(3356, 3356, 3372, 3372), "%s", "Memory Danger !!");
         }
+        #endif
     }
 
     return cPhs_NEXT_e;

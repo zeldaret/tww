@@ -192,12 +192,12 @@ bool daObjBarrel2::Act_c::create_heap() {
     bool uVar6 = false;
 
     mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr()->m00);
-    JUT_ASSERT(DEMO_SELECT(533, 533), mdl_data != NULL);
+    JUT_ASSERT(533, mdl_data != NULL);
 
     m298 = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
     J3DAnmTevRegKey* brk_data = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, attr()->m02);
-    JUT_ASSERT(DEMO_SELECT(543, 543), brk_data != NULL);
+    JUT_ASSERT(543, brk_data != NULL);
 
     m29C = new mDoExt_brkAnm();
 

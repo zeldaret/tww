@@ -217,7 +217,7 @@ void daObjPirateship::Act_c::partsCreate() {
 
     u8 uVar2 = fopAcM_GetParam(this) >> 0x18;
     m_sail_id = fopAcM_createChild("Psail", fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
-    JUT_ASSERT(DEMO_SELECT(282, 282), (m_sail_id != fpcM_ERROR_PROCESS_ID_e));
+    JUT_ASSERT(282, (m_sail_id != fpcM_ERROR_PROCESS_ID_e));
 
     m2F0 = fopAcM_createChild(PROC_PIRATE_FLAG, fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
 
@@ -277,7 +277,7 @@ void daObjPirateship::Act_c::sound_proc() {
 /* 0000095C-00000A50       .text CreateHeap__Q215daObjPirateship5Act_cFv */
 BOOL daObjPirateship::Act_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mArcname, KAIZOKUSEN_INDEX_BDL_OBA_KAIZOKU_A);
-    JUT_ASSERT(DEMO_SELECT(374, 374), modelData != NULL);
+    JUT_ASSERT(374, modelData != NULL);
 
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     if (l_HIO.mNo < 0) {

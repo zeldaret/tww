@@ -15,7 +15,8 @@
 class daBmdhand_HIO_c : public JORReflexible {
 public:
     daBmdhand_HIO_c();
-    virtual ~daBmdhand_HIO_c() {};
+    virtual ~daBmdhand_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;
