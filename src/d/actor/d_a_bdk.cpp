@@ -22,8 +22,10 @@
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
+#if VERSION > VERSION_DEMO
+#include "m_Do/m_Do_graphic.h"
+#endif
 
 enum ActionStatus {
     ACTION_FLY = 0,
@@ -226,12 +228,17 @@ void anm_init(bdk_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 spee
     }
 
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("Bdk", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bdk", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bdk", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            dComIfG_getObjectRes("Bdk", soundFileIdx)
+        );
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bdk", bckFileIdx);
-        i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
+        i_this->mpMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bdk", bckFileIdx),
+            loopMode, morf, speed, 0.0f, -1.0f,
+            NULL
+        );
     }
 }
 
@@ -243,12 +250,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bdk_class* bdk = (bdk_class*)model->getUserArea();
         if (bdk != NULL) {
-            cMtx_copy(model->getAnmMtx(jnt_no), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
             if (jnt_no == 0x17) { // j_dk_kubi1 joint
                 cMtx_YrotM(*calc_mtx, bdk->mF14);
                 cMtx_XrotM(*calc_mtx, bdk->mF12);
                 model->setAnmMtx(jnt_no, *calc_mtx);
-                cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+                MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             } else if (jnt_no >= 0x1F && 0x24 >= jnt_no) { // j_dk_tosaka_A1 to j_dk_tosaka_B2 joints
                 if (jnt_no >= 0x23) { // j_dk_tosaka_B1 and j_dk_tosaka_B2 joints
                     cMtx_YrotM(*calc_mtx, bdk->m112E + bdk->m1120 + bdk->m1124);
@@ -258,7 +265,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                     cMtx_ZrotM(*calc_mtx, -(bdk->m112C + bdk->m1122 + bdk->m112A));
                 }
                 model->setAnmMtx(jnt_no, *calc_mtx);
-                cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+                MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             } else {
                 cXyz offset;
                 jnt_no = (jnt_no - 0x3A) / 2;
@@ -417,7 +424,7 @@ void kamen_draw(bdk_class* i_this) {
         fVar3 = REG8_F(18) + 1.20f;
     }
 
-    cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
     cMtx_YrotM(*calc_mtx, sVar1 + 0x4000);
     cMtx_ZrotM(*calc_mtx, sVar2 + -0x4000);
     MtxTrans(0.0f, 40.0f, 125.0f, TRUE);
@@ -467,6 +474,7 @@ static BOOL daBdk_Draw(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     J3DModel* model = i_this->mpMorf->getModel();
 
+    #if VERSION > VERSION_DEMO
     if (i_this->m259E > 1) {
         mDoGph_gInf_c::setBlureRate(i_this->m259E);
         mDoGph_gInf_c::onBlure();
@@ -474,6 +482,8 @@ static BOOL daBdk_Draw(bdk_class* i_this) {
         i_this->m259E = 0;
         mDoGph_gInf_c::mBlureFlag = FALSE;
     }
+    #endif
+
     if (!dComIfGs_isStageBossEnemy()) {
         fopAc_ac_c* player = dComIfGp_getPlayer(1);
         actor->tevStr = player->tevStr;
@@ -619,7 +629,7 @@ void up_fly(bdk_class* i_this) {
         i_this->m2E8 = 1.0f;
         actor->speedF = 0.0f;
         break;
-    case 1:
+    case 1: {
         s32 frame = i_this->mpMorf->getFrame();
         if (frame == REG0_S(7) + 0x17) {
             i_this->mState = 2;
@@ -632,6 +642,7 @@ void up_fly(bdk_class* i_this) {
             break;
         }
         // Fall-through
+    }
     case 2:
         i_this->m2E0 = 0.0f;
         if (i_this->mpMorf->isStop()) {
@@ -750,7 +761,7 @@ void landing(bdk_class* i_this) {
     i_this->mF10 = 1;
     switch (i_this->mState) {
     case -2:
-    case 0:
+    case 0: {
         s16 angle = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
         cMtx_YrotS(*calc_mtx, angle);
         diff2.x = 0.0f;
@@ -775,6 +786,7 @@ void landing(bdk_class* i_this) {
             break;
         }
         // Fall-through
+    }
     case 1:
         diff1 = i_this->m2CC - actor->current.pos;
         if (diff1.abs() < 1300.0f) {
@@ -940,9 +952,12 @@ void wait(bdk_class* i_this) {
                         i_this->mAction = ACTION_JIDA_ATTACK;
                         i_this->mState = 0;
                     } else if (dist < REG0_F(12) + 550.0f ) {
+                        #if VERSION > VERSION_DEMO
                         if (i_this->m8F8 < 2) {
                             i_this->mAction = ACTION_KUTI_ATTACK;
-                        } else {
+                        } else
+                        #endif
+                        {
                             if (cM_rndF(1.0f) < 0.25f) {
                                 i_this->mAction = ACTION_WIND_ATTACK;
                             } else {
@@ -1068,7 +1083,7 @@ void jida_attack(bdk_class* i_this) {
         i_this->mState = 1;
         i_this->m2EC[0] = (s16)cM_rndF(5.0f) * 0x18;
         // Fall-through
-    case 1:
+    case 1: {
         if (!(i_this->m2C4 & 7)) {
             eff_hane_set(i_this, &i_this->m1168, 1, 0);
         }
@@ -1116,6 +1131,7 @@ void jida_attack(bdk_class* i_this) {
             i_this->mState = 0;
         }
         break;
+    }
     default:
         break;
     }
@@ -1542,7 +1558,9 @@ void damage_check(bdk_class* i_this) {
                     mDoAud_bgmStop(0x1E);
                 } else {
                     dComIfGs_onEventBit(0x3C01);
+                    #if VERSION > VERSION_DEMO
                     dScnPly_ply_c::setPauseTimer(5);
+                    #endif
                     i_this->m8F8++;
                     if (i_this->m8F8 == 4) {
                         i_this->m8F8 = 3;
@@ -1563,9 +1581,8 @@ void damage_check(bdk_class* i_this) {
                 angle.z = 0;
                 angle.x = 0;
                 angle.y = player->shape_angle.y + 0x8000;
-                cXyz* hitpos = i_this->mHeadTgSph.GetTgHitPosP();
-                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, hitpos, &angle, &pos);
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8129, hitpos, &actor->shape_angle, NULL);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
+                dComIfGp_particle_set(dPa_name::ID_SCENE_8129, i_this->mHeadTgSph.GetTgHitPosP(), &actor->shape_angle, NULL);
 
                 dKy_SordFlush_set(actor->current.pos, 1);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5,
@@ -1671,7 +1688,7 @@ void kamen_demo(bdk_class* i_this) {
             pos.y = 0.0f;
             pos.z = 0.0f;
 
-            cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
+            MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
             MtxPosition(&pos, &i_this->m910[i]);
             i_this->m9A0[i].y = actor->shape_angle.y;
             i_this->m9A0[i].x = REG0_S(6) + 0x3625;
@@ -2333,7 +2350,7 @@ void col_set(bdk_class* i_this) {
     i_this->m1168 = actor->current.pos;
     i_this->m1168.y += 380.0f;
     model = i_this->mpMorf->getModel();
-    cMtx_copy(model->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
+    MTXCopy(model->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
 
     offset.x = REG8_F(0) + 40.0f;
     offset.y = REG8_F(1);
@@ -2349,7 +2366,7 @@ void col_set(bdk_class* i_this) {
     MtxPosition(&offset, &i_this->m1150);
     if (i_this->m2584 == 1) {
         model = i_this->mpMorf->getModel();
-        cMtx_copy(model->getAnmMtx(0x19), *calc_mtx); // j_dk_ago joint
+        MTXCopy(model->getAnmMtx(0x19), *calc_mtx); // j_dk_ago joint
         offset.x = REG8_F(3) + 120.0f;
         offset.y = REG8_F(4);
         offset.z = REG8_F(5);
@@ -2368,7 +2385,7 @@ void col_set(bdk_class* i_this) {
 
     if (4 <= i_this->m8F8) {
         model = i_this->mpMorf->getModel();
-        cMtx_copy(model->getAnmMtx(REG8_S(2) + 0x21), *calc_mtx); // j_dk_tosaka_A3 joint
+        MTXCopy(model->getAnmMtx(REG8_S(2) + 0x21), *calc_mtx); // j_dk_tosaka_A3 joint
 
         offset.x = REG8_F(3);
         offset.y = REG8_F(4);
@@ -2381,10 +2398,10 @@ void col_set(bdk_class* i_this) {
     for (s32 i = 0; i < 2; i++) {
         if (i == 0) {
             model = i_this->mpMorf->getModel();
-            cMtx_copy(model->getAnmMtx(0x5), *calc_mtx); // j_dk_ashi_l3 joint
+            MTXCopy(model->getAnmMtx(0x5), *calc_mtx); // j_dk_ashi_l3 joint
         } else {
             model = i_this->mpMorf->getModel();
-            cMtx_copy(model->getAnmMtx(0xE), *calc_mtx); // j_dk_ashi_r3 joint
+            MTXCopy(model->getAnmMtx(0xE), *calc_mtx); // j_dk_ashi_r3 joint
         }
         if (i_this->mAction == ACTION_T_LASTATTACK) {
             i_this->mFootCCSph[i].SetR(REG0_F(8) + 300.0f);
@@ -2676,7 +2693,7 @@ void demo_camera(bdk_class* i_this) {
         i_this->m25C8 = dVar16;
         i_this->m8F8 = 4;
         player->changeOriginalDemo();
-    case 0x2:
+    case 0x2: {
         cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
 
         local_104.x = REG0_F(0) + -30.0f - 50.0f;
@@ -2715,6 +2732,7 @@ void demo_camera(bdk_class* i_this) {
         }
         cLib_addCalc2(&i_this->m25C8, dVar16, dVar14, dVar15);
         break;
+    }
     case 0xA:
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, dEvtType_OTHER_e, 0xFFFF, 0);
@@ -2961,7 +2979,7 @@ void demo_camera(bdk_class* i_this) {
             i_this->m25A0 = 0x96;
         }
         break;
-    case 0x64:
+    case 0x64: {
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, dEvtType_OTHER_e, 0xFFFF, 0);
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -2989,6 +3007,7 @@ void demo_camera(bdk_class* i_this) {
         player->changeOriginalDemo();
         mDoAud_bgmStreamPrepare(JA_STRM_DK_CLEAR);
         // Fall-through
+    }
     case 0x65:
         if (i_this->m25A6 == 0x3C) {
             mDoAud_bgmStreamPlay();
@@ -3019,23 +3038,24 @@ void demo_camera(bdk_class* i_this) {
         i_this->m25A8.z = 22916.0f;
         i_this->m25A0 = 0x6F;
         // Fall-through
-    case 0x6F:
-            i_this->m25B4.x = 3600.0f;
-            f32 fVar17 = actor->current.pos.y;
-            if (fVar17 < 30000.0f) {
-                i_this->m25B4.y = (fVar17 - 6000.0f) + REG0_F(19);
-            }
-            i_this->m25B4.z = -3800.0f;
-            cLib_addCalc2(&i_this->m25A8.z, 30449.0f, 0.02f, i_this->m25CC * 75.33f);
-            if (i_this->m25A6 > REG0_S(2)) {
-                cLib_addCalc2(&i_this->m25CC, REG0_S(1) + 1.5f, 1.0f, REG0_F(2) + 0.02f);
-            }
-            local_108.x = 4444.0f;
-            local_108.y = 9800.0f;
-            local_108.z = -4500.0f;
+    case 0x6F: {
+        i_this->m25B4.x = 3600.0f;
+        f32 fVar17 = actor->current.pos.y;
+        if (fVar17 < 30000.0f) {
+            i_this->m25B4.y = (fVar17 - 6000.0f) + REG0_F(19);
+        }
+        i_this->m25B4.z = -3800.0f;
+        cLib_addCalc2(&i_this->m25A8.z, 30449.0f, 0.02f, i_this->m25CC * 75.33f);
+        if (i_this->m25A6 > REG0_S(2)) {
+            cLib_addCalc2(&i_this->m25CC, REG0_S(1) + 1.5f, 1.0f, REG0_F(2) + 0.02f);
+        }
+        local_108.x = 4444.0f;
+        local_108.y = 9800.0f;
+        local_108.z = -4500.0f;
 
-            player->setPlayerPosAndAngle(&local_108, (s16)0);
+        player->setPlayerPosAndAngle(&local_108, (s16)0);
         break;
+    }
     case 0x70:
         i_this->m25B4 = i_this->m2CC;
 
@@ -4098,7 +4118,9 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
             }
         }
     }
+    #if VERSION > VERSION_DEMO
     i_this->m6224 = actor->tevStr;
+    #endif
     return phase_state;
 }
 static actor_method_class l_daBdk_Method = {

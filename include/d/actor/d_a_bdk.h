@@ -39,7 +39,7 @@ struct bdk_eff_s {
 
 class bdk_class {
 public:
-    /* 0x000 */ fopEn_enemy_c actor;
+    /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x02AC */ request_of_phase_process_class mPhase;
     /* 0x02B4 */ u8 m2B4;
     /* 0x02B8 */ mDoExt_McaMorf* mpMorf;
