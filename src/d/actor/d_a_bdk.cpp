@@ -417,7 +417,7 @@ void kamen_draw(bdk_class* i_this) {
         fVar3 = REG8_F(18) + 1.20f;
     }
 
-    cMtx_copy(i_this->mpMorf->mpModel->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
+    cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
     cMtx_YrotM(*calc_mtx, sVar1 + 0x4000);
     cMtx_ZrotM(*calc_mtx, sVar2 + -0x4000);
     MtxTrans(0.0f, 40.0f, 125.0f, TRUE);
