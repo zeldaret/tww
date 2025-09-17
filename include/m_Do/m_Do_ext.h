@@ -178,6 +178,9 @@ private:
 
 class mDoExt_bvaAnm : public mDoExt_baseAnm {
 public:
+    mDoExt_bvaAnm() {
+        field_0xc = NULL;
+    }
     int init(J3DModel*, J3DAnmVisibilityFull*, int, int, f32, s16, s16, bool, int);
     void entry(J3DModel*, s16);
 
@@ -189,6 +192,7 @@ public:
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;
     /* 0x0C */ J3DVisibilityManager* field_0xc;
+    /* 0x10 */ s32 field_0x10; // TODO Unknown
 };
 
 class mDoExt_AnmRatioPack {

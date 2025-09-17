@@ -1243,22 +1243,22 @@ void kuti_attack(bdk_class* i_this) {
 
 /* 00003BC4-00003D9C       .text wind_set__FP9bdk_classP4cXyz */
 void wind_set(bdk_class* i_this, cXyz* param2) {
-    /* Nonmatching */
+    fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player;
-    fopAc_ac_c* actor;
+    camera_class* camera;
     cXyz vec1;
     cXyz vec2;
-    camera_class* camera;
-    actor = &i_this->actor;
-    if ((i_this->m2C4 & 1) != 0) {
+
+    if ((i_this->m2C4 & 1) == 0) {
         player = dComIfGp_getPlayer(0);
         vec1.y = 0.0f;
         vec1.x = 0.0f;
         vec1.z = REG0_F(4) + 100.0f;
-        
+
         for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m2494); i++) {
             if (i_this->m2488[i] == 0) {
                 i_this->m2488[i] = 1;
+
                 cMtx_YrotS(*calc_mtx, actor->current.angle.y + (s16)cM_rndFX(6000.0f));
                 MtxPosition(&vec1, &i_this->m250C[i]);
                 i_this->m2494[i] = *param2;
@@ -1267,7 +1267,7 @@ void wind_set(bdk_class* i_this, cXyz* param2) {
             }
         }
     }
-    camera = dComIfGp_getCamera(0);
+    camera = static_cast<camera_class*>(dComIfGp_getCamera(0));
     vec2 = actor->eyePos - camera->mLookat.mEye;
     wind_se_pos = actor->eyePos + (camera->mLookat.mEye - actor->eyePos) * 0.8f;
     mDoAud_seStart(JA_SE_CM_DK_WIND, &wind_se_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -1474,11 +1474,11 @@ void wind_attack(bdk_class* i_this) {
     default:
         break;
     }
-    
+
     cLib_addCalcAngleS2(&actor->current.angle.y, fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0)), 4, 0x800);
-    cLib_addCalc2(&actor->current.pos.y, i_this->m2CC.y + (cM_ssin(i_this->m2C4 * 1500)) * i_this->m2E0 * 100.0f,0.1f, 60.0f);
-    cLib_addCalc2(&actor->current.pos.x, i_this->m2CC.x + cM_ssin(i_this->m2C4 * 700) * i_this->m2E0 * 200.0f,0.1f, 40.0f);
-    cLib_addCalc2(&actor->current.pos.z, i_this->m2CC.z + cM_ssin(i_this->m2C4 * 500) * i_this->m2E0 * 200.0f,0.1f, 40.0f);
+    cLib_addCalc2(&actor->current.pos.y, i_this->m2CC.y + (cM_ssin(i_this->m2C4 * 1500)) * i_this->m2E0 * 100.0f, 0.1f, 60.0f);
+    cLib_addCalc2(&actor->current.pos.x, i_this->m2CC.x + cM_ssin(i_this->m2C4 * 700) * i_this->m2E0 * 200.0f, 0.1f, 40.0f);
+    cLib_addCalc2(&actor->current.pos.z, i_this->m2CC.z + cM_ssin(i_this->m2C4 * 500) * i_this->m2E0 * 200.0f, 0.1f, 40.0f);
 }
 
 /* 0000491C-000049C0       .text end_set__FP9bdk_class */
@@ -1503,7 +1503,7 @@ void end_set(bdk_class* i_this) {
 
 /* 000049C0-00005018       .text damage_check__FP9bdk_class */
 void damage_check(bdk_class* i_this) {
-    fopAc_ac_c* actor = &i_this->actor; 
+    fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = daPy_getPlayerActorClass();
 
     i_this->mStts.Move();
@@ -2444,7 +2444,7 @@ void kankyo_cont(bdk_class* i_this) {
     non_pos.x = 0.0f;
     non_pos.y = -10000.0f;
     non_pos.z = 10000.0f;
-    
+
     for (s32 i = 0; i < 10; i++) {
         if (i_this->m2488[i] != 0) {
             i_this->m2494[i] += i_this->m250C[i];
@@ -2487,7 +2487,7 @@ void kamen_break_move(bdk_class* i_this) {
     cXyz vec3;
     cXyz vec4;
     cXyz vec5;
-    
+
     s16 rot1;
     s16 rot2;
 
@@ -2644,7 +2644,7 @@ void demo_camera(bdk_class* i_this) {
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz local_14C;
     csXyz local_154;
-    
+
     cXyz local_104;
     cXyz local_108;
     cXyz local_e4;
@@ -2656,7 +2656,7 @@ void demo_camera(bdk_class* i_this) {
 
     u8 r28 = 1;
     u8 r27 = 0;
-    
+
     switch (i_this->m25A0) {
     case 0x0:
         break;
@@ -3249,20 +3249,20 @@ void eff_hane_move(bdk_class* i_this, bdk_eff_s* i_eff) {
         i_eff->m048.SetC(i_eff->m004);
         dComIfG_Ccsp()->Set(&i_eff->m048);
     }
-    //TODO: why is this here twice?
-    fopAc_ac_c* actor2;
+
+    fopAc_ac_c* tgActor;
     CcAtInfo hit_atInfo;
     if (i_eff->m048.ChkTgHit() != NULL && i_eff->m040 == 0) {
         CcAtInfo hit_atInfo;
         cCcD_Stts* stts = i_eff->m048.GetTgHitObj()->GetStts();
         if (stts == NULL) {
-            actor2 = NULL;
+            tgActor = NULL;
         } else {
-            actor2 = stts->GetActor();
+            tgActor = stts->GetActor();
         }
 
-        if (actor2 != NULL) {
-            vec3 = i_eff->m004 - actor2->current.pos;
+        if (tgActor != NULL) {
+            vec3 = i_eff->m004 - tgActor->current.pos;
 
             if (i_eff->m020 < 5.0f) {
                 i_eff->m030.y = cM_atan2s(vec3.x, vec3.z) + (s16)cM_rndFX(4000.0f);
@@ -3430,7 +3430,7 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
     }
     actor->shape_angle.y = actor->current.angle.y;
     actor->shape_angle.z = actor->current.angle.z;
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x18),*calc_mtx); // j_dk_atama1 joint
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx); // j_dk_atama1 joint
 
     offset.x = REG0_F(10) + 120.0f;
     offset.y = 0.0f;
@@ -3541,7 +3541,6 @@ static BOOL daBdk_Delete(bdk_class* i_this) {
 
 /* 0000BF08-0000C684       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
-    /* Nonmatching */
     bdk_class* i_this = (bdk_class *)i_actor;
     i_this->mpMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Bdk", BDK_BDL_DK),
@@ -3589,7 +3588,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     i_this->bva = new mDoExt_bvaAnm();
     JUT_ASSERT(0x1864, i_this->bva);
 
-    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, 0, 1.0f, 0, -1, TRUE, 0);
+    s32 bva = i_this->bva->init(i_this->mp8F0, (J3DAnmVisibilityFull *)dComIfG_getObjectRes("Bdk", BDK_BVA_HIBIWARE1), 1, 0, 1.0f, 0, -1, FALSE, 0);
     if (bva == 0) {
         return FALSE;
     }
@@ -3760,7 +3759,6 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
 /* 0000C6CC-0000CCA8       .text daBdk_Create__FP10fopAc_ac_c */
 static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcSph head_at_sph_src = {
         // dCcD_SrcGObjInf
         {
@@ -3985,19 +3983,10 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
             /* Radius */ 100.0f,
         }},
     };
-    // fopAcM_SetupActor(&a_this, bdk_class);
-    // bdk_class* i_this = (bdk_class*)a_this;
 
-    // bdk_class* i_this = (bdk_class*)i_actor;
-    // fopAcM_SetupActor(&i_this->actor, bdk_class);
-    // cc_class* i_this = (cc_class*)a_this;
-    // fopAcM_SetupActor(a_this, cc_class);
-
-    // fopAcM_SetupActor(i_this, bdk_class);
-    // bdk_class* a_this = (bdk_class*)i_this;
-    // cPhs_State phase_state;
-    bdk_class* i_this = (bdk_class*)a_this;
     fopAcM_SetupActor(a_this, bdk_class);
+    bdk_class* i_this = (bdk_class*)a_this;
+    fopAc_ac_c* actor = &i_this->actor;
 
     cPhs_State phase_state = dComIfG_resLoad(&i_this->mPhase, "Bdk");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -4010,32 +3999,32 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
 
         i_this->m6110.setFollowOff();
 
-        i_this->m2B4 = fopAcM_GetParam(a_this);
+        i_this->m2B4 = fopAcM_GetParam(actor);
         i_this->m2B4 = 1;
 
-        if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x96000)) {
+        if (!fopAcM_entrySolidHeap(actor, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;
         }
 
-        if (i_this->pm_bgw && dComIfG_Bgsp()->Regist(i_this->pm_bgw, a_this)) {
+        if (i_this->pm_bgw && dComIfG_Bgsp()->Regist(i_this->pm_bgw, actor)) {
             return cPhs_ERROR_e;
         }
 
         for (s32 i = 0; i < 3; i++) {
-            if (i_this->mp63BC[i] != NULL && dComIfG_Bgsp()->Regist(i_this->mp63BC[i], a_this)) {
+            if (i_this->mp63BC[i] != NULL && dComIfG_Bgsp()->Regist(i_this->mp63BC[i], actor)) {
                 return cPhs_ERROR_e;
             }
         }
 
-        a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-        a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x2A;
+        actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+        actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x2A;
 
         l_HIO.mNo = mDoHIO_createChild("戦闘用大怪鳥", &l_HIO);
-        i_this->mAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1 , &i_this->mAcchCir, fopAcM_GetSpeed_p(a_this));
+        i_this->mAcch.Set(fopAcM_GetPosition_p(actor), fopAcM_GetOldPosition_p(actor), actor, 1 , &i_this->mAcchCir, fopAcM_GetSpeed_p(actor));
         i_this->mAcch.OffSameActorChk();
 
         i_this->mAcchCir.SetWall(400.0f, 500.0f);
-        i_this->mStts.Init(0xff, 0xff, a_this);
+        i_this->mStts.Init(0xff, 0xff, actor);
 
         i_this->mHeadAtSph.Set(head_at_sph_src);
         i_this->mHeadTgSph.Set(head_tg_sph_src);
@@ -4080,17 +4069,17 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
         if (dComIfGs_isStageBossEnemy() || REG0_S(0) != 0) {
             dComIfGs_onStageBossEnemy();
             i_this->mAction = ACTION_AFTER_FIGHT;
-            a_this->current.pos.x = 300000.0f;
-            a_this->current.pos.y = 300000.0f;
-            a_this->current.pos.z = 300000.0f;
+            actor->current.pos.x = 300000.0f;
+            actor->current.pos.y = 300000.0f;
+            actor->current.pos.z = 300000.0f;
             i_this->m6320 = -630.0f;
             i_this->m6324 = -70.0f;
             i_this->m62D4 = -500.0f;
         } else {
             if (i_this->m2B4 == 0x1) {
                 i_this->mAction = ACTION_T_FLY;
-                a_this->current.pos = center_pos;
-                a_this->current.pos.y = 5000.0f;
+                actor->current.pos = center_pos;
+                actor->current.pos.y = 5000.0f;
                 i_this->m6320 = -630.0f;
                 i_this->m6324 = -70.0f;
                 mDoAud_bgmStart(JA_BGM_MJ_TOWER_BATTLE);
@@ -4099,17 +4088,17 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
                 }
                 i_this->m2EC[0] = 0x168;
             } else {
-                a_this->gravity = REG0_F(4) + -5.0f;
-                a_this->speedF = l_HIO.m020;
+                actor->gravity = REG0_F(4) + -5.0f;
+                actor->speedF = l_HIO.m020;
                 i_this->m2CA = -1;
                 i_this->m1120 = -2000;
-                a_this->health = 20;
-                a_this->max_health = 20;
-                a_this->current.pos.y = 11000.0f;
+                actor->health = 20;
+                actor->max_health = 20;
+                actor->current.pos.y = 11000.0f;
             }
         }
     }
-    i_this->m6224 = a_this->tevStr;
+    i_this->m6224 = actor->tevStr;
     return phase_state;
 }
 static actor_method_class l_daBdk_Method = {
