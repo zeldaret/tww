@@ -89,23 +89,23 @@ static void message_cont(bst_class* i_this) {
 
 /* 000001FC-00000268       .text set_hand_AT__FP9bst_classUc */
 static void set_hand_AT(bst_class* i_this, u8 param_2) {
-    for (int i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_fingers); i++) {
+    for (int i = 0; i < (s32)ARRAY_SIZE(i_this->mFingerSphs); i++) {
         if (param_2 != 0) {
-            i_this->mCcD_fingers[i].OnAtSetBit();
+            i_this->mFingerSphs[i].OnAtSetBit();
         } else {
-            i_this->mCcD_fingers[i].OffAtSetBit();
+            i_this->mFingerSphs[i].OffAtSetBit();
         }
-        i_this->mCcD_fingers[i].SetAtSpl(dCcG_At_Spl_UNK1);
+        i_this->mFingerSphs[i].SetAtSpl(dCcG_At_Spl_UNK1);
     }
 }
 
 /* 00000268-000002C0       .text set_hand_CO__FP9bst_classUc */
 static void set_hand_CO(bst_class* i_this, u8 param_2) {
-    for (int i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_fingers); i++) {
+    for (int i = 0; i < (s32)ARRAY_SIZE(i_this->mFingerSphs); i++) {
         if (param_2 != 0) {
-            i_this->mCcD_fingers[i].OnCoSetBit();
+            i_this->mFingerSphs[i].OnCoSetBit();
         } else {
-            i_this->mCcD_fingers[i].OffCoSetBit();
+            i_this->mFingerSphs[i].OffCoSetBit();
         }
     }
 }
@@ -113,12 +113,17 @@ static void set_hand_CO(bst_class* i_this, u8 param_2) {
 /* 000002C0-000003E8       .text anm_init__FP9bst_classifUcfi */
 static void anm_init(bst_class* i_this, int param_2, float morf, u8 loop_mode, float play_speed, int sound_idx) {
     if (sound_idx >= 0) {
-        void* sound = dComIfG_getObjectRes("Bst", sound_idx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bst", param_2);
-        i_this->m02B8->setAnm(bckAnm, loop_mode, morf, play_speed, 0.0f, -1.0f, sound);
+        i_this->m02B8->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bst", param_2),
+            loop_mode, morf, play_speed, 0.0f, -1.0f,
+            dComIfG_getObjectRes("Bst", sound_idx)
+        );
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Bst", param_2);
-        i_this->m02B8->setAnm(bckAnm, loop_mode, morf, play_speed, 0.0f, -1.0f, NULL);
+        i_this->m02B8->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bst", param_2),
+            loop_mode, morf, play_speed, 0.0f, -1.0f,
+            NULL
+        );
     }
 }
 
@@ -130,18 +135,18 @@ static BOOL nodeCallBackHead(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bst_class* i_this = (bst_class*)model->getUserArea();
         if (i_this != NULL) {
-            mDoMtx_copy(model->getAnmMtx(jnt_no), *calc_mtx);
+            cMtx_copy(model->getAnmMtx(jnt_no), *calc_mtx);
             if (jnt_no == 9) {
-                mDoMtx_YrotM(*calc_mtx, -i_this->m2E78[1]);
+                cMtx_YrotM(*calc_mtx, -i_this->m2E78[1]);
             } else if (jnt_no == 12) {
-                mDoMtx_YrotM(*calc_mtx, i_this->m2E78[1]);
+                cMtx_YrotM(*calc_mtx, i_this->m2E78[1]);
             } else if (jnt_no == 10) {
-                mDoMtx_YrotM(*calc_mtx, -i_this->m2E78[0]);
+                cMtx_YrotM(*calc_mtx, -i_this->m2E78[0]);
             } else if (jnt_no == 11) {
-                mDoMtx_YrotM(*calc_mtx, i_this->m2E78[0]);
+                cMtx_YrotM(*calc_mtx, i_this->m2E78[0]);
             }
             model->setAnmMtx(jnt_no, *calc_mtx);
-            mDoMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+            cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
     return TRUE;
@@ -179,7 +184,7 @@ static BOOL daBst_Draw(bst_class* i_this) {
     for (u16 i = 0; i < model_2B8->getModelData()->getWEvlpMtxNum(); i++) {
         model_388->setWeightAnmMtx(i, model_2B8->getWeightAnmMtx(i));
     }
-    mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
+    cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
     temp.setall(0.0f);
     MtxPosition(&temp, &shadow_pos);
     shadow_pos.y += REG0_F(1) * 10.0f;
@@ -230,8 +235,8 @@ static void pos_move(bst_class* i_this, u8 param_2) {
     vec.x = 0.0f;
     vec.y = 0.0f;
     vec.z = actor->speedF;
-    mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, actor->current.angle.x);
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
     MtxPosition(&vec, &actor->speed);
     actor->current.pos += actor->speed;
 }
@@ -271,7 +276,7 @@ static void stay(bst_class* i_this) {
         dComIfGp_getVibration().StartShock(REG0_S(2) + 3, -0x21, cXyz(0.0f, 1.0f, 0.0f));
         boss->m2ECC = REG0_F(10) + 15.0f;
         i_this->mDamage++;
-        mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
+        cMtx_YrotS(*calc_mtx, actor->current.angle.y);
         cXyz pos_vec;
         MtxPosition(&vec, &pos_vec);
         i_this->mTargetPos = actor->current.pos + pos_vec;
@@ -281,7 +286,7 @@ static void stay(bst_class* i_this) {
     case 5:
         if (i_this->mBstPartType != bst_class::Type_HEAD_e && i_this->m10FC[3] != 0) {
             for (s32 i = 2; i <= 16; i++) {
-                mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i), *calc_mtx);
+                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i), *calc_mtx);
                 cXyz pos_vec;
                 cXyz vec(0.0f, 0.0f, 0.0f);
                 MtxPosition(&vec, &pos_vec);
@@ -304,9 +309,8 @@ static u16 damage_brk_d[] = {BST_BRK_BST_DAMAGE, BST_BRK_LH_DAMAGE, BST_BRK_RH_D
 
 /* 00000E58-000014E8       .text fly__FP9bst_class */
 static void fly(bst_class* i_this) {
-    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if (i_this->mBstPartType != bst_class::Type_HEAD_e && i_this->m10D8 == 6) {
         actor->health = 4;
     }
@@ -314,10 +318,8 @@ static void fly(bst_class* i_this) {
     if (i_this->mState == 0) {
         set_hand_CO(i_this, 1);
     }
-    if (boss->m2E9A != 0 || (i_this->mUpdateLastFacingDirIfMultipleOf32 & 0x1F) == 0) {
-        if (cM_rndF(1.0f) < 0.5f) {
-            i_this->mLastCheckedPlayerFacingDir = player->shape_angle.y;
-        }
+    if (boss->m2E9A != 0 || ((i_this->mUpdateLastFacingDirIfMultipleOf32 & 0x1F) == 0 && cM_rndF(1.0f) < 0.5f)) {
+        i_this->mLastCheckedPlayerFacingDir = player->shape_angle.y;
     }
     switch (i_this->mDamage) {
     case 0: {
@@ -340,7 +342,7 @@ static void fly(bst_class* i_this) {
         //break;
     }
     case 2: {
-        mDoMtx_YrotS(*calc_mtx, i_this->mLastCheckedPlayerFacingDir);
+        cMtx_YrotS(*calc_mtx, i_this->mLastCheckedPlayerFacingDir);
         cXyz vec;
         vec.z = REG0_F(4) + 800.0f;
         vec.y = REG0_F(3) + 200.0f;
@@ -357,19 +359,19 @@ static void fly(bst_class* i_this) {
         }
         cXyz pos_vec;
         MtxPosition(&vec, &pos_vec);
-        i_this->mTargetPos = actor->current.pos + pos_vec;
+        i_this->mTargetPos = player->current.pos + pos_vec;
         if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
             vec = i_this->mTargetPos;
             vec.y = 0.0f;
             f32 dist = vec.abs();
             if (dist > REG0_F(9) + 1350.0f) {
-                dist /= REG0_F(9) + 1350.0f;
-                i_this->mTargetPos.x *= dist;
-                i_this->mTargetPos.z *= dist;
+                f32 tmp = (REG0_F(9) + 1350.0f) / dist;
+                i_this->mTargetPos.x *= tmp;
+                i_this->mTargetPos.z *= tmp;
             }
         }
-        cXyz target_diff = i_this->mTargetPos - actor->current.pos;
-        if (target_diff.abs() > REG0_F(12) + 300.0f) {
+        vec = i_this->mTargetPos - actor->current.pos;
+        if (vec.abs() > REG0_F(12) + 300.0f) {
             f32 speed_target;
             if (i_this->mBstPartType == bst_class::Type_HEAD_e && boss->m2E7C == 11) {
                 speed_target = 10.0f;
@@ -496,7 +498,7 @@ static void down_attack(bst_class* i_this) {
     if (bVar2) {
         pos_move(i_this, 0);
     }
-    if (bVar4 || i_this->mBgS_Acch.ChkWallHit()) {
+    if (bVar4 || i_this->mAcch.ChkWallHit()) {
         i_this->mActionType = bst_class::ACTION_FLY_e;
         i_this->mDamage = 0;
         fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_GRIP_OPEN, 0);
@@ -515,17 +517,16 @@ static u16 paa_bck_d[] = {0, BST_BCK_LH_PAA, BST_BCK_RH_PAA};
 
 /* 00001C14-000023C8       .text paa_attack__FP9bst_class */
 static void paa_attack(bst_class* i_this) {
-    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    s8 bVar3;
-    bool bVar1;
     short sVar6;
     cXyz local_38;
     cXyz cStack_44;
-
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    bVar1 = true;
-    bVar3 = false;
+    
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    bool r27;
+    s8 r26;
+    r27 = true;
+    r26 = false;
     cLib_addCalcAngleS2(&actor->shape_angle.x, 0, 10, 0x200);
     cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 10, 0x400);
     cLib_addCalc2(&i_this->m1118, -40.0f, 1.0f, 10.0f);
@@ -545,7 +546,7 @@ static void paa_attack(bst_class* i_this) {
             cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
-        mDoMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+        cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
         if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
             local_38.x = -(REG0_F(2) + 700.0f);
             sVar6 = 0x4000;
@@ -575,14 +576,12 @@ static void paa_attack(bst_class* i_this) {
         }
         break;
     case 3:
-        bVar1 = false;
+        r27 = false;
         if (i_this->m10FC[0] >= 0x1C) {
             if (i_this->m10FC[0] == 0x1c) {
                 if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
                     fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_CLAP, 0);
-                    csXyz local_70;
-                    local_70.x = actor->shape_angle.x;
-                    local_70.z = actor->shape_angle.z;
+                    csXyz local_70 = actor->shape_angle;
                     local_70.y += 0x4000;
                     dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C1D7, &i_this->mTargetPos, &local_70);
                     dComIfGp_particle_setToon(
@@ -606,7 +605,7 @@ static void paa_attack(bst_class* i_this) {
             actor->speedF = 0.0f;
             i_this->m10FC[0] = REG0_S(3) + 0x1e;
             actor->current.angle.y += 0x8000;
-            mDoMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+            cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
             if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
                 local_38.x = -(REG0_F(2) + 4000.0f);
             } else {
@@ -622,21 +621,21 @@ static void paa_attack(bst_class* i_this) {
         cLib_addCalc2(&actor->speedF, 40.0f, 1.0f, REG0_F(0xd) + 1.0f);
         i_this->m10EC.x = REG0_F(5) + 2000.0f;
         if (i_this->m10FC[0] == 0) {
-            bVar3 = true;
+            r26 = true;
         }
         break;
     }
-    if (bVar1) {
+    if (r27) {
         pos_move(i_this, 0);
     }
     if (actor->current.pos.y <= REG0_F(4) + 30.0f) {
         actor->current.pos.y = REG0_F(4) + 30.0f;
     }
-    if ((bVar3) || (i_this->mBgS_Acch.ChkWallHit())) {
+    if ((r26) || (i_this->mAcch.ChkWallHit())) {
         i_this->mActionType = bst_class::ACTION_FLY_e;
         i_this->mDamage = 0;
         i_this->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
-        if (!bVar3) {
+        if (!r26) {
             s32 hand_index = 2 - i_this->mBstPartType;
             if (hand[hand_index]->mActionType == bst_class::ACTION_PAA_ATTACK_e) {
                 hand[hand_index]->mActionType = bst_class::ACTION_FLY_e;
@@ -651,18 +650,17 @@ static u16 awasu_bck_d[] = {0, BST_BCK_LH_AWASE, BST_BCK_RH_AWASU};
 
 /* 00002404-00002E08       .text kumi_attack__FP9bst_class */
 static void kumi_attack(bst_class* i_this) {
-    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    s8 bVar3;
-    bool bVar1;
     short sVar5;
     cXyz local_38;
     cXyz cStack_44;
     cXyz local_50;
 
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    bVar1 = true;
-    bVar3 = false;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    bool r27;
+    s8 r26;
+    r27 = true;
+    r26 = false;
     cLib_addCalcAngleS2(&actor->shape_angle.x, 0, 10, 0x200);
     cLib_addCalc2(&i_this->m1110, 30.0f, 1.0f, 10.0f);
     cLib_addCalc2(&i_this->m1118, -80.0f, 1.0f, 10.0f);
@@ -683,7 +681,7 @@ static void kumi_attack(bst_class* i_this) {
             cLib_addCalc0(&actor->speedF, 1.0f, (REG0_F(0xd) + 2.0f));
         }
         i_this->m10EC.x = REG0_F(5) + 8000.0f;
-        mDoMtx_YrotS(*calc_mtx, (int)i_this->m111C);
+        cMtx_YrotS(*calc_mtx, (int)i_this->m111C);
         if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
             local_38.x = -(REG0_F(2) + 500.0f);
             sVar5 = 0x4000;
@@ -713,7 +711,7 @@ static void kumi_attack(bst_class* i_this) {
         }
         break;
     case 3:
-        bVar1 = false;
+        r27 = false;
         if (i_this->mBstPartType == bst_class::Type_LEFT_HAND_e) {
             sVar5 = 0x4000;
         } else {
@@ -732,7 +730,7 @@ static void kumi_attack(bst_class* i_this) {
         }
         break;
     case 4:
-        bVar1 = false;
+        r27 = false;
         actor->current.pos.y = actor->current.pos.y + actor->speed.y;
         if (i_this->m10FC[0] <= 1) {
             if (i_this->mBstPartType == bst_class::Type_RIGHT_HAND_e) {
@@ -769,16 +767,16 @@ static void kumi_attack(bst_class* i_this) {
         }
         break;
     case 5:
-        bVar1 = false;
+        r27 = false;
         if (i_this->m10FC[0] == 0) {
-            bVar3 = true;
+            r26 = true;
         }
         break;
     }
-    if (bVar1) {
+    if (r27) {
         pos_move(i_this, 0);
     }
-    if ((bVar3) || (i_this->mBgS_Acch).ChkWallHit()) {
+    if ((r26) || (i_this->mAcch).ChkWallHit()) {
         i_this->mActionType = bst_class::ACTION_FLY_e;
         i_this->mDamage = 0;
         actor->speedF = 0.0f;
@@ -786,7 +784,7 @@ static void kumi_attack(bst_class* i_this) {
         i_this->mStateTimer = (s16)(int)(cM_rndF(100.0f) + 100.0f);
         i_this->mState = 0x28;
         fopAcM_seStartCurrent(actor, JA_SE_CM_BST_HAND_RELEASE, 0);
-        if (!bVar3) {
+        if (!r26) {
             s32 hand_index = 2 - i_this->mBstPartType;
             if (hand[hand_index]->mActionType == bst_class::ACTION_KUMI_ATTACK_e) {
                 hand[hand_index]->mActionType = bst_class::ACTION_FLY_e;
@@ -926,12 +924,12 @@ static void beam_set(bst_class* i_this) {
             continue;
         }
         i_this->m04E4[i] = 1;
-        mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + 3), *calc_mtx);
+        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(REG0_S(5) + 3), *calc_mtx);
         cXyz vec(0.0f, 0.0f, 0.0f);
         MtxPosition(&vec, &i_this->m03B8[i]);
         i_this->m04A8[i] = actor->shape_angle;
-        mDoMtx_YrotS(*calc_mtx, i_this->m04A8[i].y);
-        mDoMtx_XrotM(*calc_mtx, i_this->m04A8[i].x);
+        cMtx_YrotS(*calc_mtx, i_this->m04A8[i].y);
+        cMtx_XrotM(*calc_mtx, i_this->m04A8[i].x);
         vec.set(0.0f, 0.0f, REG0_F(12) + 160.0f);
         MtxPosition(&vec, &i_this->m0430[i]);
         i_this->m10A8[i] = 1.0f;
@@ -1073,9 +1071,9 @@ static void damage(bst_class* i_this) {
 
 /* 00003DD8-00003EC4       .text bom_eat_check__FP9bst_class */
 static BOOL bom_eat_check(bst_class* i_this) {
-    if (i_this->mHandHurtCollisionCcD_Cyl.ChkCoHit()) {
+    if (i_this->mHandHurtCyl.ChkCoHit()) {
 
-        cCcD_Obj* hit_obj = i_this->mHandHurtCollisionCcD_Cyl.GetCoHitObj();
+        cCcD_Obj* hit_obj = i_this->mHandHurtCyl.GetCoHitObj();
         if (hit_obj != NULL) {
             fopAc_ac_c* actor = (fopAc_ac_c*)hit_obj->GetAc();
             daBomb_c* bomb = (daBomb_c*)actor;
@@ -1094,7 +1092,6 @@ static BOOL bom_eat_check(bst_class* i_this) {
 
 /* 00003EC4-000049A8       .text head_damage__FP9bst_class */
 static void head_damage(bst_class* i_this) {
-    /* Nonmatching - branching */
     fopAc_ac_c* actor = &i_this->actor;
     cXyz v;
     f32 dist;
@@ -1161,7 +1158,10 @@ static void head_damage(bst_class* i_this) {
             i_this->mDamage = 0;
             mDoAud_bgmStart(JA_BGM_UNK_122);
             break;
+        } else {
+            break;
         }
+        // Fall-through
     case 4: {
         fopAc_ac_c* bomb = fopAcM_SearchByID(i_this->mBombId);
         if (bomb != NULL) {
@@ -1180,6 +1180,8 @@ static void head_damage(bst_class* i_this) {
             i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81E3, &actor->current.pos);
             fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
             i_this->m10FC[0] = 0x3c;
+        } else {
+            break;
         }
         // fallthrough
     }
@@ -1294,25 +1296,25 @@ static void col_set(bst_class* i_this) {
     cXyz vec;
     cXyz pos_vec;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(8), *calc_mtx);
+        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(8), *calc_mtx);
         vec.set(REG0_F(0) + (-30.0f), REG0_F(1), REG0_F(2) + (-100.0f));
         MtxPosition(&vec, &pos_vec);
-        i_this->mHeadHurtCollisionCcD_Cyl.SetC(pos_vec);
-        i_this->mHeadHurtCollisionCcD_Cyl.SetH(REG0_F(3) + 600.0f);
-        i_this->mHeadHurtCollisionCcD_Cyl.SetR(REG0_F(4) + 180.0f);
-        dComIfG_Ccsp()->Set(&i_this->mHeadHurtCollisionCcD_Cyl);
-        i_this->mHandHurtCollisionCcD_Cyl.OffTgSetBit();
+        i_this->mHeadHurtCyl.SetC(pos_vec);
+        i_this->mHeadHurtCyl.SetH(REG0_F(3) + 600.0f);
+        i_this->mHeadHurtCyl.SetR(REG0_F(4) + 180.0f);
+        dComIfG_Ccsp()->Set(&i_this->mHeadHurtCyl);
+        i_this->mHandHurtCyl.OffTgSetBit();
         vec.set(REG0_F(5) + 150.0f, REG0_F(6), REG0_F(7) + 70.0f);
         MtxPosition(&vec, &pos_vec);
-        i_this->mHandHurtCollisionCcD_Cyl.SetC(pos_vec);
-        i_this->mHandHurtCollisionCcD_Cyl.SetH(REG0_F(8) + 100.0f);
-        i_this->mHandHurtCollisionCcD_Cyl.SetR(REG0_F(9) + 100.0f);
-        dComIfG_Ccsp()->Set(&i_this->mHandHurtCollisionCcD_Cyl);
+        i_this->mHandHurtCyl.SetC(pos_vec);
+        i_this->mHandHurtCyl.SetH(REG0_F(8) + 100.0f);
+        i_this->mHandHurtCyl.SetR(REG0_F(9) + 100.0f);
+        dComIfG_Ccsp()->Set(&i_this->mHandHurtCyl);
         vec.set(REG0_F(11) + 250.0f, 0.0f, 0.0f);
         MtxPosition(&vec, &actor->eyePos);
         vec.setall(0.0f);
         for (s32 i = 0; i < 2; i++) {
-            mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 4), *calc_mtx);
+            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 4), *calc_mtx);
             MtxPosition(&vec, &pos_vec);
             s16 unk = i_this->m2E74[i];
             if (unk != 0 || i_this->mEyeHealth[i] <= 0) {
@@ -1324,9 +1326,9 @@ static void col_set(bst_class* i_this) {
             } else {
                 cLib_addCalcAngleS2(&i_this->m2E78[i], 0, 8, 0x200);
             }
-            i_this->mBstEyeCcD_Spheres[i].SetC(pos_vec);
-            i_this->mBstEyeCcD_Spheres[i].SetR(REG0_F(14) + 60.0f);
-            dComIfG_Ccsp()->Set(&i_this->mBstEyeCcD_Spheres[i]);
+            i_this->mEyeSphs[i].SetC(pos_vec);
+            i_this->mEyeSphs[i].SetR(REG0_F(14) + 60.0f);
+            dComIfG_Ccsp()->Set(&i_this->mEyeSphs[i]);
         }
     } else {
         vec.setall(0.0f);
@@ -1335,13 +1337,13 @@ static void col_set(bst_class* i_this) {
             radius = REG0_F(16) + 50.0f;
         }
         for (s32 i = 0; i < 15; i++) {
-            mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 2), *calc_mtx);
+            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(i + 2), *calc_mtx);
             MtxPosition(&vec, &pos_vec);
-            i_this->mCcD_fingers[i].SetC(pos_vec);
-            i_this->mCcD_fingers[i].SetR(REG0_F(14) + 50.0f + radius);
-            dComIfG_Ccsp()->Set(&i_this->mCcD_fingers[i]);
+            i_this->mFingerSphs[i].SetC(pos_vec);
+            i_this->mFingerSphs[i].SetR(REG0_F(14) + 50.0f + radius);
+            dComIfG_Ccsp()->Set(&i_this->mFingerSphs[i]);
         }
-        mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(17), *calc_mtx);
+        cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(17), *calc_mtx);
         static f32 te_x[4] = {70.0f, 70.0f, 70.0f, 70.0f};
         static f32 te_y[4] = {70.0f, -70.0f, 70.0f, -70.0f};
         static f32 te_z[4] = {90.0f, 90.0f, -30.0f, -30.0f};
@@ -1353,9 +1355,9 @@ static void col_set(bst_class* i_this) {
             vec.y = te_y[i];
             vec.z = te_z[i];
             MtxPosition(&vec, &pos_vec);
-            i_this->mCcD_fingers[i + 15].SetC(pos_vec);
-            i_this->mCcD_fingers[i + 15].SetR(REG0_F(15) + 65.0f + radius);
-            dComIfG_Ccsp()->Set(&i_this->mCcD_fingers[i + 15]);
+            i_this->mFingerSphs[i + 15].SetC(pos_vec);
+            i_this->mFingerSphs[i + 15].SetR(REG0_F(15) + 65.0f + radius);
+            dComIfG_Ccsp()->Set(&i_this->mFingerSphs[i + 15]);
         }
         if (i_this->mBstPartType == bst_class::Type_RIGHT_HAND_e) {
             vec.set(-(REG0_F(15) + 100.0f), REG0_F(16), -(REG0_F(17) + 40.0f));
@@ -1368,10 +1370,10 @@ static void col_set(bst_class* i_this) {
             vec.set(REG0_F(15) + 100.0f, REG0_F(16), -(REG0_F(18) + 10.0f));
             MtxPosition(&vec, &actor->eyePos);
         }
-        i_this->mHandHurtCollisionCcD_Cyl.SetC(pos_vec);
-        i_this->mHandHurtCollisionCcD_Cyl.SetH(REG0_F(8) + 140.0f);
-        i_this->mHandHurtCollisionCcD_Cyl.SetR(REG0_F(9) + 150.0f);
-        dComIfG_Ccsp()->Set(&i_this->mHandHurtCollisionCcD_Cyl);
+        i_this->mHandHurtCyl.SetC(pos_vec);
+        i_this->mHandHurtCyl.SetH(REG0_F(8) + 140.0f);
+        i_this->mHandHurtCyl.SetR(REG0_F(9) + 150.0f);
+        dComIfG_Ccsp()->Set(&i_this->mHandHurtCyl);
     }
     actor->attention_info.position = actor->eyePos;
 }
@@ -1394,18 +1396,18 @@ static void damage_check(bst_class* i_this) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    i_this->mCcD_Stts.Move();
+    i_this->mStts.Move();
     CcAtInfo atInfo;
     atInfo.pParticlePos = NULL;
     if (i_this->mDamageTimer == 0) {
         s8 bVar1 = false;
-        if (i_this->mBstPartType == bst_class::Type_HEAD_e && i_this->mHeadHurtCollisionCcD_Cyl.ChkTgHit()) {
-            atInfo.mpObj = i_this->mHeadHurtCollisionCcD_Cyl.GetTgHitObj();
+        if (i_this->mBstPartType == bst_class::Type_HEAD_e && i_this->mHeadHurtCyl.ChkTgHit()) {
+            atInfo.mpObj = i_this->mHeadHurtCyl.GetTgHitObj();
             bVar1 = true;
         } else {
-            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_fingers); i++) {
-                if (i_this->mCcD_fingers[i].ChkTgHit()) {
-                    atInfo.mpObj = i_this->mCcD_fingers[i].GetTgHitObj();
+            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mFingerSphs); i++) {
+                if (i_this->mFingerSphs[i].ChkTgHit()) {
+                    atInfo.mpObj = i_this->mFingerSphs[i].GetTgHitObj();
                     bVar1 = true;
                 }
             }
@@ -1417,15 +1419,15 @@ static void damage_check(bst_class* i_this) {
     }
     if (i_this->mState == 0) {
         if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-            if (i_this->mBstEyeCcD_Spheres[0].ChkTgHit() || i_this->mBstEyeCcD_Spheres[1].ChkTgHit() != 0) {
+            if (i_this->mEyeSphs[0].ChkTgHit() || i_this->mEyeSphs[1].ChkTgHit() != 0) {
                 i_this->mState = 10;
                 if (player_way_check(i_this)) {
                     u32 eye_index;
-                    if (i_this->mBstEyeCcD_Spheres[0].ChkTgHit()) {
-                        atInfo.mpObj = i_this->mBstEyeCcD_Spheres[0].GetTgHitObj();
+                    if (i_this->mEyeSphs[0].ChkTgHit()) {
+                        atInfo.mpObj = i_this->mEyeSphs[0].GetTgHitObj();
                         eye_index = 0;
                     } else {
-                        atInfo.mpObj = i_this->mBstEyeCcD_Spheres[1].GetTgHitObj();
+                        atInfo.mpObj = i_this->mEyeSphs[1].GetTgHitObj();
                         eye_index = 1;
                     }
                     if (i_this->mRoomState != 1) {
@@ -1449,7 +1451,7 @@ static void damage_check(bst_class* i_this) {
                     i_this->mHurtRecoilAngle1 = cM_atan2s(player_vec.x, player_vec.z);
                     i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(SQUARE(player_vec.x) + SQUARE(player_vec.z)));
                     actor->speedF = 0.0f;
-                    cXyz* hit_pos = i_this->mBstEyeCcD_Spheres[eye_index].GetTgHitPosP();
+                    cXyz* hit_pos = i_this->mEyeSphs[eye_index].GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hit_pos);
                     cXyz scale;
                     scale.x = scale.y = scale.z = 2.0f;
@@ -1461,12 +1463,12 @@ static void damage_check(bst_class* i_this) {
                 }
             }
         } else {
-            if (i_this->mHandHurtCollisionCcD_Cyl.ChkTgHit()) {
+            if (i_this->mHandHurtCyl.ChkTgHit()) {
                 i_this->mState = 10;
                 if (player_way_check(i_this)) {
 
-                    atInfo.mpObj = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitObj();
-                    atInfo.pParticlePos = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP();
+                    atInfo.mpObj = i_this->mHandHurtCyl.GetTgHitObj();
+                    atInfo.pParticlePos = i_this->mHandHurtCyl.GetTgHitPosP();
                     atInfo.mpActor = cc_at_check(actor, &atInfo);
                     mDoAud_seStart(JA_SE_CM_BST_EYE_HIT, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                     if (actor->health <= 0) {
@@ -1478,7 +1480,7 @@ static void damage_check(bst_class* i_this) {
                     i_this->mHurtRecoilAngle1 = cM_atan2s(player_vec.x, player_vec.z);
                     i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(SQUARE(player_vec.x) + SQUARE(player_vec.z)));
                     actor->speedF = 0.0f;
-                    cXyz* hit_pos = i_this->mHandHurtCollisionCcD_Cyl.GetTgHitPosP();
+                    cXyz* hit_pos = i_this->mHandHurtCyl.GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_COMMON_0010, hit_pos);
                     cXyz scale(2.0f, 2.0f, 2.0f);
                     csXyz angle;
@@ -1554,7 +1556,7 @@ static void hana_demo(bst_class* i_this) {
                 MtxPosition(&vec, &pos_vec);
                 i_this->mCreatedItemId = fopAcM_createItem(&pos_vec, itemNo, -1, fopAcM_GetRoomNo(actor), 0, NULL, 0xB, NULL);
                 mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
+                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
                 vec.setall(0.0f);
                 MtxPosition(&vec, &pos_vec);
                 dComIfGp_particle_setToon(
@@ -1566,14 +1568,8 @@ static void hana_demo(bst_class* i_this) {
     }
 }
 
-static u16 set_btk_d[3] = {BST_BTK_BST_START, BST_BTK_LH_START, BST_BTK_RH_START};
-static u16 set_brk_d[3] = {BST_BRK_BST_START, BST_BRK_LH_START, BST_BRK_RH_START};
-static u16 set_za_btk_d[3] = {BST_BTK_MUNE_START, BST_BTK_UDEL_START, BST_BTK_UDER_START};
-static u16 set_za_brk_d[3] = {BST_BRK_MUNE_START, BST_BRK_UDEL_START, BST_BRK_UDER_START};
-
 /* 00005D9C-00006088       .text end_demo__FP9bst_class */
 static void end_demo(bst_class* i_this) {
-    /* Nonmatching - cases 3-9 */
     fopAc_ac_c* actor = &i_this->actor;
     i_this->mState = 10;
     fopAcM_OffStatus(actor, 0);
@@ -1595,6 +1591,8 @@ static void end_demo(bst_class* i_this) {
             i_this->m2EF4->setGlobalRTMatrix(i_this->m02B8->getModel()->getAnmMtx(0));
         }
         break;
+    case 3:
+        break;
     case 10:
         if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
             anm_init(i_this, fly_bck_d[i_this->mBstPartType], 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
@@ -1610,15 +1608,6 @@ static void end_demo(bst_class* i_this) {
         cLib_addCalcAngleS2(&actor->shape_angle.y, actor->home.angle.y, 10, 0x80);
         cLib_addCalcAngleS2(&actor->shape_angle.x, actor->home.angle.x, 10, 0x80);
         cLib_addCalcAngleS2(&actor->shape_angle.z, actor->home.angle.z, 10, 0x80);
-    //break;
-    case 3:
-        return;
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
         break;
     }
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
@@ -1637,7 +1626,6 @@ static void end_demo(bst_class* i_this) {
 
 /* 00006088-00006418       .text move__FP9bst_class */
 static void move(bst_class* i_this) {
-    /* Nonmatching - .data */
     fopAc_ac_c* actor = &i_this->actor;
     s8 bVar1;
     cXyz vec;
@@ -1654,7 +1642,7 @@ static void move(bst_class* i_this) {
     } else {
         set_hand_AT(i_this, 0);
         set_hand_CO(i_this, 0);
-        i_this->mHeadHurtCollisionCcD_Cyl.OffAtHitBit();
+        i_this->mHeadHurtCyl.ClrAtSet();
         bVar1 = false;
         switch (i_this->mActionType) {
         case bst_class::ACTION_STAY_e:
@@ -1716,7 +1704,7 @@ static void move(bst_class* i_this) {
             }
         }
         damage_check(i_this);
-        dCcD_Stts* stts = &i_this->mCcD_Stts;
+        dCcD_Stts* stts = &i_this->mStts;
         if (stts != NULL) {
             actor->current.pos.x += stts->GetCCMoveP()->x;
             actor->current.pos.y += stts->GetCCMoveP()->y;
@@ -1726,8 +1714,8 @@ static void move(bst_class* i_this) {
             vec.x = 0.0f;
             vec.y = 0.0f;
             vec.z = i_this->mHeadHurtSpeed;
-            mDoMtx_YrotS(*calc_mtx, i_this->mHurtRecoilAngle1);
-            mDoMtx_XrotM(*calc_mtx, i_this->mHurtRecoilAngle2);
+            cMtx_YrotS(*calc_mtx, i_this->mHurtRecoilAngle1);
+            cMtx_XrotM(*calc_mtx, i_this->mHurtRecoilAngle2);
             MtxPosition(&vec, &pos_vec);
             actor->current.pos += pos_vec;
             cLib_addCalc0(&i_this->mHeadHurtSpeed, 1.0f, 4.0f);
@@ -1800,9 +1788,9 @@ static void main_cont(bst_class* i_this) {
             break;
         case 11:
             if (i_this->m2E7E[0] == 0 && boss->mActionType != 14) {
-                boss->mBgS_AcchCir.SetWall(200.0f, 300.0f);
-                hand[0]->mBgS_AcchCir.SetWall(200.0f, 200.0f);
-                hand[1]->mBgS_AcchCir.SetWall(200.0f, 200.0f);
+                boss->mAcchCir.SetWall(200.0f, 300.0f);
+                hand[0]->mAcchCir.SetWall(200.0f, 200.0f);
+                hand[1]->mAcchCir.SetWall(200.0f, 200.0f);
                 if (cM_rndF(1.0f) < 0.2f || REG0_S(1) != 0) {
                     if (cM_rndF(1.0f) < 0.5f) {
                         if (hand[0]->mActionType < bst_class::ACTION_DOWN_ATTACK_e && hand[0]->mStateTimer == 0) {
@@ -2009,7 +1997,7 @@ static void end_brkbtk_set(bst_class* i_this) {
 
 /* 0000815C-00009FCC       .text demo_camera__FP9bst_class */
 void demo_camera(bst_class* i_this) {
-    /* Nonmatching - regalloc */
+    /* Nonmatching */
     fopAc_ac_c* actor = &i_this->actor;
     bst_class* pbVar5;
     int iVar13;
@@ -2046,7 +2034,7 @@ void demo_camera(bst_class* i_this) {
         if (i_this->msFrameCount > REG0_S(4) + 45) {
             cLib_addCalc2(&i_this->m2EC8, 30.0f, 0.5f, REG0_F(3) + 10.0f);
         }
-        mDoMtx_YrotS(*calc_mtx, actor->shape_angle.y + (REG0_S(1) + 0xAF0));
+        cMtx_YrotS(*calc_mtx, actor->shape_angle.y + (REG0_S(1) + 0xAF0));
         if (i_this->m2E9E != 0) {
             local_40.x = REG0_F(9) + -100.0f;
         } else {
@@ -2056,7 +2044,7 @@ void demo_camera(bst_class* i_this) {
         local_40.z = REG0_F(0xc);
         MtxPosition(&local_40, &local_4c);
         i_this->m2EAC = actor->eyePos + local_4c;
-        mDoMtx_XrotM(*calc_mtx, REG0_S(2) + 4000);
+        cMtx_XrotM(*calc_mtx, REG0_S(2) + 4000);
         local_40.x = 0.0f;
         local_40.y = REG0_F(7);
         local_40.z = REG0_F(8) + 850.0f;
@@ -2468,7 +2456,7 @@ void demo_camera(bst_class* i_this) {
         }
         if ((s32)i_this->m02B8->getFrame() == 26) {
             cXyz boss_pos;
-            mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(7), *calc_mtx);
+            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(7), *calc_mtx);
             cXyz offset(REG0_F(2) + 60.0f, REG0_F(3), REG0_F(4));
             mDoAud_seStart(JA_SE_OBJ_BOMB_EXPLODE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             MtxPosition(&offset, &boss_pos);
@@ -2479,7 +2467,7 @@ void demo_camera(bst_class* i_this) {
             item_angle.y += REG0_S(7) + (-300);
             i_this->mCreatedItemId = fopAcM_createItemForBoss(&boss_pos, 0, fopAcM_GetRoomNo(actor), &item_angle, &item_scale, 1);
             mDoAud_seStart(JA_SE_CM_BST_ITEM_OUT_NOSE, &actor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
+            cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(0), *calc_mtx);
             cXyz vec(0.0f, 0.0f, 0.0f);
             MtxPosition(&vec, &boss_pos);
             dComIfGp_particle_set(item_smoke_name[1], &boss_pos, &actor->shape_angle, NULL, 0xB9, &i_this->mPa_smokeEcallBack, fopAcM_GetRoomNo(actor));
@@ -2534,7 +2522,6 @@ void demo_camera(bst_class* i_this) {
 
 /* 00009FCC-0000A1A4       .text bst_kankyo__FP9bst_class */
 void bst_kankyo(bst_class* i_this) {
-    /* Nonmatching - .data */
     switch (i_this->mRoomState) {
     case 0:
         dKy_custom_colset(3, 0, 0.0f);
@@ -2648,8 +2635,8 @@ static BOOL daBst_Execute(bst_class* i_this) {
         }
         move(i_this);
         if (i_this->mActionType != 0 && i_this->mActionType != bst_class::ACTION_END_DEMO_e) {
-            i_this->mBgS_Acch.CrrPos(*dComIfG_Bgsp());
-            i_this->mBgS_Acch.SetGroundUpY(0.0f);
+            i_this->mAcch.CrrPos(*dComIfG_Bgsp());
+            i_this->mAcch.SetGroundUpY(0.0f);
         }
         i_this->m02B8->play(&actor->eyePos, 0, 0);
         if (i_this->m02C4 != 0) {
@@ -2684,9 +2671,9 @@ static BOOL daBst_Execute(bst_class* i_this) {
     i_this->m0388->setBaseTRMtx(mDoMtx_stack_c::now);
     i_this->m02B8->calc();
     MtxTrans(actor->home.pos.x, actor->home.pos.y, actor->home.pos.z, FALSE);
-    mDoMtx_YrotM(*calc_mtx, actor->home.angle.y);
-    mDoMtx_XrotM(*calc_mtx, actor->home.angle.x);
-    mDoMtx_ZrotM(*calc_mtx, actor->home.angle.z);
+    cMtx_YrotM(*calc_mtx, actor->home.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->home.angle.x);
+    cMtx_ZrotM(*calc_mtx, actor->home.angle.z);
     i_this->m02C8->setBaseTRMtx(*calc_mtx);
     col_set(i_this);
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
@@ -2698,7 +2685,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
             fpc_ProcID proc_id = i_this->m2E90[j];
             fopAc_ac_c* actor = (fopAc_ac_c*)fopAcM_SearchByID(proc_id);
             if (actor != NULL) {
-                mDoMtx_copy(i_this->m02B8->getModel()->getAnmMtx(j + 4), *calc_mtx);
+                cMtx_copy(i_this->m02B8->getModel()->getAnmMtx(j + 4), *calc_mtx);
                 MtxPosition(&vec, &actor->current.pos);
                 actor->max_health = 2;
                 actor->health = i_this->mEyeHealth[j];
@@ -2744,9 +2731,13 @@ static BOOL daBst_Delete(bst_class* i_this) {
     return TRUE;
 }
 
+static u16 set_btk_d[3] = {BST_BTK_BST_START, BST_BTK_LH_START, BST_BTK_RH_START};
+static u16 set_brk_d[3] = {BST_BRK_BST_START, BST_BRK_LH_START, BST_BRK_RH_START};
+static u16 set_za_btk_d[3] = {BST_BTK_MUNE_START, BST_BTK_UDEL_START, BST_BTK_UDER_START};
+static u16 set_za_brk_d[3] = {BST_BRK_MUNE_START, BST_BRK_UDEL_START, BST_BRK_UDER_START};
+
 /* 0000AADC-0000B2D0       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
-    /* Nonmatching - .data */
     bst_class* i_this = (bst_class*)a_this;
     i_this->m02B8 = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Bst", set_bdl_d[i_this->mBstPartType]),
@@ -3044,7 +3035,8 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
     if (res == cPhs_COMPLEATE_e) {
         i_this->mPa_smokeEcallBack.setFollowOff();
         i_this->mBstPartType = fopAcM_GetParam(i_this) & 0xFF;
-        if (!fopAcM_entrySolidHeap(actor, useHeapInit, 0x96000)) {
+        int heap_size = 0x96000;
+        if (!fopAcM_entrySolidHeap(actor, useHeapInit, heap_size)) {
             return cPhs_ERROR_e;
         }
         actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
@@ -3055,9 +3047,9 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             // Possible bug: why is "Armos Knight" here?
             l_HIO.m4 = mDoHIO_createChild("デグアモス", &l_HIO);
         }
-        i_this->mBgS_Acch.Set(&actor->current.pos, &actor->old.pos, actor, 1, &i_this->mBgS_AcchCir, &actor->speed);
-        i_this->mBgS_Acch.OffSameActorChk();
-        i_this->mBgS_AcchCir.SetWall(200.0f, 10.0f);
+        i_this->mAcch.Set(fopAcM_GetPosition_p(actor), fopAcM_GetOldPosition_p(actor), actor, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(actor));
+        i_this->mAcch.OffSameActorChk();
+        i_this->mAcchCir.SetWall(200.0f, 10.0f);
         if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
             boss = i_this;
             msg = fpcM_ERROR_PROCESS_ID_e;
@@ -3074,31 +3066,31 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         } else {
             weight = 230;
         }
-        i_this->mCcD_Stts.Init(weight, 0xFF, actor);
-        i_this->mHandHurtCollisionCcD_Cyl.Set(core_cyl_src);
-        i_this->mHandHurtCollisionCcD_Cyl.SetStts(&i_this->mCcD_Stts);
+        i_this->mStts.Init(weight, 0xFF, actor);
+        i_this->mHandHurtCyl.Set(core_cyl_src);
+        i_this->mHandHurtCyl.SetStts(&i_this->mStts);
         if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-            i_this->mHeadHurtCollisionCcD_Cyl.Set(cc_cyl_src);
-            i_this->mHeadHurtCollisionCcD_Cyl.SetStts(&i_this->mCcD_Stts);
-            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mBstEyeCcD_Spheres); i++) {
-                i_this->mBstEyeCcD_Spheres[i].Set(eye_sph_src);
-                i_this->mBstEyeCcD_Spheres[i].SetStts(&i_this->mCcD_Stts);
+            i_this->mHeadHurtCyl.Set(cc_cyl_src);
+            i_this->mHeadHurtCyl.SetStts(&i_this->mStts);
+            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mEyeSphs); i++) {
+                i_this->mEyeSphs[i].Set(eye_sph_src);
+                i_this->mEyeSphs[i].SetStts(&i_this->mStts);
             }
             actor->health = 3;
             actor->max_health = 3;
             i_this->mEyeHealth[1] = 2;
             i_this->mEyeHealth[0] = 2;
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m2E90); i++) {
-                i_this->m2E90[i] = fopAcM_create(PROC_ATT, 100, &actor->current.pos, actor->current.roomNo);
+                i_this->m2E90[i] = fopAcM_create(PROC_ATT, 100, &actor->current.pos, fopAcM_GetRoomNo(actor));
             }
             for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_beams); i++) {
                 i_this->mCcD_beams[i].Set(beam_sph_src);
-                i_this->mCcD_beams[i].SetStts(&i_this->mCcD_Stts);
+                i_this->mCcD_beams[i].SetStts(&i_this->mStts);
             }
         } else {
-            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mCcD_fingers); i++) {
-                i_this->mCcD_fingers[i].Set(finger_sph_src);
-                i_this->mCcD_fingers[i].SetStts(&i_this->mCcD_Stts);
+            for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mFingerSphs); i++) {
+                i_this->mFingerSphs[i].Set(finger_sph_src);
+                i_this->mFingerSphs[i].SetStts(&i_this->mStts);
             }
             actor->health = 4;
             actor->max_health = 4;
@@ -3106,8 +3098,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
     }
     f32 fVar = cM_rndFX(32768.0f);
     i_this->mUpdateLastFacingDirIfMultipleOf32 = fVar;
+    #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;
+    #endif
     return res;
 }
 
