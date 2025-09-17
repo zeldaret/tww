@@ -276,7 +276,7 @@ void shot(fganon_class* i_this) {
             break;
         }
         case 2: {
-            s32 mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+            s32 mFrame = i_this->mpMorf->getFrame();
             if (REG0_S(0) + 14 == mFrame) {
                 i_this->m409 = 1;
                 i_this->m688 = 0;
@@ -346,7 +346,7 @@ void spinattack(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
-    int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+    int mFrame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             i_this->shape_angle.y = player->shape_angle.y;
@@ -569,7 +569,7 @@ void shot2(fganon_class* i_this) {
     fopAc_ac_c* actor = i_this;
 
     cLib_addCalcAngleS2(&i_this->shape_angle.y, fopAcM_searchPlayerAngleY(i_this), 10, 0x400);
-    int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+    int mFrame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             anm_init(i_this, FGANON_BCK_TAME_S1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -679,7 +679,7 @@ void spinattack2(fganon_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     dBgS_LinChk linChk;
-    int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+    int mFrame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             i_this->shape_angle.y = player->shape_angle.y + i_this->m68F * 0x3333;
@@ -699,7 +699,7 @@ void spinattack2(fganon_class* i_this) {
             cXyz transformedPos;
             MtxPosition(&offset, &transformedPos);
             i_this->current.pos = player->current.pos + transformedPos;
-            anm_init(i_this, 10, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_KAITEN_S1, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->mMode = 2;
             deru_brk(i_this);
             i_this->m38C = player->current.pos;
@@ -712,7 +712,7 @@ void spinattack2(fganon_class* i_this) {
             cXyz local_e4;
             local_e4 = i_this->m38C - i_this->current.pos;
             if (local_e4.abs() < l_HIO.m38) {
-                anm_init(i_this, 9, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_KAITEN1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mMode = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
@@ -760,7 +760,7 @@ void spinattack2(fganon_class* i_this) {
 void down(fganon_class* i_this) {
     switch(i_this->mMode) {
         case 0: {
-            anm_init(i_this, 6, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mMode++;
             i_this->speed.y = 0.0f;
         }
@@ -778,19 +778,19 @@ void down(fganon_class* i_this) {
         case 2: {
             if (i_this->mpMorf->isStop()) {
                 i_this->mMode++;
-                anm_init(i_this, 8, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_DOWN1, 2.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
             break;
         }
         case 3: {
-            int mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+            int mFrame = i_this->mpMorf->getFrame();
             if (mFrame == 2) {
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_TIRED, 0);
             }
             break;
         }
         case 10: {
-            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_DAMAGE2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mMode = 2;
         }
         default:
@@ -940,7 +940,7 @@ void fail(fganon_class* i_this) {
         case 0: {
             kieru_brk(i_this, 1);
             i_this->mMode = 1;
-            anm_init(i_this, 7, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, FGANON_BCK_DAMAGE2, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             break;
         }
         case 1: {
@@ -1163,7 +1163,7 @@ void end(fganon_class* i_this) {
     i_this->m3AE = 3;
     fopAcM_OffStatus(i_this, 0);
     i_this->attention_info.flags = 0;
-    s32 mFrame = i_this->mpMorf->mFrameCtrl.getFrame();
+    s32 mFrame = i_this->mpMorf->getFrame();
     switch(i_this->mMode) {
         case 0: {
             i_this->mMode = 1;
@@ -1387,7 +1387,7 @@ void damage_check(fganon_class* i_this) {
             if (atInfo.mpActor && (fopAcM_GetName(atInfo.mpActor) == PROC_FGMAHOU)) {
                 i_this->m670++;
 
-                anm_init(i_this, 6, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+                anm_init(i_this, FGANON_BCK_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
 
                 i_this->m3A4[0] = 60;
 
@@ -2593,7 +2593,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
         return FALSE;
 
     ptrkAnm = (J3DAnmTevRegKey *)dComIfG_getObjectRes("Fganon", FGANON_BRK_DERU_MAIN1);
-    iVar4 = i_this->mpBrkAnm1->init(i_this->mpMorf->mpModel->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
+    iVar4 = i_this->mpBrkAnm1->init(i_this->mpMorf->getModel()->getModelData(), ptrkAnm, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0);
     if (iVar4 == 0)
         return FALSE;
 

@@ -196,7 +196,7 @@ BOOL daShip_c::headJointCallBack0() {
     J3DAnmTransform* tempAnmTransform;
     if (mAnmTransform) {
         tempAnmTransform = mpHeadAnm->getAnm();
-        mpHeadAnm->mpAnm = mAnmTransform;
+        mpHeadAnm->changeAnm(mAnmTransform);
         mAnmTransform = tempAnmTransform;
     }
     return TRUE;
@@ -1647,7 +1647,7 @@ BOOL daShip_c::procSteerMove() {
         }
         windPower *= windFactor * 55.0f;
         
-        if (mpBodyAnm->mFrameCtrl.checkPass(7.0f)) {
+        if (mpBodyAnm->checkFrame(7.0f)) {
             float targetSpeed = windPower * 2.0f;
             if (targetSpeed > 80.0f) {
                 targetSpeed = 80.0f;
@@ -3358,7 +3358,7 @@ void daShip_c::setRopePos() {
                     emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
                     if(emitter) {
-                        emitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f));
+                        emitter->setGlobalParticleScale(1.5f, 1.5f);
                         emitter->setEmitterScale(water_drop_scale);
                         emitter->setLifeTime(30);
                     }

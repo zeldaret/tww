@@ -274,7 +274,7 @@ cPhs_State fopAc_Create(void* pProc) {
             actor->home.angle = prm->base.angle;
             actor->shape_angle = prm->base.angle;
             actor->parentActorID = prm->parent_id;
-            actor->subtype = prm->subtype;
+            actor->argument = prm->argument;
             actor->gbaName = prm->gbaName;
             actor->scale.set(prm->scale.x * 0.1f, prm->scale.y * 0.1f, prm->scale.z * 0.1f);
             actor->setID = prm->base.setID;

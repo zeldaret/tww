@@ -219,14 +219,14 @@ cPhs_State daNpc_Os_c::create() {
             checkRestart(getRestartNumber());
         }
         else {
-            if(subtype < 3) {
-                home.pos = l_finish_home_pos[subtype];
+            if(argument < 3) {
+                home.pos = l_finish_home_pos[argument];
                 current.pos = home.pos;
             }
         }
 
         setBaseMtx();
-        fopAcM_SetMtx(this, mpMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         if(l_HIO.mNo < 0) {
             l_HIO.mNo = mDoHIO_createChild("お供石像", &l_HIO); // "Companion Statue" (otomo sekizou)
             l_HIO.field_0x5C = this;
@@ -360,17 +360,17 @@ BOOL daNpc_Os_c::createHeap() {
 
 /* 00000C94-00000D10       .text jointCheck__10daNpc_Os_cFSc */
 BOOL daNpc_Os_c::jointCheck(s8 param_1) {
-    if(subtype == 0) {
+    if(argument == 0) {
         if(param_1 == mTuno3JointIdx) {
             return true;
         }
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         if(param_1 == mTuno2JointIdx) {
             return true;
         }
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         if(param_1 == mTuno1JointIdx) {
             return true;
         }
@@ -381,17 +381,17 @@ BOOL daNpc_Os_c::jointCheck(s8 param_1) {
 
 /* 00000D10-00000DBC       .text wakeupCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::wakeupCheck() {
-    if(subtype == 0) {
+    if(argument == 0) {
         if(dComIfGs_isEventBit(0x1780)) {
             return true;
         }
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         if(dComIfGs_isEventBit(0x1740)) {
             return true;
         }
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         if(dComIfGs_isEventBit(0x1720)) {
             return true;
         }
@@ -402,30 +402,30 @@ BOOL daNpc_Os_c::wakeupCheck() {
 
 /* 00000DBC-00000E3C       .text setWakeup__10daNpc_Os_cFv */
 void daNpc_Os_c::setWakeup() {
-    if(subtype == 0) {
+    if(argument == 0) {
         dComIfGs_onEventBit(0x1780);
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         dComIfGs_onEventBit(0x1740);
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         dComIfGs_onEventBit(0x1720);
     }
 }
 
 /* 00000E3C-00000EE8       .text finishCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::finishCheck() {
-    if(subtype == 0) {
+    if(argument == 0) {
         if(dComIfGs_isEventBit(0x1710)) {
             return true;
         }
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         if(dComIfGs_isEventBit(0x1704)) {
             return true;
         }
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         if(dComIfGs_isEventBit(0x1B01)) {
             return true;
         }
@@ -436,26 +436,26 @@ BOOL daNpc_Os_c::finishCheck() {
 
 /* 00000EE8-00000F68       .text setFinish__10daNpc_Os_cFv */
 void daNpc_Os_c::setFinish() {
-    if(subtype == 0) {
+    if(argument == 0) {
         dComIfGs_onEventBit(0x1710);
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         dComIfGs_onEventBit(0x1704);
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         dComIfGs_onEventBit(0x1B01);
     }
 }
 
 /* 00000F68-00000FA4       .text getWakeupOrderEventNum__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getWakeupOrderEventNum() {
-    if(subtype == 0) {
+    if(argument == 0) {
         return 1;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         return 3;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         return 5;
     }
     
@@ -465,24 +465,24 @@ s8 daNpc_Os_c::getWakeupOrderEventNum() {
 /* 00000FA4-00001028       .text getFinishOrderEventNum__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getFinishOrderEventNum() {
     if(fopAcM_checkCarryNow(this)) {
-        if(subtype == 0) {
+        if(argument == 0) {
             return 0xB;
         }
-        else if(subtype == 1) {
+        else if(argument == 1) {
             return 0xD;
         }
-        else if(subtype == 2) {
+        else if(argument == 2) {
             return 0xF;
         }
     }
     else {
-        if(subtype == 0) {
+        if(argument == 0) {
             return 0xA;
         }
-        else if(subtype == 1) {
+        else if(argument == 1) {
             return 0xC;
         }
-        else if(subtype == 2) {
+        else if(argument == 2) {
             return 0xE;
         }
     }
@@ -492,8 +492,8 @@ s8 daNpc_Os_c::getFinishOrderEventNum() {
 
 /* 00001028-00001084       .text getMyStaffId__10daNpc_Os_cFv */
 int daNpc_Os_c::getMyStaffId() {
-    if(subtype < 3) {
-        return dComIfGp_evmng_getMyStaffId(l_staff_name[subtype]);
+    if(argument < 3) {
+        return dComIfGp_evmng_getMyStaffId(l_staff_name[argument]);
     }
 
     return -1;
@@ -501,13 +501,13 @@ int daNpc_Os_c::getMyStaffId() {
 
 /* 00001084-000010C4       .text getRestartNumber__10daNpc_Os_cFv */
 s8 daNpc_Os_c::getRestartNumber() {
-    if(subtype == 0) {
+    if(argument == 0) {
         return 3;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         return 4;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         return 5;
     }
 
@@ -527,12 +527,12 @@ BOOL daNpc_Os_c::checkGoalRoom() {
 
 /* 0000112C-000011C4       .text checkPlayerRoom__10daNpc_Os_cFv */
 void daNpc_Os_c::checkPlayerRoom() {
-    offPlayerRoom(subtype);
+    offPlayerRoom(argument);
     
     if(wakeupCheck() && !finishCheck()) {
         fopAc_ac_c* link = dComIfGp_getLinkPlayer();
         if (fopAcM_GetRoomNo(this) == fopAcM_GetRoomNo(link)) {
-            onPlayerRoom(subtype);
+            onPlayerRoom(argument);
         }
     }
 }
@@ -541,17 +541,17 @@ void daNpc_Os_c::checkPlayerRoom() {
 void daNpc_Os_c::eventOrderCheck() {
     if(field_0x7A5 == -1) {
         s8 roomNo = fopAcM_GetRoomNo(this);
-        if(subtype == 0) {
+        if(argument == 0) {
             if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2510)) {
                 field_0x7A5 = 7;
             } 
         }
-        else if(subtype == 1) {
+        else if(argument == 1) {
             if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2608)) {
                 field_0x7A5 = 8;
             } 
         }
-        else if(subtype == 2) {
+        else if(argument == 2) {
             if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2604)) {
                 field_0x7A5 = 9;
             } 
@@ -1600,13 +1600,13 @@ void daNpc_Os_c::initialNextEvent(int staffIdx) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_OSTATUE_PUT, 0);
     }
 
-    if(subtype == 0) {
+    if(argument == 0) {
         field_0x7A5 = 2;
     }
-    else if(subtype == 1) {
+    else if(argument == 1) {
         field_0x7A5 = 4;
     }
-    else if(subtype == 2) {
+    else if(argument == 2) {
         field_0x7A5 = 6;
     }
 }
@@ -2024,7 +2024,7 @@ BOOL daNpc_Os_c::init() {
     speedF = speedF;
     m_smoke_tevstr = tevStr;
     m_smoke.setTevStr(&m_smoke_tevstr);
-    m_playerRoom[subtype] = false;
+    m_playerRoom[argument] = false;
     clearStatus();
     gravity = l_HIO.field_0x8C;
     field_0x7A0 = 3;
@@ -2166,7 +2166,7 @@ BOOL daNpc_Os_c::execute() {
         mAcchCir[1].SetWallR(40.0f);
     }
 
-    mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[subtype], 0xFF, 1);
+    mpPedestal = (daPedestal::daPds_c*)searchFromName(l_daiza_name[argument], 0xFF, 1);
     if(mpPedestal) {
         if(!isFinish()) {
             if(finishCheck()) {
@@ -2233,7 +2233,7 @@ BOOL daNpc_Os_c::execute() {
     mJntCtrl.setParam(l_HIO.mNpc.mMaxBackboneX, l_HIO.mNpc.mMaxBackboneY, l_HIO.mNpc.mMinBackboneX, l_HIO.mNpc.mMinBackboneY,l_HIO.mNpc.mMaxHeadX, l_HIO.mNpc.mMaxHeadY, l_HIO.mNpc.mMinHeadX, l_HIO.mNpc.mMinHeadY, l_HIO.mNpc.mMaxTurnStep);
 
     if(!isFinish()) {
-        if(!fopAcM_checkCarryNow(this) && isGravity() && checkNowPosMove(l_staff_name[subtype])) {
+        if(!fopAcM_checkCarryNow(this) && isGravity() && checkNowPosMove(l_staff_name[argument])) {
             if (maxFallSpeed < speed.y) {
                 speed.y -= gravity;
                 if (speed.y < maxFallSpeed) {
@@ -2340,7 +2340,7 @@ BOOL daNpc_Os_c::execute() {
         setCollision();
     }
 
-    if(checkNowPosMove(l_staff_name[subtype])) {
+    if(checkNowPosMove(l_staff_name[argument])) {
         animationPlay();
     }
 
@@ -2416,7 +2416,7 @@ daNpc_Os_c::~daNpc_Os_c() {
         l_HIO.mNo = -1;
     }
 
-    m_playerRoom[subtype] = false;
+    m_playerRoom[argument] = false;
     m_cattleRoomNo = -1;
 }
 
@@ -2435,7 +2435,7 @@ static BOOL daNpc_Os_Delete(daNpc_Os_c* i_this) {
 static BOOL daNpc_Os_Execute(daNpc_Os_c* i_this) {
     BOOL ret = i_this->execute();
 
-    if(i_this->subtype == 2) {
+    if(i_this->argument == 2) {
         i_this->setCattleRoomNo(fopAcM_GetRoomNo(i_this));
     }
 

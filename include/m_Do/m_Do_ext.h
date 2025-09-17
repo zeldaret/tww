@@ -374,6 +374,7 @@ public:
     BOOL isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
     BOOL isMorf() { return mCurMorf < 1.0f; }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
     /* 0x58 */ J3DFrameCtrl mFrameCtrl;
@@ -428,6 +429,7 @@ public:
         mAnmRate = rate;
     }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm1;
     /* 0x58 */ J3DAnmTransform* mpAnm2;
@@ -449,7 +451,9 @@ public:
     virtual void setMaterial() = 0;
     virtual void draw() = 0;
 
-public:
+protected:
+    friend class mDoExt_3DlineMatSortPacket;
+
     /* 0x0 */ /* vtable */
     /* 0x4 */ mDoExt_3DlineMat_c* mpNextLineMat;
 };
@@ -532,6 +536,7 @@ public:
         mJntNum = i_jntNum;
     }
 
+private:
     /* 0x10 */ J3DModel* mModel;
     /* 0x14 */ u16 mJntNum;
 };
@@ -546,6 +551,7 @@ public:
     void updateDL(J3DModel*);
     void updateDL(mDoExt_McaMorf*);
 
+private:
     J3DModel* mModel;
     mDoExt_invJntPacket* mpPackets;
 };
@@ -587,7 +593,10 @@ public:
 
     BOOL init(u16 numSegments, BOOL hasSize, BOOL hasTex);
 
-public:
+private:
+    friend class mDoExt_3DlineMat0_c;
+    friend class mDoExt_3DlineMat1_c;
+
     /* 0x00 */ cXyz* mpSegments;
     /* 0x04 */ u8* mpSize;
     /* 0x08 */ cXyz* mPosArr[2];
@@ -608,7 +617,7 @@ public:
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
-public:
+private:
     /* 0x08 */ GXColor mColor;
     /* 0x0C */ dKy_tevstr_c* mpTevStr;
     /* 0x10 */ u16 mNumLines;
@@ -632,7 +641,7 @@ public:
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
-public:
+private:
     /* 0x08 */ GXTexObj mTexObj;
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;

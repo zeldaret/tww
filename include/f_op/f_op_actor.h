@@ -278,7 +278,7 @@ public:
     /* 0x1BE */ u8 group;
     /* 0x1BF */ u8 cullType;
     /* 0x1C0 */ u8 demoActorID;
-    /* 0x1C1 */ s8 subtype;
+    /* 0x1C1 */ s8 argument;
     /* 0x1C2 */ u8 gbaName;
     /* 0x1C4 */ u32 actor_status;
     /* 0x1C8 */ u32 actor_condition;

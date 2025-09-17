@@ -557,7 +557,7 @@ void kubi_calc(btd_class* i_this) {
     mDoMtx_XrotM(*calc_mtx, i_this->m6E74.x);
     mDoMtx_ZrotM(*calc_mtx, i_this->m6E74.z);
     J3DModel* model = i_this->m02D4->getModel();
-    MTXCopy(*calc_mtx, model->getBaseTRMtx());
+    model->setBaseTRMtx(*calc_mtx);
     i_this->m02D4->calc();
     i_this->m02D8->play();
     i_this->m02DC->play();
@@ -781,7 +781,7 @@ s32 damage(btd_class* i_this) {
             for (s32 i = 0, j = 0, k = 0; i < (s32)ARRAY_SIZE(hahen_eff_name); i++, j++, k++) {
                 pJVar4 = dComIfGp_particle_set(hahen_eff_name[k], &i_this->current.pos);
                 if (pJVar4 != NULL) {
-                    pJVar4->setGlobalRTMatrix(iVar2->mpModel->getAnmMtx(hahen_eff_index[j]));
+                    pJVar4->setGlobalRTMatrix(iVar2->getModel()->getAnmMtx(hahen_eff_index[j]));
                 }
             }
         }
@@ -860,7 +860,7 @@ void end(btd_class* i_this) {
             i_this->m02EC[0] = REG0_S(3) + 0x21c;
             mDoAud_bgmStop(20);
             mDoAud_bgmStreamPrepare(JA_STRM_BOSS_CLEAR);
-            pJVar10 = iVar2->mpModel;
+            pJVar10 = iVar2->getModel();
             pJVar2 = (J3DMaterialTable*)dComIfG_getObjectRes("Btd", BTD_BMT_DEADA);
             pJVar10->getModelData()->setMaterialTable(pJVar2, J3DMatCopyFlag_Material);
             pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_DEADA);
@@ -916,7 +916,7 @@ void end(btd_class* i_this) {
                 i_this->m02E0 = 2;
             }
             if (i_this->m02EC[0] == 0xf1) {
-                pJVar10 = iVar2->mpModel;
+                pJVar10 = iVar2->getModel();
                 pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_DEADB);
                 i_this->brkS->init(pJVar10->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
                 pJVar4 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Btd", BTD_BTK_DEADB);
@@ -926,7 +926,7 @@ void end(btd_class* i_this) {
                 for (s32 i = 0; i < (s32)ARRAY_SIZE(last_eff_index); i++) {
                     pJVar6 = dComIfGp_particle_set(last_eff_name[i], &i_this->current.pos);
                     if (pJVar6 != NULL) {
-                        pJVar6->setGlobalRTMatrix(iVar2->mpModel->getAnmMtx(last_eff_index[i]));
+                        pJVar6->setGlobalRTMatrix(iVar2->getModel()->getAnmMtx(last_eff_index[i]));
                     }
                 }
             }
@@ -986,7 +986,7 @@ void end(btd_class* i_this) {
         kubi_calc(i_this);
         pJVar6 = i_this->m6038;
         if (pJVar6 != NULL) {
-            pJVar6->setGlobalRTMatrix(i_this->m02D4->mpModel->getAnmMtx(0));
+            pJVar6->setGlobalRTMatrix(i_this->m02D4->getModel()->getAnmMtx(0));
         }
         break;
     case 0x36:
@@ -1258,7 +1258,7 @@ void punch_attack(btd_class* i_this) {
         if (i_this->m02EA != 0) {
             iVar6 = 10;
         }
-        iVar1 = iVar3->mFrameCtrl.getFrame();
+        iVar1 = iVar3->getFrame();
         if (iVar1 == 2) {
             mDoAud_seStart(JA_SE_CM_BTD_ARM_PULLOUT_1, &i_this->m02FC[iVar6], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             fopAcM_monsSeStart(i_this, JA_SE_CV_BTD_JITABATA, 0);

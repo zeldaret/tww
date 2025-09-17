@@ -1276,7 +1276,7 @@ dStage_objectNameInf* dStage_searchName(const char* i_name) {
     dStage_objectNameInf* obj = l_objectName;
 
     for (u32 i = 0; i < ARRAY_SIZE(l_objectName); i++) {
-        if (!strcmp(obj->mName, i_name)) {
+        if (!strcmp(obj->name, i_name)) {
             return obj;
         }
         obj++;
@@ -1286,12 +1286,12 @@ dStage_objectNameInf* dStage_searchName(const char* i_name) {
 }
 
 /* 800415B4-80041608       .text dStage_getName__FsSc */
-const char* dStage_getName(s16 i_procName, s8 i_subtype) {
+const char* dStage_getName(s16 i_procName, s8 i_argument) {
     dStage_objectNameInf* obj = l_objectName;
 
     for (int i = 0; i < ARRAY_SIZE(l_objectName); i++) {
-        if (obj->mProcName == i_procName && obj->mSubtype == i_subtype) {
-            return obj->mName;
+        if (obj->procname == i_procName && obj->argument == i_argument) {
+            return obj->name;
         }
         obj++;
     }
@@ -1301,8 +1301,8 @@ const char* dStage_getName(s16 i_procName, s8 i_subtype) {
 }
 
 /* 80041608-80041628       .text dStage_getName2__FsSc */
-const char* dStage_getName2(s16 i_procName, s8 i_subtype) {
-    return dStage_getName(i_procName, i_subtype);
+const char* dStage_getName2(s16 i_procName, s8 i_argument) {
+    return dStage_getName(i_procName, i_argument);
 }
 
 /* 80041628-8004169C       .text dStage_actorCreate__FP22stage_actor_data_classP16fopAcM_prm_class */
@@ -1312,9 +1312,9 @@ void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i
     if (nameinf_p == NULL) {
         JKRHeap::free(i_actorPrm, NULL);
     } else {
-        i_actorPrm->subtype = nameinf_p->mSubtype;
-        i_actorPrm->gbaName = nameinf_p->mGbaName;
-        fopAcM_create(nameinf_p->mProcName, NULL, i_actorPrm);
+        i_actorPrm->argument = nameinf_p->argument;
+        i_actorPrm->gbaName = nameinf_p->gbaName;
+        fopAcM_create(nameinf_p->procname, NULL, i_actorPrm);
     }
 }
 

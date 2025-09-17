@@ -20,8 +20,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000010C-00000324       .text CreateHeap__16daArrow_Iceeff_cFv */
 BOOL daArrow_Iceeff_c::CreateHeap() {
+    J3DModelData* modelData;
     if(field_0xA38 == 0) {
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
         JUT_ASSERT(87, modelData != NULL);
         for(int i = 0; i < 30; i++) {
             field_0x298[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -31,7 +32,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         }
     }
     else {
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
         JUT_ASSERT(98, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if(mpModel == NULL) {
@@ -262,8 +263,7 @@ bool daArrow_Iceeff_c::_execute() {
         if(field_0xA30 == 0x23) {
             JPABaseEmitter* ptcl = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos, NULL, &ripple_scale);
             if(ptcl) {
-                JGeometry::TVec3<f32> scale(0.67f, 0.67f, 1.0f);
-                ptcl->setGlobalParticleScale(scale);
+                ptcl->setGlobalParticleScale(0.67f, 0.67f);
             }
         }
         else if(field_0xA30 == 0x28) {
@@ -274,8 +274,7 @@ bool daArrow_Iceeff_c::_execute() {
                 ptcl->setDirectionalSpeed(5.0f);
                 JGeometry::TVec3<f32> scale1(0.5f, 1.0f, 0.5f);
                 ptcl->setEmitterScale(scale1);
-                JGeometry::TVec3<f32> scale2(0.33f, 0.33f, 1.0f);
-                ptcl->setGlobalParticleScale(scale2);
+                ptcl->setGlobalParticleScale(0.33f, 0.33f);
             }
             
             dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003F, &current.pos, NULL, &ripple_scale);

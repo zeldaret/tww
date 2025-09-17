@@ -7514,8 +7514,8 @@ void daNpcPeople_c::setAnmFromMsgTagUg(int param_1) {
 
 /* 00007B28-00007B48       .text getPrmNpcNo__13daNpcPeople_cFv */
 u8 daNpcPeople_c::getPrmNpcNo() {
-    if(0 <= subtype && subtype < 0x13) {
-        return subtype;
+    if(0 <= argument && argument < 0x13) {
+        return argument;
     }
 
     return 0;

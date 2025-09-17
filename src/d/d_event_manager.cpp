@@ -185,7 +185,7 @@ static void* findObjectCallBack(fopAc_ac_c* actor, void* work) {
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
+    if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
         return actor;
 
     return NULL;
@@ -207,7 +207,7 @@ static void* extraOnObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
             fopAcM_OnStatus(actor, fopAcStts_UNK800_e);
             if (prm->mCastInFlag & 1)
                 fopAcM_OnStatus(actor, fopAcStts_FORCEMOVE_e);
@@ -227,7 +227,7 @@ static void* extraOffObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument) {
             fopAcM_OffStatus(actor, fopAcStts_UNK800_e);
         }
         return NULL;

@@ -11,6 +11,7 @@
 #include "d/d_camera.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 struct NpcDatStruct {
@@ -252,7 +253,7 @@ cPhs_State daAuction_c::_create() {
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
 BOOL daAuction_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", 0));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", PSPL_BDL_PSPL));
 
     if (modelData == NULL) {
         return FALSE;
