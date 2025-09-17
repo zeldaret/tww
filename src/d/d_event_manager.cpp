@@ -27,26 +27,27 @@ int dEvent_exception_c::setStartDemo(int eventInfoIdx) {
     if (eventInfoIdx == 0xFF) {
         mEventInfoIdx = 206;
         return 0xFF;
-    } else if (eventInfoIdx >= 200) {
+    }
+    if (eventInfoIdx >= 200) {
         mEventInfoIdx = eventInfoIdx;
         return eventInfoIdx;
-    } else {
-        if (stageEventInfo == NULL) {
-            return 0xFF;
-        } else if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
-            return 0xFF;
-        } else {
-            u8 switchNo = stageEventInfo->events[eventInfoIdx].field_0x13;
-            if (switchNo != 0xFF) {
-                if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
-                    mEventInfoIdx = 206;
-                    return 0xFF;
-                }
-                dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
-            }
-            mEventInfoIdx = eventInfoIdx;
-        }
     }
+    if (stageEventInfo == NULL) {
+        return 0xFF;
+    }
+    if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
+        return 0xFF;
+    }
+    
+    u8 switchNo = stageEventInfo->events[eventInfoIdx].mSpawnSwitchNo;
+    if (switchNo != 0xFF) {
+        if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
+            mEventInfoIdx = 206;
+            return 0xFF;
+        }
+        dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
+    }
+    mEventInfoIdx = eventInfoIdx;
     return eventInfoIdx;
 }
 
