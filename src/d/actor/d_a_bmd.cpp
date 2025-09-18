@@ -568,7 +568,7 @@ void end(bmd_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_END_FLW_DIE, &actor->current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (i_this->mB76 == REG0_S(6) + 0x276) {
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
             fopAcM_createWarpFlower(&actor->current.pos, 0, fopAcM_GetRoomNo(actor), 0);
             i_this->m302 = 2;
             i_this->mB71 = 0;

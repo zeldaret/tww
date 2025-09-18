@@ -1683,7 +1683,7 @@ void demo_camera(bwd_class* i_this) {
                 mDoAud_bgmStart(JA_BGM_RANE_BATTLE);
             }
             i_this->m3C50 = 1;
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
         }
         break;
     case 0x3C:
@@ -1813,7 +1813,7 @@ void demo_camera(bwd_class* i_this) {
         MtxPosition(&local_98, &i_this->m3C28);
         if ((int)i_this->m3C20 == REG0_S(6) + 0x208) {
             i_this->m17C4 = 200;
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
             local_98.x = 0.0f;
             local_98.y = 300.0f;
             local_98.z = 0.0f;
@@ -2612,7 +2612,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
         i_this->mCcD_Sph_Array5[i].SetStts(&i_this->mCcD_Stts);
         i_this->mCcD_Sph_Array5[i].Set(bero_co_sph_src);
     }
-    if (!(g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
         actor->current.pos.x = 0.0f;
         actor->current.pos.y = -20000.0f;
         actor->current.pos.z = 0.0f;
@@ -2622,7 +2622,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
         fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
         i_this->m3C50 = 1;
     } else {
-        if ((g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossEnemy()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+        if ((dComIfGs_isStageBossEnemy()) && (dComIfGp_getStartStageName()[0] != 'X')) {
             i_this->m18AE = 0xd;
             actor->current.pos.x = 0.0f;
             actor->current.pos.y = -20000.0f;

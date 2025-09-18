@@ -840,7 +840,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
     }
     a_this->attention_info.position.y = -20000.0f;
     a_this->eyePos.y = -20000.0f;
-    if (!(g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
         i_this->m2BA = 10;
     } else {
         i_this->mBC8 = 1;
