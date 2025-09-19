@@ -2646,10 +2646,10 @@ static void fail(bk_class* i_this) {
         fopAcM_onActor(i_this);
         
         if (i_this->mType != 4) {
-            if (dComIfGs_isEventBit(0x0301)) {
-                dComIfGs_onEventBit(0x0480);
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0480);
             } else {
-                dComIfGs_onEventBit(0x0301);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0301);
             }
         }
         break;
@@ -2899,7 +2899,7 @@ static void d_dozou(bk_class* i_this) {
     case 1:
         if (
             (i_this->m02B7 != 0xFF && dComIfGs_isSwitch(i_this->m02B7, fopAcM_GetRoomNo(i_this))) ||
-            (i_this->m02B7 == 0xFF && dComIfGs_isEventBit(0x3802))
+            (i_this->m02B7 == 0xFF && dComIfGs_isEventBit(dSv_event_flag_c::COLORS_IN_HYRULE))
         ) {
             i_this->mpMorf->setPlaySpeed(1.0f);
             i_this->dr.mMode = 2;
@@ -2933,7 +2933,7 @@ static void carry_drop(bk_class* i_this) {
     
     switch (i_this->dr.mMode) {
     case 0:
-        dComIfGs_onEventBit(0x0004);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0004);
         i_this->dr.mMode = 1;
         anm_init(i_this, BK_BCK_BK_KOUKA, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         // Fall-through

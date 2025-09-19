@@ -382,17 +382,17 @@ BOOL daNpc_Os_c::jointCheck(s8 param_1) {
 /* 00000D10-00000DBC       .text wakeupCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::wakeupCheck() {
     if(argument == 0) {
-        if(dComIfGs_isEventBit(0x1780)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1780)) {
             return true;
         }
     }
     else if(argument == 1) {
-        if(dComIfGs_isEventBit(0x1740)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1740)) {
             return true;
         }
     }
     else if(argument == 2) {
-        if(dComIfGs_isEventBit(0x1720)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1720)) {
             return true;
         }
     }
@@ -403,30 +403,30 @@ BOOL daNpc_Os_c::wakeupCheck() {
 /* 00000DBC-00000E3C       .text setWakeup__10daNpc_Os_cFv */
 void daNpc_Os_c::setWakeup() {
     if(argument == 0) {
-        dComIfGs_onEventBit(0x1780);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1780);
     }
     else if(argument == 1) {
-        dComIfGs_onEventBit(0x1740);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1740);
     }
     else if(argument == 2) {
-        dComIfGs_onEventBit(0x1720);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1720);
     }
 }
 
 /* 00000E3C-00000EE8       .text finishCheck__10daNpc_Os_cFv */
 BOOL daNpc_Os_c::finishCheck() {
     if(argument == 0) {
-        if(dComIfGs_isEventBit(0x1710)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710)) {
             return true;
         }
     }
     else if(argument == 1) {
-        if(dComIfGs_isEventBit(0x1704)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704)) {
             return true;
         }
     }
     else if(argument == 2) {
-        if(dComIfGs_isEventBit(0x1B01)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
             return true;
         }
     }
@@ -437,13 +437,13 @@ BOOL daNpc_Os_c::finishCheck() {
 /* 00000EE8-00000F68       .text setFinish__10daNpc_Os_cFv */
 void daNpc_Os_c::setFinish() {
     if(argument == 0) {
-        dComIfGs_onEventBit(0x1710);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1710);
     }
     else if(argument == 1) {
-        dComIfGs_onEventBit(0x1704);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1704);
     }
     else if(argument == 2) {
-        dComIfGs_onEventBit(0x1B01);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1B01);
     }
 }
 
@@ -542,17 +542,17 @@ void daNpc_Os_c::eventOrderCheck() {
     if(field_0x7A5 == -1) {
         s8 roomNo = fopAcM_GetRoomNo(this);
         if(argument == 0) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2510)) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2510)) {
                 field_0x7A5 = 7;
             } 
         }
         else if(argument == 1) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2608)) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2608)) {
                 field_0x7A5 = 8;
             } 
         }
         else if(argument == 2) {
-            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(0x2604)) {
+            if(roomNo == 7 && dComIfGs_isSwitch(field_0x794, roomNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2604)) {
                 field_0x7A5 = 9;
             } 
         }
@@ -831,7 +831,7 @@ BOOL daNpc_Os_c::finish01NpcAction(void* param_1) {
 BOOL daNpc_Os_c::finish02NpcAction(void* param_1) {
     if(field_0x7A9 == 0) {
         if(param_1 == NULL) {
-            if(dComIfGs_isEventBit(0x1B01)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
                 setAnm_brkAnm(7);
             }
             else {
@@ -1334,10 +1334,10 @@ BOOL daNpc_Os_c::eventProc() {
                 setFinish();
             }
             else if(field_0x7A5 == 8) {
-                dComIfGs_onEventBit(0x2608);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2608);
             }
             else if(field_0x7A5 == 9) {
-                dComIfGs_onEventBit(0x2604);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2604);
             }
         }
 
@@ -1907,7 +1907,7 @@ u16 daNpc_Os_c::next_msgStatus(u32* pMsgNo) {
         status = fopMsgStts_MSG_ENDS_e;
     }
     else if(*pMsgNo == 0xEF4) {
-        dComIfGs_onEventBit(0x2510);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2510);
         status = fopMsgStts_MSG_ENDS_e;
     }
 

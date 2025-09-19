@@ -206,7 +206,7 @@ void mflft_move(mflft_class* i_this) {
 
         if (uVar6 == 7) {
             i_this->m29A = 1;
-            dComIfGs_onEventBit(0x2a10);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A10);
             dBgS_ObjGndChk_Yogan gndChk;
             Vec pos;
             pos.x = i_this->actor.current.pos.x;
@@ -227,10 +227,10 @@ void mflft_move(mflft_class* i_this) {
             if (i_this->m6F5 != 0) {
                 i_this->m6F5--;
                 if ((i_this->m6F5 == 0) && (uVar6 != 0)) {
-                    u8 eventReg = dComIfGs_getEventReg(0xa507);
+                    u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_A507);
                     if (eventReg < 6) {
                         eventReg++;
-                        dComIfGs_setEventReg(0xa507, eventReg);
+                        dComIfGs_setEventReg(dSv_event_flag_c::UNK_A507, eventReg);
                     }
                 }
             }

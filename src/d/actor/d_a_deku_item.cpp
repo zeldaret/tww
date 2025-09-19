@@ -115,7 +115,7 @@ cPhs_State daDekuItem_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    if (!dComIfGs_isEventBit(0x1801U)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801)) {
         return cPhs_ERROR_e;
     }
 

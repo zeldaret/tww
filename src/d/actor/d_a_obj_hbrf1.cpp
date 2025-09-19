@@ -95,13 +95,13 @@ void daObjHbrf1::Act_c::init_mtx() {
 /* 000004C0-0000066C       .text daObjHbrf1_down_stop__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::daObjHbrf1_down_stop() {
     if ((prm_get_Type() == 0 && !fopAcM_isSwitch(this, prm_get_swSave())) || (prm_get_Type() != 0 && fopAcM_isSwitch(this, prm_get_swSave()))) {
-        if (prm_get_Event() == 0 && !dComIfGs_isEventBit(0x1540)) {
-            dComIfGs_onEventBit(0x1540);
+        if (prm_get_Event() == 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1540)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1540);
             fopAcM_orderOtherEventId(this, mEventIdx);
             m2E4 = 1;
             mMode = Mode_UP_DEMO_WAIT_e;
-        } else if (prm_get_Event() == 1 && !dComIfGs_isEventBit(0x1510)) {
-            dComIfGs_onEventBit(0x1510);
+        } else if (prm_get_Event() == 1 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1510)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1510);
             fopAcM_orderOtherEventId(this, mEventIdx);
             m2E4 = 1;
             mMode = Mode_UP_DEMO_WAIT_e;
@@ -152,13 +152,13 @@ void daObjHbrf1::Act_c::daObjHbrf1_up_demo() {
 /* 000007FC-000009B0       .text daObjHbrf1_up_stop__Q210daObjHbrf15Act_cFv */
 void daObjHbrf1::Act_c::daObjHbrf1_up_stop() {
     if ((prm_get_Type() == 0 && fopAcM_isSwitch(this, prm_get_swSave())) || (prm_get_Type() != 0 && !fopAcM_isSwitch(this, prm_get_swSave()))) {
-        if (prm_get_Event() == 0 && !dComIfGs_isEventBit(0x1520)) {
-            dComIfGs_onEventBit(0x1520);
+        if (prm_get_Event() == 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1520)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1520);
             fopAcM_orderOtherEventId(this, mEventIdx);
             m2E4 = 1;
             mMode = Mode_DOWN_DEMO_WAIT_e;
-        } else if (prm_get_Event() == 1 && !dComIfGs_isEventBit(0x1508)) {
-            dComIfGs_onEventBit(0x1508);
+        } else if (prm_get_Event() == 1 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1508)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1508);
             fopAcM_orderOtherEventId(this, mEventIdx);
             m2E4 = 1;
             mMode = Mode_DOWN_DEMO_WAIT_e;

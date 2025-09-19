@@ -2713,7 +2713,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             i_this->unk_2DC = 0;
         }
 
-        if (dComIfGs_isEventBit(0x1101) && i_this->unk_2DC != 0 && dComIfGs_isSwitch(i_this->unk_2DC, fopAcM_GetRoomNo(a_this))) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101) && i_this->unk_2DC != 0 && dComIfGs_isSwitch(i_this->unk_2DC, fopAcM_GetRoomNo(a_this))) {
             return cPhs_ERROR_e;
         }
 

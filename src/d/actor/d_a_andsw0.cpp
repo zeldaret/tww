@@ -236,7 +236,7 @@ static void hajimarinomori_check(andsw0_class* i_this) {
     else {
         for(int i = 0; i < 7; i++) {}
 
-        if (dComIfGs_isEventBit(4)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0004)) {
             bb_class* kargaroc = (bb_class*)ac[5];
             fopAcM_delete(&kargaroc->actor);
             kargaroc = (bb_class*)ac[6];
@@ -247,15 +247,15 @@ static void hajimarinomori_check(andsw0_class* i_this) {
             bokoblin = (bk_class*)ac[4];
             bokoblin->m121C = 1;
             
-            if (dComIfGs_isEventBit(0x301)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301)) {
                 bokoblin = (bk_class*)ac[0];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[1];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x301) && dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[2];
                 bokoblin->m121C = 1;
             }

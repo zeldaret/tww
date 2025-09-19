@@ -36,14 +36,14 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001AC-00000348       .text CreateHeap__12daObj_Pbco_cFv */
 BOOL daObj_Pbco_c::CreateHeap() {
     J3DModelData* modelData;
-    if (dComIfGs_isEventBit(0x0a02) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
         modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBCO));
     } else {
         modelData = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, PBCO_INDEX_BDL_PBC2));
     }
     JUT_ASSERT(0xa9, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-    if (dComIfGs_isEventBit(0x0a02) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !checkItemGet(dItem_PEARL_NAYRU_e, TRUE)) {
         mpBgW = NULL;
     } else {
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, PBCO_INDEX_DZB_PBCO), cBgW::MOVE_BG_e,

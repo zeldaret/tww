@@ -1557,7 +1557,7 @@ void damage_check(bdk_class* i_this) {
                     dScnPly_ply_c::setPauseTimer(8);
                     mDoAud_bgmStop(0x1E);
                 } else {
-                    dComIfGs_onEventBit(0x3C01);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3C01);
                     #if VERSION > VERSION_DEMO
                     dScnPly_ply_c::setPauseTimer(5);
                     #endif
@@ -2891,7 +2891,7 @@ void demo_camera(bdk_class* i_this) {
         if (std::fabsf(i_this->m6320) < 1.0f) {
             cLib_addCalc0(&i_this->m6324, 1.0f, REG0_F(12) + 1.0f);
             if (i_this->m25A0 == 0xF) {
-                dComIfGs_onTmpBit(0x401);
+                dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0401);
                 dComIfGs_onStageBossDemo();
                 fpcM_Search(ep_delete_sub, actor);
 

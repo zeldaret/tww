@@ -113,15 +113,24 @@ const f32 daWindTag::daWindTag_c::mData[] = {
 };
 
 const u16 daSalvage_c::m_savelabel[] = {
-    0x2080, 0x2004,
-    0x2002, 0x2804,
-    0x2802, 0x2801,
-    0x2980, 0x2940,
-    0x3B01, 0x3C80,
-    0x3C40, 0x3C20,
-    0x3C10, 0x3C08,
-    0x3C04, 0x3C02,
+    dSv_event_flag_c::UNK_2080,
+    dSv_event_flag_c::UNK_2004,
+    dSv_event_flag_c::UNK_2002,
+    dSv_event_flag_c::UNK_2804,
+    dSv_event_flag_c::UNK_2802,
+    dSv_event_flag_c::UNK_2801,
+    dSv_event_flag_c::UNK_2980,
+    dSv_event_flag_c::UNK_2940,
+    dSv_event_flag_c::UNK_3B01,
+    dSv_event_flag_c::UNK_3C80,
+    dSv_event_flag_c::UNK_3C40,
+    dSv_event_flag_c::UNK_3C20,
+    dSv_event_flag_c::UNK_3C10,
+    dSv_event_flag_c::UNK_3C08,
+    dSv_event_flag_c::UNK_3C04,
+    dSv_event_flag_c::UNK_3C02,
 };
+
 dSalvage_control_c* daSalvage_c::mTagData_p;
 s8 daSalvage_c::mNowRoomNo;
 int daSalvage_c::mSalvageId;
@@ -142,7 +151,7 @@ u8 daObjLight::Act_c::M_S_lod_access;
 bool daObjLight::Act_c::renew_light_angle() {
     M_S_lod_access = 1;
     if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
-        if (dComIfGs_isEventBit(0x1C02) == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C02) == 1) {
             set_light_dif_angle_LOD(get_light_dif_angle() + 0x80);
             return true;
         }
@@ -187,26 +196,46 @@ BOOL daObjLight::Act_c::set_light_dif_angle_FRRS(s16 r3) {
 s8 daDai_c::mNowDaizaNum;
 s8 daDai_c::mNowItemNum;
 const u16 daDai_c::m_savelabel[] = {
-    0xF8FF, 0xF7FF,
-    0xF6FF, 0xF5FF,
-    0xF4FF, 0xF3FF,
-    0xF2FF, 0xF1FF,
-    0xF0FF, 0xEFFF,
-    0xEEFF, 0xEDFF,
-    0xECFF, 0xEBFF,
-    0xEAFF, 0xE9FF,
-    0xE8FF, 0xE7FF,
-    0xE6FF, 0xE5FF,
-    0xE4FF, 0xE3FF,
-    0xE2FF, 0xE1FF,
-    0xE0FF, 0xDFFF,
-    0xDEFF, 0xDDFF,
-    0xDCFF, 0xDBFF,
-    0xDAFF, 0xD9FF,
-    0xD8FF, 0xD7FF,
-    0xD6FF, 0xD5FF,
-    0xD4FF, 0xD3FF,
-    0xD2FF, 0xD1FF,
+    dSv_event_flag_c::UNK_F8FF,
+    dSv_event_flag_c::UNK_F7FF,
+    dSv_event_flag_c::UNK_F6FF,
+    dSv_event_flag_c::UNK_F5FF,
+    dSv_event_flag_c::UNK_F4FF,
+    dSv_event_flag_c::UNK_F3FF,
+    dSv_event_flag_c::UNK_F2FF,
+    dSv_event_flag_c::UNK_F1FF,
+    dSv_event_flag_c::UNK_F0FF,
+    dSv_event_flag_c::UNK_EFFF,
+    dSv_event_flag_c::UNK_EEFF,
+    dSv_event_flag_c::UNK_EDFF,
+    dSv_event_flag_c::UNK_ECFF,
+    dSv_event_flag_c::UNK_EBFF,
+    dSv_event_flag_c::UNK_EAFF,
+    dSv_event_flag_c::UNK_E9FF,
+    dSv_event_flag_c::UNK_E8FF,
+    dSv_event_flag_c::UNK_E7FF,
+    dSv_event_flag_c::UNK_E6FF,
+    dSv_event_flag_c::UNK_E5FF,
+    dSv_event_flag_c::UNK_E4FF,
+    dSv_event_flag_c::UNK_E3FF,
+    dSv_event_flag_c::UNK_E2FF,
+    dSv_event_flag_c::UNK_E1FF,
+    dSv_event_flag_c::UNK_E0FF,
+    dSv_event_flag_c::UNK_DFFF,
+    dSv_event_flag_c::UNK_DEFF,
+    dSv_event_flag_c::UNK_DDFF,
+    dSv_event_flag_c::UNK_DCFF,
+    dSv_event_flag_c::UNK_DBFF,
+    dSv_event_flag_c::UNK_DAFF,
+    dSv_event_flag_c::UNK_D9FF,
+    dSv_event_flag_c::UNK_D8FF,
+    dSv_event_flag_c::UNK_D7FF,
+    dSv_event_flag_c::UNK_D6FF,
+    dSv_event_flag_c::UNK_D5FF,
+    dSv_event_flag_c::UNK_D4FF,
+    dSv_event_flag_c::UNK_D3FF,
+    dSv_event_flag_c::UNK_D2FF,
+    dSv_event_flag_c::UNK_D1FF,
 };
 
 /* 800568A8-800568B0       .text getMaxDaiza__7daDai_cFv */

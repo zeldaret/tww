@@ -243,7 +243,7 @@ void daObjPirateship::Act_c::partsCreate() {
     s32 uVar3 = (fopAcM_GetParam(this) >> 8) & 0xff;
 
     s16 sVar6 = 0;
-    if (dComIfGs_isEventBit(0x520)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
         sVar6 = 0x1B18;
     }
     sp10.z = sVar6;
@@ -430,9 +430,9 @@ bool daObjPirateship::Act_c::_execute() {
     }
 
     if (m2CC == 0) {
-        if (dComIfGs_isEventBit(0x310)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0310)) {
 #if VERSION > VERSION_JPN
-            if (!dComIfGs_isEventBit(1)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                 CreateWave();
             }
 #endif
@@ -440,7 +440,7 @@ bool daObjPirateship::Act_c::_execute() {
         } else {
             return false;
         }
-    } else if (m2CD == 0 && dComIfGs_isEventBit(1)) {
+    } else if (m2CD == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
         m2CD = 1;
         pirateCreate(create_idx_tbl_1stIsland_demo);
 #if VERSION > VERSION_JPN
@@ -484,12 +484,12 @@ cPhs_State daObjPirateship::Act_c::_create() {
 
         switch (uVar3) {
         case 0:
-            if (dComIfGs_isEventBit(0x310) == 0) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0310) == 0) {
                 m2CC = 0;
                 m2CD = 0;
             } else {
                 m2CC = 0;
-                if (dComIfGs_isEventBit(1)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     pirateCreate(create_idx_tbl_1stIsland);
                     m2CD = 1;
                 } else {

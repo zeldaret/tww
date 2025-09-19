@@ -1495,22 +1495,22 @@ struct SaveDatStruct {
 
 static const SaveDatStruct l_save_dat[] = {
     {
-        0x1320,
-        0xCB03,
-        0xC803,
-        0x1304,
+        dSv_event_flag_c::UNK_1320,
+        dSv_event_flag_c::UNK_CB03,
+        dSv_event_flag_c::UNK_C803,
+        dSv_event_flag_c::UNK_1304,
     },
     {
-        0x1310,
-        0xCA03,
-        0xC703,
-        0x1302,
+        dSv_event_flag_c::UNK_1310,
+        dSv_event_flag_c::UNK_CA03,
+        dSv_event_flag_c::UNK_C703,
+        dSv_event_flag_c::UNK_1302,
     },
     {
-        0x1308,
-        0xC903,
-        0xC603,
-        0x1301,
+        dSv_event_flag_c::UNK_1308,
+        dSv_event_flag_c::UNK_C903,
+        dSv_event_flag_c::UNK_C603,
+        dSv_event_flag_c::UNK_1301,
     },
 };
 
@@ -1617,7 +1617,7 @@ static cPhs_State phase_1(daNpcRoten_c* i_this) {
 
     i_this->setNpcNo(i_this->getPrmNpcNo());
 
-    if(!dComIfGs_isEventBit(0x1108)) {
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1108)) {
         return cPhs_STOP_e;
     }
 
@@ -2475,7 +2475,7 @@ u32 daNpcRoten_c::getMsg() {
         if(isGetMap(itemNo)) {
             field_0x98C = l_msg_try_force;
             dComIfGs_setReserveItemEmpty();
-            dComIfGs_onEventBit(0x3E04);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E04);
         }
         else if(dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) >= 3) {
             field_0x98C = l_msg_xy_exchange3[mNpcNo];
@@ -2500,7 +2500,7 @@ u32 daNpcRoten_c::getMsg() {
         else if(dComIfGs_getEventReg(l_save_dat[mNpcNo].field_0x02) >= 3) {
             field_0x98C = l_msg_exchange3[mNpcNo];
         }
-        else if(mNpcNo == 1 && dComIfGs_isEventBit(0x3E04)) {
+        else if(mNpcNo == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E04)) {
             field_0x98C = l_msg_collect_map;
         }
         else if(dComIfGs_isEventBit(l_save_dat[mNpcNo].field_0x06)) {
@@ -2800,7 +2800,7 @@ BOOL daNpcRoten_c::isKoukanItem(u8 itemNo) {
 
 /* 00003AC8-00003B30       .text isGetMap__12daNpcRoten_cFUc */
 BOOL daNpcRoten_c::isGetMap(u8 itemNo) {
-    if(mNpcNo == 1 && !dComIfGs_isEventBit(0x3E04) && itemNo == PRESIDENT_STATUE) {
+    if(mNpcNo == 1 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E04) && itemNo == PRESIDENT_STATUE) {
         return true;
     }
 

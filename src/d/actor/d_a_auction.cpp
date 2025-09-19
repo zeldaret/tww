@@ -49,15 +49,15 @@ static daAuction_HIO_c l_HIO;
 
 
 static daAuction_c::ItemData l_item_dat[] = {
-    {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
-    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, 0x1080},
-    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, 0x1040},
-    {dItem_HEART_PIECE_e, 0x1D13, 80, 0x1020},
+    {dItem_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
+    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
+    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
+    {dItem_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {
-    {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
-    {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
+    {POSTMAN_STATUE, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
+    {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
 static s16 l_item_dat22[] = {0x002A, 0x00F9};
@@ -420,8 +420,8 @@ void daAuction_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if (m838 == 3) {
-        if (dComIfGs_isEventBit(0x4008)) {
-            mCurrAuctionItemIndex = dComIfGs_getEventReg(0xCD03);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4008)) {
+            mCurrAuctionItemIndex = dComIfGs_getEventReg(dSv_event_flag_c::UNK_CD03);
             mCurrBid += 10;
         } else {
             mCurrAuctionItemIndex = getItemNo();
@@ -1313,8 +1313,8 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             break;
         }
 
-        if (dComIfGs_isEventBit(0x4008)) {
-            dComIfGp_setNpcNameMessageID(l_npc_msg_dat[dComIfGs_getEventReg(0x790F)].field_0x00);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4008)) {
+            dComIfGp_setNpcNameMessageID(l_npc_msg_dat[dComIfGs_getEventReg(dSv_event_flag_c::UNK_790F)].field_0x00);
             *pMsgNo = 0x1CF6;
         } else {
             *pMsgNo = 0x1CF5;
@@ -1444,11 +1444,11 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = 0x1D1C;
         } else {
             if (m824 != 0) {
-                dComIfGs_onEventBit(0x4008);
-                dComIfGs_setEventReg(0x790F, getAucMdlNo(m824));
-                dComIfGs_setEventReg(0xCD03, mCurrAuctionItemIndex);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_4008);
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_790F, getAucMdlNo(m824));
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_CD03, mCurrAuctionItemIndex);
             } else {
-                dComIfGs_offEventBit(0x4008);
+                dComIfGs_offEventBit(dSv_event_flag_c::UNK_4008);
             }
 
             fopAcM_delete(mCurrAuctionItemPID);

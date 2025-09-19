@@ -105,10 +105,22 @@ bool daObjAdnno_c::_execute() {
 }
 
 static const u16 daObjAdnno_event_bit_table[16] = {
-    0x3508, 0x3504, 0x3502, 0x3501,
-    0x3680, 0x3640, 0x3620, 0x3610,
-    0x3608, 0x3604, 0x3602, 0x3601,
-    0x3780, 0x3740, 0x3720, 0x3710,
+    dSv_event_flag_c::LITHOGRAPH_1,
+    dSv_event_flag_c::LITHOGRAPH_2,
+    dSv_event_flag_c::LITHOGRAPH_3,
+    dSv_event_flag_c::LITHOGRAPH_4,
+    dSv_event_flag_c::LITHOGRAPH_5,
+    dSv_event_flag_c::LITHOGRAPH_6,
+    dSv_event_flag_c::LITHOGRAPH_7,
+    dSv_event_flag_c::LITHOGRAPH_8,
+    dSv_event_flag_c::LITHOGRAPH_9,
+    dSv_event_flag_c::LITHOGRAPH_10,
+    dSv_event_flag_c::UNK_3602,
+    dSv_event_flag_c::UNK_3601,
+    dSv_event_flag_c::UNK_3780,
+    dSv_event_flag_c::UNK_3740,
+    dSv_event_flag_c::UNK_3720,
+    dSv_event_flag_c::UNK_3710,
 };
 
 bool daObjAdnno_c::_draw() {

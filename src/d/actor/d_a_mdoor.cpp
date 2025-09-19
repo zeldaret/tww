@@ -126,7 +126,7 @@ BOOL daMdoor_c::CreateInit() {
 
     switch (bVar5) {
         case 0:
-            if (dComIfGs_isEventBit(0x1101)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                 setAction(daMdoor_c::ACT_WAIT3_e);
             } else {
                 setAction(daMdoor_c::ACT_DEMO_WAIT_e);
@@ -136,11 +136,11 @@ BOOL daMdoor_c::CreateInit() {
             break;
 
         case 1:
-            if (dComIfGs_isEventBit(0x1101)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                 setAction(daMdoor_c::ACT_WAIT7_e);
                 m2CC = 280.0f;
             } else {
-                dComIfGs_offEventBit(0x1140);
+                dComIfGs_offEventBit(dSv_event_flag_c::UNK_1140);
                 setAction(daMdoor_c::ACT_GENOCIDE_e);
                 m2C6 = dComIfGp_evmng_getEventIdx("DEFAULT_STOP_OPEN", 0xFF);
                 m2C4 = 1;
@@ -349,7 +349,7 @@ BOOL daMdoor_actionReady(daMdoor_c* i_this) {
 
         switch (i_this->getType()) {
             case 1:
-                dComIfGs_onEventBit(0x1140);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1140);
                 break;
         }
     } else {

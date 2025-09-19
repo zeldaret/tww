@@ -529,8 +529,8 @@ void end(bmd_class* i_this) {
         if (dComIfGp_getStartStageName()[0] == 'X') {
             dLib_setNextStageBySclsNum(0, actor->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            dComIfGs_onEventBit(0x3220);
-            dComIfGs_onTmpBit(0x480);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3220);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             return;
         }
         #if VERSION > VERSION_DEMO
@@ -2013,7 +2013,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
         i_this->mCoCyl.Set(co_cyl_src);
         i_this->m308[2] = 200;
         if (!dComIfGs_isStageBossDemo() && (dComIfGp_getStartStageName()[0] != 'X')) {
-            dComIfGs_offTmpBit(0x480);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             i_this->mMode = 10;
             i_this->mBE0 = 1;
             i_this->mBDC = 1.0f;

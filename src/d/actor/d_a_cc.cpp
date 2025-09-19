@@ -1513,7 +1513,7 @@ void deku_come_demo(cc_class* i_this) {
             dComIfGp_event_reset();
             i_this->m2FC = 0;
             DEMO_COME_START_FLAG = 0;
-            dComIfGs_onTmpBit(0x304);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0304);
         }
         break;
     }

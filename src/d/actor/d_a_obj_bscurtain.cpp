@@ -41,7 +41,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000224-00000334       .text CreateHeap__17daObj_Bscurtain_cFv */
 BOOL daObj_Bscurtain_c::CreateHeap() {
     J3DModelData* modelData;
-    if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(0x1F08) != 0) {
+    if ((fpcM_GetParam(this) & 0xFF) != 1 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08) != 0) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCO);
     } else {
         modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, PTC_INDEX_BDL_PTCU);

@@ -1162,7 +1162,7 @@ void end(fganon_class* i_this) {
             i_this->mMode = 1;
             anm_init(i_this, FGANON_BCK_LAST_DAMAGE1, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->mB54 = 50;
-            dComIfGs_onEventBit(0x3f20); // PG_DEFEATED? It appears further down in `energy_ball_move`
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F20); // PG_DEFEATED? It appears further down in `energy_ball_move`
             break;
         case 1: {
             if (mFrame == 104) {
@@ -2183,7 +2183,7 @@ void energy_ball_move(fganon_class* i_this) {
                 }
                 mDoAud_changeSubBgmStatus(lVar11);
                 i_this->m688++;
-                dComIfGs_onEventBit(0x3f20);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F20);
             } else if (bVar5) {
                 local_5c = player->eyePos - i_this->m3E0;
                 local_5c.y -= REG0_F(18) + 50.0f;
@@ -2759,7 +2759,7 @@ static cPhs_State daFganon_Create(fopAc_ac_c* i_act) {
     }
     
     if ((i_this->mSwitchNo != 0xFF) && (dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo()) != 0)) {
-        if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(0x3A08))) { // Probably a flag to do with beating FF1 so PG spawns?
+        if (((fopAcM_GetParam(i_this) & 0xF) == 2) && !(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A08))) { // Probably a flag to do with beating FF1 so PG spawns?
             fopAcM_create(PROC_BOKO, daBoko_c::Type_PGANON_SWORD_e, &i_this->current.pos, i_this->current.roomNo);
         }
         return cPhs_ERROR_e;

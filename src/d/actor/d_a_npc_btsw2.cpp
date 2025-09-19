@@ -294,8 +294,8 @@ void daNpc_Btsw2_c::anmAtr(u16) {
 /* 0000097C-000009EC       .text getMsg__13daNpc_Btsw2_cFv */
 u32 daNpc_Btsw2_c::getMsg() {
     u32 msgNo;
-    if (!dComIfGs_isEventBit(0x3102)) {
-        dComIfGs_onEventBit(0x3102);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3102)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3102);
         msgNo = 0x1AB0;
     } else if (dKy_daynight_check() != dKy_TIME_DAY_e) {
         msgNo = 0x1AB2;
@@ -544,7 +544,7 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 cPhs_State daNpc_Btsw2_c::_create() {
     fopAcM_SetupActor(this, daNpc_Btsw2_c);
     
-    if (dComIfGs_getEventReg(0xC203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
+    if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     

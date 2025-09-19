@@ -256,7 +256,7 @@ static BOOL daDk_Execute(dk_class* a_this) {
 
         switch (a_this->field_0xAC5) {
             case 0:
-                if (dComIfGs_isEventBit(dSv_evtBit_c::UNK_310)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0310)) {
                     a_this->field_0xAC5 = 2;
                 }
                 break;
@@ -266,7 +266,7 @@ static BOOL daDk_Execute(dk_class* a_this) {
                 }
                 // fallthrough
             case 3:
-                if (dComIfGs_isEventBit(dSv_evtBit_c::UNK_1)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     a_this->field_0xAC5 = -1;
                 }
                 break;

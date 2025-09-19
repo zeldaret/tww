@@ -205,18 +205,18 @@ cPhs_State daNpc_Cb1_c::create() {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_isEventBit(0x2910)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910)) {
             if(!isTypeKaze()) {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_isEventBit(0x2E02)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02)) {
             if(!isTypeEkaze()) {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_isEventBit(0x1610)) {
-            if(strcmp(dComIfGp_getStartStageName(), "sea") != 0 || !dComIfGs_isEventBit(0x1604)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
+            if(strcmp(dComIfGp_getStartStageName(), "sea") != 0 || !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604)) {
                 return cPhs_ERROR_e;
             }
         }
@@ -225,7 +225,7 @@ cPhs_State daNpc_Cb1_c::create() {
                 return cPhs_ERROR_e;
             }
         }
-        else if(dComIfGs_isEventBit(0x1820)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             return cPhs_ERROR_e;
         }
         else if(dComIfGs_checkGetItem(dItem_PEARL_FARORE_e)) {
@@ -895,7 +895,7 @@ BOOL daNpc_Cb1_c::sowCheck() {
 
 /* 00002A2C-00002AD8       .text shipRideCheck__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::shipRideCheck() {
-    if(dComIfGs_isEventBit(0x1604) && dComIfGp_getShipActor()) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604) && dComIfGp_getShipActor()) {
         setNpcAction(&daNpc_Cb1_c::shipNpcAction, NULL);
         onShipRide();
         fopDwTg_DrawQTo(&draw_tag);
@@ -1119,7 +1119,7 @@ void daNpc_Cb1_c::evInitMsgSet(int staffIdx) {
     if(pMsgNo) {
         mMsgNo = *pMsgNo;
 
-        if(mMsgNo == 0x1520 && dComIfGs_isEventBit(0x1840)) {
+        if(mMsgNo == 0x1520 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1840)) {
             mMsgNo = 0x1522;
         }
     }
@@ -1519,8 +1519,8 @@ void daNpc_Cb1_c::evInitEnd(int staffIdx) {
     if(mode == -2) {
         if(mMsgNo == 0x1526) {
             dComIfGp_setNextStage("Otkura", 0xE6, 0, 8);
-            dComIfGs_onEventBit(0x1610);
-            dComIfGs_onEventBit(0x1604);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1610);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1604);
         }
 
         dComIfGp_event_reset();
@@ -1611,7 +1611,7 @@ BOOL daNpc_Cb1_c::execTalk(BOOL param_1) {
 /* 00004358-0000461C       .text waitNpcAction__11daNpc_Cb1_cFPv */
 BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
     if(m8F0 == 0) {
-        if(dComIfGs_isEventBit(0x1610)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
             cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
         }
 
@@ -1659,7 +1659,7 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
             f32 dist_sq = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
 
             if(!checkNpcCallCommand()) {
-                if(dComIfGs_isEventBit(0x1610) && dist_sq < SQUARE(l_HIO.field_0xC0)) {
+                if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) && dist_sq < SQUARE(l_HIO.field_0xC0)) {
                     daPy_getPlayerLinkActorClass()->onNpcCall();
 
                     temp = TRUE;
@@ -2146,7 +2146,7 @@ BOOL daNpc_Cb1_c::shipNpcAction(void*) {
         m8F0++;
     }
     else if(m8F0 != -1) {
-        if(!dComIfGs_isEventBit(0x1604)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604)) {
             setNpcAction(&daNpc_Cb1_c::waitNpcAction, NULL);
             offShipRide();
         }
@@ -2622,15 +2622,15 @@ u16 daNpc_Cb1_c::next_msgStatus(u32* pMsgNo) {
         *pMsgNo += 1;
     }
     else if(*pMsgNo == 0x151E) {
-        dComIfGs_onEventBit(0x1880);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1880);
         return fopMsgStts_MSG_ENDS_e;
     }
     else if(*pMsgNo == 0x1521) {
-        dComIfGs_onEventBit(0x1840);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1840);
         return fopMsgStts_MSG_ENDS_e;
     }
     else if(*pMsgNo == 0x14C4) {
-        dComIfGs_onEventBit(0x1904);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1904);
         return fopMsgStts_MSG_ENDS_e;
     }
     else {
@@ -2653,15 +2653,15 @@ u32 daNpc_Cb1_c::getMsg() {
     }
 
     if(isTypeForest()) {
-        return dComIfGs_isEventBit(0x1904) ? 0x14C5 : 0x14C2;
+        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1904) ? 0x14C5 : 0x14C2;
     }
 
     if(isTypeWaterFall()) {
         if(isTact()) {
-            return dComIfGs_isEventBit(0x1840) ? 0x1522 : 0x1520;
+            return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1840) ? 0x1522 : 0x1520;
         }
 
-        return dComIfGs_isEventBit(0x1880) ? 0x151F : 0x1519;
+        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1880) ? 0x151F : 0x1519;
     }
 
 #if VERSION > VERSION_DEMO
@@ -2780,7 +2780,7 @@ BOOL daNpc_Cb1_c::init() {
     attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 8;
 
 #if VERSION == VERSION_DEMO
-    if(!dComIfGs_isEventBit(0x1610)) {
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
         onNpcNotChange();
     }
 
@@ -2839,7 +2839,7 @@ BOOL daNpc_Cb1_c::init() {
         attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAF;
     }
     else {
-        if(dComIfGs_isEventBit(0x1610)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
             offNpcNotChange();
         }
 
@@ -3229,7 +3229,7 @@ BOOL daNpc_Cb1_c::execute() {
         else {
             m8E1 = chkMoveBlock(&m91C);
 
-            if(dComIfGs_isEventBit(0x1610)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
                 fopAcM_SetStatusMap(this, 0xD);
             }
             else {

@@ -795,7 +795,7 @@ BOOL daBoko_c::execute() {
     }
 
     if (fopAcM_GetParam(this) == Type_PGANON_SWORD_e) {
-        if (dComIfGs_isEventBit(0x3a08)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A08)) {
             mBrkAnm.play();
             bVar4 = true;
             if (mBrkAnm.isStop()) {

@@ -203,18 +203,18 @@ void daLbridge_c::demo() {
 
         if (dComIfGp_evmng_endCheck(mAppearEventIdx)) {
             dComIfGp_event_reset();
-            dComIfGs_onEventBit(0xE01U);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0E01);
         }
 
         if (dComIfGp_evmng_endCheck(mDisappearEventIdx)) {
             dComIfGp_event_reset();
-            dComIfGs_onEventBit(0xF40U);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F40);
         }
     } else {
-        if (dComIfGs_isEventBit(0xE01U) == FALSE && this->unk31C == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E01) == FALSE && this->unk31C == 1) {
             fopAcM_orderOtherEventId(this, mAppearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
-        } else if (dComIfGs_isEventBit(0xF40U) == FALSE && this->unk31C == 2) {
+        } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F40) == FALSE && this->unk31C == 2) {
             fopAcM_orderOtherEventId(this, mDisappearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }

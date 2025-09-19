@@ -664,7 +664,7 @@ void dScnName_c::FileSelectMainNormal() {
             mMainProc = 5;
         } else {
             dComIfGs_setCardToMemory(saveMemory, dFs_c->saveSlot);
-            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(0x3510)) {
+            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3510)) {
                 field_0x1bb9 = 1;
             }
 
@@ -676,7 +676,7 @@ void dScnName_c::FileSelectMainNormal() {
                 card_pictdata* workBuf = &savePicDatabuf[dFs_c->saveSlot * 3];
                 for (s32 i = 0; i < 3; i++) {
                     u32 mask = 1 << i;
-                    if ((dComIfGs_getEventReg(0x89ff) & mask)) {
+                    if ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF) & mask)) {
                         workBuf++;
                         continue;
                     }
@@ -697,7 +697,7 @@ void dScnName_c::FileSelectMainNormal() {
 
                 dComIfGs_setPictureNum(pictureNum - failed);
             }
-            dComIfGs_setEventReg(0x89ff, 0);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, 0);
             mDoMemCd_setPictDataPtr(NULL);
             dComIfGp_itemDataInit();
             if (field_0x1bb9 != 0) {

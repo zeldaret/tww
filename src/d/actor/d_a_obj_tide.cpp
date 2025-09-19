@@ -156,11 +156,11 @@ cPhs_State Act_c::Mthd_Create() {
 
     if (M_type == 3) {
 #if VERSION == VERSION_DEMO
-        if (dComIfGs_isTmpBit(0x401)) {
+        if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0401)) {
             m309 = false;
         }
 #else
-        dComIfGs_offTmpBit(0x401);
+        dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0401);
 #endif
     }
 
@@ -399,7 +399,7 @@ void Act_c::mode_gmtw() {
 
     se_set_gmtw();
 #if VERSION > VERSION_DEMO
-    if (dComIfGs_isTmpBit(0x401)) {
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0401)) {
         if (m30C > 0) {
             m30C--;
         } else {

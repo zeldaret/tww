@@ -124,7 +124,7 @@ void jbo_move(jbo_class* i_this) {
 static BOOL daJBO_Execute(jbo_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     if (i_this->mType == daJbo_Type_APPEAR_AFTER_DEKU_TREE_e) {
-        if (dComIfGs_isEventBit(0x1801)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801)) {
             i_this->mType = daJbo_Type_NORMAL_e;
             i_this->mCoSph.OnCoSetBit();
         }

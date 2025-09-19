@@ -564,7 +564,7 @@ BOOL Act_c::process_wait_falldown_init() {
     }
     
     if (mType == 0) {
-        dComIfGs_onEventBit(0x3410);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3410);
     }
     
     return TRUE;
@@ -744,7 +744,7 @@ void Act_c::set_co_collision() {
             fopAc_ac_c* hookshot = mSph.GetTgHitAc();
             mHookshotID = fopAcM_GetID(hookshot);
             if (mType == 0) {
-                dComIfGs_onEventBit(0x3880);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3880);
             }
         }
         mSph.ClrTgHit();

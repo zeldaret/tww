@@ -82,7 +82,7 @@ s32 daTag_Hint_c::arrivalTerms() {
         }
         break;
     case 0x11:
-        if (!dComIfGs_isEventBit(0x4020)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_4020)) {
             return 0;
         }
     }
@@ -98,7 +98,7 @@ s32 daTag_Hint_c::arrivalTerms() {
         m2A0 = 0xe10;
         break;
     case 9:
-        if (!dComIfGs_isTmpBit(0x308)) {
+        if (!dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0308)) {
             return 0;
         }
         m2A0 = 600;
@@ -153,12 +153,12 @@ s32 daTag_Hint_c::waitTerms() {
             if (uVar1 != 0xff) {
                 dComIfGs_onSwitch(uVar1, fopAcM_GetRoomNo(this));
             }
-            dComIfGs_onEventBit(0x404);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0404);
             return 1;
         }
         break;
     case 6:
-        if (dComIfGs_isEventBit(0x2a10)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A10)) {
 #if VERSION == VERSION_DEMO
             if (uVar1 != 0xFF) {
                 dComIfGs_onSwitch(uVar1, fopAcM_GetRoomNo(this));
@@ -173,11 +173,11 @@ s32 daTag_Hint_c::waitTerms() {
         }
         break;
     case 9:
-        if (dComIfGs_isTmpBit(0x304)) {
+        if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0304)) {
             return 1;
         }
 
-        if (dComIfGs_isEventBit(0x1801)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801)) {
             return 1;
         }
         break;
@@ -201,12 +201,12 @@ s32 daTag_Hint_c::waitTerms() {
         }
         break;
     case 0xe:
-        if (dComIfGs_isEventBit(0x3c01)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3C01)) {
             return 1;
         }
         break;
     case 0xf:
-        if (dComIfGs_isEventBit(0x3f20)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F20)) {
             return 1;
         }
         break;
@@ -268,14 +268,14 @@ s32 daTag_Hint_c::otherCheck() {
         break;
 
     case 1:
-        dComIfGs_onEventBit(0x404);
-        if (dComIfGs_isEventBit(0x401) == 0) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0404);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0401) == 0) {
             return 0;
         }
         break;
 
     case 6:
-        if (dComIfGs_getEventReg(0xa507) < 3) {
+        if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_A507) < 3) {
             return 0;
         }
         break;
@@ -448,7 +448,7 @@ void daTag_Hint_c::startProc() {
     u8 type = getType();
     switch (type) {
     case 0:
-        dComIfGs_onEventBit(0x401);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0401);
         break;
 #if VERSION > VERSION_DEMO
     case 6:
@@ -728,11 +728,11 @@ static BOOL daTag_Hint_Delete(daTag_Hint_c* i_this) {
 
     switch (i_this->getType()) {
     case 9:
-        dComIfGs_offTmpBit(0x308);
+        dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0308);
         break;
 
     case 17:
-        dComIfGs_offEventBit(0x4020);
+        dComIfGs_offEventBit(dSv_event_flag_c::UNK_4020);
         break;
     }
     return TRUE;
@@ -747,7 +747,7 @@ cPhs_State daTag_Hint_c::create() {
     s32 uVar2 = getSwbit();
     switch (getType()) {
     case 1:
-        if (dComIfGs_isEventBit(0x404) && uVar2 != 0xff) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0404) && uVar2 != 0xff) {
             dComIfGs_onSwitch(uVar2, fopAcM_GetRoomNo(this));
         }
         break;

@@ -2593,7 +2593,7 @@ void fopMsgM_msgDataProc_c::getRubyString(char* param_1, char* param_2, char* pa
 /* 80035D28-80035E40       .text tag_len_kaisen_game__21fopMsgM_msgDataProc_cFPiPfPiPiPi */
 void fopMsgM_msgDataProc_c::tag_len_kaisen_game(int* param_1, f32* param_2, int* param_3, int* param_4, int* param_5) {
     char buf[12];
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0xBEFF), false);
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF), false);
     strcat(buf, "");
 
     char* p1;
@@ -2751,7 +2751,7 @@ void fopMsgM_msgDataProc_c::tag_len_letter_game_max(int* param_1, f32* param_2, 
     /* Nonmatching */
 
     char buf[24];
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0x8AFF), false);
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF), false);
 
     char* p1;
     u8 *p2; 
@@ -2981,7 +2981,7 @@ void fopMsgM_msgDataProc_c::tag_len_point(int* param_1, f32* param_2, int* param
 
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x86FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
     if(num != 1) {
         strcat(buf, " points");
@@ -3053,8 +3053,8 @@ void fopMsgM_msgDataProc_c::tag_len_rev_pendant(int* param_1, f32* param_2, int*
 
     char buf[28];
 
-    int num = dComIfGs_getEventReg(0xC0FF);
-    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(0xC0FF), false);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
+    fopMsgM_int_to_char(buf, dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF), false);
     if(num != 1) {
         strcat(buf, "");
     }
@@ -3636,7 +3636,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
     /* Nonmatching */
     char buf[12];
 
-    int num = dComIfGs_getEventReg(0xBEFF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
     fopMsgM_int_to_char(buf, num, false);
 
     char* p1 = buf;
@@ -3668,7 +3668,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
         field_0x20 = field_0x108[field_0x130] + field_0x14 + 0.5f;
     }
 
-    dComIfGs_getEventReg(0xBEFF);
+    dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
 
     char buf2[12];
     strcpy(buf2, "");
@@ -3860,7 +3860,7 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
     /* Nonmatching */
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x8AFF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF);
     fopMsgM_int_to_char(buf, num, false);
 
     char* p1 = buf;
@@ -4199,7 +4199,7 @@ void fopMsgM_msgDataProc_c::tag_point() {
     /* Nonmatching */
     char buf[24];
 
-    int num = dComIfGs_getEventReg(0x86FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
     if(num != 1) {
         strcat(buf, " points");
@@ -4293,7 +4293,7 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
     /* Nonmatching */
     char buf[16];
 
-    int num = dComIfGs_getEventReg(0xC0FF);
+    int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     fopMsgM_int_to_char(buf, num, false);
 
     char* p1 = buf;

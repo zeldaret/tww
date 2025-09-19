@@ -383,7 +383,7 @@ void daObjFerris::Act_c::rot_mng() {
         }
         break;
     case 1:
-        dComIfGs_onEventBit(0x2104);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2104);
         if (!(mFrameTimer & 3))
             mRotSpeed++;
 
