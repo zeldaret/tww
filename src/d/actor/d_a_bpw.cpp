@@ -15,9 +15,10 @@
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
-#include "m_Do/m_Do_graphic.h"
 #if VERSION == VERSION_DEMO
 #include "m_Do/m_Do_controller_pad.h"
+#else
+#include "m_Do/m_Do_graphic.h"
 #endif
 
 static bool GOUEN_FIRE_HIT;
@@ -297,7 +298,7 @@ void kantera_draw(bpw_class* i_this) {
 }
 
 /* 00000B64-00000C20       .text damage_ball_draw__FP9bpw_class */
-static BOOL damage_ball_draw(bpw_class* i_this) {
+static void damage_ball_draw(bpw_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, false);
     MtxScale(0.8f, 0.8f, 0.8f, true);
@@ -3749,7 +3750,7 @@ void action_b_fire_2_dousa(bpw_class* i_this) {
 }
 
 /* 0000BD18-0000BE50       .text damage_ball_execute__FP9bpw_class */
-static BOOL damage_ball_execute(bpw_class* i_this) {
+static void damage_ball_execute(bpw_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player;
     fopAc_ac_c* pdVar4;

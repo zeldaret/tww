@@ -2701,6 +2701,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
             }
         }
     }
+    return TRUE;
 }
 
 /* 0000A9C8-0000A9D0       .text daBst_IsDelete__FP9bst_class */
@@ -2794,8 +2795,9 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     if (res == 0) {
         return FALSE;
     }
+    J3DModelData* modelData;
     if (i_this->mBstPartType == bst_class::Type_HEAD_e) {
-        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_TAMA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bst", BST_BDL_TAMA);
         for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m0390); i++) {
             i_this->m0390[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
             if (i_this->m0390[i] == NULL) {
@@ -2843,7 +2845,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             return FALSE;
         }
     }
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Bst", set_za_bdl[i_this->mBstPartType]));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Bst", set_za_bdl[i_this->mBstPartType]));
     i_this->m02C8 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (i_this->m02C8 == NULL) {
         return FALSE;

@@ -1704,7 +1704,7 @@ static BOOL daBmd_Delete(bmd_class* i_this) {
 }
 
 /* 00005CF4-000064C0       .text useHeapInit__FP9bmd_class */
-s32 useHeapInit(bmd_class* i_this) {
+BOOL useHeapInit(bmd_class* i_this) {
     J3DModelData* pJVar2;
     mDoExt_McaMorf* morf;
     J3DAnmTevRegKey* pJVar5;
@@ -1861,7 +1861,7 @@ s32 useHeapInit(bmd_class* i_this) {
 /* 00006508-00006528       .text solidHeapCB__FP10fopAc_ac_c */
 static BOOL solidHeapCB(fopAc_ac_c* a_this) {
     bmd_class* i_this = (bmd_class*)a_this;
-    useHeapInit(i_this);
+    return useHeapInit(i_this);
 }
 
 /* 00006528-00006908       .text daBmd_Create__FP10fopAc_ac_c */

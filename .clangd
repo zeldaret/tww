@@ -6,6 +6,7 @@ CompileFlags:
     "-Wno-undefined-inline",
     "-Wno-multichar",
     "-Wno-c++11-extensions",
+    "-Wuninitialized",
     "-Wsometimes-uninitialized",
     "-Wlogical-op-parentheses",
     "-Wbitwise-op-parentheses",
@@ -13,12 +14,8 @@ CompileFlags:
     # "-Wunused-but-set-variable",
     # "-Wunused-parameter",
     "-Wunused-but-set-parameter",
+    "-Wself-assign",
   ]
----
-If:
-  PathMatch: .*\.inc
-CompileFlags:
-  Add: ["-Wno-return-type"]
 ---
 If:
   PathMatch: src/PowerPC_EABI_Support/MSL/MSL_C\+\+/.*\.h

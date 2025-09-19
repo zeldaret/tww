@@ -1486,7 +1486,6 @@ void fire_attack(btd_class* i_this) {
 
 /* 00004FE4-000053E4       .text up_fire_attack__FP9btd_class */
 void up_fire_attack(btd_class* i_this) {
-    bool bVar2;
     daPy_py_c* apdVar4;
     mDoExt_McaMorf* iVar5;
     cXyz local_2c;
@@ -1494,7 +1493,6 @@ void up_fire_attack(btd_class* i_this) {
 
     apdVar4 = daPy_getPlayerActorClass();
     iVar5 = get_anm(i_this);
-    bVar2 = true;
     i_this->m5E86 = 3;
     switch (i_this->mGohmaState) {
     case 0:
@@ -1559,7 +1557,6 @@ void up_fire_attack(btd_class* i_this) {
 
 /* 000053E4-000058A4       .text yoko_fire_attack__FP9btd_class */
 void yoko_fire_attack(btd_class* i_this) {
-    bool bVar2;
     daPy_py_c* apdVar4;
     mDoExt_McaMorf* iVar5;
     float fVar8;
@@ -1568,7 +1565,6 @@ void yoko_fire_attack(btd_class* i_this) {
 
     apdVar4 = daPy_getPlayerActorClass();
     iVar5 = get_anm(i_this);
-    bVar2 = true;
     i_this->m5E86 = 1;
     switch (i_this->mGohmaState) {
     case 0:

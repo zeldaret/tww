@@ -7636,7 +7636,6 @@ BOOL daPy_lk_c::procDamage() {
         uVar4 = (16384.0f * (1.0f - (dVar6 / (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() -
                                               daPy_HIO_damage_c0::m.field_0x28))));
         fVar1 = 1.0f - cM_scos(uVar4);
-        uVar4 = uVar4;
         fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
     }
     m3564 = m34D4 * fVar1;

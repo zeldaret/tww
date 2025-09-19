@@ -347,7 +347,6 @@ s32 ug_move(bmdfoot_class* i_this) {
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
 void attack_2(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    bool bVar1;
     J3DAnmTransform* pJVar2;
     cXyz local_3c;
     cXyz local_48;
@@ -402,7 +401,6 @@ void attack_2(bmdfoot_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         ug_move(i_this);
-        bVar1 = true;
         if (i_this->mAF4->isStop()) {
             pJVar2 = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK2);
             i_this->mAF4->setAnm(pJVar2, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);

@@ -686,7 +686,6 @@ void eat_attack(bwd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar1;
     s8 bVar2;
-    bool bVar3;
     s16 sVar6;
     int iVar8;
     s8 cVar10;
@@ -701,7 +700,6 @@ void eat_attack(bwd_class* i_this) {
         cLib_addCalcAngleS2(&actor->current.angle.y, sVar6, 10, 0x800);
     }
     i_this->m18D6 = 5;
-    bVar3 = true;
     i_this->m1BB6 = 1;
     bVar2 = false;
     switch (i_this->m18B0) {
@@ -1028,7 +1026,6 @@ void s_fly(bwd_class* i_this) {
 void end(bwd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     bool bVar2;
-    bool bVar3;
     mDoExt_McaMorf* pmVar7;
     JPABaseEmitter* pJVar8;
     s16 uVar9;
@@ -1099,7 +1096,6 @@ void end(bwd_class* i_this) {
             g_eff_off(i_this);
         }
         bVar2 = false;
-        bVar3 = true;
         i_this->m1BB6 = 1;
         if (i_this->m02C0->isStop()) {
 #if VERSION == VERSION_USA
@@ -1490,7 +1486,6 @@ void demo_camera(bwd_class* i_this) {
     camera_class* pcVar4;
     fopAc_ac_c* pfVar7;
     camera_class* pcVar11;
-    f32 dVar13;
     cXyz local_98;
     cXyz local_a4;
     cXyz local_b0;
@@ -1840,7 +1835,6 @@ void demo_camera(bwd_class* i_this) {
         local_a4.y = i_this->m3C28.y + i_this->m3C4C * cM_scos(i_this->m3C20 * 0x3000);
         local_a4.z = i_this->m3C28.z;
         local_b0.x = i_this->m3C34.x + i_this->m3C4C * cM_ssin(i_this->m3C20 * 0x3300);
-        dVar13 = local_b0.x;
         local_b0.y = i_this->m3C34.y + i_this->m3C4C * cM_scos(i_this->m3C20 * 0x3000);
         local_b0.z = i_this->m3C34.z;
         sVar3 = (i_this->m3C4C * cM_scos(i_this->m18AC * 0x1c00) * 7.5f);
