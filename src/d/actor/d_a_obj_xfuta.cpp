@@ -47,11 +47,15 @@ bool Act_c::create_heap() {
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
 
+    #if VERSION == VERSION_DEMO
+    return mdl_data != NULL ? TRUE : FALSE;
+    #else
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL) {
         ret = TRUE;
     }
     return ret;
+    #endif
 }
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */
