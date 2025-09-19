@@ -1385,7 +1385,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_demo_kmm"),
     ActorRel(Matching,    "d_a_door10"),
     ActorRel(Matching,    "d_a_dr"),
-    ActorRel(Equivalent,  "d_a_dr2"),
+    ActorRel(MatchingFor("D44J01"),  "d_a_dr2"),
     ActorRel(Matching,    "d_a_ep"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_floor"),
     ActorRel(Matching,    "d_a_grass"),

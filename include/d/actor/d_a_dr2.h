@@ -11,9 +11,6 @@ class mDoExt_brkAnm;
 class btd_class;
 
 struct iwa_hahen_s {
-    iwa_hahen_s() {}
-    ~iwa_hahen_s() {}
-
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ bool unk_04;
     /* 0x08 */ cXyz unk_08;
