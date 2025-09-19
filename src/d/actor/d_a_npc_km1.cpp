@@ -503,7 +503,7 @@ void daNpc_Km1_c::privateCut() {
 
 /* 00001144-00001164       .text endEvent__11daNpc_Km1_cFv */
 void daNpc_Km1_c::endEvent() {
-    dComIfGp_event_onEventFlag(8);
+    dComIfGp_event_reset();
     field_0x7CB = 0xFF;
 
 }

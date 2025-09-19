@@ -200,7 +200,7 @@ bool daObjVmc::Act_c::_delete() {
     dComIfG_Bgsp()->Release(mpBgBase);
     if (mHasTreeBg == 1)
         dComIfG_Bgsp()->Release(mpBgTree);
-    mSmoke.end();
+    mSmoke.remove();
     dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }

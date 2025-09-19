@@ -1460,7 +1460,7 @@ BOOL daPy_lk_c::procCutTurn() {
 
     if (frameCtrl.getFrame() > m35A0) {
         m32F0.end();
-        mSmokeEcallBack.end();
+        mSmokeEcallBack.remove();
     }
     setSpecialBattle(1);
     if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PARRY_e) {

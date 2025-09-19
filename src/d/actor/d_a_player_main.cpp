@@ -5888,7 +5888,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m33A8.end();
     m32E4.end();
     m32F0.end();
-    mSmokeEcallBack.end();
+    mSmokeEcallBack.remove();
     
     if (!checkGrabWear()) {
         m35D8 = 0.0f;
@@ -10132,9 +10132,9 @@ void daPy_lk_c::setCollision() {
         mAtCyl.ResetAtHit();
         mAtCyl.OffAtSetBit();
         offNoResetFlg0(daPyFlg0_CUT_AT_FLG);
-        m331C.end();
-        m332C.end();
-        m333C.end();
+        m331C.remove();
+        m332C.remove();
+        m333C.remove();
     }
     if (fanWindCrashEffectDraw()) {
         f32 fVar3 = mpYbafo00Btk->getFrame() + 1.0f;
@@ -11813,7 +11813,7 @@ BOOL daPy_lk_c::playerDelete() {
     mFanSwingCb.deleteCallBack();
     m338C.end();
     m33A8.end();
-    m3280.end();
+    m3280.remove();
     m334C.end();
     m336C.end();
     mSwimTailEcallBack[0].remove();

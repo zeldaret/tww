@@ -65,12 +65,10 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 jnt_n
     J3DSys::mParentS.z = transformInfo->mScale.z;
 }
 
-static void dummy1() {
+static void dummy1(J3DJoint* joint, J3DAnmTransform* anmTransform) {
     // Fix the weak function order of J3DAnmTransform::getTransform.
     // There was most likely an unused function here that got stripped out.
     j3dSys.setCurrentMtxCalc(NULL);
-    J3DJoint* joint;
-    J3DAnmTransform* anmTransform;
     anmTransform->getTransform(0, &joint->getTransformInfo());
 }
 

@@ -220,7 +220,7 @@ bool daObjRcloud_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     J3DModelData* modelData = mpModel->getModelData();
-    mBtkAnm.entry(modelData, mBtkAnm.getFrame());
+    mBtkAnm.entry(modelData);
     mpModel->calc();
     mpModel->calcMaterial();
     setTexMtx();

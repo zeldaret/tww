@@ -160,7 +160,7 @@ void esa_1_move(esa_class* i_this) {
                 i_this->mTimer[0] = 10000;
             }
 
-            i_this->field_0x2A4.end();
+            i_this->field_0x2A4.remove();
             i_this->current.pos.y = daSea_calcWave(i_this->current.pos.x, i_this->current.pos.z);
 
             if(i_this->mTimer[0] == 0) {
@@ -219,7 +219,7 @@ static BOOL daEsa_IsDelete(esa_class* i_this) {
 
 /* 800E89C0-800E89E8       .text daEsa_Delete__FP9esa_class */
 static BOOL daEsa_Delete(esa_class* i_this) {
-    i_this->field_0x2A4.end();
+    i_this->field_0x2A4.remove();
 
     return true;
 }

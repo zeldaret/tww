@@ -125,7 +125,7 @@ void iwa_draw(dr2_class* i_this) {
         mDoExt_modelUpdateDL(i_this->unk_418);
         if (i_this->unk_424 != 0) {
             J3DModelData* modelData = i_this->unk_41C->getModelData();
-            i_this->unk_420->entry(modelData, i_this->unk_420->getFrame());
+            i_this->unk_420->entry(modelData);
             g_env_light.setLightTevColorType(i_this->unk_41C, &i_this->actor.tevStr);
             mDoExt_modelUpdateDL(i_this->unk_41C);
         }
@@ -160,14 +160,14 @@ void yuka_draw(dr2_class* i_this) {
     if (!i_this->unk_43C) {
         g_env_light.setLightTevColorType(i_this->unk_428, &i_this->actor.tevStr);
         modelData = i_this->unk_428->getModelData();
-        i_this->unk_430->entry(modelData, i_this->unk_430->getFrame());
+        i_this->unk_430->entry(modelData);
         mDoExt_modelUpdateDL(i_this->unk_428);
     } else {
         g_env_light.setLightTevColorType(i_this->unk_42C, &i_this->actor.tevStr);
         modelData = i_this->unk_42C->getModelData();
-        i_this->unk_434->entry(modelData, i_this->unk_434->getFrame());
+        i_this->unk_434->entry(modelData);
         modelData = i_this->unk_42C->getModelData();
-        i_this->unk_438->entry(modelData, i_this->unk_438->getFrame());
+        i_this->unk_438->entry(modelData);
         mDoExt_modelUpdateDL(i_this->unk_42C);
     }
 }

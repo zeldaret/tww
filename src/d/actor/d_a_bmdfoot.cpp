@@ -102,7 +102,7 @@ void housi_off(bmdfoot_class* i_this) {
         }
     }
     if (i_this->m4B0.getEmitter() != NULL) {
-        i_this->m4B0.end();
+        i_this->m4B0.remove();
     }
 }
 
@@ -329,7 +329,7 @@ s32 ug_move(bmdfoot_class* i_this) {
         if ((fVar7 < 300.0f) || (i_this->mBC0 > REG14_F(15) + 3000.0f)) {
             i_this->mBA8 = 10;
             if (i_this->m4B0.getEmitter() != NULL) {
-                i_this->m4B0.end();
+                i_this->m4B0.remove();
             }
             uVar4 = 1;
         }
@@ -695,11 +695,11 @@ static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
     mDoAud_seDeleteObject(&i_this->mAE8);
     mDoAud_seDeleteObject(&i_this->mBAC);
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m41C); i++) {
-        i_this->m41C[i].end();
+        i_this->m41C[i].remove();
     }
-    i_this->m458[0].end();
-    i_this->m458[1].end();
-    i_this->m4B0.end();
+    i_this->m458[0].remove();
+    i_this->m458[1].remove();
+    i_this->m4B0.remove();
     boss = NULL;
     return TRUE;
 }

@@ -819,7 +819,7 @@ static BOOL daBoko_IsDelete(daBoko_c* i_this) {
 /* 00002A2C-00002AA4       .text bokoDelete__8daBoko_cFv */
 BOOL daBoko_c::bokoDelete() {
     mDoAud_seDeleteObject(&m2D0);
-    mParticleCallBack.end();
+    mParticleCallBack.remove();
     dKy_plight_cut(&mLight);
     dComIfG_resDelete(&mPhase, m_arc_name[fopAcM_GetParam(this)]);
     return TRUE;

@@ -654,7 +654,7 @@ void daPy_lk_c::setWaterRipple() {
 
         JPABaseEmitter* emitter = m3280.getEmitter();
         if (emitter != NULL && ((emitter->mGlobalParticleScale.x < 0.8f && checkNoResetFlg0(daPyFlg0_UNK80)) || (emitter->mGlobalParticleScale.x > 0.8f && !checkNoResetFlg0(daPyFlg0_UNK80)))) {
-            m3280.end();
+            m3280.remove();
 
             emitter = dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, NULL, 0xFF, &m3280);
         }
@@ -667,7 +667,7 @@ void daPy_lk_c::setWaterRipple() {
             }
         }
     } else if (m3280.getEmitter() != NULL) {
-        m3280.end();
+        m3280.remove();
     }
 
     if (checkModeFlg(ModeFlg_SWIM)) {

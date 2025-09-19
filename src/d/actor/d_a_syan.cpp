@@ -187,7 +187,7 @@ static BOOL daSyan_IsDelete(syan_class* i_this) {
 static BOOL daSyan_Delete(syan_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Syan");
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->emtrCallBack); i++)
-        i_this->emtrCallBack[i].end();
+        i_this->emtrCallBack[i].remove();
     return TRUE;
 }
 

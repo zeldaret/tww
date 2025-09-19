@@ -94,8 +94,9 @@ struct bpw_class {
     /* 0x3FC */ fpc_ProcID m3FC;
     /* 0x400 */ fpc_ProcID m400;
     /* 0x404 */ fpc_ProcID m404;
+    #if VERSION > VERSION_DEMO
     /* 0x408 */ s16 m408;
-    /* 0x40A */ u8 m40A[0x40C - 0x40A];
+    #endif
     /* 0x40C */ cXyz m40C;
     /* 0x418 */ cXyz m418;
     /* 0x424 */ cXyz m424;
@@ -132,13 +133,29 @@ struct bpw_class {
     /* 0x4AC */ int mChildPoeIds[15];
     /* 0x4E8 */ u32 m4E8;
     /* 0x4EC */ LIGHT_INFLUENCE m4EC;
+    #if VERSION == VERSION_DEMO
+    /* 0x508 */ JPABaseEmitter* m508_demo;
+    /* 0x50C */ JPABaseEmitter* m50C_demo;
+    /* 0x510 */ JPABaseEmitter* m510_demo;
+    #endif
     /* 0x50C */ dPa_smokeEcallBack m50C;
+    #if VERSION == VERSION_DEMO
+    /* 0x534 */ JPABaseEmitter* m534_demo;
+    /* 0x538 */ JPABaseEmitter* m538_demo;
+    /* 0x53C */ JPABaseEmitter* m53C_demo;
+    /* 0x540 */ JPABaseEmitter* m540_demo;
+    #else
     /* 0x52C */ dPa_followEcallBack m52C;
     /* 0x540 */ dPa_followEcallBack m540;
+    #endif
     /* 0x554 */ dPa_followEcallBack m554;
     /* 0x568 */ dPa_followEcallBack mFire1Dousa_Pa_followEcallBack;
     /* 0x57C */ dPa_followEcallBack mFire1Dousa_Pa_followEcallBack2;
     /* 0x590 */ dPa_followEcallBack m590;
+    #if VERSION == VERSION_DEMO
+    /* 0x594 */ JPABaseEmitter* m594_demo;
+    /* 0x598 */ JPABaseEmitter* m598_demo;
+    #endif
     /* 0x5A4 */ dPa_followEcallBack mFireDousa2_Pa_followEcallBack;
     /* 0x5B8 */ dPa_followEcallBack mFireDousa2_Pa_followEcallBack2;
     /* 0x5CC */ dPa_followEcallBack m5CC;

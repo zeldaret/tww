@@ -186,8 +186,7 @@ public:
 
     int init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool);
 
-    // TODO
-    void entry(J3DModel* i_model) {}
+    void entry(J3DModel* i_model) { entry(i_model, getFrame()); }
 
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;

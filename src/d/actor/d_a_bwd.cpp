@@ -405,15 +405,18 @@ void start(bwd_class* i_this) {
         if (i_this->m18AC == 0x28f) {
             i_this->m1865 = 1;
         }
-        if ((i_this->m18AC >= 600) && (i_this->m394C = 1, i_this->m18AC == 0x294)) {
-            i_this->m18AE = 0xB;
-            i_this->m18B0 = 0;
-            actor->current.pos.x = 0.0f;
-            actor->current.pos.y = ((l_HIO.m28 + -2000.0f) - 200.0f) + REG0_F(0xb);
-            actor->current.pos.z = 0.0f;
-            i_this->m18CC[1] = 0x28;
-            g_eff_on(i_this);
-            dComIfGp_getVibration().StopQuake(-1);
+        if (i_this->m18AC >= 600) {
+            i_this->m394C = 1;
+            if (i_this->m18AC == 0x294) {
+                i_this->m18AE = 0xB;
+                i_this->m18B0 = 0;
+                actor->current.pos.x = 0.0f;
+                actor->current.pos.y = ((l_HIO.m28 + -2000.0f) - 200.0f) + REG0_F(0xb);
+                actor->current.pos.z = 0.0f;
+                i_this->m18CC[1] = 0x28;
+                g_eff_on(i_this);
+                dComIfGp_getVibration().StopQuake(-1);
+            }
         }
         break;
     }
@@ -715,7 +718,7 @@ void eat_attack(bwd_class* i_this) {
         if (fVar1 >= 27.0f) {
             if (((int)fVar1 == 0x1b) && (i_this->m3AE6 == 0)) {
                 i_this->m3AE6 = REG0_S(4) + 10;
-                i_this->m3978[3].end();
+                i_this->m3978[3].remove();
                 i_this->m3954.x = actor->current.pos.x;
                 i_this->m3954.z = actor->current.pos.z;
                 dComIfGp_particle_setToon(
@@ -743,7 +746,7 @@ void eat_attack(bwd_class* i_this) {
             dComIfGp_particle_set(dPa_name::ID_SCENE_8250, &i_this->m3954, &actor->shape_angle);
             if (i_this->m3AE8 == 0) {
                 i_this->m3AE8 = 0x3c;
-                i_this->m3978[4].end();
+                i_this->m3978[4].remove();
                 i_this->m3954.x = actor->current.pos.x;
                 i_this->m3954.z = actor->current.pos.z;
                 dComIfGp_particle_setToon(
@@ -788,7 +791,7 @@ void eat_attack(bwd_class* i_this) {
                 i_this->m3C20 = 0;
                 if (i_this->m3AEA == 0) {
                     i_this->m3AEA = 0x14;
-                    i_this->m3978[5].end();
+                    i_this->m3978[5].remove();
                     i_this->m3954.x = actor->current.pos.x;
                     i_this->m3954.z = actor->current.pos.z;
                     dComIfGp_particle_setToon(dPa_name::ID_SCENE_A24A, &i_this->m3954, NULL, NULL, eff_col.a, &i_this->m3978[5], (s8)actor->current.roomNo);
@@ -1065,7 +1068,7 @@ void end(bwd_class* i_this) {
         fpcM_Search(ko_delete_sub, i_this);
         if (i_this->m3AEC == 0) {
             i_this->m3AEC = 0x28;
-            i_this->m3978[6].end();
+            i_this->m3978[6].remove();
             i_this->m3954.x = actor->current.pos.x;
             i_this->m3954.z = actor->current.pos.z;
             dComIfGp_particle_setToon(
@@ -1824,7 +1827,7 @@ void demo_camera(bwd_class* i_this) {
             break;
         }
         i_this->m3C1E = 0x96;
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         i_this->m3C1E = 0;
         pcVar11->mCamera.Reset(i_this->m3C34, i_this->m3C28);
         pcVar11->mCamera.Start();
@@ -2167,7 +2170,7 @@ static BOOL daBwd_Execute(bwd_class* i_this) {
                 if (i_this->m17E6[iVar19] >= 0x3b) {
                     i_this->m17E4[iVar8] = 0;
                     for (s32 j = 0; j < 3; j++) {
-                        i_this->m3B54[j + iVar21].end();
+                        i_this->m3B54[j + iVar21].remove();
                     }
                 }
                 break;
@@ -2207,11 +2210,11 @@ static BOOL daBwd_Execute(bwd_class* i_this) {
             if (sVar2 != 0) {
                 if (sVar2 == 1) {
                     i_this->m3960++;
-                    i_this->m3AF4.end();
+                    i_this->m3AF4.remove();
                     dComIfGp_particle_set(dPa_name::ID_SCENE_824D, &i_this->m3954, &actor->shape_angle, NULL, 0xff, &i_this->m3AF4, (s8)actor->current.roomNo);
                 } else if (sVar2 < 0) {
                     i_this->m3960 = 0;
-                    i_this->m3AF4.end();
+                    i_this->m3AF4.remove();
                 } else {
                     mDoAud_seStart(JA_SE_CM_BWD_SAND_MOVE, &i_this->m3954, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 }
@@ -2220,9 +2223,9 @@ static BOOL daBwd_Execute(bwd_class* i_this) {
                 if (i_this->m3AE0[j] != 0) {
                     i_this->m3AE0[j]--;
                     if (i_this->m3AE0[j] == 0) {
-                        i_this->m3978[j].end();
+                        i_this->m3978[j].remove();
                         if (j < 2) {
-                            i_this->m3AB8[j].end();
+                            i_this->m3AB8[j].remove();
                         }
                     }
                 }
@@ -2302,14 +2305,14 @@ static BOOL daBwd_Delete(bwd_class* i_this) {
     mDoAud_seDeleteObject(&center_pos);
     mDoAud_seDeleteObject(&i_this->m3954);
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m3978); i++) {
-        i_this->m3978[i].end();
+        i_this->m3978[i].remove();
         if (i < 2) {
-            i_this->m3AB8[i].end();
+            i_this->m3AB8[i].remove();
         }
     }
-    i_this->m3AF4.end();
+    i_this->m3AF4.remove();
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m3B54); i++) {
-        i_this->m3B54[i].end();
+        i_this->m3B54[i].remove();
     }
     return TRUE;
 }
@@ -2350,10 +2353,10 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0x11020203
     );
     i_this->m02C0 = pmVar1;
-    if ((i_this->m02C0 == NULL) || (pJVar4 = i_this->m02C0->getModel(), pJVar4 == NULL)) {
+    if ((i_this->m02C0 == NULL) || (i_this->m02C0->getModel() == NULL)) {
         return FALSE;
     }
-    pJVar4 = mDoExt_J3DModel__create(pJVar4->getModelData(), 0, 0x11020203);
+    pJVar4 = mDoExt_J3DModel__create(i_this->m02C0->getModel()->getModelData(), 0, 0x11020203);
     i_this->m02CC = pJVar4;
     if (i_this->m02CC == NULL) {
         return FALSE;

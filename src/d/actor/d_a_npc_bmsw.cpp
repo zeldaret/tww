@@ -997,7 +997,7 @@ BOOL daNpc_Bmsw_c::shiwake_game_action(void*) {
                 dComIfGp_evmng_cutEnd(staff_id);
 
                 if (dComIfGp_evmng_endCheck(field_0x9D8)) {
-                    dComIfGp_event_onEventFlag(8);
+                    dComIfGp_event_reset();
                     s16 rupees = dComIfGp_getMiniGameRupee();
                     fpc_ProcID msg = daNpc_Bmsw_getGameEndMsg(rupees);
                     field_0x9C0 = msg;

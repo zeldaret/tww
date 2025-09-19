@@ -417,7 +417,7 @@ void dDoor_smoke_c::smokeProc(dDoor_info_c* door) {
 
 /* 8006C41C-8006C448       .text smokeEnd__13dDoor_smoke_cFv */
 void dDoor_smoke_c::smokeEnd() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
 }
 
 /* 8006C448-8006C478       .text keyResLoad__12dDoor_key2_cFv */

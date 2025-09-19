@@ -496,7 +496,7 @@ bool daObj_Canon_c::_execute() {
 
     if(field_0x470.getEmitter()) {
         if(cLib_calcTimer(&field_0x484) == 0) {
-            field_0x470.end();
+            field_0x470.remove();
         }
     }
 
@@ -604,7 +604,7 @@ cPhs_State daObj_Canon_c::_create() {
 /* 00001BEC-00001C50       .text _delete__13daObj_Canon_cFv */
 bool daObj_Canon_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    field_0x470.end();
+    field_0x470.remove();
 #if VERSION > VERSION_DEMO
     mDoAud_seDeleteObject(&field_0x450);
 #endif

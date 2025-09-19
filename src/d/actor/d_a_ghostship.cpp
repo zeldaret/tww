@@ -451,7 +451,7 @@ bool daGhostship_c::_draw() {
             modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = alpha;
         }
 
-        mBtk.entry(modelData, mBtk.getFrame());
+        mBtk.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
         mBtk.remove(modelData);
 

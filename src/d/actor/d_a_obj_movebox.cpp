@@ -1534,14 +1534,14 @@ namespace daObjMovebox {
     /* 00002A14-00002A74       .text eff_smoke_slip_end__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_smoke_slip_end() {
         for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
-            mSmokeCbs[i].end();
+            mSmokeCbs[i].remove();
         }
     }
     
     /* 00002A74-00002AD4       .text eff_smoke_slip_remove__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_smoke_slip_remove() {
         for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
-            mSmokeCbs[i].end();
+            mSmokeCbs[i].remove();
         }
     }
     

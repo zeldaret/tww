@@ -236,7 +236,7 @@ static BOOL daKi_Draw(ki_class* i_this) {
         dComIfGd_setList();
     } else {
         J3DModelData* pModelData = pModel->getModelData();
-        i_this->m920->entry(pModelData, i_this->m920->getFrame());
+        i_this->m920->entry(pModelData);
         
         dComIfGd_setListMaskOff();
         i_this->mpMorf->entryDL();

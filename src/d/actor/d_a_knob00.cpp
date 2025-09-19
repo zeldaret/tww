@@ -807,7 +807,7 @@ BOOL daKnob00_c::draw() {
 
     g_env_light.setLightTevColorType(mpModel2, &tevStr);
     J3DModelData* modelData = mpModel->getModelData();
-    mBckAnm.entry(modelData, mBckAnm.getFrame());
+    mBckAnm.entry(modelData);
     mpModel->calc();
     mpModel2->setBaseTRMtx(mpModel->getAnmMtx(m_jnt));
     mDoExt_modelUpdateDL(mpModel2);

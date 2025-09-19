@@ -398,7 +398,7 @@ void eat(bmd_class* i_this) {
             i_this->m302 = -1;
             i_this->m308[0] = 0x3c;
             i_this->mB74 = 0x96;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             i_this->m940 = -0x4000;
             i_this->m332 = 4;
             i_this->m314 = 0;
@@ -840,7 +840,6 @@ void mk_voice_set(bmd_class* i_this, u32 param_2) {
 /* 00002F40-0000330C       .text mk_move__FP9bmd_class */
 void mk_move(bmd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    int iVar1;
     JPABaseEmitter* pJVar3;
     cXyz local_28;
 
@@ -1150,8 +1149,6 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 void demo_camera(bmd_class* i_this) {
     /* Nonmatching - switch case, regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    s16 sVar2;
-    int iVar6;
     cXyz local_44;
     cXyz local_50;
     cXyz local_a4;
@@ -1160,6 +1157,7 @@ void demo_camera(bmd_class* i_this) {
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+
     switch (i_this->mB74) {
     case 0:
         break;
@@ -1169,7 +1167,7 @@ void demo_camera(bmd_class* i_this) {
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             i_this->mB76 = 0;
             i_this->mB78 = 0;
-            break;
+            return;
         }
         i_this->mB74++;
         camera_class* camera2 = dComIfGp_getCamera(0);
@@ -1259,7 +1257,7 @@ void demo_camera(bmd_class* i_this) {
             player->voiceStart(0x2e);
         }
         if (i_this->mB78 != 0x1e) {
-            return;
+            break;
         }
         i_this->mB78 = 0;
         i_this->mB74++;
@@ -1269,6 +1267,7 @@ void demo_camera(bmd_class* i_this) {
         i_this->mB88 = actor->eyePos;
         i_this->mB88.y += REG0_F(11) + 30.0f;
         i_this->m2DC = 4;
+        // Fall-through
     case 9:
         cLib_addCalc2(&i_this->mB88.y, actor->eyePos.y + 30.0f, 0.2f, REG0_F(4) + 5.0f);
         if (i_this->mB78 == 0x1e) {
@@ -1298,12 +1297,13 @@ void demo_camera(bmd_class* i_this) {
             player->voiceStart(0x1d);
         }
         if (i_this->mB78 != 0x19) {
-            return;
+            break;
         }
         i_this->mB78 = 0;
         i_this->mB74++;
         i_this->mB88 = actor->eyePos;
         i_this->mB88.y += REG0_F(11) + 30.0f;
+        // Fall-through
     case 11:
         i_this->mB7C.x = -139.0f;
         i_this->mB7C.y = 125.0f;
@@ -1399,7 +1399,7 @@ void demo_camera(bmd_class* i_this) {
         }
         if (i_this->mB76 == 0x24e) {
             i_this->mB74 = 0x96;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             i_this->m332 = 7;
             i_this->mMode = 0;
             i_this->m302 = -1;
@@ -1414,21 +1414,24 @@ void demo_camera(bmd_class* i_this) {
             g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
         }
         break;
-    case 100:
+    case 100: {
         if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(actor, dEvtFlag_STAFF_ALL_e, 0xFFFF, 0);
             actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             i_this->mB76 = 0;
             i_this->mB78 = 0;
+            break;
         }
-        i_this->mB74 = sVar2 + 1;
-        camera = dComIfGp_getCamera(0);
-        i_this->mB7C = camera->mLookat.mEye;
-        i_this->mB88 = camera->mLookat.mCenter;
+        i_this->mB74++;
+        camera_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->mLookat.mEye;
+        i_this->mB88 = camera2->mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;
         player->changeOriginalDemo();
+        // Fall-through
+    }
     case 101:
         if ((i_this->mB78 >= 0x140) && (cLib_addCalc2(&i_this->mB9C, REG0_F(8) + 85.0f, 0.2f, 1.0f), i_this->mB78 == 0x140)) {
             i_this->m2DC = 5;
@@ -1485,9 +1488,10 @@ void demo_camera(bmd_class* i_this) {
         // Fall-through
     }
     case 103: {
-        iVar6 = (int)(i_this->mBA0 * 22384.0f);
-        cLib_addCalcAngleS2(&i_this->mB96, actor->shape_angle.y + REG0_S(2) + 0x5770, 0x10, iVar6);
-        cLib_addCalcAngleS2(&i_this->mB94, -5000, 0x10, (int)(i_this->mBA0 * 3000.0f));
+        s16 iVar6 = i_this->mBA0 * 22384.0f;
+        cLib_addCalcAngleS2(&i_this->mB96, (s16)(actor->shape_angle.y + REG0_S(2)) + 0x5770, 0x10, iVar6);
+        s16 r5 = i_this->mBA0 * 3000.0f;
+        cLib_addCalcAngleS2(&i_this->mB94, -5000, 0x10, r5);
         cLib_addCalc2(&i_this->mBA4, 500.0f, 0.0625f, i_this->mBA0 * 1000.0f);
         cLib_addCalc2(&i_this->mBA0, REG0_F(10) + 0.0048f, 0.1f, 4.8e-05f);
         cMtx_YrotS(*calc_mtx, (int)i_this->mB96);
@@ -1498,10 +1502,10 @@ void demo_camera(bmd_class* i_this) {
         MtxPosition(&local_44, &local_50);
         i_this->mB7C = actor->current.pos + local_50;
         i_this->mB88 = actor->current.pos;
-        i_this->mB88.y = i_this->mB88.y + REG0_S(3) + 100.0f;
+        i_this->mB88.y += REG0_S(3) + 100.0f;
         if (i_this->mB76 == 800) {
             i_this->mB74 = 0x96;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             i_this->m314 = 0;
             player->cancelOriginalDemo();
         }
@@ -1515,14 +1519,16 @@ void demo_camera(bmd_class* i_this) {
         break;
     }
     if (i_this->mB74 != 0) {
-        local_b0.x = i_this->mB7C.x + i_this->mBA8 * cM_ssin(i_this->mB78 * 0x3300);
-        local_b0.y = i_this->mB7C.y + i_this->mBA8 * cM_scos(i_this->mB78 * 0x3000);
+        f32 f1 = i_this->mBA8 * cM_ssin(i_this->mB78 * 0x3300);
+        f32 f2 = i_this->mBA8 * cM_scos(i_this->mB78 * 0x3000);
+        local_b0.x = i_this->mB7C.x + f1;
+        local_b0.y = i_this->mB7C.y + f2;
         local_b0.z = i_this->mB7C.z;
-        local_a4.x = i_this->mB88.x + i_this->mBA8 * cM_ssin(i_this->mB78 * 0x3300);
-        local_a4.y = i_this->mB88.y + i_this->mBA8 * cM_scos(i_this->mB78 * 0x3000);
+        local_a4.x = i_this->mB88.x + f1;
+        local_a4.y = i_this->mB88.y + f2;
         local_a4.z = i_this->mB88.z;
-        iVar6 = (int)(i_this->mBA8 * cM_scos(i_this->m2FE * 0x1c00) * 7.5f);
-        camera->mCamera.Set(local_a4, local_b0, (s16)iVar6, i_this->mB9C);
+        s16 iVar6 = i_this->mBA8 * cM_scos(i_this->m2FE * 0x1c00) * 7.5f;
+        camera->mCamera.Set(local_a4, local_b0, iVar6, i_this->mB9C);
         cLib_addCalc0(&i_this->mBA8, 1.0f, (REG0_F(16) + 2.0f));
         JUTReport(0x1e, 0x1ae, "K MAIN COUNT  %d", (int)i_this->mB76);
         JUTReport(0x19a, 0x1ae, "K SUB  COUNT  %d", (int)i_this->mB78);
@@ -1555,10 +1561,8 @@ void bmd_kankyo(bmd_class* i_this) {
 
 /* 000055EC-00005BF4       .text daBmd_Execute__FP9bmd_class */
 static BOOL daBmd_Execute(bmd_class* i_this) {
-    /* Nonmatching - "cMtx_YrotM" */
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar2;
-    f32 in_f4;
     cXyz local_88;
 
     #if VERSION > VERSION_DEMO
@@ -1600,7 +1604,7 @@ static BOOL daBmd_Execute(bmd_class* i_this) {
     i_this->pm_bgw[5]->Move();
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m944); i++) {
         MTXCopy(mDoMtx_stack_c::now, *calc_mtx);
-        cMtx_YrotM(*calc_mtx, 13107.2f + REG0_F(11));
+        cMtx_YrotM(*calc_mtx, (i * 13107.2f) + REG0_F(11));
         MtxTrans((REG0_F(4) - 200.0f), 0.0f, 0.0f, true);
         cMtx_ZrotM(*calc_mtx, i_this->m940);
         MtxTrans(-(REG0_F(4) - 200.0f), (15.0f + REG0_F(5)), REG0_F(6), true);
@@ -1646,7 +1650,7 @@ static BOOL daBmd_Execute(bmd_class* i_this) {
     i_this->mWindInfluence.mDir.x = 0.0f;
     i_this->mWindInfluence.mDir.y = 1.0f;
     i_this->mWindInfluence.mDir.z = 0.0f;
-    cLib_addCalc0(&i_this->mBD8, 50.0f, in_f4);
+    cLib_addCalc0(&i_this->mBD8, 1.0f, 50.0f);
     i_this->mWindInfluence.mRadius = 2000.0f - i_this->mBD8;
     if (i_this->mBD8 > 1.0f) {
         i_this->mWindInfluence.mStrength = 1.0f;
@@ -1670,7 +1674,7 @@ static BOOL daBmd_Execute(bmd_class* i_this) {
     }
     mDoMtx_stack_c::transS(0.0f, 0.1f, 0.0f);
     i_this->m2D0->setBaseTRMtx(mDoMtx_stack_c::get());
-    i_this->m2D4->getFrameCtrl()->setFrame(i_this->m2D8);
+    i_this->m2D4->setFrame(i_this->m2D8);
     return TRUE;
 }
 
@@ -1692,7 +1696,7 @@ static BOOL daBmd_Delete(bmd_class* i_this) {
         }
     }
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->mA90); i++) {
-        i_this->mA90[i].end();
+        i_this->mA90[i].remove();
     }
     dKyw_pntwind_cut(&i_this->mWindInfluence);
     mDoAud_seDeleteObject(&i_this->m2E0);

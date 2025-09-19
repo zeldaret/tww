@@ -1174,15 +1174,14 @@ static void head_damage(bst_class* i_this) {
             cLib_addCalc2(&bomb->current.pos.y, actor->current.pos.y + 90.0f + REG0_F(0xb), 1.0f, 30.0f);
             cLib_addCalc2(&bomb->current.pos.z, actor->current.pos.z, 1.0f, 30.0f);
         }
-        if (i_this->m10FC[0] == 0) {
-            anm_init(i_this, BST_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            i_this->mDamage++;
-            i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81E3, &actor->current.pos);
-            fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
-            i_this->m10FC[0] = 0x3c;
-        } else {
+        if (i_this->m10FC[0] != 0) {
             break;
         }
+        anm_init(i_this, BST_BCK_BOM_NOMI, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->mDamage++;
+        i_this->m2EE0[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_81E3, &actor->current.pos);
+        fopAcM_seStart(actor, JA_SE_CM_BST_MOUTH_CLOSE, 0);
+        i_this->m10FC[0] = 0x3c;
         // fallthrough
     }
     case 5:

@@ -2514,7 +2514,7 @@ BOOL daShip_c::procTalk() {
                     return procTurn_init();
                 }
                 mpHeadAnm->setPlaySpeed(-1.0f);
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 changeDemoEndProc();
                 return TRUE;
             }
@@ -2601,7 +2601,7 @@ BOOL daShip_c::procTurn() {
             if (m037A <= 0) {
                 camera->mCamera.Start();
                 camera->mCamera.Reset();
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 changeDemoEndProc();
                 m038E = 0;
                 onStateFlg(daSFLG_UNK100000_e);
@@ -2804,7 +2804,7 @@ BOOL daShip_c::procTactWarp() {
     daTornado_c* mpTornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
     if (mpTornado == NULL || fpcM_IsCreating(mTactWarpID)) {
         if (mTactWarpID == fpcM_ERROR_PROCESS_ID_e) {
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
             m1984.remove();
             m1998.remove();
             procPaddleMove_init();

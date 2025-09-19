@@ -2667,7 +2667,7 @@ inline void dComIfGp_endMiniGame(u16 i_gameType) {
     g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
-inline u8 dComIfGp_setMiniGameResult(u8 result) {
+inline void dComIfGp_setMiniGameResult(u8 result) {
     g_dComIfG_gameInfo.play.setMiniGameResult(result);
 }
 

@@ -404,9 +404,12 @@ void startdemo(btd_class* i_this) {
             i_this->m6E48 = 40.0f;
             hahen_set2(i_this);
         }
-        if (((i_this->m6E1A >= 0x46) && (i_this->m6E1A <= 0xC3)) && (i_this->m602E = 3, i_this->m6E1A >= 0x5A)) {
-            mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-            i_this->mKankyoState = 2;
+        if (((i_this->m6E1A >= 0x46) && (i_this->m6E1A <= 0xC3))) {
+            i_this->m602E = 3;
+            if (i_this->m6E1A >= 0x5A) {
+                mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                i_this->mKankyoState = 2;
+            }
         }
         if (i_this->m6E1A >= 0x46) {
             i_this->m602C = 3;
@@ -2122,7 +2125,7 @@ void demo_camera(btd_class* i_this) {
         i_this->m6E16 = 0;
         pcVar7->mCamera.Start();
         pcVar7->mCamera.SetTrimSize(0);
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
         break;
     }

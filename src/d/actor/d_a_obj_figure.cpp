@@ -614,7 +614,7 @@ BOOL daObjFigure_c::_draw() {
     if(mbDisplay) {
         if(mpBrkAnm) {
             J3DModelData* pModelData2 = mpModel->getModelData();
-            mpBrkAnm->entry(pModelData2, mpBrkAnm->getFrame());
+            mpBrkAnm->entry(pModelData2);
         }
 
         mBtpAnm1.entry(pModelData, 1);

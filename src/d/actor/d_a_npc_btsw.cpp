@@ -665,7 +665,7 @@ BOOL daNpc_Btsw_c::dummy_event_action(void*) {
         if (dComIfGp_evmng_endCheck(field_0x9C8)) {
             field_0x9C8 = -1;
             field_0x9C7 = 3;
-            dComIfGp_event_onEventFlag(8);
+            dComIfGp_event_reset();
 
             setAction(&daNpc_Btsw_c::wait_action, NULL);
         }
@@ -833,7 +833,7 @@ BOOL daNpc_Btsw_c::shiwake_game_action(void*) {
             } else if (dComIfG_getTimerPtr() == NULL) {
                 s32 staff_id = dComIfGp_evmng_getMyStaffId("Btsw");
                 dComIfGp_evmng_cutEnd(staff_id);
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
 
                 s16 rupees = dComIfGp_getMiniGameRupee();
                 field_0x9B0 = daNpc_Btsw_getGameEndMsg(rupees);
@@ -867,7 +867,7 @@ BOOL daNpc_Btsw_c::getdemo_action(void*) {
     if (mActionStatus == ACTION_STARTING) {
         mActionStatus++;
     } else if (mActionStatus != ACTION_ENDING && dComIfGp_evmng_endCheck("GETMOTHERLETTER")) {
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
 
         field_0x9C7 = 1;
         field_0x9B0 = 0x1A9C;

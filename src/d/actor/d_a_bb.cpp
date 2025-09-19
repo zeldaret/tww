@@ -2152,7 +2152,7 @@ void damage_check(bb_class* i_this) {
         dComIfGp_particle_setToon(dPa_name::ID_COMMON_0438, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, NULL, 
             fopAcM_GetRoomNo(a_this), &a_this->tevStr.mColorK0, &a_this->tevStr.mColorK0);
         
-        i_this->mParticleCallBack.end();
+        i_this->mParticleCallBack.remove();
 
         emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_0439, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, &i_this->mParticleCallBack, 
             fopAcM_GetRoomNo(a_this));
@@ -2514,7 +2514,7 @@ static BOOL daBb_Delete(bb_class* i_this) {
 #if VERSION == VERSION_DEMO
     l_bbHIO.removeHIO();
 #endif
-    i_this->mParticleCallBack.end();
+    i_this->mParticleCallBack.remove();
     enemy_fire_remove(&i_this->mEnemyFire);
 #if VERSION > VERSION_DEMO
     if (i_this->actor.heap != NULL) {

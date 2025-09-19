@@ -462,16 +462,14 @@ void daTbox_c::CreateInit() {
     mOpenAnm.setPlaySpeed(0.0f);
 
     if (checkOpen()) {
-        J3DFrameCtrl* frameCtrl = mOpenAnm.getFrameCtrl();
-        frameCtrl->setFrame(frameCtrl->getEnd());
+        mOpenAnm.setFrame(mOpenAnm.getEndFrame());
 
         setAction(&daTbox_c::actionWait);
 
         if (checkEnv()) {
             mInvisibleScrollVal = 2.0f;
 
-            frameCtrl = mpAppearRegAnm->getFrameCtrl();
-            frameCtrl->setFrame(frameCtrl->getEnd());
+            mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
         }
     }
     else {
@@ -490,8 +488,7 @@ void daTbox_c::CreateInit() {
 
                 mInvisibleScrollVal = 2.0f;
 
-                J3DFrameCtrl* frameCtrl = mpAppearRegAnm->getFrameCtrl();
-                frameCtrl->setFrame(frameCtrl->getEnd());
+                mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
             }
             else {
                 flagOn(daTboxFlg_UNK_04);
@@ -744,7 +741,7 @@ void daTbox_c::demoProcAppear() {
     }
 
     if (mAppearTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
-        mSmokeCB.end();
+        mSmokeCB.remove();
     }
 
     if (mAppearTimer != 0x00) {

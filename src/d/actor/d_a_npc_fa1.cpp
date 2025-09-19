@@ -906,7 +906,7 @@ void daNpc_Fa1_c::findPlayer() {
 
 /* 800FD050-800FD0F0       .text _delete__11daNpc_Fa1_cFv */
 BOOL daNpc_Fa1_c::_delete() {
-    mSparklePtclCallback.end();
+    mSparklePtclCallback.remove();
     if (isTypeBaba()) {
         dKy_efplight_cut(&mPointLight);
     }

@@ -1096,7 +1096,7 @@ bool daObjBarrel2::Act_c::_draw() {
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(m298, &tevStr);
         J3DModelData* mdl_data = m298->getModelData();
-        m29C->entry(mdl_data, m29C->getFrame());
+        m29C->entry(mdl_data);
         mDoExt_modelUpdateDL(m298);
     }
     return TRUE;

@@ -169,7 +169,7 @@ bool daArrow_Iceeff_c::_draw() {
     else {
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         J3DModelData* mdl_data = mpModel->getModelData();
-        mBck.entry(mdl_data, mBck.getFrame());
+        mBck.entry(mdl_data);
         if(field_0xA3C == 1) {
             mDoExt_modelUpdateDL(mpModel);
         }

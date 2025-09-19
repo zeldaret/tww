@@ -2972,7 +2972,7 @@ BOOL daNpc_Cb1_c::draw() {
         }
         else if(mpNutModel && isNut()) {
             J3DModelData* pModelData = mpNutModel->getModelData();
-            mNutBckAnim.entry(pModelData, mNutBckAnim.getFrame());
+            mNutBckAnim.entry(pModelData);
 
             g_env_light.setLightTevColorType(mpNutModel, &tevStr);
 

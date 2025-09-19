@@ -2079,7 +2079,7 @@ BOOL daNpc_Os_c::draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(pModel, &tevStr);
     
-    mBrkAnm.entry(pModelData, mBrkAnm.getFrame());
+    mBrkAnm.entry(pModelData);
     mpMorf->entryDL();
     mBrkAnm.remove(pModelData);
 

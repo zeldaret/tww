@@ -1244,7 +1244,7 @@ bool daObj_Ikada_c::_draw() {
 
     if (mType == 4) {
         J3DModelData* modelData = mpModel->getModelData();
-        mBckAnm.entry(modelData, mBckAnm.getFrame());
+        mBckAnm.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
         mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
     } else {

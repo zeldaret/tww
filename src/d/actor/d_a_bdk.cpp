@@ -434,7 +434,7 @@ void kamen_draw(bdk_class* i_this) {
     if (i_this->m8F8 <= 3) {
         g_env_light.setLightTevColorType(kamen_model, &actor->tevStr);
         i_this->bva->setFrame(kamen_pt[i_this->m8F8]);
-        i_this->bva->entry(kamen_model, i_this->bva->getFrame());
+        i_this->bva->entry(kamen_model);
         mDoExt_modelUpdateDL(kamen_model);
     }
 }
@@ -1791,7 +1791,7 @@ void start(bdk_class* i_this) {
         }
         if (i_this->m2EC[0] == (s16)(REG8_S(8) + 5)) {
             fopAcM_monsSeStart(actor, JA_SE_CV_DK_ENTER, 0);
-            i_this->m61B0.end();
+            i_this->m61B0.remove();
             for (s32 i = 0; i < 2; i++) {
                 JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8158, &actor->current.pos, &actor->shape_angle, NULL,
                 0xFF, NULL, (s8)fopAcM_GetRoomNo(actor),

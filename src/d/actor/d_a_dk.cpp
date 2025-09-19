@@ -306,7 +306,7 @@ static BOOL daDk_IsDelete(dk_class*) {
 /* 00000D10-00000D7C       .text daDk_Delete__FP8dk_class */
 static BOOL daDk_Delete(dk_class* a_this) {
     dComIfG_resDelete(&a_this->mPhs, "Dk");
-    a_this->field_0xACC.end();
+    a_this->field_0xACC.remove();
     mDoHIO_deleteChild(l_HIO.mNo);
     return TRUE;
 }

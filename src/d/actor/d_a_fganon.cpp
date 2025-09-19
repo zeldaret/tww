@@ -250,15 +250,14 @@ void shot(fganon_class* i_this) {
     cLib_addCalcAngleS2(&i_this->shape_angle.y, fopAcM_searchPlayerAngleY(actor), 10, 0x400);
     switch(i_this->mMode) {
         case 0: {
-            if (!i_this->m408) {
-                anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-                i_this->mMode++;
-                i_this->m3A4[0] = 40;
-                fopAcM_monsSeStart(actor, JA_SE_CV_PG_EBALL_MAKE_S, 0);
-                // Fall-through
-            } else {
+            if (i_this->m408) {
                 break;
             }
+            anm_init(i_this, FGANON_BCK_TAME1, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->mMode++;
+            i_this->m3A4[0] = 40;
+            fopAcM_monsSeStart(actor, JA_SE_CV_PG_EBALL_MAKE_S, 0);
+            // Fall-through
         }
         case 1: {
             if (i_this->m3A4[0] == 30) {
@@ -611,15 +610,14 @@ void shot2(fganon_class* i_this) {
         }
         case 2: {
             fopAcM_seStart(i_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
-            if (i_this->m3A4[0] == 0) {
-                anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                i_this->mMode++;
-                i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
-                i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
-            }
-            else {
+            if (i_this->m3A4[0] != 0) {
                 break;
             }
+            anm_init(i_this, FGANON_BCK_NAGERU_S1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mMode++;
+            i_this->mEmitters2[0] = dComIfGp_particle_set(dPa_name::ID_SCENE_821C, &i_this->current.pos, NULL);
+            i_this->mEmitters2[1] = dComIfGp_particle_set(dPa_name::ID_SCENE_821D, &i_this->current.pos, NULL);
+            // Fall-through
         }
         case 3: {
             if (mFrame == REG8_S(5) + 15) {
@@ -716,11 +714,8 @@ void spinattack2(fganon_class* i_this) {
                 i_this->mMode = 3;
                 i_this->speedF = 0.0f;
                 fopAcM_monsSeStart(i_this, JA_SE_CV_PG_EBALL_FIRE_S, 0);
-                break;
             }
-            else {
-                break;
-            }
+            break;
         }
         case 3: {
             if (mFrame == 14) {
@@ -944,49 +939,47 @@ void fail(fganon_class* i_this) {
             break;
         }
         case 1: {
-            if (i_this->mpMorf->isStop()) {
-                i_this->mMode = 2;
-                i_this->m3A4[0] = 30;
-                
-                dBgS_LinChk linChk;
-                
-                cMtx_YrotS(*calc_mtx, i_this->home.angle.y);
-
-                cXyz offset;
-                offset.x = 0.0f;
-                offset.y = 0.0f;
-                offset.z = 10000.0f;
-
-                cXyz transformedPos;
-                MtxPosition(&offset, &transformedPos);
-
-                offset = i_this->home.pos;
-                offset.y += 100.0f;
-
-                transformedPos += offset;
-
-                linChk.Set(&offset, &transformedPos, a_this);
-
-                cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx);
-                
-                offset.x = 0.0f;
-                offset.y = 0.0f;
-                offset.z = 0.0f;
-
-                MtxPosition(&offset, &transformedPos);
-
-                if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                    offset = linChk.GetCross();
-                }
-
-                i_this->m6A0 = i_this->shape_angle.y - cM_atan2s(transformedPos.x - offset.x, transformedPos.z - offset.z) + 0x7058 + REG0_S(8);
-                i_this->m6A4 = REG0_S(5) + 0x80;
-                i_this->m6A8 = 100;
+            if (!i_this->mpMorf->isStop()) {
                 break;
             }
-            else {
-                break;
+            i_this->mMode = 2;
+            i_this->m3A4[0] = 30;
+            
+            dBgS_LinChk linChk;
+            
+            cMtx_YrotS(*calc_mtx, i_this->home.angle.y);
+
+            cXyz offset;
+            offset.x = 0.0f;
+            offset.y = 0.0f;
+            offset.z = 10000.0f;
+
+            cXyz transformedPos;
+            MtxPosition(&offset, &transformedPos);
+
+            offset = i_this->home.pos;
+            offset.y += 100.0f;
+
+            transformedPos += offset;
+
+            linChk.Set(&offset, &transformedPos, a_this);
+
+            cMtx_copy(i_this->mpMorf->getModel()->getAnmMtx(0x18), *calc_mtx);
+            
+            offset.x = 0.0f;
+            offset.y = 0.0f;
+            offset.z = 0.0f;
+
+            MtxPosition(&offset, &transformedPos);
+
+            if (dComIfG_Bgsp()->LineCross(&linChk)) {
+                offset = linChk.GetCross();
             }
+
+            i_this->m6A0 = i_this->shape_angle.y - cM_atan2s(transformedPos.x - offset.x, transformedPos.z - offset.z) + 0x7058 + REG0_S(8);
+            i_this->m6A4 = REG0_S(5) + 0x80;
+            i_this->m6A8 = 100;
+            break;
         }
         case 2: {
             if (i_this->m3A4[0] == 0) {
@@ -1865,14 +1858,13 @@ void demo_camera(fganon_class* i_this) {
         }
         case 54: {
             cLib_addCalc2(&i_this->mB68.y, (i_this->eyePos.y - 30.0f) + REG0_F(11), 0.1f, 20.0f);
-            if (i_this->mB56 == 100) {
-                i_this->mB54 = 55;
-                player->changeDemoMode(daPy_demo_c::DEMO_LAROUND_e);
-                i_this->mB56 = 0;
-            }
-            else {
+            if (i_this->mB56 != 100) {
                 break;
             }
+            i_this->mB54 = 55;
+            player->changeDemoMode(daPy_demo_c::DEMO_LAROUND_e);
+            i_this->mB56 = 0;
+            // Fall-through
         }
         case 55: {
             if (i_this->mB56 == 20) {
