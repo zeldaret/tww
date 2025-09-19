@@ -114,7 +114,7 @@ void daObjShelf::Act_c::mode_wait_init() {
 void daObjShelf::Act_c::mode_wait() {
     bool quake = dComIfGp_getDetect().chk_quake(&current.pos);
     bool event = false;
-    if (quake && prm_get_groundma() && !dComIfGs_isEventBit(0x1)) {
+    if (quake && prm_get_groundma() && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
         hold_event();
         quake = false;
         event = true;

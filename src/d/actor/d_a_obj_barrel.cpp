@@ -200,7 +200,7 @@ void daObjBarrel::Act_c::mode_carry_init() {
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mMode = MODE_CARRY;
     if (strcmp(dComIfGp_getStartStageName(), "majroom") == 0 || strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
-        dComIfGs_onEventBit(0x401);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0401);
     }
     mTimer = 15;
 }

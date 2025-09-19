@@ -287,7 +287,7 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
         if (hitObj != NULL) {
             fopAc_ac_c* at = hitObj->GetAc();
             if (at != NULL && fopAcM_GetName(at) == PROC_HOOKSHOT)
-                dComIfGs_onEventBit(0x3420);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3420);
         }
     }
 }

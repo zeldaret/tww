@@ -1179,9 +1179,9 @@ void new_himo2_move(himo2_class* i_this) {
         if (fopAcM_GetParam(actor) == 3) {
             i_this->m02DC = 11;
             if ((fopAcM_GetParam(i_this->m217C) & 0xF0) != 0) {
-                dComIfGs_onEventBit(0x540);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0540);
             } else {
-                dComIfGs_onEventBit(0x580);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0580);
             }
         }
         i_this->m217C->health = 1;
@@ -1370,7 +1370,7 @@ void new_himo2_move(himo2_class* i_this) {
         if (i_this->m029C == 30) {
             fopAcM_seStartCurrent((fopAc_ac_c*)dr, JA_SE_CM_BTD_ROPE_SET, 0);
         }
-        if (((dComIfGp_getStartStageName()[0] != 'X') && (i_this->m029C <= 1)) && (!dComIfGs_isEventBit(0x420))) {
+        if (((dComIfGp_getStartStageName()[0] != 'X') && (i_this->m029C <= 1)) && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0420))) {
             dKy_custom_colset(0, 4, 1.0f);
         }
         if ((i_this->m029C != 0) || (REG0_S(8) != 0)) {
@@ -1382,10 +1382,10 @@ void new_himo2_move(himo2_class* i_this) {
         btd->m6E15 = 1;
         #endif
         i_this->m24D9 = 4;
-        if ((dComIfGp_getStartStageName()[0] == 'X') || (dComIfGs_isEventBit(0x420))) {
+        if ((dComIfGp_getStartStageName()[0] == 'X') || (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0420))) {
             i_this->m029C = 0;
         } else {
-            dComIfGs_onEventBit(0x420);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0420);
             i_this->m029C = REG0_S(2) + 62;
             daYkgr_c::hide();
         }

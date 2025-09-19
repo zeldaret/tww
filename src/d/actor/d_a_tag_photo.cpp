@@ -222,7 +222,7 @@ void daTagPhoto_c::eventOrder() {
 void daTagPhoto_c::eventMove() {
     if(dComIfGp_evmng_endCheck(mPhotoTalkEventIdx) || dComIfGp_evmng_endCheck(mPhotoTalk2EventIdx)) {
         dComIfGp_event_reset();
-        dComIfGs_onEventBit(0x1601);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1601);
     }
     else {
         bool attn = mEventCut.getAttnFlag();

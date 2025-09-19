@@ -222,7 +222,11 @@ void daObjDoguu_c::CreateInit() {
         field_0x8A1 = false;
         field_0x8A2 = true;
         field_0x8AC = 14;
-    } else if (dComIfGs_isEventBit(0x1480) && dComIfGs_isEventBit(0x1440) && dComIfGs_isEventBit(0x1410)) {
+    } else if (
+        dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL) &&
+        dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL) &&
+        dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL)
+    ) {
         mBckHead.setFrame(mBckHead.getEndFrame());
         mBckBody.setFrame(mBckBody.getEndFrame());
         mBckCrystal.setFrame(mBckCrystal.getEndFrame());
@@ -233,9 +237,9 @@ void daObjDoguu_c::CreateInit() {
     } else {
         field_0x8A1 = false;
         if (
-            (field_0x894 == 0 && dComIfGs_isEventBit(0x1480)) ||
-            (field_0x894 == 1 && dComIfGs_isEventBit(0x1440)) ||
-            (field_0x894 == 2 && dComIfGs_isEventBit(0x1410))
+            (field_0x894 == 0 && dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) ||
+            (field_0x894 == 1 && dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL)) ||
+            (field_0x894 == 2 && dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL))
         ) {
             field_0x8A2 = true;
             field_0x8A0 = true;
@@ -493,13 +497,13 @@ void daObjDoguu_c::privateCut() {
 /* 000015A8-00001630       .text getFinishEventCount__12daObjDoguu_cFv */
 int daObjDoguu_c::getFinishEventCount() {
     int count = 0;
-    if (dComIfGs_isEventBit(0x1480)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
         count += 1;
     }
-    if (dComIfGs_isEventBit(0x1440)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL)) {
         count += 1;
     }
-    if (dComIfGs_isEventBit(0x1410)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL)) {
         count += 1;
     }
     return count;
@@ -509,11 +513,11 @@ int daObjDoguu_c::getFinishEventCount() {
 /* 00001630-000016A4       .text setFinishMyEvent__12daObjDoguu_cFv */
 void daObjDoguu_c::setFinishMyEvent() {
     if (field_0x894 == 0) {
-        dComIfGs_onEventBit(0x1480);
+        dComIfGs_onEventBit(dSv_event_flag_c::PLACED_DINS_PEARL);
     } else if (field_0x894 == 1) {
-        dComIfGs_onEventBit(0x1440);
+        dComIfGs_onEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL);
     } else {
-        dComIfGs_onEventBit(0x1410);
+        dComIfGs_onEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL);
     }
 }
 
@@ -734,7 +738,7 @@ bool daObjDoguu_c::_execute() {
             setFinishMyEvent();
     
             if (getFinishEventCount() >= 3) {
-                dComIfGs_onEventBit(0x1e40);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1E40);
                 fopAcM_orderChangeEventId(this, mMegamiDemoEventIdx, 0, 0xFFFF);
                 field_0x8AC = 11;
             } else {

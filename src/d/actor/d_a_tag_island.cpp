@@ -83,13 +83,13 @@ void daTag_Island_c::makeEvId() {
 /* 00000354-000003D4       .text getArrivalFlag__14daTag_Island_cFv */
 u16 daTag_Island_c::getArrivalFlag() {
     switch (getType()) {
-    case 1: return 0x0902;
-    case 2: return 0x0A20;
-    case 3: return 0x0A02;
-    case 4: return 0x1F04;
-    case 5: return 0x2E04;
-    case 6: return 0x2E02;
-    case 7: return 0x3E10;
+    case 1: return dSv_event_flag_c::UNK_0902;
+    case 2: return dSv_event_flag_c::UNK_0A20;
+    case 3: return dSv_event_flag_c::ENDLESS_NIGHT;
+    case 4: return dSv_event_flag_c::UNK_1F04;
+    case 5: return dSv_event_flag_c::UNK_2E04;
+    case 6: return dSv_event_flag_c::UNK_2E02;
+    case 7: return dSv_event_flag_c::UNK_3E10;
     default: return 0;
     }
 }
@@ -98,11 +98,11 @@ u16 daTag_Island_c::getArrivalFlag() {
 BOOL daTag_Island_c::otherCheck() {
     switch (getType()) {
     case 5:
-        if (!dComIfGs_isEventBit(0x1608))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1608))
             return FALSE;
         break;
     case 6:
-        if (!dComIfGs_isEventBit(0x1604))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604))
             return FALSE;
         break;
     }

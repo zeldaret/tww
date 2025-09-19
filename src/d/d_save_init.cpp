@@ -10,6 +10,6 @@
 
 /* 8005EF88-8005EFDC       .text setInitEventBit__Fv */
 void setInitEventBit() {
-    dComIfGs_setEventReg(0xBEFF, daNpc_Kg1_c::m_highscore);
-    dComIfGs_setEventReg(0x7EFF, 0xE);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_BEFF, daNpc_Kg1_c::m_highscore);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7EFF, 0xE);
 }

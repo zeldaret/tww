@@ -250,7 +250,7 @@ cPhs_State daGhostship_c::_create() {
 
     getArg();
 
-    if((s32)dComIfGs_getEventReg(0x8803) == 3) {
+    if((s32)dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
         return cPhs_ERROR_e;
     }
 
@@ -360,7 +360,7 @@ bool daGhostship_c::_execute() {
     }
 
     if(mAlpha == l_HIO.shipAlpha && dist < l_HIO.shipEnterDist) {
-        u8 r29 = dComIfGs_getEventReg(0x8803);
+        u8 r29 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
         if (r29 < 3
 #if VERSION > VERSION_DEMO
             && !mbEnteredShip
@@ -371,8 +371,8 @@ bool daGhostship_c::_execute() {
             JUT_ASSERT(DEMO_SELECT(457, 463), scls_data != NULL)
 
             u8 startCode = scls_data->mStart;
-            dComIfGs_setEventReg(0xC3FF, scls_data->mRoom);
-            dComIfGs_setEventReg(0x85FF, startCode);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_C3FF, scls_data->mRoom);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_85FF, startCode);
 #if VERSION == VERSION_DEMO
             dComIfGp_setNextStage("PShip", 0, r29);
 #else

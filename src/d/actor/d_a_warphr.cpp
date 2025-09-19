@@ -131,7 +131,7 @@ void daWarphr_c::CreateInit() {
     fopAcM_setCullSizeBox(this, -300.0f, 0.0f, -300.0f, 300.0f, 5000.0f, 300.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
-    if (dComIfGs_isEventBit(0x2d08)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D08)) {
         m2F8 = dComIfGp_evmng_getEventIdx("TO_SEA_WARP_2");
     } else {
         m2F8 = dComIfGp_evmng_getEventIdx("TO_SEA_WARP_1");
@@ -206,7 +206,7 @@ bool daWarphr_c::_execute() {
 BOOL daWarphr_c::normal_execute() {
     if (check_warp() != 0) {
         if (get_return_count() == 0) {
-            dComIfGs_onEventBit(0x3810);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3810);
         }
         m2F0 = 2;
     }
@@ -398,7 +398,7 @@ s32 daWarphr_c::get_return_count() {
         return 0;
     }
 
-    return dComIfGs_isEventBit(0x1001) ? 2 : 1;
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1001) ? 2 : 1;
 }
 
 /* 0000134C-000014F0       .text check_warp__10daWarphr_cFv */

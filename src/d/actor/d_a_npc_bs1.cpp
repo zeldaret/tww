@@ -611,22 +611,22 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 dComIfGp_setItemBeastNumCount(idx, -getBuyItem());
                 
                 if(*pMsgNo == 0xFD3) {
-                    u8 r3 = dComIfGs_getEventReg(0x7F0F);
+                    u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
                     r3 += getBuyItem();
                     u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-                    dComIfGs_setEventReg(0x7F0F, temp);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, temp);
 
                     if(temp < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
                     }
 
-                    if(dComIfGs_isEventBit(0x3B04)) {
+                    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B04)) {
                         *pMsgNo = 0xFD9;
                         break;
                     }
 
-                    dComIfGs_onEventBit(0x3B04);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B04);
                     *pMsgNo = 0xFD6;
                     break;
                 }
@@ -711,7 +711,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0xF3E:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -748,7 +748,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF65:
         case 0xF66:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -785,7 +785,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
         case 0xF6B:
         case 0xF6D:
             if(CPad_CHECK_TRIG_B(0)) {
-                u8 points = dComIfGs_getEventReg(0x86FF);
+                u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if(mShopItems.isSoldOutItemAll()) {
                     *pMsgNo = 0xF62;
                     break;
@@ -875,7 +875,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 execItemGet(itemNo);
 
                 if(mType == 0) {
-                    if(dComIfGs_getEventReg(0x86FF) != 0) {
+                    if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF) != 0) {
                         *pMsgNo = 0xF4C;
                         break;
                     }
@@ -928,13 +928,13 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
                     switch(itemNo) {
                         case dItem_EMPTY_BOTTLE_e:
-                            dComIfGs_onEventBit(0x2020);
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2020);
                             break;
                         case dItem_HEART_PIECE_e:
-                            dComIfGs_onEventBit(0x2010);
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2010);
                             break;
                         case dItem_COLLECT_MAP_30_e:
-                            dComIfGs_onEventBit(0x2008);
+                            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2008);
                             break;
                     }
                 }
@@ -966,9 +966,9 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0xF4C:
         case 0xF4E: {
-            int points = dComIfGs_getEventReg(0x86FF) + 1;
+            int points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF) + 1;
             points = cLib_maxLimit<int>(points, 0xFF);
-            dComIfGs_setEventReg(0x86FF, points);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_86FF, points);
 
             if(points > 60) {
                 *pMsgNo = 0xF3E;
@@ -976,7 +976,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
             
             if(points == 60) {
-                dLetter_send(0xAF03);
+                dLetter_send(dSv_event_flag_c::LETTER_GOLD_MEMBERSHIP);
                 *pMsgNo = 0xF53;
                 break;
             }
@@ -987,7 +987,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(points == 30) {
-                dLetter_send(0xB003);
+                dLetter_send(dSv_event_flag_c::LETTER_SILVER_MEMBERSHIP);
                 *pMsgNo = 0xF50;
                 break;
             }
@@ -1039,7 +1039,7 @@ u32 daNpc_Bs1_c::getMsg() {
                         msgNo = 0xF99;
                         break;
                     default:
-                        if(dComIfGs_getEventReg(0x7F0F) < 10) {
+                        if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F) < 10) {
                             msgNo = 0xF9E;
                             break;
                         }
@@ -1069,12 +1069,12 @@ u32 daNpc_Bs1_c::getMsg() {
         }
     }
     else if(mType == 0) {
-        u8 points = dComIfGs_getEventReg(0x86FF);
+        u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
         if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0xF3D;
         }
-        else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
-            dComIfGs_onEventBit(0x1F20);
+        else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
             m837 = 1;
             msgNo = 0xF55;
         }
@@ -1110,16 +1110,16 @@ u32 daNpc_Bs1_c::getMsg() {
     else if(mShopItems.isSoldOutItemAll()) {
         msgNo = 0x2F62;
     }
-    else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F20) && isSellBomb()) {
-        dComIfGs_onEventBit(0x1F20);
+    else if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F20) && isSellBomb()) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F20);
         m837 = 1;
         msgNo = 0x2F64;
     }
     else if(m837) {
         msgNo = 0x2F67;
     }
-    else if(dComIfGs_isEventBit(0x1F08)) {
-        if(dComIfGs_isEventBit(0x2040)) {
+    else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2040)) {
             if(m838 == 1) {
                 msgNo = 0x2F60;
             }
@@ -1128,20 +1128,20 @@ u32 daNpc_Bs1_c::getMsg() {
             }
         }
         else {
-            dComIfGs_onEventBit(0x2040);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2040);
             msgNo = 0x2F5F;
             m838 = 1;
         }
     }
     else {
-        switch(dComIfGs_getEventReg(0xBB07)) {
+        switch(dComIfGs_getEventReg(dSv_event_flag_c::UNK_BB07)) {
             case 0:
-                if(m836 || dComIfGs_isEventBit(0x1F10)) {
+                if(m836 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F10)) {
                     msgNo = 0x2F46;
                     break;
                 }
 
-                dComIfGs_onEventBit(0x1F10);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F10);
                 msgNo = 0x2F45;
                 break;
             case 1:
@@ -1202,8 +1202,8 @@ u32 daNpc_Bs1_c::getMsg() {
                 break;
         }
 
-        if(dComIfGs_isEventBit(0x1F10)) {
-            dComIfGs_onEventBit(0x1F10);
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F10)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F10);
         }
 
         m836 = 1;
@@ -1257,7 +1257,7 @@ u32 daNpc_Bs1_c::getDefaultMsg() {
     u32 msgNo;
 
     if(mType == 0) {
-        u8 points = dComIfGs_getEventReg(0x86FF);
+        u8 points = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
         if(mShopItems.isSoldOutItemAll()) {
             msgNo = 0xF5E;
         }
@@ -1271,11 +1271,11 @@ u32 daNpc_Bs1_c::getDefaultMsg() {
             msgNo = 0xF3F;
         }
     }
-    else if(!dComIfGs_isEventBit(0x1F08)) {
+    else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F08)) {
         msgNo = 0x2F48;
     }
-    else if(!dComIfGs_isEventBit(0x2108)) {
-        dComIfGs_onEventBit(0x2108);
+    else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2108)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2108);
         msgNo = 0x2F54;
     }
     else {
@@ -1533,7 +1533,7 @@ void daNpc_Bs1_c::createShopList() {
         int dataIdx = 0;
         for(int i = 0; i < 3; i++) {
             u8 itemNo = temp[i]->mpItemData->mItemNo;
-            if((i == 0 && dComIfGs_isEventBit(0x2020)) || (i == 1 && dComIfGs_isEventBit(0x2010)) || (i == 2 && dComIfGs_isEventBit(0x2008))) {
+            if((i == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2020)) || (i == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2010)) || (i == 2 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2008))) {
                 itemNo = dataSet[dataIdx]->mpItemData->mItemNo;
                 mpItemSetList[i] = dataSet[dataIdx];
                 dataIdx++;
@@ -1800,7 +1800,7 @@ BOOL daNpc_Bs1_c::getdemo_action(void*) {
         if (dComIfGp_evmng_endCheck(m83A)) {
             m82A = 1;
             if (mType == 0) {
-                u8 someVal = dComIfGs_getEventReg(0x86FF);
+                u8 someVal = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
                 if (someVal != 0) {
                     m740 = 0xF4C;
                 } else {

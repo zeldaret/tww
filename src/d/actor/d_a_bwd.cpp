@@ -1051,8 +1051,8 @@ void end(bwd_class* i_this) {
         if (dComIfGp_getStartStageName()[0] == 'X') {
             dLib_setNextStageBySclsNum(0, actor->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            dComIfGs_onEventBit(0x3208);
-            dComIfGs_onTmpBit(0x480);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3208);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             return;
         }
 #if VERSION != VERSION_USA
@@ -2627,7 +2627,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
             i_this->m17E0 = REG0_F(0xb) + 400.0f;
             i_this->m3C15 = 5;
         } else {
-            dComIfGs_offTmpBit(0x480);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
             i_this->m18AE = 1;
             i_this->m18B0 = -10;

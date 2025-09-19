@@ -597,9 +597,9 @@ void dEvent_manager_c::exceptionProc() {
         if (startCheck(eventIdx)) {
             mException.mState = 2;
             if (strcmp(eventName, "MEETSHISHIOH") == 0)
-                dComIfGs_onEventBit(0x0F80);
+                dComIfGs_onEventBit(dSv_event_flag_c::MET_KORL);
             if (strcmp(eventName, "look_tetra") == 0)
-                dComIfGs_onEventBit(0x0280);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0280);
         } else {
             fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }

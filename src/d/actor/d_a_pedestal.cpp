@@ -128,15 +128,15 @@ int daPds_c::getMyStaffId() {
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::wakeupCheck() {
     if (argument == 0) {
-        if (dComIfGs_isEventBit(0x1780)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1780)) {
             return TRUE;
         }
     } else if (argument == 1) {
-        if (dComIfGs_isEventBit(0x1740)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1740)) {
             return TRUE;
         }
     } else if (argument == 2) {
-        if (dComIfGs_isEventBit(0x1720)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1720)) {
             return TRUE;
         }
     }
@@ -147,15 +147,15 @@ BOOL daPds_c::wakeupCheck() {
 /* 000005D8-00000684       .text finishCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::finishCheck() {
     if (argument == 0) {
-        if (dComIfGs_isEventBit(0x1710)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710)) {
             return TRUE;
         }
     } else if (argument == 1) {
-        if (dComIfGs_isEventBit(0x1704)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704)) {
             return TRUE;
         }
     } else if (argument == 2) {
-        if (dComIfGs_isEventBit(0x1B01)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
             return TRUE;
         }
     }

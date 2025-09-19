@@ -86,7 +86,7 @@ void daTag_Event_c::demoInitProc() {
         bk = daTag_getBk(5);
         dComIfGp_event_setItemPartner(bk);
         dComIfGp_event_setTalkPartner(bk);
-        dComIfGs_onEventBit(0x0004);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0004);
         mDoAud_bgmStart(JA_BGM_BK_FLY_DOWN);
         break;
     case 0x2:
@@ -94,10 +94,10 @@ void daTag_Event_c::demoInitProc() {
         if (bk) {
             bk->m121C = 1;
         }
-        dComIfGs_onEventBit(0x0101);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0101);
         break;
     case 0x3:
-        dComIfGs_onEventBit(0x0E20);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0E20);
         break;
     case 0x5:
         mDoAud_bgmAllMute(0x1E);
@@ -110,12 +110,12 @@ void daTag_Event_c::demoInitProc() {
     }
     case 0x9:
         u8 r30;
-        if (!dComIfGs_isEventBit(0x3B20)) {
-            dComIfGs_onEventBit(0x3B20);
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B20)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B20);
             r30 = (u8)(s32)cM_rndF(6.0f);
-            dComIfGs_setEventReg(0xBA0F, r30);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_BA0F, r30);
         } else {
-            r30 = dComIfGs_getEventReg(0xBA0F);
+            r30 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
         }
         char password[0x18];
         fopMsgM_passwordGet(password, 0x1B37 + r30);
@@ -139,16 +139,16 @@ void daTag_Event_c::demoEndProc() {
         mDoAud_subBgmStart(JA_BGM_MBOSS);
         break;
     case 0x8:
-        dComIfGs_onEventBit(0x2502);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2502);
         break;
     case 0xB:
-        dComIfGs_onEventBit(0x3040);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3040);
         break;
     case 0x9:
-        dComIfGs_onEventBit(0x2110);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2110);
         break;
     case 0xA:
-        dComIfGs_onEventBit(0x3202);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3202);
         break;
     }
 }
@@ -269,7 +269,7 @@ BOOL daTag_Event_c::actionArrival() {
     if (arrivalTerms()) {
         switch (getType()) {
         case 0x2:
-            if (dComIfGs_isEventBit(0x0004)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0004)) {
                 m297 = 7;
             } else {
                 m297 = 5;
@@ -278,9 +278,9 @@ BOOL daTag_Event_c::actionArrival() {
             actionHunt2();
             break;
         case 0x3:
-            if (dComIfGs_isEventBit(0x0E20)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
                 setActio(ACTION_WAIT);
-            } else if (!dComIfGs_isEventBit(0x0101)) {
+            } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0101)) {
                 setActio(ACTION_WAIT);
             } else {
                 setActio(ACTION_HUNT);
@@ -288,7 +288,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0x5:
-            if (dComIfGs_isEventBit(0x1101)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                 setActio(ACTION_WAIT);
             } else {
                 setActio(ACTION_HUNT);
@@ -296,7 +296,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0x9:
-            if (dComIfGs_isEventBit(0x0A02)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT)) {
                 setActio(ACTION_HUNT);
                 actionHunt();
             } else {
@@ -304,7 +304,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0xA:
-            if (dComIfGs_isEventBit(0x0E20)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
                 setActio(ACTION_HUNT);
                 actionHunt();
             } else {
@@ -335,7 +335,7 @@ BOOL daTag_Event_c::actionSpeReady() {
         demoInitProc();
         setActio(ACTION_SPE_EVENT);
         actionSpeEvent();
-        dComIfGs_onEventBit(0x2740);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2740);
     } else {
         fopAcM_orderOtherEventId(this, mEventIdx);
     }
@@ -358,17 +358,17 @@ BOOL daTag_Event_c::actionSpeHunt() {
 
 /* 00000DF0-00000F20       .text actionSpeArrival__13daTag_Event_cFv */
 BOOL daTag_Event_c::actionSpeArrival() {
-    if (dComIfGs_isEventBit(0x1001)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1001)) {
         setActio(ACTION_WAIT);
         return TRUE;
     }
-    if (!dComIfGs_isEventBit(0x1820)) {
-        if (dComIfGs_isEventBit(0x2740)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2740)) {
             setActio(ACTION_WAIT);
             return TRUE;
         }
         mEventIdx = dComIfGp_evmng_getEventIdx("SUPERELF");
-    } else if (dComIfGs_isEventBit(0x2740)) {
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2740)) {
         mEventIdx = dComIfGp_evmng_getEventIdx("fairy_flag_on_Jmp");
     } else {
         mEventIdx = dComIfGp_evmng_getEventIdx("fairy_Jmp");

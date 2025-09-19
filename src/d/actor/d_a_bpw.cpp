@@ -2105,8 +2105,8 @@ void action_bunri_dousa(bpw_class* i_this) {
         currHp = actor->health;
         if (currHp < 1) {
             if (dComIfGp_getStartStageName()[0] == 'X') {
-                dComIfGs_onEventBit(0x3210);
-                dComIfGs_onTmpBit(0x480);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3210);
+                dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
                 dLib_setNextStageBySclsNum(0, actor->current.roomNo);
                 mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             } else {
@@ -3293,8 +3293,8 @@ void body_execute(bpw_class* i_this) {
     if (CPad_CHECK_HOLD_Z(0) && CPad_CHECK_HOLD_DOWN(0)) {
         dComIfGs_onStageBossEnemy();
         if (dComIfGp_getStartStageName()[0] == 'X') {
-            dComIfGs_onEventBit(0x3210);
-            dComIfGs_onTmpBit(0x0480);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3210);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             dLib_setNextStageBySclsNum(0, actor->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
             fopAcM_delete(actor);

@@ -851,8 +851,8 @@ void end(btd_class* i_this) {
         if (dComIfGp_getStartStageName()[0] == 'X') {
             dLib_setNextStageBySclsNum(0, i_this->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-            dComIfGs_onEventBit(0x3240);
-            dComIfGs_onTmpBit(0x480);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3240);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             mDoAud_bgmStop(30);
         } else {
             i_this->mGohmaState = 0x33;
@@ -2894,7 +2894,7 @@ static cPhs_State daBtd_Create(fopAc_ac_c* a_this) {
                     i_this->health = 10;
                     i_this->max_health = 10;
                     if ((dComIfGs_isStageBossDemo()) || (dComIfGp_getStartStageName()[0] == 'X')) {
-                        dComIfGs_offTmpBit(0x480);
+                        dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
                         i_this->m6E80 = -50.0f;
                         i_this->m6E84 = 0.0f;
                         if (dComIfGp_getStartStageName()[0] == 'X') {

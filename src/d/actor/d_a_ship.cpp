@@ -335,31 +335,31 @@ static BOOL daShip_Draw(daShip_c* i_this) {
 
 /* 00000B34-00000DAC       .text checkForceMessage__8daShip_cFv */
 BOOL daShip_c::checkForceMessage() {
-    if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(0x908)) {
+    if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
         mNextMessageNo = 0x5E0;
     }
-    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0xA80)) {
+    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
         mNextMessageNo = 0x5EC;
     }
-    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(0xA08)) {
+    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
         mNextMessageNo = 0x5F6;
     }
-    else if (dComIfGs_isEventBit(dSv_evtBit_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(0xA01)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
         mNextMessageNo = 0x607;
     }
-    else if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(0x1F02)) {
+    else if (dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
-    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(0x2F20)) {
+    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xD5A;
     }
-    else if (dComIfGs_isEventBit(0x2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
         mNextMessageNo = 0xD65;
     }
-    else if (dComIfGs_isEventBit(0x3E01) && !dComIfGs_isEventBit(0x3F80)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E01) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80)) {
         mNextMessageNo = 0x1688;
     }
-    else if (dComIfGs_isEventBit(0x2D02) && !dComIfGs_isEventBit(0x3201)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
         mNextMessageNo = 0x1645;
     }
     else {
@@ -380,14 +380,14 @@ void daShip_c::setInitMessage() {
         return;
     }
 #if VERSION > VERSION_DEMO
-    else if (dComIfGs_isEventBit(0x2110) && !dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110) && !dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
         mNextMessageNo = 0x623;
     }
 #endif
     else if (checkStateFlg(daSFLG_UNK800000_e)) {
         mNextMessageNo = 0x636;
     }
-    else if (dComIfGs_isEventBit(0x3D02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
         if (!strcmp(dComIfGp_getStartStageName(), "GanonA") ||
             !strcmp(dComIfGp_getStartStageName(), "GanonB") ||
             !strcmp(dComIfGp_getStartStageName(), "GanonC") ||
@@ -412,13 +412,13 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0xd78;
         }
     }
-    else if (dComIfGs_isEventBit(0x2C02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::BARRIER_BREAK)) {
         mNextMessageNo = 0xd76;
     }
-    else if (dComIfGs_isEventBit(0x2C01)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01)) {
         mNextMessageNo = 0xd75;
     }
-    else if (dComIfGs_isEventBit(0x2D08)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D08)) {
         if (!strcmp(dComIfGp_getStartStageName(), "Hyrule")) {
             mNextMessageNo = 0xd74;
         }
@@ -426,7 +426,7 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0xd73;
         }
     }
-    else if (dComIfGs_isEventBit(0x4004)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4004)) {
         if (dComIfGs_getTriforceNum() == 8) {
             mNextMessageNo = 0xd72;
         }
@@ -434,13 +434,13 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0xd71;
         }
     }
-    else if (dComIfGs_isEventBit(0x2E02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02)) {
         mNextMessageNo = 0xd70;
     }
-    else if (dComIfGs_isEventBit(0x1610)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610)) {
         mNextMessageNo = 0xd6f;
     }
-    else if (dComIfGs_isEventBit(0x3A02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A02)) {
         if (dComIfGs_isTact(4)) {
             mNextMessageNo = 0xd6e;
         }
@@ -448,36 +448,36 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0xd6d;
         }
     }
-    else if (dComIfGs_isEventBit(0x2E04)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04)) {
         mNextMessageNo = 0xd6c;
     }
-    else if (dComIfGs_isEventBit(0x1620)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620)) {
         mNextMessageNo = 0xd6b;
     }
     else if (dComIfGs_isTact(3) || dComIfGs_isTact(4)) {
         mNextMessageNo = 0xd6a;
     }
-    else if (dComIfGs_isEventBit(0x3910)) {
-        if (!dComIfGs_isEventBit(0x3380)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3380)) {
             mNextMessageNo = 0xd7b;
         }
         else {
             mNextMessageNo = 0xd69;
         }
     }
-    else if (dComIfGs_isEventBit(0x3040)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3040)) {
         mNextMessageNo = 0xd68;
     }
-    else if (dComIfGs_isEventBit(0x3810)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3810)) {
         mNextMessageNo = 0xd67;
     }
     else if (daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
         mNextMessageNo = 0xd66;
     }
-    else if (dComIfGs_isEventBit(0x2D10)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10)) {
         mNextMessageNo = 0xd65;
     }
-    else if (dComIfGs_isEventBit(0x1E40)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40)) {
         if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_DUNGEON_e) {
             mNextMessageNo = 0xd63;
         }
@@ -485,21 +485,21 @@ void daShip_c::setInitMessage() {
             mNextMessageNo = 0xd64;
         }
     }
-    else if (dComIfGs_isEventBit(0x2F20)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xd62;
     }
     else if (dComIfGs_isSymbol(0)) {
         mNextMessageNo = 0xd5a;
     }
-    else if (dComIfGs_isEventBit(0x1940)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1940)) {
         mNextMessageNo = 0xd61;
     }
-    else if (dComIfGs_isEventBit(0x3E10)) {
-        if (!dComIfGs_isEventBit(0x3E01)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E01)) {
             mNextMessageNo = 0x1687;
         }
         else {
-            if (dComIfGs_isEventBit(0x3F80)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80)) {
                 mNextMessageNo = 0x1689;
             }
             else {
@@ -507,11 +507,11 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0x1F02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0xd60;
     }
-    else if (dComIfGs_isEventBit(0x1F04)) {
-        if (!dComIfGs_isEventBit(0x2110)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F04)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110)) {
             mNextMessageNo = 0x621;
         }
         else {
@@ -523,12 +523,12 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0xA02)) {
-        if (dComIfGs_isEventBit(0x2A01)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A01)) {
             mNextMessageNo = 0xd5f;
         }
         else {
-            if (dComIfGs_isEventBit(0xA01)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
                 mNextMessageNo = 0x608;
             }
             else {
@@ -536,12 +536,12 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0xA08)) {
-        if (dComIfGs_isEventBit(0x2A02)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A02)) {
             mNextMessageNo = 0xd5e;
         }
         else {
-            if (dComIfGs_isEventBit(0xA04)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A04)) {
                 mNextMessageNo = 0x5f9;
             }
             else {
@@ -549,12 +549,12 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0xA20)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A20)) {
         if (dComIfGs_isSymbol(2)) {
             mNextMessageNo = 0x5f6;
         }
         else {
-            if (dComIfGs_isEventBit(0x2B80)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2B80)) {
                 mNextMessageNo = 0x5f5;
             }
             else {
@@ -562,8 +562,8 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0xA80)) {
-        if (dComIfGs_isEventBit(0x1980)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1980)) {
             mNextMessageNo = 0xd5d;
         }
         else {
@@ -576,12 +576,12 @@ void daShip_c::setInitMessage() {
             }
         }
     }
-    else if (dComIfGs_isEventBit(0x902)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
         if (dComIfGs_isSymbol(1)) {
             mNextMessageNo = 0x5ec;
         }
         else {
-            if (dComIfGs_isEventBit(0xA10)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A10)) {
                 mNextMessageNo = 0x5eb;
             }
             else {
@@ -590,11 +590,11 @@ void daShip_c::setInitMessage() {
         }
     }
     else {
-        if (dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::RODE_KORL)) {
             mNextMessageNo = 0xd5c;
         }
         else {
-            if (dComIfGs_isEventBit(0x908)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
                 mNextMessageNo = 0x5df;
             }
             else {
@@ -621,47 +621,47 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
         currMessageNo != 0x1687 && currMessageNo != 0x1689)
         {
         if (currMessageNo == 0x5e4) {
-            dComIfGs_onEventBit(0x908);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0908);
         }
         else if (currMessageNo == 0x5ea) {
-            dComIfGs_onEventBit(0xa10);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0A10);
         }
         else if (currMessageNo == 0x5ed) {
-            dComIfGs_onEventBit(0xa80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0A80);
         }
         else if (currMessageNo == 0x5f4) {
-            dComIfGs_onEventBit(0x2b80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2B80);
         }
         else if (currMessageNo == 0x5f7) {
-            dComIfGs_onEventBit(0xa08);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0A08);
         }
         else if (currMessageNo == 0x5f8) {
-            dComIfGs_onEventBit(0xa04);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0A04);
         }
         else if (currMessageNo == 0x607) {
-            dComIfGs_onEventBit(0xa01);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0A01);
         }
         else if (currMessageNo == 0x622) {
-            dComIfGs_onEventBit(0x1f01);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F01);
         }
         else if (currMessageNo == 0x624) {
-            dComIfGs_onEventBit(0x1f02);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F02);
         }
         else if (currMessageNo == 0xd5b) {
-            dComIfGs_onEventBit(0x2f20);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F20);
         }
         else if (currMessageNo == 0x1682) {
-            dComIfGs_onEventBit(0x3d04);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D04);
 #if VERSION > VERSION_DEMO
             mNextMessageNo = 0;
 #endif
         }
         else if (currMessageNo == 0x1688) {
-            dComIfGs_onEventBit(0x3f80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F80);
         }
         else {
             if (currMessageNo == 0x168c) {
-                dComIfGs_onEventBit(0x3840);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3840);
             }
             else {
                 if (currMessageNo == 0x5e0) {
@@ -709,7 +709,7 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
                     mNextMessageNo = 0x164b;
                 }
                 else if (currMessageNo == 0x164b) {
-                    dComIfGs_onEventBit(0x3201);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3201);
                     mNextMessageNo = 0x164c;
                 }
                 else if (currMessageNo == 0x164d) {
@@ -719,7 +719,7 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
                     mNextMessageNo = 0x164f;
                 }
                 else if (currMessageNo == 0x164f) {
-                    dComIfGs_onEventBit(0x3380);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3380);
                     if (dComIfGs_getTriforceNum() > 0) {
                         mNextMessageNo = 0x1650;
                     }
@@ -728,7 +728,7 @@ BOOL daShip_c::setNextMessage(msg_class* msg) {
                     }
                 }
                 else if (currMessageNo == 0x1683) {
-                    dComIfGs_onEventBit(0x3e20);
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E20);
                     if (dComIfGs_getItem(12) != dItem_NONE_e) {
                         mNextMessageNo = 0x1685;
                     }
@@ -1011,7 +1011,7 @@ BOOL daShip_c::checkOutRange() {
         }
         if (bVar5) {
             if (
-                (pathIndex == 0 && dComIfGs_isEventBit(0x902)) ||
+                (pathIndex == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) ||
                 (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
@@ -1562,18 +1562,18 @@ BOOL daShip_c::procPaddleMove_init() {
         current.pos.y -= 50.0f;
     }
     
-    dComIfGs_onEventBit(dSv_evtBit_c::RODE_KORL);
+    dComIfGs_onEventBit(dSv_event_flag_c::RODE_KORL);
     
-    if (dComIfGs_isEventBit(0xA80)) {
-        dComIfGs_onEventBit(0x1980);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1980);
     }
 
-    if (dComIfGs_isEventBit(0xA08)) {
-        dComIfGs_onEventBit(0x2A02);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A02);
     }
     
-    if (dComIfGs_isEventBit(0xA02)) {
-        dComIfGs_onEventBit(0x2A01);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A01);
     }
 
     return TRUE;
@@ -2628,7 +2628,7 @@ BOOL daShip_c::procTornadoUp_init() {
     camera->mCamera.Set(current.pos, tornadoPos);
     m03A6 = 0;
     fopAcM_seStartCurrent(mTornadoActor, 0x186C, 0);
-    dComIfGs_onEventBit(0x3E40);
+    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E40);
     return TRUE;
 }
 
@@ -2885,7 +2885,7 @@ BOOL daShip_c::procWhirlDown() {
             }
             current.pos.y += speed.y;
             if (m037A == 0 && current.pos.y < m03F4 - 1000.0f) {
-                dComIfGs_onEventBit(0x1940);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1940);
                 dComIfGp_setNextStage(dComIfGp_getStartStageName(), m03B2, fopAcM_GetRoomNo(this));
                 m037A = 1;
             }
@@ -3491,7 +3491,7 @@ void daShip_c::setHeadAnm() {
         } 
         else if (
 #if VERSION > VERSION_DEMO
-                (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+                (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
 #endif
                  (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
                   mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3505,7 +3505,7 @@ void daShip_c::setHeadAnm() {
     else {
         if (
 #if VERSION > VERSION_DEMO
-            (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
 #endif
             (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
              mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3521,7 +3521,7 @@ void daShip_c::setHeadAnm() {
                  std::fabsf(mpHeadAnm->getPlaySpeed()) < 0.01f && 
                  cM_rnd() < 0.4f && (g_Counter.mTimer & 0x1FF) == 0x1FF && 
 #if VERSION > VERSION_DEMO
-                 (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02)) &&
+                 (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
 #endif
                  !checkStateFlg(daSFLG_UNK40000000_e)) {
             newFileIndex = SHIP_BCK_AKIBI1;
@@ -4151,7 +4151,7 @@ BOOL daShip_c::execute() {
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
             (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-            (!dComIfGs_isEventBit(0x3910) || dComIfGs_isEventBit(0x2D02))) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02))) &&
             dComIfGp_getMiniGameType() != 1
         ) {
 #if VERSION == VERSION_DEMO
@@ -4168,12 +4168,12 @@ BOOL daShip_c::execute() {
     }
     else {
         attention_info.position = current.pos;
-        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(0x908) && !checkStateFlg(daSFLG_UNK800000_e)) {
-            if (dComIfGs_isEventBit(0x1980) || !dComIfGs_isEventBit(0x902)) {
+        if (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && !checkStateFlg(daSFLG_UNK800000_e)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1980) || !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
                 attention_info.flags = fopAc_Attn_ACTION_SHIP_e;
             }
             else {
-                if (dComIfGs_isEventBit(0xA80)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
                     cXyz* windVec = dKyw_get_wind_vec();
                     if (abs(cM_atan2s(windVec->x, windVec->z)) < 0x1000) {
                         attention_info.flags = fopAc_Attn_ACTION_SHIP_e;
@@ -4241,28 +4241,28 @@ BOOL daShip_c::execute() {
         }
     }
     if (
-        (dComIfGs_isEventBit(0x2D10) && !daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
-        (dComIfGs_isEventBit(0x3804) && !dComIfGs_isEventBit(0x2D02)) ||
-        (dComIfGs_isEventBit(0x3E10) && !dComIfGs_isEventBit(0x3F80))
+        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
+        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) ||
+        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80))
     ) {
         attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
     }
     if (mCurMode != 8 && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         BOOL r24_2;
         r24_2 = TRUE;
-        if (dComIfGs_isEventBit(0x1E40) && !dComIfGs_isEventBit(0x3840)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3840)) {
             mNextMessageNo = 0x168c;
         }
-        else if (dComIfGs_isEventBit(0x2D02) && !dComIfGs_isEventBit(0x3201)) {
+        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
             mNextMessageNo = 0x1645;
         }
-        else if (dComIfGs_isEventBit(0x1820) && !dComIfGs_isEventBit(0x3380)) {
+        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3380)) {
             mNextMessageNo = 0x164d;
         }
-        else if(dComIfGs_getTriforceNum() == 8 && !dComIfGs_isEventBit(0x3D04)) {
+        else if(dComIfGs_getTriforceNum() == 8 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D04)) {
             mNextMessageNo = 0x1682;
         }
-        else if (dComIfGs_isEventBit(0x3E40) && !dComIfGs_isEventBit(0x3E20)) {
+        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E40) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E20)) {
             mNextMessageNo = 0x1683;
         }
         else {
@@ -4565,7 +4565,7 @@ cPhs_State daShip_c::create() {
     
     fopAcM_SetupActor(this, daShip_c);
     
-    if (!dComIfGs_isEventBit(dSv_evtBit_c::MET_KORL)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
         return cPhs_ERROR_e;
     }
     

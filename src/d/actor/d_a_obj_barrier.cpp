@@ -229,7 +229,7 @@ void daObjBarrier_c::brkAnmPlay() {
 /* 00000884-000009F0       .text break_start_wait_proc__14daObjBarrier_cFv */
 void daObjBarrier_c::break_start_wait_proc() {
     // 0x3980: Saw Hyrule 3 Electric Barrier Demo
-    if (dComIfGs_isEventBit(0x3980) == true) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3980) == true) {
         daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
         if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f &&
@@ -246,7 +246,7 @@ void daObjBarrier_c::break_start_wait_proc() {
             case 8:
             case 9:
             case 10:
-                dComIfGs_onEventBit(dSv_evtBit_c::BARRIER_BREAK);
+                dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 mEventID = dComIfGp_evmng_getEventIdx("seal");
                 mBarrierProc = PROC_BREAK_ORDER;
                 break;
@@ -280,11 +280,11 @@ bool daObjBarrier_c::break_check() {
 
 #if VERSION <= VERSION_JPN
     if (mMoya == 0) {
-        if (dComIfGs_isEventBit(0x3980) == true) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3980) == true) {
             daPy_py_c* player_p = (daPy_py_c*)daPy_getPlayerActorClass();
 
             if ((player_p->current.pos - current.pos).absXZ() >= 8800.0f) {
-                dComIfGs_onEventBit(dSv_evtBit_c::BARRIER_BREAK);
+                dComIfGs_onEventBit(dSv_event_flag_c::BARRIER_BREAK);
                 dComIfGp_setNextStage("Hyrule", 0xE9, 0, 9);
                 chk = true;
             }
@@ -503,7 +503,7 @@ cPhs_State daObjBarrier_c::_create() {
         mMoya = param_get_moya();
         if (mMoya != 0) {
             mBarrierActive = true;
-        } else if (dComIfGs_isEventBit(dSv_evtBit_c::BARRIER_BREAK) == true) {
+        } else if (dComIfGs_isEventBit(dSv_event_flag_c::BARRIER_BREAK) == true) {
             mBarrierActive = false;
         } else {
             mBarrierActive = true;

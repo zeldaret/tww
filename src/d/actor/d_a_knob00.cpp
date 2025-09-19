@@ -171,11 +171,11 @@ s32 daKnob00_c::chkPassward() {
     strcpy(acStack_24, dComIfGp_getInputPassword());
 #endif
 
-    if (!dComIfGs_isEventBit(0x2110)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110)) {
         return -1;
     }
 
-    s32 uVar3 = dComIfGs_getEventReg(0xba0f);
+    s32 uVar3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
     fopMsgM_passwordGet(acStack_38, uVar3 + 0x1b37);
 #if VERSION > VERSION_JPN
     daKnob00_charactorExchange(acStack_38);
@@ -292,29 +292,29 @@ BOOL daKnob00_c::chkException() {
                 return 1;
             }
 
-            if (!dComIfGs_isEventBit(0x2110)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110)) {
                 return 1;
             }
             break;
 
         case 0x6A7:
-            if (!dComIfGs_isEventBit(0x520)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
                 return 1;
             }
             break;
 
         case 0x6A8:
-            if (!dComIfGs_isEventBit(0xa02)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT)) {
                 return 1;
             }
 
-            if (dComIfGs_isEventBit(0x2110)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2110)) {
                 return 1;
             }
             break;
 
         case 0x6A9:
-            if (dComIfGs_isEventBit(0x1701)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1701)) {
                 return 1;
             }
             break;
@@ -324,7 +324,7 @@ BOOL daKnob00_c::chkException() {
                 return 1;
             }
 
-            if (dComIfGs_isEventBit(0x1a80)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
                 return 1;
             }
             break;
@@ -614,15 +614,15 @@ BOOL daKnob00_c::actionPassward2() {
         case 0:
             if (demoProc2()) {
                 m316++;
-                if (!dComIfGs_isEventBit(0x3b20)) {
-                    dComIfGs_onEventBit(0x3b20);
-                    dComIfGs_setEventReg(0xba0f, (s8)cM_rndF(6.0f));
+                if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B20)) {
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B20);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_BA0F, (s8)cM_rndF(6.0f));
                 }
 #if VERSION == VERSION_DEMO
-                s32 tmp = dComIfGs_getEventReg(0xba0f);
+                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
                 m2D0.init(tmp + 0x1b1a);
 #else
-                s32 tmp = dComIfGs_getEventReg(0xba0f);
+                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
                 tmp += 0x1b1a;
                 m2D0.init(tmp);
 #endif
@@ -643,7 +643,7 @@ BOOL daKnob00_c::actionPassward2() {
                         m316 = 10;
                         m2D0.init(0x1b19);
                     } else {
-                        dComIfGs_onEventBit(0x1910);
+                        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1910);
                         m316++;
                         m2D0.init(0x1b18);
                     }
@@ -681,7 +681,7 @@ BOOL daKnob00_c::actionVilla() {
         initOpenDemo(0);
         setAction(7);
         demoProc();
-    } else if (dComIfGs_isEventBit(0x2d80)) {
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
         setAction(1);
     } else {
         setEventPrm();
@@ -708,20 +708,20 @@ BOOL daKnob00_c::actionInit() {
         dComIfG_Bgsp()->Regist(mpBgW, this);
     }
 
-    if (mDoorType == 6 && !dComIfGs_isEventBit(0x3401)) {
+    if (mDoorType == 6 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3401)) {
         actionFigure();
         setAction(10);
         return TRUE;
     }
     
-    if (mDoorType == 5 && !dComIfGs_isEventBit(0x2d80)) {
+    if (mDoorType == 5 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
         actionVilla();
         setAction(8);
         return TRUE;
     }
     
     if (mDoorType == 4) {
-        if (!dComIfGs_isEventBit(0x1910)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1910)) {
             setAction(5);
             actionPassward();
             return TRUE;
@@ -757,7 +757,7 @@ BOOL daKnob00_c::actionFigure() {
         initOpenDemo(0);
         setAction(9);
         demoProc();
-    } else if (dComIfGs_isEventBit(0x3401)) {
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3401)) {
         setAction(1);
     } else {
         setEventPrm();

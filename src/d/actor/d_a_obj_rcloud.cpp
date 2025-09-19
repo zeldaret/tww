@@ -97,7 +97,7 @@ cPhs_State daObjRcloud_c::_create() {
 
     switch (mDemoNameIndex) {
     case 0:
-        if (dComIfGs_isEventBit(0x3908) == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3908) == 0) {
             phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }
@@ -175,7 +175,7 @@ void daObjRcloud_c::clouds_lift_act_proc() {
     mCloudAnimProgress += HIO(m08);
     if (mCloudAnimProgress < endCloudAnimProgress) {
         mCloudAnimProgress = -1.0f;
-        dComIfGs_onEventBit(0x3908);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3908);
         fopAcM_delete(this);
     }
 }

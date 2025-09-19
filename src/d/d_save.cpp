@@ -1368,11 +1368,33 @@ void dSv_info_c::init() {
 
 /* 8005D660-8005D860       .text reinit__10dSv_info_cFv */
 void dSv_info_c::reinit() {
-    static u16 l_holdEventReg[] = {0x95FF, 0x94FF, 0x93FF, 0x92FF, 0x91FF, 0x90FF,
-                                   0x8FFF, 0x8EFF, 0x8DFF, 0x8CFF, 0xB1FF, 0x9CFF,
-                                   0x84FF, 0x83FF, 0x82FF, 0x81FF, 0x80FF};
+    static u16 l_holdEventReg[] = {
+        dSv_event_flag_c::UNK_95FF,
+        dSv_event_flag_c::UNK_94FF,
+        dSv_event_flag_c::UNK_93FF,
+        dSv_event_flag_c::UNK_92FF,
+        dSv_event_flag_c::UNK_91FF,
+        dSv_event_flag_c::UNK_90FF,
+        dSv_event_flag_c::UNK_8FFF,
+        dSv_event_flag_c::UNK_8EFF,
+        dSv_event_flag_c::UNK_8DFF,
+        dSv_event_flag_c::UNK_8CFF,
+        dSv_event_flag_c::UNK_B1FF,
+        dSv_event_flag_c::UNK_9CFF,
+        dSv_event_flag_c::UNK_84FF,
+        dSv_event_flag_c::UNK_83FF,
+        dSv_event_flag_c::UNK_82FF,
+        dSv_event_flag_c::UNK_81FF,
+        dSv_event_flag_c::UNK_80FF
+    };
 
-    static u16 l_onEventBit[] = {0x2F08, 0x2F04, 0x2F02, 0x3A01, 0x3401};
+    static u16 l_onEventBit[] = {
+        dSv_event_flag_c::UNK_2F08,
+        dSv_event_flag_c::UNK_2F04,
+        dSv_event_flag_c::UNK_2F02,
+        dSv_event_flag_c::UNK_3A01,
+        dSv_event_flag_c::UNK_3401,
+    };
 
     u8* r29 = new u8[ARRAY_SIZE(l_holdEventReg)];
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
@@ -1392,7 +1414,7 @@ void dSv_info_c::reinit() {
 #if VERSION > VERSION_DEMO
     u8 pictureNum = dComIfGs_getPictureNum();
 
-    u8 r27 = dComIfGs_getEventReg(0x89FF);
+    u8 r27 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF);
 #endif
 
     init();
@@ -1406,7 +1428,7 @@ void dSv_info_c::reinit() {
     }
 
 #if VERSION > VERSION_DEMO
-    dComIfGs_setEventReg(0xC407, 7);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_C407, 7);
 #endif
 
     dComIfGs_setClearCount(clearCount);
@@ -1433,7 +1455,7 @@ void dSv_info_c::reinit() {
 
     dComIfGs_setPictureNum(pictureNum);
 
-    dComIfGs_setEventReg(0x89FF, r27);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, r27);
 #endif
 }
 

@@ -322,11 +322,11 @@ BOOL daNpc_Ji1_c::isItemWaitAnim() {
 
 /* 000005A0-00000630       .text isClearRecord__11daNpc_Ji1_cFs */
 BOOL daNpc_Ji1_c::isClearRecord(s16 param_1) {
-    if(dComIfGs_isEventBit(0xF20)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F20)) {
         return false;
     }
 
-    u8 level = dComIfGs_getEventReg(0xD003);
+    u8 level = dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003);
     if (param_1 >= l_HIO.field_0x60[level]) {
         return TRUE;
     }
@@ -336,7 +336,7 @@ BOOL daNpc_Ji1_c::isClearRecord(s16 param_1) {
 
 /* 00000630-000006F8       .text setClearRecord__11daNpc_Ji1_cFs */
 void daNpc_Ji1_c::setClearRecord(s16 hits) {
-    u8 oldLevel = dComIfGs_getEventReg(0xD003);
+    u8 oldLevel = dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003);
 
     u8 newLevel = 0;
     while(hits >= l_HIO.field_0x60[newLevel] && newLevel <= 3) {
@@ -344,9 +344,9 @@ void daNpc_Ji1_c::setClearRecord(s16 hits) {
     }
 
     if(oldLevel < newLevel) {
-        dComIfGs_setEventReg(0xD003, newLevel);
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_D003, newLevel);
         if(hits >= l_HIO.field_0x60[3]) {
-            dComIfGs_onEventBit(0xF20);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F20);
         }
     }
 }
@@ -496,7 +496,7 @@ BOOL daNpc_Ji1_c::normalAction(void*) {
             setAnm(1, 8.0f, 0);
         }
 
-        if(dComIfGs_isEventBit(0x520)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
             eventInfo.setXyCheckCB(&daNpc_Ji1_XyCheckCB);
         }
 
@@ -518,7 +518,7 @@ BOOL daNpc_Ji1_c::normalAction(void*) {
 
         if(temp < l_HIO.field_0x2C && isGuardAnim() == 0 && mAnimation != 0xD) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
-            if(dComIfGs_isEventBit(0x520)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
                 eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
             }
         }
@@ -622,7 +622,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
     f32 temp = delta.absXZ();
     
     if(field_0xC78 == 0) {
-        if(!dComIfGs_isEventBit(0x501)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501)) {
             setAnm(0x12, 16.0f, 0);
         }
         else {
@@ -632,7 +632,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
         field_0xC78 += 1;
     }
     else if(field_0xC78 != -1) {
-        if(!dComIfGs_isEventBit(0x501) && daNpc_Ji1_plRoomOutCheck()) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501) && daNpc_Ji1_plRoomOutCheck()) {
             field_0xC84 = 9;
             setAction(&daNpc_Ji1_c::eventAction, 0);
             field_0x2C8 = &daNpc_Ji1_c::kaitenwaitAction;
@@ -644,7 +644,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
         cXyz delta2 = player->current.pos - current.pos;
         s16 temp2 = cM_atan2s(delta2.x, delta2.z);
 
-        if(!dComIfGs_isEventBit(0x501) && isGuardAnim() == 0) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501) && isGuardAnim() == 0) {
             cXyz delta3 = r27->current.pos - current.pos;
             s16 temp3 = cM_atan2s(delta3.x, delta3.z);
             cLib_addCalcAngleS2(&current.angle.y, temp3, 0x10, 0x800);
@@ -670,7 +670,7 @@ BOOL daNpc_Ji1_c::kaitenwaitAction(void*) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
         }
 
-        if(player->checkFrontRollCrash() && (!dComIfGs_isEventBit(0x501) || l_HIO.field_0x30)) {
+        if(player->checkFrontRollCrash() && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501) || l_HIO.field_0x30)) {
             field_0xD79 = 1;
             dComIfGp_getDetect().set_quake(0);
             
@@ -759,7 +759,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
             }
 
             if(dComIfGp_evmng_endCheck(mEventIdx[5])) {
-                dComIfGs_onEventBit(0x501);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0501);
                 field_0xD28 = home.pos;
                 home.angle.y = 0;
                 l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
@@ -797,17 +797,17 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
 
 /* 00002738-00002870       .text getMsg1stType__11daNpc_Ji1_cFv */
 u32 daNpc_Ji1_c::getMsg1stType() {
-    if(!dComIfGs_isEventBit(1)) {
-        if(!dComIfGs_isEventBit(0x501)) {
-            if(dComIfGs_isEventBit(0x640)) {
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0640)) {
                 return 0x964;
             }
 
-            dComIfGs_onEventBit(0x640);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0640);
             return 0x961;
         }
         
-        if(dComIfGs_isEventBit(0x2F40)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F40)) {
             return 0x95B;
         }
 
@@ -823,12 +823,12 @@ u32 daNpc_Ji1_c::getMsg1stType() {
         return 0x97B;
     }
 
-    if(dComIfGs_isEventBit(0x2F10)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10)) {
         return 0x973;
     }
 
-    if(!dComIfGs_isEventBit(0x108)) {
-        dComIfGs_onEventBit(0x108);
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0108)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0108);
         eventInfo.setEventId(-1);
 
         return 0x965;
@@ -843,8 +843,8 @@ u32 daNpc_Ji1_c::getMsg2ndType() {
 
     if(dComIfGp_event_chkTalkXY()) {
         m_jnt.offBackBoneLock();
-        if(!dComIfGs_isEventBit(0xD80)) {
-            dComIfGs_onEventBit(0xD80);
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D80)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0D80);
             msgNo = 0x9AE;
         }
 #if VERSION == VERSION_DEMO
@@ -856,23 +856,23 @@ u32 daNpc_Ji1_c::getMsg2ndType() {
             msgNo = 0x9BB;
         }
 #endif
-        else if(dComIfGs_isEventBit(0xB20)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0B20)) {
             msgNo = 0x9BC;
         }
         else {
             msgNo = 0x9B0;
         }
     }
-    else if(dComIfGs_isEventBit(0x2)) {
-        if(dComIfGs_isEventBit(0xF20)) {
-            if(dComIfGs_getEventReg(0xCF03) >= 3) {
+    else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0002)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F20)) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_CF03) >= 3) {
                 msgNo = 0x9AC;
             }
             else {
                 msgNo = 0x9AD;
             }
         }
-        else if(dComIfGs_getEventReg(0xCF03) >= 3) {
+        else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_CF03) >= 3) {
             msgNo = 0x9AA;
         }
         else {
@@ -881,16 +881,16 @@ u32 daNpc_Ji1_c::getMsg2ndType() {
     }
     else {
         msgNo = 0x986;
-        dComIfGs_onEventBit(0x2);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0002);
     }
 
-    dComIfGs_setEventReg(0xCF03, 0);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_CF03, 0);
     return msgNo;
 }
 
 /* 00002A08-00002A60       .text getMsg__11daNpc_Ji1_cFv */
 u32 daNpc_Ji1_c::getMsg() {
-    if(dComIfGs_isEventBit(0x520)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
         return getMsg2ndType();
     }
     
@@ -943,7 +943,7 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
             mMsgNo = 0x9C0;
             break;
         case 0x9A2:
-            if(dComIfGs_isEventBit(0xF10)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F10)) {
                 mMsgNo = 0x9A3;
             }
             else {
@@ -972,10 +972,10 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
             mMsgNo = 0x998;
             break;
         case 0x99A:
-            if(dComIfGs_getEventReg(0xD003) == 1) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 1) {
                 mMsgNo = 0x99B;
             }
-            else if(dComIfGs_getEventReg(0xD003) == 2) {
+            else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 2) {
                 mMsgNo = 0x99D;
             }
             else {
@@ -1035,7 +1035,7 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
 BOOL daNpc_Ji1_c::talkAction(void*) {
     if(field_0xC78 == 0) {
         if(dComIfGp_event_chkTalkXY() && !dComIfGp_evmng_ChkPresentEnd()) {
-            if(dComIfGs_isEventBit(0xD80) == 0) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D80) == 0) {
                 daPy_py_c* player = daPy_getPlayerActorClass();
                 cXyz delta = player->current.pos - current.pos;
                 f32 dummy = delta.absXZ();
@@ -1416,18 +1416,18 @@ void daNpc_Ji1_c::createItem() {
     else if(field_0xD7B == 1) {
         itemNo = dItem_HURRICANE_SPIN_e;
     }
-    else if(dComIfGs_getEventReg(0xD003) == 1) {
+    else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 1) {
         itemNo = dItem_PURPLE_RUPEE_e;
     }
-    else if(dComIfGs_getEventReg(0xD003) == 2) {
+    else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 2) {
         itemNo = dItem_ORANGE_RUPEE_e;
     }
-    else if(field_0xD70 >= l_HIO.field_0x60[3] && dComIfGs_isEventBit(0xF10)) {
+    else if(field_0xD70 >= l_HIO.field_0x60[3] && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F10)) {
         itemNo = dItem_SILVER_RUPEE_e;
     }
     else {
         itemNo = dItem_HEART_PIECE_e;
-        dComIfGs_onEventBit(0xF10);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F10);
     }
 
     fpc_ProcID itemPID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, current.roomNo);
@@ -2114,12 +2114,12 @@ BOOL daNpc_Ji1_c::startspeakAction(void*) {
 
         dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("Ji1"));
 
-        if(dComIfGs_isEventBit(0x520)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
             if(field_0xD7B) {
                 mMsgNo = 0x9B5;
             }
-            else if(!dComIfGs_isEventBit(0xF20)) {
-                switch(dComIfGs_getEventReg(0xD003)) {
+            else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F20)) {
+                switch(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003)) {
                     case 0:
                         mMsgNo = 0x98B;
 
@@ -2217,13 +2217,13 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
             dComIfGp_evmng_cutEnd(staffIdx);
         }
 
-        if(dComIfGs_isEventBit(0x520)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
             mMsgNo = 0x996;
         }
-        else if(dComIfGs_isEventBit(0x1)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
             mMsgNo = 0x96D;
         }
-        else if(!dComIfGs_isEventBit(0x2F40)) {
+        else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F40)) {
             mMsgNo = 0x950;
         }
         else {
@@ -2293,7 +2293,7 @@ BOOL daNpc_Ji1_c::reiAction(void*) {
 
         mDoAud_bgmStart(JA_BGM_HOUSE_G);
 
-        if(dComIfGs_isEventBit(0x520)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
             if(field_0xD70 == 0) {
                 mMsgNo = 0x997;
             }
@@ -2302,11 +2302,11 @@ BOOL daNpc_Ji1_c::reiAction(void*) {
                 mMsgNo = 0x999;
             }
         }
-        else if(dComIfGs_isEventBit(0x1)) {
+        else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
             mMsgNo = 0x96E;
         }
-        else if(!dComIfGs_isEventBit(0x2F40)) {
-            dComIfGs_onEventBit(0x2F40);
+        else if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F40)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F40);
             mMsgNo = 0x951;
         }
         else {
@@ -2419,7 +2419,7 @@ BOOL daNpc_Ji1_c::plmoveAction(void*) {
 
                 initPos(0);
 
-                if(dComIfGs_isEventBit(0x520) && field_0xD7B == 0) {
+                if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520) && field_0xD7B == 0) {
                     dComIfGp_startMiniGame(6);
                     game_life_point = 3;
                 }
@@ -2728,7 +2728,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
         field_0xC78++;
     }
     else if(field_0xC78 != -1) {
-        if(!dComIfGs_isEventBit(0x2F10) && daNpc_Ji1_plRoomOutCheck()) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10) && daNpc_Ji1_plRoomOutCheck()) {
             field_0xC84 = 9;
             setAction(&daNpc_Ji1_c::eventAction, 0);
             field_0x2C8 = &daNpc_Ji1_c::teachAction;
@@ -2826,8 +2826,8 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                         }
                     }
                     else if(field_0xC8C != 9 && field_0xD34 == 0) {
-                        if(field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(1))) {
-                            if(dComIfGs_isEventBit(1) && dComIfGs_isEventBit(0x2F10) == 0) {
+                        if(field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001))) {
+                            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10) == 0) {
                                 field_0xC84 = 0xF;
                                 fopAcM_orderOtherEventId(this, mEventIdx[field_0xC84]);
                             }
@@ -2897,9 +2897,9 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                         field_0xD38 = current.pos;
 
                         
-                        if((field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(1))) && field_0xC90 == 3) {
-                            if(dComIfGs_isEventBit(1) && dComIfGs_isEventBit(0x2F10) == 0) {
-                                dComIfGs_onEventBit(0x2F10);
+                        if((field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001))) && field_0xC90 == 3) {
+                            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10) == 0) {
+                                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F10);
                                 field_0xD7C = 1;
                                 field_0xC84 = 0xF;
                                 setAction(&daNpc_Ji1_c::eventAction, NULL);
@@ -3009,7 +3009,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
         field_0xC90 = 0;
         field_0xD34 = 0;
         field_0xC30 = 0;
-        dComIfGs_onTmpBit(0x402);
+        dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0402);
         field_0xD70 = 6;
         field_0xC78++;
     }
@@ -3037,8 +3037,8 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             if(cutType == 9 && y_diff < 20.0f)
 #endif
             {
-                dComIfGs_onEventBit(0xB20);
-                dComIfGs_offTmpBit(0x402);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
+                dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0402);
 #if VERSION > VERSION_DEMO
                 dComIfGp_setItemBeastNumCount(3, -10);
 #endif
@@ -3925,10 +3925,10 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
             if(field_0xD70 >= l_HIO.field_0x60[3]) {
                 field_0xC84 = 8;
-                if(dComIfGs_isEventBit(0xF20)) {
+                if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F20)) {
                     field_0xC38 = 2;
                 }
-                else if(dComIfGs_isEventBit(0xF10)) {
+                else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F10)) {
                     field_0xC38 = 0;
                 }
                 else {
@@ -4668,7 +4668,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     mEventIdx[0x10] = dComIfGp_evmng_getEventIdx("Ji1_KmonTalk");
     mEventIdx[0x11] = dComIfGp_evmng_getEventIdx("Ji1_EquipTalk");
 
-    if(dComIfGs_isEventBit(0x1) && !dComIfGs_isEventBit(0x108)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0108)) {
         eventInfo.setEventId(mEventIdx[0x11]);
     }
 
@@ -4729,8 +4729,8 @@ BOOL daNpc_Ji1_c::CreateInit() {
     field_0xC9C = 0.0f;
 
     field_0xD38 = current.pos;
-    if(dComIfGs_isEventBit(0x520)) {
-        if(!dComIfGs_isEventBit(0x2)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0002)) {
             field_0xD84 = 0;
             field_0xD50.x = -13.0f;
             field_0xD50.y = -4.0f;
@@ -4760,7 +4760,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         field_0xD28 = home.pos;
     }
     else {
-        if(dComIfGs_isEventBit(0x501) || dComIfGs_isEventBit(0x1)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
             field_0xD84 = 1;
             field_0xD50.x = -13.0f;
             field_0xD50.y = -4.0f;
@@ -4774,7 +4774,7 @@ BOOL daNpc_Ji1_c::CreateInit() {
         }
         else {
             field_0xD84 = 0;
-            if(!dComIfGs_isEventBit(0x640) || l_HIO.field_0x30) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0640) || l_HIO.field_0x30) {
                 field_0xD68 = 0;
 
                 setAction(&daNpc_Ji1_c::kaitenExpAction, 0);
@@ -5169,7 +5169,7 @@ BOOL daNpc_Ji1_c::lookBack() {
     else {
         if(
             (field_0xD7A != 0 || isGuardAnim()) ||
-            (checkAction(&daNpc_Ji1_c::kaitenwaitAction) && !dComIfGs_isEventBit(0x501)) ||
+            (checkAction(&daNpc_Ji1_c::kaitenwaitAction) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0501)) ||
             (!checkAction(&daNpc_Ji1_c::normalAction) && dist < 600.0f)
         ) {
             if(mAnimation == 0xD) {

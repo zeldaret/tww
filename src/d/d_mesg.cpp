@@ -579,7 +579,7 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
             r29 = true;
             int r30 = 0;
             char sp28[17];
-            fopMsgM_passwordGet(sp28, dComIfGs_getEventReg(0xBA0F) + 0x1B37);
+            fopMsgM_passwordGet(sp28, dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F) + 0x1B37);
             char sp10[3];
             while (sp28[r30]) {
                 int char_code;
@@ -1003,7 +1003,7 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
             r26 = true;
             int r25 = 0;
             char sp18[17];
-            u32 tmp = dComIfGs_getEventReg(0xBA0F);
+            u32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
             fopMsgM_passwordGet(sp18, tmp + 0x1B37);
 #if VERSION > VERSION_DEMO
             if (retFlag && r27 >= 0 && r27 < linemax) {
