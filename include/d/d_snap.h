@@ -210,7 +210,7 @@ enum {
     /* 0xCA */ DSNAP_TYPE_BDK,
     /* 0xCB */ DSNAP_TYPE_UNKCB,
     /* 0xCC */ DSNAP_TYPE_BWD,
-    /* 0xCD */ DSNAP_TYPE_UNKCD,
+    /* 0xCD */ DSNAP_TYPE_BGN,
     /* 0xCE */ DSNAP_TYPE_UNKCE,
     /* 0xCF */ DSNAP_TYPE_UNKCF,
     /* 0xD0 */ DSNAP_TYPE_LAST_INDEX,
