@@ -562,17 +562,22 @@ public:
     void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
 };
 
+extern J3DDrawBuffer* dComIfGd_getOpaListSky();
+
 class mDoExt_J3DModelPacketS : public J3DPacket {
 public:
     mDoExt_J3DModelPacketS() {}
     ~mDoExt_J3DModelPacketS() {}
 
-    void setModel(J3DModel*) {}
-    void update() {}
+    void setModel(J3DModel* model) { mpModel = model; }
+    void update() { dComIfGd_getOpaListSky()->entryImm(this, 0); }
     
     void draw();
     void setMaterial();
-}; // Size: 0x10
+
+public:
+    /* 0x10 */ J3DModel* mpModel;
+}; // Size: 0x14
 
 class mDoExt_3Dline_c {
 public:
