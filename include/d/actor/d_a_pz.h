@@ -107,7 +107,8 @@ public:
     /* 0x06D6 */ u8 m06D6[0x073E - 0x06D6];
     /* 0x073E */ u8 mbEyesFollowGanondorf;
     /* 0x073F */ u8 m073F;
-    /* 0x0740 */ u8 m0740[0x076C - 0x0740];
+    /* 0x0740 */ s8 m0740;
+    /* 0x0741 */ u8 m0741[0x076C - 0x0741];
     /* 0x076C */ request_of_phase_process_class mPhs;
     /* 0x0774 */ u32 m0774;
     /* 0x0778 */ mDoExt_invisibleModel mInvisibleModel;
