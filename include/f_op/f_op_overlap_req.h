@@ -8,8 +8,8 @@
 struct layer_class;
 class overlap_task_class;
 
-class overlap_request_class : public request_base_class {
-public:
+struct overlap_request_class {
+    /* 0x00 */ request_base_class base;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ s16 mDelay;
     /* 0x04 */ u16 field_0x4;

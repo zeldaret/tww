@@ -299,7 +299,7 @@ cPhs_State fopAc_Create(void* pProc) {
 
     cPhs_State status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
     if (status == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(actor);
+        s32 priority = fpcM_DrawPriority(actor);
         fopDwTg_ToDrawQ(&actor->draw_tag, priority);
     }
 

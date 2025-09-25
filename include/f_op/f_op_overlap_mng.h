@@ -10,8 +10,8 @@ struct overlap_method_class {
     /* 0x00 */ leafdraw_method_class base;
 };
 
-class overlap_task_class : public leafdraw_class {
-public:
+struct overlap_task_class {
+    /* 0x00 */ leafdraw_class base;
     /* 0xC0 */ overlap_method_class* sub_method;
     /* 0xC4 */ request_base_class mRq;
     /* 0xC8 */ fpc_ProcID mScenePId;

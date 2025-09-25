@@ -210,9 +210,9 @@ namespace daTsubo {
 
         void prm_make_skull() {}
         void prm_make_yw1() {}
-        void prm_off_moveBg() { fopAcM_SetParam(this, base.mParameters | 0xC000); }
-        void prm_off_stick() { fopAcM_SetParam(this, base.mParameters & ~0x80000000); }
-        void prm_set_cull_non() { fopAcM_SetParam(this, base.mParameters & ~0x70000000); }
+        void prm_off_moveBg() { fopAcM_SetParam(this, fopAcM_GetParam(this) | 0xC000); }
+        void prm_off_stick() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x80000000); }
+        void prm_set_cull_non() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x70000000); }
         void prm_set_itemNo(int) {}
         void set_drop_spd_y0(float) {}
         bool spec_chk_prm_boko() const { return prm_get_spec() != 0x3F; }

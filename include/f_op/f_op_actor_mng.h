@@ -678,7 +678,7 @@ void fopDwTg_ToDrawQ(create_tag_class*, int);
 void fopDwTg_DrawQTo(create_tag_class*);
 
 inline void fopAcM_onDraw(fopAc_ac_c* actor) {
-    fopDwTg_ToDrawQ(&actor->draw_tag, fpcLf_GetPriority(actor));
+    fopDwTg_ToDrawQ(&actor->draw_tag, fpcM_DrawPriority(actor));
 }
 
 inline void fopAcM_offDraw(fopAc_ac_c* actor) {

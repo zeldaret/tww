@@ -38,7 +38,7 @@ inline fpc_ProcID fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* 
 }
 
 inline s16 fpcM_DrawPriority(void* pProc) {
-    return fpcLf_GetPriority((leafdraw_class*)pProc);
+    return (s16)fpcLf_GetPriority((leafdraw_class*)pProc);
 }
 
 inline s32 fpcM_ChangeLayerID(void* pProc, int layerID) {

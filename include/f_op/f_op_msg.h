@@ -26,8 +26,8 @@ struct msg_method_class {
     /* 0x00 */ leafdraw_method_class base;
 };
 
-class msg_class : public leafdraw_class {
-public:
+struct msg_class {
+    /* 0x00 */ leafdraw_class base;
     /* 0xC0 */ int mMsgType;
     /* 0xC4 */ create_tag_class draw_tag;
     /* 0xD8 */ msg_method_class* sub_method;

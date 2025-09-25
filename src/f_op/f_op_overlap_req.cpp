@@ -25,7 +25,7 @@ static cPhs_State fopOvlpReq_phase_Done(overlap_request_class* i_this) {
 }
 
 static cPhs_State fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
-    cReq_Done(i_this);
+    cReq_Done(&i_this->base);
     if (i_this->mDelay-- <= 0)
         return cPhs_NEXT_e;
     else
@@ -45,7 +45,7 @@ static cPhs_State fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) 
     if (i_this->mPeektime)
         i_this->mPeektime--;
 
-    if (i_this->flag2 == 2 && !i_this->mPeektime) {
+    if (i_this->base.flag2 == 2 && !i_this->mPeektime) {
         cReq_Command(&i_this->mpTask->mRq, 2);
         return cPhs_NEXT_e;
     }
@@ -56,7 +56,7 @@ static cPhs_State fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) 
 
 static cPhs_State fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
     if (cReq_Is_Done(&i_this->mpTask->mRq)) {
-        cReq_Done(i_this);
+        cReq_Done(&i_this->base);
         return cPhs_NEXT_e;
     }
 
@@ -99,7 +99,7 @@ overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_this, s16 pro
         return i_this;
     }
 
-    cReq_Command(i_this, 1);
+    cReq_Command(&i_this->base, 1);
     i_this->mProcName = procName;
     cPhs_Set(&i_this->mPhs, phaseMethod);
     fopOvlpReq_SetPeektime(i_this, peekTime);
@@ -148,9 +148,9 @@ void fopOvlpReq_SetPeektime(overlap_request_class* i_this, u16 peekTime) {
 }
 
 BOOL fopOvlpReq_OverlapClr(overlap_request_class* i_this) {
-    if (i_this->flag0 == 1 || !fopOvlpReq_Is_PeektimeLimit(i_this))
+    if (i_this->base.flag0 == 1 || !fopOvlpReq_Is_PeektimeLimit(i_this))
         return FALSE;
 
-    cReq_Create(i_this, 2);
+    cReq_Create(&i_this->base, 2);
     return TRUE;
 }

@@ -1363,9 +1363,9 @@ void bb_atack_move(bb_class* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    if (&player->base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
+    if (&player->base.base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
 #else
-    if (&player->base == fpcM_Search(pl_name_check, i_this))
+    if (&player->base.base == fpcM_Search(pl_name_check, i_this))
 #endif
     {
         bb_kamome_attack(i_this);

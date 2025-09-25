@@ -2577,7 +2577,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
     if (res != cPhs_COMPLEATE_e) {
         return res;
     }
-    i_this->m02BC = (u8)actor->base.mParameters;
+    i_this->m02BC = fopAcM_GetParam(actor) & 0xFF;
     if (!fopAcM_entrySolidHeap(actor, useHeapInit, 0x96000)) {
         return cPhs_ERROR_e;
     }
