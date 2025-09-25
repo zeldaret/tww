@@ -860,7 +860,7 @@ BOOL daNpc_Cb1_c::isFlyAction() {
 /* 00002914-00002A2C       .text sowCheck__11daNpc_Cb1_cFv */
 BOOL daNpc_Cb1_c::sowCheck() {
 #if VERSION > VERSION_DEMO
-    if(!dComIfGp_event_runCheck() && (m4E4 & 1) == 0)
+    if(!dComIfGp_event_runCheck() && (!isReturnLink()))
 #endif
     {
         dAttList_c* list = dComIfGp_getAttention().getActionBtnB();
@@ -1005,7 +1005,7 @@ BOOL daNpc_Cb1_c::eventProc() {
             mDoAud_seStart(JA_SE_CTRL_NPC_TO_LINK);
         }
 
-        m4E4 |= 2;
+        onEventAccept();
         m8DD = -1;
     }
 
@@ -1036,14 +1036,14 @@ BOOL daNpc_Cb1_c::eventProc() {
         }
 
 
-        if(m4E4 & 2) {
+        if(isEventAccept()) {
             if(dComIfGp_evmng_endCheck(mEventIdx[m8E3])) {
                 dComIfGp_event_reset();
-                m4E4 &= ~2;
+                offEventAccept();
 
                 if(m8E3 == 1) {
                     returnLinkPlayer();
-                    m4E4 &= ~1;
+                    offReturnLink();
                 }
 
                 m8E3 = 0xFF;
@@ -2297,7 +2297,7 @@ BOOL daNpc_Cb1_c::hitPlayerAction(void*) {
         setAnm(ANM_02);
     }
     else if(m8F0 != -1 && mAcch.ChkGroundHit()) {
-        m4E4 |= 1;
+        returnLink();
         speedF = 0.0f;
     }
 
@@ -3059,7 +3059,7 @@ BOOL daNpc_Cb1_c::execute() {
     f32 temp3 = 3.0f;
 
     if(!fopAcM_checkCarryNow(this) && !isShipRide()) {
-        if(checkNowPosMove("Cb1") && !(m4E4 & 1)) {
+        if(checkNowPosMove("Cb1") && !(isReturnLink())) {
             f32 temp4 = current.pos.y;
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
             m900 += temp4 - current.pos.y;
@@ -3183,25 +3183,25 @@ BOOL daNpc_Cb1_c::execute() {
 
             fopAcM_SetStatusMap(this, 0x12);
 
-            if(m4E4 & 1) {
+            if(isReturnLink()) {
                 m8DD = 1;
             }
             else {
                 if(isNoCarryAction()) {
                     setPlayerAction(&daNpc_Cb1_c::carryPlayerAction, NULL);
-                    m4E4 |= 1;
+                    returnLink();
                 }
 
 #if VERSION == VERSION_DEMO
                 playerAction(NULL);
 
                 if(dComIfGp_getRStatusForce() == 7 && !dComIfGp_event_runCheck() && (CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_START(0))) {
-                    m4E4 |= 1;
+                    returnLink();
                 } else
 #else
 
                 if(!dComIfGp_event_runCheck() && dComIfGp_getRStatusForce() == 7 && !dComIfGp_event_runCheck() && (CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_START(0))) {
-                    m4E4 |= 1;
+                    returnLink();
                 }
 
                 playerAction(NULL);
