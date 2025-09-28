@@ -133,7 +133,7 @@ void himo3_control(himo3_class* i_this, himo3_s* arg1) {
             if (strcmp(dComIfGp_getStartStageName(), "majroom") == 0 || strcmp(dComIfGp_getStartStageName(), "Majroom") == 0 ||
                 strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0)
             {
-                dComIfGs_onEventBit(0x402);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0402);
             }
         } else if (fopAcM_GetParam(i_this) == 2) {
             i_this->m02BE = 2;

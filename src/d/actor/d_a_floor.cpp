@@ -30,7 +30,7 @@ void rideCallBack(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
 
 /* 000000DC-0000012C       .text Delete__9daFloor_cFv */
 BOOL daFloor_c::Delete() {
-    mSmokeCallBack.end();
+    mSmokeCallBack.remove();
     dComIfG_resDelete(&mPhs, m_arcname);
     return TRUE;
 }

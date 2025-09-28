@@ -119,7 +119,7 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
     static const char* language[] = {"ENGLISH", "GERMAN", "FRENCH", "SPANISH", "ITALIAN"};
     JUTReport(40, 440, "%s", language[dComIfGs_getPalLanguage()]);
 #endif
-    if (dComIfGs_isEventBit(0x2d01)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＮ");
     } else {
         JUTReport(400, 420, "３コン（Ａ）:デモ２３　ＯＦＦ");
@@ -230,9 +230,9 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
     if (CPad_CHECK_TRIG_A(2)) {
         l_demo23 ^= 1;
         if (l_demo23)
-            dComIfGs_onEventBit(0x2d01);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2D01);
         else
-            dComIfGs_offEventBit(0x2d01);
+            dComIfGs_offEventBit(dSv_event_flag_c::UNK_2D01);
     }
 
     g_env_light.mTimeAdv = 0.0f;

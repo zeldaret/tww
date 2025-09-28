@@ -117,15 +117,15 @@ void daWarpdm20_c::CreateInit() {
     m2E0 = current.pos;
     m2EC.set(1.0f, 1.0f, 1.0f);
     m2C8 = 0;
-    if (dComIfGs_isEventBit(0x2d08)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D08)) {
         m2CC = 1;
         setEndAnm();
     }
 
     mEventIdx = dComIfGp_evmng_getEventIdx("TO_HYRULE_WARP", 0xff);
 
-    if (dComIfGs_isEventBit(0x2d02)) {
-        dComIfGs_onEventBit(0x1820);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1820);
     }
 }
 
@@ -187,7 +187,7 @@ void daWarpdm20_c::normal_execute() {
     f32 abs = (player->current.pos - current.pos).absXZ();
     f32 max = 2000.0f;
 
-    if (dComIfGs_isEventBit(0x2d08)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D08)) {
         m2CC = 1;
         animPlay();
         if (emitter != NULL) {

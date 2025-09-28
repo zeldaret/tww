@@ -79,7 +79,7 @@ cPhs_State daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
 
     m_itemNo = daSpcItem01_prm::getItemNo(this);
-    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(0xE20)) {
+    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }

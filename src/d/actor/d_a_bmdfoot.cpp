@@ -17,7 +17,8 @@
 class daBmdfoot_HIO_c : public JORReflexible {
 public:
     daBmdfoot_HIO_c();
-    virtual ~daBmdfoot_HIO_c() {};
+    virtual ~daBmdfoot_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;
@@ -101,7 +102,7 @@ void housi_off(bmdfoot_class* i_this) {
         }
     }
     if (i_this->m4B0.getEmitter() != NULL) {
-        i_this->m4B0.end();
+        i_this->m4B0.remove();
     }
 }
 
@@ -328,7 +329,7 @@ s32 ug_move(bmdfoot_class* i_this) {
         if ((fVar7 < 300.0f) || (i_this->mBC0 > REG14_F(15) + 3000.0f)) {
             i_this->mBA8 = 10;
             if (i_this->m4B0.getEmitter() != NULL) {
-                i_this->m4B0.end();
+                i_this->m4B0.remove();
             }
             uVar4 = 1;
         }
@@ -346,7 +347,6 @@ s32 ug_move(bmdfoot_class* i_this) {
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
 void attack_2(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    bool bVar1;
     J3DAnmTransform* pJVar2;
     cXyz local_3c;
     cXyz local_48;
@@ -401,7 +401,6 @@ void attack_2(bmdfoot_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         ug_move(i_this);
-        bVar1 = true;
         if (i_this->mAF4->isStop()) {
             pJVar2 = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK2);
             i_this->mAF4->setAnm(pJVar2, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
@@ -564,16 +563,16 @@ void move(bmdfoot_class* i_this) {
 
     if (boss != NULL) {
         sVar1 = (u16)(fopAcM_GetParam(actor) & 0xF) << 13;
-        cMtx_YrotS(*calc_mtx, boss->shape_angle.y);
-        cMtx_XrotM(*calc_mtx, boss->shape_angle.x);
-        cMtx_ZrotM(*calc_mtx, boss->shape_angle.z);
+        cMtx_YrotS(*calc_mtx, boss->actor.shape_angle.y);
+        cMtx_XrotM(*calc_mtx, boss->actor.shape_angle.x);
+        cMtx_ZrotM(*calc_mtx, boss->actor.shape_angle.z);
         cMtx_YrotM(*calc_mtx, sVar1);
-        actor->current.angle.y = sVar1 + boss->shape_angle.y;
+        actor->current.angle.y = sVar1 + boss->actor.shape_angle.y;
         local_20.x = 0.0f;
         local_20.y = REG14_F(3);
         local_20.z = REG14_F(4) + 180.0f;
         MtxPosition(&local_20, &cStack_2c);
-        actor->current.pos = boss->current.pos + cStack_2c;
+        actor->current.pos = boss->actor.current.pos + cStack_2c;
         switch (i_this->m2BA) {
         case 0:
             wait(i_this);
@@ -694,11 +693,11 @@ static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
     mDoAud_seDeleteObject(&i_this->mAE8);
     mDoAud_seDeleteObject(&i_this->mBAC);
     for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m41C); i++) {
-        i_this->m41C[i].end();
+        i_this->m41C[i].remove();
     }
-    i_this->m458[0].end();
-    i_this->m458[1].end();
-    i_this->m4B0.end();
+    i_this->m458[0].remove();
+    i_this->m458[1].remove();
+    i_this->m4B0.remove();
     boss = NULL;
     return TRUE;
 }
@@ -839,7 +838,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
     }
     a_this->attention_info.position.y = -20000.0f;
     a_this->eyePos.y = -20000.0f;
-    if (!(g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
         i_this->m2BA = 10;
     } else {
         i_this->mBC8 = 1;

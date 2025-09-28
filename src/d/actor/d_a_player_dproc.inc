@@ -1249,8 +1249,7 @@ BOOL daPy_lk_c::dProcTalismanWait() {
     mpEquipItemModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mSwordAnim.play();
     J3DModelData* modelData = mpEquipItemModel->getModelData();
-    f32 frame = mSwordAnim.getFrameCtrl()->getFrame();
-    mSwordAnim.entry(modelData, frame);
+    mSwordAnim.entry(modelData);
     mDoAud_seStart(JA_SE_OBJ_OMAMORI, pcVar1, 0, mReverb);
     if (mDemo.getParam0() != 0) {
         onModeFlg(ModeFlg_00000080);

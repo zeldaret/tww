@@ -261,7 +261,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mMelodyNum = 4;
         mGiveItemNo = TACT_SONG5;
         eventInfo.setEventName("MKNJD_K_TALK");
-        m0430 = 0x2910;
+        m0430 = dSv_event_flag_c::UNK_2910;
     }
     else {
         mCheckEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[2]);
@@ -272,7 +272,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mMelodyNum = 3;
         mGiveItemNo = TACT_SONG4;
         eventInfo.setEventName("MKNJD_D_TALK");
-        m0430 = 0x2920;
+        m0430 = dSv_event_flag_c::UNK_2920;
     }
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x3D;

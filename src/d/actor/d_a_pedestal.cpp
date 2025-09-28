@@ -74,8 +74,8 @@ void daPds_c::CreateInit() {
     if (mType == 0) {
         // Type 0: A pedestal that a npc_os starts on in its original room.
         if (wakeupCheck()) {
-            if (subtype <= 2) {
-                fopAc_ac_c* pActor = fopAcM_searchFromName(l_os_name[subtype], 0, 0);
+            if (argument <= 2) {
+                fopAc_ac_c* pActor = fopAcM_searchFromName(l_os_name[argument], 0, 0);
 
                 if (pActor != NULL && fopAcM_searchActorDistanceXZ(this, pActor) < 100.0f) {
                     pActor->current.pos.y = current.pos.y;
@@ -114,11 +114,11 @@ cPhs_State daPds_c::_create() {
 
 /* 00000474-0000052C       .text getMyStaffId__Q210daPedestal7daPds_cFv */
 int daPds_c::getMyStaffId() {
-    if (subtype == 0) {
+    if (argument == 0) {
         return dComIfGp_evmng_getMyStaffId("Hdai1");
-    } else if (subtype == 1) {
+    } else if (argument == 1) {
         return dComIfGp_evmng_getMyStaffId("Hdai2");
-    } else if (subtype == 2) {
+    } else if (argument == 2) {
         return dComIfGp_evmng_getMyStaffId("Hdai3");
     }
 
@@ -127,16 +127,16 @@ int daPds_c::getMyStaffId() {
 
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::wakeupCheck() {
-    if (subtype == 0) {
-        if (dComIfGs_isEventBit(0x1780)) {
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1780)) {
             return TRUE;
         }
-    } else if (subtype == 1) {
-        if (dComIfGs_isEventBit(0x1740)) {
+    } else if (argument == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1740)) {
             return TRUE;
         }
-    } else if (subtype == 2) {
-        if (dComIfGs_isEventBit(0x1720)) {
+    } else if (argument == 2) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1720)) {
             return TRUE;
         }
     }
@@ -146,16 +146,16 @@ BOOL daPds_c::wakeupCheck() {
 
 /* 000005D8-00000684       .text finishCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::finishCheck() {
-    if (subtype == 0) {
-        if (dComIfGs_isEventBit(0x1710)) {
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710)) {
             return TRUE;
         }
-    } else if (subtype == 1) {
-        if (dComIfGs_isEventBit(0x1704)) {
+    } else if (argument == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704)) {
             return TRUE;
         }
-    } else if (subtype == 2) {
-        if (dComIfGs_isEventBit(0x1B01)) {
+    } else if (argument == 2) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
             return TRUE;
         }
     }

@@ -274,7 +274,7 @@ cPhs_State fopAc_Create(void* pProc) {
             actor->home.angle = prm->base.angle;
             actor->shape_angle = prm->base.angle;
             actor->parentActorID = prm->parent_id;
-            actor->subtype = prm->subtype;
+            actor->argument = prm->argument;
             actor->gbaName = prm->gbaName;
             actor->scale.set(prm->scale.x * 0.1f, prm->scale.y * 0.1f, prm->scale.z * 0.1f);
             actor->setID = prm->base.setID;
@@ -299,7 +299,7 @@ cPhs_State fopAc_Create(void* pProc) {
 
     cPhs_State status = fpcMtd_Create((process_method_class*)actor->sub_method, actor);
     if (status == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(actor);
+        s32 priority = fpcM_DrawPriority(actor);
         fopDwTg_ToDrawQ(&actor->draw_tag, priority);
     }
 

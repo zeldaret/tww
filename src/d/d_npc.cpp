@@ -639,7 +639,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
 
 /* 8021BEC4-8021BF30       .text dNpc_chkArasoi__Fv */
 bool dNpc_chkArasoi() {
-    return dComIfGs_isEventBit(0x1220) && !dComIfGs_isEventBit(0x1808);
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1220) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1808);
 }
 
 /* 8021BF30-8021BF98       .text dNpc_chkLetterPassed__Fv */

@@ -117,10 +117,10 @@ public:
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     void remove(J3DModelData* i_modelData) { i_modelData->getJointNodePointer(0)->setMtxCalc(NULL); }
-    J3DAnmTransform* getBckAnm() const { return mAnmTransform; }
+    J3DAnmTransform* getBckAnm() const { return mpAnm; }
 
 private:
-    /* 0x08 */ J3DAnmTransform* mAnmTransform;
+    /* 0x08 */ J3DAnmTransform* mpAnm;
     /* 0x0C */ J3DMtxCalcMayaAnm* mAnm;
 };  // Size: 0x10
 
@@ -178,17 +178,20 @@ private:
 
 class mDoExt_bvaAnm : public mDoExt_baseAnm {
 public:
+    mDoExt_bvaAnm() {
+        field_0xc = NULL;
+    }
     int init(J3DModel*, J3DAnmVisibilityFull*, int, int, f32, s16, s16, bool, int);
     void entry(J3DModel*, s16);
 
     int init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool);
 
-    // TODO
-    void entry(J3DModel* i_model) {}
+    void entry(J3DModel* i_model) { entry(i_model, getFrame()); }
 
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;
     /* 0x0C */ J3DVisibilityManager* field_0xc;
+    /* 0x10 */ s32 field_0x10; // TODO Unknown
 };
 
 class mDoExt_AnmRatioPack {
@@ -370,6 +373,7 @@ public:
     BOOL isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
     BOOL isMorf() { return mCurMorf < 1.0f; }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
     /* 0x58 */ J3DFrameCtrl mFrameCtrl;
@@ -424,6 +428,7 @@ public:
         mAnmRate = rate;
     }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm1;
     /* 0x58 */ J3DAnmTransform* mpAnm2;
@@ -445,7 +450,9 @@ public:
     virtual void setMaterial() = 0;
     virtual void draw() = 0;
 
-public:
+protected:
+    friend class mDoExt_3DlineMatSortPacket;
+
     /* 0x0 */ /* vtable */
     /* 0x4 */ mDoExt_3DlineMat_c* mpNextLineMat;
 };
@@ -528,6 +535,7 @@ public:
         mJntNum = i_jntNum;
     }
 
+private:
     /* 0x10 */ J3DModel* mModel;
     /* 0x14 */ u16 mJntNum;
 };
@@ -542,6 +550,7 @@ public:
     void updateDL(J3DModel*);
     void updateDL(mDoExt_McaMorf*);
 
+private:
     J3DModel* mModel;
     mDoExt_invJntPacket* mpPackets;
 };
@@ -583,7 +592,10 @@ public:
 
     BOOL init(u16 numSegments, BOOL hasSize, BOOL hasTex);
 
-public:
+private:
+    friend class mDoExt_3DlineMat0_c;
+    friend class mDoExt_3DlineMat1_c;
+
     /* 0x00 */ cXyz* mpSegments;
     /* 0x04 */ u8* mpSize;
     /* 0x08 */ cXyz* mPosArr[2];
@@ -604,7 +616,7 @@ public:
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
-public:
+private:
     /* 0x08 */ GXColor mColor;
     /* 0x0C */ dKy_tevstr_c* mpTevStr;
     /* 0x10 */ u16 mNumLines;
@@ -628,7 +640,7 @@ public:
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
 
-public:
+private:
     /* 0x08 */ GXTexObj mTexObj;
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;
@@ -673,6 +685,7 @@ JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
+#if VERSION > VERSION_DEMO
 s32 mDoExt_getSafeArchiveHeapSize();
 s32 mDoExt_getSafeGameHeapSize();
 s32 mDoExt_getSafeZeldaHeapSize();
@@ -682,6 +695,7 @@ void mDoExt_setSafeArchiveHeapSize();
 void mDoExt_setSafeGameHeapSize();
 void mDoExt_setSafeZeldaHeapSize();
 void mDoExt_setSafeCommandHeapSize();
+#endif
 
 s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 

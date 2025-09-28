@@ -141,7 +141,7 @@ void daBoko_c::keCalc1(ke_c_s* arg1, int arg2) {
         pcVar10->z = fVar1 * (pcVar11->z - pcVar10->z);
     }
 
-    cXyz* segments = mpLineKe->lineMat.mpLines[arg2].mpSegments;
+    cXyz* segments = mpLineKe->lineMat.getPos(arg2);
     for (s32 i = 0; i < 10; i++) {
         *segments++ = arg1->m000[i];
     }
@@ -795,7 +795,7 @@ BOOL daBoko_c::execute() {
     }
 
     if (fopAcM_GetParam(this) == Type_PGANON_SWORD_e) {
-        if (dComIfGs_isEventBit(0x3a08)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A08)) {
             mBrkAnm.play();
             bVar4 = true;
             if (mBrkAnm.isStop()) {
@@ -819,7 +819,7 @@ static BOOL daBoko_IsDelete(daBoko_c* i_this) {
 /* 00002A2C-00002AA4       .text bokoDelete__8daBoko_cFv */
 BOOL daBoko_c::bokoDelete() {
     mDoAud_seDeleteObject(&m2D0);
-    mParticleCallBack.end();
+    mParticleCallBack.remove();
     dKy_plight_cut(&mLight);
     dComIfG_resDelete(&mPhase, m_arc_name[fopAcM_GetParam(this)]);
     return TRUE;

@@ -93,12 +93,12 @@ BOOL daAgbsw0_c::draw() {
             }
         }
         else if(type == daAgbsw0Type_UNK_0xD_e) {
-            if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) || dComIfGs_isEventBit(0x2D01)) {
+            if(!dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 return true;
             }
         }
         else if(type == daAgbsw0Type_UNK_0xE_e) {
-            if(!dComIfGs_isEventBit(0x1820) || dComIfGs_getTriforceNum() == 8) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) || dComIfGs_getTriforceNum() == 8) {
                 return true;
             }
         }
@@ -197,7 +197,7 @@ cPhs_State daAgbsw0_c::create() {
         }
     }
     else if(type == daAgbsw0Type_UNK_0xD_e) {
-        if(dComIfGs_isEventBit(0x2D01)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
             return cPhs_ERROR_e;
         }
     }
@@ -771,7 +771,7 @@ BOOL daAgbsw0_c::ExeSubM() {
 
 /* 00001198-00001368       .text ExeSubM3__10daAgbsw0_cFv */
 BOOL daAgbsw0_c::ExeSubM2() {
-    if(dComIfGs_isEventBit(0x2D01)) {
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
         if(field_0x298 == 1) {
             if(mDoGaC_GbaLink()) {
                 if(!mDoGac_SendStatusCheck(5)) {
@@ -830,7 +830,7 @@ BOOL daAgbsw0_c::ExeSubM3() {
         return true;
     }
     else {
-        if(!dComIfGs_isEventBit(0x1820)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             return true;
         }
         else {
@@ -867,7 +867,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
 {
     for(int i = 0; i < 8; i++) {
         if(dComIfGs_isCollectMapTriforce(i + 1) && !dComIfGs_isTriforce(i)) {
-            return dComIfGs_isEventBit(0x3E02) ? 0x304 : 0x303;
+            return dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E02) ? 0x304 : 0x303;
         }
     }
 
@@ -992,7 +992,7 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         }
     }
     if(!dComIfGs_isGetCollectMap(5)) {
-        if(dComIfGs_isEventBit(0x3E80)) {
+        if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E80)) {
 #if VERSION <= VERSION_JPN
             if (!dComIfGs_isGetCollectMap(0x1C)) {
                 return 0x31E;
@@ -1293,9 +1293,9 @@ BOOL daAgbsw0_c::ExeSubB() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     if(restriction == 4) {
-        if(!dComIfGs_isEventBit(0x2E08)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
             if(HitCheck(player->current.pos, 60.0f)) {
-                dComIfGs_onEventBit(0x2E08);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2E08);
             }
         }
         if(agb) {
@@ -1705,7 +1705,7 @@ BOOL daAgbsw0_c::HitCheck(cXyz param_1, f32 param_2) {
 BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
     switch(conditionNo) {
         case 1:
-            if(dComIfGs_isEventBit(0xF80)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
                 return FALSE;
             }
 
@@ -1717,13 +1717,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 3:
-            if(dComIfGs_isEventBit(0x1E40)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40)) {
                 return FALSE;
             }
 
             break;
         case 4:
-            if(dComIfGs_isEventBit(0x1820)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
                 return FALSE;
             }
 
@@ -1737,19 +1737,19 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
             break;
         }
         case 6:
-            if(dComIfGs_isEventBit(0x1A10)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 7:
-            if(dComIfGs_isEventBit(0x1A08)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 8:
-            if(dComIfGs_isEventBit(0x1708)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708)) {
                 return FALSE;
             }
 
@@ -1900,13 +1900,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x20:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && dComIfGs_getItem(dInvSlot_BOW_e) != dItem_NONE_e && dComIfGs_getArrowNum() == 0) {
                 return FALSE;
             }
 
             break;
         case 0x21:
-            if(dComIfGs_isEventBit(0x1708) && dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && dComIfGs_checkGetItem(dItem_BOMB_BAG_e) && dComIfGs_getBombNum() == 0) {
                 return FALSE;
             }
 
@@ -1998,19 +1998,19 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x2F:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A08)) {
+            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 0x30:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(0x1A10)) {
+            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 0x31:
-            if(!dComIfGs_isEventBit(0x1708)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708)) {
                 return FALSE;
             }
 
@@ -2236,7 +2236,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x56:
-            if(!dComIfGs_isEventBit(0x2E08)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
                 return FALSE;
             }
 
@@ -2498,7 +2498,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x7E:
-            if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) && !dComIfGs_isEventBit(0x2D01)) {
+            if(dComIfGs_checkGetItem(dItem_SKULL_HAMMER_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 return FALSE;
             }
 

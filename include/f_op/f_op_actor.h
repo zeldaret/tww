@@ -265,8 +265,9 @@ public:
     /* 0xC */ cXyz max;
 };
 
-class fopAc_ac_c : public leafdraw_class {
+class fopAc_ac_c {
 public:
+    /* 0x000 */ leafdraw_class base;
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
@@ -278,7 +279,7 @@ public:
     /* 0x1BE */ u8 group;
     /* 0x1BF */ u8 cullType;
     /* 0x1C0 */ u8 demoActorID;
-    /* 0x1C1 */ s8 subtype;
+    /* 0x1C1 */ s8 argument;
     /* 0x1C2 */ u8 gbaName;
     /* 0x1C4 */ u32 actor_status;
     /* 0x1C8 */ u32 actor_condition;

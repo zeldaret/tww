@@ -88,7 +88,7 @@ cPhs_State daObjYboil_c::_create() {
     fopAcM_SetupActor(this, daObjYboil_c);
 
     cPhs_State ret;
-    if (dComIfGs_isEventBit(0x1902)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
         ret = cPhs_STOP_e;
     } else {
         ret = dComIfG_resLoad(&mPhs, "Yboil");

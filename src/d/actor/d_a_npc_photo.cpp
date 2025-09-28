@@ -529,10 +529,10 @@ struct SaveDatStruct {
 }; // Size: 0x08
 
 static const SaveDatStruct l_save_dat = {
-    0x1208,
-    0x1701,
-    0x1601,
-    0xC407,
+    dSv_event_flag_c::UNK_1208,
+    dSv_event_flag_c::UNK_1701,
+    dSv_event_flag_c::UNK_1601,
+    dSv_event_flag_c::UNK_C407,
 };
 
 
@@ -1667,7 +1667,7 @@ u16 daNpcPhoto_c::next_msgStatus(u32* pMsgNo) {
                             }
                             *pMsgNo = *field_0x980;
                             dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
-                            dComIfGs_onTmpBit(0x301);
+                            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0301);
                         }
                     } else {
                         field_0x980 = NULL;
@@ -1752,7 +1752,7 @@ u32 daNpcPhoto_c::getMsg() {
     } else if(dComIfGp_event_chkTalkXY()) {
         u32 itemNo = dComIfGp_event_getPreItemNo();
 
-        if(itemNo == CAMERA2 && dComIfGs_isTmpBit(0x302)) {
+        if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
             if (dComIfGs_getPictureNum() < 3) {
                 field_0x980 = l_msg_xy_buy_photo;
                 mItemNo = SALVAGE_ITEM1;
@@ -1782,19 +1782,19 @@ u32 daNpcPhoto_c::getMsg() {
             msgNo = mMsgNno;
         } else {
             if(dComIfGs_checkGetItem(CAMERA2)) {
-                if(dComIfGs_isTmpBit(0x301)) {
+                if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0301)) {
                     field_0x980 = (u32*)l_msg_buy_photo;
                     field_0x9D0 = 0;
                 } else {
-                    if(dComIfGs_isTmpBit(0x302)) {
+                    if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
                         field_0x980 = l_msg_get_photo;
                         field_0x9D0 = 0;
                         
                     } else {
                         if(isPhotoDxOk()) {
-                            dComIfGs_onTmpBit(0x302);
-                            if(dComIfGs_isEventBit(0x3808) == 0) {
-                                dComIfGs_onEventBit(0x3808);
+                            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0302);
+                            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3808) == 0) {
+                                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3808);
                                 field_0x980 = (u32*)l_msg_week_1st;
                                 field_0x9D0 = 0;
                             } else {
@@ -2140,7 +2140,7 @@ bool daNpcPhoto_c::setAnmTbl(sPhotoAnmDat* i_anmDat) {
 
 /* 000048D0-00004950       .text XyCheckCB__12daNpcPhoto_cFi */
 s16 daNpcPhoto_c::XyCheckCB(int i_itemBtn) {
-    if(dComIfGs_isTmpBit(0x302) && !dComIfGs_isTmpBit(0x301)){
+    if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302) && !dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0301)){
         attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     } else {
         attention_info.flags = fopAc_Attn_UNK1000000_e | fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
@@ -2152,7 +2152,7 @@ s16 daNpcPhoto_c::XyCheckCB(int i_itemBtn) {
 s16 daNpcPhoto_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
     u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
-    if(itemNo == CAMERA2 && dComIfGs_isTmpBit(0x302)){
+    if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)){
         if(dComIfGs_getPictureNum() < 3){
             eventIdx = mPhotoGetPhotoEventIdx;
             field_0x9C7 = false;
@@ -2193,43 +2193,43 @@ BOOL daNpcPhoto_c::isPhotoOk() {
 BOOL daNpcPhoto_c::isPhotoDxOk() {
     switch(dKy_get_dayofweek()){
         case 0:
-            if(dComIfGs_isEventBit(0x2D02)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
                 return TRUE;
             }
             break;
         case 1:
-            if(dComIfGs_isEventBit(0x3910)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910)) {
                 return TRUE;
             }
             break;
         case 2:
-            if (dComIfGs_isEventBit(0x3002) ||
-                dComIfGs_isEventBit(0x3001) ||
-                dComIfGs_isEventBit(0x3008) ||
-                dComIfGs_isEventBit(0x3004) ||
-                dComIfGs_isEventBit(0x3020) ||
-                dComIfGs_isEventBit(0x3010) ||
-                dComIfGs_isEventBit(0x3180)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3002) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3001) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3008) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3004) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3020) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3010) ||
+                dComIfGs_isEventBit(dSv_event_flag_c::UNK_3180)) {
                 return TRUE;
             }
             break;
         case 3:
-            if(dComIfGs_isEventBit(0x3920)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920)) {
                 return TRUE;
             }
             break;
         case 4:
-            if(dComIfGs_isEventBit(0x1001)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1001)) {
                 return TRUE;
             }
             break;
         case 5:
-            if(dComIfGs_isEventBit(0x2D20)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D20)) {
                 return TRUE;
             }
             break;
         case 6:
-            if(dComIfGs_isEventBit(0x2D40)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D40)) {
                 return TRUE;
             }
             break;

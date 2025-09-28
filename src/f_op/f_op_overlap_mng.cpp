@@ -51,7 +51,7 @@ BOOL fopOvlpM_IsPeek() {
 
 BOOL fopOvlpM_IsDone() {
     if (l_fopOvlpM_overlap[0] != NULL)
-        return cReq_Is_Done(l_fopOvlpM_overlap[0]);
+        return cReq_Is_Done(&l_fopOvlpM_overlap[0]->base);
     else
         return FALSE;
 }
@@ -76,7 +76,7 @@ static overlap_request_class l_fopOvlpM_Request;
 request_base_class* fopOvlpM_Request(s16 procName, u16 peekTime) {
     if (l_fopOvlpM_overlap[0] == NULL) {
         l_fopOvlpM_overlap[0] = fopOvlpReq_Request(&l_fopOvlpM_Request, procName, peekTime);
-        return l_fopOvlpM_overlap[0];
+        return &l_fopOvlpM_overlap[0]->base;
     }
 
     return NULL;

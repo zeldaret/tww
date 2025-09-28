@@ -170,7 +170,7 @@ static BOOL daCC_Draw(cc_class* i_this) {
     if (i_this->m2F5 != 0x35) {
         if (i_this->m301 == 0) {
             i_this->m2B4->entryDL();
-            a_this->model = i_this->m2B4->mpModel;
+            a_this->model = i_this->m2B4->getModel();
         } else {
             i_this->m2D8->updateDL();
         }
@@ -194,7 +194,7 @@ static BOOL daCC_Draw(cc_class* i_this) {
     if (i_this->m2F5 != 0x35) {
         i_this->m2B8->remove(i_this->m2B4->getModel()->getModelData());
         if (i_this->m2FE != 0) {
-            pJVar3 = i_this->m2C4->mpModel;
+            pJVar3 = i_this->m2C4->getModel();
             switch (i_this->m2FE) {
             case 1:
                 i_this->m2C8->remove(pJVar3->getModelData());
@@ -1513,7 +1513,7 @@ void deku_come_demo(cc_class* i_this) {
             dComIfGp_event_reset();
             i_this->m2FC = 0;
             DEMO_COME_START_FLAG = 0;
-            dComIfGs_onTmpBit(0x304);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0304);
         }
         break;
     }
@@ -2655,7 +2655,7 @@ static cPhs_State daCC_Create(fopAc_ac_c* a_this) {
             break;
         }
 
-        fopAcM_SetMtx(a_this, i_this->m2B4->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(a_this, i_this->m2B4->getModel()->getBaseTRMtx());
         a_this->attention_info.flags = 0;
 
         i_this->mAcch.Set(fopAcM_GetPosition_p(a_this), fopAcM_GetOldPosition_p(a_this), a_this, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(a_this), NULL, NULL);

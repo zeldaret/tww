@@ -301,10 +301,10 @@ int daNpc_Fa1_c::createInit() {
 
 /* 800FB514-800FB5D8       .text _draw__11daNpc_Fa1_cFv */
 BOOL daNpc_Fa1_c::_draw() {
-    J3DModel* pJVar1 = mpDoExt_McaMorf->getModel();
+    J3DModel* pJVar1 = mpMorf->getModel();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(pJVar1, &tevStr);
-    mpDoExt_McaMorf->entryDL();
+    mpMorf->entryDL();
     f32 ground_y = mGroundY;
     if (ground_y != -G_CM3D_F_INF) {
         dComIfGd_setSimpleShadow(&current.pos, ground_y, 10.0f, &m774, 0, 1.0f,
@@ -319,7 +319,7 @@ BOOL daNpc_Fa1_c::_execute() {
     cLib_calcTimer(&mTimer);
     (this->*moveProc[getMode()])();
     shape_angle.y = current.angle.y;
-    mpDoExt_McaMorf->play(NULL, 0, 0);
+    mpMorf->play(NULL, 0, 0);
     setMtx();
     if (isTypeBaba()) {
         setPointLightParam();
@@ -526,12 +526,12 @@ void daNpc_Fa1_c::init_get_player_move() {
 
 /* 800FC03C-800FC178       .text get_player_move__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::get_player_move() {
-    f32 fVar1 = mpDoExt_McaMorf->mFrameCtrl.getRate();
+    f32 fVar1 = mpMorf->getPlaySpeed();
     fVar1 += 0.05f;
     if (fVar1 > 1.5f) {
         fVar1 = 1.5f;
     }
-    mpDoExt_McaMorf->mFrameCtrl.setRate(fVar1);
+    mpMorf->setPlaySpeed(fVar1);
     s16 sVar4 = m78A;
     current.angle.y = current.angle.y - sVar4;
     sVar4 += l_HIO.prm.m40;
@@ -621,12 +621,12 @@ void daNpc_Fa1_c::init_bottle_appear_move() {
 
 /* 800FC3C8-800FC5A8       .text bottle_appear_move__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::bottle_appear_move() {
-    f32 fVar1 = mpDoExt_McaMorf->mFrameCtrl.getRate();
+    f32 fVar1 = mpMorf->getPlaySpeed();
     fVar1 += 0.05f;
     if (fVar1 > 1.5f) {
         fVar1 = 1.5f;
     }
-    mpDoExt_McaMorf->mFrameCtrl.setRate(fVar1);
+    mpMorf->setPlaySpeed(fVar1);
     current.angle.y = current.angle.y - m78A;
     m78A += m78E;
     if (m78A > m78C) {
@@ -906,7 +906,7 @@ void daNpc_Fa1_c::findPlayer() {
 
 /* 800FD050-800FD0F0       .text _delete__11daNpc_Fa1_cFv */
 BOOL daNpc_Fa1_c::_delete() {
-    mSparklePtclCallback.end();
+    mSparklePtclCallback.remove();
     if (isTypeBaba()) {
         dKy_efplight_cut(&mPointLight);
     }
@@ -932,7 +932,7 @@ cPhs_State daNpc_Fa1_c::_create() {
 
     fopAcM_SetupActor(this, daNpc_Fa1_c);
     if (fopAcM_entrySolidHeap(this, CheckCreateHeap, a_heap_size_tbl)) {
-        fopAcM_SetMtx(this, mpDoExt_McaMorf->mpModel->getBaseTRMtx());
+        fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     } else {
         return cPhs_ERROR_e;
     }
@@ -951,17 +951,17 @@ cPhs_State daNpc_Fa1_c::_create() {
 /* 800FD4E8-800FD61C       .text CreateHeap__11daNpc_Fa1_cFv */
 int daNpc_Fa1_c::CreateHeap() {
     J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_FA);
-    mpDoExt_McaMorf =
+    mpMorf =
         new mDoExt_McaMorf(pModelData,
             &mMcaMorfCallback1, NULL,
             (J3DAnmTransformKey*)dComIfG_getObjectRes("Always", ALWAYS_BCK_FA),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL,
             0x00000000,
             0x11020203);
-    if (mpDoExt_McaMorf == NULL) {
+    if (mpMorf == NULL) {
         return false;
-    } else if (mpDoExt_McaMorf->getModel() == NULL) {
-        mpDoExt_McaMorf = NULL;
+    } else if (mpMorf->getModel() == NULL) {
+        mpMorf = NULL;
         return false;
     } else {
         mMcaMorfCallback1.setNeckJoint(pModelData->getJointName()->getIndex("neck"));
@@ -972,12 +972,12 @@ int daNpc_Fa1_c::CreateHeap() {
 
 /* 800FD61C-800FD6DC       .text setMtx__11daNpc_Fa1_cFv */
 void daNpc_Fa1_c::setMtx() {
-    J3DModel* pJVar5 = mpDoExt_McaMorf->getModel();
+    J3DModel* pJVar5 = mpMorf->getModel();
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     pJVar5->setBaseTRMtx(mDoMtx_stack_c::get());
-    mpDoExt_McaMorf->calc();
-    MtxP pMVar4 = mpDoExt_McaMorf->getModel()->getAnmMtx(mMcaMorfCallback1.getNeckJoint());
+    mpMorf->calc();
+    MtxP pMVar4 = mpMorf->getModel()->getAnmMtx(mMcaMorfCallback1.getNeckJoint());
     attention_info.position.set(pMVar4[0][3], pMVar4[1][3], pMVar4[2][3]);
     eyePos = attention_info.position;
 }

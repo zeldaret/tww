@@ -20,7 +20,7 @@ public:
     daDoor12_HIO_c();
     virtual ~daDoor12_HIO_c() {}
 
-    void genMessage(JORMContext*);
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;
@@ -586,7 +586,7 @@ cPhs_State daDoor12_c::create() {
     }
 
     if (getArg1() == 8) {
-        dComIfGs_offTmpBit(0x440);
+        dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0440);
     }
 
     if (chkMakeKey()) {
@@ -682,7 +682,7 @@ void daDoor12_c::demoProc() {
     case 2:
         iVar1 = mStopBars.closeProc(this);
         if (iVar1 == 2 && getArg1() == 8) {
-            dComIfGs_onTmpBit(0x440);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0440);
         }
 
         if (iVar1 != 0) {

@@ -97,7 +97,7 @@ cPhs_State daObjRcloud_c::_create() {
 
     switch (mDemoNameIndex) {
     case 0:
-        if (dComIfGs_isEventBit(0x3908) == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3908) == 0) {
             phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }
@@ -175,7 +175,7 @@ void daObjRcloud_c::clouds_lift_act_proc() {
     mCloudAnimProgress += HIO(m08);
     if (mCloudAnimProgress < endCloudAnimProgress) {
         mCloudAnimProgress = -1.0f;
-        dComIfGs_onEventBit(0x3908);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3908);
         fopAcM_delete(this);
     }
 }
@@ -220,7 +220,7 @@ bool daObjRcloud_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     J3DModelData* modelData = mpModel->getModelData();
-    mBtkAnm.entry(modelData, mBtkAnm.getFrame());
+    mBtkAnm.entry(modelData);
     mpModel->calc();
     mpModel->calcMaterial();
     setTexMtx();

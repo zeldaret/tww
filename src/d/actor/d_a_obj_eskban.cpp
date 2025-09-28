@@ -168,7 +168,7 @@ daObjEskban::Act_c::Act_c() {}
 /* 000009C0-00000A10       .text Delete__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::Delete() {
     if (M_smoke) {
-        M_smoke->end();
+        M_smoke->remove();
         M_smoke = NULL;
     }
     return TRUE;

@@ -191,7 +191,7 @@ BOOL daObjVfan::Act_c::Execute(Mtx** mtx) {
 
         if (dComIfGp_evmng_endCheck(m_evid)) {
             fopAcM_onSwitch(this, prm_get_swSave());
-            dComIfGs_onEventBit(0x3a08);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A08);
             dComIfGp_event_reset();
             fopAcM_delete(this);
         }

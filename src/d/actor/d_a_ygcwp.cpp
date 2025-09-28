@@ -112,12 +112,12 @@ bool daYgcwp_c::_delete() {
 
 /* 000004A0-000004D0       .text check_ev__9daYgcwp_cCFv */
 BOOL daYgcwp_c::check_ev() const {
-    return dComIfGs_isTmpBit(0x0480);
+    return dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0480);
 }
 
 /* 000004D0-00000500       .text off_ev__9daYgcwp_cCFv */
 void daYgcwp_c::off_ev() const {
-    dComIfGs_offTmpBit(0x0480);
+    dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
 }
 
 /* 00000500-00000588       .text init_mtx__9daYgcwp_cFv */

@@ -41,8 +41,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000001D0-0000033C       .text draw_sub__FP9ssk_class */
 void draw_sub(ssk_class* i_this) {
-    J3DModel* pJVar4 = i_this->mpMorf1->mpModel;
-    J3DModel* pJVar3 = i_this->mpMorf2->mpModel;
+    J3DModel* pJVar4 = i_this->mpMorf1->getModel();
+    J3DModel* pJVar3 = i_this->mpMorf2->getModel();
 
     for (u16 i = 0; i < i_this->mpMorf1->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf1->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);

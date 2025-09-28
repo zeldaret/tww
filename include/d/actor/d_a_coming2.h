@@ -36,13 +36,13 @@ namespace daComing2 {
         virtual ~Act_c() {}
 
         s32 get_coming_point() {
-            return dComIfGs_getEventReg(0x7EFF);
+            return dComIfGs_getEventReg(dSv_event_flag_c::UNK_7EFF);
         }
         void init_coming_point() {}
         void minus_coming_point1() {
-            s32 evnt = dComIfGs_getEventReg(0x7EFF);
+            s32 evnt = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7EFF);
             u8 evnt2 = (evnt - 1 < 0) ? 0 : evnt - 1;
-            dComIfGs_setEventReg(0x7EFF, evnt2);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_7EFF, evnt2);
         }
         void minus_coming_point2() {
             minus_coming_point1();

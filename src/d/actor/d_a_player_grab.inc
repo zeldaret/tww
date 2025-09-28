@@ -479,7 +479,7 @@ BOOL daPy_lk_c::procGrabMiss_init() {
     );
     mProcVar0.m3570 = 0;
     m34D0 = daPy_HIO_grab_c0::m.field_0x6;
-    dComIfGs_onEventBit(0x4020);
+    dComIfGs_onEventBit(dSv_event_flag_c::UNK_4020);
     return true;
 }
 

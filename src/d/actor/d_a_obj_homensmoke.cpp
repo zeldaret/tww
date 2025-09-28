@@ -68,7 +68,7 @@ namespace daObjHomensmoke {
     /* 0000048C-000004C8       .text _delete__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_delete() {
         if (mSmokeCb.getEmitter()) {
-            mSmokeCb.end();
+            mSmokeCb.remove();
         }
         return true;
     }

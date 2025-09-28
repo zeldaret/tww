@@ -52,7 +52,7 @@ cPhs_State daObjKanat::Act_c::Mthd_Create() {
 
 /* 000002EC-0000031C       .text Delete__Q210daObjKanat5Act_cFv */
 BOOL daObjKanat::Act_c::Delete() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
     return TRUE;
 }
 

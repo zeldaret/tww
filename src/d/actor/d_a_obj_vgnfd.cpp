@@ -30,10 +30,16 @@ const s32 daObjVgnfd_c::M_door_bdl_table[] = {
     VGNFD_BDL_YGCBD00,
 };
 const u16 daObjVgnfd_c::M_door_ev_table[] = {
-    0x3904, 0x3902, 0x3901, 0x3A80,
+    dSv_event_flag_c::UNK_3904,
+    dSv_event_flag_c::UNK_3902,
+    dSv_event_flag_c::UNK_3901,
+    dSv_event_flag_c::UNK_3A80,
 };
 const u16 daObjVgnfd_c::M_boss_ev_table[] = {
-    0x3240, 0x3220, 0x3210, 0x3208,
+    dSv_event_flag_c::UNK_3240,
+    dSv_event_flag_c::UNK_3220,
+    dSv_event_flag_c::UNK_3210,
+    dSv_event_flag_c::UNK_3208,
 };
 const char daObjVgnfd_c::M_arcname[6] = "VgnFD";
 
@@ -256,7 +262,7 @@ BOOL daObjVgnfd_c::check_fin() {
 
 /* 00000A28-00000A58       .text on_fin__12daObjVgnfd_cFv */
 void daObjVgnfd_c::on_fin() {
-    dComIfGs_onEventBit(0x3204);
+    dComIfGs_onEventBit(dSv_event_flag_c::UNK_3204);
 }
 
 /* 00000A58-00000B3C       .text init_mtx__12daObjVgnfd_cFv */

@@ -617,8 +617,8 @@ namespace daBomb2 {
             mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
-            mBck0.getFrameCtrl()->setFrame(frame);
-            mBrk0.getFrameCtrl()->setFrame(frame);
+            mBck0.setFrame(frame);
+            mBrk0.setFrame(frame);
         }
     }
 
@@ -1263,8 +1263,8 @@ namespace daBomb2 {
 
     void Act_c::draw_nut() {
         J3DModelData* mdlData = (J3DModelData*)mpModel->getModelData();
-        mBck0.entry(mdlData, mBck0.getFrame());
-        mBrk0.entry(mdlData, mBrk0.getFrame());
+        mBck0.entry(mdlData);
+        mBrk0.entry(mdlData);
         dComIfGd_setListP1();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();

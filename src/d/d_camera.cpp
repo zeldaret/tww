@@ -4772,7 +4772,7 @@ bool camera_draw(camera_process_class* i_this) {
 
     body->Draw();
 
-    if (fpcLf_GetPriority(a_this) != 1) {
+    if (fpcM_DrawPriority(a_this) != 1) {
         get_camera_id(a_this);
         for (int i = 0; i < 1; i++) {
             if (!fopOvlpM_IsDoingReq()) {

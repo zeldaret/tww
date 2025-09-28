@@ -165,7 +165,7 @@ BOOL daLodbg_c::createModelData() {
             return FALSE;
     }
 #if VERSION > VERSION_JPN
-    else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && !dComIfGs_isEventBit(0x1820)) {
+    else if (getRoomNo() == dIsleRoom_ForsakenFortress_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
         if (!loadModelData("/lod01/bdl/model1.bdl", mModelData2, mDataHeap2, mDataSize2))
             return FALSE;
     }
@@ -329,7 +329,7 @@ BOOL daLodbg_c::draw() {
         return TRUE;
 
     s32 roomNo = getRoomNo();
-    if (roomNo == dIsleRoom_ToweroftheGods_e && !dComIfGs_isEventBit(0x1e40))
+    if (roomNo == dIsleRoom_ToweroftheGods_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40))
         return TRUE;
 
     g_env_light.settingTevStruct(TEV_TYPE_BG0, NULL, &tevStr);

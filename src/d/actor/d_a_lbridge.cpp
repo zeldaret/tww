@@ -20,7 +20,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000384       .text CreateHeap__11daLbridge_cFv */
 BOOL daLbridge_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GBRG00_BDL_GBRG00);
-    JUT_ASSERT(0xD6, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(213, 214), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000U, 0x11000223U);
 
@@ -29,14 +29,14 @@ BOOL daLbridge_c::CreateHeap() {
     }
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BTK_GBRG00);
-    JUT_ASSERT(0xE8, pbtk != NULL);
+    JUT_ASSERT(DEMO_SELECT(231, 232), pbtk != NULL);
 
     if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
 
     J3DAnmColor* pbpk = (J3DAnmColor*)dComIfG_getObjectRes(m_arcname, GBRG00_BPK_GBRG00);
-    JUT_ASSERT(0xF6, pbpk != NULL);
+    JUT_ASSERT(DEMO_SELECT(245, 246), pbpk != NULL);
 
     if (!mBpkAnm.init(modelData, pbpk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
@@ -46,7 +46,7 @@ BOOL daLbridge_c::CreateHeap() {
     mBpkAnm.setPlaySpeed(1.0f);
 
     J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GBRG00_BRK_GBRG00);
-    JUT_ASSERT(0x106, pbrk != NULL);
+    JUT_ASSERT(DEMO_SELECT(261, 262), pbrk != NULL);
 
     if (!mBrkAnm.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return FALSE;
@@ -168,7 +168,7 @@ void daLbridge_c::sw_check() {
     u8 alpha;
 
     if (!isSw) {
-        if (mBpkAnm.getFrame() == (f32)mBpkAnm.getFrameCtrl()->getStart()) {
+        if (mBpkAnm.getFrame() == mBpkAnm.getStartFrame()) {
             fopAcM_offDraw(this);
         }
 
@@ -203,18 +203,18 @@ void daLbridge_c::demo() {
 
         if (dComIfGp_evmng_endCheck(mAppearEventIdx)) {
             dComIfGp_event_reset();
-            dComIfGs_onEventBit(0xE01U);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0E01);
         }
 
         if (dComIfGp_evmng_endCheck(mDisappearEventIdx)) {
             dComIfGp_event_reset();
-            dComIfGs_onEventBit(0xF40U);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F40);
         }
     } else {
-        if (dComIfGs_isEventBit(0xE01U) == FALSE && this->unk31C == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E01) == FALSE && this->unk31C == 1) {
             fopAcM_orderOtherEventId(this, mAppearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
-        } else if (dComIfGs_isEventBit(0xF40U) == FALSE && this->unk31C == 2) {
+        } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F40) == FALSE && this->unk31C == 2) {
             fopAcM_orderOtherEventId(this, mDisappearEventIdx);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
@@ -300,11 +300,16 @@ bool daLbridge_c::_delete() {
 
     bool isSw = fopAcM_isSwitch(this, mSwitchNo);
 
-    if ((mSwitchNo == 0xFF || isSw == true) && heap != NULL) {
+    if (
+        (mSwitchNo == 0xFF || isSw == true)
+        #if VERSION > VERSION_DEMO
+        && heap != NULL
+        #endif
+    ) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
 
-    dComIfG_resDelete(&mPhs, m_arcname);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
 
     return TRUE;
 }

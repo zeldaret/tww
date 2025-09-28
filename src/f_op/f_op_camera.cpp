@@ -66,7 +66,7 @@ cPhs_State fopCam_Create(void* pProc) {
 
     cPhs_State ret = fpcMtd_Create(&camera->mpMtd->base, camera);
     if (ret == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(camera);
+        s32 priority = fpcM_DrawPriority(camera);
         fopDwTg_ToDrawQ(&camera->draw_tag, priority);
     }
 

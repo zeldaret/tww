@@ -251,8 +251,8 @@ bool daArrow_Lighteff_c::_draw() {
         dComIfGd_setListMaskOff();
     }
 
-    mBtk.entry(modelData, mBtk.getFrame());
-    mBrk.entry(modelData, mBrk.getFrame());
+    mBtk.entry(modelData);
+    mBrk.entry(modelData);
     mDoExt_modelUpdateDL(field_0x298);
     mBrk.remove(modelData);
     mBtk.remove(modelData);

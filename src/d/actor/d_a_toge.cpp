@@ -122,7 +122,7 @@ BOOL daToge_c::Create() {
 
     mSwitchNo = daToge_prm::getSwitchNo(this);
 
-    if (dComIfGs_isSwitch(mSwitchNo, fopAcM_GetHomeRoomNo(this))) {
+    if (fopAcM_isSwitch(this, mSwitchNo)) {
         unk470 = m_y_min;
         mEventState = 2;
     }
@@ -237,6 +237,9 @@ void daToge_c::search_wind() {
 
 /* 00000AE0-00000C1C       .text toge_move__8daToge_cFv */
 void daToge_c::toge_move() {
+    f32 f31 = 30.0f;
+    f32 f30 = 15.0f;
+    int timer  = 0xA;
     bool r30 = true;
     switch (mEventState) {
     case 0:
@@ -249,7 +252,7 @@ void daToge_c::toge_move() {
         // Fallthrough
     case 2:
         // m_y_min is also -150.0f, so that might be related
-        cLib_addCalc(&unk470, -150.0f, 0.1f, 30.0f, 15);
+        cLib_addCalc(&unk470, -150.0f, 0.1f, f31, f30);
         break;
     case 3:
         toge_seStart(JA_SE_OBJ_TOGETOGE_OUT);
@@ -257,11 +260,11 @@ void daToge_c::toge_move() {
         r30 = false;
         // Fallthrough
     case 4:
-        if (cLib_addCalc(&unk470, unk474, 0.1f, 30.0f, 15.0f) == 0) {
+        if (cLib_addCalc(&unk470, unk474, 0.1f, f31, f30) == 0) {
             if (unk470 < 0) {
                 unk474 = 0;
             } else if (unk485 != 0) {
-                unk486 = 0xA;
+                unk486 = timer;
                 mEventState = 1;
                 unk485 = 0;
             } else {
