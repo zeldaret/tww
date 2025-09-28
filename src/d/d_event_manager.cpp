@@ -27,26 +27,27 @@ int dEvent_exception_c::setStartDemo(int eventInfoIdx) {
     if (eventInfoIdx == 0xFF) {
         mEventInfoIdx = 206;
         return 0xFF;
-    } else if (eventInfoIdx >= 200) {
+    }
+    if (eventInfoIdx >= 200) {
         mEventInfoIdx = eventInfoIdx;
         return eventInfoIdx;
-    } else {
-        if (stageEventInfo == NULL) {
-            return 0xFF;
-        } else if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
-            return 0xFF;
-        } else {
-            u8 switchNo = stageEventInfo->events[eventInfoIdx].field_0x13;
-            if (switchNo != 0xFF) {
-                if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
-                    mEventInfoIdx = 206;
-                    return 0xFF;
-                }
-                dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
-            }
-            mEventInfoIdx = eventInfoIdx;
-        }
     }
+    if (stageEventInfo == NULL) {
+        return 0xFF;
+    }
+    if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
+        return 0xFF;
+    }
+    
+    u8 switchNo = stageEventInfo->events[eventInfoIdx].mSpawnSwitchNo;
+    if (switchNo != 0xFF) {
+        if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
+            mEventInfoIdx = 206;
+            return 0xFF;
+        }
+        dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
+    }
+    mEventInfoIdx = eventInfoIdx;
     return eventInfoIdx;
 }
 
@@ -185,7 +186,7 @@ static void* findObjectCallBack(fopAc_ac_c* actor, void* work) {
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
+    if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
         return actor;
 
     return NULL;
@@ -207,7 +208,7 @@ static void* extraOnObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
             fopAcM_OnStatus(actor, fopAcStts_UNK800_e);
             if (prm->mCastInFlag & 1)
                 fopAcM_OnStatus(actor, fopAcStts_FORCEMOVE_e);
@@ -227,7 +228,7 @@ static void* extraOffObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument) {
             fopAcM_OffStatus(actor, fopAcStts_UNK800_e);
         }
         return NULL;
@@ -596,9 +597,9 @@ void dEvent_manager_c::exceptionProc() {
         if (startCheck(eventIdx)) {
             mException.mState = 2;
             if (strcmp(eventName, "MEETSHISHIOH") == 0)
-                dComIfGs_onEventBit(0x0F80);
+                dComIfGs_onEventBit(dSv_event_flag_c::MET_KORL);
             if (strcmp(eventName, "look_tetra") == 0)
-                dComIfGs_onEventBit(0x0280);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0280);
         } else {
             fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }

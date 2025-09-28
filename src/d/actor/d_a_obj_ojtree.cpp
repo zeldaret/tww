@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/res/res_ojtree.h"
+#include "d/actor/d_a_jbo.h"
 #include "d/actor/d_a_obj_ojtree.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -31,7 +32,7 @@ BOOL daObjOjtree::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -500.0f, -1.0f, -300.0f, 251.0f, 5001.0f, 251.0f);
     pos.set(current.pos);
     pos.y += 5000.0f;
-    fopAcM_create(PROC_JBO, 0, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
+    fopAcM_create(PROC_JBO, daJbo_Type_NORMAL_e, &pos, home.roomNo, &shape_angle, NULL, 0xff, NULL);
     mLockTimer = 2;
     return TRUE;
 }

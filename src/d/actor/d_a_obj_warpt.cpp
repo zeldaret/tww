@@ -36,7 +36,14 @@ public:
 static daObj_Warpt_HIO_c l_HIO;
 
 const char daObj_Warpt_c::m_arc_name[] = "ltubw";
-const u16 daObj_Warpt_c::m_event_reg[] = {0xA207, 0xA107, 0xA007, 0x9F07, 0xA307, 0xA407};
+const u16 daObj_Warpt_c::m_event_reg[] = {
+    dSv_event_flag_c::UNK_A207,
+    dSv_event_flag_c::UNK_A107,
+    dSv_event_flag_c::UNK_A007,
+    dSv_event_flag_c::UNK_9F07,
+    dSv_event_flag_c::UNK_A307,
+    dSv_event_flag_c::UNK_A407,
+};
 const GXColor daObj_Warpt_c::m_def_smoke_prm_color[] = {
     {0x9F, 0x7F, 0x9C, 0x80},
     {0x9F, 0x7F, 0x9C, 0x80},

@@ -50,7 +50,7 @@ BOOL daObjUsovmc::Act_c::Delete() {
 /* 00000298-000002E4       .text Mthd_Delete__Q211daObjUsovmc5Act_cFv */
 BOOL daObjUsovmc::Act_c::Mthd_Delete() {
     BOOL ret = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return ret;
 }
 

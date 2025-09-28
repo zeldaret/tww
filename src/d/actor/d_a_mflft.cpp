@@ -77,7 +77,12 @@ void ride_call_back(dBgW*, fopAc_ac_c* arg1, fopAc_ac_c* arg2) {
 
 /* 00000408-00000488       .text himo_Draw__FP11mflft_class */
 void himo_Draw(mflft_class* i_this) {
+#ifdef __MWERKS__
     i_this->mLineMat.update(10, (GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
+    #else
+    GXColor color = {150, 150, 150, 255};
+    i_this->mLineMat.update(10, color, &i_this->actor.tevStr);
+#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 
@@ -201,7 +206,7 @@ void mflft_move(mflft_class* i_this) {
 
         if (uVar6 == 7) {
             i_this->m29A = 1;
-            dComIfGs_onEventBit(0x2a10);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2A10);
             dBgS_ObjGndChk_Yogan gndChk;
             Vec pos;
             pos.x = i_this->actor.current.pos.x;
@@ -222,10 +227,10 @@ void mflft_move(mflft_class* i_this) {
             if (i_this->m6F5 != 0) {
                 i_this->m6F5--;
                 if ((i_this->m6F5 == 0) && (uVar6 != 0)) {
-                    u8 eventReg = dComIfGs_getEventReg(0xa507);
+                    u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_A507);
                     if (eventReg < 6) {
                         eventReg++;
-                        dComIfGs_setEventReg(0xa507, eventReg);
+                        dComIfGs_setEventReg(dSv_event_flag_c::UNK_A507, eventReg);
                     }
                 }
             }
@@ -319,7 +324,7 @@ void himo_move(mflft_class* i_this) {
     cXyz sp3C;
     cXyz* line1;
     cXyz* line2;
-    s32 i;
+    int i;
     u8* lineSize;
 
     for (i = 0; i < ARRAY_SSIZE(i_this->m6EC); i++) {
@@ -329,12 +334,12 @@ void himo_move(mflft_class* i_this) {
         sp48.z = i_this->m6EC[i] * cM_ssin(i_this->m298 * 15000);
         MtxPosition(&sp48, &sp3C);
 
-        line1 = i_this->mLineMat.mpLines[i].mpSegments;
-        line2 = i_this->mLineMat.mpLines[i + 3].mpSegments;
+        line1 = i_this->mLineMat.getPos(i);
+        line2 = i_this->mLineMat.getPos(i + 3);
 
         if (i_this->m2D4[i] == 0) {
             sp48 = i_this->m2FC[i] - i_this->m2D8[i];
-            lineSize = i_this->mLineMat.mpLines[i].mpSize;
+            lineSize = i_this->mLineMat.getSize(i);
 
             for (s32 j = 0; j < 10; line1++, line2++, lineSize++, j++) {
                 if (j < 9) {
@@ -384,14 +389,14 @@ void himo_move(mflft_class* i_this) {
             dComIfG_Ccsp()->Set(&i_this->mCyls[i]);
         } else {
 #if VERSION > VERSION_DEMO
-            cXyz* line2 = i_this->mLineMat.mpLines[i + 3].mpSegments;
+            cXyz* line2 = i_this->mLineMat.getPos(i + 3);
 #endif
 
-            *i_this->mLineMat.mpLines[i].mpSegments = i_this->m2D8[i];
-            lineSize = i_this->mLineMat.mpLines[i].mpSize;
+            *i_this->mLineMat.getPos(i) = i_this->m2D8[i];
+            lineSize = i_this->mLineMat.getSize(i);
             himo_cut_control(i_this, line1, lineSize, NULL);
             *line2 = i_this->m2FC[i];
-            lineSize = i_this->mLineMat.mpLines[i + 3].mpSize;
+            lineSize = i_this->mLineMat.getSize(i + 3);
             himo_cut_control(i_this, line2, lineSize, 1);
         }
     }

@@ -404,9 +404,12 @@ void startdemo(btd_class* i_this) {
             i_this->m6E48 = 40.0f;
             hahen_set2(i_this);
         }
-        if (((i_this->m6E1A >= 0x46) && (i_this->m6E1A <= 0xC3)) && (i_this->m602E = 3, i_this->m6E1A >= 0x5A)) {
-            mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-            i_this->mKankyoState = 2;
+        if (((i_this->m6E1A >= 0x46) && (i_this->m6E1A <= 0xC3))) {
+            i_this->m602E = 3;
+            if (i_this->m6E1A >= 0x5A) {
+                mDoAud_seStart(JA_SE_CM_BTD_HIFUKI, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                i_this->mKankyoState = 2;
+            }
         }
         if (i_this->m6E1A >= 0x46) {
             i_this->m602C = 3;
@@ -781,7 +784,7 @@ s32 damage(btd_class* i_this) {
             for (s32 i = 0, j = 0, k = 0; i < (s32)ARRAY_SIZE(hahen_eff_name); i++, j++, k++) {
                 pJVar4 = dComIfGp_particle_set(hahen_eff_name[k], &i_this->current.pos);
                 if (pJVar4 != NULL) {
-                    pJVar4->setGlobalRTMatrix(iVar2->mpModel->getAnmMtx(hahen_eff_index[j]));
+                    pJVar4->setGlobalRTMatrix(iVar2->getModel()->getAnmMtx(hahen_eff_index[j]));
                 }
             }
         }
@@ -848,8 +851,8 @@ void end(btd_class* i_this) {
         if (dComIfGp_getStartStageName()[0] == 'X') {
             dLib_setNextStageBySclsNum(0, i_this->current.roomNo);
             mDoAud_seStart(JA_SE_LK_B_BOSS_WARP, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
-            dComIfGs_onEventBit(0x3240);
-            dComIfGs_onTmpBit(0x480);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3240);
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0480);
             mDoAud_bgmStop(30);
         } else {
             i_this->mGohmaState = 0x33;
@@ -860,7 +863,7 @@ void end(btd_class* i_this) {
             i_this->m02EC[0] = REG0_S(3) + 0x21c;
             mDoAud_bgmStop(20);
             mDoAud_bgmStreamPrepare(JA_STRM_BOSS_CLEAR);
-            pJVar10 = iVar2->mpModel;
+            pJVar10 = iVar2->getModel();
             pJVar2 = (J3DMaterialTable*)dComIfG_getObjectRes("Btd", BTD_BMT_DEADA);
             pJVar10->getModelData()->setMaterialTable(pJVar2, J3DMatCopyFlag_Material);
             pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_DEADA);
@@ -916,7 +919,7 @@ void end(btd_class* i_this) {
                 i_this->m02E0 = 2;
             }
             if (i_this->m02EC[0] == 0xf1) {
-                pJVar10 = iVar2->mpModel;
+                pJVar10 = iVar2->getModel();
                 pJVar3 = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", BTD_BRK_DEADB);
                 i_this->brkS->init(pJVar10->getModelData(), pJVar3, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, true, 0);
                 pJVar4 = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Btd", BTD_BTK_DEADB);
@@ -926,7 +929,7 @@ void end(btd_class* i_this) {
                 for (s32 i = 0; i < (s32)ARRAY_SIZE(last_eff_index); i++) {
                     pJVar6 = dComIfGp_particle_set(last_eff_name[i], &i_this->current.pos);
                     if (pJVar6 != NULL) {
-                        pJVar6->setGlobalRTMatrix(iVar2->mpModel->getAnmMtx(last_eff_index[i]));
+                        pJVar6->setGlobalRTMatrix(iVar2->getModel()->getAnmMtx(last_eff_index[i]));
                     }
                 }
             }
@@ -986,7 +989,7 @@ void end(btd_class* i_this) {
         kubi_calc(i_this);
         pJVar6 = i_this->m6038;
         if (pJVar6 != NULL) {
-            pJVar6->setGlobalRTMatrix(i_this->m02D4->mpModel->getAnmMtx(0));
+            pJVar6->setGlobalRTMatrix(i_this->m02D4->getModel()->getAnmMtx(0));
         }
         break;
     case 0x36:
@@ -1258,7 +1261,7 @@ void punch_attack(btd_class* i_this) {
         if (i_this->m02EA != 0) {
             iVar6 = 10;
         }
-        iVar1 = iVar3->mFrameCtrl.getFrame();
+        iVar1 = iVar3->getFrame();
         if (iVar1 == 2) {
             mDoAud_seStart(JA_SE_CM_BTD_ARM_PULLOUT_1, &i_this->m02FC[iVar6], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             fopAcM_monsSeStart(i_this, JA_SE_CV_BTD_JITABATA, 0);
@@ -1483,7 +1486,6 @@ void fire_attack(btd_class* i_this) {
 
 /* 00004FE4-000053E4       .text up_fire_attack__FP9btd_class */
 void up_fire_attack(btd_class* i_this) {
-    bool bVar2;
     daPy_py_c* apdVar4;
     mDoExt_McaMorf* iVar5;
     cXyz local_2c;
@@ -1491,7 +1493,6 @@ void up_fire_attack(btd_class* i_this) {
 
     apdVar4 = daPy_getPlayerActorClass();
     iVar5 = get_anm(i_this);
-    bVar2 = true;
     i_this->m5E86 = 3;
     switch (i_this->mGohmaState) {
     case 0:
@@ -1556,7 +1557,6 @@ void up_fire_attack(btd_class* i_this) {
 
 /* 000053E4-000058A4       .text yoko_fire_attack__FP9btd_class */
 void yoko_fire_attack(btd_class* i_this) {
-    bool bVar2;
     daPy_py_c* apdVar4;
     mDoExt_McaMorf* iVar5;
     float fVar8;
@@ -1565,7 +1565,6 @@ void yoko_fire_attack(btd_class* i_this) {
 
     apdVar4 = daPy_getPlayerActorClass();
     iVar5 = get_anm(i_this);
-    bVar2 = true;
     i_this->m5E86 = 1;
     switch (i_this->mGohmaState) {
     case 0:
@@ -2100,7 +2099,7 @@ void demo_camera(btd_class* i_this) {
         }
         if (i_this->m6E1A == 0x118) {
             static_center_pos.set(0.0f, -50.0f, 0.0f);
-            g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+            dComIfGs_onStageBossEnemy();
             fopAcM_createWarpFlower(&static_center_pos, 0, fopAcM_GetRoomNo(i_this), 0);
             i_this->m6E90 = 0;
         }
@@ -2122,7 +2121,7 @@ void demo_camera(btd_class* i_this) {
         i_this->m6E16 = 0;
         pcVar7->mCamera.Start();
         pcVar7->mCamera.SetTrimSize(0);
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
         break;
     }
@@ -2894,8 +2893,8 @@ static cPhs_State daBtd_Create(fopAc_ac_c* a_this) {
                     dKy_efplight_set(&i_this->m60B0);
                     i_this->health = 10;
                     i_this->max_health = 10;
-                    if ((g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) || (dComIfGp_getStartStageName()[0] == 'X')) {
-                        dComIfGs_offTmpBit(0x480);
+                    if ((dComIfGs_isStageBossDemo()) || (dComIfGp_getStartStageName()[0] == 'X')) {
+                        dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0480);
                         i_this->m6E80 = -50.0f;
                         i_this->m6E84 = 0.0f;
                         if (dComIfGp_getStartStageName()[0] == 'X') {

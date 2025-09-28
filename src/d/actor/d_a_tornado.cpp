@@ -69,7 +69,7 @@ BOOL daTornado_c::draw() {
     mBtk.entry(mpModel->getModelData(), mBtkFrame);
     mBrk.entry(mpModel->getModelData(), mBrkFrame);
 
-    if (dComIfGs_isTmpBit(0x404)) {
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0404)) {
         dComIfGd_setListMaskOff();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
@@ -180,7 +180,7 @@ BOOL daTornado_c::execute() {
 
         fopAcM_seStartCurrent(this, JA_SE_OBJ_TORNADE_SUS, 100);
 
-        if (dComIfGs_isEventBit(0x2710)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2710)) {
             mPtclCb.remove();
             daShip_c* ship = dComIfGp_getShipActor();
             if (ship != NULL) {
@@ -315,7 +315,7 @@ cPhs_State daTornado_c::create() {
             }
         } else {
             fopAcM_SetParam(this, 0);
-            if (dComIfGs_isEventBit(0x2710)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2710)) {
                 return cPhs_ERROR_e;
             }
             dKyw_tornado_Notice(&current.pos);

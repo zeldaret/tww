@@ -330,7 +330,7 @@ void daMachine_c::attack() {
         field_0xc04.setFrame(0.0f);
         field_0xc04.setPlaySpeed(f31);
         field_0xc78 += 1;
-        // Fall through
+        // fallthrough
     case 2:
         if(field_0xc04.play()) {
             field_0xc78 = NULL;
@@ -379,7 +379,7 @@ void daMachine_c::set_body() {
 void daMachine_c::set_at() {
     f32 f1 = 5.0f;
     f32 f2 = 25.0f;
-    f32 frame = field_0xc04.getFrameCtrl()->getFrame();
+    f32 frame = field_0xc04.getFrame();
     if (f1 < frame && f2 > frame) {
         field_0xc6c.set(field_0xc3c[0][3],
                         field_0xc3c[1][3],

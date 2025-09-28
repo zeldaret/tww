@@ -5888,7 +5888,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     m33A8.end();
     m32E4.end();
     m32F0.end();
-    mSmokeEcallBack.end();
+    mSmokeEcallBack.remove();
     
     if (!checkGrabWear()) {
         m35D8 = 0.0f;
@@ -7225,7 +7225,7 @@ BOOL daPy_lk_c::procAutoJump() {
         }
     } else if (speed.y < -gravity && mProcVar0.m3570 != 2) {
         if (mActorKeepGrab.getActor() != NULL && fopAcM_GetName(mActorKeepGrab.getActor()) == PROC_NPC_MD &&
-            dComIfGs_isEventBit(0x1620))
+            dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620))
         {
             speed.y = 5.0f;
             gravity = 0.0f;
@@ -7636,7 +7636,6 @@ BOOL daPy_lk_c::procDamage() {
         uVar4 = (16384.0f * (1.0f - (dVar6 / (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() -
                                               daPy_HIO_damage_c0::m.field_0x28))));
         fVar1 = 1.0f - cM_scos(uVar4);
-        uVar4 = uVar4;
         fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
     }
     m3564 = m34D4 * fVar1;
@@ -10132,9 +10131,9 @@ void daPy_lk_c::setCollision() {
         mAtCyl.ResetAtHit();
         mAtCyl.OffAtSetBit();
         offNoResetFlg0(daPyFlg0_CUT_AT_FLG);
-        m331C.end();
-        m332C.end();
-        m333C.end();
+        m331C.remove();
+        m332C.remove();
+        m333C.remove();
     }
     if (fanWindCrashEffectDraw()) {
         f32 fVar3 = mpYbafo00Btk->getFrame() + 1.0f;
@@ -10874,8 +10873,8 @@ void daPy_lk_c::checkFallCode() {
         }
         if (dStage_changeSceneExitId(mAcch.m_gnd, dVar5, uVar3, bVar2)) {
             onNoResetFlg1(daPyFlg1_UNK100000);
-            if (dComIfGs_isEventBit(0x3e10)) {
-                dComIfGs_onEventBit(0x3e01);
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E01);
             }
             daPy_py_c::changePlayer((daPy_py_c*)this);
             if ((!strcmp(dComIfGp_getStartStageName(), "GanonM")) && current.roomNo == 1) {
@@ -10925,7 +10924,7 @@ BOOL daPy_lk_c::startRestartRoom(u32 mode, int eventInfoIdx, f32 param_3, int i_
         setDamagePoint(param_3);
         mTinkleShieldTimer = 0;
 
-        if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dSv_evtBit_c::RODE_KORL) &&
+        if (stageType == dStageType_SEA_e && !dComIfGs_isEventBit(dSv_event_flag_c::RODE_KORL) &&
             (current.roomNo == dIsleRoom_WindfallIsland_e || current.roomNo == dIsleRoom_OutsetIsland_e) &&
             dStage_chkPlayerId(0x80, current.roomNo))
         {
@@ -11254,7 +11253,7 @@ BOOL daPy_lk_c::execute() {
         fopMsgM_demoMsgFlagOn();
         if (checkEndMessage(0x14A3)) {
             offNoResetFlg1(daPyFlg1_UNK200);
-            dComIfGs_setEventReg(0x9EFF, 0);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_9EFF, 0);
             dComIfGp_event_reset();
             mDemo.setDemoType(0);
         }
@@ -11813,7 +11812,7 @@ BOOL daPy_lk_c::playerDelete() {
     mFanSwingCb.deleteCallBack();
     m338C.end();
     m33A8.end();
-    m3280.end();
+    m3280.remove();
     m334C.end();
     m336C.end();
     mSwimTailEcallBack[0].remove();
@@ -12425,7 +12424,7 @@ void daPy_lk_c::playerInit() {
         // Modify the linktexS3TC texture in Link's model to be the casual clothes texture.
         texture->setResTIMG(i, *linktex_casual);
         
-        if (!dComIfGs_isEventBit(0x2A80) || dComIfGs_getClearCount() != 0) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A80) || dComIfGs_getClearCount() != 0) {
             onNoResetFlg1(daPyFlg1_CASUAL_CLOTHES);
         }
         if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES)) {
@@ -12544,7 +12543,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
           (!strcmp(dComIfGp_getStartStageName(), "Siren") && fopAcM_GetRoomNo(this) == 0 && current.pos.z > 1400.0f &&
            current.pos.x < 400.0f && current.pos.x > -400.0f))))
     {
-        if (!dComIfGs_isEventBit(0xf80)) {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
             if (changeSwimProc()) {
                 procSwimWait_init(0);
                 m34C2 = 0;
@@ -12557,9 +12556,9 @@ cPhs_State daPy_lk_c::makeBgWait() {
                 return cPhs_INIT_e;
             }
 #if VERSION > VERSION_JPN
-            if (dComIfGs_isEventBit(0x3e10)) {
-                dComIfGs_onEventBit(0x3e01);
-                dComIfGs_onEventBit(0x3f80);
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E01);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3F80);
             }
 #endif
             s16 sVar6;

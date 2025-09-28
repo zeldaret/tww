@@ -12,23 +12,23 @@
 #define TOTAL_FIGURE_COUNT 0x86
 
 static u16 l_figure_comp[] = {
-    0x95FF,
-    0x94FF,
-    0x93FF,
-    0x92FF,
-    0x91FF,
-    0x90FF,
-    0x8FFF,
-    0x8EFF,
-    0x8DFF,
-    0x8CFF,
-    0xB1FF,
-    0x9CFF,
-    0x84FF,
-    0x83FF,
-    0x82FF,
-    0x81FF,
-    0x80FF,
+    dSv_event_flag_c::UNK_95FF,
+    dSv_event_flag_c::UNK_94FF,
+    dSv_event_flag_c::UNK_93FF,
+    dSv_event_flag_c::UNK_92FF,
+    dSv_event_flag_c::UNK_91FF,
+    dSv_event_flag_c::UNK_90FF,
+    dSv_event_flag_c::UNK_8FFF,
+    dSv_event_flag_c::UNK_8EFF,
+    dSv_event_flag_c::UNK_8DFF,
+    dSv_event_flag_c::UNK_8CFF,
+    dSv_event_flag_c::UNK_B1FF,
+    dSv_event_flag_c::UNK_9CFF,
+    dSv_event_flag_c::UNK_84FF,
+    dSv_event_flag_c::UNK_83FF,
+    dSv_event_flag_c::UNK_82FF,
+    dSv_event_flag_c::UNK_81FF,
+    dSv_event_flag_c::UNK_80FF,
 };
 
 /* 00000078-00000228       .text __ct__9daNpcMt_cFv */
@@ -257,7 +257,7 @@ void daNpcMt_c::setFigure(u8 figure) {
         u8 reg = dComIfGs_getEventReg(l_figure_comp[figure / 8]);
         reg |= 1 << (figure % 8);
         dComIfGs_setEventReg(l_figure_comp[figure / 8], reg);
-        dComIfGs_onEventBit(0x3A01);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A01);
     }
 }
 

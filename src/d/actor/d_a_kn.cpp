@@ -505,7 +505,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0x80000,
         0x11000002
     );
-    if ((i_this->mpMorf == NULL) || (i_this->mpMorf->mpModel == NULL)) {
+    if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
     }
     return TRUE;

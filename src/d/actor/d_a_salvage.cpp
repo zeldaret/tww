@@ -510,7 +510,7 @@ bool daSalvage_c::end_salvage() {
     switch (uVar2) {
     case 0:
         dComIfGs_onCompleteCollectMap(uVar1);
-        dComIfGs_onEventBit(0x3e02);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E02);
         break;
 
     case 2:

@@ -240,7 +240,7 @@ cPhs_State daTag_Msg_c::create() {
     int swBit;
     fopAcM_SetupActor(this, daTag_Msg_c);
     swBit = (int)(getSwbit() & 0xFF);
-    if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(0x502)) {
+    if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0502)) {
         setActio(0);
     } else if ((s32)swBit != 0xff && dComIfGs_isSwitch(swBit, fopAcM_GetRoomNo(this)) != 0) {
         setActio(0);

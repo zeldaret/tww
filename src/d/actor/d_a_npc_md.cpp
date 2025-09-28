@@ -331,17 +331,17 @@ s16 daNpc_Md_c::XyCheckCB(int i_itemBtn) {
             return TRUE;
         }
         if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
-            if (!dComIfGs_isEventBit(0x2E40) || (dComIfGs_isEventBit(0x2E40) && m_seaTalk)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) || (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40) && m_seaTalk)) {
                 return TRUE;
             }
         }
     } else if (isTypeM_Dai() || isTypeEdaichi()) {
-        if (selectItemNo == dItem_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(0x3B80)) {
+        if (selectItemNo == dItem_GOLDEN_FEATHER_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B80)) {
             return TRUE;
         }
     }
     if (selectItemNo == dItem_GOLDEN_FEATHER_e) {
-        dComIfGs_onEventBit(0x2C08);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2C08);
     }
     return FALSE;
 }
@@ -380,7 +380,7 @@ cPhs_State daNpc_Md_c::create() {
     
     mType = fopAcM_GetParam(this) >> 0x08;
     if ((int)mType == -2) { // Bug: Comparing unsigned value with -2 is always false.
-        dComIfGs_onEventBit(0x1620);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1620);
     } else {
         if (dComIfGs_isCollect(0, 2)) {
             if (strcmp(dComIfGp_getStartStageName(), "M_DaiB") != 0) {
@@ -389,30 +389,30 @@ cPhs_State daNpc_Md_c::create() {
                 setTypeM_DaiB();
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-            if (dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x1820) ||
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) ||
                 !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_DRC))
             {
                 return cPhs_ERROR_e;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0) {
-            if (dComIfGs_isEventBit(0x2E04) || dNpc_chkLetterPassed()) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || dNpc_chkLetterPassed()) {
                 return cPhs_ERROR_e;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0) {
-            if (dComIfGs_isEventBit(0x2E04) || !dNpc_chkLetterPassed()) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || !dNpc_chkLetterPassed()) {
                 return cPhs_ERROR_e;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "M_Dra09") == 0) {
-            if (dComIfGs_isEventBit(0x2E04) || dComIfGs_isEventBit(0x1101)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                 return cPhs_ERROR_e;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Edaichi") == 0) {
-            if (!dComIfGs_isEventBit(0x2E04) || dComIfGs_isEventBit(0x2920)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2920)) {
                 return cPhs_ERROR_e;
             }
             setTypeEdaichi();
         } else if (strcmp(dComIfGp_getStartStageName(), "M_Dai") == 0) {
-            if (!dComIfGs_isEventBit(0x2E04) || !dComIfGs_isEventBit(0x2920)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) || !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2920)) {
                 return cPhs_ERROR_e;
             }
             setTypeM_Dai();
@@ -421,7 +421,7 @@ cPhs_State daNpc_Md_c::create() {
         }
     }
     
-    if (!dComIfGs_isEventBit(0x2E04) && dComIfGs_isEventBit(0x1608)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E04) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1608)) {
         setTypeShipRide();
         strcpy(mModelArcName, l_arc_name_ship);
         heapSizeIdx = 1;
@@ -1192,7 +1192,7 @@ int daNpc_Md_c::wallHitCheck() {
 
 /* 00003D68-00003E74       .text NpcCall__10daNpc_Md_cFPi */
 void daNpc_Md_c::NpcCall(int* r31) {
-    if (!dComIfGs_isEventBit(0x1620)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620)) {
         return;
     }
     f32 dist_sq = fopAcM_searchPlayerDistance2(this);
@@ -1308,7 +1308,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             } else {
                 setAnm(0x12);
             }
-        } else if (isTypeM_Dra09() && !dComIfGs_isEventBit(0x1140)) {
+        } else if (isTypeM_Dra09() && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1140)) {
             setAnm(0x22);
         } else if (isTypeM_Dai() || isTypeEdaichi()) {
             if (!checkStatus(0x80UL)) {
@@ -1347,14 +1347,14 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             }
         }
         
-        if (isTypeAdanmae() && dComIfGs_isEventBit(0x1102)) {
+        if (isTypeAdanmae() && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1102)) {
             fopAcM_delete(this);
             return TRUE;
         }
         
         int sp08 = 0;
         
-        if (isTypeSea() && !dComIfGs_isEventBit(0x1402)) {
+        if (isTypeSea() && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1402)) {
             daPy_lk_c* link = daPy_getPlayerLinkActorClass();
             f32 playerDistXZ2 = fopAcM_searchPlayerDistanceXZ2(this);
             f32 playerDistY = link->current.pos.y - current.pos.y;
@@ -1375,13 +1375,13 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
                 if (isTypeAtorizk() || isTypeAdanmae()) {
                     mCurEventMode = 2;
                 } else if (isTypeM_Dra09()) {
-                    if (dComIfGs_isEventBit(0x1140)) {
-                        if (dComIfGs_isEventBit(0x1101)) {
+                    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1140)) {
+                        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                             cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e);
                             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e)) {
-                                dComIfGs_onEventBit(0x1280);
+                                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1280);
                             }
-                            if (dComIfGs_isEventBit(0x1280)) {
+                            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1280)) {
                                 mCurEventMode = 2;
                             } else {
                                 mCurEventMode = 1;
@@ -1394,7 +1394,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
                         setAnm(0x22);
                     }
                 } else if (isTypeSea()) {
-                    if (mCurEventMode == 0 && dComIfGs_isEventBit(0x1402)) {
+                    if (mCurEventMode == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1402)) {
                         mCurEventMode = 3;
                     }
                 } else {
@@ -1404,7 +1404,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             NpcCall(&sp08);
         }
         
-        if (isTypeM_Dra09() && dComIfGs_isEventBit(0x1101) && dComIfGs_isSwitch(m3100, fopAcM_GetRoomNo(this))) {
+        if (isTypeM_Dra09() && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101) && dComIfGs_isSwitch(m3100, fopAcM_GetRoomNo(this))) {
             setNpcAction(&daNpc_Md_c::demoFlyNpcAction);
         }
         
@@ -1426,7 +1426,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
                 lookBack(0, 0, 0);
             }
         } else if (isTypeM_Dra09()) {
-            if (dComIfGs_isEventBit(0x1140)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1140)) {
                 lookBack(1, 0, 0);
                 setAnm(0);
             } else {
@@ -2837,7 +2837,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x17DB;
         break;
     case 0x17DB:
-        dComIfGs_onEventBit(dSv_evtBit_c::MEDLI_GAVE_FATHERS_LETTER);
+        dComIfGs_onEventBit(dSv_event_flag_c::MEDLI_GAVE_FATHERS_LETTER);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17DD:
@@ -2860,11 +2860,11 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x17E3;
         break;
     case 0x17E4:
-        dComIfGs_onEventBit(0x1101);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1101);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17E5:
-        dComIfGs_onEventBit(0x1280);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1280);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x17E6:
@@ -2912,7 +2912,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x17F4;
         break;
     case 0x17F4:
-        dComIfGs_onEventBit(0x1104);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1104);
         // Fall-through
     case 0x17F8:
         setBitStatus(daMdStts_UNK40);
@@ -2940,7 +2940,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x1801;
         break;
     case 0x1801:
-        dComIfGs_onEventBit(0x1102);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1102);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19C9:
@@ -2968,7 +2968,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x19D1;
         break;
     case 0x19D1:
-        dComIfGs_onEventBit(0x1402);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1402);
         onSeaTalk();
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
@@ -2988,7 +2988,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x19D8;
         break;
     case 0x19D8:
-        dComIfGs_onEventBit(0x1504);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1504);
     case 0x19D9:
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
@@ -3033,11 +3033,11 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         break;
     case 0x19FB:
     case 0x19FF:
-        dComIfGs_onEventBit(0x2E40);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2E40);
         onSeaTalk();
         // Fall-through
     case 0x1A01:
-        dComIfGs_onEventBit(0x2C08);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2C08);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x19FC:
@@ -3053,7 +3053,7 @@ u16 daNpc_Md_c::next_msgStatus(u32* pCurrMsgNo) {
         *pCurrMsgNo = 0x1A01;
         break;
     case 0x1A02:
-        dComIfGs_onEventBit(0x3B80);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B80);
         msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     default:
@@ -3069,7 +3069,7 @@ u32 daNpc_Md_c::getMsg() {
     if (isShipRide()) {
         msgNo = 0x19EF;
     } else if (isTypeAtorizk()) {
-        if (dComIfGs_isEventBit(dSv_evtBit_c::MEDLI_GAVE_FATHERS_LETTER)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::MEDLI_GAVE_FATHERS_LETTER)) {
             msgNo = 0x17DC;
         } else if (dComIfGs_getClearCount() != 0) {
             msgNo = 0x1805;
@@ -3089,13 +3089,13 @@ u32 daNpc_Md_c::getMsg() {
             } else {
                 msgNo = 0x17F6;
             }
-        } else if (dComIfGs_isEventBit(0x1104)) {
+        } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1104)) {
             msgNo = 0x17F7;
         } else {
             msgNo = 0x17E6;
         }
     } else if (isTypeM_Dra09()) {
-        if (dComIfGs_isEventBit(0x1101)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
             msgNo = 0x17E5;
         } else {
             msgNo = 0x17DD;
@@ -3103,22 +3103,22 @@ u32 daNpc_Md_c::getMsg() {
     } else if (isTypeSea()) {
         if (isXYTalk()) {
             if (isDefaultTalkXY()) {
-                if (dComIfGs_isEventBit(0x2E40)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E40)) {
                     msgNo = 0x1A00;
-                } else if (dComIfGs_isEventBit(0x2C08)) {
+                } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C08)) {
                     msgNo = 0x19F8;
                 } else {
                     msgNo = 0x19FC;
                 }
             } else {
-                if (dComIfGs_isEventBit(0x1504)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1504)) {
                     msgNo = 0x19D9;
                 } else {
                     msgNo = 0x19D6;
                 }
             }
         } else {
-            if (dComIfGs_isEventBit(0x1402)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1402)) {
                 if (isSeaTalk()) {
                     msgNo = 0x19D2;
                 } else {

@@ -963,7 +963,7 @@ void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
 void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
-    J3DModel *model = anm->mpModel;
+    J3DModel *model = anm->getModel();
     mDoMtx_stack_c::transS(pos);
     mDoMtx_stack_c::concat(mtx);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -973,7 +973,7 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
         J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
         modeldata->removeMatColorAnimator(color);
     } else {
-        mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
+        mpAnmClr->setFrame(anm->getFrame());
         J3DMatColorAnm *p = mpAnmMatClr;
         for(u16 i = 0; i < mpAnmClr->getUpdateMaterialNum(); i++) {
             p->setAnmColor(mpAnmClr);

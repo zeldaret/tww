@@ -554,7 +554,7 @@ void dEvDtStaff_c::specialProcCreate() {
                     scale = *pScale;
                 }
 
-                fopAcM_create(objectName->mProcName, arg, &pos, dComIfGp_roomControl_getStayNo(), &angle, &scale, objectName->mSubtype);
+                fopAcM_create(objectName->procname, arg, &pos, dComIfGp_roomControl_getStayNo(), &angle, &scale, objectName->argument);
             }
             break;
         }

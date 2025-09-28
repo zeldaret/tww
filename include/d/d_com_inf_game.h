@@ -1570,6 +1570,10 @@ inline void dComIfGs_onDungeonItemBossKey() {
     g_dComIfG_gameInfo.save.getMemory().getBit().onDungeonItemBossKey();
 }
 
+inline void dComIfGs_onStageBossEnemy() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossEnemy();
+}
+
 BOOL dComIfGs_isStageBossEnemy(int i_stageNo);
 
 inline BOOL dComIfGs_isStageBossEnemy() {
@@ -1591,6 +1595,10 @@ inline BOOL dComIfGs_isStageLife() {
 }
 
 void dComIfGs_onStageLife(int i_stageNo);
+
+inline void dComIfGs_onStageBossDemo() {
+    g_dComIfG_gameInfo.save.getMemory().getBit().onStageBossDemo();
+}
 
 inline BOOL dComIfGs_isStageBossDemo() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo();
@@ -2659,7 +2667,7 @@ inline void dComIfGp_endMiniGame(u16 i_gameType) {
     g_dComIfG_gameInfo.play.endMiniGame(i_gameType);
 }
 
-inline u8 dComIfGp_setMiniGameResult(u8 result) {
+inline void dComIfGp_setMiniGameResult(u8 result) {
     g_dComIfG_gameInfo.play.setMiniGameResult(result);
 }
 

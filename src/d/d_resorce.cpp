@@ -705,7 +705,7 @@ int dRes_control_c::syncAllRes(dRes_info_c* pInfo, int infoNum) {
 /* 8006F430-8006F500       .text setStageRes__14dRes_control_cFPCcP7JKRHeap */
 BOOL dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
     char path[20];
-    snprintf(path, sizeof(path), "/res/Stage/%s/", strcmp(dComIfGp_getStartStageName(), "ma2room") == 0 && dComIfGs_isEventBit(0x1820) ? "ma3room" : dComIfGp_getStartStageName());
+    snprintf(path, sizeof(path), "/res/Stage/%s/", strcmp(dComIfGp_getStartStageName(), "ma2room") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) ? "ma3room" : dComIfGp_getStartStageName());
     return setRes(pArcName, &mStageInfo[0], ARRAY_SIZE(mStageInfo), path, 1, pHeap);
 }
 

@@ -85,7 +85,7 @@ static dCcD_SrcTri l_tri_src = {
 
 /* 00000078-00000100       .text _delete__8daWall_cFv */
 bool daWall_c::_delete() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
     if (heap != NULL && mState == false)
         dComIfG_Bgsp()->Release(mpBgW);
 

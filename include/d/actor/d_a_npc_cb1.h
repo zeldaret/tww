@@ -36,7 +36,7 @@ public:
     MtxP getRightHandMatrix() { return cullMtx; }
 
     s16 XyCheckCB(int i_itemBtn) {
-        if(dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e && dComIfGs_isEventBit(0x1880)) {
+        if(dComIfGp_getSelectItem(i_itemBtn) == dItem_WIND_WAKER_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1880)) {
             return true;
         }
 

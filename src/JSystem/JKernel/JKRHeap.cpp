@@ -240,7 +240,7 @@ u8 JKRHeap::getCurrentGroupId() {
     return do_getCurrentGroupId();
 }
 
-s32 JKRHeap::changeGroupID(u8 groupID) {
+u8 JKRHeap::changeGroupID(u8 groupID) {
     if (mInitFlag) {
         JUT_WARN(545, "change heap ID into %x in heap %x", groupID, this);
     }
@@ -475,7 +475,7 @@ void JKRHeap::state_dump(const JKRHeap::TState& p) const {
 }
 
 /* 802B0F24-802B0F2C       .text do_changeGroupID__7JKRHeapFUc */
-s32 JKRHeap::do_changeGroupID(u8 param_0) {
+u8 JKRHeap::do_changeGroupID(u8 param_0) {
     return 0;
 }
 

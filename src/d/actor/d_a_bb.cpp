@@ -1363,9 +1363,9 @@ void bb_atack_move(bb_class* i_this) {
     }
 
 #if VERSION == VERSION_DEMO
-    if (&player->base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
+    if (&player->base.base == fpcM_Search(pl_name_check, i_this) || l_bbHIO.unk_10 != 0)
 #else
-    if (&player->base == fpcM_Search(pl_name_check, i_this))
+    if (&player->base.base == fpcM_Search(pl_name_check, i_this))
 #endif
     {
         bb_kamome_attack(i_this);
@@ -2152,7 +2152,7 @@ void damage_check(bb_class* i_this) {
         dComIfGp_particle_setToon(dPa_name::ID_COMMON_0438, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, NULL, 
             fopAcM_GetRoomNo(a_this), &a_this->tevStr.mColorK0, &a_this->tevStr.mColorK0);
         
-        i_this->mParticleCallBack.end();
+        i_this->mParticleCallBack.remove();
 
         emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_0439, &a_this->current.pos, &a_this->current.angle, NULL, 0xFF, &i_this->mParticleCallBack, 
             fopAcM_GetRoomNo(a_this));
@@ -2514,7 +2514,7 @@ static BOOL daBb_Delete(bb_class* i_this) {
 #if VERSION == VERSION_DEMO
     l_bbHIO.removeHIO();
 #endif
-    i_this->mParticleCallBack.end();
+    i_this->mParticleCallBack.remove();
     enemy_fire_remove(&i_this->mEnemyFire);
 #if VERSION > VERSION_DEMO
     if (i_this->actor.heap != NULL) {
@@ -2713,7 +2713,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             i_this->unk_2DC = 0;
         }
 
-        if (dComIfGs_isEventBit(0x1101) && i_this->unk_2DC != 0 && dComIfGs_isSwitch(i_this->unk_2DC, fopAcM_GetRoomNo(a_this))) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101) && i_this->unk_2DC != 0 && dComIfGs_isSwitch(i_this->unk_2DC, fopAcM_GetRoomNo(a_this))) {
             return cPhs_ERROR_e;
         }
 

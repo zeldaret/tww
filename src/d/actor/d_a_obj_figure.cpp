@@ -39,23 +39,23 @@ static const char* l_arcname_tbl[] = {
 };
 
 static u16 l_figure_comp[] = {
-    0x95FF,
-    0x94FF,
-    0x93FF,
-    0x92FF,
-    0x91FF,
-    0x90FF,
-    0x8FFF,
-    0x8EFF,
-    0x8DFF,
-    0x8CFF,
-    0xB1FF,
-    0x9CFF,
-    0x84FF,
-    0x83FF,
-    0x82FF,
-    0x81FF,
-    0x80FF,
+    dSv_event_flag_c::UNK_95FF,
+    dSv_event_flag_c::UNK_94FF,
+    dSv_event_flag_c::UNK_93FF,
+    dSv_event_flag_c::UNK_92FF,
+    dSv_event_flag_c::UNK_91FF,
+    dSv_event_flag_c::UNK_90FF,
+    dSv_event_flag_c::UNK_8FFF,
+    dSv_event_flag_c::UNK_8EFF,
+    dSv_event_flag_c::UNK_8DFF,
+    dSv_event_flag_c::UNK_8CFF,
+    dSv_event_flag_c::UNK_B1FF,
+    dSv_event_flag_c::UNK_9CFF,
+    dSv_event_flag_c::UNK_84FF,
+    dSv_event_flag_c::UNK_83FF,
+    dSv_event_flag_c::UNK_82FF,
+    dSv_event_flag_c::UNK_81FF,
+    dSv_event_flag_c::UNK_80FF,
 };
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -614,7 +614,7 @@ BOOL daObjFigure_c::_draw() {
     if(mbDisplay) {
         if(mpBrkAnm) {
             J3DModelData* pModelData2 = mpModel->getModelData();
-            mpBrkAnm->entry(pModelData2, mpBrkAnm->getFrame());
+            mpBrkAnm->entry(pModelData2);
         }
 
         mBtpAnm1.entry(pModelData, 1);
@@ -881,14 +881,14 @@ void daObjFigure_c::eventOnPlrInit() {
     ((daPy_lk_c*)dComIfGp_getLinkPlayer())->offPlayerNoDraw();
     dCam_getBody()->Reset();
     dCam_getBody()->Start();
-    dComIfGs_offTmpBit(0x408);
+    dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0408);
 }
 
 /* 00001658-000016A8       .text eventOffPlrInit__13daObjFigure_cFv */
 void daObjFigure_c::eventOffPlrInit() {
     ((daPy_lk_c*)dComIfGp_getLinkPlayer())->onPlayerNoDraw();
     dCam_getBody()->Stop();
-    dComIfGs_onTmpBit(0x408);
+    dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0408);
 }
 
 /* 000016A8-00001788       .text talk__13daObjFigure_cFi */
@@ -1003,13 +1003,13 @@ int daObjFigure_c::getFigureBmd(u8 figureNo) {
     u32 bmd = l_figure_dat_tbl[figureNo].mBmdId;
     switch(figureNo) {
         case 0x10:
-            if(dComIfGs_isEventBit(0x2D01)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 bmd = 3;
             }
 
             break;
         case 0x12:
-            if(dComIfGs_isEventBit(0x2D01)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 bmd = 6;
             }
 

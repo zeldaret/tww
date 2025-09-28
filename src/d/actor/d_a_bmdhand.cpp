@@ -15,7 +15,8 @@
 class daBmdhand_HIO_c : public JORReflexible {
 public:
     daBmdhand_HIO_c();
-    virtual ~daBmdhand_HIO_c() {};
+    virtual ~daBmdhand_HIO_c() {}
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;
@@ -354,7 +355,7 @@ void hand_calc(bmdhand_class* i_this) {
     switch (i_this->m2BC) {
     case 0:
         mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
-        if ((actor->base.mParameters & 1U) == 0) {
+        if ((fopAcM_GetParam(actor) & 1U) == 0) {
             local_b8.z = REG0_F(9) + 250.0f;
         } else {
             local_b8.z = REG0_F(10) + 350.0f;
@@ -374,7 +375,7 @@ void hand_calc(bmdhand_class* i_this) {
         break;
     case 1:
         mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
-        if ((actor->base.mParameters & 1U) == 0) {
+        if ((fopAcM_GetParam(actor) & 1U) == 0) {
             local_b8.z = REG0_F(9) + 250.0f;
         } else {
             local_b8.z = REG0_F(10) + 350.0f;
@@ -441,7 +442,7 @@ void start_hand_calc(bmdhand_class* i_this) {
         f32 fVar1 = (i_this->m2E4.y - i_this->m2D8.y) * ((REG13_F(4) + 0.1f) * (REG13_F(5) + 2.0f));
         local_a8.x = fVar1 * cM_ssin(i_this->m2B8 * (REG13_S(5) + 0x5dc));
         local_a8.y = fVar1 * cM_scos(i_this->m2B8 * (REG13_S(7) + 500));
-        if ((actor->base.mParameters & 1U) == 0) {
+        if ((fopAcM_GetParam(actor) & 1U) == 0) {
             local_a8.z = REG0_F(9) + 250.0f;
         } else {
             local_a8.z = REG0_F(10) + 350.0f;
@@ -467,11 +468,11 @@ void hand_move(bmdhand_class* i_this) {
 
     hand_s* pcVar9 = i_this->m324;
     if (boss != NULL) {
-        actor->current.angle.y = ((u16)actor->base.mParameters & 0x1f) * -0xccc + REG8_S(4) + -13000 + boss->shape_angle.y;
-        MTXCopy(boss->mpMorf->mpModel->getAnmMtx(boss_joint_d[(actor->base.mParameters & 0x1fU)]), *calc_mtx);
+        actor->current.angle.y = (fopAcM_GetParam(actor) & 0x1f) * -0xccc + REG8_S(4) + -13000 + boss->actor.shape_angle.y;
+        MTXCopy(boss->mpMorf->getModel()->getAnmMtx(boss_joint_d[(fopAcM_GetParam(actor) & 0x1fU)]), *calc_mtx);
         local_40.x = REG14_F(6);
         local_40.y = REG14_F(7);
-        local_40.z = boss_joint_xad[(actor->base.mParameters & 3U)];
+        local_40.z = boss_joint_xad[(fopAcM_GetParam(actor) & 3U)];
         MtxPosition(&local_40, &actor->current.pos);
         if ((i_this->m2BA != 2) && (boss->m332 == 3)) {
             i_this->m2BA = 2;
@@ -795,7 +796,7 @@ static cPhs_State daBmdhand_Create(fopAc_ac_c* a_this) {
     i_this->m6F8.Set(cc_sph_src);
     i_this->m6F8.SetStts(&i_this->m590);
     i_this->m5CC.SetR(90.0f);
-    if (!(g_dComIfG_gameInfo.save.getMemory().getBit().isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
+    if (!(dComIfGs_isStageBossDemo()) && (dComIfGp_getStartStageName()[0] != 'X')) {
         i_this->m2BA = 3;
     }
     return cPhs_COMPLEATE_e;

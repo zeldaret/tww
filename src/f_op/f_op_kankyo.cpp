@@ -82,7 +82,7 @@ static cPhs_State fopKy_Create(void* i_ky) {
 
     cPhs_State ret = fpcMtd_Create((process_method_class*)i_this->sub_method, i_this);
     if (ret == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(i_this);
+        s32 priority = fpcM_DrawPriority(i_this);
         fopDwTg_ToDrawQ(&i_this->draw_tag, priority);
     }
 

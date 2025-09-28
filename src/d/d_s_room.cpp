@@ -124,15 +124,15 @@ static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 
     if (!dComIfGp_isEnableNextStage()) {
         if (i_this->field_0x1dc == 1) {
-            dComIfGs_onEventBit(0x1a80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A80);
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
-            dComIfGs_offTmpBit(0x0320);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0320);
     }
 
     if (i_this->field_0x1dc == 2)
-        dComIfGs_onEventBit(0x1c40);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C40);
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
         daNpc_Md_c::offSeaTalk();
@@ -266,9 +266,9 @@ cPhs_State phase_4(room_of_scene_class* i_this) {
     // Bug? The game seems to set these flags for DRI even when you're not on the sea stage.
     // TODO: Look into this more.
     if (roomNo == dIsleRoom_DragonRoostIsland_e) {
-        dComIfGs_setEventReg(0xb8ff, 0);
-        if (dComIfGs_isEventBit(0x3f02))
-            dComIfGs_onEventBit(0x1580);
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, 0);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F02))
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1580);
     }
 
     return cPhs_COMPLEATE_e;

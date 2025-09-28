@@ -476,7 +476,7 @@ cPhs_State daObjLeaves_c::_create() {
 
     fopAcM_SetupActor(this, daObjLeaves_c);
 
-    if (base.mInitState == 0) {
+    if (fopAcM_IsFirstCreating(this)) {
         m43C = chk_appear();
     }
 

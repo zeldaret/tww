@@ -332,7 +332,7 @@ struct dStage_Event_dt_c {
     /* 0x10 */ u8 field_0x10;
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
+    /* 0x13 */ u8 mSpawnSwitchNo; // Keeps track of whether this event has been triggered by a player spawn.
     /* 0x14 */ u8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
@@ -987,10 +987,10 @@ public:
 
 // unknown name
 struct dStage_objectNameInf {
-    char mName[8];
-    s16 mProcName;
-    s8 mSubtype;
-    s8 mGbaName;
+    char name[8];
+    s16 procname;
+    s8 argument;
+    s8 gbaName;
 };  // Size: 0xC
 
 typedef int (*dStage_Func)(dStage_dt_c*, void*, int, void*);
@@ -1008,7 +1008,8 @@ void dStage_dt_c_roomLoader(void* i_data, dStage_dt_c* i_stage);
 void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo);
 
 dStage_objectNameInf* dStage_searchName(const char*);
-const char* dStage_getName2(s16 i_procName, s8 i_subtype);
+const char* dStage_getName(s16 i_procName, s8 i_argument);
+const char* dStage_getName2(s16 i_procName, s8 i_argument);
 
 
 inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
