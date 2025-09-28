@@ -9,7 +9,6 @@
 #include "SSystem/SComponent/c_cc_s.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -254,7 +253,7 @@ void cCcS::SetCoCommonHitInf(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* 
 
 /* 8024388C-80244750       .text SetPosCorrect__4cCcSFP8cCcD_ObjP4cXyzP8cCcD_ObjP4cXyzf */
 void cCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos2, f32 cross_len) {
-    CHECK_FLOAT_CLASS(604, cross_len);
+    JUT_ASSERT(604, !isnan(cross_len));
 #if VERSION > VERSION_DEMO
     CHECK_FLOAT_RANGE(605, cross_len);
 #endif
@@ -377,12 +376,12 @@ void cCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos
     }
     
 #if VERSION > VERSION_DEMO
-    CHECK_FLOAT_CLASS(794, vec1.x);
-    CHECK_FLOAT_CLASS(795, vec1.y);
-    CHECK_FLOAT_CLASS(796, vec1.z);
-    CHECK_FLOAT_CLASS(798, vec2.x);
-    CHECK_FLOAT_CLASS(799, vec2.y);
-    CHECK_FLOAT_CLASS(800, vec2.z);
+    JUT_ASSERT(794, !isnan(vec1.x));
+    JUT_ASSERT(795, !isnan(vec1.y));
+    JUT_ASSERT(796, !isnan(vec1.z));
+    JUT_ASSERT(798, !isnan(vec2.x));
+    JUT_ASSERT(799, !isnan(vec2.y));
+    JUT_ASSERT(800, !isnan(vec2.z));
     CHECK_VEC3_RANGE(804, vec1);
     CHECK_VEC3_RANGE(808, vec2);
 #endif
@@ -393,12 +392,12 @@ void cCcS::SetPosCorrect(cCcD_Obj* obj1, cXyz* ppos1, cCcD_Obj* obj2, cXyz* ppos
     (*ppos2) += vec2;
     
 #if VERSION > VERSION_DEMO
-    CHECK_FLOAT_CLASS(817, ppos1->x);
-    CHECK_FLOAT_CLASS(818, ppos1->y);
-    CHECK_FLOAT_CLASS(819, ppos1->z);
-    CHECK_FLOAT_CLASS(821, ppos2->x);
-    CHECK_FLOAT_CLASS(822, ppos2->y);
-    CHECK_FLOAT_CLASS(823, ppos2->z);
+    JUT_ASSERT(817, !isnan(ppos1->x));
+    JUT_ASSERT(818, !isnan(ppos1->y));
+    JUT_ASSERT(819, !isnan(ppos1->z));
+    JUT_ASSERT(821, !isnan(ppos2->x));
+    JUT_ASSERT(822, !isnan(ppos2->y));
+    JUT_ASSERT(823, !isnan(ppos2->z));
     CHECK_PVEC3_RANGE(827, ppos1);
     CHECK_PVEC3_RANGE(831, ppos2);
 #endif
