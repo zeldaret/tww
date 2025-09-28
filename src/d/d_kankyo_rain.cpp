@@ -613,7 +613,7 @@ void dKyr_sun_move() {
 
         pLenzPkt->field_0x80 = pLenzPkt->field_0x88;
         pLenzPkt->field_0x84 = pLenzPkt->field_0x8c;
-        pLenzPkt->field_0x88 = 1000000000.0f;
+        pLenzPkt->field_0x88 = 1000000000.0f; // This is not G_CM3D_F_INF
         pLenzPkt->field_0x8c = 0.0f;
 
         cXyz center;
