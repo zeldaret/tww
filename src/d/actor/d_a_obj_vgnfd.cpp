@@ -30,16 +30,16 @@ const s32 daObjVgnfd_c::M_door_bdl_table[] = {
     VGNFD_BDL_YGCBD00,
 };
 const u16 daObjVgnfd_c::M_door_ev_table[] = {
-    dSv_event_flag_c::UNK_3904,
-    dSv_event_flag_c::UNK_3902,
-    dSv_event_flag_c::UNK_3901,
-    dSv_event_flag_c::UNK_3A80,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_GOHMA,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_KALLE_DEMOS,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_JALHALLA,
+    dSv_event_flag_c::TRIALS_DOOR_LIGHT_MOLGERA,
 };
 const u16 daObjVgnfd_c::M_boss_ev_table[] = {
-    dSv_event_flag_c::UNK_3240,
-    dSv_event_flag_c::UNK_3220,
-    dSv_event_flag_c::UNK_3210,
-    dSv_event_flag_c::UNK_3208,
+    dSv_event_flag_c::GOHMA_TRIALS_CLEAR,
+    dSv_event_flag_c::KALLE_DEMOS_TRIALS_CLEAR,
+    dSv_event_flag_c::JALHALLA_TRIALS_CLEAR,
+    dSv_event_flag_c::MOLGERA_TRIALS_CLEAR,
 };
 const char daObjVgnfd_c::M_arcname[6] = "VgnFD";
 
