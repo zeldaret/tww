@@ -1016,7 +1016,7 @@ void new_himo2_move(himo2_class* i_this) {
                 i_this->m24D8 = 1;
                 #if VERSION > VERSION_DEMO
                 if (btd != 0) {
-                    fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+                    fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
                 }
                 #endif
                 break;
@@ -1393,7 +1393,7 @@ void new_himo2_move(himo2_class* i_this) {
         i_this->m217C->health = 0;
         #if VERSION > VERSION_DEMO
         if (btd != 0) {
-            fopAcM_OnStatus(btd, 0x4000);
+            fopAcM_OnStatus(&btd->actor, 0x4000);
         }
         #endif
     }
@@ -1518,12 +1518,12 @@ void new_himo2_move(himo2_class* i_this) {
             break;
         }
         i_this->m24F4 = REG0_F(12) + 50.0f;
-        fopAcM_OnStatus(btd, 0x4000);
+        fopAcM_OnStatus(&btd->actor, 0x4000);
         i_this->m24D9 = 8;
         i_this->m24E8.x = 0.0f;
         i_this->m24E8.y = REG0_F(5) * 0.1f + 3000.0f;
         i_this->m24E8.z = REG0_F(6) * 0.1f;
-        cMtx_YrotS(*calc_mtx, btd->current.angle.y);
+        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f;
         sp130.y = REG0_F(8) * 0.1f + 1000.0f;
         sp130.z = REG0_F(9) * 0.1f + 1400.0f;
@@ -1585,7 +1585,7 @@ void new_himo2_move(himo2_class* i_this) {
                 camera->mCamera.Reset(player->eyePos, spDC);
                 camera->mCamera.Start();
                 camera->mCamera.SetTrimSize(0);
-                fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+                fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
                 dComIfGp_event_reset();
             }
             dr->unk_40A = 0;
@@ -1594,8 +1594,8 @@ void new_himo2_move(himo2_class* i_this) {
     }
     case 9: {
         cLib_addCalc2(&i_this->m24F4, REG0_F(4) + 50.0f, 0.5f, 3.0f);
-        cLib_addCalc2(&i_this->m24E8.y, btd->eyePos.y + REG0_F(5) * 0.1f + 200.0f, 0.2f, 1000.0f);
-        cMtx_YrotS(*calc_mtx, btd->current.angle.y);
+        cLib_addCalc2(&i_this->m24E8.y, btd->actor.eyePos.y + REG0_F(5) * 0.1f + 200.0f, 0.2f, 1000.0f);
+        cMtx_YrotS(*calc_mtx, btd->actor.current.angle.y);
         sp130.x = REG0_F(7) * 0.1f + -300.0f;
         sp130.y = REG0_F(8) * 0.1f + 100.0f;
         sp130.z = REG0_F(9) * 0.1f + 2000.0f;
@@ -1626,7 +1626,7 @@ void new_himo2_move(himo2_class* i_this) {
             camera->mCamera.Reset(player->eyePos, spD0);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
-            fopAcM_OffStatus(btd, fopAcStts_UNK4000_e);
+            fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
             dComIfGp_event_reset();
         }
         break;
@@ -1664,7 +1664,7 @@ void new_himo2_move(himo2_class* i_this) {
                         i_this->m029C = 0;
                         #if VERSION > VERSION_DEMO
                         if (btd != 0) {
-                            fopAcM_OnStatus(btd, 0x4000);
+                            fopAcM_OnStatus(&btd->actor, 0x4000);
                         }
                         #endif
                     } else {
