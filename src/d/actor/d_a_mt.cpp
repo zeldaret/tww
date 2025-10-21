@@ -837,7 +837,7 @@ static BOOL daMt_Draw(mt_class* i_this) {
 
 /* 0000361C-000037B0       .text bakuha__FP8mt_class */
 void bakuha(mt_class* i_this) {
-    fopAcM_createDisappear(i_this, &i_this->eyePos, 10);
+    fopAcM_createDisappear(i_this, &i_this->eyePos, 10, daDisItem_IBALL_e);
     if (!i_this->m2B6 && i_this->m2B9 != 0) {
         dComIfGs_onSwitch(i_this->m2B9, fopAcM_GetRoomNo(i_this));
     }
@@ -1327,7 +1327,7 @@ void mt_move_maru(mt_class* i_this) {
             gndChk.SetPos(&local_fc);
             local_fc.y = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-            if (local_fc.y != C_BG_MIN_HEIGHT) {
+            if (local_fc.y != -G_CM3D_F_INF) {
                 if (local_fc.y < fVar9 - 1.0f) {
                     target = 5.0f;
                     fVar2 = 0.3f;
@@ -1609,7 +1609,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
     cXyz pos(i_this->current.pos.x, i_this->current.pos.y + 200.0f, i_this->current.pos.z);
     lavaChk.SetPos(&pos);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
-    if (lavaY != C_BG_MIN_HEIGHT && i_this->current.pos.y - 30.0f + REG0_F(13) < lavaY) {
+    if (lavaY != -G_CM3D_F_INF && i_this->current.pos.y - 30.0f + REG0_F(13) < lavaY) {
         if (!i_this->mInLava) {
             i_this->speedF *= 0.1f;
             i_this->speed.y = 0.0f;
@@ -2010,10 +2010,10 @@ static BOOL daMt_Delete(mt_class* i_this) {
     }
     if (i_this->m1CBC != 0 && i_this->m2B6 && i_this->m2BA != 0 && !dComIfGs_isSwitch(i_this->m2BA, fopAcM_GetRoomNo(i_this))) {
         fopAcM_prm_class* params = fopAcM_CreateAppend();
-        params->mPos = i_this->home.pos;
-        params->mAngle = i_this->home.angle;
-        params->mParameter = fopAcM_GetParam(i_this);
-        params->mRoomNo = fopAcM_GetRoomNo(i_this);
+        params->base.position = i_this->home.pos;
+        params->base.angle = i_this->home.angle;
+        params->base.parameters = fopAcM_GetParam(i_this);
+        params->room_no = fopAcM_GetRoomNo(i_this);
         fopAcM_create(PROC_MT, NULL, params);
     }
     return TRUE;
