@@ -549,10 +549,10 @@ void body_control3(mt_class* i_this) {
             cMtx_XrotM(*calc_mtx, i_this->shape_angle.x + sVar13);
             cMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
             MtxPosition(&offset, &out);
-            f32 fVar1 = out.x + i_this->mPos[i].x - i_this->mPos[i - 1].x;
-            f32 fVar2 = out.y + i_this->mPos[i].y - i_this->mPos[i - 1].y;
-            f32 fVar3 = out.z + i_this->mPos[i].z - i_this->mPos[i - 1].z;
-            s16 sVar10 = cM_atan2s(fVar1, fVar3);
+            f32 fVar1 = i_this->mPos[i].x - i_this->mPos[i - 1].x + out.x;
+            f32 fVar2 = i_this->mPos[i].y - i_this->mPos[i - 1].y + out.y;
+            f32 fVar3 = i_this->mPos[i].z - i_this->mPos[i - 1].z + out.z;
+            s32 sVar10 = cM_atan2s(fVar1, fVar3);
             fVar1 = std::sqrtf(fVar1 * fVar1 + fVar3 * fVar3);
             s16 sVar4 = -cM_atan2s(fVar2, fVar1);
             cXyz offset2(0.0f, 0.0f, REG0_F(7) + 35.0f);
@@ -560,7 +560,7 @@ void body_control3(mt_class* i_this) {
             cMtx_XrotM(*calc_mtx, sVar4);
             MtxPosition(&offset2, &out);
             s16 sVar7 = sVar10 - i_this->shape_angle.y;
-            uint uVar5 = sVar7 < 0 ? -sVar7 : sVar7;
+            u32 uVar5 = sVar7 < 0 ? -sVar7 : sVar7;
             if (uVar5 < 0x4000) {
                 i_this->mAngle[i].y = sVar10;
                 i_this->mAngle[i].x = -(sVar4 - 0x8000);
@@ -576,7 +576,7 @@ void body_control3(mt_class* i_this) {
 
         J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
-        mDoMtx_stack_c::transS(i_this->mPos[i] + out);
+        mDoMtx_stack_c::transS(i_this->mPos[i].x + out.x, i_this->mPos[i].y + out.y, i_this->mPos[i].z + out.z);
         mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
         mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
         mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
@@ -660,11 +660,10 @@ void body_control5(mt_class* i_this) {
     f32 fVar3 = l_HIO.m18 + i_this->mAcch.GetGroundH();
     for (int i = 0; i < 8; i++) {
         if (i > 0) {
-            cXyz offset(
-                i_this->m474 * (REG0_F(4) + 50.0f) * cM_ssin(i_this->m46A * (REG0_S(5) + 0xDAC) + i * (REG0_S(6) + 7000)),
-                i_this->m474 * (REG0_F(5) + 80.0f) * cM_ssin(i_this->m46A * (REG0_S(7) + 0x1194) + i * (REG0_S(8) + 6000)),
-                REG0_F(3) + -30.0f
-            );
+            cXyz offset;
+            offset.x = i_this->m474 * (REG0_F(4) + 50.0f) * cM_ssin(i_this->m46A * (REG0_S(5) + 0xDAC) + i * (REG0_S(6) + 7000));
+            offset.y = i_this->m474 * (REG0_F(5) + 80.0f) * cM_ssin(i_this->m46A * (REG0_S(7) + 0x1194) + i * (REG0_S(8) + 6000));
+            offset.z = REG0_F(3) + -30.0f;
             cXyz out;
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             MtxPosition(&offset, &out);
@@ -815,12 +814,14 @@ static BOOL daMt_Draw(mt_class* i_this) {
         i_this->brk[i]->entry(model->getModelData());
         if (i_this->m2E4 == 0) {
             int iVar3 = i_this->mBrkFrame + i * l_HIO.m50;
+            // TODO: this is wrong, should be some kind of looped addition
             if (iVar3 < 0) {
                 iVar3 = 0x28U - iVar3;
             }
             iVar3 %= 0x29U;
             i_this->brk[i]->setFrame(iVar3);
             iVar3 = i_this->mBtkFrame + i * l_HIO.m50;
+            // TODO: this is wrong, should be some kind of looped addition
             if (iVar3 < 0) {
                 iVar3 = 0x1EU - iVar3;
             }
@@ -1841,37 +1842,41 @@ static BOOL daMt_Execute(mt_class* i_this) {
             cLib_addCalc2(&i_this->m18F0, 1.0f, 1.0f, 0.1f);
         }
     }
-    dBgS_ObjLinChk linChk;
-    cXyz start = i_this->old.pos;
-    cXyz end = start;
-    end.y += 40.0f;
-    linChk.Set(&start, &end, i_this);
 
-    cXyz end2;
-    f32 h = 40.0f;
-    if (dComIfG_Bgsp()->LineCross(&linChk)) {
-        h = linChk.GetCrossP()->y - 1 - i_this->old.pos.y;
-        if (h < 0.0f) {
-            h = 0.0f;
+    // Fakematch? these linChks get deconstructed so they need to go out of scope
+    {
+        dBgS_ObjLinChk linChk;
+        cXyz start = i_this->old.pos;
+        cXyz end = start;
+        end.y += 40.0f;
+        linChk.Set(&start, &end, i_this);
+
+        cXyz end2;
+        f32 h = 40.0f;
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            h = linChk.GetCrossP()->y - 1 - i_this->old.pos.y;
+            if (h < 0.0f) {
+                h = 0.0f;
+            }
         }
-    }
-    cXyz start2 = i_this->old.pos;
-    start2.y += h;
-    end2 = i_this->current.pos;
-    end2.y += h;
+        cXyz start2 = i_this->old.pos;
+        start2.y += h;
+        end2 = i_this->current.pos;
+        end2.y += h;
 
-    dBgS_ObjLinChk linChk2;
-    linChk2.Set(&start2, &end2, i_this);
-    bool cross2 = dComIfG_Bgsp()->LineCross(&linChk2);
-    dBgS_ObjLinChk linChk3;
-    linChk3.Set(&end2, &start2, i_this);
-    bool cross3 = dComIfG_Bgsp()->LineCross(&linChk3);
-    if (cross2 && cross3) {
-        i_this->current.pos = *linChk2.GetCrossP();
-        cXyz* norm = &dComIfG_Bgsp()->GetTriPla(linChk2)->mNormal;
-        i_this->current.pos.x += norm->x;
-        i_this->current.pos.y += norm->y;
-        i_this->current.pos.z += norm->z;
+        dBgS_ObjLinChk linChk2;
+        linChk2.Set(&start2, &end2, i_this);
+        bool cross2 = dComIfG_Bgsp()->LineCross(&linChk2);
+        dBgS_ObjLinChk linChk3;
+        linChk3.Set(&end2, &start2, i_this);
+        bool cross3 = dComIfG_Bgsp()->LineCross(&linChk3);
+        if (cross2 && !cross3) {
+            i_this->current.pos = *linChk2.GetCrossP();
+            cXyz* norm = &dComIfG_Bgsp()->GetTriPla(linChk2)->mNormal;
+            i_this->current.pos.x += norm->x;
+            i_this->current.pos.y += norm->y;
+            i_this->current.pos.z += norm->z;
+        }
     }
 
     i_this->attention_info.position = i_this->eyePos;
@@ -2010,13 +2015,17 @@ static BOOL daMt_IsDelete(mt_class* i_this) {
 /* 00007CCC-00007E18       .text daMt_Delete__FP8mt_class */
 static BOOL daMt_Delete(mt_class* i_this) {
     dComIfG_resDelete(&i_this->mPhs, "Mt");
+#if VERSION == VERSION_DEMO
+    l_HIO.removeHIO();
+#else
     if (i_this->mpEmitter != NULL) {
         i_this->mpEmitter->quitImmortalEmitter();
         i_this->mpEmitter->becomeInvalidEmitter();
         i_this->mpEmitter = NULL;
     }
+#endif
     for (int i = 0; i < 8; i++) {
-        i_this->mPtclCallback[i].end();
+        i_this->mPtclCallback[i].remove();
     }
     if (i_this->m1CBC != 0 && i_this->m2B6 && i_this->m2BA != 0 && !dComIfGs_isSwitch(i_this->m2BA, fopAcM_GetRoomNo(i_this))) {
         fopAcM_prm_class* params = fopAcM_CreateAppend();
