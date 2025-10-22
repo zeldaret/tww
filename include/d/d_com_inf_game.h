@@ -423,7 +423,9 @@ public:
     void setOperateWindOn() { mOperateWind = 2; }
 
     u8 checkMesgSendButton() { return mMesgSendButton; }
+    void setMesgSendButton(u8 button) { mMesgSendButton = button; }
     u8 checkMesgCancelButton() { return mMesgCancelButton; }
+    void setMesgCancelButton(u8 button) { mMesgCancelButton = button; }
 
     void setPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] |= flag; }
     void clearPlayerStatus(int param_0, int i, u32 flag) { mPlayerStatus[param_0][i] &= ~flag; }
@@ -2568,8 +2570,16 @@ inline void dComIfGp_setOperateWindOn() {
     g_dComIfG_gameInfo.play.setOperateWindOn();
 }
 
+inline void dComIfGp_setMesgSendButton(u8 button) {
+    g_dComIfG_gameInfo.play.setMesgSendButton(button);
+}
+
 inline u8 dComIfGp_checkMesgSendButton() {
     return g_dComIfG_gameInfo.play.checkMesgSendButton();
+}
+
+inline void dComIfGp_setMesgCancelButton(u8 button) {
+    g_dComIfG_gameInfo.play.setMesgCancelButton(button);
 }
 
 inline u8 dComIfGp_checkMesgCancelButton() {

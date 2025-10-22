@@ -540,7 +540,7 @@ void daObjMknjD::Act_c::privateCut() {
                 case ACT_LESSON: {
                     u16 msgStatus = talk(1);
 
-                    if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_UNK15_e) {
+                    if (msgStatus == fopMsgStts_BOX_CLOSED_e || msgStatus == fopMsgStts_INPUT_e) {
                         doCutEnd = true;
                     }
                     break;
