@@ -169,7 +169,8 @@ void mt_eye_tex_anm(mt_class* i_this) {
 /* 000005EC-00000720       .text nodeCallBack_head__FP7J3DNodei */
 static BOOL nodeCallBack_head(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        s32 jntNo = ((J3DJoint*) node)->getJntNo();
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         mt_class* i_this = (mt_class*) model->getUserArea();
         if (i_this != NULL) {
@@ -260,42 +261,45 @@ void body_control2(mt_class* i_this) {
 
     for (int i = 0; i < 8; i++) {
         if (i > 0) {
-            cXyz local_178(i_this->mPos[i].x, i_this->mPos[i].y + 50.0f, i_this->mPos[i].z);
+            u8 num_crossed = 0;
+            cXyz start = i_this->mPos[i];
+            start.y += 50.0f;
             cMtx_YrotS(*calc_mtx, i_this->mAngle[i].y);
-            cXyz offset(3.0f, -200.0f, 0.0f);
-            cXyz out1;
-            MtxPosition(&offset, &out1);
-            out1 += i_this->mPos[i];
-            linChk.Set(&local_178, &out1, i_this);
-            u8 crossed = dComIfG_Bgsp()->LineCross(&linChk);
+            cXyz end_offset(3.0f, -200.0f, 0.0f);
+            cXyz end1;
+            MtxPosition(&end_offset, &end1);
+            end1 += i_this->mPos[i];
+            linChk.Set(&start, &end1, i_this);
+            bool crossed = dComIfG_Bgsp()->LineCross(&linChk);
             if (crossed != 0) {
-                out1 = linChk.GetCross();
+                end1 = linChk.GetCross();
+                num_crossed = 1;
             }
-            offset.x *= -1.0f;
-            cXyz out2;
-            MtxPosition(&offset, &out2);
-            out2 += i_this->mPos[i];
-            linChk.Set(&local_178, &out2, i_this);
+            end_offset.x *= -1.0f;
+            cXyz end2;
+            MtxPosition(&end_offset, &end2);
+            end2 += i_this->mPos[i];
+            linChk.Set(&start, &end2, i_this);
             if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                out2 = linChk.GetCross();
-                crossed++;
+                end2 = linChk.GetCross();
+                num_crossed++;
             }
 
             s16 target = 0;
             f32 f30;
-            if (crossed == 2) {
+            if (num_crossed == 2) {
                 f30 = i_this->mPos[i].y - 10.0f;
-                f32 fVar2 = out1.y + l_HIO.m18;
+                f32 fVar2 = end1.y + l_HIO.m18;
                 if (f30 < fVar2) {
-                    offset = out1 - out2;
-                    f32 fVar3 = std::sqrtf(offset.x * offset.x + offset.z * offset.z);
-                    target = cM_atan2s(offset.y, fVar3);
                     f30 = fVar2;
+                    cXyz diff = end1 - end2;
+                    f32 xzmag = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
+                    target = cM_atan2s(diff.y, xzmag);
                 }
             }
 
             cLib_addCalcAngleS2(&i_this->mAngle[i].z, target, 2, 0x400);
-            f32 f = i_this->m590[i].y + f30 - i_this->mPos[i - 1].y;
+            f32 f = i_this->m590[i].y - i_this->mPos[i - 1].y + f30;
             if (i_this->m48E == 0) {
                 cXyz offset(
                     cM_ssin(i_this->m46A * (REG0_S(5) + 0x5DC) + i * (REG0_S(6) + 0x1D4C)) * 3.0f,
@@ -355,9 +359,9 @@ void body_control2(mt_class* i_this) {
             mDoMtx_stack_c::multVec(&offset, &i_this->eyePos);
             i_this->mEyeSph.SetC(i_this->eyePos);
             offset.set(0.0f, 0.0f, REG6_F(9) + 100.0f);
-            cXyz headPos;
-            mDoMtx_stack_c::multVec(&offset, &headPos);
-            i_this->mSph[0].SetC(headPos);
+            cXyz head_pos;
+            mDoMtx_stack_c::multVec(&offset, &head_pos);
+            i_this->mSph[0].SetC(head_pos);
 
             i_this->mSph[0].OffAtVsBitSet(cCcD_AtSPrm_VsEnemy_e);
             i_this->mSph[0].OnAtVsBitSet(cCcD_AtSPrm_VsOther_e);
@@ -388,13 +392,18 @@ void body_control2(mt_class* i_this) {
         }
 
         dComIfG_Ccsp()->Set(&i_this->mSph[i]);
-        if (i_this->mC01 && i > 0) {
+        if (i_this->mC01 && i >= 1) {
             u8 uVar3 = i_this->mC00 ? move_ad2[i] : move_ad[i];
             for (int j = 0; j < 6; j++) {
                 u8 uVar2 = uVar3 + j;
-                i_this->m6F4[uVar2].x = i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f);
-                i_this->m6F4[uVar2].y = i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f);
-                i_this->m6F4[uVar2].z = i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f);
+                i_this->m6F4[uVar2].set(
+                    i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f),
+                    i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f),
+                    i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f)
+                );
+                // i_this->m6F4[uVar2].x = i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f);
+                // i_this->m6F4[uVar2].y = i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f);
+                // i_this->m6F4[uVar2].z = i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f);
                 i_this->m9F4[uVar2] = i_this->mAngle[i];
             }
         }
@@ -663,23 +672,22 @@ void body_control5(mt_class* i_this) {
             if (fVar2 < fVar3) {
                 fVar2 = fVar3;
             }
-            f32 fVar4 = out.x + i_this->mPos[i].x - i_this->mPos[i - 1].x;
-            f32 fVar1 = i_this->mPos[i - 1].y;
-            f32 fVar5 = out.z + i_this->mPos[i].z - i_this->mPos[i - 1].z;
-            s16 iVar6 = cM_atan2s(fVar4, fVar5);
-            fVar4 = std::sqrtf(fVar4 * fVar4 + fVar5 * fVar5);
-            s16 iVar7 = -cM_atan2s(fVar2 - fVar1, fVar4);
-            offset.x = 0.0f;
-            offset.y = 0.0f;
-            offset.z = REG0_F(7) + 35.0f;
-            cMtx_YrotS(*calc_mtx, iVar6);
-            cMtx_XrotM(*calc_mtx, iVar7);
-            MtxPosition(&offset, &out);
-            i_this->mAngle[i].y = iVar6 + 0x8000;
-            i_this->mAngle[i].x = -iVar7;
-            i_this->mPos[i].x = i_this->mPos[i - 1].x + out.x;
-            i_this->mPos[i].y = i_this->mPos[i - 1].y + out.y;
-            i_this->mPos[i].z = i_this->mPos[i - 1].z + out.z;
+            f32 mag_x = i_this->mPos[i].x - i_this->mPos[i - 1].x + out.x;
+            f32 mag_y = fVar2 - i_this->mPos[i - 1].y;
+            f32 mag_z = i_this->mPos[i].z - i_this->mPos[i - 1].z + out.z;
+            int angle_y = cM_atan2s(mag_x, mag_z);
+            f32 mag_xz = std::sqrtf(mag_x * mag_x + mag_z * mag_z);
+            s16 angle_x = -cM_atan2s(mag_y, mag_xz);
+            offset.set(0.0f, 0.0f, REG0_F(7) + 35.0f);
+            cXyz dir;
+            cMtx_YrotS(*calc_mtx, angle_y);
+            cMtx_XrotM(*calc_mtx, angle_x);
+            MtxPosition(&offset, &dir);
+            i_this->mAngle[i].y = angle_y + 0x8000;
+            i_this->mAngle[i].x = -angle_x;
+            i_this->mPos[i].x = i_this->mPos[i - 1].x + dir.x;
+            i_this->mPos[i].y = i_this->mPos[i - 1].y + dir.y;
+            i_this->mPos[i].z = i_this->mPos[i - 1].z + dir.z;
         }
 
         J3DModel* model = i_this->mpMorf[i]->getModel();
@@ -690,6 +698,8 @@ void body_control5(mt_class* i_this) {
         mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
         if (i == 0) {
             mDoMtx_stack_c::YrotM(i_this->m468);
+        }
+        if (i == 0) {
             mDoMtx_stack_c::scaleM(l_HIO.m1C, l_HIO.m1C, l_HIO.m1C);
         } else {
             mDoMtx_stack_c::scaleM(i_this->mScale[i], i_this->mScale[i] * i_this->m620[i], 1.0f);
@@ -722,27 +732,27 @@ void body_control5(mt_class* i_this) {
 
 /* 00003008-00003210       .text br_draw__FP8mt_class */
 void br_draw(mt_class* i_this) {
-    if (i_this->m18D4 != 0) {
+    if (i_this->br_frame != 0) {
         MtxTrans(i_this->eyePos.x, i_this->eyePos.y, i_this->eyePos.z, false);
         cMtx_YrotM(*calc_mtx, i_this->shape_angle.y);
         cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
         cMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
         f32 scale = l_HIO.m1C * (REG0_F(4) + 2.0f);
         MtxPush();
-        cMtx_YrotM(*calc_mtx, br_ya[i_this->m18D4 - 1]);
+        cMtx_YrotM(*calc_mtx, br_ya[i_this->br_frame - 1]);
         cMtx_XrotM(*calc_mtx, -0x4000);
         MtxScale(scale, scale, scale, true);
 
-        J3DModel* model = i_this->br_modelL[br_no[i_this->m18D4 - 1]];
+        J3DModel* model = i_this->br_modelL[br_no[i_this->br_frame - 1]];
         g_env_light.setLightTevColorType(model, &i_this->tevStr);
         model->setBaseTRMtx(*calc_mtx);
         mDoExt_modelUpdateDL(model);
         MtxPull();
         cMtx_ZrotM(*calc_mtx, -0x8000);
-        cMtx_YrotM(*calc_mtx, br_ya[i_this->m18D4 - 1]);
+        cMtx_YrotM(*calc_mtx, br_ya[i_this->br_frame - 1]);
         cMtx_XrotM(*calc_mtx, -0x4000);
         MtxScale(scale, scale, scale, true);
-        model = i_this->br_modelR[br_no[i_this->m18D4 - 1]];
+        model = i_this->br_modelR[br_no[i_this->br_frame - 1]];
         g_env_light.setLightTevColorType(model, &i_this->tevStr);
         model->setBaseTRMtx(*calc_mtx);
         mDoExt_modelUpdateDL(model);
@@ -846,7 +856,7 @@ void bakuha(mt_class* i_this) {
     i_this->mTimer[2] = REG0_S(0) + 57;
     for (int i = 1; i < 8; i++) {
         i_this->m590[i].x = cM_rndFX(REG0_F(4) + 30.0f);
-        i_this->m590[i].y = REG0_F(5) + cM_rndF(10.0f) + 20.0f;
+        i_this->m590[i].y = cM_rndF(10.0f) + 20.0f + REG0_F(5);
         i_this->m590[i].z = cM_rndFX(REG0_F(4) + 30.0f);
         i_this->m5F0[i] = cM_rndF(3.0f);
         if (i_this->m18F8 == 3) {
@@ -859,7 +869,7 @@ void bakuha(mt_class* i_this) {
 
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
 void mt_move(mt_class* i_this) {
-    u8 cross_bits;
+    u8 cross_bits = 0;
     cXyz cross_pos[6];
     cXyz end_pos[6];
     dBgS_LinChk linChk;
@@ -939,7 +949,7 @@ void mt_move(mt_class* i_this) {
                     i_this->m488 = 0x800;
                     if (std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z) < 100.0f) {
                         i_this->mPathPntIdx += i_this->mPathDir;
-                        if (i_this->mPathPntIdx >= i_this->mpPath->m_num) {
+                        if (i_this->mPathPntIdx >= (s8)i_this->mpPath->m_num) {
                             if (dPath_ChkClose(i_this->mpPath)) {
                                 i_this->mPathPntIdx = 0;
                             } else {
@@ -1001,7 +1011,7 @@ void mt_move(mt_class* i_this) {
     fopAcM_posMove(i_this, NULL);
     if (cross_bits == 0) {
         i_this->m46C++;
-        if (i_this->m46C > 9) {
+        if (i_this->m46C >= 10) {
             i_this->mMode = 1;
             i_this->mFightMode = 0x11;
         }
@@ -1157,7 +1167,7 @@ void mt_fight(mt_class* i_this) {
                 i_this->mC04 = 1;
             }
             if (i_this->mC02 == l_HIO.m3E + 2) {
-                i_this->m18D4 = 1;
+                i_this->br_frame = 1;
             }
             if (i_this->mC02 >= l_HIO.m3E + 2 && i_this->mC02 <= l_HIO.m3E + 15) {
                 i_this->mC04 = 2;
@@ -1182,7 +1192,7 @@ void mt_fight(mt_class* i_this) {
                 i_this->m462 = 10;
                 i_this->mTimer[0] = 10;
                 anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
-                i_this->m18D4 = 0;
+                i_this->br_frame = 0;
             }
             if (i_this->mC02 == l_HIO.m3A) {
                 i_this->mFightMode = 0;
@@ -1571,7 +1581,7 @@ void damage_check(mt_class* i_this) {
         }
         fopAcM_monsSeStart(i_this, JA_SE_CV_MG_DAMAGE, 0);
         anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
-        i_this->m18D4 = 0;
+        i_this->br_frame = 0;
     }
     if (iVar4 != 0) {
         cMtx_YrotS(*calc_mtx, atInfo.m0C.y);
@@ -1628,9 +1638,9 @@ static BOOL daMt_Execute(mt_class* i_this) {
     i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
     mt_eye_tex_anm(i_this);
     if (l_HIO.m04 == 0) {
-        if (i_this->m18D4 != 0) {
-            if (++i_this->m18D4 == 11) {
-                i_this->m18D4 = 0;
+        if (i_this->br_frame != 0) {
+            if (++i_this->br_frame == 11) {
+                i_this->br_frame = 0;
             }
         }
         i_this->setBtAttackData(100.0f, 100.0f, 10000.0f, fopEn_enemy_c::OPENING_NONE);
@@ -2121,10 +2131,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_ac) {
     return TRUE;
 }
 
-const char* unused1 = "i_this->btk[i]";
-const char* unused2 = "i_this->brk[i]";
-const char* unused3 = "i_this->br_modelL[i] != 0";
-const char* unused4 = "i_this->br_modelR[i] != 0";
+const char* unused[4] = {
+    "i_this->btk[i]",
+    "i_this->brk[i]",
+    "i_this->br_modelL[i] != 0",
+    "i_this->br_modelR[i] != 0"
+};
 
 static dCcD_SrcSph sph_src = {
     // dCcD_SrcGObjInf

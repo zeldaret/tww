@@ -91,11 +91,11 @@ public:
     /* 0x0C02 */ s16 mC02;
     /* 0x0C04 */ u8 mC04;
     /* 0x0C08 */ dBgS_AcchCir mAcchCir;
-    /* 0x0C48 */ dBgS_Acch mAcch;
+    /* 0x0C48 */ dBgS_ObjAcch mAcch;
     /* 0x0E0C */ dCcD_Stts mStts;
     /* 0x0E48 */ dCcD_Sph mSph[8];
     /* 0x17A8 */ dCcD_Sph mEyeSph;
-    /* 0x18D4 */ u8 m18D4;
+    /* 0x18D4 */ u8 br_frame;
     /* 0x18D8 */ J3DModel* br_modelL[3];
     /* 0x18E4 */ J3DModel* br_modelR[3];
     /* 0x18F0 */ f32 m18F0;
