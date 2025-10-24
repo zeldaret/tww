@@ -169,8 +169,7 @@ void mt_eye_tex_anm(mt_class* i_this) {
 /* 000005EC-00000720       .text nodeCallBack_head__FP7J3DNodei */
 static BOOL nodeCallBack_head(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        J3DJoint* joint = (J3DJoint*)node;
-        s32 jntNo = joint->getJntNo();
+        s32 jntNo = ((J3DJoint*)node)->getJntNo();
         J3DModel* model = j3dSys.getModel();
         mt_class* i_this = (mt_class*) model->getUserArea();
         if (i_this != NULL) {
@@ -458,7 +457,7 @@ void body_control1(mt_class* i_this) {
     i_this->m9F4[i_this->mBF4] = i_this->shape_angle;
     i_this->mB74[i_this->mBF4] = i_this->m468;
     for (int i = 0; i < 8; i++) {
-        u8 uVar2 = i_this->mC00 ? (i_this->mBF4 + move_ad2[i]) & 0x3F : (i_this->mBF4 + move_ad[i]) & 0x3F;
+        u32 uVar2 = i_this->mC00 ? (i_this->mBF4 + move_ad2[i]) & 0x3F : (i_this->mBF4 + move_ad[i]) & 0x3F;
         J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
         mDoMtx_stack_c::transS(i_this->m6F4[uVar2].x, i_this->m6F4[uVar2].y, i_this->m6F4[uVar2].z);
@@ -637,7 +636,7 @@ void body_control4(mt_class* i_this) {
             if (i_this->m590[i].y < 0.0f) {
                 cLib_addCalc0(&i_this->mScale[i], 1.0f, 0.025f);
             }
-        } 
+        }
 
         model = i_this->mpMorf[i]->getModel();
         mDoMtx_stack_c::transS(i_this->mPos[i]);
@@ -813,20 +812,17 @@ static BOOL daMt_Draw(mt_class* i_this) {
         i_this->btk[i]->entry(model->getModelData());
         i_this->brk[i]->entry(model->getModelData());
         if (i_this->m2E4 == 0) {
-            int iVar3 = i_this->mBrkFrame + i * l_HIO.m50;
-            // TODO: this is wrong, should be some kind of looped addition
-            if (iVar3 < 0) {
-                iVar3 = 0x28U - iVar3;
+            int new_brk_frame = i_this->mBrkFrame + i * l_HIO.m50;
+            while (new_brk_frame < 0) {
+                new_brk_frame += 41;
             }
-            iVar3 %= 0x29U;
-            i_this->brk[i]->setFrame(iVar3);
-            iVar3 = i_this->mBtkFrame + i * l_HIO.m50;
-            // TODO: this is wrong, should be some kind of looped addition
-            if (iVar3 < 0) {
-                iVar3 = 0x1EU - iVar3;
+            i_this->brk[i]->setFrame(new_brk_frame);
+
+            int new_btk_frame = i_this->mBtkFrame + i * l_HIO.m50;
+            while (new_btk_frame < 0) {
+                new_btk_frame += 31;
             }
-            iVar3 %= 0x1F;
-            i_this->btk[i]->setFrame(iVar3);
+            i_this->btk[i]->setFrame(new_btk_frame);
         } else {
             i_this->brk[i]->setFrame(i_this->mBrkFrame);
             i_this->btk[i]->setFrame(i_this->mBtkFrame);
@@ -1882,42 +1878,42 @@ static BOOL daMt_Execute(mt_class* i_this) {
     i_this->attention_info.position = i_this->eyePos;
 
     int step = 1;
-    int r29;
-    int r28;
-    int r27;
+    int brk_start_frame;
+    int brk_end_frame;
+    int btk_end_frame;
     switch (i_this->m2E4) {
         case 0:
-            r29 = 0;
-            r28 = 40;
-            r27 = 30;
+            brk_start_frame = 0;
+            brk_end_frame = 40;
+            btk_end_frame = 30;
             break;
         case 1:
-            r29 = 40;
-            r28 = 100;
-            r27 = 90;
+            brk_start_frame = 40;
+            brk_end_frame = 100;
+            btk_end_frame = 90;
             step = 2;
             break;
         case 2:
-            r29 = 100;
-            r28 = 130;
-            r27 = 120;
+            brk_start_frame = 100;
+            brk_end_frame = 130;
+            btk_end_frame = 120;
             break;
     }
 
     i_this->mBrkFrame += step;
-    if (i_this->mBrkFrame > r28) {
+    if (i_this->mBrkFrame > brk_end_frame) {
         if (i_this->m2E4 == 0) {
-            i_this->mBrkFrame = r29;
+            i_this->mBrkFrame = brk_start_frame;
         } else {
-            i_this->mBrkFrame = r28;
+            i_this->mBrkFrame = brk_end_frame;
         }
     }
     i_this->mBtkFrame += step;
-    if (i_this->mBtkFrame > r27) {
+    if (i_this->mBtkFrame > btk_end_frame) {
         if (i_this->m2E4 == 0) {
             i_this->mBtkFrame = 0;
         } else {
-            i_this->mBtkFrame = r27;
+            i_this->mBtkFrame = btk_end_frame;
         }
     }
 
