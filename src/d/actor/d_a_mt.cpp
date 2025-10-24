@@ -866,26 +866,27 @@ void bakuha(mt_class* i_this) {
 
 /* 000037B0-000042C4       .text mt_move__FP8mt_class */
 void mt_move(mt_class* i_this) {
-    u8 cross_bits = 0;
+    fopAc_ac_c* actor = i_this;
     cXyz cross_pos[6];
     cXyz end_pos[6];
     dBgS_LinChk linChk;
-    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    u8 cross_bits = 0;
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, actor->current.angle.z);
     cXyz offset(0.0f, 50.0f, 0.0f);
     cXyz start_pos;
     MtxPosition(&offset, &start_pos);
-    start_pos = start_pos + i_this->current.pos;
-    int segs = abs(i_this->current.angle.x) < 0x1000 ? 6 : 4;
+    start_pos = start_pos + actor->current.pos;
+    int segs = abs(actor->current.angle.x) < 0x1000 ? 6 : 4;
     for (int i = 0; i < segs; i++) {
         cXyz check_pos;
         check_pos.x = check_x[i];
         check_pos.y = check_y[i];
         check_pos.z = check_z[i];
         MtxPosition(&check_pos, &end_pos[i]);
-        end_pos[i] += i_this->current.pos;
-        linChk.Set(&start_pos, &end_pos[i], i_this);
+        end_pos[i] += actor->current.pos;
+        linChk.Set(&start_pos, &end_pos[i], actor);
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
             cross_pos[i] = linChk.GetCross();
             cross_bits |= check_bitD[i];
@@ -898,24 +899,24 @@ void mt_move(mt_class* i_this) {
         cXyz local_178;
         MtxPosition(&local_16C, &local_178);
         if (i_this->m48E == 0) {
-            cLib_addCalc2(&i_this->current.pos.x, local_178.x + cross_pos[1].x + local_190.x * 0.5f, 1.0f, 1.0f);
-            cLib_addCalc2(&i_this->current.pos.y, local_178.y + cross_pos[1].y + local_190.y * 0.5f, 1.0f, 1.0f);
-            cLib_addCalc2(&i_this->current.pos.z, local_178.z + cross_pos[1].z + local_190.z * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&actor->current.pos.x, local_178.x + cross_pos[1].x + local_190.x * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&actor->current.pos.y, local_178.y + cross_pos[1].y + local_190.y * 0.5f, 1.0f, 1.0f);
+            cLib_addCalc2(&actor->current.pos.z, local_178.z + cross_pos[1].z + local_190.z * 0.5f, 1.0f, 1.0f);
         }
         f32 fVar1 = std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z);
-        i_this->current.angle.x = -cM_atan2s(local_190.y, fVar1);
+        actor->current.angle.x = -cM_atan2s(local_190.y, fVar1);
         if (std::fabsf(local_190.x) > 0.1f || std::fabsf(local_190.z) > 0.1f) {
             i_this->m48C = cM_atan2s(local_190.x, local_190.z);
         }
-        s16 sVar5 = i_this->m48C - i_this->current.angle.y;
+        s16 sVar5 = i_this->m48C - actor->current.angle.y;
         uint uVar4 = (sVar5 < 0) ? -sVar5 : sVar5;
         if (uVar4 > 0x4000) {
-            i_this->current.angle.x = 0x8000 - i_this->current.angle.x;
+            actor->current.angle.x = 0x8000 - actor->current.angle.x;
         }
         i_this->m492 = 23;
     } else if ((cross_bits & 0x1) == 0) {
         if (i_this->m492 == 0) {
-            i_this->current.angle.x += REG0_S(2) + 0x800;
+            actor->current.angle.x += REG0_S(2) + 0x800;
         } else {
             i_this->m492--;
         }
@@ -923,25 +924,25 @@ void mt_move(mt_class* i_this) {
 
     if ((cross_bits & 0xC) == 0xC) {
         cXyz local_190 = cross_pos[2] - cross_pos[3];
-        cMtx_XrotS(*calc_mtx, -i_this->current.angle.x);
-        cMtx_YrotM(*calc_mtx, -i_this->current.angle.y);
+        cMtx_XrotS(*calc_mtx, -actor->current.angle.x);
+        cMtx_YrotM(*calc_mtx, -actor->current.angle.y);
         cXyz local_178;
         MtxPosition(&local_190, &local_178);
         f32 fVar1 = std::sqrtf(local_178.x * local_178.x + local_178.z * local_178.z);
-        i_this->current.angle.z = cM_atan2s(local_178.x, fVar1);
+        actor->current.angle.z = cM_atan2s(local_178.x, fVar1);
     }
 
-    if (abs(i_this->current.angle.x) < 0x1000) {
+    if (abs(actor->current.angle.x) < 0x1000) {
         if ((cross_bits & 0x30) == 0x30) {
             cXyz local_190 = cross_pos[4] - cross_pos[5];
-            i_this->current.angle.y = cM_atan2s(local_190.x, local_190.z) + 0x4000;
+            actor->current.angle.y = cM_atan2s(local_190.x, local_190.z) + 0x4000;
         } else {
             if (i_this->m2B4 >= 10) {
-                i_this->current.angle.y += i_this->m488;
+                actor->current.angle.y += i_this->m488;
             } else {
                 s16 target_angle;
                 if (i_this->m2BC != 0) {
-                    cXyz local_190 = i_this->m47C - i_this->current.pos;
+                    cXyz local_190 = i_this->m47C - actor->current.pos;
                     target_angle = cM_atan2s(local_190.x, local_190.z);
                     i_this->m488 = 0x800;
                     if (std::sqrtf(local_190.x * local_190.x + local_190.z * local_190.z) < 100.0f) {
@@ -952,26 +953,27 @@ void mt_move(mt_class* i_this) {
                             } else {
                                 i_this->mPathDir = -1;
                                 i_this->mPathPntIdx = i_this->mpPath->m_num - 2;
-                            } 
+                            }
                         } else if (i_this->mPathPntIdx < 0) {
                             i_this->mPathDir = 1;
                             i_this->mPathPntIdx = 1;
                         }
-                        i_this->m47C = i_this->mpPath->m_points[i_this->mPathPntIdx].m_position;
+                        dPnt* pt = &i_this->mpPath->m_points[i_this->mPathPntIdx];
+                        i_this->m47C = pt->m_position;
                     }
                 } else {
-                    target_angle = fopAcM_searchPlayerAngleY(i_this);
+                    target_angle = fopAcM_searchPlayerAngleY(actor);
                     cLib_addCalcAngleS2(&i_this->m488, REG0_S(4) + 0x400, 1, 0x10);
                 }
                  
                 if (i_this->m2B5 == 1) {
-                    i_this->current.angle.y = target_angle;
+                    actor->current.angle.y = target_angle;
                 } else {
-                    cLib_addCalcAngleS2(&i_this->current.angle.y, target_angle, 0x10, i_this->m488);
+                    cLib_addCalcAngleS2(&actor->current.angle.y, target_angle, 0x10, i_this->m488);
                 }
             } 
 
-            if (i_this->m2B4 < 10 && !i_this->mBlocked && fopAcM_searchPlayerDistance(i_this) < l_HIO.m24) {
+            if (i_this->m2B4 < 10 && !i_this->mBlocked && fopAcM_searchPlayerDistance(actor) < l_HIO.m24) {
                 bool bVar3 = false;
                 for (int i = 0; i < 64; i += 8) {
                     if (abs(i_this->m9F4[i].x) > 0x1000) {
@@ -995,17 +997,19 @@ void mt_move(mt_class* i_this) {
             4, 0x400
         );
         float fVar2 = i_this->mC00 ? 10.0f : 5.0f;
-        cLib_addCalc2(&i_this->speedF, fVar2, 1.0f, fVar2);
+        cLib_addCalc2(&actor->speedF, fVar2, 1.0f, fVar2);
     } else {
-        cLib_addCalc0(&i_this->speedF, 1.0f, 5.0f);
+        cLib_addCalc0(&actor->speedF, 1.0f, 5.0f);
     }
 
-    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
     cMtx_YrotM(*calc_mtx, i_this->m468);
-    cXyz local_16C(0.0f, 0.0f, i_this->speedF);
-    MtxPosition(&local_16C, &i_this->speed);
-    fopAcM_posMove(i_this, NULL);
+    offset.x = 0.0f;
+    offset.y = 0.0f;
+    offset.z = actor->speedF;
+    MtxPosition(&offset, &actor->speed);
+    fopAcM_posMove(actor, NULL);
     if (cross_bits == 0) {
         i_this->m46C++;
         if (i_this->m46C >= 10) {
