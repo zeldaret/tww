@@ -1294,15 +1294,23 @@ switch_end:
 
 /* 00005088-00005A04       .text mt_move_maru__FP8mt_class */
 void mt_move_maru(mt_class* i_this) {
+    f32 fVar1;
+    uint uVar7 = 0;
+    cXyz out;
+    cXyz offset;
+    cXyz out2;
+
     i_this->mBlinkTimer = 3;
-    if (i_this->mFightMode == 0) {
+    switch (i_this->mFightMode) {
+    case 0:
         if (i_this->mTimer[0] == 0) {
             i_this->mSph[0].OnCoSetBit();
         }
         i_this->shape_angle.x += (s16)(i_this->speedF * 200.0f);
         cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-        cXyz offset(0.0f, 0.0f, i_this->speedF);
-        cXyz out;
+        offset.x = 0.0f;
+        offset.y = 0.0f;
+        offset.z = i_this->speedF;
         MtxPosition(&offset, &out);
         i_this->speed.x = out.x;
         i_this->speed.z = out.z;
@@ -1313,15 +1321,14 @@ void mt_move_maru(mt_class* i_this) {
         if (i_this->speed.y < -100.0f) {
             i_this->speed.y = -100.0f;
         }
-        f32 fVar1 = i_this->speed.y;
+        fVar1 = i_this->speed.y;
         mt_bg_check(i_this);
-        uint uVar7;
         if (i_this->mAcch.ChkGroundHit()) {
             if (fVar1 < REG0_F(12) + -50.0f) {
                 i_this->m18F8 = 2;
             }
 
-            f32 target = 0.0f;
+            f32 target_speed = 0.0f;
             f32 fVar2 = 1.0f;
 
             dBgS_GndChk gndChk;
@@ -1329,26 +1336,25 @@ void mt_move_maru(mt_class* i_this) {
             cXyz local_f0 = i_this->current.pos;
             local_f0.y += 50.0f;
             gndChk.SetPos(&local_f0);
-            f32 fVar9 = dComIfG_Bgsp()->GroundCross(&gndChk);
+            f32 cur_gnd_y = dComIfG_Bgsp()->GroundCross(&gndChk);
             cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
-            cXyz local_d8(0.0f, 50.0f, 5.0f);
-            cXyz out;
-            MtxPosition(&local_d8, &out);
-            cXyz local_fc = i_this->current.pos + out;
-            gndChk.SetPos(&local_fc);
-            local_fc.y = dComIfG_Bgsp()->GroundCross(&gndChk);
+            offset.set(0.0f, 50.0f, 5.0f);
+            MtxPosition(&offset, &out2);
+            cXyz ahead_gnd_pt = i_this->current.pos + out2;
+            gndChk.SetPos(&ahead_gnd_pt);
+            ahead_gnd_pt.y = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-            if (local_fc.y != -G_CM3D_F_INF) {
-                if (local_fc.y < fVar9 - 1.0f) {
-                    target = 5.0f;
+            if (ahead_gnd_pt.y != -G_CM3D_F_INF) {
+                if (ahead_gnd_pt.y < cur_gnd_y - 1.0f) {
+                    target_speed = 5.0f;
                     fVar2 = 0.3f;
-                } else if (local_fc.y > fVar9 + 1.0f) {
-                    target = -5.0f;
+                } else if (ahead_gnd_pt.y > cur_gnd_y + 1.0f) {
+                    target_speed = -5.0f;
                     fVar2 = 0.3f;
                 }
             }
 
-            cLib_addCalc2(&i_this->speedF, target, 1.0f, l_HIO.m5C * fVar2);
+            cLib_addCalc2(&i_this->speedF, target_speed, 1.0f, l_HIO.m5C * fVar2);
             if (fVar1 < REG0_F(14) + -15.0f) {
                 i_this->speed.y = fVar1 * (REG0_F(15) + -0.4f);
                 uVar7 = i_this->speed.y * (REG0_F(5) + 6.0f);
@@ -1373,7 +1379,8 @@ void mt_move_maru(mt_class* i_this) {
             cLib_offBit<u32>(i_this->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             i_this->mFightMode = 1;
         }
-    } else if (i_this->mFightMode == 1) {
+        break;
+    case 1:
         i_this->mSph[0].OffCoSetBit();
         i_this->current.angle.x = 0;
         i_this->current.angle.y = i_this->shape_angle.y;
@@ -1435,7 +1442,7 @@ void mt_move_maru(mt_class* i_this) {
                 dPa_name::ID_SCENE_8095,
                 &i_this->current.pos, &i_this->current.angle,
                 NULL, 0xB4, NULL,
-                fopAcM_GetRoomNo(i_this)
+                (s8)fopAcM_GetRoomNo(i_this)
             );
             if (i_this->mpEmitter != NULL) {
                 i_this->mpEmitter->becomeImmortalEmitter();
