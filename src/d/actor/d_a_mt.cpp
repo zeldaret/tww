@@ -1408,7 +1408,7 @@ void mt_move_maru(mt_class* i_this) {
         s16 target = l_HIO.m52;
         if (i_this->m466 < 110) {
             if (i_this->m466 > 100 || i_this->m466 < 80) {
-                target = l_HIO.m52 - 0x5DC;
+                target -= 1500;
             }
             cLib_addCalcAngleS2(&i_this->shape_angle.x, 0x7800, 4, 0x300);
         }
@@ -1427,7 +1427,7 @@ void mt_move_maru(mt_class* i_this) {
         cLib_addCalcAngleS2(&i_this->m468, i_this->m330 * cM_ssin(i_this->m466 * (REG0_S(5) + 5000)) * 5.0f, 2, 0x1000);
         cLib_addCalcAngleS2(&i_this->shape_angle.x, 0, 4, 0x1000);
         cLib_addCalc2(&i_this->m474, -0.4f, 1.0f, 0.2f);
-        cLib_addCalcAngleS2(&i_this->m48A, (REG0_F(14) + 4.0f) * i_this->m330 * cM_ssin(i_this->m466 * (REG0_S(5) + 5000)), 1, 0x1000);
+        cLib_addCalcAngleS2(&i_this->m48A, (REG0_F(14) + 4.0f) * (i_this->m330 * cM_ssin(i_this->m466 * (REG0_S(5) + 5000))), 1, 0x1000);
         i_this->current.angle.x = i_this->shape_angle.x;
         i_this->shape_angle.y = i_this->current.angle.y + i_this->m468;
         cLib_addCalc0(&i_this->speedF, 1.0f, 0.5f);
@@ -1481,6 +1481,7 @@ void water_damage_se_set(mt_class* i_this) {
 
 /* 00005C54-0000614C       .text damage_check__FP8mt_class */
 void damage_check(mt_class* i_this) {
+    fopAc_ac_c* actor = i_this;
     CcAtInfo atInfo;
     atInfo.pParticlePos = NULL;
 
@@ -1499,7 +1500,7 @@ void damage_check(mt_class* i_this) {
                 i_this->m1CBC = 1;
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
                 i_this->mEnemyIce.mYOffset = REG0_F(0) + -20.0f;
-                i_this->health = 0;
+                actor->health = 0;
                 return;
             }
             at_power_check(&atInfo);
@@ -1524,24 +1525,24 @@ void damage_check(mt_class* i_this) {
                 } else {
                     if (atInfo.mResultingAttackType != 6 && i_this->mMode == 1) {
                         i_this->mFightMode = 0xF;
-                        cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+                        cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
                         pos.set(0.0f, 60.0f, -120.0f);
                         MtxPosition(&pos, &i_this->m47C);
-                        i_this->m47C += i_this->current.pos;
+                        i_this->m47C += actor->current.pos;
                         i_this->m462 = REG6_S(7) + 6;
                         i_this->mTimer[0] = REG6_S(8) + 6;
                         i_this->m460 = 5;
-                        def_se_set(i_this, atInfo.mpObj, 0x40);
+                        def_se_set(actor, atInfo.mpObj, 0x40);
                         return;
                     }
                     if (i_this->mMode == 2) {
                         i_this->m460 = 5;
-                        cc_at_check(i_this, &atInfo);
-                        if (i_this->health <= 0) {
+                        cc_at_check(actor, &atInfo);
+                        if (actor->health <= 0) {
                             i_this->m18F8 = 2;
                         }
                         i_this->m18FC = 12;
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_80CF, &i_this->current.pos);
+                        dComIfGp_particle_set(dPa_name::ID_SCENE_80CF, &actor->current.pos);
                     }
                 }
             }
@@ -1566,7 +1567,7 @@ void damage_check(mt_class* i_this) {
         ) {
             return;
         }
-        atInfo.mpActor = cc_at_check(i_this, &atInfo);
+        atInfo.mpActor = cc_at_check(actor, &atInfo);
         if (atInfo.mResultingAttackType == 6) {
             i_this->m18F8 = 1;
             i_this->m18FB = 0;
@@ -1579,24 +1580,24 @@ void damage_check(mt_class* i_this) {
             iVar4 = 1;
         } else {
             i_this->mFightMode = 0xF;
-            cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
+            cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
             pos.set(0.0f, 60.0f, -120.0f);
             MtxPosition(&pos, &i_this->m47C);
-            i_this->m47C += i_this->current.pos;
+            i_this->m47C += actor->current.pos;
             i_this->m462 = 25;
             i_this->mTimer[0] = 10;
-            i_this->current.angle.x = -0x4000;
+            actor->current.angle.x = -0x4000;
         }
-        fopAcM_monsSeStart(i_this, JA_SE_CV_MG_DAMAGE, 0);
+        fopAcM_monsSeStart(actor, JA_SE_CV_MG_DAMAGE, 0);
         anm_init(i_this, MT_BCK_WAIT1, 2.0f, 2, 1.0f, 0);
         i_this->br_frame = 0;
     }
     if (iVar4 != 0) {
         cMtx_YrotS(*calc_mtx, atInfo.m0C.y);
         cXyz pos(0.0f, l_HIO.m4C * 40.0f, l_HIO.m4C * -20.0f);
-        MtxPosition(&pos, &i_this->speed);
+        MtxPosition(&pos, &actor->speed);
         if (iVar4 == 2) {
-            i_this->speed.y = 0.0f;
+            actor->speed.y = 0.0f;
         }
         i_this->mMode = 1;
         i_this->mFightMode = 0x14;
