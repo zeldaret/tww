@@ -623,30 +623,33 @@ void body_control3(mt_class* i_this) {
 
 /* 000028BC-00002AB0       .text body_control4__FP8mt_class */
 void body_control4(mt_class* i_this) {
+    cXyz* pos_i = &i_this->mPos[1];
+    csXyz* angle_i = &i_this->mAngle[1];
+    cXyz* m590_i = &i_this->m590[1];
     J3DModel* model = i_this->mpMorf[0]->getModel();
     mDoMtx_stack_c::scaleS(0.0f, 0.0f, 0.0f);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
-    for (int i = 1; i < 8; i++) {
+    for (int i = 1; i < 8; i++, pos_i++, angle_i++, m590_i++) {
         if (i_this->m5F0[i] != 0) {
             i_this->m5F0[i]--;
         } else {
-            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8060, &i_this->mPos[i], 0xFF, g_whiteColor, g_whiteColor);
-            i_this->mPos[i].x += i_this->m590[i].x;
-            i_this->mPos[i].y += i_this->m590[i].y;
-            i_this->mPos[i].z += i_this->m590[i].z;
-            i_this->m590[i].y -= 2.5f;
-            i_this->mAngle[i].x += 0x1800;
-            i_this->mAngle[i].y += 0x1800;
-            if (i_this->m590[i].y < 0.0f) {
+            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8060, pos_i, 0xFF, g_whiteColor, g_whiteColor);
+            pos_i->x += m590_i->x;
+            pos_i->y += m590_i->y;
+            pos_i->z += m590_i->z;
+            m590_i->y -= 2.5f;
+            angle_i->x += 0x1800;
+            angle_i->y += 0x1000;
+            if (m590_i->y < 0.0f) {
                 cLib_addCalc0(&i_this->mScale[i], 1.0f, 0.025f);
             }
         }
 
         model = i_this->mpMorf[i]->getModel();
-        mDoMtx_stack_c::transS(i_this->mPos[i]);
-        mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
-        mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
-        mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
+        mDoMtx_stack_c::transS(*pos_i);
+        mDoMtx_stack_c::YrotM(angle_i->y);
+        mDoMtx_stack_c::XrotM(angle_i->x);
+        mDoMtx_stack_c::ZrotM(angle_i->z);
         mDoMtx_stack_c::scaleM(i_this->mScale[i], i_this->mScale[i], i_this->mScale[i]);
         if (i == 7) {
             mDoMtx_stack_c::scaleM(0.0f, 0.0f, 0.0f);
