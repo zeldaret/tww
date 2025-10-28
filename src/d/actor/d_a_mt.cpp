@@ -520,6 +520,11 @@ void body_control1(mt_class* i_this) {
 void body_control3(mt_class* i_this) {
     i_this->mPos[0] = i_this->current.pos;
     i_this->mAngle[0] = i_this->shape_angle;
+
+    cXyz* old_pos_i = &i_this->mOldPos[0];
+    cXyz* pos_i = &i_this->mPos[0];
+    csXyz* angle_i = &i_this->mAngle[0];
+
     s16 sVar13 = 0;
     cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
     cMtx_XrotM(*calc_mtx, i_this->shape_angle.x);
@@ -535,9 +540,10 @@ void body_control3(mt_class* i_this) {
         sVar6 = (i_this->m18FC & 2) * 500;
     }
 
-    for (int i = 0; i < 8; i++) {
+
+    for (int i = 0; i < 8; i++, old_pos_i++, angle_i++, pos_i++) {
         if (i > 0) {
-            sVar13 -= i_this->m48A + sVar6;
+            sVar13 -= (s16)(i_this->m48A + sVar6);
             offset.x = i_this->m330 * cM_ssin(i_this->m466 * (REG0_S(5) + 5000) + i * (REG0_S(6) + 7000));
             offset.y = 0.0f;
             offset.z = -i_this->m478;
@@ -546,9 +552,9 @@ void body_control3(mt_class* i_this) {
             cMtx_XrotM(*calc_mtx, i_this->shape_angle.x + sVar13);
             cMtx_ZrotM(*calc_mtx, i_this->shape_angle.z);
             MtxPosition(&offset, &out);
-            f32 fVar1 = i_this->mPos[i].x - i_this->mPos[i - 1].x + out.x;
-            f32 fVar2 = i_this->mPos[i].y - i_this->mPos[i - 1].y + out.y;
-            f32 fVar3 = i_this->mPos[i].z - i_this->mPos[i - 1].z + out.z;
+            f32 fVar1 = pos_i->x - pos_i[-1].x + out.x;
+            f32 fVar2 = pos_i->y - pos_i[-1].y + out.y;
+            f32 fVar3 = pos_i->z - pos_i[-1].z + out.z;
             s32 sVar10 = cM_atan2s(fVar1, fVar3);
             fVar1 = std::sqrtf(fVar1 * fVar1 + fVar3 * fVar3);
             s16 sVar4 = -cM_atan2s(fVar2, fVar1);
@@ -559,24 +565,24 @@ void body_control3(mt_class* i_this) {
             s16 sVar7 = sVar10 - i_this->shape_angle.y;
             u32 uVar5 = sVar7 < 0 ? -sVar7 : sVar7;
             if (uVar5 < 0x4000) {
-                i_this->mAngle[i].y = sVar10;
-                i_this->mAngle[i].x = -(sVar4 - 0x8000);
+                angle_i->y = sVar10;
+                angle_i->x = -(sVar4 - 0x8000);
             } else {
-                i_this->mAngle[i].y = sVar10 - 0x8000;
-                i_this->mAngle[i].x = sVar4;
+                angle_i->y = sVar10 - 0x8000;
+                angle_i->x = sVar4;
             }
-            i_this->mOldPos[i] = i_this->mPos[i];
-            i_this->mPos[i].x = i_this->mPos[i - 1].x + out.x;
-            i_this->mPos[i].y = i_this->mPos[i - 1].y + out.y;
-            i_this->mPos[i].z = i_this->mPos[i - 1].z + out.z;
+            *old_pos_i = *pos_i;
+            pos_i->x = pos_i[-1].x + out.x;
+            pos_i->y = pos_i[-1].y + out.y;
+            pos_i->z = pos_i[-1].z + out.z;
         }
 
         J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
-        mDoMtx_stack_c::transS(i_this->mPos[i].x + out.x, i_this->mPos[i].y + out.y, i_this->mPos[i].z + out.z);
-        mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
-        mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
-        mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
+        mDoMtx_stack_c::transS(pos_i->x + out.x, pos_i->y + out.y, pos_i->z + out.z);
+        mDoMtx_stack_c::YrotM(angle_i->y);
+        mDoMtx_stack_c::XrotM(angle_i->x);
+        mDoMtx_stack_c::ZrotM(angle_i->z);
 
         if (i == 0) {
             mDoMtx_stack_c::scaleM(l_HIO.m20, l_HIO.m20, l_HIO.m20);
