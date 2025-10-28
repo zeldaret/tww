@@ -663,44 +663,48 @@ void body_control5(mt_class* i_this) {
     i_this->mPos[0] = i_this->current.pos;
     i_this->mAngle[0] = i_this->shape_angle;
 
+    cXyz* pos_i = &i_this->mPos[0];
+    csXyz* angle_i = &i_this->mAngle[0];
+
     f32 fVar3 = l_HIO.m18 + i_this->mAcch.GetGroundH();
-    for (int i = 0; i < 8; i++) {
+    cXyz offset;
+    cXyz dir;
+    cXyz out;
+    for (int i = 0; i < 8; i++, pos_i++, angle_i++) {
         if (i > 0) {
-            cXyz offset;
-            offset.x = i_this->m474 * (REG0_F(4) + 50.0f) * cM_ssin(i_this->m46A * (REG0_S(5) + 0xDAC) + i * (REG0_S(6) + 7000));
-            offset.y = i_this->m474 * (REG0_F(5) + 80.0f) * cM_ssin(i_this->m46A * (REG0_S(7) + 0x1194) + i * (REG0_S(8) + 6000));
+            offset.x = i_this->m474 * ((REG0_F(4) + 50.0f) * cM_ssin(i_this->m46A * (REG0_S(5) + 0xDAC) + i * (REG0_S(6) + 7000)));
+            offset.y = i_this->m474 * ((REG0_F(5) + 80.0f) * cM_ssin(i_this->m46A * (REG0_S(7) + 0x1194) + i * (REG0_S(8) + 6000)));
             offset.z = REG0_F(3) + -30.0f;
-            cXyz out;
             cMtx_YrotS(*calc_mtx, i_this->shape_angle.y);
             MtxPosition(&offset, &out);
-            f32 fVar2 = i_this->mPos[i].y - 10.0f + out.y;
+            f32 fVar2 = pos_i->y - 10.0f + out.y;
             if (fVar2 < fVar3) {
                 fVar2 = fVar3;
             }
-            f32 mag_x = i_this->mPos[i].x - i_this->mPos[i - 1].x + out.x;
-            f32 mag_y = fVar2 - i_this->mPos[i - 1].y;
-            f32 mag_z = i_this->mPos[i].z - i_this->mPos[i - 1].z + out.z;
+            f32 mag_x = pos_i->x - pos_i[-1].x + out.x;
+            f32 mag_y = fVar2 - pos_i[-1].y;
+            f32 mag_z = pos_i->z - pos_i[-1].z + out.z;
             int angle_y = cM_atan2s(mag_x, mag_z);
             f32 mag_xz = std::sqrtf(mag_x * mag_x + mag_z * mag_z);
             s16 angle_x = -cM_atan2s(mag_y, mag_xz);
             offset.set(0.0f, 0.0f, REG0_F(7) + 35.0f);
-            cXyz dir;
             cMtx_YrotS(*calc_mtx, angle_y);
             cMtx_XrotM(*calc_mtx, angle_x);
             MtxPosition(&offset, &dir);
-            i_this->mAngle[i].y = angle_y + 0x8000;
-            i_this->mAngle[i].x = -angle_x;
-            i_this->mPos[i].x = i_this->mPos[i - 1].x + dir.x;
-            i_this->mPos[i].y = i_this->mPos[i - 1].y + dir.y;
-            i_this->mPos[i].z = i_this->mPos[i - 1].z + dir.z;
+            angle_i->y = angle_y + 0x8000;
+            angle_i->x = -angle_x;
+            pos_i->x = pos_i[-1].x + dir.x;
+            pos_i->y = pos_i[-1].y + dir.y;
+            pos_i->z = pos_i[-1].z + dir.z;
         }
 
         J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
-        mDoMtx_stack_c::transS(i_this->mPos[i]);
-        mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
-        mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
-        mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
+        mDoMtx_stack_c::transS(*pos_i);
+        mDoMtx_stack_c::YrotM(angle_i->y);
+        mDoMtx_stack_c::XrotM(angle_i->x);
+        mDoMtx_stack_c::ZrotM(angle_i->z);
+
         if (i == 0) {
             mDoMtx_stack_c::YrotM(i_this->m468);
         }
@@ -715,15 +719,16 @@ void body_control5(mt_class* i_this) {
 
         mDoMtx_stack_c::transM(0.0f, 0.0f, i_this->m470);
         model->setBaseTRMtx(mDoMtx_stack_c::get());
+
         if (i == 0) {
-            cXyz offset(0.0f, 0.0f, REG0_F(9) + 30.0f);
+            offset.set(0.0f, 0.0f, REG0_F(9) + 30.0f);
             mDoMtx_stack_c::multVec(&offset, &i_this->eyePos);
             i_this->mEyeSph.SetC(i_this->eyePos);
             i_this->mEyeSph.SetR(30.0f);
             dComIfG_Ccsp()->Set(&i_this->mEyeSph);
         } else {
             i_this->mSph[i].OffCoSetBit();
-            i_this->mSph[i].SetC(i_this->mPos[i]);
+            i_this->mSph[i].SetC(*pos_i);
         }
 
         i_this->mSph[i].OffAtSetBit();
@@ -732,7 +737,7 @@ void body_control5(mt_class* i_this) {
     }
 
     cLib_addCalc2(&i_this->m470, 20.0f, 1.0f, 1.0f);
-    i_this->m468 =i_this->m474 * (REG0_F(7) + 3000.0f) * cM_ssin(i_this->m46A * (REG0_S(0) + 3000));
+    i_this->m468 = i_this->m474 * ((REG0_F(7) + 3000.0f) * cM_ssin(i_this->m46A * (REG0_S(0) + 3000)));
 }
 
 /* 00003008-00003210       .text br_draw__FP8mt_class */
