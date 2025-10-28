@@ -254,30 +254,32 @@ void body_control2(mt_class* i_this) {
     i_this->mPos[0] = i_this->current.pos;
     i_this->mAngle[0] = i_this->shape_angle;
 
+    cXyz* pos_i = &i_this->mPos[0];
+    cXyz* old_pos_i = &i_this->mOldPos[0];
+    csXyz* angle_i = &i_this->mAngle[0];
+    cXyz* m590_i = &i_this->m590[0];
     dBgS_LinChk linChk;
+    cXyz diff, end2, end1, offset, out, start, local_184;
 
-    cXyz local_184(0.0f, 0.0f, 0.0f);
-
-    for (int i = 0; i < 8; i++) {
+    local_184.set(0.0f, 0.0f, 0.0f);
+    for (int i = 0; i < 8; i++, pos_i++, old_pos_i++, angle_i++, m590_i++) {
         if (i > 0) {
             u8 num_crossed = 0;
-            cXyz start = i_this->mPos[i];
+            start = *pos_i;
             start.y += 50.0f;
-            cMtx_YrotS(*calc_mtx, i_this->mAngle[i].y);
-            cXyz end_offset(3.0f, -200.0f, 0.0f);
-            cXyz end1;
-            MtxPosition(&end_offset, &end1);
-            end1 += i_this->mPos[i];
+            cMtx_YrotS(*calc_mtx, angle_i->y);
+            offset.set(3.0f, -200.0f, 0.0f);
+            MtxPosition(&offset, &end1);
+            end1 += *pos_i;
             linChk.Set(&start, &end1, i_this);
             bool crossed = dComIfG_Bgsp()->LineCross(&linChk);
             if (crossed != 0) {
                 end1 = linChk.GetCross();
                 num_crossed = 1;
             }
-            end_offset.x *= -1.0f;
-            cXyz end2;
-            MtxPosition(&end_offset, &end2);
-            end2 += i_this->mPos[i];
+            offset.x *= -1.0f;
+            MtxPosition(&offset, &end2);
+            end2 += *pos_i;
             linChk.Set(&start, &end2, i_this);
             if (dComIfG_Bgsp()->LineCross(&linChk)) {
                 end2 = linChk.GetCross();
@@ -287,20 +289,20 @@ void body_control2(mt_class* i_this) {
             s16 target = 0;
             f32 f30;
             if (num_crossed == 2) {
-                f30 = i_this->mPos[i].y - 10.0f;
+                f30 = pos_i->y - 10.0f;
                 f32 fVar2 = end1.y + l_HIO.m18;
                 if (f30 < fVar2) {
                     f30 = fVar2;
-                    cXyz diff = end1 - end2;
+                    diff = end1 - end2;
                     f32 xzmag = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
                     target = cM_atan2s(diff.y, xzmag);
                 }
             }
 
-            cLib_addCalcAngleS2(&i_this->mAngle[i].z, target, 2, 0x400);
-            f32 f = i_this->m590[i].y - i_this->mPos[i - 1].y + f30;
+            cLib_addCalcAngleS2(&angle_i->z, target, 2, 0x400);
+            f32 f = m590_i->y - pos_i[-1].y + f30;
             if (i_this->m48E == 0) {
-                cXyz offset(
+                offset.set(
                     cM_ssin(i_this->m46A * (REG0_S(5) + 0x5DC) + i * (REG0_S(6) + 0x1D4C)) * 3.0f,
                     0.0f,
                     REG0_F(3) + -5.0f
@@ -309,34 +311,33 @@ void body_control2(mt_class* i_this) {
                 MtxPosition(&offset, &local_184);
             }
 
-            f32 fVar4 = i_this->mPos[i].x - i_this->mPos[i - 1].x + local_184.x + i_this->m590[i].x;
-            f32 fVar5 = i_this->mPos[i].z - i_this->mPos[i - 1].z + local_184.z + i_this->m590[i].z;
+            f32 fVar4 = pos_i->x - pos_i[-1].x + m590_i->x + local_184.x;
+            f32 fVar5 = pos_i->z - pos_i[-1].z + m590_i->z + local_184.z;
             int iVar8 = cM_atan2s(fVar4, fVar5);
             fVar4 = std::sqrtf(fVar4 * fVar4 + fVar5 * fVar5);
             s16 iVar9 = -cM_atan2s(f, fVar4);
-            cXyz offset2(0.0f, 0.0f, REG0_F(7) + 35.0f);
+            offset.set(0.0f, 0.0f, REG0_F(7) + 35.0f);
             cMtx_YrotS(*calc_mtx, iVar8);
             cMtx_XrotM(*calc_mtx, iVar9);
-            cXyz local_16c;
-            MtxPosition(&offset2, &local_16c);
-            i_this->mAngle[i].y = iVar8 + 0x8000;
-            i_this->mAngle[i].x = -iVar9;
-            i_this->mOldPos[i] = i_this->mPos[i];
+            MtxPosition(&offset, &out);
+            angle_i->y = iVar8 + 0x8000;
+            angle_i->x = -iVar9;
+            *old_pos_i = *pos_i;
 
-            i_this->mPos[i].x = i_this->mPos[i - 1].x + local_16c.x;
-            i_this->mPos[i].y = i_this->mPos[i - 1].y + local_16c.y;
-            i_this->mPos[i].z = i_this->mPos[i - 1].z + local_16c.z;
-            i_this->m590[i].x = fVar1 * (i_this->mPos[i].x - i_this->mOldPos[i].x);
-            i_this->m590[i].y = fVar1 * (i_this->mPos[i].y - i_this->mOldPos[i].y);
-            i_this->m590[i].z = fVar1 * (i_this->mPos[i].z - i_this->mOldPos[i].z);
+            pos_i->x = pos_i[-1].x + out.x;
+            pos_i->y = pos_i[-1].y + out.y;
+            pos_i->z = pos_i[-1].z + out.z;
+            m590_i->x = fVar1 * (pos_i->x - old_pos_i->x);
+            m590_i->y = fVar1 * (pos_i->y - old_pos_i->y);
+            m590_i->z = fVar1 * (pos_i->z - old_pos_i->z);
         }
 
         J3DModel* model = i_this->mpMorf[i]->getModel();
         model->setBaseScale(i_this->scale);
-        mDoMtx_stack_c::transS(i_this->mPos[i]);
-        mDoMtx_stack_c::YrotM(i_this->mAngle[i].y);
-        mDoMtx_stack_c::XrotM(i_this->mAngle[i].x);
-        mDoMtx_stack_c::ZrotM(i_this->mAngle[i].z);
+        mDoMtx_stack_c::transS(*pos_i);
+        mDoMtx_stack_c::YrotM(angle_i->y);
+        mDoMtx_stack_c::XrotM(angle_i->x);
+        mDoMtx_stack_c::ZrotM(angle_i->z);
 
         if (i == 0) {
             mDoMtx_stack_c::YrotM(i_this->m468);
@@ -354,13 +355,12 @@ void body_control2(mt_class* i_this) {
         model->setBaseTRMtx(mDoMtx_stack_c::get());
 
         if (i == 0) {
-            cXyz offset(0.0f, 0.0f, REG0_F(9) + 30.0f);
+            offset.set(0.0f, 0.0f, REG0_F(9) + 30.0f);
             mDoMtx_stack_c::multVec(&offset, &i_this->eyePos);
             i_this->mEyeSph.SetC(i_this->eyePos);
             offset.set(0.0f, 0.0f, REG6_F(9) + 100.0f);
-            cXyz head_pos;
-            mDoMtx_stack_c::multVec(&offset, &head_pos);
-            i_this->mSph[0].SetC(head_pos);
+            mDoMtx_stack_c::multVec(&offset, &out);
+            i_this->mSph[0].SetC(out);
 
             i_this->mSph[0].OffAtVsBitSet(cCcD_AtSPrm_VsEnemy_e);
             i_this->mSph[0].OnAtVsBitSet(cCcD_AtSPrm_VsOther_e);
@@ -382,7 +382,7 @@ void body_control2(mt_class* i_this) {
             }
             dComIfG_Ccsp()->Set(&i_this->mEyeSph);
         } else {
-            i_this->mSph[i].SetC(i_this->mPos[i]);
+            i_this->mSph[i].SetC(*pos_i);
             if (i_this->m460 != 0) {
                 i_this->mSph[i].SetR(-200.0f);
             } else {
@@ -392,18 +392,16 @@ void body_control2(mt_class* i_this) {
 
         dComIfG_Ccsp()->Set(&i_this->mSph[i]);
         if (i_this->mC01 && i >= 1) {
-            u8 uVar3 = i_this->mC00 ? move_ad2[i] : move_ad[i];
+            u32 uVar3 = i_this->mC00 ? move_ad2[i] & 0x3F : move_ad[i] & 0x3F;
             for (int j = 0; j < 6; j++) {
-                u8 uVar2 = uVar3 + j;
-                i_this->m6F4[uVar2].set(
-                    i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f),
-                    i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f),
-                    i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f)
-                );
-                // i_this->m6F4[uVar2].x = i_this->mPos[i].x + j * ((i_this->mPos[i - 1].x - i_this->mPos[i].x) / 5.0f);
-                // i_this->m6F4[uVar2].y = i_this->mPos[i].y + j * ((i_this->mPos[i - 1].y - i_this->mPos[i].y) / 5.0f);
-                // i_this->m6F4[uVar2].z = i_this->mPos[i].z + j * ((i_this->mPos[i - 1].z - i_this->mPos[i].z) / 5.0f);
-                i_this->m9F4[uVar2] = i_this->mAngle[i];
+                u8 uVar2 = (uVar3 + j) & 0x3F;
+                f32 diff_x = ((pos_i[-1].x - pos_i->x) / 5.0f) * j;
+                f32 diff_y = ((pos_i[-1].y - pos_i->y) / 5.0f) * j;
+                f32 diff_z = ((pos_i[-1].z - pos_i->z) / 5.0f) * j;
+                i_this->m6F4[uVar2].x = pos_i->x + diff_x;
+                i_this->m6F4[uVar2].y = pos_i->y + diff_y;
+                i_this->m6F4[uVar2].z = pos_i->z + diff_z;
+                i_this->m9F4[uVar2] = *angle_i;
             }
         }
     }
