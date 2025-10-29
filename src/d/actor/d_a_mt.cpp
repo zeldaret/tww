@@ -1512,13 +1512,19 @@ void damage_check(mt_class* i_this) {
                 i_this->m1CBC = 1;
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
                 i_this->mEnemyIce.mYOffset = REG0_F(0) + -20.0f;
+#if VERSION > VERSION_DEMO
                 actor->health = 0;
+#endif
                 return;
             }
             at_power_check(&atInfo);
             if (atInfo.mResultingAttackType == 4 || atInfo.mpObj->ChkAtType(AT_TYPE_ICE_ARROW)) {
                 iVar4 = 2;
+#if VERSION == VERSION_DEMO
+                i_this->health = 0;
+#else
                 i_this->m18FB = 0;
+#endif
                 i_this->m460 = 5;
                 water_damage_se_set(i_this);
             } else {
@@ -1549,10 +1555,37 @@ void damage_check(mt_class* i_this) {
                     }
                     if (i_this->mMode == 2) {
                         i_this->m460 = 5;
+#if VERSION == VERSION_DEMO
+                        i_this->health = 20;
+                        cc_at_check(actor, &atInfo);
+                        i_this->health = 2;
+                        i_this->m18FB -= atInfo.mDamage;
+                        f32 scalef = 1.0f;
+                        if (i_this->m18FB <= 0) {
+                            i_this->m18F8 = 2;
+                            dScnPly_ply_c::setPauseTimer(REG0_S(7) + 6);
+                            dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &i_this->current.pos);
+                            fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
+                            scalef = 2.0f;
+                        } else {
+                            dScnPly_ply_c::setPauseTimer(REG0_S(5) + 1);
+                        }
+                        cXyz scale;
+                        scale.z = scalef;
+                        scale.y = scalef;
+                        scale.x = scalef;
+                        csXyz angle;
+                        angle.z = 0;
+                        angle.x = 0;
+                        angle.y = fopAcM_searchPlayerAngleY(i_this);
+                        dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &i_this->current.pos, &angle, &scale);
+                        dKy_SordFlush_set(i_this->current.pos, 1);
+#else
                         cc_at_check(actor, &atInfo);
                         if (actor->health <= 0) {
                             i_this->m18F8 = 2;
                         }
+#endif
                         i_this->m18FC = 12;
                         dComIfGp_particle_set(dPa_name::ID_SCENE_80CF, &actor->current.pos);
                     }
@@ -1570,7 +1603,9 @@ void damage_check(mt_class* i_this) {
             return;
         }
         at_power_check(&atInfo);
+#if VERSION > VERSION_DEMO
         i_this->m18FB -= atInfo.mDamage;
+#endif
         if (atInfo.mResultingAttackType != 6 &&
             atInfo.mResultingAttackType != 3 &&
             atInfo.mResultingAttackType != 4 &&
@@ -1580,15 +1615,33 @@ void damage_check(mt_class* i_this) {
             return;
         }
         atInfo.mpActor = cc_at_check(actor, &atInfo);
+#if VERSION == VERSION_DEMO
+        if (l_HIO.m06) {
+            i_this->health = 10;
+            i_this->m18FB = 8;
+        }
+#endif
         if (atInfo.mResultingAttackType == 6) {
             i_this->m18F8 = 1;
+#if VERSION == VERSION_DEMO
+            i_this->health = 0;
+#else
             i_this->m18FB = 0;
+#endif
         } else if (atInfo.mResultingAttackType == 4 || atInfo.mpObj->ChkAtType(AT_TYPE_ICE_ARROW)) {
             iVar4 = 2;
+#if VERSION == VERSION_DEMO
+            i_this->health = 0;
+#else
             i_this->m18FB = 0;
+#endif
             water_damage_se_set(i_this);
         }
+#if VERSION == VERSION_DEMO
+        if (i_this->health <= 0) {
+#else
         if (i_this->m18FB <= 0) {
+#endif
             iVar4 = 1;
         } else {
             i_this->mFightMode = 0xF;
@@ -1606,7 +1659,10 @@ void damage_check(mt_class* i_this) {
     }
     if (iVar4 != 0) {
         cMtx_YrotS(*calc_mtx, atInfo.m0C.y);
-        cXyz pos(0.0f, l_HIO.m4C * 40.0f, l_HIO.m4C * -20.0f);
+        cXyz pos;
+        pos.x = 0.0f;
+        pos.y = l_HIO.m4C * 40.0f;
+        pos.z = l_HIO.m4C * -20.0f;
         MtxPosition(&pos, &actor->speed);
         if (iVar4 == 2) {
             actor->speed.y = 0.0f;
@@ -1637,8 +1693,12 @@ static BOOL daMt_Execute(mt_class* i_this) {
 
     fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
     dBgS_ObjGndChk_Yogan lavaChk;
-    cXyz pos(i_this->current.pos.x, i_this->current.pos.y + 200.0f, i_this->current.pos.z);
-    lavaChk.SetPos(&pos);
+    Vec tmp;
+    tmp.x = i_this->current.pos.x;
+    tmp.y = i_this->current.pos.y;
+    tmp.z = i_this->current.pos.z;
+    tmp.y += 200.0f;
+    lavaChk.SetPos(&tmp);
     f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
     if (lavaY != -G_CM3D_F_INF && i_this->current.pos.y - 30.0f + REG0_F(13) < lavaY) {
         if (!i_this->mInLava) {
@@ -1660,7 +1720,8 @@ static BOOL daMt_Execute(mt_class* i_this) {
     mt_eye_tex_anm(i_this);
     if (l_HIO.m04 == 0) {
         if (i_this->br_frame != 0) {
-            if (++i_this->br_frame == 11) {
+            i_this->br_frame++;
+            if (i_this->br_frame == 11) {
                 i_this->br_frame = 0;
             }
         }
@@ -1698,7 +1759,7 @@ static BOOL daMt_Execute(mt_class* i_this) {
         if (i_this->m466 != 0) {
             i_this->m466--;
         }
-        if (i_this->mMode > 3) {
+        if (i_this->mMode < 3) {
             damage_check(i_this);
         }
         i_this->mC04 = 0;
@@ -2102,15 +2163,23 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_ac) {
         J3DModelData* modelData = model->getModelData();
         actor->btk[i] = new mDoExt_btkAnm();
         JUT_ASSERT(0x11C0, actor->btk[i]);
+#if VERSION == VERSION_DEMO
+        actor->btk[i]->init(modelData, (J3DAnmTextureSRTKey*) dComIfG_getObjectRes("Mt", btk_data[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+#else
         if (!actor->btk[i]->init(modelData, (J3DAnmTextureSRTKey*) dComIfG_getObjectRes("Mt", btk_data[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
             return FALSE;
         }
+#endif
 
         actor->brk[i] = new mDoExt_brkAnm();
         JUT_ASSERT(0x11CD, actor->brk[i]);
+#if VERSION == VERSION_DEMO
+        actor->brk[i]->init(modelData, (J3DAnmTevRegKey*) dComIfG_getObjectRes("Mt", brk_data[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+#else
         if (!actor->brk[i]->init(modelData, (J3DAnmTevRegKey*) dComIfG_getObjectRes("Mt", brk_data[i]), TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
             return FALSE;
         }
+#endif
 
         if (i == 0) {
             anm_init(actor, 10, 20.0f, 2, 1.0f, 0);
