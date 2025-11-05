@@ -158,7 +158,6 @@ s32 fopAc_Draw(void* pProc) {
     return ret;
 }
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 /* 8002362C-80023BDC       .text fopAc_Execute__FPv */
@@ -167,9 +166,9 @@ BOOL fopAc_Execute(void* pProc) {
     BOOL ret = TRUE;
 
 #if VERSION > VERSION_DEMO
-    CHECK_FLOAT_CLASS(0x27d, actor->current.pos.x);
-    CHECK_FLOAT_CLASS(0x27e, actor->current.pos.y);
-    CHECK_FLOAT_CLASS(0x27f, actor->current.pos.z);
+    JUT_ASSERT(0x27d, !isnan(actor->current.pos.x));
+    JUT_ASSERT(0x27e, !isnan(actor->current.pos.y));
+    JUT_ASSERT(0x27f, !isnan(actor->current.pos.z));
     CHECK_VEC3_RANGE(0x286, actor->current.pos);
 #endif
 
@@ -204,9 +203,9 @@ BOOL fopAc_Execute(void* pProc) {
         }
 
 #if VERSION > VERSION_DEMO
-        CHECK_FLOAT_CLASS(0x2b4, actor->current.pos.x);
-        CHECK_FLOAT_CLASS(0x2b5, actor->current.pos.y);
-        CHECK_FLOAT_CLASS(0x2b6, actor->current.pos.z);
+        JUT_ASSERT(0x2b4, !isnan(actor->current.pos.x));
+        JUT_ASSERT(0x2b5, !isnan(actor->current.pos.y));
+        JUT_ASSERT(0x2b6, !isnan(actor->current.pos.z));
         CHECK_VEC3_RANGE(0x2bd, actor->current.pos);
 #endif
     }

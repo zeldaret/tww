@@ -192,7 +192,7 @@ void daObjOspbox::Act_c::set_ground() {
     mObjGndChk.SetActorPid(fopAcM_GetID(this));
     
     m494 = dComIfG_Bgsp()->GroundCross(&mObjGndChk);
-    if (m494 > -1000000000.0f) {
+    if (m494 > -G_CM3D_F_INF) {
         m498 = 0;
     } else {
         m498 = m498 - 1;
