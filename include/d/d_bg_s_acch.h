@@ -209,10 +209,11 @@ public:
     f32 GetCx() { return pm_pos->x; }
     f32 GetCz() { return pm_pos->z; }
 
+    void SetOld() {*pm_old_pos = *pm_pos;}
+
     // TODO
     void ChkGroundAway() {}
     void DrawWall(dBgS&) {}
-    void SetOld() {}
 
 public:
     /* 0x028 */ u32 m_flags;
