@@ -74,8 +74,9 @@ public:
 };
 
 static daNpc_Zl1_HIO_c l_HIO;
-static int l_check_wrk;
 static fopAc_ac_c* l_check_inf[20];
+
+static int l_check_wrk;
 
 static char l_BCKName[30];
 
@@ -83,12 +84,7 @@ static char l_BTPName[30];
 
 static char l_BTKName[30];
 
-static const char* l_evn_tbl[4] = {
-    "yuukaigo",
-    "ooi",
-    "majyuu_shinnyuu",
-    "nakaniwa"
-};
+
 
 /* 000000EC-00000150       .text __ct__15daNpc_Zl1_HIO_cFv */
 daNpc_Zl1_HIO_c::daNpc_Zl1_HIO_c() {
@@ -131,6 +127,13 @@ daNpc_Zl1_HIO_c::daNpc_Zl1_HIO_c() {
     mNo = -1;
     field_0x8 = -1;
 }
+
+static const char* l_evn_tbl[4] = {
+    "yuukaigo",
+    "ooi",
+    "majyuu_shinnyuu",
+    "nakaniwa"
+};
 
 /* 00000198-000001F8       .text __ct__18daNpc_Zl1_matAnm_cFv */
 daNpc_Zl1_matAnm_c::daNpc_Zl1_matAnm_c() {
