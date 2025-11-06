@@ -502,7 +502,7 @@ void wether_move_sun() {
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_LENS_32HALF);
                 g_env_light.mpSunlenzPacket->mpTexRingHalf =
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
-                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f;
+                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f; // This is not G_CM3D_F_INF
                 g_env_light.mpSunlenzPacket->field_0x8c = 0.0f;
                 g_env_light.mpSunlenzPacket->mDistFalloff = 0.0f;
                 g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;

@@ -8,23 +8,22 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "float.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
 #if VERSION > VERSION_DEMO
 /* 8025238C-80252624       .text SetC__8cM3dGSphFRC4cXyz */
 void cM3dGSph::SetC(const cXyz& p) {
-    CHECK_FLOAT_CLASS(18, p.x);
-    CHECK_FLOAT_CLASS(19, p.y);
-    CHECK_FLOAT_CLASS(20, p.z);
+    JUT_ASSERT(18, !isnan(p.x));
+    JUT_ASSERT(19, !isnan(p.y));
+    JUT_ASSERT(20, !isnan(p.z));
     CHECK_VEC3_RANGE(23, p);
     mCenter = p;
 }
 
 /* 80252624-80252750       .text SetR__8cM3dGSphFf */
 void cM3dGSph::SetR(float r) {
-    CHECK_FLOAT_CLASS(32, r);
+    JUT_ASSERT(32, !isnan(r));
     CHECK_FLOAT_RANGE(33, r);
     mRadius = r;
 }

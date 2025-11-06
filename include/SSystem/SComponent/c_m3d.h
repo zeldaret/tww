@@ -22,7 +22,7 @@ extern const f32 G_CM3D_F_ABS_MIN;
 #if VERSION == VERSION_DEMO
 extern const f32 G_CM3D_F_INF;
 #else
-#define G_CM3D_F_INF 1e+9f
+#define G_CM3D_F_INF (1000000000.0f)
 #endif
 
 extern const u32 BPCP_OUTCODE0;
