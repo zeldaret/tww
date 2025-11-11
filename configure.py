@@ -1594,7 +1594,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),   "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
-    ActorRel(NonMatching, "d_a_kmon"),
+    ActorRel(Matching, "d_a_kmon"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_komore"),
     ActorRel(Matching,    "d_a_lbridge"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_leaflift"),
