@@ -54,7 +54,7 @@ cPhs_State daObjGnnbtaki_c::_create() {
     if (state == cPhs_COMPLEATE_e) {
         state = cPhs_ERROR_e;
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
-            field_0x2B1 = base.mParameters & 0xF;
+            field_0x2B1 = fopAcM_GetParam(this) & 0xF;
             if (field_0x2B1 == 0xF) {
                 field_0x2B1 = 0;
             }
