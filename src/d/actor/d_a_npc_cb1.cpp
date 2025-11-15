@@ -1580,7 +1580,7 @@ BOOL daNpc_Cb1_c::execTalk(BOOL param_1) {
             fopMsgM_messageSet(mMsgNo);
         }
     }
-    else if(l_msg->mStatus == fopMsgStts_UNK15_e) {
+    else if(l_msg->mStatus == fopMsgStts_INPUT_e) {
         if(param_1) {
             if(dComIfGp_checkMesgCancelButton()) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
