@@ -100,6 +100,12 @@ parser.add_argument(
     help="path to decomp-toolkit binary or source (optional)",
 )
 parser.add_argument(
+    "--objdiff",
+    metavar="BINARY | DIR",
+    type=Path,
+    help="path to objdiff-cli binary or source (optional)",
+)
+parser.add_argument(
     "--sjiswrap",
     metavar="EXE",
     type=Path,
@@ -144,6 +150,7 @@ version_num = VERSIONS.index(config.version)
 # Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
+config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
 config.generate_map = args.map
@@ -159,10 +166,10 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20250812"
-config.dtk_tag = "v1.6.2"
-config.objdiff_tag = "v3.0.1"
+config.dtk_tag = "v1.7.1"
+config.objdiff_tag = "v3.4.1"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "0.7.0"
+config.wibo_tag = "1.0.0-beta.4"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
