@@ -726,7 +726,7 @@ BOOL Act_c::Execute(Mtx** outMtx) {
                 mCyl.MoveCAtTg(current.pos);
                 dComIfG_Ccsp()->Set(&mCyl);
                 if (m648 == 2) {
-                    dComIfG_Ccsp_SetMass(&mCyl, 3);
+                    dComIfG_Ccsp()->SetMass(&mCyl, 3);
                 }
             }
 

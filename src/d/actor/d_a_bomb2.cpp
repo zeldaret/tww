@@ -476,7 +476,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            dComIfG_Ccsp_SetMass(&mSph, 3);
+            dComIfG_Ccsp()->SetMass(&mSph, 3);
         }
     }
 
