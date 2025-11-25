@@ -9844,7 +9844,7 @@ void daPy_lk_c::setCollision() {
         mCyl.OnTgSetBit();
     }
     dComIfG_Ccsp()->Set(&mCyl);
-    dComIfG_Ccsp_SetMass(&mCyl, 1);
+    dComIfG_Ccsp()->SetMass(&mCyl, 1);
     mWindCyl.SetC(spD0);
     mWindCyl.SetH(mCyl.GetH());
     mWindCyl.SetR(mCyl.GetR());
@@ -10098,12 +10098,12 @@ void daPy_lk_c::setCollision() {
             }
         }
         dComIfG_Ccsp()->Set(&mAtCyl);
-        dComIfG_Ccsp_SetMass(&mAtCyl, 1);
+        dComIfG_Ccsp()->SetMass(&mAtCyl, 1);
         int i;
         dCcD_Cps* pdVar21 = &mAtCps[0];
         for (i = 0; i < 3; i++, pdVar21++) {
             dComIfG_Ccsp()->Set(pdVar21);
-            dComIfG_Ccsp_SetMass(pdVar21, 1);
+            dComIfG_Ccsp()->SetMass(pdVar21, 1);
         }
     } else {
         if (mSwBlur.field_0x014 < 10) {
@@ -10224,7 +10224,7 @@ void daPy_lk_c::setCollision() {
         mFanWindCps.SetAtVec(spC4);
         mFanWindCps.SetR(in_f31);
         dComIfG_Ccsp()->Set(&mFanWindCps);
-        dComIfG_Ccsp_SetMass(&mFanWindCps, 1);
+        dComIfG_Ccsp()->SetMass(&mFanWindCps, 1);
     } else {
         mFanWindCps.ResetAtHit();
     }
@@ -10240,7 +10240,7 @@ void daPy_lk_c::setCollision() {
             mFanWindSph.SetC(current.pos);
         }
         dComIfG_Ccsp()->Set(&mFanWindSph);
-        dComIfG_Ccsp_SetMass(&mFanWindSph, 1);
+        dComIfG_Ccsp()->SetMass(&mFanWindSph, 1);
         m353A--;
     } else {
         mFanWindSph.ResetAtHit();
@@ -10259,7 +10259,7 @@ void daPy_lk_c::setCollision() {
         mFanLightCps.SetAtVec(local_118);
         mFanLightCps.OnAtSetBit();
         dComIfG_Ccsp()->Set(&mFanLightCps);
-        dComIfG_Ccsp_SetMass(&mFanLightCps, 1);
+        dComIfG_Ccsp()->SetMass(&mFanLightCps, 1);
     } else {
         mFanLightCps.ResetAtHit();
         mFanLightCps.OffAtSetBit();

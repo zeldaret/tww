@@ -195,7 +195,7 @@ BOOL daHookshot_c::procWait() {
             mSightCps.SetR(5.0f);
             mSightCps.CalcAtVec();
             dComIfG_Ccsp()->Set(&mSightCps);
-            dComIfG_Ccsp_SetMass(&mSightCps, 1);
+            dComIfG_Ccsp()->SetMass(&mSightCps, 1);
             
             m2A3 = false;
             mCurrProcFunc = &daHookshot_c::procShot;
@@ -311,7 +311,7 @@ BOOL daHookshot_c::procShot() {
         mSightCps.SetR(5.0f);
         mSightCps.CalcAtVec();
         dComIfG_Ccsp()->Set(&mSightCps);
-        dComIfG_Ccsp_SetMass(&mSightCps, 1);
+        dComIfG_Ccsp()->SetMass(&mSightCps, 1);
         current.pos = sp8C;
     }
 

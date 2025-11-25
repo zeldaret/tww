@@ -298,7 +298,7 @@ void daArrow_c::arrowShooting() {
     mAtCps.CalcAtVec();
     
     dComIfG_Ccsp()->Set(&mAtCps);
-    dComIfG_Ccsp_SetMass(&mAtCps, 1);
+    dComIfG_Ccsp()->SetMass(&mAtCps, 1);
     
     clrAtHitNormal();
     setAtHitPosBuff(&end);
@@ -872,7 +872,7 @@ BOOL daArrow_c::procMove() {
         mAtCps.CalcAtVec();
         
         dComIfG_Ccsp()->Set(&mAtCps);
-        dComIfG_Ccsp_SetMass(&mAtCps, 1);
+        dComIfG_Ccsp()->SetMass(&mAtCps, 1);
     }
     
     return TRUE;
