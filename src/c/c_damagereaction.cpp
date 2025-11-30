@@ -1132,7 +1132,13 @@ int dr_damage_set(damagereaction* dr) {
             break;
         case 1:
             {
-                s16 temp5 = dr->m486 > 0 ? 0x350 : 0x800; // Nonmatching: dunno how to get an mr instead of extsh here
+                s16 temp5;
+                if(dr->m486 > 0) {
+                   temp5 = 0x350;
+                }
+                else {
+                   temp5 = 0x800;
+                }
                 if(test_sw != 0) {
                     dr->m486 = 0;
                 }
@@ -1564,7 +1570,7 @@ void dr_damage_anime(damagereaction* dr) {
         }
         else if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
             dr->m010[0xD].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
-            dr->m010[0x12].y += (s16)(cxyz_temp2.y * (REG8_F(5) + 2.0f));
+            dr->m010[0x12].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
             dr->m010[0xC].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
             dr->m010[0xD].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
             dr->m010[0x12].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
