@@ -1443,16 +1443,82 @@ int dr_damage_set(damagereaction* dr) {
 
 /* 80020FD8-80022460       .text dr_damage_anime__FP14damagereaction */
 void dr_damage_anime(damagereaction* dr) {
-    /* Nonmatching */
+    csXyz csxyz_temp;
 
+    for(int i = 0; i < 0x14; i++) {
+        dr->m010[i].x = dr->m010[i].y = dr->m010[i].z = 0;
+    }
+
+    s16 maxSpeed;
     if(dr->m47C != 0 || test_sw != 0) {
-        dr->m010[8].y = 8192.0f;
+        maxSpeed = 0x3000;
+
+        s16 temp7 = dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y;
+        f32 temp = temp7;
+        f32 temp2 = temp;
+        if(temp2 > 5000.0f) {
+            temp2 = 5000.0f;
+        }
+        if(temp2 < -22000.0f) {
+            temp2 = -22000.0f;
+        }
+        dr->m010[8].y = temp2 * 0.4f + 8192.0f;
+        dr->m010[4].z = -temp2 * 0.4f - 8192.0f;
+        f32 temp_8192 = 8192.0f;
+        dr->m010[8].z = temp_8192;
+        dr->m010[4].y = temp_8192;
+
+        f32 temp3 = temp;
+        if(temp3 > 22000.0f) {
+            temp3 = 22000.0f;
+        }
+        if(temp3 < -5000.0f) {
+            temp3 = -5000.0f;
+        }
+        dr->m010[9].y = temp3 * 0.4f - 8192.0f;
+        dr->m010[5].z = temp3 * 0.4f - 8192.0f;
+        f32 zero = 0.0f;
+        dr->m010[9].z = temp_8192;
+        dr->m010[5].y = -zero * 0.4f - temp_8192;
+
+        f32 temp4 = temp;
+        if(temp4 > 20000.0f) {
+            temp4 = 20000.0f;
+        }
+        if(temp4 < -20000.0f) {
+            temp4 = -20000.0f;
+        }
+        dr->m010[0xC].x = temp4 * 0.2f;
+        dr->m010[0x13].x = temp4 * 0.2f;
+        dr->m010[0xC].z = -zero * 0.2f;
+        dr->m010[0x13].z = -zero * 0.2f;
+
+        f32 temp5 = temp;
+        if(temp5 > 7000.0f) {
+            temp5 = 7000.0f;
+        }
+        if(temp5 < -10000.0f) {
+            temp5 = -10000.0f;
+        }
+        dr->m010[6].x = (3000.0f - temp5) + REG0_S(0);
+        dr->m010[6].z = (-zero - 16384.0f) + REG0_S(1);
+
+        f32 temp6 = temp;
+        if(temp6 > 10000.0f) {
+            temp6 = 10000.0f;
+        }
+        if(temp6 < -7000.0f) {
+            temp6 = -7000.0f;
+        }
+        dr->m010[7].x = (-temp6 - 3000.0f);
+        dr->m010[7].z = (-zero - 16384.0f);
     }
     else {
         dr->m010[6].y += dr->m4B8;
-        dr->m010[7].y += dr->m4BA;
+        dr->m010[7].y -= dr->m4BA;
         dr->m010[4].y += dr->m4BC;
-        dr->m010[5].y += dr->m4BE;
+        dr->m010[5].y -= dr->m4BE;
+        maxSpeed = 0x400;
     }
 
     cLib_addCalcAngleS2(&dr->m4A6, dr->m4AE, 1, 0x800);
@@ -1462,14 +1528,330 @@ void dr_damage_anime(damagereaction* dr) {
     cLib_addCalcAngleS2(&dr->m496, dr->m49A, 2, 0x200);
     cLib_addCalcAngleS2(&dr->m498, dr->m49C, 2, 0x400);
 
-    for(int i = 0; i < 20; i++) {
-        if(dr->m474 > 0.1f) {
-            dr->m010[i].z = 0;
+    dr->m010[6].z = dr->m010[6].z - dr->m4A4 / 2 - dr->m4B4;
+    dr->m010[2].z = dr->m010[2].z + dr->m4A4 + dr->m4B0;
+    dr->m010[7].z = dr->m010[7].z - dr->m4A6 / 2 - dr->m4B6;
+    dr->m010[3].z = dr->m010[3].z + dr->m4A6 + dr->m4B2;
+    dr->m010[0].z += dr->m4A0;
+    dr->m010[1].z += dr->m4A2;
+    dr->m010[0x12].y += dr->m496;
+    dr->m010[0xD].y += dr->m498;
+    
+    if(dr->m70D != 0) {
+        dr->m010[0x13].z += -0x960;
+    }
+
+    if(dr->m70C != 0 && dr->mpEnemy->speed.y > 0.0f) {
+        dr->m010[0xC].z += -3000;
+        dr->m010[0x13].z += -3000;
+    }
+
+    cXyz cxyz_temp;
+    cXyz cxyz_temp2;
+    if(dr->m470 > 200.0f) {
+        s16 angle = cM_atan2s(-dr->m42C.x, -dr->m42C.z);
+        cxyz_temp.x = 0.0f;
+        cxyz_temp.y = 0.0f;
+        cxyz_temp.z = dr->m470;
+        mDoMtx_YrotS(*calc_mtx, angle - dr->mpEnemy->current.angle.y);
+        MtxPosition(&cxyz_temp, &cxyz_temp2);
+
+        if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+            dr->m010[0xC].z -= cxyz_temp2.z * 4.0f;
+            dr->m010[0xC].y += cxyz_temp2.x * 4.0f;
+            dr->m010[0xD].y += cxyz_temp2.x * 6.0f;
+            dr->m010[0xD].z -= cxyz_temp2.z * 6.0f;
+        }
+        else if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+            dr->m010[0xD].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
+            dr->m010[0x12].y += (s16)(cxyz_temp2.y * (REG8_F(5) + 2.0f));
+            dr->m010[0xC].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
+            dr->m010[0xD].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+            dr->m010[0x12].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+            dr->m010[0xC].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+        }
+        else {
+            dr->m010[0x13].z -= cxyz_temp2.z;
+            dr->m010[0x13].y += cxyz_temp2.x;
+            dr->m010[0xC].z -= cxyz_temp2.z;
+            dr->m010[0xC].y += cxyz_temp2.x;
+            dr->m010[0xD].y += cxyz_temp2.x * 4.0f;
+            dr->m010[0xD].z -= cxyz_temp2.z * 4.0f;
         }
 
-        cLib_addCalcAngleS2(&dr->m088[i].x, dr->m010[i].x, 2, 5);
-        cLib_addCalcAngleS2(&dr->m088[i].y, dr->m010[i].y, 2, 5);
-        cLib_addCalcAngleS2(&dr->m088[i].z, dr->m010[i].z, 2, 5);
+        maxSpeed = 0x3000;
+    }
+    else if(dr->m710 != 0 || dr->m49E != 0) {
+        maxSpeed = 0x800;
+
+        s16 temp;
+        s16 temp2;
+        if(dr->m710 == 1 || dr->m710 == 5 || dr->m49E != 0) {
+            if(dr->m710 == 1 || dr->m49E != 0) {
+                if(dr->m49E != 0) {
+                    dr->m49E--;
+                    maxSpeed = 0x2000;
+                    temp2 = (REG0_F(6) + 1000.0f) * cM_ssin(dr->m49E * (REG0_S(5) + 16000));
+                    temp = 0;
+                }
+                else {
+                    cxyz_temp.x = dr->m714->eyePos.x - dr->mpEnemy->current.pos.x;
+                    cxyz_temp.y = dr->m714->eyePos.y - (dr->mpEnemy->current.pos.y + 100.0f);
+                    cxyz_temp.z = dr->m714->eyePos.z - dr->mpEnemy->current.pos.z;
+                    temp2 = cM_atan2s(cxyz_temp.x, cxyz_temp.z) - dr->mpEnemy->current.angle.y;
+                    temp = -cM_atan2s(cxyz_temp.y, std::sqrtf(cxyz_temp.x * cxyz_temp.x + cxyz_temp.z * cxyz_temp.z));
+                }
+            }
+            else {
+                temp = dr->m718;
+                temp2 = dr->m71A;
+            }
+
+            if(temp2 > 0x2000) {
+                temp2 = 0x2000;
+            }
+            else if(temp2 < -0x2000) {
+                temp2 = -0x2000;
+            }
+            if(temp > 0x2000) {
+                temp = 0x2000;
+            }
+            else if(temp < -0x2000) {
+                temp = -0x2000;
+            }
+
+            if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+                dr->m010[0xD].x += temp2 >> 2;
+                dr->m010[0xD].y -= temp >> 2;
+                dr->m010[0x12].x += temp2 >> 2;
+                dr->m010[0x12].y -= temp >> 2;
+            }
+            else if(dr->m710 == 1) {
+                if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+                    dr->m010[0xD].x += temp2;
+                    dr->m010[0xD].y -= temp2 >> 2;
+                    dr->m010[0xD].z += temp;
+                }
+                else {
+                    dr->m010[0xD].y -= temp2;
+                    dr->m010[0xC].y -= temp2 / 2.0f;
+                    dr->m010[0xC].x = dr->m010[0xC].y + temp2 / 2.0f;
+                    dr->m010[0xD].z += temp;
+                }
+            }
+            else {
+                dr->m010[0xD].y -= (int)temp2;
+                dr->m010[0xC].x = dr->m010[0xC].y + temp2;
+                dr->m010[0xD].z += temp;
+            }
+        }
+        else if(dr->m710 == 3) {
+            temp = -6000;
+            temp2 = -10000;
+        }
+        else if(dr->m710 == 4) {
+            temp = 6000;
+            temp2 = 10000;
+        }
+        else if(dr->m710 == 6) {
+            dr->m010[0x12].y += dr->m71A;
+            dr->m010[0x12].x += REG0_S(6);
+            dr->m010[0x12].z += dr->m718;
+
+            maxSpeed = 0x300;
+        }
+
+        if(dr->m710 == 3 || dr->m710 == 4) {
+            maxSpeed = 0x800;
+
+            dr->m010[0xC].x -= (int)temp;
+            dr->m010[0xC].y += (int)temp;
+            dr->m010[0xD].y += temp2;
+        }
+    }
+
+    if(dr->m711 != 0) {
+        dr->m010[8].x = 8000;
+        dr->m010[9].x = -8000;
+        maxSpeed = 0x3000;
+    }
+
+    if(dr->mAction != 5 && dr->m488 != 1) {
+        cxyz_temp.x = dr->m48C.z;
+        cxyz_temp.y = 0.0f;
+        cxyz_temp.z = dr->m48C.x;
+        mDoMtx_YrotS(*calc_mtx, dr->mpEnemy->current.angle.y);
+        MtxPosition(&cxyz_temp, &cxyz_temp2);
+        cLib_addCalcAngleS2(&dr->m492, cxyz_temp2.x, 4, 0x100);
+        cLib_addCalcAngleS2(&dr->m494, cxyz_temp2.z, 4, 0x100);
+    }
+    else {
+        cLib_addCalcAngleS2(&dr->m492, 0, 4, 0x100);
+        cLib_addCalcAngleS2(&dr->m494, 0, 4, 0x100);
+    }
+
+    dr->m010[0xC].y -= (f32)dr->m492;
+    dr->m010[0xC].z -= (f32)dr->m494;
+
+    cLib_addCalc0(&dr->m470, 0.5f, 200.0f);
+
+    if(dr->m478 == 0.0f && dr->m488 == 1) {
+        if(dr->m70D == 0) {
+            if(dr->m3D0[2] == 0 && dr->m408 == 0) {
+                dr->m010[6].z += dr->m4B4;
+                dr->m010[2].z = dr->m010[2].z - dr->m4B0 + 13000;
+
+                if(dr->m440 > 2000) {
+                    dr->m010[2].z += -7000;
+                }
+            }
+
+            if(dr->m3D0[3] == 0 && dr->m40C == 0) {
+                dr->m010[7].z += dr->m4B6;
+                dr->m010[3].z = dr->m010[3].z - dr->m4B2 + 13000;
+
+                if(dr->m442 > 2000) {
+                    dr->m010[3].z += -7000;
+                }
+            }
+        }
+        else {
+            if(dr->m3D0[0] == 0) {
+                dr->m010[0].z += -10000;
+            }
+            
+            if(dr->m3D0[1] == 0) {
+                dr->m010[1].z += -10000;
+            }
+        }
+    }
+
+    if(dr->m478 == 0.0f && dr->m488 == 1) {
+        s16 temp = 1;
+        if(dr->m70D == 0) {
+            temp = -1;
+        }
+
+        dr->m010[6].z -= dr->m440 * temp;
+        dr->m010[7].z -= dr->m442 * temp;
+        dr->m010[4].z -= dr->m444 * temp;
+        dr->m010[5].z -= dr->m446 * temp;
+        dr->m010[0xC].z += temp * (s16)(dr->m448 / 2);
+        dr->m010[0x13].z += temp * (s16)(dr->m448 / 2);
+
+        if(dr->m418 == 2) {
+            dr->m010[0xD].z += temp * (s16)(dr->m448 / 2);
+            dr->m010[0x12].z += temp * (s16)(dr->m448 / 2);
+        }
+    }
+
+    switch(dr->mEnemyType) {
+        case damagereaction::TYPE_MOBLIN:
+        case damagereaction::TYPE_BOKOBLIN:
+            dr->m010[0].y = -dr->m010[0].z;
+            dr->m010[0].z = 0;
+            dr->m010[1].y = dr->m010[1].z;
+            dr->m010[1].z = 0;
+
+            if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+                dr->m010[0].y = -dr->m010[0].y;
+                dr->m010[0].x = -dr->m010[0].x;
+            }
+
+            {
+                s16 temp = dr->m010[4].z;
+                dr->m010[4].z = dr->m010[4].y;
+                dr->m010[4].y = -temp;
+                s16 temp2 = dr->m010[5].z;
+                dr->m010[5].z = -dr->m010[5].y;
+                dr->m010[5].y = temp2;
+            }
+
+            break;
+        case damagereaction::TYPE_DARKNUT:
+            for(int i = 0; i < 0x14; i++) {
+                if(i != 0xD && i != 0x12) {
+                    csXyz temp(0, 0, 0);
+                    dr->m010[i] = temp;
+                }
+            }
+
+            dr->m010[8].z = dr->m4BC;
+            dr->m010[9].z = dr->m4BE;
+
+            if(dr->m47C != 0) {
+                if(test_sw != 0) {
+                    dr->m482 = fopAcM_searchPlayerAngleY(dr->mpEnemy) + 0x8000 + REG0_S(3);
+                }
+
+                f32 temp = -(s16)(dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y);
+                f32 temp2 = temp;
+                if(temp2 > 20000.0f) {
+                    temp2 = 20000.0f;
+                }
+                if(temp2 < -9000.0f) {
+                    temp2 = -9000.0f;
+                }
+                dr->m010[4].x = temp2;
+                dr->m010[8].y = -5000;
+                dr->m010[8].z = -5000;
+                dr->m010[0].y = -10000;
+                dr->m010[4].z = -15000;
+
+                f32 temp3 = temp;
+                if(temp3 > 9000.0f) {
+                    temp3 = 9000.0f;
+                }
+                if(temp3 < -20000.0f) {
+                    temp3 = -20000.0f;
+                }
+                dr->m010[5].x = temp3;
+                dr->m010[9].y = -5000;
+                dr->m010[9].z = 5000;
+                dr->m010[1].y = -10000;
+                dr->m010[5].z = 15000;
+                dr->m010[0xA].y = -15000;
+                dr->m010[0xB].y = -15000;
+
+                f32 temp4 = temp;
+                if(temp4 > 10000.0f) {
+                    temp4 = 10000.0f;
+                }
+                if(temp4 < -10000.0f) {
+                    temp4 = -10000.0f;
+                }
+                dr->m010[0xA].z = temp4;
+                dr->m010[0XB].z = temp4;
+                dr->m010[0XC].y = 5000;
+
+                if(temp > 8000.0f) {
+                    temp = 8000.0f;
+                }
+                if(temp < -8000.0f) {
+                    temp = -8000.0f;
+                }
+                dr->m010[0xC].z = temp;
+            }
+
+            break;
+    }
+
+    csxyz_temp.x = 0;
+    csxyz_temp.y = 0;
+    csxyz_temp.z = 0;
+    for(int i = 0; i < 20; i++) {
+        if((dr->m474 > 0.1f && (i == 2 || i == 6 || i == 7 || i == 3) && (dr->m70E & 8)) ||
+            ((i == 0 || i == 4 || i == 5 || i == 1) && (dr->m70E & 4)) ||
+            (i == 0x13 && (dr->m70E & 2)) || 
+            (i == 0xD && (dr->m70E & 1)))
+        {
+            dr->m010[i].y += dr->m474 * cM_ssin(dr->mTimer * 5000 + i * 0xED8);
+            dr->m010[i].z += dr->m474 * cM_scos(dr->mTimer * 4000 + i * 0xC80);
+        }
+
+        cLib_addCalcAngleS2(&dr->m088[i].x, dr->m010[i].x + csxyz_temp.x, 2, (int)maxSpeed);
+        cLib_addCalcAngleS2(&dr->m088[i].y, dr->m010[i].y + csxyz_temp.y, 2, (int)maxSpeed);
+        cLib_addCalcAngleS2(&dr->m088[i].z, dr->m010[i].z + csxyz_temp.z, 2, (int)maxSpeed);
     }
 }
 
