@@ -122,7 +122,8 @@ public:
     /* 0x488 */ s16 m488;
     /* 0x48A */ s16 m48A;
     /* 0x48C */ csXyz m48C;
-    /* 0x492 */ u8 m492[0x496 - 0x492];
+    /* 0x492 */ s16 m492;
+    /* 0x492 */ s16 m494;
     /* 0x496 */ s16 m496;
     /* 0x498 */ s16 m498;
     /* 0x49A */ s16 m49A;
@@ -189,8 +190,7 @@ public:
     /* 0x7B7 */ u8 m7B7[0x7B8 - 0x7B7];
     /* 0x7B8 */ fpc_ProcID m7B8;
 };  // Size: 0x7BC
-
-// STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
+STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
 
 BOOL ice_bg_check(enemyice*);
 BOOL enemy_ice(enemyice*);
@@ -199,10 +199,10 @@ void enemy_fire_remove(enemyfire*);
 void enemy_piyo_set(fopAc_ac_c*);
 s16 wall_angle_get(fopAc_ac_c*, s16);
 void dr_body_bg_check(damagereaction*);
-void dr_joint_bg_check(damagereaction*);
-void kado_check(damagereaction*);
-void hang_ang_get(damagereaction*);
-void dr_damage_set(damagereaction*);
+int dr_joint_bg_check(damagereaction*);
+int kado_check(damagereaction*);
+s16 hang_ang_get(damagereaction*);
+int dr_damage_set(damagereaction*);
 void dr_damage_anime(damagereaction*);
 void dr_matrix_set(damagereaction*);
 int damage_reaction(damagereaction*);
