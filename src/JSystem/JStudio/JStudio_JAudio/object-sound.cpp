@@ -3,6 +3,8 @@
 // Translation Unit: object-sound.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JAudio/object-sound.h"
 #include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIBasic.h"

@@ -158,7 +158,6 @@ private:
 class TFunctionValue_constant : public TFunctionValue {
 public:
     TFunctionValue_constant();
-    virtual ~TFunctionValue_constant() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();
@@ -197,7 +196,6 @@ public:
     typedef TFunctionValue_composite::TData (*GetCompositeFunc)(const void*);
 
     TFunctionValue_composite();
-    virtual ~TFunctionValue_composite() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();
@@ -234,7 +232,6 @@ class TFunctionValue_transition : public TFunctionValue,
                                   public TFunctionValueAttribute_interpolate {
 public:
     TFunctionValue_transition();
-    virtual ~TFunctionValue_transition() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();
@@ -266,7 +263,6 @@ public:
     typedef f64 (*update_INTERPOLATE)(const TFunctionValue_list&, const TIndexData_&);
 
     TFunctionValue_list();
-    virtual ~TFunctionValue_list() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();
@@ -382,7 +378,6 @@ public:
     typedef f64 (*update_INTERPOLATE)(const TFunctionValue_list_parameter&, f64);
 
     TFunctionValue_list_parameter();
-    virtual ~TFunctionValue_list_parameter() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();
@@ -497,7 +492,6 @@ public:
     };
 
     TFunctionValue_hermite();
-    virtual ~TFunctionValue_hermite() {}
 
     virtual u32 getType() const;
     virtual TFunctionValueAttributeSet getAttributeSet();

@@ -3,6 +3,8 @@
 // Translation Unit: JASWaveBankMgr.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASWaveBankMgr.h"
 #include "JSystem/JAudio/JASBasicWaveBank.h"
 #include "JSystem/JAudio/JASCalc.h"

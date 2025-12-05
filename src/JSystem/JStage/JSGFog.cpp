@@ -3,6 +3,8 @@
 // Translation Unit: JSGFog.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGFog.h"
 #include "dolphin/types.h"
 
@@ -50,4 +52,3 @@ GXColor JStage::TFog::JSGGetColor() const {
 /* 8026DE90-8026DE94       .text JSGSetColor__Q26JStage4TFogF8_GXColor */
 void JStage::TFog::JSGSetColor(GXColor) {
 }
-
