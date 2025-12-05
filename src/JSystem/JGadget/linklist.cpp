@@ -4,19 +4,9 @@
 //
 
 #include "JSystem/JSystem.h" // IWYU pragma: keep
+#include <algorithm.h>
 
 #include "JSystem/JGadget/linklist.h"
-
-namespace std {
-
-template <class InputIterator, class Predicate>
-inline InputIterator find_if(InputIterator first, InputIterator last, Predicate pred) {
-    while (first != last && !pred(*first))
-        ++first;
-    return first;
-}
-
-} // namespace std
 
 /* 802BFC00-802BFC3C       .text __dt__Q27JGadget13TNodeLinkListFv */
 JGadget::TNodeLinkList::~TNodeLinkList() {

@@ -761,12 +761,12 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
-            Object(Equivalent,  "JSystem/JStudio/JStudio/functionvalue.cpp"), # weak func order
+            Object(Matching,    "JSystem/JStudio/JStudio/functionvalue.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
-            Object(Matching,    "JSystem/JStudio/JStudio/stb.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JStudio/JStudio/stb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
         ],
@@ -794,7 +794,7 @@ config.libs = [
         "JStudio_JParticle",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JParticle/control.cpp"),
-            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"),
         ],
     ),
     JSystemLib(
@@ -951,7 +951,7 @@ config.libs = [
             Object(Matching,    "JSystem/JKernel/JKRFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdRipper.cpp"),
-            Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDecomp.cpp"),
         ],
     ),
@@ -1025,7 +1025,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DTransform.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DPacket.cpp"),
-            Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
             Object(Equivalent,  "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # regalloc
