@@ -3,6 +3,8 @@
 // Translation Unit: JASInstSense.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASInstSense.h"
 #include "JSystem/JUtility/JUTAssert.h"
 

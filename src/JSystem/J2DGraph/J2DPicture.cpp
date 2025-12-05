@@ -3,6 +3,8 @@
 // Translation Unit: J2DPicture.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J2DGraph/J2DPicture.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"

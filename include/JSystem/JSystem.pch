@@ -1,0 +1,6 @@
+#ifndef JSYSTEM_PCH
+#define JSYSTEM_PCH
+
+#include "JSystem/JStudio/JStudio/stb.h"
+
+#endif /* JSYSTEM_PCH */

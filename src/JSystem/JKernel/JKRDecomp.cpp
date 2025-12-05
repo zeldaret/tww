@@ -3,6 +3,8 @@
 // Translation Unit: JKRDecomp.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JKernel/JKRAramPiece.h"
 #include "dolphin/types.h"

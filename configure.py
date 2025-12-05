@@ -369,6 +369,11 @@ config.precompiled_headers = [
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_rel],
     },
+    {
+        "source": "JSystem/JSystem.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_framework],
+    },
 ]
 config.libs = [
     {

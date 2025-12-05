@@ -3,6 +3,8 @@
 // Translation Unit: JPAKeyBlock.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAKeyBlock.h"
 
 /* 8025855C-80258588       .text __ct__14JPAKeyBlockArcFPCUc */

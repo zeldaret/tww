@@ -3,6 +3,8 @@
 // Translation Unit: jstudio-math.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "dolphin/types.h"
 

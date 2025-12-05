@@ -3,6 +3,8 @@
 // Translation Unit: JASRegisterParam.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASRegisterParam.h"
 #include "dolphin/types.h"
 

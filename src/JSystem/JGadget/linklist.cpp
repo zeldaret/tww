@@ -3,6 +3,8 @@
 // Translation Unit: linklist.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JGadget/linklist.h"
 
 namespace std {
