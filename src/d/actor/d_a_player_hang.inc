@@ -16,7 +16,7 @@
 
 /* 80133F1C-80133F40       .text getHangMoveAnmSpeed__9daPy_lk_cFv */
 f32 daPy_lk_c::getHangMoveAnmSpeed() {
-    return getAnmSpeedStickRate(daPy_HIO_hang_c0::m.field_0x24, daPy_HIO_hang_c0::m.field_0x28);
+    return getAnmSpeedStickRate(m_HIO->mHang.m.field_0x24, m_HIO->mHang.m.field_0x28);
 }
 
 /* 80133F40-80133FB4       .text getHangDirectionFromAngle__9daPy_lk_cFv */
@@ -120,13 +120,13 @@ int daPy_lk_c::changeHangEndProc(int param_0) {
         m3588 = dBgS_Attr_UNK1B_e;
     }
     if (m35DC > mFootData[1].field_0x018.y + current.pos.y) {
-        return procLand_init(daPy_HIO_autoJump_c0::m.field_0x24, 0);
+        return procLand_init(m_HIO->mAutoJump.m.field_0x24, 0);
     }
     if (param_0 != 0) {
         dComIfGp_setDoStatus(dActStts_LET_GO_e);
         if (doTrigger()) {
             speed.y = 0.0f;
-            return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
         }
     }
     return false;
@@ -204,10 +204,10 @@ BOOL daPy_lk_c::procHangStart_init() {
     mProcVar0.m3570 = sVar3;
     setSingleMoveAnime(
         ANM_VJMPCHA,
-        daPy_HIO_wallCatch_c0::m.field_0x44,
-        daPy_HIO_wallCatch_c0::m.field_0x4C,
-        daPy_HIO_wallCatch_c0::m.field_0x2,
-        daPy_HIO_wallCatch_c0::m.field_0x48
+        m_HIO->mWallCatch.m.field_0x44,
+        m_HIO->mWallCatch.m.field_0x4C,
+        m_HIO->mWallCatch.m.field_0x2,
+        m_HIO->mWallCatch.m.field_0x48
     );
     current.pos = local_1c;
     shape_angle.y = m352C + 0x8000;
@@ -226,11 +226,11 @@ BOOL daPy_lk_c::procHangStart() {
     }
 
     if (((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
-         (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_wallCatch_c0::m.field_0x50)) &&
+         (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mWallCatch.m.field_0x50)) &&
         (mStickDistance > 0.05f || mProcVar0.m3570 != 0))
     {
         if (getDirectionFromShapeAngle() == DIR_FORWARD || mProcVar0.m3570 != 0) {
-            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+            procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         }
     } else {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
@@ -311,11 +311,11 @@ BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla* param_0) {
     if (mCurProc == daPyProc_FRONT_ROLL_e) {
         morf = 0.0f;
     } else {
-        morf = daPy_HIO_hang_c0::m.field_0x10;
+        morf = m_HIO->mHang.m.field_0x10;
     }
     commonProcInit(daPyProc_HANG_FALL_START_e);
     setSingleMoveAnime(
-        ANM_HANGING, daPy_HIO_hang_c0::m.field_0x4, daPy_HIO_hang_c0::m.field_0x8, daPy_HIO_hang_c0::m.field_0x0, morf
+        ANM_HANGING, m_HIO->mHang.m.field_0x4, m_HIO->mHang.m.field_0x8, m_HIO->mHang.m.field_0x0, morf
     );
     mVelocity = 0.0f;
     speed.y = 0.0f;
@@ -329,7 +329,7 @@ BOOL daPy_lk_c::procHangFallStart() {
     int iVar2;
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f ||
-        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_hang_c0::m.field_0xC)
+        mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0xC)
     {
         iVar2 = 1;
     } else {
@@ -360,10 +360,10 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
     commonProcInit(daPyProc_HANG_UP_e);
     setSingleMoveAnime(
         ANM_HANGUP,
-        daPy_HIO_hang_c0::m.field_0x14,
-        daPy_HIO_hang_c0::m.field_0x18,
-        daPy_HIO_hang_c0::m.field_0x2,
-        daPy_HIO_hang_c0::m.field_0x20
+        m_HIO->mHang.m.field_0x14,
+        m_HIO->mHang.m.field_0x18,
+        m_HIO->mHang.m.field_0x2,
+        m_HIO->mHang.m.field_0x20
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
     mProcVar0.m3570 = param_0;
@@ -382,10 +382,10 @@ BOOL daPy_lk_c::procHangUp() {
     }
 
     if ((mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) ||
-        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_hang_c0::m.field_0x1C))
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0x1C))
     {
         if (mProcVar0.m3570 == 0) {
-            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+            procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else if (changeHangMoveProc(mProcVar0.m3570)) {
             procHangMove_init(mProcVar0.m3570);
         } else {
@@ -398,7 +398,7 @@ BOOL daPy_lk_c::procHangUp() {
 /* 80135094-80135140       .text procHangWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangWait_init() {
     commonProcInit(daPyProc_HANG_WAIT_e);
-    setSingleMoveAnime(ANM_VJMPCHA, 0.0f, daPy_HIO_wallCatch_c0::m.field_0x2, -1, 5.0f);
+    setSingleMoveAnime(ANM_VJMPCHA, 0.0f, m_HIO->mWallCatch.m.field_0x2, -1, 5.0f);
     setTextureAnime(9, 0);
     mpSeAnmFrameCtrl = NULL;
     mVelocity = 0.0f;
@@ -421,7 +421,7 @@ BOOL daPy_lk_c::procHangWait() {
     if (mStickDistance > 0.05f) {
         iVar2 = getHangDirectionFromAngle();
         if (iVar2 == 0) {
-            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+            procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else if (iVar2 != 1 && changeHangMoveProc(iVar2)) {
             s16 sVar1 = m34EC;
             procHangMove_init(iVar2);
@@ -444,7 +444,7 @@ BOOL daPy_lk_c::procHangMove_init(int param_0) {
         current.angle.y = shape_angle.y + -0x4000;
     }
     f32 dVar3 = getHangMoveAnmSpeed();
-    setSingleMoveAnime(dVar1, dVar3, 0.0f, -1, daPy_HIO_hang_c0::m.field_0x2C);
+    setSingleMoveAnime(dVar1, dVar3, 0.0f, -1, m_HIO->mHang.m.field_0x2C);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
     mVelocity = 0.0f;
     cXyz local_1c = mLeftHandPos - mRightHandPos;
@@ -459,7 +459,7 @@ BOOL daPy_lk_c::procHangMove() {
 
     if (!changeHangEndProc(1)) {
         if (iVar7 == 0 && mStickDistance > 0.05f) {
-            procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x2C);
+            procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else {
             J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
             frameCtrl.setRate(getHangMoveAnmSpeed());
@@ -475,7 +475,7 @@ BOOL daPy_lk_c::procHangMove() {
                 cXyz local_64 = mRightHandPos - mLeftHandPos;
                 float dVar12 = local_64.absXZ();
                 if (changeHangMoveProc(4)) {
-                    mVelocity = std::fabsf(dVar12 - m35A0) * daPy_HIO_hang_c0::m.field_0x30;
+                    mVelocity = std::fabsf(dVar12 - m35A0) * m_HIO->mHang.m.field_0x30;
                     float fVar1 = cM_ssin(shape_angle.y);
                     float fVar2 = cM_scos(shape_angle.y);
                     float dVar13 = cM_ssin(current.angle.y);
@@ -542,10 +542,10 @@ BOOL daPy_lk_c::procHangClimb_init(f32 param_0) {
     commonProcInit(daPyProc_HANG_CLIMB_e);
     setSingleMoveAnime(
         ANM_VJMPCL,
-        daPy_HIO_wallCatch_c0::m.field_0x24,
+        m_HIO->mWallCatch.m.field_0x24,
         param_0,
-        daPy_HIO_wallCatch_c0::m.field_0x4,
-        daPy_HIO_wallCatch_c0::m.field_0x28
+        m_HIO->mWallCatch.m.field_0x4,
+        m_HIO->mWallCatch.m.field_0x28
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK200_e);
     mVelocity = 0.0f;
@@ -557,7 +557,7 @@ BOOL daPy_lk_c::procHangClimb_init(f32 param_0) {
 BOOL daPy_lk_c::procHangClimb() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_wallCatch_c0::m.field_0x38) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mWallCatch.m.field_0x38) {
         checkNextMode(1);
     }
     return true;
@@ -585,10 +585,10 @@ BOOL daPy_lk_c::procHangWallCatch_init() {
     commonProcInit(daPyProc_HANG_WALL_CATCH_e);
     setSingleMoveAnime(
         ANM_VJMPCHB,
-        daPy_HIO_wallCatch_c0::m.field_0x1C,
-        daPy_HIO_wallCatch_c0::m.field_0x34,
-        daPy_HIO_wallCatch_c0::m.field_0x0,
-        daPy_HIO_wallCatch_c0::m.field_0x20
+        m_HIO->mWallCatch.m.field_0x1C,
+        m_HIO->mWallCatch.m.field_0x34,
+        m_HIO->mWallCatch.m.field_0x0,
+        m_HIO->mWallCatch.m.field_0x20
     );
     current.pos = local_1c;
     shape_angle.y = m352C + 0x8000;
@@ -601,8 +601,8 @@ BOOL daPy_lk_c::procHangWallCatch_init() {
 
 /* 80135AE0-80135B50       .text procHangWallCatch__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangWallCatch() {
-    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f && !procHangClimb_init(daPy_HIO_wallCatch_c0::m.field_0x30)) {
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f && !procHangClimb_init(m_HIO->mWallCatch.m.field_0x30)) {
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else {
         return true;
     }

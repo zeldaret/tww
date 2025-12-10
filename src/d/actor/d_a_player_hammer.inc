@@ -172,10 +172,10 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
     commonProcInit(daPyProc_HAMMER_SIDE_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGA,
-        daPy_HIO_ham_c0::m.field_0x8,
-        daPy_HIO_ham_c0::m.field_0xC,
-        daPy_HIO_ham_c0::m.field_0x0,
-        daPy_HIO_ham_c0::m.field_0x14
+        m_HIO->mItem.mHam.m.field_0x8,
+        m_HIO->mItem.mHam.m.field_0xC,
+        m_HIO->mItem.mHam.m.field_0x0,
+        m_HIO->mItem.mHam.m.field_0x14
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -184,7 +184,7 @@ BOOL daPy_lk_c::procHammerSideSwing_init() {
     setBlurPosResource(LKANM__HAMMERSIDE_POS);
     setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 17, 50.0f);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGAA));
-    m35EC = daPy_HIO_ham_c0::m.field_0xC;
+    m35EC = m_HIO->mItem.mHam.m.field_0xC;
     return true;
 }
 
@@ -197,7 +197,7 @@ BOOL daPy_lk_c::procHammerSideSwing() {
         checkNextMode(0);
         return true;
     }
-    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x10) {
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mItem.mHam.m.field_0x10) {
         f32 dVar4 = mVelocity;
         u8 orig_direction = mDirection;
         mVelocity = 0.0f;
@@ -219,14 +219,14 @@ BOOL daPy_lk_c::procHammerSideSwing() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
-    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= daPy_HIO_ham_c0::m.field_0x18) &&
-        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_ham_c0::m.field_0x1C))
+    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mItem.mHam.m.field_0x18) &&
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mItem.mHam.m.field_0x1C))
     {
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
@@ -242,10 +242,10 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_READY_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBPRE,
-        daPy_HIO_ham_c0::m.field_0x20,
-        daPy_HIO_ham_c0::m.field_0x24,
-        daPy_HIO_ham_c0::m.field_0x2,
-        daPy_HIO_ham_c0::m.field_0x28
+        m_HIO->mItem.mHam.m.field_0x20,
+        m_HIO->mItem.mHam.m.field_0x24,
+        m_HIO->mItem.mHam.m.field_0x2,
+        m_HIO->mItem.mHam.m.field_0x28
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -257,7 +257,7 @@ BOOL daPy_lk_c::procHammerFrontSwingReady_init() {
     setAtParam(AT_TYPE_SKULL_HAMMER, 4, dCcG_At_Spl_UNK0, dCcG_SE_UNK5, dCcG_AtHitMark_Nrm_e, 18, 50.0f);
     voiceStart(7);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBPREA));
-    m35EC = daPy_HIO_ham_c0::m.field_0x24;
+    m35EC = m_HIO->mItem.mHam.m.field_0x24;
     m355C = 0;
     return true;
 }
@@ -275,9 +275,9 @@ BOOL daPy_lk_c::procHammerFrontSwingReady() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
@@ -289,9 +289,9 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBHIT,
-        4.0f * daPy_HIO_ham_c0::m.field_0x2C,
-        daPy_HIO_ham_c0::m.field_0x30,
-        daPy_HIO_ham_c0::m.field_0x4,
+        4.0f * m_HIO->mItem.mHam.m.field_0x2C,
+        m_HIO->mItem.mHam.m.field_0x30,
+        m_HIO->mItem.mHam.m.field_0x4,
         0.0f
     );
     current.angle.y = shape_angle.y;
@@ -309,7 +309,7 @@ BOOL daPy_lk_c::procHammerFrontSwing_init() {
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
     m34D0 = 0;
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_HAMSWINGBHITA));
-    m35EC = daPy_HIO_ham_c0::m.field_0x30;
+    m35EC = m_HIO->mItem.mHam.m.field_0x30;
     return true;
 }
 
@@ -376,9 +376,9 @@ BOOL daPy_lk_c::procHammerFrontSwing() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
@@ -391,10 +391,10 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
     commonProcInit(daPyProc_HAMMER_FRONT_SWING_END_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBEND,
-        daPy_HIO_ham_c0::m.field_0x34,
-        daPy_HIO_ham_c0::m.field_0x38,
-        daPy_HIO_ham_c0::m.field_0x6,
-        daPy_HIO_ham_c0::m.field_0x40
+        m_HIO->mItem.mHam.m.field_0x34,
+        m_HIO->mItem.mHam.m.field_0x38,
+        m_HIO->mItem.mHam.m.field_0x6,
+        m_HIO->mItem.mHam.m.field_0x40
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -407,7 +407,7 @@ BOOL daPy_lk_c::procHammerFrontSwingEnd_init() {
 BOOL daPy_lk_c::procHammerFrontSwingEnd() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         return checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_ham_c0::m.field_0x3C) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mItem.mHam.m.field_0x3C) {
         return checkNextMode(1);
     } else {
         return true;

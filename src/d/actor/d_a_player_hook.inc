@@ -149,10 +149,10 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
             current.angle.y = shape_angle.y + 0x4000;
             onModeFlg(ModeFlg_00000001);
             m3598 = 0.0f;
-            setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+            setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
             mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
-            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
             mFrameCtrlUpper[UPPER_MOVE1_e].setRate(0.0f);
             mFrameCtrlUpper[UPPER_MOVE2_e].setRate(0.0f);
             return true;
@@ -205,7 +205,7 @@ BOOL daPy_lk_c::procHookshotSubject_init() {
     mVelocity = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
 
@@ -258,7 +258,7 @@ BOOL daPy_lk_c::procHookshotMove_init() {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
         setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
-        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
     return true;
@@ -287,7 +287,7 @@ BOOL daPy_lk_c::procHookshotMove() {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_LEFT) {
                 mDirection = DIR_LEFT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
             current.angle.y = shape_angle.y + 0x4000;
         } else {

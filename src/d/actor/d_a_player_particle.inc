@@ -505,7 +505,7 @@ void daPy_lk_c::setAuraEffect() {
 
             if (m3548 == 0) {
                 if (dComIfGs_getMagic() != 0) {
-                    m3548 = daPy_HIO_magicShield_c0::m.field_0x0;
+                    m3548 = m_HIO->mItem.mMagicShield.m.field_0x0;
                     dComIfGp_setItemMagicCount(-1);
                 } else {
                     offNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
@@ -576,7 +576,7 @@ void daPy_lk_c::setAuraEffect() {
                 var_f28 = 1.5f;
             }
         } else {
-            var_f31 = std::fabsf(mVelocity) / daPy_HIO_move_c0::m.field_0x18;
+            var_f31 = std::fabsf(mVelocity) / m_HIO->mMove.m.field_0x18;
             if (var_f31 > 1.0f) {
                 var_f31 = 1.0f;
             }
@@ -838,9 +838,9 @@ void daPy_lk_c::setFootEffectType(int effectID, cXyz* i_pos, int param_2, int pa
         }
 
         if (effectID == -2) {
-            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+            emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_2022, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)m_HIO->mBasic.m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
         } else if (effectID == dPa_name::ID_COMMON_2022 || effectID == dPa_name::ID_COMMON_2027) {
-            emitter = dComIfGp_particle_setToonP1(effectID, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)daPy_HIO_basic_c0::m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
+            emitter = dComIfGp_particle_setToonP1(effectID, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&smoke_scale, (u8)m_HIO->mBasic.m.field_0x2, footEffect->getSmokeCallBack(), fopAcM_GetRoomNo(this));
         } else if (effectID == dPa_name::ID_COMMON_0024) {
             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
             emitter = dComIfGp_particle_setP1(effectID, &footEffect->getPos(), &footEffect->getAngle(), (cXyz*)&grass_scale, 0xFF, footEffect->getOtherCallBack(), -1, &color, &tevStr.mColorK0);
@@ -1231,7 +1231,7 @@ void daPy_lk_c::setDamageElecEmitter() {
         mDmEcallBack[1].makeEmitter(dPa_name::ID_COMMON_03EE, mpCLModel->getAnmMtx(4), &current.pos, NULL);
     }
 
-    daPy_dmEcallBack_c::setElec(daPy_HIO_elecDamage_c0::m.field_0x2);
+    daPy_dmEcallBack_c::setElec(m_HIO->mDam.mElecDamage.m.field_0x2);
 }
 
 /* 8012C880-8012C8F8       .text setDamageEmitter__9daPy_lk_cFv */
