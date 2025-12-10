@@ -25,24 +25,24 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
     daPy_ANM dVar5;
 
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-        fVar1 = daPy_HIO_wall_c0::m.field_0x14;
-        fVar5 = daPy_HIO_wall_c0::m.field_0x40;
+        fVar1 = m_HIO->mWall.m.field_0x14;
+        fVar5 = m_HIO->mWall.m.field_0x40;
         dVar6 = ANM_WALL;
-        sVar1 = daPy_HIO_wall_c0::m.field_0x8;
-        fVar6 = daPy_HIO_wall_c0::m.field_0x60;
-        fVar3 = daPy_HIO_wall_c0::m.field_0x58;
+        sVar1 = m_HIO->mWall.m.field_0x8;
+        fVar6 = m_HIO->mWall.m.field_0x60;
+        fVar3 = m_HIO->mWall.m.field_0x58;
         if (mDirection == DIR_LEFT) {
             dVar5 = ANM_WALLWR;
         } else {
             dVar5 = ANM_WALLWL;
         }
     } else {
-        fVar1 = daPy_HIO_wall_c0::m.field_0x18;
-        fVar5 = daPy_HIO_wall_c0::m.field_0x44;
+        fVar1 = m_HIO->mWall.m.field_0x18;
+        fVar5 = m_HIO->mWall.m.field_0x44;
         dVar6 = ANM_WALLDW;
-        sVar1 = daPy_HIO_wall_c0::m.field_0xA;
-        fVar6 = daPy_HIO_wall_c0::m.field_0x64;
-        fVar3 = daPy_HIO_wall_c0::m.field_0x5C;
+        sVar1 = m_HIO->mWall.m.field_0xA;
+        fVar6 = m_HIO->mWall.m.field_0x64;
+        fVar3 = m_HIO->mWall.m.field_0x5C;
         if (mDirection == DIR_LEFT) {
             dVar5 = ANM_WALLWRDW;
         } else {
@@ -96,9 +96,9 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
 
     *param_2 = mLinkLinChk.GetCross();
     cXyz local_3c;
-    local_3c.x = param_2->x + cM_ssin(uVar3) * daPy_HIO_wall_c0::m.field_0x50;
+    local_3c.x = param_2->x + cM_ssin(uVar3) * m_HIO->mWall.m.field_0x50;
     local_3c.y = param_2->y;
-    local_3c.z = param_2->z + cM_ssin(uVar3) * daPy_HIO_wall_c0::m.field_0x50;
+    local_3c.z = param_2->z + cM_ssin(uVar3) * m_HIO->mWall.m.field_0x50;
     mGndChk.SetPos(&local_3c);
     float f31 = bgs->GroundCross(&mGndChk);
     if (-G_CM3D_F_INF != f31 && (!cBgW_CheckBGround(bgs->GetTriPla(mGndChk)->GetNP()->y))) {
@@ -153,12 +153,12 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* param_0, cXyz* param_1, cXyz* par
     if (direction != DIR_NONE) {
         if (direction == DIR_LEFT) {
             sVar7 = sVar7 - shape_angle.y;
-            param_2->x += daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->z;
-            param_2->z -= daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->x;
+            param_2->x += m_HIO->mWall.m.field_0x54 * triPla->GetNP()->z;
+            param_2->z -= m_HIO->mWall.m.field_0x54 * triPla->GetNP()->x;
         } else {
             sVar7 = shape_angle.y - sVar7;
-            param_2->x -= daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->z;
-            param_2->z += daPy_HIO_wall_c0::m.field_0x54 * triPla->GetNP()->x;
+            param_2->x -= m_HIO->mWall.m.field_0x54 * triPla->GetNP()->z;
+            param_2->z += m_HIO->mWall.m.field_0x54 * triPla->GetNP()->x;
         }
         if (sVar7 > 0x2aaa) {
             return NULL;
@@ -185,9 +185,9 @@ void daPy_lk_c::getWHideBasePos(cXyz* param_0) {
 /* 80137640-8013769C       .text getWHideNextPos__9daPy_lk_cFP4cXyzP4cXyz */
 void daPy_lk_c::getWHideNextPos(cXyz* param_0, cXyz* param_1) {
     param_1->set(
-        param_0->x + cM_ssin(current.angle.y) * daPy_HIO_wall_c0::m.field_0x54,
+        param_0->x + cM_ssin(current.angle.y) * m_HIO->mWall.m.field_0x54,
         param_0->y,
-        param_0->z + cM_scos(current.angle.y) * daPy_HIO_wall_c0::m.field_0x54
+        param_0->z + cM_scos(current.angle.y) * m_HIO->mWall.m.field_0x54
     );
 }
 
@@ -274,21 +274,21 @@ BOOL daPy_lk_c::procWHideReady_init(cM3dGPla* param_0, cXyz* param_1) {
     m370C.z = param_1->z;
     if (param_0 != NULL) {
         m34D4 = cM_atan2s(param_0->mNormal.x, param_0->mNormal.z);
-        m370C.x += param_0->mNormal.x * daPy_HIO_wall_c0::m.field_0x50;
-        m370C.z += param_0->mNormal.z * daPy_HIO_wall_c0::m.field_0x50;
+        m370C.x += param_0->mNormal.x * m_HIO->mWall.m.field_0x50;
+        m370C.z += param_0->mNormal.z * m_HIO->mWall.m.field_0x50;
     } else {
         m34D4 = m352C;
-        m370C.x += cM_ssin(m352C) * daPy_HIO_wall_c0::m.field_0x50;
-        m370C.z += cM_scos(m352C) * daPy_HIO_wall_c0::m.field_0x50;
+        m370C.x += cM_ssin(m352C) * m_HIO->mWall.m.field_0x50;
+        m370C.z += cM_scos(m352C) * m_HIO->mWall.m.field_0x50;
     }
     if (mEquipItem == daPyItem_NONE_e) {
         if (checkEquipAnime()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         }
-        setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
+        setSingleMoveAnime(ANM_WALL, 0.0f, m_HIO->mWall.m.field_0x24, -1, m_HIO->mWall.m.field_0x34);
         mProcVar0.m3570 = 1;
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         mProcVar0.m3570 = 0;
     }
@@ -305,7 +305,7 @@ BOOL daPy_lk_c::procWHideReady() {
     }
     if (mProcVar0.m3570 == 0) {
         if (checkNoUpperAnime()) {
-            setSingleMoveAnime(ANM_WALL, 0.0f, daPy_HIO_wall_c0::m.field_0x24, -1, daPy_HIO_wall_c0::m.field_0x34);
+            setSingleMoveAnime(ANM_WALL, 0.0f, m_HIO->mWall.m.field_0x24, -1, m_HIO->mWall.m.field_0x34);
             mProcVar0.m3570 = 1;
         }
         return true;
@@ -329,22 +329,22 @@ BOOL daPy_lk_c::procWHideWait_init() {
 
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
         dVar3 = ANM_WALL;
-        sVar2 = daPy_HIO_wall_c0::m.field_0x0;
-        dVar4 = daPy_HIO_wall_c0::m.field_0x38;
+        sVar2 = m_HIO->mWall.m.field_0x0;
+        dVar4 = m_HIO->mWall.m.field_0x38;
     } else {
         dVar3 = ANM_WALLDW;
-        sVar2 = daPy_HIO_wall_c0::m.field_0x2;
-        dVar4 = daPy_HIO_wall_c0::m.field_0x3C;
+        sVar2 = m_HIO->mWall.m.field_0x2;
+        dVar4 = m_HIO->mWall.m.field_0x3C;
     }
     if (mCurProc == daPyProc_WHIDE_READY_e) {
-        fVar1 = daPy_HIO_wall_c0::m.field_0x24;
+        fVar1 = m_HIO->mWall.m.field_0x24;
     } else {
         fVar1 = sVar2 - 0.001f;
     }
     dVar5 = fVar1;
     commonProcInit(daPyProc_WHIDE_WAIT_e);
     mVelocity = 0.0f;
-    setSingleMoveAnime(dVar3, daPy_HIO_wall_c0::m.field_0xC, dVar5, sVar2, dVar4);
+    setSingleMoveAnime(dVar3, m_HIO->mWall.m.field_0xC, dVar5, sVar2, dVar4);
     current.angle.y = shape_angle.y;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1_e);
     return true;
@@ -364,22 +364,22 @@ BOOL daPy_lk_c::procWHideWait() {
     if (iVar1 == 1) {
         setSingleMoveAnime(
             ANM_WALLDW,
-            daPy_HIO_wall_c0::m.field_0x10,
-            daPy_HIO_wall_c0::m.field_0x28,
-            daPy_HIO_wall_c0::m.field_0x2,
-            daPy_HIO_wall_c0::m.field_0x3C
+            m_HIO->mWall.m.field_0x10,
+            m_HIO->mWall.m.field_0x28,
+            m_HIO->mWall.m.field_0x2,
+            m_HIO->mWall.m.field_0x3C
         );
         onNoResetFlg0(daPyFlg0_UNK10000);
         mAcchCir[2].SetWallH(89.9f);
     } else if (iVar1 == -1) {
         setSingleMoveAnime(
             ANM_WALLDW,
-            -daPy_HIO_wall_c0::m.field_0x10,
-            daPy_HIO_wall_c0::m.field_0x28,
-            daPy_HIO_wall_c0::m.field_0x2,
-            daPy_HIO_wall_c0::m.field_0x3C
+            -m_HIO->mWall.m.field_0x10,
+            m_HIO->mWall.m.field_0x28,
+            m_HIO->mWall.m.field_0x2,
+            m_HIO->mWall.m.field_0x3C
         );
-        mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(daPy_HIO_wall_c0::m.field_0x2 - 0.001f);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(m_HIO->mWall.m.field_0x2 - 0.001f);
         mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
         offNoResetFlg0(daPyFlg0_UNK10000);
         mAcchCir[2].SetWallH(125.0f);
@@ -468,7 +468,7 @@ BOOL daPy_lk_c::procWHideMove() {
             setBlendWHideMoveAnime(2.0f);
         }
         if (direction == DIR_FORWARD || direction == DIR_BACKWARD) {
-            fVar2 = daPy_HIO_move_c0::m.field_0x14;
+            fVar2 = m_HIO->mMove.m.field_0x14;
             fVar2 *= mStickDistance;
         } else {
             fVar2 = 0.0f;
@@ -511,8 +511,8 @@ BOOL daPy_lk_c::procWHideMove() {
         current.pos.x += 8.0f * cM_ssin(current.angle.y);
         current.pos.z += 8.0f * cM_scos(current.angle.y);
     }
-    current.pos.x -= 0.8f * daPy_HIO_wall_c0::m.field_0x50 * cM_ssin(shape_angle.y);
-    current.pos.z -= 0.8f * daPy_HIO_wall_c0::m.field_0x50 * cM_scos(shape_angle.y);
+    current.pos.x -= 0.8f * m_HIO->mWall.m.field_0x50 * cM_ssin(shape_angle.y);
+    current.pos.z -= 0.8f * m_HIO->mWall.m.field_0x50 * cM_scos(shape_angle.y);
     setBlendWHideMoveAnime(-1.0f);
     return true;
 }
@@ -527,20 +527,20 @@ BOOL daPy_lk_c::procWHidePeep_init() {
 
     commonProcInit(daPyProc_WHIDE_PEEP_e);
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-        fVar1 = daPy_HIO_wall_c0::m.field_0x1C;
-        fVar3 = daPy_HIO_wall_c0::m.field_0x48;
-        fVar2 = daPy_HIO_wall_c0::m.field_0x2C;
-        sVar4 = daPy_HIO_wall_c0::m.field_0x4;
+        fVar1 = m_HIO->mWall.m.field_0x1C;
+        fVar3 = m_HIO->mWall.m.field_0x48;
+        fVar2 = m_HIO->mWall.m.field_0x2C;
+        sVar4 = m_HIO->mWall.m.field_0x4;
         if (mDirection == DIR_LEFT) {
             dVar2 = ANM_WALLPR;
         } else {
             dVar2 = ANM_WALLPL;
         }
     } else {
-        fVar1 = daPy_HIO_wall_c0::m.field_0x20;
-        fVar3 = daPy_HIO_wall_c0::m.field_0x4C;
-        fVar2 = daPy_HIO_wall_c0::m.field_0x30;
-        sVar4 = daPy_HIO_wall_c0::m.field_0x6;
+        fVar1 = m_HIO->mWall.m.field_0x20;
+        fVar3 = m_HIO->mWall.m.field_0x4C;
+        fVar2 = m_HIO->mWall.m.field_0x30;
+        sVar4 = m_HIO->mWall.m.field_0x6;
         if (mDirection == DIR_LEFT) {
             dVar2 = ANM_WALLPRDW;
         } else {
@@ -575,9 +575,9 @@ BOOL daPy_lk_c::procWHidePeep() {
             dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20_e);
         }
         if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-            dVar3 = daPy_HIO_wall_c0::m.field_0x1C;
+            dVar3 = m_HIO->mWall.m.field_0x1C;
         } else {
-            dVar3 = daPy_HIO_wall_c0::m.field_0x20;
+            dVar3 = m_HIO->mWall.m.field_0x20;
         }
     }
 

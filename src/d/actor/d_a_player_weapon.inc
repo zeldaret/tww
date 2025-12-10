@@ -49,10 +49,10 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     commonProcInit(daPyProc_WEAPON_NORMAL_SWING_e);
     setSingleMoveAnime(
         ANM_CUTBOKO,
-        daPy_HIO_cutBoko_c0::m.field_0x10,
-        daPy_HIO_cutBoko_c0::m.field_0x18,
-        daPy_HIO_cutBoko_c0::m.field_0x6,
-        daPy_HIO_cutBoko_c0::m.field_0x34
+        m_HIO->mCut.mCutBoko.m.field_0x10,
+        m_HIO->mCut.mCutBoko.m.field_0x18,
+        m_HIO->mCut.mCutBoko.m.field_0x6,
+        m_HIO->mCut.mCutBoko.m.field_0x34
     );
     current.angle.y = shape_angle.y;
     m3700 = cXyz::Zero;
@@ -67,7 +67,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     m351E = m34DC;
     setBlurPosResource(LKANM__CUTBOKO_POS);
     setEnemyWeaponAtParam(0);
-    m34D0 = daPy_HIO_cutBoko_c0::m.field_0x4;
+    m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
 
     return true;
 }
@@ -94,7 +94,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
             checkNextMode(0);
             return true;
         }
-    } else if (frameCtrl.getFrame() > daPy_HIO_cutBoko_c0::m.field_0x1C) {
+    } else if (frameCtrl.getFrame() > m_HIO->mCut.mCutBoko.m.field_0x1C) {
         f32 dVar4 = mVelocity;
         u8 orig_direction = mDirection;
         mVelocity = 0.0f;
@@ -118,21 +118,21 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
 
     current.angle.y = shape_angle.y;
-    if (frameCtrl.checkPass(daPy_HIO_cutBoko_c0::m.field_0x38)) {
-        mVelocity = std::fabsf(speedF) * daPy_HIO_cutBoko_c0::m.field_0x20 + daPy_HIO_cutBoko_c0::m.field_0x24;
+    if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x38)) {
+        mVelocity = std::fabsf(speedF) * m_HIO->mCut.mCutBoko.m.field_0x20 + m_HIO->mCut.mCutBoko.m.field_0x24;
     }
-    if (frameCtrl.checkPass(daPy_HIO_cutBoko_c0::m.field_0x3C)) {
-        frameCtrl.setRate(daPy_HIO_cutBoko_c0::m.field_0x14);
+    if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x3C)) {
+        frameCtrl.setRate(m_HIO->mCut.mCutBoko.m.field_0x14);
     }
-    if (frameCtrl.getFrame() >= daPy_HIO_cutBoko_c0::m.field_0x40 &&
-        frameCtrl.getFrame() < daPy_HIO_cutBoko_c0::m.field_0x44)
+    if (frameCtrl.getFrame() >= m_HIO->mCut.mCutBoko.m.field_0x40 &&
+        frameCtrl.getFrame() < m_HIO->mCut.mCutBoko.m.field_0x44)
     {
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
@@ -143,9 +143,9 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
     cLib_addCalc(
         &mVelocity,
         0.0f,
-        daPy_HIO_cutBoko_c0::m.field_0x30,
-        daPy_HIO_cutBoko_c0::m.field_0x28,
-        daPy_HIO_cutBoko_c0::m.field_0x2C
+        m_HIO->mCut.mCutBoko.m.field_0x30,
+        m_HIO->mCut.mCutBoko.m.field_0x28,
+        m_HIO->mCut.mCutBoko.m.field_0x2C
     );
 
     return true;
@@ -156,10 +156,10 @@ BOOL daPy_lk_c::procWeaponSideSwing_init() {
     commonProcInit(daPyProc_WEAPON_SIDE_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGA,
-        daPy_HIO_cutBoko_c0::m.field_0x48,
-        daPy_HIO_cutBoko_c0::m.field_0x4C,
-        daPy_HIO_cutBoko_c0::m.field_0x8,
-        daPy_HIO_cutBoko_c0::m.field_0x54
+        m_HIO->mCut.mCutBoko.m.field_0x48,
+        m_HIO->mCut.mCutBoko.m.field_0x4C,
+        m_HIO->mCut.mCutBoko.m.field_0x8,
+        m_HIO->mCut.mCutBoko.m.field_0x54
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -185,7 +185,7 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
         return true;
     }
 
-    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_cutBoko_c0::m.field_0x50) {
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutBoko.m.field_0x50) {
         f32 dVar4 = mVelocity;
         u8 orig_direction = mDirection;
         mVelocity = 0.0f;
@@ -208,14 +208,14 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
-    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= daPy_HIO_cutBoko_c0::m.field_0x58) &&
-        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < daPy_HIO_cutBoko_c0::m.field_0x5C))
+    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mCut.mCutBoko.m.field_0x58) &&
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mCut.mCutBoko.m.field_0x5C))
     {
         if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
             onResetFlg0(daPyRFlg0_UNK1);
@@ -232,10 +232,10 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
     commonProcInit(daPyProc_WEAPON_FRONT_SWING_READY_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBPRE,
-        daPy_HIO_cutBoko_c0::m.field_0x60,
-        daPy_HIO_cutBoko_c0::m.field_0x64,
-        daPy_HIO_cutBoko_c0::m.field_0xA,
-        daPy_HIO_cutBoko_c0::m.field_0x68
+        m_HIO->mCut.mCutBoko.m.field_0x60,
+        m_HIO->mCut.mCutBoko.m.field_0x64,
+        m_HIO->mCut.mCutBoko.m.field_0xA,
+        m_HIO->mCut.mCutBoko.m.field_0x68
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -265,9 +265,9 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
 
@@ -280,9 +280,9 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
     commonProcInit(daPyProc_WEAPON_FRONT_SWING_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBHIT,
-        4.0f * daPy_HIO_cutBoko_c0::m.field_0x6C,
-        daPy_HIO_cutBoko_c0::m.field_0x70,
-        daPy_HIO_cutBoko_c0::m.field_0xC,
+        4.0f * m_HIO->mCut.mCutBoko.m.field_0x6C,
+        m_HIO->mCut.mCutBoko.m.field_0x70,
+        m_HIO->mCut.mCutBoko.m.field_0xC,
         0.0f
     );
     current.angle.y = shape_angle.y;
@@ -320,9 +320,9 @@ BOOL daPy_lk_c::procWeaponFrontSwing() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             m34D4,
-            daPy_HIO_turn_c0::m.field_0x4,
-            daPy_HIO_turn_c0::m.field_0x0,
-            daPy_HIO_turn_c0::m.field_0x2
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
         );
     }
     current.angle.y = shape_angle.y;
@@ -335,10 +335,10 @@ BOOL daPy_lk_c::procWeaponFrontSwingEnd_init() {
     commonProcInit(daPyProc_WEAPON_FRONT_SWING_END_e);
     setSingleMoveAnime(
         ANM_HAMSWINGBEND,
-        daPy_HIO_cutBoko_c0::m.field_0x74,
-        daPy_HIO_cutBoko_c0::m.field_0x78,
-        daPy_HIO_cutBoko_c0::m.field_0xE,
-        daPy_HIO_cutBoko_c0::m.field_0x80
+        m_HIO->mCut.mCutBoko.m.field_0x74,
+        m_HIO->mCut.mCutBoko.m.field_0x78,
+        m_HIO->mCut.mCutBoko.m.field_0xE,
+        m_HIO->mCut.mCutBoko.m.field_0x80
     );
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
@@ -356,7 +356,7 @@ BOOL daPy_lk_c::procWeaponFrontSwingEnd() {
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
         return checkNextMode(0);
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_cutBoko_c0::m.field_0x7C) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutBoko.m.field_0x7C) {
         return checkNextMode(1);
     } else {
         return true;
