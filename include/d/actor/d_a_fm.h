@@ -12,7 +12,7 @@ public:
     };
 
     enum Prm_e {
-        PRM_SWSAVE_W = 0x04,
+        PRM_SWSAVE_W = 0x04, // unsure about names
         PRM_SWSAVE_S = 0x18,
 
         PRM_SOUND_W = 0x01,
@@ -44,9 +44,9 @@ public:
     bool checkTgHit();
     void setGrabPos();
     void getOffsetPos();
-    bool checkPlayerGrabBomb();
-    bool checkPlayerGrabNpc();
-    bool checkPlayerGrabTarget();
+    u8 checkPlayerGrabBomb();
+    u8 checkPlayerGrabNpc();
+    u8 checkPlayerGrabTarget();
     bool isGrabPos();
     bool isGrab();
     bool isGrabFoot();
@@ -75,7 +75,7 @@ public:
     void modeParalysisInit();
     void modeParalysis();
     void modeDamageInit();
-    bool modeDamage();
+    void modeDamage();
     void modeGrabInit();
     void modeGrab();
     void modeGrabDemoInit();
@@ -93,7 +93,7 @@ public:
     void modeBikubikuInit();
     void modeBikubiku();
     void modeProc(Proc_e, int);
-    void setAnm(signed char, bool);
+    void setAnm(s8, bool);
     void cancelGrab();
     void calcInvKine(fopAc_ac_c*);
     void resetInvKine();
@@ -125,18 +125,20 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    typedef void (daFm_c::*ModeFunc)();
+
     static const dCcD_SrcSph m_sph_src;
     static const dCcD_SrcCyl m_cyl_src;
     static const u32 m_heapsize;
     static const char m_arc_name[3];
 
 public:
-    /* 0x2AC */ int field_0x2AC;
+    /* 0x2AC */ int mMode;
     /* 0x2B0 */ dPa_followEcallBack mpFollowEcallBack;
     /* 0x2C4 */ u8 field_0x2C4[0x2C5 - 0x2C4];
     /* 0x2C5 */ s8 field_0x2C5;
     /* 0x2C6 */ u8 field_0x2C6[0x2C7 - 0x2C6];
-    /* 0x2C7 */ s8 field_0x2C7;
+    /* 0x2C7 */ u8 field_0x2C7;
     /* 0x2C8 */ u16 field_0x2C8;
     /* 0x2CA */ u8 field_0x2CA[0x2CC - 0x2CA];
     /* 0x2CC */ int m_path_no;
@@ -188,7 +190,8 @@ public:
     /* 0x68E */ u8 field_0x68E[0x690 - 0x68E];
     /* 0x690 */ cXyz field_0x690;
     /* 0x69C */ cXyz field_0x69C;
-    /* 0x6A8 */ u8 field_0x6A8[0x6B4 - 0x6A8];
+    /* 0x6A8 */ fpc_ProcID mProcId2;
+    /* 0x6AC */ u8 field_0x6AC[0x6B4 - 0x6AC];
     /* 0x6B4 */ int field_0x6B4;
     /* 0x6B8 */ u8 field_0x6B8;
     /* 0x6B9 */ u8 field_0x6B9[0x6BC - 0x6B9];
@@ -198,7 +201,9 @@ public:
     /* 0x72C */ dCcD_Stts mStts2;
     /* 0x768 */ dCcD_Sph mSph;
     /* 0x894 */ dCcD_Cyl mCyl;
-    /* 0x9C4 */ u8 field_0x9C4[0x9CC - 0x9C4];
+    /* 0x9C4 */ int field_0x9C4;
+    /* 0x9C8 */ u8 mHitType;
+    /* 0x9C9 */ u8 field_0x9C9[0x9CC - 0x9C9];
     /* 0x9CC */ fopAc_ac_c* mBaseTarget;
     /* 0x9D0 */ s16 field_0x9D0;
     /* 0x9D2 */ u8 field_0x9D2[0x9D4 - 0x9D2];

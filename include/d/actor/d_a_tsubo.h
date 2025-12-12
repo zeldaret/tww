@@ -214,7 +214,7 @@ namespace daTsubo {
         void prm_off_stick() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x80000000); }
         void prm_set_cull_non() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x70000000); }
         void prm_set_itemNo(int) {}
-        void set_drop_spd_y0(float) {}
+        void set_drop_spd_y0(f32 drop_speed) {speed.y = drop_speed;}
         bool spec_chk_prm_boko() const { return prm_get_spec() != 0x3F; }
     
         void prmZ_init();
