@@ -67,9 +67,9 @@ public:
     ~dDemo_actor_c();
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
-    void* getP_BtpData(const char*);
+    J3DAnmTexPattern* getP_BtpData(const char*);
     void* getP_BrkData(const char*);
-    void* getP_BtkData(const char*);
+    J3DAnmTextureSRTKey* getP_BtkData(const char*);
     f32 getPrm_Morf();
     void JSGSetData(u32, const void*, u32);
     void JSGSetTranslation(const Vec&);
