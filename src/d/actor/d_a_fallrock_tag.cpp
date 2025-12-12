@@ -7,10 +7,7 @@
 #include "d/actor/d_a_fallrock_tag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-#include "f_op/f_op_actor_mng.h"
-#include "f_op/f_op_camera.h"
 #include "c/c_dylink.h"
-#include "d/d_kankyo.h"
 
 f32 daFallRockTag_c::m_div_num = 6.0f;
 
