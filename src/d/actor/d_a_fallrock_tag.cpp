@@ -12,6 +12,8 @@
 #include "c/c_dylink.h"
 #include "d/d_kankyo.h"
 
+f32 daFallRockTag_c::m_div_num = 6.0f;
+
 daFallRockTag_mData daFallRockTag_c::m_data = {
     0x437a0000,
     0x3e99999a,
