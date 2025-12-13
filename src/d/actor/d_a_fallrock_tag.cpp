@@ -12,74 +12,63 @@
 f32 daFallRockTag_c::m_div_num = 6.0f;
 
 daFallRockTag_mData daFallRockTag_c::m_data = {
-    0x437a0000,
-    0x3e99999a,
-    0x3f4ccccd,
-    0xc28c0000,
-    0xc0e00000,
-    0x005a005a,
-    0x00030000
-
+    250.0f,
+    0.3f,
+    0.8f,
+    -70.0f,
+    -7.0f,
+    90,
+    90,
+    3,
+    0
 };
+
+daFallRockTag_c::~daFallRockTag_c() {
+   cDyl_Unlink(PROC_FallRock);
+}
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
     return TRUE;
 }
 
-/* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Execute(daFallRockTag_c* a_this) {
-    /* regalloc */
-  fopAc_ac_c* actor = a_this;
-  u16 stType;
-  stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
-  u8 bVar3;
-  csXyz local_58;
-  cXyz local_50;
-  cXyz local_44;
-  int timer;
-  s32 iVar2;
+static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
+    int temp = (int)(dStage_stagInfo_GetSchSec(dComIfGp_getStageStagInfo()) / i_this->m_div_num) * 30;
+    u8 schbit = dKy_get_schbit();
+    if ((schbit & i_this->mParameters) != 0) {
+        if (temp < dKy_get_schbit_timer()) {
+            
+            int iVar2 = dKy_get_schbit_timer() - i_this->getData()->placeholder7;
+            int temp2 = 30 / i_this->getData()->placeholder8;
 
-  f32 *pfVar3;
-  f32 fVar5;
-  
-  stType = stage_info->mStageTypeAndSchbit & 0xff;
-  iVar2 = (stType / a_this->m_div_num);
-  iVar2 = iVar2 * 30;
-  bVar3 = dKy_get_schbit();
-  if ((bVar3 & a_this->mParameters) != 0) {
-    timer = dKy_get_schbit_timer();
-    if (iVar2 < timer) {
-      iVar2 = dKy_get_schbit_timer();
-      timer = (int)a_this->getData();
-      iVar2 = iVar2 - *(s16 *)(timer + 22);
-      timer = 30 / ((int)*(s16 *)((int)a_this->getData() + 24));
-      if (iVar2 - (iVar2 / timer) * timer == 0) {
-        pfVar3 = (f32 *)a_this->getData();
-        fVar5 = *pfVar3 * actor->scale.x;
-        local_50.x = cM_rndFX(fVar5);
-        local_50.y = 0.0;
-        local_50.z = cM_rndFX(fVar5 - (f32)fabs(local_50.x));
-        iVar2 =  (int)a_this->getData();
-        fVar5 = *(f32 *)(iVar2 + 4);
-        iVar2 = (int)a_this->getData();
-        local_44.x = fVar5 + cM_rndF(*(f32 *)(iVar2 + 8) - fVar5);
-        local_44.y = local_44.x;
-        local_44.z = local_44.x;
-        fVar5 = cM_rndF(32767.0f);
-        local_58.x = (f32)fVar5;
-        fVar5 = cM_rndF(32767.0);
-        local_58.y = (f32)fVar5;
-        fVar5 = cM_rndF(32767.0);
-        local_58.z = (f32)fVar5;
-        a_this->createRock(&local_50, &local_44, &local_58, fopAcM_GetRoomNo(actor), 0);
-        fopAcM_seStart(actor, JA_SE_ATM_RAKUBAN, 0.0f);
-      }
+            if (iVar2 % temp2 == 0) {
+                f32 fVar5 = i_this->getData()->placeholder1 * i_this->scale.x;
+                cXyz local_44;
+                cXyz temp3;
+                
+                temp3.x = cM_rndFX(fVar5);
+                temp3.y = 0.0;
+                temp3.z = cM_rndFX(fVar5 - std::fabsf(temp3.x));
+
+                fVar5 = i_this->getData()->placeholder2;
+
+                local_44.z = fVar5 + cM_rndF(i_this->getData()->placeholder3 - fVar5);
+                local_44.y = local_44.z;
+                local_44.x = local_44.z;
+
+                csXyz local_58;
+                local_58.x = cM_rndF(32767.0f);
+                local_58.y = cM_rndF(32767.0f);
+                local_58.z = cM_rndF(32767.0f);
+
+                i_this->createRock(&temp3, &local_44, &local_58, fopAcM_GetRoomNo(i_this), 0);
+                fopAcM_seStart(i_this, JA_SE_ATM_RAKUBAN, 0);
+            }
+        }
+        else {
+            i_this->field9_0x298 = 0;
+        }
     }
-    else {
-      a_this->field9_0x298 = 0;
-    }
-  }
     return TRUE;
 }
 
@@ -90,21 +79,14 @@ static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Delete(daFallRockTag_c* a_this) {
-    //non-match because of destructor
-    if(a_this)
-    {
-        cDyl_Unlink(PROC_FallRock);     
-        ((fopAc_ac_c*)a_this)->~fopAc_ac_c();
-    }
+    a_this->~daFallRockTag_c();
     return TRUE;
            
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
 static cPhs_State daFallRockTag_Create(fopAc_ac_c* a_this) {
-    /* Match*/
     fopAcM_SetupActor(a_this, daFallRockTag_c);
-
     cPhs_State state = cDyl_LinkASync(PROC_FallRock);
     switch (state) {
         case cPhs_COMPLEATE_e:
@@ -120,7 +102,6 @@ static cPhs_State daFallRockTag_Create(fopAc_ac_c* a_this) {
 
 /* 00000360-000003D8       .text createRock__15daFallRockTag_cFP4cXyzP4cXyzP5csXyziUl */
 void daFallRockTag_c::createRock(cXyz* param_1, cXyz* param_2, csXyz* param_3, int param_4, unsigned long roomNo) {
-    /* Match*/
       cXyz position [2];
   
   position[0].x = current.pos.x + param_1->x;
@@ -131,7 +112,6 @@ void daFallRockTag_c::createRock(cXyz* param_1, cXyz* param_2, csXyz* param_3, i
 
 /* 000003D8-000003E4       .text getData__15daFallRockTag_cFv */
 const daFallRockTag_mData* daFallRockTag_c::getData() {
-    /* Match? no actual field tho*/
     return &daFallRockTag_c::m_data;
 }
 
