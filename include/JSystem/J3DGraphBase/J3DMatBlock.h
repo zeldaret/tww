@@ -9,8 +9,8 @@
 
 struct J3DGXColorS10 {
     J3DGXColorS10() {}
-    J3DGXColorS10(const GXColorS10& other) { mColor = other; }
-    J3DGXColorS10(const J3DGXColorS10& other) { mColor = other.mColor; }
+    J3DGXColorS10(GXColorS10& other) { mColor = other; }
+    J3DGXColorS10(J3DGXColorS10& other) { mColor = other.mColor; }
     J3DGXColorS10& operator=(const J3DGXColorS10& other) {
         mColor = other.mColor;
         return *this;
@@ -25,8 +25,8 @@ struct J3DGXColorS10 {
 
 struct J3DGXColor {
     J3DGXColor() {}
-    J3DGXColor(const GXColor& other) { mColor = other; }
-    J3DGXColor(const J3DGXColor& other) { mColor = other.mColor; }
+    J3DGXColor(GXColor& other) { mColor = other; }
+    J3DGXColor(J3DGXColor& other) { mColor = other.mColor; }
     J3DGXColor& operator=(const J3DGXColor& other) {
         mColor = other.mColor;
         return *this;
