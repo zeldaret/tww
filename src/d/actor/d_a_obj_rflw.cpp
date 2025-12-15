@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rflw.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -66,9 +67,26 @@ void daObjRflw_c::set_mtx() {
     /* Nonmatching */
 }
 
+inline cPhs_State daObjRflw_c::_create() {
+    cPhs_State rt = cPhs_ERROR_e;
+    fopAcM_SetupActor(this, daObjRflw_c);
+
+    rt = dComIfG_resLoad(&field_0x290, "Rflw");
+    
+    if (rt == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xC60)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    field_0x410 = 0;
+    return rt;
+}
+
 /* 000003E8-0000051C       .text daObjRflw_Create__FPv */
-static cPhs_State daObjRflw_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjRflw_Create(void* i_this) {
+    daObjRflw_c* rflw = static_cast<daObjRflw_c*>(i_this);
+    return rflw->_create();
 }
 
 /* 000006D4-00000704       .text daObjRflw_Delete__FPv */
