@@ -579,6 +579,7 @@ public:
 
 STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
 
+bool dCam_isManual(camera_class* i_this);
 s16 dCam_getAngleY(camera_class*);
 s16 dCam_getAngleX(camera_class*);
 s16 dCam_getControledAngleY(camera_class*);

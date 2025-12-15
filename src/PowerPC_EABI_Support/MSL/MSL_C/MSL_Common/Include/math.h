@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 int abs(int);
+long labs(long);
 double acos(double);
 float acosf(float);
 double asin(double);

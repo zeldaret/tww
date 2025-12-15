@@ -1590,7 +1590,7 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
     if (((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (fopMsgM_checkMessageSend())) {
         dMsg_setCancelMode(i_Msg);
     } else {
-        dMeter_Info.field_0x0[0] = 3;
+        dMeter_Info.field_0x0 = 3;
     }
 }
 
@@ -1960,7 +1960,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             if ((bVar1 != 5) && (bVar1 != 0xe)) {
                 dMsg_arrowInit(i_Msg);
             }
-            dMeter_Info.field_0x0[0] = 2;
+            dMeter_Info.field_0x0 = 2;
             if (dComIfGp_getDoStatusForce() == dActStts_CANCEL_e) {
                 mDoAud_seStart(JA_SE_TALK_SEL_CANCEL);
             } else {
@@ -1973,7 +1973,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             if ((bVar1 != 5) && (bVar1 != 0xe)) {
                 dMsg_arrowMove(i_Msg);
             }
-            dMeter_Info.field_0x0[0] = 1;
+            dMeter_Info.field_0x0 = 1;
         }
     } else {
         if (((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) && (!dComIfGp_checkMesgBgm())) {
@@ -1984,7 +1984,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                 dMsg_arrowInit(i_Msg);
             }
-            dMeter_Info.field_0x0[0] = 2;
+            dMeter_Info.field_0x0 = 2;
             if (dComIfGp_getDoStatusForce() == dActStts_CANCEL_e) {
                 mDoAud_seStart(JA_SE_TALK_SEL_CANCEL);
             } else {
@@ -2005,7 +2005,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                 dMsg_arrowMove(i_Msg);
             }
-            dMeter_Info.field_0x0[0] = 1;
+            dMeter_Info.field_0x0 = 1;
         }
     }
     return TRUE;
@@ -2039,7 +2039,7 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
             if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                 dMsg_arrowMove(i_Msg);
             }
-            dMeter_Info.field_0x0[0] = 1;
+            dMeter_Info.field_0x0 = 1;
         } else {
             if (i_Msg->mStatus == fopMsgStts_SELECT_YOKO_e) {
                 i_Msg->m026C[0].mUserArea = 2;
@@ -2179,9 +2179,9 @@ end:
 s32 dMsg_inputProc(sub_msg_class* i_Msg) {
     if (i_Msg->mMesgEntry.mTextboxType == 0xe) {
         if (fopMsgM_tactMsgFlagCheck()) {
-            dMsg_tactInput(i_Msg);
-        } else {
             dMsg_tactInput2(i_Msg);
+        } else {
+            dMsg_tactInput(i_Msg);
         }
     } else {
         dMsg_numberInput(i_Msg);
@@ -2394,7 +2394,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
             mDoAud_messageSePlay(i_Msg->mMesgEntry.mInitialSound, NULL, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
         }
         dMsg_setString(i_Msg);
-        dMeter_Info.field_0x0[0] = 2;
+        dMeter_Info.field_0x0 = 2;
         if (dComIfGp_getDoStatusForce() == dActStts_CANCEL_e) {
             mDoAud_seStart(JA_SE_TALK_SEL_CANCEL);
         } else {
@@ -2464,7 +2464,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
             dMsg_arrowMove(i_Msg);
         }
-        dMeter_Info.field_0x0[0] = 1;
+        dMeter_Info.field_0x0 = 1;
     }
     return TRUE;
 }
@@ -2499,7 +2499,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                         fopMsgM_setNowAlphaZero(&i_Msg->m050C);
                     }
                     i_Msg->m1100 = 0;
-                    dMeter_Info.field_0x0[0] = 0;
+                    dMeter_Info.field_0x0 = 0;
                     i_Msg->m116A++;
                     dComIfGp_setMesgSendButton(i_Msg->m116A);
                 } else {
@@ -2507,7 +2507,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                     if ((bVar1 != 5) && (bVar1 != 0xe)) {
                         dMsg_dotMove(i_Msg);
                     }
-                    dMeter_Info.field_0x0[0] = 4;
+                    dMeter_Info.field_0x0 = 4;
                 }
             } else {
                 i_Msg->mMsgDataProc.field_0x298 = 0;
@@ -2517,7 +2517,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                     fopMsgM_setNowAlphaZero(&i_Msg->m050C);
                 }
                 i_Msg->m1100 = 0;
-                dMeter_Info.field_0x0[0] = 0;
+                dMeter_Info.field_0x0 = 0;
                 i_Msg->m116A++;
                 dComIfGp_setMesgSendButton(i_Msg->m116A);
             }
@@ -2538,7 +2538,7 @@ s32 dMsg_finishProc(sub_msg_class* i_Msg) {
             fopMsgM_setNowAlphaZero(&i_Msg->m050C);
         }
         i_Msg->m1100 = 0;
-        dMeter_Info.field_0x0[0] = 0;
+        dMeter_Info.field_0x0 = 0;
         i_Msg->m116A++;
         dComIfGp_setMesgSendButton(i_Msg->m116A);
         if (i_Msg->mMsgNo == 0x1072) {
@@ -2548,7 +2548,7 @@ s32 dMsg_finishProc(sub_msg_class* i_Msg) {
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
             dMsg_dotMove(i_Msg);
         }
-        dMeter_Info.field_0x0[0] = 4;
+        dMeter_Info.field_0x0 = 4;
     }
     return TRUE;
 }
@@ -2563,7 +2563,7 @@ s32 dMsg_openTalkProc(sub_msg_class* i_Msg) {
             mDoAud_messageSePlay(i_Msg->mMesgEntry.mInitialSound, NULL, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
         }
         dMsg_setString(i_Msg);
-        dMeter_Info.field_0x0[0] = 2;
+        dMeter_Info.field_0x0 = 2;
     } else {
         dMsg_frame_openTalk(i_Msg);
     }
@@ -2599,7 +2599,7 @@ s32 dMsg_openItemProc(sub_msg_class* i_Msg) {
             local_28.set(x, y, 0.0f);
             i_Msg->m10B4[0] = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_02E1, &local_28);
         }
-        dMeter_Info.field_0x0[0] = 2;
+        dMeter_Info.field_0x0 = 2;
     } else {
         dMsg_frame_openItem(i_Msg);
     }
@@ -2688,7 +2688,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
     const char* pcVar3;
     char acStack_28[24];
 
-    if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4) != 0) || (fopMsgM_demoMsgFlagCheck())) {
+    if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) || (fopMsgM_demoMsgFlagCheck())) {
         pcVar3 = i_Msg->mpMesgStr;
         if (((u8)pcVar3[0] == 0x1A) && ((u8)pcVar3[2] == 0x02)) {
             dComIfGp_setMesgCameraTagInfo((s32)(u16)((((u8)pcVar3[3] << 8) & ~0xFFFF00FF) | (((u8)pcVar3[4]) & ~0xFF00)));
@@ -2744,7 +2744,7 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
     u32 iVar3;
 
     if (i_Msg->mMesgCameraTagInfo != dComIfGp_getMesgCameraTagInfo()) {
-        if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4) != 0) || (fopMsgM_demoMsgFlagCheck())) {
+        if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) || (fopMsgM_demoMsgFlagCheck())) {
             dMsg_mesgOutPos(i_Msg);
             i_Msg->m10D8 = (int)i_Msg->m049C.mPosCenter.x;
             i_Msg->m10DC = (int)i_Msg->m049C.mPosCenter.y;

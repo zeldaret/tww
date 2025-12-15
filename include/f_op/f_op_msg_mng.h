@@ -349,6 +349,9 @@ void fopMsgM_setInitAlpha(fopMsgM_pane_class*);
 void fopMsgM_setNowAlpha(fopMsgM_pane_class*, f32);
 void fopMsgM_setNowAlphaZero(fopMsgM_pane_class*);
 void fopMsgM_setAlpha(fopMsgM_pane_class*);
+void fopMsgM_paneScaleX(fopMsgM_pane_class* i_this, f32 s);
+void fopMsgM_paneScaleY(fopMsgM_pane_class* i_this, f32 s);
+void fopMsgM_paneScale(fopMsgM_pane_class* i_this, f32 sx, f32 sy);
 void fopMsgM_paneScaleXY(fopMsgM_pane_class*, f32);
 void fopMsgM_cposMove(fopMsgM_pane_class*);
 void fopMsgM_paneTrans(fopMsgM_pane_class*, f32, f32);
@@ -376,6 +379,8 @@ bool fopMsgM_nextMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendInit(J2DPicture* pic, const char* data);
+u8 fopMsgM_itemNumIdx(u8 i);
+u8 fopMsgM_itemNum(u8 itemNo);
 u32 fopMsgM_getColorTable(u16 param_1);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
