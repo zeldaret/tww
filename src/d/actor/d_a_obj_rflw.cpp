@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rflw.h"
+#include "d/res/res_rflw.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
@@ -47,9 +48,36 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
+static BOOL nodeCallBack(J3DNode*, int);
+
 /* 00000098-000001E0       .text CreateHeap__11daObjRflw_cFv */
-void daObjRflw_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObjRflw_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Rflw", RFLW_BDL_PHANA);
+    JUT_ASSERT(0xAA, modelData != NULL);
+
+    field_0x298 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+
+    BOOL rt;
+    if (field_0x298 != NULL) {
+        JUTNameTab* name_table = field_0x298->getModelData()->getJointName();
+        for (u16 i = 0; i < field_0x298->getModelData()->getJointNum(); i++) {
+            if (strcmp("joint2", name_table->getName(i)) == 0) {
+                field_0x298->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+                break;
+            }
+        }
+        field_0x298->setUserArea(reinterpret_cast<u32>(this));
+        goto exit_true;
+    }
+
+    // Probably a fake match
+exit_false:
+    rt = FALSE;
+    goto exit;
+exit_true:
+    rt = TRUE;
+exit:
+    return rt;
 }
 
 /* 000001E0-00000284       .text CreateInit__11daObjRflw_cFv */
