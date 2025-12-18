@@ -7,16 +7,16 @@
 #include "d/actor/d_a_obj_aygr.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_aygr.h"
 
 Mtx daObjAygr::Act_c::M_tmp_mtx;
 const char daObjAygr::Act_c::M_arcname[] = "Aygr";
 
 /* 00000078-000002A4       .text CreateHeap__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::CreateHeap() {
-    /* Nonmatching */
 
     BOOL temp;
-    J3DModelData* model_data_yagura = (J3DModelData*)dComIfG_getObjectRes(M_arcname, 0x4);
+    J3DModelData* model_data_yagura = (J3DModelData*)dComIfG_getObjectRes(M_arcname, AYGR_BDL_AYGR);
     JUT_ASSERT(0x50, model_data_yagura != NULL);
 
     mModel1 = mDoExt_J3DModel__create(model_data_yagura, 0, 0x11020203);
@@ -27,7 +27,7 @@ BOOL daObjAygr::Act_c::CreateHeap() {
 
     u8 prm = daObjAygr::Act_c::prm_get_mdl();
     if (prm != 0) {
-        J3DModelData* model_data_hashigo = (J3DModelData*) dComIfG_getObjectRes(M_arcname, 5);
+        J3DModelData* model_data_hashigo = (J3DModelData*) dComIfG_getObjectRes(M_arcname, AYGR_BDL_AYGRH);
         JUT_ASSERT(0x59, model_data_hashigo != NULL);
 
         mModel2 = mDoExt_J3DModel__create(model_data_hashigo, 0,0x11020203);
@@ -44,7 +44,7 @@ BOOL daObjAygr::Act_c::CreateHeap() {
 
         mpBgW = new dBgW();
 
-        if (mpBgW == NULL || mpBgW->Set((cBgD_t*) dComIfG_getObjectRes(M_arcname, 0x9), cBgW::MOVE_BG_e, &m2dc) != 0) {
+        if (mpBgW == NULL || mpBgW->Set((cBgD_t*) dComIfG_getObjectRes(M_arcname, AYGR_DZB_AYGRH), cBgW::MOVE_BG_e, &m2dc) != 0) {
             temp = FALSE;
         }
 
@@ -82,7 +82,7 @@ cPhs_State daObjAygr::Act_c::Mthd_Create() {
 
     if (phase_state == cPhs_COMPLEATE_e)
     {
-        phase_state = MoveBGCreate(M_arcname, 8, NULL, 0x85f0);
+        phase_state = MoveBGCreate(M_arcname, AYGR_DZB_AYGR, NULL, 0x85f0);
         if (actor->mpBgW)
         {
             if (actor->mpBgW->ChkUsed())
