@@ -65,13 +65,10 @@ BOOL daObjRflw_c::CreateHeap() {
             }
         }
         mpModel->setUserArea(reinterpret_cast<u32>(this));
-        goto exit_true;
+    } else {
+        return FALSE;
     }
 
-    // Probably a fake match, could not get it to produce the correct assembly
-    // no matter how the if-statement was written
-    return FALSE;
-exit_true:
     return TRUE;
 }
 
