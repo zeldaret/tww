@@ -27,7 +27,12 @@ static EventInitFunc event_init_tbl[] = {
 
 typedef BOOL (daWarpgn_c::*EventActionFunc)(int);
 static EventActionFunc event_action_tbl[] = {
-    &daWarpgn_c::actWait, &daWarpgn_c::actWarp, &daWarpgn_c::actWarpArrive, &daWarpgn_c::actWarpArriveEnd, &daWarpgn_c::actStartWarp, &daWarpgn_c::actAppear
+    &daWarpgn_c::actWait, 
+    &daWarpgn_c::actWarp, 
+    &daWarpgn_c::actWarpArrive, 
+    &daWarpgn_c::actWarpArriveEnd, 
+    &daWarpgn_c::actStartWarp, 
+    &daWarpgn_c::actAppear
 };
 
 /* 00000078-00000120       .text _delete__10daWarpgn_cFv */
