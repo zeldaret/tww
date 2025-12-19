@@ -42,33 +42,37 @@ public:
     static const u32 m_heapsize;
 
 public:
-    /* 0x290 */ request_of_phase_process_class field_0x290;
-    /* 0x298 */ J3DModel* field_0x298;
-    /* 0x29C */ mDoExt_btkAnm* field_0x29C;
-    /* 0x2A0 */ mDoExt_btkAnm* field_0x2A0;
-    /* 0x2A4 */ mDoExt_brkAnm* field_0x2A4;
-    /* 0x2A8 */ mDoExt_bckAnm* field_0x2A8;
-    /* 0x2AC */ JPABaseEmitter* field_0x2AC;
-    /* 0x2B0 */ JPABaseEmitter* field_0x2B0;
-    /* 0x2B4 */ JPABaseEmitter* field_0x2B4;
-    /* 0x2B8 */ u32 field_0x2B8;
-    /* 0x2BC */ u8 field_0x2BC;
-    /* 0x2BD */ u8 field_0x2BD[0x2C0 - 0x2BD];
-    /* 0x2C0 */ u32 field_0x2C0;
-    /* 0x2C4 */ s32 field_0x2C4;
-    /* 0x2C8 */ s16 field_0x2C8;
-    /* 0x2CA */ s16 field_0x2CA;
-    /* 0x2CC */ s32 field_0x2CC;
-    /* 0x2D0 */ u32 field_0x2D0;
-    /* 0x2D4 */ int field_0x2D4;
-    /* 0x2D8 */ dKy_tevstr_c field_0x2D8;
-    /* 0x388 */ bool field_0x388;
-    /* 0x389 */ u8 field_0x389[0x38C - 0x389];
-};  // Size: 0x38C
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ mDoExt_btkAnm* mpBtkAnm1;
+    /* 0x2A0 */ mDoExt_btkAnm* mpBtkAnm2;
+    /* 0x2A4 */ mDoExt_brkAnm* mpBrkAnm;
+    /* 0x2A8 */ mDoExt_bckAnm* mpBckAnm;
+    /* 0x2AC */ JPABaseEmitter* mpEmitter1;
+    /* 0x2B0 */ JPABaseEmitter* mpEmitter2;
+    /* 0x2B4 */ JPABaseEmitter* mpEmitter3;
+    /* 0x2B8 */ u32 mSwitchNo;
+    /* 0x2BC */ u8 mIsSwitch;
+    /* 0x2BD */ u8 m2BD[0x2C0 - 0x2BD];
+    /* 0x2C0 */ u32 mSceneNo;
+    /* 0x2C4 */ s32 m2C4;
+    /* 0x2C8 */ s16 mEvtToMajyuuWarpIdx;
+    /* 0x2CA */ s16 mEvtAppearWarpIdx;
+    /* 0x2CC */ s32 mStaffId;
+    /* 0x2D0 */ u32 mDemoShape;
+    /* 0x2D4 */ int mTimer;
+    /* 0x2D8 */ dKy_tevstr_c mTevStr;
+    /* 0x388 */ bool m388;
+    /* 0x389 */ u8 m389[0x38C - 0x389];
+}; // Size: 0x38C
 
 namespace daWarpgn_prm {
-    inline u32 getSwitchNo(daWarpgn_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
-    inline u32 getSceneNo(daWarpgn_c* i_this) { return fopAcM_GetParam(i_this) & 0xFF; } 
+inline u32 getSwitchNo(daWarpgn_c* i_this) {
+    return (fopAcM_GetParam(i_this) >> 8) & 0xFF;
 }
+inline u32 getSceneNo(daWarpgn_c* i_this) {
+    return fopAcM_GetParam(i_this) & 0xFF;
+}
+} // namespace daWarpgn_prm
 
 #endif /* D_A_WARPGN_H */

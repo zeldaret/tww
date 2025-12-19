@@ -16,7 +16,7 @@ const char daWarpgn_c::m_arcname[] = "Gmjwp";
 const u32 daWarpgn_c::m_heapsize = 0x3000;
 
 typedef void (daWarpgn_c::*EventInitFunc)(int);
-EventInitFunc event_init_tbl[] = {
+static EventInitFunc event_init_tbl[] = {
     &daWarpgn_c::initWait,
     &daWarpgn_c::initWarp,
     &daWarpgn_c::initWarpArrive,
@@ -26,33 +26,28 @@ EventInitFunc event_init_tbl[] = {
 };
 
 typedef BOOL (daWarpgn_c::*EventActionFunc)(int);
-EventActionFunc event_action_tbl[] = {
-    &daWarpgn_c::actWait,
-    &daWarpgn_c::actWarp,
-    &daWarpgn_c::actWarpArrive,
-    &daWarpgn_c::actWarpArriveEnd,
-    &daWarpgn_c::actStartWarp,
-    &daWarpgn_c::actAppear
+static EventActionFunc event_action_tbl[] = {
+    &daWarpgn_c::actWait, &daWarpgn_c::actWarp, &daWarpgn_c::actWarpArrive, &daWarpgn_c::actWarpArriveEnd, &daWarpgn_c::actStartWarp, &daWarpgn_c::actAppear
 };
 
 /* 00000078-00000120       .text _delete__10daWarpgn_cFv */
 bool daWarpgn_c::_delete() {
-    if (field_0x2AC != NULL) {
-        field_0x2AC->becomeInvalidEmitter();
-        field_0x2AC = NULL;
+    if (mpEmitter1 != NULL) {
+        mpEmitter1->becomeInvalidEmitter();
+        mpEmitter1 = NULL;
     }
 
-    if (field_0x2B0 != NULL) {
-        field_0x2B0->becomeInvalidEmitter();
-        field_0x2B0 = NULL;
+    if (mpEmitter2 != NULL) {
+        mpEmitter2->becomeInvalidEmitter();
+        mpEmitter2 = NULL;
     }
 
-    if (field_0x2B4 != NULL) {
-        field_0x2B4->becomeInvalidEmitter();
-        field_0x2B4 = NULL;
+    if (mpEmitter3 != NULL) {
+        mpEmitter3->becomeInvalidEmitter();
+        mpEmitter3 = NULL;
     }
 
-    dComIfG_resDelete(&field_0x290, m_arcname);
+    dComIfG_resDelete(&mPhs, m_arcname);
     return true;
 }
 
@@ -63,82 +58,82 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000140-00000570       .text CreateHeap__10daWarpgn_cFv */
 BOOL daWarpgn_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, GMJWP_BDL_GMJWP00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, GMJWP_BDL_GMJWP00);
     JUT_ASSERT(0xCF, modelData != NULL);
 
-    field_0x298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
-    if (field_0x298 == NULL) {
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
+    if (mpModel == NULL) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP00);
     JUT_ASSERT(0xDE, pbtk != NULL);
-    field_0x29C = new mDoExt_btkAnm(); 
-    if ((field_0x29C == NULL) || field_0x29C->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+    mpBtkAnm1 = new mDoExt_btkAnm();
+    if ((mpBtkAnm1 == NULL) || mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
-    field_0x29C->setPlaySpeed(1.0f);
+    mpBtkAnm1->setPlaySpeed(1.0f);
 
-    pbtk = (J3DAnmTextureSRTKey*) dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP02);
+    pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BTK_GMJWP02);
     JUT_ASSERT(0xED, pbtk != NULL);
-    field_0x2A0 = new mDoExt_btkAnm();
-    if ((field_0x2A0 == NULL) || field_0x2A0->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+    mpBtkAnm2 = new mDoExt_btkAnm();
+    if ((mpBtkAnm2 == NULL) || mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
-    field_0x2A0->setPlaySpeed(0.0f);
+    mpBtkAnm2->setPlaySpeed(0.0f);
 
-    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arcname, GMJWP_BRK_GMJWP01);
+    J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, GMJWP_BRK_GMJWP01);
     JUT_ASSERT(0xFF, pbrk != NULL);
-    field_0x2A4 = new mDoExt_brkAnm();
-    if (field_0x2A4 == NULL || field_0x2A4->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+    mpBrkAnm = new mDoExt_brkAnm();
+    if (mpBrkAnm == NULL || mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
-    field_0x2A4->setPlaySpeed(0.0f);
+    mpBrkAnm->setPlaySpeed(0.0f);
 
-    J3DAnmTransform* pbck = (J3DAnmTransform*) dComIfG_getObjectRes(m_arcname, GMJWP_BCK_GMJWP01);
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, GMJWP_BCK_GMJWP01);
     JUT_ASSERT(0x10F, pbck != NULL);
-    field_0x2A8 = new mDoExt_bckAnm();
-    if (field_0x2A8 == NULL || field_0x2A8->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
+    mpBckAnm = new mDoExt_bckAnm();
+    if (mpBckAnm == NULL || mpBckAnm->init(modelData, pbck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
         return FALSE;
     }
-    field_0x2A8->setPlaySpeed(0.0f);
+    mpBckAnm->setPlaySpeed(0.0f);
 
     return TRUE;
 }
 
 /* 000005B8-000007D0       .text CreateInit__10daWarpgn_cFv */
 void daWarpgn_c::CreateInit() {
-    cullMtx = field_0x298->getBaseTRMtx();
+    cullMtx = mpModel->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -400.0f, 0.0f, -400.0f, 400.0f, 2000.0f, 400.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
     set_mtx();
-    
-    field_0x2AC = dComIfGp_particle_set(dPa_name::ID_SCENE_83FD, &current.pos);
-    field_0x2B0 = dComIfGp_particle_set(dPa_name::ID_SCENE_83FE, &current.pos);
-    field_0x2B4 = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C3FC, &current.pos);
 
-    if (field_0x2AC != NULL) {
-        field_0x2AC->stopCreateParticle();
+    mpEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_83FD, &current.pos);
+    mpEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_83FE, &current.pos);
+    mpEmitter3 = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C3FC, &current.pos);
+
+    if (mpEmitter1 != NULL) {
+        mpEmitter1->stopCreateParticle();
     }
 
-    if (field_0x2B0 != NULL) {
-        field_0x2B0->stopCreateParticle();
+    if (mpEmitter2 != NULL) {
+        mpEmitter2->stopCreateParticle();
     }
 
-    if (field_0x2B4 != NULL) {
-        field_0x2B4->stopCreateParticle();
+    if (mpEmitter3 != NULL) {
+        mpEmitter3->stopCreateParticle();
     }
 
-    field_0x2C8 = dComIfGp_evmng_getEventIdx("TO_MAJYUU_WARP");
-    field_0x2CA = dComIfGp_evmng_getEventIdx("APPEAR_WARP");
-    field_0x2B8 = daWarpgn_prm::getSwitchNo(this);
+    mEvtToMajyuuWarpIdx = dComIfGp_evmng_getEventIdx("TO_MAJYUU_WARP");
+    mEvtAppearWarpIdx = dComIfGp_evmng_getEventIdx("APPEAR_WARP");
+    mSwitchNo = daWarpgn_prm::getSwitchNo(this);
 
     if (checkValidWarp() != FALSE) {
-        field_0x2BC = 1;
-        field_0x2CA = -1;
+        mIsSwitch = 1;
+        mEvtAppearWarpIdx = -1;
     }
-    field_0x2C0 = daWarpgn_prm::getSceneNo(this);
-    dKy_tevstr_init(&field_0x2D8, fopAcM_GetRoomNo(this), 0xFF);
+    mSceneNo = daWarpgn_prm::getSceneNo(this);
+    dKy_tevstr_init(&mTevStr, fopAcM_GetRoomNo(this), 0xFF);
 }
 
 /* 000007D0-000008F4       .text _create__10daWarpgn_cFv */
@@ -147,7 +142,7 @@ cPhs_State daWarpgn_c::_create() {
 
     fopAcM_SetupActor(this, daWarpgn_c);
 
-    rt = dComIfG_resLoad(&field_0x290, m_arcname);
+    rt = dComIfG_resLoad(&mPhs, m_arcname);
 
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize)) {
@@ -161,9 +156,9 @@ cPhs_State daWarpgn_c::_create() {
 
 /* 000008F4-00000964       .text set_mtx__10daWarpgn_cFv */
 void daWarpgn_c::set_mtx() {
-    field_0x298->setBaseScale(scale);
-    PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    field_0x298->setBaseTRMtx(mDoMtx_stack_c::now);
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000964-00000A78       .text _execute__10daWarpgn_cFv */
@@ -173,63 +168,63 @@ bool daWarpgn_c::_execute() {
         demo_proc();
         eventOrder();
     } else {
-        field_0x2C4 = 0;
+        m2C4 = 0;
         demo_execute();
     }
 
-    if (field_0x388 != false || dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02) != 0) {
+    if (m388 != false || dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02) != 0) {
         fopAcM_seStart(this, JA_SE_OBJ_GN_WAPR_EFF, 0);
     }
-    field_0x298->setBaseScale(scale);
+    mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
-    field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     return true;
 }
 
 /* 00000A78-00000B88       .text normal_execute__10daWarpgn_cFv */
 BOOL daWarpgn_c::normal_execute() {
-    BOOL is_switch = fopAcM_isSwitch(this, field_0x2B8);
+    BOOL new_is_switch = fopAcM_isSwitch(this, mSwitchNo);
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
-        if (is_switch && field_0x2BC == 0) {
-            field_0x2C4 = 1;
+        if (new_is_switch && mIsSwitch == 0) {
+            m2C4 = 1;
         }
     } else {
         anim_play(2);
-        if (field_0x2AC != NULL) {
-            field_0x2AC->playCreateParticle();
+        if (mpEmitter1 != NULL) {
+            mpEmitter1->playCreateParticle();
         }
 
-        if (field_0x2B0 != NULL) {
-            field_0x2B0->playCreateParticle();
+        if (mpEmitter2 != NULL) {
+            mpEmitter2->playCreateParticle();
         }
 
-        if (field_0x2B4 != NULL) {
-            field_0x2B4->playCreateParticle();
+        if (mpEmitter3 != NULL) {
+            mpEmitter3->playCreateParticle();
         }
     }
 
-    if (!check_warp() || dComIfGp_event_runCheck() != FALSE) {
-        // ?????
-    } else {
-        field_0x2C4 = 2;
+    if (check_warp()) {
+        if (DEMO_SELECT(true, !dComIfGp_event_runCheck())) {
+            m2C4 = 2;
+        }
     }
 
-    field_0x2BC = is_switch;
+    mIsSwitch = new_is_switch;
 
     return TRUE;
 }
 
 /* 00000B88-00000C10       .text demo_execute__10daWarpgn_cFv */
 BOOL daWarpgn_c::demo_execute() {
-    dDemo_actor_c* actor = dComIfGp_demo_getActor(demoActorID);
-    if (actor != NULL) {
-        field_0x2D0 = actor->getShapeId();
-        if (field_0x2D0 == 0) {
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    if (demo_actor != NULL) {
+        mDemoShape = demo_actor->getShapeId();
+        if (mDemoShape == 0) {
             anim_play(0);
             return TRUE;
-        } 
-        
-        if (field_0x2D0 == 1) {
+        }
+
+        if (mDemoShape == 1) {
             anim_play(1);
         }
     }
@@ -238,29 +233,22 @@ BOOL daWarpgn_c::demo_execute() {
 
 /* 00000C10-00000D2C       .text demo_proc__10daWarpgn_cFv */
 void daWarpgn_c::demo_proc() {
-    static char* action_table[] = {
-        "WAIT",
-        "WARP",
-        "WARP_ARRIVE",
-        "WARP_ARRIVE_END",
-        "START_WARP",
-        "APPEAR"
-    };
+    static char* action_table[] = {"WAIT", "WARP", "WARP_ARRIVE", "WARP_ARRIVE_END", "START_WARP", "APPEAR"};
 
-    field_0x2CC = dComIfGp_evmng_getMyStaffId("Warpgn");
-    
-    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && field_0x2CC != -1) {
-        s32 action_index = dComIfGp_evmng_getMyActIdx(field_0x2CC, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+    mStaffId = dComIfGp_evmng_getMyStaffId("Warpgn");
+
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && mStaffId != -1) {
+        s32 action_index = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
         if (action_index == -1) {
-            dComIfGp_evmng_cutEnd(field_0x2CC);
+            dComIfGp_evmng_cutEnd(mStaffId);
         } else {
-            if (dComIfGp_evmng_getIsAddvance(field_0x2CC)) {
-                (this->*event_init_tbl[action_index])(field_0x2CC);
+            if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
+                (this->*event_init_tbl[action_index])(mStaffId);
             }
 
-            if ((this->*event_action_tbl[action_index])(field_0x2CC) != FALSE) {
-                dComIfGp_evmng_cutEnd(field_0x2CC);
+            if ((this->*event_action_tbl[action_index])(mStaffId) != FALSE) {
+                dComIfGp_evmng_cutEnd(mStaffId);
             }
         }
     }
@@ -281,24 +269,24 @@ BOOL daWarpgn_c::actWait(int) {
 void daWarpgn_c::initStartWarp(int) {
     dComIfGp_evmng_setGoal(&current.pos);
 
-    if (field_0x29C != NULL) {
-        field_0x29C->setFrame(0.0f);
+    if (mpBtkAnm1 != NULL) {
+        mpBtkAnm1->setFrame(0.0f);
     }
 
-    if (field_0x2A0 != NULL) {
-        field_0x2A0->setFrame(0.0f);
+    if (mpBtkAnm2 != NULL) {
+        mpBtkAnm2->setFrame(0.0f);
     }
 
-    if (field_0x2AC != NULL) {
-        field_0x2AC->playCreateParticle();
+    if (mpEmitter1 != NULL) {
+        mpEmitter1->playCreateParticle();
     }
 
-    if (field_0x2B0 != NULL) {
-        field_0x2B0->playCreateParticle();
+    if (mpEmitter2 != NULL) {
+        mpEmitter2->playCreateParticle();
     }
 
-    if (field_0x2B4 != NULL) {
-        field_0x2B4->playCreateParticle();
+    if (mpEmitter3 != NULL) {
+        mpEmitter3->playCreateParticle();
     }
 }
 
@@ -322,19 +310,19 @@ BOOL daWarpgn_c::actWarp(int) {
 /* 00000EBC-00000F6C       .text initWarpArrive__10daWarpgn_cFi */
 void daWarpgn_c::initWarpArrive(int) {
     set_end_anim();
-    if (field_0x2AC != NULL) {
-        field_0x2AC->playCreateParticle();
+    if (mpEmitter1 != NULL) {
+        mpEmitter1->playCreateParticle();
     }
 
-    if (field_0x2B0 != NULL) {
-        field_0x2B0->playCreateParticle();
+    if (mpEmitter2 != NULL) {
+        mpEmitter2->playCreateParticle();
     }
 
-    if (field_0x2B4 != NULL) {
-        field_0x2B4->playCreateParticle();
+    if (mpEmitter3 != NULL) {
+        mpEmitter3->playCreateParticle();
     }
 
-    mDoAud_seStart(VERSION_SELECT(JA_SE_LK_GN_WAPR_D_OUT, JA_SE_LK_GN_WAPR_U_OUT, JA_SE_LK_GN_WAPR_D_OUT, JA_SE_LK_GN_WAPR_D_OUT));
+    mDoAud_seStart(VERSION_SELECT(JA_SE_LK_GN_WAPR_U_OUT, JA_SE_LK_GN_WAPR_U_OUT, JA_SE_LK_GN_WAPR_D_OUT, JA_SE_LK_GN_WAPR_D_OUT));
 }
 
 /* 00000F6C-00000F94       .text actWarpArrive__10daWarpgn_cFi */
@@ -352,7 +340,7 @@ void daWarpgn_c::initWarpArriveEnd(int) {
 BOOL daWarpgn_c::actWarpArriveEnd(int) {
     BOOL rt = FALSE;
     anim_play(4);
-    if ((field_0x2A0 != NULL) && (field_0x2A0->getFrame() < 0.5f)) {
+    if ((mpBtkAnm2 != NULL) && (mpBtkAnm2->getFrame() < 0.5f)) {
         rt = TRUE;
     }
     return rt;
@@ -360,136 +348,162 @@ BOOL daWarpgn_c::actWarpArriveEnd(int) {
 
 /* 00001000-0000100C       .text initAppear__10daWarpgn_cFi */
 void daWarpgn_c::initAppear(int) {
-    field_0x2D4 = 100;
+    mTimer = 100;
 }
 
 /* 0000100C-000010BC       .text actAppear__10daWarpgn_cFi */
 BOOL daWarpgn_c::actAppear(int) {
     BOOL rt = FALSE;
-    if (cLib_calcTimer(&field_0x2D4) == 0) {
-        if (field_0x2AC != NULL) {
-            field_0x2AC->playCreateParticle();
+    if (cLib_calcTimer(&mTimer) == 0) {
+        if (mpEmitter1 != NULL) {
+            mpEmitter1->playCreateParticle();
         }
 
-        if (field_0x2B0 != NULL) {
-            field_0x2B0->playCreateParticle();
+        if (mpEmitter2 != NULL) {
+            mpEmitter2->playCreateParticle();
         }
 
-        if (field_0x2B4 != NULL) {
-            field_0x2B4->playCreateParticle();
+        if (mpEmitter3 != NULL) {
+            mpEmitter3->playCreateParticle();
         }
-        field_0x2D4 = 100;
+        mTimer = 100;
         rt = TRUE;
     }
     anim_play(1);
-    field_0x388 = true;
+    m388 = true;
     return rt;
 }
 
 /* 000010BC-0000114C       .text eventOrder__10daWarpgn_cFv */
 void daWarpgn_c::eventOrder() {
-    if (field_0x2C4 == 2) {
-        fopAcM_orderOtherEventId(this, field_0x2C8);
+    if (m2C4 == 2) {
+        fopAcM_orderOtherEventId(this, mEvtToMajyuuWarpIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
-    } else if (field_0x2C4 == 1) {
-        fopAcM_orderOtherEventId(this, field_0x2CA);
+    } else if (m2C4 == 1) {
+        fopAcM_orderOtherEventId(this, mEvtAppearWarpIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
     }
 }
 
 /* 0000114C-00001258       .text checkOrder__10daWarpgn_cFv */
 void daWarpgn_c::checkOrder() {
+#if VERSION != VERSION_DEMO
     if (eventInfo.checkCommandDemoAccrpt()) {
-        BOOL res = dComIfGp_evmng_startCheck(field_0x2C8);
-        if ((res != FALSE) && (field_0x2C4 != 0)) {
-            field_0x2C4 = 0;
+        if ((dComIfGp_evmng_startCheck(mEvtToMajyuuWarpIdx) != FALSE) && (m2C4 != 0)) {
+            m2C4 = 0;
         }
 
-        res = dComIfGp_evmng_startCheck(field_0x2CA);
-        if ((res != FALSE) && (field_0x2C4 != 0)) {
-            field_0x2C4 = 0;
+        if ((dComIfGp_evmng_startCheck(mEvtAppearWarpIdx) != FALSE) && (m2C4 != 0)) {
+            m2C4 = 0;
         }
 
-        res = dComIfGp_evmng_endCheck(field_0x2C8);
-        if (res) {
-            dLib_setNextStageBySclsNum(field_0x2C0 & 0xFF, fopAcM_GetRoomNo(this));
+        if (dComIfGp_evmng_endCheck(mEvtToMajyuuWarpIdx) != FALSE) {
+            dLib_setNextStageBySclsNum(mSceneNo, fopAcM_GetRoomNo(this));
         }
 
-        res = dComIfGp_evmng_endCheck(field_0x2CA);
-        if (res) {
+        if (dComIfGp_evmng_endCheck(mEvtAppearWarpIdx) != FALSE) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D02);
-            field_0x2CA = -1;
+            mEvtAppearWarpIdx = -1;
             dComIfGp_event_reset();
         }
-    } else if (field_0x2C4 == 0) {
+    } else if (m2C4 == 0) {
         normal_execute();
-    } 
+    }
+#else
+    // very fakematch
+    daWarpgn_c* i_this = this;
+    if (i_this->eventInfo.checkCommandDemoAccrpt()) {
+        s16 evt_id = i_this->mEvtToMajyuuWarpIdx;
+        if ((dComIfGp_evmng_startCheck(evt_id) != FALSE) && (i_this->m2C4 != 0)) {
+            i_this->m2C4 = 0;
+        }
+
+        evt_id = i_this->mEvtAppearWarpIdx;
+        if ((dComIfGp_evmng_startCheck(evt_id) != FALSE) && (i_this->m2C4 != 0)) {
+            i_this->m2C4 = 0;
+        }
+
+        evt_id = i_this->mEvtToMajyuuWarpIdx;
+        if (dComIfGp_evmng_endCheck(evt_id) != FALSE) {
+            dLib_setNextStageBySclsNum(i_this->mSceneNo, fopAcM_GetRoomNo(i_this));
+        }
+
+        evt_id = i_this->mEvtAppearWarpIdx;
+        if (dComIfGp_evmng_endCheck(evt_id) != FALSE) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D02);
+            i_this->mEvtAppearWarpIdx = -1;
+            dComIfGp_event_reset();
+        }
+    } else if (i_this->m2C4 == 0 && !dComIfGp_event_runCheck()) {
+        normal_execute();
+    }
+#endif
 }
 
 /* 00001258-0000146C       .text anim_play__10daWarpgn_cFi */
-void daWarpgn_c::anim_play(int param_1) {
-    if (param_1 == 0) {
-        if (field_0x29C != NULL) {
-            field_0x29C->setPlaySpeed(1.0f);
-            field_0x29C->play();
+void daWarpgn_c::anim_play(int anim_no) {
+    if (anim_no == 0) {
+        if (mpBtkAnm1 != NULL) {
+            mpBtkAnm1->setPlaySpeed(1.0f);
+            mpBtkAnm1->play();
         }
-        if (field_0x2A0 != NULL) {
-            field_0x2A0->setPlaySpeed(1.0f);
-            field_0x2A0->play();
+        if (mpBtkAnm2 != NULL) {
+            mpBtkAnm2->setPlaySpeed(1.0f);
+            mpBtkAnm2->play();
         }
-    } else if (param_1 == 1) {
-        if (field_0x29C != NULL) {
-            field_0x29C->setPlaySpeed(1.0f);
-            field_0x29C->play();
+    } else if (anim_no == 1) {
+        if (mpBtkAnm1 != NULL) {
+            mpBtkAnm1->setPlaySpeed(1.0f);
+            mpBtkAnm1->play();
         }
-        if (field_0x2A8 != NULL) {
-            field_0x2A8->setPlaySpeed(1.0f);
-            field_0x2A8->play();
+        if (mpBckAnm != NULL) {
+            mpBckAnm->setPlaySpeed(1.0f);
+            mpBckAnm->play();
         }
-        if (field_0x2A4 != NULL) {
-            field_0x2A4->setPlaySpeed(1.0f);
-            field_0x2A4->play();
+        if (mpBrkAnm != NULL) {
+            mpBrkAnm->setPlaySpeed(1.0f);
+            mpBrkAnm->play();
         }
-    } else if (param_1 == 2) {
-        if (field_0x29C != NULL) {
-            field_0x29C->setPlaySpeed(1.0f);
-            field_0x29C->play();
+    } else if (anim_no == 2) {
+        if (mpBtkAnm1 != NULL) {
+            mpBtkAnm1->setPlaySpeed(1.0f);
+            mpBtkAnm1->play();
         }
-        if (field_0x2A4 != NULL) {
-            field_0x2A4->setFrame(field_0x2A4->getEndFrame());
+        if (mpBrkAnm != NULL) {
+            mpBrkAnm->setFrame(mpBrkAnm->getEndFrame());
         }
-        if (field_0x2A8 != NULL) {
-            field_0x2A8->setFrame(field_0x2A8->getEndFrame());
+        if (mpBckAnm != NULL) {
+            mpBckAnm->setFrame(mpBckAnm->getEndFrame());
         }
-    } else if (param_1 == 3) {
-        if (field_0x29C != NULL) {
-            field_0x29C->setPlaySpeed(1.0f);
-            field_0x29C->play();
+    } else if (anim_no == 3) {
+        if (mpBtkAnm1 != NULL) {
+            mpBtkAnm1->setPlaySpeed(1.0f);
+            mpBtkAnm1->play();
         }
-    } else if (param_1 == 4) {
-        if (field_0x29C != NULL) {
-            field_0x29C->setPlaySpeed(1.0f);
-            field_0x29C->play();
+    } else if (anim_no == 4) {
+        if (mpBtkAnm1 != NULL) {
+            mpBtkAnm1->setPlaySpeed(1.0f);
+            mpBtkAnm1->play();
         }
-        if (field_0x2A0 != NULL) {
-            field_0x2A0->setPlaySpeed(-1.0f);
-            field_0x2A0->play();
+        if (mpBtkAnm2 != NULL) {
+            mpBtkAnm2->setPlaySpeed(-1.0f);
+            mpBtkAnm2->play();
         }
     }
 }
 
 /* 0000146C-00001520       .text set_end_anim__10daWarpgn_cFv */
 void daWarpgn_c::set_end_anim() {
-    if (field_0x2A0 != NULL) {
-        field_0x2A0->setFrame(field_0x2A0->getEndFrame());
+    if (mpBtkAnm2 != NULL) {
+        mpBtkAnm2->setFrame(mpBtkAnm2->getEndFrame());
     }
 
-    if (field_0x2A4 != NULL) {
-        field_0x2A4->setFrame(field_0x2A4->getEndFrame());
+    if (mpBrkAnm != NULL) {
+        mpBrkAnm->setFrame(mpBrkAnm->getEndFrame());
     }
 
-    if (field_0x2A8 != NULL) {
-        field_0x2A8->setFrame(field_0x2A8->getEndFrame());
+    if (mpBckAnm != NULL) {
+        mpBckAnm->setFrame(mpBckAnm->getEndFrame());
     }
 }
 
@@ -498,7 +512,7 @@ BOOL daWarpgn_c::check_warp() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     float dist_to_player = (player->current.pos - current.pos).absXZ();
 
-    if (checkValidWarp() == FALSE) {   
+    if (checkValidWarp() == FALSE) {
         return FALSE;
     }
 
@@ -517,8 +531,7 @@ BOOL daWarpgn_c::check_warp() {
 
 /* 000016DC-00001744       .text checkValidWarp__10daWarpgn_cFv */
 BOOL daWarpgn_c::checkValidWarp() {
-    if (!fopAcM_isSwitch(this, field_0x2B8) && 
-        !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
+    if (!fopAcM_isSwitch(this, mSwitchNo) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
         return FALSE;
     }
     return TRUE;
@@ -527,31 +540,31 @@ BOOL daWarpgn_c::checkValidWarp() {
 /* 00001744-000018D4       .text _draw__10daWarpgn_cFv */
 bool daWarpgn_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(field_0x298, &tevStr);
-    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &field_0x2D8);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
 
-    J3DModelData* model_data = field_0x298->getModelData();
+    J3DModelData* model_data = mpModel->getModelData();
     for (u16 i = 0; i < model_data->getMaterialNum(); i++) {
         J3DMaterial* material = model_data->getMaterialNodePointer(i);
-        material->getTevKColor(1)->mColor.r = field_0x2D8.mColorK0.r;
-        material->getTevKColor(1)->mColor.g = field_0x2D8.mColorK0.g;
-        material->getTevKColor(1)->mColor.b = field_0x2D8.mColorK0.b;
+        material->getTevKColor(1)->mColor.r = mTevStr.mColorK0.r;
+        material->getTevKColor(1)->mColor.g = mTevStr.mColorK0.g;
+        material->getTevKColor(1)->mColor.b = mTevStr.mColorK0.b;
     }
 
-    if (field_0x29C != NULL) {
-        field_0x29C->entry(field_0x298->getModelData());
+    if (mpBtkAnm1 != NULL) {
+        mpBtkAnm1->entry(mpModel->getModelData());
     }
-    if (field_0x2A0 != NULL) {
-        field_0x2A0->entry(field_0x298->getModelData());
+    if (mpBtkAnm2 != NULL) {
+        mpBtkAnm2->entry(mpModel->getModelData());
     }
-    if (field_0x2A4 != NULL) {
-        field_0x2A4->entry(field_0x298->getModelData());
+    if (mpBrkAnm != NULL) {
+        mpBrkAnm->entry(mpModel->getModelData());
     }
-    if (field_0x2A8 != NULL) {
-        field_0x2A8->entry(field_0x298->getModelData());
+    if (mpBckAnm != NULL) {
+        mpBckAnm->entry(mpModel->getModelData());
     }
 
-    mDoExt_modelUpdateDL(field_0x298);
+    mDoExt_modelUpdateDL(mpModel);
     return true;
 }
 
