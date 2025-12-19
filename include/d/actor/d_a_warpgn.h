@@ -15,7 +15,7 @@ public:
     void CreateInit();
     cPhs_State _create();
     bool _execute();
-    void normal_execute();
+    BOOL normal_execute();
     BOOL demo_execute();
     void demo_proc();
     void initWait(int);
@@ -34,7 +34,7 @@ public:
     void checkOrder();
     void anim_play(int);
     void set_end_anim();
-    void check_warp();
+    BOOL check_warp();
     BOOL checkValidWarp();
     bool _draw();
 
@@ -52,13 +52,13 @@ public:
     /* 0x2B0 */ JPABaseEmitter* field_0x2B0;
     /* 0x2B4 */ JPABaseEmitter* field_0x2B4;
     /* 0x2B8 */ u32 field_0x2B8;
-    /* 0x2BC */ bool field_0x2BC;
+    /* 0x2BC */ u8 field_0x2BC;
     /* 0x2BD */ u8 field_0x2BD[0x2C0 - 0x2BD];
     /* 0x2C0 */ u32 field_0x2C0;
     /* 0x2C4 */ s32 field_0x2C4;
     /* 0x2C8 */ s16 field_0x2C8;
     /* 0x2CA */ s16 field_0x2CA;
-    /* 0x2CC */ u8 field_0x2CC[0x2D0 - 0x2CC];
+    /* 0x2CC */ s32 field_0x2CC;
     /* 0x2D0 */ u32 field_0x2D0;
     /* 0x2D4 */ int field_0x2D4;
     /* 0x2D8 */ dKy_tevstr_c field_0x2D8;

@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpgn.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_ship.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -16,20 +18,20 @@ const u32 daWarpgn_c::m_heapsize = 0x3000;
 typedef void (daWarpgn_c::*EventInitFunc)(int);
 EventInitFunc event_init_tbl[] = {
     &daWarpgn_c::initWait,
-    &daWarpgn_c::initStartWarp,
     &daWarpgn_c::initWarp,
     &daWarpgn_c::initWarpArrive,
     &daWarpgn_c::initWarpArriveEnd,
+    &daWarpgn_c::initStartWarp,
     &daWarpgn_c::initAppear
 };
 
 typedef BOOL (daWarpgn_c::*EventActionFunc)(int);
 EventActionFunc event_action_tbl[] = {
     &daWarpgn_c::actWait,
-    &daWarpgn_c::actStartWarp,
     &daWarpgn_c::actWarp,
     &daWarpgn_c::actWarpArrive,
     &daWarpgn_c::actWarpArriveEnd,
+    &daWarpgn_c::actStartWarp,
     &daWarpgn_c::actAppear
 };
 
@@ -132,7 +134,7 @@ void daWarpgn_c::CreateInit() {
     field_0x2B8 = daWarpgn_prm::getSwitchNo(this);
 
     if (checkValidWarp() != FALSE) {
-        field_0x2BC = true;
+        field_0x2BC = 1;
         field_0x2CA = -1;
     }
     field_0x2C0 = daWarpgn_prm::getSceneNo(this);
@@ -166,12 +168,55 @@ void daWarpgn_c::set_mtx() {
 
 /* 00000964-00000A78       .text _execute__10daWarpgn_cFv */
 bool daWarpgn_c::_execute() {
-    /* Nonmatching */
+    if (demoActorID == 0) {
+        checkOrder();
+        demo_proc();
+        eventOrder();
+    } else {
+        field_0x2C4 = 0;
+        demo_execute();
+    }
+
+    if (field_0x388 != false || dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02) != 0) {
+        fopAcM_seStart(this, JA_SE_OBJ_GN_WAPR_EFF, 0);
+    }
+    field_0x298->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
+    return true;
 }
 
 /* 00000A78-00000B88       .text normal_execute__10daWarpgn_cFv */
-void daWarpgn_c::normal_execute() {
-    /* Nonmatching */
+BOOL daWarpgn_c::normal_execute() {
+    BOOL is_switch = fopAcM_isSwitch(this, field_0x2B8);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02)) {
+        if (is_switch && field_0x2BC == 0) {
+            field_0x2C4 = 1;
+        }
+    } else {
+        anim_play(2);
+        if (field_0x2AC != NULL) {
+            field_0x2AC->playCreateParticle();
+        }
+
+        if (field_0x2B0 != NULL) {
+            field_0x2B0->playCreateParticle();
+        }
+
+        if (field_0x2B4 != NULL) {
+            field_0x2B4->playCreateParticle();
+        }
+    }
+
+    if (!check_warp() || dComIfGp_event_runCheck() != FALSE) {
+        // ?????
+    } else {
+        field_0x2C4 = 2;
+    }
+
+    field_0x2BC = is_switch;
+
+    return TRUE;
 }
 
 /* 00000B88-00000C10       .text demo_execute__10daWarpgn_cFv */
@@ -193,7 +238,6 @@ BOOL daWarpgn_c::demo_execute() {
 
 /* 00000C10-00000D2C       .text demo_proc__10daWarpgn_cFv */
 void daWarpgn_c::demo_proc() {
-    /* Nonmatching */
     static char* action_table[] = {
         "WAIT",
         "WARP",
@@ -202,11 +246,29 @@ void daWarpgn_c::demo_proc() {
         "START_WARP",
         "APPEAR"
     };
+
+    field_0x2CC = dComIfGp_evmng_getMyStaffId("Warpgn");
+    
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && field_0x2CC != -1) {
+        s32 action_index = dComIfGp_evmng_getMyActIdx(field_0x2CC, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+
+        if (action_index == -1) {
+            dComIfGp_evmng_cutEnd(field_0x2CC);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(field_0x2CC)) {
+                (this->*event_init_tbl[action_index])(field_0x2CC);
+            }
+
+            if ((this->*event_action_tbl[action_index])(field_0x2CC) != FALSE) {
+                dComIfGp_evmng_cutEnd(field_0x2CC);
+            }
+        }
+    }
 }
 
 /* 00000D2C-00000D30       .text initWait__10daWarpgn_cFi */
 void daWarpgn_c::initWait(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000D30-00000D58       .text actWait__10daWarpgn_cFi */
@@ -283,7 +345,7 @@ BOOL daWarpgn_c::actWarpArrive(int) {
 
 /* 00000F94-00000F98       .text initWarpArriveEnd__10daWarpgn_cFi */
 void daWarpgn_c::initWarpArriveEnd(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000F98-00001000       .text actWarpArriveEnd__10daWarpgn_cFi */
@@ -326,7 +388,6 @@ BOOL daWarpgn_c::actAppear(int) {
 
 /* 000010BC-0000114C       .text eventOrder__10daWarpgn_cFv */
 void daWarpgn_c::eventOrder() {
-    /* Nonmatching */
     if (field_0x2C4 == 2) {
         fopAcM_orderOtherEventId(this, field_0x2C8);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -433,8 +494,25 @@ void daWarpgn_c::set_end_anim() {
 }
 
 /* 00001520-000016DC       .text check_warp__10daWarpgn_cFv */
-void daWarpgn_c::check_warp() {
-    /* Nonmatching */
+BOOL daWarpgn_c::check_warp() {
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    float dist_to_player = (player->current.pos - current.pos).absXZ();
+
+    if (checkValidWarp() == FALSE) {   
+        return FALSE;
+    }
+
+    if (dComIfGp_checkPlayerStatus0(0, 0x10000) != 0) {
+        daShip_c* ship = dComIfGp_getShipActor();
+        if (ship != NULL) {
+            f32 dist_to_ship = (dComIfGp_getShipActor()->current.pos - current.pos).absXZ();
+            if (dist_to_ship < 200.0f) {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
 }
 
 /* 000016DC-00001744       .text checkValidWarp__10daWarpgn_cFv */
@@ -448,7 +526,33 @@ BOOL daWarpgn_c::checkValidWarp() {
 
 /* 00001744-000018D4       .text _draw__10daWarpgn_cFv */
 bool daWarpgn_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x298, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &field_0x2D8);
+
+    J3DModelData* model_data = field_0x298->getModelData();
+    for (u16 i = 0; i < model_data->getMaterialNum(); i++) {
+        J3DMaterial* material = model_data->getMaterialNodePointer(i);
+        material->getTevKColor(1)->mColor.r = field_0x2D8.mColorK0.r;
+        material->getTevKColor(1)->mColor.g = field_0x2D8.mColorK0.g;
+        material->getTevKColor(1)->mColor.b = field_0x2D8.mColorK0.b;
+    }
+
+    if (field_0x29C != NULL) {
+        field_0x29C->entry(field_0x298->getModelData());
+    }
+    if (field_0x2A0 != NULL) {
+        field_0x2A0->entry(field_0x298->getModelData());
+    }
+    if (field_0x2A4 != NULL) {
+        field_0x2A4->entry(field_0x298->getModelData());
+    }
+    if (field_0x2A8 != NULL) {
+        field_0x2A8->entry(field_0x298->getModelData());
+    }
+
+    mDoExt_modelUpdateDL(field_0x298);
+    return true;
 }
 
 /* 000018D4-000018F4       .text daWarpgn_Create__FPv */
