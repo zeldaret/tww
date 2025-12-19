@@ -334,7 +334,7 @@ void daWarpgn_c::initWarpArrive(int) {
         field_0x2B4->playCreateParticle();
     }
 
-    mDoAud_seStart(JA_SE_LK_GN_WAPR_D_OUT);
+    mDoAud_seStart(VERSION_SELECT(JA_SE_LK_GN_WAPR_D_OUT, JA_SE_LK_GN_WAPR_U_OUT, JA_SE_LK_GN_WAPR_D_OUT, JA_SE_LK_GN_WAPR_D_OUT));
 }
 
 /* 00000F6C-00000F94       .text actWarpArrive__10daWarpgn_cFi */
