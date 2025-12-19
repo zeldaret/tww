@@ -87,20 +87,17 @@ void daObjRflw_c::CreateInit() {
 /* 00000284-00000368       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
-        J3DJoint* joint = (J3DJoint*) node;
+        J3DJoint* joint = (J3DJoint*)node;
         s32 jointNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         daObjRflw_c* i_this = (daObjRflw_c*)model->getUserArea();
         if (i_this != NULL) {
-            PSMTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
             cMtx_XrotM(*calc_mtx, i_this->m40E);
             cMtx_YrotM(*calc_mtx, i_this->m408);
             cMtx_XrotM(*calc_mtx, -i_this->m40E);
-#if VERSION == VERSION_DEMO
-            Mtx* temp = calc_mtx;
-#endif
-            PSMTXCopy(DEMO_SELECT(*temp, *calc_mtx), model->getAnmMtx(jointNo));
-            PSMTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+            model->setAnmMtx(jointNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
     return TRUE;
@@ -109,22 +106,9 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000368-000003E8       .text set_mtx__11daObjRflw_cFv */
 void daObjRflw_c::set_mtx() {
     mpModel->setBaseScale(scale);
-#if VERSION == VERSION_DEMO
-    f32 z = current.pos.z;
-    f32 y = current.pos.y;
-    f32 x = current.pos.x;
-    PSMTXTrans(mDoMtx_stack_c::now, x, y, z);
-
-    s16 angle_y = current.angle.y;
-    mDoMtx_YrotM(mDoMtx_stack_c::now, angle_y);
-
-    MtxP now_mtx = mDoMtx_stack_c::now;
-    PSMTXCopy(now_mtx, mpModel->getBaseTRMtx());
-#else 
-    PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
-#endif
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 inline cPhs_State daObjRflw_c::_create() {
@@ -132,7 +116,7 @@ inline cPhs_State daObjRflw_c::_create() {
     fopAcM_SetupActor(this, daObjRflw_c);
 
     rt = dComIfG_resLoad(&mPhs, "Rflw");
-    
+
     if (rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xC60)) {
             return cPhs_ERROR_e;
@@ -192,7 +176,7 @@ inline BOOL daObjRflw_c::_execute() {
             m40C = 0;
             m408 = 0;
         }
-    } 
+    }
     set_mtx();
     return TRUE;
 }

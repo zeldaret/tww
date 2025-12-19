@@ -26,6 +26,6 @@ public:
     /* 0x40E */ s16 m40E;
     /* 0x410 */ bool m410;
     /* 0x411 */ u8 m411[0x414 - 0x411];
-};  // Size: 0x414
+}; // Size: 0x414
 
 #endif /* D_A_OBJ_RFLW_H */
