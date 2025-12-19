@@ -128,17 +128,13 @@ inline cPhs_State daObjRflw_c::_create() {
 }
 
 inline BOOL daObjRflw_c::_delete() {
-#if VERSION == VERSION_DEMO
-    dComIfG_deleteObjectRes("Rflw");
-#else
-    dComIfG_resDelete(&mPhs, "Rflw");
-#endif
+    dComIfG_resDeleteDemo(&mPhs, "Rflw");
     return TRUE;
 }
 
 inline BOOL daObjRflw_c::_draw() {
     dKy_tevstr_c* p_tev_str;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, p_tev_str = &tevStr); // needed to do this to match
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, p_tev_str = &tevStr); // fakematch
     g_env_light.setLightTevColorType(mpModel, p_tev_str);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
