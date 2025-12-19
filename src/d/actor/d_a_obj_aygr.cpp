@@ -27,10 +27,10 @@ BOOL daObjAygr::Act_c::CreateHeap() {
 
     u8 prm = daObjAygr::Act_c::prm_get_mdl();
     if (prm != 0) {
-        J3DModelData* model_data_hashigo = (J3DModelData*) dComIfG_getObjectRes(M_arcname, AYGR_BDL_AYGRH);
+        J3DModelData* model_data_hashigo = (J3DModelData*)dComIfG_getObjectRes(M_arcname, AYGR_BDL_AYGRH);
         JUT_ASSERT(0x59, model_data_hashigo != NULL);
 
-        mModel2 = mDoExt_J3DModel__create(model_data_hashigo, 0,0x11020203);
+        mModel2 = mDoExt_J3DModel__create(model_data_hashigo, 0, 0x11020203);
 
         if (!mModel2) {
             return FALSE;
@@ -44,7 +44,7 @@ BOOL daObjAygr::Act_c::CreateHeap() {
 
         mpBgW = new dBgW();
 
-        if (mpBgW == NULL || mpBgW->Set((cBgD_t*) dComIfG_getObjectRes(M_arcname, AYGR_DZB_AYGRH), cBgW::MOVE_BG_e, &m2dc) != 0) {
+        if (mpBgW == NULL || mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(M_arcname, AYGR_DZB_AYGRH), cBgW::MOVE_BG_e, &m2dc) != 0) {
             temp = FALSE;
         }
 
@@ -59,7 +59,6 @@ BOOL daObjAygr::Act_c::CreateHeap() {
     }
 
     return TRUE;
-
 }
 
 /* 000002A4-00000310       .text Create__Q29daObjAygr5Act_cFv */
@@ -73,31 +72,25 @@ BOOL daObjAygr::Act_c::Create() {
 
 /* 00000310-000004D4       .text Mthd_Create__Q29daObjAygr5Act_cFv */
 cPhs_State daObjAygr::Act_c::Mthd_Create() {
-    
+
     dBgS_MoveBgActor* actor = static_cast<dBgS_MoveBgActor*>(this);
     fopAcM_SetupActor(this, Act_c);
     m30C = 0;
-    
-    cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);   
 
-    if (phase_state == cPhs_COMPLEATE_e)
-    {
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, AYGR_DZB_AYGR, NULL, 0x85f0);
-        if (actor->mpBgW)
-        {
-            if (actor->mpBgW->ChkUsed())
-            {
+        if (actor->mpBgW) {
+            if (actor->mpBgW->ChkUsed()) {
                 actor->mpBgW->Move();
                 actor->mpBgW->SetLock();
             }
         }
-        if (prm_get_mdl())
-        {
+        if (prm_get_mdl()) {
             dComIfG_Bgsp()->Regist(mpBgW, this);
-            if (mpBgW)
-            {
-                if (mpBgW->ChkUsed())
-                {
+            if (mpBgW) {
+                if (mpBgW->ChkUsed()) {
                     mpBgW->Move();
                     mpBgW->SetLock();
                 }
@@ -108,7 +101,6 @@ cPhs_State daObjAygr::Act_c::Mthd_Create() {
     }
 
     return phase_state;
-    
 }
 
 /* 000004D4-000004DC       .text Delete__Q29daObjAygr5Act_cFv */
@@ -118,13 +110,13 @@ BOOL daObjAygr::Act_c::Delete() {
 
 /* 000004DC-0000054C       .text Mthd_Delete__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Mthd_Delete() {
-    
+
     if (m30C)
         dComIfG_Bgsp()->Release(this->mpBgW);
-    
+
     u32 result = MoveBGDelete();
     dComIfG_resDelete(&mPhase, M_arcname);
-    
+
     return result;
 }
 
@@ -133,18 +125,18 @@ void daObjAygr::Act_c::set_mtx() {
 
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    
-    mModel1->setBaseTRMtx(mDoMtx_stack_c::get()); 
-    
+
+    mModel1->setBaseTRMtx(mDoMtx_stack_c::get());
+
     if (prm_get_mdl())
         mModel2->setBaseTRMtx(mDoMtx_stack_c::get());
-    
+
     MTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
 }
 
 /* 000005F8-00000674       .text init_mtx__Q29daObjAygr5Act_cFv */
 void daObjAygr::Act_c::init_mtx() {
-    
+
     mModel1->setBaseScale(scale);
     if (prm_get_mdl())
         mModel2->setBaseScale(scale);
@@ -153,29 +145,29 @@ void daObjAygr::Act_c::init_mtx() {
 
 /* 00000674-000006B0       .text Execute__Q29daObjAygr5Act_cFPPA3_A4_f */
 BOOL daObjAygr::Act_c::Execute(Mtx** pMtx) {
-   set_mtx();
-  *pMtx = &M_tmp_mtx;
-  return TRUE;
+    set_mtx();
+    *pMtx = &M_tmp_mtx;
+    return TRUE;
 }
 
 /* 000006B0-0000079C       .text Draw__Q29daObjAygr5Act_cFv */
 BOOL daObjAygr::Act_c::Draw() {
 
-      g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);      
-      g_env_light.setLightTevColorType(mModel1, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mModel1, &tevStr);
 
-      if (prm_get_mdl()) 
+    if (prm_get_mdl())
         g_env_light.setLightTevColorType(mModel2, &tevStr);
-  
-      dComIfGd_setListBG();
-      mDoExt_modelUpdateDL(mModel1);
-      
-      if (prm_get_mdl()) 
-        mDoExt_modelUpdateDL(mModel2);
-      
-      dComIfGd_setList();
 
-      return TRUE;
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mModel1);
+
+    if (prm_get_mdl())
+        mDoExt_modelUpdateDL(mModel2);
+
+    dComIfGd_setList();
+
+    return TRUE;
 }
 
 namespace daObjAygr {
