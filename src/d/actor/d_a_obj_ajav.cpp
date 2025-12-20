@@ -9,10 +9,38 @@
 #include "d/d_priority.h"
 
 
-static Vec l_daObjAjav_co_offset[3];
-static Vec l_daObjAjav_offset[6];
-static Vec l_daObjAjav_cyl_offset[6];
-static cXyz l_daObjAjav_rock_pos_table[6];
+static cXyz l_daObjAjav_co_offset[3] = {
+    cXyz(0.0f, 2550.0f, 200.0f),
+    cXyz(250.0f, 1270.0f, 200.0f),
+    cXyz(-290.0f, 740.0f, 200.0f)
+};
+
+static cXyz l_daObjAjav_offset[6] = {
+    cXyz(0.0f, 3000.0f, 0.0f),
+    cXyz(500.0f, 2400.0f, 0.0f),
+    cXyz(-300.0f, 1900.0f, 0.0f),
+    cXyz(500.0f, 1400.0f, 0.0f),
+    cXyz(-550.0f, 650.0f, 0.0f),
+    cXyz(250.0f, 400.0f, 0.0f)
+};
+
+static cXyz l_daObjAjav_cyl_offset[6] = {
+    cXyz(33.0f, 2541.0f, 220.0f),
+    cXyz(465.0f, 2083.0f, 220.0f),
+    cXyz(-137.7f, 1297.0f, 220.0f),
+    cXyz(530.0f, 511.0f, 220.0f),
+    cXyz(-124.5f, 118.0f, 220.0f),
+    cXyz(530.0f, 118.0f, 220.0f)
+};
+
+static cXyz l_daObjAjav_rock_pos_table[6] = {
+    cXyz(-170.0f, 3087.0f, 222.0f),
+    cXyz(563.0f, 2384.0f, 222.0f),
+    cXyz(-371.0f, 1880.0f, 222.0f),
+    cXyz(615.0f, 1391.0f, 222.0f),
+    cXyz(-494.0f, 748.0f, 222.0f),
+    cXyz(249.0f, 535.0f, 222.0f)
+};
 
 const char daObjAjav::Act_c::M_arcname[] = "Ajav";
 
