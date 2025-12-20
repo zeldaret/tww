@@ -111,6 +111,9 @@ void daObjAjav::Act_c::create_heap() {
 /* 00001288-0000166C       .text _create__Q29daObjAjav5Act_cFv */
 cPhs_State daObjAjav::Act_c::_create() {
     /* Nonmatching */
+    cPhs_State rt = cPhs_ERROR_e;
+
+    fopAcM_SetupActor(this, daObjAjav::Act_c);
 }
 
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */

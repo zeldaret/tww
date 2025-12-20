@@ -1,6 +1,8 @@
 #ifndef D_A_OBJ_AJAV_H
 #define D_A_OBJ_AJAV_H
 
+#include "d/d_bg_w.h"
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjAjav {
@@ -13,11 +15,13 @@ namespace daObjAjav {
     
     class Part_c {
     public:
+        typedef void(Part_c::*daObjAjavPartCallback)();
+    public:
         void checkExeProc(void (daObjAjav::Part_c::*)(daObjAjav::Act_c*)) {}
         void draw(daObjAjav::Act_c*) {}
         void execute(daObjAjav::Act_c*) {}
-        void setDrawProc(void (daObjAjav::Part_c::*)(daObjAjav::Act_c*)) {}
-        void setExeProc(void (daObjAjav::Part_c::*)(daObjAjav::Act_c*)) {}
+        void setDrawProc(daObjAjavPartCallback i_drawProc) {}
+        void setExeProc(daObjAjavPartCallback i_exeProc) {}
         void set_se_pos(cXyz) {}
         
         void make_hamon(cXyz, float);
@@ -36,8 +40,23 @@ namespace daObjAjav {
         void draw_flashing_normal(daObjAjav::Act_c*);
         void draw_shy(daObjAjav::Act_c*);
         void make_fall_rock(int);
-    };
-    
+    public:
+        /* 0x00 */ cXyz field_0x00;
+        /* 0x0C */ cXyz field_0x0C;
+        /* 0x18 */ cXyz field_0x18;
+        /* 0x24 */ cXyz field_0x24;
+        /* 0x30 */ u8 field_0x30[0x3C - 0x30];
+        /* 0x3C */ csXyz field_0x3C;
+        /* 0x42 */ u8 field_0x42[0x6C - 0x42];
+        /* 0x6C */ cXyz field_0x6C;
+        /* 0x78 */ J3DModel* field_0x78;
+        /* 0x7C */ dKy_tevstr_c* field_0x7C;
+        /* 0x80 */ daObjAjavPartCallback field_0x80;
+        /* 0x8C */ daObjAjavPartCallback field_0x8C;
+    };  // Size: 0x98
+    STATIC_ASSERT(sizeof(Part_c) == 0x98);
+
+
     class Act_c : public fopAc_ac_c {
     public:
         void check_ev() {}
@@ -62,8 +81,29 @@ namespace daObjAjav {
         bool _draw();
     
     public:
-        /* Place member variables here */
-    };
+        /* 0x290 */ u32 field_0x290;
+        /* 0x294 */ request_of_phase_process_class mPhs;
+        /* 0x29C */ dCcD_Stts field_0x29C;
+        /* 0x2D8 */ dCcD_Sph field_0x2D8;
+        /* 0x404 */ u8 field_0x404[0x410 - 0x404];
+        /* 0x410 */ dCcD_Stts field_0x410;
+        /* 0x44C */ dCcD_Cyl field_0x44C;
+        /* 0x57C */ dCcD_Stts field_0x57C[2];
+        /* 0x5F4 */ dCcD_Cyl field_0x5F4[2];
+        /* 0x854 */ Mtx field_0x854;
+        /* 0x884 */ u8 field_0x884[0x890 - 0x884];
+        /* 0x890 */ Part_c field_0x890[6];
+        /* 0xC20 */ s16 field_0xC20;
+        /* 0xC22 */ s8 field_0xC22;
+        /* 0xC23 */ u8 field_0xC23[0xC24 - 0xC23];
+        /* 0xC24 */ s8 field_0xC24;
+        /* 0xC25 */ u8 field_0xC25[0xC26 - 0xC25];
+        /* 0xC26 */ s16 field_0xC26;
+        /* 0xC28 */ s8 field_0xC28;
+        /* 0xC29 */ u8 field_0xC29[0xC2C - 0xC29];
+        /* 0xC2C */ dBgW* field_0xC2C;
+    };  // Size: 0xC30
+    STATIC_ASSERT(sizeof(Act_c) == 0xC30);
 };
 
 #endif /* D_A_OBJ_AJAV_H */
