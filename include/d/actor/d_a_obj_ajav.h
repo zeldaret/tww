@@ -15,7 +15,7 @@ namespace daObjAjav {
     
     class Part_c {
     public:
-        typedef void(Part_c::*daObjAjavPartCallback)();
+        typedef void(Part_c::*daObjAjavPartCallback)(daObjAjav::Act_c*);
     public:
         void checkExeProc(void (daObjAjav::Part_c::*)(daObjAjav::Act_c*)) {}
         void draw(daObjAjav::Act_c*) {}
@@ -59,12 +59,14 @@ namespace daObjAjav {
 
     class Act_c : public fopAc_ac_c {
     public:
+        static const char M_arcname[];
+    public:
         void check_ev() {}
         void check_sw() {}
         void on_sw() {}
         
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        static BOOL solidHeapCB(fopAc_ac_c*);
+        BOOL create_heap();
         cPhs_State _create();
         bool _delete();
         void init_mtx();
@@ -95,7 +97,7 @@ namespace daObjAjav {
         /* 0x890 */ Part_c field_0x890[6];
         /* 0xC20 */ s16 field_0xC20;
         /* 0xC22 */ s8 field_0xC22;
-        /* 0xC23 */ u8 field_0xC23[0xC24 - 0xC23];
+        /* 0xC23 */ s8 field_0xC23;
         /* 0xC24 */ s8 field_0xC24;
         /* 0xC25 */ u8 field_0xC25[0xC26 - 0xC25];
         /* 0xC26 */ s16 field_0xC26;

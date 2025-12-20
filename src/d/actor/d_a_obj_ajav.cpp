@@ -8,6 +8,115 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+
+static Vec l_daObjAjav_co_offset[3];
+static Vec l_daObjAjav_offset[6];
+static Vec l_daObjAjav_cyl_offset[6];
+static cXyz l_daObjAjav_rock_pos_table[6];
+
+const char daObjAjav::Act_c::M_arcname[] = "Ajav";
+
+static dCcD_SrcSph l_daObjAjav_sph_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 32,
+        /* SrcObjTg  SPrm    */ 0xF,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGSphS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 280.0f,
+    }},
+};
+
+static dCcD_SrcCyl l_daObjAjav_cyl_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0x20,
+        /* SrcObjTg  SPrm    */ 0x09,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e | dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, -40.0f, 0.0f},
+        /* Radius */ 780.0f,
+        /* Height */ 3300.0f,
+    }},
+};
+
+static dCcD_SrcCyl l_daObjAjav_hint_cyl_data = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0x20,
+        /* SrcObjTg  SPrm    */ 0x09,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e | dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, -40.0f, 0.0f},
+        /* Radius */ 780.0f,
+        /* Height */ 3300.0f,
+    }},
+};
+
+static Vec l_daObjAjav_hint_cyl_h_talbe = {3300.0f, 2360.0f, 1050.0f};
+
+static Vec l_daObjAjav_cyl_r[] = {
+    {629.0f, 294.8f, 491.0f},
+    {216.0f, 563.0f,  85.3f}
+};
+
+static Vec l_daObjAjav_cyl_h[] = {
+    {773.0f, 458.5f, 1100.5f},
+    {1401.9f, 1133.0f,  451.9}
+};
+
 /* 000000EC-00000170       .text daObjAjav_make_splash__9daObjAjavF4cXyzf */
 void daObjAjav::daObjAjav_make_splash(cXyz, float) {
     /* Nonmatching */
@@ -20,12 +129,20 @@ void daObjAjav::Part_c::make_hamon(cXyz, float) {
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::no_proc(daObjAjav::Act_c*) {
-    /* Nonmatching */
+    return;
 }
 
 /* 0000026C-000003A8       .text init_data__Q29daObjAjav6Part_cF4cXyz4cXyzP12dKy_tevstr_cP4cXyz */
-void daObjAjav::Part_c::init_data(cXyz, cXyz, dKy_tevstr_c*, cXyz*) {
-    /* Nonmatching */
+void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_tevstr, cXyz* param_4) {
+    field_0x00 = param_2;
+    field_0x0C = cXyz::Zero - field_0x00;
+    field_0x3C = csXyz::Zero;
+    field_0x18 = cXyz::Zero;
+    field_0x24 = cXyz::Zero;
+    field_0x7C = i_tevstr;
+    field_0x6C = *param_4 + param_1;
+    field_0x80 = &daObjAjav::Part_c::no_proc;
+    field_0x8C = &daObjAjav::Part_c::draw_normal;
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
@@ -99,21 +216,63 @@ void daObjAjav::Part_c::make_fall_rock(int) {
 }
 
 /* 00001168-00001188       .text solidHeapCB__Q29daObjAjav5Act_cFP10fopAc_ac_c */
-void daObjAjav::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjAjav::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjAjav::Act_c*)i_this)->create_heap();
 }
 
 /* 00001188-00001288       .text create_heap__Q29daObjAjav5Act_cFv */
-void daObjAjav::Act_c::create_heap() {
+BOOL daObjAjav::Act_c::create_heap() {
     /* Nonmatching */
 }
 
 /* 00001288-0000166C       .text _create__Q29daObjAjav5Act_cFv */
 cPhs_State daObjAjav::Act_c::_create() {
-    /* Nonmatching */
     cPhs_State rt = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjAjav::Act_c);
+
+    field_0x290 = fopAcM_GetParam(this) & 0xFF;
+    field_0xC23 = 0;
+    BOOL is_event = dComIfGs_isEventBit(0xA02);
+    if (is_event != FALSE && !dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this))) {
+        rt = dComIfG_resLoad(&mPhs, M_arcname);
+        if (rt == cPhs_COMPLEATE_e) {
+            if (fopAcM_entrySolidHeap(this, Act_c::solidHeapCB, 0)) {
+                int i;
+                for (i = 0; i < (int)ARRAY_SIZE(field_0x890); i++) {
+                    field_0x890[i].init_data(current.pos, l_daObjAjav_offset[i], &tevStr, &l_daObjAjav_rock_pos_table[i]);
+                }
+                
+                init_mtx();
+                MTXCopy(field_0x890[5].field_0x78->getBaseTRMtx(), field_0x854);
+                set_tex();
+                
+                field_0x29C.Init(0, 0xFF, this);
+                field_0x2D8.SetStts(&field_0x29C);
+                field_0x2D8.Set(l_daObjAjav_sph_data);
+                
+                field_0x410.Init(0, 0xFF, this);
+                field_0x44C.SetStts(&field_0x410);
+                field_0x44C.Set(l_daObjAjav_cyl_data);
+                field_0x44C.SetC(current.pos);
+
+                for (i = 0; i < 2; i++) {
+                    field_0x57C[i].Init(0, 0xFF, this);
+                    field_0x5F4[i].SetStts(&field_0x57C[i]);
+                    field_0x5F4[i].Set(l_daObjAjav_hint_cyl_data);
+                }
+                set_co_offset();
+                dComIfG_Bgsp()->Regist(field_0xC2C, this);
+                field_0xC23 = 1;
+                field_0xC24 = 0;
+                field_0xC28 = 0;
+            } else {
+                rt = cPhs_ERROR_e;
+            }
+        }        
+    }
+    
+    return rt;
 }
 
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */
