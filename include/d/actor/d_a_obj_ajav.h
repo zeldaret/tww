@@ -3,13 +3,15 @@
 
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 
 namespace daObjAjav {
     static void daObjAjav_make_splash(cXyz, float);
     static void check_angle(short*, short);
     static void daObjAjav_limit_angle(short*, short);
-    static void daObjAjav_get_rot_speed(cXyz, cXyz, short);
+    static csXyz daObjAjav_get_rot_speed(cXyz, cXyz, short);
     
     class Act_c;
     
@@ -27,7 +29,7 @@ namespace daObjAjav {
         void make_hamon(cXyz, float);
         void no_proc(daObjAjav::Act_c*);
         void init_data(cXyz, cXyz, dKy_tevstr_c*, cXyz*);
-        void set_mdl_area(const char*, int, unsigned long);
+        BOOL set_mdl_area(const char*, int, unsigned long);
         void init_mtx(cXyz, csXyz, cXyz);
         void set_flaw_mtx(cXyz, csXyz);
         void set_fall_mtx(cXyz, csXyz);
@@ -47,7 +49,9 @@ namespace daObjAjav {
         /* 0x24 */ cXyz field_0x24;
         /* 0x30 */ u8 field_0x30[0x3C - 0x30];
         /* 0x3C */ csXyz field_0x3C;
-        /* 0x42 */ u8 field_0x42[0x6C - 0x42];
+        /* 0x42 */ u8 field_0x42[0x48 - 0x42];
+        /* 0x48 */ Vec field_0x48;
+        /* 0x54 */ u8 field_0x54[0x6C - 0x54];
         /* 0x6C */ cXyz field_0x6C;
         /* 0x78 */ J3DModel* field_0x78;
         /* 0x7C */ dKy_tevstr_c* field_0x7C;
@@ -59,10 +63,8 @@ namespace daObjAjav {
 
     class Act_c : public fopAc_ac_c {
     public:
-        static const char M_arcname[];
-    public:
-        void check_ev() {}
-        void check_sw() {}
+        BOOL check_ev() { return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT); }
+        BOOL check_sw() { return dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
         void on_sw() {}
         
         static BOOL solidHeapCB(fopAc_ac_c*);
@@ -82,6 +84,8 @@ namespace daObjAjav {
         bool _execute();
         bool _draw();
     
+    public:
+        static const char M_arcname[];
     public:
         /* 0x290 */ u32 field_0x290;
         /* 0x294 */ request_of_phase_process_class mPhs;

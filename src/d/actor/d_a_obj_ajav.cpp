@@ -7,7 +7,7 @@
 #include "d/actor/d_a_obj_ajav.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
+#include "d/res/res_ajav.h"
 
 static cXyz l_daObjAjav_co_offset[3] = {
     cXyz(0.0f, 2550.0f, 200.0f),
@@ -41,8 +41,6 @@ static cXyz l_daObjAjav_rock_pos_table[6] = {
     cXyz(-494.0f, 748.0f, 222.0f),
     cXyz(249.0f, 535.0f, 222.0f)
 };
-
-const char daObjAjav::Act_c::M_arcname[] = "Ajav";
 
 static dCcD_SrcSph l_daObjAjav_sph_data = {
     // dCcD_SrcGObjInf
@@ -145,14 +143,46 @@ static Vec l_daObjAjav_cyl_h[] = {
     {1401.9f, 1133.0f,  451.9}
 };
 
+static const s32 l_daObjAjav_idx_table[6] = {
+    4, 5 ,6 ,7, 8, 9
+};
+
+static const char* const l_daObjAjav_ev_name[] = {
+    "ajav_destroy0",
+    "ajav_destroy1",
+    "ajav_uzu"
+};
+
 /* 000000EC-00000170       .text daObjAjav_make_splash__9daObjAjavF4cXyzf */
-void daObjAjav::daObjAjav_make_splash(cXyz, float) {
-    /* Nonmatching */
+void daObjAjav::daObjAjav_make_splash(cXyz param_1, float param_2) {
+    cXyz scale;
+
+    param_2 /= 2000.0f;
+    param_2 = 4.0f + param_2;
+
+    scale.x = param_2;
+    scale.y = 4.0f;
+    scale.z = scale.x;
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &param_1,  NULL, &scale);
 }
 
 /* 000001AC-00000268       .text make_hamon__Q29daObjAjav6Part_cF4cXyzf */
-void daObjAjav::Part_c::make_hamon(cXyz, float) {
-    /* Nonmatching */
+void daObjAjav::Part_c::make_hamon(cXyz param_1, float param_2) {
+    cXyz temp;
+
+    param_2 /= 2000.0f;
+    temp.x = 2.0f + param_2;
+    temp.y = temp.x;
+    temp.z = temp.x;
+
+    param_1.y += 10.0f;
+    
+    f32 temp3;
+    if (fopAcM_getWaterY(&param_1, &temp3) == TRUE) {
+        param_1.y = temp3;
+    }
+
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &param_1, NULL, &temp);
 }
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -174,7 +204,7 @@ void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_te
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
-void daObjAjav::Part_c::set_mdl_area(const char*, int, unsigned long) {
+BOOL daObjAjav::Part_c::set_mdl_area(const char*, int, unsigned long) {
     /* Nonmatching */
 }
 
@@ -239,9 +269,18 @@ void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
 }
 
 /* 00001090-00001168       .text make_fall_rock__Q29daObjAjav6Part_cFi */
-void daObjAjav::Part_c::make_fall_rock(int) {
-    /* Nonmatching */
+void daObjAjav::Part_c::make_fall_rock(int param_1) {
+    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8427, &field_0x6C);
+    if (particle_emitter && field_0x7C) {
+        if (param_1 != 0) {
+            particle_emitter->setRate(20.0f);
+        }
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &field_0x6C, field_0x7C);
+        particle_emitter->setGlobalPrmColor(field_0x7C->mColorK0.r, field_0x7C->mColorK0.g, field_0x7C->mColorK0.b);
+    }    
 }
+
+const char daObjAjav::Act_c::M_arcname[] = "Ajav";
 
 /* 00001168-00001188       .text solidHeapCB__Q29daObjAjav5Act_cFP10fopAc_ac_c */
 BOOL daObjAjav::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
@@ -250,7 +289,25 @@ BOOL daObjAjav::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00001188-00001288       .text create_heap__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::create_heap() {
-    /* Nonmatching */
+    int i;
+    BOOL res = field_0x890[0].set_mdl_area(M_arcname, l_daObjAjav_idx_table[0], 0x11000002);
+
+    if (res != FALSE) {
+        for (i = 1; i < ARRAY_SSIZE(field_0x890); i++) {
+            res = field_0x890[i].set_mdl_area(M_arcname, l_daObjAjav_idx_table[i], 0x15021202);
+            if (res == FALSE) break;
+        }
+    }
+
+    if (res != FALSE) {
+        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, AJAV_DZB_AJAV);
+        field_0xC2C = dBgW_NewSet(cbgd_res, cBgW::MOVE_BG_e, &field_0x854);
+        if (field_0xC2C == NULL) {
+            res = FALSE;
+        } 
+    }
+
+    return res;
 }
 
 /* 00001288-0000166C       .text _create__Q29daObjAjav5Act_cFv */
@@ -261,13 +318,12 @@ cPhs_State daObjAjav::Act_c::_create() {
 
     field_0x290 = fopAcM_GetParam(this) & 0xFF;
     field_0xC23 = 0;
-    BOOL is_event = dComIfGs_isEventBit(0xA02);
-    if (is_event != FALSE && !dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this))) {
+    if (check_ev() && !check_sw()) {
         rt = dComIfG_resLoad(&mPhs, M_arcname);
         if (rt == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, Act_c::solidHeapCB, 0)) {
                 int i;
-                for (i = 0; i < (int)ARRAY_SIZE(field_0x890); i++) {
+                for (i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
                     field_0x890[i].init_data(current.pos, l_daObjAjav_offset[i], &tevStr, &l_daObjAjav_rock_pos_table[i]);
                 }
                 
@@ -284,7 +340,7 @@ cPhs_State daObjAjav::Act_c::_create() {
                 field_0x44C.Set(l_daObjAjav_cyl_data);
                 field_0x44C.SetC(current.pos);
 
-                for (i = 0; i < 2; i++) {
+                for (i = 0; i < ARRAY_SSIZE(field_0x57C); i++) {
                     field_0x57C[i].Init(0, 0xFF, this);
                     field_0x5F4[i].SetStts(&field_0x57C[i]);
                     field_0x5F4[i].Set(l_daObjAjav_hint_cyl_data);
@@ -305,7 +361,17 @@ cPhs_State daObjAjav::Act_c::_create() {
 
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_delete() {
-    /* Nonmatching */
+    if (heap != NULL && field_0xC2C != NULL) {
+        if (field_0xC2C->ChkUsed()) {
+            dComIfG_Bgsp()->Release(field_0xC2C);
+            field_0xC2C = NULL;
+        }
+    }
+    dComIfG_resDelete(&mPhs, M_arcname);
+    for (int i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        mDoAud_seDeleteObject(&field_0x890[i].field_0x48);
+    }
+    return TRUE;
 }
 
 /* 00001C08-00001CA8       .text init_mtx__Q29daObjAjav5Act_cFv */
@@ -324,13 +390,28 @@ void daObjAjav::Act_c::set_co_offset() {
 }
 
 /* 00001E3C-00001EA0       .text daObjAjav_limit_angle__9daObjAjavFPss */
-void daObjAjav::daObjAjav_limit_angle(short*, short) {
-    /* Nonmatching */
+void daObjAjav::daObjAjav_limit_angle(short* param_1, short param_2) {
+    if (abs(*param_1) > param_2) {
+        if (*param_1 > 0) {
+            *param_1 = param_2;
+        } else {
+            *param_1 = -param_2;
+        }
+    }
 }
 
 /* 00001EA0-00001F54       .text daObjAjav_get_rot_speed__9daObjAjavF4cXyz4cXyzs */
-void daObjAjav::daObjAjav_get_rot_speed(cXyz, cXyz, short) {
-    /* Nonmatching */
+csXyz daObjAjav::daObjAjav_get_rot_speed(cXyz param_1, cXyz param_2, short param_3) {
+    cXyz temp = param_1 - param_2;
+
+    csXyz temp2 = csXyz::Zero;
+    temp2.x = temp.y;
+    temp2.y = temp.x;
+
+    daObjAjav_limit_angle(&temp2.x, param_3);
+    daObjAjav_limit_angle(&temp2.y, param_3);
+    
+    return temp2;
 }
 
 /* 00001F54-00001FE4       .text check_all_wait__Q29daObjAjav5Act_cFv */
