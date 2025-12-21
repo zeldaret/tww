@@ -180,7 +180,7 @@ enum {
     /* 0xAC */ DSNAP_TYPE_UNKAC,
     /* 0xAD */ DSNAP_TYPE_UNKAD,
     /* 0xAE */ DSNAP_TYPE_UNKAE,
-    /* 0xAF */ DSNAP_TYPE_UNKAF,
+    /* 0xAF */ DSNAP_TYPE_MT,
     /* 0xB0 */ DSNAP_TYPE_BB,
     /* 0xB1 */ DSNAP_TYPE_UNKB1,
     /* 0xB2 */ DSNAP_TYPE_UNKB2,
