@@ -9,7 +9,7 @@
 
 namespace daObjAjav {
     static void daObjAjav_make_splash(cXyz, float);
-    static void check_angle(short*, short);
+    static BOOL check_angle(short*, short);
     static void daObjAjav_limit_angle(short*, short);
     static csXyz daObjAjav_get_rot_speed(cXyz, cXyz, short);
     
@@ -47,11 +47,13 @@ namespace daObjAjav {
         /* 0x0C */ cXyz field_0x0C;
         /* 0x18 */ cXyz field_0x18;
         /* 0x24 */ cXyz field_0x24;
-        /* 0x30 */ u8 field_0x30[0x3C - 0x30];
+        /* 0x30 */ cXyz field_0x30;
         /* 0x3C */ csXyz field_0x3C;
-        /* 0x42 */ u8 field_0x42[0x48 - 0x42];
-        /* 0x48 */ Vec field_0x48;
-        /* 0x54 */ u8 field_0x54[0x6C - 0x54];
+        /* 0x42 */ csXyz field_0x42;
+        /* 0x48 */ cXyz field_0x48;
+        /* 0x54 */ u16 field_0x54[3]; // TODO: is this really a csXyz?
+        /* 0x5A */ bool field_0x5A;
+        /* 0x5B */ u8 field_0x5B[0x6C - 0x5B];
         /* 0x6C */ cXyz field_0x6C;
         /* 0x78 */ J3DModel* field_0x78;
         /* 0x7C */ dKy_tevstr_c* field_0x7C;

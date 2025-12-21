@@ -204,48 +204,151 @@ void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_te
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
-BOOL daObjAjav::Part_c::set_mdl_area(const char*, int, unsigned long) {
-    /* Nonmatching */
+BOOL daObjAjav::Part_c::set_mdl_area(const char* param_1, int param_2, unsigned long param_3) {
+    J3DModelData* mdl_data;
+    BOOL res = FALSE;
+    mdl_data = (J3DModelData*) dComIfG_getObjectRes(param_1, param_2);
+    JUT_ASSERT(600, mdl_data != NULL);
+
+    if (mdl_data != NULL) {
+        field_0x78 = mDoExt_J3DModel__create(mdl_data, 0x80000, param_3);
+        res = TRUE;
+    }
+
+    return res;
 }
 
 /* 00000464-0000050C       .text init_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz4cXyz */
-void daObjAjav::Part_c::init_mtx(cXyz, csXyz, cXyz) {
-    /* Nonmatching */
+void daObjAjav::Part_c::init_mtx(cXyz i_translation, csXyz i_zxyRotation, cXyz i_scale) {
+    field_0x78->setBaseScale(i_scale);
+    mDoMtx_stack_c::transS(i_translation);
+    mDoMtx_stack_c::ZXYrotM(i_zxyRotation);
+    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
+    field_0x78->calc();
 }
 
 /* 0000050C-000005A8       .text set_flaw_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
-void daObjAjav::Part_c::set_flaw_mtx(cXyz, csXyz) {
-    /* Nonmatching */
+void daObjAjav::Part_c::set_flaw_mtx(cXyz param_1, csXyz param_2) {
+    mDoMtx_stack_c::transS(param_1);
+    mDoMtx_stack_c::ZXYrotM(param_2);
+    mDoMtx_stack_c::transM(field_0x18);
+    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
+    field_0x78->calc();
 }
 
 /* 000005A8-0000067C       .text set_fall_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
-void daObjAjav::Part_c::set_fall_mtx(cXyz, csXyz) {
+void daObjAjav::Part_c::set_fall_mtx(cXyz param_1, csXyz param_2) {
     /* Nonmatching */
+    mDoMtx_stack_c::transS(param_1);
+    mDoMtx_stack_c::ZXYrotM(param_2);
+    mDoMtx_stack_c::transM(field_0x18);
+    mDoMtx_stack_c::transM(field_0x00);
+    mDoMtx_stack_c::ZXYrotM(field_0x3C);
+    mDoMtx_stack_c::transM(field_0x0C);
+    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
+    field_0x78->calc();  
 }
 
 /* 0000067C-000006E4       .text fall_init__Q29daObjAjav6Part_cF4cXyz5csXyzsUs */
-void daObjAjav::Part_c::fall_init(cXyz, csXyz, short, unsigned short) {
-    /* Nonmatching */
+void daObjAjav::Part_c::fall_init(cXyz param_1, csXyz param_2, short param_3, unsigned short param_4) {
+    field_0x24 = param_1;
+    field_0x42 = param_2;
+
+    field_0x54[2] = param_3;
+    field_0x54[0] = param_4;
+    field_0x54[1] = 0;
+
+    field_0x5A = 0;
+    field_0x80 = &Part_c::fall_0;
 }
 
 /* 000006E4-0000076C       .text check_angle__9daObjAjavFPss */
-void daObjAjav::check_angle(short*, short) {
-    /* Nonmatching */
+BOOL daObjAjav::check_angle(short* param_1, short param_2) {
+    BOOL rt = FALSE;
+    if (abs(*param_1) >= param_2) {
+        s16 temp = abs(*param_1) - param_2;
+        if (*param_1 > 0) {
+            *param_1 = param_2 - temp;
+        } else {
+            *param_1 = -(param_2 - temp);
+        }
+        rt = TRUE;
+    }
+    return rt;
 }
 
 /* 0000076C-0000095C       .text fall_0__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
-void daObjAjav::Part_c::fall_0(daObjAjav::Act_c*) {
+void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
     /* Nonmatching */
+    // wtf is going on in this function?
+    field_0x3C += field_0x42;
+    if (check_angle(&field_0x3C.x, *(s16*)&field_0x54[2])) {
+        field_0x42.x *= -1;
+    }
+    if (check_angle(&field_0x3C.y, *(s16*)&field_0x54[2])) {
+        field_0x42.y *= -1;
+    }
+
+    field_0x18 += field_0x24;
+
+    f32 rnd = cM_rnd();
+    rnd = 0.2f * rnd;
+    rnd = 0.8f + rnd;
+    field_0x24.z = field_0x24.z * rnd;
+    field_0x54[1]++;
+    if (field_0x54[1] == field_0x54[0]) {
+        cXyz temp = field_0x24 * 0.4f;
+        temp.y = 5.0f;
+        field_0x24 = temp;
+
+        field_0x80 = &Part_c::fall_1;
+
+        field_0x54[1] = 0;
+
+        field_0x42 = field_0x42 * 0.3f;
+
+        s32 rnd2 = cM_rnd() * 511.0f;
+        s32 rnd3 = cM_rnd() * -2.0f;
+        field_0x42.z = rnd3 * rnd2;
+    }
+    set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
 
 /* 0000095C-00000B8C       .text fall_1__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
-void daObjAjav::Part_c::fall_1(daObjAjav::Act_c*) {
-    /* Nonmatching */
+void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
+    /* Nonmatching, .rodata, .data */
+    field_0x18 += field_0x24;
+    field_0x18.y -= field_0x54[1] * 2.0f;
+    field_0x3C += field_0x42;
+  
+
+    field_0x54[1]++; 
+    
+    if (!field_0x5A) {
+        if (field_0x18.y <= (field_0x0C.y - 100.0f)) {
+            cXyz temp2 = (i_actor->current.pos + field_0x18) + field_0x00;
+            temp2.y = 0.0f;
+            daObjAjav_make_splash(temp2, field_0x00.y);
+            field_0x5A = true;
+            make_hamon(temp2, field_0x00.y);
+            field_0x48 = temp2;
+            mDoAud_seStart(JA_SE_OBJ_JB_STONE_FALL, &field_0x48, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_actor)));
+        }
+    }
+
+    if (field_0x18.y <= (field_0x0C.y - 1000.0f)) {
+        field_0x80 = &Part_c::no_proc;
+        field_0x8C = &Part_c::no_proc;
+    }
+    set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
 
 /* 00000B8C-00000C28       .text flaw__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
-void daObjAjav::Part_c::flaw(daObjAjav::Act_c*) {
+void daObjAjav::Part_c::flaw(daObjAjav::Act_c* i_actor) {
     /* Nonmatching */
+    field_0x18 += field_0x30;
+    set_flaw_mtx(i_actor->current.pos, i_actor->shape_angle);
+    field_0x80 = &Part_c::no_proc;
 }
 
 /* 00000C28-00000C6C       .text draw_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
