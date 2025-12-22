@@ -131,16 +131,16 @@ static dCcD_SrcCyl l_daObjAjav_hint_cyl_data = {
     }},
 };
 
-static Vec l_daObjAjav_hint_cyl_h_talbe = {3300.0f, 2360.0f, 1050.0f};
+static f32 l_daObjAjav_hint_cyl_h_talbe[] = {3300.0f, 2360.0f, 1050.0f};
 
-static Vec l_daObjAjav_cyl_r[] = {
-    {629.0f, 294.8f, 491.0f},
-    {216.0f, 563.0f,  85.3f}
+static f32 l_daObjAjav_cyl_r[6] = {
+    629.0f, 294.8f, 491.0f,
+    216.0f, 563.0f,  85.3f
 };
 
-static Vec l_daObjAjav_cyl_h[] = {
-    {773.0f, 458.5f, 1100.5f},
-    {1401.9f, 1133.0f,  451.9}
+static f32 l_daObjAjav_cyl_h[6] = {
+    773.0f, 458.5f, 1100.5f,
+    1401.9f, 1133.0f,  451.9
 };
 
 static const s32 l_daObjAjav_idx_table[6] = {
@@ -199,8 +199,8 @@ void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_te
     field_0x24 = cXyz::Zero;
     field_0x7C = i_tevstr;
     field_0x6C = *param_4 + param_1;
-    field_0x80 = &daObjAjav::Part_c::no_proc;
-    field_0x8C = &daObjAjav::Part_c::draw_normal;
+    setExeProc(&Part_c::no_proc);
+    setDrawProc(&Part_c::draw_normal);
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
@@ -238,7 +238,6 @@ void daObjAjav::Part_c::set_flaw_mtx(cXyz param_1, csXyz param_2) {
 
 /* 000005A8-0000067C       .text set_fall_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
 void daObjAjav::Part_c::set_fall_mtx(cXyz param_1, csXyz param_2) {
-    /* Nonmatching */
     mDoMtx_stack_c::transS(param_1);
     mDoMtx_stack_c::ZXYrotM(param_2);
     mDoMtx_stack_c::transM(field_0x18);
@@ -259,7 +258,7 @@ void daObjAjav::Part_c::fall_init(cXyz param_1, csXyz param_2, short param_3, un
     field_0x54[1] = 0;
 
     field_0x5A = 0;
-    field_0x80 = &Part_c::fall_0;
+    setExeProc(&Part_c::fall_0);
 }
 
 /* 000006E4-0000076C       .text check_angle__9daObjAjavFPss */
@@ -279,44 +278,40 @@ BOOL daObjAjav::check_angle(short* param_1, short param_2) {
 
 /* 0000076C-0000095C       .text fall_0__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
-    /* Nonmatching */
-    // wtf is going on in this function?
+    cXyz temp1(0.0f, -10.0f, 0.0f);
+    
     field_0x3C += field_0x42;
-    if (check_angle(&field_0x3C.x, *(s16*)&field_0x54[2])) {
+    if (check_angle(&field_0x3C.x, *reinterpret_cast<s16*>(&field_0x54[2]))) {
         field_0x42.x *= -1;
     }
-    if (check_angle(&field_0x3C.y, *(s16*)&field_0x54[2])) {
+    if (check_angle(&field_0x3C.y, *reinterpret_cast<s16*>(&field_0x54[2]))) {
         field_0x42.y *= -1;
     }
 
     field_0x18 += field_0x24;
 
-    f32 rnd = cM_rnd();
-    rnd = 0.2f * rnd;
-    rnd = 0.8f + rnd;
+    f32 rnd = 0.8f + (0.2f * cM_rnd());
     field_0x24.z = field_0x24.z * rnd;
     field_0x54[1]++;
     if (field_0x54[1] == field_0x54[0]) {
-        cXyz temp = field_0x24 * 0.4f;
-        temp.y = 5.0f;
-        field_0x24 = temp;
+        temp1 = field_0x24 * 0.4f;
+        temp1.y = 5.0f;
+        field_0x24 = temp1;
 
-        field_0x80 = &Part_c::fall_1;
+        setExeProc(&Part_c::fall_1);
 
         field_0x54[1] = 0;
+        
+        field_0x42 = csXyz(field_0x42 * 0.3f);
 
-        field_0x42 = field_0x42 * 0.3f;
-
-        s32 rnd2 = cM_rnd() * 511.0f;
-        s32 rnd3 = cM_rnd() * -2.0f;
-        field_0x42.z = rnd3 * rnd2;
+        s16 rnd2 = static_cast<int>(cM_rnd() * -2.0f) * ((s16)(cM_rnd() * 511.0f));
+        field_0x42.z = rnd2;
     }
     set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
 
 /* 0000095C-00000B8C       .text fall_1__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
-    /* Nonmatching, .rodata, .data */
     field_0x18 += field_0x24;
     field_0x18.y -= field_0x54[1] * 2.0f;
     field_0x3C += field_0x42;
@@ -337,38 +332,84 @@ void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
     }
 
     if (field_0x18.y <= (field_0x0C.y - 1000.0f)) {
-        field_0x80 = &Part_c::no_proc;
-        field_0x8C = &Part_c::no_proc;
+        setExeProc(&Part_c::no_proc);
+        setDrawProc(&Part_c::no_proc);
     }
     set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
 
 /* 00000B8C-00000C28       .text flaw__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::flaw(daObjAjav::Act_c* i_actor) {
-    /* Nonmatching */
     field_0x18 += field_0x30;
     set_flaw_mtx(i_actor->current.pos, i_actor->shape_angle);
-    field_0x80 = &Part_c::no_proc;
+    setExeProc(&Part_c::no_proc);
 }
 
 /* 00000C28-00000C6C       .text draw_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_normal(daObjAjav::Act_c*) {
-    /* Nonmatching */
+    g_env_light.setLightTevColorType(field_0x78, field_0x7C);
+    mDoExt_modelUpdateDL(field_0x78);
 }
 
 /* 00000C6C-00000EA8       .text draw_flashing__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
-    /* Nonmatching */
+    u8 r, g, b;
+    if (field_0x7C) {
+        g_env_light.setLightTevColorType(field_0x78, field_0x7C);
+        J3DMaterial* mesh = field_0x78->getModelData()->getJointNodePointer(0)->getMesh();
+        if (mesh) {
+            s16 theta = (s16)(((f32)field_0x54[1] / field_0x54[0]) * 20479.0f) + 0x3000;
+            f32 abs_sin_theta = std::abs(JMASSin(theta));
+
+            r = mesh->getTevKColor(1)->mColor.r;
+            g = mesh->getTevKColor(1)->mColor.g;
+            b = mesh->getTevKColor(1)->mColor.b;
+
+            mesh->getTevKColor(1)->mColor.r = abs_sin_theta * 85.0f;
+            mesh->getTevKColor(1)->mColor.g = abs_sin_theta * 11.0f;
+            mesh->getTevKColor(1)->mColor.b = abs_sin_theta *  9.0f;
+        }
+        mDoExt_modelUpdateDL(field_0x78);
+        if (mesh) {
+            mesh->getTevKColor(1)->mColor.r = r;
+            mesh->getTevKColor(1)->mColor.g = g;
+            mesh->getTevKColor(1)->mColor.b = b;
+        }
+    }
 }
 
 /* 00000EA8-00000F10       .text draw_flashing_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
-void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c*) {
-    /* Nonmatching */
+void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
+    /* Nonmatching, .data offset */
+    draw_flashing(i_actor);
+    field_0x54[1]++;
+    if (field_0x54[1] == field_0x54[0]) {
+        setDrawProc(&Part_c::draw_normal);
+    }
 }
 
 /* 00000F10-00001090       .text draw_shy__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
-    /* Nonmatching */
+    u8 r, g, b;
+    if (field_0x7C) {
+        g_env_light.setLightTevColorType(field_0x78, field_0x7C);
+        J3DMaterial* mesh = field_0x78->getModelData()->getJointNodePointer(0)->getMesh();
+        if (mesh) {
+            r = mesh->getTevKColor(1)->mColor.r;
+            g = mesh->getTevKColor(1)->mColor.g;
+            b = mesh->getTevKColor(1)->mColor.b;
+
+            mesh->getTevKColor(1)->mColor.r = 0x55;
+            mesh->getTevKColor(1)->mColor.g = 0x0B;
+            mesh->getTevKColor(1)->mColor.b = 0x09;
+        }
+        mDoExt_modelUpdateDL(field_0x78);
+        if (mesh) {
+            mesh->getTevKColor(1)->mColor.r = r;
+            mesh->getTevKColor(1)->mColor.g = g;
+            mesh->getTevKColor(1)->mColor.b = b;
+        }
+    }
 }
 
 /* 00001090-00001168       .text make_fall_rock__Q29daObjAjav6Part_cFi */
@@ -380,7 +421,7 @@ void daObjAjav::Part_c::make_fall_rock(int param_1) {
         }
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &field_0x6C, field_0x7C);
         particle_emitter->setGlobalPrmColor(field_0x7C->mColorK0.r, field_0x7C->mColorK0.g, field_0x7C->mColorK0.b);
-    }    
+    }  
 }
 
 const char daObjAjav::Act_c::M_arcname[] = "Ajav";
@@ -479,17 +520,38 @@ bool daObjAjav::Act_c::_delete() {
 
 /* 00001C08-00001CA8       .text init_mtx__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::init_mtx() {
-    /* Nonmatching */
+    for (int i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        field_0x890[i].init_mtx(current.pos, shape_angle, scale);
+    }
 }
 
 /* 00001CA8-00001CE4       .text set_tex__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_tex() {
-    /* Nonmatching */
+    J3DModelData* model_data = field_0x890[0].field_0x78->getModelData();
+    J3DTexture* model_texture = model_data->getTexture();
+    JUTNameTab* name_table = model_data->getTextureName();
+
+    for (int i = 1; i < ARRAY_SSIZE(field_0x890); i++) {
+        J3DModelData* model_data_i = field_0x890[i].field_0x78->getModelData(); 
+        model_data_i->setTexture(model_texture);
+        model_data_i->setTextureName(name_table);
+    }
 }
 
 /* 00001CE4-00001E3C       .text set_co_offset__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_co_offset() {
     /* Nonmatching */
+    s32 i, j;
+    JUT_ASSERT(0x494, (M_status >= 0) && (M_status < STATUS_MAX - 1));
+    field_0x404 = l_daObjAjav_co_offset[M_status];
+    field_0x2D8.SetC(current.pos + field_0x404);
+    field_0x44C.SetH(l_daObjAjav_hint_cyl_h_talbe[M_status]);
+
+    for (i = M_status << 1, j = 0; j < ARRAY_SSIZE(field_0x5F4); i++, j++) {
+        field_0x5F4[j].SetC(current.pos + l_daObjAjav_cyl_offset[i]);
+        field_0x5F4[j].SetR(l_daObjAjav_cyl_r[i]);
+        field_0x5F4[j].SetH(l_daObjAjav_cyl_h[i]);
+    }
 }
 
 /* 00001E3C-00001EA0       .text daObjAjav_limit_angle__9daObjAjavFPss */
@@ -518,8 +580,17 @@ csXyz daObjAjav::daObjAjav_get_rot_speed(cXyz param_1, cXyz param_2, short param
 }
 
 /* 00001F54-00001FE4       .text check_all_wait__Q29daObjAjav5Act_cFv */
-void daObjAjav::Act_c::check_all_wait() {
-    /* Nonmatching */
+BOOL daObjAjav::Act_c::check_all_wait() {
+    /* Nonmatching, .data offset issue */
+    int i;
+    BOOL res = TRUE;
+    for (i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        if (!field_0x890[i].checkExeProc(&Part_c::no_proc)) {
+            res = FALSE;
+            break;
+        }
+    }
+    return res;
 }
 
 /* 00001FE4-0000201C       .text check_end__Q29daObjAjav5Act_cFv */
@@ -555,6 +626,12 @@ void daObjAjav::Act_c::set_hamon(float) {
 /* 000024A4-00002CF4       .text _execute__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_execute() {
     /* Nonmatching */
+}
+
+/* 00002CF4-00002D50       .text set_se_pos__Q29daObjAjav6Part_cF4cXyz */
+void daObjAjav::Part_c::set_se_pos(cXyz i_pos) {
+    field_0x48 = i_pos + field_0x00;
+    field_0x48 += field_0x18;
 }
 
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */

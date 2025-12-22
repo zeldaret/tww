@@ -19,12 +19,12 @@ namespace daObjAjav {
     public:
         typedef void(Part_c::*daObjAjavPartCallback)(daObjAjav::Act_c*);
     public:
-        void checkExeProc(void (daObjAjav::Part_c::*)(daObjAjav::Act_c*)) {}
-        void draw(daObjAjav::Act_c*) {}
-        void execute(daObjAjav::Act_c*) {}
-        void setDrawProc(daObjAjavPartCallback i_drawProc) {}
-        void setExeProc(daObjAjavPartCallback i_exeProc) {}
-        void set_se_pos(cXyz) {}
+        bool checkExeProc(daObjAjavPartCallback i_proc) { return field_0x80 == i_proc; }
+        void draw(daObjAjav::Act_c* i_actor) { if (field_0x8C) { (this->*field_0x8C)(i_actor); } }
+        void execute(daObjAjav::Act_c* i_actor) { if (field_0x80) { (this->*field_0x80)(i_actor); } }
+        void setDrawProc(daObjAjavPartCallback i_drawProc) { field_0x8C = i_drawProc; }
+        void setExeProc(daObjAjavPartCallback i_exeProc) { field_0x80 = i_exeProc; }
+        inline void set_se_pos(cXyz i_pos); // weak but not inlined
         
         void make_hamon(cXyz, float);
         void no_proc(daObjAjav::Act_c*);
@@ -51,7 +51,7 @@ namespace daObjAjav {
         /* 0x3C */ csXyz field_0x3C;
         /* 0x42 */ csXyz field_0x42;
         /* 0x48 */ cXyz field_0x48;
-        /* 0x54 */ u16 field_0x54[3]; // TODO: is this really a csXyz?
+        /* 0x54 */ u16 field_0x54[3]; // TODO: i'm not too sure what this is supposed to be
         /* 0x5A */ bool field_0x5A;
         /* 0x5B */ u8 field_0x5B[0x6C - 0x5B];
         /* 0x6C */ cXyz field_0x6C;
@@ -65,6 +65,10 @@ namespace daObjAjav {
 
     class Act_c : public fopAc_ac_c {
     public:
+        enum {
+            STATUS_MAX = (s8)4
+        };
+    public:
         BOOL check_ev() { return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT); }
         BOOL check_sw() { return dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
         void on_sw() {}
@@ -76,7 +80,7 @@ namespace daObjAjav {
         void init_mtx();
         void set_tex();
         void set_co_offset();
-        void check_all_wait();
+        BOOL check_all_wait();
         void check_end();
         void to_broken();
         void damage_part();
@@ -93,7 +97,7 @@ namespace daObjAjav {
         /* 0x294 */ request_of_phase_process_class mPhs;
         /* 0x29C */ dCcD_Stts field_0x29C;
         /* 0x2D8 */ dCcD_Sph field_0x2D8;
-        /* 0x404 */ u8 field_0x404[0x410 - 0x404];
+        /* 0x404 */ cXyz field_0x404;
         /* 0x410 */ dCcD_Stts field_0x410;
         /* 0x44C */ dCcD_Cyl field_0x44C;
         /* 0x57C */ dCcD_Stts field_0x57C[2];
@@ -102,7 +106,7 @@ namespace daObjAjav {
         /* 0x884 */ u8 field_0x884[0x890 - 0x884];
         /* 0x890 */ Part_c field_0x890[6];
         /* 0xC20 */ s16 field_0xC20;
-        /* 0xC22 */ s8 field_0xC22;
+        /* 0xC22 */ u8 M_status;
         /* 0xC23 */ s8 field_0xC23;
         /* 0xC24 */ s8 field_0xC24;
         /* 0xC25 */ u8 field_0xC25[0xC26 - 0xC25];
