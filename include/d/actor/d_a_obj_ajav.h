@@ -20,8 +20,8 @@ namespace daObjAjav {
         typedef void(Part_c::*daObjAjavPartCallback)(daObjAjav::Act_c*);
     public:
         bool checkExeProc(daObjAjavPartCallback i_proc) { return field_0x80 == i_proc; }
-        void draw(daObjAjav::Act_c* i_actor) { if (field_0x8C) { (this->*field_0x8C)(i_actor); } }
-        void execute(daObjAjav::Act_c* i_actor) { if (field_0x80) { (this->*field_0x80)(i_actor); } }
+        void draw(daObjAjav::Act_c* i_actor) {  (this->*field_0x8C)(i_actor); }
+        void execute(daObjAjav::Act_c* i_actor) { (this->*field_0x80)(i_actor); }
         void setDrawProc(daObjAjavPartCallback i_drawProc) { field_0x8C = i_drawProc; }
         void setExeProc(daObjAjavPartCallback i_exeProc) { field_0x80 = i_exeProc; }
         inline void set_se_pos(cXyz i_pos); // weak but not inlined
@@ -66,7 +66,7 @@ namespace daObjAjav {
     class Act_c : public fopAc_ac_c {
     public:
         enum {
-            STATUS_MAX = (s8)4
+            STATUS_MAX = 4
         };
     public:
         BOOL check_ev() { return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT); }
@@ -81,9 +81,9 @@ namespace daObjAjav {
         void set_tex();
         void set_co_offset();
         BOOL check_all_wait();
-        void check_end();
+        BOOL check_end();
         void to_broken();
-        void damage_part();
+        BOOL damage_part();
         void make_shot_rock();
         void make_hamon2(cXyz, float);
         void set_hamon(float);

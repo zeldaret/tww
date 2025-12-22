@@ -540,7 +540,6 @@ void daObjAjav::Act_c::set_tex() {
 
 /* 00001CE4-00001E3C       .text set_co_offset__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_co_offset() {
-    /* Nonmatching */
     s32 i, j;
     JUT_ASSERT(0x494, (M_status >= 0) && (M_status < STATUS_MAX - 1));
     field_0x404 = l_daObjAjav_co_offset[M_status];
@@ -594,33 +593,104 @@ BOOL daObjAjav::Act_c::check_all_wait() {
 }
 
 /* 00001FE4-0000201C       .text check_end__Q29daObjAjav5Act_cFv */
-void daObjAjav::Act_c::check_end() {
-    /* Nonmatching */
+BOOL daObjAjav::Act_c::check_end() {
+    BOOL rt = FALSE;
+    if (M_status == (STATUS_MAX - 1)) {
+        rt = check_all_wait();
+    }
+    return rt;
 }
 
 /* 0000201C-000020B0       .text to_broken__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::to_broken() {
-    /* Nonmatching */
+    field_0xC20 = dComIfGp_evmng_getEventIdx(l_daObjAjav_ev_name[M_status]);
+    field_0xC24 = 1;
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        fopAcM_orderOtherEventId(this, field_0xC20);
+        eventInfo.onCondition(dEvtCnd_UNK2_e);
+    }
 }
 
 /* 000020B0-00002124       .text damage_part__Q29daObjAjav5Act_cFv */
-void daObjAjav::Act_c::damage_part() {
+BOOL daObjAjav::Act_c::damage_part() {
     /* Nonmatching */
+    BOOL rt = FALSE;
+    if (M_status < 3 && field_0x2D8.ChkTgHit()) {
+        to_broken();
+        field_0x2D8.ClrTgHit();
+        rt = TRUE;
+    }
+    return rt;
 }
 
 /* 00002124-000021EC       .text make_shot_rock__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::make_shot_rock() {
-    /* Nonmatching */
+    cXyz sph_center = field_0x2D8.GetC();
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8426, &sph_center);
+    if (emitter) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &sph_center, &tevStr);
+        emitter->setGlobalPrmColor(
+            tevStr.mColorK0.r,
+            tevStr.mColorK0.g,
+            tevStr.mColorK0.b
+        );
+    }
 }
 
 /* 000021EC-000022F0       .text make_hamon2__Q29daObjAjav5Act_cF4cXyzf */
-void daObjAjav::Act_c::make_hamon2(cXyz, float) {
-    /* Nonmatching */
+void daObjAjav::Act_c::make_hamon2(cXyz param_1, float param_2) {
+    cXyz temp;
+
+    param_2 /= 3000.0f;
+    temp.x = 1.0f + param_2;
+    temp.y = temp.x;
+    temp.z = temp.x;
+
+    param_1.y += 10.0f;
+    
+    f32 temp3;
+    if (fopAcM_getWaterY(&param_1, &temp3) == TRUE) {
+        param_1.y = temp3;
+    }
+
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8454, &param_1, NULL, &temp);
+
+    if (emitter) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
+        emitter->setGlobalPrmColor(
+            tevStr.mColorC0.r,
+            tevStr.mColorC0.g,
+            tevStr.mColorC0.b
+        );
+    }
 }
 
 /* 000022F0-000024A4       .text set_hamon__Q29daObjAjav5Act_cFf */
-void daObjAjav::Act_c::set_hamon(float) {
-    /* Nonmatching */
+void daObjAjav::Act_c::set_hamon(float param_1) {
+    cXyz current_pos;
+    cXyz base_z;
+    cXyz base_x;
+    cXyz temp_base_x;
+
+    mDoMtx_stack_c::YrotS(current.angle.y);
+
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &base_z);
+    base_z *= 1300.0f;
+
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseX, &base_x);
+
+    for (int i = 0; i < 2; i++) {
+        current_pos = current.pos;
+
+        temp_base_x = base_x;
+        temp_base_x *= (i * -2.0f + 1.0f) * 400.0f;
+        
+        current_pos += base_z;
+        current_pos += temp_base_x;
+
+        make_hamon2(current_pos, param_1);
+    }
 }
 
 /* 000024A4-00002CF4       .text _execute__Q29daObjAjav5Act_cFv */
@@ -636,7 +706,11 @@ void daObjAjav::Part_c::set_se_pos(cXyz i_pos) {
 
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    for (int i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        field_0x890[i].draw(this);
+    }
+    return true;
 }
 
 namespace daObjAjav {
