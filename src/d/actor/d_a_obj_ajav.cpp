@@ -673,7 +673,6 @@ void daObjAjav::Act_c::set_hamon(float param_1) {
     cXyz temp_base_x;
 
     mDoMtx_stack_c::YrotS(current.angle.y);
-
     mDoMtx_stack_c::multVec(&cXyz::BaseZ, &base_z);
     base_z *= 1300.0f;
 
@@ -695,7 +694,150 @@ void daObjAjav::Act_c::set_hamon(float param_1) {
 
 /* 000024A4-00002CF4       .text _execute__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_execute() {
-    /* Nonmatching */
+    /* Nonmatching */   
+    static cXyz flaw_pos[] = {
+        cXyz(0.0f, 0.0f, 0.0f),
+        cXyz(0.0f, 0.0f, 0.0f),
+        cXyz(0.0f, 40.0f, 0.0f),
+        cXyz(30.0f, 30.0f, 0.0f),
+        cXyz(-20.0f, 0.0f, 0.0f),
+        cXyz(20.0f, 0.0f, 0.0f)
+    };    
+    
+    cXyz temp(12.0f, -10.0f, 55.0f);
+    bool temp2 = false;
+    bool temp3 = false;
+    csXyz temp4;
+    int i, cond;
+
+    for (i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        field_0x890[i].set_se_pos(current.pos);
+    }
+
+    switch (field_0xC24) {
+    case 0:
+        if (!damage_part()) {
+            for (i = 0; i < 2; i++) {
+                field_0x57C[i].Move();
+                if (field_0x5F4[i].ChkTgHit()) {
+                    if (!temp3) {
+                        field_0xC28++;
+                        if (field_0xC28 >= STATUS_MAX - 1) {
+                            to_broken();
+                            field_0xC28 = 0;
+                            temp2 = true;
+                        }
+                        temp3 = true;
+                    }
+                    field_0x5F4[i].ClrTgHit();
+                }
+            }
+            if (temp2 != true) {
+                field_0x410.Move();
+                if (field_0x44C.ChkTgHit()) {
+                    int cond = (M_status << 1);
+                    for (int i = M_status << 1; i < cond + 2; i++) {
+                        field_0x890[i].make_fall_rock(1);
+                        field_0x890[i].field_0x54[1] = 0;
+                        field_0x890[i].field_0x54[0] = 0x1E;
+                        field_0x890[i].setDrawProc(&Part_c::draw_flashing_normal);
+                    }
+                    field_0x44C.ClrTgHit(); 
+                }
+            }
+        }
+        break;
+    case 1:
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            cond = M_status << 1;
+            for (i = M_status << 1; i < (cond + 2); i++) {
+                temp.x = 12.0f;
+                if ((i & 1) == 0) {
+                    temp.x *= -1.0f;
+                }
+                temp4 = daObjAjav_get_rot_speed(field_0x404, field_0x890[i].field_0x00, 0x1FF);
+                field_0x890[i].fall_init(temp, temp4, 0x1FF, (s16)(cM_rnd() * 9.0f) + 7);
+                mDoAud_seStart(JA_SE_OBJ_JB_STONE_BRK, &field_0x890[i].field_0x48,0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                field_0x890[i].setDrawProc(&Part_c::draw_normal);
+                field_0x890[i].make_fall_rock(0);
+            }
+            
+            make_shot_rock();
+            const f32 hamon = field_0x890[M_status << 1].field_0x18.y;
+            set_hamon(hamon);
+            
+            M_status++;
+            if (M_status < STATUS_MAX - 1) {
+                cond = (M_status << 1);
+                for (i = (M_status << 1); i < (cond + 2); i++) {
+                    field_0x890[i].field_0x30 = flaw_pos[i];
+                    field_0x890[i].setExeProc(&Part_c::flaw); 
+                }
+                set_co_offset();
+                field_0xC24 = 2;
+            } else {
+                field_0xC24 = 3;
+                field_0xC26 = 0x3C;
+            }
+        } else {
+            fopAcM_orderOtherEventId(this, field_0xC20);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(field_0xC20)) {
+            dComIfGp_event_reset();
+            if (M_status < STATUS_MAX - 1) {
+                field_0xC24 = 0;
+            } else {
+                field_0xC24 = 4;
+            }
+        }
+        break;
+    case 3:
+        if (check_end()) {
+            if (field_0xC26 == 0) {
+                dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("Ajav"));
+                if (heap && field_0xC2C) {
+                    if (field_0xC2C->ChkUsed()) {
+                        dComIfG_Bgsp()->Release(field_0xC2C);
+                        field_0xC2C = NULL;
+                    }
+                }
+                on_sw();
+                mDoAud_seStart(JA_SE_READ_RIDDLE_1);
+                mDoAud_subBgmStop();
+                field_0xC24 = 2;
+                M_status++;
+            } else {
+                field_0xC26--;
+            }
+        }
+        break;
+    case 4:
+        break;
+    default:
+        field_0xC24 = 0;
+        break;
+    }
+
+    if (M_status < 3) {
+        dComIfG_Ccsp()->Set(&field_0x2D8);
+        dComIfG_Ccsp()->Set(&field_0x44C);
+        for (i = 0; i < 2; i++) {
+            dComIfG_Ccsp()->Set(&field_0x5F4[i]);
+        }
+    }
+
+    for (i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
+        field_0x890[i].execute(this);
+    }
+
+    if (field_0xC2C && field_0xC2C->ChkUsed()) {
+        field_0xC2C->Move();
+    }
+
+    return true;
 }
 
 /* 00002CF4-00002D50       .text set_se_pos__Q29daObjAjav6Part_cF4cXyz */

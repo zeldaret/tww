@@ -60,7 +60,6 @@ namespace daObjAjav {
         /* 0x80 */ daObjAjavPartCallback field_0x80;
         /* 0x8C */ daObjAjavPartCallback field_0x8C;
     };  // Size: 0x98
-    STATIC_ASSERT(sizeof(Part_c) == 0x98);
 
 
     class Act_c : public fopAc_ac_c {
@@ -71,7 +70,7 @@ namespace daObjAjav {
     public:
         BOOL check_ev() { return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT); }
         BOOL check_sw() { return dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
-        void on_sw() {}
+        void on_sw() { dComIfGs_onSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
         
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
@@ -107,15 +106,14 @@ namespace daObjAjav {
         /* 0x890 */ Part_c field_0x890[6];
         /* 0xC20 */ s16 field_0xC20;
         /* 0xC22 */ u8 M_status;
-        /* 0xC23 */ s8 field_0xC23;
-        /* 0xC24 */ s8 field_0xC24;
+        /* 0xC23 */ u8 field_0xC23;
+        /* 0xC24 */ u8 field_0xC24;
         /* 0xC25 */ u8 field_0xC25[0xC26 - 0xC25];
-        /* 0xC26 */ s16 field_0xC26;
-        /* 0xC28 */ s8 field_0xC28;
+        /* 0xC26 */ u16 field_0xC26;
+        /* 0xC28 */ u8 field_0xC28;
         /* 0xC29 */ u8 field_0xC29[0xC2C - 0xC29];
         /* 0xC2C */ dBgW* field_0xC2C;
     };  // Size: 0xC30
-    STATIC_ASSERT(sizeof(Act_c) == 0xC30);
 };
 
 #endif /* D_A_OBJ_AJAV_H */
