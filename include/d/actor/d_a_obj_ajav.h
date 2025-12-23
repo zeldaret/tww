@@ -72,6 +72,10 @@ namespace daObjAjav {
         BOOL check_sw() { return dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
         void on_sw() { dComIfGs_onSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
         
+        // methods to fakematch _execute
+        void fake_set_hamon(int i) { set_hamon(field_0x890[i].field_0x18.y); }
+        int fake_M_status() { return M_status << 1; }
+
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
         cPhs_State _create();

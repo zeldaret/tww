@@ -281,9 +281,13 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
     cXyz temp1(0.0f, -10.0f, 0.0f);
     
     field_0x3C += field_0x42;
+
+    // fakematch
     if (check_angle(&field_0x3C.x, *reinterpret_cast<s16*>(&field_0x54[2]))) {
         field_0x42.x *= -1;
     }
+
+    // fakematch too
     if (check_angle(&field_0x3C.y, *reinterpret_cast<s16*>(&field_0x54[2]))) {
         field_0x42.y *= -1;
     }
@@ -380,7 +384,7 @@ void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
 
 /* 00000EA8-00000F10       .text draw_flashing_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
-    (void)&daObjAjav::Part_c::draw_shy; //fake match?
+    (void)&daObjAjav::Part_c::draw_shy; // fakematch?
     draw_flashing(i_actor);
     field_0x54[1]++;
     if (field_0x54[1] == field_0x54[0]) {
@@ -580,7 +584,6 @@ csXyz daObjAjav::daObjAjav_get_rot_speed(cXyz param_1, cXyz param_2, short param
 
 /* 00001F54-00001FE4       .text check_all_wait__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::check_all_wait() {
-    /* Nonmatching, .data offset issue */
     int i;
     BOOL res = TRUE;
     for (i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
@@ -613,7 +616,6 @@ void daObjAjav::Act_c::to_broken() {
 
 /* 000020B0-00002124       .text damage_part__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::damage_part() {
-    /* Nonmatching */
     BOOL rt = FALSE;
     if (M_status < 3 && field_0x2D8.ChkTgHit()) {
         to_broken();
@@ -763,8 +765,7 @@ bool daObjAjav::Act_c::_execute() {
             }
             
             make_shot_rock();
-            const f32 hamon = field_0x890[M_status << 1].field_0x18.y;
-            set_hamon(hamon);
+            fake_set_hamon(fake_M_status()); // *very* fakematch
             
             M_status++;
             if (M_status < STATUS_MAX - 1) {
