@@ -380,7 +380,7 @@ void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
 
 /* 00000EA8-00000F10       .text draw_flashing_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
-    /* Nonmatching, .data offset */
+    (void)&daObjAjav::Part_c::draw_shy; //fake match?
     draw_flashing(i_actor);
     field_0x54[1]++;
     if (field_0x54[1] == field_0x54[0]) {
