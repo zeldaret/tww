@@ -73,7 +73,7 @@ namespace daObjAjav {
         void on_sw(int sw_no) { dComIfGs_onSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         
         // methods to fakematch _execute
-        void fake_set_hamon(int i) { set_hamon(field_0x890[i].field_0x18.y); }
+        void fake_set_hamon(int i) { set_hamon(mStoneParts[i].field_0x18.y); }
         int fake_M_status() { return M_status << 1; }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
@@ -96,27 +96,27 @@ namespace daObjAjav {
     public:
         static const char M_arcname[];
     public:
-        /* 0x290 */ u32 field_0x290;
+        /* 0x290 */ u32 mSwNo;
         /* 0x294 */ request_of_phase_process_class mPhs;
-        /* 0x29C */ dCcD_Stts field_0x29C;
-        /* 0x2D8 */ dCcD_Sph field_0x2D8;
+        /* 0x29C */ dCcD_Stts mSphStts;
+        /* 0x2D8 */ dCcD_Sph mSph;
         /* 0x404 */ cXyz field_0x404;
-        /* 0x410 */ dCcD_Stts field_0x410;
-        /* 0x44C */ dCcD_Cyl field_0x44C;
-        /* 0x57C */ dCcD_Stts field_0x57C[2];
-        /* 0x5F4 */ dCcD_Cyl field_0x5F4[2];
-        /* 0x854 */ Mtx field_0x854;
-        /* 0x884 */ u8 field_0x884[0x890 - 0x884];
-        /* 0x890 */ Part_c field_0x890[6];
-        /* 0xC20 */ s16 field_0xC20;
+        /* 0x410 */ dCcD_Stts mCylStts;
+        /* 0x44C */ dCcD_Cyl mCyl;
+        /* 0x57C */ dCcD_Stts mHintCylStts[2];
+        /* 0x5F4 */ dCcD_Cyl mHintCyls[2];
+        /* 0x854 */ Mtx mMtx;
+        /* 0x884 */ u8 m884[0x890 - 0x884];
+        /* 0x890 */ Part_c mStoneParts[6];
+        /* 0xC20 */ s16 mEventIdx;
         /* 0xC22 */ u8 M_status;
         /* 0xC23 */ u8 field_0xC23;
         /* 0xC24 */ u8 field_0xC24;
-        /* 0xC25 */ u8 field_0xC25[0xC26 - 0xC25];
+        /* 0xC25 */ u8 mC25[0xC26 - 0xC25];
         /* 0xC26 */ u16 field_0xC26;
         /* 0xC28 */ u8 field_0xC28;
-        /* 0xC29 */ u8 field_0xC29[0xC2C - 0xC29];
-        /* 0xC2C */ dBgW* field_0xC2C;
+        /* 0xC29 */ u8 mC29[0xC2C - 0xC29];
+        /* 0xC2C */ dBgW* mpBgW;
     };  // Size: 0xC30
 };
 
