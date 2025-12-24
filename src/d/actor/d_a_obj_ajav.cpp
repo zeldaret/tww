@@ -154,7 +154,7 @@ static const char* const l_daObjAjav_ev_name[] = {
 };
 
 /* 000000EC-00000170       .text daObjAjav_make_splash__9daObjAjavF4cXyzf */
-void daObjAjav::daObjAjav_make_splash(cXyz param_1, float param_2) {
+void daObjAjav::daObjAjav_make_splash(cXyz splash_pos, float param_2) {
     cXyz scale;
 
     param_2 /= 2000.0f;
@@ -163,11 +163,11 @@ void daObjAjav::daObjAjav_make_splash(cXyz param_1, float param_2) {
     scale.x = param_2;
     scale.y = 4.0f;
     scale.z = scale.x;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &param_1,  NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &splash_pos,  NULL, &scale);
 }
 
 /* 000001AC-00000268       .text make_hamon__Q29daObjAjav6Part_cF4cXyzf */
-void daObjAjav::Part_c::make_hamon(cXyz param_1, float param_2) {
+void daObjAjav::Part_c::make_hamon(cXyz hamon_pos, float param_2) {
     cXyz temp;
 
     param_2 /= 2000.0f;
@@ -175,14 +175,14 @@ void daObjAjav::Part_c::make_hamon(cXyz param_1, float param_2) {
     temp.y = temp.x;
     temp.z = temp.x;
 
-    param_1.y += 10.0f;
+    hamon_pos.y += 10.0f;
     
     f32 temp3;
-    if (fopAcM_getWaterY(&param_1, &temp3) == TRUE) {
-        param_1.y = temp3;
+    if (fopAcM_getWaterY(&hamon_pos, &temp3) == TRUE) {
+        hamon_pos.y = temp3;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &param_1, NULL, &temp);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &hamon_pos, NULL, &temp);
 }
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -191,20 +191,20 @@ void daObjAjav::Part_c::no_proc(daObjAjav::Act_c*) {
 }
 
 /* 0000026C-000003A8       .text init_data__Q29daObjAjav6Part_cF4cXyz4cXyzP12dKy_tevstr_cP4cXyz */
-void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_tevstr, cXyz* param_4) {
-    field_0x00 = param_2;
-    field_0x0C = cXyz::Zero - field_0x00;
+void daObjAjav::Part_c::init_data(cXyz actor_pos, cXyz param_2, dKy_tevstr_c* i_tevstr, cXyz* rock_pos) {
+    mFallFromPos = param_2;
+    field_0x0C = cXyz::Zero - mFallFromPos;
     field_0x3C = csXyz::Zero;
     field_0x18 = cXyz::Zero;
     field_0x24 = cXyz::Zero;
-    field_0x7C = i_tevstr;
-    field_0x6C = *param_4 + param_1;
-#if VERSION == VERSION_DEMO
-    field_0x80 = &Part_c::no_proc;
-    field_0x8C = &Part_c::draw_normal;
-#else
+    mpTevStr = i_tevstr;
+    m6C = *rock_pos + actor_pos;
+#if VERSION > VERSION_DEMO
     setExeProc(&Part_c::no_proc);
     setDrawProc(&Part_c::draw_normal);
+#else
+    mExeProc = &Part_c::no_proc;
+    mDrawProc = &Part_c::draw_normal;
 #endif
 }
 
@@ -216,7 +216,7 @@ BOOL daObjAjav::Part_c::set_mdl_area(const char* param_1, int param_2, unsigned 
     JUT_ASSERT(600, mdl_data != NULL);
 
     if (mdl_data != NULL) {
-        field_0x78 = mDoExt_J3DModel__create(mdl_data, 0x80000, param_3);
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, param_3);
         res = TRUE;
     }
 
@@ -225,11 +225,11 @@ BOOL daObjAjav::Part_c::set_mdl_area(const char* param_1, int param_2, unsigned 
 
 /* 00000464-0000050C       .text init_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz4cXyz */
 void daObjAjav::Part_c::init_mtx(cXyz i_translation, csXyz i_zxyRotation, cXyz i_scale) {
-    field_0x78->setBaseScale(i_scale);
+    mpModel->setBaseScale(i_scale);
     mDoMtx_stack_c::transS(i_translation);
     mDoMtx_stack_c::ZXYrotM(i_zxyRotation);
-    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
-    field_0x78->calc();
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->calc();
 }
 
 /* 0000050C-000005A8       .text set_flaw_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
@@ -237,8 +237,8 @@ void daObjAjav::Part_c::set_flaw_mtx(cXyz param_1, csXyz param_2) {
     mDoMtx_stack_c::transS(param_1);
     mDoMtx_stack_c::ZXYrotM(param_2);
     mDoMtx_stack_c::transM(field_0x18);
-    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
-    field_0x78->calc();
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->calc();
 }
 
 /* 000005A8-0000067C       .text set_fall_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
@@ -246,11 +246,11 @@ void daObjAjav::Part_c::set_fall_mtx(cXyz param_1, csXyz param_2) {
     mDoMtx_stack_c::transS(param_1);
     mDoMtx_stack_c::ZXYrotM(param_2);
     mDoMtx_stack_c::transM(field_0x18);
-    mDoMtx_stack_c::transM(field_0x00);
+    mDoMtx_stack_c::transM(mFallFromPos);
     mDoMtx_stack_c::ZXYrotM(field_0x3C);
     mDoMtx_stack_c::transM(field_0x0C);
-    field_0x78->setBaseTRMtx(mDoMtx_stack_c::get());
-    field_0x78->calc();  
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->calc();  
 }
 
 /* 0000067C-000006E4       .text fall_init__Q29daObjAjav6Part_cF4cXyz5csXyzsUs */
@@ -258,9 +258,9 @@ void daObjAjav::Part_c::fall_init(cXyz param_1, csXyz param_2, short param_3, un
     field_0x24 = param_1;
     field_0x42 = param_2;
 
-    field_0x54[2] = param_3;
-    field_0x54[0] = param_4;
-    field_0x54[1] = 0;
+    field_0x58 = param_3;
+    field_0x54 = param_4;
+    field_0x56 = 0;
 
     field_0x5A = 0;
     setExeProc(&Part_c::fall_0);
@@ -288,12 +288,12 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
     field_0x3C += field_0x42;
 
     // fakematch
-    if (check_angle(&field_0x3C.x, *reinterpret_cast<s16*>(&field_0x54[2]))) {
+    if (check_angle(&field_0x3C.x, field_0x58)) {
         field_0x42.x *= -1;
     }
 
     // fakematch too
-    if (check_angle(&field_0x3C.y, *reinterpret_cast<s16*>(&field_0x54[2]))) {
+    if (check_angle(&field_0x3C.y, field_0x58)) {
         field_0x42.y *= -1;
     }
 
@@ -301,15 +301,15 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
 
     f32 rnd = 0.8f + (0.2f * cM_rnd());
     field_0x24.z = field_0x24.z * rnd;
-    field_0x54[1]++;
-    if (field_0x54[1] == field_0x54[0]) {
+    field_0x56++;
+    if (field_0x56 == field_0x54) {
         temp1 = field_0x24 * 0.4f;
         temp1.y = 5.0f;
         field_0x24 = temp1;
 
         setExeProc(&Part_c::fall_1);
 
-        field_0x54[1] = 0;
+        field_0x56 = 0;
         
         field_0x42 = csXyz(field_0x42 * 0.3f);
 
@@ -322,21 +322,21 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
 /* 0000095C-00000B8C       .text fall_1__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
     field_0x18 += field_0x24;
-    field_0x18.y -= field_0x54[1] * 2.0f;
+    field_0x18.y -= field_0x56 * 2.0f;
     field_0x3C += field_0x42;
   
 
-    field_0x54[1]++; 
+    field_0x56++; 
     
     if (!field_0x5A) {
         if (field_0x18.y <= (field_0x0C.y - 100.0f)) {
-            cXyz temp2 = (i_actor->current.pos + field_0x18) + field_0x00;
-            temp2.y = 0.0f;
-            daObjAjav_make_splash(temp2, field_0x00.y);
+            cXyz pos_in_world = (i_actor->current.pos + field_0x18) + mFallFromPos;
+            pos_in_world.y = 0.0f;
+            daObjAjav_make_splash(pos_in_world, mFallFromPos.y);
             field_0x5A = true;
-            make_hamon(temp2, field_0x00.y);
-            field_0x48 = temp2;
-            mDoAud_seStart(JA_SE_OBJ_JB_STONE_FALL, &field_0x48, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_actor)));
+            make_hamon(pos_in_world, mFallFromPos.y);
+            mSePos = pos_in_world;
+            mDoAud_seStart(JA_SE_OBJ_JB_STONE_FALL, &mSePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_actor)));
         }
     }
 
@@ -349,29 +349,29 @@ void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
 
 /* 00000B8C-00000C28       .text flaw__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::flaw(daObjAjav::Act_c* i_actor) {
-    field_0x18 += field_0x30;
+    field_0x18 += mFlawPos;
     set_flaw_mtx(i_actor->current.pos, i_actor->shape_angle);
-#if VERSION == VERSION_DEMO
-    field_0x80 = &Part_c::no_proc;
-#else
+#if VERSION > VERSION_DEMO
     setExeProc(&Part_c::no_proc);
+#else
+    mExeProc = &Part_c::no_proc;
 #endif
 }
 
 /* 00000C28-00000C6C       .text draw_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_normal(daObjAjav::Act_c*) {
-    g_env_light.setLightTevColorType(field_0x78, field_0x7C);
-    mDoExt_modelUpdateDL(field_0x78);
+    g_env_light.setLightTevColorType(mpModel, mpTevStr);
+    mDoExt_modelUpdateDL(mpModel);
 }
 
 /* 00000C6C-00000EA8       .text draw_flashing__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
     u8 r, g, b;
-    if (field_0x7C) {
-        g_env_light.setLightTevColorType(field_0x78, field_0x7C);
-        J3DMaterial* mesh = field_0x78->getModelData()->getJointNodePointer(0)->getMesh();
+    if (mpTevStr) {
+        g_env_light.setLightTevColorType(mpModel, mpTevStr);
+        J3DMaterial* mesh = mpModel->getModelData()->getJointNodePointer(0)->getMesh();
         if (mesh) {
-            s16 theta = (s16)(((f32)field_0x54[1] / field_0x54[0]) * 20479.0f) + 0x3000;
+            s16 theta = (s16)(((f32)field_0x56 / field_0x54) * 20479.0f) + 0x3000;
             f32 abs_sin_theta = std::abs(JMASSin(theta));
 
             r = mesh->getTevKColor(1)->mColor.r;
@@ -382,7 +382,7 @@ void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
             mesh->getTevKColor(1)->mColor.g = abs_sin_theta * 11.0f;
             mesh->getTevKColor(1)->mColor.b = abs_sin_theta *  9.0f;
         }
-        mDoExt_modelUpdateDL(field_0x78);
+        mDoExt_modelUpdateDL(mpModel);
         if (mesh) {
             mesh->getTevKColor(1)->mColor.r = r;
             mesh->getTevKColor(1)->mColor.g = g;
@@ -395,8 +395,8 @@ void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
 void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
     (void)&daObjAjav::Part_c::draw_shy; // fakematch?
     draw_flashing(i_actor);
-    field_0x54[1]++;
-    if (field_0x54[1] == field_0x54[0]) {
+    field_0x56++;
+    if (field_0x56 == field_0x54) {
         setDrawProc(&Part_c::draw_normal);
     }
 }
@@ -404,9 +404,9 @@ void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
 /* 00000F10-00001090       .text draw_shy__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
     u8 r, g, b;
-    if (field_0x7C) {
-        g_env_light.setLightTevColorType(field_0x78, field_0x7C);
-        J3DMaterial* mesh = field_0x78->getModelData()->getJointNodePointer(0)->getMesh();
+    if (mpTevStr) {
+        g_env_light.setLightTevColorType(mpModel, mpTevStr);
+        J3DMaterial* mesh = mpModel->getModelData()->getJointNodePointer(0)->getMesh();
         if (mesh) {
             r = mesh->getTevKColor(1)->mColor.r;
             g = mesh->getTevKColor(1)->mColor.g;
@@ -416,7 +416,7 @@ void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
             mesh->getTevKColor(1)->mColor.g = 0x0B;
             mesh->getTevKColor(1)->mColor.b = 0x09;
         }
-        mDoExt_modelUpdateDL(field_0x78);
+        mDoExt_modelUpdateDL(mpModel);
         if (mesh) {
             mesh->getTevKColor(1)->mColor.r = r;
             mesh->getTevKColor(1)->mColor.g = g;
@@ -427,13 +427,13 @@ void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
 
 /* 00001090-00001168       .text make_fall_rock__Q29daObjAjav6Part_cFi */
 void daObjAjav::Part_c::make_fall_rock(int param_1) {
-    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8427, &field_0x6C);
-    if (particle_emitter && field_0x7C) {
+    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8427, &m6C);
+    if (particle_emitter && mpTevStr) {
         if (param_1 != 0) {
             particle_emitter->setRate(20.0f);
         }
-        g_env_light.settingTevStruct(TEV_TYPE_BG0, &field_0x6C, field_0x7C);
-        particle_emitter->setGlobalPrmColor(field_0x7C->mColorK0.r, field_0x7C->mColorK0.g, field_0x7C->mColorK0.b);
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &m6C, mpTevStr);
+        particle_emitter->setGlobalPrmColor(mpTevStr->mColorK0.r, mpTevStr->mColorK0.g, mpTevStr->mColorK0.b);
     }  
 }
 
@@ -474,7 +474,7 @@ cPhs_State daObjAjav::Act_c::_create() {
     fopAcM_SetupActor(this, daObjAjav::Act_c);
 
     mSwNo = fopAcM_GetParam(this) & 0xFF;
-    field_0xC23 = 0;
+    mbResLoaded = false;
     if (check_ev() && !check_sw(mSwNo)) {
         rt = dComIfG_resLoad(&mPhs, M_arcname);
         if (rt == cPhs_COMPLEATE_e) {
@@ -485,7 +485,7 @@ cPhs_State daObjAjav::Act_c::_create() {
                 }
                 
                 init_mtx();
-                MTXCopy(mStoneParts[5].field_0x78->getBaseTRMtx(), mMtx);
+                MTXCopy(mStoneParts[5].mpModel->getBaseTRMtx(), mMtx);
                 set_tex();
                 
                 mSphStts.Init(0, 0xFF, this);
@@ -502,11 +502,13 @@ cPhs_State daObjAjav::Act_c::_create() {
                     mHintCyls[i].SetStts(&mHintCylStts[i]);
                     mHintCyls[i].Set(l_daObjAjav_hint_cyl_data);
                 }
+
                 set_co_offset();
                 dComIfG_Bgsp()->Regist(mpBgW, this);
-                field_0xC23 = 1;
-                field_0xC24 = 0;
-                field_0xC28 = 0;
+
+                mbResLoaded = true;
+                mActionIdx = 0;
+                mHintCylHits = 0;
             } else {
                 rt = cPhs_ERROR_e;
             }
@@ -527,12 +529,12 @@ bool daObjAjav::Act_c::_delete() {
         }
     }
 
-    if (DEMO_SELECT(field_0xC23 == 1, true)) {
+    if (DEMO_SELECT(mbResLoaded == 1, true)) {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
 
     for (int i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mDoAud_seDeleteObject(&mStoneParts[i].field_0x48);
+        mDoAud_seDeleteObject(&mStoneParts[i].mSePos);
     }
     return TRUE;
 }
@@ -546,12 +548,12 @@ void daObjAjav::Act_c::init_mtx() {
 
 /* 00001CA8-00001CE4       .text set_tex__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_tex() {
-    J3DModelData* model_data = mStoneParts[0].field_0x78->getModelData();
+    J3DModelData* model_data = mStoneParts[0].mpModel->getModelData();
     J3DTexture* model_texture = model_data->getTexture();
     JUTNameTab* name_table = model_data->getTextureName();
 
     for (int i = 1; i < ARRAY_SSIZE(mStoneParts); i++) {
-        J3DModelData* model_data_i = mStoneParts[i].field_0x78->getModelData(); 
+        J3DModelData* model_data_i = mStoneParts[i].mpModel->getModelData(); 
         model_data_i->setTexture(model_texture);
         model_data_i->setTextureName(name_table);
     }
@@ -561,8 +563,8 @@ void daObjAjav::Act_c::set_tex() {
 void daObjAjav::Act_c::set_co_offset() {
     s32 i, j;
     JUT_ASSERT(DEMO_SELECT(1173, 1172), (M_status >= 0) && (M_status < STATUS_MAX - 1));
-    field_0x404 = l_daObjAjav_co_offset[M_status];
-    mSph.SetC(current.pos + field_0x404);
+    mSphCoOffset = l_daObjAjav_co_offset[M_status];
+    mSph.SetC(current.pos + mSphCoOffset);
     mCyl.SetH(l_daObjAjav_hint_cyl_h_talbe[M_status]);
 
     for (i = M_status << 1, j = 0; j < ARRAY_SSIZE(mHintCyls); i++, j++) {
@@ -622,7 +624,7 @@ BOOL daObjAjav::Act_c::check_end() {
 /* 0000201C-000020B0       .text to_broken__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::to_broken() {
     mEventIdx = dComIfGp_evmng_getEventIdx(l_daObjAjav_ev_name[M_status]);
-    field_0xC24 = 1;
+    mActionIdx = 1;
     if (!eventInfo.checkCommandDemoAccrpt()) {
         fopAcM_orderOtherEventId(this, mEventIdx);
         eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -721,8 +723,11 @@ bool daObjAjav::Act_c::_execute() {
     };    
     
     cXyz temp(12.0f, -10.0f, 55.0f);
-    bool temp2 = false;
-    bool temp3 = false;
+    bool stone_broken = false;
+
+    // this bool is checked for falsehood once, set to true and then never read from again
+    bool useless_bool = false; 
+    
     csXyz temp4;
     int i, cond;
 
@@ -730,32 +735,32 @@ bool daObjAjav::Act_c::_execute() {
         mStoneParts[i].set_se_pos(current.pos);
     }
 
-    switch (field_0xC24) {
+    switch (mActionIdx) {
     case 0:
         if (!damage_part()) {
             for (i = 0; i < 2; i++) {
                 mHintCylStts[i].Move();
                 if (mHintCyls[i].ChkTgHit()) {
-                    if (!temp3) {
-                        field_0xC28++;
-                        if (field_0xC28 >= STATUS_MAX - 1) {
+                    if (!useless_bool) {
+                        mHintCylHits++;
+                        if (mHintCylHits >= STATUS_MAX - 1) {
                             to_broken();
-                            field_0xC28 = 0;
-                            temp2 = true;
+                            mHintCylHits = 0;
+                            stone_broken = true;
                         }
-                        temp3 = true;
+                        useless_bool = true;
                     }
                     mHintCyls[i].ClrTgHit();
                 }
             }
-            if (temp2 != true) {
+            if (stone_broken != true) {
                 mCylStts.Move();
                 if (mCyl.ChkTgHit()) {
                     int cond = (M_status << 1);
-                    for (int i = M_status << 1; i < cond + 2; i++) {
+                    for (int i = M_status << 1; i < (cond + 2); i++) {
                         mStoneParts[i].make_fall_rock(1);
-                        mStoneParts[i].field_0x54[1] = 0;
-                        mStoneParts[i].field_0x54[0] = 0x1E;
+                        mStoneParts[i].field_0x56 = 0;
+                        mStoneParts[i].field_0x54 = 30;
                         mStoneParts[i].setDrawProc(&Part_c::draw_flashing_normal);
                     }
                     mCyl.ClrTgHit(); 
@@ -771,9 +776,9 @@ bool daObjAjav::Act_c::_execute() {
                 if ((i & 1) == 0) {
                     temp.x *= -1.0f;
                 }
-                temp4 = daObjAjav_get_rot_speed(field_0x404, mStoneParts[i].field_0x00, 0x1FF);
+                temp4 = daObjAjav_get_rot_speed(mSphCoOffset, mStoneParts[i].mFallFromPos, 0x1FF);
                 mStoneParts[i].fall_init(temp, temp4, 0x1FF, (s16)(cM_rnd() * 9.0f) + 7);
-                mDoAud_seStart(JA_SE_OBJ_JB_STONE_BRK, &mStoneParts[i].field_0x48,0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                mDoAud_seStart(JA_SE_OBJ_JB_STONE_BRK, &mStoneParts[i].mSePos,0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
                 mStoneParts[i].setDrawProc(&Part_c::draw_normal);
                 mStoneParts[i].make_fall_rock(0);
             }
@@ -785,14 +790,14 @@ bool daObjAjav::Act_c::_execute() {
             if (M_status < STATUS_MAX - 1) {
                 cond = (M_status << 1);
                 for (i = (M_status << 1); i < (cond + 2); i++) {
-                    mStoneParts[i].field_0x30 = flaw_pos[i];
+                    mStoneParts[i].mFlawPos = flaw_pos[i];
                     mStoneParts[i].setExeProc(&Part_c::flaw); 
                 }
                 set_co_offset();
-                field_0xC24 = 2;
+                mActionIdx = 2;
             } else {
-                field_0xC24 = 3;
-                field_0xC26 = 0x3C;
+                mActionIdx = 3;
+                mCutsceneEndDelay = 60;
             }
         } else {
             fopAcM_orderOtherEventId(this, mEventIdx);
@@ -803,17 +808,17 @@ bool daObjAjav::Act_c::_execute() {
         if (dComIfGp_evmng_endCheck(mEventIdx)) {
             dComIfGp_event_reset();
             if (M_status < STATUS_MAX - 1) {
-                field_0xC24 = 0;
+                mActionIdx = 0;
             } else {
-                field_0xC24 = 4;
+                mActionIdx = 4;
             }
         }
         break;
     case 3:
         if (check_end()) {
-            if (field_0xC26 == 0) {
+            if (mCutsceneEndDelay == 0) {
                 dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("Ajav"));
-                if (DEMO_SELECT(true, heap) && mpBgW) {
+                if (DEMO_SELECT(true, heap != NULL) && mpBgW != NULL) {
                     if (mpBgW->ChkUsed()) {
                         dComIfG_Bgsp()->Release(mpBgW);
 #if VERSION > VERSION_DEMO
@@ -824,17 +829,17 @@ bool daObjAjav::Act_c::_execute() {
                 on_sw(mSwNo);
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 mDoAud_subBgmStop();
-                field_0xC24 = 2;
+                mActionIdx = 2;
                 M_status++;
             } else {
-                field_0xC26--;
+                mCutsceneEndDelay--;
             }
         }
         break;
     case 4:
         break;
     default:
-        field_0xC24 = 0;
+        mActionIdx = 0;
         break;
     }
 
@@ -859,8 +864,8 @@ bool daObjAjav::Act_c::_execute() {
 
 /* 00002CF4-00002D50       .text set_se_pos__Q29daObjAjav6Part_cF4cXyz */
 void daObjAjav::Part_c::set_se_pos(cXyz i_pos) {
-    field_0x48 = i_pos + field_0x00;
-    field_0x48 += field_0x18;
+    mSePos = i_pos + mFallFromPos;
+    mSePos += field_0x18;
 }
 
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */

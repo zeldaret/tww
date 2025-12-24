@@ -19,11 +19,11 @@ namespace daObjAjav {
     public:
         typedef void(Part_c::*daObjAjavPartCallback)(daObjAjav::Act_c*);
     public:
-        bool checkExeProc(daObjAjavPartCallback i_proc) { return field_0x80 == i_proc; }
-        void draw(daObjAjav::Act_c* i_actor) {  (this->*field_0x8C)(i_actor); }
-        void execute(daObjAjav::Act_c* i_actor) { (this->*field_0x80)(i_actor); }
-        void setDrawProc(daObjAjavPartCallback i_drawProc) { field_0x8C = i_drawProc; }
-        void setExeProc(daObjAjavPartCallback i_exeProc) { field_0x80 = i_exeProc; }
+        bool checkExeProc(daObjAjavPartCallback i_proc) { return mExeProc == i_proc; }
+        void draw(daObjAjav::Act_c* i_actor) {  (this->*mDrawProc)(i_actor); }
+        void execute(daObjAjav::Act_c* i_actor) { (this->*mExeProc)(i_actor); }
+        void setDrawProc(daObjAjavPartCallback i_drawProc) { mDrawProc = i_drawProc; }
+        void setExeProc(daObjAjavPartCallback i_exeProc) { mExeProc = i_exeProc; }
         inline void set_se_pos(cXyz i_pos); // weak but not inlined
         
         void make_hamon(cXyz, float);
@@ -43,22 +43,24 @@ namespace daObjAjav {
         void draw_shy(daObjAjav::Act_c*);
         void make_fall_rock(int);
     public:
-        /* 0x00 */ cXyz field_0x00;
+        /* 0x00 */ cXyz mFallFromPos;
         /* 0x0C */ cXyz field_0x0C;
         /* 0x18 */ cXyz field_0x18;
         /* 0x24 */ cXyz field_0x24;
-        /* 0x30 */ cXyz field_0x30;
+        /* 0x30 */ cXyz mFlawPos;
         /* 0x3C */ csXyz field_0x3C;
         /* 0x42 */ csXyz field_0x42;
-        /* 0x48 */ cXyz field_0x48;
-        /* 0x54 */ u16 field_0x54[3]; // TODO: i'm not too sure what this is supposed to be
+        /* 0x48 */ cXyz mSePos;
+        /* 0x54 */ u16 field_0x54;
+        /* 0x56 */ u16 field_0x56;
+        /* 0x58 */ s16 field_0x58;
         /* 0x5A */ bool field_0x5A;
         /* 0x5B */ u8 field_0x5B[0x6C - 0x5B];
-        /* 0x6C */ cXyz field_0x6C;
-        /* 0x78 */ J3DModel* field_0x78;
-        /* 0x7C */ dKy_tevstr_c* field_0x7C;
-        /* 0x80 */ daObjAjavPartCallback field_0x80;
-        /* 0x8C */ daObjAjavPartCallback field_0x8C;
+        /* 0x6C */ cXyz m6C;
+        /* 0x78 */ J3DModel* mpModel;
+        /* 0x7C */ dKy_tevstr_c* mpTevStr;
+        /* 0x80 */ daObjAjavPartCallback mExeProc;
+        /* 0x8C */ daObjAjavPartCallback mDrawProc;
     };  // Size: 0x98
 
 
@@ -100,7 +102,7 @@ namespace daObjAjav {
         /* 0x294 */ request_of_phase_process_class mPhs;
         /* 0x29C */ dCcD_Stts mSphStts;
         /* 0x2D8 */ dCcD_Sph mSph;
-        /* 0x404 */ cXyz field_0x404;
+        /* 0x404 */ cXyz mSphCoOffset;
         /* 0x410 */ dCcD_Stts mCylStts;
         /* 0x44C */ dCcD_Cyl mCyl;
         /* 0x57C */ dCcD_Stts mHintCylStts[2];
@@ -110,11 +112,11 @@ namespace daObjAjav {
         /* 0x890 */ Part_c mStoneParts[6];
         /* 0xC20 */ s16 mEventIdx;
         /* 0xC22 */ u8 M_status;
-        /* 0xC23 */ u8 field_0xC23;
-        /* 0xC24 */ u8 field_0xC24;
+        /* 0xC23 */ bool mbResLoaded;
+        /* 0xC24 */ u8 mActionIdx;
         /* 0xC25 */ u8 mC25[0xC26 - 0xC25];
-        /* 0xC26 */ u16 field_0xC26;
-        /* 0xC28 */ u8 field_0xC28;
+        /* 0xC26 */ u16 mCutsceneEndDelay;
+        /* 0xC28 */ u8 mHintCylHits;
         /* 0xC29 */ u8 mC29[0xC2C - 0xC29];
         /* 0xC2C */ dBgW* mpBgW;
     };  // Size: 0xC30
