@@ -392,7 +392,6 @@ void daWarpgn_c::eventOrder() {
 
 /* 0000114C-00001258       .text checkOrder__10daWarpgn_cFv */
 void daWarpgn_c::checkOrder() {
-#if VERSION != VERSION_DEMO
     if (eventInfo.checkCommandDemoAccrpt()) {
         if ((dComIfGp_evmng_startCheck(mEvtToMajyuuWarpIdx) != FALSE) && (m2C4 != 0)) {
             m2C4 = 0;
@@ -414,35 +413,6 @@ void daWarpgn_c::checkOrder() {
     } else if (m2C4 == 0) {
         normal_execute();
     }
-#else
-    // very fakematch
-    daWarpgn_c* i_this = this;
-    if (i_this->eventInfo.checkCommandDemoAccrpt()) {
-        s16 evt_id = i_this->mEvtToMajyuuWarpIdx;
-        if ((dComIfGp_evmng_startCheck(evt_id) != FALSE) && (i_this->m2C4 != 0)) {
-            i_this->m2C4 = 0;
-        }
-
-        evt_id = i_this->mEvtAppearWarpIdx;
-        if ((dComIfGp_evmng_startCheck(evt_id) != FALSE) && (i_this->m2C4 != 0)) {
-            i_this->m2C4 = 0;
-        }
-
-        evt_id = i_this->mEvtToMajyuuWarpIdx;
-        if (dComIfGp_evmng_endCheck(evt_id) != FALSE) {
-            dLib_setNextStageBySclsNum(i_this->mSceneNo, fopAcM_GetRoomNo(i_this));
-        }
-
-        evt_id = i_this->mEvtAppearWarpIdx;
-        if (dComIfGp_evmng_endCheck(evt_id) != FALSE) {
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D02);
-            i_this->mEvtAppearWarpIdx = -1;
-            dComIfGp_event_reset();
-        }
-    } else if (i_this->m2C4 == 0 && !dComIfGp_event_runCheck()) {
-        normal_execute();
-    }
-#endif
 }
 
 /* 00001258-0000146C       .text anim_play__10daWarpgn_cFi */
@@ -521,7 +491,7 @@ BOOL daWarpgn_c::check_warp() {
         return FALSE;
     }
 
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000) != 0) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) != 0) {
         daShip_c* ship = dComIfGp_getShipActor();
         if (ship != NULL) {
             f32 dist_to_ship = (dComIfGp_getShipActor()->current.pos - current.pos).absXZ();
