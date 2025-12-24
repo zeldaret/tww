@@ -1788,7 +1788,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
     ActorRel(Matching,    "d_a_warpfout"),
-    ActorRel(NonMatching, "d_a_warpgn"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_warpgn"),
     ActorRel(NonMatching, "d_a_warpls"),
     ActorRel(NonMatching, "d_a_warpmj"),
     ActorRel(NonMatching, "d_a_waterfall"),
