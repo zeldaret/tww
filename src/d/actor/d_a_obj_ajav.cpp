@@ -199,8 +199,13 @@ void daObjAjav::Part_c::init_data(cXyz param_1, cXyz param_2, dKy_tevstr_c* i_te
     field_0x24 = cXyz::Zero;
     field_0x7C = i_tevstr;
     field_0x6C = *param_4 + param_1;
+#if VERSION == VERSION_DEMO
+    field_0x80 = &Part_c::no_proc;
+    field_0x8C = &Part_c::draw_normal;
+#else
     setExeProc(&Part_c::no_proc);
     setDrawProc(&Part_c::draw_normal);
+#endif
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
@@ -346,7 +351,11 @@ void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
 void daObjAjav::Part_c::flaw(daObjAjav::Act_c* i_actor) {
     field_0x18 += field_0x30;
     set_flaw_mtx(i_actor->current.pos, i_actor->shape_angle);
+#if VERSION == VERSION_DEMO
+    field_0x80 = &Part_c::no_proc;
+#else
     setExeProc(&Part_c::no_proc);
+#endif
 }
 
 /* 00000C28-00000C6C       .text draw_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -466,7 +475,7 @@ cPhs_State daObjAjav::Act_c::_create() {
 
     field_0x290 = fopAcM_GetParam(this) & 0xFF;
     field_0xC23 = 0;
-    if (check_ev() && !check_sw()) {
+    if (check_ev() && !check_sw(field_0x290)) {
         rt = dComIfG_resLoad(&mPhs, M_arcname);
         if (rt == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, Act_c::solidHeapCB, 0)) {
@@ -509,13 +518,19 @@ cPhs_State daObjAjav::Act_c::_create() {
 
 /* 00001B3C-00001C08       .text _delete__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_delete() {
-    if (heap != NULL && field_0xC2C != NULL) {
+    if (DEMO_SELECT(true, heap != NULL) && field_0xC2C != NULL) {
         if (field_0xC2C->ChkUsed()) {
             dComIfG_Bgsp()->Release(field_0xC2C);
+#if VERSION > VERSION_DEMO
             field_0xC2C = NULL;
+#endif
         }
     }
-    dComIfG_resDelete(&mPhs, M_arcname);
+
+    if (DEMO_SELECT(field_0xC23 == 1, true)) {
+        dComIfG_resDelete(&mPhs, M_arcname);
+    }
+
     for (int i = 0; i < ARRAY_SSIZE(field_0x890); i++) {
         mDoAud_seDeleteObject(&field_0x890[i].field_0x48);
     }
@@ -545,7 +560,7 @@ void daObjAjav::Act_c::set_tex() {
 /* 00001CE4-00001E3C       .text set_co_offset__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_co_offset() {
     s32 i, j;
-    JUT_ASSERT(0x494, (M_status >= 0) && (M_status < STATUS_MAX - 1));
+    JUT_ASSERT(DEMO_SELECT(1173, 1172), (M_status >= 0) && (M_status < STATUS_MAX - 1));
     field_0x404 = l_daObjAjav_co_offset[M_status];
     field_0x2D8.SetC(current.pos + field_0x404);
     field_0x44C.SetH(l_daObjAjav_hint_cyl_h_talbe[M_status]);
@@ -799,13 +814,15 @@ bool daObjAjav::Act_c::_execute() {
         if (check_end()) {
             if (field_0xC26 == 0) {
                 dComIfGp_evmng_cutEnd(dComIfGp_evmng_getMyStaffId("Ajav"));
-                if (heap && field_0xC2C) {
+                if (DEMO_SELECT(true, heap) && field_0xC2C) {
                     if (field_0xC2C->ChkUsed()) {
                         dComIfG_Bgsp()->Release(field_0xC2C);
+#if VERSION > VERSION_DEMO
                         field_0xC2C = NULL;
+#endif
                     }
                 }
-                on_sw();
+                on_sw(field_0x290);
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
                 mDoAud_subBgmStop();
                 field_0xC24 = 2;

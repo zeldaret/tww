@@ -69,8 +69,8 @@ namespace daObjAjav {
         };
     public:
         BOOL check_ev() { return dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT); }
-        BOOL check_sw() { return dComIfGs_isSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
-        void on_sw() { dComIfGs_onSwitch(field_0x290, fopAcM_GetHomeRoomNo(this)); }
+        BOOL check_sw(int sw_no) { return dComIfGs_isSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
+        void on_sw(int sw_no) { dComIfGs_onSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         
         // methods to fakematch _execute
         void fake_set_hamon(int i) { set_hamon(field_0x890[i].field_0x18.y); }
