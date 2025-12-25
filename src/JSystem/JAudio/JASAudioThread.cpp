@@ -3,6 +3,8 @@
 // Translation Unit: JASAudioThread.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASAiCtrl.h"
 #include "JSystem/JAudio/JASDSPBuf.h"

@@ -5,16 +5,21 @@
 
 class daObjGnnbtaki_c : public fopAc_ac_c {
 public:
-    void solidHeapCB(fopAc_ac_c*);
-    void create_heap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
+    BOOL create_heap();
     cPhs_State _create();
     bool _delete();
     void init_mtx();
     bool _execute();
     bool _draw();
-
+    static const char M_arcname[];
 public:
     /* Place member variables here */
+    /* 0x290 */ J3DModel* mJ3DModel;
+    /* 0x294 */ request_of_phase_process_class mPhase;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
+    /* 0x2B0 */ u8 field_0x2B0;
+    /* 0x2B1 */ u8 field_0x2B1;
 };
 
 #endif /* D_A_OBJ_GNNBTLTAKI_H */

@@ -3,6 +3,8 @@
 // Translation Unit: J3DModelData.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 #include "JSystem/JUtility/JUTNameTab.h"

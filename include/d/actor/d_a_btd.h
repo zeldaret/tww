@@ -25,9 +25,8 @@ struct btd_sibuki_s {
     /* 0x20 */ u8 m1C[0x24 - 0x1C];
 }; // Size: 0x24
 
-class btd_class : public fopAc_ac_c {
-public:
-    /* 0x0290 */ u8 m0290[0x02AC - 0x0290];
+struct btd_class {
+    /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x02AC */ request_of_phase_process_class m02AC;
     /* 0x02B4 */ request_of_phase_process_class m02B4;
     /* 0x02BC */ mDoExt_McaMorf* m02BC;

@@ -20,14 +20,13 @@ typedef enum _GXCullMode {
     /* 0x3 */ GX_CULL_ALL,
 } GXCullMode;
 
-typedef enum _GXBoolVal {
-    /* 0x0 */ GX_FALSE,
-    /* 0x1 */ GX_TRUE,
-    /* 0x0 */ GX_DISABLE = 0,
-    /* 0x1 */ GX_ENABLE,
-} GXBoolVal;
-
 typedef u8 GXBool;
+
+#define GX_FALSE ((GXBool)0)
+#define GX_TRUE ((GXBool)1)
+
+#define GX_ENABLE ((GXBool)1)
+#define GX_DISABLE ((GXBool)0)
 
 typedef enum _GXTexMapID {
     /* 0x000 */ GX_TEXMAP0,

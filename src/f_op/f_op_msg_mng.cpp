@@ -813,7 +813,7 @@ bool fopMsgM_getScopeMode() {
 
 /* 8002C624-8002C650       .text fopMsgM_forceSendOn__Fv */
 bool fopMsgM_forceSendOn() {
-    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_UNKA_e) {
+    if (dComIfGp_getScopeMesgStatus() == fopMsgStts_CLOSE_WAIT_e) {
         pushButton = true;
         return true;
     }

@@ -3,6 +3,8 @@
 // Translation Unit: std-vector.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JGadget/vector.h"
 #include "dolphin/types.h"
 

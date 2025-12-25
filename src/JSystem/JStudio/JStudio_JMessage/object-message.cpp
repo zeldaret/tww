@@ -3,6 +3,8 @@
 // Translation Unit: object-message.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JMessage/object-message.h"
 #include "dolphin/types.h"
 

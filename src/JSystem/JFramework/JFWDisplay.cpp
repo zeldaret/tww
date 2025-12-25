@@ -3,6 +3,8 @@
 // Translation Unit: JFWDisplay.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JUtility/JUTAssert.h"

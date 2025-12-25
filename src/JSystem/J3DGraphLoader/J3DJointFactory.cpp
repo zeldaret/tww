@@ -3,6 +3,8 @@
 // Translation Unit: J3DJointFactory.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphLoader/J3DJointFactory.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"

@@ -3,6 +3,8 @@
 // Translation Unit: JASDSPInterface.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASDriverTables.h"

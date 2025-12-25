@@ -3,6 +3,8 @@
 // Translation Unit: object-fog.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JStage/object-fog.h"
 #include "dolphin/types.h"
 

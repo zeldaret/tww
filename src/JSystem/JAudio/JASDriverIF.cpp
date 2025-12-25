@@ -3,6 +3,8 @@
 // Translation Unit: JASDriverIF.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASDSPChannel.h"

@@ -1905,8 +1905,7 @@ bool dCamera_c::lineBGCheckBoth(cXyz* i_start, cXyz* i_end, dBgS_LinChk* i_linCh
 u32 dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
     u32 ret = 0;
 
-    // Fakematch
-    u32 result = g_dComIfG_gameInfo.play.mCcS.GetMassResultCam();
+    u32 result = dComIfG_Ccsp()->GetMassResultCam();
     if (result & 2) {
         ret |= 1;
     }
@@ -1919,8 +1918,7 @@ u32 dCamera_c::lineCollisionCheckBush(cXyz* i_start, cXyz* i_end) {
 
     cM3dGCps cps;
     cps.Set(*i_start, *i_end, 30.0f);
-    // Fakematch
-    g_dComIfG_gameInfo.play.mCcS.SetMassCam(cps);
+    dComIfG_Ccsp()->SetMassCam(cps);
 
     return ret;
 }

@@ -3,6 +3,8 @@
 // Translation Unit: JKRAramHeap.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/os/OS.h"

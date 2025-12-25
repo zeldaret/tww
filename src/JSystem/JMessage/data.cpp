@@ -3,6 +3,8 @@
 // Translation Unit: data.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMessage/data.h"
 
 namespace JMessage {

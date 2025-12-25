@@ -6289,7 +6289,7 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
                 }
 
                 break;
-            case fopMsgStts_UNKA_e:
+            case fopMsgStts_CLOSE_WAIT_e:
                 if(m7A8 == 0) {
                     chkMsg();
                     m7A8 = 1;

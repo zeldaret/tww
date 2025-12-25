@@ -3,6 +3,8 @@
 // Translation Unit: JASDriverTables.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDriverTables.h"
 
 f32 JASystem::Driver::C5BASE_PITCHTABLE[] = {

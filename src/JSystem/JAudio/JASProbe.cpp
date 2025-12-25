@@ -3,6 +3,8 @@
 // Translation Unit: JASProbe.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASProbe.h"
 
 /* 8027D6B0-8027D6B4       .text probeStart__Q28JASystem6KernelFlPc */

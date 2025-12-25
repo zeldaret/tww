@@ -128,7 +128,7 @@ public:
     virtual void drawSelf(f32, f32, Mtx*);
     virtual void drawFullSet2(f32, f32, f32, f32, J2DBinding, J2DMirror, bool, Mtx*);
 
-private:
+public:
     /* 0x124 */ f32 m124;
     /* 0x128 */ f32 m128;
     /* 0x12C */ f32 m12C;
@@ -324,6 +324,7 @@ void fopMsgM_Delete(void* process);
 fopMsg_prm_class* fopMsgM_GetAppend(void* msg);
 void fopMsgM_destroyExpHeap(JKRExpHeap*);
 f32 fopMsgM_valueIncrease(int param_0, int param_1, u8 param_2);
+bool fopMsgM_hyrule_language_check(u32 msgNo);
 s32 fopMsgM_setStageLayer(void*);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actorP);
 fpc_ProcID fopMsgM_messageSet(u32 param_0, cXyz*);
@@ -359,6 +360,8 @@ void fopMsgM_setAlpha(fopMsgM_pane_alpha_class*);
 
 u32 fopMsgM_searchMessageNumber(u32);
 void fopMsgM_messageSendOn();
+void fopMsgM_messageSendOff();
+bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
 void fopMsgM_demoMsgFlagOn();
 
@@ -368,6 +371,8 @@ bool fopMsgM_demoMsgFlagCheck();
 void fopMsgM_tactMsgFlagOn();
 void fopMsgM_tactMsgFlagOff();
 bool fopMsgM_tactMsgFlagCheck();
+void fopMsgM_nextMsgFlagOff();
+bool fopMsgM_nextMsgFlagCheck();
 
 void fopMsgM_blendInit(fopMsgM_pane_class* i_this, const char* data);
 void fopMsgM_blendInit(J2DPicture* pic, const char* data);

@@ -95,12 +95,12 @@ void daPy_lk_c::setBowReadyAnime() {
         LKANM_BCK_ARROWSHOOT,
         UPPER_MOVE2_e,
         1.0f,
-        daPy_HIO_bow_c0::m.field_0x0 - 0.001f,
-        daPy_HIO_bow_c0::m.field_0x0,
+        m_HIO->mItem.mBow.m.field_0x0 - 0.001f,
+        m_HIO->mItem.mBow.m.field_0x0,
         10.0f
     );
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
-    m35EC = daPy_HIO_bow_c0::m.field_0x0 - 0.001f;
+    m35EC = m_HIO->mItem.mBow.m.field_0x0 - 0.001f;
     setPriTextureAnime(0x70, 0);
     m355E = 10;
     seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
@@ -111,10 +111,10 @@ void daPy_lk_c::setBowReloadAnime() {
     setActAnimeUpper(
         LKANM_BCK_ARROWRELORD,
         UPPER_MOVE2_e,
-        daPy_HIO_bow_c0::m.field_0x10,
-        daPy_HIO_bow_c0::m.field_0x14,
-        daPy_HIO_bow_c0::m.field_0x2,
-        daPy_HIO_bow_c0::m.field_0x18
+        m_HIO->mItem.mBow.m.field_0x10,
+        m_HIO->mItem.mBow.m.field_0x14,
+        m_HIO->mItem.mBow.m.field_0x2,
+        m_HIO->mItem.mBow.m.field_0x18
     );
     setPriTextureAnime(0x8d, 0);
     mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
@@ -130,10 +130,10 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             setActAnimeUpper(
                 LKANM_BCK_ARROWSHOOT,
                 UPPER_MOVE2_e,
-                daPy_HIO_bow_c0::m.field_0x4,
-                daPy_HIO_bow_c0::m.field_0x8,
-                daPy_HIO_bow_c0::m.field_0x0,
-                daPy_HIO_bow_c0::m.field_0xC
+                m_HIO->mItem.mBow.m.field_0x4,
+                m_HIO->mItem.mBow.m.field_0x8,
+                m_HIO->mItem.mBow.m.field_0x0,
+                m_HIO->mItem.mBow.m.field_0xC
             );
             setPriTextureAnime(0x70, 0);
             mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
@@ -244,7 +244,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
     if (!checkBowAnime()) {
         setBowReadyAnime();
     }
-    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     mVelocity = 0.0f;
 
@@ -285,7 +285,7 @@ BOOL daPy_lk_c::procBowMove_init() {
     if (!checkBowAnime()) {
         setBowReadyAnime();
     }
-    setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
     return true;
 }
@@ -305,7 +305,7 @@ BOOL daPy_lk_c::procBowMove() {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
             current.angle.y = shape_angle.y + -0x4000;
         } else {

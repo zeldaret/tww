@@ -76,10 +76,10 @@ BOOL daPy_lk_c::checkNextActionBoomerangReady() {
         setActAnimeUpper(
             LKANM_BCK_BOOMTHROW,
             UPPER_MOVE2_e,
-            daPy_HIO_boom_c0::m.field_0x4,
-            daPy_HIO_boom_c0::m.field_0x8,
-            daPy_HIO_boom_c0::m.field_0x0,
-            daPy_HIO_boom_c0::m.field_0xC
+            m_HIO->mItem.mBoom.m.field_0x4,
+            m_HIO->mItem.mBoom.m.field_0x8,
+            m_HIO->mItem.mBoom.m.field_0x0,
+            m_HIO->mItem.mBoom.m.field_0xC
         );
         setPriTextureAnime(0x48, 0);
         return true;
@@ -93,7 +93,7 @@ void daPy_lk_c::checkNextActionBoomerangFly() {
         checkNextActionBoomerangReady();
     } else if (itemTrigger() && mEquipItem == getReadyItem()) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC
+            LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, m_HIO->mBasic.m.field_0xC
         );
     }
 }
@@ -119,10 +119,10 @@ BOOL daPy_lk_c::changeBoomerangCatchProc() {
             setActAnimeUpper(
                 LKANM_BCK_BOOMCATCH,
                 UPPER_MOVE2_e,
-                daPy_HIO_boom_c0::m.field_0x20,
-                daPy_HIO_boom_c0::m.field_0x24,
-                daPy_HIO_boom_c0::m.field_0x2,
-                daPy_HIO_boom_c0::m.field_0x28
+                m_HIO->mItem.mBoom.m.field_0x20,
+                m_HIO->mItem.mBoom.m.field_0x24,
+                m_HIO->mItem.mBoom.m.field_0x2,
+                m_HIO->mItem.mBoom.m.field_0x28
             );
             setPriTextureAnime(0x49, 0);
             seStartOnlyReverb(JA_SE_LK_BOOM_CATCH);
@@ -146,7 +146,7 @@ BOOL daPy_lk_c::procBoomerangSubject_init() {
     mVelocity = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
 
@@ -201,8 +201,8 @@ BOOL daPy_lk_c::procBoomerangMove_init() {
         mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, daPy_HIO_boom_c0::m.field_0x18, 0.0f, -1, -1.0f);
-    setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, -1.0f);
+    setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
     return true;
 }
@@ -225,7 +225,7 @@ BOOL daPy_lk_c::procBoomerangMove() {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
         } else {
             offModeFlg(ModeFlg_00000001);
@@ -246,10 +246,10 @@ BOOL daPy_lk_c::procBoomerangCatch_init() {
     commonProcInit(daPyProc_BOOMERANG_CATCH_e);
     setSingleMoveAnime(
         ANM_BOOMCATCH,
-        daPy_HIO_boom_c0::m.field_0x20,
-        daPy_HIO_boom_c0::m.field_0x24,
-        daPy_HIO_boom_c0::m.field_0x2,
-        daPy_HIO_boom_c0::m.field_0x28
+        m_HIO->mItem.mBoom.m.field_0x20,
+        m_HIO->mItem.mBoom.m.field_0x24,
+        m_HIO->mItem.mBoom.m.field_0x2,
+        m_HIO->mItem.mBoom.m.field_0x28
     );
     offNoResetFlg0(daPyFlg0_UNK20);
     return true;
@@ -260,7 +260,7 @@ BOOL daPy_lk_c::procBoomerangCatch() {
     if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
-        setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+        setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);

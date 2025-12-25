@@ -3,6 +3,8 @@
 // Translation Unit: JKRAram.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramPiece.h"
 #include "JSystem/JKernel/JKRAramStream.h"

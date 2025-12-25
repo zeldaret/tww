@@ -3,6 +3,8 @@
 // Translation Unit: JASChAllocQueue.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASChAllocQueue.h"
 #include "JSystem/JAudio/JASChannel.h"
 #include "JSystem/JAudio/JASChannelMgr.h"
