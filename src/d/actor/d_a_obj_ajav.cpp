@@ -779,7 +779,11 @@ bool daObjAjav::Act_c::_execute() {
             }
             
             make_shot_rock();
-            set_stone_hamon(get_stone_row()); // fakematch, see header
+
+            int idx = get_stone_row();
+            f32 y = mStoneParts[idx].field_0x18.y;
+            
+            set_hamon(y);
 
             M_status++;
             if (M_status < STATUS_MAX - 1) {

@@ -74,9 +74,8 @@ namespace daObjAjav {
         BOOL check_sw(int sw_no) { return dComIfGs_isSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         void on_sw(int sw_no) { dComIfGs_onSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         
-        // fake inline methods to match _execute, these aren't in the debug maps 
-        // and both of these are needed to match
-        void set_stone_hamon(int i) { set_hamon(mStoneParts[i].field_0x18.y); }
+        // fake inline method to match _execute, this isn't in the debug maps but is needed
+        // in the call to set_hamon
         // the stone is 6 fragments arranged in a 3x2 (row x col) grid
         // this gets the starting index of the n'th row
         int get_stone_row() { return M_status << 1; }
