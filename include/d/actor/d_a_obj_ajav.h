@@ -74,9 +74,12 @@ namespace daObjAjav {
         BOOL check_sw(int sw_no) { return dComIfGs_isSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         void on_sw(int sw_no) { dComIfGs_onSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         
-        // methods to fakematch _execute
-        void fake_set_hamon(int i) { set_hamon(mStoneParts[i].field_0x18.y); }
-        int fake_M_status() { return M_status << 1; }
+        // fake inline methods to match _execute, these aren't in the debug maps 
+        // and both of these are needed to match
+        void set_stone_hamon(int i) { set_hamon(mStoneParts[i].field_0x18.y); }
+        // the stone is 6 fragments arranged in a 3x2 (row x col) grid
+        // this gets the starting index of the n'th row
+        int get_stone_row() { return M_status << 1; }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();

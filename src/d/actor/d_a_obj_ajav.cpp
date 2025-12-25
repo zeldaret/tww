@@ -49,8 +49,8 @@ static dCcD_SrcSph l_daObjAjav_sph_data = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 32,
-        /* SrcObjTg  SPrm    */ 0xF,
+        /* SrcObjTg  Type    */ AT_TYPE_BOMB,
+        /* SrcObjTg  SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e | dCcG_TgSPrm_ShieldFrontRange_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -78,8 +78,8 @@ static dCcD_SrcCyl l_daObjAjav_cyl_data = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0x20,
-        /* SrcObjTg  SPrm    */ 0x09,
+        /* SrcObjTg  Type    */ AT_TYPE_BOMB,
+        /* SrcObjTg  SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_ShieldFrontRange_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -242,9 +242,9 @@ void daObjAjav::Part_c::set_flaw_mtx(cXyz param_1, csXyz param_2) {
 }
 
 /* 000005A8-0000067C       .text set_fall_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
-void daObjAjav::Part_c::set_fall_mtx(cXyz param_1, csXyz param_2) {
-    mDoMtx_stack_c::transS(param_1);
-    mDoMtx_stack_c::ZXYrotM(param_2);
+void daObjAjav::Part_c::set_fall_mtx(cXyz i_pos, csXyz i_angle) {
+    mDoMtx_stack_c::transS(i_pos);
+    mDoMtx_stack_c::ZXYrotM(i_angle);
     mDoMtx_stack_c::transM(field_0x18);
     mDoMtx_stack_c::transM(mFallFromPos);
     mDoMtx_stack_c::ZXYrotM(field_0x3C);
@@ -283,38 +283,33 @@ BOOL daObjAjav::check_angle(short* param_1, short param_2) {
 
 /* 0000076C-0000095C       .text fall_0__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
-    cXyz temp1(0.0f, -10.0f, 0.0f);
+    cXyz temp(0.0f, -10.0f, 0.0f);
     
     field_0x3C += field_0x42;
 
-    // fakematch
     if (check_angle(&field_0x3C.x, field_0x58)) {
         field_0x42.x *= -1;
     }
 
-    // fakematch too
     if (check_angle(&field_0x3C.y, field_0x58)) {
         field_0x42.y *= -1;
     }
 
     field_0x18 += field_0x24;
 
-    f32 rnd = 0.8f + (0.2f * cM_rnd());
-    field_0x24.z = field_0x24.z * rnd;
+    field_0x24.z *= 0.8f + (0.2f * cM_rnd());
     field_0x56++;
     if (field_0x56 == field_0x54) {
-        temp1 = field_0x24 * 0.4f;
-        temp1.y = 5.0f;
-        field_0x24 = temp1;
+        temp = field_0x24 * 0.4f;
+        temp.y = 5.0f;
+        field_0x24 = temp;
 
         setExeProc(&Part_c::fall_1);
 
         field_0x56 = 0;
         
         field_0x42 = csXyz(field_0x42 * 0.3f);
-
-        s16 rnd2 = static_cast<int>(cM_rnd() * -2.0f) * ((s16)(cM_rnd() * 511.0f));
-        field_0x42.z = rnd2;
+        field_0x42.z = static_cast<int>(cM_rnd() * -2.0f) * s16(cM_rnd() * 511.0f);
     }
     set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
@@ -567,7 +562,7 @@ void daObjAjav::Act_c::set_co_offset() {
     mSph.SetC(current.pos + mSphCoOffset);
     mCyl.SetH(l_daObjAjav_hint_cyl_h_talbe[M_status]);
 
-    for (i = M_status << 1, j = 0; j < ARRAY_SSIZE(mHintCyls); i++, j++) {
+    for (i = get_stone_row(), j = 0; j < ARRAY_SSIZE(mHintCyls); i++, j++) {
         mHintCyls[j].SetC(current.pos + l_daObjAjav_cyl_offset[i]);
         mHintCyls[j].SetR(l_daObjAjav_cyl_r[i]);
         mHintCyls[j].SetH(l_daObjAjav_cyl_h[i]);
@@ -634,7 +629,7 @@ void daObjAjav::Act_c::to_broken() {
 /* 000020B0-00002124       .text damage_part__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::damage_part() {
     BOOL rt = FALSE;
-    if (M_status < 3 && mSph.ChkTgHit()) {
+    if (M_status < STATUS_MAX - 1 && mSph.ChkTgHit()) {
         to_broken();
         mSph.ClrTgHit();
         rt = TRUE;
@@ -756,12 +751,12 @@ bool daObjAjav::Act_c::_execute() {
             if (stone_broken != true) {
                 mCylStts.Move();
                 if (mCyl.ChkTgHit()) {
-                    int cond = (M_status << 1);
-                    for (int i = M_status << 1; i < (cond + 2); i++) {
-                        mStoneParts[i].make_fall_rock(1);
-                        mStoneParts[i].field_0x56 = 0;
-                        mStoneParts[i].field_0x54 = 30;
-                        mStoneParts[i].setDrawProc(&Part_c::draw_flashing_normal);
+                    cond = get_stone_row();
+                    for (int j = get_stone_row(); j < (cond + 2); j++) {
+                        mStoneParts[j].make_fall_rock(1);
+                        mStoneParts[j].field_0x56 = 0;
+                        mStoneParts[j].field_0x54 = 30;
+                        mStoneParts[j].setDrawProc(&Part_c::draw_flashing_normal);
                     }
                     mCyl.ClrTgHit(); 
                 }
@@ -770,8 +765,8 @@ bool daObjAjav::Act_c::_execute() {
         break;
     case 1:
         if (eventInfo.checkCommandDemoAccrpt()) {
-            cond = M_status << 1;
-            for (i = M_status << 1; i < (cond + 2); i++) {
+            cond = get_stone_row();
+            for (i = get_stone_row(); i < (cond + 2); i++) {
                 temp.x = 12.0f;
                 if ((i & 1) == 0) {
                     temp.x *= -1.0f;
@@ -784,12 +779,12 @@ bool daObjAjav::Act_c::_execute() {
             }
             
             make_shot_rock();
-            fake_set_hamon(fake_M_status()); // *very* fakematch
-            
+            set_stone_hamon(get_stone_row()); // fakematch, see header
+
             M_status++;
             if (M_status < STATUS_MAX - 1) {
-                cond = (M_status << 1);
-                for (i = (M_status << 1); i < (cond + 2); i++) {
+                cond = get_stone_row();
+                for (i = get_stone_row(); i < (cond + 2); i++) {
                     mStoneParts[i].mFlawPos = flaw_pos[i];
                     mStoneParts[i].setExeProc(&Part_c::flaw); 
                 }
@@ -843,7 +838,7 @@ bool daObjAjav::Act_c::_execute() {
         break;
     }
 
-    if (M_status < 3) {
+    if (M_status < STATUS_MAX - 1) {
         dComIfG_Ccsp()->Set(&mSph);
         dComIfG_Ccsp()->Set(&mCyl);
         for (i = 0; i < 2; i++) {
