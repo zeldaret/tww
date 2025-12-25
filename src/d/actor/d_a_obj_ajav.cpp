@@ -781,9 +781,7 @@ bool daObjAjav::Act_c::_execute() {
             make_shot_rock();
 
             int idx = get_stone_row();
-            f32 y = mStoneParts[idx].field_0x18.y;
-            
-            set_hamon(y);
+            set_hamon(mStoneParts[idx].field_0x18.y);
 
             M_status++;
             if (M_status < STATUS_MAX - 1) {
