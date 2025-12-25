@@ -19,18 +19,18 @@ public:
         PRM_SOUND_S = 0x08
     };
     
-    void isBodyAppear() {}
-    void isHoleAppear() {}
-    void modeProcInit(int) {}
+    bool isBodyAppear() {return mMode != 1 && mMode != 0x12 && mMode != 0 && (mMode != 2 && (mMode != 4) && (mMode != 3 && (mMode != 0x11)));}
+    bool isHoleAppear() {return field_0x3E0 > 0.015f;} // unsure?
+    void modeProcInit(int newMode) {modeProc(PROC_0_e, newMode);}
 
     void _nodeControl(J3DNode*, J3DModel*);
-    void _createHeap();
-    void holeCreateHeap();
-    void bodyCreateHeap();
-    void jntHitCreateHeap();
-    void _pathMove(cXyz*, cXyz*, cXyz*);
-    void searchNearOtherActor(fopAc_ac_c*);
-    void searchNearFm(fopAc_ac_c*);
+    BOOL _createHeap();
+    BOOL holeCreateHeap();
+    BOOL bodyCreateHeap();
+    BOOL jntHitCreateHeap();
+    BOOL _pathMove(cXyz*, cXyz*, cXyz*);
+    fopAc_ac_c* searchNearOtherActor(fopAc_ac_c*);
+    bool searchNearFm(fopAc_ac_c*);
     void moveRndBack();
     void moveRndEscape();
     void spAttackVJump();
@@ -43,7 +43,7 @@ public:
     void setAttention();
     bool checkTgHit();
     void setGrabPos();
-    void getOffsetPos();
+    cXyz getOffsetPos();
     u8 checkPlayerGrabBomb();
     u8 checkPlayerGrabNpc();
     u8 checkPlayerGrabTarget();
@@ -113,7 +113,7 @@ public:
     int setRnd(int, int);
     void setHoleEffect();
     void holeExecute();
-    u8 setHoleScale(f32, f32, f32);
+    bool setHoleScale(f32, f32, f32);
     bool _execute();
     void MtxToRot(Mtx, csXyz*);
     void debugDraw();
@@ -135,9 +135,9 @@ public:
 public:
     /* 0x2AC */ int mMode;
     /* 0x2B0 */ dPa_followEcallBack mpFollowEcallBack;
-    /* 0x2C4 */ u8 field_0x2C4[0x2C5 - 0x2C4];
-    /* 0x2C5 */ s8 field_0x2C5;
-    /* 0x2C6 */ u8 field_0x2C6[0x2C7 - 0x2C6];
+    /* 0x2C4 */ s8 mBckIdx;
+    /* 0x2C5 */ s8 mAnmPrmIdx;
+    /* 0x2C6 */ s8 mOldAnmPrmIdx;
     /* 0x2C7 */ u8 field_0x2C7;
     /* 0x2C8 */ u16 field_0x2C8;
     /* 0x2CA */ u8 field_0x2CA[0x2CC - 0x2CA];
@@ -149,11 +149,13 @@ public:
     /* 0x2E0 */ f32 field_0x2E0;
     /* 0x2E4 */ u8 field_0x2E4;
     /* 0x2E5 */ bool field_0x2E5;
-    /* 0x2E6 */ u8 field_0x2E6[0x330 - 0x2E6];
+    /* 0x2E6 */ u8 field_0x2E6[0x2E8 - 0x2E6];
+    /* 0x2E8 */ cXyz field_0x2E8[6];
     /* 0x330 */ Quaternion field_0x330[6];
-    /* 0x390 */ u8 field_0x390[0x394 - 0x390];
+    /* 0x390 */ int field_0x390;
     /* 0x394 */ f32 field_0x394;
-    /* 0x398 */ u8 field_0x398[0x3B0 - 0x398];
+    /* 0x398 */ cXyz field_0x398;
+    /* 0x3A4 */ cXyz field_0x3A4;
     /* 0x3B0 */ cXyz field_0x3B0;
     /* 0x3BC */ u8 field_0x3BC[0x3C0 - 0x3BC];
     /* 0x3C0 */ dPath* mpPath;
@@ -161,7 +163,7 @@ public:
     /* 0x3C8 */ J3DModel* mpModel;
     /* 0x3CC */ mDoExt_btkAnm mBtkAnm;
     /* 0x3E0 */ f32 field_0x3E0;
-    /* 0x3E4 */ u8 field_0x3E4[0x3F0 - 0x3E4];
+    /* 0x3E4 */ cXyz field_0x3E4;
     /* 0x3F0 */ request_of_phase_process_class mPhs;
     /* 0x3F8 */ u8 field_0x3F8[0x400 - 0x3F8];
     /* 0x400 */ mDoExt_McaMorf* mpMorf;
@@ -183,9 +185,11 @@ public:
     /* 0x66C */ fopAc_ac_c* mpActorTarget;
     /* 0x670 */ fpc_ProcID mProcId;
     /* 0x674 */ cXyz mGrabPos;
-    /* 0x680 */ u8 field_0x680[0x684 - 0x680];
+    /* 0x680 */ s16 field_0x680;
+    /* 0x682 */ u8 field_0x682[0x684 - 0x682];
     /* 0x684 */ int field_0x684;
-    /* 0x688 */ u8 field_0x688[0x68C - 0x688];
+    /* 0x688 */ u8 field_0x688[0x68A - 0x688];
+    /* 0x68A */ s16 field_0x68A;
     /* 0x68C */ s16 field_0x68C;
     /* 0x68E */ u8 field_0x68E[0x690 - 0x68E];
     /* 0x690 */ cXyz field_0x690;
@@ -196,7 +200,7 @@ public:
     /* 0x6B8 */ u8 field_0x6B8;
     /* 0x6B9 */ u8 field_0x6B9[0x6BC - 0x6B9];
     /* 0x6BC */ Mtx field_0x6BC;
-    /* 0x6EC */ u8 field_0x6EC[0x6F0 - 0x6EC];
+    /* 0x6EC */ JntHit_c* mpJntHit;
     /* 0x6F0 */ dCcD_Stts mStts;
     /* 0x72C */ dCcD_Stts mStts2;
     /* 0x768 */ dCcD_Sph mSph;
@@ -208,7 +212,8 @@ public:
     /* 0x9D0 */ s16 field_0x9D0;
     /* 0x9D2 */ u8 field_0x9D2[0x9D4 - 0x9D2];
     /* 0x9D4 */ f32 field_0x9D4;
-    /* 0x9D8 */ u8 field_0x9D8[0xA48 - 0x9D8];
+    /* 0x9D8 */ dBgS_LinChk mLinChk;
+    /* 0xA44 */ u8 field_0xA44[0xA48 - 0xA44];
     /* 0xA48 */ cXyz field_0xA48[12];
     /* 0xAD8 */ bool field_0xAD8[12];
     /* 0xAE4 */ u8 field_0xAE4;
