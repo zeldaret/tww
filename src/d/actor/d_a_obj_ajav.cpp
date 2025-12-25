@@ -194,7 +194,7 @@ void daObjAjav::Part_c::no_proc(daObjAjav::Act_c*) {
 void daObjAjav::Part_c::init_data(cXyz actor_pos, cXyz param_2, dKy_tevstr_c* i_tevstr, cXyz* rock_pos) {
     mFallFromPos = param_2;
     field_0x0C = cXyz::Zero - mFallFromPos;
-    field_0x3C = csXyz::Zero;
+    mAccumulatedFallRotation = csXyz::Zero;
     field_0x18 = cXyz::Zero;
     field_0x24 = cXyz::Zero;
     mpTevStr = i_tevstr;
@@ -247,7 +247,7 @@ void daObjAjav::Part_c::set_fall_mtx(cXyz i_pos, csXyz i_angle) {
     mDoMtx_stack_c::ZXYrotM(i_angle);
     mDoMtx_stack_c::transM(field_0x18);
     mDoMtx_stack_c::transM(mFallFromPos);
-    mDoMtx_stack_c::ZXYrotM(field_0x3C);
+    mDoMtx_stack_c::ZXYrotM(mAccumulatedFallRotation);
     mDoMtx_stack_c::transM(field_0x0C);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();  
@@ -256,7 +256,7 @@ void daObjAjav::Part_c::set_fall_mtx(cXyz i_pos, csXyz i_angle) {
 /* 0000067C-000006E4       .text fall_init__Q29daObjAjav6Part_cF4cXyz5csXyzsUs */
 void daObjAjav::Part_c::fall_init(cXyz param_1, csXyz param_2, short param_3, unsigned short param_4) {
     field_0x24 = param_1;
-    field_0x42 = param_2;
+    mFallAngularVelocity = param_2;
 
     field_0x58 = param_3;
     field_0x54 = param_4;
@@ -285,14 +285,14 @@ BOOL daObjAjav::check_angle(short* param_1, short param_2) {
 void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
     cXyz temp(0.0f, -10.0f, 0.0f);
     
-    field_0x3C += field_0x42;
+    mAccumulatedFallRotation += mFallAngularVelocity;
 
-    if (check_angle(&field_0x3C.x, field_0x58)) {
-        field_0x42.x *= -1;
+    if (check_angle(&mAccumulatedFallRotation.x, field_0x58)) {
+        mFallAngularVelocity.x *= -1;
     }
 
-    if (check_angle(&field_0x3C.y, field_0x58)) {
-        field_0x42.y *= -1;
+    if (check_angle(&mAccumulatedFallRotation.y, field_0x58)) {
+        mFallAngularVelocity.y *= -1;
     }
 
     field_0x18 += field_0x24;
@@ -308,8 +308,8 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
 
         field_0x56 = 0;
         
-        field_0x42 = csXyz(field_0x42 * 0.3f);
-        field_0x42.z = static_cast<int>(cM_rnd() * -2.0f) * s16(cM_rnd() * 511.0f);
+        mFallAngularVelocity = csXyz(mFallAngularVelocity * 0.3f);
+        mFallAngularVelocity.z = static_cast<int>(cM_rnd() * -2.0f) * s16(cM_rnd() * 511.0f);
     }
     set_fall_mtx(i_actor->current.pos, i_actor->shape_angle);
 }
@@ -318,7 +318,7 @@ void daObjAjav::Part_c::fall_0(daObjAjav::Act_c* i_actor) {
 void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
     field_0x18 += field_0x24;
     field_0x18.y -= field_0x56 * 2.0f;
-    field_0x3C += field_0x42;
+    mAccumulatedFallRotation += mFallAngularVelocity;
   
 
     field_0x56++; 
@@ -780,8 +780,8 @@ bool daObjAjav::Act_c::_execute() {
             
             make_shot_rock();
 
-            int idx = get_stone_row();
-            set_hamon(mStoneParts[idx].field_0x18.y);
+            s32 row = get_stone_row();
+            set_hamon(mStoneParts[row].field_0x18.y);
 
             M_status++;
             if (M_status < STATUS_MAX - 1) {

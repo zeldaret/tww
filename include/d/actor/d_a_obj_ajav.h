@@ -48,8 +48,8 @@ namespace daObjAjav {
         /* 0x18 */ cXyz field_0x18;
         /* 0x24 */ cXyz field_0x24;
         /* 0x30 */ cXyz mFlawPos;
-        /* 0x3C */ csXyz field_0x3C;
-        /* 0x42 */ csXyz field_0x42;
+        /* 0x3C */ csXyz mAccumulatedFallRotation;
+        /* 0x42 */ csXyz mFallAngularVelocity;
         /* 0x48 */ cXyz mSePos;
         /* 0x54 */ u16 field_0x54;
         /* 0x56 */ u16 field_0x56;
@@ -78,7 +78,7 @@ namespace daObjAjav {
         // in the call to set_hamon
         // the stone is 6 fragments arranged in a 3x2 (row x col) grid
         // this gets the starting index of the n'th row
-        int get_stone_row() { return M_status << 1; }
+        s32 get_stone_row() { return M_status << 1; }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
