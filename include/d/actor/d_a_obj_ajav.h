@@ -8,10 +8,10 @@
 #include "f_op/f_op_actor_mng.h"
 
 namespace daObjAjav {
-    static void daObjAjav_make_splash(cXyz, float);
-    static BOOL check_angle(short*, short);
-    static void daObjAjav_limit_angle(short*, short);
-    static csXyz daObjAjav_get_rot_speed(cXyz, cXyz, short);
+    static void daObjAjav_make_splash(cXyz, f32);
+    static BOOL check_angle(s16*, s16);
+    static void daObjAjav_limit_angle(s16*, s16);
+    static csXyz daObjAjav_get_rot_speed(cXyz, cXyz, s16);
     
     class Act_c;
     
@@ -26,14 +26,14 @@ namespace daObjAjav {
         void setExeProc(daObjAjavPartCallback i_exeProc) { mExeProc = i_exeProc; }
         inline void set_se_pos(cXyz i_pos); // weak but not inlined
         
-        void make_hamon(cXyz, float);
+        void make_hamon(cXyz, f32);
         void no_proc(daObjAjav::Act_c*);
         void init_data(cXyz, cXyz, dKy_tevstr_c*, cXyz*);
-        BOOL set_mdl_area(const char*, int, unsigned long);
+        BOOL set_mdl_area(const char*, int, u32);
         void init_mtx(cXyz, csXyz, cXyz);
         void set_flaw_mtx(cXyz, csXyz);
         void set_fall_mtx(cXyz, csXyz);
-        void fall_init(cXyz, csXyz, short, unsigned short);
+        void fall_init(cXyz, csXyz, s16, u16);
         void fall_0(daObjAjav::Act_c*);
         void fall_1(daObjAjav::Act_c*);
         void flaw(daObjAjav::Act_c*);
@@ -41,22 +41,22 @@ namespace daObjAjav {
         void draw_flashing(daObjAjav::Act_c*);
         void draw_flashing_normal(daObjAjav::Act_c*);
         void draw_shy(daObjAjav::Act_c*);
-        void make_fall_rock(int);
+        void make_fall_rock(BOOL);
     public:
-        /* 0x00 */ cXyz mFallFromPos;
-        /* 0x0C */ cXyz field_0x0C;
-        /* 0x18 */ cXyz field_0x18;
-        /* 0x24 */ cXyz field_0x24;
+        /* 0x00 */ cXyz mRockOffset;
+        /* 0x0C */ cXyz mInverseRockOffset;
+        /* 0x18 */ cXyz mRockDisplacement;
+        /* 0x24 */ cXyz mRockDisplacementRate;
         /* 0x30 */ cXyz mFlawPos;
-        /* 0x3C */ csXyz mAccumulatedFallRotation;
-        /* 0x42 */ csXyz mFallAngularVelocity;
+        /* 0x3C */ csXyz mAccumulatedRotation;
+        /* 0x42 */ csXyz mRotationSpeed;
         /* 0x48 */ cXyz mSePos;
-        /* 0x54 */ u16 field_0x54;
-        /* 0x56 */ u16 field_0x56;
-        /* 0x58 */ s16 field_0x58;
-        /* 0x5A */ bool field_0x5A;
-        /* 0x5B */ u8 field_0x5B[0x6C - 0x5B];
-        /* 0x6C */ cXyz m6C;
+        /* 0x54 */ u16 mTimerTrigger;
+        /* 0x56 */ u16 mTimer;
+        /* 0x58 */ s16 mAngleLimit;
+        /* 0x5A */ bool mbHasSplashed;
+        /* 0x5B */ u8 mB8[0x6C - 0x5B];
+        /* 0x6C */ cXyz mRockParticlePos;
         /* 0x78 */ J3DModel* mpModel;
         /* 0x7C */ dKy_tevstr_c* mpTevStr;
         /* 0x80 */ daObjAjavPartCallback mExeProc;
