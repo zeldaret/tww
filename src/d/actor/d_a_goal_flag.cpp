@@ -8,6 +8,13 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+static const char* sub_arcname_tbl[] = {
+    "Gflag",
+    "Tgflag"
+};
+static const char arcname[] = "Cloth";
+static daGoal_Flag_HIO_c l_HIO;
+
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
 void daGFlag_packet_c::setTexObj(unsigned char) {
     /* Nonmatching */
@@ -106,6 +113,7 @@ static cPhs_State daGoal_FlagCreate(void* i_this) {
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daGoal_Flag_c);
 }
 
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
