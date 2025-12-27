@@ -29,8 +29,7 @@ void daObj_Pbco_c::set_mtx() {
 
 /* 0000018C-000001AC       .text CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
-    daObj_Pbco_c* a_this = static_cast<daObj_Pbco_c*>(i_this);
-    return a_this->CreateHeap();
+    return ((daObj_Pbco_c*)i_this)->CreateHeap();
 }
 
 /* 000001AC-00000348       .text CreateHeap__12daObj_Pbco_cFv */
@@ -80,7 +79,7 @@ cPhs_State daObj_Pbco_c::_create() {
 
 /* 000003A4-00000434       .text daObj_PbcoCreate__FPv */
 static cPhs_State daObj_PbcoCreate(void* i_this) {
-    return static_cast<daObj_Pbco_c*>(i_this)->_create();
+    return ((daObj_Pbco_c*)i_this)->_create();
 }
 
 bool daObj_Pbco_c::_delete() {
@@ -93,8 +92,7 @@ bool daObj_Pbco_c::_delete() {
 
 /* 00000434-0000048C       .text daObj_PbcoDelete__FPv */
 static BOOL daObj_PbcoDelete(void* i_this) {
-    static_cast<daObj_Pbco_c*>(i_this)->_delete();
-    return TRUE;
+    return ((daObj_Pbco_c*)i_this)->_delete();
 }
 
 bool daObj_Pbco_c::_execute() {
@@ -106,21 +104,19 @@ bool daObj_Pbco_c::_execute() {
 
 /* 0000048C-000004D0       .text daObj_PbcoExecute__FPv */
 static BOOL daObj_PbcoExecute(void* i_this) {
-    return static_cast<daObj_Pbco_c*>(i_this)->_execute();
+    return ((daObj_Pbco_c*)i_this)->_execute();
 }
 
 bool daObj_Pbco_c::_draw() {
-    dKy_tevstr_c* pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr); // fakematch
-    g_env_light.setLightTevColorType(mpModel, pTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }
 
 /* 000004D0-0000053C       .text daObj_PbcoDraw__FPv */
 static BOOL daObj_PbcoDraw(void* i_this) {
-    daObj_Pbco_c* a_this = (daObj_Pbco_c*)i_this;
-    return a_this->_draw();
+    return ((daObj_Pbco_c*)i_this)->_draw();
 }
 
 /* 0000053C-00000544       .text daObj_PbcoIsDelete__FPv */

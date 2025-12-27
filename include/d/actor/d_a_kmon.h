@@ -10,6 +10,11 @@ public:
     cPhs_State CreateInit();
     void checkTalk();
 
+    inline cPhs_State _create();
+    inline BOOL _delete();
+    inline BOOL _draw();
+    inline BOOL _execute();
+
     static const char m_arcname[];
 
 public:
