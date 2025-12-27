@@ -199,13 +199,8 @@ void daObjAjav::Part_c::init_data(cXyz i_actorPos, cXyz i_rockOffset, dKy_tevstr
     mRockDisplacementRate = cXyz::Zero;
     mpTevStr = i_tevStr;
     mRockParticlePos = *i_rockPos + i_actorPos;
-#if VERSION > VERSION_DEMO
-    setExeProc(&Part_c::no_proc);
-    setDrawProc(&Part_c::draw_normal);
-#else
     mExeProc = &Part_c::no_proc;
     mDrawProc = &Part_c::draw_normal;
-#endif
 }
 
 /* 000003A8-00000464       .text set_mdl_area__Q29daObjAjav6Part_cFPCciUl */
@@ -345,11 +340,7 @@ void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
 void daObjAjav::Part_c::flaw(daObjAjav::Act_c* i_actor) {
     mRockDisplacement += mFlawPos;
     set_flaw_mtx(i_actor->current.pos, i_actor->shape_angle);
-#if VERSION > VERSION_DEMO
-    setExeProc(&Part_c::no_proc);
-#else
     mExeProc = &Part_c::no_proc;
-#endif
 }
 
 /* 00000C28-00000C6C       .text draw_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -385,9 +376,13 @@ void daObjAjav::Part_c::draw_flashing(daObjAjav::Act_c*) {
     }
 }
 
+// Unused member function
+void daObjAjav::Part_c::draw_flashing_shy(daObjAjav::Act_c*) {
+    (void)&daObjAjav::Part_c::draw_shy;
+}
+
 /* 00000EA8-00000F10       .text draw_flashing_normal__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
 void daObjAjav::Part_c::draw_flashing_normal(daObjAjav::Act_c* i_actor) {
-    (void)&daObjAjav::Part_c::draw_shy; // fakematch?
     draw_flashing(i_actor);
     mTimer++;
     if (mTimer == mTimerTrigger) {

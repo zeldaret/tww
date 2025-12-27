@@ -39,6 +39,7 @@ namespace daObjAjav {
         void flaw(daObjAjav::Act_c*);
         void draw_normal(daObjAjav::Act_c*);
         void draw_flashing(daObjAjav::Act_c*);
+        void draw_flashing_shy(daObjAjav::Act_c*);
         void draw_flashing_normal(daObjAjav::Act_c*);
         void draw_shy(daObjAjav::Act_c*);
         void make_fall_rock(BOOL);
