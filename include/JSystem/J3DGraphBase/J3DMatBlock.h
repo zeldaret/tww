@@ -625,8 +625,6 @@ struct J3DBlend : public J3DBlendInfo {
     // void operator==(J3DBlend&) {}
 };
 
-extern const J3DFogInfo j3dDefaultFogInfo;
-
 struct J3DFog : public J3DFogInfo {
     // J3DFog() { *getFogInfo() = j3dDefaultFogInfo; } // Produces the wrong codegen for mDoExt_backupMatBlock_c's constructor
     J3DFog() { J3DFogInfo::operator=(j3dDefaultFogInfo); }
@@ -639,17 +637,6 @@ struct J3DFog : public J3DFogInfo {
         J3DGDSetFogRangeAdj(mAdjEnable, mCenter, (GXFogAdjTable*)mFogAdjTable);
     }
     void setType(u8 type) { mType = type; }
-};
-
-struct J3DAlphaCompInfo {
-    /* 0x0 */ u8 mComp0;
-    /* 0x1 */ u8 mRef0;
-    /* 0x2 */ u8 mOp;
-    /* 0x3 */ u8 mComp1;
-    /* 0x4 */ u8 mRef1;
-    /* 0x5 */ u8 field_0x5;
-    /* 0x6 */ u8 field_0x6;
-    /* 0x7 */ u8 field_0x7;
 };
 
 inline u16 calcAlphaCmpID(u8 comp0, u8 op, u8 comp1) {

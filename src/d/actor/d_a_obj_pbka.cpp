@@ -77,7 +77,7 @@ static BOOL daObjPbka_Delete(void* i_this) {
 
 bool daObjPbka_c::_draw() {
     dKy_tevstr_c * pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr); // fakematch
     g_env_light.setLightTevColorType(mpModel, pTevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
