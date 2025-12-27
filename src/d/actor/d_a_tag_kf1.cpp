@@ -49,8 +49,8 @@ BOOL daTag_Kf1_c::createInit() {
     this->set_action(&daTag_Kf1_c::wait_action1, NULL);
     return TRUE;
 }
+
 static char* a_demo_name_tbl[] = {"BENSYO"};
-static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 char daTag_Kf1_c::setStt(signed char c) {
@@ -182,6 +182,9 @@ void daTag_Kf1_c::event_talkInit(int staffIdx) {
         this->mCurrMsgNo = 0;
     }
 }
+
+static const u32 at4350[] = {0xff000080};
+static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::event_mesSet() { 
