@@ -198,9 +198,9 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
         }
         mProcVar0.m3570 = r30;
         if (mProcVar0.m3570 != -4) {
-            g_dComIfG_gameInfo.play.field_0x4947 = 1;
+            dComIfGp_setMetronomeOn();
         } else {
-            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+            dComIfGp_setMetronomeOff();
         }
         return TRUE;
     } else if (r30 == -1) {
@@ -292,7 +292,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     setTactZev(-1, -1, NULL);
 
     if (mProcVar0.m3570 != -4) {
-        g_dComIfG_gameInfo.play.field_0x4947 = 1;
+        dComIfGp_setMetronomeOn();
     }
     mDoAud_taktModeMute();
 
@@ -316,7 +316,7 @@ BOOL daPy_lk_c::procTactWait() {
         if (m34D2 == 0) {
             if (mProcVar0.m3570 == -5 || mProcVar0.m3570 == 6 || mProcVar0.m3570 == 7) {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
-                g_dComIfG_gameInfo.play.field_0x4947 = 0;
+                dComIfGp_setMetronomeOff();
             } else if (mProcVar0.m3570 == -1 || mProcVar0.m3570 == -3 || mProcVar0.m3570 >= 0) {
                 procTactPlay_init(m3574, mProcVar0.m3570 == -1, mProcVar0.m3570 >= 0);
             }
@@ -342,7 +342,7 @@ BOOL daPy_lk_c::procTactWait() {
             seStartSystem(JA_SE_TAKT_USE_CANCEL);
         }
 
-        g_dComIfG_gameInfo.play.field_0x4947 = 0;
+        dComIfGp_setMetronomeOff();
 
         if (cancelTrigger() && mProcVar0.m3570 == 5) {
             m35AC = -1000.0f;
@@ -587,7 +587,7 @@ BOOL daPy_lk_c::procTactPlay() {
 
     if (m34D0 != 0) {
         if (m34D8 != 0) {
-            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+            dComIfGp_setMetronomeOff();
             dComIfGp_evmng_cutEnd(mStaffIdx);
             return TRUE;
         }
@@ -595,7 +595,7 @@ BOOL daPy_lk_c::procTactPlay() {
         msg_class* msg_p = fopMsgM_SearchByID(m3628);
         if (msg_p == NULL || msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
             fopAc_ac_c* tactZevPartner = NULL;
-            g_dComIfG_gameInfo.play.field_0x4947 = 0;
+            dComIfGp_setMetronomeOff();
 
             if (msg_p != NULL) {
                 msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;

@@ -245,7 +245,7 @@ void daPy_lk_c::setDoStatusCrawl() {
         }
     } else if (dCam_getBody()->ChangeModeOK(4)) {
         if (m35D0 <= current.pos.y) {
-            onResetFlg0(daPyRFlg0_UNK4000000);
+            onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
             if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
                 setSubjectMode();
             }
@@ -349,7 +349,7 @@ BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
         current.angle.y = shape_angle.y;
         setSingleMoveAnime(ANM_LIEFORWARD, dVar4, 0.0f, -1, m_HIO->mCrouch.m.field_0x38);
     } else {
-        onResetFlg0(daPyRFlg0_UNK1000);
+        onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     }
     m35A0 = -1.0f;
     mProcVar0.m3570 = var_r29 ^ 1;
@@ -397,8 +397,8 @@ BOOL daPy_lk_c::procCrawlMove() {
     iVar6 = checkNotCrawlStand(&sp118);
     iVar7 = checkNotCrawlStand(&sp124);
     iVar8 = checkNotCrawlStand(&sp10C);
-    if ((((iVar6 != 0 || iVar7 != 0) || iVar8 != 0) ||
-         (checkNotCrawlStand(&sp124, &sp100) || checkNotCrawlStand(&sp10C, &sp100))) ||
+    if (iVar6 != 0 || iVar7 != 0 || iVar8 != 0 ||
+        checkNotCrawlStand(&sp124, &sp100) || checkNotCrawlStand(&sp10C, &sp100) ||
         checkNotCrawlStand(&sp118, &sp100))
     {
         bVar5 = false;
@@ -462,7 +462,7 @@ BOOL daPy_lk_c::procCrawlMove() {
                        checkCrawlSideWall(&spF4, &spDC, &spC4, &spD0, &sp08, &sp0A)))
         {
             mProcVar0.m3570 = 1;
-            onResetFlg0(daPyRFlg0_UNK1000);
+            onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
             m370C = ((spD0 + spC4) * 0.5f) - spB8;
             m34D4 = sp0A + 0x4000;
         }
@@ -541,7 +541,7 @@ BOOL daPy_lk_c::procCrawlAutoMove_init(int param_0, cXyz* param_1) {
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     setCrawlMoveDirectionArrow();
     mVelocity = 0.0f;
-    onResetFlg0(daPyRFlg0_UNK1000);
+    onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     for (int i = 0; i < 3; i++) {
         mAcchCir[i].SetWallR(9.99f);
     }
@@ -558,7 +558,7 @@ BOOL daPy_lk_c::procCrawlAutoMove() {
 
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
-    onResetFlg0(daPyRFlg0_UNK1000);
+    onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     s16 sVar4 = shape_angle.y;
     s16 sVar5 = current.angle.y;
     if (m34D0 > 0) {

@@ -488,6 +488,10 @@ public:
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
     inline void offHeapLockFlag() { mHeapLockFlag = 0; }
 
+    bool getMetronome() { return mMetronome; }
+    void setMetronomeOn() { mMetronome = true; }
+    void setMetronomeOff() { mMetronome = false; }
+
 #if VERSION > VERSION_DEMO
     // These inlines aren't present in WW demo debug maps, but are present in TP debug.
     inline u8 getNowVibration() { return mNowVibration; }
@@ -741,7 +745,7 @@ public:
     /* 0x4944 */ u8 field_0x4944;
     /* 0x4945 */ u8 mScopeType;
     /* 0x4946 */ u8 mOperateWind;
-    /* 0x4947 */ u8 field_0x4947;
+    /* 0x4947 */ bool mMetronome;
     /* 0x4948 */ u8 mMesgSendButton;
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
@@ -3245,6 +3249,18 @@ inline u8 dComIfGp_event_getTactFreeMStick(int which) {
 
 inline u8 dComIfGp_event_getTactFreeCStick(int which) {
     return g_dComIfG_gameInfo.play.getEvent().getTactFreeCStick(which);
+}
+
+inline bool dComIfGp_getMetronome() {
+    return g_dComIfG_gameInfo.play.getMetronome();
+}
+
+inline void dComIfGp_setMetronomeOn() {
+    g_dComIfG_gameInfo.play.setMetronomeOn();
+}
+
+inline void dComIfGp_setMetronomeOff() {
+    g_dComIfG_gameInfo.play.setMetronomeOff();
 }
 
 /**

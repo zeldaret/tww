@@ -156,7 +156,7 @@ void daPy_lk_c::setLightSaver() {
     }
     if (checkChanceMode()) {
         mpEquipItemBrk->setFrame(1.0f);
-    } else if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+    } else if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
         mpEquipItemBrk->setFrame(0.0f);
     } else {
         mpEquipItemBrk->setFrame(2.0f);
@@ -168,10 +168,10 @@ void daPy_lk_c::setLightSaver() {
 #else
         !checkDemoSwordNoDraw(0) &&
 #endif
-        ((checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000)) || checkFinalMasterSwordEquip()))
+        ((checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) || checkFinalMasterSwordEquip()))
     {
         simpleAnmPlay(mpSwordBtk);
-        if ((m3454.getEmitter() == NULL) && (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000))) {
+        if ((m3454.getEmitter() == NULL) && (checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP))) {
             pJVar7 = m3454.makeEmitter(dPa_name::ID_COMMON_0309, mpSwordModel1->getAnmMtx(2), &current.pos, NULL);
             if (pJVar7 != 0) {
                 if (checkMasterSwordEquip()) {
@@ -179,7 +179,7 @@ void daPy_lk_c::setLightSaver() {
                     pJVar7->setGlobalParticleScale(p_scale);
                 }
             }
-        } else if (!checkChanceMode() && (!checkNoResetFlg1(daPyFlg1_UNK8000) && checkFinalMasterSwordEquip())) {
+        } else if (!checkChanceMode() && (!checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP) && checkFinalMasterSwordEquip())) {
             m3454.end();
         }
         if (checkChanceMode()) {
@@ -195,14 +195,14 @@ void daPy_lk_c::setLightSaver() {
             pJVar7->setGlobalEnvColor(pbVar9->r, pbVar9->g, pbVar9->b);
         }
         if ((dComIfGp_getDoStatus() == dActStts_PARRY_e && m355C == 0) ||
-            ((checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) &&
+            ((checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP) || checkFinalMasterSwordEquip()) &&
              !checkNoResetFlg1(daPyFlg1_UNK200000)))
         {
             if (dComIfGp_getDoStatus() == dActStts_PARRY_e && m355C == 0) {
                 pbVar9 = &g_prm1;
                 pbVar8 = pbVar9;
                 dComIfGp_getVibration().StartShock(6, 1, cXyz(0.0f, 1.0f, 0.0f));
-            } else if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+            } else if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                 pbVar9 = &y_prm1;
                 pbVar8 = &y_env1;
             } else {
@@ -288,7 +288,7 @@ int daPy_lk_c::getSwordBlurColor() {
         if (checkChanceMode()) {
             return 2;
         }
-        if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+        if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
             return 1;
         }
     }
@@ -1336,14 +1336,14 @@ BOOL daPy_lk_c::procCutTurn_init(int param_0) {
         }
         if (checkNormalSwordEquip()) {
             m35A4 = m_HIO->mCut.mCutTurn.m.field_0x40;
-            if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+            if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                 mAtCyl.SetAtAtp(4);
             } else {
                 mAtCyl.SetAtAtp(2);
             }
         } else {
             m35A4 = m_HIO->mCut.mCutTurn.m.field_0x44;
-            if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+            if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                 mAtCyl.SetAtAtp(8);
             } else {
                 mAtCyl.SetAtAtp(4);
@@ -1509,14 +1509,14 @@ BOOL daPy_lk_c::procCutRoll_init() {
     offResetFlg0(daPyRFlg0_UNK8000000);
     if (checkNormalSwordEquip()) {
         m35A4 = m_HIO->mCut.mCutRoll.m.field_0x20;
-        if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+        if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
             mAtCyl.SetAtAtp(4);
         } else {
             mAtCyl.SetAtAtp(2);
         }
     } else {
         m35A4 = m_HIO->mCut.mCutRoll.m.field_0x24;
-        if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+        if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
             mAtCyl.SetAtAtp(8);
         } else {
             mAtCyl.SetAtAtp(4);

@@ -144,7 +144,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                 dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
             }
             if (mEquipItem == dItem_SOUP_BOTTLE_e || mEquipItem == dItem_HALF_SOUP_BOTTLE_e) {
-                onNoResetFlg1(daPyFlg1_UNK8000);
+                onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
             }
             resetCurse();
         } else {
