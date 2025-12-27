@@ -3,8 +3,10 @@
 // Translation Unit: d_a_tag_event.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_event.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_bk.h"
 #include "d/actor/d_a_dr.h"
@@ -84,7 +86,7 @@ void daTag_Event_c::demoInitProc() {
         bk = daTag_getBk(5);
         dComIfGp_event_setItemPartner(bk);
         dComIfGp_event_setTalkPartner(bk);
-        dComIfGs_onEventBit(0x0004);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0004);
         mDoAud_bgmStart(JA_BGM_BK_FLY_DOWN);
         break;
     case 0x2:
@@ -92,10 +94,10 @@ void daTag_Event_c::demoInitProc() {
         if (bk) {
             bk->m121C = 1;
         }
-        dComIfGs_onEventBit(0x0101);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0101);
         break;
     case 0x3:
-        dComIfGs_onEventBit(0x0E20);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0E20);
         break;
     case 0x5:
         mDoAud_bgmAllMute(0x1E);
@@ -108,12 +110,12 @@ void daTag_Event_c::demoInitProc() {
     }
     case 0x9:
         u8 r30;
-        if (!dComIfGs_isEventBit(0x3B20)) {
-            dComIfGs_onEventBit(0x3B20);
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B20)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B20);
             r30 = (u8)(s32)cM_rndF(6.0f);
-            dComIfGs_setEventReg(0xBA0F, r30);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_BA0F, r30);
         } else {
-            r30 = dComIfGs_getEventReg(0xBA0F);
+            r30 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
         }
         char password[0x18];
         fopMsgM_passwordGet(password, 0x1B37 + r30);
@@ -137,16 +139,16 @@ void daTag_Event_c::demoEndProc() {
         mDoAud_subBgmStart(JA_BGM_MBOSS);
         break;
     case 0x8:
-        dComIfGs_onEventBit(0x2502);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2502);
         break;
     case 0xB:
-        dComIfGs_onEventBit(0x3040);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3040);
         break;
     case 0x9:
-        dComIfGs_onEventBit(0x2110);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2110);
         break;
     case 0xA:
-        dComIfGs_onEventBit(0x3202);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_3202);
         break;
     }
 }
@@ -230,7 +232,7 @@ BOOL daTag_Event_c::actionReady() {
     } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
     } else {
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -251,9 +253,9 @@ BOOL daTag_Event_c::actionHunt() {
 
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
-    } else if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    } else if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -267,7 +269,7 @@ BOOL daTag_Event_c::actionArrival() {
     if (arrivalTerms()) {
         switch (getType()) {
         case 0x2:
-            if (dComIfGs_isEventBit(0x0004)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0004)) {
                 m297 = 7;
             } else {
                 m297 = 5;
@@ -276,9 +278,9 @@ BOOL daTag_Event_c::actionArrival() {
             actionHunt2();
             break;
         case 0x3:
-            if (dComIfGs_isEventBit(0x0E20)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
                 setActio(ACTION_WAIT);
-            } else if (!dComIfGs_isEventBit(0x0101)) {
+            } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0101)) {
                 setActio(ACTION_WAIT);
             } else {
                 setActio(ACTION_HUNT);
@@ -286,7 +288,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0x5:
-            if (dComIfGs_isEventBit(0x1101)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1101)) {
                 setActio(ACTION_WAIT);
             } else {
                 setActio(ACTION_HUNT);
@@ -294,7 +296,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0x9:
-            if (dComIfGs_isEventBit(0x0A02)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT)) {
                 setActio(ACTION_HUNT);
                 actionHunt();
             } else {
@@ -302,7 +304,7 @@ BOOL daTag_Event_c::actionArrival() {
             }
             break;
         case 0xA:
-            if (dComIfGs_isEventBit(0x0E20)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
                 setActio(ACTION_HUNT);
                 actionHunt();
             } else {
@@ -333,9 +335,9 @@ BOOL daTag_Event_c::actionSpeReady() {
         demoInitProc();
         setActio(ACTION_SPE_EVENT);
         actionSpeEvent();
-        dComIfGs_onEventBit(0x2740);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_2740);
     } else {
-        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx);
     }
     return TRUE;
 }
@@ -347,26 +349,26 @@ BOOL daTag_Event_c::actionSpeHunt() {
     if (sp20.y < 0.0f) {
         sp20.y = -sp20.y;
     }
-    if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         setActio(ACTION_SPE_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx);
     }
     return TRUE;
 }
 
 /* 00000DF0-00000F20       .text actionSpeArrival__13daTag_Event_cFv */
 BOOL daTag_Event_c::actionSpeArrival() {
-    if (dComIfGs_isEventBit(0x1001)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1001)) {
         setActio(ACTION_WAIT);
         return TRUE;
     }
-    if (!dComIfGs_isEventBit(0x1820)) {
-        if (dComIfGs_isEventBit(0x2740)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2740)) {
             setActio(ACTION_WAIT);
             return TRUE;
         }
         mEventIdx = dComIfGp_evmng_getEventIdx("SUPERELF");
-    } else if (dComIfGs_isEventBit(0x2740)) {
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2740)) {
         mEventIdx = dComIfGp_evmng_getEventIdx("fairy_flag_on_Jmp");
     } else {
         mEventIdx = dComIfGp_evmng_getEventIdx("fairy_Jmp");
@@ -398,7 +400,7 @@ BOOL daTag_Event_c::actionMjReady() {
         } else {
             mEventIdx = dComIfGp_evmng_getEventIdx("BEAST_GATE2", getEventNo());
         }
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -418,14 +420,14 @@ BOOL daTag_Event_c::actionMjHunt() {
 
     if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACTION_WAIT);
-    } else if (sp20.abs2XZ() < (scale.x*scale.x) * (100.0f*100.0f) && sp20.y <= scale.y * 100.0f) {
+    } else if (sp20.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f) && sp20.y <= scale.y * 100.0f) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             mEventIdx = dComIfGp_evmng_getEventIdx(NULL, getEventNo());
         } else {
             mEventIdx = dComIfGp_evmng_getEventIdx("BEAST_GATE2", getEventNo());
         }
         setActio(ACTION_MJ_READY);
-        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+        fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
         if (cancelShutter()) {
             dComIfGp_event_onEventFlag(1);
         }
@@ -446,7 +448,7 @@ BOOL daTag_Event_c::actionHunt2() {
                 m294--;
             } else {
                 setActio(ACTION_READY);
-                fopAcM_orderOtherEventId(this, mEventIdx, getEventNo(), 0xFFFF, 0, 1);
+                fopAcM_orderOtherEventId(this, mEventIdx, getEventNo());
             }
         } else {
             m294 = 65;
@@ -502,7 +504,7 @@ BOOL daTag_Event_c::execute() {
     return TRUE;
 }
 
-s32 daTag_Event_c::create() {
+cPhs_State daTag_Event_c::create() {
     fopAcM_SetupActor(this, daTag_Event_c);
 
     int swbit = getSwbit();
@@ -513,12 +515,10 @@ s32 daTag_Event_c::create() {
 
     if (getType() == 0xD) {
         setActio(ACTION_SPE_ARRIVAL);
+    } else if (mEventIdx != -1 && (swbit == 0xFF || !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this)))) {
+        setActio(ACTION_ARRIVAL);
     } else {
-        if (mEventIdx != -1 && (swbit == 0xFF || !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this)))) {
-            setActio(ACTION_ARRIVAL);
-        } else {
-            setActio(ACTION_WAIT);
-        }
+        setActio(ACTION_WAIT);
     }
 
     shape_angle.x = shape_angle.z = 0;
@@ -549,7 +549,7 @@ static BOOL daTag_Event_Delete(daTag_Event_c* i_this) {
 }
 
 /* 0000140C-00001524       .text daTag_Event_Create__FP10fopAc_ac_c */
-static s32 daTag_Event_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTag_Event_Create(fopAc_ac_c* i_this) {
     return static_cast<daTag_Event_c*>(i_this)->create();
 }
 
@@ -571,7 +571,7 @@ actor_process_profile_definition g_profile_TAG_EVENT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011E,
+    /* Priority     */ PRIO_TAG_EVENT,
     /* Actor SubMtd */ &l_daTag_Event_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

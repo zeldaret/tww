@@ -4,7 +4,7 @@
 //
 
 #include "d/d_bg_s_spl_grp_chk.h"
-#include "dolphin/types.h"
+#include "SSystem/SComponent/c_bg_s.h"
 
 /* 800A5A7C-800A5B94       .text __ct__14dBgS_SplGrpChkFv */
 dBgS_SplGrpChk::dBgS_SplGrpChk() {
@@ -14,7 +14,7 @@ dBgS_SplGrpChk::dBgS_SplGrpChk() {
     m_ground.x = 0.0f;
     m_ground.y = 0.0f;
     m_ground.z = 0.0f;
-    m_roof = 1000000000.0f;
+    m_roof = G_CM3D_F_INF;
     m_height = 0.0f;
 }
 
@@ -25,4 +25,3 @@ void dBgS_SplGrpChk::Init() {
     SetHeight(GetPosP()->y);
     ClearPi();
 }
-

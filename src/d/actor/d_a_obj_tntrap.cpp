@@ -3,8 +3,10 @@
 // Translation Unit: d_a_obj_tntrap.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tntrap.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000002AC       .text chk_appear__13daObjTnTrap_cFv */
 void daObjTnTrap_c::chk_appear() {
@@ -57,7 +59,7 @@ void daObjTnTrap_c::set_em_set_offsetY() {
 }
 
 /* 00000A98-00000C78       .text _create__13daObjTnTrap_cFv */
-s32 daObjTnTrap_c::_create() {
+cPhs_State daObjTnTrap_c::_create() {
     /* Nonmatching */
 }
 
@@ -147,28 +149,28 @@ bool daObjTnTrap_c::_draw() {
 }
 
 /* 00001BF0-00001C10       .text daObjTnTrap_Create__FP10fopAc_ac_c */
-static s32 daObjTnTrap_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjTnTrap_Create(fopAc_ac_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_create();
 }
 
 /* 00001C10-00001C34       .text daObjTnTrap_Delete__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Delete(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Delete(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_delete();
 }
 
 /* 00001C34-00001C58       .text daObjTnTrap_Execute__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Execute(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Execute(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_execute();
 }
 
 /* 00001C58-00001C7C       .text daObjTnTrap_Draw__FP13daObjTnTrap_c */
-static BOOL daObjTnTrap_Draw(daObjTnTrap_c*) {
-    /* Nonmatching */
+static BOOL daObjTnTrap_Draw(daObjTnTrap_c* i_this) {
+    return ((daObjTnTrap_c*)i_this)->_draw();
 }
 
 /* 00001C7C-00001C84       .text daObjTnTrap_IsDelete__FP13daObjTnTrap_c */
 static BOOL daObjTnTrap_IsDelete(daObjTnTrap_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjTnTrap_Method = {
@@ -189,7 +191,7 @@ actor_process_profile_definition g_profile_Obj_TnTrap = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0085,
+    /* Priority     */ PRIO_Obj_TnTrap,
     /* Actor SubMtd */ &l_daObjTnTrap_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

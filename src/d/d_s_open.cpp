@@ -3,12 +3,12 @@
 // Translation Unit: d_s_open.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_open.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_overlap_mng.h"
-#include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "m_Do/m_Do_audio.h"
@@ -16,11 +16,11 @@
 #include "m_Do/m_Do_graphic.h"
 
 /* 80232A68-80232BC4       .text create__10dScnOpen_cFv */
-s32 dScnOpen_c::create() {
+cPhs_State dScnOpen_c::create() {
     dComIfGp_offEnableNextStage();
     mpProc = NULL;
 
-    s32 rt = dComIfG_resLoad(&mPhs, "Opening");
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "Opening");
     if (rt == cPhs_COMPLEATE_e) {
         solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x20000, 0);
         JUT_ASSERT(0x3b, solid_heap != NULL);
@@ -40,7 +40,7 @@ s32 dScnOpen_c::create() {
 
 /* 80232BC4-80232CAC       .text execute__10dScnOpen_cFv */
 BOOL dScnOpen_c::execute() {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     if (mpProc->mState >= 5 && !fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #else
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
@@ -73,11 +73,15 @@ BOOL dScnOpen_c::draw() {
 
 /* 80232D38-80232DD8       .text __dt__10dScnOpen_cFv */
 dScnOpen_c::~dScnOpen_c() {
+#if VERSION > VERSION_DEMO
     if (mpProc != NULL)
+#endif
         delete mpProc;
+#if VERSION > VERSION_DEMO
     if (solid_heap != NULL)
+#endif
         mDoExt_destroySolidHeap(solid_heap);
-    dComIfG_resDelete(&mPhs, "Opening");
+    dComIfG_resDeleteDemo(&mPhs, "Opening");
     dComIfGp_setWindowNum(0);
 }
 
@@ -118,7 +122,7 @@ static BOOL dScnOpen_Delete(dScnOpen_c* i_this) {
 }
 
 /* 80232EDC-80232EFC       .text dScnOpen_Create__FP11scene_class */
-static s32 dScnOpen_Create(scene_class* i_scn) {
+static cPhs_State dScnOpen_Create(scene_class* i_scn) {
     dScnOpen_c* i_this = (dScnOpen_c*)i_scn;
     return i_this->create();
 }
@@ -132,29 +136,27 @@ scene_method_class l_dScnOpen_Method = {
 };
 
 scene_process_profile_definition g_profile_OPEN_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPEN_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnOpen_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnOpen_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPEN_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnOpen_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnOpen_Method,
 };
 
 scene_process_profile_definition g_profile_OPEN2_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPEN2_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnOpen_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnOpen_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPEN2_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnOpen_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnOpen_Method,
 };

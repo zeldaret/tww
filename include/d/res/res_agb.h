@@ -1,7 +1,7 @@
 #ifndef RES_AGB_H
 #define RES_AGB_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum AGB_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

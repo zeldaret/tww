@@ -23,9 +23,11 @@ public:
     /* 0x20 */ s16 m20;
     /* 0x22 */ s16 m22;
     /* 0x24 */ s16 m24;
+#if VERSION > VERSION_DEMO
     /* 0x26 */ s16 m26;
     /* 0x28 */ s16 m28;
     /* 0x2A */ s16 m2A;
+#endif
 };
 
 class daNpc_Md_HIO3_c {
@@ -92,11 +94,10 @@ public:
     daNpc_Md_HIO_c();
     virtual ~daNpc_Md_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x004 */ s8 mNo;
-    /* 0x005 */ u8 m005[0x008 - 0x005];
     /* 0x008 */ daNpc_Md_HIO2_c m008;
     /* 0x034 */ daNpc_Md_HIO3_c m034;
     /* 0x05C */ daNpc_Md_HIO4_c m05C;
@@ -179,7 +180,6 @@ public:
     /* 0x1C6 */ u8 m1C6;
     /* 0x1C7 */ u8 m1C7;
     /* 0x1C8 */ u8 m1C8;
-    /* 0x1C9 */ u8 field_1C9[0x1CC - 0x1C9];
 };
 
 class daNpc_Md_followEcallBack_c : public dPa_levelEcallBack {
@@ -341,7 +341,7 @@ public:
     
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
-    s32 create();
+    cPhs_State create();
     BOOL createHeap();
     BOOL setAction(ActionFunc*, ActionFunc, void*);
     void npcAction(void*);

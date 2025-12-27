@@ -199,6 +199,9 @@ extern process_profile_definition g_profile_TN;
 extern process_profile_definition g_profile_MANT;
 extern process_profile_definition g_profile_KANTERA;
 extern process_profile_definition g_profile_KAMOME;
+#if VERSION == VERSION_DEMO
+extern process_profile_definition g_profile_KAMOME2;
+#endif
 extern process_profile_definition g_profile_NPC_KAM;
 extern process_profile_definition g_profile_WBIRD;
 extern process_profile_definition g_profile_DEMO_KMM;

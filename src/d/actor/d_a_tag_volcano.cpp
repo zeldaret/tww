@@ -3,9 +3,11 @@
 // Translation Unit: d_a_tag_volcano.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_volcano.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 namespace daTagvolcano {
     namespace {
@@ -22,7 +24,7 @@ namespace daTagvolcano {
 }
 
 /* 00000078-000002B4       .text _create__Q212daTagvolcano5Act_cFv */
-s32 daTagvolcano::Act_c::_create() {
+cPhs_State daTagvolcano::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
     field_0x298 = 0;
@@ -32,7 +34,7 @@ s32 daTagvolcano::Act_c::_create() {
 
     if (mType == 0) {
         if (current.roomNo == dIsleRoom_FireMountain_e) {
-            if (dComIfGs_isEventBit(0x1902)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
                 fopAcM_onSwitch(this, prm_get_swSave());
             } else if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
                 field_0x2a0 = 10;
@@ -41,7 +43,7 @@ s32 daTagvolcano::Act_c::_create() {
                 fopAcM_offSwitch(this, prm_get_swSave());
             }
         } else {
-            if (dComIfGs_isEventBit(0x1901)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1901)) {
                 fopAcM_onSwitch(this, prm_get_swSave());
             } else if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
                 field_0x2a0 = 10;
@@ -88,7 +90,7 @@ bool daTagvolcano::Act_c::_execute() {
                 if (field_0x298 == 1) {
                     if (dComIfG_getTimerPtr() != NULL) {
                         if (field_0x299 == 0) {
-                            dComIfG_TimerStart(0, 3);
+                            dComIfG_TimerStart(3, 0);
                             field_0x299 = 1;
                         } else {
                             if (dComIfGp_event_runCheck()) {
@@ -132,9 +134,9 @@ bool daTagvolcano::Act_c::_execute() {
             if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 3)
                 dComIfG_TimerDeleteRequest();
             if (mType == 1)
-                dComIfGs_onEventBit(0x1902);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1902);
             else
-                dComIfGs_onEventBit(0x1901);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1901);
             field_0x2a4 = 0;
         } else if (dComIfG_getTimerPtr() != NULL) {
             if (dComIfGp_event_runCheck()) {
@@ -154,7 +156,7 @@ bool daTagvolcano::Act_c::_execute() {
                 field_0x2a4 = 1;
                 fopAcM_orderOtherEvent(this, "TAG_VOLCANO");
             }
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         } else {
             mDoAud_seStart(JA_SE_ISLE_TIMER_0);
             dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
@@ -186,7 +188,7 @@ bool daTagvolcano::Act_c::_draw() {
 
 namespace daTagvolcano {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 
@@ -226,7 +228,7 @@ actor_process_profile_definition g_profile_Tag_Volcano = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0061,
+    /* Priority     */ PRIO_Tag_Volcano,
     /* Actor SubMtd */ &daTagvolcano::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

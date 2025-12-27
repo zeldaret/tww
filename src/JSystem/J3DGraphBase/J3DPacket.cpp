@@ -3,6 +3,8 @@
 // Translation Unit: J3DPacket.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -374,8 +376,4 @@ bool J3DMatPacket::isSame(J3DMatPacket* pOther) const {
         isSame = true;
     }
     return isSame;
-}
-
-/* 802DB978-802DB97C       .text draw__9J3DPacketFv */
-void J3DPacket::draw() {
 }

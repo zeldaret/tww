@@ -2,11 +2,10 @@
 #define D_A_PEDESTAL_H
 
 #include "d/d_bg_w.h"
-#include "d/d_com_inf_game.h"
-#include "f_op/f_op_actor.h"
-
 #include "d/d_particle.h"
+#include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
+#include "SSystem/SComponent/c_phase.h"
 
 namespace daPedestal {
 
@@ -42,7 +41,7 @@ namespace daPedestal {
         bool _delete();
         BOOL CreateHeap();
         void CreateInit();
-        s32 _create();
+        cPhs_State _create();
         int getMyStaffId();
         BOOL wakeupCheck();
         BOOL finishCheck();

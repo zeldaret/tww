@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open_sub.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "d/d_s_open.h"
 #include "d/d_com_inf_game.h"
@@ -261,7 +262,7 @@ void dScnOpen_proc_c::proc_execute() {
         mAlpha = 0.0f;
         mState = 23;
     case 23:
-        mPosX -= 0.4748201f;
+        mPosX -= 0.47482014f;
         mAlpha += 0.067f;
         if (mAlpha >= 1.0f) {
             mAlpha = 1.0f;
@@ -277,7 +278,7 @@ void dScnOpen_proc_c::proc_execute() {
         fopMsgM_setNowAlpha(&pane[4], 1.0f);
         mState = 25;
     case 25:
-        mPosX -= 0.4748201f;
+        mPosX -= 0.47482014f;
         if (m_message->field_0x22e8 != 0)
             mState = 26;
         fopMsgM_paneTrans(&pane[3], mPosX, 0.0f);
@@ -289,7 +290,7 @@ void dScnOpen_proc_c::proc_execute() {
         mAlpha = 0.0f;
         mState = 27;
     case 27:
-        mPosX -= 0.4748201f;
+        mPosX -= 0.47482014f;
         mAlpha += 0.0223f;
         if (mAlpha >= 1.0f) {
             mAlpha = 1.0f;

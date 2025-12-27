@@ -17,7 +17,7 @@ public:
         PRM_POWER_S = 0xB,
     };
 
-    s32 _create();
+    cPhs_State _create();
     BOOL _delete();
     BOOL _is_delete();
     BOOL _execute();
@@ -39,7 +39,7 @@ public:
     daObjQuake_HIO_c();
     virtual ~daObjQuake_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

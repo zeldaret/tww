@@ -21,9 +21,14 @@ public:
 
     cM3dGSph() {}
     virtual ~cM3dGSph() {}
-    void SetC(const cXyz&);
-    void SetC(f32, f32, f32) {}
-    void SetR(f32);
+#if VERSION == VERSION_DEMO
+    void SetC(const cXyz& p) { mCenter = p; }
+    void SetR(f32 r) { mRadius = r; }
+#else
+    void SetC(const cXyz& p);
+    void SetR(f32 r);
+#endif
+    void SetC(f32 x, f32 y, f32 z) { mCenter.x = x; mCenter.y = y; mCenter.z = z; }
     void Set(const cM3dGSphS & src) {
         SetC(src.mCenter);
         SetR(src.mRadius);
@@ -45,7 +50,9 @@ public:
         cXyz temp;
         return cM3d_Cross_CylSph(cyl, this, &temp, out);
     }
-    void cross(const cM3dGTri*) const {}
+    bool cross(const cM3dGTri *param_1) const {
+        return cM3d_Cross_SphTri(this, param_1);
+    }
     const cXyz& GetC() const { return mCenter; }
     cXyz& GetC() { return mCenter; }
     const cXyz* GetCP() const { return &mCenter; }

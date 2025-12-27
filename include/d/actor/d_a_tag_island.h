@@ -7,14 +7,20 @@ class msg_class;
 
 class daTag_Island_c : public fopAc_ac_c {
 public:
+    enum {
+        daTagIsl_UNK_01 = 0x01,
+        daTagIsl_UNK_02 = 0x02,
+        daTagIsl_UNK_04 = 0x04,
+    };
+
     bool chkFlag(u16 flag) { return (mFlag & flag) == flag; }
     void clrFlag(u16 flag) { mFlag &= ~flag; }
     void setFlag(u16 flag) { mFlag |= flag; }
 
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
-    void setActio(u8 v) { mAction = v; }
+    void setActio(u8 action) { mAction = action; }
 
     u8 getEventNo();
     u8 getSwbit();

@@ -20,7 +20,7 @@ public:
     bool _execute();
     bool _draw();
     void getArg();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
 
 public:
@@ -35,7 +35,7 @@ public:
     daTag_Gship_HIO_c();
     virtual ~daTag_Gship_HIO_c() {}
 
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05;
     /* 0x08 */ u32 field_0x08;
     /* 0x0C */ u32 field_0x0C;

@@ -3,17 +3,15 @@
 // Translation Unit: d_a_dai_item.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dai_item.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/res/res_fdai.h"
 #include "d/res/res_cloth.h"
-
-#include "f_op/f_op_actor.h"
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const char daStandItem_c::m_arcname[] = "Fdai";
 const s16 daStandItem_c::m_bmdidx[] = {
@@ -143,7 +141,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  SPrm    */ 0,
         /* SrcObjTg  Type    */ AT_TYPE_ALL,
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_VsPlayer_e | cCcD_CoSPrm_VsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
@@ -157,11 +155,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 static cXyz Vobj03_pos0[25];
@@ -236,18 +234,18 @@ BOOL daStandItem_c::CreateHeap() {
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[] = {
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_1 */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_2 */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FLOWER_3 */
-            -1,                          /* HEROS_FLAG */
-            -1,                          /* TAIRYO_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* SALES_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* WIND_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* RED_FLAG */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* FOSSIL_HEAD */
-            J3DFrameCtrl::LOOP_ONCE_e,   /* WATER_STATUE */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* POSTMAN_STATUE */
-            J3DFrameCtrl::LOOP_REPEAT_e, /* PRESIDENT_STATUE */
+            /* FLOWER_1         */ J3DFrameCtrl::EMode_LOOP,
+            /* FLOWER_2         */ J3DFrameCtrl::EMode_LOOP,
+            /* FLOWER_3         */ J3DFrameCtrl::EMode_LOOP,
+            /* HEROS_FLAG       */ -1,
+            /* TAIRYO_FLAG      */ -1,
+            /* SALES_FLAG       */ J3DFrameCtrl::EMode_LOOP,
+            /* WIND_FLAG        */ J3DFrameCtrl::EMode_LOOP,
+            /* RED_FLAG         */ J3DFrameCtrl::EMode_LOOP,
+            /* FOSSIL_HEAD      */ J3DFrameCtrl::EMode_LOOP,
+            /* WATER_STATUE     */ J3DFrameCtrl::EMode_NONE,
+            /* POSTMAN_STATUE   */ J3DFrameCtrl::EMode_LOOP,
+            /* PRESIDENT_STATUE */ J3DFrameCtrl::EMode_LOOP,
         };
 
         if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType], 1.0f, 0, -1, false))
@@ -306,7 +304,7 @@ void daStandItem_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -0.0f, -100.0f, 100.0f, 300.0f, 100.0f);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     if (fopAcM_checkCarryNow(this))
         mode_carry_init();
     else
@@ -368,23 +366,23 @@ void daStandItem_c::CreateInit() {
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
 }
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
-s32 daStandItem_c::_create() {
+cPhs_State daStandItem_c::_create() {
     fopAcM_SetupActor(this, daStandItem_c);
 
     mItemNo = fopAcM_GetParam(this);
     mItemType = convItemNo(mItemNo);
 
-    s32 rt = dComIfG_resLoad(&mPhsDai, m_arcname);
+    cPhs_State rt = dComIfG_resLoad(&mPhsDai, m_arcname);
     if (rt != cPhs_COMPLEATE_e)
         return rt;
 
-    s32 cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    cPhs_State cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
     if (cloth_rt != cPhs_COMPLEATE_e)
         return cloth_rt;
 
@@ -549,7 +547,7 @@ bool daStandItem_c::actionFobj09() {
             m698 = NULL;
         }
         if (m690 == NULL) {
-            m690 = dComIfGp_particle_set(0x82B3, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+            m690 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B3, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
         } else {
             m690->setGlobalRTMatrix(m660);
         }
@@ -574,10 +572,10 @@ bool daStandItem_c::actionFobj09() {
                 m690 = NULL;
             }
             if (m694 == NULL) {
-                m694 = dComIfGp_particle_set(0x82B4, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
+                m694 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B4, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
             }
             if (m698 == NULL) {
-                m698 = dComIfGp_particle_set(0x82B5, &current.pos, &current.angle);
+                m698 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B5, &current.pos, &current.angle);
             }
             if (m698) {
                 m698->becomeImmortalEmitter();
@@ -716,7 +714,7 @@ void daStandItem_c::execAction() {
 void daStandItem_c::mode_carry_init() {
     fopAcM_SetSpeedF(this, 0.0f);
     speed = cXyz::Zero;
-    attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mCyl.OffCoSetBit();
     mMode = MODE_CARRY;
 }
@@ -759,7 +757,7 @@ bool daStandItem_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     if (mItemNo == WIND_FLAG)
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mDoExt_bckAnmRemove(mpModel->getModelData());
     else if (mpBckAnm != NULL)
         mpBckAnm->entry(mpModel->getModelData());
 
@@ -774,7 +772,7 @@ bool daStandItem_c::_draw() {
 }
 
 /* 800E53B8-800E53D8       .text daStandItem_Create__FPv */
-static s32 daStandItem_Create(void* i_this) {
+static cPhs_State daStandItem_Create(void* i_this) {
     return ((daStandItem_c*)i_this)->_create();
 }
 
@@ -816,7 +814,7 @@ actor_process_profile_definition g_profile_STANDITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0101,
+    /* Priority     */ PRIO_STANDITEM,
     /* Actor SubMtd */ &daStandItemMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

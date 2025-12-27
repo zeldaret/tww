@@ -1,7 +1,7 @@
 #ifndef RES_HJUMP_H
 #define RES_HJUMP_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum HJUMP_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

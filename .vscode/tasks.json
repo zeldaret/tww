@@ -7,10 +7,11 @@
         "id": "gameVersion",
         "type": "pickString",
         "options": [
+            "D44J01",
             "GZLJ01",
             "GZLE01",
             "GZLP01",
-            "GZLJ01 --debug",
+            "D44J01 --debug --map",
         ],
         "default": "GZLE01",
         "description": "Game version to build."
@@ -29,7 +30,13 @@
     {
       "label": "configure",
       "type": "shell",
-      "command": "python configure.py --version ${input:gameVersion}",
+      "command": "${command:python.interpreterPath} configure.py --version ${input:gameVersion}",
+      "problemMatcher": [],
+    },
+    {
+      "label": "ninja changes_all",
+      "type": "shell",
+      "command": "ninja changes_all",
       "problemMatcher": [],
     },
   ]

@@ -19,13 +19,13 @@ namespace daObjKanat {
     
         int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
-        int CreateHeap();
-        int Create();
-        BOOL Delete();
-        BOOL Execute(Mtx**);
-        BOOL Draw();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        virtual BOOL Delete();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
         
-        s32 Mthd_Create();
+        cPhs_State Mthd_Create();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();

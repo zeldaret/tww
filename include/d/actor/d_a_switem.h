@@ -9,7 +9,7 @@ class daSwItem_c : public fopAc_ac_c {
 public:
     bool _delete();
     BOOL CreateInit();
-    s32 _create();
+    cPhs_State _create();
     bool _execute();
     BOOL isRupeeInAllCreateTable(int);
     bool _draw();
@@ -24,9 +24,9 @@ public:
 };
 
 namespace daSwItem_prm {
-    inline u32 getAtType(daSwItem_c* item) { return (fopAcM_GetParam(item) >> 0x00) & 0xFF; }
-    inline u32 getItemTbl(daSwItem_c* item) { return (fopAcM_GetParam(item) >> 0x08) & 0x3F; }
-    inline u32 getItemBitNo(daSwItem_c* item) { return (fopAcM_GetParam(item) >> 0x0E) & 0x7F; }
+    inline u32 getAtType(daSwItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 0x00) & 0xFF; }
+    inline u32 getItemTbl(daSwItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 0x08) & 0x3F; }
+    inline u32 getItemBitNo(daSwItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 0x0E) & 0x7F; }
 }
 
 #endif /* D_A_SWITEM_H */

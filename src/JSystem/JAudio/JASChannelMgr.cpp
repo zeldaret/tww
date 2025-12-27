@@ -3,6 +3,8 @@
 // Translation Unit: JASChannelMgr.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASChannelMgr.h"
 #include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASChannel.h"
@@ -84,21 +86,21 @@ JASystem::TChannel* JASystem::TChannelMgr::getLogicalChannel(u32) {
 }
 
 /* 8028D778-8028D7D8       .text moveListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-bool JASystem::TChannelMgr::moveListHead(TChannel* param_1, u32 param_2) {
+BOOL JASystem::TChannelMgr::moveListHead(TChannel* param_1, u32 param_2) {
     if (cutList(param_1) == -1) {
-        return false;
+        return FALSE;
     }
     addListHead(param_1, param_2);
-    return true;
+    return TRUE;
 }
 
 /* 8028D7D8-8028D838       .text moveListTail__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-bool JASystem::TChannelMgr::moveListTail(TChannel* param_1, u32 param_2) {
+BOOL JASystem::TChannelMgr::moveListTail(TChannel* param_1, u32 param_2) {
     if (cutList(param_1) == -1) {
-        return false;
+        return FALSE;
     }
     addListTail(param_1, param_2);
-    return true;
+    return TRUE;
 }
 
 /* 8028D838-8028D8E4       .text addListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */

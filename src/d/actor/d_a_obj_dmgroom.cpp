@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_dmgroom.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_dmgroom.h"
 #include "d/res/res_dmgroom.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,6 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -28,7 +30,7 @@ BOOL daObjDmgroom_c::CreateHeap() {
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Dmgroom", DMGROOM_BRK_DMGROOM));
     JUT_ASSERT(0x5c, brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     return TRUE;
@@ -50,10 +52,10 @@ void daObjDmgroom_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDmgroom_c::_create() {
+cPhs_State daObjDmgroom_c::_create() {
     fopAcM_SetupActor(this, daObjDmgroom_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, "Dmgroom");
+    cPhs_State ret = dComIfG_resLoad(&mPhs, "Dmgroom");
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460) == 0) {
@@ -74,8 +76,8 @@ bool daObjDmgroom_c::_delete() {
 bool daObjDmgroom_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c * demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(0x40))
-            mBrkAnm.setFrame(demoAc->mAnimationFrame);
+        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e))
+            mBrkAnm.setFrame(demoAc->getAnmFrame());
     }
     set_mtx();
     return true;
@@ -93,7 +95,7 @@ bool daObjDmgroom_c::_draw() {
 }
 
 /* 000002EC-000003B4       .text daObjDmgroom_Create__FPv */
-static s32 daObjDmgroom_Create(void* i_this) {
+static cPhs_State daObjDmgroom_Create(void* i_this) {
     return ((daObjDmgroom_c*)i_this)->_create();
 }
 
@@ -135,7 +137,7 @@ actor_process_profile_definition g_profile_Obj_Dmgroom = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x001D,
+    /* Priority     */ PRIO_Obj_Dmgroom,
     /* Actor SubMtd */ &daObj_DmgroomMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

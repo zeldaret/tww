@@ -2,6 +2,7 @@
 #define OS_H_
 
 #include "stdarg.h"
+#include "dolphin/base/PPCArch.h" // IWYU pragma: export
 #include "dolphin/dvd/dvd.h"
 
 #include "dolphin/os/OSAlarm.h" // IWYU pragma: export
@@ -93,8 +94,6 @@ extern BOOL __OSIsGcam;
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
 
-void OSReportInit__Fv(void);  // needed for inline asm
-
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);
 static void InquiryCallback(s32 param_0, DVDCommandBlock* param_1);
@@ -154,6 +153,27 @@ inline u8 __OSf32tou8(register f32 inF) {
 
 inline void OSf32tou8(f32* f, u8* out) {
     *out = __OSf32tou8(*f);
+}
+
+inline s8 __OSf32tos8(register f32 inF) {
+    register u8 out;
+    u32 tmp;
+    register u32* tmpPtr = &tmp;
+    // clang-format off
+#ifdef __MWERKS__
+    asm {
+        psq_st inF, 0(tmpPtr), 0x1, 4
+        lbz out, 0(tmpPtr)
+        extsb out, out
+    }
+#endif
+    // clang-format on
+
+    return out;
+}
+
+inline void OSf32tos8(f32* f, s8* out) {
+    *out = __OSf32tos8(*f);
 }
 
 static inline void OSInitFastCast(void) {
@@ -284,6 +304,12 @@ struct GLOBAL_MEMORY {
 };
 
 #define OS_ASSERT(...)
+
+#define ASSERTLINE(line, cond) (void)0
+#define ASSERTMSGLINE(line, cond, msg) (void)0
+#define ASSERTMSG1LINE(line, cond, msg, arg1) (void)0
+#define ASSERTMSG2LINE(line, cond, msg, arg1, arg2) (void)0
+#define ASSERTMSGLINEV(line, cond, ...) (void)0
 
 #define OSPhysicalToCached(paddr) ((void*)((u32)(paddr) + OS_BASE_CACHED))
 #define OSPhysicalToUncached(paddr) ((void*)((u32)(paddr) + OS_BASE_UNCACHED))

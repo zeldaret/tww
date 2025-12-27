@@ -9,16 +9,16 @@
 #include "f_pc/f_pc_layer.h"
 
 /* 8003DE00-8003DE38       .text fpcLyIt_OnlyHere__FP11layer_classPFPvPv_iPv */
-s32 fpcLyIt_OnlyHere(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
-    layer_iter lIter;
-    lIter.mpFunc = i_func;
-    lIter.mpUserData = i_data;
-    return cTrIt_Method(&i_layer->mNodeListTree, (cNdIt_MethodFunc)cTgIt_MethodCall, &lIter);
+BOOL fpcLyIt_OnlyHere(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
+    method_filter filter;
+    filter.mpMethodFunc = (cNdIt_MethodFunc)i_func;
+    filter.mpUserData = i_data;
+    return cTrIt_Method(&i_layer->mNodeListTree, (cNdIt_MethodFunc)cTgIt_MethodCall, &filter);
 }
 
 /* 8003DE38-8003DEA0       .text fpcLyIt_OnlyHereLY__FP11layer_classPFPvPv_iPv */
-s32 fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
-    s32 result;
+BOOL fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* i_data) {
+    BOOL result;
     layer_class* currentLayer = fpcLy_CurrentLayer();
     fpcLy_SetCurrentLayer(i_layer);
     result = fpcLyIt_OnlyHere(i_layer, i_func, i_data);
@@ -28,23 +28,23 @@ s32 fpcLyIt_OnlyHereLY(layer_class* i_layer, fpcLyIt_OnlyHereFunc i_func, void* 
 
 /* 8003DEA0-8003DED8       .text fpcLyIt_Judge__FP11layer_classPFPvPv_PvPv */
 void* fpcLyIt_Judge(layer_class* i_layer, fpcLyIt_JudgeFunc i_func, void* i_data) {
-    layer_iter lIter;
-    lIter.mpFunc = i_func;
-    lIter.mpUserData = i_data;
-    return cTrIt_Judge(&i_layer->mNodeListTree, (cNdIt_JudgeFunc)cTgIt_JudgeFilter, &lIter);
+    judge_filter filter;
+    filter.mpJudgeFunc = (cNdIt_JudgeFunc)i_func;
+    filter.mpUserData = i_data;
+    return cTrIt_Judge(&i_layer->mNodeListTree, (cNdIt_JudgeFunc)cTgIt_JudgeFilter, &filter);
 }
 
 /* 8003DED8-8003DF4C       .text fpcLyIt_AllJudge__FPFPvPv_PvPv */
 void* fpcLyIt_AllJudge(fpcLyIt_JudgeFunc i_func, void* i_data) {
-    layer_iter lIter;
+    judge_filter filter;
     layer_class* current;
-    lIter.mpFunc = i_func;
-    lIter.mpUserData = i_data;
+    filter.mpJudgeFunc = (cNdIt_JudgeFunc)i_func;
+    filter.mpUserData = i_data;
 
     current = fpcLy_RootLayer();
     while (current != NULL) {
         void* result =
-            cTrIt_Judge(&current->mNodeListTree, (cNdIt_JudgeFunc)cTgIt_JudgeFilter, &lIter);
+            cTrIt_Judge(&current->mNodeListTree, (cNdIt_JudgeFunc)cTgIt_JudgeFilter, &filter);
         if (result != NULL) {
             return result;
         }

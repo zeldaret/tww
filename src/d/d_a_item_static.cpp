@@ -3,6 +3,7 @@
 // Translation Unit: d_a_item_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_item.h"
 #include "dolphin/types.h"
 
@@ -17,9 +18,11 @@ BOOL daItem_c::checkControl() {
     if (mItemStatus == STATUS_UNK4) {
         return FALSE;
     }
+#if VERSION > VERSION_DEMO
     if (mItemStatus == STATUS_INIT_NORMAL || mItemStatus == STATUS_MAIN_NORMAL) {
         return FALSE;
     }
+#endif
     return TRUE;
 }
 

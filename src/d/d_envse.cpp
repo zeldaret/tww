@@ -3,6 +3,9 @@
 // Translation Unit: d_envse.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_envse.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
@@ -11,14 +14,6 @@
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_audio.h"
-
-class dEnvSe_c : public kankyo_class {
-public:
-    BOOL execute();
-
-    /* 0xF8 */ u32 field_0xf8;
-    /* 0xFC */ u32 field_0xfc;
-};
 
 /* 8017D4C0-8017D4C8       .text dEnvSe_Draw__FP8dEnvSe_c */
 static BOOL dEnvSe_Draw(dEnvSe_c* i_this) {
@@ -33,24 +28,24 @@ void dEnvSe_getNearPathPos(cXyz* r30, cXyz* r31, dPath* r26) {
     cXyz sp30[2];
     f32 sp8;
     f32 f31 = FLOAT_MAX;
-    dPath__Point* point = r26->mpPnt;
+    dPnt* point = r26->m_points;
     cM3dGLin lin;
     
     for (i = 0; i < r26->m_num; point++, i++) {
-        sp8 = r31->abs2(point->mPos);
+        sp8 = r31->abs2(point->m_position);
         if (f31 > sp8) {
             f31 = sp8;
             nearIdx = i;
         }
     }
     
-    point = &r26->mpPnt[nearIdx];
+    point = &r26->m_points[nearIdx];
     if (nearIdx != 0) {
-        lin.set(point[-1].mPos, point[0].mPos);
+        lin.set(point[-1].m_position, point[0].m_position);
         spc[0] = cM3d_Len3dSqPntAndSegLine(&lin, r31, &sp30[0], &sp8);
     }
     if (nearIdx != r26->m_num-1) {
-        lin.set(point[0].mPos, point[1].mPos);
+        lin.set(point[0].m_position, point[1].m_position);
         spc[1] = cM3d_Len3dSqPntAndSegLine(&lin, r31, &sp30[1], &sp8);
     }
     
@@ -68,7 +63,7 @@ void dEnvSe_getNearPathPos(cXyz* r30, cXyz* r31, dPath* r26) {
         if (spc[1]) {
             *r30 = sp30[1];
         } else {
-            *r30 = point[0].mPos;;
+            *r30 = point[0].m_position;
         }
     }
 }
@@ -183,7 +178,7 @@ static BOOL dEnvSe_Delete(dEnvSe_c* i_this) {
 }
 
 /* 8017DB38-8017DB40       .text dEnvSe_Create__FP12kankyo_class */
-static s32 dEnvSe_Create(kankyo_class*) {
+static cPhs_State dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
@@ -196,15 +191,15 @@ kankyo_method_class l_dEnvSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_ENVSE = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_ENVSE,
-    &g_fpcLf_Method.base,
-    sizeof(dEnvSe_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0xA9,
-    &l_dEnvSe_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ENVSE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dEnvSe_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_ENVSE,
+    /* Actor SubMtd */ &l_dEnvSe_Method,
 };

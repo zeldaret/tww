@@ -3,6 +3,7 @@
 // Translation Unit: d_a_hot_floor.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hot_floor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -10,6 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -29,7 +31,7 @@ void daHot_Floor_c::set_mtx() {
         mDoMtx_copy(mtx[i - 1], mtx[i]);
     if (mtx_p != NULL) {
         cXyz pos = cXyz::Zero;
-        mDoMtx_stack_c::copy(*mtx_p);
+        mDoMtx_stack_c::copy(mtx_p);
         mDoMtx_stack_c::transM(0.0f, 5.0f, -5.0f);
         mDoMtx_copy(mDoMtx_stack_c::get(), mtx[0]);
         mDoMtx_stack_c::multVec(&pos, &current.pos);
@@ -42,7 +44,7 @@ void daHot_Floor_c::set_mtx() {
 }
 
 /* 00000218-00000264       .text CreateInit__13daHot_Floor_cFv */
-s32 daHot_Floor_c::CreateInit() {
+cPhs_State daHot_Floor_c::CreateInit() {
     mbSpawnParticle = true;
     mSpawnTimer = 0.0f;
     set_mtx_init();
@@ -50,8 +52,11 @@ s32 daHot_Floor_c::CreateInit() {
     return cPhs_COMPLEATE_e;
 }
 
-s32 daHot_Floor_c::_create() {
+cPhs_State daHot_Floor_c::_create() {
+#if VERSION > VERSION_DEMO
+    // Bug: This actor is never initialized in the demo.
     fopAcM_SetupActor(this, daHot_Floor_c);
+#endif
     return CreateInit();
 }
 
@@ -66,9 +71,9 @@ bool daHot_Floor_c::_delete() {
 bool daHot_Floor_c::_execute() {
     if (mbSpawnParticle) {
         if (mEmitter2 == NULL && !(fopAcM_GetParam(this) & 1))
-            mEmitter2 = dComIfGp_particle_set(0x814c, &current.pos);
+            mEmitter2 = dComIfGp_particle_set(dPa_name::ID_SCENE_814C, &current.pos);
         if (mEmitter1 == NULL && !(fopAcM_GetParam(this) & 2))
-            mEmitter1 = dComIfGp_particle_set(0x8120, &current.pos);
+            mEmitter1 = dComIfGp_particle_set(dPa_name::ID_SCENE_8120, &current.pos);
         cLib_chaseF(&mSpawnTimer, 60.0f, 5.0f);
         mbSpawnParticle = false;
     } else {
@@ -96,7 +101,7 @@ bool daHot_Floor_c::_draw() {
 }
 
 /* 00000264-000002F8       .text daHot_FloorCreate__FPv */
-static s32 daHot_FloorCreate(void* i_this) {
+static cPhs_State daHot_FloorCreate(void* i_this) {
     return ((daHot_Floor_c*)i_this)->_create();
 }
 
@@ -138,7 +143,7 @@ actor_process_profile_definition g_profile_Hot_Floor = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00DB,
+    /* Priority     */ PRIO_Hot_Floor,
     /* Actor SubMtd */ &daHot_FloorMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

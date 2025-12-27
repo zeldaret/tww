@@ -3,6 +3,7 @@
 // Translation Unit: d_s_title.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
@@ -49,7 +50,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
 #if VERSION == VERSION_PAL
         daMP_c *movie = dScnTitle_c::mMp;
         if (movie == NULL) {
-            s32 rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
+            BOOL rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
             JUT_ASSERT(0x8a, rt);
 
             if (movie == NULL)
@@ -59,7 +60,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
         }
 #else
         daMP_c *movie;
-        s32 rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
+        BOOL rt = fopAcM_SearchByID(i_this->mMoviePId, (fopAc_ac_c**)&movie);
         JUT_ASSERT(0x83, rt);
 
         if (movie == NULL)
@@ -102,7 +103,7 @@ static BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
 }
 
 /* 802374D8-80237568       .text dScnTitle_Create__FP11scene_class */
-static s32 dScnTitle_Create(scene_class* i_scn) {
+static cPhs_State dScnTitle_Create(scene_class* i_scn) {
     title_of_scene_class * i_this = (title_of_scene_class*) i_scn;
 
     if (JAInter::BankWave::checkAllWaveLoadStatus())
@@ -134,27 +135,27 @@ static scene_method_class l_dScnTitle_Method = {
 };
 
 scene_process_profile_definition g_profile_TITLE_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_TITLE_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(title_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnTitle_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_TITLE_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(title_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnTitle_Method,
 };
 
 scene_process_profile_definition g_profile_ENDING_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_ENDING_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(title_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnTitle_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ENDING_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(title_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnTitle_Method,
 };

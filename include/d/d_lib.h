@@ -25,7 +25,7 @@ public:
     void Yinit();
     virtual f32 getValueStick();
     virtual s16 getAngleStick();
-    s32 checkTrigger();
+    u8 checkTrigger();
     bool checkLeftTrigger();
     bool checkRightTrigger();
     bool checkUpTrigger();
@@ -103,7 +103,7 @@ void dLib_setAnm(const char*, mDoExt_McaMorf*, s8*, s8*, s8*, const dLib_anm_idx
 void dLib_bcks_setAnm(const char* arcName, mDoExt_McaMorf* morf, s8* pBckIdx, s8* pPrmIdx,
                       s8* param_5, const int* bcksTbl, const dLib_anm_prm_c* anmPrmTbl, bool param_8);
 void dLib_scaleAnime(f32* o_value, f32* p_targets, int targetNum, int* p_targetIdx, f32 scale, f32 maxStep, f32 minStep);
-void dLib_getPosFromMtx(f32(*)[4], cXyz*);
+void dLib_getPosFromMtx(MtxP, cXyz*);
 bool dLib_pathInfo(dPath**, u8);
 void dLib_pathMove(cXyz*, s8*, dPath*, f32, int (*)(cXyz*, cXyz*, cXyz*, void*), void*);
 void dLib_setNextStageBySclsNum(u8 i_sclsnum, s8 room_no);

@@ -8,8 +8,8 @@
 class daObj_Bscurtain_c : public fopAc_ac_c {
 public:
     BOOL CreateHeap();
-    s32 CreateInit();
-    inline s32 _create();
+    cPhs_State CreateInit();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _execute();
     inline bool _draw();
@@ -28,7 +28,7 @@ public:
     virtual ~daObj_Bscurtain_HIO_c() {}
 
 public:
-    /* 0x04 */ s8 field_0x04;
+    /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 field_0x08;
     /* 0x0C */ u16 field_0x0c;
 };

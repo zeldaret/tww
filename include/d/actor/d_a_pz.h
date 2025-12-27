@@ -93,8 +93,10 @@ public:
     bool _draw();
     void bodyCreateInit();
     void createInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
+
+    static const dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x06C4 */ int mMode;

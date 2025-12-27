@@ -3,13 +3,15 @@
 // Translation Unit: J2DTextBox.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "dolphin/gx/GXTransform.h"
-#include "__va_arg.h"
+#include "stdarg.h"
 
 /* 802D51D8-802D5268       .text __ct__10J2DTextBoxFPCcPCc */
 J2DTextBox::J2DTextBox(const char* font, const char* str) : mpFont(NULL), mStringPtr(NULL) {

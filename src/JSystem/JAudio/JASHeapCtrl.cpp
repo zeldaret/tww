@@ -3,6 +3,8 @@
 // Translation Unit: JASHeapCtrl.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASHeapCtrl.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/os/OS.h"

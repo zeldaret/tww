@@ -7,12 +7,12 @@
 #include "dolphin/types.h"
 
 /* 80245364-80245390       .text cReq_Is_Done__FP18request_base_class */
-int cReq_Is_Done(request_base_class* i_this) {
+BOOL cReq_Is_Done(request_base_class* i_this) {
     if (i_this->flag1 == 1) {
         i_this->flag1 = 0;
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 /* 80245390-802453C0       .text cReq_Done__FP18request_base_class */

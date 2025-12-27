@@ -24,12 +24,12 @@ struct daSteamTag_mData {
 class daSteamTag_c : public fopAc_ac_c {
 public:
     ~daSteamTag_c();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 
     const daSteamTag_mData* getData();
-    s32 CreateInit();
+    BOOL CreateInit();
     BOOL createEmitter();
     bool endEmitter();
 
@@ -55,7 +55,7 @@ public:
 };
 
 namespace daSteamTag_prm {
-    inline u8 getSchBit(daSteamTag_c* item) { return (fopAcM_GetParam(item) >> 2) & 0xFF; }
+    inline u8 getSchBit(daSteamTag_c* i_this) { return (fopAcM_GetParam(i_this) >> 2) & 0xFF; }
 };
 
 #endif /* D_A_STEAM_TAG_H */

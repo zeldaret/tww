@@ -3,17 +3,17 @@
 // Translation Unit: d_a_tag_ghostship.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ghostship.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include "d/d_priority.h"
 
 static daTag_Gship_HIO_c l_HIO;
 
 /* 000000EC-0000010C .text __ct__17daTag_Gship_HIO_cFv */
 daTag_Gship_HIO_c::daTag_Gship_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     field_0x05 = 0;
 }
 
@@ -31,8 +31,8 @@ void daTag_Gship_c::modeClearWait() {
 
 /* 000001C0-00000214 .text modeClearEventInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEventInit() {
-    dComIfGs_getEventReg(0x8803);
-    dComIfGs_setEventReg(0x8803, 3);
+    dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_8803, 3);
 }
 
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
@@ -40,7 +40,7 @@ void daTag_Gship_c::modeClearEvent() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
-            if(dComIfGs_getEventReg(0x8803) == 3) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
             } else {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
@@ -51,8 +51,8 @@ void daTag_Gship_c::modeClearEvent() {
 
         if(dComIfGp_evmng_endCheck("PSHIP_CLEAR")) {
             mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
-            s8 room = dComIfGs_getEventReg(0xC3FF);
-            s8 spawn = dComIfGs_getEventReg(0x85FF);
+            u8 room = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C3FF);
+            s8 spawn = dComIfGs_getEventReg(dSv_event_flag_c::UNK_85FF);
             dKy_set_nexttime(120.0f);
             dComIfGp_setNextStage("sea", spawn, room, 0xFF, 0.0f, 5);
         }
@@ -119,7 +119,7 @@ void daTag_Gship_c::getArg() {
 }
 
 /* 00000594-000005EC .text _create__13daTag_Gship_cFv */
-s32 daTag_Gship_c::_create() {
+cPhs_State daTag_Gship_c::_create() {
     fopAcM_SetupActor(this, daTag_Gship_c);
 
     getArg();
@@ -133,7 +133,7 @@ bool daTag_Gship_c::_delete() {
 }
 
 /* 000005F4-00000614 .text daTag_GshipCreate__FPv */
-static s32 daTag_GshipCreate(void* i_this) {
+static cPhs_State daTag_GshipCreate(void* i_this) {
     return static_cast<daTag_Gship_c*>(i_this)->_create();
 }
 
@@ -175,7 +175,7 @@ actor_process_profile_definition g_profile_TAG_GSHIP = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0066,
+    /* Priority     */ PRIO_TAG_GSHIP,
     /* Actor SubMtd */ &daTag_GshipMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

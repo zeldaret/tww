@@ -3,9 +3,11 @@
 // Translation Unit: d_a_alldie.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_alldie.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 enum {
@@ -64,7 +66,7 @@ BOOL daAlldie_c::execute() {
     return TRUE;
 }
 
-s32 daAlldie_c::create() {
+cPhs_State daAlldie_c::create() {
     fopAcM_SetupActor(this, daAlldie_c);
 
     if (!dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))) {
@@ -104,7 +106,7 @@ static BOOL daAlldie_Delete(daAlldie_c* i_this) {
 }
 
 /* 00000220-000002CC       .text daAlldie_Create__FP10fopAc_ac_c */
-static s32 daAlldie_Create(fopAc_ac_c* ac) {
+static cPhs_State daAlldie_Create(fopAc_ac_c* ac) {
     return ((daAlldie_c*)ac)->create();
 }
 
@@ -126,7 +128,7 @@ actor_process_profile_definition g_profile_ALLDIE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011D,
+    /* Priority     */ PRIO_ALLDIE,
     /* Actor SubMtd */ &l_daAlldie_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

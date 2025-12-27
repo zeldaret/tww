@@ -12,9 +12,9 @@ public:
         unk[1] = 0;
         mWindPowerScale = 0.1f;
     }
-    virtual ~daObjIkariHIO_c(){};
+    virtual ~daObjIkariHIO_c() {};
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ u8 unk[2];
@@ -28,7 +28,7 @@ public:
     void getArg();
     bool _execute();
     bool _draw();
-    int _create();
+    cPhs_State _create();
     bool _delete();
 
 public:

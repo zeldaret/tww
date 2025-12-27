@@ -3,11 +3,13 @@
 // Translation Unit: d_a_tag_ret.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ret.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 
@@ -34,21 +36,23 @@ static dCcD_SrcCyl cyl_check_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 1000.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 namespace daTagRet {
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, daTagRet::Act_c);
 
+        #if VERSION > VERSION_DEMO
         if (checkItemGet(dItem_PEARL_FARORE_e, TRUE)) {
             return cPhs_STOP_e;
         }
+        #endif
 
         mStts.Init(0xFF, 0xFF, this);
         mCyl.Set(cyl_check_src);
@@ -93,7 +97,7 @@ namespace daTagRet {
 
     namespace {
         /* 00000468-00000488       .text Mthd_Create__Q28daTagRet25@unnamed@d_a_tag_ret_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 
@@ -137,7 +141,7 @@ actor_process_profile_definition g_profile_Tag_Ret = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x005F,
+    /* Priority     */ PRIO_Tag_Ret,
     /* Actor SubMtd */ &daTagRet::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

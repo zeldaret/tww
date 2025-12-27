@@ -3,10 +3,12 @@
 // Translation Unit: d_a_disappear.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_disappear.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
@@ -27,7 +29,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                 if (dropType == daDisItem_HEART_CONTAINER_e) {
                     fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
                 }
-                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_UNK13_e) {
+                else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_NONE13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
@@ -76,31 +78,32 @@ void set_disappear(disappear_class* i_this, float scale) {
         case 0xB:
         case 0xC:
         case 0xD:
-            dComIfGp_particle_set(0x14, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0014, &i_this->current.pos, NULL, &particleScale);
+            // Fall-through
         case 0x3:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_setStripes(0x15, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_setStripes(dPa_name::ID_COMMON_0015, &i_this->current.pos, NULL, &particleScale, 0xFF, 0x96);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x1:
-            dComIfGp_particle_set(0x13, &i_this->current.pos, NULL, &particleScale);
-            dComIfGp_particle_set(0x16, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0013, &i_this->current.pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0016, &i_this->current.pos, NULL, &particleScale);
             break;
         case 0x4:
-            dComIfGp_particle_set(0x043C, &i_this->current.pos);
-            dComIfGp_particle_set(0x043D, &i_this->current.pos);
-            dComIfGp_particle_set(0x043E, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043C, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043D, &i_this->current.pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_043E, &i_this->current.pos);
             break;
     }
 }
 
 /* 800E7DBC-800E7E60       .text daDisappear_Create__FP10fopAc_ac_c */
-static s32 daDisappear_Create(fopAc_ac_c* i_this) {
+static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
     fopAcM_SetupActor(dis, disappear_class);
 
-    dis->health = fopAcM_GetParam(dis) & 0xFF;
+    dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
 
     dis->mItemBitNo = (fopAcM_GetParam(dis) >> 0x10) & 0xFF;
@@ -131,7 +134,7 @@ actor_process_profile_definition g_profile_DISAPPEAR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0188,
+    /* Priority     */ PRIO_DISAPPEAR,
     /* Actor SubMtd */ &l_daDisappear_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

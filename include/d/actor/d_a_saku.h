@@ -3,12 +3,14 @@
 
 #include "f_op/f_op_actor.h"
 
+class dCcD_SrcCyl;
+
 class daSaku_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned char) {}
     void setFlag(unsigned char) {}
 
-    inline s32 _daSaku_create();
+    inline cPhs_State _daSaku_create();
     inline BOOL _daSaku_delete();
     inline BOOL _daSaku_draw();
     inline BOOL _daSaku_execute();
@@ -35,6 +37,8 @@ public:
     void MoveBGResist(int, int);
     void setEffFire(int);
     void setEffBreak(int);
+
+    static const dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

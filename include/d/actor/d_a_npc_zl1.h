@@ -140,10 +140,10 @@ public:
     void optn_action1(void*);
     void demo();
     void shadowDraw();
-    bool _draw();
-    bool _execute();
-    bool _delete();
-    s32 _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
     void bodyCreateHeap();
     void itemCreateHeap();
     void CreateHeap();

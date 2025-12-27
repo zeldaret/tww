@@ -127,10 +127,10 @@ public:
     void wait_action4(void*);
     void demo();
     void shadowDraw();
-    bool _draw();
-    bool _execute();
-    bool _delete();
-    s32 _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
     void create_Anm();
     void create_hed_Anm();
     void create_bln_Anm();

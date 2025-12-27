@@ -1,7 +1,7 @@
 #ifndef RES_BIN_H
 #define RES_BIN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BIN_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

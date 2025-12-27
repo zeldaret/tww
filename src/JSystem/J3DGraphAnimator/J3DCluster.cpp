@@ -3,6 +3,8 @@
 // Translation Unit: J3DCluster.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DCluster.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
@@ -71,7 +73,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx) {
 /* 802F3A08-802F3FA8       .text deform__11J3DDeformerFP15J3DVertexBufferUsPf */
 void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
     /* Nonmatching */
-    if (!!(mFlags & 2) && vtx->getVertexData()->getVtxPosType() == GX_F32) {
+    if (checkFlag(2) && vtx->getVertexData()->getVtxPosType() == GX_F32) {
         J3DCluster* cluster = mDeformData->getClusterPointer(idx);
         s32 posNum = cluster->mPosNum;
         s32 keyNum = cluster->mKeyNum;
@@ -105,7 +107,7 @@ void J3DDeformer::deform(J3DVertexBuffer* vtx, u16 idx, f32* weightList) {
             }
         }
 
-        if (!!(mFlags & 1) && cluster->mFlags != 0 && vtx->getVertexData()->getVtxNrmType() == GX_F32) {
+        if (checkFlag(1) && cluster->mFlags != 0 && vtx->getVertexData()->getVtxNrmType() == GX_F32) {
             f32* vtxNrmDst = (f32*)vtx->getVtxNrmArrayPointer(0);
             f32* vtxNrmSrc = mDeformData->getVtxNrm();
             f32* nrmBuf = field_0x0c;
@@ -226,7 +228,7 @@ J3DSkinDeform::J3DSkinDeform() {
 
 /* 802F40F0-802F44E8       .text initMtxIndexArray__13J3DSkinDeformFP12J3DModelData */
 int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - operand swap */
 
     if (mPosUseMtx != NULL && mNrmUseMtx != NULL)
         return J3DErrType_Success;
@@ -432,12 +434,16 @@ void J3DSkinDeform::calcNrmMtx(J3DModel* model) {
     }
 }
 
+#ifdef DEBUG
+#pragma push
+#pragma optimization_level 1
+#endif
 /* 802F4850-802F4974       .text deformVtxPos_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
-    /* Nonmatching */
+    /* Nonmatching - J3DPSMulMtxVec regalloc */
     Mtx* mtxArr[2];
-    mtxArr[0] = model->mpNodeMtx;
-    mtxArr[1] = model->mpWeightEnvMtx;
+    mtxArr[0] = (Mtx*)model->getAnmMtx(0);
+    mtxArr[1] = (Mtx*)model->getWeightAnmMtx(0);
     model->getVertexBuffer()->swapTransformedVtxPos();
 
     s32 vtxNum = model->getModelData()->getVtxNum();
@@ -452,13 +458,16 @@ void J3DSkinDeform::deformVtxPos_F32(J3DModel* model) const {
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(Vec));
     model->setCurrentVtxPos(transformedVtxPos);
 }
+#ifdef DEBUG
+#pragma pop
+#endif
 
 /* 802F4974-802F4AB4       .text deformVtxPos_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
-    /* Nonmatching */
+    /* Nonmatching - J3DPSMulMtxVec regalloc */
     Mtx* mtxArr[2];
-    mtxArr[0] = model->mpNodeMtx;
-    mtxArr[1] = model->mpWeightEnvMtx;
+    mtxArr[0] = (Mtx*)model->getAnmMtx(0);
+    mtxArr[1] = (Mtx*)model->getWeightAnmMtx(0);
 
     J3DGQRSetup7(model->getModelData()->getVertexData().getVtxPosFrac(), 7, model->getModelData()->getVertexData().getVtxPosFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxPos();
@@ -469,7 +478,10 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
 
     for (s32 i = 0; i < vtxNum; i++) {
         Mtx* mtx = mtxArr[model->getModelData()->getDrawMtxFlag(mPosUseMtx[i])];
+// TODO: this line doesn't compile on debug
+#ifndef DEBUG
         J3DPSMulMtxVec(mtx[model->getModelData()->getDrawMtxIndex(mPosUseMtx[i])], &curVtxPos[i], &transformedVtxPos[i]);
+#endif
     }
 
     DCStoreRange(model->getVertexBuffer()->getTransformedVtxPos(0), model->getModelData()->getVtxNum() * sizeof(SVec));
@@ -478,7 +490,7 @@ void J3DSkinDeform::deformVtxPos_S16(J3DModel* model) const {
 
 /* 802F4AB4-802F4BB8       .text deformVtxNrm_F32__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
-    /* Nonmatching */
+    /* Nonmatching - J3DPSMulMtxVec regalloc */
     model->getVertexBuffer()->swapTransformedVtxNrm();
 
     s32 vtxNum = model->getModelData()->getNrmNum();
@@ -495,7 +507,7 @@ void J3DSkinDeform::deformVtxNrm_F32(J3DModel* model) const {
 
 /* 802F4BB8-802F4CD8       .text deformVtxNrm_S16__13J3DSkinDeformCFP8J3DModel */
 void J3DSkinDeform::deformVtxNrm_S16(J3DModel* model) const {
-    /* Nonmatching */
+    /* Nonmatching - J3DPSMulMtxVec regalloc */
     J3DGQRSetup7(model->getModelData()->getVertexData().getVtxNrmFrac(), 7, model->getModelData()->getVertexData().getVtxNrmFrac(), 7);
     model->getVertexBuffer()->swapTransformedVtxNrm();
 

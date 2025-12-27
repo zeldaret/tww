@@ -199,6 +199,9 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     &g_profile_MANT,
     &g_profile_KANTERA,
     &g_profile_KAMOME,
+#if VERSION == VERSION_DEMO
+    &g_profile_KAMOME2,
+#endif
     &g_profile_NPC_KAM,
     &g_profile_WBIRD,
     &g_profile_DEMO_KMM,

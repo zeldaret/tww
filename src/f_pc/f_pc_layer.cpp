@@ -20,7 +20,7 @@ s32 fpcLy_ToCancelQ(layer_class* i_layer, process_method_tag_class* i_methods) {
 
 /* 8003D844-8003D870       .text fpcLy_CancelMethod__FP24process_method_tag_class */
 bool fpcLy_CancelMethod(process_method_tag_class* i_layer) {
-    return fpcMtdTg_Do(i_layer) == 1;
+    return fpcMtdTg_Do(i_layer) == TRUE;
 }
 
 /* 8003D870-8003D894       .text fpcLy_IntoQueue__FP11layer_classiP16create_tag_classi */
@@ -128,18 +128,18 @@ void fpcLy_Regist(layer_class* i_layer) {
 }
 
 /* 8003DA60-8003DB14       .text fpcLy_Delete__FP11layer_class */
-s32 fpcLy_Delete(layer_class* i_layer) {
+BOOL fpcLy_Delete(layer_class* i_layer) {
     if (i_layer->mNodeListTree.mpLists->mSize == 0 && i_layer->mCancelList.mSize == 0) {
         cLs_SingleCut((node_class*)i_layer);
         *i_layer = l_fpcLy_Crear;
-        return 1;
+        return TRUE;
     } else {
-        return 0;
+        return FALSE;
     }
 }
 
 /* 8003DB14-8003DB40       .text fpcLy_Cancel__FP11layer_class */
-s32 fpcLy_Cancel(layer_class* i_layer) {
+BOOL fpcLy_Cancel(layer_class* i_layer) {
     return fpcMtdIt_Method(&i_layer->mCancelList, (fpcMtdIt_MethodFunc)fpcLy_CancelMethod);
 }
 

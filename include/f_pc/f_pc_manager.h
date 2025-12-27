@@ -34,12 +34,11 @@ inline s16 fpcM_GetProfName(void* pProc) {
 }
 
 inline fpc_ProcID fpcM_Create(s16 procName, FastCreateReqFunc createFunc, void* params) {
-    return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL,
-                            params);
+    return fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, (stdCreateFunc)createFunc, NULL, params);
 }
 
 inline s16 fpcM_DrawPriority(void* pProc) {
-    return fpcLf_GetPriority((leafdraw_class*)pProc);
+    return (s16)fpcLf_GetPriority((leafdraw_class*)pProc);
 }
 
 inline s32 fpcM_ChangeLayerID(void* pProc, int layerID) {
@@ -78,10 +77,10 @@ inline s8 fpcM_CreateResult(void* pProc) {
     return ((base_process_class*)pProc)->mCreateResult;
 }
 
-void fpcM_Draw(void* pProc);
-s32 fpcM_DrawIterater(fpcM_DrawIteraterFunc pFunc);
-s32 fpcM_Execute(void* pProc);
-s32 fpcM_Delete(void* pProc);
+BOOL fpcM_Draw(void* pProc);
+BOOL fpcM_DrawIterater(fpcM_DrawIteraterFunc pFunc);
+BOOL fpcM_Execute(void* pProc);
+BOOL fpcM_Delete(void* pProc);
 BOOL fpcM_IsCreating(fpc_ProcID pID);
 void fpcM_Management(fpcM_ManagementFunc pFunc1, fpcM_ManagementFunc pFunc2);
 void fpcM_Init(void);
@@ -91,9 +90,5 @@ s32 fpcM_IsPause(void* pProc, u8 i_flag);
 void fpcM_PauseEnable(void* pProc, u8 i_flag);
 void fpcM_PauseDisable(void* pProc, u8 i_flag);
 void* fpcM_JudgeInLayer(uint i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data);
-
-extern "C" {
-void fpcM_Delete__FPv(void);
-}
 
 #endif

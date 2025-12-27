@@ -33,7 +33,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     mCardSlot = 0;
     OSInitMutex(&mMutex);
     OSInitCond(&mCond);
-    s32 priority = OSGetThreadPriority(OSGetCurrentThread());
+    OSPriority priority = OSGetThreadPriority(OSGetCurrentThread());
     OSCreateThread(&MemCardThread, (void*)mDoMemCd_main, NULL, &MemCardStack[ARRAY_SIZE(MemCardStack)], ARRAY_SIZE(MemCardStack), priority + 1, 1);
     OSResumeThread(&MemCardThread);
 }
@@ -44,6 +44,12 @@ void mDoMemCd_Ctrl_c::main() {
         OSLockMutex(&mMutex);
         while (mCommand == CARD_NO_COMMAND)
             OSWaitCond(&mCond, &mMutex);
+
+#if VERSION == VERSION_DEMO
+        if (mDoRst::isReset()) {
+            mCommand = CARD_NO_COMMAND;
+        }
+#endif
 
         switch (mCommand) {
         case CARD_RESTORE:
@@ -75,13 +81,16 @@ void mDoMemCd_Ctrl_c::main() {
 
 /* 80018EC8-80018FD8       .text update__15mDoMemCd_Ctrl_cFv */
 void mDoMemCd_Ctrl_c::update() {
+#if VERSION > VERSION_DEMO
     if (mDoRst::isReset()) {
         OSLockMutex(&mMutex);
         mCommand = CARD_DETACH;
         field_0x165A = 3;
         OSUnlockMutex(&mMutex);
         OSSignalCond(&mCond);
-    } else {
+    } else
+#endif
+    {
         if (getStatus(0) != 14) {
             if (CARDProbe(0) && getStatus(0) == 0) {
                 OSLockMutex(&mMutex);
@@ -105,7 +114,7 @@ void mDoMemCd_Ctrl_c::restore() {
     CARDFileInfo cardInfo;
     s32 ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
     if (ret == CARD_ERROR_READY) {
-        if (!mDoMemCdRWm_Restore(&cardInfo, this, 0x1650)) {
+        if (!mDoMemCdRWm_Restore(&cardInfo, mData, sizeof(mData))) {
             field_0x1660 = 3;
         } else {
             setCardState(ret);
@@ -133,7 +142,7 @@ void mDoMemCd_Ctrl_c::store() {
     if (field_0x1660 == 1) {
         ret = CARDOpen(mCardSlot, "gczelda", &cardInfo);
         if (ret == CARD_ERROR_READY) {
-            ret = mDoMemCdRWm_Store(&cardInfo, this, 0x1650);
+            ret = mDoMemCdRWm_Store(&cardInfo, mData, sizeof(mData));
             if (ret != CARD_ERROR_READY)
                 setCardState(ret);
             else
@@ -199,7 +208,7 @@ s32 mDoMemCd_Ctrl_c::SaveSync() {
         if (field_0x1660 == 4) {
             field_0x1660 = 1;
             ret = 1;
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         } else if (field_0x1660 == 1) {
             ret = 0;
 #endif
@@ -423,10 +432,12 @@ void mDoMemCd_Ctrl_c::setCardState(s32 state) {
 
 /* 800198C4-80019918       .text mDoMemCd_main__FPv */
 int mDoMemCd_main(void*) {
+#if VERSION > VERSION_DEMO
     { JKRThread thread(OSGetCurrentThread(), 0); }
 
     JKRHeap* heap = NULL;
     heap->becomeCurrentHeap();
+#endif
 
     g_mDoMemCd_control.main();
     return 0;

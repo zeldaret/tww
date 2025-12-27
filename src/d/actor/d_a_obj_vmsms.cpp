@@ -3,9 +3,11 @@
 // Translation Unit: d_a_obj_vmsms.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsms.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_vmsms.h"
 
 const char daObjVmsms_c::M_arcname[6] = "VmsMS";
@@ -34,8 +36,8 @@ BOOL daObjVmsms_c::create_heap() {
 }
 
 /* 0000015C-0000021C       .text _create__12daObjVmsms_cFv */
-s32 daObjVmsms_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVmsms_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVmsms_c);
 
@@ -67,7 +69,7 @@ void daObjVmsms_c::init_mtx() {
 
 /* 0000026C-000002A8       .text check_demo__12daObjVmsms_cCFv */
 bool daObjVmsms_c::check_demo() const {
-    return dComIfGs_isEventBit(0x2d04);
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04);
 }
 
 /* 000002A8-0000030C       .text _execute__12daObjVmsms_cFv */
@@ -89,7 +91,7 @@ bool daObjVmsms_c::_draw() {
 
 namespace {
 /* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVmsms_c*)i_ac)->_create();
 }
 
@@ -132,7 +134,7 @@ actor_process_profile_definition g_profile_Obj_Vmsms = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004D,
+    /* Priority     */ PRIO_Obj_Vmsms,
     /* Actor SubMtd */ &Vmsms_Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

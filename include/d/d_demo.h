@@ -26,15 +26,50 @@
 class fopAc_ac_c;
 class dMesg_tControl;
 
+// TODO: made up, figure out what this is
+struct dDemo_prm_data {
+    /* 0x0 */ u8 field_0x0[0x4 - 0x0];
+    /* 0x4 */ s8 field_0x4;
+    /* 0x5 */ u8 field_0x5[0x6 - 0x5];
+    /* 0x6 */ s8 field_0x6;
+    /* 0x7 */ s8 field_0x7;
+    /* 0x8 */ u8 field_0x8[0xB - 0x8];
+    /* 0xB */ s8 field_0xb;
+    /* 0xC */ u8 field_0xc[0xF - 0xC];
+    /* 0xF */ s8 field_0xf;
+};
+
+class dDemo_prm_c {
+public:
+    u32 getId() { return mId; }
+    dDemo_prm_data* getData() { return mData; }
+
+public:
+    /* 0x0 */ u32 mId;
+    /* 0x4 */ dDemo_prm_data* mData;
+};
+
 class dDemo_actor_c : public JStage::TActor {
 public:
+    enum Enable_e {
+        /* 0x001 */ ENABLE_UNK_e = (1 << 0),
+        /* 0x002 */ ENABLE_TRANS_e = (1 << 1),
+        /* 0x004 */ ENABLE_SCALE_e = (1 << 2),
+        /* 0x008 */ ENABLE_ROTATE_e = (1 << 3),
+        /* 0x010 */ ENABLE_SHAPE_e = (1 << 4),
+        /* 0x020 */ ENABLE_ANM_e = (1 << 5),
+        /* 0x040 */ ENABLE_ANM_FRAME_e = (1 << 6),
+        /* 0x080 */ ENABLE_TEX_ANM = (1 << 7),
+        /* 0x100 */ ENABLE_TEX_ANM_FRAME_e = (1 << 8),
+    };
+
     dDemo_actor_c();
     ~dDemo_actor_c();
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
-    void* getP_BtpData(const char*);
+    J3DAnmTexPattern* getP_BtpData(const char*);
     void* getP_BrkData(const char*);
-    void* getP_BtkData(const char*);
+    J3DAnmTextureSRTKey* getP_BtkData(const char*);
     f32 getPrm_Morf();
     void JSGSetData(u32, const void*, u32);
     void JSGSetTranslation(const Vec&);
@@ -50,71 +85,80 @@ public:
         JUT_ASSERT(0x4d, mModel != NULL);
         return mModel->getModelData()->getJointName()->getIndex(name);
     }
-    int JSGGetNodeTransformation(u32 no, Mtx dst) const {
+    bool JSGGetNodeTransformation(u32 no, Mtx dst) const {
         JUT_ASSERT(0x52, mModel != NULL);
         cMtx_copy(mModel->getAnmMtx((u16)no), dst);
-        return 1;
+        return true;
     }
-    f32 JSGGetAnimationFrameMax() const { return mAnimationFrameMax; }
+    f32 JSGGetAnimationFrameMax() const { return mAnmFrameMax; }
     f32 JSGGetTextureAnimationFrameMax() const { return mTexAnimationFrameMax; }
-    void JSGGetTranslation(Vec* dst) const { *dst = mTranslation; }
-    void JSGGetScaling(Vec* dst) const { *dst = mScaling; }
+    void JSGGetTranslation(Vec* dst) const { *dst = mTrans; }
+    void JSGGetScaling(Vec* dst) const { *dst = mScale; }
     void JSGGetRotation(Vec* dst) const {
-        dst->x = cM_sht2d(mRotation.x);
-        dst->y = cM_sht2d(mRotation.y);
-        dst->z = cM_sht2d(mRotation.z);
+        dst->x = cM_sht2d(mRotate.x);
+        dst->y = cM_sht2d(mRotate.y);
+        dst->z = cM_sht2d(mRotate.z);
     }
 
     u32 checkEnable(u16 mask) { return mFlags & mask; }
-    csXyz* getRatate() { return &mRotation; }
+    void onEnable(u16 flag) { mFlags |= flag; }
+    cXyz* getTrans() { return &mTrans; }
+    cXyz* getScale() { return &mScale; }
+    csXyz* getRatate() { return &mRotate; }
     u32 getShapeId() { return mShapeId; }
+    u32 getAnmId() { return mAnmId; }
+    f32 getAnmFrame() { return mAnmFrame; }
+    f32 getAnmTransition() { return mAnmTransition; }
+    void setAnmFrameMax(f32 max) { mAnmFrameMax = max; }
+    void setModel(J3DModel* model) { mModel = model; }
+    dDemo_prm_c* getPrm() { return &mPrm; }
+    u32 getOldAnmId() { return mOldAnmId; }
+    void setOldAnmId(u32 id) { mOldAnmId = id; }
 
-    void getAnmFrame() {}
-    void getAnmId() {}
-    void getAnmTransition() {}
-    void getOldAnmId() {}
     void getOldScrId() {}
     void getOldTevId() {}
     void getOldTexId() {}
-    void getPrm() {}
-    void getScale() {}
-    void getTrans() {}
-    void onEnable(u16) {}
-    void setAnmFrameMax(f32 v) { mAnimationFrameMax = v; }
-    void setModel(J3DModel* model) { mModel = model; }
-    void setOldAnmId(u32) {}
     void setOldScrId(u32) {}
     void setOldTevId(u32) {}
     void setOldTexId(u32) {}
     void setTexAnmFrameMax(f32) {}
 
+private:
     /* 0x04 */ u16 mFlags;
-    /* 0x06 */ u8 field_0x06[0x08 - 0x06];
-    /* 0x08 */ cXyz mTranslation;
-    /* 0x14 */ cXyz mScaling;
-    /* 0x20 */ csXyz mRotation;
-    /* 0x26 */ u8 field_0x26[0x28 - 0x26];
+    /* 0x08 */ cXyz mTrans;
+    /* 0x14 */ cXyz mScale;
+    /* 0x20 */ csXyz mRotate;
     /* 0x28 */ u32 mShapeId;
-    /* 0x2C */ u32 mNextBckId;
-    /* 0x30 */ f32 mAnimationFrame;
-    /* 0x34 */ f32 mAnimationTransition;
-    /* 0x38 */ f32 mAnimationFrameMax;
+    /* 0x2C */ u32 mAnmId;
+    /* 0x30 */ f32 mAnmFrame;
+    /* 0x34 */ f32 mAnmTransition;
+    /* 0x38 */ f32 mAnmFrameMax;
     /* 0x3C */ s32 mTexAnimation;
     /* 0x40 */ f32 mTexAnimationFrame;
     /* 0x44 */ f32 mTexAnimationFrameMax;
     /* 0x48 */ J3DModel* mModel;
-    /* 0x4C */ u32 field_0x4c;
-    /* 0x50 */ const void* field_0x50;
+    /* 0x4C */ dDemo_prm_c mPrm;
     /* 0x54 */ u32 field_0x54;
-    /* 0x58 */ fpc_ProcID mActorPcId;
-    /* 0x5C */ s32 mBckId;
+    /* 0x58 */ fpc_ProcID mActorId;
+    /* 0x5C */ s32 mOldAnmId;
     /* 0x60 */ s32 mBtpId;
     /* 0x64 */ s32 mBtkId;
     /* 0x68 */ s32 mBrkId;
-};
+}; // size = 0x6C
 
 class dDemo_camera_c : public JStage::TCamera {
 public:
+    enum Enable_e {
+        /* 0x01 */ ENABLE_PROJ_NEAR_e = (1 << 0),
+        /* 0x02 */ ENABLE_PROJ_FAR_e = (1 << 1),
+        /* 0x04 */ ENABLE_PROJ_FOVY_e = (1 << 2),
+        /* 0x08 */ ENABLE_PROJ_ASPECT_e = (1 << 3),
+        /* 0x10 */ ENABLE_VIEW_POS_e = (1 << 4),
+        /* 0x20 */ ENABLE_VIEW_UP_VEC_e = (1 << 5),
+        /* 0x40 */ ENABLE_VIEW_TARG_POS_e = (1 << 6),
+        /* 0x80 */ ENABLE_VIEW_ROLL_e = (1 << 7),
+    };
+
     dDemo_camera_c() { mFlags = 0; }
     ~dDemo_camera_c() {}
     f32 JSGGetProjectionNear() const;
@@ -134,6 +178,15 @@ public:
     f32 JSGGetViewRoll() const;
     void JSGSetViewRoll(f32);
 
+    bool checkEnable(u8 mask) { return mFlags & mask; }
+    void onEnable(u8 flag) { mFlags |= flag; }
+
+    f32 getFovy() { return mFovy; }
+    f32 getRoll() { return mRoll; }
+    cXyz& getTarget() { return mTargetPosition; }
+    cXyz& getTrans() { return mViewPosition; }
+    cXyz& getUp() { return mUpVector; }
+
 private:
     /* 0x04 */ u8 mFlags;
     /* 0x08 */ f32 mProjNear;
@@ -148,9 +201,15 @@ private:
 
 class dDemo_ambient_c : public JStage::TAmbientLight {
 public:
+    enum Enable_e {
+        /* 0x1 */ ENABLE_COLOR_e = (1 << 0),
+    };
+
     dDemo_ambient_c() { mFlags = 0; }
     ~dDemo_ambient_c() {}
     void JSGSetColor(GXColor color);
+
+    void onEnable(u8 flag) { mFlags |= flag; }
 
 private:
     /* 0x04 */ u8 mFlags;
@@ -159,6 +218,15 @@ private:
 
 class dDemo_light_c : public JStage::TLight {
 public:
+    enum Enable_e {
+        /* 0x01 */ ENABLE_LIGHT_TYPE_e = (1 << 0),
+        /* 0x02 */ ENABLE_POSITION_e = (1 << 1),
+        /* 0x04 */ ENABLE_COLOR_e = (1 << 2),
+        /* 0x08 */ ENABLE_DIST_ATTEN_e = (1 << 3),
+        /* 0x10 */ ENABLE_ANGLE_ATTEN_e = (1 << 4),
+        /* 0x20 */ ENABLE_DIRECTION_e = (1 << 5),
+    };
+
     dDemo_light_c() { mFlags = 0; }
     ~dDemo_light_c() {}
     void JSGSetLightType(JStage::TELight);
@@ -167,6 +235,8 @@ public:
     void JSGSetDistanceAttenuation(f32, f32, GXDistAttnFn);
     void JSGSetAngleAttenuation(f32, GXSpotFn);
     void JSGSetDirection(const Vec&);
+
+    void onEnable(u8 flag) { mFlags |= flag; }
 
 private:
     /* 0x04 */ u8 mFlags;
@@ -183,12 +253,21 @@ private:
 
 class dDemo_fog_c : public JStage::TFog {
 public:
+    enum Enable_e {
+        /* 0x1 */ ENABLE_FOG_FN_e = (1 << 0),
+        /* 0x2 */ ENABLE_START_Z_e = (1 << 1),
+        /* 0x4 */ ENABLE_END_Z_e = (1 << 2),
+        /* 0x8 */ ENABLE_COLOR_e = (1 << 3),
+    };
+
     dDemo_fog_c() { mFlags = 0; }
     ~dDemo_fog_c() {}
     void JSGSetFogFunction(GXFogType);
     void JSGSetStartZ(f32);
     void JSGSetEndZ(f32);
     void JSGSetColor(GXColor);
+
+    void onEnable(u8 flag) { mFlags |= flag; }
 
 private:
     /* 0x04 */ u8 mFlags;
@@ -212,10 +291,16 @@ public:
     dDemo_fog_c* createFog();
     void remove();
 
+    dDemo_camera_c* getCamera() { return mpCamera; }
+    void createEditorCamera() {}
+    void getEditorCamera() {}
+    void removeEditorCamera() {}
+
+private:
     /* 0x00 */ u8 mNumActor;
     /* 0x01 */ u8 mNumLight;
     /* 0x04 */ dDemo_actor_c* mpActors[32];
-    /* 0x84 */ dDemo_camera_c* mpActiveCamera;
+    /* 0x84 */ dDemo_camera_c* mpCamera;
     /* 0x88 */ dDemo_ambient_c* mpAmbient;
     /* 0x8C */ dDemo_light_c* mpLight[8];
     /* 0xAC */ dDemo_fog_c* mpFog;
@@ -226,6 +311,7 @@ public:
     dDemo_system_c() : mObject(NULL) {}
     ~dDemo_system_c();
     void* JSGFindObject(const char*, JStage::TEObject) const;
+
     void setObject(dDemo_object_c* obj) { mObject = obj; }
 
 private:
@@ -241,10 +327,15 @@ public:
     void remove();
     bool update();
 
+    dDemo_system_c* getSystem() { return mSystem;}
+    JStudio::TControl* getControl() { return mControl; }
+    dMesg_tControl* getMesgControl() { return mMesgControl; }
+    dDemo_object_c* getObject() { return &mDemoObj; }
     int getFrame() { return mFrame; }
     u32 getFrameNoMsg() { return mFrameNoMsg; }
     s32 getMode() { return mMode; }
 
+private:
     /* 0x00 */ dDemo_system_c* mSystem;
     /* 0x04 */ JStudio::TControl* mControl;
     /* 0x08 */ JStudio_JStage::TCreateObject* mStage;
@@ -261,6 +352,10 @@ public:
 };
 
 class mDoExt_McaMorf;
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8);
+#if VERSION == VERSION_DEMO
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL);
+#else
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL, u32 = 0, s8 = 0);
+#endif
 
 #endif /* D_DEMO_H */

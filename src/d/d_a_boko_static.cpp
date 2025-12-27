@@ -3,86 +3,86 @@
 // Translation Unit: d_a_boko_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_cc_d.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "SSystem/SComponent/c_phase.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "m_Do/m_Do_mtx.h"
 
-Vec daBoko_c::m_top_offset[6] = {
-    { 0.0f, 0.0f, 85.0f },
-    { 16.0f, 0.0f, 77.0f },
-    { -8.0f, 3.0f, 120.0f },
-    { 0.0f, 0.0f, 128.0f },
-    { 10.0f, 0.0f, 200.0f },
-    { -40.0f, 0.0f, 110.0f },
+Vec daBoko_c::m_top_offset[] = {
+    /* Type_BOKO_STICK_e    */ { 0.0f, 0.0f, 85.0f },
+    /* Type_MACHETE_e       */ { 16.0f, 0.0f, 77.0f },
+    /* Type_STALFOS_MACE_e  */ { -8.0f, 3.0f, 120.0f },
+    /* Type_DARKNUT_SWORD_e */ { 0.0f, 0.0f, 128.0f },
+    /* Type_MOBLIN_SPEAR_e  */ { 10.0f, 0.0f, 200.0f },
+    /* Type_PGANON_SWORD_e  */ { -40.0f, 0.0f, 110.0f },
 };
-Vec daBoko_c::m_blur_root_offset[6] = {
-    { 0.0f, 0.0f, -45.0f },
-    { 0.0f, 0.0f, -43.0f },
-    { -1.0f, 3.0f, -60.0f },
-    { 0.0f, 0.0f, -50.0f },
-    { 0.0f, 0.0f, -100.0f },
-    { -20.0f, 0.0f, -50.0f },
+Vec daBoko_c::m_blur_root_offset[] = {
+    /* Type_BOKO_STICK_e    */ { 0.0f, 0.0f, -45.0f },
+    /* Type_MACHETE_e       */ { 0.0f, 0.0f, -43.0f },
+    /* Type_STALFOS_MACE_e  */ { -1.0f, 3.0f, -60.0f },
+    /* Type_DARKNUT_SWORD_e */ { 0.0f, 0.0f, -50.0f },
+    /* Type_MOBLIN_SPEAR_e  */ { 0.0f, 0.0f, -100.0f },
+    /* Type_PGANON_SWORD_e  */ { -20.0f, 0.0f, -50.0f },
 };
-Vec daBoko_c::m_root_offset[6] = {
-    { 0.0f, 0.0f, -85.0f },
-    { 5.0f, 0.0f, -90.0f },
-    { 3.0f, 0.0f, -120.0f },
-    { 0.0f, 0.0f, -130.0f },
-    { 0.0f, 0.0f, -175.0f },
-    { 0.0f, 0.0f, -125.0f },
+Vec daBoko_c::m_root_offset[] = {
+    /* Type_BOKO_STICK_e    */ { 0.0f, 0.0f, -85.0f },
+    /* Type_MACHETE_e       */ { 5.0f, 0.0f, -90.0f },
+    /* Type_STALFOS_MACE_e  */ { 3.0f, 0.0f, -120.0f },
+    /* Type_DARKNUT_SWORD_e */ { 0.0f, 0.0f, -130.0f },
+    /* Type_MOBLIN_SPEAR_e  */ { 0.0f, 0.0f, -175.0f },
+    /* Type_PGANON_SWORD_e  */ { 0.0f, 0.0f, -125.0f },
 };
-f32 daBoko_c::m_cps_r[6] = {
-    30.0f,
-    30.0f,
-    50.0f,
-    50.0f,
-    50.0f,
-    50.0f,
+f32 daBoko_c::m_cps_r[] = {
+    /* Type_BOKO_STICK_e    */ 30.0f,
+    /* Type_MACHETE_e       */ 30.0f,
+    /* Type_STALFOS_MACE_e  */ 50.0f,
+    /* Type_DARKNUT_SWORD_e */ 50.0f,
+    /* Type_MOBLIN_SPEAR_e  */ 50.0f,
+    /* Type_PGANON_SWORD_e  */ 50.0f,
 };
-s32 daBoko_c::m_at_point[6] = {
-    0x01,
-    0x02,
-    0x04,
-    0x04,
-    0x04,
-    0x04,
+s32 daBoko_c::m_at_point[] = {
+    /* Type_BOKO_STICK_e    */ 0x01,
+    /* Type_MACHETE_e       */ 0x02,
+    /* Type_STALFOS_MACE_e  */ 0x04,
+    /* Type_DARKNUT_SWORD_e */ 0x04,
+    /* Type_MOBLIN_SPEAR_e  */ 0x04,
+    /* Type_PGANON_SWORD_e  */ 0x04,
 };
-u32 daBoko_c::m_at_type[6] = {
-    AT_TYPE_BOKO_STICK,
-    AT_TYPE_MACHETE,
-    AT_TYPE_STALFOS_MACE,
-    AT_TYPE_DARKNUT_SWORD,
-    AT_TYPE_MOBLIN_SPEAR,
-    AT_TYPE_PGANON_SWORD,
+u32 daBoko_c::m_at_type[] = {
+    /* Type_BOKO_STICK_e    */ AT_TYPE_BOKO_STICK,
+    /* Type_MACHETE_e       */ AT_TYPE_MACHETE,
+    /* Type_STALFOS_MACE_e  */ AT_TYPE_STALFOS_MACE,
+    /* Type_DARKNUT_SWORD_e */ AT_TYPE_DARKNUT_SWORD,
+    /* Type_MOBLIN_SPEAR_e  */ AT_TYPE_MOBLIN_SPEAR,
+    /* Type_PGANON_SWORD_e  */ AT_TYPE_PGANON_SWORD,
 };
-f32 daBoko_c::m_jump_blur_rate[6] = {
-    0.0f,
-    -0.1f,
-    0.4f,
-    0.5f,
-    1.4f,
-    0.5f,
+f32 daBoko_c::m_jump_blur_rate[] = {
+    /* Type_BOKO_STICK_e    */ 0.0f,
+    /* Type_MACHETE_e       */ -0.1f,
+    /* Type_STALFOS_MACE_e  */ 0.4f,
+    /* Type_DARKNUT_SWORD_e */ 0.5f,
+    /* Type_MOBLIN_SPEAR_e  */ 1.4f,
+    /* Type_PGANON_SWORD_e  */ 0.5f,
 };
-f32 daBoko_c::m_blur_rate[6] = {
-    0.0f,
-    -0.1f,
-    0.1f,
-    0.2f,
-    1.0f,
-    0.2f,
+f32 daBoko_c::m_blur_rate[] = {
+    /* Type_BOKO_STICK_e    */ 0.0f,
+    /* Type_MACHETE_e       */ -0.1f,
+    /* Type_STALFOS_MACE_e  */ 0.1f,
+    /* Type_DARKNUT_SWORD_e */ 0.2f,
+    /* Type_MOBLIN_SPEAR_e  */ 1.0f,
+    /* Type_PGANON_SWORD_e  */ 0.2f,
 };
-u8 daBoko_c::m_se_type[6] = {
-    0x04,
-    0x01,
-    0x01,
-    0x01,
-    0x03,
-    0x01,
+u8 daBoko_c::m_se_type[] = {
+    /* Type_BOKO_STICK_e    */ dCcG_SE_UNK4,
+    /* Type_MACHETE_e       */ dCcG_SE_UNK1,
+    /* Type_STALFOS_MACE_e  */ dCcG_SE_UNK1,
+    /* Type_DARKNUT_SWORD_e */ dCcG_SE_UNK1,
+    /* Type_MOBLIN_SPEAR_e  */ dCcG_SE_UNK3,
+    /* Type_PGANON_SWORD_e  */ dCcG_SE_UNK1,
 };
 
 /* 80067E78-80067F0C       .text getTopPos__8daBoko_cFP4cXyz */
@@ -90,7 +90,7 @@ void daBoko_c::getTopPos(cXyz* ret) {
     if (mpModel != NULL) {
         cMtx_multVec(mpModel->getBaseTRMtx(), &m_top_offset[fopAcM_GetParam(this)], ret);
     } else {
-        *ret = fopAcM_GetPosition(this) + m_top_offset[fopAcM_GetParam(this)];
+        *ret = current.pos + m_top_offset[fopAcM_GetParam(this)];
     }
 }
 
@@ -99,6 +99,6 @@ void daBoko_c::getBlurRootPos(cXyz* ret) {
     if (mpModel != NULL) {
         cMtx_multVec(mpModel->getBaseTRMtx(), &m_blur_root_offset[fopAcM_GetParam(this)], ret);
     } else {
-        *ret = fopAcM_GetPosition(this) + m_blur_root_offset[fopAcM_GetParam(this)];
+        *ret = current.pos + m_blur_root_offset[fopAcM_GetParam(this)];
     }
 }

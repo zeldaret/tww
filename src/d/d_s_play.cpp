@@ -3,6 +3,7 @@
 // Translation Unit: d_s_play.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_play.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -39,8 +40,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include <stdio.h>
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;
@@ -285,7 +284,7 @@ static request_of_phase_process_class dylPhase[PRELOAD_DYL_MAX];
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
 /* 80234B9C-80234FD0       .text dScnPly_Draw__FP13dScnPly_ply_c */
-static int dScnPly_Draw(dScnPly_ply_c* i_this) {
+static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
     dComIfG_Ccsp()->Move();
     dComIfG_Bgsp()->ClrMoveFlag();
 
@@ -306,7 +305,7 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
                 PROC_OVERLAP8,
             };
 
-            JUT_ASSERT(VERSION_SELECT(997, 1001, 1001),
+            JUT_ASSERT(VERSION_SELECT(997, 997, 1001, 1001),
                        dComIfGp_getNextStageWipe() < ARRAY_SIZE(l_wipeType));
 
             if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
@@ -328,9 +327,9 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
                     ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && isNight) ||
                     ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !isNight))
                 {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_saftyWhiteColor);
                 } else {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_blackColor);
                 }
 
                 mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
@@ -347,9 +346,7 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
         if (dComIfGp_getGrass() != NULL || dComIfGp_getTree() != NULL ||
             dComIfGp_getWood() != NULL || dComIfGp_getFlower() != NULL || dKyr_poison_live_check())
         {
-            // using the inline breaks the match
-            // dComIfG_Ccsp()->PrepareMass();
-            g_dComIfG_gameInfo.play.mCcS.PrepareMass();
+            dComIfG_Ccsp()->PrepareMass();
         }
 
         dComIfGp_executeGrass();
@@ -394,7 +391,7 @@ static int dScnPly_Draw(dScnPly_ply_c* i_this) {
         dComIfGp_map_mapBufferSendAGB(3);
     }
 
-    return 1;
+    return TRUE;
 }
 
 const char* sea_resName[] = {
@@ -1036,7 +1033,7 @@ const PreLoadInfoT_s PreLoadInfoT[] = {
 };
 
 /* 80234FD0-802350B4       .text dScnPly_Execute__FP13dScnPly_ply_c */
-static int dScnPly_Execute(dScnPly_ply_c* i_this) {
+static BOOL dScnPly_Execute(dScnPly_ply_c* i_this) {
     if (!fopOvlpM_IsPeek()) {
         if (mDoAud_zelAudio_c::isBgmSet()) {
             mDoAud_sceneBgmStart();
@@ -1045,13 +1042,15 @@ static int dScnPly_Execute(dScnPly_ply_c* i_this) {
         }
 
         if (i_this->calcPauseTimer() != 0) {
-            return 1;
+            return TRUE;
         }
     }
 
     dKy_itudemo_se();
     if (!dMenu_flag()) {
         dComIfGp_demo_update();
+        // dComIfGp_jcame_update(); // Debug only
+        // dComIfGp_jprev_update(); // Debug only
         dComIfGp_evmng_execute();
 
         if (dComIfGp_getAttention().Owner() != NULL) {
@@ -1063,12 +1062,12 @@ static int dScnPly_Execute(dScnPly_ply_c* i_this) {
         dComIfGp_getDetect().proc();
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 802350B4-802350BC       .text dScnPly_IsDelete__FP13dScnPly_ply_c */
-static int dScnPly_IsDelete(dScnPly_ply_c* i_this) {
-    return 1;
+static BOOL dScnPly_IsDelete(dScnPly_ply_c* i_this) {
+    return TRUE;
 }
 
 static s8 preLoadNo = 0xFF;
@@ -1106,8 +1105,7 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     dComIfGp_removeWood();
     dComIfGp_removeFlower();
     
-    dComIfGp_setItemTimeCount(0);
-    dComIfGp_setItemTimeMax(0);
+    dComIfGp_clearItemTimeCount();
     
     g_msgDHIO.field_0x06 = 0;
     g_msgDHIO.field_0x10 = -1;
@@ -1140,6 +1138,7 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     return TRUE;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80235364-802355A8       .text heapSizeCheck__Fv */
 BOOL heapSizeCheck() {
     int archive_free = mDoExt_getArchiveHeap()->getFreeSize();
@@ -1153,7 +1152,7 @@ BOOL heapSizeCheck() {
     f32 temp_f28 = (f32)game_free / (f32)game_total_free;
 
     mDoExt_getZeldaHeap()->getFreeSize();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     int zelda_total_free = mDoExt_getZeldaHeap()->getFreeSize();
 #else
     int zelda_total_free = mDoExt_getZeldaHeap()->getTotalFreeSize();
@@ -1161,7 +1160,7 @@ BOOL heapSizeCheck() {
     f32 temp_f27 = (f32)zelda_total_free / (f32)mDoExt_getSafeZeldaHeapSize();
 
     mDoExt_getCommandHeap()->getFreeSize();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     int command_total_free = mDoExt_getCommandHeap()->getFreeSize();
 #else
     int command_total_free = mDoExt_getCommandHeap()->getTotalFreeSize();
@@ -1171,24 +1170,27 @@ BOOL heapSizeCheck() {
     if (temp_f31 < 0.7f || temp_f30 < 0.7f || temp_f29 < 0.7f || temp_f28 < 0.7f ||
         temp_f27 < 0.7f || temp_f1 < 0.7f)
     {
-        return 0;
+        return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
+#endif
 
 /* 802355A8-802356B0       .text phase_00__FP13dScnPly_ply_c */
-int phase_00(dScnPly_ply_c* i_this) {
+cPhs_State phase_00(dScnPly_ply_c* i_this) {
     if (mDoAud_isUsedHeapForStreamBuffer()) {
-        return 0;
+        return cPhs_INIT_e;
     }
 
     mDoGph_gInf_c::offBlure();
 
     if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
+        #endif
 
         if (mDoRst::isReset()) {
             if (mDoAud_zelAudio_c::isResetFlag()) {
@@ -1206,16 +1208,18 @@ int phase_00(dScnPly_ply_c* i_this) {
 
         dComIfGs_init();
     } else {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
-            JUT_WARN(VERSION_SELECT(3356, 3372, 3372), "%s", "Memory Danger !!");
+            JUT_WARN(VERSION_SELECT(3356, 3356, 3372, 3372), "%s", "Memory Danger !!");
         }
+        #endif
     }
 
     return cPhs_NEXT_e;
 }
 
 /* 802356B0-802356E0       .text phase_01__FP13dScnPly_ply_c */
-int phase_01(dScnPly_ply_c* i_this) {
+cPhs_State phase_01(dScnPly_ply_c* i_this) {
     if (!mDoAud_load1stDynamicWave()) {
         return cPhs_INIT_e;
     } else {
@@ -1226,13 +1230,13 @@ int phase_01(dScnPly_ply_c* i_this) {
 static mDoDvdThd_mountXArchive_c* l_lkDemoAnmCommand;
 
 /* 802356E0-802357F4       .text phase_0__FP13dScnPly_ply_c */
-s32 phase_0(dScnPly_ply_c* i_this) {
+cPhs_State phase_0(dScnPly_ply_c* i_this) {
     if (mDoAud_checkAllWaveLoadStatus()) {
         return cPhs_INIT_e;
     } else {
         l_lkDemoAnmCommand = NULL;
 
-        s32 darcIdx = dComIfGs_isEventBit(0x2D01) ? 1 : 0;
+        s32 darcIdx = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01) ? 1 : 0;
         if (darcIdx != dComIfGp_getLkDemoAnmNo()) {
             if (dComIfGp_getLkDemoAnmNo() >= 0) {
                 dComIfGp_getLkDemoAnmArchive()->unmount();
@@ -1242,7 +1246,7 @@ s32 phase_0(dScnPly_ply_c* i_this) {
             char buf[32];
             sprintf(buf, "/res/Object/LkD%02d.arc", dComIfGp_getLkDemoAnmNo());
             l_lkDemoAnmCommand = mDoDvdThd_mountXArchive_c::create(buf, 0, JKRArchive::MOUNT_ARAM);
-            JUT_ASSERT(VERSION_SELECT(3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
+            JUT_ASSERT(VERSION_SELECT(3399, 3399, 3414, 3414), l_lkDemoAnmCommand != NULL);
         }
 
         return cPhs_NEXT_e;
@@ -1250,13 +1254,13 @@ s32 phase_0(dScnPly_ply_c* i_this) {
 }
 
 /* 802357F4-802359DC       .text phase_1__FP13dScnPly_ply_c */
-int phase_1(dScnPly_ply_c* i_this) {
+cPhs_State phase_1(dScnPly_ply_c* i_this) {
     if (l_lkDemoAnmCommand != NULL) {
         if (!l_lkDemoAnmCommand->sync()) {
-            return 0;
+            return cPhs_INIT_e;
         }
 
-        JUT_ASSERT(VERSION_SELECT(3424, 3439, 3439), l_lkDemoAnmCommand->getArchive());
+        JUT_ASSERT(VERSION_SELECT(3424, 3424, 3439, 3439), l_lkDemoAnmCommand->getArchive());
         dComIfGp_setLkDemoAnmArchive(l_lkDemoAnmCommand->getArchive());
 
         delete l_lkDemoAnmCommand;
@@ -1273,7 +1277,7 @@ int phase_1(dScnPly_ply_c* i_this) {
     dComIfGp_setStatus(0);
 
     int rt = dComIfG_setStageRes("Stage", NULL);
-    JUT_ASSERT(VERSION_SELECT(3443, 3458, 3458), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(3443, 3443, 3458, 3458), rt == 1);
 
     dMat_control_c::create((J3DMaterialTable*)dComIfG_getObjectRes("Always", ALWAYS_BMT_ICE),
                            (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_ICE));
@@ -1282,9 +1286,9 @@ int phase_1(dScnPly_ply_c* i_this) {
 }
 
 /* 802359DC-80235ABC       .text phase_2__FP13dScnPly_ply_c */
-int phase_2(dScnPly_ply_c* i_this) {
+cPhs_State phase_2(dScnPly_ply_c* i_this) {
     int rt = dComIfG_syncStageRes("Stage");
-    JUT_ASSERT(VERSION_SELECT(3470, 3485, 3485), rt >= 0)
+    JUT_ASSERT(VERSION_SELECT(3470, 3470, 3485, 3485), rt >= 0)
 
     if (rt != 0) {
         return cPhs_INIT_e;
@@ -1297,7 +1301,7 @@ int phase_2(dScnPly_ply_c* i_this) {
 }
 
 /* 80235ABC-80235B0C       .text phase_3__FP13dScnPly_ply_c */
-int phase_3(dScnPly_ply_c* i_this) {
+cPhs_State phase_3(dScnPly_ply_c* i_this) {
     if ((i_this->sceneCommand != NULL && !i_this->sceneCommand->sync()) ||
         mDoAud_zelAudio_c::getInterface()->check1stDynamicWave())
     {
@@ -1308,20 +1312,23 @@ int phase_3(dScnPly_ply_c* i_this) {
 }
 
 /* 80235B0C-80236334       .text phase_4__FP13dScnPly_ply_c */
-s32 phase_4(dScnPly_ply_c* i_this) {
+cPhs_State phase_4(dScnPly_ply_c* i_this) {
     if (i_this->sceneCommand != NULL) {
-        JUT_ASSERT(VERSION_SELECT(3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
+        JUT_ASSERT(VERSION_SELECT(3552, 3552, 3567, 3567), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     } else {
         dComIfGp_particle_createScene(NULL);
     }
 
+    // dComIfG_initStopwatch(); // Debug only
     dComIfG_Bgsp()->Ct();
     dComIfG_Ccsp()->Ct();
     dComIfGp_createDemo();
     daSea_Init();
     dSnap_Create();
+    // dComIfGp_createJcame(); // Debug only
+    // dComIfGp_createJprev(); // Debug only
     dComIfGp_setPlayerInfo(0, NULL, 0);
     for (s32 i = 0; i < 3; i++)
         dComIfGp_setPlayerPtr(i, NULL);
@@ -1332,8 +1339,8 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dComIfGd_setViewport(NULL);
     dComIfGd_setView(NULL);
 
-    JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x73EA1, 0x73EA1));
-    JUT_ASSERT(VERSION_SELECT(3633, 3653, 3653), heap != NULL);
+    JKRExpHeap* heap = fopMsgM_createExpHeap(VERSION_SELECT(0x736A1, 0x736A1, 0x73EA1, 0x73EA1));
+    JUT_ASSERT(VERSION_SELECT(3633, 3633, 3653, 3653), heap != NULL);
     dComIfGp_setExpHeap2D(heap);
 
     dStage_Create();
@@ -1355,7 +1362,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     mDoGph_gInf_c::offFade();
 
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
-    if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(0x0801)) {
+    if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)) {
         dComIfGs_setSelectEquip(0, dItem_NONE_e);
         dComIfGp_setSelectEquip(0, dItem_NONE_e);
         dComIfGs_offCollect(0, 0);
@@ -1399,7 +1406,17 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     dScnPly_ply_c::pauseTimer = 0;
     dScnPly_ply_c::nextPauseTimer = 0;
 
-    if (((strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 || strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0 || strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) && !dComIfGs_isEventBit(0x3802)) || dComIfGp_getStartStageName()[0] == 'X') {
+    if (
+        (
+            (
+                strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "kenroom") == 0
+            ) &&
+            !dComIfGs_isEventBit(dSv_event_flag_c::COLORS_IN_HYRULE)
+        ) ||
+        dComIfGp_getStartStageName()[0] == 'X'
+    ) {
         mDoGph_gInf_c::onMonotone();
 
         bool hy8 = strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 && dComIfGp_getStartStageLayer() == 8;
@@ -1424,7 +1441,7 @@ s32 phase_4(dScnPly_ply_c* i_this) {
     JUTGamePad::clearResetOccurred();
     JUTGamePad::setResetCallback(mDoRst_resetCallBack, NULL);
 
-    s32 rt;
+    cPhs_State rt;
     if (preLoadNo < 0)
         return cPhs_COMPLEATE_e;
 
@@ -1436,13 +1453,13 @@ s32 phase_4(dScnPly_ply_c* i_this) {
 }
 
 /* 80236334-80236444       .text phase_5__FP13dScnPly_ply_c */
-s32 phase_5(dScnPly_ply_c* i_this) {
+cPhs_State phase_5(dScnPly_ply_c* i_this) {
     if (preLoadNo >= 0) {
-        s32 rt = cPhs_NEXT_e;
+        cPhs_State rt = cPhs_NEXT_e;
         const char** resName = PreLoadInfoT[preLoadNo].resName;
         s32 resNameNum = PreLoadInfoT[preLoadNo].resNameNum;
         if (resName != NULL && resName[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
+            JUT_ASSERT(VERSION_SELECT(3804, 3804, 3824, 3824), resNameNum <= ARRAY_SIZE(resPhase));
             for (int i = 0; i < resNameNum; i++) {
                 if (dComIfG_resLoad(&resPhase[i], resName[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;
@@ -1459,13 +1476,13 @@ s32 phase_5(dScnPly_ply_c* i_this) {
 }
 
 /* 80236444-80236554       .text phase_6__FP13dScnPly_ply_c */
-s32 phase_6(dScnPly_ply_c* i_this) {
+cPhs_State phase_6(dScnPly_ply_c* i_this) {
     if (preLoadNo >= 0) {
-        s32 rt = cPhs_NEXT_e;
+        cPhs_State rt = cPhs_NEXT_e;
         const s16* dylKeyTbl = PreLoadInfoT[preLoadNo].dylKeyTbl;
         s32 dylKeyTblNum = PreLoadInfoT[preLoadNo].dylKeyTblNum;
         if (dylKeyTbl != NULL && dylKeyTbl[0] != NULL) {
-            JUT_ASSERT(VERSION_SELECT(3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
+            JUT_ASSERT(VERSION_SELECT(3838, 3838, 3858, 3858), dylKeyTblNum <= ARRAY_SIZE(dylPhase));
             for (int i = 0; i < dylKeyTblNum; i++) {
                 if (cDylPhs::Link(&dylPhase[i], dylKeyTbl[i]) != cPhs_COMPLEATE_e) {
                     rt = cPhs_INIT_e;
@@ -1482,12 +1499,12 @@ s32 phase_6(dScnPly_ply_c* i_this) {
 }
 
 /* 80236554-8023655C       .text phase_compleate__FPv */
-int phase_compleate(void* i_this) {
+cPhs_State phase_compleate(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 8023655C-8023658C       .text dScnPly_Create__FP11scene_class */
-static int dScnPly_Create(scene_class* i_this) {
+static cPhs_State dScnPly_Create(scene_class* i_this) {
     static request_of_phase_process_fn l_method[] = {
         (request_of_phase_process_fn)phase_00, (request_of_phase_process_fn)phase_01,
         (request_of_phase_process_fn)phase_0,  (request_of_phase_process_fn)phase_1,
@@ -1506,40 +1523,40 @@ static scene_method_class l_dScnPly_Method = {
 };
 
 scene_process_profile_definition g_profile_PLAY_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_PLAY_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_PLAY_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };
 
 scene_process_profile_definition g_profile_OPENING_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPENING_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPENING_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };
 
 scene_process_profile_definition g_profile_OPENING2_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_OPENING2_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnPly_ply_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnPly_Method,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_OPENING2_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnPly_ply_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnPly_Method,
 };

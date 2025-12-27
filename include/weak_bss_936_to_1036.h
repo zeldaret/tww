@@ -3,28 +3,34 @@
 
 // Fake header.
 // These are some kind of weak objects that get included in the .bss sections of several TUs.
+// They each have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
 // Their true source is currently unknown, so include this header in TUs that need them to match for now.
 
-#include "global.h"
+// A possible origin for one of these could be the constructor of TFunctionValueAttribute_refer in
+// functionvalue.h. That constructor includes `JGadget::TAllocator<void*>()` in it, which produces
+// one weak bss object that has the correct size and alignment. However, we need 16 of them, while
+// that only creates one.
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
+#include "JSystem/JStudio/JStudio/functionvalue.h" // IWYU pragma: keep
 
 // They each have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
-static u8 bss_1036 ALIGN_DECL(4);
-static u8 bss_1034 ALIGN_DECL(4);
-static u8 bss_1032 ALIGN_DECL(4);
-static u8 bss_1031 ALIGN_DECL(4);
-static u8 bss_1026 ALIGN_DECL(4);
-static u8 bss_1024 ALIGN_DECL(4);
-static u8 bss_1022 ALIGN_DECL(4);
-static u8 bss_1021 ALIGN_DECL(4);
-static u8 bss_984 ALIGN_DECL(4);
-static u8 bss_982 ALIGN_DECL(4);
-static u8 bss_980 ALIGN_DECL(4);
-static u8 bss_979 ALIGN_DECL(4);
-static u8 bss_941 ALIGN_DECL(4);
-static u8 bss_939 ALIGN_DECL(4);
-static u8 bss_937 ALIGN_DECL(4);
-static u8 bss_936 ALIGN_DECL(4);
+static inline void dummy_bss_936_to_1036() {
+    // JGadget::TAllocator<void*>(); // @1036 // Already covered by TFunctionValueAttribute_refer's ctor
+    JGadget::TAllocator<void*>(); // @1034
+    JGadget::TAllocator<void*>(); // @1032
+    JGadget::TAllocator<void*>(); // @1031
+    JGadget::TAllocator<void*>(); // @1026
+    JGadget::TAllocator<void*>(); // @1024
+    JGadget::TAllocator<void*>(); // @1022
+    JGadget::TAllocator<void*>(); // @1021
+    JGadget::TAllocator<void*>(); // @984
+    JGadget::TAllocator<void*>(); // @982
+    JGadget::TAllocator<void*>(); // @980
+    JGadget::TAllocator<void*>(); // @979
+    JGadget::TAllocator<void*>(); // @941
+    JGadget::TAllocator<void*>(); // @939
+    JGadget::TAllocator<void*>(); // @937
+    JGadget::TAllocator<void*>(); // @936
+}
 
 #endif /* WEAK_BSS_936_TO_1036_H */

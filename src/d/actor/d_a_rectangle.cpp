@@ -3,9 +3,11 @@
  * Unused Dummy Actor
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rectangle.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "SSystem/SComponent/c_phase.h"
 
 /* 00000078-00000080       .text daRct_Draw__FP15RECTANGLE_class */
@@ -29,7 +31,7 @@ static BOOL daRct_Delete(RECTANGLE_class* i_this) {
 }
 
 /* 00000098-000000A0       .text daRct_Create__FP10fopAc_ac_c */
-static int daRct_Create(fopAc_ac_c* i_this) {
+static cPhs_State daRct_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
@@ -51,7 +53,7 @@ actor_process_profile_definition g_profile_RECTANGLE = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009F,
+    /* Priority     */ PRIO_RECTANGLE,
     /* Actor SubMtd */ &l_daRct_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

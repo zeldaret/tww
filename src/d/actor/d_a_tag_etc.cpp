@@ -3,10 +3,12 @@
 // Translation Unit: d_a_tag_etc.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_etc.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 enum Action {
     ACT_WAIT,
@@ -95,11 +97,10 @@ void daTag_Etc_c::demoInitProc() {
         field_0x29A = 15;
         break;
     }
-    return;
 }
 
 /* 00000368-00000458       .text create__11daTag_Etc_cFv */
-s32 daTag_Etc_c::create() {
+cPhs_State daTag_Etc_c::create() {
     float fVar1;
     u8 stageEVNTListIndex;
 
@@ -238,7 +239,7 @@ static BOOL daTag_Etc_Delete(daTag_Etc_c* i_this) {
 }
 
 /* 00000768-00000788       .text daTag_Etc_Create__FP10fopAc_ac_c */
-static s32 daTag_Etc_Create(fopAc_ac_c* i_this) {
+static cPhs_State daTag_Etc_Create(fopAc_ac_c* i_this) {
     return reinterpret_cast<daTag_Etc_c*>(i_this)->create();
 }
 
@@ -260,7 +261,7 @@ actor_process_profile_definition g_profile_TAG_ETC = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0122,
+    /* Priority     */ PRIO_TAG_ETC,
     /* Actor SubMtd */ &l_daTag_Etc_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_dmap.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_dmap.h"
 #include "d/d_stage.h"
 

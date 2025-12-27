@@ -4,6 +4,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAISound.h"
+#include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/vec.h"
 
 class JKRSolidHeap;
@@ -33,7 +34,7 @@ public:
     void initHeap();
     void initArchive();
     void initResourcePath();
-    void setCameraInfo(Vec*, Vec*, f32(*)[4], u32);
+    void setCameraInfo(Vec*, Vec*, MtxP, u32);
     void initAudioThread(JKRSolidHeap*, u32, u8);
     void initCamera();
     BOOL initReadFile();

@@ -1,7 +1,7 @@
 #ifndef RES_MGST_H
 #define RES_MGST_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 #if VERSION == VERSION_PAL
 enum MGST_RES_FILE_ID { // IDs and indexes are synced
@@ -36,6 +36,25 @@ enum MGST_RES_FILE_ID { // IDs and indexes are synced
     MGST_BTI_MS_SHIPFONT_V_BIG=0x1F,
     MGST_BTI_MS_SHIPFONT_Y_BIG=0x20,
     MGST_BTI_MS_SHIPFONT_Z=0x21,
+};
+#elif VERSION == VERSION_DEMO
+enum MGST_RES_FILE_ID { // IDs and indexes are synced
+    /* ROOT */
+    MGST_ARC_MGST=0x0,
+    
+    /* SCRN */
+    MGST_BLO_SHIP_RACE1=0x5,
+    
+    /* TIMG */
+    MGST_BTI_SHIPFONT_1=0x8,
+    MGST_BTI_SHIPFONT_1_2=0x9,
+    MGST_BTI_SHIPFONT_2=0xA,
+    MGST_BTI_SHIPFONT_2_2=0xB,
+    MGST_BTI_SHIPFONT_3=0xC,
+    MGST_BTI_SHIPFONT_3_2=0xD,
+    MGST_BTI_SHIPFONT_EX=0xE,
+    MGST_BTI_SHIPFONT_G_BIG=0xF,
+    MGST_BTI_SHIPFONT_O=0x10,
 };
 #else
 enum MGST_RES_FILE_ID { // IDs and indexes are synced

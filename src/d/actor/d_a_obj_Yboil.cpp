@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Yboil.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Yboil.h"
 #include "d/res/res_yboil.h"
 #include "d/d_a_obj.h"
@@ -11,6 +12,7 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -33,11 +35,11 @@ BOOL daObjYboil_c::CreateHeap() {
         if (mModel[i] == NULL)
             return FALSE;
 
-        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+        if (!mBckAnm[i].init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
             return FALSE;
-        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBtkAnm[i].init(modelData, btk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
-        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0))
+        if (!mBrkAnm[i].init(modelData, brk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0))
             return FALSE;
     }
 
@@ -82,11 +84,11 @@ void daObjYboil_c::set_mtx() {
     }
 }
 
-s32 daObjYboil_c::_create() {
+cPhs_State daObjYboil_c::_create() {
     fopAcM_SetupActor(this, daObjYboil_c);
 
-    s32 ret;
-    if (dComIfGs_isEventBit(0x1902)) {
+    cPhs_State ret;
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
         ret = cPhs_STOP_e;
     } else {
         ret = dComIfG_resLoad(&mPhs, "Yboil");
@@ -141,7 +143,7 @@ bool daObjYboil_c::_execute() {
 }
 
 /* 0000066C-000007D8       .text daObjYboil_Create__FPv */
-static s32 daObjYboil_Create(void* i_this) {
+static cPhs_State daObjYboil_Create(void* i_this) {
     return ((daObjYboil_c*)i_this)->_create();
 }
 
@@ -213,7 +215,7 @@ actor_process_profile_definition g_profile_Obj_Yboil = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0073,
+    /* Priority     */ PRIO_Obj_Yboil,
     /* Actor SubMtd */ &daObj_YboilMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

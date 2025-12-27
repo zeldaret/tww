@@ -1,20 +1,21 @@
 /**
- * d_a_bomb.cpp
- * Bomb Flower Bomb
+ * d_a_bomb2.cpp
+ * Object - Bomb Flower - Bomb
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_a_obj.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_vbakh.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daBomb2 {
     namespace {
@@ -233,17 +234,15 @@ namespace daBomb2 {
     }
 
     void FuseSparksCB_c::execute(JPABaseEmitter* emitter) {
-        f32 x = mpPos->x;
-        f32 y = mpPos->y;
-        f32 z = mpPos->z;
-        emitter->mGlobalTranslation.set(x, y, z);
+        JGeometry::TVec3<f32> pos(*mpPos);
+        emitter->setGlobalTranslation(pos);
 
-        JSUPtrLink* link = emitter->mActiveParticles.getFirstLink();
+        JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
         while(link != 0) {
             JSUPtrLink* next = link->getNext();
 
             JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
-            ptcl->setOffsetPosition(x, y, z);
+            ptcl->setOffsetPosition(pos);
 
             link = next;
         }
@@ -272,11 +271,11 @@ namespace daBomb2 {
 
         J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, VBAKH_BCK_VBAKM));
         JUT_ASSERT(0x30D, bck_data != NULL);
-        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+        int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
 
         J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, VBAKH_BRK_VBAKM));
         JUT_ASSERT(0x314, brk_data != NULL);
-        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+        int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
         return mpModel && temp && temp3;
     }
@@ -287,17 +286,17 @@ namespace daBomb2 {
 
     void Act_c::crr_init() {
         mCir.SetWall(30.0f, 30.0f);
-        mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
         mAcch.OnLineCheck();
-        field_0x51C = -1.0e9f;
-        field_0x520 = -1.0e9f;
+        field_0x51C = -G_CM3D_F_INF;
+        field_0x520 = -G_CM3D_F_INF;
         field_0x524 = 0;
         mbWaterIn = 0;
         field_0x526 = 0;
-        field_0x528 = -1.0e9f;
+        field_0x528 = -G_CM3D_F_INF;
     }
 
     dCcD_SrcSph Act_c::M_sph_src = {
@@ -323,10 +322,10 @@ namespace daBomb2 {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
 
     void Act_c::cc_init() {
@@ -404,10 +403,10 @@ namespace daBomb2 {
         start_proc_call();
     }
 
-    int Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
-        int status = dComIfG_resLoad(&mPhase, attr().resName);
+        cPhs_State status = dComIfG_resLoad(&mPhase, attr().resName);
 
         if(status == cPhs_COMPLEATE_e) {
             if(fopAcM_entrySolidHeap(this, solidHeapCB, attr().heapSize)) {
@@ -477,9 +476,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp()->SetMass(&mSph, 3);
         }
     }
 
@@ -492,21 +489,21 @@ namespace daBomb2 {
     void Act_c::posMoveF() {
         if (mWindVec.abs2() > 0.01f) {
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-            cXyz* r6;
-            f32 f3, f4;
+            cXyz* norm;
+            f32 friction, no_grade_cos;
             if (triPla) {
-                r6 = triPla->GetNP();
-                f3 = 0.06f;
-                f4 = cM_scos(0xA4F);
+                norm = triPla->GetNP();
+                friction = 0.06f;
+                no_grade_cos = cM_scos(0xA4F);
             } else {
-                r6 = NULL;
-                f3 = 0.0f;
-                f4 = 0.0f;
+                norm = NULL;
+                friction = 0.0f;
+                no_grade_cos = 0.0f;
             }
             daObj::posMoveF_grade(
                 this, mStts.GetCCMoveP(), &mWindVec,
                 attr().field_0x30, attr().field_0x34,
-                r6, f3, f4, NULL
+                norm, friction, no_grade_cos, NULL
             );
         } else {
             fopAcM_posMoveF(this, mStts.GetCCMoveP());
@@ -553,7 +550,7 @@ namespace daBomb2 {
             r5 = true;
             field_0x526 = 1;
         } else {
-            field_0x520 = -1e9f;
+            field_0x520 = -G_CM3D_F_INF;
             field_0x526 = 0;
         }
         mbWaterIn = r5;
@@ -564,7 +561,7 @@ namespace daBomb2 {
     }
 
     bool Act_c::chk_lava_in() const {
-        if(field_0x51C == -1.0e9f) {
+        if(field_0x51C == -G_CM3D_F_INF) {
             return false;
         }
 
@@ -573,7 +570,7 @@ namespace daBomb2 {
 
     void Act_c::setRoomInfo() {
         s32 roomNo;
-        if(mAcch.GetGroundH() != -1.0e9f) {
+        if(mAcch.GetGroundH() != -G_CM3D_F_INF) {
             roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         }
@@ -620,8 +617,8 @@ namespace daBomb2 {
             mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
-            mBck0.getFrameCtrl()->setFrame(frame);
-            mBrk0.getFrameCtrl()->setFrame(frame);
+            mBck0.setFrame(frame);
+            mBrk0.setFrame(frame);
         }
     }
 
@@ -648,8 +645,8 @@ namespace daBomb2 {
         f32 f30 = attr().field_0x40;
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
-        if (f31 > f30*f30) {
-            sp48 *= f30 / std::sqrtf(f31);;
+        if (f31 > SQUARE(f30)) {
+            sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
         cXyz hitNormal = cXyz::Zero;
@@ -733,7 +730,7 @@ namespace daBomb2 {
             field_0x6D8 = field_0x6C0;
 
             dComIfGp_particle_setP1(dPa_name::ID_COMMON_FUSE_SPARKS, &field_0x6C0, NULL, &scale, 0xFF, &mSparks);
-            dComIfGp_particle_setToonP1(0x2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
+            dComIfGp_particle_setToonP1(dPa_name::ID_COMMON_2012, &field_0x6C0, NULL, &scale, 0xDC, &mSmoke);
             mSmoke.setOldPosP(&field_0x6CC, &field_0x6D8);
         }
     }
@@ -956,11 +953,11 @@ namespace daBomb2 {
     }
 
     void Act_c::on_carry() {
-        attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::off_carry() {
-        attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
+        cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     }
 
     void Act_c::mode_wait_init() {
@@ -1092,7 +1089,7 @@ namespace daBomb2 {
     void Act_c::mode_sink() {
         f32 temp;
         bool temp2 = fopAcM_getWaterY(&current.pos, &temp);
-        if(temp2 && field_0x528 != -1.0e9f && --field_0x698 > 0) {
+        if(temp2 && field_0x528 != -G_CM3D_F_INF && --field_0x698 > 0) {
             current.pos.y += temp - field_0x528;
             field_0x528 = temp;
             posMoveF();
@@ -1266,8 +1263,8 @@ namespace daBomb2 {
 
     void Act_c::draw_nut() {
         J3DModelData* mdlData = (J3DModelData*)mpModel->getModelData();
-        mBck0.entry(mdlData, mBck0.getFrame());
-        mBrk0.entry(mdlData, mBrk0.getFrame());
+        mBck0.entry(mdlData);
+        mBrk0.entry(mdlData);
         dComIfGd_setListP1();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();
@@ -1287,7 +1284,7 @@ namespace daBomb2 {
             1.04f,
             1.02f,
             1.01f,
-            1.0f
+            1.0f,
         };
 
         if(fopAcM_GetModel(this) == 0) {
@@ -1311,7 +1308,7 @@ namespace daBomb2 {
     }
 
     namespace {
-        int Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
 
@@ -1327,8 +1324,8 @@ namespace daBomb2 {
             return static_cast<Act_c*>(i_this)->_draw();
         }
 
-        bool Mthd_IsDelete(void*) {
-            return true;
+        BOOL Mthd_IsDelete(void* i_this) {
+            return TRUE;
         }
         
         static actor_method_class Mthd_Table = {
@@ -1351,7 +1348,7 @@ actor_process_profile_definition g_profile_Bomb2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0116,
+    /* Priority     */ PRIO_Bomb2,
     /* Actor SubMtd */ &daBomb2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

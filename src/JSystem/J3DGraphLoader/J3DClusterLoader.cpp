@@ -3,6 +3,8 @@
 // Translation Unit: J3DClusterLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphLoader/J3DClusterLoader.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "m_Do/m_Do_printf.h"

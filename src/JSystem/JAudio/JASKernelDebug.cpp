@@ -3,6 +3,8 @@
 // Translation Unit: JASKernelDebug.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASKernelDebug.h"
 
 /* 8027D6B8-8027D6F4       .text stackInit__Q28JASystem6KernelFPUxUl */

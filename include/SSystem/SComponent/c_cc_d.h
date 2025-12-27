@@ -66,16 +66,6 @@ public:
     /* 0x00 */ cM3dGAab mAab;
     /* 0x1C vtable */
 
-    struct Shape {
-        ~Shape();
-
-        /* 0x00 */ int _0;
-        /* 0x04 */ f32 _4;
-        /* 0x08 */ f32 _8;
-        /* 0x0C */ f32 _C;
-        /* 0x10 */ f32 _10;
-        /* 0x14 */ f32 _14;
-    };
     cCcD_ShapeAttr() {}
     virtual ~cCcD_ShapeAttr() {}
     virtual bool CrossAtTg(cCcD_ShapeAttr const&, cXyz*) const {
@@ -140,7 +130,7 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const { return false; }
     virtual bool CrossCo(cCcD_SphAttr const&, f32*) const { return false; }
     virtual ~cCcD_TriAttr() {}
-};
+};  // Size: 0x58
 
 struct cCcD_SrcCpsAttr {
     cM3dGCpsS mCps;
@@ -155,7 +145,7 @@ public:
     void Set(const cCcD_SrcCpsAttr& pSrc) {
         cM3dGCps::Set(pSrc.mCps);
     }
-    void Set(const cXyz& pStart, const cXyz& pEnd, float radius) {
+    void Set(const cXyz& pStart, const cXyz& pEnd, f32 radius) {
         cM3dGCps::Set(pStart, pEnd, radius);
     }
 
@@ -180,7 +170,7 @@ public:
     virtual bool CrossCo(cCcD_AabAttr const&, f32*) const { return false; }
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-};
+};  // Size: 0x40
 
 STATIC_ASSERT(0x40 == sizeof(cCcD_CpsAttr));
 
@@ -219,7 +209,6 @@ public:
     virtual bool CrossCo(cCcD_CylAttr const&, f32*) const;
     virtual void CalcAabBox();
     virtual bool GetNVec(cXyz const&, cXyz*) const;
-
 };  // Size = 0x34
 
 STATIC_ASSERT(0x34 == sizeof(cCcD_SphAttr));
@@ -332,6 +321,8 @@ private:
     /* 0x00 vtable */
 };  // Size = 0x4
 
+STATIC_ASSERT(sizeof(cCcD_GStts) == 0x4);
+
 class cCcD_Stts {
 private:
     /* 0x00 */ cXyz m_cc_move;
@@ -349,7 +340,15 @@ public:
     virtual cCcD_GStts* GetGStts();
     void Init(int, int, void*, fpc_ProcID);
     virtual void Ct();
+#if VERSION == VERSION_DEMO
+    void PlusCcMove(f32 x, f32 y, f32 z) {
+        m_cc_move.x += x;
+        m_cc_move.y += y;
+        m_cc_move.z += z;
+    }
+#else
     void PlusCcMove(f32, f32, f32);
+#endif
     void ClrCcMove() {
         m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }
@@ -431,8 +430,8 @@ public:
 
 protected:
     /* 0x10 */ u32 mType;
-    /* 0x14 */ u8 mAtp;
-};
+    /* 0x14 */ u8 mAtp; // AtPoint, amount of damage done when attacking
+}; // size = 0x18
 
 STATIC_ASSERT(0x18 == sizeof(cCcD_ObjAt));
 

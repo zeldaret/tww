@@ -1,0 +1,18 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_obj_msdan_sub.cpp:
+	.text       start:0x00000078 end:0x00000D14
+	.text       start:0x00000D14 end:0x00000D2C
+	.text       start:0x00000D2C end:0x00000D48
+	.rodata     start:0x00000000 end:0x000000B2
+	.data       start:0x00000000 end:0x00000078
+	.bss        start:0x00000000 end:0x00000030

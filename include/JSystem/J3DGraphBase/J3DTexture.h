@@ -4,6 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/types.h"
@@ -42,7 +43,10 @@ public:
     void addResTIMG(u16, ResTIMG const*);
 
     u16 getNum() const { return mNum; }
-    ResTIMG* getResTIMG(u16 entry) const { return &mpRes[entry]; }
+    ResTIMG* getResTIMG(u16 entry) const {
+        J3D_ASSERT(72, entry < mNum, "Error : range over.");
+        return &mpRes[entry];   
+    }
     void setResTIMG(u16 entry, const ResTIMG& timg) {
         mpRes[entry] = timg;
         mpRes[entry].imageOffset = ((mpRes[entry].imageOffset + (u32)&timg - (u32)(mpRes + entry)));
@@ -62,18 +66,15 @@ public:
         J3DGDLoadTexMtxImm((Mtx&)mMtx, GX_TEXMTX0 + texMtxID * 3, (GXTexMtxType)mTexMtxInfo.mProjection);
     };
     void calc();
-    void calcTexMtx(f32 const (*)[4]);
-    void calcPostTexMtx(f32 const (*)[4]);
-    void loadTexMtx(u32) const;
-    void loadPostTexMtx(u32) const;
 
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
+    void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
 
-    void getTextureSRT() {}
+    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
 
 private:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
@@ -85,9 +86,9 @@ struct J3DTexCoord : public J3DTexCoordInfo {
     J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
     J3DTexCoord(const J3DTexCoordInfo& info) { *(J3DTexCoordInfo*)this = info; }
 
-    u8 getTexGenType() { return mTexGenType; }
-    u8 getTexGenSrc() { return mTexGenSrc; }
-    u32 getTexGenMtx() { return mTexGenMtx & 0xFF; }
+    u8 getTexGenType() const { return mTexGenType; }
+    u8 getTexGenSrc() const { return mTexGenSrc; }
+    u8 getTexGenMtx() const { return mTexGenMtx; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
 };  // Size: 0x4
 

@@ -3,9 +3,12 @@
 // Translation Unit: dspproc.c
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/dspproc.h"
-#include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/dsptask.h"
+
+u16 DSP_CreateMap2(u32 param_1);
 
 /* 8028E600-8028E648       .text DSPReleaseHalt2__FUl */
 void DSPReleaseHalt2(u32 msg) {
@@ -26,7 +29,7 @@ void DSPReleaseHalt() {
 static volatile BOOL flag;
 
 /* 8028E6A0-8028E6AC       .text setup_callback__FUs */
-void setup_callback(u16) {
+void setup_callback(u16 param_1) {
     flag = 0;
 }
 
@@ -40,7 +43,7 @@ void DsetupTable(u32 param_1, u32 param_2, u32 param_3, u32 param_4, u32 param_5
     table[4] = param_5;
     flag = 1;
     DSPSendCommands2(table,5,setup_callback);
-    while (true) {
+    while (TRUE) {
         if (flag == 0) {
             return;
         }
@@ -66,7 +69,7 @@ void DsyncFrame(u32 param_1, u32 param_2, u32 param_3) {
 static volatile BOOL d_waitflag;
 
 /* 8028E7E0-8028E7EC       .text dummy_callback__FUs */
-void dummy_callback(u16) {
+void dummy_callback(u16 param_1) {
     d_waitflag = 0;
 }
 

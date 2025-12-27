@@ -3,8 +3,10 @@
 // Translation Unit: d_a_tag_md_cb.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_md_cb.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-00000160       .text __ct__16daTag_MdCb_HIO_cFv */
 daTag_MdCb_HIO_c::daTag_MdCb_HIO_c() {
@@ -12,7 +14,7 @@ daTag_MdCb_HIO_c::daTag_MdCb_HIO_c() {
 }
 
 /* 00000160-000002D0       .text create__12daTag_MdCb_cFv */
-s32 daTag_MdCb_c::create() {
+cPhs_State daTag_MdCb_c::create() {
     /* Nonmatching */
 }
 
@@ -157,28 +159,30 @@ daTag_MdCb_c::~daTag_MdCb_c() {
 }
 
 /* 0000191C-0000193C       .text daTag_MdCb_Draw__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Draw(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Draw(daTag_MdCb_c* i_this) {
+    return ((daTag_MdCb_c*)i_this)->draw();
 }
 
 /* 0000193C-00001960       .text daTag_MdCb_Execute__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Execute(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Execute(daTag_MdCb_c* i_this) {
+    ((daTag_MdCb_c*)i_this)->execute();
+    return TRUE;
 }
 
 /* 00001960-00001968       .text daTag_MdCb_IsDelete__FP12daTag_MdCb_c */
 static BOOL daTag_MdCb_IsDelete(daTag_MdCb_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00001968-00001990       .text daTag_MdCb_Delete__FP12daTag_MdCb_c */
-static BOOL daTag_MdCb_Delete(daTag_MdCb_c*) {
-    /* Nonmatching */
+static BOOL daTag_MdCb_Delete(daTag_MdCb_c* i_this) {
+    ((daTag_MdCb_c*)i_this)->~daTag_MdCb_c();
+    return TRUE;
 }
 
 /* 00001990-000019B0       .text daTag_MdCb_Create__FP10fopAc_ac_c */
-static s32 daTag_MdCb_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_MdCb_Create(fopAc_ac_c* i_this) {
+    return ((daTag_MdCb_c*)i_this)->create();
 }
 
 static actor_method_class l_daTag_MdCb_Method = {
@@ -199,7 +203,7 @@ actor_process_profile_definition g_profile_TAG_MDCB = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0129,
+    /* Priority     */ PRIO_TAG_MDCB,
     /* Actor SubMtd */ &l_daTag_MdCb_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

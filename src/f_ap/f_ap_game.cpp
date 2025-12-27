@@ -19,17 +19,20 @@ fapGm_HIO_c g_HIO;
 fapGm_HIO_c::fapGm_HIO_c() {
     field_0x05 = 1;
 
+#if VERSION > VERSION_DEMO
     if (mDoMain::developmentMode) {
         mDisplayMeter = true;
         mDisplayFlag = 1;
-    } else {
+    } else
+#endif
+    {
         mDisplayMeter = false;
         mDisplayFlag = 0;
     }
 
     field_0x09 = 1;
     field_0x0a = 1;
-    field_0x0c = 0.96f;
+    mAspectRatio = 0.96f;
     field_0x10 = 0;
     field_0x11 = 0;
     field_0x12 = 8;

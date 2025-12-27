@@ -22,342 +22,437 @@ modules:
 - object: files/RELS.arc:rels/mmem/f_pc_profile_lst.rel
   splits: config/GZLJ01/rels/f_pc_profile_lst/splits.txt
   symbols: config/GZLJ01/rels/f_pc_profile_lst/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_agbsw0.rel
   splits: config/GZLJ01/rels/d_a_agbsw0/splits.txt
   symbols: config/GZLJ01/rels/d_a_agbsw0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_andsw0.rel
   splits: config/GZLJ01/rels/d_a_andsw0/splits.txt
   symbols: config/GZLJ01/rels/d_a_andsw0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_andsw2.rel
   splits: config/GZLJ01/rels/d_a_andsw2/splits.txt
   symbols: config/GZLJ01/rels/d_a_andsw2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_att.rel
   splits: config/GZLJ01/rels/d_a_att/splits.txt
   symbols: config/GZLJ01/rels/d_a_att/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bflower.rel
   splits: config/GZLJ01/rels/d_a_bflower/splits.txt
   symbols: config/GZLJ01/rels/d_a_bflower/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bita.rel
   splits: config/GZLJ01/rels/d_a_bita/splits.txt
   symbols: config/GZLJ01/rels/d_a_bita/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_branch.rel
   splits: config/GZLJ01/rels/d_a_branch/splits.txt
   symbols: config/GZLJ01/rels/d_a_branch/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_bridge.rel
   splits: config/GZLJ01/rels/d_a_bridge/splits.txt
   symbols: config/GZLJ01/rels/d_a_bridge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_coming2.rel
   splits: config/GZLJ01/rels/d_a_coming2/splits.txt
   symbols: config/GZLJ01/rels/d_a_coming2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_coming3.rel
   splits: config/GZLJ01/rels/d_a_coming3/splits.txt
   symbols: config/GZLJ01/rels/d_a_coming3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_demo_dk.rel
   splits: config/GZLJ01/rels/d_a_demo_dk/splits.txt
   symbols: config/GZLJ01/rels/d_a_demo_dk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_demo_kmm.rel
   splits: config/GZLJ01/rels/d_a_demo_kmm/splits.txt
   symbols: config/GZLJ01/rels/d_a_demo_kmm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_door10.rel
   splits: config/GZLJ01/rels/d_a_door10/splits.txt
   symbols: config/GZLJ01/rels/d_a_door10/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_dr.rel
   splits: config/GZLJ01/rels/d_a_dr/splits.txt
   symbols: config/GZLJ01/rels/d_a_dr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_dr2.rel
   splits: config/GZLJ01/rels/d_a_dr2/splits.txt
   symbols: config/GZLJ01/rels/d_a_dr2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ep.rel
   splits: config/GZLJ01/rels/d_a_ep/splits.txt
   symbols: config/GZLJ01/rels/d_a_ep/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_floor.rel
   splits: config/GZLJ01/rels/d_a_floor/splits.txt
   symbols: config/GZLJ01/rels/d_a_floor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_grass.rel
   splits: config/GZLJ01/rels/d_a_grass/splits.txt
   symbols: config/GZLJ01/rels/d_a_grass/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_hitobj.rel
   splits: config/GZLJ01/rels/d_a_hitobj/splits.txt
   symbols: config/GZLJ01/rels/d_a_hitobj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_hot_floor.rel
   splits: config/GZLJ01/rels/d_a_hot_floor/splits.txt
   symbols: config/GZLJ01/rels/d_a_hot_floor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ikari.rel
   splits: config/GZLJ01/rels/d_a_ikari/splits.txt
   symbols: config/GZLJ01/rels/d_a_ikari/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_jbo.rel
   splits: config/GZLJ01/rels/d_a_jbo/splits.txt
   symbols: config/GZLJ01/rels/d_a_jbo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kaji.rel
   splits: config/GZLJ01/rels/d_a_kaji/splits.txt
   symbols: config/GZLJ01/rels/d_a_kaji/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kanban.rel
   splits: config/GZLJ01/rels/d_a_kanban/splits.txt
   symbols: config/GZLJ01/rels/d_a_kanban/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ki.rel
   splits: config/GZLJ01/rels/d_a_ki/splits.txt
   symbols: config/GZLJ01/rels/d_a_ki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_knob00.rel
   splits: config/GZLJ01/rels/d_a_knob00/splits.txt
   symbols: config/GZLJ01/rels/d_a_knob00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kui.rel
   splits: config/GZLJ01/rels/d_a_kui/splits.txt
   symbols: config/GZLJ01/rels/d_a_kui/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag00.rel
   splits: config/GZLJ01/rels/d_a_kytag00/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag01.rel
   splits: config/GZLJ01/rels/d_a_kytag01/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag01/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag02.rel
   splits: config/GZLJ01/rels/d_a_kytag02/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag02/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag03.rel
   splits: config/GZLJ01/rels/d_a_kytag03/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag03/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag04.rel
   splits: config/GZLJ01/rels/d_a_kytag04/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag04/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag05.rel
   splits: config/GZLJ01/rels/d_a_kytag05/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag05/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag06.rel
   splits: config/GZLJ01/rels/d_a_kytag06/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag06/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_kytag07.rel
   splits: config/GZLJ01/rels/d_a_kytag07/splits.txt
   symbols: config/GZLJ01/rels/d_a_kytag07/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lamp.rel
   splits: config/GZLJ01/rels/d_a_lamp/splits.txt
   symbols: config/GZLJ01/rels/d_a_lamp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lod_bg.rel
   splits: config/GZLJ01/rels/d_a_lod_bg/splits.txt
   symbols: config/GZLJ01/rels/d_a_lod_bg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_lwood.rel
   splits: config/GZLJ01/rels/d_a_lwood/splits.txt
   symbols: config/GZLJ01/rels/d_a_lwood/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_magma.rel
   splits: config/GZLJ01/rels/d_a_magma/splits.txt
   symbols: config/GZLJ01/rels/d_a_magma/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_majuu_flag.rel
   splits: config/GZLJ01/rels/d_a_majuu_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_majuu_flag/symbols.txt
-
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
+  extract:
+    - symbol: l_flag02TEX
+      binary: assets/l_flag02TEX.bin
+      header: assets/l_flag02TEX.h
+    - symbol: l_majuu_flag_matDL
+      binary: assets/l_majuu_flag_matDL.bin
+      header: assets/l_majuu_flag_matDL.h
+    - symbol: l_majuu_flagDL
+      binary: assets/l_majuu_flagDL.bin
+      header: assets/l_majuu_flagDL.h
+      
 - object: files/RELS.arc:rels/mmem/d_a_mdoor.rel
   splits: config/GZLJ01/rels/d_a_mdoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_mdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_msw.rel
   splits: config/GZLJ01/rels/d_a_msw/splits.txt
   symbols: config/GZLJ01/rels/d_a_msw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_mtoge.rel
   splits: config/GZLJ01/rels/d_a_mtoge/splits.txt
   symbols: config/GZLJ01/rels/d_a_mtoge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_AjavW.rel
   splits: config/GZLJ01/rels/d_a_obj_AjavW/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_AjavW/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_Ygush00.rel
   splits: config/GZLJ01/rels/d_a_obj_Ygush00/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_Ygush00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_akabe.rel
   splits: config/GZLJ01/rels/d_a_obj_akabe/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_akabe/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_barrel.rel
   splits: config/GZLJ01/rels/d_a_obj_barrel/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_barrel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_barrel2.rel
   splits: config/GZLJ01/rels/d_a_obj_barrel2/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_barrel2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_bscurtain.rel
   splits: config/GZLJ01/rels/d_a_obj_bscurtain/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_bscurtain/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_cafelmp.rel
   splits: config/GZLJ01/rels/d_a_obj_cafelmp/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_cafelmp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_coming.rel
   splits: config/GZLJ01/rels/d_a_obj_coming/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_coming/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_demo_barrel.rel
   splits: config/GZLJ01/rels/d_a_obj_demo_barrel/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_demo_barrel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_doguu.rel
   splits: config/GZLJ01/rels/d_a_obj_doguu/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_doguu/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_doguu_demo.rel
   splits: config/GZLJ01/rels/d_a_obj_doguu_demo/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_doguu_demo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_gryw00.rel
   splits: config/GZLJ01/rels/d_a_obj_gryw00/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gryw00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_hfuck1.rel
   splits: config/GZLJ01/rels/d_a_obj_hfuck1/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hfuck1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_hole.rel
   splits: config/GZLJ01/rels/d_a_obj_hole/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hole/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ice.rel
   splits: config/GZLJ01/rels/d_a_obj_ice/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ice/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ikada.rel
   splits: config/GZLJ01/rels/d_a_obj_ikada/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ikada/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_kanat.rel
   splits: config/GZLJ01/rels/d_a_obj_kanat/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_kanat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_leaves.rel
   splits: config/GZLJ01/rels/d_a_obj_leaves/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_leaves/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_lpalm.rel
   splits: config/GZLJ01/rels/d_a_obj_lpalm/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_lpalm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_monument.rel
   splits: config/GZLJ01/rels/d_a_obj_monument/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_monument/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_movebox.rel
   splits: config/GZLJ01/rels/d_a_obj_movebox/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_movebox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_mshokki.rel
   splits: config/GZLJ01/rels/d_a_obj_mshokki/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mshokki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_ohatch.rel
   splits: config/GZLJ01/rels/d_a_obj_ohatch/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ohatch/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_otble.rel
   splits: config/GZLJ01/rels/d_a_obj_otble/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_otble/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_pbco.rel
   splits: config/GZLJ01/rels/d_a_obj_pbco/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_pbco/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_pirateship.rel
   splits: config/GZLJ01/rels/d_a_obj_pirateship/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_pirateship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_quake.rel
   splits: config/GZLJ01/rels/d_a_obj_quake/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_quake/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_rcloud.rel
   splits: config/GZLJ01/rels/d_a_obj_rcloud/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_rcloud/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_roten.rel
   splits: config/GZLJ01/rels/d_a_obj_roten/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_roten/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_shelf.rel
   splits: config/GZLJ01/rels/d_a_obj_shelf/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_shelf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_shmrgrd.rel
   splits: config/GZLJ01/rels/d_a_obj_shmrgrd/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_shmrgrd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_swpush.rel
   splits: config/GZLJ01/rels/d_a_obj_swpush/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_swpush/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_table.rel
   splits: config/GZLJ01/rels/d_a_obj_table/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_table/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tenmado.rel
   splits: config/GZLJ01/rels/d_a_obj_tenmado/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tenmado/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tide.rel
   splits: config/GZLJ01/rels/d_a_obj_tide/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tide/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_timer.rel
   splits: config/GZLJ01/rels/d_a_obj_timer/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_timer/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_toripost.rel
   splits: config/GZLJ01/rels/d_a_obj_toripost/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_toripost/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_tousekiki.rel
   splits: config/GZLJ01/rels/d_a_obj_tousekiki/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tousekiki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_warpt.rel
   splits: config/GZLJ01/rels/d_a_obj_warpt/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_warpt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_obj_wood.rel
   splits: config/GZLJ01/rels/d_a_obj_wood/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_wood/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_pirate_flag.rel
   splits: config/GZLJ01/rels/d_a_pirate_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_pirate_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_pirate_flag_DL
     binary: assets/l_pirate_flag_DL.bin
@@ -369,470 +464,587 @@ modules:
 - object: files/RELS.arc:rels/mmem/d_a_race_item.rel
   splits: config/GZLJ01/rels/d_a_race_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_race_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_rd.rel
   splits: config/GZLJ01/rels/d_a_rd/splits.txt
   symbols: config/GZLJ01/rels/d_a_rd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_rectangle.rel
   splits: config/GZLJ01/rels/d_a_rectangle/splits.txt
   symbols: config/GZLJ01/rels/d_a_rectangle/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_salvage.rel
   splits: config/GZLJ01/rels/d_a_salvage/splits.txt
   symbols: config/GZLJ01/rels/d_a_salvage/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sbox.rel
   splits: config/GZLJ01/rels/d_a_sbox/splits.txt
   symbols: config/GZLJ01/rels/d_a_sbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sk.rel
   splits: config/GZLJ01/rels/d_a_sk/splits.txt
   symbols: config/GZLJ01/rels/d_a_sk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_sk2.rel
   splits: config/GZLJ01/rels/d_a_sk2/splits.txt
   symbols: config/GZLJ01/rels/d_a_sk2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_spotbox.rel
   splits: config/GZLJ01/rels/d_a_spotbox/splits.txt
   symbols: config/GZLJ01/rels/d_a_spotbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ssk.rel
   splits: config/GZLJ01/rels/d_a_ssk/splits.txt
   symbols: config/GZLJ01/rels/d_a_ssk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_stone.rel
   splits: config/GZLJ01/rels/d_a_stone/splits.txt
   symbols: config/GZLJ01/rels/d_a_stone/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_stone2.rel
   splits: config/GZLJ01/rels/d_a_stone2/splits.txt
   symbols: config/GZLJ01/rels/d_a_stone2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swc00.rel
   splits: config/GZLJ01/rels/d_a_swc00/splits.txt
   symbols: config/GZLJ01/rels/d_a_swc00/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swhit0.rel
   splits: config/GZLJ01/rels/d_a_swhit0/splits.txt
   symbols: config/GZLJ01/rels/d_a_swhit0/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_swtdoor.rel
   splits: config/GZLJ01/rels/d_a_swtdoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_swtdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_attention.rel
   splits: config/GZLJ01/rels/d_a_tag_attention/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_attention/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_ba1.rel
   splits: config/GZLJ01/rels/d_a_tag_ba1/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_ba1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_event.rel
   splits: config/GZLJ01/rels/d_a_tag_event/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_event/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_evsw.rel
   splits: config/GZLJ01/rels/d_a_tag_evsw/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_evsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_ghostship.rel
   splits: config/GZLJ01/rels/d_a_tag_ghostship/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_ghostship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_hint.rel
   splits: config/GZLJ01/rels/d_a_tag_hint/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_hint/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_kb_item.rel
   splits: config/GZLJ01/rels/d_a_tag_kb_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_kb_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_kk1.rel
   splits: config/GZLJ01/rels/d_a_tag_kk1/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_kk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_light.rel
   splits: config/GZLJ01/rels/d_a_tag_light/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_light/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_msg.rel
   splits: config/GZLJ01/rels/d_a_tag_msg/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_msg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_photo.rel
   splits: config/GZLJ01/rels/d_a_tag_photo/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_photo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tag_waterlevel.rel
   splits: config/GZLJ01/rels/d_a_tag_waterlevel/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_waterlevel/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tama.rel
   splits: config/GZLJ01/rels/d_a_tama/splits.txt
   symbols: config/GZLJ01/rels/d_a_tama/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tbox.rel
   splits: config/GZLJ01/rels/d_a_tbox/splits.txt
   symbols: config/GZLJ01/rels/d_a_tbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tpota.rel
   splits: config/GZLJ01/rels/d_a_tpota/splits.txt
   symbols: config/GZLJ01/rels/d_a_tpota/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_tsubo.rel
   splits: config/GZLJ01/rels/d_a_tsubo/splits.txt
   symbols: config/GZLJ01/rels/d_a_tsubo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_warpdm20.rel
   splits: config/GZLJ01/rels/d_a_warpdm20/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpdm20/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_warphr.rel
   splits: config/GZLJ01/rels/d_a_warphr/splits.txt
   symbols: config/GZLJ01/rels/d_a_warphr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_wbird.rel
   splits: config/GZLJ01/rels/d_a_wbird/splits.txt
   symbols: config/GZLJ01/rels/d_a_wbird/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/mmem/d_a_ykgr.rel
   splits: config/GZLJ01/rels/d_a_ykgr/splits.txt
   symbols: config/GZLJ01/rels/d_a_ykgr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_alldie.rel
   splits: config/GZLJ01/rels/d_a_alldie/splits.txt
   symbols: config/GZLJ01/rels/d_a_alldie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_am.rel
   splits: config/GZLJ01/rels/d_a_am/splits.txt
   symbols: config/GZLJ01/rels/d_a_am/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_am2.rel
   splits: config/GZLJ01/rels/d_a_am2/splits.txt
   symbols: config/GZLJ01/rels/d_a_am2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_amiprop.rel
   splits: config/GZLJ01/rels/d_a_amiprop/splits.txt
   symbols: config/GZLJ01/rels/d_a_amiprop/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_arrow_iceeff.rel
   splits: config/GZLJ01/rels/d_a_arrow_iceeff/splits.txt
   symbols: config/GZLJ01/rels/d_a_arrow_iceeff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_arrow_lighteff.rel
   splits: config/GZLJ01/rels/d_a_arrow_lighteff/splits.txt
   symbols: config/GZLJ01/rels/d_a_arrow_lighteff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_beam.rel
   splits: config/GZLJ01/rels/d_a_beam/splits.txt
   symbols: config/GZLJ01/rels/d_a_beam/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_boko.rel
   splits: config/GZLJ01/rels/d_a_boko/splits.txt
   symbols: config/GZLJ01/rels/d_a_boko/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_canon.rel
   splits: config/GZLJ01/rels/d_a_canon/splits.txt
   symbols: config/GZLJ01/rels/d_a_canon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_cc.rel
   splits: config/GZLJ01/rels/d_a_cc/splits.txt
   symbols: config/GZLJ01/rels/d_a_cc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_dai.rel
   splits: config/GZLJ01/rels/d_a_dai/splits.txt
   symbols: config/GZLJ01/rels/d_a_dai/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_demo_item.rel
   splits: config/GZLJ01/rels/d_a_demo_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_demo_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_door12.rel
   splits: config/GZLJ01/rels/d_a_door12/splits.txt
   symbols: config/GZLJ01/rels/d_a_door12/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_fallrock.rel
   splits: config/GZLJ01/rels/d_a_fallrock/splits.txt
   symbols: config/GZLJ01/rels/d_a_fallrock/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ff.rel
   splits: config/GZLJ01/rels/d_a_ff/splits.txt
   symbols: config/GZLJ01/rels/d_a_ff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_gy_ctrl.rel
   splits: config/GZLJ01/rels/d_a_gy_ctrl/splits.txt
   symbols: config/GZLJ01/rels/d_a_gy_ctrl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_himo3.rel
   splits: config/GZLJ01/rels/d_a_himo3/splits.txt
   symbols: config/GZLJ01/rels/d_a_himo3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_hmlif.rel
   splits: config/GZLJ01/rels/d_a_hmlif/splits.txt
   symbols: config/GZLJ01/rels/d_a_hmlif/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_hys.rel
   splits: config/GZLJ01/rels/d_a_hys/splits.txt
   symbols: config/GZLJ01/rels/d_a_hys/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kamome.rel
   splits: config/GZLJ01/rels/d_a_kamome/splits.txt
   symbols: config/GZLJ01/rels/d_a_kamome/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kantera.rel
   splits: config/GZLJ01/rels/d_a_kantera/splits.txt
   symbols: config/GZLJ01/rels/d_a_kantera/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kn.rel
   splits: config/GZLJ01/rels/d_a_kn/splits.txt
   symbols: config/GZLJ01/rels/d_a_kn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kokiie.rel
   splits: config/GZLJ01/rels/d_a_kokiie/splits.txt
   symbols: config/GZLJ01/rels/d_a_kokiie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ks.rel
   splits: config/GZLJ01/rels/d_a_ks/splits.txt
   symbols: config/GZLJ01/rels/d_a_ks/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_kt.rel
   splits: config/GZLJ01/rels/d_a_kt/splits.txt
   symbols: config/GZLJ01/rels/d_a_kt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_mflft.rel
   splits: config/GZLJ01/rels/d_a_mflft/splits.txt
   symbols: config/GZLJ01/rels/d_a_mflft/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_cb1.rel
   splits: config/GZLJ01/rels/d_a_npc_cb1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_cb1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_md.rel
   splits: config/GZLJ01/rels/d_a_npc_md/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_md/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_npc_so.rel
   splits: config/GZLJ01/rels/d_a_npc_so/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_so/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_nzg.rel
   splits: config/GZLJ01/rels/d_a_nzg/splits.txt
   symbols: config/GZLJ01/rels/d_a_nzg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_aygr.rel
   splits: config/GZLJ01/rels/d_a_obj_aygr/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_aygr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_balancelift.rel
   splits: config/GZLJ01/rels/d_a_obj_balancelift/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_balancelift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_barrier.rel
   splits: config/GZLJ01/rels/d_a_obj_barrier/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_barrier/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_bemos.rel
   splits: config/GZLJ01/rels/d_a_obj_bemos/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_bemos/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_canon.rel
   splits: config/GZLJ01/rels/d_a_obj_canon/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_canon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_eff.rel
   splits: config/GZLJ01/rels/d_a_obj_eff/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_eff/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_magmarock.rel
   splits: config/GZLJ01/rels/d_a_obj_magmarock/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_magmarock/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_majyuu_door.rel
   splits: config/GZLJ01/rels/d_a_obj_majyuu_door/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_majyuu_door/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_stair.rel
   splits: config/GZLJ01/rels/d_a_obj_stair/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_stair/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swflat.rel
   splits: config/GZLJ01/rels/d_a_obj_swflat/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_swflat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swhammer.rel
   splits: config/GZLJ01/rels/d_a_obj_swhammer/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_swhammer/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swheavy.rel
   splits: config/GZLJ01/rels/d_a_obj_swheavy/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_swheavy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_obj_swlight.rel
   splits: config/GZLJ01/rels/d_a_obj_swlight/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_swlight/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_oq.rel
   splits: config/GZLJ01/rels/d_a_oq/splits.txt
   symbols: config/GZLJ01/rels/d_a_oq/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_pedestal.rel
   splits: config/GZLJ01/rels/d_a_pedestal/splits.txt
   symbols: config/GZLJ01/rels/d_a_pedestal/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_saku.rel
   splits: config/GZLJ01/rels/d_a_saku/splits.txt
   symbols: config/GZLJ01/rels/d_a_saku/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_seatag.rel
   splits: config/GZLJ01/rels/d_a_seatag/splits.txt
   symbols: config/GZLJ01/rels/d_a_seatag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_shand.rel
   splits: config/GZLJ01/rels/d_a_shand/splits.txt
   symbols: config/GZLJ01/rels/d_a_shand/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ship.rel
   splits: config/GZLJ01/rels/d_a_ship/splits.txt
   symbols: config/GZLJ01/rels/d_a_ship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_shop_item.rel
   splits: config/GZLJ01/rels/d_a_shop_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_shop_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sie_flag.rel
   splits: config/GZLJ01/rels/d_a_sie_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_sie_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sitem.rel
   splits: config/GZLJ01/rels/d_a_sitem/splits.txt
   symbols: config/GZLJ01/rels/d_a_sitem/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_ss.rel
   splits: config/GZLJ01/rels/d_a_ss/splits.txt
   symbols: config/GZLJ01/rels/d_a_ss/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_sss.rel
   splits: config/GZLJ01/rels/d_a_sss/splits.txt
   symbols: config/GZLJ01/rels/d_a_sss/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_syan.rel
   splits: config/GZLJ01/rels/d_a_syan/splits.txt
   symbols: config/GZLJ01/rels/d_a_syan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_md_cb.rel
   splits: config/GZLJ01/rels/d_a_tag_md_cb/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_md_cb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_mk.rel
   splits: config/GZLJ01/rels/d_a_tag_mk/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_mk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tag_so.rel
   splits: config/GZLJ01/rels/d_a_tag_so/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_so/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_tornado.rel
   splits: config/GZLJ01/rels/d_a_tornado/splits.txt
   symbols: config/GZLJ01/rels/d_a_tornado/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_warpf.rel
   splits: config/GZLJ01/rels/d_a_warpf/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/RELS.arc:rels/amem/d_a_wind_tag.rel
   splits: config/GZLJ01/rels/d_a_wind_tag/splits.txt
   symbols: config/GZLJ01/rels/d_a_wind_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_acorn_leaf.rel
   splits: config/GZLJ01/rels/d_a_acorn_leaf/splits.txt
   symbols: config/GZLJ01/rels/d_a_acorn_leaf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_atdoor.rel
   splits: config/GZLJ01/rels/d_a_atdoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_atdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_auction.rel
   splits: config/GZLJ01/rels/d_a_auction/splits.txt
   symbols: config/GZLJ01/rels/d_a_auction/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bb.rel
   splits: config/GZLJ01/rels/d_a_bb/splits.txt
   symbols: config/GZLJ01/rels/d_a_bb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bdk.rel
   splits: config/GZLJ01/rels/d_a_bdk/splits.txt
   symbols: config/GZLJ01/rels/d_a_bdk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bdkobj.rel
   splits: config/GZLJ01/rels/d_a_bdkobj/splits.txt
   symbols: config/GZLJ01/rels/d_a_bdkobj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn.rel
   splits: config/GZLJ01/rels/d_a_bgn/splits.txt
   symbols: config/GZLJ01/rels/d_a_bgn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn2.rel
   splits: config/GZLJ01/rels/d_a_bgn2/splits.txt
   symbols: config/GZLJ01/rels/d_a_bgn2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bgn3.rel
   splits: config/GZLJ01/rels/d_a_bgn3/splits.txt
   symbols: config/GZLJ01/rels/d_a_bgn3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bigelf.rel
   splits: config/GZLJ01/rels/d_a_bigelf/splits.txt
   symbols: config/GZLJ01/rels/d_a_bigelf/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bk.rel
   splits: config/GZLJ01/rels/d_a_bk/splits.txt
   symbols: config/GZLJ01/rels/d_a_bk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bl.rel
   splits: config/GZLJ01/rels/d_a_bl/splits.txt
   symbols: config/GZLJ01/rels/d_a_bl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmd.rel
   splits: config/GZLJ01/rels/d_a_bmd/splits.txt
   symbols: config/GZLJ01/rels/d_a_bmd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmdfoot.rel
   splits: config/GZLJ01/rels/d_a_bmdfoot/splits.txt
   symbols: config/GZLJ01/rels/d_a_bmdfoot/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bmdhand.rel
   splits: config/GZLJ01/rels/d_a_bmdhand/splits.txt
   symbols: config/GZLJ01/rels/d_a_bmdhand/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bo.rel
   splits: config/GZLJ01/rels/d_a_bo/splits.txt
   symbols: config/GZLJ01/rels/d_a_bo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_boss_item.rel
   splits: config/GZLJ01/rels/d_a_boss_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_boss_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bpw.rel
   splits: config/GZLJ01/rels/d_a_bpw/splits.txt
   symbols: config/GZLJ01/rels/d_a_bpw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bst.rel
   splits: config/GZLJ01/rels/d_a_bst/splits.txt
   symbols: config/GZLJ01/rels/d_a_bst/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_btd.rel
   splits: config/GZLJ01/rels/d_a_btd/splits.txt
   symbols: config/GZLJ01/rels/d_a_btd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bwd.rel
   splits: config/GZLJ01/rels/d_a_bwd/splits.txt
   symbols: config/GZLJ01/rels/d_a_bwd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_bwdg.rel
   splits: config/GZLJ01/rels/d_a_bwdg/splits.txt
   symbols: config/GZLJ01/rels/d_a_bwdg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_B_sand2TEX
     binary: assets/l_B_sand2TEX.bin
@@ -852,731 +1064,913 @@ modules:
 - object: files/rels/d_a_bwds.rel
   splits: config/GZLJ01/rels/d_a_bwds/splits.txt
   symbols: config/GZLJ01/rels/d_a_bwds/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_daiocta.rel
   splits: config/GZLJ01/rels/d_a_daiocta/splits.txt
   symbols: config/GZLJ01/rels/d_a_daiocta/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_daiocta_eye.rel
   splits: config/GZLJ01/rels/d_a_daiocta_eye/splits.txt
   symbols: config/GZLJ01/rels/d_a_daiocta_eye/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_deku_item.rel
   splits: config/GZLJ01/rels/d_a_deku_item/splits.txt
   symbols: config/GZLJ01/rels/d_a_deku_item/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_dk.rel
   splits: config/GZLJ01/rels/d_a_dk/splits.txt
   symbols: config/GZLJ01/rels/d_a_dk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_dummy.rel
   splits: config/GZLJ01/rels/d_a_dummy/splits.txt
   symbols: config/GZLJ01/rels/d_a_dummy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fallrock_tag.rel
   splits: config/GZLJ01/rels/d_a_fallrock_tag/splits.txt
   symbols: config/GZLJ01/rels/d_a_fallrock_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fan.rel
   splits: config/GZLJ01/rels/d_a_fan/splits.txt
   symbols: config/GZLJ01/rels/d_a_fan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fganon.rel
   splits: config/GZLJ01/rels/d_a_fganon/splits.txt
   symbols: config/GZLJ01/rels/d_a_fganon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fgmahou.rel
   splits: config/GZLJ01/rels/d_a_fgmahou/splits.txt
   symbols: config/GZLJ01/rels/d_a_fgmahou/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fire.rel
   splits: config/GZLJ01/rels/d_a_fire/splits.txt
   symbols: config/GZLJ01/rels/d_a_fire/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_fm.rel
   splits: config/GZLJ01/rels/d_a_fm/splits.txt
   symbols: config/GZLJ01/rels/d_a_fm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gm.rel
   splits: config/GZLJ01/rels/d_a_gm/splits.txt
   symbols: config/GZLJ01/rels/d_a_gm/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gnd.rel
   splits: config/GZLJ01/rels/d_a_gnd/splits.txt
   symbols: config/GZLJ01/rels/d_a_gnd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_goal_flag.rel
   splits: config/GZLJ01/rels/d_a_goal_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_goal_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_gy.rel
   splits: config/GZLJ01/rels/d_a_gy/splits.txt
   symbols: config/GZLJ01/rels/d_a_gy/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_icelift.rel
   splits: config/GZLJ01/rels/d_a_icelift/splits.txt
   symbols: config/GZLJ01/rels/d_a_icelift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kb.rel
   splits: config/GZLJ01/rels/d_a_kb/splits.txt
   symbols: config/GZLJ01/rels/d_a_kb/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kddoor.rel
   splits: config/GZLJ01/rels/d_a_kddoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_kddoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kita.rel
   splits: config/GZLJ01/rels/d_a_kita/splits.txt
   symbols: config/GZLJ01/rels/d_a_kita/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_klft.rel
   splits: config/GZLJ01/rels/d_a_klft/splits.txt
   symbols: config/GZLJ01/rels/d_a_klft/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_kmon.rel
   splits: config/GZLJ01/rels/d_a_kmon/splits.txt
   symbols: config/GZLJ01/rels/d_a_kmon/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_komore.rel
   splits: config/GZLJ01/rels/d_a_komore/splits.txt
   symbols: config/GZLJ01/rels/d_a_komore/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_lbridge.rel
   splits: config/GZLJ01/rels/d_a_lbridge/splits.txt
   symbols: config/GZLJ01/rels/d_a_lbridge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_leaflift.rel
   splits: config/GZLJ01/rels/d_a_leaflift/splits.txt
   symbols: config/GZLJ01/rels/d_a_leaflift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_lstair.rel
   splits: config/GZLJ01/rels/d_a_lstair/splits.txt
   symbols: config/GZLJ01/rels/d_a_lstair/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_machine.rel
   splits: config/GZLJ01/rels/d_a_machine/splits.txt
   symbols: config/GZLJ01/rels/d_a_machine/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mant.rel
   splits: config/GZLJ01/rels/d_a_mant/splits.txt
   symbols: config/GZLJ01/rels/d_a_mant/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mbdoor.rel
   splits: config/GZLJ01/rels/d_a_mbdoor/splits.txt
   symbols: config/GZLJ01/rels/d_a_mbdoor/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mgameboard.rel
   splits: config/GZLJ01/rels/d_a_mgameboard/splits.txt
   symbols: config/GZLJ01/rels/d_a_mgameboard/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mmusic.rel
   splits: config/GZLJ01/rels/d_a_mmusic/splits.txt
   symbols: config/GZLJ01/rels/d_a_mmusic/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mo2.rel
   splits: config/GZLJ01/rels/d_a_mo2/splits.txt
   symbols: config/GZLJ01/rels/d_a_mo2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mozo.rel
   splits: config/GZLJ01/rels/d_a_mozo/splits.txt
   symbols: config/GZLJ01/rels/d_a_mozo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_mt.rel
   splits: config/GZLJ01/rels/d_a_mt/splits.txt
   symbols: config/GZLJ01/rels/d_a_mt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ac1.rel
   splits: config/GZLJ01/rels/d_a_npc_ac1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ac1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ah.rel
   splits: config/GZLJ01/rels/d_a_npc_ah/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ah/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_aj1.rel
   splits: config/GZLJ01/rels/d_a_npc_aj1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_aj1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_auction.rel
   splits: config/GZLJ01/rels/d_a_npc_auction/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_auction/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ba1.rel
   splits: config/GZLJ01/rels/d_a_npc_ba1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ba1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bj1.rel
   splits: config/GZLJ01/rels/d_a_npc_bj1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bj1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bm1.rel
   splits: config/GZLJ01/rels/d_a_npc_bm1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bm1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bmcon1.rel
   splits: config/GZLJ01/rels/d_a_npc_bmcon1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bmcon1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bms1.rel
   splits: config/GZLJ01/rels/d_a_npc_bms1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bms1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bmsw.rel
   splits: config/GZLJ01/rels/d_a_npc_bmsw/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bmsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_bs1.rel
   splits: config/GZLJ01/rels/d_a_npc_bs1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_bs1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_btsw.rel
   splits: config/GZLJ01/rels/d_a_npc_btsw/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_btsw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_btsw2.rel
   splits: config/GZLJ01/rels/d_a_npc_btsw2/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_btsw2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_co1.rel
   splits: config/GZLJ01/rels/d_a_npc_co1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_co1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_de1.rel
   splits: config/GZLJ01/rels/d_a_npc_de1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_de1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ds1.rel
   splits: config/GZLJ01/rels/d_a_npc_ds1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ds1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_gk1.rel
   splits: config/GZLJ01/rels/d_a_npc_gk1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_gk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_gp1.rel
   splits: config/GZLJ01/rels/d_a_npc_gp1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_gp1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_hi1.rel
   splits: config/GZLJ01/rels/d_a_npc_hi1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_hi1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ho.rel
   splits: config/GZLJ01/rels/d_a_npc_ho/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ho/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_hr.rel
   splits: config/GZLJ01/rels/d_a_npc_hr/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_hr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_jb1.rel
   splits: config/GZLJ01/rels/d_a_npc_jb1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_jb1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ji1.rel
   splits: config/GZLJ01/rels/d_a_npc_ji1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ji1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kamome.rel
   splits: config/GZLJ01/rels/d_a_npc_kamome/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kamome/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kf1.rel
   splits: config/GZLJ01/rels/d_a_npc_kf1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kg1.rel
   splits: config/GZLJ01/rels/d_a_npc_kg1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kg1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kg2.rel
   splits: config/GZLJ01/rels/d_a_npc_kg2/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kg2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kk1.rel
   splits: config/GZLJ01/rels/d_a_npc_kk1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_km1.rel
   splits: config/GZLJ01/rels/d_a_npc_km1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_km1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ko1.rel
   splits: config/GZLJ01/rels/d_a_npc_ko1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ko1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_kp1.rel
   splits: config/GZLJ01/rels/d_a_npc_kp1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_kp1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ls1.rel
   splits: config/GZLJ01/rels/d_a_npc_ls1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ls1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mk.rel
   splits: config/GZLJ01/rels/d_a_npc_mk/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_mk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mn.rel
   splits: config/GZLJ01/rels/d_a_npc_mn/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_mn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_mt.rel
   splits: config/GZLJ01/rels/d_a_npc_mt/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_mt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_nz.rel
   splits: config/GZLJ01/rels/d_a_npc_nz/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_nz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_ob1.rel
   splits: config/GZLJ01/rels/d_a_npc_ob1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ob1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_os.rel
   splits: config/GZLJ01/rels/d_a_npc_os/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_os/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_p1.rel
   splits: config/GZLJ01/rels/d_a_npc_p1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_p1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_p2.rel
   splits: config/GZLJ01/rels/d_a_npc_p2/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_p2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_people.rel
   splits: config/GZLJ01/rels/d_a_npc_people/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_people/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_pf1.rel
   splits: config/GZLJ01/rels/d_a_npc_pf1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_pf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_photo.rel
   splits: config/GZLJ01/rels/d_a_npc_photo/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_photo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_pm1.rel
   splits: config/GZLJ01/rels/d_a_npc_pm1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_pm1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_roten.rel
   splits: config/GZLJ01/rels/d_a_npc_roten/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_roten/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_rsh1.rel
   splits: config/GZLJ01/rels/d_a_npc_rsh1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_rsh1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_sarace.rel
   splits: config/GZLJ01/rels/d_a_npc_sarace/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_sarace/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_sv.rel
   splits: config/GZLJ01/rels/d_a_npc_sv/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_sv/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_tc.rel
   splits: config/GZLJ01/rels/d_a_npc_tc/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_tc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_tt.rel
   splits: config/GZLJ01/rels/d_a_npc_tt/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_tt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_uk.rel
   splits: config/GZLJ01/rels/d_a_npc_uk/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_uk/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   force_active: [__register_global_object] # TODO why does this get stripped?
 
 - object: files/rels/d_a_npc_ym1.rel
   splits: config/GZLJ01/rels/d_a_npc_ym1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_ym1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_yw1.rel
   splits: config/GZLJ01/rels/d_a_npc_yw1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_yw1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_zk1.rel
   splits: config/GZLJ01/rels/d_a_npc_zk1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_zk1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_npc_zl1.rel
   splits: config/GZLJ01/rels/d_a_npc_zl1/splits.txt
   symbols: config/GZLJ01/rels/d_a_npc_zl1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_nz.rel
   splits: config/GZLJ01/rels/d_a_nz/splits.txt
   symbols: config/GZLJ01/rels/d_a_nz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Itnak.rel
   splits: config/GZLJ01/rels/d_a_obj_Itnak/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_Itnak/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Vds.rel
   splits: config/GZLJ01/rels/d_a_obj_Vds/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_Vds/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Vteng.rel
   splits: config/GZLJ01/rels/d_a_obj_Vteng/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_Vteng/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_YLzou.rel
   splits: config/GZLJ01/rels/d_a_obj_YLzou/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_YLzou/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_Yboil.rel
   splits: config/GZLJ01/rels/d_a_obj_Yboil/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_Yboil/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_adnno.rel
   splits: config/GZLJ01/rels/d_a_obj_adnno/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_adnno/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ajav.rel
   splits: config/GZLJ01/rels/d_a_obj_ajav/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ajav/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_apzl.rel
   splits: config/GZLJ01/rels/d_a_obj_apzl/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_apzl/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ashut.rel
   splits: config/GZLJ01/rels/d_a_obj_ashut/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ashut/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_auzu.rel
   splits: config/GZLJ01/rels/d_a_obj_auzu/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_auzu/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_buoyflag.rel
   splits: config/GZLJ01/rels/d_a_obj_buoyflag/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_buoyflag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_buoyrace.rel
   splits: config/GZLJ01/rels/d_a_obj_buoyrace/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_buoyrace/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_correct.rel
   splits: config/GZLJ01/rels/d_a_obj_correct/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_correct/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_dmgroom.rel
   splits: config/GZLJ01/rels/d_a_obj_dmgroom/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_dmgroom/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_dragonhead.rel
   splits: config/GZLJ01/rels/d_a_obj_dragonhead/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_dragonhead/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_drift.rel
   splits: config/GZLJ01/rels/d_a_obj_drift/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_drift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_eayogn.rel
   splits: config/GZLJ01/rels/d_a_obj_eayogn/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_eayogn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ebomzo.rel
   splits: config/GZLJ01/rels/d_a_obj_ebomzo/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ebomzo/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ekskz.rel
   splits: config/GZLJ01/rels/d_a_obj_ekskz/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ekskz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_eskban.rel
   splits: config/GZLJ01/rels/d_a_obj_eskban/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_eskban/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ferris.rel
   splits: config/GZLJ01/rels/d_a_obj_ferris/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ferris/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_figure.rel
   splits: config/GZLJ01/rels/d_a_obj_figure/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_figure/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_firewall.rel
   splits: config/GZLJ01/rels/d_a_obj_firewall/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_firewall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_flame.rel
   splits: config/GZLJ01/rels/d_a_obj_flame/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_flame/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ftree.rel
   splits: config/GZLJ01/rels/d_a_obj_ftree/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ftree/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ganonbed.rel
   splits: config/GZLJ01/rels/d_a_obj_ganonbed/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ganonbed/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gaship.rel
   splits: config/GZLJ01/rels/d_a_obj_gaship/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gaship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gaship2.rel
   splits: config/GZLJ01/rels/d_a_obj_gaship2/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gaship2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnnbtltaki.rel
   splits: config/GZLJ01/rels/d_a_obj_gnnbtltaki/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gnnbtltaki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnndemotakie.rel
   splits: config/GZLJ01/rels/d_a_obj_gnndemotakie/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gnndemotakie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gnndemotakis.rel
   splits: config/GZLJ01/rels/d_a_obj_gnndemotakis/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gnndemotakis/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gong.rel
   splits: config/GZLJ01/rels/d_a_obj_gong/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gong/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_gtaki.rel
   splits: config/GZLJ01/rels/d_a_obj_gtaki/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_gtaki/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami2.rel
   splits: config/GZLJ01/rels/d_a_obj_hami2/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hami2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami3.rel
   splits: config/GZLJ01/rels/d_a_obj_hami3/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hami3/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hami4.rel
   splits: config/GZLJ01/rels/d_a_obj_hami4/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hami4/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hat.rel
   splits: config/GZLJ01/rels/d_a_obj_hat/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hat/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hbrf1.rel
   splits: config/GZLJ01/rels/d_a_obj_hbrf1/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hbrf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hcbh.rel
   splits: config/GZLJ01/rels/d_a_obj_hcbh/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hcbh/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hha.rel
   splits: config/GZLJ01/rels/d_a_obj_hha/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hha/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hlift.rel
   splits: config/GZLJ01/rels/d_a_obj_hlift/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hlift/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_homen.rel
   splits: config/GZLJ01/rels/d_a_obj_homen/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_homen/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_homensmoke.rel
   splits: config/GZLJ01/rels/d_a_obj_homensmoke/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_homensmoke/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_hsehi1.rel
   splits: config/GZLJ01/rels/d_a_obj_hsehi1/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_hsehi1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_htetu1.rel
   splits: config/GZLJ01/rels/d_a_obj_htetu1/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_htetu1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_iceisland.rel
   splits: config/GZLJ01/rels/d_a_obj_iceisland/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_iceisland/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_jump.rel
   splits: config/GZLJ01/rels/d_a_obj_jump/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_jump/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_kanoke.rel
   splits: config/GZLJ01/rels/d_a_obj_kanoke/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_kanoke/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ladder.rel
   splits: config/GZLJ01/rels/d_a_obj_ladder/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ladder/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_light.rel
   splits: config/GZLJ01/rels/d_a_obj_light/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_light/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mkie.rel
   splits: config/GZLJ01/rels/d_a_obj_mkie/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mkie/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mkiek.rel
   splits: config/GZLJ01/rels/d_a_obj_mkiek/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mkiek/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mknjd.rel
   splits: config/GZLJ01/rels/d_a_obj_mknjd/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mknjd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mmrr.rel
   splits: config/GZLJ01/rels/d_a_obj_mmrr/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mmrr/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan.rel
   splits: config/GZLJ01/rels/d_a_obj_msdan/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_msdan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan2.rel
   splits: config/GZLJ01/rels/d_a_obj_msdan2/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_msdan2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan_sub.rel
   splits: config/GZLJ01/rels/d_a_obj_msdan_sub/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_msdan_sub/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_msdan_sub2.rel
   splits: config/GZLJ01/rels/d_a_obj_msdan_sub2/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_msdan_sub2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_mtest.rel
   splits: config/GZLJ01/rels/d_a_obj_mtest/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_mtest/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_nest.rel
   splits: config/GZLJ01/rels/d_a_obj_nest/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_nest/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ojtree.rel
   splits: config/GZLJ01/rels/d_a_obj_ojtree/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ojtree/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_ospbox.rel
   splits: config/GZLJ01/rels/d_a_obj_ospbox/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_ospbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_paper.rel
   splits: config/GZLJ01/rels/d_a_obj_paper/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_paper/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_pbka.rel
   splits: config/GZLJ01/rels/d_a_obj_pbka/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_pbka/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_pfall.rel
   splits: config/GZLJ01/rels/d_a_obj_pfall/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_pfall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_plant.rel
   splits: config/GZLJ01/rels/d_a_obj_plant/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_plant/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_rflw.rel
   splits: config/GZLJ01/rels/d_a_obj_rflw/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_rflw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_rforce.rel
   splits: config/GZLJ01/rels/d_a_obj_rforce/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_rforce/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_smplbg.rel
   splits: config/GZLJ01/rels/d_a_obj_smplbg/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_smplbg/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tapestry.rel
   splits: config/GZLJ01/rels/d_a_obj_tapestry/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tapestry/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tntrap.rel
   splits: config/GZLJ01/rels/d_a_obj_tntrap/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tntrap/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tower.rel
   splits: config/GZLJ01/rels/d_a_obj_tower/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tower/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_trap.rel
   splits: config/GZLJ01/rels/d_a_obj_trap/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_trap/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_tribox.rel
   splits: config/GZLJ01/rels/d_a_obj_tribox/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_tribox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_try.rel
   splits: config/GZLJ01/rels/d_a_obj_try/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_try/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_usovmc.rel
   splits: config/GZLJ01/rels/d_a_obj_usovmc/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_usovmc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vfan.rel
   splits: config/GZLJ01/rels/d_a_obj_vfan/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vfan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vgnfd.rel
   splits: config/GZLJ01/rels/d_a_obj_vgnfd/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vgnfd/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmc.rel
   splits: config/GZLJ01/rels/d_a_obj_vmc/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vmc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmsdz.rel
   splits: config/GZLJ01/rels/d_a_obj_vmsdz/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vmsdz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vmsms.rel
   splits: config/GZLJ01/rels/d_a_obj_vmsms/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vmsms/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_volcano.rel
   splits: config/GZLJ01/rels/d_a_obj_volcano/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_volcano/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vtil.rel
   splits: config/GZLJ01/rels/d_a_obj_vtil/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vtil/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_vyasi.rel
   splits: config/GZLJ01/rels/d_a_obj_vyasi/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_vyasi/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_xfuta.rel
   splits: config/GZLJ01/rels/d_a_obj_xfuta/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_xfuta/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_obj_zouK.rel
   splits: config/GZLJ01/rels/d_a_obj_zouK/splits.txt
   symbols: config/GZLJ01/rels/d_a_obj_zouK/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_oship.rel
   splits: config/GZLJ01/rels/d_a_oship/splits.txt
   symbols: config/GZLJ01/rels/d_a_oship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ph.rel
   splits: config/GZLJ01/rels/d_a_ph/splits.txt
   symbols: config/GZLJ01/rels/d_a_ph/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pt.rel
   splits: config/GZLJ01/rels/d_a_pt/splits.txt
   symbols: config/GZLJ01/rels/d_a_pt/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pw.rel
   splits: config/GZLJ01/rels/d_a_pw/splits.txt
   symbols: config/GZLJ01/rels/d_a_pw/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_pz.rel
   splits: config/GZLJ01/rels/d_a_pz/splits.txt
   symbols: config/GZLJ01/rels/d_a_pz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_sail.rel
   splits: config/GZLJ01/rels/d_a_sail/splits.txt
   symbols: config/GZLJ01/rels/d_a_sail/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
   extract:
   - symbol: l_sail_DL
     binary: assets/l_sail_DL.bin
@@ -1594,126 +1988,157 @@ modules:
 - object: files/rels/d_a_salvage_tbox.rel
   splits: config/GZLJ01/rels/d_a_salvage_tbox/splits.txt
   symbols: config/GZLJ01/rels/d_a_salvage_tbox/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_scene_change.rel
   splits: config/GZLJ01/rels/d_a_scene_change/splits.txt
   symbols: config/GZLJ01/rels/d_a_scene_change/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_shutter.rel
   splits: config/GZLJ01/rels/d_a_shutter/splits.txt
   symbols: config/GZLJ01/rels/d_a_shutter/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_shutter2.rel
   splits: config/GZLJ01/rels/d_a_shutter2/splits.txt
   symbols: config/GZLJ01/rels/d_a_shutter2/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_st.rel
   splits: config/GZLJ01/rels/d_a_st/splits.txt
   symbols: config/GZLJ01/rels/d_a_st/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_steam_tag.rel
   splits: config/GZLJ01/rels/d_a_steam_tag/splits.txt
   symbols: config/GZLJ01/rels/d_a_steam_tag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swattack.rel
   splits: config/GZLJ01/rels/d_a_swattack/splits.txt
   symbols: config/GZLJ01/rels/d_a_swattack/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_switem.rel
   splits: config/GZLJ01/rels/d_a_switem/splits.txt
   symbols: config/GZLJ01/rels/d_a_switem/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swpropeller.rel
   splits: config/GZLJ01/rels/d_a_swpropeller/splits.txt
   symbols: config/GZLJ01/rels/d_a_swpropeller/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_swtact.rel
   splits: config/GZLJ01/rels/d_a_swtact/splits.txt
   symbols: config/GZLJ01/rels/d_a_swtact/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_etc.rel
   splits: config/GZLJ01/rels/d_a_tag_etc/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_etc/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_island.rel
   splits: config/GZLJ01/rels/d_a_tag_island/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_island/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_kf1.rel
   splits: config/GZLJ01/rels/d_a_tag_kf1/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_kf1/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_ret.rel
   splits: config/GZLJ01/rels/d_a_tag_ret/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_ret/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tag_volcano.rel
   splits: config/GZLJ01/rels/d_a_tag_volcano/splits.txt
   symbols: config/GZLJ01/rels/d_a_tag_volcano/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_title.rel
   splits: config/GZLJ01/rels/d_a_title/splits.txt
   symbols: config/GZLJ01/rels/d_a_title/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tn.rel
   splits: config/GZLJ01/rels/d_a_tn/splits.txt
   symbols: config/GZLJ01/rels/d_a_tn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_toge.rel
   splits: config/GZLJ01/rels/d_a_toge/splits.txt
   symbols: config/GZLJ01/rels/d_a_toge/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_tori_flag.rel
   splits: config/GZLJ01/rels/d_a_tori_flag/splits.txt
   symbols: config/GZLJ01/rels/d_a_tori_flag/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_wall.rel
   splits: config/GZLJ01/rels/d_a_wall/splits.txt
   symbols: config/GZLJ01/rels/d_a_wall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpfout.rel
   splits: config/GZLJ01/rels/d_a_warpfout/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpfout/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpgn.rel
   splits: config/GZLJ01/rels/d_a_warpgn/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpgn/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpls.rel
   splits: config/GZLJ01/rels/d_a_warpls/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpls/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_warpmj.rel
   splits: config/GZLJ01/rels/d_a_warpmj/splits.txt
   symbols: config/GZLJ01/rels/d_a_warpmj/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_waterfall.rel
   splits: config/GZLJ01/rels/d_a_waterfall/splits.txt
   symbols: config/GZLJ01/rels/d_a_waterfall/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_windmill.rel
   splits: config/GZLJ01/rels/d_a_windmill/splits.txt
   symbols: config/GZLJ01/rels/d_a_windmill/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_wz.rel
   splits: config/GZLJ01/rels/d_a_wz/splits.txt
   symbols: config/GZLJ01/rels/d_a_wz/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ygcwp.rel
   splits: config/GZLJ01/rels/d_a_ygcwp/splits.txt
   symbols: config/GZLJ01/rels/d_a_ygcwp/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_yougan.rel
   splits: config/GZLJ01/rels/d_a_yougan/splits.txt
   symbols: config/GZLJ01/rels/d_a_yougan/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_ghostship.rel
   splits: config/GZLJ01/rels/d_a_ghostship/splits.txt
   symbols: config/GZLJ01/rels/d_a_ghostship/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 - object: files/rels/d_a_movie_player.rel
   splits: config/GZLJ01/rels/d_a_movie_player/splits.txt
   symbols: config/GZLJ01/rels/d_a_movie_player/symbols.txt
+  ldscript_template: config/GZLE01/rels/ldscript.tpl
 
 extract:
 - symbol: black_tex

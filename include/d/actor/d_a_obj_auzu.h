@@ -20,7 +20,7 @@ namespace daObjAuzu {
     
         void solidHeapCB(fopAc_ac_c*);
         void create_heap();
-        s32 _create();
+        cPhs_State _create();
         bool _delete();
         void is_exist() const;
         void set_mtx();

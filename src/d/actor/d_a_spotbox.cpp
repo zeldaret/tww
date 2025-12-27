@@ -3,13 +3,15 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spotbox.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
-s32 daSpotbox_c::create() {
+cPhs_State daSpotbox_c::create() {
     fopAcM_SetupActor(this, daSpotbox_c);
     f32 baseScale = getType() != 0 ? 1000.0f : 100.0f;
     scale.x *= baseScale;
@@ -59,7 +61,7 @@ static BOOL daSpotbox_Delete(daSpotbox_c* i_this) {
 }
 
 /* 00000170-00000250       .text daSpotbox_Create__FP10fopAc_ac_c */
-static s32 daSpotbox_Create(fopAc_ac_c* i_this) {
+static cPhs_State daSpotbox_Create(fopAc_ac_c* i_this) {
     daSpotbox_c* a_this = (daSpotbox_c*)i_this;
     return a_this->create();
 }
@@ -82,9 +84,13 @@ actor_process_profile_definition g_profile_SPOTBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C9,
+    /* Priority     */ PRIO_SPOTBOX,
     /* Actor SubMtd */ &l_daSpotbox_Method,
+#if VERSION == VERSION_DEMO
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+#else
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+#endif
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

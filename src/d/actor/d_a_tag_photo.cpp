@@ -3,152 +3,397 @@
 // Translation Unit: d_a_tag_photo.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_photo.h"
+#include "d/actor/d_a_npc_photo.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_com_lib_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "f_op/f_op_actor_mng.h"
+
+static u32 l_msg_talk[] = {
+    0x2A6D,
+    0x2A70,
+    0x2A73,
+    0x2A76,
+    0x2A79,
+    0x2A7C,
+    0x2A7F
+};
+
+static u32 l_msg_talk2_0[] = {
+    0x2A6E,
+    0x2A6F,
+    0,
+};
+
+static u32 l_msg_talk2_1[] = {
+    0x2A71,
+    0x2A72,
+    0,
+};
+
+static u32 l_msg_talk2_2[] = {
+    0x2A74,
+    0x2A75,
+    0,
+};
+
+static u32 l_msg_talk2_3[] = {
+    0x2A77,
+    0x2A78,
+    0,
+};
+
+static u32 l_msg_talk2_4[] = {
+    0x2A7A,
+    0x2A7B,
+    0,
+};
+
+static u32 l_msg_talk2_5[] = {
+    0x2A7D,
+    0x2A7E,
+    0,
+};
+
+static u32 l_msg_talk2_6[] = {
+    0x2A80,
+    0x2A81,
+    0,
+};
+
+static u32* l_msg_talk2[] = {
+    l_msg_talk2_0,
+    l_msg_talk2_1,
+    l_msg_talk2_2,
+    l_msg_talk2_3,
+    l_msg_talk2_4,
+    l_msg_talk2_5,
+    l_msg_talk2_6
+};
 
 /* 00000078-000000D0       .text __ct__12daTagPhoto_cFv */
 daTagPhoto_c::daTagPhoto_c() {
-    /* Nonmatching */
+    mTagNo = getPrmTagNo();
+    mMode = 0;
+    field_0x31C = 0;
 }
 
 /* 000000D0-000000F0       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return static_cast<daTagPhoto_c*>(i_this)->createHeap();
 }
 
 /* 000000F0-00000140       .text phase_1__FP12daTagPhoto_c */
-void phase_1(daTagPhoto_c*) {
-    /* Nonmatching */
+static cPhs_State phase_1(daTagPhoto_c* i_this) {
+    fopAcM_SetupActor(i_this, daTagPhoto_c);
+
+    return cPhs_NEXT_e;
 }
 
 /* 00000140-00000198       .text phase_2__FP12daTagPhoto_c */
-void phase_2(daTagPhoto_c*) {
-    /* Nonmatching */
+static cPhs_State phase_2(daTagPhoto_c* i_this) {
+    if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x10000)) {
+        i_this->createInit();
+    }
+    else {
+        return cPhs_ERROR_e;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000198-000001C8       .text _create__12daTagPhoto_cFv */
-s32 daTagPhoto_c::_create() {
-    /* Nonmatching */
+cPhs_State daTagPhoto_c::_create() {
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler)phase_1,
+        (cPhs__Handler)phase_2,
+        NULL
+    };
+
+    return dComLbG_PhaseHandler(&mPhs, l_method, this);
 }
 
 /* 000001C8-000001D0       .text createHeap__12daTagPhoto_cFv */
-void daTagPhoto_c::createHeap() {
-    /* Nonmatching */
+BOOL daTagPhoto_c::createHeap() {
+    return TRUE;
 }
 
 /* 000001D0-00000298       .text createInit__12daTagPhoto_cFv */
-void daTagPhoto_c::createInit() {
-    /* Nonmatching */
+cPhs_State daTagPhoto_c::createInit() {
+    mPhotoTalkEventIdx = dComIfGp_evmng_getEventIdx("PHOTO_TALK");
+    mPhotoTalk2EventIdx = dComIfGp_evmng_getEventIdx("PHOTO_TALK2");
+    mEventCut.setActorInfo("TagPo", this);
+    eventInfo.setEventId(mPhotoTalk2EventIdx);
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x23;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x24;
+    attention_info.flags = fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+    shape_angle = current.angle;
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000298-000002A0       .text _delete__12daTagPhoto_cFv */
-bool daTagPhoto_c::_delete() {
-    /* Nonmatching */
+BOOL daTagPhoto_c::_delete() {
+    return TRUE;
 }
 
 /* 000002A0-000002A8       .text _draw__12daTagPhoto_cFv */
-bool daTagPhoto_c::_draw() {
-    /* Nonmatching */
+BOOL daTagPhoto_c::_draw() {
+    return TRUE;
 }
 
 /* 000002A8-000002CC       .text setMode__12daTagPhoto_cFUc */
-void daTagPhoto_c::setMode(unsigned char) {
-    /* Nonmatching */
+void daTagPhoto_c::setMode(u8 mode) {
+    switch(mode) {
+        case 0:
+            break;
+        case 1:
+            mMsgID = fpcM_ERROR_PROCESS_ID_e;
+            break;
+    }
+
+    mMode = mode;
 }
 
+static daTagPhoto_c::ProcFunc_t moveProc[] = {
+    &daTagPhoto_c::executeWait,
+    &daTagPhoto_c::executeTalk,
+};
+
 /* 000002CC-00000368       .text _execute__12daTagPhoto_cFv */
-bool daTagPhoto_c::_execute() {
-    /* Nonmatching */
+BOOL daTagPhoto_c::_execute() {
+    checkOrder();
+
+    if(!dComIfGp_event_runCheck()) {
+        (this->*moveProc[mMode])();
+    }
+    else {
+        eventMove();
+    }
+
+    eventOrder();
+
+    attention_info.position.set(current.pos.x, current.pos.y + 50.0f, current.pos.z);
+
+    return TRUE;
 }
 
 /* 00000368-000004A0       .text executeWait__12daTagPhoto_cFv */
 void daTagPhoto_c::executeWait() {
-    /* Nonmatching */
+    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+    f32 temp = (player->current.pos - current.pos).absXZ();
+    if(temp < 160.0f) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+
+        if(field_0x31C == 0) {
+            field_0x31C = 1;
+
+            daNpcPhoto_c* lenzo = (daNpcPhoto_c*)fopAcM_searchFromName("Po", 0xF, 0);
+            if(lenzo && !lenzo->isDate()) {
+                eventInfo.setEventId(mPhotoTalkEventIdx);
+            }
+        }
+    }
 }
 
 /* 000004A0-000004FC       .text executeTalk__12daTagPhoto_cFv */
 void daTagPhoto_c::executeTalk() {
-    /* Nonmatching */
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
+        dComIfGp_event_reset();
+        setMode(0);
+    }
 }
 
 /* 000004FC-00000500       .text checkOrder__12daTagPhoto_cFv */
 void daTagPhoto_c::checkOrder() {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000500-00000504       .text eventOrder__12daTagPhoto_cFv */
 void daTagPhoto_c::eventOrder() {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000504-000005BC       .text eventMove__12daTagPhoto_cFv */
 void daTagPhoto_c::eventMove() {
-    /* Nonmatching */
+    if(dComIfGp_evmng_endCheck(mPhotoTalkEventIdx) || dComIfGp_evmng_endCheck(mPhotoTalk2EventIdx)) {
+        dComIfGp_event_reset();
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1601);
+    }
+    else {
+        bool attn = mEventCut.getAttnFlag();
+        if(mEventCut.cutProc()) {
+            if(!mEventCut.getAttnFlag()) {
+                mEventCut.setAttnFlag(attn);
+            }
+        }
+        else {
+            privateCut();
+        }
+    }
+
 }
 
 /* 000005BC-000006C8       .text privateCut__12daTagPhoto_cFv */
 void daTagPhoto_c::privateCut() {
-    /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "MES_SET"
+    };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId("TagPo");
+    if(staffIdx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
+        if(mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        }
+        else {
+            if(dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch(mActIdx) {
+                    case 0:
+                        eventMesSetInit(staffIdx);
+                }
+            }
+
+            bool result;
+            switch(mActIdx) {
+                case 0:
+                    result = eventMesSet();
+                    break;
+                default:
+                    result = true;
+                    break;
+            }
+
+            if(result) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
 }
 
 /* 000006C8-00000768       .text eventMesSetInit__12daTagPhoto_cFi */
-void daTagPhoto_c::eventMesSetInit(int) {
-    /* Nonmatching */
+void daTagPhoto_c::eventMesSetInit(int staffIdx) {
+    int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    field_0x310 = 0;
+    if(pMsgNo) {
+        switch(*pMsgNo) {
+            case 0:
+                setMessage(l_msg_talk[mTagNo]);
+                break;
+            default:
+                setMessage(*pMsgNo);
+                break;
+        }
+    }
+    else {
+        setMessage(0);
+    }
 }
 
 /* 00000768-0000079C       .text eventMesSet__12daTagPhoto_cFv */
-void daTagPhoto_c::eventMesSet() {
-    /* Nonmatching */
+bool daTagPhoto_c::eventMesSet() {
+    return talk(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 0000079C-0000087C       .text talk__12daTagPhoto_cFi */
-void daTagPhoto_c::talk(int) {
-    /* Nonmatching */
+u16 daTagPhoto_c::talk(int param_1) {
+    u16 status = 0xFF;
+
+    if(mMsgID == fpcM_ERROR_PROCESS_ID_e) {
+        if(param_1 == 1) {
+            mMsgNo = getMsg();
+        }
+
+        mMsgID = fopMsgM_messageSet(mMsgNo, this);
+        mpCurrMsg = NULL;
+    }
+    else if(mpCurrMsg) {
+        status = mpCurrMsg->mStatus;
+        if(status == fopMsgStts_MSG_DISPLAYED_e) {
+            mpCurrMsg->mStatus = next_msgStatus(&mMsgNo);
+            if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(mMsgNo);
+            }
+        }
+        else if(status == fopMsgStts_BOX_CLOSED_e) {
+            mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            mMsgID = fpcM_ERROR_PROCESS_ID_e;
+        }
+    }
+    else {
+        mpCurrMsg = fopMsgM_SearchByID(mMsgID);
+    }
+
+    return status;
 }
 
 /* 0000087C-000008CC       .text next_msgStatus__12daTagPhoto_cFPUl */
-void daTagPhoto_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daTagPhoto_c::next_msgStatus(u32* pMsgNo) {
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
+
+    if(field_0x310) {
+        field_0x310++;
+        switch(*field_0x310) {
+            case 0:
+                field_0x310 = NULL;
+                msgStatus = fopMsgStts_MSG_ENDS_e;
+                break;
+            default:
+                *pMsgNo = *field_0x310;
+                break;
+        }
+    }
+    else {
+        msgStatus = fopMsgStts_MSG_ENDS_e;
+    }
+
+    return msgStatus;
 }
 
 /* 000008CC-000008EC       .text getMsg__12daTagPhoto_cFv */
-void daTagPhoto_c::getMsg() {
-    /* Nonmatching */
+u32 daTagPhoto_c::getMsg() {
+    field_0x310 = NULL;
+    return l_msg_talk[mTagNo];
 }
 
 /* 000008EC-000008FC       .text setMessage__12daTagPhoto_cFUl */
-void daTagPhoto_c::setMessage(unsigned long) {
-    /* Nonmatching */
+void daTagPhoto_c::setMessage(u32 msgNo) {
+    mMsgID = fpcM_ERROR_PROCESS_ID_e;
+    mMsgNo = msgNo;
 }
 
 /* 000008FC-00000928       .text getPrmTagNo__12daTagPhoto_cFv */
-void daTagPhoto_c::getPrmTagNo() {
-    /* Nonmatching */
+u8 daTagPhoto_c::getPrmTagNo() {
+    return daObj::PrmAbstract(this, PRM_TAG_NO_W, PRM_TAG_NO_S);
 }
 
 /* 00000928-00000948       .text daTagPhotoCreate__FPv */
-static s32 daTagPhotoCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daTagPhotoCreate(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_create();
 }
 
 /* 00000948-00000968       .text daTagPhotoDelete__FPv */
-static BOOL daTagPhotoDelete(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoDelete(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_delete();
 }
 
 /* 00000968-00000988       .text daTagPhotoExecute__FPv */
-static BOOL daTagPhotoExecute(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoExecute(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_execute();
 }
 
 /* 00000988-000009A8       .text daTagPhotoDraw__FPv */
-static BOOL daTagPhotoDraw(void*) {
-    /* Nonmatching */
+static BOOL daTagPhotoDraw(void* i_this) {
+    return ((daTagPhoto_c*)i_this)->_draw();
 }
 
 /* 000009A8-000009B0       .text daTagPhotoIsDelete__FPv */
 static BOOL daTagPhotoIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daTagPhotoMethodTable = {
@@ -169,7 +414,7 @@ actor_process_profile_definition g_profile_TAG_PHOTO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0126,
+    /* Priority     */ PRIO_TAG_PHOTO,
     /* Actor SubMtd */ &daTagPhotoMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

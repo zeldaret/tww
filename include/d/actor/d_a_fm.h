@@ -106,15 +106,18 @@ public:
     void holeExecute();
     void setHoleScale(float, float, float);
     bool _execute();
-    void MtxToRot(float(*)[4], csXyz*);
+    void MtxToRot(Mtx, csXyz*);
     void debugDraw();
     void holeDraw();
     void bodyDraw();
     bool _draw();
     void getArg();
     void createInit();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
+
+    static const dCcD_SrcSph m_sph_src;
+    static const dCcD_SrcCyl m_cyl_src;
 
 public:
     /* 0x2AC */ u8 m2AC[0x2C5 - 0x2AC];

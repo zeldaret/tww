@@ -1,14 +1,28 @@
 # https://clangd.llvm.org/config
 CompileFlags:
   Add: [
+    "-fdeclspec",
     "-Wno-c++11-compat-deprecated-writable-strings",
     "-Wno-undefined-inline",
     "-Wno-multichar",
+    "-Wno-c++11-extensions",
+    "-Wuninitialized",
+    "-Wsometimes-uninitialized",
+    "-Wlogical-op-parentheses",
+    "-Wbitwise-op-parentheses",
+    "-Wunused-variable",
+    # "-Wunused-but-set-variable",
+    # "-Wunused-parameter",
+    "-Wunused-but-set-parameter",
+    "-Wself-assign",
   ]
 ---
 If:
-  PathMatch: .*\.inc
+  PathMatch: src/PowerPC_EABI_Support/MSL/MSL_C\+\+/.*\.h
 CompileFlags:
-  Add: [
-    "-Wno-return-type",
-  ]
+  Add: ["--language=c++", "--std=c++98"]
+---
+If:
+  PathMatch: .*\.pch
+CompileFlags:
+  Add: ["--language=c++", "--std=c++98"]

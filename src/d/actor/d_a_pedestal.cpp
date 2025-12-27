@@ -3,11 +3,12 @@
 // Translation Unit: d_a_pedestal.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pedestal.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_hdai1.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daPedestal {
 
@@ -47,7 +48,11 @@ BOOL daPds_c::CreateHeap() {
     mpBgW = new dBgW();
 
     if (mpBgW != NULL) {
-        return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true ? FALSE : TRUE;
+        if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arcname, HDAI1_DZB_HDAI), cBgW::MOVE_BG_e, &mMtx) == true) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -69,8 +74,8 @@ void daPds_c::CreateInit() {
     if (mType == 0) {
         // Type 0: A pedestal that a npc_os starts on in its original room.
         if (wakeupCheck()) {
-            if (subtype <= 2) {
-                fopAc_ac_c* pActor = fopAcM_searchFromName(l_os_name[subtype], 0, 0);
+            if (argument <= 2) {
+                fopAc_ac_c* pActor = fopAcM_searchFromName(l_os_name[argument], 0, 0);
 
                 if (pActor != NULL && fopAcM_searchActorDistanceXZ(this, pActor) < 100.0f) {
                     pActor->current.pos.y = current.pos.y;
@@ -90,10 +95,10 @@ void daPds_c::CreateInit() {
 }
 
 /* 00000380-00000474       .text _create__Q210daPedestal7daPds_cFv */
-s32 daPds_c::_create() {
+cPhs_State daPds_c::_create() {
     fopAcM_SetupActor(this, daPds_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhase, m_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, m_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2000)) {
@@ -109,11 +114,11 @@ s32 daPds_c::_create() {
 
 /* 00000474-0000052C       .text getMyStaffId__Q210daPedestal7daPds_cFv */
 int daPds_c::getMyStaffId() {
-    if (subtype == 0) {
+    if (argument == 0) {
         return dComIfGp_evmng_getMyStaffId("Hdai1");
-    } else if (subtype == 1) {
+    } else if (argument == 1) {
         return dComIfGp_evmng_getMyStaffId("Hdai2");
-    } else if (subtype == 2) {
+    } else if (argument == 2) {
         return dComIfGp_evmng_getMyStaffId("Hdai3");
     }
 
@@ -122,16 +127,16 @@ int daPds_c::getMyStaffId() {
 
 /* 0000052C-000005D8       .text wakeupCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::wakeupCheck() {
-    if (subtype == 0) {
-        if (dComIfGs_isEventBit(0x1780)) {
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1780)) {
             return TRUE;
         }
-    } else if (subtype == 1) {
-        if (dComIfGs_isEventBit(0x1740)) {
+    } else if (argument == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1740)) {
             return TRUE;
         }
-    } else if (subtype == 2) {
-        if (dComIfGs_isEventBit(0x1720)) {
+    } else if (argument == 2) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1720)) {
             return TRUE;
         }
     }
@@ -141,16 +146,16 @@ BOOL daPds_c::wakeupCheck() {
 
 /* 000005D8-00000684       .text finishCheck__Q210daPedestal7daPds_cFv */
 BOOL daPds_c::finishCheck() {
-    if (subtype == 0) {
-        if (dComIfGs_isEventBit(0x1710)) {
+    if (argument == 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710)) {
             return TRUE;
         }
-    } else if (subtype == 1) {
-        if (dComIfGs_isEventBit(0x1704)) {
+    } else if (argument == 1) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704)) {
             return TRUE;
         }
-    } else if (subtype == 2) {
-        if (dComIfGs_isEventBit(0x1B01)) {
+    } else if (argument == 2) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01)) {
             return TRUE;
         }
     }
@@ -305,7 +310,7 @@ BOOL daPds_c::actionMoveEvent(int) {
 
 /* 00000AEC-00000B40       .text initialEffectSet__Q210daPedestal7daPds_cFi */
 void daPds_c::initialEffectSet(int) {
-    mOctagonGlowCb.makeEmitter(dPa_name::ID_PEDESTAL_OCTAGON_GLOW, &current.pos, &shape_angle, NULL);
+    mOctagonGlowCb.makeEmitter(dPa_name::ID_SCENE_PEDESTAL_OCTAGON_GLOW, &current.pos, &shape_angle, NULL);
     initBrkAnm(0, true);
 }
 
@@ -333,10 +338,10 @@ BOOL daPds_c::initBrkAnm(u8 param_1, bool param_2) {
     };  // Size: 0x0C
 
     static AnmTableEntry brkAnmTbl[] = {
-        {J3DFrameCtrl::LOOP_REPEAT_e,   1.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f,  0},
-        {J3DFrameCtrl::LOOP_ONCE_e,     0.0f, -1},
+        {J3DFrameCtrl::EMode_LOOP,   1.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f,  0},
+        {J3DFrameCtrl::EMode_NONE,     0.0f, -1},
     };
 
     J3DModelData* modelData = mpModel->getModelData();
@@ -394,7 +399,7 @@ bool daPds_c::_draw() {
 
     mBrk.entry(modelData);
     mDoExt_modelUpdateDL(mpModel);
-    modelData->getMaterialTable().removeTevRegAnimator(mBrk.getBrkAnm());
+    mBrk.remove(modelData);
 
     dComIfGd_setList();
 
@@ -402,7 +407,7 @@ bool daPds_c::_draw() {
 }
 
 /* 00000F10-00000F30       .text daPds_Create__10daPedestalFPv */
-static s32 daPds_Create(void* i_this) {
+static cPhs_State daPds_Create(void* i_this) {
     return static_cast<daPds_c*>(i_this)->_create();
 }
 
@@ -433,12 +438,7 @@ void daPds_infiniteEcallBack_c::execute(JPABaseEmitter* emitter) {
     }
 
     if (mpAngle != NULL) {
-        JGeometry::TVec3<s16> rot;
-
-        rot.x = mpAngle->x;
-        rot.y = mpAngle->y;
-        rot.z = mpAngle->z;
-
+        JGeometry::TVec3<s16> rot(mpAngle->x, mpAngle->y, mpAngle->z);
         emitter->setGlobalRotation(rot);
     }
 }
@@ -484,7 +484,7 @@ actor_process_profile_definition g_profile_PEDESTAL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0091,
+    /* Priority     */ PRIO_PEDESTAL,
     /* Actor SubMtd */ &daPedestal::daActMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

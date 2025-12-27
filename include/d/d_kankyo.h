@@ -10,10 +10,10 @@
 class J3DModel;
 
 struct color_RGB_class {
-    u8 r;
-    u8 g;
-    u8 b;
-};
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+};  // Size: 0x3
 
 struct LIGHT_INFLUENCE {
     /* 0x00 */ cXyz mPos;
@@ -157,13 +157,13 @@ class dKankyo_cloud_Packet;
 class dKankyo_vrkumo_Packet;
 class dKankyo_wave_Packet;
 class dKankyo_poison_Packet;
-class WINDEFF_SET;
+struct WINDEFF_SET;
 class dKankyo_star_Packet;
-class stage_palet_info_class;
-class stage_pselect_info_class;
-class stage_envr_info_class;
-class stage_vrbox_info_class;
-class stage_plight_info_class;
+struct stage_palet_info_class;
+struct stage_pselect_info_class;
+struct stage_envr_info_class;
+struct stage_vrbox_info_class;
+struct stage_plight_info_class;
 struct dKyd_Schedule;
 
 class dScnKy_env_light_c {
@@ -277,10 +277,12 @@ public:
     /* 0xB88 */ GXColorS10 mBgAddColDif;
     /* 0xB90 */ GXColorS10 mBg1AddColAmb;
     /* 0xB98 */ GXColorS10 mBg1AddColDif;
+#if VERSION > VERSION_DEMO
     /* 0xBA0 */ GXColorS10 mBg2AddColAmb;
     /* 0xBA8 */ GXColorS10 mBg2AddColDif;
     /* 0xBB0 */ GXColorS10 mBg3AddColAmb;
     /* 0xBB8 */ GXColorS10 mBg3AddColDif;
+#endif
     /* 0xBC0 */ GXColorS10 mAddColFog;
     /* 0xBC8 */ GXColorS10 mVrboxAddColSky0;
     /* 0xBD0 */ GXColorS10 mVrboxAddColKasumi;
@@ -356,7 +358,9 @@ public:
 
 extern dScnKy_env_light_c g_env_light;
 
+#if VERSION > VERSION_DEMO
 STATIC_ASSERT(sizeof(dScnKy_env_light_c) == 0xC9C);
+#endif
 
 inline dScnKy_env_light_c& dKy_getEnvlight() {
     return g_env_light;
@@ -377,6 +381,11 @@ enum dKy_dice_wether_state {
     /* 1 */ DICE_STATE_INIT_e,
     /* 2 */ DICE_STATE_EXEC_e,
     /* 3 */ DICE_STATE_NEXT_e,
+};
+
+enum {
+    dKy_TIME_DAY_e = 0,
+    dKy_TIME_NIGHT_e = 1,
 };
 
 int dKy_getdaytime_hour();
@@ -404,21 +413,24 @@ void dKy_vrbox_addcol_kasumi_set(s16, s16, s16, f32);
 void dKy_vrbox_addcol_set(s16, s16, s16, f32);
 void dKy_addcol_fog_set(s16, s16, s16, f32);
 void dKy_plight_set(LIGHT_INFLUENCE*);
+f32 dKy_yuragi_ratio_set(f32 param_0);
 void dKy_plight_priority_set(LIGHT_INFLUENCE*);
 void dKy_efplight_set(LIGHT_INFLUENCE* param_0);
 void dKy_plight_cut(LIGHT_INFLUENCE* param_0);
 cXyz dKy_plight_near_pos();
 void dKy_efplight_cut(LIGHT_INFLUENCE* param_0);
 void dKy_fog_startendz_set(f32, f32, f32);
-BOOL dKy_daynight_check();
+int dKy_daynight_check();
 void dKy_tevstr_init(dKy_tevstr_c*, s8, u8);
 void dKy_Sound_init();
 void dKy_change_colset(u8 param_0, u8 param_1, f32 param_2);
 void dKy_change_colpat(u8 param_0);
 void dKy_custom_colset(u8 param_0, u8 param_1, f32 i_blend);
+void dKy_custom_timeset(f32 i_speed);
 void dKy_pship_existense_set();
 void dKy_pship_existense_cut();
 u8 dKy_pship_existense_chk();
+void dKy_Itemgetcol_chg_on();
 void dKy_Itemgetcol_chg_off();
 void dKy_Itemgetcol_chg_move();
 void dKy_arrowcol_chg_on(cXyz*, int);

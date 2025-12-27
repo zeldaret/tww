@@ -3,7 +3,6 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_event_data.h"
-#include "string.h"
 
 class fopAc_ac_c;
 
@@ -67,8 +66,9 @@ public:
     dEvDtFlag_c& getFlags() { return mFlag; }
 
     int setStartDemo(int eventInfoIdx) { return mException.setStartDemo(eventInfoIdx); }
-    void cancelStartDemo() { /* TODO */ }
-    void setCameraPlay(u32 v) { mCameraPlay = v; }
+    void cancelStartDemo() { mException.init(); }
+    void setCameraPlay(int v) { mCameraPlay = v; }
+    int cameraPlay() { return mCameraPlay; }
 
     /* 0x000 */ dEvDtBase_c mList;
     /* 0x020 */ u32 mCameraPlay;

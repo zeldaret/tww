@@ -76,10 +76,10 @@ public:
     void seek_action(void*);
     void hind_action(void*);
     void visit_action(void*);
-    bool _draw();
-    bool _execute();
-    bool _delete();
-    s32 _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
     void CreateHeap();
 
 public:

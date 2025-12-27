@@ -3,15 +3,13 @@
 // Translation Unit: d_a_att.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
-
-#if VERSION == VERSION_USA
-#include "weak_data_1811.h" // IWYU pragma: keep
-#endif
 
 static bgn_class* boss;
 static cXyz non_pos(-30000.0f, -30000.0f, -30000.0f);
@@ -112,7 +110,7 @@ static BOOL daAtt_Delete(att_class* i_this) {
 }
 
 /* 00000578-00000768       .text daAtt_Create__FP10fopAc_ac_c */
-static s32 daAtt_Create(fopAc_ac_c* i_this) {
+static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
 #if VERSION == VERSION_USA
     static dCcD_SrcSph sita_sph_src = {
         // dCcD_SrcGObjInf
@@ -137,10 +135,10 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 90.0f,
-        },
+        }},
     };
 #endif
     static dCcD_SrcCyl cc_cyl_src = {
@@ -166,11 +164,11 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
             /* Height */ 2000.0f,
-        },
+        }},
     };
     static dCcD_SrcSph bm_sph_src = {
         // dCcD_SrcGObjInf
@@ -195,10 +193,10 @@ static s32 daAtt_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 200.0f,
-        },
+        }},
     };
     
     att_class* a_this = (att_class*)i_this;
@@ -250,7 +248,7 @@ actor_process_profile_definition g_profile_ATT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x019C,
+    /* Priority     */ PRIO_ATT,
     /* Actor SubMtd */ &l_daAtt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,

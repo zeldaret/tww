@@ -204,7 +204,7 @@ struct J3DNBTScale : public J3DNBTScaleInfo {
     Vec* getScale() { return &mScale; }
 };
 
-class J3DTexCoord;
+struct J3DTexCoord;
 void loadTexCoordGens(u32, J3DTexCoord*);
 void loadNBTScale(J3DNBTScale& param_0);
 

@@ -21,7 +21,7 @@ public:
     }
     void setAnm(int, f32) {}
 
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _execute();
     inline bool _draw();

@@ -3,11 +3,12 @@
 // Translation Unit: d_a_tag_waterlevel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_waterlevel.h"
-#include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "SSystem/SComponent/c_lib.h"
 
 namespace daTagWaterlevel {
@@ -27,7 +28,7 @@ namespace daTagWaterlevel {
     }
 
     /* 00000078-000001D4       .text _create__Q28daTagRet5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
         if ((prm_get_sch() & dKy_get_schbit() & 0xFF)) {
@@ -69,7 +70,8 @@ namespace daTagWaterlevel {
         u8 sch_bit = dKy_get_schbit();
         cLib_offBit(M_state, STATE_2);
 
-        if ((prm_sch & sch_bit & 0xFF)) {
+        bool temp = prm_sch & sch_bit & 0xFF;
+        if (temp) {
             target = 1.0f;
             if (!cLib_checkBit(get_state(), STATE_1)) {
                 cLib_onBit(M_state, STATE_2);
@@ -113,7 +115,7 @@ namespace daTagWaterlevel {
     }
 
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 
@@ -153,7 +155,7 @@ actor_process_profile_definition g_profile_Tag_Waterlevel = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0128,
+    /* Priority     */ PRIO_Tag_Waterlevel,
     /* Actor SubMtd */ &daTagWaterlevel::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

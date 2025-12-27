@@ -3,6 +3,8 @@
 // Translation Unit: resource.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMessage/resource.h"
 #include "JSystem/JMessage/data.h"
 #include "JSystem/JUtility/JUTResFont.h"
@@ -60,7 +62,7 @@ namespace JMessage {
 void JMessage::TResourceContainer::SetEncoding_(u8 param_1) {
     mEncoding = param_1;
     u32 r4 = param_1;
-    mIsLeadByteFunc = 0;
+    mIsLeadByteFunc = NULL;
     if (r4 >= 4) {
         return;
     }

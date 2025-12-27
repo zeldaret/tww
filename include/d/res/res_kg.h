@@ -1,7 +1,7 @@
 #ifndef RES_KG_H
 #define RES_KG_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KG_RES_FILE_ID {
     /* BDLM */

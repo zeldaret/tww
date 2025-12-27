@@ -8,6 +8,7 @@ volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 
 ASM void __OSLoadFPUContext(s32 unused0, register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     lhz r5, OSContext.state(context)
@@ -89,11 +90,13 @@ load_fprs:
 
 exit:
     blr
+#endif
     // clang-format on
 }
 
 ASM void __OSSaveFPUContext(s32 unused0, s32 unused1, register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     lhz r3, OSContext.state(context)
@@ -175,20 +178,24 @@ ASM void __OSSaveFPUContext(s32 unused0, s32 unused1, register OSContext* contex
 
 exit:
     blr
+#endif
     // clang-format on
 }
 
 ASM void OSSaveFPUContext(register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     addi r5, context, 0
     b __OSSaveFPUContext
+#endif
     // clang-format on
 }
 
 ASM void OSSetCurrentContext(register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     lis r4, OS_CURRENT_CONTEXT@ha
@@ -216,6 +223,7 @@ disable_fpu:
     mtmsr r6
     isync
     blr
+#endif
     // clang-format on
 }
 
@@ -225,6 +233,7 @@ OSContext* OSGetCurrentContext(void) {
 
 ASM u32 OSSaveContext(register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     stmw r13, OSContext.gpr[13](context)
@@ -264,11 +273,13 @@ ASM u32 OSSaveContext(register OSContext* context) {
 
     li r3, 0
     blr
+#endif
     // clang-format on
 }
 
 ASM void OSLoadContext(register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     lis r4, __RAS_OSDisableInterrupts_begin@ha
@@ -331,15 +342,18 @@ load_special_regs:
     lwz r4, OSContext.gpr[4](context)
     lwz context, OSContext.gpr[3](context)
     rfi
+#endif
     // clang-format on
 }
 
 ASM u8* OSGetStackPointer(void) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     mr r3, r1
     blr
+#endif
     // clang-format on
 }
 
@@ -354,6 +368,7 @@ void OSClearContext(OSContext* context) {
 
 ASM void OSInitContext(register OSContext* context, register u32 srr0, register u32 stack) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
     
     stw srr0, OSContext.srr0(context)
@@ -404,6 +419,7 @@ ASM void OSInitContext(register OSContext* context, register u32 srr0, register 
     stw r0, OSContext.gqr[7](context)
 
     b OSClearContext
+#endif
     // clang-format on
 }
 
@@ -461,6 +477,7 @@ void OSDumpContext(OSContext* context) {
 
 static ASM void OSSwitchFPUContext(register u8 err, register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     mfmsr r5
@@ -500,6 +517,7 @@ context_is_curr_fpu_context:
     lwz r3, OSContext.gpr[3](context)
     lwz context, OSContext.gpr[4](context)
     rfi
+#endif
     // clang-format on
 }
 
@@ -511,6 +529,7 @@ void __OSContextInit(void) {
 
 ASM void OSFillFPUContext(register OSContext* context) {
     // clang-format off
+#ifdef __MWERKS__
     nofralloc
 
     mfmsr r5
@@ -593,5 +612,6 @@ ASM void OSFillFPUContext(register OSContext* context) {
 
 exit:
     blr
+#endif
     // clang-format on
 }

@@ -412,7 +412,7 @@ void mDoGaC_agbCom_c::mDoGaC_ProbeCheck1() {
 /* 8001AFDC-8001B060       .text mDoGaC_CodeExchange0__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
     u8 sp8[16];
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20 | 0x08) {
 #else
@@ -428,7 +428,7 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange0() {
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
-        if (field_0x118 == *(u32*) VERSION_SELECT("GZLJ", "GZLE", "GZLP")) {
+        if (field_0x118 == *(u32*) VERSION_SELECT("GZLJ", "GZLJ", "GZLE", "GZLP")) {
             JUTGba::getManager()->doGetStatus(mDoGaC_getPortNo(), CodeExchange_2, NULL);
         } else {
             mDoGaC_GbaReboot();
@@ -442,7 +442,7 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange1() {
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange2() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20) {
-        field_0x114 = *(u32*) VERSION_SELECT("GZLJ", "GZLE", "GZLP");
+        field_0x114 = *(u32*) VERSION_SELECT("GZLJ", "GZLJ", "GZLE", "GZLP");
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, CodeExchange_3, NULL);
     } else {
         field_0x2 = 0;
@@ -462,7 +462,7 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange3() {
 /* 8001B1F8-8001B298       .text mDoGaC_CodeExchange4__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_CodeExchange4() {
     u8 sp8[16];
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x10 | 0x20) {
 #else
@@ -510,7 +510,7 @@ void mDoGaC_agbCom_c::mDoGaC_ContextSend() {
 /* 8001B3A8-8001B42C       .text mDoGaC_ContextRead__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_ContextRead() {
     u8 sp8[16];
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: Missing parentheses cause the second half of this condition to always evaluate to true on JPN.
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == 0x20 | 0x08) {
 #else

@@ -3,9 +3,11 @@
 // Translation Unit: d_a_switem.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_switem.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -34,11 +36,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 /* 00000078-00000080       .text _delete__10daSwItem_cFv */
@@ -66,7 +68,7 @@ BOOL daSwItem_c::CreateInit() {
 }
 
 /* 00000154-00000250       .text _create__10daSwItem_cFv */
-s32 daSwItem_c::_create() {
+cPhs_State daSwItem_c::_create() {
     fopAcM_SetupActor(this, daSwItem_c);
 
     if (!CreateInit()) {
@@ -178,7 +180,7 @@ bool daSwItem_c::_draw() {
 }
 
 /* 00000774-00000794       .text daSwItem_Create__FPv */
-static BOOL daSwItem_Create(void* i_this) {
+static cPhs_State daSwItem_Create(void* i_this) {
     return static_cast<daSwItem_c*>(i_this)->_create();
 }
 
@@ -220,7 +222,7 @@ actor_process_profile_definition g_profile_SW_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x013A,
+    /* Priority     */ PRIO_SW_ITEM,
     /* Actor SubMtd */ &daSwItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

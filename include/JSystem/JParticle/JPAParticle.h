@@ -23,9 +23,32 @@ class JPACallBackBase2;
 
 enum JPAParticleStatus {
     JPAPtclStts_FirstFrame = 0x01,
+    JPAPtclStts_Delete = 0x02,
     JPAPtlcStts_Child = 0x04,
     JPAPtclStts_Invisible = 0x08,
+    JPAPtclStts_UNK_10 = 0x10,
+    JPAPtclStts_UNK_20 = 0x20,
+    JPAPtclStts_UNK_40 = 0x40,
+    JPAPtclStts_UNK_80 = 0x80,
 };
+
+// fake name
+struct JPADrawParams {
+    /* 0x00 */ JGeometry::TVec3<f32> mAxis;
+    /* 0x0C */ f32 mScaleOut;
+    /* 0x10 */ f32 mScaleX;
+    /* 0x14 */ f32 mScaleY;
+    /* 0x18 */ u8 field_0x18[0x20 - 0x18];
+    /* 0x20 */ f32 mAlphaOut;
+    /* 0x24 */ f32 mAlphaWaveRandom;
+    /* 0x28 */ int mLoopOffset;
+    /* 0x2C */ GXColor mPrmColor;
+    /* 0x30 */ GXColor mEnvColor;
+    /* 0x34 */ u16 mRotateAngle;
+    /* 0x36 */ s16 mRotateSpeed;
+    /* 0x38 */ u8 field_0x38[0x3A - 0x38];
+    /* 0x3A */ u16 mTexIdx;
+};  // Size: 0x3C
 
 class JPABaseParticle {
 public:
@@ -44,6 +67,7 @@ public:
     void getOffsetPosition(JGeometry::TVec3<f32>& out) const { out.set(mOffsetPosition); }
     void getLocalPosition(JGeometry::TVec3<f32>& out) const { out.set(mLocalPosition); }
     void getGlobalPosition(JGeometry::TVec3<f32>& out) const { out.set(mGlobalPosition); }
+    void getVelVec(JGeometry::TVec3<f32>& out) const { out.set(mVelocity); }
     s32 getAge() const { return mCurFrame; } // TODO: Not sure about this one, especially the cast to s32; this could also be mCurNormTime?
     void calcCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->execute(emtr, this); }
     void drawCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->draw(emtr, this); }
@@ -53,16 +77,16 @@ public:
     void initStatus(u32 flag) { mStatus = flag; }
     void setStatus(u32 flag) { mStatus |= flag; }
     void clearStatus(u32 flag) { mStatus &= ~flag; }
+    void setDeleteParticleFlag() { setStatus(JPAPtclStts_Delete); }
     bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
     void setInvisibleParticleFlag() { setStatus(JPAPtclStts_Invisible); }
 
+    JPADrawParams* getDrawParamPPtr() { return &mDrawParams; }
     void getDrawParamCPtr() {}
-    void getDrawParamPPtr() {}
+
+    void getWidth() {}
     void getHeight() {}
     void getLifeTime() const {}
-    void getVelVec(JGeometry::TVec3<f32>&) const {}
-    void getWidth() {}
-    void setDeleteParticleFlag() {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;
@@ -81,20 +105,7 @@ public:
     /* 0x80 */ f32 mCurNormTime;
     /* 0x84 */ f32 mFieldDrag;
     /* 0x88 */ f32 mDrag;
-    /* 0x8C */ JGeometry::TVec3<f32> mAxis;
-    /* 0x98 */ f32 mScaleOut;
-    /* 0x9C */ f32 mScaleX;
-    /* 0xA0 */ f32 mScaleY;
-    /* 0xA4 */ u8 field_0xA4[0xAC - 0xA4];
-    /* 0xAC */ f32 mAlphaOut;
-    /* 0xB0 */ f32 mAlphaWaveRandom;
-    /* 0xB4 */ int mLoopOffset;
-    /* 0xB8 */ GXColor mPrmColor;
-    /* 0xBC */ GXColor mEnvColor;
-    /* 0xC0 */ u16 mRotateAngle;
-    /* 0xC2 */ s16 mRotateSpeed;
-    /* 0xC4 */ u16 field_0xC4;
-    /* 0xC6 */ u16 mTexIdx;
+    /* 0x8C */ JPADrawParams mDrawParams;
     /* 0xC8 */ JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* mpCallBack2;
     /* 0xCC */ u32 mStatus;
     /* 0xD0 */ u32 field_0xd0;

@@ -3,12 +3,14 @@
 // Translation Unit: d_a_fallrock_tag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
@@ -18,7 +20,7 @@ static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
 static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
@@ -27,7 +29,7 @@ static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static s32 daFallRockTag_Create(fopAc_ac_c*) {
+static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -59,7 +61,7 @@ actor_process_profile_definition g_profile_TagRock = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x018F,
+    /* Priority     */ PRIO_TagRock,
     /* Actor SubMtd */ &l_daFallRockTag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

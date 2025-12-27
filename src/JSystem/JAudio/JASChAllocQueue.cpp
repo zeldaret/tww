@@ -3,6 +3,8 @@
 // Translation Unit: JASChAllocQueue.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASChAllocQueue.h"
 #include "JSystem/JAudio/JASChannel.h"
 #include "JSystem/JAudio/JASChannelMgr.h"
@@ -25,7 +27,7 @@ void JASystem::TDSPQueue::deQueue() {
                 r31--;
                 continue;
             }
-            if (TDSPChannel::breakLower(channel->field_0x48)) {
+            if (TDSPChannel::breakLower(channel->getNoteOnPriority())) {
                 continue;
             }
             channel->field_0x28(channel, 6);

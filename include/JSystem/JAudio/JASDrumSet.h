@@ -5,7 +5,7 @@
 
 namespace JASystem {
     class TInstEffect;
-    class TInstParam;
+    struct TInstParam;
 
     class TDrumSet : public TInst {
     public:

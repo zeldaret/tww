@@ -3,12 +3,13 @@
 
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J2DGraph/J2DPicture.h"
+#include "SSystem/SComponent/c_bg_s_shdw_draw.h"
 #include "f_op/f_op_view.h"
 #include "m_Do/m_Do_ext.h"
 #include "SSystem/SComponent/c_rnd.h"
 #include "global.h"
 
-class ResTIMG;
+struct ResTIMG;
 class cM3dGPla;
 
 class dDlst_base_c {
@@ -210,6 +211,13 @@ public:
     void update(cXyz&, GXColor&, u16, u16, u16, u16, f32, f32, f32, f32);
     virtual void draw();
 
+    f32 getRndFX(f32 param_0) { return mRnd.getFX(param_0); }
+    f32 getRndValue(f32 param_0, f32 param_1) { return mRnd.getValue(param_0, param_1); }
+
+    void initRnd(int r0, int r1, int r2) {
+        mRnd.init(r0, r1, r2);
+    }
+
 public:
     /* 0x04 */ cM_rnd_c mRnd;
     /* 0x10 */ cXyz mPos;
@@ -238,7 +246,8 @@ public:
     void setScissor(f32, f32, f32, f32);
 
     view_port_class* getViewPort() { return &mViewport; }
-    s8 getCameraID() { return mCameraID; }
+    scissor_class* getScissor() { return &mViewport.mScissor; }
+    int getCameraID() { return mCameraID; }
     void setCameraID(int id) { mCameraID = id; }
     void setMode(int mode) { mMode = mode; }
 
@@ -324,7 +333,7 @@ class dKy_tevstr_c;
 class dDlst_shadowReal_c {
 public:
     void reset();
-    void imageDraw(f32 (*)[4]);
+    void imageDraw(Mtx);
     void draw();
     u32 set(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
     u32 set2(u32, s8, J3DModel*, cXyz*, f32, f32, dKy_tevstr_c*);
@@ -340,7 +349,7 @@ public:
     bool isUse() { return mState != 0; }
     bool checkKey(u32 i_key) { return mKey == i_key; }
 
-    enum { MODEL_MAX = 0x1A };
+    static const int MODEL_MAX = 0x1A;
 
 private:
     /* 0x0000 */ u8 mState;
@@ -351,7 +360,7 @@ private:
     /* 0x0008 */ Mtx mViewMtx;
     /* 0x0038 */ Mtx44 mRenderProjMtx;
     /* 0x0078 */ Mtx mReceiverProjMtx;
-    /* 0x00A8 */ void* mpTexData;
+    /* 0x00A8 */ u8* mpTexData;
     /* 0x00AC */ dDlst_shadowRealPoly_c mShadowRealPoly;
     /* 0x24B4 */ GXTexObj mTexObj;
     /* 0x24D4 */ J3DDrawBuffer* mpDrawBuffer;
@@ -385,10 +394,30 @@ private:
 
 STATIC_ASSERT(sizeof(dDlst_shadowControl_c) == 0x15E28);
 
+class ShdwDrawPoly_c : public cBgS_ShdwDraw {
+public:
+    virtual ~ShdwDrawPoly_c() {}
+
+    void setCenter(cXyz* center) { mCenter = center; }
+    cXyz* getCenter() { return mCenter; }
+    void setLightVec(cXyz* lightVec) { mLightVec = lightVec; }
+    cXyz* getLightVec() { return mLightVec; }
+    void setPoly(dDlst_shadowPoly_c* poly) { mPoly = poly; }
+    dDlst_shadowPoly_c* getPoly() { return mPoly; }
+
+    /* 0x34 */ cXyz* mCenter;
+    /* 0x38 */ cXyz* mLightVec;
+    /* 0x3C */ dDlst_shadowPoly_c* mPoly;
+};  // Size: 0x40
+
 class dDlst_mirrorPacket : public J3DPacket {
 public:
     void init(ResTIMG*);
+#if VERSION == VERSION_DEMO
+    void update(Mtx, u8);
+#else
     void update(Mtx, u8, f32);
+#endif
     virtual void draw();
 
     /* 0x0010 */ u8 field_0x0010[0x0040 - 0x0010];
@@ -402,7 +431,7 @@ public:
 
 struct view_port_class;
 struct view_class;
-struct camera_class;
+class camera_class;
 
 struct dDlst_alphaModelData_c {
 public:
@@ -551,9 +580,9 @@ public:
     void drawXluListInvisible() { drawXluDrawList(mpXluListInvisible); }
     void drawOpaList2D() { drawOpaDrawList(mpOpaList2D); }
 
-    int setSimpleShadow(cXyz* i_pos, f32 param_1, f32 param_2, cXyz* param_3, s16 i_angle,
+    int setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm, s16 i_angle,
                         f32 param_5, GXTexObj* i_tex) {
-        return mShadowControl.setSimple(i_pos, param_1, param_2, param_3, i_angle, param_5,
+        return mShadowControl.setSimple(i_pos, groundY, param_2, floor_nrm, i_angle, param_5,
                                         i_tex);
     }
     int setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,

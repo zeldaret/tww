@@ -12,6 +12,7 @@
 
 enum dCcD_ObjAtType {
     /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
+    /* 0x00000008 */ AT_TYPE_UNK8           = (1 << 3),
     /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
     /* 0x00000040 */ AT_TYPE_BOOMERANG      = (1 << 6),
     /* 0x00000080 */ AT_TYPE_BOKO_STICK     = (1 << 7),
@@ -19,7 +20,7 @@ enum dCcD_ObjAtType {
     /* 0x00000200 */ AT_TYPE_FIRE           = (1 << 9),
     /* 0x00000400 */ AT_TYPE_MACHETE        = (1 << 10),
     /* 0x00000800 */ AT_TYPE_UNK800         = (1 << 11),
-    /* 0x00001000 */ AT_TYPE_UNK1000        = (1 << 12),
+    /* 0x00001000 */ AT_TYPE_SPIKE          = (1 << 12),
     /* 0x00002000 */ AT_TYPE_UNK2000        = (1 << 13),
     /* 0x00004000 */ AT_TYPE_NORMAL_ARROW   = (1 << 14),
     /* 0x00008000 */ AT_TYPE_HOOKSHOT       = (1 << 15),
@@ -41,41 +42,42 @@ enum dCcD_ObjAtType {
 };
 
 enum dCcG_AtSPrm_e {
-    dCcG_AtSPrm_NoConHit_e         = 1 << 0,
-    dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
-    dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
-    dCcG_AtSPrm_NoMass_e           = 1 << 3,
+    /* 0x01 */ dCcG_AtSPrm_NoConHit_e         = 1 << 0,
+    /* 0x02 */ dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
+    /* 0x04 */ dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
+    /* 0x08 */ dCcG_AtSPrm_NoMass_e           = 1 << 3,
 };
 
 enum dCcG_AtRPrm_e {
-    dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
-    dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
+    /* 0x01 */ dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
+    /* 0x02 */ dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
 };
 
 enum dCcG_TgSPrm_e {
-    dCcG_TgSPrm_Shield_e           = 1 << 0,
-    dCcG_TgSPrm_NoConHit_e         = 1 << 1,
-    dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
-    dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
+    /* 0x01 */ dCcG_TgSPrm_Shield_e           = 1 << 0,
+    /* 0x02 */ dCcG_TgSPrm_NoConHit_e         = 1 << 1,
+    /* 0x04 */ dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
+    /* 0x08 */ dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
 };
 
 enum dCcG_TgRPrm_e {
-    dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
-    dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
+    /* 0x01 */ dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x02 */ dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
 };
 
 enum dCcG_CoSPrm_e {
-    dCcG_CoSPrm_AtLasso_e          = 1 << 0,
-    dCcG_CoSPrm_TgLasso_e          = 1 << 1,
+    /* 0x01 */ dCcG_CoSPrm_AtLasso_e          = 1 << 0,
+    /* 0x02 */ dCcG_CoSPrm_TgLasso_e          = 1 << 1,
 };
 
 enum dCcG_CoRPrm_e {
-    dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x01 */ dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
 };
 
 enum dCcG_hitSe {
     /* 0x01 */ dCcG_SE_UNK1 = 1,
     /* 0x02 */ dCcG_SE_UNK2 = 2,
+    /* 0x03 */ dCcG_SE_UNK3 = 3,
     /* 0x04 */ dCcG_SE_UNK4 = 4,
     /* 0x05 */ dCcG_SE_UNK5 = 5,
     /* 0x06 */ dCcG_SE_UNK6 = 6,
@@ -86,27 +88,38 @@ enum dCcG_hitSe {
 };
 
 enum CcG_At_HitMark {
-    /* 0x0 */ dCcG_AtHitMark_None_e = 0,
-    /* 0x1 */ dCcG_AtHitMark_Unk1_e = 1,
+    /* 0x0 */ dCcG_AtHitMark_None_e = dPa_name::ID_NONE,
+    /* 0x1 */ dCcG_AtHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xD */ dCcG_AtHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
     /* 0xF */ dCcG_AtHitMark_Big_e = dPa_name::ID_COMMON_BIG_HIT,
 };
 
 enum CcG_Tg_HitMark {
-    /* 0x1 */ dCcG_TgHitMark_Unk1_e = 1,
+    /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
+    /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
+    /* 0xFF */ dCcG_TgHitMark_Unk255_e = 0xFF,
 };
 
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0x2 */ dCcG_At_Spl_UNK2 = 2,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
+    /* 0x4 */ dCcG_At_Spl_UNK4 = 4,
+    /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
+    /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
+    /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
+    /* 0xA */ dCcG_At_Spl_UNKA = 0xA,
     /* 0xB */ dCcG_At_Spl_UNKB = 0xB,
 };
 
-enum dCcG_Tg_Spl {};
+enum dCcG_Tg_Spl {
+    /* 0x0 */ dCcG_Tg_Spl_UNK0 = 0,
+    /* 0x1 */ dCcG_Tg_Spl_UNK1 = 1,
+};
 
 struct dCcD_SrcGAtTgCoCommonBase {
     /* 0x0 */ u32 mSPrm;
@@ -170,13 +183,14 @@ public:
 
     void Ct();
     void Move();
-    void ClrAt() { mAtSpl = 0; }
-    void ClrTg() { mTgSpl = 0; }
+    void ClrAt() { mAtSpl = dCcG_At_Spl_UNK0; }
+    void ClrTg() { mTgSpl = dCcG_Tg_Spl_UNK0; }
     void SetAtApid(fpc_ProcID id) { mAtApid = id; }
     void SetTgApid(fpc_ProcID id) { mTgApid = id; }
     u8 GetRoomId() { return mRoomId; }
     void SetRoomId(int id) { mRoomId = id; }
     fpc_ProcID GetAtOldApid() { return mAtOldApid; }
+    fpc_ProcID GetTgApid() { return mTgApid; }
     fpc_ProcID GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return mFlag & 1; }
     bool ChkNoneActorPerfTblId() { return mActorPerfTblId == 0xFFFF; }
@@ -197,6 +211,8 @@ public:
     /* 0x18 */ fpc_ProcID mTgOldApid;
     /* 0x1C */ u32 mFlag;
 };  // Size = 0x20
+
+STATIC_ASSERT(sizeof(dCcD_GStts) == 0x20);
 
 class dCcD_Stts : public cCcD_Stts, public dCcD_GStts {
 public:
@@ -220,6 +236,8 @@ public:
     /* 0x18 */ /* vtable */
     /* 0x1C */ /* dCcD_GStts */
 };  // Size = 0x3C
+
+STATIC_ASSERT(sizeof(dCcD_Stts) == 0x3C);
 
 class dCcD_GObjInf;
 typedef void (*dCcD_HitCallback)(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
@@ -345,6 +363,7 @@ private:
 // Correction (Co) Collider
 class dCcD_GObjCo : public dCcD_GAtTgCoCommonBase {
 public:
+    /* 0x00 */ /* dCcD_GAtTgCoCommonBase */
     virtual ~dCcD_GObjCo() {}
     void Set(dCcD_SrcGObjCo const& pSrc) { dCcD_GAtTgCoCommonBase::Set(pSrc.mBase); }
     void ClrHit() { ClrActorInfo(); }
@@ -357,7 +376,7 @@ public:
     virtual ~dCcD_GObjInf();
     virtual cCcD_GObjInf* GetGObjInf();
     virtual void ClrAtHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkAtHit();
 #endif
     void ResetAtHit();
@@ -365,7 +384,7 @@ public:
     cCcD_GObjInf* GetAtHitGObj();
     u8 ChkAtNoGuard();
     virtual void ClrTgHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkTgHit();
 #endif
     void ResetTgHit();
@@ -373,7 +392,7 @@ public:
     dCcD_GObjInf* GetTgHitGObj();
     u8 GetTgHitObjSe();
     virtual void ClrCoHit();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     u32 ChkCoHit();
 #endif
     void ResetCoHit();
@@ -423,6 +442,8 @@ public:
     bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OnTgShieldFrontRange() { mGObjTg.OnSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OffTgShieldFrontRange() { mGObjTg.OffSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
+    void OnAtStopNoConHit() { mGObjAt.OnSPrm(dCcG_AtSPrm_StopNoConHit_e); }
+    void OffAtStopNoConHit() { mGObjAt.OffSPrm(dCcG_AtSPrm_StopNoConHit_e); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
     bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_AtLasso_e); }
     bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_TgLasso_e); }
@@ -466,6 +487,7 @@ public:
     cXyz* GetTgHitPosP() { return mGObjTg.GetHitPosP(); }
 
 protected:
+    /* 0x000 */ /* cCcD_GObjInf */
     /* 0x050 */ dCcD_GObjAt mGObjAt;
     /* 0x094 */ dCcD_GObjTg mGObjTg;
     /* 0x0DC */ dCcD_GObjCo mGObjCo;
@@ -480,7 +502,7 @@ public:
     /* 0xF8 */ /* cCcD_CylAttr */
 
     void Set(dCcD_SrcCyl const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     void StartCAt(cXyz&);
     void StartCTg(cXyz&);
     void MoveCAtTg(cXyz&);
@@ -490,9 +512,14 @@ public:
     dCcD_Cyl() {}
 };  // Size = 0x130
 
+STATIC_ASSERT(sizeof(dCcD_Cyl) == 0x130);
+
 // Sphere
 class dCcD_Sph : public dCcD_GObjInf, public cCcD_SphAttr {
 public:
+    /* 0x000 */ /* dCcD_GObjInf */
+    /* 0x0F8 */ /* cCcD_SphAttr */
+
     dCcD_Sph() {}
     void Set(dCcD_SrcSph const&);
     void StartCAt(cXyz&);
@@ -508,7 +535,7 @@ public:
     /* 0xF8 */ /* cCcD_CpsAttr */
 
     void Set(dCcD_SrcCps const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
     void CalcAtVec() {
         cXyz* atVecP = GetAtVecP();
         CalcVec(atVecP);
@@ -521,11 +548,14 @@ public:
 // Triangle
 class dCcD_Tri : public dCcD_GObjInf, public cCcD_TriAttr {
 public:
+    /* 0x00 */ /* dCcD_GObjInf */
+    /* 0xF8 */ /* cCcD_TriAttr */
+
     void Set(dCcD_SrcTri const&);
-    cCcD_ShapeAttr* GetShapeAttr() { return this; }
+    virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
-};
+};  // Size: 0x150
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);
 

@@ -17,7 +17,7 @@ public:
     BOOL otherCheck(fopAc_ac_c*);
     void demoProc();
     void demoInitProc();
-    s32 create();
+    cPhs_State create();
 
 public:
     /* 0x290 */ u8 mAction;

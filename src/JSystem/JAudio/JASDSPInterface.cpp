@@ -3,6 +3,8 @@
 // Translation Unit: JASDSPInterface.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASDriverTables.h"
@@ -77,8 +79,8 @@ void JASystem::DSPInterface::initBuffer() {
 }
 
 /* 8028A368-8028A378       .text getFXHandle__Q28JASystem12DSPInterfaceFUc */
-JASystem::DSPInterface::FXBuffer* JASystem::DSPInterface::getFXHandle(u8 param_1) {
-    return FX_BUF + param_1;
+JASystem::DSPInterface::FXBuffer* JASystem::DSPInterface::getFXHandle(u8 i) {
+    return &FX_BUF[i];
 }
 
 u16 JASystem::DSPInterface::SEND_TABLE[] = {

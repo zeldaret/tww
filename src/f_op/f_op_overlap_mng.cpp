@@ -29,7 +29,7 @@ int fopOvlpM_SceneIsStart() {
     }
 }
 
-int fopOvlpM_IsOutReq(overlap_task_class* pTaskClass) {
+BOOL fopOvlpM_IsOutReq(overlap_task_class* pTaskClass) {
     return pTaskClass->mRq.flag2 == 2;
 }
 
@@ -42,33 +42,33 @@ void fopOvlpM_ToldAboutID(fpc_ProcID pcId) {
         l_fopOvlpM_overlap[0]->mpTask->mScenePId = pcId;
 }
 
-int fopOvlpM_IsPeek() {
+BOOL fopOvlpM_IsPeek() {
     if (l_fopOvlpM_overlap[0] != NULL)
         return l_fopOvlpM_overlap[0]->mIsPeek;
     else
-        return 0;
+        return FALSE;
 }
 
-int fopOvlpM_IsDone() {
+BOOL fopOvlpM_IsDone() {
     if (l_fopOvlpM_overlap[0] != NULL)
-        return cReq_Is_Done(l_fopOvlpM_overlap[0]);
+        return cReq_Is_Done(&l_fopOvlpM_overlap[0]->base);
     else
-        return 0;
+        return FALSE;
 }
 
-int fopOvlpM_IsDoingReq() {
+BOOL fopOvlpM_IsDoingReq() {
     if (l_fopOvlpM_overlap[0] && l_fopOvlpM_overlap[0]->field_0x4 == 1) {
-        return 1;
+        return TRUE;
     }
 
-    return 0;
+    return FALSE;
 }
 
-int fopOvlpM_ClearOfReq() {
+BOOL fopOvlpM_ClearOfReq() {
     if (l_fopOvlpM_overlap[0] != NULL)
         return fopOvlpReq_OverlapClr(l_fopOvlpM_overlap[0]);
     else
-        return 0;
+        return FALSE;
 }
 
 static overlap_request_class l_fopOvlpM_Request;
@@ -76,7 +76,7 @@ static overlap_request_class l_fopOvlpM_Request;
 request_base_class* fopOvlpM_Request(s16 procName, u16 peekTime) {
     if (l_fopOvlpM_overlap[0] == NULL) {
         l_fopOvlpM_overlap[0] = fopOvlpReq_Request(&l_fopOvlpM_Request, procName, peekTime);
-        return l_fopOvlpM_overlap[0];
+        return &l_fopOvlpM_overlap[0]->base;
     }
 
     return NULL;

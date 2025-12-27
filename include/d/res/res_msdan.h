@@ -1,7 +1,7 @@
 #ifndef RES_MSDAN_H
 #define RES_MSDAN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MSDAN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

@@ -31,8 +31,8 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
-
+    // s32
+    cPhs_State _create();
     
 public:
     /* 0x6c4 */ ActionFunc func;

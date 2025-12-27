@@ -3,7 +3,9 @@
 // Translation Unit: d_shop.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_shop.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_actor_mng.h"
@@ -994,9 +996,9 @@ int ShopCam_action_c::ds_normal_cam_action() {
 void ShopCam_action_c::Save() {
     camera_class* camera = dComIfGp_getCamera(0);
     if (camera) {
-        mOrigCenter = camera->mLookat.mCenter;
-        mOrigEye = camera->mLookat.mEye;
-        mOrigFovy = camera->mFovy;
+        mOrigCenter = *fopCamM_GetCenter_p(camera);
+        mOrigEye = *fopCamM_GetEye_p(camera);
+        mOrigFovy = fopCamM_GetFovy(camera);
     }
 }
 
@@ -1006,7 +1008,7 @@ void ShopCam_action_c::Reset() {
     camera->mCamera.Set(mOrigCenter, mOrigEye, mOrigFovy, 0);
     camera->mCamera.Stay();
     camera->mCamera.Reset(mOrigCenter, mOrigEye, mOrigFovy, 0);
-    setCamAction(NULL);
+    mCurrActionFunc = NULL;
 }
 
 /* 8005F6C4-8005F708       .text move__16ShopCam_action_cFv */
@@ -1027,8 +1029,8 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
             Item_set_pos_data_tbl[mItemSetListGlobalIdx][0].z
         );
         
-        dComIfGs_isEventBit(0x0D04);
-        dComIfGs_isEventBit(0x0D02);
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D04);
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D02);
         
         mItemActorProcessIds[0] = fopAcM_createShopItem(
             &pos, Item_set_data_tbl[mItemSetListGlobalIdx][0]->mpItemData->mItemNo,
@@ -1036,7 +1038,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
         );
         pos.x += 75.0f;
         
-        if (dComIfGs_isEventBit(0x0D04)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D04)) {
             mItemActorProcessIds[1] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][1]->mpItemData->mItemNo,
                 &angle, roomNo
@@ -1044,7 +1046,7 @@ void ShopItems_c::createItem(int numItems, int roomNo) {
             pos.x += 75.0f;
         }
         
-        if (dComIfGs_isEventBit(0x0D02)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0D02)) {
             mItemActorProcessIds[2] = fopAcM_createShopItem(
                 &pos, Item_set_data_tbl[mItemSetListGlobalIdx][2]->mpItemData->mItemNo,
                 &angle, roomNo
@@ -1073,10 +1075,12 @@ BOOL ShopItems_c::Item_Select(int idx) {
         temp -= item->getCenter();
         if (m3C == 1) {
             cXyz temp3 = temp - temp2;
-            cLib_addCalcPos2(pPos, temp, 0.5f, temp3.abs() * 0.05f);
+            f32 f2 = temp3.abs() * 0.05f;
+            cLib_addCalcPos2(pPos, temp, 0.5f, f2);
         } else {
             cXyz temp3 = temp - temp2;
-            cLib_addCalcPos2(pPos, temp2, 0.5f, temp3.abs() * 0.1f);
+            f32 f2 = temp3.abs() * 0.1f;
+            cLib_addCalcPos2(pPos, temp2, 0.5f, f2);
         }
         pAngle->y += 0x400;
         return TRUE;
@@ -1337,7 +1341,8 @@ BOOL dShop_maxCheck(int itemNo, int) {
 
 /* 8006044C-800606A8       .text dShop_BoughtErrorStatus__FP11ShopItems_cii */
 u8 dShop_BoughtErrorStatus(ShopItems_c* shopItems, int param_2, int param_3) {
-    ShopItems_c__ItemData* itemData = shopItems->mpItemSetList[shopItems->mSelectedItemIdx]->mpItemData;
+    s16 selectedItemIdx = shopItems->mSelectedItemIdx;
+    ShopItems_c__ItemData* itemData = shopItems->mpItemSetList[selectedItemIdx]->mpItemData;
     u8 buyCond = itemData->mBuyConditions;
     u32 itemNo = itemData->mItemNo;
     u8 errorStatus = 0x00;
@@ -1409,7 +1414,7 @@ ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f3
     }
     
     mpBrkData = brkData;
-    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if (!mBrkAnm.init(modelData, mpBrkData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         mpBrkData = NULL;
     }
     
@@ -1418,8 +1423,10 @@ ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f3
     m40 = m38;
     m44 = 15;
     m48 = param_2;
+#if VERSION > VERSION_DEMO
     m4C = 1.0f;
     m50 = 1.0f;
+#endif
     m54 = 0;
 }
 
@@ -1428,8 +1435,7 @@ void ShopCursor_c::anm_play() {
     mBrkAnm.play();
     if (m44-- <= 0) {
         m44 = 15 + (s16)cM_rndF(5.0f);
-        f32 temp = (m38 + m3C) * 0.5f;
-        if (m40 > temp) {
+        if (m40 > (m38 + m3C) * 0.5f) {
             m40 = m3C;
         } else {
             m40 = m38;
@@ -1440,16 +1446,15 @@ void ShopCursor_c::anm_play() {
 /* 80060960-80060B2C       .text draw__12ShopCursor_cFv */
 void ShopCursor_c::draw() {
     camera_class* camera = dComIfGp_getCamera(0);
-    s16 angleY = cLib_targetAngleY(&camera->mLookat.mCenter, &camera->mLookat.mEye);
-    s16 angleX = -cLib_targetAngleX(&camera->mLookat.mCenter, &camera->mLookat.mEye);
+    s16 angleY = cLib_targetAngleY(fopCamM_GetCenter_p(camera), fopCamM_GetEye_p(camera));
+    s16 angleX = -cLib_targetAngleX(fopCamM_GetCenter_p(camera), fopCamM_GetEye_p(camera));
     
     if (m54 == 0) {
         return;
     }
     
     f32 temp2;
-    f32 temp = (m38 + m3C) * 0.5f;
-    if (m40 > temp) {
+    if (m40 > (m38 + m3C) * 0.5f) {
         temp2 = m4C;
     } else {
         temp2 = m50;

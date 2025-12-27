@@ -1,6 +1,7 @@
 #include "dolphin/gba/GBAPriv.h"
+#include "dolphin/si/SIBios.h"
 
-static void __GBAHandler(s32 chan, u32 error, OSContext* context) {
+void __GBAHandler(s32 chan, u32 error, OSContext* context) {
     GBAControl* gba;
     GBATransferCallback proc;
     GBACallback callback;
@@ -12,9 +13,9 @@ static void __GBAHandler(s32 chan, u32 error, OSContext* context) {
     }
 
     if ((error & 0xf)) {
-        gba->ret = 1;
+        gba->ret = GBA_NOT_READY;
     } else {
-        gba->ret = 0;
+        gba->ret = GBA_READY;
     }
 
     if (gba->proc != NULL) {

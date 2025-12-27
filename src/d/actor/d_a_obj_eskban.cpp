@@ -3,14 +3,13 @@
 // Translation Unit: d_a_obj_eskban.cpp
 //
 
-#include "d/d_procname.h"
-#include "d/d_com_inf_game.h"
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eskban.h"
 #include "d/res/res_eskban.h"
+#include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjEskban {
 Mtx Act_c::M_tmp_mtx;
@@ -108,7 +107,7 @@ static dCcD_SrcSph sph_check_src = {
 };
 
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */
-int daObjEskban::Act_c::CreateHeap() {
+BOOL daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
         static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
     JUT_ASSERT(261, model_data != NULL);
@@ -119,7 +118,7 @@ int daObjEskban::Act_c::CreateHeap() {
 }
 
 /* 000001FC-00000368       .text Create__Q211daObjEskban5Act_cFv */
-int daObjEskban::Act_c::Create() {
+BOOL daObjEskban::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -500, -1, -500, 500, 500, 500);
@@ -147,8 +146,8 @@ int daObjEskban::Act_c::Create() {
 }
 
 /* 000003A4-000004D0       .text Mthd_Create__Q211daObjEskban5Act_cFv */
-s32 daObjEskban::Act_c::Mthd_Create() {
-    s32 phase_state;
+cPhs_State daObjEskban::Act_c::Mthd_Create() {
+    cPhs_State phase_state;
     fopAcM_SetupActor(this, Act_c);
     M_smoke = NULL;
 
@@ -169,7 +168,7 @@ daObjEskban::Act_c::Act_c() {}
 /* 000009C0-00000A10       .text Delete__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::Delete() {
     if (M_smoke) {
-        M_smoke->end();
+        M_smoke->remove();
         M_smoke = NULL;
     }
     return TRUE;
@@ -179,7 +178,7 @@ BOOL daObjEskban::Act_c::Delete() {
 BOOL daObjEskban::Act_c::Mthd_Delete() {
     s32 result = MoveBGDelete();
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, M_arcname);
+        dComIfG_resDeleteDemo(&mPhs, M_arcname);
     }
     return result;
 }
@@ -243,8 +242,8 @@ void daObjEskban::Act_c::eff_b_break(u16 particleID) {
 
 /* 00000D44-00000EF0       .text daObjEskban_effect_set__Q211daObjEskban5Act_cFv */
 void daObjEskban::Act_c::daObjEskban_effect_set() {
-    eff_m_break(0x82b1, 2);
-    eff_b_break(0x82b2);
+    eff_m_break(dPa_name::ID_SCENE_82B1, 2);
+    eff_b_break(dPa_name::ID_SCENE_82B2);
 
     static cXyz offset_vec(0, 250, 0);
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
@@ -252,7 +251,7 @@ void daObjEskban::Act_c::daObjEskban_effect_set() {
     if (!M_smoke) {
         return;
     }
-    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(0x2027, &mSmokePos, NULL, NULL, 0xc8,
+    JPABaseEmitter* pBEmtr = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mSmokePos, NULL, NULL, 0xc8,
                                                        M_smoke, -1, NULL, NULL, NULL);
     if (!pBEmtr) {
         return;
@@ -267,7 +266,7 @@ void daObjEskban::Act_c::daObjEskban_effect_set() {
 }
 
 /* 00000EF0-00001400       .text Execute__Q211daObjEskban5Act_cFPPA3_A4_f */
-int daObjEskban::Act_c::Execute(Mtx** pMtx) {
+BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
     dComIfG_Ccsp()->Set(&mCheckCyl);
     dComIfG_Ccsp()->Set(&mCameraCyl);
     dComIfG_Ccsp()->Set(&mCheckSph);
@@ -276,7 +275,7 @@ int daObjEskban::Act_c::Execute(Mtx** pMtx) {
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
             if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
-                cXyz dist = fopAcM_GetPosition(hitAct) - fopAcM_GetPosition(this);
+                cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
                     dist *= 10;
@@ -389,28 +388,28 @@ BOOL daObjEskban::Act_c::Draw() {
 namespace daObjEskban {
 namespace {
 /* 000014B4-000014D4       .text Mthd_Create__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Create(void* i_this) {
-    ((Act_c*)i_this)->Mthd_Create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Create();
 }
 
 /* 000014D4-000014F4       .text Mthd_Delete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Delete(void* i_this) {
-    ((Act_c*)i_this)->Mthd_Delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000014F4-00001514       .text Mthd_Execute__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Execute(void* i_this) {
-    ((Act_c*)i_this)->MoveBGExecute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001514-00001540       .text Mthd_Draw__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_Draw(void* i_this) {
-    ((Act_c*)i_this)->MoveBGDraw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00001540-0000156C       .text Mthd_IsDelete__Q211daObjEskban28@unnamed@d_a_obj_eskban_cpp@FPv */
-void Mthd_IsDelete(void* i_this) {
-    ((Act_c*)i_this)->MoveBGIsDelete();
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Eskban = {
@@ -433,7 +432,7 @@ actor_process_profile_definition g_profile_Obj_Eskban = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x007A,
+    /* Priority     */ PRIO_Obj_Eskban,
     /* Actor SubMtd */ &daObjEskban::Mthd_Eskban,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

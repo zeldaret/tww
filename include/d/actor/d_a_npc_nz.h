@@ -50,7 +50,7 @@ public:
     BOOL createInit();
     void setSmokeParticle();
     void getArg();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     BOOL _searchEsa(fopAc_ac_c*);
     void cutProc();
@@ -110,31 +110,5 @@ public:
     /* 0xA8C */ u32 field_0xA8C;
     /* 0xA90 */ s16 field_0xA90;
 }; // Size: 0xA92
-
-class daNpc_Nz_HIO_c : public JORReflexible {
-public:
-    daNpc_Nz_HIO_c();
-    virtual ~daNpc_Nz_HIO_c() {}
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x00 - vtable */
-    /* 0x04 */ s8 field_0x04;
-    /* 0x06 */ s16 field_0x06;
-    /* 0x08 */ s16 field_0x08;
-    /* 0x0A */ s16 field_0x0A;
-    /* 0x0C */ s16 field_0x0C;
-    /* 0x0E */ s16 field_0x0E;
-    /* 0x10 */ s16 field_0x10;
-    /* 0x12 */ s16 field_0x12;
-    /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ s16 field_0x18;
-    /* 0x1A */ s8 field_0x1A;
-    /* 0x1C */ f32 field_0x1C;
-    /* 0x20 */ f32 field_0x20;
-    /* 0x24 */ f32 field_0x24;
-}; // Size: 0x28
 
 #endif /* D_A_NPC_NZ_H */

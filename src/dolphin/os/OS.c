@@ -7,6 +7,8 @@
 #include "dolphin/db/db.h"
 #include "dolphin/pad/Pad.h"
 #include "dolphin/dvd/dvdfs.h"
+#include "dolphin/si/SIBios.h"
+#include <string.h>
 // #include "TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.h"
 
 #define OS_BI2_DEBUG_ADDRESS 0x800000F4
@@ -45,6 +47,7 @@ extern f64 ZeroF;
 f64 ZeroF;
 
 ASM void __OSFPRInit(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -128,6 +131,7 @@ skip_ps_init:
     mtfsf 0xff, f0
     blr
     // clang-format on
+#endif
 }
 
 static void DisableWriteGatherPipe(void)
@@ -173,15 +177,15 @@ static void ClearArena(void) {
 
     if ((u32)OSGetArenaLo() < *(u32*)&__OSSavedRegionStart) {
         if ((u32)OSGetArenaHi() <= *(u32*)&__OSSavedRegionStart) {
-            memset((u32)OSGetArenaLo(), 0U, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
+            memset(OSGetArenaLo(), 0U, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
             return;
         }
 
         memset(OSGetArenaLo(), 0U, *(u32*)&__OSSavedRegionStart - (u32)OSGetArenaLo());
 
         if ((u32)OSGetArenaHi() > *(u32*)&__OSSavedRegionEnd) {
-            memset(*(u32*)&__OSSavedRegionEnd, 0,
-                   (u32)OSGetArenaHi() - *(u32*)&__OSSavedRegionEnd);
+            memset(__OSSavedRegionEnd, 0,
+                   (u8*)OSGetArenaHi() - (u8*)__OSSavedRegionEnd);
         }
     }
 }
@@ -452,6 +456,7 @@ static void OSExceptionInit(void) {
 }
 
 ASM void __OSDBIntegrator(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -477,6 +482,7 @@ entry __OSDBJUMPSTART
     bla 0x60
 entry __OSDBJUMPEND
     // clang-format on
+#endif
 }
 
 OSExceptionHandler __OSSetExceptionHandler(__OSException exception, OSExceptionHandler handler) {
@@ -490,6 +496,7 @@ OSExceptionHandler __OSGetExceptionHandler(__OSException exception) {
 }
 
 static ASM void OSExceptionVector(void) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -571,10 +578,12 @@ recoverable:
 entry __OSEVEnd
     nop
     // clang-format on
+#endif
 }
 
 static ASM void OSDefaultExceptionHandler(register __OSException exception,
                                           register OSContext* context) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -603,9 +612,11 @@ static ASM void OSDefaultExceptionHandler(register __OSException exception,
     stwu r1, -8(r1)
     b __OSUnhandledException
     // clang-format on
+#endif
 }
 
 ASM void __OSPSInit(void){
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -626,6 +637,7 @@ ASM void __OSPSInit(void){
     mtlr r0
     blr
     // clang-format on
+#endif
 }
 
 vu32 __DIRegs[16] AT_ADDRESS(0xCC006000);

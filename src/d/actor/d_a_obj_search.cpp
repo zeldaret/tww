@@ -3,8 +3,42 @@
 // Translation Unit: d_a_obj_search.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_search.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCps cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+    }},
+};
+
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c*) {
@@ -147,7 +181,7 @@ void daObj_Search::Act_c::CreateInit() {
 }
 
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
-s32 daObj_Search::Act_c::_create() {
+cPhs_State daObj_Search::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -232,7 +266,7 @@ BOOL daObj_Search::Act_c::_isdelete() {
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-s32 daObj_Search::Mthd::Create(void*) {
+cPhs_State daObj_Search::Mthd::Create(void*) {
     /* Nonmatching */
 }
 
@@ -274,7 +308,7 @@ actor_process_profile_definition g_profile_OBJ_SEARCH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B2,
+    /* Priority     */ PRIO_OBJ_SEARCH,
     /* Actor SubMtd */ &daObj_Search::Mthd::Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

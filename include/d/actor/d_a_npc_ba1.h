@@ -11,7 +11,7 @@ public:
         
     };
 
-    void holdEventOn() {}
+    void holdEventOn() { mHoldEvent = 1; }
 
     void nodeBa1Control(J3DNode*, J3DModel*);
     void XyCheck_cB(int);
@@ -98,16 +98,21 @@ public:
     void wait_action4(void*);
     void demo();
     void shadowDraw();
-    bool _draw();
-    bool _execute();
-    bool _delete();
-    s32 _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
     void create_Anm();
     void create_itm_Mdl();
     void CreateHeap();
 
 public:
-    /* Place member variables here */
+    /* 0x290 */ u8 m290[0x7F8 - 0x290];
+#if VERSION > VERSION_JPN
+    /* 0x7F8 */ u8 m7F8;
+#endif
+    /* Offsets below are for USA/PAL */
+    /* 0x7F9 */ u8 mHoldEvent;
 };
 
 class daNpc_Ba1_HIO_c {

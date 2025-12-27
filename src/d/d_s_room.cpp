@@ -3,6 +3,8 @@
 // Translation Unit: d_s_room.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_s_room.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
 #include "f_op/f_op_actor_mng.h"
@@ -13,26 +15,12 @@
 #include "d/d_map.h"
 #include "d/d_procname.h"
 #include "d/d_stage.h"
-#include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "stdio.h"
-
-class room_of_scene_class : public scene_class {
-public:
-    /* 0x1C4 */ request_of_phase_process_class mPhs;
-    /* 0x1CC */ void * mpRoomData;
-    /* 0x1D0 */ dStage_roomDt_c * mpRoomDt;
-    /* 0x1D4 */ mDoDvdThd_toMainRam_c * sceneCommand;
-    /* 0x1D8 */ bool mbHasRoomParticle;
-    /* 0x1D9 */ bool mbReLoaded;
-    /* 0x1DA */ bool mbSetMap;
-    /* 0x1DB */ bool field_0x1db;
-    /* 0x1DC */ u16 field_0x1dc;
-};
 
 // Fake inline: An inline like this seems necessary for setMapImage to match, but it isn't in the debug maps.
 // TODO: Try to find a way to match setMapImage with real inlines.
@@ -136,15 +124,15 @@ static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 
     if (!dComIfGp_isEnableNextStage()) {
         if (i_this->field_0x1dc == 1) {
-            dComIfGs_onEventBit(0x1a80);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A80);
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
-            dComIfGs_offTmpBit(0x0320);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0320);
     }
 
     if (i_this->field_0x1dc == 2)
-        dComIfGs_onEventBit(0x1c40);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C40);
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0)
         daNpc_Md_c::offSeaTalk();
@@ -159,14 +147,14 @@ static BOOL dScnRoom_Delete(room_of_scene_class* i_this) {
 }
 
 /* 80236D24-80236D58       .text phase_0__FP19room_of_scene_class */
-s32 phase_0(room_of_scene_class* i_this) {
+cPhs_State phase_0(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
     dStage_roomControl_c::setStatusProcID(roomNo, fopScnM_GetID(i_this));
     return cPhs_NEXT_e;
 }
 
 /* 80236D58-80236DE8       .text phase_1__FP19room_of_scene_class */
-s32 phase_1(room_of_scene_class* i_this) {
+cPhs_State phase_1(room_of_scene_class* i_this) {
     s32 roomNo = fopScnM_GetParam(i_this);
     JKRExpHeap * pHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (pHeap != NULL && pHeap->getTotalUsedSize() != 0)
@@ -183,7 +171,7 @@ s32 phase_1(room_of_scene_class* i_this) {
 }
 
 /* 80236DE8-802370A0       .text phase_2__FP19room_of_scene_class */
-s32 phase_2(room_of_scene_class* i_this) {
+cPhs_State phase_2(room_of_scene_class* i_this) {
     const char * arcName = setArcName(i_this);
     s32 rt = dComIfG_syncStageRes(arcName);
     if (rt < 0) {
@@ -203,7 +191,7 @@ s32 phase_2(room_of_scene_class* i_this) {
     }
 
     i_this->mpRoomDt = dComIfGp_roomControl_getStatusRoomDt(roomNo);
-    i_this->mpRoomDt->mRoomNo = roomNo;
+    i_this->mpRoomDt->setRoomNo(roomNo);
     i_this->mpRoomData = dComIfG_getStageRes(arcName, "room.dzr");
 
     if (i_this->mpRoomData != NULL) {
@@ -211,7 +199,7 @@ s32 phase_2(room_of_scene_class* i_this) {
         if (dStage_roomControl_c::mDemoArcName[0] == '\0') {
             dStage_Lbnk_c * lbnk = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getLbnk();
             if (lbnk != NULL) {
-                u8 * banks = lbnk->m_bank;
+                u8* banks = lbnk->m_entries;
                 if (banks != NULL) {
                     u32 layerNo = dComIfG_play_c::getLayerNo(roomNo);
                     s32 bank = banks[layerNo];
@@ -236,7 +224,7 @@ s32 phase_2(room_of_scene_class* i_this) {
 }
 
 /* 802370B8-802371D0       .text phase_3__FP19room_of_scene_class */
-s32 phase_3(room_of_scene_class* i_this) {
+cPhs_State phase_3(room_of_scene_class* i_this) {
     if (dStage_roomControl_c::getDemoArcName()[0] != '\0') {
         s32 rt = dComIfG_syncObjectRes(dStage_roomControl_c::getDemoArcName());
         if (rt < 0) {
@@ -261,7 +249,7 @@ s32 phase_3(room_of_scene_class* i_this) {
 }
 
 /* 802371D0-802372C4       .text phase_4__FP19room_of_scene_class */
-s32 phase_4(room_of_scene_class* i_this) {
+cPhs_State phase_4(room_of_scene_class* i_this) {
     if (dComIfGp_getPlayer(0) == NULL)
         return cPhs_INIT_e;
 
@@ -278,16 +266,16 @@ s32 phase_4(room_of_scene_class* i_this) {
     // Bug? The game seems to set these flags for DRI even when you're not on the sea stage.
     // TODO: Look into this more.
     if (roomNo == dIsleRoom_DragonRoostIsland_e) {
-        dComIfGs_setEventReg(0xb8ff, 0);
-        if (dComIfGs_isEventBit(0x3f02))
-            dComIfGs_onEventBit(0x1580);
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_B8FF, 0);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F02))
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1580);
     }
 
     return cPhs_COMPLEATE_e;
 }
 
 /* 802372C4-802372F4       .text dScnRoom_Create__FP11scene_class */
-static s32 dScnRoom_Create(scene_class* i_scn) {
+static cPhs_State dScnRoom_Create(scene_class* i_scn) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_0,
         (cPhs__Handler)phase_1,
@@ -309,15 +297,14 @@ scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    fpcLy_CURRENT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_ROOM_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(room_of_scene_class),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnRoom_Method,
-    NULL,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_ROOM_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(room_of_scene_class),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnRoom_Method,
 };

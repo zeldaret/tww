@@ -12,7 +12,7 @@ s32 GBAGetProcessStatus(s32 chan, u8* percentp) {
     bootInfo = &__GBA[chan].bootInfo;
 
     if (gba->callback != NULL || bootInfo->callback != NULL) {
-        ret = 2;
+        ret = GBA_BUSY;
 
         if (bootInfo->callback != NULL) {
             percent = (bootInfo->curOffset * 100) / bootInfo->realLength;
@@ -32,7 +32,7 @@ s32 GBAGetProcessStatus(s32 chan, u8* percentp) {
             }
         }
     } else {
-        ret = 0;
+        ret = GBA_READY;
     }
 
     return ret;

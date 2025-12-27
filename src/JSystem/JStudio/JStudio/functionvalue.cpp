@@ -3,19 +3,14 @@
 // Translation Unit: functionvalue.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/functionvalue.h"
-#include "JSystem/JStudio/JStudio/functionvalue_weak.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JGadget/linklist.h"
 #include "dolphin/types.h"
 #include "math.h"
-#include "arith.h"
-
-namespace JGadget {
-template <typename Iterator, typename B1>
-// TODO
-Iterator findUpperBound_binary_current(Iterator, Iterator, Iterator, const B1&);
-};  // namespace JGadget
+#include "stdlib.h"
 
 namespace JStudio {
 
@@ -77,24 +72,25 @@ f64 interpolateValue_hermite(f64 c0, f64 c1, f64 x, f64 c2, f64 x2, f64 c3, f64 
 }
 
 /* 8027114C-802711B0       .text interpolateValue_BSpline_uniform__Q27JStudio13functionvalueFddddd */
-f64 interpolateValue_BSpline_uniform(f64 f1, f64 f2, f64 f3, f64 f4, f64 f5) {
-    /* Nonmatching - operand swap */
-    // pow3(1.0 - f1)
-    f64 f6 = (1.0 - f1);
-    f64 f0 = f6;
-    f0 = (f6 * f6) * f0;
-    f64 f8 = f0;
+f64 interpolateValue_BSpline_uniform(f64 interpolationFactor, f64 point2, f64 point3, f64 point4, f64 point5) {
+    f64 inverseInterpolationFactor = (1.0 - interpolationFactor);
+    f64 inverseInterpolationFactorSquared = inverseInterpolationFactor * inverseInterpolationFactor;
+    f64 inverseInterpolationFactorCubed = inverseInterpolationFactorSquared * inverseInterpolationFactor;
 
-    f64 f9 = f1 * f1;
-    f64 f10 = f9 * f1;
+    f64 interpolationFactorSquared = interpolationFactor * interpolationFactor;
+    f64 interpolationFactorCubed = interpolationFactorSquared * interpolationFactor;
 
-    f64 temp2 = ((1.0 / 6.0) + 0.5 * ((f1 + f9) - f10));
-    f64 temp3 = temp2 * f4;
+    f64 coefficient1 = inverseInterpolationFactorCubed;
 
-    f64 temp4 = ((0.5 * f10 - f9) + (2.0 / 3.0));
-    f64 temp5 = temp4 * f3;
+    f64 blendFactorForPoint3 = (1.0 / 2.0) * interpolationFactorCubed - interpolationFactorSquared + (2.0 / 3.0);
 
-    return temp5 + (f8 * f2 + f10 * f5) * (1.0 / 6.0) + temp3;
+    f64 blendFactorForPoint4 =
+        (1.0 / 2.0) * (interpolationFactor + interpolationFactorSquared - interpolationFactorCubed) + (1.0 / 6.0);
+
+    f64 coefficient2 = interpolationFactorCubed;
+
+    return ((coefficient1 * point2) + (coefficient2 * point5)) * (1.0 / 6.0) + (blendFactorForPoint3 * point3) +
+           (blendFactorForPoint4 * point4);
 }
 
 /* 802711B0-80271290       .text interpolateValue_BSpline_nonuniform__Q27JStudio13functionvalueFdPCdPCd */
@@ -239,7 +235,6 @@ TFunctionValueAttribute_range::TFunctionValueAttribute_range()
 
 /* 80271734-80271790       .text __ct__Q27JStudio24TFunctionValue_compositeFv */
 TFunctionValue_composite::TFunctionValue_composite() : pfn_(NULL), data((void*)NULL) {
-    /* Nonmatching - see TODO comment in allocator.h */
 }
 
 /* 80271790-80271798       .text getType__Q27JStudio24TFunctionValue_compositeCFv */
@@ -655,7 +650,7 @@ f64 TFunctionValue_list::update_INTERPOLATE_BSPLINE_dataMore3_(const TFunctionVa
 }
 
 /* 80272728-80272794       .text __ct__Q27JStudio29TFunctionValue_list_parameterFv */
-TFunctionValue_list_parameter::TFunctionValue_list_parameter() : pfData_(NULL), uData_(0), dat1(NULL), dat2(dat1), dat3(dat1), pfnUpdate_(NULL) {}
+TFunctionValue_list_parameter::TFunctionValue_list_parameter() : pfData_(NULL), uData_(0), dat1(*this, NULL), dat2(dat1), dat3(dat1), pfnUpdate_(NULL) {}
 
 /* 80272794-8027279C       .text getType__Q27JStudio29TFunctionValue_list_parameterCFv */
 u32 TFunctionValue_list_parameter::getType() const {
@@ -687,7 +682,7 @@ void TFunctionValue_list_parameter::initialize() {
     pfData_ = NULL;
     uData_ = 0;
 
-    TIterator_data_ iter(NULL);
+    TIterator_data_ iter(*this, NULL);
 
     dat1 = iter;
     dat2 = dat1;
@@ -725,7 +720,6 @@ void TFunctionValue_list_parameter::prepare() {
 
 /* 80272904-802729DC       .text getValue__Q27JStudio29TFunctionValue_list_parameterFd */
 f64 TFunctionValue_list_parameter::getValue(f64 pfData_) {
-    /* Nonmatching */
     pfData_ = range_getParameter(pfData_, data_getValue_front(), data_getValue_back());
     // JUT_ASSERT(1395, pfData_!=0)
 
@@ -840,7 +834,7 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(const T
 }
 
 /* 80272CB8-80272D38       .text __ct__Q27JStudio22TFunctionValue_hermiteFv */
-TFunctionValue_hermite::TFunctionValue_hermite() : pf_(NULL), u_(0), uSize_(0), dat1(*this, NULL), dat2(dat1), dat3(dat1) {}
+TFunctionValue_hermite::TFunctionValue_hermite() : pfData_(NULL), u_(0), uSize_(0), dat1(*this, NULL), dat2(dat1), dat3(dat1) {}
 
 /* 80272D38-80272D40       .text getType__Q27JStudio22TFunctionValue_hermiteCFv */
 u32 TFunctionValue_hermite::getType() const {
@@ -857,12 +851,12 @@ void TFunctionValue_hermite::data_set(const f32* pf, u32 u, u32 uSize) {
     ASSERT((pf != NULL) || (u == 0));
     ASSERT((uSize == 3) || (uSize == 4));
 
-    pf_ = pf;
+    pfData_ = pf;
     u_ = u;
     uSize_ = uSize;
 
-    dat1.set(pf_, uSize_);
-    dat2.set(&pf_[u_ * uSize_], uSize_);
+    dat1.set(pfData_, uSize_);
+    dat2.set(&pfData_[u_ * uSize_], uSize_);
     dat3 = dat1;
 }
 
@@ -870,7 +864,7 @@ void TFunctionValue_hermite::data_set(const f32* pf, u32 u, u32 uSize) {
 void TFunctionValue_hermite::initialize() {
     range_initialize();
 
-    pf_ = NULL;
+    pfData_ = NULL;
     u_ = 0;
     uSize_ = 0;
 
@@ -887,7 +881,6 @@ void TFunctionValue_hermite::prepare() {
 
 /* 80272E40-80272F64       .text getValue__Q27JStudio22TFunctionValue_hermiteFd */
 f64 TFunctionValue_hermite::getValue(f64 pfData_) {
-    /* Nonmatching */
     pfData_ = range_getParameter(pfData_, data_getValue_front(), data_getValue_back());
     // JUT_ASSERT(1395, pfData_!=0)
     dat3 = JGadget::findUpperBound_binary_current(dat1, dat2, dat3, pfData_);

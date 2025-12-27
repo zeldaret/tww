@@ -11,16 +11,16 @@ public:
     virtual ~Act_c() {}
     static BOOL solidHeapCB(fopAc_ac_c*);
     bool create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void set_mtx();
     bool _execute();
     bool _draw();
-    s32 Mthd_Delete();
-    s32 Mthd_Create();
-    s32 Mthd_Execute();
-    s32 Mthd_Draw();
-    s32 Mthd_IsDelete();
+    BOOL Mthd_Delete();
+    cPhs_State Mthd_Create();
+    BOOL Mthd_Execute();
+    BOOL Mthd_Draw();
+    BOOL Mthd_IsDelete();
     static const char M_arcname[];
 
 public:

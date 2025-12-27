@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global
+_epilog = .text:0x0000002C; // type:function size:0x2C scope:global
+_unresolved = .text:0x00000058; // type:function size:0x20 scope:global
+_delete__13daTagKbItem_cFv = .text:0x00000078; // type:function size:0x8 scope:global
+CreateInit__13daTagKbItem_cFv = .text:0x00000080; // type:function size:0x44 scope:global
+_create__13daTagKbItem_cFv = .text:0x000000C4; // type:function size:0xB0 scope:global
+_execute__13daTagKbItem_cFv = .text:0x00000174; // type:function size:0x84 scope:global
+_draw__13daTagKbItem_cFv = .text:0x000001F8; // type:function size:0x8 scope:global
+daTagKbItem_Create__FPv = .text:0x00000200; // type:function size:0x20 scope:local
+daTagKbItem_Delete__FPv = .text:0x00000220; // type:function size:0x24 scope:local
+daTagKbItem_Draw__FPv = .text:0x00000244; // type:function size:0x24 scope:local
+daTagKbItem_Execute__FPv = .text:0x00000268; // type:function size:0x24 scope:local
+daTagKbItem_IsDelete__FPv = .text:0x0000028C; // type:function size:0x8 scope:local
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+daTagKbItemMethodTable = .data:0x00000000; // type:object size:0x20 scope:local
+g_profile_TAG_KB_ITEM = .data:0x00000020; // type:object size:0x30 scope:global

@@ -3,10 +3,12 @@
 // Translation Unit: d_a_obj_rforce.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rforce.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_stptetu.h"
 
 const char daObjRforce::Act_c::M_arcname[] = "StpTetu";
@@ -18,7 +20,6 @@ BOOL daObjRforce::Act_c::solidHeapCB(fopAc_ac_c* this_i) {
 
 /* 0000009C-00000220       .text create_heap__Q211daObjRforce5Act_cFv */
 bool daObjRforce::Act_c::create_heap() {
-
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, STPTETU_BDL_STPTETU));
     JUT_ASSERT(0x57, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
@@ -42,10 +43,10 @@ bool daObjRforce::Act_c::create_heap() {
 }
 
 /* 00000220-000002F8       .text _create__Q211daObjRforce5Act_cFv */
-s32 daObjRforce::Act_c::_create() {
+cPhs_State daObjRforce::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = dComIfG_resLoad(&mPhs, M_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     
     if(ret == cPhs_COMPLEATE_e){
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0)){
@@ -102,7 +103,7 @@ bool daObjRforce::Act_c::_draw() {
 namespace daObjRforce {
 namespace {
 /* 00000508-00000528       .text Mthd_Create__Q211daObjRforce28@unnamed@d_a_obj_rforce_cpp@FPv */
-s32 Mthd_Create(void* obj) {
+cPhs_State Mthd_Create(void* obj) {
     return static_cast<daObjRforce::Act_c*>(obj)->_create();
 }
 
@@ -146,7 +147,7 @@ actor_process_profile_definition g_profile_Obj_Rforce = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003E,
+    /* Priority     */ PRIO_Obj_Rforce,
     /* Actor SubMtd */ &daObjRforce::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -27,13 +27,13 @@ public:
     void minigameExplainCut();
     void privateCut();
     void setAttentionPos(cXyz*);
-    s32 _create();
+    cPhs_State _create();
     void CreateHeap();
-    bool _delete();
+    BOOL _delete();
     void getKajiID();
     void kaji_anm();
-    bool _execute();
-    bool _draw();
+    BOOL _execute();
+    BOOL _draw();
     void lookBack();
 
 public:

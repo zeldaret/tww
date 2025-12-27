@@ -3,9 +3,11 @@
 // Translation Unit: d_a_kytag01.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag01.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 00000078-0000007C       .text wether_tag_move__FP13kytag01_class */
@@ -48,11 +50,19 @@ void wave_make() {
         env_light.mWaveChan.mWaveReset = 0;
         env_light.mWaveChan.mWaveScale = 300.0f;
         env_light.mWaveChan.mWaveScaleRand = 0.001f;
+#if VERSION == VERSION_DEMO
+        env_light.mWaveChan.mWaveCounterSpeedScale = 1.3f;
+#else
         env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
+#endif
         env_light.mWaveChan.field_0x2f = 0;
         env_light.mWaveChan.mWaveScaleBottom = 6.0f;
         env_light.mWaveChan.mWaveCount = 300;
+#if VERSION == VERSION_DEMO
+        env_light.mWaveChan.mWaveSpeed = 60.0f;
+#else
         env_light.mWaveChan.mWaveSpeed = 30.0f;
+#endif
         env_light.mWaveChan.mWaveFlatInter = 0.0f;
         if (strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
             env_light.mWaveChan.mWaveSpawnDist = 25000.0f;
@@ -71,7 +81,7 @@ void wave_make() {
 }
 
 /* 00000224-00000318       .text daKytag01_Create__FP10fopAc_ac_c */
-static s32 daKytag01_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag01_Create(fopAc_ac_c* i_ac) {
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
     kytag01_class* i_this = (kytag01_class*)i_ac;
     fopAcM_SetupActor(i_this, kytag01_class);
@@ -113,7 +123,7 @@ actor_process_profile_definition g_profile_KYTAG01 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A1,
+    /* Priority     */ PRIO_KYTAG01,
     /* Actor SubMtd */ &l_daKytag01_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

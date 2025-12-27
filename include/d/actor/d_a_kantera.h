@@ -19,16 +19,16 @@ struct mo_ga_s {
     /* 0x2C */ s16 m2C;
     /* 0x2E */ u8 m2E;
     /* 0x2F */ u8 m2F;
-};
+}; // size = 0x30
 
-class kantera_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
+struct kantera_class {
+    /* 0x000 */ fopAc_ac_c actor;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ u8 mParam0;
     /* 0x299 */ u8 mParam1;
     /* 0x29A */ u8 mParam2;
-    /* 0x29B */ u8 mSwitchID;
-    /* 0x29C */ J3DModel* mpModel;
+    /* 0x29B */ u8 mSwitchNo;
+    /* 0x29C */ J3DModel* mpModel1;
     /* 0x2A0 */ J3DModel* mpModel2;
     /* 0x2A4 */ fpc_ProcID mTargetActorID;
     /* 0x2A8 */ mDoExt_brkAnm* mpBrkAnm1;
@@ -55,18 +55,18 @@ public:
     /* 0x35C */ s16 m35C;
     /* 0x35E */ u8 m35E[0x360 - 0x35E];
     /* 0x360 */ f32 mModel2Scale;
-    /* 0x364 */ u8 mState;
+    /* 0x364 */ s8 mState;
     /* 0x365 */ u8 m365[0x368 - 0x365];
     /* 0x368 */ f32 mOffsY;
     /* 0x36C */ u32 mPeekZResult;
-    /* 0x370 */ dBgS_AcchCir mBgS_AcchCir;
-    /* 0x3B0 */ dBgS_Acch mBgS_Acch;
+    /* 0x370 */ dBgS_AcchCir mAcchCir;
+    /* 0x3B0 */ dBgS_ObjAcch mAcch;
     /* 0x574 */ dCcD_Stts mStts;
     /* 0x5B0 */ dCcD_Sph mSph;
     /* 0x6DC */ dPa_followEcallBack mPtclCallBack0;
     /* 0x6F0 */ dPa_followEcallBack mPtclCallBack1;
     /* 0x704 */ cXyz mParticleScale;
     /* 0x710 */ mo_ga_s mGa[2];
-};
+};  // Size: 0x770
 
 #endif /* D_A_KANTERA_H */

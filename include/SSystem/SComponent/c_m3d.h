@@ -19,6 +19,11 @@ class cXyz;
 struct Vec;
 
 extern const f32 G_CM3D_F_ABS_MIN;
+#if VERSION == VERSION_DEMO
+extern const f32 G_CM3D_F_INF;
+#else
+#define G_CM3D_F_INF (1000000000.0f)
+#endif
 
 extern const u32 BPCP_OUTCODE0;
 extern const u32 BPCP_OUTCODE1;
@@ -52,6 +57,12 @@ struct cM3d_Range {
     f32 end;
 };
 
+inline f32 cM3d_Len2dSq(f32 x0, f32 y0, f32 x1, f32 y1) {
+    f32 x = x0 - x1;
+    f32 y = y0 - y1;
+    return x*x + y*y;
+}
+
 void cM3d_InDivPos1(const Vec*, const Vec*, f32, Vec*);
 void cM3d_InDivPos2(const Vec*, const Vec*, f32, Vec*);
 bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32*, f32*, f32*);
@@ -67,6 +78,7 @@ bool cM3d_Cross_LinPla(const cM3dGLin*, const cM3dGPla*, Vec*, bool, bool);
 bool cM3d_Cross_MinMaxBoxLine(const Vec*, const Vec*, const Vec*, const Vec*);
 bool cM3d_InclusionCheckPosIn3PosBox3d(const Vec*, const Vec*, const Vec*, const Vec*, f32);
 inline static bool cM3d_InclusionCheckPosIn3PosBox2d(f32, f32, f32, f32, f32, f32, f32, f32);
+bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*, f32*);
 bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*, f32);
 bool cM3d_CrossX_Tri(const cM3dGTri*, const Vec*);
 bool cM3d_CrossX_LinTri_proc(const cM3dGTri*, const Vec*);
@@ -77,6 +89,7 @@ bool cM3d_CrossY_Tri_Front(const Vec&, const Vec&, const Vec&, const Vec*);
 bool cM3d_CrossY_Tri(const cM3dGTri*, const Vec*, f32*);
 bool cM3d_CrossY_Tri(const cM3dGTri*, const Vec*, f32);
 bool cM3d_CrossY_Tri(const cM3dGTri*, const Vec*, const cM3d_Range*, f32*);
+bool cM3d_CrossZ_Tri(const cM3dGTri*, const Vec*, f32*);
 bool cM3d_CrossZ_Tri(const cM3dGTri*, const Vec*, f32);
 bool cM3d_CrossZ_Tri(const cM3dGTri*, const Vec*);
 bool cM3d_CrossZ_LinTri_proc(const cM3dGTri*, const Vec*);
@@ -103,7 +116,7 @@ int cM3d_Cross_CylPntPnt(const cM3dGCyl*, const Vec*, const Vec*, Vec*, Vec*);
 bool cM3d_Cross_CylPnt(const cM3dGCyl*, const Vec*);
 bool cM3d_Cross_CpsCps(const cM3dGCps&, const cM3dGCps&, Vec*);
 bool cM3d_Cross_CpsCyl(const cM3dGCps&, const cM3dGCyl&, Vec*);
-bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps&, const cM3dGSph&, const Vec&, Vec*);
+void cM3d_Cross_CpsSph_CrossPos(const cM3dGCps&, const cM3dGSph&, const Vec&, Vec*);
 bool cM3d_Cross_CpsSph(const cM3dGCps&, const cM3dGSph&, Vec*);
 bool cM3d_Cross_TriTri(const cM3dGTri&, const cM3dGTri&, Vec*);
 bool cM3d_Cross_CpsTri(const cM3dGCps&, cM3dGTri, Vec*);
@@ -112,7 +125,7 @@ void cM3d_CalcVecZAngle(const Vec&, csXyz*);
 bool cM3d_NearPos_Cps(const cM3dGCps&, const Vec&, Vec*);
 void cM3d_PlaneCrossLineProcWork(f32, f32, f32, f32, f32, f32, f32, f32*, f32*);
 int cM3d_2PlaneCrossLine(const cM3dGPla&, const cM3dGPla&, cM3dGLin*);
-bool cM3d_3PlaneCrossPos(const cM3dGPla&, const cM3dGPla&, const cM3dGPla&, Vec*);
+BOOL cM3d_3PlaneCrossPos(const cM3dGPla&, const cM3dGPla&, const cM3dGPla&, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const cM3dGLin*, const Vec*, Vec*);
 f32 cM3d_lineVsPosSuisenCross(const Vec&, const Vec&, const Vec&, Vec*);
 int cM3d_2PlaneLinePosNearPos(const cM3dGPla&, const cM3dGPla&, const Vec*, Vec*);

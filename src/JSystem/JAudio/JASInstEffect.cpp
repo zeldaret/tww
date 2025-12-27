@@ -3,6 +3,8 @@
 // Translation Unit: JASInstEffect.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASInstEffect.h"
 #include "JSystem/JUtility/JUTAssert.h"
 

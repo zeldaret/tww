@@ -7,7 +7,7 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "JSystem/JUtility/TColor.h"
 
-class fopMsgM_pane_class;
+struct fopMsgM_pane_class;
 class JKRExpHeap;
 class J2DScreen;
 class STControl;

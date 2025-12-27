@@ -3,8 +3,11 @@
  * Enemy - Bubble
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bl.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-00000178       .text draw_SUB__FP8bl_class */
 void draw_SUB(bl_class*) {
@@ -138,7 +141,7 @@ static BOOL daBL_Execute(bl_class*) {
 
 /* 00005504-0000550C       .text daBL_IsDelete__FP8bl_class */
 static BOOL daBL_IsDelete(bl_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 0000550C-0000558C       .text daBL_Delete__FP8bl_class */
@@ -152,8 +155,36 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00005884-00005D88       .text daBL_Create__FP10fopAc_ac_c */
-static s32 daBL_Create(fopAc_ac_c*) {
+static cPhs_State daBL_Create(fopAc_ac_c*) {
     /* Nonmatching */
+    static dCcD_SrcSph body_co_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_FIRE,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 15.0f,
+        }},
+    };
 }
 
 static actor_method_class l_daBL_Method = {
@@ -174,7 +205,7 @@ actor_process_profile_definition g_profile_BL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C2,
+    /* Priority     */ PRIO_BL,
     /* Actor SubMtd */ &l_daBL_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -1,7 +1,7 @@
 #ifndef RES_KT_H
 #define RES_KT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KT_RES_FILE_ID {
     /* BCK */

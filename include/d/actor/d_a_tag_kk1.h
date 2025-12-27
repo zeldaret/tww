@@ -1,26 +1,21 @@
 #ifndef D_A_TAG_KK1_H
 #define D_A_TAG_KK1_H
 
-#include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
+#include "m_Do/m_Do_hostIO.h"
 
-class daTag_Kk1_c : public fopAc_ac_c {
+class daTag_Kk1_c : public fopNpc_npc_c {
 public:
-    void createInit();
+    BOOL createInit();
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
+    cPhs_State _create();
 
 public:
-    /* Place member variables here */
-};
-
-class daTag_Kk1_HIO_c {
-public:
-    daTag_Kk1_HIO_c();
-
-public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ u8   padding_0x6C4;
+    /* 0x6C5 */ bool mTagSet;
+    /* 0x6C6 */ bool mNameIsWrong;
+};  // Size: 0x6C8
 
 #endif /* D_A_TAG_KK1_H */

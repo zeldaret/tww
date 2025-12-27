@@ -3,6 +3,7 @@
 // Translation Unit: d_kankyo_wether.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -501,7 +502,7 @@ void wether_move_sun() {
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_LENS_32HALF);
                 g_env_light.mpSunlenzPacket->mpTexRingHalf =
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
-                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f;
+                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f; // This is not G_CM3D_F_INF
                 g_env_light.mpSunlenzPacket->field_0x8c = 0.0f;
                 g_env_light.mpSunlenzPacket->mDistFalloff = 0.0f;
                 g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;
@@ -590,10 +591,14 @@ void wether_move_snow() {
 
 /* 80088A50-80088D08       .text wether_move_star__Fv */
 void wether_move_star() {
-    if (dComIfGp_checkStatus(1) && (!g_env_light.mbVrboxInvisible &&
-                                    strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0) ||
-        strcmp(dComIfGp_getStartStageName(), "Name") == 0)
-    {
+    if (
+        (
+            dComIfGp_checkStatus(1) &&
+            !g_env_light.mbVrboxInvisible &&
+            strcmp(dComIfGp_getStartStageName(), "M_DragB") != 0
+        ) ||
+        strcmp(dComIfGp_getStartStageName(), "Name") == 0
+    ) {
         f32 time = g_env_light.getDaytime();
         f32 target;
 
@@ -685,7 +690,7 @@ void wether_move_housi() {
             g_env_light.mpHousiPacket->field_0x5ddc = 0.0f;
 
             for (int i = 0; i < 300; i++) {
-                g_env_light.mpHousiPacket->mEff[i].mState = 0;
+                g_env_light.mpHousiPacket->mEffect[i].mStatus = 0;
             }
 
             dKyr_housi_move();
@@ -1369,7 +1374,7 @@ void dKyw_evt_wind_set_go() {
 /* 8008A96C-8008A9F8       .text dKyw_gbwind_use_check__Fv */
 BOOL dKyw_gbwind_use_check() {
     dStage_FileList_dt_c* fili_p = NULL;
-    int rt = 0;
+    BOOL rt = 0;
 
     if (g_env_light.mWind.mpWindVecOverride == NULL) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
@@ -1378,7 +1383,7 @@ BOOL dKyw_gbwind_use_check() {
         }
 
         if (fili_p != NULL && dStage_FileList_dt_GlobalWindLevel(fili_p) <= 2) {
-            rt = 1;
+            rt = TRUE;
         }
     }
 

@@ -3,10 +3,12 @@
 // Translation Unit: d_a_vrbox.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_vrbox.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_kankyo_wether.h"
 
@@ -177,13 +179,13 @@ static BOOL daVrbox_solidHeapCB(fopAc_ac_c* i_actor) {
 }
 
 /* 8015E968-8015EA14       .text daVrbox_Create__FP10fopAc_ac_c */
-static s32 daVrbox_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daVrbox_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, vrbox_class);
     vrbox_class* i_this = static_cast<vrbox_class*>(i_actor);
 
     i_this->m29C = 0;
 
-    s32 phase_state = cPhs_COMPLEATE_e;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
     if (fopAcM_entrySolidHeap(i_this, daVrbox_solidHeapCB, 0xC60)) {
         dComIfGp_onStatus(1);
         g_env_light.mbVrboxInvisible = 0;
@@ -212,7 +214,7 @@ actor_process_profile_definition g_profile_VRBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0007,
+    /* Priority     */ PRIO_VRBOX,
     /* Actor SubMtd */ &l_daVrbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

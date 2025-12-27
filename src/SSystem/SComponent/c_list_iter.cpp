@@ -8,11 +8,11 @@
 #include "dolphin/types.h"
 
 /* 80244BF0-80244C28       .text cLsIt_Method__FP15node_list_classPFP10node_classPv_iPv */
-int cLsIt_Method(node_list_class* pList, cNdIt_MethodFunc pMethod, void* pUserData) {
+BOOL cLsIt_Method(node_list_class* pList, cNdIt_MethodFunc pMethod, void* pUserData) {
     if (pList->mSize > 0)
         return cNdIt_Method(pList->mpHead, pMethod, pUserData);
     else
-        return 1;
+        return TRUE;
 }
 
 /* 80244C28-80244C60       .text cLsIt_Judge__FP15node_list_classPFP10node_classPv_PvPv */

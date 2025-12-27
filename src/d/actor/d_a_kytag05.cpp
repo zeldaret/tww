@@ -3,17 +3,17 @@
  * Tag - Weather Tag 5
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag05.h"
 #include "JAZelAudio/JAIZelBasic.h"
-#include "d/actor/d_a_player.h"
-#include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_actor_mng.h"
-#include "f_op/f_op_camera_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_ykgr.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_audio.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag05_Draw__FP13kytag05_class */
 static BOOL daKytag05_Draw(kytag05_class*) {
@@ -32,7 +32,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         10,
         10,
         0,
-        90
+        90,
     };
     static const s16 fuu_timer[] = {
         150,
@@ -44,26 +44,26 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
     camera_process_class *camera = dComIfGp_getCamera(0);
     fopAc_ac_c *player = dComIfGp_getPlayer(0);
     f32 windPow = dKyw_get_wind_pow();
-    f32 i_blend = 1.0f;
+    f32 blend = 1.0f;
 
     if (g_env_light.mWind.mEvtWindSet == 0xFF) {
         return TRUE;
     }
     
-    if (dComIfGp_event_runCheck() && dComIfGp_evmng_startCheck("demo41") && dComIfGp_demo_get()) {
+    if (dComIfGp_event_runCheck() != FALSE && dComIfGp_evmng_startCheck("demo41") && dComIfGp_demo_get()) {
         u32 demoFrame = dComIfGp_demo_get()->getFrame();
         if(demoFrame >= 0x186) {
             f32 fVar7 = ((f32)demoFrame - 390.0f) / 100.0f;
-            if(fVar7 > i_blend) {
-                fVar7 = i_blend;
+            if(fVar7 > 1.0f) {
+                fVar7 = 1.0f;
             }
-            i_blend = 1.0f - fVar7;
-            g_env_light.mSnowCount = (int)(200.0f * i_blend);
+            blend = 1.0f - fVar7;
+            g_env_light.mSnowCount = (int)(200.0f * blend);
         } else if (demoFrame == 0x187) {
             daYkgr_c::stop();
         }
     }
-    dKy_custom_colset(0, 7, i_blend);
+    dKy_custom_colset(0, 7, blend);
     
     if((a_this->mIndex & 1) == 0) {
         if (a_this->mTimer >= fuu_timer[a_this->mIndex >> 1]) {
@@ -79,7 +79,8 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
             if(a_this->mIndex >> 1 >= 4) {
                 a_this->mIndex = 0;
             }
-            dKyw_evt_wind_set(0, wind_table[a_this->mIndex >> 1]);
+            s16 windY = wind_table[a_this->mIndex >> 1];
+            dKyw_evt_wind_set(0, windY);
             a_this->mTimer = 0;
             g_env_light.mWind.mEvtWindSet = 1;
         } else {
@@ -104,7 +105,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         dKyw_evt_wind_set(0, -0x32C8);
     }
 
-    mDoAud_seStart(JA_SE_ATM_WIND_VAR, NULL, windPow * 100.0f, 0);
+    mDoAud_seStart(JA_SE_ATM_WIND_VAR, NULL, windPow * 100.0f);
     
     return TRUE;
 }
@@ -120,15 +121,22 @@ static BOOL daKytag05_Delete(kytag05_class*) {
 }
 
 /* 00000404-000004C0       .text daKytag05_Create__FP10fopAc_ac_c */
-static int daKytag05_Create(fopAc_ac_c* i_this) {
+static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, kytag05_class);
+#endif
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {
-        return 3;
+        return cPhs_STOP_e;
     }
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(i_this, kytag05_class);
+#endif
+
     a_this->mIndex = 0;
     a_this->mTimer = 0;
-    a_this->mUnknownParam = i_this->base.mParameters & 0xff;
+    a_this->mUnknownParam = fopAcM_GetParam(i_this) & 0xff;
     dKyw_evt_wind_set_go();
     dKyw_evt_wind_set(0, 0);
     g_env_light.mSnowCount = 200;
@@ -160,7 +168,7 @@ actor_process_profile_definition g_profile_KYTAG05 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A5,
+    /* Priority     */ PRIO_KYTAG05,
     /* Actor SubMtd */ &l_daKytag05_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

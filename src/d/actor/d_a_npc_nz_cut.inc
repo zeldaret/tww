@@ -284,9 +284,9 @@ void daNpc_Nz_c::cutHideProc() {
 
 /* 00004100-00004204       .text cutSetAnmStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutSetAnmStart() {
-    u32* pAnmNo = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "anm_no");
+    int* pAnmNo = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "anm_no");
     s32 anmNo = 0;
-    u32* pLoopCount = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "loop_count");
+    int* pLoopCount = dComIfGp_evmng_getMyIntegerP(field_0x8F4, "loop_count");
 
     if(pAnmNo) {
         anmNo = *pAnmNo;
@@ -334,7 +334,7 @@ void daNpc_Nz_c::cutSetAnmProc() {
 
             mDoMtx_stack_c::copy(pModel->getAnmMtx(m_jnt.getHeadJntNum()));
             mDoMtx_stack_c::multVec(&temp4, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, 0, -1, &color);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, 0, -1, &color);
         }
     }
 }
@@ -365,7 +365,7 @@ void daNpc_Nz_c::cutGoHomeProc() {
 /* 000044D4-00004520       .text cutChkGetItemStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutChkGetItemStart() {
     if(field_0x8F8 >= 3) {
-        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, field_0x8FA, 1, 0xFFFF);
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, field_0x8FA, dEvtFlag_NOPARTNER_e, 0xFFFF);
     }
 }
 

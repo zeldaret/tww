@@ -16,15 +16,15 @@ scene_class* fopScnM_SearchByID(fpc_ProcID id) {
 
 static uint l_scnRqID = -1;
 
-int fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeProcName, u16 fadePeekTime) {
+BOOL fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeProcName, u16 fadePeekTime) {
     uint sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeProcName, fadePeekTime);
 
     if (sceneRequestID == -1) {
-        return 0;
+        return FALSE;
     }
 
     l_scnRqID = sceneRequestID;
-    return 1;
+    return TRUE;
 }
 
 BOOL fopScnM_DeleteReq(scene_class* i_scene) {

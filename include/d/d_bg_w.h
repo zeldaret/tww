@@ -19,10 +19,11 @@ typedef struct _GXColor GXColor;
 class dBgW : public cBgW {
 public:
     enum PushPullLabel {
-        PP_UNK1_e = 0x01,
-        PP_UNK2_e = 0x02,
-        PP_UNK4_e = 0x04,
-        PP_UNK8_e = 0x08,
+        PPLABEL_NONE = 0x00,
+        PPLABEL_PUSH = 0x01,
+        PPLABEL_PULL = 0x02,
+        PPLABEL_UNK4 = 0x04,
+        PPLABEL_HEAVY = 0x08,
     };
     
     typedef void (*dBgW_CrrFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
@@ -52,6 +53,8 @@ public:
     bool WallCrrPos(dBgS_CrrPos*);
     void ChangeAttributeCodeByPathPntNo(int, u32);
 
+    void dummyfunc(); // for assert. TODO remove later
+
     virtual ~dBgW() {}
     virtual bool ChkPolyThrough(int, cBgS_PolyPassChk*);
     virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk*);
@@ -66,6 +69,7 @@ public:
     void SetRideCallback(dBgW_RideCallBack func) { mpRideCb = func; }
     void SetPushPullCallback(dBgW_PPCallBack func) { mpPushPullCb = func; }
 
+    // TODO:
     void CalcDiffShapeAngleY(s16) {}
     void CaptPoly(dBgS_CaptPoly&) {}
     void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}
@@ -96,9 +100,9 @@ public:
     void OnMoveFlag() {}
     void RoofChk(dBgS_RoofChk*) {}
     void RwgCaptPoly(int, dBgS_CaptPoly&) {}
-    void SetGrpRoomInf(int) {}
+    void SetGrpRoomInf(int room) { mRoomNo2 = room; }
     void SetOldShapeAngleY(s16) {}
-    void SetRoomId(u16) {}
+    void SetRoomId(u16 roomNo) { mRoomNo = roomNo; }
     void SphChk(dBgS_SphChk*, void*) {}
     void SplGrpChk(dBgS_SplGrpChk*) {}
     void WallCorrect(dBgS_Acch*) {}

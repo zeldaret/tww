@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 #define CHECK_PVEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v->x && v->x < 1.0e32f && -1.0e32f < v->y && v->y < 1.0e32f && -1.0e32f < v->z && v->z < 1.0e32f)
@@ -56,7 +55,7 @@ dBgS_Acch::dBgS_Acch() {
     pm_pos = NULL;
     pm_old_pos = NULL;
     pm_speed = NULL;
-    m_ground_h = -1000000000.0f;
+    m_ground_h = -G_CM3D_F_INF;
     m_ground_up_h = 0.0f;
     m_ground_check_offset = 60.0f;
     m_ground_up_h_diff = 0.0f;
@@ -65,15 +64,15 @@ dBgS_Acch::dBgS_Acch() {
     field_0xb8 = 0.0f;
     m_tbl_size = 0;
     pm_acch_cir = NULL;
-    m_roof_y = 0.0f;
-    m_roof_crr_height = 0.0f;
     m_roof_height = 0.0f;
-    m_water_check_offset = 200.0f;
+    m_roof_crr_height = 0.0f;
+    field_0xC4 = 0.0f;
+    m_wtr_check_offset = 200.0f;
     pm_angle = NULL;
     pm_shape_angle = NULL;
     m_my_ac = NULL;
     pm_out_poly_info = NULL;
-    m_sea_height = -1000000000.0f;
+    m_sea_height = -G_CM3D_F_INF;
 }
 
 static void dummy1() {
@@ -108,7 +107,7 @@ void dBgS_Acch::Set(cXyz* pos, cXyz* old_pos, fopAc_ac_c* actor, int tbl_size, d
 
 /* 800A2E80-800A2EE8       .text GroundCheckInit__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::GroundCheckInit(dBgS&) {
-    m_ground_h = -1000000000.0f;
+    m_ground_h = -G_CM3D_F_INF;
     if (m_flags & GRND_NONE) {
         return;
     }
@@ -128,10 +127,10 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
 
     pos.y += m_ground_up_h_diff + (m_ground_check_offset - m_ground_up_h);
     m_ground_up_h_diff = 0.0f;
-    m_gnd.m_pos = pos;
+    m_gnd.SetPos(&pos);
 
     m_ground_h = i_bgs.GroundCross(&m_gnd);
-    if (m_ground_h != -1000000000.0f) {
+    if (m_ground_h != -G_CM3D_F_INF) {
         field_0xb8 = m_ground_h + m_ground_up_h;
         if (field_0xb8 > field_0xb4) {
             pm_pos->y = field_0xb8;
@@ -148,34 +147,28 @@ void dBgS_Acch::GroundCheck(dBgS& i_bgs) {
         }
     }
 
-    if (field_0xb0 && !(m_flags & GROUND_HIT)) {
-        m_flags |= GROUND_AWAY;
+    if (field_0xb0 && !ChkGroundHit()) {
+        SetGroundAway();
     }
 }
 
 /* 800A305C-800A313C       .text GroundRoofProc__9dBgS_AcchFR4dBgS */
-f32 dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
-    f32 y = -1000000000.0f;
-    if (m_ground_h != -1000000000.0f) {
-        // y = m_roof_height;
-        // fakematch to fix load order
-        if (field_0xb8 < (y = m_roof_height) && y < pm_pos->y) {
-            pm_pos->y = y;
+void dBgS_Acch::GroundRoofProc(dBgS& i_bgs) {
+    if (m_ground_h != -G_CM3D_F_INF) {
+        if (field_0xb8 < field_0xC4 && field_0xC4 < pm_pos->y) {
+            pm_pos->y = field_0xC4;
         }
 
         if (!(m_flags & ROOF_NONE)) {
-            y = m_ground_h;
-            if (y >= m_roof_y) {
+            if (m_ground_h >= m_roof_height) {
                 m_roof.SetExtChk(*this);
                 ClrRoofHit();
                 cXyz pos = *pm_pos;
                 m_roof.SetPos(pos);
-                y = i_bgs.RoofChk(&m_roof);
-                m_roof_y = y;
+                m_roof_height = i_bgs.RoofChk(&m_roof);
             }
         }
     }
-    return y;
 }
 
 /* 800A313C-800A3460       .text LineCheck__9dBgS_AcchFR4dBgS */
@@ -192,14 +185,14 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         linChk.SetExtChk(*this);
         if (i_bgs.LineCross(&linChk)) {
             *pm_pos = linChk.GetLinP()->GetEnd();
-            m_flags |= LINE_CHECK_HIT;
+            OnLineCheckHit();
 
             if (pm_out_poly_info != NULL)
                 pm_out_poly_info->SetPolyInfo(linChk);
 
             cM3dGPla* pla = i_bgs.GetTriPla(linChk);
-            if (!(pla->GetNP()->y >= 0.5f)) {
-                VECAdd(pm_pos, pla->GetNP(), pm_pos);
+            if (!cBgW_CheckBGround(pla->GetNP()->y)) {
+                VECAdd(GetPos(), pla->GetNP(), GetPos());
                 if (!cM3d_IsZero(std::sqrtf(pla->GetNP()->x*pla->GetNP()->x + pla->GetNP()->z*pla->GetNP()->z)))
                     pm_acch_cir[i].SetWallHDirect(pm_pos->y);
 
@@ -214,16 +207,16 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
 
 /* 800A3460-800A3F50       .text CrrPos__9dBgS_AcchFR4dBgS */
 void dBgS_Acch::CrrPos(dBgS& i_bgs) {
-    if (m_flags & 0x1) {
+    if (m_flags & UNK_1) {
         return;
     }
 
     JUT_ASSERT(494, pm_pos != NULL);
     JUT_ASSERT(495, pm_old_pos != NULL);
 
-    CHECK_FLOAT_CLASS(535, pm_pos->x);
-    CHECK_FLOAT_CLASS(536, pm_pos->y);
-    CHECK_FLOAT_CLASS(537, pm_pos->z);
+    JUT_ASSERT(535, !isnan(pm_pos->x));
+    JUT_ASSERT(536, !isnan(pm_pos->y));
+    JUT_ASSERT(537, !isnan(pm_pos->z));
     CHECK_PVEC3_RANGE(541, pm_pos);
 
     i_bgs.MoveBgCrrPos(m_gnd, ChkGroundHit(), pm_pos, pm_angle, pm_shape_angle);
@@ -232,15 +225,12 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
     Init();
 
     f32 lowH_R = GetWallAllLowH_R();
-    cXyz* temp9 = pm_old_pos;
-    cXyz* temp10 = pm_pos;
-    f32 distXZ2 = temp9->abs2XZ(*temp10);
-    f32 distY = pm_old_pos->y - pm_pos->y;
+    f32 distXZ2 = GetOldPos()->abs2XZ(*GetPos());
+    f32 distY = GetOldPos()->y - GetPos()->y;
     f32 lowH = GetWallAllLowH();
-    field_0xb4 = pm_pos->y;
-    f32 oldY = pm_old_pos->y;
-    f32 temp7 = lowH + oldY;
-    f32 temp8 = m_ground_check_offset + pm_pos->y;
+    field_0xb4 = GetPos()->y;
+    f32 temp7 = lowH + GetOldPos()->y;
+    f32 temp8 = m_ground_check_offset + GetPos()->y;
 
     bool ranLineCheck = false;
     OffLineCheckHit();
@@ -257,15 +247,15 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         LineCheck(i_bgs);
     }
 
-    m_roof_height = 1000000000.0f;
+    field_0xC4 = G_CM3D_F_INF;
     if (!(m_flags & ROOF_NONE)) {
         m_roof.SetExtChk(*(cBgS_Chk*)this);
         ClrRoofHit();
         cXyz roofPos = *pm_pos;
         m_roof.SetPos(roofPos);
-        m_roof_y = i_bgs.RoofChk(&m_roof);
-        if (m_roof_y != 1000000000.0f && pm_pos->y + m_roof_crr_height > m_roof_y) {
-            m_roof_height = m_roof_y - m_roof_crr_height;
+        m_roof_height = i_bgs.RoofChk(&m_roof);
+        if (m_roof_height != G_CM3D_F_INF && pm_pos->y + m_roof_crr_height > m_roof_height) {
+            field_0xC4 = m_roof_height - m_roof_crr_height;
             SetRoofHit();
         }
     }
@@ -274,17 +264,17 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         ClrGroundFind();
         GroundCheck(i_bgs);
         GroundRoofProc(i_bgs);
-    } else if (m_roof_height < pm_pos->y) {
-        pm_pos->y = m_roof_height;
+    } else if (field_0xC4 < pm_pos->y) {
+        pm_pos->y = field_0xC4;
     }
 
     if (!(m_flags & WATER_NONE)) {
         ClrWaterHit();
         ClrWaterIn();
-        m_wtr.SetHeight(-1000000000.0f);
+        m_wtr.SetHeight(-G_CM3D_F_INF);
 
         int room_no = i_bgs.GetRoomId(m_gnd);
-        if (m_ground_h != -1000000000.0f && 0 <= room_no && room_no < 64) {
+        if (m_ground_h != -G_CM3D_F_INF && 0 <= room_no && room_no < 64) {
             JUT_ASSERT(693, 0 <= room_no && room_no < 64);
 
             dBgW* bgw = dComIfGp_roomControl_getBgW(room_no);
@@ -312,7 +302,7 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
 
     if (ChkSeaCheckOn()) {
         m_flags &= ~SEA_IN;
-        m_sea_height = -1000000000.0f;
+        m_sea_height = -G_CM3D_F_INF;
 
         if (daSea_ChkArea(pm_pos->x, pm_pos->z)) {
             m_sea_height = daSea_calcWave(pm_pos->x, pm_pos->z);
@@ -330,10 +320,12 @@ void dBgS_Acch::CrrPos(dBgS& i_bgs) {
         }
     }
 
-    CHECK_FLOAT_CLASS(780, pm_pos->x);
-    CHECK_FLOAT_CLASS(781, pm_pos->y);
-    CHECK_FLOAT_CLASS(782, pm_pos->z);
+#if VERSION > VERSION_DEMO
+    JUT_ASSERT(780, !isnan(pm_pos->x));
+    JUT_ASSERT(781, !isnan(pm_pos->y));
+    JUT_ASSERT(782, !isnan(pm_pos->z));
     CHECK_PVEC3_RANGE(786, pm_pos);
+#endif
 }
 
 /* 800A3F50-800A3F8C       .text GetWallAllR__9dBgS_AcchFv */
@@ -368,11 +360,10 @@ void dBgS_Acch::CalcWallBmdCyl() {
     f32 max_h = min_h;
     if (m_tbl_size >= 1) {
         for (s32 i = 0; i < m_tbl_size; i++) {
-            f32 h = pm_acch_cir[i].GetWallH();
-            if (min_h > h)
-                min_h = h;
-            if (max_h < h)
-                max_h = h;
+            if (min_h > pm_acch_cir[i].GetWallH())
+                min_h = pm_acch_cir[i].GetWallH();
+            if (max_h < pm_acch_cir[i].GetWallH())
+                max_h = pm_acch_cir[i].GetWallH();
         }
     }
 

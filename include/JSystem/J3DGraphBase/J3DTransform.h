@@ -31,13 +31,13 @@ void J3DCalcYBBoardMtx(Mtx);
 void J3DPSCalcInverseTranspose(f32 (*param_0)[4], f32 (*param_1)[3]);
 void J3DGetTranslateRotateMtx(J3DTransformInfo const&, Mtx);
 void J3DGetTranslateRotateMtx(s16, s16, s16, f32, f32, f32, Mtx);
-void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
-void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, f32(*)[4]);
-void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, f32(*)[4]);
-void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, f32(*)[4]);
+void J3DGetTextureMtx(const J3DTextureSRTInfo&, Vec, Mtx);
+void J3DGetTextureMtxOld(const J3DTextureSRTInfo&, Vec, Mtx);
+void J3DGetTextureMtxMaya(const J3DTextureSRTInfo&, Mtx);
+void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, Mtx);
 void J3DScaleNrmMtx(Mtx, const Vec&);
 void J3DScaleNrmMtx33(Mtx33, const Vec&);
-void J3DMtxProjConcat(f32(*)[4], f32(*)[4], f32(*)[4]);
+void J3DMtxProjConcat(Mtx, Mtx, Mtx);
 void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
 void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
 
@@ -49,38 +49,34 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
     register f32 fr9;
     register f32 fr8;
     register f32 fr6;
-    register f32 fra6;
     register f32 fr5;
-    register f32 fra5;
-    register f32 fra4;
     register f32 fr4;
     register f32 fr3;
     register f32 fr2;
-    register f32 fra2;
-    register f32 fr01;
-    register f32 fr00;
+    register f32 fr1;
+    register f32 fr0;
 #ifdef __MWERKS__
     asm {
-        psq_l fr00, 0(vec), 0, 0
+        psq_l fr0, 0(vec), 0, 0
         psq_l fr2, 0(mtx), 0, 0
-        psq_l fr01, 8(vec), 1, 0
-        ps_mul fr4, fr2, fr00
+        psq_l fr1, 8(vec), 1, 0
+        ps_mul fr4, fr2, fr0
         psq_l fr3, 8(mtx), 0, 0
-        ps_madd fr5, fr3, fr01, fr4
+        ps_madd fr5, fr3, fr1, fr4
         psq_l fr8, 16(mtx), 0, 0
         ps_sum0 fr6, fr5, fr6, fr5
         psq_l fr9, 24(mtx), 0, 0
-        ps_mul fr10, fr8, fr00
+        ps_mul fr10, fr8, fr0
         psq_st fr6, 0(dst), 1, 0
-        ps_madd fr11, fr9, fr01, fr10
-        psq_l fra2, 32(mtx), 0, 0
+        ps_madd fr11, fr9, fr1, fr10
+        psq_l fr2, 32(mtx), 0, 0
         ps_sum0 fr12, fr11, fr12, fr11
         psq_l fr3, 40(mtx), 0, 0
-        ps_mul fra4, fra2, fr00
+        ps_mul fr4, fr2, fr0
         psq_st fr12, 4(dst), 1, 0
-        ps_madd fra5, fr3, fr01, fra4
-        ps_sum0 fra6, fra5, fra6, fra5
-        psq_st fra6, 8(dst), 1, 0
+        ps_madd fr5, fr3, fr1, fr4
+        ps_sum0 fr6, fr5, fr6, fr5
+        psq_st fr6, 8(dst), 1, 0
     }
 #endif
 }

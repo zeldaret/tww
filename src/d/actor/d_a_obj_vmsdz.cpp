@@ -3,9 +3,11 @@
 // Translation Unit: d_a_obj_vmsdz.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsdz.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_vmsdz.h"
 
 const char daObjVmsdz_c::M_arcname[6] = "VmsDZ";
@@ -34,8 +36,8 @@ BOOL daObjVmsdz_c::create_heap() {
 }
 
 /* 0000015C-00000208       .text _create__12daObjVmsdz_cFv */
-s32 daObjVmsdz_c::_create() {
-    s32 ret = cPhs_ERROR_e;
+cPhs_State daObjVmsdz_c::_create() {
+    cPhs_State ret = cPhs_ERROR_e;
 
     fopAcM_SetupActor(this, daObjVmsdz_c);
 
@@ -80,7 +82,7 @@ bool daObjVmsdz_c::_draw() {
 
 namespace {
 /* 00000300-00000320       .text Mthd_Create__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-s32 Mthd_Create(void* i_ac) {
+cPhs_State Mthd_Create(void* i_ac) {
     return ((daObjVmsdz_c*)i_ac)->_create();
 }
 
@@ -123,7 +125,7 @@ actor_process_profile_definition g_profile_Obj_Vmsdz = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x004E,
+    /* Priority     */ PRIO_Obj_Vmsdz,
     /* Actor SubMtd */ &Vmsdz_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

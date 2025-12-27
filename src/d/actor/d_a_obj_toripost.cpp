@@ -3,6 +3,7 @@
  * Object - Rito Postbox
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_toripost.h"
 #include "d/res/res_toripost.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -15,29 +16,44 @@
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daObjTpost_HIO_c {
+public:
+    daObjTpost_HIO_c();
+    virtual ~daObjTpost_HIO_c() {}
+
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ bool debug_draw;
+    /* 0x06 */ s8 field_0x06;
+    /* 0x07 */ u8 field_0x07;
+    /* 0x08 */ f32 attn_pos_offset;
+    /* 0x0C */ f32 eye_pos_offset;
+    /* 0x10 */ f32 talk_distance;
+    /* 0x14 */ s16 field_0x14;
+    /* 0x16 */ s16 field_0x16;
+};
 
 extern dScnPly_reg_HIO_c g_regHIO;
 
 const char daObjTpost_c::m_arc_name[] = "Toripost";
 
 const daObjTpost_c__letter_data daObjTpost_c::m_letter[] = {
-    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {false, 0x0CF9, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_KOMALIS_FATHER},
-    {false, 0x0CFA, dItem_COLLECT_MAP_60_e, dSv_evtBit_c::LETTER_BOMBS_AD},
-    {false, 0x0CFC, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_ORCA},
-    {false, 0x0805, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_GRANDMA},
-    {false, 0x0CFD, dItem_GREEN_RUPEE_e,    dSv_evtBit_c::LETTER_ROCK_SPIRE_SHOP_AD},
-    {true,  0x0DB6, dItem_COLLECT_MAP_52_e, dSv_evtBit_c::LETTER_TINGLE},
-    {false, 0x1148, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_ARYLL},
-    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_evtBit_c::LETTER_BAITOS_MOM},
-    {true,  0x0F76, KAISEN_PRESENT1,        dSv_evtBit_c::LETTER_SILVER_MEMBERSHIP},
-    {false, 0x19A6, KAKERA_HEART2,          dSv_evtBit_c::LETTER_HOSKITS_GIRLFRIEND},
-    {true,  0x0CFB, dItem_RED_RUPEE_e,      dSv_evtBit_c::LETTER_BAITO},
-    {true,  0x0F77, KAISEN_PRESENT2,        dSv_evtBit_c::LETTER_GOLD_MEMBERSHIP},
+    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
+    {false, 0x0CF9, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_KOMALIS_FATHER},
+    {false, 0x0CFA, dItem_COLLECT_MAP_60_e, dSv_event_flag_c::LETTER_BOMBS_AD},
+    {false, 0x0CFC, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ORCA},
+    {false, 0x0805, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_GRANDMA},
+    {false, 0x0CFD, dItem_GREEN_RUPEE_e,    dSv_event_flag_c::LETTER_ROCK_SPIRE_SHOP_AD},
+    {true,  0x0DB6, dItem_COLLECT_MAP_52_e, dSv_event_flag_c::LETTER_TINGLE},
+    {false, 0x1148, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_ARYLL},
+    {false, 0x1AAF, dItem_HEART_PIECE_e,    dSv_event_flag_c::LETTER_BAITOS_MOM},
+    {true,  0x0F76, KAISEN_PRESENT1,        dSv_event_flag_c::LETTER_SILVER_MEMBERSHIP},
+    {false, 0x19A6, KAKERA_HEART2,          dSv_event_flag_c::LETTER_HOSKITS_GIRLFRIEND},
+    {true,  0x0CFB, dItem_RED_RUPEE_e,      dSv_event_flag_c::LETTER_BAITO},
+    {true,  0x0F77, KAISEN_PRESENT2,        dSv_event_flag_c::LETTER_GOLD_MEMBERSHIP},
 };
 
 const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
@@ -63,12 +79,16 @@ const dCcD_SrcCyl daObjTpost_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
+
+#ifdef __MWERKS__
+static
+#endif
 const s32 daObjTpost_c::m_send_price[] = {
     0x05,
     0x0A,
@@ -109,7 +129,7 @@ BOOL daObjTpost_c::_createHeap() {
 
 /* 0000022C-00000280       .text __ct__16daObjTpost_HIO_cFv */
 daObjTpost_HIO_c::daObjTpost_HIO_c() {
-    field_0x04 = -1;
+    mNo = -1;
     debug_draw = false;
     field_0x06 = 0;
     field_0x07 = 0;
@@ -219,10 +239,10 @@ void daObjTpost_c::cutDispLetterProc(int staffIdx) {
 void daObjTpost_c::deliverLetter() {
     switch(mPreItemNo) {
         case MAGYS_LETTER:
-            dComIfGs_onEventBit(0x1220);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1220);
             break;
         case dItem_NOTE_TO_MOM_e:
-            dLetter_send(dSv_evtBit_c::LETTER_BAITOS_MOM);
+            dLetter_send(dSv_event_flag_c::LETTER_BAITOS_MOM);
             break;
     }
 }
@@ -335,9 +355,9 @@ int daObjTpost_c::getMsgXY() {
             col.r = REG12_S(0) + 0x80;
             col.g = REG12_S(1) + 0x80;
             col.b = REG12_S(2) + 0x80;
-            mDoMtx_stack_c::copy(mMorf->getModel()->mpNodeMtx[2]);
+            mDoMtx_stack_c::copy(mMorf->getModel()->getAnmMtx(2));
             mDoMtx_stack_c::multVec(&pos, &pos);
-            dComIfGp_particle_set(0x57, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0057, &pos, &shape_angle, &scale, 0xFF, NULL, -1, &col);
             
             break;
         case dItem_FATHER_LETTER_e:
@@ -367,7 +387,7 @@ int daObjTpost_c::getMsgNormal() {
         field_0x8EB = 0;
     }
     else {
-        if(dKy_daynight_check() == false) {
+        if(dKy_daynight_check() == dKy_TIME_DAY_e) {
             msgId = 0xCE5;
         }
         else {
@@ -466,7 +486,7 @@ u16 daObjTpost_c::next_msgStatus(u32* pMsgNo) {
         case 0xCF4:
         case 0xCF8:
             if(mpCurrMsg->mSelectNum == 0) {
-                s32 price = 0x0A;
+                int price = 0x0A;
                 if(m_letter[mNumReadable].mEventReg == 0xB203) {
                     price = 0xC9;
                 }
@@ -552,8 +572,6 @@ void daObjTpost_c::checkOrder() {
             }
         }
     }
-
-    return;
 }
 
 /* 00000E48-00000EA4       .text setAttention__12daObjTpost_cFv */
@@ -579,7 +597,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_POST_GET0
@@ -588,7 +606,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_GET1
@@ -597,7 +615,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_PUTOUT
@@ -606,7 +624,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_POST_WAIT
@@ -615,7 +633,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
     };
 
@@ -631,7 +649,7 @@ void daObjTpost_c::setAnm(s8 anmPrmIdx, bool param_2) {
         cXyz scale;
         scale.setall(1.0f);
         if(mMorf->getFrame() == 1.0f) {
-            dComIfGp_particle_set(0x8190, &current.pos, &current.angle, &scale);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_8190, &current.pos, &current.angle, &scale);
             mDoAud_seStart(JA_SE_OBJ_POST_LUGGAGE_OUT);
         }
     }
@@ -724,7 +742,7 @@ void daObjTpost_c::modeTalkXY() {
 
         if(field_0x8E4 != -1 && cLib_calcTimer(&field_0x8E4) == 0) {
             player->changeOriginalDemo();
-            player->changeDemoMode(daPy_demo_c::DEMO_UNK18_e);
+            player->changeDemoMode(daPy_demo_c::DEMO_SURPRISED_e);
 
             field_0x8E4 = -1;
         }
@@ -736,7 +754,7 @@ void daObjTpost_c::modeTalkXY() {
             case 0xCF1:
                 if(player->getBaseAnimeFrameRate() == 0.0f) {
                     player->changeOriginalDemo();
-                    player->changeDemoMode(daPy_demo_c::DEMO_UNK1_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
                 }
 
                 break;
@@ -895,29 +913,29 @@ bool daObjTpost_c::_draw() {
     mMorf->entryDL();
     dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), 40.0f, mAcch.m_gnd, shape_angle.y, 1.0f, 0);
 
-    return 1;
+    return true;
 }
 
 /* 00001980-00001BA4       .text createInit__12daObjTpost_cFv */
 void daObjTpost_c::createInit() {
     if(dComIfGs_isSymbol(2)) {
-        dLetter_autoStock(0xB503);
+        dLetter_autoStock(dSv_event_flag_c::LETTER_KOMALIS_FATHER);
     }
 
     if(dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) {
-        dLetter_autoStock(0x7D03);
+        dLetter_autoStock(dSv_event_flag_c::LETTER_BOMBS_AD);
     }
 
-    if(dLetter_isDelivery(dSv_evtBit_c::LETTER_BAITOS_MOM) && dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) {
-        dLetter_autoStock(0x7C03);
+    if(dLetter_isDelivery(dSv_event_flag_c::LETTER_BAITOS_MOM) && dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) {
+        dLetter_autoStock(dSv_event_flag_c::LETTER_BAITO);
     }
 
-    if(dComIfGs_isEventBit(0x1E80)) {
-        dLetter_autoStock(0x7B03);
+    if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E80)) {
+        dLetter_autoStock(dSv_event_flag_c::LETTER_ORCA);
     }
 
     if(dComIfGs_getWalletSize() == 1 || dComIfGs_getWalletSize() == 2) {
-        dLetter_autoStock(0x7A03);
+        dLetter_autoStock(dSv_event_flag_c::LETTER_ROCK_SPIRE_SHOP_AD);
     }
 
     field_0x8F0 = 1;
@@ -944,7 +962,7 @@ void daObjTpost_c::createInit() {
     modeProcInit(MODE_WAIT);
 
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     gravity = -4.5f;
 
@@ -957,11 +975,11 @@ void daObjTpost_c::getArg() {
 }
 
 /* 00001BA8-00001D88       .text _create__12daObjTpost_cFv */
-int daObjTpost_c::_create() {
+cPhs_State daObjTpost_c::_create() {
     fopAcM_SetupActor(this, daObjTpost_c);
 
     getArg();
-    int step = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State step = dComIfG_resLoad(&mPhs, m_arc_name);
     if(step == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, createHeap_CB, 0x7E0) == 0) {
             return cPhs_ERROR_e;
@@ -980,7 +998,7 @@ bool daObjTpost_c::_delete() {
 }
 
 /* 000020C4-000020E4       .text daObjTpostCreate__FPv */
-static int daObjTpostCreate(void* i_this) {
+static cPhs_State daObjTpostCreate(void* i_this) {
     return static_cast<daObjTpost_c*>(i_this)->_create();
 }
 
@@ -1022,7 +1040,7 @@ actor_process_profile_definition g_profile_OBJ_TORIPOST = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01B3,
+    /* Priority     */ PRIO_OBJ_TORIPOST,
     /* Actor SubMtd */ &daObjTpostMethodTable,
     /* Status       */ 0x18 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,

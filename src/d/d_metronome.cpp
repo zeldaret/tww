@@ -3,6 +3,7 @@
 // Translation Unit: d_metronome.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_metronome.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
@@ -39,8 +40,8 @@ dMn_HIO_c::dMn_HIO_c() {
 void dMetronome_c::screenSet() {
     static const u32 cn_t2[] = { 'cn08', 'cn09', 'cn10', 'cn11', 'cn12', 'cn13' };
     static const u32 wn_t2[] = { 'wn08', 'wn09', 'wn10', 'wn11', 'wn12', 'wn13' };
-    static const u32 i11_t2[] = { 'i081', 'i091', 'i101', 'i111', 'i121', 'i131' };
-    static const u32 i12_t2[] = { 'i082', 'i092', 'i102', 'i112', 'i122', 'i132' };
+    static const u32 i12_t2[] = { 'i081', 'i091', 'i101', 'i111', 'i121', 'i131' };
+    static const u32 i11_t2[] = { 'i082', 'i092', 'i102', 'i112', 'i122', 'i132' };
     static const u32 bs_t2[] = { 'bs08', 'bs09', 'bs10', 'bs11', 'bs12', 'bs13' };
 
     static const u32 cn_t1[] = { 'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06', 'cn07' };
@@ -339,14 +340,14 @@ void dMetronome_c::melodyShow() {
             pos.y = pane_wn[mBeat - 1].mPosCenter.y - 240.0f;
         }
 
-        dComIfGp_particle_set2Dfore(0x23e, &pos);
+        dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_023E, &pos);
 
         if (daPy_getPlayerLinkActorClass()->getTactTopPos(&tactTop)) {
             mDoLib_project(&tactTop, &sparklePos);
 
             sparklePos.x -= 320.0f;
             sparklePos.y -= 240.0f;
-            mpEmitter = dComIfGp_particle_set2Dfore(0x23f, &sparklePos);
+            mpEmitter = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_023F, &sparklePos);
             mpEmitter->becomeImmortalEmitter();
         }
 
@@ -508,7 +509,7 @@ void dMetronome_c::initialize() {
 void dMetronome_c::_create() {
     scrn = new J2DScreen();
     JUT_ASSERT(0x2db, scrn != NULL);
-    scrn->set("baton_input.blo", dComIfGp_getTmsgArchive());
+    scrn->set("baton_input.blo", dComIfGp_getTactMsgArchive());
     screenSet();
     initialize();
 }
@@ -516,7 +517,7 @@ void dMetronome_c::_create() {
 /* 8022319C-802231F4       .text _delete__12dMetronome_cFv */
 void dMetronome_c::_delete() {
     delete scrn;
-    dComIfGp_getTmsgArchive()->removeResourceAll();
+    dComIfGp_getTactMsgArchive()->removeResourceAll();
 }
 
 /* 802231F4-80223314       .text _move__12dMetronome_cFv */

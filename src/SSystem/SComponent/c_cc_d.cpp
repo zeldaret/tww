@@ -8,7 +8,6 @@
 #include "f_pc/f_pc_manager.h"
 #include "dolphin/types.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(((sizeof(x) == sizeof(float)) ? __fpclassifyf((float)(x)) : __fpclassifyd((double)(x)) ) == 1));
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)
 
@@ -204,16 +203,18 @@ void cCcD_Stts::Ct() {
     m_dmg = 0;
 }
 
+#if VERSION > VERSION_DEMO
 /* 802419C4-80241C5C       .text PlusCcMove__9cCcD_SttsFfff */
 void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
     m_cc_move.x += x;
     m_cc_move.y += y;
     m_cc_move.z += z;
-    CHECK_FLOAT_CLASS(0x1bb, m_cc_move.x);
-    CHECK_FLOAT_CLASS(0x1bc, m_cc_move.y);
-    CHECK_FLOAT_CLASS(0x1bd, m_cc_move.z);
+    JUT_ASSERT(0x1bb, !isnan(m_cc_move.x));
+    JUT_ASSERT(0x1bc, !isnan(m_cc_move.y));
+    JUT_ASSERT(0x1bd, !isnan(m_cc_move.z));
     CHECK_VEC3_RANGE(0x1c1, m_cc_move);
 }
+#endif
 
 /* 80241C5C-80241C98       .text Set__8cCcD_ObjFRC11cCcD_SrcObj */
 void cCcD_Obj::Set(const cCcD_SrcObj& src) {

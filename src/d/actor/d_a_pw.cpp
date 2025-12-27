@@ -3,6 +3,7 @@
  * Enemy - Poe
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_pw.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -10,8 +11,10 @@
 #include "d/res/res_pw.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_camera.h"
 #include "f_pc/f_pc_manager.h"
+#include "d/d_cc_d.h"
 
 enum daPW__BehaviorType {
     VisibleFromStart = 0x0,
@@ -34,9 +37,9 @@ void draw_SUB(pw_class* i_this) {
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(i_this->scale);
     mDoMtx_stack_c::transS(i_this->current.pos.x, i_this->current.pos.y + i_this->m3A4, i_this->current.pos.z);
-    cMtx_YrotM(mDoMtx_stack_c::get(), i_this->shape_angle.y);
-    cMtx_XrotM(mDoMtx_stack_c::get(), i_this->shape_angle.x);
-    cMtx_ZrotM(mDoMtx_stack_c::get(), i_this->shape_angle.z);
+    mDoMtx_stack_c::YrotM(i_this->shape_angle.y);
+    mDoMtx_stack_c::XrotM(i_this->shape_angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->shape_angle.z);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
 
     i_this->mpMorf->calc();
@@ -55,11 +58,11 @@ static BOOL daPW_Draw(pw_class*) {
 void anm_init(pw_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
     i_this->mBckIdx = bckFileIdx;
     if (soundFileIdx >= 0) {
-        void* soundAnm = dComIfG_getObjectRes("AM", soundFileIdx);
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        void* soundAnm = dComIfG_getObjectRes("PW", soundFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("PW", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, soundAnm);
     } else {
-        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("AM", bckFileIdx);
+        J3DAnmTransform* bckAnm = (J3DAnmTransform*)dComIfG_getObjectRes("PW", bckFileIdx);
         i_this->mpMorf->setAnm(bckAnm, loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
 }
@@ -174,24 +177,24 @@ void action_dousa(pw_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
     camera_class* camera = dComIfGp_getCamera(0);
     cXyz camfwd;
-    switch (i_this->mState) {
+    switch (i_this->mMode) {
     case 0:
-        anm_init(i_this, PW_BCK_WAIT1, 7.0, J3DFrameCtrl::LOOP_REPEAT_e, 1.0, -1);
+        anm_init(i_this, PW_BCK_WAIT1, 7.0, J3DFrameCtrl::EMode_LOOP, 1.0, -1);
         i_this->m346 = 0;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
-    case 0x1:
+    case 1:
         if (fopAcM_searchPlayerDistance(i_this) < 500.0f) {
-            anm_init(i_this, PW_BCK_DERUA1, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+            anm_init(i_this, PW_BCK_DERUA1, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
             i_this->m3A4 = -80.0f;
             i_this->m340 = 1;
-            i_this->mState += 1;
+            i_this->mMode += 1;
         }
         break;
-    case 0x2:
+    case 2:
         i_this->shape_angle.y += 0x1000;
         cLib_addCalc0(&i_this->m3A4, 1.0f, 3.0f);
         i_this->m39A += 7;
@@ -202,20 +205,20 @@ void action_dousa(pw_class* i_this) {
             i_this->m3A4 = 0.0f;
             first_mode_change(i_this);
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
-            JPABaseEmitter* particle = dComIfGp_particle_set(0x82EE, &i_this->m2CC, &i_this->shape_angle);
+            JPABaseEmitter* particle = dComIfGp_particle_set(dPa_name::ID_SCENE_82EE, &i_this->m2CC, &i_this->shape_angle);
             if (particle != NULL) {
                 particle->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x17)); // j_pw_item_r1 joint
             }
             i_this->attention_info.flags = 0;
-            i_this->mState = 0x0A;
+            i_this->mMode = 0x0A;
         }
         break;
-    case 0x9:
+    case 9:
         i_this->m39A = 0;
         i_this->m39C = 0;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
-    case 0xA:
+    case 10:
         if (i_this->mBehaviorType == InvisibleAtStart) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
         }
@@ -224,20 +227,20 @@ void action_dousa(pw_class* i_this) {
             i_this->m382 = 5;
             switch (i_this->mBehaviorType) {
             case InvisibleAtStart:
-                i_this->mState = 0xB;
+                i_this->mMode = 0xB;
                 break;
             case OnlyLanternVisibleAtStart:
                 i_this->m341 = 2;
-                i_this->mState = 8;
+                i_this->mMode = 8;
                 break;
             default:
                 i_this->m346 = 1;
-                i_this->mState = 0xD;
+                i_this->mMode = 0xD;
                 break;
             }
         }
         break;
-    case 0xB:
+    case 11:
         dKyr_get_vectle_calc(&i_this->current.pos, &camera->mLookat.mEye, &camfwd);
         i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
@@ -256,11 +259,11 @@ void action_dousa(pw_class* i_this) {
                 first_mode_change(i_this);
                 i_this->m382 = 3;
                 i_this->m346 = 1;
-                i_this->mState = 0xD;
+                i_this->mMode = 0xD;
             }
         }
         break;
-    case 0x6:
+    case 6:
         i_this->m39A += 10;
         if (i_this->m39A > 100) {
             i_this->m39A = 100;
@@ -269,27 +272,27 @@ void action_dousa(pw_class* i_this) {
             i_this->mBehaviorType = VisibleFromStart;
             i_this->m346 = 1;
             first_mode_change(i_this);
-            i_this->mState = 0xD;
+            i_this->mMode = 0xD;
         }
         break;
-    case 0x7:
+    case 7:
         if (fopAcM_searchPlayerDistance(i_this) < i_this->mNoticeRange) {
             i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
             i_this->current.angle.y = i_this->m38C;
             i_this->shape_angle.y = i_this->m38C;
-            anm_init(i_this, PW_BCK_DERUB2, 3.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-            i_this->mState = 6;
+            anm_init(i_this, PW_BCK_DERUB2, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mMode = 6;
         }
         break;
-    case 0x8:
+    case 8:
         i_this->m380 = 2;
         i_this->m346 = 1;
         if (fopAcM_searchPlayerDistance(i_this) < i_this->m3AC) {
-            anm_init(i_this, PW_BCK_DERUB1, 3.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
-            i_this->mState = 7;
+            anm_init(i_this, PW_BCK_DERUB1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->mMode = 7;
         }
         break;
-    case 0xD:
+    case 13:
         for (int i = 0; i < 4; i++) {
             i_this->m384[i] = 0;
         }
@@ -297,56 +300,56 @@ void action_dousa(pw_class* i_this) {
         i_this->m341 = 0;
         i_this->m378 = cM_rndF(60.0f) + 60.0f;
         if (i_this->m346 && i_this->mBckIdx != PW_BCK_WAIT1) {
-            anm_init(i_this, PW_BCK_WAIT1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, PW_BCK_WAIT1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         } else if (i_this->mBckIdx != PW_BCK_WAIT2) {
-            anm_init(i_this, PW_BCK_WAIT2, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+            anm_init(i_this, PW_BCK_WAIT2, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         }
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
-    case 0xE:
+    case 14:
         cLib_addCalc0(&i_this->speedF, 1.0f, 1.0f);
         if (i_this->m378) {
             break;
         }
-        i_this->mState += 1;
+        i_this->mMode += 1;
         // Fall-through
-    case 0xF:
+    case 15:
         i_this->m378 = cM_rndF(120.0f) + 120.0f;
         if (i_this->m346 == 1) {
             if (i_this->mBckIdx != PW_BCK_IDOU1) {
-                anm_init(i_this, PW_BCK_IDOU1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, PW_BCK_IDOU1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         } else {
             if (i_this->mBckIdx != PW_BCK_IDOU2) {
-                anm_init(i_this, PW_BCK_IDOU2, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+                anm_init(i_this, PW_BCK_IDOU2, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         }
         i_this->m38C += (s16)cM_rndFX(16384.0f);
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
-            i_this->mState = 0x14;
+            i_this->mMode = 0x14;
         } else {
-            i_this->mState = 0x10;
+            i_this->mMode = 0x10;
         }
         break;
-    case 0x10:
+    case 16:
         i_this->speedF = 5.0f;
         move_sound(i_this);
         if (i_this->m37A == 0) {
             if (Line_check(i_this, i_this->current.pos, 0) || hani_check(i_this)) {
                 i_this->m37A = 10;
             } else if (i_this->m378 == 0) {
-                i_this->mState = 0xF;
+                i_this->mMode = 0xF;
             }
         }
         break;
-    case 0x14:
+    case 20:
         i_this->m2FC = i_this->current.pos;
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->speedF = 5.0f;
             move_sound(i_this);
-            dPath__Point* pnt = &i_this->mpPath->mpPnt[i_this->mPathPntIdx];
-            f32 delta_x = pnt->mPos.x - i_this->current.pos.x;
-            f32 delta_z = pnt->mPos.z - i_this->current.pos.z;
+            dPnt* pnt = &i_this->mpPath->m_points[i_this->mPathPntIdx];
+            f32 delta_x = pnt->m_position.x - i_this->current.pos.x;
+            f32 delta_z = pnt->m_position.z - i_this->current.pos.z;
             i_this->m38C = cM_atan2s(delta_x, delta_z);
             f32 dist_xz = std::sqrtf(delta_x*delta_x + delta_z*delta_z);
             if (dist_xz < 80.0f) {
@@ -357,77 +360,77 @@ void action_dousa(pw_class* i_this) {
             }
         }
         break;
-    case 0x19:
+    case 25:
         i_this->m38C = fopAcM_searchPlayerAngleY(i_this);
-        anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
+        anm_init(i_this, PW_BCK_DAMAGE_K1, 9.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->speedF = -2.0f;
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
-    case 0x1A:
+    case 26:
         break;
-    case 0x1B:
-    case 0x1C:
+    case 27:
+    case 28:
         if (!fopAcM_CheckStatus(i_this, fopAcStts_HOOK_CARRY_e)) {
-            i_this->mState = 0x5A;
+            i_this->mMode = 0x5A;
         }
         break;
-    case 0x65:
+    case 101:
         if (!i_this->mpMorf->isStop()) {
             break;
         }
         // Fall-through
-    case 0x5A:
-    case 0x5B:
+    case 90:
+    case 91:
         // TODO
         Big_pow_gattai_check(i_this);
         break;
-    case 0x5C:
+    case 92:
         break;
-    case 0x64:
-        anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-        i_this->mState += 1;
+    case 100:
+        anm_init(i_this, PW_BCK_JITTAIKA1, 6.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->mMode += 1;
         break;
-    case 0x6E:
-        anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, -1);
+    case 110:
+        anm_init(i_this, PW_BCK_ATTACK1, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
         // TODO
-        i_this->mState += 1;
+        i_this->mMode += 1;
         break;
-    case 0x6F:
-        if (i_this->m5C4.mpEmitter != NULL) {
+    case 111:
+        if (i_this->m5C4.getEmitter() != NULL) {
             i_this->mActorPlace.pos = i_this->current.pos;
             i_this->mActorPlace.angle = i_this->shape_angle;
         }
         if (!i_this->mAcch.ChkGroundHit())
             break;
-        i_this->m5C4.end();
+        i_this->m5C4.remove();
         i_this->speedF = 0.0f;
         i_this->speed.setall(0.0f);
         i_this->gravity = 0.0f;
-        anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, -1);
-        i_this->mState += 1;
-    case 0x70:
+        anm_init(i_this, PW_BCK_SIRIMOTI1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->mMode += 1;
+    case 112:
         // Fall-through
         if (i_this->mpMorf->isStop()) {
-            i_this->mState = 0x5A;
+            i_this->mMode = 90;
         }
         break;
     }
     
-    if (i_this->mState <= 0xB) {
+    if (i_this->mMode <= 11) {
         return;
     }
-    if (i_this->m37C == 0 && i_this->mState < 0x5A) {
-        if (i_this->mState == 0x0E || i_this->mState == 0x10 || i_this->mState == 0x14) {
+    if (i_this->m37C == 0 && i_this->mMode < 90) {
+        if (i_this->mMode == 14 || i_this->mMode == 16 || i_this->mMode == 20) {
             if (!hani_check(i_this) && fopAcM_searchPlayerDistance(i_this) < 500.0f && std::fabsf(i_this->current.pos.y - player->current.pos.y) < 100.0f) {
                 if (!Line_check(i_this, i_this->current.pos, 1) && (i_this->m346 == 1 || !TORITUKI_ON)) {
                     i_this->mAction = 1;
-                    i_this->mState = 0x1E;
+                    i_this->mMode = 30;
                 }
             }
         }
     }
     
-    if (i_this->mState >= 10 && i_this->mState < 90) {
+    if (i_this->mMode >= 10 && i_this->mMode < 90) {
         alpha_anime(i_this);
     }
     
@@ -482,8 +485,65 @@ static BOOL useHeapInit(fopAc_ac_c*) {
 }
 
 /* 00006720-00006BDC       .text daPW_Create__FP10fopAc_ac_c */
-static s32 daPW_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daPW_Create(fopAc_ac_c* i_actor) {
     /* Nonmatching */
+    static dCcD_SrcCyl body_co_cyl_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
+            /* SrcObjAt  Atp     */ 0,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_NoTgHitInfSet_e,
+            /* SrcObjTg  Type    */ AT_TYPE_LIGHT_ARROW | AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+            /* SrcObjCo  SPrm    */ 0,
+            /* SrcGObjAt Se      */ 0,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 15.0f,
+            /* Height */ 0.0f,
+        }},
+    };
+    static dCcD_SrcSph kantera_co_sph_src = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_SPIKE,
+            /* SrcObjAt  Atp     */ 2,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
+            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK5,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGSphS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 15.0f,
+        }},
+    };
     fopAcM_SetupActor(i_actor, pw_class);
 }
 
@@ -505,7 +565,7 @@ actor_process_profile_definition g_profile_PW = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00C7,
+    /* Priority     */ PRIO_PW,
     /* Actor SubMtd */ &l_daPW_Method,
     /* Status       */ fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -21,7 +21,6 @@ public:
     
     typedef BOOL (daArrow_c::*daArrow_c_ProcFunc)();
     
-    daArrow_c() {}
     BOOL _createHeap();
     void _atHit(dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     void checkCreater();
@@ -34,9 +33,9 @@ public:
     void arrowUseMp();
     void ShieldReflect();
     bool check_water_in();
-    BOOL changeArrowMp();
+    static BOOL changeArrowMp();
     daArrow_c* changeArrowType();
-    void changeArrowTypeNotReady();
+    static void changeArrowTypeNotReady();
     void setRoomInfo();
     void setKeepMatrix();
     void setStopActorMatrix();
@@ -51,7 +50,7 @@ public:
     BOOL createInit();
     BOOL _execute();
     BOOL _draw();
-    s32 _create();
+    cPhs_State _create();
     BOOL _delete();
     
     static u8 getKeepType();
@@ -84,8 +83,10 @@ public:
     /* 0x602 */ s16 field_0x602;
     /* 0x604 */ s16 field_0x604;
     /* 0x606 */ u8 field_0x606[0x608 - 0x606];
+#if VERSION > VERSION_DEMO
     /* 0x608 */ s16 mSparkleTimer;
     /* 0x60C */ JPABaseEmitter* mpSparkleEmitter;
+#endif
     /* 0x610 */ fpc_ProcID mHitActorProcID;
     /* 0x614 */ s32 mHitJointIndex;
     /* 0x618 */ cXyz field_0x618;

@@ -3,6 +3,7 @@
 // Translation Unit: d_npc.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_npc.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -11,8 +12,6 @@
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_item_data.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 8021A7B4-8021A858       .text angCalcS__14dNpc_JntCtrl_cFPssss */
 bool dNpc_JntCtrl_c::angCalcS(s16* out, s16 targetY, s16 speed, s16 maxVel) {
@@ -104,7 +103,7 @@ void dNpc_JntCtrl_c::lookAtTarget(s16* outY, cXyz* pDstPos, cXyz srcPos, s16 def
         delta.x = pDstPos->x - srcPos.x;
         delta.y = pDstPos->y - srcPos.y;
         delta.z = pDstPos->z - srcPos.z;
-        f32 distXZ = std::sqrtf(delta.x * delta.x + delta.z * delta.z);
+        f32 distXZ = std::sqrtf(SQUARE(delta.x) + SQUARE(delta.z));
         targetY = cM_atan2s(delta.x, delta.z);
         r23 = cM_atan2s(delta.y, distXZ);
     } else {
@@ -184,7 +183,7 @@ cXyz dNpc_PathRun_c::getPoint(u8 pointIdx) {
     cXyz point(0.0f, 0.0f, 0.0f);
 
     if(mPath != 0 && pointIdx < mPath->m_num) {
-        point = mPath->mpPnt[pointIdx].mPos;
+        point = mPath->m_points[pointIdx].m_position;
     }
 
     return point;
@@ -195,19 +194,19 @@ bool dNpc_PathRun_c::chkPointPass(cXyz currPos, bool goingForwards) {
     bool passed = false;
     if (mPath) {
         cXyz target;
-        target.x = mPath->mpPnt[mCurrPointIndex].mPos.x;
-        target.z = mPath->mpPnt[mCurrPointIndex].mPos.z;
+        target.x = mPath->m_points[mCurrPointIndex].m_position.x;
+        target.z = mPath->m_points[mCurrPointIndex].m_position.z;
         f32 deltaX;
         f32 deltaZ;
         if (mCurrPointIndex == 0) {
-            deltaX = mPath->mpPnt[1].mPos.x - mPath->mpPnt[0].mPos.x;
-            deltaZ = mPath->mpPnt[1].mPos.z - mPath->mpPnt[0].mPos.z;
+            deltaX = mPath->m_points[1].m_position.x - mPath->m_points[0].m_position.x;
+            deltaZ = mPath->m_points[1].m_position.z - mPath->m_points[0].m_position.z;
         } else if (mCurrPointIndex == mPath->m_num - 1) {
-            deltaX = mPath->mpPnt[mPath->m_num - 1].mPos.x - mPath->mpPnt[mPath->m_num - 2].mPos.x;
-            deltaZ = mPath->mpPnt[mPath->m_num - 1].mPos.z - mPath->mpPnt[mPath->m_num - 2].mPos.z;
+            deltaX = mPath->m_points[mPath->m_num - 1].m_position.x - mPath->m_points[mPath->m_num - 2].m_position.x;
+            deltaZ = mPath->m_points[mPath->m_num - 1].m_position.z - mPath->m_points[mPath->m_num - 2].m_position.z;
         } else {
-            deltaX = mPath->mpPnt[mCurrPointIndex + 1].mPos.x - mPath->mpPnt[mCurrPointIndex - 1].mPos.x;
-            deltaZ = mPath->mpPnt[mCurrPointIndex + 1].mPos.z - mPath->mpPnt[mCurrPointIndex - 1].mPos.z;
+            deltaX = mPath->m_points[mCurrPointIndex + 1].m_position.x - mPath->m_points[mCurrPointIndex - 1].m_position.x;
+            deltaZ = mPath->m_points[mCurrPointIndex + 1].m_position.z - mPath->m_points[mCurrPointIndex - 1].m_position.z;
         }
         
         f32 f29 = cM_ssin(cM_atan2s(deltaX, deltaZ)) * (f32)0x7FFF;
@@ -258,7 +257,7 @@ bool dNpc_PathRun_c::incIdxAuto() {
     bool hitEnd = true;
 
     if(mPath != 0) {
-        if(mPath->mLoops & 1) {
+        if(dPath_ChkClose(mPath)) {
             mCurrPointIndex += 1;
             if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = 0;
@@ -311,7 +310,7 @@ bool dNpc_PathRun_c::decIdxAuto() {
     bool hitEnd = true;
 
     if(mPath != 0) {
-        if(mPath->mLoops & 1) {
+        if(dPath_ChkClose(mPath)) {
             mCurrPointIndex -= 1;
             if(mCurrPointIndex >= mPath->m_num) {
                 mCurrPointIndex = mPath->m_num - 1;
@@ -405,7 +404,7 @@ u8 dNpc_PathRun_c::maxPoint() {
 u8 dNpc_PathRun_c::pointArg(u8 idx) {
     u8 arg = 0;
     if(mPath != 0 && idx < (u8)mPath->m_num) {
-        arg = mPath->mpPnt[idx].mArg3;
+        arg = mPath->m_points[idx].mArg3;
     }
 
     return arg;
@@ -415,14 +414,14 @@ u8 dNpc_PathRun_c::pointArg(u8 idx) {
 bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
     
             cXyz diff = (*param_1 - point);
             f32 xz_mag = diff.abs2XZ();
-            f32 y_mag = param_2 * (diff.y * diff.y);
+            f32 y_mag = param_2 * SQUARE(diff.y);
             f32 dist = std::sqrtf(y_mag + xz_mag);
 
             if(max_dist > dist) {
@@ -441,8 +440,8 @@ bool dNpc_PathRun_c::setNearPathIndx(cXyz* param_1, f32 param_2) {
 /* 8021B514-8021B670       .text setNearPathIndxMk__14dNpc_PathRun_cFP4cXyz */
 f32 dNpc_PathRun_c::setNearPathIndxMk(cXyz* param_1) {
     f32 max_dist;
-    if(mPath != 0) {
-        max_dist = 1000000000.0f;
+    if(mPath != NULL) {
+        max_dist = G_CM3D_F_INF;
         u8 pointIdx = 0;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -465,7 +464,7 @@ bool dNpc_PathRun_c::setNearPathIndxMk2(cXyz* param_1, u8 param_2, u8 param_3) {
     u8 pointIdx;
     bool set = false;
     if(mPath != 0) {
-        f32 max_dist = 1000000000.0f;
+        f32 max_dist = G_CM3D_F_INF;
         pointIdx = param_2;
         for(int i = 0; i < maxPoint(); i++) {
             cXyz point = getPoint(i);
@@ -599,10 +598,10 @@ bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int a
 /* 8021BC8C-8021BD2C       .text dNpc_setShadowModel__FP8J3DModelP12J3DModelDataP8J3DModel */
 void dNpc_setShadowModel(J3DModel* param_1, J3DModelData* param_2, J3DModel* param_3) {
     for(int i = 0; i < param_2->getWEvlpMtxNum(); i++) {
-        mDoMtx_copy(param_3->mpWeightEnvMtx[i], param_1->mpWeightEnvMtx[i]);
+        param_1->setWeightAnmMtx(i, param_3->getWeightAnmMtx(i));
     }
     for(int i = 0; i < param_2->getJointNum(); i++) {
-        mDoMtx_copy(param_3->mpNodeMtx[i], param_1->mpNodeMtx[i]);
+        param_1->setAnmMtx(i, param_3->getAnmMtx(i));
     }
 }
 
@@ -629,7 +628,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
     diff.z = param_2.z - param_1.z;
 
     if(param_3 != 0) {
-        f32 dist = std::sqrtf(diff.x * diff.x + diff.z * diff.z);
+        f32 dist = std::sqrtf(SQUARE(diff.x) + SQUARE(diff.z));
         *param_3 = dist;
     }
 
@@ -640,7 +639,7 @@ void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param
 
 /* 8021BEC4-8021BF30       .text dNpc_chkArasoi__Fv */
 bool dNpc_chkArasoi() {
-    return dComIfGs_isEventBit(0x1220) && !dComIfGs_isEventBit(0x1808);
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1220) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1808);
 }
 
 /* 8021BF30-8021BF98       .text dNpc_chkLetterPassed__Fv */
@@ -937,8 +936,8 @@ bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, f32 param_3, f32 param_4, f3
     return ret;
 }
 
-static void dummyfunc(int i_pathInf) {
-    JUT_ASSERT(0, i_pathInf != 0);
+static void dummyfunc(dStage_dPath_c* i_pathInf) {
+    JUT_ASSERT(0, i_pathInf != NULL);
 }
 
 dCcD_SrcCyl dNpc_cyl_src = {
@@ -964,9 +963,9 @@ dCcD_SrcCyl dNpc_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };

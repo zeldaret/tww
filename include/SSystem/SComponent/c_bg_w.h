@@ -33,7 +33,7 @@ public:
     }
 };
 
-struct cBgD_Vtx_t;
+struct cBgD_Vtx_t : public Vec {};
 
 struct cBgD_Blk_t {
     /* 0x00 */ u16 startTri;
@@ -158,7 +158,7 @@ public:
     void MakeNodeTreeGrpRp(int);
     void MakeNodeTree();
     bool ChkMemoryError();
-    bool Set(cBgD_t*, u32, f32(*)[3][4]);
+    bool Set(cBgD_t*, u32, Mtx*);
     bool RwgLineCheck(u16, cBgS_LinChk*);
     bool LineCheckRp(cBgS_LinChk*, int);
     bool LineCheckGrpRp(cBgS_LinChk*, int, int);
@@ -201,6 +201,7 @@ public:
     BOOL ChkPriority(int prio) { return mWallCorrectPriority == prio; }
 
     Mtx* GetBaseMtxP() { return pm_base; }
+    void SetBaseMtxP(Mtx* mtx_p) { pm_base = mtx_p; }
     u32 GetPolyInfId(int poly_index) const {
         JUT_ASSERT(0x2f1, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return pm_bgd->m_t_tbl[poly_index].id;
@@ -222,8 +223,8 @@ public:
         return pm_bgd->m_ti_tbl[id].mPolyInf3;
     }
     int GetVtxNum() const { return pm_bgd->m_v_num; }
-    Vec* GetVtxTbl() const { return pm_vtx_tbl; }
-    void SetVtxTbl(Vec* v) { pm_vtx_tbl = v; }
+    cBgD_Vtx_t* GetVtxTbl() const { return pm_vtx_tbl; }
+    void SetVtxTbl(Vec* v) { pm_vtx_tbl = (cBgD_Vtx_t*)v; }
     bool GroundCross(cBgS_GndChk* chk) {
         return GroundCrossGrpRp(chk, m_rootGrpIdx, 1);
     }
@@ -231,17 +232,17 @@ public:
         return LineCheckGrpRp(chk, m_rootGrpIdx, 1);
     }
 
-    void GetOldInvMtx(float(*)[4]) const {}
+    void ShdwDraw(cBgS_ShdwDraw* shdw) {
+        ShdwDrawGrpRp(shdw, m_rootGrpIdx);
+    }
+
+    void GetOldInvMtx(Mtx) const {}
     bool ChkFlush() { return mIgnorePlaneType & 8; }
     void ChkGroundRegist() {}
     void ChkRoofRegist() {}
     void ChkThrough() {}
     void ChkWallRegist() {}
     void OffRoofRegist() {}
-    void SetBaseMtxP(Mtx* mtx_p) { pm_base = mtx_p; }
-    void ShdwDraw(cBgS_ShdwDraw* shdw) {
-        ShdwDrawGrpRp(shdw, m_rootGrpIdx);
-    }
 
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;
@@ -264,16 +265,26 @@ public:
     /* 0x7C */ cXyz mTransVel;
     /* 0x88 */ cBgW_TriElm* pm_tri;
     /* 0x8C */ cBgW_RwgElm* pm_rwg;
-    /* 0x90 */ Vec* pm_vtx_tbl;
+    /* 0x90 */ cBgD_Vtx_t* pm_vtx_tbl;
     /* 0x94 */ cBgD_t* pm_bgd;
     /* 0x98 */ cBgW_BlkElm* pm_blk;
     /* 0x9C */ cBgW_GrpElm* pm_grp;
     /* 0xA0 */ cBgW_NodeTree* m_nt_tbl;
     /* 0xA4 */ int m_rootGrpIdx;
-};
+}; // size = 0xA8
 
-bool cBgW_CheckBGround(f32 ny);
-bool cBgW_CheckBRoof(f32 ny);
-bool cBgW_CheckBWall(f32 ny);
+inline bool cBgW_CheckBGround(f32 ny) {
+    return ny >= 0.5f;
+}
+
+inline bool cBgW_CheckBRoof(f32 ny) {
+    return ny < (-4.0f / 5.0f);
+}
+
+inline bool cBgW_CheckBWall(float y) {
+    if (!cBgW_CheckBGround(y) && !cBgW_CheckBRoof(y))
+        return true;
+    return false;
+}
 
 #endif /* C_BG_W_H */

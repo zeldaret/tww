@@ -3,17 +3,20 @@
  * Item - Shop Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shop_item.h"
-#include "d/res/res_fdai.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
+#include "d/d_cloth_packet.h"
+#include "d/res/res_fdai.h"
+#include "d/res/res_cloth.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
-#include "d/res/res_cloth.h"
 
 const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
@@ -44,8 +47,8 @@ s16 daShopItem_c::getShopBmdIdx() {
 void daShopItem_c::CreateInit() {
     fopAcM_SetMtx(this, field_0x64C);
     fopAcM_setCullSizeBox(this, -100.0f, 0.0f, -100.0f, 100.0f, 200.0f, 100.0f);
-    if(mDoLib_clipper::mSystemFar > 1.0f) {
-        fopAcM_setCullSizeFar(this, 5000.0f / mDoLib_clipper::mSystemFar);
+    if(mDoLib_clipper::getFar() > 1.0f) {
+        fopAcM_setCullSizeFar(this, 5000.0f / mDoLib_clipper::getFar());
     }
     show();
 
@@ -99,14 +102,14 @@ BOOL daShopItem_c::clothCreate() {
 
         field_0x644 = (*clothFunc[field_0x648])(shopArc, clothArc, &tevStr, 0);
         if (field_0x644 == 0) {
-            return 0;
+            return FALSE;
         }
     }
     else {
         field_0x644 = 0;
     }
     
-    return 1;
+    return TRUE;
 }
 
 /* 000003BC-000005A8       .text set_mtx__12daShopItem_cFv */
@@ -153,10 +156,10 @@ bool daShopItem_c::_execute() {
 
 /* 000005F8-00000694       .text _draw__12daShopItem_cFv */
 bool daShopItem_c::_draw() {
-    if(chkDraw() == 0) return 1;
+    if(!chkDraw()) return true;
 
     if(m_itemNo == WATER_STATUE || m_itemNo == POSTMAN_STATUE) {
-        mpModel->getModelData()->getJointTree().getJointNodePointer(0)->setMtxCalc(0);
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(0);
     }
     DrawBase();
     
@@ -185,12 +188,12 @@ void daShopItem_c::setTevStr() {
 }
 
 /* 000007A4-000007C4       .text daShopItem_Create__FPv */
-static int daShopItem_Create(void* i_this) {
+static cPhs_State daShopItem_Create(void* i_this) {
     return static_cast<daShopItem_c*>(i_this)->_create();
 }
 
 /* 000007C4-00000AA4       .text _create__12daShopItem_cFv */
-int daShopItem_c::_create() {
+cPhs_State daShopItem_c::_create() {
     fopAcM_SetupActor(this, daShopItem_c);
     
     m_itemNo = fopAcM_GetParamBit(fopAcM_GetParam(this), 0, 8);
@@ -201,7 +204,7 @@ int daShopItem_c::_create() {
     }
 
     arcName = getShopArcname();
-    int result = dComIfG_resLoad(&mPhs, arcName);
+    cPhs_State result = dComIfG_resLoad(&mPhs, arcName);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -248,7 +251,7 @@ static BOOL daShopItem_Delete(void* i_this) {
     }
     inst->DeleteBase(inst->getShopArcname());
 
-    return 1;
+    return TRUE;
 }
 
 /* 00000D2C-00000D50       .text daShopItem_Draw__FPv */
@@ -284,7 +287,7 @@ actor_process_profile_definition g_profile_ShopItem = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00FE,
+    /* Priority     */ PRIO_ShopItem,
     /* Actor SubMtd */ &daShopItemMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

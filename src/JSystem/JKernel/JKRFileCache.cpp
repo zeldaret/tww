@@ -3,6 +3,8 @@
 // Translation Unit: JKRFileCache.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JKernel/JKRFileFinder.h"
@@ -389,7 +391,8 @@ char* JKRFileCache::getDvdPathName(const char* path) const {
 /* 802B7E60-802B7EA8       .text convStrLower__12JKRFileCacheCFPc */
 void JKRFileCache::convStrLower(char* buffer) const {
     while (*buffer) {
-        *buffer++ = tolower(*buffer);
+        *buffer = tolower(*buffer);
+        buffer++;
     }
 }
 

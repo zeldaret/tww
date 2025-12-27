@@ -3,17 +3,19 @@
 // Translation Unit: object-camera.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JStage/object-camera.h"
 #include "dolphin/types.h"
 
 namespace JStudio_JStage {
 
 const TAdaptor_camera::TVVOutput TAdaptor_camera::saoVVOutput_[5] = {
-    TVVOutput(7, &JStage::TCamera::JSGSetViewRoll, &JStage::TCamera::JSGGetViewRoll),
-    TVVOutput(6, &JStage::TCamera::JSGSetProjectionFovy, &JStage::TCamera::JSGGetProjectionFovy),
-    TVVOutput(8, &JStage::TCamera::JSGSetProjectionNear, &JStage::TCamera::JSGGetProjectionNear),
-    TVVOutput(9, &JStage::TCamera::JSGSetProjectionFar, &JStage::TCamera::JSGGetProjectionFar),
-    TVVOutput(-1, NULL, NULL),
+    TVVOutput(TECAMERA_7, &JStage::TCamera::JSGSetViewRoll, &JStage::TCamera::JSGGetViewRoll),
+    TVVOutput(TECAMERA_6, &JStage::TCamera::JSGSetProjectionFovy, &JStage::TCamera::JSGGetProjectionFovy),
+    TVVOutput(TECAMERA_8, &JStage::TCamera::JSGSetProjectionNear, &JStage::TCamera::JSGGetProjectionNear),
+    TVVOutput(TECAMERA_9, &JStage::TCamera::JSGSetProjectionFar, &JStage::TCamera::JSGGetProjectionFar),
+    TVVOutput(TE_VALUE_NONE, NULL, NULL),
 };
 
 /* 80277354-802773E8       .text __ct__Q214JStudio_JStage15TAdaptor_cameraFPCQ26JStage7TSystemPQ26JStage7TCamera */

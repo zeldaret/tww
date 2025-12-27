@@ -30,7 +30,7 @@ public:
     ~daNh_c();
     void setBaseMtx();
     BOOL createHeap();
-    s32 create();
+    cPhs_State create();
     BOOL init();
     void action(void*);
     BOOL setAction(ActionFunc, void*);
@@ -107,7 +107,7 @@ public:
     daNh_HIO_c();
     virtual ~daNh_HIO_c() {}
     
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext*) {}
 
 public:
     /* 0x04 */ s8 mNo;

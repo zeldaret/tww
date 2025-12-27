@@ -2,14 +2,12 @@
 #define D_A_SPC_ITEM01_H
 
 #include "d/actor/d_a_itembase.h"
-#include "f_op/f_op_actor.h"
-#include "SSystem/SComponent/c_phase.h"
 
 class daSpcItem01_c : public daItemBase_c {
 public:
     void set_mtx();
     BOOL _delete();
-    s32 _create();
+    cPhs_State _create();
     BOOL CreateInit();
     BOOL _execute();
     void set_effect();

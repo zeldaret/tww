@@ -8,8 +8,8 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class am2_class : public fopEn_enemy_c {
-public:
+struct am2_class {
+    /* 0x000 */ fopEn_enemy_c actor;
     /* 0x2AC */ request_of_phase_process_class mPhase;
     /* 0x2B4 */ JntHit_c* mEyeJntHit;
     /* 0x2B8 */ mDoExt_McaMorf* mpMorf;
@@ -21,7 +21,7 @@ public:
     /* 0x2CA */ u8 mStartsInactive;
     /* 0x2CB */ u8 mSwitch;
     /* 0x2CC */ u8 mAction;
-    /* 0x2CD */ u8 mState;
+    /* 0x2CD */ u8 mMode;
     /* 0x2CE */ u8 m2CE;
     /* 0x2CF */ bool mbIsWeakBeingHit;
     /* 0x2D0 */ bool mbNotInHomeRoom;

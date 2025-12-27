@@ -29,8 +29,8 @@ void dCcD_GAtTgCoCommonBase::SetEffCounterTimer() {
 
 /* 800AB334-800AB384       .text __ct__10dCcD_GSttsFv */
 dCcD_GStts::dCcD_GStts() {
-    mAtSpl = 0;
-    mTgSpl = 0;
+    mAtSpl = dCcG_At_Spl_UNK0;
+    mTgSpl = dCcG_Tg_Spl_UNK0;
     mRoomId = 0;
     mActorPerfTblId = -1;
     mAtApid = fpcM_ERROR_PROCESS_ID_e;
@@ -42,8 +42,8 @@ dCcD_GStts::dCcD_GStts() {
 
 /* 800AB384-800AB3BC       .text Ct__10dCcD_GSttsFv */
 void dCcD_GStts::Ct() {
-    mAtSpl = 0;
-    mTgSpl = 0;
+    mAtSpl = dCcG_At_Spl_UNK0;
+    mTgSpl = dCcG_Tg_Spl_UNK0;
     mRoomId = 0;
     mActorPerfTblId = -1;
     mAtApid = fpcM_ERROR_PROCESS_ID_e;
@@ -132,7 +132,7 @@ void dCcD_GObjInf::ClrAtHit() {
     SubtractAtEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800AB81C-800AB874       .text ChkAtHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkAtHit() {
     if (!cCcD_ObjHitInf::ChkAtHit())
@@ -170,7 +170,7 @@ cCcD_GObjInf* dCcD_GObjInf::GetAtHitGObj() {
 
 /* 800AB938-800AB958       .text ChkAtNoGuard__12dCcD_GObjInfFv */
 u8 dCcD_GObjInf::ChkAtNoGuard() {
-    return GetAtSpl() >= 8;
+    return GetAtSpl() >= dCcG_At_Spl_UNK8;
 }
 
 /* 800AB958-800AB9B0       .text ClrTgHit__12dCcD_GObjInfFv */
@@ -182,7 +182,7 @@ void dCcD_GObjInf::ClrTgHit() {
     SubtractTgEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800AB9B0-800ABA08       .text ChkTgHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkTgHit() {
     if (!cCcD_ObjHitInf::ChkTgHit())
@@ -232,7 +232,7 @@ void dCcD_GObjInf::ClrCoHit() {
     SubtractCoEffCounter();
 }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
 /* 800ABB4C-800ABBA4       .text ChkCoHit__12dCcD_GObjInfFv */
 u32 dCcD_GObjInf::ChkCoHit() {
     if (!cCcD_ObjHitInf::ChkCoHit())
@@ -263,7 +263,7 @@ void dCcD_GObjInf::Set(const dCcD_SrcGObjInf& src) {
 
 /* 800ABC54-800ABCC4       .text dCcD_GetGObjInf__FP8cCcD_Obj */
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* pobj) {
-    JUT_ASSERT(VERSION_SELECT(466, 531, 531), pobj != NULL);
+    JUT_ASSERT(VERSION_SELECT(466, 466, 531, 531), pobj != NULL);
     return (dCcD_GObjInf*)pobj->GetGObjInf();
 }
 

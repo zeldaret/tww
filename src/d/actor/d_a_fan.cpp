@@ -3,6 +3,7 @@
 // Translation Unit: d_a_fan.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fan.h"
 #include "d/res/res_hsen1.h"
 #include "d/res/res_hsen3.h"
@@ -11,6 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_level_se.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -49,11 +51,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 100.0f,
-    },
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 100.0f,
+    }},
 };
 
 /* 00000078-000000F0       .text Delete__7daFan_cFv */
@@ -69,7 +71,7 @@ BOOL daFan_c::Delete() {
 }
 
 /* 000000F0-0000040C       .text CreateHeap__7daFan_cFv */
-int daFan_c::CreateHeap() {
+BOOL daFan_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]));
     JUT_ASSERT(0x15e, modelData != NULL);
 
@@ -86,26 +88,26 @@ int daFan_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_01);
     JUT_ASSERT(400, pbtk != NULL);
-    if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false, 0))
+    if (!mWindBtkAnm0.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BTK_YAFLW00_02);
     JUT_ASSERT(0x19c, pbtk != NULL);
-    if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0,-1, false, 0))
+    if (!mWindBtkAnm1.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0,-1, false, 0))
         return FALSE;
 
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname2, YAFLW00_BCK_YAFLW00);
     JUT_ASSERT(0x1a9, pbck != NULL);
-    if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0,-1, false))
+    if (!mWindBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0,-1, false))
         return FALSE;
 
     return TRUE;
 }
 
-static int nodeCallBack(J3DNode*, int);
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 0000040C-00000640       .text Create__7daFan_cFv */
-int daFan_c::Create() {
+BOOL daFan_c::Create() {
     f32 wind_len = m_wind_length[mType];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
@@ -135,8 +137,8 @@ int daFan_c::Create() {
 }
 
 /* 00000640-000006F4       .text nodeCallBack__FP7J3DNodei */
-static int nodeCallBack(J3DNode* node, int timing) {
-    if (timing == 0) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
         u32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
@@ -153,15 +155,15 @@ static int nodeCallBack(J3DNode* node, int timing) {
 }
 
 /* 000006F4-00000900       .text _create__7daFan_cFv */
-s32 daFan_c::_create() {
+cPhs_State daFan_c::_create() {
     fopAcM_SetupActor(this, daFan_c);
 
     mType = daFan_prm::getType(this);
-    s32 rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State rt1 = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (rt1 != cPhs_COMPLEATE_e)
         return rt1;
 
-    s32 rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
+    cPhs_State rt2 = dComIfG_resLoad(&mWindPhs, m_arcname2);
     if (rt2 != cPhs_COMPLEATE_e)
         return rt2;
 
@@ -209,7 +211,7 @@ void daFan_c::set_cps(f32 h) {
 }
 
 /* 00000E54-00001088       .text Execute__7daFan_cFPPA3_A4_f */
-int daFan_c::Execute(Mtx** mtxP) {
+BOOL daFan_c::Execute(Mtx** mtxP) {
     s16 speed = m_fan_speed[mType];
     f32 len = mFanSpeed / (f32)speed;
 
@@ -261,7 +263,7 @@ BOOL daFan_c::Draw() {
 }
 
 /* 0000118C-000011AC       .text daFan_Create__FPv */
-static BOOL daFan_Create(void* i_this) {
+static cPhs_State daFan_Create(void* i_this) {
     return ((daFan_c*)i_this)->_create();
 }
 
@@ -272,7 +274,7 @@ static BOOL daFan_Delete(void* i_this) {
 
 /* 000011CC-000011F8       .text daFan_Draw__FPv */
 static BOOL daFan_Draw(void* i_this) {
-    return ((daFan_c*)i_this)->Draw();
+    return ((daFan_c*)i_this)->MoveBGDraw();
 }
 
 /* 000011F8-00001218       .text daFan_Execute__FPv */
@@ -303,7 +305,7 @@ actor_process_profile_definition g_profile_FAN = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x011B,
+    /* Priority     */ PRIO_FAN,
     /* Actor SubMtd */ &daFanMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

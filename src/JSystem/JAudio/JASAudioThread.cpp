@@ -3,6 +3,8 @@
 // Translation Unit: JASAudioThread.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASAiCtrl.h"
 #include "JSystem/JAudio/JASDSPBuf.h"
@@ -26,8 +28,8 @@ OSMessage JASystem::TAudioThread::saAudioMsgBuf[16];
 
 u32 JASystem::TAudioThread::sAudioprocMQInit;
 int JASystem::TAudioThread::sbIsPrioritySet;
-s32 JASystem::TAudioThread::sDSPPrio;
-s32 JASystem::TAudioThread::sDVDPrio;
+OSPriority JASystem::TAudioThread::sDSPPrio;
+OSPriority JASystem::TAudioThread::sDVDPrio;
 vs32 JASystem::TAudioThread::snIntCount;
 int JASystem::TAudioThread::sbIsDSPBoot;
 
@@ -124,7 +126,7 @@ void JASystem::TAudioThread::setPriority(u8 dspPrio, u8 dvdPrio) {
 /* 8028920C-802892E0       .text start__Q28JASystem12TAudioThreadFP12JKRSolidHeapUlUl */
 void JASystem::TAudioThread::start(JKRSolidHeap* heap, u32 aramSize, u32 flag) {
     if (!sbIsPrioritySet) {
-        s32 priority = OSGetThreadPriority(OSGetCurrentThread()) - 3;
+        OSPriority priority = OSGetThreadPriority(OSGetCurrentThread()) - 3;
         sDSPPrio = priority;
         sDVDPrio = priority - 1;
     }
