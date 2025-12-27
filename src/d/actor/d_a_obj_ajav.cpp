@@ -561,7 +561,7 @@ void daObjAjav::Act_c::set_co_offset() {
     mSph.SetC(current.pos + mSphCoOffset);
     mCyl.SetH(l_daObjAjav_hint_cyl_h_talbe[M_status]);
 
-    for (i = get_stone_row(), j = 0; j < ARRAY_SSIZE(mHintCyls); i++, j++) {
+    for (i = get_rock_row(), j = 0; j < ARRAY_SSIZE(mHintCyls); i++, j++) {
         mHintCyls[j].SetC(current.pos + l_daObjAjav_cyl_offset[i]);
         mHintCyls[j].SetR(l_daObjAjav_cyl_r[i]);
         mHintCyls[j].SetH(l_daObjAjav_cyl_h[i]);
@@ -750,8 +750,8 @@ bool daObjAjav::Act_c::_execute() {
             if (stone_broken != true) {
                 mCylStts.Move();
                 if (mCyl.ChkTgHit()) {
-                    cond = get_stone_row();
-                    for (int j = get_stone_row(); j < (cond + 2); j++) {
+                    cond = get_rock_row();
+                    for (int j = get_rock_row(); j < (cond + 2); j++) {
                         mRockParts[j].make_fall_rock(TRUE);
                         mRockParts[j].mTimer = 0;
                         mRockParts[j].mTimerTrigger = 30;
@@ -764,8 +764,8 @@ bool daObjAjav::Act_c::_execute() {
         break;
     case 1:
         if (eventInfo.checkCommandDemoAccrpt()) {
-            cond = get_stone_row();
-            for (i = get_stone_row(); i < (cond + 2); i++) {
+            cond = get_rock_row();
+            for (i = get_rock_row(); i < (cond + 2); i++) {
                 init_disp_rate.x = 12.0f;
                 if ((i & 1) == 0) {
                     init_disp_rate.x *= -1.0f;
@@ -779,13 +779,13 @@ bool daObjAjav::Act_c::_execute() {
             
             make_shot_rock();
 
-            int row = get_stone_row();
+            int row = get_rock_row();
             set_hamon(mRockParts[row].mRockDisplacement.y);
 
             M_status++;
             if (M_status < STATUS_MAX - 1) {
-                cond = get_stone_row();
-                for (i = get_stone_row(); i < (cond + 2); i++) {
+                cond = get_rock_row();
+                for (i = get_rock_row(); i < (cond + 2); i++) {
                     mRockParts[i].mFlawPos = flaw_pos[i];
                     mRockParts[i].setExeProc(&Part_c::flaw); 
                 }

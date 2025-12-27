@@ -78,7 +78,7 @@ namespace daObjAjav {
         // in the call to set_hamon.
         // The stone is 6 fragments arranged in a 3x2 (row x col) grid, so
         // this gets the starting index of the n'th row.
-        int get_stone_row() { return M_status << 1; }
+        int get_rock_row() { return M_status << 1; }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
