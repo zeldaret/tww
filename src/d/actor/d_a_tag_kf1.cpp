@@ -391,22 +391,22 @@ static cPhs_State daTag_Kf1_Create(fopAc_ac_c* obj) {
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_delete();
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_execute();
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_draw();
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
+static bool daTag_Kf1_IsDelete(daTag_Kf1_c*) {
     return TRUE;
 }
 static actor_method_class l_daTag_Kf1_Method = {
