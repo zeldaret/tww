@@ -43,8 +43,8 @@ namespace daObjAjav {
         void draw_shy(daObjAjav::Act_c*);
         void make_fall_rock(BOOL);
     public:
-        /* 0x00 */ cXyz mRockOffset;
-        /* 0x0C */ cXyz mInverseRockOffset;
+        /* 0x00 */ cXyz mCenterPos;
+        /* 0x0C */ cXyz mCenterToOriginTrans;
         /* 0x18 */ cXyz mRockDisplacement;
         /* 0x24 */ cXyz mRockDisplacementRate;
         /* 0x30 */ cXyz mFlawPos;
@@ -52,7 +52,7 @@ namespace daObjAjav {
         /* 0x42 */ csXyz mRotationSpeed;
         /* 0x48 */ cXyz mSePos;
         /* 0x54 */ u16 mTimerTrigger;
-        /* 0x56 */ u16 mTimer;
+        /* 0x56 */ u16 mTimer; // also used as a vertical velocity in fall_1
         /* 0x58 */ s16 mAngleLimit;
         /* 0x5A */ bool mbHasSplashed;
         /* 0x5B */ u8 mB8[0x6C - 0x5B];
@@ -74,11 +74,11 @@ namespace daObjAjav {
         BOOL check_sw(int sw_no) { return dComIfGs_isSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         void on_sw(int sw_no) { dComIfGs_onSwitch(sw_no, fopAcM_GetHomeRoomNo(this)); }
         
-        // fake inline method to match _execute, this isn't in the debug maps but is needed
-        // in the call to set_hamon
-        // the stone is 6 fragments arranged in a 3x2 (row x col) grid
-        // this gets the starting index of the n'th row
-        s32 get_stone_row() { return M_status << 1; }
+        // Fake inline method to match _execute, this isn't in the debug maps but is needed
+        // in the call to set_hamon.
+        // The stone is 6 fragments arranged in a 3x2 (row x col) grid, so
+        // this gets the starting index of the n'th row.
+        int get_stone_row() { return M_status << 1; }
 
         static BOOL solidHeapCB(fopAc_ac_c*);
         BOOL create_heap();
@@ -111,7 +111,7 @@ namespace daObjAjav {
         /* 0x5F4 */ dCcD_Cyl mHintCyls[2];
         /* 0x854 */ Mtx mMtx;
         /* 0x884 */ u8 m884[0x890 - 0x884];
-        /* 0x890 */ Part_c mStoneParts[6];
+        /* 0x890 */ Part_c mRockParts[6];
         /* 0xC20 */ s16 mEventIdx;
         /* 0xC22 */ u8 M_status;
         /* 0xC23 */ bool mbResLoaded;

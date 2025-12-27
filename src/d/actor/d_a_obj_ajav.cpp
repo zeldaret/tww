@@ -108,8 +108,8 @@ static dCcD_SrcCyl l_daObjAjav_hint_cyl_data = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ 0x20,
-        /* SrcObjTg  SPrm    */ 0x09,
+        /* SrcObjTg  Type    */ AT_TYPE_BOMB,
+        /* SrcObjTg  SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_ShieldFrontRange_e,
         /* SrcObjCo  SPrm    */ 0,
         /* SrcGObjAt Se      */ 0,
         /* SrcGObjAt HitMark */ 0,
@@ -168,21 +168,21 @@ void daObjAjav::daObjAjav_make_splash(cXyz i_splashPos, f32 i_scale) {
 
 /* 000001AC-00000268       .text make_hamon__Q29daObjAjav6Part_cF4cXyzf */
 void daObjAjav::Part_c::make_hamon(cXyz i_hamonPos, f32 i_scale) {
-    cXyz temp;
+    cXyz scale;
 
     i_scale /= 2000.0f;
-    temp.x = 2.0f + i_scale;
-    temp.y = temp.x;
-    temp.z = temp.x;
+    scale.x = 2.0f + i_scale;
+    scale.y = scale.x;
+    scale.z = scale.x;
 
     i_hamonPos.y += 10.0f;
     
-    f32 temp3;
-    if (fopAcM_getWaterY(&i_hamonPos, &temp3) == TRUE) {
-        i_hamonPos.y = temp3;
+    f32 water_height;
+    if (fopAcM_getWaterY(&i_hamonPos, &water_height) == TRUE) {
+        i_hamonPos.y = water_height;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &i_hamonPos, NULL, &temp);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &i_hamonPos, NULL, &scale);
 }
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -191,13 +191,13 @@ void daObjAjav::Part_c::no_proc(daObjAjav::Act_c*) {
 }
 
 /* 0000026C-000003A8       .text init_data__Q29daObjAjav6Part_cF4cXyz4cXyzP12dKy_tevstr_cP4cXyz */
-void daObjAjav::Part_c::init_data(cXyz i_actorPos, cXyz i_rockOffset, dKy_tevstr_c* i_tevstr, cXyz* i_rockPos) {
-    mRockOffset = i_rockOffset;
-    mInverseRockOffset = cXyz::Zero - mRockOffset;
+void daObjAjav::Part_c::init_data(cXyz i_actorPos, cXyz i_rockOffset, dKy_tevstr_c* i_tevStr, cXyz* i_rockPos) {
+    mCenterPos = i_rockOffset;
+    mCenterToOriginTrans = cXyz::Zero - mCenterPos;
     mAccumulatedRotation = csXyz::Zero;
     mRockDisplacement = cXyz::Zero;
     mRockDisplacementRate = cXyz::Zero;
-    mpTevStr = i_tevstr;
+    mpTevStr = i_tevStr;
     mRockParticlePos = *i_rockPos + i_actorPos;
 #if VERSION > VERSION_DEMO
     setExeProc(&Part_c::no_proc);
@@ -224,18 +224,18 @@ BOOL daObjAjav::Part_c::set_mdl_area(const char* i_arcName, int i_index, u32 i_d
 }
 
 /* 00000464-0000050C       .text init_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz4cXyz */
-void daObjAjav::Part_c::init_mtx(cXyz i_translation, csXyz i_zxyRotation, cXyz i_scale) {
+void daObjAjav::Part_c::init_mtx(cXyz i_pos, csXyz i_angle, cXyz i_scale) {
     mpModel->setBaseScale(i_scale);
-    mDoMtx_stack_c::transS(i_translation);
-    mDoMtx_stack_c::ZXYrotM(i_zxyRotation);
+    mDoMtx_stack_c::transS(i_pos);
+    mDoMtx_stack_c::ZXYrotM(i_angle);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
 }
 
 /* 0000050C-000005A8       .text set_flaw_mtx__Q29daObjAjav6Part_cF4cXyz5csXyz */
-void daObjAjav::Part_c::set_flaw_mtx(cXyz param_1, csXyz param_2) {
-    mDoMtx_stack_c::transS(param_1);
-    mDoMtx_stack_c::ZXYrotM(param_2);
+void daObjAjav::Part_c::set_flaw_mtx(cXyz i_pos, csXyz i_angle) {
+    mDoMtx_stack_c::transS(i_pos);
+    mDoMtx_stack_c::ZXYrotM(i_angle);
     mDoMtx_stack_c::transM(mRockDisplacement);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();
@@ -246,9 +246,9 @@ void daObjAjav::Part_c::set_fall_mtx(cXyz i_pos, csXyz i_angle) {
     mDoMtx_stack_c::transS(i_pos);
     mDoMtx_stack_c::ZXYrotM(i_angle);
     mDoMtx_stack_c::transM(mRockDisplacement);
-    mDoMtx_stack_c::transM(mRockOffset);
+    mDoMtx_stack_c::transM(mCenterPos);
     mDoMtx_stack_c::ZXYrotM(mAccumulatedRotation);
-    mDoMtx_stack_c::transM(mInverseRockOffset);
+    mDoMtx_stack_c::transM(mCenterToOriginTrans);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpModel->calc();  
 }
@@ -319,23 +319,22 @@ void daObjAjav::Part_c::fall_1(daObjAjav::Act_c* i_actor) {
     mRockDisplacement += mRockDisplacementRate;
     mRockDisplacement.y -= mTimer * 2.0f;
     mAccumulatedRotation += mRotationSpeed;
-  
 
     mTimer++; 
     
     if (!mbHasSplashed) {
-        if (mRockDisplacement.y <= (mInverseRockOffset.y - 100.0f)) {
-            cXyz pos_in_world = (i_actor->current.pos + mRockDisplacement) + mRockOffset;
-            pos_in_world.y = 0.0f;
-            daObjAjav_make_splash(pos_in_world, mRockOffset.y);
+        if (mRockDisplacement.y <= (mCenterToOriginTrans.y - 100.0f)) {
+            cXyz splash_pos = (i_actor->current.pos + mRockDisplacement) + mCenterPos;
+            splash_pos.y = 0.0f;
+            daObjAjav_make_splash(splash_pos, mCenterPos.y);
             mbHasSplashed = true;
-            make_hamon(pos_in_world, mRockOffset.y);
-            mSePos = pos_in_world;
+            make_hamon(splash_pos, mCenterPos.y);
+            mSePos = splash_pos;
             mDoAud_seStart(JA_SE_OBJ_JB_STONE_FALL, &mSePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_actor)));
         }
     }
 
-    if (mRockDisplacement.y <= (mInverseRockOffset.y - 1000.0f)) {
+    if (mRockDisplacement.y <= (mCenterToOriginTrans.y - 1000.0f)) {
         setExeProc(&Part_c::no_proc);
         setDrawProc(&Part_c::no_proc);
     }
@@ -442,11 +441,11 @@ BOOL daObjAjav::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 /* 00001188-00001288       .text create_heap__Q29daObjAjav5Act_cFv */
 BOOL daObjAjav::Act_c::create_heap() {
     int i;
-    BOOL res = mStoneParts[0].set_mdl_area(M_arcname, l_daObjAjav_idx_table[0], 0x11000002);
+    BOOL res = mRockParts[0].set_mdl_area(M_arcname, l_daObjAjav_idx_table[0], 0x11000002);
 
     if (res != FALSE) {
-        for (i = 1; i < ARRAY_SSIZE(mStoneParts); i++) {
-            res = mStoneParts[i].set_mdl_area(M_arcname, l_daObjAjav_idx_table[i], 0x15021202);
+        for (i = 1; i < ARRAY_SSIZE(mRockParts); i++) {
+            res = mRockParts[i].set_mdl_area(M_arcname, l_daObjAjav_idx_table[i], 0x15021202);
             if (res == FALSE) break;
         }
     }
@@ -475,12 +474,12 @@ cPhs_State daObjAjav::Act_c::_create() {
         if (rt == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, Act_c::solidHeapCB, 0)) {
                 int i;
-                for (i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-                    mStoneParts[i].init_data(current.pos, l_daObjAjav_offset[i], &tevStr, &l_daObjAjav_rock_pos_table[i]);
+                for (i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+                    mRockParts[i].init_data(current.pos, l_daObjAjav_offset[i], &tevStr, &l_daObjAjav_rock_pos_table[i]);
                 }
                 
                 init_mtx();
-                MTXCopy(mStoneParts[5].mpModel->getBaseTRMtx(), mMtx);
+                MTXCopy(mRockParts[5].mpModel->getBaseTRMtx(), mMtx);
                 set_tex();
                 
                 mSphStts.Init(0, 0xFF, this);
@@ -528,27 +527,27 @@ bool daObjAjav::Act_c::_delete() {
         dComIfG_resDelete(&mPhs, M_arcname);
     }
 
-    for (int i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mDoAud_seDeleteObject(&mStoneParts[i].mSePos);
+    for (int i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        mDoAud_seDeleteObject(&mRockParts[i].mSePos);
     }
     return TRUE;
 }
 
 /* 00001C08-00001CA8       .text init_mtx__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::init_mtx() {
-    for (int i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mStoneParts[i].init_mtx(current.pos, shape_angle, scale);
+    for (int i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        mRockParts[i].init_mtx(current.pos, shape_angle, scale);
     }
 }
 
 /* 00001CA8-00001CE4       .text set_tex__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::set_tex() {
-    J3DModelData* model_data = mStoneParts[0].mpModel->getModelData();
+    J3DModelData* model_data = mRockParts[0].mpModel->getModelData();
     J3DTexture* model_texture = model_data->getTexture();
     JUTNameTab* name_table = model_data->getTextureName();
 
-    for (int i = 1; i < ARRAY_SSIZE(mStoneParts); i++) {
-        J3DModelData* model_data_i = mStoneParts[i].mpModel->getModelData(); 
+    for (int i = 1; i < ARRAY_SSIZE(mRockParts); i++) {
+        J3DModelData* model_data_i = mRockParts[i].mpModel->getModelData(); 
         model_data_i->setTexture(model_texture);
         model_data_i->setTextureName(name_table);
     }
@@ -598,8 +597,8 @@ csXyz daObjAjav::daObjAjav_get_rot_speed(cXyz i_param1, cXyz i_param2, s16 i_ang
 BOOL daObjAjav::Act_c::check_all_wait() {
     int i;
     BOOL res = TRUE;
-    for (i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        if (!mStoneParts[i].checkExeProc(&Part_c::no_proc)) {
+    for (i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        if (!mRockParts[i].checkExeProc(&Part_c::no_proc)) {
             res = FALSE;
             break;
         }
@@ -652,7 +651,7 @@ void daObjAjav::Act_c::make_shot_rock() {
 }
 
 /* 000021EC-000022F0       .text make_hamon2__Q29daObjAjav5Act_cF4cXyzf */
-void daObjAjav::Act_c::make_hamon2(cXyz i_hamonPos, float i_scale) {
+void daObjAjav::Act_c::make_hamon2(cXyz i_hamonPos, f32 i_scale) {
     cXyz scale;
 
     i_scale /= 3000.0f;
@@ -680,7 +679,7 @@ void daObjAjav::Act_c::make_hamon2(cXyz i_hamonPos, float i_scale) {
 }
 
 /* 000022F0-000024A4       .text set_hamon__Q29daObjAjav5Act_cFf */
-void daObjAjav::Act_c::set_hamon(float i_scale) {
+void daObjAjav::Act_c::set_hamon(f32 i_scale) {
     cXyz current_pos;
     cXyz base_z;
     cXyz base_x;
@@ -726,8 +725,8 @@ bool daObjAjav::Act_c::_execute() {
     csXyz rotation_speed;
     int i, cond;
 
-    for (i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mStoneParts[i].set_se_pos(current.pos);
+    for (i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        mRockParts[i].set_se_pos(current.pos);
     }
 
     switch (mActionIdx) {
@@ -753,10 +752,10 @@ bool daObjAjav::Act_c::_execute() {
                 if (mCyl.ChkTgHit()) {
                     cond = get_stone_row();
                     for (int j = get_stone_row(); j < (cond + 2); j++) {
-                        mStoneParts[j].make_fall_rock(TRUE);
-                        mStoneParts[j].mTimer = 0;
-                        mStoneParts[j].mTimerTrigger = 30;
-                        mStoneParts[j].setDrawProc(&Part_c::draw_flashing_normal);
+                        mRockParts[j].make_fall_rock(TRUE);
+                        mRockParts[j].mTimer = 0;
+                        mRockParts[j].mTimerTrigger = 30;
+                        mRockParts[j].setDrawProc(&Part_c::draw_flashing_normal);
                     }
                     mCyl.ClrTgHit(); 
                 }
@@ -771,24 +770,24 @@ bool daObjAjav::Act_c::_execute() {
                 if ((i & 1) == 0) {
                     init_disp_rate.x *= -1.0f;
                 }
-                rotation_speed = daObjAjav_get_rot_speed(mSphCoOffset, mStoneParts[i].mRockOffset, 0x1FF);
-                mStoneParts[i].fall_init(init_disp_rate, rotation_speed, 0x1FF, (s16)(cM_rnd() * 9.0f) + 7);
-                mDoAud_seStart(JA_SE_OBJ_JB_STONE_BRK, &mStoneParts[i].mSePos,0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
-                mStoneParts[i].setDrawProc(&Part_c::draw_normal);
-                mStoneParts[i].make_fall_rock(FALSE);
+                rotation_speed = daObjAjav_get_rot_speed(mSphCoOffset, mRockParts[i].mCenterPos, 0x1FF);
+                mRockParts[i].fall_init(init_disp_rate, rotation_speed, 0x1FF, (s16)(cM_rnd() * 9.0f) + 7);
+                mDoAud_seStart(JA_SE_OBJ_JB_STONE_BRK, &mRockParts[i].mSePos,0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+                mRockParts[i].setDrawProc(&Part_c::draw_normal);
+                mRockParts[i].make_fall_rock(FALSE);
             }
             
             make_shot_rock();
 
-            s32 row = get_stone_row();
-            set_hamon(mStoneParts[row].mRockDisplacement.y);
+            int row = get_stone_row();
+            set_hamon(mRockParts[row].mRockDisplacement.y);
 
             M_status++;
             if (M_status < STATUS_MAX - 1) {
                 cond = get_stone_row();
                 for (i = get_stone_row(); i < (cond + 2); i++) {
-                    mStoneParts[i].mFlawPos = flaw_pos[i];
-                    mStoneParts[i].setExeProc(&Part_c::flaw); 
+                    mRockParts[i].mFlawPos = flaw_pos[i];
+                    mRockParts[i].setExeProc(&Part_c::flaw); 
                 }
                 set_co_offset();
                 mActionIdx = 2;
@@ -848,8 +847,8 @@ bool daObjAjav::Act_c::_execute() {
         }
     }
 
-    for (i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mStoneParts[i].execute(this);
+    for (i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        mRockParts[i].execute(this);
     }
 
     if (mpBgW && mpBgW->ChkUsed()) {
@@ -861,15 +860,15 @@ bool daObjAjav::Act_c::_execute() {
 
 /* 00002CF4-00002D50       .text set_se_pos__Q29daObjAjav6Part_cF4cXyz */
 void daObjAjav::Part_c::set_se_pos(cXyz i_pos) {
-    mSePos = i_pos + mRockOffset;
+    mSePos = i_pos + mCenterPos;
     mSePos += mRockDisplacement;
 }
 
 /* 00002D50-00002DCC       .text _draw__Q29daObjAjav5Act_cFv */
 bool daObjAjav::Act_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
-    for (int i = 0; i < ARRAY_SSIZE(mStoneParts); i++) {
-        mStoneParts[i].draw(this);
+    for (int i = 0; i < ARRAY_SSIZE(mRockParts); i++) {
+        mRockParts[i].draw(this);
     }
     return true;
 }
