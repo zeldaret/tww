@@ -3,11 +3,13 @@
 // Translation Unit: d_a_tag_island.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_island.h"
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -81,13 +83,13 @@ void daTag_Island_c::makeEvId() {
 /* 00000354-000003D4       .text getArrivalFlag__14daTag_Island_cFv */
 u16 daTag_Island_c::getArrivalFlag() {
     switch (getType()) {
-    case 1: return 0x0902;
-    case 2: return 0x0A20;
-    case 3: return 0x0A02;
-    case 4: return 0x1F04;
-    case 5: return 0x2E04;
-    case 6: return 0x2E02;
-    case 7: return 0x3E10;
+    case 1: return dSv_event_flag_c::UNK_0902;
+    case 2: return dSv_event_flag_c::UNK_0A20;
+    case 3: return dSv_event_flag_c::ENDLESS_NIGHT;
+    case 4: return dSv_event_flag_c::UNK_1F04;
+    case 5: return dSv_event_flag_c::UNK_2E04;
+    case 6: return dSv_event_flag_c::UNK_2E02;
+    case 7: return dSv_event_flag_c::UNK_3E10;
     default: return 0;
     }
 }
@@ -96,11 +98,11 @@ u16 daTag_Island_c::getArrivalFlag() {
 BOOL daTag_Island_c::otherCheck() {
     switch (getType()) {
     case 5:
-        if (!dComIfGs_isEventBit(0x1608))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1608))
             return FALSE;
         break;
     case 6:
-        if (!dComIfGs_isEventBit(0x1604))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1604))
             return FALSE;
         break;
     }
@@ -191,7 +193,7 @@ u16 daTag_Island_c::talk() {
 void daTag_Island_c::demoInitTact_Bf() {
     talkInit();
 
-    s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "prm0");
+    int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "prm0");
     JUT_ASSERT(0x167, a_intP);
 
     if (a_intP != NULL) {
@@ -206,7 +208,7 @@ void daTag_Island_c::demoInitTact_Bf() {
 
 /* 00000778-000007C8       .text demoProcTact_Bf__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcTact_Bf() {
-    if (talk() == fopMsgStts_UNK15_e)
+    if (talk() == fopMsgStts_INPUT_e)
         dComIfGp_evmng_cutEnd(mStaffId);
     return TRUE;
 }
@@ -258,7 +260,7 @@ BOOL daTag_Island_c::demoProcTact_Af() {
 /* 00000A00-00000AC4       .text demoInitSpeak__14daTag_Island_cFv */
 void daTag_Island_c::demoInitSpeak() {
     talkInit();
-    s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "MsgNo");
+    int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "MsgNo");
     JUT_ASSERT(0x1C2, a_intP);
 
     m2AC = *a_intP;
@@ -282,7 +284,7 @@ BOOL daTag_Island_c::demoProcSpeak() {
 
 /* 00000B1C-00000B84       .text demoInitWait__14daTag_Island_cFv */
 void daTag_Island_c::demoInitWait() {
-    s32* a_intP = (s32*)dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
+    int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "Timer");
     if (a_intP != NULL)
         mTimer = *a_intP;
     else
@@ -314,9 +316,9 @@ void daTag_Island_c::demoProcCom_ikada() {
         ikada->mCurPathP0 = ikada->mInitPos;
         ikada->current.pos = ikada->mCurPathP0;
         ikada->mCurPathPoint = 0;
-        ikada->m02CC = ikada->mpPath->mpPnt[ikada->mCurPathPoint].mPos;
-        ikada->mCurPathP1 = ikada->mpPath->mpPnt[ikada->mCurPathPoint + 1].mPos;
-        ikada->mPathPosTarget = ikada->mpPath->mpPnt[ikada->mCurPathPoint].mPos;
+        ikada->m02CC = ikada->mpPath->m_points[ikada->mCurPathPoint].m_position;
+        ikada->mCurPathP1 = ikada->mpPath->m_points[ikada->mCurPathPoint + 1].m_position;
+        ikada->mPathPosTarget = ikada->mpPath->m_points[ikada->mCurPathPoint].m_position;
     }
 }
 
@@ -405,8 +407,8 @@ BOOL daTag_Island_c::actionReady() {
         setActio(ACT_EVENT);
         actionEvent();
         if (swbit != 0xFF)
-            dComIfGs_onSwitch(swbit, current.roomNo);
-    } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, current.roomNo)) {
+            dComIfGs_onSwitch(swbit, fopAcM_GetRoomNo(this));
+    } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_WAIT);
     } else {
         makeEvId();
@@ -418,7 +420,7 @@ BOOL daTag_Island_c::actionReady() {
 /* 00001130-000011E4       .text actionHunt__14daTag_Island_cFv */
 BOOL daTag_Island_c::actionHunt() {
     s32 swbit = getSwbit();
-    if (swbit != 0xFF && dComIfGs_isSwitch(swbit, current.roomNo)) {
+    if (swbit != 0xFF && dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_WAIT);
     } else {
         if (otherCheck() && checkArea()) {
@@ -446,14 +448,14 @@ BOOL daTag_Island_c::actionWait() {
     return TRUE;
 }
 
-s32 daTag_Island_c::create() {
+cPhs_State daTag_Island_c::create() {
     fopAcM_SetupActor(this, daTag_Island_c);
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
     eventInfo.mMapToolId = getEventNo();
 
-    if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, current.roomNo)) {
+    if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_ARRIVAL);
     } else {
         setActio(ACT_WAIT);
@@ -515,7 +517,7 @@ static BOOL daTag_Island_Delete(daTag_Island_c* i_this) {
 }
 
 /* 000012FC-000013D8       .text daTag_Island_Create__FP10fopAc_ac_c */
-static s32 daTag_Island_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daTag_Island_Create(fopAc_ac_c* i_ac) {
     return ((daTag_Island_c*)i_ac)->create();
 }
 
@@ -537,7 +539,7 @@ actor_process_profile_definition g_profile_TAG_ISLAND = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0123,
+    /* Priority     */ PRIO_TAG_ISLAND,
     /* Actor SubMtd */ &l_daTag_Island_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

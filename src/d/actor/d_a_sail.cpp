@@ -3,10 +3,15 @@
 // Translation Unit: d_a_sail.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sail.h"
+#if VERSION == VERSION_DEMO
+#include "d/d_s_play.h"
+#endif
 #include "d/res/res_kaizokusen.h"
 #include "d/res/res_cloth.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "d/actor/d_a_obj_pirateship.h"
@@ -15,8 +20,39 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_angle.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daSail_HIO_c : public JORReflexible {
+public:
+    daSail_HIO_c() {
+        mNo = -1;
+        m05 = 1;
+        m06 = 1;
+        m10 = 0.0f;
+        m07 = 0;
+    }
+    virtual ~daSail_HIO_c() {
+        mNo = -1;
+    }
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 m07;
+    /* 0x08 */ u8 m08;
+    /* 0x09 */ u8 m09[0x0C - 0x09];
+    /* 0x0C */ f32 m0C;
+    /* 0x10 */ f32 m10;
+};
+
+#if VERSION == VERSION_DEMO
+#define REG_SAIL_F(i) REG10_F(i)
+#define REG_SAIL_S(i) REG10_S(i)
+#else
+#define REG_SAIL_F(i) 0.0f
+#define REG_SAIL_S(i) 0
+#endif
 
 static daObjPirateship::Act_c* l_p_ship;
 static daSail_HIO_c l_HIO;
@@ -248,21 +284,19 @@ cXy l_mast_texCoord[] = {
 
 /* 000000EC-00000364       .text setCorrectNrmAngle__15daSail_packet_cFsf */
 void daSail_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
-    m1C38 += (s16)(900 + (s32)cM_rndF(200.0f));
+    m1C38 += (s16)(900 + REG_SAIL_S(0) + (s32)cM_rndF(REG_SAIL_S(1) + 200.0f));
 
-    m1C34 = 300.0f * cM_ssin(m1C38);
+    m1C34 = (REG_SAIL_F(0) + 300.0f) * cM_ssin(m1C38);
 
     s16 r28 = param_0 + 0x8000;
     s32 r27 = param_0;
 
     s16 r26 = l_HIO.m10 * (1.0f - 0.5f * param_1);
-    s32 r0 = abs(r28);
-    s16 r30 = cAngle::d2s(1.25f * r26);
 
-    if (r0 < r30) {
+    if (abs(r28) < cAngle::d2s(1.25f * r26)) {
         s16 targetAngle = r28 > 0 ? (s16)cAngle::d2s(-r26) : (s16)cAngle::d2s(r26);
         cLib_addCalcAngleS2(&m1C36, targetAngle, 5, 192);
-    } else if (abs(r27) < r30) {
+    } else if (abs(r27) < cAngle::d2s(1.25f * r26)) {
         s16 targetAngle = (s16)r27 > 0 ? (s16)cAngle::d2s(-r26) : (s16)cAngle::d2s(r26);
         cLib_addCalcAngleS2(&m1C36, targetAngle, 5, 192);
     } else {
@@ -273,18 +307,18 @@ void daSail_packet_c::setCorrectNrmAngle(s16 param_0, f32 param_1) {
 
 /* 00000364-00000398       .text setNrmMtx__15daSail_packet_cFv */
 void daSail_packet_c::setNrmMtx() {
-    mDoMtx_YrotS(*calc_mtx, m1C34);
+    cMtx_YrotS(*calc_mtx, m1C34);
 }
 
 /* 00000398-00000424       .text setBackNrm__15daSail_packet_cFv */
 void daSail_packet_c::setBackNrm() {
-    cXyz* vtxNrm1 = getNrm();
-    cXyz* vtxNrm2 = m1454[m1C3A];
+    cXyz* nrm = mNrm[m1C3A];
+    cXyz* backNrm = mBackNrm[m1C3A];
     for (int i = 0; i < 0x54; i++) {
-        vtxNrm2->setall(0.0f);
-        *vtxNrm2 -= *vtxNrm1;
-        vtxNrm1++;
-        vtxNrm2++;
+        backNrm->setall(0.0f);
+        *backNrm -= *nrm;
+        nrm++;
+        backNrm++;
     }
 }
 
@@ -334,7 +368,7 @@ void daSail_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
     spD4 = spD4.normZC();
 
     MtxPush();
-    mDoMtx_YrotM(*calc_mtx, cM_ssin(-800 * (param_1 + param_2)) * 900.0f);
+    cMtx_YrotM(*calc_mtx, cM_ssin((REG_SAIL_S(3) - 800) * (param_1 + param_2)) * (REG_SAIL_S(2) + 900));
     MtxPosition(&spD4, &spE0);
     *param_0 = spE0.normZC();
     MtxPull();
@@ -344,7 +378,7 @@ void daSail_packet_c::setNrmVtx(cXyz* param_0, int param_1, int param_2) {
 void daSail_packet_c::draw() {
     j3dSys.reinitGX();
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
@@ -358,8 +392,8 @@ void daSail_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_POS_XY, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_F32, 0);
 
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GXSetArray(GX_VA_POS, mPos[m1C3A], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mNrm[m1C3A], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(*l_texCoord));
 
     GXTexObj texObj;
@@ -463,10 +497,10 @@ void daSail_packet_c::draw() {
     GXCallDisplayList(l_sail_DL, 0x200);
 
     GXSetCullMode(GX_CULL_FRONT);
-    GXSetArray(GX_VA_NRM, getNrm() + 2 * 0x54, sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mBackNrm[m1C3A], sizeof(cXyz));
     GXCallDisplayList(l_sail_DL, 0x200);
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -479,16 +513,18 @@ static BOOL daSail_Draw(sail_class* i_this) {
 
     i_this->tevStr = l_p_ship->tevStr;
 
+#if VERSION > VERSION_DEMO
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
+#endif
     g_env_light.setLightTevColorType(i_this->mSailPacket.mStickModel, &i_this->tevStr);
     mDoExt_modelUpdateDL(i_this->mSailPacket.mStickModel);
 
     MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, 0);
-    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
 
-    mDoMtx_concat(j3dSys.mViewMtx, *calc_mtx, *i_this->mSailPacket.getMtx());
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *i_this->mSailPacket.getMtx());
 
     cXyz* vtxPos = i_this->mSailPacket.getPos();
     MtxTrans(
@@ -498,15 +534,15 @@ static BOOL daSail_Draw(sail_class* i_this) {
         0
     );
 
-    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
 
-    mDoMtx_concat(j3dSys.mViewMtx, *calc_mtx, *i_this->mSailPacket.getStickMtx());
-    mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mStickModel->mBaseTransformMtx);
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *i_this->mSailPacket.getStickMtx());
+    i_this->mSailPacket.mStickModel->setBaseTRMtx(*calc_mtx);
 
     MtxTrans(0.0f, 0.0f, 0.0f, 0);
-    mDoMtx_copy(*calc_mtx, i_this->mSailPacket.mTexMtx);
+    MTXCopy(*calc_mtx, *i_this->mSailPacket.getTexMtx());
 
     i_this->mSailPacket.setTevStr(&i_this->tevStr);
 
@@ -518,17 +554,19 @@ static BOOL daSail_Draw(sail_class* i_this) {
 /* 000013CC-00001CEC       .text sail_pos_move__FP10sail_class */
 static void sail_pos_move(sail_class* i_this) {
     cXyz* windVec = dKyw_get_wind_vec();
+    f32 f15 = 0.8f;
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    mDoMtx_YrotS(*calc_mtx, -(i_this->current.angle.y - windAngle));
+    cMtx_YrotS(*calc_mtx, -(i_this->current.angle.y - windAngle));
 
     cXyz sp28;
     cXyz sp1C;
     cXyz sp10;
 
-    sp28.set(0.0f, 0.0f, 0.064f);
+    f32 f14 = 0.08f * 0.8f;
+    sp28.set(0.0f, 0.0f, f14);
     MtxPosition(&sp28, &sp1C);
 
-    f32 f31 = (0.9f * std::fabsf(sp1C.z)) + 0.02f + (0.064f / 10.0f);
+    f32 f31 = (0.9f * std::fabsf(sp1C.z)) + 0.02f + (f14 * 0.1f);
     sp28.x = 0.0f;
     sp28.z = 1.0f;
     MtxPosition(&sp28, &sp1C);
@@ -536,7 +574,8 @@ static void sail_pos_move(sail_class* i_this) {
     f32 f25 = (0.9f * std::fabsf(sp1C.z)) + 0.1f;
     f32 f0 = std::fabsf(sp1C.x);
 
-    i_this->mSailPacket.m1C40 += (s32)((1.0f - (i_this->mSailPacket.m1C44 * 0.95f)) * 4000.0f) * ((f25 * 0.85f) + 0.15f);
+    s32 tmp = f15 * (REG_SAIL_F(9) + 5000.0f) * (1.0f - (i_this->mSailPacket.m1C44 * 0.95f));
+    i_this->mSailPacket.m1C40 += tmp * ((f25 * 0.85f) + 0.15f);
     i_this->mSailPacket.m1C50 = ((f0 * 1.5f) + 1.0f) * 7500.0f;
     i_this->mSailPacket.m1C52 = ((f25 * 0.95f) + 0.05f) * 7200.0f;
 
@@ -547,26 +586,26 @@ static void sail_pos_move(sail_class* i_this) {
     f25 *= 1.0f - (0.5f * i_this->mSailPacket.m1C44 * i_this->mSailPacket.m1C4C);
     f0 *= 1.0f - (0.75f * i_this->mSailPacket.m1C44);
 
-    f32 ELEVEN = 11.0f; // this must be non-const
-
     for (int i = 0; i < 12; i++) {
         f32 f12 = i - 6;
         f32 f13 = i - 5.5f;
 
-        sp10.z = f25 * (-ELEVEN * f12 * f12 + 396.0f);
+        f32 tmp = REG_SAIL_F(10) + 11.0f;
+        sp10.z = f25 * (-tmp * f12 * f12 + (tmp * 36.0f));
 
         for (int j = 0; j < 7; j++, vtxPos++) {
             f32 f24;
             f32 f23 = j - 3;
+            f32 tmp = 5.0f + REG_SAIL_F(11);
+            f32 f17 = tmp * i;
             f32 f22, f21, f20; // these are xyz components
-            f32 f17 = i * 5.0f;
 
             // these explicit casts are necessary
             u32 r22 = (i_this->mSailPacket.m1C50 * (s32)f23) + (i_this->mSailPacket.m1C52 * (s32)f12);
 
-            f20 = 1750.0f * ((f0 * f0) + 0.05f) * cM_ssin(-i_this->mSailPacket.m1C40 + r22) * f31;
-            f22 = 550.0f * ((f0 * f0) + 0.1f) * cM_scos(i_this->mSailPacket.m1C40 + r22) * f31;
-            f21 = std::sqrtf((f22 * f22) + (f20 * f20)) * 0.1f;
+            f20 = (1750.0f + REG_SAIL_F(13)) * (SQUARE(f0) + 0.05f) * cM_ssin(-i_this->mSailPacket.m1C40 + r22) * f31;
+            f22 = (550.0f + REG_SAIL_F(12)) * (SQUARE(f0) + 0.1f) * cM_scos(i_this->mSailPacket.m1C40 + r22) * f31;
+            f21 = std::sqrtf(SQUARE(f22) + SQUARE(f20)) * 0.1f;
 
             f24 = (f25 * ((10.0f * f17) + (-f17 * f23 * f23)));
             f24 += ((sp10.z * (18.0f - f23 * f23)) / 18.0f);
@@ -587,7 +626,7 @@ static void sail_pos_move(sail_class* i_this) {
                 }
             }
 
-            f32 f14 = 100.0f - std::sqrtf((125.0f * 125.0f) - (f16 * f16));
+            f32 f14 = 100.0f - std::sqrtf(SQUARE(125.0f) - SQUARE(f16));
             sp6C[j] += f14 > -10.0f ? f14 : -10.0f;
 
             sp10.x = 0.0f;
@@ -603,27 +642,27 @@ static void sail_pos_move(sail_class* i_this) {
             }
 
             vtxPos->x = sp10.x + f22;
-            vtxPos->y = ((sp6C[j] + sp10.y + f21) - (i * 1.25f * (f23 * f23)));
+            vtxPos->y = ((sp6C[j] + sp10.y + f21) - (i * 1.25f * SQUARE(f23)));
             vtxPos->z = f24 + f20;
 
             vtxPos->x += l_pos[i * 7 + j].x;
             vtxPos->y += l_pos[i * 7 + j].y;
             vtxPos->z += l_pos[i * 7 + j].z;
 
-            vtxPos->y *= (1.0f - ((i_this->mSailPacket.m1C44 * (f13 * f13)) / 30.25f));
-            vtxPos->y *= ((ELEVEN - (i_this->mSailPacket.m1C44 * i)) / ELEVEN);
-            vtxPos->z *= (1.0f - ((i_this->mSailPacket.m1C44 * (f13 * f13)) / 30.25f));
-            vtxPos->z *= ((ELEVEN - (i_this->mSailPacket.m1C44 * i)) / ELEVEN);
+            vtxPos->y *= (1.0f - ((i_this->mSailPacket.m1C44 * SQUARE(f13)) / 30.25f));
+            vtxPos->y *= ((11.0f - (i_this->mSailPacket.m1C44 * i)) / 11.0f);
+            vtxPos->z *= (1.0f - ((i_this->mSailPacket.m1C44 * SQUARE(f13)) / 30.25f));
+            vtxPos->z *= ((11.0f - (i_this->mSailPacket.m1C44 * i)) / 11.0f);
 
             if (i_this->mSailPacket.m1C44 > 0.0f && i < 6) {
                 f32 f15_2 = i - 3;
-                f32 f20 = (9.0f - (f15_2 * f15_2)) / 9.0f;
-                vtxPos->z += (700.0f * f20 * i_this->mSailPacket.m1C44);
-                vtxPos->y -= (150.0f * f20 * i_this->mSailPacket.m1C44);
+                f32 f20 = (9.0f - SQUARE(f15_2)) / 9.0f;
+                vtxPos->z += ((REG_SAIL_F(26) * 10.0f + 3.5f) * 200.0f * f20 * i_this->mSailPacket.m1C44);
+                vtxPos->y -= ((REG_SAIL_F(29) * 10.0f + 1.5f) * 100.0f * f20 * i_this->mSailPacket.m1C44);
             }
 
-            vtxPos->y *= (0.3f * (j & 1) * i_this->mSailPacket.m1C44) + (1.0f - i_this->mSailPacket.m1C44);
-            vtxPos->z *= (0.15f * (j & 1) * i_this->mSailPacket.m1C44) + (1.0f - i_this->mSailPacket.m1C44);
+            vtxPos->y *= ((REG_SAIL_F(27) + 0.3f) * (j & 1) * i_this->mSailPacket.m1C44) + (1.0f - i_this->mSailPacket.m1C44);
+            vtxPos->z *= ((REG_SAIL_F(28) + 0.15f) * (j & 1) * i_this->mSailPacket.m1C44) + (1.0f - i_this->mSailPacket.m1C44);
         }
     }
 }
@@ -633,10 +672,10 @@ static BOOL demo_move(sail_class* i_this) {
     if (i_this->demoActorID == 0) {
         return FALSE;
     }
-    dDemo_actor_c* demo = g_dComIfG_gameInfo.play.mDemo->mDemoObj.getActor(i_this->demoActorID);
-    if (demo != NULL) {
-        if (demo->checkEnable(0x40)) {
-            f32 frame = demo->mAnimationFrame;
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(i_this->demoActorID);
+    if (demo_actor != NULL) {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_FRAME_e)) {
+            f32 frame = demo_actor->getAnmFrame();
             frame = 0.6f - (frame * 0.006f);
             i_this->mSailPacket.m1C44 = frame;
             i_this->mSailPacket.m1C44 = cLib_minMaxLimit<f32>(i_this->mSailPacket.m1C44, 0.0f, 0.6f);
@@ -648,14 +687,15 @@ static BOOL demo_move(sail_class* i_this) {
 
 /* 00001DB0-00002094       .text sail_move__FP10sail_class */
 static void sail_move(sail_class* i_this) {
+    f32 f31 = 0.8f;
     cXyz* windVec = dKyw_get_wind_vec();
-    if (l_HIO.m06 == 0 && i_this->mSailPacket.m1C44 < 0.6f) {
+    if (l_HIO.m06 == 0 && i_this->mSailPacket.m1C44 < REG_SAIL_F(25) + 0.6f) {
         if (i_this->mSailPacket.m1C48 <= 0.0f) {
             i_this->mSailPacket.m1C48 = 0.015f;
         } else {
             i_this->mSailPacket.m1C48 -= 0.001f;
         }
-        cLib_addCalc(&i_this->mSailPacket.m1C44, 0.6f, 0.1f, i_this->mSailPacket.m1C48, 0.01f);
+        cLib_addCalc(&i_this->mSailPacket.m1C44, REG_SAIL_F(25) + 0.6f, 0.1f, i_this->mSailPacket.m1C48, 0.01f);
     } else {
         if (l_HIO.m06 == 1 && i_this->mSailPacket.m1C44 > 0.0f) {
             i_this->mSailPacket.m1C48 += 0.0075f;
@@ -677,9 +717,10 @@ static void sail_move(sail_class* i_this) {
     i_this->mSailPacket.m1C4C = (i_this->mSailPacket.m1C44 - 0.6f) * 15.0f;
 
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    mDoMtx_YrotS(*calc_mtx, -(i_this->current.angle.y - windAngle));
+    cMtx_YrotS(*calc_mtx, -(i_this->current.angle.y - windAngle));
 
-    cXyz sp2C(0.0f, 0.0f, 0.064f);
+    f32 temp = 0.08f * f31;
+    cXyz sp2C(0.0f, 0.0f, temp);
     cXyz sp20;
     MtxPosition(&sp2C, &sp20);
 
@@ -691,39 +732,40 @@ static void sail_move(sail_class* i_this) {
     sail_pos_move(i_this);
     f32 f31_2 = f31_1 * (1.0f - (i_this->mSailPacket.m1C44 * 0.5f * i_this->mSailPacket.m1C4C));
 
-    cXyz* vtxPos = i_this->mSailPacket.getPos() + 3 * 0x54;
+    cXyz* vtxNrm = i_this->mSailPacket.getNrm();
 
     s16 angleY = i_this->current.angle.y;
     cXyz light;
     dKy_FirstlightVec_get(&light);
     s16 lightAngle = cM_atan2s(light.x, light.z);
+    s16 tmp = lightAngle - angleY;
 
-    i_this->mSailPacket.setCorrectNrmAngle(lightAngle - angleY, f31_2);
+    i_this->mSailPacket.setCorrectNrmAngle(tmp, f31_2);
 
     i_this->mSailPacket.setNrmMtx();
     for (int i = 0; i < 12; i++) {
         for (int j = 0; j < 7; j++) {
-            i_this->mSailPacket.setNrmVtx(vtxPos, j, i);
-            vtxPos++;
+            i_this->mSailPacket.setNrmVtx(vtxNrm, j, i);
+            vtxNrm++;
         }
     }
     i_this->mSailPacket.setBackNrm();
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     // Bug: The number of bytes (0x14AC0) passed here is way too large and causes an overflow.
     // The below sizeof calculation is a guess as to what led the devs to arriving at this wrong number.
     DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos) * sizeof(*i_this->mSailPacket.mNrm) / sizeof(cXyz));
 #else
     DCStoreRangeNoSync(i_this->mSailPacket.getPos(), sizeof(*i_this->mSailPacket.mPos));
     DCStoreRangeNoSync(i_this->mSailPacket.getNrm(), sizeof(*i_this->mSailPacket.mNrm));
-    DCStoreRangeNoSync(i_this->mSailPacket.getNrm() + sizeof(i_this->mSailPacket.mNrm) / sizeof(cXyz), sizeof(*i_this->mSailPacket.m1454)); // Fakematch?
+    DCStoreRangeNoSync(i_this->mSailPacket.getBackNrm(), sizeof(*i_this->mSailPacket.mBackNrm));
 #endif
 }
 
 /* 00002094-00002154       .text daSail_Execute__FP10sail_class */
 static BOOL daSail_Execute(sail_class* i_this) {
     static cXyz sail_offset(0.0f, 2100.0f, 100.0f);
-    cMtx_multVec(l_p_ship->mpModel->getBaseTRMtx(), &sail_offset, &i_this->current.pos);
+    cMtx_multVec(l_p_ship->mModel->getBaseTRMtx(), &sail_offset, &i_this->current.pos);
     i_this->current.angle = l_p_ship->shape_angle;
     sail_move(i_this);
     return TRUE;
@@ -736,8 +778,8 @@ static BOOL daSail_IsDelete(sail_class* i_this) {
 
 /* 0000215C-000021D8       .text daSail_Delete__FP10sail_class */
 static BOOL daSail_Delete(sail_class* i_this) {
-    dComIfG_resDelete(&i_this->mClothPhase, "Cloth");
-    dComIfG_resDelete(&i_this->mKaizokusenPhase, "Kaizokusen");
+    dComIfG_resDeleteDemo(&i_this->mClothPhase, "Cloth");
+    dComIfG_resDeleteDemo(&i_this->mKaizokusenPhase, "Kaizokusen");
     
     if (l_HIO.mNo >= 0) {
         mDoHIO_root.m_subroot.deleteChild(l_HIO.mNo);
@@ -763,47 +805,59 @@ static BOOL daSail_checkCreateHeap(fopAc_ac_c* i_actor) {
 }
 
 /* 00002254-000024E4       .text daSail_Create__FP10fopAc_ac_c */
-static s32 daSail_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
     fopAcM_SetupActor(i_actor, sail_class);
     sail_class* i_this = (sail_class*)i_actor;
     
     {
-        int phase_state = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
-        if (phase_state != cPhs_COMPLEATE_e) {
-            return phase_state;
+        cPhs_State rt1 = dComIfG_resLoad(&i_this->mClothPhase, "Cloth");
+#if VERSION > VERSION_DEMO
+        if (rt1 != cPhs_COMPLEATE_e) {
+            return rt1;
         }
-        phase_state = dComIfG_resLoad(&i_this->mKaizokusenPhase, "Kaizokusen");
-        if (phase_state != cPhs_COMPLEATE_e) {
-            return phase_state;
+#endif
+        cPhs_State rt2 = dComIfG_resLoad(&i_this->mKaizokusenPhase, "Kaizokusen");
+#if VERSION == VERSION_DEMO
+        if (rt1 == cPhs_ERROR_e || rt2 == cPhs_ERROR_e) {
+            return cPhs_ERROR_e;
+        }
+        if (rt1 != cPhs_COMPLEATE_e) {
+            return rt1;
+        }
+#endif
+        if (rt2 != cPhs_COMPLEATE_e) {
+            return rt2;
         }
     }
     
-    int phase_state = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
-        if (l_HIO.mNo < 0) {
-            l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
-        }
-        
-        i_this->mSailPacket.m1C44 = 0.0f;
-        i_this->mSailPacket.m1C48 = 0.0f;
-        cXyz* vtxPosSpd = i_this->mSailPacket.getPosSpd();
-        cXyz* vtxPos = i_this->mSailPacket.getPos();
-        for (int i = 0; i < ARRAY_SIZE(l_pos); i++, vtxPosSpd++, vtxPos++) {
-            vtxPosSpd->setall(0.0f);
-            vtxPos->set(l_pos[i]);
-        }
-        
-        l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(i_this->parentActorID);
-        if (l_p_ship->m2CE == 0) {
-            l_HIO.m06 = 0;
-            i_this->mSailPacket.m1C44 = 0.6f;
+    cPhs_State phase_state = cPhs_COMPLEATE_e;
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
+            if (l_HIO.mNo < 0) {
+                l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
+            }
+            
+            i_this->mSailPacket.m1C44 = 0.0f;
+            i_this->mSailPacket.m1C48 = 0.0f;
+            cXyz* vtxPosSpd = i_this->mSailPacket.getPosSpd();
+            cXyz* vtxPos = i_this->mSailPacket.getPos();
+            for (int i = 0; i < ARRAY_SIZE(l_pos); i++, vtxPosSpd++, vtxPos++) {
+                vtxPosSpd->setall(0.0f);
+                vtxPos->set(l_pos[i]);
+            }
+            
+            l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(i_this->parentActorID);
+            if (l_p_ship->m2CE == 0) {
+                l_HIO.m06 = 0;
+                i_this->mSailPacket.m1C44 = 0.6f;
+            } else {
+                l_HIO.m06 = 1;
+            }
+            
+            sail_move(i_this);
         } else {
-            l_HIO.m06 = 1;
+            phase_state = cPhs_ERROR_e;
         }
-        
-        sail_move(i_this);
-    } else {
-        phase_state = cPhs_ERROR_e;
     }
     
     return phase_state;
@@ -827,7 +881,7 @@ actor_process_profile_definition g_profile_SAIL = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0069,
+    /* Priority     */ PRIO_SAIL,
     /* Actor SubMtd */ &l_daSail_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

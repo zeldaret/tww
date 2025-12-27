@@ -4,12 +4,13 @@
 //
 
 #include "d/d_bg_w_hf.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "dolphin/types.h"
 
 #define CHECK_MINMAX_1(line, min, max)                                                             \
     JUT_ASSERT(line,                                                                               \
-        min->x !=  (1000000000.0f) && min->y !=  (1000000000.0f) && min->z !=  (1000000000.0f) &&  \
-        max->x != -(1000000000.0f) && max->y != -(1000000000.0f) && max->z != -(1000000000.0f)     \
+        min->x !=  G_CM3D_F_INF && min->y !=  G_CM3D_F_INF && min->z !=  G_CM3D_F_INF &&  \
+        max->x != -G_CM3D_F_INF && max->y != -G_CM3D_F_INF && max->z != -G_CM3D_F_INF     \
     );
 
 #define CHECK_MINMAX_2(line, min, max)                                                             \
@@ -87,7 +88,7 @@ void dBgWHf::ClassifyPlane() {
     }
     
     for (int b = 0; b < pm_bgd->m_b_num; b++) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         JUT_ASSERT(140, 0 <= b && b < pm_bgd->m_b_num);
 #endif
         
@@ -105,7 +106,7 @@ void dBgWHf::ClassifyPlane() {
         int sp8 = (u16)-1;
         
         for (int t = r6; t <= r29; t++) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
             JUT_ASSERT(159, 0 <= t && t < pm_bgd->m_t_num);
 #endif
             BlckConnect(&pm_blk[b].ground, &sp8, t);
@@ -126,7 +127,7 @@ void dBgWHf::MoveHf() {
 
 /* 800A9EDC-800A9FA0       .text MakeBlckMinMaxHf__6dBgWHfFiPfPf */
 void dBgWHf::MakeBlckMinMaxHf(int v_index, f32* r30, f32* r31) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     JUT_ASSERT(198, 0 <= v_index && v_index < pm_bgd->m_v_num);
 #endif
     Vec* vtx = &pm_vtx_tbl[v_index];
@@ -140,7 +141,7 @@ void dBgWHf::MakeBlckMinMaxHf(int v_index, f32* r30, f32* r31) {
 
 /* 800A9FA0-800AA164       .text MakeBlckBndHf__6dBgWHfFiPfPf */
 void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     JUT_ASSERT(221, blck_id >= 0 && blck_id < pm_bgd->m_b_num);
 #endif
     
@@ -152,11 +153,11 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
         r31 = pm_bgd->m_t_num - 1;
     }
     
-    *r28 = 1000000000.0f;
-    *r29 = -1000000000.0f;
+    *r28 = G_CM3D_F_INF;
+    *r29 = -G_CM3D_F_INF;
     
     for (int t = r7; t <= r31; t++) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
         JUT_ASSERT(238, 0 <= t && t < pm_bgd->m_t_num);
 #endif
         MakeBlckMinMaxHf(pm_bgd->m_t_tbl[t].vtx0, r28, r29);
@@ -170,7 +171,7 @@ void dBgWHf::MakeBlckBndHf(int blck_id, f32* r28, f32* r29) {
 
 /* 800AA164-800AA8AC       .text MakeNodeTreeRpHf__6dBgWHfFi */
 void dBgWHf::MakeNodeTreeRpHf(int node_index) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     JUT_ASSERT(258, 0 <= node_index && node_index < pm_bgd->m_tree_num);
 #endif
     
@@ -223,7 +224,7 @@ void dBgWHf::MakeNodeTreeRpHf(int node_index) {
         }
     }
     
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     CHECK_MINMAX_1(353, m_nt_tbl[node_index].GetMinP(), m_nt_tbl[node_index].GetMaxP());
     CHECK_MINMAX_2(365, m_nt_tbl[node_index].GetMinP(), m_nt_tbl[node_index].GetMaxP());
 #endif
@@ -231,7 +232,7 @@ void dBgWHf::MakeNodeTreeRpHf(int node_index) {
 
 /* 800AA8AC-800AAA70       .text MakeNodeTreeGrpRpHf__6dBgWHfFi */
 void dBgWHf::MakeNodeTreeGrpRpHf(int g) {
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     JUT_ASSERT(377, 0 <= g && g < pm_bgd->m_g_num);
 #endif
     

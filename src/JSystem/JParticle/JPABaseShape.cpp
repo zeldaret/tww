@@ -3,6 +3,8 @@
 // Translation Unit: JPABaseShape.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -77,12 +79,6 @@ GXTevAlphaArg JPABaseShapeArc::stTevAlphaArg[2][4] = {
     { GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0   },
 };
 
-class JPAColorRegAnmKey {
-public:
-    s16 m00;
-    GXColor m02;
-};
-
 /* 80256F88-80257248       .text makeColorTable__FP17JPAColorRegAnmKeyiiP7JKRHeap */
 GXColor* makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHeap* pHeap) {
     GXColor* colTbl = (GXColor*)JKRHeap::alloc((frmNum + 1) * sizeof(GXColor), 4, pHeap);
@@ -132,6 +128,10 @@ static void dummy() {
     OSReport("texTable");
     OSReport("(*((s16*) (bin + 20))) != 0");
     OSReport("(*((s16*) (bin + 22))) != 0");
+
+    // Fakematch? Fixes weak function order of JPABaseShape::~JPABaseShape()
+    JPABaseShape* temp = NULL;
+    delete temp;
 }
 
 /* 80257248-80257508       .text __ct__15JPABaseShapeArcFPCUcP7JKRHeap */
@@ -163,5 +163,3 @@ JPABaseShapeArc::JPABaseShapeArc(const u8* data, JKRHeap* pHeap) {
         mpEnvColorArr = NULL;
     }
 }
-
-JPABaseShape::~JPABaseShape() {}

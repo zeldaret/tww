@@ -3,16 +3,16 @@
 // Translation Unit: d_a_auction.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_auction.h"
 #include "d/actor/d_a_npc_auction.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/res/res_pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -49,15 +49,15 @@ static daAuction_HIO_c l_HIO;
 
 
 static daAuction_c::ItemData l_item_dat[] = {
-    {dItem_JOY_PENDANT_e, 0x1D10, 40, 0x0F01},
-    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, 0x1080},
-    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, 0x1040},
-    {dItem_HEART_PIECE_e, 0x1D13, 80, 0x1020},
+    {dItem_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
+    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
+    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
+    {dItem_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {
-    {POSTMAN_STATUE, 0x1D14, 30, 0x1008},
-    {PRESIDENT_STATUE, 0x1D15, 40, 0x1004},
+    {POSTMAN_STATUE, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
+    {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
 static s16 l_item_dat22[] = {0x002A, 0x00F9};
@@ -67,8 +67,8 @@ static NpcDatStruct l_npc_dat[7] = {
     {0.3f, 0.5f, 0x4, 0x6, 450 },
     {0.3f, 0.6f, 0x3, 0x7, 500 },
     {0.4f, 0.7f, 0x2, 0x4, 250 },
-    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 990, 990) },
-    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 990, 990) },
+    {0.5f, 1.0f, 0x2, 0x3, VERSION_SELECT(998, 998, 990, 990) },
+    {0.4f, 0.5f, 0x3, 0x4, VERSION_SELECT(998, 998, 990, 990) },
     {0.7f, 1.2f, 0x2, 0x2, 150 },
 };
 
@@ -235,10 +235,10 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
-s32 daAuction_c::_create() {
+cPhs_State daAuction_c::_create() {
     fopAcM_SetupActor(this, daAuction_c);
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, "Pspl");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Pspl");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
@@ -253,7 +253,7 @@ s32 daAuction_c::_create() {
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
 BOOL daAuction_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", 0));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", PSPL_BDL_PSPL));
 
     if (modelData == NULL) {
         return FALSE;
@@ -269,7 +269,7 @@ BOOL daAuction_c::createHeap() {
 }
 
 /* 00000770-000008C4       .text createInit__11daAuction_cFv */
-s32 daAuction_c::createInit() {
+cPhs_State daAuction_c::createInit() {
     mEvtStartIdx = dComIfGp_evmng_getEventIdx("AUCTION_START");
     mEvtGetItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_GET_ITEM");
     mEvtNoItemIdx = dComIfGp_evmng_getEventIdx("AUCTION_NO_ITEM");
@@ -296,9 +296,14 @@ s32 daAuction_c::createInit() {
 
 /* 000008C4-0000092C       .text _delete__11daAuction_cFv */
 BOOL daAuction_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Pspl");
+    dComIfG_resDeleteDemo(&mPhs, "Pspl");
 
-    if (heap != NULL && mpEmitter != NULL) {
+#if VERSION == VERSION_DEMO
+    if (mpEmitter != NULL)
+#else
+    if (heap != NULL && mpEmitter != NULL)
+#endif
+    {
         mpEmitter->becomeInvalidEmitter();
     }
 
@@ -415,8 +420,8 @@ void daAuction_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if (m838 == 3) {
-        if (dComIfGs_isEventBit(0x4008)) {
-            mCurrAuctionItemIndex = dComIfGs_getEventReg(0xCD03);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4008)) {
+            mCurrAuctionItemIndex = dComIfGs_getEventReg(dSv_event_flag_c::UNK_CD03);
             mCurrBid += 10;
         } else {
             mCurrAuctionItemIndex = getItemNo();
@@ -492,6 +497,19 @@ void daAuction_c::privateCut() {
         "END",
         "CAMERA_TEST",
     };
+    enum {
+        ACT_MES_SET,
+        ACT_MES_END,
+        ACT_START,
+        ACT_MAIN,
+        ACT_GET_ITEM,
+        ACT_CAMERA_OFF,
+        ACT_GET_ITEM_NPC,
+        ACT_GET_ITEM_MES,
+        ACT_CAMERA_OFF_NPC,
+        ACT_END,
+        ACT_CAMERA_TEST,
+    };
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("Auction");
 
@@ -508,31 +526,31 @@ void daAuction_c::privateCut() {
 
     if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
         switch (mAction) {
-        case 0:
+        case ACT_MES_SET:
             eventTalkInit(staffIdx);
             break;
-        case 2:
+        case ACT_START:
             eventStartInit();
             break;
-        case 3:
+        case ACT_MAIN:
             eventMainInit();
             break;
-        case 4:
+        case ACT_GET_ITEM:
             eventGetItemInit();
             break;
-        case 5:
+        case ACT_CAMERA_OFF:
             eventCameraOffInit();
             break;
-        case 6:
+        case ACT_GET_ITEM_NPC:
             eventGetItemNpcInit(staffIdx);
             break;
-        case 7:
+        case ACT_GET_ITEM_MES:
             eventGetItemMesInit();
             break;
-        case 9:
+        case ACT_END:
             eventEndInit();
             break;
-        case 10:
+        case ACT_CAMERA_TEST:
             eventCameraTestInit();
             break;
         }
@@ -540,31 +558,38 @@ void daAuction_c::privateCut() {
 
     bool evtRes;
     switch (mAction) {
-    case 0:
+    case ACT_MES_SET:
         evtRes = eventMesSet();
         break;
-    case 1:
+    case ACT_MES_END:
         evtRes = eventMesEnd();
         break;
-    case 2:
+    case ACT_START:
         evtRes = eventStart();
         break;
-    case 3:
+    case ACT_MAIN:
         evtRes = eventMain();
         break;
-    case 4:
+    case ACT_GET_ITEM:
         evtRes = eventGetItem();
         break;
-    case 7:
-        evtRes = &daAuction_c::eventMesSet != NULL;
+    case ACT_GET_ITEM_MES:
+#if BUGFIX
+        evtRes = eventMesSet();
+#elif __MWERKS__
+        // @bug They probably meant to call this function
+        evtRes = eventMesSet;
+#else
+        evtRes = &daAuction_c::eventMesSet;
+#endif
         break;
-    case 8:
+    case ACT_CAMERA_OFF_NPC:
         evtRes = eventCameraOffNpc();
         break;
-    case 9:
+    case ACT_END:
         evtRes = eventEnd();
         break;
-    case 10:
+    case ACT_CAMERA_TEST:
         evtRes = eventCameraTest();
         break;
     default:
@@ -597,7 +622,7 @@ void daAuction_c::privateCut() {
 
 /* 00001300-000013C0       .text eventTalkInit__11daAuction_cFi */
 void daAuction_c::eventTalkInit(int staffIdx) {
-    s32* pMsg = (s32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    int* pMsg = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
 
     if (pMsg != NULL) {
         switch (*pMsg) {
@@ -673,12 +698,12 @@ bool daAuction_c::eventStart() {
         mpTimer = (dTimer_c*)fopMsgM_SearchByID(mTimerID);
         
         if (mpTimer != NULL) {
-            mpTimer->mpScrnDraw->setShowType(0);
+            mpTimer->setShowType(0);
         }
     }
 
-    dComIfGp_setDoStatusForce(0x3E);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_HIDDEN_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 
     return mpTimer != NULL;
 }
@@ -719,7 +744,7 @@ void daAuction_c::eventMainInit() {
     m834 = 0;
     m82E = 0;
 
-    dComIfG_TimerStart(0, 4);
+    dComIfG_TimerStart(4, 0);
 
     if (m822 == 1) {
         dAuction_screen_gaugeShow();
@@ -730,7 +755,7 @@ void daAuction_c::eventMainInit() {
     daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
 
     pLink->changeOriginalDemo();
-    mCurLinkAnm = daPy_demo_c::DEMO_UNK1_e;
+    mCurLinkAnm = daPy_demo_c::DEMO_N_WAIT_e;
     dComIfGp_event_setTalkPartner(this);
     m82F = 0;
 
@@ -755,11 +780,11 @@ bool daAuction_c::eventMain() {
 
     if (
         pLink->getBaseAnimeFrameRate() == 0.0f &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e &&
-        mCurLinkAnm != daPy_demo_c::DEMO_UNK25_e
+        mCurLinkAnm != daPy_demo_c::DEMO_N_WAIT_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_UNK_029_e &&
+        mCurLinkAnm != daPy_demo_c::DEMO_PRESENT_e
     ) {
-        setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        setLinkAnm(daPy_demo_c::DEMO_N_WAIT_e);
     }
 
     mFlags &= 4;
@@ -902,8 +927,8 @@ void daAuction_c::eventMainKai() {
                     m800 = mCurrBid + 1;
                     dComIfGp_setMessageSetNumber(mCurrBid + 1);
                     end = 0x1CFA;
-                    setLinkAnm(daPy_demo_c::DEMO_UNK48_e);
-                    mpTimer->mpScrnDraw->setShowType(1);
+                    setLinkAnm(daPy_demo_c::DEMO_UNK_072_e);
+                    mpTimer->setShowType(1);
 
                     dAuction_screen_gaugeUp();
                     dComIfGp_getVibration().StartShock(5, 1, cXyz(0.0f, 1.0f, 0.0f));
@@ -934,8 +959,8 @@ void daAuction_c::eventMainKai() {
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m824)].field_0x00);
                     setMessage2(msgParam);
                     setCameraNpc(m824, 0);
-                    if (m824 == 0 && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
-                        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
+                    if (m824 == 0 && mCurLinkAnm != daPy_demo_c::DEMO_UNK_029_e) {
+                        setLinkAnm(daPy_demo_c::DEMO_L_AROUND2_e);
                     }
 
                     m834 |= 0x20;
@@ -971,8 +996,8 @@ void daAuction_c::eventMainKai() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0x25);
-    dComIfGp_setAStatusForce(0x27);
+    dComIfGp_setDoStatusForce(dActStts_BID_e);
+    dComIfGp_setAStatusForce(dActStts_CANCEL_e);
 }
 
 /* 000022A8-00002760       .text eventMainUri__11daAuction_cFv */
@@ -1045,7 +1070,7 @@ void daAuction_c::eventMainUri() {
                     setCameraNpc(m824, 0);
 
                     if (m824 == 0) {
-                        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
+                        setLinkAnm(daPy_demo_c::DEMO_L_AROUND2_e);
                     }
 
                     m834 |= 0x20;
@@ -1072,7 +1097,7 @@ void daAuction_c::eventMainUri() {
     }
 
     if (m82E != 0) {
-        dComIfGp_setDoStatusForce(0x25);
+        dComIfGp_setDoStatusForce(dActStts_BID_e);
     }
 }
 
@@ -1086,8 +1111,8 @@ void daAuction_c::eventMainMsgSet() {
 /* 0000279C-0000294C       .text eventMainMsgEnd__11daAuction_cFv */
 void daAuction_c::eventMainMsgEnd() {
     if (eventMesEnd()) {
-        if (mCurLinkAnm != daPy_demo_c::DEMO_UNK1_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK1D_e) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+        if (mCurLinkAnm != daPy_demo_c::DEMO_N_WAIT_e && mCurLinkAnm != daPy_demo_c::DEMO_UNK_029_e) {
+            setLinkAnm(daPy_demo_c::DEMO_N_WAIT_e);
         }
 
         if (m834 & 0x20) {
@@ -1111,7 +1136,7 @@ void daAuction_c::eventMainMsgEnd() {
             m798 = l_camera_pos[m82F][1];
         }
 
-        mpTimer->mpScrnDraw->setShowType(0);
+        mpTimer->setShowType(0);
         dAuction_screen_gaugeDown();
         m834 &= ~0x29;
         dAuction_screen_talkEnd();
@@ -1144,7 +1169,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8 = getNpcActorP(m827)->current.pos;
         m7A8.y += getPiconDispOfs(m827);
 
-        dComIfGp_particle_set(0x8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_set(dPa_name::ID_SCENE_8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
         mTimer = 30;
 
         if (m827 == 0) {
@@ -1158,8 +1183,8 @@ void daAuction_c::eventMainMsgBikonC() {
         eyePos = getNpcActorP(m827)->eyePos;
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002B90-00002C1C       .text eventMainMsgBikonW__11daAuction_cFv */
@@ -1176,8 +1201,8 @@ void daAuction_c::eventMainMsgBikonW() {
         }
     }
 
-    dComIfGp_setDoStatusForce(0);
-    dComIfGp_setAStatusForce(0x3E);
+    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+    dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
 }
 
 /* 00002C1C-00002D4C       .text eventGetItemInit__11daAuction_cFv */
@@ -1217,7 +1242,7 @@ void daAuction_c::eventCameraOffInit() {
 void daAuction_c::eventGetItemNpcInit(int staffIdx) {
     setCameraNpc(m824, 0);
 
-    u32* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+    int* pTimerData = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
 
     if (pTimerData != NULL) {
         mTimer = *pTimerData;
@@ -1276,7 +1301,7 @@ bool daAuction_c::eventCameraTest() {
 
 /* 00002F6C-0000369C       .text next_msgStatus__11daAuction_cFPUl */
 u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
-    u16 ret = 0xF;
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*pMsgNo) {
     case 0x1CF2:
@@ -1288,8 +1313,8 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             break;
         }
 
-        if (dComIfGs_isEventBit(0x4008)) {
-            dComIfGp_setNpcNameMessageID(l_npc_msg_dat[dComIfGs_getEventReg(0x790F)].field_0x00);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4008)) {
+            dComIfGp_setNpcNameMessageID(l_npc_msg_dat[dComIfGs_getEventReg(dSv_event_flag_c::UNK_790F)].field_0x00);
             *pMsgNo = 0x1CF6;
         } else {
             *pMsgNo = 0x1CF5;
@@ -1313,7 +1338,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
                 *pMsgNo = l_npc_msg_dat[getAucMdlNo(m824)].field_0x02;
             }
         } else {
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
 
         m825 = m824;
@@ -1321,7 +1346,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         m826 = tmp;
         m824 = tmp;
         if (m826 != 0) {
-            setLinkAnm(daPy_demo_c::DEMO_UNK1_e);
+            setLinkAnm(daPy_demo_c::DEMO_N_WAIT_e);
         }
         break;
     }
@@ -1330,12 +1355,12 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
 
         if (dComIfGs_getRupee() < msgSetNo) {
             mDoAud_seStart(JA_SE_AUC_BID_NG);
-            setLinkAnm(daPy_demo_c::DEMO_UNK4A_e);
+            setLinkAnm(daPy_demo_c::DEMO_UNK_074_e);
             *pMsgNo = 0x1CFB;
             m7C4[0] = 50.0f;
         } else if (msgSetNo <= mCurrBid) {
             mDoAud_seStart(JA_SE_AUC_BID_NG);
-            setLinkAnm(daPy_demo_c::DEMO_UNK4A_e);
+            setLinkAnm(daPy_demo_c::DEMO_UNK_074_e);
             *pMsgNo = 0x1D1E;
             m7C4[0] = 50.0f;
         } else {
@@ -1371,7 +1396,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         if (mpCurrMsg->mSelectNum == 0) {
             *pMsgNo = 0x1D1F;
         } else {
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
         break;
     case 0x1D1A:
@@ -1379,21 +1404,21 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             m82B = 1;
         }
 
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D1F:
         dComIfGp_setNextStage("sea", 3, 11);
     case 0x1D24:
         m82B = 1;
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D20:
     case 0x1D21:
     case 0x1D22:
     case 0x1D23: {
-        setLinkAnm(daPy_demo_c::DEMO_UNK14_e);
+        setLinkAnm(daPy_demo_c::DEMO_L_AROUND2_e);
         int rnd = getRand(6) + 1;
         *pMsgNo = l_npc_msg_dat[getAucMdlNo(rnd)].field_0x06;
         m825 = rnd;
@@ -1411,7 +1436,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
     case 0x1D3C:
         this->m834 |= 2;
         this->m808 = 0;
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
 
     case 0x1D05:
@@ -1419,20 +1444,20 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             *pMsgNo = 0x1D1C;
         } else {
             if (m824 != 0) {
-                dComIfGs_onEventBit(0x4008);
-                dComIfGs_setEventReg(0x790F, getAucMdlNo(m824));
-                dComIfGs_setEventReg(0xCD03, mCurrAuctionItemIndex);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_4008);
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_790F, getAucMdlNo(m824));
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_CD03, mCurrAuctionItemIndex);
             } else {
-                dComIfGs_offEventBit(0x4008);
+                dComIfGs_offEventBit(dSv_event_flag_c::UNK_4008);
             }
 
             fopAcM_delete(mCurrAuctionItemPID);
-            ret = 0x10;
+            msgStatus = fopMsgStts_MSG_ENDS_e;
         }
         break;
     case 0x1D1C:
         dComIfGp_setItemRupeeCount(mCurrBid);
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x1D07:
         dComIfGp_setItemRupeeCount(-mCurrBid);
@@ -1444,17 +1469,17 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         break;
     
     default:
-        ret = 0x10;
+        msgStatus = fopMsgStts_MSG_ENDS_e;
         break;
     }
 
-    if (ret == 0xF) {
+    if (msgStatus == fopMsgStts_MSG_CONTINUES_e) {
         m7EC = *pMsgNo;
     } else {
         m7EC = 0;
     }
 
-    return ret;
+    return msgStatus;
 }
 
 /* 0000369C-000036AC       .text setMessage__11daAuction_cFUl */
@@ -1543,8 +1568,8 @@ void daAuction_c::setCameraNpc(int idx, s16 param_2) {
 
 /* 000039FC-00003A3C       .text setLinkAnm__11daAuction_cFUc */
 void daAuction_c::setLinkAnm(u8 linkAnm) {
-    if (linkAnm == daPy_demo_c::DEMO_UNK1_e && m826 == 0) {
-        linkAnm = daPy_demo_c::DEMO_UNK1D_e;
+    if (linkAnm == daPy_demo_c::DEMO_N_WAIT_e && m826 == 0) {
+        linkAnm = daPy_demo_c::DEMO_UNK_029_e;
     }
 
     daPy_lk_c* pLink = (daPy_lk_c*)dComIfGp_getLinkPlayer();
@@ -1599,7 +1624,7 @@ int daAuction_c::getRand(int max) {
 }
 
 /* 00003C08-00003C28       .text daAuctionCreate__FPv */
-static s32 daAuctionCreate(void* i_this) {
+static cPhs_State daAuctionCreate(void* i_this) {
     return static_cast<daAuction_c*>(i_this)->_create();
 }
 
@@ -1641,7 +1666,7 @@ actor_process_profile_definition g_profile_AUCTION = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01E0,
+    /* Priority     */ PRIO_AUCTION,
     /* Actor SubMtd */ &daAuctionMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

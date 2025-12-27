@@ -3,8 +3,10 @@
 // Translation Unit: d_a_obj_quake.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_quake.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 
@@ -25,7 +27,7 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 }
 
 /* 00000134-000002C4       .text _create__12daObjQuake_cFv */
-s32 daObjQuake_c::_create() {
+cPhs_State daObjQuake_c::_create() {
     fopAcM_SetupActor(this, daObjQuake_c);
 
     if (dComIfGs_isSymbol(1)) {
@@ -190,7 +192,7 @@ s32 daObjQuake_c::getPrmPower() {
 }
 
 /* 000006F8-00000718       .text daObjQuakeCreate__FPv */
-static s32 daObjQuakeCreate(void* i_this) {
+static cPhs_State daObjQuakeCreate(void* i_this) {
     return static_cast<daObjQuake_c*>(i_this)->_create();
 }
 
@@ -232,7 +234,7 @@ actor_process_profile_definition g_profile_Obj_Quake = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0014,
+    /* Priority     */ PRIO_Obj_Quake,
     /* Actor SubMtd */ &daObjQuakeMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -3,13 +3,13 @@
 // Translation Unit: d_a_obj_homensmoke.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_homensmoke.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_particle.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daObjHomensmoke {
     /* 000000EC-00000230       .text set_mtx__Q215daObjHomensmoke5Act_cFv */
@@ -19,22 +19,22 @@ namespace daObjHomensmoke {
             cXyz forwardOffset(0.0f, 0.0f, 200.0f);
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::transM(forwardOffset);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_stack_c::transM(backOffset);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         } else {
             mDoMtx_stack_c::transS(current.pos);
-            cMtx_ZrotM(mDoMtx_stack_c::get(), shape_angle.z);
-            cMtx_YrotM(mDoMtx_stack_c::get(), shape_angle.y);
-            cMtx_XrotM(mDoMtx_stack_c::get(), shape_angle.x);
+            mDoMtx_stack_c::ZrotM(shape_angle.z);
+            mDoMtx_stack_c::YrotM(shape_angle.y);
+            mDoMtx_stack_c::XrotM(shape_angle.x);
             mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
         }
     }
 
     /* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
         
         mbInitialized = FALSE;
@@ -48,7 +48,7 @@ namespace daObjHomensmoke {
             /* 0x0 */ Vec mMin;
             /* 0xC */ Vec mMax;
         };
-        static daObjHomensmoke__cullbox culling_dat[2] = {
+        static daObjHomensmoke__cullbox culling_dat[] = {
             {-300.0f, -30.0f, -100.0f, 300.0f, 600.0f, 300.0f},
             {-100.0f, -30.0f, -100.0f, 100.0f, 250.0f, 120.0f},
         };
@@ -68,14 +68,19 @@ namespace daObjHomensmoke {
     /* 0000048C-000004C8       .text _delete__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_delete() {
         if (mSmokeCb.getEmitter()) {
-            mSmokeCb.end();
+            mSmokeCb.remove();
         }
         return true;
     }
 
     /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
     bool Act_c::_execute() {
-        if (!mbInitialized) {
+#if VERSION == VERSION_DEMO
+        if (m2D0 == NULL)
+#else
+        if (!mbInitialized)
+#endif
+        {
             static cXyz norse_offsetL(0.0f, 300.0f, 20.0f);
             static cXyz norse_offsetS(0.0f, 70.0f, 20.0f);
             if (mType == 0) {
@@ -84,7 +89,7 @@ namespace daObjHomensmoke {
                 cMtx_multVec(mMtx, &norse_offsetS, &mSmokePos);
             }
             
-            JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(0x2027, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
             if (smokeEmitter) {
                 static f32 rate_table[2] = {1.0f, 0.5f};
                 f32 rate = rate_table[mType & 1];
@@ -100,7 +105,7 @@ namespace daObjHomensmoke {
                 smokeEmitter->setGlobalParticleScale(scale);
             }
             
-            JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(0x81B1, &current.pos);
+            JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(dPa_name::ID_SCENE_81B1, &current.pos);
             if (rubbleEmitter) {
                 rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
                 if (mType == 1) {
@@ -126,7 +131,7 @@ namespace daObjHomensmoke {
 
     namespace {
         /* 00000740-00000760       .text Mthd_Create__Q215daObjHomensmoke32@unnamed@d_a_obj_homensmoke_cpp@FPv */
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 
@@ -170,7 +175,7 @@ actor_process_profile_definition g_profile_Obj_Homensmk = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0043,
+    /* Priority     */ PRIO_Obj_Homensmk,
     /* Actor SubMtd */ &daObjHomensmoke::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

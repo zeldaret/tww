@@ -1,7 +1,6 @@
 #ifndef D_A_DEMO_ITEM_H
 #define D_A_DEMO_ITEM_H
 
-#include "f_op/f_op_actor.h"
 #include "d/actor/d_a_itembase.h"
 #include "f_op/f_op_actor_mng.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -10,6 +9,13 @@ class JPABaseEmitter;
 
 class daDitem_c : public daItemBase_c {
 public:
+    enum ArgFlag {
+        FLAG_UNK01 = 0x01,
+        FLAG_UNK02 = 0x02,
+        FLAG_UNK04 = 0x04,
+        FLAG_UNK08 = 0x08,
+    };
+    
     BOOL chkArgFlag(u8 flag) { return mArgFlag & flag; }
     void clrFlag() { cLib_setBit(mFlag, (u8)0); }
     void setOffsetPos(cXyz pos) { mOffsetPos = pos; }
@@ -18,7 +24,7 @@ public:
     static u8 m_effect_type[];
 
     inline BOOL Delete();
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
     inline BOOL isdelete();

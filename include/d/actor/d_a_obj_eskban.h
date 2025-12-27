@@ -1,11 +1,9 @@
 #ifndef D_A_OBJ_ESKBAN_H
 #define D_A_OBJ_ESKBAN_H
 
-#include "f_op/f_op_actor.h"
-
-#include "d/d_a_obj.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_particle.h"
+
+class dPa_smokeEcallBack;
 
 namespace daObjEskban {
 
@@ -37,18 +35,18 @@ namespace daObjEskban {
 
         Act_c();
 
-        int CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        int Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
         void eff_m_break(unsigned short, unsigned short);
         void eff_b_break(unsigned short);
         void daObjEskban_effect_set();
-        int Execute(Mtx**);
-        int Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
 
     public:
         /* 0x2C4 Act_c vtable */

@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "f_op/f_op_actor.h"
+#include "d/d_a_obj.h"
 
 class dBgW;
 typedef void (*MoveBGActor_SetFunc)(dBgW*, void*, cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
@@ -18,22 +19,22 @@ public:
     /* 0x2C4 */ /* vtable */
 
     dBgS_MoveBgActor();
-    int MoveBGCreateHeap();
-    int MoveBGCreate(char const* resName, int resIndex, MoveBGActor_SetFunc callback, u32 resSize);
-    int MoveBGDelete();
-    int MoveBGExecute();
+    BOOL MoveBGCreateHeap();
+    cPhs_State MoveBGCreate(char const* resName, int resIndex, MoveBGActor_SetFunc callback, u32 resSize);
+    BOOL MoveBGDelete();
+    BOOL MoveBGExecute();
 
-    int MoveBGDraw() { return Draw(); }
-    int MoveBGIsDelete() { return IsDelete(); }
+    BOOL MoveBGDraw() { return Draw(); }
+    BOOL MoveBGIsDelete() { return IsDelete(); }
 
-    virtual int CreateHeap() { return 1; }
-    virtual int Create() { return 1; }
-    virtual int Execute(Mtx**) { return 1; }
-    virtual int Draw() { return 1; }
-    virtual int Delete() { return 1; }
-    virtual int IsDelete() { return 1; }
-    virtual int ToFore() { return 1; }
-    virtual int ToBack() { return 1; }
+    virtual BOOL CreateHeap() { return TRUE; }
+    virtual BOOL Create() { return TRUE; }
+    virtual BOOL Execute(Mtx**) { return TRUE; }
+    virtual BOOL Draw() { return TRUE; }
+    virtual BOOL Delete() { return TRUE; }
+    virtual BOOL IsDelete() { return TRUE; }
+    virtual BOOL ToFore() { return TRUE; }
+    virtual BOOL ToBack() { return TRUE; }
 
     static const char* m_name;
     static int m_dzb_id;

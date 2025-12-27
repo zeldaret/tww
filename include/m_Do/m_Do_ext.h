@@ -23,16 +23,18 @@ public:
     virtual ~mDoExt_baseAnm() {}
 
     int initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool);
-    int play();
+    BOOL play();
 
     J3DFrameCtrl* getFrameCtrl() { return mFrameCtrl; }
     f32 getPlaySpeed() { return mFrameCtrl->getRate(); }
     void setPlaySpeed(f32 speed) { mFrameCtrl->setRate(speed); }
     BOOL checkFrame(f32 frame) { return mFrameCtrl->checkPass(frame); }
+    f32 getStartFrame() { return mFrameCtrl->getStart(); }
     f32 getFrame() { return mFrameCtrl->getFrame(); }
     f32 getEndFrame() { return mFrameCtrl->getEnd(); }
     void setFrame(f32 frame) { mFrameCtrl->setFrame(frame); }
     void setPlayMode(int i_mode) { mFrameCtrl->setAttribute(i_mode); }
+    f32 getLoopFrame() { return mFrameCtrl->getLoop(); }
     void setLoopFrame(f32 i_frame) { mFrameCtrl->setLoop(i_frame); }
     BOOL isStop() {
         return mFrameCtrl->checkState(J3DFrameCtrl::STATE_STOP_E) || mFrameCtrl->getRate() == 0.0f;
@@ -52,6 +54,7 @@ public:
     void entry(J3DModelData *i_modelData, f32 i_frame);
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
+    void entry(J3DMaterialTable* i_matTable) { entry(i_matTable, getFrame()); }
     int init(J3DModelData* i_modelData, J3DAnmTextureSRTKey* i_btk, BOOL i_anmPlay, int i_attribute,
              f32 i_rate, s16 i_start, s16 i_end, bool i_modify, BOOL i_entry);
 
@@ -106,6 +109,7 @@ STATIC_ASSERT(sizeof(mDoExt_brkAnm) == 0x18);
 class mDoExt_bckAnm : public mDoExt_baseAnm {
 public:
     mDoExt_bckAnm() { mAnm = NULL; }
+    virtual ~mDoExt_bckAnm() {}
     int init(J3DModelData * i_model, J3DAnmTransform* i_bck, int i_play, int i_attr,
                             f32 i_rate, s16 i_startF, s16 i_endF1, bool i_modify);
     void changeBckOnly(J3DAnmTransform* i_bck);
@@ -113,10 +117,10 @@ public:
 
     void entry(J3DModelData* i_modelData) { entry(i_modelData, getFrame()); }
     void remove(J3DModelData* i_modelData) { i_modelData->getJointNodePointer(0)->setMtxCalc(NULL); }
-    J3DAnmTransform* getBckAnm() const { return mAnmTransform; }
+    J3DAnmTransform* getBckAnm() const { return mpAnm; }
 
 private:
-    /* 0x08 */ J3DAnmTransform* mAnmTransform;
+    /* 0x08 */ J3DAnmTransform* mpAnm;
     /* 0x0C */ J3DMtxCalcMayaAnm* mAnm;
 };  // Size: 0x10
 
@@ -140,7 +144,7 @@ private:
     /* 0x08 */ J3DAnmTexPattern* mpAnm;
     /* 0x0C */ J3DTexNoAnm* field_0xc;
     /* 0x10 */ u16 mUpdateMaterialNum;
-};
+}; // size = 0x14
 
 class mDoExt_blkAnm : public mDoExt_baseAnm {
 public:
@@ -174,14 +178,20 @@ private:
 
 class mDoExt_bvaAnm : public mDoExt_baseAnm {
 public:
+    mDoExt_bvaAnm() {
+        field_0xc = NULL;
+    }
     int init(J3DModel*, J3DAnmVisibilityFull*, int, int, f32, s16, s16, bool, int);
     void entry(J3DModel*, s16);
 
     int init(J3DModelData*, J3DAnmTransform*, int, int, f32, s16, s16, bool);
 
+    void entry(J3DModel* i_model) { entry(i_model, getFrame()); }
+
 private:
     /* 0x08 */ J3DAnmVisibilityFull* mpAnm;
     /* 0x0C */ J3DVisibilityManager* field_0xc;
+    /* 0x10 */ s32 field_0x10; // TODO Unknown
 };
 
 class mDoExt_AnmRatioPack {
@@ -286,7 +296,6 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
         mAfterCallback = NULL;
         mUserArea = 0;
     }
-    virtual ~mDoExt_MtxCalcAnmBlendTblOld();
     virtual void calc(u16);
 
     void setUserArea(u32 area)  { mUserArea = area; }
@@ -302,7 +311,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
 class mDoExt_McaMorfCallBack1_c {
 public:
     virtual ~mDoExt_McaMorfCallBack1_c() {}
-    virtual bool execute(u16, J3DTransformInfo*) = 0;
+    virtual bool execute(u16 jnt_no, J3DTransformInfo*) = 0;
 };
 
 class mDoExt_McaMorfCallBack2_c {
@@ -325,10 +334,9 @@ public:
                    mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
                    int loopMode, f32 param_5, int param_6, int param_7, int param_8,
                    void* basAnm, u32 modelFlag, u32 differedDlistFlag);
-    virtual ~mDoExt_McaMorf();
 
     void calc();
-    void calc(u16);
+    void calc(u16 jnt_no);
     void setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32 playSpeed, f32 startFrame, f32 endFrame, void* basAnm);
     void setMorf(f32);
     void update();
@@ -341,7 +349,7 @@ public:
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }
-    u8 getPlayMode() { return mFrameCtrl.getAttribute(); }
+    int getPlayMode() { return mFrameCtrl.getAttribute(); }
     void setPlayMode(int mode) { mFrameCtrl.setAttribute(mode); }
     f32 getStartFrame() { return mFrameCtrl.getStart(); }
     void setStartFrame(f32 frame) { mFrameCtrl.setStart(frame); }
@@ -365,6 +373,7 @@ public:
     BOOL isLoop() { return mFrameCtrl.checkState(J3DFrameCtrl::STATE_LOOP_E); }
     BOOL isMorf() { return mCurMorf < 1.0f; }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm;
     /* 0x58 */ J3DFrameCtrl mFrameCtrl;
@@ -385,7 +394,6 @@ public:
                     J3DAnmTransform* anmTransform1, J3DAnmTransform* anmTransform2,
                     int loopMode, f32 param_5, int param_6, int param_7, int param_8,
                     void* basAnm, u32 modelFlag, u32 differedDlistFlag);
-    ~mDoExt_McaMorf2();
 
     void ERROR_EXIT();
     void calc(u16);
@@ -397,7 +405,7 @@ public:
     void stopZelAnime();
 
     J3DModel* getModel() { return mpModel; }
-    u8 getPlayMode() { return mFrameCtrl.getAttribute(); }
+    int getPlayMode() { return mFrameCtrl.getAttribute(); }
     void setPlayMode(int mode) { mFrameCtrl.setAttribute(mode); }
     f32 getStartFrame() { return mFrameCtrl.getStart(); }
     void setStartFrame(f32 frame) { mFrameCtrl.setStart(frame); }
@@ -420,6 +428,7 @@ public:
         mAnmRate = rate;
     }
 
+private:
     /* 0x50 */ J3DModel* mpModel;
     /* 0x54 */ J3DAnmTransform* mpAnm1;
     /* 0x58 */ J3DAnmTransform* mpAnm2;
@@ -441,7 +450,9 @@ public:
     virtual void setMaterial() = 0;
     virtual void draw() = 0;
 
-public:
+protected:
+    friend class mDoExt_3DlineMatSortPacket;
+
     /* 0x0 */ /* vtable */
     /* 0x4 */ mDoExt_3DlineMat_c* mpNextLineMat;
 };
@@ -524,6 +535,7 @@ public:
         mJntNum = i_jntNum;
     }
 
+private:
     /* 0x10 */ J3DModel* mModel;
     /* 0x14 */ u16 mJntNum;
 };
@@ -538,6 +550,7 @@ public:
     void updateDL(J3DModel*);
     void updateDL(mDoExt_McaMorf*);
 
+private:
     J3DModel* mModel;
     mDoExt_invJntPacket* mpPackets;
 };
@@ -570,16 +583,19 @@ public:
     
     void draw();
     void setMaterial();
-};
+}; // Size: 0x10
 
 class mDoExt_3Dline_c {
 public:
     mDoExt_3Dline_c();
     ~mDoExt_3Dline_c();
 
-    int init(u16, int, int);
+    BOOL init(u16 numSegments, BOOL hasSize, BOOL hasTex);
 
-public:
+private:
+    friend class mDoExt_3DlineMat0_c;
+    friend class mDoExt_3DlineMat1_c;
+
     /* 0x00 */ cXyz* mpSegments;
     /* 0x04 */ u8* mpSize;
     /* 0x08 */ cXyz* mPosArr[2];
@@ -588,14 +604,19 @@ public:
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, int);
+    ~mDoExt_3DlineMat0_c() {}
+
+    BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
 
-public:
+    cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
+    u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
+
+private:
     /* 0x08 */ GXColor mColor;
     /* 0x0C */ dKy_tevstr_c* mpTevStr;
     /* 0x10 */ u16 mNumLines;
@@ -603,18 +624,23 @@ public:
     /* 0x14 */ u16 mNumSegments;
     /* 0x16 */ u8 mCurArr;
     /* 0x18 */ mDoExt_3Dline_c* mpLines;
-};
+}; // size = 0x1C
 
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
-    int init(u16, u16, ResTIMG*, int);
+    ~mDoExt_3DlineMat1_c() {}
+    
+    BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
     void setMaterial();
     void draw();
     void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
     void update(u16, GXColor&, dKy_tevstr_c*);
     int getMaterialID();
 
-public:
+    cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
+    u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
+
+private:
     /* 0x08 */ GXTexObj mTexObj;
     /* 0x28 */ GXColor mColor;
     /* 0x2C */ dKy_tevstr_c* mpTevStr;
@@ -622,9 +648,25 @@ public:
     /* 0x32 */ u16 mMaxSegments;
     /* 0x34 */ u16 mNumSegments;
     /* 0x36 */ u8 mCurArr;
-    /* 0x37 */ u8 m37[0x38 - 0x37];
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
 };
+
+// The following classes only appear in the debug maps and seem unused:
+// mDoExt_ArrowPacket
+// mDoExt_circlePacket
+// mDoExt_cube8pPacket
+// mDoExt_cubePacket
+// mDoExt_cylinderMPacket
+// mDoExt_cylinderPacket
+// mDoExt_linePacket
+// mDoExt_pointPacket
+// mDoExt_quadPacket
+// mDoExt_spherePacket
+// mDoExt_trianglePacket
+
+inline void mDoExt_bckAnmRemove(J3DModelData* i_modelData) {
+    i_modelData->getJointNodePointer(0)->setMtxCalc(NULL);
+}
 
 J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u32 i_differedDlistFlag);
 
@@ -643,6 +685,7 @@ JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap);
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap);
 
+#if VERSION > VERSION_DEMO
 s32 mDoExt_getSafeArchiveHeapSize();
 s32 mDoExt_getSafeGameHeapSize();
 s32 mDoExt_getSafeZeldaHeapSize();
@@ -652,6 +695,7 @@ void mDoExt_setSafeArchiveHeapSize();
 void mDoExt_setSafeGameHeapSize();
 void mDoExt_setSafeZeldaHeapSize();
 void mDoExt_setSafeCommandHeapSize();
+#endif
 
 s32 mDoExt_resIDToIndex(JKRArchive*, u16);
 

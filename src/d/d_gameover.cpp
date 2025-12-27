@@ -3,14 +3,15 @@
 // Translation Unit: d_gameover.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-
 
 /* 8018E1CC-8018E4B4       .text draw__24dDlst_Gameover_CAPTURE_cFv */
 void dDlst_Gameover_CAPTURE_c::draw() {
@@ -44,7 +45,7 @@ void dDlst_Gameover_CAPTURE_c::draw() {
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -65,15 +66,15 @@ void dDlst_Gameover_CAPTURE_c::draw() {
 }
 
 /* 8018E4B4-8018E77C       .text _create__11dGameover_cFv */
-s32 dGameover_c::_create() {
-    s32 rt = dComIfG_resLoad(&mPhs, "Gover");
+cPhs_State dGameover_c::_create() {
+    cPhs_State rt = dComIfG_resLoad(&mPhs, "Gover");
     if (dMenu_flag() || (dComIfGp_isHeapLockFlag() != 0 && dComIfGp_isHeapLockFlag() != 4) || dComIfGp_getMesgStatus() != 0)
         return cPhs_INIT_e;
 
     if (rt == cPhs_COMPLEATE_e) {
         dComIfGs_addDeathCount();
         dRes_info_c* resInfo = dComIfG_getObjectResInfo("Gover");
-        JUT_ASSERT(VERSION_SELECT(0x9c, 0xa0, 0xa0), resInfo != NULL);
+        JUT_ASSERT(VERSION_SELECT(0x9c, 0x9c, 0xa0, 0xa0), resInfo != NULL);
 
         mpHeap = dComIfGp_getExpHeap2D();
         dComIfGp_setHeapLockFlag(4);
@@ -83,12 +84,12 @@ s32 dGameover_c::_create() {
         dgo_scrn_c->setScreen("gameover.blo", resInfo->getArchive());
 
         dMs_c = new dMenu_save_c();
-        JUT_ASSERT(VERSION_SELECT(0xa7, 0xb6, 0xb6), dMs_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xa7, 0xa7, 0xb6, 0xb6), dMs_c != NULL);
         dMs_c->setUseType(2);
         dMs_c->_create();
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
-        JUT_ASSERT(VERSION_SELECT(0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
+        JUT_ASSERT(VERSION_SELECT(0xac, 0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
 
         mDoExt_setCurrentHeap(oldHeap);
     } else {
@@ -186,7 +187,7 @@ BOOL dGameover_c::deleteCheck() {
     return mState == 6;
 }
 
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 static const s16 dGover_tex_number = 8;
 #else
 static s16 dGover_tex_number = 8;
@@ -264,7 +265,7 @@ BOOL dDlst_GameOverScrnDraw_c::animeOpen() {
                 anime1(i);
                 if (letter[i].mUserArea == 5) {
                     cXyz temp(x[i], 50.0f, 0.0f);
-                    dComIfGp_particle_set2Dfore(0x2E, &temp);
+                    dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002E, &temp);
                 }
             }
 
@@ -326,12 +327,12 @@ BOOL dDlst_GameOverScrnDraw_c::animeClose() {
 
 /* 8018F05C-8018F0CC       .text setEmitter0__24dDlst_GameOverScrnDraw_cF4cXyz */
 void dDlst_GameOverScrnDraw_c::setEmitter0(cXyz pos) {
-    mpEmitter0 = dComIfGp_particle_set2Dfore(0x2f, &pos);
+    mpEmitter0 = dComIfGp_particle_set2Dfore(dPa_name::ID_COMMON_002F, &pos);
 }
 
 /* 8018F0CC-8018F13C       .text setEmitter1__24dDlst_GameOverScrnDraw_cF4cXyz */
 void dDlst_GameOverScrnDraw_c::setEmitter1(cXyz pos) {
-    mpEmitter1 = dComIfGp_particle_set2DmenuFore(0x30, &pos);
+    mpEmitter1 = dComIfGp_particle_set2DmenuFore(dPa_name::ID_COMMON_0030, &pos);
 }
 
 /* 8018F13C-8018F334       .text anime1__24dDlst_GameOverScrnDraw_cFi */
@@ -437,7 +438,7 @@ static BOOL dGameover_Delete(dGameover_c* i_this) {
 }
 
 /* 8018F654-8018F674       .text dGameover_Create__FP9msg_class */
-static s32 dGameover_Create(msg_class* i_this) {
+static cPhs_State dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 
@@ -459,6 +460,6 @@ msg_process_profile_definition g_profile_GAMEOVER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ 0x01DE,
+    /* Priority     */ PRIO_GAMEOVER,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_grass.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_grass.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,10 +11,9 @@
 #include "d/d_flower.h"
 #include "d/d_grass.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_tree.h"
 #include "SSystem/SComponent/c_sxyz.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace daGrass_prm {
     inline s8 getItemNo(grass_class* ac) { return (fopAcM_GetParam(ac) >> 6) & 0x3F; }
@@ -32,7 +32,7 @@ static BOOL daGrass_Delete(grass_class*) {
 }
 
 /* 000000FC-000014E0       .text daGrass_Create__FP10fopAc_ac_c */
-static s32 daGrass_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
     static const csXyz l_setType0[] = {
         csXyz(0, 0, 0),
         csXyz(3, 0, -50),
@@ -137,7 +137,7 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
     OffsetData * offset = &l_offsetData[grp];
     const csXyz * ofpos = offset->pos;
     u32 kind = daGrass_prm::getKind(i_this);
-    cXyz & acpos = fopAcM_GetPosition(i_this);
+    cXyz * acpos = &i_this->current.pos;
 
     if (kind == 0) {
         // grass
@@ -148,9 +148,9 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
                 cXyz pos;
-                pos.x = acpos.x + ofpos->x;
-                pos.y = acpos.y;
-                pos.z = acpos.z + ofpos->z;
+                pos.x = acpos->x + ofpos->x;
+                pos.y = acpos->y;
+                pos.z = acpos->z + ofpos->z;
                 dComIfGp_getGrass()->newData(pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
@@ -159,12 +159,12 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
         if (dComIfGp_createTree() != NULL) {
             f32 cosR = cM_scos(i_this->current.angle.y), sinR = cM_ssin(i_this->current.angle.y);
             cXyz pos;
-            pos.y = acpos.y;
+            pos.y = acpos->y;
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
-                pos.x = acpos.x + (ofpos->x * cosR + ofpos->z * sinR);
-                pos.y = acpos.y;
-                pos.z = acpos.z + (ofpos->z * cosR - ofpos->x * sinR);
+                pos.x = acpos->x + (ofpos->x * cosR + ofpos->z * sinR);
+                pos.y = acpos->y;
+                pos.z = acpos->z + (ofpos->z * cosR - ofpos->x * sinR);
                 dComIfGp_getTree()->newData(pos, 0, fopAcM_GetRoomNo(i_this));
             }
         }
@@ -183,9 +183,9 @@ static s32 daGrass_Create(fopAc_ac_c* i_ac) {
 
             for (s32 i = 0; i < offset->num; ofpos++, i++) {
                 cXyz pos;
-                pos.x = acpos.x + ofpos->x;
-                pos.y = acpos.y;
-                pos.z = acpos.z + ofpos->z;
+                pos.x = acpos->x + ofpos->x;
+                pos.y = acpos->y;
+                pos.z = acpos->z + ofpos->z;
                 dComIfGp_getFlower()->newData(flowerType, pos, fopAcM_GetRoomNo(i_this), item);
             }
         }
@@ -212,7 +212,7 @@ actor_process_profile_definition g_profile_GRASS = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01BD,
+    /* Priority     */ PRIO_GRASS,
     /* Actor SubMtd */ &daGrass_METHODS,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -3,6 +3,8 @@
 // Translation Unit: JAISequenceHeap.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAISequenceHeap.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
@@ -19,20 +21,20 @@ void JAInter::HeapMgr::init(u8 param_1, u32 param_2, u8 param_3, u32 param_4) {
     sAutoHeap = new (JAIBasic::getCurrentJAIHeap(), 0x20) HeapBlock[param_3];
     JUT_ASSERT_MSG(38, sAutoHeap, "JAIHeapMgr::initHeap Cannot Alloc Heap!!\n");
     for (u32 i = 0; i < param_3; i++) {
-        sAutoHeap[i].mStatus = 0;
-        sAutoHeap[i].field_0xc = 0;
-        sAutoHeap[i].field_0x8 = -1;
-        sAutoHeap[i].field_0x10 = -1;
-        sAutoHeap[i].mPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[param_4];
+        sAutoHeap[i].setStatus(0);
+        sAutoHeap[i].setEndAddress(0);
+        sAutoHeap[i].setDataNumber(-1);
+        sAutoHeap[i].setUseCounter(-1);
+        sAutoHeap[i].setPointer(new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[param_4]);
     }
     sStayHeap = new (JAIBasic::getCurrentJAIHeap(), 0x20) HeapBlock[param_1];
     JUT_ASSERT_MSG(48, sStayHeap, "JAIHeapMgr::initHeap Cannot Alloc Heap!!\n");
-    sStayHeap->mPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[param_2];
+    sStayHeap->setPointer(new (JAIBasic::getCurrentJAIHeap(), 0x20) u8[param_2]);
     for (u32 i = 0; i < param_1; i++) {
-        sStayHeap[i].mStatus = 0;
-        sStayHeap[i].field_0xc = 0;
-        sStayHeap[i].field_0x8 = -1;
-        sStayHeap[i].field_0x10 = -1;
+        sStayHeap[i].setStatus(0);
+        sStayHeap[i].setEndAddress(0);
+        sStayHeap[i].setDataNumber(-1);
+        sStayHeap[i].setUseCounter(-1);
     }
 }
 
@@ -44,10 +46,10 @@ JAInter::HeapBlock* JAInter::HeapMgr::getAutoHeapPointer() {
 /* 80295324-8029541C       .text checkOnMemory__Q27JAInter7HeapMgrFUlPUc */
 void* JAInter::HeapMgr::checkOnMemory(u32 param_1, u8* param_2) {
     for (u8 i = 0; i < JAIGlobalParameter::getParamAutoHeapMax(); i++) {
-        if (param_1 != sAutoHeap[i].field_0x8) {
+        if (param_1 != sAutoHeap[i].getDataNumber()) {
             continue;
         }
-        if (sAutoHeap[i].mStatus == 1) {
+        if (sAutoHeap[i].getStatus() == 1) {
             return (void*)-1;
         }
         if (param_2) {
@@ -56,7 +58,7 @@ void* JAInter::HeapMgr::checkOnMemory(u32 param_1, u8* param_2) {
         return sAutoHeap[i].getPointer();
     }
     for (u8 i = 0; i < sStayHeapCount; i++) {
-        if (param_1 != sStayHeap[i].field_0x8) {
+        if (param_1 != sStayHeap[i].getDataNumber()) {
             continue;
         }
         if (param_2) {
@@ -69,11 +71,10 @@ void* JAInter::HeapMgr::checkOnMemory(u32 param_1, u8* param_2) {
 
 /* 8029541C-80295440       .text releaseAutoHeapPointer__Q27JAInter7HeapMgrFUc */
 void JAInter::HeapMgr::releaseAutoHeapPointer(u8 param_1) {
-    /* Nonmatching */
     if (param_1 == 0xff) {
         return;
     }
-    sAutoHeap[param_1].field_0x10 = -1;
+    sAutoHeap[param_1].setUseCounter(-1);
 }
 
 /* 80295440-80295518       .text checkUsefulAutoHeapPosition__Q27JAInter7HeapMgrFv */
@@ -82,15 +83,15 @@ u8 JAInter::HeapMgr::checkUsefulAutoHeapPosition() {
     u32 r29 = -1;
     int r28 = 0;
     for (; i < JAIGlobalParameter::getParamAutoHeapMax(); i++) {
-        if (sAutoHeap[i].field_0x8 == -1) {
+        if (sAutoHeap[i].getDataNumber() == -1) {
             break;
         }
     }
     if (i == JAIGlobalParameter::getParamAutoHeapMax()) {
         for (i = 0; i < JAIGlobalParameter::getParamAutoHeapMax(); i++) {
-            if (r29 > sAutoHeap[i].field_0xc && sAutoHeap[i].field_0x10 == -1) {
+            if (r29 > sAutoHeap[i].getEndAddress() && sAutoHeap[i].getUseCounter() == -1) {
                 r28 = i;
-                r29 = sAutoHeap[i].field_0xc;
+                r29 = sAutoHeap[i].getEndAddress();
             }
         }
         if (r29 != -1) {
@@ -102,26 +103,26 @@ u8 JAInter::HeapMgr::checkUsefulAutoHeapPosition() {
 
 /* 80295518-80295560       .text getFreeAutoHeapPointer__Q27JAInter7HeapMgrFUcUl */
 void* JAInter::HeapMgr::getFreeAutoHeapPointer(u8 param_1, u32 param_2) {
-    /* Nonmatching */
-    sAutoHeap[param_1].field_0x8 = param_2;
-    void* result = sAutoHeap[param_1].mPointer;
-    sAutoHeap[param_1].field_0x10 = sAutoHeapCount;
-    sAutoHeap[param_1].field_0xc = sAutoHeapCount;
+    sAutoHeap[param_1].setDataNumber(param_2);
+    void* result = sAutoHeap[param_1].getPointer();
+    sAutoHeap[param_1].setUseCounter(sAutoHeapCount);
+    sAutoHeap[param_1].setEndAddress(sAutoHeapCount);
     sAutoHeapCount++;
     return result;
 }
 
 /* 80295560-80295658       .text getFreeStayHeapPointer__Q27JAInter7HeapMgrFUlUl */
 void* JAInter::HeapMgr::getFreeStayHeapPointer(u32 param_1, u32 param_2) {
-    /* Nonmatching */
     if (sStayHeapCount >= JAIGlobalParameter::getParamStayHeapMax()) {
         return NULL;
     }
-    void* r30 = sStayHeap[0].getPointer();
-    void* r29 = sStayHeap[sStayHeapCount].getPointer();
-    if (u32(r29) + param_1 < u32(r30) + JAIGlobalParameter::getParamStayHeapSize() && sStayHeapCount < JAIGlobalParameter::getParamStayHeapMax()) {
+    void* r29;
+    void* r30;
+    r30 = sStayHeap[0].getPointer();
+    r29 = sStayHeap[sStayHeapCount].getPointer();
+    if (param_1 + u32(r29) < u32(r30) + JAIGlobalParameter::getParamStayHeapSize() && sStayHeapCount < JAIGlobalParameter::getParamStayHeapMax()) {
         r29 = sStayHeap[sStayHeapCount].getPointer();
-        sStayHeap[sStayHeapCount].field_0x8 = param_2;
+        sStayHeap[sStayHeapCount].setDataNumber(param_2);
         r30 = (void*)(u32(sStayHeap[sStayHeapCount].getPointer()) + ALIGN_PREV(param_1, 32));
         if (IS_NOT_ALIGNED(param_1, 32)) {
             r30 = (void*)(u32(r30) + 32);
@@ -143,7 +144,7 @@ void JAInter::HeapMgr::setAutoHeapLoadedFlag(u8 param_1, u8 param_2) {
 
 /* 8029566C-80295684       .text __ct__Q27JAInter9HeapBlockFv */
 JAInter::HeapBlock::HeapBlock() {
-    field_0xc = 0;
-    field_0x8 = -1;
-    field_0x10 = -1;
+    mEndAddress = 0;
+    mDataNumber = -1;
+    mUseCounter = -1;
 }

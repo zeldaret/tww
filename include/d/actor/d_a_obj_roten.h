@@ -9,14 +9,14 @@
 
 class daObj_Roten_c : public fopAc_ac_c {
 public:
-    inline s32 _create();
+    inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
 
     void set_mtx();
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
     
     static int getCreateCount();
 
@@ -36,7 +36,7 @@ public:
     daObj_Roten_HIO_c();
     virtual ~daObj_Roten_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

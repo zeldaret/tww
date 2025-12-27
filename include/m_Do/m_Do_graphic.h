@@ -7,6 +7,7 @@
 bool mDoGph_Create();
 
 struct ResTIMG;
+
 class mDoGph_gInf_c {
 public:
     static void create();
@@ -27,9 +28,9 @@ public:
         mFader = fader;
     }
 
-    static BOOL startFadeOut(int param_0) { return JFWDisplay::getManager()->startFadeOut(param_0); }
-    static BOOL startFadeIn(int param_0) { return JFWDisplay::getManager()->startFadeIn(param_0); }
-    static void setFadeColor(JUtility::TColor color) { mFader->mColor.set(color); }
+    static BOOL startFadeOut(int fadeTime) { return JFWDisplay::getManager()->startFadeOut(fadeTime); }
+    static BOOL startFadeIn(int fadeTime) { return JFWDisplay::getManager()->startFadeIn(fadeTime); }
+    static void setFadeColor(JUtility::TColor& color) { mFader->setColor(color); }
     static void setClearColor(JUtility::TColor color) { JFWDisplay::getManager()->setClearColor(color); }
     static void setBackColor(GXColor& color) { mBackColor = color; }
     static void endFrame() { JFWDisplay::getManager()->endFrame(); }
@@ -38,8 +39,10 @@ public:
     static void offBlure() { mBlureFlag = false; }
     static bool isBlure() { return mBlureFlag; }
     static u8 getBlureRate() { return mBlureRate; }
+    static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
     static void offAutoForcus() { mAutoForcus = false; }
+    static void onAutoForcus() { mAutoForcus = true; }
     static BOOL isAutoForcus() { return mAutoForcus; }
     static void setTickRate(u32 rate) { JFWDisplay::getManager()->setTickRate(rate); }
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
@@ -67,7 +70,6 @@ public:
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
     static void setBlureMtx(const Mtx) {}
-    static void setBlureRate(u8) {}
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

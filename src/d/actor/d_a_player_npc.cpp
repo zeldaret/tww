@@ -3,6 +3,7 @@
 // Translation Unit: d_a_player_npc.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_npc.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
@@ -13,18 +14,16 @@
 int daPy_npc_c::check_initialRoom() {
     if (home.roomNo < 0) {
         mAcch.CrrPos(*dComIfG_Bgsp());
-        if (mAcch.GetGroundH() == -1000000000.0f || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
+        if (mAcch.GetGroundH() == -G_CM3D_F_INF || dComIfG_Bgsp()->GetGroundCode(mAcch.m_gnd) == 4) {
             return 0;
-        } else {
-            int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
-            if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
-                return 0;
-            } else {
-                fopAcM_SetHomeRoomNo(this, roomNo);
-                fopAcM_SetRoomNo(this, roomNo);
-                return -1;
-            }
         }
+        int roomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        if (roomNo < 0 || !dComIfGp_roomControl_checkStatusFlag(roomNo, 0x10)) {
+            return 0;
+        }
+        fopAcM_SetHomeRoomNo(this, roomNo);
+        fopAcM_SetRoomNo(this, roomNo);
+        return -1;
     }
     return 1;
 }
@@ -89,7 +88,7 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     int scls_start_code = scls_data[i_point].mStart;
     int i;
     for (i = 0; i < dComIfGp_getStagePlayerNum(); i++) {
-        u8 plyr_start_code = player_data->mAngle.z & 0xFF;
+        u8 plyr_start_code = player_data->base.angle.z & 0xFF;
         if (plyr_start_code == scls_start_code) {
             break;
         }
@@ -97,8 +96,8 @@ void daPy_npc_c::setPointRestart(s16 i_point, s8 option) {
     }
     JUT_ASSERT(174, i != dComIfGp_getStagePlayerNum());
     
-    home.pos = player_data->mSpawnPos;
-    home.angle.y = player_data->mAngle.y;
+    home.pos = player_data->base.position;
+    home.angle.y = player_data->base.angle.y;
     home.roomNo = -1;
     setOffsetHomePos();
     current = home;

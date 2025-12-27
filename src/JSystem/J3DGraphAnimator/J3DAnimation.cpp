@@ -3,13 +3,15 @@
 // Translation Unit: J3DAnimation.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JMath/JMath.h"
 #include "dolphin/os/OS.h"
 
 /* 802EF5D8-802EF608       .text init__12J3DFrameCtrlFs */
 void J3DFrameCtrl::init(s16 end) {
-    mAttribute = 2;
+    mAttribute = EMode_LOOP;
     mState = 0;
     mStart = 0;
     mEnd = end;
@@ -24,8 +26,8 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
     f32 next_frame = cur_frame + mRate;
 
     switch (mAttribute) {
-    case LOOP_ONCE_e:
-    case LOOP_ONCE_RESET_e:
+    case EMode_NONE:
+    case EMode_RESET:
         if (next_frame < mStart) {
             next_frame = mStart;
         }
@@ -46,7 +48,7 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
             return true;
         }
         return false;
-    case LOOP_REPEAT_e:
+    case EMode_LOOP:
         if (cur_frame < mStart) {
             while (next_frame < mStart) {
                 if (mLoop - mStart <= 0.0f) {
@@ -110,8 +112,8 @@ BOOL J3DFrameCtrl::checkPass(f32 pass_frame) {
             return true;
         }
         return false;
-    case LOOP_MIRROR_ONCE_e:
-    case LOOP_MIRROR_REPEAT_e:
+    case EMode_REVERSE:
+    case EMode_LOOP_REVERSE:
         if (next_frame >= mEnd) {
             next_frame = mEnd - 0.001f;
         }
@@ -142,7 +144,7 @@ void J3DFrameCtrl::update() {
     mState = 0;
     mFrame += mRate;
     switch (mAttribute) {
-    case LOOP_ONCE_e:
+    case EMode_NONE:
         if (mFrame < mStart) {
             mFrame = mStart;
             mRate = 0.0f;
@@ -154,7 +156,7 @@ void J3DFrameCtrl::update() {
             mState |= 1;
         }
         break;
-    case LOOP_ONCE_RESET_e:
+    case EMode_RESET:
         if (mFrame < mStart) {
             mFrame = mStart;
             mRate = 0.0f;
@@ -166,7 +168,7 @@ void J3DFrameCtrl::update() {
             mState |= 1;
         }
         break;
-    case LOOP_REPEAT_e:
+    case EMode_LOOP:
         while (mFrame < mStart) {
             mState |= 2;
             if (mLoop - mStart <= 0.0f) {
@@ -182,7 +184,7 @@ void J3DFrameCtrl::update() {
             mFrame -= mEnd - mLoop;
         }
         break;
-    case LOOP_MIRROR_ONCE_e:
+    case EMode_REVERSE:
         if (mFrame >= mEnd) {
             mFrame = mEnd - 0.001f;
             mRate = -mRate;
@@ -193,7 +195,7 @@ void J3DFrameCtrl::update() {
             mState |= 1;
         }
         break;
-    case LOOP_MIRROR_REPEAT_e:
+    case EMode_LOOP_REVERSE:
         if (mFrame >= mEnd) {
             mFrame = mEnd - 0.001f;
             mRate = -mRate;

@@ -3,6 +3,7 @@
 // Translation Unit: d_wood.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wood.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -14,17 +15,13 @@
 #include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 #include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXDisplayList.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/types.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 //-----------------------------------------
 // Types
@@ -321,7 +318,6 @@ dWood::Anm_c::Anm_c() {
 
     mNormAnimIdx = AnmID_Norm0;
     mAlphaScale = 0xff;
-    return;
 }
 
 /* 800BD710-800BD800       .text play__Q25dWood5Anm_cFPQ25dWood8Packet_c */
@@ -334,7 +330,6 @@ void dWood::Anm_c::play(dWood::Packet_c *i_packet) {
         };
         (this->*mode_proc[mMode])(i_packet);
     }
-    return;
 }
 
 /* 800BD800-800BD848       .text copy_angamp__Q25dWood5Anm_cFPCQ25dWood5Anm_c */
@@ -351,8 +346,7 @@ void dWood::Anm_c::copy_angamp(const dWood::Anm_c *other) {
     }
 }
 
-/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs
- */
+/* 800BD848-800BD8BC       .text mode_cut_init__Q25dWood5Anm_cFPCQ25dWood5Anm_cs */
 void dWood::Anm_c::mode_cut_init(const dWood::Anm_c *, s16 targetAngle) {
     for (u32 i = 0; i < 2; i++) {
         mPhaseY[i] = 0;
@@ -381,11 +375,11 @@ void dWood::Anm_c::mode_cut(dWood::Packet_c *) {
     mPosOffsetZ = mPosOffsetZ + L_attr.kCutZVel;
     mPhaseX[0] = mPhaseX[0] - L_attr.kCutPitchVel;
 
-    mDoMtx_YrotS(mDoMtx_stack_c::now, mForceDir);
+    mDoMtx_stack_c::YrotS(mForceDir);
     mDoMtx_stack_c::transM(0.0f, mPosOffsetY, mPosOffsetZ);
-    mDoMtx_XrotM(mDoMtx_stack_c::now, mPhaseX[0]);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, -mForceDir);
-    mDoMtx_copy(mDoMtx_stack_c::now, mModelMtx);
+    mDoMtx_stack_c::XrotM(mPhaseX[0]);
+    mDoMtx_stack_c::YrotM(-mForceDir);
+    cMtx_copy(mDoMtx_stack_c::get(), mModelMtx);
 
     // Fade out the bush as it falls
     if (mCountdown < attr().kCutFadeStart) {
@@ -606,7 +600,7 @@ bool dWood::Unit_c::set_ground() {
     gndChk.SetPos(&pos);
     f32 gndHeight = dComIfG_Bgsp()->GroundCross(&gndChk);
 
-    if (gndHeight > -1000000000.0f) {
+    if (gndHeight > -G_CM3D_F_INF) {
         mPos.y = gndHeight;
         cM3dGPla *triPla = dComIfG_Bgsp()->GetTriPla(gndChk);
 
@@ -641,7 +635,7 @@ bool dWood::Unit_c::set_ground() {
         mtx[2][3] = mPos.z;
         mDoMtx_stack_c::scaleM(L_attr.kUncutShadowScale, kGroundHeightBias,
                                L_attr.kUncutShadowScale);
-        mDoMtx_copy(mDoMtx_stack_c::now, mShadowModelMtx);
+        cMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
         return true;
     } else {
         return false;
@@ -652,16 +646,17 @@ bool dWood::Unit_c::set_ground() {
 void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
     int anmIdx = mAnmIdx;
 
-    mDoMtx_copy(anim[anmIdx].mModelMtx, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::now[0][3] = mDoMtx_stack_c::now[0][3] + mPos.x;
-    mDoMtx_stack_c::now[1][3] = mDoMtx_stack_c::now[1][3] + mPos.y;
-    mDoMtx_stack_c::now[2][3] = mDoMtx_stack_c::now[2][3] + mPos.z;
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::now, mModelViewMtx);
+    mDoMtx_stack_c::copy(anim[anmIdx].mModelMtx);
+    MtxP mtx = mDoMtx_stack_c::get();
+    mtx[0][3] += mPos.x;
+    mtx[1][3] += mPos.y;
+    mtx[2][3] += mPos.z;
+    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mModelViewMtx);
 
-    mDoMtx_copy(anim[anmIdx].mTrunkModelMtx, mDoMtx_stack_c::get());
-    mDoMtx_stack_c::now[0][3] = mPos.x;
-    mDoMtx_stack_c::now[1][3] = mPos.y;
-    mDoMtx_stack_c::now[2][3] = mPos.z;
+    mDoMtx_stack_c::copy(anim[anmIdx].mTrunkModelMtx);
+    mtx[0][3] = mPos.x;
+    mtx[1][3] = mPos.y;
+    mtx[2][3] = mPos.z;
     mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
 
     mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
@@ -777,7 +772,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 g_env_light.settingTevStruct(TEV_TYPE_BG0, &mPos, &mTevStr);
 
                 // Spawn cut down particles (a bunch of leaves)
-                dComIfGp_particle_set(dPa_name::ID_CUT_L_TREE_DOWN, &mPos, NULL,
+                dComIfGp_particle_set(dPa_name::ID_COMMON_CUT_L_TREE_DOWN, &mPos, NULL,
                                       NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
                                       NULL, NULL);
 
@@ -834,7 +829,6 @@ dWood::Room_c::Room_c() {
 void dWood::Room_c::entry_unit(dWood::Unit_c *unit) {
     unit->mpNext = mpUnit;
     mpUnit = unit;
-    return;
 }
 
 /* 800BEF94-800BEFF0       .text delete_all_unit__Q25dWood6Room_cFv */
@@ -956,18 +950,6 @@ void dWood::Packet_c::update() {
 
 /* 800BF614-800BF900       .text draw__Q25dWood8Packet_cFv */
 void dWood::Packet_c::draw() {
-    u8 bVar1;
-    int iVar2;
-    int iVar3;
-    uint uVar4;
-    int iVar6;
-    int iVar7;
-    GXColor local_48;
-    GXColor local_44;
-    GXColor local_40;
-    GXColor local_38;
-    GXColorS10 local_30;
-
     static GXVtxDescList l_shadowVtxDescList[] = {
         {GX_VA_POS, GX_INDEX8},
         {GX_VA_TEX0, GX_INDEX8},
@@ -1063,7 +1045,7 @@ void dWood::Packet_c::draw() {
         }
     }
 
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
 #endif
 }
@@ -1089,7 +1071,7 @@ s32 dWood::Packet_c::search_empty_UnitID() const {
 dWood::AnmID_e dWood::Packet_c::search_anm(dWood::Anm_c::Mode_e i_mode) {
     u32 animIdx;
 
-    JUT_ASSERT(VERSION_SELECT(2059, 2061, 2061), (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
+    JUT_ASSERT(VERSION_SELECT(2059, 2059, 2061, 2061), (i_mode >= 0) && (i_mode < Anm_c::Mode_Max));
 
     if (i_mode == Anm_c::Mode_Norm) {
         static s32 anm_norm_num = 0;

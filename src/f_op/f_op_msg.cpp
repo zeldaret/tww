@@ -52,7 +52,7 @@ int fopMsg_Delete(void* i_this) {
 static int fopMsg_MSG_TYPE;
 
 /* 8002A788-8002A860       .text fopMsg_Create__FPv */
-int fopMsg_Create(void* i_this) {
+cPhs_State fopMsg_Create(void* i_this) {
     msg_class* _this = (msg_class*)i_this;
 
     if (fpcM_IsFirstCreating(_this)) {
@@ -70,9 +70,9 @@ int fopMsg_Create(void* i_this) {
         }
     }
 
-    int status = fpcMtd_Create((process_method_class*)_this->sub_method, _this);
+    cPhs_State status = fpcMtd_Create((process_method_class*)_this->sub_method, _this);
     if (status == cPhs_COMPLEATE_e) {
-        s32 priority = fpcLf_GetPriority(_this);
+        s32 priority = fpcM_DrawPriority(_this);
         fopDwTg_ToDrawQ(&_this->draw_tag, priority);
     }
 

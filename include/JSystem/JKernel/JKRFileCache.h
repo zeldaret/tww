@@ -63,4 +63,8 @@ inline JKRFileCache* JKRMountDvdDrive(const char* path, JKRHeap* heap, const cha
     return JKRFileCache::mount(path, heap, param_2);
 }
 
+inline void JKRUnmountDvdDrive(JKRFileCache* cache) {
+    cache->unmount();
+}
+
 #endif /* JKRFILECACHE_H */

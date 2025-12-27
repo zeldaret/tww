@@ -9,6 +9,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/res/res_link.h" // IWYU pragma: export
 #include "d/res/res_lkanm.h"
 
@@ -96,10 +97,11 @@ public:
     void setID(s32 id) { mId = id; }
     s32 getID() const { return mId; }
     void setAngle(csXyz* angle) { mAngle = *angle; }
-    const csXyz& getAngle() { return mAngle; }
+    csXyz& getAngle() { return mAngle; }
     void setPos(const cXyz* pos) { mPos = *pos; }
-    const cXyz& getPos() { return mPos; }
+    cXyz& getPos() { return mPos; }
 
+private:
     /* 0x00 */ dPa_smokeEcallBack mSmokeCb;
     /* 0x20 */ dPa_followEcallBack mFollowCb;
     /* 0x34 */ cXyz mPos;
@@ -120,8 +122,15 @@ public:
     void onAlphaOutFlg() { mAlphaOutFlg = TRUE; }
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     
-    void deleteCallBack() {}
+    void deleteCallBack() {
+        if(mpEmitter) {
+            mpEmitter->quitImmortalEmitter();
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter = NULL;
+        }
+    }
     
+protected:
     /* 0x4 */ BOOL mAlphaOutFlg;
     /* 0x8 */ JPABaseEmitter* mpEmitter;
 };  // Size: 0xC
@@ -130,8 +139,12 @@ class daPy_waterDropPcallBack_c : public JPACallBackBase2<JPABaseEmitter*, JPABa
 public:
     void execute(JPABaseEmitter*, JPABaseParticle*);
     ~daPy_waterDropPcallBack_c() {}
-    
-    /* 0x4 */ BOOL field_0x4;
+
+    void offWaterMark() { mbWaterMark = FALSE; }
+    void onWaterMark() { mbWaterMark = TRUE; }
+
+protected:
+    /* 0x4 */ BOOL mbWaterMark;
     /* 0x8 */ dBgS_ObjGndChk mGndChk;
 };
 
@@ -146,19 +159,27 @@ public:
     daPy_swimTailEcallBack_c() {}
     
     void onEnd() {
-        field_0x04 = true;
+        mbEnd = true;
         field_0x20 = NULL;
     }
+    bool getEnd() { return mbEnd; }
+
+    void onRightFlg() { field_0x05 = true; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
     cXyz& getPos() { return mPos; }
     void setPos(cXyz& pos) { mPos = pos; }
 
-    /* 0x04 */ bool field_0x04;
+    void setSpeedRate(f32 rate) { mSpeedRate = rate; }
+    void setWaterY(f32 y) { mWaterY = y; }
+    void setWaterFlatY(f32 y) { mWaterFlatY = y; }
+
+protected:
+    /* 0x04 */ bool mbEnd;
     /* 0x05 */ bool field_0x05;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x08 */ f32 mSpeedRate;
+    /* 0x0C */ f32 mWaterY;
+    /* 0x10 */ f32 mWaterFlatY;
     /* 0x14 */ cXyz mPos;
     /* 0x20 */ const csXyz* field_0x20;
     /* 0x24 */ JPABaseEmitter* mpEmitter;
@@ -172,15 +193,16 @@ public:
     void setup(JPABaseEmitter*, const cXyz*, const csXyz*, s8);
     void end();
     ~daPy_followEcallBack_c() {}
+
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setPos(const cXyz* pos) { mPos = *pos; }
     cXyz& getPos() { return mPos; }
+    void setPos(const cXyz* pos) { mPos = *pos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
+protected:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
-    /* 0x1A */ u8 field_0x1A[0x1C - 0x1A];
 };  // Size: 0x1C
 
 class daPy_waterDropEcallBack_c : public daPy_followEcallBack_c {
@@ -191,6 +213,13 @@ public:
     daPy_waterDropEcallBack_c() {}
     ~daPy_waterDropEcallBack_c() {}
 
+    BOOL checkReady() { return field_0x1C; }
+    void onReady() { field_0x1C = TRUE; }
+    void offReady() { field_0x1C = FALSE; }
+
+    static daPy_waterDropPcallBack_c* getPcallBack() { return &m_pcallback; }
+
+protected:
     static daPy_waterDropPcallBack_c m_pcallback;
 
     /* 0x1C */ BOOL field_0x1C;
@@ -202,7 +231,7 @@ public:
     ~daPy_dmEcallBack_c() {}
     daPy_dmEcallBack_c() {}
     
-    static int getTimer() { return m_timer; }
+    static s16 getTimer() { return m_timer; }
     static void setTimer(s16 timer) { m_timer = timer; }
     static void decTimer() { m_timer--; }
     
@@ -223,6 +252,7 @@ public:
         setTimer(timer);
     }
 
+private:
     static s16 m_timer;
     static u16 m_type;
 };  // Size: 0x0C
@@ -234,6 +264,7 @@ public:
     daPy_mtxPosFollowEcallBack_c() {}
     ~daPy_mtxPosFollowEcallBack_c() {}
 
+protected:
     /* 0xC */ const csXyz* mpAngle;
 };  // Size: 0x10
 
@@ -244,26 +275,32 @@ public:
     virtual ~daPy_matAnm_c() {}
     virtual void calc(J3DMaterial*) const;
     
+    static u8 m_maba_timer;
     static u8 m_maba_flg;
     static u8 m_eye_move_flg;
-    static u8 m_maba_timer;
     static u8 m_morf_frame;
 
     static void onMabaFlg() { m_maba_flg = 1; }
-    static void offMabaFlg() { m_maba_flg = 0; }
+    static void offMabaFlg() {
+        m_maba_flg = 0;
+        m_maba_timer = 1;
+    }
     static void decMabaTimer() { cLib_calcTimer(&m_maba_timer); }
     static void decMorfFrame() { cLib_calcTimer(&m_morf_frame); }
-    static void getEyeMoveFlg() {}
-    static void getMabaFlg() {}
-    static void getMabaTimer() {}
-    static void getNowOffsetXP() {}
-    static void getNowOffsetYP() {}
-    static void offEyeMoveFlg() {}
-    static void onEyeMoveFlg() {}
+    static u8 getEyeMoveFlg() { return m_eye_move_flg; }
+    static u8 getMabaFlg() { return m_maba_flg; }
+    static u8 getMabaTimer() { return m_maba_timer; }
+    static u8 getMorfFrame() { return m_morf_frame; }
+    static void offEyeMoveFlg() { m_eye_move_flg = 0; }
+    static void onEyeMoveFlg() { m_eye_move_flg = 1; }
     static void setMabaTimer(u8 timer) { m_maba_timer = timer; }
     static void setMorfFrame(u8 frame) { m_morf_frame = frame; }
-    static void setNowOffsetX(f32) {}
-    static void setNowOffsetY(f32) {}
+
+    // TODO:
+    void getNowOffsetXP() {}
+    void getNowOffsetYP() {}
+    void setNowOffsetX(f32 x) { mEyePos.x = x; }
+    void setNowOffsetY(f32 y) { mEyePos.y = y; }
 
 public:
     /* 0x6C */ cXy mEyePosOld;
@@ -277,12 +314,13 @@ public:
         ELIXIR_SOUP_SLASH_BLUR,
         PARRYING_SLASH_BLUR,
     };
-public:
+
     void initSwBlur(MtxP, int, f32, int);
     void copySwBlur(MtxP, int);
     void draw();
     ~daPy_swBlur_c() {}
 
+public:
     /* 0x010 */ ResTIMG* mpTex;
     /* 0x014 */ int field_0x014;
     /* 0x018 */ int field_0x018;
@@ -300,19 +338,29 @@ public:
     daPy_footData_c();
 
 public:
-    /* 0x000 */ u8 field_0x000[0x034 - 0x000];
+    /* 0x000 */ u8 field_0x000;
+    /* 0x001 */ u8 field_0x001;
+    /* 0x002 */ s16 field_0x002;
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
+    /* 0x008 */ s16 field_0x008;
+    /* 0x00A */ s16 field_0x00A;
+    /* 0x00C */ cXyz field_0x00C;
+    /* 0x018 */ cXyz field_0x018;
+    /* 0x024 */ cXyz field_0x024;
+    /* 0x030 */ f32 field_0x030;
     /* 0x034 */ dBgS_LinkGndChk field_0x034;
-    /* 0x088 */ u8 field_0x088[0x118 - 0x088];
-};
+    /* 0x088 */ Mtx field_0x088[3];
+};  // Size: 0x118
 
-struct daPy_aura_c {
+class daPy_aura_c {
 public:
     void setModel(J3DModel* model) { mpYaura00Model = model; }
     J3DModel* getModel() { return mpYaura00Model; }
     void setFrame(f32 frame) { mFrame = frame; }
     f32 getFrame() { return mFrame; }
 
-public:
+private:
     /* 0x00 */ J3DModel* mpYaura00Model;
     /* 0x04 */ f32 mFrame;
 };  // Size: 0x08
@@ -322,6 +370,48 @@ public:
     /* 0x00 */ u16 mUnderBckIdx;
     /* 0x02 */ u16 mUpperBckIdx;
 };
+
+class daPy_HIO_c {
+public:
+    daPy_HIO_c();
+
+public:
+    daPy_HIO_basic_c0 mBasic;
+    daPy_HIO_move_c0 mMove;
+    daPy_HIO_atnMove_c0 mAtnMove;
+    daPy_HIO_atnMoveB_c0 mAtnMoveB;
+    daPy_HIO_turn_c0 mTurn;
+    daPy_HIO_cut_c0 mCut;
+    daPy_HIO_roll_c0 mRoll;
+    daPy_HIO_backJump_c0 mBackJump;
+    daPy_HIO_slip_c0 mSlip;
+    daPy_HIO_slide_c0 mSlide;
+    daPy_HIO_autoJump_c0 mAutoJump;
+    daPy_HIO_fall_c0 mFall;
+    daPy_HIO_swim_c0 mSwim;
+    daPy_HIO_battle_c0 mBattle;
+    daPy_HIO_wall_c0 mWall;
+    daPy_HIO_smallJump_c0 mSmallJump;
+    daPy_HIO_wallCatch_c0 mWallCatch;
+    daPy_HIO_hang_c0 mHang;
+    daPy_HIO_guard_c0 mGuard;
+    daPy_HIO_nockback_c0 mNockback;
+    daPy_HIO_iceSlip_c0 mIceSlip;
+    daPy_HIO_dam_c0 mDam;
+    daPy_HIO_slowJump_c0 mSlowJump;
+    daPy_HIO_sideStep_c0 mSideStep;
+    daPy_HIO_grab_c0 mGrab;
+    daPy_HIO_ladder_c0 mLadder;
+    daPy_HIO_crouch_c0 mCrouch;
+    daPy_HIO_pushpull_c0 mPushpull;
+    daPy_HIO_item_c0 mItem;
+    daPy_HIO_ship_c0 mShip;
+    daPy_HIO_restart_c0 mRestart;
+    daPy_HIO_holdup_c0 mHoldup;
+    daPy_HIO_vomit_c0 mVomit;
+    daPy_HIO_warp_c0 mWarp;
+    u8 pad[0x3F - 0x22];
+};  // Size: 0x3F
 
 class daPy_lk_c : public daPy_py_c {
 public:
@@ -809,37 +899,37 @@ public:
     
     enum {
         ModeFlg_00000001 = 0x00000001,
-        ModeFlg_MIDAIR = 0x00000002,
+        ModeFlg_MIDAIR   = 0x00000002,
         ModeFlg_00000004 = 0x00000004,
-        ModeFlg_DAMAGE = 0x00000008,
-        ModeFlg_WHIDE = 0x00000010,
-        ModeFlg_HANG = 0x00000020,
+        ModeFlg_DAMAGE   = 0x00000008,
+        ModeFlg_WHIDE    = 0x00000010,
+        ModeFlg_HANG     = 0x00000020,
         ModeFlg_00000040 = 0x00000040,
         ModeFlg_00000080 = 0x00000080,
         ModeFlg_00000100 = 0x00000100,
         ModeFlg_HOOKSHOT = 0x00000200,
         ModeFlg_00000400 = 0x00000400,
-        ModeFlg_ROPE = 0x00000800,
+        ModeFlg_ROPE     = 0x00000800,
         ModeFlg_00001000 = 0x00001000,
-        ModeFlg_IN_SHIP = 0x00002000,
+        ModeFlg_IN_SHIP  = 0x00002000,
         ModeFlg_00004000 = 0x00004000,
         ModeFlg_00008000 = 0x00008000,
-        ModeFlg_CLIMB = 0x00010000,
+        ModeFlg_CLIMB    = 0x00010000,
         ModeFlg_00020000 = 0x00020000,
-        ModeFlg_SWIM = 0x00040000,
+        ModeFlg_SWIM     = 0x00040000,
         ModeFlg_00080000 = 0x00080000,
-        ModeFlg_GRAB = 0x00100000,
+        ModeFlg_GRAB     = 0x00100000,
         ModeFlg_PUSHPULL = 0x00200000,
-        ModeFlg_LADDER = 0x00400000,
-        ModeFlg_CROUCH = 0x00800000,
-        ModeFlg_CRAWL = 0x01000000,
+        ModeFlg_LADDER   = 0x00400000,
+        ModeFlg_CROUCH   = 0x00800000,
+        ModeFlg_CRAWL    = 0x01000000,
         ModeFlg_02000000 = 0x02000000,
         ModeFlg_04000000 = 0x04000000,
         ModeFlg_08000000 = 0x08000000,
-        ModeFlg_CAUGHT = 0x10000000,
-        ModeFlg_SUBJECT = 0x20000000,
+        ModeFlg_CAUGHT   = 0x10000000,
+        ModeFlg_SUBJECT  = 0x20000000,
         ModeFlg_40000000 = 0x40000000,
-        ModeFlg_PARRY = 0x80000000,
+        ModeFlg_PARRY    = 0x80000000,
     };
     
     enum {
@@ -867,6 +957,17 @@ public:
         /* 0x40 */ BTN_R = (1 << 6),
     };
     
+    /**
+     * Moving direction calculated from an angle
+     */
+    enum daPy_lk_DIR {
+        /* 0x0 */ DIR_FORWARD,
+        /* 0x1 */ DIR_BACKWARD,
+        /* 0x2 */ DIR_LEFT,
+        /* 0x3 */ DIR_RIGHT,
+        /* 0x4 */ DIR_NONE,
+    };
+    
     typedef BOOL (daPy_lk_c::*ProcFunc)();
     
     void seStartOnlyReverb(u32);
@@ -892,7 +993,7 @@ public:
     J3DAnmTexPattern* loadTextureAnimeResource(u32, BOOL);
     BOOL checkBossBgm();
     BOOL checkMabaAnimeBtp(int);
-    BOOL checkNormalFace();
+    u16 checkNormalFace();
     void setTextureAnime(u16, int);
     void setPriTextureAnime(u16, int);
     void resetPriTextureAnime();
@@ -903,11 +1004,11 @@ public:
     void playTextureAnime();
     BOOL checkSightLine(f32, cXyz*);
     void setBootsModel(J3DModel**);
-    void setItemModel();
+    s32 setItemModel();
     BOOL checkUpperReadyAnime() const;
     BOOL checkUpperReadyThrowAnime() const;
     BOOL checkNoCollisionCorret();
-    void setDrawHandModel();
+    s32 setDrawHandModel();
     void entryDLSetLight(J3DModel*, u32);
     void updateDLSetLight(J3DModel*, u32);
     void hideHatAndBackle(J3DMaterial*);
@@ -918,8 +1019,8 @@ public:
     BOOL draw();
     void setAtnList();
     void setActorPointer();
-    void setTalkStatus();
-    void setHintActor();
+    BOOL setTalkStatus();
+    int setHintActor();
     void setDoStatusBasic();
     void setDoStatus();
     int getDirectionFromAngle(s16);
@@ -929,8 +1030,8 @@ public:
     void posMoveFromFootPos();
     void posMove();
     void setShapeAngleToAtnActor();
-    void cancelItemUpperReadyAnime();
-    BOOL checkBodyAngleX(s16);
+    BOOL cancelItemUpperReadyAnime();
+    s16 checkBodyAngleX(s16);
     BOOL setBodyAngleToCamera();
     void setBodyAngleXReadyAnime();
     void setSpeedAndAngleNormal(s16);
@@ -959,24 +1060,24 @@ public:
     void makeItemType();
     void setScopeModel();
     void setPhotoBoxModel();
-    void changeDragonShield(int);
+    BOOL changeDragonShield(int);
     BOOL checkNewItemChange(u8);
     BOOL checkItemChangeFromButton();
     void checkItemAction();
-    void getSlidePolygon();
+    cM3dGPla* getSlidePolygon();
     BOOL checkJumpCutFromButton();
-    void orderTalk();
+    int orderTalk();
     BOOL checkNextActionFromButton();
     void setShieldGuard();
     BOOL checkItemModeActorPointer();
-    BOOL checkNextActionItemFly();
+    void checkNextActionItemFly();
     BOOL checkNextMode(int);
     BOOL checkIceSlipFall();
     void setFrontWallType();
-    void changeFrontWallTypeProc();
-    void changeSlideProc();
-    void changeWaitProc();
-    void changeLandProc(f32);
+    BOOL changeFrontWallTypeProc();
+    int changeSlideProc();
+    BOOL changeWaitProc();
+    BOOL changeLandProc(f32);
     BOOL setDamagePoint(f32);
     BOOL checkNormalDamage(int);
     void setDashDamage();
@@ -1102,7 +1203,7 @@ public:
     BOOL procNotUse_init(int);
     BOOL procNotUse();
     s16 getGroundAngle(cBgS_PolyInfo*, s16);
-    void setLegAngle(f32, int, s16*, s16*);
+    int setLegAngle(f32, int, s16*, s16*);
     void footBgCheck();
     void setWaterY();
     void autoGroundHit();
@@ -1149,7 +1250,7 @@ public:
     void setSeAnime(daPy_anmHeap_c const*, J3DFrameCtrl*);
     void initSeAnime();
     void resetSeAnime();
-    void setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
+    int setMoveAnime(f32, f32, f32, daPy_ANM, daPy_ANM, int, f32);
     BOOL setSingleMoveAnime(daPy_ANM, f32, f32, s16, f32);
     BOOL setActAnimeUpper(u16, daPy_UPPER, f32, f32, s16, f32);
     BOOL resetActAnimeUpper(daPy_UPPER, f32);
@@ -1176,14 +1277,14 @@ public:
     void endFlameDamageEmitter();
     void endDamageEmitter();
     static u32 setItemWaterEffect(fopAc_ac_c*, int, int);
-    void getDemoLookActor();
+    fopAc_ac_c* getDemoLookActor();
     void setTinkleCeiverModel();
     void setTalismanModel();
     void setLetterModel();
     BOOL checkCaughtShapeHide();
     void setShapeAngleToTalkActor();
     BOOL checkEndMessage(u32);
-    void setTalkStartBack();
+    int setTalkStartBack();
     BOOL dProcTool_init();
     BOOL dProcTool();
     BOOL dProcTalk_init();
@@ -1195,7 +1296,9 @@ public:
     BOOL dProcOpenTreasure_init();
     BOOL dProcOpenTreasure();
     void setGetItemSound(u16, int);
+#if VERSION > VERSION_DEMO
     BOOL setGetDemo();
+#endif
     BOOL dProcGetItem_init();
     BOOL dProcGetItem();
     BOOL dProcUnequip_init();
@@ -1291,10 +1394,10 @@ public:
     BOOL dProcHandUp();
     BOOL dProcIceSlip_init();
     BOOL dProcIceSlip();
-    void getLadderMoveAnmSpeed();
+    f32 getLadderMoveAnmSpeed();
     void setLadderFootSe();
-    void changeLadderMoveProc(int);
-    void setMoveBGLadderCorrect();
+    int changeLadderMoveProc(int);
+    int setMoveBGLadderCorrect();
     void procLadderUpStart_init_sub();
     BOOL procLadderUpStart_init();
     BOOL procLadderUpStart();
@@ -1307,10 +1410,10 @@ public:
     BOOL procLadderDownEnd();
     BOOL procLadderMove_init(int, int, cXyz*);
     BOOL procLadderMove();
-    void getHangMoveAnmSpeed();
-    void getHangDirectionFromAngle();
-    void changeHangMoveProc(int);
-    void changeHangEndProc(int);
+    f32 getHangMoveAnmSpeed();
+    int getHangDirectionFromAngle();
+    BOOL changeHangMoveProc(int);
+    int changeHangEndProc(int);
     void setHangShapeOffset();
     BOOL procHangStart_init();
     BOOL procHangStart();
@@ -1326,13 +1429,13 @@ public:
     BOOL procHangClimb();
     BOOL procHangWallCatch_init();
     BOOL procHangWallCatch();
-    void getClimbMoveAnmSpeed();
+    f32 getClimbMoveAnmSpeed();
     void setClimbShapeOffset();
-    void getClimbDirectionFromAngle();
+    int getClimbDirectionFromAngle();
     void changeClimbMoveProc(int);
-    void setMoveBGCorrectClimb();
-    BOOL checkBgCorrectClimbMove(cXyz*, cXyz*);
-    BOOL checkBgClimbMove();
+    BOOL setMoveBGCorrectClimb();
+    void checkBgCorrectClimbMove(cXyz*, cXyz*);
+    void checkBgClimbMove();
     void procClimbUpStart_init_sub();
     BOOL procClimbUpStart_init();
     BOOL procClimbUpStart();
@@ -1343,13 +1446,13 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    void getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
     BOOL checkWHideFrontFloor(cXyz*);
-    BOOL checkWHideModeChange(cXyz*);
-    void changeWHideEndProc(cXyz*);
+    int checkWHideModeChange(cXyz*);
+    int changeWHideEndProc(cXyz*);
     BOOL procWHideReady_init(cM3dGPla*, cXyz*);
     BOOL procWHideReady();
     BOOL procWHideWait_init();
@@ -1358,11 +1461,11 @@ public:
     BOOL procWHideMove();
     BOOL procWHidePeep_init();
     BOOL procWHidePeep();
-    void getCrawlMoveAnmSpeed();
-    void getCrawlMoveSpeed();
+    f32 getCrawlMoveAnmSpeed();
+    f32 getCrawlMoveSpeed();
     void setCrawlMoveDirectionArrow();
-    void changeCrawlAutoMoveProc(cXyz*);
-    void getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
+    BOOL changeCrawlAutoMoveProc(cXyz*);
+    int getCrawlMoveVec(cXyz*, cXyz*, cXyz*);
     void crawlBgCheck(cXyz*, cXyz*);
     BOOL checkCrawlSideWall(cXyz*, cXyz*, cXyz*, cXyz*, s16*, s16*);
     void setDoStatusCrawl();
@@ -1401,22 +1504,22 @@ public:
     BOOL procGrabRebound();
     void setSpeedAndAngleSwim();
     BOOL checkNextModeSwim();
-    void changeSwimProc();
-    void changeSwimUpProc();
-    void swimOutAfter(int);
+    BOOL changeSwimProc();
+    BOOL changeSwimUpProc();
+    void swimOutAfter(BOOL);
     BOOL checkSwimFallCheck();
-    void changeSwimOutProc();
+    BOOL changeSwimOutProc();
     void setSwimMoveAnime(daPy_ANM);
-    void getSwimTimerRate();
+    f32 getSwimTimerRate();
     void setSwimTimerStartStop();
-    BOOL procSwimUp_init(int);
+    BOOL procSwimUp_init(BOOL);
     BOOL procSwimUp();
-    BOOL procSwimWait_init(int);
+    BOOL procSwimWait_init(BOOL);
     BOOL procSwimWait();
-    BOOL procSwimMove_init(int);
+    BOOL procSwimMove_init(BOOL);
     BOOL procSwimMove();
-    void setSpecialBattle(int);
-    void changeSpecialBattle();
+    void setSpecialBattle(BOOL);
+    BOOL changeSpecialBattle();
     BOOL procBtJump_init(fopEn_enemy_c*);
     BOOL procBtJump();
     BOOL procBtJumpCut_init(cXyz*);
@@ -1432,7 +1535,7 @@ public:
     BOOL procBtVerticalJumpCut();
     BOOL procBtVerticalJumpLand_init();
     BOOL procBtVerticalJumpLand();
-    void shipSpecialDemoStart();
+    BOOL shipSpecialDemoStart();
     BOOL checkJumpRideShip();
     BOOL checkShipNotNormalMode();
     void setShipRideArmAngle(int, J3DTransformInfo*);
@@ -1442,7 +1545,7 @@ public:
     void setShipRidePos(int);
     void setShipAttentionAnmSpeed(f32);
     void setShipAttnetionBodyAngle();
-    void changeShipEndProc();
+    BOOL changeShipEndProc();
     void initShipBaseAnime();
     void initShipCraneAnime();
     BOOL procShipReady_init();
@@ -1471,14 +1574,14 @@ public:
     BOOL procShipRestart();
     BOOL checkRopeAnime() const;
     void freeRopeItem();
-    BOOL checkRopeRoofHit(s16);
-    void changeRopeSwingProc();
-    void changeRopeEndProc(int);
+    f32 checkRopeRoofHit(s16);
+    int changeRopeSwingProc();
+    int changeRopeEndProc(int);
     BOOL checkSpecialRope();
-    void changeRopeToHangProc();
+    int changeRopeToHangProc();
     BOOL checkRopeSwingWall(cXyz*, cXyz*, s16*, f32*);
     void setBlendRopeMoveAnime(int);
-    void throwRope();
+    int throwRope();
     BOOL checkNextActionRopeReady();
     BOOL checkNextRopeMode();
     BOOL checkHangRopeActorNull();
@@ -1490,7 +1593,7 @@ public:
     BOOL procRopeSwing();
     BOOL procRopeHangWait_init(int);
     BOOL procRopeHangWait();
-    void specialRopeHangUp();
+    int specialRopeHangUp();
     BOOL procRopeUp_init();
     BOOL procRopeUp();
     BOOL procRopeDown_init();
@@ -1505,18 +1608,18 @@ public:
     BOOL procRopeUpHang();
     BOOL checkBoomerangAnime() const;
     void throwBoomerang();
-    void returnBoomerang();
+    int returnBoomerang();
     BOOL checkNextActionBoomerangReady();
-    BOOL checkNextActionBoomerangFly();
+    void checkNextActionBoomerangFly();
     BOOL checkNextBoomerangMode();
-    void changeBoomerangCatchProc();
+    BOOL changeBoomerangCatchProc();
     BOOL procBoomerangSubject_init();
     BOOL procBoomerangSubject();
     BOOL procBoomerangMove_init();
     BOOL procBoomerangMove();
     BOOL procBoomerangCatch_init();
     BOOL procBoomerangCatch();
-    void bowJointCB(int);
+    BOOL bowJointCB(int);
     BOOL bowButton() const;
     BOOL checkBowReadyAnime() const;
     BOOL checkBowAnime() const;
@@ -1525,7 +1628,7 @@ public:
     void setBowReadyAnime();
     void setBowReloadAnime();
     BOOL checkNextActionBowReady();
-    BOOL checkNextActionBowFly();
+    void checkNextActionBowFly();
     BOOL checkNextBowMode();
     void setBowModel();
     BOOL procBowSubject_init();
@@ -1546,9 +1649,9 @@ public:
     BOOL procHookshotFly();
     BOOL fanWindEffectDraw();
     BOOL fanWindCrashEffectDraw();
-    void fanJointCB(int);
-    void parachuteJointCB(int);
-    void setShapeFanLeaf();
+    BOOL fanJointCB(int);
+    BOOL parachuteJointCB(int);
+    int setShapeFanLeaf();
     BOOL checkFanGlideProc(int);
     void setFanModel();
     void setSmallFanModel();
@@ -1597,16 +1700,16 @@ public:
     BOOL procHammerFrontSwing();
     BOOL procHammerFrontSwingEnd_init();
     BOOL procHammerFrontSwingEnd();
-    void setPushPullKeepData(dBgW::PushPullLabel);
+    BOOL setPushPullKeepData(dBgW::PushPullLabel);
     BOOL procPushPullWait_init(int);
     BOOL procPushPullWait();
     BOOL procPushMove_init();
     BOOL procPushMove();
     BOOL procPullMove_init();
     BOOL procPullMove();
-    void changeBottleDrinkFace(int);
+    int changeBottleDrinkFace(int);
     void setBottleModel(u16);
-    void makeFairy(cXyz*, u32);
+    fopAc_ac_c* makeFairy(cXyz*, u32);
     BOOL procBottleDrink_init(u16);
     BOOL procBottleDrink();
     BOOL procBottleOpen_init(u16);
@@ -1633,21 +1736,29 @@ public:
     BOOL procFoodThrow();
     BOOL procFoodSet_init();
     BOOL procFoodSet();
+#if VERSION == VERSION_DEMO
+    void setSwordModel();
+#else
     void setSwordModel(BOOL);
+#endif
     void setLightSaver();
+#if VERSION == VERSION_DEMO
+    BOOL checkLastDemoSwordNoDraw(int);
+#else
     BOOL checkDemoShieldNoDraw();
-    BOOL checkDemoSwordNoDraw(int);
+    BOOL checkDemoSwordNoDraw(BOOL);
+#endif
     BOOL checkChanceMode();
     BOOL checkCutRollChange() const;
-    void getSwordBlurColor();
+    int getSwordBlurColor();
     void setNormalCutAtParam(u8);
     void setFinishCutAtParam(u8);
     void setExtraCutAtParam(u8);
     void setExtraFinishCutAtParam(u8);
     void setJumpCutAtParam();
     int getCutDirection();
-    void changeCutProc();
-    void changeCutReverseProc(daPy_ANM);
+    int changeCutProc();
+    int changeCutReverseProc(daPy_ANM);
     BOOL procCutA_init(s16);
     BOOL procCutA();
     BOOL procCutF_init(s16);
@@ -1689,26 +1800,32 @@ public:
     J3DAnmTextureSRTKey* getIceArrowBtk() { return mpIceArrowBtk; }
     J3DAnmTextureSRTKey* getLightArrowBtk() { return mpLightArrowBtk; }
     
-    bool checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
-    bool checkGrabAnimeLight() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAIT; };
-    bool checkGrabAnimeHeavy() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_GRABWAITB; };
-    bool checkBoomerangCatchAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMCATCH; };
-    bool checkBoomerangThrowAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMTHROW; };
-    bool checkBoomerangReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_BOOMWAIT; };
-    bool checkHookshotReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_HOOKSHOTWAIT; }
-    bool checkDashDamageAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_DAMDASH; }
-    bool checkGuardSlip() const {
+    BOOL checkUpperAnime(u16 i_idx) const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == i_idx; }
+    BOOL checkNoUpperAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == 0xFFFF; }
+    
+    BOOL checkGrabAnime() const { return checkGrabAnimeLight() || checkGrabAnimeHeavy(); };
+    BOOL checkGrabAnimeLight() const { return checkUpperAnime(LKANM_BCK_GRABWAIT); };
+    BOOL checkGrabAnimeHeavy() const { return checkUpperAnime(LKANM_BCK_GRABWAITB); };
+    BOOL checkBoomerangCatchAnime() const { return checkUpperAnime(LKANM_BCK_BOOMCATCH); };
+    BOOL checkBoomerangThrowAnime() const { return checkUpperAnime(LKANM_BCK_BOOMTHROW); };
+    BOOL checkBoomerangReadyAnime() const { return checkUpperAnime(LKANM_BCK_BOOMWAIT); };
+    BOOL checkHookshotReadyAnime() const { return checkUpperAnime(LKANM_BCK_HOOKSHOTWAIT); }
+    BOOL checkDashDamageAnime() const { return checkUpperAnime(LKANM_BCK_DAMDASH); }
+    BOOL checkBowReloadAnime() const { return checkUpperAnime(LKANM_BCK_ARROWRELORD); }
+    BOOL checkBowShootAnime() const { return checkUpperAnime(LKANM_BCK_ARROWSHOOT); }
+    BOOL checkBowWaitAnime() const { return checkUpperAnime(LKANM_BCK_BOWWAIT); }
+    BOOL checkGuardSlip() const {
         return mCurProc == daPyProc_GUARD_SLIP_e ||
             mCurProc == daPyProc_CROUCH_DEFENSE_SLIP_e;
     }
-    bool checkUpperGuardAnime() const {
-        return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNG ||
-            m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ATNGHAM;
+    BOOL checkUpperGuardAnime() const {
+        return checkUpperAnime(LKANM_BCK_ATNG) ||
+            checkUpperAnime(LKANM_BCK_ATNGHAM);
     }
     
     s16 checkTinkleShield() const { return mTinkleShieldTimer; }
     void setTinkleShield(s16 time) { mTinkleShieldTimer = time; }
-    bool checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
+    BOOL checkNoDamageMode() const { return checkEquipDragonShield() || checkTinkleShield() != 0; }
     s16 checkTinkleHover() const { return mTinkleHoverTimer; }
     void setHoverBoots(s16 time) {
         onNoResetFlg0(daPyFlg0_HOVER_BOOTS);
@@ -1716,18 +1833,17 @@ public:
     }
     void onShipTact() { onNoResetFlg1(daPyFlg1_SHIP_TACT); }
     void offShipTact() { offNoResetFlg1(daPyFlg1_SHIP_TACT); }
-    bool checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
+    BOOL checkShipGetOff() { return mCurProc == daPyProc_SHIP_GET_OFF_e; }
     void onShipDrop(s16 param_1) {
         onNoResetFlg0(daPyFlg0_SHIP_DROP);
         m3550 = param_1;
     }
-    bool checkCarryActionNow() const {
+    BOOL checkCarryActionNow() const {
         return mCurProc == daPyProc_GRAB_PUT_e ||
             mCurProc == daPyProc_GRAB_UP_e ||
             mCurProc == daPyProc_GRAB_THROW_e;
     }
-    bool checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
-    void clearDamageWait() {}
+    BOOL checkNoControll() const { return dComIfGp_getPlayer(0) != this; }
     void exchangeGrabActor(fopAc_ac_c* actor) { mActorKeepGrab.setData(actor); }
     void getDekuLeafWindPos() const {}
     void getBoomerangCatchPos() const {}
@@ -1736,26 +1852,27 @@ public:
     void getIceParticleBtk() {}
     void getIceWaterParticleBtk() {}
     void getShadowID() const {}
-    void npcStartRestartRoom() {}
+    void npcStartRestartRoom() { startRestartRoom(5, 0xC9, -1.0f, 0); }
     void setDaiokutaEnd() {}
-    void setWhirlId(fpc_ProcID) {}
+    void setWhirlId(fpc_ProcID id) { mWhirlId = id; }
     void decrementBombCnt() {
         if (mActivePlayerBombs != 0) {
             mActivePlayerBombs--;
         }
     }
-    bool checkSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) != dItem_NONE_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) != dItem_NONE_e || checkSwordMiniGame();
     }
     
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0x0C) & 0xF; }
+    static int getStartModeFromParam(u32 param) { return (param >> 0x0C) & 0xF; }
     int getStartEvent() { return (fopAcM_GetParam(this) >> 0x18) & 0xFF; }
     
     void onModeFlg(u32 flag) { mModeFlg |= flag; }
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
     u32 checkModeFlg(u32 flag) const { return mModeFlg & flag; }
+    void clearDamageWait() { offModeFlg(ModeFlg_DAMAGE); }
     
     request_of_phase_process_class* getPhase() { return &mPhase; }
     
@@ -1771,6 +1888,7 @@ public:
     
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL spBattleTrigger() const {return mItemTrigger & BTN_A; }
     BOOL swordTrigger() const { return mItemTrigger & BTN_B; }
     BOOL cancelTrigger() const { return mItemTrigger & BTN_B; }
     BOOL itemTriggerX() const { return mItemTrigger & BTN_X; }
@@ -1778,36 +1896,32 @@ public:
     BOOL itemTriggerZ() const { return mItemTrigger & BTN_Z; }
     BOOL spLTrigger() const { return mItemTrigger & BTN_L; }
     BOOL spActionTrigger() const { return mItemTrigger & BTN_R; }
-    void allTrigger() const {}
+    BOOL allTrigger() const { return mItemTrigger & (BTN_A | BTN_B | BTN_X | BTN_Y | BTN_Z); }
     void otherWeaponTrigger() const {}
-    void spBattleTrigger() const {}
     
-    void checkPlayerDemoMode() const {}
+    BOOL checkPlayerDemoMode() const { return mDemo.getDemoType() != 0; }
     void checkSpecialDemoMode() const {}
     
-    void checkAttentionLock() {}
+    f32 getAnmSpeedStickRate(f32 param_0, f32 param_1) {
+        return param_0 + (mStickDistance * (param_1 - param_0));
+    }
+    void seStartSystem(u32 i_seNum) { mDoAud_seStart(i_seNum); }
+    BOOL checkAttentionLock() { return mpAttention->Lockon(); }
     void checkBoomerangRock() {}
+    
     void checkBothItemEquipAnime() const {}
-    void checkBowReloadAnime() const {}
-    void checkBowShootAnime() const {}
-    void checkBowWaitAnime() const {}
     void checkCrawlWaterIn() {}
     void checkDoubleItemEquipAnime() const {}
     void checkFaceTypeNot() const {}
     void checkIsland() const {}
     void checkMirrorShieldEquip() const {}
-    void checkNoUpperAnime() const {}
     void checkPowerGloveEquip() const {}
     void checkRopeThrowAnime() const {}
     void checkShieldEquip() const {}
     void checkSwordEquipAnime() const {}
-    void checkUpperAnime(u16) const {}
-    void getAnmSpeedStickRate(f32, f32) {}
-    void getBombWaterPillarBrk() {}
-    void getBombWaterPillarBtk() {}
-    void getStartModeFromParam(u32) {}
+    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
+    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
     void getTactLeftHandPos() const {}
-    void seStartSystem(u32) {}
     void setFootEffectPosType(u8) {}
     void setSpeedAndAngleBoomerang() {}
     void setSpeedAndAngleBow() {}
@@ -1820,9 +1934,9 @@ public:
     virtual BOOL setThrowDamage(cXyz*, s16, f32, f32, int);
     virtual void changeTextureAnime(u16, u16, int);
     
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     virtual MtxP getLeftHandMatrix() { return mpCLModel->getAnmMtx(0x08); } // cl_LhandA joint
     virtual MtxP getRightHandMatrix() { return mpCLModel->getAnmMtx(0x0C); } // cl_RhandA joint
-    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     virtual s32 getTactMusic() const;
     virtual int getTactTimerCancel() const;
     virtual BOOL checkPlayerGuard() const;
@@ -1847,7 +1961,6 @@ public:
     virtual BOOL checkTactWait() const { return mCurProc == daPyProc_TACT_WAIT_e; }
     virtual void setTactZev(fpc_ProcID, int, char*);
     virtual void onDekuSpReturnFlg(u8 i_point);
-    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && m3570 != 0; }
     virtual f32 getBaseAnimeFrameRate() { return mFrameCtrlUnder[UNDER_MOVE0_e].getRate(); }
     virtual f32 getBaseAnimeFrame() { return mFrameCtrlUnder[UNDER_MOVE0_e].getFrame(); }
     virtual fpc_ProcID getItemID() const { return mActorKeepEquip.getID(); }
@@ -1856,13 +1969,14 @@ public:
     virtual BOOL checkGrabBarrel() { return checkGrabBarrelSearch(1); }
     virtual u32 checkPlayerNoDraw() { return dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 2) || checkNoResetFlg0(daPyFlg0_NO_DRAW); }
     virtual BOOL checkRopeTag() { return mActorKeepEquip.getActor() == NULL; }
-    virtual BOOL checkRopeReadyAnime() const { return m_anm_heap_upper[UPPER_MOVE2_e].mIdx == LKANM_BCK_ROPETHROWWAIT; }
+    virtual BOOL checkRopeReadyAnime() const { return checkUpperAnime(LKANM_BCK_ROPETHROWWAIT); }
     virtual void voiceStart(u32);
     virtual void setOutPower(f32, s16, int);
     virtual void onFrollCrashFlg(u32 param_1) { m3620 = param_1; onNoResetFlg0(daPyFlg0_UNK8); }
     virtual MtxP getModelJointMtx(u16 idx) { return mpCLModel->getAnmMtx(idx); }
     virtual f32 getOldSpeedY() { return mOldSpeed.y; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*);
+    virtual BOOL checkComboCutTurn() const { return mCurProc == daPyProc_CUT_TURN_e && mProcVar0.m3570 != 0; }
     virtual void cancelChangeTextureAnime() { resetDemoTextureAnime(); }
 
 public:
@@ -1976,7 +2090,7 @@ public:
     /* 0x31C8 */ daPy_anmHeap_c m_tex_scroll_heap;
     /* 0x31D8 */ int mCurProc;
     /* 0x31DC */ ProcFunc mCurProcFunc;
-    /* 0x31E8 */ daPy_footEffect_c m31E8[2];
+    /* 0x31E8 */ daPy_footEffect_c mFootEffect[2];
     /* 0x3280 */ dPa_rippleEcallBack m3280;
     /* 0x3294 */ daPy_swimTailEcallBack_c mSwimTailEcallBack[2];
     /* 0x32E4 */ daPy_mtxFollowEcallBack_c m32E4;
@@ -2005,7 +2119,7 @@ public:
     /* 0x3490 */ dAttList_c* mpAttnEntryZ;
     /* 0x3494 */ char* m3494;
     /* 0x3498 */ LIGHT_INFLUENCE mLightInfluence;
-    /* 0x34B8 */ u8 m34B8;
+    /* 0x34B8 */ u8 mDirection;
     /* 0x34B9 */ u8 mFrontWallType;
     /* 0x34BA */ u8 m34BA;
     /* 0x34BB */ u8 mCurrItemHeapIdx;
@@ -2106,7 +2220,13 @@ public:
     /* 0x3566 */ s16 m3566;
     /* 0x3568 */ s16 m3568;
     /* 0x356C */ int mCameraInfoIdx;
-    /* 0x3570 */ s32 m3570;
+    // `mProcVar`'s are variables that are context dependent for each `PROC` action.
+    // (The exact setup may need to be simplified later)
+    union {
+        s32 m3570;
+        daPy_ANM mDamageAnm;
+        int mBottleItem;
+    } /* 0x3570  */ mProcVar0;
     /* 0x3574 */ s32 m3574;
     /* 0x3578 */ int m3578;
     /* 0x357C */ int m357C;
@@ -2122,7 +2242,7 @@ public:
     /* 0x35A4 */ f32 m35A4;
     /* 0x35A8 */ f32 m35A8;
     /* 0x35AC */ f32 m35AC;
-    /* 0x35B0 */ f32 m35B0;
+    /* 0x35B0 */ f32 mStickDistance;
     /* 0x35B4 */ f32 m35B4;
     /* 0x35B8 */ f32 m35B8;
     /* 0x35BC */ f32 mVelocity;
@@ -2153,10 +2273,12 @@ public:
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ u32 m3624;
     /* 0x3628 */ fpc_ProcID m3628;
-    /* 0x362C */ fpc_ProcID mTactZevPartnerPID;
+    /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
-    /* 0x3634 */ int m3634;
+    /* 0x3634 */ fpc_ProcID mWhirlId;
+#if VERSION > VERSION_DEMO
     /* 0x3638 */ fpc_ProcID mMsgId;
+#endif
     /* 0x363C */ J3DFrameCtrl* mpSeAnmFrameCtrl;
     /* 0x3640 */ s16 m3640;
     /* 0x3644 */ f32 m3644;

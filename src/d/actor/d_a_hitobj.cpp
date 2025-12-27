@@ -3,12 +3,14 @@
 // Translation Unit: d_a_hitobj.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_hitobj.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daHitobj_Draw__FP12hitobj_class */
 static BOOL daHitobj_Draw(hitobj_class* i_this) {
@@ -42,11 +44,11 @@ static BOOL daHitobj_Delete(hitobj_class* i_this) {
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
-static s32 daHitobj_Create(fopAc_ac_c* pActor) {
+static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
     hitobj_class* i_this = (hitobj_class*)pActor;
     fopAcM_SetupActor(i_this, hitobj_class);
 
-    int res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
+    cPhs_State res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");
     if (res == cPhs_COMPLEATE_e) {
         i_this->mUnusedParam = fopAcM_GetParam(i_this) & 0xFF; 
 
@@ -73,10 +75,10 @@ static s32 daHitobj_Create(fopAc_ac_c* pActor) {
                 /* SrcGObjCo SPrm    */ 0,
             },
             // cM3dGSphS
-            {
-                /* Center */ 0.0f, 0.0f, 0.0f,
+            {{
+                /* Center */ {0.0f, 0.0f, 0.0f},
                 /* Radius */ 100.0f,
-            },
+            }},
         };
         i_this->mStts.Init(0xFF, 0xFF, i_this);
         i_this->mSph.Set(cc_sph_src);
@@ -105,7 +107,7 @@ actor_process_profile_definition g_profile_HITOBJ = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00AB,
+    /* Priority     */ PRIO_HITOBJ,
     /* Actor SubMtd */ &l_daHitobj_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

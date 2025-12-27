@@ -3,8 +3,10 @@
 // Translation Unit: d_a_warpls.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpls.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
 bool daWarpls_c::_delete() {
@@ -27,7 +29,7 @@ void daWarpls_c::CreateInit() {
 }
 
 /* 00000764-0000082C       .text _create__10daWarpls_cFv */
-s32 daWarpls_c::_create() {
+cPhs_State daWarpls_c::_create() {
     /* Nonmatching */
 }
 
@@ -77,13 +79,13 @@ void daWarpls_c::warp_eff_start() {
 }
 
 /* 000010C8-000010E8       .text daWarpls_Create__FPv */
-static s32 daWarpls_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daWarpls_Create(void* i_this) {
+    return ((daWarpls_c*)i_this)->_create();
 }
 
 /* 000010E8-0000110C       .text daWarpls_Delete__FPv */
-static BOOL daWarpls_Delete(void*) {
-    /* Nonmatching */
+static BOOL daWarpls_Delete(void* i_this) {
+    return ((daWarpls_c*)i_this)->_delete();
 }
 
 /* 0000110C-000011D0       .text daWarpls_Draw__FPv */
@@ -92,13 +94,13 @@ static BOOL daWarpls_Draw(void*) {
 }
 
 /* 000011D0-000011F4       .text daWarpls_Execute__FPv */
-static BOOL daWarpls_Execute(void*) {
-    /* Nonmatching */
+static BOOL daWarpls_Execute(void* i_this) {
+    return ((daWarpls_c*)i_this)->_execute();
 }
 
 /* 000011F4-000011FC       .text daWarpls_IsDelete__FPv */
 static BOOL daWarpls_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daWarplsMethodTable = {
@@ -119,7 +121,7 @@ actor_process_profile_definition g_profile_WARPLIGHT = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A4,
+    /* Priority     */ PRIO_WARPLIGHT,
     /* Actor SubMtd */ &daWarplsMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

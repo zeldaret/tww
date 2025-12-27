@@ -3,18 +3,69 @@
 // Translation Unit: JASChannel.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASChAllocQueue.h"
+#include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASChannelMgr.h"
 #include "JSystem/JAudio/JASDSPChannel.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
+#include "JSystem/JAudio/JASDriverTables.h"
+#include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
+namespace JASystem {
+
+enum CalcSource {
+    CALC_Sound   = 0,
+    CALC_Effect  = 1,
+    CALC_Channel = 2,
+};
+
+enum CalcStyle {
+    CALC_NONE   = 0, // don't add that component
+    CALC_ADD    = 1, // simply add that component
+    CALC_WEIGHT = 2, // add component weighted by power
+};
+
+u8 Driver::calc_sw_table[27][3] = {
+    // sound, effect, channel
+    { CALC_NONE, CALC_NONE, CALC_NONE },       // 0, null
+    { CALC_NONE, CALC_NONE, CALC_ADD },        // 1, add only channel
+    { CALC_NONE, CALC_NONE, CALC_ADD },        // 2, add only channel
+    { CALC_NONE, CALC_ADD, CALC_NONE },        // 3, add only effect
+    { CALC_NONE, CALC_ADD, CALC_ADD },         // 4, add effect and channel
+    { CALC_NONE, CALC_ADD, CALC_WEIGHT },      // 5, add effect, weight channel
+    { CALC_NONE, CALC_ADD, CALC_NONE },        // 6, add only effect
+    { CALC_NONE, CALC_WEIGHT, CALC_ADD },      // 7, weight effect, add channel
+    { CALC_NONE, CALC_WEIGHT, CALC_WEIGHT },   // 8, weight effect and channel
+    { CALC_ADD, CALC_NONE, CALC_NONE },        // 9, add only sound
+    { CALC_ADD, CALC_NONE, CALC_ADD },         // 10, add sound and channel
+    { CALC_ADD, CALC_NONE, CALC_WEIGHT },      // 11, add sound, weight channel
+    { CALC_ADD, CALC_ADD, CALC_NONE },         // 12, add sound and effect
+    { CALC_ADD, CALC_ADD, CALC_ADD },          // 13, add all
+    { CALC_ADD, CALC_ADD, CALC_WEIGHT },       // 14, add sound and effect, weight channel
+    { CALC_ADD, CALC_WEIGHT, CALC_NONE },      // 15, add sound, weight effect
+    { CALC_ADD, CALC_WEIGHT, CALC_ADD },       // 16, add sound and channel, weight effect
+    { CALC_ADD, CALC_WEIGHT, CALC_WEIGHT },    // 17, add sound, weight effect and channel
+    { CALC_ADD, CALC_NONE, CALC_NONE },        // 18, add only sound
+    { CALC_WEIGHT, CALC_NONE, CALC_ADD },      // 19, weight sound, add channel
+    { CALC_WEIGHT, CALC_NONE, CALC_WEIGHT },   // 20, weight sound and channel
+    { CALC_WEIGHT, CALC_ADD, CALC_NONE },      // 21, weight sound, add effect
+    { CALC_WEIGHT, CALC_ADD, CALC_ADD },       // 22, weight sound, add effect and channel
+    { CALC_WEIGHT, CALC_ADD, CALC_WEIGHT },    // 23, weight sound and channel, weight effect
+    { CALC_WEIGHT, CALC_WEIGHT, CALC_NONE },   // 24, weight sound and effect
+    { CALC_WEIGHT, CALC_WEIGHT, CALC_ADD },    // 25, weight sound and effect, add channel
+    { CALC_WEIGHT, CALC_WEIGHT, CALC_WEIGHT }, // 26, weight all
+};
+
 /* 8028B3E8-8028B5A4       .text init__Q28JASystem8TChannelFv */
-void JASystem::TChannel::init() {
-    field_0x28 = 0;
-    field_0x2c = 0;
+void TChannel::init() {
+    field_0x28 = NULL;
+    field_0x2c = NULL;
     field_0x30 = 0;
     field_0x34 = 0;
     field_0x10 = NULL;
@@ -24,25 +75,25 @@ void JASystem::TChannel::init() {
     field_0x1c = 0;
     field_0xd4 = 0;
     if (!field_0x4) {
-        field_0xb0[0] = 0x150;
-        field_0xb0[1] = 0x210;
-        field_0xb0[2] = 0x352;
-        field_0xb0[3] = 0x412;
-        field_0xb0[4] = 0;
-        field_0xb0[5] = 0;
+        mMixConfigs[0].mWhole = 0x150;
+        mMixConfigs[1].mWhole = 0x210;
+        mMixConfigs[2].mWhole = 0x352;
+        mMixConfigs[3].mWhole = 0x412;
+        mMixConfigs[4].mWhole = 0;
+        mMixConfigs[5].mWhole = 0;
         field_0x48 = 0x10101;
         field_0x4c = 600;
-        field_0x60[0] = 0x1a;
-        field_0x60[1] = 1;
-        field_0x60[2] = 1;
+        mCalcTypes[0] = CALC_WeightAll; // Pan
+        mCalcTypes[1] = CALC_AddChannelOnly; // FxMix
+        mCalcTypes[2] = CALC_AddChannelOnly;
     } else {
         for (int i = 0; i < 6; i++) {
-            field_0xb0[i] = field_0x4->field_0x4e[i];
+            mMixConfigs[i].mWhole = field_0x4->field_0x4e[i];
         }
         field_0x48 = field_0x4->field_0x68;
         field_0x4c = field_0x4->field_0x6c;
         for (int i = 0; i < 3; i++) {
-            field_0x60[i] = field_0x4->mCalcTypes[i];
+            mCalcTypes[i] = field_0x4->mCalcTypes[i];
         }
     }
     for (u32 i = 0; i < 4; i++) {
@@ -59,68 +110,84 @@ void JASystem::TChannel::init() {
 }
 
 /* 8028B5A4-8028B620       .text setOscillator__Q28JASystem8TChannelFUlPQ28JASystem11TOscillator */
-void JASystem::TChannel::setOscillator(u32 oscnum, TOscillator* param_2) {
+void TChannel::setOscillator(u32 oscnum, TOscillator* param_2) {
     JUT_ASSERT(173, oscnum < (4));
     osc[oscnum] = param_2;
 }
 
 /* 8028B620-8028B6A8       .text setOscInit__Q28JASystem8TChannelFUlPCQ38JASystem11TOscillator4Osc_ */
-void JASystem::TChannel::setOscInit(u32 oscnum, const TOscillator::Osc_* param_2) {
+void TChannel::setOscInit(u32 oscnum, const TOscillator::Osc_* param_2) {
     JUT_ASSERT(183, oscnum < (4));
     osc[oscnum]->setOsc(param_2);
     osc[oscnum]->initStart();
 }
 
 /* 8028B6A8-8028B73C       .text forceStopOsc__Q28JASystem8TChannelFUl */
-bool JASystem::TChannel::forceStopOsc(u32 numosc) {
-    /* Nonmatching */
+bool TChannel::forceStopOsc(u32 numosc) {
     JUT_ASSERT(195, numosc < (4));
     return osc[numosc]->isOsc() ? osc[numosc]->forceStop() : false;
 }
 
 /* 8028B73C-8028B7D0       .text releaseOsc__Q28JASystem8TChannelFUl */
-bool JASystem::TChannel::releaseOsc(u32 numosc) {
-    /* Nonmatching */
+bool TChannel::releaseOsc(u32 numosc) {
     JUT_ASSERT(209, numosc < (4));
     return osc[numosc]->isOsc() ? osc[numosc]->release() : false;
 }
 
 /* 8028B7D0-8028B850       .text directReleaseOsc__Q28JASystem8TChannelFUlUs */
-void JASystem::TChannel::directReleaseOsc(u32 oscnum, u16 param_2) {
+void TChannel::directReleaseOsc(u32 oscnum, u16 param_2) {
     JUT_ASSERT(224, oscnum < (4));
     osc[oscnum]->releaseDirect(param_2);
 }
 
 /* 8028B850-8028B8E4       .text bankOscToOfs__Q28JASystem8TChannelFUl */
-f32 JASystem::TChannel::bankOscToOfs(u32 oscnum) {
-    /* Nonmatching */
+f32 TChannel::bankOscToOfs(u32 oscnum) {
     JUT_ASSERT(234, oscnum < (4));
     // Probably uses inline JASystem::TOscillator::bankOscToOfs
     return osc[oscnum]->isOsc() ? osc[oscnum]->getOffset() : 1.0f;
 }
 
 /* 8028B8E4-8028BA98       .text effectOsc__Q28JASystem8TChannelFUlf */
-void JASystem::TChannel::effectOsc(u32 oscnum, f32 param_2) {
-    /* Nonmatching */
+void TChannel::effectOsc(u32 oscnum, f32 effect) {
+    JUT_ASSERT(246, oscnum < (4));
+
+    switch (osc[oscnum]->getOsc()->field_0x0) {
+    case 1:
+        field_0x94 *= effect;
+        break;
+    case 0:
+        field_0x98 *= effect;
+        break;
+    case 2:
+        effect -= 0.5; // Must be double literal to match
+        mPanVec.mEffect += effect;
+        mPanVec.mEffect = Driver::Clamp01(mPanVec.mEffect);
+        break;
+    case 3:
+        mFxmixVec.mEffect += effect;
+        mFxmixVec.mEffect = Driver::Clamp01(mFxmixVec.mEffect);
+        break;
+    case 4:
+        mDolbyVec.mEffect += effect;
+        mDolbyVec.mEffect = Driver::Clamp01(mDolbyVec.mEffect);
+        break;
+    }
 }
 
 /* 8028BA98-8028BB14       .text getOscState__Q28JASystem8TChannelCFUl */
-int JASystem::TChannel::getOscState(u32 oscnum) const {
-    /* Nonmatching */
+u8 TChannel::getOscState(u32 oscnum) const {
     JUT_ASSERT(274, oscnum < (4));
     return osc[oscnum]->mState;
 }
 
 /* 8028BB14-8028BB98       .text isOsc__Q28JASystem8TChannelFUl */
-BOOL JASystem::TChannel::isOsc(u32 oscnum) {
-    /* Nonmatching */
+BOOL TChannel::isOsc(u32 oscnum) {
     JUT_ASSERT(284, oscnum < (4));
     return osc[oscnum]->isOsc();
 }
 
 /* 8028BB98-8028BC78       .text copyOsc__Q28JASystem8TChannelFUlPQ38JASystem11TOscillator4Osc_ */
-void JASystem::TChannel::copyOsc(u32 oscnum, TOscillator::Osc_* param_2) {
-    /* Nonmatching */
+void TChannel::copyOsc(u32 oscnum, TOscillator::Osc_* param_2) {
     JUT_ASSERT(295, oscnum < (4));
     if (isOsc(oscnum)) {
         *param_2 = *osc[oscnum]->getOsc();
@@ -130,44 +197,64 @@ void JASystem::TChannel::copyOsc(u32 oscnum, TOscillator::Osc_* param_2) {
 }
 
 /* 8028BC78-8028BD10       .text overwriteOsc__Q28JASystem8TChannelFUlPQ38JASystem11TOscillator4Osc_ */
-void JASystem::TChannel::overwriteOsc(u32 oscnum, TOscillator::Osc_* param_2) {
+void TChannel::overwriteOsc(u32 oscnum, TOscillator::Osc_* param_2) {
     JUT_ASSERT(308, oscnum < (4));
     setOscInit(oscnum, param_2);
     effectOsc(oscnum, bankOscToOfs(oscnum));
 }
 
 /* 8028BD10-8028BDA4       .text setKeySweepTarget__Q28JASystem8TChannelFUcUl */
-void JASystem::TChannel::setKeySweepTarget(u8, u32) {
-    /* Nonmatching */
+void TChannel::setKeySweepTarget(u8 key, u32 target) {
+    s32 r0;
+
+    if (field_0xc == 2 || field_0x10 == 0)
+        r0 = key;
+    else
+        r0 = key + 0x3C - field_0x10->field_0x2;
+
+    if (r0 < 0)
+        r0 = 0;
+    else if (r0 > 0x7F)
+        r0 = 0x7F;
+
+    f32 val = Driver::C5BASE_PITCHTABLE[r0];
+    val *= field_0x50;
+    if (target == 0) {
+        field_0x58 = val;
+        field_0x2c = NULL;
+        return;
+    }
+
+    field_0x9c = val;
+    field_0xa2 = target;
+    field_0x2c = &TChannel::extraUpdate;
 }
 
 /* 8028BDA4-8028BDAC       .text setPauseFlag__Q28JASystem8TChannelFUc */
-void JASystem::TChannel::setPauseFlag(u8 param_1) {
+void TChannel::setPauseFlag(u8 param_1) {
     mPauseFlag = param_1;
 }
 
 /* 8028BDAC-8028BDBC       .text setPauseFlagReq__Q28JASystem8TChannelFUc */
-void JASystem::TChannel::setPauseFlagReq(u8 param_1) {
+void TChannel::setPauseFlagReq(u8 param_1) {
     mPauseFlag = param_1;
     field_0x3 = 1;
 }
 
 /* 8028BDBC-8028BE64       .text setPanPower__Q28JASystem8TChannelFffff */
-void JASystem::TChannel::setPanPower(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
-    /* Nonmatching */
+void TChannel::setPanPower(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
     f32 px = param_1 + param_2 + param_3;
     if (px == 0.0f) {
         OSReport("----- JASChannel::setPanPower : px == 0.0\n");
         px = 1.0f;
     }
-    field_0x64.field_0x0 = param_1 / px;
-    field_0x64.field_0x4 = param_2 / px;
-    field_0x64.field_0x8 = param_3 / px;
+    mPanPower.mSound = param_1 / px;
+    mPanPower.mEffect = param_2 / px;
+    mPanPower.mChannel = param_3 / px;
 }
 
 /* 8028BE64-8028BEB8       .text checkLogicalChannel__Q28JASystem8TChannelFv */
-BOOL JASystem::TChannel::checkLogicalChannel() {
-    /* Nonmatching */
+BOOL TChannel::checkLogicalChannel() {
     if (!field_0x10 && field_0xc == 0) {
         OSReport("----- checkLC : 波形がアサインされていません\n");
         return false;
@@ -176,8 +263,7 @@ BOOL JASystem::TChannel::checkLogicalChannel() {
 }
 
 /* 8028BEB8-8028BF40       .text play__Q28JASystem8TChannelFUl */
-BOOL JASystem::TChannel::play(u32 param_1) {
-    /* Nonmatching */
+BOOL TChannel::play(u32 param_1) {
     if (param_1 == 0) {
         param_1 = -1;
     }
@@ -194,7 +280,7 @@ BOOL JASystem::TChannel::play(u32 param_1) {
 }
 
 /* 8028BF40-8028BFAC       .text stop__Q28JASystem8TChannelFUs */
-void JASystem::TChannel::stop(u16 param_1) {
+void TChannel::stop(u16 param_1) {
     if (!field_0x20) {
         updatecallLogicalChannel(this, 6);
     } else if (param_1 == 0) {
@@ -206,21 +292,20 @@ void JASystem::TChannel::stop(u16 param_1) {
 }
 
 /* 8028BFAC-8028C108       .text updateJcToDSP__Q28JASystem8TChannelFv */
-void JASystem::TChannel::updateJcToDSP() {
-    /* Nonmatching */
+void TChannel::updateJcToDSP() {
     DSPInterface::DSPBuffer* dspBuffer = field_0x20->field_0xc;
     if (field_0xd4) {
         for (u8 i = 0; i < 6; i++) {
             dspBuffer->setMixerVolumeOnly(i, field_0xbc[i]);
         }
-        dspBuffer->setPitch(field_0xa0);
+        dspBuffer->setPitch(mPitch);
         dspBuffer->setPauseFlag(mPauseFlag);
         dspBuffer->flushChannel();
     } else {
         for (u8 i = 0; i < 6; i++) {
             dspBuffer->setMixerVolume(i, field_0xbc[i], field_0x4->field_0x5a[i]);
         }
-        dspBuffer->setPitch(field_0xa0);
+        dspBuffer->setPitch(mPitch);
         if (field_0x4->field_0x61 & 0x20) {
             dspBuffer->setIIRFilterParam(field_0x4->field_0x3c);
         }
@@ -235,7 +320,7 @@ void JASystem::TChannel::updateJcToDSP() {
 }
 
 /* 8028C108-8028C140       .text forceStopLogicalChannel__Q28JASystem8TChannelFv */
-bool JASystem::TChannel::forceStopLogicalChannel() {
+bool TChannel::forceStopLogicalChannel() {
     if (!field_0x20) {
         return false;
     }
@@ -244,77 +329,541 @@ bool JASystem::TChannel::forceStopLogicalChannel() {
 }
 
 /* 8028C140-8028C1C0       .text stopLogicalChannel__Q28JASystem8TChannelFv */
-bool JASystem::TChannel::stopLogicalChannel() {
-    /* Nonmatching */
+BOOL TChannel::stopLogicalChannel() {
     if (!field_0x20) {
         OSReport("----- stopLC : DSP Ch is not assigned\n");
-        return false;
+        return FALSE;
     }
     field_0x20->mCallback = NULL;
-    field_0x20->field_0x6 = 0;
+    field_0x20->setCBInterval(0);
     field_0x20->stop();
     TDSPChannel::free(field_0x20, u32(this));
     field_0x20 = NULL;
-    return true;
+    return TRUE;
 }
 
 /* 8028C1C0-8028C3A8       .text playLogicalChannel__Q28JASystem8TChannelFv */
-int JASystem::TChannel::playLogicalChannel() {
-    /* Nonmatching */
+BOOL TChannel::playLogicalChannel() {
+    if (!field_0x20) {
+        OSReport("----- playLC DSP Ch が割当てられていません\n");
+        return FALSE;
+    }
+
+    if (!checkLogicalChannel())
+        return FALSE;
+
+    field_0x20->mCallback = &TChannel::updatecallDSPChannel;
+    field_0x20->setCBInterval(1);
+
+    DSPInterface::DSPBuffer* buf = field_0x20->field_0xc;
+
+    switch (field_0xc) {
+    case 0:
+        buf->setWaveInfo(field_0x10, field_0x14, field_0xe8);
+        break;
+    case 2:
+        buf->setOscInfo(field_0x14);
+        break;
+    }
+
+    for (u8 i = 0; i < 6; ++i) {
+        // Something ungodly is occurring here.
+
+        union {
+            u16 asS16;
+            struct {
+                u8 hi;
+                u8 lo;
+            } asP;
+        } s;
+        s.asS16 = mMixConfigs[i].mWhole;
+        u32 om  = Driver::getOutputMode();
+
+        if (om == 0) {
+            switch (s.asP.hi) {
+            case 8:
+                s.asP.hi = 0xB;
+                break;
+            case 9:
+                s.asP.hi = 0x2;
+                break;
+            }
+        } else if (om == 1) {
+            if (s.asP.hi == 8)
+                s.asP.hi = 0xB;
+        }
+
+        buf->setBusConnect(i, s.asP.hi);
+    }
+
+    field_0xa4 = field_0x4;
+
+    for (u32 i = 0; i < 4; ++i) {
+        if (isOsc(i)) {
+            effectOsc(i, bankOscToOfs(i));
+        }
+    }
+
+    updateEffectorParam();
+    updateJcToDSPInit();
+    field_0x20->setPriority(field_0x48);
+    field_0x20->setPriorityTime(field_0x4c);
+    field_0x20->play();
+
+    return TRUE;
 }
 
 /* 8028C3A8-8028C62C       .text updateEffectorParam__Q28JASystem8TChannelFv */
-void JASystem::TChannel::updateEffectorParam() {
-    /* Nonmatching */
-}
+void TChannel::updateEffectorParam() {
+    f32 pan;
+    f32 fxmix;
+    f32 dolby = 0.0f;
 
-/* 8028C62C-8028C6C4       .text killBrokenLogicalChannels__Q28JASystem8TChannelFPQ28JASystem11TDSPChannel */
-void JASystem::TChannel::killBrokenLogicalChannels(TDSPChannel*) {
-    /* Nonmatching */
-}
+    if (field_0xa4 == field_0x4) {
+        field_0xa8 = field_0x4->field_0x1c;
+        field_0xac = field_0x4->field_0x18;
+        mPanVec.mChannel = field_0x4->field_0x20;
+        mFxmixVec.mChannel = field_0x4->field_0x24;
+        mDolbyVec.mChannel = field_0x4->field_0x28;
+        for (int i = 0; i < 3; i++) {
+            mCalcTypes[i] = field_0x4->mCalcTypes[i];
+        }
+    }
 
-/* 8028C6C4-8028CABC       .text updatecallDSPChannel__Q28JASystem8TChannelFPQ28JASystem11TDSPChannelUl */
-void JASystem::TChannel::updatecallDSPChannel(TDSPChannel*, u32) {
-    /* Nonmatching */
-}
+    switch (Driver::getOutputMode()) {
+    case 0:
+        pan   = 0.5f;
+        dolby = 0.0f;
+        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
+        break;
+    case 1:
+        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&mPanVec, &mPanPower, mCalcTypes[0]);
+        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
+        dolby = 0.0f;
+        break;
+    case 2:
+        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&mPanVec, &mPanPower, mCalcTypes[0]);
+        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
+        dolby = calcEffect(&mDolbyVec, &mPanPower, mCalcTypes[2]);
+        break;
+    }
 
-/* 8028CABC-8028CB88       .text calcEffect__Q28JASystem8TChannelFPCQ38JASystem6Driver10PanMatrix_PCQ38JASystem6Driver10PanMatrix_Uc */
-f32 JASystem::TChannel::calcEffect(const Driver::PanMatrix_*, const JASystem::Driver::PanMatrix_*, u8) {
-    /* Nonmatching */
-}
+    f32 volume = field_0xac * (field_0x5c * field_0x98);
 
-/* 8028CB88-8028CC90       .text calcPan__Q28JASystem8TChannelFPCQ38JASystem6Driver10PanMatrix_PCQ38JASystem6Driver10PanMatrix_Uc */
-f32 JASystem::TChannel::calcPan(const Driver::PanMatrix_*, const Driver::PanMatrix_*, u8) {
-    /* Nonmatching */
-}
+    pan   = Driver::Clamp01(pan);
+    fxmix = Driver::Clamp01(fxmix);
+    dolby = Driver::Clamp01(dolby);
 
-/* 8028CC90-8028CD90       .text updateJcToDSPInit__Q28JASystem8TChannelFv */
-void JASystem::TChannel::updateJcToDSPInit() {
-    /* Nonmatching */
-    JASystem::DSPInterface::DSPBuffer * pBuffer = field_0x20->field_0xc;
-    if (pBuffer->field_0xb0[0] == 0xFFFF) {
-        pBuffer->initAutoMixer();
-        pBuffer->setMixerInitDelayMax(field_0x4->field_0x60);
+    mPitch = 4096.0f * (field_0xa8 * (field_0x58 * field_0x94));
+
+    if (mMixConfigs[0].mWhole != 0xFFFF) {
+        updateMixer(volume, pan, fxmix, dolby);
+    } else {
+        updateAutoMixer(volume, pan, fxmix, dolby);
     }
 }
 
+/* 8028C62C-8028C6C4       .text killBrokenLogicalChannels__Q28JASystem8TChannelFPQ28JASystem11TDSPChannel */
+void TChannel::killBrokenLogicalChannels(TDSPChannel* dspChannel) {
+    TChannelMgr* mgr;
+    for (u32 i = 0; i < 256; i++) {
+        TChannel* channel = TGlobalChannel::getChannelHandle(i);
+        if (channel == NULL) continue;
+        if (channel->field_0x20 != dspChannel) continue;
+        mgr = channel->field_0x4;
+        if (mgr == NULL) continue;
+        channel->stopLogicalChannel();
+        if (!mgr->moveListHead(channel, 0)) {
+            OSReport("----- killBrokenLogicalChannels : Cutできない\n");
+        }
+    }
+}
+
+/* 8028C6C4-8028CABC       .text updatecallDSPChannel__Q28JASystem8TChannelFPQ28JASystem11TDSPChannelUl */
+int TChannel::updatecallDSPChannel(TDSPChannel* dspChannel, u32 param_2) {
+    TChannel* channel = dspChannel->getLogicalChannel();
+    TChannelMgr* mgr = channel->field_0x4;
+
+    u32 i;
+    u32 r27 = 0;
+
+    if (channel == NULL) {
+        OSReport("-----Error JASDriver::commonCallbackLC DSPchのsignがNULL\n");
+        dspChannel->mCallback = NULL;
+        dspChannel->mPriority = 0;
+        killBrokenLogicalChannels(dspChannel);
+        return 0;
+    }
+
+    if (channel->field_0x20 != dspChannel) {
+        if (channel->field_0x20 != NULL && channel == channel->field_0x20->getLogicalChannel()) {
+            killBrokenLogicalChannels(dspChannel);
+        } else {
+            channel->stopLogicalChannel();
+            if (!mgr->moveListHead(channel, 0)) {
+                OSReport("----- updatecallDSPChannel : Cutできない\n");
+            }
+        }
+        dspChannel->forceDelete();
+        return 0;
+    } else {
+        if (param_2 == 2) {
+            if (channel->field_0x28 != NULL) {
+                channel->field_0x28(channel, 1);
+            } else {
+                channel->stopLogicalChannel();
+                if (!mgr->moveListHead(channel, 0)) {
+                    OSReport("----- updatecallDSPChannel : Cutできない\n");
+                }
+            }
+            return 0;
+        }
+        
+        if (channel->field_0x10 != NULL && channel->field_0x10->field_0x24[0] == 0) {
+            dspChannel->forceStop();
+            return -1;
+        }
+        
+        if (param_2 == 4) {
+            u8 priority = channel->getLifeTimePriority();
+            if (channel->field_0x20 != NULL) {
+                if (priority < channel->field_0x20->getPriority()) {
+                    channel->field_0x20->setPriority(priority);
+                }
+            }
+            return 0;
+        }
+        
+        if (param_2 == 3) {
+            channel->forceStopOsc(0);
+            if (!mgr->moveListHead(channel, 3)) {
+                OSReport("----- updatecallDSPChannel : Cutできない\n");
+                return 1;
+            }
+            param_2 = 0;
+        }
+        
+        if (param_2 == 0) {
+            channel->field_0x94 = 1.0f;
+            channel->field_0x98 = 1.0f;
+            channel->mPanVec.mEffect = 0.5f;
+            channel->mFxmixVec.mEffect = 0.0f;
+            channel->mDolbyVec.mEffect = 0.0f;
+            
+            for (i = 0; i < 4; i++) {
+                if (!channel->isOsc(i)) continue;
+                channel->effectOsc(i, channel->bankOscToOfs(i));
+                if (i == 0 && channel->getOscState(i) == 0) {
+                    if (channel->field_0x28 == NULL) {
+                        OSReport("----- updatecallDSPCh JC停止のためのUPDATECALLがNULL\n");
+                        if (!channel->stopLogicalChannel()) {
+                            dspChannel->stop();
+                        }
+                        if (!mgr->moveListHead(channel, 0)) {
+                            OSReport("----- updatecallDSPChannel : Cutできない update\n");
+                        }
+                        return 0;
+                    }
+                    channel->field_0x28(channel, 2);
+                    return 0;
+                }
+                r27++;
+            }
+            
+            if (r27 != 0) {
+                channel->updateEffectorParam();
+                channel->field_0x3 = 1;
+            }
+            
+            if (channel->field_0x2c != NULL) {
+                if (channel->field_0x2c(channel, 0) == 1) {
+                    channel->field_0x3++;
+                }
+            }
+            
+            u8 updateInterval = Driver::getUpdateInterval();
+            if (channel->field_0x28 == NULL) {
+                return updateInterval;
+            }
+            if (channel->field_0x34 > 0) {
+                if (channel->field_0x34 > updateInterval) {
+                    channel->field_0x34 -= updateInterval;
+                } else {
+                    channel->field_0x34 = 0;
+                }
+            }
+        }
+        
+        if (channel->field_0x34 == 0) {
+            channel->field_0x28(channel, 0);
+            channel->field_0x34 = channel->field_0x30;
+        }
+        if (channel->field_0x3 != 0) {
+            channel->updateJcToDSP();
+            channel->field_0x3 = 0;
+        }
+        
+        return Driver::getUpdateInterval();
+    }
+    dspChannel->forceDelete();
+}
+
+/* 8028CABC-8028CB88       .text calcEffect__Q28JASystem8TChannelFPCQ38JASystem6Driver10PanMatrix_PCQ38JASystem6Driver10PanMatrix_Uc */
+f32 TChannel::calcEffect(const Driver::PanMatrix_* params, const Driver::PanMatrix_* power, u8 calcType) {
+    f32 value = 0.0f;
+    const u8* calcTypes = Driver::calc_sw_table[calcType];
+    switch (calcTypes[CALC_Sound]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += params->mSound;
+        break;
+    case CALC_WEIGHT:
+        value += params->mSound * power->mSound;
+        break;
+    }
+
+    switch (calcTypes[CALC_Effect]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += params->mEffect;
+        break;
+    case CALC_WEIGHT:
+        value += params->mEffect * power->mEffect;
+        break;
+    }
+
+    switch (calcTypes[CALC_Channel]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += params->mChannel;
+        break;
+    case CALC_WEIGHT:
+        value += params->mChannel * power->mChannel;
+        break;
+    }
+
+    return value;
+}
+
+/* 8028CB88-8028CC90       .text calcPan__Q28JASystem8TChannelFPCQ38JASystem6Driver10PanMatrix_PCQ38JASystem6Driver10PanMatrix_Uc */
+f32 TChannel::calcPan(const Driver::PanMatrix_* params, const Driver::PanMatrix_* power, u8 calcType) {
+    f32 value = 0.0f;
+    const u8* calcTypes = Driver::calc_sw_table[calcType];
+    switch (calcTypes[CALC_Sound]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += (params->mSound - 0.5f);
+        break;
+    case CALC_WEIGHT:
+        value += (params->mSound - 0.5f) * power->mSound;
+        break;
+    }
+
+    switch (calcTypes[CALC_Effect]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += (params->mEffect - 0.5f);
+        break;
+    case CALC_WEIGHT:
+        value += (params->mEffect - 0.5f) * power->mEffect;
+        break;
+    }
+
+    switch (calcTypes[CALC_Channel]) {
+    case CALC_NONE:
+        break;
+    case CALC_ADD:
+        value += (params->mChannel - 0.5f);
+        break;
+    case CALC_WEIGHT:
+        value += (params->mChannel - 0.5f) * power->mChannel;
+        break;
+    }
+
+    value += 0.5f;
+    return value;
+}
+
+/* 8028CC90-8028CD90       .text updateJcToDSPInit__Q28JASystem8TChannelFv */
+void TChannel::updateJcToDSPInit() {
+    DSPInterface::DSPBuffer* buf = field_0x20->field_0xc;
+
+    if (mMixConfigs[0].mWhole == 0xFFFF) {
+        field_0x20->field_0xc->initAutoMixer();
+    } else {
+        buf->setMixerInitDelayMax(field_0x4->field_0x60);
+        for (u8 i = 0; i < 6; ++i)
+            buf->setMixerInitVolume(i, field_0xbc[i],
+                                    field_0x4->field_0x5a[i]);
+    }
+
+    buf->setPitch(mPitch);
+    if (field_0x4->field_0x61 & 0x20)
+        buf->setIIRFilterParam(field_0x4->field_0x3c);
+    if (field_0x4->field_0x61 & 0x1F)
+        buf->setFIR8FilterParam(field_0x4->field_0x2c);
+
+    buf->setFilterMode(field_0x4->field_0x61);
+    buf->setPauseFlag(mPauseFlag);
+}
+
 /* 8028CD90-8028CEA8       .text updateAutoMixer__Q28JASystem8TChannelFffff */
-void JASystem::TChannel::updateAutoMixer(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
-    f32 level = param_1 <= 0.0f ? 0.0f : param_1 >= 1.0f ? 1.0f : param_1;
-    field_0x20->field_0xc->setAutoMixer(level * Driver::getAutoLevel(), param_2 * 127.5f, param_4 * 127.5f, param_3 * 127.5f, field_0xb0[1]);
+void TChannel::updateAutoMixer(f32 volume, f32 pan, f32 fxmix, f32 dolby) {
+    field_0x20->field_0xc->setAutoMixer(
+        Driver::Clamp01(volume) * Driver::getAutoLevel(),
+        pan * 127.5f, dolby * 127.5f, fxmix * 127.5f,
+        mMixConfigs[1].mWhole
+    );
 }
 
 /* 8028CEA8-8028D128       .text updateMixer__Q28JASystem8TChannelFffff */
-void JASystem::TChannel::updateMixer(f32, f32, f32, f32) {
-    /* Nonmatching */
+void TChannel::updateMixer(f32 volume, f32 pan, f32 fxmix, f32 dolby) {
+    for (u32 i = 0; i < 6; i++) {
+        f32 vol = volume;
+        MixConfig config = mMixConfigs[i];
+        if (config.mParts.u == 0) {
+            field_0xbc[i] = 0;
+        } else {
+            f32 scale;
+
+            if (config.mParts.l0 != 0) {
+                switch (config.mParts.l0) {
+                case 1:
+                    scale = pan;
+                    break;
+                case 2:
+                    scale = fxmix;
+                    break;
+                case 3:
+                    scale = dolby;
+                    break;
+                case 5:
+                    scale = 1.0f - pan;
+                    break;
+                case 6:
+                    scale = 1.0f - fxmix;
+                    break;
+                case 7:
+                    scale = 1.0f - dolby;
+                    break;
+                }
+
+                vol *= Calc::sinfT(scale);
+            }
+
+            if (config.mParts.l1 != 0) {
+                switch (config.mParts.l1) {
+                case 1:
+                    scale = pan;
+                    break;
+                case 2:
+                    scale = fxmix;
+                    break;
+                case 3:
+                    scale = dolby;
+                    break;
+                case 5:
+                    scale = 1.0f - pan;
+                    break;
+                case 6:
+                    scale = 1.0f - fxmix;
+                    break;
+                case 7:
+                    scale = 1.0f - dolby;
+                    break;
+                }
+
+                switch (config.mParts.l1) {
+                case 3:
+                case 7:
+                    vol *= Calc::sinfDolby2(scale);
+                    break;
+                default:
+                    vol *= Calc::sinfT(scale);
+                    break;
+                }
+            }
+
+            field_0xbc[i] = Driver::Clamp01(vol) * Driver::getChannelLevel();
+        }
+    }
 }
 
 /* 8028D128-8028D218       .text extraUpdate__Q28JASystem8TChannelFPQ28JASystem8TChannelUl */
-void JASystem::TChannel::extraUpdate(TChannel*, u32) {
-    /* Nonmatching */
+u32 TChannel::extraUpdate(TChannel* channel, u32) {
+    if (channel->field_0xa2 != 0) {
+        f32 f31 = channel->field_0x9c - channel->field_0x58;
+        u8 updateInterval = Driver::getUpdateInterval();
+        if (channel->field_0xa2 <= updateInterval) {
+            channel->field_0xa2 = 1;
+        }
+        f31 /= channel->field_0xa2;
+        channel->field_0x58 += f31 * updateInterval;
+        if ((channel->field_0xa2 - updateInterval) <= 0) {
+            channel->field_0xa2 = 0;
+        } else {
+            channel->field_0xa2 -= updateInterval;
+        }
+        if (channel->field_0xa2 == 0) {
+            channel->field_0x2c = NULL;
+        }
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 /* 8028D218-8028D3C0       .text updatecallLogicalChannel__Q28JASystem8TChannelFPQ28JASystem8TChannelUl */
-void JASystem::TChannel::updatecallLogicalChannel(TChannel*, u32) {
-    /* Nonmatching */
+BOOL TChannel::updatecallLogicalChannel(TChannel* channel, u32 param) {
+    TChannelMgr* mgr = channel->field_0x4;
+
+    if (param == 0) {
+        for (u32 i = 0; i < 4; ++i)
+            channel->releaseOsc(i);
+
+        if (channel->field_0x20)
+            channel->field_0x20->mPriority = channel->getReleasePriority();
+
+        if (!mgr->moveListTail(channel, 2)) {
+            OSReport("----- updatecallLC : CUT失敗(release)\n");
+        }
+        channel->field_0x30 = -1;
+        return FALSE;
+    } else if (param == 1 || param == 2 || param == 6) {
+        if (mgr->field_0x4 != 0) {
+            if (mgr->cutList(channel) == -1) {
+                OSReport("----- updatecallLC : CUT失敗(extra)\n");
+            } else {
+                --mgr->field_0x4;
+                if (u32 thing = channel->field_0xcc) {
+                    channel->field_0xcc = 0;
+                    mgr->checkLimitStop(channel, thing);
+                }
+                TGlobalChannel::release(channel);
+            }
+        } else {
+            int r29 = channel->field_0xcc;
+            if (!mgr->moveListHead(channel, 0)) {
+                OSReport("----- updatecallLC : CUT失敗(not extra)\n");
+            }
+            mgr->checkLimitStop(channel, r29);
+        }
+
+        if (param != 6)
+            channel->stopLogicalChannel();
+        else
+            TDSPQueue::deleteQueue(channel);
+
+        channel->field_0x1  = 0xFF;
+        channel->field_0x30 = 0xFFFFFFFF;
+        channel->field_0x28 = NULL;
+    }
+    return FALSE;
 }
+
+}; // namespace JASystem

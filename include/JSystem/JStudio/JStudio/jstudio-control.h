@@ -8,7 +8,7 @@
 #include "dolphin/mtx/mtxvec.h"
 
 namespace JStudio {
-struct TObject;
+class TObject;
 struct TCreateObject {
     TCreateObject() {}
     virtual ~TCreateObject() = 0;

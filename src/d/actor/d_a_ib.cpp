@@ -3,8 +3,10 @@
 // Translation Unit: d_a_ib.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -13,8 +15,6 @@
 #include "d/d_item_data.h"
 #include "global.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct daIball_c__data {
     /* 0x00 */ u8 m00;
@@ -88,17 +88,17 @@ void daIball_c::createDisappearEffect(int param_1, int color_idx) {
     pos.y += m_data.mYOffset;
     switch (param_1) {
     case 0:
-        dComIfGp_particle_set(0x1C, &pos, NULL, &scale, 0xFF, dPa_control_c::getLifeBallSetColorEcallBack(color_idx));
-        dComIfGp_particle_set(0x1D, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_001C, &pos, NULL, &scale, 0xFF, dPa_control_c::getLifeBallSetColorEcallBack(color_idx));
+        dComIfGp_particle_set(dPa_name::ID_COMMON_001D, &pos, NULL, &scale);
         if (color_idx == 2) {
-            dComIfGp_particle_set(0x47, &pos);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0047, &pos);
         }
         fopAcM_seStartCurrent(this, JA_SE_OBJ_CUT_INOCHIDAMA, 0);
         break;
     case 1:
-        dComIfGp_particle_set(0x19, &pos, NULL, &scale);
-        dComIfGp_particle_set(0x1A, &pos, NULL, &scale);
-        dComIfGp_particle_set(0x1B, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_0019, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_001A, &pos, NULL, &scale);
+        dComIfGp_particle_set(dPa_name::ID_COMMON_001B, &pos, NULL, &scale);
         fopAcM_seStartCurrent(this, JA_SE_CM_INOCHIDAMA_BREAK, 0);
         break;
     }
@@ -201,20 +201,20 @@ void daIball_c::checkGeo() {
     
     (this->*mode_proc[mMode])();
     
-    dBgS_ObjGndChk_Yogan gnd_chk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz pos(current.pos.x, old.pos.y + 30.0f + m_data.mYOffset, current.pos.z);
-    gnd_chk.SetPos(&pos);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gnd_chk);
+    lavaChk.SetPos(&pos);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
     f32 groundH = mAcch.GetGroundH();
-    if (groundY != -1000000000.0f) {
-        f32 dist_off_gnd = groundY - groundH;
-        if ((dist_off_gnd < 20.0f && groundY > current.pos.y) || (dist_off_gnd >= 20.0f && groundY > current.pos.y + 20.0f)) {
+    if (lavaY != -G_CM3D_F_INF) {
+        f32 lava_depth = lavaY - groundH;
+        if ((lava_depth < 20.0f && lavaY > current.pos.y) || (lava_depth >= 20.0f && lavaY > current.pos.y + 20.0f)) {
             fopAcM_seStartCurrent(this, JA_SE_OBJ_FALL_MAGMA_S, 0);
             cXyz particle_scale;
             particle_scale.setall(0.25f);
             cXyz particle_pos(current.pos);
-            particle_pos.y = groundY;
-            dComIfGp_particle_set(0x80D5, &particle_pos, NULL, &particle_scale);
+            particle_pos.y = lavaY;
+            dComIfGp_particle_set(dPa_name::ID_SCENE_80D5, &particle_pos, NULL, &particle_scale);
             fopAcM_delete(this);
         }
     }
@@ -222,7 +222,7 @@ void daIball_c::checkGeo() {
 
 /* 800F3E78-800F3EB0       .text mode_wait_init__9daIball_cFv */
 void daIball_c::mode_wait_init() {
-    mRippleCb.end();
+    mRippleCb.remove();
     mMode = MODE_WAIT;
 }
 
@@ -238,7 +238,7 @@ void daIball_c::mode_wait() {
     }
     
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight > current.pos.y && seaHeight != -1000000000.0f) {
+    if (seaHeight > current.pos.y && seaHeight != -G_CM3D_F_INF) {
         mode_water_init();
         current.pos.y = seaHeight;
     }
@@ -246,7 +246,7 @@ void daIball_c::mode_wait() {
 
 /* 800F3F6C-800F3FE8       .text mode_water_init__9daIball_cFv */
 void daIball_c::mode_water_init() {
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &scale, 0xFF, &mRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &scale, 0xFF, &mRippleCb);
     mRippleCb.setRate(0.0f);
     mMode = MODE_WATER;
 }
@@ -254,10 +254,10 @@ void daIball_c::mode_water_init() {
 /* 800F3FE8-800F4054       .text mode_water__9daIball_cFv */
 void daIball_c::mode_water() {
     f32 seaHeight = mAcch.GetSeaHeight();
-    if (seaHeight == -1000000000.0f || seaHeight < current.pos.y) {
+    if (seaHeight == -G_CM3D_F_INF || seaHeight < current.pos.y) {
         mode_wait_init();
     }
-    if (seaHeight != -1000000000.0f) {
+    if (seaHeight != -G_CM3D_F_INF) {
         current.pos.y = seaHeight;
     }
 }
@@ -324,7 +324,7 @@ void daIball_c::CreateInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.OnSeaCheckOn();
     mAcch.OnSeaWaterHeight();
     
@@ -395,7 +395,7 @@ BOOL daIball_c::_daIball_execute() {
 
 /* 800F4634-800F4678       .text _daIball_delete__9daIball_cFv */
 BOOL daIball_c::_daIball_delete() {
-    mRippleCb.end();
+    mRippleCb.remove();
     dKy_plight_cut(&mLight);
     remove(this);
     return TRUE;
@@ -407,7 +407,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 800F4698-800F4870       .text _daIball_create__9daIball_cFv */
-s32 daIball_c::_daIball_create() {
+cPhs_State daIball_c::_daIball_create() {
     fopAcM_SetupActor(this, daIball_c);
     
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x3500)) {
@@ -428,12 +428,12 @@ BOOL daIball_c::CreateHeap() {
     
     J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, ALWAYS_BCK_START);
     JUT_ASSERT(1152, pbck != NULL);
-    int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false);
+    int ret = mBckAnm.init(modelData, pbck, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
     if (!ret) { return FALSE; }
     
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, ALWAYS_BTK_IB);
     JUT_ASSERT(1164, pbtk != NULL);
-    ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+    ret = mBtkAnm.init(modelData, pbtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
     if (!ret) { return FALSE; }
     
     int brkIds[ARRAY_SIZE(mBrkAnm)] = {
@@ -444,7 +444,7 @@ BOOL daIball_c::CreateHeap() {
     for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, brkIds[i]);
         JUT_ASSERT(1182, pbrk != NULL);
-        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
+        ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
         if (!ret) { return FALSE; }
     }
     
@@ -452,7 +452,7 @@ BOOL daIball_c::CreateHeap() {
 }
 
 /* 800F4B40-800F4B60       .text daIball_Create__FP10fopAc_ac_c */
-static s32 daIball_Create(fopAc_ac_c* i_this) {
+static cPhs_State daIball_Create(fopAc_ac_c* i_this) {
     return static_cast<daIball_c*>(i_this)->_daIball_create();
 }
 
@@ -504,11 +504,11 @@ dCcD_SrcCyl daIball_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static actor_method_class l_daIball_Method = {
@@ -529,7 +529,7 @@ actor_process_profile_definition g_profile_Iball = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0187,
+    /* Priority     */ PRIO_Iball,
     /* Actor SubMtd */ &l_daIball_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

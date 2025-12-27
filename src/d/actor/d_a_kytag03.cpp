@@ -3,10 +3,12 @@
 // Translation Unit: d_a_kytag03.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag03.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/res/res_m_door.h"
 
 /* 00000078-0000015C       .text useHeapInit__FP10fopAc_ac_c */
@@ -14,7 +16,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
     i_this->mpModel = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("M_DOOR", M_DOOR_BDL_MYAMIF),
-        NULL, NULL, NULL, J3DFrameCtrl::LOOP_REPEAT_e, 0.0f, 0, -1, 1, NULL, 0x0, 0x11020203
+        NULL, NULL, NULL, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1, NULL, 0x0, 0x11020203
     );
 
     if (i_this->mpModel == NULL || i_this->mpModel->getModel() == NULL)
@@ -46,59 +48,56 @@ void draw_SUB(kytag03_class* i_this) {
 
 /* 00000280-0000050C       .text daKytag03_Execute__FP13kytag03_class */
 static BOOL daKytag03_Execute(kytag03_class* i_this) {
-    /* Nonmatching */
-    if (!dComIfGp_event_runCheck() || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
-        if (i_this->tevStr.mRoomNo == dStage_roomControl_c::getStayNo()) {
+    fopAc_ac_c* actor = i_this;
+    if (dComIfGp_event_runCheck() == FALSE || !dComIfGp_event_chkEventFlag(dEvtFlag_STAFF_ALL_e)) {
+        if (actor->tevStr.mRoomNo == dComIfGp_roomControl_getStayNo()) {
             i_this->mbRoomActive = true;
-            if (i_this->mSwitchNo != 0xFF) {
-                if (dComIfGs_isSwitch(i_this->mSwitchNo, dStage_roomControl_c::getStayNo())) {
-                    if (!dKy_contrast_flg_get()) {
-                        dKy_contrast_flg_set(true);
-                        dKy_change_colpat(4);
-                    }
-
-                    i_this->mbIsActive = true;
-                } else {
-                    if (dKy_contrast_flg_get()) {
-                        dKy_contrast_flg_set(false);
-                        dKy_change_colpat(0);
-                    }
-
-                    i_this->mbIsActive = false;
+            if (i_this->mSwitchNo != 0xFF && dComIfGs_isSwitch(i_this->mSwitchNo, dComIfGp_roomControl_getStayNo())) {
+                if (!dKy_contrast_flg_get()) {
+                    dKy_contrast_flg_set(true);
+                    dKy_change_colpat(4);
                 }
+
+                i_this->mbIsActive = true;
+            } else {
+                if (dKy_contrast_flg_get()) {
+                    dKy_contrast_flg_set(false);
+                    dKy_change_colpat(0);
+                }
+
+                i_this->mbIsActive = false;
             }
         }
     } else if (!i_this->mbRoomActive) {
-        if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
-            if (i_this->mSwitchNo != 0xFF) {
-                if (dComIfGs_isSwitch(i_this->mSwitchNo, i_this->tevStr.mRoomNo)) {
-                    if (!dKy_contrast_flg_get()) {
-                        dKy_contrast_flg_set(true);
-                        dKy_change_colpat(4);
-                    }
-
-                    i_this->mbIsActive = true;
-                } else {
-                    if (dKy_contrast_flg_get()) {
-                        dKy_contrast_flg_set(false);
-                        dKy_change_colpat(0);
-                    }
-
-                    i_this->mbIsActive = false;
+        if (actor->tevStr.mRoomNo != dComIfGp_roomControl_getStayNo()) {
+            if (i_this->mSwitchNo != 0xFF && dComIfGs_isSwitch(i_this->mSwitchNo, actor->tevStr.mRoomNo)) {
+                if (!dKy_contrast_flg_get()) {
+                    dKy_contrast_flg_set(true);
+                    dKy_change_colpat(4);
                 }
+
+                i_this->mbIsActive = true;
+            } else {
+                if (dKy_contrast_flg_get()) {
+                    dKy_contrast_flg_set(false);
+                    dKy_change_colpat(0);
+                }
+
+                i_this->mbIsActive = false;
             }
         }
-    } else if (i_this->tevStr.mRoomNo != dStage_roomControl_c::getStayNo()) {
-        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    } else if (actor->tevStr.mRoomNo != dComIfGp_roomControl_getStayNo()) {
+        fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
         if (!i_this->mbIsActive && dKy_contrast_flg_get()) {
             if (!i_this->mbVisible) {
                 cXyz pos;
-                pos.x = cM_scos(0) * cM_ssin(player->shape_angle.y);
+                const s16 y = player->shape_angle.y;
+                pos.x = cM_scos(0) * cM_ssin(y);
                 pos.y = cM_ssin(0);
-                pos.z = cM_scos(0) * cM_scos(player->shape_angle.y);
-                i_this->current.pos = player->current.pos + pos * -100.0f;
-                i_this->current.angle.y = player->current.angle.y;
-                i_this->shape_angle.y = player->shape_angle.y;
+                pos.z = cM_scos(0) * cM_scos(y);
+                actor->current.pos = player->current.pos + pos * -100.0f;
+                actor->current.angle.y = player->current.angle.y;
+                actor->shape_angle.y = player->shape_angle.y;
             }
             i_this->mbVisible = true;
         }
@@ -119,16 +118,24 @@ static BOOL daKytag03_IsDelete(kytag03_class* i_this) {
 
 /* 00000514-00000544       .text daKytag03_Delete__FP13kytag03_class */
 static BOOL daKytag03_Delete(kytag03_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "M_DOOR");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "M_DOOR");
     return TRUE;
 }
 
 /* 00000544-00000604       .text daKytag03_Create__FP10fopAc_ac_c */
-static s32 daKytag03_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag03_Create(fopAc_ac_c* i_ac) {
     kytag03_class* i_this = (kytag03_class*)i_ac;
+
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(i_this, kytag03_class);
-    s32 ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
+#endif
+
+    cPhs_State ret = dComIfG_resLoad(&i_this->mPhs, "M_DOOR");
     if (ret == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, kytag03_class);
+#endif
+
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x4c30)) {
             return cPhs_ERROR_e;
         }
@@ -161,7 +168,7 @@ actor_process_profile_definition g_profile_KYTAG03 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A3,
+    /* Priority     */ PRIO_KYTAG03,
     /* Actor SubMtd */ &l_daKytag03_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

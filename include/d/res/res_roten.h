@@ -1,9 +1,34 @@
 #ifndef RES_ROTEN_H
 #define RES_ROTEN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
-enum ROTEN_RES_FILE_ID { // IDs and indexes are synced
+#if VERSION == VERSION_DEMO
+enum ROTEN_RES_FILE_ID {
+    /* BDL */
+    ROTEN_BDL_ROTEN02=0x0,
+    ROTEN_BDL_ROTEN03=0x1,
+    ROTEN_BDL_ROTEN04=0x2,
+    
+    /* DZB */
+    ROTEN_DZB_ROTEN02=0x3,
+    ROTEN_DZB_ROTEN03=0x4,
+    ROTEN_DZB_ROTEN04=0x5,
+};
+
+enum ROTEN_RES_FILE_INDEX {
+    /* BDL */
+    ROTEN_INDEX_BDL_ROTEN02=0x4,
+    ROTEN_INDEX_BDL_ROTEN03=0x5,
+    ROTEN_INDEX_BDL_ROTEN04=0x6,
+    
+    /* DZB */
+    ROTEN_INDEX_DZB_ROTEN02=0x9,
+    ROTEN_INDEX_DZB_ROTEN03=0xA,
+    ROTEN_INDEX_DZB_ROTEN04=0xB,
+};
+#else
+enum ROTEN_RES_FILE_ID {
     /* BDL */
     ROTEN_BDL_ROTEN02=0x4,
     ROTEN_BDL_ROTEN03=0x5,
@@ -14,5 +39,18 @@ enum ROTEN_RES_FILE_ID { // IDs and indexes are synced
     ROTEN_DZB_ROTEN03=0xA,
     ROTEN_DZB_ROTEN04=0xB,
 };
+
+enum ROTEN_RES_FILE_INDEX {
+    /* BDL */
+    ROTEN_INDEX_BDL_ROTEN02=0x4,
+    ROTEN_INDEX_BDL_ROTEN03=0x5,
+    ROTEN_INDEX_BDL_ROTEN04=0x6,
+    
+    /* DZB */
+    ROTEN_INDEX_DZB_ROTEN02=0x9,
+    ROTEN_INDEX_DZB_ROTEN03=0xA,
+    ROTEN_INDEX_DZB_ROTEN04=0xB,
+};
+#endif
 
 #endif /* RES_ROTEN_H */

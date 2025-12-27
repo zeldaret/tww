@@ -23,7 +23,7 @@ namespace daTagvolcano {
         u32 prm_get_timer() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TIMER_W, PRM_TIMER_S); }
         u32 prm_get_type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
     
-        s32 _create();
+        cPhs_State _create();
         bool check_timer_clear();
         bool _delete();
         bool _execute();

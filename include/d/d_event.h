@@ -56,7 +56,7 @@ public:
     /* 0x15 */ u8 mEventInfoIdx;
 };  // Size = 0x18
 
-class dStage_Event_dt_c;
+struct dStage_Event_dt_c;
 
 enum dTalkXYButton_e {
     dTalkBtn_NONE_e = 0,
@@ -131,14 +131,14 @@ public:
     void reset() { onEventFlag(8); }
 
     BOOL runCheck() { return mMode != dEvtMode_NONE_e; }
-    u32 getMode() { return mMode & 0xFF; } // &0xFF added to fix dEvt_control_c::moveApproval, probably fakematch
+    u8 getMode() const { return mMode; }
 
-    void checkHind(u16) {}
-    BOOL chkPhoto() { return mbInPhoto; }
-    void getMode() const {}
-    void offHindFlag(u16 flag) { mHindFlag &= ~flag; }
     void onHindFlag(u16 flag) { mHindFlag |= flag; }
-    u16 chkHindFlag(u16 flag) { return mHindFlag & flag; }
+    void offHindFlag(u16 flag) { mHindFlag &= ~flag; }
+    void checkHind(u16) {}
+
+    BOOL chkPhoto() { return mbInPhoto; }
+
     void setDebugStb(u8) {}
 
 public:

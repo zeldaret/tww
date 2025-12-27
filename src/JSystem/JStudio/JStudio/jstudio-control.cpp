@@ -3,6 +3,8 @@
 // Translation Unit: jstudio-control.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "JSystem/JStudio/JStudio/jstudio-data.h"

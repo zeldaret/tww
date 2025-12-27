@@ -3,6 +3,8 @@
 // Translation Unit: JSGCamera.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGCamera.h"
 #include "dolphin/types.h"
 
@@ -109,4 +111,3 @@ f32 JStage::TCamera::JSGGetViewRoll() const {
 /* 8026DDEC-8026DDF0       .text JSGSetViewRoll__Q26JStage7TCameraFf */
 void JStage::TCamera::JSGSetViewRoll(f32) {
 }
-

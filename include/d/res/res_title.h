@@ -1,7 +1,7 @@
 #ifndef RES_TITLE_H
 #define RES_TITLE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum TITLE_RES_FILE_ID { // IDs and indexes are synced
     /* BMD */

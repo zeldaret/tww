@@ -3,8 +3,10 @@
 // Translation Unit: d_a_shutter.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shutter.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/res/res_htobi1.h"
 #include "d/res/res_htobi2.h"
@@ -65,7 +67,7 @@ BOOL daShutter_c::CreateHeap() {
 }
 
 /* 000002B8-000004B4       .text Create__11daShutter_cFv */
-s32 daShutter_c::Create() {
+BOOL daShutter_c::Create() {
     fopAcM_SetMtx(this, mpModel[0]->getBaseTRMtx());
     Vec cullMin = m_cull_min[mType];
     Vec cullMax = m_cull_max[mType];
@@ -93,14 +95,14 @@ s32 daShutter_c::Create() {
     if (m_close_ev_name[mType] != NULL) {
         mCloseEventIdx = dComIfGp_evmng_getEventIdx(m_close_ev_name[mType], 0xff);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 000004B4-000005A0       .text _create__11daShutter_cFv */
-s32 daShutter_c::_create() {
+cPhs_State daShutter_c::_create() {
     fopAcM_SetupActor(this, daShutter_c);
     mType = daShutter_prm::getType(this);
-    int result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (result == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])){
             return cPhs_ERROR_e;
@@ -278,7 +280,7 @@ bool daShutter_c::_draw() {
 }
 
 /* 00000DD8-00000DF8       .text daShutter_Create__FPv */
-static s32 daShutter_Create(void* i_this) {
+static cPhs_State daShutter_Create(void* i_this) {
     return ((daShutter_c*)i_this)->_create();
 }
 
@@ -320,7 +322,7 @@ actor_process_profile_definition g_profile_SHUTTER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01BA,
+    /* Priority     */ PRIO_SHUTTER,
     /* Actor SubMtd */ &daShutterMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

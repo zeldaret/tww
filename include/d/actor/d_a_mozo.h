@@ -13,14 +13,14 @@ public:
 
     void setProcess(proc_t proc) { mCurrentProc = proc; }
 
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     bool _draw();
     bool _execute();
     void anime_proc();
     void checkRange(int);
     BOOL CreateHeap();
-    s32 CreateInit();
+    cPhs_State CreateInit();
     void event_move();
     fopAc_ac_c* getBeamActor(fpc_ProcID);
     void search_beam_proc_init();
@@ -78,7 +78,7 @@ public:
     daMozo_HIO_c();
     virtual ~daMozo_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;

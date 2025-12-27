@@ -16,9 +16,9 @@ public:
     bool isDispFigure() { return mbDisplay; }
     void setResFlag(u8 flag) { mLoadFlags |= flag; }
 
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();
@@ -35,7 +35,7 @@ public:
     void setMessage(u32);
     u8 getPrmFigureNo();
     void setMtx();
-    BOOL isFigureGet(u8);
+    u8 isFigureGet(u8);
     int getFigureBmd(u8);
     
     enum Prm_e {

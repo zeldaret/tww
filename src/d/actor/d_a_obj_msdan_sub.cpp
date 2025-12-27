@@ -3,21 +3,23 @@
 // Translation Unit: d_a_obj_msdan_sub.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::CreateHeap() {
+BOOL daObjMsdanSub::Act_c::CreateHeap() {
     /* Nonmatching */
 }
 
 /* 0000012C-00000304       .text Create__Q213daObjMsdanSub5Act_cFv */
-s32 daObjMsdanSub::Act_c::Create() {
+BOOL daObjMsdanSub::Act_c::Create() {
     /* Nonmatching */
 }
 
 /* 00000304-00000400       .text Mthd_Create__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::Mthd_Create() {
+cPhs_State daObjMsdanSub::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
@@ -27,7 +29,7 @@ BOOL daObjMsdanSub::Act_c::Delete() {
 }
 
 /* 00000408-00000454       .text Mthd_Delete__Q213daObjMsdanSub5Act_cFv */
-void daObjMsdanSub::Act_c::Mthd_Delete() {
+BOOL daObjMsdanSub::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
@@ -42,7 +44,7 @@ void daObjMsdanSub::Act_c::init_mtx() {
 }
 
 /* 00000534-00000BB4       .text Execute__Q213daObjMsdanSub5Act_cFPPA3_A4_f */
-void daObjMsdanSub::Act_c::Execute(float(**)[3][4]) {
+BOOL daObjMsdanSub::Act_c::Execute(Mtx**) {
     /* Nonmatching */
 }
 
@@ -54,28 +56,28 @@ BOOL daObjMsdanSub::Act_c::Draw() {
 namespace daObjMsdanSub {
 namespace {
 /* 00000C54-00000C74       .text Mthd_Create__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000C74-00000C94       .text Mthd_Delete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000C94-00000CB4       .text Mthd_Execute__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00000CB4-00000CE0       .text Mthd_Draw__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->Draw();
 }
 
 /* 00000CE0-00000D0C       .text Mthd_IsDelete__Q213daObjMsdanSub31@unnamed@d_a_obj_msdan_sub_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjMsdanSub::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_MsdanSub = {
@@ -98,7 +100,7 @@ actor_process_profile_definition g_profile_Obj_MsdanSub = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0039,
+    /* Priority     */ PRIO_Obj_MsdanSub,
     /* Actor SubMtd */ &daObjMsdanSub::Mthd_MsdanSub,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

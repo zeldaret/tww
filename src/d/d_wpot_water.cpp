@@ -3,9 +3,11 @@
 // Translation Unit: d_wpot_water.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wpot_water.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -59,11 +61,11 @@ static BOOL dWpotWater_Delete(dWpotWater_c* i_this) {
     return TRUE;
 }
 
-s32 dWpotWater_c::create() {
-    new(this) dWpotWater_c();
-    dComIfGp_particle_set(0x8083, &mPos);
-    dComIfGp_particle_set(0x8084, &mPos);
-    emtr = dComIfGp_particle_set(0x8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
+cPhs_State dWpotWater_c::create() {
+    new (this) dWpotWater_c();
+    dComIfGp_particle_set(dPa_name::ID_SCENE_8083, &mPos);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_8084, &mPos);
+    emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_8086, &mPos, NULL, NULL, 0xAA, &dWpotWater_c::mEcallback);
     if (emtr == NULL) {
         return cPhs_ERROR_e;
     } else {
@@ -73,11 +75,11 @@ s32 dWpotWater_c::create() {
 }
 
 /* 8023F750-8023FFCC       .text dWpotWater_Create__FP12kankyo_class */
-static s32 dWpotWater_Create(kankyo_class* i_k) {
-    dWpotWater_c* i_this = (dWpotWater_c*)i_k;
+static cPhs_State dWpotWater_Create(kankyo_class* i_this) {
+    dWpotWater_c* a_this = (dWpotWater_c*)i_this;
     
-    dBgS_GndChk chk2;
-    dBgS_ObjGndChk_Yogan chk;
+    dBgS_GndChk gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz pos;
     
     s16 angle = 0;
@@ -88,13 +90,13 @@ static s32 dWpotWater_Create(kankyo_class* i_k) {
             i_this->mPos.y + 100.0f,
             i_this->mPos.z + f4 * cM_ssin(angle)
         );
-        chk.SetPos(&pos);
-        f32 ret = dComIfG_Bgsp()->GroundCross(&chk);
-        if (ret != -1000000000.0f) {
-            chk2.SetPos(&pos);
-            f32 ret2 = dComIfG_Bgsp()->GroundCross(&chk2);
-            if (chk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(chk) == dBgS_Attr_LAVA_e && ret > ret2) {
-                cXyz spawnPos(pos.x, ret + 25.0f, pos.z);
+        lavaChk.SetPos(&pos);
+        f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+        if (lavaY != -G_CM3D_F_INF) {
+            gndChk.SetPos(&pos);
+            f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+            if (lavaChk.ChkSetInfo() && dComIfG_Bgsp()->GetAttributeCode(lavaChk) == dBgS_Attr_LAVA_e && lavaY > groundY) {
+                cXyz spawnPos(pos.x, lavaY + 25.0f, pos.z);
                 fopAcM_create(PROC_Obj_Magmarock, 0, &spawnPos, i_this->mParam);
                 break;
             }
@@ -106,13 +108,13 @@ static s32 dWpotWater_Create(kankyo_class* i_k) {
         i_this->mPos.y + 100.0f,
         i_this->mPos.z
     );
-    chk2.SetPos(&pos);
-    f32 ret = dComIfG_Bgsp()->GroundCross(&chk2);
-    i_this->mPos.y = ret;
-    if (ret != -1000000000.0f) {
+    gndChk.SetPos(&pos);
+    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
+    i_this->mPos.y = groundY;
+    if (groundY != -G_CM3D_F_INF) {
         cXyz sp18(i_this->mPos.x, i_this->mPos.y, i_this->mPos.z);
         fopAcM_create(PROC_HITOBJ, 0, &sp18, i_this->mParam);
-        return i_this->create();
+        return a_this->create();
     }
     
     return cPhs_ERROR_e;
@@ -127,15 +129,15 @@ kankyo_method_class l_dWpotWater_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WPOT_WATER = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_WPOT_WATER,
-    &g_fpcLf_Method.base,
-    sizeof(dWpotWater_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x01CC,
-    &l_dWpotWater_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_WPOT_WATER,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dWpotWater_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_WPOT_WATER,
+    /* Actor SubMtd */ &l_dWpotWater_Method,
 };

@@ -3,6 +3,7 @@
 // Translation Unit: d_ovlp_fade3.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_drawlist.h"
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/gx/GX.h"
@@ -14,4 +15,3 @@ void dDlst_snapShot_c::draw() {
     GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
     GXPixModeSync();
 }
-

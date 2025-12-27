@@ -3,11 +3,13 @@
 // Translation Unit: d_a_arrow_lighteff.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow_lighteff.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -58,14 +60,14 @@ void daArrow_Lighteff_c::delete_particle() {
             field_0x2F4.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x2F4.end();
+        field_0x2F4.remove();
     }
     if(field_0x308.getEmitter()) {
         if(field_0x2E8 == 3) {
             field_0x308.getEmitter()->setGlobalAlpha(0);
         }
 
-        field_0x308.end();
+        field_0x308.remove();
     }
 }
 
@@ -114,10 +116,10 @@ BOOL daArrow_Lighteff_c::CreateHeap() {
     JUT_ASSERT(216, btk != NULL);
     JUT_ASSERT(217, brk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
-    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBrk.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 
@@ -145,23 +147,23 @@ void daArrow_Lighteff_c::CreateInit() {
 
     if(field_0x2E8 == 1) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x299, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_0299, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
     }
     else if(field_0x2E8 == 2) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29C, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029C, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29D, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029D, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
     else if(field_0x2E8 == 3) {
         if(field_0x2F4.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x29F, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_029F, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x2F4);
         }
         if(field_0x308.getEmitter() == 0) {
-            dComIfGp_particle_setP1(0x2A0, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A0, &field_0x29C, &current.angle, NULL, 0xFF, &field_0x308);
         }
     }
 
@@ -187,7 +189,7 @@ void daArrow_Lighteff_c::set_mtx() {
     }
 }
 
-s32 daArrow_Lighteff_c::_create() {
+cPhs_State daArrow_Lighteff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Lighteff_c);
 
     field_0x2EA = 0;
@@ -201,7 +203,7 @@ s32 daArrow_Lighteff_c::_create() {
 }
 
 /* 00000980-00000A70       .text daArrow_Lighteff_Create__FPv */
-static s32 daArrow_Lighteff_Create(void* i_this) {
+static cPhs_State daArrow_Lighteff_Create(void* i_this) {
     return static_cast<daArrow_Lighteff_c*>(i_this)->_create();
 }
 
@@ -233,9 +235,13 @@ static BOOL daArrow_Lighteff_Delete(void* i_this) {
 }
 
 bool daArrow_Lighteff_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if(field_0x2E9 != 0) {
+#else
     if(field_0x2E9 == 0) {
         return true;
     }
+#endif
 
     J3DModelData* modelData = field_0x298->getModelData();
     if(mDoGph_gInf_c::isMonotone()) {
@@ -245,14 +251,18 @@ bool daArrow_Lighteff_c::_draw() {
         dComIfGd_setListMaskOff();
     }
 
-    mBtk.entry(modelData, mBtk.getFrame());
-    mBrk.entry(modelData, mBrk.getFrame());
+    mBtk.entry(modelData);
+    mBrk.entry(modelData);
     mDoExt_modelUpdateDL(field_0x298);
     mBrk.remove(modelData);
     mBtk.remove(modelData);
     
     dComIfGd_setList();
 
+#if VERSION == VERSION_DEMO
+    }
+#endif
+    
     return true;
 }
 
@@ -363,7 +373,7 @@ bool daArrow_Lighteff_c::_execute() {
     if(field_0x2E8 == 1) {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARROW_AMB, 0);
         if(!dComIfGp_checkCameraAttentionStatus(cam, 0x20)) {
-            dComIfGp_particle_setSimple(0x4004, &field_0x29C, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_COMMON_4004, &field_0x29C);
         }
     }
     else if(field_0x2E8 == 2) {
@@ -417,7 +427,7 @@ actor_process_profile_definition g_profile_ARROW_LIGHTEFF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C1,
+    /* Priority     */ PRIO_ARROW_LIGHTEFF,
     /* Actor SubMtd */ &daArrow_LighteffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

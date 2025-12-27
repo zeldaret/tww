@@ -3,15 +3,16 @@
 // Translation Unit: d_a_tag_so.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
     mNo = -1;
     m05 = 0;
-    return;
 }
 
 static daTag_So_HIO_c l_HIO;
@@ -27,7 +28,6 @@ void daTag_So_c::debugDraw() {
     actorPos.y += 20.0f;
     if (m298 == 1)
         dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
-    return;
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */
@@ -52,11 +52,10 @@ void daTag_So_c::getArg() {
     else {
         mRadius = paramRadius * 100;
     }
-    return;
 }
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
-s32 daTag_So_c::_create() {
+cPhs_State daTag_So_c::_create() {
     fopAcM_SetupActor(this, daTag_So_c);
     getArg();
     return cPhs_COMPLEATE_e;
@@ -68,7 +67,7 @@ bool daTag_So_c::_delete() {
 }
 
 /* 00000284-000002A4       .text daTag_SoCreate__FPv */
-static s32 daTag_SoCreate(void* i_this) {
+static cPhs_State daTag_SoCreate(void* i_this) {
     return ((daTag_So_c*)i_this)->_create();
 }
 
@@ -84,7 +83,7 @@ static BOOL daTag_SoExecute(void* i_this) {
 
 /* 000002EC-00000310       .text daTag_SoDraw__FPv */
 static BOOL daTag_SoDraw(void* i_this) {
-    return ((daTag_So_c*)i_this)->_draw();;
+    return ((daTag_So_c*)i_this)->_draw();
 }
 
 /* 00000310-00000318       .text daTag_SoIsDelete__FPv */
@@ -110,7 +109,7 @@ actor_process_profile_definition g_profile_TAG_SO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0065,
+    /* Priority     */ PRIO_TAG_SO,
     /* Actor SubMtd */ &daTag_SoMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

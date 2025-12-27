@@ -3,6 +3,7 @@
  * Item - Field Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_item.h"
@@ -10,11 +11,10 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 s32 daItem_c::m_timer_max = 10000;
 
@@ -77,9 +77,11 @@ float daItem_c::getYOffset() {
 void daItem_c::set_mtx() {
     cXyz pos = current.pos;
     csXyz rot = current.angle;
+#if VERSION > VERSION_DEMO
     if (m_itemNo == dItem_HEART_CONTAINER_e) {
         rot.y = shape_angle.y;
     }
+#endif
     set_mtx_base(mpModel, pos, rot);
     
     if (isArrow(m_itemNo)) {
@@ -131,7 +133,7 @@ void itemGetCallBack(fopAc_ac_c* item_actor, dCcD_GObjInf*, fopAc_ac_c* collided
 /* 800F5044-800F53EC       .text CreateInit__8daItem_cFv */
 void daItem_c::CreateInit() {
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
 
@@ -208,12 +210,12 @@ void daItem_c::CreateInit() {
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     
     if (fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        mpParticleEmitter = dComIfGp_particle_set(0x81E1, &current.pos);
+        mpParticleEmitter = dComIfGp_particle_set(dPa_name::ID_SCENE_81E1, &current.pos);
     }
 }
 
 /* 800F53EC-800F5668       .text _daItem_create__8daItem_cFv */
-s32 daItem_c::_daItem_create() {
+cPhs_State daItem_c::_daItem_create() {
     fopAcM_SetupActor(this, daItem_c);
     
     m_itemNo = daItem_prm::getItemNo(this);
@@ -224,7 +226,10 @@ s32 daItem_c::_daItem_create() {
     }
     
     mItemBitNo = daItem_prm::getItemBitNo(this);
-    if (m_itemNo != dItem_BLUE_JELLY_e) { // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+#if VERSION > VERSION_DEMO
+    if (m_itemNo != dItem_BLUE_JELLY_e) // Blue Chu Jelly uses mItemBitNo as if it was a switch.
+#endif
+    {
         mItemBitNo &= 0x7F;
         if (fopAcM_isItem(this, mItemBitNo) && mItemBitNo != 0x7F) {
             // Already picked up, don't create the item again.
@@ -233,10 +238,13 @@ s32 daItem_c::_daItem_create() {
         }
     }
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
-        // Note: The demo version calls getHeapSize instead of getFieldHeapSize here.
+#if VERSION == VERSION_DEMO
+        u32 heap_size = dItem_data::getHeapSize(m_itemNo);
+#else
         u32 heap_size = dItem_data::getFieldHeapSize(m_itemNo);
+#endif
         if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, heap_size)) {
             return cPhs_ERROR_e;
         }
@@ -333,9 +341,11 @@ void daItem_c::mode_proc_call() {
         }
     }
     
+#if VERSION > VERSION_DEMO
     if (mType == daItemType_1_e && (fopAcM_checkHookCarryNow(this) || checkFlag(FLAG_BOOMERANG))) {
         mType = daItemType_3_e;
     }
+#endif
 }
 
 /* 800F59CC-800F5AFC       .text execInitNormalDirection__8daItem_cFv */
@@ -358,7 +368,7 @@ void daItem_c::execInitNormalDirection() {
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
     
-    mPtclSmokeCb.end();
+    mPtclSmokeCb.remove();
     if (mpParticleEmitter) {
         mpParticleEmitter->becomeInvalidEmitter();
         mpParticleEmitter = NULL;
@@ -393,12 +403,12 @@ void daItem_c::execInitGetDemoDirection() {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
     
     hide();
-    mPtclFollowCb.end();
+    mPtclFollowCb.remove();
     
     if (player == link) {
         fopAcM_orderItemEvent(this);
         eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
-        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, current.roomNo);
+        mDemoItemBsPcId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this));
         mItemStatus = STATUS_WAIT_GET_DEMO;
     }
 }
@@ -534,9 +544,9 @@ void daItem_c::setTevStr() {
 
 /* 800F61C8-800F6268       .text _daItem_delete__8daItem_cFv */
 BOOL daItem_c::_daItem_delete() {
-    mPtclRippleCb.end();
-    mPtclFollowCb.end();
-    mPtclSmokeCb.end();
+    mPtclRippleCb.remove();
+    mPtclFollowCb.remove();
+    mPtclSmokeCb.remove();
     if (mpParticleEmitter) {
         mpParticleEmitter->becomeInvalidEmitter();
         mpParticleEmitter = NULL;
@@ -761,10 +771,12 @@ void daItem_c::itemGetExecute() {
     
     clrFlag(FLAG_UNK04);
     
+#if VERSION > VERSION_DEMO
     mCyl.SetTgType(0);
     mCyl.OffCoSetBit();
     mCyl.ClrTgHit();
     mCyl.ClrCoHit();
+#endif
 }
 
 /* 800F6D24-800F6D78       .text itemDefaultRotateY__8daItem_cFv */
@@ -831,9 +843,9 @@ BOOL daItem_c::itemActionForRupee() {
     if (mAcch.ChkGroundLanding()) {
         f32 temp2 = field_0x650 * getData()->mGroundReflect;
         if (temp2 > gravity - 0.5f) {
-            speedF = 0.0f;
+            fopAcM_SetSpeedF(this, 0.0f);
         } else {
-            speed.set(0.0f, -temp2, 0.0f);
+            fopAcM_GetSpeed(this).set(0.0f, -temp2, 0.0f);
         }
         
         mOnGroundTimer++;
@@ -844,13 +856,13 @@ BOOL daItem_c::itemActionForRupee() {
         set_bound_se();
     } else if (mAcch.ChkGroundHit()) {
         itemDefaultRotateY();
-        speedF = 0.0f;
+        fopAcM_SetSpeedF(this, 0.0f);
         clrFlag(FLAG_UNK04);
         mOnGroundTimer = 1;
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     mRotateSpeed = getData()->mRotateXSpeed;
@@ -920,8 +932,8 @@ BOOL daItem_c::itemActionForKey() {
         itemDefaultRotateY();
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     mRotateSpeed = getData()->mRotateXSpeed;
@@ -957,8 +969,8 @@ BOOL daItem_c::itemActionForEmono() {
         speedF = 0.0f;
     }
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     return TRUE;
@@ -1037,10 +1049,7 @@ BOOL daItem_c::itemActionForArrow() {
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     if (mOnGroundTimer == 0 && mpParticleEmitter && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-        f32 transX = current.pos.x;
-        f32 transY = current.pos.y;
-        f32 transZ = current.pos.z;
-        mpParticleEmitter->setGlobalTranslation(transX, transY, transZ);
+        mpParticleEmitter->setGlobalTranslation(current.pos);
     }
     
     if (mAcch.ChkGroundLanding()) {
@@ -1055,7 +1064,7 @@ BOOL daItem_c::itemActionForArrow() {
         mOnGroundTimer++;
         
         if (mOnGroundTimer == 1 && fopAcM_SearchByName(PROC_BST)) { // Gohdan
-            JPABaseEmitter* emitter = dComIfGp_particle_set(0xA1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
+            JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_A1E2, &current.pos, NULL, NULL, 0xFF, &mPtclSmokeCb, fopAcM_GetRoomNo(this));
             if (emitter) {
                 emitter->setMaxFrame(1);
             }
@@ -1070,11 +1079,15 @@ BOOL daItem_c::itemActionForArrow() {
     } else if (mAcch.ChkGroundHit()) {
         speedF = 0.0f;
         
-        if (m_itemNo != dItem_HEART_CONTAINER_e) {
+#if VERSION > VERSION_DEMO
+        if (m_itemNo != dItem_HEART_CONTAINER_e)
+#endif
+        {
             itemDefaultRotateY();
         }
     }
     
+#if VERSION > VERSION_DEMO
     if (m_itemNo == dItem_HEART_CONTAINER_e) {
         if (mOnGroundTimer != 0) {
             getData();
@@ -1084,9 +1097,10 @@ BOOL daItem_c::itemActionForArrow() {
         
         cLib_chaseAngleS(&shape_angle.y, shape_angle.y + mRotateSpeed, mRotateSpeed);
     }
+#endif
     
-    if (speed.y != 0.0f) {
-        field_0x650 = speed.y;
+    if (fopAcM_GetSpeed(this).y != 0.0f) {
+        field_0x650 = fopAcM_GetSpeed(this).y;
     }
     
     return TRUE;
@@ -1201,8 +1215,8 @@ BOOL daItem_c::timeCount() {
 /* 800F7F0C-800F7F50       .text mode_wait_init__8daItem_cFv */
 void daItem_c::mode_wait_init() {
     mMode = MODE_WAIT;
-    gravity = getData()->mGravity;
-    mPtclRippleCb.end();
+    fopAcM_SetGravity(this, getData()->mGravity);
+    mPtclRippleCb.remove();
 }
 
 /* 800F7F50-800F80CC       .text mode_water_init__8daItem_cFv */
@@ -1223,20 +1237,18 @@ void daItem_c::mode_water_init() {
     
     fopAcM_SetSpeed(this, 0.0f, 0.0f, 0.0f);
     fopAcM_SetSpeedF(this, 0.0f);
-    current.angle.z = 0;
-    current.angle.x = 0;
+    current.angle.x = current.angle.z = 0;
     mExtraZRot = 0;
     mRotateSpeed = 0;
     clrFlag(FLAG_UNK04);
     scale.set(mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
     
     cXyz particleScale;
-    f32 temp = dItem_data::getShadowSize(m_itemNo);
-    f32 temp3 = temp / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
+    f32 temp3 = (f32)dItem_data::getShadowSize(m_itemNo) / dItem_data::getShadowSize(dItem_GREEN_RUPEE_e);
     temp3 *= scale.x;
     particleScale.setall(temp3);
     
-    dComIfGp_particle_setShipTail(0x33, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
+    dComIfGp_particle_setShipTail(dPa_name::ID_COMMON_0033, &current.pos, NULL, &particleScale, 0xFF, &mPtclRippleCb);
     mPtclRippleCb.mRate = 0.0f;
 }
 
@@ -1244,7 +1256,7 @@ void daItem_c::mode_water_init() {
 void daItem_c::mode_wait() {
     if (checkFlag(FLAG_UNK04) && dItem_data::checkAppearEffect(m_itemNo)) {
         u16 appearEffect = dItem_data::getAppearEffect(m_itemNo);
-        dComIfGp_particle_setSimple(appearEffect, &current.pos, 0xFF, g_whiteColor, g_whiteColor, 0);
+        dComIfGp_particle_setSimple(appearEffect, &current.pos);
     }
     
     switch (m_itemNo) {
@@ -1270,7 +1282,9 @@ void daItem_c::mode_wait() {
         break;
     case dItem_SMALL_MAGIC_e:
     case dItem_LARGE_MAGIC_e:
+#if VERSION > VERSION_DEMO
     case dItem_JOY_PENDANT_e:
+#endif
     case dItem_SKULL_NECKLACE_e:
     case dItem_BOKOBABA_SEED_e:
     case dItem_GOLDEN_FEATHER_e:
@@ -1290,18 +1304,18 @@ void daItem_c::mode_wait() {
         break;
     }
     
-    if (mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y ||
+    if ((mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y) ||
         (daSea_ChkArea(current.pos.x, current.pos.z) && daSea_calcWave(current.pos.x, current.pos.z) > current.pos.y))
     {
         mode_water_init();
     }
     
-    dBgS_ObjGndChk_Yogan gndChk;
+    dBgS_ObjGndChk_Yogan lavaChk;
     cXyz temp;
     temp.set(old.pos.x, old.pos.y, old.pos.z);
-    gndChk.SetPos(&temp);
-    f32 groundY = dComIfG_Bgsp()->GroundCross(&gndChk);
-    if (groundY != -1000000000.0f && groundY > current.pos.y) {
+    lavaChk.SetPos(&temp);
+    f32 lavaY = dComIfG_Bgsp()->GroundCross(&lavaChk);
+    if (lavaY != -G_CM3D_F_INF && lavaY > current.pos.y) {
         fopAcM_delete(this);
     }
 }
@@ -1346,17 +1360,21 @@ BOOL daItem_c::initAction() {
             scale.setall(0.0f);
             mItemStatus = STATUS_WAIT_BOSS1;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+#if VERSION > VERSION_DEMO
             mRotateSpeed = 0x4A8;
+#endif
             break;
         case daItemAct_BOSS_e:
             scale.setall(1.0f);
             mItemStatus = STATUS_WAIT_BOSS2;
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
+#if VERSION > VERSION_DEMO
             mRotateSpeed = 0x4A8;
+#endif
             break;
         }
         
-        gravity = getData()->mGravity;
+        fopAcM_SetGravity(this, getData()->mGravity);
         clrFlag(FLAG_UNK04);
         mMode = MODE_WAIT;
         
@@ -1457,7 +1475,7 @@ static BOOL daItem_Delete(daItem_c* i_this) {
 }
 
 /* 800F89D0-800F89F0       .text daItem_Create__FP10fopAc_ac_c */
-static s32 daItem_Create(fopAc_ac_c* i_this) {
+static cPhs_State daItem_Create(fopAc_ac_c* i_this) {
     return ((daItem_c*)i_this)->_daItem_create();
 }
 
@@ -1489,11 +1507,11 @@ dCcD_SrcCyl daItem_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 static actor_method_class l_daItem_Method = {
@@ -1514,7 +1532,7 @@ actor_process_profile_definition g_profile_ITEM = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F5,
+    /* Priority     */ PRIO_ITEM,
     /* Actor SubMtd */ &l_daItem_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ACTOR_e,

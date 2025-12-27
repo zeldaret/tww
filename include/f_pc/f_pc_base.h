@@ -10,12 +10,8 @@
 
 typedef unsigned int fpc_ProcID;
 
-typedef struct create_request create_request;
-typedef struct process_method_class process_method_class;
-typedef struct profile_method_class profile_method_class;
-
 typedef struct base_process_class {
-    /* 0x00 */ u32 mBsType;
+    /* 0x00 */ int mBsType;
     /* 0x04 */ fpc_ProcID mBsPcId;
     /* 0x08 */ s16 mProcName;
     /* 0x0A */ s8 mUnk0;
@@ -32,22 +28,17 @@ typedef struct base_process_class {
     /* 0xA8 */ process_method_class* mpPcMtd;
     /* 0xAC */ void* mpUserData;
     /* 0xB0 */ u32 mParameters;
-    /* 0xB4 */ u32 mSubType;
+    /* 0xB4 */ int mSubType;
 } base_process_class;  // Size: 0xB8
 
 BOOL fpcBs_Is_JustOfType(int pType1, int pType2);
-s32 fpcBs_MakeOfType(int* pType);
+int fpcBs_MakeOfType(int* pType);
 fpc_ProcID fpcBs_MakeOfId(void);
-s32 fpcBs_Execute(base_process_class* pProc);
+BOOL fpcBs_Execute(base_process_class* pProc);
 void fpcBs_DeleteAppend(base_process_class* pProc);
-s32 fpcBs_IsDelete(base_process_class* pProc);
-s32 fpcBs_Delete(base_process_class* pProc);
+BOOL fpcBs_IsDelete(base_process_class* pProc);
+BOOL fpcBs_Delete(base_process_class* pProc);
 base_process_class* fpcBs_Create(s16 pProcTypeID, fpc_ProcID pProcID, void* pData);
-s32 fpcBs_SubCreate(base_process_class* pProc);
-
-extern "C" {
-void fpcBs_MakeOfType__FPi(void);
-void fpcBs_Is_JustOfType__Fii(void);
-}
+cPhs_State fpcBs_SubCreate(base_process_class* pProc);
 
 #endif

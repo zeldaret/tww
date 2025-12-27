@@ -114,7 +114,6 @@ public:
             mItemIsSoldOut[i] = false;
         }
     }
-    ~ShopItems_c() {}
     
     BOOL isSoldOutItem(s16 i) { return mItemIsSoldOut[i] == true; }
     BOOL isHide() { return mbIsHide; }

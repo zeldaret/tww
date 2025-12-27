@@ -3,49 +3,51 @@
 // Translation Unit: d_a_obj_msdan.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
-void daObjMsdan::Act_c::Mthd_Create() {
+cPhs_State daObjMsdan::Act_c::Mthd_Create() {
     /* Nonmatching */
 }
 
 /* 000003D4-000005C0       .text Mthd_Execute__Q210daObjMsdan5Act_cFv */
-void daObjMsdan::Act_c::Mthd_Execute() {
+BOOL daObjMsdan::Act_c::Mthd_Execute() {
     /* Nonmatching */
 }
 
 /* 000005C0-000005F0       .text Mthd_Delete__Q210daObjMsdan5Act_cFv */
-void daObjMsdan::Act_c::Mthd_Delete() {
+BOOL daObjMsdan::Act_c::Mthd_Delete() {
     /* Nonmatching */
 }
 
 namespace daObjMsdan {
 namespace {
 /* 000005F0-00000610       .text Mthd_Create__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-void Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 00000610-00000630       .text Mthd_Delete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-void Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 00000630-00000650       .text Mthd_Execute__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-void Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMsdan::Act_c*)i_this)->Mthd_Execute();
 }
 
 /* 00000650-00000658       .text Mthd_Draw__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-void Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void*) {
+    return TRUE;
 }
 
 /* 00000658-00000660       .text Mthd_IsDelete__Q210daObjMsdan27@unnamed@d_a_obj_msdan_cpp@FPv */
-void Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void*) {
+    return TRUE;
 }
 
 static actor_method_class Mthd_Msdan = {
@@ -68,7 +70,7 @@ actor_process_profile_definition g_profile_Obj_Msdan = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0038,
+    /* Priority     */ PRIO_Obj_Msdan,
     /* Actor SubMtd */ &daObjMsdan::Mthd_Msdan,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

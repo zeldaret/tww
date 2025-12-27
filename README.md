@@ -20,6 +20,7 @@ All GameCube versions are supported:
 - `GZLE01`: Rev 0 (USA), Rev 48 (KOR)
 - `GZLP01`: Rev 0 (PAL)
 - `GZLJ01`: Rev 0 (JPN)
+- `D44J01`: Kiosk demo (JPN)
 
 Dependencies
 ============
@@ -41,21 +42,14 @@ macOS:
   ```
   brew install ninja
   ```
-- Install [wine-crossover](https://github.com/Gcenx/homebrew-wine):
-  ```
-  brew install --cask --no-quarantine gcenx/wine/wine-crossover
-  ```
 
-After OS upgrades, if macOS complains about `Wine Crossover.app` being unverified, you can unquarantine it using:
-```sh
-sudo xattr -rd com.apple.quarantine '/Applications/Wine Crossover.app'
-```
+[wibo](https://github.com/decompals/wibo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
 
 Linux:
 ------
 - Install [ninja](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages).
-- For non-x86(_64) platforms: Install wine from your package manager.
-  - For x86(_64), [WiBo](https://github.com/decompals/WiBo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
+
+[wibo](https://github.com/decompals/wibo), a minimal 32-bit Windows binary wrapper, will be automatically downloaded and used.
 
 Building
 ========
@@ -99,19 +93,19 @@ Ghidra is a tool that automatically decompiles code. Although Ghidra's output is
 We have a shared Ghidra project for TWW already set up. To get access to this server:
 
 * Go to https://ghidra.decomp.dev and link your Discord account.
+* Create a Ghidra account by entering a new username and password into the form on the right.
 * Request "Read" access to the WindWaker server.
 
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
 
-* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/de/temurin/releases/).
+* To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/temurin/releases/).
 * Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
 * Launch Ghidra with `ghidraRun`.
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
     * Server Name: ghidra.decomp.dev
     * Port Number: 13100
-    * User ID: `put your own username here`
-    * Password: changeme
-* After logging in, change your password as prompted so that it's not "changeme".
+    * User ID: (the username that you chose earlier)
+    * Password: (the password that you chose earlier)
 * You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
 
 Now you have Ghidra set up and ready to use.
@@ -119,3 +113,8 @@ Now you have Ghidra set up and ready to use.
 For an introduction on how to use Ghidra, you can read [this section of the Twilight Princess decompilation's guide](https://zsrtp.link/contribute/decompiler-setup#using-ghidra).
 
 Optionally, you may also want to also request "Read" access to the TwilightPrincess server on https://ghidra.decomp.dev and set that Ghidra project up too, even if you are not interested in working on that game. The reason for this is that a significant amount of engine code is shared between The Wind Waker and Twilight Princess, and the debug version of Twilight Princess (called `shield_chn_debug` in the Ghidra project) is easier to work with because inline functions are not inlined in that version. It can be worth checking if the function you're working on is present in that game as well.
+
+Contributing
+=======
+
+If you've got all the requirements set up and want to learn how to contribute to the decompilation effort, see [this guide](/docs/decompiling.md) for details.

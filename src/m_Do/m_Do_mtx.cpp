@@ -3,13 +3,28 @@
 // Translation Unit: m_Do_mtx.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_mtx.h"
 #include "dolphin/mtx/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
+Mtx mDoMtx_stack_c::now;
+Mtx mDoMtx_stack_c::buffer[16];
+
+Mtx* mDoMtx_stack_c::next = mDoMtx_stack_c::buffer;
+Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + ARRAY_SIZE(mDoMtx_stack_c::buffer);
+
+mDoMtx_stack_c mDoMtx_stack;
+
+mDoMtx_quatStack_c mDoMtx_quatStack;
+
+Mtx g_mDoMtx_identity = {
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+};
 
 /* 8000CB48-8000CBEC       .text mDoMtx_XYZrotM__FPA4_fsss */
 void mDoMtx_XYZrotM(Mtx mtx, s16 x, s16 y, s16 z) {
@@ -281,12 +296,6 @@ void mDoMtx_MtxToRot(const Mtx m, csXyz* o_rot) {
     }
 }
 
-Mtx mDoMtx_stack_c::now;
-Mtx mDoMtx_stack_c::buffer[16];
-
-Mtx* mDoMtx_stack_c::next = mDoMtx_stack_c::buffer;
-Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + ARRAY_SIZE(mDoMtx_stack_c::buffer);
-
 /* 8000D74C-8000D7CC       .text push__14mDoMtx_stack_cFv */
 bool mDoMtx_stack_c::push() {
     if (next >= end) {
@@ -343,13 +352,3 @@ void mDoMtx_stack_c::quatM(const Quaternion* param_0) {
     mDoMtx_quat(tmp, param_0);
     mDoMtx_concat(now, tmp, now);
 }
-
-mDoMtx_stack_c mDoMtx_stack;
-
-mDoMtx_quatStack_c mDoMtx_quatStack;
-
-Mtx g_mDoMtx_identity = {
-    {1.0f, 0.0f, 0.0f, 0.0f},
-    {0.0f, 1.0f, 0.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f, 0.0f},
-};

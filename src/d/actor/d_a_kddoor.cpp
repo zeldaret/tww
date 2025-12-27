@@ -3,8 +3,11 @@
 // Translation Unit: d_a_kddoor.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kddoor.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
 
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 void daKddoor_c::chkMakeKey() {
@@ -114,6 +117,35 @@ void dDoor_ssk_c::openProc(dDoor_info_c*) {
 /* 00000D84-00000DE8       .text init__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::init() {
     /* Nonmatching */
+    static dCcD_SrcCyl body_co_cyl = {
+        // dCcD_SrcGObjInf
+        {
+            /* Flags             */ 0,
+            /* SrcObjAt  Type    */ AT_TYPE_UNK2000,
+            /* SrcObjAt  Atp     */ 1,
+            /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e,
+            /* SrcObjTg  Type    */ 0,
+            /* SrcObjTg  SPrm    */ 0,
+            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
+            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+            /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+            /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
+            /* SrcGObjAt Mtrl    */ 0,
+            /* SrcGObjAt SPrm    */ 0,
+            /* SrcGObjTg Se      */ 0,
+            /* SrcGObjTg HitMark */ 0,
+            /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+            /* SrcGObjTg Mtrl    */ 0,
+            /* SrcGObjTg SPrm    */ 0,
+            /* SrcGObjCo SPrm    */ 0,
+        },
+        // cM3dGCylS
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 15.0f,
+            /* Height */ 300.0f,
+        }},
+    };
 }
 
 /* 00000DE8-00000E14       .text end__15dDoor_ssk_sub_cFv */
@@ -227,7 +259,7 @@ void daKddoor_c::CreateInit() {
 }
 
 /* 0000220C-000023CC       .text create__10daKddoor_cFv */
-s32 daKddoor_c::create() {
+cPhs_State daKddoor_c::create() {
     /* Nonmatching */
 }
 
@@ -262,8 +294,8 @@ BOOL daKddoor_c::draw() {
 }
 
 /* 000029E0-00002A00       .text daKddoor_Draw__FP10daKddoor_c */
-static BOOL daKddoor_Draw(daKddoor_c*) {
-    /* Nonmatching */
+static BOOL daKddoor_Draw(daKddoor_c* i_this) {
+    return ((daKddoor_c*)i_this)->draw();
 }
 
 /* 00002A00-00002AF4       .text daKddoor_Execute__FP10daKddoor_c */
@@ -273,7 +305,7 @@ static BOOL daKddoor_Execute(daKddoor_c*) {
 
 /* 00002AF4-00002AFC       .text daKddoor_IsDelete__FP10daKddoor_c */
 static BOOL daKddoor_IsDelete(daKddoor_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00002AFC-00002C44       .text daKddoor_Delete__FP10daKddoor_c */
@@ -282,8 +314,8 @@ static BOOL daKddoor_Delete(daKddoor_c*) {
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
-static s32 daKddoor_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daKddoor_Create(fopAc_ac_c* i_this) {
+    return ((daKddoor_c*)i_this)->create();
 }
 
 static actor_method_class l_daKddoor_Method = {
@@ -304,7 +336,7 @@ actor_process_profile_definition g_profile_KDDOOR = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0131,
+    /* Priority     */ PRIO_KDDOOR,
     /* Actor SubMtd */ &l_daKddoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

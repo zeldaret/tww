@@ -54,7 +54,7 @@ public:
     BOOL ExeSubM();
     BOOL ExeSubM2();
     BOOL ExeSubM3();
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     u32 TriforceCheck();
 #else
     u32 TriforceCheck(daAgb_c*);
@@ -91,7 +91,7 @@ public:
     static void incTclBeat();
     
     inline BOOL draw();
-    inline int create();
+    inline cPhs_State create();
     inline BOOL execute();
     inline void deleteSub();
     

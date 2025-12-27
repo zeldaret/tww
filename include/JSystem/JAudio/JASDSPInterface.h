@@ -8,13 +8,15 @@ namespace JASystem {
         struct Wave_ {
             /* 0x00 */ u8 field_0x0;
             /* 0x01 */ u8 field_0x1;
-            /* 0x02 */ u8 field_0x2[0x10 - 0x2];
+            /* 0x02 */ u8 field_0x2;
+            /* 0x03 */ u8 field_0x3[0x10 - 0x3];
             /* 0x10 */ int field_0x10;
             /* 0x14 */ int field_0x14;
             /* 0x18 */ int field_0x18;
             /* 0x1C */ int field_0x1c;
             /* 0x20 */ short field_0x20;
             /* 0x22 */ short field_0x22;
+            /* 0x24 */ u32* field_0x24;
         };
     }
     namespace DSPInterface {
@@ -121,6 +123,22 @@ namespace JASystem {
         void setupBuffer();
         void initBuffer();
         FXBuffer* getFXHandle(u8 param_1);
+
+        // TODO inlines
+        inline void boot(void (*)(void*)) {}
+        inline void finishWork(u16) {}
+        inline void flushChannel(u8) {}
+        inline void restart() {}
+        inline void setBusConnect(u8, u8, u8) {}
+        inline bool setFXLine(u8 i, s16* buffer, FxlineConfig_* config) {
+            return getFXHandle(i)->setFXLine(buffer, config);
+        }
+        inline void setMixerInitDelayMax(u8, u8) {}
+        inline void setMixerInitVolume(u8, u8, s16, u8) {}
+        inline void setMixerVolume(u8, u8, s16, u8) {}
+        inline void setPauseFlag(u8, u8) {}
+        inline void setPitch(u8, u16) {}
+        inline void sync(u32, u32, u32) {}
 
         extern u16 SEND_TABLE[12];
         extern u32 DOLBY2_DELAY_BUF[];

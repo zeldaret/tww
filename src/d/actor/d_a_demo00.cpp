@@ -3,6 +3,7 @@
 // Translation Unit: d_a_demo00.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo00.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -11,9 +12,11 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
+#include "d/d_item.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_demo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -21,6 +24,10 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "string.h"
+
+static void dummy() {
+    OSReport("V_24_tri_joint");
+}
 
 /* 800E595C-800E598C       .text reset__16daDemo00_resID_cFv */
 void daDemo00_resID_c::reset() {
@@ -50,11 +57,13 @@ void daDemo00_model_c::reset() {
     shadow = NULL;
 }
 
+#if VERSION > VERSION_DEMO
 daDemo00_c::~daDemo00_c() {
     if (heap != NULL && model.morf != NULL) {
         model.morf->stopZelAnime();
     }
 }
+#endif
 
 /* 800E5A60-800E5AFC       .text setBaseMtx__10daDemo00_cFv */
 void daDemo00_c::setBaseMtx() {
@@ -69,8 +78,8 @@ void daDemo00_c::setBaseMtx() {
 void daDemo00_c::setShadowSize() {
     J3DModelData* modelData = model.model->getModelData();
 
-    cXyz min(1000000000.0f, 1000000000.0f, 1000000000.0f);
-    cXyz max(-1000000000.0f, -1000000000.0f, -1000000000.0f);
+    cXyz min(100000000.0f, 100000000.0f, 100000000.0f);
+    cXyz max(-100000000.0f, -100000000.0f, -100000000.0f);
 
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         J3DJoint* joint = modelData->getJointNodePointer(i);
@@ -107,7 +116,11 @@ BOOL awaCheck(J3DModel* model) {
         if (texName != NULL) {
             for (u16 i = 0; i < tex->getNum(); i++) {
                 const char* name = texName->getName(i);
-                if (strcmp(name, "B_dummy") == 0 || strcmp(name, "cy_kankyo") == 0) {
+                if (strcmp(name, "B_dummy") == 0
+#if VERSION > VERSION_DEMO
+                    || strcmp(name, "cy_kankyo") == 0
+#endif
+                ) {
                     J3DSkinDeform* deform = new J3DSkinDeform();
                     if (deform == NULL)
                         return FALSE;
@@ -115,7 +128,10 @@ BOOL awaCheck(J3DModel* model) {
                     if (model->setSkinDeform(deform, 1) != J3DErrType_Success)
                         return FALSE;
 
-                    if (strcmp(name, "B_dummy") == 0) {
+#if VERSION > VERSION_DEMO
+                    if (strcmp(name, "B_dummy") == 0)
+#endif
+                    {
                         tex->setResTIMG(i, *mDoGph_gInf_c::getFrameBufferTimg());
                         mDoExt_modelTexturePatch(modelData);
                     }
@@ -134,12 +150,15 @@ static BOOL createHeapCallBack(fopAc_ac_c* i_this) {
 /* 800E6014-800E6620       .text createHeap__10daDemo00_cFv */
 BOOL daDemo00_c::createHeap() {
     /* Nonmatching */
+    J3DModelData* modelData;
+    JUT_ASSERT(0, modelData != NULL);
+    void* anm;
+    JUT_ASSERT(0, anm != NULL);
 }
 
 /* 800E6620-800E6758       .text actStandby__10daDemo00_cFP13dDemo_actor_c */
 BOOL daDemo00_c::actStandby(dDemo_actor_c* act) {
-    /* Nonmatching */
-    if (nextRes.modelID != 0xFFFF || nextRes.plightID != 0xFFFF) {
+    if (nextRes.modelID != -1 || nextRes.plightID != -1) {
         model.resID = nextRes;
         if (fopAcM_entrySolidHeap(this, createHeapCallBack, 0x4000) != 0) {
             if (model.model != NULL) {
@@ -164,10 +183,11 @@ BOOL daDemo00_c::actPerformance(dDemo_actor_c*) {
 
 /* 800E6E2C-800E6E90       .text actLeaving__10daDemo00_cFP13dDemo_actor_c */
 BOOL daDemo00_c::actLeaving(dDemo_actor_c* act) {
-    /* Nonmatching */
+#if VERSION > VERSION_DEMO
     if (model.morf != NULL) {
         model.morf->stopZelAnime();
     }
+#endif
 
     fopAcM_DeleteHeap(this);
     setAction(&daDemo00_c::actStandby);
@@ -182,6 +202,9 @@ static BOOL daDemo00_Draw(daDemo00_c* i_this) {
 /* 800E6EB0-800E7204       .text draw__10daDemo00_cFv */
 BOOL daDemo00_c::draw() {
     /* Nonmatching */
+#if VERSION > VERSION_DEMO
+    OSReport("GTower");
+#endif
 }
 
 /* 800E7204-800E7224       .text daDemo00_Execute__FP10daDemo00_c */
@@ -191,7 +214,204 @@ static BOOL daDemo00_Execute(daDemo00_c* i_this) {
 
 /* 800E7224-800E78A0       .text execute__10daDemo00_cFv */
 BOOL daDemo00_c::execute() {
-    /* Nonmatching */
+#if VERSION > VERSION_DEMO
+    field_0x29e = 0;
+#endif
+
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(demoActorID);
+    if (demo_actor == NULL) {
+        fopAcM_delete(this);
+    } else {
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_SHAPE_e)) {
+            nextRes.modelID = demo_actor->getShapeId();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_ANM_e)) {
+            nextRes.bckID = demo_actor->getAnmId();
+        }
+        if (demo_actor->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+#if VERSION > VERSION_DEMO
+            u8 r29 = field_0x29c;
+#endif
+            field_0x29c = demo_actor->getPrm()->getId();
+            if (field_0x29c == 4) {
+                static const u16 l_eventBit[] = {
+                    -1,
+                    dSv_event_flag_c::UNK_2A80,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2401,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2110,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::UNK_2D01,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                    dSv_event_flag_c::COLORS_IN_HYRULE,
+                };
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spCC(data);
+                if (!spCC.isEnd() && spCC.isValid()) {
+                    TValueIterator_raw<u8> it = spCC.begin();
+                    int argID = *it;
+                    JUT_ASSERT(DEMO_SELECT(771, 832), argID < (sizeof(l_eventBit)/sizeof(u16)));
+                    if (l_eventBit[argID] != 0xFFFF) {
+                        dComIfGs_onEventBit(l_eventBit[argID]);
+                    }
+                }
+            } else if (field_0x29c == 5) {
+                static const u8 l_itemNo[] = {
+                    dItem_MASTER_SWORD_1_e,
+                    dItem_MASTER_SWORD_2_e,
+                    dItem_MASTER_SWORD_3_e,
+                    dItem_PEARL_DIN_e,
+                    dItem_PEARL_FARORE_e,
+                    dItem_PEARL_NAYRU_e,
+                    dItem_DELIVERY_BAG_e,
+                    dItem_SHIELD_e,
+                    dItem_MAGIC_ARROW_e,
+                    dItem_NONE_e,
+                };
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > spB8(data);
+                if (!spB8.isEnd() && spB8.isValid()) {
+                    TValueIterator_raw<u8> it = spB8.begin();
+                    int argID = *it;
+                    JUT_ASSERT(DEMO_SELECT(797, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
+                    if (l_itemNo[argID] != dItem_NONE_e) {
+                        execItemGet(l_itemNo[argID]);
+                    }
+                }
+            } else if (field_0x29c == 6) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<33, TValueIterator_misaligned<s8> > spA4(data);
+                if (!spA4.isEnd() && spA4.isValid()) {
+                    TValueIterator_misaligned<s8> it = spA4.begin();
+                    int argID = *it;
+                    mDoGph_gInf_c::setMonotoneRateSpeed(argID);
+                }
+            } else if (field_0x29c == 7) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<49, TValueIterator_raw<u8> > sp90(data);
+                if (!sp90.isEnd() && sp90.isValid()) {
+                    TValueIterator_raw<u8> it = sp90.begin();
+                    int argID = *it;
+                    if (argID < 100) {
+                        dComIfGp_getVibration().StartShock(argID, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    } else if (argID != 0xFF) {
+                        dComIfGp_getVibration().StartQuake(argID - 100, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    } else {
+                        dComIfGp_getVibration().StopQuake(1);
+                    }
+                }
+            } else if (field_0x29c == 9 || field_0x29c == 10) {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<33, TValueIterator_raw<s8> > sp7C(data);
+                if (!sp7C.isEnd() && sp7C.isValid()) {
+                    TValueIterator_raw<s8> it = sp7C.begin();
+                    int r4 = *it;
+#if VERSION > VERSION_DEMO
+                    if (field_0x29c != r29 || r4 != field_0x29d)
+#endif
+                    {
+#if VERSION > VERSION_DEMO
+                        field_0x29d = r4;
+#endif
+                        s8 r5 = 0;
+                        if (++it != sp7C.end()) {
+                            r5 = (int)*it;
+                        }
+                        if ((s8)r4 == 0) {
+                            mDoGph_gInf_c::startFadeOut(r5);
+                        } else {
+                            mDoGph_gInf_c::startFadeIn(r5);
+                        }
+                        
+                        JUtility::TColor& fade_color = field_0x29c == 9 ? (JUtility::TColor&)g_blackColor : (JUtility::TColor&)g_saftyWhiteColor;
+                        mDoGph_gInf_c::setFadeColor(fade_color);
+                    }
+                }
+            } else {
+                dDemo_prm_data* data = demo_actor->getPrm()->getData();
+                JStudio::stb::TParseData_fixed<51, TValueIterator_misaligned<u32> > sp68(data);
+                if (!sp68.isEnd() && sp68.isValid()) {
+                    int r5 = -1;
+                    for (TValueIterator_misaligned<u32> it = sp68.begin(); it != sp68.end(); it++) {
+                        if (r5 < 0) {
+                            r5 = *it;
+                        } else {
+                            if (r5 == 0) {
+                                nextRes.btpID = *it;
+                            } else if (r5 == 1) {
+                                nextRes.btkID = *it;
+                            } else if (r5 == 2) {
+                                nextRes.plightID = *it;
+                            } else if (r5 == 3) {
+                                nextRes.field_0x1C = *it;
+                            } else if (r5 == 4) {
+                                nextRes.brkID = *it;
+                            } else if (r5 == 5) {
+                                nextRes.shadowID = *it;
+                            } else if (r5 == 6) {
+#if VERSION == VERSION_DEMO
+                                nextRes.btkID = *it | 0x10000;
+#else
+                                nextRes.btkID = *it | 0x10000000;
+#endif
+                            } else if (r5 == 7) {
+#if VERSION == VERSION_DEMO
+                                nextRes.brkID = *it | 0x10000;
+#else
+                                nextRes.brkID = *it | 0x10000000;
+#endif
+                            }
+                            r5 = -1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        action(demo_actor);
+    }
+    return TRUE;
 }
 
 /* 800E78A0-800E78A8       .text daDemo00_IsDelete__FP10daDemo00_c */
@@ -206,13 +426,15 @@ static BOOL daDemo00_Delete(daDemo00_c* i_this) {
 }
 
 /* 800E78D0-800E7964       .text daDemo00_Create__FP10fopAc_ac_c */
-static s32 daDemo00_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daDemo00_Create(fopAc_ac_c* i_ac) {
     daDemo00_c* i_this = (daDemo00_c*)i_ac;
     fopAcM_SetupActor(i_this, daDemo00_c);
     dKy_tevstr_init(&i_this->tevStr, dComIfGp_roomControl_getStayNo(), 0xFF);
     i_this->setAction(&daDemo00_c::actStandby);
     i_this->nextRes.reset();
+#if VERSION > VERSION_DEMO
     i_this->field_0x29d = -1;
+#endif
     return cPhs_COMPLEATE_e;
 }
 
@@ -234,7 +456,7 @@ actor_process_profile_definition g_profile_DEMO00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x018D,
+    /* Priority     */ PRIO_DEMO00,
     /* Actor SubMtd */ &l_daDemo00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

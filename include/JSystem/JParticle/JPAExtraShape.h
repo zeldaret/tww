@@ -4,7 +4,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 
 struct JPAExtraShapeData {
-    /* 0x00 */ u32 mFlag;
+    /* 0x00 */ u32 mFlags;
     /* 0x04 */ u32 field_0x04;
     /* 0x08 */ f32 mAlphaInTiming;
     /* 0x0C */ f32 mAlphaOutTiming;
@@ -29,7 +29,7 @@ struct JPAExtraShapeData {
     /* 0x54 */ f32 mRotateRandomAngle;
     /* 0x58 */ f32 mRotateRandomSpeed;
     /* 0x5C */ f32 mRotateDirection;
-};
+};  // Size: 0x60
 
 class JPAExtraShape {
 public:
@@ -80,41 +80,41 @@ class JPAExtraShapeArc : public JPAExtraShape {
 public:
     JPAExtraShapeArc(const u8*);
     virtual ~JPAExtraShapeArc() {}
-    virtual BOOL isEnableScale() { return (mpData->mFlag & 0x100); }
-    virtual BOOL isDiffXY() { return (mpData->mFlag & 0x200); }
-    virtual BOOL isEnableScaleAnmX() { return (mpData->mFlag & 0x800); }
-    virtual BOOL isEnableScaleAnmY() { return (mpData->mFlag & 0x400); }
-    virtual BOOL isEnableScaleBySpeedX() { return (mpData->mFlag & 0x2000); }
-    virtual BOOL isEnableScaleBySpeedY() { return (mpData->mFlag & 0x1000); }
+    virtual BOOL isEnableScale() { return (mpData->mFlags & 0x100); }
+    virtual BOOL isDiffXY() { return (mpData->mFlags & 0x200); }
+    virtual BOOL isEnableScaleAnmX() { return (mpData->mFlags & 0x800); }
+    virtual BOOL isEnableScaleAnmY() { return (mpData->mFlags & 0x400); }
+    virtual BOOL isEnableScaleBySpeedX() { return (mpData->mFlags & 0x2000); }
+    virtual BOOL isEnableScaleBySpeedY() { return (mpData->mFlags & 0x1000); }
     virtual f32 getScaleInTiming() { return mpData->mScaleInTiming; }
     virtual f32 getScaleOutTiming() { return mpData->mScaleOutTiming; }
     virtual f32 getScaleInValueX() { return mpData->mScaleInValueX; }
     virtual f32 getScaleInValueY() { return mpData->mScaleInValueY; }
-    virtual u8 getAnmTypeX() { return (mpData->mFlag >> 18) & 0x01; }
-    virtual u8 getAnmTypeY() { return (mpData->mFlag >> 19) & 0x01; }
+    virtual u8 getAnmTypeX() { return (mpData->mFlags >> 18) & 0x01; }
+    virtual u8 getAnmTypeY() { return (mpData->mFlags >> 19) & 0x01; }
     virtual s16 getAnmCycleX() { return mpData->mAnmCycleX; }
     virtual s16 getAnmCycleY() { return mpData->mAnmCycleY; }
     virtual f32 getIncreaseRateX() { return mIncreaseRateX; }
     virtual f32 getIncreaseRateY() { return mIncreaseRateY; }
     virtual f32 getDecreaseRateX() { return mDecreaseRateX; }
     virtual f32 getDecreaseRateY() { return mDecreaseRateY; }
-    virtual u8 getPivotX() { return (mpData->mFlag >> 14) & 0x03; }
-    virtual u8 getPivotY() { return (mpData->mFlag >> 16) & 0x03; }
+    virtual u8 getPivotX() { return (mpData->mFlags >> 14) & 0x03; }
+    virtual u8 getPivotY() { return (mpData->mFlags >> 16) & 0x03; }
     virtual f32 getRandomScale() { return mpData->mRandomScale; }
-    virtual BOOL isEnableAlpha() { return (mpData->mFlag & 0x01); }
-    virtual BOOL isEnableSinWave() { return (mpData->mFlag & 0x02); }
+    virtual BOOL isEnableAlpha() { return (mpData->mFlags & 0x01); }
+    virtual BOOL isEnableSinWave() { return (mpData->mFlags & 0x02); }
     virtual f32 getAlphaInTiming() { return mpData->mAlphaInTiming; }
     virtual f32 getAlphaOutTiming() { return mpData->mAlphaOutTiming; }
     virtual f32 getAlphaInValue() { return mpData->mAlphaInValue; }
     virtual f32 getAlphaBaseValue() { return mpData->mAlphaBaseValue; }
-    virtual u8 getAlphaWaveType() { return (mpData->mFlag >> 2) & 0x03; }
+    virtual u8 getAlphaWaveType() { return (mpData->mFlags >> 2) & 0x03; }
     virtual f32 getAlphaWaveParam1() { return mpData->mAlphaWaveParam1; }
     virtual f32 getAlphaWaveParam2() { return mpData->mAlphaWaveParam2; }
     virtual f32 getAlphaWaveParam3() { return mpData->mAlphaWaveParam3; }
     virtual f32 getAlphaWaveRandom() { return mpData->mAlphaWaveRandom; }
     virtual f32 getAlphaIncreaseRate() { return mAlphaIncreaseRate; }
     virtual f32 getAlphaDecreaseRate() { return mAlphaDecreaseRate; }
-    virtual BOOL isEnableRotate() { return (mpData->mFlag & 0x01000000); }
+    virtual BOOL isEnableRotate() { return (mpData->mFlags & 0x01000000); }
     virtual f32 getRotateAngle() { return mpData->mRotateAngle; }
     virtual f32 getRotateSpeed() { return mpData->mRotateSpeed; }
     virtual f32 getRotateRandomAngle() { return mpData->mRotateRandomAngle; }

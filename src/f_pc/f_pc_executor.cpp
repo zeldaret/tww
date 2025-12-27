@@ -27,9 +27,9 @@ BOOL fpcEx_IsExist(fpc_ProcID i_id) {
 }
 
 /* 8003D63C-8003D690       .text fpcEx_Execute__FP18base_process_class */
-s32 fpcEx_Execute(base_process_class* i_proc) {
+BOOL fpcEx_Execute(base_process_class* i_proc) {
     if (i_proc->mInitState != 2 || fpcPause_IsEnable(i_proc, 1) == 1)
-        return 0;
+        return FALSE;
     return fpcBs_Execute(i_proc);
 }
 
@@ -39,7 +39,8 @@ s32 fpcEx_ToLineQ(base_process_class* i_proc) {
     base_process_class* pLayerPcNode = &pLayer->mpPcNode->base;
 
     if (pLayer->mLayerID == 0 || cTg_IsUse(&pLayerPcNode->mLnTg.base) == TRUE) {
-        s32 ret = fpcLnTg_ToQueue(&i_proc->mLnTg, i_proc->mPi.mInfoCurr.mListID);
+        u16 listID = i_proc->mPi.mInfoCurr.mListID;
+        s32 ret = fpcLnTg_ToQueue(&i_proc->mLnTg, listID);
         if (ret == 0) {
             fpcLyTg_QueueTo(&i_proc->mLyTg);
             return 0;
@@ -58,25 +59,25 @@ s32 fpcEx_ToLineQ(base_process_class* i_proc) {
 }
 
 /* 8003D73C-8003D788       .text fpcEx_ExecuteQTo__FP18base_process_class */
-s32 fpcEx_ExecuteQTo(base_process_class* i_proc) {
-    s32 ret = fpcLyTg_QueueTo(&i_proc->mLyTg);
-    if (ret == 1) {
+BOOL fpcEx_ExecuteQTo(base_process_class* i_proc) {
+    BOOL ret = fpcLyTg_QueueTo(&i_proc->mLyTg);
+    if (ret == TRUE) {
         i_proc->mInitState = 3;
-        return 1;
+        return TRUE;
     } else {
-        return 0;
+        return FALSE;
     }
 }
 
 /* 8003D788-8003D7E0       .text fpcEx_ToExecuteQ__FP18base_process_class */
-s32 fpcEx_ToExecuteQ(base_process_class* i_proc) {
-    s32 ret = fpcLyTg_ToQueue(&i_proc->mLyTg, i_proc->mPi.mInfoCurr.mLayer,
+BOOL fpcEx_ToExecuteQ(base_process_class* i_proc) {
+    BOOL ret = fpcLyTg_ToQueue(&i_proc->mLyTg, i_proc->mPi.mInfoCurr.mLayer,
                               i_proc->mPi.mInfoCurr.mListID, i_proc->mPi.mInfoCurr.mListPrio);
-    if (ret == 1) {
+    if (ret == TRUE) {
         fpcEx_ToLineQ(i_proc);
-        return 1;
+        return TRUE;
     } else {
-        return 0;
+        return FALSE;
     }
 }
 

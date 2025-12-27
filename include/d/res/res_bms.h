@@ -1,7 +1,7 @@
 #ifndef RES_BMS_H
 #define RES_BMS_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BMS_RES_FILE_ID {
     /* BMDM */

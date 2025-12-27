@@ -3,6 +3,7 @@
 // Translation Unit: d_demo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_demo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
@@ -12,12 +13,12 @@
 /* 800692C4-80069330       .text __ct__13dDemo_actor_cFv */
 dDemo_actor_c::dDemo_actor_c() {
     mFlags = 0;
-    mTranslation.setall(0.0f);
-    mScaling.setall(1.0f);
-    mRotation.setall(0);
+    mTrans.setall(0.0f);
+    mScale.setall(1.0f);
+    mRotate.setall(0);
     mModel = NULL;
-    mAnimationFrameMax = 3.402823e+38;
-    mTexAnimationFrameMax = 3.402823e+38;
+    mAnmFrameMax = FLOAT_MAX;
+    mTexAnimationFrameMax = FLOAT_MAX;
 }
 
 /* 80069330-800693C0       .text __dt__13dDemo_actor_cFv */
@@ -26,8 +27,8 @@ dDemo_actor_c::~dDemo_actor_c() {
     if (actor) {
         actor->demoActorID = 0;
     }
-    mActorPcId = fpcM_ERROR_PROCESS_ID_e;
-    mBckId = -1;
+    mActorId = fpcM_ERROR_PROCESS_ID_e;
+    mOldAnmId = -1;
     mBtpId = -1;
     mBtkId = -1;
     mBrkId = -1;
@@ -35,25 +36,25 @@ dDemo_actor_c::~dDemo_actor_c() {
 
 /* 800693C0-800693F4       .text getActor__13dDemo_actor_cFv */
 fopAc_ac_c* dDemo_actor_c::getActor() {
-    return fopAcM_SearchByID(mActorPcId);
+    return fopAcM_SearchByID(mActorId);
 }
 
 /* 800693F4-80069434       .text setActor__13dDemo_actor_cFP10fopAc_ac_c */
 void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
     if (ac == NULL)
-        mActorPcId = fpcM_ERROR_PROCESS_ID_e;
+        mActorId = fpcM_ERROR_PROCESS_ID_e;
     else
-        mActorPcId = fopAcM_GetID(ac);
-    mBckId = -1;
+        mActorId = fopAcM_GetID(ac);
+    mOldAnmId = -1;
     mBtpId = -1;
     mBtkId = -1;
     mBrkId = -1;
 }
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtpData(const char* name) {
+J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
     /* Nonmatching */
-    if (!(mFlags & 1))
+    if (!checkEnable(ENABLE_UNK_e))
         return NULL;
 }
 
@@ -63,75 +64,138 @@ void* dDemo_actor_c::getP_BrkData(const char*) {
 }
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
-void* dDemo_actor_c::getP_BtkData(const char*) {
+J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char*) {
     /* Nonmatching */
 }
 
 /* 8006969C-80069838       .text getPrm_Morf__13dDemo_actor_cFv */
 f32 dDemo_actor_c::getPrm_Morf() {
-    /* Nonmatching */
+    if (checkEnable(ENABLE_ANM_FRAME_e)) {
+        return mAnmTransition;
+    }
+
+    if (!checkEnable(ENABLE_UNK_e)) {
+        return 0.0f;
+    }
+
+    dDemo_prm_data* prm = mPrm.mData;
+
+    switch (mPrm.mId) {
+    case ID_UNK_1:
+        if (field_0x54 < 4) {
+            return 0.0f;
+        }
+        return prm->field_0x4;
+    case ID_UNK_2:
+        if (field_0x54 < 7) {
+            return 0.0f;
+        }
+        return prm->field_0x7;
+    case ID_UNK_4:
+        if (field_0x54 < 6) {
+            return 0.0f;
+        }
+        return prm->field_0x6;
+    case ID_UNK_5:
+        if (field_0x54 < 0xB) {
+            return 0.0f;
+        }
+        return prm->field_0xb;
+    case ID_UNK_6:
+        if (field_0x54 < 0xF) {
+            return 0.0f;
+        }
+        return prm->field_0xf;
+    default:
+        return 0.0f;
+    }
 }
 
 /* 80069838-800698C0       .text dDemo_getJaiPointer__FPCcUliPUs */
 void* dDemo_getJaiPointer(const char* a_name, u32 bck, int num, u16* tbl) {
-    /* Nonmatching */
     if (num <= 0 || tbl == NULL)
         return NULL;
-    for (s32 i = 0; i < num; i++)
-        if (tbl[i*2 + 0] == bck)
-            return dComIfG_getObjectIDRes(a_name, tbl[i*2 + 1]);
+
+    int i;
+    int var_r31;
+    for (i = var_r31 = 0; i < num; i++, var_r31 += 2)
+        if (tbl[var_r31 + 0] == (bck & 0xFFFF))
+            return dComIfG_getObjectIDRes(a_name, tbl[var_r31 + 1]);
+
     return NULL;
 }
 
+#if VERSION == VERSION_DEMO
+BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, const char* i_arcName,
+                       int p5, u16* p6)
+#else
 /* 800698C0-80069BC0       .text dDemo_setDemoData__FP10fopAc_ac_cUcP14mDoExt_McaMorfPCciPUsUlSc */
-BOOL dDemo_setDemoData(fopAc_ac_c* ac, u8 flag, mDoExt_McaMorf* morf, const char* a_name, int p5, u16* p6, u32 mtrlSndId, s8 reverb) {
-    /* Nonmatching */
-    dDemo_actor_c* demoActor = dComIfGp_demo_getActor(ac->demoActorID);
-    if (demoActor == NULL)
+BOOL dDemo_setDemoData(fopAc_ac_c* i_actor, u8 i_flags, mDoExt_McaMorf* i_morf, const char* i_arcName,
+                       int p5, u16* p6, u32 mtrlSndId, s8 i_reverb)
+#endif
+{
+    dDemo_actor_c* demo_actor = dComIfGp_demo_getActor(i_actor->demoActorID);
+    if (demo_actor == NULL)
         return FALSE;
 
-    u32 enable = demoActor->checkEnable(flag);
-    if (enable & 2) {
-        ac->current.pos = demoActor->mTranslation;
-        ac->old.pos = ac->current.pos;
+    u8 flags = demo_actor->checkEnable(i_flags);
+    if (flags & dDemo_actor_c::ENABLE_TRANS_e) {
+        i_actor->old.pos = i_actor->current.pos = *demo_actor->getTrans();
     }
-    if (enable & 8) {
-        ac->shape_angle = demoActor->mRotation;
-        ac->current.angle = ac->shape_angle;
+    if (flags & dDemo_actor_c::ENABLE_ROTATE_e) {
+        i_actor->current.angle = i_actor->shape_angle = *demo_actor->getRatate();
     }
-    if (enable & 4) {
-        ac->scale = demoActor->mScaling;
+    if (flags & dDemo_actor_c::ENABLE_SCALE_e) {
+        i_actor->scale = *demo_actor->getScale();
     }
 
-    if (morf == NULL)
+    if (i_morf == NULL)
         return TRUE;
 
-    demoActor->mModel = morf->getModel();
+    demo_actor->setModel(i_morf->getModel());
 
-    if ((enable & 0x20)) {
-        int bck = demoActor->mNextBckId;
-        if (bck & 0x10000)
-            a_name = dStage_roomControl_c::getDemoArcName();
-        JUT_ASSERT(0, a_name != NULL);
-        demoActor->mBckId = bck;
-
-        J3DAnmTransform* i_key = (J3DAnmTransform*)dComIfG_getObjectIDRes(a_name, bck);
-        JUT_ASSERT(0, i_key != NULL);
-
-        void* i_sound = dDemo_getJaiPointer(a_name, bck, p5, p6);
-        morf->setAnm(i_key, -1, demoActor->getPrm_Morf(), 1.0f, 0.0f, -1.0f, i_sound);
-        demoActor->mAnimationFrameMax = morf->getEndFrame();
-
-        if (enable & 0x40) {
-            if (demoActor->mAnimationFrame > 1.0f) {
-                morf->setFrame(demoActor->mAnimationFrame - 1.0f);
-                morf->play(&ac->current.pos, mtrlSndId, reverb);
+    if (flags & dDemo_actor_c::ENABLE_ANM_e) {
+        int anmID = demo_actor->getAnmId();
+        if (anmID != demo_actor->getOldAnmId()) {
+            const char* a_name;
+            if (anmID & 0x10000) {
+                a_name = dStage_roomControl_c::getDemoArcName();
+                JUT_ASSERT(397, a_name != NULL);
             } else {
-                morf->setFrame(demoActor->mAnimationFrame);
+                a_name = i_arcName;
             }
-        } else {
-            morf->play(&ac->current.pos, mtrlSndId, reverb);
+
+            demo_actor->setOldAnmId(anmID);
+
+            J3DAnmTransform* i_key = (J3DAnmTransform*)dComIfG_getObjectIDRes(a_name, anmID & 0xFFFF);
+            JUT_ASSERT(408, i_key != NULL);
+
+            void* i_sound = dDemo_getJaiPointer(a_name, anmID & 0xFFFF, p5, p6);
+            f32 f1 = demo_actor->getPrm_Morf();
+            i_morf->setAnm(i_key, -1, f1, 1.0f, 0.0f, -1.0f, i_sound);
+            demo_actor->setAnmFrameMax(i_morf->getEndFrame());
         }
+    }
+
+    if (flags & dDemo_actor_c::ENABLE_ANM_FRAME_e) {
+        f32 anm_frame = demo_actor->getAnmFrame();
+        if (anm_frame > 1.0f) {
+            anm_frame -= 1.0f;
+            i_morf->setFrame(anm_frame);
+#if VERSION == VERSION_DEMO
+            i_morf->play(&i_actor->current.pos, 0, 0);
+#else
+            i_morf->play(&i_actor->current.pos, mtrlSndId, i_reverb);
+#endif
+        } else {
+            i_morf->setFrame(anm_frame);
+        }
+    } else {
+#if VERSION == VERSION_DEMO
+        i_morf->play(&i_actor->current.pos, 0, 0);
+#else
+        i_morf->play(&i_actor->current.pos, mtrlSndId, i_reverb);
+#endif
     }
 
     return TRUE;
@@ -139,67 +203,67 @@ BOOL dDemo_setDemoData(fopAc_ac_c* ac, u8 flag, mDoExt_McaMorf* morf, const char
 
 /* 80069BC0-80069BDC       .text JSGSetData__13dDemo_actor_cFUlPCvUl */
 void dDemo_actor_c::JSGSetData(u32 p0, const void* p1, u32 p2) {
-    field_0x4c = p0;
-    field_0x50 = p1;
+    mPrm.mId = p0;
+    mPrm.mData = (dDemo_prm_data*)p1;
     field_0x54 = p2;
-    mFlags |= 0x01;
+    onEnable(ENABLE_UNK_e);
 }
 
 /* 80069BDC-80069C04       .text JSGSetTranslation__13dDemo_actor_cFRC3Vec */
 void dDemo_actor_c::JSGSetTranslation(const Vec& v) {
-    mTranslation = v;
-    mFlags |= 0x02;
+    mTrans = v;
+    onEnable(ENABLE_TRANS_e);
 }
 
 /* 80069C04-80069C2C       .text JSGSetScaling__13dDemo_actor_cFRC3Vec */
 void dDemo_actor_c::JSGSetScaling(const Vec& v) {
-    mScaling = v;
-    mFlags |= 0x04;
+    mScale = v;
+    onEnable(ENABLE_SCALE_e);
 }
 
 /* 80069C2C-80069C90       .text JSGSetRotation__13dDemo_actor_cFRC3Vec */
 void dDemo_actor_c::JSGSetRotation(const Vec& v) {
-    mRotation.x = cM_deg2s(v.x);
-    mRotation.y = cM_deg2s(v.y);
-    mRotation.z = cM_deg2s(v.z);
-    mFlags |= 0x08;
+    mRotate.x = cM_deg2s(v.x);
+    mRotate.y = cM_deg2s(v.y);
+    mRotate.z = cM_deg2s(v.z);
+    onEnable(ENABLE_ROTATE_e);
 }
 
 /* 80069C90-80069CA4       .text JSGSetShape__13dDemo_actor_cFUl */
 void dDemo_actor_c::JSGSetShape(u32 id) {
     mShapeId = id;
-    mFlags |= 0x10;
+    onEnable(ENABLE_SHAPE_e);
 }
 
 /* 80069CA4-80069CC0       .text JSGSetAnimation__13dDemo_actor_cFUl */
 void dDemo_actor_c::JSGSetAnimation(u32 no) {
-    mNextBckId = no;
-    mAnimationFrameMax = 3.402823e+38;
-    mFlags |= 0x20;
+    mAnmId = no;
+    mAnmFrameMax = FLOAT_MAX;
+    onEnable(ENABLE_ANM_e);
 }
 
 /* 80069CC0-80069CD4       .text JSGSetAnimationFrame__13dDemo_actor_cFf */
 void dDemo_actor_c::JSGSetAnimationFrame(f32 v) {
-    mAnimationFrame = v;
-    mFlags |= 0x40;
+    mAnmFrame = v;
+    onEnable(ENABLE_ANM_FRAME_e);
 }
 
 /* 80069CD4-80069CE8       .text JSGSetAnimationTransition__13dDemo_actor_cFf */
 void dDemo_actor_c::JSGSetAnimationTransition(f32 v) {
-    mAnimationTransition = v;
-    mFlags |= 0x40;
+    mAnmTransition = v;
+    onEnable(ENABLE_ANM_FRAME_e);
 }
 
 /* 80069CE8-80069CFC       .text JSGSetTextureAnimation__13dDemo_actor_cFUl */
 void dDemo_actor_c::JSGSetTextureAnimation(u32 no) {
     mTexAnimation = no;
-    mFlags |= 0x80;
+    onEnable(ENABLE_TEX_ANM);
 }
 
 /* 80069CFC-80069D10       .text JSGSetTextureAnimationFrame__13dDemo_actor_cFf */
 void dDemo_actor_c::JSGSetTextureAnimationFrame(f32 v) {
     mTexAnimationFrame = v;
-    mFlags |= 0x100;
+    onEnable(ENABLE_TEX_ANM_FRAME_e);
 }
 
 /* 80069D10-80069D44       .text getView__Fv */
@@ -221,7 +285,7 @@ f32 dDemo_camera_c::JSGGetProjectionNear() const {
 /* 80069D78-80069D8C       .text JSGSetProjectionNear__14dDemo_camera_cFf */
 void dDemo_camera_c::JSGSetProjectionNear(f32 v) {
     mProjNear = v;
-    mFlags |= 0x01;
+    onEnable(ENABLE_PROJ_NEAR_e);
 }
 
 /* 80069D8C-80069DC0       .text JSGGetProjectionFar__14dDemo_camera_cCFv */
@@ -235,7 +299,7 @@ f32 dDemo_camera_c::JSGGetProjectionFar() const {
 /* 80069DC0-80069DD4       .text JSGSetProjectionFar__14dDemo_camera_cFf */
 void dDemo_camera_c::JSGSetProjectionFar(f32 v) {
     mProjFar = v;
-    mFlags |= 0x02;
+    onEnable(ENABLE_PROJ_FAR_e);
 }
 
 /* 80069DD4-80069E08       .text JSGGetProjectionFovy__14dDemo_camera_cCFv */
@@ -249,21 +313,21 @@ f32 dDemo_camera_c::JSGGetProjectionFovy() const {
 /* 80069E08-80069E1C       .text JSGSetProjectionFovy__14dDemo_camera_cFf */
 void dDemo_camera_c::JSGSetProjectionFovy(f32 v) {
     mFovy = v;
-    mFlags |= 0x04;
+    onEnable(ENABLE_PROJ_FOVY_e);
 }
 
 /* 80069E1C-80069E50       .text JSGGetProjectionAspect__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetProjectionAspect() const {
     camera_class* view = getView();
     if (view == NULL)
-        return 1.3333f;
+        return (4.0f/3.0f);
     return view->mAspect;
 }
 
 /* 80069E50-80069E64       .text JSGSetProjectionAspect__14dDemo_camera_cFf */
 void dDemo_camera_c::JSGSetProjectionAspect(f32 v) {
     mAspect = v;
-    mFlags |= 0x08;
+    onEnable(ENABLE_PROJ_ASPECT_e);
 }
 
 /* 80069E64-80069EC0       .text JSGGetViewPosition__14dDemo_camera_cCFP3Vec */
@@ -280,7 +344,7 @@ void dDemo_camera_c::JSGGetViewPosition(Vec* dst) const {
 /* 80069EC0-80069EE8       .text JSGSetViewPosition__14dDemo_camera_cFRC3Vec */
 void dDemo_camera_c::JSGSetViewPosition(const Vec& v) {
     mViewPosition = v;
-    mFlags |= 0x10;
+    onEnable(ENABLE_VIEW_POS_e);
 }
 
 /* 80069EE8-80069F48       .text JSGGetViewUpVector__14dDemo_camera_cCFP3Vec */
@@ -297,7 +361,7 @@ void dDemo_camera_c::JSGGetViewUpVector(Vec* dst) const {
 /* 80069F48-80069F70       .text JSGSetViewUpVector__14dDemo_camera_cFRC3Vec */
 void dDemo_camera_c::JSGSetViewUpVector(const Vec& v) {
     mUpVector = v;
-    mFlags |= 0x20;
+    onEnable(ENABLE_VIEW_UP_VEC_e);
 }
 
 /* 80069F70-80069FD0       .text JSGGetViewTargetPosition__14dDemo_camera_cCFP3Vec */
@@ -314,7 +378,7 @@ void dDemo_camera_c::JSGGetViewTargetPosition(Vec* dst) const {
 /* 80069FD0-80069FF8       .text JSGSetViewTargetPosition__14dDemo_camera_cFRC3Vec */
 void dDemo_camera_c::JSGSetViewTargetPosition(const Vec& v) {
     mTargetPosition = v;
-    mFlags |= 0x40;
+    onEnable(ENABLE_VIEW_TARG_POS_e);
 }
 
 /* 80069FF8-8006A050       .text JSGGetViewRoll__14dDemo_camera_cCFv */
@@ -328,31 +392,31 @@ f32 dDemo_camera_c::JSGGetViewRoll() const {
 /* 8006A050-8006A064       .text JSGSetViewRoll__14dDemo_camera_cFf */
 void dDemo_camera_c::JSGSetViewRoll(f32 v) {
     mRoll = v;
-    mFlags |= 0x80;
+    onEnable(ENABLE_VIEW_ROLL_e);
 }
 
 /* 8006A064-8006A094       .text JSGSetColor__15dDemo_ambient_cF8_GXColor */
 void dDemo_ambient_c::JSGSetColor(GXColor color) {
     mColor = color;
-    mFlags |= 0x01;
+    onEnable(ENABLE_COLOR_e);
 }
 
 /* 8006A094-8006A0A8       .text JSGSetLightType__13dDemo_light_cFQ26JStage7TELight */
 void dDemo_light_c::JSGSetLightType(JStage::TELight type) {
     mLightType = type;
-    mFlags |= 0x01;
+    onEnable(ENABLE_LIGHT_TYPE_e);
 }
 
 /* 8006A0A8-8006A0D0       .text JSGSetPosition__13dDemo_light_cFRC3Vec */
 void dDemo_light_c::JSGSetPosition(const Vec& v) {
     mPosition = v;
-    mFlags |= 0x02;
+    onEnable(ENABLE_POSITION_e);
 }
 
 /* 8006A0D0-8006A100       .text JSGSetColor__13dDemo_light_cF8_GXColor */
 void dDemo_light_c::JSGSetColor(GXColor v) {
     mColor = v;
-    mFlags |= 0x04;
+    onEnable(ENABLE_COLOR_e);
 }
 
 /* 8006A100-8006A11C       .text JSGSetDistanceAttenuation__13dDemo_light_cFff13_GXDistAttnFn */
@@ -360,51 +424,51 @@ void dDemo_light_c::JSGSetDistanceAttenuation(f32 ref0, f32 ref1, GXDistAttnFn f
     mDistAttn0 = ref0;
     mDistAttn1 = ref1;
     mAttnFn = fn;
-    mFlags |= 0x08;
+    onEnable(ENABLE_DIST_ATTEN_e);
 }
 
 /* 8006A11C-8006A134       .text JSGSetAngleAttenuation__13dDemo_light_cFf9_GXSpotFn */
 void dDemo_light_c::JSGSetAngleAttenuation(f32 ref, GXSpotFn fn) {
     mAngleAttn = ref;
     mSpotFn = fn;
-    mFlags |= 0x10;
+    onEnable(ENABLE_ANGLE_ATTEN_e);
 }
 
 /* 8006A134-8006A15C       .text JSGSetDirection__13dDemo_light_cFRC3Vec */
 void dDemo_light_c::JSGSetDirection(const Vec& v) {
     mDirection = v;
-    mFlags |= 0x20;
+    onEnable(ENABLE_DIRECTION_e);
 }
 
 /* 8006A15C-8006A170       .text JSGSetFogFunction__11dDemo_fog_cF10_GXFogType */
 void dDemo_fog_c::JSGSetFogFunction(GXFogType type) {
     mFogType = type;
-    mFlags |= 0x01;
+    onEnable(ENABLE_FOG_FN_e);
 }
 
 /* 8006A170-8006A184       .text JSGSetStartZ__11dDemo_fog_cFf */
 void dDemo_fog_c::JSGSetStartZ(f32 v) {
     mStartZ = v;
-    mFlags |= 0x02;
+    onEnable(ENABLE_START_Z_e);
 }
 
 /* 8006A184-8006A198       .text JSGSetEndZ__11dDemo_fog_cFf */
 void dDemo_fog_c::JSGSetEndZ(f32 v) {
     mEndZ = v;
-    mFlags |= 0x04;
+    onEnable(ENABLE_END_Z_e);
 }
 
 /* 8006A198-8006A1C8       .text JSGSetColor__11dDemo_fog_cF8_GXColor */
 void dDemo_fog_c::JSGSetColor(GXColor color) {
     mColor = color;
-    mFlags |= 0x08;
+    onEnable(ENABLE_COLOR_e);
 }
 
 /* 8006A1C8-8006A1E4       .text __ct__14dDemo_object_cFv */
 dDemo_object_c::dDemo_object_c() {
     mNumActor = 0;
     mNumLight = 0;
-    mpActiveCamera = NULL;
+    mpCamera = NULL;
     mpAmbient = NULL;
     mpFog = NULL;
 }
@@ -442,17 +506,17 @@ dDemo_actor_c* dDemo_object_c::getActor(u8 no) {
 
 /* 8006A31C-8006A398       .text createCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::createCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (mpCamera != NULL)
+        return mpCamera;
 
-    mpActiveCamera = new dDemo_camera_c();
-    return mpActiveCamera;
+    mpCamera = new dDemo_camera_c();
+    return mpCamera;
 }
 
 /* 8006A398-8006A3AC       .text getActiveCamera__14dDemo_object_cFv */
 dDemo_camera_c* dDemo_object_c::getActiveCamera() {
-    if (mpActiveCamera != NULL)
-        return mpActiveCamera;
+    if (getCamera() != NULL)
+        return getCamera();
     return NULL;
 }
 
@@ -492,9 +556,9 @@ void dDemo_object_c::remove() {
     while (mNumActor)
         delete mpActors[--mNumActor];
 
-    if (mpActiveCamera != NULL) {
-        delete mpActiveCamera;
-        mpActiveCamera = NULL;
+    if (mpCamera != NULL) {
+        delete mpCamera;
+        mpCamera = NULL;
     }
 
     if (mpAmbient != NULL) {
@@ -519,7 +583,7 @@ void* dDemo_system_c::JSGFindObject(const char* name, JStage::TEObject type) con
     if (type == JStage::TOBJ_ACTOR || type == JStage::TOBJ_ACTOR_UNK) {
         fopAc_ac_c* ac = fopAcM_searchFromName((char*)name, 0, 0);
         if (ac == NULL) {
-            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", 5) == 0) {
+            if (type == JStage::TOBJ_ACTOR && strncmp(name, "d_act", sizeof("d_act")-1) == 0) {
                 ac = (fopAc_ac_c*)fopAcM_fastCreate((char*)name, 0);
                 if (ac == NULL)
                     return NULL;

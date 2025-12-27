@@ -3,6 +3,7 @@
 // Translation Unit: d_door.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_door.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_vibration.h"
@@ -89,7 +90,11 @@ s32 dDoor_info_c::frontCheckOld() {
     cSAngle angle1;
     angle1 = (globe.U() - current.angle.y);
     s16 angle = angle1.Abs();
+#if VERSION == VERSION_DEMO
+    if (angle < 0x4000)
+#else
     if (angle < 0x4000 && angle >= 0)
+#endif
         return 0;
     else
         return 1;
@@ -107,7 +112,7 @@ s32 dDoor_info_c::frontCheck() {
 
 /* 8006B6F4-8006B824       .text drawCheck_local__12dDoor_info_cFv */
 s32 dDoor_info_c::drawCheck_local() {
-    if (!adjoinPlayer() && !eventInfo.checkCommandDemoAccrpt() && !eventInfo.checkCommandDoor())
+    if (!adjoinPlayer() && eventInfo.checkCommandDemoAccrpt() == FALSE && eventInfo.checkCommandDoor() ==  FALSE)
         return 0;
 
     if (getFRoomNo() == 0x3F || getBRoomNo() == 0x3F)
@@ -133,7 +138,7 @@ s32 dDoor_info_c::drawCheck_local() {
 }
 
 /* 8006B824-8006B8AC       .text drawCheck__12dDoor_info_cFi */
-u8 dDoor_info_c::drawCheck(int mode) {
+s32 dDoor_info_c::drawCheck(int mode) {
     s32 rt = drawCheck_local();
     if (rt != 0) {
         if (mode) {
@@ -148,7 +153,7 @@ u8 dDoor_info_c::drawCheck(int mode) {
 }
 
 /* 8006B8AC-8006B954       .text checkExecute__12dDoor_info_cFv */
-u8 dDoor_info_c::checkExecute() {
+s32 dDoor_info_c::checkExecute() {
     mFrontCheck = frontCheck();
     if (fopAcM_CheckStatus(this, fopAcStts_UNK1000_e))
         return 1;
@@ -170,7 +175,7 @@ void dDoor_info_c::startDemoProc() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
     shape_angle.y = current.angle.y;
-    JUT_ASSERT(0x112, player);
+    JUT_ASSERT(DEMO_SELECT(271, 274), player);
     s16 delta = player->home.angle.y - home.angle.y;
     if (delta < 0)
         delta = -delta;
@@ -200,14 +205,19 @@ void dDoor_info_c::makeEventId(int spl) {
         mEventIdx[i] = dComIfGp_evmng_getEventIdx(table[i], mToolId[i]);
     }
 
+    s16 r27;
     switch (spl) {
     case 1:
-        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[2]);
-        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[3]);
+        r27 = 2;
+        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[r27]);
+        r27 = 3;
+        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_10", mToolId[r27]);
         break;
     case 2:
-        mEventIdx[2] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[2]);
-        mEventIdx[3] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[3]);
+        r27 = 2;
+        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[r27]);
+        r27 = 3;
+        mEventIdx[r27] = dComIfGp_evmng_getEventIdx("DEFAULT_SHUTTER_DOOR_12", mToolId[r27]);
         break;
     }
 }
@@ -220,7 +230,7 @@ void dDoor_info_c::initProc(int spl) {
 
 /* 8006BBB0-8006BC50       .text initOpenDemo__12dDoor_info_cFi */
 void dDoor_info_c::initOpenDemo(int evt) {
-    if (field_0x2c6 != 9)
+    if (m2C6 != 9)
         dComIfGp_map_setAGBMapSendStopFlg();
 
     shape_angle.y = current.angle.y;
@@ -301,13 +311,11 @@ void dDoor_info_c::closeEndCom() {
 
     cXyz pos(current.pos.x - rad * mAngleVec.x, current.pos.y, current.pos.z - rad * mAngleVec.z);
     s8 roomNo = fopAcM_GetRoomNo(player);
-    s16 angle;
-    if (dot > 0.0f) {
-        angle = current.angle.y;
-    } else {
-        angle = current.angle.y + 0x8000;
-    }
-    dComIfGs_setRestartRoom(pos, angle, roomNo);
+    dComIfGs_setRestartRoom(
+        pos,
+        dot > 0.0f ? current.angle.y : (s16)(current.angle.y + 0x8000),
+        roomNo
+    );
 }
 
 /* 8006C0A4-8006C0EC       .text getDemoAction__12dDoor_info_cFv */
@@ -384,18 +392,14 @@ void dDoor_info_c::setPosAndAngle(cXyz* pPos, s16 angle) {
 void dDoor_smoke_c::smokeInit(dDoor_info_c* door) {
     mPos = door->current.pos;
     mRot.y = door->shape_angle.y;
-    JPABaseEmitter* emtr = dComIfGp_particle_set(0x2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, fopAcM_GetRoomNo(door));
+    JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_COMMON_2022, &mPos, &mRot, NULL, 0xAA, &mSmokeCb, fopAcM_GetRoomNo(door));
     m34 = 0;
     m35 = 0;
     if (emtr != NULL) {
         emtr->setRate(16.0f);
         emtr->setSpread(0.35f);
-        emtr->mGlobalDynamicsScale.x = 2.0f;
-        emtr->mGlobalDynamicsScale.y = 2.0f;
-        emtr->mGlobalDynamicsScale.z = 2.0f;
-        emtr->mGlobalParticleScale.x = 2.0f;
-        emtr->mGlobalParticleScale.y = 2.0f;
-        emtr->mGlobalParticleScale.z = 2.0f;
+        JGeometry::TVec3<f32> scale(2.0f, 2.0f, 2.0f);
+        emtr->setGlobalScale(scale);
     }
 }
 
@@ -413,12 +417,12 @@ void dDoor_smoke_c::smokeProc(dDoor_info_c* door) {
 
 /* 8006C41C-8006C448       .text smokeEnd__13dDoor_smoke_cFv */
 void dDoor_smoke_c::smokeEnd() {
-    mSmokeCb.end();
+    mSmokeCb.remove();
 }
 
 /* 8006C448-8006C478       .text keyResLoad__12dDoor_key2_cFv */
-void dDoor_key2_c::keyResLoad() {
-    dComIfG_resLoad(&mPhs, "Key");
+cPhs_State dDoor_key2_c::keyResLoad() {
+    return dComIfG_resLoad(&mPhs, "Key");
 }
 
 /* 8006C478-8006C4A8       .text keyResDelete__12dDoor_key2_cFv */
@@ -461,14 +465,14 @@ BOOL dDoor_key2_c::keyProc() {
 /* 8006C650-8006C764       .text keyCreate_Nkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Nkey() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCN);
-    JUT_ASSERT(0x2cc, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(713, 716), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCN);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
         return FALSE;
 
     return TRUE;
@@ -477,14 +481,14 @@ BOOL dDoor_key2_c::keyCreate_Nkey() {
 /* 8006C764-8006C910       .text keyCreate_Bkey__12dDoor_key2_cFv */
 BOOL dDoor_key2_c::keyCreate_Bkey() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Key", KEY_BDL_VLOCB);
-    JUT_ASSERT(0x2e4, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(737, 740), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpModel == NULL)
         return FALSE;
 
     J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Key", KEY_BCK_VLOCB);
-    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false))
+    if (!mBckAnim.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false))
         return FALSE;
 
     J3DSkinDeform* deform = new J3DSkinDeform();
@@ -495,7 +499,7 @@ BOOL dDoor_key2_c::keyCreate_Bkey() {
     case J3DErrType_OutOfMemory:
         return FALSE;
     default:
-        JUT_ASSERT(0x306, FALSE);
+        JUT_ASSERT(DEMO_SELECT(771, 774), FALSE);
     case J3DErrType_Success:
         return TRUE;
     }
@@ -642,7 +646,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
             mState++;
         break;
     case 2:
-        JUT_ASSERT(0x3ba, m_msg);
+        JUT_ASSERT(DEMO_SELECT(951, 954), m_msg);
         if (m_msg->mStatus == fopMsgStts_MSG_TYPING_e) {
             switch (mMsgId) {
             case 0x1BBD:
@@ -654,7 +658,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
         }
         break;
     case 3:
-        JUT_ASSERT(0x3ca, m_msg);
+        JUT_ASSERT(DEMO_SELECT(967, 970), m_msg);
         if (m_msg->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
             switch (mMsgId) {
             case 0x1BBD:
@@ -683,7 +687,7 @@ BOOL dDoor_msg_c::proc(cXyz* pos) {
 }
 
 /* 8006D0DC-8006D11C       .text resLoad__12dDoor_hkyo_cFv */
-s32 dDoor_hkyo_c::resLoad() {
+cPhs_State dDoor_hkyo_c::resLoad() {
     if (m11 == 0) {
         return cPhs_COMPLEATE_e;
     }
@@ -704,7 +708,7 @@ BOOL dDoor_hkyo_c::create() {
         return TRUE;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hkyo", HKYO_BDL_HKYO1);
-    JUT_ASSERT(0x41c, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1049, 1052), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
     if (mpModel == NULL)
@@ -715,7 +719,7 @@ BOOL dDoor_hkyo_c::create() {
         return FALSE;
 
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", HKYO_BRK_HKYO1B);
-    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0))
+    if (!mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0))
         return FALSE;
 
     return TRUE;
@@ -739,7 +743,7 @@ void dDoor_hkyo_c::setAnm(u8 idx) {
 
     J3DModelData* modelData = mpModel->getModelData();
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Hkyo", fileIndex);
-    mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, true, 0);
+    mpBrkAnm->init(modelData, brk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, 0);
 }
 
 /* 8006D3A8-8006D3B4       .text init__12dDoor_hkyo_cFv */
@@ -776,27 +780,27 @@ void dDoor_hkyo_c::proc(dDoor_info_c* door) {
 
     switch (m11) {
     case 1:
-        if (dComIfGs_isTmpBit(0x108))
+        if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0108))
             setAnm(1);
-        else if (dComIfGs_isTmpBit(0x110))
+        else if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0110))
             setAnm(2);
         else
             setAnm(0);
         break;
     case 4:
-        if (dComIfGs_isEventBit(0x1710))
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1710))
             setAnm(0);
         else
             setAnm(3);
         break;
     case 3:
-        if (!dComIfGs_isTact(2) || dComIfGs_isEventBit(0x1704))
+        if (!dComIfGs_isTact(2) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704))
             setAnm(0);
         else
             setAnm(3);
         break;
     case 2:
-        if (!dComIfGs_isEventBit(0x1704) || dComIfGs_isEventBit(0x1b01))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1B01))
             setAnm(0);
         else
             setAnm(3);
@@ -819,7 +823,7 @@ BOOL dDoor_hkyo_c::chkFirst() {
 
     switch (mAnmIdx) {
     case 1:
-        if (!dComIfGs_isEventBit(0x2602))
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2602))
             return TRUE;
         break;
     }
@@ -830,12 +834,16 @@ BOOL dDoor_hkyo_c::chkFirst() {
 /* 8006D784-8006D7E8       .text onFirst__12dDoor_hkyo_cFv */
 void dDoor_hkyo_c::onFirst() {
     switch (mAnmIdx) {
-    case 1: dComIfGs_onEventBit(0x2602); break;
-    case 2: dComIfGs_onEventBit(0x2601); break;
+    case 1: dComIfGs_onEventBit(dSv_event_flag_c::UNK_2602); break;
+    case 2: dComIfGs_onEventBit(dSv_event_flag_c::UNK_2601); break;
     }
 }
 
 /* 8006D7E8-8006D800       .text chkStart__12dDoor_hkyo_cFv */
 BOOL dDoor_hkyo_c::chkStart() {
-    return daPy_getPlayerActorClass()->getGrabUpEnd();
+    if (daPy_getPlayerActorClass()->getGrabUpEnd()) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }

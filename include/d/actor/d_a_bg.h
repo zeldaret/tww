@@ -42,7 +42,7 @@ public:
     ~daBg_c();
     const char * setArcName();
     inline BOOL createHeap();
-    s32 create();
+    cPhs_State create();
     inline BOOL execute();
     inline BOOL draw();
     inline BOOL isDelete();

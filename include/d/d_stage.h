@@ -1,6 +1,7 @@
 #ifndef D_D_STAGE_H
 #define D_D_STAGE_H
 
+#include "SSystem/SComponent/c_bg_s_poly_info.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
@@ -8,8 +9,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
 #include "f_op/f_op_actor_mng.h"
-
-class JKRExpHeap;
 
 void dStage_SetErrorRoom();
 void dStage_SetErrorStage();
@@ -26,8 +25,21 @@ enum StageType {
     /* 0x08 */ dStageType_UNKNOWN_8_e,
 };
 
-class stage_vrbox_info_class {
-public:
+// made up name
+struct dStage_nodeHeader {
+    /* 0x0 */ u32 m_tag;
+    /* 0x4 */ int m_entryNum;
+    /* 0x8 */ u32 m_offset;
+};
+
+// made up name
+struct dStage_fileHeader {
+    /* 0x0 */ int m_chunkCount;
+    /* 0x4 */ dStage_nodeHeader m_nodes[];
+};
+
+// Virt
+struct stage_vrbox_info_class {
     /* 0x00 */ u32 field_0x00;
     /* 0x04 */ u32 field_0x04;
     /* 0x08 */ u32 field_0x08;
@@ -37,81 +49,73 @@ public:
     /* 0x18 */ color_RGB_class mSkyColor;
     /* 0x1B */ color_RGB_class mUsoUmiColor;
     /* 0x1E */ color_RGB_class mKasumiMaeColor;
-};
+};  // Size: 0x24
 
-class stage_tresure_data_class {
-public:
-    /* 0x00 */ char mName[8];
-    /* 0x08 */ u32 mParameter;
-    /* 0x0C */ cXyz mSpawnPos;
-    /* 0x18 */ csXyz mAngle;
-    /* 0x1E */ u16 mSetId;
-
-    stage_tresure_data_class() {}
-    ~stage_tresure_data_class() {}
+// TRES
+struct stage_tresure_data_class {
+    /* 0x00 */ char name[8];
+    /* 0x08 */ fopAcM_prmBase_class base;
 };  // Size: 0x20
 
-class stage_tresure_class {
-public:
+struct stage_tresure_class {
     /* 0x00 */ int num;
     /* 0x04 */ stage_tresure_data_class* m_entries;
 };
 
+// STAG
 struct stage_stag_info_class {
-    /* 0x00 */ f32 field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ u8 mDefaultCameraType;
-    /* 0x09 */ u8 field_0x09;
-    /* 0x0A */ u16 field_0x0a;
-    /* 0x0C */ u32 field_0x0c;
-    /* 0x10 */ u32 field_0x10;
+    /* 0x00 */ f32 mNearPlane;
+    /* 0x04 */ f32 mFarPlane;
+    /* 0x08 */ u8 mCameraMapToolID;
+    /* 0x09 */ u8 mProp;
+    /* 0x0A */ u16 mParticleSceneNo;
+    /* 0x0C */ u32 mStageTypeAndSchbit;
+    /* 0x10 */ u32 mSchbitEnableAndFarPlane; // High 16 bits are the schbit enable, low 16 bits are the far plane
     /* 0x14 */ u32 field_0x14;
     /* 0x18 */ u32 field_0x18;
     /* 0x1C */ u32 field_0x1c;
-};
+};  // Size: 0x20
 
+// SCLS
 struct stage_scls_info_class {
     /* 0x0 */ char mStage[8];
     /* 0x8 */ u8 mStart;
     /* 0x9 */ u8 mRoom;
     /* 0xA */ u8 mWipe;
     /* 0xB */ u8 field_0xb;
-};
+};  // Size: 0xC
 
 struct stage_scls_info_dummy_class {
     /* 0x00 */ int num;
     /* 0x04 */ stage_scls_info_class* m_entries;
 };
 
-class stage_lightvec_info_class {
-public:
-    /* 0x00 */ Vec mPos;
-    /* 0x0C */ f32 mRadius;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
+// LGTV
+struct stage_lightvec_info_class {
+    /* 0x00 */ Vec position;
+    /* 0x0C */ f32 radius;
+    /* 0x10 */ u8 field_0x10[0x18 - 0x10];
     /* 0x18 */ u8 field_0x18[0x1B - 0x18];
-    /* 0x1B */ u8 mFluctuation;
-};
+    /* 0x1B */ u8 fluctuation;
+};  // Size: 0x1C
 
-class stage_pselect_info_class {
-public:
-    /* 0x0 */ u8 mPalIdx[8];
-    /* 0x8 */ f32 mChangeRate;
-};
+// COLO
+struct stage_pselect_info_class {
+    /* 0x0 */ u8 palette_id[8];
+    /* 0x8 */ f32 change_rate;
+};  // Size: 0xC
 
+// LGHT
 struct stage_plight_info_class {
-    /* 0x00 */ Vec mPos;
-    /* 0x0C */ f32 mRadius;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ u8 mColorR;
-    /* 0x19 */ u8 mColorG;
-    /* 0x1A */ u8 mColorB;
-    /* 0x1B */ u8 mFluctuation;
-};
+    /* 0x00 */ Vec position;
+    /* 0x0C */ f32 radius;
+    /* 0x10 */ u8 field_0x10[0x18 - 0x10];
+    /* 0x18 */ color_RGB_class color;
+    /* 0x1B */ u8 fluctuation;
+};  // Size: 0x1C
 
-class stage_palet_info_class {
-public:
+// Pale
+struct stage_palet_info_class {
     /* 0x00 */ color_RGB_class mActor_C0;
     /* 0x03 */ color_RGB_class mActor_K0;
     /* 0x06 */ color_RGB_class mBG0_C0;
@@ -126,55 +130,58 @@ public:
     /* 0x21 */ u8 mVirtIdx;
     /* 0x24 */ f32 mFogStartZ;
     /* 0x28 */ f32 mFogEndZ;
-};
+};  // Size: 0x2C
 
-class stage_map_info_class {
-public:
-    /* 0x00 */ u8 field_0x00[0x18 - 0x00];
+// 2Dma / 2DMA
+struct stage_map_info_class {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;
     /* 0x1C */ f32 field_0x1C;
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 field_0x24;
-    /* 0x28 */ u32 field_0x28;
-    /* 0x2C */ u32 field_0x2c;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
     /* 0x30 */ f32 field_0x30;
     /* 0x34 */ u8 field_0x34;
     /* 0x35 */ u8 field_0x35;
     /* 0x36 */ u8 mOceanXZ;
     /* 0x37 */ u8 field_0x37[0x38 - 0x37];
-};
+};  // Size: 0x38
 
 struct stage_map_info_dummy_class {
-    int num;
-    stage_map_info_class* m_entries;
+    /* 0x0 */ int num;
+    /* 0x4 */ stage_map_info_class* m_entries;
 };
 
-class stage_envr_info_class {
-public:
-    /* 0x0 */ u8 mPselIdx[8];
-};
+// EnvR
+struct stage_envr_info_class {
+    /* 0x0 */ u8 pselect_id[8];
+};  // Size: 0x8
 
+// CAMR / RCAM
 struct stage_camera2_data_class {
-    /* 0x00 */ int field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
-    /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ u8 field_0x10;
+    /* 0x00 */ char m_cam_type[16];
+    /* 0x10 */ u8 m_arrow_idx;
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u16 field_0x14;
-    /* 0x16 */ u16 field_0x16;
-};  // Size: 0x18
+};  // Size: 0x14
 
 struct stage_camera_class {
     /* 0x0 */ int num;
     /* 0x4 */ stage_camera2_data_class* m_entries;
 };
 
+// AROB / RARO
 struct stage_arrow_data_class {
-    /* 0x00 */ cXyz mPosition;
-    /* 0x0C */ csXyz mAngle;
+    /* 0x00 */ cXyz position;
+    /* 0x0C */ csXyz angle;
+    /* 0x12 */ s16 field_0x12;
 };  // Size: 0x14
 
 struct stage_arrow_class {
@@ -182,58 +189,73 @@ struct stage_arrow_class {
     /* 0x04 */ stage_arrow_data_class* m_entries;
 };
 
-class stage_actor_data_class {
-public:
-    /* 0x00 */ char mName[8];
-    /* 0x08 */ u32 mParameter;
-    /* 0x0C */ cXyz mSpawnPos;
-    /* 0x18 */ csXyz mAngle;
-    /* 0x1E */ u16 mSetId;
+// ACT
+struct stage_actor_data_class {
+    /* 0x00 */ char name[8];
+    /* 0x08 */ fopAcM_prmBase_class base;
 };  // Size: 0x20
 
-class stage_actor_class {
-public:
+struct stage_actor_class {
     /* 0x0 */ int num;
     /* 0x4 */ stage_actor_data_class* m_entries;
 };
 
-class stage_tgsc_data_class : public stage_actor_data_class {
-public:
-    fopAcM_prmScale_class mScale;
-
-    stage_tgsc_data_class() {}
-    ~stage_tgsc_data_class() {}
+// TGSC / SCOB / DOOR / TGDR
+struct stage_tgsc_data_class {
+    /* 0x00 */ char name[8];
+    /* 0x08 */ fopAcM_prmBase_class base;
+    /* 0x20 */ fopAcM_prmScale_class scale;
 };  // Size: 0x24
 
-class stage_tgsc_class {
-public:
+struct stage_tgsc_class {
     /* 0x00 */ int num;
     /* 0x04 */ stage_tgsc_data_class* m_entries;
 };
 
+// RTBL
 struct roomRead_data_class {
-    /* 0x0 */ u8 mRoomCount;
+    /* 0x0 */ u8 num;
     /* 0x1 */ u8 field_0x1;
     /* 0x2 */ u8 field_0x2;
-    /* 0x4 */ u8* mpRooms;
-};
+    /* 0x4 */ u8* m_rooms;
+};  // Size: 0x8
 
 struct roomRead_class {
     /* 0x0 */ int num;
     /* 0x4 */ roomRead_data_class** m_entries;
 };
 
+// MEMA
 struct dStage_MemoryMap_c {
     /* 0x0 */ int num;
     /* 0x4 */ u32* m_entries;
 };
 
+// MECO
+struct dStage_MemoryConfig_data {
+    /* 0x0 */ u8 m_roomNo;
+    /* 0x1 */ u8 m_blockID;
+};  // Size: 0x2
+
+struct dStage_MemoryConfig_c {
+    /* 0x0 */ int num;
+    /* 0x4 */ dStage_MemoryConfig_data* m_entries;
+};
+
+// PATH / RPAT
 struct dPath;
 struct dStage_dPath_c {
     /* 0x0 */ int num;
     /* 0x4 */ dPath* m_path;
 };
 
+// PPNT / RPPN
+struct dStage_dPnt_c {
+    /* 0x0 */ int num;
+    /* 0x4 */ u32 m_pnt_offset;
+};  // Size: 0x8
+
+// MULT
 struct dStage_Mult_info {
     /* 0x0 */ f32 mTransX;
     /* 0x4 */ f32 mTransY;
@@ -242,12 +264,12 @@ struct dStage_Mult_info {
     /* 0xB */ u8 mWaveMax;
 };  // Size: 0xC
 
-class dStage_Multi_c {
-public:
+struct dStage_Multi_c {
     /* 0x0 */ int num;
     /* 0x4 */ dStage_Mult_info* m_entries;
 };
 
+// SOND
 struct stage_sound_data {
     /* 0x00 */ char field_0x0[8];
     /* 0x08 */ Vec field_0x8;
@@ -265,65 +287,52 @@ struct dStage_SoundInfo_c {
     /* 0x4 */ stage_sound_data* m_entries;
 };
 
-class dStage_FileList_dt_c {
-public:
+// FILI
+struct dStage_FileList_dt_c {
     /* 0x0 */ u32 mParam;
     /* 0x4 */ f32 mSeaLevel;
-};
+};  // Size: 0x8
 
-struct dStage_dPnt_c {
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ u8 field_0x2;
-    /* 0x3 */ u8 field_0x3;
-    /* 0x4 */ cXyz m_position;
-};  // Size: 0x10
-
-struct dStage_FloorInfo_entry_c {
-    /* 0x00 */ int field_0x00;
+// FLOR
+struct dStage_FloorInfo_dt_c {
+    /* 0x00 */ f32 field_0x00;
     /* 0x04 */ u8 floorNo;
     /* 0x05 */ s8 field_0x05[14];
 }; // Size: 0x14
 
 struct dStage_FloorInfo_c {
     /* 0x00 */ int num;
-    /* 0x04 */ dStage_FloorInfo_entry_c* entry;
+    /* 0x04 */ dStage_FloorInfo_dt_c* m_entries;
 };
 
+
+// LBNK
 struct dStage_Lbnk_c {
-    /* 0x00 */ u32 m_num;
-    /* 0x04 */ u8 * m_bank;
+    /* 0x00 */ int m_num;
+    /* 0x04 */ u8* m_entries;
 };
 
-struct dStage_MemoryConfig_data {
-    /* 0x0 */ u8 m_roomNo;
-    /* 0x1 */ u8 m_blockID;
-};  // Size: 0x2
-
-struct dStage_MemoryConfig_c {
-    /* 0x0 */ int num;
-    /* 0x4 */ dStage_MemoryConfig_data* m_entries;
-};
-
-struct dStage_DMap_entry_c {
+// DMAP
+struct dStage_DMap_dt_c {
     /* 0x00 */ int field_0x00;
     /* 0x04 */ int field_0x04;
     /* 0x08 */ int field_0x08;
-    /* 0x0C */ float offsetY;
-};
+    /* 0x0C */ f32 offsetY;
+};  // Size: 0x10
 
 struct dStage_DMap_c {
     /* 0x00 */ int num;
-    /* 0x04 */ dStage_DMap_entry_c* entry;
+    /* 0x04 */ dStage_DMap_dt_c* entries;
 };
 
+// EVNT
 struct dStage_Event_dt_c {
     /* 0x00 */ u8 field_0x0;
     /* 0x04 */ char mName[15];
     /* 0x10 */ u8 field_0x10;
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
+    /* 0x13 */ u8 mSpawnSwitchNo; // Keeps track of whether this event has been triggered by a player spawn.
     /* 0x14 */ u8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
@@ -335,17 +344,17 @@ struct dStage_EventInfo_c {
     /* 0x04 */ dStage_Event_dt_c* events;
 }; // Size: 0x08
 
-struct dStage_Ship_data {
+// SHIP
+struct dStage_Ship_dt_c {
     /* 0x0 */ cXyz m_pos;
     /* 0xC */ s16 m_angle;
     /* 0xE */ u8 field_0xe;
     /* 0xF */ u8 field_0xf;
-};
+};  // Size: 0x10
 
-class dStage_Ship_c {
-public:
+struct dStage_Ship_c {
     /* 0x0 */ int num;
-    /* 0x4 */ dStage_Ship_data* m_entries;
+    /* 0x4 */ dStage_Ship_dt_c* m_entries;
 };
 
 struct FuncTable;
@@ -593,6 +602,7 @@ public:
 
 class dStage_roomDt_c : public dStage_dt_c {
 public:
+    void setRoomNo(int roomNo) { mRoomNo = roomNo; }
     /* vt[ 2] */ virtual void init();
     /* vt[ 3] */ virtual int getRoomNo() const { return mRoomNo; }
     /* vt[ 4] */ virtual void setCamera(stage_camera_class* i_camera) { mpCamera = i_camera; }
@@ -827,20 +837,21 @@ public:
 class dStage_darkStatus_c {
 public:
     /* 0x00 */ u8 mEnvAlpha;
-    /* 0x01 */ u8 mBokoAlpha[2];
-    /* 0x04 */ f32 mBokoScale[2];
-    /* 0x0C */ int field_0xc;
-    /* 0x10 */ f32 field_0x10[2];
+    /* 0x01 */ u8 mNonAlpha[2];
+    /* 0x04 */ f32 mNonScale[2];
+    /* 0x0C */ u8 mBokoAlpha[4];
+    /* 0x10 */ f32 mBokoScale[2];
     /* 0x18 */ f32 field_0x18[2];
 
     u8 getEnvAlpha() const { return mEnvAlpha; }
+    u8 getNonAlpha(int i) const { return mNonAlpha[i]; }
+    f32 getNonScale(int i) const { return mNonScale[i]; }
     u8 getBokoAlpha(int i) const { return mBokoAlpha[i]; }
     f32 getBokoScale(int i) const { return mBokoScale[i]; }
-    // void getNonAlpha(int i) const {}
-    // void getNonScale(int i) const {}
-};
+}; // size = 0x20
 
 class dBgW;
+
 class dStage_roomStatus_c {
 public:
     /* 0x000 */ dStage_roomDt_c mRoomDt;
@@ -859,6 +870,8 @@ public:
 
 STATIC_ASSERT(sizeof(dStage_roomStatus_c) == 0x114);
 
+class JKRExpHeap;
+
 class dStage_roomControl_c {
 public:
     dStage_roomControl_c() {}
@@ -869,8 +882,8 @@ public:
     int loadRoom(int, u8*);
     void zoneCountCheck(int) const;
     void checkDrawArea() const;
-    dStage_darkStatus_c* getDarkStatus();
-    u32 getDarkMode();
+    static dStage_darkStatus_c* getDarkStatus();
+    static s32 getDarkMode();
 
     dKy_tevstr_c* getTevStr(int i_roomNo) { return &mStatus[i_roomNo].mTevStr; }
     BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
@@ -888,7 +901,7 @@ public:
     static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
 
-    static s8 getStayNo() { return mStayNo; }
+    static int getStayNo() { return mStayNo; }
     static s8 getMemoryBlockID(int i_roomNo) { return mStatus[i_roomNo].mMemBlockID; }
     static void onStatusDraw(int i_roomNo) { mStatus[i_roomNo].mDraw = true; }
     static void setProcID(fpc_ProcID id) { mProcID = id; }
@@ -907,7 +920,9 @@ public:
     static dBgW* getBgW(int i_roomNo) { return mStatus[i_roomNo].mpBgW; }
     static void setBgW(int i_roomNo, dBgW* i_bgw) { mStatus[i_roomNo].mpBgW = i_bgw; }
 
-    static JKRExpHeap* mMemoryBlock[16];
+    static const int MEMORY_BLOCK_MAX = 16;
+
+    static JKRExpHeap* mMemoryBlock[MEMORY_BLOCK_MAX];
     static dStage_roomStatus_c mStatus[64];
     static dStage_darkStatus_c mDarkStatus[8];
     static u8 mDarkRatio;
@@ -926,7 +941,7 @@ public:
     void set(const char*, s8, s16, s8);
     const char* getName() const { return mName; }
     s16 getPoint() const { return mPoint; }
-    int getRoomNo() const { return mRoomNo; }
+    s8 getRoomNo() const { return mRoomNo; }
     s8 getLayer() const { return mLayer; }
     void setLayer(s8 layer) { mLayer = layer; }
 
@@ -972,28 +987,16 @@ public:
 
 // unknown name
 struct dStage_objectNameInf {
-    char mName[8];
-    s16 mProcName;
-    s8 mSubtype;
-    s8 mGbaName;
+    char name[8];
+    s16 procname;
+    s8 argument;
+    s8 gbaName;
 };  // Size: 0xC
 
 typedef int (*dStage_Func)(dStage_dt_c*, void*, int, void*);
 struct FuncTable {
     char identifier[5];
     dStage_Func function;
-};
-
-// made up name
-struct dStage_fileHeader {
-    /* 0x0 */ int chunkCount;
-};
-
-// made up name
-struct dStage_nodeHeader {
-    /* 0x0 */ u32 m_tag;
-    /* 0x4 */ int m_entryNum;
-    /* 0x8 */ u32 m_offset;
 };
 
 s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
@@ -1005,47 +1008,48 @@ void dStage_dt_c_roomLoader(void* i_data, dStage_dt_c* i_stage);
 void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int i_roomNo);
 
 dStage_objectNameInf* dStage_searchName(const char*);
-const char* dStage_getName2(s16 i_procName, s8 i_subtype);
+const char* dStage_getName(s16 i_procName, s8 i_argument);
+const char* dStage_getName2(s16 i_procName, s8 i_argument);
 
 
 inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
-    return p_info->mDefaultCameraType;
+    return p_info->mCameraMapToolID;
 }
 
 inline s32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
-    return i_stagInfo->field_0x09 & 1;
+    return i_stagInfo->mProp & 1;
 }
 
 inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x09 >> 1) & 0x7F;
+    return (i_stagInfo->mProp >> 1) & 0x7F;
 }
 
 inline u32 dStage_stagInfo_GetSTType(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x0c >> 16) & 7;
+    return (i_stagInfo->mStageTypeAndSchbit >> 16) & 7;
 }
 
 inline u8 dStage_stagInfo_GetUpButton(stage_stag_info_class* i_stagInfo) {
-    return i_stagInfo->field_0x0a & 3;
+    return i_stagInfo->mParticleSceneNo & 3;
 }
 
 inline u8 dStage_stagInfo_GetParticleNo(stage_stag_info_class* i_stagInfo) {
-    return (i_stagInfo->field_0x0a >> 0x3) & 0xFF;
+    return (i_stagInfo->mParticleSceneNo >> 0x3) & 0xFF;
 }
 
 inline s8 dStage_stagInfo_GetTimeH(stage_stag_info_class* p_info) {
-    return (p_info->field_0x0c >> 8) & 0xFF;
+    return (p_info->mStageTypeAndSchbit >> 8) & 0xFF;
 }
 
-inline u8 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
-    return p_info->field_0x10 & 0xFFFF;
+inline u16 dStage_stagInfo_GetCullPoint(stage_stag_info_class* p_info) {
+    return p_info->mSchbitEnableAndFarPlane & 0xFFFF;
 }
 
 inline u8 dStage_stagInfo_getStartSch(stage_stag_info_class* p_info) {
-    return (p_info->field_0x10 >> 0x10) & 0xFF;
+    return (p_info->mSchbitEnableAndFarPlane >> 0x10) & 0xFF;
 }
 
 inline u8 dStage_stagInfo_GetSchSec(stage_stag_info_class* p_info) {
-    return p_info->field_0x0c & 0xFF;
+    return p_info->mStageTypeAndSchbit & 0xFF;
 }
 
 // TODO:
@@ -1059,7 +1063,7 @@ inline u8 dStage_roomRead_dt_c_ChkBg(u8 param_0) {
     return param_0 & 0x80;
 }
 
-inline u8 dStage_roomRead_dt_c_GetReverb(roomRead_data_class& room) {
+inline u32 dStage_roomRead_dt_c_GetReverb(roomRead_data_class& room) {
     return room.field_0x1 & 0x7F;
 }
 
@@ -1119,6 +1123,7 @@ inline f32 dStage_FileList_dt_SeaLevel(dStage_FileList_dt_c* i_fili) {
 }
 
 bool dStage_chkPlayerId(int playerId, int room_no);
+int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 i_roomNo);
 int dStage_changeScene(int i_exitId, f32 speed, u32 mode, s8 room_no);
 void dStage_restartRoom(u32 roomParam, u32 mode);
 void dStage_turnRestart();

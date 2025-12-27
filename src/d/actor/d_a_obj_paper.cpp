@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_paper.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_paper.h"
 #include "d/res/res_opaper.h"
 #include "d/res/res_ppos.h"
@@ -13,14 +14,13 @@
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_a_obj.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daObjPaper {
     namespace {
@@ -39,7 +39,7 @@ namespace daObjPaper {
             /* 0x16 */ s16 mColCylinderHeight;
         };
 
-        static const Attr_c L_attr[3] = {
+        static const Attr_c L_attr[] = {
             {
                 /* mResName           */ "Opaper",
                 /* mHeapSize          */ 0x04C0,
@@ -56,7 +56,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Ppos",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x1000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PPOS_BDL_PPOS,
                 /* mEyeOffset         */ 0x00,
                 /* mAttentionOffset   */ 0x32,
@@ -70,7 +74,11 @@ namespace daObjPaper {
             },
             {
                 /* mResName           */ "Piwa",
+#if VERSION == VERSION_DEMO
+                /* mHeapSize          */ 0x8000,
+#else
                 /* mHeapSize          */ 0x04C0,
+#endif
                 /* mModelId           */ PIWA_BDL_PIWA,
                 /* mEyeOffset         */ 0x3C,
                 /* mAttentionOffset   */ 0x82,
@@ -110,11 +118,11 @@ namespace daObjPaper {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 0.0f,
             /* Height */ 0.0f,
-        },
+        }},
     };
 
     /* 00000078-0000009C       .text solidHeapCB__Q210daObjPaper5Act_cFP10fopAc_ac_c */
@@ -139,12 +147,12 @@ namespace daObjPaper {
     }
 
     /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
-    s32 Act_c::_create() {
+    cPhs_State Act_c::_create() {
         fopAcM_SetupActor(this, Act_c);
 
         mType = prm_get_type();
 
-        s32 result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
+        cPhs_State result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
 
         if (result == cPhs_COMPLEATE_e) {
             if (fopAcM_entrySolidHeap(this, solidHeapCB, attr(mType).mHeapSize)) {
@@ -153,7 +161,7 @@ namespace daObjPaper {
                 attention_info.position.y += attr(mType).mAttentionOffset;
                 attention_info.distances[fopAc_Attn_TYPE_TALK_e] = attr(mType).mAttentionDist1;
                 attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = attr(mType).mAttentionDist2;
-                attention_info.flags |= fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e;
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e);
 
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
@@ -190,7 +198,7 @@ namespace daObjPaper {
 
     /* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
     bool daObjPaper::Act_c::_delete() {
-        dComIfG_resDelete(&mPhs, attr(mType).mResName);
+        dComIfG_resDeleteDemo(&mPhs, attr(mType).mResName);
         return TRUE;
     }
 
@@ -323,27 +331,27 @@ namespace daObjPaper {
 
     namespace {
         /* 00000BD4-00000BF4       .text Mthd_Create__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Create(void* i_this) {
+        static cPhs_State Mthd_Create(void* i_this) {
             return static_cast<Act_c*>(i_this)->_create();
         }
 
         /* 00000BF4-00000C18       .text Mthd_Delete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Delete(void* i_this) {
+        static BOOL Mthd_Delete(void* i_this) {
             return static_cast<Act_c*>(i_this)->_delete();
         }
 
         /* 00000C18-00000C3C       .text Mthd_Execute__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Execute(void* i_this) {
+        static BOOL Mthd_Execute(void* i_this) {
             return static_cast<Act_c*>(i_this)->_execute();
         }
 
         /* 00000C3C-00000C60       .text Mthd_Draw__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_Draw(void* i_this) {
+        static BOOL Mthd_Draw(void* i_this) {
             return static_cast<Act_c*>(i_this)->_draw();
         }
 
         /* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static s32 Mthd_IsDelete(void* i_this) {
+        static BOOL Mthd_IsDelete(void* i_this) {
             return TRUE;
         }
 
@@ -367,7 +375,7 @@ actor_process_profile_definition g_profile_Obj_Paper = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0108,
+    /* Priority     */ PRIO_Obj_Paper,
     /* Actor SubMtd */ &daObjPaper::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -1,7 +1,7 @@
 #ifndef RES_ADNNO_H
 #define RES_ADNNO_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum ADNNO_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

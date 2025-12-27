@@ -3,6 +3,7 @@
 
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JKernel/JKRArchive.h"
+#include "JSystem/JUtility/JUTFont.h"
 #include "JSystem/JUtility/JUTResFont.h"
 
 enum J2DTextBoxHBinding {
@@ -36,6 +37,7 @@ public:
 
     void initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding);
     void setFont(JUTFont*);
+    JUTFont* getFont() { return mpFont; }
     void setFontSize(f32 sizeX, f32 sizeY) {
         mFontSizeX = sizeX > 0.0f ? sizeX : 0.0f;
         mFontSizeY = sizeY > 0.0f ? sizeY : 0.0f;
@@ -50,9 +52,11 @@ public:
     void setCharColor(JUtility::TColor c) { mCharColor.set(c); }
     void setGradColor(JUtility::TColor c) { mGradColor.set(c); }
     void setBlack(JUtility::TColor c) { mBlack = c; }
-    void setWhite(JUtility::TColor c) { mBlack = c; }
+    void setWhite(JUtility::TColor c) { mWhite = c; }
+    
     void setLineSpace(f32 x) { mLineSpace = x; }
     f32 getLineSpace() const { return mLineSpace; }
+    f32 getCharSpace() const { return mCharSpace; }
     void setCharSpace(f32 x) { mCharSpace = x; }
     void draw(f32, f32, f32, J2DTextBoxHBinding);
     char* getStringPtr() const;
@@ -65,7 +69,7 @@ public:
     virtual void resize(f32, f32);
     virtual u16 getTypeID() { return 19; };
 
-private:
+public:
     /* 0xCC */ JUTFont* mpFont;
     /* 0xD0 */ JUtility::TColor mCharColor;
     /* 0xD4 */ JUtility::TColor mGradColor;

@@ -179,6 +179,7 @@ static void DecrementerExceptionCallback(register __OSException exception,
 
 static ASM void DecrementerExceptionHandler(register __OSException exception,
                                             register OSContext* context) {
+#ifdef __MWERKS__
     // clang-format off
     nofralloc
 
@@ -203,6 +204,7 @@ static ASM void DecrementerExceptionHandler(register __OSException exception,
     stwu r1, -8(r1)
     b DecrementerExceptionCallback
     // clang-format on
+#endif
 }
 
 static BOOL OnReset(BOOL final) {

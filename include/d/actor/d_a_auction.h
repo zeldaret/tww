@@ -45,9 +45,9 @@ public:
     void setNpcID(int, fpc_ProcID) {}
     void setStart(unsigned char) {}
 
-    s32 _create();
+    cPhs_State _create();
     BOOL createHeap();
-    s32 createInit();
+    cPhs_State createInit();
     BOOL _delete();
     BOOL _draw();
     BOOL _execute();
@@ -168,7 +168,7 @@ class daAuction_HIO_c : public JORReflexible  {
 public:
     daAuction_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* Place member variables here */

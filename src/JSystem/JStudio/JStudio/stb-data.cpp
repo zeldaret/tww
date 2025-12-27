@@ -3,6 +3,8 @@
 // Translation Unit: stb-data.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/stb-data.h"
 #include "dolphin/types.h"
 

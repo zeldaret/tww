@@ -8,7 +8,7 @@
 
 class JUTTexture;
 class JPABaseEmitter;
-class WIND_INFLUENCE;
+struct WIND_INFLUENCE;
 
 class dKankyo_sun_Packet : public J3DPacket {
 public:
@@ -87,7 +87,7 @@ public:
     /* 0x3700 */ f32 field_0x3700;
     /* 0x3704 */ f32 mSibukiAlpha;
     /* 0x3708 */ f32 mOverheadFade;
-    /* 0x370C */ f32 mFwd1Fade;
+    /* 0x370C */ f32 mFwdFade1;
     /* 0x3710 */ f32 mFwdFade2;
     /* 0x3714 */ u8 mStatus;
 };
@@ -144,8 +144,8 @@ public:
     virtual ~dKankyo_star_Packet();
 
     /* 0x10 */ u8* mpTexture;
-    /* 0x14 */ STAR_EFF mStarEff[1];
-    /* 0x48 */ s16 mCount;
+    /* 0x14 */ STAR_EFF mEffect[1];
+    /* 0x48 */ s16 mEffectNum;
 };
 
 struct POISON_EFF {
@@ -211,19 +211,19 @@ struct HOUSI_EFF {
     HOUSI_EFF();
     ~HOUSI_EFF();
 
-    /* 0x00 */ u8 mState;
+    /* 0x00 */ u8 mStatus;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ cXyz mBasePos;
-    /* 0x1C */ cXyz mVel;
+    /* 0x1C */ cXyz mSpeed;
     /* 0x28 */ cXyz mScale;
     /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ u8 field_0x38[0x3C - 0x38];
-    /* 0x3C */ s16 field_0x3c;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ u16 field_0x3c;
     /* 0x3E */ u8 field_0x3E[0x40 - 0x3E];
     /* 0x40 */ f32 mAlpha;
-    /* 0x44 */ u8 field_0x44[0x48 - 0x44];
+    /* 0x44 */ f32 field_0x44;
     /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ s16 field_0x4c;
+    /* 0x4C */ u16 field_0x4c;
 };
 
 class dKankyo_housi_Packet : public J3DPacket {
@@ -234,7 +234,7 @@ public:
     virtual ~dKankyo_housi_Packet();
 
     /* 0x0010 */ u8* mpTex;
-    /* 0x0014 */ HOUSI_EFF mEff[300];
+    /* 0x0014 */ HOUSI_EFF mEffect[300];
     /* 0x5DD4 */ u8 field_0x5DD4[0x5DDC - 0x5DD4];
     /* 0x5DDC */ f32 field_0x5ddc;
     /* 0x5DE0 */ s16 mCount;
@@ -358,6 +358,8 @@ void dKy_wave_chan_init();
 f32 dKyw_get_wind_pow();
 f32* dKyw_get_wind_power();
 cXyz dKyw_get_wind_vecpow();
+void dKyw_squal_set(cXyz* i_pos, s16 i_x, s16 i_y, f32 i_radius, f32 i_minRadius, f32 i_strength,
+    f32 i_speed, f32 i_maxStrength);
 cXyz * dKyw_get_wind_vec();
 void squal_proc();
 void dKyw_pntwind_set(WIND_INFLUENCE*);
@@ -369,7 +371,10 @@ void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
+int dKyw_get_tactwind_dir();
 BOOL dKyw_gbwind_use_check();
 void dKyw_tornado_Notice(cXyz* param_0);
+void dKyw_custom_windpower(f32 i_windpower);
+void dKyw_tact_wind_set_go();
 
 #endif /* D_KANKYO_WETHER_H */

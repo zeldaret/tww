@@ -1,0 +1,16 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_kddoor.cpp:
+	.text       start:0x00000078 end:0x00002E54
+	.text       start:0x00002E54 end:0x00002FD0
+	.text       start:0x00002FD0 end:0x00003074
+	.rodata     start:0x00000000 end:0x000000D5
+	.data       start:0x00000000 end:0x00000278

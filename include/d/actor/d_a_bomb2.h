@@ -1,8 +1,7 @@
 #ifndef D_A_BOMB_2_H
 #define D_A_BOMB_2_H
 
-#include "f_op/f_op_actor_mng.h"
-#include "d/d_a_obj.h"
+#include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
@@ -98,7 +97,7 @@ namespace daBomb2 {
         void start_carry();
         void start_proc_call();
         void create_init();
-        int _create();
+        cPhs_State _create();
         bool _delete();
         void set_mtx();
         void init_mtx();

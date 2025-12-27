@@ -5,7 +5,6 @@
 
 #include "SSystem/SComponent/c_m3d_g_tri.h"
 #include "SSystem/SComponent/c_m3d.h"
-#include "dolphin/types.h"
 
 /* 802527D4-80252878       .text __ct__8cM3dGTriFPC3VecPC3VecPC3Vec */
 cM3dGTri::cM3dGTri(const Vec* pA, const Vec* pB, const Vec* pC) {

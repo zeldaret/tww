@@ -3,8 +3,42 @@
 // Translation Unit: d_a_obj_gtaki.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gtaki.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ 0,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsEnemy_e | cCcD_CoSPrm_NoCrr_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 70.0f,
+        /* Height */ 1000.0f,
+    }},
+};
+
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c*) {
@@ -32,12 +66,12 @@ void daObjGtaki_c::set_mtx() {
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
-static s32 daObjGtaki_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjGtaki_Create(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_create();
 }
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
-s32 daObjGtaki_c::_create() {
+cPhs_State daObjGtaki_c::_create() {
     /* Nonmatching */
 }
 
@@ -58,7 +92,7 @@ static BOOL daObjGtaki_Execute(void*) {
 
 /* 00000C64-00000C6C       .text daObjGtaki_IsDelete__FPv */
 static BOOL daObjGtaki_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_GtakiMethodTable = {
@@ -79,7 +113,7 @@ actor_process_profile_definition g_profile_Obj_Gtaki = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0072,
+    /* Priority     */ PRIO_Obj_Gtaki,
     /* Actor SubMtd */ &daObj_GtakiMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

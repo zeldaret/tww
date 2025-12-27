@@ -3,17 +3,17 @@
 // Translation Unit: d_a_ghostship.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
 #include "d/res/res_ayush.h"
 #include "SSystem/SComponent/c_math.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo_wether.h"
 #include "d/res/res_cloth.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 const u32 daGhostship_c::m_heapsize = 0x1EA0;
 const char daGhostship_c::m_arc_name[] = "Ayush";
@@ -34,7 +34,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 00000118-0000032C .text _createHeap__13daGhostship_cFv */
 BOOL daGhostship_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BDL_AYUSH));
-    JUT_ASSERT(88, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(80, 88), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(!mpModel) {
@@ -42,9 +42,9 @@ BOOL daGhostship_c::_createHeap() {
     }
 
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, AYUSH_BTK_AYUSH));
-    JUT_ASSERT(95, btk != NULL);
+    JUT_ASSERT(DEMO_SELECT(87, 95), btk != NULL);
 
-    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0)) {
+    if(!mBtk.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0)) {
         return false;
     }
 
@@ -235,33 +235,37 @@ void daGhostship_c::getArg() {
     moonPhase = fopAcM_GetParamBit(param, 0, 8);
 }
 
-/* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
-static s32 daGhostshipCreate(void* i_actor) {
-    daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
-    fopAcM_SetupActor(i_this, daGhostship_c);
+cPhs_State daGhostship_c::_create() {
+    fopAcM_SetupActor(this, daGhostship_c);
 
-    s32 result = dComIfG_resLoad(&i_this->mPhs, daGhostship_c::m_arc_name);
+    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
 
-    result = dComIfG_resLoad(&i_this->mClothPhs, daGhostship_c::m_cloth_arc_name);
+    result = dComIfG_resLoad(&mClothPhs, m_cloth_arc_name);
     if(result != cPhs_COMPLEATE_e) {
         return result;
     }
 
-    i_this->getArg();
-    if((s32)dComIfGs_getEventReg(0x8803) == 3) {
+    getArg();
+
+    if((s32)dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
         return cPhs_ERROR_e;
     }
 
-    if (!fopAcM_entrySolidHeap(i_this, createHeap_CB, 0x1EA0)) {
+    if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
         return cPhs_ERROR_e;
     }
 
-    i_this->createInit();
+    createInit();
 
     return cPhs_COMPLEATE_e;
+}
+
+/* 00000C8C-00000DFC .text daGhostshipCreate__FPv */
+static cPhs_State daGhostshipCreate(void* i_this) {
+    return ((daGhostship_c*)i_this)->_create();
 }
 
 /* 00000FD8-00001024 .text daGhostshipDelete__FPv */
@@ -285,7 +289,13 @@ bool daGhostship_c::_execute() {
     f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
 
     mbCanEnterShip = false;
-    if(moonPhase != dKy_moon_type_chk() || (time > 90.0f && time < 285.0f)) {
+    if(moonPhase != dKy_moon_type_chk() ||
+#if VERSION == VERSION_DEMO
+        (time > 90.0f && time < 330.0f)
+#else
+        (time > 90.0f && time < 285.0f)
+#endif
+    ) {
         dKy_pship_existense_cut();
         mAlpha = 0.0f;
     }
@@ -345,20 +355,31 @@ bool daGhostship_c::_execute() {
 
         dLib_setCirclePath(&mPaths[i]);
         if(mAlpha != 0.0f) {
-            dComIfGp_particle_setSimple(0x8306, &mPaths[i].mPos, 0xFF, g_whiteColor, g_whiteColor, 0);
+            dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8306, &mPaths[i].mPos);
         }
     }
 
-    if(mAlpha == l_HIO.shipAlpha && dist < l_HIO.shipEnterDist && dComIfGs_getEventReg(0x8803) < 3 && !mbEnteredShip) {
-        mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
-        stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
-        JUT_ASSERT(463, scls_data != NULL)
+    if(mAlpha == l_HIO.shipAlpha && dist < l_HIO.shipEnterDist) {
+        u8 r29 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
+        if (r29 < 3
+#if VERSION > VERSION_DEMO
+            && !mbEnteredShip
+#endif
+        ) {
+            mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
+            stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
+            JUT_ASSERT(DEMO_SELECT(457, 463), scls_data != NULL)
 
-        u8 startCode = scls_data->mStart;
-        dComIfGs_setEventReg(0xC3FF, scls_data->mRoom);
-        dComIfGs_setEventReg(0x85FF, startCode);
-        dComIfGp_setNextStage("PShip", 0, 2);
-        mbEnteredShip = true;
+            u8 startCode = scls_data->mStart;
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_C3FF, scls_data->mRoom);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_85FF, startCode);
+#if VERSION == VERSION_DEMO
+            dComIfGp_setNextStage("PShip", 0, r29);
+#else
+            dComIfGp_setNextStage("PShip", 0, 2);
+            mbEnteredShip = true;
+#endif
+        }
     }
 
     modeProcCall();
@@ -376,12 +397,22 @@ bool daGhostship_c::_execute() {
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
 
     mDoMtx_stack_c::push();
+#if VERSION == VERSION_DEMO
+    mDoMtx_stack_c::transM(0.0f + REG10_F(0), 3200.0f + REG10_F(1), 75.0f);
+    mDoMtx_stack_c::YrotM(REG10_S(0));
+#else
     mDoMtx_stack_c::transM(0.0f, 3200.0f, 75.0f);
+#endif
     mpCloth->setMtx(mDoMtx_stack_c::get());
 
     mDoMtx_stack_c::pop();
+#if VERSION == VERSION_DEMO
+    mDoMtx_stack_c::transM(-900.0f + REG10_F(3), 2080.0f + REG10_F(4), 85.0f + REG10_F(5));
+    mDoMtx_stack_c::YrotM(0x4000 + REG10_S(1));
+#else
     mDoMtx_stack_c::transM(-900.0f, 2080.0f, 85.0f);
     mDoMtx_stack_c::YrotM(0x4000);
+#endif
     mpCloth2->setMtx(mDoMtx_stack_c::get());
 
     mpCloth->setParam(0.45f, -1.5f, 0.875f, 1.0f, 1.0f, 0x100, 0, 900, -800, 7.0f, 6.0f);
@@ -420,7 +451,7 @@ bool daGhostship_c::_draw() {
             modelData->getMaterialNodePointer(i)->getTevKColor(3)->mColor.a = alpha;
         }
 
-        mBtk.entry(modelData, mBtk.getFrame());
+        mBtk.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
         mBtk.remove(modelData);
 
@@ -433,9 +464,13 @@ bool daGhostship_c::_draw() {
     return true;
 }
 
-/* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
-static BOOL daGhostshipIsDelete(void*) {
+bool daGhostship_c::_delete() {
     return true;
+}
+
+/* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
+static BOOL daGhostshipIsDelete(void* i_this) {
+    return ((daGhostship_c*)i_this)->_delete();
 }
 
 static actor_method_class daGhostshipMethodTable = {
@@ -456,7 +491,7 @@ actor_process_profile_definition g_profile_AYUSH = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x009E,
+    /* Priority     */ PRIO_AYUSH,
     /* Actor SubMtd */ &daGhostshipMethodTable,
     /* Status       */ 0x03 | fopAcStts_SHOWMAP_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

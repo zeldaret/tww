@@ -34,10 +34,10 @@ namespace daObjHbrf1 {
         s32 prm_get_Type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
         s32 prm_get_Event() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVENT_W, PRM_EVENT_S); }
 
-        BOOL CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        BOOL Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
@@ -49,8 +49,8 @@ namespace daObjHbrf1 {
         void daObjHbrf1_down_demo_wait();
         void daObjHbrf1_down_demo_timer();
         void daObjHbrf1_down_demo();
-        BOOL Execute(Mtx** mtx);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx** mtx);
+        virtual BOOL Draw();
 
         static Mtx M_tmp_mtx;
 

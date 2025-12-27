@@ -3,6 +3,7 @@
 // Translation Unit: d_a_branch_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_branch.h"
 #include "dolphin/types.h"
 #include "JSystem/JUtility/JUTAssert.h"

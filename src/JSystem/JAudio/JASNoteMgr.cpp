@@ -3,6 +3,8 @@
 // Translation Unit: JASNoteMgr.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrack.h"
 #include "JSystem/JAudio/JASChannel.h"
 #include "JSystem/JUtility/JUTAssert.h"

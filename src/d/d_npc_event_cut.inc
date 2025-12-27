@@ -75,7 +75,7 @@ bool dNpc_EventCut_c::cutProc() {
                 }
                 
                 (this->*cut_tbl[mCurActIdx].proc)();
-                return 1;
+                return true;
             }
         }
     }
@@ -83,7 +83,7 @@ bool dNpc_EventCut_c::cutProc() {
 
 /* 8021CED0-8021CF3C       .text cutWaitStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutWaitStart() {
-    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    int* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
     if(timer) {
         mTimer = (s16)*timer;
     }
@@ -103,7 +103,7 @@ void dNpc_EventCut_c::cutWaitProc() {
 void dNpc_EventCut_c::cutTurnToActorStart() {
     mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
 
-    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    int* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
     if(set) {
         mSetId = *set;
     }
@@ -119,7 +119,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mOffsetPos.set(0.0f, 0.0f, 0.0f);
     }
 
-    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    int* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
     if(turnType) {
         mTurnType = *turnType;
     }
@@ -127,7 +127,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mTurnType = 1;
     }
 
-    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    int* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
     if(timer) {
         mTimer = (s16)*timer;
     }
@@ -135,7 +135,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mTimer = 1;
     }
 
-    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    int* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
     if(speed) {
         mTurnSpeed = *speed;
     }
@@ -143,7 +143,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         mTurnSpeed = 0;
     }
 
-    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    int* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
     if(angle == 0) {
         mAddAngle = 0;
     }
@@ -159,7 +159,7 @@ void dNpc_EventCut_c::cutTurnToActorStart() {
         pDelDistance = *dist;
     }
 
-    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    int* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
     if(noTurn) {
         mbNoTurn = 1;
     }
@@ -240,13 +240,13 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
 /* 8021D51C-8021D730       .text cutMoveToActorStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutMoveToActorStart() {
     mpActorName = dComIfGp_evmng_getMyStringP(mEvtStaffId, "ActorName");
-    u32* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
+    int* set = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "SetId");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
     cXyz* offs = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "OffsetPos");
-    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
-    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
-    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
+    int* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    int* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    int* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "ShapeAngle");
 
     if(noTurn == 0) {
         mbNoTurn = 0;
@@ -366,7 +366,7 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
                 return 0;
             }
             else {
-                if(obj->mProcName == fopAcM_GetProfName(pActor) && obj->mSubtype == pActor->subtype) {
+                if(obj->procname == fopAcM_GetProfName(pActor) && obj->argument == pActor->argument) {
                     if(cut->mTargetActorPos.abs() == 0.0f) {
                         cut->mTargetActorPos = pActor->current.pos;
                         cut->mpTargetActor = pActor;
@@ -397,7 +397,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
         mPos.set(0.0f, 0.0f, 0.0f);
     }
 
-    u32* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
+    int* turnType = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnType");
     if(turnType) {
         mTurnType = *turnType;
     }
@@ -405,7 +405,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
         mTurnType = 1;
     }
 
-    u32* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
+    int* timer = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Timer");
     if(timer) {
         mTimer = (s16)*timer;
     }
@@ -413,7 +413,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
         mTimer = 1;
     }
 
-    u32* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
+    int* speed = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "TurnSpeed");
     if(speed) {
         mTurnSpeed = *speed;
     }
@@ -421,7 +421,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
         mTurnSpeed = 0;
     }
     
-    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    int* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
     if(noTurn) {
         mbNoTurn = 1;
     }
@@ -429,7 +429,7 @@ void dNpc_EventCut_c::cutTurnToPosStart() {
         mbNoTurn = 0;
     }
 
-    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    int* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
     if(angle == 0) {
         mAddAngle = 0;
     }
@@ -480,9 +480,9 @@ void dNpc_EventCut_c::cutMoveToPosStart() {
     cXyz* pos = dComIfGp_evmng_getMyXyzP(mEvtStaffId, "Pos");
     f32* speed = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "Speed");
     f32* dist = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "DelDistance");
-    u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
-    u32* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
-    u32* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
+    int* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+    int* noTurn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "NoTurn");
+    int* angle = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "AddAngle");
 
     if(noTurn == 0) {
         mbNoTurn = 0;
@@ -556,7 +556,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
 /* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
     if(mpTalkActor != 0) {
-        u32* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
+        int* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
         if(attn == 0) {
             mbAttention = false;
         }
@@ -564,8 +564,8 @@ void dNpc_EventCut_c::cutTalkMsgStart() {
             mbAttention = true;
         }
 
-        u32* firstMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
-        u32* endMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
+        int* firstMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "msg_num");
+        int* endMsgNo = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_msg");
         if(firstMsgNo == 0) {
             mpTalkActor->mCurrMsgNo = 0;
         }
@@ -586,7 +586,7 @@ void dNpc_EventCut_c::cutTalkMsgStart() {
 /* 8021E444-8021E4C0       .text cutContinueTalkStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutContinueTalkStart() {
     if(mpTalkActor != 0) {
-        u32* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
+        int* endMsg = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "end_num");
         if(endMsg) {
             mpTalkActor->mEndMsgNo = *endMsg;
         }

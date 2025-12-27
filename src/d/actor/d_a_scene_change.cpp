@@ -3,11 +3,13 @@
 // Translation Unit: d_a_scene_change.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_scene_change.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 static daSceneChgHIO_c l_HIO;
 
@@ -19,7 +21,7 @@ daSceneChgHIO_c::daSceneChgHIO_c() {
 }
 
 /* 00000118-000001A8       .text daSceneChgCreate__FPv */
-static s32 daSceneChgCreate(void* i_this) {
+static cPhs_State daSceneChgCreate(void* i_this) {
     d_a_scene_change_c* scnChg = static_cast<d_a_scene_change_c*>(i_this);
     
     fopAcM_SetupActor(scnChg, d_a_scene_change_c);
@@ -69,7 +71,7 @@ actor_process_profile_definition g_profile_SCENECHG = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01A1,
+    /* Priority     */ PRIO_SCENECHG,
     /* Actor SubMtd */ &daSceneChgMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

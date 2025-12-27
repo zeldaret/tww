@@ -15,9 +15,9 @@ public:
             }
         }
 
-        dComIfG_resDelete(&mPhase, m_arcname);
+        dComIfG_resDeleteDemo(&mPhase, m_arcname);
     }
-    inline s32 create();
+    inline cPhs_State create();
     inline BOOL draw();
     inline BOOL execute();
 
@@ -25,8 +25,8 @@ public:
     void set_anim(int, int, int);
     void demoPlay(mDoExt_McaMorf*);
 
-    int CreateHeap();
-    static int solidHeapCB(fopAc_ac_c*);
+    BOOL CreateHeap();
+    static BOOL solidHeapCB(fopAc_ac_c*);
     
     MtxP getJointMtx(const char*);
 

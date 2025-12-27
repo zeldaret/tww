@@ -3,9 +3,11 @@
  * Enemy - ReDead
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
 #include "d/res/res_rd.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -19,8 +21,45 @@
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daRd_HIO_c : public mDoHIO_entry_c {
+public:
+    daRd_HIO_c();
+    virtual ~daRd_HIO_c() {}
+    
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ dNpc_HIO_c mNpc;
+    /* 0x2C */ u8 m2C;
+    /* 0x2D */ u8 m2D[0x30 - 0x2D];
+    /* 0x30 */ f32 m30;
+    /* 0x34 */ f32 m34;
+    /* 0x38 */ f32 mCryRadius;
+    /* 0x3C */ f32 mAttackRadius;
+    /* 0x40 */ s16 m40;
+    /* 0x42 */ s16 mCrySpreadAngle;
+    /* 0x44 */ s16 mAttackSpreadAngle;
+    /* 0x46 */ s16 m46;
+    /* 0x48 */ s16 m48;
+    /* 0x4A */ s16 m4A;
+    /* 0x4C */ s16 m4C;
+    /* 0x4E */ s16 m4E;
+    /* 0x50 */ s16 m50;
+    /* 0x52 */ s16 m52;
+    /* 0x54 */ s16 m54;
+    /* 0x56 */ u8 m56[0x58 - 0x56];
+    /* 0x58 */ f32 m58;
+    /* 0x5C */ f32 m5C;
+    /* 0x60 */ f32 m60;
+    /* 0x64 */ f32 m64;
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 mReturnWalkSpeed;
+    /* 0x70 */ f32 m70;
+    /* 0x74 */ f32 m74;
+    /* 0x78 */ s16 m78;
+    /* 0x7A */ s16 mParalysisDuration;
+    /* 0x7C */ JntHit_HIO_c m7C;
+};
 
 static daRd_HIO_c l_HIO;
 
@@ -49,11 +88,11 @@ const dCcD_SrcCyl daRd_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 /* 000000EC-0000027C       .text __ct__10daRd_HIO_cFv */
@@ -132,10 +171,10 @@ static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 00000358-00000514       .text _nodeControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
-    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     
     if (mJntCtrl.getHeadJntNum() == jntNo) {
         static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
@@ -169,12 +208,12 @@ static BOOL nodeHeadControl_CB(J3DNode* node, int calcTiming) {
 }
 
 /* 0000059C-000006A0       .text _nodeHeadControl__6daRd_cFP7J3DNodeP8J3DModel */
-BOOL daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
+void daRd_c::_nodeHeadControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
     
     cXyz temp4(mD38, 0.0f, 0.0f);
-    cMtx_copy(model->getAnmMtx(jntNo), mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
     mDoMtx_stack_c::transM(temp4);
     
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -198,13 +237,13 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
-    JUT_ASSERT(504, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
         static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, RD_BCK_SUWARIP)),
-        J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, 1,
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
         0x37441622
@@ -219,16 +258,16 @@ BOOL daRd_c::_createHeap() {
     }
     
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
-    JUT_ASSERT(525, btk != NULL);
-    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
+    if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
     modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
-    JUT_ASSERT(550, brk != NULL);
-    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0)) {
+    JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
+    if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0)) {
         return FALSE;
     }
     
@@ -255,133 +294,133 @@ bool daRd_c::createArrowHeap() {
     static Vec yubi_cyl_offset[]   = {{0.0f, 0.0f, 0.0f},    {17.0f, 0.0f, 0.0f}};
     static __jnt_hit_data_c search_data[] = {
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x01,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x02,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x03,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x04,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x05,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x06,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x07,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x08,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ sebone_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ muneA_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x09,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x0F,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x10,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x11,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x12,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x13,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x14,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x15,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
-            /* mShapeType  */ 0, // Cylinder
+            /* mShapeType  */ JntHitType_CYL_e,
             /* mJointIndex */ 0x16,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
@@ -398,12 +437,14 @@ bool daRd_c::createArrowHeap() {
 
 /* 000009D0-00000A38       .text checkPlayerInAttack__6daRd_cFv */
 bool daRd_c::checkPlayerInAttack() {
-    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    return dLib_checkActorInFan(current.pos, player, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, 100.0f);
 }
 
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
-    return dLib_checkActorInFan(current.pos, dComIfGp_getLinkPlayer(), mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -458,7 +499,12 @@ void daRd_c::lookBack() {
             mTargetPos = player->getHeadTopPos();
             break;
         case MODE_RETURN:
-            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+#if VERSION == VERSION_DEMO
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 100.0f))
+#else
+            if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f))
+#endif
+            {
                 mJntCtrl.clrTrn();
                 mJntCtrl.onHeadLock();
                 mJntCtrl.onBackBoneLock();
@@ -493,7 +539,9 @@ bool daRd_c::checkTgHit() {
     if (mCyl.ChkTgHit()) {
         hitObj = mCyl.GetTgHitObj();
         if (hitObj->GetAtType() == AT_TYPE_LIGHT) {
+#if VERSION > VERSION_DEMO
             fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+#endif
             modeProcInit(MODE_PARALYSIS);
             return true;
         }
@@ -601,7 +649,7 @@ bool daRd_c::checkTgHit() {
         case AT_TYPE_FIRE:
         case AT_TYPE_UNK20000:
             r29 = false;
-            if (mEnemyFire.mState == 0) {
+            if (mEnemyFire.mMode == 0) {
                 mEnemyFire.mFireDuration = l_HIO.m4C;
             } else {
                 mHitType = 0xD;
@@ -623,7 +671,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(0x10, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, mCyl.GetTgHitPosP());
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_COMMON_BIG_HIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {
@@ -646,7 +694,9 @@ bool daRd_c::checkTgHit() {
     }
     
     if (dComIfGp_getDetect().chk_light(&current.pos)) {
+#if VERSION > VERSION_DEMO
         fopAcM_seStart(this, JA_SE_CM_PW_BECOME_SOLID, 0);
+#endif
         modeProcInit(MODE_PARALYSIS);
         return true;
     }
@@ -800,7 +850,7 @@ void daRd_c::modeDeath() {
     fopAcM_SetGroup(this, fopAc_ENV_e);
     
     if (cLib_calcTimer(&mTimer1) == 0) {
-        fopAcM_createDisappear(this, &current.pos, 5);
+        fopAcM_createDisappear(this, &current.pos, 5, daDisItem_IBALL_e);
         fopAcM_delete(this);
     }
 }
@@ -887,7 +937,7 @@ void daRd_c::modeMove() {
                 temp = 0.1f;
             }
             f32 temp2 = l_HIO.m68;
-            if (mEnemyFire.mState != 0) {
+            if (mEnemyFire.mMode != 0) {
                 temp2 *= 2.0f;
             }
             cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
@@ -943,7 +993,7 @@ void daRd_c::modeCry() {
                 temp = 0.1f;
             }
             f32 temp2 = l_HIO.m68;
-            if (mEnemyFire.mState != 0) {
+            if (mEnemyFire.mMode != 0) {
                 temp2 *= 2.0f;
             }
             cLib_addCalc2(&speedF, temp2*temp, 0.1f, 0.1f + REG12_F(0));
@@ -1058,9 +1108,13 @@ void daRd_c::modeAttack() {
         if (dist <= 20.0f + REG12_F(2)) {
             cLib_addCalcPosXZ2(&current.pos, player->current.pos, 0.3f, 1.0f);
             if (cLib_calcTimer(&mTimer2) == 0) {
+#if VERSION == VERSION_DEMO
+                dComIfGp_setItemLifeCount(-1.0f);
+#else
                 if (!daPy_getPlayerLinkActorClass()->checkNoDamageMode()) {
                     daPy_getPlayerLinkActorClass()->setDamagePoint(-1.0f);
                 }
+#endif
                 mTimer2 = 30;
             }
         } else if (mAcch.ChkWallHit()) {
@@ -1329,10 +1383,10 @@ void daRd_c::setBrkAnm(s8 idx) {
         RD_BRK_BEAM_END,
     };
     static const int a_play_mod_tbl[] = {
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
-        J3DFrameCtrl::LOOP_REPEAT_e,
-        J3DFrameCtrl::LOOP_ONCE_e,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_NONE,
+        J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_NONE,
     };
     
     J3DModel* model = mpMorf->getModel();
@@ -1355,11 +1409,11 @@ void daRd_c::setBtkAnm(s8 idx) {
         int loopMode;
     };
     static const anm_prm_struct a_anm_prm_tbl[] = {
-        {0x01,   -1, J3DFrameCtrl::LOOP_ONCE_e},
-        {0x00,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
-        {0x01,   -1, J3DFrameCtrl::LOOP_REPEAT_e},
-        {0x02, 0x01, J3DFrameCtrl::LOOP_ONCE_e},
-        {0x03, 0x02, J3DFrameCtrl::LOOP_ONCE_e},
+        {0x01,   -1, J3DFrameCtrl::EMode_NONE},
+        {0x00,   -1, J3DFrameCtrl::EMode_LOOP},
+        {0x01,   -1, J3DFrameCtrl::EMode_LOOP},
+        {0x02, 0x01, J3DFrameCtrl::EMode_NONE},
+        {0x03, 0x02, J3DFrameCtrl::EMode_NONE},
     };
     
     if (idx != 5) {
@@ -1374,7 +1428,7 @@ void daRd_c::setBtkAnm(s8 idx) {
         mBtkAnm.init(modelData, btk, true, a_anm_prm_tbl[m6DB].loopMode, 1.0f, 0, -1, true, 0);
         
         if (mBtkAnm.isStop()) {
-            if (a_anm_prm_tbl[m6DB].m01 != -1 && a_anm_prm_tbl[m6DB].loopMode == J3DFrameCtrl::LOOP_ONCE_e) {
+            if (a_anm_prm_tbl[m6DB].m01 != -1 && a_anm_prm_tbl[m6DB].loopMode == J3DFrameCtrl::EMode_NONE) {
                 m6DB = a_anm_prm_tbl[m6DB].m01;
             }
         }
@@ -1409,7 +1463,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_TACHIP1
@@ -1418,7 +1472,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_SUWARIP
@@ -1427,7 +1481,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_WALK2ATACK
@@ -1436,7 +1490,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_ATACK
@@ -1445,7 +1499,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_ATACK2WALK
@@ -1454,7 +1508,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_WALK
@@ -1463,7 +1517,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_DAMAGE
@@ -1472,7 +1526,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_DEAD
@@ -1481,7 +1535,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_TATSU
@@ -1490,7 +1544,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.5f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_SUWARU
@@ -1499,7 +1553,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 0.5f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_KANOKEP
@@ -1508,7 +1562,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 8.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_BEAM_HIT
@@ -1517,7 +1571,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
         {
             // AnmPrm_BEAM
@@ -1526,7 +1580,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_REPEAT_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_LOOP
         },
         {
             // AnmPrm_BEAM_END
@@ -1535,7 +1589,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
             /* field_0x02  */ 0,
             /* mMorf       */ 2.0f,
             /* mPlaySpeed  */ 1.0f,
-            /* mLoopMode   */ J3DFrameCtrl::LOOP_ONCE_e
+            /* mLoopMode   */ J3DFrameCtrl::EMode_NONE
         },
     };
     
@@ -1592,7 +1646,7 @@ bool daRd_c::_execute() {
     }
     current.angle = shape_angle;
     
-    if (mEnemyFire.mState == 0) { // Not on fire (TODO enum)
+    if (mEnemyFire.mMode == 0) { // Not on fire (TODO enum)
         mCyl.SetAtType(0);
         m6D4 = l_HIO.m4E;
     } else {
@@ -1752,14 +1806,20 @@ void daRd_c::createInit() {
         }
     }
     
+#if VERSION > VERSION_DEMO
     setBrkAnm(0);
+#endif
     setMtx();
+#if VERSION > VERSION_DEMO
     mBtkAnm.play();
     mBrkAnm.play();
     mpMorf->play(&current.pos, 0, 0);
     mBrkAnm.setFrame(0.0f);
+#endif
     mpMorf->calc();
+#if VERSION > VERSION_DEMO
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+#endif
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -100.0f, -10.0f, -100.0f, 100.0f, 250.0f, 150.0f);
     
@@ -1815,15 +1875,15 @@ void daRd_c::getArg() {
 }
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
-s32 daRd_c::_create() {
+cPhs_State daRd_c::_create() {
     fopAcM_SetupActor(this, daRd_c);
     
-    s32 phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
     if (phase_state == cPhs_COMPLEATE_e) {
         getArg();
         
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2520)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         
@@ -1837,14 +1897,16 @@ s32 daRd_c::_create() {
 bool daRd_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
     enemy_fire_remove(&mEnemyFire);
+#if VERSION > VERSION_DEMO
     if (heap) {
         mpMorf->stopZelAnime();
     }
+#endif
     return true;
 }
 
 /* 00004FB8-00004FD8       .text daRdCreate__FPv */
-static s32 daRdCreate(void* i_this) {
+static cPhs_State daRdCreate(void* i_this) {
     return static_cast<daRd_c*>(i_this)->_create();
 }
 
@@ -1886,7 +1948,7 @@ actor_process_profile_definition g_profile_RD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D4,
+    /* Priority     */ PRIO_RD,
     /* Actor SubMtd */ &daRdMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,

@@ -65,6 +65,22 @@ public:
     dBgS() {}
     virtual ~dBgS() {}
 
+    bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
+    fopAc_ac_c* GetActorPointer(cBgS_PolyInfo& i_poly) const {
+        return cBgS::GetActorPointer(i_poly);
+    }
+
+    // void CaptPoly(dBgS_CaptPoly&) {}
+    // void ChkDeleteActorRegist(fopAc_ac_c*) {}
+    // void DebugDrawPoly(dBgW&) {}
+    // void Draw() {}
+    // void DrawPoly(cBgS_PolyInfo&, _GXColor&) {}
+    dBgW* GetBgWPointer(cBgS_PolyInfo& i_poly) { return (dBgW*)cBgS::GetBgWPointer(i_poly); }
+    // void GetPolyCamId(cBgS_PolyInfo&) {}
+    // void GroundCross(cBgS_GndChk*) {}
+    // void LineCross(cBgS_LinChk*) {}
+    // void ShdwDraw(cBgS_ShdwDraw*) {}
+
     virtual void Ct();
     virtual void Dt();
     virtual void Move();
@@ -106,8 +122,6 @@ public:
     void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void RideCallBack(cBgS_PolyInfo&, fopAc_ac_c*);
     fopAc_ac_c* PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
-
-    bool WaterChk(dBgS_SplGrpChk* chk) { return SplGrpChk(chk); }
 };  // Size: 0x1404
 
 class dBgS_CrrPos : public cBgS_PolyInfo, public dBgS_Chk, public cBgS_Chk {
@@ -121,7 +135,7 @@ public:
         mWallRadius = 0.0f;
         pm_pos = NULL;
         pm_old_pos = NULL;
-        mGroundH = C_BG_INVALID_HEIGHT;
+        mGroundH = -G_CM3D_F_INF;
         field_0x60 = 0;
         field_0x68 = 20.0f;
         field_0x58 = NULL;
@@ -157,7 +171,7 @@ public:
         mGndChk.OffWall();
         mFlag &= ~8;
     }
-    void ClrPosVec() { field_0x4c.x = field_0x4c.y = field_0x4c.z = 0.0f; }
+    void ClrPosVec() { m_pos_vec.x = m_pos_vec.y = m_pos_vec.z = 0.0f; }
 
     f32 GetWallH() const { return mWallHeight; }
     f32 GetWallR() const { return mWallRadius; }
@@ -167,9 +181,9 @@ public:
     }
     f32 GetGroundH() const { return mGroundH; }
 
-    cXyz* GetOldPos() const { return pm_old_pos; }
     cXyz* GetPos() const { return pm_pos; }
-    cXyz& GetPosVec() { return field_0x4c; }
+    cXyz* GetOldPos() const { return pm_old_pos; }
+    cXyz& GetPosVec() { return m_pos_vec; }
 
     const cM3dGCyl* GetCylP() const { return &mCyl; }
     void SetOldCyl() { mOldCyl.Set(*pm_old_pos, mWallRadius, mWallHeight * 2.0f); }
@@ -179,14 +193,19 @@ public:
     void SetWallActorInfo(int bg_index, void* bgw, fpc_ProcID actor_id) {
         SetActorInfo(bg_index, bgw, actor_id);
     }
-    void SetWallPolyIndex(int) {} // TODO
+    void SetWallPolyIndex(int poly_index) {
+        SetPolyIndex(poly_index);
+    }
 
+    /* 0x000 */ /* cBgS_PolyInfo */
+    /* 0x010 */ /* dBgS_Chk */
+    /* 0x024 */ /* cBgS_Chk */
     /* 0x038 */ u32 mFlag;
     /* 0x03C */ f32 mWallHeight;
     /* 0x040 */ f32 mWallRadius;
     /* 0x044 */ cXyz* pm_pos;
     /* 0x048 */ cXyz* pm_old_pos;
-    /* 0x04C */ cXyz field_0x4c;
+    /* 0x04C */ cXyz m_pos_vec;
     /* 0x058 */ cXyz* field_0x58;
     /* 0x05C */ f32 mGroundH;
     /* 0x060 */ u8 field_0x60;

@@ -10,18 +10,20 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_boko.h"
 
 /* 80153554-801535D8       .text setEnemyWeaponAtParam__9daPy_lk_cFi */
 void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
     static const u8 cut_type[] = {
-        0x0B,
-        0x0D,
-        0x14,
-        0x16,
-        0x18,
-        0x1C,
+        /* daBoko_c::Type_STICK_e    */ 0x0B,
+        /* daBoko_c::Type_MACHETE_e  */ 0x0D,
+        /* daBoko_c::Type_CLUB_e     */ 0x14,
+        /* daBoko_c::Type_DN_SWORD_e */ 0x16,
+        /* daBoko_c::Type_SPEAR_e    */ 0x18,
+        /* daBoko_c::Type_PG_SWORD_e */ 0x1C,
     };
     daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
     u8 cutType = cut_type[fopAcM_GetParam(boko)];
@@ -40,60 +42,363 @@ void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
 
 /* 801535D8-8015372C       .text procWeaponNormalSwing_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponNormalSwing_init() {
-    /* Nonmatching */
+    if (mActorKeepEquip.getActor() == NULL) {
+        return false;
+    }
+
+    commonProcInit(daPyProc_WEAPON_NORMAL_SWING_e);
+    setSingleMoveAnime(
+        ANM_CUTBOKO,
+        m_HIO->mCut.mCutBoko.m.field_0x10,
+        m_HIO->mCut.mCutBoko.m.field_0x18,
+        m_HIO->mCut.mCutBoko.m.field_0x6,
+        m_HIO->mCut.mCutBoko.m.field_0x34
+    );
+    current.angle.y = shape_angle.y;
+    m3700 = cXyz::Zero;
+    m34C2 = 1;
+    voiceStart(1);
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
+        m34D4 = shape_angle.y;
+    } else {
+        m34D4 = m34E8;
+    }
+    dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
+    m351E = m34DC;
+    setBlurPosResource(LKANM__CUTBOKO_POS);
+    setEnemyWeaponAtParam(0);
+    m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
+
+    return true;
 }
 
 /* 8015372C-801539C8       .text procWeaponNormalSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponNormalSwing() {
-    /* Nonmatching */
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+
+    if (swordButton() && mActorKeepEquip.getActor() != NULL) {
+        onNoResetFlg0(daPyFlg0_UNK4);
+    } else {
+        offNoResetFlg0(daPyFlg0_UNK4);
+    }
+    if (frameCtrl.getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        if (mActorKeepEquip.getActor() == NULL) {
+            m34D0 = 0;
+            offNoResetFlg0(daPyFlg0_UNK4);
+        }
+        if (m34D0 > 0) {
+            m34D0--;
+        } else {
+            mVelocity = 0.0f;
+            mDirection = DIR_RIGHT;
+            checkNextMode(0);
+            return true;
+        }
+    } else if (frameCtrl.getFrame() > m_HIO->mCut.mCutBoko.m.field_0x1C) {
+        f32 dVar4 = mVelocity;
+        u8 orig_direction = mDirection;
+        mVelocity = 0.0f;
+        mDirection = DIR_RIGHT;
+        if (checkNextMode(1)) {
+            return true;
+        }
+        mVelocity = dVar4;
+        mDirection = orig_direction;
+    }
+
+    if (changeCutReverseProc(ANM_CUTRER)) {
+        return true;
+    }
+
+    m34C2 = 1;
+    if (mpAttnActorLockOn != NULL) {
+        setShapeAngleToAtnActor();
+        m34D4 = shape_angle.y;
+    } else {
+        cLib_addCalcAngleS(
+            &shape_angle.y,
+            m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
+        );
+    }
+
+    current.angle.y = shape_angle.y;
+    if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x38)) {
+        mVelocity = std::fabsf(speedF) * m_HIO->mCut.mCutBoko.m.field_0x20 + m_HIO->mCut.mCutBoko.m.field_0x24;
+    }
+    if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x3C)) {
+        frameCtrl.setRate(m_HIO->mCut.mCutBoko.m.field_0x14);
+    }
+    if (frameCtrl.getFrame() >= m_HIO->mCut.mCutBoko.m.field_0x40 &&
+        frameCtrl.getFrame() < m_HIO->mCut.mCutBoko.m.field_0x44)
+    {
+        if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
+            onResetFlg0(daPyRFlg0_UNK1);
+            seStartSwordCut(JA_SE_LK_SW_KAZEKIRI_S);
+        }
+        onResetFlg0(daPyRFlg0_UNK2);
+    }
+    cLib_addCalc(
+        &mVelocity,
+        0.0f,
+        m_HIO->mCut.mCutBoko.m.field_0x30,
+        m_HIO->mCut.mCutBoko.m.field_0x28,
+        m_HIO->mCut.mCutBoko.m.field_0x2C
+    );
+
+    return true;
 }
 
 /* 801539C8-80153A68       .text procWeaponSideSwing_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponSideSwing_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_WEAPON_SIDE_SWING_e);
+    setSingleMoveAnime(
+        ANM_HAMSWINGA,
+        m_HIO->mCut.mCutBoko.m.field_0x48,
+        m_HIO->mCut.mCutBoko.m.field_0x4C,
+        m_HIO->mCut.mCutBoko.m.field_0x8,
+        m_HIO->mCut.mCutBoko.m.field_0x54
+    );
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    voiceStart(1);
+    m34D4 = shape_angle.y;
+    setBlurPosResource(LKANM__HAMMERSIDE_POS);
+    setEnemyWeaponAtParam(0);
+    return true;
 }
 
 /* 80153A68-80153C30       .text procWeaponSideSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponSideSwing() {
-    /* Nonmatching */
+    if (swordButton() && mActorKeepEquip.getActor() != NULL) {
+        onNoResetFlg0(daPyFlg0_UNK4);
+    } else {
+        offNoResetFlg0(daPyFlg0_UNK4);
+    }
+
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        mVelocity = 0.0f;
+        mDirection = DIR_RIGHT;
+        checkNextMode(0);
+        return true;
+    }
+
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutBoko.m.field_0x50) {
+        f32 dVar4 = mVelocity;
+        u8 orig_direction = mDirection;
+        mVelocity = 0.0f;
+        mDirection = DIR_RIGHT;
+        if (checkNextMode(1)) {
+            return true;
+        }
+        mVelocity = dVar4;
+        mDirection = orig_direction;
+    }
+
+    if (changeCutReverseProc(ANM_CUTREL)) {
+        return true;
+    }
+
+    if (mpAttnActorLockOn != NULL) {
+        setShapeAngleToAtnActor();
+        m34D4 = shape_angle.y;
+    } else {
+        cLib_addCalcAngleS(
+            &shape_angle.y,
+            m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
+        );
+    }
+    current.angle.y = shape_angle.y;
+    if ((mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mCut.mCutBoko.m.field_0x58) &&
+        (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < m_HIO->mCut.mCutBoko.m.field_0x5C))
+    {
+        if (!checkNoResetFlg0(daPyFlg0_CUT_AT_FLG)) {
+            onResetFlg0(daPyRFlg0_UNK1);
+            seStartSwordCut(JA_SE_LK_SW_KAZEKIRI_S);
+        }
+        onResetFlg0(daPyRFlg0_UNK2);
+    }
+
+    return true;
 }
 
 /* 80153C30-80153D1C       .text procWeaponFrontSwingReady_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_WEAPON_FRONT_SWING_READY_e);
+    setSingleMoveAnime(
+        ANM_HAMSWINGBPRE,
+        m_HIO->mCut.mCutBoko.m.field_0x60,
+        m_HIO->mCut.mCutBoko.m.field_0x64,
+        m_HIO->mCut.mCutBoko.m.field_0xA,
+        m_HIO->mCut.mCutBoko.m.field_0x68
+    );
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
+        m34D4 = shape_angle.y;
+    } else {
+        m34D4 = m34E8;
+    }
+    setEnemyWeaponAtParam(0);
+    voiceStart(7);
+    return true;
 }
 
 /* 80153D1C-80153DBC       .text procWeaponFrontSwingReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwingReady() {
-    /* Nonmatching */
+    if (mActorKeepEquip.getActor() == NULL) {
+        return checkNextMode(0);
+    }
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        return procWeaponFrontSwing_init();
+    }
+
+    if (mpAttnActorLockOn != NULL) {
+        setShapeAngleToAtnActor();
+        m34D4 = shape_angle.y;
+    } else {
+        cLib_addCalcAngleS(
+            &shape_angle.y,
+            m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
+        );
+    }
+
+    current.angle.y = shape_angle.y;
+    return true;
 }
 
 /* 80153DBC-80153ED8       .text procWeaponFrontSwing_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwing_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_WEAPON_FRONT_SWING_e);
+    setSingleMoveAnime(
+        ANM_HAMSWINGBHIT,
+        4.0f * m_HIO->mCut.mCutBoko.m.field_0x6C,
+        m_HIO->mCut.mCutBoko.m.field_0x70,
+        m_HIO->mCut.mCutBoko.m.field_0xC,
+        0.0f
+    );
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    voiceStart(1);
+    if (checkAttentionLock() || mStickDistance <= 0.05f) {
+        m34D4 = shape_angle.y;
+    } else {
+        m34D4 = m34E8;
+    }
+    m34D4 = shape_angle.y;
+    setBlurPosResource(LKANM__HAMMERFRONT_POS);
+    setEnemyWeaponAtParam(0);
+    onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
+    m34D0 = 0;
+    return true;
 }
 
 /* 80153ED8-80153FA0       .text procWeaponFrontSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwing() {
-    /* Nonmatching */
+    if (mActorKeepEquip.getActor() == NULL) {
+        return checkNextMode(0);
+    }
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
+        return procWeaponFrontSwingEnd_init();
+    }
+    if (changeCutReverseProc(ANM_CUTREL)) {
+        return true;
+    }
+
+    if (mpAttnActorLockOn != NULL) {
+        setShapeAngleToAtnActor();
+        m34D4 = shape_angle.y;
+    } else {
+        cLib_addCalcAngleS(
+            &shape_angle.y,
+            m34D4,
+            m_HIO->mTurn.m.field_0x4,
+            m_HIO->mTurn.m.field_0x0,
+            m_HIO->mTurn.m.field_0x2
+        );
+    }
+    current.angle.y = shape_angle.y;
+    onResetFlg0(daPyRFlg0_UNK2);
+    return true;
 }
 
 /* 80153FA0-80154014       .text procWeaponFrontSwingEnd_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwingEnd_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_WEAPON_FRONT_SWING_END_e);
+    setSingleMoveAnime(
+        ANM_HAMSWINGBEND,
+        m_HIO->mCut.mCutBoko.m.field_0x74,
+        m_HIO->mCut.mCutBoko.m.field_0x78,
+        m_HIO->mCut.mCutBoko.m.field_0xE,
+        m_HIO->mCut.mCutBoko.m.field_0x80
+    );
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    setEnemyWeaponAtParam(0);
+    return true;
 }
 
 /* 80154014-801540B4       .text procWeaponFrontSwingEnd__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwingEnd() {
-    /* Nonmatching */
+    if (swordButton() && mActorKeepEquip.getActor() != NULL) {
+        onNoResetFlg0(daPyFlg0_UNK4);
+    } else {
+        offNoResetFlg0(daPyFlg0_UNK4);
+    }
+
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        return checkNextMode(0);
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutBoko.m.field_0x7C) {
+        return checkNextMode(1);
+    } else {
+        return true;
+    }
 }
 
 /* 801540B4-8015411C       .text procWeaponThrow_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponThrow_init() {
-    /* Nonmatching */
+    commonProcInit(daPyProc_WEAPON_THROW_e);
+    setSingleMoveAnime(ANM_CUTA, 1.0f, 0.0f, -1, 5.0f);
+    current.angle.y = shape_angle.y;
+    mVelocity = 0.0f;
+    m34C2 = 1;
+    return true;
 }
 
 /* 8015411C-80154334       .text procWeaponThrow__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponThrow() {
-    /* Nonmatching */
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+
+    if (frameCtrl.getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        return checkNextMode(0);
+    }
+    if (frameCtrl.getFrame() > 100.0f) {
+        return checkNextMode(1);
+    }
+
+    if (frameCtrl.checkPass(10.0f)) {
+        daBoko_c* boko = static_cast<daBoko_c*>(mActorKeepEquip.getActor());
+        s16 uVar2 = 0xf400;
+        if (mpAttnActorLockOn != NULL) {
+            cXyz local_34 = mpAttnActorLockOn->eyePos - boko->current.pos;
+            f32 dVar5 = local_34.abs();
+            if (dVar5 >= 1.0f) {
+                dVar5 = local_34.absXZ();
+                uVar2 = cM_atan2s(-local_34.y, dVar5);
+            }
+        }
+        boko->setThrow(uVar2);
+        voiceStart(0);
+        deleteEquipItem(FALSE);
+    }
+
+    return true;
 }

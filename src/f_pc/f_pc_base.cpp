@@ -25,7 +25,7 @@ BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
 static int g_fpcBs_type;
 
 /* 8003C89C-8003C8DC       .text fpcBs_MakeOfType__FPi */
-s32 fpcBs_MakeOfType(int* i_type) {
+int fpcBs_MakeOfType(int* i_type) {
     static s32 t_type = 0x9130000;
     if (*i_type == 0) {
         *i_type = ++t_type;
@@ -40,12 +40,14 @@ fpc_ProcID fpcBs_MakeOfId() {
 }
 
 /* 8003C904-8003C960       .text fpcBs_Execute__FP18base_process_class */
-s32 fpcBs_Execute(base_process_class* i_proc) {
-    s32 result;
-    layer_class* savedLayer = fpcLy_CurrentLayer();
-    fpcLy_SetCurrentLayer(i_proc->mLyTg.mpLayer);
-    result = fpcMtd_Execute(i_proc->mpPcMtd, i_proc);
-    fpcLy_SetCurrentLayer(savedLayer);
+BOOL fpcBs_Execute(base_process_class* i_proc) {
+    BOOL result = TRUE;
+    if (result == TRUE) {
+        layer_class* savedLayer = fpcLy_CurrentLayer();
+        fpcLy_SetCurrentLayer(i_proc->mLyTg.mpLayer);
+        result = fpcMtd_Execute(i_proc->mpPcMtd, i_proc);
+        fpcLy_SetCurrentLayer(savedLayer);
+    }
     return result;
 }
 
@@ -58,8 +60,8 @@ void fpcBs_DeleteAppend(base_process_class* i_proc) {
 }
 
 /* 8003C9A0-8003C9FC       .text fpcBs_IsDelete__FP18base_process_class */
-s32 fpcBs_IsDelete(base_process_class* i_proc) {
-    s32 result;
+BOOL fpcBs_IsDelete(base_process_class* i_proc) {
+    BOOL result;
     layer_class* savedLayer = fpcLy_CurrentLayer();
     fpcLy_SetCurrentLayer(i_proc->mLyTg.mpLayer);
     result = fpcMtd_IsDelete(i_proc->mpPcMtd, i_proc);
@@ -68,14 +70,17 @@ s32 fpcBs_IsDelete(base_process_class* i_proc) {
 }
 
 /* 8003C9FC-8003CA60       .text fpcBs_Delete__FP18base_process_class */
-s32 fpcBs_Delete(base_process_class* i_proc) {
-    s32 deleteResult = fpcMtd_Delete(i_proc->mpPcMtd, i_proc);
-    if (deleteResult == 1) {
-        fpcBs_DeleteAppend(i_proc);
-        i_proc->mBsType = 0;
-        cMl::free(i_proc);
+BOOL fpcBs_Delete(base_process_class* i_proc) {
+    BOOL result = TRUE;
+    if (result == TRUE) {
+        result = fpcMtd_Delete(i_proc->mpPcMtd, i_proc);
+        if (result == TRUE) {
+            fpcBs_DeleteAppend(i_proc);
+            i_proc->mBsType = 0;
+            cMl::free(i_proc);
+        }
     }
-    return deleteResult;
+    return result;
 }
 
 /* 8003CA60-8003CB5C       .text fpcBs_Create__FsUiPv */
@@ -112,7 +117,7 @@ base_process_class* fpcBs_Create(s16 i_profName, fpc_ProcID i_procID, void* i_da
 }
 
 /* 8003CB5C-8003CC08       .text fpcBs_SubCreate__FP18base_process_class */
-s32 fpcBs_SubCreate(base_process_class* i_proc) {
+cPhs_State fpcBs_SubCreate(base_process_class* i_proc) {
     switch (fpcMtd_Create(i_proc->mpPcMtd, i_proc)) {
     case cPhs_NEXT_e:
     case cPhs_COMPLEATE_e:

@@ -6,8 +6,9 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "m_Do/m_Do_hostIO.h"
 
-class dPath;
+struct dPath;
 namespace daObj_Search { class Act_c; };
+struct br_s;
 
 class bk_class : public fopEn_enemy_c {
 public:
@@ -69,7 +70,7 @@ public:
     /* 0x034F */ u8 m034F;
     /* 0x0350 */ dPa_smokeEcallBack m0350;
     /* 0x0370 */ damagereaction dr;
-    /* 0x0B2C */ u8 m0B2C[0x0B30 - 0x0B2C];
+    /* 0x0B2C */ br_s* m0B2C;
     /* 0x0B30 */ int m0B30;
     /* 0x0B34 */ int m0B34;
     /* 0x0B38 */ u8 m0B38[0x0B44 - 0x0B38];
@@ -225,7 +226,7 @@ public:
     }
     virtual ~bkHIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x004 */ s8 mNo;

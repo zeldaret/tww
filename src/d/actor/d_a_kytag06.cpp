@@ -3,6 +3,7 @@
  * Tag - Weather Tag 6
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag06.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,6 +11,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag06_Draw__FP13kytag06_class */
 static BOOL daKytag06_Draw(kytag06_class*) {
@@ -21,7 +23,7 @@ static BOOL daKytag06_Execute(kytag06_class* i_this) {
     f32 time;
     int date;
 
-    if (!dComIfGp_event_runCheck()) {
+    if (dComIfGp_event_runCheck() == FALSE) {
         return TRUE;
     }
     if(!dComIfGp_evmng_startCheck("ARRIVAL_BRK")) {
@@ -57,20 +59,24 @@ static BOOL daKytag06_Delete(kytag06_class*) {
 }
 
 /* 000001A4-00000224       .text daKytag06_Create__FP10fopAc_ac_c */
-static int daKytag06_Create(fopAc_ac_c* i_this) {
+static cPhs_State daKytag06_Create(fopAc_ac_c* i_this) {
+#if VERSION > VERSION_DEMO
+    fopAcM_SetupActor(i_this, kytag06_class);
+#endif
     kytag06_class* a_this = (kytag06_class*)i_this;
-    int var;
 
-    fopAcM_SetupActor(a_this, kytag06_class);
-
-    if(dComIfGs_isSymbol(0) != 0) {
-        var = 5;
+    cPhs_State phase_state;
+    if(dComIfGs_isSymbol(0)) {
+        phase_state = cPhs_ERROR_e;
     } else {
+#if VERSION == VERSION_DEMO
+        fopAcM_SetupActor(i_this, kytag06_class);
+#endif
         a_this->field_0x294 = 0;
-        var = 4;
+        phase_state = cPhs_COMPLEATE_e;
     }
 
-    return var;
+    return phase_state;
 }
 
 static actor_method_class l_daKytag06_Method = {
@@ -91,7 +97,7 @@ actor_process_profile_definition g_profile_KYTAG06 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A6,
+    /* Priority     */ PRIO_KYTAG06,
     /* Actor SubMtd */ &l_daKytag06_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

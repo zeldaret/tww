@@ -1,8 +1,9 @@
 /**
  * d_a_mozo.cpp
- * Moblin Statue / モ石像 (Mo Sekizou)
+ * Enemy - Moblin Statue / モ石像 (Mo Sekizou)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mozo.h"
 #include "d/res/res_mozo.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,10 +11,43 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCps cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_FIRE,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK8,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+    }},
+};
+
 
 static daMozo_HIO_c l_HIO;
 
@@ -72,14 +106,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_BDL_MOZ);
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BDL_MOZ);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
         mdlData,
         0,
         0,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
-        J3DFrameCtrl::LOOP_REPEAT_e,
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_INDEX_BCK_MOZ)),
+        J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
@@ -91,14 +125,14 @@ BOOL daMozo_c::CreateHeap() {
     
     mAnimMorf = newMorf;
 
-    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_BRK_MOZ);
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BRK_MOZ);
     JUT_ASSERT(0x16A, m_brk != NULL);
 
-    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
-    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
-    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
+    int btkInitResult = mBtkAnm.init(mdlData, m_btk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     return mdlData != 0 && mAnimMorf != 0 && mAnimMorf->getModel() != 0 && brkInitResult != 0 && btkInitResult != 0;
 }
@@ -170,7 +204,7 @@ void daMozo_c::setAnm(int, float) {
 }
 
 /* 00001F70-00002228       .text CreateInit__8daMozo_cFv */
-s32 daMozo_c::CreateInit() {
+cPhs_State daMozo_c::CreateInit() {
     /* Nonmatching */
     J3DModelData* mdlData = mAnimMorf->getModel()->getModelData();
 
@@ -206,10 +240,10 @@ s32 daMozo_c::CreateInit() {
 }
 
 /* 00002228-000023B0       .text _create__8daMozo_cFv */
-s32 daMozo_c::_create() {
+cPhs_State daMozo_c::_create() {
     fopAcM_SetupActor(this, daMozo_c);
 
-    s32 result = dComIfG_resLoad(&mPhs, "Mozo");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Mozo");
 
     if (result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1AA0)) {
@@ -289,7 +323,7 @@ static BOOL daMozo_Delete(daMozo_c* i_this) {
 }
 
 /* 000026F0-00002710       .text daMozo_Create__FP10fopAc_ac_c */
-static s32 daMozo_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMozo_Create(fopAc_ac_c* i_this) {
     return static_cast<daMozo_c*>(i_this)->_create();
 }
 
@@ -311,7 +345,7 @@ actor_process_profile_definition g_profile_MOZO = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00D1,
+    /* Priority     */ PRIO_MOZO,
     /* Actor SubMtd */ &l_daMozo_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

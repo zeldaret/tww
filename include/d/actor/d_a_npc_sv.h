@@ -16,7 +16,7 @@ public:
     void setResFlag(unsigned char) {}
 
     daNpcSv_c();
-    s32 _create();
+    cPhs_State _create();
     void createHeap();
     void createInit();
     bool _delete();

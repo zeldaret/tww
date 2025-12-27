@@ -3,49 +3,243 @@
 // Translation Unit: d_a_sk2.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk2.h"
+#include "d/res/res_sk2.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_bg_w_sv.h"
+#include "d/d_bg_w_deform.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_s_play.h"
+#include "f_op/f_op_actor_mng.h"
+
+static s32 sk2_dzb[] = {SK2_DZB_KSYLF_00, SK2_DZB_KSYLF_01};
+static s32 sk2_bck[] = {SK2_BCK_KSYLF_00, SK2_BCK_KSYLF_01};
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == 0) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 uVar2 = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        sk2_class* i_this = (sk2_class*)model->getUserArea();
+
+        if (i_this != NULL && uVar2 <= 3) {
+            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
+            cMtx_YrotM(*calc_mtx, i_this->m2CE[uVar2].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2CE[uVar2].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2CE[uVar2].z);
+
+            cXyz sp08(0.0f, 0.0f, 0.0f);
+            MtxPosition(&sp08, &i_this->m2E8[uVar2]);
+            model->setAnmMtx(uVar2, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 000001D0-00000278       .text daSk2_Draw__FP9sk2_class */
-static BOOL daSk2_Draw(sk2_class*) {
-    /* Nonmatching */
+static BOOL daSk2_Draw(sk2_class* i_this) {
+    J3DModel* model = i_this->mpMorf->getModel();
+    g_env_light.settingTevStruct(TEV_TYPE_BG0_PLIGHT, &i_this->actor.current.pos, &i_this->actor.tevStr);
+    g_env_light.setLightTevColorType(model, &i_this->actor.tevStr);
+
+    dComIfGd_setListBG();
+    i_this->mpMorf->entryDL();
+    dComIfGd_setList();
+    return TRUE;
 }
 
 /* 00000278-00000568       .text dousa_move__FP9sk2_class */
-void dousa_move(sk2_class*) {
-    /* Nonmatching */
+void dousa_move(sk2_class* i_this) {
+    switch (i_this->m2BA) {
+    case 0:
+        i_this->mpMorf->setFrame(i_this->m2C4);
+        i_this->m2C0 = 0.5f;
+        i_this->m2BA++;
+
+    case 1:
+        if (!i_this->mpMorf->checkFrame(0.0f) && !i_this->mpMorf->checkFrame(18.0f)) {
+            break;
+        }
+        i_this->m2BA++;
+
+    case 2:
+        cLib_addCalc0(&i_this->m2C0, 0.3f, 0.3f);
+        if (i_this->m2C0 < 0.1f) {
+            i_this->m2C0 = 0.0f;
+            i_this->m2BC = REG8_S(1) + 100;
+            i_this->m2BA++;
+        }
+        break;
+
+    case 3:
+        i_this->m2BC--;
+        if (i_this->m2BC == 0) {
+            i_this->m2C0 = 0.5f;
+            fopAcM_seStart(&i_this->actor, JA_SE_OBJ_SHOKU_LIFT_MOVE, 0);
+            i_this->m2BA = 1;
+        }
+        break;
+    }
+
+    for (s32 i = 1; i < 4; i++) {
+        if (i_this->m2B4 == 0) {
+            i_this->m2CE[i].x = (REG8_F(1) + 500.0f) * cM_ssin(i_this->m2CC * 1000 + (i * 5000));
+            i_this->m2CE[i].z = (REG8_F(1) + 500.0f) * cM_ssin(i_this->m2CC * 1000 + (i * 5000));
+        } else {
+            i_this->m2CE[i].y = (REG8_F(1) + 500.0f) * cM_ssin((i_this->m2CC + i) * 1000);
+        }
+    }
+
+    i_this->mpMorf->setPlaySpeed(i_this->m2C0);
+    i_this->mpMorf->play(NULL, 0, 0);
+    i_this->m2CC++;
 }
 
 /* 00000568-00000660       .text daSk2_Execute__FP9sk2_class */
-static BOOL daSk2_Execute(sk2_class*) {
-    /* Nonmatching */
+static BOOL daSk2_Execute(sk2_class* i_this) {
+    dousa_move(i_this);
+
+    J3DModel* model = i_this->mpMorf->getModel();
+    model->setBaseScale(i_this->actor.scale);
+    mDoMtx_stack_c::transS(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z);
+    mDoMtx_stack_c::YrotM(i_this->actor.current.angle.y);
+    mDoMtx_stack_c::XrotM(i_this->actor.current.angle.x);
+    mDoMtx_stack_c::ZrotM(i_this->actor.current.angle.z);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    i_this->mpBgW->CopyBackVtx();
+    i_this->mpMorf->calc();
+
+    i_this->mpBgW->MoveAfterAnmCalc(i_this->mpMorf->getModel());
+    return TRUE;
 }
 
 /* 00000660-00000668       .text daSk2_IsDelete__FP9sk2_class */
 static BOOL daSk2_IsDelete(sk2_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000668-000006C4       .text daSk2_Delete__FP9sk2_class */
-static BOOL daSk2_Delete(sk2_class*) {
-    /* Nonmatching */
+static BOOL daSk2_Delete(sk2_class* i_this) {
+#if VERSION == VERSION_DEMO
+    dComIfG_Bgsp()->Release(i_this->mpBgW);
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Sk2");
+#else
+    dComIfG_resDelete(&i_this->mPhase, "Sk2");
+    if (i_this->actor.heap != NULL) {
+        dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
+#endif
+    return TRUE;
 }
 
 /* 000006C4-00000918       .text useHeapInit__FP10fopAc_ac_c */
-static BOOL useHeapInit(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL useHeapInit(fopAc_ac_c* a_this) {
+    sk2_class* i_this = (sk2_class*)a_this;
+
+    J3DModelData* pModelData;
+    if (i_this->m2B4 == 0) {
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_00);
+    } else {
+        pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk2", SK2_BDL_KSYLF_01);
+    }
+
+    i_this->mpMorf = new mDoExt_McaMorf(
+        pModelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectRes("Sk2", sk2_bck[i_this->m2B4]),
+        J3DFrameCtrl::EMode_LOOP,
+        0.5f,
+        0,
+        -1,
+        1,
+        NULL,
+        0x80000,
+        0x11000022
+    );
+
+    if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+
+    for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
+        i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+    }
+
+    i_this->mpBgW = new dBgWDeform();
+
+    if (i_this->mpBgW == NULL) {
+        return FALSE;
+    }
+
+    if (i_this->mpBgW->Set((cBgD_t*)dComIfG_getObjectRes("Sk2", sk2_dzb[i_this->m2B4]), i_this->mpMorf->getModel(), 0)) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000918-00000BC4       .text daSk2_Create__FP10fopAc_ac_c */
-static s32 daSk2_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daSk2_Create(fopAc_ac_c* a_this) {
+    sk2_class* i_this = (sk2_class*)a_this;
+#if VERSION == VERSION_DEMO
+    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
+    if (PVar1 == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(a_this, sk2_class);
+#else
+    fopAcM_SetupActor(a_this, sk2_class);
+    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Sk2");
+    if (PVar1 == cPhs_COMPLEATE_e) {
+#endif
+        i_this->m2B4 = fopAcM_GetParam(a_this);
+        i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;
+
+        if (i_this->m2B4 == 0xff) {
+            i_this->m2B4 = 0;
+        }
+
+        if (i_this->m2B5 != 0xff) {
+            i_this->m2C4 = i_this->m2B5;
+            if (i_this->m2C4 > 35.0f) {
+                i_this->m2C4 = 0.0f;
+            }
+        }
+
+        i_this->m2B6 = fopAcM_GetParam(a_this) >> 0x18;
+        if (i_this->m2B6 != 0xff && fopAcM_isSwitch(a_this, i_this->m2B6)) {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(&i_this->actor, useHeapInit, 0x3b20)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
+        J3DModel* model = i_this->mpMorf->getModel();
+        model->setBaseScale(a_this->scale);
+        mDoMtx_stack_c::transS(a_this->current.pos.x, a_this->current.pos.y, a_this->current.pos.z);
+        mDoMtx_stack_c::YrotM(a_this->current.angle.y);
+        mDoMtx_stack_c::XrotM(a_this->current.angle.x);
+        mDoMtx_stack_c::ZrotM(a_this->current.angle.z);
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+        i_this->mpMorf->calc();
+
+        fopAcM_SetMin(a_this, -800.0f, -200.0f, -400.0f);
+        fopAcM_SetMax(a_this, 500.0f, 1000.0f, 1000.0f);
+        a_this->attention_info.flags = 0;
+
+        if (dComIfG_Bgsp()->Regist(i_this->mpBgW, a_this)) {
+            return cPhs_ERROR_e;
+        }
+    }
+    return PVar1;
 }
 
 static actor_method_class l_daSk2_Method = {
@@ -66,7 +260,7 @@ actor_process_profile_definition g_profile_SK2 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0098,
+    /* Priority     */ PRIO_SK2,
     /* Actor SubMtd */ &l_daSk2_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

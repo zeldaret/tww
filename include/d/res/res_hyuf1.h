@@ -1,7 +1,7 @@
 #ifndef RES_HYUF1_H
 #define RES_HYUF1_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum HYUF1_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

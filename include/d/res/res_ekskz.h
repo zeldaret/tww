@@ -1,7 +1,7 @@
 #ifndef RES_EKSKZ_H
 #define RES_EKSKZ_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum EKSKZ_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

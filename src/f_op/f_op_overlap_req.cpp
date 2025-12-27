@@ -11,8 +11,8 @@
 
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
-static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
-    if (fpcM_Delete(i_this->mpTask) == 1) {
+static cPhs_State fopOvlpReq_phase_Done(overlap_request_class* i_this) {
+    if (fpcM_Delete(i_this->mpTask) == TRUE) {
         i_this->mpTask = NULL;
         i_this->field_0x4 = 0;
         i_this->mPeektime = 0;
@@ -24,15 +24,15 @@ static int fopOvlpReq_phase_Done(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
-    cReq_Done(i_this);
+static cPhs_State fopOvlpReq_phase_IsDone(overlap_request_class* i_this) {
+    cReq_Done(&i_this->base);
     if (i_this->mDelay-- <= 0)
         return cPhs_NEXT_e;
     else
         return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
     if (cReq_Is_Done(&i_this->mpTask->mRq)) {
         i_this->mIsPeek = 0;
         return cPhs_NEXT_e;
@@ -41,11 +41,11 @@ static s32 fopOvlpReq_phase_IsWaitOfFadeout(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
     if (i_this->mPeektime)
         i_this->mPeektime--;
 
-    if (i_this->flag2 == 2 && !i_this->mPeektime) {
+    if (i_this->base.flag2 == 2 && !i_this->mPeektime) {
         cReq_Command(&i_this->mpTask->mRq, 2);
         return cPhs_NEXT_e;
     }
@@ -54,16 +54,16 @@ static s32 fopOvlpReq_phase_WaitOfFadeout(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsComplete(overlap_request_class* i_this) {
     if (cReq_Is_Done(&i_this->mpTask->mRq)) {
-        cReq_Done(i_this);
+        cReq_Done(&i_this->base);
         return cPhs_NEXT_e;
     }
 
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
     if (fpcM_IsCreating(i_this->mPId) == 0) {
         base_process_class* pBaseProc = fpcEx_SearchByID(i_this->mPId);
         if (pBaseProc == NULL)
@@ -76,9 +76,9 @@ static s32 fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
     return cPhs_INIT_e;
 }
 
-static s32 fopOvlpReq_phase_Create(overlap_request_class* i_this) {
+static cPhs_State fopOvlpReq_phase_Create(overlap_request_class* i_this) {
     fpcLy_SetCurrentLayer(i_this->pCurrentLayer);
-    i_this->mPId = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_this->mProcName, 0, 0, 0);
+    i_this->mPId = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_this->mProcName, NULL, NULL, NULL);
     return cPhs_NEXT_e;
 }
 
@@ -99,7 +99,7 @@ overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_this, s16 pro
         return i_this;
     }
 
-    cReq_Command(i_this, 1);
+    cReq_Command(&i_this->base, 1);
     i_this->mProcName = procName;
     cPhs_Set(&i_this->mPhs, phaseMethod);
     fopOvlpReq_SetPeektime(i_this, peekTime);
@@ -112,8 +112,8 @@ overlap_request_class* fopOvlpReq_Request(overlap_request_class* i_this, s16 pro
     return i_this;
 }
 
-s32 fopOvlpReq_Handler(overlap_request_class* i_this) {
-    s32 phase_state = cPhs_Do(&i_this->mPhs, i_this);
+cPhs_State fopOvlpReq_Handler(overlap_request_class* i_this) {
+    cPhs_State phase_state = cPhs_Do(&i_this->mPhs, i_this);
 
     switch (phase_state) {
     case cPhs_NEXT_e:
@@ -147,10 +147,10 @@ void fopOvlpReq_SetPeektime(overlap_request_class* i_this, u16 peekTime) {
     i_this->mPeektime = peekTime;
 }
 
-int fopOvlpReq_OverlapClr(overlap_request_class* i_this) {
-    if (i_this->flag0 == 1 || !fopOvlpReq_Is_PeektimeLimit(i_this))
-        return 0;
+BOOL fopOvlpReq_OverlapClr(overlap_request_class* i_this) {
+    if (i_this->base.flag0 == 1 || !fopOvlpReq_Is_PeektimeLimit(i_this))
+        return FALSE;
 
-    cReq_Create(i_this, 2);
-    return 1;
+    cReq_Create(&i_this->base, 2);
+    return TRUE;
 }

@@ -3,6 +3,7 @@
 // Translation Unit: d_s_actor_data_mng.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_actor_data_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -65,11 +66,10 @@ void dADM_CharTbl::SetUpIndex() {
 /* 800C2B40-800C2BC8       .text GetNameIndex2__12dADM_CharTblCFPCci */
 int dADM_CharTbl::GetNameIndex2(const char* pName, int index) const {
     for (int start = 0; ; start++) {
-        int col = GetNameIndex(pName, start);
-        if (col == -1)
+        start = GetNameIndex(pName, start);
+        if (start == -1)
             return -1;
 
-        start = col;
         int inf = GetInf(mIndex_ARG, start);
         if (index == inf)
             return start;
@@ -116,8 +116,20 @@ void dADM::SetData(void* pData) {
         pHeader += 3;
     }
 
-    if (FindTag('ACFN', &row, &rowOffs) && FindTag('ACNA', &name, &nameOffs) && FindTag('ACDS', &dat_size, &dataOffs)) {
-        JUT_ASSERT(0xca, row * name == dat_size);
-        mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
+    u32 tag;
+    tag = 'ACFN';
+    if (!FindTag(tag, &row, &rowOffs)) {
+        return;
     }
+    tag = 'ACNA';
+    if (!FindTag(tag, &name, &nameOffs)) {
+        return;
+    }
+    tag = 'ACDS';
+    if (!FindTag(tag, &dat_size, &dataOffs)) {
+        return;
+    }
+
+    JUT_ASSERT(202, row * name == dat_size);
+    mCharTbl.SetData((u32)pData, row, rowOffs, name, nameOffs, dat_size, dataOffs);
 }

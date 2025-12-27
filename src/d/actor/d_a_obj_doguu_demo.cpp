@@ -3,12 +3,13 @@
 // Translation Unit: d_a_obj_doguu_demo.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_doguu_demo.h"
 #include "d/res/res_doguud.h"
 #include "d/d_bg_w.h"
-#include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_mtx.h"
@@ -62,11 +63,11 @@ void daObjDoguuD_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjDoguuD_c::_create() {
+cPhs_State daObjDoguuD_c::_create() {
     fopAcM_SetupActor(this, daObjDoguuD_c);
     mBgwRegistered = false;
 
-    s32 phase_state = dComIfG_resLoad(&mPhs, "DoguuD");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "DoguuD");
 
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {
@@ -79,7 +80,7 @@ s32 daObjDoguuD_c::_create() {
 }
 
 /* 00000314-000003BC       .text daObjDoguuD_create__FPv */
-static s32 daObjDoguuD_create(void* i_this) {
+static cPhs_State daObjDoguuD_create(void* i_this) {
     return ((daObjDoguuD_c*)i_this)->_create();
 }
 
@@ -113,8 +114,8 @@ static BOOL daObjDoguuD_Draw(void* i_this) {
 bool daObjDoguuD_c::_execute() {
     if (demoActorID != 0) {
         dDemo_actor_c* demoAc = dComIfGp_demo_getActor(demoActorID);
-        if (demoAc != NULL && demoAc->checkEnable(0x10)) {
-            mShape = demoAc->mShapeId;
+        if (demoAc != NULL && demoAc->checkEnable(dDemo_actor_c::ENABLE_SHAPE_e)) {
+            mShape = demoAc->getShapeId();
         }
     }
     set_mtx();
@@ -149,7 +150,7 @@ actor_process_profile_definition g_profile_Obj_DoguuD = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C5,
+    /* Priority     */ PRIO_Obj_DoguuD,
     /* Actor SubMtd */ &daObj_DoguuDMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

@@ -315,7 +315,7 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GO
             csXyz angle;
             CalcParticleAngle(atInf, atStts, tgStts, &angle);
             if (atInf->GetAtHitMark() == dCcG_AtHitMark_Big_e) {
-                dComIfGp_particle_set(0x10, pos);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0010, pos);
                 cXyz scale;
                 scale.x = scale.y = scale.z = 2.0f;
                 dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, pos, &angle, &scale);
@@ -477,10 +477,5 @@ bool dCcS::ChkNoHitGCo(cCcD_Obj* obj1, cCcD_Obj* obj2) {
     if ((inf1->ChkCoAtLasso() && !inf2->ChkCoTgLasso()) || (inf2->ChkCoAtLasso() && !inf1->ChkCoTgLasso())) {
         return true;
     }
-    return false;
-}
-
-/* 800AE930-800AE938       .text ChkNoHitGAtTg__4cCcSFPC12cCcD_GObjInfPC12cCcD_GObjInfP10cCcD_GSttsP10cCcD_GStts */
-bool cCcS::ChkNoHitGAtTg(const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_GStts*, cCcD_GStts*) {
     return false;
 }

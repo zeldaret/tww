@@ -3,11 +3,13 @@
 // Translation Unit: d_a_kytag00.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "SSystem/SComponent/c_lib.h"
 
@@ -151,9 +153,8 @@ void raincnt_set(f32 count) {
     s32 newCount = 0;
 
     if (dKy_checkEventNightStop()) {
-        s32 newCount2;
-        if (g_env_light.mRainCount < (newCount2 = (count * count * count) * 250.0f))
-            newCount = newCount2;
+        if (g_env_light.mRainCount < (s32)((count * count * count) * 250.0f))
+            newCount = (count * count * count) * 250.0f;
     } else {
         newCount = (count * count * count) * 250.0f;
     }
@@ -348,7 +349,7 @@ static BOOL daKytag00_Delete(kytag00_class* i_this) {
 }
 
 /* 00000D64-00000F8C       .text daKytag00_Create__FP10fopAc_ac_c */
-static s32 daKytag00_Create(fopAc_ac_c* i_ac) {
+static cPhs_State daKytag00_Create(fopAc_ac_c* i_ac) {
     kytag00_class * i_this = (kytag00_class *)i_ac;
 
     fopAcM_SetupActor(i_this, kytag00_class);
@@ -415,7 +416,7 @@ actor_process_profile_definition g_profile_KYTAG00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00A0,
+    /* Priority     */ PRIO_KYTAG00,
     /* Actor SubMtd */ &l_daKytag00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

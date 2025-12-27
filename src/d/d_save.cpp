@@ -3,12 +3,13 @@
 // Translation Unit: d_save.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_save.h"
 #include "d/d_save_init.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
 #include "d/d_s_play.h"
 #endif
 #include "d/actor/d_a_npc_sarace.h"
@@ -41,7 +42,9 @@ void dSv_player_status_a_c::init() {
     mMagic = 0;
     field_0x15 = 0;
     field_0x6 = 0;
+#if VERSION > VERSION_DEMO
     field_0x16 = 0;
+#endif
 }
 
 /* 80058B54-80058B84       .text init__21dSv_player_status_b_cFv */
@@ -51,7 +54,9 @@ void dSv_player_status_b_c::init() {
     mTime = 165.0f;
     mDate = 0;
     mDateIPL = 0;
+#if VERSION > VERSION_DEMO
     field_0x8 = 0.0f;
+#endif
 }
 
 /* 80058B84-80058BC8       .text init__25dSv_player_return_place_cFv */
@@ -63,7 +68,7 @@ void dSv_player_return_place_c::init() {
 
 /* 80058BC8-80058C60       .text set__25dSv_player_return_place_cFPCcScUc */
 void dSv_player_return_place_c::set(const char* i_name, s8 i_roomNo, u8 i_status) {
-    JUT_ASSERT(179, strlen(i_name) <= 7);
+    JUT_ASSERT(DEMO_SELECT(173, 179), strlen(i_name) <= 7);
 
     strcpy(mName, i_name);
     mRoomNo = i_roomNo;
@@ -197,14 +202,14 @@ void dSv_player_get_item_c::init() {
 
 /* 800594C4-8005955C       .text onItem__21dSv_player_get_item_cFiUc */
 void dSv_player_get_item_c::onItem(int i_field, u8 i_item) {
-    JUT_ASSERT(399, 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(393, 399), 0 <= i_item && i_item < 8);
 
     mItemFlags[i_field] |= (u8)(1 << i_item);
 }
 
 /* 8005955C-800595F8       .text isItem__21dSv_player_get_item_cFiUc */
 BOOL dSv_player_get_item_c::isItem(int i_field, u8 i_item) {
-    JUT_ASSERT(429, 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(423, 429), 0 <= i_item && i_item < 8);
 
     return mItemFlags[i_field] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
@@ -620,8 +625,8 @@ void dSv_player_bag_item_c::setReserveItemEmpty() {
 }
 
 /* 8005A7C0-8005A7E4       .text setReserveItemEmpty__21dSv_player_bag_item_cFUc */
-void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemNo) {
-    setReserveItemChange(i_itemNo, dItem_NONE_e);
+void dSv_player_bag_item_c::setReserveItemEmpty(u8 i_itemBtn) {
+    setReserveItemChange(i_itemBtn, dItem_NONE_e);
 }
 
 /* 8005A7E4-8005A854       .text setReserveItem__21dSv_player_bag_item_cFUc */
@@ -663,37 +668,37 @@ void dSv_player_get_bag_item_c::init() {
 
 /* 8005A8CC-8005A960       .text onBeast__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onBeast(u8 i_no) {
-    JUT_ASSERT(1235, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1229, 1235), 0 <= i_no && i_no < 8);
     mBeastFlags |= (u8)(1 << i_no);
 }
 
 /* 8005A960-8005A9F8       .text isBeast__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBeast(u8 i_no) {
-    JUT_ASSERT(1265, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1259, 1265), 0 <= i_no && i_no < 8);
     return mBeastFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005A9F8-8005AA8C       .text onBait__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onBait(u8 i_no) {
-    JUT_ASSERT(1280, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1274, 1280), 0 <= i_no && i_no < 8);
     mBaitFlags |= (u8)(1 << i_no);
 }
 
 /* 8005AA8C-8005AB24       .text isBait__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isBait(u8 i_no) {
-    JUT_ASSERT(1310, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1304, 1310), 0 <= i_no && i_no < 8);
     return mBaitFlags & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AB24-8005ABB4       .text onReserve__25dSv_player_get_bag_item_cFUc */
 void dSv_player_get_bag_item_c::onReserve(u8 i_no) {
-    JUT_ASSERT(1325, 0 <= i_no && i_no < 32);
+    JUT_ASSERT(DEMO_SELECT(1319, 1325), 0 <= i_no && i_no < 32);
     mReserveFlags |= (1 << i_no);
 }
 
 /* 8005ABB4-8005AC48       .text isReserve__25dSv_player_get_bag_item_cFUc */
 BOOL dSv_player_get_bag_item_c::isReserve(u8 i_no) {
-    JUT_ASSERT(1355, 0 <= i_no && i_no < 32);
+    JUT_ASSERT(DEMO_SELECT(1349, 1355), 0 <= i_no && i_no < 32);
     return mReserveFlags & (1 << i_no) ? TRUE : FALSE;
 }
 
@@ -727,55 +732,55 @@ void dSv_player_collect_c::init() {
 
 /* 8005ACE0-8005AD78       .text onCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::onCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(1412, 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1406, 1412), 0 <= i_item && i_item < 8);
     mCollect[i_idx] |= (u8)(1 << i_item);
 }
 
 /* 8005AD78-8005AE10       .text offCollect__20dSv_player_collect_cFiUc */
 void dSv_player_collect_c::offCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(1427, 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1421, 1427), 0 <= i_item && i_item < 8);
     mCollect[i_idx] &= ~(u8)(1 << i_item);
 }
 
 /* 8005AE10-8005AEAC       .text isCollect__20dSv_player_collect_cFiUc */
 BOOL dSv_player_collect_c::isCollect(int i_idx, u8 i_item) {
-    JUT_ASSERT(1442, 0 <= i_item && i_item < 8);
+    JUT_ASSERT(DEMO_SELECT(1436, 1442), 0 <= i_item && i_item < 8);
     return mCollect[i_idx] & (u8)(1 << i_item) ? TRUE : FALSE;
 }
 
 /* 8005AEAC-8005AF40       .text onTact__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onTact(u8 i_no) {
-    JUT_ASSERT(1502, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1496, 1502), 0 <= i_no && i_no < 8);
     mTact |= (u8)(1 << i_no);
 }
 
 /* 8005AF40-8005AFD8       .text isTact__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTact(u8 i_no) {
-    JUT_ASSERT(1532, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1526, 1532), 0 <= i_no && i_no < 8);
     return mTact & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005AFD8-8005B06C       .text onTriforce__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onTriforce(u8 i_no) {
-    JUT_ASSERT(1547, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1541, 1547), 0 <= i_no && i_no < 8);
     mTriforce |= (u8)(1 << i_no);
 }
 
 /* 8005B06C-8005B104       .text isTriforce__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isTriforce(u8 i_no) {
-    JUT_ASSERT(1577, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1571, 1577), 0 <= i_no && i_no < 8);
     return mTriforce & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005B104-8005B198       .text onSymbol__20dSv_player_collect_cFUc */
 void dSv_player_collect_c::onSymbol(u8 i_no) {
-    JUT_ASSERT(1592, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1586, 1592), 0 <= i_no && i_no < 8);
     mSymbol |= (u8)(1 << i_no);
 }
 
 /* 8005B198-8005B230       .text isSymbol__20dSv_player_collect_cFUc */
 BOOL dSv_player_collect_c::isSymbol(u8 i_no) {
-    JUT_ASSERT(1622, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1616, 1622), 0 <= i_no && i_no < 8);
     return mSymbol & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
@@ -805,7 +810,9 @@ void dSv_player_map_c::init() {
         mFmapBits[i] = 0;
     }
 
+#if VERSION > VERSION_DEMO
     field_0x81 = 0;
+#endif
     mFmapBits[dIsleIdx_ForsakenFortress_e] = 1 | 2;
     mFmapBits[dIsleIdx_OutsetIsland_e] = 1 | 2;
     mFmapBits[dIsleIdx_WindfallIsland_e] = 1 | 2;
@@ -817,67 +824,67 @@ void dSv_player_map_c::init() {
 
 /* 8005B320-8005B3CC       .text onGetMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onGetMap(int i_no) {
-    JUT_ASSERT(1690, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1680, 1690), 0 <= i_no && i_no < 128);
     field_0x0[1][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B3CC-8005B47C       .text isGetMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isGetMap(int i_no) {
-    JUT_ASSERT(1718, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1708, 1718), 0 <= i_no && i_no < 128);
     return field_0x0[1][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B47C-8005B528       .text onOpenMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onOpenMap(int i_no) {
-    JUT_ASSERT(1751, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1741, 1751), 0 <= i_no && i_no < 128);
     field_0x0[2][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B528-8005B5D4       .text offOpenMap__16dSv_player_map_cFi */
 void dSv_player_map_c::offOpenMap(int i_no) {
-    JUT_ASSERT(1765, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(0, 1765), 0 <= i_no && i_no < 128);
     field_0x0[2][i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005B5D4-8005B684       .text isOpenMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isOpenMap(int i_no) {
-    JUT_ASSERT(1779, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1769, 1779), 0 <= i_no && i_no < 128);
     return field_0x0[2][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B684-8005B730       .text onCompleteMap__16dSv_player_map_cFi */
 void dSv_player_map_c::onCompleteMap(int i_no) {
-    JUT_ASSERT(1812, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1802, 1812), 0 <= i_no && i_no < 128);
     field_0x0[3][i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005B730-8005B7DC       .text offCompleteMap__16dSv_player_map_cFi */
 void dSv_player_map_c::offCompleteMap(int i_no) {
-    JUT_ASSERT(1826, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(0, 1826), 0 <= i_no && i_no < 128);
     field_0x0[3][i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005B7DC-8005B88C       .text isCompleteMap__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isCompleteMap(int i_no) {
-    JUT_ASSERT(1840, 0 <= i_no && i_no < 128);
+    JUT_ASSERT(DEMO_SELECT(1830, 1840), 0 <= i_no && i_no < 128);
     return field_0x0[3][i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005B88C-8005B92C       .text onTriforce__16dSv_player_map_cFi */
 void dSv_player_map_c::onTriforce(int i_no) {
-    JUT_ASSERT(1874, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1864, 1874), 0 <= i_no && i_no < 8);
     field_0x81 |= (u8)(1 << i_no);
 }
 
 /* 8005B92C-8005B9CC       .text offTriforce__16dSv_player_map_cFi */
 void dSv_player_map_c::offTriforce(int i_no) {
-    JUT_ASSERT(1888, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(0, 1888), 0 <= i_no && i_no < 8);
     field_0x81 &= ~(u8)(1 << i_no);
 }
 
 /* 8005B9CC-8005BA70       .text isTriforce__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isTriforce(int i_no) {
-    JUT_ASSERT(1902, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1892, 1902), 0 <= i_no && i_no < 8);
     return field_0x81 & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
@@ -895,46 +902,46 @@ int dSv_player_map_c::getCollectMapNum() {
 
 /* 8005BAE8-8005BB84       .text onFmapBit__16dSv_player_map_cFiUc */
 void dSv_player_map_c::onFmapBit(int i_idx, u8 i_no) {
-    JUT_ASSERT(1957, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1947, 1957), 0 <= i_no && i_no < 8);
     mFmapBits[i_idx] |= (u8)(1 << i_no);
 }
 
 /* 8005BB84-8005BC24       .text isFmapBit__16dSv_player_map_cFiUc */
 BOOL dSv_player_map_c::isFmapBit(int i_idx, u8 i_no) {
-    JUT_ASSERT(1987, 0 <= i_no && i_no < 8);
+    JUT_ASSERT(DEMO_SELECT(1977, 1987), 0 <= i_no && i_no < 8);
     return mFmapBits[i_idx] & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005BC24-8005BCBC       .text onSaveArriveGrid__16dSv_player_map_cFi */
 void dSv_player_map_c::onSaveArriveGrid(int no) {
-    JUT_ASSERT(1996, (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(1986, 1996), (no >= 0) && (no < 49));
     onFmapBit(no, 0);
 }
 
 /* 8005BCBC-8005BD54       .text isSaveArriveGrid__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isSaveArriveGrid(int no) {
-    JUT_ASSERT(2010, (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2000, 2010), (no >= 0) && (no < 49));
     return isFmapBit(no, 0);
 }
 
 /* 8005BD54-8005BDEC       .text onSaveArriveGridForAgb__16dSv_player_map_cFi */
 void dSv_player_map_c::onSaveArriveGridForAgb(int no) {
-    JUT_ASSERT(2017, (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2007, 2017), (no >= 0) && (no < 49));
     onFmapBit(no, 1);
 }
 
 /* 8005BDEC-8005BE84       .text isSaveArriveGridForAgb__16dSv_player_map_cFi */
 BOOL dSv_player_map_c::isSaveArriveGridForAgb(int no) {
-    JUT_ASSERT(2029, (no >= 0) && (no < 49));
+    JUT_ASSERT(DEMO_SELECT(2019, 2029), (no >= 0) && (no < 49));
     return isFmapBit(no, 1);
 }
 
 /* 8005BE84-8005BF2C       .text init__17dSv_player_info_cFv */
 void dSv_player_info_c::init() {
-    static char l_defaultName[] = VERSION_SELECT("リンク", "Link", "Link");
+    static char l_defaultName[] = VERSION_SELECT("リンク", "リンク", "Link", "Link");
 
     strcpy(mPlayerName, l_defaultName);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 1) {
         strcpy(mPlayerName, "Link");
     }
@@ -958,21 +965,22 @@ void dSv_player_info_c::init() {
 
 /* 8005BF2C-8005BFA4       .text init__19dSv_player_config_cFv */
 void dSv_player_config_c::init() {
-    mRuby = VERSION_SELECT(0, 1, 0);
+    mRuby = VERSION_SELECT(0, 0, 1, 0);
 
     u32 soundMode = OSGetSoundMode();
     if (soundMode == 0) {
         mSoundMode = 0;
-        JAIZelBasic::getInterface()->setOutputMode(0);
+        mDoAud_setOutputMode(0);
     } else {
         mSoundMode = 1;
-        JAIZelBasic::getInterface()->setOutputMode(1);
+        mDoAud_setOutputMode(1);
     }
 
     mAttentionType = 0;
     mVibration = 1;
 }
 
+#if VERSION > VERSION_DEMO
 /* 8005BFA4-8005BFC8       .text checkVibration__19dSv_player_config_cFv */
 s32 dSv_player_config_c::checkVibration() {
     if (JUTGamePad::sRumbleSupported & 0x80000000)
@@ -980,6 +988,7 @@ s32 dSv_player_config_c::checkVibration() {
 
     return 0;
 }
+#endif
 
 /* 8005BFC8-8005BFD4       .text init__19dSv_player_priest_cFv */
 void dSv_player_priest_c::init() {
@@ -1035,37 +1044,37 @@ void dSv_memBit_c::init() {
 
 /* 8005C0EC-8005C188       .text onTbox__12dSv_memBit_cFi */
 void dSv_memBit_c::onTbox(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2225, 2252, 2252), 0 <= i_no && i_no < 32);
+    JUT_ASSERT(VERSION_SELECT(2197, 2225, 2252, 2252), 0 <= i_no && i_no < 32);
     mTbox |= (1 << i_no);
 }
 
 /* 8005C188-8005C228       .text isTbox__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isTbox(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2253, 2280, 2280), 0 <= i_no && i_no < 32);
+    JUT_ASSERT(VERSION_SELECT(2225, 2253, 2280, 2280), 0 <= i_no && i_no < 32);
     return mTbox & (1 << i_no) ? TRUE : FALSE;
 }
 
 /* 8005C228-8005C2D4       .text onSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2284, 2311, 2311), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2256, 2284, 2311, 2311), 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C2D4-8005C380       .text offSwitch__12dSv_memBit_cFi */
 void dSv_memBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2298, 2325, 2325), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2270, 2298, 2325, 2325), 0 <= i_no && i_no < 128);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005C380-8005C430       .text isSwitch__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2312, 2339, 2339), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2284, 2312, 2339, 2339), 0 <= i_no && i_no < 128);
     return mSwitch[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C430-8005C4EC       .text revSwitch__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2326, 2353, 2353), 0 <= i_no && i_no < 128);
+    JUT_ASSERT(VERSION_SELECT(2298, 2326, 2353, 2353), 0 <= i_no && i_no < 128);
 
     u32 idx = i_no >> 5;
     u32 sw = 1 << (i_no & 0x1F);
@@ -1075,37 +1084,37 @@ BOOL dSv_memBit_c::revSwitch(int i_no) {
 
 /* 8005C4EC-8005C598       .text onItem__12dSv_memBit_cFi */
 void dSv_memBit_c::onItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2345, 2372, 2372), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2317, 2345, 2372, 2372), 0 <= i_no && i_no < 64);
     mItem[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C598-8005C648       .text isItem__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2373, 2400, 2400), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2345, 2373, 2400, 2400), 0 <= i_no && i_no < 64);
     return mItem[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C648-8005C6F4       .text onVisitedRoom__12dSv_memBit_cFi */
 void dSv_memBit_c::onVisitedRoom(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2405, 2432, 2432), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2377, 2405, 2432, 2432), 0 <= i_no && i_no < 64);
     mVisitedRoom[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005C6F4-8005C7A4       .text isVisitedRoom__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isVisitedRoom(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2433, 2460, 2460), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2405, 2433, 2460, 2460), 0 <= i_no && i_no < 64);
     return mVisitedRoom[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005C7A4-8005C844       .text onDungeonItem__12dSv_memBit_cFi */
 void dSv_memBit_c::onDungeonItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2465, 2492, 2492), 0 <= i_no && i_no < 6);
+    JUT_ASSERT(VERSION_SELECT(2437, 2465, 2492, 2492), 0 <= i_no && i_no < 6);
     mDungeonItem |= (u8)(1 << i_no);
 }
 
 /* 8005C844-8005C8E8       .text isDungeonItem__12dSv_memBit_cFi */
 BOOL dSv_memBit_c::isDungeonItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2494, 2521, 2521), 0 <= i_no && i_no < 6);
+    JUT_ASSERT(VERSION_SELECT(2466, 2494, 2521, 2521), 0 <= i_no && i_no < 6);
     return mDungeonItem & (u8)(1 << i_no) ? TRUE : FALSE;
 }
 
@@ -1122,15 +1131,15 @@ void dSv_ocean_c::init() {
 
 /* 8005C908-8005C9E8       .text onOceanSvBit__11dSv_ocean_cFUcUs */
 void dSv_ocean_c::onOceanSvBit(u8 i_grid, u16 i_bit) {
-    JUT_ASSERT(VERSION_SELECT(2613, 2640, 2640), (0 <= i_grid) && (i_grid <= 0x31));
-    JUT_ASSERT(VERSION_SELECT(2614, 2641, 2641), (0 <= i_bit) && (i_bit < 16));
+    JUT_ASSERT(VERSION_SELECT(2585, 2613, 2640, 2640), (0 <= i_grid) && (i_grid <= 0x31));
+    JUT_ASSERT(VERSION_SELECT(2586, 2614, 2641, 2641), (0 <= i_bit) && (i_bit < 16));
     field_0x0[i_grid] |= (u16)(1 << i_bit);
 }
 
 /* 8005C9E8-8005CACC       .text isOceanSvBit__11dSv_ocean_cFUcUs */
 BOOL dSv_ocean_c::isOceanSvBit(u8 i_grid, u16 i_bit) {
-    JUT_ASSERT(VERSION_SELECT(2645, 2672, 2672), (0 <= i_grid) && (i_grid <= 0x31));
-    JUT_ASSERT(VERSION_SELECT(2646, 2673, 2673), (0 <= i_bit) && (i_bit < 16));
+    JUT_ASSERT(VERSION_SELECT(2617, 2645, 2672, 2672), (0 <= i_grid) && (i_grid <= 0x31));
+    JUT_ASSERT(VERSION_SELECT(2618, 2646, 2673, 2673), (0 <= i_bit) && (i_bit < 16));
     return field_0x0[i_grid] & (u16)(1 << i_bit) ? TRUE : FALSE;
 }
 
@@ -1196,25 +1205,25 @@ int dSv_danBit_c::init(s8 i_stageNo) {
 
 /* 8005CC08-8005CCB4       .text onSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2790, 2817, 2817), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2762, 2790, 2817, 2817), 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] |= (1 << (i_no & 0x1F));
 }
 
 /* 8005CCB4-8005CD60       .text offSwitch__12dSv_danBit_cFi */
 void dSv_danBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2804, 2831, 2831), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2776, 2804, 2831, 2831), 0 <= i_no && i_no < 64);
     mSwitch[i_no >> 5] &= ~(1 << (i_no & 0x1F));
 }
 
 /* 8005CD60-8005CE10       .text isSwitch__12dSv_danBit_cFi */
 BOOL dSv_danBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2818, 2845, 2845), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2790, 2818, 2845, 2845), 0 <= i_no && i_no < 64);
     return mSwitch[i_no >> 5] & (1 << (i_no & 0x1F)) ? TRUE : FALSE;
 }
 
 /* 8005CE10-8005CECC       .text revSwitch__12dSv_danBit_cFi */
 BOOL dSv_danBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2832, 2859, 2859), 0 <= i_no && i_no < 64);
+    JUT_ASSERT(VERSION_SELECT(2804, 2832, 2859, 2859), 0 <= i_no && i_no < 64);
 
     int sw = 1 << (i_no & 0x1F);
     mSwitch[i_no >> 5] ^= sw;
@@ -1237,25 +1246,25 @@ void dSv_zoneBit_c::clearRoomSwitch() {
 
 /* 8005CF00-8005CFAC       .text onSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2876, 2903, 2903), 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2848, 2876, 2903, 2903), 0 <= i_no && i_no < SWITCH_MAX);
     mSwitch[i_no >> 4] |= (u16)(1 << (i_no & 0xF));
 }
 
 /* 8005CFAC-8005D054       .text offSwitch__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::offSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2890, 2917, 2917), 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2862, 2890, 2917, 2917), 0 <= i_no && i_no < SWITCH_MAX);
     mSwitch[i_no >> 4] &= ~(1 << (i_no & 0xF));
 }
 
 /* 8005D054-8005D100       .text isSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::isSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2904, 2931, 2931), 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2876, 2904, 2931, 2931), 0 <= i_no && i_no < SWITCH_MAX);
     return mSwitch[i_no >> 4] & 1 << (i_no & 0xF) ? TRUE : FALSE;
 }
 
 /* 8005D100-8005D1B8       .text revSwitch__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::revSwitch(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2918, 2945, 2945), 0 <= i_no && i_no < SWITCH_MAX);
+    JUT_ASSERT(VERSION_SELECT(2890, 2918, 2945, 2945), 0 <= i_no && i_no < SWITCH_MAX);
 
     u32 idx = i_no >> 4;
     int sw = 1 << (i_no & 0xF);
@@ -1265,13 +1274,13 @@ BOOL dSv_zoneBit_c::revSwitch(int i_no) {
 
 /* 8005D1B8-8005D254       .text onItem__13dSv_zoneBit_cFi */
 void dSv_zoneBit_c::onItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2937, 2964, 2964), 0 <= i_no && i_no < 16);
+    JUT_ASSERT(VERSION_SELECT(2909, 2937, 2964, 2964), 0 <= i_no && i_no < 16);
     mItem |= (1 << i_no);
 }
 
 /* 8005D254-8005D2F4       .text isItem__13dSv_zoneBit_cFi */
 BOOL dSv_zoneBit_c::isItem(int i_no) {
-    JUT_ASSERT(VERSION_SELECT(2965, 2992, 2992), 0 <= i_no && i_no < 16);
+    JUT_ASSERT(VERSION_SELECT(2937, 2965, 2992, 2992), 0 <= i_no && i_no < 16);
     return mItem & (1 << i_no) ? TRUE : FALSE;
 }
 
@@ -1284,13 +1293,13 @@ void dSv_zoneActor_c::init() {
 
 /* 8005D314-8005D3BC       .text on__15dSv_zoneActor_cFi */
 void dSv_zoneActor_c::on(int i_id) {
-    JUT_ASSERT(VERSION_SELECT(3010, 3037, 3037), 0 <= i_id && i_id < ACTOR_MAX);
+    JUT_ASSERT(VERSION_SELECT(2982, 3010, 3037, 3037), 0 <= i_id && i_id < ACTOR_MAX);
     mActorFlags[i_id >> 5] |= (1 << (i_id & 0x1F));
 }
 
 /* 8005D3BC-8005D468       .text is__15dSv_zoneActor_cFi */
 BOOL dSv_zoneActor_c::is(int i_id) {
-    JUT_ASSERT(VERSION_SELECT(3038, 3065, 3065), 0 <= i_id && i_id < ACTOR_MAX);
+    JUT_ASSERT(VERSION_SELECT(3010, 3038, 3065, 3065), 0 <= i_id && i_id < ACTOR_MAX);
     return mActorFlags[i_id >> 5] & (1 << (i_id & 0x1F)) ? TRUE : FALSE;
 }
 
@@ -1328,7 +1337,11 @@ void dSv_restart_c::setRestartOption(s8 param_0, cXyz* i_pos, s16 i_angle, s8 i_
 
 /* 8005D5B4-8005D604       .text set__17dSv_turnRestart_cFRC4cXyzsScUlRC4cXyzsi */
 void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_param,
-                            const cXyz& i_shipPos, s16 i_shipAngle, BOOL i_hasShip) {
+                            const cXyz& i_shipPos, s16 i_shipAngle
+#if VERSION > VERSION_DEMO
+                            , BOOL i_hasShip
+#endif
+) {
     mPosition = i_pos;
     mAngleY = i_angle;
     mRoomNo = i_roomNo;
@@ -1336,7 +1349,9 @@ void dSv_turnRestart_c::set(const cXyz& i_pos, s16 i_angle, s8 i_roomNo, u32 i_p
     field_0x13 = 0;
     mShipPos = i_shipPos;
     mShipAngleY = i_shipAngle;
+#if VERSION > VERSION_DEMO
     mHasShip = i_hasShip;
+#endif
 }
 
 /* 8005D604-8005D660       .text init__10dSv_info_cFv */
@@ -1353,11 +1368,33 @@ void dSv_info_c::init() {
 
 /* 8005D660-8005D860       .text reinit__10dSv_info_cFv */
 void dSv_info_c::reinit() {
-    static u16 l_holdEventReg[] = {0x95FF, 0x94FF, 0x93FF, 0x92FF, 0x91FF, 0x90FF,
-                                   0x8FFF, 0x8EFF, 0x8DFF, 0x8CFF, 0xB1FF, 0x9CFF,
-                                   0x84FF, 0x83FF, 0x82FF, 0x81FF, 0x80FF};
+    static u16 l_holdEventReg[] = {
+        dSv_event_flag_c::UNK_95FF,
+        dSv_event_flag_c::UNK_94FF,
+        dSv_event_flag_c::UNK_93FF,
+        dSv_event_flag_c::UNK_92FF,
+        dSv_event_flag_c::UNK_91FF,
+        dSv_event_flag_c::UNK_90FF,
+        dSv_event_flag_c::UNK_8FFF,
+        dSv_event_flag_c::UNK_8EFF,
+        dSv_event_flag_c::UNK_8DFF,
+        dSv_event_flag_c::UNK_8CFF,
+        dSv_event_flag_c::UNK_B1FF,
+        dSv_event_flag_c::UNK_9CFF,
+        dSv_event_flag_c::UNK_84FF,
+        dSv_event_flag_c::UNK_83FF,
+        dSv_event_flag_c::UNK_82FF,
+        dSv_event_flag_c::UNK_81FF,
+        dSv_event_flag_c::UNK_80FF
+    };
 
-    static u16 l_onEventBit[] = {0x2F08, 0x2F04, 0x2F02, 0x3A01, 0x3401};
+    static u16 l_onEventBit[] = {
+        dSv_event_flag_c::UNK_2F08,
+        dSv_event_flag_c::UNK_2F04,
+        dSv_event_flag_c::UNK_2F02,
+        dSv_event_flag_c::UNK_3A01,
+        dSv_event_flag_c::UNK_3401,
+    };
 
     u8* r29 = new u8[ARRAY_SIZE(l_holdEventReg)];
     for (int i = 0; i < ARRAY_SIZE(l_holdEventReg); i++) {
@@ -1374,9 +1411,11 @@ void dSv_info_c::reinit() {
     u8 sound = dComIfGs_getOptSound();
     u8 vib = dComIfGs_getOptVibration();
 
+#if VERSION > VERSION_DEMO
     u8 pictureNum = dComIfGs_getPictureNum();
 
-    u8 r27 = dComIfGs_getEventReg(0x89FF);
+    u8 r27 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF);
+#endif
 
     init();
 
@@ -1388,7 +1427,9 @@ void dSv_info_c::reinit() {
         dComIfGs_onEventBit(l_onEventBit[i]);
     }
 
-    dComIfGs_setEventReg(0xC407, 7);
+#if VERSION > VERSION_DEMO
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_C407, 7);
+#endif
 
     dComIfGs_setClearCount(clearCount);
 
@@ -1408,12 +1449,14 @@ void dSv_info_c::reinit() {
     dComIfGs_setItem(dInvSlot_CAMERA_e, CAMERA2);
     dComIfGp_setItem(dInvSlot_CAMERA_e, CAMERA2);
 
+#if VERSION > VERSION_DEMO
     dComIfGs_onGetItem(dInvSlot_CAMERA_e, 0);
     dComIfGs_onGetItem(dInvSlot_CAMERA_e, 1);
 
     dComIfGs_setPictureNum(pictureNum);
 
-    dComIfGs_setEventReg(0x89FF, r27);
+    dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, r27);
+#endif
 }
 
 /* 8005D860-8005D8C8       .text init__10dSv_save_cFv */
@@ -1430,13 +1473,13 @@ void dSv_save_c::init() {
 
 /* 8005D8C8-8005D988       .text getSave__10dSv_info_cFi */
 void dSv_info_c::getSave(int i_stageNo) {
-    JUT_ASSERT(VERSION_SELECT(3308, 3335, 3335), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3271, 3308, 3335, 3335), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mMemory = mSavedata.getSave(i_stageNo);
 }
 
 /* 8005D988-8005DA70       .text putSave__10dSv_info_cFi */
 void dSv_info_c::putSave(int i_stageNo) {
-    JUT_ASSERT(VERSION_SELECT(3324, 3351, 3351), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3287, 3324, 3351, 3351), 0 <= i_stageNo && i_stageNo < dSv_save_c::STAGE_MAX);
     mSavedata.putSave(i_stageNo, mMemory);
 }
 
@@ -1464,7 +1507,7 @@ int dSv_info_c::createZone(int i_roomNo) {
 
 /* 8005DB24-8005DCD0       .text onSwitch__10dSv_info_cFii */
 void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3384, 3411, 3411),
+    JUT_ASSERT(VERSION_SELECT(3347, 3384, 3411, 3411),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1476,10 +1519,10 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         mDan.onSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3397, 3424, 3424), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3360, 3397, 3424, 3424), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneId = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3399, 3426, 3426), 0 <= zoneId && zoneId < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3362, 3399, 3426, 3426), 0 <= zoneId && zoneId < ZONE_MAX);
 
         mZone[zoneId].getZoneBit().onSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1487,7 +1530,7 @@ void dSv_info_c::onSwitch(int i_no, int i_roomNo) {
 
 /* 8005DCEC-8005DE98       .text offSwitch__10dSv_info_cFii */
 void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3421, 3448, 3448),
+    JUT_ASSERT(VERSION_SELECT(3384, 3421, 3448, 3448),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1499,10 +1542,10 @@ void dSv_info_c::offSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         mDan.offSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3434, 3461, 3461), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3397, 3434, 3461, 3461), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3436, 3463, 3463), 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3399, 3436, 3463, 3463), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().offSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1519,10 +1562,10 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.isSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3482, 3509, 3509), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3445, 3482, 3509, 3509), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3484, 3511, 3511), 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3447, 3484, 3511, 3511), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1530,7 +1573,7 @@ BOOL dSv_info_c::isSwitch(int i_no, int i_roomNo) {
 
 /* 8005DFE0-8005E190       .text revSwitch__10dSv_info_cFii */
 BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3505, 3532, 3532),
+    JUT_ASSERT(VERSION_SELECT(3468, 3505, 3532, 3532),
                (0 <= i_no && i_no < (MEMORY_SWITCH+ DAN_SWITCH+ ZONE_SWITCH)) || i_no == -1 || i_no == 255);
 
     if (i_no == -1 || i_no == 255) {
@@ -1542,10 +1585,10 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
     } else if (i_no < (MEMORY_SWITCH + DAN_SWITCH)) {
         return mDan.revSwitch(i_no - MEMORY_SWITCH);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3517, 3544, 3544), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3480, 3517, 3544, 3544), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3519, 3546, 3546), 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3482, 3519, 3546, 3546), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().revSwitch(i_no - (MEMORY_SWITCH + DAN_SWITCH));
     }
@@ -1553,7 +1596,7 @@ BOOL dSv_info_c::revSwitch(int i_no, int i_roomNo) {
 
 /* 8005E190-8005E324       .text onItem__10dSv_info_cFii */
 void dSv_info_c::onItem(int i_no, int i_roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3538, 3565, 3565),
+    JUT_ASSERT(VERSION_SELECT(3501, 3538, 3565, 3565),
                (0 <= i_no && i_no < (MEMORY_ITEM+ZONE_ITEM)) || i_no == -1 || i_no == 127);
 
     if (i_no == -1 || i_no == 127) {
@@ -1563,10 +1606,10 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
     if (i_no < MEMORY_ITEM) {
         mMemory.getBit().onItem(i_no);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3548, 3575, 3575), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3511, 3548, 3575, 3575), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3550, 3577, 3577), 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3513, 3550, 3577, 3577), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         mZone[zoneNo].getZoneBit().onItem(i_no - MEMORY_ITEM);
     }
@@ -1574,7 +1617,7 @@ void dSv_info_c::onItem(int i_no, int i_roomNo) {
 
 /* 8005E324-8005E4BC       .text isItem__10dSv_info_cFii */
 BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
-    JUT_ASSERT(VERSION_SELECT(3602, 3629, 3629),
+    JUT_ASSERT(VERSION_SELECT(3565, 3602, 3629, 3629),
                (0 <= i_no && i_no < (MEMORY_ITEM+ZONE_ITEM)) || i_no == -1 || i_no == 127);
 
     if (i_no == -1 || i_no == 127) {
@@ -1584,10 +1627,10 @@ BOOL dSv_info_c::isItem(int i_no, int i_roomNo) {
     if (i_no < MEMORY_ITEM) {
         return mMemory.getBit().isItem(i_no);
     } else {
-        JUT_ASSERT(VERSION_SELECT(3611, 3638, 3638), 0 <= i_roomNo && i_roomNo < 64);
+        JUT_ASSERT(VERSION_SELECT(3574, 3611, 3638, 3638), 0 <= i_roomNo && i_roomNo < 64);
 
         int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-        JUT_ASSERT(VERSION_SELECT(3613, 3640, 3640), 0 <= zoneNo && zoneNo < ZONE_MAX);
+        JUT_ASSERT(VERSION_SELECT(3576, 3613, 3640, 3640), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
         return mZone[zoneNo].getZoneBit().isItem(i_no - MEMORY_ITEM);
     }
@@ -1599,10 +1642,10 @@ void dSv_info_c::onActor(int i_id, int i_roomNo) {
         return;
     }
 
-    JUT_ASSERT(VERSION_SELECT(3666, 3693, 3693), (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
+    JUT_ASSERT(VERSION_SELECT(3629, 3666, 3693, 3693), (0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX) && (0 <= i_roomNo && i_roomNo < 64));
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-    JUT_ASSERT(VERSION_SELECT(3668, 3695, 3695), 0 <= zoneNo && zoneNo < ZONE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3631, 3668, 3695, 3695), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     mZone[zoneNo].getActor().on(i_id);
 }
@@ -1614,13 +1657,13 @@ BOOL dSv_info_c::isActor(int i_id, int i_roomNo) {
     }
 
     if (0 > i_id || i_id >= dSv_zoneActor_c::ACTOR_MAX) {
-        JUT_ASSERT(VERSION_SELECT(3717, 3744, 3744), 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
+        JUT_ASSERT(VERSION_SELECT(3680, 3717, 3744, 3744), 0 <= i_id && i_id < dSv_zoneActor_c::ACTOR_MAX);
     }
 
-    JUT_ASSERT(VERSION_SELECT(3719, 3746, 3746), 0 <= i_roomNo && i_roomNo < 64);
+    JUT_ASSERT(VERSION_SELECT(3682, 3719, 3746, 3746), 0 <= i_roomNo && i_roomNo < 64);
 
     int zoneNo = dComIfGp_roomControl_getZoneNo(i_roomNo);
-    JUT_ASSERT(VERSION_SELECT(3721, 3748, 3748), 0 <= zoneNo && zoneNo < ZONE_MAX);
+    JUT_ASSERT(VERSION_SELECT(3684, 3721, 3748, 3748), 0 <= zoneNo && zoneNo < ZONE_MAX);
 
     return mZone[zoneNo].getActor().is(i_id);
 }
@@ -1678,7 +1721,7 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
 
     memcpy(buffer, dComIfGs_getpConfig(), sizeof(dSv_player_config_c));
     buffer += sizeof(dSv_player_config_c);
-#if VERSION == VERSION_JPN
+#if VERSION <= VERSION_JPN
     if (dComIfGs_getOptSound() == 0) {
         OSSetSoundMode(0);
     } else {

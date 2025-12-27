@@ -2,26 +2,50 @@
 #define JASREGISTERPARAM_H
 
 #include "dolphin/types.h"
+#include "JSystem/JUtility/JUTAssert.h"
 
 namespace JASystem {
     class TRegisterParam {
     public:
+        static const u8 PARAM_REG_XY = 0x23;
+        static const u8 PARAM_REG_AR0 = 0x28;
+        static const u8 PARAM_REG_AR3 = 0x2B;
+
         TRegisterParam();
         void init();
         void inherit(const TRegisterParam&);
         u8 getBankNumber() const;
         u8 getProgramNumber() const;
 
-        void getAddress(int) const {}
+        u32 getAddress(int index) const {
+            JUT_ASSERT(130, index >= 0);
+            JUT_ASSERT(131, index < 4);
+            return field_0x20[index];
+        }
+        void setAddress(int index, u32 value) {
+            JUT_ASSERT(124, index >= 0);
+            JUT_ASSERT(125, index < 4);
+            field_0x20[index] = value;
+        }
+
         void getBendSense() const {}
-        u16 getFlag() const { return field_0x0[3]; }
-        void getPanPowerBank() const {}
-        void getPanPowerExt() const {}
-        void getPanPowerOsc() const {}
-        void getPanPowerParent() const {}
-        void getPanPowerTrack() const {}
+        u16 getPanPowerBank() const {
+            return mPanPower[0];
+        }
+        u16 getPanPowerExt() const {
+            return mPanPower[1];
+        }
+        u16 getPanPowerOsc() const {
+            return mPanPower[2];
+        }
+        u16 getPanPowerParent() const {
+            return mPanPower[3];
+        }
+        u16 getPanPowerTrack() const {
+            return mPanPower[4];
+        }
         void getPriority() const {}
-        void setAddress(int, u32) {}
+        u16 getFlag() const { return field_0x0[3]; }
         void setFlag(u16 flag) { field_0x0[3] = flag; }
         void setPanPower(int i, u16 power) { mPanPower[i] = power; }
 
@@ -31,10 +55,7 @@ namespace JASystem {
         /* 0x10 */ u16 mPanPower[5];
         /* 0x1A */ u16 field_0x1a;
         /* 0x1C */ int field_0x1c;
-        /* 0x20 */ int field_0x20;
-        /* 0x24 */ int field_0x24;
-        /* 0x28 */ int field_0x28;
-        /* 0x2C */ int field_0x2c;
+        /* 0x20 */ u32 field_0x20[4];
     };
 }
 

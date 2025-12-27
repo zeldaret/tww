@@ -77,17 +77,19 @@ public:
     /* vt[10] */ virtual void do_free(void* ptr);                               /* override */
     /* vt[11] */ virtual void do_freeAll();                                     /* override */
     /* vt[12] */ virtual void do_freeTail();                                    /* override */
+#if VERSION > VERSION_DEMO
     /* vt[13] */ virtual void do_freeFill();                                    /* override */
+#endif
     /* vt[14] */ virtual s32 do_resize(void* ptr, u32 size);                    /* override */
     /* vt[15] */ virtual s32 do_getSize(void* ptr);                             /* override */
     /* vt[16] */ virtual s32 do_getFreeSize();                                  /* override */
     /* vt[17] */ virtual void* do_getMaxFreeBlock();                            /* override */
     /* vt[18] */ virtual s32 do_getTotalFreeSize();                             /* override */
-    /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);                   /* override */
+    /* vt[19] */ virtual u8 do_changeGroupID(u8 newGroupID);                    /* override */
     /* vt[20] */ virtual u8 do_getCurrentGroupId();                             /* override */
     /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const; /* override */
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1,
-                                            JKRHeap::TState const& r2) const; /* override */
+                                            JKRHeap::TState const& r2) const;   /* override */
 
     /* 0x6C */ u8 mAllocMode;
     /* 0x6D */ u8 mCurrentGroupId;

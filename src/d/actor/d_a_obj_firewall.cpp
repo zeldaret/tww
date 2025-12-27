@@ -3,8 +3,10 @@
 // Translation Unit: d_a_obj_firewall.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_firewall.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
 void daObjFirewall_c::init_mtx() {
@@ -72,7 +74,7 @@ void daObjFirewall_c::setup_put_the_fire_out() {
 }
 
 /* 00000EAC-000011F8       .text _create__15daObjFirewall_cFv */
-s32 daObjFirewall_c::_create() {
+cPhs_State daObjFirewall_c::_create() {
     /* Nonmatching */
 }
 
@@ -127,28 +129,28 @@ bool daObjFirewall_c::_draw() {
 }
 
 /* 00001CD4-00001CF4       .text daObjFirewall_Create__FP10fopAc_ac_c */
-static s32 daObjFirewall_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjFirewall_Create(fopAc_ac_c* i_this) {
+    return ((daObjFirewall_c*)i_this)->_create();
 }
 
 /* 00001CF4-00001D18       .text daObjFirewall_Delete__FP15daObjFirewall_c */
-static BOOL daObjFirewall_Delete(daObjFirewall_c*) {
-    /* Nonmatching */
+static BOOL daObjFirewall_Delete(daObjFirewall_c* i_this) {
+    return ((daObjFirewall_c*)i_this)->_delete();
 }
 
 /* 00001D18-00001D3C       .text daObjFirewall_Execute__FP15daObjFirewall_c */
-static BOOL daObjFirewall_Execute(daObjFirewall_c*) {
-    /* Nonmatching */
+static BOOL daObjFirewall_Execute(daObjFirewall_c* i_this) {
+    return ((daObjFirewall_c*)i_this)->_execute();
 }
 
 /* 00001D3C-00001D60       .text daObjFirewall_Draw__FP15daObjFirewall_c */
-static BOOL daObjFirewall_Draw(daObjFirewall_c*) {
-    /* Nonmatching */
+static BOOL daObjFirewall_Draw(daObjFirewall_c* i_this) {
+    return ((daObjFirewall_c*)i_this)->_draw();
 }
 
 /* 00001D60-00001D68       .text daObjFirewall_IsDelete__FP15daObjFirewall_c */
 static BOOL daObjFirewall_IsDelete(daObjFirewall_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjFirewall_Method = {
@@ -169,7 +171,7 @@ actor_process_profile_definition g_profile_Obj_Firewall = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0084,
+    /* Priority     */ PRIO_Obj_Firewall,
     /* Actor SubMtd */ &l_daObjFirewall_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

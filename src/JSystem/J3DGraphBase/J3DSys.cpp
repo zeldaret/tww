@@ -3,6 +3,8 @@
 // Translation Unit: J3DSys.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
@@ -126,7 +128,7 @@ void J3DSys::setTexCacheRegion(GXTexCacheSize size) {
     u32 regionNum = kRegionNum[size];
     mTexCacheRegionNum = regionNum;
 
-    if (!!(mFlags & 0x80000000)) {
+    if (checkFlag(J3DSysFlag_UNK80000000)) {
         for (u32 i = 0; i < regionNum; i++) {
             if (!!(i & 1)) {
                 GXInitTexCacheRegion(&mTexCacheRegion[i], GX_FALSE, i * kSize[size] + 0x80000, size, i * kSize[size], size);

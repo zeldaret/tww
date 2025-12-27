@@ -94,10 +94,10 @@ public:
     BOOL wait_action1(void*);
     void demo();
     void shadowDraw();
-    bool _draw();
-    bool _execute();
-    bool _delete();
-    s32 _create();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
     BOOL bodyCreateHeap();
     BOOL itemCreateHeap();
     BOOL CreateHeap();
@@ -130,7 +130,7 @@ public:
     u8 m788[0x794 - 0x788];
     /* 0x794 */ s16 field_0x794;
     u8 m796[0x79c - 0x796];
-    u8 field_0x79C;
+    s8 field_0x79C;
     u8 field_0x79D;
     u8 field_0x79E;
     /* 0x79F */ u8 field_0x79F;
@@ -143,7 +143,8 @@ public:
     u8 m7ad[0x7bc - 0x7ad];
     u32 field_0x7BC[12];
     /* 0x7EC */ s16 field_0x7EC;
-    u8 m7F0[0x7F3 - 0x7EE];
+    s16 field_0x7EE;
+    u32 field_0x7F0;
     /* 0x7F3 */ u8 field_0x7F3;
     /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ s8 field_0x7F5;
@@ -158,14 +159,14 @@ public:
     /* 0x7FE */ s8 field_0x7FE;
 };
 
-class daNpc_Kf1_HIO_c : public JORReflexible {
+class daNpc_Kf1_HIO_c : public mDoHIO_entry_c{
 public:
     daNpc_Kf1_HIO_c();
     virtual ~daNpc_Kf1_HIO_c() {}
 
 public:
-    u8 a;
-    u32 b;
+    s8 a;
+    s32 b;
     u8 data[0x30];
     /* Place member variables here */
 };

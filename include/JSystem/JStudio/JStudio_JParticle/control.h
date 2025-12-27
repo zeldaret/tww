@@ -27,7 +27,6 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
         {
         }
 
-        virtual ~TJPACallback_() { }           // _08 (weak)
         virtual void execute(JPABaseEmitter*); // _0C
 
         /* 0x04 */ TAdaptor_particle* mAdaptor;
@@ -61,14 +60,14 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
     /* 0x19C */ JPAEmitterManager* mEmitterManager;
     /* 0x1A0 */ JPABaseEmitter* mEmitter;
     /* 0x1A4 */ TJPACallback_ mCallback;
-    /* 0x1B0 */ int _188;
-    /* 0x1B4 */ u32 _18C;
-    /* 0x1B8 */ u32 _190;
-    /* 0x1BC */ u32 _194;
+    /* 0x1B0 */ int field_0x1B0;
+    /* 0x1B4 */ int field_0x1B4;
+    /* 0x1B8 */ u32 field_0x1B8;
+    /* 0x1BC */ u32 field_0x1BC;
     /* 0x1C0 */ const JStage::TSystem* mSystem;
-    /* 0x1C4 */ JStage::TObject* _19C;
-    /* 0x1C8 */ u32 _1A0;
-    /* 0x1CC */ bool _1A4;
+    /* 0x1C4 */ JStage::TObject* mObject;
+    /* 0x1C8 */ u32 field_0x1C8;
+    /* 0x1CC */ bool field_0x1CC;
 };  // Size: 0x1D0
 
 };  // namespace JStudio_JParticle

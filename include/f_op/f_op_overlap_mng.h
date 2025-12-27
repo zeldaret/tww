@@ -10,8 +10,8 @@ struct overlap_method_class {
     /* 0x00 */ leafdraw_method_class base;
 };
 
-class overlap_task_class : public leafdraw_class {
-public:
+struct overlap_task_class {
+    /* 0x00 */ leafdraw_class base;
     /* 0xC0 */ overlap_method_class* sub_method;
     /* 0xC4 */ request_base_class mRq;
     /* 0xC8 */ fpc_ProcID mScenePId;
@@ -25,13 +25,13 @@ struct overlap_process_profile_definition {
 int fopOvlpM_SceneIsStop();
 int fopOvlpM_SceneIsStart();
 void fopOvlpM_Management();
-int fopOvlpM_IsOutReq(overlap_task_class* i_this);
+BOOL fopOvlpM_IsOutReq(overlap_task_class* i_this);
 void fopOvlpM_Done(overlap_task_class* i_this);
 void fopOvlpM_ToldAboutID(fpc_ProcID pid);
-int fopOvlpM_IsPeek();
-int fopOvlpM_IsDone();
-int fopOvlpM_IsDoingReq();
-int fopOvlpM_ClearOfReq();
+BOOL fopOvlpM_IsPeek();
+BOOL fopOvlpM_IsDone();
+BOOL fopOvlpM_IsDoingReq();
+BOOL fopOvlpM_ClearOfReq();
 request_base_class* fopOvlpM_Request(s16 procName, u16 peekTime);
 int fopOvlpM_Cancel();
 void fopOvlpM_Init();

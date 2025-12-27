@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Ygush00.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Ygush00.h"
 #include "d/res/res_ygush00.h"
 #include "f_op/f_op_actor_mng.h"
@@ -10,29 +11,25 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_obj_gryw00.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 namespace {
     static const char l_arcname[] = "Ygush00";
 };
 
-#ifdef DEBUG
+#if VERSION == VERSION_DEMO
 static daObjYgush00_HIO_c l_HIO;
-#endif
 
 daObjYgush00_HIO_c::daObjYgush00_HIO_c() {
-    
+    mNo = -1;
+    m05 = 0;
+    m06 = 0;
+    m07 = 0;
 }
-
-void daObjYgush00_HIO_c::genMessage(JORMContext* ctx) {
-    ctx->genCheckBox(NULL, NULL, 0, 0, NULL, 0, 0, 0, 0); // placeholder
-}
+#endif
 
 /* 00000078-0000009C       .text solidHeapCB__14daObjYgush00_cFP10fopAc_ac_c */
 BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
@@ -52,12 +49,12 @@ bool daObjYgush00_c::create_heap() {
     J3DAnmTransform * pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(l_arcname, bck_table[mType]));
 
     if (!pModelData || !pBtk || !pBck) {
-        JUT_ASSERT(207, FALSE);
+        JUT_ASSERT(DEMO_SELECT(203, 207), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000222);
-        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0);
-        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false);
+        s32 btkRet = mBtkAnm.init(pModelData, pBtk, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+        s32 bckRet = mBckAnm.init(pModelData, pBck, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false);
 
         if (!mpModel || !btkRet || !bckRet)
             ret = false;
@@ -67,7 +64,7 @@ bool daObjYgush00_c::create_heap() {
 }
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
-s32 daObjYgush00_c::_create() {
+cPhs_State daObjYgush00_c::_create() {
     fopAcM_SetupActor(this, daObjYgush00_c);
 
     if (fopAcM_IsFirstCreating(this)) {
@@ -77,7 +74,7 @@ s32 daObjYgush00_c::_create() {
             mType = 0;
     }
 
-    s32 ret = dComIfG_resLoad(&mPhase, l_arcname);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
 
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x740) == 1) {
@@ -89,16 +86,16 @@ s32 daObjYgush00_c::_create() {
             fopAcM_setCullSizeBox(this,
                 scale.x * -80.0f, 0.0f, scale.z * -80.0f,
                 scale.x * 80.0f, scale.y * 125.0f, scale.z * 80.0f);
-
-#ifdef DEBUG
-                if (l_HIO.mNo < 0) {
-                    l_HIO.mNo = mDoHIO_createChild("", &l_HIO);
-                }
-#endif
         } else {
             ret = cPhs_ERROR_e;
         }
     }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("湧き水", &l_HIO);
+    }
+#endif
 
     return ret;
 }
@@ -107,7 +104,7 @@ s32 daObjYgush00_c::_create() {
 bool daObjYgush00_c::_delete() {
     dComIfG_resDelete(&mPhase, l_arcname);
 
-#ifdef DEBUG
+#if VERSION == VERSION_DEMO
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -119,7 +116,7 @@ bool daObjYgush00_c::_delete() {
 
 /* 00000524-0000066C       .text _execute__14daObjYgush00_cFv */
 bool daObjYgush00_c::_execute() {
-    if (mType != 3 || dComIfGs_isEventBit(dSv_evtBit_c::COLORS_IN_HYRULE) == 1) {
+    if (mType != 3 || dComIfGs_isEventBit(dSv_event_flag_c::COLORS_IN_HYRULE) == 1) {
         mBtkAnm.play();
         mBckAnm.play();
     }
@@ -150,7 +147,7 @@ bool daObjYgush00_c::_draw() {
 }
 
 /* 000006FC-0000071C       .text daObjYgush00_Create__FP14daObjYgush00_c */
-static s32 daObjYgush00_Create(daObjYgush00_c* i_this) {
+static cPhs_State daObjYgush00_Create(daObjYgush00_c* i_this) {
     return i_this->_create();
 }
 
@@ -200,7 +197,7 @@ actor_process_profile_definition g_profile_Obj_Ygush00 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x005E,
+    /* Priority     */ PRIO_Obj_Ygush00,
     /* Actor SubMtd */ &l_daObjYgush00_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

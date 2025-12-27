@@ -459,7 +459,9 @@ STATIC_ASSERT(sizeof(dSv_player_info_c) == 0x5C);
 class dSv_player_config_c {
 public:
     void init();
+#if VERSION > VERSION_DEMO
     s32 checkVibration();
+#endif
 
     u8 getRuby() { return mRuby; }
     void setRuby(u8 ruby) { mRuby = ruby; }
@@ -783,8 +785,8 @@ public:
     }
 
     s16 getStartPoint() { return mStartCode; }
-    u32 getLastMode() { return mLastMode; }
     f32 getLastSpeedF() { return mLastSpeedF; }
+    u32 getLastMode() { return mLastMode; }
     s8 getRoomNo() { return mRestartRoom; }
     u32 getRoomParam() { return mRestartParam; }
     cXyz& getRoomPos() { return mRestartPos; }
@@ -811,7 +813,11 @@ public:
 
 class dSv_turnRestart_c {
 public:
+#if VERSION == VERSION_DEMO
+    void set(cXyz const&, s16, s8, u32, cXyz const&, s16);
+#else
     void set(cXyz const&, s16, s8, u32, cXyz const&, s16, int);
+#endif
 
     u32 getParam() { return mParam; }
     cXyz& getPos() { return mPosition; }
@@ -819,9 +825,11 @@ public:
     s8 getRoomNo() { return mRoomNo; }
     cXyz& getShipPos() { return mShipPos; }
     s16 getShipAngleY() { return mShipAngleY; }
+#if VERSION > VERSION_DEMO
     // The "HasShip" name is fake. These inlines don't exist in the demo, but probably do in the final release.
     BOOL getHasShip() { return mHasShip; }
     void setHasShip(BOOL hasShip) { mHasShip = hasShip; }
+#endif
 
     /* 0x00 */ cXyz mPosition;
     /* 0x0C */ u32 mParam;
@@ -831,7 +839,9 @@ public:
     /* 0x14 */ u8 field_0x14[0x24 - 0x14];
     /* 0x24 */ cXyz mShipPos;
     /* 0x30 */ s16 mShipAngleY;
+#if VERSION > VERSION_DEMO
     /* 0x34 */ BOOL mHasShip;
+#endif
 };  // Size: 0x38
 
 class dSv_save_c {
@@ -925,13 +935,13 @@ public:
     void initDan(s8 i_stage) { mDan.init(i_stage); }
 
     u8 getDataNum() { return mDataNum; }
-    void getMemCardCheckID() {}
-    void getNewFile() {}
-    void getNoFile() {}
     void setDataNum(u8 num) { mDataNum = num; }
-    void setMemCardCheckID(u64) {}
-    void setNewFile(u8) {}
-    void setNoFile(u8) {}
+    u8 getNoFile() { return mNoFile; }
+    void setNoFile(u8 no) { mNoFile = no; }
+    u8 getNewFile() { return mNewFile; }
+    void setNewFile(u8 file) {mNewFile = file; }
+    u64 getMemCardCheckID() { return mMemCardCheckID; }
+    void setMemCardCheckID(u64 id) { mMemCardCheckID = id; }
 
     static const int MEMORY_SWITCH = 0x80;
     static const int DAN_SWITCH = 0x40;
@@ -950,13 +960,17 @@ public:
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
     /* 0x1290 */ u8 mDataNum;
-    /* 0x1291 */ u8 field_0x1291;
-    /* 0x1292 */ u8 field_0x1292;
-    /* 0x1298 */ s64 field_0x1298;
+    /* 0x1291 */ u8 mNoFile;
+    /* 0x1292 */ u8 mNewFile;
+    /* 0x1298 */ u64 mMemCardCheckID;
 };  // Size: 0x12A0
 
+#if VERSION > VERSION_DEMO
 STATIC_ASSERT(sizeof(dSv_info_c) == 0x12A0);
+#endif
 
-#include "d/d_save_event_bit.inc"
+#include "d/d_save_event_flag.inc"
+
+#include "d/d_save_event_tmp_flag.inc"
 
 #endif /* D_SAVE_D_SAVE_H */

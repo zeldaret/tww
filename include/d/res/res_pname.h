@@ -1,7 +1,7 @@
 #ifndef RES_PNAME_H
 #define RES_PNAME_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PNAME_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */

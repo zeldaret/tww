@@ -3,9 +3,11 @@
 // Translation Unit: d_a_magma.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_magma.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_magma.h"
 
@@ -13,10 +15,10 @@ daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");
 }
 
-s32 daMagma_c::create() {
+cPhs_State daMagma_c::create() {
     fopAcM_SetupActor(this, daMagma_c);
 
-    int result = dComIfG_resLoad(&mPhs, "Magma");
+    cPhs_State result = dComIfG_resLoad(&mPhs, "Magma");
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }
@@ -45,7 +47,7 @@ static BOOL daMagma_Delete(daMagma_c* i_this) {
 }
 
 /* 000000CC-00000178       .text daMagma_Create__FP10fopAc_ac_c */
-static s32 daMagma_Create(fopAc_ac_c* i_this) {
+static cPhs_State daMagma_Create(fopAc_ac_c* i_this) {
     return ((daMagma_c*)i_this)->create();
 }
 
@@ -67,7 +69,7 @@ actor_process_profile_definition g_profile_MAGMA = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01BC,
+    /* Priority     */ PRIO_MAGMA,
     /* Actor SubMtd */ &l_daMagma_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

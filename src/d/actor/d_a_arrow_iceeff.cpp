@@ -3,11 +3,13 @@
 // Translation Unit: d_a_arrow_iceeff.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_arrow_iceeff.h"
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_arrow.h"
 
@@ -18,8 +20,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000010C-00000324       .text CreateHeap__16daArrow_Iceeff_cFv */
 BOOL daArrow_Iceeff_c::CreateHeap() {
+    J3DModelData* modelData;
     if(field_0xA38 == 0) {
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER00));
         JUT_ASSERT(87, modelData != NULL);
         for(int i = 0; i < 30; i++) {
             field_0x298[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -29,7 +32,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         }
     }
     else {
-        J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_GICER01));
         JUT_ASSERT(98, modelData != NULL);
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if(mpModel == NULL) {
@@ -38,7 +41,7 @@ BOOL daArrow_Iceeff_c::CreateHeap() {
         
         J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Link", LINK_BCK_GICER01));
         JUT_ASSERT(107, bck != NULL);
-        if(!mBck.init(modelData, bck, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false)) {
+        if(!mBck.init(modelData, bck, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false)) {
             return false;
         }
     }
@@ -106,7 +109,7 @@ void daArrow_Iceeff_c::set_mtx() {
     }
 }
 
-s32 daArrow_Iceeff_c::_create() {
+cPhs_State daArrow_Iceeff_c::_create() {
     fopAcM_SetupActor(this, daArrow_Iceeff_c);
 
     void* arrow = fopAcM_SearchByID(parentActorID);
@@ -131,7 +134,7 @@ s32 daArrow_Iceeff_c::_create() {
 }
 
 /* 0000073C-00000854       .text daArrow_Iceeff_Create__FPv */
-static s32 daArrow_Iceeff_Create(void* i_this) {
+static cPhs_State daArrow_Iceeff_Create(void* i_this) {
     return static_cast<daArrow_Iceeff_c*>(i_this)->_create();
 }
 
@@ -166,7 +169,7 @@ bool daArrow_Iceeff_c::_draw() {
     else {
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         J3DModelData* mdl_data = mpModel->getModelData();
-        mBck.entry(mdl_data, mBck.getFrame());
+        mBck.entry(mdl_data);
         if(field_0xA3C == 1) {
             mDoExt_modelUpdateDL(mpModel);
         }
@@ -196,7 +199,7 @@ bool daArrow_Iceeff_c::_execute() {
     daArrow_c* arrow = static_cast<daArrow_c*>(fopAcM_SearchByID(parentActorID));
     if(field_0xA38 == 0) {
         if(arrow == 0) {
-            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_0055, &current.pos, &current.angle);
             fopAcM_delete(this);
 
             return true;
@@ -219,7 +222,7 @@ bool daArrow_Iceeff_c::_execute() {
             field_0xA30++;
         }
         else {
-            dComIfGp_particle_setP1(0x55, &current.pos, &current.angle);
+            dComIfGp_particle_setP1(dPa_name::ID_COMMON_0055, &current.pos, &current.angle);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_MINI_ICE_BREAK, 0);
             fopAcM_delete(arrow);
             fopAcM_delete(this);
@@ -234,7 +237,7 @@ bool daArrow_Iceeff_c::_execute() {
             csXyz angle;
             angle.set(-0x4000, 0, 0);
 
-            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x29E, &current.pos, &angle);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(dPa_name::ID_COMMON_029E, &current.pos, &angle);
             if(ptcl) {
                 JGeometry::TVec3<f32> scale(0.5f, 0.5f, 0.5f);
                 ptcl->setGlobalScale(scale);
@@ -258,25 +261,23 @@ bool daArrow_Iceeff_c::_execute() {
         }
 
         if(field_0xA30 == 0x23) {
-            JPABaseEmitter* ptcl = dComIfGp_particle_setSingleRipple(0x3D, &current.pos, NULL, &ripple_scale);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003D, &current.pos, NULL, &ripple_scale);
             if(ptcl) {
-                JGeometry::TVec3<f32> scale(0.67f, 0.67f, 1.0f);
-                ptcl->setGlobalParticleScale(scale);
+                ptcl->setGlobalParticleScale(0.67f, 0.67f);
             }
         }
         else if(field_0xA30 == 0x28) {
-            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(0x55, &current.pos);
+            JPABaseEmitter* ptcl = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0055, &current.pos);
             if(ptcl) {
                 ptcl->setAwayFromCenterSpeed(25.0f);
                 ptcl->setAwayFromAxisSpeed(5.0f);
                 ptcl->setDirectionalSpeed(5.0f);
                 JGeometry::TVec3<f32> scale1(0.5f, 1.0f, 0.5f);
                 ptcl->setEmitterScale(scale1);
-                JGeometry::TVec3<f32> scale2(0.33f, 0.33f, 1.0f);
-                ptcl->setGlobalParticleScale(scale2);
+                ptcl->setGlobalParticleScale(0.33f, 0.33f);
             }
             
-            dComIfGp_particle_setSingleRipple(0x3F, &current.pos, NULL, &ripple_scale);
+            dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003F, &current.pos, NULL, &ripple_scale);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_MINI_ICE_BREAK, 0);
 
             field_0xA3C = 0;
@@ -311,7 +312,7 @@ actor_process_profile_definition g_profile_ARROW_ICEEFF = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x01C0,
+    /* Priority     */ PRIO_ARROW_ICEEFF,
     /* Actor SubMtd */ &daArrow_IceeffMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

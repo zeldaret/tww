@@ -1,7 +1,7 @@
 #ifndef RES_VMAPH_H
 #define RES_VMAPH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VMAPH_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

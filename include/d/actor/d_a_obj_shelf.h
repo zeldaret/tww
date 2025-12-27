@@ -16,11 +16,11 @@ namespace daObjShelf {
 
         bool prm_get_groundma() const { return daObj::PrmAbstract<Prm_e>(this, PRM_GROUNDMA_W, PRM_GROUNDMA_S); }
     
-        int CreateHeap();
-        int Create();
-        s32 Mthd_Create();
-        BOOL Delete();
-        int Mthd_Delete();
+        virtual BOOL CreateHeap();
+        virtual BOOL Create();
+        cPhs_State Mthd_Create();
+        virtual BOOL Delete();
+        BOOL Mthd_Delete();
         void hold_event() const;
         void mode_wait_init();
         void mode_wait();
@@ -34,8 +34,8 @@ namespace daObjShelf {
         void mode_fell();
         void set_mtx();
         void init_mtx();
-        BOOL Execute(Mtx**);
-        BOOL Draw();
+        virtual BOOL Execute(Mtx**);
+        virtual BOOL Draw();
     
     public:
         static const char M_arcname[6];

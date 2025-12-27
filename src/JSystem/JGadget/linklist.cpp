@@ -3,31 +3,10 @@
 // Translation Unit: linklist.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+#include <algorithm.h>
+
 #include "JSystem/JGadget/linklist.h"
-
-namespace std {
-
-template <class InputIterator, class Predicate>
-inline InputIterator find_if(InputIterator first, InputIterator last, Predicate pred) {
-    while (first != last && !pred(*first))
-        ++first;
-    return first;
-}
-
-} // namespace std
-
-template <typename T>
-class TPRIsEqual_pointer_ {
-public:
-    TPRIsEqual_pointer_<T>(const T* p) { this->p_ = p; }
-
-    bool operator()(const T& rSrc) const {
-        return &rSrc == this->p_;
-    }
-
-private:
-    const T* p_;
-};
 
 /* 802BFC00-802BFC3C       .text __dt__Q27JGadget13TNodeLinkListFv */
 JGadget::TNodeLinkList::~TNodeLinkList() {
@@ -100,4 +79,3 @@ JGadget::TNodeLinkList::iterator JGadget::TNodeLinkList::Erase(TLinkListNode* p)
 void JGadget::TNodeLinkList::Remove(TLinkListNode* p) {
     remove_if(TPRIsEqual_pointer_<TLinkListNode>(p));
 }
-

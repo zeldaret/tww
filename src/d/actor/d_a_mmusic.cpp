@@ -3,21 +3,24 @@
 // Translation Unit: d_a_mmusic.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mmusic.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 namespace daMmusic {
     namespace {
         struct Attr_c {
-            /* 0x00 */ u32 mTimer;
+            /* 0x00 */ u16 field_0x00;
+            /* 0x02 */ u16 field_0x02;
             /* 0x04 */ u16 field_0x04;
         };
 
         static const Attr_c L_attr = {
-            120, 180,
+            0, 120, 180,
         };
 
         inline const Attr_c & attr() { return L_attr; }
@@ -37,9 +40,9 @@ bool daMmusic::Act_c::create_heap() {
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
 BOOL daMmusic::Act_c::Macore_is_playing() {
     if (dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT) ||
-        dComIfGs_isEventBit(0x2910) ||
-        dComIfGs_isEventBit(0x2e02) ||
-        dComIfGs_isEventBit(0x1610) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) ||
         !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
         return FALSE;
 
@@ -54,18 +57,20 @@ void daMmusic::Act_c::set_mtx() {
 }
 
 /* 000001A4-00000268       .text _create__Q28daMmusic5Act_cFv */
-s32 daMmusic::Act_c::_create() {
+cPhs_State daMmusic::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
-    s32 ret = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
-        set_mtx();
-        fopAcM_SetMtx(this, mMtx);
-        field_0x298 = Macore_is_playing();
-        fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
-        init_se();
-    } else {
-        ret = cPhs_ERROR_e;
+    cPhs_State ret = cPhs_COMPLEATE_e;
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            set_mtx();
+            fopAcM_SetMtx(this, mMtx);
+            field_0x298 = Macore_is_playing();
+            fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
+            init_se();
+        } else {
+            ret = cPhs_ERROR_e;
+        }
     }
     return ret;
 }
@@ -116,7 +121,7 @@ bool daMmusic::Act_c::_execute() {
     if (mpEmitter == NULL && field_0x298 == 1) {
         set_mtx();
         cXyz scale(1.0f, 1.0f, 1.0f);
-        JPABaseEmitter* emtr = dComIfGp_particle_set(0x826c, &current.pos);
+        JPABaseEmitter* emtr = dComIfGp_particle_set(dPa_name::ID_SCENE_826C, &current.pos);
         mpEmitter = emtr;
         if (emtr != NULL) {
             mpEmitter->setGlobalRTMatrix(mMtx);
@@ -151,7 +156,7 @@ bool daMmusic::Act_c::_draw() {
 
 namespace daMmusic {
     namespace {
-        s32 Mthd_Create(void* i_this) {
+        cPhs_State Mthd_Create(void* i_this) {
             return ((Act_c*)i_this)->_create();
         }
 
@@ -191,7 +196,7 @@ actor_process_profile_definition g_profile_Mmusic = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x00F6,
+    /* Priority     */ PRIO_Mmusic,
     /* Actor SubMtd */ &daMmusic::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

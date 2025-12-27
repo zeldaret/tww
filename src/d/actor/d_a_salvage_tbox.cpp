@@ -3,8 +3,10 @@
 // Translation Unit: d_a_salvage_tbox.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
 void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
@@ -47,7 +49,7 @@ void daSTBox_c::CreateInit() {
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
-s32 daSTBox_c::_create() {
+cPhs_State daSTBox_c::_create() {
     /* Nonmatching */
 }
 
@@ -112,13 +114,13 @@ void daSTBox_c::actWaitDummy(int) {
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
-static s32 daSTBox_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daSTBox_Create(void* i_this) {
+    return ((daSTBox_c*)i_this)->_create();
 }
 
 /* 000013DC-00001400       .text daSTBox_Delete__FPv */
-static BOOL daSTBox_Delete(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Delete(void* i_this) {
+    return ((daSTBox_c*)i_this)->_delete();
 }
 
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
@@ -127,13 +129,13 @@ static BOOL daSTBox_Draw(void*) {
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */
-static BOOL daSTBox_Execute(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Execute(void* i_this) {
+    return ((daSTBox_c*)i_this)->_execute();
 }
 
 /* 00001490-00001498       .text daSTBox_IsDelete__FPv */
 static BOOL daSTBox_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSTBoxMethodTable = {
@@ -154,7 +156,7 @@ actor_process_profile_definition g_profile_SALVAGE_TBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x018A,
+    /* Priority     */ PRIO_SALVAGE_TBOX,
     /* Actor SubMtd */ &daSTBoxMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

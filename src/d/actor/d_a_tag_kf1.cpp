@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_kf1.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_a_obj.h"
@@ -17,23 +18,23 @@ static s32 l_check_wrk;
 static f32 a_prm_tbl[] = {
     150.0f,30.0f, 0x00000000
 };
+#include "d/d_priority.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
 { 
     mAttentionMaxEuclidDistance = a_prm_tbl[0];
     mAttentionMaxYDistance = a_prm_tbl[1];
-    /* Nonmatching */
-    // type is wrong, but anything else seems to make this more wrong 
-    // it seems to definitely come from a_prm_tbl[2], but instructions assign an integer.
-    f0x10 = a_prm_tbl[2];
+    // this line should def load from a_prm_tbl according to asm,
+    // but unlike the others the type is not float so do this gross cast instead
+    f0x10 = *(u8*)(void*)&a_prm_tbl[2];
     mNo = -1;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
 void* searchActor_Kutani(void* arg1, void* _) {
     fopAc_ac_c* act = (fopAc_ac_c*)arg1;
-    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.mProcName == 0x1cb &&
+    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.base.mProcName == 0x1cb &&
         daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(act, daTsubo::Act_c::PRM_TYPE_W,
                                                   daTsubo::Act_c::PRM_TYPE_S) == 0xe) {
         l_check_inf[l_check_wrk] = (u32)act;
@@ -50,12 +51,15 @@ BOOL daTag_Kf1_c::createInit() {
     this->set_action(&daTag_Kf1_c::wait_action1, NULL);
     return TRUE;
 }
+
 static char* a_demo_name_tbl[] = {"BENSYO"};
-static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
 char daTag_Kf1_c::setStt(signed char c) {
     stt = c;
+    if (stt == 3) {
+        return;
+    }
     /* Nonmatching */
 }
 
@@ -126,17 +130,13 @@ BOOL daTag_Kf1_c::partner_srch() {
     for (i = 0; j != 0; ++i, --j) {
         l_check_inf[i] = 0;
     }
+
     fpcM_Search(searchActor_Kutani, this);
     // register/cast fiddling needed here
     if (l_check_wrk <= 8 && l_check_wrk != 0) {
         npartners = 0;
         for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
-            if (l_check_inf[i] != 0) {
-                tmp = l_check_inf[i];
-            } else {
-                tmp = 0xffffffff;
-            }
-            partners[i] = tmp;
+            partners[i] = fopAcM_GetID((void*)l_check_inf[i]);
             npartners++;
         }
         tmp = TRUE;
@@ -171,7 +171,7 @@ void daTag_Kf1_c::goto_nextStage() {
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
 void daTag_Kf1_c::event_talkInit(int staffIdx) { 
     /* Nonmatching */ // TODO stringBase and layout
-    u32 *msgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    u32 *msgNo = (u32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     if (msgNo != NULL) {
         
@@ -184,6 +184,9 @@ void daTag_Kf1_c::event_talkInit(int staffIdx) {
         this->mCurrMsgNo = 0;
     }
 }
+
+static const u32 at4350[] = {0xff000080};
+static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::event_mesSet() { 
@@ -201,7 +204,7 @@ bool daTag_Kf1_c::event_mesEnd() {
 void daTag_Kf1_c::bensyoInit() { 
     dComIfGp_setItemRupeeCount(-(this->tenth_cost * 10));
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    if (this->rupee_count < tenth_cost * 10) {
+    if (this->rupee_count > tenth_cost * 10) {
         this->mCurrMsgNo = 0x1c2f;
     }
     else {
@@ -252,8 +255,9 @@ void daTag_Kf1_c::privateCut() {
     switch (mActIdx) {
         case 0: status = event_mesSet(); break;
         case 1: status = event_mesEnd(); break;
-        case 2: status = event_bensyo(); break; 
-        default: status=true; break;
+        case 2: status = event_bensyo(); break;
+        case 3:
+        default: status=TRUE; break;
     }
     if (status) {
         dComIfGp_evmng_cutEnd(staffIdx);
@@ -360,52 +364,51 @@ bool daTag_Kf1_c::_delete() {
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
-s32 daTag_Kf1_c::_create() {
+cPhs_State daTag_Kf1_c::_create() {
     s32 ret = cPhs_COMPLEATE_e;
     fopAcM_SetupActor(this, daTag_Kf1_c);
 
-    // field_0x6d8 = 0;
-    // field_0x6dc = 0;
-    // field_0x738 = 0;
-
-    if (fopAcM_GetName(this) != PROC_TAG_KF1) {
+    switch (fopAcM_GetName(this)) {
+        case PROC_TAG_KF1:
+            this->field_0x769 = 0;
+            break;
+        default:
+            return cPhs_ERROR_e;
+    }
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
+    }
+    if (!createInit()) {
         ret = cPhs_ERROR_e;
-    } else {
-        this->field_0x769 = 0;
-        if (l_HIO.mNo < 0) {
-            l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
-        }
-        if (!createInit()) {
-            ret = cPhs_ERROR_e;
-        }
     }
     return ret;
     /* Nonmatching */
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static s32 daTag_Kf1_Create(fopAc_ac_c* obj) {
+static cPhs_State daTag_Kf1_Create(fopAc_ac_c* obj) {
     (static_cast<daTag_Kf1_c*>(obj))->_create();
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c* obj) {
-    (static_cast<daTag_Kf1_c*>(obj))->_delete();
+static bool daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_delete();
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c* obj) {
-    (static_cast<daTag_Kf1_c*>(obj))->_execute();
+static bool daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_execute();
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c* obj) {
-    (static_cast<daTag_Kf1_c*>(obj))->_draw();
+static bool daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
+    return ((daTag_Kf1_c*)i_this)->_draw();
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c* obj) { return TRUE; }
-
+static bool daTag_Kf1_IsDelete(daTag_Kf1_c*) {
+    return TRUE;
+}
 static actor_method_class l_daTag_Kf1_Method = {
     (process_method_func)daTag_Kf1_Create,  (process_method_func)daTag_Kf1_Delete,
     (process_method_func)daTag_Kf1_Execute, (process_method_func)daTag_Kf1_IsDelete,
@@ -422,7 +425,7 @@ actor_process_profile_definition g_profile_TAG_KF1 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0124,
+    /* Priority     */ PRIO_TAG_KF1,
     /* Actor SubMtd */ &l_daTag_Kf1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

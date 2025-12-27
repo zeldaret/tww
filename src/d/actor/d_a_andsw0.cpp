@@ -3,10 +3,12 @@
 // Translation Unit: d_a_andsw0.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_andsw0.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/actor/d_a_bk.h"
 #include "d/actor/d_a_bb.h"
 
@@ -20,8 +22,8 @@ enum {
 };
 
 /* 00000078-00000080       .text daAndsw0_Draw__FP12andsw0_class */
-static s32 daAndsw0_Draw(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_Draw(andsw0_class*) {
+    return TRUE;
 }
 
 /* 00000080-000003C4       .text daAndsw0_check__FP12andsw0_class */
@@ -234,26 +236,26 @@ static void hajimarinomori_check(andsw0_class* i_this) {
     else {
         for(int i = 0; i < 7; i++) {}
 
-        if (dComIfGs_isEventBit(4)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0004)) {
             bb_class* kargaroc = (bb_class*)ac[5];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             kargaroc = (bb_class*)ac[6];
-            fopAcM_delete(kargaroc);
+            fopAcM_delete(&kargaroc->actor);
             
             bk_class* bokoblin = (bk_class*)ac[3];
             bokoblin->m121C = 1;
             bokoblin = (bk_class*)ac[4];
             bokoblin->m121C = 1;
             
-            if (dComIfGs_isEventBit(0x301)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301)) {
                 bokoblin = (bk_class*)ac[0];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[1];
                 bokoblin->m121C = 1;
             }
-            if (dComIfGs_isEventBit(0x301) && dComIfGs_isEventBit(0x480)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0301) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0480)) {
                 bokoblin = (bk_class*)ac[2];
                 bokoblin->m121C = 1;
             }
@@ -295,27 +297,27 @@ static void event_start_check(andsw0_class* i_this) {
 }
 
 /* 00000914-00000964       .text daAndsw0_Execute__FP12andsw0_class */
-static s32 daAndsw0_Execute(andsw0_class* i_this) {
+static BOOL daAndsw0_Execute(andsw0_class* i_this) {
     event_start_check(i_this);
     if (i_this->mNumSwitchesToCheck == 0xFF)
         hajimarinomori_check(i_this);
     else
         daAndsw0_check(i_this);
-    return 1;
+    return TRUE;
 }
 
 /* 00000964-0000096C       .text daAndsw0_IsDelete__FP12andsw0_class */
-static s32 daAndsw0_IsDelete(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_IsDelete(andsw0_class*) {
+    return TRUE;
 }
 
 /* 0000096C-00000974       .text daAndsw0_Delete__FP12andsw0_class */
-static s32 daAndsw0_Delete(andsw0_class*) {
-    return 1;
+static BOOL daAndsw0_Delete(andsw0_class*) {
+    return TRUE;
 }
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
-static s32 daAndsw0_Create(fopAc_ac_c* ac) {
+static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
     fopAcM_SetupActor(ac, andsw0_class);
 
     andsw0_class * i_this = (andsw0_class *)ac;
@@ -356,7 +358,7 @@ actor_process_profile_definition g_profile_ANDSW0 = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0135,
+    /* Priority     */ PRIO_ANDSW0,
     /* Actor SubMtd */ &l_daAndsw0_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

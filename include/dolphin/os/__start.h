@@ -31,12 +31,12 @@ extern void InitMetroTRK_BBA(void);
 extern void OSInit(void);
 extern void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu);
 
-SECTION_INIT extern void __check_pad3(void);
+SECTION_INIT static void __check_pad3(void);
 SECTION_INIT extern void __set_debug_bba(void);
 SECTION_INIT extern u8 __get_debug_bba(void);
-SECTION_INIT extern void __start(void);
-SECTION_INIT extern void __init_registers(void);
-SECTION_INIT extern void __init_data(void);
+SECTION_INIT extern __declspec(weak) void __start(void);
+SECTION_INIT static void __init_registers(void);
+SECTION_INIT static void __init_data(void);
 SECTION_INIT extern void __init_hardware(void);
 SECTION_INIT extern void __flush_cache(void* addr, u32 size);
 

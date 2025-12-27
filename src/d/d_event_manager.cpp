@@ -3,9 +3,16 @@
 // Translation Unit: d_event_manager.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+
+enum {
+    ACT_WAIT,
+    ACT_TALK0,
+    ACT_TALK1,
+};
 
 /* 800737DC-800737F4       .text init__18dEvent_exception_cFv */
 void dEvent_exception_c::init() {
@@ -16,30 +23,31 @@ void dEvent_exception_c::init() {
 
 /* 800737F4-80073900       .text setStartDemo__18dEvent_exception_cFi */
 int dEvent_exception_c::setStartDemo(int eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (eventInfoIdx == 0xFF) {
         mEventInfoIdx = 206;
         return 0xFF;
-    } else if (eventInfoIdx >= 200) {
+    }
+    if (eventInfoIdx >= 200) {
         mEventInfoIdx = eventInfoIdx;
         return eventInfoIdx;
-    } else {
-        if (stageEventInfo == NULL) {
-            return 0xFF;
-        } else if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
-            return 0xFF;
-        } else {
-            u8 switchNo = stageEventInfo->events[eventInfoIdx].field_0x13;
-            if (switchNo != 0xFF) {
-                if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
-                    mEventInfoIdx = 206;
-                    return 0xFF;
-                }
-                dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
-            }
-            mEventInfoIdx = eventInfoIdx;
-        }
     }
+    if (stageEventInfo == NULL) {
+        return 0xFF;
+    }
+    if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
+        return 0xFF;
+    }
+    
+    u8 switchNo = stageEventInfo->events[eventInfoIdx].mSpawnSwitchNo;
+    if (switchNo != 0xFF) {
+        if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
+            mEventInfoIdx = 206;
+            return 0xFF;
+        }
+        dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
+    }
+    mEventInfoIdx = eventInfoIdx;
     return eventInfoIdx;
 }
 
@@ -61,7 +69,7 @@ const char* dEvent_exception_c::getEventName() {
         "FALL_START",
     };
 
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
     if (mEventInfoIdx == -1)
         return NULL;
@@ -178,7 +186,7 @@ static void* findObjectCallBack(fopAc_ac_c* actor, void* work) {
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
+    if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
         return actor;
 
     return NULL;
@@ -200,7 +208,7 @@ static void* extraOnObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
             fopAcM_OnStatus(actor, fopAcStts_UNK800_e);
             if (prm->mCastInFlag & 1)
                 fopAcM_OnStatus(actor, fopAcStts_FORCEMOVE_e);
@@ -220,7 +228,7 @@ static void* extraOffObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument) {
             fopAcM_OffStatus(actor, fopAcStts_UNK800_e);
         }
         return NULL;
@@ -333,7 +341,7 @@ dEvDtEvent_c* dEvent_manager_c::getEventData(s16 eventIdx) {
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
 s16 dEvent_manager_c::getEventIdx(const char* eventName, u8 eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (mList.mHeaderP == NULL)
         return -1;
 
@@ -589,9 +597,9 @@ void dEvent_manager_c::exceptionProc() {
         if (startCheck(eventIdx)) {
             mException.mState = 2;
             if (strcmp(eventName, "MEETSHISHIOH") == 0)
-                dComIfGs_onEventBit(0x0F80);
+                dComIfGs_onEventBit(dSv_event_flag_c::MET_KORL);
             if (strcmp(eventName, "look_tetra") == 0)
-                dComIfGs_onEventBit(0x0280);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0280);
         } else {
             fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }
@@ -727,7 +735,7 @@ void dEvent_manager_c::setPrmStaff(void* work, int staffIdx) {
 
 /* 80075288-8007537C       .text getToolId__16dEvent_manager_cFUci */
 u8 dEvent_manager_c::getToolId(u8 r4, int r31) {
-    dStage_EventInfo_c* eventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* eventInfo = dComIfGp_getStage().getEventInfo();
     int r5 = r31;
     if (r4 == 0xFF) {
         return 0xFF;
@@ -764,9 +772,9 @@ dEv_seach_prm::dEv_seach_prm(const char* name, u32 mask, u32 value) {
 }
 
 /* 80075394-800753A8       .text dEv_extra_createCB__FPv */
-int dEv_extra_createCB(void* actor) {
+cPhs_State dEv_extra_createCB(void* actor) {
     fopAcM_OnStatus((fopAc_ac_c*)actor, fopAcStts_UNK800_e);
-    return 4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 800753A8-80075450       .text dEv_talkman_get_action__Fi */
@@ -789,12 +797,12 @@ static int dEv_talkman_get_action(int param_0) {
 
 /* 80075450-8007548C       .text ChkPresentEnd__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::ChkPresentEnd() {
-    return dEv_talkman_get_action(0) >= 1;
+    return dEv_talkman_get_action(ACT_WAIT) >= ACT_TALK0;
 }
 
 /* 8007548C-800754BC       .text CancelPresent__16dEvent_manager_cFv */
 BOOL dEvent_manager_c::CancelPresent() {
-    return dEv_talkman_get_action(1) == 1;
+    return dEv_talkman_get_action(ACT_TALK0) == ACT_TALK0;
 }
 
 /* 800754BC-800754EC       .text checkStartDemo__16dEvent_manager_cFv */

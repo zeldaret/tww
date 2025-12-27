@@ -13,11 +13,13 @@ class daPy_mtxFollowEcallBack_c : public dPa_levelEcallBack {
 public:
     void execute(JPABaseEmitter*);
     void end();
-    void makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
-    void makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
+    JPABaseEmitter* makeEmitter(u16, MtxP, const cXyz*, const cXyz*);
+    JPABaseEmitter* makeEmitterColor(u16, MtxP, const cXyz*, const GXColor*, const GXColor*);
     void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz*, s8) { mpEmitter = emitter; }
 
     JPABaseEmitter* getEmitter() { return mpEmitter; }
+    MtxP getMtx() { return mpMtx; }
+    void setMatrix(MtxP mtx) { mpMtx = mtx; }
 
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ MtxP mpMtx;
@@ -25,30 +27,86 @@ public:
 
 STATIC_ASSERT(sizeof(daPy_mtxFollowEcallBack_c) == 0x0C);
 
-// TODO: this probably does not belong in d_a_player.h based on the .text section splitting in d_a_player_main
-class daPy_HIO_c {
-public:
-    // TODO: constructor should be weak, but not inlined?
-    // daPy_HIO_c() {}
-    daPy_HIO_c();
-
-public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
-};  // Size: 0x3F
-
 class daPy_demo_c {
 public:
     enum {
-        DEMO_UNK1_e = 0x01,
-        DEMO_UNK14_e = 0x14,
-        DEMO_UNK18_e = 0x18,
-        DEMO_UNK1D_e = 0x1D,
-        DEMO_UNK25_e = 0x25,
-        DEMO_UNK44_e = 0x44,
-        DEMO_UNK48_e = 0x48,
-        DEMO_UNK4A_e = 0x4A,
-        DEMO_LAST_e = 0x4B,
-        DEMO_NEW_ANM0_e = 0x200,
+        /* 0x000 */ DEMO_UNK00_e = 0,
+        /* 0x001 */ DEMO_N_WAIT_e = 1,
+        /* 0x002 */ DEMO_N_WALK_e = 2,
+        /* 0x003 */ DEMO_N_DASH_e = 3,
+        /* 0x004 */ DEMO_INIT_WAIT_e = 4,
+        /* 0x005 */ DEMO_WAIT_TURN_e = 5,
+        /* 0x006 */ DEMO_N_TALK_e = 6,
+        /* 0x007 */ DEMO_DAM_ACTION_e = 7,
+        /* 0x008 */ DEMO_E_TALK_e = 8,
+        /* 0x009 */ DEMO_LDAM_e = 9,
+        /* 0x00A */ DEMO_OPEN_TREASURE_e = 10,
+        /* 0x00B */ DEMO_GET_ITEM_e = 11,
+        /* 0x00C */ DEMO_UNEQUIP_e = 12,
+        /* 0x00D */ DEMO_HOLDUP_e = 13,
+        /* 0x00E */ DEMO_KEEP_e = 14,
+        /* 0x00F */ DEMO_LAROUND_e = 15,
+        /* 0x010 */ DEMO_BJUMP_e = 16,
+        /* 0x011 */ DEMO_PFALL_e = 17,
+        /* 0x012 */ DEMO_UNK_018_e = 18,
+        /* 0x013 */ DEMO_SALUTE_e = 19,
+        /* 0x014 */ DEMO_L_AROUND2_e = 20,
+        /* 0x015 */ DEMO_T_PICKUP_e = 21,
+        /* 0x016 */ DEMO_T_WAIT_e = 22,
+        /* 0x017 */ DEMO_A_WAIT_e = 23,
+        /* 0x018 */ DEMO_SURPRISED_e = 24,
+        /* 0x019 */ DEMO_TBACK_e = 25,
+        /* 0x01A */ DEMO_LOOKUP_e = 26,
+        /* 0x01B */ DEMO_UNK_027_e = 27,
+        /* 0x01C */ DEMO_UNK_028_e = 28,
+        /* 0x01D */ DEMO_UNK_029_e = 29,
+        /* 0x01E */ DEMO_UNK_030_e = 30,
+        /* 0x01F */ DEMO_LWAIT_e = 31,
+        /* 0x020 */ DEMO_PWAIT_032_e = 32,
+        /* 0x021 */ DEMO_PUSH_e = 33,
+        /* 0x022 */ DEMO_TACT_e = 34,
+        /* 0x023 */ DEMO_DOOR_e = 35,
+        /* 0x024 */ DEMO_NOD_e = 36,
+        /* 0x025 */ DEMO_PRESENT_e = 37,
+        /* 0x026 */ DEMO_WCHANGE_e = 38,
+        /* 0x027 */ DEMO_SHIP_e = 39,
+        /* 0x028 */ DEMO_SIPUT_e = 40,
+        /* 0x029 */ DEMO_UNK_041_e = 41,
+        /* 0x02A */ DEMO_KM_WAIT_e = 42,
+        /* 0x02B */ DEMO_CUT_ROLL_e = 43,
+        /* 0x02C */ DEMO_POS_INIT_e = 44,
+        /* 0x02D */ DEMO_UNK_045_e = 45,
+        /* 0x02E */ DEMO_PGET_e = 46,
+        /* 0x02F */ DEMO_VOLCANO_e = 47,
+        /* 0x030 */ DEMO_WARP_e = 48,
+        /* 0x031 */ DEMO_S_SURP_e = 49,
+        /* 0x032 */ DEMO_SMILE_e = 50,
+        /* 0x033 */ DEMO_UNK_051_e = 51,
+        /* 0x034 */ DEMO_AGB_e = 52,
+        /* 0x035 */ DEMO_LTURN_e = 53,
+        /* 0x036 */ DEMO_LET_OPEN_e = 54,
+        /* 0x037 */ DEMO_LET_READ_e = 55,
+        /* 0x038 */ DEMO_GRAB_PUT_e = 56,
+        /* 0x039 */ DEMO_RD_STOP_e = 57,
+        /* 0x03A */ DEMO_RD_CATCH_e = 58,
+        /* 0x03B */ DEMO_GET_DANCE_e = 59,
+        /* 0x03C */ DEMO_BO_FAIRY_e = 60,
+        /* 0x03D */ DEMO_BO_OPEN_e = 61,
+        /* 0x03E */ DEMO_S_WARP_e = 62,
+        /* 0x03F */ DEMO_OPEN_SBOX_e = 63,
+        /* 0x040 */ DEMO_SFALL_e = 64,
+        /* 0x041 */ DEMO_FOODSET_e = 65,
+        /* 0x042 */ DEMO_SWAIT_e = 66,
+        /* 0x043 */ DEMO_PWAIT_067_e = 67,
+        /* 0x044 */ DEMO_BOW_MINIGAME_e = 68,
+        /* 0x045 */ DEMO_SHIPSIT_e = 69,
+        /* 0x046 */ DEMO_UNK_070_e = 70,
+        /* 0x047 */ DEMO_SHIPOFF_e = 71,
+        /* 0x048 */ DEMO_UNK_072_e = 72,
+        /* 0x049 */ DEMO_FOODTHROW_e = 73,
+        /* 0x04A */ DEMO_UNK_074_e = 74,
+        /* 0x04B */ DEMO_LAST_e,
+        /* 0x200 */ DEMO_NEW_ANM0_e = 0x200,
     };
 
     void setDemoType(u16 pType) { mDemoType = pType; }
@@ -56,6 +114,7 @@ public:
     void setDemoMode(u32 mode) { mDemoMode = mode; }
     u32 getDemoMode() const { return mDemoMode; }
     int getParam1() const { return mParam1; }
+    s16 getTimer() const { return mTimer; }
     void setTimer(s16 time) { mTimer = time; }
     void decTimer() { mTimer--; }
     void setOriginalDemoType() { setDemoType(3); }
@@ -70,7 +129,7 @@ public:
     void setParam1(int value) { mParam1 = value; }
     void setParam2(int value) { mParam2 = value; }
 
-private:
+public:
     /* 0x00 */ u16 mDemoType;
     /* 0x02 */ s16 mDemoMoveAngle;
     /* 0x04 */ s16 mTimer;
@@ -84,13 +143,17 @@ private:
 class daPy_py_c : public fopAc_ac_c {
 public:
     enum daPy_FLG0 {
+        daPyFlg0_UNK1               = 0x00000001,
+        daPyFlg0_UNK2               = 0x00000002,
         daPyFlg0_UNK4               = 0x00000004,
         daPyFlg0_UNK8               = 0x00000008,
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
+        daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
         daPyFlg0_UNK80              = 0x00000080,
         daPyFlg0_UNK100             = 0x00000100,
         daPyFlg0_SHIP_DROP          = 0x00000200,
+        daPyFlg0_UNK400             = 0x00000400,
         daPyFlg0_PUSH_PULL_KEEP     = 0x00000800,
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
@@ -99,8 +162,10 @@ public:
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
+        daPyFlg0_UNK100000          = 0x00100000,
         daPyFlg0_UNK200000          = 0x00200000,
         daPyFlg0_UNK400000          = 0x00400000,
+        daPyFlg0_UNK800000          = 0x00800000,
         daPyFlg0_UNK1000000         = 0x01000000,
         daPyFlg0_EQUIP_HEAVY_BOOTS  = 0x02000000,
         daPyFlg0_NO_DRAW            = 0x08000000,
@@ -130,6 +195,7 @@ public:
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
         daPyFlg1_UNK40000               = 0x00040000,
         daPyFlg1_WATER_DROP             = 0x00080000,
+        daPyFlg1_UNK100000              = 0x00100000,
         daPyFlg1_UNK200000              = 0x00200000,
         daPyFlg1_UNK800000              = 0x00800000,
         daPyFlg1_UNK1000000             = 0x01000000,
@@ -142,28 +208,37 @@ public:
     };
     
     enum daPy_RFLG0 {
+        daPyRFlg0_UNK1                  = 0x00000001,
         daPyRFlg0_UNK2                  = 0x00000002,
         daPyRFlg0_ROPE_GRAB_RIGHT_HAND  = 0x00000004,
+        daPyRFlg0_UNK8                  = 0x00000008,
         daPyRFlg0_UNK10                 = 0x00000010,
         daPyRFlg0_GRAB_UP_END           = 0x00000020,
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
         daPyRFlg0_UNK80                 = 0x00000080,
+        daPyRFlg0_UNK100                = 0x00000100,
         daPyRFlg0_UNK200                = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
+        daPyRFlg0_UNK1000               = 0x00001000,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
         daPyRFlg0_UNK4000               = 0x00004000,
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
         daPyRFlg0_ATTENTION_LOCK        = 0x00010000,
         daPyRFlg0_HAMMER_QUAKE          = 0x00020000,
+        daPyRFlg0_UNK40000              = 0x00040000,
         daPyRFlg0_UNK80000              = 0x00080000,
         daPyRFlg0_POISON_CURSE          = 0x00100000,
+        daPyRFlg0_UNK200000             = 0x00200000,
         daPyRFlg0_GRAB_PUT_START        = 0x00400000,
+        daPyRFlg0_UNK800000             = 0x00800000,
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
+        daPyRFlg0_UNK4000000            = 0x04000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
+        daPyRFlg0_UNK40000000           = 0x40000000,
         // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
         // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
         // 0x04000000 set in daPy_lk_c::procShipPaddle
@@ -394,95 +469,94 @@ public:
     }
     void cancelOriginalDemo() {
         mDemo.setSystemDemoType();
-        mDemo.setDemoMode(daPy_demo_c::DEMO_UNK1_e);
+        mDemo.setDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
     }
 
     void onNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 |= flag; }
     void offNoResetFlg0(daPy_FLG0 flag) { mNoResetFlg0 &= ~flag; }
-    bool checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
-    bool getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
+    u32 checkNoResetFlg0(daPy_FLG0 flag) const { return mNoResetFlg0 & flag; }
+    u32 getCutAtFlg() const { return checkNoResetFlg0(daPyFlg0_CUT_AT_FLG); }
     void onPushPullKeep() { onNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
     void offPushPullKeep() { offNoResetFlg0(daPyFlg0_PUSH_PULL_KEEP); }
-    bool checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
+    u32 checkEquipHoverBoots() const { return checkNoResetFlg0(daPyFlg0_HOVER_BOOTS); }
     void onNoFallVoice() { onNoResetFlg0(daPyFlg0_NO_FALL_VOICE); }
     void onScopeCancel() { onNoResetFlg0(daPyFlg0_SCOPE_CANCEL); }
     void onPhotoBoxCancel() { onNoResetFlg0(daPyFlg0_PHOTO_BOX_CANCEL); }
-    bool checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
+    u32 checkEquipHeavyBoots() const { return checkNoResetFlg0(daPyFlg0_EQUIP_HEAVY_BOOTS); }
     void onPlayerNoDraw() { onNoResetFlg0(daPyFlg0_NO_DRAW); }
     void offPlayerNoDraw() { offNoResetFlg0(daPyFlg0_NO_DRAW); }
     void onHeavyState() { onNoResetFlg0(daPyFlg0_HEAVY_STATE); }
     void offHeavyState() { offNoResetFlg0(daPyFlg0_HEAVY_STATE); }
-    bool getHeavyState() { return checkNoResetFlg0(daPyFlg0_HEAVY_STATE); }
-    bool getHeavyStateAndBoots() { return checkNoResetFlg0(static_cast<daPy_FLG0>(daPyFlg0_HEAVY_STATE | daPyFlg0_EQUIP_HEAVY_BOOTS)); }
+    u32 getHeavyState() { return checkNoResetFlg0(daPyFlg0_HEAVY_STATE); }
+    u32 getHeavyStateAndBoots() { return checkNoResetFlg0(static_cast<daPy_FLG0>(daPyFlg0_HEAVY_STATE | daPyFlg0_EQUIP_HEAVY_BOOTS)); }
     
     void onNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 |= flag; }
     void offNoResetFlg1(daPy_FLG1 flag) { mNoResetFlg1 &= ~flag; }
-    bool checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
-    bool checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
+    u32 checkNoResetFlg1(daPy_FLG1 flag) const { return mNoResetFlg1 & flag; }
+    u32 checkEquipDragonShield() const { return checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD); }
     void onNpcCallCommand() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onNpcCall() { onNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void offNpcCallCommand() { offNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
-    bool checkNpcCallCommand() const { return checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
+    u32 checkNpcCallCommand() const { return checkNoResetFlg1(daPyFlg1_NPC_CALL_COMMAND); }
     void onForceVomitJump() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP); }
     void onNpcNotChange() { onNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
     void offNpcNotChange() { offNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
-    bool checkNpcNotChange() const { return checkNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
+    u32 checkNpcNotChange() const { return checkNoResetFlg1(daPyFlg1_NPC_NOT_CHANGE); }
     void onConfuse() { onNoResetFlg1(daPyFlg1_CONFUSE); }
     void offConfuse() { offNoResetFlg1(daPyFlg1_CONFUSE); }
-    bool checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
-    bool checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    u32 checkConfuse() const { return checkNoResetFlg1(daPyFlg1_CONFUSE); }
+    u32 checkFreezeState() const { return checkNoResetFlg1(daPyFlg1_FREEZE_STATE); }
+    u32 checkUseArrowEffect() const { return checkNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
     void onForceVomitJumpShort() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP_SHORT); }
-    bool checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
+    u32 checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
     void onWaterDrop() { onNoResetFlg1(daPyFlg1_WATER_DROP); }
     void onVineCatch() { onNoResetFlg1(daPyFlg1_VINE_CATCH); }
-    bool checkLastComboWait() const { return checkNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT); }
+    u32 checkLastComboWait() const { return checkNoResetFlg1(daPyFlg1_LAST_COMBO_WAIT); }
     
     void onResetFlg0(daPy_RFLG0 flag) { mResetFlg0 |= flag; }
     void offResetFlg0(daPy_RFLG0 flag) { mResetFlg0 &= ~flag; }
-    bool checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
-    bool getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
-    bool getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
-    bool getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
-    bool getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
-    bool getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
-    bool getFootOnGround() const { return getRightFootOnGround() || getLeftFootOnGround(); }
-    bool checkFrontRollCrash() const { return checkResetFlg0(daPyRFlg0_FRONT_ROLL_CRASH); }
-    bool getGrabUpStart() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_START); }
-    bool checkAttentionLock() const { return checkResetFlg0(daPyRFlg0_ATTENTION_LOCK); }
-    bool checkHammerQuake() const { return checkResetFlg0(daPyRFlg0_HAMMER_QUAKE); }
+    u32 checkResetFlg0(daPy_RFLG0 flag) const { return mResetFlg0 & flag; }
+    u32 getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
+    u32 getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
+    u32 getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
+    u32 getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
+    u32 getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
+    u32 getFootOnGround() const { return getRightFootOnGround() || getLeftFootOnGround(); }
+    u32 checkFrontRollCrash() const { return checkResetFlg0(daPyRFlg0_FRONT_ROLL_CRASH); }
+    u32 getGrabUpStart() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_START); }
+    u32 checkAttentionLock() const { return checkResetFlg0(daPyRFlg0_ATTENTION_LOCK); }
+    u32 checkHammerQuake() const { return checkResetFlg0(daPyRFlg0_HAMMER_QUAKE); }
     void onPoisonCurse() { onResetFlg0(daPyRFlg0_POISON_CURSE); }
-    bool getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
-    bool checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
-    bool checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
-    bool checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
+    u32 getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
+    u32 checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
+    u32 checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
+    u32 checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
     
-    bool checkGrabWear() const { return field_0x2b0 < 0.0f; }
-    bool checkNormalSwordEquip() const {
-        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e ||
-            dComIfGp_getMiniGameType() == 2;
+    BOOL checkGrabWear() const { return field_0x2b0 < 0.0f; }
+    BOOL checkNormalSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_SWORD_e || checkSwordMiniGame();
     }
-    bool checkMasterSwordEquip() const {
+    BOOL checkMasterSwordEquip() const {
         return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_1_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
-            dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_2_e ||
+               dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
     }
+    BOOL checkFinalMasterSwordEquip() const {
+        return dComIfGs_getSelectEquip(0) == dItem_MASTER_SWORD_3_e;
+    }
+    
     void setFace(daPy_FACE face) { mFace = face; }
     
-    void checkFinalMasterSwordEquip() const {}
-    void checkBowMiniGame() const {}
-    void checkSwordMiniGame() const {}
+    BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
+    BOOL checkBowMiniGame() const { return mDemo.getDemoMode() == daPy_demo_c::DEMO_BOW_MINIGAME_e; }
     void checkSoupPowerUp() const {}
     void checkSubjectAccept() const {}
-    void checkUseArrowEffect() const {}
-    void getRopeJumpLand() const {}
-    void checkRopeForceEnd() const {}
+    u32 getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_UNK200); }
+    u32 checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_UNK40000000); }
     
-    // This class's weak virtual functions tend to cause weak function ordering issues in TUs that use them.
-    // The proper way to match this is still unknown, so some of the definitions have been temporarily commented out
-    // here so that they can be fakematched instead.
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;
     virtual f32 getGroundY() = 0;

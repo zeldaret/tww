@@ -11,7 +11,7 @@ public:
     void onEventAccept() {}
     void setTimer(short) {}
 
-    s32 create();
+    cPhs_State create();
     void init();
     void checkTimer();
     void checkEventFinish();

@@ -6,6 +6,7 @@
 #include "d/d_cc_mass_s.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "SSystem/SComponent/c_bg_s.h"
 #include "SSystem/SComponent/c_math.h"
 #include "f_op/f_op_actor.h"
 
@@ -19,10 +20,10 @@ void dCcMassS_Mng::Ct() {
     mFlag = 0;
     mResultCam = 0;
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -1e+9f;
+    mCamTopPos.y = -G_CM3D_F_INF;
     mCamTopPos.z = 0.0f;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.y = -G_CM3D_F_INF;
     mCamBottomPos.z = 0.0f;
     Clear();
 }
@@ -31,25 +32,23 @@ void dCcMassS_Mng::Ct() {
 void dCcMassS_Mng::Prepare() {
     cM3dGAab area;
     area.ClearForMinMax();
-    cCcD_ShapeAttr* attr;
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
         cCcD_Obj* pobj = mass->GetObj();
         JUT_ASSERT(61, pobj != NULL);
-        attr = pobj->GetShapeAttr();
+        cCcD_ShapeAttr* attr = pobj->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     for (dCcMassS_Obj* mass = mMassAreas; mass < mMassAreas + mMassAreaCount; mass++) {
         cCcD_Obj* parea = mass->GetObj();
         JUT_ASSERT(73, parea != NULL);
-        attr = parea->GetShapeAttr();
+        cCcD_ShapeAttr* attr = parea->GetShapeAttr();
         attr->CalcAabBox();
         area.SetMinMax(attr->GetWorkAab());
     }
     if (mFlag & 1) {
         mCpsAttr.CalcAabBox();
-        attr = &mCpsAttr;
-        area.SetMinMax(attr->GetWorkAab());
+        area.SetMinMax(mCpsAttr.GetWorkAab());
     }
     mDivideArea.SetArea(area);
     for (dCcMassS_Obj* mass = mMassObjs; mass < mMassObjs + mMassObjCount; mass++) {
@@ -70,13 +69,13 @@ void dCcMassS_Mng::Prepare() {
         mDivideArea.CalcDivideInfo(&mDivideInfo, mCpsAttr.GetWorkAab(), 0);
     }
     mCamTopPos.x = 0.0f;
-    mCamTopPos.y = -1e+9f;
+    mCamTopPos.y = -G_CM3D_F_INF;
     mCamTopPos.z = 0.0f;
-    mCamTopDist = 1e+9f;
+    mCamTopDist = G_CM3D_F_INF;
     mCamBottomPos.x = 0.0f;
-    mCamBottomPos.y = -1e+9f;
+    mCamBottomPos.y = -G_CM3D_F_INF;
     mCamBottomPos.z = 0.0f;
-    mCamBottomDist = 1e+9f;
+    mCamBottomDist = G_CM3D_F_INF;
 }
 
 /* 800ACCB8-800AD17C       .text Chk__12dCcMassS_MngFP4cXyzPP10fopAc_ac_cP15dCcMassS_HitInf */
@@ -209,7 +208,7 @@ void dCcMassS_Mng::Clear() {
 
 /* 800AD234-800AD310       .text Set__12dCcMassS_MngFP8cCcD_ObjUc */
 void dCcMassS_Mng::Set(cCcD_Obj* i_obj, u8 i_priority) {
-    if (mMassObjCount >= 5) {
+    if (mMassObjCount >= (s32)ARRAY_SIZE(mMassObjs)) {
         for (int i = 0; i < (s32)ARRAY_SIZE(mMassObjs); i++) {
             int priority = mMassObjs[i].GetPriority();
             if (priority > i_priority || (priority == i_priority && cM_rndF(1.0f) < 0.5f)) {

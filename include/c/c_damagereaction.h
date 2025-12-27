@@ -17,7 +17,7 @@ public:
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ f32 mYOffset;
     /* 0x00C */ s8 m00C;
-    /* 0x00D */ s8 mState;
+    /* 0x00D */ s8 mMode;
     /* 0x00E */ s16 mFreezeTimer;
     /* 0x010 */ s16 mMoveDelayTimer;
     /* 0x012 */ s16 mAngleY;
@@ -46,7 +46,7 @@ struct enemyfire {
 public:
     /* 0x000 */ fopAc_ac_c* mpActor;
     /* 0x004 */ s16 mFireDuration;
-    /* 0x006 */ s8 mState;
+    /* 0x006 */ s8 mMode;
     /* 0x007 */ u8 m007[0x008 - 0x007];
     /* 0x008 */ s16 mFireTimer;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
@@ -77,9 +77,9 @@ public:
     };
     
     /* 0x000 */ fopEn_enemy_c* mpEnemy;
-    /* 0x004 */ s16 m004;
-    /* 0x006 */ s16 mState;
-    /* 0x008 */ u16 mEnemyType;
+    /* 0x004 */ s16 mMode;
+    /* 0x006 */ s16 mAction;
+    /* 0x008 */ s16 mEnemyType;
     /* 0x00A */ u8 m00A[0x00C - 0x00A];
     /* 0x00C */ int mTimer;
     /* 0x010 */ csXyz m010[20];
@@ -122,7 +122,8 @@ public:
     /* 0x488 */ s16 m488;
     /* 0x48A */ s16 m48A;
     /* 0x48C */ csXyz m48C;
-    /* 0x492 */ u8 m492[0x496 - 0x492];
+    /* 0x492 */ s16 m492;
+    /* 0x492 */ s16 m494;
     /* 0x496 */ s16 m496;
     /* 0x498 */ s16 m498;
     /* 0x49A */ s16 m49A;
@@ -178,31 +179,30 @@ public:
     /* 0x772 */ u8 m772[0x774 - 0x772];
     /* 0x774 */ dPa_smokeEcallBack mParticleCallBack;
     /* 0x794 */ s16 m794;
-    /* 0x796 */ u8 m796[0x7A0 - 0x796];
+    /* 0x796 */ u8 m796[0x798 - 0x796];
+    /* 0x798 */ f32 m798;
+    /* 0x79C */ cXyz* m79C;
     /* 0x7A0 */ cXyz m7A0;
-    /* 0x7AC */ u8 m7AC[0x7AE - 0x7AC];
-    /* 0x7AE */ s16 m7AE;
-    /* 0x7B0 */ u8 m7B0[0x7B2 - 0x7B0];
+    /* 0x7AC */ csXyz m7AC;
     /* 0x7B2 */ s16 m7B2;
-    /* 0x7B4 */ u8 m7B4[0x7B6 - 0x7B4];
+    /* 0x7B4 */ s16 m7B4;
     /* 0x7B6 */ u8 m7B6;
     /* 0x7B7 */ u8 m7B7[0x7B8 - 0x7B7];
-    /* 0x7B8 */ int m7B8;
+    /* 0x7B8 */ fpc_ProcID m7B8;
 };  // Size: 0x7BC
-
-// STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
+STATIC_ASSERT(sizeof(damagereaction) == 0x7BC);
 
 BOOL ice_bg_check(enemyice*);
 BOOL enemy_ice(enemyice*);
 void enemy_fire(enemyfire*);
 void enemy_fire_remove(enemyfire*);
 void enemy_piyo_set(fopAc_ac_c*);
-void wall_angle_get(fopAc_ac_c*, s16);
+s16 wall_angle_get(fopAc_ac_c*, s16);
 void dr_body_bg_check(damagereaction*);
-void dr_joint_bg_check(damagereaction*);
-void kado_check(damagereaction*);
-void hang_ang_get(damagereaction*);
-void dr_damage_set(damagereaction*);
+int dr_joint_bg_check(damagereaction*);
+int kado_check(damagereaction*);
+s16 hang_ang_get(damagereaction*);
+int dr_damage_set(damagereaction*);
 void dr_damage_anime(damagereaction*);
 void dr_matrix_set(damagereaction*);
 int damage_reaction(damagereaction*);

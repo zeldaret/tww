@@ -3,59 +3,159 @@
 // Translation Unit: d_a_obj_demo_barrel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_demo_barrel.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
+#include "d/res/res_dbarrel.h"
+#include "f_op/f_op_actor_mng.h"
+
+const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
 
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleHahen() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter =
+        dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &current.pos, NULL, NULL, 0xFF, NULL, -1,
+                              &tevStr.mColorK0, &tevStr.mColorK0, NULL);
+    if (emitter != NULL) {
+        static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
+        emitter->setEmitterScale(em_scl);
+    }
 }
 
 /* 00000144-00000378       .text setParticleSibuki__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleSibuki() {
-    /* Nonmatching */
+    cXyz sp18 = current.pos;
+    sp18.y = 100.0f;
+    m2D0 = current.pos;
+    m2D0.y = dBgS_ObjGndChk_Wtr_Func(sp18);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003D, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_003E, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80CB, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80CC, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80CE, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80DC, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80DD, &m2D0);
 }
 
 /* 00000378-00000398       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
+    return ((daObj_Demo_Barrel_c*)a_this)->CreateHeap();
 }
 
 /* 00000398-00000538       .text CreateHeap__19daObj_Demo_Barrel_cFv */
-void daObj_Demo_Barrel_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObj_Demo_Barrel_c::CreateHeap() {
+    mpMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BDL_KTARU_02), NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD),
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
+
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD), 0,
+                   0.0f, 1.0f, 0.0f, -1.0f, NULL);
+    mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
+    mpModel = mpMorf->getModel();
+    return TRUE;
+}
+
+cPhs_State daObj_Demo_Barrel_c::_create() {
+#if VERSION == VERSION_DEMO
+    cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
+#else
+    fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+#endif
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22E0)) {
+            return cPhs_ERROR_e;
+        }
+
+        fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+        m2DC = 1;
+        m2DE = 0;
+    }
+    return ret;
 }
 
 /* 00000538-000005EC       .text daObj_Demo_BarrelCreate__FPv */
-static s32 daObj_Demo_BarrelCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daObj_Demo_BarrelCreate(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_create();
+}
+
+bool daObj_Demo_Barrel_c::_delete() {
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
+    return true;
 }
 
 /* 000005EC-0000061C       .text daObj_Demo_BarrelDelete__FPv */
-static BOOL daObj_Demo_BarrelDelete(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelDelete(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_delete();
+}
+
+bool daObj_Demo_Barrel_c::_execute() {
+    if (demoActorID != 0) {
+        dDemo_actor_c* ac = dComIfGp_demo_getActor(demoActorID);
+
+        if (ac->checkEnable(dDemo_actor_c::ENABLE_UNK_e)) {
+            if ((m2DC == 1) && (ac->getPrm()->getId() == 1)) {
+                m2DC = 0;
+                dComIfGs_onCollect(3, 0);
+                dComIfGs_offCollect(0, 0);
+                dComIfGs_setSelectEquip(0, dItem_NONE_e);
+                setParticleHahen();
+            }
+
+            if (m2DE == 0 && ac->getPrm()->getId() == 2) {
+                setParticleSibuki();
+                m2DE = 1;
+            }
+        }
+    }
+
+    dDemo_setDemoData(this, dDemo_actor_c::ENABLE_ANM_FRAME_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_TRANS_e, mpMorf, "DBarrel");
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::XYZrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    return false;
 }
 
 /* 0000061C-00000790       .text daObj_Demo_BarrelExecute__FPv */
-static BOOL daObj_Demo_BarrelExecute(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelExecute(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_execute();
+}
+
+bool daObj_Demo_Barrel_c::_draw() {
+    if (m2DC == 0) {
+        return false;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpMorf->updateDL();
+    return true;
 }
 
 /* 00000790-00000814       .text daObj_Demo_BarrelDraw__FPv */
-static BOOL daObj_Demo_BarrelDraw(void*) {
-    /* Nonmatching */
+static BOOL daObj_Demo_BarrelDraw(void* v_this) {
+    return ((daObj_Demo_Barrel_c*)v_this)->_draw();
 }
 
 /* 00000814-0000081C       .text daObj_Demo_BarrelIsDelete__FPv */
 static BOOL daObj_Demo_BarrelIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daObj_Demo_BarrelMethodTable = {
-    (process_method_func)daObj_Demo_BarrelCreate,
-    (process_method_func)daObj_Demo_BarrelDelete,
-    (process_method_func)daObj_Demo_BarrelExecute,
-    (process_method_func)daObj_Demo_BarrelIsDelete,
+    (process_method_func)daObj_Demo_BarrelCreate,  (process_method_func)daObj_Demo_BarrelDelete,
+    (process_method_func)daObj_Demo_BarrelExecute, (process_method_func)daObj_Demo_BarrelIsDelete,
     (process_method_func)daObj_Demo_BarrelDraw,
 };
 
@@ -69,7 +169,7 @@ actor_process_profile_definition g_profile_Obj_Demo_Barrel = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x010F,
+    /* Priority     */ PRIO_Obj_Demo_Barrel,
     /* Actor SubMtd */ &daObj_Demo_BarrelMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

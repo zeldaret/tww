@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_layer_tag.h"
 
 /* 8003FC08-8003FC28       .text fpcPi_IsInQueue__FP22process_priority_class */
-s32 fpcPi_IsInQueue(process_priority_class* i_procPriority) {
+BOOL fpcPi_IsInQueue(process_priority_class* i_procPriority) {
     return cTg_IsUse(&i_procPriority->base);
 }
 
@@ -57,7 +57,7 @@ process_priority_class* fpcPi_GetFromQueue() {
 }
 
 /* 8003FD40-8003FD8C       .text fpcPi_Delete__FP22process_priority_class */
-s32 fpcPi_Delete(process_priority_class* i_procPriority) {
+BOOL fpcPi_Delete(process_priority_class* i_procPriority) {
     static process_priority_queue_info crear = {
         0xFFFFFFFF,
         0xFFFF,
@@ -68,7 +68,7 @@ s32 fpcPi_Delete(process_priority_class* i_procPriority) {
     i_procPriority->mInfoQ.mLayer = crear.mLayer;
     i_procPriority->mInfoQ.mListID = crear.mListID;
     i_procPriority->mInfoQ.mListPrio = crear.mListPrio;
-    return 1;
+    return TRUE;
 }
 
 /* 8003FD8C-8003FDC0       .text fpcPi_IsNormal__FUiUsUs */
@@ -125,11 +125,11 @@ s32 fpcPi_Change(process_priority_class* i_procPriority, uint i_layer, u16 i_lis
 /* 8003FF00-8003FF94       .text fpcPi_Handler__Fv */
 s32 fpcPi_Handler() {
     process_priority_class* i_procPriority;
-    while (i_procPriority = fpcPi_GetFromQueue()) {
+    while ((i_procPriority = fpcPi_GetFromQueue())) {
         base_process_class* pProc = (base_process_class*)i_procPriority->base.mpTagData;
         layer_management_tag_class* pLayerTag = &pProc->mLyTg;
         line_tag* pLineTag = &pProc->mLnTg;
-        if (fpcLyTg_Move(pLayerTag, i_procPriority->mInfoQ.mLayer, i_procPriority->mInfoQ.mListID, i_procPriority->mInfoQ.mListPrio) == 1) {
+        if (fpcLyTg_Move(pLayerTag, i_procPriority->mInfoQ.mLayer, i_procPriority->mInfoQ.mListID, i_procPriority->mInfoQ.mListPrio) == TRUE) {
             fpcLnTg_Move(pLineTag, i_procPriority->mInfoCurr.mListID);
             i_procPriority->mInfoCurr.mLayer = i_procPriority->mInfoQ.mLayer;
             i_procPriority->mInfoCurr.mListID = i_procPriority->mInfoQ.mListID;

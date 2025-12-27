@@ -9,11 +9,6 @@ typedef struct create_tag create_tag;
 typedef int (*fpcCtIt_MethodFunc)(void*, void*);
 typedef void* (*fpcCtIt_JudgeFunc)(void*, void*);
 
-typedef struct node_method_data {
-    fpcCtIt_MethodFunc mFunc;
-    void* mpUserData;
-} node_method_data;
-
 typedef struct node_judge_data {
     fpcCtIt_JudgeFunc mFunc;
     void* mpUserData;
@@ -25,7 +20,7 @@ typedef struct fpcCtIt_jilprm_c {
     void* mpUserData;
 } fpcCtIt_jilprm_c;
 
-s32 fpcCtIt_Method(fpcCtIt_MethodFunc pJudge, void* pUserData);
+BOOL fpcCtIt_Method(fpcCtIt_MethodFunc pJudge, void* pUserData);
 void* fpcCtIt_Judge(fpcCtIt_JudgeFunc pJudge, void* pUserData);
 void* fpcCtIt_filter_JudgeInLayer(create_tag*, fpcCtIt_jilprm_c*);
 void* fpcCtIt_JudgeInLayer(uint i_layerID, fpcCtIt_JudgeFunc i_judgeFunc, void* i_data);

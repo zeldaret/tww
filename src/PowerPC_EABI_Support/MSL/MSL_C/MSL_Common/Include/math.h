@@ -79,10 +79,20 @@ inline float atan2f(float y, float x) { return (float)atan2(y, x); }
 inline float sinf(float x) { return sin(x); }
 inline float cosf(float x) { return cos(x); }
 inline float tanf(float x) { return tan(x); }
+}; // namespace std
+#endif
 
+#ifdef __cplusplus
+namespace std {
+#endif
 extern inline float sqrtf(float x) {
+#ifdef DECOMPCTX // Hack, see comment in dolzel.pch for details
     const double _half = .5;
     const double _three = 3.0;
+#else
+    static const double _half = .5;
+    static const double _three = 3.0;
+#endif
     volatile float y;
     if (x > 0.0f) {
         double guess = __frsqrte((double)x);                   // returns an approximation to
@@ -94,6 +104,7 @@ extern inline float sqrtf(float x) {
     }
     return x;
 }
+#ifdef __cplusplus
 }; // namespace std
 #endif
 

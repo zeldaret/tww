@@ -3,8 +3,10 @@
 // Translation Unit: d_a_obj_buoyrace.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyrace.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
 void daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c*) {
@@ -22,7 +24,7 @@ void daObjBuoyrace::Act_c::create_load() {
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
-s32 daObjBuoyrace::Act_c::_create() {
+cPhs_State daObjBuoyrace::Act_c::_create() {
     /* Nonmatching */
 }
 
@@ -74,27 +76,27 @@ bool daObjBuoyrace::Act_c::_draw() {
 namespace daObjBuoyrace {
 namespace {
 /* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Create(void*) {
+cPhs_State Mthd_Create(void*) {
     /* Nonmatching */
 }
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Delete(void*) {
+BOOL Mthd_Delete(void*) {
     /* Nonmatching */
 }
 
 /* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Execute(void*) {
+BOOL Mthd_Execute(void*) {
     /* Nonmatching */
 }
 
 /* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_Draw(void*) {
+BOOL Mthd_Draw(void*) {
     /* Nonmatching */
 }
 
 /* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-void Mthd_IsDelete(void*) {
+BOOL Mthd_IsDelete(void*) {
     /* Nonmatching */
 }
 
@@ -118,7 +120,7 @@ actor_process_profile_definition g_profile_Obj_Buoyrace = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x010C,
+    /* Priority     */ PRIO_Obj_Buoyrace,
     /* Actor SubMtd */ &daObjBuoyrace::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

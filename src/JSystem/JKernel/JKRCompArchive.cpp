@@ -3,6 +3,8 @@
 // Translation Unit: JKRCompArchive.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRCompArchive.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
@@ -379,9 +381,11 @@ u32 JKRCompArchive::getExpandedResSize(const void* resource) const {
         JKRAramToMainRam(addr, bufPtr, sizeof(buf) / 2, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1, NULL);
     } else if ((flags & 0x40) != 0) {
         JKRDvdToMainRam(mEntryNum, bufPtr, EXPAND_SWITCH_UNKNOWN2, sizeof(buf) / 2, NULL, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, field_0x6c + fileEntry->data_offset, NULL);
+#if VERSION > VERSION_DEMO
         DCInvalidateRange(bufPtr, sizeof(buf) / 2);
+#endif
     } else {
-        OSPanic(__FILE__, VERSION_SELECT(948, 944, 944), "illegal resource.");
+        OSPanic(__FILE__, VERSION_SELECT(940, 948, 944, 944), "illegal resource.");
     }
     u32 expandSize = JKRDecompExpandSize(bufPtr);
     const_cast<JKRCompArchive *>(this)->setExpandSize(fileEntry, expandSize);

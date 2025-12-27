@@ -1,7 +1,7 @@
 #ifndef RES_NITEN_H
 #define RES_NITEN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum NITEN_RES_FILE_ID {
     /* BCKS */

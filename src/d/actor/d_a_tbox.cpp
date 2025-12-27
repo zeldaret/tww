@@ -3,6 +3,7 @@
  * Treasure Chest / 宝箱 (Takarabako)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
 #include "d/res/res_dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -13,12 +14,12 @@
 #include "d/d_kankyo.h"
 #include "d/d_particle.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
-
 
 #define FUNC_TYPE_NORMAL 0
 #define FUNC_TYPE_SWITCH 1
@@ -29,8 +30,6 @@
 #define FUNC_TYPE_TACT 6
 #define FUNC_TYPE_EXTRA_SAVE_INFO 7
 #define FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN 8
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -81,7 +80,7 @@ daTbox_HIO_c::daTbox_HIO_c() {
 }
 
 /* 00000124-00000550       .text commonShapeSet__8daTbox_cFv */
-s32 daTbox_c::commonShapeSet() {
+cPhs_State daTbox_c::commonShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -92,7 +91,7 @@ s32 daTbox_c::commonShapeSet() {
 
     // Load open animation
     J3DAnmTransform* openAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", mdlInfo.openBckId);
-    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::LOOP_ONCE_e,  1.0f, 0, -1, false) == 0) {
+    if (mOpenAnm.init(modelData, openAnm, true, J3DFrameCtrl::EMode_NONE,  1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
@@ -104,7 +103,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTextureSRTKey* appearTexData = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", mdlInfo.btkId);
-        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::LOOP_REPEAT_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearTexAnm->init(modelData, appearTexData, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -119,7 +118,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* appearRegData = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", mdlInfo.brkId);
-        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mpAppearRegAnm->init(modelData, appearRegData, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
 
@@ -143,7 +142,7 @@ s32 daTbox_c::commonShapeSet() {
         }
 
         J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
-        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+        if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return cPhs_ERROR_e;
         }
     }
@@ -165,7 +164,7 @@ s32 daTbox_c::commonShapeSet() {
 }
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
-s32 daTbox_c::effectShapeSet() {
+cPhs_State daTbox_c::effectShapeSet() {
     J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
     JUT_ASSERT(0x117, flashModelData != NULL);
 
@@ -175,17 +174,17 @@ s32 daTbox_c::effectShapeSet() {
     }
 
     J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false) == 0) {
+    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0) == 0) {
+    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
         return cPhs_ERROR_e;
     }
 
     J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::LOOP_ONCE_e, 1.0f, 0, -1, false, 0);
+    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;
@@ -195,7 +194,7 @@ s32 daTbox_c::effectShapeSet() {
 }
 
 /* 00000764-00000928       .text envShapeSet__8daTbox_cFv */
-s32 daTbox_c::envShapeSet() {
+cPhs_State daTbox_c::envShapeSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     // Load model
@@ -226,7 +225,7 @@ s32 daTbox_c::envShapeSet() {
 }
 
 /* 00000928-00000BB0       .text bgCheckSet__8daTbox_cFv */
-s32 daTbox_c::bgCheckSet() {
+cPhs_State daTbox_c::bgCheckSet() {
     modelInfo& mdlInfo = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", mdlInfo.closedColId);
@@ -459,20 +458,18 @@ void daTbox_c::CreateInit() {
     s32 funcType = getFuncType();
     flagClr();
 
-    mSmokeCB.field_0x15 = 1;
+    mSmokeCB.onWindOff();
     mOpenAnm.setPlaySpeed(0.0f);
 
     if (checkOpen()) {
-        J3DFrameCtrl* frameCtrl = mOpenAnm.getFrameCtrl();
-        frameCtrl->setFrame(frameCtrl->getEnd());
+        mOpenAnm.setFrame(mOpenAnm.getEndFrame());
 
         setAction(&daTbox_c::actionWait);
 
         if (checkEnv()) {
             mInvisibleScrollVal = 2.0f;
 
-            frameCtrl = mpAppearRegAnm->getFrameCtrl();
-            frameCtrl->setFrame(frameCtrl->getEnd());
+            mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
         }
     }
     else {
@@ -491,8 +488,7 @@ void daTbox_c::CreateInit() {
 
                 mInvisibleScrollVal = 2.0f;
 
-                J3DFrameCtrl* frameCtrl = mpAppearRegAnm->getFrameCtrl();
-                frameCtrl->setFrame(frameCtrl->getEnd());
+                mpAppearRegAnm->setFrame(mpAppearRegAnm->getEndFrame());
             }
             else {
                 flagOn(daTboxFlg_UNK_04);
@@ -555,7 +551,7 @@ void daTbox_c::CreateInit() {
 
     if (funcType == FUNC_TYPE_GRAVITY) {
         mAcchCir.SetWall(30.0f, 0.0f);
-        mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+        mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
 
         gravity = -2.5f;
     }
@@ -568,7 +564,7 @@ s32 daTbox_c::boxCheck() {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz playerChestDiff = player->current.pos - home.pos;
 
-    if (playerChestDiff.abs2XZ() < 10000.0f) {
+    if (playerChestDiff.abs2XZ() < SQUARE(100.0f)) {
         if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
             return TRUE;
         }
@@ -672,14 +668,14 @@ void daTbox_c::demoInitAppear_Tact() {
     angle.y = current.angle.y;
     angle.z = current.angle.z;
 
-    dComIfGp_particle_set(0x82F1, &current.pos, &angle);
-    dComIfGp_particle_set(0x82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82F1, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(0x82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
 
     angle.y += 0x5555;
-    dComIfGp_particle_set(0x82F0, &current.pos, &angle);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_82F0, &current.pos, &angle);
 
     fopAcM_seStart(this, JA_SE_OBJ_TRIFORCE_BOX_IN, 0);
 }
@@ -688,8 +684,8 @@ void daTbox_c::demoInitAppear_Tact() {
 void daTbox_c::demoInitAppear() {
     fopAcM_seStart(this, JA_SE_OBJ_KOUBAKU_TBOX, 0);
 
-    dComIfGp_particle_set(0x3EB, &current.pos);
-    dComIfGp_particle_set(0x3EC, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_03EB, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_03EC, &current.pos);
 }
 
 /* 00001B38-00001CF4       .text demoProcAppear_Tact__8daTbox_cFv */
@@ -735,17 +731,17 @@ void daTbox_c::demoProcAppear() {
     }
 
     if (mAppearTimer == 0x05) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(0x2022, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
             emitter->setRate(100.0f);
             emitter->setSpread(1.0f);
-            emitter->mInitialVelDir = 25.0f;
+            emitter->setDirectionalSpeed(25.0f);
         }
     }
 
     if (mAppearTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
-        mSmokeCB.end();
+        mSmokeCB.remove();
     }
 
     if (mAppearTimer != 0x00) {
@@ -824,7 +820,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = true;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
@@ -836,7 +832,7 @@ s32 daTbox_c::demoProc() {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
             else {
-                if (mOpenAnm.play() != 0) {
+                if (mOpenAnm.play()) {
                     mHasOpenAnmFinished = 1;
                     dComIfGp_evmng_cutEnd(mStaffId);
                     fopAcM_seStart(this, JA_SE_OBJ_TBOX_OPEN_S2, 0);
@@ -873,7 +869,6 @@ void daTbox_c::OpenInit_com() {
 
     s32 openSwNo = home.angle.z & 0xFF;
     if (openSwNo != 0xFF) {
-
         dComIfGs_onSwitch(openSwNo, mRoomNo);
     }
 
@@ -896,13 +891,13 @@ void daTbox_c::OpenInit() {
 
     flagOn(daTboxFlg_OPENING_e);
 
-    dComIfGp_particle_set(0x01F1, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x01F2, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x01F3, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x01F4, &current.pos, &current.angle);
-    dComIfGp_particle_set(0x01F6, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F1, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F2, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F3, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F4, &current.pos, &current.angle);
+    dComIfGp_particle_set(dPa_name::ID_COMMON_01F6, &current.pos, &current.angle);
 
-    mSmokeEmitter = dComIfGp_particle_set(0x01F5, &current.pos, &current.angle);
+    mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_01F5, &current.pos, &current.angle);
     if (mSmokeEmitter != NULL) {
         mSmokeEmitter->mGlobalPrmColor.a = 0;
     }
@@ -927,15 +922,24 @@ BOOL daTbox_c::actionDemo() {
     /* Fakematch - the temp variable for play is definitely not right. */
     s16 eventId = eventInfo.getEventId();
     dComIfG_play_c* play = &g_dComIfG_gameInfo.play;
-
     if (dComIfGp_evmng_endCheck(eventId)) {
+    // if (dComIfGp_evmng_endCheck(eventInfo.getEventId())) {
         setAction(&daTbox_c::actionWait);
+
+        // Fakematch:
+        // When dComIfGp_event_reset is used here, the way gameInfo is loaded matches the demo
+        // binary, but not the release binary. So the demo's debug map may be misleading here?
+        // But daTbox_c::actionDemo in TP debug still calls dComIfGp_event_reset, so maybe not?
+        // Also, putting a cast like (void) on dComIfGp_event_reset() slightly improves the
+        // codegen, but it's still slightly wrong.
         // dComIfGp_event_reset();
         play->getEvent().reset();
 
         dKy_set_allcol_ratio(1.0f);
-
         flagOff(daTboxFlg_UNK_08 | daTboxFlg_OPENING_e);
+
+        // The fakematch also might be related to dComIfGp_event_setItemPartner? Removing this
+        // call fixes the load above.
         dComIfGp_event_setItemPartner(NULL);
 
         if (mSmokeEmitter != NULL) {
@@ -1224,11 +1228,7 @@ static s32 daTbox_IsDelete(daTbox_c*) {
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 static s32 daTbox_Delete(daTbox_c* i_tbox) {
-    if (i_tbox->mpBgWCurrent != NULL) {
-        dComIfG_Bgsp()->Release(i_tbox->mpBgWCurrent);
-    }
-
-    i_tbox->mSmokeCB.end();
+    i_tbox->deleteProc();
     dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mNo >= 0) {
@@ -1240,7 +1240,7 @@ static s32 daTbox_Delete(daTbox_c* i_tbox) {
 }
 
 /* 00003070-0000315C       .text daTbox_Create__FP10fopAc_ac_c */
-static s32 daTbox_Create(fopAc_ac_c* i_actor) {
+static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
     static const u32 heapsize_tbl[] = {
         0x2E40,
         0x2D7C,
@@ -1256,11 +1256,10 @@ static s32 daTbox_Create(fopAc_ac_c* i_actor) {
     };
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
-    s32 result;
 
     fopAcM_SetupActor(tbox, daTbox_c);
 
-    result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
+    cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
     if (result == cPhs_COMPLEATE_e) {
         tbox->mRoomNo = tbox->home.angle.x & 0x3F;
@@ -1303,7 +1302,7 @@ actor_process_profile_definition g_profile_TBOX = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0113,
+    /* Priority     */ PRIO_TBOX,
     /* Actor SubMtd */ &l_daTbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

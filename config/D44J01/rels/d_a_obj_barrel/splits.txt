@@ -1,0 +1,17 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+REL/executor.c:
+	.text       start:0x00000000 end:0x00000078
+
+d/actor/d_a_obj_barrel.cpp:
+	.text       start:0x00000078 end:0x000026EC
+	.text       start:0x000026EC end:0x00002728
+	.rodata     start:0x00000000 end:0x000001A5
+	.data       start:0x00000000 end:0x00000288
+	.bss        start:0x00000000 end:0x00000010

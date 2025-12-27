@@ -1,8 +1,7 @@
 #ifndef D_A_BOMB_H
 #define D_A_BOMB_H
 
-#include "f_op/f_op_actor_mng.h"
-#include "d/d_a_obj.h"
+#include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
@@ -56,8 +55,6 @@ class daBomb_c : public fopAc_ac_c {
 public:
     typedef bool(daBomb_c::*procFunc)();
 
-    daBomb_c() {}
-
     void draw_norm();
     void draw_nut();
     BOOL draw();
@@ -71,7 +68,9 @@ public:
     bool checkExplodeBg_nut();
     bool checkExplodeBg_cannon();
     bool checkExplodeBg();
+#if VERSION > VERSION_DEMO
     void water_tention();
+#endif
     void posMoveF();
     void bgCrrPos();
     void bgCrrPos_lava();
@@ -90,7 +89,7 @@ public:
     void eff_explode_normal(const csXyz*);
     void eff_explode_cheap(const csXyz*);
     void eff_explode();
-    int procExplode_init();
+    BOOL procExplode_init();
     bool procExplode();
     bool procCarry_init();
     bool procCarry();
@@ -110,7 +109,7 @@ public:
     void eff_water_splash();
     bool bombDelete();
     BOOL createHeap();
-    int create();
+    cPhs_State create();
     void create_init();
 
     enum State_e {
@@ -174,11 +173,15 @@ private:
     /* 0x2B8 */ mDoExt_bckAnm mBck1;
     /* 0x2C8 */ mDoExt_brkAnm mBrk0;
     /* 0x2E0 */ mDoExt_brkAnm mBrk1;
-    /* 0x2F8 */ s32 mType;
+    /* 0x2F8 */ int mType;
     /* 0x2FC */ dBgS_BombAcch mAcch;
     /* 0x4C0 */ dBgS_AcchCir mCir;
     /* 0x500 */ dBgS_ObjGndChk_Yogan mGndChk;
-    /* 0x554 */ cXyz field_0x554;
+    /* 0x554 */ f32 field_0x554;
+    /* 0x558 */ f32 field_0x558;
+#if VERSION > VERSION_DEMO
+    /* 0x55C */ f32 field_0x55C;
+#endif
     /* 0x560 */ bool field_0x560;
     /* 0x561 */ bool mbWaterIn;
     /* 0x562 */ u8 field_0x562;

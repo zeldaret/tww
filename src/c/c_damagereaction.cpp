@@ -4,13 +4,16 @@
 //
 
 #include "c/c_damagereaction.h"
-#include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_bk.h"
+#include "d/actor/d_a_tn.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_cc_uty.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_procname.h"
 
 cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
@@ -94,11 +97,11 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 250.0f,
         /* Height */ 400.0f,
-    },
+    }},
 };
 
 /* 8001C0B4-8001CD7C       .text enemy_ice__FP8enemyice */
@@ -125,7 +128,7 @@ BOOL enemy_ice(enemyice* ei) {
             ac->tevStr.mFogStartZ = 0.0f;
             ac->tevStr.mFogEndZ = 2000.0f;
             fopAcM_seStart(ac, JA_SE_CM_L_ARROW_SHRINK, 0);
-            ac->attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+            cLib_offBit<u32>(ac->attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
         } else {
             ei->mLightShrinkTimer++;
             
@@ -172,7 +175,7 @@ BOOL enemy_ice(enemyice* ei) {
     
     BOOL frozen = FALSE;
     BOOL moveAndCollide = FALSE;
-    switch (ei->mState) {
+    switch (ei->mMode) {
     case 0: // Not initialized
         // Initialize the enemyice now.
         ei->mStts.Init(250, 0xFF, ac);
@@ -180,7 +183,7 @@ BOOL enemy_ice(enemyice* ei) {
         ei->mCyl.SetStts(&ei->mStts);
         ei->mCyl.SetR(ei->mWallRadius);
         ei->mCyl.SetH(ei->mCylHeight);
-        ei->mBgAcch.Set(&ac->current.pos, &ac->old.pos, ac, 1, &ei->mBgAcchCir, &ei->mSpeed);
+        ei->mBgAcch.Set(fopAcM_GetPosition_p(ac), fopAcM_GetOldPosition_p(ac), ac, 1, &ei->mBgAcchCir, &ei->mSpeed);
         ei->mBgAcchCir.SetWall(40.0f, ei->mWallRadius);
         
         if (ei->mParticleScale < 0.1f) {
@@ -189,7 +192,7 @@ BOOL enemy_ice(enemyice* ei) {
         if (std::fabsf(ei->mYOffset) < 0.1f) {
             ei->mYOffset = 80.0f;
         }
-        ei->mState = 1;
+        ei->mMode = 1;
         ei->mScaleY = 1.0f;
         ei->mScaleXZ = 1.0f;
         fopAcM_OnStatus(ac, fopAcStts_UNK8000000_e);
@@ -199,7 +202,7 @@ BOOL enemy_ice(enemyice* ei) {
             // The enemy has signaled that it wants to be frozen for some length of time.
             ei->mFreezeTimer = ei->mFreezeDuration;
             ei->mFreezeDuration = 0;
-            ei->mState = 2;
+            ei->mMode = 2;
             if (ei->m00C == 0) {
                 ei->mSpeed.y = 30.0f;
                 ei->mAngularVelY = (s16)cM_rndFX(3000.0f);
@@ -216,7 +219,7 @@ BOOL enemy_ice(enemyice* ei) {
             particleScale.setall(ei->mParticleScale);
             pos = ac->current.pos;
             pos.y += ei->mYOffset;
-            dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+            dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
         } else {
             return FALSE;
         }
@@ -224,12 +227,17 @@ BOOL enemy_ice(enemyice* ei) {
     case 2: // Frozen
         frozen = TRUE;
         moveAndCollide = TRUE;
+#if VERSION == VERSION_DEMO
+        if (ei->mSpeedF > 19.0f) {
+            ac->shape_angle.x -= 0x300;
+        }
+#endif
         if (ei->m00C != 1) {
-            ac->attention_info.flags |= fopAc_Attn_ACTION_CARRY_e;
+            cLib_onBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
             ac->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x12;
             if (fopAcM_CheckStatus(ac, fopAcStts_CARRY_e)) {
-                ac->attention_info.flags &= ~fopAc_Attn_ACTION_CARRY_e;
-                ei->mState = 3;
+                cLib_offBit<u32>(ac->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+                ei->mMode = 3;
                 if (ei->m00C == 2) {
                     ei->m00C = 0;
                 }
@@ -247,7 +255,7 @@ BOOL enemy_ice(enemyice* ei) {
                 ei->mSpeed.y = -15.0f;
             }
             ei->mAngleY = player->shape_angle.y;
-            ei->mState = 2;
+            ei->mMode = 2;
         }
         break;
     }
@@ -322,12 +330,12 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x273, &pos, NULL, &particleScale);
-                dComIfGp_particle_set(0x274, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0273, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0274, &pos, NULL, &particleScale);
                 
                 if (ei->mFreezeTimer == -2) {
                     // Shattered by Skull Hammer.
-                    dComIfGp_particle_set(0x10, &pos);
+                    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, &pos);
                     csXyz angle(0, fopAcM_searchPlayerAngleY(ac), 0);
                     particleScale.setall(2.0f);
                     dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &pos, &angle, &particleScale);
@@ -346,7 +354,7 @@ BOOL enemy_ice(enemyice* ei) {
             }
             
             if (ei->mFreezeTimer == 0) {
-                ei->mState = 1;
+                ei->mMode = 1;
                 ei->mCyl.SetC(non_pos);
                 dComIfG_Ccsp()->Set(&ei->mCyl);
                 
@@ -375,7 +383,7 @@ BOOL enemy_ice(enemyice* ei) {
                 particleScale.setall(ei->mParticleScale);
                 pos = ac->current.pos;
                 pos.y += ei->mYOffset;
-                dComIfGp_particle_set(0x277, &pos, NULL, &particleScale);
+                dComIfGp_particle_set(dPa_name::ID_COMMON_0277, &pos, NULL, &particleScale);
                 fopAcM_seStart(ac, JA_SE_CM_ICE_RECOVER, 0);
             }
         }
@@ -424,10 +432,10 @@ dCcD_SrcSph fire_at_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 /* 8001CDB8-8001D3B0       .text enemy_fire__FP9enemyfire */
@@ -437,39 +445,43 @@ void enemy_fire(enemyfire* ef) {
     cXyz pos;
     offset.setall(0.0f);
     
-    switch (ef->mState) {
+    switch (ef->mMode) {
     case 0: // Not on fire.
-        if (ef->mFireDuration == 0) {
-            return;
+        if (ef->mFireDuration != 0) {
+            // The enemy has signaled that it wants to be lit on fire for some length of time.
+            ef->mFireTimer = ef->mFireDuration;
+            ef->mFireDuration = 0;
+            
+            ef->mMode = 1; // On fire
+            
+            dKy_plight_set(&ef->mLight);
+            
+            for (int i = 0; i < 10; i++) {
+                if (ef->mFlameJntIdxs[i] < 0) {
+                    continue;
+                }
+                if (ef->mpFlameEmitters[i]) {
+                    continue;
+                }
+                cXyz scale;
+                scale.setall(ef->mParticleScale[i]);
+                ef->mpFlameEmitters[i] = dComIfGp_particle_set(dPa_name::ID_COMMON_03F1, &ac->current.pos, NULL, &scale);
+                ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
+                if (ef->mFlameTimers[i] < 10) {
+                    ef->mFlameTimers[i] = 10;
+                }
+                ef->mFlameScaleY = 2.0f;
+            }
+            
+            ef->mStts.Init(250, 0xFF, ac);
+            ef->mSph.Set(fire_at_sph_src);
+            ef->mSph.SetStts(&ef->mStts);
         }
-        // The enemy has signaled that it wants to be lit on fire for some length of time.
-        ef->mFireTimer = ef->mFireDuration;
-        ef->mFireDuration = 0;
-        
-        ef->mState = 1; // On fire
-        
-        dKy_plight_set(&ef->mLight);
-        
-        for (int i = 0; i < 10; i++) {
-            if (ef->mFlameJntIdxs[i] < 0) {
-                continue;
-            }
-            if (ef->mpFlameEmitters[i]) {
-                continue;
-            }
-            cXyz scale;
-            scale.setall(ef->mParticleScale[i]);
-            ef->mpFlameEmitters[i] = dComIfGp_particle_set(0x3F1, &ac->current.pos, NULL, &scale);
-            ef->mFlameTimers[i] = ef->mFireTimer - (s16)cM_rndF(60.0f);
-            if (ef->mFlameTimers[i] < 10) {
-                ef->mFlameTimers[i] = 10;
-            }
-            ef->mFlameScaleY = 2.0f;
+#if VERSION == VERSION_DEMO
+        else {
+            ef->mLight.mPower = 0.0f;
         }
-        
-        ef->mStts.Init(250, 0xFF, ac);
-        ef->mSph.Set(fire_at_sph_src);
-        ef->mSph.SetStts(&ef->mStts);
+#endif
         break;
     case 1: // On fire.
         ef->mLight.mPos = ac->current.pos;
@@ -526,7 +538,7 @@ void enemy_fire(enemyfire* ef) {
             } else {
                 ef->mFlameTimers[i]--;
                 
-                cMtx_copy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
+                MTXCopy(ef->mpMcaMorf->getModel()->getAnmMtx(ef->mFlameJntIdxs[i]), *calc_mtx);
                 MtxPosition(&offset, &pos);
                 
                 ef->mpFlameEmitters[i]->setGlobalTranslation(pos.x, pos.y, pos.z);
@@ -559,8 +571,10 @@ void enemy_fire(enemyfire* ef) {
         fopAcM_seStart(ac, JA_SE_OBJ_TORCH_BURNING, 0);
         
         if (ef->mFireTimer == 0) {
-            ef->mState = 0; // Not on fire
+            ef->mMode = 0; // Not on fire
+#if VERSION > VERSION_DEMO
             dKy_plight_cut(&ef->mLight);
+#endif
             ef->mSph.SetC(non_pos);
             dComIfG_Ccsp()->Set(&ef->mSph);
         } else {
@@ -576,7 +590,7 @@ void enemy_fire(enemyfire* ef) {
 
 /* 8001D3B0-8001D428       .text enemy_fire_remove__FP9enemyfire */
 void enemy_fire_remove(enemyfire* ef) {
-    ef->mState = 0; // Not on fire
+    ef->mMode = 0; // Not on fire
     dKy_plight_cut(&ef->mLight);
     
     for (int i = 0; i < 10; i++) {
@@ -594,46 +608,1323 @@ void enemy_piyo_set(fopAc_ac_c* enemy) {
 }
 
 /* 8001D48C-8001D890       .text wall_angle_get__FP10fopAc_ac_cs */
-void wall_angle_get(fopAc_ac_c*, s16) {
-    /* Nonmatching */
+s16 wall_angle_get(fopAc_ac_c* actor, s16 angle_y) {
+    dBgS_LinChk linChk;
+    cMtx_YrotS(*calc_mtx, angle_y);
+    cXyz sp20(0.0f, 0.0f, 100.0f);
+    cXyz sp14;
+    MtxPosition(&sp20, &sp14);
+    sp14 += actor->current.pos;
+    cXyz sp2C[2];
+    sp20.set(10.0f, 0.0f, -300.0f);
+    for (int i = 0; i < 2; i++) {
+        MtxPosition(&sp20, &sp2C[i]);
+        sp20.x *= -1.0f;
+        sp2C[i] += sp14;
+        linChk.Set(&sp14, &sp2C[i], actor);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            sp2C[i] = linChk.GetCross();
+        } else {
+            return 1;
+        }
+    }
+    sp20 = sp2C[1] - sp2C[0];
+    return cM_atan2s(sp20.x, sp20.z) + 0x4000;
 }
 
 /* 8001DCC8-8001E244       .text dr_body_bg_check__FP14damagereaction */
 void dr_body_bg_check(damagereaction* dr) {
-    /* Nonmatching */
+    cXyz sp20;
+    
+    f32 f31 = dr->m488 == 1 ? 12.5f : 0.0f;
+    if (dr->m71E == 0) {
+        dr->mpEnemy->current.pos.y -= dr->m44C.y + f31;
+        dr->mpEnemy->old.pos.y -= dr->m44C.y + f31;
+        dr->mpEnemy->speed.y /= 4.0f;
+        dr->mAcch.CrrPos(*dComIfG_Bgsp());
+        dr->mpEnemy->speed.y *= 4.0f;
+        dr->mpEnemy->current.pos.y += dr->m44C.y + f31;
+        dr->mpEnemy->old.pos.y += dr->m44C.y + f31;
+        dr->m6E8 = dr->mpEnemy->old.pos;
+        dr->m6E8.y = dr->mSpawnY;
+        dr->mSpawnY = dr->mAcch.GetGroundH();
+    } else {
+        dr->m71E--;
+    }
+    
+    if (dr->mAction != 21 && dr->mAction != 22) {
+        dBgS_ObjGndChk_Spl gndChk;
+        f32 x = dr->mpEnemy->current.pos.x;
+        f32 y = dr->mpEnemy->current.pos.y;
+        f32 z = dr->mpEnemy->current.pos.z;
+        y += 1000.0f;
+        Vec temp;
+        temp.x = x;
+        temp.y = y;
+        temp.z = z;
+        gndChk.SetPos(&temp);
+        f32 floor_y = dComIfG_Bgsp()->GroundCross(&gndChk);
+        if (floor_y != -G_CM3D_F_INF && dr->mpEnemy->current.pos.y <= floor_y) {
+            dr->mpEnemy->current.pos.y = floor_y + REG0_F(13);
+            dr->mMode = 0;
+            dr->m47C = 0;
+            if (dComIfG_Bgsp()->ChkGrpInf(gndChk, 0x100)) {
+                dr->mAction = 22;
+                cXyz sp14(x, floor_y, z);
+                fopKyM_createWpillar(&sp14, REG0_F(9) + 1.0f, REG0_F(10) + 1.0f, 0);
+            } else {
+                dr->mAction = 21;
+                cXyz sp08(x, floor_y, z);
+                fopKyM_createMpillar(&sp08, REG0_F(14) + 0.5f);
+            }
+        }
+    }
+    
+    if (dr->mEnemyType == 2 && daSea_ChkArea(dr->mpEnemy->current.pos.x, dr->mpEnemy->current.pos.z)) {
+        f32 sea_y = daSea_calcWave(dr->mpEnemy->current.pos.x, dr->mpEnemy->current.pos.z);
+        sea_y -= 40.0f;
+        sea_y = REG0_F(13) + sea_y;
+        sea_y = dr->m44C.y + sea_y;
+        if (dr->mpEnemy->current.pos.y <= sea_y) {
+            dr->mpEnemy->current.pos.y = sea_y;
+            sp20 = dr->mpEnemy->current.pos;
+            sp20.y = sea_y;
+            fopKyM_createWpillar(&sp20, REG0_F(9) + 1.0f, REG0_F(10) + 1.0f, 0);
+            fopAcM_seStart(dr->mpEnemy, JA_SE_OBJ_FALL_WATER_S, 0);
+            fopAcM_delete(dr->mpEnemy);
+            bk_class* bk = (bk_class*)dr->mpEnemy;
+            u8 switch_no = bk->m02B8;
+            if (switch_no != 0) {
+                dComIfGs_onSwitch(switch_no, fopAcM_GetRoomNo(dr->mpEnemy));
+            }
+        }
+    }
 }
 
 /* 8001E684-8001F6A0       .text dr_joint_bg_check__FP14damagereaction */
-void dr_joint_bg_check(damagereaction* dr) {
-    /* Nonmatching */
+int dr_joint_bg_check(damagereaction* dr) {
+    int result = 0;
+
+    dBgS_ObjGndChk_Yogan gndChk;
+
+    if(dr->m420 != 0) {
+        dr->m420--;
+        if(dr->m420 == 0 && dr->m70D == 1) {
+            result = 2;
+        }
+
+        for(int i = 0; i < 0xE; i++) {
+            dr->m1F0[i] = dr->m100[i];
+            dr->m1F0[i].y += REG0_F(7) * 10.0f + 200.0f;
+            gndChk.SetPos(&dr->m1F0[i]);
+            dr->m1F0[i].y = dComIfG_Bgsp()->GroundCross(&gndChk);
+            if(dr->m1F0[i].y == -G_CM3D_F_INF) {
+                dr->m1F0[i].y = G_CM3D_F_INF;
+            }
+
+            if((u32)i <= 2 || i == 3) {
+                if(dr->m1F0[i].y == G_CM3D_F_INF) {
+                    dr->m3D0[i] = 2;
+                }
+                else if(dr->m100[i].y - dr->m1F0[i].y > REG0_F(8) * 10.0f + 200.0f) {
+                    dr->m3D0[i] = 0;
+                }
+                else {
+                    dr->m3D0[i] = 1;
+                }
+            }
+        }
+
+        dBgS_LinChk linChk;
+
+        cXyz temp;
+        cXyz temp2;
+        temp.x = 0.0f;
+        temp.y = 0.0f;
+        f32 diffX = dr->m100[0xE].x - dr->m100[0xA].x;
+        f32 diffY = dr->m100[0xE].y - dr->m100[0xA].y;
+        f32 diffZ = dr->m100[0xE].z - dr->m100[0xA].z;
+        temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        s16 angle = cM_atan2s(diffX, diffZ);
+        s16 i = 0;
+        for(; i >= -0x4000; i -= 0x400) {
+            mDoMtx_YrotS(*calc_mtx, angle);
+            mDoMtx_XrotM(*calc_mtx, i);
+            MtxPosition(&temp, &temp2);
+            temp2.x = temp2.x + dr->m100[0xA].x;
+            temp2.y = temp2.y + dr->m100[0xA].y;
+            temp2.z = temp2.z + dr->m100[0xA].z;
+            linChk.Set(&dr->m100[0xA], &temp2, dr->mpEnemy);
+            if(!dComIfG_Bgsp()->LineCross(&linChk)) {
+                break;
+            }
+        }
+
+        if(i != 0) {
+            dr->m440 = i + 0x400;
+            dr->m408 = 2;
+        }
+        else {
+            f32 diff2X = dr->m1F0[6].x - dr->m1F0[0xA].x;
+            f32 diff2Y = dr->m1F0[6].y - dr->m1F0[0xA].y;
+            f32 diff2Z = dr->m1F0[6].z - dr->m1F0[0xA].z;
+            dr->m440 = -cM_atan2s(diff2Y, std::sqrtf(diff2X * diff2X + diff2Z * diff2Z));
+            dr->m408 = 0;
+
+            if(dr->m70D == 1) {
+                dr->m4B4 = 0;
+                dr->m4B0 = 0;
+            }
+        }
+
+        if(dr->m440 > 7000) {
+            dr->m440 = 7000;
+        }
+        else if(dr->m440 < -10000) {
+            dr->m440 = -10000;
+        }
+
+
+
+        diffX = dr->m100[0xF].x - dr->m100[0xB].x;
+        diffY = dr->m100[0xF].y - dr->m100[0xB].y;
+        diffZ = dr->m100[0xF].z - dr->m100[0xB].z;
+        temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        angle = cM_atan2s(diffX, diffZ);
+        i = 0;
+        for(; i >= -0x4000; i -= 0x400) {
+            mDoMtx_YrotS(*calc_mtx, angle);
+            mDoMtx_XrotM(*calc_mtx, i);
+            MtxPosition(&temp, &temp2);
+            temp2.x = temp2.x + dr->m100[0xB].x;
+            temp2.y = temp2.y + dr->m100[0xB].y;
+            temp2.z = temp2.z + dr->m100[0xB].z;
+            linChk.Set(&dr->m100[0xB], &temp2, dr->mpEnemy);
+            if(!dComIfG_Bgsp()->LineCross(&linChk)) {
+                break;
+            }
+        }
+
+        if(i != 0) {
+            dr->m442 = i + 0x400;
+            dr->m40C = 2;
+        }
+        else {
+            f32 diff2X = dr->m1F0[7].x - dr->m1F0[0xB].x;
+            f32 diff2Y = dr->m1F0[7].y - dr->m1F0[0xB].y;
+            f32 diff2Z = dr->m1F0[7].z - dr->m1F0[0xB].z;
+            dr->m442 = -cM_atan2s(diff2Y, std::sqrtf(diff2X * diff2X + diff2Z * diff2Z));
+            dr->m40C = 0;
+
+            if(dr->m70D == 1) {
+                dr->m4B6= 0;
+                dr->m4B2 = 0;
+            }
+        }
+
+
+
+        diffX = dr->m100[0x10].x - dr->m100[0x8].x;
+        diffY = dr->m100[0x10].y - dr->m100[0x8].y;
+        diffZ = dr->m100[0x10].z - dr->m100[0x8].z;
+        temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        angle = cM_atan2s(diffX, diffZ);
+        i = 0;
+        for(; i >= -0x4000; i -= 0x400) {
+            mDoMtx_YrotS(*calc_mtx, angle);
+            mDoMtx_XrotM(*calc_mtx, i);
+            MtxPosition(&temp, &temp2);
+            temp2.x = temp2.x + dr->m100[0x8].x;
+            temp2.y = temp2.y + dr->m100[0x8].y;
+            temp2.z = temp2.z + dr->m100[0x8].z;
+            linChk.Set(&dr->m100[0x8], &temp2, dr->mpEnemy);
+            if(!dComIfG_Bgsp()->LineCross(&linChk)) {
+                break;
+            }
+        }
+
+        if(i != 0) {
+            dr->m444 = i + 0x400;
+            dr->m410 = 2;
+        }
+        else {
+            f32 diff2X = dr->m1F0[4].x - dr->m1F0[0x8].x;
+            f32 diff2Y = dr->m1F0[4].y - dr->m1F0[0x8].y;
+            f32 diff2Z = dr->m1F0[4].z - dr->m1F0[0x8].z;
+            dr->m444 = -cM_atan2s(diff2Y, std::sqrtf(diff2X * diff2X + diff2Z * diff2Z));
+            dr->m410 = 0;
+        }
+
+
+
+        diffX = dr->m100[0x11].x - dr->m100[0x9].x;
+        diffY = dr->m100[0x11].y - dr->m100[0x9].y;
+        diffZ = dr->m100[0x11].z - dr->m100[0x9].z;
+        temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        angle = cM_atan2s(diffX, diffZ);
+        i = 0;
+        for(; i >= -0x4000; i -= 0x400) {
+            mDoMtx_YrotS(*calc_mtx, angle);
+            mDoMtx_XrotM(*calc_mtx, i);
+            MtxPosition(&temp, &temp2);
+            temp2.x = temp2.x + dr->m100[0x9].x;
+            temp2.y = temp2.y + dr->m100[0x9].y;
+            temp2.z = temp2.z + dr->m100[0x9].z;
+            linChk.Set(&dr->m100[0x9], &temp2, dr->mpEnemy);
+            if(!dComIfG_Bgsp()->LineCross(&linChk)) {
+                break;
+            }
+        }
+
+        if(i != 0) {
+            dr->m446 = i + 0x400;
+            dr->m414 = 2;
+        }
+        else {
+            f32 diff2X = dr->m1F0[5].x - dr->m1F0[0x9].x;
+            f32 diff2Y = dr->m1F0[5].y - dr->m1F0[0x9].y;
+            f32 diff2Z = dr->m1F0[5].z - dr->m1F0[0x9].z;
+            dr->m446 = -cM_atan2s(diff2Y, std::sqrtf(diff2X * diff2X + diff2Z * diff2Z));
+            dr->m414 = 0;
+        }
+
+
+
+        diffX = dr->m100[0x12].x - dr->m100[0xC].x;
+        diffY = dr->m100[0x12].y - dr->m100[0xC].y;
+        diffZ = dr->m100[0x12].z - dr->m100[0xC].z;
+        temp.z = std::sqrtf(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        angle = cM_atan2s(diffX, diffZ);
+
+        if(REG0_S(4) == 0) {
+            i = 0;
+            for(; i >= -0x4000; i -= 0x400) {
+                mDoMtx_YrotS(*calc_mtx, angle);
+                mDoMtx_XrotM(*calc_mtx, i);
+                MtxPosition(&temp, &temp2);
+                temp2.x = temp2.x + dr->m100[0xC].x;
+                temp2.y = temp2.y + dr->m100[0xC].y;
+                temp2.z = temp2.z + dr->m100[0xC].z;
+                linChk.Set(&dr->m100[0xC], &temp2, dr->mpEnemy);
+                if(!dComIfG_Bgsp()->LineCross(&linChk)) {
+                    break;
+                }
+            }
+
+            if(i != 0) {
+                dr->m448 = i + 0x400;
+                dr->m418 = 2;
+            }
+            else {
+                f32 diff2X = dr->m1F0[0xD].x - dr->m1F0[0xC].x;
+                f32 diff2Y = dr->m1F0[0xD].y - dr->m1F0[0xC].y;
+                f32 diff2Z = dr->m1F0[0xD].z - dr->m1F0[0xC].z;
+                dr->m448 = -cM_atan2s(diff2Y, std::sqrtf(diff2X * diff2X + diff2Z * diff2Z));
+                dr->m418 = 0;
+            }
+
+            if(dr->m448 > 13000) {
+                dr->m448 = 13000;
+            }
+            else if(dr->m448 < -13000) {
+                dr->m448 = -13000;
+            }
+        }
+    }
+
+    return result;
 }
 
 /* 8001F808-8001FBA8       .text kado_check__FP14damagereaction */
-void kado_check(damagereaction* dr) {
-    /* Nonmatching */
+int kado_check(damagereaction* dr) {
+    static int kado_bit[] = {1, 2};
+    static float kado_check_x[] = {80.0f, -80.0f};
+
+    dBgS_LinChk linChk;
+
+    int result = 0;
+
+    mDoMtx_YrotS(*calc_mtx, dr->m482);
+    mDoMtx_XrotM(*calc_mtx, dr->m480);
+
+    for(int i = 0; i < 2; i++) {
+        cXyz temp1;
+        cXyz start = dr->mpEnemy->current.pos;
+        start.y += REG14_F(0) + 100.0f;
+        temp1.set(REG14_F(1), REG14_F(2), REG14_F(3) + -70.0f);
+        cXyz temp2;
+        MtxPosition(&temp1, &temp2);
+        start += temp2;
+        temp1.y = REG14_F(4) + 50.0f;
+        temp1.z = REG14_F(5) + 150.0f;
+        temp1.x = (REG14_F(6) + 1.0f) * kado_check_x[i];
+        MtxPosition(&temp1, &temp2);
+        temp2 += start;
+        linChk.Set(&start, &temp2, dr->mpEnemy);
+        if(dComIfG_Bgsp()->LineCross(&linChk)) {
+            result |= kado_bit[i];
+        }
+    }
+
+    if(result == 3) {
+        result = 0;
+    }
+
+    return result;
 }
 
 /* 8001FBA8-8001FFEC       .text hang_ang_get__FP14damagereaction */
-void hang_ang_get(damagereaction* dr) {
-    /* Nonmatching */
+s16 hang_ang_get(damagereaction* dr) {
+    cXyz dst[2];
+
+    dBgS_LinChk linChk;
+
+    cXyz temp = dr->m7A0 - dr->mpEnemy->current.pos;
+
+    mDoMtx_YrotS(*calc_mtx, cM_atan2s(temp.x, temp.z));
+    cXyz temp3;
+    temp.set(0.0f, 0.0f, -100.0f);
+    MtxPosition(&temp, &temp3);
+    temp3 += dr->mpEnemy->current.pos;
+    temp3.y = dr->m7A0.y - 5.0f;
+    temp.set(10.0f, 0.0f, 250.0f);
+
+    for(int i = 0; i < 2; i++) {
+        MtxPosition(&temp, &dst[i]);
+        temp.x *= -1.0f;
+        dst[i] += temp3;
+
+        linChk.Set(&temp3, &dst[i], dr->mpEnemy);
+        if(dComIfG_Bgsp()->LineCross(&linChk)) {
+            dst[i] = linChk.GetLinP()->GetEnd();
+        }
+        else {
+            return 0xDCF;
+        }
+    }
+
+    temp = dst[1] - dst[0];
+    return cM_atan2s(temp.x, temp.z) + 0x4000;
 }
 
+static u8 test_sw;
+
 /* 8001FFEC-80020FD8       .text dr_damage_set__FP14damagereaction */
-void dr_damage_set(damagereaction* dr) {
-    /* Nonmatching */
+int dr_damage_set(damagereaction* dr) {
+    int react = 0;
+    bool temp = false;
+    cXyz temp2;
+    cXyz temp4;
+    cXyz temp3;
+
+    if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN && dr->m488 == 0) {
+        if(dr->mAction < 0x13 && dr->mpEnemy->current.pos.y - dr->mSpawnY > dr->mMaxFallDistance) {
+            if(dr->m7B2 != 0 && dr->mMode > -100) {
+                dr->mAction = 0x13;
+                dr->mMode = 0;
+                dr->m71E = 2;
+            }
+            else {
+                if(dr->m6E8.y - dr->mSpawnY > 300.0f) {
+                    dr->m7A0 = dr->m6E8;
+                    dr->m7AC.y = hang_ang_get(dr);
+                    if(dr->m7AC.y == 0xDCF) {
+                        temp = true;
+                        dr->mpEnemy->health = 0;
+                    }
+                    else {
+                        dr->mAction = 0x13;
+                        dr->mMode = 0;
+                        dr->m71E = 2;
+                        dr->m7B8 = fpcM_ERROR_PROCESS_ID_e;
+                    }
+                }
+                else {
+                    temp = true;
+                    dr->mpEnemy->health = 0;
+                }
+            }
+        }
+    }
+    else if(dr->mpEnemy->current.pos.y - dr->mSpawnY > dr->mMaxFallDistance) {
+        temp = true;
+        dr->mpEnemy->health = 0;
+    }
+
+    switch(dr->m488) {
+        case 0:
+            if(temp || (dr->m424 != 0 && dr->m428 > 25.0f)) {
+                dr->mMode = -100;
+                dr->m488 = 1;
+                dr->m713 = 0;
+                dr->m44C.y = -125.0f;
+                dr->m486 = 0x4000;
+                temp2 = dr->m42C;
+
+                if(temp) {
+                    dr->m482 = dr->mpEnemy->shape_angle.y;
+                    dr->m478 = 0.0f;
+                    dr->mpEnemy->speed.y = 0.0f;
+                    dr->m71E = 10;
+                }
+                else if(dr->m424 & 0x40) {
+                    if(dr->m712) {
+                        dr->m478 = -7.0f;
+                        dr->mpEnemy->speed.y = 72.0f;
+                    }
+                    else {
+                        dr->m478 = -20.0f;
+                        dr->mpEnemy->speed.y = 96.0f;
+                    }
+
+                    dr->m482 = cM_atan2s(temp2.x, temp2.z) + 0x8000;
+                }
+                else {
+                    dr->m482 = cM_atan2s(temp2.x, temp2.z);
+                    dr->m478 = dr->m428;
+
+                    if(((dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) && (fopAcM_GetParam(dr->mpEnemy) & 0xF) == 0xA) || REG0_S(5) != 0) {
+                        dr->mpEnemy->speed.y = dr->m478 * 0.8f * (REG0_F(7) + 0.8f);
+                    }
+                    else {
+                        dr->mpEnemy->speed.y = dr->m478 * 0.9f * 1.2f;
+                    }
+                }
+
+                temp2.x = 0.0f;
+                temp2.y = 0.0f;
+                temp2.z = dr->m478;
+                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                MtxPosition(&temp2, &temp4);
+                dr->mpEnemy->speed.x = temp4.x;
+                dr->mpEnemy->speed.z = temp4.z;
+                dr->m47C = 1;
+                dr->m4AE = cM_rndF(20000.0f);
+                dr->m4AC = cM_rndF(20000.0f);
+                dr->m4AA = cM_rndF(-20000.0f);
+                dr->m4A8 = cM_rndF(-20000.0f);
+                dr->m70C = 0;
+                dr->m474 = 2000.0f;
+                dr->m70E = 0xFF;
+
+                if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+                    dr->m4BC = -cM_rndF(9000.0f);
+                    dr->m4BE = cM_rndF(9000.0f);
+                }
+                else {
+                    dr->m4B8 = cM_rndF(6000.0f) + 1000.0f;
+                    dr->m4BA = cM_rndF(6000.0f) + 1000.0f;
+                    dr->m4BC = cM_rndF(10000.0f) + 5000.0f;
+                    dr->m4BE = cM_rndF(10000.0f) + 5000.0f;
+                }
+
+                react = temp ? 0x1E : 1;
+
+                dr->m48A = 0;
+            }
+            else if(dr->m424 & 0x10) {
+                dr->m470 = REG0_F(0xD) + 4000.0f;
+                dr->m474 = REG0_F(0xE) + 4000.0f;
+                dr->m70E = 7;
+                react = 5;
+            }
+
+            break;
+        case 1:
+            {
+                s16 temp5;
+                if(dr->m486 > 0) {
+                   temp5 = 0x350;
+                }
+                else {
+                   temp5 = 0x800;
+                }
+                if(test_sw != 0) {
+                    dr->m486 = 0;
+                }
+                cLib_addCalcAngleS2(&dr->m480, dr->m486, 3, temp5);
+
+                if(dr->m70C != 0 && dr->m474 <= 0.01f && dr->m4C8[2] == 0 && test_sw == 0) {
+                    if(dr->mpEnemy->health <= 0) {
+                        dr->mAction = 0x14;
+                        dr->mMode = 0;
+                        dr->m4C8[2] = 10000;
+                    }
+                    else {
+                        dr->m4BE = 0;
+                        dr->m4BC = 0;
+                        dr->m4BA = 0;
+                        dr->m4B8 = 0;
+                        dr->m49C = 0;
+                        dr->m49A = 0;
+                        dr->m4B2 = 0;
+                        dr->m4B6 = 0;
+                        dr->m4B0 = 0;
+                        dr->m4B4 = 0;
+
+                        if(dr->m70D == 0) {
+                            dr->mMode = 10;
+                        }
+                        else {
+                            dr->mMode = 0xC;
+                        }
+
+                        dr->mAction = 0xB;
+                        dr->m48A = 0;
+                        dr->m488 = 2;
+                        dr->mpEnemy->current.angle.y += dr->m484;
+                        dr->mpEnemy->shape_angle.y += dr->m484;
+                        dr->m4C0 += dr->m484;
+                        dr->m7B6 = 1;
+                        dr->m484 = 0;
+                        dr->m6E0 = 0;
+                    }
+                }
+            }
+
+            break;
+        case 2:
+            dr->m484 = 0;
+            dr->m6E0 = 0;
+
+            break;
+        default:
+            break;
+    }
+
+    if(dr->m7B6 == 0 && test_sw == 0) {
+        if(dr->m4C8[0] == 0) {
+            mDoMtx_YrotS(*calc_mtx, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
+            temp2.x = 0.0f;
+            temp2.y = 0.0f;
+            temp2.z = dr->m4D4;
+            MtxPosition(&temp2, &temp3);
+            dr->mpEnemy->current.pos.x += dr->mpEnemy->speed.x * 0.25f + temp3.x;
+            dr->mpEnemy->current.pos.y += dr->mpEnemy->speed.y * 0.25f + temp3.y;
+            dr->mpEnemy->current.pos.z += dr->mpEnemy->speed.z * 0.25f + temp3.z;
+
+            if(dr->mAction != 0xF) { 
+                dCcD_Stts* pStts = &dr->mStts;
+                if(pStts != NULL) {
+                    dr->mpEnemy->current.pos.x += pStts->GetCCMoveP()->x;
+                    dr->mpEnemy->current.pos.y += pStts->GetCCMoveP()->y;
+                    dr->mpEnemy->current.pos.z += pStts->GetCCMoveP()->z;
+                }
+            }
+
+            if(dr->mInvincibleTimer == 0) {
+                dr->mpEnemy->speed.y -= 12.0f;
+                if(dr->mpEnemy->speed.y < -200.0f) {
+                    dr->mpEnemy->speed.y = -200.0f;
+                }
+            }
+
+            cLib_addCalc0(&dr->m4D4, 1.0f, 10.0f);
+        }
+        else if(dr->m4C8[0] == 1 && dr->m486 == 0) {
+            dr->m486 = -0x4000;
+            dr->m4AE = cM_rndF(20000.0f);
+            dr->m4AC = cM_rndF(20000.0f);
+            dr->m4AA = cM_rndF(-20000.0f);
+            dr->m4A8 = cM_rndF(-20000.0f);
+        }
+
+        dr_body_bg_check(dr);
+        if(dr_joint_bg_check(dr) == 2) {
+            react = 2;
+        }
+    }
+    else {
+        dr->m7B6 = 0;
+    }
+
+    if(dr->m478 != 0.0f && react == 0 && dr->mAcch.ChkWallHit()) {
+        react = 0x15;
+        dr->m47C = 0;
+        dr->mpEnemy->speed.y = 0.0f;
+        dr->mpEnemy->speed.x *= -0.4f;
+        dr->mpEnemy->speed.z *= -0.4f;
+
+        if(dr->m70C == 0 && std::fabsf(dr->m478) > 30.0f) {
+            dr->m474 = 6000.0f;
+            dr->m70E = 0xFF;
+
+            if(dr->mpEnemy->current.pos.y - dr->mSpawnY > REG14_F(6) + 50.0f) {
+                dr->m4C8[0] = 10;
+                dr->m486 = 0;
+            }
+            else {
+                dr->mpEnemy->speed.z = 0.0f;
+                dr->mpEnemy->speed.x = 0.0f;
+                dr->m486 = 0x4000;
+            }
+
+            int kado_check_temp = kado_check(dr);
+            if(kado_check_temp != 0) {
+                dr->m4C8[0] = 0;
+                dr->m486 = 0x4000;
+
+                int temp;
+                if(dr->mpEnemy->current.pos.y - dr->mSpawnY > REG0_F(6) + 90.0f) {
+                    temp = 0x10000;
+                }
+                else {
+                    temp = 0x8000;
+                }
+
+                if(kado_check_temp == 2) {
+                    dr->m6E0 += temp;
+                    temp2.x = dr->m478 * 0.5f;
+                }
+                else {
+                    dr->m6E0 -= temp;
+                    temp2.x = dr->m478 * -0.5f;
+                }
+                temp2.y = 0.0f;
+                temp2.z = dr->m478 * 0.5f;
+                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                MtxPosition(&temp2, &temp4);
+                dr->mpEnemy->speed.x = temp4.x;
+                dr->mpEnemy->speed.z = temp4.z;
+            }
+        }
+
+        dr->m478 = 0.0f;
+        dr->m4A8 = 0;
+        dr->m4AA = 0;
+        dr->m4AC = 0;
+        dr->m4AE = 0;
+        dr->mParticlePos = dr->m100[0xC];
+        dr->mParticleAngle.z = 0;
+        dr->mParticleAngle.y = wall_angle_get(dr->mpEnemy, cM_atan2s(-dr->m42C.x, -dr->m42C.z));
+        dr->mParticleAngle.x = 0x4000;
+        dr->mParticleCallBack.end();
+        JPABaseEmitter* pEmitter = dComIfGp_particle_setToon(0x2022, &dr->mParticlePos, &dr->mParticleAngle, NULL, 0xB9, &dr->mParticleCallBack, fopAcM_GetRoomNo(dr->mpEnemy));
+        if(pEmitter) {
+            f32 scale;
+            if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+                scale = 1.0f;
+            }
+            else {
+                scale = 1.2f;
+            }
+            pEmitter->setRate(3.0f);
+            pEmitter->setSpread(1.0f);
+            pEmitter->setGlobalDynamicsScale(JGeometry::TVec3<f32>(scale, scale, scale));
+            pEmitter->setGlobalParticleScale(JGeometry::TVec3<f32>(scale, scale, scale));
+            pEmitter->setGlobalParticleScale(JGeometry::TVec3<f32>(scale * 2.0f, scale * 2.0f, scale * 2.0f));
+            dr->m794 = 6;
+        }
+    }
+
+    if(dr->mAcch.ChkGroundHit()) {
+        if(dr->m488 != 0 && react == 0 && (dr->m70C == 0 || dr->mpEnemy->speed.y <= -100.0f)) {
+            react = 0x14;
+            dr->mpEnemy->speed.x *= 0.75f;
+            dr->mpEnemy->speed.z *= 0.75f;
+            dr->m70E = 0xFF;
+
+            if(dr->m712 != 0) {
+                dr->mpEnemy->speed.y = 60.0f;
+                dr->m474 = REG0_F(0xC) * 100.0f + 9000.0f;
+            }
+            else {
+                dr->mpEnemy->speed.y = 60.0f;
+                dr->m474 = 8000.0f;
+            }
+
+            dr->m70C += 1;
+            dr->m47C = 0;
+            dr->m420 = REG0_S(3) + 1;
+
+            s16 temp5 = dr->m482;
+            s16 temp6 = dr->mpEnemy->current.angle.y - temp5;
+            if(temp6 < 0) {
+                temp6 = -temp6;
+            }
+
+            if(temp6 < 0x4000) {
+                dr->m4C0 = temp5;
+            }
+            else {
+                dr->m4C0 = temp5 + 0x8000;
+            }
+
+            dr->m49A = cM_rndFX(18000.0f);
+            dr->m49C = cM_rndFX(10000.0f);
+            dr->m4B0 = cM_rndF(20000.0f);
+            dr->m4B4 = dr->m4B0 / 2;
+            dr->m4B2 = cM_rndF(20000.0f);
+            dr->m4B6 = dr->m4B2 / 2;
+
+            if(dr->mpEnemy->health <= 0) {
+                fopAcM_seStart(dr->mpEnemy, JA_SE_CM_ENEMY_KO_L, 0);
+            }
+            else if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+                if(((tn_class*)dr->mpEnemy)->mRemainingEquipmentPieces & 1) {
+                    fopAcM_seStart(dr->mpEnemy, JA_SE_CM_TN_FALL_ARMOR, 0);
+                }
+                else {
+                    fopAcM_seStart(dr->mpEnemy, JA_SE_CM_TN_FALL, 0);
+                }
+            }
+            else {
+                fopAcM_seStart(dr->mpEnemy, JA_SE_CM_ENEMY_FALL_L, 0);
+            }
+
+            int kado_check_temp = kado_check(dr);
+            if(kado_check_temp != 0) {
+                if(kado_check_temp == 2) {
+                    dr->m6E0 += 0x8000;
+                    temp2.x = dr->m478 * 0.3f;
+                }
+                else {
+                    dr->m6E0 += -0x8000;
+                    temp2.x = dr->m478 * -0.3f;
+                }
+                temp2.y = 0.0f;
+                temp2.z = dr->m478 * 0.75f;
+                mDoMtx_YrotS(*calc_mtx, dr->m482);
+                MtxPosition(&temp2, &temp4);
+                dr->mpEnemy->speed.x = temp4.x;
+                dr->mpEnemy->speed.z = temp4.z;
+            }
+        }
+        else {
+            if(dr->m478 != 0) {
+                dr->m420 = 1;
+            }
+
+            dr->m478 = 0.0f;
+
+            if(dr->m6E0 == 0) {
+                dr->mpEnemy->speed.z = 0.0f;
+                dr->mpEnemy->speed.x = 0.0f;
+            }
+            else {
+                cLib_addCalc0(&dr->mpEnemy->speed.x, 1.0f, 4.0f);
+                cLib_addCalc0(&dr->mpEnemy->speed.z, 1.0f, 4.0f);
+            }
+            dr->mpEnemy->speed.y = -1.0f;
+
+            dr->m4A8 = 0;
+            dr->m4AA = 0;
+            dr->m4AC = 0;
+            dr->m4AE = 0;
+
+            if(dr->m70D != 0) {
+                dr->m4A8 = 0;
+                dr->m4AA = 0;
+                dr->m4AC = 0;
+                dr->m4AE = 0;
+                dr->m4A0 = 0;
+                dr->m4A2 = 0;
+                dr->m4A4 = 0;
+                dr->m4A6 = 0;
+            }
+        }
+    }
+
+    if(dr->m6E0 != 0) {
+        if(dr->m6E0 > 0) {
+            dr->m6E0 += -0x1000;
+            dr->m484 += -0x1000;
+        }
+        else {
+            dr->m6E0 += 0x1000;
+            dr->m484 += 0x1000;
+        }
+    }
+
+    if(dr->m70C != 0) {
+        if(dr->m488 != 0) {
+            cLib_addCalcAngleS2(&dr->mpEnemy->current.angle.y, dr->m4C0, 1, 0x500);
+        }
+
+        cLib_addCalc0(&dr->m474, 1.0f, REG0_F(5) * 10.0f + 300.0f);
+    }
+
+    return react;
 }
 
 /* 80020FD8-80022460       .text dr_damage_anime__FP14damagereaction */
 void dr_damage_anime(damagereaction* dr) {
-    /* Nonmatching */
+    csXyz csxyz_temp;
+
+    for(int i = 0; i < 0x14; i++) {
+        dr->m010[i].x = dr->m010[i].y = dr->m010[i].z = 0;
+    }
+
+    s16 maxSpeed;
+    if(dr->m47C != 0 || test_sw != 0) {
+        maxSpeed = 0x3000;
+
+        s16 temp7 = dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y;
+        f32 temp = temp7;
+        f32 temp2 = temp;
+        if(temp2 > 5000.0f) {
+            temp2 = 5000.0f;
+        }
+        if(temp2 < -22000.0f) {
+            temp2 = -22000.0f;
+        }
+        dr->m010[8].y = temp2 * 0.4f + 8192.0f;
+        dr->m010[4].z = -temp2 * 0.4f - 8192.0f;
+        f32 temp_8192 = 8192.0f;
+        dr->m010[8].z = temp_8192;
+        dr->m010[4].y = temp_8192;
+
+        f32 temp3 = temp;
+        if(temp3 > 22000.0f) {
+            temp3 = 22000.0f;
+        }
+        if(temp3 < -5000.0f) {
+            temp3 = -5000.0f;
+        }
+        dr->m010[9].y = temp3 * 0.4f - 8192.0f;
+        dr->m010[5].z = temp3 * 0.4f - 8192.0f;
+        f32 zero = 0.0f;
+        dr->m010[9].z = temp_8192;
+        dr->m010[5].y = -zero * 0.4f - temp_8192;
+
+        f32 temp4 = temp;
+        if(temp4 > 20000.0f) {
+            temp4 = 20000.0f;
+        }
+        if(temp4 < -20000.0f) {
+            temp4 = -20000.0f;
+        }
+        dr->m010[0xC].x = temp4 * 0.2f;
+        dr->m010[0x13].x = temp4 * 0.2f;
+        dr->m010[0xC].z = -zero * 0.2f;
+        dr->m010[0x13].z = -zero * 0.2f;
+
+        f32 temp5 = temp;
+        if(temp5 > 7000.0f) {
+            temp5 = 7000.0f;
+        }
+        if(temp5 < -10000.0f) {
+            temp5 = -10000.0f;
+        }
+        dr->m010[6].x = (3000.0f - temp5) + REG0_S(0);
+        dr->m010[6].z = (-zero - 16384.0f) + REG0_S(1);
+
+        f32 temp6 = temp;
+        if(temp6 > 10000.0f) {
+            temp6 = 10000.0f;
+        }
+        if(temp6 < -7000.0f) {
+            temp6 = -7000.0f;
+        }
+        dr->m010[7].x = (-temp6 - 3000.0f);
+        dr->m010[7].z = (-zero - 16384.0f);
+    }
+    else {
+        dr->m010[6].y += dr->m4B8;
+        dr->m010[7].y -= dr->m4BA;
+        dr->m010[4].y += dr->m4BC;
+        dr->m010[5].y -= dr->m4BE;
+        maxSpeed = 0x400;
+    }
+
+    cLib_addCalcAngleS2(&dr->m4A6, dr->m4AE, 1, 0x800);
+    cLib_addCalcAngleS2(&dr->m4A4, dr->m4AC, 1, 0x800);
+    cLib_addCalcAngleS2(&dr->m4A2, dr->m4AA, 1, 0x800);
+    cLib_addCalcAngleS2(&dr->m4A0, dr->m4A8, 1, 0x800);
+    cLib_addCalcAngleS2(&dr->m496, dr->m49A, 2, 0x200);
+    cLib_addCalcAngleS2(&dr->m498, dr->m49C, 2, 0x400);
+
+    dr->m010[6].z = dr->m010[6].z - dr->m4A4 / 2 - dr->m4B4;
+    dr->m010[2].z = dr->m010[2].z + dr->m4A4 + dr->m4B0;
+    dr->m010[7].z = dr->m010[7].z - dr->m4A6 / 2 - dr->m4B6;
+    dr->m010[3].z = dr->m010[3].z + dr->m4A6 + dr->m4B2;
+    dr->m010[0].z += dr->m4A0;
+    dr->m010[1].z += dr->m4A2;
+    dr->m010[0x12].y += dr->m496;
+    dr->m010[0xD].y += dr->m498;
+    
+    if(dr->m70D != 0) {
+        dr->m010[0x13].z += -0x960;
+    }
+
+    if(dr->m70C != 0 && dr->mpEnemy->speed.y > 0.0f) {
+        dr->m010[0xC].z += -3000;
+        dr->m010[0x13].z += -3000;
+    }
+
+    cXyz cxyz_temp;
+    cXyz cxyz_temp2;
+    if(dr->m470 > 200.0f) {
+        s16 angle = cM_atan2s(-dr->m42C.x, -dr->m42C.z);
+        cxyz_temp.x = 0.0f;
+        cxyz_temp.y = 0.0f;
+        cxyz_temp.z = dr->m470;
+        mDoMtx_YrotS(*calc_mtx, angle - dr->mpEnemy->current.angle.y);
+        MtxPosition(&cxyz_temp, &cxyz_temp2);
+
+        if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+            dr->m010[0xC].z -= cxyz_temp2.z * 4.0f;
+            dr->m010[0xC].y += cxyz_temp2.x * 4.0f;
+            dr->m010[0xD].y += cxyz_temp2.x * 6.0f;
+            dr->m010[0xD].z -= cxyz_temp2.z * 6.0f;
+        }
+        else if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+            dr->m010[0xD].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
+            dr->m010[0x12].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
+            dr->m010[0xC].y += (s16)(cxyz_temp2.z * (REG8_F(5) + 2.0f));
+            dr->m010[0xD].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+            dr->m010[0x12].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+            dr->m010[0xC].x += (s16)(cxyz_temp2.x * (REG8_F(6) + -2.0f));
+        }
+        else {
+            dr->m010[0x13].z -= cxyz_temp2.z;
+            dr->m010[0x13].y += cxyz_temp2.x;
+            dr->m010[0xC].z -= cxyz_temp2.z;
+            dr->m010[0xC].y += cxyz_temp2.x;
+            dr->m010[0xD].y += cxyz_temp2.x * 4.0f;
+            dr->m010[0xD].z -= cxyz_temp2.z * 4.0f;
+        }
+
+        maxSpeed = 0x3000;
+    }
+    else if(dr->m710 != 0 || dr->m49E != 0) {
+        maxSpeed = 0x800;
+
+        s16 temp;
+        s16 temp2;
+        if(dr->m710 == 1 || dr->m710 == 5 || dr->m49E != 0) {
+            if(dr->m710 == 1 || dr->m49E != 0) {
+                if(dr->m49E != 0) {
+                    dr->m49E--;
+                    maxSpeed = 0x2000;
+                    temp2 = (REG0_F(6) + 1000.0f) * cM_ssin(dr->m49E * (REG0_S(5) + 16000));
+                    temp = 0;
+                }
+                else {
+                    cxyz_temp.x = dr->m714->eyePos.x - dr->mpEnemy->current.pos.x;
+                    cxyz_temp.y = dr->m714->eyePos.y - (dr->mpEnemy->current.pos.y + 100.0f);
+                    cxyz_temp.z = dr->m714->eyePos.z - dr->mpEnemy->current.pos.z;
+                    temp2 = cM_atan2s(cxyz_temp.x, cxyz_temp.z) - dr->mpEnemy->current.angle.y;
+                    temp = -cM_atan2s(cxyz_temp.y, std::sqrtf(cxyz_temp.x * cxyz_temp.x + cxyz_temp.z * cxyz_temp.z));
+                }
+            }
+            else {
+                temp = dr->m718;
+                temp2 = dr->m71A;
+            }
+
+            if(temp2 > 0x2000) {
+                temp2 = 0x2000;
+            }
+            else if(temp2 < -0x2000) {
+                temp2 = -0x2000;
+            }
+            if(temp > 0x2000) {
+                temp = 0x2000;
+            }
+            else if(temp < -0x2000) {
+                temp = -0x2000;
+            }
+
+            if(dr->mEnemyType == damagereaction::TYPE_DARKNUT) {
+                dr->m010[0xD].x += temp2 >> 2;
+                dr->m010[0xD].y -= temp >> 2;
+                dr->m010[0x12].x += temp2 >> 2;
+                dr->m010[0x12].y -= temp >> 2;
+            }
+            else if(dr->m710 == 1) {
+                if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+                    dr->m010[0xD].x += temp2;
+                    dr->m010[0xD].y -= temp2 >> 2;
+                    dr->m010[0xD].z += temp;
+                }
+                else {
+                    dr->m010[0xD].y -= temp2;
+                    dr->m010[0xC].y -= temp2 / 2.0f;
+                    dr->m010[0xC].x = dr->m010[0xC].y + temp2 / 2.0f;
+                    dr->m010[0xD].z += temp;
+                }
+            }
+            else {
+                dr->m010[0xD].y -= (int)temp2;
+                dr->m010[0xC].x = dr->m010[0xC].y + temp2;
+                dr->m010[0xD].z += temp;
+            }
+        }
+        else if(dr->m710 == 3) {
+            temp = -6000;
+            temp2 = -10000;
+        }
+        else if(dr->m710 == 4) {
+            temp = 6000;
+            temp2 = 10000;
+        }
+        else if(dr->m710 == 6) {
+            dr->m010[0x12].y += dr->m71A;
+            dr->m010[0x12].x += REG0_S(6);
+            dr->m010[0x12].z += dr->m718;
+
+            maxSpeed = 0x300;
+        }
+
+        if(dr->m710 == 3 || dr->m710 == 4) {
+            maxSpeed = 0x800;
+
+            dr->m010[0xC].x -= (int)temp;
+            dr->m010[0xC].y += (int)temp;
+            dr->m010[0xD].y += temp2;
+        }
+    }
+
+    if(dr->m711 != 0) {
+        dr->m010[8].x = 8000;
+        dr->m010[9].x = -8000;
+        maxSpeed = 0x3000;
+    }
+
+    if(dr->mAction != 5 && dr->m488 != 1) {
+        cxyz_temp.x = dr->m48C.z;
+        cxyz_temp.y = 0.0f;
+        cxyz_temp.z = dr->m48C.x;
+        mDoMtx_YrotS(*calc_mtx, dr->mpEnemy->current.angle.y);
+        MtxPosition(&cxyz_temp, &cxyz_temp2);
+        cLib_addCalcAngleS2(&dr->m492, cxyz_temp2.x, 4, 0x100);
+        cLib_addCalcAngleS2(&dr->m494, cxyz_temp2.z, 4, 0x100);
+    }
+    else {
+        cLib_addCalcAngleS2(&dr->m492, 0, 4, 0x100);
+        cLib_addCalcAngleS2(&dr->m494, 0, 4, 0x100);
+    }
+
+    dr->m010[0xC].y -= (f32)dr->m492;
+    dr->m010[0xC].z -= (f32)dr->m494;
+
+    cLib_addCalc0(&dr->m470, 0.5f, 200.0f);
+
+    if(dr->m478 == 0.0f && dr->m488 == 1) {
+        if(dr->m70D == 0) {
+            if(dr->m3D0[2] == 0 && dr->m408 == 0) {
+                dr->m010[6].z += dr->m4B4;
+                dr->m010[2].z = dr->m010[2].z - dr->m4B0 + 13000;
+
+                if(dr->m440 > 2000) {
+                    dr->m010[2].z += -7000;
+                }
+            }
+
+            if(dr->m3D0[3] == 0 && dr->m40C == 0) {
+                dr->m010[7].z += dr->m4B6;
+                dr->m010[3].z = dr->m010[3].z - dr->m4B2 + 13000;
+
+                if(dr->m442 > 2000) {
+                    dr->m010[3].z += -7000;
+                }
+            }
+        }
+        else {
+            if(dr->m3D0[0] == 0) {
+                dr->m010[0].z += -10000;
+            }
+            
+            if(dr->m3D0[1] == 0) {
+                dr->m010[1].z += -10000;
+            }
+        }
+    }
+
+    if(dr->m478 == 0.0f && dr->m488 == 1) {
+        s16 temp = 1;
+        if(dr->m70D == 0) {
+            temp = -1;
+        }
+
+        dr->m010[6].z -= dr->m440 * temp;
+        dr->m010[7].z -= dr->m442 * temp;
+        dr->m010[4].z -= dr->m444 * temp;
+        dr->m010[5].z -= dr->m446 * temp;
+        dr->m010[0xC].z += temp * (s16)(dr->m448 / 2);
+        dr->m010[0x13].z += temp * (s16)(dr->m448 / 2);
+
+        if(dr->m418 == 2) {
+            dr->m010[0xD].z += temp * (s16)(dr->m448 / 2);
+            dr->m010[0x12].z += temp * (s16)(dr->m448 / 2);
+        }
+    }
+
+    switch(dr->mEnemyType) {
+        case damagereaction::TYPE_MOBLIN:
+        case damagereaction::TYPE_BOKOBLIN:
+            dr->m010[0].y = -dr->m010[0].z;
+            dr->m010[0].z = 0;
+            dr->m010[1].y = dr->m010[1].z;
+            dr->m010[1].z = 0;
+
+            if(dr->mEnemyType == damagereaction::TYPE_BOKOBLIN) {
+                dr->m010[0].y = -dr->m010[0].y;
+                dr->m010[0].x = -dr->m010[0].x;
+            }
+
+            {
+                s16 temp = dr->m010[4].z;
+                dr->m010[4].z = dr->m010[4].y;
+                dr->m010[4].y = -temp;
+                s16 temp2 = dr->m010[5].z;
+                dr->m010[5].z = -dr->m010[5].y;
+                dr->m010[5].y = temp2;
+            }
+
+            break;
+        case damagereaction::TYPE_DARKNUT:
+            for(int i = 0; i < 0x14; i++) {
+                if(i != 0xD && i != 0x12) {
+                    csXyz temp(0, 0, 0);
+                    dr->m010[i] = temp;
+                }
+            }
+
+            dr->m010[8].z = dr->m4BC;
+            dr->m010[9].z = dr->m4BE;
+
+            if(dr->m47C != 0) {
+                if(test_sw != 0) {
+                    dr->m482 = fopAcM_searchPlayerAngleY(dr->mpEnemy) + 0x8000 + REG0_S(3);
+                }
+
+                f32 temp = -(s16)(dr->m482 + 0x8000 - dr->mpEnemy->current.angle.y);
+                f32 temp2 = temp;
+                if(temp2 > 20000.0f) {
+                    temp2 = 20000.0f;
+                }
+                if(temp2 < -9000.0f) {
+                    temp2 = -9000.0f;
+                }
+                dr->m010[4].x = temp2;
+                dr->m010[8].y = -5000;
+                dr->m010[8].z = -5000;
+                dr->m010[0].y = -10000;
+                dr->m010[4].z = -15000;
+
+                f32 temp3 = temp;
+                if(temp3 > 9000.0f) {
+                    temp3 = 9000.0f;
+                }
+                if(temp3 < -20000.0f) {
+                    temp3 = -20000.0f;
+                }
+                dr->m010[5].x = temp3;
+                dr->m010[9].y = -5000;
+                dr->m010[9].z = 5000;
+                dr->m010[1].y = -10000;
+                dr->m010[5].z = 15000;
+                dr->m010[0xA].y = -15000;
+                dr->m010[0xB].y = -15000;
+
+                f32 temp4 = temp;
+                if(temp4 > 10000.0f) {
+                    temp4 = 10000.0f;
+                }
+                if(temp4 < -10000.0f) {
+                    temp4 = -10000.0f;
+                }
+                dr->m010[0xA].z = temp4;
+                dr->m010[0XB].z = temp4;
+                dr->m010[0XC].y = 5000;
+
+                if(temp > 8000.0f) {
+                    temp = 8000.0f;
+                }
+                if(temp < -8000.0f) {
+                    temp = -8000.0f;
+                }
+                dr->m010[0xC].z = temp;
+            }
+
+            break;
+    }
+
+    csxyz_temp.x = 0;
+    csxyz_temp.y = 0;
+    csxyz_temp.z = 0;
+    for(int i = 0; i < 20; i++) {
+        if((dr->m474 > 0.1f && (i == 2 || i == 6 || i == 7 || i == 3) && (dr->m70E & 8)) ||
+            ((i == 0 || i == 4 || i == 5 || i == 1) && (dr->m70E & 4)) ||
+            (i == 0x13 && (dr->m70E & 2)) || 
+            (i == 0xD && (dr->m70E & 1)))
+        {
+            dr->m010[i].y += dr->m474 * cM_ssin(dr->mTimer * 5000 + i * 0xED8);
+            dr->m010[i].z += dr->m474 * cM_scos(dr->mTimer * 4000 + i * 0xC80);
+        }
+
+        cLib_addCalcAngleS2(&dr->m088[i].x, dr->m010[i].x + csxyz_temp.x, 2, (int)maxSpeed);
+        cLib_addCalcAngleS2(&dr->m088[i].y, dr->m010[i].y + csxyz_temp.y, 2, (int)maxSpeed);
+        cLib_addCalcAngleS2(&dr->m088[i].z, dr->m010[i].z + csxyz_temp.z, 2, (int)maxSpeed);
+    }
 }
 
 /* 80022460-800225D0       .text dr_matrix_set__FP14damagereaction */
 void dr_matrix_set(damagereaction* dr) {
-    /* Nonmatching */
+    MtxTrans(dr->mpEnemy->current.pos.x + dr->m458.x, dr->mpEnemy->current.pos.y + dr->m458.y, dr->mpEnemy->current.pos.z + dr->m458.z, false);
+    mDoMtx_XrotM(*calc_mtx, dr->m48C.x);
+    mDoMtx_ZrotM(*calc_mtx, dr->m48C.z);
+    MtxTrans(-dr->m44C.x, -dr->m44C.y, -dr->m44C.z, true);
+    mDoMtx_YrotM(*calc_mtx, dr->m482);
+    mDoMtx_XrotM(*calc_mtx, dr->m480);
+    mDoMtx_YrotM(*calc_mtx, dr->m484);
+    mDoMtx_YrotM(*calc_mtx, -dr->m482);
+    MtxTrans(dr->m44C.x, dr->m44C.y, dr->m44C.z, true);
+    mDoMtx_YrotM(*calc_mtx, dr->mpEnemy->shape_angle.y);
+    mDoMtx_XrotM(*calc_mtx, dr->mpEnemy->shape_angle.x);
+    mDoMtx_ZrotM(*calc_mtx, dr->mpEnemy->shape_angle.z);
+    MtxTrans(0.0f, dr->m468, dr->m46C, true);
+
+    cXyz temp(0.0f, 0.0f, 10000.0f);
+    cXyz temp2;
+    MtxPosition(&temp, &temp2);
+
+    if(temp2.y < dr->mpEnemy->current.pos.y) {
+        dr->m70D = 1;
+    }
+    else {
+        dr->m70D = 0;
+    }
+
+    dr->m424 = 0;
 }
 
 /* 800225D0-800226C8       .text damage_reaction__FP14damagereaction */
 int damage_reaction(damagereaction* dr) {
-    /* Nonmatching */
+    dr->mTimer++;
+
+    for(int i = 0; i < 3; i++) {
+        if(dr->m4C8[i] != 0) {
+            dr->m4C8[i]--;
+        }
+    }
+
+    int result;
+
+    if(dr->mInvincibleTimer != 0) {
+        dr->mInvincibleTimer--;
+        dr->mSpawnY = dr->mpEnemy->current.pos.y;
+        result = 0;
+    }
+    else {
+        result = dr_damage_set(dr);
+    }
+
+    dr_damage_anime(dr);
+    dr_matrix_set(dr);
+
+    if(dr->m794 != 0) {
+        dr->m794--;
+        if(dr->m794 == 0) {
+            dr->mParticleCallBack.end();
+        }
+    }
+
+    if(dr->m7B2 != 0) {
+        dr->m7B2--;
+    }
+
+    return result;
 }

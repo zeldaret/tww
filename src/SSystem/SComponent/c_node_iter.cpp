@@ -8,14 +8,14 @@
 #include "dolphin/types.h"
 
 /* 80244EB4-80244F44       .text cNdIt_Method__FP10node_classPFP10node_classPv_iPv */
-int cNdIt_Method(node_class* pNode, cNdIt_MethodFunc pMethod, void* pUserData) {
-    int ret = 1;
+BOOL cNdIt_Method(node_class* pNode, cNdIt_MethodFunc pMethod, void* pUserData) {
+    BOOL ret = TRUE;
     node_class* pNext = NODE_GET_NEXT(pNode);
 
     while (pNode) {
         int methodRet = pMethod(pNode, pUserData);
         if (!methodRet)
-            ret = 0;
+            ret = FALSE;
         pNode = pNext;
         pNext = NODE_GET_NEXT(pNext);
     }

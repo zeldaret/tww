@@ -3,19 +3,20 @@
 // Translation Unit: d_path.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 /* 80080018-8008010C       .text dPath_GetPnt__FP5dPathi */
-dPath__Point* dPath_GetPnt(dPath* path, int pnt_index) {
+dPnt* dPath_GetPnt(dPath* path, int pnt_index) {
     JUT_ASSERT(30, path != NULL);
     JUT_ASSERT(31, 0 <= pnt_index && pnt_index < path->m_num);
 
-    if (path == NULL || path->mpPnt == NULL || 0 > pnt_index || pnt_index >= path->m_num)
+    if (path == NULL || path->m_points == NULL || 0 > pnt_index || pnt_index >= path->m_num)
         return NULL;
     else
-        return &path->mpPnt[pnt_index];
+        return &path->m_points[pnt_index];
 }
 
 /* 8008010C-80080218       .text dPath_GetRoomPath__Fii */
@@ -49,7 +50,7 @@ dPath* dPath_GetNextRoomPath(dPath* path, int room_no) {
         pd = pRoom->getPath2Inf();
     }
 
-    s32 next_id = path->mNextPathId;
+    s32 next_id = path->m_nextID;
     if (pd == NULL || (next_id & 0xFFFF) == 0xFFFF) {
         return NULL;
     } else {
@@ -85,16 +86,15 @@ bool dPath_GetPolyRoomPathVec(cBgS_PolyInfo& polyInfo, cXyz* pDstPos, int* pDstA
     if (pnt_no == 0xFF || pnt_no < 0 || pnt_no >= path->m_num)
         return FALSE;
 
-    dPath__Point *point = &path->mpPnt[pnt_no];
-    dPath__Point *next_point;
+    dPnt *point = &path->m_points[pnt_no];
+    dPnt *next_point;
     if (pnt_no == path->m_num - 1)
-        next_point = &path->mpPnt[0];
+        next_point = &path->m_points[0];
     else
-        next_point = &path->mpPnt[pnt_no + 1];
-    pDstPos->x = next_point->mPos.x - point->mPos.x;
-    pDstPos->y = next_point->mPos.y - point->mPos.y;
-    pDstPos->z = next_point->mPos.z - point->mPos.z;
+        next_point = &path->m_points[pnt_no + 1];
+    pDstPos->x = next_point->m_position.x - point->m_position.x;
+    pDstPos->y = next_point->m_position.y - point->m_position.y;
+    pDstPos->z = next_point->m_position.z - point->m_position.z;
     *pDstArg0 = path->mArg0;
     return TRUE;
 }
-

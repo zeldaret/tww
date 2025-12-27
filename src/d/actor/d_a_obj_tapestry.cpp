@@ -3,8 +3,10 @@
 // Translation Unit: d_a_obj_tapestry.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_tapestry.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 000000EC-000001E0       .text __ct__19daObjTapestry_HIO_cFv */
 daObjTapestry_HIO_c::daObjTapestry_HIO_c() {
@@ -267,7 +269,7 @@ void daObjTapestry_c::set_eye_pos() {
 }
 
 /* 00004F2C-00005168       .text _create__15daObjTapestry_cFv */
-s32 daObjTapestry_c::_create() {
+cPhs_State daObjTapestry_c::_create() {
     /* Nonmatching */
 }
 
@@ -317,28 +319,28 @@ bool daObjTapestry_c::_draw() {
 }
 
 /* 00005C44-00005C64       .text daObjTapestry_Create__FP10fopAc_ac_c */
-static s32 daObjTapestry_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daObjTapestry_Create(fopAc_ac_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_create();
 }
 
 /* 00005C64-00005C88       .text daObjTapestry_Delete__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Delete(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Delete(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_delete();
 }
 
 /* 00005C88-00005CAC       .text daObjTapestry_Execute__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Execute(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Execute(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_execute();
 }
 
 /* 00005CAC-00005CD0       .text daObjTapestry_Draw__FP15daObjTapestry_c */
-static BOOL daObjTapestry_Draw(daObjTapestry_c*) {
-    /* Nonmatching */
+static BOOL daObjTapestry_Draw(daObjTapestry_c* i_this) {
+    return ((daObjTapestry_c*)i_this)->_draw();
 }
 
 /* 00005CD0-00005CD8       .text daObjTapestry_IsDelete__FP15daObjTapestry_c */
 static BOOL daObjTapestry_IsDelete(daObjTapestry_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daObjTapestry_Method = {
@@ -359,7 +361,7 @@ actor_process_profile_definition g_profile_Obj_Tapestry = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0087,
+    /* Priority     */ PRIO_Obj_Tapestry,
     /* Actor SubMtd */ &l_daObjTapestry_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

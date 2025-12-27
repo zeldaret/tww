@@ -1,13 +1,16 @@
-/*
+/**
  * d_a_obj_pbka.cpp
+ * Object - Windfall Island - Bomb Shop - Ceiling fan
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbka.h"
 #include "d/res/res_pbka.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -42,10 +45,10 @@ void daObjPbka_c::set_mtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daObjPbka_c::_create() {
+cPhs_State daObjPbka_c::_create() {
     fopAcM_SetupActor(this, daObjPbka_c);
 
-    int phase_state = dComIfG_resLoad(&mPhase, "Pbka");
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Pbka");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x680) == 0) {
             phase_state =  cPhs_ERROR_e;
@@ -57,7 +60,7 @@ s32 daObjPbka_c::_create() {
 }
 
 /* 0000024C-000002EC       .text daObjPbka_Create__FPv */
-static int daObjPbka_Create(void* i_this) {
+static cPhs_State daObjPbka_Create(void* i_this) {
     return static_cast<daObjPbka_c*>(i_this)->_create();
 }
 
@@ -124,7 +127,7 @@ actor_process_profile_definition g_profile_Obj_Pbka = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0070,
+    /* Priority     */ PRIO_Obj_Pbka,
     /* Actor SubMtd */ &daObj_PbkaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

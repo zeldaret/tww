@@ -3,6 +3,7 @@
 // Translation Unit: d_auction_screen.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_auction_screen.h"
 #include "f_op/f_op_msg.h"
 
@@ -117,27 +118,27 @@ void dAs_c::_delete() {
 }
 
 /* 80160C7C-80160C9C       .text dAs_Draw__FP5dAs_c */
-static void dAs_Draw(dAs_c*) {
+static BOOL dAs_Draw(dAs_c*) {
     /* Nonmatching */
 }
 
 /* 80160C9C-80160CBC       .text dAs_Execute__FP5dAs_c */
-static void dAs_Execute(dAs_c*) {
+static BOOL dAs_Execute(dAs_c*) {
     /* Nonmatching */
 }
 
 /* 80160CBC-80160CC4       .text dAs_IsDelete__FP5dAs_c */
-static void dAs_IsDelete(dAs_c*) {
+static BOOL dAs_IsDelete(dAs_c*) {
     /* Nonmatching */
 }
 
 /* 80160CC4-80160CF8       .text dAs_Delete__FP5dAs_c */
-static void dAs_Delete(dAs_c*) {
+static BOOL dAs_Delete(dAs_c*) {
     /* Nonmatching */
 }
 
 /* 80160CF8-80160D20       .text dAs_Create__FP9msg_class */
-static void dAs_Create(msg_class*) {
+static cPhs_State dAs_Create(msg_class*) {
     /* Nonmatching */
 }
 

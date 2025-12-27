@@ -15,7 +15,7 @@ public:
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
-    s32 _create();
+    cPhs_State _create();
 
 public:
     /* 0x290 */ fpc_ProcID mPartnerID;

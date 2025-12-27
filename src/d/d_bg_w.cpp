@@ -10,7 +10,6 @@
 #include "SSystem/SComponent/c_m2d.h"
 #include "SSystem/SComponent/c_math.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
@@ -36,8 +35,8 @@ void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz*
     f32 move = speed * dist;
     pupper_pos->x += move * plane.mNormal.x;
     pupper_pos->z += move * plane.mNormal.z;
-    CHECK_FLOAT_CLASS(0xd0, pupper_pos->x);
-    CHECK_FLOAT_CLASS(0xd1, pupper_pos->z);
+    JUT_ASSERT(0xd0, !isnan(pupper_pos->x));
+    JUT_ASSERT(0xd1, !isnan(pupper_pos->z));
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
@@ -50,8 +49,7 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
         if (!ChkPolyThrough(i_poly_idx, pwi->GetPolyPassChk())) {
             cBgW_TriElm* tri = &pm_tri[i_poly_idx];
 
-            f32 sp68 = std::sqrtf(tri->m_plane.GetNP()->x * tri->m_plane.GetNP()->x +
-                                  tri->m_plane.GetNP()->z * tri->m_plane.GetNP()->z);
+            f32 sp68 = std::sqrtf(SQUARE(tri->m_plane.GetNP()->x) + SQUARE(tri->m_plane.GetNP()->z));
             if (cM3d_IsZero(sp68)) {
                 if (rwg_elm->next != 0xFFFF) {
                     i_poly_idx = rwg_elm->next;
@@ -202,8 +200,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                             pwi->GetPos()->x += cx0 - spF0;
                                             pwi->GetPos()->z += cy0 - spF4;
 
-                                            CHECK_FLOAT_CLASS(484, pwi->GetPos()->x);
-                                            CHECK_FLOAT_CLASS(485, pwi->GetPos()->z);
+                                            JUT_ASSERT(484, !isnan(pwi->GetPos()->x));
+                                            JUT_ASSERT(485, !isnan(pwi->GetPos()->z));
 
                                             pwi->CalcMovePosWork();
                                             pwi->SetWallCirHit(cir_index);
@@ -222,8 +220,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                         pwi->GetPos()->x += cx1 - spF8;
                                         pwi->GetPos()->z += cy1 - spFC;
 
-                                        CHECK_FLOAT_CLASS(524, pwi->GetPos()->x);
-                                        CHECK_FLOAT_CLASS(525, pwi->GetPos()->z);
+                                        JUT_ASSERT(524, !isnan(pwi->GetPos()->x));
+                                        JUT_ASSERT(525, !isnan(pwi->GetPos()->z));
 
                                         pwi->CalcMovePosWork();
                                         pwi->SetWallCirHit(cir_index);
@@ -597,14 +595,203 @@ void dBgW::positionWallCrrPos(cM3dGTri& plane, dBgS_CrrPos* crr, cXyz* pos, f32 
 }
 
 /* 800A819C-800A8964       .text RwgWallCrrPos__4dBgWFUsP11dBgS_CrrPos */
-bool dBgW::RwgWallCrrPos(u16, dBgS_CrrPos*) {
-    /* Nonmatching */
+bool dBgW::RwgWallCrrPos(u16 i_poly_index, dBgS_CrrPos* crr) {
+    cBgW_RwgElm* rwg_elm;
+    cBgD_Tri_t* tri_t;
+    cM3dGPla* plane;
+    bool ret = false;
+    cM3dGTri tri;
+    cXyz wall_top_pos = *crr->GetPos();
+    wall_top_pos.y += crr->GetWallH();
+    cXyz old_wall_top_pos = *crr->GetOldPos();
+    old_wall_top_pos.y += crr->GetWallH();
+    u32 poly_index_z = i_poly_index;
+    u32 poly_index_x = i_poly_index;
+
+    // Z
+    while (true) {
+        rwg_elm = &pm_rwg[poly_index_z];
+        if (!ChkPolyThrough(poly_index_z, crr->GetPolyPassChk())) {
+            tri_t = &pm_bgd->m_t_tbl[poly_index_z];
+            plane = &pm_tri[poly_index_z].m_plane;
+            tri.setBg(
+                &pm_vtx_tbl[tri_t->vtx0],
+                &pm_vtx_tbl[tri_t->vtx1],
+                &pm_vtx_tbl[tri_t->vtx2],
+                plane
+            );
+            
+            f32 dist = tri.getSignedLenPos(&wall_top_pos);
+            if (std::fabsf(dist) > crr->GetWallR()) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_z = rwg_elm->next;
+                continue;
+            }
+            
+            f32 nx = plane->GetNP()->x;
+            f32 nz = plane->GetNP()->z;
+            f32 f4 = std::sqrtf(nx*nx + nz*nz);
+            if (cM3d_IsZero(f4)) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_z = rwg_elm->next;
+                continue;
+            }
+            
+            f32 f29 = 1.0f / f4;
+            f32 f28 = f29 * std::fabsf(nz);
+            if (f28 < 0.4f) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_z = rwg_elm->next;
+                continue;
+            }
+            
+            // Is this an inline? 
+            f32 min_z = tri.mA.z;
+            f32 max_z = min_z;
+            if (min_z > tri.mB.z) {
+                min_z = tri.mB.z;
+            } else if (max_z < tri.mB.z) {
+                max_z = tri.mB.z;
+            }
+            if (min_z > tri.mC.z) {
+                min_z = tri.mC.z;
+            } else if (max_z < tri.mC.z) {
+                max_z = tri.mC.z;
+            }
+            min_z -= crr->GetWallR();
+            max_z += crr->GetWallR();
+            if (min_z > wall_top_pos.z || max_z < wall_top_pos.z) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_z = rwg_elm->next;
+                continue;
+            }
+            
+            f32 cross_len;
+            if (tri.crossZ(&wall_top_pos, &cross_len)) {
+                f32 f2 = crr->GetWallR() / f28;
+                f32 f1 = cross_len - wall_top_pos.z;
+                f1 *= nz;
+                if (std::fabsf(cross_len - wall_top_pos.z) <= f2 && f1 <= 4.0f) {
+                    positionWallCrrPos(tri, crr, &crr->GetPosVec(), f29, dist);
+                    crr->SetWallPolyIndex(poly_index_z);
+                    ret = true;
+                    crr->SetZCrr();
+                }
+            }
+        }
+
+        if (rwg_elm->next == 0xFFFF)
+            break;
+        poly_index_z = rwg_elm->next;
+    }
+
+    // X
+    while (true) {
+        rwg_elm = &pm_rwg[poly_index_x];
+        if (!ChkPolyThrough(poly_index_x, crr->GetPolyPassChk())) {
+            tri_t = &pm_bgd->m_t_tbl[poly_index_x];
+            plane = &pm_tri[poly_index_x].m_plane;
+            tri.setBg(
+                &pm_vtx_tbl[tri_t->vtx0],
+                &pm_vtx_tbl[tri_t->vtx1],
+                &pm_vtx_tbl[tri_t->vtx2],
+                plane
+            );
+            
+            f32 dist = tri.getSignedLenPos(&wall_top_pos);
+            if (std::fabsf(dist) > crr->GetWallR()) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_x = rwg_elm->next;
+                continue;
+            }
+            
+            f32 nx = plane->GetNP()->x;
+            f32 nz = plane->GetNP()->z;
+            f32 f4 = std::sqrtf(nx*nx + nz*nz);
+            if (cM3d_IsZero(f4)) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_x = rwg_elm->next;
+                continue;
+            }
+            
+            f32 f28 = 1.0f / f4;
+            f32 f29 = f28 * std::fabsf(nx);
+            if (f29 < 0.4f) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_x = rwg_elm->next;
+                continue;
+            }
+            
+            // Is this an inline? 
+            f32 min_x = tri.mA.x;
+            f32 max_x = min_x;
+            if (min_x > tri.mB.x) {
+                min_x = tri.mB.x;
+            } else if (max_x < tri.mB.x) {
+                max_x = tri.mB.x;
+            }
+            if (min_x > tri.mC.x) {
+                min_x = tri.mC.x;
+            } else if (max_x < tri.mC.x) {
+                max_x = tri.mC.x;
+            }
+            min_x -= crr->GetWallR();
+            max_x += crr->GetWallR();
+            if (min_x > wall_top_pos.x || max_x < wall_top_pos.x) {
+                if (rwg_elm->next == 0xFFFF) {
+                    break;
+                }
+                poly_index_x = rwg_elm->next;
+                continue;
+            }
+            
+            f32 cross_len;
+            if (tri.crossX(&wall_top_pos, &cross_len)) {
+                f32 f2 = crr->GetWallR() / f29;
+                f32 f1 = cross_len - wall_top_pos.x;
+                f1 *= nx;
+                if (std::fabsf(cross_len - wall_top_pos.x) <= f2 && f1 <= 4.0f) {
+                    positionWallCrrPos(tri, crr, &crr->GetPosVec(), f28, dist);
+                    crr->SetWallPolyIndex(poly_index_x);
+                    ret = true;
+                    crr->SetXCrr();
+                }
+            }
+        }
+
+        poly_index_x = rwg_elm->next;
+        if (poly_index_x == 0xFFFF) {
+            break;
+        }
+        poly_index_x = rwg_elm->next;
+    }
+
+    if (ret) {
+        crr->SetCyl();
+        crr->SetLin();
+    }
+
+    return ret;
 }
 
 void dBgW::dummyfunc() {
     // TODO: find where this assert actually comes from
     // cBgW::RwgShdwDraw ?
-    int index;
+    int index = 0;
     JUT_ASSERT(0, 0 <= index && index < pm_bgd->m_t_num);
 }
 

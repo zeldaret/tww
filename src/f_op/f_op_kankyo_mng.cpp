@@ -98,6 +98,6 @@ int fopKyM_createMpillar(cXyz const* i_pos, f32 i_size) {
     scale.x = i_size;
     scale.y = i_size;
     scale.z = i_size;
-    dComIfGp_particle_set(0x80d5, i_pos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_SCENE_80D5, i_pos, NULL, &scale);
     return -1;
 }

@@ -1,7 +1,7 @@
 #ifndef RES_SK_H
 #define RES_SK_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SK_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

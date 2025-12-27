@@ -31,15 +31,16 @@ public:
     bool _draw();
     bool _execute();
     bool _delete();
-    s32 _create();
-
+    // s32
+    cPhs_State _create();
     
 public:
     /* 0x6c4 */ ActionFunc func;
     /* 0x6d0 */ dNpc_EventCut_c tag_event_cut;
     /* 0x73c */ u8 hasAttention;
     /* 0x73e */ s16 tenth_cost;
-    /* 0x742 */ s16 rupee_count;
+    /* 0x740 */ u16 f_0x740;
+    /* 0x742 */ u16 rupee_count;
 
     /* 0x744 */ s32 partners[8];
     /* 0x764 */ s16 npartners;
@@ -59,7 +60,7 @@ public:
     /* 0x04 */ s8 mNo;
     /* 0x08 */ f32 mAttentionMaxEuclidDistance;
     /* 0x0C */ f32 mAttentionMaxYDistance;
-    /* 0x10 */ f32 f0x10;
+    /* 0x10 */ u8 f0x10;
     /* Place member variables here */
 }; /* Size: 0x14 */
 

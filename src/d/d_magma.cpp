@@ -3,17 +3,13 @@
 // Translation Unit: d_magma.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_magma.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
 #include "d/res/res_magma.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
-
-// #pragma sym on
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx l_kuroOrthoMtx;
 Mtx l_colOrthoMtx;
@@ -89,9 +85,9 @@ void dMagma_ball_c::draw() {
 BOOL dMagma_ball_c::rangeCheck(cXyz& pos, f32* dst) {
     f32 distSq = mPos.abs2XZ(pos);
     f32 rad1 = mScale * 243.6414f;
-    if (distSq < rad1*rad1) {
+    if (distSq < SQUARE(rad1)) {
         f32 rad2 = mScale * 800.0f;
-        f32 dist = std::sqrtf(rad2 * rad2 - distSq);
+        f32 dist = std::sqrtf(SQUARE(rad2) - distSq);
         f32 temp = (mPos.y - (rad2 - 47.999146f));
         temp += dist;
         *dst = temp;
@@ -126,9 +122,9 @@ void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
     /* Nonmatching */
     dPath* path = dPath_GetRoomPath(pathNo, roomNo);
     s32 ptNo = (s32)cM_rndF(path->m_num - 1);
-    dPath__Point* pt = &path->mpPnt[ptNo];
-    mPos.x = pt->mPos.x + cM_rndFX(pt->mArg3 * 100.0f);
-    mPos.z = pt->mPos.z + cM_rndFX(pt->mArg3 * 100.0f);
+    dPnt* pt = &path->m_points[ptNo];
+    mPos.x = pt->m_position.x + cM_rndFX(pt->mArg3 * 100.0f);
+    mPos.z = pt->m_position.z + cM_rndFX(pt->mArg3 * 100.0f);
     mScale = cM_rndF(1.0f) + 1.0f;
     mBaseY = offsY - cM_rndF(20.0f);
     mWave = cM_rndF(8.0f) * 4096.0f;
@@ -173,7 +169,12 @@ void dMagma_floor_c::draw() {
 /* 80075CB8-80075DD8       .text calc__14dMagma_floor_cFi */
 void dMagma_floor_c::calc(int i_roomNo) {
     mDoMtx_stack_c::scaleS(1.0f, 0.05f, 1.0f);
-    if (strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0)
+    if (
+        strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0
+#if VERSION > VERSION_DEMO
+        || strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0
+#endif
+    )
         mDoMtx_stack_c::transM(0.0f, -(mPos.y + 20.0f), 0.0f);
     else
         mDoMtx_stack_c::transM(0.0f, -(mPos.y + 30.0f), 0.0f);
@@ -424,7 +425,7 @@ dMagma_floor_c* dMagma_packet_c::newFloor(cXyz& p0, cXyz& p1, int i_roomNo, s16 
                 if (path == NULL)
                     return NULL;
 
-                dPath__Point* pnt = path->mpPnt;
+                dPnt* pnt = path->m_points;
                 for (s32 j = 0; j < path->m_num; j++)
                     param += (s32)(pnt->mArg3 * 4.0f); // bug? forgot to increment pnt
             }

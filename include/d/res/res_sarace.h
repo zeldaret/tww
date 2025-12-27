@@ -1,7 +1,7 @@
 #ifndef RES_SARACE_H
 #define RES_SARACE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SARACE_RES_FILE_ID {
     /* BCKS */

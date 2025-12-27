@@ -3,9 +3,43 @@
 // Translation Unit: d_a_swpropeller.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swpropeller.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_UNK2000000,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 100.0f,
+        /* Height */ 80.0f,
+    }},
+};
+
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
@@ -33,7 +67,7 @@ static BOOL nodeCallBack(J3DNode*, int) {
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
-s32 daSwProp_c::_create() {
+cPhs_State daSwProp_c::_create() {
     /* Nonmatching */
 }
 
@@ -53,28 +87,28 @@ bool daSwProp_c::_draw() {
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
-static s32 daSwProp_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daSwProp_Create(void* i_this) {
+    return ((daSwProp_c*)i_this)->_create();
 }
 
 /* 00000C20-00000C44       .text daSwProp_Delete__FPv */
-static BOOL daSwProp_Delete(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Delete(void* i_this) {
+    return ((daSwProp_c*)i_this)->_delete();
 }
 
 /* 00000C44-00000C68       .text daSwProp_Draw__FPv */
-static BOOL daSwProp_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Draw(void* i_this) {
+    return ((daSwProp_c*)i_this)->_draw();
 }
 
 /* 00000C68-00000C8C       .text daSwProp_Execute__FPv */
-static BOOL daSwProp_Execute(void*) {
-    /* Nonmatching */
+static BOOL daSwProp_Execute(void* i_this) {
+    return ((daSwProp_c*)i_this)->_execute();
 }
 
 /* 00000C8C-00000C94       .text daSwProp_IsDelete__FPv */
 static BOOL daSwProp_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daSwPropMethodTable = {
@@ -95,7 +129,7 @@ actor_process_profile_definition g_profile_SW_PROPELLER = {
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x0199,
+    /* Priority     */ PRIO_SW_PROPELLER,
     /* Actor SubMtd */ &daSwPropMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,

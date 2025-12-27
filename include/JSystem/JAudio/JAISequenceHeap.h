@@ -12,19 +12,18 @@ namespace JAInter {
         void setStatus(u8 status) { mStatus = status; }
         void* getPointer() { return mPointer; }
         void setPointer(void* pointer) { mPointer = pointer; }
-        // TODO
-        u32 getUseCounter() {}
-        void setUseCounter(u32) {}
-        u32 getDataNumber() {}
-        void setDataNumber(u32) {}
-        u32 getEndAddress() {}
-        void setEndAddress(u32) {}
+        u32 getDataNumber() { return mDataNumber;}
+        void setDataNumber(u32 number) { mDataNumber = number; }
+        u32 getEndAddress() { return mEndAddress; }
+        void setEndAddress(u32 address) { mEndAddress = address; }
+        u32 getUseCounter() { return mUseCounter; }
+        void setUseCounter(u32 counter) { mUseCounter = counter; }
 
         /* 0x00 */ u8 mStatus;
         /* 0x04 */ void* mPointer;
-        /* 0x08 */ u32 field_0x8;
-        /* 0x0C */ u32 field_0xc;
-        /* 0x10 */ u32 field_0x10;
+        /* 0x08 */ u32 mDataNumber;
+        /* 0x0C */ u32 mEndAddress;
+        /* 0x10 */ u32 mUseCounter;
     };
 
     namespace HeapMgr {

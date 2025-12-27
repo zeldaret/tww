@@ -1,7 +1,7 @@
 #ifndef RES_VBELT_H
 #define RES_VBELT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VBELT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

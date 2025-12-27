@@ -3,6 +3,7 @@
 // Translation Unit: d_s_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_name.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
@@ -30,8 +31,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include "JSystem/JKernel/JKRMemArchive.h"
 
 dSn_HIO_c g_snHIO;
 
@@ -62,13 +62,16 @@ dSn_HIO_c::dSn_HIO_c() {
 }
 
 /* 8022F8F0-8022F95C       .text phase_1__FPc */
-static s32 phase_1(char* resName) {
+static cPhs_State phase_1(char* resName) {
     mDoAud_bgmStart(JA_BGM_SELECT);
-    return !dComIfG_setStageRes(resName, NULL) ? cPhs_ERROR_e : cPhs_NEXT_e;
+    if (dComIfG_setStageRes(resName, NULL) == FALSE) {
+        return cPhs_ERROR_e;
+    }
+    return cPhs_NEXT_e;
 }
 
 /* 8022F95C-8022F9B4       .text phase_2__FPc */
-static s32 phase_2(char* resName) {
+static cPhs_State phase_2(char* resName) {
     s32 rt = dComIfG_syncStageRes(resName);
     if (rt < 0)
         return cPhs_ERROR_e;
@@ -78,12 +81,12 @@ static s32 phase_2(char* resName) {
 }
 
 /* 8022F9B4-8022F9BC       .text phase_3__FPc */
-static s32 phase_3(char*) {
+static cPhs_State phase_3(char*) {
     return cPhs_COMPLEATE_e;
 }
 
 /* 8022F9BC-8022F9FC       .text resLoad__FP30request_of_phase_process_classPc */
-s32 resLoad(request_of_phase_process_class* phase, char* resName) {
+cPhs_State resLoad(request_of_phase_process_class* phase, char* resName) {
     static cPhs__Handler l_method[] = {
         (cPhs__Handler)phase_1,
         (cPhs__Handler)phase_2,
@@ -96,13 +99,13 @@ s32 resLoad(request_of_phase_process_class* phase, char* resName) {
 }
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
-s32 dScnName_c::create() {
+cPhs_State dScnName_c::create() {
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
 
-    s32 rt = resLoad(&mPhs, "Stage");
+    cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
         heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
         JUT_ASSERT(0x1c8, heap != NULL);
@@ -115,7 +118,7 @@ s32 dScnName_c::create() {
         dFs_c = new dFile_select_c();
         JUT_ASSERT(470, dFs_c != NULL);
         dFs_c->field_0x0 = mArchive;
-        savePicDatabuf = new (0x20) u8[0x12000];
+        savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(476, savePicDatabuf != NULL);
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
             dFs_c->setUseType(0);
@@ -126,8 +129,8 @@ s32 dScnName_c::create() {
             JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
-            g_dComIfG_gameInfo.save.field_0x1291 = 0;
-            g_dComIfG_gameInfo.save.field_0x1292 = 0;
+            dComIfGs_setNoFile(0);
+            dComIfGs_setNewFile(0);
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
             dComIfGs_setClearCount(1);
@@ -148,7 +151,7 @@ s32 dScnName_c::create() {
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;
         f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
-        field_0x2a8 = aspect * g_HIO.field_0x0c;
+        field_0x2a8 = aspect * fapGmHIO_getAspectRatio();
         field_0x2ac.x = 9377.0f;
         field_0x2ac.y = 0.0;
         field_0x2ac.z = 7644.0;
@@ -438,8 +441,7 @@ void dScnName_c::MemCardErrMsgWaitFormatSel2() {
 
 /* 8023106C-802310C0       .text MemCardFormat__10dScnName_cFv */
 void dScnName_c::MemCardFormat() {
-    /* Nonmatching */
-    field_0x1bbc = g_mDoMemCd_control.FormatSync();
+    field_0x1bbc = mDoMemCd_FormatSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 8;
@@ -458,7 +460,7 @@ void dScnName_c::MemCardMakeGameFileSel() {
 
 /* 80231284-802312D8       .text MemCardMakeGameFile__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFile() {
-    field_0x1bbc = g_mDoMemCd_control.SaveSync();
+    field_0x1bbc = mDoMemCd_SaveSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 11;
@@ -512,11 +514,11 @@ void dScnName_c::NoteOpenWait() {
     if (g_snHIO.field_0x8 == 0) {
         if (fpcM_GetName(this) == PROC_NAME_SCENE) {
             dFs_c->setSaveDataPtr(saveMemory);
-            dFs_c->setSavePicDataPtr(savePicDatabuf);
+            dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
             dFs_c->setSaveDataPtr(dMs_c->getDataBufPtr());
-            dFs_c->setSavePicDataPtr(savePicDatabuf);
+            dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
         dFs_c->initial();
         mMainProc = 3;
@@ -532,7 +534,6 @@ void dScnName_c::FileSelectOpen() {
 
 /* 802315E0-802319B4       .text buttonIconProc__10dScnName_cFv */
 void dScnName_c::buttonIconProc() {
-    /* Nonmatching */
     switch (field_0x1bb6) {
     case 0:
         {
@@ -541,7 +542,7 @@ void dScnName_c::buttonIconProc() {
             if (ret == 1) {
                 field_0x1bb4 = 0;
                 field_0x1bb6 = 6;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
@@ -557,7 +558,7 @@ void dScnName_c::buttonIconProc() {
             if (ret == 1) {
                 field_0x1bb4 = 0;
                 field_0x1bb6 = 6;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
@@ -573,24 +574,24 @@ void dScnName_c::buttonIconProc() {
             if (ret == 1) {
                 field_0x1bb4 = 0;
                 field_0x1bb6 = 6;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
     case 3:
         {
-            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, 0.0f, g_snHIO.field_0xc, 0);
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
                 field_0x1bb6 = 6;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
     case 4:
         {
-            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, 0.0f, g_snHIO.field_0xc, 0);
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
@@ -600,13 +601,13 @@ void dScnName_c::buttonIconProc() {
                     field_0x4ac.pane->show();
                 }
                 field_0x1bb6 = 0;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
     case 5:
         {
-            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
+            s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, 0.0f, g_snHIO.field_0xc, 0);
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
@@ -616,7 +617,7 @@ void dScnName_c::buttonIconProc() {
                     field_0x4ac.pane->hide();
                 }
                 field_0x1bb6 = 0;
-                dFs_c->field_0x3936 = field_0x1bb6;
+                dFs_c->setIconMode(field_0x1bb6);
             }
         }
         break;
@@ -635,7 +636,7 @@ void dScnName_c::FileSelOpenMain() {
     } else {
         field_0x1bb6 = 1;
     }
-    dFs_c->field_0x3936 = field_0x1bb6;
+    dFs_c->setIconMode(field_0x1bb6);
     mMainProc = 4;
 }
 
@@ -645,7 +646,7 @@ void dScnName_c::FileselOpenWait() {}
 /* 80231A28-80231A8C       .text FileSelectMain__10dScnName_cFv */
 void dScnName_c::FileSelectMain() {
     dFs_c->_move();
-    field_0x1bb6 = dFs_c->field_0x3936;
+    field_0x1bb6 = dFs_c->getIconMode();
     if (fpcM_GetName(this) == PROC_NAME_SCENE)
         FileSelectMainNormal();
     if (fpcM_GetName(this) == PROC_NAMEEX_SCENE)
@@ -663,7 +664,7 @@ void dScnName_c::FileSelectMainNormal() {
             mMainProc = 5;
         } else {
             dComIfGs_setCardToMemory(saveMemory, dFs_c->saveSlot);
-            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(0x3510)) {
+            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3510)) {
                 field_0x1bb9 = 1;
             }
 
@@ -671,32 +672,34 @@ void dScnName_c::FileSelectMainNormal() {
             if (dComIfGs_getPictureNum() != 0) {
                 u8 failed = 0;
                 u8 boxDataIdx = 0;
-                u8* workBuf = &((u8*)savePicDatabuf)[dFs_c->saveSlot * 0x6000];
+                u8 r25 = 0;
+                card_pictdata* workBuf = &savePicDatabuf[dFs_c->saveSlot * 3];
                 for (s32 i = 0; i < 3; i++) {
                     u32 mask = 1 << i;
-                    if ((dComIfGs_getEventReg(0x89ff) & mask)) {
-                        workBuf += 0x2000;
+                    if ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF) & mask)) {
+                        workBuf++;
                         continue;
                     }
 
                     if (mDoMemCdRWm_TestCheckSumPictData(workBuf)) {
-                        JKRMainRamToAram(workBuf, dComIfGp_getPictureBoxData(boxDataIdx), 0x2000, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
+                        JKRMainRamToAram((u8*)workBuf, dComIfGp_getPictureBoxData(boxDataIdx), sizeof(card_pictdata), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
                         boxDataIdx++;
                     } else {
                         failed++;
                     }
 
-                    if (i == pictureNum)
+                    r25++;
+                    if (r25 == pictureNum)
                         break;
 
-                    workBuf += 0x2000;
+                    workBuf++;
                 }
 
                 dComIfGs_setPictureNum(pictureNum - failed);
             }
-            dComIfGs_setEventReg(0x89ff, 0);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, 0);
             mDoMemCd_setPictDataPtr(NULL);
-            g_dComIfG_gameInfo.play.itemInit();
+            dComIfGp_itemDataInit();
             if (field_0x1bb9 != 0) {
                 field_0x1bb6 = 3;
                 mMainProc = 5;
@@ -748,7 +751,7 @@ void dScnName_c::FileSelectClose() {
             if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
                 dMs_c->initialize();
                 dMs_c->field_0x053c = 1;
-                dMs_c->field_0x053d = dFs_c->field_0x392f;
+                dMs_c->field_0x053d = dFs_c->field_0x392f; // getErrType?
                 if (dFs_c->field_0x392f == 2) {
                     dMs_c->initializeEx();
                 }
@@ -771,9 +774,9 @@ void dScnName_c::FileSelectClose() {
             break;
         case 1:
             if (field_0x1bb9) {
-                strcpy(dNm_c->field_0x2ad0, dComIfGs_getPlayerName());
+                dNm_c->setNextNameStr((char*)dComIfGs_getPlayerName());
             } else {
-                strcpy(dNm_c->field_0x2ad0, "");
+                dNm_c->setNextNameStr("");
             }
             dNm_c->initial();
             mMainProc = 6;
@@ -807,18 +810,17 @@ void dScnName_c::NameOpenWait() {}
 
 /* 80231F48-80231FF4       .text NameInMain__10dScnName_cFv */
 void dScnName_c::NameInMain() {
-    /* Nonmatching */
     dNm_c->_move();
-    if (dNm_c->field_0x290b == 1) {
+    if (dNm_c->isInputEnd() == 1) {
         if (!field_0x1bb9) {
-            g_dComIfG_gameInfo.save.init();
-            g_dComIfG_gameInfo.play.itemInit();
+            dComIfGs_init();
+            dComIfGp_itemDataInit();
         }
 
-        dComIfGs_setPlayerName(dNm_c->field_0x2a5c);
+        dComIfGs_setPlayerName(dNm_c->getInputStrPtr());
         field_0x55f = 1;
         mMainProc = 9;
-    } else if (dNm_c->field_0x290b == 2) {
+    } else if (dNm_c->isInputEnd() == 2) {
         field_0x1bb6 = 3;
         mMainProc = 8;
     }
@@ -836,7 +838,7 @@ void dScnName_c::NameInClose() {
 
 /* 80232050-80232074       .text NameInDraw__10dScnName_cFv */
 void dScnName_c::NameInDraw() {
-    dNm_c->_draw();
+    dNm_c->draw();
 }
 
 /* 80232074-802320C0       .text ShopDemoDataLoad__10dScnName_cFv */
@@ -863,7 +865,7 @@ void dScnName_c::SaveOpen() {
     }
     if (dMs_c->_open() == 1) {
         field_0x1bb6 = 1;
-        dFs_c->field_0x3936 = field_0x1bb6;
+        dFs_c->setIconMode(field_0x1bb6);
         mMainProc = 11;
     }
 }
@@ -918,28 +920,28 @@ void dScnName_c::changeGameScene() {
 }
 
 /* 80232338-80232358       .text dScnName_Draw__FP10dScnName_c */
-static s32 dScnName_Draw(dScnName_c* i_this) {
+static BOOL dScnName_Draw(dScnName_c* i_this) {
     return i_this->draw();
 }
 
 /* 80232358-80232378       .text dScnName_Execute__FP10dScnName_c */
-static s32 dScnName_Execute(dScnName_c* i_this) {
+static BOOL dScnName_Execute(dScnName_c* i_this) {
     return i_this->execute();
 }
 
 /* 80232378-80232380       .text dScnName_IsDelete__FP10dScnName_c */
-static s32 dScnName_IsDelete(dScnName_c*) {
-    return 1;
+static BOOL dScnName_IsDelete(dScnName_c*) {
+    return TRUE;
 }
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
-static s32 dScnName_Delete(dScnName_c* i_this) {
+static BOOL dScnName_Delete(dScnName_c* i_this) {
     i_this->~dScnName_c();
-    return 1;
+    return TRUE;
 }
 
 /* 802323A8-802323F8       .text dScnName_Create__FP11scene_class */
-static s32 dScnName_Create(scene_class* i_scn) {
+static cPhs_State dScnName_Create(scene_class* i_scn) {
     dScnName_c* i_this = new (i_scn) dScnName_c();
     return i_this->create();
 }
@@ -956,7 +958,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     Mtx44 mtx;
     view_port_class* viewport = dComIfGp_getCurrentViewport();
     f32 aspect = viewport->mWidth / viewport->mHeight;
-    C_MTXPerspective(mtx, 30.0f, aspect * g_HIO.field_0x0c, 1.0f, 100000.0f);
+    C_MTXPerspective(mtx, 30.0f, aspect * fapGmHIO_getAspectRatio(), 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
     cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();
@@ -971,29 +973,27 @@ scene_method_class l_dScnName_Method = {
 };
 
 scene_process_profile_definition g_profile_NAME_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAME_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NAME_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
 };
 
 scene_process_profile_definition g_profile_NAMEEX_SCENE = {
-    fpcLy_ROOT_e,
-    1,
-    fpcPi_CURRENT_e,
-    PROC_NAMEEX_SCENE,
-    &g_fpcNd_Method.base,
-    sizeof(dScnName_c),
-    0,
-    0,
-    &g_fopScn_Method.base,
-    &l_dScnName_Method,
-    NULL,
+    /* LayerID      */ fpcLy_ROOT_e,
+    /* ListID       */ 1,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_NAMEEX_SCENE,
+    /* Proc SubMtd  */ &g_fpcNd_Method.base,
+    /* Size         */ sizeof(dScnName_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Node SubMtd  */ &g_fopScn_Method.base,
+    /* Scene SubMtd */ &l_dScnName_Method,
 };

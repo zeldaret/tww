@@ -7,12 +7,12 @@
 
 class daYgcwp_c : public fopAc_ac_c {
 public:
-    BOOL check_ev() const; // weak but not inlined?
-    void off_ev() const; // weak but not inlined?
+    inline BOOL check_ev() const; // weak but not inlined
+    inline void off_ev() const; // weak but not inlined
 
     static BOOL solidHeapCB(fopAc_ac_c*);
     BOOL create_heap();
-    s32 _create();
+    cPhs_State _create();
     bool _delete();
     void init_mtx();
     void make_shine();

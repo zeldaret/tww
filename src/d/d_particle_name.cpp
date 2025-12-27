@@ -3,23 +3,55 @@
 // Translation Unit: d_particle_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_particle_name.h"
 
 namespace dPa_name {
     u16 j_o_id[] = {
-        0x0000, 0x0001, 0x0002, 0x0003,
-        0x03DA, 0x03DB, 0x03DC, 0x4004,
+        dPa_name::ID_NONE,
+        dPa_name::ID_COMMON_0001,
+        dPa_name::ID_COMMON_0002,
+        dPa_name::ID_COMMON_0003,
+        dPa_name::ID_COMMON_03DA,
+        dPa_name::ID_COMMON_03DB,
+        dPa_name::ID_COMMON_03DC,
+        dPa_name::ID_COMMON_4004,
     };
 
     u16 s_o_id[] = {
-        0x8058, 0x8059, 0x805A, 0x805B,
-        0x805C, 0x8221, 0x8222, 0x8060,
-        0x8061, 0x8062, 0x8063, 0x8064,
-        0x8065, 0x8066, 0x8067, 0x8068,
-        0x8069, 0x81D5, 0x8240, 0x8241,
-        0x8306, 0x8407, 0x8408, 0x8409,
-        0x8443, 0x840A, 0x840B, 0x840C,
-        0x840D, 0x840E, 0x840F, 0xA410,
-        0xA06A, 0xC06B,
+        dPa_name::ID_SCENE_8058,
+        dPa_name::ID_SCENE_8059,
+        dPa_name::ID_SCENE_805A,
+        dPa_name::ID_SCENE_805B,
+        dPa_name::ID_SCENE_805C,
+        dPa_name::ID_SCENE_8221,
+        dPa_name::ID_SCENE_8222,
+        dPa_name::ID_SCENE_8060,
+        dPa_name::ID_SCENE_8061,
+        dPa_name::ID_SCENE_8062,
+        dPa_name::ID_SCENE_8063,
+        dPa_name::ID_SCENE_8064,
+        dPa_name::ID_SCENE_8065,
+        dPa_name::ID_SCENE_8066,
+        dPa_name::ID_SCENE_8067,
+        dPa_name::ID_SCENE_8068,
+        dPa_name::ID_SCENE_8069,
+        dPa_name::ID_SCENE_81D5,
+        dPa_name::ID_SCENE_8240,
+        dPa_name::ID_SCENE_8241,
+        dPa_name::ID_SCENE_8306,
+        dPa_name::ID_SCENE_8407,
+        dPa_name::ID_SCENE_8408,
+        dPa_name::ID_SCENE_8409,
+        dPa_name::ID_SCENE_8443,
+        dPa_name::ID_SCENE_840A,
+        dPa_name::ID_SCENE_840B,
+        dPa_name::ID_SCENE_840C,
+        dPa_name::ID_SCENE_840D,
+        dPa_name::ID_SCENE_840E,
+        dPa_name::ID_SCENE_840F,
+        dPa_name::ID_SCENE_A410,
+        dPa_name::ID_SCENE_A06A,
+        dPa_name::ID_SCENE_C06B,
     };
 }

@@ -1,7 +1,7 @@
 #ifndef RES_DEMO10_H
 #define RES_DEMO10_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DEMO10_RES_FILE_ID {
     /* BDLM */

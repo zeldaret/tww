@@ -1,7 +1,7 @@
 #ifndef RES_TRND_H
 #define RES_TRND_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum TRND_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */
