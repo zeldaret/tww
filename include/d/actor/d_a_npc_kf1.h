@@ -62,13 +62,13 @@ public:
     void cut_init_BENSYOU(int);
     bool cut_move_BENSYOU();
     void cut_init_GET_OUT(int);
-    void cut_move_GET_OUT();
+    bool cut_move_GET_OUT();
     void cut_init_DSP_RUPEE_CNT(int);
     bool cut_move_DSP_RUPEE_CNT();
     void cut_init_PLYER_TRN(int);
     bool cut_move_PLYER_TRN();
     void cut_init_RUPEE_CNT_END(int);
-    void cut_move_RUPEE_CNT_END();
+    BOOL cut_move_RUPEE_CNT_END();
     void cut_init_START_AGE(int);
     void cut_move_START_AGE();
     void cut_init_PLYER_MOV(int);
