@@ -123,6 +123,10 @@ public:
 
 class MyPicture : public J2DPicture {
 public:
+    MyPicture(J2DPane* pParent, JSURandomInputStream* pStream) : J2DPicture(pParent, pStream) {
+        m134 = 0;
+    }
+
     virtual ~MyPicture() {}
     virtual void drawSelf(f32, f32);
     virtual void drawSelf(f32, f32, Mtx*);
