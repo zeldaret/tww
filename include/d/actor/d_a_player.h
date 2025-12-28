@@ -460,6 +460,7 @@ public:
     cXyz getRopePos() const { return mRopePos; }
     void getYPos() const {}
     
+    void changeDemoType(u32 mode) { mDemo.setDemoType(mode); }
     void changeDemoMode(u32 mode) { mDemo.setDemoMode(mode); }
     void changeDemoMoveAngle(s16 angle) { mDemo.setMoveAngle(angle); }
     void changeDemoParam0(int param0) { mDemo.setParam0(param0); }
