@@ -135,7 +135,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4944 = 7;
     mScopeType = 0;
     mOperateWind = 0;
-    field_0x4947 = 0;
+    mMetronome = false;
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
@@ -660,7 +660,7 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 
         i_lastMode |= link->checkTinkleShield() << 0x10;
 
-        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_UNK8000)) {
+        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_SOUP_POWER_UP)) {
             i_lastMode |= 0x4000;
         }
     }

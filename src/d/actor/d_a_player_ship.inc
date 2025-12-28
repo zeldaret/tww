@@ -655,7 +655,7 @@ BOOL daPy_lk_c::procShipPaddle() {
             dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
         }
     } else {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             setSubjectMode();
         }

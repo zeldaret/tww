@@ -750,9 +750,9 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
     } else if ((dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) && (dComIfGp_getAStatus() == dActStts_RETURN_e)) {
         i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
     } else if ((dComIfGp_event_runCheck()) && (dMenu_getMenuStatus() != 4)) {
-        if (((dComIfGp_demo_mode() != 1) && (dComIfGp_getMesgStatus() != 0)) && (g_dComIfG_gameInfo.play.field_0x4947 == 0)) {
+        if (((dComIfGp_demo_mode() != 1) && (dComIfGp_getMesgStatus() != 0)) && !dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100_e;
-        } else if ((dComIfGp_demo_mode() != 1) && (g_dComIfG_gameInfo.play.field_0x4947 != 0)) {
+        } else if ((dComIfGp_demo_mode() != 1) && dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
             dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
         } else {
@@ -1450,7 +1450,7 @@ void dMeter_heartColor(sub_meter_class* i_Meter) {
     JUtility::TColor white(0xFF, 0xFF, 0xFF, 0xFF);
     JUtility::TColor black(0x00, 0x00, 0x00, 0x00);
 
-    if ((daPy_getPlayerActorClass()->checkNoResetFlg1(daPy_lk_c::daPyFlg1_UNK8000)) && (dComIfGp_getMiniGameType() != 6)) {
+    if ((daPy_getPlayerActorClass()->checkSoupPowerUp()) && (dComIfGp_getMiniGameType() != 6)) {
         JUtility::TColor white2 = -1;
         JUtility::TColor black2 = -1;
         if (i_Meter->mHeartShadow[0].mUserArea == 0) {
@@ -4638,7 +4638,7 @@ void dMeter_windMove(sub_meter_class* i_Meter) {
 
 /* 801FBD7C-801FBF24       .text dMeter_metronomeMove__FP15sub_meter_class */
 void dMeter_metronomeMove(sub_meter_class* i_Meter) {
-    if ((((g_dComIfG_gameInfo.play.field_0x4947 != 0) && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e))) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))) &&
+    if (((dComIfGp_getMetronome() && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e))) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))) &&
         ((!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))))
     {
         if ((i_Meter->field_0x3028 == 0) && (dMn_c == NULL)) {
@@ -7090,7 +7090,7 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
         }
         dComIfGd_set2DOpaTop(&meter2);
         dMeter_moveItemDraw(i_Meter);
-        if ((i_Meter->field_0x3028 == 1) && (g_dComIfG_gameInfo.play.field_0x4947 != 0) && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) &&
+        if ((i_Meter->field_0x3028 == 1) && dComIfGp_getMetronome() && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) &&
             (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e)))
         {
             dComIfGd_set2DOpa(dMn_c);
@@ -7430,7 +7430,6 @@ void mapCtrlDisp_c::initMapCtrlDisp() {
 /* 80205A44-80205D24       .text moveMapCtrlDisp__13mapCtrlDisp_cFv */
 void mapCtrlDisp_c::moveMapCtrlDisp() {
     f32 fVar1;
-    bool bVar5;
     s8 uVar6;
     f32 dVar7;
 
@@ -7468,11 +7467,8 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
     }
     if (dComIfGp_checkCameraAttentionStatus(0, 0x400)) {
         daPy_py_c* player = daPy_getPlayerActorClass();
-        bVar5 = false;
-        if ((player->checkResetFlg0(daPy_py_c::daPyRFlg0_UNK4000000)) && (dComIfGp_event_getMode() == dEvtMode_NONE_e)) {
-            bVar5 = true;
-        }
-        if (bVar5) {
+        BOOL temp = player->checkSubjectAccept() && !dComIfGp_event_runCheck();
+        if (temp) {
             dMap_c::mIconSelfAlpha = 0xcc;
             dMap_c::mIconDispMode = 2;
         }
