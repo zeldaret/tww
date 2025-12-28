@@ -27,7 +27,7 @@ public:
     void setMtx(bool);
     s32 bckResID(int);
     s32 btpResID(int);
-    BOOL setBtp(signed char, bool);
+    bool setBtp(signed char, bool);
     BOOL init_texPttrnAnm(signed char, bool);
     void play_btp_anm();
     void setAnm_anm(anm_prm_c*);
@@ -134,7 +134,9 @@ public:
     u8 m77A[0x77C - 0x77A];
     s32 field_0x77C;
     /* 0x780 */ s16 field_0x780[4];
-    u8 m788[0x794 - 0x788];
+    u8 m788[0x78C - 0x788];
+    s16 field_0x78C;
+    u8 m78E[0x794 - 0x78E];
     /* 0x794 */ s16 field_0x794;
     u8 m796[0x79a - 0x796];
     s16 field_0x79A;
@@ -151,9 +153,11 @@ public:
     /* 0x7AD */ bool field_0x7AD;
     u8 m7ae[0x7bc - 0x7ae];
     fpc_ProcID field_0x7BC[12];
+
     /* 0x7EC */ s16 field_0x7EC;
-    s16 field_0x7EE;
-    u16 field_0x7F0;
+    // tenth of rupee cost
+    /* 0x7EE */ s16 field_0x7EE;
+    /* 0x7FF */ u16 field_0x7F0;
     /* 0x7F2 */ u8 field_0x7F2;
     /* 0x7F3 */ u8 field_0x7F3;
     /* 0x7F4 */ u8 field_0x7F4;

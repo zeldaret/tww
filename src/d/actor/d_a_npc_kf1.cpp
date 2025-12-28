@@ -17,6 +17,7 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_actor_mng.h"
 
 #include "d/actor/d_a_tsubo.h"
@@ -261,7 +262,7 @@ s32 daNpc_Kf1_c::btpResID(int idx) {
 }
 
 /* 00000A48-00000B4C       .text setBtp__11daNpc_Kf1_cFScb */
-BOOL daNpc_Kf1_c::setBtp(signed char btpId, bool i_modify) {
+bool daNpc_Kf1_c::setBtp(signed char btpId, bool i_modify) {
     /* Nonmatching */
     J3DModel* model = mpMorf->getModel();
     if (btpId < 0) {
@@ -273,7 +274,7 @@ BOOL daNpc_Kf1_c::setBtp(signed char btpId, bool i_modify) {
     field_0x7F5 = btpId;
     field_0x6F0 = 0;
     field_0x6F2 = 0;
-    return mBtpAnm.init(model->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_modify, FALSE);
+    return 0 != mBtpAnm.init(model->getModelData(), a_btp, TRUE, 0, 1.0f, 0, -1, i_modify, FALSE);
 }
 
 /* 00000B4C-00000B6C       .text init_texPttrnAnm__11daNpc_Kf1_cFScb */
@@ -591,8 +592,8 @@ BOOL daNpc_Kf1_c::chk_talk() {
 fopAc_ac_c *daNpc_Kf1_c::searchByID(fpc_ProcID i_procId, int* o_par1) {
     fopAc_ac_c *ret = NULL;
     *o_par1 = 0;
-    s32 id = fopAcM_SearchByID(i_procId, &ret);
-    if (id == 0) {
+    BOOL found = fopAcM_SearchByID(i_procId, &ret);
+    if (found == FALSE) {
         *o_par1 = 1;
     }
     return ret;
@@ -830,7 +831,6 @@ void daNpc_Kf1_c::cut_init_ANGRY_START(int staffIdx) {
 /* 00001E04-00001E0C       .text cut_move_ANGRY_START__11daNpc_Kf1_cFv */
 bool daNpc_Kf1_c::cut_move_ANGRY_START() {
     return 1;
-    /* Nonmatching */
 }
 
 /* 00001E0C-00001E5C       .text cut_init_BENSYOU_START__11daNpc_Kf1_cFi */
@@ -843,7 +843,6 @@ void daNpc_Kf1_c::cut_init_BENSYOU_START(int staffIdx) {
 /* 00001E5C-00001E64       .text cut_move_BENSYOU_START__11daNpc_Kf1_cFv */
 bool daNpc_Kf1_c::cut_move_BENSYOU_START() {
     return 1;
-    /* Nonmatching */
 }
 
 /* 00001E64-00001EB4       .text cut_init_TSUBO_CNT__11daNpc_Kf1_cFi */
@@ -867,7 +866,9 @@ bool daNpc_Kf1_c::cut_move_TSUBO_CNT() {
 
 /* 00001EBC-00001EE8       .text cut_init_BENSYOU__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_BENSYOU(int) {
-    /* Nonmatching */
+    this->field_0x7F0 = dComIfGs_getRupee();
+
+    dComIfGp_setItemRupeeCount(-(this->field_0x7EE * 10));
 }
 
 /* 00001EE8-00001EF0       .text cut_move_BENSYOU__11daNpc_Kf1_cFv */
@@ -877,8 +878,31 @@ bool daNpc_Kf1_c::cut_move_BENSYOU() {
 }
 
 /* 00001EF0-00001FE4       .text cut_init_GET_OUT__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_GET_OUT(int) {
+void daNpc_Kf1_c::cut_init_GET_OUT(int staffIdx) {
     /* Nonmatching */
+    int* ev = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+    this->field_0x78C = 0;
+    if (ev != NULL) {
+        this->field_0x78C = *ev;
+    }
+
+    ((daPy_py_c*)dComIfGp_getPlayer(0))->changeDemoMoveAngle(0);
+    // daPy_lk_c* player = (daPy_lk_c*)dComIfGp_getLinkPlayer();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+
+    player->changeDemoType(3);
+    player->changeDemoParam0(0);
+    if (!(this->field_0x7F0 < this->field_0x7EE * 10)) {
+        cXyz angle(0.0f, 0.0f, 999.0f);
+        
+        cLib_targetAngleY(&daPy_getPlayerActorClass()->current.pos, &angle);
+        ((daPy_py_c*)dComIfGp_getPlayer(0))->changeDemoMode(daPy_demo_c::DEMO_N_DASH_e );
+    }
+    else {
+
+        ((daPy_py_c*)dComIfGp_getPlayer(0))->changeDemoParam0(1);
+        ((daPy_py_c*)dComIfGp_getPlayer(0))->changeDemoMode(daPy_demo_c::DEMO_LDAM_e );
+    }
 }
 
 /* 00001FE4-00002044       .text cut_move_GET_OUT__11daNpc_Kf1_cFv */
@@ -1023,6 +1047,24 @@ void daNpc_Kf1_c::setStt(signed char stt) {
             break;
     }
     setAnm();
+    /* Nonmatching */
+}
+
+void daNpc_Kf1_c::set_pthPoint(unsigned char) {
+    /* Nonmatching */
+}
+
+/* .text:0x2F44 | 0x3030 | size: 0x78 */
+s16 daNpc_Kf1_c::chk_tsubo() {
+    int id;
+    s16 count = 0;
+    for (int i = 0; i < 8; ++i) {
+        searchByID(this->field_0x7BC[i], &id);
+        if (id == 0) {
+            count++;
+        }
+    }
+    return count;
     /* Nonmatching */
 }
 
