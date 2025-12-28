@@ -18,14 +18,24 @@ BOOL daObjGnntakie_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakie_cFv */
 BOOL daObjGnntakie_c::create_heap() {
+#if VERSION == VERSION_DEMO
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
+    BOOL ret = FALSE;
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E);
+#else
     BOOL ret = FALSE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
-
+#endif
     JUT_ASSERT(0x5A, mdl_data != NULL);
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel != NULL) {
+#if VERSION == VERSION_DEMO
+            btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E);
+#else
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E));
+#endif
             JUT_ASSERT(0x61, btk_data != NULL);
             if (btk_data != NULL) {
                 if (mpBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
@@ -56,7 +66,11 @@ cPhs_State daObjGnntakie_c::_create() {
 
 /* 000003A4-000003D4       .text _delete__15daObjGnntakie_cFv */
 bool daObjGnntakie_c::_delete() {
+#if VERSION == VERSION_DEMO
+    dComIfG_deleteObjectRes(M_arcname);
+#else
     dComIfG_resDelete(&mPhase, M_arcname);
+#endif
     return true;
 }
 
