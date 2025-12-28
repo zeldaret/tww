@@ -3,6 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_npc.h"
+#include "f_pc/f_pc_base.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Kf1_c : public fopNpc_npc_c {
@@ -49,29 +50,29 @@ public:
     void create_rupee(cXyz, int);
     void ready_kutaniCamera(int, int);
     void lookBack();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     bool decideType(int);
     void cut_init_ANGRY_START(int);
-    void cut_move_ANGRY_START();
+    bool cut_move_ANGRY_START();
     void cut_init_BENSYOU_START(int);
-    void cut_move_BENSYOU_START();
+    bool cut_move_BENSYOU_START();
     void cut_init_TSUBO_CNT(int);
-    void cut_move_TSUBO_CNT();
+    bool cut_move_TSUBO_CNT();
     void cut_init_BENSYOU(int);
-    void cut_move_BENSYOU();
+    bool cut_move_BENSYOU();
     void cut_init_GET_OUT(int);
     void cut_move_GET_OUT();
     void cut_init_DSP_RUPEE_CNT(int);
-    void cut_move_DSP_RUPEE_CNT();
+    bool cut_move_DSP_RUPEE_CNT();
     void cut_init_PLYER_TRN(int);
-    void cut_move_PLYER_TRN();
+    bool cut_move_PLYER_TRN();
     void cut_init_RUPEE_CNT_END(int);
     void cut_move_RUPEE_CNT_END();
     void cut_init_START_AGE(int);
     void cut_move_START_AGE();
     void cut_init_PLYER_MOV(int);
-    void cut_move_PLYER_MOV();
+    bool cut_move_PLYER_MOV();
     void cut_init_RUPEE_SET(int);
     void cut_move_RUPEE_SET();
     void cut_init_TSUBO_ATN(int);
@@ -86,7 +87,7 @@ public:
     void set_action(int (daNpc_Kf1_c::*)(void*), void*);
     void setStt(signed char);
     void set_pthPoint(unsigned char);
-    void chk_tsubo();
+    s16 chk_tsubo();
     void orderTsuboEvent();
     void wait_1();
     void walk_1();
@@ -108,43 +109,52 @@ public:
     /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ s8 m_nck_jnt_num;
     /* 0x6D0 */ J3DModel* mModel;
-    /* 0x6D4 */ const char field_0x6d4[4];
+    /* 0x6D4 */ char field_0x6d4[4];
     s32 pad;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 field_0x6F0;
     /* 0x6F2 */ s16 field_0x6F2;
-    /* 0x6F3 */ u8 m6D5[0x700 - 0x6F4];
+    /* 0x6F3 */ u8 m6D5[12];
     u32 field_0x700;
-    /* 0x6F3 */ u8 m704[0x708 - 0x704];
+    /* 0x704 */ fpc_ProcID field_0x704;
     /* 0x708 */ dNpc_PathRun_c pathRun;
     /* 0x710 */ u8 m710[0x722 - 0x710];
     /* 0x722 */ csXyz mAngle;
     u8 m728[0x730 - 0x728];
     /* 0x730 */ cXyz head_anm_vec;
-    u8 m73C[0x754 - 0x73C];
+    /* 0x73C */ cXyz field_0x73C;
+    u8 m73C[0x754 - 0x748];
     /* 0x754 */ cXyz mMtx;
     u8 m760[0x76C - 0x760];
     /* 0x76C */ f32 mAnimTimer;
-    u8 m770[0x780 - 0x770];
+    u8 m770[0x774 - 0x770];
+    s16 field_0x774;
+    s16 field_0x776;
+    s16 field_0x778;
+    u8 m77A[0x77C - 0x77A];
+    s32 field_0x77C;
     /* 0x780 */ s16 field_0x780[4];
     u8 m788[0x794 - 0x788];
     /* 0x794 */ s16 field_0x794;
-    u8 m796[0x79c - 0x796];
+    u8 m796[0x79a - 0x796];
+    s16 field_0x79A;
     s8 field_0x79C;
     u8 field_0x79D;
     u8 field_0x79E;
     /* 0x79F */ u8 field_0x79F;
     /* 0x7A0 */ u8 field_0x7A0;
     /* 0x7A0 */ u8 field_0x7A1;
-    u8 m7a2[0x7a6 - 0x7a2];
+    u8 m7a2[0x7a6 - 0x7a4];
     /* 0x7A6 */ bool field_0x7A6;
     u8 m7a7[0x7ac - 0x7a7];
     /* 0x7AC */ u8 field_0x7AC;
-    u8 m7ad[0x7bc - 0x7ad];
-    u32 field_0x7BC[12];
+    /* 0x7AD */ bool field_0x7AD;
+    u8 m7ae[0x7bc - 0x7ae];
+    fpc_ProcID field_0x7BC[12];
     /* 0x7EC */ s16 field_0x7EC;
     s16 field_0x7EE;
-    u32 field_0x7F0;
+    u16 field_0x7F0;
+    /* 0x7F2 */ u8 field_0x7F2;
     /* 0x7F3 */ u8 field_0x7F3;
     /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ s8 field_0x7F5;
@@ -152,9 +162,10 @@ public:
     /* 0x7F7 */ s8 field_0x7F7;
     /* 0x7F8 */ s8 field_0x7F8;
     /* 0x7F9 */ u8 field_0x7F9;
-    /* 0x7FA */ u8 m7f8[0x7fb - 0x7fA];
-    /* 0x7FB */ u8 field_0x7FB;
-    /* 0x7FC */ u8 field_0x7FC;
+    // some kind of state variable?
+    /* 0x7FA */ s8 field_0x7FA;
+    /* 0x7FB */ s8 field_0x7FB;
+    /* 0x7FC */ s8 field_0x7FC;
     /* 0x7FD */ u8 field_0x7FD;
     /* 0x7FE */ s8 field_0x7FE;
 };
@@ -165,8 +176,14 @@ public:
     virtual ~daNpc_Kf1_HIO_c() {}
 
 public:
-    s8 a;
-    s32 b;
+    /* 0x00 */ s8 a;
+    /* 0x04 */ s32 b;
+    /* 0x0C */ f32 yoffset;
+    /* 0x10 */ u32 _1;
+    /* 0x14 */ u32 _2;
+    /* 0x18 */ u32 _3;
+    /* 0x1C */ u16 _4;
+    /* 0x1E */ s16 field_0x1e;
     u8 data[0x30];
     /* Place member variables here */
 };
