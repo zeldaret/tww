@@ -212,7 +212,7 @@ public:
     // TODO
     void ChkGroundAway() {}
     void DrawWall(dBgS&) {}
-    void SetOld() {}
+    void SetOld() { GetOldPos()->set(*GetPos()); }
 
 public:
     /* 0x028 */ u32 m_flags;
