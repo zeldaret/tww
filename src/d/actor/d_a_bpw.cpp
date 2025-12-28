@@ -3794,7 +3794,7 @@ void torituki_execute(bpw_class* i_this) {
         actor->scale.z = fVar1;
         actor->scale.y = fVar1;
         if (!(actor->scale.x < 0.3f)) {
-            anm_init(i_this, 0x29, 15.0f, 2, 1.0f, -1);
+            anm_init(i_this, BPW_BCK_TORITUKI1, 15.0f, 2, 1.0f, -1);
             i_this->mSomeCountdownTimers[8] = 0x96;
             actor->scale.setall(0.4f);
             i_this->mActionState++;
