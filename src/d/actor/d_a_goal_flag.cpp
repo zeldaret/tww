@@ -190,7 +190,12 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateHeap() {
-    /* Nonmatching */
+    for (int i = 0; i < field_0x16AC; i++) {
+        if (!field_0x16B0[i].init(1, (field_0x169C[i] << 2) + 1, 0)) {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 /* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
