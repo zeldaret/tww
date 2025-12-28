@@ -594,6 +594,11 @@ void* fopAcM_fastCreateItem(cXyz* p_pos, int i_itemNo, int i_roomNo, csXyz* p_an
 
 void* fopAcM_createStealItem(cXyz* p_pos, int i_tblNo, int i_roomNo, csXyz* p_angle, int i_itemBitNo);
 
+fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo,
+                                    csXyz* angle, cXyz* scale,
+                                    f32 speedF, f32 speedY, f32 gravity,
+                                    u16 i_itemBitNo);
+
 fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo);
 
 fpc_ProcID fopAcM_createDisappear(fopAc_ac_c* i_actor, cXyz* p_pos, u8 i_scale, u8 i_dropType, u8 i_itemBitNo = -1);
