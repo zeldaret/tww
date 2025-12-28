@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_goal_flag.h"
+#include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
@@ -116,10 +117,10 @@ static const char* sub_arcname_tbl[] = {
 };
 static const char arcname[] = "Cloth";
 
-static daGoal_Flag_HIO_c l_HIO;
+static daGFlag_HIO_c l_HIO;
 
-daGoal_Flag_HIO_c::~daGoal_Flag_HIO_c() {
-    field_0x00 = -1;
+daGFlag_HIO_c::~daGFlag_HIO_c() {
+    m04 = -1;
 }
 
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
@@ -148,7 +149,7 @@ void daGFlag_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
-void daGoal_Flag_c::getRacePath(unsigned char) {
+BOOL daGoal_Flag_c::getRacePath(unsigned char) {
     /* Nonmatching */
 }
 
@@ -198,7 +199,7 @@ void daGoal_Flag_c::getDemoAction(int) {
 }
 
 /* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
-void daGoal_Flag_c::RaceStart() {
+BOOL daGoal_Flag_c::RaceStart() {
     /* Nonmatching */
 }
 
@@ -219,8 +220,110 @@ static cPhs_State daGoal_FlagCreate(void* i_this) {
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
-    /* Nonmatching */
+    /* Nonmatching, .data and .rodata offsets */
+    cPhs_State rt;
+    u8 temp;
+    dPath* path_ptr;
+
     fopAcM_SetupActor(this, daGoal_Flag_c);
+
+    u32 prm = fopAcM_GetParam(this) & 0xFF;
+    rt = dComIfG_resLoad(&field_0x1618, "Cloth");
+
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+
+    if (prm == 0 || prm == 0xFF) {
+        temp = 0;
+        rt = dComIfG_resLoad(&field_0x1620, "Gflag");
+        scale.set(1.05f, 1.0f, 1.0f);
+    } else {
+        temp = 1;
+        rt = dComIfG_resLoad(&field_0x1620, "Tgflag");
+        scale.set(0.98f, 1.0f, 1.0f);
+    }
+
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+
+    prm = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+    if (prm != 0xFF) {
+        path_ptr = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
+        if (path_ptr) {
+            BOOL path = getRacePath(path_ptr->m_nextID);
+            if (path != FALSE) {
+                if (fopAcM_entrySolidHeap(this, checkCreateHeap, 0x10000)) {
+                    CreateBuoyRaces();
+                } else {
+                    return cPhs_ERROR_e;
+                }
+            }
+        } else {
+            return cPhs_ERROR_e;
+        }
+    } else {
+        return cPhs_ERROR_e;
+    }
+
+    cXyz* pos_array = field_0x0290.getPos();
+    for (int i = 0; i < 45; i++, pos_array++) {
+        pos_array->set(l_pos[i]);
+    }
+
+    field_0x0290.setTexObj(temp);
+    field_0x0290.setToonTexObj();
+
+    path_ptr = dPath_GetRoomPath((fopAcM_GetParam(this) >> 0x10) & 0xFF, fopAcM_GetRoomNo(this));
+
+    if (path_ptr) {
+        field_0x1658[0].set(path_ptr->m_points[0].m_position);
+        field_0x1658[1].set(path_ptr->m_points[1].m_position);
+    }
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale);
+    MTXCopy(mDoMtx_stack_c::get(), field_0x1628);
+    if (
+        strcmp(dComIfGp_getStartStageName(), "Ocean") == 0 &&
+        dComIfGp_getStartStagePoint() == 1
+    ) {
+        u16 temp2 = l_HIO.m18;
+        u16 reg = (u16)dComIfGs_getEventReg(0xAAFF) * 10;
+        temp2 -= reg;
+        field_0x1674 = fopMsgM_Timer_create(PROC_TIMER, 2, temp2, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
+        
+        u32 temp3 = 0;
+        temp3 |= 0x2000000;
+        field_0x1678 = fopMsgM_create(PROC_MINIGAME_STARTER, NULL, NULL, &temp3, &temp3, NULL);
+
+        dComIfGp_startMiniGame(1);
+        dComIfGp_setMiniGameRupee(0);
+
+        field_0x1720 = &daGoal_Flag_c::RaceStart;     
+        field_0x1688 = 0;
+    }
+
+    cXyz temp5 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
+
+    cXyz temp6 = field_0x1658[1] - field_0x1658[0];
+    temp6.y = 0.0f;
+    temp6 = temp6.normZP();
+
+    cXyz temp7;
+    temp7.x = temp6.z;
+    temp7.y = 0.0f;
+    temp7.z = -temp6.x;
+
+    field_0x1680 = VECDotProduct(&temp7, &temp5);
+    field_0x1684 = 0;
+
+    for (int i = 0; i < 20; i++) {
+        flag_move();
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
