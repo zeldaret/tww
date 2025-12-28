@@ -8,12 +8,119 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+#include "assets/l_txa_dummy_hataTEX.h"
+
+static Vec l_pos[] = {
+    { -1000.0f,    0.0f, 0.0f }, 
+    {  -750.0f,    0.0f, 0.0f }, 
+    {  -500.0f,    0.0f, 0.0f }, 
+    {  -250.0f,    0.0f, 0.0f }, 
+    {     0.0f,    0.0f, 0.0f }, 
+    {   250.0f,    0.0f, 0.0f }, 
+    {   500.0f,    0.0f, 0.0f }, 
+    {   750.0f,    0.0f, 0.0f }, 
+    {  1000.0f,    0.0f, 0.0f }, 
+    { -1000.0f, -100.0f, 0.0f }, 
+    {  -750.0f, -100.0f, 0.0f }, 
+    {  -500.0f, -100.0f, 0.0f }, 
+    {  -250.0f, -100.0f, 0.0f }, 
+    {     0.0f, -100.0f, 0.0f }, 
+    {   250.0f, -100.0f, 0.0f }, 
+    {   500.0f, -100.0f, 0.0f }, 
+    {   750.0f, -100.0f, 0.0f }, 
+    {  1000.0f, -100.0f, 0.0f }, 
+    { -1000.0f, -200.0f, 0.0f }, 
+    {  -750.0f, -200.0f, 0.0f }, 
+    {  -500.0f, -200.0f, 0.0f }, 
+    {  -250.0f, -200.0f, 0.0f }, 
+    {     0.0f, -200.0f, 0.0f }, 
+    {   250.0f, -200.0f, 0.0f }, 
+    {   500.0f, -200.0f, 0.0f }, 
+    {   750.0f, -200.0f, 0.0f }, 
+    {  1000.0f, -200.0f, 0.0f }, 
+    { -1000.0f, -300.0f, 0.0f }, 
+    {  -750.0f, -300.0f, 0.0f }, 
+    {  -500.0f, -300.0f, 0.0f }, 
+    {  -250.0f, -300.0f, 0.0f }, 
+    {     0.0f, -300.0f, 0.0f }, 
+    {   250.0f, -300.0f, 0.0f }, 
+    {   500.0f, -300.0f, 0.0f }, 
+    {   750.0f, -300.0f, 0.0f }, 
+    {  1000.0f, -300.0f, 0.0f }, 
+    { -1000.0f, -400.0f, 0.0f }, 
+    {  -750.0f, -400.0f, 0.0f }, 
+    {  -500.0f, -400.0f, 0.0f }, 
+    {  -250.0f, -400.0f, 0.0f }, 
+    {     0.0f, -400.0f, 0.0f }, 
+    {   250.0f, -400.0f, 0.0f }, 
+    {   500.0f, -400.0f, 0.0f }, 
+    {   750.0f, -400.0f, 0.0f }, 
+    {  1000.0f, -400.0f, 0.0f } 
+};
+
+static cXy l_texCoord[] = {
+    {   1.0f,  0.0f }, 
+    { 0.875f,  0.0f }, 
+    {  0.75f,  0.0f }, 
+    { 0.625f,  0.0f }, 
+    {   0.5f,  0.0f }, 
+    { 0.375f,  0.0f }, 
+    {  0.25f,  0.0f }, 
+    { 0.125f,  0.0f }, 
+    {   0.0f,  0.0f }, 
+    {   1.0f, 0.25f }, 
+    { 0.875f, 0.25f }, 
+    {  0.75f, 0.25f }, 
+    { 0.625f, 0.25f }, 
+    {   0.5f, 0.25f }, 
+    { 0.375f, 0.25f }, 
+    {  0.25f, 0.25f }, 
+    { 0.125f, 0.25f }, 
+    {   0.0f, 0.25f }, 
+    {   1.0f,  0.5f }, 
+    { 0.875f,  0.5f }, 
+    {  0.75f,  0.5f }, 
+    { 0.625f,  0.5f }, 
+    {   0.5f,  0.5f }, 
+    { 0.375f,  0.5f }, 
+    {  0.25f,  0.5f }, 
+    { 0.125f,  0.5f }, 
+    {   0.0f,  0.5f }, 
+    {   1.0f, 0.75f }, 
+    { 0.875f, 0.75f }, 
+    {  0.75f, 0.75f }, 
+    { 0.625f, 0.75f }, 
+    {   0.5f, 0.75f }, 
+    { 0.375f, 0.75f }, 
+    {  0.25f, 0.75f }, 
+    { 0.125f, 0.75f }, 
+    {   0.0f, 0.75f }, 
+    {   1.0f,  1.0f }, 
+    { 0.875f,  1.0f }, 
+    {  0.75f,  1.0f }, 
+    { 0.625f,  1.0f }, 
+    {   0.5f,  1.0f }, 
+    { 0.375f,  1.0f }, 
+    {  0.25f,  1.0f }, 
+    { 0.125f,  1.0f }, 
+    {   0.0f,  1.0f } 
+};
+
+#include "assets/l_goal_flag_DL.h"
+#include "assets/l_goal_flag_matDL.h"
+l_goal_flag_matDL(l_txa_dummy_hataTEX);
+
 static const char* sub_arcname_tbl[] = {
     "Gflag",
     "Tgflag"
 };
 static const char arcname[] = "Cloth";
+
 static daGoal_Flag_HIO_c l_HIO;
+
+daGoal_Flag_HIO_c::~daGoal_Flag_HIO_c() {
+    field_0x00 = -1;
+}
 
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
 void daGFlag_packet_c::setTexObj(unsigned char) {
@@ -76,12 +183,12 @@ void daGoal_Flag_c::get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int) {
 }
 
 /* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
-static BOOL checkCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daGoal_Flag_c*)i_actor)->CreateHeap();
 }
 
 /* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
-void daGoal_Flag_c::CreateHeap() {
+BOOL daGoal_Flag_c::CreateHeap() {
     /* Nonmatching */
 }
 

@@ -5,12 +5,20 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 
+class daGoal_Flag_HIO_c {
+public:
+    inline virtual ~daGoal_Flag_HIO_c();
+public:
+    /* 0x00 */ s8 field_0x00;
+};
+
 class daGFlag_packet_c : public J3DPacket {
 public:
     daGFlag_packet_c() {
         field_0x1384 = false;
         field_0x0010 = 0;
     }
+    virtual ~daGFlag_packet_c() {}
     void changeCurrentPos() {}
     void getDPos() {}
     void getMtx() {}
@@ -53,7 +61,7 @@ public:
     void goal_check();
     void flag_move();
     void get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);
-    void CreateHeap();
+    BOOL CreateHeap();
     void getDemoAction(int);
     void RaceStart();
     void TimerExecute();
@@ -75,14 +83,5 @@ public:
     /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];
     /* 0x1720 */ int (daGoal_Flag_c::*field_0x1720)();
 };  // Size: 0x172C
-
-class daGoal_Flag_HIO_c {
-public:
-    virtual ~daGoal_Flag_HIO_c() {
-        field_0x00 = -1;
-    }
-public:
-    /* 0x00 */ s8 field_0x00;
-};
 
 #endif /* D_A_GOAL_FLAG_H */
