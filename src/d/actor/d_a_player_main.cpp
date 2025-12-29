@@ -1381,7 +1381,7 @@ BOOL daPy_lk_c::checkNoCollisionCorret() {
         mDemo.getDemoType() == 1 ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_OPEN_TREASURE_e ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_030_e ||
-        checkResetFlg0(daPyRFlg0_UNK1000) ||
+        checkResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE) ||
         eventInfo.checkCommandDoor() ||
         mCurProc == daPyProc_VERTICAL_JUMP_e ||
         mCurProc == daPyProc_CRAWL_END_e ||
@@ -1997,7 +1997,7 @@ BOOL daPy_lk_c::draw() {
                 }
                 entryDLSetLight(mpEquipItemModel, checkFreezeState());
                 if (mpSwordModel1 != NULL) {
-                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
                     }
                 }
@@ -4342,7 +4342,7 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
     if ((daPy_getPlayerActorClass() == this && !dComIfGp_event_runCheck()) &&
         !checkGrabWear())
     {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000)) {
             return procSubjectivity_init(0);
         }
@@ -5019,7 +5019,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
     if (!checkNoDamageMode()) {
         dComIfGp_setItemLifeCount(amount);
         if (amount < 0.0f) {
-            offNoResetFlg1(daPyFlg1_UNK8000);
+            offNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
 #if VERSION > VERSION_JPN
             if (!checkFinalMasterSwordEquip())
 #endif
@@ -6437,7 +6437,7 @@ BOOL daPy_lk_c::procCrouchDefense_init() {
 BOOL daPy_lk_c::procCrouchDefense() {
     dComIfGp_setRStatus(dActStts_DEFEND_e);
     if (dCam_getBody()->ChangeModeOK(4) && current.pos.y >= m35D0) {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             return procSubjectivity_init(1);
         }
@@ -6564,7 +6564,7 @@ BOOL daPy_lk_c::procCrouch() {
 
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     if (dCam_getBody()->ChangeModeOK(4) && current.pos.y >= m35D0) {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             return procSubjectivity_init(1);
         }
@@ -9640,7 +9640,7 @@ void daPy_lk_c::setWorldMatrix() {
 /* 8011D070-8011D0E4       .text setAtParam__9daPy_lk_cFUli11dCcG_At_SplUcUcUcf */
 void daPy_lk_c::setAtParam(u32 type, int atp, dCcG_At_Spl spl, u8 se, u8 hitMark, u8 cutType, f32 radius) {
     dCcD_Cps* cps = mAtCps;
-    if (type == AT_TYPE_SWORD && checkNoResetFlg1(daPyFlg1_UNK8000)) {
+    if (type == AT_TYPE_SWORD && checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
         atp *= 2;
     }
     if (type != AT_TYPE_SWORD) {
@@ -9868,7 +9868,7 @@ void daPy_lk_c::setCollision() {
             if (mpCutfBrk != NULL) {
                 if (checkModeFlg(ModeFlg_PARRY)) {
                     mpCutfBrk->setFrame(2.0f);
-                } else if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                } else if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                     mpCutfBrk->setFrame(1.0f);
                 } else {
                     mpCutfBrk->setFrame(0.0f);
@@ -9931,7 +9931,7 @@ void daPy_lk_c::setCollision() {
                         prm0 = &nm_turn_prm0;
                         prm1 = &nm_turn_prm1;
                         env = &nm_turn_env;
-                    } else if (mCurProc == daPyProc_CUT_ROLL_e || checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                    } else if (mCurProc == daPyProc_CUT_ROLL_e || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                         if (checkNormalSwordEquip()) {
                             if (mCurProc == daPyProc_CUT_ROLL_e) {
                                 dVar27 = m_HIO->mCut.mCutRoll.m.field_0x18;
@@ -11531,7 +11531,7 @@ BOOL daPy_lk_c::execute() {
                 }
                 offNoResetFlg0(daPyFlg0_UNK20000);
                 if (checkNoResetFlg0(daPyFlg0_UNK400000)) {
-                    onResetFlg0(daPyRFlg0_UNK200);
+                    onResetFlg0(daPyRFlg0_ROPE_JUMP_LAND);
                 }
                 offNoResetFlg0(daPyFlg0_UNK400000);
                 if (current.pos.y < 2000.0f && dComIfG_Bgsp()->GetSpecialCode(mAcch.m_gnd) != 1) {
@@ -11860,7 +11860,7 @@ BOOL daPy_lk_c::playerDelete() {
     
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
     dComIfGp_clearPlayerStatus1(0, daPyStts1_UNK40000_e);
-    g_dComIfG_gameInfo.play.field_0x4947 = 0;
+    dComIfGp_setMetronomeOff();
     
     cancelNoDamageMode();
     
@@ -12706,7 +12706,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
 
 #if VERSION > VERSION_DEMO
     if ((dComIfGs_getLastSceneMode() & 0x4000) != 0) {
-        onNoResetFlg1(daPyFlg1_UNK8000);
+        onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
     }
 
     l_debug_keep_pos = current.pos;

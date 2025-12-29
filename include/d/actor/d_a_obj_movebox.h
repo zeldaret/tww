@@ -198,8 +198,7 @@ namespace daObjMovebox {
         
         void prmZ_init();
         void prmX_init();
-        const Attr_c* attr() const; // TODO weak?
-        inline const Attr_c* i_attr() const { return &M_attr[mType]; } // TODO weak?
+        inline const Attr_c* attr() const;
         void set_mtx();
         void init_mtx();
         void path_init();

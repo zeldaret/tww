@@ -165,11 +165,11 @@ if args.no_asm:
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20250812"
-config.dtk_tag = "v1.7.1"
-config.objdiff_tag = "v3.4.1"
+config.compilers_tag = "20251118"
+config.dtk_tag = "v1.7.6"
+config.objdiff_tag = "v3.5.1"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0-beta.5"
+config.wibo_tag = "1.0.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -1788,7 +1788,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
     ActorRel(Matching,    "d_a_warpfout"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_warpgn"),
+    ActorRel(Matching,    "d_a_warpgn"),
     ActorRel(NonMatching, "d_a_warpls"),
     ActorRel(NonMatching, "d_a_warpmj"),
     ActorRel(NonMatching, "d_a_waterfall"),

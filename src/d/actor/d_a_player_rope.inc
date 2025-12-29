@@ -29,13 +29,13 @@ void daPy_lk_c::freeRopeItem() {
     if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
         fopAc_ac_c* rope = mActorKeepRope.getActor();
         if (mActorKeepEquip.getActor() != NULL) {
-            onResetFlg0(daPyRFlg0_UNK40000000);
+            onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
         }
         if (rope != NULL) {
             if (fopAcM_GetName(rope) == PROC_HIMO2) {
                 fopAcM_SetParam(rope, 4);
                 mActorKeepRope.clearData();
-                onResetFlg0(daPyRFlg0_UNK40000000);
+                onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
             } else if (fopAcM_GetName(rope) == PROC_HIMO3) {
                 mEquipItem = daPyItem_NONE_e;
                 fopAcM_SetParam(rope, 3);
