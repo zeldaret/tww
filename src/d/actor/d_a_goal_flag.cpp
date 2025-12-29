@@ -165,20 +165,20 @@ void daGoal_Flag_c::RopeMove() {
         0.0f, 150.0f, 225.0f, 150.0f
     };
     for (int i = 0; i < field_0x16AC; i++) {
-        cXyz& temp = getRopePos(i, field_0x169C[i])[0];
-        temp = getRopePos(i, 0)[0];
-        for (u32 j = 0; (s32)j < (s32)(field_0x169C[i] * 4); j++) {
-            s32 temp3 = j & 3;
-            s32 temp4 = (int)j >> 2;
-            if (temp3 != 0) {
-                cXyz& temp7 = getRopePos(i, temp4)[0];
-                cXyz& temp8 = getRopePos(i, temp4 + 1)[0];
-                cXyz& temp6 = getRopePos(i, temp4)[temp3];
+        cXyz* temp = getRopePos(i, field_0x169C[i]);
+        temp->set(*getRopePos(i, 0));
+        for (u32 j = 0; (s32)j < (s32)(field_0x169C[i] << 2); j++) {
+            s32 temp2 = j & 3;
+            s32 temp3 = (int)j >> 2;
+            if (temp2 != 0) {
+                cXyz* temp4 = getRopePos(i, temp3);
+                cXyz* temp5 = getRopePos(i, temp3 + 1);
+                cXyz* temp6 = &getRopePos(i, temp3)[temp2];
                 // looks like a LERP
-                f32 temp9 = (f32)temp3 * 0.25f;
-                f32 temp10 = 1.0f - temp9;
-                temp6 = (temp7 * temp10) + (temp8 * temp9);
-                temp6.y -= down_offset[temp3];
+                f32 temp7 = (f32)temp2 * 0.25f;
+                f32 temp8 = 1.0f - temp7;
+                temp6->set((*temp4 * temp8) + (*temp5 * temp7));
+                temp6->y -= down_offset[temp2];
             }
         }
     }
