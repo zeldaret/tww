@@ -103,7 +103,7 @@ public:
 
     BOOL getRacePath(u8);
     void RopeMove();
-    void CreateBuoyRaces();
+    BOOL CreateBuoyRaces();
     int goal_check();
     void flag_move();
     void get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);

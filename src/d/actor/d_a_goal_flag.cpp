@@ -153,8 +153,8 @@ void daGFlag_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
-BOOL daGoal_Flag_c::getRacePath(u8 param_1) {
-    field_0x168C[0] = dPath_GetRoomPath(param_1, fopAcM_GetRoomNo(this));
+BOOL daGoal_Flag_c::getRacePath(u8 i_pathIdx) {
+    field_0x168C[0] = dPath_GetRoomPath(i_pathIdx, fopAcM_GetRoomNo(this));
 
     if (!field_0x168C[0]) {
         return FALSE;
@@ -163,18 +163,19 @@ BOOL daGoal_Flag_c::getRacePath(u8 param_1) {
     field_0x169C[0] = field_0x168C[0]->m_num;
     u8 next_path_id = field_0x168C[0]->m_nextID;
     int i, j;
-    for (j = i = 1; i < ARRAY_SSIZE(field_0x169C) && next_path_id != 0xFFU; i++, j++) {        
+    for (j = i = 1; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++, j++) {        
         field_0x168C[j] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
         field_0x169C[j] = field_0x168C[j]->m_num;
         next_path_id = field_0x168C[j]->m_nextID;
     }
     field_0x16AC = i;
+    
     return TRUE;
 }
 
 /* 00000F80-000010F4       .text RopeMove__13daGoal_Flag_cFv */
 void daGoal_Flag_c::RopeMove() {
-    /* Nonmatching, .data offsets */
+    /* Apparent match, .data offset issue */
     // TODO: wtf is going on in this method?
     static const f32 down_offset[] = {
         0.0f, 150.0f, 225.0f, 150.0f
@@ -188,25 +189,48 @@ void daGoal_Flag_c::RopeMove() {
             if (temp2 != 0) {
                 cXyz* temp4 = getRopePos(i, temp3);
                 cXyz* temp5 = getRopePos(i, temp3 + 1);
-                cXyz* temp6 = &getRopePos(i, temp3)[temp2];
+                cXyz& temp6 = getRopePos(i, temp3)[temp2];
                 // looks like a LERP
                 f32 temp7 = (f32)temp2 * 0.25f;
                 f32 temp8 = 1.0f - temp7;
-                temp6->set((*temp4 * temp8) + (*temp5 * temp7));
-                temp6->y -= down_offset[temp2];
+                temp6.set((*temp4 * temp8) + (*temp5 * temp7));
+                temp6.y -= down_offset[temp2];
             }
         }
     }
 }
 
 /* 000010F4-0000123C       .text CreateBuoyRaces__13daGoal_Flag_cFv */
-void daGoal_Flag_c::CreateBuoyRaces() {
-    /* Nonmatching */
+BOOL daGoal_Flag_c::CreateBuoyRaces() {
+    /* Apparent match, .rodata offsets */
+    int i;
+    dPnt* points_p;
+    cXyz* segment;
+    for (i = 0; i < field_0x16AC; i++) {
+        points_p = points_p = field_0x168C[i]->m_points;
+        segment = getRopePos(i, 0);
+        for (u32 j = 0; (s32)j < (s32)field_0x169C[i]; j++, points_p++, segment++) {
+            cXyz temp2;
+            temp2.set(
+                points_p->m_position.x,
+                points_p->m_position.y,
+                points_p->m_position.z
+            );
+            fopAcM_createChild(0x10E, fopAcM_GetID(this), j | (i * 0x100), &temp2, fopAcM_GetRoomNo(this), NULL);
+            segment->set(
+                points_p->m_position.x, 
+                points_p->m_position.y + 250.0f, 
+                points_p->m_position.z
+            );
+        }
+        segment->set(*getRopePos(i, 0));
+    }
+    return TRUE;
 }
 
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
 int daGoal_Flag_c::goal_check() {
-    /* Nonmatching, .rodata */
+    /* Apparent match, .rodata issue */
     int o_ret;
     cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
 
@@ -315,7 +339,7 @@ static cPhs_State daGoal_FlagCreate(void* i_this) {
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
-    /* Nonmatching, .data and .rodata offsets */
+    /* Apparent match, .data and .rodata offsets */
     cPhs_State rt;
     u8 temp;
     dPath* path_ptr;
