@@ -278,9 +278,9 @@ struct TVec3<f32> : public Vec {
 template <typename T>
 struct TVec2 {
     TVec2() {}
-    TVec2(T x, T y) { set(x, y); }
+    TVec2(const T x, const T y) { set(x, y); }
 
-    void set(T x, T y) {
+    void set(const T x, const T y) {
         this->x = x;
         this->y = y;
     }
