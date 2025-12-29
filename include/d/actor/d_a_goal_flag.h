@@ -5,6 +5,8 @@
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
 
+class dPath;
+
 class daGFlag_HIO_c {
 public:
     daGFlag_HIO_c() {
@@ -99,7 +101,7 @@ public:
     cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return field_0x16B0[i_matIdx].getPos(0) + (i_segmentIdx * 4); }
     void setAction(ProcFunc i_proc) { field_0x1720 = i_proc; }
 
-    BOOL getRacePath(unsigned char);
+    BOOL getRacePath(u8);
     void RopeMove();
     void CreateBuoyRaces();
     int goal_check();
@@ -125,7 +127,8 @@ public:
     /* 0x1684 */ s16 field_0x1684;
     /* 0x1686 */ u8 field_0x1686[0x1688 - 0x1686];
     /* 0x1688 */ u8 field_0x1688;
-    /* 0x1689 */ u8 field_0x1689[0x169C - 0x1689];
+    /* 0x1689 */ u8 field_0x1689[0x168C - 0x1689];
+    /* 0x168C */ dPath* field_0x168C[4];
     /* 0x169C */ u32 field_0x169C[4];
     /* 0x16AC */ int field_0x16AC;
     /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];

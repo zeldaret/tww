@@ -153,8 +153,23 @@ void daGFlag_packet_c::setNrmVtx(cXyz*, int, int) {
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
-BOOL daGoal_Flag_c::getRacePath(unsigned char) {
-    /* Nonmatching */
+BOOL daGoal_Flag_c::getRacePath(u8 param_1) {
+    field_0x168C[0] = dPath_GetRoomPath(param_1, fopAcM_GetRoomNo(this));
+
+    if (!field_0x168C[0]) {
+        return FALSE;
+    }
+
+    field_0x169C[0] = field_0x168C[0]->m_num;
+    u8 next_path_id = field_0x168C[0]->m_nextID;
+    int i, j;
+    for (j = i = 1; i < ARRAY_SSIZE(field_0x169C) && next_path_id != 0xFFU; i++, j++) {        
+        field_0x168C[j] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
+        field_0x169C[j] = field_0x168C[j]->m_num;
+        next_path_id = field_0x168C[j]->m_nextID;
+    }
+    field_0x16AC = i;
+    return TRUE;
 }
 
 /* 00000F80-000010F4       .text RopeMove__13daGoal_Flag_cFv */
