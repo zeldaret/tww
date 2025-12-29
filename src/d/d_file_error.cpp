@@ -159,6 +159,8 @@ void dFile_error_c::resizeMsgBoard(int param_1) {
 #if VERSION <= VERSION_JPN
 f32 curxp[2] = {230.0f, 348.0f};
 #elif VERSION == VERSION_PAL
+// In the PAL version, `curxp` is initialized depending on the current language,
+// in `dFile_error_c::displayInit`
 f32 curxp[2];
 #else
 f32 curxp[2] = {265.0f, 345.0f};
@@ -177,7 +179,7 @@ void dFile_error_c::setMessage(char* message) {
 
     int in_r9;
 #if VERSION > VERSION_JPN
-    switch(g_dComIfG_gameInfo.play.getPalLanguage()) {
+    switch(dComIfGs_getPalLanguage()) {
         case 0:
         case 2:
             in_r9 = 3;
@@ -670,7 +672,7 @@ void dFile_error_c::paneTransInit() {
 /* 8017F3E0-8017F3FC       .text displayInit__13dFile_error_cFv */
 void dFile_error_c::displayInit() {
 #if VERSION == VERSION_PAL
-    switch(g_dComIfG_gameInfo.play.getPalLanguage()) {
+    switch(dComIfGs_getPalLanguage()) {
         case 0:
             curxp[0] = 265.0f;
             curxp[1] = 345.0f;
