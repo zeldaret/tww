@@ -1736,7 +1736,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_mtest"),
     ActorRel(Matching,    "d_a_obj_nest"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ojtree"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ospbox"),
+    ActorRel(Matching,    "d_a_obj_ospbox"),
     ActorRel(Matching,    "d_a_obj_paper"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbka"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_pfall"),
