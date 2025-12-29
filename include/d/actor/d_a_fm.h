@@ -24,10 +24,10 @@ public:
     void modeProcInit(int newMode) {modeProc(PROC_0_e, newMode);}
 
     void _nodeControl(J3DNode*, J3DModel*);
-    BOOL _createHeap();
-    BOOL holeCreateHeap();
-    BOOL bodyCreateHeap();
-    BOOL jntHitCreateHeap();
+    BOOL  _createHeap();
+    bool holeCreateHeap();
+    bool bodyCreateHeap();
+    bool jntHitCreateHeap();
     BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     fopAc_ac_c* searchNearOtherActor(fopAc_ac_c*);
     bool searchNearFm(fopAc_ac_c*);
@@ -139,7 +139,7 @@ public:
     /* 0x2C5 */ s8 mAnmPrmIdx;
     /* 0x2C6 */ s8 mOldAnmPrmIdx;
     /* 0x2C7 */ u8 field_0x2C7;
-    /* 0x2C8 */ u16 field_0x2C8;
+    /* 0x2C8 */ s16 field_0x2C8;
     /* 0x2CA */ u8 field_0x2CA[0x2CC - 0x2CA];
     /* 0x2CC */ int m_path_no;
     /* 0x2D0 */ int field_0x2D0;
@@ -157,7 +157,8 @@ public:
     /* 0x398 */ cXyz field_0x398;
     /* 0x3A4 */ cXyz field_0x3A4;
     /* 0x3B0 */ cXyz field_0x3B0;
-    /* 0x3BC */ u8 field_0x3BC[0x3C0 - 0x3BC];
+    /* 0x3BC */ s8 field_0x3BC;
+    /* 0x3BD */ u8 field_0x3BD[0x3C0 - 0x3BD];
     /* 0x3C0 */ dPath* mpPath;
     /* 0x3C4 */ u8 field_0x3C4[0x3C8 - 0x3C4];
     /* 0x3C8 */ J3DModel* mpModel;
@@ -165,7 +166,9 @@ public:
     /* 0x3E0 */ f32 field_0x3E0;
     /* 0x3E4 */ cXyz field_0x3E4;
     /* 0x3F0 */ request_of_phase_process_class mPhs;
-    /* 0x3F8 */ u8 field_0x3F8[0x400 - 0x3F8];
+    /* 0x3F8 */ u8 field_0x3F8[0x3FC - 0x3F8];
+    /* 0x3FC */ bool field_0x3FC;
+    /* 0x3FD */ u8 field_0x3FD[0x400 - 0x3FD];
     /* 0x400 */ mDoExt_McaMorf* mpMorf;
     /* 0x404 */ dBgS_Acch mAcch;
     /* 0x5C8 */ dBgS_AcchCir mAcchCir;
@@ -188,7 +191,8 @@ public:
     /* 0x680 */ s16 field_0x680;
     /* 0x682 */ u8 field_0x682[0x684 - 0x682];
     /* 0x684 */ int field_0x684;
-    /* 0x688 */ u8 field_0x688[0x68A - 0x688];
+    /* 0x688 */ bool field_0x688;
+    /* 0x689 */ u8 field_0x689[0x68A - 0x689];
     /* 0x68A */ s16 field_0x68A;
     /* 0x68C */ s16 field_0x68C;
     /* 0x68E */ u8 field_0x68E[0x690 - 0x68E];
