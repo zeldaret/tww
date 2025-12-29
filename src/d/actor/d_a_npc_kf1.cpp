@@ -14,14 +14,18 @@
 #include "d/d_item_data.h"
 #include "d/d_npc.h"
 #include "d/d_procname.h"
+#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx/mtxvec.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_player.h"
-#include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_actor_mng.h"
 
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_priority.h"
+#include "f_pc/f_pc_base.h"
+#include "f_pc/f_pc_manager.h"
+#include "m_Do/m_Do_audio.h"
 #include <string.h>
 
 
@@ -485,9 +489,9 @@ u16 daNpc_Kf1_c::next_msgStatus(unsigned long* param) {
         break;
     case 0x1c33:
         // TODO cryptic add with carry that I don't know how to spell
-        u32 temp_r3_3 = this->field_0x7EE * 0xA;
-        u32 temp_r3_4 = (this->field_0x7F0 - temp_r3_3) + (temp_r3_3 ^ 0x80000000);
-        *param = (temp_r3_4 - temp_r3_4) + 0x1C30;
+        // u32 temp_r3_3 = this->field_0x7EE * 0xA;
+        // u32 temp_r3_4 = (this->field_0x7F0 - temp_r3_3) + (temp_r3_3 ^ 0x80000000);
+        // *param = (temp_r3_4 - temp_r3_4) + 0x1C30;
         // *param = 0x1c30;
         break;
     case 0x1c36:
@@ -937,7 +941,7 @@ void daNpc_Kf1_c::cut_init_RUPEE_CNT_END(int) {
 }
 
 /* 000020B8-000020EC       .text cut_move_RUPEE_CNT_END__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() {
+bool daNpc_Kf1_c::cut_move_RUPEE_CNT_END() {
     if (dComIfGs_getRupee() == dComIfGp_getItemNowRupee()) {
         dComIfGp_event_onHindFlag(0x80);
         return TRUE;
@@ -948,83 +952,436 @@ BOOL daNpc_Kf1_c::cut_move_RUPEE_CNT_END() {
 
 /* 000020EC-00002168       .text cut_init_START_AGE__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_START_AGE(int) {
-    /* Nonmatching */
+    f32 ycoord = this->eyePos.y;
+    this->field_0x73C.x = 0.0;
+    this->field_0x73C.y = ycoord;
+    this->field_0x73C.z = 0.0;
+
+    this->shape_angle.y = cLib_targetAngleY(&this->current.pos, &this->field_0x73C);
+
+    this->field_0x7A8 = 1;
+    this->field_0x7FA = 3;
+    this->field_0x79A = this->shape_angle.y;
+    this->m_jnt.setTrn();
+    this->setAnm_NUM(0, 1);
 }
 
 /* 00002168-00002178       .text cut_move_START_AGE__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::cut_move_START_AGE() {
-    /* Nonmatching */
+bool daNpc_Kf1_c::cut_move_START_AGE() {
+    return !this->m_jnt.trnChk();
 }
 
 /* 00002178-00002284       .text cut_init_PLYER_MOV__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_PLYER_MOV(int) {
+    cXyz dst;
+
+    s16 angle = cLib_targetAngleY(&this->current.pos, &dComIfGp_getPlayer(0)->current.pos) - this->current.angle.y;
+    int angle_abs = abs(angle);
+    if (angle_abs > 0x2000) {
+        dComIfGp_evmng_setGoal(&dComIfGp_getPlayer(0)->current.pos);
+    } else {
+        cXyz vec(0.0, 0.0, 0.0);
+        angle = (angle > 0) ? 0x2800 : -0x2800;
+        // if (angle > 0) {
+        //     angle_offset = 0x2800;
+        // } else {
+        //     angle_offset = -0x2800;
+        // }
+        MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+
+        cMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y + angle);
+        vec.z = 150.0f;
+        PSMTXMultVec(mDoMtx_stack_c::now, &vec, &dst);
+
+        dComIfGp_evmng_setGoal(&dst);
+    }
+
     /* Nonmatching */
 }
 
 /* 00002284-0000228C       .text cut_move_PLYER_MOV__11daNpc_Kf1_cFv */
 bool daNpc_Kf1_c::cut_move_PLYER_MOV() {
-    /* Nonmatching */
     return 1;
 }
 
 /* 0000228C-000023E8       .text cut_init_RUPEE_SET__11daNpc_Kf1_cFi */
 void daNpc_Kf1_c::cut_init_RUPEE_SET(int) {
+    if (this->field_0x7EC == 8) {
+        // NOTE is this really char?
+        // TODO regalloc
+        char l54[8] = {0};
+        for (int i = 0; i < 3; ++i) {
+            int j;
+            do {
+                j = cM_rndF(32.0f) * 0.25f;
+                // l48 = j;
+            } while (l54[j] != 0);
+
+            fopAc_ac_c* a_tsubo_actor = fopAcM_SearchByID(this->field_0x7BC[j]);
+            JUT_ASSERT(0x5c3, NULL != a_tsubo_actor);
+            fpcM_SetParam(a_tsubo_actor, (fpcM_GetParam(a_tsubo_actor) & 0xffffffc0) | 4);
+            dComIfGp_event_setItemPartner(a_tsubo_actor);
+            this->field_0x7BC[i + 8] = this->field_0x7BC[j];
+            l54[j] = 1;
+        }
+    }
+    this->setAnm_NUM(8, 1);
     /* Nonmatching */
 }
 
 /* 000023E8-0000260C       .text cut_move_RUPEE_SET__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::cut_move_RUPEE_SET() {
+bool daNpc_Kf1_c::cut_move_RUPEE_SET() {
     /* Nonmatching */
+    int count = 0;
+    if (this->field_0x79C == 0) {
+
+        if (this->mpMorf->checkFrame(68.0f)) {
+            cXyz vec(0.0f, 40.0f, 40.0f);
+            cXyz dst;
+            s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+            mDoAud_seStart(0x69e9, NULL, 0, reverb);
+
+            MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+
+            cMtx_YrotM(mDoMtx_stack_c::now, this->current.angle.y);
+            PSMTXMultVec(mDoMtx_stack_c::now, &vec, &dst);
+
+            this->create_rupee(dst, 3);
+        } else /* waiting for frame 68 */ {
+            if (this->mpMorf->getFrame() < 68.0f) {
+                for (int i = 0; i < 3; ++i) {
+                    int id;
+                    fopAc_ac_c* actor = this->searchByID(this->field_0x7B0[i], &id);
+                    if (actor != NULL && id == 0) {
+                        this->eyePos = actor->current.pos;
+                    }
+                }
+                this->field_0x77C = 0;
+            }
+        }
+        return FALSE;
+    } else /* this->field_0x79C != 0 */ {
+        int i;
+        for (i = 0; i < 3; ++i) {
+            int id;
+            fopAc_ac_c* actor = this->searchByID(this->field_0x7B0[i], &id);
+            if (actor != NULL) {
+                fopAcM_delete(actor);
+                ++count;
+            } else {
+                if (id != 0) {
+                    ++count;
+                }
+            }
+        }
+        if (i == count) {
+            this->ready_kutaniCamera(0, 1);
+            this->field_0x77C = 1;
+            this->setAnm_NUM(0, 1);
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 }
 
 /* 0000260C-000026B4       .text cut_init_TSUBO_ATN__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_TSUBO_ATN(int) {
-    /* Nonmatching */
+void daNpc_Kf1_c::cut_init_TSUBO_ATN(int staffIdx) {
+    int* timer = dComIfGp_evmng_getMyIntegerP(staffIdx, "Timer");
+    int* count = dComIfGp_evmng_getMyIntegerP(staffIdx, "Count");
+
+    this->field_0x78C = 0;
+    if (timer != NULL) {
+        this->field_0x78C = *timer;
+    }
+    this->field_0x78E = 0;
+    if (count != NULL) {
+        this->field_0x78E = *count;
+    }
 }
 
 /* 000026B4-00002794       .text cut_move_TSUBO_ATN__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::cut_move_TSUBO_ATN() {
+bool daNpc_Kf1_c::cut_move_TSUBO_ATN() {
+    if (!cLib_calcTimer(&this->field_0x78C)) {
+        s16 state = this->field_0x78E;
+        if (state >= 0) {
+            switch (state) {
+            case 0:
+            case 1:
+            case 2:
+                this->ready_kutaniCamera(state, 1);
+                break;
+            case 3:
+                this->ready_kutaniCamera(0, 0);
+                break;
+            }
+        }
+        
+        return true;
+    } else {
+
+        if (this->field_0x78C == 0x14) {
+            s8 reverb = dComIfGp_getReverb(this->current.roomNo);
+            mDoAud_seStart(0x6981, NULL, 0, reverb);
+        }
+        return false;
+    }
+
     /* Nonmatching */
 }
 
 /* 00002794-000028F4       .text cut_init_TLK_MSG__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_TLK_MSG(int) {
+void daNpc_Kf1_c::cut_init_TLK_MSG(int staffIdx) {
+    int* msg_num = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNum");
+    int* end_msg = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsg");
+
+    this->field_0x7F3 = 0xff;
+    this->field_0x7F4 = 0xff;
+    this->field_0x7FE = 0;
+    this->mCurrMsgNo = 0;
+    this->mEndMsgNo = -1;
+    if (msg_num != NULL) {
+        this->mEndMsgNo = *end_msg;
+    }
+    if (end_msg != NULL) {
+        this->mCurrMsgNo = *msg_num;
+        switch (this->mCurrMsgNo) {
+        case 0x1c2e:
+            break;
+        case 0x1c2d:
+            dComIfGp_setMessageCountNumber(this->field_0x7EE * 10);
+            break;
+        default: {
+            /*
+              (this->parent).mCurrMsgID =
+                   0x1c30 - !CARRY4((uint)*(ushort *)&this->field_0x7f0 +
+                                    *(short *)&this->field_0x7ee * -10,
+                                    *(short *)&this->field_0x7ee * 10 ^ 0x80000000);
+            */
+            // TODO carry bit crap 
+            this->mCurrMsgNo = 0x1C30 + (this->field_0x7F0 >= this->field_0x7EE * 10);
+            break;
+        }
+        case 0x1c39: {
+            dComIfGp_getVibration().StartShock(5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
+            break;
+        }
+        }
+    }
+    this->mCurrMsgBsPcId = -1;
     /* Nonmatching */
 }
 
 /* 000028F4-00002954       .text cut_init_CONTNUE_TLK__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::cut_init_CONTNUE_TLK(int) {
-    /* Nonmatching */
+void daNpc_Kf1_c::cut_init_CONTNUE_TLK(int staffIdx) {
+    int* endMsg = dComIfGp_evmng_getMyIntegerP(staffIdx, "EndMsg");
+
+    this->mEndMsgNo = -1;
+    if (endMsg != NULL) {
+        this->mEndMsgNo = *endMsg;
+    }
 }
 
 /* 00002954-000029D8       .text cut_move_TLK_MSG__11daNpc_Kf1_cFv */
-void daNpc_Kf1_c::cut_move_TLK_MSG() {
-    /* Nonmatching */
+bool daNpc_Kf1_c::cut_move_TLK_MSG() {
+    u16 res = this->talk(0);
+    if (res == 0x12) {
+        this->field_0x7F3 = 0xff;
+        this->field_0x7F4 = 0xff;
+        this->field_0x7FE = 0;
+        return true;
+    } else if (res == 2 || res == 6) {
+        return this->mCurrMsgNo == this->mEndMsgNo;
+    } else {
+        return false;
+    }
 }
 
+static char* a_cut_tbl[14] = {
+    "ANGRY_START",
+    "BENSYOU_START",
+    "TSUBO_CNT",
+    "BENSYOU",
+    "GET_OUT",
+    "DSP_RUPEE_CNT",
+    "PLYER_TRN",
+    "RUPEE_CNT_END",
+    "START_AGE",
+    "PLYER_MOV",
+    "RUPEE_SET",
+    "TSUBO_ATN",
+    "TLK_MSG",
+    "CONTINUE_TLK"
+};
+
 /* 000029D8-00002C60       .text privateCut__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::privateCut(int) {
-    /* Nonmatching */
+void daNpc_Kf1_c::privateCut(int staffIdx) {
+    if (staffIdx == -1) return;
+
+    this->field_0x7F2 = dComIfGp_evmng_getMyActIdx(staffIdx, a_cut_tbl, sizeof(a_cut_tbl) / sizeof(char*), TRUE, 0);
+    if (this->field_0x7F2 == -1) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+        return;
+    }
+
+    if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+        switch (this->field_0x7F2) {
+        case 0:
+            this->cut_init_ANGRY_START(staffIdx);
+            break;
+        case 1:
+            this->cut_init_BENSYOU_START(staffIdx);
+            break;
+        case 2:
+            this->cut_init_TSUBO_CNT(staffIdx);
+            break;
+        case 3:
+            this->cut_init_BENSYOU(staffIdx);
+            break;
+        case 4:
+            this->cut_init_GET_OUT(staffIdx);
+            break;
+        case 5:
+            this->cut_init_DSP_RUPEE_CNT(staffIdx);
+            break;
+        case 6:
+            this->cut_init_PLYER_TRN(staffIdx);
+            break;
+        case 7:
+            this->cut_init_RUPEE_CNT_END(staffIdx);
+            break;
+        case 8:
+            this->cut_init_START_AGE(staffIdx);
+            break;
+        case 9:
+            this->cut_init_PLYER_MOV(staffIdx);
+            break;
+        case 10:
+            this->cut_init_RUPEE_SET(staffIdx);
+            break;
+        case 0xb:
+            this->cut_init_TSUBO_ATN(staffIdx);
+            break;
+        case 0xc:
+            this->cut_init_TLK_MSG(staffIdx);
+            break;
+        case 0xd:
+            this->cut_init_CONTNUE_TLK(staffIdx);
+        }
+    }
+    bool res;
+    switch (this->field_0x7F2) {
+    case 0:
+        res = this->cut_move_ANGRY_START();
+        break;
+    case 1:
+        res = this->cut_move_BENSYOU_START();
+        break;
+    case 2:
+        res = this->cut_move_TSUBO_CNT();
+        break;
+    case 3:
+        res = this->cut_move_BENSYOU();
+        break;
+    case 4:
+        res = this->cut_move_GET_OUT();
+        break;
+    case 5:
+        res = this->cut_move_DSP_RUPEE_CNT();
+        break;
+    case 6:
+        res = this->cut_move_PLYER_TRN();
+        break;
+    case 7:
+        res = this->cut_move_RUPEE_CNT_END();
+        break;
+    case 8:
+        res = this->cut_move_START_AGE();
+        break;
+    case 9:
+        res = this->cut_move_PLYER_MOV();
+        break;
+    case 10:
+        res = this->cut_move_RUPEE_SET();
+        break;
+    case 0xb:
+        res = this->cut_move_TSUBO_ATN();
+        break;
+    case 0xc:
+        res = this->cut_move_TLK_MSG();
+        break;
+    case 0xd:
+        res = this->cut_move_TLK_MSG();
+        break;
+    default:
+        res = TRUE;
+        break;
+    } /* Nonmatching */
+
+    if (res) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+    }
 }
 
 /* 00002C60-00002C84       .text endEvent__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::endEvent() {
-    /* Nonmatching */
+    dComIfGp_event_reset();
+    this->field_0x7F3 = 0xff;
+    this->field_0x7F4 = 0xff;
 }
 
 /* 00002C84-00002CBC       .text isEventEntry__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::isEventEntry() {
-    /* Nonmatching */
+    dComIfGp_evmng_getMyStaffId(this->mEventCut.getActorName());
 }
 
 /* 00002CBC-00002E14       .text event_proc__11daNpc_Kf1_cFi */
-void daNpc_Kf1_c::event_proc(int) {
+void daNpc_Kf1_c::event_proc(int staffIdx) {
+    if (dComIfGp_evmng_endCheck(this->field_0x780[this->field_0x780[3]])) {
+        switch (this->field_0x780[3]) {
+        case 0:
+            dComIfGs_onEventBit(0x2780);
+            this->field_0x7EC = this->chk_tsubo();
+            break;
+        case 1: {
+            u8 event_reg = dComIfGs_getEventReg(0xbcff) | 1;
+            dComIfGs_setEventReg(0xbcff, event_reg);
+            this->field_0x7A8 = 0;
+            this->setStt(1);
+            this->setAnm_NUM(0, 1);
+            this->field_0x792 = cLib_getRndValue(30, 60);
+            this->field_0x790 = cLib_getRndValue(15, 30);
+            this->field_0x7A1 = 1;
+            break;
+        }
+        default:
+            break;
+        }
+
+        this->field_0x792 = cLib_getRndValue(30, 60);
+        this->endEvent();
+
+    } else {
+        if (!this->mEventCut.cutProc()) {
+            this->privateCut(staffIdx);
+        }
+    }
     /* Nonmatching */
 }
 
 /* 00002E14-00002EC0       .text set_action__11daNpc_Kf1_cFM11daNpc_Kf1_cFPCvPvPv_iPv */
-void daNpc_Kf1_c::set_action(int (daNpc_Kf1_c::*)(void*), void*) {
-    /* Nonmatching */
+bool daNpc_Kf1_c::set_action(int (daNpc_Kf1_c::*action)(void*), void* param) {
+    if (this->field_0x6F4 != action) {
+        if (this->field_0x6F4) {
+            this->field_0x7FD = 9;
+            (this->*field_0x6F4)(param);
+        }
+        this->field_0x6F4 = action;
+
+        this->field_0x7FD = 0;
+        (this->*field_0x6F4)(param);
+    }
+    return true;
 }
 
 /* 00002EC0-00002F88       .text setStt__11daNpc_Kf1_cFSc */
@@ -1054,8 +1411,17 @@ void daNpc_Kf1_c::setStt(signed char stt) {
     /* Nonmatching */
 }
 
-void daNpc_Kf1_c::set_pthPoint(unsigned char) {
-    /* Nonmatching */
+void daNpc_Kf1_c::set_pthPoint(unsigned char param) {
+    if (this->pathRun.mPath != NULL) {
+        this->pathRun.mCurrPointIndex = param;
+        
+        this->current.pos = this->pathRun.getPoint(this->pathRun.mCurrPointIndex);
+        if (this->pathRun.nextIdx()) {
+            cXyz nextPoint = this->pathRun.getPoint(this->pathRun.mCurrPointIndex);
+            this->current.angle.y = cLib_targetAngleY(&this->current.pos, &nextPoint);
+            
+        }
+    }
 }
 
 /* .text:0x2F44 | 0x3030 | size: 0x78 */
@@ -1074,6 +1440,28 @@ s16 daNpc_Kf1_c::chk_tsubo() {
 
 /* 000037F4-00003884       .text shadowDraw__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::shadowDraw() {
+
+
+    f32 prev_y = this->current.pos.y;
+    cXyz pos(
+        this->current.pos.x,
+        this->current.pos.y + 150.0,
+        this->current.pos.z
+    );
+    
+    this->field_0x6D8 = dComIfGd_setShadow(
+        this->field_0x6D8,
+        1,
+        this->mpMorf->getModel(),
+        &pos,
+        800.0f,
+        40.0f,
+        prev_y,
+        this->mObjAcch.m_ground_h,
+        this->mObjAcch.m_gnd,
+        &this->tevStr
+    );
+
     /* Nonmatching */
 }
 
