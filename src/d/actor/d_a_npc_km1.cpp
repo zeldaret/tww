@@ -298,8 +298,8 @@ void daNpc_Km1_c::setAnm_ATR(int param_1) {
 }
 
 /* 00000B50-00000C0C       .text anmAtr__11daNpc_Km1_cFUs */
-void daNpc_Km1_c::anmAtr(unsigned short param_1) {
-    if(param_1 == 6){
+void daNpc_Km1_c::anmAtr(u16 i_msgStatus) {
+    if(i_msgStatus == fopMsgStts_MSG_TYPING_e){
         if(field_0x7D6 == 0){
             field_0x7CC = 0xFF;
             chngAnmAtr(dComIfGp_getMesgAnimeAttrInfo());
@@ -311,7 +311,7 @@ void daNpc_Km1_c::anmAtr(unsigned short param_1) {
             field_0x7CC = uVar1;
             chngAnmTag();
         }
-    }else if(param_1 == 0xE){
+    }else if(i_msgStatus == fopMsgStts_MSG_DISPLAYED_e){
         field_0x7D6 = 0;
     }
     ctrlAnmAtr();
