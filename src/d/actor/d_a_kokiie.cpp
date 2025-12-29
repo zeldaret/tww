@@ -433,7 +433,7 @@ static cPhs_State daKokiie_Create(fopAc_ac_c* a_this) {
         a_this->scale.y = 1.0f;
 
         fopAcM_SetMtx(a_this, i_this->mpModel->getBaseTRMtx());
-        fopAcM_SetMin(a_this, a_this->scale.x * -1000.0f, DEMO_SELECT(-1000.0f, -1500.0f), a_this->scale.z * -1000.0f);
+        fopAcM_SetMin(a_this, a_this->scale.x * -1000.0f, VERSION_SELECT(-1000.0f, -1000.0f, -1500.0f, -1000.0f), a_this->scale.z * -1000.0f);
         fopAcM_SetMax(a_this, a_this->scale.x * 1000.0f, 1000.0f, a_this->scale.z * 1000.0f);
 
         i_this->mpModel->setBaseScale(a_this->scale);
