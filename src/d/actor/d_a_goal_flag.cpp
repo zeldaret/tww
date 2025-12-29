@@ -126,6 +126,10 @@ daGFlag_HIO_c::~daGFlag_HIO_c() {
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
 void daGFlag_packet_c::setTexObj(unsigned char) {
     /* Nonmatching */
+    static char* arc_name_tbl[] = {
+        "Gflag",
+        "Tgflag"
+    };
 }
 
 /* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
@@ -155,7 +159,29 @@ BOOL daGoal_Flag_c::getRacePath(unsigned char) {
 
 /* 00000F80-000010F4       .text RopeMove__13daGoal_Flag_cFv */
 void daGoal_Flag_c::RopeMove() {
-    /* Nonmatching */
+    /* Nonmatching, .data offsets */
+    // TODO: wtf is going on in this method?
+    static const f32 down_offset[] = {
+        0.0f, 150.0f, 225.0f, 150.0f
+    };
+    for (int i = 0; i < field_0x16AC; i++) {
+        cXyz& temp = getRopePos(i, field_0x169C[i])[0];
+        temp = getRopePos(i, 0)[0];
+        for (u32 j = 0; (s32)j < (s32)(field_0x169C[i] * 4); j++) {
+            s32 temp3 = j & 3;
+            s32 temp4 = (int)j >> 2;
+            if (temp3 != 0) {
+                cXyz& temp7 = getRopePos(i, temp4)[0];
+                cXyz& temp8 = getRopePos(i, temp4 + 1)[0];
+                cXyz& temp6 = getRopePos(i, temp4)[temp3];
+                // looks like a LERP
+                f32 temp9 = (f32)temp3 * 0.25f;
+                f32 temp10 = 1.0f - temp9;
+                temp6 = (temp7 * temp10) + (temp8 * temp9);
+                temp6.y -= down_offset[temp3];
+            }
+        }
+    }
 }
 
 /* 000010F4-0000123C       .text CreateBuoyRaces__13daGoal_Flag_cFv */
@@ -164,8 +190,38 @@ void daGoal_Flag_c::CreateBuoyRaces() {
 }
 
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
-void daGoal_Flag_c::goal_check() {
-    /* Nonmatching */
+int daGoal_Flag_c::goal_check() {
+    /* Nonmatching, .rodata */
+    int o_ret;
+    cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
+
+    cXyz temp2 = field_0x1658[1] - field_0x1658[0];
+    temp2.y = 0.0f;
+    temp2 = temp2.normZP();
+
+    temp1.y = 0.0f;
+
+    f32 mag = (field_0x1658[1] - field_0x1658[0]).absXZ();
+    f32 dot = VECDotProduct(&temp2, &temp1);
+    
+    cXyz temp4;
+    temp4.x = temp2.z;
+    temp4.y = 0.0f;
+    temp4.z = -temp2.x;
+
+    f32 dot2 = VECDotProduct(&temp4, &temp1);
+
+    o_ret = 0;
+    if (dot > 0.0f && dot < mag) {
+        if (field_0x1680 > 0.0f && dot2 <= 0.0f) {
+            o_ret = 1;
+        } else if (field_0x1680 <= 0.0f && dot2 > 0.0f) {
+            o_ret = -1;
+        }
+    }
+
+    field_0x1680 = dot2;
+    return o_ret;
 }
 
 /* 00001450-0000183C       .text flag_move__13daGoal_Flag_cFv */
@@ -199,23 +255,42 @@ BOOL daGoal_Flag_c::CreateHeap() {
 }
 
 /* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
-void daGoal_Flag_c::getDemoAction(int) {
+void daGoal_Flag_c::getDemoAction(int param_1) {
     /* Nonmatching */
+    static char* ActionNames[] = { 
+        "00_dummy",
+        "01_dummy",
+        "02_dummy",
+        "03_dummy",
+        "04_dummy" 
+    };
+    dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
 }
 
 /* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::RaceStart() {
     /* Nonmatching */
+    field_0x1720 = &daGoal_Flag_c::TimerExecute;
+    return TRUE;
 }
 
 /* 00001F60-00002290       .text TimerExecute__13daGoal_Flag_cFv */
-void daGoal_Flag_c::TimerExecute() {
+BOOL daGoal_Flag_c::TimerExecute() {
     /* Nonmatching */
+    field_0x1720 = &daGoal_Flag_c::RaceEnd;
+    static char* event_name_tbl[] = {
+        "race_goal_cam",
+        "race_fail_cam",
+    };
 }
 
 /* 00002290-000023E0       .text RaceEnd__13daGoal_Flag_cFv */
-void daGoal_Flag_c::RaceEnd() {
+BOOL daGoal_Flag_c::RaceEnd() {
     /* Nonmatching */
+    static char* event_name_tbl[] = {
+        "race_goal_cam",
+        "race_fail_cam",
+    };
 }
 
 /* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
@@ -306,7 +381,7 @@ cPhs_State daGoal_Flag_c::_create() {
         dComIfGp_startMiniGame(1);
         dComIfGp_setMiniGameRupee(0);
 
-        field_0x1720 = &daGoal_Flag_c::RaceStart;     
+        setAction(&daGoal_Flag_c::RaceStart);     
         field_0x1688 = 0;
     }
 

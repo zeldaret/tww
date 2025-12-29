@@ -89,24 +89,27 @@ public:
 
 class daGoal_Flag_c : public fopAc_ac_c {
 public:
+    typedef BOOL (daGoal_Flag_c::*ProcFunc)();
+public:
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    void getRopePos(int, int) {}
-    void setAction(int (daGoal_Flag_c::*)()) {}
+    // TODO: does getRopePos actually do this?
+    cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return field_0x16B0[i_matIdx].getPos(0) + (i_segmentIdx * 4); }
+    void setAction(ProcFunc i_proc) { field_0x1720 = i_proc; }
 
     BOOL getRacePath(unsigned char);
     void RopeMove();
     void CreateBuoyRaces();
-    void goal_check();
+    int goal_check();
     void flag_move();
     void get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);
     BOOL CreateHeap();
     void getDemoAction(int);
     BOOL RaceStart();
-    void TimerExecute();
-    void RaceEnd();
+    BOOL TimerExecute();
+    BOOL RaceEnd();
 
 public:
     /* 0x0290 */ daGFlag_packet_c field_0x0290;
@@ -126,7 +129,7 @@ public:
     /* 0x169C */ u32 field_0x169C[4];
     /* 0x16AC */ int field_0x16AC;
     /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];
-    /* 0x1720 */ int (daGoal_Flag_c::*field_0x1720)();
+    /* 0x1720 */ ProcFunc field_0x1720;
 };  // Size: 0x172C
 
 #endif /* D_A_GOAL_FLAG_H */
