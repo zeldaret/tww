@@ -16,9 +16,9 @@
 #include "f_op/f_op_camera.h"
 #include "JSystem/JUtility/JUTReport.h"
 
-static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
-    // There was an unused function here that got stripped out, but it still affected literal ordering.
-    f32* dummy;
+static cXyz ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
+    // There was an unused function here that got stripped out, but it still affected literal and weak function ordering.
+    f32* dummy = NULL;
     *dummy = 10.0f;
     *dummy = 50.0f;
     *dummy = 5.0f;
@@ -26,11 +26,14 @@ static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
     *dummy = 1.2f;
     *dummy = -100.0f;
     *dummy = 0.1f;
+    cXyz temp(0.0f, 0.0f, 0.0f);
+    return temp;
 }
 
 /* 000000B4-00000154       .text daKokiie_Draw__FP12kokiie_class */
 static BOOL daKokiie_Draw(kokiie_class* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &i_this->actor.current.pos, &i_this->actor.tevStr);
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &actor->current.pos, &actor->tevStr);
     g_env_light.setLightTevColorType(i_this->mpModel, &(i_this->actor).tevStr);
 
     dComIfGd_setListBG();
@@ -41,6 +44,13 @@ static BOOL daKokiie_Draw(kokiie_class* i_this) {
 
 /* 00000154-00000884       .text kokiie_move__FP12kokiie_class */
 void kokiie_move(kokiie_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
+    int i;
+    int uVar6;
+    s16 maxSpeed;
+    s16 target;
+    s16 sVar1;
+
     static u8 himo_off_check[] = {1, 2, 4, 8, 16};
     static s16 himo_off_ya[] = {
         0x1,    0x0,    0x2EE0, 0x1D4C, 0x5FB4, 0x0,    0x4E20, 0x30D4, 0x987C, 0x0,    0x0,    0x1964, 0x7FFF, 0x7FFF, 0x6784, 0x5014,
@@ -59,8 +69,8 @@ void kokiie_move(kokiie_class* i_this) {
 
     switch (i_this->m29A) {
     case 0: {
-        s32 uVar6 = 0;
-        for (s32 i = 0; i < ARRAY_SSIZE(i_this->m32C); i++) {
+        uVar6 = 0;
+        for (i = 0; i < ARRAY_SSIZE(i_this->m32C); i++) {
             if (i_this->m32C[i] == 2) {
                 i_this->m32C[i] = 0;
                 i_this->m338 = 0.0f;
@@ -75,16 +85,16 @@ void kokiie_move(kokiie_class* i_this) {
             }
         }
 
-        s16 sVar1 = himo_off_ya[uVar6];
-        s16 target = himo_off_xa[uVar6];
+        sVar1 = himo_off_ya[uVar6];
+        target = himo_off_xa[uVar6];
         cLib_addCalc2(&i_this->m2D0, REG8_F(4) - himo_off_yp[uVar6], 0.1f, i_this->m338 * 50.0f);
         if ((uVar6 == 0x1f) && dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
             i_this->m29A = 1;
-            i_this->actor.health = 0;
+            actor->health = 0;
             i_this->m378 = 1;
         }
 
-        s16 maxSpeed = i_this->m338 * 10000.0f;
+        maxSpeed = i_this->m338 * 10000.0f;
         cLib_addCalcAngleS2(&i_this->m334, target, 4, maxSpeed);
 
         if (target != 0) {
@@ -92,8 +102,8 @@ void kokiie_move(kokiie_class* i_this) {
         }
 
         cLib_addCalc2(&i_this->m338, 1.0f, 1.0f, REG8_F(14) + 0.001f);
-        cLib_addCalcAngleS2(&i_this->actor.current.angle.x, 0, 10, 0x200);
-        cLib_addCalcAngleS2(&i_this->actor.current.angle.z, 0, 10, 0x200);
+        cLib_addCalcAngleS2(&actor->current.angle.x, 0, 10, 0x200);
+        cLib_addCalcAngleS2(&actor->current.angle.z, 0, 10, 0x200);
 
         i_this->m2C8.x = i_this->m2BC * cM_ssin(i_this->m298 * 900);
         i_this->m2C8.z = i_this->m2C4 * cM_ssin(i_this->m298 * 700);
@@ -107,19 +117,19 @@ void kokiie_move(kokiie_class* i_this) {
         cLib_addCalc0(&i_this->m2B0, 1.0f, 0.25f);
         cLib_addCalc0(&i_this->m2B8, 1.0f, 0.25f);
 
-        i_this->actor.shape_angle = i_this->actor.current.angle + i_this->m2C8;
-        i_this->actor.current.pos = i_this->actor.home.pos + i_this->m2A4;
-        i_this->actor.current.pos.y += i_this->m2D0;
+        actor->shape_angle = actor->current.angle + i_this->m2C8;
+        actor->current.pos = actor->home.pos + i_this->m2A4;
+        actor->current.pos.y += i_this->m2D0;
         cLib_addCalc0(&i_this->m2A4.y, 0.05f, REG0_F(7) + 2.0f);
     } break;
 
     case 1:
-        cLib_addCalcAngleS2(&i_this->actor.shape_angle.x, 0, 10, 0x800);
-        cLib_addCalcAngleS2(&i_this->actor.shape_angle.z, 0, 10, 0x800);
+        cLib_addCalcAngleS2(&actor->shape_angle.x, 0, 10, 0x800);
+        cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 10, 0x800);
         cLib_addCalcAngleS2(&i_this->m334, 0, 4, 0x200);
 
-        i_this->actor.current.pos.y += i_this->actor.speed.y;
-        i_this->actor.speed.y -= REG12_F(14) + 3.0f;
+        actor->current.pos.y += actor->speed.y;
+        actor->speed.y -= REG12_F(14) + 3.0f;
 
         if (i_this->m37A == (s16)(REG0_S(4) + 0x1b)) {
             if (i_this->m2A2 != 0xff) {
@@ -131,23 +141,23 @@ void kokiie_move(kokiie_class* i_this) {
         }
 
         if (i_this->m37A == (s16)(REG0_S(5) + 0x40)) {
-            cXyz sp44 = i_this->actor.current.pos;
+            cXyz sp44 = actor->current.pos;
             sp44.y = 1170.0f;
             dComIfGp_particle_set(dPa_name::ID_SCENE_82A4, &sp44);
             dComIfGp_particle_set(dPa_name::ID_SCENE_82A5, &sp44);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_82A6, &i_this->actor.current.pos);
+            dComIfGp_particle_set(dPa_name::ID_SCENE_82A6, &actor->current.pos);
             dComIfGp_particle_set(dPa_name::ID_SCENE_82A7, &sp44);
         }
 
         i_this->m374 = (REG0_F(9) + 5180.0f) - 3800.0f;
-        if (i_this->actor.current.pos.y <= i_this->m374) {
-            i_this->actor.current.pos.y = i_this->m374;
-            if (i_this->actor.speed.y < -20.0f) {
+        if (actor->current.pos.y <= i_this->m374) {
+            actor->current.pos.y = i_this->m374;
+            if (actor->speed.y < -20.0f) {
                 dComIfGp_getVibration().StartShock(REG6_S(2) + 7, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 fopAcM_seStartCurrent(&i_this->actor, JA_SE_OBJ_KOKIRI_H_LANDING, 0);
                 i_this->m39C = REG12_F(10) + 40.0f + 50.0f;
             }
-            i_this->actor.speed.y = 0.0f;
+            actor->speed.y = 0.0f;
             cLib_addCalcAngleS2(&i_this->m334, 0, 2, 0x2000);
         }
         break;
@@ -160,6 +170,7 @@ void himo_create(kokiie_class* i_this) {
 #else
 BOOL himo_create(kokiie_class* i_this) {
 #endif
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 #if VERSION > VERSION_DEMO
     if ((i_this->m2A2 != 0xff) && fopAcM_isSwitch(&i_this->actor, i_this->m2A2)) {
         return FALSE;
@@ -174,10 +185,10 @@ BOOL himo_create(kokiie_class* i_this) {
         switch (i_this->m2E8[i]) {
         case 0:
             pfVar3 = fopAcM_CreateAppend();
-            pfVar3->base.position = i_this->actor.current.pos;
-            pfVar3->base.angle.y = i_this->actor.current.angle.y + i * 0x3333 + -13000;
+            pfVar3->base.position = actor->current.pos;
+            pfVar3->base.angle.y = actor->current.angle.y + i * 0x3333 + -13000;
             pfVar3->base.parameters = 0xffffff01;
-            pfVar3->room_no = i_this->actor.current.roomNo;
+            pfVar3->room_no = actor->current.roomNo;
             i_this->m2D4[i] = fopAcM_create(PROC_SHAND, NULL, pfVar3);
             i_this->m2E8[i]++;
 
@@ -206,45 +217,46 @@ BOOL himo_create(kokiie_class* i_this) {
 
 /* 00000A18-00000E98       .text demo_camera__FP12kokiie_class */
 void demo_camera(kokiie_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp5C;
     cXyz sp50;
 
-    cMtx_YrotS(*calc_mtx, i_this->actor.shape_angle.y);
+    cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
 
     switch (i_this->m378) {
     case 0:
         break;
 
     case 1:
-        if (!i_this->actor.eventInfo.checkCommandDemoAccrpt()) {
+        if (!actor->eventInfo.checkCommandDemoAccrpt()) {
             fopAcM_orderPotentialEvent(&i_this->actor, 2, 0xffff, 0);
-            i_this->actor.eventInfo.onCondition(dEvtCnd_UNK2_e);
+            actor->eventInfo.onCondition(dEvtCnd_UNK2_e);
             return;
         }
         i_this->m378++;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
-        i_this->m37C = i_this->actor.current.pos;
+        i_this->m37C = actor->current.pos;
         sp5C.x = (REG12_F(2) + 1300.0f) - 800.0f;
         sp5C.y = 0.0f;
         sp5C.z = REG12_F(4) - 1000.0f;
         MtxPosition(&sp5C, &sp50);
 
-        i_this->m37C.x = i_this->actor.current.pos.x + sp50.x;
+        i_this->m37C.x = actor->current.pos.x + sp50.x;
         i_this->m37C.y = ((REG12_F(5) + 4030.0f) - 3800.0f) + 1500.0f;
-        i_this->m37C.z = i_this->actor.current.pos.z + sp50.z;
-        i_this->m388 = i_this->actor.current.pos;
+        i_this->m37C.z = actor->current.pos.z + sp50.z;
+        i_this->m388 = actor->current.pos;
         i_this->m388.y += REG12_F(6) + -450.0f;
         i_this->m3A0 = REG12_F(18) + 65.0f;
         i_this->m37A = 0;
 
     case 2:
         if (i_this->m37A < (s16)(REG12_S(3) + 10)) {
-            i_this->actor.speed.y = 0.0f;
+            actor->speed.y = 0.0f;
         }
 
-        cLib_addCalc2(&i_this->m388.y, (i_this->actor.current.pos.y - 450.0f) + REG12_F(6), REG12_F(7) + 0.5f, REG12_F(8) + 200.0f);
+        cLib_addCalc2(&i_this->m388.y, (actor->current.pos.y - 450.0f) + REG12_F(6), REG12_F(7) + 0.5f, REG12_F(8) + 200.0f);
         if (i_this->m37A > (s16)(REG12_S(4) + 0x32)) {
             cLib_addCalc2(&i_this->m3A0, REG12_F(19) + 80.0f, 0.02f, REG12_F(20) + 0.5f);
         }
@@ -287,15 +299,16 @@ void demo_camera(kokiie_class* i_this) {
 
 /* 00000E98-0000107C       .text daKokiie_Execute__FP12kokiie_class */
 static BOOL daKokiie_Execute(kokiie_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     kokiie_move(i_this);
-    MtxTrans(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z, 0);
+    MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, 0);
 
-    cMtx_YrotM(*calc_mtx, i_this->actor.shape_angle.y);
+    cMtx_YrotM(*calc_mtx, actor->shape_angle.y);
     cMtx_YrotM(*calc_mtx, i_this->m332);
     cMtx_XrotM(*calc_mtx, i_this->m334);
     cMtx_YrotM(*calc_mtx, -i_this->m332);
-    cMtx_XrotM(*calc_mtx, i_this->actor.shape_angle.x);
-    cMtx_ZrotM(*calc_mtx, i_this->actor.shape_angle.z);
+    cMtx_XrotM(*calc_mtx, actor->shape_angle.x);
+    cMtx_ZrotM(*calc_mtx, actor->shape_angle.z);
     cMtx_YrotM(*calc_mtx, 0xb54);
 
     i_this->mpModel->setBaseTRMtx(*calc_mtx);
@@ -328,9 +341,10 @@ static BOOL daKokiie_IsDelete(kokiie_class*) {
 
 /* 00001084-000010E4       .text daKokiie_Delete__FP12kokiie_class */
 static BOOL daKokiie_Delete(kokiie_class* i_this) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     dComIfG_resDeleteDemo(&i_this->mPhase, "Kokiie");
 #if VERSION > VERSION_DEMO
-    if (i_this->actor.heap != NULL)
+    if (actor->heap != NULL)
 #endif
     {
         dComIfG_Bgsp()->Release(i_this->pm_bgw);
