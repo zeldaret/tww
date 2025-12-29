@@ -28,8 +28,6 @@ class dGrass_packet_c;
 class dTree_packet_c;
 class dFlower_packet_c;
 namespace dWood { class Packet_c; };
-class daPy_py_c;
-class daPy_lk_c;
 class daShip_c;
 class daAgb_c;
 class camera_class;
@@ -2337,20 +2335,12 @@ inline daAgb_c* dComIfGp_getAgb() {
     return g_dComIfG_gameInfo.play.getAgb();
 }
 
-inline daPy_py_c* daPy_getPlayerActorClass() {
-    return (daPy_py_c*)dComIfGp_getPlayer(0);
-}
-
 inline fopAc_ac_c* dComIfGp_getLinkPlayer() {
     return g_dComIfG_gameInfo.play.getPlayerPtr(0);
 }
 
 inline void dComIfGp_setLinkPlayer(fopAc_ac_c* player) {
     g_dComIfG_gameInfo.play.setPlayerPtr(0, player);
-}
-
-inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
-    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
 }
 
 inline void dComIfGp_setWindowNum(int num) {

@@ -2343,4 +2343,8 @@ public:
     static const AnmDataTableEntry mAnmDataTable[];
 };  // Size: 0x4C28
 
+inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
+    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
+}
+
 #endif /* D_A_PLAYER_MAIN */
