@@ -6667,7 +6667,7 @@ u32 daNpcPeople_c::getMsg() {
 
     m734 = NULL;
 
-    if(g_dComIfG_gameInfo.play.getEvent().chkPhoto()) {
+    if(g_dComIfG_gameInfo.play.getEvent()->chkPhoto()) {
         switch(mNpcType) {
             case 2:
                 if(dComIfGp_getPictureResult() == 1) {
