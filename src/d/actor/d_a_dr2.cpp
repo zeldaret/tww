@@ -186,6 +186,7 @@ static BOOL daDr2_Draw(dr2_class* i_this) {
 
 /* 000006D4-00000720       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* ac1, void* ac2) {
+    UNUSED(ac2);
     if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == PROC_BTD) {
         return ac1;
     }

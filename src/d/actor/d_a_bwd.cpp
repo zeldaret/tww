@@ -112,6 +112,7 @@ void g_eff_off(bwd_class* i_this) {
 
 /* 000001CC-00000250       .text ko_s_sub__FPvPv */
 void* ko_s_sub(void* param_1, void* param_2) {
+    UNUSED(param_2);
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
     if ((fopAc_IsActor(actor)) && (fopAcM_GetName(actor) == PROC_BWDS)) {
@@ -126,6 +127,7 @@ void* ko_s_sub(void* param_1, void* param_2) {
 
 /* 00000250-0000029C       .text ko_delete_sub__FPvPv */
 void* ko_delete_sub(void* param_1, void* param_2) {
+    UNUSED(param_2);
     bwds_class* actor = (bwds_class*)param_1;
 
     if ((fopAc_IsActor(actor)) && (fopAcM_GetName(actor) == PROC_BWDS)) {
