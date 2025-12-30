@@ -64,13 +64,14 @@ public:
     virtual ~daGFlag_packet_c() {}
     void changeCurrentPos() {}
     void getDPos() {}
-    void getMtx() {}
+    Mtx* getMtx() { return &field_0x0054; }
     void getNrm() {}
     void getOffsetVec() {}
-    cXyz* getPos() { return field_0x0088[field_0x1384]; } // TODO: does getPos actually return field_0x0088?
+    // TODO: does getPos actually return field_0x0088?
+    cXyz* getPos() { return field_0x0088[field_0x1384]; }
     void getTexObjP() {}
     void getToonTexObjP() {}
-    void setTevStr(dKy_tevstr_c*) {}
+    void setTevStr(dKy_tevstr_c* i_tevStr_p) { field_0x0084 = i_tevStr_p; }
 
     void setTexObj(unsigned char);
     void setToonTexObj();
@@ -79,7 +80,9 @@ public:
     void setNrmVtx(cXyz*, int, int);
 public:
     /* 0x0010 */ s16 field_0x0010;
-    /* 0x0012 */ u8 field_0x0012[0x0088 - 0x0012];
+    /* 0x0012 */ u8 field_0x0012[0x0054 - 0x0012];
+    /* 0x0054 */ Mtx field_0x0054;
+    /* 0x0084 */ dKy_tevstr_c* field_0x0084;
     /* 0x0088 */ cXyz field_0x0088[2][45];
     /* 0x04C0 */ cXyz field_0x04C0[90];
     /* 0x08F8 */ cXyz field_0x08F8[90];
@@ -106,7 +109,7 @@ public:
     BOOL CreateBuoyRaces();
     int goal_check();
     void flag_move();
-    void get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);
+    cXyz get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);
     BOOL CreateHeap();
     void getDemoAction(int);
     BOOL RaceStart();

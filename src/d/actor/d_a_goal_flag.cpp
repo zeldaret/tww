@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_goal_flag.h"
+#include "d/actor/d_a_npc_sarace.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -175,7 +176,7 @@ BOOL daGoal_Flag_c::getRacePath(u8 i_pathIdx) {
 
 /* 00000F80-000010F4       .text RopeMove__13daGoal_Flag_cFv */
 void daGoal_Flag_c::RopeMove() {
-    /* Apparent match, .data offset issue */
+    /* Apparent match, .data offsets issue */
     // TODO: wtf is going on in this method?
     static const f32 down_offset[] = {
         0.0f, 150.0f, 225.0f, 150.0f
@@ -202,7 +203,7 @@ void daGoal_Flag_c::RopeMove() {
 
 /* 000010F4-0000123C       .text CreateBuoyRaces__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateBuoyRaces() {
-    /* Apparent match, .rodata offsets */
+    /* Apparent match, .rodata offsets issue */
     int i;
     dPnt* points_p;
     cXyz* segment;
@@ -216,7 +217,13 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
                 points_p->m_position.y,
                 points_p->m_position.z
             );
-            fopAcM_createChild(0x10E, fopAcM_GetID(this), j | (i * 0x100), &temp2, fopAcM_GetRoomNo(this), NULL);
+            fopAcM_createChild(
+                PROC_Obj_Buoyrace, 
+                fopAcM_GetID(this), 
+                j | (i << 8), &temp2, 
+                fopAcM_GetRoomNo(this), 
+                NULL
+            );
             segment->set(
                 points_p->m_position.x, 
                 points_p->m_position.y + 250.0f, 
@@ -230,7 +237,7 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
 
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
 int daGoal_Flag_c::goal_check() {
-    /* Apparent match, .rodata issue */
+    /* Apparent match, .rodata offsets issue */
     int o_ret;
     cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
 
@@ -269,13 +276,64 @@ void daGoal_Flag_c::flag_move() {
 }
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz*, cXyz*, cXyz*, float) {
-    /* Nonmatching */
+void get_cloth_anim_sub_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
+    /* Apparent match, .rodata offsets issue */
+    cXyz temp = *param_2 - *param_1;
+    cXyz temp2 = temp.normZP();
+    
+    f32 mag = temp.abs();
+
+    f32 temp3 = (mag - param_4);
+    temp3 *= l_HIO.m3C;
+
+    temp2 *= temp3;
+    *param_3 += temp2;
 }
 
 /* 00001970-00001CC0       .text get_cloth_anim_factor__13daGoal_Flag_cFP4cXyzP4cXyzP4cXyzii */
-void daGoal_Flag_c::get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int) {
-    /* Nonmatching */
+cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, int param_4, int param_5) {
+    /* Apparent match, .rodata offsets issue */
+    int temp = (param_5 * 9) + param_4;
+    cXyz temp2 = param_1[temp];
+    f32 dot = VECDotProduct(param_3, &param_2[temp]);
+    if ((param_5 == 0 || param_5 == 4) && (param_4 == 0 || param_4 == 8)) {
+        return cXyz::Zero;
+    } else {
+        cXyz temp3 = param_2[temp] * dot;
+        temp3.y += l_HIO.m38 * ((float)param_5 * 0.25f);
+        if (param_4 != 0) {
+            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 * 9)], &temp3, 250.0f); 
+            if (param_5 != 0) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f); 
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 - 1) * 9], &temp3, 277.3085f);     
+            }
+            if (param_5 != 4) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f); 
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 + 1) * 9], &temp3, 277.3085f);     
+            }
+            if (param_4 != 8) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + param_5 * 9], &temp3, 250.0f);
+                if (param_5 != 0) {
+                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
+                }
+                if (param_5 != 4) {
+                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
+                }
+            }
+            return temp3;
+        } else {
+            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 * 9)], &temp3, 250.0f);
+            if (param_5 != 0) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f);
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
+            }
+            if (param_5 != 4) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f);
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
+            }
+            return temp3;
+        }
+    }
 }
 
 /* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
@@ -339,7 +397,7 @@ static cPhs_State daGoal_FlagCreate(void* i_this) {
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
-    /* Apparent match, .data and .rodata offsets */
+    /* Apparent match, .data and .rodata offsets issue */
     cPhs_State rt;
     u8 temp;
     dPath* path_ptr;
@@ -409,10 +467,13 @@ cPhs_State daGoal_Flag_c::_create() {
         dComIfGp_getStartStagePoint() == 1
     ) {
         u16 temp2 = l_HIO.m18;
-        u16 reg = (u16)dComIfGs_getEventReg(0xAAFF) * 10;
+        u16 reg = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
         temp2 -= reg;
         field_0x1674 = fopMsgM_Timer_create(PROC_TIMER, 2, temp2, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
         
+        // TODO: Fakematch, debug map mentions a call to an inline func named
+        // fopMsgM_MiniGameStarter_create, but the parameters do not match up one-to-one, 
+        // so it's not entirely obvious how the call to fopMsgM_create is constructed.
         u32 temp3 = 0;
         temp3 |= 0x2000000;
         field_0x1678 = fopMsgM_create(PROC_MINIGAME_STARTER, NULL, NULL, &temp3, &temp3, NULL);
@@ -445,19 +506,75 @@ cPhs_State daGoal_Flag_c::_create() {
     return cPhs_COMPLEATE_e;
 }
 
-/* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
-static BOOL daGoal_FlagDelete(void*) {
-    /* Nonmatching */
+bool daGoal_Flag_c::_delete() {
+    u8 prm = fopAcM_GetParam(this) & 0xFF;
+    dComIfG_resDelete(&field_0x1618, arcname);
+    dComIfG_resDelete(&field_0x1620, sub_arcname_tbl[prm]);
+
+    if (dComIfGp_getMiniGameType() == 1) {
+        if (dComIfGp_getMiniGameResult() == 1) {
+            daNpc_Sarace_c::ship_race_result = 2;
+            daNpc_Sarace_c::ship_race_rupee = dComIfGp_getMiniGameRupee();
+        } else if (dComIfGp_getMiniGameResult() == 2) {
+            daNpc_Sarace_c::ship_race_result = 1;
+            daNpc_Sarace_c::ship_race_rupee = dComIfGp_getMiniGameRupee();
+        }
+        dComIfGp_endMiniGame(1);
+    }
+
+    return true;
 }
 
-/* 00002AAC-00002B14       .text daGoal_FlagExecute__FPv */
-static BOOL daGoal_FlagExecute(void*) {
+/* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
+static BOOL daGoal_FlagDelete(void* i_this) {
     /* Nonmatching */
+    return ((daGoal_Flag_c*)i_this)->_delete();
+}
+
+bool daGoal_Flag_c::_execute() {
+    if (field_0x1720 != NULL) {
+        (this->*field_0x1720)();
+    }
+    flag_move();
+    RopeMove();
+    return true;
+} 
+
+/* 00002AAC-00002B14       .text daGoal_FlagExecute__FPv */
+static BOOL daGoal_FlagExecute(void* i_this) {
+    return ((daGoal_Flag_c*)i_this)->_execute();
+}
+
+bool daGoal_Flag_c::_draw() {
+    /* Apparent match, .rodata offsets issue */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+
+    MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
+    mDoMtx_YrotM(*calc_mtx, current.angle.y);
+    MtxScale(scale.x, scale.y, scale.z, true);
+
+    Mtx* mtx_p = field_0x0290.getMtx();
+    MTXConcat(j3dSys.getViewMtx(), *calc_mtx, *mtx_p);
+
+    field_0x0290.setTevStr(&tevStr);
+    j3dSys.getDrawBuffer(0)->entryImm(&field_0x0290, 0);
+
+    for (int i = 0; i < field_0x16AC; i++) {
+        GXColor color;
+        color.r = l_HIO.m24;
+        color.g = l_HIO.m28;
+        color.b = l_HIO.m2C;
+        color.a = 0xFF;
+        field_0x16B0[i].update((field_0x169C[i] << 2) + 1, 20.0f, color, 0, &tevStr);
+        dComIfGd_set3DlineMat(&field_0x16B0[i]);
+    }
+
+    return true;
 }
 
 /* 00002B14-00002CA4       .text daGoal_FlagDraw__FPv */
-static BOOL daGoal_FlagDraw(void*) {
-    /* Nonmatching */
+static BOOL daGoal_FlagDraw(void* i_this) {
+    return ((daGoal_Flag_c*)i_this)->_draw();
 }
 
 /* 00002CA4-00002CAC       .text daGoal_FlagIsDelete__FPv */

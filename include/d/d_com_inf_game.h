@@ -585,6 +585,7 @@ public:
         mMinigameFlags ^= 1 << (i_gameType - 1); // toggle Nth bit
         mMinigameResult = 0;
     }
+    u8 getMiniGameResult() { return mMinigameResult; }
     void setMiniGameResult(u8 i_result) {
         mMinigameResult = i_result;
     }
@@ -2694,6 +2695,10 @@ inline void dComIfGp_endMiniGame(u16 i_gameType) {
 
 inline void dComIfGp_setMiniGameResult(u8 result) {
     g_dComIfG_gameInfo.play.setMiniGameResult(result);
+}
+
+inline u8 dComIfGp_getMiniGameResult() {
+    return g_dComIfG_gameInfo.play.getMiniGameResult();
 }
 
 enum dActionStatus_e {
