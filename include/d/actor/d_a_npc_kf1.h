@@ -22,7 +22,7 @@ public:
     void _nodeCB_Neck(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     BOOL init_KF1_0();
-    BOOL createInit();
+    bool createInit();
     void play_animation();
     void setMtx(bool);
     s32 bckResID(int);
@@ -82,7 +82,7 @@ public:
     bool cut_move_TLK_MSG();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
     typedef int (daNpc_Kf1_c::*ActionFunc)(void*);
     bool set_action(ActionFunc, void*);
@@ -94,7 +94,7 @@ public:
     void walk_1();
     void talk_1();
     BOOL wait_action1(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -110,7 +110,7 @@ public:
     /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ s8 m_nck_jnt_num;
     /* 0x6D0 */ J3DModel* mModel;
-    /* 0x6D4 */ char field_0x6d4[4];
+    /* 0x6D4 */ char field_0x6D4[4];
     s32 field_0x6D8;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 field_0x6F0;
@@ -119,7 +119,9 @@ public:
     u32 field_0x700;
     /* 0x704 */ fpc_ProcID field_0x704;
     /* 0x708 */ dNpc_PathRun_c pathRun;
-    /* 0x710 */ u8 m710[0x722 - 0x710];
+
+    /* 0x710 */ cXyz field_0x710;
+    /* 0x71C */ csXyz field_0x71C;
     /* 0x722 */ csXyz mAngle;
     u8 m728[0x730 - 0x728];
     /* 0x730 */ cXyz head_anm_vec;
@@ -149,14 +151,20 @@ public:
     /* 0x79F */ u8 field_0x79F;
     /* 0x7A0 */ u8 field_0x7A0;
     /* 0x7A0 */ u8 field_0x7A1;
-    u8 m7a2[0x7a6 - 0x7a2];
+    u8 m7a2[0x7a3 - 0x7a2];
+    /* 0x7A3 */ u8 field_0x7A3;
+    /* 0x7A4 */ u8 field_0x7A4;
+    /* 0x7A5 */ u8 field_0x7A5;
     /* 0x7A6 */ bool field_0x7A6;
-    u8 m7a7[0x7a8 - 0x7a7];
+    /* 0x7A7 */ u8 field_0x7A7;
     /* 0x7A8 */ u8 field_0x7A8;
-    u8 m7a9[0x7AC - 0x7a9];
+    /* 0x7A9 */ u8 field_0x7A9;
+    /* 0x7AA */ u8 field_0x7AA;
+    u8 m7ab[0x7AC - 0x7ab];
     /* 0x7AC */ u8 field_0x7AC;
     /* 0x7AD */ bool field_0x7AD;
-    u8 m7ae[0x7b0 - 0x7ae];
+    /* 0x7AD */ bool field_0x7AE;
+    u8 m7ae[0x7b0 - 0x7af];
     fpc_ProcID field_0x7B0[3];
     fpc_ProcID field_0x7BC[12];
 
@@ -188,12 +196,19 @@ public:
 public:
     /* 0x00 */ s8 a;
     /* 0x04 */ s32 b;
-    /* 0x0C */ f32 yoffset;
-    /* 0x10 */ u32 _1;
-    /* 0x14 */ u32 _2;
+    /* 0x0C */ s16 max_head_x;
+    /* 0x0E */ s16 max_head_y;
+    /* 0x10 */ s16 min_head_x;
+    /* 0x12 */ s16 min_head_y;
+    /* 0x14 */ s16 max_backbone_x;
+    /* 0x16 */ s16 max_backbone_y;
+    /* 0x18 */ s16 min_backbone_x;
+    /* 0x1A */ s16 min_backbone_y;
+    /* 0x1C */ s16 max_turn_step;
     /* 0x18 */ u32 _3;
     /* 0x1C */ u16 _4;
     /* 0x1E */ s16 field_0x1e;
+    f32 yoffset;
     u8 data[0x30];
     /* Place member variables here */
 };
