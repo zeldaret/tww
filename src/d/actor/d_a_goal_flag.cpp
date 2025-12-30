@@ -6,11 +6,14 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_goal_flag.h"
 #include "d/actor/d_a_npc_sarace.h"
+#include "d/d_minigame_starter.h"
+#include "d/res/res_cloth.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
 #include "assets/l_txa_dummy_hataTEX.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 static Vec l_pos[] = {
     { -1000.0f,    0.0f, 0.0f }, 
@@ -135,7 +138,29 @@ void daGFlag_packet_c::setTexObj(unsigned char) {
 
 /* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setToonTexObj() {
-    /* Nonmatching */
+    /* Apparent match, .rodata offsets issue */
+    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    GXInitTexObj(
+        &field_0x0034, 
+        (u8*)tex_info_p + tex_info_p->imageOffset, 
+        tex_info_p->width, 
+        tex_info_p->height, 
+        GXTexFmt(tex_info_p->format), 
+        GXTexWrapMode(tex_info_p->wrapS), 
+        GXTexWrapMode(tex_info_p->wrapT),
+        GXBool(tex_info_p->mipmapCount > 1)
+    );
+    GXInitTexObjLOD(
+        &field_0x0034,
+        GXTexFilter(tex_info_p->minFilter),
+        GXTexFilter(tex_info_p->magFilter),
+        (f32)tex_info_p->minLOD * 0.125f,
+        (f32)tex_info_p->maxLOD * 0.125f,
+        (f32)tex_info_p->LODBias * 0.01f,
+        GXBool(tex_info_p->biasClamp),
+        GXBool(tex_info_p->doEdgeLOD),
+        GXAnisotropy(tex_info_p->maxAnisotropy)
+    );
 }
 
 /* 00000330-00000978       .text draw__16daGFlag_packet_cFv */
@@ -352,8 +377,8 @@ BOOL daGoal_Flag_c::CreateHeap() {
 }
 
 /* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
-void daGoal_Flag_c::getDemoAction(int param_1) {
-    /* Nonmatching */
+int daGoal_Flag_c::getDemoAction(int param_1) {
+    /* Apparent match, .data offsets issue */
     static char* ActionNames[] = { 
         "00_dummy",
         "01_dummy",
@@ -361,13 +386,48 @@ void daGoal_Flag_c::getDemoAction(int param_1) {
         "03_dummy",
         "04_dummy" 
     };
-    dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
+    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
 }
 
 /* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::RaceStart() {
-    /* Nonmatching */
-    field_0x1720 = &daGoal_Flag_c::TimerExecute;
+    /* Apparent match, .rodata offsets issue */
+    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
+    int action_idx = getDemoAction(staff_idx);
+
+    if (field_0x1688 == 0) {
+        if (staff_idx != -1 && action_idx == 0) {
+            dComIfGp_evmng_cutEnd(staff_idx);
+        } else {
+            return TRUE;
+        }         
+        field_0x1688++;
+    } else {
+        dTimer_c* timer_p = (dTimer_c*) fopMsgM_SearchByID(field_0x1674);
+        dMinigame_Starter_c* mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(field_0x1678);
+
+        if (action_idx == 1 && mgame_start_p) {
+            if (!mgame_start_p->field_0x111) {
+                mgame_start_p->field_0x111 = true;
+            }
+            dComIfGp_evmng_cutEnd(staff_idx);
+        }
+
+        if (timer_p && mgame_start_p && mgame_start_p->startCheck()) {
+            dComIfGp_evmng_cutEnd(staff_idx);
+            timer_p->start(7);
+            if (field_0x1688 == 1) {
+                mDoAud_bgmStart(JA_BGM_SEA_GAME);
+                field_0x1688++;
+            }
+        }
+
+        bool end_chk = dComIfGp_evmng_endCheck("race_start_cam");
+        if (end_chk) {
+            setAction(&daGoal_Flag_c::TimerExecute);
+            field_0x1688 = 0;
+        }
+    }
     return TRUE;
 }
 
@@ -383,11 +443,39 @@ BOOL daGoal_Flag_c::TimerExecute() {
 
 /* 00002290-000023E0       .text RaceEnd__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::RaceEnd() {
-    /* Nonmatching */
+    /* Apparent match, .data and .rodata offsets */
     static char* event_name_tbl[] = {
         "race_goal_cam",
         "race_fail_cam",
     };
+
+    field_0x1686++;
+    
+    dTimer_c* timer_p;
+    if (
+        field_0x1674 != -1 && 
+        (timer_p = (dTimer_c*)fopMsgM_SearchByID(field_0x1674)) &&
+        timer_p->deleteCheck()
+    ) {
+        fopMsgM_Delete(timer_p);
+        field_0x1674 = -1;
+    }
+
+    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
+    
+    if (staff_idx != -1) {
+        dComIfGp_evmng_cutEnd(staff_idx);
+    } 
+
+    bool end_chk = dComIfGp_evmng_endCheck(event_name_tbl[field_0x1684 != 3 ? 1 : 0]);
+
+    
+    if (end_chk || ( (int)field_0x1686 > (int)l_HIO.m20 && 
+        (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
+        dComIfGp_setNextStage("sea", 1, 0x30);
+    }
+
+    return true;
 }
 
 /* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
@@ -527,7 +615,6 @@ bool daGoal_Flag_c::_delete() {
 
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
 static BOOL daGoal_FlagDelete(void* i_this) {
-    /* Nonmatching */
     return ((daGoal_Flag_c*)i_this)->_delete();
 }
 

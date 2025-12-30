@@ -2,6 +2,7 @@
 #define D_MINIGAME_STARTER_H
 
 #include "dolphin/types.h"
+#include "f_op/f_op_msg.h"
 
 class JKRArchive;
 struct fopMsgM_pane_class;
@@ -18,7 +19,7 @@ public:
     void draw();
 };
 
-class dMinigame_Starter_c {
+class dMinigame_Starter_c : public msg_class {
 public:
     void countStart() {}
     
@@ -26,8 +27,12 @@ public:
     void _execute();
     void _draw();
     void _delete();
-    void startCheck();
+    BOOL startCheck();
     void deleteCheck();
-};
+public:
+    /* 0x0FC */ u8 field_0x0FC[0x111 - 0x0FC];
+    /* 0x111 */ bool field_0x111;
+    /* 0x112 */ u8 field_0x112[0x114 - 0x112];
+};  // Size: 0x114
 
 #endif /* D_MINIGAME_STARTER_H */

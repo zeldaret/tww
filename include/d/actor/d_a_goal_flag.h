@@ -80,7 +80,8 @@ public:
     void setNrmVtx(cXyz*, int, int);
 public:
     /* 0x0010 */ s16 field_0x0010;
-    /* 0x0012 */ u8 field_0x0012[0x0054 - 0x0012];
+    /* 0x0012 */ u8 field_0x0012[0x0034 - 0x0012];
+    /* 0x0034 */ GXTexObj field_0x0034;
     /* 0x0054 */ Mtx field_0x0054;
     /* 0x0084 */ dKy_tevstr_c* field_0x0084;
     /* 0x0088 */ cXyz field_0x0088[2][45];
@@ -111,7 +112,7 @@ public:
     void flag_move();
     cXyz get_cloth_anim_factor(cXyz*, cXyz*, cXyz*, int, int);
     BOOL CreateHeap();
-    void getDemoAction(int);
+    int getDemoAction(int);
     BOOL RaceStart();
     BOOL TimerExecute();
     BOOL RaceEnd();
@@ -128,14 +129,14 @@ public:
     /* 0x167C */ u8 field_0x167C[0x1680 - 0x167C];
     /* 0x1680 */ f32 field_0x1680;
     /* 0x1684 */ s16 field_0x1684;
-    /* 0x1686 */ u8 field_0x1686[0x1688 - 0x1686];
+    /* 0x1686 */ s16 field_0x1686;
     /* 0x1688 */ u8 field_0x1688;
     /* 0x1689 */ u8 field_0x1689[0x168C - 0x1689];
     /* 0x168C */ dPath* field_0x168C[4];
     /* 0x169C */ u32 field_0x169C[4];
     /* 0x16AC */ int field_0x16AC;
     /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];
-    /* 0x1720 */ ProcFunc field_0x1720;
+    /* 0x1720 */ int (daGoal_Flag_c::*field_0x1720)();
 };  // Size: 0x172C
 
 #endif /* D_A_GOAL_FLAG_H */
