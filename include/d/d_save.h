@@ -15,7 +15,7 @@ public:
     void setSelectEquip(int i_no, u8 i_itemNo) { mSelectEquip[i_no] = i_itemNo; }
     u8 getWalletSize() { return mWalletSize; }
     void setWalletSize(u8 size) { mWalletSize = size; }
-    int getRupee() { return mRupee; }
+    u16 getRupee() { return mRupee; }
     void setRupee(u16 rupee) { mRupee = rupee; }
     u16 getRupeeMax() { return 0; } // TODO
     u8 getMagic() { return mMagic; }

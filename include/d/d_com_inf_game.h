@@ -713,7 +713,7 @@ public:
     /* 0x4920 */ s16 mAuctionGauge;
     /* 0x4922 */ s16 mItemTimer;
     /* 0x4924 */ u16 mItemNowLife;
-    /* 0x4926 */ s16 mItemNowRupee;
+    /* 0x4926 */ u16 mItemNowRupee;
     /* 0x4928 */ bool mItemSwimTimerStatus;
     /* 0x4929 */ u8 field_0x4929;
     /* 0x492A */ u8 mMesgStatus;
@@ -873,7 +873,7 @@ inline void dComIfGs_setWalletSize(u8 size) {
     g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().setWalletSize(size);
 }
 
-inline int dComIfGs_getRupee() {
+inline u16 dComIfGs_getRupee() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupee();
 }
 
@@ -915,6 +915,10 @@ inline void dComIfGs_setRupee(u16 rupee) {
 
 inline u16 dComIfGs_getRupeeMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupeeMax();
+}
+
+inline u16 dComIfGp_getItemNowRupee() {
+    return g_dComIfG_gameInfo.play.mItemNowRupee;
 }
 
 inline u8 dComIfGs_getItemBeast(int param_0) {
