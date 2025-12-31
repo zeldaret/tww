@@ -165,11 +165,11 @@ if args.no_asm:
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20251118"
-config.dtk_tag = "v1.7.6"
-config.objdiff_tag = "v3.5.1"
+config.compilers_tag = "20250812"
+config.dtk_tag = "v1.7.1"
+config.objdiff_tag = "v3.4.1"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0"
+config.wibo_tag = "1.0.0-beta.5"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -1592,11 +1592,11 @@ config.libs = [
     ActorRel(NonMatching, "d_a_dk"),
     ActorRel(Matching,    "d_a_dummy"),
     ActorRel(NonMatching, "d_a_fallrock_tag"),
-    ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_fan"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fganon"),
     ActorRel(NonMatching, "d_a_fgmahou"),
     ActorRel(Matching,    "d_a_fire"),
-    ActorRel(Matching, "d_a_fm"),
+    ActorRel(MatchingFor("GZLE01", "GZLP01"), "d_a_fm"),
     ActorRel(NonMatching, "d_a_gm"),
     ActorRel(NonMatching, "d_a_gnd"),
     ActorRel(NonMatching, "d_a_goal_flag"),
@@ -1681,7 +1681,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_YLzou"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Yboil"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_adnno"),
-    ActorRel(Matching, "d_a_obj_ajav"),
+    ActorRel(NonMatching, "d_a_obj_ajav"),
     ActorRel(NonMatching, "d_a_obj_apzl"),
     ActorRel(NonMatching, "d_a_obj_ashut"),
     ActorRel(NonMatching, "d_a_obj_auzu"),
@@ -1704,7 +1704,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship2"),
     ActorRel(Matching, "d_a_obj_gnnbtltaki"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gnndemotakie"),
+    ActorRel(NonMatching, "d_a_obj_gnndemotakie"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakis"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gong"),
     ActorRel(NonMatching, "d_a_obj_gtaki"),
@@ -1788,7 +1788,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
     ActorRel(Matching,    "d_a_warpfout"),
-    ActorRel(Matching,    "d_a_warpgn"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_warpgn"),
     ActorRel(NonMatching, "d_a_warpls"),
     ActorRel(NonMatching, "d_a_warpmj"),
     ActorRel(NonMatching, "d_a_waterfall"),
