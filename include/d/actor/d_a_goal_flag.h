@@ -33,7 +33,7 @@ public:
     inline virtual ~daGFlag_HIO_c();
 public:
     /* 0x04 */ s8 m04;
-    /* 0x05 */ s8 m05;
+    /* 0x05 */ u8 m05;
     /* 0x06 */ s8 m06;
     /* 0x07 */ s8 m07;
     /* 0x08 */ s8 m08;
@@ -67,9 +67,9 @@ public:
     cXyz* getNrm() { return mNrm[mCurrArr]; }
     cXyz* getOffsetVec() { return m1168; }
     cXyz* getPos() { return mPos[mCurrArr]; }
-    GXTexObj* getTexObjP() { return &m0014; }
-    GXTexObj* getToonTexObjP() { return &m0034; }
-    void setTevStr(dKy_tevstr_c* i_tevStr_p) { field_0x0084 = i_tevStr_p; }
+    GXTexObj* getTexObjP() { return &mTexObj; }
+    GXTexObj* getToonTexObjP() { return &mToonTexObj; }
+    void setTevStr(dKy_tevstr_c* i_tevStr_p) { mpTevStr = i_tevStr_p; }
 
     void setTexObj(unsigned char);
     void setToonTexObj();
@@ -79,10 +79,10 @@ public:
 public:
     /* 0x0010 */ s16 m0010;
     /* 0x0012 */ s16 m0012;
-    /* 0x0014 */ GXTexObj m0014;
-    /* 0x0034 */ GXTexObj m0034;
+    /* 0x0014 */ GXTexObj mTexObj;
+    /* 0x0034 */ GXTexObj mToonTexObj;
     /* 0x0054 */ Mtx mMtx;
-    /* 0x0084 */ dKy_tevstr_c* field_0x0084;
+    /* 0x0084 */ dKy_tevstr_c* mpTevStr;
     /* 0x0088 */ cXyz mPos[2][45];
     /* 0x04C0 */ cXyz mDPos[2][45];
     /* 0x08F8 */ cXyz mNrm[2][45];
