@@ -592,18 +592,12 @@ If done correctly, the scratch should compile and show the same issue as you wer
 
 Note that scratches only show functions, not data. So if all the functions match 100% but some data doesn't, you'll have to figure that out locally using objdiff.
 
-### Missing weak data
+### Extra weak data/functions
 
-Many actors TUs in TWW have unused data included into them, usually in the .bss or .data sections. This data won't be referenced by any of the functions, but it's still necessary to include it in order for the TU to match.
+You might notice that you have some extra data on the right side with names like `@1234` and `std::sqrtf(float)::_three`, or extra weak functions like destructors.
 
-You can tell if this is the case for the TU you're working on by looking at the symbol list in objdiff. If one of the data sections has a bunch of symbols on the left side but not on the right side, and they have names like `@1036`, they may be missing weak data.
-
-The exact cause of these aren't fully understood yet, but we have headers you can include that should match these symbols. Copy either the .bss include or the .data include below, or both, depending on which section(s) in your TU the missing symbols are in:
-
-```cpp
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
-```
+This is normal. They're from a header that gets included in every TU. The linker will strip them out if they're unused, so they shouldn't cause any problems.  
+The important thing is for all sections on the left side to show 100%, so you can safely ignore extra symbols on the right side in most cases.
 
 ### Diffing data values with objdiff
 
@@ -677,7 +671,19 @@ Even if all functions match 100%, it's possible for the TU to not match if the c
 
 ![objdiff showing weak functions that are out of order](images/objdiff_weak_func_order.png)
 
-This issue is called **weak function ordering**, and it's so common, and has so many different possible causes, that it gets its [own entire guide](weak_func_order.md).
+This issue is called **weak function ordering**. It has a large number of possible causes, but we're only going to go over the most common ones.
+
+The most common cause of weak function ordering is when a function is defined in the wrong file - for example, you might need to move a class definition from the header to the .cpp file or vice versa in order to get the inlines defined in that class body in the right order.
+
+Another possible cause is explicit vs implicit definition of a class's empty destructor. If you explicitly define `~SomeClass() {}`, that can cause the destructor to be placed in a different order compared to letting the compiler generate it automatically.
+
+If neither of those fix it, I recommend marking the TU as `Equivalent` in [configure.py](../configure.py) and adding a comment about the weak function order, e.g.:
+
+```py
+ActorRel(Equivalent, "d_a_pirate_flag"), # weak func order
+```
+
+Then you can just submit a pull request as-is instead of worrying about it any more. The build system won't be able to automatically verify that the TU is accurately decompiled, but it will still contribute to the project's overall percent completion and be useful for anyone interested in understanding the code of the actor you just decompiled or modding the actor, as weak function order has no effect on the functionality of the code.
 
 ## Documentation and naming
 

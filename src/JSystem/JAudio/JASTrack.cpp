@@ -3,6 +3,8 @@
 // Translation Unit: JASTrack.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrack.h"
 #include "JSystem/JAudio/JASBankMgr.h"
 #include "JSystem/JAudio/JASCalc.h"

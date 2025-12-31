@@ -59,11 +59,11 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
         }
         daPy_matAnm_c::offMabaFlg();
         setSingleMoveAnime(
-            ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+            ANM_WAITPUSHPULL, m_HIO->mPushpull.m.field_0x0, 0.0f, -1, m_HIO->mPushpull.m.field_0x4
         );
         m34D6 = 0;
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         m3598 = 0.0f;
         m34D6 = 1;
@@ -85,7 +85,7 @@ BOOL daPy_lk_c::procPushPullWait() {
     if (m34D6 != 0) {
         if (checkNoUpperAnime()) {
             setSingleMoveAnime(
-                ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+                ANM_WAITPUSHPULL, m_HIO->mPushpull.m.field_0x0, 0.0f, -1, m_HIO->mPushpull.m.field_0x4
             );
             m34D6 = 0;
         }
@@ -126,7 +126,7 @@ BOOL daPy_lk_c::procPushMove_init() {
     }
 
     commonProcInit(daPyProc_PUSH_MOVE_e);
-    setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_WALKPUSH, m_HIO->mPushpull.m.field_0x8, 0.0f, -1, m_HIO->mPushpull.m.field_0xC);
     mProcVar0.m3570 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
 
@@ -169,7 +169,7 @@ BOOL daPy_lk_c::procPullMove_init() {
     }
 
     commonProcInit(daPyProc_PULL_MOVE_e);
-    setSingleMoveAnime(ANM_WALKPULL, daPy_HIO_pushpull_c0::m.field_0x10, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x14);
+    setSingleMoveAnime(ANM_WALKPULL, m_HIO->mPushpull.m.field_0x10, 0.0f, -1, m_HIO->mPushpull.m.field_0x14);
     mProcVar0.m3570 = 1;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
 

@@ -204,7 +204,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
                 fVar2 = 1.0f;
             }
             mFrameCtrlUpper[UPPER_MOVE2_e].setRate(
-                (1.0f - daPy_HIO_ship_c0::m.field_0xC) * fVar2 + daPy_HIO_ship_c0::m.field_0xC
+                (1.0f - m_HIO->mShip.m.field_0xC) * fVar2 + m_HIO->mShip.m.field_0xC
             );
             if (ship->getJumpFlg()) {
                 if (ship->getJumpRate() > 0.6f) {
@@ -230,7 +230,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
             }
             s16 sVar4;
             if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_VOYAGE1) {
-                sVar4 = -daPy_HIO_ship_c0::m.field_0x4 * ship->getTillerAngleRate();
+                sVar4 = -m_HIO->mShip.m.field_0x4 * ship->getTillerAngleRate();
             } else {
                 sVar4 = 0;
             }
@@ -242,7 +242,7 @@ void daPy_lk_c::setShipRidePos(int param_0) {
 /* 801403E0-80140480       .text setShipAttentionAnmSpeed__9daPy_lk_cFf */
 void daPy_lk_c::setShipAttentionAnmSpeed(f32 param_0) {
     if (checkAttentionLock()) {
-        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
         mFrameCtrlUpper[UPPER_MOVE2_e].setRate(param_0);
     } else {
         mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
@@ -475,10 +475,10 @@ BOOL daPy_lk_c::procShipReady_init() {
     daShip_c* ship = dComIfGp_getShipActor();
     setSingleMoveAnime(
         ANM_VJMPCL,
-        daPy_HIO_wallCatch_c0::m.field_0x24,
-        daPy_HIO_wallCatch_c0::m.field_0x2C,
-        daPy_HIO_wallCatch_c0::m.field_0x4,
-        daPy_HIO_wallCatch_c0::m.field_0x28
+        m_HIO->mWallCatch.m.field_0x24,
+        m_HIO->mWallCatch.m.field_0x2C,
+        m_HIO->mWallCatch.m.field_0x4,
+        m_HIO->mWallCatch.m.field_0x28
     );
     gravity = 0.0f;
     mVelocity = 0.0f;
@@ -524,7 +524,7 @@ BOOL daPy_lk_c::procShipReady() {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             mProcVar0.m3570 = 1;
             mVelocity = 6.0f;
-            setSingleMoveAnime(ANM_WALK, daPy_HIO_move_c0::m.field_0x40, 0.0f, -1, 5.0f);
+            setSingleMoveAnime(ANM_WALK, m_HIO->mMove.m.field_0x40, 0.0f, -1, 5.0f);
             m34C2 = 10;
             offModeFlg(ModeFlg_HANG | ModeFlg_00000400);
             ship->setReadySecond();
@@ -655,7 +655,7 @@ BOOL daPy_lk_c::procShipPaddle() {
             dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK2000_e);
         }
     } else {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             setSubjectMode();
         }
@@ -707,7 +707,7 @@ BOOL daPy_lk_c::procShipScope_init(int param_0) {
     gravity = 0.0f;
     ship->setPaddleMove();
     setShipRidePos(0);
-    setSingleMoveAnime(ANM_WAITS, daPy_HIO_move_c0::m.field_0x38, 0.0f, -1, 5.0f);
+    setSingleMoveAnime(ANM_WAITS, m_HIO->mMove.m.field_0x38, 0.0f, -1, 5.0f);
     dComIfGp_setPlayerStatus0(0, daPyStts0_SHIP_RIDE_e);
     seStartSystem(JA_SE_ITM_SUBMENU_IN_1);
     offNoResetFlg0(daPyFlg0_SCOPE_CANCEL);
@@ -786,7 +786,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
     if (!checkUpperAnime(LKANM_BCK_BOOMCATCH)) {
         if (mEquipItem == dItem_BOOMERANG_e) {
             if (checkUpperAnime(LKANM_BCK_BOOMWAIT)) {
-                setShipAttentionAnmSpeed(daPy_HIO_boom_c0::m.field_0x18);
+                setShipAttentionAnmSpeed(m_HIO->mItem.mBoom.m.field_0x18);
                 checkNextActionBoomerangReady();
                 if (checkAttentionLock()) {
                     setShipAttnetionBodyAngle();
@@ -811,7 +811,7 @@ BOOL daPy_lk_c::procShipBoomerang() {
                 return procShipPaddle_init();
             }
             setShapeAngleToAtnActor();
-            mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+            mFrameCtrlUnder[UNDER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
         }
     }
     m34D4 = ship->shape_angle.y;
@@ -1162,7 +1162,7 @@ BOOL daPy_lk_c::procShipGetOff_init() {
     daShip_c* ship = dComIfGp_getShipActor();
     commonProcInit(daPyProc_SHIP_GET_OFF_e);
     deleteEquipItem(TRUE);
-    setSingleMoveAnime(ANM_DASH, daPy_HIO_move_c0::m.field_0x40, 0.0f, -1, 5.0f);
+    setSingleMoveAnime(ANM_DASH, m_HIO->mMove.m.field_0x40, 0.0f, -1, 5.0f);
     mVelocity = 8.0f;
     gravity = 0.0f;
     shape_angle.y = ship->shape_angle.y + -0x4000;
@@ -1191,14 +1191,14 @@ BOOL daPy_lk_c::procShipGetOff() {
         if (cLib_distanceAngleS(sVar3, shape_angle.y) >= 0x4000) {
             setSingleMoveAnime(
                 ANM_JMPST,
-                daPy_HIO_autoJump_c0::m.field_0x20,
-                daPy_HIO_autoJump_c0::m.field_0x2C,
-                daPy_HIO_autoJump_c0::m.field_0x2,
-                daPy_HIO_autoJump_c0::m.field_0x30
+                m_HIO->mAutoJump.m.field_0x20,
+                m_HIO->mAutoJump.m.field_0x2C,
+                m_HIO->mAutoJump.m.field_0x2,
+                m_HIO->mAutoJump.m.field_0x30
             );
-            gravity = daPy_HIO_autoJump_c0::m.field_0xC;
-            mVelocity = daPy_HIO_ship_c0::m.field_0x10;
-            speed.y = daPy_HIO_ship_c0::m.field_0x14;
+            gravity = m_HIO->mAutoJump.m.field_0xC;
+            mVelocity = m_HIO->mShip.m.field_0x10;
+            speed.y = m_HIO->mShip.m.field_0x14;
             mProcVar0.m3570 = 1;
             m34C2 = 1;
             ship->setGetOffSecond();
@@ -1208,11 +1208,11 @@ BOOL daPy_lk_c::procShipGetOff() {
         m34C2 = 1;
         dComIfGp_evmng_cutEnd(mStaffIdx);
         if (mAcch.ChkGroundHit()) {
-            changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+            changeLandProc(m_HIO->mAutoJump.m.field_0x24);
         } else if (checkFanGlideProc(0)) {
             return true;
         } else if (speed.y < -gravity) {
-            procFall_init(0, daPy_HIO_smallJump_c0::m.field_0x18);
+            procFall_init(0, m_HIO->mSmallJump.m.field_0x18);
             setTextureAnime(0x37, 0);
         }
     }

@@ -514,13 +514,13 @@ u16 daTag_Hint_c::talk() {
                 break;
             case 2:
                 sVar3 = l_msg->mStatus;
-                if (sVar3 == 0xe) {
+                if (sVar3 == fopMsgStts_MSG_DISPLAYED_e) {
                     l_msg->mStatus = next_msgStatus(&m290);
-                    if (l_msg->mStatus == 0xf) {
+                    if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
                         fopMsgM_messageSet(m290);
                     }
-                } else if (sVar3 == 0x12) {
-                    l_msg->mStatus = 0x13;
+                } else if (sVar3 == fopMsgStts_BOX_CLOSED_e) {
+                    l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
                     m294 = -1;
                 }
                 break;

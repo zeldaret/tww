@@ -784,9 +784,9 @@ BOOL daBoko_c::execute() {
         mSph.SetC(m2D0);
         dComIfG_Ccsp()->Set(&mSph);
         if (getNowMode() == Mode_PLAYER_CARRY_e) {
-            dComIfG_Ccsp_SetMass(&mSph, 1);
+            dComIfG_Ccsp()->SetMass(&mSph, 1);
         } else {
-            dComIfG_Ccsp_SetMass(&mSph, 4);
+            dComIfG_Ccsp()->SetMass(&mSph, 4);
         }
     }
 

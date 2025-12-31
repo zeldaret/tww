@@ -3,6 +3,8 @@
 // Translation Unit: JASHardStream.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASHardStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"

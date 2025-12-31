@@ -3,6 +3,8 @@
 // Translation Unit: J3DMaterialAttach.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"

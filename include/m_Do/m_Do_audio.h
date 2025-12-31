@@ -433,7 +433,9 @@ inline void mDoAud_talkOut() {
 }
 
 inline void mDoAud_checkSePlaying(u32 param_0) {}
-inline void mDoAud_heartGaugeOn() {}
+inline void mDoAud_heartGaugeOn() {
+    mDoAud_zelAudio_c::getInterface()->heartGaugeOn();
+}
 inline void mDoAud_resetRecover() {}
 
 #endif /* M_DO_AUDIO_H */

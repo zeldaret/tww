@@ -208,7 +208,7 @@ void daTag_Island_c::demoInitTact_Bf() {
 
 /* 00000778-000007C8       .text demoProcTact_Bf__14daTag_Island_cFv */
 BOOL daTag_Island_c::demoProcTact_Bf() {
-    if (talk() == fopMsgStts_UNK15_e)
+    if (talk() == fopMsgStts_INPUT_e)
         dComIfGp_evmng_cutEnd(mStaffId);
     return TRUE;
 }

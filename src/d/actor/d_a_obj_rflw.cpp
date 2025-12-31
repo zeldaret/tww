@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_rflw.h"
+#include "d/res/res_rflw.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -40,50 +42,158 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObjRflw_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-000001E0       .text CreateHeap__11daObjRflw_cFv */
-void daObjRflw_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObjRflw_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Rflw", RFLW_BDL_PHANA);
+    JUT_ASSERT(0xAA, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+
+    if (mpModel != NULL) {
+        JUTNameTab* name_table = mpModel->getModelData()->getJointName();
+        for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+            if (strcmp("joint2", name_table->getName(i)) == 0) {
+                mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+                break;
+            }
+        }
+        mpModel->setUserArea(reinterpret_cast<u32>(this));
+    } else {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 000001E0-00000284       .text CreateInit__11daObjRflw_cFv */
 void daObjRflw_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    m408 = 0;
+    set_mtx();
 }
 
 /* 00000284-00000368       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jointNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daObjRflw_c* i_this = (daObjRflw_c*)model->getUserArea();
+        if (i_this != NULL) {
+            MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, i_this->m40E);
+            cMtx_YrotM(*calc_mtx, i_this->m408);
+            cMtx_XrotM(*calc_mtx, -i_this->m40E);
+            model->setAnmMtx(jointNo, *calc_mtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000368-000003E8       .text set_mtx__11daObjRflw_cFv */
 void daObjRflw_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+}
+
+inline cPhs_State daObjRflw_c::_create() {
+    cPhs_State rt = cPhs_ERROR_e;
+    fopAcM_SetupActor(this, daObjRflw_c);
+
+    rt = dComIfG_resLoad(&mPhs, "Rflw");
+
+    if (rt == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xC60)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    m410 = false;
+    return rt;
+}
+
+inline BOOL daObjRflw_c::_delete() {
+    dComIfG_resDeleteDemo(&mPhs, "Rflw");
+    return TRUE;
+}
+
+inline BOOL daObjRflw_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setList();
+    return TRUE;
+}
+
+inline BOOL daObjRflw_c::_execute() {
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    if ((m40C > 0x38 || m410 == false) && mCyl.ChkCoHit()) {
+        fopAc_ac_c* actor = mCyl.GetCoHitAc();
+        cXyz dir_to_obj = current.pos - actor->current.pos;
+        s16 dir_angle = cM_atan2s(dir_to_obj.x, dir_to_obj.z);
+        m40E = dir_angle + -0x4000;
+        m410 = true;
+        m40C = 0;
+        m40A = 0;
+        fopAcM_seStart(this, JA_SE_OBJ_TREE_SWING_S, 0);
+    }
+    if (m410 != false) {
+        m40C++;
+        s32 temp4 = m40C;
+        if (temp4 < 8) {
+            s32 temp5 = ((float)(0x100 - temp4) * cM_ssin(m40A) * 4.0f);
+            m408 = temp5;
+            m40A += 0x1000;
+        } else {
+            s32 temp5 = ((float)(0x100 - temp4) * cM_ssin(m40A) * 2.0f);
+            m408 = temp5;
+            m40A += 0x800;
+        }
+        if (m40C > 0x100) {
+            m410 = false;
+            m40C = 0;
+            m408 = 0;
+        }
+    }
+    set_mtx();
+    return TRUE;
 }
 
 /* 000003E8-0000051C       .text daObjRflw_Create__FPv */
-static cPhs_State daObjRflw_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daObjRflw_Create(void* i_this) {
+    return ((daObjRflw_c*)i_this)->_create();
 }
 
 /* 000006D4-00000704       .text daObjRflw_Delete__FPv */
-static BOOL daObjRflw_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjRflw_Delete(void* i_this) {
+    return ((daObjRflw_c*)i_this)->_delete();
 }
 
 /* 00000704-000007A8       .text daObjRflw_Draw__FPv */
-static BOOL daObjRflw_Draw(void*) {
-    /* Nonmatching */
+static BOOL daObjRflw_Draw(void* i_this) {
+    return ((daObjRflw_c*)i_this)->_draw();
 }
 
 /* 000007A8-000009EC       .text daObjRflw_Execute__FPv */
-static BOOL daObjRflw_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjRflw_Execute(void* i_this) {
+    return ((daObjRflw_c*)i_this)->_execute();
 }
 
 /* 000009EC-000009F4       .text daObjRflw_IsDelete__FPv */

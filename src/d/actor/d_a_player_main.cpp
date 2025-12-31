@@ -1381,7 +1381,7 @@ BOOL daPy_lk_c::checkNoCollisionCorret() {
         mDemo.getDemoType() == 1 ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_OPEN_TREASURE_e ||
         mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_030_e ||
-        checkResetFlg0(daPyRFlg0_UNK1000) ||
+        checkResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE) ||
         eventInfo.checkCommandDoor() ||
         mCurProc == daPyProc_VERTICAL_JUMP_e ||
         mCurProc == daPyProc_CRAWL_END_e ||
@@ -1594,7 +1594,7 @@ void daPy_lk_c::drawShadow() {
         {
             f1 = 1400.0f;
         } else {
-            f1 = daPy_HIO_basic_c0::m.field_0x10;
+            f1 = m_HIO->mBasic.m.field_0x10;
         }
         int iVar4 = dComIfGd_setShadow(m3614, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
                                        f31, mAcch.m_gnd, &tevStr, 0, 1.0f,
@@ -1997,7 +1997,7 @@ BOOL daPy_lk_c::draw() {
                 }
                 entryDLSetLight(mpEquipItemModel, checkFreezeState());
                 if (mpSwordModel1 != NULL) {
-                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_UNK8000) || checkFinalMasterSwordEquip()) {
+                    if (checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP) || checkFinalMasterSwordEquip()) {
                         updateDLSetLight(mpSwordModel1, 0);
                     }
                 }
@@ -2191,9 +2191,9 @@ void daPy_lk_c::setDoStatusBasic() {
     if (dComIfGp_getDoStatus() == dActStts_BLANK_e) {
         int direction = getDirectionFromShapeAngle();
         if (checkHeavyStateOn()) {
-            fVar1 = daPy_HIO_basic_c0::m.field_0x1C * daPy_HIO_move_c0::m.field_0x80;
+            fVar1 = m_HIO->mBasic.m.field_0x1C * m_HIO->mMove.m.field_0x80;
         } else {
-            fVar1 = daPy_HIO_basic_c0::m.field_0x1C;
+            fVar1 = m_HIO->mBasic.m.field_0x1C;
         }
         if (checkAttentionLock() ||
             (mActorKeepThrow.getActor() != NULL && mpAttnActorLockOn == mActorKeepThrow.getActor()))
@@ -2332,7 +2332,7 @@ void daPy_lk_c::setNormalSpeedF(f32 param_1, f32 param_2, f32 param_3, f32 param
             }
         }
         if (abs(uVar2) < 0x4000) {
-            dVar10 *= (1.0f - cM_scos(uVar2) * daPy_HIO_basic_c0::m.field_0x14);
+            dVar10 *= (1.0f - cM_scos(uVar2) * m_HIO->mBasic.m.field_0x14);
         }
     }
     f32 temp_f3;
@@ -2440,8 +2440,8 @@ void daPy_lk_c::posMoveFromFootPos() {
             f32 f30;
             f30 = std::abs(cM_scos(r3 & 0xFFFF));
             f32 f1 =
-                ((speedF * (1.0f - daPy_HIO_swim_c0::m.field_0x60)) + daPy_HIO_swim_c0::m.field_0x60 * (speedF * f30)) /
-                (1.0f + (daPy_HIO_swim_c0::m.field_0x7C * getSwimTimerRate()));
+                ((speedF * (1.0f - m_HIO->mSwim.m.field_0x60)) + m_HIO->mSwim.m.field_0x60 * (speedF * f30)) /
+                (1.0f + (m_HIO->mSwim.m.field_0x7C * getSwimTimerRate()));
             speed.x = f1 * cM_ssin(current.angle.y);
             speed.z = f1 * cM_scos(current.angle.y);
         } else if (mCurProc != daPyProc_CUT_ROLL_e || !dComIfGp_event_runCheck() ||
@@ -2775,10 +2775,10 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
         bVar2 = false;
         dVar11 = mStickDistance * mStickDistance;
         if (checkHeavyStateOn()) {
-            dVar11 *= 1.0f / (daPy_HIO_move_c0::m.field_0x80 * daPy_HIO_move_c0::m.field_0x80);
+            dVar11 *= 1.0f / (m_HIO->mMove.m.field_0x80 * m_HIO->mMove.m.field_0x80);
         }
         if (checkGrabWear()) {
-            dVar11 *= 1.0f / (daPy_HIO_move_c0::m.field_0x74 * daPy_HIO_move_c0::m.field_0x74);
+            dVar11 *= 1.0f / (m_HIO->mMove.m.field_0x74 * m_HIO->mMove.m.field_0x74);
         }
         if ((!checkAttentionLock() && cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800) &&
             mCurProc != daPyProc_MOVE_TURN_e)
@@ -2787,36 +2787,36 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                 return;
             }
             if (mCurProc == daPyProc_MOVE_e) {
-                if ((speedF / mMaxNormalSpeed > daPy_HIO_slip_c0::m.field_0x4) &&
+                if ((speedF / mMaxNormalSpeed > m_HIO->mSlip.m.field_0x4) &&
                     getDirectionFromAngle(m34EA - m34DC) == DIR_BACKWARD)
                 {
                     return;
                 }
-                if (speedF / mMaxNormalSpeed <= daPy_HIO_slip_c0::m.field_0x4) {
-                    cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6,
-                                       param_1, daPy_HIO_move_c0::m.field_0x4);
+                if (speedF / mMaxNormalSpeed <= m_HIO->mSlip.m.field_0x4) {
+                    cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mMove.m.field_0x6,
+                                       param_1, m_HIO->mMove.m.field_0x4);
                     return;
                 }
                 bVar2 = true;
             } else {
-                cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6, param_1,
-                                   daPy_HIO_move_c0::m.field_0x4);
+                cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mMove.m.field_0x6, param_1,
+                                   m_HIO->mMove.m.field_0x4);
             }
         } else {
             if (dComIfGp_event_runCheck()) {
                 sVar6 = param_1;
-                sVar7 = daPy_HIO_move_c0::m.field_0x4;
+                sVar7 = m_HIO->mMove.m.field_0x4;
             } else {
                 sVar6 = param_1 * dVar11;
                 if (sVar6 < 10) {
                     sVar6 = 10;
                 }
-                sVar7 = daPy_HIO_move_c0::m.field_0x4 * dVar11;
+                sVar7 = m_HIO->mMove.m.field_0x4 * dVar11;
                 if (sVar7 < 1) {
                     sVar7 = 1;
                 }
             }
-            cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6, sVar6,
+            cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mMove.m.field_0x6, sVar6,
                                sVar7);
         }
         if (!bVar2) {
@@ -2829,17 +2829,17 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
                 dVar9 = 0.0f;
             }
             if (dComIfGp_event_runCheck()) {
-                dVar9 *= daPy_HIO_move_c0::m.field_0x14 * mStickDistance;
+                dVar9 *= m_HIO->mMove.m.field_0x14 * mStickDistance;
             } else {
                 dVar10 = 0.5f - (0.5f * std::abs(mVelocity / mMaxNormalSpeed));
                 if (checkHeavyStateOn()) {
-                    dVar10 *= daPy_HIO_move_c0::m.field_0x80;
+                    dVar10 *= m_HIO->mMove.m.field_0x80;
                 }
                 if (checkGrabWear()) {
-                    dVar10 *= daPy_HIO_move_c0::m.field_0x74;
+                    dVar10 *= m_HIO->mMove.m.field_0x74;
                 }
                 if (mStickDistance > dVar10) {
-                    dVar9 *= daPy_HIO_move_c0::m.field_0x14 * dVar11;
+                    dVar9 *= m_HIO->mMove.m.field_0x14 * dVar11;
                 } else {
                     dVar9 = 0.0f;
                 }
@@ -2854,15 +2854,15 @@ void daPy_lk_c::setSpeedAndAngleNormal(s16 param_1) {
         mStickDistance > 0.05f)
     {
         sVar6 = shape_angle.y;
-        cLib_addCalcAngleS(&shape_angle.y, m34E8, daPy_HIO_move_c0::m.field_0x6,
-                           (s16)(param_1 << 1), (s16)(daPy_HIO_move_c0::m.field_0x4 << 1));
+        cLib_addCalcAngleS(&shape_angle.y, m34E8, m_HIO->mMove.m.field_0x6,
+                           (s16)(param_1 << 1), (s16)(m_HIO->mMove.m.field_0x4 << 1));
         sVar7 = current.angle.y;
         if ((s16)(sVar6 - sVar7) * (s16)(shape_angle.y - sVar7) <= 0) {
             shape_angle.y = sVar7;
         }
     }
-    setNormalSpeedF(dVar9, daPy_HIO_move_c0::m.field_0x24, daPy_HIO_move_c0::m.field_0x1C,
-                    daPy_HIO_move_c0::m.field_0x20);
+    setNormalSpeedF(dVar9, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C,
+                    m_HIO->mMove.m.field_0x20);
 }
 
 /* 8010A96C-8010AA90       .text setSpeedAndAngleAtn__9daPy_lk_cFv */
@@ -2871,7 +2871,7 @@ void daPy_lk_c::setSpeedAndAngleAtn() {
     f32 fVar2;
 
     if (mDirection == DIR_FORWARD) {
-        return setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+        return setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     } else if (mDirection == DIR_BACKWARD) {
         return setSpeedAndAngleAtnBack();
     } else {
@@ -2881,17 +2881,17 @@ void daPy_lk_c::setSpeedAndAngleAtn() {
                 mVelocity *= -1.0f;
             }
             sVar1 = current.angle.y;
-            cLib_addCalcAngleS(&current.angle.y, m34E8, daPy_HIO_atnMove_c0::m.field_0x4,
-                               daPy_HIO_atnMove_c0::m.field_0x0, daPy_HIO_atnMove_c0::m.field_0x2);
-            fVar2 = daPy_HIO_atnMove_c0::m.field_0x8 * mStickDistance *
+            cLib_addCalcAngleS(&current.angle.y, m34E8, m_HIO->mAtnMove.m.field_0x4,
+                               m_HIO->mAtnMove.m.field_0x0, m_HIO->mAtnMove.m.field_0x2);
+            fVar2 = m_HIO->mAtnMove.m.field_0x8 * mStickDistance *
                     cM_scos(current.angle.y - sVar1);
         } else {
             fVar2 = 0.0f;
         }
     }
     shape_angle.y = m34E6;
-    return setNormalSpeedF(fVar2, daPy_HIO_atnMove_c0::m.field_0x18,
-                           daPy_HIO_atnMove_c0::m.field_0x10, daPy_HIO_atnMove_c0::m.field_0x14);
+    return setNormalSpeedF(fVar2, m_HIO->mAtnMove.m.field_0x18,
+                           m_HIO->mAtnMove.m.field_0x10, m_HIO->mAtnMove.m.field_0x14);
 }
 
 /* 8010AA90-8010AB84       .text setSpeedAndAngleAtnBack__9daPy_lk_cFv */
@@ -2905,20 +2905,20 @@ void daPy_lk_c::setSpeedAndAngleAtnBack() {
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
             &current.angle.y, m34E8,
-            daPy_HIO_atnMoveB_c0::m.field_0x4,
-            daPy_HIO_atnMoveB_c0::m.field_0x0,
-            daPy_HIO_atnMoveB_c0::m.field_0x2
+            m_HIO->mAtnMoveB.m.field_0x4,
+            m_HIO->mAtnMoveB.m.field_0x0,
+            m_HIO->mAtnMoveB.m.field_0x2
         );
-        f1 = (daPy_HIO_atnMoveB_c0::m.field_0x8 * mStickDistance) * cM_scos(current.angle.y - origAngleY);
+        f1 = (m_HIO->mAtnMoveB.m.field_0x8 * mStickDistance) * cM_scos(current.angle.y - origAngleY);
     } else {
         f1 = 0.0f;
     }
     shape_angle.y = m34E6;
     setNormalSpeedF(
         f1,
-        daPy_HIO_atnMoveB_c0::m.field_0x18,
-        daPy_HIO_atnMoveB_c0::m.field_0x10,
-        daPy_HIO_atnMoveB_c0::m.field_0x14
+        m_HIO->mAtnMoveB.m.field_0x18,
+        m_HIO->mAtnMoveB.m.field_0x10,
+        m_HIO->mAtnMoveB.m.field_0x14
     );
 }
 
@@ -2933,20 +2933,20 @@ void daPy_lk_c::setSpeedAndAngleAtnActor() {
         s16 origAngleY = current.angle.y;
         cLib_addCalcAngleS(
             &current.angle.y, m34E8,
-            daPy_HIO_atnMove_c0::m.field_0x4,
-            daPy_HIO_atnMove_c0::m.field_0x0,
-            daPy_HIO_atnMove_c0::m.field_0x2
+            m_HIO->mAtnMove.m.field_0x4,
+            m_HIO->mAtnMove.m.field_0x0,
+            m_HIO->mAtnMove.m.field_0x2
             );
-        f1 = (daPy_HIO_atnMove_c0::m.field_0x8 * mStickDistance) * cM_scos(current.angle.y - origAngleY);
+        f1 = (m_HIO->mAtnMove.m.field_0x8 * mStickDistance) * cM_scos(current.angle.y - origAngleY);
     } else {
         f1 = 0.0f;
     }
     setShapeAngleToAtnActor();
     setNormalSpeedF(
         f1,
-        daPy_HIO_atnMove_c0::m.field_0x18,
-        daPy_HIO_atnMove_c0::m.field_0x10,
-        daPy_HIO_atnMove_c0::m.field_0x14
+        m_HIO->mAtnMove.m.field_0x18,
+        m_HIO->mAtnMove.m.field_0x10,
+        m_HIO->mAtnMove.m.field_0x14
     );
 }
 
@@ -2994,14 +2994,14 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
     f32 f29;
     f32 f28;
     if (dComIfGp_event_runCheck() || checkPlayerDemoMode()) {
-        f29 = daPy_HIO_move_c0::m.field_0x44;
-        f28 = daPy_HIO_move_c0::m.field_0x64;
+        f29 = m_HIO->mMove.m.field_0x44;
+        f28 = m_HIO->mMove.m.field_0x64;
     } else if (checkHeavyStateOn()) {
-        f29 = daPy_HIO_move_c0::m.field_0x78;
-        f28 = daPy_HIO_move_c0::m.field_0x7C;
+        f29 = m_HIO->mMove.m.field_0x78;
+        f28 = m_HIO->mMove.m.field_0x7C;
     } else {
-        f29 = daPy_HIO_move_c0::m.field_0x40;
-        f28 = daPy_HIO_move_c0::m.field_0x60;
+        f29 = m_HIO->mMove.m.field_0x40;
+        f28 = m_HIO->mMove.m.field_0x60;
     }
     daPy_ANM r28 = ANM_WAITS;
     daPy_ANM r27;
@@ -3018,14 +3018,14 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
             r27 = ANM_WALKHBOOTSKAZE;
             r26 = ANM_WALKHBOOTSKAZE;
             if (!checkNoResetFlg1(daPyFlg1_UNK1000000)) {
-                param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                param_1 = m_HIO->mBasic.m.field_0xC;
                 onNoResetFlg1(daPyFlg1_UNK1000000);
             }
         } else {
             r27 = ANM_WALKHBOOTS;
             r26 = ANM_WALKHBOOTS;
             if (checkNoResetFlg1(daPyFlg1_UNK1000000)) {
-                param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                param_1 = m_HIO->mBasic.m.field_0xC;
                 offNoResetFlg1(daPyFlg1_UNK1000000);
             }
         }
@@ -3033,7 +3033,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         r27 = ANM_WALKSLOPE;
         r26 = ANM_WALKSLOPE;
         if (!checkNoResetFlg1(daPyFlg1_UNK80)) {
-            param_1 = daPy_HIO_basic_c0::m.field_0xC;
+            param_1 = m_HIO->mBasic.m.field_0xC;
             onNoResetFlg1(daPyFlg1_UNK80);
         }
     } else {
@@ -3045,18 +3045,18 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         {
             r26 = ANM_DASHKAZE;
             if (!checkNoResetFlg1(daPyFlg1_UNK1000000)) {
-                param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                param_1 = m_HIO->mBasic.m.field_0xC;
                 onNoResetFlg1(daPyFlg1_UNK1000000);
             }
         } else {
             r26 = ANM_DASH;
             if (checkNoResetFlg1(daPyFlg1_UNK1000000)) {
-                param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                param_1 = m_HIO->mBasic.m.field_0xC;
                 offNoResetFlg1(daPyFlg1_UNK1000000);
             }
         }
         if (checkNoResetFlg1(daPyFlg1_UNK80)) {
-            param_1 = daPy_HIO_basic_c0::m.field_0xC;
+            param_1 = m_HIO->mBasic.m.field_0xC;
             offNoResetFlg1(daPyFlg1_UNK80);
         }
     }
@@ -3082,14 +3082,14 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         seStartMapInfo(JA_SE_LK_SLIP_SUS);
         if ((m34C3 != 9 && (bVar3)) || ((m34C3 != 10 && (!bVar3)))) {
             if (bVar3) {
-                setSingleMoveAnime(ANM_SLIPICE, daPy_HIO_iceSlip_c0::m.field_0x10,
-                                   daPy_HIO_iceSlip_c0::m.field_0x14,
-                                   daPy_HIO_iceSlip_c0::m.field_0x0,
-                                   daPy_HIO_iceSlip_c0::m.field_0x18);
+                setSingleMoveAnime(ANM_SLIPICE, m_HIO->mIceSlip.m.field_0x10,
+                                   m_HIO->mIceSlip.m.field_0x14,
+                                   m_HIO->mIceSlip.m.field_0x0,
+                                   m_HIO->mIceSlip.m.field_0x18);
                 m34C3 = 9;
             } else {
-                setSingleMoveAnime(ANM_WAITQ, daPy_HIO_move_c0::m.field_0x84, 0.0f, -1,
-                                   daPy_HIO_basic_c0::m.field_0xC);
+                setSingleMoveAnime(ANM_WAITQ, m_HIO->mMove.m.field_0x84, 0.0f, -1,
+                                   m_HIO->mBasic.m.field_0xC);
                 setTextureAnime(0x68, 0);
                 m34C3 = 10;
             }
@@ -3105,16 +3105,16 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         m3598 = 0.0f;
     } else {
         if (m34C3 == 9) {
-            param_1 = daPy_HIO_basic_c0::m.field_0xC;
+            param_1 = m_HIO->mBasic.m.field_0xC;
         }
-        if (f30 < daPy_HIO_move_c0::m.field_0x2C || checkHeavyStateOn()) {
+        if (f30 < m_HIO->mMove.m.field_0x2C || checkHeavyStateOn()) {
             if (checkHeavyStateOn()) {
-                f25 = f30 / daPy_HIO_move_c0::m.field_0x80;
+                f25 = f30 / m_HIO->mMove.m.field_0x80;
                 if (f25 > 0.55f) {
                     r25 = true;
                 }
             } else {
-                f25 = f30 / daPy_HIO_move_c0::m.field_0x2C;
+                f25 = f30 / m_HIO->mMove.m.field_0x2C;
             }
             r28 = ANM_WAITS;
             int r24;
@@ -3126,9 +3126,9 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
             if (checkModeFlg(ModeFlg_00000001)) {
                 if (checkAttentionLock()) {
                     if (checkUpperGuardAnime()) {
-                        setMoveAnime(0.0f, daPy_HIO_atnMove_c0::m.field_0x24,
-                                     daPy_HIO_atnMove_c0::m.field_0x28, ANM_ATNRS, ANM_ATNWRS, 2,
-                                     daPy_HIO_basic_c0::m.field_0xC);
+                        setMoveAnime(0.0f, m_HIO->mAtnMove.m.field_0x24,
+                                     m_HIO->mAtnMove.m.field_0x28, ANM_ATNRS, ANM_ATNWRS, 2,
+                                     m_HIO->mBasic.m.field_0xC);
                         return;
                     }
                 }
@@ -3138,8 +3138,8 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
                     !dComIfGp_event_runCheck())
                 {
                     if (m_anm_heap_under[UNDER_MOVE0_e].mIdx != LKANM_BCK_WAITQ) {
-                        setSingleMoveAnime(ANM_WAITQ, daPy_HIO_move_c0::m.field_0x84, f1, -1,
-                                           daPy_HIO_basic_c0::m.field_0xC);
+                        setSingleMoveAnime(ANM_WAITQ, m_HIO->mMove.m.field_0x84, f1, -1,
+                                           m_HIO->mBasic.m.field_0xC);
                         m34C3 = 2;
                     }
                     return;
@@ -3156,28 +3156,28 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
                         f25 = 1.0f;
                     }
                     if (!checkNoResetFlg1(daPyFlg1_UNK800000)) {
-                        param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                        param_1 = m_HIO->mBasic.m.field_0xC;
                     }
                     onNoResetFlg1(daPyFlg1_UNK800000);
-                    f29 = daPy_HIO_atnMove_c0::m.field_0x28;
+                    f29 = m_HIO->mAtnMove.m.field_0x28;
                 } else if (checkRestHPAnime()) {
                     r28 = ANM_WAITB;
-                    in_f27 = daPy_HIO_move_c0::m.field_0x3C;
+                    in_f27 = m_HIO->mMove.m.field_0x3C;
                     if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
-                        param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                        param_1 = m_HIO->mBasic.m.field_0xC;
                     }
                     offNoResetFlg1(daPyFlg1_UNK800000);
                 } else {
-                    in_f27 = daPy_HIO_move_c0::m.field_0x38;
+                    in_f27 = m_HIO->mMove.m.field_0x38;
                     if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
-                        param_1 = daPy_HIO_basic_c0::m.field_0xC;
+                        param_1 = m_HIO->mBasic.m.field_0xC;
                     }
                     offNoResetFlg1(daPyFlg1_UNK800000);
                 }
             } else {
                 m3598 = (1.0f - ((1.0f - f28) * f25));
                 r24 = 1;
-                in_f27 = daPy_HIO_move_c0::m.field_0x38;
+                in_f27 = m_HIO->mMove.m.field_0x38;
             }
             setMoveAnime(f25, in_f27, f29, r28, r27, r24, param_1);
             if (r28 == ANM_WAITB && (!dComIfGp_event_runCheck() || mDemo.getDemoType() != 3) &&
@@ -3189,18 +3189,18 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
                     voiceStart(20);
                 }
             }
-        } else if (f30 < daPy_HIO_move_c0::m.field_0x30) {
-            f32 f1 = (f30 - daPy_HIO_move_c0::m.field_0x2C) /
-                    (daPy_HIO_move_c0::m.field_0x30 - daPy_HIO_move_c0::m.field_0x2C);
-            setMoveAnime(f1, f29, daPy_HIO_move_c0::m.field_0x48, r27, r26, 1, param_1);
+        } else if (f30 < m_HIO->mMove.m.field_0x30) {
+            f32 f1 = (f30 - m_HIO->mMove.m.field_0x2C) /
+                    (m_HIO->mMove.m.field_0x30 - m_HIO->mMove.m.field_0x2C);
+            setMoveAnime(f1, f29, m_HIO->mMove.m.field_0x48, r27, r26, 1, param_1);
             m3598 = (f28 * (1.0f - f1));
         } else {
             f32 f1;
             if (f31 >= 169.0f) {
-                f1 = 1.7f * daPy_HIO_move_c0::m.field_0x48;
+                f1 = 1.7f * m_HIO->mMove.m.field_0x48;
                 onResetFlg0(daPyRFlg0_UNK40000);
             } else {
-                f1 = daPy_HIO_move_c0::m.field_0x48;
+                f1 = m_HIO->mMove.m.field_0x48;
             }
             setMoveAnime(1.0f, f1, f1, r26, r26, 1, param_1);
             m3598 = 0.0f;
@@ -3219,7 +3219,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         }
     }
     if (m34C3 != 9 && m34C3 != 10) {
-        if (f30 > daPy_HIO_move_c0::m.field_0x34) {
+        if (f30 > m_HIO->mMove.m.field_0x34) {
             setHandModel(r26);
         } else if (f30 > 0.0f) {
             setHandModel(r27);
@@ -3244,8 +3244,8 @@ void daPy_lk_c::setBlendAtnBackMoveAnime(f32 param_1) {
     }
     dVar7 = (std::abs(mVelocity * fVar1) / mMaxNormalSpeed);
     J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE1_e];
-    if (dVar7 < daPy_HIO_atnMoveB_c0::m.field_0x1C) {
-        fVar1 = dVar7 / daPy_HIO_atnMoveB_c0::m.field_0x1C;
+    if (dVar7 < m_HIO->mAtnMoveB.m.field_0x1C) {
+        fVar1 = dVar7 / m_HIO->mAtnMoveB.m.field_0x1C;
         if (checkModeFlg(ModeFlg_00000001)) {
             iVar4 = 2;
             m3598 = 0.0f;
@@ -3253,7 +3253,7 @@ void daPy_lk_c::setBlendAtnBackMoveAnime(f32 param_1) {
             iVar4 = 4;
             m3598 = 1.0f;
         }
-        setMoveAnime(fVar1, daPy_HIO_move_c0::m.field_0x38, daPy_HIO_atnMoveB_c0::m.field_0x24,
+        setMoveAnime(fVar1, m_HIO->mMove.m.field_0x38, m_HIO->mAtnMoveB.m.field_0x24,
                      ANM_WAITS, ANM_ATNWB, iVar4, param_1);
         if (!checkModeFlg(ModeFlg_00000001)) {
             if (frameCtrl.checkPass(2.0f)) {
@@ -3262,11 +3262,11 @@ void daPy_lk_c::setBlendAtnBackMoveAnime(f32 param_1) {
                 onResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND);
             }
         }
-    } else if (dVar7 < daPy_HIO_atnMoveB_c0::m.field_0x20) {
-        fVar1 = (dVar7 - daPy_HIO_atnMoveB_c0::m.field_0x1C) /
-                (daPy_HIO_atnMoveB_c0::m.field_0x20 - daPy_HIO_atnMoveB_c0::m.field_0x1C);
+    } else if (dVar7 < m_HIO->mAtnMoveB.m.field_0x20) {
+        fVar1 = (dVar7 - m_HIO->mAtnMoveB.m.field_0x1C) /
+                (m_HIO->mAtnMoveB.m.field_0x20 - m_HIO->mAtnMoveB.m.field_0x1C);
         dVar6 = fVar1;
-        setMoveAnime(fVar1, daPy_HIO_atnMoveB_c0::m.field_0x24, daPy_HIO_atnMoveB_c0::m.field_0x28,
+        setMoveAnime(fVar1, m_HIO->mAtnMoveB.m.field_0x24, m_HIO->mAtnMoveB.m.field_0x28,
                      ANM_ATNWB, ANM_ATNDB, 4, param_1);
         m3598 = 1.0f - dVar6;
         if (frameCtrl.checkPass(5.0f) || frameCtrl.checkPass(15.0f)) {
@@ -3276,10 +3276,10 @@ void daPy_lk_c::setBlendAtnBackMoveAnime(f32 param_1) {
         }
     } else {
         if (m36A0.abs2XZ() >= SQUARE(7.0f)) {
-            fVar1 = 1.9f * daPy_HIO_atnMoveB_c0::m.field_0x28;
+            fVar1 = 1.9f * m_HIO->mAtnMoveB.m.field_0x28;
             onResetFlg0(daPyRFlg0_UNK40000);
         } else {
-            fVar1 = daPy_HIO_atnMoveB_c0::m.field_0x28;
+            fVar1 = m_HIO->mAtnMoveB.m.field_0x28;
         }
         setMoveAnime(1.0f, fVar1, fVar1, ANM_ATNDB, ANM_ATNDB, 4, dVar6);
         m3598 = 0.0f;
@@ -3319,9 +3319,9 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
         }
     } else if (mStickDistance > 0.05f) {
         if (mpAttnActorLockOn == NULL &&
-            (fVar4 <= daPy_HIO_atnMoveB_c0::m.field_0x30 || (fVar4 >= daPy_HIO_atnMoveB_c0::m.field_0x2C)))
+            (fVar4 <= m_HIO->mAtnMoveB.m.field_0x30 || (fVar4 >= m_HIO->mAtnMoveB.m.field_0x2C)))
         {
-            if (fVar4 <= daPy_HIO_atnMoveB_c0::m.field_0x30) {
+            if (fVar4 <= m_HIO->mAtnMoveB.m.field_0x30) {
                 mDirection = DIR_BACKWARD;
             } else {
                 mDirection = DIR_FORWARD;
@@ -3329,7 +3329,7 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
         } else {
             if (uVar1 == DIR_BACKWARD || uVar1 == DIR_FORWARD) {
                 mDirection = DIR_RIGHT;
-                mMaxNormalSpeed = daPy_HIO_atnMove_c0::m.field_0xC;
+                mMaxNormalSpeed = m_HIO->mAtnMove.m.field_0xC;
             }
             if (f2 > 0.0f) {
                 mDirection = DIR_LEFT;
@@ -3340,20 +3340,20 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
     }
     u8 uVar2 = mDirection;
     if (uVar1 != uVar2) {
-        f30 = daPy_HIO_basic_c0::m.field_0xC;
+        f30 = m_HIO->mBasic.m.field_0xC;
     }
     if (uVar2 == DIR_BACKWARD) {
-        mMaxNormalSpeed = daPy_HIO_atnMoveB_c0::m.field_0xC;
+        mMaxNormalSpeed = m_HIO->mAtnMoveB.m.field_0xC;
         setBlendAtnBackMoveAnime(f30);
     } else if (uVar2 == DIR_FORWARD) {
-        mMaxNormalSpeed = daPy_HIO_move_c0::m.field_0x18;
+        mMaxNormalSpeed = m_HIO->mMove.m.field_0x18;
         setBlendMoveAnime(f30);
     } else {
         daPy_ANM dVar8;
         daPy_ANM dVar9;
         if (uVar2 != DIR_RIGHT && uVar2 != DIR_LEFT) {
             mDirection = DIR_RIGHT;
-            f30 = daPy_HIO_basic_c0::m.field_0xC;
+            f30 = m_HIO->mBasic.m.field_0xC;
         }
         J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE1_e];
         f32 f29;
@@ -3362,8 +3362,8 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
         } else {
             f29 = 1.0f;
         }
-        if (f31 < daPy_HIO_atnMove_c0::m.field_0x1C) {
-            f32 f1 = f31 / daPy_HIO_atnMove_c0::m.field_0x1C;
+        if (f31 < m_HIO->mAtnMove.m.field_0x1C) {
+            f32 f1 = f31 / m_HIO->mAtnMove.m.field_0x1C;
             if (mDirection == DIR_LEFT) {
                 dVar8 = ANM_ATNLS;
                 dVar9 = ANM_ATNWLS;
@@ -3378,13 +3378,13 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
                 iVar6 = 4;
                 m3598 = 1.0f;
             }
-            f32 f2 = daPy_HIO_atnMove_c0::m.field_0x24;
-            f32 f3 = daPy_HIO_atnMove_c0::m.field_0x28 * f29;
+            f32 f2 = m_HIO->mAtnMove.m.field_0x24;
+            f32 f3 = m_HIO->mAtnMove.m.field_0x28 * f29;
             setMoveAnime(f1, f2, f3, dVar8, dVar9, iVar6, f30);
         } else {
-            if (f31 < daPy_HIO_atnMove_c0::m.field_0x20) {
-                f32 f28 = (f31 - daPy_HIO_atnMove_c0::m.field_0x1C) /
-                          (daPy_HIO_atnMove_c0::m.field_0x20 - daPy_HIO_atnMove_c0::m.field_0x1C);
+            if (f31 < m_HIO->mAtnMove.m.field_0x20) {
+                f32 f28 = (f31 - m_HIO->mAtnMove.m.field_0x1C) /
+                          (m_HIO->mAtnMove.m.field_0x20 - m_HIO->mAtnMove.m.field_0x1C);
                 if (mDirection == DIR_LEFT) {
                     dVar8 = ANM_ATNWLS;
                     dVar9 = ANM_ATNDLS;
@@ -3392,8 +3392,8 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
                     dVar8 = ANM_ATNWRS;
                     dVar9 = ANM_ATNDRS;
                 }
-                f32 f2 = daPy_HIO_atnMove_c0::m.field_0x28 * f29;
-                f32 f3 = daPy_HIO_atnMove_c0::m.field_0x2C * f29;
+                f32 f2 = m_HIO->mAtnMove.m.field_0x28 * f29;
+                f32 f3 = m_HIO->mAtnMove.m.field_0x2C * f29;
                 setMoveAnime(f28, f2, f3, dVar8, dVar9, 4, f30);
                 m3598 = 1.0f - (f28 * m3598);
             } else {
@@ -3404,10 +3404,10 @@ void daPy_lk_c::setBlendAtnMoveAnime(f32 f30) {
                 }
                 f32 f2;
                 if (m36A0.abs2XZ() >= SQUARE(7.0f)) {
-                    f2 = 1.9f * daPy_HIO_atnMove_c0::m.field_0x2C;
+                    f2 = 1.9f * m_HIO->mAtnMove.m.field_0x2C;
                     onResetFlg0(daPyRFlg0_UNK40000);
                 } else {
-                    f2 = daPy_HIO_atnMove_c0::m.field_0x2C * f29;
+                    f2 = m_HIO->mAtnMove.m.field_0x2C * f29;
                 }
                 setMoveAnime(1.0f, f2, f2, dVar9, dVar9, 4, f30);
                 m3598 = 0.0f;
@@ -3445,10 +3445,10 @@ void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
         return;
     }
     m3562 = daPyItem_SWORD_e;
-    f32 rate = daPy_HIO_cut_c0::m.field_0x8;
-    f32 start = daPy_HIO_cut_c0::m.field_0xC;
-    s16 end = daPy_HIO_cut_c0::m.field_0x0;
-    f32 f3 = daPy_HIO_cut_c0::m.field_0x10;
+    f32 rate = m_HIO->mCut.m.field_0x8;
+    f32 start = m_HIO->mCut.m.field_0xC;
+    s16 end = m_HIO->mCut.m.field_0x0;
+    f32 f3 = m_HIO->mCut.m.field_0x10;
     setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
     setPriTextureAnime(0x72, 0);
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
@@ -3467,10 +3467,10 @@ void daPy_lk_c::setAnimeEquipSword(BOOL r4) {
 void daPy_lk_c::setAnimeEquipSingleItem(u16 bckIdx) {
     setActAnimeUpper(
         bckIdx, UPPER_MOVE2_e,
-        daPy_HIO_item_c0::m.field_0x14,
-        daPy_HIO_item_c0::m.field_0x18,
-        daPy_HIO_item_c0::m.field_0x2,
-        daPy_HIO_item_c0::m.field_0x1C
+        m_HIO->mItem.m.field_0x14,
+        m_HIO->mItem.m.field_0x18,
+        m_HIO->mItem.m.field_0x2,
+        m_HIO->mItem.m.field_0x1C
     );
     setPriTextureAnime(0x74, 0);
 }
@@ -3510,15 +3510,15 @@ void daPy_lk_c::setAnimeUnequipSword() {
         ModeFlg_CROUCH |
         ModeFlg_CRAWL
     ) || dComIfGp_event_runCheck() || checkPlayerDemoMode()) {
-        rate = daPy_HIO_cut_c0::m.field_0x20;
-        start = daPy_HIO_cut_c0::m.field_0x24;
-        end = daPy_HIO_cut_c0::m.field_0x4;
-        f3 = daPy_HIO_cut_c0::m.field_0x28;
+        rate = m_HIO->mCut.m.field_0x20;
+        start = m_HIO->mCut.m.field_0x24;
+        end = m_HIO->mCut.m.field_0x4;
+        f3 = m_HIO->mCut.m.field_0x28;
     } else {
-        rate = daPy_HIO_cut_c0::m.field_0x14;
-        start = daPy_HIO_cut_c0::m.field_0x18;
-        end = daPy_HIO_cut_c0::m.field_0x2;
-        f3 = daPy_HIO_cut_c0::m.field_0x1C;
+        rate = m_HIO->mCut.m.field_0x14;
+        start = m_HIO->mCut.m.field_0x18;
+        end = m_HIO->mCut.m.field_0x2;
+        f3 = m_HIO->mCut.m.field_0x1C;
     }
     
     setActAnimeUpper(LKANM_BCK_REST, UPPER_MOVE2_e, rate, start, end, f3);
@@ -3541,16 +3541,16 @@ void daPy_lk_c::setAnimeUnequipItem(u16 i_itemNo) {
     } else if (checkBowItem(i_itemNo)) {
         setAnimeEquipSingleItem(LKANM_BCK_TAKER);
     } else if (i_itemNo == dItem_SKULL_HAMMER_e) {
-        f32 rate = daPy_HIO_item_c0::m.field_0x24;
-        f32 start = daPy_HIO_item_c0::m.field_0x28;
-        s16 end = daPy_HIO_item_c0::m.field_0x4;
-        f32 f3 = daPy_HIO_item_c0::m.field_0x2C;
+        f32 rate = m_HIO->mItem.m.field_0x24;
+        f32 start = m_HIO->mItem.m.field_0x28;
+        s16 end = m_HIO->mItem.m.field_0x4;
+        f32 f3 = m_HIO->mItem.m.field_0x2C;
         setActAnimeUpper(LKANM_BCK_TAKEBOTH, UPPER_MOVE2_e, rate, start, end, f3);
     } else {
-        f32 rate = daPy_HIO_item_c0::m.field_0x8;
-        f32 start = daPy_HIO_item_c0::m.field_0xC;
-        s16 end = daPy_HIO_item_c0::m.field_0x0;
-        f32 f3 = daPy_HIO_item_c0::m.field_0x10;
+        f32 rate = m_HIO->mItem.m.field_0x8;
+        f32 start = m_HIO->mItem.m.field_0xC;
+        s16 end = m_HIO->mItem.m.field_0x0;
+        f32 f3 = m_HIO->mItem.m.field_0x10;
         setActAnimeUpper(LKANM_BCK_TAKE, UPPER_MOVE2_e, rate, start, end, f3);
         setPriTextureAnime(0x73, 0);
     }
@@ -3656,7 +3656,7 @@ void daPy_lk_c::setFallVoice() {
          -G_CM3D_F_INF == mAcch.GetGroundH()) &&
         (m35F0 - current.pos.y > 500.0f))
     {
-        if (current.pos.y - mAcch.GetGroundH() >= 100.0f * daPy_HIO_fall_c0::m.field_0x14) {
+        if (current.pos.y - mAcch.GetGroundH() >= 100.0f * m_HIO->mFall.m.field_0x14) {
             voiceStart(12);
             onNoResetFlg0(daPyFlg0_NO_FALL_VOICE);
             setTextureAnime(0x56, 0);
@@ -3787,7 +3787,7 @@ BOOL daPy_lk_c::changeDragonShield(int param_1) {
         return true;
     } else if (dComIfGs_getMagic() != 0) {
         onNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD);
-        m3548 = daPy_HIO_magicShield_c0::m.field_0x0;
+        m3548 = m_HIO->mItem.mMagicShield.m.field_0x0;
         mTinkleShieldTimer = 0;
         if (param_1 != 0) {
             dComIfGp_setItemMagicCount(-1);
@@ -3939,22 +3939,22 @@ void daPy_lk_c::checkItemAction() {
                 if (!(mStickDistance > 0.05f)) {
                     return;
                 }
-                if (!(frameCtrl.getFrame() > daPy_HIO_boom_c0::m.field_0x2C)) {
+                if (!(frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x2C)) {
                     return;
                 }
             }
-            resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+            resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 procShipPaddle_init();
             }
         } else if (checkUpperAnime(LKANM_BCK_BOOMTHROW)) {
             if (frameCtrl.getRate() < 0.01f ||
                 ((mStickDistance > 0.05f &&
-                  (frameCtrl.getFrame() > daPy_HIO_boom_c0::m.field_0x10))))
+                  (frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x10))))
             {
-                resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+                resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
             } else {
-                if (frameCtrl.checkPass(daPy_HIO_boom_c0::m.field_0x14)) {
+                if (frameCtrl.checkPass(m_HIO->mItem.mBoom.m.field_0x14)) {
                     throwBoomerang();
                 }
             }
@@ -3962,7 +3962,7 @@ void daPy_lk_c::checkItemAction() {
             if (frameCtrl.getRate() < 0.01f) {
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
-                mFrameCtrlUpper[UPPER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+                mFrameCtrlUpper[UPPER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
                 mFrameCtrlUpper[UPPER_MOVE1_e].setRate(0.0f);
             }
         } else if (checkEquipAnime()) {
@@ -3970,18 +3970,18 @@ void daPy_lk_c::checkItemAction() {
                 ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
                  (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f - frameCtrl.getRate())) ||
                  (checkUpperAnime(LKANM_BCK_TAKEBOTH) &&
-                  frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x30 - frameCtrl.getRate())) ||
+                  frameCtrl.checkPass(m_HIO->mItem.m.field_0x30 - frameCtrl.getRate())) ||
                  (checkSingleItemEquipAnime() &&
-                  frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x20 - frameCtrl.getRate()))))
+                  frameCtrl.checkPass(m_HIO->mItem.m.field_0x20 - frameCtrl.getRate()))))
             {
                 seStartOnlyReverb(JA_SE_LK_SW_PUTIN_S);
             }
             if (std::fabsf(frameCtrl.getRate()) < 0.01f) {
-                resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+                resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
             } else if ((checkUpperAnime(LKANM_BCK_REST) && frameCtrl.checkPass(7.0f)) ||
                         (checkUpperAnime(LKANM_BCK_TAKE) && frameCtrl.checkPass(7.0f)) ||
-                        (checkUpperAnime(LKANM_BCK_TAKEBOTH) && frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x30)) ||
-                        (checkSingleItemEquipAnime() && frameCtrl.checkPass(daPy_HIO_item_c0::m.field_0x20)))
+                        (checkUpperAnime(LKANM_BCK_TAKEBOTH) && frameCtrl.checkPass(m_HIO->mItem.m.field_0x30)) ||
+                        (checkSingleItemEquipAnime() && frameCtrl.checkPass(m_HIO->mItem.m.field_0x20)))
             {
                 if ((mEquipItem != daPyItem_NONE_e && mEquipItem != daPyItem_SWORD_e) ||
                     (m3562 != daPyItem_NONE_e && m3562 != daPyItem_SWORD_e))
@@ -4336,13 +4336,13 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
             if (!checkAttentionLock() && mStickDistance > 0.05f) {
                 shape_angle.y = m34E8;
             }
-            return procFrontRoll_init(daPy_HIO_roll_c0::m.field_0xC);
+            return procFrontRoll_init(m_HIO->mRoll.m.field_0xC);
         }
     }
     if ((daPy_getPlayerActorClass() == this && !dComIfGp_event_runCheck()) &&
         !checkGrabWear())
     {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000)) {
             return procSubjectivity_init(0);
         }
@@ -4371,13 +4371,13 @@ void daPy_lk_c::setShieldGuard() {
             freeGrabItem();
             if (!checkUpperAnime(uVar3)) {
                 resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
-                setActAnimeUpper(uVar3, UPPER_MOVE2_e, daPy_HIO_atnMove_c0::m.field_0x24, 0.0f, -1,
-                                 daPy_HIO_basic_c0::m.field_0xC);
+                setActAnimeUpper(uVar3, UPPER_MOVE2_e, m_HIO->mAtnMove.m.field_0x24, 0.0f, -1,
+                                 m_HIO->mBasic.m.field_0xC);
             } else {
                 f32 dVar6 = 1.0f;
                 if (local_18 < dVar6) {
-                    if (daPy_HIO_basic_c0::m.field_0xC > 0.01f) {
-                        cLib_chaseF(&local_18, dVar6, dVar6 / daPy_HIO_basic_c0::m.field_0xC);
+                    if (m_HIO->mBasic.m.field_0xC > 0.01f) {
+                        cLib_chaseF(&local_18, dVar6, dVar6 / m_HIO->mBasic.m.field_0xC);
                     } else {
                         local_18 = 1.0f;
                     }
@@ -4392,13 +4392,13 @@ void daPy_lk_c::setShieldGuard() {
             }
         } else {
             if (checkUpperGuardAnime()) {
-                if (daPy_HIO_basic_c0::m.field_0xC > 0.01f) {
-                    cLib_chaseF(&local_18, 0.0f, 1.0f / daPy_HIO_basic_c0::m.field_0xC);
+                if (m_HIO->mBasic.m.field_0xC > 0.01f) {
+                    cLib_chaseF(&local_18, 0.0f, 1.0f / m_HIO->mBasic.m.field_0xC);
                 } else {
                     local_18 = 0.0f;
                 }
                 if (local_18 <= 0.0f) {
-                    resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+                    resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
                 } else {
                     m_pbCalc[PART_UPPER_e]->setRatio(2, local_18);
                 }
@@ -4453,9 +4453,9 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
         mDemo.getDemoMode() == daPy_demo_c::DEMO_A_WAIT_e;
     
     if (r24) {
-        mMaxNormalSpeed = daPy_HIO_atnMove_c0::m.field_0xC;
+        mMaxNormalSpeed = m_HIO->mAtnMove.m.field_0xC;
     } else {
-        mMaxNormalSpeed = daPy_HIO_move_c0::m.field_0x18;
+        mMaxNormalSpeed = m_HIO->mMove.m.field_0x18;
     }
     
     if (changeSlideProc()) {
@@ -4509,7 +4509,7 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
         } else if (cLib_distanceAngleS(m34E8, current.angle.y) > 0x7800 &&
                    mStickDistance > 0.05f)
         {
-            if ((speedF / mMaxNormalSpeed > daPy_HIO_slip_c0::m.field_0x4) &&
+            if ((speedF / mMaxNormalSpeed > m_HIO->mSlip.m.field_0x4) &&
                 mCurrAttributeCode != dBgS_Attr_ICE_e &&
                 (!checkGrabAnime() && getDirectionFromAngle(m34EA - m34DC) == DIR_BACKWARD))
             {
@@ -4725,14 +4725,14 @@ void daPy_lk_c::setFrontWallType() {
                 }
             }
         }
-        spA8.set(current.pos.x, current.pos.y + (0.1f + daPy_HIO_wallCatch_c0::m.field_0x18), current.pos.z);
+        spA8.set(current.pos.x, current.pos.y + (0.1f + m_HIO->mWallCatch.m.field_0x18), current.pos.z);
         sp9C.set(spA8.x + (dVar15 * (50.0f + dVar16)), spA8.y, spA8.z + (dVar14 * (50.0f + dVar16)));
         mLinkLinChk.Set(&spA8, &sp9C, this);
         cVar8 = dComIfG_Bgsp()->LineCross(&mLinkLinChk);
         if (cVar8 == 0) {
             mRoofChk.SetPos(current.pos);
             dVar12 = dComIfG_Bgsp()->RoofChk(&mRoofChk);
-            if ((dVar12 - current.pos.y) > 10.0f + daPy_HIO_wallCatch_c0::m.field_0x18) {
+            if ((dVar12 - current.pos.y) > 10.0f + m_HIO->mWallCatch.m.field_0x18) {
                 cVar8 = 0;
             } else {
                 cVar8 = 1;
@@ -4756,7 +4756,7 @@ void daPy_lk_c::setFrontWallType() {
         }
         spA8.set(
             m3724.x - 15.0f * pVVar6->GetNP()->x,
-            current.pos.y + (daPy_HIO_wallCatch_c0::m.field_0x18 + 0.1f),
+            current.pos.y + (m_HIO->mWallCatch.m.field_0x18 + 0.1f),
             m3724.z - 15.0f * pVVar6->GetNP()->z
         );
         mGndChk.SetPos(&spA8);
@@ -4777,23 +4777,23 @@ void daPy_lk_c::setFrontWallType() {
         m3724 = sp3C;
         f32 fVar3 = m3724.y - current.pos.y;
         if (checkModeFlg(ModeFlg_SWIM)) {
-            if ((fVar3 <= 0.1f + daPy_HIO_swim_c0::m.field_0x6C) && fVar3 >= -5.0f) {
+            if ((fVar3 <= 0.1f + m_HIO->mSwim.m.field_0x6C) && fVar3 >= -5.0f) {
                 mFrontWallType = 7;
             }
         } else if (checkModeFlg(ModeFlg_MIDAIR)) {
             if (((dVar16 - mAcch.GetGroundH()) > 125.0f) && (mCurProc != daPyProc_HOOKSHOT_FLY_e || fVar3 < 100.0f)) {
                 mFrontWallType = 7;
             }
-        } else if (fVar3 >= 0.1f + daPy_HIO_wallCatch_c0::m.field_0x18) {
+        } else if (fVar3 >= 0.1f + m_HIO->mWallCatch.m.field_0x18) {
             // TODO?
-        } else if (!checkGrabAnime() || !(fVar3 >= 0.1f + daPy_HIO_wallCatch_c0::m.field_0xC)) {
+        } else if (!checkGrabAnime() || !(fVar3 >= 0.1f + m_HIO->mWallCatch.m.field_0xC)) {
             if (fVar3 < 27.09f) {
                 return;
-            } else if (fVar3 < daPy_HIO_wallCatch_c0::m.field_0xC + 0.1f) {
+            } else if (fVar3 < m_HIO->mWallCatch.m.field_0xC + 0.1f) {
                 mFrontWallType = 6;
-            } else if (fVar3 < daPy_HIO_wallCatch_c0::m.field_0x10 + 0.1f) {
+            } else if (fVar3 < m_HIO->mWallCatch.m.field_0x10 + 0.1f) {
                 mFrontWallType = 7;
-            } else if (fVar3 < daPy_HIO_wallCatch_c0::m.field_0x14 + 0.1f) {
+            } else if (fVar3 < m_HIO->mWallCatch.m.field_0x14 + 0.1f) {
                 mFrontWallType = 8;
             } else {
                 mFrontWallType = 9;
@@ -4835,7 +4835,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 fVar3 = cM_scos(m352C);
                 iVar8 = (int)((current.pos.y - m3724.y) / 37.5f) - 1;
                 if (iVar8 < 1) {
-                    return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+                    return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
                 }
                 shape_angle.y = m352C + 0x8000;
                 current.angle.y = shape_angle.y;
@@ -4885,7 +4885,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 current.pos.x = (m3724.x + 20.5f * fVar3) - fVar2;
                 current.pos.y = m3724.y + 37.5f * iVar8;
                 current.pos.z = (m3724.z + 20.5f * fVar2) + fVar3;
-                while (m35D0 - current.pos.y > daPy_HIO_swim_c0::m.field_0x24) {
+                while (m35D0 - current.pos.y > m_HIO->mSwim.m.field_0x24) {
                     current.pos.y += 37.5f;
                 }
                 procLadderMove_init(1, 0, &current.pos);
@@ -4903,12 +4903,12 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
         }
         m3544 = sVar5 + 1;
         if (mFrontWallType == 6) {
-            if (m3544 > daPy_HIO_smallJump_c0::m.field_0x2) {
+            if (m3544 > m_HIO->mSmallJump.m.field_0x2) {
                 return procSmallJump_init(0);
             }
             return false;
         }
-        if (m3544 > daPy_HIO_wallCatch_c0::m.field_0x8) {
+        if (m3544 > m_HIO->mWallCatch.m.field_0x8) {
             if (mFrontWallType == 7) {
                 return procHangWallCatch_init();
             }
@@ -4935,7 +4935,7 @@ int daPy_lk_c::changeSlideProc() {
                 return false;
             }
         }
-        if (cLib_distanceAngleS(sVar4, shape_angle.y) < daPy_HIO_slide_c0::m.field_0x8) {
+        if (cLib_distanceAngleS(sVar4, shape_angle.y) < m_HIO->mSlide.m.field_0x8) {
             return procSlideFront_init(sVar4);
         } else {
             return procSlideBack_init(sVar4);
@@ -4967,9 +4967,9 @@ BOOL daPy_lk_c::changeLandProc(f32 param_1) {
 
     dVar7 = m35F0 - current.pos.y;
     if (mCurrAttributeCode != dBgS_Attr_GIANT_FLOWER_e &&
-        ((dVar7 >= (100.0f * daPy_HIO_fall_c0::m.field_0x14))))
+        ((dVar7 >= (100.0f * m_HIO->mFall.m.field_0x14))))
     {
-        if (dVar7 >= (100.0f * daPy_HIO_fall_c0::m.field_0x10)) {
+        if (dVar7 >= (100.0f * m_HIO->mFall.m.field_0x10)) {
             return procLandDamage_init(2);
         } else {
             return procLandDamage_init(1);
@@ -4990,13 +4990,13 @@ BOOL daPy_lk_c::changeLandProc(f32 param_1) {
     {
         voiceStart(7);
         if (direction == DIR_FORWARD) {
-            speedF = daPy_HIO_move_c0::m.field_0x18;
-            procFrontRoll_init(daPy_HIO_fall_c0::m.field_0x38);
+            speedF = m_HIO->mMove.m.field_0x18;
+            procFrontRoll_init(m_HIO->mFall.m.field_0x38);
         } else {
             procSideRoll_init();
         }
     } else {
-        if (((dVar7 >= (0.5f * (daPy_HIO_fall_c0::m.field_0x14 * 100.0f))) &&
+        if (((dVar7 >= (0.5f * (m_HIO->mFall.m.field_0x14 * 100.0f))) &&
              !checkBossGomaStage()) &&
             mCurrAttributeCode != dBgS_Attr_GIANT_FLOWER_e)
         {
@@ -5019,7 +5019,7 @@ BOOL daPy_lk_c::setDamagePoint(f32 amount) {
     if (!checkNoDamageMode()) {
         dComIfGp_setItemLifeCount(amount);
         if (amount < 0.0f) {
-            offNoResetFlg1(daPyFlg1_UNK8000);
+            offNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
 #if VERSION > VERSION_JPN
             if (!checkFinalMasterSwordEquip())
 #endif
@@ -5047,11 +5047,11 @@ BOOL daPy_lk_c::checkNormalDamage(int param_1) {
 
 /* 80110448-801104E4       .text setDashDamage__9daPy_lk_cFv */
 void daPy_lk_c::setDashDamage() {
-    setActAnimeUpper(LKANM_BCK_DAMDASH, UPPER_MOVE2_e, daPy_HIO_move_c0::m.field_0x48, 0.0f, -1,
-                     daPy_HIO_basic_c0::m.field_0xC);
+    setActAnimeUpper(LKANM_BCK_DAMDASH, UPPER_MOVE2_e, m_HIO->mMove.m.field_0x48, 0.0f, -1,
+                     m_HIO->mBasic.m.field_0xC);
     setPriTextureAnime(0x40, 0);
     mFrameCtrlUpper[UPPER_MOVE2_e].setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getFrame());
-    mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
+    mDamageWaitTimer = m_HIO->mDam.m.field_0x2;
     voiceStart(2);
     seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
 }
@@ -5097,7 +5097,7 @@ BOOL daPy_lk_c::changeDamageProc() {
         mDamageWaitTimer--;
         if (mDamageWaitTimer == 0) {
             if (checkDashDamageAnime()) {
-                resetActAnimeUpper(UPPER_MOVE2_e, daPy_HIO_basic_c0::m.field_0xC);
+                resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
             } else if (checkModeFlg(ModeFlg_SWIM)) {
                 resetPriTextureAnime();
             }
@@ -5187,7 +5187,7 @@ BOOL daPy_lk_c::changeDamageProc() {
     if (checkModeFlg(ModeFlg_04000000)) {
         if (r30 || (mCyl.ChkTgHit() && !checkSuccessGuard(spl))) {
             setDamagePoint(-damage);
-            mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x2;
+            mDamageWaitTimer = m_HIO->mDam.m.field_0x2;
             
             voiceStart(2);
             
@@ -5333,7 +5333,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
         mLavaGndChk.SetPos(&current.pos);
         if (checkNoResetFlg0(daPyFlg0_HOVER_BOOTS)) {
             offNoResetFlg0(daPyFlg0_HOVER_BOOTS);
-            return procFall_init(2, daPy_HIO_wallCatch_c0::m.field_0x54);
+            return procFall_init(2, m_HIO->mWallCatch.m.field_0x54);
         }
         
         if (dVar11 < -30.1f) {
@@ -5362,7 +5362,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                 }
                 dVar10 = mVelocity;
                 if (dComIfGs_getLife() != 0 || dComIfGs_checkBottle(dItem_FAIRY_BOTTLE_e)) {
-                    if (m357C != 3 && !checkGrabWear() && dVar10 >= daPy_HIO_autoJump_c0::m.field_0x14 &&
+                    if (m357C != 3 && !checkGrabWear() && dVar10 >= m_HIO->mAutoJump.m.field_0x14 &&
                         mStickDistance > 0.85f && cLib_distanceAngleS(sVar3, shape_angle.y) < 0x800)
                     {
                         if (pcVar4 != NULL) {
@@ -5391,7 +5391,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                 if (mCurProc == daPyProc_FRONT_ROLL_e) {
                     fVar1 = 0.0f;
                 } else {
-                    fVar1 = daPy_HIO_wallCatch_c0::m.field_0x54;
+                    fVar1 = m_HIO->mWallCatch.m.field_0x54;
                 }
                 dVar11 = fVar1;
                 if (pcVar4 != NULL) {
@@ -5402,7 +5402,7 @@ BOOL daPy_lk_c::changeAutoJumpProc() {
                     current.pos.z = current.pos.z + 35.0f * dVar8;
                 }
             } else {
-                dVar11 = daPy_HIO_wallCatch_c0::m.field_0x54;
+                dVar11 = m_HIO->mWallCatch.m.field_0x54;
             }
             if (mStaffIdx != -1 && dComIfGp_evmng_getMyIntegerP(mStaffIdx, "fall")) {
                 return procFall_init(0, dVar11);
@@ -5506,7 +5506,7 @@ BOOL daPy_lk_c::changeDemoProc() {
         return procBackJump_init();
     } else if (demo_mode == daPy_demo_c::DEMO_PFALL_e) {
         onNoResetFlg0(daPyFlg0_UNK100000);
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else if (demo_mode == daPy_demo_c::DEMO_SFALL_e) {
         if (mCurProc == daPyProc_LAND_e) {
             return true;
@@ -5579,7 +5579,7 @@ BOOL daPy_lk_c::changeDeadProc() {
         {
             return dProcDead_init();
         }
-        return procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else {
         return false;
     }
@@ -5633,7 +5633,7 @@ void daPy_lk_c::setOldRootQuaternion(s16 param_1, s16 param_2, s16 param_3) {
 BOOL daPy_lk_c::checkRestHPAnime() {
     if (!checkPlayerGuard() && checkNoUpperAnime() && mpAttnActorLockOn == NULL &&
         ((mDemo.getDemoType() == 0 && !checkModeFlg(ModeFlg_IN_SHIP) &&
-          dComIfGs_getLife() <= daPy_HIO_move_c0::m.field_0xE) ||
+          dComIfGs_getLife() <= m_HIO->mMove.m.field_0xE) ||
          mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_018_e))
     {
         return true;
@@ -5758,7 +5758,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         setSmallFanModel();
     } else if (mCurProc == daPyProc_FAN_GLIDE_e) {
         deleteEquipItem(FALSE);
-        maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+        maxFallSpeed = m_HIO->mAutoJump.m.field_0x10;
         setSmallFanModel();
         mEquipItem = dItem_DEKU_LEAF_e;
         m35F0 = m3688.y;
@@ -5766,7 +5766,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
         m34E0 = 0;
         m34E4 = 0;
     } else if (mCurProc == daPyProc_SLOW_FALL_e) {
-        maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+        maxFallSpeed = m_HIO->mAutoJump.m.field_0x10;
     } else if (mCurProc == daPyProc_DEMO_TOOL_e) {
         resetDemoAnime = TRUE;
         speed.y = 0.0f;
@@ -5832,7 +5832,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
     dComIfGp_clearPlayerStatus0(0, ~(daPyStts0_BOOMERANG_WAIT_e | daPyStts0_UNK10_e));
     dComIfGp_clearPlayerStatus1(0, ~(daPyStts1_SAIL_e | daPyStts1_UNK8000_e | daPyStts1_UNK40000_e) & 0x000FFFFF);
     
-    gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+    gravity = m_HIO->mAutoJump.m.field_0xC;
     m34F2 = 0;
     m34F4 = 0;
     onResetFlg0(daPyRFlg0_UNK8000000);
@@ -5927,7 +5927,7 @@ BOOL daPy_lk_c::commonProcInit(daPy_PROC proc) {
 BOOL daPy_lk_c::procScope_init(int param_1) {
     commonProcInit(daPyProc_SCOPE_e);
     mVelocity = 0.0f;
-    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     current.angle.y = shape_angle.y;
     seStartSystem(JA_SE_ITM_SUBMENU_IN_1);
     offNoResetFlg0(daPyFlg0_SCOPE_CANCEL);
@@ -5962,7 +5962,7 @@ BOOL daPy_lk_c::procSubjectivity_init(BOOL i_crouch) {
     setSubjectMode();
 
     if(!i_crouch) {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
 
     mProcVar0.m3570 = i_crouch;
@@ -6001,7 +6001,7 @@ BOOL daPy_lk_c::procCall_init() {
     commonProcInit(daPyProc_CALL_e);
     mVelocity = 0.0f;
     daPy_matAnm_c::offMabaFlg();
-    setSingleMoveAnime(ANM_YOBU, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_YOBU, 1.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
     current.angle.y = shape_angle.y;
     if (mEquipItem == daPyItem_BOKO_e) {
         deleteEquipItem(FALSE);
@@ -6038,7 +6038,7 @@ BOOL daPy_lk_c::procControllWait_init() {
     commonProcInit(daPyProc_CONTROLL_WAIT_e);
     mVelocity = 0.0f;
     daPy_matAnm_c::offMabaFlg();
-    setSingleMoveAnime(ANM_NENRIKI, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_NENRIKI, 1.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
     current.angle.y = shape_angle.y;
     deleteEquipItem(FALSE);
     initShipRideUseItem(iVar3, 2);
@@ -6080,9 +6080,9 @@ BOOL daPy_lk_c::procWait_init() {
     if (iVar4 != 0 && iVar3 == 0) {
         s32 uVar2 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
         u16 uVar1 = m3530;
-        setSingleMoveAnime(ANM_WAITATOB, daPy_HIO_move_c0::m.field_0x68,
-                           daPy_HIO_move_c0::m.field_0x6C, daPy_HIO_move_c0::m.field_0x10,
-                           daPy_HIO_move_c0::m.field_0x70);
+        setSingleMoveAnime(ANM_WAITATOB, m_HIO->mMove.m.field_0x68,
+                           m_HIO->mMove.m.field_0x6C, m_HIO->mMove.m.field_0x10,
+                           m_HIO->mMove.m.field_0x70);
         if (uVar2 == 0) {
             onModeFlg(ModeFlg_00000400);
             offModeFlg(ModeFlg_00000100);
@@ -6090,7 +6090,7 @@ BOOL daPy_lk_c::procWait_init() {
             setTextureAnime(0xe, uVar1);
         }
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     current.angle.y = shape_angle.y;
     mDirection = DIR_NONE;
@@ -6123,13 +6123,13 @@ BOOL daPy_lk_c::procWait() {
     if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
-        setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+        setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     }
     m35A0 = 0.0f;
     if (!checkNextMode(0)) {
         if (m34C3 == 0) {
             if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || !checkRestHPAnime()) {
-                setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+                setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 offModeFlg(ModeFlg_00000400);
                 onModeFlg(ModeFlg_00000100);
             }
@@ -6138,9 +6138,9 @@ BOOL daPy_lk_c::procWait() {
         {
             s32 uVar3 = m_tex_anm_heap.mIdx == mTexAnmIndexTable[daPyFace_TMABAF].mBtpIdx;
             u16 uVar1 = m3530;
-            setSingleMoveAnime(ANM_WAITATOB, daPy_HIO_move_c0::m.field_0x68,
-                               daPy_HIO_move_c0::m.field_0x6C, daPy_HIO_move_c0::m.field_0x10,
-                               daPy_HIO_move_c0::m.field_0x70);
+            setSingleMoveAnime(ANM_WAITATOB, m_HIO->mMove.m.field_0x68,
+                               m_HIO->mMove.m.field_0x6C, m_HIO->mMove.m.field_0x10,
+                               m_HIO->mMove.m.field_0x70);
             if (uVar3 == 0) {
                 onModeFlg(ModeFlg_00000400);
                 offModeFlg(ModeFlg_00000100);
@@ -6203,7 +6203,7 @@ BOOL daPy_lk_c::procFreeWait() {
     if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     } else {
-        setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+        setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     }
     if (mProcVar0.m3570 != 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(168.0f)) {
@@ -6227,20 +6227,20 @@ BOOL daPy_lk_c::procMove_init() {
         return false;
     }
     commonProcInit(daPyProc_MOVE_e);
-    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     m34D0 = 0x14;
     return true;
 }
 
 /* 80113628-801136D4       .text procMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procMove() {
-    setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+    setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     if (!checkNextMode(0) && !changeFrontWallTypeProc() && !checkIceSlipFall()) {
         if (mDemo.getDemoMode() == daPy_demo_c::DEMO_N_WALK_e) {
             // Fakematch? Regalloc doesn't match unless all three of these vars are given temps.
             f32 vel = mVelocity;
             f32 temp1 = mMaxNormalSpeed;
-            f32 temp2 = daPy_HIO_move_c0::m.field_0x2C;
+            f32 temp2 = m_HIO->mMove.m.field_0x2C;
             if (vel > temp1 * temp2) {
                 vel = temp1 * temp2;
                 mVelocity = vel;
@@ -6257,7 +6257,7 @@ BOOL daPy_lk_c::procAtnMove_init() {
         return false;
     }
     commonProcInit(daPyProc_ATN_MOVE_e);
-    setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     m34D0 = 0x14;
     return true;
 }
@@ -6290,9 +6290,9 @@ BOOL daPy_lk_c::procAtnActorWait_init() {
         mDirection = DIR_RIGHT;
     }
     if (checkAtnWaitAnime()) {
-        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     return true;
 }
@@ -6316,7 +6316,7 @@ BOOL daPy_lk_c::procAtnActorMove_init() {
         return false;
     }
     commonProcInit(daPyProc_ATN_ACTOR_MOVE_e);
-    setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     m34D0 = 0x14;
     return true;
 }
@@ -6343,11 +6343,11 @@ BOOL daPy_lk_c::procSideStep_init(int param_1) {
         dVar1 = ANM_ATNJR;
         current.angle.y = shape_angle.y + -0x4000;
     }
-    setSingleMoveAnime(dVar1, daPy_HIO_sideStep_c0::m.field_0xC, daPy_HIO_sideStep_c0::m.field_0x10,
-                       daPy_HIO_sideStep_c0::m.field_0x4, daPy_HIO_sideStep_c0::m.field_0x14);
-    mVelocity = cM_scos(daPy_HIO_sideStep_c0::m.field_0x2) * daPy_HIO_sideStep_c0::m.field_0x8;
-    speed.y = cM_ssin(daPy_HIO_sideStep_c0::m.field_0x2) * daPy_HIO_sideStep_c0::m.field_0x8;
-    gravity = daPy_HIO_sideStep_c0::m.field_0x18;
+    setSingleMoveAnime(dVar1, m_HIO->mSideStep.m.field_0xC, m_HIO->mSideStep.m.field_0x10,
+                       m_HIO->mSideStep.m.field_0x4, m_HIO->mSideStep.m.field_0x14);
+    mVelocity = cM_scos(m_HIO->mSideStep.m.field_0x2) * m_HIO->mSideStep.m.field_0x8;
+    speed.y = cM_ssin(m_HIO->mSideStep.m.field_0x2) * m_HIO->mSideStep.m.field_0x8;
+    gravity = m_HIO->mSideStep.m.field_0x18;
     mProcVar0.m3570 = 0;
     voiceStart(5);
     return true;
@@ -6355,7 +6355,7 @@ BOOL daPy_lk_c::procSideStep_init(int param_1) {
 
 /* 80113AC4-80113BDC       .text procSideStep__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSideStep() {
-    if (daPy_HIO_sideStep_c0::m.field_0x0 != 0) {
+    if (m_HIO->mSideStep.m.field_0x0 != 0) {
         if (mpAttnActorLockOn != NULL) {
             s16 sVar2 = fopAcM_searchActorAngleY(this, mpAttnActorLockOn);
             cLib_addCalcAngleS(&shape_angle.y, sVar2, 5, 0x5e8, 0x13c);
@@ -6376,8 +6376,8 @@ BOOL daPy_lk_c::procSideStep() {
         if (checkFanGlideProc(0)) {
             return true;
         }
-        if (current.pos.y < m3688.y - daPy_HIO_sideStep_c0::m.field_0x30) {
-            procFall_init(2, daPy_HIO_sideStep_c0::m.field_0x2C);
+        if (current.pos.y < m3688.y - m_HIO->mSideStep.m.field_0x30) {
+            procFall_init(2, m_HIO->mSideStep.m.field_0x2C);
         }
     }
     checkItemChangeFromButton();
@@ -6395,9 +6395,9 @@ BOOL daPy_lk_c::procSideStepLand_init() {
     } else {
         dVar2 = ANM_ATNJRLAND;
     }
-    setSingleMoveAnime(dVar2, daPy_HIO_sideStep_c0::m.field_0x1C,
-                       daPy_HIO_sideStep_c0::m.field_0x20, daPy_HIO_sideStep_c0::m.field_0x6,
-                       daPy_HIO_sideStep_c0::m.field_0x24);
+    setSingleMoveAnime(dVar2, m_HIO->mSideStep.m.field_0x1C,
+                       m_HIO->mSideStep.m.field_0x20, m_HIO->mSideStep.m.field_0x6,
+                       m_HIO->mSideStep.m.field_0x24);
     m34BE = 3;
     onResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND);
     onResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND);
@@ -6414,7 +6414,7 @@ BOOL daPy_lk_c::procSideStepLand() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_sideStep_c0::m.field_0x28) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mSideStep.m.field_0x28) {
             checkNextMode(1);
         }
     }
@@ -6425,8 +6425,8 @@ BOOL daPy_lk_c::procSideStepLand() {
 BOOL daPy_lk_c::procCrouchDefense_init() {
     commonProcInit(daPyProc_CROUCH_DEFENSE_e);
     daPy_matAnm_c::offMabaFlg();
-    setSingleMoveAnime(ANM_DIFENCE, daPy_HIO_crouch_c0::m.field_0x10, 0.0f, -1,
-                       daPy_HIO_crouch_c0::m.field_0x14);
+    setSingleMoveAnime(ANM_DIFENCE, m_HIO->mCrouch.m.field_0x10, 0.0f, -1,
+                       m_HIO->mCrouch.m.field_0x14);
     current.angle.y = shape_angle.y;
     m34D4 = 0;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK80000_e);
@@ -6437,13 +6437,13 @@ BOOL daPy_lk_c::procCrouchDefense_init() {
 BOOL daPy_lk_c::procCrouchDefense() {
     dComIfGp_setRStatus(dActStts_DEFEND_e);
     if (dCam_getBody()->ChangeModeOK(4) && current.pos.y >= m35D0) {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             return procSubjectivity_init(1);
         }
     }
-    cLib_addCalc(&mVelocity, 0.0f, daPy_HIO_move_c0::m.field_0x24, daPy_HIO_move_c0::m.field_0x1C,
-                 daPy_HIO_move_c0::m.field_0x20);
+    cLib_addCalc(&mVelocity, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C,
+                 m_HIO->mMove.m.field_0x20);
     if (checkAttentionLock() || !spActionButton()) {
         current.angle.y = shape_angle.y;
         mDirection = DIR_RIGHT;
@@ -6453,13 +6453,13 @@ BOOL daPy_lk_c::procCrouchDefense() {
         f32 fVar1 = mStickDistance * cM_scos(uVar2);
         s16 sVar5;
         if (fVar1 >= 0.0f) {
-            sVar5 = daPy_HIO_crouch_c0::m.field_0x2 * fVar1;
+            sVar5 = m_HIO->mCrouch.m.field_0x2 * fVar1;
         } else {
-            sVar5 = daPy_HIO_crouch_c0::m.field_0x0 * fVar1;
+            sVar5 = m_HIO->mCrouch.m.field_0x0 * fVar1;
         }
         cLib_addCalcAngleS(&mBodyAngle.x, sVar5, 4, 0xc00, 0x180);
         cLib_addCalcAngleS(&mBodyAngle.y,
-                           daPy_HIO_crouch_c0::m.field_0x4 * mStickDistance * cM_ssin(uVar2), 4,
+                           m_HIO->mCrouch.m.field_0x4 * mStickDistance * cM_ssin(uVar2), 4,
                            0xc00, 0x180);
     }
     return true;
@@ -6480,30 +6480,30 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
             pfVar3->GetAtSpl() == dCcG_At_Spl_UNK7
         )
     ) {
-        setSingleMoveAnime(ANM_DIFENCEA, daPy_HIO_nockback_c0::m.field_0x8,
-                           daPy_HIO_nockback_c0::m.field_0xC, daPy_HIO_nockback_c0::m.field_0x0,
-                           daPy_HIO_nockback_c0::m.field_0x10);
+        setSingleMoveAnime(ANM_DIFENCEA, m_HIO->mNockback.m.field_0x8,
+                           m_HIO->mNockback.m.field_0xC, m_HIO->mNockback.m.field_0x0,
+                           m_HIO->mNockback.m.field_0x10);
         dVar5 = damage_vec->absXZ();
         mVelocity =
-            (daPy_HIO_nockback_c0::m.field_0x18 * dVar5) + daPy_HIO_nockback_c0::m.field_0x14;
-        m34D0 = daPy_HIO_nockback_c0::m.field_0x2;
-        m35A0 = daPy_HIO_nockback_c0::m.field_0x1C;
-        m35A4 = daPy_HIO_nockback_c0::m.field_0x20;
-        m35A8 = daPy_HIO_nockback_c0::m.field_0x24;
-        m35AC = daPy_HIO_nockback_c0::m.field_0x28;
+            (m_HIO->mNockback.m.field_0x18 * dVar5) + m_HIO->mNockback.m.field_0x14;
+        m34D0 = m_HIO->mNockback.m.field_0x2;
+        m35A0 = m_HIO->mNockback.m.field_0x1C;
+        m35A4 = m_HIO->mNockback.m.field_0x20;
+        m35A8 = m_HIO->mNockback.m.field_0x24;
+        m35AC = m_HIO->mNockback.m.field_0x28;
         dVar5 = cM_rnd();
         mProcVar0.m3570 = (dVar5 < 0.2f) ? 1 : 0;
     } else {
-        setSingleMoveAnime(ANM_DIFENCEA, daPy_HIO_guard_c0::m.field_0x4,
-                           daPy_HIO_guard_c0::m.field_0x8, daPy_HIO_guard_c0::m.field_0x0,
-                           daPy_HIO_guard_c0::m.field_0xC);
+        setSingleMoveAnime(ANM_DIFENCEA, m_HIO->mGuard.m.field_0x4,
+                           m_HIO->mGuard.m.field_0x8, m_HIO->mGuard.m.field_0x0,
+                           m_HIO->mGuard.m.field_0xC);
         dVar5 = damage_vec->absXZ();
-        mVelocity = (daPy_HIO_guard_c0::m.field_0x14 * dVar5) + daPy_HIO_guard_c0::m.field_0x10;
-        m34D0 = daPy_HIO_guard_c0::m.field_0x2;
-        m35A0 = daPy_HIO_guard_c0::m.field_0x18;
-        m35A4 = daPy_HIO_guard_c0::m.field_0x1C;
-        m35A8 = daPy_HIO_guard_c0::m.field_0x20;
-        m35AC = daPy_HIO_guard_c0::m.field_0x24;
+        mVelocity = (m_HIO->mGuard.m.field_0x14 * dVar5) + m_HIO->mGuard.m.field_0x10;
+        m34D0 = m_HIO->mGuard.m.field_0x2;
+        m35A0 = m_HIO->mGuard.m.field_0x18;
+        m35A4 = m_HIO->mGuard.m.field_0x1C;
+        m35A8 = m_HIO->mGuard.m.field_0x20;
+        m35AC = m_HIO->mGuard.m.field_0x24;
         mProcVar0.m3570 = 0;
     }
     if (mEquipItem == dItem_SKULL_HAMMER_e) {
@@ -6547,8 +6547,8 @@ BOOL daPy_lk_c::procCrouchDefenseSlip() {
 /* 801143D4-80114440       .text procCrouch_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procCrouch_init() {
     commonProcInit(daPyProc_CROUCH_e);
-    setSingleMoveAnime(ANM_CROUCH, daPy_HIO_crouch_c0::m.field_0x18, 0.0f, -1,
-                       daPy_HIO_crouch_c0::m.field_0x1C);
+    setSingleMoveAnime(ANM_CROUCH, m_HIO->mCrouch.m.field_0x18, 0.0f, -1,
+                       m_HIO->mCrouch.m.field_0x1C);
     deleteEquipItem(FALSE);
     current.angle.y = shape_angle.y;
     return true;
@@ -6564,13 +6564,13 @@ BOOL daPy_lk_c::procCrouch() {
 
     dComIfGp_setRStatus(dActStts_CROUCH_e);
     if (dCam_getBody()->ChangeModeOK(4) && current.pos.y >= m35D0) {
-        onResetFlg0(daPyRFlg0_UNK4000000);
+        onResetFlg0(daPyRFlg0_SUBJECT_ACCEPT);
         if (dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x1000) && !dComIfGp_event_runCheck()) {
             return procSubjectivity_init(1);
         }
     }
-    cLib_addCalc(&mVelocity, 0.0f, daPy_HIO_move_c0::m.field_0x24, daPy_HIO_move_c0::m.field_0x1C,
-                 daPy_HIO_move_c0::m.field_0x20);
+    cLib_addCalc(&mVelocity, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C,
+                 m_HIO->mMove.m.field_0x20);
     if (!spActionButton() ||
         (checkAttentionLock() && dComIfGs_getSelectEquip(1) != dItem_NONE_e && checkGuardAccept()))
     {
@@ -6605,8 +6605,8 @@ BOOL daPy_lk_c::procWaitTurn_init() {
         return false;
     }
     commonProcInit(daPyProc_WAIT_TURN_e);
-    setSingleMoveAnime(ANM_ROT, daPy_HIO_basic_c0::m.field_0x4, 0.0f, -1,
-                       daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ROT, m_HIO->mBasic.m.field_0x4, 0.0f, -1,
+                       m_HIO->mBasic.m.field_0xC);
     if (dComIfGp_event_runCheck()) {
         mVelocity = 0.0f;
     }
@@ -6617,13 +6617,13 @@ BOOL daPy_lk_c::procWaitTurn_init() {
 
 /* 80114804-80114908       .text procWaitTurn__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWaitTurn() {
-    cLib_addCalc(&mVelocity, 0.0f, daPy_HIO_move_c0::m.field_0x24, daPy_HIO_move_c0::m.field_0x1C,
-                 daPy_HIO_move_c0::m.field_0x20);
+    cLib_addCalc(&mVelocity, 0.0f, m_HIO->mMove.m.field_0x24, m_HIO->mMove.m.field_0x1C,
+                 m_HIO->mMove.m.field_0x20);
     if (changeSlideProc()) {
         return true;
     }
-    s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, daPy_HIO_turn_c0::m.field_0x4,
-                                   daPy_HIO_turn_c0::m.field_0x0, daPy_HIO_turn_c0::m.field_0x2);
+    s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, m34D4, m_HIO->mTurn.m.field_0x4,
+                                   m_HIO->mTurn.m.field_0x0, m_HIO->mTurn.m.field_0x2);
     current.angle.y = shape_angle.y;
     if (checkNextActionFromButton()) {
         return true;
@@ -6648,17 +6648,17 @@ BOOL daPy_lk_c::procMoveTurn_init(int param_1) {
         return false;
     }
     commonProcInit(daPyProc_MOVE_TURN_e);
-    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800_e);
     if (param_1 != 0) {
-        m34D4 = (daPy_HIO_move_c0::m.field_0x0 * 4) + 0x4A56;
-        m34D6 = daPy_HIO_move_c0::m.field_0x0 * 2;
+        m34D4 = (m_HIO->mMove.m.field_0x0 * 4) + 0x4A56;
+        m34D6 = m_HIO->mMove.m.field_0x0 * 2;
         m34D0 = 2;
         current.angle.y = m34E8;
         mVelocity *= 0.5f;
     } else {
-        m34D4 = daPy_HIO_move_c0::m.field_0x0 * 2;
-        m34D6 = daPy_HIO_move_c0::m.field_0x0;
+        m34D4 = m_HIO->mMove.m.field_0x0 * 2;
+        m34D6 = m_HIO->mMove.m.field_0x0;
         m34D0 = 3;
     }
     return true;
@@ -6666,7 +6666,7 @@ BOOL daPy_lk_c::procMoveTurn_init(int param_1) {
 
 /* 801149EC-80114A60       .text procMoveTurn__9daPy_lk_cFv */
 BOOL daPy_lk_c::procMoveTurn() {
-    setSpeedAndAngleNormal(daPy_HIO_move_c0::m.field_0x0);
+    setSpeedAndAngleNormal(m_HIO->mMove.m.field_0x0);
     cLib_addCalcAngleS(&shape_angle.y, current.angle.y, m34D0, m34D4, m34D6);
     if (!checkNextMode(0)) {
         setBlendMoveAnime(-1.0f);
@@ -6678,12 +6678,12 @@ BOOL daPy_lk_c::procMoveTurn() {
 BOOL daPy_lk_c::procSlip_init() {
     commonProcInit(daPyProc_SLIP_e);
     daPy_matAnm_c::offMabaFlg();
-    setSingleMoveAnime(ANM_SLIP, daPy_HIO_slip_c0::m.field_0xC, 0.0f, -1,
-                       daPy_HIO_slip_c0::m.field_0x1C);
-    mVelocity = speedF * daPy_HIO_slip_c0::m.field_0x8;
-    if (daPy_HIO_slip_c0::m.field_0x0 == 1) {
+    setSingleMoveAnime(ANM_SLIP, m_HIO->mSlip.m.field_0xC, 0.0f, -1,
+                       m_HIO->mSlip.m.field_0x1C);
+    mVelocity = speedF * m_HIO->mSlip.m.field_0x8;
+    if (m_HIO->mSlip.m.field_0x0 == 1) {
         mVelocity = mMaxNormalSpeed;
-    } else if (daPy_HIO_slip_c0::m.field_0x0 == 2 && mVelocity > mMaxNormalSpeed) {
+    } else if (m_HIO->mSlip.m.field_0x0 == 2 && mVelocity > mMaxNormalSpeed) {
         mVelocity = mMaxNormalSpeed;
     }
     m34BE = 2;
@@ -6693,8 +6693,8 @@ BOOL daPy_lk_c::procSlip_init() {
 
 /* 80114B28-80114D2C       .text procSlip__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSlip() {
-    f32 dVar5 = cLib_addCalc(&mVelocity, 0.0f, daPy_HIO_slip_c0::m.field_0x18,
-                             daPy_HIO_slip_c0::m.field_0x10, daPy_HIO_slip_c0::m.field_0x14);
+    f32 dVar5 = cLib_addCalc(&mVelocity, 0.0f, m_HIO->mSlip.m.field_0x18,
+                             m_HIO->mSlip.m.field_0x10, m_HIO->mSlip.m.field_0x14);
     if (dVar5 <= 0.001f) {
         if (mStickDistance > 0.05f) {
             current.angle.y = shape_angle.y + 0x8000;
@@ -6709,7 +6709,7 @@ BOOL daPy_lk_c::procSlip() {
         checkNextMode(0);
         return true;
     } else {
-        if (mVelocity < daPy_HIO_slip_c0::m.field_0x20) {
+        if (mVelocity < m_HIO->mSlip.m.field_0x20) {
             resetFootEffect();
         }
         cXyz local_1c;
@@ -6739,9 +6739,9 @@ BOOL daPy_lk_c::procSlideFront_init(s16 param_1) {
     commonProcInit(daPyProc_SLIDE_FRONT_e);
     m3526 = 8;
     current.angle.y = param_1;
-    setSingleMoveAnime(ANM_SLIDEF, daPy_HIO_slide_c0::m.field_0xC, daPy_HIO_slide_c0::m.field_0x10,
-                       daPy_HIO_slide_c0::m.field_0x0, daPy_HIO_slide_c0::m.field_0x14);
-    mMaxNormalSpeed = daPy_HIO_slide_c0::m.field_0x44;
+    setSingleMoveAnime(ANM_SLIDEF, m_HIO->mSlide.m.field_0xC, m_HIO->mSlide.m.field_0x10,
+                       m_HIO->mSlide.m.field_0x0, m_HIO->mSlide.m.field_0x14);
+    mMaxNormalSpeed = m_HIO->mSlide.m.field_0x44;
     m34BE = 4;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK100_e);
     return true;
@@ -6754,7 +6754,7 @@ BOOL daPy_lk_c::procSlideFront() {
         s16 iVar3 = cM_atan2s(pfVar2->GetNP()->x, pfVar2->GetNP()->z);
         cLib_addCalcAngleS(&current.angle.y, iVar3, 4, 0x1000, 0x400);
         cLib_addCalcAngleS(&shape_angle.y, current.angle.y, 4, 0x1000, 0x400);
-        mVelocity += (1.0f + 0.5f * (1.0f - pfVar2->GetNP()->y)) * daPy_HIO_slide_c0::m.field_0x48 *
+        mVelocity += (1.0f + 0.5f * (1.0f - pfVar2->GetNP()->y)) * m_HIO->mSlide.m.field_0x48 *
                      cM_scos(current.angle.y - iVar3);
         if (mVelocity > mMaxNormalSpeed) {
             mVelocity = mMaxNormalSpeed;
@@ -6774,9 +6774,9 @@ BOOL daPy_lk_c::procSlideBack_init(s16 param_1) {
     commonProcInit(daPyProc_SLIDE_BACK_e);
     m3526 = 8;
     current.angle.y = param_1;
-    setSingleMoveAnime(ANM_SLIDEB, daPy_HIO_slide_c0::m.field_0x18, daPy_HIO_slide_c0::m.field_0x1C,
-                       daPy_HIO_slide_c0::m.field_0x2, daPy_HIO_slide_c0::m.field_0x20);
-    mMaxNormalSpeed = daPy_HIO_slide_c0::m.field_0x44;
+    setSingleMoveAnime(ANM_SLIDEB, m_HIO->mSlide.m.field_0x18, m_HIO->mSlide.m.field_0x1C,
+                       m_HIO->mSlide.m.field_0x2, m_HIO->mSlide.m.field_0x20);
+    mMaxNormalSpeed = m_HIO->mSlide.m.field_0x44;
     m34BE = 3;
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK200_e);
     return true;
@@ -6789,7 +6789,7 @@ BOOL daPy_lk_c::procSlideBack() {
         s16 iVar3 = cM_atan2s(pfVar2->GetNP()->x, pfVar2->GetNP()->z);
         cLib_addCalcAngleS(&current.angle.y, iVar3, 4, 0x1000, 0x400);
         cLib_addCalcAngleS(&shape_angle.y, current.angle.y + 0x8000, 4, 0x1000, 0x400);
-        mVelocity += (1.0f + 0.5f * (1.0f - pfVar2->GetNP()->y)) * daPy_HIO_slide_c0::m.field_0x48 *
+        mVelocity += (1.0f + 0.5f * (1.0f - pfVar2->GetNP()->y)) * m_HIO->mSlide.m.field_0x48 *
                      cM_scos(current.angle.y - iVar3);
         if (mVelocity > mMaxNormalSpeed) {
             mVelocity = mMaxNormalSpeed;
@@ -6804,9 +6804,9 @@ BOOL daPy_lk_c::procSlideBack() {
 /* 801150B0-80115118       .text procSlideFrontLand_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSlideFrontLand_init() {
     commonProcInit(daPyProc_SLIDE_FRONT_LAND_e);
-    setSingleMoveAnime(ANM_SLIDEFLAND, daPy_HIO_slide_c0::m.field_0x24,
-                       daPy_HIO_slide_c0::m.field_0x28, daPy_HIO_slide_c0::m.field_0x4,
-                       daPy_HIO_slide_c0::m.field_0x30);
+    setSingleMoveAnime(ANM_SLIDEFLAND, m_HIO->mSlide.m.field_0x24,
+                       m_HIO->mSlide.m.field_0x28, m_HIO->mSlide.m.field_0x4,
+                       m_HIO->mSlide.m.field_0x30);
     mVelocity *= 0.5f;
     return true;
 }
@@ -6818,7 +6818,7 @@ BOOL daPy_lk_c::procSlideFrontLand() {
         current.angle.y = shape_angle.y;
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_slide_c0::m.field_0x2C) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mSlide.m.field_0x2C) {
             s16 sVar1 = current.angle.y;
             current.angle.y = shape_angle.y;
             if (!checkNextMode(1)) {
@@ -6832,9 +6832,9 @@ BOOL daPy_lk_c::procSlideFrontLand() {
 /* 801151C8-80115220       .text procSlideBackLand_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSlideBackLand_init() {
     commonProcInit(daPyProc_SLIDE_BACK_LAND_e);
-    setSingleMoveAnime(ANM_SLIDEBLAND, daPy_HIO_slide_c0::m.field_0x34,
-                       daPy_HIO_slide_c0::m.field_0x38, daPy_HIO_slide_c0::m.field_0x6,
-                       daPy_HIO_slide_c0::m.field_0x40);
+    setSingleMoveAnime(ANM_SLIDEBLAND, m_HIO->mSlide.m.field_0x34,
+                       m_HIO->mSlide.m.field_0x38, m_HIO->mSlide.m.field_0x6,
+                       m_HIO->mSlide.m.field_0x40);
     return true;
 }
 
@@ -6845,7 +6845,7 @@ BOOL daPy_lk_c::procSlideBackLand() {
         current.angle.y = shape_angle.y;
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_slide_c0::m.field_0x3C) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mSlide.m.field_0x3C) {
             s16 sVar1 = current.angle.y;
             current.angle.y = shape_angle.y;
             if (!checkNextMode(1)) {
@@ -6859,19 +6859,19 @@ BOOL daPy_lk_c::procSlideBackLand() {
 /* 801152D0-80115478       .text procFrontRoll_init__9daPy_lk_cFf */
 BOOL daPy_lk_c::procFrontRoll_init(f32 param_1) {
     commonProcInit(daPyProc_FRONT_ROLL_e);
-    setSingleMoveAnime(ANM_ROLLF, daPy_HIO_roll_c0::m.field_0x8, param_1,
-                       daPy_HIO_roll_c0::m.field_0x0, daPy_HIO_roll_c0::m.field_0x14);
-    mVelocity = speedF * daPy_HIO_roll_c0::m.field_0x18 + daPy_HIO_roll_c0::m.field_0x1C;
+    setSingleMoveAnime(ANM_ROLLF, m_HIO->mRoll.m.field_0x8, param_1,
+                       m_HIO->mRoll.m.field_0x0, m_HIO->mRoll.m.field_0x14);
+    mVelocity = speedF * m_HIO->mRoll.m.field_0x18 + m_HIO->mRoll.m.field_0x1C;
     if (checkHeavyStateOn()) {
-        mVelocity *= daPy_HIO_move_c0::m.field_0x80;
+        mVelocity *= m_HIO->mMove.m.field_0x80;
     }
-    if (mVelocity < daPy_HIO_roll_c0::m.field_0x20) {
-        mVelocity = daPy_HIO_roll_c0::m.field_0x20;
+    if (mVelocity < m_HIO->mRoll.m.field_0x20) {
+        mVelocity = m_HIO->mRoll.m.field_0x20;
     } else {
-        param_1 = daPy_HIO_roll_c0::m.field_0x1C +
-                  daPy_HIO_move_c0::m.field_0x18 * daPy_HIO_roll_c0::m.field_0x18;
+        param_1 = m_HIO->mRoll.m.field_0x1C +
+                  m_HIO->mMove.m.field_0x18 * m_HIO->mRoll.m.field_0x18;
         if (checkHeavyStateOn()) {
-            param_1 *= daPy_HIO_move_c0::m.field_0x80;
+            param_1 *= m_HIO->mMove.m.field_0x80;
         }
         if (mVelocity > param_1) {
             mVelocity = param_1;
@@ -6879,7 +6879,7 @@ BOOL daPy_lk_c::procFrontRoll_init(f32 param_1) {
     }
     current.angle.y = shape_angle.y;
     if (mAcchCir[0].ChkWallHit() &&
-        cLib_distanceAngleS(current.angle.y + 0x8000, mAcchCir[0].GetWallAngleY()) <= daPy_HIO_roll_c0::m.field_0x4)
+        cLib_distanceAngleS(current.angle.y + 0x8000, mAcchCir[0].GetWallAngleY()) <= m_HIO->mRoll.m.field_0x4)
     {
         mProcVar0.m3570 = 0;
     } else {
@@ -6902,22 +6902,22 @@ BOOL daPy_lk_c::procFrontRoll() {
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         if (mStickDistance <= 0.05f) {
-            mVelocity -= daPy_HIO_roll_c0::m.field_0x20;
+            mVelocity -= m_HIO->mRoll.m.field_0x20;
         }
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_roll_c0::m.field_0x10) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mRoll.m.field_0x10) {
             checkNextMode(1);
         } else {
-            if (speedF >= daPy_HIO_roll_c0::m.field_0x3C &&
+            if (speedF >= m_HIO->mRoll.m.field_0x3C &&
                 !checkNoResetFlg1(daPyFlg1_UNK100000))
             {
                 if (checkNoResetFlg0(daPyFlg0_UNK8) ||
                     (mProcVar0.m3570 != 0 && mAcch.ChkWallHit() && mAcchCir[0].ChkWallHit() &&
                      cLib_distanceAngleS(current.angle.y + 0x8000, mAcchCir[0].GetWallAngleY()) <=
-                         daPy_HIO_roll_c0::m.field_0x4 &&
-                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= daPy_HIO_roll_c0::m.field_0x34 &&
-                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= daPy_HIO_roll_c0::m.field_0x38))
+                         m_HIO->mRoll.m.field_0x4 &&
+                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= m_HIO->mRoll.m.field_0x34 &&
+                     mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() <= m_HIO->mRoll.m.field_0x38))
                 {
                     if (!checkNoResetFlg0(daPyFlg0_UNK8)) {
                         m3620 = dComIfG_Bgsp()->GetMtrlSndId(mAcchCir[0]);
@@ -6933,10 +6933,10 @@ BOOL daPy_lk_c::procFrontRoll() {
 /* 80115628-801157D8       .text procFrontRollCrash_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procFrontRollCrash_init() {
     commonProcInit(daPyProc_FRONT_ROLL_CRASH_e);
-    setSingleMoveAnime(ANM_ROLLFMIS, 0.0f, daPy_HIO_roll_c0::m.field_0x28,
-                       daPy_HIO_roll_c0::m.field_0x2, daPy_HIO_roll_c0::m.field_0x2C);
-    mVelocity = speedF * daPy_HIO_roll_c0::m.field_0x40;
-    speed.y = daPy_HIO_roll_c0::m.field_0x44;
+    setSingleMoveAnime(ANM_ROLLFMIS, 0.0f, m_HIO->mRoll.m.field_0x28,
+                       m_HIO->mRoll.m.field_0x2, m_HIO->mRoll.m.field_0x2C);
+    mVelocity = speedF * m_HIO->mRoll.m.field_0x40;
+    speed.y = m_HIO->mRoll.m.field_0x44;
     offNoResetFlg0(daPyFlg0_UNK8);
     current.angle.y += 0x8000;
     dComIfGp_getVibration().StartShock(5, -0x31, cXyz(0.0f, 1.0f, 0.0f));
@@ -6960,14 +6960,14 @@ BOOL daPy_lk_c::procFrontRollCrash() {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             checkNextMode(0);
         } else {
-            if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_roll_c0::m.field_0x30) {
+            if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mRoll.m.field_0x30) {
                 checkNextMode(1);
             }
         }
     }
     if (mAcch.ChkGroundHit() && checkModeFlg(ModeFlg_MIDAIR)) {
         mVelocity = 0.0f;
-        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_roll_c0::m.field_0x24);
+        mFrameCtrlUnder[UNDER_MOVE0_e].setRate(m_HIO->mRoll.m.field_0x24);
         voiceStart(9);
         offModeFlg(ModeFlg_MIDAIR);
         onModeFlg(ModeFlg_00008000);
@@ -6978,9 +6978,9 @@ BOOL daPy_lk_c::procFrontRollCrash() {
 /* 801158AC-8011590C       .text procNockBackEnd_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procNockBackEnd_init() {
     commonProcInit(daPyProc_NOCK_BACK_END_e);
-    setSingleMoveAnime(ANM_ROLLFMIS, daPy_HIO_nockback_c0::m.field_0x2C,
-                       daPy_HIO_nockback_c0::m.field_0x30, daPy_HIO_nockback_c0::m.field_0x4,
-                       daPy_HIO_nockback_c0::m.field_0x34);
+    setSingleMoveAnime(ANM_ROLLFMIS, m_HIO->mNockback.m.field_0x2C,
+                       m_HIO->mNockback.m.field_0x30, m_HIO->mNockback.m.field_0x4,
+                       m_HIO->mNockback.m.field_0x34);
     mVelocity = 0.0f;
     return true;
 }
@@ -6990,7 +6990,7 @@ BOOL daPy_lk_c::procNockBackEnd() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_nockback_c0::m.field_0x38) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mNockback.m.field_0x38) {
             checkNextMode(1);
         }
     }
@@ -7007,11 +7007,11 @@ BOOL daPy_lk_c::procSideRoll_init() {
     } else {
         dVar2 = ANM_MROLLR;
     }
-    setSingleMoveAnime(dVar2, daPy_HIO_fall_c0::m.field_0x3C, daPy_HIO_fall_c0::m.field_0x40,
-                       daPy_HIO_fall_c0::m.field_0x8, daPy_HIO_fall_c0::m.field_0x48);
-    mVelocity = daPy_HIO_fall_c0::m.field_0x4C;
+    setSingleMoveAnime(dVar2, m_HIO->mFall.m.field_0x3C, m_HIO->mFall.m.field_0x40,
+                       m_HIO->mFall.m.field_0x8, m_HIO->mFall.m.field_0x48);
+    mVelocity = m_HIO->mFall.m.field_0x4C;
     if (checkHeavyStateOn()) {
-        mVelocity *= daPy_HIO_move_c0::m.field_0x80;
+        mVelocity *= m_HIO->mMove.m.field_0x80;
     }
     m34BE = 4;
     return true;
@@ -7033,7 +7033,7 @@ BOOL daPy_lk_c::procSideRoll() {
         if (frameCtrl.checkPass(10.0f)) {
             endFlameDamageEmitter();
         } else {
-            if (frameCtrl.getFrame() > daPy_HIO_fall_c0::m.field_0x44) {
+            if (frameCtrl.getFrame() > m_HIO->mFall.m.field_0x44) {
                 sVar1 = current.angle.y;
                 dVar3 = mVelocity;
                 current.angle.y = shape_angle.y;
@@ -7056,16 +7056,16 @@ BOOL daPy_lk_c::procBackJump_init() {
     }
     commonProcInit(daPyProc_BACK_JUMP_e);
     if (checkHeavyStateOn()) {
-        mVelocity = 0.5f * daPy_HIO_backJump_c0::m.field_0x10;
-        fVar1 = 1.5f * daPy_HIO_backJump_c0::m.field_0x4;
+        mVelocity = 0.5f * m_HIO->mBackJump.m.field_0x10;
+        fVar1 = 1.5f * m_HIO->mBackJump.m.field_0x4;
     } else {
-        mVelocity = daPy_HIO_backJump_c0::m.field_0x10;
-        fVar1 = daPy_HIO_backJump_c0::m.field_0x4;
+        mVelocity = m_HIO->mBackJump.m.field_0x10;
+        fVar1 = m_HIO->mBackJump.m.field_0x4;
     }
-    setSingleMoveAnime(ANM_ROLLB, fVar1, daPy_HIO_backJump_c0::m.field_0x8,
-                       daPy_HIO_backJump_c0::m.field_0x0, daPy_HIO_backJump_c0::m.field_0xC);
-    speed.y = daPy_HIO_backJump_c0::m.field_0x14;
-    gravity = daPy_HIO_backJump_c0::m.field_0x18;
+    setSingleMoveAnime(ANM_ROLLB, fVar1, m_HIO->mBackJump.m.field_0x8,
+                       m_HIO->mBackJump.m.field_0x0, m_HIO->mBackJump.m.field_0xC);
+    speed.y = m_HIO->mBackJump.m.field_0x14;
+    gravity = m_HIO->mBackJump.m.field_0x18;
     current.angle.y = shape_angle.y + 0x8000;
     voiceStart(7);
     return true;
@@ -7079,8 +7079,8 @@ BOOL daPy_lk_c::procBackJump() {
         if (checkFanGlideProc(0)) {
             return true;
         }
-        if (current.pos.y < m3688.y - daPy_HIO_backJump_c0::m.field_0x1C) {
-            procFall_init(2, daPy_HIO_backJump_c0::m.field_0x20);
+        if (current.pos.y < m3688.y - m_HIO->mBackJump.m.field_0x1C) {
+            procFall_init(2, m_HIO->mBackJump.m.field_0x20);
         }
     }
     checkItemChangeFromButton();
@@ -7091,9 +7091,9 @@ BOOL daPy_lk_c::procBackJump() {
 BOOL daPy_lk_c::procBackJumpLand_init() {
     commonProcInit(daPyProc_BACK_JUMP_LAND_e);
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_ROLLBLAND, daPy_HIO_backJump_c0::m.field_0x24,
-                       daPy_HIO_backJump_c0::m.field_0x28, daPy_HIO_backJump_c0::m.field_0x2,
-                       daPy_HIO_backJump_c0::m.field_0x2C);
+    setSingleMoveAnime(ANM_ROLLBLAND, m_HIO->mBackJump.m.field_0x24,
+                       m_HIO->mBackJump.m.field_0x28, m_HIO->mBackJump.m.field_0x2,
+                       m_HIO->mBackJump.m.field_0x2C);
     m34BE = 3;
     onResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND);
     onResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND);
@@ -7120,7 +7120,7 @@ BOOL daPy_lk_c::procBackJumpLand() {
         } else {
             checkNextMode(0);
         }
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_backJump_c0::m.field_0x30) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mBackJump.m.field_0x30) {
         checkNextMode(1);
     } else {
         if (mProcVar0.m3570 != 0) {
@@ -7147,18 +7147,18 @@ BOOL daPy_lk_c::procAutoJump_init() {
     m3688 = current.pos;
     m35F0 = m3688.y;
     m35F4 = m3688.y;
-    setSingleMoveAnime(ANM_JMPST, daPy_HIO_autoJump_c0::m.field_0x20,
-                       daPy_HIO_autoJump_c0::m.field_0x2C, daPy_HIO_autoJump_c0::m.field_0x2,
-                       daPy_HIO_autoJump_c0::m.field_0x30);
-    if (speedF > daPy_HIO_move_c0::m.field_0x18) {
-        speedF = daPy_HIO_move_c0::m.field_0x18;
-    } else if (speedF < daPy_HIO_autoJump_c0::m.field_0x14) {
-        speedF = daPy_HIO_autoJump_c0::m.field_0x14;
+    setSingleMoveAnime(ANM_JMPST, m_HIO->mAutoJump.m.field_0x20,
+                       m_HIO->mAutoJump.m.field_0x2C, m_HIO->mAutoJump.m.field_0x2,
+                       m_HIO->mAutoJump.m.field_0x30);
+    if (speedF > m_HIO->mMove.m.field_0x18) {
+        speedF = m_HIO->mMove.m.field_0x18;
+    } else if (speedF < m_HIO->mAutoJump.m.field_0x14) {
+        speedF = m_HIO->mAutoJump.m.field_0x14;
     }
     mVelocity =
-        speedF * cM_scos(daPy_HIO_autoJump_c0::m.field_0x6) * daPy_HIO_autoJump_c0::m.field_0x18;
+        speedF * cM_scos(m_HIO->mAutoJump.m.field_0x6) * m_HIO->mAutoJump.m.field_0x18;
     speed.y =
-        speedF * cM_ssin(daPy_HIO_autoJump_c0::m.field_0x6) * daPy_HIO_autoJump_c0::m.field_0x18;
+        speedF * cM_ssin(m_HIO->mAutoJump.m.field_0x6) * m_HIO->mAutoJump.m.field_0x18;
     mProcVar0.m3570 = 0;
     m3700 = cXyz::Zero;
     m34C2 = 1;
@@ -7175,22 +7175,22 @@ BOOL daPy_lk_c::procAutoJump_init() {
 BOOL daPy_lk_c::procAutoJump() {
     if (m34D0 == 0) {
         if (mStickDistance > 0.05f && getDirectionFromCurrentAngle() == DIR_BACKWARD) {
-            cLib_chaseF(&mVelocity, 0.0f, (daPy_HIO_autoJump_c0::m.field_0x3C * mStickDistance));
+            cLib_chaseF(&mVelocity, 0.0f, (m_HIO->mAutoJump.m.field_0x3C * mStickDistance));
         } else if (mStickDistance <= 0.05f) {
-            cLib_chaseF(&mVelocity, 0.0f, (0.1f * daPy_HIO_autoJump_c0::m.field_0x3C));
+            cLib_chaseF(&mVelocity, 0.0f, (0.1f * m_HIO->mAutoJump.m.field_0x3C));
         } else {
-            cLib_chaseF(&mVelocity, daPy_HIO_move_c0::m.field_0x18,
-                        daPy_HIO_autoJump_c0::m.field_0x1C);
+            cLib_chaseF(&mVelocity, m_HIO->mMove.m.field_0x18,
+                        m_HIO->mAutoJump.m.field_0x1C);
         }
     } else {
-        cLib_chaseF(&mVelocity, daPy_HIO_move_c0::m.field_0x18, daPy_HIO_autoJump_c0::m.field_0x1C);
+        cLib_chaseF(&mVelocity, m_HIO->mMove.m.field_0x18, m_HIO->mAutoJump.m.field_0x1C);
     }
     checkNextActionItemFly();
     if (checkJumpFlower() || checkJumpRideShip()) {
         return true;
     }
     if (mAcch.ChkGroundHit()) {
-        return changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+        return changeLandProc(m_HIO->mAutoJump.m.field_0x24);
     }
     if (checkFanGlideProc(0)) {
         return true;
@@ -7215,7 +7215,7 @@ BOOL daPy_lk_c::procAutoJump() {
             m34D0 = 0;
         }
         if (m34D0 == 0) {
-            gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+            gravity = m_HIO->mAutoJump.m.field_0xC;
         }
         if (speed.y > 0.0f) {
             speed.y -= 0.5f;
@@ -7229,9 +7229,9 @@ BOOL daPy_lk_c::procAutoJump() {
         {
             speed.y = 5.0f;
             gravity = 0.0f;
-            m34D0 = daPy_HIO_autoJump_c0::m.field_0x8;
+            m34D0 = m_HIO->mAutoJump.m.field_0x8;
         }
-        setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, daPy_HIO_autoJump_c0::m.field_0x38);
+        setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, m_HIO->mAutoJump.m.field_0x38);
         m34C2 = 2;
         mProcVar0.m3570 = 2;
         offModeFlg(ModeFlg_00000400);
@@ -7249,11 +7249,11 @@ BOOL daPy_lk_c::procLand_init(f32 param_1, int param_2) {
     commonProcInit(daPyProc_LAND_e);
     mVelocity = 0.0f;
     if (param_2 != 0) {
-        setSingleMoveAnime(ANM_JMPEDS, param_1, daPy_HIO_fan_c0::m.field_0x54,
-                           daPy_HIO_fan_c0::m.field_0x6, daPy_HIO_fan_c0::m.field_0x58);
+        setSingleMoveAnime(ANM_JMPEDS, param_1, m_HIO->mItem.mFan.m.field_0x54,
+                           m_HIO->mItem.mFan.m.field_0x6, m_HIO->mItem.mFan.m.field_0x58);
     } else {
-        setSingleMoveAnime(ANM_JMPEDS, param_1, daPy_HIO_autoJump_c0::m.field_0x28,
-                           daPy_HIO_autoJump_c0::m.field_0x4, daPy_HIO_autoJump_c0::m.field_0x34);
+        setSingleMoveAnime(ANM_JMPEDS, param_1, m_HIO->mAutoJump.m.field_0x28,
+                           m_HIO->mAutoJump.m.field_0x4, m_HIO->mAutoJump.m.field_0x34);
     }
     m34BE = 3;
     onResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND);
@@ -7280,7 +7280,7 @@ BOOL daPy_lk_c::procLand() {
         } else {
             checkNextMode(0);
         }
-    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_autoJump_c0::m.field_0x40) {
+    } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mAutoJump.m.field_0x40) {
         checkNextMode(1);
     }
     return true;
@@ -7304,14 +7304,14 @@ BOOL daPy_lk_c::procLandDamage_init(int param_1) {
     commonProcInit(daPyProc_LAND_DAMAGE_e);
     mVelocity = 0.0f;
     if (param_1 == 0) {
-        m34D0 = daPy_HIO_fall_c0::m.field_0xC;
+        m34D0 = m_HIO->mFall.m.field_0xC;
         offModeFlg(ModeFlg_DAMAGE);
     } else {
-        m34D0 = daPy_HIO_fall_c0::m.field_0x2;
-        mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
+        m34D0 = m_HIO->mFall.m.field_0x2;
+        mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
     }
-    setSingleMoveAnime(ANM_LANDDAMA, daPy_HIO_fall_c0::m.field_0x1C, daPy_HIO_fall_c0::m.field_0x20,
-                       daPy_HIO_fall_c0::m.field_0x4, daPy_HIO_fall_c0::m.field_0x24);
+    setSingleMoveAnime(ANM_LANDDAMA, m_HIO->mFall.m.field_0x1C, m_HIO->mFall.m.field_0x20,
+                       m_HIO->mFall.m.field_0x4, m_HIO->mFall.m.field_0x24);
     mProcVar0.m3570 = 0;
     seStartOnlyReverb(JA_SE_LK_FALL_DAMAGE);
     voiceStart(13);
@@ -7325,7 +7325,7 @@ BOOL daPy_lk_c::procLandDamage() {
     if (mProcVar0.m3570 != 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             checkNextMode(0);
-        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_fall_c0::m.field_0x30) {
+        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mFall.m.field_0x30) {
             checkNextMode(1);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
@@ -7334,12 +7334,12 @@ BOOL daPy_lk_c::procLandDamage() {
         } else {
             f32 fVar1;
             if (checkModeFlg(ModeFlg_DAMAGE)) {
-                fVar1 = daPy_HIO_fall_c0::m.field_0x28;
+                fVar1 = m_HIO->mFall.m.field_0x28;
             } else {
-                fVar1 = daPy_HIO_fall_c0::m.field_0x50;
+                fVar1 = m_HIO->mFall.m.field_0x50;
             }
-            setSingleMoveAnime(ANM_LANDDAMAST, fVar1, daPy_HIO_fall_c0::m.field_0x2C,
-                               daPy_HIO_fall_c0::m.field_0x6, daPy_HIO_fall_c0::m.field_0x34);
+            setSingleMoveAnime(ANM_LANDDAMAST, fVar1, m_HIO->mFall.m.field_0x2C,
+                               m_HIO->mFall.m.field_0x6, m_HIO->mFall.m.field_0x34);
             mProcVar0.m3570 = 1;
         }
     }
@@ -7419,7 +7419,7 @@ BOOL daPy_lk_c::procFall() {
         return true;
     }
     if (mAcch.ChkGroundHit()) {
-        changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+        changeLandProc(m_HIO->mAutoJump.m.field_0x24);
     } else {
         if (checkFanGlideProc(0)) {
             return true;
@@ -7455,7 +7455,7 @@ BOOL daPy_lk_c::procSlowFall_init() {
     commonProcInit(daPyProc_SLOW_FALL_e);
     maxFallSpeed = -20.0f;
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_MSTEPOVER_JMPED, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_MSTEPOVER_JMPED, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
     mFrameCtrlUnder[UNDER_MOVE0_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() - 0.001f);
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(
         mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
@@ -7468,7 +7468,7 @@ BOOL daPy_lk_c::procSlowFall() {
         cLib_chaseF(&maxFallSpeed, -5.0f, 1.0f);
     }
     if (mAcch.ChkGroundHit()) {
-        procLand_init(daPy_HIO_fan_c0::m.field_0x50, 1);
+        procLand_init(m_HIO->mItem.mFan.m.field_0x50, 1);
     }
     return true;
 }
@@ -7476,16 +7476,16 @@ BOOL daPy_lk_c::procSlowFall() {
 /* 80116D3C-80116EB4       .text procSmallJump_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procSmallJump_init(int param_1) {
     commonProcInit(daPyProc_SMALL_JUMP_e);
-    setSingleMoveAnime(ANM_JMPST, daPy_HIO_smallJump_c0::m.field_0x4,
-                       daPy_HIO_smallJump_c0::m.field_0x8, daPy_HIO_smallJump_c0::m.field_0x0,
-                       daPy_HIO_smallJump_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_JMPST, m_HIO->mSmallJump.m.field_0x4,
+                       m_HIO->mSmallJump.m.field_0x8, m_HIO->mSmallJump.m.field_0x0,
+                       m_HIO->mSmallJump.m.field_0xC);
     if (param_1 == 0) {
-        mVelocity = daPy_HIO_smallJump_c0::m.field_0x10;
+        mVelocity = m_HIO->mSmallJump.m.field_0x10;
         speed.y = std::sqrtf(
-            -gravity * ((m3724.y - current.pos.y) + daPy_HIO_smallJump_c0::m.field_0x14) * 2.0f);
+            -gravity * ((m3724.y - current.pos.y) + m_HIO->mSmallJump.m.field_0x14) * 2.0f);
         mProcVar0.m3570 = 2;
     } else {
-        mVelocity = 2.0f * daPy_HIO_smallJump_c0::m.field_0x10;
+        mVelocity = 2.0f * m_HIO->mSmallJump.m.field_0x10;
         speed.y = 20.0f;
         mProcVar0.m3570 = 0;
     }
@@ -7499,11 +7499,11 @@ BOOL daPy_lk_c::procSmallJump_init(int param_1) {
 /* 80116EB4-80116F54       .text procSmallJump__9daPy_lk_cFv */
 BOOL daPy_lk_c::procSmallJump() {
     if (mAcch.ChkGroundHit()) {
-        changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+        changeLandProc(m_HIO->mAutoJump.m.field_0x24);
     } else if (checkFanGlideProc(0)) {
         return true;
     } else if (speed.y < -gravity) {
-        procFall_init(mProcVar0.m3570, daPy_HIO_smallJump_c0::m.field_0x18);
+        procFall_init(mProcVar0.m3570, m_HIO->mSmallJump.m.field_0x18);
         setTextureAnime(0x37, 0);
     }
     return true;
@@ -7512,8 +7512,8 @@ BOOL daPy_lk_c::procSmallJump() {
 /* 80116F54-80116FEC       .text procVerticalJump_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procVerticalJump_init() {
     commonProcInit(daPyProc_VERTICAL_JUMP_e);
-    setSingleMoveAnime(ANM_VJMP, daPy_HIO_wallCatch_c0::m.field_0x3C, 0.0f,
-                       daPy_HIO_wallCatch_c0::m.field_0x6, daPy_HIO_wallCatch_c0::m.field_0x40);
+    setSingleMoveAnime(ANM_VJMP, m_HIO->mWallCatch.m.field_0x3C, 0.0f,
+                       m_HIO->mWallCatch.m.field_0x6, m_HIO->mWallCatch.m.field_0x40);
     m34D0 = 0;
     m34D4 = m352C + 0x8000;
     if (mFrontWallType == 9) {
@@ -7564,22 +7564,22 @@ BOOL daPy_lk_c::procDamage_init() {
     f32 f31 = cM_ssin(shape_angle.y);
     f32 f30 = cM_scos(shape_angle.y);
     commonProcInit(daPyProc_DAMAGE_e);
-    mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
+    mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
     cXyz local_54(damage_vec->z * -f31 + damage_vec->x * f30, damage_vec->y, damage_vec->z * f30 + damage_vec->x * f31);
     m34D4 = cM_atan2s(local_54.z, local_54.y);
     m34D6 = cM_atan2s(-local_54.x, std::sqrtf(local_54.y * local_54.y + local_54.z * local_54.z));
-    if (m34D4 > daPy_HIO_damage_c0::m.field_0x2) {
-        m34D4 = daPy_HIO_damage_c0::m.field_0x2;
+    if (m34D4 > m_HIO->mDam.mDamage.m.field_0x2) {
+        m34D4 = m_HIO->mDam.mDamage.m.field_0x2;
     } else {
-        if (m34D4 < -daPy_HIO_damage_c0::m.field_0x2) {
-            m34D4 = -daPy_HIO_damage_c0::m.field_0x2;
+        if (m34D4 < -m_HIO->mDam.mDamage.m.field_0x2) {
+            m34D4 = -m_HIO->mDam.mDamage.m.field_0x2;
         }
     }
-    if (m34D6 > daPy_HIO_damage_c0::m.field_0x2) {
-        m34D6 = daPy_HIO_damage_c0::m.field_0x2;
+    if (m34D6 > m_HIO->mDam.mDamage.m.field_0x2) {
+        m34D6 = m_HIO->mDam.mDamage.m.field_0x2;
     } else {
-        if (m34D6 < -daPy_HIO_damage_c0::m.field_0x2) {
-            m34D6 = -daPy_HIO_damage_c0::m.field_0x2;
+        if (m34D6 < -m_HIO->mDam.mDamage.m.field_0x2) {
+            m34D6 = -m_HIO->mDam.mDamage.m.field_0x2;
         }
     }
     int direction = getDirectionFromAngle(cM_atan2s(local_54.x, local_54.z));
@@ -7593,8 +7593,8 @@ BOOL daPy_lk_c::procDamage_init() {
     } else {
         dVar2 = ANM_DAMB;
     }
-    setSingleMoveAnime(dVar2, daPy_HIO_damage_c0::m.field_0x14, daPy_HIO_damage_c0::m.field_0x18,
-                       daPy_HIO_damage_c0::m.field_0x0, daPy_HIO_damage_c0::m.field_0x8);
+    setSingleMoveAnime(dVar2, m_HIO->mDam.mDamage.m.field_0x14, m_HIO->mDam.mDamage.m.field_0x18,
+                       m_HIO->mDam.mDamage.m.field_0x0, m_HIO->mDam.mDamage.m.field_0x8);
     current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
     if (dVar2 != ANM_DAMR) {
         m34BE = 2;
@@ -7603,7 +7603,7 @@ BOOL daPy_lk_c::procDamage_init() {
         m34BE = 1;
     }
     mVelocity =
-        (daPy_HIO_damage_c0::m.field_0x10 * damage_vec->absXZ()) + daPy_HIO_damage_c0::m.field_0xC;
+        (m_HIO->mDam.mDamage.m.field_0x10 * damage_vec->absXZ()) + m_HIO->mDam.mDamage.m.field_0xC;
     voiceStart(2);
     seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
     mProcVar0.mDamageAnm = dVar2;
@@ -7620,11 +7620,11 @@ BOOL daPy_lk_c::procDamage() {
     f32 dVar5;
     f32 dVar6;
 
-    dVar6 = (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - daPy_HIO_damage_c0::m.field_0x28);
+    dVar6 = (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - m_HIO->mDam.mDamage.m.field_0x28);
     cLib_addCalcAngleS(&m3566, 0, 4, 0x800, 0x100);
     if (dVar6 < 0.0f) {
         uVar4 = ((16384.0f * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()) /
-                 daPy_HIO_damage_c0::m.field_0x28);
+                 m_HIO->mDam.mDamage.m.field_0x28);
         fVar1 = cM_ssin(uVar4);
         if (uVar4 < 0x2000) {
             uVar4 = uVar4 << 1;
@@ -7634,7 +7634,7 @@ BOOL daPy_lk_c::procDamage() {
         fVar2 = cM_ssin(uVar4);
     } else {
         uVar4 = (16384.0f * (1.0f - (dVar6 / (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() -
-                                              daPy_HIO_damage_c0::m.field_0x28))));
+                                              m_HIO->mDam.mDamage.m.field_0x28))));
         fVar1 = 1.0f - cM_scos(uVar4);
         fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
     }
@@ -7644,11 +7644,11 @@ BOOL daPy_lk_c::procDamage() {
     mBodyAngle.x = m34D4 * fVar2;
     mBodyAngle.z = m34D6 * fVar2;
     mBodyAngle.y = 0;
-    dVar5 = cLib_addCalc(&mVelocity, 0.0f, daPy_HIO_damage_c0::m.field_0x1C,
-                         daPy_HIO_damage_c0::m.field_0x20, daPy_HIO_damage_c0::m.field_0x24);
+    dVar5 = cLib_addCalc(&mVelocity, 0.0f, m_HIO->mDam.mDamage.m.field_0x1C,
+                         m_HIO->mDam.mDamage.m.field_0x20, m_HIO->mDam.mDamage.m.field_0x24);
     if (dVar5 <= 0.001f && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         checkNextMode(0);
-    } else if (mVelocity < daPy_HIO_damage_c0::m.field_0x2C) {
+    } else if (mVelocity < m_HIO->mDam.mDamage.m.field_0x2C) {
         resetFootEffect();
     }
     return true;
@@ -7657,9 +7657,9 @@ BOOL daPy_lk_c::procDamage() {
 /* 801176FC-80117794       .text procPolyDamage_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procPolyDamage_init() {
     commonProcInit(daPyProc_POLY_DAMAGE_e);
-    mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
-    setSingleMoveAnime(ANM_DAM, daPy_HIO_damage_c0::m.field_0x30, daPy_HIO_damage_c0::m.field_0x34,
-                       daPy_HIO_damage_c0::m.field_0x4, daPy_HIO_damage_c0::m.field_0x38);
+    mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
+    setSingleMoveAnime(ANM_DAM, m_HIO->mDam.mDamage.m.field_0x30, m_HIO->mDam.mDamage.m.field_0x34,
+                       m_HIO->mDam.mDamage.m.field_0x4, m_HIO->mDam.mDamage.m.field_0x38);
     mVelocity = 0.0f;
     voiceStart(2);
     seStartOnlyReverb(JA_SE_LK_DAMAGE_NORMAL);
@@ -7687,7 +7687,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
     }
     commonProcInit(daPyProc_LARGE_DAMAGE_e);
     if (mDemo.getDemoMode() != daPy_demo_c::DEMO_LDAM_e) {
-        mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
+        mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
     } else {
         mDamageWaitTimer = 0;
     }
@@ -7748,8 +7748,8 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         iVar7 = 0;
         current.angle.y = shape_angle.y;
         fVar2 =
-            ((2.0f * daPy_HIO_huDamage_c0::m.field_0x20) / -daPy_HIO_huDamage_c0::m.field_0x1C) *
-            daPy_HIO_huDamage_c0::m.field_0x18;
+            ((2.0f * m_HIO->mDam.mHuDamage.m.field_0x20) / -m_HIO->mDam.mHuDamage.m.field_0x1C) *
+            m_HIO->mDam.mHuDamage.m.field_0x18;
         current.pos.x = current.pos.x - fVar2 * cM_ssin(shape_angle.y);
         current.pos.z = current.pos.z - fVar2 * cM_scos(shape_angle.y);
         mDamageWaitTimer = 0;
@@ -7789,18 +7789,18 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
         shape_angle.y = current.angle.y + 0x8000;
     }
     if (param_2 != 0) {
-        fVar2 = daPy_HIO_laDamage_c0::m.field_0x14;
-        gravity = daPy_HIO_laDamage_c0::m.field_0x1C;
-        mMaxNormalSpeed = daPy_HIO_laDamage_c0::m.field_0x18;
+        fVar2 = m_HIO->mDam.mLaDamage.m.field_0x14;
+        gravity = m_HIO->mDam.mLaDamage.m.field_0x1C;
+        mMaxNormalSpeed = m_HIO->mDam.mLaDamage.m.field_0x18;
         m34D6 = m34D6 | 8;
-        m34D8 = daPy_HIO_laDamage_c0::m.field_0x2;
-        m35A0 = daPy_HIO_laDamage_c0::m.field_0x64;
+        m34D8 = m_HIO->mDam.mLaDamage.m.field_0x2;
+        m35A0 = m_HIO->mDam.mLaDamage.m.field_0x64;
     } else {
-        fVar2 = daPy_HIO_huDamage_c0::m.field_0x14;
-        gravity = daPy_HIO_huDamage_c0::m.field_0x1C;
-        mMaxNormalSpeed = daPy_HIO_huDamage_c0::m.field_0x18;
-        m34D8 = daPy_HIO_huDamage_c0::m.field_0x2;
-        m35A0 = daPy_HIO_huDamage_c0::m.field_0x64;
+        fVar2 = m_HIO->mDam.mHuDamage.m.field_0x14;
+        gravity = m_HIO->mDam.mHuDamage.m.field_0x1C;
+        mMaxNormalSpeed = m_HIO->mDam.mHuDamage.m.field_0x18;
+        m34D8 = m_HIO->mDam.mHuDamage.m.field_0x2;
+        m35A0 = m_HIO->mDam.mHuDamage.m.field_0x64;
     }
     setSingleMoveAnime(mProcVar0.mDamageAnm, 1.0f, 0.0f, -1, fVar2);
     if (param_1 < 0) {
@@ -7814,19 +7814,19 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
                 speed.y = fVar2;
             } else {
                 if (param_2 != 0) {
-                    mVelocity = daPy_HIO_laDamage_c0::m.field_0x18;
-                    speed.y = daPy_HIO_laDamage_c0::m.field_0x20;
+                    mVelocity = m_HIO->mDam.mLaDamage.m.field_0x18;
+                    speed.y = m_HIO->mDam.mLaDamage.m.field_0x20;
                 } else {
-                    mVelocity = daPy_HIO_huDamage_c0::m.field_0x18;
-                    speed.y = daPy_HIO_huDamage_c0::m.field_0x20;
+                    mVelocity = m_HIO->mDam.mHuDamage.m.field_0x18;
+                    speed.y = m_HIO->mDam.mHuDamage.m.field_0x20;
                 }
             }
         }
     } else {
         if (param_2 != 0) {
-            mVelocity = daPy_HIO_laDamage_c0::m.field_0x64;
+            mVelocity = m_HIO->mDam.mLaDamage.m.field_0x64;
         } else {
-            mVelocity = daPy_HIO_huDamage_c0::m.field_0x64;
+            mVelocity = m_HIO->mDam.mHuDamage.m.field_0x64;
         }
         current.pos.x = current.pos.x + 35.0f * cM_ssin(current.angle.y);
         current.pos.z = current.pos.z + 35.0f * cM_scos(current.angle.y);
@@ -7848,8 +7848,8 @@ BOOL daPy_lk_c::procLargeDamage() {
     if ((int)m34D0 > 0) {
         m34D0--;
         if (m34D0 == 0) {
-            mVelocity = daPy_HIO_laDamage_c0::m.field_0x18;
-            speed.y = daPy_HIO_laDamage_c0::m.field_0x20;
+            mVelocity = m_HIO->mDam.mLaDamage.m.field_0x18;
+            speed.y = m_HIO->mDam.mLaDamage.m.field_0x20;
         } else {
             return true;
         }
@@ -7924,7 +7924,7 @@ BOOL daPy_lk_c::procLargeDamageUp_init(int param_1, int param_2, s16 param_3, s1
         dVar4 = ANM_DAMFBUP;
         dVar6 = 7.0f;
         sVar3 = -1;
-        dVar5 = daPy_HIO_laDamage_c0::m.field_0x40;
+        dVar5 = m_HIO->mDam.mLaDamage.m.field_0x40;
         m35A0 = 36.0f;
         if (param_1 == -1) {
             m34D0 = 0x1e;
@@ -7937,9 +7937,9 @@ BOOL daPy_lk_c::procLargeDamageUp_init(int param_1, int param_2, s16 param_3, s1
         dVar4 = ANM_DAMFBUP;
         dVar7 = 0.0f;
         dVar6 = 7.0f;
-        sVar3 = daPy_HIO_huDamage_c0::m.field_0x6;
-        dVar5 = daPy_HIO_huDamage_c0::m.field_0x40;
-        m35A0 = daPy_HIO_huDamage_c0::m.field_0x3C;
+        sVar3 = m_HIO->mDam.mHuDamage.m.field_0x6;
+        dVar5 = m_HIO->mDam.mHuDamage.m.field_0x40;
+        m35A0 = m_HIO->mDam.mHuDamage.m.field_0x3C;
         if (param_1 == -4) {
             m34D0 = 0x28;
         } else {
@@ -7957,62 +7957,62 @@ BOOL daPy_lk_c::procLargeDamageUp_init(int param_1, int param_2, s16 param_3, s1
         if (param_1 == ANM_DAMFB) {
             dVar4 = ANM_DAMFBUP;
             if (param_2 != 0) {
-                dVar7 = daPy_HIO_laDamage_c0::m.field_0x34;
-                dVar6 = daPy_HIO_laDamage_c0::m.field_0x38;
-                sVar3 = daPy_HIO_laDamage_c0::m.field_0x6;
-                dVar5 = daPy_HIO_laDamage_c0::m.field_0x40;
-                m35A0 = daPy_HIO_laDamage_c0::m.field_0x3C;
+                dVar7 = m_HIO->mDam.mLaDamage.m.field_0x34;
+                dVar6 = m_HIO->mDam.mLaDamage.m.field_0x38;
+                sVar3 = m_HIO->mDam.mLaDamage.m.field_0x6;
+                dVar5 = m_HIO->mDam.mLaDamage.m.field_0x40;
+                m35A0 = m_HIO->mDam.mLaDamage.m.field_0x3C;
             } else {
-                dVar7 = daPy_HIO_huDamage_c0::m.field_0x34;
-                dVar6 = daPy_HIO_huDamage_c0::m.field_0x38;
-                sVar3 = daPy_HIO_huDamage_c0::m.field_0x6;
-                dVar5 = daPy_HIO_huDamage_c0::m.field_0x40;
-                m35A0 = daPy_HIO_huDamage_c0::m.field_0x3C;
+                dVar7 = m_HIO->mDam.mHuDamage.m.field_0x34;
+                dVar6 = m_HIO->mDam.mHuDamage.m.field_0x38;
+                sVar3 = m_HIO->mDam.mHuDamage.m.field_0x6;
+                dVar5 = m_HIO->mDam.mHuDamage.m.field_0x40;
+                m35A0 = m_HIO->mDam.mHuDamage.m.field_0x3C;
             }
         } else if (param_1 == ANM_DAMFL) {
             dVar4 = ANM_DAMFLUP;
             if (param_2 != 0) {
-                dVar7 = daPy_HIO_laDamage_c0::m.field_0x44;
-                dVar6 = daPy_HIO_laDamage_c0::m.field_0x48;
-                sVar3 = daPy_HIO_laDamage_c0::m.field_0x8;
-                dVar5 = daPy_HIO_laDamage_c0::m.field_0x50;
-                m35A0 = daPy_HIO_laDamage_c0::m.field_0x4C;
+                dVar7 = m_HIO->mDam.mLaDamage.m.field_0x44;
+                dVar6 = m_HIO->mDam.mLaDamage.m.field_0x48;
+                sVar3 = m_HIO->mDam.mLaDamage.m.field_0x8;
+                dVar5 = m_HIO->mDam.mLaDamage.m.field_0x50;
+                m35A0 = m_HIO->mDam.mLaDamage.m.field_0x4C;
             } else {
-                dVar7 = daPy_HIO_huDamage_c0::m.field_0x44;
-                dVar6 = daPy_HIO_huDamage_c0::m.field_0x48;
-                sVar3 = daPy_HIO_huDamage_c0::m.field_0x8;
-                dVar5 = daPy_HIO_huDamage_c0::m.field_0x50;
-                m35A0 = daPy_HIO_huDamage_c0::m.field_0x4C;
+                dVar7 = m_HIO->mDam.mHuDamage.m.field_0x44;
+                dVar6 = m_HIO->mDam.mHuDamage.m.field_0x48;
+                sVar3 = m_HIO->mDam.mHuDamage.m.field_0x8;
+                dVar5 = m_HIO->mDam.mHuDamage.m.field_0x50;
+                m35A0 = m_HIO->mDam.mHuDamage.m.field_0x4C;
             }
         } else if (param_1 == ANM_DAMFR) {
             dVar4 = ANM_DAMFRUP;
             if (param_2 != 0) {
-                dVar7 = daPy_HIO_laDamage_c0::m.field_0x54;
-                dVar6 = daPy_HIO_laDamage_c0::m.field_0x58;
-                sVar3 = daPy_HIO_laDamage_c0::m.field_0xA;
-                dVar5 = daPy_HIO_laDamage_c0::m.field_0x60;
-                m35A0 = daPy_HIO_laDamage_c0::m.field_0x5C;
+                dVar7 = m_HIO->mDam.mLaDamage.m.field_0x54;
+                dVar6 = m_HIO->mDam.mLaDamage.m.field_0x58;
+                sVar3 = m_HIO->mDam.mLaDamage.m.field_0xA;
+                dVar5 = m_HIO->mDam.mLaDamage.m.field_0x60;
+                m35A0 = m_HIO->mDam.mLaDamage.m.field_0x5C;
             } else {
-                dVar7 = daPy_HIO_huDamage_c0::m.field_0x54;
-                dVar6 = daPy_HIO_huDamage_c0::m.field_0x58;
-                sVar3 = daPy_HIO_huDamage_c0::m.field_0xA;
-                dVar5 = daPy_HIO_huDamage_c0::m.field_0x60;
-                m35A0 = daPy_HIO_huDamage_c0::m.field_0x5C;
+                dVar7 = m_HIO->mDam.mHuDamage.m.field_0x54;
+                dVar6 = m_HIO->mDam.mHuDamage.m.field_0x58;
+                sVar3 = m_HIO->mDam.mHuDamage.m.field_0xA;
+                dVar5 = m_HIO->mDam.mHuDamage.m.field_0x60;
+                m35A0 = m_HIO->mDam.mHuDamage.m.field_0x5C;
             }
         } else {
             dVar4 = ANM_DAMFFUP;
             if (param_2 != 0) {
-                dVar7 = daPy_HIO_laDamage_c0::m.field_0x24;
-                dVar6 = daPy_HIO_laDamage_c0::m.field_0x28;
-                sVar3 = daPy_HIO_laDamage_c0::m.field_0x4;
-                dVar5 = daPy_HIO_laDamage_c0::m.field_0x30;
-                m35A0 = daPy_HIO_laDamage_c0::m.field_0x2C;
+                dVar7 = m_HIO->mDam.mLaDamage.m.field_0x24;
+                dVar6 = m_HIO->mDam.mLaDamage.m.field_0x28;
+                sVar3 = m_HIO->mDam.mLaDamage.m.field_0x4;
+                dVar5 = m_HIO->mDam.mLaDamage.m.field_0x30;
+                m35A0 = m_HIO->mDam.mLaDamage.m.field_0x2C;
             } else {
-                dVar7 = daPy_HIO_huDamage_c0::m.field_0x24;
-                dVar6 = daPy_HIO_huDamage_c0::m.field_0x28;
-                sVar3 = daPy_HIO_huDamage_c0::m.field_0x4;
-                dVar5 = daPy_HIO_huDamage_c0::m.field_0x30;
-                m35A0 = daPy_HIO_huDamage_c0::m.field_0x2C;
+                dVar7 = m_HIO->mDam.mHuDamage.m.field_0x24;
+                dVar6 = m_HIO->mDam.mHuDamage.m.field_0x28;
+                sVar3 = m_HIO->mDam.mHuDamage.m.field_0x4;
+                dVar5 = m_HIO->mDam.mHuDamage.m.field_0x30;
+                m35A0 = m_HIO->mDam.mHuDamage.m.field_0x2C;
             }
         }
     }
@@ -8082,60 +8082,60 @@ BOOL daPy_lk_c::procLargeDamageWall_init(int param_1, int param_2, s16 param_3, 
     if (param_1 == 0x5c) {
         mProcVar0.mDamageAnm = ANM_DAMFBUP;
         if (param_2) {
-            fVar1 = daPy_HIO_laDamage_c0::m.field_0x74;
-            fVar2 = daPy_HIO_laDamage_c0::m.field_0x78;
-            sVar10 = daPy_HIO_laDamage_c0::m.field_0xE;
-            fVar5 = daPy_HIO_laDamage_c0::m.field_0x7C;
+            fVar1 = m_HIO->mDam.mLaDamage.m.field_0x74;
+            fVar2 = m_HIO->mDam.mLaDamage.m.field_0x78;
+            sVar10 = m_HIO->mDam.mLaDamage.m.field_0xE;
+            fVar5 = m_HIO->mDam.mLaDamage.m.field_0x7C;
         } else {
-            fVar1 = daPy_HIO_huDamage_c0::m.field_0x74;
-            fVar2 = daPy_HIO_huDamage_c0::m.field_0x78;
-            sVar10 = daPy_HIO_huDamage_c0::m.field_0xE;
-            fVar5 = daPy_HIO_huDamage_c0::m.field_0x7C;
+            fVar1 = m_HIO->mDam.mHuDamage.m.field_0x74;
+            fVar2 = m_HIO->mDam.mHuDamage.m.field_0x78;
+            sVar10 = m_HIO->mDam.mHuDamage.m.field_0xE;
+            fVar5 = m_HIO->mDam.mHuDamage.m.field_0x7C;
         }
         m34F2 = sVar3 + -0x4000;
         m34D0 = 0;
     } else if (param_1 == 0x59) {
         mProcVar0.mDamageAnm = ANM_DAMFLUP;
         if (param_2) {
-            fVar1 = daPy_HIO_laDamage_c0::m.field_0x80;
-            fVar2 = daPy_HIO_laDamage_c0::m.field_0x84;
-            sVar10 = daPy_HIO_laDamage_c0::m.field_0x10;
-            fVar5 = daPy_HIO_laDamage_c0::m.field_0x88;
+            fVar1 = m_HIO->mDam.mLaDamage.m.field_0x80;
+            fVar2 = m_HIO->mDam.mLaDamage.m.field_0x84;
+            sVar10 = m_HIO->mDam.mLaDamage.m.field_0x10;
+            fVar5 = m_HIO->mDam.mLaDamage.m.field_0x88;
         } else {
-            fVar1 = daPy_HIO_huDamage_c0::m.field_0x80;
-            fVar2 = daPy_HIO_huDamage_c0::m.field_0x84;
-            sVar10 = daPy_HIO_huDamage_c0::m.field_0x10;
-            fVar5 = daPy_HIO_huDamage_c0::m.field_0x88;
+            fVar1 = m_HIO->mDam.mHuDamage.m.field_0x80;
+            fVar2 = m_HIO->mDam.mHuDamage.m.field_0x84;
+            sVar10 = m_HIO->mDam.mHuDamage.m.field_0x10;
+            fVar5 = m_HIO->mDam.mHuDamage.m.field_0x88;
         }
         m34F4 = sVar3 + -0x4000;
         m34D0 = 1;
     } else if (param_1 == 0x5a) {
         mProcVar0.mDamageAnm = ANM_DAMFRUP;
         if (param_2) {
-            fVar1 = daPy_HIO_laDamage_c0::m.field_0x8C;
-            fVar2 = daPy_HIO_laDamage_c0::m.field_0x90;
-            sVar10 = daPy_HIO_laDamage_c0::m.field_0x12;
-            fVar5 = daPy_HIO_laDamage_c0::m.field_0x94;
+            fVar1 = m_HIO->mDam.mLaDamage.m.field_0x8C;
+            fVar2 = m_HIO->mDam.mLaDamage.m.field_0x90;
+            sVar10 = m_HIO->mDam.mLaDamage.m.field_0x12;
+            fVar5 = m_HIO->mDam.mLaDamage.m.field_0x94;
         } else {
-            fVar1 = daPy_HIO_huDamage_c0::m.field_0x8C;
-            fVar2 = daPy_HIO_huDamage_c0::m.field_0x90;
-            sVar10 = daPy_HIO_huDamage_c0::m.field_0x12;
-            fVar5 = daPy_HIO_huDamage_c0::m.field_0x94;
+            fVar1 = m_HIO->mDam.mHuDamage.m.field_0x8C;
+            fVar2 = m_HIO->mDam.mHuDamage.m.field_0x90;
+            sVar10 = m_HIO->mDam.mHuDamage.m.field_0x12;
+            fVar5 = m_HIO->mDam.mHuDamage.m.field_0x94;
         }
         m34F4 = 0x4000 - sVar3;
         m34D0 = 1;
     } else {
         mProcVar0.mDamageAnm = ANM_DAMFFUP;
         if (param_2) {
-            fVar1 = daPy_HIO_laDamage_c0::m.field_0x68;
-            fVar2 = daPy_HIO_laDamage_c0::m.field_0x6C;
-            sVar10 = daPy_HIO_laDamage_c0::m.field_0xC;
-            fVar5 = daPy_HIO_laDamage_c0::m.field_0x70;
+            fVar1 = m_HIO->mDam.mLaDamage.m.field_0x68;
+            fVar2 = m_HIO->mDam.mLaDamage.m.field_0x6C;
+            sVar10 = m_HIO->mDam.mLaDamage.m.field_0xC;
+            fVar5 = m_HIO->mDam.mLaDamage.m.field_0x70;
         } else {
-            fVar1 = daPy_HIO_huDamage_c0::m.field_0x68;
-            fVar2 = daPy_HIO_huDamage_c0::m.field_0x6C;
-            sVar10 = daPy_HIO_huDamage_c0::m.field_0xC;
-            fVar5 = daPy_HIO_huDamage_c0::m.field_0x70;
+            fVar1 = m_HIO->mDam.mHuDamage.m.field_0x68;
+            fVar2 = m_HIO->mDam.mHuDamage.m.field_0x6C;
+            sVar10 = m_HIO->mDam.mHuDamage.m.field_0xC;
+            fVar5 = m_HIO->mDam.mHuDamage.m.field_0x70;
         }
         m34F2 = 0x4000 - sVar3;
         m34D0 = 0;
@@ -8175,12 +8175,12 @@ BOOL daPy_lk_c::procLavaDamage_init() {
     gravity = -2.5f;
     mVelocity = 15.0f + (40.0f * dVar3);
     speed.y = 32.0f + (36.0f * dVar3);
-    setSingleMoveAnime(ANM_LAVADAM, daPy_HIO_restart_c0::m.field_0x0, 0.0f, -1, daPy_HIO_restart_c0::m.field_0x4);
+    setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
     m32E4.makeEmitter(dPa_name::ID_SCENE_8078, mpCLModel->getAnmMtx(0), &current.pos, NULL);
     voiceStart(4);
     seStartMapInfo(JA_SE_LK_FALL_MAGMA);
     current.angle.y = cM_atan2s(current.pos.x, current.pos.z);
-    mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
+    mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
     setDamagePoint(-1.0f);
 
     return true;
@@ -8228,10 +8228,10 @@ BOOL daPy_lk_c::procElecDamage_init(const cXyz* param_1) {
     }
     mVelocity = 0.0f;
     speed.y = 0.0f;
-    setSingleMoveAnime(ANM_DAMBIRI, daPy_HIO_elecDamage_c0::m.field_0x4, 0.0f, -1,
-                       daPy_HIO_elecDamage_c0::m.field_0x8);
-    mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
-    m34D0 = daPy_HIO_elecDamage_c0::m.field_0x0;
+    setSingleMoveAnime(ANM_DAMBIRI, m_HIO->mDam.mElecDamage.m.field_0x4, 0.0f, -1,
+                       m_HIO->mDam.mElecDamage.m.field_0x8);
+    mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
+    m34D0 = m_HIO->mDam.mElecDamage.m.field_0x0;
     if (param_1 != 0) {
         m370C = current.pos - *param_1;
         m34D6 = 1;
@@ -8292,27 +8292,27 @@ BOOL daPy_lk_c::procGuardSlip_init() {
                           iVar4->GetAtSpl() == dCcG_At_Spl_UNK6 ||
                           iVar4->GetAtSpl() == dCcG_At_Spl_UNK7))
     {
-        setSingleMoveAnime(dVar5, daPy_HIO_nockback_c0::m.field_0x8,
-                           daPy_HIO_nockback_c0::m.field_0xC, daPy_HIO_nockback_c0::m.field_0x0,
-                           daPy_HIO_nockback_c0::m.field_0x10);
-        mVelocity = (daPy_HIO_nockback_c0::m.field_0x18 * damage_vec->absXZ()) +
-                    daPy_HIO_nockback_c0::m.field_0x14;
-        m34D0 = daPy_HIO_nockback_c0::m.field_0x2;
-        m35A0 = daPy_HIO_nockback_c0::m.field_0x1C;
-        m35A4 = daPy_HIO_nockback_c0::m.field_0x20;
-        m35A8 = daPy_HIO_nockback_c0::m.field_0x24;
-        m35AC = daPy_HIO_nockback_c0::m.field_0x28;
+        setSingleMoveAnime(dVar5, m_HIO->mNockback.m.field_0x8,
+                           m_HIO->mNockback.m.field_0xC, m_HIO->mNockback.m.field_0x0,
+                           m_HIO->mNockback.m.field_0x10);
+        mVelocity = (m_HIO->mNockback.m.field_0x18 * damage_vec->absXZ()) +
+                    m_HIO->mNockback.m.field_0x14;
+        m34D0 = m_HIO->mNockback.m.field_0x2;
+        m35A0 = m_HIO->mNockback.m.field_0x1C;
+        m35A4 = m_HIO->mNockback.m.field_0x20;
+        m35A8 = m_HIO->mNockback.m.field_0x24;
+        m35AC = m_HIO->mNockback.m.field_0x28;
         mProcVar0.m3570 = (cM_rnd() < 0.2f) ? 1 : 0;
     } else {
-        setSingleMoveAnime(dVar5, daPy_HIO_guard_c0::m.field_0x4, daPy_HIO_guard_c0::m.field_0x8,
-                           daPy_HIO_guard_c0::m.field_0x0, daPy_HIO_guard_c0::m.field_0xC);
+        setSingleMoveAnime(dVar5, m_HIO->mGuard.m.field_0x4, m_HIO->mGuard.m.field_0x8,
+                           m_HIO->mGuard.m.field_0x0, m_HIO->mGuard.m.field_0xC);
         mVelocity =
-            (daPy_HIO_guard_c0::m.field_0x14 * damage_vec->absXZ()) + daPy_HIO_guard_c0::m.field_0x10;
-        m34D0 = daPy_HIO_guard_c0::m.field_0x2;
-        m35A0 = daPy_HIO_guard_c0::m.field_0x18;
-        m35A4 = daPy_HIO_guard_c0::m.field_0x1C;
-        m35A8 = daPy_HIO_guard_c0::m.field_0x20;
-        m35AC = daPy_HIO_guard_c0::m.field_0x24;
+            (m_HIO->mGuard.m.field_0x14 * damage_vec->absXZ()) + m_HIO->mGuard.m.field_0x10;
+        m34D0 = m_HIO->mGuard.m.field_0x2;
+        m35A0 = m_HIO->mGuard.m.field_0x18;
+        m35A4 = m_HIO->mGuard.m.field_0x1C;
+        m35A8 = m_HIO->mGuard.m.field_0x20;
+        m35AC = m_HIO->mGuard.m.field_0x24;
         mProcVar0.m3570 = 0;
     }
     if (mEquipItem == dItem_SKULL_HAMMER_e) {
@@ -8374,9 +8374,9 @@ BOOL daPy_lk_c::procIceSlipFall_init() {
         m34D4 = -0x3fff;
         m34D6 = 1;
     }
-    setSingleMoveAnime(mProcVar0.mDamageAnm, 1.0f, 0.0f, -1, daPy_HIO_iceSlip_c0::m.field_0x20);
+    setSingleMoveAnime(mProcVar0.mDamageAnm, 1.0f, 0.0f, -1, m_HIO->mIceSlip.m.field_0x20);
     mVelocity = 0.0f;
-    speed.y = daPy_HIO_iceSlip_c0::m.field_0x1C;
+    speed.y = m_HIO->mIceSlip.m.field_0x1C;
     mBodyAngle.x = 0;
     mBodyAngle.y = 0;
     mBodyAngle.z = 0;
@@ -8393,7 +8393,7 @@ BOOL daPy_lk_c::procIceSlipFall() {
     } else {
         psVar1 = &m34F4;
     }
-    cLib_chaseAngleS(psVar1, m34D4, daPy_HIO_iceSlip_c0::m.field_0x2);
+    cLib_chaseAngleS(psVar1, m34D4, m_HIO->mIceSlip.m.field_0x2);
     if (mAcch.ChkGroundHit() && !changeSlideProc()) {
         procIceSlipFallUp_init(mProcVar0.m3570, m34F2, m34F4);
     }
@@ -8414,32 +8414,32 @@ BOOL daPy_lk_c::procIceSlipFallUp_init(int param_1, s16 param_2, s16 param_3) {
     seStartMapInfo(JA_SE_LK_FALL_DOWN);
     if (param_1 == ANM_DAMFB) {
         dVar5 = ANM_DAMFBUP;
-        fVar1 = daPy_HIO_iceSlip_c0::m.field_0x34;
-        fVar2 = daPy_HIO_iceSlip_c0::m.field_0x38;
-        sVar6 = daPy_HIO_iceSlip_c0::m.field_0x6;
-        fVar3 = daPy_HIO_iceSlip_c0::m.field_0x40;
-        m35A0 = daPy_HIO_iceSlip_c0::m.field_0x3C;
+        fVar1 = m_HIO->mIceSlip.m.field_0x34;
+        fVar2 = m_HIO->mIceSlip.m.field_0x38;
+        sVar6 = m_HIO->mIceSlip.m.field_0x6;
+        fVar3 = m_HIO->mIceSlip.m.field_0x40;
+        m35A0 = m_HIO->mIceSlip.m.field_0x3C;
     } else if (param_1 == ANM_DAMFL) {
         dVar5 = ANM_DAMFLUP;
-        fVar1 = daPy_HIO_iceSlip_c0::m.field_0x44;
-        fVar2 = daPy_HIO_iceSlip_c0::m.field_0x48;
-        sVar6 = daPy_HIO_iceSlip_c0::m.field_0x8;
-        fVar3 = daPy_HIO_iceSlip_c0::m.field_0x50;
-        m35A0 = daPy_HIO_iceSlip_c0::m.field_0x4C;
+        fVar1 = m_HIO->mIceSlip.m.field_0x44;
+        fVar2 = m_HIO->mIceSlip.m.field_0x48;
+        sVar6 = m_HIO->mIceSlip.m.field_0x8;
+        fVar3 = m_HIO->mIceSlip.m.field_0x50;
+        m35A0 = m_HIO->mIceSlip.m.field_0x4C;
     } else if (param_1 == ANM_DAMFR) {
         dVar5 = ANM_DAMFRUP;
-        fVar1 = daPy_HIO_iceSlip_c0::m.field_0x54;
-        fVar2 = daPy_HIO_iceSlip_c0::m.field_0x58;
-        sVar6 = daPy_HIO_iceSlip_c0::m.field_0xA;
-        fVar3 = daPy_HIO_iceSlip_c0::m.field_0x60;
-        m35A0 = daPy_HIO_iceSlip_c0::m.field_0x5C;
+        fVar1 = m_HIO->mIceSlip.m.field_0x54;
+        fVar2 = m_HIO->mIceSlip.m.field_0x58;
+        sVar6 = m_HIO->mIceSlip.m.field_0xA;
+        fVar3 = m_HIO->mIceSlip.m.field_0x60;
+        m35A0 = m_HIO->mIceSlip.m.field_0x5C;
     } else {
         dVar5 = ANM_DAMFFUP;
-        fVar1 = daPy_HIO_iceSlip_c0::m.field_0x24;
-        fVar2 = daPy_HIO_iceSlip_c0::m.field_0x28;
-        sVar6 = daPy_HIO_iceSlip_c0::m.field_0x4;
-        fVar3 = daPy_HIO_iceSlip_c0::m.field_0x30;
-        m35A0 = daPy_HIO_iceSlip_c0::m.field_0x2C;
+        fVar1 = m_HIO->mIceSlip.m.field_0x24;
+        fVar2 = m_HIO->mIceSlip.m.field_0x28;
+        sVar6 = m_HIO->mIceSlip.m.field_0x4;
+        fVar3 = m_HIO->mIceSlip.m.field_0x30;
+        m35A0 = m_HIO->mIceSlip.m.field_0x2C;
     }
     m35E4 = 1.0f;
     m35A4 = 2.0f / (m35A0 - fVar2);
@@ -8479,8 +8479,8 @@ BOOL daPy_lk_c::procIceSlipAlmostFall_init() {
     } else { // DIR_FORWARD
         anm = ANM_DAMB;
     }
-    setSingleMoveAnime(anm, daPy_HIO_iceSlip_c0::m.field_0x64, daPy_HIO_iceSlip_c0::m.field_0x68,
-                       daPy_HIO_iceSlip_c0::m.field_0xC, daPy_HIO_iceSlip_c0::m.field_0x70);
+    setSingleMoveAnime(anm, m_HIO->mIceSlip.m.field_0x64, m_HIO->mIceSlip.m.field_0x68,
+                       m_HIO->mIceSlip.m.field_0xC, m_HIO->mIceSlip.m.field_0x70);
     setTextureAnime(6, 0);
     mVelocity = 0.0f;
     return true;
@@ -8492,7 +8492,7 @@ BOOL daPy_lk_c::procIceSlipAlmostFall() {
         current.angle.y = shape_angle.y;
         checkNextMode(0);
     } else {
-        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_iceSlip_c0::m.field_0x6C) {
+        if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mIceSlip.m.field_0x6C) {
             s16 sVar1 = current.angle.y;
             current.angle.y = shape_angle.y;
             if (!checkNextMode(1)) {
@@ -8508,8 +8508,8 @@ BOOL daPy_lk_c::procBootsEquip_init(u16 param_1) {
     commonProcInit(daPyProc_BOOTS_EQUIP_e);
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_SETBOOTS, daPy_HIO_boots_c0::m.field_0x4, daPy_HIO_boots_c0::m.field_0x8,
-                       daPy_HIO_boots_c0::m.field_0x0, daPy_HIO_boots_c0::m.field_0x10);
+    setSingleMoveAnime(ANM_SETBOOTS, m_HIO->mItem.mBoots.m.field_0x4, m_HIO->mItem.mBoots.m.field_0x8,
+                       m_HIO->mItem.mBoots.m.field_0x0, m_HIO->mItem.mBoots.m.field_0x10);
     mProcVar0.m3570 = param_1;
     return true;
 }
@@ -8535,7 +8535,7 @@ BOOL daPy_lk_c::procBootsEquip() {
         }
 #endif
     } else {
-        if (frameCtrl.getFrame() > daPy_HIO_boots_c0::m.field_0xC) {
+        if (frameCtrl.getFrame() > m_HIO->mItem.mBoots.m.field_0xC) {
 #if VERSION <= VERSION_JPN
             checkNextMode(1);
 #else
@@ -8565,9 +8565,9 @@ BOOL daPy_lk_c::procNotUse_init(int param_1) {
     commonProcInit(daPyProc_NOT_USE_e);
     current.angle.y = shape_angle.y;
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_PRESENTATIONB, daPy_HIO_turn_c0::m.field_0x34,
-                       daPy_HIO_turn_c0::m.field_0x38, daPy_HIO_turn_c0::m.field_0x10,
-                       daPy_HIO_turn_c0::m.field_0x3C);
+    setSingleMoveAnime(ANM_PRESENTATIONB, m_HIO->mTurn.m.field_0x34,
+                       m_HIO->mTurn.m.field_0x38, m_HIO->mTurn.m.field_0x10,
+                       m_HIO->mTurn.m.field_0x3C);
     keepItemData();
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK800_e);
     m3628 = fpcM_ERROR_PROCESS_ID_e;
@@ -9139,10 +9139,10 @@ void daPy_lk_c::setNeckAngle() {
         } else if (r27 < -10000) {
             r27 = -10000;
         }
-        if (r23_3 > daPy_HIO_ship_c0::m.field_0x0) {
-            r23_3 = daPy_HIO_ship_c0::m.field_0x0;
-        } else if (r23_3 < -daPy_HIO_ship_c0::m.field_0x0) {
-            r23_3 = -daPy_HIO_ship_c0::m.field_0x0;
+        if (r23_3 > m_HIO->mShip.m.field_0x0) {
+            r23_3 = m_HIO->mShip.m.field_0x0;
+        } else if (r23_3 < -m_HIO->mShip.m.field_0x0) {
+            r23_3 = -m_HIO->mShip.m.field_0x0;
         }
         if (checkModeFlg(ModeFlg_00000080) && m_anm_heap_upper[UPPER_MOVE0_e].mIdx != LKANM_BCK_DASHKAZE &&
             m_anm_heap_upper[UPPER_MOVE1_e].mIdx != LKANM_BCK_DASHKAZE)
@@ -9202,10 +9202,10 @@ void daPy_lk_c::setNeckAngle() {
     cLib_addCalcAngleS(&m3566, r23, 3, 0x1000, 0x100);
     if (checkModeFlg(ModeFlg_00000080)) {
         s16 r4 = r25_2 + m3566;
-        if (r4 > daPy_HIO_ship_c0::m.field_0x0) {
-            m3566 = daPy_HIO_ship_c0::m.field_0x0 - r25_2;
-        } else if (r4 < -daPy_HIO_ship_c0::m.field_0x0) {
-            m3566 = -(daPy_HIO_ship_c0::m.field_0x0 + r25_2);
+        if (r4 > m_HIO->mShip.m.field_0x0) {
+            m3566 = m_HIO->mShip.m.field_0x0 - r25_2;
+        } else if (r4 < -m_HIO->mShip.m.field_0x0) {
+            m3566 = -(m_HIO->mShip.m.field_0x0 + r25_2);
         }
     }
     if (mCurProc != daPyProc_DAMAGE_e) {
@@ -9546,17 +9546,17 @@ void daPy_lk_c::setMoveSlantAngle() {
         return;
     }
 
-    if (mCurProc == daPyProc_MOVE_e && fVar1 > daPy_HIO_move_c0::m.field_0x4C) {
+    if (mCurProc == daPyProc_MOVE_e && fVar1 > m_HIO->mMove.m.field_0x4C) {
         cLib_addCalcAngleS(
             &m351C,
-            daPy_HIO_move_c0::m.field_0x50 * (s16)(m34DE - shape_angle.y) *
-                ((fVar1 - daPy_HIO_move_c0::m.field_0x4C) / (1.0f - daPy_HIO_move_c0::m.field_0x4C)),
-            daPy_HIO_move_c0::m.field_0xC,
-            daPy_HIO_move_c0::m.field_0x8,
-            daPy_HIO_move_c0::m.field_0xA
+            m_HIO->mMove.m.field_0x50 * (s16)(m34DE - shape_angle.y) *
+                ((fVar1 - m_HIO->mMove.m.field_0x4C) / (1.0f - m_HIO->mMove.m.field_0x4C)),
+            m_HIO->mMove.m.field_0xC,
+            m_HIO->mMove.m.field_0x8,
+            m_HIO->mMove.m.field_0xA
         );
     } else {
-        s16 sVar2 = m351C * daPy_HIO_move_c0::m.field_0x54;
+        s16 sVar2 = m351C * m_HIO->mMove.m.field_0x54;
         if (sVar2 == 0) {
             m351C = 0;
         } else {
@@ -9640,7 +9640,7 @@ void daPy_lk_c::setWorldMatrix() {
 /* 8011D070-8011D0E4       .text setAtParam__9daPy_lk_cFUli11dCcG_At_SplUcUcUcf */
 void daPy_lk_c::setAtParam(u32 type, int atp, dCcG_At_Spl spl, u8 se, u8 hitMark, u8 cutType, f32 radius) {
     dCcD_Cps* cps = mAtCps;
-    if (type == AT_TYPE_SWORD && checkNoResetFlg1(daPyFlg1_UNK8000)) {
+    if (type == AT_TYPE_SWORD && checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
         atp *= 2;
     }
     if (type != AT_TYPE_SWORD) {
@@ -9844,7 +9844,7 @@ void daPy_lk_c::setCollision() {
         mCyl.OnTgSetBit();
     }
     dComIfG_Ccsp()->Set(&mCyl);
-    dComIfG_Ccsp_SetMass(&mCyl, 1);
+    dComIfG_Ccsp()->SetMass(&mCyl, 1);
     mWindCyl.SetC(spD0);
     mWindCyl.SetH(mCyl.GetH());
     mWindCyl.SetR(mCyl.GetR());
@@ -9868,7 +9868,7 @@ void daPy_lk_c::setCollision() {
             if (mpCutfBrk != NULL) {
                 if (checkModeFlg(ModeFlg_PARRY)) {
                     mpCutfBrk->setFrame(2.0f);
-                } else if (checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                } else if (checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                     mpCutfBrk->setFrame(1.0f);
                 } else {
                     mpCutfBrk->setFrame(0.0f);
@@ -9915,46 +9915,46 @@ void daPy_lk_c::setCollision() {
                             uVar6 = fopAcM_GetParam(mActorKeepEquip.getActor());
                         }
                         if (uVar6 == 0) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x48;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x48;
                         } else if (uVar6 == 1) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x4C;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x4C;
                         } else if (uVar6 == 2) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x50;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x50;
                         } else if (uVar6 == 3) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x54;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x54;
                         } else if (uVar6 == 4) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x58;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x58;
                         } else {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x5C;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x5C;
                         }
                         dVar27 *= 1.5f;
                         prm0 = &nm_turn_prm0;
                         prm1 = &nm_turn_prm1;
                         env = &nm_turn_env;
-                    } else if (mCurProc == daPyProc_CUT_ROLL_e || checkNoResetFlg1(daPyFlg1_UNK8000)) {
+                    } else if (mCurProc == daPyProc_CUT_ROLL_e || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP)) {
                         if (checkNormalSwordEquip()) {
                             if (mCurProc == daPyProc_CUT_ROLL_e) {
-                                dVar27 = daPy_HIO_cutRoll_c0::m.field_0x18;
+                                dVar27 = m_HIO->mCut.mCutRoll.m.field_0x18;
                             } else {
-                                dVar27 = daPy_HIO_cutTurn_c0::m.field_0x38;
+                                dVar27 = m_HIO->mCut.mCutTurn.m.field_0x38;
                             }
                             prm0 = &n_roll_prm0;
                             prm1 = &n_roll_prm1;
                             env = &n_roll_env;
                         } else if (checkFinalMasterSwordEquip()) {
                             if (mCurProc == daPyProc_CUT_ROLL_e) {
-                                dVar27 = daPy_HIO_cutRoll_c0::m.field_0x1C;
+                                dVar27 = m_HIO->mCut.mCutRoll.m.field_0x1C;
                             } else {
-                                dVar27 = daPy_HIO_cutTurn_c0::m.field_0x3C;
+                                dVar27 = m_HIO->mCut.mCutTurn.m.field_0x3C;
                             }
                             prm0 = &fm_roll_prm0;
                             prm1 = &fm_roll_prm1;
                             env = &fm_roll_env;
                         } else {
                             if (mCurProc == daPyProc_CUT_ROLL_e) {
-                                dVar27 = daPy_HIO_cutRoll_c0::m.field_0x1C;
+                                dVar27 = m_HIO->mCut.mCutRoll.m.field_0x1C;
                             } else {
-                                dVar27 = daPy_HIO_cutTurn_c0::m.field_0x3C;
+                                dVar27 = m_HIO->mCut.mCutTurn.m.field_0x3C;
                             }
                             prm0 = &nm_roll_prm0;
                             prm1 = &nm_roll_prm1;
@@ -9962,17 +9962,17 @@ void daPy_lk_c::setCollision() {
                         }
                     } else {
                         if (checkNormalSwordEquip()) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x38;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x38;
                             prm0 = &n_turn_prm0;
                             prm1 = &n_turn_prm1;
                             env = &n_turn_env;
                         } else if (checkFinalMasterSwordEquip()) {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x3C;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x3C;
                             prm0 = &fm_turn_prm0;
                             prm1 = &fm_turn_prm1;
                             env = &fm_turn_env;
                         } else {
-                            dVar27 = daPy_HIO_cutTurn_c0::m.field_0x3C;
+                            dVar27 = m_HIO->mCut.mCutTurn.m.field_0x3C;
                             prm0 = &nm_turn_prm0;
                             prm1 = &nm_turn_prm1;
                             env = &nm_turn_env;
@@ -10027,7 +10027,7 @@ void daPy_lk_c::setCollision() {
             }
         } else if (mCurProc == daPyProc_CUT_ROLL_e) {
             cXyz* pcVar23 = &mSwBlur.field_0x304[0];
-            s16 r27 = daPy_HIO_cutRoll_c0::m.field_0x4 / 10;
+            s16 r27 = m_HIO->mCut.mCutRoll.m.field_0x4 / 10;
             cXyz spAC = (old.pos - current.pos) * 0.1f;
             mDoMtx_stack_c::copy(mpCLModel->getBaseTRMtx());
             mDoMtx_stack_c::push();
@@ -10098,12 +10098,12 @@ void daPy_lk_c::setCollision() {
             }
         }
         dComIfG_Ccsp()->Set(&mAtCyl);
-        dComIfG_Ccsp_SetMass(&mAtCyl, 1);
+        dComIfG_Ccsp()->SetMass(&mAtCyl, 1);
         int i;
         dCcD_Cps* pdVar21 = &mAtCps[0];
         for (i = 0; i < 3; i++, pdVar21++) {
             dComIfG_Ccsp()->Set(pdVar21);
-            dComIfG_Ccsp_SetMass(pdVar21, 1);
+            dComIfG_Ccsp()->SetMass(pdVar21, 1);
         }
     } else {
         if (mSwBlur.field_0x014 < 10) {
@@ -10153,7 +10153,7 @@ void daPy_lk_c::setCollision() {
         sp94.z = mFanWindCps.GetEndP()->z;
         f32 dVar27 = m3534 / 10.0f;
         f32 fVar4 =
-            (dVar27 * (daPy_HIO_fan_c0::m.field_0x18 - daPy_HIO_fan_c0::m.field_0x1C) + daPy_HIO_fan_c0::m.field_0x1C);
+            (dVar27 * (m_HIO->mItem.mFan.m.field_0x18 - m_HIO->mItem.mFan.m.field_0x1C) + m_HIO->mItem.mFan.m.field_0x1C);
         spC4.set(
             fVar4 * cM_ssin(m3536) * cM_scos(m3538), -fVar4 * cM_ssin(m3538), fVar4 * cM_scos(m3536) * cM_scos(m3538)
         );
@@ -10224,7 +10224,7 @@ void daPy_lk_c::setCollision() {
         mFanWindCps.SetAtVec(spC4);
         mFanWindCps.SetR(in_f31);
         dComIfG_Ccsp()->Set(&mFanWindCps);
-        dComIfG_Ccsp_SetMass(&mFanWindCps, 1);
+        dComIfG_Ccsp()->SetMass(&mFanWindCps, 1);
     } else {
         mFanWindCps.ResetAtHit();
     }
@@ -10240,7 +10240,7 @@ void daPy_lk_c::setCollision() {
             mFanWindSph.SetC(current.pos);
         }
         dComIfG_Ccsp()->Set(&mFanWindSph);
-        dComIfG_Ccsp_SetMass(&mFanWindSph, 1);
+        dComIfG_Ccsp()->SetMass(&mFanWindSph, 1);
         m353A--;
     } else {
         mFanWindSph.ResetAtHit();
@@ -10259,7 +10259,7 @@ void daPy_lk_c::setCollision() {
         mFanLightCps.SetAtVec(local_118);
         mFanLightCps.OnAtSetBit();
         dComIfG_Ccsp()->Set(&mFanLightCps);
-        dComIfG_Ccsp_SetMass(&mFanLightCps, 1);
+        dComIfG_Ccsp()->SetMass(&mFanLightCps, 1);
     } else {
         mFanLightCps.ResetAtHit();
         mFanLightCps.OffAtSetBit();
@@ -10531,7 +10531,7 @@ void daPy_lk_c::setDemoData() {
             m34EC -= (s16)(current.angle.y - r24);
         } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e) || (demo_mode == daPy_demo_c::DEMO_N_DASH_e)) {
             cXyz sp44 = *pos_p - current.pos;
-            if (std::abs(mVelocity) / mMaxNormalSpeed < daPy_HIO_move_c0::m.field_0x2C) {
+            if (std::abs(mVelocity) / mMaxNormalSpeed < m_HIO->mMove.m.field_0x2C) {
                 demo_mode = daPy_demo_c::DEMO_N_WALK_e;
             }
             f32 dVar22 = sp44.abs2XZ();
@@ -10681,10 +10681,10 @@ void daPy_lk_c::setStickData() {
                 mItemButton |= BTN_R;
             }
             if (checkHeavyStateOn()) {
-                mStickDistance = mStickDistance * daPy_HIO_move_c0::m.field_0x80;
+                mStickDistance = mStickDistance * m_HIO->mMove.m.field_0x80;
             }
             if (checkGrabWear()) {
-                mStickDistance = mStickDistance * daPy_HIO_move_c0::m.field_0x74;
+                mStickDistance = mStickDistance * m_HIO->mMove.m.field_0x74;
             }
 #if VERSION == VERSION_DEMO
             if (bVar1)
@@ -10698,16 +10698,16 @@ void daPy_lk_c::setStickData() {
     }
     s16 angle_diff = m34DC - m34EA;
     int abs_v = abs(angle_diff);
-    if (((abs_v < daPy_HIO_cutTurnR_c0::m.field_0x6) &&
-         (abs_v > daPy_HIO_cutTurnR_c0::m.field_0x8)) &&
+    if (((abs_v < m_HIO->mCut.mCutTurnR.m.field_0x6) &&
+         (abs_v > m_HIO->mCut.mCutTurnR.m.field_0x8)) &&
         (m3578 * angle_diff >= 0))
     {
         m3578 = m3578 + angle_diff;
-        m3524 = daPy_HIO_cutTurnR_c0::m.field_0x2;
+        m3524 = m_HIO->mCut.mCutTurnR.m.field_0x2;
     } else if (m3578 * angle_diff < 0) {
         m3578 = angle_diff;
-        m3524 = daPy_HIO_cutTurnR_c0::m.field_0x2;
-    } else if (daPy_HIO_cutTurnR_c0::m.field_0x0 == 0) {
+        m3524 = m_HIO->mCut.mCutTurnR.m.field_0x2;
+    } else if (m_HIO->mCut.mCutTurnR.m.field_0x0 == 0) {
         if (m3524 > 0) {
             m3524--;
         } else {
@@ -10731,7 +10731,7 @@ void daPy_lk_c::setBgCheckParam() {
     } else if (checkModeFlg(ModeFlg_PUSHPULL)) {
         mAcchCir[0].SetWallR(40.0f);
     } else if (checkModeFlg(ModeFlg_WHIDE)) {
-        mAcchCir[0].SetWallR(daPy_HIO_wall_c0::m.field_0x50);
+        mAcchCir[0].SetWallR(m_HIO->mWall.m.field_0x50);
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
             mAcchCir[2].SetWallH(89.9f);
         }
@@ -10814,7 +10814,7 @@ void daPy_lk_c::checkFallCode() {
     if (m3580 == 4 || -G_CM3D_F_INF == mAcch.GetGroundH()) {
         bVar4 = m35D0 > mAcch.GetGroundH() ? TRUE : FALSE;
         if (((((!bVar4) && checkModeFlg(ModeFlg_MIDAIR)) &&
-              (!checkModeFlg(ModeFlg_HOOKSHOT) && (m35F4 - current.pos.y > 100.0f * daPy_HIO_fall_c0::m.field_0x14))) ||
+              (!checkModeFlg(ModeFlg_HOOKSHOT) && (m35F4 - current.pos.y > 100.0f * m_HIO->mFall.m.field_0x14))) ||
              (bVar4 && checkModeFlg(ModeFlg_SWIM))) ||
             (mAcch.ChkGroundHit() && (!checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)))))
         {
@@ -10842,8 +10842,8 @@ void daPy_lk_c::checkFallCode() {
         dVar5 = 1.5f;
         if (dVar6 < dVar5) {
             dVar5 = dVar5;
-        } else if (dVar6 > daPy_HIO_move_c0::m.field_0x18) {
-            dVar5 = daPy_HIO_move_c0::m.field_0x18;
+        } else if (dVar6 > m_HIO->mMove.m.field_0x18) {
+            dVar5 = m_HIO->mMove.m.field_0x18;
         } else {
             dVar5 = dVar6;
         }
@@ -11223,9 +11223,9 @@ void daPy_lk_c::checkRoofRestart() {
                 cXyz local_8;
 
                 local_8.set(
-                    current.pos.x + (35.0f - daPy_HIO_wall_c0::m.field_0x50) * cM_ssin(shape_angle.y),
+                    current.pos.x + (35.0f - m_HIO->mWall.m.field_0x50) * cM_ssin(shape_angle.y),
                     current.pos.y,
-                    current.pos.z + (35.0f - daPy_HIO_wall_c0::m.field_0x50) * cM_scos(shape_angle.y)
+                    current.pos.z + (35.0f - m_HIO->mWall.m.field_0x50) * cM_scos(shape_angle.y)
                 );
 
                 mRoofChk.SetPos(local_8);
@@ -11531,7 +11531,7 @@ BOOL daPy_lk_c::execute() {
                 }
                 offNoResetFlg0(daPyFlg0_UNK20000);
                 if (checkNoResetFlg0(daPyFlg0_UNK400000)) {
-                    onResetFlg0(daPyRFlg0_UNK200);
+                    onResetFlg0(daPyRFlg0_ROPE_JUMP_LAND);
                 }
                 offNoResetFlg0(daPyFlg0_UNK400000);
                 if (current.pos.y < 2000.0f && dComIfG_Bgsp()->GetSpecialCode(mAcch.m_gnd) != 1) {
@@ -11860,7 +11860,7 @@ BOOL daPy_lk_c::playerDelete() {
     
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
     dComIfGp_clearPlayerStatus1(0, daPyStts1_UNK40000_e);
-    g_dComIfG_gameInfo.play.field_0x4947 = 0;
+    dComIfGp_setMetronomeOff();
     
     cancelNoDamageMode();
     
@@ -12251,9 +12251,9 @@ void daPy_lk_c::playerInit() {
     mAcch.OnLineCheck();
     mAcch.ClrRoofNone();
     mAcch.SetRoofCrrHeight(125.0f);
-    mMaxNormalSpeed = daPy_HIO_move_c0::m.field_0x18;
-    gravity = daPy_HIO_autoJump_c0::m.field_0xC;
-    maxFallSpeed = daPy_HIO_autoJump_c0::m.field_0x10;
+    mMaxNormalSpeed = m_HIO->mMove.m.field_0x18;
+    gravity = m_HIO->mAutoJump.m.field_0xC;
+    maxFallSpeed = m_HIO->mAutoJump.m.field_0x10;
     mAcchCir[0].SetWall(30.1f, 35.0f);
     mAcchCir[1].SetWall(89.9f, 35.0f);
     mAcchCir[2].SetWall(125.0f, 35.0f);
@@ -12615,12 +12615,12 @@ cPhs_State daPy_lk_c::makeBgWait() {
             mDemo.setTimer(0x23);
             if (changeSwimProc()) {
                 if (startMode == 1) {
-                    mVelocity = 0.5f * daPy_HIO_swim_c0::m.field_0xC;
+                    mVelocity = 0.5f * m_HIO->mSwim.m.field_0xC;
                 }
                 speedF = mVelocity;
                 procSwimMove_init(0);
             } else if (startMode == 1) {
-                mVelocity = daPy_HIO_move_c0::m.field_0x2C * daPy_HIO_move_c0::m.field_0x18;
+                mVelocity = m_HIO->mMove.m.field_0x2C * m_HIO->mMove.m.field_0x18;
                 speedF = mVelocity;
                 procMove_init();
             } else if (sceneMode == 2) {
@@ -12633,8 +12633,8 @@ cPhs_State daPy_lk_c::makeBgWait() {
                 m34E8 = shape_angle.y + 0x8000;
                 procCrawlMove_init(0, 0);
             } else {
-                if (mVelocity > daPy_HIO_move_c0::m.field_0x18) {
-                    mVelocity = daPy_HIO_move_c0::m.field_0x18;
+                if (mVelocity > m_HIO->mMove.m.field_0x18) {
+                    mVelocity = m_HIO->mMove.m.field_0x18;
                 }
                 speedF = mVelocity;
                 procMove_init();
@@ -12706,7 +12706,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
 
 #if VERSION > VERSION_DEMO
     if ((dComIfGs_getLastSceneMode() & 0x4000) != 0) {
-        onNoResetFlg1(daPyFlg1_UNK8000);
+        onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
     }
 
     l_debug_keep_pos = current.pos;
@@ -12923,7 +12923,7 @@ BOOL daPy_lk_c::setActAnimeUpper(u16 bckIdx, daPy_UPPER upperIdx, f32 rate, f32 
 /* 801285F8-801286C0       .text resetActAnimeUpper__9daPy_lk_cFQ29daPy_lk_c10daPy_UPPERf */
 BOOL daPy_lk_c::resetActAnimeUpper(daPy_UPPER upperIdx, f32 f31) {
     if (checkDashDamageAnime()) {
-        mDamageWaitTimer = daPy_HIO_dam_c0::m.field_0x0;
+        mDamageWaitTimer = m_HIO->mDam.m.field_0x0;
     }
     
     mAnmRatioUpper[upperIdx].setAnmTransform(NULL);

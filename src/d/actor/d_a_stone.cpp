@@ -937,7 +937,7 @@ bool Act_c::_execute() {
                 mCyl.MoveCAtTg(current.pos);
                 dComIfG_Ccsp()->Set(&mCyl);
                 if (m674 == 2 || m674 == 3 || m67B != 0) {
-                    dComIfG_Ccsp_SetMass(&mCyl, 3);
+                    dComIfG_Ccsp()->SetMass(&mCyl, 3);
                 }
                 attention_info.position.x = current.pos.x;
                 attention_info.position.y = current.pos.y + data().m08;

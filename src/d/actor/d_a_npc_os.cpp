@@ -1641,7 +1641,7 @@ BOOL daNpc_Os_c::talk() {
             fopMsgM_messageSet(field_0x780);
         }
     }
-    else if(l_msg->mStatus != fopMsgStts_UNK15_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+    else if(l_msg->mStatus != fopMsgStts_INPUT_e && l_msg->mStatus != fopMsgStts_MSG_TYPING_e && l_msg->mStatus == fopMsgStts_BOX_CLOSED_e) {
         l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
 
         return true;

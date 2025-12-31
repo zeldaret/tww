@@ -310,7 +310,7 @@ void iwa_move(dr2_class* i_this) {
             cLib_addCalc2(&i_this->unk_414, 2000.0f, 0.5f, 100.0f);
 
             i_this->unk_4A8.y = btd->m02FC[3].y + REG0_F(3);
-            i_this->unk_4B4.y = i_this->unk_514->current.angle.y;
+            i_this->unk_4B4.y = i_this->unk_514->actor.current.angle.y;
             
             if (btd->m02FC[3].y < REG0_F(6) + 100.0f) {
                 i_this->unk_4C0 = (REG0_F(6) + 100.0f) - btd->m02FC[3].y;

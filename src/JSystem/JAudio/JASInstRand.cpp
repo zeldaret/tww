@@ -3,6 +3,8 @@
 // Translation Unit: JASInstRand.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASInstRand.h"
 #include "JSystem/JMath/random.h"
 

@@ -5,52 +5,151 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kmon.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const char daKmon_c::m_arcname[] = "Always";
+
 /* 00000078-00000118       .text set_mtx__8daKmon_cFv */
 void daKmon_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(0.0f, -24.0f, 0.0f);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000118-00000138       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daKmon_c*)i_this)->CreateHeap();
 }
 
 /* 00000138-00000324       .text CreateHeap__8daKmon_cFv */
-void daKmon_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daKmon_c::CreateHeap() {
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BDL_VBELL));
+    JUT_ASSERT(166, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BTK_VBELL));
+    JUT_ASSERT(176, pbtk != NULL);
+    if (!mBtkAnm.init(modelData, pbtk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        return FALSE;
+    }
+    mBtkAnm.setPlaySpeed(1.0);
+
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(daKmon_c::m_arcname, ALWAYS_BCK_VBELL));
+    JUT_ASSERT(188, pbck != NULL);
+    if (!mBckAnm.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
+        return FALSE;
+    }
+    mBckAnm.setPlaySpeed(0.0);
+
+    return TRUE;
 }
 
 /* 00000324-000003FC       .text CreateInit__8daKmon_cFv */
-void daKmon_c::CreateInit() {
-    /* Nonmatching */
+cPhs_State daKmon_c::CreateInit() {
+    set_mtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    mAcchCir.SetWall(30.0f, 30.0f);
+    cXyz* p_speed = &speed;
+    cXyz* p_old_pos = &old.pos;
+    cXyz* p_current_pos = &current.pos;
+    mAcch.Set(p_current_pos, p_old_pos, this, 1, &mAcchCir, p_speed);
+    gravity = -4.0f;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6e;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6c;
+    attention_info.flags |= fopAc_Attn_TALKFLAG_LOOK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+    eventInfo.setEventName("Ji1_KmonTalk");
+    mpJi1 = (daNpc_Ji1_c*)fopAcM_SearchByID(parentActorID);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000003FC-000006E8       .text checkTalk__8daKmon_cFv */
 void daKmon_c::checkTalk() {
-    /* Nonmatching */
+    cXyz player_pos = dComIfGp_getPlayer(0)->current.pos;
+    cXyz vec_from_player = current.pos - player_pos;
+    f32 distance_to_player = vec_from_player.absXZ();
+
+    eyePos = attention_info.position = current.pos;
+    attention_info.position.y += 25.0f;
+
+    if (eventInfo.checkCommandTalk()) {
+        if (!mpJi1->checkAction(&daNpc_Ji1_c::eventAction)) {
+            dComIfGp_event_setTalkPartner(mpJi1);
+            mpJi1->field_0xC84 = 0x10;
+
+            mpJi1->field_0x2C8 = mpJi1->mAction;
+            mpJi1->setAction(&daNpc_Ji1_c::eventAction, 0);
+
+            return;
+        }
+    }
+    if ((distance_to_player < 300.0f) && (current.pos.y > 200.0f) && !dComIfGs_isEventBit(0xd80) && (g_dComIfG_gameInfo.play.mMiniGameType == 0)) {
+        eventInfo.mCondition |= dEvtCnd_CANTALK_e;
+    }
+}
+
+cPhs_State daKmon_c::_create() {
+    fopAcM_SetupActor(this, daKmon_c);
+
+    cPhs_State state = dComIfG_resLoad(&mPhase, daKmon_c::m_arcname);
+    if(state == cPhs_COMPLEATE_e) {
+        if(fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {
+            state = CreateInit();
+        } else {
+            state = cPhs_ERROR_e;
+        }
+    }
+    return state;
 }
 
 /* 000006E8-000007F8       .text daKmonCreate__FPv */
-static cPhs_State daKmonCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daKmonCreate(void* i_this) {
+    return ((daKmon_c*)i_this)->_create();
+}
+
+BOOL daKmon_c::_delete() {
+    dComIfG_resDelete(&mPhase, daKmon_c::m_arcname);
+    return TRUE;
 }
 
 /* 00000968-00000998       .text daKmonDelete__FPv */
-static BOOL daKmonDelete(void*) {
-    /* Nonmatching */
+static BOOL daKmonDelete(void* i_this) {
+    return ((daKmon_c*)i_this)->_delete();
+}
+
+BOOL daKmon_c::_execute() {
+    checkTalk();
+    fopAcM_posMoveF(this, NULL);
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    mBckAnm.play();
+    mBtkAnm.play();
+    set_mtx();
+    return FALSE;
 }
 
 /* 00000998-00000A00       .text daKmonExecute__FPv */
-static BOOL daKmonExecute(void*) {
-    /* Nonmatching */
+static BOOL daKmonExecute(void* i_this) {
+    return ((daKmon_c*)i_this)->_execute();
+}
+
+BOOL daKmon_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG1_PLIGHT, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBckAnm.entry(mpModel->getModelData());
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 00000A00-00000A9C       .text daKmonDraw__FPv */
-static BOOL daKmonDraw(void*) {
-    /* Nonmatching */
+static BOOL daKmonDraw(void* i_this) {
+    return ((daKmon_c*)i_this)->_draw();
 }
 
 /* 00000A9C-00000AA4       .text daKmonIsDelete__FPv */

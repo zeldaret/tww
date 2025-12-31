@@ -45,6 +45,7 @@ public:
     void _draw();
     BOOL _open();
     BOOL _close();
+    void draw() { return _draw(); };
 
 public:
     /* 0x004 */ J2DScreen* scrn;

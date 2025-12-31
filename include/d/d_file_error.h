@@ -1,11 +1,12 @@
 #ifndef D_FILE_ERROR_H
 #define D_FILE_ERROR_H
 
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "d/d_drawlist.h"
 
-class MyScreen {
+class MyScreen :public J2DScreen {
 public:
-    void createPane(const J2DPane::J2DScrnBlockHeader&, JSURandomInputStream*, J2DPane*) {}
+    J2DPane* createPane(const J2DPane::J2DScrnBlockHeader&, JSURandomInputStream*, J2DPane*) {}
 };
 
 class dFe_HIO_c {

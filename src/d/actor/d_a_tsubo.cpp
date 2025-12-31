@@ -3554,7 +3554,7 @@ bool Act_c::_execute() {
                         }
 
                         if (m678 == 5 || m678 == 6 || m678 == 3 || m683 != 0) {
-                            dComIfG_Ccsp_SetMass(&mCyl, 3);
+                            dComIfG_Ccsp()->SetMass(&mCyl, 3);
                         }
 
                         attention_info.position.x = current.pos.x;

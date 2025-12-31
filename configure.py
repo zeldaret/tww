@@ -100,6 +100,12 @@ parser.add_argument(
     help="path to decomp-toolkit binary or source (optional)",
 )
 parser.add_argument(
+    "--objdiff",
+    metavar="BINARY | DIR",
+    type=Path,
+    help="path to objdiff-cli binary or source (optional)",
+)
+parser.add_argument(
     "--sjiswrap",
     metavar="EXE",
     type=Path,
@@ -144,6 +150,7 @@ version_num = VERSIONS.index(config.version)
 # Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
+config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
 config.generate_map = args.map
@@ -158,11 +165,11 @@ if args.no_asm:
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20250812"
-config.dtk_tag = "v1.6.2"
-config.objdiff_tag = "v3.0.1"
+config.compilers_tag = "20251118"
+config.dtk_tag = "v1.7.6"
+config.objdiff_tag = "v3.5.1"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "0.7.0"
+config.wibo_tag = "1.0.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -362,6 +369,11 @@ config.precompiled_headers = [
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_rel],
     },
+    {
+        "source": "JSystem/JSystem.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_framework],
+    },
 ]
 config.libs = [
     {
@@ -379,7 +391,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
             Object(NonMatching, "m_Do/m_Do_ext.cpp"),
-            Object(NonMatching, "m_Do/m_Do_lib.cpp"),
+            Object(Matching,    "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_dvd_thread.cpp"),
@@ -749,12 +761,12 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
-            Object(Equivalent,  "JSystem/JStudio/JStudio/functionvalue.cpp"), # weak func order
+            Object(Matching,    "JSystem/JStudio/JStudio/functionvalue.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
-            Object(Matching,    "JSystem/JStudio/JStudio/stb.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JStudio/JStudio/stb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
         ],
@@ -782,7 +794,7 @@ config.libs = [
         "JStudio_JParticle",
         [
             Object(Matching,    "JSystem/JStudio/JStudio_JParticle/control.cpp"),
-            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"),
         ],
     ),
     JSystemLib(
@@ -939,7 +951,7 @@ config.libs = [
             Object(Matching,    "JSystem/JKernel/JKRFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdFile.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDvdRipper.cpp"),
-            Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/JKernel/JKRDvdAramRipper.cpp"),
             Object(Matching,    "JSystem/JKernel/JKRDecomp.cpp"),
         ],
     ),
@@ -1013,7 +1025,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DVertex.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DTransform.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DPacket.cpp"),
-            Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp", extra_cflags=['-pragma "nosyminline on"']), # TODO: nosyminline may be a fakematch. jsystem pch?
+            Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
             Object(Equivalent,  "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # regalloc
@@ -1594,7 +1606,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),   "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
-    ActorRel(NonMatching, "d_a_kmon"),
+    ActorRel(Matching, "d_a_kmon"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_komore"),
     ActorRel(Matching,    "d_a_lbridge"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_leaflift"),
@@ -1625,7 +1637,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ds1"),
     ActorRel(NonMatching, "d_a_npc_gk1"),
     ActorRel(NonMatching, "d_a_npc_gp1"),
-    ActorRel(NonMatching, "d_a_npc_hi1"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_hi1"),
     ActorRel(NonMatching, "d_a_npc_ho"),
     ActorRel(NonMatching, "d_a_npc_hr"),
     ActorRel(NonMatching, "d_a_npc_jb1"),
@@ -1669,7 +1681,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_YLzou"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Yboil"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_adnno"),
-    ActorRel(NonMatching, "d_a_obj_ajav"),
+    ActorRel(Matching, "d_a_obj_ajav"),
     ActorRel(NonMatching, "d_a_obj_apzl"),
     ActorRel(NonMatching, "d_a_obj_ashut"),
     ActorRel(NonMatching, "d_a_obj_auzu"),
@@ -1691,8 +1703,8 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ganonbed"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship2"),
-    ActorRel(NonMatching, "d_a_obj_gnnbtltaki"),
-    ActorRel(NonMatching, "d_a_obj_gnndemotakie"),
+    ActorRel(Matching, "d_a_obj_gnnbtltaki"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gnndemotakie"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakis"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gong"),
     ActorRel(NonMatching, "d_a_obj_gtaki"),
@@ -1729,7 +1741,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbka"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_pfall"),
     ActorRel(NonMatching, "d_a_obj_plant"),
-    ActorRel(NonMatching, "d_a_obj_rflw"),
+    ActorRel(Matching, "d_a_obj_rflw"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_rforce"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_smplbg"),
     ActorRel(NonMatching, "d_a_obj_tapestry"),
@@ -1776,14 +1788,14 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
     ActorRel(Matching,    "d_a_warpfout"),
-    ActorRel(NonMatching, "d_a_warpgn"),
+    ActorRel(Matching,    "d_a_warpgn"),
     ActorRel(NonMatching, "d_a_warpls"),
     ActorRel(NonMatching, "d_a_warpmj"),
     ActorRel(NonMatching, "d_a_waterfall"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_windmill"),
     ActorRel(NonMatching, "d_a_wz"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ygcwp"),
-    ActorRel(NonMatching, "d_a_yougan"),
+    ActorRel(Matching, "d_a_yougan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ghostship"),
     ActorRel(NonMatching, "d_a_movie_player", extra_cflags=["-O3,p"]),
 ]

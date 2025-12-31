@@ -3,6 +3,8 @@
 // Translation Unit: JPAEmitter.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAExtraShape.h"
