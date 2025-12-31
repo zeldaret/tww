@@ -208,7 +208,7 @@ namespace daTsubo {
             return param;
         }
 
-        void prm_make_skull() {}
+        static u32 prm_make_skull() { return 0x57f3f3f; }
         void prm_make_yw1() {}
         void prm_off_moveBg() { fopAcM_SetParam(this, fopAcM_GetParam(this) | 0xC000); }
         void prm_off_stick() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x80000000); }

@@ -170,7 +170,7 @@ public:
     /* 0x3FC */ bool field_0x3FC;
     /* 0x3FD */ u8 field_0x3FD[0x400 - 0x3FD];
     /* 0x400 */ mDoExt_McaMorf* mpMorf;
-    /* 0x404 */ dBgS_Acch mAcch;
+    /* 0x404 */ dBgS_ObjAcch mObjAcch;
     /* 0x5C8 */ dBgS_AcchCir mAcchCir;
     /* 0x608 */ mDoExt_invisibleModel mInvisibleModel;
     /* 0x610 */ cXyz field_0x610;
@@ -216,7 +216,7 @@ public:
     /* 0x9D0 */ s16 field_0x9D0;
     /* 0x9D2 */ u8 field_0x9D2[0x9D4 - 0x9D2];
     /* 0x9D4 */ f32 field_0x9D4;
-    /* 0x9D8 */ dBgS_LinChk mLinChk;
+    /* 0x9D8 */ dBgS_ObjLinChk mLinChk;
     /* 0xA44 */ u8 field_0xA44[0xA48 - 0xA44];
     /* 0xA48 */ cXyz field_0xA48[12];
     /* 0xAD8 */ bool field_0xAD8[12];
