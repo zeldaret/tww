@@ -10,11 +10,8 @@
 class JKRHeap;
 class JPABaseEmitter;
 class JPABaseParticle;
-class JPAEmitterCallBack;
 class JPAEmitterManager;
-class JPAParticleCallBack;
 class JPAResourceManager;
-struct JPAEmitterWorkData;
 
 template<typename T>
 class JPACallBackBase;

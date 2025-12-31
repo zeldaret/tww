@@ -46,7 +46,7 @@ static BOOL nodeCallBack(J3DNode*, int);
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
-    return static_cast<daObjRflw_c*>(i_this)->CreateHeap();
+    return ((daObjRflw_c*)i_this)->CreateHeap();
 }
 
 /* 00000098-000001E0       .text CreateHeap__11daObjRflw_cFv */
@@ -133,9 +133,8 @@ inline BOOL daObjRflw_c::_delete() {
 }
 
 inline BOOL daObjRflw_c::_draw() {
-    dKy_tevstr_c* p_tev_str;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, p_tev_str = &tevStr); // fakematch
-    g_env_light.setLightTevColorType(mpModel, p_tev_str);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -179,20 +178,17 @@ inline BOOL daObjRflw_c::_execute() {
 
 /* 000003E8-0000051C       .text daObjRflw_Create__FPv */
 static cPhs_State daObjRflw_Create(void* i_this) {
-    daObjRflw_c* rflw = static_cast<daObjRflw_c*>(i_this);
-    return rflw->_create();
+    return ((daObjRflw_c*)i_this)->_create();
 }
 
 /* 000006D4-00000704       .text daObjRflw_Delete__FPv */
 static BOOL daObjRflw_Delete(void* i_this) {
-    daObjRflw_c* rflw = static_cast<daObjRflw_c*>(i_this);
-    return rflw->_delete();
+    return ((daObjRflw_c*)i_this)->_delete();
 }
 
 /* 00000704-000007A8       .text daObjRflw_Draw__FPv */
 static BOOL daObjRflw_Draw(void* i_this) {
-    daObjRflw_c* rflw = static_cast<daObjRflw_c*>(i_this);
-    return rflw->_draw();
+    return ((daObjRflw_c*)i_this)->_draw();
 }
 
 /* 000007A8-000009EC       .text daObjRflw_Execute__FPv */

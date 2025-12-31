@@ -94,16 +94,13 @@ void daKmon_c::checkTalk() {
     }
 }
 
-/* 000006E8-000007F8       .text daKmonCreate__FPv */
-static cPhs_State daKmonCreate(void* i_this) {
-    daKmon_c* pKmon = static_cast<daKmon_c*>(i_this);
+cPhs_State daKmon_c::_create() {
+    fopAcM_SetupActor(this, daKmon_c);
 
-    fopAcM_SetupActor(pKmon, daKmon_c);
-
-    cPhs_State state = dComIfG_resLoad(&pKmon->mPhase, daKmon_c::m_arcname);
+    cPhs_State state = dComIfG_resLoad(&mPhase, daKmon_c::m_arcname);
     if(state == cPhs_COMPLEATE_e) {
-        if(fopAcM_entrySolidHeap(pKmon, CheckCreateHeap, 0x10000)) {
-            state = pKmon->CreateInit();
+        if(fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x10000)) {
+            state = CreateInit();
         } else {
             state = cPhs_ERROR_e;
         }
@@ -111,35 +108,48 @@ static cPhs_State daKmonCreate(void* i_this) {
     return state;
 }
 
+/* 000006E8-000007F8       .text daKmonCreate__FPv */
+static cPhs_State daKmonCreate(void* i_this) {
+    return ((daKmon_c*)i_this)->_create();
+}
+
+BOOL daKmon_c::_delete() {
+    dComIfG_resDelete(&mPhase, daKmon_c::m_arcname);
+    return TRUE;
+}
+
 /* 00000968-00000998       .text daKmonDelete__FPv */
 static BOOL daKmonDelete(void* i_this) {
-    daKmon_c* actor = static_cast<daKmon_c*>(i_this);
-    dComIfG_resDelete(&actor->mPhase, daKmon_c::m_arcname);
-    return TRUE;
+    return ((daKmon_c*)i_this)->_delete();
+}
+
+BOOL daKmon_c::_execute() {
+    checkTalk();
+    fopAcM_posMoveF(this, NULL);
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    mBckAnm.play();
+    mBtkAnm.play();
+    set_mtx();
+    return FALSE;
 }
 
 /* 00000998-00000A00       .text daKmonExecute__FPv */
 static BOOL daKmonExecute(void* i_this) {
-    daKmon_c* actor = static_cast<daKmon_c*>(i_this);
-    actor->checkTalk();
-    fopAcM_posMoveF(actor, NULL);
-    actor->mAcch.CrrPos(*dComIfG_Bgsp());
-    actor->mBckAnm.play();
-    actor->mBtkAnm.play();
-    actor->set_mtx();
-    return FALSE;
+    return ((daKmon_c*)i_this)->_execute();
+}
+
+BOOL daKmon_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG1_PLIGHT, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mBckAnm.entry(mpModel->getModelData());
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 00000A00-00000A9C       .text daKmonDraw__FPv */
 static BOOL daKmonDraw(void* i_this) {
-    daKmon_c* actor = static_cast<daKmon_c*>(i_this);
-    dKy_tevstr_c* pTev;
-    g_env_light.settingTevStruct(TEV_TYPE_BG1_PLIGHT, &actor->current.pos, (pTev = &actor->tevStr));
-    g_env_light.setLightTevColorType(actor->mpModel, pTev);
-    actor->mBckAnm.entry(actor->mpModel->getModelData());
-    actor->mBtkAnm.entry(actor->mpModel->getModelData());
-    mDoExt_modelUpdateDL(actor->mpModel);
-    return TRUE;
+    return ((daKmon_c*)i_this)->_draw();
 }
 
 /* 00000A9C-00000AA4       .text daKmonIsDelete__FPv */

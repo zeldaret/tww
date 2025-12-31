@@ -190,7 +190,7 @@ public:
         daPyFlg1_SHIP_TACT              = 0x00001000,
         daPyFlg1_USE_ARROW_EFFECT       = 0x00002000,
         daPyFlg1_LETTER_READ_EYE_MOVE   = 0x00004000,
-        daPyFlg1_UNK8000                = 0x00008000,
+        daPyFlg1_SOUP_POWER_UP          = 0x00008000,
         daPyFlg1_FORCE_VOMIT_JUMP_SHORT = 0x00010000,
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
         daPyFlg1_UNK40000               = 0x00040000,
@@ -217,10 +217,10 @@ public:
         daPyRFlg0_AUTO_JUMP_LAND        = 0x00000040,
         daPyRFlg0_UNK80                 = 0x00000080,
         daPyRFlg0_UNK100                = 0x00000100,
-        daPyRFlg0_UNK200                = 0x00000200,
+        daPyRFlg0_ROPE_JUMP_LAND        = 0x00000200,
         daPyRFlg0_RIGHT_FOOT_ON_GROUND  = 0x00000400,
         daPyRFlg0_LEFT_FOOT_ON_GROUND   = 0x00000800,
-        daPyRFlg0_UNK1000               = 0x00001000,
+        daPyRFlg0_CRAWL_AUTO_MOVE       = 0x00001000,
         daPyRFlg0_FRONT_ROLL_CRASH      = 0x00002000,
         daPyRFlg0_UNK4000               = 0x00004000,
         daPyRFlg0_GRAB_UP_START         = 0x00008000,
@@ -234,14 +234,11 @@ public:
         daPyRFlg0_UNK800000             = 0x00800000,
         daPyRFlg0_TACT_INPUT            = 0x01000000,
         daPyRFlg0_FAIRY_USE             = 0x02000000,
-        daPyRFlg0_UNK4000000            = 0x04000000,
+        daPyRFlg0_SUBJECT_ACCEPT        = 0x04000000,
         daPyRFlg0_UNK8000000            = 0x08000000,
         daPyRFlg0_UNK10000000           = 0x10000000,
         daPyRFlg0_ARROW_SHOOT           = 0x20000000,
-        daPyRFlg0_UNK40000000           = 0x40000000,
-        // 0x00000001 and 0x00000002 set in daPy_lk_c::dProcLastCombo
-        // 0x00001000 set in daPy_lk_c::procCrawlMove_init, checked in checkNoCollisionCorret__9daPy_lk_cFv
-        // 0x04000000 set in daPy_lk_c::procShipPaddle
+        daPyRFlg0_ROPE_FORCE_END        = 0x40000000,
     };
     
     enum daPy_FACE {
@@ -510,6 +507,7 @@ public:
     void onUseArrowEffect() { onNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void offUseArrowEffect() { offNoResetFlg1(daPyFlg1_USE_ARROW_EFFECT); }
     void onLetterReadEyeMove() { onNoResetFlg1(daPyFlg1_LETTER_READ_EYE_MOVE); }
+    u32 checkSoupPowerUp() const { return checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP); }
     void onForceVomitJumpShort() { onNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP_SHORT); }
     u32 checkForestWaterUse() const { return checkNoResetFlg1(daPyFlg1_FOREST_WATER_USE); }
     void onWaterDrop() { onNoResetFlg1(daPyFlg1_WATER_DROP); }
@@ -522,6 +520,7 @@ public:
     u32 getRopeGrabRightHand() const { return checkResetFlg0(daPyRFlg0_ROPE_GRAB_RIGHT_HAND); }
     u32 getGrabUpEnd() const { return checkResetFlg0(daPyRFlg0_GRAB_UP_END); }
     u32 getAutoJumpLand() const { return checkResetFlg0(daPyRFlg0_AUTO_JUMP_LAND); }
+    u32 getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_ROPE_JUMP_LAND); }
     u32 getRightFootOnGround() const { return checkResetFlg0(daPyRFlg0_RIGHT_FOOT_ON_GROUND); }
     u32 getLeftFootOnGround() const { return checkResetFlg0(daPyRFlg0_LEFT_FOOT_ON_GROUND); }
     u32 getFootOnGround() const { return getRightFootOnGround() || getLeftFootOnGround(); }
@@ -533,7 +532,9 @@ public:
     u32 getGrabPutStart() const { return checkResetFlg0(daPyRFlg0_GRAB_PUT_START); }
     u32 checkFairyUse() const { return checkResetFlg0(daPyRFlg0_FAIRY_USE); }
     u32 checkTactInput() const { return checkResetFlg0(daPyRFlg0_TACT_INPUT); }
+    u32 checkSubjectAccept() const { return checkResetFlg0(daPyRFlg0_SUBJECT_ACCEPT); }
     u32 checkArrowShoot() const { return checkResetFlg0(daPyRFlg0_ARROW_SHOOT); }
+    u32 checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_ROPE_FORCE_END); }
     
     BOOL checkGrabWear() const { return field_0x2b0 < 0.0f; }
     BOOL checkNormalSwordEquip() const {
@@ -552,10 +553,6 @@ public:
     
     BOOL checkSwordMiniGame() const { return dComIfGp_getMiniGameType() == 2; }
     BOOL checkBowMiniGame() const { return mDemo.getDemoMode() == daPy_demo_c::DEMO_BOW_MINIGAME_e; }
-    void checkSoupPowerUp() const {}
-    void checkSubjectAccept() const {}
-    u32 getRopeJumpLand() const { return checkResetFlg0(daPyRFlg0_UNK200); }
-    u32 checkRopeForceEnd() const { return checkResetFlg0(daPyRFlg0_UNK40000000); }
     
     virtual MtxP getLeftHandMatrix() = 0;
     virtual MtxP getRightHandMatrix() = 0;

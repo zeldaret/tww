@@ -177,7 +177,7 @@ bool daWarpgn_c::_execute() {
         demo_execute();
     }
 
-    if (m388 != false || dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02) != 0) {
+    if (m388 || dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D02) != 0) {
         fopAcM_seStart(this, JA_SE_OBJ_GN_WAPR_EFF, 0);
     }
     mpModel->setBaseScale(scale);
@@ -252,7 +252,7 @@ void daWarpgn_c::demo_proc() {
                 (this->*event_init_tbl[action_index])(mStaffId);
             }
 
-            if ((this->*event_action_tbl[action_index])(mStaffId) != FALSE) {
+            if ((this->*event_action_tbl[action_index])(mStaffId)) {
                 dComIfGp_evmng_cutEnd(mStaffId);
             }
         }
@@ -393,24 +393,28 @@ void daWarpgn_c::eventOrder() {
 /* 0000114C-00001258       .text checkOrder__10daWarpgn_cFv */
 void daWarpgn_c::checkOrder() {
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if ((dComIfGp_evmng_startCheck(mEvtToMajyuuWarpIdx) != FALSE) && (m2C4 != 0)) {
+        if (dComIfGp_evmng_startCheck(mEvtToMajyuuWarpIdx) && m2C4 != 0) {
             m2C4 = 0;
         }
 
-        if ((dComIfGp_evmng_startCheck(mEvtAppearWarpIdx) != FALSE) && (m2C4 != 0)) {
+        if (dComIfGp_evmng_startCheck(mEvtAppearWarpIdx) && m2C4 != 0) {
             m2C4 = 0;
         }
 
-        if (dComIfGp_evmng_endCheck(mEvtToMajyuuWarpIdx) != FALSE) {
+        if (dComIfGp_evmng_endCheck(mEvtToMajyuuWarpIdx)) {
             dLib_setNextStageBySclsNum(mSceneNo, fopAcM_GetRoomNo(this));
         }
 
-        if (dComIfGp_evmng_endCheck(mEvtAppearWarpIdx) != FALSE) {
+        if (dComIfGp_evmng_endCheck(mEvtAppearWarpIdx)) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D02);
             mEvtAppearWarpIdx = -1;
             dComIfGp_event_reset();
         }
-    } else if (m2C4 == 0) {
+    } else if (m2C4 == 0
+        #if VERSION == VERSION_DEMO
+        && !dComIfGp_event_runCheck()
+        #endif
+    ) {
         normal_execute();
     }
 }

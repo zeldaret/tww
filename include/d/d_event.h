@@ -133,9 +133,9 @@ public:
     BOOL runCheck() { return mMode != dEvtMode_NONE_e; }
     u8 getMode() const { return mMode; }
 
-    void onHindFlag(u16) {}
-    void offHindFlag(u16) {}
-    void checkHind(u16) {}
+    void onHindFlag(u16 flag) { mHindFlag |= flag; }
+    void offHindFlag(u16 flag) { mHindFlag &= ~flag; }
+    u16 checkHind(u16 flag) { return flag & mHindFlag; }
 
     BOOL chkPhoto() { return mbInPhoto; }
 

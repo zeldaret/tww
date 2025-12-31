@@ -374,6 +374,7 @@ public:
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
     void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
 
+    s16 getItemBombNumCount() { return mItemBombNumCount; }
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
 
     u16 getItemNowLife() { return mItemNowLife; }
@@ -487,6 +488,10 @@ public:
     inline void setHeapLockFlag(u8 flag) { mHeapLockFlag = flag; }
     inline void offHeapLockFlag() { mHeapLockFlag = 0; }
 
+    bool getMetronome() { return mMetronome; }
+    void setMetronomeOn() { mMetronome = true; }
+    void setMetronomeOff() { mMetronome = false; }
+
 #if VERSION > VERSION_DEMO
     // These inlines aren't present in WW demo debug maps, but are present in TP debug.
     inline u8 getNowVibration() { return mNowVibration; }
@@ -534,6 +539,7 @@ public:
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
     void setCameraResArchive(JKRArchive * pArc) { mpCameraResArchive = pArc; }
+    JKRArchive* getSwimResArchive() { return mpSwimResArchive; }
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
     void setWindResArchive(JKRArchive * pArc) { mpWindResArchive = pArc; }
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
@@ -739,7 +745,7 @@ public:
     /* 0x4944 */ u8 field_0x4944;
     /* 0x4945 */ u8 mScopeType;
     /* 0x4946 */ u8 mOperateWind;
-    /* 0x4947 */ u8 field_0x4947;
+    /* 0x4947 */ bool mMetronome;
     /* 0x4948 */ u8 mMesgSendButton;
     /* 0x4949 */ u8 mMesgCancelButton;
     /* 0x494A */ u8 field_0x494a[6];
@@ -835,8 +841,9 @@ extern GXColor g_saftyWhiteColor;
  * === SAVE ===
  */
 
-void dComIfGs_gameStart();
 void dComIfGs_setGameStartStage();
+void dComIfGs_gameStart();
+void dComIfGs_copyPlayerRecollectionData();
 u8 dComIfGs_checkGetItem(u8);
 
 inline void dComIfGs_init() {
@@ -1894,6 +1901,10 @@ inline u8 dComIfGs_getKeyNum() {
     return g_dComIfG_gameInfo.save.getMemory().getBit().getKeyNum();
 }
 
+inline void dComIfGs_setKeyNum(u8 i_keyNum) {
+    g_dComIfG_gameInfo.save.getMemory().getBit().setKeyNum(i_keyNum);
+}
+
 inline dSv_player_status_a_c* dComIfGs_getpPlayerStatusA() {
     return g_dComIfG_gameInfo.save.getPlayer().getpPlayerStatusA();
 }
@@ -2478,7 +2489,7 @@ inline void dComIfGp_clearItemTimeCount() {
     g_dComIfG_gameInfo.play.clearItemTimeCount();
 }
 
-inline u32 dComIfGp_getItemTimeMax() {
+inline s32 dComIfGp_getItemTimeMax() {
     return g_dComIfG_gameInfo.play.getItemTimeMax();
 }
 
@@ -2524,6 +2535,10 @@ inline s16 dComIfGp_getItemMaxMagicCount() {
 
 inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
+}
+
+inline s16 dComIfGp_getItemBombNumCount() {
+    return g_dComIfG_gameInfo.play.getItemBombNumCount();
 }
 
 inline void dComIfGp_setItemBombNumCount(s16 num) {
@@ -2789,8 +2804,8 @@ inline void dComIfGp_setRStatusForce(u8 status) {
 }
 
 // B Button
-inline void dComIfGp_getAStatusForce(u8 status) {
-    g_dComIfG_gameInfo.play.setAStatus(status);
+inline u8 dComIfGp_getAStatusForce() {
+    return g_dComIfG_gameInfo.play.getAStatusForce();
 }
 
 // B Button
@@ -3116,6 +3131,13 @@ inline BOOL dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent().runCheck();
 }
 
+inline u16 dComIfGp_event_checkHind(u16 i_hindFlag) {
+    if (!dComIfGp_event_runCheck()) {
+        return false;
+    }
+    return g_dComIfG_gameInfo.play.getEvent().checkHind(i_hindFlag);
+}
+
 /**
  * Returns the button (X Y or Z) that was used to start this event.
  * @return The dTalkXYButton_e of the button the player used to initiate this event.
@@ -3227,6 +3249,18 @@ inline u8 dComIfGp_event_getTactFreeMStick(int which) {
 
 inline u8 dComIfGp_event_getTactFreeCStick(int which) {
     return g_dComIfG_gameInfo.play.getEvent().getTactFreeCStick(which);
+}
+
+inline bool dComIfGp_getMetronome() {
+    return g_dComIfG_gameInfo.play.getMetronome();
+}
+
+inline void dComIfGp_setMetronomeOn() {
+    g_dComIfG_gameInfo.play.setMetronomeOn();
+}
+
+inline void dComIfGp_setMetronomeOff() {
+    g_dComIfG_gameInfo.play.setMetronomeOff();
 }
 
 /**
@@ -3543,6 +3577,7 @@ inline void dComIfGd_entryZSortXluListMaskOff(J3DPacket* i_packet, cXyz& param_1
     g_dComIfG_gameInfo.drawlist.entryZSortXluListMaskOff(i_packet, param_1);
 }
 
+inline void dComIfGd_set2DOpaTop(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DOpaTop(pBase); }
 inline void dComIfGd_set2DOpa(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DOpa(pBase); }
 inline void dComIfGd_set2DXlu(dDlst_base_c* pBase) { g_dComIfG_gameInfo.drawlist.set2DXlu(pBase); }
 
@@ -3621,6 +3656,7 @@ inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInf
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
 inline void dComIfGp_setCameraResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCameraResArchive(pArc); }
+inline JKRArchive* dComIfGp_getSwimResArchive() { return g_dComIfG_gameInfo.play.getSwimResArchive(); }
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
 inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setWindResArchive(pArc); }
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
