@@ -24,7 +24,7 @@ public:
     void modeProcInit(int newMode) {modeProc(PROC_0_e, newMode);}
 
     void _nodeControl(J3DNode*, J3DModel*);
-    BOOL  _createHeap();
+    BOOL _createHeap();
     bool holeCreateHeap();
     bool bodyCreateHeap();
     bool jntHitCreateHeap();

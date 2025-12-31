@@ -94,16 +94,16 @@ public:
 
 public:
     /* 0x004 */ s8 field_0x004;
-    /* 0x005 */ s8 field_0x005;
-    /* 0x006 */ s8 field_0x006;
-    /* 0x007 */ s8 field_0x007;
-    /* 0x008 */ s8 field_0x008;
+    /* 0x005 */ u8 field_0x005;
+    /* 0x006 */ u8 field_0x006;
+    /* 0x007 */ u8 field_0x007;
+    /* 0x008 */ u8 field_0x008;
     /* 0x009 */ u8 field_0x009;
-    /* 0x00A */ s8 field_0x00A;
-    /* 0x00B */ s8 field_0x00B;
-    /* 0x00C */ s8 field_0x00C;
+    /* 0x00A */ u8 field_0x00A;
+    /* 0x00B */ u8 field_0x00B;
+    /* 0x00C */ u8 field_0x00C;
     /* 0x00D */ u8 field_0x00D;
-    /* 0x00E */ s8 field_0x00E;
+    /* 0x00E */ u8 field_0x00E;
     /* 0x00F */ u8 field_0x00F[6];
     /* 0x015 */ s8 field_0x015[10];
     /* 0x01F */ u8 field_0x01F;
@@ -185,6 +185,7 @@ public:
     /* 0x128 */ f32 field_0x128;
     /* 0x12C */ f32 field_0x12C;
     /* 0x130 */ JntHit_HIO_c field_0x130;
+    /* 0x158 */ u8 field_0x158[0x15C - 0x158];
 };  // Size: 0x15C
 
 static daFm_HIO_c l_HIO;
@@ -238,7 +239,7 @@ daFm_HIO_c::daFm_HIO_c() {
     field_0x058 = 0.0f;
     field_0x05C = 0;
     field_0x05E = 0;
-    field_0x060 = 0;
+    field_0x060 = 0; // maybe this is the angle
     field_0x020.x = -10.0f;
     field_0x020.y = 5.0f;
     field_0x020.z = -10.0f;
@@ -634,15 +635,12 @@ static void* searchNearFm_CB(void* param_1, void* param_2) {
 
 /* 00000F44-00001150       .text searchNearFm__6daFm_cFP10fopAc_ac_c */
 bool daFm_c::searchNearFm(fopAc_ac_c* i_actor) {
-    cXyz temp;
     f32 dist;
     if(fopAc_IsActor(i_actor) && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FM) { // redundant isactor check?
-        // temp = field_0x3E4 - current.pos;
         f32 abs = (field_0x3E4 - current.pos).absXZ();
         dist = fopAcM_searchActorDistanceXZ(this, i_actor);
         if(dist != 0.0f) {
-            temp.set(field_0x3E4.x, 0.0f, field_0x3E4.z);
-            if(temp.abs() == 0.0) { // double?
+            if(field_0x3E4.absXZ() == 0.0) { // double?
                 field_0x3E4 = i_actor->current.pos;
             } else if(dist < abs) {
                 field_0x3E4 = i_actor->current.pos;
@@ -1948,8 +1946,6 @@ void daFm_c::modeGrabInit() {
 
 /* 000053E0-00005A7C       .text modeGrab__6daFm_cFv */
 void daFm_c::modeGrab() {
-    cXyz temp;
-    cXyz temp2;
     f32 dist;
     if (!isLink(mpActorTarget) && (field_0x2D0 == 0 || field_0x2D0 == 1) && isNpc(mpActorTarget) == true) {
         moveRndEscape();
@@ -1973,12 +1969,10 @@ void daFm_c::modeGrab() {
                 }
                 
             } else {
-
                 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
                 if (field_0x2D0 == 2 && isNpc(mpActorTarget) && dist < l_HIO.field_0x0C4) {
                     fopAcM_Search(searchNearFm_CB, this); // unused call?
-                    temp2.set(field_0x3E4.x, 0.0f, field_0x3E4.z);
-                    if (temp2.abs() != 0.0f) {
+                    if (field_0x3E4.absXZ() != 0.0f) {
                         angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
                     } else {
                         angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
@@ -1999,6 +1993,8 @@ void daFm_c::modeGrab() {
                         modeProcInit(0xE);
                         field_0x684 = 1;
                     } else {
+                        // temp.absXZ() matches offsets but cant store mGrabPos - field_0x63C in temp first
+                        // dist = temp.absXZ();
                         dist = (mGrabPos - field_0x63C).absXZ();
                         if (dist > l_HIO.field_0x110 && dist < l_HIO.field_0x114) {
                             daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
@@ -2018,7 +2014,7 @@ void daFm_c::modeGrab() {
                         if (isGrabFoot()) {
                             modeProcInit(6);
                         }
-                    }
+                   }
                 }
                 
             } else {
@@ -2275,30 +2271,34 @@ void daFm_c::modePlayerStartDemo() {
     if(dComIfGp_event_runCheck()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
         char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        daPy_py_c* link_player2 = (daPy_py_c*)daPy_getPlayerLinkActorClass();
+        daPy_lk_c* link_player = (daPy_lk_c*)link_player2;
+
+        // fopAc_ac_c* link_actor = dComIfGp_getLinkPlayer();
+        // daPy_py_c* link_player = (daPy_py_c*)link_actor;
+
         
-        daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
-        pLink->changeOriginalDemo();
+        link_player->changeOriginalDemo();
         
         if(strcmp(cutName, "Dummy") == 0 || strcmp(cutName, "WAIT") == 0) {
-            
             cXyz pos = current.pos;
             pos.y -= REG12_F(2);
-            pLink->setPlayerPosAndAngle(&pos, &shape_angle);
-            pLink->onPlayerNoDraw();
+            link_player2->setPlayerPosAndAngle(&pos, &shape_angle);
+            link_player->onPlayerNoDraw();
             dComIfGp_evmng_cutEnd(staffIdx);
 
         } else if(strcmp(cutName, "OPEN") == 0) {
             cXyz pos2 = current.pos;
             pos2.y -= REG12_F(2);
-            pLink->setPlayerPosAndAngle(&pos2, &shape_angle);
-            pLink->onPlayerNoDraw();
+            link_player2->setPlayerPosAndAngle(&pos2, &shape_angle);
+            link_player2->onPlayerNoDraw();
             if(setHoleScale(l_HIO.field_0x124, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
 
         } else if(strcmp(cutName, "PL_OUT") == 0) {
-            pLink->offPlayerNoDraw();
-            pLink->setThrowDamage(
+            link_player->offPlayerNoDraw();
+            link_player->setThrowDamage(
                 NULL,
                 shape_angle.y,
                 REG12_F(0) + 10.0f,
@@ -2308,7 +2308,8 @@ void daFm_c::modePlayerStartDemo() {
             dComIfGp_evmng_cutEnd(staffIdx);
 
         } else if(strcmp(cutName, "CLOSE") == 0) {
-            pLink->offPlayerNoDraw();
+
+            link_player->offPlayerNoDraw();
             if(setHoleScale(l_HIO.field_0x120, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -3024,11 +3025,9 @@ bool daFm_c::isLinkControl() {
 /* 00007D0C-00007F5C       .text areaCheck__6daFm_cFv */
 bool daFm_c::areaCheck() {
     bool ret = true;
+    int i = 0;
 
-    int i;
-    s16 angle;
-
-    for(i = 0, angle = 0; i < 12; i++, angle += 0x1555) {
+    for(int angle = 0; i < 12; angle += 0x1555) {
         cXyz temp(l_HIO.field_0x0E0, -30.0f, 0.0f);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM((s16)angle);
@@ -3047,6 +3046,7 @@ bool daFm_c::areaCheck() {
                 field_0xAD8[i] = true;
             }
         }
+
         if(field_0xAD8[i] == true || field_0x2D0 == 2) {
             if(!lineCheck(&temp2, &field_0xA48[i])) {
                 field_0xAD8[i] = false;
@@ -3056,6 +3056,7 @@ bool daFm_c::areaCheck() {
                 field_0xAD8[i] = true;
             }
         }
+        i++;
     }
     return ret;
     /* Nonmatching */
@@ -3216,120 +3217,19 @@ void daFm_c::MtxToRot(Mtx i_mtx, csXyz* angle) {
     /* Nonmatching */
 }
 
-static const u32 dummy[] = {
-    0x0000FF80,
-    0x00FF0080,
-};
+
 
 /* 000085A4-000089A4       .text debugDraw__6daFm_cFv */
 void daFm_c::debugDraw() {
-
+    static const u32 dummy[] = { // to match rodata
+        0x0000FF80,
+        0x00FF0080,
+    };
 
     static const GXColor color_ok = {0x00, 0xFF, 0x00, 0x80};
     static const GXColor color_ng = {0xFF, 0x00, 0x00, 0x80};
 
-    Mtx mtx;
-    cXyz temp;
-    cXyz temp2;
-    cXyz temp3;
-    cXyz temp4;
-    cXyz temp5;
-    cXyz temp6;
-    cXyz temp7;
-    cXyz temp8;
-    cXyz temp9;
-
-    if (l_HIO.field_0x00C != 0) { // maybe bool field hio
-
-
-        // iVar1 = 0;
-        // iVar4 = 0xc;
-        for (int i = 0; i != 12; i++) {
-            temp = field_0xA48[i];
-            temp.y += 60.0f;
-        }
-
-        if (field_0x9D4 < l_HIO.field_0x0E8 && mBaseTarget != NULL) {
-            temp2 = current.pos;
-            temp2.y += 100.0f;
-
-            temp3 = mBaseTarget->current.pos;
-            temp3.y += 100.0f;
-        }
-        temp4 = field_0x69C;
-        temp4.y += 20.0f;
-    if (l_HIO.field_0x00A != 0) {
-        temp5 = current.pos;
-        temp5.y += 20.0f;
-        temp6 = field_0x690;
-        temp6.y += 20.0f;
-        // local_7c = (this->parent).parent.current.pos.x;
-        // local_74 = (this->parent).parent.current.pos.z;
-        // local_88 = (this->field85_0x690).x;
-        // local_80 = (this->field85_0x690).z;
-        // local_78 = (this->parent).parent.current.pos.y + 20.0;
-        // local_84 = (this->field85_0x690).y + 20.0;
-    }
-    if (l_HIO.field_0x009 != 0) {
-        temp7 = current.pos;
-        temp8.set(field_0x690.x, temp7.y + 20.0f, field_0x690.z);
-        // local_dc = (this->parent).parent.current.pos.x;
-        // local_d8 = (this->parent).parent.current.pos.y;
-        // local_d4 = (this->parent).parent.current.pos.z;
-        // local_a0 = (this->field85_0x690).x;
-        // local_98 = (this->field85_0x690).z;
-        // local_90 = local_d8 + 20.0;
-        // local_9c = (this->field85_0x690).y + 20.0;
-        // iVar1 = (int)DAT_8065bdd4;
-        // if ((iVar1 != 0x7ffff) || (DAT_8065bdd4 != 0)) {
-        // iVar3 = (int)(this->parent).parent.shape_angle.y;
-        // iVar4 = (int)(iVar3 + iVar1 & 0xffffU) >> (JKernel::JMath::jmaSinShift & 0x3f);
-        // local_a4 = local_d4 + DAT_8065be00 * JKernel::JMath::jmaCosTable[iVar4];
-        // local_ac = local_dc + DAT_8065be00 * JKernel::JMath::jmaSinTable[iVar4];
-        // iVar1 = (int)(iVar3 - iVar1 & 0xffffU) >> (JKernel::JMath::jmaSinShift & 0x3f);
-        // local_b0 = local_d4 + DAT_8065be00 * JKernel::JMath::jmaCosTable[iVar1];
-        // local_b8 = local_dc + DAT_8065be00 * JKernel::JMath::jmaSinTable[iVar1];
-        // local_b4 = local_d8;
-        // local_a8 = local_d8;
-        // }
-        // iVar1 = (int)DAT_8065bdd6;
-        // if ((iVar1 != 0x7ffff) || (DAT_8065bdd6 != 0)) {
-        // iVar3 = (int)(this->parent).parent.shape_angle.y;
-        // iVar4 = (int)(iVar3 + iVar1 & 0xffffU) >> (JKernel::JMath::jmaSinShift & 0x3f);
-        // local_bc = local_d4 + DAT_8065be00 * JKernel::JMath::jmaCosTable[iVar4];
-        // local_c4 = local_dc + DAT_8065be00 * JKernel::JMath::jmaSinTable[iVar4];
-        // iVar1 = (int)(iVar3 - iVar1 & 0xffffU) >> (JKernel::JMath::jmaSinShift & 0x3f);
-        // local_c8 = local_d4 + DAT_8065be00 * JKernel::JMath::jmaCosTable[iVar1];
-        // local_d0 = local_dc + DAT_8065be00 * JKernel::JMath::jmaSinTable[iVar1];
-        // local_cc = local_d8;
-        // local_c0 = local_d8;
-        // }
-        // local_d8 = local_d8 + DAT_8065bde4;
-        // local_94 = local_dc;
-        // local_8c = local_d4;
-    }
-    }
-    if (l_HIO.field_0x00B != 0) {
-        for (int i = 6; i != 0; i--) {
-            temp8 = field_0xA48[i - 6];
-            temp8.y += 60.0f;
-        }
-
-    }
-    if (l_HIO.field_0x006 != 0) {
-        dLib_debugDrawAxis(field_0x6BC, 100.0f);
-    }
-    if (l_HIO.field_0x007 != 0) {
-        MTXCopy(fopAcM_GetModel(this)->getAnmMtx(5), mtx);
-        dLib_debugDrawAxis(mtx, 100.0f);
-    }
-    if (l_HIO.field_0x005 != 0) {
-        daPy_getPlayerLinkActorClass()->getHeadTopPos();
-    }
-    /* Nonmatching */
-}
-
-    static const u32 dummy2[] = {
+    static const u32 dummy2[] = { // to match rodata
         0x0000FF80,
         0x0000FF80,
         0xFF000080,
@@ -3357,6 +3257,115 @@ void daFm_c::debugDraw() {
         0xFF000080,
         0x00FF0080,
     };
+
+    Mtx mtx;
+    cXyz temp;
+    cXyz temp2;
+    cXyz temp3;
+    cXyz temp4;
+    cXyz temp5;
+    cXyz temp6;
+    cXyz temp7;
+    cXyz temp8;
+    u32 temp9;
+    s16 temp10;
+    int temp11;
+    cXyz temp12;
+    cXyz temp13;
+    cXyz temp14;
+    cXyz temp15;
+    f32 temp16;
+    f32 local_90;
+    cXyz temp17;
+
+    if (l_HIO.field_0x00C != 0) { // maybe bool field hio
+        for (int i = 0; i != 12; i++) {
+            temp = field_0xA48[i];
+            temp.y += 60.0f;
+        }
+
+        if (field_0x9D4 < l_HIO.field_0x0E8 && mBaseTarget != NULL) {
+            temp2 = current.pos;
+            temp2.y += 100.0f;
+
+            temp3 = mBaseTarget->current.pos;
+            temp3.y += 100.0f;
+        }
+        temp4 = field_0x69C;
+        temp4.y += 20.0f;
+    }
+    if (l_HIO.field_0x00A != 0) {
+        temp5 = current.pos;
+        temp6 = field_0x690;
+        temp5.y += 20.0f;
+
+        temp6.y += 20.0f;
+
+    }
+    if (l_HIO.field_0x009 != 0) {
+
+        f32 curPosX = current.pos.x;
+        temp7.x = curPosX;
+        f32 curPosY = current.pos.y;
+        temp7.y = curPosY;
+        f32 curPosZ = current.pos.z;
+        temp7.z = curPosZ;
+        temp8 = field_0x690;
+        temp7.y += 20.0f;
+        temp8.y += 20.0f;
+        local_90 = curPosX;
+
+        temp9 = l_HIO.field_0x098;
+        if (temp9 - 0x70000 != 0xFFFF || l_HIO.field_0x098 != 0) {
+            temp10 = shape_angle.y;
+
+            int temp19 = shape_angle.y + temp9;
+            temp12.set(curPosX, curPosY, curPosZ);
+            temp12.z = curPosZ + l_HIO.field_0x0C4 * cM_scos(temp19);
+            temp12.x = curPosX + l_HIO.field_0x0C4 * cM_ssin(temp19);
+            temp13.x = local_90;
+
+            temp13.y = curPosY;
+            temp13.z = curPosZ;
+            temp13.z = curPosZ + l_HIO.field_0x0C4 * cM_scos(temp10 - temp9);
+            temp13.x = local_90 + l_HIO.field_0x0C4 * cM_ssin(temp10 - temp9);
+        }
+
+        temp9 = l_HIO.field_0x09A;
+        if (temp9 - 0x70000  != 0xFFFF || l_HIO.field_0x09A != 0) {
+            temp10 = shape_angle.y;
+            int temp16 = shape_angle.y + temp9;
+            temp14.set(curPosX, curPosY, curPosZ);
+            temp14.z = curPosZ + l_HIO.field_0x0C4 * cM_scos(temp16);
+            temp14.x = local_90 + l_HIO.field_0x0C4 * cM_ssin(temp16);
+            temp15.x = local_90;
+            temp15.y = curPosY;
+            temp15.z = curPosZ;
+            
+            temp15.z = curPosZ + l_HIO.field_0x0C4 * cM_scos(temp10 - temp9);
+            temp15.x = local_90 + l_HIO.field_0x0C4 * cM_ssin(temp10 - temp9);
+        }
+
+        temp17.set(curPosX, curPosY, curPosZ);
+        temp17.y = curPosY + l_HIO.field_0x0A8;
+    }
+
+    if (l_HIO.field_0x00B != 0) {
+        for (int i = 6; i != 0; i--) {
+        }
+    }
+    if (l_HIO.field_0x006 != 0) {
+        dLib_debugDrawAxis(field_0x6BC, 100.0f);
+    }
+    if (l_HIO.field_0x007 != 0) {
+        MTXCopy(fopAcM_GetModel(this)->getAnmMtx(5), mtx);
+        dLib_debugDrawAxis(mtx, 100.0f);
+    }
+    if (l_HIO.field_0x005 != 0) {
+        daPy_getPlayerLinkActorClass()->getHeadTopPos();
+    }
+    /* Nonmatching */
+}
 
 /* 000089A4-00008A14       .text holeDraw__6daFm_cFv */
 void daFm_c::holeDraw() {
