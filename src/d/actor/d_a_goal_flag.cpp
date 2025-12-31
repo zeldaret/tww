@@ -8,6 +8,8 @@
 #include "d/actor/d_a_npc_sarace.h"
 #include "d/d_minigame_starter.h"
 #include "d/res/res_cloth.h"
+#include "d/res/res_gflag.h"
+#include "d/res/res_tgflag.h"
 #include "d/d_path.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -128,20 +130,20 @@ daGFlag_HIO_c::~daGFlag_HIO_c() {
 }
 
 /* 000000EC-00000210       .text setTexObj__16daGFlag_packet_cFUc */
-void daGFlag_packet_c::setTexObj(unsigned char) {
-    /* Nonmatching */
+void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
     static char* arc_name_tbl[] = {
         "Gflag",
         "Tgflag"
     };
-}
-
-/* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
-void daGFlag_packet_c::setToonTexObj() {
-    /* Apparent match, .rodata offsets issue */
-    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    static const int index_tbl[] = {
+        GFLAG_BTI_B_FRAGGAIKOT,
+        TGFLAG_BTI_B_FRAGTORI
+    };
+    // index_tbl likely existed in this function but passing 
+    // an element of it into getObjectRes breaks the match
+    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes(arc_name_tbl[i_arcIdx], 3);
     GXInitTexObj(
-        &field_0x0034, 
+        &m0014, 
         (u8*)tex_info_p + tex_info_p->imageOffset, 
         tex_info_p->width, 
         tex_info_p->height, 
@@ -151,7 +153,33 @@ void daGFlag_packet_c::setToonTexObj() {
         GXBool(tex_info_p->mipmapCount > 1)
     );
     GXInitTexObjLOD(
-        &field_0x0034,
+        &m0014,
+        GXTexFilter(tex_info_p->minFilter),
+        GXTexFilter(tex_info_p->magFilter),
+        (f32)tex_info_p->minLOD * 0.125f,
+        (f32)tex_info_p->maxLOD * 0.125f,
+        (f32)tex_info_p->LODBias * 0.01f,
+        GXBool(tex_info_p->biasClamp),
+        GXBool(tex_info_p->doEdgeLOD),
+        GXAnisotropy(tex_info_p->maxAnisotropy)
+    );
+}
+
+/* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
+void daGFlag_packet_c::setToonTexObj() {
+    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    GXInitTexObj(
+        &m0034, 
+        (u8*)tex_info_p + tex_info_p->imageOffset, 
+        tex_info_p->width, 
+        tex_info_p->height, 
+        GXTexFmt(tex_info_p->format), 
+        GXTexWrapMode(tex_info_p->wrapS), 
+        GXTexWrapMode(tex_info_p->wrapT),
+        GXBool(tex_info_p->mipmapCount > 1)
+    );
+    GXInitTexObjLOD(
+        &m0034,
         GXTexFilter(tex_info_p->minFilter),
         GXTexFilter(tex_info_p->magFilter),
         (f32)tex_info_p->minLOD * 0.125f,
@@ -170,12 +198,64 @@ void daGFlag_packet_c::draw() {
 
 /* 00000978-00000A04       .text setBackNrm__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setBackNrm() {
-    /* Nonmatching */
-}
+    cXyz* nrm_p = mNrm[mCurrArr];
+    cXyz* back_nrm_p = mBackNrm[mCurrArr];
+    for (int i = 0; i < ARRAY_SSIZE(*mBackNrm); i++) {
+        back_nrm_p->setall(0.0f);
+        *back_nrm_p -= *nrm_p;
+
+        nrm_p++;
+        back_nrm_p++;
+    }
+} 
 
 /* 00000A04-00000E78       .text setNrmVtx__16daGFlag_packet_cFP4cXyzii */
-void daGFlag_packet_c::setNrmVtx(cXyz*, int, int) {
-    /* Nonmatching */
+void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
+    cXyz* dpos_arr_p = getDPos();
+    cXyz temp1;
+    cXyz temp2;
+    cXyz temp3;
+    cXyz temp4;
+    cXyz temp5 = dpos_arr_p[(param_3 * 9) + param_2];
+    temp4.setall(0.0f);
+
+    if (param_2 != 0) {
+        temp1 = dpos_arr_p[(param_3 * 9 + param_2) - 1] - temp5;
+        if (param_3 != 0) {
+            temp2 = dpos_arr_p[(param_3 - 1) * 9 + param_2] - temp5;
+            temp3 = temp2.outprod(temp1);
+            temp3 = temp3.normZP();
+            temp4 += temp3;
+        }
+        if (param_3 != 4) {
+            temp2 = dpos_arr_p[(param_3 + 1) * 9 + param_2] - temp5;
+            temp3 = temp1.outprod(temp2);
+            temp3 = temp3.normZP();
+            temp4 += temp3;
+        }
+    } 
+    if (param_2 != 8) {
+        temp1 = dpos_arr_p[(param_2 + 1) + param_3 * 9] - temp5;
+        if (param_3 != 0) {
+            temp2 = dpos_arr_p[(param_3 - 1) * 9 + param_2] - temp5;
+            temp3 = temp1.outprod(temp2);
+            temp3 = temp3.normZP();
+            temp4 += temp3;
+        }
+        if (param_3 != 4) {
+            temp2 = dpos_arr_p[(param_3 + 1) * 9 + param_2] - temp5;
+            temp3 = temp2.outprod(temp1);
+            temp3 = temp3.normZP();
+            temp4 += temp3;
+        }
+    }
+    temp4 = temp4.normZC();
+    MtxPush();
+    mDoMtx_YrotM(*calc_mtx, cM_ssin(m0010 + (param_2 * -0x400 + param_3 * 0x100)) * 512.0f);
+    mDoMtx_XrotM(*calc_mtx, cM_scos(m0010 + (param_2 * -0x400 + param_3 * 0x100)) * 512.0f);
+    MtxPosition(&temp4, &temp3);
+    param_1->set(temp3.normZP());
+    MtxPull();
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
@@ -201,7 +281,6 @@ BOOL daGoal_Flag_c::getRacePath(u8 i_pathIdx) {
 
 /* 00000F80-000010F4       .text RopeMove__13daGoal_Flag_cFv */
 void daGoal_Flag_c::RopeMove() {
-    /* Apparent match, .data offsets issue */
     // TODO: wtf is going on in this method?
     static const f32 down_offset[] = {
         0.0f, 150.0f, 225.0f, 150.0f
@@ -228,7 +307,6 @@ void daGoal_Flag_c::RopeMove() {
 
 /* 000010F4-0000123C       .text CreateBuoyRaces__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateBuoyRaces() {
-    /* Apparent match, .rodata offsets issue */
     int i;
     dPnt* points_p;
     cXyz* segment;
@@ -262,7 +340,6 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
 
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
 int daGoal_Flag_c::goal_check() {
-    /* Apparent match, .rodata offsets issue */
     int o_ret;
     cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
 
@@ -302,7 +379,6 @@ void daGoal_Flag_c::flag_move() {
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
 void get_cloth_anim_sub_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
-    /* Apparent match, .rodata offsets issue */
     cXyz temp = *param_2 - *param_1;
     cXyz temp2 = temp.normZP();
     
@@ -488,7 +564,7 @@ cPhs_State daGoal_Flag_c::_create() {
     /* Apparent match, .data and .rodata offsets issue */
     cPhs_State rt;
     u8 temp;
-    dPath* path_ptr;
+    dPath* path_p;
 
     fopAcM_SetupActor(this, daGoal_Flag_c);
 
@@ -515,9 +591,9 @@ cPhs_State daGoal_Flag_c::_create() {
 
     prm = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
     if (prm != 0xFF) {
-        path_ptr = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
-        if (path_ptr) {
-            BOOL path = getRacePath(path_ptr->m_nextID);
+        path_p = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
+        if (path_p) {
+            BOOL path = getRacePath(path_p->m_nextID);
             if (path != FALSE) {
                 if (fopAcM_entrySolidHeap(this, checkCreateHeap, 0x10000)) {
                     CreateBuoyRaces();
@@ -532,19 +608,19 @@ cPhs_State daGoal_Flag_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    cXyz* pos_array = field_0x0290.getPos();
-    for (int i = 0; i < 45; i++, pos_array++) {
-        pos_array->set(l_pos[i]);
+    cXyz* pos_arr_p = field_0x0290.getPos();
+    for (int i = 0; i < 45; i++, pos_arr_p++) {
+        pos_arr_p->set(l_pos[i]);
     }
 
     field_0x0290.setTexObj(temp);
     field_0x0290.setToonTexObj();
 
-    path_ptr = dPath_GetRoomPath((fopAcM_GetParam(this) >> 0x10) & 0xFF, fopAcM_GetRoomNo(this));
+    path_p = dPath_GetRoomPath((fopAcM_GetParam(this) >> 0x10) & 0xFF, fopAcM_GetRoomNo(this));
 
-    if (path_ptr) {
-        field_0x1658[0].set(path_ptr->m_points[0].m_position);
-        field_0x1658[1].set(path_ptr->m_points[1].m_position);
+    if (path_p) {
+        field_0x1658[0].set(path_p->m_points[0].m_position);
+        field_0x1658[1].set(path_p->m_points[1].m_position);
     }
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(shape_angle.y);

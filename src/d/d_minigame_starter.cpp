@@ -29,7 +29,7 @@ void dMinigame_Starter_c::_delete() {
 }
 
 /* 80206328-8020634C       .text startCheck__19dMinigame_Starter_cFv */
-void dMinigame_Starter_c::startCheck() {
+BOOL dMinigame_Starter_c::startCheck() {
     /* Nonmatching */
 }
 

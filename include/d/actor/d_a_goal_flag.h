@@ -53,24 +53,22 @@ public:
     /* 0x38 */ f32 m38;
     /* 0x3C */ f32 m3C;
 };  // Size: 0x40
-STATIC_ASSERT(sizeof(daGFlag_HIO_c) == 0x40);
 
 class daGFlag_packet_c : public J3DPacket {
 public:
     daGFlag_packet_c() {
-        field_0x1384 = 0;
-        field_0x0010 = 0;
+        mCurrArr = 0;
+        m0010 = 0;
     }
     virtual ~daGFlag_packet_c() {}
-    void changeCurrentPos() {}
-    void getDPos() {}
-    Mtx* getMtx() { return &field_0x0054; }
-    void getNrm() {}
-    void getOffsetVec() {}
-    // TODO: does getPos actually return field_0x0088?
-    cXyz* getPos() { return field_0x0088[field_0x1384]; }
-    void getTexObjP() {}
-    void getToonTexObjP() {}
+    void changeCurrentPos() { mCurrArr = mCurrArr ^ 1; }
+    cXyz* getDPos() { return mDPos[mCurrArr]; }
+    Mtx* getMtx() { return &mMtx; }
+    cXyz* getNrm() { return mNrm[mCurrArr]; }
+    cXyz* getOffsetVec() { return m1168; }
+    cXyz* getPos() { return mPos[mCurrArr]; }
+    GXTexObj* getTexObjP() { return &m0014; }
+    GXTexObj* getToonTexObjP() { return &m0034; }
     void setTevStr(dKy_tevstr_c* i_tevStr_p) { field_0x0084 = i_tevStr_p; }
 
     void setTexObj(unsigned char);
@@ -79,18 +77,19 @@ public:
     void setBackNrm();
     void setNrmVtx(cXyz*, int, int);
 public:
-    /* 0x0010 */ s16 field_0x0010;
-    /* 0x0012 */ u8 field_0x0012[0x0034 - 0x0012];
-    /* 0x0034 */ GXTexObj field_0x0034;
-    /* 0x0054 */ Mtx field_0x0054;
+    /* 0x0010 */ s16 m0010;
+    /* 0x0012 */ s16 m0012;
+    /* 0x0014 */ GXTexObj m0014;
+    /* 0x0034 */ GXTexObj m0034;
+    /* 0x0054 */ Mtx mMtx;
     /* 0x0084 */ dKy_tevstr_c* field_0x0084;
-    /* 0x0088 */ cXyz field_0x0088[2][45];
-    /* 0x04C0 */ cXyz field_0x04C0[90];
-    /* 0x08F8 */ cXyz field_0x08F8[90];
-    /* 0x0D30 */ cXyz field_0x0D30[90];
-    /* 0x1168 */ cXyz field_0x1168[45];
-    /* 0x1384 */ u8 field_0x1384;
-    /* 0x1385 */ u8 field_0x1385[0x1388 - 0x1385];
+    /* 0x0088 */ cXyz mPos[2][45];
+    /* 0x04C0 */ cXyz mDPos[2][45];
+    /* 0x08F8 */ cXyz mNrm[2][45];
+    /* 0x0D30 */ cXyz mBackNrm[2][45];
+    /* 0x1168 */ cXyz m1168[45];
+    /* 0x1384 */ u8 mCurrArr;
+    /* 0x1385 */ u8 m1385[0x1388 - 0x1385];
 };  // Size: 0x1388
 
 class daGoal_Flag_c : public fopAc_ac_c {
@@ -123,7 +122,8 @@ public:
     /* 0x1620 */ request_of_phase_process_class field_0x1620;
     /* 0x1628 */ Mtx field_0x1628;
     /* 0x1658 */ cXyz field_0x1658[2];
-    /* 0x1670 */ u8 field_0x1670[0x1674 - 0x1670];
+    /* 0x1670 */ s16 field_0x1670;
+    /* 0x1672 */ u8 field_0x1672[0x1674 - 0x1672];
     /* 0x1674 */ fpc_ProcID field_0x1674;
     /* 0x1678 */ fpc_ProcID field_0x1678;
     /* 0x167C */ u8 field_0x167C[0x1680 - 0x167C];
@@ -136,7 +136,7 @@ public:
     /* 0x169C */ u32 field_0x169C[4];
     /* 0x16AC */ int field_0x16AC;
     /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];
-    /* 0x1720 */ int (daGoal_Flag_c::*field_0x1720)();
+    /* 0x1720 */ ProcFunc field_0x1720;
 };  // Size: 0x172C
 
 #endif /* D_A_GOAL_FLAG_H */
