@@ -28,7 +28,7 @@ public:
     void _draw();
     void _delete();
     BOOL startCheck();
-    void deleteCheck();
+    BOOL deleteCheck();
 public:
     /* 0x0FC */ u8 field_0x0FC[0x111 - 0x0FC];
     /* 0x111 */ bool field_0x111;

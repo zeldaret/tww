@@ -198,12 +198,12 @@ void daGFlag_packet_c::draw() {
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
     GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS,GX_INDEX8);
-    GXSetVtxDesc(GX_VA_NRM,GX_INDEX8);
-    GXSetVtxDesc(GX_VA_TEX0,GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_POS,GX_CLR_RGBA,GX_F32,0);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_NRM,GX_CLR_RGB,GX_F32,0);
-    GXSetVtxAttrFmt(GX_VTXFMT0,GX_VA_TEX0,GX_CLR_RGBA,GX_F32,0);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
     GXSetArray(GX_VA_POS, &mDPos[mCurrArr], sizeof(cXyz));
     GXSetArray(GX_VA_NRM, &mNrm[mCurrArr], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
@@ -219,55 +219,55 @@ void daGFlag_packet_c::draw() {
         lightMask = 1;
     }
     if (l_HIO.m05 != 0) {
-        GXSetChanCtrl(GX_COLOR0,true,GX_SRC_REG,GX_SRC_REG,lightMask,GX_DF_CLAMP,GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(2);
-        GXSetTexCoordGen2(GX_TEXCOORD0,GX_TG_MTX2x4,GX_TG_TEX0,GX_IDENTITY,false,GX_PTIDENTITY);
-        GXSetTexCoordGen2(GX_TEXCOORD1,GX_TG_SRTG,GX_TG_COLOR0,GX_IDENTITY,false,GX_PTIDENTITY);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY, false, GX_PTIDENTITY);
         GXSetNumTevStages(num_tev_stages);
         GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
-        GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD1,GX_TEXMAP1,GX_COLOR0A0);
-        GXSetTevColorIn(GX_TEVSTAGE0,GX_CC_C0,GX_CC_C1,GX_CC_TEXC,GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevOrder(GX_TEVSTAGE1,GX_TEXCOORD0,GX_TEXMAP0,GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE1,GX_CC_ZERO,GX_CC_TEXC,GX_CC_CPREV,GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE1,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_TEXA);
-        GXSetTevAlphaOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         if (num_tev_stages == 3) {
             GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP2);
-            GXSetTevOrder(GX_TEVSTAGE2,GX_TEXCOORD1,GX_TEXMAP1,GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE2,GX_CC_ZERO,GX_CC_C2,GX_CC_TEXC,GX_CC_CPREV);
-            GXSetTevColorOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE2,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_TEXA);
-            GXSetTevAlphaOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         }
     } else {
-        GXSetChanCtrl(GX_COLOR0,true,GX_SRC_REG,GX_SRC_REG,lightMask,GX_DF_CLAMP,GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0,GX_TG_MTX2x4,GX_TG_TEX0,GX_IDENTITY,false,GX_PTIDENTITY);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
         GXSetNumTevStages(num_tev_stages);
-        GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR0A0);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
         GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP1, GX_TEV_SWAP0);
-        GXSetTevColorIn(GX_TEVSTAGE0,GX_CC_C0,GX_CC_C1,GX_CC_RASC,GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_RASC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevOrder(GX_TEVSTAGE1,GX_TEXCOORD0,GX_TEXMAP0,GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE1,GX_CC_ZERO,GX_CC_CPREV,GX_CC_TEXC,GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE1,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_TEXA);
-        GXSetTevAlphaOp(GX_TEVSTAGE1,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         if (num_tev_stages == 3) {
             GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP2, GX_TEV_SWAP0);
-            GXSetTevOrder(GX_TEVSTAGE2,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE2,GX_CC_ZERO,GX_CC_C2,GX_CC_RASC,GX_CC_CPREV);
-            GXSetTevColorOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE2,GX_CA_ZERO,GX_CA_ZERO,GX_CA_ZERO,GX_CA_TEXA);
-            GXSetTevAlphaOp(GX_TEVSTAGE2,GX_TEV_ADD,GX_TB_ZERO,GX_CS_SCALE_1,true,GX_TEVPREV);
+            GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C2, GX_CC_RASC, GX_CC_CPREV);
+            GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+            GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+            GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         }
     }
     GXColorS10 color = mpTevStr->mColorC0;
@@ -463,196 +463,21 @@ int daGoal_Flag_c::goal_check() {
     return o_ret;
 }
 
+static void dummy() {
+    cXyz v1(0.5f, 1.0f, 0.2f);
+    v1 = v1 * cXyz(0.85f, 4.5f, 0.0f);
+    v1 = v1 * cXyz(40.0f, 20.25f, 20.25f);
+}
+
 /* 00001450-0000183C       .text flag_move__13daGoal_Flag_cFv */
 void daGoal_Flag_c::flag_move() {
     /* Nonmatching */
 }
 
-/* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
-    cXyz temp = *param_2 - *param_1;
-    cXyz temp2 = temp.normZP();
-    
-    f32 mag = temp.abs();
-
-    f32 temp3 = (mag - param_4);
-    temp3 *= l_HIO.m3C;
-
-    temp2 *= temp3;
-    *param_3 += temp2;
-}
-
-/* 00001970-00001CC0       .text get_cloth_anim_factor__13daGoal_Flag_cFP4cXyzP4cXyzP4cXyzii */
-cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, int param_4, int param_5) {
-    /* Apparent match, .rodata offsets issue */
-    int temp = (param_5 * 9) + param_4;
-    cXyz temp2 = param_1[temp];
-    f32 dot = VECDotProduct(param_3, &param_2[temp]);
-    if ((param_5 == 0 || param_5 == 4) && (param_4 == 0 || param_4 == 8)) {
-        return cXyz::Zero;
-    } else {
-        cXyz temp3 = param_2[temp] * dot;
-        temp3.y += l_HIO.m38 * ((float)param_5 * 0.25f);
-        if (param_4 != 0) {
-            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 * 9)], &temp3, 250.0f); 
-            if (param_5 != 0) {
-                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f); 
-                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 - 1) * 9], &temp3, 277.3085f);     
-            }
-            if (param_5 != 4) {
-                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f); 
-                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 + 1) * 9], &temp3, 277.3085f);     
-            }
-            if (param_4 != 8) {
-                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + param_5 * 9], &temp3, 250.0f);
-                if (param_5 != 0) {
-                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
-                }
-                if (param_5 != 4) {
-                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
-                }
-            }
-            return temp3;
-        } else {
-            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 * 9)], &temp3, 250.0f);
-            if (param_5 != 0) {
-                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f);
-                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
-            }
-            if (param_5 != 4) {
-                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f);
-                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
-            }
-            return temp3;
-        }
-    }
-}
-
-/* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
-static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
-    return ((daGoal_Flag_c*)i_actor)->CreateHeap();
-}
-
-/* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
-BOOL daGoal_Flag_c::CreateHeap() {
-    for (int i = 0; i < field_0x16AC; i++) {
-        if (!field_0x16B0[i].init(1, (field_0x169C[i] << 2) + 1, 0)) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
-/* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
-int daGoal_Flag_c::getDemoAction(int param_1) {
-    /* Apparent match, .data offsets issue */
-    static char* ActionNames[] = { 
-        "00_dummy",
-        "01_dummy",
-        "02_dummy",
-        "03_dummy",
-        "04_dummy" 
-    };
-    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
-}
-
-/* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
-BOOL daGoal_Flag_c::RaceStart() {
-    /* Apparent match, .rodata offsets issue */
-    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
-    int action_idx = getDemoAction(staff_idx);
-
-    if (field_0x1688 == 0) {
-        if (staff_idx != -1 && action_idx == 0) {
-            dComIfGp_evmng_cutEnd(staff_idx);
-        } else {
-            return TRUE;
-        }         
-        field_0x1688++;
-    } else {
-        dTimer_c* timer_p = (dTimer_c*) fopMsgM_SearchByID(field_0x1674);
-        dMinigame_Starter_c* mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(field_0x1678);
-
-        if (action_idx == 1 && mgame_start_p) {
-            if (!mgame_start_p->field_0x111) {
-                mgame_start_p->field_0x111 = true;
-            }
-            dComIfGp_evmng_cutEnd(staff_idx);
-        }
-
-        if (timer_p && mgame_start_p && mgame_start_p->startCheck()) {
-            dComIfGp_evmng_cutEnd(staff_idx);
-            timer_p->start(7);
-            if (field_0x1688 == 1) {
-                mDoAud_bgmStart(JA_BGM_SEA_GAME);
-                field_0x1688++;
-            }
-        }
-
-        bool end_chk = dComIfGp_evmng_endCheck("race_start_cam");
-        if (end_chk) {
-            setAction(&daGoal_Flag_c::TimerExecute);
-            field_0x1688 = 0;
-        }
-    }
-    return TRUE;
-}
-
-/* 00001F60-00002290       .text TimerExecute__13daGoal_Flag_cFv */
-BOOL daGoal_Flag_c::TimerExecute() {
-    /* Nonmatching */
-    field_0x1720 = &daGoal_Flag_c::RaceEnd;
-    static char* event_name_tbl[] = {
-        "race_goal_cam",
-        "race_fail_cam",
-    };
-}
-
-/* 00002290-000023E0       .text RaceEnd__13daGoal_Flag_cFv */
-BOOL daGoal_Flag_c::RaceEnd() {
-    /* Apparent match, .data and .rodata offsets */
-    static char* event_name_tbl[] = {
-        "race_goal_cam",
-        "race_fail_cam",
-    };
-
-    field_0x1686++;
-    
-    dTimer_c* timer_p;
-    if (
-        field_0x1674 != -1 && 
-        (timer_p = (dTimer_c*)fopMsgM_SearchByID(field_0x1674)) &&
-        timer_p->deleteCheck()
-    ) {
-        fopMsgM_Delete(timer_p);
-        field_0x1674 = -1;
-    }
-
-    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
-    
-    if (staff_idx != -1) {
-        dComIfGp_evmng_cutEnd(staff_idx);
-    } 
-
-    bool end_chk = dComIfGp_evmng_endCheck(event_name_tbl[field_0x1684 != 3 ? 1 : 0]);
-
-    
-    if (end_chk || ( (int)field_0x1686 > (int)l_HIO.m20 && 
-        (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
-        dComIfGp_setNextStage("sea", 1, 0x30);
-    }
-
-    return true;
-}
-
-/* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
-static cPhs_State daGoal_FlagCreate(void* i_this) {
-    return ((daGoal_Flag_c*)i_this)->_create();
-}
+static BOOL checkCreateHeap(fopAc_ac_c*);
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
-    /* Apparent match, .data and .rodata offsets issue */
     cPhs_State rt;
     u8 temp;
     dPath* path_p;
@@ -761,6 +586,81 @@ cPhs_State daGoal_Flag_c::_create() {
     return cPhs_COMPLEATE_e;
 }
 
+
+/* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
+void get_cloth_anim_sub_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, f32 param_4) {
+    cXyz temp = *param_2 - *param_1;
+    cXyz temp2 = temp.normZP();
+    
+    f32 mag = temp.abs();
+
+    f32 temp3 = (mag - param_4);
+    temp3 *= l_HIO.m3C;
+
+    temp2 *= temp3;
+    *param_3 += temp2;
+}
+
+/* 00001970-00001CC0       .text get_cloth_anim_factor__13daGoal_Flag_cFP4cXyzP4cXyzP4cXyzii */
+cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* param_1, cXyz* param_2, cXyz* param_3, int param_4, int param_5) {
+    int temp = (param_5 * 9) + param_4;
+    cXyz temp2 = param_1[temp];
+    f32 dot = VECDotProduct(param_3, &param_2[temp]);
+    if ((param_5 == 0 || param_5 == 4) && (param_4 == 0 || param_4 == 8)) {
+        return cXyz::Zero;
+    } else {
+        cXyz temp3 = param_2[temp] * dot;
+        temp3.y += l_HIO.m38 * ((float)param_5 * 0.25f);
+        if (param_4 != 0) {
+            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 * 9)], &temp3, 250.0f); 
+            if (param_5 != 0) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f); 
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 - 1) * 9], &temp3, 277.3085f);     
+            }
+            if (param_5 != 4) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f); 
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 - 1) + (param_5 + 1) * 9], &temp3, 277.3085f);     
+            }
+            if (param_4 != 8) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + param_5 * 9], &temp3, 250.0f);
+                if (param_5 != 0) {
+                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
+                }
+                if (param_5 != 4) {
+                    get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
+                }
+            }
+            return temp3;
+        } else {
+            get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 * 9)], &temp3, 250.0f);
+            if (param_5 != 0) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 - 1) * 9], &temp3, 120.0f);
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 - 1) * 9], &temp3, 277.3085f);
+            }
+            if (param_5 != 4) {
+                get_cloth_anim_sub_factor(&temp2, &param_1[param_4 + (param_5 + 1) * 9], &temp3, 120.0f);
+                get_cloth_anim_sub_factor(&temp2, &param_1[(param_4 + 1) + (param_5 + 1) * 9], &temp3, 277.3085f);
+            }
+            return temp3;
+        }
+    }
+}
+
+/* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
+static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daGoal_Flag_c*)i_actor)->CreateHeap();
+}
+
+/* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
+BOOL daGoal_Flag_c::CreateHeap() {
+    for (int i = 0; i < field_0x16AC; i++) {
+        if (!field_0x16B0[i].init(1, (field_0x169C[i] << 2) + 1, 0)) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 bool daGoal_Flag_c::_delete() {
     u8 prm = fopAcM_GetParam(this) & 0xFF;
     dComIfG_resDelete(&field_0x1618, arcname);
@@ -778,6 +678,182 @@ bool daGoal_Flag_c::_delete() {
     }
 
     return true;
+}
+
+/* 00001D74-00001DB4       .text getDemoAction__13daGoal_Flag_cFi */
+int daGoal_Flag_c::getDemoAction(int param_1) {
+    static char* ActionNames[] = { 
+        "00_dummy",
+        "01_dummy",
+        "02_dummy",
+        "03_dummy",
+        "04_dummy" 
+    };
+    return dComIfGp_evmng_getMyActIdx(param_1, ActionNames, 5, FALSE, 0);
+}
+
+/* 00001DB4-00001F60       .text RaceStart__13daGoal_Flag_cFv */
+BOOL daGoal_Flag_c::RaceStart() {
+    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
+    int action_idx = getDemoAction(staff_idx);
+
+    if (field_0x1688 == 0) {
+        if (staff_idx != -1 && action_idx == 0) {
+            dComIfGp_evmng_cutEnd(staff_idx);
+        } else {
+            return TRUE;
+        }         
+        field_0x1688++;
+    } else {
+        dTimer_c* timer_p = (dTimer_c*) fopMsgM_SearchByID(field_0x1674);
+        dMinigame_Starter_c* mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(field_0x1678);
+
+        if (action_idx == 1 && mgame_start_p) {
+            if (!mgame_start_p->field_0x111) {
+                mgame_start_p->field_0x111 = true;
+            }
+            dComIfGp_evmng_cutEnd(staff_idx);
+        }
+
+        if (timer_p && mgame_start_p && mgame_start_p->startCheck()) {
+            dComIfGp_evmng_cutEnd(staff_idx);
+            timer_p->start(7);
+            if (field_0x1688 == 1) {
+                mDoAud_bgmStart(JA_BGM_SEA_GAME);
+                field_0x1688++;
+            }
+        }
+
+        bool end_chk = dComIfGp_evmng_endCheck("race_start_cam");
+        if (end_chk) {
+            setAction(&daGoal_Flag_c::TimerExecute);
+            field_0x1688 = 0;
+        }
+    }
+    return TRUE;
+}
+
+/* 00001F60-00002290       .text TimerExecute__13daGoal_Flag_cFv */
+BOOL daGoal_Flag_c::TimerExecute() {
+    dTimer_c* timer_p = (dTimer_c *) fopMsgM_SearchByID(field_0x1674);
+    s32 temp;
+    int goal_chk;
+    int mgame_rupee;
+    int rest_time;
+    dMinigame_Starter_c* mgame_start_p;
+    if (field_0x1678 != -1) {
+        mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(field_0x1678);
+        if (mgame_start_p && mgame_start_p->deleteCheck()) {
+            fopMsgM_Delete(mgame_start_p);
+            field_0x1678 = -1;
+        }
+    }
+
+    goal_chk = goal_check();
+
+    if (goal_chk == 1) {
+        if (field_0x1684 == 1) {
+            timer_p->end(-1);
+            if (dComIfGp_getMiniGameRupee() == 0) {
+                field_0x1684 = 2;
+            } else {
+                field_0x1684 = 3;
+            }
+        } else {
+            field_0x1684 = 1;
+        }
+    } else if (goal_chk == -1) {
+        timer_p->end(-1);
+        mDoAud_seStart(JA_SE_SGAME_TIMER_0);
+        field_0x1684 = 2;
+    }
+
+    if (timer_p->getRestTimeMs() == 0 && (timer_p->end(-1), field_0x1684 != 3)) {
+        field_0x1684 = 2;
+        mDoAud_seStart(JA_SE_SGAME_TIMER_0);
+    }
+
+    if (field_0x1684 == 3 || field_0x1684 == 2) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            timer_p->timerHide();
+            if (field_0x1684 == 3) {
+                temp = dComIfGp_getMiniGameRupee() < l_HIO.m1C ? 1 : 2;
+                dComIfGp_setMiniGameResult(1);
+            } else {
+                temp = 0;
+                dComIfGp_setMiniGameResult(2);
+            }
+            if (u16(temp) == 1 || u16(temp) == 2) {
+                mDoAud_bgmStart(JA_BGM_SEA_GOAL);
+            } else {
+                mDoAud_bgmStart(JA_BGM_SEA_FAIL);
+            }
+            dComIfGp_clearPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e);
+            mgame_rupee = dComIfGp_getMiniGameRupee();
+            rest_time = timer_p->getRestTimeMs() / 10;
+            field_0x167C = fopMsgM_MiniGameTerminater_create(
+                PROC_MINIGAME_TERMINATER, 
+                0, 
+                temp, 
+                rest_time, 
+                mgame_rupee, 
+                NULL
+            );
+            fopMsgM_SearchByID(field_0x167C); // unused return?
+            field_0x1686 = 0;
+            setAction(&daGoal_Flag_c::RaceEnd);
+            field_0x1688 = 0;
+        } else {
+            static char* event_name_tbl[] = {
+                "race_goal_cam",
+                "race_fail_cam",
+            };
+            fopAcM_orderOtherEvent2(this, event_name_tbl[field_0x1684 != 3 ? 1 : 0], 1);
+            eventInfo.onCondition(2);
+        }
+    }
+    return TRUE;
+}
+
+/* 00002290-000023E0       .text RaceEnd__13daGoal_Flag_cFv */
+BOOL daGoal_Flag_c::RaceEnd() {
+    static char* event_name_tbl[] = {
+        "race_goal_cam",
+        "race_fail_cam",
+    };
+
+    field_0x1686++;
+    
+    dTimer_c* timer_p;
+    if (
+        field_0x1674 != -1 && 
+        (timer_p = (dTimer_c*)fopMsgM_SearchByID(field_0x1674)) &&
+        timer_p->deleteCheck()
+    ) {
+        fopMsgM_Delete(timer_p);
+        field_0x1674 = -1;
+    }
+
+    int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
+    
+    if (staff_idx != -1) {
+        dComIfGp_evmng_cutEnd(staff_idx);
+    } 
+
+    bool end_chk = dComIfGp_evmng_endCheck(event_name_tbl[field_0x1684 != 3 ? 1 : 0]);
+
+    
+    if (end_chk || ( (int)field_0x1686 > (int)l_HIO.m20 && 
+        (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
+        dComIfGp_setNextStage("sea", 1, 0x30);
+    }
+
+    return true;
+}
+
+/* 000023E0-00002400       .text daGoal_FlagCreate__FPv */
+static cPhs_State daGoal_FlagCreate(void* i_this) {
+    return ((daGoal_Flag_c*)i_this)->_create();
 }
 
 /* 000029CC-00002AAC       .text daGoal_FlagDelete__FPv */
@@ -800,7 +876,6 @@ static BOOL daGoal_FlagExecute(void* i_this) {
 }
 
 bool daGoal_Flag_c::_draw() {
-    /* Apparent match, .rodata offsets issue */
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
     MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);

@@ -34,7 +34,7 @@ BOOL dMinigame_Starter_c::startCheck() {
 }
 
 /* 8020634C-80206360       .text deleteCheck__19dMinigame_Starter_cFv */
-void dMinigame_Starter_c::deleteCheck() {
+BOOL dMinigame_Starter_c::deleteCheck() {
     /* Nonmatching */
 }
 

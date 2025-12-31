@@ -43,7 +43,7 @@ public:
     /* 0x10 */ u32 m10;
     /* 0x14 */ u32 m14;
     /* 0x18 */ u32 m18;
-    /* 0x1C */ u32 m1C;
+    /* 0x1C */ s32 m1C;
     /* 0x20 */ u32 m20;
     /* 0x24 */ u32 m24;
     /* 0x28 */ u32 m28;
@@ -126,7 +126,7 @@ public:
     /* 0x1672 */ u8 field_0x1672[0x1674 - 0x1672];
     /* 0x1674 */ fpc_ProcID field_0x1674;
     /* 0x1678 */ fpc_ProcID field_0x1678;
-    /* 0x167C */ u8 field_0x167C[0x1680 - 0x167C];
+    /* 0x167C */ fpc_ProcID field_0x167C;
     /* 0x1680 */ f32 field_0x1680;
     /* 0x1684 */ s16 field_0x1684;
     /* 0x1686 */ s16 field_0x1686;
