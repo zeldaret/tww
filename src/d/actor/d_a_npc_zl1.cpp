@@ -2536,6 +2536,13 @@ u8 daNpc_Zl1_c::demo() {
                 field_0x7CE = false;
             }
         }
+        #if VERSION == VERSION_DEMO
+        dDemo_setDemoData(this, 
+            dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
+            mpMorf, 
+            mArcName
+        );
+        #else
         dDemo_setDemoData(this, 
             dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
             mpMorf, 
@@ -2545,7 +2552,7 @@ u8 daNpc_Zl1_c::demo() {
             dBgS_GetGndMtrlSndId_Func(current.pos, 10.0f),
             dComIfGp_getReverb(fopAcM_GetRoomNo(this))
         );
-
+        #endif
     }
     return field_0x7D9;
 }
