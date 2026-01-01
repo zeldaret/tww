@@ -13,6 +13,10 @@
 #define IS_ALIGNED(X, N) (((X) & ((N)-1)) == 0)
 #define IS_NOT_ALIGNED(X, N) (((X) & ((N)-1)) != 0)
 
+// Silence unused parameter warnings.
+// TP debug suggests the original devs used something like this.
+#define UNUSED(x) ((void)(x))
+
 #define JUT_EXPECT(...)
 #define ASSERT(...)
 #define LOGF(FMT, ...)

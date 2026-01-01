@@ -1714,7 +1714,7 @@ u32 daNpcPhoto_c::getMsg() {
     field_0x980 = 0;
     field_0x9D0 = 0;
     
-    if(g_dComIfG_gameInfo.play.getEvent().chkPhoto()) {
+    if(g_dComIfG_gameInfo.play.getEvent()->chkPhoto()) {
         if (eventReg < 1) {
             msgNo = 0x2A5C;
         } else if (eventReg < 3) {

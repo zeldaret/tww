@@ -1138,7 +1138,7 @@ void dComIfGs_setGameStartStage() {
         {true,  dSv_event_flag_c::UNK_0801,  "MajyuE",  0,                          0},
         {true,  dSv_event_flag_c::UNK_0808,  "MajyuE",  0,                          18},
         {true,  dSv_event_flag_c::UNK_2401,  "A_umikz", 0,                          204},
-        {false, 0,                       "sea",     dIsleRoom_OutsetIsland_e,   128},
+        {false, 0,                           "sea",     dIsleRoom_OutsetIsland_e,   128},
     };
 
     check_data* data_p = l_checkData;

@@ -270,7 +270,7 @@ public:
 
     virtual u16 next_msgStatus(u32* pMsgNo) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
-    virtual void anmAtr(u16) {}
+    virtual void anmAtr(u16 i_msgStatus) {}
 
     void setCollision(float radius, float height);
     u16 talk(int);

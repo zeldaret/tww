@@ -1524,7 +1524,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(Matching,    "d_a_kn"),
-    ActorRel(Equivalent,  "d_a_kokiie"),
+    ActorRel(Matching,    "d_a_kokiie"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ks"),
     ActorRel(NonMatching, "d_a_kt"), # regalloc
     ActorRel(Matching,    "d_a_mflft"),
@@ -1703,8 +1703,8 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ganonbed"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gaship2"),
-    ActorRel(Matching, "d_a_obj_gnnbtltaki"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gnndemotakie"),
+    ActorRel(Matching,    "d_a_obj_gnnbtltaki"),
+    ActorRel(Matching,    "d_a_obj_gnndemotakie"),
     ActorRel(NonMatching, "d_a_obj_gnndemotakis"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gong"),
     ActorRel(NonMatching, "d_a_obj_gtaki"),
@@ -1736,7 +1736,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_mtest"),
     ActorRel(Matching,    "d_a_obj_nest"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ojtree"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ospbox"),
+    ActorRel(Matching,    "d_a_obj_ospbox"),
     ActorRel(Matching,    "d_a_obj_paper"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbka"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_pfall"),
