@@ -768,19 +768,3 @@ void dDlst_FileErr_c::draw() {
 
     Scr->draw(0.0, 0.0, port);
 }
-
-/* 8017F6D8-8017F760       .text createPane__8MyScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */
-J2DPane* MyScreen::createPane(const J2DPane::J2DScrnBlockHeader& pHeader, JSURandomInputStream* pStream, J2DPane* pParent) {
-    J2DPane* pane;
-
-    switch (pHeader.mMagic) {
-        case 'PIC1':
-            pane = new MyPicture(pParent, pStream);
-            break;
-        default:
-            pane = J2DScreen::createPane(pHeader, pStream, pParent);
-            break;
-    }
-
-    return pane;
-}
