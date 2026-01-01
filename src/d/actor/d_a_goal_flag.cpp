@@ -8,6 +8,9 @@
 #include "d/actor/d_a_npc_sarace.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_minigame_starter.h"
+#if VERSION == VERSION_DEMO
+#include "d/d_s_play.h"
+#endif
 #include "d/res/res_cloth.h"
 #include "d/res/res_gflag.h"
 #include "d/res/res_tgflag.h"
@@ -143,6 +146,7 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
     // index_tbl likely existed in this function but passing 
     // an element of it into getObjectRes breaks the match
     ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes(arc_name_tbl[i_arcIdx], 3);
+    GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
         &mTexObj, 
         (u8*)tex_info_p + tex_info_p->imageOffset, 
@@ -151,7 +155,7 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
         GXTexFmt(tex_info_p->format), 
         GXTexWrapMode(tex_info_p->wrapS), 
         GXTexWrapMode(tex_info_p->wrapT),
-        GXBool(tex_info_p->mipmapCount > 1)
+        mipmap_cnt_over_one
     );
     GXInitTexObjLOD(
         &mTexObj,
@@ -169,6 +173,7 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
 /* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setToonTexObj() {
     ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
         &mToonTexObj, 
         (u8*)tex_info_p + tex_info_p->imageOffset, 
@@ -177,7 +182,7 @@ void daGFlag_packet_c::setToonTexObj() {
         GXTexFmt(tex_info_p->format), 
         GXTexWrapMode(tex_info_p->wrapS), 
         GXTexWrapMode(tex_info_p->wrapT),
-        GXBool(tex_info_p->mipmapCount > 1)
+        mipmap_cnt_over_one
     );
     GXInitTexObjLOD(
         &mToonTexObj,
@@ -195,7 +200,7 @@ void daGFlag_packet_c::setToonTexObj() {
 /* 00000330-00000978       .text draw__16daGFlag_packet_cFv */
 void daGFlag_packet_c::draw() {
     j3dSys.reinitGX();
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
     dKy_GxFog_tevstr_set(mpTevStr);
@@ -273,12 +278,9 @@ void daGFlag_packet_c::draw() {
             GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
         }
     }
-    GXColorS10 color = mpTevStr->mColorC0;
-    GXSetTevColorS10(GX_TEVREG0, color);
-    GXColor colorK0 = mpTevStr->mColorK0;
-    GXSetTevColor(GX_TEVREG1, colorK0);
-    GXColor colorK1 = mpTevStr->mColorK1;
-    GXSetTevColor(GX_TEVREG2, colorK1);
+    GXSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
+    GXSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
+    GXSetTevColor(GX_TEVREG2, mpTevStr->mColorK1);
     GXCallDisplayList(l_goal_flag_matDL, 32);
     GXLoadPosMtxImm(mMtx, 0);
     GXLoadNrmMtxImm(mMtx, 0);
@@ -287,7 +289,7 @@ void daGFlag_packet_c::draw() {
     GXSetCullMode(GX_CULL_FRONT);
     GXSetArray(GX_VA_NRM, &mBackNrm[mCurrArr], sizeof(cXyz));
     GXCallDisplayList(l_goal_flag_DL, 256);
-#if VERSION != VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::sOldVcdVatCmd = 0;
 #endif
 }
@@ -347,8 +349,31 @@ void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
     }
     temp4 = temp4.normZC();
     MtxPush();
-    mDoMtx_YrotM(*calc_mtx, cM_ssin(m0010 + (param_2 * -0x400 + param_3 * 0x100)) * 512.0f);
-    mDoMtx_XrotM(*calc_mtx, cM_scos(m0010 + (param_2 * -0x400 + param_3 * 0x100)) * 512.0f);
+
+    cMtx_YrotM(*calc_mtx, 
+#if VERSION == VERSION_DEMO
+        (REG10_S(2) + 0x200) *
+#endif
+        cM_ssin(m0010 + 
+            (param_2 * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
+            param_3 * (DEMO_SELECT(REG10_S(4), 0) + 0x100)))
+#if VERSION != VERSION_DEMO
+            * 512.0f
+#endif
+    );
+
+    cMtx_XrotM(*calc_mtx, 
+#if VERSION == VERSION_DEMO
+        (REG10_S(5) + 0x200) * 
+#endif
+        cM_scos(m0010 + 
+            (param_2 * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
+            param_3 * (DEMO_SELECT(REG10_S(7), 0) + 0x100)))
+#if VERSION != VERSION_DEMO
+             * 512.0f
+#endif
+    );
+    
     MtxPosition(&temp4, &temp3);
     param_1->set(temp3.normZP());
     MtxPull();
@@ -356,22 +381,21 @@ void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
 BOOL daGoal_Flag_c::getRacePath(u8 i_pathIdx) {
-    field_0x168C[0] = dPath_GetRoomPath(i_pathIdx, fopAcM_GetRoomNo(this));
-
-    if (!field_0x168C[0]) {
+    int i = 0;
+    field_0x168C[i] = dPath_GetRoomPath(i_pathIdx, fopAcM_GetRoomNo(this));
+    if (!field_0x168C[i]) {
         return FALSE;
     }
 
-    field_0x169C[0] = field_0x168C[0]->m_num;
-    u8 next_path_id = field_0x168C[0]->m_nextID;
-    int i, j;
-    for (j = i = 1; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++, j++) {        
+    field_0x169C[i] = field_0x168C[i]->m_num;
+    u8 next_path_id = field_0x168C[i]->m_nextID;
+    for (int j = i = 1; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++, j++) {        
         field_0x168C[j] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
         field_0x169C[j] = field_0x168C[j]->m_num;
         next_path_id = field_0x168C[j]->m_nextID;
     }
     field_0x16AC = i;
-    
+
     return TRUE;
 }
 
@@ -382,8 +406,9 @@ void daGoal_Flag_c::RopeMove() {
         0.0f, 150.0f, 225.0f, 150.0f
     };
     for (int i = 0; i < field_0x16AC; i++) {
-        cXyz* temp = getRopePos(i, field_0x169C[i]);
-        temp->set(*getRopePos(i, 0));
+        cXyz* temp = getRopePos(i, 0);
+        cXyz* temp2 = getRopePos(i, field_0x169C[i]);
+        temp2->set(*temp);
         for (u32 j = 0; (s32)j < (s32)(field_0x169C[i] << 2); j++) {
             s32 temp2 = j & 3;
             s32 temp3 = (int)j >> 2;
@@ -440,6 +465,7 @@ int daGoal_Flag_c::goal_check() {
     cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - field_0x1658[0];
 
     cXyz temp2 = field_0x1658[1] - field_0x1658[0];
+
     temp2.y = 0.0f;
     temp2 = temp2.normZP();
 
@@ -449,9 +475,7 @@ int daGoal_Flag_c::goal_check() {
     f32 dot = VECDotProduct(&temp2, &temp1);
     
     cXyz temp4;
-    temp4.x = temp2.z;
-    temp4.y = 0.0f;
-    temp4.z = -temp2.x;
+    temp4.set(temp2.z, 0.0f, -temp2.x);
 
     f32 dot2 = VECDotProduct(&temp4, &temp1);
 
@@ -485,7 +509,7 @@ void daGoal_Flag_c::flag_move() {
     f32 sin_m1670 = 0.5f + (cM_ssin(field_0x1670) * 0.5f);
     f32 tmp1 = l_HIO.m30 * sin_m1670 + (l_HIO.m34 * (1.0f - sin_m1670));
 
-    mDoMtx_YrotS(*calc_mtx, -current.angle.y);
+    cMtx_YrotS(*calc_mtx, -current.angle.y);
     cXyz wind_vector;
     MtxPosition(dKyw_get_wind_vec(), &wind_vector);
     f32 mag = wind_vector.getSquareMag();
@@ -494,7 +518,7 @@ void daGoal_Flag_c::flag_move() {
         wind_vector = cXyz::Zero;
     } else {
         wind_vector = wind_vector.norm();
-        wind_vector.x *= 0.2f;
+        wind_vector.x *= DEMO_SELECT(REG10_F(24) + 0.2f, 0.2f);
         wind_vector *= tmp1;
     }
 
@@ -510,7 +534,7 @@ void daGoal_Flag_c::flag_move() {
                 j
             );
             off_arr[idx] += cloth_anim_fac;
-            off_arr[idx] *= 0.85f;
+            off_arr[idx] *= DEMO_SELECT(0.85f - REG10_F(25), 0.85f);
             pos_arr2[idx] += off_arr[idx];
         }
     }
@@ -521,24 +545,28 @@ void daGoal_Flag_c::flag_move() {
         for (int l = 0; l < 5; l++) {
             idx = k + l * 9;
             dpos_arr[idx] = pos_arr2[idx];
-            f32 lhs_term = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f) * 40.0f;
-            f32 rhs_term = cM_ssin(k * 0x4000 + l * 0x2000 + field_0x0290.m0012);
-            dpos_arr[idx].z += lhs_term * rhs_term;
+            f32 term = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f);
+            dpos_arr[idx].z += ( 
+                DEMO_SELECT(40.0f + REG10_F(10), 40.0f) * 
+                term * 
+                cM_ssin(k * 0x4000 + l * 0x2000 + field_0x0290.m0012)
+            );
         }    
     }
 
-    nrm_arr = field_0x0290.getNrm();
-
+    cXyz* nrm_arr2 = field_0x0290.getNrm();
+    //nrm_arr = field_0x0290.mNrm[field_0x0290.mCurrArr];
     for (int m = 0; m < 5; m++) {
         for (int n = 0; n < 9; n++) {
-            field_0x0290.setNrmVtx(nrm_arr, n, m);
-            nrm_arr++;
+            field_0x0290.setNrmVtx(nrm_arr2, n, m);
+            nrm_arr2++;
         }
     }
 
     field_0x0290.setBackNrm();
     DCStoreRangeNoSync(field_0x0290.getDPos(), 45 * sizeof(cXyz));
-#if VERSION != VERSION_JPN
+
+#if VERSION > VERSION_JPN
     DCStoreRangeNoSync(field_0x0290.getNrm(), 45 * sizeof(cXyz));
     DCStoreRangeNoSync(field_0x0290.getBackNrm(), 45 * sizeof(cXyz));
 #endif
@@ -549,6 +577,7 @@ static BOOL checkCreateHeap(fopAc_ac_c*);
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
     cPhs_State rt;
+    cPhs_State rt2;
     u8 temp;
     dPath* path_p;
 
@@ -557,30 +586,52 @@ cPhs_State daGoal_Flag_c::_create() {
     u32 prm = fopAcM_GetParam(this) & 0xFF;
     rt = dComIfG_resLoad(&field_0x1618, "Cloth");
 
+#if VERSION > VERSION_DEMO
     if (rt != cPhs_COMPLEATE_e) {
         return rt;
     }
+#endif
 
     if (prm == 0 || prm == 0xFF) {
         temp = 0;
-        rt = dComIfG_resLoad(&field_0x1620, "Gflag");
+        rt2 = dComIfG_resLoad(&field_0x1620, "Gflag");
         scale.set(1.05f, 1.0f, 1.0f);
     } else {
         temp = 1;
-        rt = dComIfG_resLoad(&field_0x1620, "Tgflag");
+        rt2 = dComIfG_resLoad(&field_0x1620, "Tgflag");
         scale.set(0.98f, 1.0f, 1.0f);
     }
 
-    if (rt != cPhs_COMPLEATE_e) {
+
+#if VERSION > VERSION_DEMO
+    if (rt2 != cPhs_COMPLEATE_e) {
+        return rt2;
+    }
+#else
+    if (rt == cPhs_ERROR_e || rt2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    } 
+    if (rt != cPhs_COMPLEATE_e) { 
         return rt;
     }
-
+    if (rt2 != cPhs_COMPLEATE_e) {
+        return rt2;
+    }
+    // TODO: Fakematch
+    // return if 4 isn't equal to 4 ??????????????????
+    register int r0;
+    asm {
+        li r0, 0x4
+        cmpwi r0, 0x4
+        bne exit
+    };
+#endif
     prm = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
     if (prm != 0xFF) {
         path_p = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
         if (path_p) {
-            BOOL path = getRacePath(path_p->m_nextID);
-            if (path != FALSE) {
+            u8 path_idx = path_p->m_nextID;
+            if (getRacePath(path_idx)) {
                 if (fopAcM_entrySolidHeap(this, checkCreateHeap, 0x10000)) {
                     CreateBuoyRaces();
                 } else {
@@ -602,7 +653,8 @@ cPhs_State daGoal_Flag_c::_create() {
     field_0x0290.setTexObj(temp);
     field_0x0290.setToonTexObj();
 
-    path_p = dPath_GetRoomPath((fopAcM_GetParam(this) >> 0x10) & 0xFF, fopAcM_GetRoomNo(this));
+    prm = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+    path_p = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
 
     if (path_p) {
         field_0x1658[0].set(path_p->m_points[0].m_position);
@@ -642,9 +694,7 @@ cPhs_State daGoal_Flag_c::_create() {
     temp6 = temp6.normZP();
 
     cXyz temp7;
-    temp7.x = temp6.z;
-    temp7.y = 0.0f;
-    temp7.z = -temp6.x;
+    temp7.set(temp6.z, 0.0f, -temp6.x);
 
     field_0x1680 = VECDotProduct(&temp7, &temp5);
     field_0x1684 = 0;
@@ -652,7 +702,7 @@ cPhs_State daGoal_Flag_c::_create() {
     for (int i = 0; i < 20; i++) {
         flag_move();
     }
-
+exit:
     return cPhs_COMPLEATE_e;
 }
 
@@ -733,8 +783,8 @@ BOOL daGoal_Flag_c::CreateHeap() {
 
 bool daGoal_Flag_c::_delete() {
     u8 prm = fopAcM_GetParam(this) & 0xFF;
-    dComIfG_resDelete(&field_0x1618, arcname);
-    dComIfG_resDelete(&field_0x1620, sub_arcname_tbl[prm]);
+    dComIfG_resDeleteDemo(&field_0x1618, arcname);
+    dComIfG_resDeleteDemo(&field_0x1620, sub_arcname_tbl[prm]);
 
     if (dComIfGp_getMiniGameType() == 1) {
         if (dComIfGp_getMiniGameResult() == 1) {
@@ -794,7 +844,7 @@ BOOL daGoal_Flag_c::RaceStart() {
             }
         }
 
-        bool end_chk = dComIfGp_evmng_endCheck("race_start_cam");
+        BOOL end_chk = dComIfGp_evmng_endCheck("race_start_cam");
         if (end_chk) {
             setAction(&daGoal_Flag_c::TimerExecute);
             field_0x1688 = 0;
@@ -878,7 +928,8 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 "race_goal_cam",
                 "race_fail_cam",
             };
-            fopAcM_orderOtherEvent2(this, event_name_tbl[field_0x1684 != 3 ? 1 : 0], 1);
+            char* event_name = event_name_tbl[field_0x1684 != 3 ? 1 : 0];
+            fopAcM_orderOtherEvent2(this, event_name, 1);
             eventInfo.onCondition(2);
         }
     }
@@ -910,8 +961,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
         dComIfGp_evmng_cutEnd(staff_idx);
     } 
 
-    bool end_chk = dComIfGp_evmng_endCheck(event_name_tbl[field_0x1684 != 3 ? 1 : 0]);
-
+    BOOL end_chk = dComIfGp_evmng_endCheck(event_name_tbl[field_0x1684 != 3 ? 1 : 0]);
     
     if (end_chk || ( (int)field_0x1686 > (int)l_HIO.m20 && 
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
@@ -949,11 +999,11 @@ bool daGoal_Flag_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
     MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, current.angle.y);
+    cMtx_YrotM(*calc_mtx, current.angle.y);
     MtxScale(scale.x, scale.y, scale.z, true);
 
     Mtx* mtx_p = field_0x0290.getMtx();
-    MTXConcat(j3dSys.getViewMtx(), *calc_mtx, *mtx_p);
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *mtx_p);
 
     field_0x0290.setTevStr(&tevStr);
     j3dSys.getDrawBuffer(0)->entryImm(&field_0x0290, 0);

@@ -103,7 +103,7 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return field_0x16B0[i_matIdx].getPos(0) + (i_segmentIdx * 4); }
+    cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return &field_0x16B0[i_matIdx].getPos(0)[i_segmentIdx * 4]; }
     void setAction(ProcFunc i_proc) { field_0x1720 = i_proc; }
 
     BOOL getRacePath(u8);
