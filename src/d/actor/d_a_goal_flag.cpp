@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_goal_flag.h"
 #include "d/actor/d_a_npc_sarace.h"
+#include "d/d_kankyo_wether.h"
 #include "d/d_minigame_starter.h"
 #include "d/res/res_cloth.h"
 #include "d/res/res_gflag.h"
@@ -194,7 +195,9 @@ void daGFlag_packet_c::setToonTexObj() {
 /* 00000330-00000978       .text draw__16daGFlag_packet_cFv */
 void daGFlag_packet_c::draw() {
     j3dSys.reinitGX();
+#if VERSION != VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     dKy_GxFog_tevstr_set(mpTevStr);
     dKy_setLight_mine(mpTevStr);
     GXClearVtxDesc();
@@ -284,7 +287,9 @@ void daGFlag_packet_c::draw() {
     GXSetCullMode(GX_CULL_FRONT);
     GXSetArray(GX_VA_NRM, &mBackNrm[mCurrArr], sizeof(cXyz));
     GXCallDisplayList(l_goal_flag_DL, 256);
+#if VERSION != VERSION_JPN
     J3DShape::sOldVcdVatCmd = 0;
+#endif
 }
 
 /* 00000978-00000A04       .text setBackNrm__16daGFlag_packet_cFv */
@@ -463,15 +468,80 @@ int daGoal_Flag_c::goal_check() {
     return o_ret;
 }
 
-static void dummy() {
-    cXyz v1(0.5f, 1.0f, 0.2f);
-    v1 = v1 * cXyz(0.85f, 4.5f, 0.0f);
-    v1 = v1 * cXyz(40.0f, 20.25f, 20.25f);
-}
-
 /* 00001450-0000183C       .text flag_move__13daGoal_Flag_cFv */
 void daGoal_Flag_c::flag_move() {
-    /* Nonmatching */
+    int idx, i, j;
+    cXyz cloth_anim_fac;
+    cXyz* pos_arr = field_0x0290.getPos();
+    cXyz* nrm_arr = field_0x0290.getNrm();
+    field_0x0290.changeCurrentPos();
+    cXyz* pos_arr2 = field_0x0290.getPos();
+    cXyz* off_arr = field_0x0290.getOffsetVec();
+
+    field_0x1670 += l_HIO.m0C;
+    field_0x0290.m0010 += l_HIO.m10;
+    field_0x0290.m0012 += l_HIO.m14;
+
+    f32 sin_m1670 = 0.5f + (cM_ssin(field_0x1670) * 0.5f);
+    f32 tmp1 = l_HIO.m30 * sin_m1670 + (l_HIO.m34 * (1.0f - sin_m1670));
+
+    mDoMtx_YrotS(*calc_mtx, -current.angle.y);
+    cXyz wind_vector;
+    MtxPosition(dKyw_get_wind_vec(), &wind_vector);
+    f32 mag = wind_vector.getSquareMag();
+
+    if (cM3d_IsZero(mag)) {
+        wind_vector = cXyz::Zero;
+    } else {
+        wind_vector = wind_vector.norm();
+        wind_vector.x *= 0.2f;
+        wind_vector *= tmp1;
+    }
+
+    for (i = 0; i < 9; i++) {
+        for (j = 0; j < 5; j++) {
+            idx = i + j * 9;
+            pos_arr2[idx].set(pos_arr[idx]);
+            cloth_anim_fac = get_cloth_anim_factor(
+                pos_arr, 
+                nrm_arr, 
+                &wind_vector, 
+                i, 
+                j
+            );
+            off_arr[idx] += cloth_anim_fac;
+            off_arr[idx] *= 0.85f;
+            pos_arr2[idx] += off_arr[idx];
+        }
+    }
+
+    cXyz* dpos_arr = field_0x0290.getDPos();
+
+    for (int k = 0; k < 9; k++) {
+        for (int l = 0; l < 5; l++) {
+            idx = k + l * 9;
+            dpos_arr[idx] = pos_arr2[idx];
+            f32 lhs_term = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f) * 40.0f;
+            f32 rhs_term = cM_ssin(k * 0x4000 + l * 0x2000 + field_0x0290.m0012);
+            dpos_arr[idx].z += lhs_term * rhs_term;
+        }    
+    }
+
+    nrm_arr = field_0x0290.getNrm();
+
+    for (int m = 0; m < 5; m++) {
+        for (int n = 0; n < 9; n++) {
+            field_0x0290.setNrmVtx(nrm_arr, n, m);
+            nrm_arr++;
+        }
+    }
+
+    field_0x0290.setBackNrm();
+    DCStoreRangeNoSync(field_0x0290.getDPos(), 45 * sizeof(cXyz));
+#if VERSION != VERSION_JPN
+    DCStoreRangeNoSync(field_0x0290.getNrm(), 45 * sizeof(cXyz));
+    DCStoreRangeNoSync(field_0x0290.getBackNrm(), 45 * sizeof(cXyz));
+#endif
 }
 
 static BOOL checkCreateHeap(fopAc_ac_c*);
@@ -551,7 +621,7 @@ cPhs_State daGoal_Flag_c::_create() {
         temp2 -= reg;
         field_0x1674 = fopMsgM_Timer_create(PROC_TIMER, 2, temp2, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
         
-        // TODO: Fakematch, debug map mentions a call to an inline func named
+        // Fakematch, debug map mentions a call to an inline func named
         // fopMsgM_MiniGameStarter_create, but the parameters do not match up one-to-one, 
         // so it's not entirely obvious how the call to fopMsgM_create is constructed.
         u32 temp3 = 0;

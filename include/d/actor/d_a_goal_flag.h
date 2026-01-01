@@ -61,7 +61,7 @@ public:
         m0010 = 0;
     }
     virtual ~daGFlag_packet_c() {}
-    void changeCurrentPos() { mCurrArr = mCurrArr ^ 1; }
+    void changeCurrentPos() { mCurrArr ^= 1; }
     cXyz* getDPos() { return mDPos[mCurrArr]; }
     Mtx* getMtx() { return &mMtx; }
     cXyz* getNrm() { return mNrm[mCurrArr]; }
@@ -70,6 +70,9 @@ public:
     GXTexObj* getTexObjP() { return &mTexObj; }
     GXTexObj* getToonTexObjP() { return &mToonTexObj; }
     void setTevStr(dKy_tevstr_c* i_tevStr_p) { mpTevStr = i_tevStr_p; }
+    // Might be fake? This isn't in the debug maps, 
+    // but needed to match flag_move.
+    cXyz* getBackNrm() { return mBackNrm[mCurrArr]; }
 
     void setTexObj(unsigned char);
     void setToonTexObj();
@@ -100,7 +103,6 @@ public:
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    // TODO: does getRopePos actually do this?
     cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return field_0x16B0[i_matIdx].getPos(0) + (i_segmentIdx * 4); }
     void setAction(ProcFunc i_proc) { field_0x1720 = i_proc; }
 
