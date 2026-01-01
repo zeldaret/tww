@@ -12,7 +12,7 @@ public:
     };
     
     bool isBodyAppear() {return mMode != 1 && mMode != 0x12 && mMode != 0 && (mMode != 2 && (mMode != 4) && (mMode != 3 && (mMode != 0x11)));}
-    bool isHoleAppear() {return field_0x3E0 > 0.015f;} // unsure?
+    bool isHoleAppear() {return field_0x3E0 > 0.015f;}
     void modeProcInit(int newMode) {modeProc(PROC_0_e, newMode);}
 
     void _nodeControl(J3DNode*, J3DModel*);
