@@ -42,15 +42,14 @@ void dFile_error_c::_create() {
     stick = new STControl(5, 2, 3, 2, 0.9, 0.5, 0, 0x2000);
     JUT_ASSERT(VERSION_SELECT(108, 108, 121, 121), stick != NULL);
 
-    archive = g_dComIfG_gameInfo.play.mpErrorResArchive;
+    archive = dComIfGp_getErrorResArchive();
     JUT_ASSERT(VERSION_SELECT(112, 112, 125, 125), archive != NULL);
     fileErr.Scr->set("file_error.blo", archive);
 
-    JUTFont *font = mDoExt_getMesgFont();
-    fileErr.font = font;
+    fileErr.font = mDoExt_getMesgFont();
     JUT_ASSERT(VERSION_SELECT(118, 118, 131, 131), fileErr.font != NULL);
 
-    g_feHIO.mNo = (&mDoHIO_root.m_subroot)->createChild("エラー表示画面", &g_feHIO);
+    g_feHIO.mNo = mDoHIO_createChild("エラー表示画面", &g_feHIO); // "Error Display Screen"
 
     screenSet();
     displayInit();
@@ -73,7 +72,7 @@ void dFile_error_c::_delete() {
 
     archive->removeResourceAll();
 
-    mDoHIO_root.m_subroot.deleteChild(g_feHIO.mNo);
+    mDoHIO_deleteChild(g_feHIO.mNo);
 }
 
 MyScreen::~MyScreen() {
@@ -93,17 +92,9 @@ void dFile_error_c::setErrMessage(u32 stringId, int param_2) {
         resizeMsgBoard(line_count + 2);
     }
 
-    f32 bottomY;
-    f32 height;
-
-    f32 charSpace = ((J2DTextBox*) msgPanes[2].pane)->mLineSpace;
-    height = msgPanes[2].mSize.y;
-    bottomY = msgPanes[2].mPosTopLeft.y;
-    bottomY += height;
-
-    charSpace = charSpace * 2.0f;
-
-    m300 = bottomY - charSpace;
+    f32 lineSpace = ((J2DTextBox*) msgPanes[2].pane)->getLineSpace();
+    f32 bottomY = msgPanes[2].mPosTopLeft.y + msgPanes[2].mSize.y;
+    m300 = bottomY - lineSpace * 2.0f;
 
     m300 -= msgPanes[0].mPosTopLeft.y;
 
@@ -169,9 +160,9 @@ f32 curxp[2] = {265.0f, 345.0f};
 /* 8017E228-8017E310       .text setMessage__13dFile_error_cFPc */
 void dFile_error_c::setMessage(char* message) {
 #if VERSION > VERSION_JPN
-    static char txt[] = {' ', ' ', '/', ' ', ' ', '\0'};
+    static char txt[] = "  /  ";
 #else
-    static char txt[] = {'\x81', '@', '\x81', '^', '\x81', '@', '\0'};
+    static char txt[] = "　／　";
 #endif
 
     int j;
@@ -761,23 +752,21 @@ int dFile_error_c::PaneTranceBase(s16 param_1, u8 param_2, f32 param_3, f32 para
 
 /* 8017F5A4-8017F5E0       .text _draw__13dFile_error_cFv */
 void dFile_error_c::_draw() {
-    dDlst_list_c* list = &g_dComIfG_gameInfo.drawlist;
-
-    list->set(list->mp2DOpa, list->mp2DOpaEnd, &fileErr);
+    dComIfGd_set2DOpa(&fileErr);
 }
 
 /* 8017F5E0-8017F618       .text draw2__13dFile_error_cFv */
 void dFile_error_c::draw2() {
-    fileErr.Scr->draw(0.0, 0.0, g_dComIfG_gameInfo.play.mCurrentGrafPort);
+    fileErr.Scr->draw(0.0, 0.0, dComIfGp_getCurrentGrafPort());
 }
 
 /* 8017F618-8017F67C       .text draw__15dDlst_FileErr_cFv */
 void dDlst_FileErr_c::draw() {
-    J2DOrthoGraph* pCtx = g_dComIfG_gameInfo.play.mCurrentGrafPort;
+    J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
 
-    pCtx->setPort();
+    port->setPort();
 
-    Scr->draw(0.0, 0.0, pCtx);
+    Scr->draw(0.0, 0.0, port);
 }
 
 /* 8017F6D8-8017F760       .text createPane__8MyScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */

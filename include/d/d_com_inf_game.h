@@ -531,6 +531,7 @@ public:
     JKRArchive* getItemIconArchive() { return mpItemIconArchive; }
     void setNameResArchive(JKRArchive * pArc) { mpNameResArchive = pArc; }
     void setErrorResArchive(JKRArchive * pArc) { mpErrorResArchive = pArc; }
+    JKRArchive* getErrorResArchive() { return mpErrorResArchive; }
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
@@ -3636,6 +3637,7 @@ inline void dComIfGp_setItemIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.
 inline JKRArchive* dComIfGp_getItemIconArchive() { return g_dComIfG_gameInfo.play.getItemIconArchive(); }
 inline void dComIfGp_setNameResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setNameResArchive(pArc); }
 inline void dComIfGp_setErrorResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setErrorResArchive(pArc); }
+inline JKRArchive* dComIfGp_getErrorResArchive() { return g_dComIfG_gameInfo.play.getErrorResArchive(); }
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
