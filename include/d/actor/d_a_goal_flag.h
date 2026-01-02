@@ -26,9 +26,9 @@ public:
         m34 = 4.0f;
         m38 = -1.0f;
         m3C = 0.4f;
-        m24 = 0xff;
-        m28 = 0x80;
-        m2C = 0x80;
+        mMaterialColorR = 0xff;
+        mMaterialColorG = 0x80;
+        mMaterialColorB = 0x80;
     }
     inline virtual ~daGFlag_HIO_c();
 public:
@@ -45,9 +45,9 @@ public:
     /* 0x18 */ u32 m18;
     /* 0x1C */ s32 m1C;
     /* 0x20 */ u32 m20;
-    /* 0x24 */ u32 m24;
-    /* 0x28 */ u32 m28;
-    /* 0x2C */ u32 m2C;
+    /* 0x24 */ u32 mMaterialColorR;
+    /* 0x28 */ u32 mMaterialColorG;
+    /* 0x2C */ u32 mMaterialColorB;
     /* 0x30 */ f32 m30;
     /* 0x34 */ f32 m34;
     /* 0x38 */ f32 m38;
@@ -70,8 +70,6 @@ public:
     GXTexObj* getTexObjP() { return &mTexObj; }
     GXTexObj* getToonTexObjP() { return &mToonTexObj; }
     void setTevStr(dKy_tevstr_c* i_tevStr_p) { mpTevStr = i_tevStr_p; }
-    // Might be fake? This isn't in the debug maps, 
-    // but needed to match flag_move.
     cXyz* getBackNrm() { return mBackNrm[mCurrArr]; }
 
     void setTexObj(unsigned char);
@@ -98,13 +96,16 @@ public:
 class daGoal_Flag_c : public fopAc_ac_c {
 public:
     typedef BOOL (daGoal_Flag_c::*ProcFunc)();
+
 public:
     inline cPhs_State _create();
     inline bool _delete();
     inline bool _draw();
     inline bool _execute();
-    cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { return &field_0x16B0[i_matIdx].getPos(0)[i_segmentIdx * 4]; }
-    void setAction(ProcFunc i_proc) { field_0x1720 = i_proc; }
+    cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { 
+        return &mMats[i_matIdx].getPos(0)[i_segmentIdx * 4]; 
+    }
+    void setAction(ProcFunc i_proc) { mCurrProc = i_proc; }
 
     BOOL getRacePath(u8);
     void RopeMove();
@@ -119,26 +120,26 @@ public:
     BOOL RaceEnd();
 
 public:
-    /* 0x0290 */ daGFlag_packet_c field_0x0290;
-    /* 0x1618 */ request_of_phase_process_class field_0x1618;
-    /* 0x1620 */ request_of_phase_process_class field_0x1620;
-    /* 0x1628 */ Mtx field_0x1628;
-    /* 0x1658 */ cXyz field_0x1658[2];
-    /* 0x1670 */ s16 field_0x1670;
-    /* 0x1672 */ u8 field_0x1672[0x1674 - 0x1672];
-    /* 0x1674 */ fpc_ProcID field_0x1674;
-    /* 0x1678 */ fpc_ProcID field_0x1678;
-    /* 0x167C */ fpc_ProcID field_0x167C;
-    /* 0x1680 */ f32 field_0x1680;
-    /* 0x1684 */ s16 field_0x1684;
-    /* 0x1686 */ s16 field_0x1686;
-    /* 0x1688 */ u8 field_0x1688;
+    /* 0x0290 */ daGFlag_packet_c mFlagPacket;
+    /* 0x1618 */ request_of_phase_process_class mPhs1;
+    /* 0x1620 */ request_of_phase_process_class mPhs2;
+    /* 0x1628 */ Mtx mMtx;
+    /* 0x1658 */ cXyz mPathPoints[2];
+    /* 0x1670 */ s16 m1670;
+    /* 0x1672 */ u8 m1672[0x1674 - 0x1672];
+    /* 0x1674 */ fpc_ProcID mTimerProcID;
+    /* 0x1678 */ fpc_ProcID mMgameStartProcID;
+    /* 0x167C */ fpc_ProcID mMgameTermProcID;
+    /* 0x1680 */ f32 m1680;
+    /* 0x1684 */ s16 m1684;
+    /* 0x1686 */ s16 m1686;
+    /* 0x1688 */ u8 m1688;
     /* 0x1689 */ u8 field_0x1689[0x168C - 0x1689];
-    /* 0x168C */ dPath* field_0x168C[4];
-    /* 0x169C */ u32 field_0x169C[4];
-    /* 0x16AC */ int field_0x16AC;
-    /* 0x16B0 */ mDoExt_3DlineMat0_c field_0x16B0[4];
-    /* 0x1720 */ ProcFunc field_0x1720;
+    /* 0x168C */ dPath* mpPaths[4];
+    /* 0x169C */ u32 mNumPathPoints[4];
+    /* 0x16AC */ int mNumPaths;
+    /* 0x16B0 */ mDoExt_3DlineMat0_c mMats[4];
+    /* 0x1720 */ ProcFunc mCurrProc;
 };  // Size: 0x172C
 
 #endif /* D_A_GOAL_FLAG_H */
