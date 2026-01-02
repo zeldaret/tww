@@ -386,7 +386,7 @@ BOOL daGoal_Flag_c::getRacePath(u8 i_pathId) {
     if (!field_0x168C[i]) {
         return FALSE;
     }
-
+ 
     field_0x169C[i] = field_0x168C[i]->m_num;
     u8 next_path_id = field_0x168C[i]->m_nextID;
     for (i++; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++) {        
