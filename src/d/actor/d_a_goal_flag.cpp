@@ -296,52 +296,52 @@ void daGFlag_packet_c::draw() {
 
 /* 00000978-00000A04       .text setBackNrm__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setBackNrm() {
-    cXyz* nrm_p = mNrm[mCurrArr];
-    cXyz* back_nrm_p = mBackNrm[mCurrArr];
+    cXyz* nrm_arr = mNrm[mCurrArr];
+    cXyz* back_nrm_arr = mBackNrm[mCurrArr];
     for (int i = 0; i < ARRAY_SSIZE(*mBackNrm); i++) {
-        back_nrm_p->setall(0.0f);
-        *back_nrm_p -= *nrm_p;
+        back_nrm_arr->setall(0.0f);
+        *back_nrm_arr -= *nrm_arr;
 
-        nrm_p++;
-        back_nrm_p++;
+        nrm_arr++;
+        back_nrm_arr++;
     }
 } 
 
 /* 00000A04-00000E78       .text setNrmVtx__16daGFlag_packet_cFP4cXyzii */
 void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
-    cXyz* dpos_arr_p = getDPos();
+    cXyz* dpos_arr = getDPos();
     cXyz temp1;
     cXyz temp2;
     cXyz temp3;
     cXyz temp4;
-    cXyz temp5 = dpos_arr_p[(param_3 * 9) + param_2];
+    cXyz temp5 = dpos_arr[(param_3 * 9) + param_2];
     temp4.setall(0.0f);
 
     if (param_2 != 0) {
-        temp1 = dpos_arr_p[(param_3 * 9 + param_2) - 1] - temp5;
+        temp1 = dpos_arr[(param_3 * 9 + param_2) - 1] - temp5;
         if (param_3 != 0) {
-            temp2 = dpos_arr_p[(param_3 - 1) * 9 + param_2] - temp5;
+            temp2 = dpos_arr[(param_3 - 1) * 9 + param_2] - temp5;
             temp3 = temp2.outprod(temp1);
             temp3 = temp3.normZP();
             temp4 += temp3;
         }
         if (param_3 != 4) {
-            temp2 = dpos_arr_p[(param_3 + 1) * 9 + param_2] - temp5;
+            temp2 = dpos_arr[(param_3 + 1) * 9 + param_2] - temp5;
             temp3 = temp1.outprod(temp2);
             temp3 = temp3.normZP();
             temp4 += temp3;
         }
     } 
     if (param_2 != 8) {
-        temp1 = dpos_arr_p[(param_2 + 1) + param_3 * 9] - temp5;
+        temp1 = dpos_arr[(param_2 + 1) + param_3 * 9] - temp5;
         if (param_3 != 0) {
-            temp2 = dpos_arr_p[(param_3 - 1) * 9 + param_2] - temp5;
+            temp2 = dpos_arr[(param_3 - 1) * 9 + param_2] - temp5;
             temp3 = temp1.outprod(temp2);
             temp3 = temp3.normZP();
             temp4 += temp3;
         }
         if (param_3 != 4) {
-            temp2 = dpos_arr_p[(param_3 + 1) * 9 + param_2] - temp5;
+            temp2 = dpos_arr[(param_3 + 1) * 9 + param_2] - temp5;
             temp3 = temp2.outprod(temp1);
             temp3 = temp3.normZP();
             temp4 += temp3;
@@ -380,19 +380,19 @@ void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
-BOOL daGoal_Flag_c::getRacePath(u8 i_pathIdx) {
+BOOL daGoal_Flag_c::getRacePath(u8 i_pathId) {
     int i = 0;
-    field_0x168C[i] = dPath_GetRoomPath(i_pathIdx, fopAcM_GetRoomNo(this));
+    field_0x168C[i] = dPath_GetRoomPath(i_pathId, fopAcM_GetRoomNo(this));
     if (!field_0x168C[i]) {
         return FALSE;
     }
 
     field_0x169C[i] = field_0x168C[i]->m_num;
     u8 next_path_id = field_0x168C[i]->m_nextID;
-    for (int j = i = 1; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++, j++) {        
-        field_0x168C[j] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
-        field_0x169C[j] = field_0x168C[j]->m_num;
-        next_path_id = field_0x168C[j]->m_nextID;
+    for (i++; i < ARRAY_SSIZE(field_0x168C) && next_path_id != 0xFFU; i++) {        
+        field_0x168C[i] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
+        field_0x169C[i] = field_0x168C[i]->m_num;
+        next_path_id = field_0x168C[i]->m_nextID;
     }
     field_0x16AC = i;
 
@@ -555,7 +555,6 @@ void daGoal_Flag_c::flag_move() {
     }
 
     cXyz* nrm_arr2 = field_0x0290.getNrm();
-    //nrm_arr = field_0x0290.mNrm[field_0x0290.mCurrArr];
     for (int m = 0; m < 5; m++) {
         for (int n = 0; n < 9; n++) {
             field_0x0290.setNrmVtx(nrm_arr2, n, m);
@@ -626,8 +625,8 @@ cPhs_State daGoal_Flag_c::_create() {
         if (prm != 0xFF) {
             path_p = dPath_GetRoomPath(prm, fopAcM_GetRoomNo(this));
             if (path_p) {
-                u8 path_idx = path_p->m_nextID;
-                if (getRacePath(path_idx)) {
+                u8 path_id = path_p->m_nextID;
+                if (getRacePath(path_id)) {
                     if (fopAcM_entrySolidHeap(this, checkCreateHeap, 0x10000)) {
                         CreateBuoyRaces();
                     } else {
@@ -641,9 +640,9 @@ cPhs_State daGoal_Flag_c::_create() {
             return cPhs_ERROR_e;
         }
 
-        cXyz* pos_arr_p = field_0x0290.getPos();
-        for (int i = 0; i < 45; i++, pos_arr_p++) {
-            pos_arr_p->set(l_pos[i]);
+        cXyz* pos_arr = field_0x0290.getPos();
+        for (int i = 0; i < 45; i++, pos_arr++) {
+            pos_arr->set(l_pos[i]);
         }
 
         field_0x0290.setTexObj(temp);
@@ -934,7 +933,7 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 mgame_rupee, 
                 NULL
             );
-            fopMsgM_SearchByID(field_0x167C); // unused return?
+            fopMsgM_SearchByID(field_0x167C); // Unused return
             field_0x1686 = 0;
             setAction(&daGoal_Flag_c::RaceEnd);
             field_0x1688 = 0;
