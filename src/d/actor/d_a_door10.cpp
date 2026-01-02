@@ -132,8 +132,12 @@ BOOL daDoor10_c::chkStopOpen() {
     }
 
     if ((mFrontCheck == 0 && cVar3 == 2) || (mFrontCheck == 1 && cVar3 == 5)) {
-#if VERSION == VERSION_DEMO
-        if (dComIfGp_event_runCheck() == FALSE) {
+        if (
+            dComIfGp_event_runCheck() == FALSE
+            #if VERSION > VERSION_DEMO
+            || m2A1 == 0
+            #endif
+        ) {
             if (dComIfGp_roomControl_checkRoomDisp(roomNo)) {
                 if (fopAcM_myRoomSearchEnemy(roomNo) == NULL) {
                     if (m2A1 != 0) {
@@ -147,36 +151,23 @@ BOOL daDoor10_c::chkStopOpen() {
                     return TRUE;
                 }
             }
-        }
-
-        if (getArg1() == 15) {
-            m2A1 = 0;
-        } else {
-            m2A1 = 0x41;
-        }
-#else
-        if (dComIfGp_event_runCheck() == FALSE || m2A1 == 0) {
-            if (dComIfGp_roomControl_checkRoomDisp(roomNo)) {
-                if (fopAcM_myRoomSearchEnemy(roomNo) == NULL) {
-                    if (m2A1 != 0) {
-                        m2A1--;
-                        return FALSE;
-                    }
-
-                    if (swbit != 0xFF) {
-                        dComIfGs_onSwitch(swbit, roomNo);
-                    }
-                    return TRUE;
-                }
-            }
-
+            
+            #if VERSION > VERSION_DEMO
             if (getArg1() == 15) {
                 m2A1 = 0;
             } else {
                 m2A1 = 0x41;
             }
+            #endif
         }
-#endif
+
+        #if VERSION == VERSION_DEMO
+        if (getArg1() == 15) {
+            m2A1 = 0;
+        } else {
+            m2A1 = 0x41;
+        }
+        #endif
     } else if (swbit != 0xFF && dComIfGs_isSwitch(swbit, roomNo)) {
         return TRUE;
     }

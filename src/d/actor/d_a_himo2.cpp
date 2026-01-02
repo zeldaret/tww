@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bk.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_himo2.h"
 #include "d/actor/d_a_btd.h"

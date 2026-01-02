@@ -2,6 +2,7 @@
 #define D_A_OBJ_GNNDEMOTAKIE_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
 
 class daObjGnntakie_c : public fopAc_ac_c {
 public:

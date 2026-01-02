@@ -4,11 +4,6 @@
 #include "f_op/f_op_actor.h"
 #include "c/c_damagereaction.h"
 
-class mDoExt_McaMorf;
-class mDoExt_brkAnm;
-class mDoExt_btkAnm;
-class daPy_lk_c;
-
 class ks_class : public fopEn_enemy_c {
 public:
     /* 0x2AC */ request_of_phase_process_class mPhs;

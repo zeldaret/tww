@@ -877,6 +877,7 @@ void light_on_off(bpw_class* i_this) {
 
 /* 0000242C-000024B0       .text skull_search_sub__FPvPv */
 void* skull_search_sub(void* param_1, void* param_2) {
+    UNUSED(param_2);
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
 
     if ((get_check_count < 100) && (fopAc_IsActor(actor))) {

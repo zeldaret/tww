@@ -9073,22 +9073,21 @@ void daPy_lk_c::setNeckAngle() {
                 checkAttentionPosAngle(mpAttnActorZ, &sp18)
             ) {
                 r28 = true;
-            } else {
-                if (dComIfGp_getDetect().chk_attention(&spA0) &&
-                    cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000)
-                {
+            } else if (
+                dComIfGp_getDetect().chk_attention(&spA0) &&
+                cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000
+            ) {
+                sp18 = &spA0;
+                r28 = true;
+            } else if (m34C3 == 10) {
+                spA0.set(
+                    current.pos.x - 10.0f * (m3730.x + m36B8.x),
+                    120.0f + current.pos.y,
+                    current.pos.z - 10.0f * (m3730.z + m36B8.z)
+                );
+                if (cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000) {
                     sp18 = &spA0;
                     r28 = true;
-                } else if (m34C3 == 10) {
-                    spA0.set(
-                        current.pos.x - 10.0f * (m3730.x + m36B8.x),
-                        120.0f + current.pos.y,
-                        current.pos.z - 10.0f * (m3730.z + m36B8.z)
-                    );
-                    if (cLib_distanceAngleS(cLib_targetAngleY(&current.pos, &spA0), m34DE) <= 0x6000) {
-                        sp18 = &spA0;
-                        r28 = true;
-                    }
                 }
             }
         } else if (mCurProc == daPyProc_BOTTLE_OPEN_e) {
