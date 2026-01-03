@@ -38,7 +38,7 @@ public:
     /* 0x07 */ s8 m07;
     /* 0x08 */ s8 m08;
     /* 0x09 */ s8 m09;
-    /* 0x0A */ u8 field_0x0A[0x0C - 0x0A];
+    /* 0x0A */ /* 2 bytes of alignment padding */
     /* 0x0C */ u32 m0C;
     /* 0x10 */ u32 m10;
     /* 0x14 */ u32 m14;
@@ -53,6 +53,7 @@ public:
     /* 0x38 */ f32 m38;
     /* 0x3C */ f32 m3C;
 };  // Size: 0x40
+STATIC_ASSERT(sizeof(daGFlag_HIO_c) == 0x40);
 
 class daGFlag_packet_c : public J3DPacket {
 public:
@@ -90,8 +91,9 @@ public:
     /* 0x0D30 */ cXyz mBackNrm[2][45];
     /* 0x1168 */ cXyz m1168[45];
     /* 0x1384 */ u8 mCurrArr;
-    /* 0x1385 */ u8 m1385[0x1388 - 0x1385];
+    /* 0x1385 */ /* 3 bytes of alignment padding */
 };  // Size: 0x1388
+STATIC_ASSERT(sizeof(daGFlag_packet_c) == 0x1388);
 
 class daGoal_Flag_c : public fopAc_ac_c {
 public:
@@ -126,7 +128,7 @@ public:
     /* 0x1628 */ Mtx mMtx;
     /* 0x1658 */ cXyz mPathPoints[2];
     /* 0x1670 */ s16 m1670;
-    /* 0x1672 */ u8 m1672[0x1674 - 0x1672];
+    /* 0x1672 */ /* 2 bytes of alignment padding */
     /* 0x1674 */ fpc_ProcID mTimerProcID;
     /* 0x1678 */ fpc_ProcID mMgameStartProcID;
     /* 0x167C */ fpc_ProcID mMgameTermProcID;
@@ -134,12 +136,13 @@ public:
     /* 0x1684 */ s16 m1684;
     /* 0x1686 */ s16 m1686;
     /* 0x1688 */ u8 m1688;
-    /* 0x1689 */ u8 field_0x1689[0x168C - 0x1689];
+    /* 0x1689 */ /* 3 bytes of alignment padding */
     /* 0x168C */ dPath* mpPaths[4];
     /* 0x169C */ u32 mNumPathPoints[4];
     /* 0x16AC */ int mNumPaths;
     /* 0x16B0 */ mDoExt_3DlineMat0_c mMats[4];
     /* 0x1720 */ ProcFunc mCurrProc;
 };  // Size: 0x172C
+STATIC_ASSERT(sizeof(daGoal_Flag_c) == 0x172C);
 
 #endif /* D_A_GOAL_FLAG_H */

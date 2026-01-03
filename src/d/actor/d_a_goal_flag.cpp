@@ -470,12 +470,12 @@ int daGoal_Flag_c::goal_check() {
     temp1.y = 0.0f;
 
     f32 mag = (mPathPoints[1] - mPathPoints[0]).absXZ();
-    f32 dot = VECDotProduct(&temp2, &temp1);
+    f32 dot = temp2.getDotProduct(temp1);
     
     cXyz temp4;
     temp4.set(temp2.z, 0.0f, -temp2.x);
 
-    f32 dot2 = VECDotProduct(&temp4, &temp1);
+    f32 dot2 = temp4.getDotProduct(temp1);
 
     o_ret = 0;
     if (dot > 0.0f && dot < mag) {
@@ -563,7 +563,7 @@ void daGoal_Flag_c::flag_move() {
     DCStoreRangeNoSync(mFlagPacket.getDPos(), sizeof(mFlagPacket.mDPos[0]));
 #if VERSION > VERSION_JPN
     DCStoreRangeNoSync(mFlagPacket.getNrm(), sizeof(mFlagPacket.mNrm[0]));
-    DCStoreRangeNoSync(mFlagPacket.getBackNrm(), 45 * sizeof(*mFlagPacket.mBackNrm[0]));
+    DCStoreRangeNoSync(mFlagPacket.getBackNrm(), sizeof(mFlagPacket.mBackNrm[0]));
 #endif
 }
 
@@ -706,7 +706,7 @@ cPhs_State daGoal_Flag_c::_create() {
         cXyz temp7;
         temp7.set(temp6.z, 0.0f, -temp6.x);
 
-        m1680 = VECDotProduct(&temp7, &temp5);
+        m1680 = temp7.getDotProduct(temp5);
         m1684 = 0;
 
         for (int i = 0; i < 20; i++) {
@@ -734,7 +734,7 @@ void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_
 cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* i_windVecP, int i_col, int i_row) {
     int index = (i_row * 9) + i_col;
     cXyz pos = i_posArr[index];
-    f32 dot = VECDotProduct(i_windVecP, &i_nrmArr[index]);
+    f32 dot = i_windVecP->getDotProduct(i_nrmArr[index]);
     if ((i_row == 0 || i_row == 4) && (i_col == 0 || i_col == 8)) {
         return cXyz::Zero;
     } else {
@@ -1007,9 +1007,9 @@ static BOOL daGoal_FlagExecute(void* i_this) {
 bool daGoal_Flag_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
-    MtxTrans(current.pos.x, current.pos.y, current.pos.z, false);
+    MtxTrans(current.pos.x, current.pos.y, current.pos.z, FALSE);
     cMtx_YrotM(*calc_mtx, current.angle.y);
-    MtxScale(scale.x, scale.y, scale.z, true);
+    MtxScale(scale.x, scale.y, scale.z, TRUE);
 
     Mtx* mtx_p = mFlagPacket.getMtx();
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *mtx_p);
