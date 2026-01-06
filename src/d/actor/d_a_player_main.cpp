@@ -1584,7 +1584,7 @@ void daPy_lk_c::drawShadow() {
         }
         f32 f31;
         if (checkModeFlg(ModeFlg_HANG)) {
-            f31 = m35DC;
+            f31 = mHangGroundH;
         } else {
             f31 = mAcch.GetGroundH();
         }
@@ -1596,13 +1596,13 @@ void daPy_lk_c::drawShadow() {
         } else {
             f1 = m_HIO->mBasic.m.field_0x10;
         }
-        int iVar4 = dComIfGd_setShadow(m3614, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
+        int iVar4 = dComIfGd_setShadow(mShadowId, 0, mpCLModel, &local_30, f1, 30.0f, current.pos.y,
                                        f31, mAcch.m_gnd, &tevStr, 0, 1.0f,
                                        &dDlst_shadowControl_c::mSimpleTexObj);
-        m3614 = iVar4;
-        if ((u32)m3614 != 0) {
+        mShadowId = iVar4;
+        if ((u32)mShadowId != 0) {
             if (checkNoResetFlg1(daPyFlg1_CASUAL_CLOTHES) && !checkCaughtShapeHide()) {
-                dComIfGd_addRealShadow(m3614, mpKatsuraModel);
+                dComIfGd_addRealShadow(mShadowId, mpKatsuraModel);
             }
             if (checkSwordEquip()
 #if VERSION == VERSION_DEMO
@@ -1611,7 +1611,7 @@ void daPy_lk_c::drawShadow() {
                 && !checkDemoSwordNoDraw(1)
 #endif
             ) {
-                dComIfGd_addRealShadow(m3614, mpEquippedSwordModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquippedSwordModel);
             }
             if ((mpEquipItemModel != NULL
 #if VERSION == VERSION_DEMO
@@ -1622,7 +1622,7 @@ void daPy_lk_c::drawShadow() {
             ) &&
                 (!checkBowItem(mEquipItem) || !checkPlayerGuard()))
             {
-                dComIfGd_addRealShadow(m3614, mpEquipItemModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquipItemModel);
             }
             if (dComIfGs_getSelectEquip(1) != dItem_NONE_e
 #if VERSION == VERSION_DEMO
@@ -1631,18 +1631,18 @@ void daPy_lk_c::drawShadow() {
                 && !checkDemoShieldNoDraw()
 #endif
             ) {
-                dComIfGd_addRealShadow(m3614, mpEquippedShieldModel);
+                dComIfGd_addRealShadow(mShadowId, mpEquippedShieldModel);
             }
             fopAc_ac_c* pfVar10;
             if (mActorKeepGrab.getID() != fpcM_ERROR_PROCESS_ID_e) {
                 pfVar10 = fopAcM_SearchByID(mActorKeepGrab.getID());
                 if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(m3614, fopAcM_GetModel(pfVar10));
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
                 }
             } else if (mActorKeepEquip.getID() != fpcM_ERROR_PROCESS_ID_e) {
                 pfVar10 = fopAcM_SearchByID(mActorKeepEquip.getID());
                 if (pfVar10 != NULL && fopAcM_GetModel(pfVar10) != NULL) {
-                    dComIfGd_addRealShadow(m3614, fopAcM_GetModel(pfVar10));
+                    dComIfGd_addRealShadow(mShadowId, fopAcM_GetModel(pfVar10));
                 }
             }
         }
