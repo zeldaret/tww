@@ -677,17 +677,10 @@ cPhs_State daGoal_Flag_c::_create() {
                 NULL
             );
             
-            // Fakematch, debug map mentions a call to an inline func named
-            // fopMsgM_MiniGameStarter_create, but the parameters do not match up one-to-one, 
-            // so it's not entirely obvious how the call to fopMsgM_create is constructed.
-            u32 temp3 = 0;
-            temp3 |= 0x2000000;
-            mMgameStartProcID = fopMsgM_create(
+            mMgameStartProcID = fopMsgM_MiniGameStarter_create(
                 PROC_MINIGAME_STARTER, 
-                NULL, 
-                NULL, 
-                &temp3, 
-                &temp3, 
+                0, 
+                0x200, 
                 NULL
             );
 

@@ -323,6 +323,11 @@ JKRExpHeap* fopMsgM_createExpHeap(u32);
 fpc_ProcID fopMsgM_Create(s16, fopMsgCreateFunc, void*);
 fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* param_1 = NULL, cXyz* param_2 = NULL,
                           u32* param_3 = NULL, u32* param_4 = NULL, fopMsgCreateFunc createFunc = NULL);
+inline fpc_ProcID fopMsgM_MiniGameStarter_create(s16 i_procName, u8 param_1, u16 param_2, fopMsgCreateFunc createFunc) {
+    u32 parameter = param_1;
+    parameter |= param_2 << 16;
+    return fopMsgM_create(i_procName, NULL, NULL, &parameter, &parameter, createFunc);
+}
 fpc_ProcID fop_MGameTerm_create(s16, s16, s16, int, int, fopMsgCreateFunc);
 inline fpc_ProcID fopMsgM_MiniGameTerminater_create(s16 param_0, s16 param_1, s16 param_2, int param_3, int param_4, fopMsgCreateFunc createFunc) {
     return fop_MGameTerm_create(param_0, param_1, param_2, param_3, param_4, createFunc);
