@@ -308,55 +308,55 @@ void daGFlag_packet_c::setBackNrm() {
 } 
 
 /* 00000A04-00000E78       .text setNrmVtx__16daGFlag_packet_cFP4cXyzii */
-void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
+void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
     cXyz* dpos_arr = getDPos();
-    cXyz temp1;
-    cXyz temp2;
-    cXyz temp3;
-    cXyz temp4;
-    cXyz temp5 = dpos_arr[(param_3 * 9) + param_2];
-    temp4.setall(0.0f);
+    cXyz horizontal_edge;
+    cXyz vertical_edge;
+    cXyz tri_normal;
+    cXyz averaged_normal;
+    cXyz center_vertex = dpos_arr[(i_row * 9) + i_col];
+    averaged_normal.setall(0.0f);
 
-    if (param_2 != 0) {
-        temp1 = dpos_arr[(param_3 * 9 + param_2) - 1] - temp5;
-        if (param_3 != 0) {
-            temp2 = dpos_arr[(param_3 - 1) * 9 + param_2] - temp5;
-            temp3 = temp2.outprod(temp1);
-            temp3 = temp3.normZP();
-            temp4 += temp3;
+    if (i_col != 0) {
+        horizontal_edge = dpos_arr[(i_row * 9) + (i_col - 1)] - center_vertex;
+        if (i_row != 0) {
+            vertical_edge = dpos_arr[(i_row - 1) * 9 + i_col] - center_vertex;
+            tri_normal = vertical_edge.outprod(horizontal_edge);
+            tri_normal = tri_normal.normZP();
+            averaged_normal += tri_normal;
         }
-        if (param_3 != 4) {
-            temp2 = dpos_arr[(param_3 + 1) * 9 + param_2] - temp5;
-            temp3 = temp1.outprod(temp2);
-            temp3 = temp3.normZP();
-            temp4 += temp3;
+        if (i_row != 4) {
+            vertical_edge = dpos_arr[(i_row + 1) * 9 + i_col] - center_vertex;
+            tri_normal = horizontal_edge.outprod(vertical_edge);
+            tri_normal = tri_normal.normZP();
+            averaged_normal += tri_normal;
         }
     } 
-    if (param_2 != 8) {
-        temp1 = dpos_arr[(param_2 + 1) + param_3 * 9] - temp5;
-        if (param_3 != 0) {
-            temp2 = dpos_arr[(param_3 - 1) * 9 + param_2] - temp5;
-            temp3 = temp1.outprod(temp2);
-            temp3 = temp3.normZP();
-            temp4 += temp3;
+    if (i_col != 8) {
+        horizontal_edge = dpos_arr[(i_col + 1) + i_row * 9] - center_vertex;
+        if (i_row != 0) {
+            vertical_edge = dpos_arr[(i_row - 1) * 9 + i_col] - center_vertex;
+            tri_normal = horizontal_edge.outprod(vertical_edge);
+            tri_normal = tri_normal.normZP();
+            averaged_normal += tri_normal;
         }
-        if (param_3 != 4) {
-            temp2 = dpos_arr[(param_3 + 1) * 9 + param_2] - temp5;
-            temp3 = temp2.outprod(temp1);
-            temp3 = temp3.normZP();
-            temp4 += temp3;
+        if (i_row != 4) {
+            vertical_edge = dpos_arr[(i_row + 1) * 9 + i_col] - center_vertex;
+            tri_normal = vertical_edge.outprod(horizontal_edge);
+            tri_normal = tri_normal.normZP();
+            averaged_normal += tri_normal;
         }
     }
-    temp4 = temp4.normZC();
-    MtxPush();
+    averaged_normal = averaged_normal.normZC();
 
+    MtxPush();
     cMtx_YrotM(*calc_mtx, 
 #if VERSION == VERSION_DEMO
         (REG10_S(2) + 0x200) *
 #endif
         cM_ssin(m0010 + 
-            (param_2 * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
-            param_3 * (DEMO_SELECT(REG10_S(4), 0) + 0x100)))
+            (i_col * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
+            i_row * (DEMO_SELECT(REG10_S(4), 0) + 0x100)))
 #if VERSION != VERSION_DEMO
             * 512.0f
 #endif
@@ -367,34 +367,33 @@ void daGFlag_packet_c::setNrmVtx(cXyz* param_1, int param_2, int param_3) {
         (REG10_S(5) + 0x200) * 
 #endif
         cM_scos(m0010 + 
-            (param_2 * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
-            param_3 * (DEMO_SELECT(REG10_S(7), 0) + 0x100)))
+            (i_col * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
+            i_row * (DEMO_SELECT(REG10_S(7), 0) + 0x100)))
 #if VERSION != VERSION_DEMO
              * 512.0f
 #endif
     );
-    
-    MtxPosition(&temp4, &temp3);
-    param_1->set(temp3.normZP());
+    MtxPosition(&averaged_normal, &tri_normal);
+    o_nrm->set(tri_normal.normZP());
     MtxPull();
 }
 
 /* 00000EB4-00000F80       .text getRacePath__13daGoal_Flag_cFUc */
 BOOL daGoal_Flag_c::getRacePath(u8 i_pathId) {
     int i = 0;
-    mpPaths[i] = dPath_GetRoomPath(i_pathId, fopAcM_GetRoomNo(this));
-    if (!mpPaths[i]) {
+    mpRopePaths[i] = dPath_GetRoomPath(i_pathId, fopAcM_GetRoomNo(this));
+    if (!mpRopePaths[i]) {
         return FALSE;
     }
  
-    mNumPathPoints[i] = mpPaths[i]->m_num;
-    u8 next_path_id = mpPaths[i]->m_nextID;
-    for (i++; i < ARRAY_SSIZE(mpPaths) && next_path_id != 0xFFU; i++) {        
-        mpPaths[i] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
-        mNumPathPoints[i] = mpPaths[i]->m_num;
-        next_path_id = mpPaths[i]->m_nextID;
+    mNumRopeBuoys[i] = mpRopePaths[i]->m_num;
+    u8 next_path_id = mpRopePaths[i]->m_nextID;
+    for (i++; i < ARRAY_SSIZE(mpRopePaths) && next_path_id != 0xFFU; i++) {        
+        mpRopePaths[i] = dPath_GetRoomPath(next_path_id, fopAcM_GetRoomNo(this));
+        mNumRopeBuoys[i] = mpRopePaths[i]->m_num;
+        next_path_id = mpRopePaths[i]->m_nextID;
     }
-    mNumPaths = i;
+    mNumRopes = i;
 
     return TRUE;
 }
@@ -404,11 +403,11 @@ void daGoal_Flag_c::RopeMove() {
     static const f32 down_offset[] = {
         0.0f, 150.0f, 225.0f, 150.0f
     };
-    for (int i = 0; i < mNumPaths; i++) {
+    for (int i = 0; i < mNumRopes; i++) {
         cXyz* temp = getRopePos(i, 0);
-        cXyz* temp2 = getRopePos(i, mNumPathPoints[i]);
+        cXyz* temp2 = getRopePos(i, mNumRopeBuoys[i]);
         temp2->set(*temp);
-        for (int j = 0; j < (int)(mNumPathPoints[i] << 2); j++) {
+        for (int j = 0; j < (int)(mNumRopeBuoys[i] << 2); j++) {
             int temp2 = j & 3;
             int temp3 = j >> 2;
             if (temp2 != 0) {
@@ -429,10 +428,10 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
     int i;
     dPnt* points_p;
     cXyz* segment;
-    for (i = 0; i < mNumPaths; i++) {
-        points_p = mpPaths[i]->m_points;
+    for (i = 0; i < mNumRopes; i++) {
+        points_p = mpRopePaths[i]->m_points;
         segment = getRopePos(i, 0);
-        for (u32 j = 0; (s32)j < (s32)mNumPathPoints[i]; j++, points_p++, segment++) {
+        for (u32 j = 0; (s32)j < (s32)mNumRopeBuoys[i]; j++, points_p++, segment++) {
             cXyz path_point_pos;
             path_point_pos.set(
                 points_p->m_position.x,
@@ -460,33 +459,35 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
 int daGoal_Flag_c::goal_check() {
     int o_ret;
-    cXyz temp1 = dComIfGp_getPlayer(0)->current.pos - mPathPoints[0];
+    cXyz player_from_line_start = dComIfGp_getPlayer(0)->current.pos - mGoalFlagPolePos[0];
 
-    cXyz temp2 = mPathPoints[1] - mPathPoints[0];
+    cXyz finish_line_dir = mGoalFlagPolePos[1] - mGoalFlagPolePos[0];
 
-    temp2.y = 0.0f;
-    temp2 = temp2.normZP();
+    finish_line_dir.y = 0.0f;
+    finish_line_dir = finish_line_dir.normZP();
 
-    temp1.y = 0.0f;
+    player_from_line_start.y = 0.0f;
 
-    f32 mag = (mPathPoints[1] - mPathPoints[0]).absXZ();
-    f32 dot = temp2.getDotProduct(temp1);
+    f32 finish_line_len = (mGoalFlagPolePos[1] - mGoalFlagPolePos[0]).absXZ();
+    f32 player_along_line = finish_line_dir.getDotProduct(player_from_line_start);
     
-    cXyz temp4;
-    temp4.set(temp2.z, 0.0f, -temp2.x);
+    cXyz finish_line_normal;
+    finish_line_normal.set(finish_line_dir.z, 0.0f, -finish_line_dir.x);
 
-    f32 dot2 = temp4.getDotProduct(temp1);
+    // Positive values mean the player is behind the finish line
+    // Negative values mean the player is in front of it
+    f32 player_finish_side = finish_line_normal.getDotProduct(player_from_line_start);
 
-    o_ret = 0;
-    if (dot > 0.0f && dot < mag) {
-        if (m1680 > 0.0f && dot2 <= 0.0f) {
-            o_ret = 1;
-        } else if (m1680 <= 0.0f && dot2 > 0.0f) {
-            o_ret = -1;
+    o_ret = 0; // Not yet crossed the finish line
+    if (player_along_line > 0.0f && player_along_line < finish_line_len) {
+        if (mPrevPlayerLineSide > 0.0f && player_finish_side <= 0.0f) {
+            o_ret = 1; // Crossed the finish line normally
+        } else if (mPrevPlayerLineSide <= 0.0f && player_finish_side > 0.0f) {
+            o_ret = -1; // Crossed the finish line the wrong way
         }
     }
 
-    m1680 = dot2;
+    mPrevPlayerLineSide = player_finish_side;
     return o_ret;
 }
 
@@ -497,14 +498,14 @@ void daGoal_Flag_c::flag_move() {
     cXyz* prev_nrm_arr = mFlagPacket.getNrm();
     mFlagPacket.changeCurrentPos();
     cXyz* curr_pos_arr = mFlagPacket.getPos();
-    cXyz* offset_arr = mFlagPacket.getOffsetVec();
+    cXyz* velocity_arr = mFlagPacket.getOffsetVec();
 
-    m1670 += l_HIO.m0C;
+    mWindScalePhase += l_HIO.m0C;
     mFlagPacket.m0010 += l_HIO.m10;
-    mFlagPacket.m0012 += l_HIO.m14;
+    mFlagPacket.mFlagWavePhase += l_HIO.m14;
 
-    f32 sin_m1670 = 0.5f + (cM_ssin(m1670) * 0.5f);
-    f32 wind_vector_scale = l_HIO.m30 * sin_m1670 + (l_HIO.m34 * (1.0f - sin_m1670));
+    f32 scale_blend_factor = 0.5f + (cM_ssin(mWindScalePhase) * 0.5f);
+    f32 wind_vector_scale = l_HIO.mWindScale1 * scale_blend_factor + (l_HIO.mWindScale2 * (1.0f - scale_blend_factor));
 
     cMtx_YrotS(*calc_mtx, -current.angle.y);
     cXyz wind_vector;
@@ -531,9 +532,9 @@ void daGoal_Flag_c::flag_move() {
                 i, 
                 j
             );
-            offset_arr[index] += cloth_anim_factor;
-            offset_arr[index] *= DEMO_SELECT(0.85f - REG10_F(25), 0.85f);
-            curr_pos_arr[index] += offset_arr[index];
+            velocity_arr[index] += cloth_anim_factor;
+            velocity_arr[index] *= DEMO_SELECT(0.85f - REG10_F(25), 0.85f);
+            curr_pos_arr[index] += velocity_arr[index];
         }
     }
 
@@ -546,16 +547,16 @@ void daGoal_Flag_c::flag_move() {
             curr_dpos_arr[index].z += ( 
                 DEMO_SELECT(40.0f + REG10_F(10), 40.0f) * 
                 tmp * 
-                cM_ssin(k * 0x4000 + l * 0x2000 + mFlagPacket.m0012)
+                cM_ssin(k * 0x4000 + l * 0x2000 + mFlagPacket.mFlagWavePhase)
             );
         }    
     }
 
-    cXyz* curr_nrm_arr = mFlagPacket.getNrm();
+    cXyz* curr_nrm_p = mFlagPacket.getNrm();
     for (int m = 0; m < 5; m++) {
         for (int n = 0; n < 9; n++) {
-            mFlagPacket.setNrmVtx(curr_nrm_arr, n, m);
-            curr_nrm_arr++;
+            mFlagPacket.setNrmVtx(curr_nrm_p, n, m);
+            curr_nrm_p++;
         }
     }
 
@@ -648,8 +649,8 @@ cPhs_State daGoal_Flag_c::_create() {
         path_p = dPath_GetRoomPath(path_id, fopAcM_GetRoomNo(this));
 
         if (path_p) {
-            mPathPoints[0].set(path_p->m_points[0].m_position);
-            mPathPoints[1].set(path_p->m_points[1].m_position);
+            mGoalFlagPolePos[0].set(path_p->m_points[0].m_position);
+            mGoalFlagPolePos[1].set(path_p->m_points[1].m_position);
         }
 
         mDoMtx_stack_c::transS(current.pos);
@@ -697,16 +698,16 @@ cPhs_State daGoal_Flag_c::_create() {
             m1688 = 0;
         }
 
-        cXyz temp5 = dComIfGp_getPlayer(0)->current.pos - mPathPoints[0];
+        cXyz temp5 = dComIfGp_getPlayer(0)->current.pos - mGoalFlagPolePos[0];
 
-        cXyz temp6 = mPathPoints[1] - mPathPoints[0];
+        cXyz temp6 = mGoalFlagPolePos[1] - mGoalFlagPolePos[0];
         temp6.y = 0.0f;
         temp6 = temp6.normZP();
 
         cXyz temp7;
         temp7.set(temp6.z, 0.0f, -temp6.x);
 
-        m1680 = temp7.getDotProduct(temp5);
+        mPrevPlayerLineSide = temp7.getDotProduct(temp5);
         m1684 = 0;
 
         for (int i = 0; i < 20; i++) {
@@ -719,15 +720,15 @@ cPhs_State daGoal_Flag_c::_create() {
 
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_param4) {
-    cXyz vector_to_other = *i_otherP - *i_posP;
-    cXyz norm_zp = vector_to_other.normZP();
+void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
+    cXyz vec_to_neighbor = *i_otherP - *i_posP;
+    cXyz correction_dir = vec_to_neighbor.normZP();
     
-    f32 diff = (vector_to_other.abs() - i_param4);
-    diff *= l_HIO.m3C;
+    f32 diff_from_ideal = (vec_to_neighbor.abs() - i_idealDist);
+    diff_from_ideal *= l_HIO.mClothStiffness;
 
-    norm_zp *= diff;
-    *o_dst += norm_zp;
+    correction_dir *= diff_from_ideal;
+    *o_dst += correction_dir;
 }
 
 /* 00001970-00001CC0       .text get_cloth_anim_factor__13daGoal_Flag_cFP4cXyzP4cXyzP4cXyzii */
@@ -739,7 +740,7 @@ cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* 
         return cXyz::Zero;
     } else {
         cXyz nrm = i_nrmArr[index] * dot;
-        nrm.y += l_HIO.m38 * ((float)i_row * 0.25f);
+        nrm.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
         if (i_col != 0) {
             get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col - 1) + (i_row * 9)], &nrm, 250.0f); 
             if (i_row != 0) {
@@ -782,8 +783,8 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateHeap() {
-    for (int i = 0; i < mNumPaths; i++) {
-        if (!mMats[i].init(1, (mNumPathPoints[i] << 2) + 1, 0)) {
+    for (int i = 0; i < mNumRopes; i++) {
+        if (!mMats[i].init(1, (mNumRopeBuoys[i] << 2) + 1, 0)) {
             return FALSE;
         }
     }
@@ -1017,13 +1018,13 @@ bool daGoal_Flag_c::_draw() {
     mFlagPacket.setTevStr(&tevStr);
     j3dSys.getDrawBuffer(0)->entryImm(&mFlagPacket, 0);
 
-    for (int i = 0; i < mNumPaths; i++) {
+    for (int i = 0; i < mNumRopes; i++) {
         GXColor color;
-        color.r = l_HIO.mMaterialColorR;
-        color.g = l_HIO.mMaterialColorG;
-        color.b = l_HIO.mMaterialColorB;
+        color.r = l_HIO.mRopeColorR;
+        color.g = l_HIO.mRopeColorG;
+        color.b = l_HIO.mRopeColorB;
         color.a = 0xFF;
-        mMats[i].update((mNumPathPoints[i] << 2) + 1, 20.0f, color, 0, &tevStr);
+        mMats[i].update((mNumRopeBuoys[i] << 2) + 1, 20.0f, color, 0, &tevStr);
         dComIfGd_set3DlineMat(&mMats[i]);
     }
 

@@ -22,13 +22,13 @@ public:
         m1C = 0x96;
         m20 = 0x96;
         m09 = 0;
-        m30 = 12.0f;
-        m34 = 4.0f;
-        m38 = -1.0f;
-        m3C = 0.4f;
-        mMaterialColorR = 0xff;
-        mMaterialColorG = 0x80;
-        mMaterialColorB = 0x80;
+        mWindScale1 = 12.0f;
+        mWindScale2 = 4.0f;
+        mFlagSagFactor = -1.0f;
+        mClothStiffness = 0.4f;
+        mRopeColorR = 0xff;
+        mRopeColorG = 0x80;
+        mRopeColorB = 0x80;
     }
     inline virtual ~daGFlag_HIO_c();
 public:
@@ -45,13 +45,13 @@ public:
     /* 0x18 */ u32 m18;
     /* 0x1C */ s32 m1C;
     /* 0x20 */ u32 m20;
-    /* 0x24 */ u32 mMaterialColorR;
-    /* 0x28 */ u32 mMaterialColorG;
-    /* 0x2C */ u32 mMaterialColorB;
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ f32 m34;
-    /* 0x38 */ f32 m38;
-    /* 0x3C */ f32 m3C;
+    /* 0x24 */ u32 mRopeColorR;
+    /* 0x28 */ u32 mRopeColorG;
+    /* 0x2C */ u32 mRopeColorB;
+    /* 0x30 */ f32 mWindScale1;
+    /* 0x34 */ f32 mWindScale2;
+    /* 0x38 */ f32 mFlagSagFactor;
+    /* 0x3C */ f32 mClothStiffness;
 };  // Size: 0x40
 STATIC_ASSERT(sizeof(daGFlag_HIO_c) == 0x40);
 
@@ -66,7 +66,7 @@ public:
     cXyz* getDPos() { return mDPos[mCurrArr]; }
     Mtx* getMtx() { return &mMtx; }
     cXyz* getNrm() { return mNrm[mCurrArr]; }
-    cXyz* getOffsetVec() { return m1168; }
+    cXyz* getOffsetVec() { return mVelocity; }
     cXyz* getPos() { return mPos[mCurrArr]; }
     GXTexObj* getTexObjP() { return &mTexObj; }
     GXTexObj* getToonTexObjP() { return &mToonTexObj; }
@@ -80,7 +80,7 @@ public:
     void setNrmVtx(cXyz*, int, int);
 public:
     /* 0x0010 */ s16 m0010;
-    /* 0x0012 */ s16 m0012;
+    /* 0x0012 */ s16 mFlagWavePhase;
     /* 0x0014 */ GXTexObj mTexObj;
     /* 0x0034 */ GXTexObj mToonTexObj;
     /* 0x0054 */ Mtx mMtx;
@@ -89,7 +89,7 @@ public:
     /* 0x04C0 */ cXyz mDPos[2][45];
     /* 0x08F8 */ cXyz mNrm[2][45];
     /* 0x0D30 */ cXyz mBackNrm[2][45];
-    /* 0x1168 */ cXyz m1168[45];
+    /* 0x1168 */ cXyz mVelocity[45];
     /* 0x1384 */ u8 mCurrArr;
     /* 0x1385 */ /* 3 bytes of alignment padding */
 };  // Size: 0x1388
@@ -126,20 +126,20 @@ public:
     /* 0x1618 */ request_of_phase_process_class mPhs1;
     /* 0x1620 */ request_of_phase_process_class mPhs2;
     /* 0x1628 */ Mtx mMtx;
-    /* 0x1658 */ cXyz mPathPoints[2];
-    /* 0x1670 */ s16 m1670;
+    /* 0x1658 */ cXyz mGoalFlagPolePos[2];
+    /* 0x1670 */ s16 mWindScalePhase;
     /* 0x1672 */ /* 2 bytes of alignment padding */
     /* 0x1674 */ fpc_ProcID mTimerProcID;
     /* 0x1678 */ fpc_ProcID mMgameStartProcID;
     /* 0x167C */ fpc_ProcID mMgameTermProcID;
-    /* 0x1680 */ f32 m1680;
+    /* 0x1680 */ f32 mPrevPlayerLineSide;
     /* 0x1684 */ s16 m1684;
     /* 0x1686 */ s16 m1686;
     /* 0x1688 */ u8 m1688;
     /* 0x1689 */ /* 3 bytes of alignment padding */
-    /* 0x168C */ dPath* mpPaths[4];
-    /* 0x169C */ u32 mNumPathPoints[4];
-    /* 0x16AC */ int mNumPaths;
+    /* 0x168C */ dPath* mpRopePaths[4];
+    /* 0x169C */ u32 mNumRopeBuoys[4];
+    /* 0x16AC */ int mNumRopes;
     /* 0x16B0 */ mDoExt_3DlineMat0_c mMats[4];
     /* 0x1720 */ ProcFunc mCurrProc;
 };  // Size: 0x172C
