@@ -141,7 +141,7 @@ actor_process_profile_definition g_profile_Obj_Msdan2 = {
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Msdan2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObjMsdan2::Act_c),
+    /* Size         */ sizeof(daObjMsdan2::Act_c), // Doit faire 0x2A0 (vérifié ok)
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
