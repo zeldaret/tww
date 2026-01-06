@@ -5,8 +5,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan2.h"
 #include "d/d_procname.h"
+#include "d/d_priority.h"
 #include "d/d_a_obj.h"
-
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
@@ -93,13 +93,11 @@ BOOL daObjMsdan2::Act_c::Mthd_Execute() {
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Delete() {
-    return 1;
+    return TRUE;
 }
 
 namespace daObjMsdan2 {
 namespace {
-
-
 
 /* 0000034C-0000036C       .text Mthd_Create__Q211daObjMsdan228@unnamed@d_a_obj_msdan2_cpp@FPv */
 cPhs_State Mthd_Create(void* i_this) {
@@ -143,13 +141,13 @@ actor_process_profile_definition g_profile_Obj_Msdan2 = {
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Msdan2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObjMsdan2::Act_c), // Doit faire 0x2A0 (vérifié ok)
+    /* Size         */ sizeof(daObjMsdan2::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003A, // PRIO_Obj_Msdan2 doit valoir 58
+    /* Priority     */ 0x003A,
     /* Actor SubMtd */ &daObjMsdan2::Mthd_Msdan2,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ 0x0E, // Si fopAc_CULLBOX_CUSTOM_e != 14, mets 0x0E ici
+    /* CullType     */ 0x0E,
 };
