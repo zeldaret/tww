@@ -226,7 +226,7 @@ void daGFlag_packet_c::draw() {
         num_tev_stages = 2;
         lightMask = 1;
     }
-    if (l_HIO.m05 != 0) {
+    if (l_HIO.mDrawShiny) {
         GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(2);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
@@ -354,7 +354,7 @@ void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
 #if VERSION == VERSION_DEMO
         (REG10_S(2) + 0x200) *
 #endif
-        cM_ssin(m0010 + 
+        cM_ssin(mNormalFlutterPhase + 
             (i_col * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
             i_row * (DEMO_SELECT(REG10_S(4), 0) + 0x100)))
 #if VERSION != VERSION_DEMO
@@ -366,7 +366,7 @@ void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
 #if VERSION == VERSION_DEMO
         (REG10_S(5) + 0x200) * 
 #endif
-        cM_scos(m0010 + 
+        cM_scos(mNormalFlutterPhase + 
             (i_col * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
             i_row * (DEMO_SELECT(REG10_S(7), 0) + 0x100)))
 #if VERSION != VERSION_DEMO
@@ -500,9 +500,9 @@ void daGoal_Flag_c::flag_move() {
     cXyz* curr_pos_arr = mFlagPacket.getPos();
     cXyz* velocity_arr = mFlagPacket.getOffsetVec();
 
-    mWindScalePhase += l_HIO.m0C;
-    mFlagPacket.m0010 += l_HIO.m10;
-    mFlagPacket.mFlagWavePhase += l_HIO.m14;
+    mWindScalePhase += l_HIO.mWindScalePhaseInc;
+    mFlagPacket.mNormalFlutterPhase += l_HIO.mNormalFlutterPhaseInc;
+    mFlagPacket.mFlagWavePhase += l_HIO.mFlagWavePhaseInc;
 
     f32 scale_blend_factor = 0.5f + (cM_ssin(mWindScalePhase) * 0.5f);
     f32 wind_vector_scale = l_HIO.mWindScale1 * scale_blend_factor + (l_HIO.mWindScale2 * (1.0f - scale_blend_factor));
@@ -661,13 +661,13 @@ cPhs_State daGoal_Flag_c::_create() {
             strcmp(dComIfGp_getStartStageName(), "Ocean") == 0 &&
             dComIfGp_getStartStagePoint() == 1
         ) {
-            u16 temp2 = l_HIO.m18;
-            u16 reg = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
-            temp2 -= reg;
+            u16 time_limit = l_HIO.mTimeLimit;
+            u16 time_limit_modifier = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
+            time_limit -= time_limit_modifier;
             mTimerProcID = fopMsgM_Timer_create(
                 PROC_TIMER, 
                 2, 
-                temp2, 
+                time_limit, 
                 3, 
                 0, 
                 221.0f, 
@@ -859,7 +859,7 @@ BOOL daGoal_Flag_c::RaceStart() {
 /* 00001F60-00002290       .text TimerExecute__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::TimerExecute() {
     dTimer_c* timer_p = (dTimer_c *) fopMsgM_SearchByID(mTimerProcID);
-    s32 temp;
+    s32 finish_type;
     int goal_chk;
     int mgame_rupee;
     int rest_time;
@@ -900,13 +900,15 @@ BOOL daGoal_Flag_c::TimerExecute() {
         if (eventInfo.checkCommandDemoAccrpt()) {
             timer_p->timerHide();
             if (m1684 == 3) {
-                temp = dComIfGp_getMiniGameRupee() < l_HIO.m1C ? 1 : 2;
+                // 1 is standard finish, 2 is perfect (got all 150 rupees)
+                finish_type = dComIfGp_getMiniGameRupee() < l_HIO.mPerfectRupeeScore ? 1 : 2;
                 dComIfGp_setMiniGameResult(1);
             } else {
-                temp = 0;
+                // 0 is did not finish
+                finish_type = 0;
                 dComIfGp_setMiniGameResult(2);
             }
-            if (u16(temp) == 1 || u16(temp) == 2) {
+            if (u16(finish_type) == 1 || u16(finish_type) == 2) {
                 mDoAud_bgmStart(JA_BGM_SEA_GOAL);
             } else {
                 mDoAud_bgmStart(JA_BGM_SEA_FAIL);
@@ -917,13 +919,13 @@ BOOL daGoal_Flag_c::TimerExecute() {
             mMgameTermProcID = fopMsgM_MiniGameTerminater_create(
                 PROC_MINIGAME_TERMINATER, 
                 0, 
-                temp, 
+                finish_type, 
                 rest_time, 
                 mgame_rupee, 
                 NULL
             );
             fopMsgM_SearchByID(mMgameTermProcID); // Unused return
-            m1686 = 0;
+            mCamFramesPassed = 0;
             setAction(&daGoal_Flag_c::RaceEnd);
             m1688 = 0;
         } else {
@@ -932,8 +934,8 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 "race_fail_cam",
             };
             char* event_name = event_name_tbl[m1684 != 3 ? 1 : 0];
-            fopAcM_orderOtherEvent2(this, event_name, 1);
-            eventInfo.onCondition(2);
+            fopAcM_orderOtherEvent2(this, event_name, dEvtFlag_NOPARTNER_e);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
     return TRUE;
@@ -946,7 +948,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
         "race_fail_cam",
     };
 
-    m1686++;
+    mCamFramesPassed++;
     
     dTimer_c* timer_p;
     if (
@@ -966,7 +968,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
 
     BOOL end_chk = dComIfGp_evmng_endCheck(event_name_tbl[m1684 != 3 ? 1 : 0]);
     
-    if (end_chk || ( (int)m1686 > (int)l_HIO.m20 && 
+    if (end_chk || ( (int)mCamFramesPassed > (int)l_HIO.mEndCamEarlyFrame && 
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
         dComIfGp_setNextStage("sea", 1, 0x30);
     }

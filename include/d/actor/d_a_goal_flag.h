@@ -10,18 +10,23 @@ class dPath;
 class daGFlag_HIO_c {
 public:
     daGFlag_HIO_c() {
-        m04 = -1;
-        m05 = 1;
-        m07 = 0;
-        m06 = 0;
-        m08 = 0;
-        m0C = 0x2ee;
-        m10 = 0x800;
-        m14 = 0xbd1;
-        m18 = 0xf0;
-        m1C = 0x96;
-        m20 = 0x96;
-        m09 = 0;
+        m04 = -1; // Unused HIO field
+        mDrawShiny = true;
+        m07 = 0; // Unused HIO field
+        m06 = 0; // Unused HIO field
+        m08 = 0; // Unused HIO field
+        mWindScalePhaseInc = 0x2ee;
+        mNormalFlutterPhaseInc = 0x800;
+        mFlagWavePhaseInc = 0xbd1;
+        mTimeLimit = 240; // 4 minutes
+
+        // Maximum amount of rupees you can get in these minigames
+        mPerfectRupeeScore = 150; 
+
+        // How long the player must wait until they can end the results screen; 5 seconds (150 frames)
+        mEndCamEarlyFrame = 150; 
+
+        m09 = 0; // Unused HIO field
         mWindScale1 = 12.0f;
         mWindScale2 = 4.0f;
         mFlagSagFactor = -1.0f;
@@ -33,18 +38,18 @@ public:
     inline virtual ~daGFlag_HIO_c();
 public:
     /* 0x04 */ s8 m04;
-    /* 0x05 */ u8 m05;
+    /* 0x05 */ bool mDrawShiny;
     /* 0x06 */ s8 m06;
     /* 0x07 */ s8 m07;
     /* 0x08 */ s8 m08;
     /* 0x09 */ s8 m09;
     /* 0x0A */ /* 2 bytes of alignment padding */
-    /* 0x0C */ u32 m0C;
-    /* 0x10 */ u32 m10;
-    /* 0x14 */ u32 m14;
-    /* 0x18 */ u32 m18;
-    /* 0x1C */ s32 m1C;
-    /* 0x20 */ u32 m20;
+    /* 0x0C */ u32 mWindScalePhaseInc;
+    /* 0x10 */ u32 mNormalFlutterPhaseInc;
+    /* 0x14 */ u32 mFlagWavePhaseInc;
+    /* 0x18 */ u32 mTimeLimit;
+    /* 0x1C */ s32 mPerfectRupeeScore;
+    /* 0x20 */ u32 mEndCamEarlyFrame;
     /* 0x24 */ u32 mRopeColorR;
     /* 0x28 */ u32 mRopeColorG;
     /* 0x2C */ u32 mRopeColorB;
@@ -59,7 +64,7 @@ class daGFlag_packet_c : public J3DPacket {
 public:
     daGFlag_packet_c() {
         mCurrArr = 0;
-        m0010 = 0;
+        mNormalFlutterPhase = 0;
     }
     virtual ~daGFlag_packet_c() {}
     void changeCurrentPos() { mCurrArr ^= 1; }
@@ -79,7 +84,7 @@ public:
     void setBackNrm();
     void setNrmVtx(cXyz*, int, int);
 public:
-    /* 0x0010 */ s16 m0010;
+    /* 0x0010 */ s16 mNormalFlutterPhase;
     /* 0x0012 */ s16 mFlagWavePhase;
     /* 0x0014 */ GXTexObj mTexObj;
     /* 0x0034 */ GXTexObj mToonTexObj;
@@ -134,7 +139,7 @@ public:
     /* 0x167C */ fpc_ProcID mMgameTermProcID;
     /* 0x1680 */ f32 mPrevPlayerLineSide;
     /* 0x1684 */ s16 m1684;
-    /* 0x1686 */ s16 m1686;
+    /* 0x1686 */ s16 mCamFramesPassed;
     /* 0x1688 */ u8 m1688;
     /* 0x1689 */ /* 3 bytes of alignment padding */
     /* 0x168C */ dPath* mpRopePaths[4];
