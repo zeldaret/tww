@@ -29,17 +29,15 @@
 #include "m_Do/m_Do_audio.h"
 #include <string.h>
 
-
 static daNpc_Kf1_HIO_c l_HIO;
-
-static u8 a_prm_tbl[0x30];
+static u8 a_prm_tbl[0x30] = {0x20, 0x00, 0x07, 0xd0, 0xfc, 0x18, 0xf8, 0x30, 0x00, 0x00, 0x13, 0x88, 0xf0, 0x60, 0xec, 0x78,
+                                 0x05, 0xdc, 0x04, 0xb0, 0x43, 0x48, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x04, 0x00, 0x00, 0x00,
+                                 0x3f, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x3e, 0x4c, 0xcc, 0xcd, 0x41, 0x00, 0x00, 0x00};
 
 /* 000000EC-00000150       .text __ct__15daNpc_Kf1_HIO_cFv */
 daNpc_Kf1_HIO_c::daNpc_Kf1_HIO_c() {
-    memcpy(data, a_prm_tbl, 0x30);
+        memcpy((char*)this + 0xC, a_prm_tbl, 0x30);
     b = a = -1;
-
-    /* Nonmatching */
 }
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
@@ -54,15 +52,9 @@ static BOOL nodeCB_Head(J3DNode* node, int idx) {
     return TRUE;
 }
 
-cXyz a_eye_pos_off;
-u8 init;
-
 /* 000001E4-000002D8       .text _nodeCB_Head__11daNpc_Kf1_cFP7J3DNodeP8J3DModel */
 void daNpc_Kf1_c::_nodeCB_Head(J3DNode* node, J3DModel* model) {
-    if (init == 0) {
-        a_eye_pos_off = cXyz(30.0f, 30.0f, 0.0f);
-        init = 1;
-    }
+    static cXyz a_eye_pos_off(30.0f, 30.0f, 0.0f);
 
     u16 joint_number = static_cast<J3DJoint*>(node)->getJntNo();
     MTXCopy(model->getAnmMtx(joint_number), mDoMtx_stack_c::now);
@@ -147,7 +139,7 @@ char* l_evn_tbl[] = {
 /* 0000059C-0000061C       .text init_KF1_0__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::init_KF1_0() {
     if (!dComIfGs_isEventBit(0x2d01)) {
-        set_action(&daNpc_Kf1_c::wait_action1, NULL);
+        this->set_action(&daNpc_Kf1_c::wait_action1, NULL);
         return TRUE;
     }
     return FALSE;
@@ -172,44 +164,45 @@ bool daNpc_Kf1_c::createInit() {
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
             weight = 0xD9;
             set_pthPoint(0);
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
     if (this->pathRun.mPath == NULL) {
-        status = FALSE;
-    } else {
-        this->attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
-        this->attention_info.distances[1] = 0xab;
-        this->attention_info.distances[3] = 0xab;
-        this->gravity = -4.5f;
-        this->mAnmId = 10;
-
-        BOOL init;
-        if (field_0x7FC != 0) {
-            init = FALSE;
-        } else {
-            init = this->init_KF1_0();
-        }
-        if (init == FALSE) {
-            status = FALSE;
-        } else {
-            mAngle = current.angle;
-            shape_angle = mAngle;
-            mStts.Init(weight, 0xff, this);
-            mCyl.SetStts(&mStts);
-            mCyl.Set(dNpc_cyl_src);
-            mObjAcch.CrrPos(*dComIfG_Bgsp());
-            play_animation();
-            this->tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
-            tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
-            mpMorf->setMorf(0.0f);
-            setMtx(true);
-
-            status = TRUE;
-        }
+        return FALSE;
     }
+    this->attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    this->attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xab;
+    this->attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xab;
+    this->gravity = -4.5f;
+    this->mAnmId = 10;
+
+    BOOL init;
+    BOOL cond = this->field_0x7FC == FALSE;
+    // BOOL init = (this->field_0x7FC == 0) ? this->init_KF1_0() : FALSE;
+    if (cond) {
+        init = FALSE;
+    } else {
+        init = this->init_KF1_0();
+    }
+    if (init) {
+        this->mAngle = current.angle;
+        shape_angle = mAngle;
+        this->mStts.Init(weight, 0xff, this);
+        this->mCyl.SetStts(&mStts);
+        this->mCyl.Set(dNpc_cyl_src);
+        this->mObjAcch.CrrPos(*dComIfG_Bgsp());
+        this->play_animation();
+        this->tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+        this->tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+        this->mpMorf->setMorf(0.0f);
+        this->setMtx(true);
+
+        return true;
+    } else {
+        return false;
+    }
+
     return status;
 }
 
@@ -231,14 +224,14 @@ void daNpc_Kf1_c::play_animation() {
 
 /* 000008E4-00000A20       .text setMtx__11daNpc_Kf1_cFb */
 void daNpc_Kf1_c::setMtx(bool arg) {
-    mpMorf->getModel()->setBaseScale(scale);
+    this->mpMorf->getModel()->setBaseScale(this->scale);
     MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_ZXYrotM(mDoMtx_stack_c::now, mAngle.x, mAngle.y, mAngle.z);
-    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
-    mpMorf->calc();
+    this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
+    this->mpMorf->calc();
     if (mModel != NULL) {
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
-        //MTXCopy(mpMorf->getModel()->mpNodeMtx[m_hed_jnt_num], mDoMtx_stack_c::now);
+        // mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
+        MTXCopy(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num), mDoMtx_stack_c::now);
         mDoMtx_stack_c::transM(33.87f, 3.26f, 0.0f);
         mDoMtx_XYZrotM(mDoMtx_stack_c::now, -0x4000, -0x4000, 0);
         mModel->setBaseTRMtx(mDoMtx_stack_c::now);
@@ -283,7 +276,7 @@ bool daNpc_Kf1_c::setBtp(signed char btpId, bool i_modify) {
 }
 
 /* 00000B4C-00000B6C       .text init_texPttrnAnm__11daNpc_Kf1_cFScb */
-BOOL daNpc_Kf1_c::init_texPttrnAnm(signed char btpId, bool i_modify) {
+bool daNpc_Kf1_c::init_texPttrnAnm(signed char btpId, bool i_modify) {
     setBtp(btpId, i_modify);
 }
 
@@ -349,8 +342,8 @@ void daNpc_Kf1_c::setAnm() {
         {0xff, 0xff, 0.0f, 0.0f, 0xffffffff},
 
     {1, 1, 8.0f, 1.0f, 2}};
-    init_texPttrnAnm(a_anm_prm_tbl[field_0x7F9].flag, true);
-    setAnm_anm(&a_anm_prm_tbl[field_0x7F9]);
+    init_texPttrnAnm(a_anm_prm_tbl[field_0x7F8].flag, true);
+    setAnm_anm(&a_anm_prm_tbl[field_0x7F8]);
     /* Nonmatching */
 }
 
@@ -404,8 +397,8 @@ void daNpc_Kf1_c::setAnm_ATR() {
     {3, 0, 8.0f, 1.0f, 2},
     {9, 1, 8.0f, 1.0f, 2},
 };
-    init_texPttrnAnm(a_anm_prm_tbl[field_0x7F5].flag, true);
-    setAnm_anm(&a_anm_prm_tbl[field_0x7F5]);
+    init_texPttrnAnm(a_anm_prm_tbl[field_0x7F3].flag, true);
+    setAnm_anm(&a_anm_prm_tbl[field_0x7F3]);
 }
 
 /* 00000EC4-00000F80       .text anmAtr__11daNpc_Kf1_cFUs */
@@ -488,13 +481,11 @@ u16 daNpc_Kf1_c::next_msgStatus(unsigned long* param) {
     case 0x1c2d:
         *param = 0x1c2e;
         break;
-    case 0x1c33:
-        // TODO cryptic add with carry that I don't know how to spell
-        // u32 temp_r3_3 = this->field_0x7EE * 0xA;
-        // u32 temp_r3_4 = (this->field_0x7F0 - temp_r3_3) + (temp_r3_3 ^ 0x80000000);
-        // *param = (temp_r3_4 - temp_r3_4) + 0x1C30;
-        // *param = 0x1c30;
+    case 0x1c33: {
+        int temp = field_0x7F0 >= field_0x7EE * 10 ? -1 : 0;
+        *param = 0x1C30 + temp;
         break;
+    }
     case 0x1c36:
         *param = 0x1c37;
         break;
@@ -538,13 +529,13 @@ u32 daNpc_Kf1_c::getMsg() {
 
 /* 00001218-000012A4       .text eventOrder__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::eventOrder() {
-    if (field_0x7F9 == 1 || field_0x7F9 == 2) {
+    if (field_0x7F7 == 1 || field_0x7F7 == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if (field_0x7F9 == 1) {
+        if (field_0x7F7 == 1) {
             fopAcM_orderSpeakEvent(this);
         }
-    } else if (field_0x7F9 >= 3) {
-        field_0x780[3] = field_0x7F9 - 3;
+    } else if (field_0x7F7 >= 3) {
+        field_0x780[3] = field_0x7F7 - 3;
         fopAcM_orderOtherEventId(this, field_0x780[field_0x780[3]]);
     }
 }
@@ -553,25 +544,28 @@ void daNpc_Kf1_c::eventOrder() {
 void daNpc_Kf1_c::checkOrder() {
     /* Nonmatching */
     if (eventInfo.checkCommandDemoAccrpt()) {
-        if (dComIfGp_evmng_startCheck(field_0x780[field_0x780[3]]) && field_0x7F9 >= 3) {
+        if (dComIfGp_evmng_startCheck(field_0x780[field_0x780[3]]) && field_0x7F7 >= 3) {
             // TODO missing blt statement in asm around here
             switch (field_0x780[3]) {
+            default:
+                break;
             case 0:
-                static_cast<daPy_py_c*>(dComIfGp_getPlayer(0))->changeDemoMoveAngle(dComIfGp_getPlayer(0)->current.angle.y);
+                static_cast<daPy_py_c*>((daPy_py_c*)dComIfGp_getPlayer(0))->changeDemoMoveAngle(dComIfGp_getPlayer(0)->current.angle.y);
                 break;
             }
-            field_0x7F9 = 0;
+            field_0x7F7 = 0;
+            field_0x7F3 = 0xff;
             field_0x7F4 = 0xff;
-            field_0x7F5 = 0xff;
         }
-    } else if (eventInfo.checkCommandTalk()) {
-        switch (field_0x7F9) {
-        case 0:
-        case 1:
-            field_0x7F9 = 0;
-            field_0x7AC = 1;
-            break;
-        }
+    } else if (eventInfo.getCommand() == dEvtCmd_INTALK_e && (field_0x7F7 == 1 || field_0x7F7 == 2)) {
+        field_0x7F7 = 0;
+        field_0x7AC = 1;
+        // switch (field_0x7F7) {
+        // case 1:
+        // case 2:
+        //     field_0x7F7 = 0;
+        //     field_0x7AC = 1;
+        // }
     }
 }
 
@@ -602,13 +596,16 @@ fopAc_ac_c* daNpc_Kf1_c::searchByID(fpc_ProcID i_procId, int* o_par1) {
 }
 
 /* 0000146C-0000156C       .text srch_Tsubo__11daNpc_Kf1_cFv */
-BOOL daNpc_Kf1_c::srch_Tsubo() {
+bool daNpc_Kf1_c::srch_Tsubo() {
     /* Nonmatching */
 
+    bool ret = false;
     int i = 0;
-    BOOL ret = FALSE;
     int j = 0;
     switch (field_0x7FD) {
+    default:
+        return false;
+        break;
     case 1:
         field_0x700 = -1;
         l_check_wrk = 0;
@@ -622,12 +619,9 @@ BOOL daNpc_Kf1_c::srch_Tsubo() {
                 field_0x7BC[i] = fopAcM_GetID(l_check_inf[i]);
                 field_0x7EC++;
             }
-            ret = TRUE;
+            ret = true;
             field_0x7FD++;
-            break;
         }
-    default:
-        ret = FALSE;
         break;
     }
     return ret;
@@ -636,21 +630,23 @@ BOOL daNpc_Kf1_c::srch_Tsubo() {
 /* 0000156C-000017F4       .text create_rupee__11daNpc_Kf1_cF4cXyzi */
 void daNpc_Kf1_c::create_rupee(cXyz vec, int count) {
     /* Nonmatching */
-    cXyz scale(0.2, 0.2, 0.2);
+    cXyz scale(0.2f, 0.2f, 0.2f);
     csXyz shape_angle(0, 0, 0);
 
-    u32 cnt = g_Counter.mCounter0;
-    for (int i = 0; i < count; ++i) {
-        f32 nums[] = {-30.0, 0.0, 30.0};
-        s16 j = ((s16)(nums[cnt % 3] + cM_rndF(30.0) - 15.0) ^ 0x8000) * *(float*)((u32*)0x433609F5);
-        // j = j ^ 0x80000000;
+    int i;
+    int cnt = g_Counter.mCounter0;
+    int idx = 0;
+    for (i = 0; i < count; ++i) {
+        f32 nums[] = {-30.0f, 0.0f, 30.0f};
+
         // mysterious constant 0x433609F5 (182.0389f) here.
         // a similar constant 182.0445f appears in Degree_To_Sangle but this is what ghidra says
-        // j = (int)(j * *(float*)((u32*)0x433609F5));
-        shape_angle.y = this->current.angle.y + (s16)j;
+        s16 rand_angle = nums[cnt % 3] + (cM_rndF(30.0f) - 15.0f);
+        rand_angle = 182.0389f * rand_angle;
+        shape_angle.y = this->current.angle.y + rand_angle;
         s8 roomNo = current.roomNo;
-        f32 speed = cM_rndFX(4.0) + 13.0;
-        f32 yvelocity = cM_rndFX(2.0) + 31.0;
+        f32 yvelocity = cM_rndFX(4.0f) + 31.0f;
+        f32 speed = cM_rndFX(2.0f) +  13.0f;
         f32 gravity = -2.0;
         // cXyz pos(speed, yvelocity, gravity);
         fopAc_ac_c* a_actor_p = fopAcM_createItemForKP2(&vec, dItem_RED_RUPEE_e, roomNo, NULL, NULL, speed, yvelocity, gravity, 1);
@@ -664,13 +660,13 @@ void daNpc_Kf1_c::create_rupee(cXyz vec, int count) {
             a_actor_p->scale = scale;
             a_actor_p->shape_angle = shape_angle;
             a_actor_p->current.angle = a_actor_p->shape_angle;
-            fpc_ProcID id;
-            if (a_actor_p == NULL) {
-                id = fopAcM_GetID(a_actor_p);
-            } else {
-                id = -1;
-            }
-            this->field_0x7BC[i] = id;
+            // fpc_ProcID id = 
+            // if (a_actor_p != NULL) {
+            //     id = fopAcM_GetID(a_actor_p);
+            // } else {
+            //     id = -1;
+            // }
+            this->field_0x7B0[i] = fopAcM_GetID(a_actor_p);
         }
 
         cnt++;
@@ -1105,7 +1101,7 @@ void daNpc_Kf1_c::cut_init_TSUBO_ATN(int staffIdx) {
 bool daNpc_Kf1_c::cut_move_TSUBO_ATN() {
     if (!cLib_calcTimer(&this->field_0x78C)) {
         s16 state = this->field_0x78E;
-        if (state >= 0) {
+        if (state == 3) {
             switch (state) {
             case 0:
             case 1:
@@ -1141,10 +1137,10 @@ void daNpc_Kf1_c::cut_init_TLK_MSG(int staffIdx) {
     this->field_0x7FE = 0;
     this->mCurrMsgNo = 0;
     this->mEndMsgNo = -1;
-    if (msg_num != NULL) {
+    if (end_msg != NULL) {
         this->mEndMsgNo = *end_msg;
     }
-    if (end_msg != NULL) {
+    if (msg_num != NULL) {
         this->mCurrMsgNo = *msg_num;
         switch (this->mCurrMsgNo) {
         case 0x1c2e:
@@ -1152,21 +1148,12 @@ void daNpc_Kf1_c::cut_init_TLK_MSG(int staffIdx) {
         case 0x1c2d:
             dComIfGp_setMessageCountNumber(this->field_0x7EE * 10);
             break;
-        default: {
-            /*
-              (this->parent).mCurrMsgID =
-                   0x1c30 - !CARRY4((uint)*(ushort *)&this->field_0x7f0 +
-                                    *(short *)&this->field_0x7ee * -10,
-                                    *(short *)&this->field_0x7ee * 10 ^ 0x80000000);
-            */
-            // TODO carry bit crap 
-            this->mCurrMsgNo = 0x1C30 + (this->field_0x7F0 >= this->field_0x7EE * 10);
+        default:
+            this->mCurrMsgNo = 0x1C30 + (field_0x7F0 >= field_0x7EE * 10 ? -1 : 0);
             break;
-        }
-        case 0x1c39: {
+        case 0x1c39:
             dComIfGp_getVibration().StartShock(5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             break;
-        }
         }
     }
     this->mCurrMsgBsPcId = -1;
@@ -1212,7 +1199,7 @@ static char* a_cut_tbl[14] = {
     "RUPEE_SET",
     "TSUBO_ATN",
     "TLK_MSG",
-    "CONTINUE_TLK"
+    "CONTNUE_TLK"
 };
 
 /* 000029D8-00002C60       .text privateCut__11daNpc_Kf1_cFi */
@@ -1441,14 +1428,14 @@ s16 daNpc_Kf1_c::chk_tsubo() {
 
 /* 000037F4-00003884       .text shadowDraw__11daNpc_Kf1_cFv */
 void daNpc_Kf1_c::shadowDraw() {
+    cXyz pos;
 
-
+    pos.set(current.pos.x, current.pos.y + 150.0f, current.pos.z);
     f32 prev_y = this->current.pos.y;
-    cXyz pos(
-        this->current.pos.x,
-        this->current.pos.y + 150.0,
-        this->current.pos.z
-    );
+    // pos.z = this->current.pos.z;
+    // f32 offset = 150.0f;
+    // pos.y = this->current.pos.y + current.pos.y;
+    // pos.x = this->current.pos.x;
     
     this->field_0x6D8 = dComIfGd_setShadow(
         this->field_0x6D8,
@@ -1596,18 +1583,31 @@ cPhs_State daNpc_Kf1_c::_create() {
 
 /* 00004130-0000442C       .text bodyCreateHeap__11daNpc_Kf1_cFv */
 BOOL daNpc_Kf1_c::bodyCreateHeap() {
-    /* Nonmatching */
-    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(field_0x6D4, 1);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(field_0x6D4, 1);
     JUT_ASSERT(0x97f, a_mdl_dat != NULL);
-    mpMorf = new mDoExt_McaMorf(a_mdl_dat, NULL, NULL, NULL, /* ~J3DFrameCtrl::LOOP_ONCE_e */NULL, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
-    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+    mpMorf = new mDoExt_McaMorf(a_mdl_dat,
+                                NULL,
+                                NULL,
+                                NULL,
+                                J3DFrameCtrl::EMode_NULL,
+                                1.0f,
+                                0,
+                                -1,
+                                1,
+                                NULL,
+                                0x80000,
+                                0x11020022);
+    if (mpMorf == NULL) {
+        return FALSE;
+    }
+    if (mpMorf->getModel() == NULL) {
         mpMorf = NULL;
         return FALSE;
     }
 
     if (!init_texPttrnAnm(0, false)) {
         mpMorf = NULL;
-        return FALSE;
+        return false;
     }
 
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
@@ -1617,13 +1617,10 @@ BOOL daNpc_Kf1_c::bodyCreateHeap() {
     m_nck_jnt_num = a_mdl_dat->getJointName()->getIndex("neck");
     JUT_ASSERT(0x997, m_nck_jnt_num >= 0);
 
-    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_hed_jnt_num)
-        ->mCallBack = nodeCB_Head;
-    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_bbone_jnt_num)
-        ->mCallBack = nodeCB_BackBone;
-    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_nck_jnt_num)
-        ->mCallBack = nodeCB_Neck;
-    //mpMorf->getModel()->setUserArea(u32 area)
+    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_hed_jnt_num)->mCallBack = nodeCB_Head;
+    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_bbone_jnt_num)->mCallBack = nodeCB_BackBone;
+    mpMorf->getModel()->getModelData()->getJointTree().getJointNodePointer(m_nck_jnt_num)->mCallBack = nodeCB_Neck;
+    mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
     return TRUE;
 }
 
@@ -1636,7 +1633,12 @@ BOOL daNpc_Kf1_c::itemCreateHeap() {
     // TODO enums?
     J3DModel* model = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
     this->mModel = model;
-    return mModel != NULL;
+    if (this->mModel == NULL) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 /* 000044EC-00004590       .text CreateHeap__11daNpc_Kf1_cFv */

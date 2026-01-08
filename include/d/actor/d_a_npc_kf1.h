@@ -28,7 +28,7 @@ public:
     s32 bckResID(int);
     s32 btpResID(int);
     bool setBtp(signed char, bool);
-    BOOL init_texPttrnAnm(signed char, bool);
+    bool init_texPttrnAnm(signed char, bool);
     void play_btp_anm();
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
@@ -46,7 +46,7 @@ public:
     void checkOrder();
     BOOL chk_talk();
     fopAc_ac_c *searchByID(fpc_ProcID, int*);
-    BOOL srch_Tsubo();
+    bool srch_Tsubo();
     void create_rupee(cXyz, int);
     void ready_kutaniCamera(int, int);
     void lookBack();
@@ -209,7 +209,7 @@ public:
     /* 0x1C */ u16 _4;
     /* 0x1E */ s16 field_0x1e;
     f32 yoffset;
-    u8 data[0x30];
+    // u8 data[0x30];
     /* Place member variables here */
 };
 
