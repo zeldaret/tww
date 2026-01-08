@@ -431,7 +431,7 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
     for (i = 0; i < mNumRopes; i++) {
         points_p = mpRopePaths[i]->m_points;
         segment = getRopePos(i, 0);
-        for (u32 j = 0; (s32)j < (s32)mNumRopeBuoys[i]; j++, points_p++, segment++) {
+        for (int j = 0; j < mNumRopeBuoys[i]; j++, points_p++, segment++) {
             cXyz path_point_pos;
             path_point_pos.set(
                 points_p->m_position.x,
@@ -543,10 +543,10 @@ void daGoal_Flag_c::flag_move() {
         for (int l = 0; l < 5; l++) {
             index = k + l * 9;
             curr_dpos_arr[index] = curr_pos_arr[index];
-            f32 tmp = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f);
+            f32 center_to_edge_falloff = ((20.25f - std::abs(4.5f - (f32)k) * std::abs(4.5f - (f32)k)) / 20.25f);
             curr_dpos_arr[index].z += ( 
                 DEMO_SELECT(40.0f + REG10_F(10), 40.0f) * 
-                tmp * 
+                center_to_edge_falloff * 
                 cM_ssin(k * 0x4000 + l * 0x2000 + mFlagPacket.mFlagWavePhase)
             );
         }    
@@ -572,53 +572,53 @@ static BOOL checkCreateHeap(fopAc_ac_c*);
 
 /* 00002400-00002968       .text _create__13daGoal_Flag_cFv */
 cPhs_State daGoal_Flag_c::_create() {
-    cPhs_State rt;
-    cPhs_State rt2;
+    cPhs_State cloth_resload_state;
+    cPhs_State flag_resload_state;
     u8 arc_index;
     dPath* path_p;
 
     fopAcM_SetupActor(this, daGoal_Flag_c);
 
-    u32 path_id = fopAcM_GetParam(this) & 0xFF;
-    rt = dComIfG_resLoad(&mPhs1, "Cloth");
+    u32 prm = fopAcM_GetParam(this) & 0xFF;
+    cloth_resload_state = dComIfG_resLoad(&mClothPhs, "Cloth");
 
 #if VERSION > VERSION_DEMO
-    if (rt != cPhs_COMPLEATE_e) {
-        return rt;
+    if (cloth_resload_state != cPhs_COMPLEATE_e) {
+        return cloth_resload_state;
     }
 #endif
 
-    if (path_id == 0 || path_id == 0xFF) {
+    if (prm == 0 || prm == 0xFF) {
         arc_index = 0;
-        rt2 = dComIfG_resLoad(&mPhs2, "Gflag");
+        flag_resload_state = dComIfG_resLoad(&mFlagPhs, "Gflag");
         scale.set(1.05f, 1.0f, 1.0f);
     } else {
         arc_index = 1;
-        rt2 = dComIfG_resLoad(&mPhs2, "Tgflag");
+        flag_resload_state = dComIfG_resLoad(&mFlagPhs, "Tgflag");
         scale.set(0.98f, 1.0f, 1.0f);
     }
 
 
 #if VERSION > VERSION_DEMO
-    if (rt2 != cPhs_COMPLEATE_e) {
-        return rt2;
+    if (flag_resload_state != cPhs_COMPLEATE_e) {
+        return flag_resload_state;
     }
 #else
-    if (rt == cPhs_ERROR_e || rt2 == cPhs_ERROR_e) {
+    if (cloth_resload_state == cPhs_ERROR_e || flag_resload_state == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
     } 
-    if (rt != cPhs_COMPLEATE_e) { 
-        return rt;
+    if (cloth_resload_state != cPhs_COMPLEATE_e) { 
+        return cloth_resload_state;
     }
-    if (rt2 != cPhs_COMPLEATE_e) {
-        return rt2;
+    if (flag_resload_state != cPhs_COMPLEATE_e) {
+        return flag_resload_state;
     }
 
     int useless_int = 4;
     if (useless_int == 4) 
 #endif
     {
-        path_id = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+        u32 path_id = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
         if (path_id != 0xFF) {
             path_p = dPath_GetRoomPath(path_id, fopAcM_GetRoomNo(this));
             if (path_p) {
@@ -688,20 +688,20 @@ cPhs_State daGoal_Flag_c::_create() {
             dComIfGp_setMiniGameRupee(0);
 
             setAction(&daGoal_Flag_c::RaceStart);     
-            m1688 = 0;
+            mRaceStartState = 0;
         }
 
-        cXyz temp5 = dComIfGp_getPlayer(0)->current.pos - mGoalFlagPolePos[0];
+        cXyz initial_player_from_start = dComIfGp_getPlayer(0)->current.pos - mGoalFlagPolePos[0];
 
-        cXyz temp6 = mGoalFlagPolePos[1] - mGoalFlagPolePos[0];
-        temp6.y = 0.0f;
-        temp6 = temp6.normZP();
+        cXyz finish_line_dir = mGoalFlagPolePos[1] - mGoalFlagPolePos[0];
+        finish_line_dir.y = 0.0f;
+        finish_line_dir = finish_line_dir.normZP();
 
-        cXyz temp7;
-        temp7.set(temp6.z, 0.0f, -temp6.x);
+        cXyz finish_line_normal;
+        finish_line_normal.set(finish_line_dir.z, 0.0f, -finish_line_dir.x);
 
-        mPrevPlayerLineSide = temp7.getDotProduct(temp5);
-        m1684 = 0;
+        mPrevPlayerLineSide = finish_line_normal.getDotProduct(initial_player_from_start);
+        mRaceEndState = 0;
 
         for (int i = 0; i < 20; i++) {
             flag_move();
@@ -777,7 +777,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_actor) {
 /* 00001CE0-00001D74       .text CreateHeap__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateHeap() {
     for (int i = 0; i < mNumRopes; i++) {
-        if (!mMats[i].init(1, (mNumRopeBuoys[i] << 2) + 1, 0)) {
+        if (!mRopeLines[i].init(1, (mNumRopeBuoys[i] << 2) + 1, 0)) {
             return FALSE;
         }
     }
@@ -786,8 +786,8 @@ BOOL daGoal_Flag_c::CreateHeap() {
 
 bool daGoal_Flag_c::_delete() {
     u8 prm = fopAcM_GetParam(this) & 0xFF;
-    dComIfG_resDeleteDemo(&mPhs1, arcname);
-    dComIfG_resDeleteDemo(&mPhs2, sub_arcname_tbl[prm]);
+    dComIfG_resDeleteDemo(&mClothPhs, arcname);
+    dComIfG_resDeleteDemo(&mFlagPhs, sub_arcname_tbl[prm]);
 
     if (dComIfGp_getMiniGameType() == 1) {
         if (dComIfGp_getMiniGameResult() == 1) {
@@ -820,13 +820,13 @@ BOOL daGoal_Flag_c::RaceStart() {
     int staff_idx = dComIfGp_evmng_getMyStaffId("Gflag");
     int action_idx = getDemoAction(staff_idx);
 
-    if (m1688 == 0) {
+    if (mRaceStartState == 0) {
         if (staff_idx != -1 && action_idx == 0) {
             dComIfGp_evmng_cutEnd(staff_idx);
         } else {
             return TRUE;
         }         
-        m1688++;
+        mRaceStartState++;
     } else {
         dTimer_c* timer_p = (dTimer_c*) fopMsgM_SearchByID(mTimerProcID);
         dMinigame_Starter_c* mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(mMgameStartProcID);
@@ -841,16 +841,15 @@ BOOL daGoal_Flag_c::RaceStart() {
         if (timer_p && mgame_start_p && mgame_start_p->startCheck()) {
             dComIfGp_evmng_cutEnd(staff_idx);
             timer_p->start(7);
-            if (m1688 == 1) {
+            if (mRaceStartState == 1) {
                 mDoAud_bgmStart(JA_BGM_SEA_GAME);
-                m1688++;
+                mRaceStartState++;
             }
         }
 
-        BOOL end_chk = dComIfGp_evmng_endCheck("race_start_cam");
-        if (end_chk) {
+        if (dComIfGp_evmng_endCheck("race_start_cam")) {
             setAction(&daGoal_Flag_c::TimerExecute);
-            m1688 = 0;
+            mRaceStartState = 0;
         }
     }
     return TRUE;
@@ -875,36 +874,36 @@ BOOL daGoal_Flag_c::TimerExecute() {
     goal_chk = goal_check();
 
     if (goal_chk == 1) {
-        if (m1684 == 1) {
+        if (mRaceEndState == 1) {
             timer_p->end(-1);
             if (dComIfGp_getMiniGameRupee() == 0) {
-                m1684 = 2;
+                mRaceEndState = 2;
             } else {
-                m1684 = 3;
+                mRaceEndState = 3;
             }
         } else {
-            m1684 = 1;
+            mRaceEndState = 1;
         }
     } else if (goal_chk == -1) {
         timer_p->end(-1);
         mDoAud_seStart(JA_SE_SGAME_TIMER_0);
-        m1684 = 2;
+        mRaceEndState = 2;
     }
 
-    if (timer_p->getRestTimeMs() == 0 && (timer_p->end(-1), m1684 != 3)) {
-        m1684 = 2;
+    if (timer_p->getRestTimeMs() == 0 && (timer_p->end(-1), mRaceEndState != 3)) {
+        mRaceEndState = 2;
         mDoAud_seStart(JA_SE_SGAME_TIMER_0);
     }
 
-    if (m1684 == 3 || m1684 == 2) {
+    if (mRaceEndState == 3 || mRaceEndState == 2) {
         if (eventInfo.checkCommandDemoAccrpt()) {
             timer_p->timerHide();
-            if (m1684 == 3) {
+            if (mRaceEndState == 3) {
                 // 1 is standard finish, 2 is perfect (got all 150 rupees)
                 finish_type = dComIfGp_getMiniGameRupee() < l_HIO.mPerfectRupeeScore ? 1 : 2;
                 dComIfGp_setMiniGameResult(1);
             } else {
-                // 0 is did not finish
+                // 0 is did not finish or got no rupees
                 finish_type = 0;
                 dComIfGp_setMiniGameResult(2);
             }
@@ -927,17 +926,18 @@ BOOL daGoal_Flag_c::TimerExecute() {
             fopMsgM_SearchByID(mMgameTermProcID); // Unused return
             mCamFramesPassed = 0;
             setAction(&daGoal_Flag_c::RaceEnd);
-            m1688 = 0;
+            mRaceStartState = 0;
         } else {
             static char* event_name_tbl[] = {
                 "race_goal_cam",
                 "race_fail_cam",
             };
-            char* event_name = event_name_tbl[m1684 != 3 ? 1 : 0];
+            char* event_name = event_name_tbl[mRaceEndState != 3 ? 1 : 0];
             fopAcM_orderOtherEvent2(this, event_name, dEvtFlag_NOPARTNER_e);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
+
     return TRUE;
 }
 
@@ -966,9 +966,9 @@ BOOL daGoal_Flag_c::RaceEnd() {
         dComIfGp_evmng_cutEnd(staff_idx);
     } 
 
-    BOOL end_chk = dComIfGp_evmng_endCheck(event_name_tbl[m1684 != 3 ? 1 : 0]);
+    BOOL end_chk = dComIfGp_evmng_endCheck(event_name_tbl[mRaceEndState != 3 ? 1 : 0]);
     
-    if (end_chk || ( (int)mCamFramesPassed > (int)l_HIO.mEndCamEarlyFrame && 
+    if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame && 
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
         dComIfGp_setNextStage("sea", 1, 0x30);
     }
@@ -1019,8 +1019,8 @@ bool daGoal_Flag_c::_draw() {
         color.g = l_HIO.mRopeColorG;
         color.b = l_HIO.mRopeColorB;
         color.a = 0xFF;
-        mMats[i].update((mNumRopeBuoys[i] << 2) + 1, 20.0f, color, 0, &tevStr);
-        dComIfGd_set3DlineMat(&mMats[i]);
+        mRopeLines[i].update((mNumRopeBuoys[i] << 2) + 1, 20.0f, color, 0, &tevStr);
+        dComIfGd_set3DlineMat(&mRopeLines[i]);
     }
 
     return true;

@@ -49,7 +49,7 @@ public:
     /* 0x14 */ u32 mFlagWavePhaseInc;
     /* 0x18 */ u32 mTimeLimit;
     /* 0x1C */ s32 mPerfectRupeeScore;
-    /* 0x20 */ u32 mEndCamEarlyFrame;
+    /* 0x20 */ s32 mEndCamEarlyFrame;
     /* 0x24 */ u32 mRopeColorR;
     /* 0x28 */ u32 mRopeColorG;
     /* 0x2C */ u32 mRopeColorB;
@@ -110,7 +110,7 @@ public:
     inline bool _draw();
     inline bool _execute();
     cXyz* getRopePos(int i_matIdx, int i_segmentIdx) { 
-        return &mMats[i_matIdx].getPos(0)[i_segmentIdx * 4]; 
+        return &mRopeLines[i_matIdx].getPos(0)[i_segmentIdx * 4]; 
     }
     void setAction(ProcFunc i_proc) { mCurrProc = i_proc; }
 
@@ -128,8 +128,8 @@ public:
 
 public:
     /* 0x0290 */ daGFlag_packet_c mFlagPacket;
-    /* 0x1618 */ request_of_phase_process_class mPhs1;
-    /* 0x1620 */ request_of_phase_process_class mPhs2;
+    /* 0x1618 */ request_of_phase_process_class mClothPhs;
+    /* 0x1620 */ request_of_phase_process_class mFlagPhs;
     /* 0x1628 */ Mtx mMtx;
     /* 0x1658 */ cXyz mGoalFlagPolePos[2];
     /* 0x1670 */ s16 mWindScalePhase;
@@ -138,14 +138,14 @@ public:
     /* 0x1678 */ fpc_ProcID mMgameStartProcID;
     /* 0x167C */ fpc_ProcID mMgameTermProcID;
     /* 0x1680 */ f32 mPrevPlayerLineSide;
-    /* 0x1684 */ s16 m1684;
+    /* 0x1684 */ s16 mRaceEndState;
     /* 0x1686 */ s16 mCamFramesPassed;
-    /* 0x1688 */ u8 m1688;
+    /* 0x1688 */ u8 mRaceStartState;
     /* 0x1689 */ /* 3 bytes of alignment padding */
     /* 0x168C */ dPath* mpRopePaths[4];
-    /* 0x169C */ u32 mNumRopeBuoys[4];
-    /* 0x16AC */ int mNumRopes;
-    /* 0x16B0 */ mDoExt_3DlineMat0_c mMats[4];
+    /* 0x169C */ s32 mNumRopeBuoys[4];
+    /* 0x16AC */ s32 mNumRopes;
+    /* 0x16B0 */ mDoExt_3DlineMat0_c mRopeLines[4];
     /* 0x1720 */ ProcFunc mCurrProc;
 };  // Size: 0x172C
 STATIC_ASSERT(sizeof(daGoal_Flag_c) == 0x172C);
