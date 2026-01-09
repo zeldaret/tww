@@ -37,13 +37,13 @@ bool daObjBuoyrace::Act_c::create_heap() {
 
     J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
     JUT_ASSERT(0x77, mdl_data_kiba != NULL);
-    field_0x2D4 = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
+    mpModelKiba = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
 
     J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
     JUT_ASSERT(0x80, mdl_data_hasi != NULL);
-    field_0x2D8 = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
+    mpModelHasi = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
 
-    if (field_0x2D4 && field_0x2D8) {
+    if (mpModelKiba && mpModelHasi) {
         o_return = true;
     }
     
@@ -52,13 +52,13 @@ bool daObjBuoyrace::Act_c::create_heap() {
 
 /* 000001D0-00000238       .text create_load__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::create_load() {
-    cPhs_State o_result = dComIfG_resLoad(&field_0x2C4, M_arcname_kiba);
+    cPhs_State o_result = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
 
     if (o_result != cPhs_COMPLEATE_e) {
         return o_result;
     }
 
-    o_result = dComIfG_resLoad(&field_0x2CC, M_arcname_hasi);
+    o_result = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
 
     if (o_result != cPhs_COMPLEATE_e) {
         return o_result;
@@ -90,8 +90,8 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
     if (o_result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, DEMO_SELECT(0x2560, 0x980))) {
             set_water_pos();
-            current.pos.y = field_0x290 + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(field_0x2A0)) * attr().m04;
-            cullMtx = field_0x2D4->getBaseTRMtx();
+            current.pos.y = m290 + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().m04;
+            cullMtx = mpModelKiba->getBaseTRMtx();
             fopAcM_setCullSizeBox(
                 this, 
                 -1.0f * 76.0f * attr().m04, 
@@ -111,8 +111,8 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_delete() {
-    dComIfG_resDeleteDemo(&field_0x2C4, M_arcname_kiba);
-    dComIfG_resDeleteDemo(&field_0x2CC, M_arcname_hasi);
+    dComIfG_resDeleteDemo(&mPhsKiba, M_arcname_kiba);
+    dComIfG_resDeleteDemo(&mPhsHasi, M_arcname_hasi);
     return true;
 }
 
@@ -124,22 +124,26 @@ void daObjBuoyrace::Act_c::set_mtx() {
     Vec actor_scale;
     cXyz tmp3;
     
-    field_0x2D4->setBaseScale(scale * attr().m04);
+    mpModelKiba->setBaseScale(scale * attr().m04);
 
     actor_scale.x = 1.75f * (scale.x * attr().m04);
     actor_scale.y =  2.5f * (scale.y * attr().m04);
     actor_scale.z = 1.75f * (scale.z * attr().m04);
 
-    field_0x2D8->setBaseScale(actor_scale);
+    mpModelHasi->setBaseScale(actor_scale);
 
     mDoMtx_stack_c::transS(current.pos);
-    tmp0.set(field_0x2AC, 1.0f, field_0x2B0);
+
+    tmp0.set(m2AC, 1.0f, m2B0);
+
     mDoMtx_stack_c::transM(0.0f, attr().m00 * 0.5f * attr().m04, 0.0f);
+
     daObj::quat_rotBaseY(&quat, tmp0);
     mDoMtx_stack_c::quatM(&quat);
+
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
     mDoMtx_stack_c::transM(0.0f, -attr().m00 * 0.5f * attr().m04, 0.0f);
-    field_0x2D4->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModelKiba->setBaseTRMtx(mDoMtx_stack_c::get());
 
     set_rope_pos();
 
@@ -148,7 +152,7 @@ void daObjBuoyrace::Act_c::set_mtx() {
     mDoMtx_stack_c::get()[0][3] += tmp3.x;
     mDoMtx_stack_c::get()[1][3] += tmp3.y;
     mDoMtx_stack_c::get()[2][3] += tmp3.z;
-    field_0x2D8->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModelHasi->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000005A0-000005C0       .text init_mtx__Q213daObjBuoyrace5Act_cFv */
@@ -171,16 +175,16 @@ void daObjBuoyrace::Act_c::set_water_pos() {
         sea_wave_3 - sea_wave_1,
         0.0f
     );
-    field_0x290 = (sea_wave_1 + sea_wave_2 + sea_wave_3) * 0.33333333f;
-    field_0x294 = tmp1.outprod(tmp2);
-    field_0x294.normalize();
+    m290 = (sea_wave_1 + sea_wave_2 + sea_wave_3) * 0.33333333f;
+    m294 = tmp1.outprod(tmp2);
+    m294.normalize();
 }
 
 /* 000006D8-0000081C       .text afl_calc_sway__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc_sway() {
     f32 cond = attr().m14 * attr().m14;
-    f32 tmp1 = field_0x294.x * attr().m20;
-    f32 tmp2 = field_0x294.z * attr().m20;
+    f32 tmp1 = m294.x * attr().m20;
+    f32 tmp2 = m294.z * attr().m20;
     f32 tmp3 = tmp1 * tmp1 + tmp2 * tmp2;
 
     if (tmp3 > cond) {
@@ -190,11 +194,11 @@ void daObjBuoyrace::Act_c::afl_calc_sway() {
     }
 
 #if VERSION > VERSION_DEMO
-    f32 tmp4 = -(field_0x2B0 - tmp2) * attr().m18;
-    f32 tmp5 = -(field_0x2AC - tmp1) * attr().m18; 
+    f32 tmp4 = -(m2B0 - tmp2) * attr().m18;
+    f32 tmp5 = -(m2AC - tmp1) * attr().m18; 
 
-    f32 tmp6 = -field_0x2B8 * attr().m1C;
-    f32 tmp7 = -field_0x2B4 * attr().m1C;
+    f32 tmp6 = -m2B8 * attr().m1C;
+    f32 tmp7 = -m2B4 * attr().m1C;
 #else
     f32 tmp5 = (field_0x2AC - tmp1); 
     f32 tmp4 = (field_0x2B0 - tmp2);
@@ -206,24 +210,24 @@ void daObjBuoyrace::Act_c::afl_calc_sway() {
     f32 tmp6 = -field_0x2B8 * attr().m1C;
 #endif
 
-    field_0x2B4 += tmp5 + tmp7;
-    field_0x2B8 += tmp4 + tmp6;
+    m2B4 += tmp5 + tmp7;
+    m2B8 += tmp4 + tmp6;
 
-    field_0x2AC += field_0x2B4;
-    field_0x2B0 += field_0x2B8;
+    m2AC += m2B4;
+    m2B0 += m2B8;
 }
 
 /* 0000081C-00000960       .text afl_calc__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc() {
-    field_0x2C0 += field_0x2BC * -0.01f;
-    field_0x2C0 *= 0.94f;
-    field_0x2BC += field_0x2C0;
-    if (field_0x2BC > 0.2f * attr().m00) {
-        field_0x2BC = 0.2f * attr().m00;
+    m2C0 += m2BC * -0.01f;
+    m2C0 *= 0.94f;
+    m2BC += m2C0;
+    if (m2BC > 0.2f * attr().m00) {
+        m2BC = 0.2f * attr().m00;
     } 
-    field_0x2A0 = field_0x2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
+    m2A0 = m2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
 
-    f32 target = field_0x290 + field_0x2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(field_0x2A0)) * attr().m04;
+    f32 target = m290 + m2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().m04;
     f32* pos_y = &current.pos.y;
     cLib_chaseF(
         pos_y, 
@@ -235,14 +239,13 @@ void daObjBuoyrace::Act_c::afl_calc() {
 
 /* 00000960-00000A6C       .text set_rope_pos__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_rope_pos() {
-    /* Nonmatching */
     daGoal_Flag_c* parent_p = (daGoal_Flag_c*) fopAcM_SearchByID(fopAcM_GetLinkId(this));
 
     if (parent_p) {
         int line = prm_get_line();
         int id = prm_get_id();
-        cXyz* rope_pos; // = parent_p->getRopePos(line, id);
-        JUT_ASSERT(DEMO_SELECT(0x178, 0x194), rope_pos != NULL);
+        cXyz* rope_pos = parent_p->getRopePos(line, id);
+        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos != NULL);
         cXyz tmp(
             0.0f,
             (attr().m00 - 5.0f + 160.0f) * attr().m04,
@@ -263,10 +266,10 @@ bool daObjBuoyrace::Act_c::_execute() {
 /* 00000AAC-00000B28       .text _draw__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_draw() {
     g_env_light.settingTevStruct(0, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(field_0x2D4, &tevStr);
-    g_env_light.setLightTevColorType(field_0x2D8, &tevStr);
-    mDoExt_modelUpdateDL(field_0x2D4);
-    mDoExt_modelUpdateDL(field_0x2D8);
+    g_env_light.setLightTevColorType(mpModelKiba, &tevStr);
+    g_env_light.setLightTevColorType(mpModelHasi, &tevStr);
+    mDoExt_modelUpdateDL(mpModelKiba);
+    mDoExt_modelUpdateDL(mpModelHasi);
     return true;;
 }
 
