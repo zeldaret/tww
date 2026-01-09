@@ -23,24 +23,35 @@ const daObjBuoyrace::Act_c::Attr_c daObjBuoyrace::Act_c::M_attr = {
 };
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
-BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-000001D0       .text create_heap__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::create_heap() {
+bool daObjBuoyrace::Act_c::create_heap() {
     /* Nonmatching */
 }
 
 /* 000001D0-00000238       .text create_load__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::create_load() {
-    /* Nonmatching */
+    cPhs_State o_result = dComIfG_resLoad(&field_0x2C4, M_arcname_kiba);
+
+    if (o_result != cPhs_COMPLEATE_e) {
+        return o_result;
+    }
+
+    o_result = dComIfG_resLoad(&field_0x2CC, M_arcname_hasi);
+
+    if (o_result != cPhs_COMPLEATE_e) {
+        return o_result;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
     fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
-
     cPhs_State o_result = create_load();
     if (o_result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, 0x980)) {
@@ -67,7 +78,9 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&field_0x2C4, M_arcname_kiba);
+    dComIfG_resDelete(&field_0x2CC, M_arcname_hasi);
+    return true;
 }
 
 /* 000003C0-000005A0       .text set_mtx__Q213daObjBuoyrace5Act_cFv */
@@ -77,7 +90,7 @@ void daObjBuoyrace::Act_c::set_mtx() {
 
 /* 000005A0-000005C0       .text init_mtx__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::init_mtx() {
-    /* Nonmatching */
+    set_mtx();
 }
 
 /* 000005C0-000006D8       .text set_water_pos__Q213daObjBuoyrace5Act_cFv */
@@ -102,12 +115,20 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
 
 /* 00000A6C-00000AAC       .text _execute__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_execute() {
-    /* Nonmatching */
+    set_water_pos();
+    afl_calc();
+    set_mtx();
+    return true;
 }
 
 /* 00000AAC-00000B28       .text _draw__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x2D4, &tevStr);
+    g_env_light.setLightTevColorType(field_0x2D8, &tevStr);
+    mDoExt_modelUpdateDL(field_0x2D4);
+    mDoExt_modelUpdateDL(field_0x2D8);
+    return true;;
 }
 
 namespace daObjBuoyrace {
@@ -118,23 +139,26 @@ cPhs_State Mthd_Create(void* i_this) {
 }
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Delete(void*) {
+BOOL Mthd_Delete(void* i_this) {
     /* Nonmatching */
+    return ((daObjBuoyrace::Act_c*)i_this)->_delete();
 }
 
 /* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Execute(void*) {
+BOOL Mthd_Execute(void* i_this) {
     /* Nonmatching */
+    return ((daObjBuoyrace::Act_c*)i_this)->_execute();
 }
 
 /* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Draw(void*) {
+BOOL Mthd_Draw(void* i_this) {
     /* Nonmatching */
+    return ((daObjBuoyrace::Act_c*)i_this)->_draw(); 
 }
 
 /* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

@@ -27,14 +27,14 @@ namespace daObjBuoyrace {
 
     public:
         cPhs_State _create();
-        inline bool _delete();
-        inline bool _draw();
-        inline bool _execute();
+        bool _delete();
+        bool _draw();
+        bool _execute();
         const Attr_c& attr() const { return M_attr; }
         void prm_get_id() const {}
         void prm_get_line() const {}
     
-        void create_heap();
+        bool create_heap();
         cPhs_State create_load();
         void set_mtx();
         void init_mtx();
