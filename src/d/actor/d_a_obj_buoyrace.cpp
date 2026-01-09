@@ -70,12 +70,27 @@ cPhs_State daObjBuoyrace::Act_c::create_load() {
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
     fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
+
+#if VERSION > VERSION_DEMO
     cPhs_State o_result = create_load();
+#else
+    cPhs_State o_result;
+    cPhs_State o_result_kiba  = dComIfG_resLoad(&field_0x2C4, M_arcname_kiba);
+    cPhs_State o_result_hasi = dComIfG_resLoad(&field_0x2CC, M_arcname_hasi);
+
+    if (o_result_kiba == cPhs_COMPLEATE_e && o_result_hasi == cPhs_COMPLEATE_e) {
+        o_result = cPhs_COMPLEATE_e;
+    } else if (o_result_kiba == cPhs_ERROR_e || o_result_hasi == cPhs_ERROR_e) {
+        o_result = cPhs_ERROR_e;   
+    } else {
+        o_result = cPhs_INIT_e;
+    }
+#endif
+
     if (o_result == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, 0x980)) {
+        if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, DEMO_SELECT(0x2560, 0x980))) {
             set_water_pos();
-            f32 tmp = attr().m08 * -attr().m00;
-            current.pos.y = field_0x290 + (attr().m0C * cM_ssin(field_0x2A0) + tmp) * attr().m04;
+            current.pos.y = field_0x290 + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(field_0x2A0)) * attr().m04;
             cullMtx = field_0x2D4->getBaseTRMtx();
             fopAcM_setCullSizeBox(
                 this, 
@@ -96,8 +111,8 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_delete() {
-    dComIfG_resDelete(&field_0x2C4, M_arcname_kiba);
-    dComIfG_resDelete(&field_0x2CC, M_arcname_hasi);
+    dComIfG_resDeleteDemo(&field_0x2C4, M_arcname_kiba);
+    dComIfG_resDeleteDemo(&field_0x2CC, M_arcname_hasi);
     return true;
 }
 
@@ -163,21 +178,33 @@ void daObjBuoyrace::Act_c::set_water_pos() {
 
 /* 000006D8-0000081C       .text afl_calc_sway__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc_sway() {
+    f32 cond = attr().m14 * attr().m14;
     f32 tmp1 = field_0x294.x * attr().m20;
     f32 tmp2 = field_0x294.z * attr().m20;
     f32 tmp3 = tmp1 * tmp1 + tmp2 * tmp2;
 
-    if (tmp3 > attr().m14 * attr().m14) {
+    if (tmp3 > cond) {
         tmp3 = std::sqrtf(tmp3);
         tmp1 *= (attr().m14 / tmp3);
         tmp2 *= (attr().m14 / tmp3);
     }
 
+#if VERSION > VERSION_DEMO
     f32 tmp4 = -(field_0x2B0 - tmp2) * attr().m18;
     f32 tmp5 = -(field_0x2AC - tmp1) * attr().m18; 
 
     f32 tmp6 = -field_0x2B8 * attr().m1C;
     f32 tmp7 = -field_0x2B4 * attr().m1C;
+#else
+    f32 tmp5 = (field_0x2AC - tmp1); 
+    f32 tmp4 = (field_0x2B0 - tmp2);
+
+    tmp5 = -tmp5 * attr().m18;
+    tmp4 = -tmp4 * attr().m18;
+
+    f32 tmp7 = -field_0x2B4 * attr().m1C;
+    f32 tmp6 = -field_0x2B8 * attr().m1C;
+#endif
 
     field_0x2B4 += tmp5 + tmp7;
     field_0x2B8 += tmp4 + tmp6;
@@ -196,13 +223,11 @@ void daObjBuoyrace::Act_c::afl_calc() {
     } 
     field_0x2A0 = field_0x2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
 
-    f32 tmp1 = field_0x290 + field_0x2BC;
-    f32 tmp2 = attr().m08 * -attr().m00;
-    f32 tmp3 = (attr().m0C * cM_ssin(field_0x2A0) + tmp2) * attr().m04;
-
+    f32 target = field_0x290 + field_0x2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(field_0x2A0)) * attr().m04;
+    f32* pos_y = &current.pos.y;
     cLib_chaseF(
-        &current.pos.y, 
-        tmp1 + tmp3,
+        pos_y, 
+        target,
         50.0f
     );
     afl_calc_sway();
@@ -216,8 +241,8 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
     if (parent_p) {
         int line = prm_get_line();
         int id = prm_get_id();
-        cXyz* rope_pos;// = parent_p->getRopePos(line, id);
-        JUT_ASSERT(0x194, rope_pos != NULL);
+        cXyz* rope_pos; // = parent_p->getRopePos(line, id);
+        JUT_ASSERT(DEMO_SELECT(0x178, 0x194), rope_pos != NULL);
         cXyz tmp(
             0.0f,
             (attr().m00 - 5.0f + 160.0f) * attr().m04,

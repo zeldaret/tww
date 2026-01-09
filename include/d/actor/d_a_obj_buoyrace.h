@@ -35,16 +35,24 @@ namespace daObjBuoyrace {
         static BOOL solidHeapCB(fopAc_ac_c*);
 
     public:
+#if VERSION > VERSION_DEMO
         cPhs_State _create();
         bool _delete();
         bool _draw();
         bool _execute();
+#else
+        inline cPhs_State _create();
+        inline bool _delete();
+        inline bool _draw();
+        inline bool _execute();
+#endif
         const Attr_c& attr() const { return M_attr; }
         int prm_get_id() const { return daObj::PrmAbstract(this, PRM_ID_W, PRM_ID_S); }
         int prm_get_line() const { return daObj::PrmAbstract(this, PRM_LINE_W, PRM_LINE_S); }
     
         bool create_heap();
         cPhs_State create_load();
+
         void set_mtx();
         void init_mtx();
         void set_water_pos();
