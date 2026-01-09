@@ -8,8 +8,22 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
+const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
+const daObjBuoyrace::Act_c::Attr_c daObjBuoyrace::Act_c::M_attr = {
+    /* _00 */ 150.0f,
+    /* _04 */ 2.0f,
+    /* _08 */ 0.8f,
+    /* _0C */ 0.5f,
+    /* _10 */ 1.36357345e-36f,
+    /* _14 */ 0.3f,
+    /* _18 */ 0.02f,
+    /* _1C */ 0.04f,
+    /* _20 */ 0.35f
+};
+
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
-void daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c*) {
+BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
 }
 
@@ -19,13 +33,36 @@ void daObjBuoyrace::Act_c::create_heap() {
 }
 
 /* 000001D0-00000238       .text create_load__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::create_load() {
+cPhs_State daObjBuoyrace::Act_c::create_load() {
     /* Nonmatching */
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
+
+    cPhs_State o_result = create_load();
+    if (o_result == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, 0x980)) {
+            set_water_pos();
+            f32 tmp = attr()._08 * -attr()._00;
+            current.pos.y = field_0x290 + (attr()._0C * cM_ssin(field_0x2A0) + tmp) * attr()._04;
+            cullMtx = field_0x2D4->getBaseTRMtx();
+            fopAcM_setCullSizeBox(
+                this, 
+                -1.0f * 76.0f * attr()._04, 
+                -1.0f * attr()._04, 
+                -1.0f * 76.0f * attr()._04, 
+                76.0f * attr()._04, 
+                295.0f * attr()._04, 
+                76.0f * attr()._04
+            );
+            init_mtx();
+        } else {
+            o_result = cPhs_ERROR_e;
+        }
+    }
+    return o_result;
 }
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
@@ -76,8 +113,8 @@ bool daObjBuoyrace::Act_c::_draw() {
 namespace daObjBuoyrace {
 namespace {
 /* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjBuoyrace::Act_c*)i_this)->_create();
 }
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
