@@ -36,11 +36,11 @@ bool daObjBuoyrace::Act_c::create_heap() {
     bool o_return = false;
 
     J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
-    JUT_ASSERT(0x77, mdl_data_kiba != NULL);
+    JUT_ASSERT(119, mdl_data_kiba != NULL);
     mpModelKiba = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
 
     J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
-    JUT_ASSERT(0x80, mdl_data_hasi != NULL);
+    JUT_ASSERT(128, mdl_data_hasi != NULL);
     mpModelHasi = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
 
     if (mpModelKiba && mpModelHasi) {
@@ -75,8 +75,8 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
     cPhs_State o_result = create_load();
 #else
     cPhs_State o_result;
-    cPhs_State o_result_kiba  = dComIfG_resLoad(&field_0x2C4, M_arcname_kiba);
-    cPhs_State o_result_hasi = dComIfG_resLoad(&field_0x2CC, M_arcname_hasi);
+    cPhs_State o_result_kiba  = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
+    cPhs_State o_result_hasi = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
 
     if (o_result_kiba == cPhs_COMPLEATE_e && o_result_hasi == cPhs_COMPLEATE_e) {
         o_result = cPhs_COMPLEATE_e;
