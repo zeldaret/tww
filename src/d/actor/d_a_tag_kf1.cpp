@@ -5,174 +5,413 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
+#include "d/actor/d_a_tsubo.h"
+#include "d/d_a_obj.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
+#include "m_Do/m_Do_hostIO.h"
+
+static daTag_Kf1_HIO_c l_HIO;
+static s32 l_check_inf[100];
+static s32 l_check_wrk;
+
+static f32 a_prm_tbl[] = {
+    150.0f,30.0f, 0x00000000
+};
 #include "d/d_priority.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
-daTag_Kf1_HIO_c::daTag_Kf1_HIO_c() {
-    /* Nonmatching */
+daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
+{ 
+    mAttentionMaxEuclidDistance = a_prm_tbl[0];
+    mAttentionMaxYDistance = a_prm_tbl[1];
+    // this line should def load from a_prm_tbl according to asm,
+    // but unlike the others the type is not float so do this gross cast instead
+    f0x10 = *(u8*)(void*)&a_prm_tbl[2];
+    mNo = -1;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
-void searchActor_Kutani(void*, void*) {
-    /* Nonmatching */
+void* searchActor_Kutani(void* arg1, void* _) {
+    fopAc_ac_c* act = (fopAc_ac_c*)arg1;
+    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.base.mProcName == 0x1cb &&
+        daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(act, daTsubo::Act_c::PRM_TYPE_W,
+                                                  daTsubo::Act_c::PRM_TYPE_S) == 0xe) {
+        l_check_inf[l_check_wrk] = (u32)act;
+        l_check_wrk++;
+    }
+    return 0;
 }
 
 /* 000001B0-00000220       .text createInit__11daTag_Kf1_cFv */
-void daTag_Kf1_c::createInit() {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::createInit() {
+    tag_event_cut.setActorInfo("TagKf1", this);
+
+    // TODO first arg should be some function pointer
+    this->set_action(&daTag_Kf1_c::wait_action1, NULL);
+    return TRUE;
 }
 
+static char* a_demo_name_tbl[] = {"BENSYO"};
+
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-void daTag_Kf1_c::setStt(signed char) {
+char daTag_Kf1_c::setStt(signed char c) {
+    stt = c;
+    if (stt == 3) {
+        return;
+    }
     /* Nonmatching */
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
-void daTag_Kf1_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daTag_Kf1_c::next_msgStatus(unsigned long* arg) { 
+    u16 ret = 0xf;
+    switch (*arg) {
+        case 0x1c30:
+            *arg = 0x1c35; 
+            break;
+        case 0x1c35:
+            *arg = 0x1c31; 
+            break;
+            //return 0xf;
+        case 0x1c2e:
+            rupee_count = dComIfGs_getRupee();
+        default: ret = 0x10;
+    }
+    return ret;
 }
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
-    /* Nonmatching */
+    if (event_state == 1 || event_state == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (event_state == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    }
+    else if (event_state >= 3) {
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[event_state - 3]);
+    }
 }
 
 /* 00000314-00000380       .text checkOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt() &&
+        dComIfGp_evmng_startCheck("BENSYO") &&
+        // TODO correct enum here?
+        (event_state == cPhs_STOP_e)) {
+        event_state = 0;
+    }
 }
 
 /* 00000380-00000470       .text chkAttention__11daTag_Kf1_cF4cXyz */
-void daTag_Kf1_c::chkAttention(cXyz) {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::chkAttention(cXyz vec) {
+    BOOL ret = FALSE;
+    f32 dist = vec.abs(dComIfGp_getPlayer(0)->current.pos);
+    f32 ydist = dComIfGp_getPlayer(0)->current.pos.y - vec.y;
+    if (dist < l_HIO.mAttentionMaxEuclidDistance &&
+        ydist < l_HIO.mAttentionMaxYDistance) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /* 00000470-0000057C       .text partner_srch__11daTag_Kf1_cFv */
-void daTag_Kf1_c::partner_srch() {
+BOOL daTag_Kf1_c::partner_srch() {
+    BOOL tmp = 0;
+    int i;
+    int j;
+    for (i = 0, j = 8; j != 0; ++i, --j) {
+        partners[i] = 0xffffffff;
+    }
+
+    l_check_wrk = 0;
+    j = 100;
+    for (i = 0; j != 0; ++i, --j) {
+        l_check_inf[i] = 0;
+    }
+
+    fpcM_Search(searchActor_Kutani, this);
+    // register/cast fiddling needed here
+    if (l_check_wrk <= 8 && l_check_wrk != 0) {
+        npartners = 0;
+        for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
+            partners[i] = fopAcM_GetID((void*)l_check_inf[i]);
+            npartners++;
+        }
+        tmp = TRUE;
+    }
+    return tmp;
+
     /* Nonmatching */
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
-void daTag_Kf1_c::checkPartner() {
-    /* Nonmatching */
+s16 daTag_Kf1_c::checkPartner() {
+
+    s16 hits = 0;
+    int id = 0;
+    for (int idx = 0; idx < npartners; ++idx) {
+        int cand_it = partners[idx];
+        fopAc_ac_c* cand = fopAcM_SearchByID(cand_it);
+        if (cand != NULL) {
+            ++hits;
+        }
+        ++id;
+    }
+    return hits;
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
-void daTag_Kf1_c::goto_nextStage() {
-    /* Nonmatching */
+void daTag_Kf1_c::goto_nextStage() { 
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, -1, -1, 0.0f, 0,
+                          TRUE, 0);
 }
 
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
-void daTag_Kf1_c::event_talkInit(int) {
-    /* Nonmatching */
+void daTag_Kf1_c::event_talkInit(int staffIdx) { 
+    /* Nonmatching */ // TODO stringBase and layout
+    u32 *msgNo = (u32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    if (msgNo != NULL) {
+        
+        mCurrMsgNo = *msgNo;
+        if (mCurrMsgNo == 0x1c2d) {
+            dComIfGp_setMessageCountNumber(this->tenth_cost * 10);
+        }
+    }
+    else {
+        this->mCurrMsgNo = 0;
+    }
 }
 
+static const u32 at4350[] = {0xff000080};
+static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
+
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesSet() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_mesSet() { 
+    this->talk(0);
+    return mCurrMsgBsPcId != -1;
 }
 
 /* 0000071C-00000750       .text event_mesEnd__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_mesEnd() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_mesEnd() { 
+    return this->talk(0) == fopMsgStts_BOX_CLOSED_e;
+    
 }
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
-void daTag_Kf1_c::bensyoInit() {
-    /* Nonmatching */
+void daTag_Kf1_c::bensyoInit() { 
+    dComIfGp_setItemRupeeCount(-(this->tenth_cost * 10));
+    mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+    if (this->rupee_count > tenth_cost * 10) {
+        this->mCurrMsgNo = 0x1c2f;
+    }
+    else {
+        this->mCurrMsgNo = 0x1c30;
+    }
 }
 
 /* 000007A4-000007C4       .text event_bensyo__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_bensyo() {
-    /* Nonmatching */
+bool daTag_Kf1_c::event_bensyo() {
+    return event_mesSet();
 }
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_cntTsubo() {
-    /* Nonmatching */
+void daTag_Kf1_c::event_cntTsubo() { 
+    this->tenth_cost = this->npartners - checkPartner();
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
-void daTag_Kf1_c::privateCut() {
-    /* Nonmatching */
+void daTag_Kf1_c::privateCut() { 
+    int staffIdx = dComIfGp_evmng_getMyStaffId("TagKf1");
+    if (staffIdx == -1) {
+        return;
+    }
+    s8 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 5, 1, 0);
+    mActIdx = actIdx;
+    if (mActIdx == -1) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+        return;
+    }
+    if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+        switch (mActIdx) {
+            case 0:
+            event_talkInit(staffIdx); break;
+            case 2:
+            bensyoInit(); break;
+            case 3:
+            goto_nextStage(); break;
+            case 4:
+            event_cntTsubo(); break;
+        }
+    }
+    
+    bool status;
+
+    /* Nonmatching */ 
+    // TODO on account of branch ordering; 
+    // functionally should be equivalent.
+    switch (mActIdx) {
+        case 0: status = event_mesSet(); break;
+        case 1: status = event_mesEnd(); break;
+        case 2: status = event_bensyo(); break;
+        case 3:
+        default: status=TRUE; break;
+    }
+    if (status) {
+        dComIfGp_evmng_cutEnd(staffIdx);
+    }
+    return;
 }
 
 /* 00000978-00000A0C       .text event_proc__11daTag_Kf1_cFv */
-void daTag_Kf1_c::event_proc() {
-    /* Nonmatching */
+void daTag_Kf1_c::event_proc() { 
+    if (dComIfGp_evmng_endCheck("BENSYO")) {
+        setStt(0x02);
+    }
+    else {
+        bool attn_flag = this->tag_event_cut.getAttnFlag();
+        if (this->tag_event_cut.cutProc()) {
+            if (!tag_event_cut.getAttnFlag()){
+                tag_event_cut.setAttnFlag(attn_flag);
+            }
+        }
+        else {
+            privateCut();
+        }
+    }
 }
 
 /* 00000A0C-00000AB8       .text set_action__11daTag_Kf1_cFM11daTag_Kf1_cFPCvPvPv_iPv */
-void daTag_Kf1_c::set_action(int (daTag_Kf1_c::*)(void*), void*) {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) { 
+    if (this->func != action) {
+        if (this->func) {
+            this->mActionState = 0xff;
+            (this->*func)(param);
+        }
+        this->func = action;
+
+        this->mActionState = 0;
+        (this->*func)(param);
+    }
+
+    return TRUE;
 }
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait01() {
-    /* Nonmatching */
+bool daTag_Kf1_c::wait01() {
+    this->event_state = 0;
+    if ((this->hasAttention) && checkPartner() != this->npartners) {
+        this->event_state = 3;
+    }
+    return TRUE;
 }
 
 /* 00000B14-00000B1C       .text wait02__11daTag_Kf1_cFv */
-void daTag_Kf1_c::wait02() {
-    /* Nonmatching */
+bool daTag_Kf1_c::wait02() {
+    return TRUE;
 }
 
 /* 00000B1C-00000BE8       .text wait_action1__11daTag_Kf1_cFPv */
-void daTag_Kf1_c::wait_action1(void*) {
-    /* Nonmatching */
+BOOL daTag_Kf1_c::wait_action1(void*) {
+    if (mActionState == 0) {
+        setStt(1);
+        mActionState++;
+    } else if (mActionState != -1) {
+        if (mActionState == 1) {
+            partner_srch();
+            mActionState = 2;
+        }
+        hasAttention = chkAttention(this->current.pos);
+        s32 val = stt;
+        switch (val) {
+            case 1: wait01(); break;
+            case 2: wait02(); break;
+        }
+        
+    }
+    return TRUE;
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_draw() {
-    /* Nonmatching */
+bool daTag_Kf1_c::_draw() {
+    return TRUE;
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_execute() {
-    /* Nonmatching */
+bool daTag_Kf1_c::_execute() {
+    checkOrder();
+    if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
+        event_proc();
+    }
+    else { 
+        (this->*func)(NULL);
+    }
+    eventOrder();
+    return TRUE;
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
-BOOL daTag_Kf1_c::_delete() {
-    /* Nonmatching */
+bool daTag_Kf1_c::_delete() {
+    fpc_ProcID id = fopAcM_GetID(this);
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+
+    return TRUE;
 }
 
 /* 00000CBC-00000E98       .text _create__11daTag_Kf1_cFv */
 cPhs_State daTag_Kf1_c::_create() {
+    s32 ret = cPhs_COMPLEATE_e;
+    fopAcM_SetupActor(this, daTag_Kf1_c);
+
+    switch (fopAcM_GetName(this)) {
+        case PROC_TAG_KF1:
+            this->field_0x769 = 0;
+            break;
+        default:
+            return cPhs_ERROR_e;
+    }
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("クタニ焼き監視タグ", &l_HIO);
+    }
+    if (!createInit()) {
+        ret = cPhs_ERROR_e;
+    }
+    return ret;
     /* Nonmatching */
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Kf1_Create(fopAc_ac_c* i_this) {
-    return ((daTag_Kf1_c*)i_this)->_create();
+static cPhs_State daTag_Kf1_Create(fopAc_ac_c* obj) {
+    (static_cast<daTag_Kf1_c*>(obj))->_create();
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_delete();
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_execute();
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
+static bool daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_draw();
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
-static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
+static bool daTag_Kf1_IsDelete(daTag_Kf1_c*) {
     return TRUE;
 }
-
 static actor_method_class l_daTag_Kf1_Method = {
-    (process_method_func)daTag_Kf1_Create,
-    (process_method_func)daTag_Kf1_Delete,
-    (process_method_func)daTag_Kf1_Execute,
-    (process_method_func)daTag_Kf1_IsDelete,
+    (process_method_func)daTag_Kf1_Create,  (process_method_func)daTag_Kf1_Delete,
+    (process_method_func)daTag_Kf1_Execute, (process_method_func)daTag_Kf1_IsDelete,
     (process_method_func)daTag_Kf1_Draw,
 };
 
