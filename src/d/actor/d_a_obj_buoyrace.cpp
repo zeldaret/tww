@@ -5,21 +5,25 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyrace.h"
+#include "d/actor/d_a_goal_flag.h"
+#include "d/actor/d_a_sea.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_khasi_00.h"
+#include "d/res/res_kkiba_00.h"
 
 const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
 const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
 const daObjBuoyrace::Act_c::Attr_c daObjBuoyrace::Act_c::M_attr = {
-    /* _00 */ 150.0f,
-    /* _04 */ 2.0f,
-    /* _08 */ 0.8f,
-    /* _0C */ 0.5f,
-    /* _10 */ 1.36357345e-36f,
-    /* _14 */ 0.3f,
-    /* _18 */ 0.02f,
-    /* _1C */ 0.04f,
-    /* _20 */ 0.35f
+    /* m00 */ 150.0f,
+    /* m04 */ 2.0f,
+    /* m08 */ 0.8f,
+    /* m0C */ 0.5f,
+    /* m10 */ 0x3E8,
+    /* m14 */ 0.3f,
+    /* m18 */ 0.02f,
+    /* m1C */ 0.04f,
+    /* m20 */ 0.35f
 };
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
@@ -29,7 +33,21 @@ BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 0000009C-000001D0       .text create_heap__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::create_heap() {
-    /* Nonmatching */
+    bool o_return = false;
+
+    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
+    JUT_ASSERT(0x77, mdl_data_kiba != NULL);
+    field_0x2D4 = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
+
+    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
+    JUT_ASSERT(0x80, mdl_data_hasi != NULL);
+    field_0x2D8 = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
+
+    if (field_0x2D4 && field_0x2D8) {
+        o_return = true;
+    }
+    
+    return o_return;
 }
 
 /* 000001D0-00000238       .text create_load__Q213daObjBuoyrace5Act_cFv */
@@ -56,17 +74,17 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
     if (o_result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, 0x980)) {
             set_water_pos();
-            f32 tmp = attr()._08 * -attr()._00;
-            current.pos.y = field_0x290 + (attr()._0C * cM_ssin(field_0x2A0) + tmp) * attr()._04;
+            f32 tmp = attr().m08 * -attr().m00;
+            current.pos.y = field_0x290 + (attr().m0C * cM_ssin(field_0x2A0) + tmp) * attr().m04;
             cullMtx = field_0x2D4->getBaseTRMtx();
             fopAcM_setCullSizeBox(
                 this, 
-                -1.0f * 76.0f * attr()._04, 
-                -1.0f * attr()._04, 
-                -1.0f * 76.0f * attr()._04, 
-                76.0f * attr()._04, 
-                295.0f * attr()._04, 
-                76.0f * attr()._04
+                -1.0f * 76.0f * attr().m04, 
+                -1.0f * attr().m04, 
+                -1.0f * 76.0f * attr().m04, 
+                76.0f * attr().m04, 
+                295.0f * attr().m04, 
+                76.0f * attr().m04
             );
             init_mtx();
         } else {
@@ -85,7 +103,37 @@ bool daObjBuoyrace::Act_c::_delete() {
 
 /* 000003C0-000005A0       .text set_mtx__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_mtx() {
-    /* Nonmatching */
+    cXyz tmp0;
+    Quaternion quat;
+    cXyz tmp1;
+    Vec actor_scale;
+    cXyz tmp3;
+    
+    field_0x2D4->setBaseScale(scale * attr().m04);
+
+    actor_scale.x = 1.75f * (scale.x * attr().m04);
+    actor_scale.y =  2.5f * (scale.y * attr().m04);
+    actor_scale.z = 1.75f * (scale.z * attr().m04);
+
+    field_0x2D8->setBaseScale(actor_scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+    tmp0.set(field_0x2AC, 1.0f, field_0x2B0);
+    mDoMtx_stack_c::transM(0.0f, attr().m00 * 0.5f * attr().m04, 0.0f);
+    daObj::quat_rotBaseY(&quat, tmp0);
+    mDoMtx_stack_c::quatM(&quat);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::transM(0.0f, -attr().m00 * 0.5f * attr().m04, 0.0f);
+    field_0x2D4->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    set_rope_pos();
+
+    tmp1.set(0.0f, (attr().m00 - 5.0f) * attr().m04, 0.0f);
+    mDoMtx_stack_c::multVecSR(&tmp1, &tmp3);
+    mDoMtx_stack_c::get()[0][3] += tmp3.x;
+    mDoMtx_stack_c::get()[1][3] += tmp3.y;
+    mDoMtx_stack_c::get()[2][3] += tmp3.z;
+    field_0x2D8->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000005A0-000005C0       .text init_mtx__Q213daObjBuoyrace5Act_cFv */
@@ -95,22 +143,88 @@ void daObjBuoyrace::Act_c::init_mtx() {
 
 /* 000005C0-000006D8       .text set_water_pos__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_water_pos() {
-    /* Nonmatching */
+    f32 sea_wave_1 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z - 32.0f);
+    f32 sea_wave_2 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z + 32.0f);
+    f32 sea_wave_3 = daSea_calcWave(current.pos.x + 32.0f, current.pos.z - 32.0f);
+    cXyz tmp1(
+        0.0f,
+        sea_wave_2 - sea_wave_1,
+        32.0f
+    );
+    cXyz tmp2(
+        32.0f,
+        sea_wave_3 - sea_wave_1,
+        0.0f
+    );
+    field_0x290 = (sea_wave_1 + sea_wave_2 + sea_wave_3) * 0.33333333f;
+    field_0x294 = tmp1.outprod(tmp2);
+    field_0x294.normalize();
 }
 
 /* 000006D8-0000081C       .text afl_calc_sway__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc_sway() {
-    /* Nonmatching */
+    f32 tmp1 = field_0x294.x * attr().m20;
+    f32 tmp2 = field_0x294.z * attr().m20;
+    f32 tmp3 = tmp1 * tmp1 + tmp2 * tmp2;
+
+    if (tmp3 > attr().m14 * attr().m14) {
+        tmp3 = std::sqrtf(tmp3);
+        tmp1 *= (attr().m14 / tmp3);
+        tmp2 *= (attr().m14 / tmp3);
+    }
+
+    f32 tmp4 = -(field_0x2B0 - tmp2) * attr().m18;
+    f32 tmp5 = -(field_0x2AC - tmp1) * attr().m18; 
+
+    f32 tmp6 = -field_0x2B8 * attr().m1C;
+    f32 tmp7 = -field_0x2B4 * attr().m1C;
+
+    field_0x2B4 += tmp5 + tmp7;
+    field_0x2B8 += tmp4 + tmp6;
+
+    field_0x2AC += field_0x2B4;
+    field_0x2B0 += field_0x2B8;
 }
 
 /* 0000081C-00000960       .text afl_calc__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc() {
-    /* Nonmatching */
+    field_0x2C0 += field_0x2BC * -0.01f;
+    field_0x2C0 *= 0.94f;
+    field_0x2BC += field_0x2C0;
+    if (field_0x2BC > 0.2f * attr().m00) {
+        field_0x2BC = 0.2f * attr().m00;
+    } 
+    field_0x2A0 = field_0x2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
+
+    f32 tmp1 = field_0x290 + field_0x2BC;
+    f32 tmp2 = attr().m08 * -attr().m00;
+    f32 tmp3 = (attr().m0C * cM_ssin(field_0x2A0) + tmp2) * attr().m04;
+
+    cLib_chaseF(
+        &current.pos.y, 
+        tmp1 + tmp3,
+        50.0f
+    );
+    afl_calc_sway();
 }
 
 /* 00000960-00000A6C       .text set_rope_pos__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_rope_pos() {
     /* Nonmatching */
+    daGoal_Flag_c* parent_p = (daGoal_Flag_c*) fopAcM_SearchByID(fopAcM_GetLinkId(this));
+
+    if (parent_p) {
+        int line = prm_get_line();
+        int id = prm_get_id();
+        cXyz* rope_pos;// = parent_p->getRopePos(line, id);
+        JUT_ASSERT(0x194, rope_pos != NULL);
+        cXyz tmp(
+            0.0f,
+            (attr().m00 - 5.0f + 160.0f) * attr().m04,
+            0.0f
+        );
+        mDoMtx_stack_c::multVec(&tmp, rope_pos);
+    }
 }
 
 /* 00000A6C-00000AAC       .text _execute__Q213daObjBuoyrace5Act_cFv */
@@ -140,19 +254,16 @@ cPhs_State Mthd_Create(void* i_this) {
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
 BOOL Mthd_Delete(void* i_this) {
-    /* Nonmatching */
     return ((daObjBuoyrace::Act_c*)i_this)->_delete();
 }
 
 /* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
 BOOL Mthd_Execute(void* i_this) {
-    /* Nonmatching */
     return ((daObjBuoyrace::Act_c*)i_this)->_execute();
 }
 
 /* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    /* Nonmatching */
     return ((daObjBuoyrace::Act_c*)i_this)->_draw(); 
 }
 
