@@ -21,7 +21,7 @@ public:
 
 class dMinigame_Starter_c : public msg_class {
 public:
-    void countStart() {}
+    void countStart() { if (!field_0x111) field_0x111 = true; }
     
     void _create();
     void _execute();

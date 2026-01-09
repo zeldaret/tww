@@ -11,14 +11,14 @@ class daGFlag_HIO_c {
 public:
     daGFlag_HIO_c() {
         m04 = -1; // Unused HIO field
-        mDrawShiny = true;
+        mDrawCelShaded = true;
         m07 = 0; // Unused HIO field
         m06 = 0; // Unused HIO field
         m08 = 0; // Unused HIO field
         mWindScalePhaseInc = 0x2ee;
         mNormalFlutterPhaseInc = 0x800;
         mFlagWavePhaseInc = 0xbd1;
-        mTimeLimit = 240; // 4 minutes
+        mTimeLimit = 240; // In seconds; 4 minutes
 
         // Maximum amount of rupees you can get in these minigames
         mPerfectRupeeScore = 150; 
@@ -38,7 +38,7 @@ public:
     inline virtual ~daGFlag_HIO_c();
 public:
     /* 0x04 */ s8 m04;
-    /* 0x05 */ bool mDrawShiny;
+    /* 0x05 */ bool mDrawCelShaded;
     /* 0x06 */ s8 m06;
     /* 0x07 */ s8 m07;
     /* 0x08 */ s8 m08;
@@ -69,7 +69,7 @@ public:
     virtual ~daGFlag_packet_c() {}
     void changeCurrentPos() { mCurrArr ^= 1; }
     cXyz* getDPos() { return mDPos[mCurrArr]; }
-    Mtx* getMtx() { return &mMtx; }
+    MtxP getMtx() { return mMtx; }
     cXyz* getNrm() { return mNrm[mCurrArr]; }
     cXyz* getOffsetVec() { return mVelocity; }
     cXyz* getPos() { return mPos[mCurrArr]; }

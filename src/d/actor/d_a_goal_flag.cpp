@@ -226,7 +226,7 @@ void daGFlag_packet_c::draw() {
         num_tev_stages = 2;
         lightMask = 1;
     }
-    if (l_HIO.mDrawShiny) {
+    if (l_HIO.mDrawCelShaded) {
         GXSetChanCtrl(GX_COLOR0, true, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(2);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
@@ -351,27 +351,20 @@ void daGFlag_packet_c::setNrmVtx(cXyz* o_nrm, int i_col, int i_row) {
 
     MtxPush();
     cMtx_YrotM(*calc_mtx, 
-#if VERSION == VERSION_DEMO
-        (REG10_S(2) + 0x200) *
-#endif
-        cM_ssin(mNormalFlutterPhase + 
+        DEMO_SELECT(REG10_S(2) + 0x200, 512.0f) *
+        cM_ssin(
+            mNormalFlutterPhase + 
             (i_col * (DEMO_SELECT(REG10_S(3), 0) + -0x400) + 
-            i_row * (DEMO_SELECT(REG10_S(4), 0) + 0x100)))
-#if VERSION != VERSION_DEMO
-            * 512.0f
-#endif
+            i_row * (DEMO_SELECT(REG10_S(4), 0) + 0x100))
+        )
     );
-
     cMtx_XrotM(*calc_mtx, 
-#if VERSION == VERSION_DEMO
-        (REG10_S(5) + 0x200) * 
-#endif
-        cM_scos(mNormalFlutterPhase + 
+        DEMO_SELECT(REG10_S(5) + 0x200, 512.0f) * 
+        cM_scos(
+            mNormalFlutterPhase + 
             (i_col * (DEMO_SELECT(REG10_S(6), 0) + -0x400) + 
-            i_row * (DEMO_SELECT(REG10_S(7), 0) + 0x100)))
-#if VERSION != VERSION_DEMO
-             * 512.0f
-#endif
+            i_row * (DEMO_SELECT(REG10_S(7), 0) + 0x100))
+        )
     );
     MtxPosition(&averaged_normal, &tri_normal);
     o_nrm->set(tri_normal.normZP());
@@ -404,20 +397,20 @@ void daGoal_Flag_c::RopeMove() {
         0.0f, 150.0f, 225.0f, 150.0f
     };
     for (int i = 0; i < mNumRopes; i++) {
-        cXyz* temp = getRopePos(i, 0);
-        cXyz* temp2 = getRopePos(i, mNumRopeBuoys[i]);
-        temp2->set(*temp);
+        cXyz* rope_start = getRopePos(i, 0);
+        cXyz* rope_end = getRopePos(i, mNumRopeBuoys[i]);
+        rope_end->set(*rope_start);
         for (int j = 0; j < (int)(mNumRopeBuoys[i] << 2); j++) {
-            int temp2 = j & 3;
-            int temp3 = j >> 2;
-            if (temp2 != 0) {
-                cXyz* temp4 = getRopePos(i, temp3);
-                cXyz* temp5 = getRopePos(i, temp3 + 1);
-                cXyz& temp6 = getRopePos(i, temp3)[temp2];
-                f32 temp7 = (f32)temp2 * 0.25f;
-                f32 temp8 = 1.0f - temp7;
-                temp6.set((*temp4 * temp8) + (*temp5 * temp7));
-                temp6.y -= down_offset[temp2];
+            int interpolated_point = j & 3;
+            int anchor_point = j >> 2;
+            if (interpolated_point != 0) {
+                cXyz* A = getRopePos(i, anchor_point);
+                cXyz* B = getRopePos(i, anchor_point + 1);
+                cXyz& C = getRopePos(i, anchor_point)[interpolated_point];
+                f32 t = (f32)interpolated_point * 0.25f;
+                f32 one_minus_t = 1.0f - t;
+                C.set((*A) * one_minus_t + (*B) * t);
+                C.y -= down_offset[interpolated_point];
             }
         }
     }
@@ -426,29 +419,29 @@ void daGoal_Flag_c::RopeMove() {
 /* 000010F4-0000123C       .text CreateBuoyRaces__13daGoal_Flag_cFv */
 BOOL daGoal_Flag_c::CreateBuoyRaces() {
     int i;
-    dPnt* points_p;
+    dPnt* rope_points_p;
     cXyz* segment;
     for (i = 0; i < mNumRopes; i++) {
-        points_p = mpRopePaths[i]->m_points;
+        rope_points_p = mpRopePaths[i]->m_points;
         segment = getRopePos(i, 0);
-        for (int j = 0; j < mNumRopeBuoys[i]; j++, points_p++, segment++) {
-            cXyz path_point_pos;
-            path_point_pos.set(
-                points_p->m_position.x,
-                points_p->m_position.y,
-                points_p->m_position.z
+        for (int j = 0; j < mNumRopeBuoys[i]; j++, rope_points_p++, segment++) {
+            cXyz rope_point_pos;
+            rope_point_pos.set(
+                rope_points_p->m_position.x,
+                rope_points_p->m_position.y,
+                rope_points_p->m_position.z
             );
             fopAcM_createChild(
                 PROC_Obj_Buoyrace, 
                 fopAcM_GetID(this), 
-                j | (i << 8), &path_point_pos, 
+                j | (i << 8), &rope_point_pos, 
                 fopAcM_GetRoomNo(this), 
                 NULL
             );
             segment->set(
-                points_p->m_position.x, 
-                points_p->m_position.y + 250.0f, 
-                points_p->m_position.z
+                rope_points_p->m_position.x, 
+                rope_points_p->m_position.y + 250.0f, 
+                rope_points_p->m_position.z
             );
         }
         segment->set(*getRopePos(i, 0));
@@ -458,7 +451,7 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
 
 /* 0000123C-00001450       .text goal_check__13daGoal_Flag_cFv */
 int daGoal_Flag_c::goal_check() {
-    int o_ret;
+    int o_result;
     cXyz player_from_line_start = dComIfGp_getPlayer(0)->current.pos - mGoalFlagPolePos[0];
 
     cXyz finish_line_dir = mGoalFlagPolePos[1] - mGoalFlagPolePos[0];
@@ -478,17 +471,17 @@ int daGoal_Flag_c::goal_check() {
     // Negative values mean the player is in front of it
     f32 player_finish_side = finish_line_normal.getDotProduct(player_from_line_start);
 
-    o_ret = 0; // Not yet crossed the finish line
+    o_result = 0; // Not yet crossed the finish line
     if (player_along_line > 0.0f && player_along_line < finish_line_len) {
         if (mPrevPlayerLineSide > 0.0f && player_finish_side <= 0.0f) {
-            o_ret = 1; // Crossed the finish line normally
+            o_result = 1; // Crossed the finish line normally
         } else if (mPrevPlayerLineSide <= 0.0f && player_finish_side > 0.0f) {
-            o_ret = -1; // Crossed the finish line the wrong way
+            o_result = -1; // Crossed the finish line the wrong way
         }
     }
 
     mPrevPlayerLineSide = player_finish_side;
-    return o_ret;
+    return o_result;
 }
 
 /* 00001450-0000183C       .text flag_move__13daGoal_Flag_cFv */
@@ -579,7 +572,7 @@ cPhs_State daGoal_Flag_c::_create() {
 
     fopAcM_SetupActor(this, daGoal_Flag_c);
 
-    u32 prm = fopAcM_GetParam(this) & 0xFF;
+    u8 prm = fopAcM_GetParam(this) & 0xFF;
     cloth_resload_state = dComIfG_resLoad(&mClothPhs, "Cloth");
 
 #if VERSION > VERSION_DEMO
@@ -614,11 +607,11 @@ cPhs_State daGoal_Flag_c::_create() {
         return flag_resload_state;
     }
 
-    int useless_int = 4;
-    if (useless_int == 4) 
+    int dummy_int = 4;
+    if (dummy_int == 4) 
 #endif
     {
-        u32 path_id = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+        u8 path_id = fopAcM_GetParam(this) >> 16u;
         if (path_id != 0xFF) {
             path_p = dPath_GetRoomPath(path_id, fopAcM_GetRoomNo(this));
             if (path_p) {
@@ -645,7 +638,7 @@ cPhs_State daGoal_Flag_c::_create() {
         mFlagPacket.setTexObj(arc_index);
         mFlagPacket.setToonTexObj();
 
-        path_id = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
+        path_id = fopAcM_GetParam(this) >> 16u;
         path_p = dPath_GetRoomPath(path_id, fopAcM_GetRoomNo(this));
 
         if (path_p) {
@@ -732,39 +725,65 @@ cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* 
     if ((i_row == 0 || i_row == 4) && (i_col == 0 || i_col == 8)) {
         return cXyz::Zero;
     } else {
-        cXyz nrm = i_nrmArr[index] * dot;
-        nrm.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
+        cXyz anim_factor = i_nrmArr[index] * dot;
+        anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
         if (i_col != 0) {
-            get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col - 1) + (i_row * 9)], &nrm, 250.0f); 
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col - 1) + (i_row * 9)], 
+                &anim_factor, 250.0f); 
             if (i_row != 0) {
-                get_cloth_anim_sub_factor(&pos, &i_posArr[i_col + (i_row - 1) * 9], &nrm, 120.0f); 
-                get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9], &nrm, 277.3085f);     
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[i_col + (i_row - 1) * 9], 
+                    &anim_factor, 120.0f); 
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9], 
+                    &anim_factor, 277.3085f);     
             }
             if (i_row != 4) {
-                get_cloth_anim_sub_factor(&pos, &i_posArr[i_col + (i_row + 1) * 9], &nrm, 120.0f); 
-                get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9], &nrm, 277.3085f);     
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[i_col + (i_row + 1) * 9], 
+                    &anim_factor, 120.0f); 
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9], 
+                    &anim_factor, 277.3085f);     
             }
             if (i_col != 8) {
-                get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + i_row * 9], &nrm, 250.0f);
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[(i_col + 1) + i_row * 9], 
+                    &anim_factor, 250.0f);
                 if (i_row != 0) {
-                    get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], &nrm, 277.3085f);
+                    get_cloth_anim_sub_factor(
+                        &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], 
+                        &anim_factor, 277.3085f);
                 }
                 if (i_row != 4) {
-                    get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], &nrm, 277.3085f);
+                    get_cloth_anim_sub_factor(
+                        &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], 
+                        &anim_factor, 277.3085f);
                 }
             }
-            return nrm;
+            return anim_factor;
         } else {
-            get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + (i_row * 9)], &nrm, 250.0f);
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col + 1) + (i_row * 9)], 
+                &anim_factor, 250.0f);
             if (i_row != 0) {
-                get_cloth_anim_sub_factor(&pos, &i_posArr[i_col + (i_row - 1) * 9], &nrm, 120.0f);
-                get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], &nrm, 277.3085f);
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[i_col + (i_row - 1) * 9], 
+                    &anim_factor, 120.0f);
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9], 
+                    &anim_factor, 277.3085f);
             }
             if (i_row != 4) {
-                get_cloth_anim_sub_factor(&pos, &i_posArr[i_col + (i_row + 1) * 9], &nrm, 120.0f);
-                get_cloth_anim_sub_factor(&pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], &nrm, 277.3085f);
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[i_col + (i_row + 1) * 9], 
+                    &anim_factor, 120.0f);
+                get_cloth_anim_sub_factor(
+                    &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9], 
+                    &anim_factor, 277.3085f);
             }
-            return nrm;
+            return anim_factor;
         }
     }
 }
@@ -832,9 +851,7 @@ BOOL daGoal_Flag_c::RaceStart() {
         dMinigame_Starter_c* mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(mMgameStartProcID);
 
         if (action_idx == 1 && mgame_start_p) {
-            if (!mgame_start_p->field_0x111) {
-                mgame_start_p->field_0x111 = true;
-            }
+            mgame_start_p->countStart();
             dComIfGp_evmng_cutEnd(staff_idx);
         }
 
@@ -860,8 +877,8 @@ BOOL daGoal_Flag_c::TimerExecute() {
     dTimer_c* timer_p = (dTimer_c *) fopMsgM_SearchByID(mTimerProcID);
     s32 finish_type;
     int goal_chk;
-    int mgame_rupee;
-    int rest_time;
+    int rupees_collected;
+    int remaining_time;
     dMinigame_Starter_c* mgame_start_p;
     if (mMgameStartProcID != -1) {
         mgame_start_p = (dMinigame_Starter_c*) fopMsgM_SearchByID(mMgameStartProcID);
@@ -913,14 +930,14 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 mDoAud_bgmStart(JA_BGM_SEA_FAIL);
             }
             dComIfGp_clearPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e);
-            mgame_rupee = dComIfGp_getMiniGameRupee();
-            rest_time = timer_p->getRestTimeMs() / 10;
+            rupees_collected = dComIfGp_getMiniGameRupee();
+            remaining_time = timer_p->getRestTimeMs() / 10;
             mMgameTermProcID = fopMsgM_MiniGameTerminater_create(
                 PROC_MINIGAME_TERMINATER, 
                 0, 
                 finish_type, 
-                rest_time, 
-                mgame_rupee, 
+                remaining_time, 
+                rupees_collected, 
                 NULL
             );
             fopMsgM_SearchByID(mMgameTermProcID); // Unused return
@@ -1007,19 +1024,18 @@ bool daGoal_Flag_c::_draw() {
     cMtx_YrotM(*calc_mtx, current.angle.y);
     MtxScale(scale.x, scale.y, scale.z, TRUE);
 
-    Mtx* mtx_p = mFlagPacket.getMtx();
-    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, *mtx_p);
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, mFlagPacket.getMtx());
 
     mFlagPacket.setTevStr(&tevStr);
     j3dSys.getDrawBuffer(0)->entryImm(&mFlagPacket, 0);
 
     for (int i = 0; i < mNumRopes; i++) {
-        GXColor color;
-        color.r = l_HIO.mRopeColorR;
-        color.g = l_HIO.mRopeColorG;
-        color.b = l_HIO.mRopeColorB;
-        color.a = 0xFF;
-        mRopeLines[i].update((mNumRopeBuoys[i] << 2) + 1, 20.0f, color, 0, &tevStr);
+        GXColor rope_color;
+        rope_color.r = l_HIO.mRopeColorR;
+        rope_color.g = l_HIO.mRopeColorG;
+        rope_color.b = l_HIO.mRopeColorB;
+        rope_color.a = 0xFF;
+        mRopeLines[i].update((mNumRopeBuoys[i] << 2) + 1, 20.0f, rope_color, 0, &tevStr);
         dComIfGd_set3DlineMat(&mRopeLines[i]);
     }
 
