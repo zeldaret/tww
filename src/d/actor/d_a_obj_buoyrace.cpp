@@ -200,14 +200,14 @@ void daObjBuoyrace::Act_c::afl_calc_sway() {
     f32 tmp6 = -m2B8 * attr().m1C;
     f32 tmp7 = -m2B4 * attr().m1C;
 #else
-    f32 tmp5 = (field_0x2AC - tmp1); 
-    f32 tmp4 = (field_0x2B0 - tmp2);
+    f32 tmp5 = (m2AC - tmp1); 
+    f32 tmp4 = (m2B0 - tmp2);
 
     tmp5 = -tmp5 * attr().m18;
     tmp4 = -tmp4 * attr().m18;
 
-    f32 tmp7 = -field_0x2B4 * attr().m1C;
-    f32 tmp6 = -field_0x2B8 * attr().m1C;
+    f32 tmp7 = -m2B4 * attr().m1C;
+    f32 tmp6 = -m2B8 * attr().m1C;
 #endif
 
     m2B4 += tmp5 + tmp7;
