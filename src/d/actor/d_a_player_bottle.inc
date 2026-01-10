@@ -106,9 +106,9 @@ BOOL daPy_lk_c::procBottleDrink_init(u16 param_0) {
     setSingleMoveAnime(
         ANM_BINDRINKPRE,
         1.0f,
-        daPy_HIO_bottle_c0::m.field_0x5C,
-        daPy_HIO_bottle_c0::m.field_0xC,
-        daPy_HIO_bottle_c0::m.field_0x60
+        m_HIO->mItem.mBottle.m.field_0x5C,
+        m_HIO->mItem.mBottle.m.field_0xC,
+        m_HIO->mItem.mBottle.m.field_0x60
     );
     if (changeBottleDrinkFace(param_0)) {
         setTextureAnime(0x85, 0);
@@ -133,7 +133,7 @@ BOOL daPy_lk_c::procBottleDrink() {
     u16 uVar1 = m_anm_heap_under[UNDER_MOVE0_e].mIdx;
     if (uVar1 == LKANM_BCK_BINDRINKPRE) {
         if (frameCtrl.getRate() < 0.01f) {
-            setSingleMoveAnime(ANM_BINDRINKING, daPy_HIO_bottle_c0::m.field_0x64, 0.0f, -1, 0.0f);
+            setSingleMoveAnime(ANM_BINDRINKING, m_HIO->mItem.mBottle.m.field_0x64, 0.0f, -1, 0.0f);
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x86, 0);
             }
@@ -144,7 +144,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                 dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
             }
             if (mEquipItem == dItem_SOUP_BOTTLE_e || mEquipItem == dItem_HALF_SOUP_BOTTLE_e) {
-                onNoResetFlg1(daPyFlg1_UNK8000);
+                onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
             }
             resetCurse();
         } else {
@@ -159,9 +159,9 @@ BOOL daPy_lk_c::procBottleDrink() {
             setSingleMoveAnime(
                 ANM_BINDRINKAFTER,
                 1.0f,
-                daPy_HIO_bottle_c0::m.field_0x68,
-                daPy_HIO_bottle_c0::m.field_0xE,
-                daPy_HIO_bottle_c0::m.field_0x6C
+                m_HIO->mItem.mBottle.m.field_0x68,
+                m_HIO->mItem.mBottle.m.field_0xE,
+                m_HIO->mItem.mBottle.m.field_0x6C
             );
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x87, 0);
@@ -224,9 +224,9 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     setSingleMoveAnime(
         ANM_BINOPENPRE,
         1.0f,
-        daPy_HIO_bottle_c0::m.field_0x3C,
-        daPy_HIO_bottle_c0::m.field_0x6,
-        daPy_HIO_bottle_c0::m.field_0x40
+        m_HIO->mItem.mBottle.m.field_0x3C,
+        m_HIO->mItem.mBottle.m.field_0x6,
+        m_HIO->mItem.mBottle.m.field_0x40
     );
     keepItemData();
     setBottleModel(param_0);
@@ -259,17 +259,17 @@ BOOL daPy_lk_c::procBottleOpen() {
                 setSingleMoveAnime(
                     ANM_BINOPENB,
                     1.0f,
-                    daPy_HIO_bottle_c0::m.field_0x50,
-                    daPy_HIO_bottle_c0::m.field_0xA,
-                    daPy_HIO_bottle_c0::m.field_0x54
+                    m_HIO->mItem.mBottle.m.field_0x50,
+                    m_HIO->mItem.mBottle.m.field_0xA,
+                    m_HIO->mItem.mBottle.m.field_0x54
                 );
             } else {
                 setSingleMoveAnime(
                     ANM_BINOPENA,
                     1.0f,
-                    daPy_HIO_bottle_c0::m.field_0x44,
-                    daPy_HIO_bottle_c0::m.field_0x8,
-                    daPy_HIO_bottle_c0::m.field_0x48
+                    m_HIO->mItem.mBottle.m.field_0x44,
+                    m_HIO->mItem.mBottle.m.field_0x8,
+                    m_HIO->mItem.mBottle.m.field_0x48
                 );
             }
         } else if (frameCtrl.checkPass(32.0f)) {
@@ -376,8 +376,8 @@ BOOL daPy_lk_c::procBottleOpen() {
                 }
                 setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, 0, 5.0f);
             } else if (
-                (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= daPy_HIO_bottle_c0::m.field_0x58) ||
-                (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= daPy_HIO_bottle_c0::m.field_0x4C)
+                (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
+                (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)
             ) {
                 mpBottleContentsModel = NULL;
                 m34D8 = 1;
@@ -445,21 +445,21 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     if (bVar1) {
         setSingleMoveAnime(
             ANM_BINSWINGU,
-            daPy_HIO_bottle_c0::m.field_0x20,
-            daPy_HIO_bottle_c0::m.field_0x24,
-            daPy_HIO_bottle_c0::m.field_0x2,
-            daPy_HIO_bottle_c0::m.field_0x2C
+            m_HIO->mItem.mBottle.m.field_0x20,
+            m_HIO->mItem.mBottle.m.field_0x24,
+            m_HIO->mItem.mBottle.m.field_0x2,
+            m_HIO->mItem.mBottle.m.field_0x2C
         );
-        m35A0 = daPy_HIO_bottle_c0::m.field_0x28;
+        m35A0 = m_HIO->mItem.mBottle.m.field_0x28;
     } else {
         setSingleMoveAnime(
             ANM_BINSWINGS,
-            daPy_HIO_bottle_c0::m.field_0x10,
-            daPy_HIO_bottle_c0::m.field_0x14,
-            daPy_HIO_bottle_c0::m.field_0x0,
-            daPy_HIO_bottle_c0::m.field_0x1C
+            m_HIO->mItem.mBottle.m.field_0x10,
+            m_HIO->mItem.mBottle.m.field_0x14,
+            m_HIO->mItem.mBottle.m.field_0x0,
+            m_HIO->mItem.mBottle.m.field_0x1C
         );
-        m35A0 = daPy_HIO_bottle_c0::m.field_0x18;
+        m35A0 = m_HIO->mItem.mBottle.m.field_0x18;
     }
     mProcVar0.m3570 = 0;
     m3574 = 0;
@@ -508,7 +508,7 @@ BOOL daPy_lk_c::procBottleSwing() {
             if (m34D4 == 0) {
                 offModeFlg(ModeFlg_00000400);
                 onModeFlg(ModeFlg_00000100);
-                setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+                setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 m34D4 = 1;
             }
             if (checkEndMessage(0x14a2)) {
@@ -540,10 +540,10 @@ BOOL daPy_lk_c::procBottleGet_init() {
     commonProcInit(daPyProc_BOTTLE_GET_e);
     setSingleMoveAnime(
         ANM_BINGET,
-        daPy_HIO_bottle_c0::m.field_0x30,
-        daPy_HIO_bottle_c0::m.field_0x34,
-        daPy_HIO_bottle_c0::m.field_0x4,
-        daPy_HIO_bottle_c0::m.field_0x38
+        m_HIO->mItem.mBottle.m.field_0x30,
+        m_HIO->mItem.mBottle.m.field_0x34,
+        m_HIO->mItem.mBottle.m.field_0x4,
+        m_HIO->mItem.mBottle.m.field_0x38
     );
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK1000_e);
     m3628 = fpcM_ERROR_PROCESS_ID_e;

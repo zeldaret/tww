@@ -3,6 +3,8 @@
 // Translation Unit: processor.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMessage/processor.h"
 #include "JSystem/JMessage/control.h"
 

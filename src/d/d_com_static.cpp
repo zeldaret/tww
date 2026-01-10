@@ -484,7 +484,7 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
     return TRUE;
 }
 
-s8 daNpc_Ji1_c::game_life_point;
+u8 daNpc_Ji1_c::game_life_point;
 
 bool daNpc_kam_c::m_hyoi_kamome;
 

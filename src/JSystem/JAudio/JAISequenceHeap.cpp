@@ -3,6 +3,8 @@
 // Translation Unit: JAISequenceHeap.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAISequenceHeap.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"

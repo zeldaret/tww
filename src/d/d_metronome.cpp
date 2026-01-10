@@ -40,8 +40,8 @@ dMn_HIO_c::dMn_HIO_c() {
 void dMetronome_c::screenSet() {
     static const u32 cn_t2[] = { 'cn08', 'cn09', 'cn10', 'cn11', 'cn12', 'cn13' };
     static const u32 wn_t2[] = { 'wn08', 'wn09', 'wn10', 'wn11', 'wn12', 'wn13' };
-    static const u32 i11_t2[] = { 'i081', 'i091', 'i101', 'i111', 'i121', 'i131' };
-    static const u32 i12_t2[] = { 'i082', 'i092', 'i102', 'i112', 'i122', 'i132' };
+    static const u32 i12_t2[] = { 'i081', 'i091', 'i101', 'i111', 'i121', 'i131' };
+    static const u32 i11_t2[] = { 'i082', 'i092', 'i102', 'i112', 'i122', 'i132' };
     static const u32 bs_t2[] = { 'bs08', 'bs09', 'bs10', 'bs11', 'bs12', 'bs13' };
 
     static const u32 cn_t1[] = { 'cn01', 'cn02', 'cn03', 'cn04', 'cn05', 'cn06', 'cn07' };

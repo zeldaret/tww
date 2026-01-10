@@ -6289,7 +6289,7 @@ u16 daNpcPeople_c::talk2(int param_1, fopAc_ac_c* param_2) {
                 }
 
                 break;
-            case fopMsgStts_UNKA_e:
+            case fopMsgStts_CLOSE_WAIT_e:
                 if(m7A8 == 0) {
                     chkMsg();
                     m7A8 = 1;
@@ -6667,7 +6667,7 @@ u32 daNpcPeople_c::getMsg() {
 
     m734 = NULL;
 
-    if(g_dComIfG_gameInfo.play.getEvent().chkPhoto()) {
+    if(g_dComIfG_gameInfo.play.getEvent()->chkPhoto()) {
         switch(mNpcType) {
             case 2:
                 if(dComIfGp_getPictureResult() == 1) {

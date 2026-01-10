@@ -3,6 +3,8 @@
 // Translation Unit: JAIFx.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAIFx.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JASDSPInterface.h"

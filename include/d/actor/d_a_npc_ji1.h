@@ -275,7 +275,7 @@ public:
     /* 0xD84 */ u8 field_0xD84;
     /* 0xD85 */ bool mHide;
     
-    static s8 game_life_point;
+    static u8 game_life_point;
 }; // Size: 0xD88
 
 class daNpc_Ji1_HIO_c : public JORReflexible {

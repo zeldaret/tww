@@ -618,14 +618,9 @@ BOOL daKnob00_c::actionPassward2() {
                     dComIfGs_onEventBit(dSv_event_flag_c::UNK_3B20);
                     dComIfGs_setEventReg(dSv_event_flag_c::UNK_BA0F, (s8)cM_rndF(6.0f));
                 }
-#if VERSION == VERSION_DEMO
-                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
-                m2D0.init(tmp + 0x1b1a);
-#else
-                s32 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
-                tmp += 0x1b1a;
-                m2D0.init(tmp);
-#endif
+                int tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
+                int tmp2 = tmp;
+                m2D0.init(tmp2 + 0x1b1a);
             }
             break;
 

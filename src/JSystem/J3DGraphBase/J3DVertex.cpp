@@ -3,6 +3,8 @@
 // Translation Unit: J3DVertex.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphAnimator/J3DJointTree.h"

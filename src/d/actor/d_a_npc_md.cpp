@@ -2311,7 +2311,7 @@ BOOL daNpc_Md_c::talk(int r4) {
             fopMsgM_messageSet(mMsgNo);
             m313A = 0;
         }
-    } else if (msgStatus == fopMsgStts_UNK15_e) {
+    } else if (msgStatus == fopMsgStts_INPUT_e) {
         if (r4 != 0) {
             if (dComIfGp_checkMesgCancelButton()) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;

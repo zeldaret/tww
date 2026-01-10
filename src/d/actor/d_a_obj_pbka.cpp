@@ -61,7 +61,7 @@ cPhs_State daObjPbka_c::_create() {
 
 /* 0000024C-000002EC       .text daObjPbka_Create__FPv */
 static cPhs_State daObjPbka_Create(void* i_this) {
-    return static_cast<daObjPbka_c*>(i_this)->_create();
+    return ((daObjPbka_c*)i_this)->_create();
 }
 
 bool daObjPbka_c::_delete() {
@@ -71,14 +71,12 @@ bool daObjPbka_c::_delete() {
 
 /* 000002EC-0000031C       .text daObjPbka_Delete__FPv */
 static BOOL daObjPbka_Delete(void* i_this) {
-    static_cast<daObjPbka_c*>(i_this)->_delete();
-    return TRUE;
+    return ((daObjPbka_c*)i_this)->_delete();
 }
 
 bool daObjPbka_c::_draw() {
-    dKy_tevstr_c * pTevStr;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, pTevStr = &tevStr);
-    g_env_light.setLightTevColorType(mpModel, pTevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mpModel);
     dComIfGd_setList();
@@ -87,8 +85,7 @@ bool daObjPbka_c::_draw() {
 
 /* 0000031C-000003C0       .text daObjPbka_Draw__FPv */
 static BOOL daObjPbka_Draw(void* i_this) {
-    daObjPbka_c* a_this = (daObjPbka_c*)i_this;
-    return a_this->_draw();
+    return ((daObjPbka_c*)i_this)->_draw();
 }
 
 bool daObjPbka_c::_execute() {
@@ -101,7 +98,7 @@ bool daObjPbka_c::_execute() {
 
 /* 000003C0-00000450       .text daObjPbka_Execute__FPv */
 static BOOL daObjPbka_Execute(void* i_this) {
-    return static_cast<daObjPbka_c*>(i_this)->_execute();
+    return ((daObjPbka_c*)i_this)->_execute();
 }
 
 /* 00000450-00000458       .text daObjPbka_IsDelete__FPv */

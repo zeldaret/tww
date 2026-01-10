@@ -3,6 +3,8 @@
 // Translation Unit: JPAField.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAField.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"

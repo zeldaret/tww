@@ -79,9 +79,9 @@ namespace daObjMovebox {
         if (mbShouldAppear) {
             phase_state = dComIfG_resLoad(&mPhs, M_arcname[mType]);
             if (phase_state == cPhs_COMPLEATE_e) {
-                u32 heapSize = i_attr()->mDZBHeapSize;
+                u32 heapSize = attr()->mDZBHeapSize;
                 path_init();
-                phase_state = MoveBGCreate(M_arcname[mType], i_attr()->mDZBFileIndex, dBgS_MoveBGProc_Trans, heapSize);
+                phase_state = MoveBGCreate(M_arcname[mType], attr()->mDZBFileIndex, dBgS_MoveBGProc_Trans, heapSize);
                 JUT_ASSERT(1998, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
             }
         }
@@ -1102,7 +1102,7 @@ namespace daObjMovebox {
                     mkie->setup(&targetPos);
                 }
             } else {
-                cXyz buoyOffset(0.0f, i_attr()->m68 - 5.0f, 0.0f);
+                cXyz buoyOffset(0.0f, attr()->m68 - 5.0f, 0.0f);
                 cXyz buoyOffsetSR;
                 MtxP mtx = mDoMtx_stack_c::get();
                 cMtx_multVecSR(mtx, &buoyOffset, &buoyOffsetSR);
@@ -1209,8 +1209,8 @@ namespace daObjMovebox {
     /* 00001A10-00001B00       .text CreateHeap__Q212daObjMovebox5Act_cFv */
     BOOL Act_c::CreateHeap() {
         BOOL success = TRUE;
-        if (i_attr()->mModelFileIndex >= 0) {
-            J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], i_attr()->mModelFileIndex);
+        if (attr()->mModelFileIndex >= 0) {
+            J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname[mType], attr()->mModelFileIndex);
             JUT_ASSERT(1722, modelData != NULL);
             
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -1227,18 +1227,18 @@ namespace daObjMovebox {
         if (movebox->mMode != MODE_AFLOAT) {
             return;
         }
-        const Attr_c* attr = movebox->i_attr();
-        f32 f0 = movebox->i_attr()->m2C + movebox->i_attr()->m30;
+        const Attr_c* attr = movebox->attr();
+        f32 f0 = movebox->attr()->m2C + movebox->attr()->m30;
         f32 deltaX = actor2->current.pos.x - actor1->current.pos.x;
         f32 deltaZ = actor2->current.pos.z - actor1->current.pos.z;
         f32 f3;
         f32 f4;
         if (fopAcM_GetProfName(actor2) == PROC_PLAYER) {
-            f3 = movebox->i_attr()->m2C;
-            f4 = movebox->i_attr()->m74 * movebox->i_attr()->m44;
+            f3 = movebox->attr()->m2C;
+            f4 = movebox->attr()->m74 * movebox->attr()->m44;
         } else {
-            f3 = movebox->i_attr()->m30;
-            f4 = movebox->i_attr()->m74 * movebox->i_attr()->m48;
+            f3 = movebox->attr()->m30;
+            f4 = movebox->attr()->m74 * movebox->attr()->m48;
         }
         f32 f6 = std::sqrtf(deltaX*deltaX + deltaZ*deltaZ);
         f6 = 1.0f - f6 * attr->m74;
@@ -1262,7 +1262,7 @@ namespace daObjMovebox {
         dBgW::PushPullLabel pp_label = static_cast<dBgW::PushPullLabel>(orig_pp_label & (dBgW::PPLABEL_PUSH | dBgW::PPLABEL_PULL));
         if (pp_label) {
             bool unk;
-            if (!i_this->i_attr()->m9A) {
+            if (!i_this->attr()->m9A) {
                 unk = true;
             } else {
                 unk = orig_pp_label & dBgW::PPLABEL_HEAVY;
@@ -1310,7 +1310,7 @@ namespace daObjMovebox {
         m618 = 0.0f;
         m61C = 0.0f;
         m620 = 0.0f;
-        m624 = i_attr()->m68 * 0.5f;
+        m624 = attr()->m68 * 0.5f;
         m628 = 0;
         m62C = 0;
         m630 = 0.0f;
@@ -1333,12 +1333,12 @@ namespace daObjMovebox {
         
         fopAcM_SetMtx(this, mMtx);
         fopAcM_setCullSizeBox(this,
-            i_attr()->mCullMinX, i_attr()->mCullMinY, i_attr()->mCullMinZ,
-            i_attr()->mCullMaxX, i_attr()->mCullMaxY, i_attr()->mCullMaxZ
+            attr()->mCullMinX, attr()->mCullMinY, attr()->mCullMinZ,
+            attr()->mCullMaxX, attr()->mCullMaxY, attr()->mCullMaxZ
         );
         
         speedF = 0.0f;
-        gravity = i_attr()->m14;
+        gravity = attr()->m14;
         fopAcM_posMoveF(this, NULL);
         mBgc.proc_vertical(this);
         cLib_offBit(mBgc.mStateFlags, static_cast<Bgc_c::State_e>(Bgc_c::BgcState_JUST_LEFT_GROUND_e | Bgc_c::BgcState_JUST_HIT_GROUND_e | Bgc_c::BgcState_JUST_HIT_WATER_e));
@@ -1348,7 +1348,7 @@ namespace daObjMovebox {
         
         mChildPID = fpcM_ERROR_PROCESS_ID_e;
         if (prm_get_buoy() == 0) {
-            cXyz buoyPos(current.pos.x, current.pos.y + i_attr()->m68 - 5.0f, current.pos.z);
+            cXyz buoyPos(current.pos.x, current.pos.y + attr()->m68 - 5.0f, current.pos.z);
             mChildPID = daObjBuoyflag::Act_c::make_norm(fopAcM_GetID(this), &buoyPos, fopAcM_GetRoomNo(this), &shape_angle);
         } else if (mType == TYPE_METAL_BOX_WITH_SPRING) {
             u32 jumpParams = daObjJump::Act_c::prm_make_b();
@@ -1382,13 +1382,13 @@ namespace daObjMovebox {
     /* 00002214-000024D4       .text afl_sway__Q212daObjMovebox5Act_cFv */
     void Act_c::afl_sway() {
         f32 f31 = m60C*m60C + m610*m610;
-        f32 f30 = i_attr()->m4C*i_attr()->m4C;
+        f32 f30 = attr()->m4C*attr()->m4C;
         
         int bgcSrcCount;
         BgcSrc_c* bgcSrc;
         // fakematch? a cast here seems necessary to get the bgcSrc to temporarily be placed in r0 and then moved
-        bgcSrc = const_cast<BgcSrc_c*>(i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
-        bgcSrcCount = i_attr()->m9A ? ARRAY_SIZE(Bgc_c::M_lin20)-2 : ARRAY_SIZE(Bgc_c::M_lin5);
+        bgcSrc = const_cast<BgcSrc_c*>(attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5);
+        bgcSrcCount = attr()->m9A ? ARRAY_SIZE(Bgc_c::M_lin20)-2 : ARRAY_SIZE(Bgc_c::M_lin5);
         
         bool touchedFrontBack = mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[0]) ||
             mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[2]);
@@ -1397,15 +1397,15 @@ namespace daObjMovebox {
             mBgc.chk_wall_touch2(this, bgcSrc, bgcSrcCount, M_dir_base[3]);
         
         if (f31 > f30) {
-            f32 temp = i_attr()->m4C / std::sqrtf(f31);
+            f32 temp = attr()->m4C / std::sqrtf(f31);
             m60C *= temp;
             m610 *= temp;
         }
         
-        f32 f5 = -(m618 - m610) * i_attr()->m50;
-        f32 f6 = -m620 * i_attr()->m54;
-        f32 f1 = -(m614 - m60C) * i_attr()->m50;
-        f32 f0 = -m61C * i_attr()->m54;
+        f32 f5 = -(m618 - m610) * attr()->m50;
+        f32 f6 = -m620 * attr()->m54;
+        f32 f1 = -(m614 - m60C) * attr()->m50;
+        f32 f0 = -m61C * attr()->m54;
         m61C += f1 + f0;
         m620 += f5 + f6;
         m614 += m61C;
@@ -1433,22 +1433,22 @@ namespace daObjMovebox {
             s16 r0;
             if (temp) {
                 if (r3) {
-                    r0 = i_attr()->m06;
+                    r0 = attr()->m06;
                 } else {
-                    r0 = i_attr()->m08;
+                    r0 = attr()->m08;
                 }
             } else {
                 if (r3) {
-                    r0 = i_attr()->m00;
+                    r0 = attr()->m00;
                 } else {
-                    r0 = i_attr()->m02;
+                    r0 = attr()->m02;
                 }
             }
             
             for (int i = 0; i < (int)ARRAY_SIZE(mMomentCnt); i++) {
                 if (mMomentCnt[i] >= r0) {
-                    const BgcSrc_c* bgcSrc = i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
-                    int bgcSrcCount = i_attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
+                    const BgcSrc_c* bgcSrc = attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
+                    int bgcSrcCount = attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
                     if (!mBgc.chk_wall_pre(this, bgcSrc, bgcSrcCount, M_dir_base[i])) {
                         r30 = i;
                     }
@@ -1499,7 +1499,7 @@ namespace daObjMovebox {
         
         s16 angle = home.angle.y + M_dir_base[m634];
         
-        f32 scaleMag = i_attr()->mScaleXZ;
+        f32 scaleMag = attr()->mScaleXZ;
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(angle);
         mDoMtx_stack_c::transM(0.0f, 0.0f, 10.0f);
@@ -1548,7 +1548,7 @@ namespace daObjMovebox {
     /* 00002AD4-00002B48       .text mode_wait_init__Q212daObjMovebox5Act_cFv */
     void Act_c::mode_wait_init() {
         speedF = 0.0f;
-        gravity = i_attr()->m14;
+        gravity = attr()->m14;
         mpBgW->SetCrrFunc(dBgS_MoveBGProc_Trans);
         clr_moment_cnt();
         m634 = -1;
@@ -1568,11 +1568,11 @@ namespace daObjMovebox {
             path_save();
         }
         
-        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, i_attr()->m18, i_attr()->m1C);
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr()->m18, attr()->m1C);
         
         mDoMtx_stack_c::transS(home.pos);
         mDoMtx_stack_c::YrotM(home.angle.y);
-        mDoMtx_stack_c::transM(m628 * i_attr()->m0C, 0.0f, m62C * i_attr()->m0C);
+        mDoMtx_stack_c::transM(m628 * attr()->m0C, 0.0f, m62C * attr()->m0C);
         cXyz pos;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &pos);
         current.pos.x = pos.x;
@@ -1585,11 +1585,11 @@ namespace daObjMovebox {
             mode_walk_init();
             
             if (cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL)) {
-                m644 = i_attr()->m0A;
-                m630 = (f32)0x8000 / i_attr()->m0A;
+                m644 = attr()->m0A;
+                m630 = (f32)0x8000 / attr()->m0A;
             } else {
-                m644 = i_attr()->m04;
-                m630 = (f32)0x8000 / i_attr()->m04;
+                m644 = attr()->m04;
+                m630 = (f32)0x8000 / attr()->m04;
             }
         }
     }
@@ -1615,9 +1615,9 @@ namespace daObjMovebox {
         mDoMtx_stack_c::transS(home.pos);
         mDoMtx_stack_c::YrotM(home.angle.y);
         mDoMtx_stack_c::transM(
-            (m628 + temp * dir_vec[m634].x) * i_attr()->m0C,
+            (m628 + temp * dir_vec[m634].x) * attr()->m0C,
             0.0f,
-            (m62C + temp * dir_vec[m634].z) * i_attr()->m0C
+            (m62C + temp * dir_vec[m634].z) * attr()->m0C
         );
         cXyz temp2;
         mDoMtx_stack_c::multVec(&cXyz::Zero, &temp2);
@@ -1627,8 +1627,8 @@ namespace daObjMovebox {
         sound_slip();
         
         if (r28) {
-            const BgcSrc_c* bgcSrc = i_attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
-            int bgcSrcCount = i_attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
+            const BgcSrc_c* bgcSrc = attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
+            int bgcSrcCount = attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(Bgc_c::M_lin20) : ARRAY_SIZE(Bgc_c::M_lin20)-2) : ARRAY_SIZE(Bgc_c::M_lin5);
             if (mBgc.chk_wall_pre(this, bgcSrc, bgcSrcCount, M_dir_base[m634])) {
                 sound_limit();
             }
@@ -1637,7 +1637,7 @@ namespace daObjMovebox {
             eff_set_slip_smoke_pos();
         }
         
-        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, i_attr()->m18, i_attr()->m1C);
+        daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr()->m18, attr()->m1C);
         current.pos.x = temp2.x;
         current.pos.z = temp2.z;
         
@@ -1670,30 +1670,30 @@ namespace daObjMovebox {
         if (f1 >= 0.0f) {
             f0 = 0.0f;
         } else {
-            if (f1 <= -i_attr()->m68) {
+            if (f1 <= -attr()->m68) {
                 f0 = 1.0f;
             } else {
                 f1 = -f1;
-                f0 = f1 * i_attr()->m6C;
+                f0 = f1 * attr()->m6C;
             }
         }
         
-        s16 r3 = i_attr()->m38 * (1.0f + cM_rnd());
+        s16 r3 = attr()->m38 * (1.0f + cM_rnd());
         m604 += r3;
-        gravity = (f0 * i_attr()->m28) + i_attr()->m14 + i_attr()->m34 * cM_ssin(m604) + m608;
+        gravity = (f0 * attr()->m28) + attr()->m14 + attr()->m34 * cM_ssin(m604) + m608;
         m608 = 0.0f;
         
         afl_sway();
         
         f32 temp3 = 1.0f - f0;
-        f32 temp1 = f0*i_attr()->m3C + temp3*i_attr()->m18;
-        f32 temp2 = f0*i_attr()->m40 + temp3*i_attr()->m1C;
+        f32 temp1 = f0*attr()->m3C + temp3*attr()->m18;
+        f32 temp2 = f0*attr()->m40 + temp3*attr()->m1C;
         
         m624 = mBgc.mWaterY - current.pos.y;
         if (m624 < 0.0f) {
             m624 = 0.0f;
-        } else if (m624 > i_attr()->m68) {
-            m624 = i_attr()->m68;
+        } else if (m624 > attr()->m68) {
+            m624 = attr()->m68;
         }
         
         daObj::posMoveF_stream(this, NULL, &cXyz::Zero, temp1, temp2);
@@ -1752,7 +1752,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mMoveSE, &eyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(attr()->mMoveSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003BA4-00003C68       .text sound_limit__Q212daObjMovebox5Act_cFv */
@@ -1765,7 +1765,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mCantMoveSE, &eyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(attr()->mCantMoveSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003C68-00003D2C       .text sound_land__Q212daObjMovebox5Act_cFv */
@@ -1778,7 +1778,7 @@ namespace daObjMovebox {
             }
         }
         
-        mDoAud_seStart(i_attr()->mNormalFallSE, &eyePos, mtrlSndId, mReverb);
+        mDoAud_seStart(attr()->mNormalFallSE, &eyePos, mtrlSndId, mReverb);
     }
     
     /* 00003D2C-00003D80       .text vib_land__Q212daObjMovebox5Act_cFv */
@@ -1789,7 +1789,7 @@ namespace daObjMovebox {
     /* 00003D80-00003E04       .text eff_land_smoke__Q212daObjMovebox5Act_cFv */
     void Act_c::eff_land_smoke() {
         cXyz smokeScale;
-        smokeScale.setall(i_attr()->mLandSmokeScale);
+        smokeScale.setall(attr()->mLandSmokeScale);
         smokeScale *= 5.0f/3.0f;
         fopAcM_create(PROC_Obj_Eff, 0x3, &current.pos, -1, NULL, &smokeScale);
         // TODO daObjEff::Act_c::make_land_smoke(cXyz*, float)
@@ -1804,13 +1804,13 @@ namespace daObjMovebox {
             fopAcM_delete(this);
         } else {
             if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_JUST_HIT_WATER_e)) {
-                mDoAud_seStart(i_attr()->mWaterFallSE, &eyePos, 0, mReverb);
+                mDoAud_seStart(attr()->mWaterFallSE, &eyePos, 0, mReverb);
             }
             
             if (mMode == MODE_WAIT) {
                 if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_IN_WATER_e) && m646 == 0) {
                     if (cLib_checkBit(mBgc.mStateFlags, Bgc_c::BgcState_ON_GROUND_e)) {
-                        if (i_attr()->m28 + i_attr()->m14 > 0.0f) {
+                        if (attr()->m28 + attr()->m14 > 0.0f) {
                             mode_afl_init();
                         }
                     } else {
@@ -1856,7 +1856,7 @@ namespace daObjMovebox {
     /* 000040D0-00004254       .text Draw__Q212daObjMovebox5Act_cFv */
     BOOL Act_c::Draw() {
         if (mpModel) {
-            int tevType = !i_attr()->mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0;
+            int tevType = !attr()->mbUseBGTevType ? TEV_TYPE_ACTOR : TEV_TYPE_BG0;
             g_env_light.settingTevStruct(tevType, &current.pos, &tevStr);
             g_env_light.setLightTevColorType(mpModel, &tevStr);
             dComIfGd_setListBG();
@@ -1864,13 +1864,13 @@ namespace daObjMovebox {
             dComIfGd_setList();
         }
         
-        if (!i_attr()->mbCastsShadow && mBgc.mMaxGroundIdx >= 0) {
+        if (!attr()->mbCastsShadow && mBgc.mMaxGroundIdx >= 0) {
             int temp = mBgc.mMaxGroundIdx;
             f32 groundH = mBgc.mGroundY[temp];
             cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(Bgc_c::M_gnd_work[temp]);
             cXyz* norm = triPla->GetNP();
             if (norm && groundH != -G_CM3D_F_INF) {
-                dComIfGd_setSimpleShadow(&current.pos, groundH, i_attr()->m10, norm, shape_angle.y, 1.0f, NULL);
+                dComIfGd_setSimpleShadow(&current.pos, groundH, attr()->m10, norm, shape_angle.y, 1.0f, NULL);
             }
         }
         

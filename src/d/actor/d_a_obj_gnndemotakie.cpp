@@ -7,40 +7,76 @@
 #include "d/actor/d_a_obj_gnndemotakie.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_gnndemotakie.h"
+
+const char daObjGnntakie_c::M_arcname[] = "Gnndemotakie";
 
 /* 00000078-00000098       .text solidHeapCB__15daObjGnntakie_cFP10fopAc_ac_c */
-void daObjGnntakie_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjGnntakie_c::solidHeapCB(fopAc_ac_c* a_this) {
+    return ((daObjGnntakie_c*)a_this)->create_heap();
 }
 
 /* 00000098-000001F4       .text create_heap__15daObjGnntakie_cFv */
-void daObjGnntakie_c::create_heap() {
-    /* Nonmatching */
+BOOL daObjGnntakie_c::create_heap() {
+    J3DModelData* mdl_data;
+    J3DAnmTextureSRTKey* btk_data;
+    BOOL ret = FALSE;
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BDL_GNN_DEMO_TAKI_E));
+    JUT_ASSERT(90, mdl_data != NULL);
+    if (mdl_data != NULL) {
+        mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
+        if (mpModel != NULL) {
+            btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E));
+            JUT_ASSERT(97, btk_data != NULL);
+            if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+                ret = TRUE;
+            }
+        }
+    }
+    return ret;
 }
 
 /* 000001F4-00000300       .text _create__15daObjGnntakie_cFv */
 cPhs_State daObjGnntakie_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjGnntakie_c);
+    cPhs_State state = dComIfG_resLoad(&mPhase, M_arcname);
+    if (state == cPhs_COMPLEATE_e) {
+        state = cPhs_ERROR_e;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
+            cullMtx = mpModel->getBaseTRMtx();
+            init_mtx();
+            mpBtkAnm.getFrameCtrl()->setFrame(mpBtkAnm.getStartFrame());
+            mpBtkAnm.setPlaySpeed(1.0);
+            state = cPhs_COMPLEATE_e;
+        }
+    }
+    return state;
 }
 
 /* 000003A4-000003D4       .text _delete__15daObjGnntakie_cFv */
 bool daObjGnntakie_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDeleteDemo(&mPhase, M_arcname);
+    return true;
 }
 
 /* 000003D4-000003F4       .text init_mtx__15daObjGnntakie_cFv */
 void daObjGnntakie_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
 }
 
 /* 000003F4-0000041C       .text _execute__15daObjGnntakie_cFv */
 bool daObjGnntakie_c::_execute() {
-    /* Nonmatching */
+    mpBtkAnm.play();
+    return true;
 }
 
 /* 0000041C-00000494       .text _draw__15daObjGnntakie_cFv */
 bool daObjGnntakie_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
 }
 
 namespace {

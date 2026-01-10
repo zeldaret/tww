@@ -1180,7 +1180,7 @@ u8 dSv_event_c::getEventReg(u16 i_reg) {
 
 /* 8005CB94-8005CBB0       .text init__13dSv_reserve_cFv */
 void dSv_reserve_c::init() {
-    for (int i = 0; i < sizeof(dSv_reserve_c); i++) {
+    for (int i = 0; i < ARRAY_SIZE(mReserve); i++) {
         mReserve[i] = 0;
     }
 }

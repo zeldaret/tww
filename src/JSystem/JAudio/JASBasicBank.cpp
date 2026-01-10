@@ -3,6 +3,8 @@
 // Translation Unit: JASBasicBank.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASBasicBank.h"
 #include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"

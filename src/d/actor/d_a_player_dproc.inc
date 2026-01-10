@@ -99,9 +99,9 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
         cLib_addCalcAngleS(
             &shape_angle.y,
             target,
-            daPy_HIO_turn_c0::m.field_0x6,
-            daPy_HIO_turn_c0::m.field_0x8,
-            daPy_HIO_turn_c0::m.field_0xA
+            m_HIO->mTurn.m.field_0x6,
+            m_HIO->mTurn.m.field_0x8,
+            m_HIO->mTurn.m.field_0xA
         );
     }
 }
@@ -142,7 +142,7 @@ int daPy_lk_c::setTalkStartBack() {
             if (dComIfG_Bgsp()->GroundCross(&mGndChk) - current.pos.y >= -30.1f) {
                 current.angle.y = cM_atan2s(sp24.x, sp24.z);
                 mVelocity = 5.0f;
-                setSingleMoveAnime(ANM_WALK, -daPy_HIO_move_c0::m.field_0x44, 0.0f, -1, daPy_HIO_turn_c0::m.field_0x18);
+                setSingleMoveAnime(ANM_WALK, -m_HIO->mMove.m.field_0x44, 0.0f, -1, m_HIO->mTurn.m.field_0x18);
                 return 1;
             }
         }
@@ -357,9 +357,9 @@ BOOL daPy_lk_c::dProcTalk_init() {
     if (mProcVar0.m3570 == 0) {
         mVelocity = 0.0f;
         if (mDemo.getDemoMode() == 8) {
-            setSingleMoveAnime(ANM_WAITS, daPy_HIO_move_c0::m.field_0x38, 0.0f, -1, daPy_HIO_turn_c0::m.field_0x18);
+            setSingleMoveAnime(ANM_WAITS, m_HIO->mMove.m.field_0x38, 0.0f, -1, m_HIO->mTurn.m.field_0x18);
         } else {
-            setSingleMoveAnime(ANM_TALKA, daPy_HIO_turn_c0::m.field_0x14, 0.0f, -1, daPy_HIO_turn_c0::m.field_0x18);
+            setSingleMoveAnime(ANM_TALKA, m_HIO->mTurn.m.field_0x14, 0.0f, -1, m_HIO->mTurn.m.field_0x18);
         }
         m3574 = mDemo.getParam1();
         if (m3574 == 1) {
@@ -401,9 +401,9 @@ BOOL daPy_lk_c::dProcTalk() {
             current.pos.z = m370C.z;
             mProcVar0.m3570 = 0;
             if (mDemo.getDemoMode() == 8) {
-                setSingleMoveAnime(ANM_WAITS, daPy_HIO_move_c0::m.field_0x38, 0.0f, -1, daPy_HIO_turn_c0::m.field_0x18);
+                setSingleMoveAnime(ANM_WAITS, m_HIO->mMove.m.field_0x38, 0.0f, -1, m_HIO->mTurn.m.field_0x18);
             } else {
-                setSingleMoveAnime(ANM_TALKA, daPy_HIO_turn_c0::m.field_0x14, 0.0f, -1, daPy_HIO_turn_c0::m.field_0x18);
+                setSingleMoveAnime(ANM_TALKA, m_HIO->mTurn.m.field_0x14, 0.0f, -1, m_HIO->mTurn.m.field_0x18);
             }
             if (m3574 == 1) {
                 setTextureAnime(145, 0);
@@ -435,13 +435,13 @@ BOOL daPy_lk_c::dProcDamage_init() {
     commonProcInit(daPyProc_DEMO_DAMAGE_e);
     setSingleMoveAnime(
         ANM_DAMF,
-        daPy_HIO_damage_c0::m.field_0x14,
-        daPy_HIO_damage_c0::m.field_0x18,
-        daPy_HIO_damage_c0::m.field_0x0,
-        daPy_HIO_damage_c0::m.field_0x8
+        m_HIO->mDam.mDamage.m.field_0x14,
+        m_HIO->mDam.mDamage.m.field_0x18,
+        m_HIO->mDam.mDamage.m.field_0x0,
+        m_HIO->mDam.mDamage.m.field_0x8
     );
     mVelocity = 0.0f;
-    m35A0 = M_PI / (daPy_HIO_damage_c0::m.field_0x0 - daPy_HIO_damage_c0::m.field_0x18);
+    m35A0 = M_PI / (m_HIO->mDam.mDamage.m.field_0x0 - m_HIO->mDam.mDamage.m.field_0x18);
     return true;
 }
 
@@ -471,25 +471,25 @@ BOOL daPy_lk_c::dProcHoldup_init() {
     if (uVar1) {
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
             dVar3 = ANM_WALLHOLDUPDW;
-            dVar6 = daPy_HIO_holdup_c0::m.field_0x30;
-            dVar5 = daPy_HIO_holdup_c0::m.field_0x34;
-            sVar2 = daPy_HIO_holdup_c0::m.field_0x6;
-            dVar4 = daPy_HIO_holdup_c0::m.field_0x38;
+            dVar6 = m_HIO->mHoldup.m.field_0x30;
+            dVar5 = m_HIO->mHoldup.m.field_0x34;
+            sVar2 = m_HIO->mHoldup.m.field_0x6;
+            dVar4 = m_HIO->mHoldup.m.field_0x38;
         } else {
             dVar3 = ANM_WALLHOLDUP;
-            dVar6 = daPy_HIO_holdup_c0::m.field_0x24;
-            dVar5 = daPy_HIO_holdup_c0::m.field_0x28;
-            sVar2 = daPy_HIO_holdup_c0::m.field_0x4;
-            dVar4 = daPy_HIO_holdup_c0::m.field_0x2C;
+            dVar6 = m_HIO->mHoldup.m.field_0x24;
+            dVar5 = m_HIO->mHoldup.m.field_0x28;
+            sVar2 = m_HIO->mHoldup.m.field_0x4;
+            dVar4 = m_HIO->mHoldup.m.field_0x2C;
         }
         onModeFlg(ModeFlg_WHIDE);
         setBgCheckParam();
     } else {
         dVar3 = ANM_HOLDUP;
-        dVar6 = daPy_HIO_holdup_c0::m.field_0x18;
-        dVar5 = daPy_HIO_holdup_c0::m.field_0x1C;
-        sVar2 = daPy_HIO_holdup_c0::m.field_0x2;
-        dVar4 = daPy_HIO_holdup_c0::m.field_0x20;
+        dVar6 = m_HIO->mHoldup.m.field_0x18;
+        dVar5 = m_HIO->mHoldup.m.field_0x1C;
+        sVar2 = m_HIO->mHoldup.m.field_0x2;
+        dVar4 = m_HIO->mHoldup.m.field_0x20;
     }
     setSingleMoveAnime(dVar3, dVar6, dVar5, sVar2, dVar4);
     mVelocity = 0.0f;
@@ -676,7 +676,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
         mProcVar0.m3570 = 0;
         onModeFlg(ModeFlg_00000400);
     } else {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         setAnimeUnequip();
         m3598 = 0.0f;
         mProcVar0.m3570 = 1;
@@ -777,7 +777,7 @@ BOOL daPy_lk_c::dProcGetItem() {
                     dComIfGp_evmng_cutEnd(mStaffIdx);
                     item->dead();
                     m3574 = 1;
-                    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+                    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 }
             }
         } else if (item != NULL && (fopAcM_GetName(item) == PROC_ITEM || (fopAcM_GetName(item) == PROC_Demo_Item))) {
@@ -794,7 +794,7 @@ BOOL daPy_lk_c::dProcUnequip_init() {
     }
     commonProcInit(daPyProc_DEMO_UNEQUIP_e);
     mVelocity = 0.0f;
-    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     if (mEquipItem != daPyItem_NONE_e) {
         setAnimeUnequip();
         m3598 = 0.0f;
@@ -812,11 +812,11 @@ BOOL daPy_lk_c::dProcUnequip() {
 
 /* 8012ED74-8012EE0C       .text dProcLavaDamage_init_sub__9daPy_lk_cFv */
 void daPy_lk_c::dProcLavaDamage_init_sub() {
-    speed.y = daPy_HIO_restart_c0::m.field_0x8;
+    speed.y = m_HIO->mRestart.m.field_0x8;
     mProcVar0.m3570 = 0;
     voiceStart(4);
     seStartMapInfo(JA_SE_LK_FALL_MAGMA);
-    gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+    gravity = m_HIO->mAutoJump.m.field_0xC;
     mDemo.setDemoType(5);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10000000_e);
     daPy_py_c::changePlayer(this);
@@ -829,7 +829,7 @@ BOOL daPy_lk_c::dProcLavaDamage_init() {
     }
     commonProcInit(daPyProc_DEMO_LAVA_DAMAGE_e);
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_LAVADAM, daPy_HIO_restart_c0::m.field_0x0, 0.0f, -1, daPy_HIO_restart_c0::m.field_0x4);
+    setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
     m32E4.makeEmitter(dPa_name::ID_SCENE_8078, mpCLModel->getAnmMtx(0), &current.pos, NULL);
     if (dComIfGp_event_compulsory(this)) {
         dProcLavaDamage_init_sub();
@@ -931,7 +931,7 @@ void daPy_lk_c::dProcDead_init_sub() {
 void daPy_lk_c::dProcDead_init_sub2() {
     static const Vec ripple_scale = {0.75f, 0.75f, 0.75f};
 
-    mFrameCtrlUnder[UNDER_MOVE0_e].setRate(daPy_HIO_restart_c0::m.field_0xC);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setRate(m_HIO->mRestart.m.field_0xC);
     voiceStart(22);
     mDoAud_bgmStop(0);
     mDoAud_bgmStart(JA_BGM_DIE_LINK);
@@ -975,7 +975,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     commonProcInit(daPyProc_DEMO_DEAD_e);
     if (dComIfGp_event_compulsory(this)) {
         dProcDead_init_sub();
-        dVar8 = daPy_HIO_restart_c0::m.field_0xC;
+        dVar8 = m_HIO->mRestart.m.field_0xC;
     } else {
         dVar8 = 0.0f;
         mProcVar0.m3570 = 1;
@@ -1001,7 +1001,7 @@ BOOL daPy_lk_c::dProcDead_init() {
         onModeFlg(ModeFlg_02000000);
     }
 
-    setSingleMoveAnime(dVar6, dVar8, daPy_HIO_restart_c0::m.field_0x10, -1, daPy_HIO_restart_c0::m.field_0x14);
+    setSingleMoveAnime(dVar6, dVar8, m_HIO->mRestart.m.field_0x10, -1, m_HIO->mRestart.m.field_0x14);
     mDamageWaitTimer = 0;
     m35E4 = 0.0f;
     m35A0 = 1.0f;
@@ -1121,10 +1121,10 @@ BOOL daPy_lk_c::dProcLookAround_init() {
     commonProcInit(daPyProc_DEMO_LOOK_AROUND_e);
     setSingleMoveAnime(
         ANM_COMEOUT,
-        daPy_HIO_holdup_c0::m.field_0xC,
-        daPy_HIO_holdup_c0::m.field_0x10,
-        daPy_HIO_holdup_c0::m.field_0x0,
-        daPy_HIO_holdup_c0::m.field_0x14
+        m_HIO->mHoldup.m.field_0xC,
+        m_HIO->mHoldup.m.field_0x10,
+        m_HIO->mHoldup.m.field_0x0,
+        m_HIO->mHoldup.m.field_0x14
     );
     mVelocity = 0.0f;
     return true;
@@ -1188,10 +1188,10 @@ BOOL daPy_lk_c::dProcTalismanPickup_init() {
     commonProcInit(daPyProc_DEMO_TALISMAN_PICKUP_e);
     setSingleMoveAnime(
         ANM_PICKUP,
-        daPy_HIO_holdup_c0::m.field_0x3C,
-        daPy_HIO_holdup_c0::m.field_0x40,
-        daPy_HIO_holdup_c0::m.field_0x8,
-        daPy_HIO_holdup_c0::m.field_0x44
+        m_HIO->mHoldup.m.field_0x3C,
+        m_HIO->mHoldup.m.field_0x40,
+        m_HIO->mHoldup.m.field_0x8,
+        m_HIO->mHoldup.m.field_0x44
     );
     mVelocity = 0.0f;
     initShipRideUseItem(iVar2, 1);
@@ -1220,7 +1220,7 @@ BOOL daPy_lk_c::dProcTalismanWait_init() {
     }
     int iVar2 = checkShipRideUseItem(1);
     commonProcInit(daPyProc_DEMO_TALISMAN_WAIT_e);
-    setSingleMoveAnime(ANM_WAITPICKUP, 1.0f, 0.0f, -1, daPy_HIO_holdup_c0::m.field_0x48);
+    setSingleMoveAnime(ANM_WAITPICKUP, 1.0f, 0.0f, -1, m_HIO->mHoldup.m.field_0x48);
     mVelocity = 0.0f;
     setTalismanModel();
     m32E4.makeEmitter(dPa_name::ID_COMMON_03E9, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
@@ -1312,16 +1312,16 @@ BOOL daPy_lk_c::dProcTurnBack_init() {
     commonProcInit(daPyProc_DEMO_TURN_BACK_e);
     mVelocity = 0.0f;
     if (mActorKeepGrab.getActor() != NULL) {
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         mProcVar0.m3570 = 1;
     } else {
         setSingleMoveAnime(
             ANM_TURNBACK,
-            daPy_HIO_holdup_c0::m.field_0x4C,
-            daPy_HIO_holdup_c0::m.field_0x50,
-            daPy_HIO_holdup_c0::m.field_0xA,
-            daPy_HIO_holdup_c0::m.field_0x54
+            m_HIO->mHoldup.m.field_0x4C,
+            m_HIO->mHoldup.m.field_0x50,
+            m_HIO->mHoldup.m.field_0xA,
+            m_HIO->mHoldup.m.field_0x54
         );
         mProcVar0.m3570 = 0;
     }
@@ -1427,7 +1427,7 @@ BOOL daPy_lk_c::dProcLookWait_init() {
     }
     commonProcInit(daPyProc_DEMO_LOOK_WAIT_e);
     mVelocity = 0.0f;
-    setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+    setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     current.angle.y = shape_angle.y;
     mDirection = DIR_NONE;
     initShipRideUseItem(iVar1, 0);
@@ -1464,7 +1464,7 @@ BOOL daPy_lk_c::dProcPushPullWait_init() {
     }
     commonProcInit(daPyProc_DEMO_PUSH_PULL_WAIT_e);
     setSingleMoveAnime(
-        ANM_WAITPUSHPULL, daPy_HIO_pushpull_c0::m.field_0x0, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0x4
+        ANM_WAITPUSHPULL, m_HIO->mPushpull.m.field_0x0, 0.0f, -1, m_HIO->mPushpull.m.field_0x4
     );
     mVelocity = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
@@ -1483,7 +1483,7 @@ BOOL daPy_lk_c::dProcPushMove_init() {
         return false;
     }
     commonProcInit(daPyProc_DEMO_PUSH_MOVE_e);
-    setSingleMoveAnime(ANM_WALKPUSH, daPy_HIO_pushpull_c0::m.field_0x8, 0.0f, -1, daPy_HIO_pushpull_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_WALKPUSH, m_HIO->mPushpull.m.field_0x8, 0.0f, -1, m_HIO->mPushpull.m.field_0xC);
     mVelocity = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK4000000_e);
     voiceStart(19);
@@ -1531,7 +1531,7 @@ BOOL daPy_lk_c::dProcDoorOpen() {
         mAcch.ClrWallNone();
         mAcch.OffLineCheckNone();
         dComIfGp_evmng_cutEnd(mStaffIdx);
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
         mProcVar0.m3570 = 1;
         m3598 = 0.0f;
     } else {
@@ -1555,10 +1555,10 @@ BOOL daPy_lk_c::dProcNod_init() {
     mVelocity = 0.0f;
     setSingleMoveAnime(
         ANM_SEYYES,
-        daPy_HIO_turn_c0::m.field_0x1C,
-        daPy_HIO_turn_c0::m.field_0x20,
-        daPy_HIO_turn_c0::m.field_0xC,
-        daPy_HIO_turn_c0::m.field_0x24
+        m_HIO->mTurn.m.field_0x1C,
+        m_HIO->mTurn.m.field_0x20,
+        m_HIO->mTurn.m.field_0xC,
+        m_HIO->mTurn.m.field_0x24
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK10_e);
     return true;
@@ -1578,10 +1578,10 @@ BOOL daPy_lk_c::dProcNod() {
 void daPy_lk_c::dProcPresent_init_sub() {
     setSingleMoveAnime(
         ANM_PRESENTATIONA,
-        daPy_HIO_turn_c0::m.field_0x28,
-        daPy_HIO_turn_c0::m.field_0x2C,
-        daPy_HIO_turn_c0::m.field_0xE,
-        daPy_HIO_turn_c0::m.field_0x30
+        m_HIO->mTurn.m.field_0x28,
+        m_HIO->mTurn.m.field_0x2C,
+        m_HIO->mTurn.m.field_0xE,
+        m_HIO->mTurn.m.field_0x30
     );
     onModeFlg(ModeFlg_00000400);
     if (!checkBottleItem(dComIfGp_event_getPreItemNo())) {
@@ -1637,7 +1637,7 @@ BOOL daPy_lk_c::dProcPresent() {
             setSingleMoveAnime(ANM_PRESENTATIONAWAIT, 1.0f, 0.0f, -1, 3.0f);
             onModeFlg(ModeFlg_00000080 | ModeFlg_00000100);
             offModeFlg(ModeFlg_00000400);
-        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(daPy_HIO_turn_c0::m.field_0xE - 10.0f)) {
+        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].checkPass(m_HIO->mTurn.m.field_0xE - 10.0f)) {
             if (checkBottleItem(dComIfGp_event_getPreItemNo())) {
                 if (mEquipItem == daPyItem_NONE_e) {
                     setBottleModel(dComIfGp_event_getPreItemNo());
@@ -1715,7 +1715,7 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
         angle = fopAcM_GetShapeAngle_p(this);
     }
     mProcVar0.m3570 = 1;
-    setSingleMoveAnime(ANM_GRABWAIT, daPy_HIO_grab_c0::m.field_0x78, 0.0f, -1, -1.0f);
+    setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
     pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(PROC_STANDITEM, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
     if (pfVar2 != NULL) {
         mActorKeepGrab.setData(pfVar2);
@@ -1730,10 +1730,10 @@ BOOL daPy_lk_c::dProcStandItemPut() {
         if (m_old_fdata->getOldFrameRate() < 0.01f) {
             setSingleMoveAnime(
                 ANM_GRABUP,
-                daPy_HIO_grab_c0::m.field_0x68,
-                daPy_HIO_grab_c0::m.field_0x6C,
-                daPy_HIO_grab_c0::m.field_0xC,
-                daPy_HIO_grab_c0::m.field_0x74
+                m_HIO->mGrab.m.field_0x68,
+                m_HIO->mGrab.m.field_0x6C,
+                m_HIO->mGrab.m.field_0xC,
+                m_HIO->mGrab.m.field_0x74
             );
             mProcVar0.m3570 = 2;
             voiceStart(7);
@@ -1758,7 +1758,7 @@ BOOL daPy_lk_c::dProcVorcanoFail_init() {
     mVelocity = 0.0f;
     speed.y = 18.0f;
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_LAVADAM, daPy_HIO_restart_c0::m.field_0x0, 0.0f, -1, daPy_HIO_restart_c0::m.field_0x4);
+    setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
     m32E4.makeEmitter(dPa_name::ID_SCENE_8078, mpCLModel->getAnmMtx(0), &current.pos, NULL);
     return true;
 }
@@ -1900,7 +1900,7 @@ BOOL daPy_lk_c::dProcAgbUse_init() {
     keepItemData();
     setAnimeEquipItem();
     mVelocity = 0.0f;
-    setSingleMoveAnime(ANM_USETCEIVER, 1.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_USETCEIVER, 1.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
     seStartSystem(JA_SE_TALK_START);
     initShipRideUseItem(iVar2, 2);
     return true;
@@ -2120,7 +2120,7 @@ BOOL daPy_lk_c::dProcGetDance() {
         pJVar3->mTranslate.z *= -1.0f;
         dComIfGp_evmng_cutEnd(mStaffIdx);
         m3574 = 1;
-        setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     return true;
 }
@@ -2136,9 +2136,9 @@ BOOL daPy_lk_c::dProcBottleOpenFairy_init() {
     setSingleMoveAnime(
         ANM_BINOPENPRE,
         1.0f,
-        daPy_HIO_bottle_c0::m.field_0x3C,
-        daPy_HIO_bottle_c0::m.field_0x6,
-        daPy_HIO_bottle_c0::m.field_0x40
+        m_HIO->mItem.mBottle.m.field_0x3C,
+        m_HIO->mItem.mBottle.m.field_0x6,
+        m_HIO->mItem.mBottle.m.field_0x40
     );
     keepItemData();
     setBottleModel(dItem_FAIRY_BOTTLE_e);
@@ -2156,9 +2156,9 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
             setSingleMoveAnime(
                 ANM_BINOPENB,
                 1.0f,
-                daPy_HIO_bottle_c0::m.field_0x50,
-                daPy_HIO_bottle_c0::m.field_0xA,
-                daPy_HIO_bottle_c0::m.field_0x54
+                m_HIO->mItem.mBottle.m.field_0x50,
+                m_HIO->mItem.mBottle.m.field_0xA,
+                m_HIO->mItem.mBottle.m.field_0x54
             );
         } else if (frameCtrl.checkPass(32.0f)) {
             m355E = 0;
@@ -2168,7 +2168,7 @@ BOOL daPy_lk_c::dProcBottleOpenFairy() {
         dComIfGp_evmng_cutEnd(mStaffIdx);
     } else {
         if (mpBottleContentsModel != NULL) {
-            if (frameCtrl.getFrame() >= daPy_HIO_bottle_c0::m.field_0x58) {
+            if (frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) {
                 mpBottleContentsModel = NULL;
                 if (dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e) {
                     dComIfGs_setEquipBottleItemEmpty(dItemBtn_X_e);
@@ -2192,7 +2192,7 @@ BOOL daPy_lk_c::dProcWarpShort_init() {
     commonProcInit(daPyProc_DEMO_WARP_SHORT_e);
     setSingleMoveAnime(ANM_RISE, 1.0f, 0.0f, -1, 40.0f);
     gravity = mVelocity = 0.0f;
-    speed.y = daPy_HIO_warp_c0::m.field_0x10;
+    speed.y = m_HIO->mWarp.m.field_0x10;
     if (mEquipItem == daPyItem_BOKO_e) {
         deleteEquipItem(FALSE);
     }
@@ -2201,9 +2201,9 @@ BOOL daPy_lk_c::dProcWarpShort_init() {
 
 /* 801324D0-80132534       .text dProcWarpShort__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcWarpShort() {
-    speed.y += daPy_HIO_warp_c0::m.field_0x14;
-    if (speed.y > daPy_HIO_warp_c0::m.field_0x18) {
-        speed.y = daPy_HIO_warp_c0::m.field_0x18;
+    speed.y += m_HIO->mWarp.m.field_0x14;
+    if (speed.y > m_HIO->mWarp.m.field_0x18) {
+        speed.y = m_HIO->mWarp.m.field_0x18;
     }
     dComIfGp_evmng_cutEnd(mStaffIdx);
     return true;
@@ -2330,7 +2330,7 @@ BOOL daPy_lk_c::dProcPowerUp() {
         }
         if (checkEndMessage(m3624)) {
             dComIfGp_evmng_cutEnd(mStaffIdx);
-            setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+            setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
             m3574 = 1;
         }
     }

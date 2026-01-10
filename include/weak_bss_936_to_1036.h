@@ -9,15 +9,13 @@
 // A possible origin for one of these could be the constructor of TFunctionValueAttribute_refer in
 // functionvalue.h. That constructor includes `JGadget::TAllocator<void*>()` in it, which produces
 // one weak bss object that has the correct size and alignment. However, we need 16 of them, while
-// that only creates one. Also, that header seems to be required in some actors that *don't* need
-// any of these weak bss objects. So that constructor is moved to functionvalue.cpp and this fake
-// header should be included where necessary instead.
+// that only creates one.
 
 #include "JSystem/JStudio/JStudio/functionvalue.h" // IWYU pragma: keep
 
 // They each have size 1, and alignment 1 in the debug maps, but alignment 4 in the non-debug maps.
 static inline void dummy_bss_936_to_1036() {
-    JGadget::TAllocator<void*>(); // @1036
+    // JGadget::TAllocator<void*>(); // @1036 // Already covered by TFunctionValueAttribute_refer's ctor
     JGadget::TAllocator<void*>(); // @1034
     JGadget::TAllocator<void*>(); // @1032
     JGadget::TAllocator<void*>(); // @1031

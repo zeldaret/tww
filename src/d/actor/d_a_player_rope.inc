@@ -29,13 +29,13 @@ void daPy_lk_c::freeRopeItem() {
     if (mEquipItem == dItem_GRAPPLING_HOOK_e) {
         fopAc_ac_c* rope = mActorKeepRope.getActor();
         if (mActorKeepEquip.getActor() != NULL) {
-            onResetFlg0(daPyRFlg0_UNK40000000);
+            onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
         }
         if (rope != NULL) {
             if (fopAcM_GetName(rope) == PROC_HIMO2) {
                 fopAcM_SetParam(rope, 4);
                 mActorKeepRope.clearData();
-                onResetFlg0(daPyRFlg0_UNK40000000);
+                onResetFlg0(daPyRFlg0_ROPE_FORCE_END);
             } else if (fopAcM_GetName(rope) == PROC_HIMO3) {
                 mEquipItem = daPyItem_NONE_e;
                 fopAcM_SetParam(rope, 3);
@@ -78,7 +78,7 @@ int daPy_lk_c::changeRopeEndProc(int param_0) {
             setAnimeEquipSword(0);
         }
         if (param_0 != 0) {
-            procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
         }
         onNoResetFlg0(daPyFlg0_UNK400000);
         onNoResetFlg1(daPyFlg1_UNK8000000);
@@ -160,7 +160,7 @@ BOOL daPy_lk_c::checkRopeSwingWall(cXyz* r4, cXyz* r5, s16* r6, f32* r7) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToonP1(
             dPa_name::ID_COMMON_2022,
             &foot_effect->getPos(), &foot_effect->getAngle(),
-            NULL, daPy_HIO_basic_c0::m.field_0x2, foot_effect->getSmokeCallBack(),
+            NULL, m_HIO->mBasic.m.field_0x2, foot_effect->getSmokeCallBack(),
             fopAcM_GetRoomNo(this)
         );
         if (emitter) {
@@ -208,7 +208,7 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
             } else {
                 anm = ANM_ROPESWINGF;
             }
-            dVar6 = (0.6f * m34D4) / daPy_HIO_rope_c0::m.field_0x0;
+            dVar6 = (0.6f * m34D4) / m_HIO->mItem.mRope.m.field_0x0;
             if (checkSpecialRope()) {
                 dVar6 *= 8.0f;
             }
@@ -217,12 +217,12 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
             }
         } else {
             if ((M_PI / 2 > f30) && (M_PI / 10 <= f30)) {
-                setMoveAnime(0.0f, daPy_HIO_rope_c0::m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGF, 7, 7.0f);
+                setMoveAnime(0.0f, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGF, 7, 7.0f);
                 m34D0 = -1;
                 return;
             }
             if ((-M_PI / 2 > f30) && (-2.8274333f <= f30)) {
-                setMoveAnime(0.0f, daPy_HIO_rope_c0::m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGB, 7, 7.0f);
+                setMoveAnime(0.0f, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGB, 7, 7.0f);
                 m34D0 = 1;
                 return;
             }
@@ -231,7 +231,7 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
             } else {
                 anm = ANM_ROPESWINGF;
             }
-            dVar6 = (0.6f * m34D4) / daPy_HIO_rope_c0::m.field_0x0;
+            dVar6 = (0.6f * m34D4) / m_HIO->mItem.mRope.m.field_0x0;
             if (checkSpecialRope()) {
                 dVar6 *= 8.0f;
             }
@@ -259,11 +259,11 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
     }
     f32 f4;
     if (param_0 != 0) {
-        f4 = daPy_HIO_rope_c0::m.field_0x20;
+        f4 = m_HIO->mItem.mRope.m.field_0x20;
     } else {
         f4 = -1.0f;
     }
-    setMoveAnime(sp08, daPy_HIO_rope_c0::m.field_0x18, 1.0f, ANM_ROPECATCH, anm, 7, f4);
+    setMoveAnime(sp08, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, anm, 7, f4);
 }
 
 /* 80143A44-80143C5C       .text throwRope__9daPy_lk_cFv */
@@ -272,9 +272,9 @@ int daPy_lk_c::throwRope() {
     setActAnimeUpper(
         LKANM_BCK_ROPETHROW,
         UPPER_MOVE2_e,
-        daPy_HIO_rope_c0::m.field_0x44,
-        daPy_HIO_rope_c0::m.field_0x48,
-        daPy_HIO_rope_c0::m.field_0x8,
+        m_HIO->mItem.mRope.m.field_0x44,
+        m_HIO->mItem.mRope.m.field_0x48,
+        m_HIO->mItem.mRope.m.field_0x8,
         -1.0f
     );
     setPriTextureAnime(0x48, 0);
@@ -284,7 +284,7 @@ int daPy_lk_c::throwRope() {
     }
     current.angle.y = shape_angle.y + -0x4000;
     onModeFlg(ModeFlg_00000001);
-    setBlendAtnMoveAnime(daPy_HIO_rope_c0::m.field_0x4C);
+    setBlendAtnMoveAnime(m_HIO->mItem.mRope.m.field_0x4C);
     cXyz local_1c;
     if (mCurProc == daPyProc_ROPE_MOVE_e) {
         fopAc_ac_c* pfVar4 = mpAttnActorLockOn;
@@ -377,7 +377,7 @@ BOOL daPy_lk_c::checkHangRopeActorNull() {
         if (checkRopeTag()) {
             mEquipItem = daPyItem_NONE_e;
         }
-        procFall_init(1, daPy_HIO_wallCatch_c0::m.field_0x54);
+        procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
         onNoResetFlg0(daPyFlg0_UNK400000);
         onNoResetFlg1(daPyFlg1_UNK8000000);
         return true;
@@ -398,7 +398,7 @@ BOOL daPy_lk_c::procRopeSubject_init() {
 
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
         setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-        setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x54);
+        setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x54);
     }
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_ROPE_AIM_e);
@@ -466,10 +466,10 @@ BOOL daPy_lk_c::procRopeReady_init() {
     fopAc_ac_c* rope = mActorKeepEquip.getActor();
     commonProcInit(daPyProc_ROPE_READY_e);
     setMoveAnime(
-        0.5f, daPy_HIO_rope_c0::m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGB, 7, daPy_HIO_rope_c0::m.field_0x20
+        0.5f, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGB, 7, m_HIO->mItem.mRope.m.field_0x20
     );
-    mFrameCtrlUnder[UNDER_MOVE0_e].setStart(daPy_HIO_rope_c0::m.field_0x1C);
-    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(daPy_HIO_rope_c0::m.field_0x4);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setStart(m_HIO->mItem.mRope.m.field_0x1C);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(m_HIO->mItem.mRope.m.field_0x4);
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
     m3688 = current.pos;
     m35F0 = m3688.y;
@@ -559,7 +559,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
     m35A4 = dVar11;
     dVar11 = M_PI / 2 / m35A4;
     if (pfVar7 != NULL) {
-        m34D4 = daPy_HIO_rope_c0::m.field_0x0;
+        m34D4 = m_HIO->mItem.mRope.m.field_0x0;
         #if VERSION == VERSION_DEMO
         if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
             m34D4 /= 3;
@@ -618,8 +618,8 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
     if (pfVar7 == NULL) {
         m_old_fdata->initOldFrameMorf(15.0f, 0, 0x2A);
     }
-    mFrameCtrlUnder[UNDER_MOVE0_e].setStart(daPy_HIO_rope_c0::m.field_0x1C);
-    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(daPy_HIO_rope_c0::m.field_0x4);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setStart(m_HIO->mItem.mRope.m.field_0x1C);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(m_HIO->mItem.mRope.m.field_0x4);
     if ((pfVar7 != NULL) && (mActorKeepEquip.getActor() == NULL)) {
         mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
     }
@@ -713,19 +713,19 @@ BOOL daPy_lk_c::procRopeSwing() {
     s16 r29;
 #if VERSION == VERSION_DEMO
     if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
-        r30 = daPy_HIO_rope_c0::m.field_0x0 / 3;
+        r30 = m_HIO->mItem.mRope.m.field_0x0 / 3;
         r28 = 0xA;
         r29 = 0x15;
     }
 #else
     if (checkSpecialRope()) {
-        r30 = daPy_HIO_rope_c0::m.field_0x0 / 8.0f;
+        r30 = m_HIO->mItem.mRope.m.field_0x0 / 8.0f;
         r28 = 4;
         r29 = 8;
     }
 #endif
     else {
-        r30 = daPy_HIO_rope_c0::m.field_0x0;
+        r30 = m_HIO->mItem.mRope.m.field_0x0;
         r28 = 0x20;
         r29 = 0x40;
     }
@@ -782,17 +782,17 @@ BOOL daPy_lk_c::procRopeSwing() {
 
     f32 f30_3 = ((f32)m34D4 / r30);
     if (changeRopeEndProc(0)) {
-        dVar13 = (m35A0 / (100.0f * daPy_HIO_rope_c0::m.field_0x14));
+        dVar13 = (m35A0 / (100.0f * m_HIO->mItem.mRope.m.field_0x14));
         if (dVar13 < 1.0f) {
             dVar13 = 1.0f;
         }
         f30_3 *= dVar13;
-        mVelocity = daPy_HIO_rope_c0::m.field_0xC * f30_3;
+        mVelocity = m_HIO->mItem.mRope.m.field_0xC * f30_3;
         if (std::abs(sp0C) > M_PI / 2) {
             current.angle.y = shape_angle.y + 0x8000;
         }
-        speed.y = daPy_HIO_rope_c0::m.field_0x10 * f30_3;
-        procFall_init(0, daPy_HIO_wallCatch_c0::m.field_0x54);
+        speed.y = m_HIO->mItem.mRope.m.field_0x10 * f30_3;
+        procFall_init(0, m_HIO->mWallCatch.m.field_0x54);
         onNoResetFlg1(daPyFlg1_UNK8000000);
     } else if ((m34D4 == 0) && (m34D6 == 0)) {
         procRopeHangWait_init(0);
@@ -815,14 +815,14 @@ BOOL daPy_lk_c::procRopeHangWait_init(int param_0) {
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);
     gravity = 0.0f;
     if (param_0 == 0) {
-        m34D0 = daPy_HIO_rope_c0::m.field_0x6;
+        m34D0 = m_HIO->mItem.mRope.m.field_0x6;
         setSingleMoveAnime(
-            ANM_ROPECATCH, 1.0f, mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() - 0.001f, -1, daPy_HIO_rope_c0::m.field_0x28
+            ANM_ROPECATCH, 1.0f, mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() - 0.001f, -1, m_HIO->mItem.mRope.m.field_0x28
         );
         setTextureAnime(2, 0);
     } else {
         m34D0 = -1;
-        setSingleMoveAnime(ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x28);
+        setSingleMoveAnime(ANM_ROPEWAIT, m_HIO->mItem.mRope.m.field_0x24, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x28);
     }
     m34D4 = 0;
     return true;
@@ -894,7 +894,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
                     if (m34D0 != -1) {
                         m34D0 = -1;
                         setSingleMoveAnime(
-                            ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C
+                            ANM_ROPEWAIT, m_HIO->mItem.mRope.m.field_0x24, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x2C
                         );
                     }
                 }
@@ -908,7 +908,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
             if (m34D0 == 0) {
                 m34D0 = -1;
                 setSingleMoveAnime(
-                    ANM_ROPEWAIT, daPy_HIO_rope_c0::m.field_0x24, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x2C
+                    ANM_ROPEWAIT, m_HIO->mItem.mRope.m.field_0x24, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x2C
                 );
             }
             r29 = 0;
@@ -984,7 +984,7 @@ BOOL daPy_lk_c::procRopeUp_init() {
     } else {
         commonProcInit(daPyProc_ROPE_UP_e);
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);
-        setSingleMoveAnime(ANM_ROPECLIMB, daPy_HIO_rope_c0::m.field_0x30, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x34);
+        setSingleMoveAnime(ANM_ROPECLIMB, m_HIO->mItem.mRope.m.field_0x30, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x34);
         mFrameCtrlUnder[UNDER_MOVE0_e].setAttribute(J3DFrameCtrl::EMode_NONE);
         m35A0 = dVar4;
         gravity = 0.0f;
@@ -1017,7 +1017,7 @@ BOOL daPy_lk_c::procRopeUp() {
                             procRopeHangWait_init(0);
                         }
                     } else {
-                        setSingleMoveAnime(ANM_ROPECLIMB, daPy_HIO_rope_c0::m.field_0x30, 0.0f, -1, -1.0f);
+                        setSingleMoveAnime(ANM_ROPECLIMB, m_HIO->mItem.mRope.m.field_0x30, 0.0f, -1, -1.0f);
                         mFrameCtrlUnder[UNDER_MOVE0_e].setAttribute(J3DFrameCtrl::EMode_NONE);
                     }
                 } else {
@@ -1060,7 +1060,7 @@ BOOL daPy_lk_c::procRopeDown_init() {
     } else {
         commonProcInit(daPyProc_ROPE_DOWN_e);
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);
-        setSingleMoveAnime(ANM_ROPEDOWN, daPy_HIO_rope_c0::m.field_0x38, 0.0f, -1, daPy_HIO_rope_c0::m.field_0x3C);
+        setSingleMoveAnime(ANM_ROPEDOWN, m_HIO->mItem.mRope.m.field_0x38, 0.0f, -1, m_HIO->mItem.mRope.m.field_0x3C);
         gravity = 0.0f;
         m35A0 = 0.0f;
         return true;
@@ -1087,8 +1087,8 @@ BOOL daPy_lk_c::procRopeDown() {
                 procRopeUp_init();
             } else if (direction == DIR_BACKWARD) {
                 m35A0 += 1.5f;
-                if (m35A0 > daPy_HIO_rope_c0::m.field_0x40) {
-                    m35A0 = daPy_HIO_rope_c0::m.field_0x40;
+                if (m35A0 > m_HIO->mItem.mRope.m.field_0x40) {
+                    m35A0 = m_HIO->mItem.mRope.m.field_0x40;
                 }
                 if (cLib_chaseF(&current.pos.y, m35A4, m35A0)) {
                     procRopeHangWait_init(1);
@@ -1174,8 +1174,8 @@ BOOL daPy_lk_c::procRopeMove_init() {
         current.angle.y = shape_angle.y + -0x4000;
     }
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) {
-        setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, daPy_HIO_rope_c0::m.field_0x50, 0.0f, -1, -1.0f);
-        setBlendAtnMoveAnime(daPy_HIO_rope_c0::m.field_0x54);
+        setActAnimeUpper(LKANM_BCK_ROPETHROWWAIT, UPPER_MOVE2_e, m_HIO->mItem.mRope.m.field_0x50, 0.0f, -1, -1.0f);
+        setBlendAtnMoveAnime(m_HIO->mItem.mRope.m.field_0x54);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_ROPE_AIM_e);
     return true;
@@ -1203,7 +1203,7 @@ BOOL daPy_lk_c::procRopeMove() {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
         } else {
             offModeFlg(ModeFlg_00000001);
@@ -1219,10 +1219,10 @@ BOOL daPy_lk_c::procRopeThrowCatch_init() {
     commonProcInit(daPyProc_ROPE_THROW_CATCH_e);
     setSingleMoveAnime(
         ANM_ROPETHROWCATCH,
-        daPy_HIO_rope_c0::m.field_0x58,
-        daPy_HIO_rope_c0::m.field_0x5C,
-        daPy_HIO_rope_c0::m.field_0xA,
-        daPy_HIO_rope_c0::m.field_0x64
+        m_HIO->mItem.mRope.m.field_0x58,
+        m_HIO->mItem.mRope.m.field_0x5C,
+        m_HIO->mItem.mRope.m.field_0xA,
+        m_HIO->mItem.mRope.m.field_0x64
     );
     mVelocity = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_ROPE_AIM_e);

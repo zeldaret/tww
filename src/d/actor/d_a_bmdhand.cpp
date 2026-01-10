@@ -170,21 +170,13 @@ void control2(bmdhand_class* i_this) {
 void cut_control(bmdhand_class* i_this) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
-    f32 fVar1;
-    f32 fVar2;
-    f32 fVar3;
-    f32 dVar8;
-    f32 dVar9;
-    f32 dVar10;
-    f32 dVar11;
+    
+    i_this->m324[0].m00 = actor->current.pos;
+    s32 i = 1;
+    hand_s* pcVar6 = &i_this->m324[i];
     cXyz local_e8;
     cXyz cStack_f4;
     cXyz local_100;
-    cXyz local_110;
-    cXyz local_124;
-
-    i_this->m324[0].m00 = actor->current.pos;
-    hand_s* pcVar6 = &i_this->m324[1];
     mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
     local_e8.x = 0.0f;
     local_e8.y = i_this->m314;
@@ -192,36 +184,41 @@ void cut_control(bmdhand_class* i_this) {
     MtxPosition(&local_e8, &local_100);
     cLib_addCalc2(&i_this->m314, REG14_F(7) + -3.0f, 1.0f, REG12_F(4) + 0.1f);
     cLib_addCalc2(&i_this->m318, REG14_F(8) + 20.0f + 10.0f, 1.0f, REG12_F(5) + 0.2f);
-    cLib_addCalc0(&i_this->m31C, (REG12_F(6) + 1.0f), 1.0f);
+    cLib_addCalc0(&i_this->m31C, 1.0f, (REG12_F(6) + 1.0f));
     local_e8.z = i_this->m310;
+    f32 dVar9;
     dVar9 = (REG7_F(10) + 0.5f);
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m324); i++, pcVar6++) {
+    cXyz local_100_scaled;
+    cXyz local_124;
+    f32 fVar_x;
+    f32 fVar_y;
+    f32 fVar_z;
+    f32 delta_y;
+    for (i = 1; i < (s32)ARRAY_SIZE(i_this->m324); i++, pcVar6++) {
         local_124.x = i_this->m31C * cM_ssin(i_this->m2B8 * (REG0_S(4) + 0xdac) + i * (REG0_S(5) + 4000));
         local_124.y = i_this->m31C * cM_scos(i_this->m2B8 * (REG0_S(6) + 4000) + i * (REG0_S(7) + 4000));
         local_124.z = i_this->m31C * cM_scos(i_this->m2B8 * (REG0_S(8) + 0xed8) + i * (REG0_S(9) + 4000));
         f32 factor = 1.0f - i * (REG0_F(9) + 0.03763158f);
-        local_110.x = local_100.x * factor;
-        local_110.z = local_100.z * factor;
-        fVar2 = pcVar6[1].m00.x + local_124.x + (local_110.x + (pcVar6->m00.x - pcVar6[-1].m00.z));
-        dVar11 = fVar2;
-        fVar3 = pcVar6[1].m00.y + (local_124.y + pcVar6->m00.y + local_100.y);
-        fVar1 = (5.0f + boss->m328);
-        if (fVar3 < fVar1) {
-            fVar3 = fVar1;
+        local_100_scaled.x = local_100.x * factor;
+        local_100_scaled.z = local_100.z * factor;
+        fVar_x = pcVar6->m0C.x + (pcVar6->m00.x - pcVar6[-1].m00.x + local_100_scaled.x + local_124.x);
+        fVar_y = pcVar6->m0C.y + (pcVar6->m00.y + local_100.y + local_124.y);
+        if (fVar_y < (5.0f + boss->m328)) {
+            fVar_y = (5.0f + boss->m328);
         }
-        dVar10 = (fVar3 - pcVar6[-1].m00.x);
-        fVar1 = pcVar6[1].m00.z + local_124.z + (local_110.z + (pcVar6->m00.z - pcVar6[-1].m00.y));
-        dVar8 = fVar1;
-        int iVar4 = cM_atan2s(fVar2, fVar1);
-        s16 iVar5 = -cM_atan2s(dVar10, std::sqrtf((dVar11 * dVar11) + (dVar8 * dVar8)));
+        delta_y = fVar_y - pcVar6[-1].m00.y;
+        fVar_z = pcVar6->m0C.z + (pcVar6->m00.z - pcVar6[-1].m00.z + local_100_scaled.z + local_124.z);
+        s16 iVar5;
+        int iVar4 = cM_atan2s(fVar_x, fVar_z);
+        iVar5 = -cM_atan2s(delta_y, std::sqrtf((fVar_x * fVar_x) + (fVar_z * fVar_z)));
         mDoMtx_YrotS(*calc_mtx, iVar4);
         mDoMtx_XrotM(*calc_mtx, iVar5);
         MtxPosition(&local_e8, &cStack_f4);
-        pcVar6[1].m00 = pcVar6->m00;
-        pcVar6[0].m00 = pcVar6[-1].m00 + cStack_f4;
-        pcVar6[1].m00.x = (dVar9 * (pcVar6->m00.x - pcVar6[1].m00.x));
-        pcVar6[1].m00.y = (dVar9 * (pcVar6->m00.y - pcVar6[1].m00.y));
-        pcVar6[1].m00.z = (dVar9 * (pcVar6->m00.z - pcVar6[1].m00.z));
+        pcVar6->m0C = pcVar6->m00;
+        pcVar6->m00 = pcVar6[-1].m00 + cStack_f4;
+        pcVar6->m0C.x = (dVar9 * (pcVar6->m00.x - pcVar6->m0C.x));
+        pcVar6->m0C.y = (dVar9 * (pcVar6->m00.y - pcVar6->m0C.y));
+        pcVar6->m0C.z = (dVar9 * (pcVar6->m00.z - pcVar6->m0C.z));
         if ((i == 0x13) && (i_this->m2CA != 0)) {
             dComIfGp_particle_setSimple(dPa_name::ID_SCENE_8067, &pcVar6->m00, 0xFF, g_whiteColor, g_whiteColor, 0);
         }
@@ -332,7 +329,6 @@ void hand_open(bmdhand_class* i_this) {
 
 /* 000016AC-00001D30       .text hand_calc__FP13bmdhand_class */
 void hand_calc(bmdhand_class* i_this) {
-    /* Nonmatching - swapped fadds instruction */
     fopAc_ac_c* actor = &i_this->actor;
     f32 dVar6;
     f32 fVar7;
@@ -343,9 +339,11 @@ void hand_calc(bmdhand_class* i_this) {
     local_b8.x = 0.0f;
     if ((i_this->m2B8 & 0xfU) == 0) {
         dBgS_LinChk local_ac;
-        cXyz local_d0(i_this->m2D8);
-        cXyz local_dc(local_d0);
-        local_dc.y = local_d0.y + 2500.0f;
+        cXyz local_d0;
+        cXyz local_dc;
+        local_d0 = i_this->m2D8;
+        local_dc = i_this->m2D8;
+        local_dc.y += 2500.0f;
         local_ac.Set(&local_d0, &local_dc, actor);
         if (dComIfG_Bgsp()->LineCross(&local_ac)) {
             i_this->m2CC = local_ac.GetCross();
@@ -421,7 +419,7 @@ void hand_calc(bmdhand_class* i_this) {
 
 /* 00002168-000025D4       .text start_hand_calc__FP13bmdhand_class */
 void start_hand_calc(bmdhand_class* i_this) {
-    /* Nonmatching - swapped fadds instruction, math */
+    /* Nonmatching - math */
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_a8;
     cXyz cStack_b4;
@@ -429,19 +427,23 @@ void start_hand_calc(bmdhand_class* i_this) {
     local_a8.y = 0.0f;
     local_a8.x = 0.0f;
     dBgS_LinChk local_9c;
-    cXyz local_c0(i_this->m2D8);
-    cXyz local_cc(local_c0);
-    local_cc.y = local_c0.y + 2500.0f;
+    cXyz local_c0;
+    cXyz local_cc;
+    local_c0 = i_this->m2D8;
+    local_cc = i_this->m2D8;
+    local_cc.y += 2500.0f;
     local_9c.Set(&local_c0, &local_cc, actor);
     if (dComIfG_Bgsp()->LineCross(&local_9c)) {
         i_this->m2CC = local_9c.GetCross();
         i_this->m2CC.y += l_HIO.m08;
     }
-    if (i_this->m2BC == 0) {
+    switch (i_this->m2BC) {
+        case 0:
         mDoMtx_YrotS(*calc_mtx, actor->current.angle.y);
         f32 fVar1 = (i_this->m2E4.y - i_this->m2D8.y) * ((REG13_F(4) + 0.1f) * (REG13_F(5) + 2.0f));
         local_a8.x = fVar1 * cM_ssin(i_this->m2B8 * (REG13_S(5) + 0x5dc));
-        local_a8.y = fVar1 * cM_scos(i_this->m2B8 * (REG13_S(7) + 500));
+        local_a8.z = fVar1 * cM_scos(i_this->m2B8 * (REG13_S(5) + 0x4B0));
+        local_a8.y = fVar1 * cM_ssin(i_this->m2B8 * (REG13_S(7) + 500));
         if ((fopAcM_GetParam(actor) & 1U) == 0) {
             local_a8.z = REG0_F(9) + 250.0f;
         } else {
@@ -478,10 +480,8 @@ void hand_move(bmdhand_class* i_this) {
             i_this->m2BA = 2;
             i_this->m314 = 3.0f;
             i_this->m318 = 40.0f;
-            fVar10 = cM_rndF(20.0f);
-            i_this->m31C = fVar10 + 30.0f;
-            fVar10 = cM_rndF(30.0f);
-            i_this->m2C0[1] = (s16)(fVar10 + 50.0f);
+            i_this->m31C = cM_rndF(20.0f) + 30.0f;
+            i_this->m2C0[1] = (s16)(cM_rndF(30.0f) + 50.0f);
         }
         switch (i_this->m2BA) {
         case 0:
@@ -637,6 +637,7 @@ void hand_move(bmdhand_class* i_this) {
 
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* param_1, void* param_2) {
+    UNUSED(param_2);
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == PROC_BMD)) {
         return param_1;
     } else {
@@ -733,12 +734,11 @@ s32 useHeapInit(bmdhand_class* i_this) {
 /* 00003210-00003230       .text solidHeapCB__FP10fopAc_ac_c */
 static BOOL solidHeapCB(fopAc_ac_c* a_this) {
     bmdhand_class* i_this = (bmdhand_class*)a_this;
-    useHeapInit(i_this);
+    return useHeapInit(i_this);
 }
 
 /* 00003230-000034FC       .text daBmdhand_Create__FP10fopAc_ac_c */
 static cPhs_State daBmdhand_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching - .data */
     static dCcD_SrcSph cc_sph_src = {
         // dCcD_SrcGObjInf
         {

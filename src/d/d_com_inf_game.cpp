@@ -135,7 +135,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4944 = 7;
     mScopeType = 0;
     mOperateWind = 0;
-    field_0x4947 = 0;
+    mMetronome = false;
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
@@ -660,7 +660,7 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 
         i_lastMode |= link->checkTinkleShield() << 0x10;
 
-        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_UNK8000)) {
+        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_SOUP_POWER_UP)) {
             i_lastMode |= 0x4000;
         }
     }
@@ -1138,7 +1138,7 @@ void dComIfGs_setGameStartStage() {
         {true,  dSv_event_flag_c::UNK_0801,  "MajyuE",  0,                          0},
         {true,  dSv_event_flag_c::UNK_0808,  "MajyuE",  0,                          18},
         {true,  dSv_event_flag_c::UNK_2401,  "A_umikz", 0,                          204},
-        {false, 0,                       "sea",     dIsleRoom_OutsetIsland_e,   128},
+        {false, 0,                           "sea",     dIsleRoom_OutsetIsland_e,   128},
     };
 
     check_data* data_p = l_checkData;

@@ -9,6 +9,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_bg_w.h"
 #include "d/actor/d_a_player.h"
+#include "d/actor/d_a_player_HIO.h"
 #include "d/res/res_link.h" // IWYU pragma: export
 #include "d/res/res_lkanm.h"
 
@@ -375,7 +376,41 @@ public:
     daPy_HIO_c();
 
 public:
-    /* 0x00 */ u8 temp[0x3F - 0x00];
+    daPy_HIO_basic_c0 mBasic;
+    daPy_HIO_move_c0 mMove;
+    daPy_HIO_atnMove_c0 mAtnMove;
+    daPy_HIO_atnMoveB_c0 mAtnMoveB;
+    daPy_HIO_turn_c0 mTurn;
+    daPy_HIO_cut_c0 mCut;
+    daPy_HIO_roll_c0 mRoll;
+    daPy_HIO_backJump_c0 mBackJump;
+    daPy_HIO_slip_c0 mSlip;
+    daPy_HIO_slide_c0 mSlide;
+    daPy_HIO_autoJump_c0 mAutoJump;
+    daPy_HIO_fall_c0 mFall;
+    daPy_HIO_swim_c0 mSwim;
+    daPy_HIO_battle_c0 mBattle;
+    daPy_HIO_wall_c0 mWall;
+    daPy_HIO_smallJump_c0 mSmallJump;
+    daPy_HIO_wallCatch_c0 mWallCatch;
+    daPy_HIO_hang_c0 mHang;
+    daPy_HIO_guard_c0 mGuard;
+    daPy_HIO_nockback_c0 mNockback;
+    daPy_HIO_iceSlip_c0 mIceSlip;
+    daPy_HIO_dam_c0 mDam;
+    daPy_HIO_slowJump_c0 mSlowJump;
+    daPy_HIO_sideStep_c0 mSideStep;
+    daPy_HIO_grab_c0 mGrab;
+    daPy_HIO_ladder_c0 mLadder;
+    daPy_HIO_crouch_c0 mCrouch;
+    daPy_HIO_pushpull_c0 mPushpull;
+    daPy_HIO_item_c0 mItem;
+    daPy_HIO_ship_c0 mShip;
+    daPy_HIO_restart_c0 mRestart;
+    daPy_HIO_holdup_c0 mHoldup;
+    daPy_HIO_vomit_c0 mVomit;
+    daPy_HIO_warp_c0 mWarp;
+    u8 pad[0x3F - 0x22];
 };  // Size: 0x3F
 
 class daPy_lk_c : public daPy_py_c {
@@ -2307,5 +2342,9 @@ public:
     };  // Size: 0x08
     static const AnmDataTableEntry mAnmDataTable[];
 };  // Size: 0x4C28
+
+inline daPy_lk_c* daPy_getPlayerLinkActorClass() {
+    return (daPy_lk_c*)dComIfGp_getLinkPlayer();
+}
 
 #endif /* D_A_PLAYER_MAIN */

@@ -141,7 +141,7 @@ u16 daPz_c::next_msgStatus(unsigned long*) {
 }
 
 /* 00001208-00001288       .text anmAtr__6daPz_cFUs */
-void daPz_c::anmAtr(unsigned short) {
+void daPz_c::anmAtr(u16 i_msgStatus) {
     /* Nonmatching */
 }
 

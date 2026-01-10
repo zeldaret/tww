@@ -3,6 +3,8 @@
 // Translation Unit: control.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio_JStage/control.h"
 
 namespace JStudio_JStage {
