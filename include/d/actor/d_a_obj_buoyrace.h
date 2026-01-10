@@ -17,7 +17,7 @@ namespace daObjBuoyrace {
 
         struct Attr_c {
             /* 0x00 */ f32 m00;
-            /* 0x04 */ f32 m04;
+            /* 0x04 */ f32 mScale;
             /* 0x08 */ f32 m08;
             /* 0x0C */ f32 m0C;
             /* 0x10 */ s16 m10;

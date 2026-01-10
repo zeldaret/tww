@@ -15,15 +15,15 @@
 const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
 const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
 const daObjBuoyrace::Act_c::Attr_c daObjBuoyrace::Act_c::M_attr = {
-    /* m00 */ 150.0f,
-    /* m04 */ 2.0f,
-    /* m08 */ 0.8f,
-    /* m0C */ 0.5f,
-    /* m10 */ 0x3E8,
-    /* m14 */ 0.3f,
-    /* m18 */ 0.02f,
-    /* m1C */ 0.04f,
-    /* m20 */ 0.35f
+    /* m00    */ 150.0f,
+    /* mScale */ 2.0f,
+    /* m08    */ 0.8f,
+    /* m0C    */ 0.5f,
+    /* m10    */ 0x3E8,
+    /* m14    */ 0.3f,
+    /* m18    */ 0.02f,
+    /* m1C    */ 0.04f,
+    /* m20    */ 0.35f
 };
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
@@ -72,41 +72,41 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
     fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
 
 #if VERSION > VERSION_DEMO
-    cPhs_State o_result = create_load();
+    cPhs_State result = create_load();
 #else
-    cPhs_State o_result;
-    cPhs_State o_result_kiba  = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
-    cPhs_State o_result_hasi = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
+    cPhs_State result;
+    cPhs_State result_kiba  = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
+    cPhs_State result_hasi = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
 
-    if (o_result_kiba == cPhs_COMPLEATE_e && o_result_hasi == cPhs_COMPLEATE_e) {
-        o_result = cPhs_COMPLEATE_e;
-    } else if (o_result_kiba == cPhs_ERROR_e || o_result_hasi == cPhs_ERROR_e) {
-        o_result = cPhs_ERROR_e;   
+    if (result_kiba == cPhs_COMPLEATE_e && result_hasi == cPhs_COMPLEATE_e) {
+        result = cPhs_COMPLEATE_e;
+    } else if (o_result_kiba == cPhs_ERROR_e || result_hasi == cPhs_ERROR_e) {
+        result = cPhs_ERROR_e;   
     } else {
-        o_result = cPhs_INIT_e;
+        result = cPhs_INIT_e;
     }
 #endif
 
-    if (o_result == cPhs_COMPLEATE_e) {
+    if (result == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, DEMO_SELECT(0x2560, 0x980))) {
             set_water_pos();
-            current.pos.y = m290 + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().m04;
+            current.pos.y = m290 + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().mScale;
             cullMtx = mpModelKiba->getBaseTRMtx();
             fopAcM_setCullSizeBox(
                 this, 
-                -1.0f * 76.0f * attr().m04, 
-                -1.0f * attr().m04, 
-                -1.0f * 76.0f * attr().m04, 
-                76.0f * attr().m04, 
-                295.0f * attr().m04, 
-                76.0f * attr().m04
+                -1.0f * 76.0f * attr().mScale, 
+                -1.0f * attr().mScale, 
+                -1.0f * 76.0f * attr().mScale, 
+                76.0f * attr().mScale, 
+                295.0f * attr().mScale, 
+                76.0f * attr().mScale
             );
             init_mtx();
         } else {
-            o_result = cPhs_ERROR_e;
+            result = cPhs_ERROR_e;
         }
     }
-    return o_result;
+    return result;
 }
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
@@ -124,11 +124,11 @@ void daObjBuoyrace::Act_c::set_mtx() {
     Vec actor_scale;
     cXyz tmp3;
     
-    mpModelKiba->setBaseScale(scale * attr().m04);
+    mpModelKiba->setBaseScale(scale * attr().mScale);
 
-    actor_scale.x = 1.75f * (scale.x * attr().m04);
-    actor_scale.y =  2.5f * (scale.y * attr().m04);
-    actor_scale.z = 1.75f * (scale.z * attr().m04);
+    actor_scale.x = 1.75f * (scale.x * attr().mScale);
+    actor_scale.y =  2.5f * (scale.y * attr().mScale);
+    actor_scale.z = 1.75f * (scale.z * attr().mScale);
 
     mpModelHasi->setBaseScale(actor_scale);
 
@@ -136,18 +136,18 @@ void daObjBuoyrace::Act_c::set_mtx() {
 
     tmp0.set(m2AC, 1.0f, m2B0);
 
-    mDoMtx_stack_c::transM(0.0f, attr().m00 * 0.5f * attr().m04, 0.0f);
+    mDoMtx_stack_c::transM(0.0f, attr().m00 * 0.5f * attr().mScale, 0.0f);
 
     daObj::quat_rotBaseY(&quat, tmp0);
     mDoMtx_stack_c::quatM(&quat);
 
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
-    mDoMtx_stack_c::transM(0.0f, -attr().m00 * 0.5f * attr().m04, 0.0f);
+    mDoMtx_stack_c::transM(0.0f, -attr().m00 * 0.5f * attr().mScale, 0.0f);
     mpModelKiba->setBaseTRMtx(mDoMtx_stack_c::get());
 
     set_rope_pos();
 
-    tmp1.set(0.0f, (attr().m00 - 5.0f) * attr().m04, 0.0f);
+    tmp1.set(0.0f, (attr().m00 - 5.0f) * attr().mScale, 0.0f);
     mDoMtx_stack_c::multVecSR(&tmp1, &tmp3);
     mDoMtx_stack_c::get()[0][3] += tmp3.x;
     mDoMtx_stack_c::get()[1][3] += tmp3.y;
@@ -227,7 +227,7 @@ void daObjBuoyrace::Act_c::afl_calc() {
     } 
     m2A0 = m2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
 
-    f32 target = m290 + m2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().m04;
+    f32 target = m290 + m2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().mScale;
     f32* pos_y = &current.pos.y;
     cLib_chaseF(
         pos_y, 
@@ -244,14 +244,14 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
     if (parent_p) {
         int line = prm_get_line();
         int id = prm_get_id();
-        cXyz* rope_pos = parent_p->getRopePos(line, id);
-        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos != NULL);
-        cXyz tmp(
+        cXyz* rope_pos_p = parent_p->getRopePos(line, id);
+        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos_p != NULL);
+        cXyz base_pos(
             0.0f,
-            (attr().m00 - 5.0f + 160.0f) * attr().m04,
+            (attr().m00 - 5.0f + 160.0f) * attr().mScale,
             0.0f
         );
-        mDoMtx_stack_c::multVec(&tmp, rope_pos);
+        mDoMtx_stack_c::multVec(&base_pos, rope_pos_p);
     }
 }
 
