@@ -80,7 +80,7 @@ cPhs_State daObjBuoyrace::Act_c::_create() {
 
     if (result_kiba == cPhs_COMPLEATE_e && result_hasi == cPhs_COMPLEATE_e) {
         result = cPhs_COMPLEATE_e;
-    } else if (o_result_kiba == cPhs_ERROR_e || result_hasi == cPhs_ERROR_e) {
+    } else if (result_kiba == cPhs_ERROR_e || result_hasi == cPhs_ERROR_e) {
         result = cPhs_ERROR_e;   
     } else {
         result = cPhs_INIT_e;
@@ -244,14 +244,14 @@ void daObjBuoyrace::Act_c::set_rope_pos() {
     if (parent_p) {
         int line = prm_get_line();
         int id = prm_get_id();
-        cXyz* rope_pos_p = parent_p->getRopePos(line, id);
-        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos_p != NULL);
+        cXyz* rope_pos = parent_p->getRopePos(line, id);
+        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos != NULL);
         cXyz base_pos(
             0.0f,
             (attr().m00 - 5.0f + 160.0f) * attr().mScale,
             0.0f
         );
-        mDoMtx_stack_c::multVec(&base_pos, rope_pos_p);
+        mDoMtx_stack_c::multVec(&base_pos, rope_pos);
     }
 }
 
