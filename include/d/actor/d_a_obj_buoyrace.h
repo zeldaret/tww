@@ -60,7 +60,7 @@ namespace daObjBuoyrace {
         void set_rope_pos();
     
     public:
-        /* 0x290 */ f32 m290;
+        /* 0x290 */ f32 mMeanSeaHeight;
         /* 0x294 */ cXyz m294;
         /* 0x2A0 */ s16 m2A0;
         /* 0x2A2 */ u8 m2A2[0x2AC - 0x2A2];
