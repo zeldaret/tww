@@ -8,51 +8,39 @@
 #include "d/d_priority.h"
 #include "d/d_a_obj.h"
 
-/* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
+/* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
-    int i;
-    fopAc_ac_c* a_this = (fopAc_ac_c*)this;
-    u32 prmArg;
+    fopAcM_SetupActor(this, daObjMsdan2::Act_c);
+
+    cXyz pos = current.pos;
+    csXyz angle = current.angle;
     
-    if (!(a_this->actor_condition & 8)) {
-        new (a_this) fopAc_ac_c();
-        a_this->actor_condition |= 8;
-    }
-
-    cXyz pos = a_this->current.pos;
-    csXyz angle = a_this->current.angle;
-
     angle.y += 0x8000;
     pos.y += 400.0f;
 
-    i = 0;
-    prmArg = 0;
-    for (; i < 16; i++) {
-        pos.x += 50.0f * JMASSin(a_this->current.angle.y);
-        pos.z += 50.0f * JMASCos(a_this->current.angle.y);
-        u32 prmAbstractVal = daObj::PrmAbstract<Prm_e>(a_this, (Prm_e)8, (Prm_e)0);
+    for (int i = 0; i < 16; i++) {
+        pos.x += 50.0f * cM_ssin(current.angle.y);
+        pos.z += 50.0f * cM_scos(current.angle.y);
 
         fopAcM_create(
-            0x53, 
-            prmArg + prmAbstractVal, 
+            PROC_Obj_MsdanSub2, 
+            prm_get_swSave() + i * 0x100,
             &pos, 
-            this->mType,
+            mType,
             &angle, 
             NULL, 
             -1, 
             NULL
         );
-        prmArg += 0x100;
     }
 
-    mEventIdx = g_dComIfG_gameInfo.play.mEvtManager.getEventIdx("Msdan2", 0xff);
+    mEventIdx = dComIfGp_evmng_getEventIdx("Msdan2", 0xff);
 
-    u32 prmCheck = daObj::PrmAbstract<Prm_e>(a_this, (Prm_e)8, (Prm_e)0);
-    s8 swBit = this->mSwitchBit;
-    if (dComIfGs_isSwitch(prmCheck, swBit)) {
-        this->mMode = 3;
+    u32 prmCheck = prm_get_swSave();
+    if (dComIfGs_isSwitch(prmCheck, mSwitchBit)) {
+        mMode = MODE_DONE;
     } else {
-        this->mMode = 0;
+        mMode = MODE_WAIT;
     }
 
     return (cPhs_State)4;
@@ -63,16 +51,16 @@ BOOL daObjMsdan2::Act_c::Mthd_Execute() {
     int swIdx;
     switch (mMode) {
         case 0:  
-            swIdx = daObj::PrmAbstract<Prm_e>(this, PRM_SW_W, PRM_SW_S);
+            swIdx = prm_get_swSave();
             if (dComIfGs_isSwitch(swIdx, home.roomNo)) {
                 fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
-                mMode = 1;
+                mMode = MODE_EVENT;
             }
             break;
         
         case 1:
             if (eventInfo.checkCommandDemoAccrpt()) {
-                mMode = 2;
+                mMode = MODE_EVENT_RUNNING;
             }
             break;
 
@@ -80,7 +68,7 @@ BOOL daObjMsdan2::Act_c::Mthd_Execute() {
             dComIfG_play_c& play = g_dComIfG_gameInfo.play;
             if (play.mEvtManager.endCheck(mEventIdx)) {
                 play.mEvtCtrl.mEventFlag |= 8;    
-                mMode = 3;
+                mMode = MODE_DONE;
             }
             break;
 
@@ -131,8 +119,7 @@ static actor_method_class Mthd_Msdan2 = {
     (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
     };
-};
- // namespace
+}; // namespace
 }; // namespace daObjMsdan2
 
 actor_process_profile_definition g_profile_Obj_Msdan2 = {
@@ -141,13 +128,13 @@ actor_process_profile_definition g_profile_Obj_Msdan2 = {
     /* ListPrio     */ fpcPi_CURRENT_e,
     /* ProcName     */ PROC_Obj_Msdan2,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(daObjMsdan2::Act_c), // Doit faire 0x2A0 (vérifié ok)
+    /* Size         */ sizeof(daObjMsdan2::Act_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ 0x003A,
+    /* Priority     */ PRIO_Obj_Msdan2,
     /* Actor SubMtd */ &daObjMsdan2::Mthd_Msdan2,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ 0x0E,
+    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };
