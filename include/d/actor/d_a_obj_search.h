@@ -69,6 +69,7 @@ namespace daObj_Search {
         /* 0x290 */ u8 m290[0x664 - 0x290];
         /* 0x664 */ bool mBkControl;
         /* 0x665 */ u8 m665[0x84C - 0x665];
+        
         /* 0x84C */ fpc_ProcID mChildId;
     };
 

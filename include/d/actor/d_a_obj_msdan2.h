@@ -1,4 +1,6 @@
-#include "d/dolzel_rel.h" // IWYU pragma: keep
+#ifndef D_A_OBJ_MSDAN2_H
+#define D_A_OBJ_MSDAN2_H
+
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_a_obj.h"
@@ -39,3 +41,5 @@ namespace daObjMsdan2 {
         /* 0x29C */ s32 mMode;
     };
 };
+
+#endif /* D_A_OBJ_MSDAN2_H */
