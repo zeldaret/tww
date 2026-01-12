@@ -24,7 +24,7 @@ cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
 
         fopAcM_create(
             PROC_Obj_MsdanSub2, 
-            prm_get_swSave() + i * 0x100,
+            prm_get_swSave() + (i << 8),
             &pos, 
             mType,
             &angle, 
@@ -43,36 +43,35 @@ cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
         mMode = MODE_WAIT;
     }
 
-    return (cPhs_State)4;
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Execute() {
     int swIdx;
     switch (mMode) {
-        case 0:  
+        case MODE_WAIT:  
             swIdx = prm_get_swSave();
-            if (dComIfGs_isSwitch(swIdx, home.roomNo)) {
+            if (fopAcM_isSwitch(this,swIdx)) {
                 fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
                 mMode = MODE_EVENT;
             }
             break;
         
-        case 1:
+        case MODE_EVENT:
             if (eventInfo.checkCommandDemoAccrpt()) {
                 mMode = MODE_EVENT_RUNNING;
             }
             break;
 
-        case 2:
-            dComIfG_play_c& play = g_dComIfG_gameInfo.play;
-            if (play.mEvtManager.endCheck(mEventIdx)) {
-                play.mEvtCtrl.mEventFlag |= 8;    
+        case MODE_EVENT_RUNNING:
+            if (dComIfGp_evmng_endCheck(mEventIdx)) {
+                dComIfGp_event_reset();    
                 mMode = MODE_DONE;
             }
             break;
 
-        case 3: break;
+        case MODE_DONE: break;
 
     }
 
@@ -118,7 +117,7 @@ static actor_method_class Mthd_Msdan2 = {
     (process_method_func)Mthd_Execute,
     (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
-    };
+};
 }; // namespace
 }; // namespace daObjMsdan2
 
