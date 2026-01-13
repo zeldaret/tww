@@ -3445,31 +3445,31 @@ stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo);
  * === DRAWLIST ===
  */
 
-int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
-                       f32 y, f32 param_8, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
-                       s16 rotY = 0, f32 param_12 = 1.0f,
+int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize, f32 scaleXZ,
+                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* pTevStr,
+                       s16 rotY = 0, f32 scaleZ = 1.0f,
                        GXTexObj* pTexObj = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 param_2, cXyz* floor_nrm,
-                                    s16 i_angle = 0, f32 param_5 = 1.0f,
+inline int dComIfGd_setSimpleShadow(cXyz* i_pos, f32 groundY, f32 scaleXZ, cXyz* floor_nrm,
+                                    s16 i_angle = 0, f32 scaleZ = 1.0f,
                                     GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex()) {
-    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, param_2, floor_nrm, i_angle,
-                                                       param_5, i_tex);
+    return g_dComIfG_gameInfo.drawlist.setSimpleShadow(i_pos, groundY, scaleXZ, floor_nrm, i_angle,
+                                                       scaleZ, i_tex);
 }
 
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 param_1, f32 param_2, cBgS_PolyInfo& i_floorPoly,
-                              s16 i_angle = 0, f32 param_5 = 1.0f,
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle = 0, f32 scaleZ = 1.0f,
                               GXTexObj* i_tex = dDlst_shadowControl_c::getSimpleTex());
 
-inline int dComIfGd_setRealShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5,
-                                   f32 param_6, dKy_tevstr_c* pTevStr) {
-    return g_dComIfG_gameInfo.drawlist.setRealShadow(id, param_2, pModel, pPos, param_5, param_6,
+inline int dComIfGd_setRealShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize,
+                                   f32 heightAboveGround, dKy_tevstr_c* pTevStr) {
+    return g_dComIfG_gameInfo.drawlist.setRealShadow(id, shouldFade, pModel, pPos, casterSize, heightAboveGround,
                                                      pTevStr);
 }
 
-inline int dComIfGd_setRealShadow2(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5,
-                                   f32 param_6, dKy_tevstr_c* pTevStr) {
-    return g_dComIfG_gameInfo.drawlist.setRealShadow2(id, param_2, pModel, pPos, param_5, param_6,
+inline int dComIfGd_setRealShadow2(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize,
+                                   f32 heightAboveGround, dKy_tevstr_c* pTevStr) {
+    return g_dComIfG_gameInfo.drawlist.setRealShadow2(id, shouldFade, pModel, pPos, casterSize, heightAboveGround,
                                                       pTevStr);
 }
 

@@ -563,13 +563,13 @@ s8 dComIfGp_getReverb(int param_0) {
 }
 
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
-                              s16 i_angle, f32 param_5, GXTexObj* i_tex) {
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle, f32 scaleZ, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, groundY, param_2, plane_p->GetNP(), i_angle, param_5, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, plane_p->GetNP(), i_angle, scaleZ, i_tex);
     } else {
         return 0;
     }
@@ -1041,17 +1041,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 }
 
 /* 80054578-8005468C       .text dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
-int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
-                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
-                       s16 rotY, f32 param_12, GXTexObj* pTexObj) {
+int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize, f32 scaleXZ,
+                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* pTevStr,
+                       s16 rotY, f32 scaleZ, GXTexObj* pTexObj) {
     if (groundY <= -G_CM3D_F_INF) {
         return 0;
     }
 
-    int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - groundY, param_10);
+    int sid = dComIfGd_setRealShadow2(id, shouldFade, pModel, pPos, casterSize, y - groundY, pTevStr);
     if (sid == 0) {
         cXyz pos(pPos->x, y, pPos->z);
-        dComIfGd_setSimpleShadow2(&pos, groundY, param_6, pFloorPoly, rotY, param_12, pTexObj);
+        dComIfGd_setSimpleShadow2(&pos, groundY, scaleXZ, pFloorPoly, rotY, scaleZ, pTexObj);
     }
     return sid;
 }
