@@ -129,7 +129,7 @@ void daNpc_Ls1_c::init_LS1_4() {
 }
 
 /* 00000A60-00000C6C       .text createInit__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::createInit() {
+bool daNpc_Ls1_c::createInit() {
     /* Nonmatching */
 }
 
@@ -239,7 +239,7 @@ void daNpc_Ls1_c::anmAtr(unsigned short) {
 }
 
 /* 00001B88-00001C30       .text next_msgStatus__11daNpc_Ls1_cFPUl */
-void daNpc_Ls1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Ls1_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
@@ -254,7 +254,7 @@ void daNpc_Ls1_c::getMsg_LS1_3() {
 }
 
 /* 00001D50-00001DAC       .text getMsg__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::getMsg() {
+u32 daNpc_Ls1_c::getMsg() {
     /* Nonmatching */
 }
 
@@ -319,8 +319,47 @@ void daNpc_Ls1_c::setAttention(bool) {
 }
 
 /* 0000253C-00002670       .text decideType__11daNpc_Ls1_cFi */
-void daNpc_Ls1_c::decideType(int) {
-    /* Nonmatching */
+bool daNpc_Ls1_c::decideType(int param_1) {
+    /* Apparent match, stringBase offsets issue */
+    if (field_0x854 > 0) {
+        return true;
+    }
+
+    field_0x854 = 1;
+    field_0x855 = -1;
+
+    switch (param_1) {
+    case 0:
+        if (dComIfGs_isEventBit(0x2A80)) {
+            field_0x855 = 0;
+        }    
+        break;
+    case 1:
+        field_0x855 = 1;
+        break;
+    case 2:
+        field_0x855 = 2;
+        break;
+    case 3:
+        if (!dComIfGs_isEventBit(0x2A80)) {
+            field_0x855 = 3;
+        }
+        break;
+    case 4:
+        field_0x855 = 4;
+        break;
+    }
+    if (field_0x855 < 0) {
+        return 0;
+    }
+
+    strcpy(field_0x6E0, "Ls");
+    bool result = false;
+    if (field_0x854 != -1 && field_0x855 != -1) {
+        result = true;
+    }
+    
+    return result;
 }
 
 /* 00002670-00002724       .text cut_init_LOK_PLYER__11daNpc_Ls1_cFi */
@@ -355,12 +394,12 @@ void daNpc_Ls1_c::cut_move_WAI() {
 
 /* 000027C0-00002828       .text cut_init_ANM_CHG__11daNpc_Ls1_cFi */
 void daNpc_Ls1_c::cut_init_ANM_CHG(int) {
-    /* Nonmatching */
+    /* Nonmatching */   
 }
 
 /* 00002828-00002830       .text cut_move_ANM_CHG__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::cut_move_ANM_CHG() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::cut_move_ANM_CHG() {
+    return TRUE;
 }
 
 /* 00002830-000029B0       .text privateCut__11daNpc_Ls1_cFi */
@@ -480,8 +519,40 @@ BOOL daNpc_Ls1_c::_delete() {
 
 /* 000046A8-000047D4       .text _create__11daNpc_Ls1_cFv */
 cPhs_State daNpc_Ls1_c::_create() {
-    /* Nonmatching */
+    /* Apparent match */
+    static int a_siz_tbl[] = {
+        0,
+        0
+    };
+
+    cPhs_State state;
+    fopAcM_SetupActor(this, daNpc_Ls1_c);
+
+    if (!decideType(fopAcM_GetParam(this) & 0xFF)) {
+        return cPhs_ERROR_e;
+    }
+
+    state = dComIfG_resLoad(&field_0x6C4, field_0x6E0);
+    field_0x837 = state == cPhs_COMPLEATE_e;
+    if (!field_0x837) {
+        return state;
+    }
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[field_0x854])) {
+        return cPhs_ERROR_e;
+    }
+
+    fopAcM_SetMtx(this, this->mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -50.0f, -20.0f, -50.0f, 50.0f, 140.0f, 50.0f);
+
+    if (createInit() == 0) {
+        return cPhs_ERROR_e;
+    }
+
+    return state;
 }
+
+daNpc_Ls1_c::daNpc_Ls1_c() {}
 
 /* 00004C98-00005250       .text bodyCreateHeap__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::bodyCreateHeap() {

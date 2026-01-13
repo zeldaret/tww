@@ -1,6 +1,7 @@
 #ifndef D_A_NPC_LS1_H
 #define D_A_NPC_LS1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
 
 class J3DMaterial;
@@ -20,11 +21,13 @@ public:
     /* Place member variables here */
 };
 
-class daNpc_Ls1_c : public fopAc_ac_c {
+class daNpc_Ls1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
         
     };
+
+    daNpc_Ls1_c();
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
@@ -37,7 +40,7 @@ public:
     void init_LS1_2();
     void init_LS1_3();
     void init_LS1_4();
-    void createInit();
+    bool createInit();
     void play_animation();
     void setMtx(bool);
     void bckResID(int);
@@ -59,10 +62,10 @@ public:
     void ctrlAnmAtr();
     void setAnm_ATR(int);
     void anmAtr(unsigned short);
-    void next_msgStatus(unsigned long*);
+    u16 next_msgStatus(unsigned long*);
     void getMsg_LS1_0();
     void getMsg_LS1_3();
-    void getMsg();
+    u32 getMsg();
     void eventOrder();
     void checkOrder();
     void chk_talk();
@@ -75,7 +78,7 @@ public:
     void lookBack();
     void chkAttention();
     void setAttention(bool);
-    void decideType(int);
+    bool decideType(int);
     void cut_init_LOK_PLYER(int);
     void cut_move_LOK_PLYER();
     void cut_init_PLYER_MOV(int);
@@ -83,7 +86,7 @@ public:
     void cut_init_WAI(int);
     void cut_move_WAI();
     void cut_init_ANM_CHG(int);
-    void cut_move_ANM_CHG();
+    BOOL cut_move_ANM_CHG();
     void privateCut(int);
     void endEvent();
     void isEventEntry();
@@ -114,8 +117,22 @@ public:
     void CreateHeap();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ request_of_phase_process_class field_0x6C4;
+    /* 0x6CC */ u8 field_0x6CC[0x6E0 - 0x6CC];
+    /* 0x6E0 */ char field_0x6E0[3];
+    /* 0x6E3 */ u8 field_0x6E3[0x6F0 - 0x6E3];
+    /* 0x6F0 */ mDoExt_btkAnm field_0x6F0;
+    /* 0x704 */ u8 field_0x704[0x708 - 0x704];
+    /* 0x708 */ mDoExt_btpAnm field_0x708;
+    /* 0x71C */ u8 field_0x71C[0x7CC - 0x71C];
+    /* 0x7CC */ cXyz field_0x7CC[2];
+    /* 0x7E4 */ u8 field_0x7E4[0x837 - 0x7E4];
+    /* 0x837 */ bool field_0x837;
+    /* 0x838 */ u8 field_0x838[0x854 - 0x838];
+    /* 0x854 */ s8 field_0x854;
+    /* 0x855 */ s8 field_0x855;
+    /* 0x856 */ u8 field_0x856[0x858 - 0x856];
+};  // Size: 0x858
 
 class daNpc_Ls1_HIO_c {
 public:
