@@ -67,7 +67,7 @@ cPhs_State daObjVolcano::Act_c::Mthd_Create() {
 
 /* 00000E58-00000E60       .text Delete__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 00000E60-00000EC0       .text Mthd_Delete__Q212daObjVolcano5Act_cFv */
