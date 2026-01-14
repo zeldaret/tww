@@ -3,6 +3,7 @@
 
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DMaterial;
 class J3DNode;
@@ -140,12 +141,38 @@ public:
     /* 0x856 */ u8 field_0x856[0x858 - 0x856];
 };  // Size: 0x858
 
-class daNpc_Ls1_HIO_c {
+class daNpc_Ls1_HIO_c : public mDoHIO_entry_c {
 public:
+    struct hio_prm_c {
+        /* 0x00 */ s16 field_0x00;
+        /* 0x02 */ s16 field_0x02;
+        /* 0x04 */ s16 field_0x04;
+        /* 0x06 */ s16 field_0x06;
+        /* 0x08 */ s16 field_0x08;
+        /* 0x0A */ s16 field_0x0A;
+        /* 0x0C */ s16 field_0x0C;
+        /* 0x0E */ s16 field_0x0E;
+        /* 0x10 */ s16 field_0x10;
+        /* 0x12 */ s16 field_0x12;
+        /* 0x14 */ f32 field_0x14;
+        /* 0x18 */ u8 field_0x18;
+        /* 0x19 */ u8 field_0x19[0x1C - 0x19];
+        /* 0x1C */ f32 field_0x1C;
+        /* 0x20 */ f32 field_0x20;
+        /* 0x24 */ f32 field_0x24;
+        /* 0x28 */ f32 field_0x28;
+        /* 0x2C */ f32 field_0x2C;
+        /* 0x30 */ s16 field_0x30;
+        /* 0x32 */ u8 field_0x32[0x34 - 0x32];
+        /* 0x34 */ f32 field_0x34;
+    };  // Size: 0x38
     daNpc_Ls1_HIO_c();
-
+    inline virtual ~daNpc_Ls1_HIO_c();
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ s8 field_0x04;
+    /* 0x05 */ u8 field_0x05[0x08 - 0x05]; // probably padding?
+    /* 0x08 */ s32 field_0x08;
+    /* 0x0C */ hio_prm_c field_0x0C;
+};  // Size: 0x44
 
 #endif /* D_A_NPC_LS1_H */

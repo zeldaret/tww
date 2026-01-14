@@ -8,10 +8,40 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+daNpc_Ls1_HIO_c l_HIO;
+
 /* 000000EC-00000150       .text __ct__15daNpc_Ls1_HIO_cFv */
 daNpc_Ls1_HIO_c::daNpc_Ls1_HIO_c() {
-    /* Nonmatching */
+    /* Apparent match */
+    static hio_prm_c a_prm_tbl = {
+        0x2EE0,
+        0x4650,
+        0xFC18,
+        0xB9B0,
+        0x0BB8,
+        0x1B58,
+        0x0000,
+        0xE4A8,
+        0x1000,
+        0x0960,
+        110.0f,
+        0,
+        {0, 0, 0}, // probably padding
+        700.0f,
+        200.0f,
+        2.0f,
+        9.0f,
+        50.0f,
+        0x1A2C,
+        {0, 0}, // also probably padding
+        9.0f
+    };
+    memcpy(&field_0x0C, &a_prm_tbl, 0x38);
+    field_0x04 = -1;
+    field_0x08 = -1;
 }
+
+daNpc_Ls1_HIO_c::~daNpc_Ls1_HIO_c() {}
 
 /* 00000198-000001F8       .text __ct__18daNpc_Ls1_matAnm_cFv */
 daNpc_Ls1_matAnm_c::daNpc_Ls1_matAnm_c() {
