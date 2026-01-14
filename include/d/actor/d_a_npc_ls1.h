@@ -28,6 +28,8 @@ public:
 
 class daNpc_Ls1_c : public fopNpc_npc_c {
 public:
+    typedef BOOL (daNpc_Ls1_c::*ProcFunc)(void*);
+
     struct anm_prm_c {
         
     };
@@ -40,11 +42,11 @@ public:
     void _nodeCB_Hand_R(J3DNode*, J3DModel*);
     void _Ls_hand_nodeCB_Hand_L(J3DNode*, J3DModel*);
     void _Ls_hand_nodeCB_Hand_R(J3DNode*, J3DModel*);
-    void init_LS1_0();
-    void init_LS1_1();
-    void init_LS1_2();
-    void init_LS1_3();
-    void init_LS1_4();
+    bool init_LS1_0();
+    bool init_LS1_1();
+    bool init_LS1_2();
+    bool init_LS1_3();
+    bool init_LS1_4();
     bool createInit();
     void play_animation();
     void setMtx(bool);
@@ -108,8 +110,8 @@ public:
     void wait_3();
     void wait_4();
     void talk_1();
-    void wait_action1(void*);
-    void demo_action1(void*);
+    BOOL wait_action1(void*);
+    BOOL demo_action1(void*);
     bool demo();
     void shadowDraw();
     BOOL _draw();
@@ -139,14 +141,16 @@ public:
     /* 0x704 */ u8 field_0x704[0x708 - 0x704];
     /* 0x708 */ mDoExt_btpAnm field_0x708;
     /* 0x71C */ u8 field_0x71C[0x720 - 0x71C];
-    /* 0x720 */ int (daNpc_Ls1_c::*field_0x720)(void*);
+    /* 0x720 */ ProcFunc field_0x720;
     /* 0x72C */ u8 field_0x72C[0x794 - 0x72C];
     /* 0x794 */ cXyz field_0x794;
     /* 0x7A0 */ csXyz field_0x7A0;
     /* 0x7A6 */ csXyz field_0x7A6;
     /* 0x7AC */ u8 field_0x7AC[0x7CC - 0x7AC];
     /* 0x7CC */ cXyz field_0x7CC[2];
-    /* 0x7E4 */ u8 field_0x7E4[0x834 - 0x7E4];
+    /* 0x7E4 */ u8 field_0x7E4[0x814 - 0x7E4];
+    /* 0x814 */ s16 field_0x814[4];
+    /* 0x81C */ u8 field_0x81C[0x834 - 0x81C];
     /* 0x834 */ u8 field_0x834;
     /* 0x835 */ u8 field_0x835[0x837 - 0x835];
     /* 0x837 */ bool field_0x837;
@@ -160,7 +164,9 @@ public:
     /* 0x842 */ u8 field_0x842[0x84B - 0x842];
     /* 0x84B */ u8 field_0x84B;
     /* 0x84C */ u8 field_0x84C;
-    /* 0x84D */ u8 field_0x84D[0x854 - 0x84D];
+    /* 0x84D */ u8 field_0x84D[0x84F - 0x84D];
+    /* 0x84F */ s8 field_0x84F;
+    /* 0x850 */ u8 field_0x850[0x854 - 0x850];
     /* 0x854 */ s8 field_0x854;
     /* 0x855 */ s8 field_0x855;
     /* 0x856 */ u8 field_0x856[0x858 - 0x856];
