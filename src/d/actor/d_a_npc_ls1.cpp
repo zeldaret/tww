@@ -327,11 +327,37 @@ void daNpc_Ls1_c::setAnm_anm(daNpc_Ls1_c::anm_prm_c*) {
 /* 00001584-000015F4       .text setAnm_NUM__11daNpc_Ls1_cFii */
 void daNpc_Ls1_c::setAnm_NUM(int, int) {
     /* Nonmatching */
+    static anm_prm_c a_anm_prm_tbl[14] = {
+        {  0,  1, 8.0f, 1.0f, 2 },
+        {  1,  1, 8.0f, 1.0f, 0 },
+        {  2,  1, 8.0f, 1.0f, 2 },
+        {  3,  1, 8.0f, 1.0f, 2 },
+        {  4,  1, 8.0f, 1.0f, 2 },
+        {  5,  1, 8.0f, 1.0f, 2 },
+        {  6,  1, 8.0f, 1.0f, 0 },
+        {  7,  1, 8.0f, 1.0f, 0 },
+        {  8,  6, 8.0f, 1.0f, 2 },
+        {  9,  4, 8.0f, 1.0f, 0 },
+        { 10,  1, 8.0f, 1.0f, 2 },
+        { 11,  1, 8.0f, 1.0f, 2 },
+        { 12, 10, 8.0f, 1.0f, 2 },
+        { 13, 10, 8.0f, 1.0f, 0 }
+    };
 }
 
 /* 000015F4-00001660       .text setAnm__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::setAnm() {
-    /* Nonmatching */
+    /* Apparent match */
+    static anm_prm_c a_anm_prm_tbl[6] = {
+        { -1, -1, 0.0f, 0.0f, -1 },
+        {  0,  1, 8.0f, 1.0f,  2 },
+        {  5,  1, 8.0f, 1.0f,  2 },
+        { 10,  2, 8.0f, 1.0f,  2 },
+        {  5,  1, 8.0f, 1.0f,  2 },
+        { -1, -1, 0.0f, 0.0f, -1 }
+    };
+    init_texPttrnAnm(a_anm_prm_tbl[field_0x851].field_0x01, true);
+    setAnm_anm(&a_anm_prm_tbl[field_0x851]);
 }
 
 /* 00001660-000016F8       .text chngAnmTag__11daNpc_Ls1_cFv */
