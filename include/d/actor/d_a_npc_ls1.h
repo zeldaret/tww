@@ -8,7 +8,7 @@
 class J3DMaterial;
 class J3DNode;
 
-class daNpc_Ls1_matAnm_c {
+class daNpc_Ls1_matAnm_c : public J3DMaterialAnm {
 public:
     daNpc_Ls1_matAnm_c();
     void clrMoveFlag() {}
@@ -19,8 +19,12 @@ public:
     void calc(J3DMaterial*) const;
 
 public:
-    /* Place member variables here */
-};
+    /* 0x6C */ f32 field_0x6C;
+    /* 0x70 */ f32 field_0x70;
+    /* 0x74 */ u8 field_0x74[0x7C - 0x74];
+    /* 0x7C */ u8 field_0x7C;
+    /* 0x7D */ u8 field_0x7D[0x80 - 0x7D];
+};  // Size: 0x80
 
 class daNpc_Ls1_c : public fopNpc_npc_c {
 public:
@@ -50,7 +54,7 @@ public:
     void setBtp(signed char, bool);
     void setMat();
     void setBtk(signed char, bool);
-    void init_texPttrnAnm(signed char, bool);
+    bool init_texPttrnAnm(s8, bool);
     void play_btp_anm();
     void eye_ctrl();
     void play_btk_anm();
@@ -65,7 +69,7 @@ public:
     void anmAtr(unsigned short);
     u16 next_msgStatus(unsigned long*);
     void getMsg_LS1_0();
-    void getMsg_LS1_3();
+    u32 getMsg_LS1_3();
     u32 getMsg();
     void eventOrder();
     void checkOrder();
@@ -90,7 +94,7 @@ public:
     BOOL cut_move_ANM_CHG();
     void privateCut(int);
     void endEvent();
-    void isEventEntry();
+    int isEventEntry();
     void event_proc(int);
     void set_action(int (daNpc_Ls1_c::*)(void*), void*);
     void setStt(signed char);
@@ -106,7 +110,7 @@ public:
     void talk_1();
     void wait_action1(void*);
     void demo_action1(void*);
-    void demo();
+    bool demo();
     void shadowDraw();
     BOOL _draw();
     BOOL _execute();
@@ -119,7 +123,10 @@ public:
 
 public:
     /* 0x6C4 */ request_of_phase_process_class field_0x6C4;
-    /* 0x6CC */ u8 field_0x6CC[0x6D0 - 0x6CC];
+    /* 0x6CC */ s8 m_hed_jnt_num;
+    /* 0x6CD */ s8 m_bbone_jnt_num;
+    /* 0x6CE */ s8 m_hnd_L_jnt_num;
+    /* 0x6CF */ s8 m_hnd_R_jnt_num;
     /* 0x6D0 */ J3DModel* field_0x6D0;
     /* 0x6D4 */ u8 field_0x6D4[0x6E0 - 0x6D4];
     /* 0x6E0 */ char field_0x6E0[3];
@@ -131,11 +138,29 @@ public:
     /* 0x6F0 */ mDoExt_btkAnm field_0x6F0;
     /* 0x704 */ u8 field_0x704[0x708 - 0x704];
     /* 0x708 */ mDoExt_btpAnm field_0x708;
-    /* 0x71C */ u8 field_0x71C[0x7CC - 0x71C];
+    /* 0x71C */ u8 field_0x71C[0x720 - 0x71C];
+    /* 0x720 */ int (daNpc_Ls1_c::*field_0x720)(void*);
+    /* 0x72C */ u8 field_0x72C[0x794 - 0x72C];
+    /* 0x794 */ cXyz field_0x794;
+    /* 0x7A0 */ csXyz field_0x7A0;
+    /* 0x7A6 */ csXyz field_0x7A6;
+    /* 0x7AC */ u8 field_0x7AC[0x7CC - 0x7AC];
     /* 0x7CC */ cXyz field_0x7CC[2];
-    /* 0x7E4 */ u8 field_0x7E4[0x837 - 0x7E4];
+    /* 0x7E4 */ u8 field_0x7E4[0x834 - 0x7E4];
+    /* 0x834 */ u8 field_0x834;
+    /* 0x835 */ u8 field_0x835[0x837 - 0x835];
     /* 0x837 */ bool field_0x837;
-    /* 0x838 */ u8 field_0x838[0x854 - 0x838];
+    /* 0x838 */ u8 field_0x838[0x83A - 0x838];
+    /* 0x83A */ u8 field_0x83A;
+    /* 0x83B */ u8 field_0x83B;
+    /* 0x83C */ u8 field_0x83C[0x83D - 0x83C];
+    /* 0x83D */ bool field_0x83D;
+    /* 0x83E */ u8 field_0x83E[0x841 - 0x83E];
+    /* 0x841 */ u8 field_0x841;
+    /* 0x842 */ u8 field_0x842[0x84B - 0x842];
+    /* 0x84B */ u8 field_0x84B;
+    /* 0x84C */ u8 field_0x84C;
+    /* 0x84D */ u8 field_0x84D[0x854 - 0x84D];
     /* 0x854 */ s8 field_0x854;
     /* 0x855 */ s8 field_0x855;
     /* 0x856 */ u8 field_0x856[0x858 - 0x856];
