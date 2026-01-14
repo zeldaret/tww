@@ -49,7 +49,10 @@ namespace daObjVolcano {
         /* 0x4E8 */ int field_0x4E8;
         /* 0x4EC */ f32 field_0x4EC;
         /* 0x4F0 */ f32 field_0x4F0;
-        /* 0x4F4 */ int field_0x4F4;
+        /* 0x4F4 */ char field_0x4F4;
+        /* 0x4F5 */ char field_0x4F5;
+        /* 0x4F6 */ char field_0x4F6;
+        /* 0x4F7 */ char field_0x4F7;
         /* 0x4F8 */ f32 field_0x4F8;
         /* 0x4FC */ s16 field_0x4FC;
         /* 0x4FE */ s16 field_0x4FE;

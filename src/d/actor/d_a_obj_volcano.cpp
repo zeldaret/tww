@@ -43,6 +43,87 @@ static dCcD_SrcCyl cyl_check_src = {
 /* 00000078-000003CC       .text StartFire__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::StartFire() {
     /* Nonmatching */
+    
+    this->field_0x4E8 = 0;
+    this->field_0x4F4 = 1;
+    J3DFrameCtrl* fc = field_0x328.getFrameCtrl(); 
+    fc->setFrame(0.0f); 
+    fc->setRate(1.0f);
+    if (mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+        }
+    }
+    this->field_0x2C8[0] = dComIfGp_particle_set(
+                                            0x805a, &this->field_0x4B8[1],
+                                            &this->current.angle,
+                                            &this->field_0x4AC, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[1] = dComIfGp_particle_set(
+                                            0x805b, &this->field_0x4B8[2],
+                                            &this->current.angle,
+                                            &this->field_0x4AC, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[2] = dComIfGp_particle_set(
+                                            0x805c, &this->field_0x4B8[3],
+                                            &this->current.angle,
+                                            &this->field_0x4AC, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[3] = dComIfGp_particle_set(
+                                            0x8194, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[4] = dComIfGp_particle_set(
+                                            0x8195, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[5] = dComIfGp_particle_set(
+                                            0x8196, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[6] = dComIfGp_particle_set(
+                                            0x8197, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[7] = dComIfGp_particle_set(
+                                            0x8198, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[8] = dComIfGp_particle_set(
+                                            0x8199, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
+    this->field_0x2C8[9] = dComIfGp_particle_set(
+                                            0x819a, &this->current.pos,
+                                            &this->current.angle,
+                                            NULL, 0xff,
+                                            NULL, -1,
+                                            NULL, NULL,
+                                            NULL);
 }
 
 /* 000003CC-00000470       .text StopFire__Q212daObjVolcano5Act_cFv */
