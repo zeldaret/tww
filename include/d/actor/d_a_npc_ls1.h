@@ -27,7 +27,7 @@ public:
         
     };
 
-    daNpc_Ls1_c();
+    inline daNpc_Ls1_c();
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
@@ -80,11 +80,11 @@ public:
     void setAttention(bool);
     bool decideType(int);
     void cut_init_LOK_PLYER(int);
-    void cut_move_LOK_PLYER();
+    BOOL cut_move_LOK_PLYER();
     void cut_init_PLYER_MOV(int);
-    void cut_move_PLYER_MOV();
+    BOOL cut_move_PLYER_MOV();
     void cut_init_WAI(int);
-    void cut_move_WAI();
+    BOOL cut_move_WAI();
     void cut_init_ANM_CHG(int);
     BOOL cut_move_ANM_CHG();
     void privateCut(int);
@@ -111,16 +111,22 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void bodyCreateHeap();
-    void handCreateHeap();
-    void itemCreateHeap();
-    void CreateHeap();
+    BOOL bodyCreateHeap();
+    BOOL handCreateHeap();
+    BOOL itemCreateHeap();
+    BOOL CreateHeap();
 
 public:
     /* 0x6C4 */ request_of_phase_process_class field_0x6C4;
-    /* 0x6CC */ u8 field_0x6CC[0x6E0 - 0x6CC];
+    /* 0x6CC */ u8 field_0x6CC[0x6D0 - 0x6CC];
+    /* 0x6D0 */ J3DModel* field_0x6D0;
+    /* 0x6D4 */ u8 field_0x6D4[0x6E0 - 0x6D4];
     /* 0x6E0 */ char field_0x6E0[3];
-    /* 0x6E3 */ u8 field_0x6E3[0x6F0 - 0x6E3];
+    /* 0x6E3 */ u8 field_0x6E3[0x6E8 - 0x6E3];
+    /* 0x6E8 */ J3DModel* field_0x6E8;
+    /* 0x6EC */ s8 m_lsHnd_L_jnt_num;
+    /* 0x6ED */ s8 m_lsHnd_R_jnt_num;
+    /* 0x6EE */ u8 field_0x6EE[0x6F0 - 0x6EE];
     /* 0x6F0 */ mDoExt_btkAnm field_0x6F0;
     /* 0x704 */ u8 field_0x704[0x708 - 0x704];
     /* 0x708 */ mDoExt_btpAnm field_0x708;

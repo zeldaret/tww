@@ -368,18 +368,18 @@ void daNpc_Ls1_c::cut_init_LOK_PLYER(int) {
 }
 
 /* 00002724-0000272C       .text cut_move_LOK_PLYER__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::cut_move_LOK_PLYER() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::cut_move_LOK_PLYER() {
+    return TRUE;
 }
 
 /* 0000272C-00002760       .text cut_init_PLYER_MOV__11daNpc_Ls1_cFi */
 void daNpc_Ls1_c::cut_init_PLYER_MOV(int) {
-    /* Nonmatching */
+    dComIfGp_evmng_setGoal(&field_0x7CC[1]);
 }
 
 /* 00002760-00002768       .text cut_move_PLYER_MOV__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::cut_move_PLYER_MOV() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::cut_move_PLYER_MOV() {
+    return TRUE;
 }
 
 /* 00002768-0000276C       .text cut_init_WAI__11daNpc_Ls1_cFi */
@@ -388,7 +388,7 @@ void daNpc_Ls1_c::cut_init_WAI(int) {
 }
 
 /* 0000276C-000027C0       .text cut_move_WAI__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::cut_move_WAI() {
+BOOL daNpc_Ls1_c::cut_move_WAI() {
     /* Nonmatching */
 }
 
@@ -514,7 +514,13 @@ BOOL daNpc_Ls1_c::_execute() {
 
 /* 00004654-000046A8       .text _delete__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&field_0x6C4, field_0x6E0);
+
+    if (heap && mpMorf) {
+        mpMorf->stopZelAnime();
+    }
+
+    return TRUE;
 }
 
 /* 000046A8-000047D4       .text _create__11daNpc_Ls1_cFv */
@@ -555,23 +561,72 @@ cPhs_State daNpc_Ls1_c::_create() {
 daNpc_Ls1_c::daNpc_Ls1_c() {}
 
 /* 00004C98-00005250       .text bodyCreateHeap__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::bodyCreateHeap() {
+BOOL daNpc_Ls1_c::bodyCreateHeap() {
     /* Nonmatching */
 }
 
 /* 00005250-00005428       .text handCreateHeap__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::handCreateHeap() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::handCreateHeap() {
+    /* Apparent match */
+    field_0x6E8 = NULL;
+    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(field_0x6E0, 0xC);
+    JUT_ASSERT(0xC1F, a_mdl_dat != NULL);
+    field_0x6E8 = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+
+    if (!field_0x6E8) {
+        return FALSE;
+    }
+
+    m_lsHnd_L_jnt_num = a_mdl_dat->getJointName()->getIndex("ls_handL");
+    JUT_ASSERT(0xC27, m_lsHnd_L_jnt_num >= 0);
+
+    m_lsHnd_R_jnt_num = a_mdl_dat->getJointName()->getIndex("ls_handR");
+    JUT_ASSERT(0xC29, m_lsHnd_R_jnt_num >= 0);
+
+    field_0x6E8->getModelData()->getJointNodePointer(m_lsHnd_L_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_L);
+    field_0x6E8->getModelData()->getJointNodePointer(m_lsHnd_R_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_R);
+    field_0x6E8->setUserArea((u32)this);
+    return TRUE;
 }
 
 /* 00005428-000054F8       .text itemCreateHeap__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::itemCreateHeap() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::itemCreateHeap() {
+    /* Apparent match */
+    field_0x6D0 = NULL;
+
+    J3DModelData* a_mdl_dat = (J3DModelData *) dComIfG_getObjectRes("Link", 0x2F);
+    JUT_ASSERT(0xC43, a_mdl_dat != NULL);
+    
+    field_0x6D0 = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
+    
+    if (!field_0x6D0) {
+        return FALSE;
+    }
+    
+    return TRUE;
 }
 
 /* 000054F8-000055BC       .text CreateHeap__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daNpc_Ls1_c::CreateHeap() {
+    /* Apparent match */
+    if (!bodyCreateHeap()) {
+        return FALSE;
+    }
+
+    if (!handCreateHeap()) {
+        this->mpMorf = NULL;
+        return FALSE;
+    }
+
+    if (!itemCreateHeap()) {
+        this->mpMorf = NULL;
+        return FALSE;
+    }
+
+    mAcchCir.SetWall(30.0f, 40.0f);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+
+    return TRUE;
 }
 
 /* 000055BC-000055DC       .text daNpc_Ls1_Create__FP10fopAc_ac_c */
