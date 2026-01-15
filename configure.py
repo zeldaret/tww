@@ -1682,7 +1682,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_Yboil"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_adnno"),
     ActorRel(Matching, "d_a_obj_ajav"),
-    ActorRel(Matching, "d_a_obj_apzl"),
+    ActorRel(MatchingFor("GZLE01", "GZLP01"), "d_a_obj_apzl"),
     ActorRel(NonMatching, "d_a_obj_ashut"),
     ActorRel(NonMatching, "d_a_obj_auzu"),
     ActorRel(NonMatching, "d_a_obj_buoyflag"),
