@@ -5,99 +5,298 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyrace.h"
+#include "d/actor/d_a_goal_flag.h"
+#include "d/actor/d_a_sea.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_khasi_00.h"
+#include "d/res/res_kkiba_00.h"
+
+const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
+const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
+const daObjBuoyrace::Act_c::Attr_c daObjBuoyrace::Act_c::M_attr = {
+    /* m00    */ 150.0f,
+    /* mScale */ 2.0f,
+    /* m08    */ 0.8f,
+    /* m0C    */ 0.5f,
+    /* m10    */ 0x3E8,
+    /* m14    */ 0.3f,
+    /* m18    */ 0.02f,
+    /* m1C    */ 0.04f,
+    /* m20    */ 0.35f
+};
 
 /* 00000078-0000009C       .text solidHeapCB__Q213daObjBuoyrace5Act_cFP10fopAc_ac_c */
-void daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-000001D0       .text create_heap__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjBuoyrace::Act_c::create_heap() {
+    bool result = false;
+
+    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
+    JUT_ASSERT(119, mdl_data_kiba != NULL);
+    mpModelKiba = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
+
+    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
+    JUT_ASSERT(128, mdl_data_hasi != NULL);
+    mpModelHasi = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
+
+    if (mpModelKiba && mpModelHasi) {
+        result = true;
+    }
+    
+    return result;
 }
 
 /* 000001D0-00000238       .text create_load__Q213daObjBuoyrace5Act_cFv */
-void daObjBuoyrace::Act_c::create_load() {
-    /* Nonmatching */
+cPhs_State daObjBuoyrace::Act_c::create_load() {
+    cPhs_State result = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
+
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    result = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
+
+    if (result != cPhs_COMPLEATE_e) {
+        return result;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
+
+#if VERSION > VERSION_DEMO
+    cPhs_State result = create_load();
+#else
+    cPhs_State result;
+    cPhs_State result_kiba  = dComIfG_resLoad(&mPhsKiba, M_arcname_kiba);
+    cPhs_State result_hasi = dComIfG_resLoad(&mPhsHasi, M_arcname_hasi);
+
+    if (result_kiba == cPhs_COMPLEATE_e && result_hasi == cPhs_COMPLEATE_e) {
+        result = cPhs_COMPLEATE_e;
+    } else if (result_kiba == cPhs_ERROR_e || result_hasi == cPhs_ERROR_e) {
+        result = cPhs_ERROR_e;   
+    } else {
+        result = cPhs_INIT_e;
+    }
+#endif
+
+    if (result == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, &daObjBuoyrace::Act_c::solidHeapCB, DEMO_SELECT(0x2560, 0x980))) {
+            set_water_pos();
+            current.pos.y = mMeanSeaHeight + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().mScale;
+            cullMtx = mpModelKiba->getBaseTRMtx();
+            fopAcM_setCullSizeBox(
+                this, 
+                -1.0f * 76.0f * attr().mScale, 
+                -1.0f * attr().mScale, 
+                -1.0f * 76.0f * attr().mScale, 
+                76.0f * attr().mScale, 
+                295.0f * attr().mScale, 
+                76.0f * attr().mScale
+            );
+            init_mtx();
+        } else {
+            result = cPhs_ERROR_e;
+        }
+    }
+    return result;
 }
 
 /* 00000374-000003C0       .text _delete__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDeleteDemo(&mPhsKiba, M_arcname_kiba);
+    dComIfG_resDeleteDemo(&mPhsHasi, M_arcname_hasi);
+    return true;
 }
 
 /* 000003C0-000005A0       .text set_mtx__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_mtx() {
-    /* Nonmatching */
+    cXyz tmp1;
+    Quaternion quat;
+    cXyz tmp2;
+    Vec actor_scale;
+    cXyz tmp3;
+    
+    mpModelKiba->setBaseScale(scale * attr().mScale);
+
+    actor_scale.x = 1.75f * (scale.x * attr().mScale);
+    actor_scale.y =  2.5f * (scale.y * attr().mScale);
+    actor_scale.z = 1.75f * (scale.z * attr().mScale);
+
+    mpModelHasi->setBaseScale(actor_scale);
+
+    mDoMtx_stack_c::transS(current.pos);
+
+    tmp1.set(m2AC, 1.0f, m2B0);
+
+    mDoMtx_stack_c::transM(0.0f, attr().m00 * 0.5f * attr().mScale, 0.0f);
+
+    daObj::quat_rotBaseY(&quat, tmp1);
+    mDoMtx_stack_c::quatM(&quat);
+
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::transM(0.0f, -attr().m00 * 0.5f * attr().mScale, 0.0f);
+    mpModelKiba->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    set_rope_pos();
+
+    tmp2.set(0.0f, (attr().m00 - 5.0f) * attr().mScale, 0.0f);
+    mDoMtx_stack_c::multVecSR(&tmp2, &tmp3);
+    mDoMtx_stack_c::get()[0][3] += tmp3.x;
+    mDoMtx_stack_c::get()[1][3] += tmp3.y;
+    mDoMtx_stack_c::get()[2][3] += tmp3.z;
+    mpModelHasi->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000005A0-000005C0       .text init_mtx__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::init_mtx() {
-    /* Nonmatching */
+    set_mtx();
 }
 
 /* 000005C0-000006D8       .text set_water_pos__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_water_pos() {
-    /* Nonmatching */
+    f32 wave_height_1 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z - 32.0f);
+    f32 wave_height_2 = daSea_calcWave(current.pos.x - 32.0f, current.pos.z + 32.0f);
+    f32 wave_height_3 = daSea_calcWave(current.pos.x + 32.0f, current.pos.z - 32.0f);
+    cXyz tmp1(
+        0.0f,
+        wave_height_2 - wave_height_1,
+        32.0f
+    );
+    cXyz tmp2(
+        32.0f,
+        wave_height_3 - wave_height_1,
+        0.0f
+    );
+    mMeanSeaHeight = (wave_height_1 + wave_height_2 + wave_height_3) * (1.0f / 3.0f);
+    m294 = tmp1.outprod(tmp2);
+    m294.normalize();
 }
 
 /* 000006D8-0000081C       .text afl_calc_sway__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc_sway() {
-    /* Nonmatching */
+    f32 cond = attr().m14 * attr().m14;
+    f32 x = m294.x * attr().m20;
+    f32 z = m294.z * attr().m20;
+    f32 square_mag_xz = x * x + z * z;
+
+    if (square_mag_xz > cond) {
+        square_mag_xz = std::sqrtf(square_mag_xz);
+        x *= (attr().m14 / square_mag_xz);
+        z *= (attr().m14 / square_mag_xz);
+    }
+
+#if VERSION > VERSION_DEMO
+    f32 tmp4 = -(m2B0 - z) * attr().m18;
+    f32 tmp5 = -(m2AC - x) * attr().m18; 
+
+    f32 tmp6 = -m2B8 * attr().m1C;
+    f32 tmp7 = -m2B4 * attr().m1C;
+#else
+    f32 tmp5 = (m2AC - x); 
+    f32 tmp4 = (m2B0 - z);
+
+    tmp5 = -tmp5 * attr().m18;
+    tmp4 = -tmp4 * attr().m18;
+
+    f32 tmp7 = -m2B4 * attr().m1C;
+    f32 tmp6 = -m2B8 * attr().m1C;
+#endif
+
+    m2B4 += tmp5 + tmp7;
+    m2B8 += tmp4 + tmp6;
+
+    m2AC += m2B4;
+    m2B0 += m2B8;
 }
 
 /* 0000081C-00000960       .text afl_calc__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::afl_calc() {
-    /* Nonmatching */
+    m2C0 += m2BC * -0.01f;
+    m2C0 *= 0.94f;
+    m2BC += m2C0;
+    if (m2BC > 0.2f * attr().m00) {
+        m2BC = 0.2f * attr().m00;
+    } 
+    m2A0 = m2A0 + (s16)(attr().m10 * (f32)(cM_rnd() + 1.0f));
+
+    f32 target = mMeanSeaHeight + m2BC + (attr().m08 * -attr().m00 + attr().m0C * cM_ssin(m2A0)) * attr().mScale;
+    f32* pos_y = &current.pos.y;
+    cLib_chaseF(
+        pos_y, 
+        target,
+        50.0f
+    );
+    afl_calc_sway();
 }
 
 /* 00000960-00000A6C       .text set_rope_pos__Q213daObjBuoyrace5Act_cFv */
 void daObjBuoyrace::Act_c::set_rope_pos() {
-    /* Nonmatching */
+    daGoal_Flag_c* parent_p = (daGoal_Flag_c*) fopAcM_SearchByID(fopAcM_GetLinkId(this));
+    if (parent_p) {
+        int line = prm_get_line();
+        int id = prm_get_id();
+        cXyz* rope_pos = parent_p->getRopePos(line, id);
+        JUT_ASSERT(DEMO_SELECT(376, 404), rope_pos != NULL);
+        cXyz base_pos(
+            0.0f,
+            (attr().m00 - 5.0f + 160.0f) * attr().mScale,
+            0.0f
+        );
+        mDoMtx_stack_c::multVec(&base_pos, rope_pos);
+    }
 }
 
 /* 00000A6C-00000AAC       .text _execute__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_execute() {
-    /* Nonmatching */
+    set_water_pos();
+    afl_calc();
+    set_mtx();
+    return true;
 }
 
 /* 00000AAC-00000B28       .text _draw__Q213daObjBuoyrace5Act_cFv */
 bool daObjBuoyrace::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModelKiba, &tevStr);
+    g_env_light.setLightTevColorType(mpModelHasi, &tevStr);
+    mDoExt_modelUpdateDL(mpModelKiba);
+    mDoExt_modelUpdateDL(mpModelHasi);
+    return true;;
 }
 
 namespace daObjBuoyrace {
 namespace {
 /* 00000B28-00000B48       .text Mthd_Create__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjBuoyrace::Act_c*)i_this)->_create();
 }
 
 /* 00000B48-00000B6C       .text Mthd_Delete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjBuoyrace::Act_c*)i_this)->_delete();
 }
 
 /* 00000B6C-00000B90       .text Mthd_Execute__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjBuoyrace::Act_c*)i_this)->_execute();
 }
 
 /* 00000B90-00000BB4       .text Mthd_Draw__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjBuoyrace::Act_c*)i_this)->_draw(); 
 }
 
 /* 00000BB4-00000BBC       .text Mthd_IsDelete__Q213daObjBuoyrace30@unnamed@d_a_obj_buoyrace_cpp@FPv */
 BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class Mthd_Table = {

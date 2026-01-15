@@ -2253,7 +2253,7 @@ public:
     /* 0x35D0 */ f32 m35D0;
     /* 0x35D4 */ f32 m35D4;
     /* 0x35D8 */ f32 m35D8;
-    /* 0x35DC */ f32 m35DC;
+    /* 0x35DC */ f32 mHangGroundH;
     /* 0x35E0 */ f32 m35E0;
     /* 0x35E4 */ f32 m35E4;
     /* 0x35E8 */ f32 m35E8;
@@ -2267,7 +2267,7 @@ public:
     /* 0x3608 */ f32 m3608;
     /* 0x360C */ f32 mSeAnmRate;
     /* 0x3610 */ f32 m3610;
-    /* 0x3614 */ int m3614;
+    /* 0x3614 */ int mShadowId;
     /* 0x3618 */ u32 mModeFlg;
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;

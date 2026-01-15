@@ -969,7 +969,7 @@ bool Act_c::_draw() {
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
         if (fopAcM_GetModel(this) == NULL) {
-            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), data().m80, mAcch.m_gnd);
+            dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), data().shadowScaleXZ, mAcch.m_gnd);
         }
     }
     return true;

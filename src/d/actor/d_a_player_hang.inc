@@ -113,13 +113,13 @@ int daPy_lk_c::changeHangEndProc(int param_0) {
     pos.z = pMVar6[2][3] - cM_scos(shape_angle.y) * 4.0f;
 
     mGndChk.SetPos(&pos);
-    m35DC = dComIfG_Bgsp()->GroundCross(&mGndChk);
-    if (-G_CM3D_F_INF != m35DC) {
+    mHangGroundH = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    if (-G_CM3D_F_INF != mHangGroundH) {
         m3588 = dComIfG_Bgsp()->GetAttributeCode(mGndChk);
     } else {
         m3588 = dBgS_Attr_UNK1B_e;
     }
-    if (m35DC > mFootData[1].field_0x018.y + current.pos.y) {
+    if (mHangGroundH > mFootData[1].field_0x018.y + current.pos.y) {
         return procLand_init(m_HIO->mAutoJump.m.field_0x24, 0);
     }
     if (param_0 != 0) {
@@ -215,7 +215,7 @@ BOOL daPy_lk_c::procHangStart_init() {
     mVelocity = 0.0f;
     speed.y = 0.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK100_e);
-    m35DC = mAcch.GetGroundH();
+    mHangGroundH = mAcch.GetGroundH();
     return true;
 }
 

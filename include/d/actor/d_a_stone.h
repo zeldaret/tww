@@ -58,7 +58,7 @@ namespace daStone {
         /* 0x78 */ u32 m78;
         /* 0x7C */ u16 m7C;
         /* 0x7E */ u8 m7E;
-        /* 0x80 */ s16 m80;
+        /* 0x80 */ s16 shadowScaleXZ;
         /* 0x82 */ s16 m82;
         /* 0x84 */ s16 m84;
         /* 0x86 */ s16 m86;
