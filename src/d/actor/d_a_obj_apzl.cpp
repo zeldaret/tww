@@ -7,89 +7,946 @@
 #include "d/actor/d_a_obj_apzl.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/actor/d_a_item.h"
+#include "m_Do/m_Do_controller_pad.h"
+#include "d/res/res_apzl.h"
+
+static const u32 daObjApzl_bmt_table[16][16] = {
+    {
+        APZL_BMT_APZLP_I00,
+        APZL_BMT_APZLP_I01,
+        APZL_BMT_APZLP_I02,
+        APZL_BMT_APZLP_I03,
+        APZL_BMT_APZLP_I04,
+        APZL_BMT_APZLP_I05,
+        APZL_BMT_APZLP_I06,
+        APZL_BMT_APZLP_I07,
+        APZL_BMT_APZLP_I08,
+        APZL_BMT_APZLP_I09,
+        APZL_BMT_APZLP_I10,
+        APZL_BMT_APZLP_I11,
+        APZL_BMT_APZLP_I12,
+        APZL_BMT_APZLP_I13,
+        APZL_BMT_APZLP_I14,
+        APZL_BMT_APZLP_I15,
+    },
+    {
+        APZL_BMT_APZLP_J00,
+        APZL_BMT_APZLP_J01,
+        APZL_BMT_APZLP_J02,
+        APZL_BMT_APZLP_J03,
+        APZL_BMT_APZLP_J04,
+        APZL_BMT_APZLP_J05,
+        APZL_BMT_APZLP_J06,
+        APZL_BMT_APZLP_J07,
+        APZL_BMT_APZLP_J08,
+        APZL_BMT_APZLP_J09,
+        APZL_BMT_APZLP_J10,
+        APZL_BMT_APZLP_J11,
+        APZL_BMT_APZLP_J12,
+        APZL_BMT_APZLP_J13,
+        APZL_BMT_APZLP_J14,
+        APZL_BMT_APZLP_J15,
+    },
+    {
+        APZL_BMT_APZLP_K00,
+        APZL_BMT_APZLP_K01,
+        APZL_BMT_APZLP_K02,
+        APZL_BMT_APZLP_K03,
+        APZL_BMT_APZLP_K04,
+        APZL_BMT_APZLP_K05,
+        APZL_BMT_APZLP_K06,
+        APZL_BMT_APZLP_K07,
+        APZL_BMT_APZLP_K08,
+        APZL_BMT_APZLP_K09,
+        APZL_BMT_APZLP_K10,
+        APZL_BMT_APZLP_K11,
+        APZL_BMT_APZLP_K12,
+        APZL_BMT_APZLP_K13,
+        APZL_BMT_APZLP_K14,
+        APZL_BMT_APZLP_K15,
+    },
+    {
+        APZL_BMT_APZLP_L00,
+        APZL_BMT_APZLP_L01,
+        APZL_BMT_APZLP_L02,
+        APZL_BMT_APZLP_L03,
+        APZL_BMT_APZLP_L04,
+        APZL_BMT_APZLP_L05,
+        APZL_BMT_APZLP_L06,
+        APZL_BMT_APZLP_L07,
+        APZL_BMT_APZLP_L08,
+        APZL_BMT_APZLP_L09,
+        APZL_BMT_APZLP_L10,
+        APZL_BMT_APZLP_L11,
+        APZL_BMT_APZLP_L12,
+        APZL_BMT_APZLP_L13,
+        APZL_BMT_APZLP_L14,
+        APZL_BMT_APZLP_L15,
+    },
+    {
+        APZL_BMT_APZLP_M00,
+        APZL_BMT_APZLP_M01,
+        APZL_BMT_APZLP_M02,
+        APZL_BMT_APZLP_M03,
+        APZL_BMT_APZLP_M04,
+        APZL_BMT_APZLP_M05,
+        APZL_BMT_APZLP_M06,
+        APZL_BMT_APZLP_M07,
+        APZL_BMT_APZLP_M08,
+        APZL_BMT_APZLP_M09,
+        APZL_BMT_APZLP_M10,
+        APZL_BMT_APZLP_M11,
+        APZL_BMT_APZLP_M12,
+        APZL_BMT_APZLP_M13,
+        APZL_BMT_APZLP_M14,
+        APZL_BMT_APZLP_M15,
+    },
+    {
+        APZL_BMT_APZLP_N00,
+        APZL_BMT_APZLP_N01,
+        APZL_BMT_APZLP_N02,
+        APZL_BMT_APZLP_N03,
+        APZL_BMT_APZLP_N04,
+        APZL_BMT_APZLP_N05,
+        APZL_BMT_APZLP_N06,
+        APZL_BMT_APZLP_N07,
+        APZL_BMT_APZLP_N08,
+        APZL_BMT_APZLP_N09,
+        APZL_BMT_APZLP_N10,
+        APZL_BMT_APZLP_N11,
+        APZL_BMT_APZLP_N12,
+        APZL_BMT_APZLP_N13,
+        APZL_BMT_APZLP_N14,
+        APZL_BMT_APZLP_N15,
+    },
+    {
+        APZL_BMT_APZLP_O00,
+        APZL_BMT_APZLP_O01,
+        APZL_BMT_APZLP_O02,
+        APZL_BMT_APZLP_O03,
+        APZL_BMT_APZLP_O04,
+        APZL_BMT_APZLP_O05,
+        APZL_BMT_APZLP_O06,
+        APZL_BMT_APZLP_O07,
+        APZL_BMT_APZLP_O08,
+        APZL_BMT_APZLP_O09,
+        APZL_BMT_APZLP_O10,
+        APZL_BMT_APZLP_O11,
+        APZL_BMT_APZLP_O12,
+        APZL_BMT_APZLP_O13,
+        APZL_BMT_APZLP_O14,
+        APZL_BMT_APZLP_O15,
+    },
+    {
+        APZL_BMT_APZLP_P00,
+        APZL_BMT_APZLP_P01,
+        APZL_BMT_APZLP_P02,
+        APZL_BMT_APZLP_P03,
+        APZL_BMT_APZLP_P04,
+        APZL_BMT_APZLP_P05,
+        APZL_BMT_APZLP_P06,
+        APZL_BMT_APZLP_P07,
+        APZL_BMT_APZLP_P08,
+        APZL_BMT_APZLP_P09,
+        APZL_BMT_APZLP_P10,
+        APZL_BMT_APZLP_P11,
+        APZL_BMT_APZLP_P12,
+        APZL_BMT_APZLP_P13,
+        APZL_BMT_APZLP_P14,
+        APZL_BMT_APZLP_P15,
+    },
+    {
+        APZL_BMT_APZLP_Q00,
+        APZL_BMT_APZLP_Q01,
+        APZL_BMT_APZLP_Q02,
+        APZL_BMT_APZLP_Q03,
+        APZL_BMT_APZLP_Q04,
+        APZL_BMT_APZLP_Q05,
+        APZL_BMT_APZLP_Q06,
+        APZL_BMT_APZLP_Q07,
+        APZL_BMT_APZLP_Q08,
+        APZL_BMT_APZLP_Q09,
+        APZL_BMT_APZLP_Q10,
+        APZL_BMT_APZLP_Q11,
+        APZL_BMT_APZLP_Q12,
+        APZL_BMT_APZLP_Q13,
+        APZL_BMT_APZLP_Q14,
+        APZL_BMT_APZLP_Q15,
+    },
+    {
+        APZL_BMT_APZLP_R00,
+        APZL_BMT_APZLP_R01,
+        APZL_BMT_APZLP_R02,
+        APZL_BMT_APZLP_R03,
+        APZL_BMT_APZLP_R04,
+        APZL_BMT_APZLP_R05,
+        APZL_BMT_APZLP_R06,
+        APZL_BMT_APZLP_R07,
+        APZL_BMT_APZLP_R08,
+        APZL_BMT_APZLP_R09,
+        APZL_BMT_APZLP_R10,
+        APZL_BMT_APZLP_R11,
+        APZL_BMT_APZLP_R12,
+        APZL_BMT_APZLP_R13,
+        APZL_BMT_APZLP_R14,
+        APZL_BMT_APZLP_R15,
+    },
+    {
+        APZL_BMT_APZLP_S00,
+        APZL_BMT_APZLP_S01,
+        APZL_BMT_APZLP_S02,
+        APZL_BMT_APZLP_S03,
+        APZL_BMT_APZLP_S04,
+        APZL_BMT_APZLP_S05,
+        APZL_BMT_APZLP_S06,
+        APZL_BMT_APZLP_S07,
+        APZL_BMT_APZLP_S08,
+        APZL_BMT_APZLP_S09,
+        APZL_BMT_APZLP_S10,
+        APZL_BMT_APZLP_S11,
+        APZL_BMT_APZLP_S12,
+        APZL_BMT_APZLP_S13,
+        APZL_BMT_APZLP_S14,
+        APZL_BMT_APZLP_S15,
+    },
+    {
+        APZL_BMT_APZLP_T00,
+        APZL_BMT_APZLP_T01,
+        APZL_BMT_APZLP_T02,
+        APZL_BMT_APZLP_T03,
+        APZL_BMT_APZLP_T04,
+        APZL_BMT_APZLP_T05,
+        APZL_BMT_APZLP_T06,
+        APZL_BMT_APZLP_T07,
+        APZL_BMT_APZLP_T08,
+        APZL_BMT_APZLP_T09,
+        APZL_BMT_APZLP_T10,
+        APZL_BMT_APZLP_T11,
+        APZL_BMT_APZLP_T12,
+        APZL_BMT_APZLP_T13,
+        APZL_BMT_APZLP_T14,
+        APZL_BMT_APZLP_T15,
+    },
+    {
+        APZL_BMT_APZLP_U00,
+        APZL_BMT_APZLP_U01,
+        APZL_BMT_APZLP_U02,
+        APZL_BMT_APZLP_U03,
+        APZL_BMT_APZLP_U04,
+        APZL_BMT_APZLP_U05,
+        APZL_BMT_APZLP_U06,
+        APZL_BMT_APZLP_U07,
+        APZL_BMT_APZLP_U08,
+        APZL_BMT_APZLP_U09,
+        APZL_BMT_APZLP_U10,
+        APZL_BMT_APZLP_U11,
+        APZL_BMT_APZLP_U12,
+        APZL_BMT_APZLP_U13,
+        APZL_BMT_APZLP_U14,
+        APZL_BMT_APZLP_U15,
+    },
+    {
+        APZL_BMT_APZLP_V00,
+        APZL_BMT_APZLP_V01,
+        APZL_BMT_APZLP_V02,
+        APZL_BMT_APZLP_V03,
+        APZL_BMT_APZLP_V04,
+        APZL_BMT_APZLP_V05,
+        APZL_BMT_APZLP_V06,
+        APZL_BMT_APZLP_V07,
+        APZL_BMT_APZLP_V08,
+        APZL_BMT_APZLP_V09,
+        APZL_BMT_APZLP_V10,
+        APZL_BMT_APZLP_V11,
+        APZL_BMT_APZLP_V12,
+        APZL_BMT_APZLP_V13,
+        APZL_BMT_APZLP_V14,
+        APZL_BMT_APZLP_V15,
+    },
+    {
+        APZL_BMT_APZLP_W00,
+        APZL_BMT_APZLP_W01,
+        APZL_BMT_APZLP_W02,
+        APZL_BMT_APZLP_W03,
+        APZL_BMT_APZLP_W04,
+        APZL_BMT_APZLP_W05,
+        APZL_BMT_APZLP_W06,
+        APZL_BMT_APZLP_W07,
+        APZL_BMT_APZLP_W08,
+        APZL_BMT_APZLP_W09,
+        APZL_BMT_APZLP_W10,
+        APZL_BMT_APZLP_W11,
+        APZL_BMT_APZLP_W12,
+        APZL_BMT_APZLP_W13,
+        APZL_BMT_APZLP_W14,
+        APZL_BMT_APZLP_W15,
+    },
+    {
+        APZL_BMT_APZLP_X00,
+        APZL_BMT_APZLP_X01,
+        APZL_BMT_APZLP_X02,
+        APZL_BMT_APZLP_X03,
+        APZL_BMT_APZLP_X04,
+        APZL_BMT_APZLP_X05,
+        APZL_BMT_APZLP_X06,
+        APZL_BMT_APZLP_X07,
+        APZL_BMT_APZLP_X08,
+        APZL_BMT_APZLP_X09,
+        APZL_BMT_APZLP_X10,
+        APZL_BMT_APZLP_X11,
+        APZL_BMT_APZLP_X12,
+        APZL_BMT_APZLP_X13,
+        APZL_BMT_APZLP_X14,
+        APZL_BMT_APZLP_X15,
+    },
+};
+
+
 
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */
-void daObjApzl_c::move_piece() {
+bool daObjApzl_c::move_piece() {
+    stick->checkTrigger();
+    bool temp = false;
+    if (field_0x473 != 0) {
+        field_0x473--;
+        return false;
+    }
+
+    if ((getblank() & 3) != 3 && stick->checkLeftTrigger()) {
+        field_0x474 = 1;
+        field_0x472 = search_piece(getblank() + 1);
+        temp = true;
+    }
+    
+    if ((getblank() & 3) != 0 && stick->checkRightTrigger()) {
+        field_0x474 = 3;
+        field_0x472 = search_piece(getblank() - 1);
+        temp = true;
+    }
+
+    if ((getblank() & 0xC) != 0xC && stick->checkUpTrigger()) {
+        field_0x474 = 0;
+        field_0x472 = search_piece(getblank() + 4);
+        temp = true;
+    }
+    if ((getblank() & 0xC) != 0 && stick->checkDownTrigger()) {
+        field_0x474 = 2;
+        field_0x472 = search_piece(getblank() - 4);
+        temp = true;
+    }
+
+    if (temp == true) {
+        swap_piece(field_0x471, field_0x472);
+        if (check_clear()) {
+            field_0x473 = 0x28;
+        } else {
+            field_0x473 = 5;
+        }
+    }
+    return temp;
     /* Nonmatching */
 }
 
 /* 0000025C-00000310       .text check_arrow_draw__11daObjApzl_cFv */
 void daObjApzl_c::check_arrow_draw() {
+    for(int i = 0; i < 4; i++) {
+        field_0x487[i] = 0;
+    }
+
+    if (field_0x486 != 3) {
+        return;
+    }
+    if (field_0x473 != 0) {
+        return;
+    }
+    if ((getblank() & 3) != 3) {
+        field_0x487[1] = 1;
+    }
+    if ((getblank() & 3) != 0) {
+        field_0x487[3] = 1;
+    }
+    if ((getblank() & 0xc) != 0xc) {
+        field_0x487[0] = 1;
+    }
+    if ((getblank() & 0xc) == 0) {
+        return;
+    }
+    field_0x487[2] = 1;
     /* Nonmatching */
 }
 
 /* 00000310-0000033C       .text search_piece__11daObjApzl_cFUc */
-void daObjApzl_c::search_piece(unsigned char) {
-    /* Nonmatching */
+u8 daObjApzl_c::search_piece(u8 piece) {
+    for (int i = 0; ; i++) {
+        if (field_0x476[i] == piece) {
+            return i;
+        }
+    }
 }
 
 /* 0000033C-00000360       .text swap_piece__11daObjApzl_cFUcUc */
-void daObjApzl_c::swap_piece(unsigned char, unsigned char) {
+void daObjApzl_c::swap_piece(u8 firstPieceIdx, u8 secondPieceIdx) {
+    u8 tempPiece = field_0x476[firstPieceIdx];
+    field_0x476[firstPieceIdx] = field_0x476[secondPieceIdx];
+    field_0x476[secondPieceIdx] = tempPiece;
     /* Nonmatching */
 }
 
 /* 00000360-00000598       .text randamize_piece__11daObjApzl_cFv */
 void daObjApzl_c::randamize_piece() {
+    for(int i = 0; i < 16; i++) {
+        field_0x476[i] = i;
+    }
+
+    u8 i; // maybe try to for loop or something?
+    do {
+        i = 0;
+
+        for(int j = 0; j < 10000; j++) {
+            
+            u8 temp = (int)cM_rndF(4.0f) & 3;
+            if(temp == 1) {
+                if((getblank() & 3) != 3) {
+                    swap_piece(field_0x471, search_piece(getblank() + 1));
+                }
+
+            } else if(temp == 3) {
+                if((getblank() & 3) != 0) {
+                    swap_piece(field_0x471, search_piece(getblank() - 1));
+                }
+            } else if(temp == 0) {
+                if((getblank() & 0xc) != 0xc) {
+                    swap_piece(field_0x471, search_piece(getblank() + 4));
+                }
+            } else if((getblank() & 0xc) != 0) {
+                swap_piece(field_0x471, search_piece(getblank() - 4));
+            }
+        }
+        
+        for(int j = 0; j < 16; j++) {
+            if((u32)field_0x476[j] == (j & 0xff)) {
+                i++;
+            }
+        }
+    } while(i >= 3);
+
+    for(int i = 0; i < 3; i++) {
+        if ((getblank() & 3) != 3) {
+            swap_piece(field_0x471, search_piece(getblank() + 1));
+        }
+        if ((getblank() & 0xC) != 0) {
+            swap_piece(field_0x471, search_piece(getblank() - 4));
+        }
+    }
+
     /* Nonmatching */
 }
 
 /* 00000598-000005CC       .text save_piece__11daObjApzl_cFv */
 void daObjApzl_c::save_piece() {
+    for(int i = 0; i < 16; i++) {
+        dComIfGs_setPuzzleData(i, field_0x476[i]); // maybe rename fields
+        /* Nonmatching */
+    }
     /* Nonmatching */
 }
 
 /* 000005CC-00000604       .text check_clear__11daObjApzl_cFv */
-void daObjApzl_c::check_clear() {
+bool daObjApzl_c::check_clear() {
+    for (int i = 0; i < 16; i++) {
+        if ((u32)field_0x476[i] != (i & 0xff)) {
+            return false;
+        }
+    }   
+    return true;
     /* Nonmatching */
 }
 
 /* 00000604-00000748       .text next_msgStatus__11daObjApzl_cFPUl */
-void daObjApzl_c::next_msgStatus(unsigned long*) {
+u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
+    u16 status = fopMsgStts_MSG_CONTINUES_e;
+ // check if order from switch is actually correct
+    switch(*pMsgNo) {
+        case 0x1BC5:
+            field_0x493 = true;
+            status = 0x10;
+            break;
+        case 0x1BC6:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BC7;
+            } else {
+                *pMsgNo = 0x1BC8;
+            }
+            break;
+            
+        case 0x1BC7:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BCA;
+            } else {
+                *pMsgNo = 0x1BC9;
+            }
+            break;
+
+        case 0x1BC8:
+            field_0x493 = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BC9:
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BCA:
+            *pMsgNo = 0x1BCB;
+            break;
+
+        case 0x1BCB:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *pMsgNo = 0x1BC9;
+            } else {
+                *pMsgNo = 0x1BCC;
+            }
+            break;
+
+        case 0x1BCC:
+            *pMsgNo = 0x1BCA;
+            break;
+
+        case 0x1BCD:
+            if (mpCurrMsg->mSelectNum == 0) {
+                status = fopMsgStts_MSG_ENDS_e;
+            } else {
+                *pMsgNo = 0x1BCE;
+            }
+            break;
+
+        case 0x1BCE:
+            field_0x493 = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BCF:
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+
+        case 0x1BD0:
+            field_0x497 = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
+        default:
+            field_0x493 = true;
+            status = 0x10;
+    }
+    return status;
     /* Nonmatching */
 }
 
 /* 00000748-0000079C       .text getMsg__11daObjApzl_cFv */
-void daObjApzl_c::getMsg() {
+u32 daObjApzl_c::getMsg() {
+    if (field_0x497 == true) {
+        return 0x1BC5;
+    }
+    if (field_0x496 == true) {
+        return 0x1BD0;
+    }
+    if (field_0x495 == true) {
+        return 0x1BCF;
+    }
+    if (field_0x494 == true) {
+        return 0x1BCD;
+    }
+    return 0x1BC6;
     /* Nonmatching */
 }
 
 /* 0000079C-0000087C       .text talk__11daObjApzl_cFi */
-void daObjApzl_c::talk(int) {
+u16 daObjApzl_c::talk(int param_1) {
+    u16 status = 0xFF;
+
+    if (field_0x51C == fpcM_ERROR_PROCESS_ID_e) { // fpcM_ERROR_PROCESS_ID_e?
+        if (param_1 == 1) {
+            mMsgNo = getMsg();
+        }
+        field_0x51C = fopMsgM_messageSet(mMsgNo, this);
+        mpCurrMsg = NULL;
+    } else {
+        if (mpCurrMsg != NULL) {
+            status = mpCurrMsg->mStatus;
+            if (status == fopMsgStts_MSG_DISPLAYED_e) {
+                mpCurrMsg->mStatus = next_msgStatus(&mMsgNo);
+                if (mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mMsgNo);
+                }
+            } else if (status == fopMsgStts_BOX_CLOSED_e) {
+                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                field_0x51C = -1;
+            }
+        } else {
+            mpCurrMsg = fopMsgM_SearchByID(field_0x51C);
+        }
+    }
+    return status;
     /* Nonmatching */
 }
 
+u8 daObjApzl_Rupee_Table[] = {
+    0x01, 0x00, 0x01, 0x00,
+    0x01, 0x00, 0x02, 0x00,
+    0x01, 0x00, 0x02, 0x00,
+    0x03, 0x00, 0x01, 0x00,
+    0x01, 0x02, 0x01, 0x00,
+    0x01, 0x01, 0x01, 0x00,
+    0x01, 0x03, 0x01, 0x01,
+    0x01, 0x04,
+};
+
 /* 0000087C-00000D08       .text privateCut__11daObjApzl_cFv */
 void daObjApzl_c::privateCut() {
+    static char* cut_name_tbl[] = {
+        "WAIT",
+        "TALK",
+        "GAME",
+        "GETITEM",
+        "STOP",
+        "SOUND",
+        "PUSH_A",
+        "EVENT_END"
+    }; // not correct size?
+    bool temp;
+    int staffIdx = dComIfGp_evmng_getMyStaffId("Apzl");
+    if (staffIdx != -1) {
+
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 8, 1, 0); // rename to mActIdx
+        if (mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            temp = false;
+
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch(mActIdx) {
+                    case 0:
+                    case 1:
+                    case 4:
+                    case 6:
+                        break;
+                    case 2:
+                        field_0x494 = true;
+                        break;
+                    case 3:
+                        field_0x496 = true;
+                        field_0x524 = 0x96;
+                        break;
+                    case 5:
+                        mDoAud_seStart(JA_SE_15PUZZLE_COMPLETE);
+                        break;
+                    case 7:
+                        fopAc_ac_c* actor;
+                        for(int i = 0; i < field_0x514; i++) {
+                            actor = fopAcM_SearchByID(mProcId[i]); // unsure of length of proxid
+                            if (actor != NULL) {
+                                actor->current.angle.set(0, 0, 0);
+                            }
+                        }
+                        break;
+                }
+            }
+            switch(mActIdx) {
+                case 0:
+                    temp = true;
+                    break;
+                case 1:
+                    if (talk(1) == 0x12) {
+                        temp = true;
+                    }
+                    break;
+                case 2:
+                    temp = true;
+                    break;
+                case 3:
+                    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (field_0x524 == 0) {
+                        temp = true;
+                    } else {
+                        field_0x524--;
+                        if ((field_0x524 & 2) == 0 && field_0x514 < 0x1e) {
+                            csXyz temp2(current.angle);
+                            cXyz temp3(0.0f, 100.0f, 735.0f);
+                            temp2.x += (s16)cM_rndFX(4000.0f);
+                            temp2.y = (s16)cM_rndFX(6000.0f) + temp2.y - 0x4000;
+                            temp2.z = 0;
+
+                            int itemNo = 2;
+
+                            if (field_0x468 == 0xf) {
+                                u8 rupeeTable = daObjApzl_Rupee_Table[field_0x514]; // change name of this
+                                
+                                if (rupeeTable == 0) {
+                                    itemNo = 1;
+                                }
+                                else if (rupeeTable == 1) {
+                                    itemNo = 2;
+                                }
+                                else if (rupeeTable == 2) {
+                                    itemNo = 3;
+                                }
+                                else if (rupeeTable == 3) {
+                                    itemNo = 4;
+                                } else {
+                                    itemNo = 5;
+                                }
+                            } else if (field_0x514 % 6 == 0) {
+                                itemNo = 2;
+                            } else {
+                                itemNo = 1;
+                            }
+                            daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(&temp3, itemNo, fopAcM_GetRoomNo(this), &temp2, NULL, cM_rndF(15.0f) + 5.0f, cM_rndF(15.0f) + 5.0f, -2.1f);
+                            if(item != NULL) {
+                                fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
+                                item->setItemTimer(450);
+                            }
+                            
+                            mProcId[field_0x514] = fopAcM_GetID(item);
+                            field_0x514++;
+                            field_0x496 = true; 
+                            field_0x524 = 0x3C;
+                        }
+                    }
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (!mDoAud_checkSePlaying(JA_SE_15PUZZLE_COMPLETE)) {
+                        temp = true;
+                    }
+                    break;
+                case 6:
+                    dComIfGp_setDoStatusForce(dActStts_NEXT_e);
+                    dComIfGp_setAStatusForce(dActStts_BLANK_e);
+                    if (CPad_CHECK_HOLD_A(0)) {
+                        temp = true;
+                    }
+                    break;
+                case 7:
+                    temp = true;
+                    break;
+                default:
+                    temp = true;
+                    break;
+            }
+            if (temp) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+    
+        }  
+    }
     /* Nonmatching */
 }
 
 /* 00000D08-00000D28       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daObjApzl_c*)i_this)->CreateHeap();
+
     /* Nonmatching */
 }
 
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
-void daObjApzl_c::CreateHeap() {
+BOOL daObjApzl_c::CreateHeap() {
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLP);
+    JUT_ASSERT(0x2E2, modelData != NULL);
+
+    for(int i = 0; i < 16; i++) {
+        field_0x298[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
+        if (field_0x298[i] == NULL) {
+            return FALSE;
+        }
+    }
+
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLY);
+    JUT_ASSERT(0x2EF, modelData != NULL);
+
+    
+    for(int i = 0; i < 4; i++) {
+        field_0x2D8[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (field_0x2D8[i] == NULL) { // is it 3 actually?
+            return FALSE;
+        }
+    }
+    
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_VBSRP);
+    JUT_ASSERT(0x2FA, modelData != NULL);
+
+    J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", APZL_BTP_VBSRP);
+    JUT_ASSERT(0x2FF, btp_data != NULL);
+
+    // while loop or for loop?
+    int i = 0;
+    while (true) {
+        field_0x2E8[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (field_0x2E8[i] == NULL) {
+            return FALSE;
+        }
+
+        if(field_0x328[i].init(modelData, btp_data, 1, 0, 1.0f, 0, -1, false, FALSE) == 0) {
+            return FALSE;
+
+        }
+        i++;
+        if(i >= 0x10) {
+            stick = new STControl(0x3C, 0x1E, 0, 0, 0.9, 0.5, 0, 0);
+            JUT_ASSERT(0x310, stick != NULL);
+            return TRUE;
+        }
+    }
+    return FALSE;
     /* Nonmatching */
 }
 
 /* 00001088-000012BC       .text CreateInit__11daObjApzl_cFv */
 void daObjApzl_c::CreateInit() {
+    int i; // why is this here
+    field_0x470 = daObjApzl_prm::getType(this);
+    field_0x468 = dComIfGs_getPuzzleInfo(); // unsure
+    //    d_com_inf_game::g_dComIfG_gameInfo.info.mSavedata.mPlayer.mInfo.field21_0x47[0x10];
+    if (field_0x468 >= 0x10) {
+        field_0x468 = 0;
+    }
+    for(int i = 0; i < 16; i++) {
+        if (i >= field_0x468) {
+            field_0x328[i].setFrame(0.0f);
+        } else {
+            field_0x328[i].setFrame(1.0f);
+        }
+    }
+    fopAcM_SetMtx(this, field_0x298[0]->getBaseTRMtx());
+
+    // cullMtx = field_0x298[0]->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -600.0f, -600.0f, -600.0f, 600.0f, 600.0f, 600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    field_0x471 = 3;
+    field_0x475 = false;
+    if (field_0x470 == 0) {
+        randamize_piece();
+    } else {
+        for(int i = 0; i < 16; i++) {
+            field_0x476[i] = i;
+        }
+    }
+    field_0x48C = dComIfGp_evmng_getEventIdx("PUZZLE_TALK", 0xff);
+    field_0x48E = dComIfGp_evmng_getEventIdx("PUZZLE_GAME", 0xff);
+    field_0x490 = dComIfGp_evmng_getEventIdx("PUZZLE_RUPEE", 0xff);
+    eventInfo.setEventId(field_0x48C);
+    if (field_0x470 == 0) {
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+    }
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x28;
+    attention_info.position = current.pos;
+    mpCurrMsg = NULL;
+
+    field_0x51C = -1;
+    field_0x493 = false;
+    field_0x494 = false;
+    field_0x495 = false;
+    field_0x496 = false;
+    field_0x497 = false;
+    field_0x472 = 0;
+    field_0x473 = 0;
+    field_0x474 = 0;
+    field_0x498 = false;
+    field_0x486 = 0;
+    // check if field 476 is not [17] instead of [16] and this isnt [5] instead of [4]
+    for(int i = 0; i < 4; i++) {
+        field_0x487[i] = 0;
+    }
+
+    field_0x514 = 0;
+    set_mtx();
     /* Nonmatching */
 }
 
 /* 000012BC-000016B8       .text set_mtx__11daObjApzl_cFv */
 void daObjApzl_c::set_mtx() {
+    for(int i = 0; i < 16; i++) {
+        field_0x298[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        s32 temp = field_0x476[i];
+        mDoMtx_stack_c::transM((temp % 4) * 40.0f - 60.0f, 60.0f - (temp / 4) * 40.0f, 0.0f);
+        if (i == field_0x472 && field_0x473 != 0) {
+            f32 temp2;
+            if (!check_clear()) {
+                temp2 = field_0x473 * 8.0f;
+            } else {
+                temp2 = field_0x473;
+            }
+            u8 temp3 = field_0x474;
+            if (temp3 == 0) {
+                mDoMtx_stack_c::transM(0.0,-temp2,0.0);
+            }
+            else if (temp3 == 1) {
+                mDoMtx_stack_c::transM(temp2,0.0,0.0);
+            }
+            else if (temp3 == 2) {
+                mDoMtx_stack_c::transM(0.0,temp2,0.0);
+            }
+            else {
+                mDoMtx_stack_c::transM(-temp2,0.0,0.0);
+            }
+        }
+        field_0x298[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    for(int i = 0; i < 4; i++) {
+        field_0x2D8[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::YrotM(current.angle.y);
+        s32 temp4 = getblank();
+        mDoMtx_stack_c::transM((temp4 % 4) * 40.0f - 60.0f, 60.0f - (temp4 / 4) * 40.0f, 0.0f);
+        mDoMtx_stack_c::ZrotM(i * 0x4000);
+        mDoMtx_stack_c::transM(0.0f, -15.0f, 0.0f);
+        field_0x2D8[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
+
+    for(int i = 0; i < 16; i++) {
+        field_0x2E8[i]->setBaseScale(scale);
+        mDoMtx_stack_c::transS(0.0f, -((i % 8) + 1) * 28.62f + 10.0f, (i / 8 - 2) * 28.62f);
+        field_0x2E8[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+    }
     /* Nonmatching */
 }
 
+cPhs_State daObjApzl_c::_create(){
+    fopAcM_SetupActor(this, daObjApzl_c);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Apzl");
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return phase_state;
+}
+
 /* 000016B8-00001780       .text daObjApzl_Create__FPv */
-static cPhs_State daObjApzl_Create(void*) {
+static cPhs_State daObjApzl_Create(void* i_this) {
+    return static_cast<daObjApzl_c*>(i_this)->_create();
+    /* Nonmatching */
+}
+
+bool daObjApzl_c::_delete() {
+    delete stick;
+    dComIfG_resDelete(&mPhs, "Apzl");
+    return true;
     /* Nonmatching */
 }
 
 /* 0000184C-00001894       .text daObjApzl_Delete__FPv */
-static BOOL daObjApzl_Delete(void*) {
+static BOOL daObjApzl_Delete(void* i_this) {
+    return static_cast<daObjApzl_c*>(i_this)->_delete();
     /* Nonmatching */
 }
 
@@ -100,6 +957,43 @@ static BOOL daObjApzl_Draw(void* i_this) {
 
 /* 000018B8-00001B00       .text _draw__11daObjApzl_cFv */
 bool daObjApzl_c::_draw() {
+
+    if (field_0x470 == 0) {
+        dComIfGd_setListBG();
+        for(int i = 0; i < 16; i++) {
+            if (i != field_0x471 || field_0x475) {
+                J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[field_0x468][i]);
+                field_0x298[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+                mDoExt_modelUpdateDL(field_0x298[i]);
+            }
+        }
+
+        dComIfGd_setList();
+
+        for (int i = 0; i < 4; i++) {
+            if (field_0x487[i] != 0) {
+                mDoExt_modelUpdateDL(field_0x2D8[i]);
+            }
+        }
+
+        for(int i = 0; i < 16; i++) {
+            field_0x328[i].entry(field_0x2E8[i]->getModelData());
+            mDoExt_modelUpdateDL(field_0x2E8[i]);
+            field_0x328[i].remove(field_0x2E8[i]->getModelData());
+        }
+
+    } else {
+        dComIfGd_setListBG();
+
+        for(int i = 0; i < 16; i++) {
+            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[field_0x468][i]);
+            field_0x298[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+            mDoExt_modelUpdateDL(field_0x298[i]);
+        }
+
+        dComIfGd_setList();
+    }
+    return true;
     /* Nonmatching */
 }
 
@@ -110,6 +1004,93 @@ static BOOL daObjApzl_Execute(void* i_this) {
 
 /* 00001B24-00001E8C       .text _execute__11daObjApzl_cFv */
 bool daObjApzl_c::_execute() {
+    if(field_0x470 == 0) {
+        switch(field_0x486) {
+            case 0:
+                eventInfo.onCondition(dEvtCnd_CANTALK_e);
+                if (eventInfo.checkCommandTalk()) {
+                    field_0x486 = 1;
+                }
+                break;
+
+            case 1:
+                privateCut();
+                if(dComIfGp_evmng_endCheck(field_0x48C)) {
+                    if(field_0x493 == true) {
+                        dComIfGp_event_reset();
+                        field_0x486 = 0;
+                        field_0x493 = false;
+                        field_0x494 = false;
+                        save_piece();
+                    } else {
+                        field_0x486 = 2;
+                    }
+                }
+                break;
+
+            case 2:
+                if (!field_0x498) {
+                    mDoAud_seStart(JA_SE_15PUZZLE_START);
+                    field_0x498 = true;
+                }
+                fopAcM_orderChangeEventId(this, field_0x48E, 0, 0xFFFF);
+                field_0x486 = 3;
+                break;
+
+            case 3:
+                privateCut();
+                if (move_piece()) {
+                    mDoAud_seStart(JA_SE_TALK_CURSOR);
+                }
+                dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+                dComIfGp_setAStatusForce(dActStts_CANCEL_e);
+
+                if (check_clear() && field_0x473 == 0) {
+                    field_0x475 = 1;
+                    field_0x495 = true;
+                    dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
+                    field_0x486 = 4;
+
+                } else {
+                    if (CPad_CHECK_HOLD_B(0)) {
+                        mDoAud_seStart(JA_SE_15PUZZLE_EXIT);
+                        field_0x486 = 4;
+                    }
+                }
+                break;
+            case 4:
+                field_0x493 = false;
+                if (field_0x495 == true) {
+                    u8 puzzleInfo = dComIfGs_getPuzzleInfo();
+                    puzzleInfo++;
+                    if(puzzleInfo >= 16) {
+                        puzzleInfo = 0;
+                    }
+                    field_0x328[field_0x468].setFrame(1.0f);
+                    dComIfGs_setPuzzleInfo(puzzleInfo); // these inlines are probably correct?
+
+                    fopAcM_orderChangeEventId(this, field_0x490, 0, 0xFFFF);
+
+                    field_0x486 = 5;
+                } else {
+                    fopAcM_orderChangeEventId(this, field_0x48C, 0, 0xFFFF);
+                    field_0x486 = 1;
+                } // fallthrough
+            case 5:
+                privateCut();
+                if(dComIfGp_evmng_endCheck(field_0x490)) {
+                    dComIfGp_event_reset();
+                    field_0x486 = 0;
+                    field_0x493 = false;
+                    field_0x494 = false;
+                }
+                break;
+        }
+        check_arrow_draw();
+
+    }
+    set_mtx();
+    return true;
     /* Nonmatching */
 }
 

@@ -436,9 +436,9 @@ public:
         if (mDeathCount < 9999)
             mDeathCount++;
     }
-    void getPuzzleInfo() {}
-    void setPuzzleInfo(u8) {}
-    void setPuzzleData(int, u8) {}
+    u8 getPuzzleInfo() { return field_0x47[0x10]; }
+    void setPuzzleInfo(u8 value) {field_0x47[0x10] = value;}
+    void setPuzzleData(int i_idx, u8 i_puzzlePieceData) { field_0x47[i_idx] = i_puzzlePieceData; }
     u8 getRandomSalvage() { return mRandomSalvagePoint; }
     void setRandomSalvage(u8 point) { mRandomSalvagePoint = point; }
 
