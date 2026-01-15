@@ -427,7 +427,7 @@ bool daNpc_Ls1_c::setBtk(s8 param_1, bool param_2) {
 
 /* 000011CC-00001238       .text init_texPttrnAnm__11daNpc_Ls1_cFScb */
 bool daNpc_Ls1_c::init_texPttrnAnm(s8 param_1, bool param_2) {
-    /* Nonmatching */
+    /* Apparent match */
     static const u8 a_btk_num_tbl[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
     };
@@ -462,7 +462,6 @@ void daNpc_Ls1_c::eye_ctrl() {
 
 /* 00001490-000014E8       .text play_btk_anm__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::play_btk_anm() {
-    /* Nonmatching */
     u8 duration = field_0x6F0.getBtkAnm()->getFrameMax();
     if (field_0x838 != 0) {
         eye_ctrl();
@@ -661,25 +660,25 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
             case 12:
                 if (field_0x84F != 10) {
                     setAnm_NUM(10,1);
-                    init_texPttrnAnm('\x02',true);
+                    init_texPttrnAnm(2,true);
                 } 
                 break;                     
             case 14:
                 if (field_0x84F != 5) {
                     setAnm_NUM(5,1);
-                    init_texPttrnAnm('\b',true);
+                    init_texPttrnAnm(8, true);
                 } 
                 break;
             case 15: 
                 if(field_0x84F != 0xb) {
                     setAnm_NUM(0xb,1);
-                    init_texPttrnAnm('\b',true);
+                    init_texPttrnAnm(8, true);
                 }
                 break;
             case 16:
                 if (field_0x84F != 4) {
                     setAnm_NUM(4,1);
-                    init_texPttrnAnm('\b',true);
+                    init_texPttrnAnm(8, true);
                 }
                 break;
             default:
@@ -694,7 +693,7 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
 
 /* 00001A60-00001ACC       .text setAnm_ATR__11daNpc_Ls1_cFi */
 void daNpc_Ls1_c::setAnm_ATR(int param_1) {
-    /* Nonmatching */
+    /* Apparent match */
     static anm_prm_c a_anm_prm_tbl[17] = {
         {  5, 1, 8.0f, 1.0f, 2 },
         {  0, 1, 8.0f, 1.0f, 2 },
@@ -911,7 +910,6 @@ void daNpc_Ls1_c::cut_init_WAI(int) {
 
 /* 0000276C-000027C0       .text cut_move_WAI__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::cut_move_WAI() {
-    /* Nonmatching */
     if (field_0x84F != 1) {
         return TRUE;
     }
