@@ -168,7 +168,7 @@ BOOL daObjVolcano::Act_c::Create() {
     for (int i = 0; i < 10; i++) {
         this->field_0x2C8[i] = NULL;
     }
-    int switchIndex = prm_get_sw2();
+    int switchIndex = prm_get_swSave();
     if (fopAcM_isSwitch(this, switchIndex)) {
         field_0x4B8.y = home.pos.y - 2000.0f;
         StopFire();
@@ -233,7 +233,7 @@ void daObjVolcano::Act_c::init_mtx() {
 
 /* 00000FDC-0000103C       .text daObjVolcano_fire_demo_wait__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_fire_demo_wait() {
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
         StartFire();
         field_0x500 = 5;
     } else {
@@ -275,8 +275,8 @@ void daObjVolcano::Act_c::daObjVolcano_fire_main() {
 
 /* 00001284-000013E4       .text daObjVolcano_freeze_demo_wait__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_freeze_demo_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e){   
-        int switchIndex = prm_get_sw2();
+    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+        int switchIndex = prm_get_swSave();
         fopAcM_onSwitch(this, switchIndex);
         field_0x4E8 = 0;
         StopFire();
@@ -329,7 +329,7 @@ void daObjVolcano::Act_c::daObjVolcano_freeze_demo_main() {
 
 /* 00001558-000015E8       .text daObjVolcano_freeze_main__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_freeze_main() {
-    int switchIndex = prm_get_sw2();
+    int switchIndex = prm_get_swSave();
     if (!fopAcM_isSwitch(this, switchIndex)) {
         fopAcM_orderOtherEventId(this, field_0x4FE);
         field_0x4B8.y = home.pos.y - 2000.0f;
@@ -339,7 +339,7 @@ void daObjVolcano::Act_c::daObjVolcano_freeze_main() {
 
 /* 000015E8-0000164C       .text daObjVolcano_fail_demo_wait__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_fail_demo_wait() {
-    int switchIndex = prm_get_sw2();
+    int switchIndex = prm_get_swSave();
     if (!fopAcM_isSwitch(this, switchIndex)) {
         StartFire();
         field_0x500 = 7;
@@ -359,7 +359,7 @@ void daObjVolcano::Act_c::daObjVolcano_fail_demo_main() {
 }
 
 /* 00001740-0000199C       .text Execute__Q212daObjVolcano5Act_cFPPA3_A4_f */
-BOOL daObjVolcano::Act_c::Execute(Mtx** mtx) {
+BOOL daObjVolcano::Act_c::Execute(Mtx** o_mtx) {
     field_0x37C.SetC(field_0x4B8);
     field_0x37C.SetH(field_0x4EC);
     field_0x37C.SetR(field_0x4F0);
@@ -428,20 +428,20 @@ BOOL daObjVolcano::Act_c::Execute(Mtx** mtx) {
         field_0x2C8[9]->setGlobalPrmColor(r2, g2, b2);
     }
     set_mtx();
-    *mtx = &M_tmp_mtx;
+    *o_mtx = &M_tmp_mtx;
     return TRUE;
 }
 
 /* 0000199C-00001A2C       .text set_material__Q212daObjVolcano5Act_cFP11J3DMaterialUc */
-void daObjVolcano::Act_c::set_material(J3DMaterial* material, unsigned char c) {
-    while (material != NULL) {
-        if (c == 0) {
-            material->getShape()->hide();
+void daObjVolcano::Act_c::set_material(J3DMaterial* i_material, unsigned char i_alpha) {
+    while (i_material != NULL) {
+        if (i_alpha == 0) {
+            i_material->getShape()->hide();
         } else {
-            material->getShape()->show();
-            material->getTevKColor(3)->mColor.a = c;
+            i_material->getShape()->show();
+            i_material->getTevKColor(3)->mColor.a = i_alpha;
         }
-        material = material->getNext();
+        i_material = i_material->getNext();
     }
 }
 

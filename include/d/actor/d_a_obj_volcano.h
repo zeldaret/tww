@@ -12,11 +12,11 @@ namespace daObjVolcano {
     public:
         
         enum Prm_e {
-            PRM_SW2_W = 0x08,
-            PRM_SW2_S = 0x08,
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x08,
         };    
 
-        int prm_get_sw2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SW2_W, PRM_SW2_S);}
+        int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
     
         void StartFire();
         void StopFire();
