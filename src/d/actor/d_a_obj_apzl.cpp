@@ -302,84 +302,110 @@ static const u32 daObjApzl_bmt_table[16][16] = {
     },
 };
 
+enum EventIdx {
+    EVENT_TALK,
+    EVENT_GAME,
+    EVENT_RUPEE,
+};
 
+enum States {
+    STATE_IDLE,
+    STATE_TALK,
+    STATE_START,
+    STATE_PLAYING,
+    STATE_END,
+    STATE_RUPEE,   
+};
+
+enum Directions {
+    UP,
+    LEFT,
+    DOWN,
+    RIGHT,
+};
+
+enum RupeeType {
+    GREEN_RUPEE,
+    BLUE_RUPEE,
+    YELLOW_RUPEE,
+    RED_RUPEE,
+    PURPLE_RUPEE,
+};
 
 /* 00000078-0000025C       .text move_piece__11daObjApzl_cFv */
 bool daObjApzl_c::move_piece() {
     stick->checkTrigger();
-    bool temp = false;
-    if (field_0x473 != 0) {
-        field_0x473--;
+    bool swapped = false;
+    if (mMoveTimer != 0) {
+        mMoveTimer--;
         return false;
     }
 
     if ((getblank() & 3) != 3 && stick->checkLeftTrigger()) {
-        field_0x474 = 1;
-        field_0x472 = search_piece(getblank() + 1);
-        temp = true;
+        mMoveDirection = 1;
+        mSwappedPieceIdx = search_piece(getblank() + 1);
+        swapped = true;
     }
     
     if ((getblank() & 3) != 0 && stick->checkRightTrigger()) {
-        field_0x474 = 3;
-        field_0x472 = search_piece(getblank() - 1);
-        temp = true;
+        mMoveDirection = 3;
+        mSwappedPieceIdx = search_piece(getblank() - 1);
+        swapped = true;
     }
 
     if ((getblank() & 0xC) != 0xC && stick->checkUpTrigger()) {
-        field_0x474 = 0;
-        field_0x472 = search_piece(getblank() + 4);
-        temp = true;
+        mMoveDirection = 0;
+        mSwappedPieceIdx = search_piece(getblank() + 4);
+        swapped = true;
     }
     if ((getblank() & 0xC) != 0 && stick->checkDownTrigger()) {
-        field_0x474 = 2;
-        field_0x472 = search_piece(getblank() - 4);
-        temp = true;
+        mMoveDirection = 2;
+        mSwappedPieceIdx = search_piece(getblank() - 4);
+        swapped = true;
     }
 
-    if (temp == true) {
-        swap_piece(field_0x471, field_0x472);
+    if (swapped == true) {
+        swap_piece(mBlankIdx, mSwappedPieceIdx);
         if (check_clear()) {
-            field_0x473 = 0x28;
+            mMoveTimer = 0x28;
         } else {
-            field_0x473 = 5;
+            mMoveTimer = 5;
         }
     }
-    return temp;
-    /* Nonmatching */
+    return swapped;
 }
 
 /* 0000025C-00000310       .text check_arrow_draw__11daObjApzl_cFv */
 void daObjApzl_c::check_arrow_draw() {
     for(int i = 0; i < 4; i++) {
-        field_0x487[i] = 0;
+        mDrawArrow[i] = false;
     }
 
-    if (field_0x486 != 3) {
+    if (mState != STATE_PLAYING) {
         return;
     }
-    if (field_0x473 != 0) {
+    if (mMoveTimer != 0) {
         return;
     }
     if ((getblank() & 3) != 3) {
-        field_0x487[1] = 1;
+        mDrawArrow[LEFT] = true;
     }
     if ((getblank() & 3) != 0) {
-        field_0x487[3] = 1;
+        mDrawArrow[RIGHT] = true;
     }
     if ((getblank() & 0xc) != 0xc) {
-        field_0x487[0] = 1;
+        mDrawArrow[UP] = true;
     }
     if ((getblank() & 0xc) == 0) {
         return;
     }
-    field_0x487[2] = 1;
-    /* Nonmatching */
+    mDrawArrow[DOWN] = true;
 }
 
 /* 00000310-0000033C       .text search_piece__11daObjApzl_cFUc */
 u8 daObjApzl_c::search_piece(u8 piece) {
     for (int i = 0; ; i++) {
-        if (field_0x476[i] == piece) {
+        if (mPiecePos[i] == piece) {
             return i;
         }
     }
@@ -387,90 +413,85 @@ u8 daObjApzl_c::search_piece(u8 piece) {
 
 /* 0000033C-00000360       .text swap_piece__11daObjApzl_cFUcUc */
 void daObjApzl_c::swap_piece(u8 firstPieceIdx, u8 secondPieceIdx) {
-    u8 tempPiece = field_0x476[firstPieceIdx];
-    field_0x476[firstPieceIdx] = field_0x476[secondPieceIdx];
-    field_0x476[secondPieceIdx] = tempPiece;
-    /* Nonmatching */
+    u8 tempPiece = mPiecePos[firstPieceIdx];
+    mPiecePos[firstPieceIdx] = mPiecePos[secondPieceIdx];
+    mPiecePos[secondPieceIdx] = tempPiece;
 }
 
 /* 00000360-00000598       .text randamize_piece__11daObjApzl_cFv */
 void daObjApzl_c::randamize_piece() {
     for(int i = 0; i < 16; i++) {
-        field_0x476[i] = i;
+        mPiecePos[i] = i;
     }
 
-    u8 i; // maybe try to for loop or something?
-    do {
+    u8 i;
+    for (;;) {
         i = 0;
-
         for(int j = 0; j < 10000; j++) {
-            
             u8 temp = (int)cM_rndF(4.0f) & 3;
             if(temp == 1) {
                 if((getblank() & 3) != 3) {
-                    swap_piece(field_0x471, search_piece(getblank() + 1));
+                    swap_piece(mBlankIdx, search_piece(getblank() + 1));
                 }
 
             } else if(temp == 3) {
                 if((getblank() & 3) != 0) {
-                    swap_piece(field_0x471, search_piece(getblank() - 1));
+                    swap_piece(mBlankIdx, search_piece(getblank() - 1));
                 }
             } else if(temp == 0) {
                 if((getblank() & 0xc) != 0xc) {
-                    swap_piece(field_0x471, search_piece(getblank() + 4));
+                    swap_piece(mBlankIdx, search_piece(getblank() + 4));
                 }
             } else if((getblank() & 0xc) != 0) {
-                swap_piece(field_0x471, search_piece(getblank() - 4));
+                swap_piece(mBlankIdx, search_piece(getblank() - 4));
             }
         }
         
         for(int j = 0; j < 16; j++) {
-            if((u32)field_0x476[j] == (j & 0xff)) {
+            if((u32)mPiecePos[j] == (j & 0xff)) {
                 i++;
             }
         }
-    } while(i >= 3);
 
-    for(int i = 0; i < 3; i++) {
-        if ((getblank() & 3) != 3) {
-            swap_piece(field_0x471, search_piece(getblank() + 1));
-        }
-        if ((getblank() & 0xC) != 0) {
-            swap_piece(field_0x471, search_piece(getblank() - 4));
+        if(i < 3) {
+            break;
         }
     }
 
-    /* Nonmatching */
+    for(int i = 0; i < 3; i++) {
+        if ((getblank() & 3) != 3) {
+            swap_piece(mBlankIdx, search_piece(getblank() + 1));
+        }
+        if ((getblank() & 0xC) != 0) {
+            swap_piece(mBlankIdx, search_piece(getblank() - 4));
+        }
+    }
 }
 
 /* 00000598-000005CC       .text save_piece__11daObjApzl_cFv */
 void daObjApzl_c::save_piece() {
     for(int i = 0; i < 16; i++) {
-        dComIfGs_setPuzzleData(i, field_0x476[i]); // maybe rename fields
-        /* Nonmatching */
+        dComIfGs_setPuzzleData(i, mPiecePos[i]);
     }
-    /* Nonmatching */
 }
 
 /* 000005CC-00000604       .text check_clear__11daObjApzl_cFv */
 bool daObjApzl_c::check_clear() {
     for (int i = 0; i < 16; i++) {
-        if ((u32)field_0x476[i] != (i & 0xff)) {
+        if ((u32)mPiecePos[i] != (i & 0xff)) {
             return false;
         }
     }   
     return true;
-    /* Nonmatching */
 }
 
 /* 00000604-00000748       .text next_msgStatus__11daObjApzl_cFPUl */
 u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
     u16 status = fopMsgStts_MSG_CONTINUES_e;
- // check if order from switch is actually correct
     switch(*pMsgNo) {
         case 0x1BC5:
-            field_0x493 = true;
-            status = 0x10;
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
             break;
         case 0x1BC6:
             if (mpCurrMsg->mSelectNum == 0) {
@@ -489,7 +510,7 @@ u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
             break;
 
         case 0x1BC8:
-            field_0x493 = true;
+            mQuitGame = true;
             status = fopMsgStts_MSG_ENDS_e;
             break;
 
@@ -522,7 +543,7 @@ u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
             break;
 
         case 0x1BCE:
-            field_0x493 = true;
+            mQuitGame = true;
             status = fopMsgStts_MSG_ENDS_e;
             break;
 
@@ -531,44 +552,44 @@ u16 daObjApzl_c::next_msgStatus(u32* pMsgNo) {
             break;
 
         case 0x1BD0:
-            field_0x497 = true;
+            mShownRewardMessage = true;
             status = fopMsgStts_MSG_ENDS_e;
             break;
+
         default:
-            field_0x493 = true;
-            status = 0x10;
+            mQuitGame = true;
+            status = fopMsgStts_MSG_ENDS_e;
+            break;
     }
     return status;
-    /* Nonmatching */
 }
 
 /* 00000748-0000079C       .text getMsg__11daObjApzl_cFv */
 u32 daObjApzl_c::getMsg() {
-    if (field_0x497 == true) {
+    if (mShownRewardMessage == true) {
         return 0x1BC5;
     }
-    if (field_0x496 == true) {
+    if (mGaveReward == true) {
         return 0x1BD0;
     }
-    if (field_0x495 == true) {
+    if (mGameCleared == true) {
         return 0x1BCF;
     }
-    if (field_0x494 == true) {
+    if (mGameStarted == true) {
         return 0x1BCD;
     }
     return 0x1BC6;
-    /* Nonmatching */
 }
 
 /* 0000079C-0000087C       .text talk__11daObjApzl_cFi */
 u16 daObjApzl_c::talk(int param_1) {
     u16 status = 0xFF;
 
-    if (field_0x51C == fpcM_ERROR_PROCESS_ID_e) { // fpcM_ERROR_PROCESS_ID_e?
+    if (mCurrMsgId == fpcM_ERROR_PROCESS_ID_e) {
         if (param_1 == 1) {
             mMsgNo = getMsg();
         }
-        field_0x51C = fopMsgM_messageSet(mMsgNo, this);
+        mCurrMsgId = fopMsgM_messageSet(mMsgNo, this);
         mpCurrMsg = NULL;
     } else {
         if (mpCurrMsg != NULL) {
@@ -580,14 +601,13 @@ u16 daObjApzl_c::talk(int param_1) {
                 }
             } else if (status == fopMsgStts_BOX_CLOSED_e) {
                 mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                field_0x51C = -1;
+                mCurrMsgId = -1;
             }
         } else {
-            mpCurrMsg = fopMsgM_SearchByID(field_0x51C);
+            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgId);
         }
     }
     return status;
-    /* Nonmatching */
 }
 
 u8 daObjApzl_Rupee_Table[] = {
@@ -612,12 +632,24 @@ void daObjApzl_c::privateCut() {
         "SOUND",
         "PUSH_A",
         "EVENT_END"
-    }; // not correct size?
+    };
+
+    enum {
+        WAIT,
+        TALK,
+        GAME,
+        GETITEM,
+        STOP,
+        SOUND,
+        PUSH_A,
+        EVENT_END
+    };
+
     bool temp;
     int staffIdx = dComIfGp_evmng_getMyStaffId("Apzl");
     if (staffIdx != -1) {
 
-        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 8, 1, 0); // rename to mActIdx
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 8, 1, 0);
         if (mActIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
@@ -625,25 +657,25 @@ void daObjApzl_c::privateCut() {
 
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
                 switch(mActIdx) {
-                    case 0:
-                    case 1:
-                    case 4:
-                    case 6:
+                    case WAIT:
+                    case TALK:
+                    case STOP:
+                    case PUSH_A:
                         break;
-                    case 2:
-                        field_0x494 = true;
+                    case GAME:
+                        mGameStarted = true;
                         break;
-                    case 3:
-                        field_0x496 = true;
-                        field_0x524 = 0x96;
+                    case GETITEM:
+                        mGaveReward = true;
+                        mRewardTimer = 0x96;
                         break;
-                    case 5:
+                    case SOUND:
                         mDoAud_seStart(JA_SE_15PUZZLE_COMPLETE);
                         break;
-                    case 7:
+                    case EVENT_END:
                         fopAc_ac_c* actor;
-                        for(int i = 0; i < field_0x514; i++) {
-                            actor = fopAcM_SearchByID(mProcId[i]); // unsure of length of proxid
+                        for(int i = 0; i < mGivenRupeeCount; i++) {
+                            actor = fopAcM_SearchByID(mRupeeIds[i]);
                             if (actor != NULL) {
                                 actor->current.angle.set(0, 0, 0);
                             }
@@ -666,51 +698,50 @@ void daObjApzl_c::privateCut() {
                 case 3:
                     dComIfGp_setDoStatusForce(dActStts_BLANK_e);
                     dComIfGp_setAStatusForce(dActStts_BLANK_e);
-                    if (field_0x524 == 0) {
+                    if (mRewardTimer == 0) {
                         temp = true;
                     } else {
-                        field_0x524--;
-                        if ((field_0x524 & 2) == 0 && field_0x514 < 0x1e) {
-                            csXyz temp2(current.angle);
-                            cXyz temp3(0.0f, 100.0f, 735.0f);
-                            temp2.x += (s16)cM_rndFX(4000.0f);
-                            temp2.y = (s16)cM_rndFX(6000.0f) + temp2.y - 0x4000;
-                            temp2.z = 0;
-
+                        mRewardTimer--;
+                        if ((mRewardTimer & 2) == 0 && mGivenRupeeCount < 30) {
+                            csXyz rupeeAngle(current.angle);
+                            cXyz rupeePos(0.0f, 100.0f, 735.0f);
+                            rupeeAngle.x += (s16)cM_rndFX(4000.0f);
+                            rupeeAngle.y = (s16)cM_rndFX(6000.0f) + rupeeAngle.y - 0x4000;
+                            rupeeAngle.z = 0;
                             int itemNo = 2;
 
-                            if (field_0x468 == 0xf) {
-                                u8 rupeeTable = daObjApzl_Rupee_Table[field_0x514]; // change name of this
+                            if (mPuzzleNo == 15) {
+                                u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
                                 
-                                if (rupeeTable == 0) {
-                                    itemNo = 1;
+                                if (rupeeType == GREEN_RUPEE) {
+                                    itemNo = dItem_GREEN_RUPEE_e;
                                 }
-                                else if (rupeeTable == 1) {
-                                    itemNo = 2;
+                                else if (rupeeType == BLUE_RUPEE) {
+                                    itemNo = dItem_BLUE_RUPEE_e;
                                 }
-                                else if (rupeeTable == 2) {
-                                    itemNo = 3;
+                                else if (rupeeType == YELLOW_RUPEE) {
+                                    itemNo = dItem_YELLOW_RUPEE_e;
                                 }
-                                else if (rupeeTable == 3) {
-                                    itemNo = 4;
+                                else if (rupeeType == RED_RUPEE) {
+                                    itemNo = dItem_RED_RUPEE_e;
                                 } else {
-                                    itemNo = 5;
+                                    itemNo = dItem_PURPLE_RUPEE_e;
                                 }
-                            } else if (field_0x514 % 6 == 0) {
+                            } else if (mGivenRupeeCount % 6 == 0) {
                                 itemNo = 2;
                             } else {
                                 itemNo = 1;
                             }
-                            daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(&temp3, itemNo, fopAcM_GetRoomNo(this), &temp2, NULL, cM_rndF(15.0f) + 5.0f, cM_rndF(15.0f) + 5.0f, -2.1f);
+                            daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(&rupeePos, itemNo, fopAcM_GetRoomNo(this), &rupeeAngle, NULL, cM_rndF(15.0f) + 5.0f, cM_rndF(15.0f) + 5.0f, -2.1f);
                             if(item != NULL) {
                                 fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
                                 item->setItemTimer(450);
                             }
                             
-                            mProcId[field_0x514] = fopAcM_GetID(item);
-                            field_0x514++;
-                            field_0x496 = true; 
-                            field_0x524 = 0x3C;
+                            mRupeeIds[mGivenRupeeCount] = fopAcM_GetID(item);
+                            mGivenRupeeCount++;
+                            mGaveReward = true; 
+                            mRewardTimer = 0x3C;
                         }
                     }
                     break;
@@ -743,14 +774,11 @@ void daObjApzl_c::privateCut() {
     
         }  
     }
-    /* Nonmatching */
 }
 
 /* 00000D08-00000D28       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjApzl_c*)i_this)->CreateHeap();
-
-    /* Nonmatching */
 }
 
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
@@ -759,8 +787,8 @@ BOOL daObjApzl_c::CreateHeap() {
     JUT_ASSERT(0x2E2, modelData != NULL);
 
     for(int i = 0; i < 16; i++) {
-        field_0x298[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
-        if (field_0x298[i] == NULL) {
+        mpPieceModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
+        if (mpPieceModel[i] == NULL) {
             return FALSE;
         }
     }
@@ -770,8 +798,8 @@ BOOL daObjApzl_c::CreateHeap() {
 
     
     for(int i = 0; i < 4; i++) {
-        field_0x2D8[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        if (field_0x2D8[i] == NULL) { // is it 3 actually?
+        mpArrowModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpArrowModel[i] == NULL) {
             return FALSE;
         }
     }
@@ -782,19 +810,20 @@ BOOL daObjApzl_c::CreateHeap() {
     J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", APZL_BTP_VBSRP);
     JUT_ASSERT(0x2FF, btp_data != NULL);
 
-    // while loop or for loop?
     int i = 0;
     while (true) {
-        field_0x2E8[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-        if (field_0x2E8[i] == NULL) {
+        mpScoreboardModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        if (mpScoreboardModel[i] == NULL) {
             return FALSE;
         }
 
-        if(field_0x328[i].init(modelData, btp_data, 1, 0, 1.0f, 0, -1, false, FALSE) == 0) {
+        if(mScoreboardBtpAnm[i].init(modelData, btp_data, 1, 0, 1.0f, 0, -1, false, FALSE) == 0) {
             return FALSE;
 
         }
+
         i++;
+
         if(i >= 0x10) {
             stick = new STControl(0x3C, 0x1E, 0, 0, 0.9, 0.5, 0, 0);
             JUT_ASSERT(0x310, stick != NULL);
@@ -802,120 +831,121 @@ BOOL daObjApzl_c::CreateHeap() {
         }
     }
     return FALSE;
-    /* Nonmatching */
 }
 
 /* 00001088-000012BC       .text CreateInit__11daObjApzl_cFv */
 void daObjApzl_c::CreateInit() {
-    int i; // why is this here
-    field_0x470 = daObjApzl_prm::getType(this);
-    field_0x468 = dComIfGs_getPuzzleInfo(); // unsure
-    //    d_com_inf_game::g_dComIfG_gameInfo.info.mSavedata.mPlayer.mInfo.field21_0x47[0x10];
-    if (field_0x468 >= 0x10) {
-        field_0x468 = 0;
+    mType = daObjApzl_prm::getType(this);
+    mPuzzleNo = dComIfGs_getPuzzleInfo();
+    if (mPuzzleNo >= 0x10) {
+        mPuzzleNo = 0;
     }
     for(int i = 0; i < 16; i++) {
-        if (i >= field_0x468) {
-            field_0x328[i].setFrame(0.0f);
+        if (i >= mPuzzleNo) {
+            mScoreboardBtpAnm[i].setFrame(0.0f);
         } else {
-            field_0x328[i].setFrame(1.0f);
+            mScoreboardBtpAnm[i].setFrame(1.0f);
         }
     }
-    fopAcM_SetMtx(this, field_0x298[0]->getBaseTRMtx());
+    fopAcM_SetMtx(this, mpPieceModel[0]->getBaseTRMtx());
 
-    // cullMtx = field_0x298[0]->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -600.0f, -600.0f, -600.0f, 600.0f, 600.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);
-    field_0x471 = 3;
-    field_0x475 = false;
-    if (field_0x470 == 0) {
+
+    mBlankIdx = 3;
+    mShowBlankPiece = false;
+
+    if (mType == 0) {
         randamize_piece();
     } else {
         for(int i = 0; i < 16; i++) {
-            field_0x476[i] = i;
+            mPiecePos[i] = i;
         }
     }
-    field_0x48C = dComIfGp_evmng_getEventIdx("PUZZLE_TALK", 0xff);
-    field_0x48E = dComIfGp_evmng_getEventIdx("PUZZLE_GAME", 0xff);
-    field_0x490 = dComIfGp_evmng_getEventIdx("PUZZLE_RUPEE", 0xff);
-    eventInfo.setEventId(field_0x48C);
-    if (field_0x470 == 0) {
+
+    mEventIdx[EVENT_TALK] = dComIfGp_evmng_getEventIdx("PUZZLE_TALK", 0xff);
+    mEventIdx[EVENT_GAME] = dComIfGp_evmng_getEventIdx("PUZZLE_GAME", 0xff);
+    mEventIdx[EVENT_RUPEE] = dComIfGp_evmng_getEventIdx("PUZZLE_RUPEE", 0xff);
+    
+    eventInfo.setEventId(mEventIdx[EVENT_TALK]);
+    if (mType == 0) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
     }
+
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x28;
     attention_info.position = current.pos;
-    mpCurrMsg = NULL;
 
-    field_0x51C = -1;
-    field_0x493 = false;
-    field_0x494 = false;
-    field_0x495 = false;
-    field_0x496 = false;
-    field_0x497 = false;
-    field_0x472 = 0;
-    field_0x473 = 0;
-    field_0x474 = 0;
-    field_0x498 = false;
-    field_0x486 = 0;
-    // check if field 476 is not [17] instead of [16] and this isnt [5] instead of [4]
+    mpCurrMsg = NULL;
+    mCurrMsgId = -1;
+
+    mQuitGame = false;
+    mGameStarted = false;
+    mGameCleared = false;
+    mGaveReward = false;
+    mShownRewardMessage = false;
+
+    mSwappedPieceIdx = 0;
+    mMoveTimer = 0;
+    mMoveDirection = 0;
+    mPlayedStartSound = false;
+    mState = STATE_IDLE;
+
     for(int i = 0; i < 4; i++) {
-        field_0x487[i] = 0;
+        mDrawArrow[i] = false;
     }
 
-    field_0x514 = 0;
+    mGivenRupeeCount = 0;
     set_mtx();
-    /* Nonmatching */
 }
 
 /* 000012BC-000016B8       .text set_mtx__11daObjApzl_cFv */
 void daObjApzl_c::set_mtx() {
     for(int i = 0; i < 16; i++) {
-        field_0x298[i]->setBaseScale(scale);
+        mpPieceModel[i]->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        s32 temp = field_0x476[i];
-        mDoMtx_stack_c::transM((temp % 4) * 40.0f - 60.0f, 60.0f - (temp / 4) * 40.0f, 0.0f);
-        if (i == field_0x472 && field_0x473 != 0) {
-            f32 temp2;
+        s32 piecePos = mPiecePos[i];
+        mDoMtx_stack_c::transM((piecePos % 4) * 40.0f - 60.0f, 60.0f - (piecePos / 4) * 40.0f, 0.0f);
+        if (i == mSwappedPieceIdx && mMoveTimer != 0) {
+            f32 moveTimer;
             if (!check_clear()) {
-                temp2 = field_0x473 * 8.0f;
+                moveTimer = mMoveTimer * 8.0f;
             } else {
-                temp2 = field_0x473;
+                moveTimer = mMoveTimer;
             }
-            u8 temp3 = field_0x474;
-            if (temp3 == 0) {
-                mDoMtx_stack_c::transM(0.0,-temp2,0.0);
+            u8 moveDirection = mMoveDirection;
+            if (moveDirection == UP) { 
+                mDoMtx_stack_c::transM(0.0,-moveTimer,0.0);
             }
-            else if (temp3 == 1) {
-                mDoMtx_stack_c::transM(temp2,0.0,0.0);
+            else if (moveDirection == LEFT) {
+                mDoMtx_stack_c::transM(moveTimer,0.0,0.0);
             }
-            else if (temp3 == 2) {
-                mDoMtx_stack_c::transM(0.0,temp2,0.0);
+            else if (moveDirection == DOWN) {
+                mDoMtx_stack_c::transM(0.0,moveTimer,0.0);
             }
             else {
-                mDoMtx_stack_c::transM(-temp2,0.0,0.0);
+                mDoMtx_stack_c::transM(-moveTimer,0.0,0.0);
             }
         }
-        field_0x298[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpPieceModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
     for(int i = 0; i < 4; i++) {
-        field_0x2D8[i]->setBaseScale(scale);
+        mpArrowModel[i]->setBaseScale(scale);
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        s32 temp4 = getblank();
-        mDoMtx_stack_c::transM((temp4 % 4) * 40.0f - 60.0f, 60.0f - (temp4 / 4) * 40.0f, 0.0f);
+        s32 blankIdx = getblank();
+        mDoMtx_stack_c::transM((blankIdx % 4) * 40.0f - 60.0f, 60.0f - (blankIdx / 4) * 40.0f, 0.0f);
         mDoMtx_stack_c::ZrotM(i * 0x4000);
         mDoMtx_stack_c::transM(0.0f, -15.0f, 0.0f);
-        field_0x2D8[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpArrowModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
     for(int i = 0; i < 16; i++) {
-        field_0x2E8[i]->setBaseScale(scale);
+        mpScoreboardModel[i]->setBaseScale(scale);
         mDoMtx_stack_c::transS(0.0f, -((i % 8) + 1) * 28.62f + 10.0f, (i / 8 - 2) * 28.62f);
-        field_0x2E8[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        mpScoreboardModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
     }
-    /* Nonmatching */
 }
 
 cPhs_State daObjApzl_c::_create(){
@@ -934,20 +964,17 @@ cPhs_State daObjApzl_c::_create(){
 /* 000016B8-00001780       .text daObjApzl_Create__FPv */
 static cPhs_State daObjApzl_Create(void* i_this) {
     return static_cast<daObjApzl_c*>(i_this)->_create();
-    /* Nonmatching */
 }
 
 bool daObjApzl_c::_delete() {
     delete stick;
     dComIfG_resDelete(&mPhs, "Apzl");
     return true;
-    /* Nonmatching */
 }
 
 /* 0000184C-00001894       .text daObjApzl_Delete__FPv */
 static BOOL daObjApzl_Delete(void* i_this) {
     return static_cast<daObjApzl_c*>(i_this)->_delete();
-    /* Nonmatching */
 }
 
 /* 00001894-000018B8       .text daObjApzl_Draw__FPv */
@@ -957,44 +984,41 @@ static BOOL daObjApzl_Draw(void* i_this) {
 
 /* 000018B8-00001B00       .text _draw__11daObjApzl_cFv */
 bool daObjApzl_c::_draw() {
-
-    if (field_0x470 == 0) {
+    if (mType == 0) {
         dComIfGd_setListBG();
         for(int i = 0; i < 16; i++) {
-            if (i != field_0x471 || field_0x475) {
-                J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[field_0x468][i]);
-                field_0x298[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
-                mDoExt_modelUpdateDL(field_0x298[i]);
+            if (i != mBlankIdx || mShowBlankPiece) {
+                J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i]);
+                mpPieceModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+                mDoExt_modelUpdateDL(mpPieceModel[i]);
             }
         }
 
         dComIfGd_setList();
 
         for (int i = 0; i < 4; i++) {
-            if (field_0x487[i] != 0) {
-                mDoExt_modelUpdateDL(field_0x2D8[i]);
+            if (mDrawArrow[i]) {
+                mDoExt_modelUpdateDL(mpArrowModel[i]);
             }
         }
 
         for(int i = 0; i < 16; i++) {
-            field_0x328[i].entry(field_0x2E8[i]->getModelData());
-            mDoExt_modelUpdateDL(field_0x2E8[i]);
-            field_0x328[i].remove(field_0x2E8[i]->getModelData());
+            mScoreboardBtpAnm[i].entry(mpScoreboardModel[i]->getModelData());
+            mDoExt_modelUpdateDL(mpScoreboardModel[i]);
+            mScoreboardBtpAnm[i].remove(mpScoreboardModel[i]->getModelData());
         }
 
     } else {
+
         dComIfGd_setListBG();
-
         for(int i = 0; i < 16; i++) {
-            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[field_0x468][i]);
-            field_0x298[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
-            mDoExt_modelUpdateDL(field_0x298[i]);
+            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i]);
+            mpPieceModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+            mDoExt_modelUpdateDL(mpPieceModel[i]);
         }
-
         dComIfGd_setList();
     }
     return true;
-    /* Nonmatching */
 }
 
 /* 00001B00-00001B24       .text daObjApzl_Execute__FPv */
@@ -1004,40 +1028,40 @@ static BOOL daObjApzl_Execute(void* i_this) {
 
 /* 00001B24-00001E8C       .text _execute__11daObjApzl_cFv */
 bool daObjApzl_c::_execute() {
-    if(field_0x470 == 0) {
-        switch(field_0x486) {
-            case 0:
+    if(mType == 0) {
+        switch(mState) {
+            case STATE_IDLE:
                 eventInfo.onCondition(dEvtCnd_CANTALK_e);
                 if (eventInfo.checkCommandTalk()) {
-                    field_0x486 = 1;
+                    mState = STATE_TALK;
                 }
                 break;
 
-            case 1:
+            case STATE_TALK:
                 privateCut();
-                if(dComIfGp_evmng_endCheck(field_0x48C)) {
-                    if(field_0x493 == true) {
+                if(dComIfGp_evmng_endCheck(mEventIdx[EVENT_TALK])) {
+                    if(mQuitGame == true) {
                         dComIfGp_event_reset();
-                        field_0x486 = 0;
-                        field_0x493 = false;
-                        field_0x494 = false;
+                        mState = STATE_IDLE;
+                        mQuitGame = false;
+                        mGameStarted = false;
                         save_piece();
                     } else {
-                        field_0x486 = 2;
+                        mState = STATE_START;
                     }
                 }
                 break;
 
-            case 2:
-                if (!field_0x498) {
+            case STATE_START:
+                if (!mPlayedStartSound) {
                     mDoAud_seStart(JA_SE_15PUZZLE_START);
-                    field_0x498 = true;
+                    mPlayedStartSound = true;
                 }
-                fopAcM_orderChangeEventId(this, field_0x48E, 0, 0xFFFF);
-                field_0x486 = 3;
+                fopAcM_orderChangeEventId(this, mEventIdx[EVENT_GAME], 0, 0xFFFF);
+                mState = STATE_PLAYING;
                 break;
 
-            case 3:
+            case STATE_PLAYING:
                 privateCut();
                 if (move_piece()) {
                     mDoAud_seStart(JA_SE_TALK_CURSOR);
@@ -1045,44 +1069,46 @@ bool daObjApzl_c::_execute() {
                 dComIfGp_setDoStatusForce(dActStts_BLANK_e);
                 dComIfGp_setAStatusForce(dActStts_CANCEL_e);
 
-                if (check_clear() && field_0x473 == 0) {
-                    field_0x475 = 1;
-                    field_0x495 = true;
+                if (check_clear() && mMoveTimer == 0) {
+                    mShowBlankPiece = 1;
+                    mGameCleared = true;
                     dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
-                    field_0x486 = 4;
+                    mState = STATE_END;
 
                 } else {
                     if (CPad_CHECK_HOLD_B(0)) {
                         mDoAud_seStart(JA_SE_15PUZZLE_EXIT);
-                        field_0x486 = 4;
+                        mState = STATE_END;
                     }
                 }
                 break;
-            case 4:
-                field_0x493 = false;
-                if (field_0x495 == true) {
-                    u8 puzzleInfo = dComIfGs_getPuzzleInfo();
-                    puzzleInfo++;
-                    if(puzzleInfo >= 16) {
-                        puzzleInfo = 0;
+
+            case STATE_END:
+                mQuitGame = false;
+                if (mGameCleared == true) {
+                    u8 clearCount = dComIfGs_getPuzzleInfo();
+                    clearCount++;
+                    if(clearCount >= 16) {
+                        clearCount = 0;
                     }
-                    field_0x328[field_0x468].setFrame(1.0f);
-                    dComIfGs_setPuzzleInfo(puzzleInfo); // these inlines are probably correct?
+                    mScoreboardBtpAnm[mPuzzleNo].setFrame(1.0f);
+                    dComIfGs_setPuzzleInfo(clearCount);
 
-                    fopAcM_orderChangeEventId(this, field_0x490, 0, 0xFFFF);
+                    fopAcM_orderChangeEventId(this, mEventIdx[EVENT_RUPEE], 0, 0xFFFF);
 
-                    field_0x486 = 5;
+                    mState = STATE_RUPEE;
                 } else {
-                    fopAcM_orderChangeEventId(this, field_0x48C, 0, 0xFFFF);
-                    field_0x486 = 1;
+                    fopAcM_orderChangeEventId(this, mEventIdx[EVENT_TALK], 0, 0xFFFF);
+                    mState = STATE_TALK;
                 } // fallthrough
-            case 5:
+
+            case STATE_RUPEE:
                 privateCut();
-                if(dComIfGp_evmng_endCheck(field_0x490)) {
+                if(dComIfGp_evmng_endCheck(mEventIdx[EVENT_RUPEE])) {
                     dComIfGp_event_reset();
-                    field_0x486 = 0;
-                    field_0x493 = false;
-                    field_0x494 = false;
+                    mState = STATE_IDLE;
+                    mQuitGame = false;
+                    mGameStarted = false;
                 }
                 break;
         }
@@ -1091,7 +1117,6 @@ bool daObjApzl_c::_execute() {
     }
     set_mtx();
     return true;
-    /* Nonmatching */
 }
 
 /* 00001E8C-00001E94       .text daObjApzl_IsDelete__FPv */
