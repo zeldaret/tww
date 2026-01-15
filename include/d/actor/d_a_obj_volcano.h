@@ -12,11 +12,11 @@ namespace daObjVolcano {
     public:
         
         enum Prm_e {
-            PRM_SWSAVE_W = 0x08,
-            PRM_SWSAVE_S = 0x00,
+            PRM_SW2_W = 0x08,
+            PRM_SW2_S = 0x08,
         };    
 
-        int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
+        int prm_get_sw2() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SW2_W, PRM_SW2_S);}
     
         void StartFire();
         void StopFire();
@@ -36,10 +36,12 @@ namespace daObjVolcano {
         void daObjVolcano_fail_demo_wait();
         void daObjVolcano_fail_demo_main();
         virtual BOOL Execute(Mtx**);
-        void set_material(J3DMaterial*, unsigned char);
+        static void set_material(J3DMaterial*, unsigned char);
         virtual BOOL Draw();
         
+        static Mtx M_tmp_mtx;
         static const char M_arcname[];
+        static const char M_evname[];
     
     public:
         /* Place member variables here */
@@ -53,18 +55,18 @@ namespace daObjVolcano {
         /* 0x340 */ dCcD_Stts field_0x340;
         /* 0x37C */ dCcD_Cyl field_0x37C;
         /* 0x4AC */ cXyz field_0x4AC;
-        /* 0x4B8 */ cXyz field_0x4B8[4];
-        /* 0x4E8 */ int field_0x4E8;
+        /* 0x4B8 */ cXyz field_0x4B8;
+        /* 0x4C4 */ cXyz field_0x4C4;
+        /* 0x4D0 */ cXyz field_0x4D0;
+        /* 0x4DC */ cXyz field_0x4DC;
+        /* 0x4E8 */ s32 field_0x4E8;
         /* 0x4EC */ f32 field_0x4EC;
         /* 0x4F0 */ f32 field_0x4F0;
-        /* 0x4F4 */ char field_0x4F4;
-        /* 0x4F5 */ char field_0x4F5;
-        /* 0x4F6 */ char field_0x4F6;
-        /* 0x4F7 */ char field_0x4F7;
+        /* 0x4F4 */ u8 field_0x4F4;
         /* 0x4F8 */ f32 field_0x4F8;
         /* 0x4FC */ s16 field_0x4FC;
         /* 0x4FE */ s16 field_0x4FE;
-        /* 0x500 */ int field_0x500;
+        /* 0x500 */ s32 field_0x500;
     };  // Size: 0x504
 };
 
