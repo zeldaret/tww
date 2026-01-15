@@ -169,12 +169,12 @@ public:
     /* 0x1AC */ f32 m1AC;
     /* 0x1B0 */ f32 m1B0;
     /* 0x1B4 */ s16 m1B4;
-    /* 0x1B6 */ u16 m1B6;
+    /* 0x1B6 */ s16 m1B6;
     /* 0x1B8 */ u16 m1B8;
-    /* 0x1BA */ u16 m1BA;
-    /* 0x1BC */ u16 m1BC;
-    /* 0x1BE */ u16 m1BE;
-    /* 0x1C0 */ u16 m1C0;
+    /* 0x1BA */ s16 m1BA;
+    /* 0x1BC */ s16 m1BC;
+    /* 0x1BE */ s16 m1BE;
+    /* 0x1C0 */ s16 m1C0;
     /* 0x1C2 */ u16 m1C2;
     /* 0x1C4 */ s16 m1C4;
     /* 0x1C6 */ u8 m1C6;
@@ -214,6 +214,7 @@ public:
         daMdStts_UNK1            = 0x00000001,
         daMdStts_UNK2            = 0x00000002,
         daMdStts_UNK4            = 0x00000004,
+        daMdStts_UNK8            = 0x00000008,
         daMdStts_FLY             = 0x00000010,
         daMdStts_CAM_TAG_IN      = 0x00000020,
         daMdStts_UNK40           = 0x00000040,
@@ -383,7 +384,7 @@ public:
     BOOL carryNpcAction(void*);
     BOOL throwNpcAction(void*);
     BOOL glidingNpcAction(void*);
-    void windProc();
+    s16 windProc();
     BOOL fallNpcAction(void*);
     BOOL fall02NpcAction(void*);
     BOOL wallHitNpcAction(void*);
@@ -395,9 +396,9 @@ public:
     BOOL demoFlyNpcAction(void*);
     void routeAngCheck(cXyz&, s16*);
     void routeWallCheck(cXyz&, cXyz&, s16*);
-    void checkForwardGroundY(s16);
-    void checkWallJump(s16);
-    void routeCheck(f32, s16*);
+    f32 checkForwardGroundY(s16);
+    f32 checkWallJump(s16);
+    BOOL routeCheck(f32, s16*);
     BOOL searchNpcAction(void*);
     BOOL hitNpcAction(void*);
     void setNormalSpeedF(f32, f32, f32, f32, f32);
@@ -472,7 +473,7 @@ public:
     void setAttention(bool);
     void lookBack(int, int, int);
     void lookBack(cXyz*, int, int);
-    void lookBackWaist(s16, f32);
+    s32 lookBackWaist(s16, f32);
     void setBaseMtx();
     void deletePiyoPiyo();
     BOOL init();
@@ -537,13 +538,15 @@ public:
     /* 0x3088 */ cXyz m3088;
     /* 0x3094 */ cXyz m3094;
     /* 0x30A0 */ cXyz m30A0;
-    /* 0x30AC */ u8 m30AC[0x30D0 - 0x30AC];
+    /* 0x30AC */ cXyz m30AC;
+    /* 0x30B8 */ cXyz m30B8;
+    /* 0x30C4 */ cXyz m30C4;
     /* 0x30D0 */ f32 m30D0;
     /* 0x30D4 */ ActionFunc mCurrPlayerActionFunc;
     /* 0x30E0 */ ActionFunc mCurrNpcActionFunc;
     /* 0x30EC */ u32 mMsgNo;
     /* 0x30F0 */ u32 m30F0;
-    /* 0x30F4 */ u8 m30F4[0x30F8 - 0x30F4];
+    /* 0x30F4 */ u32 m30F4;
     /* 0x30F8 */ f32 m30F8;
     /* 0x30FC */ f32 mRunRate;
     /* 0x3100 */ int m3100;
@@ -575,12 +578,13 @@ public:
     /* 0x312C */ u8 m312C;
     /* 0x312D */ s8 m312D;
     /* 0x312E */ s8 mCurEventMode;
-    /* 0x312F */ u8 m312F[0x3131 - 0x312F];
+    /* 0x312F */ u8 m312F;
+    /* 0x3130 */ u8 m3130;
     /* 0x3131 */ u8 m3131;
     /* 0x3132 */ s8 mActionStatus;
     /* 0x3133 */ u8 m3133;
     /* 0x3134 */ u8 m3134;
-    /* 0x3135 */ u8 m3135[0x3136 - 0x3135];
+    /* 0x3135 */ u8 m3135;
     /* 0x3136 */ u8 m3136;
     /* 0x3137 */ u8 m3137;
     /* 0x3138 */ u8 mType;
@@ -589,7 +593,8 @@ public:
     /* 0x313B */ u8 m313B[0x313C - 0x313B];
     /* 0x313C */ u8 m313C;
     /* 0x313D */ u8 m313D;
-    /* 0x313E */ u8 m313E[0x3140 - 0x313E];
+    /* 0x313E */ u8 m313E;
+    /* 0x313F */ s8 m313F;
     /* 0x3140 */ bool m3140;
     /* 0x3141 */ u8 m3141[0x3144 - 0x3141];
     /* 0x3144 */ s16 m3144;
@@ -597,9 +602,9 @@ public:
     /* 0x3148 */ s16 m3148;
     /* 0x314A */ s16 m314A;
     /* 0x314C */ s16 m314C;
-    /* 0x314E */ u8 m314E[0x3150 - 0x314E];
+    /* 0x314E */ s16 m314E;
     /* 0x3150 */ f32 m3150;
-    /* 0x3154 */ u8 m3154[0x3158 - 0x3154];
+    /* 0x3154 */ f32 m3154;
     /* 0x3158 */ s16 mEventIdxTable[10];
     /* 0x316C */ s8 m_hair_jnt_nums[8];
     /* 0x3174 */ cXyz m3174[8];
@@ -607,7 +612,8 @@ public:
     /* 0x3234 */ cXyz m3234[4];
     /* 0x3264 */ f32 m3264[8];
     /* 0x3284 */ char mModelArcName[3];
-    /* 0x3287 */ u8 m3287[0x32A4 - 0x3287];
+    /* 0x3287 */ u8 m3287[0x3298 - 0x3287];
+    /* 0x3298 */ cXyz m3298;
     /* 0x32A4 */ cXyz m32A4;
     /* 0x32B0 */ cBgS_PolyInfo mPolyInfo;
 };
