@@ -10,7 +10,13 @@ class J3DMaterial;
 namespace daObjVolcano {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        void prm_get_swSave() const {}
+        
+        enum Prm_e {
+            PRM_SWSAVE_W = 0x08,
+            PRM_SWSAVE_S = 0x00,
+        };    
+
+        int prm_get_swSave() const {return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S);}
     
         void StartFire();
         void StopFire();
@@ -32,6 +38,8 @@ namespace daObjVolcano {
         virtual BOOL Execute(Mtx**);
         void set_material(J3DMaterial*, unsigned char);
         virtual BOOL Draw();
+        
+        static const char M_arcname[];
     
     public:
         /* Place member variables here */

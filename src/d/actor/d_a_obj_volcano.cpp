@@ -7,6 +7,7 @@
 #include "d/actor/d_a_obj_volcano.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_ykzyg.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCyl cyl_check_src = {
@@ -38,6 +39,8 @@ static dCcD_SrcCyl cyl_check_src = {
         /* Height */ 3000.0f,
     }},
 };
+
+const char daObjVolcano::Act_c::M_arcname[] = "Ykzyg";
 
 
 /* 00000078-000003CC       .text StartFire__Q212daObjVolcano5Act_cFv */
@@ -129,21 +132,107 @@ void daObjVolcano::Act_c::StartFire() {
 /* 000003CC-00000470       .text StopFire__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::StopFire() {
     /* Nonmatching */
+    if (mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
+        }
+    }
+
+    for (int i = 0; i < 10; i++) {
+        if (this->field_0x2C8[i] != NULL) {
+            this->field_0x2C8[i]->setMaxFrame(-1);
+            this->field_0x2C8[i]->setStatus(JPAPtclStts_FirstFrame);
+        }
+    }
 }
 
 /* 00000470-00000758       .text CreateHeap__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData * model_data = (J3DModelData *)dComIfG_getObjectRes(M_arcname, YKZYG_BDL_QKZYG);
+    JUT_ASSERT(0xbf, model_data != NULL);
+
+    field_0x2F8 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000222);
+    J3DAnmTextureSRTKey * btk = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(M_arcname, YKZYG_BTK_QKZYG);
+    JUT_ASSERT(0xca, btk != NULL);
+
+    s32 btkRet = field_0x2FC.init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    J3DModelData * model_data_fire = (J3DModelData *)dComIfG_getObjectRes(M_arcname, YKZYG_BDL_YMNKZ00);
+    JUT_ASSERT(0xe1, model_data_fire != NULL);
+
+    field_0x310 = mDoExt_J3DModel__create(model_data_fire, 0x80000, 0x11000222);
+    J3DAnmTextureSRTKey * btk_f = (J3DAnmTextureSRTKey *)dComIfG_getObjectRes(M_arcname, YKZYG_BTK_YMNKZ00);
+    JUT_ASSERT(0xec, btk_f != NULL);
+    
+    s32 btkFRet = field_0x314.init(model_data_fire, btk_f, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE);
+    
+    J3DAnmTevRegKey * brk_f = (J3DAnmTevRegKey *)dComIfG_getObjectRes(M_arcname, YKZYG_BRK_YMNKZ00);
+    JUT_ASSERT(0xf3, brk_f != NULL);
+    s32 brkRet = field_0x328.init(model_data_fire, brk_f, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE);
+
+    field_0x4F4 = 1;
+    return field_0x2F8 != NULL && field_0x310 != NULL && btkRet != 0  && btkFRet != 0 && brkRet != 0;
 }
 
 /* 00000758-000009C8       .text Create__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::Create() {
     /* Nonmatching */
+    cullMtx = field_0x2F8->getBaseTRMtx();
+    init_mtx();
+    fopAcM_setCullSizeBox
+                (this, -1600.0f,-500.0f,-1800.0f,1700.0f,2500.0f,1900.0f);
+    field_0x340.Init(0xff, 0xff, this);
+    field_0x37C.Set(cyl_check_src);
+    field_0x4B8[0] = current.pos;
+    field_0x37C.SetC(field_0x4B8[0]);
+    field_0x4EC = field_0x37C.GetH();
+    field_0x4F0 = field_0x37C.GetR();
+    field_0x37C.SetStts(&field_0x340);
+
+    field_0x4B8[1] = current.pos;
+    field_0x4B8[1].y += 5000.0f;
+    field_0x4B8[2] = current.pos;
+    field_0x4B8[2].y += 5000.0f;
+    field_0x4B8[3] = current.pos;
+    field_0x4B8[3].y += 2400.0f;
+    field_0x4AC.x = 2.0f;
+    field_0x4AC.y = 2.0f;   
+    field_0x4AC.z = 2.0f;
+
+    for (int i = 0; i < 10; i++) {
+        this->field_0x2C8[i] = NULL;
+    }
+    int switchIndex = prm_get_swSave();
+    if (fopAcM_isSwitch(this, switchIndex)) {
+        field_0x4B8[0].y = home.pos.y - 2000.0f;
+        StopFire();
+        field_0x4F8 = 0.0f;
+        if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
+            field_0x500 = 6;
+        } else {
+            field_0x500 = 3;
+        }
+    } else {
+        field_0x4B8[0].y = home.pos.y + 2000.0f;
+        StartFire();
+        field_0x4F8 = 1.0f;
+        field_0x500 = 0;
+    }
+    field_0x4FC = dComIfGp_evmng_getEventIdx("FREEZE_VOLCANO");
+    field_0x4FE = dComIfGp_evmng_getEventIdx("FIRE_VOLCANO");
+    return TRUE;
 }
 
 /* 000009C8-00000BA0       .text Mthd_Create__Q212daObjVolcano5Act_cFv */
 cPhs_State daObjVolcano::Act_c::Mthd_Create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daObjVolcano::Act_c);
+    cPhs_State phase_state = dComIfG_resLoad(&field_0x2F0, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, 0x11, NULL, 0xaed0);
+        JUT_ASSERT(0x143, (phase_state == cPhs_ERROR_e) || (phase_state == cPhs_COMPLEATE_e));
+    }
+    return phase_state;
 }
 
 /* 00000E58-00000E60       .text Delete__Q212daObjVolcano5Act_cFv */
@@ -154,6 +243,10 @@ BOOL daObjVolcano::Act_c::Delete() {
 /* 00000E60-00000EC0       .text Mthd_Delete__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::Mthd_Delete() {
     /* Nonmatching */
+    u32 result = MoveBGDelete();
+    mDoAud_seDeleteObject(field_0x4B8);
+    dComIfG_resDelete(&field_0x2F0, M_arcname);
+    return result;
 }
 
 /* 00000EC0-00000F84       .text set_mtx__Q212daObjVolcano5Act_cFv */
