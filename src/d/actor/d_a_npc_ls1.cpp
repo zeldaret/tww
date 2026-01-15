@@ -8,6 +8,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_snap.h"
 
 static daNpc_Ls1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
@@ -1053,7 +1054,43 @@ void daNpc_Ls1_c::shadowDraw() {
 
 /* 00004288-00004418       .text _draw__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::_draw() {
-    /* Nonmatching */
+    /* Apparent match */
+    J3DModel* model_p = field_0x6E8;
+    J3DModel* morf_model_p = mpMorf->getModel();
+    J3DModelData* morf_model_info_p = morf_model_p->getModelData();
+
+    if (field_0x83A != 0 || field_0x83C != 0) {
+        return TRUE;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(morf_model_p, &tevStr);
+    g_env_light.setLightTevColorType(model_p, &tevStr);
+
+    field_0x708.entry(morf_model_info_p, field_0x71C);
+    field_0x6F0.entry(morf_model_info_p, (f32)field_0x704);
+    mpMorf->entryDL(); 
+
+    field_0x6F0.remove(morf_model_info_p);
+    field_0x708.remove(morf_model_info_p);
+
+    mDoExt_modelEntryDL(model_p);
+
+    if (field_0x6D0) {
+        g_env_light.setLightTevColorType(field_0x6D0, &tevStr);
+        mDoExt_modelEntryDL(field_0x6D0);
+    }
+
+    shadowDraw();
+    dSnap_RegistFig(0x49, this, 1.0f, 1.0f, 1.0f);
+
+    // Does nothing
+    if (l_HIO.field_0x0C.field_0x18 != 0) {
+        cXyz dummy = current.pos;
+        dummy.y = dComIfGp_getLinkPlayer()->current.pos.y;
+    }
+
+    return TRUE;
 }
 
 /* 00004418-00004654       .text _execute__11daNpc_Ls1_cFv */
