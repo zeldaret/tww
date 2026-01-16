@@ -173,7 +173,11 @@ BOOL daObjVolcano::Act_c::Create() {
         field_0x4B8.y = home.pos.y - 2000.0f;
         StopFire();
         field_0x4F8 = 0.0f;
-        if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
+        if (dComIfGs_getStartPoint() == 2 
+#if VERSION > VERSION_DEMO
+        && current.roomNo == dComIfGs_getRestartRoomNo()
+#endif
+    ) {
             field_0x500 = 6;
         } else {
             field_0x500 = 3;
@@ -195,7 +199,7 @@ cPhs_State daObjVolcano::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2F0, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, 0x11, NULL, 0xaed0);
-        JUT_ASSERT(0x143,  (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        JUT_ASSERT(DEMO_SELECT(0x144, 0x143),  (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
 }
@@ -209,7 +213,7 @@ BOOL daObjVolcano::Act_c::Delete() {
 BOOL daObjVolcano::Act_c::Mthd_Delete() {
     u32 result = MoveBGDelete();
     mDoAud_seDeleteObject(&field_0x4B8);
-    dComIfG_resDelete(&field_0x2F0, M_arcname);
+    dComIfG_resDeleteDemo(&field_0x2F0, M_arcname);
     return result;
 }
 
