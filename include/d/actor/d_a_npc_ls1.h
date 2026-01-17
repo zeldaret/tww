@@ -81,13 +81,13 @@ public:
     void checkOrder();
     BOOL chk_talk();
     bool chk_parts_notMov();
-    void searchByID(fpc_ProcID, int*);
-    void partner_search_sub(void* (*)(void*, void*));
+    fopAc_ac_c* searchByID(fpc_ProcID, int*);
+    bool partner_search_sub(void* (*)(void*, void*));
     void partner_search();
     void setEyeCtrl();
     void clrEyeCtrl();
     void lookBack();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     bool decideType(int);
     void cut_init_LOK_PLYER(int);
@@ -102,7 +102,7 @@ public:
     void endEvent();
     int isEventEntry();
     void event_proc(int);
-    BOOL set_action(int (daNpc_Ls1_c::*)(void*), void*);
+    BOOL set_action(ProcFunc, void*);
     void setStt(signed char);
     void chk_areaIN(float, float, short, cXyz);
     void get_playerEvnPos(int);
@@ -137,7 +137,8 @@ public:
     /* 0x6D4 */ f32 field_0x6D4;
     /* 0x6D8 */ daNpc_Ls1_matAnm_c* field_0x6D8[2];
     /* 0x6E0 */ char field_0x6E0[3];
-    /* 0x6E3 */ u8 field_0x6E3[0x6E8 - 0x6E3];
+    /* 0x6E3 */ u8 field_0x6E3[0x6E4 - 0x6E3];
+    /* 0x6E4 */ u32 field_0x6E4;
     /* 0x6E8 */ J3DModel* field_0x6E8;
     /* 0x6EC */ s8 m_lsHnd_L_jnt_num;
     /* 0x6ED */ s8 m_lsHnd_R_jnt_num;
@@ -152,7 +153,8 @@ public:
     /* 0x720 */ ProcFunc field_0x720;
     /* 0x72C */ Mtx field_0x72C;
     /* 0x75C */ Mtx field_0x75C;
-    /* 0x78C */ u8 field_0x78C[0x794 - 0x78C];
+    /* 0x78C */ fpc_ProcID field_0x78C;
+    /* 0x790 */ u8 field_0x790[0x794 - 0x790];
     /* 0x794 */ cXyz field_0x794;
     /* 0x7A0 */ csXyz field_0x7A0;
     /* 0x7A6 */ csXyz field_0x7A6;
@@ -205,7 +207,7 @@ public:
     /* 0x853 */ u8 field_0x853;
     /* 0x854 */ s8 field_0x854;
     /* 0x855 */ s8 field_0x855;
-    /* 0x856 */ u8 field_0x856;
+    /* 0x856 */ s8 field_0x856;
     /* 0x857 */ u8 field_0x857[0x858 - 0x857];
 };  // Size: 0x858
 
