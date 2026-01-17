@@ -1397,8 +1397,40 @@ void daNpc_Ls1_c::wait_2() {
 }
 
 /* 00003A0C-00003B24       .text wait_3__11daNpc_Ls1_cFv */
-void daNpc_Ls1_c::wait_3() {
-    /* Nonmatching */
+bool daNpc_Ls1_c::wait_3() {
+    cXyz local_18;
+    
+    local_18.set(40.0f, 140.0f, 100.0f);
+    
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(field_0x7A0.y);
+    mDoMtx_stack_c::multVec(&local_18, &field_0x7C0);
+
+    cLib_addCalcAngleS(
+        &current.angle.y, 
+        cLib_targetAngleY(&current.pos, &field_0x7C0), 
+        4, 0x800, 0x80
+    );
+    
+    if (field_0x83F != 0) {
+        if (chk_talk()) {
+            setStt(5);
+            field_0x853 = 1;
+            field_0x840 = 0;
+            m_jnt.setTrn();;
+        }
+        return true;
+    } 
+        
+    if (field_0x850 != 1) {
+        field_0x850 = 2;
+    }
+
+    field_0x840 = 1;
+    field_0x853 = 2;
+    field_0x838 = 1;    
+
+    return true;
 }
 
 /* 00003B24-00003BE4       .text wait_4__11daNpc_Ls1_cFv */

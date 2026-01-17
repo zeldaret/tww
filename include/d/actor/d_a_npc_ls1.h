@@ -111,7 +111,7 @@ public:
     void telescope_proc();
     bool wait_1();
     void wait_2();
-    void wait_3();
+    bool wait_3();
     bool wait_4();
     BOOL talk_1();
     BOOL wait_action1(void*);
@@ -160,7 +160,7 @@ public:
     /* 0x7A6 */ csXyz field_0x7A6;
     /* 0x7AC */ u8 field_0x7AC[0x7B4 - 0x7AC];
     /* 0x7B4 */ cXyz field_0x7B4;
-    /* 0x7C0 */ u8 field_0x7C0[0x7CC - 0x7C0];
+    /* 0x7C0 */ cXyz field_0x7C0;
     /* 0x7CC */ cXyz field_0x7CC[2];
     /* 0x7E4 */ cXyz field_0x7E4;
     /* 0x7F0 */ u8 field_0x7F0[0x800 - 0x7F0];
@@ -216,7 +216,6 @@ public:
     /* 0x856 */ s8 field_0x856;
     /* 0x857 */ s8 field_0x857;
 };  // Size: 0x858
-
 class daNpc_Ls1_HIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
