@@ -79,7 +79,7 @@ public:
     u32 getMsg();
     void eventOrder();
     void checkOrder();
-    BOOL chk_talk();
+    bool chk_talk();
     bool chk_parts_notMov();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
     bool partner_search_sub(void* (*)(void*, void*));
@@ -104,16 +104,16 @@ public:
     void event_proc(int);
     BOOL set_action(ProcFunc, void*);
     void setStt(signed char);
-    void chk_areaIN(float, float, short, cXyz);
-    void get_playerEvnPos(int);
+    bool chk_areaIN(float, float, short, cXyz);
+    cXyz get_playerEvnPos(int);
     void chkTelescope_sph(cXyz, float, float);
-    void chkTelescope(cXyz, float, float);
+    BOOL chkTelescope(cXyz, float, float);
     void telescope_proc();
-    void wait_1();
+    bool wait_1();
     void wait_2();
     void wait_3();
-    void wait_4();
-    void talk_1();
+    bool wait_4();
+    BOOL talk_1();
     BOOL wait_action1(void*);
     BOOL demo_action1(void*);
     bool demo();
@@ -174,13 +174,18 @@ public:
     /* 0x814 */ s16 field_0x814[4];
     /* 0x81C */ s16 field_0x81C;
     /* 0x81E */ s16 field_0x81E;
-    /* 0x820 */ u8 field_0x820[0x830 - 0x820];
+    /* 0x820 */ u8 field_0x820[0x822 - 0x820];
+    /* 0x822 */ s16 field_0x822;
+    /* 0x824 */ s16 field_0x824;
+    /* 0x826 */ s16 field_0x826;
+    /* 0x828 */ u8 field_0x828[0x830 - 0x828];
     /* 0x830 */ s8 field_0x830;
     /* 0x831 */ u8 field_0x831;
     /* 0x832 */ u8 field_0x832;
-    /* 0x833 */ u8 field_0x833[0x834 - 0x833];
+    /* 0x833 */ s8 field_0x833;
     /* 0x834 */ u8 field_0x834;
-    /* 0x835 */ u8 field_0x835[0x837 - 0x835];
+    /* 0x835 */ u8 field_0x835;
+    /* 0x836 */ u8 field_0x836;
     /* 0x837 */ bool field_0x837;
     /* 0x838 */ u8 field_0x838;
     /* 0x839 */ u8 field_0x839;
@@ -188,7 +193,8 @@ public:
     /* 0x83B */ u8 field_0x83B;
     /* 0x83C */ u8 field_0x83C;
     /* 0x83D */ bool field_0x83D;
-    /* 0x83E */ u8 field_0x83E[0x840 - 0x83E];
+    /* 0x83E */ u8 field_0x83E;
+    /* 0x83F */ u8 field_0x83F;
     /* 0x840 */ u8 field_0x840;
     /* 0x841 */ u8 field_0x841;
     /* 0x842 */ s16 field_0x842;
@@ -203,12 +209,12 @@ public:
     /* 0x84F */ s8 field_0x84F;
     /* 0x850 */ s8 field_0x850;
     /* 0x851 */ s8 field_0x851;
-    /* 0x852 */ u8 field_0x852[0x853 - 0x852];
+    /* 0x852 */ s8 field_0x852;
     /* 0x853 */ u8 field_0x853;
     /* 0x854 */ s8 field_0x854;
     /* 0x855 */ s8 field_0x855;
     /* 0x856 */ s8 field_0x856;
-    /* 0x857 */ u8 field_0x857[0x858 - 0x857];
+    /* 0x857 */ s8 field_0x857;
 };  // Size: 0x858
 
 class daNpc_Ls1_HIO_c : public mDoHIO_entry_c {
