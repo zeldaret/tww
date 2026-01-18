@@ -36,17 +36,15 @@ daNpc_Ls1_HIO_c::daNpc_Ls1_HIO_c() {
         0x0960,
         110.0f,
         0,
-        {0, 0, 0}, // probably padding
         700.0f,
         200.0f,
         2.0f,
         9.0f,
         50.0f,
         0x1A2C,
-        {0, 0}, // also probably padding
         9.0f
     };
-    memcpy(&field_0x0C, &a_prm_tbl, 0x38);
+    memcpy(&mPrm, &a_prm_tbl, 0x38);
     field_0x04 = -1;
     field_0x08 = -1;
 }
@@ -82,10 +80,10 @@ void daNpc_Ls1_matAnm_c::calc(J3DMaterial* param_1) const {
 }
 
 /* 0000028C-000002D8       .text nodeCB_Head__FP7J3DNodei */
-static BOOL nodeCB_Head(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
-        daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
-        a_actor->_nodeCB_Head(i_node, j3dSys.getModel());
+static BOOL nodeCB_Head(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
+        daNpc_Ls1_c* actor_p = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
+        actor_p->_nodeCB_Head(i_node, j3dSys.getModel());
     }
     return TRUE;
 }
@@ -112,10 +110,10 @@ void daNpc_Ls1_c::_nodeCB_Head(J3DNode* param_1, J3DModel* param_2) {
 }
 
 /* 00000434-00000480       .text nodeCB_BackBone__FP7J3DNodei */
-static BOOL nodeCB_BackBone(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
-        daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
-        a_actor->_nodeCB_BackBone(i_node, j3dSys.getModel());
+static BOOL nodeCB_BackBone(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
+        daNpc_Ls1_c* actor_p = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
+        actor_p->_nodeCB_BackBone(i_node, j3dSys.getModel());
     }
     return TRUE;
 }
@@ -134,10 +132,10 @@ void daNpc_Ls1_c::_nodeCB_BackBone(J3DNode* param_1, J3DModel* param_2) {
 }
 
 /* 00000520-0000056C       .text nodeCB_Hand_L__FP7J3DNodei */
-static BOOL nodeCB_Hand_L(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
-        daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
-        a_actor->_nodeCB_Hand_L(i_node, j3dSys.getModel());
+static BOOL nodeCB_Hand_L(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
+        daNpc_Ls1_c* actor_p = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
+        actor_p->_nodeCB_Hand_L(i_node, j3dSys.getModel());
     }
     return TRUE;
 }
@@ -155,10 +153,10 @@ void daNpc_Ls1_c::_nodeCB_Hand_L(J3DNode* param_1, J3DModel* param_2) {
 }
 
 /* 000005F4-00000640       .text nodeCB_Hand_R__FP7J3DNodei */
-static BOOL nodeCB_Hand_R(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
-        daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
-        a_actor->_nodeCB_Hand_R(i_node, j3dSys.getModel());
+static BOOL nodeCB_Hand_R(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
+        daNpc_Ls1_c* actor_p = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
+        actor_p->_nodeCB_Hand_R(i_node, j3dSys.getModel());
     }
     return TRUE;
 }
@@ -176,10 +174,10 @@ void daNpc_Ls1_c::_nodeCB_Hand_R(J3DNode* param_1, J3DModel* param_2) {
 }
 
 /* 000006C8-00000714       .text Ls_hand_nodeCB_Hand_L__FP7J3DNodei */
-static BOOL Ls_hand_nodeCB_Hand_L(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
-        daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
-        a_actor->_Ls_hand_nodeCB_Hand_L(i_node, j3dSys.getModel());
+static BOOL Ls_hand_nodeCB_Hand_L(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
+        daNpc_Ls1_c* actor_p = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
+        actor_p->_Ls_hand_nodeCB_Hand_L(i_node, j3dSys.getModel());
     }
     return TRUE;
 }
@@ -194,8 +192,8 @@ void daNpc_Ls1_c::_Ls_hand_nodeCB_Hand_L(J3DNode* param_1, J3DModel* param_2) {
 }
 
 /* 00000770-000007BC       .text Ls_hand_nodeCB_Hand_R__FP7J3DNodei */
-static BOOL Ls_hand_nodeCB_Hand_R(J3DNode* i_node, int i_param2) {
-    if (i_param2 == 0 && j3dSys.getModel()->getUserArea() != 0) {
+static BOOL Ls_hand_nodeCB_Hand_R(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In && j3dSys.getModel()->getUserArea() != 0) {
         daNpc_Ls1_c* a_actor = (daNpc_Ls1_c*) j3dSys.getModel()->getUserArea();
         a_actor->_Ls_hand_nodeCB_Hand_R(i_node, j3dSys.getModel());
     }
@@ -527,8 +525,8 @@ void daNpc_Ls1_c::play_btp_anm() {
 void daNpc_Ls1_c::eye_ctrl() {
     f32 mult, fVar2, fVar1, min, max;
     if (field_0x839 != 0) {
-        fVar1 = ((f32)field_0x848 / (f32)l_HIO.field_0x0C.field_0x30);
-        fVar2 = ((f32)field_0x846 / (f32)l_HIO.field_0x0C.field_0x30);
+        fVar1 = ((f32)field_0x848 / (f32)l_HIO.mPrm.field_0x30);
+        fVar2 = ((f32)field_0x846 / (f32)l_HIO.mPrm.field_0x30);
 
         min  = -1.0f;
         max  =  1.0f;
@@ -1103,7 +1101,7 @@ void daNpc_Ls1_c::lookBack() {
 
     switch (field_0x853) {
         case 1:
-            field_0x7C0 = dNpc_playerEyePos(l_HIO.field_0x0C.field_0x34);
+            field_0x7C0 = dNpc_playerEyePos(l_HIO.mPrm.field_0x34);
             sp30 = field_0x7C0;
             sp30_p = &sp30;
             field_0x838 = 1;
@@ -1134,7 +1132,7 @@ void daNpc_Ls1_c::lookBack() {
             break;
     }
 
-    m_jnt.lookAtTarget_2(&current.angle.y, sp30_p, sp24, target_y, l_HIO.field_0x0C.field_0x12, tmp_0x840);
+    m_jnt.lookAtTarget_2(&current.angle.y, sp30_p, sp24, target_y, l_HIO.mPrm.field_0x12, tmp_0x840);
     field_0x844 = m_jnt.getHead_x() / 2;
     field_0x842 = m_jnt.getHead_y() / 2;
     field_0x848 = field_0x844;
@@ -1155,7 +1153,7 @@ bool daNpc_Ls1_c::chkAttention() {
 void daNpc_Ls1_c::setAttention(bool param_1) {
     attention_info.position.set(
         current.pos.x,
-        current.pos.y + l_HIO.field_0x0C.field_0x14,
+        current.pos.y + l_HIO.mPrm.field_0x14,
         current.pos.z
     );
 
@@ -1614,9 +1612,9 @@ bool daNpc_Ls1_c::telescope_proc() {
         case 1:
             tmp = field_0x810;
             field_0x810 = 0xBC1;
-            if (chkTelescope_sph(bm1_npc_p->attention_info.position, 0.0f, l_HIO.field_0x0C.field_0x2C)) {
+            if (chkTelescope_sph(bm1_npc_p->attention_info.position, 0.0f, l_HIO.mPrm.field_0x2C)) {
                 u32 tmp;
-                if (dComIfGp_getCameraZoomScale(0) >= l_HIO.field_0x0C.field_0x24) {
+                if (dComIfGp_getCameraZoomScale(0) >= l_HIO.mPrm.field_0x24) {
                     tmp = 0xBCB;
                 } else {
                     tmp = 0xBCA;
@@ -1626,7 +1624,7 @@ bool daNpc_Ls1_c::telescope_proc() {
             break;
         case 2:
             field_0x810 = 0xBCA;
-            if (dComIfGp_getCameraZoomScale(0) >= l_HIO.field_0x0C.field_0x28) {
+            if (dComIfGp_getCameraZoomScale(0) >= l_HIO.mPrm.field_0x28) {
                 if (scope_mesg_status == 10) {
                     fopMsgM_forceSendOn();
                 }
@@ -1698,7 +1696,7 @@ exit:
 BOOL daNpc_Ls1_c::wait_1() {
     if (field_0x850 < 3) {
         field_0x850 = 0;
-        if (chk_areaIN(l_HIO.field_0x0C.field_0x20, 100.0f, 0x7FFF, current.pos)) {
+        if (chk_areaIN(l_HIO.mPrm.field_0x20, 100.0f, 0x7FFF, current.pos)) {
             field_0x850 = 4;
         }
     }
@@ -1744,7 +1742,7 @@ BOOL daNpc_Ls1_c::wait_2() {
         if (field_0x850 != 1 && field_0x850 < 3) {
             field_0x850 = 0;
             if (
-                chk_areaIN(l_HIO.field_0x0C.field_0x1C, 100.0f, 0x7FFF, current.pos) 
+                chk_areaIN(l_HIO.mPrm.field_0x1C, 100.0f, 0x7FFF, current.pos) 
 #if VERSION > VERSION_DEMO
                 && dComIfGp_checkPlayerStatus0(0, 0x200000)
 #endif
@@ -2103,7 +2101,7 @@ BOOL daNpc_Ls1_c::_draw() {
     dSnap_RegistFig(DSNAP_TYPE_UNK49, this, 1.0f, 1.0f, 1.0f);
 
     // Does nothing
-    if (l_HIO.field_0x0C.field_0x18 != 0) {
+    if (l_HIO.mPrm.field_0x18 != 0) {
         cXyz dummy = current.pos;
         dummy.y = dComIfGp_getLinkPlayer()->current.pos.y;
     }
@@ -2119,15 +2117,15 @@ BOOL daNpc_Ls1_c::_execute() {
         field_0x83D = true;
     }
     m_jnt.setParam(
-        l_HIO.field_0x0C.field_0x08,
-        l_HIO.field_0x0C.field_0x0A,
-        l_HIO.field_0x0C.field_0x0C,
-        l_HIO.field_0x0C.field_0x0E,
-        l_HIO.field_0x0C.field_0x00,
-        l_HIO.field_0x0C.field_0x02,
-        l_HIO.field_0x0C.field_0x04,
-        l_HIO.field_0x0C.field_0x06,
-        l_HIO.field_0x0C.field_0x10
+        l_HIO.mPrm.mMaxBackBoneX,
+        l_HIO.mPrm.mMaxBackBoneY,
+        l_HIO.mPrm.mMinBackBoneX,
+        l_HIO.mPrm.mMinBackBoneY,
+        l_HIO.mPrm.mMaxHeadX,
+        l_HIO.mPrm.mMaxHeadY,
+        l_HIO.mPrm.mMinHeadX,
+        l_HIO.mPrm.mMinHeadY,
+        l_HIO.mPrm.mMaxTurnStep
     );
 
     if (field_0x83A != 0 && demoActorID == 0) {
