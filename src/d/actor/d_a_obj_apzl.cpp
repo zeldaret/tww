@@ -609,7 +609,7 @@ u16 daObjApzl_c::talk(int param_1) {
     }
     return status;
 }
-
+#if VERSION > VERSION_JPN
 u8 daObjApzl_Rupee_Table[] = {
     0x01, 0x00, 0x01, 0x00,
     0x01, 0x00, 0x02, 0x00,
@@ -620,6 +620,7 @@ u8 daObjApzl_Rupee_Table[] = {
     0x01, 0x03, 0x01, 0x01,
     0x01, 0x04,
 };
+#endif
 
 /* 0000087C-00000D08       .text privateCut__11daObjApzl_cFv */
 void daObjApzl_c::privateCut() {
@@ -645,8 +646,8 @@ void daObjApzl_c::privateCut() {
         EVENT_END
     };
 
-    bool temp;
     int staffIdx = dComIfGp_evmng_getMyStaffId("Apzl");
+    bool temp;
     if (staffIdx != -1) {
 
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 8, 1, 0);
@@ -708,7 +709,27 @@ void daObjApzl_c::privateCut() {
                             rupeeAngle.x += (s16)cM_rndFX(4000.0f);
                             rupeeAngle.y = (s16)cM_rndFX(6000.0f) + rupeeAngle.y - 0x4000;
                             rupeeAngle.z = 0;
-                            int itemNo = 2;
+
+
+                            int itemNo;
+#if VERSION <= VERSION_JPN
+                                if(mPuzzleNo == 15) {
+                                    f32 temp2 = cM_rndF(1000.0f);
+                                    if(temp2 < 900.0) {
+                                        itemNo = dItem_GREEN_RUPEE_e;
+                                    } else if (temp2 < 980.0) {
+                                        itemNo = dItem_BLUE_RUPEE_e;
+                                    } else if (temp2 < 995.0) {
+                                        itemNo = dItem_YELLOW_RUPEE_e;
+                                    } else if (temp2 < 999.0) {
+                                        itemNo = dItem_RED_RUPEE_e;
+                                    } else {
+                                        itemNo = dItem_PURPLE_RUPEE_e;
+                                    }
+                                } else {
+                                    itemNo =1;
+                                }
+#else
 
                             if (mPuzzleNo == 15) {
                                 u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
@@ -732,6 +753,8 @@ void daObjApzl_c::privateCut() {
                             } else {
                                 itemNo = 1;
                             }
+#endif
+
                             daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(&rupeePos, itemNo, fopAcM_GetRoomNo(this), &rupeeAngle, NULL, cM_rndF(15.0f) + 5.0f, cM_rndF(15.0f) + 5.0f, -2.1f);
                             if(item != NULL) {
                                 fopAcM_OnStatus(item, fopAcStts_UNK4000_e);
@@ -784,7 +807,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
 BOOL daObjApzl_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLP);
+#if VERSION <= VERSION_JPN
+    JUT_ASSERT(0x2B9, modelData != NULL);
+#else
     JUT_ASSERT(0x2E2, modelData != NULL);
+#endif
 
     for(int i = 0; i < 16; i++) {
         mpPieceModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
@@ -794,8 +821,11 @@ BOOL daObjApzl_c::CreateHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLY);
+#if VERSION <= VERSION_JPN
+    JUT_ASSERT(0x2C6, modelData != NULL);
+#else
     JUT_ASSERT(0x2EF, modelData != NULL);
-
+#endif
     
     for(int i = 0; i < 4; i++) {
         mpArrowModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -805,10 +835,19 @@ BOOL daObjApzl_c::CreateHeap() {
     }
     
     modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_VBSRP);
+#if VERSION <= VERSION_JPN
+    JUT_ASSERT(0x2D1, modelData != NULL);
+#else
     JUT_ASSERT(0x2FA, modelData != NULL);
+#endif
 
     J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", APZL_BTP_VBSRP);
+    
+#if VERSION <= VERSION_JPN
+    JUT_ASSERT(0x2D6, btp_data != NULL);
+#else
     JUT_ASSERT(0x2FF, btp_data != NULL);
+#endif
 
     int i = 0;
     while (true) {
@@ -826,7 +865,11 @@ BOOL daObjApzl_c::CreateHeap() {
 
         if(i >= 0x10) {
             stick = new STControl(0x3C, 0x1E, 0, 0, 0.9, 0.5, 0, 0);
+#if VERSION <= VERSION_JPN
+            JUT_ASSERT(0x2E7, stick != NULL);
+#else
             JUT_ASSERT(0x310, stick != NULL);
+#endif
             return TRUE;
         }
     }
@@ -988,8 +1031,7 @@ bool daObjApzl_c::_draw() {
         dComIfGd_setListBG();
         for(int i = 0; i < 16; i++) {
             if (i != mBlankIdx || mShowBlankPiece) {
-                J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i]);
-                mpPieceModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+                mpPieceModel[i]->getModelData()->setMaterialTable(((J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i])), J3DMatCopyFlag_All);
                 mDoExt_modelUpdateDL(mpPieceModel[i]);
             }
         }
@@ -1012,8 +1054,7 @@ bool daObjApzl_c::_draw() {
 
         dComIfGd_setListBG();
         for(int i = 0; i < 16; i++) {
-            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i]);
-            mpPieceModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+            mpPieceModel[i]->getModelData()->setMaterialTable(((J3DMaterialTable*)dComIfG_getObjectRes("Apzl", daObjApzl_bmt_table[mPuzzleNo][i])), J3DMatCopyFlag_All);
             mDoExt_modelUpdateDL(mpPieceModel[i]);
         }
         dComIfGd_setList();
