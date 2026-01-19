@@ -33,7 +33,7 @@ namespace daObjSmplbg {
         static const Attr_c M_attr[];
         inline const Attr_c& attr() const { return M_attr[mType]; }
 
-        void isStop() {}
+        bool isStop() { return field_0x2D8 == 0; }
         void offStop() {}
         void onStop() {}
         int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W , PRM_TYPE_S);}
