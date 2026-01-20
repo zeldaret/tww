@@ -141,6 +141,9 @@ public:
     /* 0x2E4 */ u8 field_0x2E4;
     /* 0x2E5 */ bool field_0x2E5;
     /* 0x2E6 */ u8 field_0x2E6[0x2E8 - 0x2E6];
+#if VERSION == VERSION_DEMO
+    u8 field_0x2E82[0x10];
+#endif
     /* 0x2E8 */ cXyz field_0x2E8[6];
     /* 0x330 */ Quaternion field_0x330[6];
     /* 0x390 */ int field_0x390;
@@ -170,7 +173,7 @@ public:
     /* 0x648 */ int field_0x648;
     /* 0x64C */ int field_0x64C;
     /* 0x650 */ int field_0x650;
-    /* 0x654 */ int field_0x654;
+    /* 0x654 */ int mSinkTimer;
     /* 0x658 */ int field_0x658;
     /* 0x65C */ int field_0x65C;
     /* 0x660 */ cXyz field_0x660;

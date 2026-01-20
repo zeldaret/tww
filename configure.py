@@ -1596,7 +1596,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fganon"),
     ActorRel(NonMatching, "d_a_fgmahou"),
     ActorRel(Matching,    "d_a_fire"),
-    ActorRel(MatchingFor("GZLE01", "GZLP01"), "d_a_fm"),
+    ActorRel(Matching, "d_a_fm"),
     ActorRel(NonMatching, "d_a_gm"),
     ActorRel(NonMatching, "d_a_gnd"),
     ActorRel(NonMatching, "d_a_goal_flag"),
