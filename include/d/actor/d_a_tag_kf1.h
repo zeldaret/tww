@@ -46,9 +46,9 @@ public:
     /* 0x764 */ s16 mNumPartners;
     /* 0x766 */ s8 mActIdx;
     /* 0x767 */ s8 mEventState;
-    s8 mStt;
-    u8 field_0x769;
-    s8 mActionState;
+    /* 0x768 */ s8 mStt;
+    /* 0x769 */ u8 field_0x769;
+    /* 0x76a */ s8 mActionState;
 }; /* Size: 0x076c */
 
 class daTag_Kf1_HIO_c : public JORReflexible {
@@ -61,7 +61,6 @@ public:
     /* 0x08 */ f32 mAttentionMaxEuclidDistance;
     /* 0x0C */ f32 mAttentionMaxYDistance;
     /* 0x10 */ u8 f0x10;
-    /* Place member variables here */
 }; /* Size: 0x14 */
 
 #endif /* D_A_TAG_KF1_H */

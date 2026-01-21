@@ -6,10 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
 #include "d/actor/d_a_tsubo.h"
-// #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-// #include "m_Do/m_Do_hostIO.h"
+#include "d/d_priority.h"
+#include "m_Do/m_Do_hostIO.h"
 
 static daTag_Kf1_HIO_c l_HIO;
 static s32 l_check_inf[100];
@@ -21,7 +21,6 @@ struct a_prm_tbl_c {
     u8 field_0x08;
 };
 
-#include "d/d_priority.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
@@ -158,14 +157,12 @@ s16 daTag_Kf1_c::checkPartner() {
 }
 
 /* 00000604-00000650       .text goto_nextStage__11daTag_Kf1_cFv */
-void daTag_Kf1_c::goto_nextStage() { 
-    dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, -1, -1, 0.0f, 0,
-                          TRUE, 0);
+void daTag_Kf1_c::goto_nextStage() {
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), 0, -1, -1, 0.0f, 0, TRUE, 0);
 }
 
 /* 00000650-000006DC       .text event_talkInit__11daTag_Kf1_cFi */
 void daTag_Kf1_c::event_talkInit(int staffIdx) { 
-    /* Nonmatching */ // TODO stringBase and layout
     u32 *msgNo = (u32*)dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
     if (msgNo != NULL) {
@@ -245,9 +242,6 @@ void daTag_Kf1_c::privateCut() {
     
     bool status;
 
-    /* Nonmatching */ 
-    // TODO on account of branch ordering; 
-    // functionally should be equivalent.
     switch (mActIdx) {
         case 0: status = event_mesSet(); break;
         case 1: status = event_mesEnd(); break;
@@ -378,7 +372,6 @@ cPhs_State daTag_Kf1_c::_create() {
         ret = cPhs_ERROR_e;
     }
     return ret;
-    /* Nonmatching */
 }
 
 /* 000010C0-000010E0       .text daTag_Kf1_Create__FP10fopAc_ac_c */
