@@ -40,12 +40,71 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-static daNpc_Rsh1_HIO_c l_HIO;
+char daNpc_Rsh1_c::m_arcname[] = "Rsh";
 
+static daNpc_Rsh1_HIO_c l_HIO;
+static s32 l_msgId;
+static s32 l_msg;
+
+static cXyz l_in_chk_pos1_tbl[4] = {
+    cXyz( 919.0f, 670.0f, -205111.0f),
+    cXyz(1466.0f, 670.0f, -204723.0f),
+    cXyz(1090.0f, 670.0f, -204173.0f),
+    cXyz( 603.0f, 670.0f, -204461.0f)
+};
+
+static cXyz l_in_chk_pos2_tbl[4] = {
+    cXyz(1466.0f, 670.0f, -204723.0f),
+    cXyz(1700.0f, 670.0f, -204518.0f),
+    cXyz(1423.0f, 670.0f, -204174.0f),
+    cXyz(1125.0f, 670.0f, -204337.0f)
+};
 
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
-    /* Nonmatching */
+    field_0x0C.m04 = -20.0;
+    field_0x0C.mMaxHeadX = 0x200;
+    field_0x0C.mMaxHeadY = 0x200;
+    field_0x0C.mMaxBackboneX = 5000;
+    field_0x0C.mMaxBackboneY = 6000;
+    field_0x0C.mMinHeadX = -0x200;
+    field_0x0C.mMinHeadY = -0x200;
+    field_0x0C.mMinBackboneX = -5000;
+    field_0x0C.mMinBackboneY = -6000;
+    field_0x0C.mMaxTurnStep = 0x1000;
+    field_0x0C.mMaxHeadTurnVel = 0x800;
+    field_0x0C.mAttnYOffset = 80.0;
+    field_0x0C.mMaxAttnAngleY = 0x4000;
+    field_0x0C.m22 = 0;
+    field_0x0C.mMaxAttnDistXZ = 400.0;
+    field_0x34 = 1.0;
+    field_0x38 = 0.9;
+    field_0x3C = 0.5;
+    field_0x40 = 40.0;
+    field_0x44 = 30.0;
+    field_0x48 = 7.5;
+    field_0x4C = 1300.0;
+    field_0x50 = 100.0;
+    field_0x54 = 180.0;
+    field_0x58 = 190.0;
+    field_0x68 = 0;
+    field_0x69 = 0;
+    field_0x6A = 0;
+    field_0x6B = 0;
+    field_0x5C = 0;
+    field_0x5D = 0;
+    field_0x5E = 0;
+    field_0x5F = 0;
+    field_0x60 = 0;
+    field_0x61 = 0;
+    field_0x62 = 0;
+    field_0x63 = 0;
+    field_0x64 = 0;
+    field_0x65 = 0;
+    field_0x66 = 0;
+    field_0x67 = 0;
+    field_0x04 = -1;
+    field_0x08 = -1;
 }
 
 /* 0000021C-0000045C       .text checkCreateInShopPlayer__12daNpc_Rsh1_cFv */
@@ -159,7 +218,7 @@ void daNpc_Rsh1_c::talk() {
 }
 
 /* 00001FE0-00002358       .text CreateInit__12daNpc_Rsh1_cFv */
-void daNpc_Rsh1_c::CreateInit() {
+BOOL daNpc_Rsh1_c::CreateInit() {
     /* Nonmatching */
 }
 
@@ -269,8 +328,12 @@ void daNpc_Rsh1_c::event_action(void*) {
 }
 
 /* 00003EEC-00003F08       .text dummy_action__12daNpc_Rsh1_cFPv */
-void daNpc_Rsh1_c::dummy_action(void*) {
-    /* Nonmatching */
+bool daNpc_Rsh1_c::dummy_action(void* i_unusedP) {
+    UNUSED(i_unusedP);
+    if (field_0x960 == 0) {
+        field_0x960++;
+    }
+    return true;
 }
 
 /* 00003F08-00004040       .text _draw__12daNpc_Rsh1_cFv */
@@ -289,22 +352,52 @@ BOOL daNpc_Rsh1_c::_delete() {
 }
 
 /* 00004308-00004328       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpc_Rsh1_c*)i_this)->CreateHeap();
 }
 
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
 cPhs_State daNpc_Rsh1_c::_create() {
-    /* Nonmatching */
+    /* Apparent match */
     fopAcM_SetupActor(this, daNpc_Rsh1_c);
+
+    cPhs_State state = dComIfG_resLoad(&field_0x290, m_arcname);
+
+    if (state == cPhs_COMPLEATE_e) {
+        field_0x95E = (fopAcM_GetParam(this) >> 0x14) & 0xF;
+
+        switch (field_0x95E) {
+            case 0:
+                field_0x95E = 0;
+                break;
+            default:
+                field_0x95E = 0;
+                break;
+        }
+        
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x6100)) {
+            return cPhs_ERROR_e;
+        }
+
+        cullMtx = field_0x298->getModel()->getBaseTRMtx();
+
+        if (l_HIO.field_0x08 < 0) {
+            l_HIO.field_0x04 = mDoHIO_createChild("露店の社長", &l_HIO); // "Stall owner"
+        }
+        l_HIO.field_0x08++;
+
+        if (!CreateInit()) {
+            return cPhs_ERROR_e;
+        }
+    }
+
+    return state;
 }
 
-daNpc_Rsh1_c::daNpc_Rsh1_c() {
-    
-}
+daNpc_Rsh1_c::daNpc_Rsh1_c() {}
 
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
-void daNpc_Rsh1_c::CreateHeap() {
+BOOL daNpc_Rsh1_c::CreateHeap() {
     /* Nonmatching */
 }
 
