@@ -24,9 +24,8 @@ public:
     void setEyePos(cXyz) {}
     void setShopIdx(int) {}
 
-    inline daNpc_Rsh1_c();
     void checkCreateInShopPlayer();
-    void initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(signed char);
     void setTexAnm(signed char);
@@ -80,7 +79,9 @@ public:
     /* 0x488 */ dBgS_AcchCir field_0x488;
     /* 0x4C8 */ dCcD_Stts field_0x4C8;
     /* 0x504 */ dCcD_Cyl field_0x504;
-    /* 0x634 */ u8 field_0x634[0x638 - 0x634];
+    /* 0x634 */ s8 m_head_jnt_num;
+    /* 0x635 */ s8 m_backbone_jnt_num;
+    /* 0x636 */ u8 field_0x636[0x638 - 0x636];
     /* 0x638 */ dNpc_JntCtrl_c field_0x638;
     /* 0x66C */ dNpc_EventCut_c field_0x66C;
     /* 0x6D8 */ STControl field_0x6D8;
@@ -90,17 +91,21 @@ public:
     /* 0x7B8 */ ShopCam_action_c field_0x7B8;
     /* 0x810 */ ShopItems_c* mpShopItems;
     /* 0x814 */ ShopItems_c field_0x814[4];
-    /* 0x924 */ u8 field_0x924[0x95E - 0x924];
+    /* 0x924 */ u8 field_0x924[0x954 - 0x924];
+    /* 0x954 */ ShopCursor_c* field_0x954;
+    /* 0x958 */ s8 field_0x958;
+    /* 0x959 */ u8 field_0x959[0x95E - 0x959];
     /* 0x95E */ s8 field_0x95E;
     /* 0x95F */ u8 field_0x95F[0x960 - 0x95F];
     /* 0x960 */ s8 field_0x960;
-    /* 0x961 */ u8 field_0x961[0x968 - 0x961];
+    /* 0x961 */ s8 field_0x961;
+    /* 0x962 */ u8 field_0x962[0x968 - 0x962];
 };  // Size: 0x968
 
 class daNpc_Rsh1_HIO_c : public JORReflexible {
 public:
     daNpc_Rsh1_HIO_c();
-    virtual ~daNpc_Rsh1_HIO_c() {};
+    virtual ~daNpc_Rsh1_HIO_c();
 
 public:
     /* 0x04 */ s8 field_0x04;

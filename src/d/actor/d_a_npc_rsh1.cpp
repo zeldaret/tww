@@ -60,6 +60,12 @@ static cXyz l_in_chk_pos2_tbl[4] = {
     cXyz(1125.0f, 670.0f, -204337.0f)
 };
 
+static void dummy() {
+    strcmp(__FILE__, NULL);
+    strcmp("m_head_tex_pattern != 0", NULL);
+    strcmp("Halt", NULL);
+}
+
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
     field_0x0C.m04 = -20.0;
@@ -107,33 +113,35 @@ daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
     field_0x08 = -1;
 }
 
+daNpc_Rsh1_HIO_c::~daNpc_Rsh1_HIO_c() {}
+
 /* 0000021C-0000045C       .text checkCreateInShopPlayer__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::checkCreateInShopPlayer() {
     /* Nonmatching */
 }
 
 /* 00000498-00000710       .text daNpc_Rsh1_checkRotenBaseTalkArea__Fv */
-void daNpc_Rsh1_checkRotenBaseTalkArea() {
+static void daNpc_Rsh1_checkRotenBaseTalkArea() {
     /* Nonmatching */
 }
 
 /* 00000710-000007A0       .text daNpc_Rsh1_countShop__Fv */
-void daNpc_Rsh1_countShop() {
+static void daNpc_Rsh1_countShop() {
     /* Nonmatching */
 }
 
 /* 000007A0-0000080C       .text daNpc_Rsh1_RotenItemNumInBag__Fv */
-void daNpc_Rsh1_RotenItemNumInBag() {
+static void daNpc_Rsh1_RotenItemNumInBag() {
     /* Nonmatching */
 }
 
 /* 0000080C-0000084C       .text daNpc_Rsh1_shopMsgCheck__FUl */
-void daNpc_Rsh1_shopMsgCheck(unsigned long) {
+static void daNpc_Rsh1_shopMsgCheck(unsigned long) {
     /* Nonmatching */
 }
 
 /* 0000084C-0000087C       .text daNpc_Rsh1_shopStickMoveMsgCheck__FUl */
-void daNpc_Rsh1_shopStickMoveMsgCheck(unsigned long) {
+static void daNpc_Rsh1_shopStickMoveMsgCheck(unsigned long) {
     /* Nonmatching */
 }
 
@@ -143,7 +151,7 @@ static BOOL nodeCallBack_Rsh(J3DNode*, int) {
 }
 
 /* 00000A44-00000B50       .text initTexPatternAnm__12daNpc_Rsh1_cFb */
-void daNpc_Rsh1_c::initTexPatternAnm(bool) {
+BOOL daNpc_Rsh1_c::initTexPatternAnm(bool) {
     /* Nonmatching */
 }
 
@@ -199,7 +207,7 @@ void daNpc_Rsh1_c::setCollision() {
 
 /* 000018EC-000018F8       .text talkInit__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::talkInit() {
-    /* Nonmatching */
+    field_0x961 = 0;
 }
 
 /* 000018F8-00001CB4       .text normal_talk__12daNpc_Rsh1_cFv */
@@ -223,7 +231,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
 }
 
 /* 00002358-000023A8       .text daNpc_Rsh1_checkRotenItemGet__Fi */
-void daNpc_Rsh1_checkRotenItemGet(int) {
+static void daNpc_Rsh1_checkRotenItemGet(int) {
     /* Nonmatching */
 }
 
@@ -394,11 +402,57 @@ cPhs_State daNpc_Rsh1_c::_create() {
     return state;
 }
 
-daNpc_Rsh1_c::daNpc_Rsh1_c() {}
-
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* model_p = (J3DModelData *) dComIfG_getObjectRes(m_arcname, 0x20);
+    field_0x298 = new mDoExt_McaMorf(
+        model_p, 
+        NULL, NULL, 
+        (J3DAnmTransform *) dComIfG_getObjectRes(m_arcname, 0x1B), 
+        J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, 
+        dComIfG_getObjectRes(m_arcname, 0xF), 
+        0, 0x11020203
+    );
+
+    if (!field_0x298 || !field_0x298->getModel()) {
+        field_0x298 = NULL;
+        return FALSE;
+    }
+
+    m_head_jnt_num = model_p->getJointName()->getIndex("head");
+    JUT_ASSERT(0x953, m_head_jnt_num >= 0);
+
+    m_backbone_jnt_num = model_p->getJointName()->getIndex("backbone");
+    JUT_ASSERT(0x956, m_backbone_jnt_num >= 0);
+
+    switch (field_0x95E) {
+        case 0:
+            field_0x958 = 0;
+            break;
+    }
+
+    if (!initTexPatternAnm(false)) {
+        return FALSE;
+    }
+
+    for (u16 i = 0; i < model_p->getJointNum(); i++) {
+        if (i == m_head_jnt_num || i == m_backbone_jnt_num) {
+            field_0x298->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Rsh);
+        }
+    }
+
+    field_0x298->getModel()->setUserArea((u32)this);
+    field_0x488.SetWall(30.0f, 0.0f);
+    field_0x2C4.Set(&current.pos, &old.pos, this, 1, &field_0x488, &speed);
+
+    field_0x954 = ShopCursor_create(
+        (J3DModelData *) dComIfG_getObjectRes(m_arcname, 0x23),
+        (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arcname, 0x26),
+        l_HIO.field_0x34
+    );
+
+    return field_0x954 != NULL ? TRUE : FALSE;
 }
 
 /* 000049A0-00004A28       .text set_mtx__12daNpc_Rsh1_cFv */
