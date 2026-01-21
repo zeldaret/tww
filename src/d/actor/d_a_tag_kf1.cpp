@@ -6,37 +6,38 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kf1.h"
 #include "d/actor/d_a_tsubo.h"
-#include "d/d_a_obj.h"
+// #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
-#include "m_Do/m_Do_hostIO.h"
+// #include "m_Do/m_Do_hostIO.h"
 
 static daTag_Kf1_HIO_c l_HIO;
 static s32 l_check_inf[100];
 static s32 l_check_wrk;
 
-static f32 a_prm_tbl[] = {
-    150.0f,30.0f, 0x00000000
+struct a_prm_tbl_c {
+    f32 field_0x00;
+    f32 field_0x04;
+    u8 field_0x08;
 };
+
 #include "d/d_priority.h"
 
 /* 000000EC-00000120       .text __ct__15daTag_Kf1_HIO_cFv */
 daTag_Kf1_HIO_c::daTag_Kf1_HIO_c()
-{ 
-    mAttentionMaxEuclidDistance = a_prm_tbl[0];
-    mAttentionMaxYDistance = a_prm_tbl[1];
-    // this line should def load from a_prm_tbl according to asm,
-    // but unlike the others the type is not float so do this gross cast instead
-    f0x10 = *(u8*)(void*)&a_prm_tbl[2];
+{
+    static a_prm_tbl_c a_prm_tbl = {150.0f, 30.0f, 0};
+    
+    mAttentionMaxEuclidDistance = a_prm_tbl.field_0x00;
+    mAttentionMaxYDistance = a_prm_tbl.field_0x04;
+    f0x10 = a_prm_tbl.field_0x08;
     mNo = -1;
 }
 
 /* 00000120-000001B0       .text searchActor_Kutani__FPvPv */
 void* searchActor_Kutani(void* arg1, void* _) {
     fopAc_ac_c* act = (fopAc_ac_c*)arg1;
-    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.base.mProcName == 0x1cb &&
-        daObj::PrmAbstract<daTsubo::Act_c::Prm_e>(act, daTsubo::Act_c::PRM_TYPE_W,
-                                                  daTsubo::Act_c::PRM_TYPE_S) == 0xe) {
+    if (l_check_wrk < 100 && fopAc_IsActor(act) && act->base.base.mProcName == 0x1cb && ((daTsubo::Act_c*)act)->prm_chk_type_kutani()) {
         l_check_inf[l_check_wrk] = (u32)act;
         l_check_wrk++;
     }
@@ -47,17 +48,18 @@ void* searchActor_Kutani(void* arg1, void* _) {
 BOOL daTag_Kf1_c::createInit() {
     tag_event_cut.setActorInfo("TagKf1", this);
 
-    // TODO first arg should be some function pointer
     this->set_action(&daTag_Kf1_c::wait_action1, NULL);
     return TRUE;
 }
 
-static char* a_demo_name_tbl[] = {"BENSYO"};
 
 /* 00000220-00000234       .text setStt__11daTag_Kf1_cFSc */
-char daTag_Kf1_c::setStt(signed char c) {
-    stt = c;
-    if (stt == 3) {
+char daTag_Kf1_c::setStt(s8 c) {
+    mStt = c;
+    switch (mStt) {
+        // case 3: break;
+    }
+    if (mStt == 3) {
         return;
     }
     /* Nonmatching */
@@ -73,9 +75,8 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* arg) {
         case 0x1c35:
             *arg = 0x1c31; 
             break;
-            //return 0xf;
         case 0x1c2e:
-            rupee_count = dComIfGs_getRupee();
+            mRupeeCount = dComIfGs_getRupee();
         default: ret = 0x10;
     }
     return ret;
@@ -83,24 +84,22 @@ u16 daTag_Kf1_c::next_msgStatus(unsigned long* arg) {
 
 /* 00000294-00000314       .text eventOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::eventOrder() {
-    if (event_state == 1 || event_state == 2) {
+    static char* a_demo_name_tbl[] = {"BENSYO"};
+    if (mEventState == 1 || mEventState == 2) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if (event_state == 1) {
+        if (mEventState == 1) {
             fopAcM_orderSpeakEvent(this);
         }
     }
-    else if (event_state >= 3) {
-        fopAcM_orderOtherEvent(this, a_demo_name_tbl[event_state - 3]);
+    else if (mEventState >= 3) {
+        fopAcM_orderOtherEvent(this, a_demo_name_tbl[mEventState - 3]);
     }
 }
 
 /* 00000314-00000380       .text checkOrder__11daTag_Kf1_cFv */
 void daTag_Kf1_c::checkOrder() {
-    if (eventInfo.checkCommandDemoAccrpt() &&
-        dComIfGp_evmng_startCheck("BENSYO") &&
-        // TODO correct enum here?
-        (event_state == cPhs_STOP_e)) {
-        event_state = 0;
+    if (eventInfo.checkCommandDemoAccrpt() && dComIfGp_evmng_startCheck("BENSYO") && (mEventState == cPhs_STOP_e)) {
+        mEventState = 0;
     }
 }
 
@@ -109,8 +108,7 @@ BOOL daTag_Kf1_c::chkAttention(cXyz vec) {
     BOOL ret = FALSE;
     f32 dist = vec.abs(dComIfGp_getPlayer(0)->current.pos);
     f32 ydist = dComIfGp_getPlayer(0)->current.pos.y - vec.y;
-    if (dist < l_HIO.mAttentionMaxEuclidDistance &&
-        ydist < l_HIO.mAttentionMaxYDistance) {
+    if (dist < l_HIO.mAttentionMaxEuclidDistance && ydist < l_HIO.mAttentionMaxYDistance) {
         ret = TRUE;
     }
     return ret;
@@ -122,7 +120,7 @@ BOOL daTag_Kf1_c::partner_srch() {
     int i;
     int j;
     for (i = 0, j = 8; j != 0; ++i, --j) {
-        partners[i] = 0xffffffff;
+        mPartners[i] = 0xffffffff;
     }
 
     l_check_wrk = 0;
@@ -134,16 +132,15 @@ BOOL daTag_Kf1_c::partner_srch() {
     fpcM_Search(searchActor_Kutani, this);
     // register/cast fiddling needed here
     if (l_check_wrk <= 8 && l_check_wrk != 0) {
-        npartners = 0;
+        mNumPartners = 0;
         for (i = 0, j = 0; j < l_check_wrk; ++j, ++i) {
-            partners[i] = fopAcM_GetID((void*)l_check_inf[i]);
-            npartners++;
+            mPartners[i] = fopAcM_GetID((void*)l_check_inf[i]);
+            mNumPartners++;
         }
         tmp = TRUE;
     }
     return tmp;
 
-    /* Nonmatching */
 }
 
 /* 0000057C-00000604       .text checkPartner__11daTag_Kf1_cFv */
@@ -151,8 +148,8 @@ s16 daTag_Kf1_c::checkPartner() {
 
     s16 hits = 0;
     int id = 0;
-    for (int idx = 0; idx < npartners; ++idx) {
-        int cand_it = partners[idx];
+    for (int idx = 0; idx < mNumPartners; ++idx) {
+        int cand_it = mPartners[idx];
         fopAc_ac_c* cand = fopAcM_SearchByID(cand_it);
         if (cand != NULL) {
             ++hits;
@@ -177,7 +174,7 @@ void daTag_Kf1_c::event_talkInit(int staffIdx) {
         
         mCurrMsgNo = *msgNo;
         if (mCurrMsgNo == 0x1c2d) {
-            dComIfGp_setMessageCountNumber(this->tenth_cost * 10);
+            dComIfGp_setMessageCountNumber(this->mTenthCost * 10);
         }
     }
     else {
@@ -185,11 +182,11 @@ void daTag_Kf1_c::event_talkInit(int staffIdx) {
     }
 }
 
-static const u32 at4350[] = {0xff000080};
-static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
 
 /* 000006DC-0000071C       .text event_mesSet__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::event_mesSet() { 
+    // seemingly unused thing on @4350
+    static const u32 unused[] = {0xff000080};
     this->talk(0);
     return mCurrMsgBsPcId != -1;
 }
@@ -202,9 +199,9 @@ bool daTag_Kf1_c::event_mesEnd() {
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
 void daTag_Kf1_c::bensyoInit() { 
-    dComIfGp_setItemRupeeCount(-(this->tenth_cost * 10));
+    dComIfGp_setItemRupeeCount(-(this->mTenthCost * 10));
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    if (this->rupee_count > tenth_cost * 10) {
+    if (this->mRupeeCount > mTenthCost * 10) {
         this->mCurrMsgNo = 0x1c2f;
     }
     else {
@@ -219,11 +216,12 @@ bool daTag_Kf1_c::event_bensyo() {
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_cntTsubo() { 
-    this->tenth_cost = this->npartners - checkPartner();
+    this->mTenthCost = this->mNumPartners - checkPartner();
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
-void daTag_Kf1_c::privateCut() { 
+void daTag_Kf1_c::privateCut() {
+    static char* cut_name_tbl[] = {"MES_SET", "MES_END", "TSUBO_BENSYO", "GO_NEXT", "CNT_TSUBO"};
     int staffIdx = dComIfGp_evmng_getMyStaffId("TagKf1");
     if (staffIdx == -1) {
         return;
@@ -285,15 +283,15 @@ void daTag_Kf1_c::event_proc() {
 
 /* 00000A0C-00000AB8       .text set_action__11daTag_Kf1_cFM11daTag_Kf1_cFPCvPvPv_iPv */
 BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) { 
-    if (this->func != action) {
-        if (this->func) {
+    if (this->mAction != action) {
+        if (this->mAction) {
             this->mActionState = 0xff;
-            (this->*func)(param);
+            (this->*mAction)(param);
         }
-        this->func = action;
+        this->mAction = action;
 
         this->mActionState = 0;
-        (this->*func)(param);
+        (this->*mAction)(param);
     }
 
     return TRUE;
@@ -301,9 +299,9 @@ BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) {
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::wait01() {
-    this->event_state = 0;
-    if ((this->hasAttention) && checkPartner() != this->npartners) {
-        this->event_state = 3;
+    this->mEventState = 0;
+    if ((this->mHasAttention) && checkPartner() != this->mNumPartners) {
+        this->mEventState = 3;
     }
     return TRUE;
 }
@@ -323,8 +321,8 @@ BOOL daTag_Kf1_c::wait_action1(void*) {
             partner_srch();
             mActionState = 2;
         }
-        hasAttention = chkAttention(this->current.pos);
-        s32 val = stt;
+        mHasAttention = chkAttention(this->current.pos);
+        s32 val = mStt;
         switch (val) {
             case 1: wait01(); break;
             case 2: wait02(); break;
@@ -335,25 +333,25 @@ BOOL daTag_Kf1_c::wait_action1(void*) {
 }
 
 /* 00000BE8-00000BF0       .text _draw__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_draw() {
+BOOL daTag_Kf1_c::_draw() {
     return TRUE;
 }
 
 /* 00000BF0-00000C68       .text _execute__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_execute() {
+BOOL daTag_Kf1_c::_execute() {
     checkOrder();
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
         event_proc();
     }
     else { 
-        (this->*func)(NULL);
+        (this->*mAction)(NULL);
     }
     eventOrder();
     return TRUE;
 }
 
 /* 00000C68-00000CBC       .text _delete__11daTag_Kf1_cFv */
-bool daTag_Kf1_c::_delete() {
+BOOL daTag_Kf1_c::_delete() {
     fpc_ProcID id = fopAcM_GetID(this);
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
@@ -391,22 +389,22 @@ static cPhs_State daTag_Kf1_Create(fopAc_ac_c* obj) {
 }
 
 /* 000010E0-00001100       .text daTag_Kf1_Delete__FP11daTag_Kf1_c */
-static bool daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
+static BOOL daTag_Kf1_Delete(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_delete();
 }
 
 /* 00001100-00001120       .text daTag_Kf1_Execute__FP11daTag_Kf1_c */
-static bool daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
+static BOOL daTag_Kf1_Execute(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_execute();
 }
 
 /* 00001120-00001140       .text daTag_Kf1_Draw__FP11daTag_Kf1_c */
-static bool daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
+static BOOL daTag_Kf1_Draw(daTag_Kf1_c* i_this) {
     return ((daTag_Kf1_c*)i_this)->_draw();
 }
 
 /* 00001140-00001148       .text daTag_Kf1_IsDelete__FP11daTag_Kf1_c */
-static bool daTag_Kf1_IsDelete(daTag_Kf1_c*) {
+static BOOL daTag_Kf1_IsDelete(daTag_Kf1_c*) {
     return TRUE;
 }
 static actor_method_class l_daTag_Kf1_Method = {

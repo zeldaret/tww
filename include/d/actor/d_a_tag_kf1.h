@@ -28,25 +28,25 @@ public:
     bool wait01();
     bool wait02();
     BOOL wait_action1(void*);
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     // s32
     cPhs_State _create();
     
 public:
-    /* 0x6c4 */ ActionFunc func;
+    /* 0x6c4 */ ActionFunc mAction;
     /* 0x6d0 */ dNpc_EventCut_c tag_event_cut;
-    /* 0x73c */ u8 hasAttention;
-    /* 0x73e */ s16 tenth_cost;
+    /* 0x73c */ u8 mHasAttention;
+    /* 0x73e */ s16 mTenthCost;
     /* 0x740 */ u16 f_0x740;
-    /* 0x742 */ u16 rupee_count;
+    /* 0x742 */ u16 mRupeeCount;
 
-    /* 0x744 */ s32 partners[8];
-    /* 0x764 */ s16 npartners;
+    /* 0x744 */ s32 mPartners[8];
+    /* 0x764 */ s16 mNumPartners;
     /* 0x766 */ s8 mActIdx;
-    /* 0x767 */ s8 event_state;
-    s8 stt;
+    /* 0x767 */ s8 mEventState;
+    s8 mStt;
     u8 field_0x769;
     s8 mActionState;
 }; /* Size: 0x076c */
