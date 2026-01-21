@@ -7,6 +7,9 @@
 #include "d/actor/d_a_npc_ls1.h"
 #include "d/actor/d_a_npc_bm1.h"
 #include "d/actor/d_a_player_main.h"
+#if VERSION > VERSION_DEMO
+#include "d/d_bg_s_func.h"
+#endif
 #include "f_op/f_op_camera.h"
 #include "d/res/res_link.h"
 #include "d/res/res_ls.h"
