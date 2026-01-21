@@ -1,7 +1,9 @@
 #ifndef D_A_NPC_RSH1_H
 #define D_A_NPC_RSH1_H
 
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class ShopItems_c;
 
@@ -20,6 +22,7 @@ public:
     void setEyePos(cXyz) {}
     void setShopIdx(int) {}
 
+    inline daNpc_Rsh1_c();
     void checkCreateInShopPlayer();
     void initTexPatternAnm(bool);
     void playTexPatternAnm();
@@ -71,12 +74,15 @@ public:
     /* 0x814 */ u8 m814[0x968 - 0x814];
 };
 
-class daNpc_Rsh1_HIO_c {
+class daNpc_Rsh1_HIO_c : public JORReflexible {
 public:
     daNpc_Rsh1_HIO_c();
+    virtual ~daNpc_Rsh1_HIO_c() {};
 
 public:
     /* Place member variables here */
+    u8 padding[0x8];
+    dNpc_HIO_c m0C;
 };
 
 #endif /* D_A_NPC_RSH1_H */

@@ -40,6 +40,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+static daNpc_Rsh1_HIO_c l_HIO;
+
 
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
@@ -294,6 +296,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 /* 00004328-00004464       .text _create__12daNpc_Rsh1_cFv */
 cPhs_State daNpc_Rsh1_c::_create() {
     /* Nonmatching */
+    fopAcM_SetupActor(this, daNpc_Rsh1_c);
+}
+
+daNpc_Rsh1_c::daNpc_Rsh1_c() {
+    
 }
 
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
