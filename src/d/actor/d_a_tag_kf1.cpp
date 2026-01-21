@@ -172,11 +172,11 @@ void daTag_Kf1_c::event_talkInit(int staffIdx) {
         
         mCurrMsgNo = *msgNo;
         if (mCurrMsgNo == 0x1c2d) {
-            dComIfGp_setMessageCountNumber(this->mTenthCost * 10);
+            dComIfGp_setMessageCountNumber(mTenthCost * 10);
         }
     }
     else {
-        this->mCurrMsgNo = 0;
+        mCurrMsgNo = 0;
     }
 }
 
@@ -197,13 +197,13 @@ bool daTag_Kf1_c::event_mesEnd() {
 
 /* 00000750-000007A4       .text bensyoInit__11daTag_Kf1_cFv */
 void daTag_Kf1_c::bensyoInit() { 
-    dComIfGp_setItemRupeeCount(-(this->mTenthCost * 10));
+    dComIfGp_setItemRupeeCount(-(mTenthCost * 10));
     mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-    if (this->mRupeeCount > mTenthCost * 10) {
-        this->mCurrMsgNo = 0x1c2f;
+    if (mRupeeCount > mTenthCost * 10) {
+        mCurrMsgNo = 0x1c2f;
     }
     else {
-        this->mCurrMsgNo = 0x1c30;
+        mCurrMsgNo = 0x1c30;
     }
 }
 
@@ -214,7 +214,7 @@ bool daTag_Kf1_c::event_bensyo() {
 
 /* 000007C4-000007FC       .text event_cntTsubo__11daTag_Kf1_cFv */
 void daTag_Kf1_c::event_cntTsubo() { 
-    this->mTenthCost = this->mNumPartners - checkPartner();
+    mTenthCost = mNumPartners - checkPartner();
 }
 
 /* 000007FC-00000978       .text privateCut__11daTag_Kf1_cFv */
@@ -267,8 +267,8 @@ void daTag_Kf1_c::event_proc() {
         setStt(0x02);
     }
     else {
-        bool attn_flag = this->tag_event_cut.getAttnFlag();
-        if (this->tag_event_cut.cutProc()) {
+        bool attn_flag = tag_event_cut.getAttnFlag();
+        if (tag_event_cut.cutProc()) {
             if (!tag_event_cut.getAttnFlag()){
                 tag_event_cut.setAttnFlag(attn_flag);
             }
@@ -281,14 +281,14 @@ void daTag_Kf1_c::event_proc() {
 
 /* 00000A0C-00000AB8       .text set_action__11daTag_Kf1_cFM11daTag_Kf1_cFPCvPvPv_iPv */
 BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) { 
-    if (this->mAction != action) {
-        if (this->mAction) {
-            this->mActionState = 0xff;
+    if (mAction != action) {
+        if (mAction) {
+            mActionState = 0xff;
             (this->*mAction)(param);
         }
-        this->mAction = action;
+        mAction = action;
 
-        this->mActionState = 0;
+        mActionState = 0;
         (this->*mAction)(param);
     }
 
@@ -297,9 +297,9 @@ BOOL daTag_Kf1_c::set_action(ActionFunc action, void* param) {
 
 /* 00000AB8-00000B14       .text wait01__11daTag_Kf1_cFv */
 bool daTag_Kf1_c::wait01() {
-    this->mEventState = 0;
-    if ((this->mHasAttention) && checkPartner() != this->mNumPartners) {
-        this->mEventState = 3;
+    mEventState = 0;
+    if (mHasAttention && checkPartner() != mNumPartners) {
+        mEventState = 3;
     }
     return TRUE;
 }
@@ -319,7 +319,7 @@ BOOL daTag_Kf1_c::wait_action1(void*) {
             partner_srch();
             mActionState = 2;
         }
-        mHasAttention = chkAttention(this->current.pos);
+        mHasAttention = chkAttention(current.pos);
         s32 val = mStt;
         switch (val) {
             case 1: wait01(); break;
@@ -366,7 +366,7 @@ cPhs_State daTag_Kf1_c::_create() {
 
     switch (fopAcM_GetName(this)) {
         case PROC_TAG_KF1:
-            this->field_0x769 = 0;
+            field_0x769 = 0;
             break;
         default:
             return cPhs_ERROR_e;
