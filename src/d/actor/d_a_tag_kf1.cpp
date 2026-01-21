@@ -57,12 +57,10 @@ BOOL daTag_Kf1_c::createInit() {
 char daTag_Kf1_c::setStt(s8 c) {
     mStt = c;
     switch (mStt) {
-        // case 3: break;
+    case 1:
+    case 2:
+        break;
     }
-    if (mStt == 3) {
-        return;
-    }
-    /* Nonmatching */
 }
 
 /* 00000234-00000294       .text next_msgStatus__11daTag_Kf1_cFPUl */
