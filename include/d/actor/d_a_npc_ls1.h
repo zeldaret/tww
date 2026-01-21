@@ -11,19 +11,18 @@ class J3DNode;
 class daNpc_Ls1_matAnm_c : public J3DMaterialAnm {
 public:
     daNpc_Ls1_matAnm_c();
-    void clrMoveFlag() { field_0x7C = 0; }
-    f32& getNowOffsetX() { return field_0x6C; }
-    f32& getNowOffsetY() { return field_0x70; }
-    void setMoveFlag() { field_0x7C = 1; }
+    void clrMoveFlag() { mbMove = 0; }
+    f32& getNowOffsetX() { return mOffset.x; }
+    f32& getNowOffsetY() { return mOffset.y; }
+    void setMoveFlag() { mbMove = 1; }
 
     void calc(J3DMaterial*) const;
 
 public:
-    /* 0x6C */ f32 field_0x6C;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ u8 field_0x74[0x7C - 0x74];
-    /* 0x7C */ u8 field_0x7C;
-    /* 0x7D */ u8 field_0x7D[0x80 - 0x7D];
+    /* 0x6C */ cXy mOffset;
+    /* 0x74 */ u8 m74[0x7C - 0x74];
+    /* 0x7C */ u8 mbMove;
+    /* 0x7D */ u8 m7D[0x80 - 0x7D];
 };  // Size: 0x80
 
 class daNpc_Ls1_c : public fopNpc_npc_c {
