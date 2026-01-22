@@ -1779,7 +1779,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swtact"),
     ActorRel(Matching,    "d_a_tag_etc"),
     ActorRel(Matching,    "d_a_tag_island"),
-    ActorRel(NonMatching, "d_a_tag_kf1"),
+    ActorRel(Equivalent, "d_a_tag_kf1"),
     ActorRel(Matching,    "d_a_tag_ret"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_volcano"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_title"),
