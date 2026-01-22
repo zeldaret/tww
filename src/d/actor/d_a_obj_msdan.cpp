@@ -13,7 +13,6 @@ const char daObjMsdan::Act_c::M_evname[] = "Msdan";
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 cPhs_State daObjMsdan::Act_c::Mthd_Create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daObjMsdan::Act_c);
     cPhs_State state = dComIfG_resLoad(&this->mPhs, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
@@ -57,7 +56,6 @@ cPhs_State daObjMsdan::Act_c::Mthd_Create() {
 
 /* 000003D4-000005C0       .text Mthd_Execute__Q210daObjMsdan5Act_cFv */
 BOOL daObjMsdan::Act_c::Mthd_Execute() {
-    /* Nonmatching */
     s32 prm_swSave;
     switch (this->mMode) {
     case 0:
