@@ -3430,13 +3430,7 @@ void daFm_c::createInit() {
                     break;
                 case 1:
                     modeProc(PROC_0_e, 3);
-#if VERSION == VERSION_DEMO
-                    JUT_ASSERT(0x1419, m_path_no != 0xff);
-#elif VERSION == VERSION_JPN
-                    JUT_ASSERT(0x1420, m_path_no != 0xff);
-#else
-                    JUT_ASSERT(0x1444, m_path_no != 0xff);
-#endif
+                    JUT_ASSERT(VERSION_SELECT(0x1419, 0x1420, 0x1444, 0x1444), m_path_no != 0xff);
                     break;
                 case 2:
                     modeProc(PROC_0_e, 4);
