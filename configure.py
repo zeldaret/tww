@@ -1729,7 +1729,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_mkiek"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_mknjd"),
     ActorRel(NonMatching, "d_a_obj_mmrr"),
-    ActorRel(NonMatching, "d_a_obj_msdan"),
+    ActorRel(Matching, "d_a_obj_msdan"),
     ActorRel(NonMatching, "d_a_obj_msdan2"),
     ActorRel(NonMatching, "d_a_obj_msdan_sub"),
     ActorRel(NonMatching, "d_a_obj_msdan_sub2"),
