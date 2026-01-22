@@ -807,11 +807,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
 BOOL daObjApzl_c::CreateHeap() {
     J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLP);
-#if VERSION <= VERSION_JPN
-    JUT_ASSERT(0x2B9, modelData != NULL);
-#else
-    JUT_ASSERT(0x2E2, modelData != NULL);
-#endif
+    JUT_ASSERT(VERSION_SELECT(0x2B9, 0x2B9, 0x2E2, 0x2E2), modelData != NULL);
 
     for(int i = 0; i < 16; i++) {
         mpPieceModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
@@ -821,12 +817,8 @@ BOOL daObjApzl_c::CreateHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLY);
-#if VERSION <= VERSION_JPN
-    JUT_ASSERT(0x2C6, modelData != NULL);
-#else
-    JUT_ASSERT(0x2EF, modelData != NULL);
-#endif
-    
+    JUT_ASSERT(VERSION_SELECT(0x2C6, 0x2C6, 0x2EF, 0x2EF), modelData != NULL);
+
     for(int i = 0; i < 4; i++) {
         mpArrowModel[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (mpArrowModel[i] == NULL) {
@@ -835,19 +827,11 @@ BOOL daObjApzl_c::CreateHeap() {
     }
     
     modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_VBSRP);
-#if VERSION <= VERSION_JPN
-    JUT_ASSERT(0x2D1, modelData != NULL);
-#else
-    JUT_ASSERT(0x2FA, modelData != NULL);
-#endif
+    JUT_ASSERT(VERSION_SELECT(0x2D1, 0x2D1, 0x2FA, 0x2FA), modelData != NULL);
 
     J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", APZL_BTP_VBSRP);
     
-#if VERSION <= VERSION_JPN
-    JUT_ASSERT(0x2D6, btp_data != NULL);
-#else
-    JUT_ASSERT(0x2FF, btp_data != NULL);
-#endif
+    JUT_ASSERT(VERSION_SELECT(0x2D6, 0x2D6, 0x2FF, 0x2FF), btp_data != NULL);
 
     int i = 0;
     while (true) {
@@ -865,11 +849,7 @@ BOOL daObjApzl_c::CreateHeap() {
 
         if(i >= 0x10) {
             stick = new STControl(0x3C, 0x1E, 0, 0, 0.9, 0.5, 0, 0);
-#if VERSION <= VERSION_JPN
-            JUT_ASSERT(0x2E7, stick != NULL);
-#else
-            JUT_ASSERT(0x310, stick != NULL);
-#endif
+            JUT_ASSERT(VERSION_SELECT(0x2E7, 0x2E7, 0x310, 0x310), stick != NULL);
             return TRUE;
         }
     }
