@@ -63,7 +63,7 @@ public:
         m30 = 60.0f;
     }
     
-    void SetSelectIdx(s16) {}
+    void SetSelectIdx(s16 idx) { mCamDataIdx = idx; }
     void setCamAction(ActionFunc func) { mCurrActionFunc = func; }
     BOOL checkCamAction(ActionFunc func) { return mCurrActionFunc == func; }
     cXyz getItemZoomPos(f32 f31) {
@@ -120,7 +120,11 @@ public:
     s16 getItemDataIdx() { return mItemSetListGlobalIdx; }
     void setItemDataIdx(s16 idx) { mItemSetListGlobalIdx = idx; }
     void setItemSum(s16 count) { mNumItems = count; }
-    void init() {}
+    void init() {
+        mSelectedItemIdx = - 1;
+        m3C = 0;
+        mbIsHide = false;
+    }
     
     void createItem(int, int);
     BOOL Item_Select(int);

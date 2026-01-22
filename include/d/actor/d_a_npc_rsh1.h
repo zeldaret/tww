@@ -9,22 +9,33 @@
 
 class daNpc_Rsh1_c : public fopAc_ac_c {
 public:
+    typedef BOOL (daNpc_Rsh1_c::*ProcFunc)(void*);
     static char m_arcname[];
 public:
-    void chkAction(int (daNpc_Rsh1_c::*)(void*)) {}
-    void getBackboneJntNum() {}
-    void getBackbone_x() {}
-    void getBackbone_y() {}
-    void getHeadJntNum() {}
-    void getHead_x() {}
-    void getHead_y() {}
+    bool chkAction(ProcFunc i_funcP) { return field_0x7AC == i_funcP; }
+    s8 getBackboneJntNum() { return m_backbone_jnt_num; }
+    s16 getBackbone_x() { return field_0x638.getBackbone_x(); }
+    s16 getBackbone_y() { return field_0x638.getBackbone_y(); }
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s16 getHead_x() { return field_0x638.getHead_x(); }
+    s16 getHead_y() { return field_0x638.getHead_y(); }
     void incAttnSetCount() {}
-    void setAction(int (daNpc_Rsh1_c::*)(void*), void*) {}
-    void setAttentionBasePos(cXyz) {}
-    void setEyePos(cXyz) {}
+    void setAction(ProcFunc i_funcP, void* i_actParam) {
+        if (field_0x7AC != i_funcP) {
+            if (field_0x7AC) {
+                field_0x960 = -1;
+                (this->*field_0x7AC)(NULL);
+            }
+            field_0x7AC = i_funcP;
+            field_0x960 = 0;
+            (this->*field_0x7AC)(i_actParam);
+        }
+    }
+    void setAttentionBasePos(cXyz i_attBasePos) { field_0x758 = i_attBasePos; }
+    void setEyePos(cXyz i_eyePos) { eyePos = i_eyePos; }
     void setShopIdx(int) {}
 
-    void checkCreateInShopPlayer();
+    BOOL checkCreateInShopPlayer();
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(signed char);
@@ -51,17 +62,17 @@ public:
     void wait01();
     void talk01();
     void getdemo_action(void*);
-    void wait_action(void*);
+    BOOL wait_action(void*);
     void pl_shop_out_action(void*);
-    void evn_setAnm_init(int);
+    bool evn_setAnm_init(int);
     void evn_talk_init(int);
     void evn_continue_talk_init(int);
     void evn_talk();
-    void evn_turn_init(int);
-    void evn_turn();
+    bool evn_turn_init(int);
+    bool evn_turn();
     void privateCut();
     void event_action(void*);
-    bool dummy_action(void*);
+    BOOL dummy_action(void*);
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
@@ -72,9 +83,13 @@ public:
 public:
     /* 0x290 */ request_of_phase_process_class field_0x290;
     /* 0x298 */ mDoExt_McaMorf* field_0x298;
-    /* 0x29C */ u8 field_0x29C[0x2A8 - 0x29C];
+    /* 0x29C */ u8 field_0x29C[0x2A4 - 0x29C];
+    /* 0x2A4 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x2A8 */ mDoExt_btpAnm field_0x2A8;
-    /* 0x2BC */ u8 field_0x2BC[0x2C4 - 0x2BC];
+    /* 0x2BC */ s8 field_0x2BC;
+    /* 0x2BD */ u8 field_0x2BD[0x2BE - 0x2BD];
+    /* 0x2BE */ s16 field_0x2BE;
+    /* 0x2C0 */ u8 field_0x2C0[0x2C4 - 0x2C0];
     /* 0x2C4 */ dBgS_ObjAcch field_0x2C4;
     /* 0x488 */ dBgS_AcchCir field_0x488;
     /* 0x4C8 */ dCcD_Stts field_0x4C8;
@@ -87,23 +102,40 @@ public:
     /* 0x6D8 */ STControl field_0x6D8;
     /* 0x700 */ u8 field_0x700[0x708 - 0x700];
     /* 0x708 */ cXyz field_0x708[5];
-    /* 0x744 */ u8 field_0x744[0x758 - 0x744];
+    /* 0x744 */ u8 field_0x744[0x749 - 0x744];
+    /* 0x749 */ s8 field_0x749;
+    /* 0x74A */ u8 field_0x74A[0x758 - 0x74A];
     /* 0x758 */ cXyz field_0x758;
-    /* 0x764 */ u8 field_0x764[0x7A0 - 0x764];
+    /* 0x764 */ u8 field_0x764[0x766 - 0x764];
+    /* 0x766 */ csXyz field_0x766;
+    /* 0x76C */ u8 field_0x76C[0x76F - 0x76C];
+    /* 0x76F */ u8 field_0x76F;
+    /* 0x770 */ u8 field_0x770[0x780 - 0x770];
+    /* 0x780 */ u32 field_0x780;
+    /* 0x784 */ u8 field_0x784[0x788 - 0x784];
+    /* 0x788 */ int field_0x788;
+    /* 0x78C */ u8 field_0x78C[0x790 - 0x78C];
+    /* 0x790 */ s16 field_0x790;
+    /* 0x792 */ u8 field_0x792;
+    /* 0x793 */ s8 field_0x793;
+    /* 0x794 */ cXyz field_0x794;
     /* 0x7A0 */ cXyz field_0x7A0;
-    /* 0x7AC */ u8 field_0x7AC[0x7B8 - 0x7AC];
+    /* 0x7AC */ ProcFunc field_0x7AC;
     /* 0x7B8 */ ShopCam_action_c field_0x7B8;
     /* 0x810 */ ShopItems_c* mpShopItems;
     /* 0x814 */ ShopItems_c field_0x814[4];
     /* 0x924 */ u8 field_0x924[0x954 - 0x924];
     /* 0x954 */ ShopCursor_c* field_0x954;
     /* 0x958 */ s8 field_0x958;
-    /* 0x959 */ u8 field_0x959[0x95E - 0x959];
+    /* 0x959 */ u8 field_0x959[0x95B - 0x959];
+    /* 0x95B */ s8 field_0x95B;
+    /* 0x95C */ u8 field_0x95C[0x95E - 0x95C];
     /* 0x95E */ s8 field_0x95E;
     /* 0x95F */ u8 field_0x95F[0x960 - 0x95F];
     /* 0x960 */ s8 field_0x960;
     /* 0x961 */ s8 field_0x961;
-    /* 0x962 */ u8 field_0x962[0x968 - 0x962];
+    /* 0x962 */ s8 field_0x962;
+    /* 0x963 */ u8 field_0x963[0x968 - 0x963];
 };  // Size: 0x968
 
 class daNpc_Rsh1_HIO_c : public JORReflexible {
