@@ -130,7 +130,11 @@ public:
     bool chk_areaIN(f32, f32, s16, cXyz);
     void setWaterRipple();
     void setWaterSplash();
+#if VERSION != VERSION_DEMO
     void set_simpleLand(bool);
+#else
+    void set_simpleLand();
+#endif
     void setEff();
     BOOL setFrontWallType();
     bool move_jmp();
