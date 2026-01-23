@@ -55,8 +55,8 @@ void dCloth_packet_c::setNrm() {
 }
 
 /* 800642D0-800642FC       .text setMtx__15dCloth_packet_cFPA4_f */
-void dCloth_packet_c::setMtx(Mtx) {
-    /* Nonmatching */
+void dCloth_packet_c::setMtx(Mtx mtx) {
+    MTXCopy(mtx, mMtx);
 }
 
 /* 800642FC-80064330       .text cloth_draw__15dCloth_packet_cFv */
