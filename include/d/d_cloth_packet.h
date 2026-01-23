@@ -23,7 +23,7 @@ public:
     virtual void TevSetting();
 
     void draw();
-    void setGlobalWind(cXyz*);
+    void setGlobalWind(cXyz* wind);
     void getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int);
     void setNrm();
     void plot();

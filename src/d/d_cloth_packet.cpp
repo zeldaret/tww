@@ -25,8 +25,16 @@ void dCloth_packet_c::init() {
 }
 
 /* 8006337C-80063400       .text setGlobalWind__15dCloth_packet_cFP4cXyz */
-void dCloth_packet_c::setGlobalWind(cXyz*) {
-    /* Nonmatching */
+void dCloth_packet_c::setGlobalWind(cXyz* wind) {
+    Mtx mtx;
+    MTXCopy(mMtx, mtx);
+    // FIXME: Is there a better way to set the translation?
+    mtx[2][3] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[0][3] = 0.0f;
+    MTXCopy(mtx, mDoMtx_stack_c::get());
+    MTXInverse(mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
+    MTXMultVec(mDoMtx_stack_c::get(), wind, &mGlobalWind);
 }
 
 /* 80063400-80063728       .text cloth_move__15dCloth_packet_cFv */
