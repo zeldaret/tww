@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_rsh1.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_snap.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -209,8 +210,6 @@ static const int l_btp_ix_tbl[] = {
 };
 /* 00000A44-00000B50       .text initTexPatternAnm__12daNpc_Rsh1_cFb */
 BOOL daNpc_Rsh1_c::initTexPatternAnm(bool param_1) {
-    /* Nonmatching */
-
     J3DModelData* morf_model_data_p = field_0x298->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern *) dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[field_0x958]);
     JUT_ASSERT(0x244, m_head_tex_pattern != NULL);
@@ -233,11 +232,18 @@ BOOL daNpc_Rsh1_c::initTexPatternAnm(bool param_1) {
 
 /* 00000B50-00000BDC       .text playTexPatternAnm__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::playTexPatternAnm() {
-    /* Nonmatching */
+    if (cLib_calcTimer(&field_0x2BE) == 0) {
+        if (field_0x2BC >= m_head_tex_pattern->getFrameMax()) {
+            field_0x2BC -= m_head_tex_pattern->getFrameMax();
+            field_0x2BE = cM_rndF(100.0f) + 30.0f;
+        } else {
+            field_0x2BC++;
+        }
+    }
 }
 
 /* 00000BDC-00000C64       .text setAnm__12daNpc_Rsh1_cFSc */
-void daNpc_Rsh1_c::setAnm(signed char) {
+void daNpc_Rsh1_c::setAnm(s8) {
     /* Nonmatching */
 }
 
@@ -526,7 +532,36 @@ BOOL daNpc_Rsh1_c::dummy_action(void* i_unusedP) {
 
 /* 00003F08-00004040       .text _draw__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::_draw() {
-    /* Nonmatching */
+    /* Apparent match */
+    J3DModel* morf_model_p = field_0x298->getModel();
+    J3DModelData* morf_model_data_p = morf_model_p->getModelData();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(morf_model_p, &tevStr);
+    field_0x2A8.entry(morf_model_data_p, field_0x2BC);
+    field_0x298->updateDL();
+    field_0x2A8.remove(morf_model_data_p);
+
+    cXyz temp(
+        current.pos.x,
+        current.pos.y + 120.0f,
+        current.pos.z
+    );
+
+    field_0x29C = dComIfGd_setShadow(
+        field_0x29C, 
+        1, field_0x298->getModel(), 
+        &temp, 800.0f, 20.0f, 
+        current.pos.y, field_0x2C4.m_ground_h, 
+        field_0x2C4.m_gnd, &tevStr
+    );  
+    
+    if (mpShopItems && mpShopItems->mSelectedItemIdx >= 0) {
+        field_0x954->draw();
+    }
+
+    dSnap_RegistFig(DSNAP_TYPE_UNK5F, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+
+    return TRUE;
 }
 
 /* 00004040-0000427C       .text _execute__12daNpc_Rsh1_cFv */
