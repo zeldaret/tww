@@ -13,7 +13,7 @@ public:
     typedef dCloth_packet_c* (*CreateFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
     typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
 
-    dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+    dCloth_packet_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr);
     ~dCloth_packet_c();
     virtual void init();
     virtual void cloth_move();

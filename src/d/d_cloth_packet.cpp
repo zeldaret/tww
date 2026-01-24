@@ -7,8 +7,54 @@
 #include "d/d_cloth_packet.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-dCloth_packet_c::dCloth_packet_c(ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
-    /* Nonmatching */
+dCloth_packet_c::dCloth_packet_c(
+    ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+) {
+    JUT_ASSERT(43, i_toonimage != NULL);
+
+    GXInitTexObj(
+        &mToonTex,
+        (u8*)i_toonimage + i_toonimage->imageOffset,
+        i_toonimage->width,
+        i_toonimage->height,
+        (GXTexFmt)i_toonimage->format,
+        (GXTexWrapMode)i_toonimage->wrapS,
+        (GXTexWrapMode)i_toonimage->wrapT,
+        i_toonimage->mipmapCount > 1
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        (GXTexFilter)i_toonimage->minFilter,
+        (GXTexFilter)i_toonimage->magFilter,
+        i_toonimage->minLOD * 0.125f,
+        i_toonimage->maxLOD * 0.125f,
+        i_toonimage->LODBias * 0.01f,
+        i_toonimage->biasClamp,
+        i_toonimage->doEdgeLOD,
+        (GXAnisotropy)i_toonimage->maxAnisotropy
+    );
+
+    mFlyGridSize = flyGridSize;
+    mHoistGridSize = hoistGridSize;
+    mFlyLength = flyLength;
+    mHoistLength = hoistLength;
+    mpTevstr = tevstr;
+    mCurArr = 0;
+
+    setMtx(g_mDoMtx_identity);
+
+    if (posArr == NULL) {
+        mpPosArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+        mpPosArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    } else {
+        mpPosArr[0] = posArr[0];
+        mpPosArr[1] = posArr[1];
+    }
+    mpNrmArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArrBack[0] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArrBack[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpSpeedArr = new cXyz[mFlyGridSize * mHoistGridSize];
 }
 
 dCloth_packet_c::~dCloth_packet_c() {
