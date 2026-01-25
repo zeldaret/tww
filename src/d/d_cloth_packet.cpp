@@ -94,13 +94,58 @@ void dCloth_packet_c::draw() {
 }
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
-void get_cloth_anim_sub_factor(cXyz*, cXyz*, cXyz*, float, float) {
+void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restDist, float springFactor) {
     /* Nonmatching */
+    // FIXME: Logic seems right, but the function stack and ordering are slightly off.
+    const cXyz diff = *pOther - *pPos;
+    cXyz norm = diff.normZP();
+    const float dist = pPos->abs(*pOther);
+    norm *= (dist - restDist) * springFactor;
+    *pDst += norm;
 }
 
 /* 80063A10-80063D84       .text getFactor__15dCloth_packet_cFP4cXyzP4cXyzP4cXyzfffii */
-void dCloth_packet_c::getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int) {
+cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float distFly, float distHoist, float distBoth, int x, int y) {
     /* Nonmatching */
+    if (mpFactorCheckCB(this, x, y) != 0) {
+        return cXyz::Zero;
+    }
+
+    cXyz pos = pPos[x + y * mFlyGridSize];
+    const float speedDotNrm = VECDotProduct(pSpeed, &pNrm[x + y * mFlyGridSize]);
+    cXyz ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
+
+    // FIXME: Somehow the neighbor checks use a bitfield, and the bit flags are in static memory.
+    const bool hasLeftNeighbor = x != 0;
+    const bool hasRightNeighbor = x != mFlyGridSize - 1;
+    const bool hasTopNeighbor = y != 0;
+    const bool hasBottomNeighbor = y != mHoistGridSize - 1;
+    if (hasLeftNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + y * mFlyGridSize], &ret, distFly, mSpring);
+    }
+    if (hasRightNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + y * mFlyGridSize], &ret, distFly, mSpring);
+    }
+    if (hasTopNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + (y - 1) * mFlyGridSize], &ret, distHoist, mSpring);
+    }
+    if (hasBottomNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + (y + 1) * mFlyGridSize], &ret, distHoist, mSpring);
+    }
+    if (hasLeftNeighbor && hasTopNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if (hasLeftNeighbor && hasBottomNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if (hasRightNeighbor && hasTopNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+    if (hasRightNeighbor && hasBottomNeighbor) {
+        get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
+    }
+
+    return ret;
 }
 
 /* 80063D84-800642D0       .text setNrm__15dCloth_packet_cFv */

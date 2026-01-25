@@ -24,7 +24,7 @@ public:
 
     void draw();
     void setGlobalWind(cXyz* wind);
-    void getFactor(cXyz*, cXyz*, cXyz*, float, float, float, int, int);
+    cXyz getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float distFly, float distHoist, float distBoth, int x, int y);
     void setNrm();
     void plot();
 
