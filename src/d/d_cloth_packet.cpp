@@ -86,6 +86,35 @@ void dCloth_packet_c::setGlobalWind(cXyz* wind) {
 /* 80063400-80063728       .text cloth_move__15dCloth_packet_cFv */
 void dCloth_packet_c::cloth_move() {
     /* Nonmatching */
+    cXyz wind = mGlobalWind;
+    wind *= mWindSpeed + mWindSpeedWave * cM_ssin(mWave);
+
+    cXyz* pPosOld = mpPosArr[mCurArr];
+    cXyz* pNrmOld = mpNrmArr[mCurArr];
+    mCurArr ^= 1;
+    cXyz* pPosNew = mpPosArr[mCurArr];
+
+    // FIXME: Subtle math differences here.
+    const float distFly = mFlyLength / (f32)(mFlyGridSize - 1) * mFlyFlex;
+    const float distHoist = mHoistLength / (f32)(mHoistGridSize - 1) * mHoistFlex;
+    const float distBoth = std::sqrtf(distFly * distFly + distHoist * distHoist);
+
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            const cXyz factor = getFactor(pPosOld, pNrmOld, &wind, distFly, distHoist, distBoth, x, y);
+            mpSpeedArr[x + y * mFlyGridSize] += factor;
+            mpSpeedArr[x + y * mFlyGridSize] *= mDrag;
+
+            pPosNew[x + y * mFlyGridSize] = pPosOld[x + y * mFlyGridSize];
+            pPosNew[x + y * mFlyGridSize] += mpSpeedArr[x + y * mFlyGridSize];
+        }
+    }
+
+    setNrm();
+
+    DCStoreRangeNoSync(mpPosArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArrBack[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
 }
 
 /* 80063728-800638E4       .text draw__15dCloth_packet_cFv */
