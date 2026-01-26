@@ -340,6 +340,27 @@ void dCloth_packet_c::TevSetting() {
 /* 80064718-8006487C       .text plot__15dCloth_packet_cFv */
 void dCloth_packet_c::plot() {
     /* Nonmatching */
+    float xPos = 0.0f;
+    const float xStep = 1.0f / (f32)(mFlyGridSize - 1);
+    const float yStep = 1.0f / (f32)(mHoistGridSize - 1);
+    // FIXME: x and xNext are in opposite registers.
+    for (int x = 0, xNext = 1; x < mFlyGridSize - 1; x++, xNext++) {
+        GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (u8)(mHoistGridSize * 2));
+
+        float yPos = 0.0f;
+        for (int y = 0; y < mHoistGridSize; y++) {
+            GXPosition1x8(x + y * mFlyGridSize);
+            GXPosition1x8(x + y * mFlyGridSize);
+            GXPosition2f32(xPos, yPos);
+            GXPosition1x8(xNext + y * mFlyGridSize);
+            GXPosition1x8(xNext + y * mFlyGridSize);
+            GXPosition2f32(xPos + xStep, yPos);
+
+            yPos += yStep;
+        }
+
+        xPos += xStep;
+    }
 }
 
 /* 8006487C-800649C4       .text dCloth_packet_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
