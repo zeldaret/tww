@@ -5,6 +5,8 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cloth_packet.h"
+
+#include "SSystem/SComponent/c_counter.h"
 #include "assets/l_matDL__d_cloth_packet.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
@@ -513,10 +515,10 @@ dClothVobj04_c* dClothVobj04_c::top_pointer;
 dClothVobj05_c* dClothVobj05_c::top_pointer;
 dClothVobj07_0_c* dClothVobj07_0_c::top_pointer;
 
-const s32 dClothVobj03_c::cloth_counter = -1;
-const s32 dClothVobj04_c::cloth_counter = -1;
-const s32 dClothVobj05_c::cloth_counter = -1;
-const s32 dClothVobj07_0_c::cloth_counter = -1;
+s32 dClothVobj03_c::cloth_counter = -1;
+s32 dClothVobj04_c::cloth_counter = -1;
+s32 dClothVobj05_c::cloth_counter = -1;
+s32 dClothVobj07_0_c::cloth_counter = -1;
 
 /* 80064E48-80064F0C       .text cloth_copy__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_copy() {
@@ -528,7 +530,19 @@ void dClothVobj03_c::cloth_copy() {
 
 /* 80064F0C-80065020       .text init__14dClothVobj03_cFv */
 void dClothVobj03_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        field_0x109 = 1;
+    } else {
+        field_0x109 = 0;
+    }
 }
 
 /* 80065020-8006515C       .text cloth_move__14dClothVobj03_cFv */

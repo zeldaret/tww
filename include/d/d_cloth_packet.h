@@ -112,7 +112,12 @@ class dClothVobj03_c : public dCloth_packet_c {
 
 public:
     static dClothVobj03_c* top_pointer;
-    static const s32 cloth_counter;
+    static s32 cloth_counter;
+
+private:
+    u8 padding_0xFC[0xC];
+    u8 field_0x108;
+    u8 field_0x109;
 };
 dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
@@ -127,7 +132,7 @@ class dClothVobj04_c : public dCloth_packet_c {
 
 public:
     static dClothVobj04_c* top_pointer;
-    static const s32 cloth_counter;
+    static s32 cloth_counter;
 };
 dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
@@ -142,7 +147,7 @@ class dClothVobj05_c : public dCloth_packet_c {
 
 public:
     static dClothVobj05_c* top_pointer;
-    static const s32 cloth_counter;
+    static s32 cloth_counter;
 };
 dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
@@ -157,7 +162,7 @@ class dClothVobj07_0_c : public dCloth_packet_c {
 
 public:
     static dClothVobj07_0_c* top_pointer;
-    static const s32 cloth_counter;
+    static s32 cloth_counter;
 };
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
