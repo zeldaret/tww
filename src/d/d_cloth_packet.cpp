@@ -509,9 +509,9 @@ dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float,
 }
 
 dClothVobj03_c* dClothVobj03_c::top_pointer;
-void* dClothVobj04_c::top_pointer;
-void* dClothVobj05_c::top_pointer;
-void* dClothVobj07_0_c::top_pointer;
+dClothVobj04_c* dClothVobj04_c::top_pointer;
+dClothVobj05_c* dClothVobj05_c::top_pointer;
+dClothVobj07_0_c* dClothVobj07_0_c::top_pointer;
 
 const s32 dClothVobj03_c::cloth_counter = -1;
 const s32 dClothVobj04_c::cloth_counter = -1;
@@ -553,7 +553,10 @@ dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
 
 /* 800653F4-800654B8       .text cloth_copy__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_copy() {
-    /* Nonmatching */
+    swapArrays();
+    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 800654B8-800655CC       .text init__14dClothVobj04_cFv */
@@ -583,7 +586,10 @@ dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
 
 /* 80065998-80065A5C       .text cloth_copy__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_copy() {
-    /* Nonmatching */
+    swapArrays();
+    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80065A5C-80065B70       .text init__14dClothVobj05_cFv */
@@ -618,7 +624,10 @@ dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
 
 /* 80065F50-80066014       .text cloth_copy__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_copy() {
-    /* Nonmatching */
+    swapArrays();
+    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80066014-80066128       .text init__16dClothVobj07_0_cFv */
