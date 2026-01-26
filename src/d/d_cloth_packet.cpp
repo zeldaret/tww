@@ -329,7 +329,7 @@ void dCloth_packet_c::TexObjInit(ResTIMG*) {
 
 /* 8006441C-80064444       .text TexObjLoad__15dCloth_packet_cFv */
 void dCloth_packet_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 }
 
 /* 80064444-80064718       .text TevSetting__15dCloth_packet_cFv */
