@@ -3,6 +3,7 @@
 // Translation Unit: d_spline_path.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_spline_path.h"
 #include "SSystem/SComponent/c_xyz.h"
 

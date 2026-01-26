@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_auction.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_auction.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
@@ -194,7 +195,7 @@ void daNpcAuction_c::clrEmitter() {
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-static s32 daNpc_AuctionCreate(void*) {
+static cPhs_State daNpc_AuctionCreate(void*) {
     /* Nonmatching */
 }
 
@@ -215,7 +216,7 @@ static BOOL daNpc_AuctionDraw(void*) {
 
 /* 00002EB8-00002EC0       .text daNpc_AuctionIsDelete__FPv */
 static BOOL daNpc_AuctionIsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daNpc_AuctionMethodTable = {

@@ -3,6 +3,8 @@
 // Translation Unit: random.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMath/random.h"
 #include "dolphin/types.h"
 

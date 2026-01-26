@@ -3,6 +3,8 @@
 // Translation Unit: functionvalue.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/functionvalue.h"
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JGadget/linklist.h"
@@ -43,12 +45,6 @@ TFunctionValue::TFunctionValue() {}
 
 /* 80271078-802710C0       .text __dt__Q27JStudio14TFunctionValueFv */
 TFunctionValue::~TFunctionValue() {}
-
-// This seems like it would belong in the functionvalue.h header, but putting it there causes the
-// `JGadget::TAllocator<void*>()` part to spawn a weak bss object that appears in many TUs.
-// Some TUs do need a weak bss object like that, but it also gets put in ones that don't need it.
-TFunctionValueAttribute_refer::TFunctionValueAttribute_refer() :
-    JGadget::TVector_pointer<TFunctionValue*>(JGadget::TAllocator<void*>()) {}
 
 /* 802710C0-802710E8       .text refer_initialize__Q27JStudio29TFunctionValueAttribute_referFv */
 void TFunctionValueAttribute_refer::refer_initialize() {

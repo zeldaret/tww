@@ -28,7 +28,7 @@ public:
             return false;
         } else {
             return fopAcM_isSwitch(const_cast<daObjShmrgrd_c*>(this), prm_get_swSave());
-        } 
+        }
     }
     void on_switch() const {
         if (prm_get_swSave() != 0xFF) {

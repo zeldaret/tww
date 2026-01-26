@@ -37,11 +37,15 @@ public:
 class daObjYgush00_HIO_c : public JORReflexible  {
 public:
     daObjYgush00_HIO_c();
+    virtual ~daObjYgush00_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 mNo;
+    /* 0x05 */ s8 m05;
+    /* 0x06 */ s8 m06;
+    /* 0x07 */ s8 m07;
 };
 
 #endif /* D_A_OBJ_YGUSH00_H */

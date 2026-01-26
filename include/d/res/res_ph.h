@@ -1,7 +1,7 @@
 #ifndef RES_PH_H
 #define RES_PH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
@@ -10,13 +10,23 @@ enum PH_RES_FILE_ID { // IDs and indexes are synced
     PH_BAS_BFLY=0x7,
     PH_BAS_BHUKKI=0x8,
     PH_BAS_BJUMP=0x9,
+#if VERSION == VERSION_DEMO
+    PH_BAS_BUCHIWA=0xA,
+    PH_BAS_BUCHI_CHAKU=0xB,
+#else
     PH_BAS_BUCHI_CHAKU=0xA,
     PH_BAS_BUCHIWA=0xB,
+#endif
     PH_BAS_PAWAY=0xC,
     PH_BAS_PFLY=0xD,
     PH_BAS_PHUKKI=0xE,
+#if VERSION == VERSION_DEMO
+    PH_BAS_PUCHIWA=0xF,
+    PH_BAS_PUCHI_CHAKU=0x10,
+#else
     PH_BAS_PUCHI_CHAKU=0xF,
     PH_BAS_PUCHIWA=0x10,
+#endif
     
     /* BCK */
     PH_BCK_BCHAKUCHI=0x13,
@@ -25,13 +35,23 @@ enum PH_RES_FILE_ID { // IDs and indexes are synced
     PH_BCK_BHUKKI=0x16,
     PH_BCK_BJAWS=0x17,
     PH_BCK_BJUMP=0x18,
+#if VERSION == VERSION_DEMO
+    PH_BCK_BUCHIWA=0x19,
+    PH_BCK_BUCHI_CHAKU=0x1A,
+#else
     PH_BCK_BUCHI_CHAKU=0x19,
     PH_BCK_BUCHIWA=0x1A,
+#endif
     PH_BCK_PAWAY=0x1B,
     PH_BCK_PFLY=0x1C,
     PH_BCK_PHUKKI=0x1D,
+#if VERSION == VERSION_DEMO
+    PH_BCK_PUCHIWA=0x1E,
+    PH_BCK_PUCHI_CHAKU=0x1F,
+#else
     PH_BCK_PUCHI_CHAKU=0x1E,
     PH_BCK_PUCHIWA=0x1F,
+#endif
     
     /* BDLM */
     PH_BDL_PHB=0x22,

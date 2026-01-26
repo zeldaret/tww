@@ -1,0 +1,36 @@
+#ifndef DOLZEL_PCH
+#define DOLZEL_PCH
+
+#ifdef DECOMPCTX
+// Hack to mitigate fake mismatches when building from decompctx output
+// (which doesn't support precompiled headers).
+// When built without a PCH, these constants would end up .rodata instead of .data
+// which causes a variety of knock-on effects in individual functions' assembly.
+#include "weak_data.h" // IWYU pragma: export
+#endif
+
+// Fixes weak .data
+#include "math.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
+
+// Fixes weak .bss
+#include "weak_bss_936_to_1036.h"  // IWYU pragma: keep
+#include "weak_bss_3569.h"  // IWYU pragma: keep
+
+// Fixes weak function ordering
+#include "d/d_com_inf_game.h" // IWYU pragma: export
+#include "SSystem/SComponent/c_xyz.h" // IWYU pragma: export
+#include "SSystem/SComponent/c_angle.h" // IWYU pragma: export
+#include "d/d_cc_d.h" // IWYU pragma: export
+#include "d/d_bg_s_acch.h" // IWYU pragma: export
+#include "SSystem/SComponent/c_lib.h" // IWYU pragma: export
+#include "JSystem/JKernel/JKRHeap.h" // IWYU pragma: export
+#include "JSystem/JKernel/JKRFileFinder.h" // IWYU pragma: export
+#include "d/d_bg_s_lin_chk.h" // IWYU pragma: export
+#include "m_Do/m_Do_hostIO.h" // IWYU pragma: export
+#include "d/d_cc_uty.h" // IWYU pragma: export
+#include "d/d_magma.h" // IWYU pragma: export
+#include "d/d_mesg.h" // IWYU pragma: export
+
+#endif /* DOLZEL_PCH */

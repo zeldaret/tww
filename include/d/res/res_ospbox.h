@@ -1,7 +1,7 @@
 #ifndef RES_OSPBOX_H
 #define RES_OSPBOX_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum OSPBOX_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

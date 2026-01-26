@@ -100,9 +100,9 @@ public:
     void OnMoveFlag() {}
     void RoofChk(dBgS_RoofChk*) {}
     void RwgCaptPoly(int, dBgS_CaptPoly&) {}
-    void SetGrpRoomInf(int) {}
+    void SetGrpRoomInf(int room) { mRoomNo2 = room; }
     void SetOldShapeAngleY(s16) {}
-    void SetRoomId(u16) {}
+    void SetRoomId(u16 roomNo) { mRoomNo = roomNo; }
     void SphChk(dBgS_SphChk*, void*) {}
     void SplGrpChk(dBgS_SplGrpChk*) {}
     void WallCorrect(dBgS_Acch*) {}

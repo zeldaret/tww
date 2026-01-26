@@ -1,7 +1,7 @@
 #ifndef RES_OKIOKE_H
 #define RES_OKIOKE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum OKIOKE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

@@ -31,7 +31,7 @@ struct JAIAnimeSoundData {
     /* 0x02 */ u16 field_0x02;
     /* 0x04 */ void* field_0x04;
     /* 0x08 */ JAIAnimeFrameSoundData mAfsData[];
-};  // Size: 0x20
+};
 
 struct JAIAnimeSound__Slot {
     /* 0x0 */ u8 mbIsPlaying;

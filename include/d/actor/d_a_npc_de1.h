@@ -53,9 +53,9 @@ public:
     void wait_action1(void*);
     void wait_action2(void*);
     void demo();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void CreateHeap();
 

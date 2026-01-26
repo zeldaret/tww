@@ -271,7 +271,7 @@ public:
     /* 0x9C */ cBgW_GrpElm* pm_grp;
     /* 0xA0 */ cBgW_NodeTree* m_nt_tbl;
     /* 0xA4 */ int m_rootGrpIdx;
-};
+}; // size = 0xA8
 
 inline bool cBgW_CheckBGround(f32 ny) {
     return ny >= 0.5f;

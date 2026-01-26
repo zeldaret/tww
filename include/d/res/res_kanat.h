@@ -1,7 +1,7 @@
 #ifndef RES_KANAT_H
 #define RES_KANAT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KANAT_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

@@ -479,8 +479,3 @@ bool dCcS::ChkNoHitGCo(cCcD_Obj* obj1, cCcD_Obj* obj2) {
     }
     return false;
 }
-
-/* 800AE930-800AE938       .text ChkNoHitGAtTg__4cCcSFPC12cCcD_GObjInfPC12cCcD_GObjInfP10cCcD_GSttsP10cCcD_GStts */
-bool cCcS::ChkNoHitGAtTg(const cCcD_GObjInf*, const cCcD_GObjInf*, cCcD_GStts*, cCcD_GStts*) {
-    return false;
-}

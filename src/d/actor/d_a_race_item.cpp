@@ -3,6 +3,7 @@
  * Item - Barrel Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_race_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_sea.h"
@@ -35,11 +36,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 /* 00000078-000000F8       .text set_mtx__12daRaceItem_cFv */
@@ -99,7 +100,7 @@ BOOL daRaceItem_c::CreateInit() {
     mCyl.SetH(height);
 
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.ClrWaterNone();
     mAcch.ClrRoofNone();
     

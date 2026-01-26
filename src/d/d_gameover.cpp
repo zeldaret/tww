@@ -3,6 +3,7 @@
 // Translation Unit: d_gameover.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
 #include "d/d_procname.h"
@@ -11,7 +12,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-
 
 /* 8018E1CC-8018E4B4       .text draw__24dDlst_Gameover_CAPTURE_cFv */
 void dDlst_Gameover_CAPTURE_c::draw() {
@@ -45,7 +45,7 @@ void dDlst_Gameover_CAPTURE_c::draw() {
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

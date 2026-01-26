@@ -3,6 +3,7 @@
 // Translation Unit: d_s_title.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"

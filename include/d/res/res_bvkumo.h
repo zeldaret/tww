@@ -1,7 +1,7 @@
 #ifndef RES_BVKUMO_H
 #define RES_BVKUMO_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BVKUMO_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

@@ -1,7 +1,7 @@
 #ifndef RES_VOBJ07_H
 #define RES_VOBJ07_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VOBJ07_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

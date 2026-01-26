@@ -3,6 +3,7 @@
 // Translation Unit: d_a_shop_item_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_shop_item.h"
 #include "d/d_item_data.h"
 
@@ -549,4 +550,3 @@ cXyz daShopItem_c::getCenter() {
     cXyz ret(0.0f, height / 2.0f, 0.0f);
     return ret;
 }
-

@@ -1,7 +1,7 @@
 #ifndef RES_YLSIC_H
 #define RES_YLSIC_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum YLSIC_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

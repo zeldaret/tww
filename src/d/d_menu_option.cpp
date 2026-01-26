@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_option.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_option.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -718,18 +719,23 @@ void dMenu_Option_c::initialize() {
     mE3C = dComIfGs_getOptAttentionType();
     mE3D = dComIfGs_getOptRuby();
     mE3E = dComIfGs_getOptSound();
-
+#if VERSION == VERSION_DEMO
+    mE3F = dComIfGs_getOptVibration();
+#else
     if ((JUTGamePad::sRumbleSupported & 0x80000000)) {
         mE3F = dComIfGp_getNowVibration();
     }
     else {
         mE3F = 0;
     }
+#endif
 
     mE41 = 0;
 
     mDoAud_setOutputMode(soundMode[mE3E]);
+#if VERSION > VERSION_DEMO
     setSoundMode(soundMode[mE3E]);
+#endif
 }
 
 /* 801D5224-801D53F0       .text _create__14dMenu_Option_cFv */
@@ -766,6 +772,7 @@ void dMenu_Option_c::_delete() {
 void dMenu_Option_c::_move() {
     u8 check_trigger = stick->checkTrigger();
 
+#if VERSION > VERSION_DEMO
     if (mE3F) {
         if ((JUTGamePad::sRumbleSupported & 0x80000000U) == 0) {
             mE3F = 0;
@@ -782,6 +789,7 @@ void dMenu_Option_c::_move() {
             cursorScale();
         }
     }
+#endif
 
     if (CPad_CHECK_TRIG_A(0) && 
         !CPad_CHECK_TRIG_START(0) && 
@@ -800,11 +808,14 @@ void dMenu_Option_c::_move() {
         dComIfGs_setOptAttentionType(mE3C);
         dComIfGs_setOptRuby(mE3D);
 
+#if VERSION == VERSION_DEMO
+        dComIfGs_setOptVibration(mE3F);
+#else
         if (JUTGamePad::sRumbleSupported & 0x80000000) {
-          dComIfGs_setOptVibration(mE3F);
+            dComIfGs_setOptVibration(mE3F);
         }
-
         dComIfGp_setNowVibration(mE3F);
+#endif
         dComIfGs_setOptSound(mE3E);
 
         mDoAud_seStart(JA_SE_ITM_MENU_OPT_OUT, NULL, 0);
@@ -855,6 +866,7 @@ void dMenu_Option_c::_move() {
     
     yazAnime();
 
+#if VERSION > VERSION_DEMO
     if (mB30[1].mUserArea != 2 || JUTGamePad::sRumbleSupported & 0x80000000)
     {
         m858[0].pane->show();
@@ -864,6 +876,7 @@ void dMenu_Option_c::_move() {
         m858[0].pane->hide();
         m858[1].pane->hide();
     }
+#endif
 
     ccAnime();
 

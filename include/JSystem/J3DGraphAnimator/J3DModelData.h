@@ -71,8 +71,10 @@ public:
     u32 getModelDataType() const { return mJointTree.getModelDataType(); }
     const J3DModelHierarchy* getHierarchy() const { return mJointTree.getHierarchy(); }
     void setHierarchy(J3DModelHierarchy* hierarchy) { mJointTree.setHierarchy(hierarchy); }
+    J3DMtxCalc* getBasicMtxCalc() { return mJointTree.getBasicMtxCalc(); }
     void setBasicMtxCalc(J3DMtxCalc* calc) { mJointTree.setBasicMtxCalc(calc); }
     void setModelDataType(u32 type) { mJointTree.setModelDataType(type); }
+    J3DJoint* getRootNode() { return mJointTree.getRootNode(); }
     GXColor* getVtxColorArray(u8 idx) const { return mVertexData.getVtxColorArray(idx); }
     bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
     u32 getFlag() const { return mFlags; }
@@ -82,8 +84,14 @@ public:
     s32 entryTexMtxAnimator(J3DAnmTextureSRTKey* anm) { return mMaterialTable.entryTexMtxAnimator(anm); }
     s32 entryTevRegAnimator(J3DAnmTevRegKey* anm) { return mMaterialTable.entryTevRegAnimator(anm); }
     s32 entryMatColorAnimator(J3DAnmColor* anm) { return mMaterialTable.entryMatColorAnimator(anm); }
-    void setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
-        mMaterialTable.setTexMtxAnimator(pAnm, pTexAnm, pDualAnmR);
+    int setTexMtxAnimator(J3DAnmTextureSRTKey* pAnm, J3DTexMtxAnm* pTexAnm, J3DTexMtxAnm* pDualAnmR) {
+        return mMaterialTable.setTexMtxAnimator(pAnm, pTexAnm, pDualAnmR);
+    }
+    int setTexNoAnimator(J3DAnmTexPattern* anm, J3DTexNoAnm* anmR) {
+        return mMaterialTable.setTexNoAnimator(anm, anmR);
+    }
+    int setMatColorAnimator(J3DAnmColor* anm, J3DMatColorAnm* anmR) {
+        return mMaterialTable.setMatColorAnimator(anm, anmR);
     }
     int removeTexNoAnimator(J3DAnmTexPattern* anm) {
         return mMaterialTable.removeTexNoAnimator(anm);
@@ -102,12 +110,6 @@ public:
         initShapeNodes();
     }
     const void* getBinary() { return mBinary; }
-
-    // TODO
-    void getBasicMtxCalc() {}
-    void getRootNode() {}
-    void setMatColorAnimator(J3DAnmColor*, J3DMatColorAnm*) {}
-    void setTexNoAnimator(J3DAnmTexPattern*, J3DTexNoAnm*) {}
 
 private:
     friend class J3DModelLoader;

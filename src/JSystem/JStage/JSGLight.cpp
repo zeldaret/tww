@@ -3,6 +3,8 @@
 // Translation Unit: JSGLight.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGLight.h"
 #include "dolphin/types.h"
 
@@ -64,4 +66,3 @@ void JStage::TLight::JSGGetDirection(Vec*) const {
 /* 8026DF3C-8026DF40       .text JSGSetDirection__Q26JStage6TLightFRC3Vec */
 void JStage::TLight::JSGSetDirection(const Vec&) {
 }
-

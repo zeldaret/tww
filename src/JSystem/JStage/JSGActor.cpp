@@ -3,6 +3,8 @@
 // Translation Unit: JSGActor.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStage/JSGActor.h"
 #include "dolphin/types.h"
 
@@ -102,4 +104,3 @@ void JStage::TActor::JSGSetTextureAnimationFrame(f32) {
 f32 JStage::TActor::JSGGetTextureAnimationFrameMax() const {
     return 0.0f;
 }
-

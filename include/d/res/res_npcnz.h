@@ -1,7 +1,7 @@
 #ifndef RES_NPCNZ_H
 #define RES_NPCNZ_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum NPCNZ_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

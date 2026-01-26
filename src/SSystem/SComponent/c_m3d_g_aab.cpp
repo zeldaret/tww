@@ -13,10 +13,26 @@ void cM3dGAab::SetMinMax(const cXyz& pMinMax) {
 
 /* 80251D08-80251D48       .text SetMin__8cM3dGAabFRC4cXyz */
 void cM3dGAab::SetMin(const cXyz& pMin) {
-    mMin.setMin(pMin);
+    if (mMin.x > pMin.x) {
+        mMin.x = pMin.x;
+    }
+    if (mMin.y > pMin.y) {
+        mMin.y = pMin.y;
+    }
+    if (mMin.z > pMin.z) {
+        mMin.z = pMin.z;
+    }
 }
 
 /* 80251D48-80251D88       .text SetMax__8cM3dGAabFRC4cXyz */
 void cM3dGAab::SetMax(const cXyz& pMax) {
-    mMax.setMax(pMax);
+    if (mMax.x < pMax.x) {
+        mMax.x = pMax.x;
+    }
+    if (mMax.y < pMax.y) {
+        mMax.y = pMax.y;
+    }
+    if (mMax.z < pMax.z) {
+        mMax.z = pMax.z;
+    }
 }

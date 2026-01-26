@@ -164,8 +164,16 @@ extern dScnPly_reg_HIO_c g_regHIO;
 extern dScnPly_env_HIO_c g_envHIO;
 extern dScnPly_msg_HIO_c g_msgDHIO;
 
-// Based on Twilight Princess debug, each g_envHIO child here was likely named after a specific developer.
+// Based on Twilight Princess debug, each g_regHIO child here was likely named after a specific developer.
 // However, the developer name for each child isn't known here, so the below macro names are all unofficial.
+
+/**
+ * === Register Usage ===
+ * Short Reg(00-09) ... -32768 - +32768
+ * Float Reg(00-19) ... -100000.0 - +100000.0
+ * Float Reg(20-24) ... 0.0 - 1.0
+ * Float Reg(25-29) ... -1.0 - +1.0
+ */
 
 #define REG0_F(i) g_regHIO.mChild[0].mFloatRegs[i]
 #define REG0_S(i) g_regHIO.mChild[0].mShortRegs[i]

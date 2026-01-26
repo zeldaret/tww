@@ -1,7 +1,7 @@
 #ifndef RES_MMIRROR_H
 #define RES_MMIRROR_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MMIRROR_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

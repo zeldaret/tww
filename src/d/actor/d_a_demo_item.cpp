@@ -3,6 +3,7 @@
  * Item - Cutscene Item
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo_item.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -14,8 +15,6 @@
 #include "d/d_item.h"
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_camera.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 const int daDitem_c::m_rot_time = 8*30;
 
@@ -327,7 +326,8 @@ bool daDitem_c::CreateInit() {
 /* 000003F0-000004AC       .text set_effect__9daDitem_cFv */
 void daDitem_c::set_effect() {
     s16 angleX = dCam_getAngleX(dComIfGp_getCamera(0)) - 0x2000;
-    s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
+    // Fakematch? Just angleY needs to be const to match the demo build. No effect on retail.
+    const s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
     for (int i = 0; i < (int)ARRAY_SIZE(mpEmitters); i++) {
         if (mpEmitters[i] == NULL) {
             continue;

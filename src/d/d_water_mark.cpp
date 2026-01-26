@@ -3,6 +3,7 @@
 // Translation Unit: d_water_mark.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_water_mark.h"
 #include "f_op/f_op_kankyo.h"
 

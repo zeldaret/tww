@@ -3,6 +3,8 @@
 // Translation Unit: binary.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JGadget/binary.h"
 #include "dolphin/types.h"
 

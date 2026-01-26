@@ -3,6 +3,8 @@
 // Translation Unit: JPASweepShape.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "dolphin/types.h"
 

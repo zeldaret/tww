@@ -1,7 +1,7 @@
 #ifndef RES_YBOIL_H
 #define RES_YBOIL_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum YBOIL_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

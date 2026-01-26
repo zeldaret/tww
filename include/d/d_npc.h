@@ -270,7 +270,7 @@ public:
 
     virtual u16 next_msgStatus(u32* pMsgNo) { return fopMsgStts_MSG_ENDS_e; }
     virtual u32 getMsg() { return 0; }
-    virtual void anmAtr(u16) {}
+    virtual void anmAtr(u16 i_msgStatus) {}
 
     void setCollision(float radius, float height);
     u16 talk(int);
@@ -285,5 +285,6 @@ void dNpc_calc_DisXZ_AngY(cXyz, cXyz, float*, short*);
 bool dNpc_chkArasoi();
 bool dNpc_chkLetterPassed();
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);
+bool dNpc_chkAttn(fopAc_ac_c* i_this, cXyz destPos, f32 param_3, f32 param_4, f32 param_5, bool param_6);
 
 #endif /* D_NPC_H */

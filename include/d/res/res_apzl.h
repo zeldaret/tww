@@ -1,7 +1,7 @@
 #ifndef RES_APZL_H
 #define RES_APZL_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum APZL_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

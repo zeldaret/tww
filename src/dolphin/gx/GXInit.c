@@ -3,7 +3,7 @@
 #include "dolphin/vi/vi.h"
 #include "dolphin/base/PPCArch.h"
 
-char* __GXVersion = "<< Dolphin SDK - GX    release build: Nov 10 2004 06:27:12 (0x2301) >>";
+char* __GXVersion = "<< Dolphin SDK - GX\trelease build: Sep  5 2002 05:33:28 (0x2301) >>";
 
 static GXData gxData;
 

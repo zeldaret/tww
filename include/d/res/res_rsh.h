@@ -1,8 +1,85 @@
 #ifndef RES_RSH_H
 #define RES_RSH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
+#if VERSION == VERSION_DEMO
+enum RSH_RES_FILE_ID {
+    /* BAS */
+    RSH_BAS_RS_WAIT01=0xD,
+    RSH_BAS_RS_WAIT02=0xE,
+    RSH_BAS_RS_PUSH=0x13,
+    RSH_BAS_RS_TALK01=0x14,
+    RSH_BAS_RS_TALK02=0x15,
+    RSH_BAS_RS_WALK=0x16,
+    RSH_BAS_RS_JAMP=0x1B,
+    RSH_BAS_RS_SWING=0x1C,
+    RSH_BAS_RS_TALK03=0x1D,
+    RSH_BAS_RS_TAME=0x1E,
+    
+    /* BCK */
+    RSH_BCK_RS_WAIT01=0xF,
+    RSH_BCK_RS_WAIT02=0x10,
+    RSH_BCK_RS_PUSH=0x17,
+    RSH_BCK_RS_TALK01=0x18,
+    RSH_BCK_RS_TALK02=0x19,
+    RSH_BCK_RS_WALK=0x1A,
+    RSH_BCK_RS_JAMP=0x1F,
+    RSH_BCK_RS_SWING=0x20,
+    RSH_BCK_RS_TALK03=0x21,
+    RSH_BCK_RS_TAME=0x22,
+    
+    /* BMDM */
+    RSH_BMD_SHOP_CURSOR01=0x4,
+    
+    /* BRK */
+    RSH_BRK_SHOP_CURSOR01=0x5,
+    
+    /* BTP */
+    RSH_BTP_RS_MABA01=0x11,
+    
+    /* BDLM */
+    RSH_BDL_RS=0x12,
+};
+
+enum RSH_RES_FILE_INDEX {
+    /* BAS */
+    RSH_INDEX_BAS_RS_WAIT01=0x8,
+    RSH_INDEX_BAS_RS_WAIT02=0x9,
+    RSH_INDEX_BAS_RS_PUSH=0xA,
+    RSH_INDEX_BAS_RS_TALK01=0xB,
+    RSH_INDEX_BAS_RS_TALK02=0xC,
+    RSH_INDEX_BAS_RS_WALK=0xD,
+    RSH_INDEX_BAS_RS_JAMP=0xE,
+    RSH_INDEX_BAS_RS_SWING=0xF,
+    RSH_INDEX_BAS_RS_TALK03=0x10,
+    RSH_INDEX_BAS_RS_TAME=0x11,
+    
+    /* BCK */
+    RSH_INDEX_BCK_RS_WAIT01=0x14,
+    RSH_INDEX_BCK_RS_WAIT02=0x15,
+    RSH_INDEX_BCK_RS_PUSH=0x16,
+    RSH_INDEX_BCK_RS_TALK01=0x17,
+    RSH_INDEX_BCK_RS_TALK02=0x18,
+    RSH_INDEX_BCK_RS_WALK=0x19,
+    RSH_INDEX_BCK_RS_JAMP=0x1A,
+    RSH_INDEX_BCK_RS_SWING=0x1B,
+    RSH_INDEX_BCK_RS_TALK03=0x1C,
+    RSH_INDEX_BCK_RS_TAME=0x1D,
+    
+    /* BMDM */
+    RSH_INDEX_BMD_SHOP_CURSOR01=0x20,
+    
+    /* BRK */
+    RSH_INDEX_BRK_SHOP_CURSOR01=0x23,
+    
+    /* BTP */
+    RSH_INDEX_BTP_RS_MABA01=0x26,
+    
+    /* BDLM */
+    RSH_INDEX_BDL_RS=0x29,
+};
+#else
 enum RSH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
     RSH_BAS_RS_JAMP=0x8,
@@ -40,5 +117,6 @@ enum RSH_RES_FILE_ID { // IDs and indexes are synced
     /* BTP */
     RSH_BTP_RS_MABA01=0x29,
 };
+#endif
 
 #endif /* RES_RSH_H */

@@ -10,31 +10,33 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_path.h"
 #include "d/d_lib.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daObj_Ikada_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        
+        PROC_00_e = 0,
+        PROC_01_e = 1,
     };
 
     void getCranePos() {}
     void getFrame() {}
     void getMode() {}
     void getSvDirection() {}
-    void isBonbori() {}
-    void isCrane() {}
-    void isFlag() {}
-    void isWave() {}
-    void modeProcInit(int) {}
+    bool isBonbori() { return mType == 3 || mType == 1; }
+    bool isCrane() {return mType == 4; }
+    bool isFlag() { return mType == 0 || mType == 4; }
+    bool isWave() { return mType == 4 || mType == 3 || mType == 1; }
+    void modeProcInit(int idx) { modeProc(PROC_00_e, idx); }
     void setInitPos() {}
     void setStart() {}
     void setStop() {}
 
     void _nodeControl(J3DNode*, J3DModel*);
-    void _pathMove(cXyz*, cXyz*, cXyz*);
+    BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     void _ride(fopAc_ac_c*);
     void setCollision();
-    void checkTgHit();
+    bool checkTgHit();
     void pathMove();
     void HandleRight();
     void HandleLeft();
@@ -76,12 +78,20 @@ public:
     bool _draw();
     void getArg();
     void createInit();
-    void _createHeap();
+    BOOL _createHeap();
     cPhs_State _create();
     bool _delete();
 
+    static cXyz m_rope_base_vec;
+    static cXyz m_crane_offset;
+    static const dCcD_SrcSph m_sph_src;
+    static const u32 m_heapsize[];
+    static const char m_arc_name[];
+    static const f32 m_rope_joint_len;
+    static const s32 m_rope_min_cnt;
+
 public:
-    /* 0x0290 */ u32 mType;
+    /* 0x0290 */ s32 mType;
     /* 0x0294 */ u32 m0294;
     /* 0x0298 */ u32 m0298;
     /* 0x029C */ u32 m029C;
@@ -100,14 +110,15 @@ public:
     /* 0x02E8 */ u8 m02E8[0x02EC - 0x02E8];
     /* 0x02EC */ u8 mbCraneMode;
     /* 0x02ED */ u8 m02ED[0x02F0 - 0x02ED];
-    /* 0x02F0 */ int mCurMode;
-    /* 0x02F4 */ int m02F4;
+    /* 0x02F0 */ s32 mCurMode;
+    /* 0x02F4 */ s32 m02F4;
     /* 0x02F8 */ dPa_waveEcallBack mWaveLCallback;
     /* 0x035C */ dPa_waveEcallBack mWaveRCallback;
     /* 0x03C0 */ dPa_splashEcallBack mSplashCallBack;
     /* 0x03DC */ dPa_trackEcallBack mTrackCallBack;
     /* 0x042C */ dPa_rippleEcallBack mRippleCallBack;
-    /* 0x0440 */ u8 m0440[0x0450 - 0x0440];
+    /* 0x0440 */ u8 m0440;
+    /* 0x0444 */ cXyz m0444;
     /* 0x0450 */ cXyz mWavePos;
     /* 0x045C */ csXyz mWaveRot;
     /* 0x0462 */ u8 m0462[0x0464 - 0x0462];
@@ -135,11 +146,10 @@ public:
     /* 0x0520 */ u8 m0520[0x0528 - 0x0520];
     /* 0x0528 */ s16 mLightRotX;
     /* 0x052A */ s16 mLightRotY;
-    /* 0x052C */ request_of_phase_process_class mPhs;
+    /* 0x052C */ request_of_phase_process_class mPhase;
     /* 0x0534 */ J3DModel* mpModel;
     /* 0x0538 */ mDoExt_bckAnm mBckAnm;
-    /* 0x0548 */ u8 mbIsLinkRiding;
-    /* 0x0549 */ u8 m0549[0x054C - 0x0549];
+    /* 0x0548 */ bool mbIsLinkRiding;
     /* 0x054C */ dBgW* mpBgW;
     /* 0x0550 */ Mtx mMtx;
     /* 0x0580 */ dBgS_ObjAcch mObjAcch;
@@ -149,10 +159,10 @@ public:
     /* 0x0794 */ f32 mFlagScale;
     /* 0x0798 */ J3DModel* mpRopeEnd;
     /* 0x079C */ mDoExt_3DlineMat1_c mRopeLine;
-    /* 0x07D8 */ int m07D8;
+    /* 0x07D8 */ s32 m07D8;
     /* 0x07DC */ cXyz m07DC[200];
     /* 0x113C */ csXyz mJointRot[4];
-    /* 0x1154 */ u32 m1154;
+    /* 0x1154 */ s32 m1154;
     /* 0x1158 */ s16 m1158;
     /* 0x115A */ s16 m115A;
     /* 0x115C */ s16 m115C;
@@ -162,11 +172,11 @@ public:
     /* 0x1164 */ s16 mWaveAnimTimer;
     /* 0x1166 */ u8 m1166;
     /* 0x1167 */ u8 m1167[0x1168 - 0x1167];
-    /* 0x1168 */ int m1168;
-    /* 0x116C */ int mSvId[4];
+    /* 0x1168 */ s32 m1168;
+    /* 0x116C */ s32 mSvId[4];
     /* 0x117C */ dCcD_Sph mSph;
     /* 0x12A8 */ dCcD_Stts mStts;
-    /* 0x12E4 */ u8 m12E4[0x12E8 - 0x12E4];
+    /* 0x12E4 */ int m12E4;
     /* 0x12E8 */ cXyz mSePos;
     /* 0x12F4 */ int mStopTimer;
     /* 0x12F8 */ dLib_wave_c mWave;
@@ -175,12 +185,54 @@ public:
     /* 0x1328 */ cXyz mInitPos;
 };
 
-class daObj_Ikada_HIO_c {
+class daObj_Ikada_HIO_c : public mDoHIO_entry_c {
 public:
     daObj_Ikada_HIO_c();
+    virtual ~daObj_Ikada_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ u8 mbDebugDraw;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 mbNoRotAnim;
+    /* 0x08 */ u8 m08;
+    /* 0x09 */ u8 m09[0x0C - 0x09];
+    /* 0x0C */ Vec mFlagOffset;
+    /* 0x18 */ f32 mFlagScale;
+    /* 0x1C */ s16 m1C;
+    /* 0x1E */ s16 m1E;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ s16 m24;
+    /* 0x26 */ u8 m26[0x28 - 0x26];
+    /* 0x28 */ f32 m28;
+    /* 0x2C */ f32 mShipOffsY_Attention;
+    /* 0x30 */ f32 mShipOffsY_Eye;
+    /* 0x34 */ f32 mTerryWaveOffsZ;
+    /* 0x38 */ f32 mTerryWaveOffsY;
+    /* 0x3C */ f32 mTerryTrackOffsZ;
+    /* 0x40 */ f32 mSvWaveOffsX;
+    /* 0x44 */ f32 mSvTrackOffsX;
+    /* 0x48 */ f32 mSvOffsX[4];
+    /* 0x58 */ f32 mTrackIndTransY;
+    /* 0x5C */ f32 mTrackIndScaleY;
+    /* 0x60 */ f32 mSplashScaleMax;
+    /* 0x64 */ f32 mSplashMaxScaleTimer;
+    /* 0x68 */ f32 mWaveVelFade;
+    /* 0x6C */ f32 mTrackVel;
+    /* 0x70 */ f32 mWaveVelSpeed;
+    /* 0x74 */ f32 mWaveVelOffs;
+    /* 0x78 */ f32 mWaveMaxVelocity;
+    /* 0x7C */ Vec mWaveCollapsePos[2];
+    /* 0x94 */ s16 m94;
+    /* 0x96 */ s16 mPlayerStopDistance;
+    /* 0x98 */ s16 m98;
+    /* 0x9A */ s16 m9A;
+    /* 0x9C */ f32 m9C;
+    /* 0xA0 */ f32 mVelocityTargetTerry1;
+    /* 0xA4 */ f32 mVelocityTargetTerry3;
+    /* 0xA8 */ f32 mA8;
+}; // size = 0xAC
 
 #endif /* D_A_OBJ_IKADA_H */

@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_open.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_draw_iter.h"
@@ -72,11 +73,15 @@ BOOL dScnOpen_c::draw() {
 
 /* 80232D38-80232DD8       .text __dt__10dScnOpen_cFv */
 dScnOpen_c::~dScnOpen_c() {
+#if VERSION > VERSION_DEMO
     if (mpProc != NULL)
+#endif
         delete mpProc;
+#if VERSION > VERSION_DEMO
     if (solid_heap != NULL)
+#endif
         mDoExt_destroySolidHeap(solid_heap);
-    dComIfG_resDelete(&mPhs, "Opening");
+    dComIfG_resDeleteDemo(&mPhs, "Opening");
     dComIfGp_setWindowNum(0);
 }
 

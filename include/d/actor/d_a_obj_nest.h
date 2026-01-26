@@ -15,14 +15,22 @@ namespace daObjNest {
         BOOL Mthd_Delete();
         void set_mtx();
         void init_mtx();
-        void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
+        static void rideCB(dBgW*, fopAc_ac_c*, fopAc_ac_c*);
         void vib_set(float);
         void vib_proc();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
+
+        static Mtx M_tmp_mtx;
+        static const char M_arcname[];
     
     public:
         /* Place member variables here */
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mpModel;
+        /* 0x2D4 */ cXyz mcXyz_0x2D4;
+        /* 0x2E0 */ csXyz mcsXyz_0x2E0;
+        /* 0x2E6 */ csXyz mcsXyz_0x2E6;
     };
 };
 

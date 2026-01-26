@@ -3,6 +3,8 @@
 // Translation Unit: JPAEmitterLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAEmitterLoader.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
@@ -22,10 +24,10 @@
 static void dummy(u32 texNum) {
     JUT_WARN(0, "%s", "This is WRONG Version File\n");
     JUT_WARN(0, "%s", "This is NO JPA File\n");
-    JPAEmitterData* pEmtrRes;
+    JPAEmitterData* pEmtrRes = NULL;
     JUT_ASSERT(0, pEmtrRes);
     JUT_ASSERT(0, pEmtrRes->pLinkInfoArray);
-    JPADataBlockLinkInfo* pLinkInfo;
+    JPADataBlockLinkInfo* pLinkInfo = NULL;
     JUT_ASSERT(0, pLinkInfo);
     JUT_ASSERT(0, pLinkInfo->keyBlocks || pLinkInfo->keyNum == 0);
     JUT_ASSERT(0, pLinkInfo->fldBlocks || pLinkInfo->fldNum == 0);

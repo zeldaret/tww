@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kytag00.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"

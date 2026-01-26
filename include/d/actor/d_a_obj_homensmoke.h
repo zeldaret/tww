@@ -23,6 +23,9 @@ namespace daObjHomensmoke {
         /* 0x294 */ u8 m294[0x29C - 0x294];
         /* 0x29C */ Mtx mMtx;
         /* 0x2CC */ int mType;
+#if VERSION == VERSION_DEMO
+        /* 0x2D0 */ JPABaseEmitter* m2D0;
+#endif
         /* 0x2D0 */ dPa_smokeEcallBack mSmokeCb;
         /* 0x2F0 */ BOOL mbInitialized;
         /* 0x2F4 */ cXyz mSmokePos;

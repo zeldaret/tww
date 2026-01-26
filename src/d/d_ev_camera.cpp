@@ -3,6 +3,7 @@
 // Translation Unit: d_ev_camera.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 #include "dolphin/types.h"
 

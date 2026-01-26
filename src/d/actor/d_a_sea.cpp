@@ -3,6 +3,7 @@
 // Translation Unit: d_a_sea.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -227,7 +228,7 @@ void daSea_packet_c::CleanUp() {
     for (s32 z = 0; z < GRID_CELLS; z++)
         for (s32 x = 0; x < GRID_CELLS; x++)
             mpHeightTable[idx++] = BASE_HEIGHT;
-    mCurPos.zero();
+    mCurPos.x = mCurPos.y = mCurPos.z = 0.0f;
 }
 
 /* 8015B7E4-8015B84C       .text __ct__14daSea_packet_cFv */

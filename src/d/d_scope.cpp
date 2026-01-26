@@ -3,6 +3,7 @@
 // Translation Unit: d_scope.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_scope.h"
 #include "f_op/f_op_msg.h"
 

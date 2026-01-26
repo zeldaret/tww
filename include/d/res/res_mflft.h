@@ -1,7 +1,7 @@
 #ifndef RES_MFLFT_H
 #define RES_MFLFT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MFLFT_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

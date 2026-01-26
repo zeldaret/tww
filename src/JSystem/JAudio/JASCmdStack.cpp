@@ -3,6 +3,8 @@
 // Translation Unit: JASCmdStack.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASCmdStack.h"
 #include "JSystem/JAudio/JASCallback.h"
 #include "JSystem/JUtility/JUTAssert.h"

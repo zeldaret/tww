@@ -53,12 +53,12 @@ public:
         VECScale(pOut, pOut, 0.5f);
     }
     void ClearForMinMax() {
-        mMin.z = 1000000000.0f;
-        mMin.y = 1000000000.0f;
-        mMin.x = 1000000000.0f;
-        mMax.z = -1000000000.0f;
-        mMax.y = -1000000000.0f;
-        mMax.x = -1000000000.0f;
+        mMin.z = G_CM3D_F_INF;
+        mMin.y = G_CM3D_F_INF;
+        mMin.x = G_CM3D_F_INF;
+        mMax.z = -G_CM3D_F_INF;
+        mMax.y = -G_CM3D_F_INF;
+        mMax.x = -G_CM3D_F_INF;
     }
     void ClearForMinMaxY() {
         mMin.y = G_CM3D_F_INF;

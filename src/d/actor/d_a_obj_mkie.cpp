@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_mkie.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mkie.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -120,28 +121,28 @@ BOOL daObjMkie::Act_c::Draw() {
 namespace daObjMkie {
 namespace {
 /* 000015B8-000015D8       .text Mthd_Create__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-cPhs_State Mthd_Create(void*) {
-    /* Nonmatching */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjMkie::Act_c*)i_this)->Mthd_Create();
 }
 
 /* 000015D8-000015F8       .text Mthd_Delete__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-BOOL Mthd_Delete(void*) {
-    /* Nonmatching */
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjMkie::Act_c*)i_this)->Mthd_Delete();
 }
 
 /* 000015F8-00001618       .text Mthd_Execute__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-BOOL Mthd_Execute(void*) {
-    /* Nonmatching */
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjMkie::Act_c*)i_this)->MoveBGExecute();
 }
 
 /* 00001618-00001644       .text Mthd_Draw__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-BOOL Mthd_Draw(void*) {
-    /* Nonmatching */
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjMkie::Act_c*)i_this)->Draw();
 }
 
 /* 00001644-00001670       .text Mthd_IsDelete__Q29daObjMkie26@unnamed@d_a_obj_mkie_cpp@FPv */
-BOOL Mthd_IsDelete(void*) {
-    /* Nonmatching */
+BOOL Mthd_IsDelete(void* i_this) {
+    return ((daObjMkie::Act_c*)i_this)->IsDelete();
 }
 
 static actor_method_class Mthd_Table = {

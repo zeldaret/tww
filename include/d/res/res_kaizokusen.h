@@ -1,7 +1,7 @@
 #ifndef RES_KAIZOKUSEN_H
 #define RES_KAIZOKUSEN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KAIZOKUSEN_RES_FILE_ID {
     /* DZB */

@@ -55,8 +55,6 @@ class daBomb_c : public fopAc_ac_c {
 public:
     typedef bool(daBomb_c::*procFunc)();
 
-    daBomb_c() {}
-
     void draw_norm();
     void draw_nut();
     BOOL draw();
@@ -70,7 +68,9 @@ public:
     bool checkExplodeBg_nut();
     bool checkExplodeBg_cannon();
     bool checkExplodeBg();
+#if VERSION > VERSION_DEMO
     void water_tention();
+#endif
     void posMoveF();
     void bgCrrPos();
     void bgCrrPos_lava();
@@ -173,13 +173,15 @@ private:
     /* 0x2B8 */ mDoExt_bckAnm mBck1;
     /* 0x2C8 */ mDoExt_brkAnm mBrk0;
     /* 0x2E0 */ mDoExt_brkAnm mBrk1;
-    /* 0x2F8 */ s32 mType;
+    /* 0x2F8 */ int mType;
     /* 0x2FC */ dBgS_BombAcch mAcch;
     /* 0x4C0 */ dBgS_AcchCir mCir;
     /* 0x500 */ dBgS_ObjGndChk_Yogan mGndChk;
     /* 0x554 */ f32 field_0x554;
     /* 0x558 */ f32 field_0x558;
+#if VERSION > VERSION_DEMO
     /* 0x55C */ f32 field_0x55C;
+#endif
     /* 0x560 */ bool field_0x560;
     /* 0x561 */ bool mbWaterIn;
     /* 0x562 */ u8 field_0x562;

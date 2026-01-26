@@ -1,7 +1,7 @@
 #ifndef RES_ZL2_H
 #define RES_ZL2_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum ZL2_RES_FILE_ID {
     /* BCKS */

@@ -1,7 +1,7 @@
 #ifndef RES_KB_H
 #define RES_KB_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KB_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */

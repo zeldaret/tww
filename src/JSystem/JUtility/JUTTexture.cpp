@@ -3,6 +3,8 @@
 // Translation Unit: JUTTexture.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/JUTPalette.h"
 #include "dolphin/gx/GX.h"

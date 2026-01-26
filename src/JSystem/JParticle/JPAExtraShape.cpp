@@ -3,6 +3,8 @@
 // Translation Unit: JPAExtraShape.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPAExtraShape.h"
 #include "dolphin/types.h"
 

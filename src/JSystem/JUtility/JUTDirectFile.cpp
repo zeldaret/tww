@@ -3,6 +3,8 @@
 // Translation Unit: JUTDirectFile.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTDirectFile.h"
 #include "dolphin/dvd/dvd.h"
 #include "dolphin/os/OS.h"

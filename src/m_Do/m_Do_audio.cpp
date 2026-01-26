@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_audio.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISequenceMgr.h"
@@ -17,8 +18,6 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 JAIZelInst mDoAud_zelAudio_c::mTact;
 mDoAud_zelAudio_c g_mDoAud_zelAudio;

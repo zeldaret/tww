@@ -3,6 +3,8 @@
 // Translation Unit: JAIBasic.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAIConst.h"

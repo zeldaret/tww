@@ -13,9 +13,9 @@ public:
     cPhs_State _create();
     void createHeap();
     void createInit();
-    bool _delete();
-    bool _draw();
-    bool _execute();
+    BOOL _delete();
+    BOOL _draw();
+    BOOL _execute();
     void executeNormal();
     void executeYureYoko();
     void executeOpenYoko();

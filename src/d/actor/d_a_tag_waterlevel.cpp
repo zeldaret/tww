@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_waterlevel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_waterlevel.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -69,7 +70,8 @@ namespace daTagWaterlevel {
         u8 sch_bit = dKy_get_schbit();
         cLib_offBit(M_state, STATE_2);
 
-        if ((prm_sch & sch_bit & 0xFF)) {
+        bool temp = prm_sch & sch_bit & 0xFF;
+        if (temp) {
             target = 1.0f;
             if (!cLib_checkBit(get_state(), STATE_1)) {
                 cLib_onBit(M_state, STATE_2);

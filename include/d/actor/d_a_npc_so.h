@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
+class dCcD_SrcSph;
 
 class daNpc_So_c : public fopAc_ac_c {
 public:
@@ -125,6 +126,8 @@ public:
     void cutUnequipStart();
     void initCam();
     void moveCam();
+
+    static const dCcD_SrcSph m_sph_src;
 
 public:
     /* Place member variables here */

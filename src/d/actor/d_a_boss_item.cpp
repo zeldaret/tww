@@ -3,6 +3,7 @@
 // Translation Unit: d_a_boss_item.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boss_item.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
@@ -22,17 +23,16 @@ static BOOL daBossItem_Delete(bossitem_class* i_this) {
 
 /* 00000088-00000128       .text daBossItem_Create__FP10fopAc_ac_c */
 static cPhs_State daBossItem_Create(fopAc_ac_c* i_this) {
-    bossitem_class* bItem = static_cast<bossitem_class*>(i_this);
+    bossitem_class* a_this = (bossitem_class*)i_this;
+    fopAcM_SetupActor(i_this, bossitem_class);
 
-    fopAcM_SetupActor(bItem, bossitem_class);
-
-    int stageNo = bItem->base.mParameters & 0xFF;
+    int stageNo = daBossItem_prm::getStage(a_this);
     BOOL isStageBossDead = dComIfGs_isStageBossEnemy(stageNo);
 
     if (isStageBossDead && !dComIfGs_isStageLife(stageNo)) {
         fopAcM_createItemForBoss(
-            &bItem->current.pos, 1, bItem->current.roomNo,
-            &bItem->current.angle, NULL, 1
+            &i_this->current.pos, 1, fopAcM_GetRoomNo(i_this),
+            &i_this->current.angle, NULL, 1
         );
     }
 

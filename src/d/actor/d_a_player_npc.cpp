@@ -3,6 +3,7 @@
 // Translation Unit: d_a_player_npc.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_npc.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"

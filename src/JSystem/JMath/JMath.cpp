@@ -3,6 +3,8 @@
 // Translation Unit: JMath.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "math.h"

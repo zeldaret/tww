@@ -90,7 +90,7 @@ public:
     bool isVisible() { return mVisible; }
 
     void getBounds() {}
-    void getGlbBounds() {}
+    const JGeometry::TBox2<f32>& getGlbBounds() { return mGlobalBounds; }
     f32 getRotate() const { return mRotation; }
     void place(const JGeometry::TBox2<f32>&) {}
     void rotate(f32 angle) {
@@ -110,7 +110,7 @@ public:
     /* 0x04 */ u32 mMagic;
     /* 0x08 */ int mTag;
     /* 0x0C */ JGeometry::TBox2<f32> mBounds;
-    /* 0x1C */ JGeometry::TBox2<f32> mScreenBounds;
+    /* 0x1C */ JGeometry::TBox2<f32> mGlobalBounds;
     /* 0x2C */ JGeometry::TBox2<f32> mDrawBounds;
     /* 0x3C */ Mtx mMtx;
     /* 0x6C */ Mtx mDrawMtx;

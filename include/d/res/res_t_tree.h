@@ -1,7 +1,7 @@
 #ifndef RES_T_TREE_H
 #define RES_T_TREE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum T_TREE_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

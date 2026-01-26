@@ -67,7 +67,7 @@ namespace JASystem {
             TIMED_IIR_Unk3    = 15,
             TIMED_Unk16       = 16,
             TIMED_Unk17       = 17,
-            TIMED_Count, // 18
+            TIMED_PARAMS, // 18
         };
 
         class TOuterParam {
@@ -83,14 +83,21 @@ namespace JASystem {
             void onSwitch(u16);
             void setFirFilter(s16*);
 
+            f32 getVolume() const { return mVolume; }
+            f32 getPitch() const { return mPitch; }
+            f32 getFxVol() const { return mFxmix; }
+            f32 getDolby() const { return mDolby; }
+            f32 getPan() const { return mPan; }
+            f32 getTempo() const { return mTempo; }
+
             /* 0x00 */ u16 field_0x0;
             /* 0x02 */ u16 field_0x2;
-            /* 0x04 */ f32 field_0x4;
-            /* 0x08 */ f32 field_0x8;
-            /* 0x0C */ f32 field_0xc;
-            /* 0x10 */ f32 field_0x10;
-            /* 0x14 */ f32 field_0x14;
-            /* 0x18 */ f32 field_0x18;
+            /* 0x04 */ f32 mVolume;
+            /* 0x08 */ f32 mPitch;
+            /* 0x0C */ f32 mFxmix;
+            /* 0x10 */ f32 mDolby;
+            /* 0x14 */ f32 mPan;
+            /* 0x18 */ f32 mTempo;
             /* 0x1C */ s16 field_0x1c[8];
         };
 
@@ -112,7 +119,24 @@ namespace JASystem {
 
         class AInnerParam_ {
         public:
-            AInnerParam_();
+                AInnerParam_()
+                : mVolume()
+                , mPitch()
+                , mFxmix()
+                , mPan()
+                , mDolby()
+                , _50()
+                , mOsc0Width()
+                , mOsc0Rate()
+                , mOsc0Vertex()
+                , mOsc1Width()
+                , mOsc1Rate()
+                , mOsc1Vertex()
+                , mIIRs()
+                , _100()
+                , _110()
+            {
+            }
 
             /* 0x000 */ MoveParam_ mVolume;
             /* 0x010 */ MoveParam_ mPitch;
@@ -138,10 +162,10 @@ namespace JASystem {
 #ifdef __MWERKS__
             union {
                 AInnerParam_ mInnerParam;
-                MoveParam_ mMoveParams[TIMED_Count];
+                MoveParam_ mMoveParams[TIMED_PARAMS];
             };
 #else
-            MoveParam_ mMoveParams[TIMED_Count];
+            MoveParam_ mMoveParams[TIMED_PARAMS];
 #endif
         };
 
@@ -187,7 +211,7 @@ namespace JASystem {
         void overwriteOsc(TChannel*);
         bool noteOff(u8, u16);
         int gateOn(u8, s32, s32, s32);
-        int checkNoteStop(s32);
+        bool checkNoteStop(s32);
         void oscSetupFull(u8, u32, u32);
         void oscSetupSimpleEnv(u8, u32);
         void updateOscParam(int, f32);
@@ -218,7 +242,7 @@ namespace JASystem {
         void writeSelfPort(int, u16);
         int writePortAppDirect(u32, u16);
         int readPortAppDirect(u32, u16*);
-        void routeTrack(u32);
+        JASystem::TTrack* routeTrack(u32);
         int writePortApp(u32, u16);
         int readPortApp(u32, u16*);
         void pause(bool, bool);
@@ -226,9 +250,25 @@ namespace JASystem {
         void setTempo(u16);
         void setTimebase(u16);
         f32 panCalc(f32, f32, f32, u8);
-        static int rootCallback(void*);
+        static s32 rootCallback(void*);
         static void registerSeqCallback(u16 (*)(TTrack*, u16));
         static void newMemPool(int);
+
+        void* operator new(size_t n) {
+            TTrack* track;
+            if (sFreeList == NULL) {
+                track = NULL;
+            } else {
+                track = sFreeList;
+                sFreeList = sFreeList->next;
+            }
+            return track;
+        }
+        void operator delete(void* ptr, size_t n) {
+            TTrack* track = (TTrack*)ptr;
+            track->next = sFreeList;
+            sFreeList = track;
+        }
 
         TTrack* getParent() { return mParent; }
         TTrack* getChild(int index) {
@@ -244,13 +284,11 @@ namespace JASystem {
         void getActivity() const {}
         void getRoute() const {}
         TSeqCtrl* getSeq() { return &mSeqCtrl; }
-        // void operator delete(void*, u32) {}
-        // void* operator new(size_t) {}
         void pauseTrackAll() { pause(true, true); }
         void unPauseTrackAll() { pause(false, true); }
         void setPanPower(int i, u16 power) { mRegisterParam.setPanPower(i, power); }
         void setPauseStatus(u8 status) { mPauseStatus = status; }
-        void setTranspose(s32 transpose) { field_0x37a = transpose; }
+        void setTranspose(s32 transpose) { mTranspose = transpose; }
         void setVolumeMode(u8 mode) { mVolumeMode = mode; }
 
         /* 0x000 */ union {
@@ -278,14 +316,14 @@ namespace JASystem {
         /* 0x374 */ u16 field_0x374;
         /* 0x376 */ u16 field_0x376;
         /* 0x378 */ u16 field_0x378;
-        /* 0x37A */ u8 field_0x37a;
+        /* 0x37A */ s8 mTranspose;
         /* 0x37B */ u8 field_0x37b;
         /* 0x37C */ u8 mPauseStatus;
         /* 0x37D */ u8 mVolumeMode;
         /* 0x37E */ u8 field_0x37e;
         /* 0x37F */ u8 mCalcTypes[3];
         /* 0x382 */ u8 mParentCalcTypes[3];
-        /* 0x385 */ u8 mIsPaused;
+        /* 0x385 */ bool mIsPaused;
         /* 0x386 */ u8 field_0x386;
         /* 0x387 */ bool field_0x387;
         /* 0x388 */ u8 field_0x388;

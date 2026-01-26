@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_barrel.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_obj_eff.h"
 #include "d/res/res_ktaru_01.h"
@@ -12,8 +13,6 @@
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 const char daObjBarrel::Act_c::M_arcname[] = "Ktaru_01";
 const float daObjBarrel::Act_c::l_s_radius = 45.0f;
 const float daObjBarrel::Act_c::l_l_radius = 50.0f;
@@ -22,7 +21,7 @@ const short daObjBarrel::Act_c::l_gnd_deg = 0xf;
 const float daObjBarrel::Act_c::l_viscous_resist = 0.006f;
 const float daObjBarrel::Act_c::l_inert_resist = 0.001f;
 const float daObjBarrel::Act_c::l_max_move = 30.0f;
-const short daObjBarrel::Act_c::l_max_vib_angl = 2048;
+const short daObjBarrel::Act_c::l_max_vib_angl = 0x800;
 const float daObjBarrel::Act_c::l_min_move_dir = 5.0f;
 const float daObjBarrel::Act_c::l_wind_max = 178.0f;
 const float daObjBarrel::Act_c::l_shape_vec = 25.0f;
@@ -51,16 +50,16 @@ const dCcD_SrcCyl daObjBarrel::Act_c::M_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ l_l_radius,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 const daObjBarrel::Act_c::Attr_c daObjBarrel::Act_c::M_attr = {
     /* mBdlIdx         */ KTARU_01_BDL_KTARU_01,
-    /* m02             */ 60,
+    /* mShadowSize     */ 60,
     /* mEnableCutoff   */ false,
     /* mAttnH          */ 50.0f,
     /* mNormalGravity  */ -6.0f,
@@ -114,7 +113,7 @@ cPhs_State daObjBarrel::Act_c::_create() {
     if (rt == cPhs_COMPLEATE_e) {
         if(fopAcM_entrySolidHeap(this, solidHeapCB, 0x820) != 0) {
             mAcchCir.SetWall(30.0f, l_l_radius);
-            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
+            mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
             mAcch.ClrWaterNone();
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             cull_set_draw();
@@ -201,7 +200,7 @@ void daObjBarrel::Act_c::mode_carry_init() {
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
     mMode = MODE_CARRY;
     if (strcmp(dComIfGp_getStartStageName(), "majroom") == 0 || strcmp(dComIfGp_getStartStageName(), "MajyuE") == 0) {
-        dComIfGs_onEventBit(0x401);
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_0401);
     }
     mTimer = 15;
 }
@@ -457,7 +456,7 @@ void daObjBarrel::Act_c::set_walk_rot() {
     if (mag > l_min_move_dir || (mMode == MODE_WAIT && mag > l_min_move_dir / 2)) {
         cLib_chaseAngleS(&shape_angle.y, targetAngle, 0x600);
     }
-    float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 65535.0f;
+    float fVar2 = mag / ((cM_scos(shape_angle.z) * 5.0f + l_s_radius) * 6.28f) * 0xFFFF;
     if (!negAngle) {
         m612 -= (short)(fVar2 * 3.0f);
         m630 -= (short)fVar2;
@@ -727,8 +726,8 @@ bool daObjBarrel::Act_c::_draw() {
         float gndH = mAcch.GetGroundH();
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz *norm = gndPlane->GetNP();
-        if (gndPlane && gndH != -G_CM3D_F_INF) {
-            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().m02, norm);        
+        if (norm && gndH != -G_CM3D_F_INF) {
+            dComIfGd_setSimpleShadow(&current.pos, gndH, attr().mShadowSize, norm);        
         }
     }
     return true;

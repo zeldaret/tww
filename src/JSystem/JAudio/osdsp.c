@@ -3,6 +3,8 @@
 // Translation Unit: osdsp.c
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/osdsp.h"
 #include "JSystem/JAudio/osdsp_task.h"
 #include "dolphin/types.h"

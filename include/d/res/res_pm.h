@@ -1,7 +1,7 @@
 #ifndef RES_PM_H
 #define RES_PM_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PM_RES_FILE_ID {
     /* BAS */

@@ -111,7 +111,7 @@ struct mDoDvdThdStack {
 
 struct mDoDvdThd {
     static s32 main(void*);
-    static void create(s32);
+    static void create(OSPriority);
     static void suspend();
 
     static OSThread l_thread;

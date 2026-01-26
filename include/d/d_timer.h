@@ -13,7 +13,7 @@ class JKRSolidHeap;
 class dDlst_TimerScrnDraw_c : public dDlst_base_c {
 public:
     dDlst_TimerScrnDraw_c() {
-        field_0x234 = 0;
+        mAnimeTimer = 0;
         mRupeeNum = -1;
         field_0x235 = 0;
     }
@@ -36,7 +36,7 @@ public:
     f32 acc(s16 param_0, s16 param_1, s16 param_2) {
         return ((f32)(param_1 - param_2) * (f32)(param_1 - param_2)) / ((f32)(param_0 - param_2) * (f32)(param_0 - param_2));
     }
-    void animeTimerReset() {}
+    void animeTimerReset() { mAnimeTimer = 0; }
 
 public:
     /* 0x004 */ J2DScreen* scrn;
@@ -54,7 +54,7 @@ public:
     /* 0x220 */ J2DPane* mRupeeNumberShadow[3];
     /* 0x22C */ J2DPicture* mIconPicture;
     /* 0x230 */ s32 mRupeeNum;
-    /* 0x234 */ s8 field_0x234;
+    /* 0x234 */ s8 mAnimeTimer;
     /* 0x235 */ u8 field_0x235;
     /* 0x236 */ u8 field_0x236;
     /* 0x237 */ u8 field_0x237;
@@ -81,6 +81,13 @@ public:
     s32 getLimitTimeMs();
     s32 getRestTimeMs();
 
+    void setTimerPos(f32 x, f32 y) { mpScrnDraw->setTimerPos(x, y); }
+    void setRupeePos(f32 x, f32 y) { mpScrnDraw->setRupeePos(x, y); }
+    void setShowType(u8 type) { mpScrnDraw->setShowType(type); }
+    void setIconType(void* tex, u8 type) { mpScrnDraw->setIconType(tex, type); }
+    void timerHide() { mpScrnDraw->hide(); }
+    u8 getStatus() { return mStatus; }
+
     /* 0x0FC */ dDlst_TimerScrnDraw_c* mpScrnDraw;
     /* 0x100 */ void* iconTex;
     /* 0x104 */ request_of_phase_process_class mPhs;
@@ -101,7 +108,7 @@ public:
     /* 0x160 */ s16 field_0x160;
     /* 0x162 */ u8 field_0x162;
     /* 0x163 */ u8 field_0x163;
-    /* 0x164 */ u8 mState;
+    /* 0x164 */ u8 mStatus;
     /* 0x168 */ s32 mSeTimeLeft;
     /* 0x16C */ u32 mSeTableIndex;
     /* 0x170 */ JKRSolidHeap* mpSolidHeap;

@@ -3,6 +3,7 @@
 // Translation Unit: d_auction_screen.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_auction_screen.h"
 #include "f_op/f_op_msg.h"
 

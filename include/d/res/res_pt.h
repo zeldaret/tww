@@ -1,7 +1,7 @@
 #ifndef RES_PT_H
 #define RES_PT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PT_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

@@ -3,10 +3,10 @@
 // Translation Unit: d_tree.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_tree.h"
 #include "dolphin/types.h"
 
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 #include "assets/l_Txa_swood_aTEX.h"
 const u16 l_Txa_swood_aTEX__width = 64;

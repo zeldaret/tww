@@ -33,7 +33,8 @@ s32 fpcPause_Enable(void* i_proc, u8 i_flag) {
 /* 800403AC-80040420       .text fpcPause_Disable__FPvUc */
 s32 fpcPause_Disable(void* i_proc, u8 i_flag) {
     base_process_class* pProc = (base_process_class*)i_proc;
-    pProc->mPauseFlag &= (0xFF - i_flag) & 0xFF;
+    u8 mask = 0xFF - i_flag;
+    pProc->mPauseFlag &= mask;
 
     if (fpcBs_Is_JustOfType(g_fpcNd_type, pProc->mSubType)) {
         process_node_class* pNode = (process_node_class*)pProc;

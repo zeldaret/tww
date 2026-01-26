@@ -1,7 +1,7 @@
 #ifndef RES_GBED_H
 #define RES_GBED_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum GBED_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

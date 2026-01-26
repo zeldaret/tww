@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_buoyflag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_buoyflag.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"

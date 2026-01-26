@@ -21,8 +21,9 @@ public:
     Mtx* getStickMtx() { return &mStickMtx; }
     void setTevStr(dKy_tevstr_c* tevStr) { mTevStr = tevStr; }
     cXyz* getPos() { return mPos[m1C3A]; }
-    cXyz* getPosSpd() { return m0884; }
+    cXyz* getPosSpd() { return mPosSpd; }
     cXyz* getNrm() { return mNrm[m1C3A]; }
+    cXyz* getBackNrm() { return mBackNrm[m1C3A]; }
 
     void setCorrectNrmAngle(s16, f32);
     void setNrmMtx();
@@ -37,9 +38,9 @@ public:
     /* 0x0070 */ Mtx mStickMtx;
     /* 0x00A0 */ dKy_tevstr_c* mTevStr;
     /* 0x00A4 */ cXyz mPos[2][0x54];
-    /* 0x0884 */ cXyz m0884[0x54];
+    /* 0x0884 */ cXyz mPosSpd[0x54];
     /* 0x0C74 */ cXyz mNrm[2][0x54];
-    /* 0x1454 */ cXyz m1454[2][0x54];
+    /* 0x1454 */ cXyz mBackNrm[2][0x54];
     /* 0x1C34 */ s16 m1C34;
     /* 0x1C36 */ s16 m1C36;
     /* 0x1C38 */ s16 m1C38;
@@ -62,32 +63,6 @@ public:
     /* 0x0290 */ request_of_phase_process_class mClothPhase;
     /* 0x0298 */ request_of_phase_process_class mKaizokusenPhase;
     /* 0x02A0 */ daSail_packet_c mSailPacket;
-};
-
-class daSail_HIO_c : public JORReflexible {
-public:
-    daSail_HIO_c() {
-        mNo = -1;
-        m05 = 1;
-        m06 = 1;
-        m10 = 0.0f;
-        m07 = 0;
-    }
-    virtual ~daSail_HIO_c() {
-        mNo = -1;
-    }
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 m05;
-    /* 0x06 */ u8 m06;
-    /* 0x07 */ u8 m07;
-    /* 0x08 */ u8 m08;
-    /* 0x09 */ u8 m09[0x0C - 0x09];
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
 };
 
 #endif /* D_A_SAIL_H */

@@ -3,6 +3,8 @@
 // Translation Unit: fvb-data.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudio/fvb-data.h"
 #include "dolphin/types.h"
 

@@ -10,7 +10,6 @@
 #include "SSystem/SComponent/c_m2d.h"
 #include "SSystem/SComponent/c_math.h"
 
-#define CHECK_FLOAT_CLASS(line, x) JUT_ASSERT(line, !(fpclassify(x) == 1));
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
@@ -36,8 +35,8 @@ void dBgW::positionWallCorrect(dBgS_Acch* acch, f32 dist, cM3dGPla& plane, cXyz*
     f32 move = speed * dist;
     pupper_pos->x += move * plane.mNormal.x;
     pupper_pos->z += move * plane.mNormal.z;
-    CHECK_FLOAT_CLASS(0xd0, pupper_pos->x);
-    CHECK_FLOAT_CLASS(0xd1, pupper_pos->z);
+    JUT_ASSERT(0xd0, !isnan(pupper_pos->x));
+    JUT_ASSERT(0xd1, !isnan(pupper_pos->z));
 }
 
 /* 800A5E64-800A6DF8       .text RwgWallCorrect__4dBgWFP9dBgS_AcchUs */
@@ -50,8 +49,7 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
         if (!ChkPolyThrough(i_poly_idx, pwi->GetPolyPassChk())) {
             cBgW_TriElm* tri = &pm_tri[i_poly_idx];
 
-            f32 sp68 = std::sqrtf(tri->m_plane.GetNP()->x * tri->m_plane.GetNP()->x +
-                                  tri->m_plane.GetNP()->z * tri->m_plane.GetNP()->z);
+            f32 sp68 = std::sqrtf(SQUARE(tri->m_plane.GetNP()->x) + SQUARE(tri->m_plane.GetNP()->z));
             if (cM3d_IsZero(sp68)) {
                 if (rwg_elm->next != 0xFFFF) {
                     i_poly_idx = rwg_elm->next;
@@ -202,8 +200,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                             pwi->GetPos()->x += cx0 - spF0;
                                             pwi->GetPos()->z += cy0 - spF4;
 
-                                            CHECK_FLOAT_CLASS(484, pwi->GetPos()->x);
-                                            CHECK_FLOAT_CLASS(485, pwi->GetPos()->z);
+                                            JUT_ASSERT(484, !isnan(pwi->GetPos()->x));
+                                            JUT_ASSERT(485, !isnan(pwi->GetPos()->z));
 
                                             pwi->CalcMovePosWork();
                                             pwi->SetWallCirHit(cir_index);
@@ -222,8 +220,8 @@ bool dBgW::RwgWallCorrect(dBgS_Acch* pwi, u16 i_poly_idx) {
                                         pwi->GetPos()->x += cx1 - spF8;
                                         pwi->GetPos()->z += cy1 - spFC;
 
-                                        CHECK_FLOAT_CLASS(524, pwi->GetPos()->x);
-                                        CHECK_FLOAT_CLASS(525, pwi->GetPos()->z);
+                                        JUT_ASSERT(524, !isnan(pwi->GetPos()->x));
+                                        JUT_ASSERT(525, !isnan(pwi->GetPos()->z));
 
                                         pwi->CalcMovePosWork();
                                         pwi->SetWallCirHit(cir_index);

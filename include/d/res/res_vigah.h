@@ -1,7 +1,7 @@
 #ifndef RES_VIGAH_H
 #define RES_VIGAH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VIGAH_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

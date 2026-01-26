@@ -3,6 +3,7 @@
 // Translation Unit: d_a_ib.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ib.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -14,8 +15,6 @@
 #include "d/d_item_data.h"
 #include "global.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 struct daIball_c__data {
     /* 0x00 */ u8 m00;
@@ -325,7 +324,7 @@ void daIball_c::CreateInit() {
     mCyl.Set(m_cyl_src);
     mCyl.SetStts(&mStts);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.OnSeaCheckOn();
     mAcch.OnSeaWaterHeight();
     
@@ -505,11 +504,11 @@ dCcD_SrcCyl daIball_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static actor_method_class l_daIball_Method = {

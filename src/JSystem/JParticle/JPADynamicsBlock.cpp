@@ -3,6 +3,8 @@
 // Translation Unit: JPADynamicsBlock.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 
 /* 80258118-8025813C       .text __ct__19JPADynamicsBlockArcFPCUc */

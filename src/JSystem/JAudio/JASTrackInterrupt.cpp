@@ -3,6 +3,8 @@
 // Translation Unit: JASTrackInterrupt.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASTrackInterrupt.h"
 
 /* 80284118-80284158       .text init__Q28JASystem8TIntrMgrFv */
@@ -63,7 +65,7 @@ void JASystem::TIntrMgr::timerProcess() {
     if (field_0x4 != 0) {
         return;
     }
-    request(6);
+    request(REQUEST_UNK_6);
     if (field_0x3) {
         field_0x3--;
         if (field_0x3) {

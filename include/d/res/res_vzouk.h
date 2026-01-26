@@ -1,7 +1,7 @@
 #ifndef RES_VZOUK_H
 #define RES_VZOUK_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VZOUK_RES_FILE_ID {
     /* BCK */

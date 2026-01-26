@@ -1,8 +1,9 @@
 /**
  * d_a_mozo.cpp
- * Moblin Statue / モ石像 (Mo Sekizou)
+ * Enemy - Moblin Statue / モ石像 (Mo Sekizou)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mozo.h"
 #include "d/res/res_mozo.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,6 +16,38 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "d/d_cc_d.h"
+
+static dCcD_SrcCps cps_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_FIRE,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_VsPlayer_e | cCcD_AtSPrm_VsOther_e,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK8,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCpsS
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+    }},
+};
+
 
 static daMozo_HIO_c l_HIO;
 
@@ -73,13 +106,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000007AC-00000A24       .text CreateHeap__8daMozo_cFv */
 BOOL daMozo_c::CreateHeap() {
-    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_BDL_MOZ);
+    J3DModelData* mdlData = (J3DModelData*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BDL_MOZ);
     
     mDoExt_McaMorf* newMorf =  new mDoExt_McaMorf(
         mdlData,
         0,
         0,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_BCK_MOZ)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Mozo", MOZO_INDEX_BCK_MOZ)),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -92,10 +125,10 @@ BOOL daMozo_c::CreateHeap() {
     
     mAnimMorf = newMorf;
 
-    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_BRK_MOZ);
+    m_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BRK_MOZ);
     JUT_ASSERT(0x16A, m_brk != NULL);
 
-    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_BTK_MOZ);
+    m_btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Mozo", MOZO_INDEX_BTK_MOZ);
     JUT_ASSERT(0x16D, m_btk != NULL);
 
     int brkInitResult = mBrkAnm.init(mdlData, m_brk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0);

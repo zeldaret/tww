@@ -47,6 +47,11 @@ public:
 };
 
 struct mDoMain {
+#if VERSION == VERSION_DEMO
+    static int argument;
+    static int gameHeapSize;
+    static int archiveHeapSize;
+#endif
     static char COPYDATE_STRING[18];
     static u32 memMargin;
     static OSTime sPowerOnTime;

@@ -1,7 +1,7 @@
 #ifndef RES_BITA_H
 #define RES_BITA_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BITA_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

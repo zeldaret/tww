@@ -3,6 +3,7 @@
 // Translation Unit: d_a_magma.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_magma.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"

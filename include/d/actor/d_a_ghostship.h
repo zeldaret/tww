@@ -60,7 +60,9 @@ public:
     /* 0x300 */ dBgS_ObjAcch mAcch;
     /* 0x4C4 */ dBgS_AcchCir mCir;
     /* 0x504 */ dLib_wave_c mWave;
+#if VERSION > VERSION_DEMO
     /* 0x510 */ bool mbEnteredShip;
+#endif
     /* 0x514 */ dLib_circle_path_c mPaths[0xC];
     /* 0x6C4 */ f32 field_0x6C4[0xC];
     /* 0x6F4 */ cXyz mPathPos;
@@ -78,7 +80,7 @@ public:
     daGhostship_HIO_c();
     ~daGhostship_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ u8 field_0x04;

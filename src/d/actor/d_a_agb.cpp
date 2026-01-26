@@ -3,6 +3,7 @@
  * Tingle Tuner Cursor
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
 #include "d/res/res_agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
@@ -25,8 +26,39 @@
 #include "d/actor/d_a_bomb.h"
 #include "stdio.h"
 
-#include "weak_bss_3569.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
+class daAgb_HIO_c : public mDoHIO_entry_c {
+public:
+    daAgb_HIO_c();
+    virtual ~daAgb_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ J3DGXColorS10 field_0x04[2];
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
+    /* 0x30 */ f32 field_0x30;
+};
+
+class dMsgCtrl_c {
+public:
+    int init(u16);
+    int execute();
+    ~dMsgCtrl_c() {}
+
+    int getSelectNum() { return mpMsg->mSelectNum; }
+    void setMsgStatus(u16 status) { mpMsg->mStatus = status; }
+
+public:
+    /* 0x00 */ u16 field_0x0;
+    /* 0x04 */ fpc_ProcID mMsgID;
+    /* 0x08 */ msg_class* mpMsg;
+};
 
 static mDoDvdThd_toMainRam_c* l_gbaCommand;
 
@@ -510,7 +542,7 @@ int daAgb_c::uploadMessageSend() {
             mUploadAction  = UpAct_UNKB;
             field_0x664 = 60;
 
-            dComIfGs_onEventBit(0x1A20);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A20);
             dComIfGp_particle_set(dPa_name::ID_COMMON_02E7, &current.pos, NULL, NULL, 255, &field_0x684);
 
             JKRHeap::free(l_gbaCommand->getMemAddress(), NULL);
@@ -736,7 +768,7 @@ void daAgb_c::resetCursor(bool param_0) {
 }
 
 /* 800D070C-800D0734       .text FlashCheck__7daAgb_cFv */
-bool daAgb_c::FlashCheck() {
+BOOL daAgb_c::FlashCheck() {
     if (mIsFree || mFollowTarget == true) {
         return true;
     }
@@ -780,16 +812,16 @@ void daAgb_c::FlagsRecv() {
     field_0x632 = BigLittleChange(mGbaFlg.field_0x6) >> 0x10;
     field_0x67a = mGbaFlg.field_0x2.m2;
 
-    if (!dComIfGs_isEventBit(0x1708) && mGbaFlg.field_0x2.m3) {
-        dComIfGs_onEventBit(0x1708);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708) && mGbaFlg.field_0x2.m3) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1708);
     }
 
-    if (!dComIfGs_isEventBit(0x1A10) && mGbaFlg.field_0x2.m4) {
-        dComIfGs_onEventBit(0x1A10);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT) && mGbaFlg.field_0x2.m4) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
     }
 
-    if (!dComIfGs_isEventBit(0x1A08) && mGbaFlg.field_0x2.m5) {
-        dComIfGs_onEventBit(0x1A08);
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT) && mGbaFlg.field_0x2.m5) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT);
     }
 }
 
@@ -840,7 +872,7 @@ void daAgb_c::GbaItemUse() {
                     var_r28 = 0xA;
                 } else if (temp_f1 < 70.0) {
                     var_r28 = 0xD;
-                } else if (dComIfGs_isEventBit(0x2E08)) {
+                } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E08)) {
                     var_r28 = 0xC;
                 } else {
                     var_r28 = 0xD;
@@ -1125,11 +1157,11 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     mFlags.field_0x6_3 = dKy_getdaytime_hour();
     mFlags.field_0x7_2 = dKy_getdaytime_minute();
     mFlags.field_0x8_1 = dComIfGs_getLife();
-    mFlags.field_0xa_1 = dComIfGs_isEventBit(0x1708);
-    mFlags.field_0x7_1 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
-    mFlags.field_0x7_0 = dComIfGs_isEventBit(dSv_evtBit_c::UNLOCK_TING_DISCOUNT);
+    mFlags.field_0xa_1 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1708);
+    mFlags.field_0x7_1 = dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT);
+    mFlags.field_0x7_0 = dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT);
     
-    if (!dComIfGs_isEventBit(dSv_evtBit_c::MET_KORL) || dComIfGs_isEventBit(0x1E80)) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E80)) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 0;
         mFlags.field_0x9_5 = 0;
@@ -1147,24 +1179,24 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0x9_5 = 0;
     }
     
-    if (dComIfGs_isEventBit(0x3920)) {
-        mFlags.field_0x9_4 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_DINS_PEARL);
-        mFlags.field_0x9_3 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_FARORES_PEARL);
-        mFlags.field_0x9_2 = !dComIfGs_isEventBit(dSv_evtBit_c::PLACED_NAYRUS_PEARL);
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920)) {
+        mFlags.field_0x9_4 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL);
+        mFlags.field_0x9_3 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL);
+        mFlags.field_0x9_2 = !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL);
     } else {
         mFlags.field_0x9_4 = 0;
         mFlags.field_0x9_3 = 0;
         mFlags.field_0x9_2 = 0;
     }
     
-    if (dComIfGs_isEventBit(0x1820)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
         mFlags.field_0x9_1 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT);
         mFlags.field_0x9_0 = !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET);
     } else {
         mFlags.field_0x9_1 = 0;
         mFlags.field_0x9_0 = 0;
     }
-    mFlags.field_0xa_3 = dComIfGs_isEventBit(0x1E40);
+    mFlags.field_0xa_3 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40);
     mFlags.field_0xa_0 = mIsFree;
     mFlags.field_0xb_7 = getFollowTarget();
     if (stage_type == dStageType_MINIBOSS_e) {

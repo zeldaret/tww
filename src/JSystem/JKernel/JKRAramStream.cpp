@@ -3,6 +3,8 @@
 // Translation Unit: JKRAramStream.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRAramStream.h"
 #include "JSystem/JKernel/JKRAramPiece.h"
 #include "JSystem/JSupport/JSUFileStream.h"
@@ -199,4 +201,6 @@ JKRAramStreamCommand::JKRAramStreamCommand() {
     mAllocatedTransferBuffer = false;
 }
 
-static void dummy(JSURandomInputStream* stream) { stream->getAvailable(); }
+static void dummy(JSURandomInputStream* stream) {
+    stream->getAvailable();
+}

@@ -1,8 +1,9 @@
 /**
- * d_a_bomb.cpp
- * Bomb Flower Bomb
+ * d_a_bomb2.cpp
+ * Object - Bomb Flower - Bomb
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
@@ -15,8 +16,6 @@
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daBomb2 {
     namespace {
@@ -287,7 +286,7 @@ namespace daBomb2 {
 
     void Act_c::crr_init() {
         mCir.SetWall(30.0f, 30.0f);
-        mAcch.Set(&current.pos, &old.pos, this, 1, &mCir, &speed, &current.angle, &shape_angle);
+        mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
         mAcch.ClrWaterNone();
         mAcch.ClrRoofNone();
         mAcch.m_roof_crr_height = 50.0f;
@@ -323,10 +322,10 @@ namespace daBomb2 {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
 
     void Act_c::cc_init() {
@@ -477,9 +476,7 @@ namespace daBomb2 {
             mSph.SetR(radius);
             mSph.SetC(pos);
             dComIfG_Ccsp()->Set(&mSph);
-            //using inline breaks match
-            //dComIfG_Ccsp()->SetMass(&mSph, 3);
-            g_dComIfG_gameInfo.play.mCcS.SetMass(&mSph, 3);
+            dComIfG_Ccsp()->SetMass(&mSph, 3);
         }
     }
 
@@ -620,8 +617,8 @@ namespace daBomb2 {
             mBombTimer = attr().field_0xA;
 
             f32 frame = 0x87 - attr().field_0xA;
-            mBck0.getFrameCtrl()->setFrame(frame);
-            mBrk0.getFrameCtrl()->setFrame(frame);
+            mBck0.setFrame(frame);
+            mBrk0.setFrame(frame);
         }
     }
 
@@ -648,7 +645,7 @@ namespace daBomb2 {
         f32 f30 = attr().field_0x40;
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
-        if (f31 > f30*f30) {
+        if (f31 > SQUARE(f30)) {
             sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
@@ -1266,8 +1263,8 @@ namespace daBomb2 {
 
     void Act_c::draw_nut() {
         J3DModelData* mdlData = (J3DModelData*)mpModel->getModelData();
-        mBck0.entry(mdlData, mBck0.getFrame());
-        mBrk0.entry(mdlData, mBrk0.getFrame());
+        mBck0.entry(mdlData);
+        mBrk0.entry(mdlData);
         dComIfGd_setListP1();
         mDoExt_modelUpdateDL(mpModel);
         dComIfGd_setList();

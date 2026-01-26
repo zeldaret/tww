@@ -406,7 +406,7 @@ BOOL DynamicModuleControl::do_link() {
         do_load();
     }
     if (mModule != NULL) {
-        JUT_ASSERT(VERSION_SELECT(501, 613, 613, 613), mModule->info.sectionInfoOffset < 0x80000000);
+        JUT_ASSERT(DEMO_SELECT(501, 613), mModule->info.sectionInfoOffset < 0x80000000);
 #if VERSION != VERSION_DEMO
         JUT_ASSERT(615, (u32)mModule + mModule->fixSize < 0x82000000);
 #endif
@@ -477,7 +477,7 @@ BOOL DynamicModuleControl::do_link() {
                 }
             }
         } else {
-            JUT_ASSERT(VERSION_SELECT(610, 724, 724, 724), FALSE);
+            JUT_ASSERT(DEMO_SELECT(610, 724), FALSE);
         }
         OSGetTime();
         sAllocBytes = sAllocBytes + getModuleSize();
@@ -565,7 +565,7 @@ extern "C" void ModuleUnresolved() {
 }
 
 extern "C" void ModuleConstructorsX(void (**_ctors)()) {
-    JUT_ASSERT(VERSION_SELECT(726, 850, 850, 850), _ctors);
+    JUT_ASSERT(DEMO_SELECT(726, 850), _ctors);
     while (*_ctors != 0) {
         (**_ctors)();
         _ctors++;
@@ -573,7 +573,7 @@ extern "C" void ModuleConstructorsX(void (**_ctors)()) {
 }
 
 extern "C" void ModuleDestructorsX(void (**_dtors)()) {
-    JUT_ASSERT(VERSION_SELECT(740, 864, 864, 864), _dtors);
+    JUT_ASSERT(DEMO_SELECT(740, 864), _dtors);
     while (*_dtors != 0) {
         (**_dtors)();
         _dtors++;

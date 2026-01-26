@@ -1,7 +1,7 @@
 #ifndef RES_KM_H
 #define RES_KM_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KM_RES_FILE_ID {
     /* BAS */

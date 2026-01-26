@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_volcano.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_volcano.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -33,7 +34,7 @@ cPhs_State daTagvolcano::Act_c::_create() {
 
     if (mType == 0) {
         if (current.roomNo == dIsleRoom_FireMountain_e) {
-            if (dComIfGs_isEventBit(0x1902)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
                 fopAcM_onSwitch(this, prm_get_swSave());
             } else if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
                 field_0x2a0 = 10;
@@ -42,7 +43,7 @@ cPhs_State daTagvolcano::Act_c::_create() {
                 fopAcM_offSwitch(this, prm_get_swSave());
             }
         } else {
-            if (dComIfGs_isEventBit(0x1901)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1901)) {
                 fopAcM_onSwitch(this, prm_get_swSave());
             } else if (dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()) {
                 field_0x2a0 = 10;
@@ -89,7 +90,7 @@ bool daTagvolcano::Act_c::_execute() {
                 if (field_0x298 == 1) {
                     if (dComIfG_getTimerPtr() != NULL) {
                         if (field_0x299 == 0) {
-                            dComIfG_TimerStart(0, 3);
+                            dComIfG_TimerStart(3, 0);
                             field_0x299 = 1;
                         } else {
                             if (dComIfGp_event_runCheck()) {
@@ -133,9 +134,9 @@ bool daTagvolcano::Act_c::_execute() {
             if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 3)
                 dComIfG_TimerDeleteRequest();
             if (mType == 1)
-                dComIfGs_onEventBit(0x1902);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1902);
             else
-                dComIfGs_onEventBit(0x1901);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1901);
             field_0x2a4 = 0;
         } else if (dComIfG_getTimerPtr() != NULL) {
             if (dComIfGp_event_runCheck()) {

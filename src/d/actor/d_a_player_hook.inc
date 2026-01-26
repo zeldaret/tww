@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_hookshot.h"
 #include "d/actor/d_a_player_HIO.h"
@@ -94,11 +95,11 @@ void daPy_lk_c::setHookshotSight() {
             if (mSightPacket.getLockFlg()) {
                 mSightPacket.incFrame();
                 if (mSightPacket.checkSEFrame()) {
-                    mDoAud_seStart(JA_SE_INDICATOR_1);
+                    seStartSystem(JA_SE_INDICATOR_1);
                 }
             } else {
                 mSightPacket.onLockFlg();
-                mDoAud_seStart(JA_SE_INDICATOR_1);
+                seStartSystem(JA_SE_INDICATOR_1);
             }
         } else {
             mSightPacket.offLockFlg();
@@ -148,10 +149,10 @@ BOOL daPy_lk_c::checkNextActionHookshotReady() {
             current.angle.y = shape_angle.y + 0x4000;
             onModeFlg(ModeFlg_00000001);
             m3598 = 0.0f;
-            setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+            setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
             mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
-            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(daPy_HIO_atnMove_c0::m.field_0x24);
+            mFrameCtrlUpper[UPPER_MOVE0_e].setRate(m_HIO->mAtnMove.m.field_0x24);
             mFrameCtrlUpper[UPPER_MOVE1_e].setRate(0.0f);
             mFrameCtrlUpper[UPPER_MOVE2_e].setRate(0.0f);
             return true;
@@ -186,7 +187,7 @@ BOOL daPy_lk_c::checkNextHookshotMode() {
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
     }
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         return procHookshotMove_init();
     } else {
         return procHookshotSubject_init();
@@ -204,7 +205,7 @@ BOOL daPy_lk_c::procHookshotSubject_init() {
     mVelocity = 0.0f;
 
     setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
-    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, daPy_HIO_basic_c0::m.field_0xC);
+    setSingleMoveAnime(ANM_ATNLS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
 
@@ -222,7 +223,7 @@ BOOL daPy_lk_c::procHookshotSubject() {
         dComIfGp_setDoStatus(dActStts_RETURN_e);
     }
 
-    if (mpAttention->Lockon()) {
+    if (checkAttentionLock()) {
         setSpeedAndAngleAtn();
     }
 
@@ -257,7 +258,7 @@ BOOL daPy_lk_c::procHookshotMove_init() {
     daHookshot_c* hookshot = (daHookshot_c*)mActorKeepEquip.getActor();
     if (hookshot->checkWait()) {
         setActAnimeUpper(LKANM_BCK_HOOKSHOTWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
-        setBlendAtnMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+        setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e);
     return true;
@@ -274,7 +275,7 @@ BOOL daPy_lk_c::procHookshotMove() {
     if (hookshot->checkWait()) {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
-        } else if (m355E == 0 && !mpAttention->Lockon()) {
+        } else if (m355E == 0 && !checkAttentionLock()) {
             resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         } else {
             setSpeedAndAngleAtn();
@@ -286,7 +287,7 @@ BOOL daPy_lk_c::procHookshotMove() {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_LEFT) {
                 mDirection = DIR_LEFT;
-                fVar1 = daPy_HIO_basic_c0::m.field_0xC;
+                fVar1 = m_HIO->mBasic.m.field_0xC;
             }
             current.angle.y = shape_angle.y + 0x4000;
         } else {

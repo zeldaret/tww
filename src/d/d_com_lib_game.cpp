@@ -3,6 +3,7 @@
  * Game - Shared Library ("Common Library Game")
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_com_lib_game.h"
 #include "SSystem/SComponent/c_phase.h"
 

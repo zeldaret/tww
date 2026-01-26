@@ -1,7 +1,7 @@
 #ifndef RES_PW_H
 #define RES_PW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum PW_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */

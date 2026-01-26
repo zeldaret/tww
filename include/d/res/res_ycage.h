@@ -1,7 +1,7 @@
 #ifndef RES_YCAGE_H
 #define RES_YCAGE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum YCAGE_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

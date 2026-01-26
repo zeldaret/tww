@@ -1,7 +1,7 @@
 #ifndef RES_VBOOT_H
 #define RES_VBOOT_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VBOOT_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

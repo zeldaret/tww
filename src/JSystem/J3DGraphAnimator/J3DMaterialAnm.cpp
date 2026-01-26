@@ -3,6 +3,8 @@
 // Translation Unit: J3DMaterialAnm.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "dolphin/types.h"
 

@@ -3,6 +3,8 @@
 // Translation Unit: JSUList.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JSupport/JSUList.h"
 
 /* 802BEFE4-802BEFFC       .text __ct__10JSUPtrLinkFPv */

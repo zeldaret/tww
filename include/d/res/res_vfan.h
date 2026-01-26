@@ -1,7 +1,7 @@
 #ifndef RES_VFAN_H
 #define RES_VFAN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum VFAN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

@@ -50,7 +50,9 @@ public:
     bool _delete();
 
 public:
-    /* 0x2AC */ u8 m2AC[0x2D4 - 0x2AC];
+    /* 0x2AC */ u8 m2AC[0x2B0 - 0x2AC];
+    /* 0x2B0 */ s32 m2B0;
+    /* 0x2B4 */ u8 m2B4[0x2D4 - 0x2B4];
     /* 0x2D4 */ mDoExt_McaMorf* mpMorf;
     /* 0x2D8 */ mDoExt_invisibleModel m2D8;
     /* 0x2E0 */ dBgS_Acch mAcch;

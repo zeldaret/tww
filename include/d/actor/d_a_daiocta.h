@@ -4,6 +4,8 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
+class dCcD_SrcSph;
+class dCcD_SrcCps;
 
 class daDaiocta_c : public fopAc_ac_c {
 public:
@@ -64,6 +66,9 @@ public:
     void createInit();
     cPhs_State _create();
     bool _delete();
+
+    static const dCcD_SrcSph m_sph_src;
+    static const dCcD_SrcCps m_cps_src;
 
 public:
     /* 0x290 */ u8 field_0x290[0x574 - 0x290];

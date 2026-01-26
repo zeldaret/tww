@@ -3,6 +3,7 @@
 // Translation Unit: d_a_switem.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_switem.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_procname.h"
@@ -35,11 +36,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 25.0f,
         /* Height */ 50.0f,
-    },
+    }},
 };
 
 /* 00000078-00000080       .text _delete__10daSwItem_cFv */

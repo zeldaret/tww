@@ -65,16 +65,16 @@ public:
     void getData(TData*) const;
 };
 
-struct TParse_TParagraph_data : public TParseData_aligned<4> {
+struct TParse_TParagraph_data : public TParseData {
     struct TData {
         /* 0x00 */ u8 status;
-        /* 0x04 */ u32 dataSize;
-        /* 0x08 */ u32 _8;
-        /* 0x0C */ const void* fileCount;
-        /* 0x10 */ const void* _10;
+        /* 0x04 */ u32 entrySize;
+        /* 0x08 */ u32 entryCount;
+        /* 0x0C */ const void* content;
+        /* 0x10 */ const void* next;
     };
 
-    TParse_TParagraph_data(const void* content) : TParseData_aligned<4>(content) {}
+    TParse_TParagraph_data(const void* content) : TParseData(content) {}
     void getData(TData* pData) const;
 };
 

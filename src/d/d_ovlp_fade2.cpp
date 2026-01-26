@@ -3,8 +3,10 @@
 // Translation Unit: d_ovlp_fade2.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade2.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
@@ -40,7 +42,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_TRUE);
     GXSetClipMode(GX_CLIP_DISABLE);
-    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -253,7 +255,7 @@ overlap_process_profile_definition g_profile_OVERLAP2 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E3,
+    PRIO_OVERLAP2,
     &l_dOvlpFd2_Method,
 };
 
@@ -268,10 +270,7 @@ overlap_process_profile_definition g_profile_OVERLAP3 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E4,
+    PRIO_OVERLAP3,
     &l_dOvlpFd2_Method,
 };
 #endif
-
-// Fakematch to fix the weak func order of cLib_calcTimer<signed char>(signed char*)
-#pragma sym off

@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_item.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_item.h"
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */

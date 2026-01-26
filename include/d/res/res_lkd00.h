@@ -1,7 +1,7 @@
 #ifndef RES_LKD00_H
 #define RES_LKD00_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum LKD00_RES_FILE_ID {
     /* BTP */

@@ -1,7 +1,7 @@
 #ifndef RES_FIGURE2_H
 #define RES_FIGURE2_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum FIGURE2_RES_FILE_ID {
     /* BCK */
@@ -32,7 +32,9 @@ enum FIGURE2_RES_FILE_ID {
     FIGURE2_BDL_VF_064S=0x16,
     FIGURE2_BDL_VF_053=0x17,
     FIGURE2_BDL_VF_056=0x18,
+#if VERSION > VERSION_DEMO
     FIGURE2_BDL_VF_064=0x1B,
+#endif
     
     /* BDLM */
     FIGURE2_BDL_VF_061=0x19,
@@ -70,13 +72,23 @@ enum FIGURE2_RES_FILE_INDEX {
     FIGURE2_INDEX_BDL_VF_064S=0x1E,
     FIGURE2_INDEX_BDL_VF_053=0x1F,
     FIGURE2_INDEX_BDL_VF_056=0x20,
+#if VERSION > VERSION_DEMO
     FIGURE2_INDEX_BDL_VF_064=0x21,
+#endif
     
     /* BDLM */
+#if VERSION == VERSION_DEMO
+    FIGURE2_INDEX_BDL_VF_061=0x23,
+#else
     FIGURE2_INDEX_BDL_VF_061=0x24,
+#endif
     
     /* BRK */
+#if VERSION == VERSION_DEMO
+    FIGURE2_INDEX_BRK_VF_061=0x26,
+#else
     FIGURE2_INDEX_BRK_VF_061=0x27,
+#endif
 };
 
 #endif /* RES_FIGURE2_H */

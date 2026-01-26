@@ -1,7 +1,7 @@
 #ifndef RES_SH_H
 #define RES_SH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SH_RES_FILE_ID { // IDs and indexes are synced
     /* BAS */
@@ -10,8 +10,13 @@ enum SH_RES_FILE_ID { // IDs and indexes are synced
     SH_BAS_BFLY=0x7,
     SH_BAS_BHUKKI=0x8,
     SH_BAS_BJUMP=0x9,
+#if VERSION == VERSION_DEMO
+    SH_BAS_BUCHIWA=0xA,
+    SH_BAS_BUCHI_CHAKU=0xB,
+#else
     SH_BAS_BUCHI_CHAKU=0xA,
     SH_BAS_BUCHIWA=0xB,
+#endif
     SH_BAS_PAWAY=0xC,
     SH_BAS_PFLY=0xD,
     SH_BAS_PHUKKI=0xE,
@@ -25,13 +30,23 @@ enum SH_RES_FILE_ID { // IDs and indexes are synced
     SH_BCK_BHUKKI=0x16,
     SH_BCK_BJAWS=0x17,
     SH_BCK_BJUMP=0x18,
+#if VERSION == VERSION_DEMO
+    SH_BCK_BUCHIWA=0x19,
+    SH_BCK_BUCHI_CHAKU=0x1A,
+#else
     SH_BCK_BUCHI_CHAKU=0x19,
     SH_BCK_BUCHIWA=0x1A,
+#endif
     SH_BCK_PAWAY=0x1B,
     SH_BCK_PFLY=0x1C,
     SH_BCK_PHUKKI=0x1D,
+#if VERSION == VERSION_DEMO
+    SH_BCK_PUCHIWA=0x1E,
+    SH_BCK_PUCHI_CHAKU=0x1F,
+#else
     SH_BCK_PUCHI_CHAKU=0x1E,
     SH_BCK_PUCHIWA=0x1F,
+#endif
     
     /* BMDM */
     SH_BMD_SHB=0x22,

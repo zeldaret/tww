@@ -240,4 +240,15 @@ struct J3DZModeInfo {
     /* 0x03 */ u8 pad;
 };
 
+struct J3DAlphaCompInfo {
+    /* 0x0 */ u8 mComp0;
+    /* 0x1 */ u8 mRef0;
+    /* 0x2 */ u8 mOp;
+    /* 0x3 */ u8 mComp1;
+    /* 0x4 */ u8 mRef1;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+    /* 0x7 */ u8 field_0x7;
+};
+
 #endif /* J3DSTRUCT_H */

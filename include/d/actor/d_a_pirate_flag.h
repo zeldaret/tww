@@ -24,6 +24,7 @@ public:
     void setTevStr(dKy_tevstr_c* i_tevStr) { mTevStr = i_tevStr; }
     cXyz* getPos() { return mPos[m87E]; }
     cXyz* getNrm() { return mNrm[m87E]; }
+    cXyz* getBackNrm() { return mBackNrm[m87E]; }
     cXyz* getOffsetVec() { return m74C; } // Guessed based on size in debug maps
     s16 getEscapeNrmAngle() { return m87A; }
     void changeCurrentPos() { m87E ^= 1; }
@@ -40,46 +41,13 @@ public:
     /* 0x040 */ dKy_tevstr_c* mTevStr;
     /* 0x044 */ cXyz mPos[2][25];
     /* 0x29C */ cXyz mNrm[2][25];
-    /* 0x4F4 */ cXyz m4F4[2][25];
+    /* 0x4F4 */ cXyz mBackNrm[2][25];
     /* 0x74C */ cXyz m74C[25];
     /* 0x878 */ s16 m878;
     /* 0x87A */ s16 m87A;
     /* 0x87C */ s16 m87C;
     /* 0x87E */ u8 m87E;
     /* 0x87F */ u8 m87F;
-};
-
-class daPirate_Flag_HIO_c : public JORReflexible {
-public:
-    daPirate_Flag_HIO_c() {
-        mNo = -1;
-        m06 = 0;
-        m1C = 0.0f;
-        m05 = 0;
-        m07 = 0;
-        m08 = 0x40;
-        m0C = 13.0f;
-        m10 = 7.0f;
-        m14 = -3.5f;
-        m18 = 0.45f;
-    }
-    virtual ~daPirate_Flag_HIO_c() {
-        mNo = -1;
-    }
-
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 m05;
-    /* 0x06 */ u8 m06;
-    /* 0x07 */ u8 m07;
-    /* 0x08 */ s32 m08;
-    /* 0x0C */ f32 m0C;
-    /* 0x10 */ f32 m10;
-    /* 0x14 */ f32 m14;
-    /* 0x18 */ f32 m18;
-    /* 0x1C */ f32 m1C;
 };
 
 class pirate_flag_class : public fopAc_ac_c {

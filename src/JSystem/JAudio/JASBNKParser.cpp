@@ -3,6 +3,8 @@
 // Translation Unit: JASBNKParser.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASBNKParser.h"
 #include "JSystem/JAudio/JASBasicBank.h"
 #include "JSystem/JAudio/JASBasicInst.h"

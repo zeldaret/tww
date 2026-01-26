@@ -1,7 +1,7 @@
 #ifndef RES_LS3_H
 #define RES_LS3_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum LS3_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

@@ -13,6 +13,7 @@
  * But the debug version had implementations for all of Link's HIO classes.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 
 daPy_HIO_c::daPy_HIO_c() {}

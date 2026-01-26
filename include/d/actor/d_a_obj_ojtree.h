@@ -4,7 +4,6 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_bg_s_movebg_actor.h"
 
-
 namespace daObjOjtree {
     class Act_c : public dBgS_MoveBgActor {
     public:

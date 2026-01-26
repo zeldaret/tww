@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_Yboil.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Yboil.h"
 #include "d/res/res_yboil.h"
 #include "d/d_a_obj.h"
@@ -87,7 +88,7 @@ cPhs_State daObjYboil_c::_create() {
     fopAcM_SetupActor(this, daObjYboil_c);
 
     cPhs_State ret;
-    if (dComIfGs_isEventBit(0x1902)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
         ret = cPhs_STOP_e;
     } else {
         ret = dComIfG_resLoad(&mPhs, "Yboil");

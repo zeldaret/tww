@@ -1,7 +1,7 @@
 #ifndef RES_YLZOU_H
 #define RES_YLZOU_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum YLZOU_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

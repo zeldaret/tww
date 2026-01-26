@@ -3,6 +3,7 @@
 // Translation Unit: d_message.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_message.h"
 #include "f_op/f_op_msg.h"
 

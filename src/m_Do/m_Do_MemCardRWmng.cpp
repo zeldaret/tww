@@ -15,6 +15,14 @@
 #include <string.h>
 #include <stdio.h>
 
+#if VERSION <= VERSION_JPN
+#define HEADER_TITLE   "ゼルダの伝説～風のタクト～"
+#define HEADER_COMMENT "%d月%d日のセーブデータです"
+#else
+#define HEADER_TITLE   "Zelda: The Wind Waker"
+#define HEADER_COMMENT "%d/%d Save Data"
+#endif
+
 static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
 static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);
 static u32 sSaveCount;
@@ -83,6 +91,11 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
                 if (ret != CARD_ERROR_READY) return ret;
                 ret = CARDRead(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
                 if (ret != CARD_ERROR_READY) return ret;
+#if VERSION == VERSION_DEMO
+                if (!mDoMemCdRWm_TestCheckSumPictData(sTmpBuf)) {
+                    return ret;
+                }
+#endif
             }
         }
     }
@@ -192,19 +205,11 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo* card) {
 
 /* 80019F4C-8001A0A8       .text mDoMemCdRWm_BuildHeader__FP22mDoMemCdRWm_HeaderData */
 void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
-#if VERSION <= VERSION_JPN
-    snprintf(header->comment, sizeof(header->comment), "ゼルダの伝説～風のタクト～");
-#else
-    snprintf(header->comment, sizeof(header->comment), "Zelda: The Wind Waker");
-#endif
+    snprintf(header->comment, sizeof(header->comment), HEADER_TITLE);
     OSTime time = OSGetTime();
     OSCalendarTime cal;
     OSTicksToCalendarTime(time, &cal);
-#if VERSION <= VERSION_JPN
-    snprintf(header->info, sizeof(header->info), "%d月%d日のセーブデータです", cal.month + 1, cal.day_of_month);
-#elif VERSION == VERSION_USA
-    snprintf(header->info, sizeof(header->info), "%d/%d Save Data", cal.month + 1, cal.day_of_month);
-#else
+#if VERSION == VERSION_PAL
     switch (dComIfGs_getPalLanguage()) {
     case 0:
         snprintf(header->info, sizeof(header->info), "%d/%d Save Data", cal.month + 1, cal.day_of_month);
@@ -222,6 +227,8 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
         snprintf(header->info, sizeof(header->info), "Dati salvati: %d/%d", cal.day_of_month, cal.month + 1);
         break;
     }
+#else
+    snprintf(header->info, sizeof(header->info), HEADER_COMMENT, cal.month + 1, cal.day_of_month);
 #endif
     mDoDvdThd_mountArchive_c* cmd = mDoDvdThd_mountArchive_c::create("/res/CardIcon/cardicon.arc", 0, NULL);
     while (!cmd->sync()) ;
@@ -306,8 +313,7 @@ u32 mDoMemCdRWm_CalcCheckSum(void* p_, u32 size) {
 u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
     u16 csum = 0;
     for (int i = 0; i < size; i++) {
-        u8 v = ((u8*)p)[i];
-        csum += v;
+        csum += ((u8*)p)[i];
     }
     return csum;
 }

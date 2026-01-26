@@ -3,6 +3,8 @@
 // Translation Unit: console.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JStudio/JStudioToolLibrary/console.h"
 #include "dolphin/types.h"
 

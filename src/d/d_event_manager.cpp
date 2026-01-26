@@ -3,6 +3,7 @@
 // Translation Unit: d_event_manager.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -22,30 +23,31 @@ void dEvent_exception_c::init() {
 
 /* 800737F4-80073900       .text setStartDemo__18dEvent_exception_cFi */
 int dEvent_exception_c::setStartDemo(int eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (eventInfoIdx == 0xFF) {
         mEventInfoIdx = 206;
         return 0xFF;
-    } else if (eventInfoIdx >= 200) {
+    }
+    if (eventInfoIdx >= 200) {
         mEventInfoIdx = eventInfoIdx;
         return eventInfoIdx;
-    } else {
-        if (stageEventInfo == NULL) {
-            return 0xFF;
-        } else if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
-            return 0xFF;
-        } else {
-            u8 switchNo = stageEventInfo->events[eventInfoIdx].field_0x13;
-            if (switchNo != 0xFF) {
-                if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
-                    mEventInfoIdx = 206;
-                    return 0xFF;
-                }
-                dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
-            }
-            mEventInfoIdx = eventInfoIdx;
-        }
     }
+    if (stageEventInfo == NULL) {
+        return 0xFF;
+    }
+    if (eventInfoIdx == -1 || stageEventInfo->num < eventInfoIdx) {
+        return 0xFF;
+    }
+    
+    u8 switchNo = stageEventInfo->events[eventInfoIdx].mSpawnSwitchNo;
+    if (switchNo != 0xFF) {
+        if (dComIfGs_isSwitch(switchNo, dComIfGp_roomControl_getStayNo())) {
+            mEventInfoIdx = 206;
+            return 0xFF;
+        }
+        dComIfGs_onSwitch(switchNo, dComIfGp_roomControl_getStayNo());
+    }
+    mEventInfoIdx = eventInfoIdx;
     return eventInfoIdx;
 }
 
@@ -67,7 +69,7 @@ const char* dEvent_exception_c::getEventName() {
         "FALL_START",
     };
 
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
     if (mEventInfoIdx == -1)
         return NULL;
@@ -184,7 +186,7 @@ static void* findObjectCallBack(fopAc_ac_c* actor, void* work) {
     if (inf == NULL)
         return NULL;
 
-    if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
+    if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor)))))
         return actor;
 
     return NULL;
@@ -206,7 +208,7 @@ static void* extraOnObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument && (prm->mMask == 0 || (prm->mValue == (prm->mMask & fopAcM_GetParam(actor))))) {
             fopAcM_OnStatus(actor, fopAcStts_UNK800_e);
             if (prm->mCastInFlag & 1)
                 fopAcM_OnStatus(actor, fopAcStts_FORCEMOVE_e);
@@ -226,7 +228,7 @@ static void* extraOffObjectCallBack(fopAc_ac_c* actor, void* work) {
         dStage_objectNameInf* inf = dStage_searchName(name);
         if (inf == NULL)
             return NULL;
-        if (inf->mProcName == fopAcM_GetProfName(actor) && inf->mSubtype == actor->subtype) {
+        if (inf->procname == fopAcM_GetProfName(actor) && inf->argument == actor->argument) {
             fopAcM_OffStatus(actor, fopAcStts_UNK800_e);
         }
         return NULL;
@@ -339,7 +341,7 @@ dEvDtEvent_c* dEvent_manager_c::getEventData(s16 eventIdx) {
 
 /* 800743AC-800744AC       .text getEventIdx__16dEvent_manager_cFPCcUc */
 s16 dEvent_manager_c::getEventIdx(const char* eventName, u8 eventInfoIdx) {
-    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* stageEventInfo = dComIfGp_getStage().getEventInfo();
     if (mList.mHeaderP == NULL)
         return -1;
 
@@ -595,9 +597,9 @@ void dEvent_manager_c::exceptionProc() {
         if (startCheck(eventIdx)) {
             mException.mState = 2;
             if (strcmp(eventName, "MEETSHISHIOH") == 0)
-                dComIfGs_onEventBit(0x0F80);
+                dComIfGs_onEventBit(dSv_event_flag_c::MET_KORL);
             if (strcmp(eventName, "look_tetra") == 0)
-                dComIfGs_onEventBit(0x0280);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0280);
         } else {
             fopAcM_orderOtherEvent(NULL, (char*)eventName);
         }
@@ -672,7 +674,7 @@ fopAc_ac_c* dEvent_manager_c::specialCast_Shutter(s16 profName, int flag) {
         goal.x += cM_ssin(angle) * 100.0f;
         goal.z += cM_scos(angle) * 100.0f;
         dComIfGp_evmng_setGoal(&goal);
-        g_dComIfG_gameInfo.play.getEvent().setPt2(shutter);
+        g_dComIfG_gameInfo.play.getEvent()->setPt2(shutter);
     }
 
     return shutter;
@@ -733,7 +735,7 @@ void dEvent_manager_c::setPrmStaff(void* work, int staffIdx) {
 
 /* 80075288-8007537C       .text getToolId__16dEvent_manager_cFUci */
 u8 dEvent_manager_c::getToolId(u8 r4, int r31) {
-    dStage_EventInfo_c* eventInfo = dComIfGp_getStageEventInfo();
+    dStage_EventInfo_c* eventInfo = dComIfGp_getStage().getEventInfo();
     int r5 = r31;
     if (r4 == 0xFF) {
         return 0xFF;

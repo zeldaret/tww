@@ -1,7 +1,7 @@
 #ifndef RES_DBARREL_H
 #define RES_DBARREL_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DBARREL_RES_FILE_ID {
     /* BCK */

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_vmsms.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsms.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -68,7 +69,7 @@ void daObjVmsms_c::init_mtx() {
 
 /* 0000026C-000002A8       .text check_demo__12daObjVmsms_cCFv */
 bool daObjVmsms_c::check_demo() const {
-    return dComIfGs_isEventBit(0x2d04);
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04);
 }
 
 /* 000002A8-0000030C       .text _execute__12daObjVmsms_cFv */

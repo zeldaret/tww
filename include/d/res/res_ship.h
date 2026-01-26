@@ -1,7 +1,7 @@
 #ifndef RES_SHIP_H
 #define RES_SHIP_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SHIP_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

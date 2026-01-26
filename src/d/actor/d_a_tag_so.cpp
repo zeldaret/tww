@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_so.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
@@ -66,7 +67,7 @@ bool daTag_So_c::_delete() {
 }
 
 /* 00000284-000002A4       .text daTag_SoCreate__FPv */
-static s32 daTag_SoCreate(void* i_this) {
+static cPhs_State daTag_SoCreate(void* i_this) {
     return ((daTag_So_c*)i_this)->_create();
 }
 

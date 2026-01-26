@@ -3,6 +3,7 @@
 // Translation Unit: d_attention.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_attention.h"
 #include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
@@ -54,7 +55,7 @@ bool dAttDraw_CallBack_c::execute(u16 timing, J3DTransformInfo* xform) {
 
 /* 8009D2E0-8009D654       .text __ct__12dAttention_cFP10fopAc_ac_cUl */
 dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
-    mpPlayer = (daPy_lk_c*)i_player;
+    mpPlayer = i_player;
     mPadNo = i_padNo;
     initList(0xFFFFFFFF);
     mFlagMask = 0;
@@ -847,7 +848,7 @@ void dAttention_c::judgementStatusHd(u32 interactMask) {
 bool dAttention_c::Run(u32 interactMask) {
     bool var = dComIfGs_getOptAttentionType() == 0;
     if (chkFlag(AttnFlag_00000080)) {
-        mpPlayer = (daPy_lk_c*)dComIfGp_getPlayer(0);
+        mpPlayer = dComIfGp_getPlayer(0);
         mPadNo = 0;
     }
     runDebugDisp0();
@@ -962,7 +963,7 @@ void dAttDraw_c::setAnm(int resIdxTransform, int resIdxColor, int loopMode) {
 
 /* 8009F6B4-8009F834       .text draw__10dAttDraw_cFR4cXyzPA4_f */
 void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
-    J3DModel *model = anm->mpModel;
+    J3DModel *model = anm->getModel();
     mDoMtx_stack_c::transS(pos);
     mDoMtx_stack_c::concat(mtx);
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -970,16 +971,16 @@ void dAttDraw_c::draw(cXyz &pos, Mtx mtx) {
     J3DModelData *modeldata = model->getModelData();
     if (mpAnmClr == NULL) {
         J3DAnmColor *color = (J3DAnmColor*)dComIfG_getObjectRes("Always", ALWAYS_BPK_YJ_IN);
-        modeldata->getMaterialTable().removeMatColorAnimator(color);
+        modeldata->removeMatColorAnimator(color);
     } else {
-        mpAnmClr->setFrame(anm->mFrameCtrl.getFrame());
+        mpAnmClr->setFrame(anm->getFrame());
         J3DMatColorAnm *p = mpAnmMatClr;
         for(u16 i = 0; i < mpAnmClr->getUpdateMaterialNum(); i++) {
             p->setAnmColor(mpAnmClr);
             p->setAnmIndex(i);
             p++;
         }
-        modeldata->getMaterialTable().setMatColorAnimator(mpAnmClr, mpAnmMatClr);
+        modeldata->setMatColorAnimator(mpAnmClr, mpAnmMatClr);
     }
 
     if (mDoGph_gInf_c::isMonotone()) {
@@ -1224,7 +1225,7 @@ bool dAttLook_c::request(fopAc_ac_c* reqActor, f32 horizontalDist, f32 upDist, f
 /* 800A009C-800A0270       .text requestF__10dAttLook_cFP10fopAc_ac_csi */
 bool dAttLook_c::requestF(fopAc_ac_c* reqActor, s16 angle, int param_3) {
     // TODO: what is param_3?
-    fopAc_ac_c* player = g_dComIfG_gameInfo.play.mpPlayer[0];
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (param_3 > field_0x4) {
         return false;
     }

@@ -3,6 +3,8 @@
 // Translation Unit: JPADrawSetupTev.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPADrawSetupTev.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAExTexShape.h"

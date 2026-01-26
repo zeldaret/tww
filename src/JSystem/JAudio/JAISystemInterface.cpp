@@ -3,6 +3,8 @@
 // Translation Unit: JAISystemInterface.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JAudio/JASTrack.h"
 #include "JSystem/JAudio/JAISequenceMgr.h"

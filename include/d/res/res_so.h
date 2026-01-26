@@ -1,7 +1,7 @@
 #ifndef RES_SO_H
 #define RES_SO_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SO_RES_FILE_ID { // IDs and indexes are synced
     /* BCKS */

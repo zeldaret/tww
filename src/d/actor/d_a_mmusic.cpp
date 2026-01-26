@@ -3,6 +3,7 @@
 // Translation Unit: d_a_mmusic.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mmusic.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
@@ -13,12 +14,13 @@
 namespace daMmusic {
     namespace {
         struct Attr_c {
-            /* 0x00 */ u32 mTimer;
+            /* 0x00 */ u16 field_0x00;
+            /* 0x02 */ u16 field_0x02;
             /* 0x04 */ u16 field_0x04;
         };
 
         static const Attr_c L_attr = {
-            120, 180,
+            0, 120, 180,
         };
 
         inline const Attr_c & attr() { return L_attr; }
@@ -38,9 +40,9 @@ bool daMmusic::Act_c::create_heap() {
 /* 000000A4-0000013C       .text Macore_is_playing__Q28daMmusic5Act_cFv */
 BOOL daMmusic::Act_c::Macore_is_playing() {
     if (dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT) ||
-        dComIfGs_isEventBit(0x2910) ||
-        dComIfGs_isEventBit(0x2e02) ||
-        dComIfGs_isEventBit(0x1610) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2910) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_2E02) ||
+        dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) ||
         !dComIfGs_checkGetItem(dItem_MASTER_SWORD_2_e))
         return FALSE;
 
@@ -59,14 +61,16 @@ cPhs_State daMmusic::Act_c::_create() {
     fopAcM_SetupActor(this, Act_c);
 
     cPhs_State ret = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
-        set_mtx();
-        fopAcM_SetMtx(this, mMtx);
-        field_0x298 = Macore_is_playing();
-        fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
-        init_se();
-    } else {
-        ret = cPhs_ERROR_e;
+    if (ret == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            set_mtx();
+            fopAcM_SetMtx(this, mMtx);
+            field_0x298 = Macore_is_playing();
+            fopAcM_setCullSizeSphere(this, 0.0f, 0.0f, 0.0f, 300.0f);
+            init_se();
+        } else {
+            ret = cPhs_ERROR_e;
+        }
     }
     return ret;
 }

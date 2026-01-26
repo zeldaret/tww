@@ -1,7 +1,7 @@
 #ifndef RES_BTSW_H
 #define RES_BTSW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum BTSW_RES_FILE_ID {
     /* BCKS */

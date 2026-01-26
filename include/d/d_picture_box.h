@@ -67,5 +67,5 @@ class dJle_Pb_c {
     void draw();
     void _delete(JKRExpHeap*);
 };
-
+void dPb_erasePicture();
 #endif /* D_PICTURE_BOX_H */

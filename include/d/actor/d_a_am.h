@@ -8,8 +8,8 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class am_class : public fopEn_enemy_c {
-public:
+struct am_class {
+    /* 0x0000 */ fopEn_enemy_c actor;
     /* 0x02AC */ request_of_phase_process_class mPhase;
     /* 0x02B4 */ JntHit_c* mEyeJntHit;
     /* 0x02B8 */ mDoExt_McaMorf* mpMorf;
@@ -39,6 +39,9 @@ public:
     /* 0x0324 */ cXyz mSpawnPos;
     /* 0x0330 */ csXyz mEyeRot;
     /* 0x0336 */ csXyz mTargetEyeRot;
+#if VERSION == VERSION_DEMO
+    /* 0x033C */ JPABaseEmitter* m033C_demo;
+#endif
     /* 0x033C */ JPABaseEmitter* m033C;
     /* 0x0340 */ JPABaseEmitter* m0340;
     /* 0x0344 */ dPa_smokeEcallBack mSmokeCbs[4];

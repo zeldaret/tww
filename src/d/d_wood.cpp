@@ -3,6 +3,7 @@
 // Translation Unit: d_wood.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wood.h"
 #include "JAZelAudio/JAIZelBasic.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -14,17 +15,13 @@
 #include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
-#include "dolphin/gf/GFGeometry.h"
-#include "dolphin/gf/GFTev.h"
-#include "dolphin/gf/GFTransform.h"
+#include "dolphin/gf/GF.h"
 #include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXDisplayList.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/types.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 //-----------------------------------------
 // Types

@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_fmap.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_fmap.h"
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */

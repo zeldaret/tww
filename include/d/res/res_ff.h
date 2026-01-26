@@ -1,7 +1,7 @@
 #ifndef RES_FF_H
 #define RES_FF_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum FF_RES_FILE_ID { // IDs and indexes are synced
     /* BMD */

@@ -18,14 +18,25 @@
         }                                                                                          \
     }
 
+#ifdef DEBUG
+#define J3D_ASSERT(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
+#define JUT_ASSERT_DEBUG(LINE, COND) (COND) ? (void)0 : (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"));
+#else
+#define J3D_ASSERT(LINE, COND, MSG) (void)0
+#define JUT_ASSERT_DEBUG(LINE, COND) (void)0
+#endif
+
 #define JUT_WARN(LINE, ...)                                                                        \
     JUTAssertion::setWarningMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__);    \
 
 #define JUT_LOG(LINE, ...)                                                                         \
     JUTAssertion::setLogMessage_f(JUTAssertion::getSDevice(), __FILE__, LINE, __VA_ARGS__)
 
-#define JUT_CONFIRM(LINE, COND)                                                                    \
+#define JUT_SET_CONFIRM(LINE, COND)                                                                \
     JUTAssertion::setConfirmMessage(JUTAssertion::getSDevice(), __FILE__, LINE, COND, #COND)
+
+#define JUT_CONFIRM(LINE, COND)                                                                    \
+    JUT_SET_CONFIRM(LINE, COND)
 
 namespace JUTAssertion {
     u32 getSDevice();

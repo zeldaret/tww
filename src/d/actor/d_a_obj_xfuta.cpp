@@ -3,10 +3,12 @@
 // Translation Unit: d_a_obj_xfuta.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_xfuta.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/res/res_x_futa.h"
 #include "dolphin/types.h"
 
 namespace daObjXfuta {
@@ -39,17 +41,21 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool Act_c::create_heap() {
     J3DModelData* mdl_data;
 
-    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, 0x03));
+    mdl_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, X_FUTA_BDL_X_FUTA));
 
     JUT_ASSERT(0x105, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
 
+    #if VERSION == VERSION_DEMO
+    return mdl_data != NULL ? TRUE : FALSE;
+    #else
     bool ret = FALSE;
     if (mdl_data != NULL && this->mpModel != NULL) {
         ret = TRUE;
     }
     return ret;
+    #endif
 }
 
 /* 0000015C-00000214       .text _create__Q210daObjXfuta5Act_cFv */

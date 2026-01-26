@@ -8,56 +8,6 @@
 class JORMContext;
 class daNpc_kam_c;
 
-class daNpc_kam_HIO1_c {
-public:
-    daNpc_kam_HIO1_c();
-    virtual ~daNpc_kam_HIO1_c() {}
-    
-    void genMessage(JORMContext*);
-    
-public:
-    /* 0x04 */ f32 mSpeedF;
-    /* 0x08 */ f32 mUnused08;
-    /* 0x0C */ f32 mFlappingSpeedF;
-    /* 0x10 */ f32 mAccelF;
-    /* 0x14 */ s16 mGlidingAngVelY;
-    /* 0x16 */ s16 mGlidingAngVelX;
-    /* 0x18 */ s16 mMaxAngleZ;
-    /* 0x1A */ s16 mFlappingAngVelY;
-    /* 0x1C */ s16 mFlappingAngVelX;
-    /* 0x1E */ s16 mAngVelStepScale;
-    /* 0x20 */ s16 mAngVelMaxStep;
-    /* 0x22 */ s16 mAngVelMinStep;
-    /* 0x24 */ s16 mFlapDuration;
-    /* 0x26 */ s16 mFlapExhaustedDuration;
-    /* 0x28 */ s16 mFlapEnergyDuration;
-};  // Size: 0x2C
-
-class daNpc_kam_HIO_c : public JORReflexible {
-public:
-    struct hio_prm_c {
-        // Note: Offsets are relative to daNpc_kam_HIO_c instead of hio_prm_c for convenience.
-        /* 0x08 */ f32 m08;
-        /* 0x0C */ f32 m0C;
-        /* 0x10 */ f32 m10;
-        /* 0x14 */ f32 m14;
-        /* 0x18 */ f32 m18;
-        /* 0x1C */ s16 m1C;
-        /* 0x1E */ u8 m1E;
-    };  // Size: 0x18
-    
-    daNpc_kam_HIO_c();
-    virtual ~daNpc_kam_HIO_c() {}
-    
-    void genMessage(JORMContext* ctx);
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x08 */ hio_prm_c prm;
-    /* 0x20 */ daNpc_kam_c* mpActor;
-    /* 0x24 */ daNpc_kam_HIO1_c mHio1;
-};  // Size: 0x50
-
 class daNpc_kam_c : public daPy_npc_c {
 public:
     enum ActionStatus {
@@ -103,7 +53,6 @@ public:
     void setBaseMtx();
     BOOL createHeap();
     cPhs_State create();
-    daNpc_kam_c() {}
     BOOL init();
     BOOL setAction(ActionFunc*, ActionFunc, void*);
     void npcAction(void*);

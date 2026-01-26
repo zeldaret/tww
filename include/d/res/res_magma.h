@@ -1,7 +1,7 @@
 #ifndef RES_MAGMA_H
 #define RES_MAGMA_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MAGMA_RES_FILE_ID { // IDs and indexes are synced
     /* DAT */

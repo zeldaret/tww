@@ -107,7 +107,7 @@ static u8 print_threadID;
 static u8 print_callerPC;
 static u8 print_callerPCLevel = 3;
 static u32 print_counts;
-static u32 print_errors;
+u32 print_errors;
 static u32 print_warings;
 static bool print_initialized;
 

@@ -1,7 +1,7 @@
 #ifndef RES_MHSG_H
 #define RES_MHSG_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MHSG_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

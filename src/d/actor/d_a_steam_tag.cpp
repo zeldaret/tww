@@ -3,6 +3,7 @@
 // Translation Unit: d_a_steam_tag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_steam_tag.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_cc_d.h"
@@ -36,11 +37,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start */ 0.0f, 0.0f, 0.0f,
-        /* End */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
-    },
+    }},
 };
 
 daSteamTag_mData daSteamTag_c::mData = {
@@ -130,9 +131,12 @@ BOOL daSteamTag_c::execute() {
         mCreateTimer--;
         if (mCreateTimer == 0) {
             if (createEmitter()) {
-                // TODO: fakematch? debug map indicates TVec3(s16, s16, s16) constructor was used here, but the codegen doesn't match
-                // JGeometry::TVec3<s16> angle(current.angle.x, current.angle.y, current.angle.z);
-                JGeometry::TVec3<s16> angle;
+                // TODO: Fakematch? The demo debug map indicates TVec3(s16, s16, s16) constructor
+                // was used here, but just doing that doesn't match for either the demo or retail.
+                // Assigning x/y/z with 3 individual assignments matches for retail, but doesn't
+                // match for the demo. However, first using the TVec3(s16, s16, s16) ctor and then
+                // *also* assigning x/y/z separately matches for both demo and retail.
+                JGeometry::TVec3<s16> angle(current.angle.x, current.angle.y, current.angle.z);
                 angle.x = current.angle.x;
                 angle.y = current.angle.y;
                 angle.z = current.angle.z;

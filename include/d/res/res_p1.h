@@ -1,7 +1,7 @@
 #ifndef RES_P1_H
 #define RES_P1_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum P1_RES_FILE_ID {
     /* BMT */

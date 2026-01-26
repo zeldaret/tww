@@ -1,7 +1,7 @@
 #ifndef RES_AYUSH_H
 #define RES_AYUSH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum AYUSH_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

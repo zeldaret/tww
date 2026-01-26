@@ -3,6 +3,7 @@
 // Translation Unit: d_a_wbird.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_wbird.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -10,7 +11,6 @@
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_angle.h"
 #include "d/actor/d_a_player.h"
-
 
 const char daWbird_c::M_arcname[] = "Wbird";
 /* 00000078-000000AC       .text calcMtx__9daWbird_cFv */
@@ -139,7 +139,7 @@ void daWbird_c::actionSelect() {
                 sVar2 = current.angle.y + 0x7fff;
                 mAngle = player->shape_angle.y;
                 player->setPlayerPosAndAngle(&player->current.pos, sVar2);
-                if(dComIfGp_checkPlayerStatus0(0, 0x00010000)){
+                if(dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)){
                     mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2_SHIP");
                 } else{
                     mEventIdx = dComIfGp_evmng_getEventIdx("TACT_WINDOW2");

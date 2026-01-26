@@ -58,8 +58,13 @@ public:
     /* 0x80 */ /* vtable */
 
 public:
+#if VERSION == VERSION_DEMO
+    dVibration_c() { setDefault(); }
+    virtual ~dVibration_c() { Kill(); }
+#else
     dVibration_c();
     virtual ~dVibration_c();
+#endif
 
     int Run();
     bool StartShock(int, int, cXyz);

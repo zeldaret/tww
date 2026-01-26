@@ -116,6 +116,9 @@ public:
     cPhs_State _create();
     bool _delete();
 
+    static const dCcD_SrcSph m_sph_src;
+    static const dCcD_SrcCyl m_cyl_src;
+
 public:
     /* 0x2AC */ u8 m2AC[0x2C5 - 0x2AC];
     /* 0x2C5 */ s8 m2C5;

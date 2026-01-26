@@ -3,6 +3,8 @@
 // Translation Unit: JASDSPChannel.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDSPChannel.h"
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASChAllocQueue.h"

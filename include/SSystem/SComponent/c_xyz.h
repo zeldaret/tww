@@ -64,7 +64,10 @@ struct cXyz : Vec {
         z -= f;
     }
     void operator-=(const Vec& other) { VECSubtract(this, &other, this); }
-    void operator+=(const Vec& other) { VECAdd(this, &other, this); }
+    cXyz* operator+=(const Vec& other) {
+        VECAdd(this, &other, this);
+        return this;
+    }
     void operator*=(f32 scale) { VECScale(this, this, scale); }
     cXyz getCrossProduct(const Vec&) const;
     cXyz outprod(const Vec&) const;
@@ -93,39 +96,12 @@ struct cXyz : Vec {
     }
 
     void setall(f32 f) { set(f, f, f); }
-    void zero() { x = y = z = 0.0f; }
-
-    void setMin(const cXyz& other) {
-        if (x > other.x) {
-            x = other.x;
-        }
-        if (y > other.y) {
-            y = other.y;
-        }
-        if (z > other.z) {
-            z = other.z;
-        }
-    }
-
-    void setMax(const cXyz& other) {
-        if (x < other.x) {
-            x = other.x;
-        }
-        if (y < other.y) {
-            y = other.y;
-        }
-        if (z < other.z) {
-            z = other.z;
-        }
-    }
 
     f32 getSquareMag() const { return VECSquareMag(this); }
     f32 getSquareDistance(const Vec& other) const { return VECSquareDistance(this, &other); }
 
-    static f32 getNearZeroValue() { return 8e-11f; }
-
-    bool isNearZeroSquare() const { return (this->getSquareMag() < getNearZeroValue()); }
-    bool isNearZeroSquare(const cXyz& other) const { return (VECSquareMag(&other) < getNearZeroValue()); }
+    bool isNearZeroSquare() const { return (this->getSquareMag() < 8e-11f); }
+    bool isNearZeroSquare(const cXyz& other) const { return (VECSquareMag(&other) < 8e-11f); }
     f32 abs2() const { return this->getSquareMag(); }
     f32 abs2(const Vec& other) const { return this->getSquareDistance(other); }
     f32 abs2XZ() const {
@@ -141,7 +117,6 @@ struct cXyz : Vec {
     f32 abs(const Vec& other) const { return std::sqrtf(this->abs2(other)); }
     f32 absXZ() const { return std::sqrtf(this->abs2XZ()); }
     f32 absXZ(const Vec& other) const { return std::sqrtf(this->abs2XZ(other)); }
-    f32 getMagXZ() const { return cXyz(this->x, 0, this->z).getSquareMag(); }
 
     f32 getDotProduct(const Vec& other) const { return VECDotProduct(this, &other); }
     f32 inprod(const Vec& other) const { return getDotProduct(other); }

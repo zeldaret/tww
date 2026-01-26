@@ -1,0 +1,21 @@
+IndentWidth: 4
+AllowShortFunctionsOnASingleLine: InlineOnly
+PointerAlignment: Left
+ColumnLimit: 160
+RemoveParentheses: ReturnStatement
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: BlockIndent
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: MultiLine
+ReflowComments: false
+AccessModifierOffset: -4
+# BreakBeforeBinaryOperators: None
+# BreakBeforeTernaryOperators: true
+# AlignConsecutiveAssignments: false
+PackConstructorInitializers: Never
+SortIncludes: false
+IncludeCategories:
+  - Regex: '"d/dolzel(_rel)?\.h"'
+    Priority: -1000

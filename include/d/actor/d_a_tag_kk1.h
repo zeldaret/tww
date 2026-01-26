@@ -18,22 +18,4 @@ public:
     /* 0x6C6 */ bool mNameIsWrong;
 };  // Size: 0x6C8
 
-
-class daTag_Kk1_HIO_c : public JORReflexible{
-
-    public:
-        daTag_Kk1_HIO_c();
-        virtual ~daTag_Kk1_HIO_c(){};
-
-    public:
-        struct hio_prm_c {
-        /* 0x08  */    f32 mHorizontalDistance;
-        /* 0x0C  */    f32 mVerticalDistance;
-        /* 0x10  */    u8  field_0x10;
-        };
-
-        /* 0x04  */ s8  mNo;
-        /* 0x08  */ hio_prm_c prm;
-};
-
 #endif /* D_A_TAG_KK1_H */

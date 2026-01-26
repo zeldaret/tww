@@ -3,6 +3,8 @@
 // Translation Unit: JASDvdThread.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDvdThread.h"
 #include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASSystemHeap.h"

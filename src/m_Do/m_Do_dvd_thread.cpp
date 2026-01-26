@@ -33,7 +33,7 @@ s32 mDoDvdThd::main(void* userData) {
 }
 
 /* 80017F54-80017FB0       .text create__9mDoDvdThdFl */
-void mDoDvdThd::create(s32 priority) {
+void mDoDvdThd::create(OSPriority priority) {
     OSCreateThread(&l_thread, (void*)main, &l_param, l_threadStack.stack + sizeof(l_threadStack), sizeof(l_threadStack), priority, 1);
     OSResumeThread(&l_thread);
 }

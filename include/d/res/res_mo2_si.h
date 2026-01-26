@@ -1,7 +1,7 @@
 #ifndef RES_MO2_SI_H
 #define RES_MO2_SI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum MO2_SI_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

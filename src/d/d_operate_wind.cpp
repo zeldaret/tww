@@ -3,6 +3,7 @@
 // Translation Unit: d_operate_wind.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_operate_wind.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_msg_mng.h"

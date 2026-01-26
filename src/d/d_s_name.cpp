@@ -3,6 +3,7 @@
 // Translation Unit: d_s_name.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_name.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
@@ -31,8 +32,6 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 dSn_HIO_c g_snHIO;
 
@@ -130,8 +129,8 @@ cPhs_State dScnName_c::create() {
             JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
-            g_dComIfG_gameInfo.save.field_0x1291 = 0;
-            g_dComIfG_gameInfo.save.field_0x1292 = 0;
+            dComIfGs_setNoFile(0);
+            dComIfGs_setNewFile(0);
         }
         if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
             dComIfGs_setClearCount(1);
@@ -442,8 +441,7 @@ void dScnName_c::MemCardErrMsgWaitFormatSel2() {
 
 /* 8023106C-802310C0       .text MemCardFormat__10dScnName_cFv */
 void dScnName_c::MemCardFormat() {
-    /* Nonmatching */
-    field_0x1bbc = g_mDoMemCd_control.FormatSync();
+    field_0x1bbc = mDoMemCd_FormatSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 8;
@@ -462,7 +460,7 @@ void dScnName_c::MemCardMakeGameFileSel() {
 
 /* 80231284-802312D8       .text MemCardMakeGameFile__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFile() {
-    field_0x1bbc = g_mDoMemCd_control.SaveSync();
+    field_0x1bbc = mDoMemCd_SaveSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
         field_0x556 = 11;
@@ -666,7 +664,7 @@ void dScnName_c::FileSelectMainNormal() {
             mMainProc = 5;
         } else {
             dComIfGs_setCardToMemory(saveMemory, dFs_c->saveSlot);
-            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(0x3510)) {
+            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3510)) {
                 field_0x1bb9 = 1;
             }
 
@@ -678,7 +676,7 @@ void dScnName_c::FileSelectMainNormal() {
                 card_pictdata* workBuf = &savePicDatabuf[dFs_c->saveSlot * 3];
                 for (s32 i = 0; i < 3; i++) {
                     u32 mask = 1 << i;
-                    if ((dComIfGs_getEventReg(0x89ff) & mask)) {
+                    if ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF) & mask)) {
                         workBuf++;
                         continue;
                     }
@@ -699,7 +697,7 @@ void dScnName_c::FileSelectMainNormal() {
 
                 dComIfGs_setPictureNum(pictureNum - failed);
             }
-            dComIfGs_setEventReg(0x89ff, 0);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, 0);
             mDoMemCd_setPictDataPtr(NULL);
             dComIfGp_itemDataInit();
             if (field_0x1bb9 != 0) {

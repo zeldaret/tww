@@ -1,7 +1,7 @@
 #ifndef RES_ESEKH_H
 #define RES_ESEKH_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum ESEKH_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

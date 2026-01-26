@@ -5,16 +5,19 @@
 #include "d/d_a_obj.h"
 
 namespace daTagWaterlevel {
+    enum State_e {
+        STATE_1 = 1,
+        STATE_2 = 2,
+        STATE_4 = 4,
+    };
+    
     class Act_c : public fopAc_ac_c {
     public:
         enum Prm_e {
             PRM_SCH_W = 8,
             PRM_SCH_S = 0,
         };
-        enum State_e {
-            STATE_1 = 1,
-            STATE_2 = 2,
-        };
+
 
         static f32 get_now() { return M_now; }
         static State_e get_state() { return M_state; }

@@ -3,10 +3,10 @@
 // Translation Unit: d_a_spc_item01.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spc_item01.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -44,11 +44,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 0.0f,
         /* Height */ 0.0f,
-    },
+    }},
 };
 
 /* 8015DAF4-8015DBC0       .text set_mtx__13daSpcItem01_cFv */
@@ -79,7 +79,7 @@ cPhs_State daSpcItem01_c::_create() {
     fopAcM_SetupActor(this, daSpcItem01_c);
 
     m_itemNo = daSpcItem01_prm::getItemNo(this);
-    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(0xE20)) {
+    if (m_itemNo == dItem_SHIELD_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
         setLoadError();
         return cPhs_ERROR_e;
     }
@@ -113,7 +113,7 @@ BOOL daSpcItem01_c::CreateInit() {
     mCyl.SetR(tempVar2);
     mCyl.SetH(tempVar1);
     mAcchCir.SetWall(30.0f, 30.0f);
-    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
 
     field_0x644 = daSpcItem01_prm::getFlag(this);
     fopAcM_SetGravity(this, -4.0f);

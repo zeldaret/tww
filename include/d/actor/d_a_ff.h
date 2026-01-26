@@ -31,7 +31,7 @@ public:
     /* 0x306 */ s16 mTargetRotY;
     /* 0x308 */ s16 mTimers[5];
     /* 0x312 */ s16 mLiveTimer;
-    /* 0x314 */ u8 mState;
+    /* 0x314 */ s8 mMode;
     /* 0x315 */ u8 m315[0x317 - 0x315];
     /* 0x317 */ u8 mbNotVisibleZ;
     /* 0x318 */ dCcD_Stts mStts;

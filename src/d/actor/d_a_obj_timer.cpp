@@ -3,12 +3,11 @@
  * Object - Timer
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_timer.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_com_inf_game.h" // IWYU pragma: keep // Needed for dComIfGs_isSwitch inline definition
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 cPhs_State daObjTimer::Act_c::_create() {

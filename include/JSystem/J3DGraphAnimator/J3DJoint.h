@@ -15,7 +15,7 @@ public:
     virtual void init(const Vec&, const Mtx&) {}
     virtual void recursiveCalc(J3DNode*) {}
     virtual void calcTransform(u16, const J3DTransformInfo&) {}
-    virtual void calc(u16) {}
+    virtual void calc(u16 jnt_no) {}
 
     void initAnm() {
         for (int i = 0; i < 4; i++) {
@@ -51,8 +51,9 @@ public:
     virtual ~J3DMtxCalcBasic() {}
     virtual void init(const Vec& vec, const Mtx& mtx) {
         J3DSys::mCurrentS = vec;
-        // TODO: Same issue as J3DMtxCalcMaya::init.
-        // J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
+        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#endif
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
         J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;
         J3DSys::mCurrentMtx[0][2] = mtx[0][2] * J3DSys::mCurrentS.z;
@@ -68,7 +69,7 @@ public:
     }
     virtual void recursiveCalc(J3DNode*);
     virtual void calcTransform(u16, const J3DTransformInfo&);
-    virtual void calc(u16);
+    virtual void calc(u16 jnt_no);
 
     Mtx& getBackupMtx() { return mBackupMtx; }
     Vec& getBackupS() { return mBackupS; }
@@ -94,11 +95,9 @@ public:
     J3DMtxCalcMaya() : J3DMtxCalcBasic() {}
     virtual ~J3DMtxCalcMaya() {}
     virtual void init(const Vec& vec, const Mtx& mtx) {
-        // TODO: This breaks some TUs by adding extra data ({0x3F800000, 0x3F800000, 0x3F800000})
-        // This seems to be responsible for the @2100 Vec literal that gets added to most TUs.
-        // The strange part is that @2100 needs to be in the .data section, but uncommenting this
-        // will put it in the .rodata sections.
-        // J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
+        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#endif
         J3DSys::mCurrentS = vec;
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
         J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;

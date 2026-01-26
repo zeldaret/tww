@@ -3,13 +3,11 @@
 // Translation Unit: d_menu_collect.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_collect.h"
 #include "dolphin/types.h"
 #include "stdio.h"
 #include "d/d_com_inf_game.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static dMc_HIO_c g_mcHIO;
 
@@ -217,17 +215,17 @@ void dMenu_Collect_c::screenSet() {
         fopMsgM_setPaneData(&m3F8[i], m004, l_sik[i]);
     }
     
-    if (dComIfGs_isEventBit(0x1480)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
         m1000[1].mInitAlpha *= 0.5f;
         m10A8[1].mInitAlpha *= 0.5f;
     }
 
-    if (dComIfGs_isEventBit(0x1440)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL)) {
         m1000[2].mInitAlpha *= 0.5f;
         m10A8[2].mInitAlpha *= 0.5f;
     }
 
-    if (dComIfGs_isEventBit(0x1410)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL)) {
         m1000[0].mInitAlpha *= 0.5f;
         m10A8[0].mInitAlpha *= 0.5f;
     }

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_quake.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_quake.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -191,7 +192,7 @@ s32 daObjQuake_c::getPrmPower() {
 }
 
 /* 000006F8-00000718       .text daObjQuakeCreate__FPv */
-static s32 daObjQuakeCreate(void* i_this) {
+static cPhs_State daObjQuakeCreate(void* i_this) {
     return static_cast<daObjQuake_c*>(i_this)->_create();
 }
 

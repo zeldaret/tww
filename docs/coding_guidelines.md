@@ -11,7 +11,8 @@ Naming variables properly isn't required to help with the decompilation. You can
 3. [Includes](#includes)
 4. [Naming style](#naming-style)
 5. [Use the official names where possible](#use-the-official-names-where-possible)
-6. [Look at the actor's model](#look-at-the-actors-model)
+6. [Resource archive enums](#resource-archive-enums)
+7. [Look at the actor's model](#look-at-the-actors-model)
 
 ## Primitive types
 
@@ -118,6 +119,34 @@ JUT_ASSERT(98, modelData != NULL);
 ```cpp
 J3DModelData* model_data = ...
 JUT_ASSERT(382, model_data != NULL);
+```
+
+## Resource archive enums
+
+Most actors will load resource files, such as model data, with code similar to this:
+
+```cpp
+modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", 0x5B);
+```
+
+The first argument to `dComIfG_getObjectRes` is the name of the resource archive being used, in this case `files/res/Object/Bk.arc` within the game's files.  
+The second argument is the file index of the specific file being loaded from this archive, in this case index 0x5B within the archive.
+
+In order to make the code more readable, you should replace all of these file indexes with enums containing the filename instead. But you don't have to create these enums manually, the decomp already has enums for all resource archives.
+
+You can find the header for the archive in question by pressing VSCode's `Ctrl+P` shortcut and typing `res_` followed by the name of the resource archive.  
+In this example, the header you want is located at `include/d/res/res_bk.h` because the archive is named "Bk". The resource archive's name is not necessarily the same as the actor's name (though in this example it is).
+
+Once you open the header, search for the file index, e.g. 0x5B:
+
+```cpp
+BK_BMD_BK_TATE=0x5B,
+```
+
+This means `BK_BMD_BK_TATE` is the enum for this file, so replace the index with the enum like so:
+
+```cpp
+modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
 ```
 
 ## Look at the actor's model

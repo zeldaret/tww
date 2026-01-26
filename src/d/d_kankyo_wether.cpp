@@ -3,6 +3,7 @@
 // Translation Unit: d_kankyo_wether.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -501,7 +502,7 @@ void wether_move_sun() {
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_LENS_32HALF);
                 g_env_light.mpSunlenzPacket->mpTexRingHalf =
                     (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
-                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f;
+                g_env_light.mpSunlenzPacket->field_0x88 = 1000000000.0f; // This is not G_CM3D_F_INF
                 g_env_light.mpSunlenzPacket->field_0x8c = 0.0f;
                 g_env_light.mpSunlenzPacket->mDistFalloff = 0.0f;
                 g_env_light.mpSunlenzPacket->mbDrawLenzInSky = false;
@@ -689,7 +690,7 @@ void wether_move_housi() {
             g_env_light.mpHousiPacket->field_0x5ddc = 0.0f;
 
             for (int i = 0; i < 300; i++) {
-                g_env_light.mpHousiPacket->mEff[i].mState = 0;
+                g_env_light.mpHousiPacket->mEffect[i].mStatus = 0;
             }
 
             dKyr_housi_move();

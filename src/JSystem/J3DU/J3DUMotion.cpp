@@ -3,6 +3,8 @@
 // Translation Unit: J3DUMotion.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J3DU/J3DUMotion.h"
 #include "JSystem/J3DGraphAnimator/J3DJoint.h"
 #include "dolphin/types.h"

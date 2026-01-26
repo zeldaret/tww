@@ -45,6 +45,13 @@ public:
     cM3dGPla* GetTriPla(cBgS_PolyInfo& polyInfo) const {
         return GetTriPla(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
     }
+    s32 GetTriGrp(cBgS_PolyInfo& polyInfo) const {
+        return GetTriGrp(polyInfo.GetBgIndex(), polyInfo.GetPolyIndex());
+    }
+    fopAc_ac_c* GetActorPointer(cBgS_PolyInfo& i_poly) const {
+        return GetActorPointer(i_poly.GetBgIndex());
+    }
+
     bool Regist(cBgW*, fpc_ProcID, void*);
     bool Release(cBgW*);
     bool LineCross(cBgS_LinChk*);

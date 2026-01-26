@@ -1,7 +1,7 @@
 #ifndef RES_DEMO_KMM_H
 #define RES_DEMO_KMM_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DEMO_KMM_RES_FILE_ID {
     /* BMD */

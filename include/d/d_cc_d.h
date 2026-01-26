@@ -42,41 +42,42 @@ enum dCcD_ObjAtType {
 };
 
 enum dCcG_AtSPrm_e {
-    dCcG_AtSPrm_NoConHit_e         = 1 << 0,
-    dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
-    dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
-    dCcG_AtSPrm_NoMass_e           = 1 << 3,
+    /* 0x01 */ dCcG_AtSPrm_NoConHit_e         = 1 << 0,
+    /* 0x02 */ dCcG_AtSPrm_NoHitMark_e        = 1 << 1,
+    /* 0x04 */ dCcG_AtSPrm_StopNoConHit_e     = 1 << 2,
+    /* 0x08 */ dCcG_AtSPrm_NoMass_e           = 1 << 3,
 };
 
 enum dCcG_AtRPrm_e {
-    dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
-    dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
+    /* 0x01 */ dCcG_AtRPrm_ShieldHit_e        = 1 << 0,
+    /* 0x02 */ dCcG_AtRPrm_HitNoActor_e       = 1 << 1,
 };
 
 enum dCcG_TgSPrm_e {
-    dCcG_TgSPrm_Shield_e           = 1 << 0,
-    dCcG_TgSPrm_NoConHit_e         = 1 << 1,
-    dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
-    dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
+    /* 0x01 */ dCcG_TgSPrm_Shield_e           = 1 << 0,
+    /* 0x02 */ dCcG_TgSPrm_NoConHit_e         = 1 << 1,
+    /* 0x04 */ dCcG_TgSPrm_NoHitMark_e        = 1 << 2,
+    /* 0x08 */ dCcG_TgSPrm_ShieldFrontRange_e = 1 << 3,
 };
 
 enum dCcG_TgRPrm_e {
-    dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
-    dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
+    /* 0x01 */ dCcG_TgRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x02 */ dCcG_TgRPrm_ShieldHit_e        = 1 << 1,
 };
 
 enum dCcG_CoSPrm_e {
-    dCcG_CoSPrm_AtLasso_e          = 1 << 0,
-    dCcG_CoSPrm_TgLasso_e          = 1 << 1,
+    /* 0x01 */ dCcG_CoSPrm_AtLasso_e          = 1 << 0,
+    /* 0x02 */ dCcG_CoSPrm_TgLasso_e          = 1 << 1,
 };
 
 enum dCcG_CoRPrm_e {
-    dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
+    /* 0x01 */ dCcG_CoRPrm_HitNoActor_e       = 1 << 0,
 };
 
 enum dCcG_hitSe {
     /* 0x01 */ dCcG_SE_UNK1 = 1,
     /* 0x02 */ dCcG_SE_UNK2 = 2,
+    /* 0x03 */ dCcG_SE_UNK3 = 3,
     /* 0x04 */ dCcG_SE_UNK4 = 4,
     /* 0x05 */ dCcG_SE_UNK5 = 5,
     /* 0x06 */ dCcG_SE_UNK6 = 6,
@@ -97,12 +98,15 @@ enum CcG_Tg_HitMark {
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_COMMON_0001,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_COMMON_PURPLE_HIT,
     /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_COMMON_NORMAL_HIT,
+    /* 0xFF */ dCcG_TgHitMark_Unk255_e = 0xFF,
 };
 
 enum dCcG_At_Spl {
     /* 0x0 */ dCcG_At_Spl_UNK0 = 0,
     /* 0x1 */ dCcG_At_Spl_UNK1 = 1,
+    /* 0x2 */ dCcG_At_Spl_UNK2 = 2,
     /* 0x3 */ dCcG_At_Spl_UNK3 = 3,
+    /* 0x4 */ dCcG_At_Spl_UNK4 = 4,
     /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
     /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
@@ -186,6 +190,7 @@ public:
     u8 GetRoomId() { return mRoomId; }
     void SetRoomId(int id) { mRoomId = id; }
     fpc_ProcID GetAtOldApid() { return mAtOldApid; }
+    fpc_ProcID GetTgApid() { return mTgApid; }
     fpc_ProcID GetTgOldApid() { return mTgOldApid; }
     bool ChkNoActor() { return mFlag & 1; }
     bool ChkNoneActorPerfTblId() { return mActorPerfTblId == 0xFFFF; }
@@ -437,6 +442,8 @@ public:
     bool ChkTgShieldFrontRange() { return mGObjTg.ChkSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OnTgShieldFrontRange() { mGObjTg.OnSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
     void OffTgShieldFrontRange() { mGObjTg.OffSPrm(dCcG_TgSPrm_ShieldFrontRange_e); }
+    void OnAtStopNoConHit() { mGObjAt.OnSPrm(dCcG_AtSPrm_StopNoConHit_e); }
+    void OffAtStopNoConHit() { mGObjAt.OffSPrm(dCcG_AtSPrm_StopNoConHit_e); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
     bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_AtLasso_e); }
     bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_TgLasso_e); }

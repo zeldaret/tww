@@ -3,8 +3,10 @@
 // Translation Unit: d_wind_arrow.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_wind_arrow.h"
 #include "d/d_kankyo_wether.h"
+#include "d/d_priority.h"
 #include "d/d_procname.h"
 #include "d/res/res_always.h"
 #include "m_Do/m_Do_graphic.h"
@@ -108,7 +110,7 @@ static BOOL dWindArrow_Delete(dWindArrow_c* i_this) {
 }
 
 cPhs_State dWindArrow_c::create() {
-    new(this) dWindArrow_c();
+    new (this) dWindArrow_c();
     
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_YA);
     JUT_ASSERT(0x56, modelData != NULL);
@@ -151,15 +153,15 @@ kankyo_method_class l_dWindArrow_Method = {
 };
 
 kankyo_process_profile_definition g_profile_WIND_ARROW = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_WIND_ARROW,
-    &g_fpcLf_Method.base,
-    sizeof(dWindArrow_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x01CB,
-    &l_dWindArrow_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_WIND_ARROW,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dWindArrow_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_WIND_ARROW,
+    /* Actor SubMtd */ &l_dWindArrow_Method,
 };

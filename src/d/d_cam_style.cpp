@@ -3,6 +3,7 @@
 // Translation Unit: d_cam_style.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cam_param.h"
 
 #include "global.h"

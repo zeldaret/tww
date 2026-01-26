@@ -3,12 +3,29 @@
 // Translation Unit: d_a_tag_kk1.cpp
 //
 
-
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kk1.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 
+class daTag_Kk1_HIO_c : public JORReflexible {
+public:
+    struct hio_prm_c {
+        /* 0x08  */ f32 mHorizontalDistance;
+        /* 0x0C  */ f32 mVerticalDistance;
+        /* 0x10  */ u8  field_0x10;
+    };
+
+    daTag_Kk1_HIO_c();
+    virtual ~daTag_Kk1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04  */ s8 mNo;
+    /* 0x08  */ hio_prm_c prm;
+};
 
 static daTag_Kk1_HIO_c l_HIO;
 
@@ -37,13 +54,10 @@ bool daTag_Kk1_c::_draw() {
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_execute() {
-
     f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
     f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
     mTagSet = false;
-    if (
-        (distance < l_HIO.prm.mHorizontalDistance) && (vert_distance< l_HIO.prm.mVerticalDistance)
-    ){
+    if (distance < l_HIO.prm.mHorizontalDistance && vert_distance < l_HIO.prm.mVerticalDistance) {
         s16 angle_deviation = dComIfGp_getPlayer(0)->shape_angle.y - current.angle.y;
         angle_deviation =abs(angle_deviation);
         if(angle_deviation < 0x1000){       
@@ -56,7 +70,6 @@ bool daTag_Kk1_c::_execute() {
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
 bool daTag_Kk1_c::_delete() {
-
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -66,7 +79,6 @@ bool daTag_Kk1_c::_delete() {
 
 /* 000002A0-0000046C       .text _create__11daTag_Kk1_cFv */
 cPhs_State daTag_Kk1_c::_create() {
-
     u32 name_int = 0;
     s32 o_phsState = cPhs_COMPLEATE_e;
 
@@ -81,7 +93,7 @@ cPhs_State daTag_Kk1_c::_create() {
     }
 
     if(l_HIO.mNo  < 0){
-        //Poor Muuru (Mila) chase startup tag
+        // Poor Muuru (Mila) chase startup tag
         l_HIO.mNo = mDoHIO_createChild("貧乏ム−ル追跡起動タグ",&l_HIO); 
     }
 
@@ -111,14 +123,12 @@ static BOOL daTag_Kk1_Execute(daTag_Kk1_c* obj) {
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Draw(daTag_Kk1_c* obj) {
     (static_cast<daTag_Kk1_c*>(obj))->_draw();
-
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_IsDelete(daTag_Kk1_c* obj) {
     return TRUE;
 }
-
 
 static actor_method_class l_daTag_Kk1_Method = {
     (process_method_func)daTag_Kk1_Create,

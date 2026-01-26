@@ -3,6 +3,7 @@
 // Translation Unit: d_a_spotbox.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_spotbox.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -85,7 +86,11 @@ actor_process_profile_definition g_profile_SPOTBOX = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Priority     */ PRIO_SPOTBOX,
     /* Actor SubMtd */ &l_daSpotbox_Method,
+#if VERSION == VERSION_DEMO
+    /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
+#else
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+#endif
     /* Group        */ fopAc_ACTOR_e,
     /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
 };

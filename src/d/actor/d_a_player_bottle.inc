@@ -10,11 +10,13 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/d_camera.h"
 #include "d/d_procname.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "f_op/f_op_kankyo_mng.h"
 
 /* 80151E40-80151E60       .text changeBottleDrinkFace__9daPy_lk_cFi */
 int daPy_lk_c::changeBottleDrinkFace(int param_0) {
@@ -104,9 +106,9 @@ BOOL daPy_lk_c::procBottleDrink_init(u16 param_0) {
     setSingleMoveAnime(
         ANM_BINDRINKPRE,
         1.0f,
-        daPy_HIO_bottle_c0::m.field_0x5C,
-        daPy_HIO_bottle_c0::m.field_0xC,
-        daPy_HIO_bottle_c0::m.field_0x60
+        m_HIO->mItem.mBottle.m.field_0x5C,
+        m_HIO->mItem.mBottle.m.field_0xC,
+        m_HIO->mItem.mBottle.m.field_0x60
     );
     if (changeBottleDrinkFace(param_0)) {
         setTextureAnime(0x85, 0);
@@ -131,7 +133,7 @@ BOOL daPy_lk_c::procBottleDrink() {
     u16 uVar1 = m_anm_heap_under[UNDER_MOVE0_e].mIdx;
     if (uVar1 == LKANM_BCK_BINDRINKPRE) {
         if (frameCtrl.getRate() < 0.01f) {
-            setSingleMoveAnime(ANM_BINDRINKING, daPy_HIO_bottle_c0::m.field_0x64, 0.0f, -1, 0.0f);
+            setSingleMoveAnime(ANM_BINDRINKING, m_HIO->mItem.mBottle.m.field_0x64, 0.0f, -1, 0.0f);
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x86, 0);
             }
@@ -142,7 +144,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                 dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
             }
             if (mEquipItem == dItem_SOUP_BOTTLE_e || mEquipItem == dItem_HALF_SOUP_BOTTLE_e) {
-                onNoResetFlg1(daPyFlg1_UNK8000);
+                onNoResetFlg1(daPyFlg1_SOUP_POWER_UP);
             }
             resetCurse();
         } else {
@@ -157,9 +159,9 @@ BOOL daPy_lk_c::procBottleDrink() {
             setSingleMoveAnime(
                 ANM_BINDRINKAFTER,
                 1.0f,
-                daPy_HIO_bottle_c0::m.field_0x68,
-                daPy_HIO_bottle_c0::m.field_0xE,
-                daPy_HIO_bottle_c0::m.field_0x6C
+                m_HIO->mItem.mBottle.m.field_0x68,
+                m_HIO->mItem.mBottle.m.field_0xE,
+                m_HIO->mItem.mBottle.m.field_0x6C
             );
             if (changeBottleDrinkFace(mEquipItem)) {
                 setTextureAnime(0x87, 0);
@@ -207,7 +209,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
         return true;
     }
 
-    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_BO_OPEN_e) {
         if (!dComIfGp_event_compulsory(this)) {
             return false;
         }
@@ -222,9 +224,9 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     setSingleMoveAnime(
         ANM_BINOPENPRE,
         1.0f,
-        daPy_HIO_bottle_c0::m.field_0x3C,
-        daPy_HIO_bottle_c0::m.field_0x6,
-        daPy_HIO_bottle_c0::m.field_0x40
+        m_HIO->mItem.mBottle.m.field_0x3C,
+        m_HIO->mItem.mBottle.m.field_0x6,
+        m_HIO->mItem.mBottle.m.field_0x40
     );
     keepItemData();
     setBottleModel(param_0);
@@ -234,7 +236,7 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
     } else {
         mProcVar0.m3570 = 2;
     }
-    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK3D_e) {
+    if (mDemo.getDemoMode() != daPy_demo_c::DEMO_BO_OPEN_e) {
         dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar0.m3570, 0);
     }
     initShipRideUseItem(iVar1, 2);
@@ -247,9 +249,173 @@ BOOL daPy_lk_c::procBottleOpen_init(u16 param_0) {
 
 /* 801527CC-80152ED0       .text procBottleOpen__9daPy_lk_cFv */
 BOOL daPy_lk_c::procBottleOpen() {
-    /* Nonmatching */
-    static const Vec splash_scale = {0.3f, 0.3f, 0.3f};
-    static const Vec ripple_scale = {0.5f, 0.5f, 0.5f};
+    J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
+    
+    setShipRidePosUseItem();
+    
+    if (m_anm_heap_under[UNDER_MOVE0_e].mIdx == LKANM_BCK_BINOPENPRE) {
+        if (frameCtrl.getRate() < 0.01f) {
+            if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+                setSingleMoveAnime(
+                    ANM_BINOPENB,
+                    1.0f,
+                    m_HIO->mItem.mBottle.m.field_0x50,
+                    m_HIO->mItem.mBottle.m.field_0xA,
+                    m_HIO->mItem.mBottle.m.field_0x54
+                );
+            } else {
+                setSingleMoveAnime(
+                    ANM_BINOPENA,
+                    1.0f,
+                    m_HIO->mItem.mBottle.m.field_0x44,
+                    m_HIO->mItem.mBottle.m.field_0x8,
+                    m_HIO->mItem.mBottle.m.field_0x48
+                );
+            }
+        } else if (frameCtrl.checkPass(32.0f)) {
+            m355E = 0;
+            mRightHandIdx = 8;
+        }
+    } else {
+        if (m32E4.getEmitter() && m34D4 == 0 && m32E4.getEmitter()->getParticleList() && m32E4.getEmitter()->getParticleList()->getLast()) {
+            JGeometry::TVec3<f32> temp;
+            m32E4.getEmitter()->getParticleList()->getLast()->getObject()->getGlobalPosition(temp);
+            cXyz sp64(temp.x, temp.y + 100.0f, temp.z);
+            BOOL r27 = FALSE;
+            mGndChk.SetPos(&sp64);
+            f32 f31 = dComIfG_Bgsp()->GroundCross(&mGndChk);
+            mLavaGndChk.SetPos(&sp64);
+            f32 f29 = dComIfG_Bgsp()->GroundCross(&mGndChk); // Bug? They might have meant to use mLavaGndChk here
+            f32 f1;
+            f32 water_y;
+            if (fopAcM_getWaterY(&sp64, &water_y)) {
+                if (water_y > f31) {
+                    if (water_y > f29) {
+                        f1 = water_y;
+                        r27 = TRUE;
+                    } else {
+                        f1 = f29;
+                    }
+                } else {
+                    if (f31 > f29) {
+                        f1 = f31;
+                    } else {
+                        f1 = f29;
+                    }
+                }
+            } else {
+                if (f31 > f29) {
+                    f1 = f31;
+                } else {
+                    f1 = f29;
+                }
+            }
+            cXyz sp58;
+            cXyz sp4C;
+            cXyz sp40;
+            cXyz sp34;
+            if (f1 > temp.y + 15.0f) {
+                m34D4 = 1;
+                sp64.y = f1;
+                m34D4 = 1;
+                static const Vec splash_scale = {0.3f, 0.3f, 0.3f};
+                JPABaseEmitter* emitter = dComIfGp_particle_setP1(
+                    dPa_name::ID_COMMON_0040, &sp64,
+                    NULL, (cXyz*)&splash_scale, 0xFF, NULL, -1,
+                    &tevStr.mColorK0, &tevStr.mColorK0
+                );
+                if (emitter) {
+                    emitter->setRate(8.0f);
+                    emitter->setMaxFrame(20);
+                }
+                static const Vec ripple_scale = {0.5f, 0.5f, 0.5f};
+                if (r27) {
+                    dComIfGp_particle_setSingleRipple(dPa_name::ID_COMMON_003F, &sp64, NULL, (cXyz*)&ripple_scale);
+                } else {
+                    m370C = sp64;
+                    m34D0 = 1;
+                }
+                sp58.set(sp64.x, sp64.y, sp64.z);
+                sp4C.set(sp64.x, sp64.y + 5.0f, sp64.z);
+                mAtCps[1].SetStartEnd(sp58, sp64);
+                sp34.set(0.0f, 0.0f, 0.0f);
+                mAtCps[1].SetAtVec(sp34);
+                mAtCps[1].SetR(50.0f);
+            } else {
+                sp64.y = temp.y;
+            }
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &sp58);
+            sp40 = sp64 - sp58;
+            mAtCps[0].SetStartEnd(sp58, sp64);
+            mAtCps[0].SetAtVec(sp40);
+            m34D6 = 1;
+        }
+        if (frameCtrl.getRate() < 0.01f) {
+            mActorKeepRope.clearData();
+            if (mDemo.getDemoType() == 5) {
+                dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
+                dComIfGp_event_reset();
+                endDemoMode();
+            } else {
+                dComIfGp_evmng_cutEnd(mStaffIdx);
+            }
+        } else if (m34D8 == 0) {
+            if (
+                (mEquipItem == dItem_WATER_BOTTLE_e || mEquipItem == dItem_FOREST_WATER_e) &&
+                (frameCtrl.checkPass(9.0f))
+            ) {
+                seStartOnlyReverb(JA_SE_LK_SPRINKLE_WATER);
+                m32E4.makeEmitterColor(dPa_name::ID_COMMON_0279, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
+                dCcG_At_Spl spl;
+                if (mEquipItem == dItem_WATER_BOTTLE_e) {
+                    spl = dCcG_At_Spl_UNK0;
+                } else {
+                    spl = dCcG_At_Spl_UNK4;
+                    onNoResetFlg1(daPyFlg1_FOREST_WATER_USE);
+                    m3554 = 3;
+                }
+                setAtParam(AT_TYPE_WATER, 0, spl, 0, dCcG_AtHitMark_None_e, 0, 5.0f);
+            } else if (
+                (mEquipItem == dItem_FAIRY_BOTTLE_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x58) ||
+                (mEquipItem != dItem_FAIRY_BOTTLE_e && mEquipItem != dItem_FOREST_WATER_e && frameCtrl.getFrame() >= m_HIO->mItem.mBottle.m.field_0x4C)
+            ) {
+                mpBottleContentsModel = NULL;
+                m34D8 = 1;
+                if (mDemo.getDemoType() == 5) {
+                    dComIfGs_setEquipBottleItemEmpty(mReadyItemBtn);
+                } else if (dComIfGp_event_getTalkXYBtn() == dTalkBtn_X_e) {
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_X_e);
+                } else if (dComIfGp_event_getTalkXYBtn() == dTalkBtn_Y_e) {
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_Y_e);
+                } else { // dTalkBtn_Z_e
+                    dComIfGs_setEquipBottleItemEmpty(dItemBtn_Z_e);
+                }
+                if (mEquipItem == dItem_FAIRY_BOTTLE_e) {
+                    onModeFlg(ModeFlg_08000000);
+                    mActorKeepRope.setData(makeFairy(&mLeftHandPos, 2));
+                } else if (mEquipItem == dItem_FIREFLY_BOTTLE_e) {
+                    fopAcM_create(PROC_NH, 1, &mLeftHandPos, fopAcM_GetRoomNo(this), &shape_angle);
+                }
+            }
+        } else if (frameCtrl.getFrame() > 40.0f) {
+            m32E4.end();
+        }
+    }
+    
+    if (m34D0 > 0) {
+        m34D0--;
+        if (m34D0 == 0) {
+            cXyz sp28(
+                m370C.x + cM_rndFX(45.0f),
+                m370C.y,
+                m370C.z + cM_rndFX(45.0f)
+            );
+            fopKyM_create(PROC_WATER_MARK, 1, &sp28);
+            m34D0 = 3;
+        }
+    }
+    
+    return TRUE;
 }
 
 /* 80152ED0-80153064       .text procBottleSwing_init__9daPy_lk_cFi */
@@ -279,21 +445,21 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     if (bVar1) {
         setSingleMoveAnime(
             ANM_BINSWINGU,
-            daPy_HIO_bottle_c0::m.field_0x20,
-            daPy_HIO_bottle_c0::m.field_0x24,
-            daPy_HIO_bottle_c0::m.field_0x2,
-            daPy_HIO_bottle_c0::m.field_0x2C
+            m_HIO->mItem.mBottle.m.field_0x20,
+            m_HIO->mItem.mBottle.m.field_0x24,
+            m_HIO->mItem.mBottle.m.field_0x2,
+            m_HIO->mItem.mBottle.m.field_0x2C
         );
-        m35A0 = daPy_HIO_bottle_c0::m.field_0x28;
+        m35A0 = m_HIO->mItem.mBottle.m.field_0x28;
     } else {
         setSingleMoveAnime(
             ANM_BINSWINGS,
-            daPy_HIO_bottle_c0::m.field_0x10,
-            daPy_HIO_bottle_c0::m.field_0x14,
-            daPy_HIO_bottle_c0::m.field_0x0,
-            daPy_HIO_bottle_c0::m.field_0x1C
+            m_HIO->mItem.mBottle.m.field_0x10,
+            m_HIO->mItem.mBottle.m.field_0x14,
+            m_HIO->mItem.mBottle.m.field_0x0,
+            m_HIO->mItem.mBottle.m.field_0x1C
         );
-        m35A0 = daPy_HIO_bottle_c0::m.field_0x18;
+        m35A0 = m_HIO->mItem.mBottle.m.field_0x18;
     }
     mProcVar0.m3570 = 0;
     m3574 = 0;
@@ -342,7 +508,7 @@ BOOL daPy_lk_c::procBottleSwing() {
             if (m34D4 == 0) {
                 offModeFlg(ModeFlg_00000400);
                 onModeFlg(ModeFlg_00000100);
-                setBlendMoveAnime(daPy_HIO_basic_c0::m.field_0xC);
+                setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
                 m34D4 = 1;
             }
             if (checkEndMessage(0x14a2)) {
@@ -374,10 +540,10 @@ BOOL daPy_lk_c::procBottleGet_init() {
     commonProcInit(daPyProc_BOTTLE_GET_e);
     setSingleMoveAnime(
         ANM_BINGET,
-        daPy_HIO_bottle_c0::m.field_0x30,
-        daPy_HIO_bottle_c0::m.field_0x34,
-        daPy_HIO_bottle_c0::m.field_0x4,
-        daPy_HIO_bottle_c0::m.field_0x38
+        m_HIO->mItem.mBottle.m.field_0x30,
+        m_HIO->mItem.mBottle.m.field_0x34,
+        m_HIO->mItem.mBottle.m.field_0x4,
+        m_HIO->mItem.mBottle.m.field_0x38
     );
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK1000_e);
     m3628 = fpcM_ERROR_PROCESS_ID_e;
@@ -404,7 +570,7 @@ BOOL daPy_lk_c::procBottleGet() {
         m355E = 1;
     }
     if (frameCtrl.checkPass(39.0f)) {
-        mDoAud_seStart(JA_SE_ME_ITEM_GET_S);
+        seStartSystem(JA_SE_ME_ITEM_GET_S);
         dComIfGp_setMesgBgmOn2();
     }
     return true;

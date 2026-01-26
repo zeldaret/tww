@@ -67,9 +67,9 @@ public:
     ~dDemo_actor_c();
     fopAc_ac_c* getActor();
     void setActor(fopAc_ac_c*);
-    void* getP_BtpData(const char*);
+    J3DAnmTexPattern* getP_BtpData(const char*);
     void* getP_BrkData(const char*);
-    void* getP_BtkData(const char*);
+    J3DAnmTextureSRTKey* getP_BtkData(const char*);
     f32 getPrm_Morf();
     void JSGSetData(u32, const void*, u32);
     void JSGSetTranslation(const Vec&);
@@ -144,7 +144,7 @@ private:
     /* 0x60 */ s32 mBtpId;
     /* 0x64 */ s32 mBtkId;
     /* 0x68 */ s32 mBrkId;
-};
+}; // size = 0x6C
 
 class dDemo_camera_c : public JStage::TCamera {
 public:
@@ -352,6 +352,10 @@ private:
 };
 
 class mDoExt_McaMorf;
-BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int, u16*, u32, s8);
+#if VERSION == VERSION_DEMO
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL);
+#else
+BOOL dDemo_setDemoData(fopAc_ac_c*, u8, mDoExt_McaMorf*, const char*, int = 0, u16* = NULL, u32 = 0, s8 = 0);
+#endif
 
 #endif /* D_DEMO_H */

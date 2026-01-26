@@ -15,7 +15,9 @@ class dBgS_GndChk;
 
 class daDemo00_shadow_c {
 public:
+#if VERSION > VERSION_DEMO
     /* 0x00 */ u32 shadowID;
+#endif
     /* 0x04 */ cXyz pos;
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ f32 field_0x14;
@@ -26,7 +28,7 @@ public:
     void reset();
 
 public:
-    /* 0x00 */ s32 modelID;
+    /* 0x00 */ u32 modelID;
     /* 0x04 */ s32 bckID;
     /* 0x08 */ s32 field_0x08;
     /* 0x0C */ s32 btpID;
@@ -34,7 +36,7 @@ public:
     /* 0x14 */ s32 brkID;
     /* 0x18 */ s32 field_0x18;
     /* 0x1C */ s32 field_0x1C;
-    /* 0x20 */ s32 plightID;
+    /* 0x20 */ u32 plightID;
     /* 0x24 */ s32 shadowID;
 };
 
@@ -60,7 +62,9 @@ class daDemo00_bgc_c {
 
 class daDemo00_c : public fopAc_ac_c {
 public:
+#if VERSION > VERSION_DEMO
     ~daDemo00_c();
+#endif
 
     typedef BOOL (daDemo00_c::*ActionFunc)(dDemo_actor_c* act);
 
@@ -75,7 +79,7 @@ public:
     BOOL actLeaving(dDemo_actor_c*);
     inline BOOL create();
     BOOL draw();
-    BOOL execute();
+    inline BOOL execute();
 
 public:
     /* 0x290 */ ActionFunc actionFunc;

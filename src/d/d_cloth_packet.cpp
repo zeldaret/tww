@@ -3,6 +3,7 @@
 // Translation Unit: d_cloth_packet.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cloth_packet.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */

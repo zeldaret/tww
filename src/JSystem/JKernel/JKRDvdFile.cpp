@@ -3,6 +3,8 @@
 // Translation Unit: JKRDvdFile.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
@@ -124,7 +126,7 @@ s32 JKRDvdFile::readData(void* param_1, s32 length, s32 param_3) {
 /* 802BCBCC-802BCC24       .text writeData__10JKRDvdFileFPCvll */
 s32 JKRDvdFile::writeData(const void* param_0, s32 length, s32 param_2) {
     /* clang-format off */
-    JUT_ASSERT(340, ( length & 0x1f ) == 0);
+    JUT_ASSERT(DEMO_SELECT(364, 340), ( length & 0x1f ) == 0);
     /* clang-format on */
 
     return -1;

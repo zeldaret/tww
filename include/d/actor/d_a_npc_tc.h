@@ -58,10 +58,10 @@ public:
     void wait_action(void*);
     void calc_sitpos();
     void set_mtx();
-    bool _draw();
+    BOOL _draw();
     void setTower();
-    bool _execute();
-    bool _delete();
+    BOOL _execute();
+    BOOL _delete();
     void isCreate();
     cPhs_State _create();
     void _createHeap();

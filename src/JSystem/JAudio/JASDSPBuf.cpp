@@ -3,6 +3,8 @@
 // Translation Unit: JASDSPBuf.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASDSPBuf.h"
 #include "JSystem/JAudio/JASAudioThread.h"
 #include "JSystem/JAudio/JASCallback.h"

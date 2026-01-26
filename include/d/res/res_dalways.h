@@ -1,7 +1,7 @@
 #ifndef RES_DALWAYS_H
 #define RES_DALWAYS_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum DALWAYS_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

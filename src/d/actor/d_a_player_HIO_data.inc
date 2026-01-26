@@ -150,6 +150,10 @@ const daPy_HIO_b_verJump_c1 daPy_HIO_b_verJump_c0::m = {
     4.0f, 8.0f, -7.0f, -10.0f, 1.0f, 2.0f, 0.0f,  5.5f,  25.0f,
 };
 
+const daPy_HIO_battle_c1 daPy_HIO_battle_c0::m = {
+    0.0f, 1.5f,
+};
+
 const daPy_HIO_wall_c1 daPy_HIO_wall_c0::m = {
     10,   7,    14,   14,   28,   28,   1.3f, 1.1f, 1.6f, 1.8f,  0.8f, 0.9f, 3.0f, 0.0f,  1.0f,
     1.0f, 5.0f, 5.0f, 5.0f, 5.0f, 5.0f, 5.0f, 5.0f, 8.5f, 25.0f, 0.9f, 0.9f, 1.0f, 0.98f,
@@ -205,6 +209,10 @@ const daPy_HIO_elecDamage_c1 daPy_HIO_elecDamage_c0::m = {
     75,
     1.0f,
     0.0f,
+};
+
+const daPy_HIO_dam_c1 daPy_HIO_dam_c0::m = {
+    30, 20,
 };
 
 const daPy_HIO_slowJump_c1 daPy_HIO_slowJump_c0::m = {
@@ -278,6 +286,10 @@ const daPy_HIO_food_c1 daPy_HIO_food_c0::m = {
     17, 21, 0.6f, 0.0f, 4.0f, 1.1f, 2.0f, 4.0f,
 };
 
+const daPy_HIO_magicShield_c1 daPy_HIO_magicShield_c0::m = {
+    60, 0,
+};
+
 const daPy_HIO_item_c1 daPy_HIO_item_c0::m = {
     15, 10, 7, 1.0f, 2.0f, 1.0f, 0.7f, 1.0f, 3.0f, 4.0f, 0.8f, 3.0f, 4.0f, 6.0f,
 };
@@ -302,16 +314,4 @@ const daPy_HIO_vomit_c1 daPy_HIO_vomit_c0::m = {
 
 const daPy_HIO_warp_c1 daPy_HIO_warp_c0::m = {
     53, 12, 28, 4, 1.2f, 1.6f, 0.5f, 0.1f, 1.35f,
-};
-
-const daPy_HIO_battle_c1 daPy_HIO_battle_c0::m = {
-    0.0f, 1.5f,
-};
-
-const daPy_HIO_dam_c1 daPy_HIO_dam_c0::m = {
-    30, 20,
-};
-
-const daPy_HIO_magicShield_c1 daPy_HIO_magicShield_c0::m = {
-    60, 0,
 };

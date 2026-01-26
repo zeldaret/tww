@@ -2,6 +2,7 @@
 #define D_A_HYS_H
 
 #include "d/d_bg_s_movebg_actor.h"
+#include "m_Do/m_Do_ext.h"
 
 class daHys_c : public dBgS_MoveBgActor {
 public:

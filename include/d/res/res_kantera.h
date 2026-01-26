@@ -1,7 +1,7 @@
 #ifndef RES_KANTERA_H
 #define RES_KANTERA_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KANTERA_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

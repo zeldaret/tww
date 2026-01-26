@@ -1,7 +1,7 @@
 #ifndef RES_SALVAGE_H
 #define RES_SALVAGE_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum SALVAGE_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

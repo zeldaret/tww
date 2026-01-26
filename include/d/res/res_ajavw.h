@@ -1,7 +1,7 @@
 #ifndef RES_AJAVW_H
 #define RES_AJAVW_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum AJAVW_RES_FILE_ID { // IDs and indexes are synced
     /* BDLM */

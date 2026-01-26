@@ -1,7 +1,7 @@
 #ifndef RES_EAYOGN_H
 #define RES_EAYOGN_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum EAYOGN_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

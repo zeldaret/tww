@@ -3,6 +3,7 @@
 // Translation Unit: d_menu_cloth.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_cloth.h"
 
 /* 8019940C-8019966C       .text __ct__13daCLOTH_HIO_cFv */

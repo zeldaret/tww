@@ -3,6 +3,7 @@
  * Main Initialization
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_main.h"
 #include "DynamicLink.h"
 #include "JSystem/JFramework/JFWSystem.h"
@@ -25,8 +26,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
+#include <stdio.h>
 
 /* 800056E0-80005748       .text version_check__Fv */
 void version_check() {
@@ -90,7 +90,7 @@ void CheckHeap(JUTGamePad* i_pad) {
     bool comboCheck = false;
 
     // if L + R + Z is pressed
-    if ((i_pad->testButton(~CButton::Z)) == (CButton::L | CButton::R) && i_pad->testTrigger(CButton::Z))
+    if ((i_pad->getButton() & ~CButton::Z) == (CButton::L | CButton::R) && i_pad->testTrigger(CButton::Z) != false)
         comboCheck = true;
 
     int saveRel = comboCheck;
@@ -166,13 +166,24 @@ void HeapCheck::heapDisplay() {
     JUTReport(100, 357, "UsedCount             %3ld%", used_count);
 }
 
+#if VERSION == VERSION_DEMO
+int mDoMain::argument = -1;
+#endif
+
 s8 mDoMain::developmentMode = -1;
 
-u32 mDoMain::memMargin = 0xFFFFFFFF;
+#if VERSION == VERSION_DEMO
+int mDoMain::gameHeapSize = -1;
+int mDoMain::archiveHeapSize = -1;
+#endif
+
+u32 mDoMain::memMargin = -1;
 
 u8 mHeapBriefType = 4;
 
+#if VERSION > VERSION_DEMO
 static u8 fillcheck_check_frame;
+#endif
 
 OSTime mDoMain::sPowerOnTime;
 OSTime mDoMain::sHungUpTime;
@@ -181,7 +192,12 @@ static bool mDisplayHeapSize;
 
 static u8 mSelectHeapBar;
 
-static bool mCheckHeap;
+#if VERSION == VERSION_DEMO
+static bool mCheckHeap = true;
+#else
+static bool mCheckHeap = false;
+
+#endif
 
 /* 80005B28-80005DE0       .text debugDisplay__Fv */
 void debugDisplay() {
@@ -207,7 +223,7 @@ void debugDisplay() {
             return;
         }
     } else if (mHeapBriefType != 0) {
-        JUT_ASSERT(VERSION_SELECT(530, 530, 531, 531), mHeapBriefType < HeapCheckTableNum);
+        JUT_ASSERT(VERSION_SELECT(528, 530, 531, 531), mHeapBriefType < HeapCheckTableNum);
 
         JUTReport(500, 100, "%s", desc1[mHeapBriefType]);
         JUTReport(500, 114, "%s", desc2[mHeapBriefType]);
@@ -219,16 +235,16 @@ void debugDisplay() {
             s32 check2;
             switch (mHeapBriefType) {
             case 1:
-                check1 = heap_check->getHeap()->getTotalFreeSize();
-                check2 = heap_check->getHeap()->getFreeSize();
+                check1 = heap_check->mHeap->getTotalFreeSize();
+                check2 = heap_check->mHeap->getFreeSize();
                 break;
             case 2:
                 check1 = heap_check->getMaxTotalUsedSize();
-                check2 = heap_check->getHeap()->getHeapSize();
+                check2 = heap_check->mHeap->getHeapSize();
                 break;
             case 3:
                 check1 = heap_check->getUsedCount();
-                check2 = heap_check->getHeap()->getTotalUsedSize();
+                check2 = heap_check->mHeap->getTotalUsedSize();
                 break;
             case 4:
                 check1 = heap_check->getRelUsedCount();
@@ -236,7 +252,7 @@ void debugDisplay() {
                 break;
             }
 
-            JUTReport(500, (i * 44) + 150, " [%s]", heap_check->getName());
+            JUTReport(500, (i * 44) + 150, " [%s]", heap_check->mName);
             JUTReport(500, (i * 44) + 164, "%10d", check1);
             JUTReport(500, (i * 44) + 178, "%10d", check2);
         }
@@ -251,26 +267,25 @@ bool Debug_console(JUTGamePad* i_pad) {
         static f32 console_position_y = 30.0f;
         static f32 console_scroll = 0.0f;
 
-        if ((i_pad->getTrigger() & CButton::Z) && !(i_pad->getButton() & ~CButton::Z)) {
+        if (i_pad->testTrigger(CButton::Z) && !(i_pad->getButton() & ~CButton::Z)) {
             console->setVisible(console->isVisible() == false);
             JUTAssertion::setMessageCount(0);
         }
 
         if (console->isVisible()) {
-            u32 holdButtons = i_pad->getButton();
-            if ((holdButtons & CButton::L && holdButtons & CButton::R) ||
+            if ((i_pad->testButton(CButton::L) && i_pad->testButton(CButton::R)) ||
                 ((i_pad->getAnalogL() != 0 && i_pad->getAnalogR() != 0)))
             {
                 f32 stick_x = i_pad->getMainStickX();
                 f32 stick_y = i_pad->getMainStickY();
 
-                if ((holdButtons & CButton::X) && (holdButtons & CButton::Y) &&
-                    i_pad->getTrigger() & CButton::START)
+                if (i_pad->testButton(CButton::X) && i_pad->testButton(CButton::Y) &&
+                    i_pad->testTrigger(CButton::START))
                 {
                     console->clear();
                 }
 
-                if (!(i_pad->getButton() & CButton::X) && !(i_pad->getButton() & CButton::Y)) {
+                if (!i_pad->testButton(CButton::X) && !i_pad->testButton(CButton::Y)) {
                     console_scroll -= stick_y;
 
                     int scrollAmount;
@@ -287,16 +302,16 @@ bool Debug_console(JUTGamePad* i_pad) {
                         console->scroll(scrollAmount);
                     }
                 } else {
-                    if (i_pad->getButton() & CButton::X) {
+                    if (i_pad->testButton(CButton::X)) {
                         console_position_x += stick_x;
                     }
 
-                    if (i_pad->getButton() & CButton::Y) {
+                    if (i_pad->testButton(CButton::Y)) {
                         console_position_y -= stick_y;
                     }
                 }
 
-                if (i_pad->getTrigger() & CButton::A) {
+                if (i_pad->testTrigger(CButton::A)) {
                     console->dumpToTerminal(0xFFFFFFFF);
                     console->setOutput(JUTConsole::OUTPUT_OSREPORT | JUTConsole::OUTPUT_CONSOLE);
                 }
@@ -307,11 +322,12 @@ bool Debug_console(JUTGamePad* i_pad) {
                 JUTReport(30, 420, 1, "SCROLL：%3d %3d %3d Output=%1x", console->getLineOffset(),
                           console->getPositionX(), console->getPositionY(), console->getOutput());
             } else {
-                if (i_pad->getTrigger() & CButton::DPAD_DOWN) {
+#if VERSION > VERSION_DEMO
+                if (i_pad->testTrigger(CButton::DPAD_DOWN)) {
                     g_HIO.mDisplayMeter ^= 1;
                 }
 
-                if (i_pad->getTrigger() & CButton::DPAD_LEFT) {
+                if (i_pad->testTrigger(CButton::DPAD_LEFT)) {
                     if (JKRAram::getAramHeap()) {
                         JKRAram::getAramHeap()->dump();
                     }
@@ -320,15 +336,16 @@ bool Debug_console(JUTGamePad* i_pad) {
                     dComIfG_dumpResControl();
                 }
 
-                if (i_pad->getTrigger() & CButton::DPAD_RIGHT) {
+                if (i_pad->testTrigger(CButton::DPAD_RIGHT)) {
                     JKRHeap::getSystemHeap()->dump_sort();
                 }
 
-                if (i_pad->getTrigger() & CButton::DPAD_UP) {
+                if (i_pad->testTrigger(CButton::DPAD_UP)) {
                     zeldaHeap->dump_sort();
                     gameHeap->dump_sort();
                     archiveHeap->dump_sort();
                 }
+#endif
                 JUTReport(30, 440, 1, "Press L+R trigger to control console.");
                 JUTReport(30, 450, 1, "Press [Z] trigger to close this window.");
             }
@@ -337,11 +354,6 @@ bool Debug_console(JUTGamePad* i_pad) {
         }
     }
     return 0;
-}
-
-/* 800061E0-800061E8       .text dump_sort__7JKRHeapFv */
-bool JKRHeap::dump_sort() {
-    return 1;
 }
 
 /* 800061E8-80006264       .text LOAD_COPYDATE__FPv */
@@ -360,6 +372,7 @@ s32 LOAD_COPYDATE(void*) {
     return status;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80006264-80006338       .text debug__Fv */
 void debug() {
     if (mDoMain::developmentMode) {
@@ -367,12 +380,17 @@ void debug() {
             CheckHeap(g_mDoCPd_gamePad[2]);
         }
 
-        if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
+        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
             mDisplayHeapSize ^= 1;
 
         if (mDisplayHeapSize) {
-            if (g_mDoCPd_gamePad[2]->testButton(~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
-                mHeapBriefType < 5 ? mHeapBriefType++ : mHeapBriefType = 1;
+            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z)) {
+                if (mHeapBriefType < 5) {
+                    mHeapBriefType++;
+                } else {
+                    mHeapBriefType = 1;
+                }
+            }
 
             debugDisplay();
         }
@@ -380,11 +398,10 @@ void debug() {
         Debug_console(g_mDoCPd_gamePad[2]);
     }
 }
+#endif
 
 /* 80006338-80006464       .text main01__Fv */
 void main01() {
-    static u32 frame;
-
     // Setup heaps, setup exception manager, set RNG seed, setup DVDError Thread, setup Memory card
     // Thread
     mDoMch_Create();
@@ -403,42 +420,121 @@ void main01() {
     CommandHeapCheck.setHeap(mDoExt_getCommandHeap());
 
     JUTConsole* console = JFWSystem::getSystemConsole();
+#if VERSION == VERSION_DEMO
+    console->setOutput(JUTConsole::OUTPUT_OSR_AND_CONSOLE);
+#else
     console->setOutput(mDoMain::developmentMode ? JUTConsole::OUTPUT_OSR_AND_CONSOLE :
                                                   JUTConsole::OUTPUT_NONE);
+#endif
     console->setPosition(32, 42);
+
+#if VERSION == VERSION_DEMO
+    console->print("JUTConsole START\n");
+#endif
 
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)LOAD_COPYDATE, NULL);
     fapGm_Create();  // init framework
+#if VERSION > VERSION_DEMO
 #if VERSION <= VERSION_JPN
     mDisplayHeapSize = 1;
 #else
     mDisplayHeapSize = 0;
 #endif
+#endif
     cDyl_InitAsync();  // init RELs
 
+#if VERSION > VERSION_DEMO
     g_mDoAud_audioHeap = JKRSolidHeap::create(0x166800, JKRHeap::getCurrentHeap(), false);
 
+    static u32 frame;
+#endif
+
     do {
+#if VERSION > VERSION_DEMO
         frame++;
         if (fillcheck_check_frame != 0 && frame % fillcheck_check_frame == 0) {
             mDoMch_HeapCheckAll();
         }
-
+#endif
         if (mDoDvdThd::SyncWidthSound) {
-            g_mDoMemCd_control.update();
+            mDoMemCd_UpDate();
         }
 
         mDoCPd_Read();     // read controller input
         mDoAud_Execute();  // handle audio execution
         fapGm_Execute();   // handle game execution
+
+#if VERSION == VERSION_DEMO
+        if (mCheckHeap) {
+            CheckHeap(g_mDoCPd_gamePad[2]);
+        }
+
+        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
+            mDisplayHeapSize ^= 1;
+
+        if (mDisplayHeapSize) {
+            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z)) {
+                if (mHeapBriefType < 5) {
+                    mHeapBriefType++;
+                } else {
+                    if (JKRAram::getAramHeap()) {
+                        JKRAram::getAramHeap()->dump();
+                    }
+                    mHeapBriefType = 1;
+                }
+            }
+
+            debugDisplay();
+        }
+
+        Debug_console(g_mDoCPd_gamePad[2]);
+#else
         debug();           // run debugger
+#endif
     } while (true);
 }
 
+#if VERSION == VERSION_DEMO
+void parse_args(int argc, const char* argv[]) {
+    for (int i = 0; i < argc; i++) {
+    }
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--noprint") == 0) {
+            OSReportDisable();
+        } else if (strcmp(argv[i], "--develop") == 0) {
+            mDoMain::developmentMode = 1;
+        } else if (strcmp(argv[i], "--nodevelop") == 0) {
+            mDoMain::developmentMode = 0;
+        } else if (strncmp(argv[i], "--e3argument=", sizeof("--e3argument=")-1) == 0) {
+            sscanf(argv[i] + sizeof("--e3argument=")-1, "%d", &mDoMain::argument);
+        } else if (strncmp(argv[i], "--gameheapsize=0x", sizeof("--gameheapsize=0x")-1) == 0) {
+            sscanf(argv[i] + sizeof("--gameheapsize=0x")-1, "%x", &mDoMain::gameHeapSize);
+        } else if (strncmp(argv[i], "--archiveheapsize=0x", sizeof("--archiveheapsize=0x")-1) == 0) {
+            sscanf(argv[i] + sizeof("--archiveheapsize=0x")-1, "%x", &mDoMain::archiveHeapSize);
+        } else if (strncmp(argv[i], "--memmargin=0x", sizeof("--memmargin=0x")-1) == 0) {
+            sscanf(argv[i] + sizeof("--memmargin=0x")-1, "%x", &mDoMain::memMargin);
+        } else {
+            OSReport_Error("unknown argument %d, %s\n", i, argv[i]);
+        }
+    }
+
+    if (mDoMain::developmentMode < 0) {
+        mDoMain::developmentMode = (OSGetConsoleType() & 0x10000000) ? 1 : 0;
+    }
+}
+#endif
+
+#if VERSION > VERSION_DEMO
 OSThread mainThread;
+#endif
 
 /* 80006464-800065DC       .text main */
-int main() {
+int main(int argc, const char* argv[]) {
+#if VERSION == VERSION_DEMO
+    OSThread mainThread;
+#endif
+
     OSThread* current_thread = OSGetCurrentThread();
     u8 ALIGN_DECL(0x20) stack[0xF000];
 
@@ -464,6 +560,7 @@ int main() {
     g_dComIfG_gameInfo.ct();
 #endif
 
+#if VERSION > VERSION_DEMO
     if (mDoMain::developmentMode < 0) {
         DVDDiskID* disk_id = DVDGetCurrentDiskID();
 
@@ -476,8 +573,13 @@ int main() {
             mDoMain::developmentMode = 0;
         }
     }
+#endif
 
-    s32 priority = OSGetThreadPriority(current_thread);
+#if VERSION == VERSION_DEMO
+    parse_args(argc, argv);
+#endif
+
+    OSPriority priority = OSGetThreadPriority(current_thread);
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);

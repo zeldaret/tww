@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx/quat.h"
 #include "dolphin/types.h"
 
 void mDoMtx_XYZrotS(Mtx, s16, s16, s16);
@@ -24,13 +25,14 @@ void mDoMtx_concatProjView(f32 const (*param_0)[4], f32 const (*param_1)[4], f32
 void mDoMtx_ZrotM(Mtx mtx, s16 z);
 bool mDoMtx_inverseTranspose(f32 const (*param_0)[4], f32 (*param_1)[4]);
 void mDoMtx_QuatConcat(Quaternion const* param_0, Quaternion const* param_1, Quaternion* param_2);
+void mDoMtx_concat(const Mtx a, const Mtx b, Mtx c);
 
 inline void mDoMtx_multVecSR(const Mtx m, const Vec* src, Vec* dst) {
     MTXMultVecSR(m, src, dst);
 }
 
 inline void cMtx_concat(const Mtx a, const Mtx b, Mtx ab) {
-    MTXConcat(a, b, ab);
+    mDoMtx_concat(a, b, ab);
 }
 
 inline void cMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
@@ -89,7 +91,7 @@ inline void cMtx_lookAt(Mtx param_0, const Vec* param_1, const Vec* param_2, con
     mDoMtx_lookAt(param_0,param_1,param_2,param_3,param_4);
 }
 
-inline void cMtx_copy(const Mtx src, Mtx dst) {
+inline void cMtx_copy(CMtxP src, MtxP dst) {
     mDoMtx_copy(src, dst);
 }
 
@@ -361,6 +363,10 @@ inline MtxP mDoMtx_getIdentity() {
     return g_mDoMtx_identity;
 }
 
+inline MtxP cMtx_getIdentity() {
+    return mDoMtx_getIdentity();
+}
+
 class mDoMtx_quatStack_c {
 public:
     mDoMtx_quatStack_c() {
@@ -371,11 +377,21 @@ public:
 
     ~mDoMtx_quatStack_c() {}
 
+    inline static Quaternion* get();
+
+    static void rotAxisRadS(const Vec* axis, f32 rad) {
+        QUATRotAxisRad(get(), axis, rad);
+    }
+
     /* 0x000 */ Quaternion* field_0x0;
     /* 0x004 */ Quaternion field_0x4;
     /* 0x014 */ Quaternion field_0x14[16];
     /* 0x114 */ Quaternion* field_0x114;
     /* 0x118 */ Quaternion** field_0x118;
 };  // Size: 0x11C
+
+extern mDoMtx_quatStack_c mDoMtx_quatStack;
+
+Quaternion* mDoMtx_quatStack_c::get() { return mDoMtx_quatStack.field_0x0; }
 
 #endif /* M_DO_M_DO_MTX_H */

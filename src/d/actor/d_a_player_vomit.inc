@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/d_procname.h"
@@ -40,13 +41,13 @@ BOOL daPy_lk_c::procVomitReady_init(s16 param_0, f32 param_1) {
     commonProcInit(daPyProc_VOMIT_READY_e);
     setSingleMoveAnime(
         ANM_MSTEPOVER,
-        daPy_HIO_vomit_c0::m.field_0xC,
-        daPy_HIO_vomit_c0::m.field_0x10,
-        daPy_HIO_vomit_c0::m.field_0x0,
-        daPy_HIO_vomit_c0::m.field_0x14
+        m_HIO->mVomit.m.field_0xC,
+        m_HIO->mVomit.m.field_0x10,
+        m_HIO->mVomit.m.field_0x0,
+        m_HIO->mVomit.m.field_0x14
     );
-    speed.y = daPy_HIO_vomit_c0::m.field_0x18;
-    mVelocity = (param_1 * -gravity) / (2.0f * daPy_HIO_vomit_c0::m.field_0x18);
+    speed.y = m_HIO->mVomit.m.field_0x18;
+    mVelocity = (param_1 * -gravity) / (2.0f * m_HIO->mVomit.m.field_0x18);
     if (checkHeavyStateOn()) {
         speed.y *= 1.5f;
         mVelocity *= 1.5f;
@@ -62,11 +63,11 @@ BOOL daPy_lk_c::procVomitReady() {
     setFallVoice();
     if (!checkJumpFlower()) {
         if (mAcch.ChkGroundHit()) {
-            changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+            changeLandProc(m_HIO->mAutoJump.m.field_0x24);
         } else if (checkFanGlideProc(0)) {
             return true;
         } else if (speed.y < -gravity) {
-            setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, daPy_HIO_wallCatch_c0::m.field_0x54);
+            setSingleMoveAnime(ANM_JMPEDS, 0.0f, 0.0f, -1, m_HIO->mWallCatch.m.field_0x54);
             offModeFlg(ModeFlg_00000400);
             setTextureAnime(0x37, 0);
             resetSeAnime();
@@ -87,6 +88,9 @@ BOOL daPy_lk_c::procVomitWait_init() {
     mVelocity = 0.0f;
     m34D4 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK80_e);
+#if VERSION == VERSION_PAL
+    m34D0 = 0;
+#endif
     return true;
 }
 
@@ -94,9 +98,20 @@ BOOL daPy_lk_c::procVomitWait_init() {
 BOOL daPy_lk_c::procVomitWait() {
     s16 r30 = 0;
 
+#if VERSION < VERSION_PAL
     if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP)) {
         procVomitJump_init(0);
-    } else {
+    }
+#else
+    if (checkNoResetFlg1(daPyFlg1_FORCE_VOMIT_JUMP) || m34D0) {
+        if (!dComIfGp_event_runCheck()) {
+            procVomitJump_init(0);
+        } else {
+            m34D0 = 1;
+        }
+    }
+#endif
+    else {
         if (mStickDistance > 0.05f) {
             int direction = getDirectionFromAngle(m34DC);
             if (direction == DIR_LEFT) {
@@ -173,7 +188,7 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
             speed.y = 46.0f;
             mProcVar0.m3570 = 1;
         } else {
-            speed.y = daPy_HIO_vomit_c0::m.field_0x1C;
+            speed.y = m_HIO->mVomit.m.field_0x1C;
         }
         m34D2 = 0;
     }
@@ -187,7 +202,7 @@ BOOL daPy_lk_c::procVomitJump() {
         if (m34D2 == 0) {
             voiceStart(0);
             speed.y = 46.0f;
-            gravity = daPy_HIO_autoJump_c0::m.field_0xC;
+            gravity = m_HIO->mAutoJump.m.field_0xC;
         }
         mStts.ClrCcMove();
         return true;
@@ -199,15 +214,15 @@ BOOL daPy_lk_c::procVomitJump() {
     }
     if (!checkJumpFlower()) {
         if (mAcch.ChkGroundHit()) {
-            changeLandProc(daPy_HIO_autoJump_c0::m.field_0x24);
+            changeLandProc(m_HIO->mAutoJump.m.field_0x24);
         } else {
             s16 sVar1 = shape_angle.x;
-            shape_angle.x = sVar1 + daPy_HIO_vomit_c0::m.field_0x2;
+            shape_angle.x = sVar1 + m_HIO->mVomit.m.field_0x2;
             if (sVar1 < 0 && 0 < shape_angle.x) {
                 seStartOnlyReverb(JA_SE_LK_JUMP_FLOWER_OUT);
             }
             if (mProcVar0.m3570 == 1) {
-                cLib_addCalc(&mVelocity, daPy_HIO_vomit_c0::m.field_0x20, 0.5f, 2.0f, 0.1f);
+                cLib_addCalc(&mVelocity, m_HIO->mVomit.m.field_0x20, 0.5f, 2.0f, 0.1f);
             } else {
                 f32 fVar2;
                 if (!checkFanGlideProc(1)) {
@@ -224,7 +239,7 @@ BOOL daPy_lk_c::procVomitJump() {
                         fVar2 = 0.0f;
                     }
                     cLib_addCalc(
-                        &mVelocity, (daPy_HIO_vomit_c0::m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
+                        &mVelocity, (m_HIO->mVomit.m.field_0x20 * mStickDistance * fVar2), 0.5f, 2.0f, 0.1f
                     );
                 }
             }
@@ -239,12 +254,12 @@ BOOL daPy_lk_c::procVomitLand_init() {
     mVelocity = 0.0f;
     setSingleMoveAnime(
         ANM_LANDDAMA,
-        daPy_HIO_vomit_c0::m.field_0x24,
-        daPy_HIO_vomit_c0::m.field_0x28,
-        daPy_HIO_vomit_c0::m.field_0x4,
-        daPy_HIO_vomit_c0::m.field_0x2C
+        m_HIO->mVomit.m.field_0x24,
+        m_HIO->mVomit.m.field_0x28,
+        m_HIO->mVomit.m.field_0x4,
+        m_HIO->mVomit.m.field_0x2C
     );
-    m34D0 = daPy_HIO_vomit_c0::m.field_0x6;
+    m34D0 = m_HIO->mVomit.m.field_0x6;
     mProcVar0.m3570 = 0;
     m34BE = 5;
     return true;
@@ -256,7 +271,7 @@ BOOL daPy_lk_c::procVomitLand() {
     if (mProcVar0.m3570 != 0) {
         if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
             checkNextMode(0);
-        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > daPy_HIO_vomit_c0::m.field_0x3C) {
+        } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mVomit.m.field_0x3C) {
             checkNextMode(1);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
@@ -265,10 +280,10 @@ BOOL daPy_lk_c::procVomitLand() {
         } else {
             setSingleMoveAnime(
                 ANM_LANDDAMAST,
-                daPy_HIO_vomit_c0::m.field_0x30,
-                daPy_HIO_vomit_c0::m.field_0x34,
-                daPy_HIO_vomit_c0::m.field_0x8,
-                daPy_HIO_vomit_c0::m.field_0x38
+                m_HIO->mVomit.m.field_0x30,
+                m_HIO->mVomit.m.field_0x34,
+                m_HIO->mVomit.m.field_0x8,
+                m_HIO->mVomit.m.field_0x38
             );
             mProcVar0.m3570 = 1;
         }

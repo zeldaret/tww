@@ -25,17 +25,28 @@ namespace JMessage {
         void setData_block_stringAttribute(const void* p) { mStringAttribute = (const char*)p; }
         void setData_block_messageID(const void* p) { mMessageID = (data::JUTMesgIDData*)p; }
 
-        u16 getMessageEntryNumber() const { return mInfo.get_messageEntryNumber(); }
-        u16 getMessageEntrySize() const { return mInfo.get_messageEntrySize(); }
+        u32 getMessageEntryNumber() const { return mInfo.get_messageEntryNumber(); }
+        u32 getMessageEntrySize() const { return mInfo.get_messageEntrySize(); }
         u16 getGroupID() const { return mInfo.get_groupID(); }
-        bool isContained_messageIndex(u16 messageIndex) const {
-            return messageIndex < getMessageEntryNumber();
-        }
-        void* getMessageData_messageIndex(u16 messageIndex) const {
-            if (messageIndex >= getMessageEntryNumber())
+
+        void* getMessageEntry(u16 messageIndex) const {
+            // Fakematch?
+            // Debug maps suggest the isMessageIndexContained inline was used for this check, but
+            // using it here causes various issues with matching from instruction order to regalloc
+            // and even completely wrong codegen on demo. Writing the check directly fixes this.
+            if (messageIndex >= getMessageEntryNumber()) {
                 return NULL;
+            }
+            return getMessageEntry_(messageIndex);
+        }
+        void* getMessageEntry_(u16 messageIndex) const {
             return mInfo.getContent() + (messageIndex * getMessageEntrySize());
         }
+        bool isMessageIndexContained(u16 messageIndex) const {
+            // wrong somehow?
+            return messageIndex < getMessageEntryNumber();
+        }
+        void getMessageData_messageEntry(const void*) const {} // TODO
 
     public:
         /* 0x00 */ JGadget::TLinkListNode mLinkNode;
@@ -47,11 +58,12 @@ namespace JMessage {
     };
 
 #ifdef __MWERKS__
-    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, mLinkNode)> {
+    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, mLinkNode)>
 #else
     // clangd does not support offsetof in template arguments.
-    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -0x00> {
+    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -0x00>
 #endif
+    {
     public:
         TResourceContainer();
         virtual TResource* Do_create();

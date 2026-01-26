@@ -1,7 +1,7 @@
 #ifndef RES_KUI_H
 #define RES_KUI_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KUI_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

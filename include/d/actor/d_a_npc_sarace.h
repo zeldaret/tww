@@ -30,9 +30,9 @@ public:
     void wait_action(void*);
     void event_endCheck_action(void*);
     void set_mtx();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
     void CreateHeap();
     

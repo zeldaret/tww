@@ -3,78 +3,256 @@
 // Translation Unit: d_a_acorn_leaf.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_acorn_leaf.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
+#include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/J3DGraphAnimator/J3DModel.h"
+#include "d/actor/d_a_tsubo.h"
+#include "d/actor/d_a_player.h"
+#include "d/res/res_vigah.h"
+
+static cXyz acorn_offset(0.0f, 15.0f, 0.0f);
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    }},
+};
+
+const char daAleaf_c::m_arcname[] = "VigaH";
+
+namespace daAleaf_prm {
+    inline u32 getItemBitNo(daAleaf_c* actor) {
+        return (fopAcM_GetParam(actor) >> 6) & 0x7F;
+    }
+
+    inline u32 getItemNo(daAleaf_c* actor) {
+        return fopAcM_GetParam(actor) & 0x3F;
+    }
+};
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daAleaf_c*)i_actor)->CreateHeap();
 }
 
 /* 0000010C-00000258       .text CreateHeap__9daAleaf_cFv */
-void daAleaf_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daAleaf_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BDL_VIGAH);
+    JUT_ASSERT(DEMO_SELECT(258, 262), modelData != NULL);
+
+    unk_298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (unk_298 == NULL) {
+        return FALSE;
+    }
+
+    J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(daAleaf_c::m_arcname, VIGAH_BCK_VIGAH);
+    JUT_ASSERT(DEMO_SELECT(273, 277), pbck != NULL);
+
+    if (!unk_408.init(modelData, pbck, 1, 1, 1.0f, 0, -1, 0)) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00000258-00000314       .text CreateInit__9daAleaf_cFv */
 void daAleaf_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, unk_298->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -50.0f, 0.0f, -50.0f, 50.0f, 100.0f, 50.0f);
+    unk_29C.Init(255, 255, this);
+    unk_2D8.Set(l_cyl_src);
+    unk_2D8.SetStts(&unk_29C);
+    current.angle = home.angle;
+    unk_428 = fpcM_ERROR_PROCESS_ID_e;
+    unk_424 = fpcM_ERROR_PROCESS_ID_e;
+    set_mtx();
+    create_acorn_sub(false);
 }
 
 /* 00000314-00000384       .text create_acorn__9daAleaf_cFv */
-void daAleaf_c::create_acorn() {
-    /* Nonmatching */
+void daAleaf_c::create_acorn(void) {
+    fopAc_ac_c* sp8;
+
+    if ((unk_420 == 0) && !fopAcM_SearchByID(unk_424, &sp8)) {
+        create_acorn_sub(true);
+        unk_420 = 60;
+    }
+
+    if (unk_420 > 0) {
+        unk_420--;
+    }
 }
 
 /* 00000384-00000460       .text create_acorn_sub__9daAleaf_cFb */
-void daAleaf_c::create_acorn_sub(bool) {
-    /* Nonmatching */
+fpc_ProcID daAleaf_c::create_acorn_sub(bool arg1) {
+    u32 params = daTsubo::Act_c::prm_make_acorn(arg1, daAleaf_prm::getItemNo(this), daAleaf_prm::getItemBitNo(this));
+
+    mDoMtx_stack_c::XrotS(home.angle.x);
+    cXyz sp10;
+    mDoMtx_stack_c::multVec(&acorn_offset, &sp10);
+
+    unk_424 = fopAcM_createChildFromOffset(PROC_TSUBO, fpcM_GetID(this), params, &sp10, fopAcM_GetRoomNo(this), NULL, NULL, -1, NULL);
+    unk_41B = false;
+    unk_41C = false;
+
+    return unk_424;
 }
 
 /* 0000049C-000005EC       .text _create__9daAleaf_cFv */
 cPhs_State daAleaf_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daAleaf_c);
+
+    cPhs_State ret = dComIfG_resLoad(&unk_290, daAleaf_c::m_arcname);
+    if (ret == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x620)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+    return ret;
 }
 
 /* 00000848-000008D0       .text set_mtx__9daAleaf_cFv */
 void daAleaf_c::set_mtx() {
-    /* Nonmatching */
+    unk_298->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
+    unk_298->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 000008D0-00000C44       .text _execute__9daAleaf_cFv */
 bool daAleaf_c::_execute() {
-    /* Nonmatching */
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c* actor = fopAcM_SearchByID(unk_424);
+    
+    bool var_r29 = false;
+
+    if (actor != NULL) {
+        var_r29 = ((daTsubo::Act_c*)actor)->prm_get_stick();
+    }
+
+    create_acorn();
+
+    if (actor != NULL) {
+        if (unk_41C < 69) {
+            unk_41C++;
+        }
+
+        if (unk_41C == 69) {
+            unk_418 = true;
+            unk_408.setPlaySpeed(1.0f);
+            unk_408.setFrame(0.0f);
+            unk_41C = 70;
+        }
+    }
+
+    if (!var_r29 && unk_419) {
+        unk_418 = true;
+        unk_408.setPlaySpeed(1.0f);
+    }
+
+    f32 var_f31 = (player->current.pos - current.pos).absXZ();
+
+    if (var_f31 < 50.0f && (unk_42C - var_f31) > 3.0f && std::fabsf(player->current.pos.y - current.pos.y) < 5.0f) {
+        unk_418 = true;
+        unk_408.setPlaySpeed(1.0f);
+    }
+
+    if (var_f31 < 200.0f && unk_428 != player->getGrabActorID() && player->getGrabActorID() == fpcM_ERROR_PROCESS_ID_e) {
+        fopAc_ac_c* actor = fopAcM_SearchByID(unk_428);
+
+        if (actor != NULL) {
+            f32 var_f1 = (actor->current.pos - current.pos).absXZ();
+            
+            if (var_f1 < 70.0f) {
+                unk_418 = true;
+                unk_408.setPlaySpeed(1.0f);
+            }
+        }
+    }
+
+    if (unk_418 && unk_408.play()) {
+        unk_418 = false;
+    }
+
+    set_mtx();
+
+    unk_419 = var_r29;
+    unk_428 = player->getGrabActorID();
+    unk_42C = var_f31;
+
+    return true;
 }
 
 /* 00000C44-00000CD4       .text _draw__9daAleaf_cFv */
 bool daAleaf_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(unk_298, &tevStr);
+
+    unk_408.entry(unk_298->getModelData());
+    mDoExt_modelUpdateDL(unk_298);
+    unk_408.remove(unk_298->getModelData());
+
+    return true;
+}
+
+bool daAleaf_c::_delete() {
+    dComIfG_resDeleteDemo(&unk_290, daAleaf_c::m_arcname);
+    return true;
 }
 
 /* 00000CD4-00000CF4       .text daAleaf_Create__FPv */
-static cPhs_State daAleaf_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daAleaf_Create(void* i_this) {
+    return ((daAleaf_c*)i_this)->_create();
 }
 
 /* 00000CF4-00000D24       .text daAleaf_Delete__FPv */
-static BOOL daAleaf_Delete(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Delete(void* i_this) {
+    return ((daAleaf_c*)i_this)->_delete();
 }
 
 /* 00000D24-00000D48       .text daAleaf_Draw__FPv */
-static BOOL daAleaf_Draw(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Draw(void* i_this) {
+    return ((daAleaf_c*)i_this)->_draw();
 }
 
 /* 00000D48-00000D6C       .text daAleaf_Execute__FPv */
-static BOOL daAleaf_Execute(void*) {
-    /* Nonmatching */
+static BOOL daAleaf_Execute(void* i_this) {
+    return ((daAleaf_c*)i_this)->_execute();
 }
 
 /* 00000D6C-00000D74       .text daAleaf_IsDelete__FPv */
 static BOOL daAleaf_IsDelete(void*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class daAleafMethodTable = {

@@ -17,6 +17,10 @@ public:
     inline bool _draw();
     inline bool _delete();
     inline bool create_heap();
+    void setAimMtx(MtxP i_mtx) { 
+        mtx_p = i_mtx; 
+        mbSpawnParticle = true;
+    }
 
     static const char M_arcname[];
 
@@ -32,7 +36,7 @@ public:
     /* 0x2D8 */ JPABaseEmitter * mEmitter2;
     /* 0x2DC */ bool mbSpawnParticle;
     /* 0x2E0 */ Mtx mtx[5];
-    /* 0x3D0 */ Mtx * mtx_p;
+    /* 0x3D0 */ MtxP mtx_p;
     /* 0x3D4 */ u32 field_0x3d4;
 };
 

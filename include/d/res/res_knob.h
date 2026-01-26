@@ -1,7 +1,7 @@
 #ifndef RES_KNOB_H
 #define RES_KNOB_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum KNOB_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

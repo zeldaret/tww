@@ -3,6 +3,8 @@
 // Translation Unit: J2DTextBox.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"

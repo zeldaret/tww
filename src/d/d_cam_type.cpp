@@ -3,6 +3,7 @@
 // Translation Unit: d_cam_type.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 
 const dCamera__Type dCamera_c::types[] = {

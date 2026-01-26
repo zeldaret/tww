@@ -3,6 +3,8 @@
 // Translation Unit: JASWaveArcLoader.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASWaveArcLoader.h"
 #include "JSystem/JAudio/JASDvdThread.h"
 #include "JSystem/JAudio/JASSystemHeap.h"

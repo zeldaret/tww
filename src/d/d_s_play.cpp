@@ -3,6 +3,7 @@
 // Translation Unit: d_s_play.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_play.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -39,8 +40,6 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include <stdio.h>
-
-#include "weak_bss_3569.h" // IWYU pragma: keep
 
 static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;
@@ -328,9 +327,9 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
                     ((dComIfGp_getNextStageWipe() == 8 || dComIfGp_getNextStageWipe() == 10) && isNight) ||
                     ((dComIfGp_getNextStageWipe() == 9 || dComIfGp_getNextStageWipe() == 11) && !isNight))
                 {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_saftyWhiteColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_saftyWhiteColor);
                 } else {
-                    mDoGph_gInf_c::setFadeColor(*(JUtility::TColor*)&g_blackColor); // Fakematch?
+                    mDoGph_gInf_c::setFadeColor((JUtility::TColor&)g_blackColor);
                 }
 
                 mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
@@ -347,9 +346,7 @@ static BOOL dScnPly_Draw(dScnPly_ply_c* i_this) {
         if (dComIfGp_getGrass() != NULL || dComIfGp_getTree() != NULL ||
             dComIfGp_getWood() != NULL || dComIfGp_getFlower() != NULL || dKyr_poison_live_check())
         {
-            // using the inline breaks the match
-            // dComIfG_Ccsp()->PrepareMass();
-            g_dComIfG_gameInfo.play.mCcS.PrepareMass();
+            dComIfG_Ccsp()->PrepareMass();
         }
 
         dComIfGp_executeGrass();
@@ -1141,6 +1138,7 @@ static BOOL dScnPly_Delete(dScnPly_ply_c* i_this) {
     return TRUE;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80235364-802355A8       .text heapSizeCheck__Fv */
 BOOL heapSizeCheck() {
     int archive_free = mDoExt_getArchiveHeap()->getFreeSize();
@@ -1177,6 +1175,7 @@ BOOL heapSizeCheck() {
 
     return TRUE;
 }
+#endif
 
 /* 802355A8-802356B0       .text phase_00__FP13dScnPly_ply_c */
 cPhs_State phase_00(dScnPly_ply_c* i_this) {
@@ -1187,9 +1186,11 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
     mDoGph_gInf_c::offBlure();
 
     if (fpcM_GetName(i_this) != PROC_PLAY_SCENE) {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             mDoRst_reset(0, 0x80000000, 0);
         }
+        #endif
 
         if (mDoRst::isReset()) {
             if (mDoAud_zelAudio_c::isResetFlag()) {
@@ -1207,9 +1208,11 @@ cPhs_State phase_00(dScnPly_ply_c* i_this) {
 
         dComIfGs_init();
     } else {
+        #if VERSION > VERSION_DEMO
         if (!heapSizeCheck()) {
             JUT_WARN(VERSION_SELECT(3356, 3356, 3372, 3372), "%s", "Memory Danger !!");
         }
+        #endif
     }
 
     return cPhs_NEXT_e;
@@ -1233,7 +1236,7 @@ cPhs_State phase_0(dScnPly_ply_c* i_this) {
     } else {
         l_lkDemoAnmCommand = NULL;
 
-        s32 darcIdx = dComIfGs_isEventBit(0x2D01) ? 1 : 0;
+        s32 darcIdx = dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01) ? 1 : 0;
         if (darcIdx != dComIfGp_getLkDemoAnmNo()) {
             if (dComIfGp_getLkDemoAnmNo() >= 0) {
                 dComIfGp_getLkDemoAnmArchive()->unmount();
@@ -1359,7 +1362,7 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
     mDoGph_gInf_c::offFade();
 
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
-    if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(0x0801)) {
+    if (stag_info != NULL && dStage_stagInfo_GetSTType(stag_info) == dStageType_FF1_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)) {
         dComIfGs_setSelectEquip(0, dItem_NONE_e);
         dComIfGp_setSelectEquip(0, dItem_NONE_e);
         dComIfGs_offCollect(0, 0);
@@ -1403,7 +1406,17 @@ cPhs_State phase_4(dScnPly_ply_c* i_this) {
     dScnPly_ply_c::pauseTimer = 0;
     dScnPly_ply_c::nextPauseTimer = 0;
 
-    if (((strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 || strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0 || strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) && !dComIfGs_isEventBit(0x3802)) || dComIfGp_getStartStageName()[0] == 'X') {
+    if (
+        (
+            (
+                strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "kenroom") == 0
+            ) &&
+            !dComIfGs_isEventBit(dSv_event_flag_c::COLORS_IN_HYRULE)
+        ) ||
+        dComIfGp_getStartStageName()[0] == 'X'
+    ) {
         mDoGph_gInf_c::onMonotone();
 
         bool hy8 = strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0 && dComIfGp_getStartStageLayer() == 8;

@@ -1,7 +1,7 @@
 #ifndef RES_TRFLAG_H
 #define RES_TRFLAG_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum TRFLAG_RES_FILE_ID { // IDs and indexes are synced
     /* BDL */

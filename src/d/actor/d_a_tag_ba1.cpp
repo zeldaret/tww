@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_ba1.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ba1.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -38,17 +39,17 @@ void daTag_Ba1_c::createInit() {
 }
 
 /* 00000288-00000290       .text _draw__11daTag_Ba1_cFv */
-bool daTag_Ba1_c::_draw() {
+BOOL daTag_Ba1_c::_draw() {
     /* Nonmatching */
 }
 
 /* 00000290-00000340       .text _execute__11daTag_Ba1_cFv */
-bool daTag_Ba1_c::_execute() {
+BOOL daTag_Ba1_c::_execute() {
     /* Nonmatching */
 }
 
 /* 00000340-00000394       .text _delete__11daTag_Ba1_cFv */
-bool daTag_Ba1_c::_delete() {
+BOOL daTag_Ba1_c::_delete() {
     /* Nonmatching */
 }
 
@@ -58,28 +59,28 @@ cPhs_State daTag_Ba1_c::_create() {
 }
 
 /* 00000454-00000474       .text daTag_Ba1_Create__FP10fopAc_ac_c */
-static cPhs_State daTag_Ba1_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daTag_Ba1_Create(fopAc_ac_c* i_this) {
+    return ((daTag_Ba1_c*)i_this)->_create();
 }
 
 /* 00000474-00000494       .text daTag_Ba1_Delete__FP11daTag_Ba1_c */
-static BOOL daTag_Ba1_Delete(daTag_Ba1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Ba1_Delete(daTag_Ba1_c* i_this) {
+    return ((daTag_Ba1_c*)i_this)->_delete();
 }
 
 /* 00000494-000004B4       .text daTag_Ba1_Execute__FP11daTag_Ba1_c */
-static BOOL daTag_Ba1_Execute(daTag_Ba1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Ba1_Execute(daTag_Ba1_c* i_this) {
+    return ((daTag_Ba1_c*)i_this)->_execute();
 }
 
 /* 000004B4-000004D4       .text daTag_Ba1_Draw__FP11daTag_Ba1_c */
-static BOOL daTag_Ba1_Draw(daTag_Ba1_c*) {
-    /* Nonmatching */
+static BOOL daTag_Ba1_Draw(daTag_Ba1_c* i_this) {
+    return ((daTag_Ba1_c*)i_this)->_draw();
 }
 
 /* 000004D4-000004DC       .text daTag_Ba1_IsDelete__FP11daTag_Ba1_c */
 static BOOL daTag_Ba1_IsDelete(daTag_Ba1_c*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 static actor_method_class l_daTag_Ba1_Method = {

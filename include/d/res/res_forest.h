@@ -1,7 +1,7 @@
 #ifndef RES_FOREST_H
 #define RES_FOREST_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum FOREST_RES_FILE_ID {
     /* BMD */

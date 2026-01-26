@@ -3,7 +3,9 @@
 // Translation Unit: d_ovlp_fade.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_overlap.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
@@ -31,10 +33,14 @@ BOOL dOvlpFd_FadeOut(overlap1_class* i_this) {
         }
     }
 
+#if VERSION > VERSION_DEMO
     fopOvlpM_SceneIsStart();
+#endif
     if (--i_this->mFadeOutTime == 0) {
         fopOvlpM_Done(i_this);
+#if VERSION > VERSION_DEMO
         i_this->mFadeOutTime++;
+#endif
     }
 
     return TRUE;
@@ -42,8 +48,12 @@ BOOL dOvlpFd_FadeOut(overlap1_class* i_this) {
 
 /* 802236AC-802236E4       .text dOvlpFd_Wait__FP14overlap1_class */
 BOOL dOvlpFd_Wait(overlap1_class* i_this) {
-    if (fopOvlpM_IsOutReq(i_this))
+    if (fopOvlpM_IsOutReq(i_this)) {
         dOvlpFd_execute_f = dOvlpFd_FadeOut;
+#if VERSION == VERSION_DEMO
+        fopOvlpM_SceneIsStart();
+#endif
+    }
     return TRUE;
 }
 
@@ -84,7 +94,11 @@ static BOOL dOvlpFd_Delete(overlap1_class* i_this) {
 /* 802237E0-802237F4       .text dOvlpFd_Create__FPv */
 static cPhs_State dOvlpFd_Create(void* i_this) {
     dOvlpFd_execute_f = dOvlpFd_FadeIn;
+#if VERSION == VERSION_DEMO
+    return cPhs_NEXT_e;
+#else
     return cPhs_COMPLEATE_e;
+#endif
 }
 
 overlap_method_class l_dOvlpFd_Method = {
@@ -105,7 +119,7 @@ overlap_process_profile_definition g_profile_OVERLAP0 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E1,
+    PRIO_OVERLAP0,
     &l_dOvlpFd_Method,
 };
 
@@ -119,7 +133,7 @@ overlap_process_profile_definition g_profile_OVERLAP1 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E2,
+    PRIO_OVERLAP1,
     &l_dOvlpFd_Method,
 };
 
@@ -133,7 +147,7 @@ overlap_process_profile_definition g_profile_OVERLAP6 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E7,
+    PRIO_OVERLAP6,
     &l_dOvlpFd_Method,
 };
 
@@ -147,7 +161,7 @@ overlap_process_profile_definition g_profile_OVERLAP7 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E8,
+    PRIO_OVERLAP7,
     &l_dOvlpFd_Method,
 };
 
@@ -161,6 +175,6 @@ overlap_process_profile_definition g_profile_OVERLAP8 = {
     0,
     0,
     &g_fopOvlp_Method,
-    0x1E9,
+    PRIO_OVERLAP8,
     &l_dOvlpFd_Method,
 };

@@ -3,6 +3,8 @@
 // Translation Unit: JPABaseShape.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -126,6 +128,10 @@ static void dummy() {
     OSReport("texTable");
     OSReport("(*((s16*) (bin + 20))) != 0");
     OSReport("(*((s16*) (bin + 22))) != 0");
+
+    // Fakematch? Fixes weak function order of JPABaseShape::~JPABaseShape()
+    JPABaseShape* temp = NULL;
+    delete temp;
 }
 
 /* 80257248-80257508       .text __ct__15JPABaseShapeArcFPCUcP7JKRHeap */
@@ -157,5 +163,3 @@ JPABaseShapeArc::JPABaseShapeArc(const u8* data, JKRHeap* pHeap) {
         mpEnvColorArr = NULL;
     }
 }
-
-JPABaseShape::~JPABaseShape() {}

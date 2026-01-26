@@ -1,7 +1,7 @@
 #ifndef RES_FOBJ08_H
 #define RES_FOBJ08_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
 enum FOBJ08_RES_FILE_ID { // IDs and indexes are synced
     /* BCK */

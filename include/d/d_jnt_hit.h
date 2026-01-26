@@ -5,13 +5,30 @@
 #include "SSystem/SComponent/c_sxyz.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 
+enum {
+    /* 0x0 */ JntHitType_CYL_e,
+    /* 0x1 */ JntHitType_SPH_e,
+    /* 0x2 */ JntHitType_CYL2_e,
+    /* 0x3 */ JntHitType_CYL_THROW_e,
+    /* 0x4 */ JntHitType_SPH_THROW_e,
+    /* 0x5 */ JntHitType_CYL_UNK_e, // Unused?
+    /* 0x6 */ JntHitType_SPH_UNK_e, // Unused?
+    /* 0x7 */ JntHitType_CYL_DELETE_e,
+    /* 0x8 */ JntHitType_SPH_DELETE_e,
+};
+
+enum {
+    JntHitIdx_DELETE_e = -3, // Hit a delete joint, so the actor should delete itself.
+    JntHitIdx_NONE_e = -1,
+};
+
 struct __jnt_hit_data_c {
 public:
     /* 0x0 */ s16 mShapeType;
     /* 0x2 */ s16 mJointIndex;
     /* 0x4 */ f32 mRadius;
     /* 0x8 */ Vec* mpOffsets;
-};
+}; // size = 0xC
 
 class JntHit_c {
 public:
@@ -34,25 +51,25 @@ public:
     void setMdlPtr(J3DModel* model) { mpModel = model; }
     void setMaxNum(s16 num) { mMaxNum = num; }
     bool isThrow(int type) {
-        if (type == 4 || type == 3) {
+        if (type == JntHitType_SPH_THROW_e || type == JntHitType_CYL_THROW_e) {
             return true;
         }
         return false;
     }
     bool isDelete(int type) {
-        if (type == 8 || type == 7) {
+        if (type == JntHitType_SPH_DELETE_e || type == JntHitType_CYL_DELETE_e) {
             return true;
         }
         return false;
     }
     bool isCylinder(int type) {
-        if (type == 0 || type == 2 || type == 3 || type == 5 || type == 7) {
+        if (type == JntHitType_CYL_e || type == JntHitType_CYL2_e || type == JntHitType_CYL_THROW_e || type == JntHitType_CYL_UNK_e || type == JntHitType_CYL_DELETE_e) {
             return true;
         }
         return false;
     }
     bool isSphere(int type) {
-        if (type == 1 || type == 4 || type == 6 || type == 8) {
+        if (type == JntHitType_SPH_e || type == JntHitType_SPH_THROW_e || type == JntHitType_SPH_UNK_e || type == JntHitType_SPH_DELETE_e) {
             return true;
         }
         return false;

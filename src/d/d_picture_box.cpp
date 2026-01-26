@@ -3,6 +3,7 @@
 // Translation Unit: d_picture_box.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_picture_box.h"
 #include "f_op/f_op_msg.h"
 

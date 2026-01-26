@@ -3,6 +3,7 @@
 // Translation Unit: d_boss_magma.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_magma.h"
 #include "dolphin/types.h"
 
@@ -30,4 +31,3 @@ void dMagma_ballBoss_c::setup(f32, u8, int) {
 dMagma_ballBoss_c::~dMagma_ballBoss_c() {
     /* Nonmatching */
 }
-

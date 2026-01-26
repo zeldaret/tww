@@ -13,8 +13,12 @@ struct sMtAnmDat {
 
 class daNpcMt_c : public fopNpc_npc_c {
 public:
-    void attnOff() {}
-    void attnOn() {}
+    void attnOff() {
+        m753 = false;
+    }
+    void attnOn() {
+        m753 = true;
+    }
     void getNpcNo() {}
     void getPhaseP() {}
     void setResFlag(u8) {}
@@ -87,7 +91,9 @@ public:
     /* 0x74B */ u8 m74B[0x750 - 0x74B];
     /* 0x750 */ u8 m750;
     /* 0x751 */ u8 m751;
-    /* 0x752 */ u8 m752[0x758 - 0x752];
+    /* 0x752 */ u8 m752[0x753 - 0x752];
+    /* 0x753 */ bool m753;
+    /* 0x754 */ u8 m754[0x758 - 0x754];
 };
 
 #endif /* D_A_NPC_MT_H */

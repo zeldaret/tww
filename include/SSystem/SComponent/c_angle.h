@@ -51,9 +51,6 @@ public:
     bool operator<(const cSAngle& other) const { return mAngle < other.mAngle; }
     bool operator>(const cSAngle& other) const { return mAngle > other.mAngle; }
     operator s16() const { return mAngle; }
-#ifdef __MWERKS__
-    void operator=(const cSAngle& other) { mAngle = other.mAngle; }
-#endif
     static inline cSAngle getMaxNegative() { return cSAngle((s16)-0x8000); }
     inline void mirrorAtMaxNeg() { *this = cSAngle((s16)-0x8000) - *this; }
 };

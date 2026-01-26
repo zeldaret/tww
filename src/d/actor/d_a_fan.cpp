@@ -3,6 +3,7 @@
 // Translation Unit: d_a_fan.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fan.h"
 #include "d/res/res_hsen1.h"
 #include "d/res/res_hsen3.h"
@@ -50,11 +51,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* P0 */ 0.0f, 0.0f, 0.0f,
-        /* P1 */ 0.0f, 0.0f, 0.0f,
-        /* Height */ 100.0f,
-    },
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 100.0f,
+    }},
 };
 
 /* 00000078-000000F0       .text Delete__7daFan_cFv */

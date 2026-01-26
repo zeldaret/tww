@@ -3,6 +3,7 @@
 // Translation Unit: d_detect.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_detect.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
@@ -45,6 +46,7 @@ void dDetect_c::proc() {
     } else if (mPlace[0].mTimer < 0) {
         mPlace[0].mTimer = 1;
     }
+
     if (mTimer > 0) {
         mTimer--;
     } else if (mTimer < 0) {
@@ -95,7 +97,7 @@ void dDetect_c::set_quake(const cXyz* pos) {
 /* 8009C254-8009C32C       .text chk_quake_area__9dDetect_cCFPC4cXyz */
 bool dDetect_c::chk_quake_area(const cXyz* pos) const {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    f32 maxDist2XZ = attr().maxDistXZ * attr().maxDistXZ;
+    f32 maxDist2XZ = SQUARE(attr().maxDistXZ);
     f32 dist2XZ = player->current.pos.abs2XZ(*pos);
     f32 diffY = pos->y - player->current.pos.y;
     return dist2XZ <= maxDist2XZ && diffY <= attr().maxY && diffY >= attr().minY;
@@ -103,12 +105,12 @@ bool dDetect_c::chk_quake_area(const cXyz* pos) const {
 
 /* 8009C32C-8009C588       .text search_tag_light__9dDetect_cFPvPv */
 void* dDetect_c::search_tag_light(void* i_proc, void* i_pos) {
-    /* Nonmatching - chk_inside */
-    if (fopAc_IsActor(i_proc) && fopAcM_GetProfName(i_proc) == PROC_Tag_Light) {
+    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == PROC_Tag_Light) {
         daTagLight::Act_c* light = (daTagLight::Act_c*)i_proc;
         const cXyz* pos = (const cXyz*)i_pos;
-        light->chk_inside(pos); // TODO
-        return light;
+        if (light->chk_inside(pos)) {
+            return light;
+        }
     }
     return NULL;
 }

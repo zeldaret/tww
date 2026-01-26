@@ -3,6 +3,7 @@
 // Translation Unit: d_s_open_sub.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "d/d_s_open.h"
 #include "d/d_com_inf_game.h"

@@ -1,9 +1,27 @@
 #ifndef RES_GOVER_H
 #define RES_GOVER_H
 
-#include "global.h"
+#include "global.h" // IWYU pragma: keep
 
-#if VERSION == VERSION_PAL
+#if VERSION == VERSION_DEMO
+enum GOVER_RES_FILE_ID { // IDs and indexes are synced
+    /* ROOT */
+    GOVER_ARC_GOVER=0x0,
+    
+    /* SCRN */
+    GOVER_BLO_GAMEOVER=0x5,
+    
+    /* TIMG */
+    GOVER_BTI_SHIPFONT_A_BIG=0x8,
+    GOVER_BTI_SHIPFONT_E_BIG=0x9,
+    GOVER_BTI_SHIPFONT_G_BIG=0xA,
+    GOVER_BTI_SHIPFONT_M_BIG=0xB,
+    GOVER_BTI_SHIPFONT_O_BIG=0xC,
+    GOVER_BTI_SHIPFONT_R_BIG=0xD,
+    GOVER_BTI_SHIPFONT_V_BIG=0xE,
+    GOVER_BTI_SMOKE=0xF,
+};
+#elif VERSION == VERSION_PAL
 enum GOVER_RES_FILE_ID { // IDs and indexes are synced
     /* SCRN */
     GOVER_BLO_GAMEOVER=0x4,

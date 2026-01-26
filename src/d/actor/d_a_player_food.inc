@@ -10,6 +10,7 @@
  * based on the original names of the functions it contains.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/d_camera.h"
@@ -34,13 +35,13 @@ BOOL daPy_lk_c::procFoodThrow_init() {
         return TRUE;
     }
     if (m3630 != fpcM_ERROR_PROCESS_ID_e) {
-        mDoAud_seStart(JA_SE_ITEM_TARGET_OUT);
+        seStartSystem(JA_SE_ITEM_TARGET_OUT);
         return FALSE;
     }
 
     dBgS* bgs = dComIfG_Bgsp(); // This is kinda weird, maybe fakematch
 
-    if (dComIfGp_event_runCheck() == FALSE) {
+    if (!dComIfGp_event_runCheck()) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         } else {
@@ -91,10 +92,10 @@ BOOL daPy_lk_c::procFoodThrow_init() {
     daPy_matAnm_c::offMabaFlg();
     setSingleMoveAnime(
         ANM_ESAMAKI,
-        daPy_HIO_food_c0::m.field_0x4,
-        daPy_HIO_food_c0::m.field_0x8,
-        daPy_HIO_food_c0::m.field_0x0,
-        daPy_HIO_food_c0::m.field_0xC
+        m_HIO->mItem.mFood.m.field_0x4,
+        m_HIO->mItem.mFood.m.field_0x8,
+        m_HIO->mItem.mFood.m.field_0x0,
+        m_HIO->mItem.mFood.m.field_0xC
     );
     keepItemData();
 
@@ -166,7 +167,7 @@ BOOL daPy_lk_c::procFoodSet_init() {
         return TRUE;
     }
 
-    if (dComIfGp_event_runCheck() == FALSE) {
+    if (!dComIfGp_event_runCheck()) {
         if (!dComIfGp_event_compulsory(this)) {
             return FALSE;
         }
@@ -180,10 +181,10 @@ BOOL daPy_lk_c::procFoodSet_init() {
     mVelocity = 0.0f;
     setSingleMoveAnime(
         ANM_SETHYOINOMI,
-        daPy_HIO_food_c0::m.field_0x10,
-        daPy_HIO_food_c0::m.field_0x14,
-        daPy_HIO_food_c0::m.field_0x2,
-        daPy_HIO_food_c0::m.field_0x18
+        m_HIO->mItem.mFood.m.field_0x10,
+        m_HIO->mItem.mFood.m.field_0x14,
+        m_HIO->mItem.mFood.m.field_0x2,
+        m_HIO->mItem.mFood.m.field_0x18
     );
     keepItemData();
     setHyoiModel();
@@ -220,7 +221,7 @@ BOOL daPy_lk_c::procFoodSet() {
             endDemoMode();
         } else if (m34D0 == 0) {
             m34D0 = -1;
-            frameCtrl.setRate(-daPy_HIO_food_c0::m.field_0x10);
+            frameCtrl.setRate(-m_HIO->mItem.mFood.m.field_0x10);
         } else if (m34D0 > 0) {
             m34D0--;
         }

@@ -27,7 +27,6 @@ struct TAdaptor_particle : public JStudio::TAdaptor_particle {
         {
         }
 
-        virtual ~TJPACallback_() { }           // _08 (weak)
         virtual void execute(JPABaseEmitter*); // _0C
 
         /* 0x04 */ TAdaptor_particle* mAdaptor;

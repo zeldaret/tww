@@ -3,6 +3,8 @@
 // Translation Unit: JASPlayer_impl.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JAudio/JASPlayer.h"
 #include "JSystem/JAudio/JASDriverTables.h"
 

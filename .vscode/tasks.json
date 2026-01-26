@@ -11,7 +11,7 @@
             "GZLJ01",
             "GZLE01",
             "GZLP01",
-            "D44J01 --debug",
+            "D44J01 --debug --map",
         ],
         "default": "GZLE01",
         "description": "Game version to build."
@@ -31,6 +31,12 @@
       "label": "configure",
       "type": "shell",
       "command": "${command:python.interpreterPath} configure.py --version ${input:gameVersion}",
+      "problemMatcher": [],
+    },
+    {
+      "label": "ninja changes_all",
+      "type": "shell",
+      "command": "ninja changes_all",
       "problemMatcher": [],
     },
   ]

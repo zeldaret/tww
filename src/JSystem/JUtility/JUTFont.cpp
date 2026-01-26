@@ -3,6 +3,8 @@
 // Translation Unit: JUTFont.cpp
 //
 
+#include "JSystem/JSystem.h" // IWYU pragma: keep
+
 #include "JSystem/JUtility/JUTFont.h"
 #include "dolphin/types.h"
 

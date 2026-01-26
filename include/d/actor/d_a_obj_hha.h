@@ -24,7 +24,7 @@ public:
     void exe_normal(daObjHha_c*);
     void exe_move(daObjHha_c*);
     void draw_normal(daObjHha_c*);
-public: 
+public:
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ dBgW* mpBgw;
     /* 0x08 */ cXyz mPos; // Position offset from current.pos
@@ -40,8 +40,6 @@ public:
 
 class daObjHhaSplash_c {
 public:
-    daObjHhaSplash_c() {}
-    ~daObjHhaSplash_c() {}
     cXyz get_base_pos() { return mBasePos; };
     cXyz get_pos() { return mPos; };
 
@@ -51,31 +49,56 @@ public:
     bool chk_stop() { return mbIsActive == false; }
     
     void delete_s() {
+#if VERSION == VERSION_DEMO
+        if(mpEmitter != NULL){
+            mSplashCb.remove();
+            mpEmitter = NULL;
+            mbIsActive = false;
+        }
+#else
         if(mSplashCb.getEmitter() != NULL){
             mSplashCb.remove();
             mbIsActive = false;
         }
+#endif
     }
 
     void play_particle() {
+#if VERSION == VERSION_DEMO
+        if(mpEmitter != NULL){
+            mpEmitter->playCreateParticle();
+            mbIsActive = true;
+        }
+#else
         JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
             pSplashEmitter->playCreateParticle();
             mbIsActive = true;
         }
+#endif
     }
     
     void stop_particle() {
+#if VERSION == VERSION_DEMO
+        if(mpEmitter != NULL){
+            mpEmitter->stopCreateParticle();
+            mbIsActive = false;
+        }
+#else
         JPABaseEmitter* pSplashEmitter = mSplashCb.getEmitter();
         if(pSplashEmitter != NULL){
             pSplashEmitter->stopCreateParticle();
             mbIsActive = false;
         }
+#endif
     }
 
     void create_s(u16, cXyz*, float, float, csXyz*);
 
 public:
+#if VERSION == VERSION_DEMO
+    /* 0x00 */ JPABaseEmitter* mpEmitter;
+#endif
     /* 0x00 */ dPa_followEcallBack mSplashCb;
     /* 0x14 */ cXyz mBasePos;
     /* 0x20 */ cXyz mPos;
@@ -138,8 +161,10 @@ public:
     bool _draw();
 
 public:
+#if VERSION > VERSION_DEMO
     static const dCcD_SrcCyl M_cyl_data;
     static const dCcD_SrcSph M_sph_data;
+#endif
     static const char M_arcname[4];
     enum State_t  {State_OPEN = 0, State_SWITCHING = 1, State_CLOSED = 2};
 
@@ -149,20 +174,22 @@ public:
     /* 0x2C4 */ dCcD_Stts mCylStts;
     /* 0x300 */ dCcD_Cyl mCyl;
     /* 0x430 */ bool mHitboxActive;
+#if VERSION > VERSION_DEMO
     /* 0x434 */ dCcD_Stts mSphStts;
     /* 0x470 */ dCcD_Sph mSph;
+#endif
     /* 0x59C */ daObjHhaYgush_c mYgush;
     /* 0x6A0 */ daObjHhaPart_c mPartA[2];
     /* 0x738 */ daObjHhaSplash_c mSplashA[2];
     /* 0x7A0 */ cXyz mPosOffset;
     /* 0x7AC */ u32 mSwitchNo;
     /* 0x7B0 */ u8 mIsMiddle;
-    /* 0x7B2 */ short mPartTimer;
-    /* 0x7B4 */ float mWtrScale;
-    /* 0x7B8 */ float mWtrScaleMin;
+    /* 0x7B2 */ s16 mPartTimer;
+    /* 0x7B4 */ f32 mWtrScale;
+    /* 0x7B8 */ f32 mWtrScaleMin;
     /* 0x7BC */ u16 mWtrTimer;
     /* 0X7BE */ u8 mWtrState;
-    /* 0x7C0 */ short mEventIdx;
+    /* 0x7C0 */ s16 mEventIdx;
     /* 0x7C2 */ u8 mState;
     /* 0x7C3 */ bool mWaterSound;
 };

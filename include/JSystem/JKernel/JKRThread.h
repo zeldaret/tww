@@ -11,7 +11,7 @@ struct JKRThreadName_ {
 };
 
 class JUTConsole;
-class JKRThread : JKRDisposer {
+class JKRThread : public JKRDisposer {
 public:
     JKRThread(u32 stack_size, int message_count, int param_3);
     JKRThread(OSThread* thread, int message_count);

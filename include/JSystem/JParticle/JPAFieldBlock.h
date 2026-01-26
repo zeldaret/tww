@@ -4,7 +4,7 @@
 #include "JSystem/JGeometry.h"
 
 struct JPAFieldBlockData {
-    /* 0x00 */ u32 mFlag;
+    /* 0x00 */ u32 mFlags;
     /* 0x04 */ f32 mMag;
     /* 0x08 */ f32 mMagRndm;
     /* 0x0C */ f32 mMaxDist;
@@ -47,9 +47,9 @@ public:
     JPAFieldBlockArc(const u8*);
     virtual ~JPAFieldBlockArc() {}
 
-    virtual u8 getType() { return (mpData->mFlag >> 0) & 0x0F; }
-    virtual u32 getVelType() { return (mpData->mFlag >> 8) & 0x03; }
-    virtual u32 getSttFlag() { return (mpData->mFlag >> 16) & 0xFFFF; }
+    virtual u8 getType() { return (mpData->mFlags >> 0) & 0x0F; }
+    virtual u32 getVelType() { return (mpData->mFlags >> 8) & 0x03; }
+    virtual u32 getSttFlag() { return (mpData->mFlags >> 16) & 0xFFFF; }
     virtual u32 getCycle() { return mpData->mCycle; }
     virtual u32 getID() { return 0; }
     virtual void getPos(JGeometry::TVec3<float>& out) { out = mpData->mPos; };

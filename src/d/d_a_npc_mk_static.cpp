@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_mk_static.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mk_static.h"
 #include "dolphin/types.h"
 

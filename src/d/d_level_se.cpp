@@ -3,7 +3,9 @@
 // Translation Unit: d_level_se.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_level_se.h"
+#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/d_procname.h"
@@ -49,15 +51,15 @@ kankyo_method_class l_dLevelSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_LEVEL_SE = {
-    fpcLy_CURRENT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_LEVEL_SE,
-    &g_fpcLf_Method.base,
-    sizeof(dLevelSe_c),
-    0,
-    0,
-    &g_fopKy_Method,
-    0x1CD,
-    &l_dLevelSe_Method,
+    /* LayerID      */ fpcLy_CURRENT_e,
+    /* ListID       */ 0x0002,
+    /* ListPrio     */ fpcPi_CURRENT_e,
+    /* ProcName     */ PROC_LEVEL_SE,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dLevelSe_c),
+    /* SizeOther    */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopKy_Method,
+    /* Priority     */ PRIO_LEVEL_SE,
+    /* Actor SubMtd */ &l_dLevelSe_Method,
 };

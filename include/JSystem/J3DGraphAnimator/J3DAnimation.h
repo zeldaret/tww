@@ -424,10 +424,16 @@ public:
         calcTransform(getFrame(), idx, pSRTInfo);
     }
 
-    u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(1029, idx < mTrackNum / 3, "Error : range over.");
+        return mUpdateMaterialID[idx];
+    }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
-    u16 getUpdateTexMtxID(u16 idx) const { return mUpdateTexMtxID[idx]; }
+    u16 getUpdateTexMtxID(u16 idx) const {
+        J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
+        return mUpdateTexMtxID[idx];
+    }
 
     u16 getPostUpdateMaterialID(u16 idx) const { return mPostUpdateMaterialID[idx]; }
     u16 getPostUpdateMaterialNum() const { return mPostTrackNum / 3; }
@@ -435,7 +441,10 @@ public:
     u16 getPostUpdateTexMtxID(u16 idx) const { return mPostUpdateTexMtxID[idx]; }
 
     u32 getTexMtxCalcType() { return mTexMtxCalcType; }
-    Vec& getSRTCenter(u16 idx) { return mSRTCenter[idx]; }
+    Vec& getSRTCenter(u16 idx) {
+        J3D_ASSERT(1047, idx < mTrackNum / 3, "Error : range over.");
+        return mSRTCenter[idx];
+    }
 
 private:
     /* 0x10 */ int mDecShift;
@@ -509,7 +518,10 @@ public:
     void searchUpdateMaterialID(J3DMaterialTable*);
     void searchUpdateMaterialID(J3DModelData*);
 
-    u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(2288, idx < mUpdateMaterialNum, "Error : range over.");
+        return mUpdateMaterialID[idx];
+    }
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
 
@@ -564,8 +576,14 @@ public:
     u16 getCRegUpdateMaterialNum() const { return mCRegUpdateMaterialNum; }
     u16 getKRegUpdateMaterialNum() const { return mKRegUpdateMaterialNum; }
 
-    u16 getCRegUpdateMaterialID(u16 idx) const { return mCRegUpdateMaterialID[idx]; }
-    u16 getKRegUpdateMaterialID(u16 idx) const { return mKRegUpdateMaterialID[idx]; }
+    u16 getCRegUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(2100, idx < mCRegUpdateMaterialNum, "Error : range over.");
+        return mCRegUpdateMaterialID[idx];
+    }
+    u16 getKRegUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(2140, idx < mKRegUpdateMaterialNum, "Error : range over.");
+        return mKRegUpdateMaterialID[idx];
+    }
 
     JUTNameTab * getCRegUpdateMaterialName() { return &mCRegUpdateMaterialName; }
     JUTNameTab * getKRegUpdateMaterialName() { return &mKRegUpdateMaterialName; }
@@ -620,7 +638,10 @@ public:
 
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
-    u16 getUpdateMaterialID(u16 idx) const { return mUpdateMaterialID[idx]; }
+    u16 getUpdateMaterialID(u16 idx) const {
+        J3D_ASSERT(1578, idx < mUpdateMaterialNum, "Error : range over.");
+        return mUpdateMaterialID[idx];
+    }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
 
 protected:
@@ -801,16 +822,17 @@ private:
 class J3DFrameCtrl {
 public:
     enum Attribute_e {
-        EMode_NONE,
-        EMode_RESET,
-        EMode_LOOP,
-        EMode_REVERSE,
-        EMode_LOOP_REVERSE,
+        /*  -1 */ EMode_NULL = -1,
+        /* 0x0 */ EMode_NONE,
+        /* 0x1 */ EMode_RESET,
+        /* 0x2 */ EMode_LOOP,
+        /* 0x3 */ EMode_REVERSE,
+        /* 0x4 */ EMode_LOOP_REVERSE,
     };
 
     enum State_e {
-        STATE_STOP_E = 0x1,
-        STATE_LOOP_E = 0x2,
+        /* 0x1 */ STATE_STOP_E = 0x1,
+        /* 0x2 */ STATE_LOOP_E = 0x2,
     };
 
     J3DFrameCtrl() { this->init(0); }

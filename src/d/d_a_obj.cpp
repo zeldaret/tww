@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_a_obj.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
@@ -141,38 +142,41 @@ namespace daObj {
     }
 
     /* 80066D6C-8006700C       .text posMoveF_grade__5daObjFP10fopAc_ac_cPC4cXyzPC4cXyzffPC4cXyzffPC4cXyz */
-    void posMoveF_grade(fopAc_ac_c* pActor, const cXyz* pAddVel, const cXyz* stream_spd, f32 param_4, f32 param_5, const cXyz* pNorm, f32 friction, f32 no_grade_cos, const cXyz* pAddAccel) {
-        /* Nonmatching */
-        JUT_ASSERT(0x118, stream_spd != NULL)
+    void posMoveF_grade(fopAc_ac_c* i_actor, const cXyz* p_add_vel, const cXyz* stream_spd, f32 param_4,
+                        f32 param_5, const cXyz* pNorm, f32 friction, f32 no_grade_cos, const cXyz* p_add_accel
+    ) {
+        JUT_ASSERT(280, stream_spd != NULL)
 
         cXyz resist_accel;
-        posMoveF_resist_acc(&resist_accel, pActor, stream_spd, param_4, param_5);
+        posMoveF_resist_acc(&resist_accel, i_actor, stream_spd, param_4, param_5);
 
-        JUT_ASSERT(0x121, (friction >= 0.0f) && (friction < 1.0f) && (no_grade_cos >= 0.0f) && (no_grade_cos <= 1.0f))
+        JUT_ASSERT(289, (friction >= 0.0f) && (friction < 1.0f) && (no_grade_cos >= 0.0f) && (no_grade_cos <= 1.0f))
 
         cXyz vel;
-        posMoveF_grade_acc(&vel, pActor, pNorm, param_5, param_4, &resist_accel, pAddAccel);
+        posMoveF_grade_acc(&vel, i_actor, pNorm, friction, no_grade_cos, &resist_accel, p_add_accel);
 
-        f32 spf = pActor->speedF;
-        f32 grav = pActor->gravity;
+        f32 speedF = fopAcM_GetSpeedF(i_actor);
+        f32 gravity = fopAcM_GetGravity(i_actor);
+        cXyz* speed_p = fopAcM_GetSpeed_p(i_actor);
 
-        f32 x = spf * cM_ssin(pActor->current.angle.y) + resist_accel.x + vel.x;
-        f32 y = pActor->speed.y + grav + resist_accel.y + vel.y;
-        f32 z = spf * cM_scos(pActor->current.angle.y) + resist_accel.z + vel.z;
-        if(pAddAccel) {
-            x += pAddAccel->x;
-            y += pAddAccel->y;
-            z += pAddAccel->z;
+        f32 speed_x = vel.x + (resist_accel.x + (speedF * cM_ssin(i_actor->current.angle.y)));
+        f32 speed_y = vel.y + (resist_accel.y + (speed_p->y + gravity));
+        f32 speed_z = vel.z + (resist_accel.z + (speedF * cM_scos(i_actor->current.angle.y)));
+
+        if(p_add_accel) {
+            speed_x += p_add_accel->x;
+            speed_y += p_add_accel->y;
+            speed_z += p_add_accel->z;
         }
 
-        if(y < pActor->maxFallSpeed) {
-            y = pActor->maxFallSpeed;
+        if(speed_y < fopAcM_GetMaxFallSpeed(i_actor)) {
+            speed_y = fopAcM_GetMaxFallSpeed(i_actor);
         }
 
-        pActor->speed.set(x, y, z);
-        pActor->speedF = std::sqrtf(x * x + z * z);
-        pActor->current.angle.y = cM_atan2s(spf, grav);
-        fopAcM_posMove(pActor, pAddVel);
+        fopAcM_SetSpeed(i_actor, speed_x, speed_y, speed_z);
+        i_actor->speedF = std::sqrtf(speed_x * speed_x + speed_z * speed_z);
+        i_actor->current.angle.y = cM_atan2s(speed_x, speed_z);
+        fopAcM_posMove(i_actor, p_add_vel);
     }
 
     /* 8006700C-800671D4       .text quat_rotBaseY__5daObjFP10QuaternionRC4cXyz */

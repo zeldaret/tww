@@ -11,7 +11,9 @@ class daWindMill_c : public fopAc_ac_c {
 public:
     void getMaxRotSpeed() const {}
     void getRotSpeed() const {}
-    void getType() const {}
+    u8 getType() const {
+        return mType;
+    }
 
     bool _delete();
     BOOL CreateHeap();
@@ -27,6 +29,10 @@ public:
     
     static const s16 m_max_rot_speed[];
     static const char* m_arcname[];
+    static const s16 m_bmdidx[];
+    static const s16 m_dzbidx[];
+    static const s16 m_heapsize[];
+    static const Vec m_cull_size[][2];
 
 public:
     /* 0x0290 */ request_of_phase_process_class mPhs;
@@ -34,13 +40,15 @@ public:
     /* 0x029C */ dCcD_Stts mStts;
     /* 0x02D8 */ dCcD_Sph mSph[9];
     /* 0x06D4 */ dCcD_Cps mCps[4];
-    /* 0x1244 */ f32 m1244[28];
+    /* 0x1244 */ cM3dGCpsS m1244[4];
     /* 0x12B4 */ dBgW* mpBgW;
     /* 0x12B8 */ Mtx mMtx;
     /* 0x12E8 */ dCcD_Cyl mCyl;
     /* 0x1418 */ u8 mType;
-    /* 0x141A */ u16 mAngle[3];
+    /* 0x141A */ s16 mAngle[3];
     /* 0x1420 */ u32 mWindTagId;
 };
+
+STATIC_ASSERT(sizeof(daWindMill_c) == 0x1424);
 
 #endif /* D_A_WINDMILL_H */

@@ -9,9 +9,15 @@
 class dBgW;
 
 namespace daObjHomen {
+    class Act_c
+#if VERSION == VERSION_DEMO
+    : public fopAc_ac_c
+#else
     // Note: The fopEn_enemy_c base class isn't used in this actor and doesn't appear in this actor's debug map.
     // However, it seems necessary for the destructor to match.
-    class Act_c : public fopEn_enemy_c {
+    : public fopEn_enemy_c
+#endif
+    {
     public:
         typedef BOOL (Act_c::*ProcInitFunc)();
         typedef void (Act_c::*ProcMainFunc)();

@@ -3,6 +3,7 @@
  * Game - Shared Runtime Data ("Common Info Game")
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"
@@ -58,9 +59,9 @@ void dComIfG_play_c::ct()
 
 /* 800521A4-800521D4       .text init__14dComIfG_play_cFv */
 void dComIfG_play_c::init() {
-    for (int i = 0; i < ARRAY_SIZE(mpPlayer); i++) {
-        mpPlayer[i] = NULL;
-        mCurCamera[i] = -1;
+    for (int i = 0; i < ARRAY_SIZE(mPlayerInfo); i++) {
+        mPlayerInfo[i].mpPlayer = NULL;
+        mPlayerInfo[i].mCameraID = -1;
     }
 
     for (int i = 0; i < ARRAY_SIZE(mpPlayerPtr); i++) {
@@ -134,7 +135,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4944 = 7;
     mScopeType = 0;
     mOperateWind = 0;
-    field_0x4947 = 0;
+    mMetronome = false;
     mMesgSendButton = 0;
     mMesgCancelButton = 0;
 
@@ -169,6 +170,7 @@ void dComIfG_play_c::itemInit() {
     field_0x4978 = 0;
     m2dShow = 0;
     field_0x497a = 0;
+#if VERSION > VERSION_DEMO
     mNowVibration = dComIfGs_getOptVibration();
     daArrow_c::setKeepType(daArrow_c::TYPE_NORMAL);
     mMesgCamInfo.mID = 0;
@@ -177,6 +179,7 @@ void dComIfG_play_c::itemInit() {
     for (int i = 0; i < ARRAY_SIZE(mMesgCamInfo.mActor); i++) {
         mMesgCamInfo.mActor[i] = 0;
     }
+#endif
 }
 
 /* 80052400-8005286C       .text getLayerNo__14dComIfG_play_cFi */
@@ -189,68 +192,68 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
             if (i_roomNo == dIsleRoom_OutsetIsland_e) {
-                if (dComIfGs_isEventBit(0x520)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
                     return layer | 4;
-                } else if (dComIfGs_isEventBit(0xE20)) {
+                } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0E20)) {
                     return layer | 2;
-                } else if (dComIfGs_isEventBit(0x101)) {
+                } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0101)) {
                     return 9;
                 }
             } else if (i_roomNo == dIsleRoom_WindfallIsland_e) {
-                if (dComIfGs_isEventBit(0x2D01)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                     return layer | 4;
                 } else if (dKy_checkEventNightStop()) {
                     return layer | 2;
                 }
             } else if (i_roomNo == dIsleRoom_ForsakenFortress_e) {
-                return dComIfGs_isEventBit(0x1820) ? 3 : 1;
+                return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) ? 3 : 1;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "A_mori") == 0) {
-            if (dComIfGs_isEventBit(0xF80)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
-            if (dComIfGs_isEventBit(0x520)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0) {
             if (dComIfGs_getTriforceNum() == 8) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(0x3280)) {
+            } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3280)) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Hyroom") == 0) {
-            if (dComIfGs_getTriforceNum() == 8 && !dComIfGs_isEventBit(0x2C01)) {
+            if (dComIfGs_getTriforceNum() == 8 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01)) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(0x3280)) {
+            } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3280)) {
                 return layer | 2;
-            } else if (dComIfGs_isEventBit(0x3B40)) {
+            } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B40)) {
                 return layer | 6;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "kenroom") == 0) {
 #if VERSION <= VERSION_JPN
-            if (dComIfGs_isEventBit(0x2C01)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01)) {
 #else
-            if (dComIfGs_isEventBit(0x2C01) ||
-                (dComIfGs_isEventBit(dSv_evtBit_c::COLORS_IN_HYRULE) && !dComIfGs_isEventBit(0x3280)))
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01) ||
+                (dComIfGs_isEventBit(dSv_event_flag_c::COLORS_IN_HYRULE) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3280)))
             {
 #endif
                 return layer | 6;
             } else if (dComIfGs_getTriforceNum() == 8) {
                 return layer | 4;
-            } else if (dComIfGs_isEventBit(VERSION_SELECT(0x3280, 0x3280, dSv_evtBit_c::COLORS_IN_HYRULE, dSv_evtBit_c::COLORS_IN_HYRULE))) {
+            } else if (dComIfGs_isEventBit(VERSION_SELECT(dSv_event_flag_c::UNK_3280, dSv_event_flag_c::UNK_3280, dSv_event_flag_c::COLORS_IN_HYRULE, dSv_event_flag_c::COLORS_IN_HYRULE))) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "M2tower") == 0) {
-            if (dComIfGs_isEventBit(0x2D01)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
-            if (!dComIfGs_isEventBit(0x3B02)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3B02)) {
                 return 8;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "GTower") == 0) {
-            if (!dComIfGs_isEventBit(0x4002)) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_4002)) {
                 return 8;
             }
         }
@@ -560,13 +563,13 @@ s8 dComIfGp_getReverb(int param_0) {
 }
 
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
-int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 param_2, cBgS_PolyInfo& i_floorPoly,
-                              s16 i_angle, f32 param_5, GXTexObj* i_tex) {
+int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyInfo& i_floorPoly,
+                              s16 i_angle, f32 scaleZ, GXTexObj* i_tex) {
     if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, groundY, param_2, plane_p->GetNP(), i_angle, param_5, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, plane_p->GetNP(), i_angle, scaleZ, i_tex);
     } else {
         return 0;
     }
@@ -657,7 +660,7 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 
         i_lastMode |= link->checkTinkleShield() << 0x10;
 
-        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_UNK8000)) {
+        if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_SOUP_POWER_UP)) {
             i_lastMode |= 0x4000;
         }
     }
@@ -1038,17 +1041,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 }
 
 /* 80054578-8005468C       .text dComIfGd_setShadow__FUlScP8J3DModelP4cXyzffffR13cBgS_PolyInfoP12dKy_tevstr_csfP9_GXTexObj */
-int dComIfGd_setShadow(u32 id, s8 param_2, J3DModel* pModel, cXyz* pPos, f32 param_5, f32 param_6,
-                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* param_10,
-                       s16 rotY, f32 param_12, GXTexObj* pTexObj) {
+int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 casterSize, f32 scaleXZ,
+                       f32 y, f32 groundY, cBgS_PolyInfo& pFloorPoly, dKy_tevstr_c* pTevStr,
+                       s16 rotY, f32 scaleZ, GXTexObj* pTexObj) {
     if (groundY <= -G_CM3D_F_INF) {
         return 0;
     }
 
-    int sid = dComIfGd_setRealShadow2(id, param_2, pModel, pPos, param_5, y - groundY, param_10);
+    int sid = dComIfGd_setRealShadow2(id, shouldFade, pModel, pPos, casterSize, y - groundY, pTevStr);
     if (sid == 0) {
         cXyz pos(pPos->x, y, pPos->z);
-        dComIfGd_setSimpleShadow2(&pos, groundY, param_6, pFloorPoly, rotY, param_12, pTexObj);
+        dComIfGd_setSimpleShadow2(&pos, groundY, scaleXZ, pFloorPoly, rotY, scaleZ, pTexObj);
     }
     return sid;
 }
@@ -1098,12 +1101,12 @@ BOOL dComIfGs_checkSeaLandingEvent(s8 i_roomNo) {
     };
 
     static landing_event l_landingEvent[] = {
-        {1,  0x3040},
-        {4,  0x2E02},
-        {13, 0x902},
-        {23, dSv_evtBit_c::ENDLESS_NIGHT},
-        {41, 0xA20},
-        {45, 0x2E04},
+        {dIsleRoom_ForsakenFortress_e,  dSv_event_flag_c::UNK_3040},
+        {dIsleRoom_GaleIsle_e,          dSv_event_flag_c::UNK_2E02},
+        {dIsleRoom_DragonRoostIsland_e, dSv_event_flag_c::UNK_0902},
+        {dIsleRoom_GreatfishIsle_e,     dSv_event_flag_c::ENDLESS_NIGHT},
+        {dIsleRoom_ForestHaven_e,       dSv_event_flag_c::UNK_0A20},
+        {dIsleRoom_HeadstoneIsland_e,   dSv_event_flag_c::UNK_2E04},
     };
 
     landing_event* event_check = l_landingEvent;
@@ -1130,12 +1133,12 @@ void dComIfGs_setGameStartStage() {
     };
 
     static check_data l_checkData[] = {
-        {true, dSv_evtBit_c::RODE_KORL, "", 0, 0},
-        {true, dSv_evtBit_c::MET_KORL, "sea", 11, 128},
-        {true, 0x801, "MajyuE", 0, 0},
-        {true, 0x808, "MajyuE", 0, 18},
-        {true, 0x2401, "A_umikz", 0, 204},
-        {false, 0, "sea", 44, 128},
+        {true,  dSv_event_flag_c::RODE_KORL, "",        0,                          0},
+        {true,  dSv_event_flag_c::MET_KORL,  "sea",     dIsleRoom_WindfallIsland_e, 128},
+        {true,  dSv_event_flag_c::UNK_0801,  "MajyuE",  0,                          0},
+        {true,  dSv_event_flag_c::UNK_0808,  "MajyuE",  0,                          18},
+        {true,  dSv_event_flag_c::UNK_2401,  "A_umikz", 0,                          204},
+        {false, 0,                           "sea",     dIsleRoom_OutsetIsland_e,   128},
     };
 
     check_data* data_p = l_checkData;
@@ -1162,20 +1165,19 @@ void dComIfGs_setGameStartStage() {
 
         if (!isNot_PShip) {
             strcpy(stage_name, "sea");
-            room_no = dComIfGs_getEventReg(0xC3FF);
-            point = dComIfGs_getEventReg(0x85FF);
+            room_no = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C3FF);
+            point = dComIfGs_getEventReg(dSv_event_flag_c::UNK_85FF);
             dKy_set_nexttime(120.0f);
         } else if (stage_type == dStageType_SEA_e) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
             point = player_p->mRestartPoint;
 
-            s8 temp_r3 = player_p->current.roomNo;
-            room_no = temp_r3;
+            room_no = fopAcM_GetRoomNo(player_p);
 
-            stage_scls_info_class* scls_p;
-            if (temp_r3 >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
+            if (fopAcM_GetRoomNo(player_p) >= 0 && point != 0xFF && dComIfGs_checkSeaLandingEvent(room_no)) {
                 strcpy(stage_name, dComIfGp_getStartStageName());
             } else {
+                stage_scls_info_class* scls_p;
                 if (dComIfGp_getShipActor() != NULL) {
                     scls_p = dComIfGd_getMeshSceneList(dComIfGp_getShipActor()->current.pos);
                 } else {
@@ -1270,16 +1272,16 @@ void dComIfGs_setPlayerRecollectionData() {
 #endif
 
     u32 tbl;
-    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 && dComIfGs_isEventBit(0x3d80) != 0) {
+    if (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D80) != 0) {
         tbl = 0;
         dComIfGp_setPlayerInfoBufferStageNo(1);
-    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 && dComIfGs_isEventBit(0x3d40) != 0) {
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D40) != 0) {
         tbl = 1;
         dComIfGp_setPlayerInfoBufferStageNo(2);
-    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 && dComIfGs_isEventBit(0x3d20) != 0) {
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D20) != 0) {
         tbl = 2;
         dComIfGp_setPlayerInfoBufferStageNo(3);
-    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0 && dComIfGs_isEventBit(0x3d10) != 0) {
+    } else if (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D10) != 0) {
         tbl = 3;
         dComIfGp_setPlayerInfoBufferStageNo(4);
     } else {
@@ -1289,7 +1291,7 @@ void dComIfGs_setPlayerRecollectionData() {
         return;
     }
 
-    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[0] != dItem_TELESCOPE_e) {
+    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[dInvSlot_TELESCOPE_e] != dItem_TELESCOPE_e) {
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
