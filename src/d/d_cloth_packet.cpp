@@ -61,13 +61,46 @@ dCloth_packet_c::~dCloth_packet_c() {
 }
 
 /* 8006310C-8006313C       .text default_factor_checkCB__FP15dCloth_packet_cii */
-void default_factor_checkCB(dCloth_packet_c*, int, int) {
-    /* Nonmatching */
+int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y) {
+    if (x == 0 && (y == 0 || y == pPkt->mHoistGridSize - 1))
+        return 1;
+    return 0;
 }
 
 /* 8006313C-8006337C       .text init__15dCloth_packet_cFv */
 void dCloth_packet_c::init() {
     /* Nonmatching */
+    cXyz* pPos0 = mpPosArr[0];
+    cXyz* pPos1 = mpPosArr[1];
+    cXyz* pSpeed = mpSpeedArr;
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            pPos0->x = 0.0f;
+            pPos0->y = mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1));
+            pPos0->z = mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1));
+
+            pPos1->x = 0.0f;
+            pPos1->y = mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1));
+            pPos1->z = mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1));
+
+            *pSpeed = cXyz(0.0f, 0.0f, 0.0f);
+
+            pPos0++;
+            pPos1++;
+            pSpeed++;
+        }
+    }
+
+    setNrm();
+
+    mScale = cXyz::BaseXYZ;
+    mGlobalWind = cXyz::BaseZ;
+
+    DCStoreRangeNoSync(mpPosArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArr[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+    DCStoreRangeNoSync(mpNrmArrBack[mCurArr], mFlyGridSize * mHoistGridSize * sizeof(cXyz));
+
+    setFactorCheckCB(default_factor_checkCB);
 }
 
 /* 8006337C-80063400       .text setGlobalWind__15dCloth_packet_cFP4cXyz */
@@ -180,8 +213,8 @@ cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float dist
 /* 80063D84-800642D0       .text setNrm__15dCloth_packet_cFv */
 void dCloth_packet_c::setNrm() {
     /* Nonmatching */
-    cXyz *pPos = mpPosArr[mCurArr];
-    cXyz *pNrm = mpNrmArr[mCurArr];
+    cXyz* pPos = mpPosArr[mCurArr];
+    cXyz* pNrm = mpNrmArr[mCurArr];
     mWave += mWaveSpeed;
     field_0xF0 += field_0xF2;
 

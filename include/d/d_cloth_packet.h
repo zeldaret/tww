@@ -48,6 +48,8 @@ public:
         setWindPower(wind, windWave);
     }
 
+    friend int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y);
+
 private:
     /* 0x10 */ s32 mFlyGridSize;
     /* 0x14 */ s32 mHoistGridSize;
