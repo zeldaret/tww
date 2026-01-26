@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_cloth_packet.h"
+#include "assets/l_matDL__d_cloth_packet.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
 dCloth_packet_c::dCloth_packet_c(
@@ -354,7 +355,6 @@ void dCloth_packet_c::TexObjLoad() {
 
 /* 80064444-80064718       .text TevSetting__15dCloth_packet_cFv */
 void dCloth_packet_c::TevSetting() {
-    /* Nonmatching */
     GXSetNumChans(1);
     u8 numStages;
     u8 lightMask;
@@ -394,8 +394,7 @@ void dCloth_packet_c::TevSetting() {
     GXSetTevColorS10(GX_TEVREG0, mpTevstr->mColorC0);
     GXSetTevColor(GX_TEVREG1, mpTevstr->mColorK0);
     GXSetTevColor(GX_TEVREG2, mpTevstr->mColorK1);
-    // TODO: Configure Display List
-    //GXCallDisplayList(l_matDL, 0x20);
+    GXCallDisplayList(l_matDL, 0x20);
 }
 
 /* 80064718-8006487C       .text plot__15dCloth_packet_cFv */
