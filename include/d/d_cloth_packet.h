@@ -111,8 +111,20 @@ class dClothVobj03_c : public dCloth_packet_c {
     void cloth_copy();
 
 public:
+    dClothVobj03_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+        if (posArr) {
+            field_0x108 = 1;
+        } else {
+            field_0x108 = 0;
+        }
+    };
+
+public:
     static dClothVobj03_c* top_pointer;
     static s32 cloth_counter;
+
+    friend dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
 private:
     u8 padding_0xFC[0xC];

@@ -561,8 +561,30 @@ void dClothVobj03_c::TexObjLoad() {
 }
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
+    dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    if (pCloth) {
+        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
+        bool succeeded;
+        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
+            pCloth->mpSpeedArr)
+        {
+            succeeded = true;
+        } else {
+            succeeded = false;
+        }
+        if (!succeeded) {
+            return NULL;
+        }
+    }
+
+    if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 800653F4-800654B8       .text cloth_copy__14dClothVobj04_cFv */
