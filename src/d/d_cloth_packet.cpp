@@ -499,7 +499,8 @@ void dCloth_packetXlu_c::TevSetting() {
 
 /* 80064C98-80064CF8       .text cloth_draw__18dCloth_packetXlu_cFv */
 void dCloth_packetXlu_c::cloth_draw() {
-    /* Nonmatching */
+    cXyz pos = mpPosArr[mCurArr][0];
+    g_dComIfG_gameInfo.drawlist.entryZSortXluDrawList(g_dComIfG_gameInfo.drawlist.mpXluList, this, pos);
 }
 
 /* 80064CF8-80064E48       .text dCloth_packetXlu_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
