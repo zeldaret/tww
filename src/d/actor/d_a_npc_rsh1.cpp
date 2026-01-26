@@ -532,6 +532,7 @@ void daNpc_Rsh1_c::createShopList() {
     // bruh wtf is this BULLLLLLSHITTTTT!!!!!!
     
     csXyz temp(0, home.angle.y, 0);
+    
     s16 y_vals[] = {
         0xE800,
         0xE400,
@@ -539,8 +540,8 @@ void daNpc_Rsh1_c::createShopList() {
         0xC000
     };
 
-    int i;
-    for(i = 0; i < 4; i++) {
+    int i = 0;
+    for(; i < 4; i++) {
         int j = 0;
         int k = 0;
         field_0x814[i].setItemDataIdx(8);
@@ -549,11 +550,18 @@ void daNpc_Rsh1_c::createShopList() {
             field_0x924[i][j] = NULL;
             if (daNpc_Rsh1_checkRotenItemGet(k) != 0) {
                 field_0x814[i].mItemActorProcessIds[j] = fopAcM_createShopItem((cXyz *)&Item_set_pos_data_rshop_0[j + i * 3], Item_setData_rshop[k]->mpItemData->mItemNo, &temp, fopAcM_GetRoomNo(this));
-                field_0x924[i][j] = Item_setData_rshop[k];
+                field_0x924[i][j << 2] = Item_setData_rshop[k];
                 j++;
             }
         }
         field_0x814[i].setItemSum(j);
+        if (j < 3) {
+            if (j == 0) {
+                i--;
+            }
+            break;
+        }
+        if (i == 3) break;
     }
 
     field_0x78C = i + 1;
