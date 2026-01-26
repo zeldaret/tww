@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_rsh1.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_item.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
@@ -375,8 +376,63 @@ u16 daNpc_Rsh1_c::next_msgStatus(unsigned long*) {
 }
 
 /* 00001650-00001808       .text getMsg__12daNpc_Rsh1_cFv */
-void daNpc_Rsh1_c::getMsg() {
-    /* Nonmatching */
+u32 daNpc_Rsh1_c::getMsg() {
+    u32 result;
+    
+    if (field_0x780 != 0) {
+        result = field_0x780;
+        field_0x780 = 0;
+    } else {
+        if (!checkItemGet(0x2A, TRUE) && daNpc_Rsh1_countShop() >= 3) {
+            return 0x285D;
+        }
+
+        if (dComIfGs_checkGetItem(0x78) == 0) {
+            if(dComIfGs_isEventBit(0x2420)) {
+                return 0x288C;
+            }
+            dComIfGs_onEventBit(0x2420);
+            return 0x2886;
+        }
+
+        if (!dComIfGs_checkGetItem(0x30)) {
+            return 0x2890;
+        }
+
+        if (field_0x788 == -1) {
+            if (dComIfGs_isEventBit(0x2D01) && !dComIfGs_isEventBit(0xE08) && dComIfGs_isEventBit(0x1108)) {
+                return 0x2859;
+            }
+            
+            int shop_cnt = daNpc_Rsh1_countShop();
+            
+            if (shop_cnt >= 8) {
+                return 0x283E;
+            }
+
+            if (shop_cnt > 1) {
+                return 0x2840;
+            }
+
+            if (dComIfGs_isEventBit(0x1108)) {
+                return 0x2842;
+            }
+
+            if (!dComIfGs_isEventBit(0x1110)) {
+                result = 0x2845;
+            } else {
+                result = 0x284B;
+            }
+        } else {
+            if (!dComIfGs_isEventBit(0x1108)) {
+                result = 0x2865;
+            } else {
+                result = 0x2862;
+            }
+        }
+    }
+    
+    return result;
 }
 
 /* 00001808-000018EC       .text setCollision__12daNpc_Rsh1_cFv */
@@ -544,7 +600,7 @@ void daNpc_Rsh1_c::createShopList() {
         field_0x814[i].setItemDataIdx(8);
         temp.y = y_vals[i];
 
-        while(j < 3 && k < ARRAY_SSIZE(field_0x924)) {
+        while(j < (ARRAY_SSIZE(field_0x924) / ARRAY_SSIZE(field_0x814)) && k < ARRAY_SSIZE(field_0x924)) {
             int idx = i * 3 + j;
             field_0x924[k] = NULL;
             if (daNpc_Rsh1_checkRotenItemGet(k)) {
@@ -561,12 +617,12 @@ void daNpc_Rsh1_c::createShopList() {
 
         field_0x814[i].setItemSum(j);
 
-        if (j < 3) {
+        if (j < (ARRAY_SSIZE(field_0x924) / ARRAY_SSIZE(field_0x814))) {
             if (j == 0) {
                 i--;
             }
             break;
-        } else if (i == 3) {
+        } else if (i == ARRAY_SSIZE(field_0x814) - 1) {
             break;
         }
     }

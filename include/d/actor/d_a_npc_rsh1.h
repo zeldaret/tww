@@ -45,7 +45,7 @@ public:
     void eventOrder();
     void checkOrder();
     u16 next_msgStatus(unsigned long*);
-    void getMsg();
+    u32 getMsg();
     void setCollision();
     void talkInit();
     void normal_talk();
