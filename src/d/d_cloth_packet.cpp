@@ -319,7 +319,7 @@ void dCloth_packet_c::setMtx(Mtx mtx) {
 
 /* 800642FC-80064330       .text cloth_draw__15dCloth_packet_cFv */
 void dCloth_packet_c::cloth_draw() {
-    /* Nonmatching */
+    j3dSys.getDrawBuffer(OPA_BUFFER)->entryImm(this, 0);
 }
 
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
