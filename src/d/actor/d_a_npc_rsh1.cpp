@@ -528,9 +528,7 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int param_1) {
 extern Vec Item_set_pos_data_rshop_0[12];
 /* 000023A8-00002568       .text createShopList__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::createShopList() {
-    /* Nonmatching */
-    // bruh wtf is this BULLLLLLSHITTTTT!!!!!!
-    
+    /* Instruction match */
     csXyz temp(0, home.angle.y, 0);
     
     s16 y_vals[] = {
@@ -539,34 +537,43 @@ void daNpc_Rsh1_c::createShopList() {
         0xE00D,
         0xC000
     };
-
-    int i = 0;
-    for(; i < 4; i++) {
+        
+    int i, k;
+    for(k = 0, i = 0; i < ARRAY_SSIZE(field_0x814); i++) {
         int j = 0;
-        int k = 0;
         field_0x814[i].setItemDataIdx(8);
         temp.y = y_vals[i];
-        for (; j < 3 && k < 12; k++) {
-            field_0x924[i][j] = NULL;
-            if (daNpc_Rsh1_checkRotenItemGet(k) != 0) {
-                field_0x814[i].mItemActorProcessIds[j] = fopAcM_createShopItem((cXyz *)&Item_set_pos_data_rshop_0[j + i * 3], Item_setData_rshop[k]->mpItemData->mItemNo, &temp, fopAcM_GetRoomNo(this));
-                field_0x924[i][j << 2] = Item_setData_rshop[k];
+
+        while(j < 3 && k < ARRAY_SSIZE(field_0x924)) {
+            int idx = i * 3 + j;
+            field_0x924[k] = NULL;
+            if (daNpc_Rsh1_checkRotenItemGet(k)) {
+                field_0x814[i].mItemActorProcessIds[j] = fopAcM_createShopItem(
+                    (cXyz *)&Item_set_pos_data_rshop_0[idx], 
+                    Item_setData_rshop[k]->mpItemData->mItemNo, 
+                    &temp, fopAcM_GetRoomNo(this)
+                );
+                field_0x924[idx] = Item_setData_rshop[k];
                 j++;
             }
+            k++;
         }
+
         field_0x814[i].setItemSum(j);
+
         if (j < 3) {
             if (j == 0) {
                 i--;
             }
             break;
+        } else if (i == 3) {
+            break;
         }
-        if (i == 3) break;
     }
 
     field_0x78C = i + 1;
     for (int i = 0; i < field_0x78C; i++) {
-        field_0x814[i].setItemSetDataList(field_0x924[i]);
+        field_0x814[i].setItemSetDataList(&field_0x924[i * 3]);
     }
 
     field_0x78C = field_0x78C > 1 ? field_0x78C : 1;

@@ -131,7 +131,7 @@ public:
     /* 0x7B8 */ ShopCam_action_c field_0x7B8;
     /* 0x810 */ ShopItems_c* mpShopItems;
     /* 0x814 */ ShopItems_c field_0x814[4];
-    /* 0x924 */ __shop_items_set_data* field_0x924[4][3];
+    /* 0x924 */ __shop_items_set_data* field_0x924[12];
     /* 0x954 */ ShopCursor_c* field_0x954;
     /* 0x958 */ s8 field_0x958;
     /* 0x959 */ s8 field_0x959;
