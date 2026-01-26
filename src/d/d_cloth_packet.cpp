@@ -323,8 +323,28 @@ void dCloth_packet_c::cloth_draw() {
 }
 
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
-void dCloth_packet_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
+    GXInitTexObj(
+        &mTexObj,
+        (u8*)i_img + i_img->imageOffset,
+        i_img->width,
+        i_img->height,
+        GXTexFmt(i_img->format),
+        GXTexWrapMode(i_img->wrapS),
+        GXTexWrapMode(i_img->wrapT),
+        i_img->mipmapCount > 1
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(i_img->minFilter),
+        GXTexFilter(i_img->magFilter),
+        i_img->minLOD * 0.125f,
+        i_img->maxLOD * 0.125f,
+        i_img->LODBias * 0.01f,
+        i_img->biasClamp,
+        i_img->doEdgeLOD,
+        GXAnisotropy(i_img->maxAnisotropy)
+    );
 }
 
 /* 8006441C-80064444       .text TexObjLoad__15dCloth_packet_cFv */

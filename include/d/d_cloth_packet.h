@@ -18,7 +18,7 @@ public:
     virtual void init();
     virtual void cloth_move();
     virtual void cloth_draw();
-    virtual void TexObjInit(ResTIMG*);
+    virtual void TexObjInit(ResTIMG* i_img);
     virtual void TexObjLoad();
     virtual void TevSetting();
 
