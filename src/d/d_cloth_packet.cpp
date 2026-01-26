@@ -152,7 +152,42 @@ void dCloth_packet_c::cloth_move() {
 
 /* 80063728-800638E4       .text draw__15dCloth_packet_cFv */
 void dCloth_packet_c::draw() {
-    /* Nonmatching */
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_GxFog_tevstr_set(mpTevstr);
+    dKy_setLight_mine(mpTevstr);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetArray(GX_VA_POS, this->mpPosArr[this->mCurArr], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, this->mpNrmArr[this->mCurArr], sizeof(cXyz));
+
+    TexObjLoad();
+    GXLoadTexObj(&this->mToonTex, GX_TEXMAP1);
+    TevSetting();
+
+    MTXCopy(mMtx, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::scaleM(mScale);
+    Mtx mtx;
+    MTXConcat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXLoadNrmMtxImm(mtx, GX_PNMTX0);
+
+    // Draw front
+    GXSetCullMode(GX_CULL_BACK);
+    plot();
+
+    // Draw back
+    GXSetCullMode(GX_CULL_FRONT);
+    GXSetArray(GX_VA_NRM, this->mpNrmArrBack[this->mCurArr], sizeof(cXyz));
+    plot();
+
+    J3DShape::resetVcdVatCache();
 }
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
