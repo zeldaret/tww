@@ -41,7 +41,7 @@ public:
     void setAnm(signed char);
     void setTexAnm(signed char);
     void setAnmFromMsgTag();
-    s8 chkAttention(cXyz, short);
+    bool chkAttention(cXyz, short);
     void eventOrder();
     void checkOrder();
     u16 next_msgStatus(unsigned long*);
@@ -121,7 +121,7 @@ public:
     /* 0x780 */ u32 field_0x780;
     /* 0x784 */ u32 field_0x784;
     /* 0x788 */ int field_0x788;
-    /* 0x78C */ u8 field_0x78C[0x790 - 0x78C];
+    /* 0x78C */ s32 field_0x78C;
     /* 0x790 */ s16 field_0x790;
     /* 0x792 */ u8 field_0x792;
     /* 0x793 */ s8 field_0x793;
@@ -131,7 +131,7 @@ public:
     /* 0x7B8 */ ShopCam_action_c field_0x7B8;
     /* 0x810 */ ShopItems_c* mpShopItems;
     /* 0x814 */ ShopItems_c field_0x814[4];
-    /* 0x924 */ u8 field_0x924[0x954 - 0x924];
+    /* 0x924 */ __shop_items_set_data* field_0x924[4][3];
     /* 0x954 */ ShopCursor_c* field_0x954;
     /* 0x958 */ s8 field_0x958;
     /* 0x959 */ s8 field_0x959;

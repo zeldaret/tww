@@ -328,8 +328,24 @@ void daNpc_Rsh1_c::setAnmFromMsgTag() {
 }
 
 /* 00000DDC-00000F50       .text chkAttention__12daNpc_Rsh1_cF4cXyzs */
-s8 daNpc_Rsh1_c::chkAttention(cXyz, short) {
-    /* Nonmatching */
+bool daNpc_Rsh1_c::chkAttention(cXyz param_1, s16 param_2) {
+    /* Instruction match */
+    daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
+    
+    f32 max_attn_dist_xz = l_HIO.field_0x0C.mMaxAttnDistXZ;
+    int max_attn_angle_y = l_HIO.field_0x0C.mMaxAttnAngleY;
+    cXyz pos_diff = link_p->current.pos - param_1;
+
+    f32 temp_abs_xz = pos_diff.absXZ();
+    s16 angle = cM_atan2s(pos_diff.x, pos_diff.z);
+    
+    if (field_0x770 != 0) {
+        max_attn_dist_xz += 40.0f;
+        max_attn_angle_y += 0x71C;
+    }
+
+    angle -= param_2;
+    return max_attn_angle_y > abs(angle) && max_attn_dist_xz > temp_abs_xz;
 }
 
 /* 00000F50-00001038       .text eventOrder__12daNpc_Rsh1_cFv */
@@ -509,9 +525,43 @@ static BOOL daNpc_Rsh1_checkRotenItemGet(int param_1) {
     return result;
 }
 
+extern Vec Item_set_pos_data_rshop_0[12];
 /* 000023A8-00002568       .text createShopList__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::createShopList() {
     /* Nonmatching */
+    // bruh wtf is this BULLLLLLSHITTTTT!!!!!!
+    
+    csXyz temp(0, home.angle.y, 0);
+    s16 y_vals[] = {
+        0xE800,
+        0xE400,
+        0xE00D,
+        0xC000
+    };
+
+    int i;
+    for(i = 0; i < 4; i++) {
+        int j = 0;
+        int k = 0;
+        field_0x814[i].setItemDataIdx(8);
+        temp.y = y_vals[i];
+        for (; j < 3 && k < 12; k++) {
+            field_0x924[i][j] = NULL;
+            if (daNpc_Rsh1_checkRotenItemGet(k) != 0) {
+                field_0x814[i].mItemActorProcessIds[j] = fopAcM_createShopItem((cXyz *)&Item_set_pos_data_rshop_0[j + i * 3], Item_setData_rshop[k]->mpItemData->mItemNo, &temp, fopAcM_GetRoomNo(this));
+                field_0x924[i][j] = Item_setData_rshop[k];
+                j++;
+            }
+        }
+        field_0x814[i].setItemSum(j);
+    }
+
+    field_0x78C = i + 1;
+    for (int i = 0; i < field_0x78C; i++) {
+        field_0x814[i].setItemSetDataList(field_0x924[i]);
+    }
+
+    field_0x78C = field_0x78C > 1 ? field_0x78C : 1;
 }
 
 /* 00002568-000025C0       .text setAttention__12daNpc_Rsh1_cFv */
