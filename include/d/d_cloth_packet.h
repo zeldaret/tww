@@ -48,6 +48,12 @@ public:
         setWindPower(wind, windWave);
     }
 
+    void swapArrays() { mCurArr ^= 1; }
+    cXyz* getCurrentPosArr() const { return mpPosArr[mCurArr]; }
+    cXyz* getCurrentNrmArr() const { return mpNrmArr[mCurArr]; }
+    cXyz* getCurrentNrmArrBack() const { return mpNrmArrBack[mCurArr]; }
+    cXyz* getSpeedArr() const { return mpSpeedArr; }
+
     friend int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y);
     friend dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
@@ -105,7 +111,7 @@ class dClothVobj03_c : public dCloth_packet_c {
     void cloth_copy();
 
 public:
-    static void* top_pointer;
+    static dClothVobj03_c* top_pointer;
     static const s32 cloth_counter;
 };
 dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);

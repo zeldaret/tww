@@ -508,7 +508,7 @@ dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float,
     /* Nonmatching */
 }
 
-void* dClothVobj03_c::top_pointer;
+dClothVobj03_c* dClothVobj03_c::top_pointer;
 void* dClothVobj04_c::top_pointer;
 void* dClothVobj05_c::top_pointer;
 void* dClothVobj07_0_c::top_pointer;
@@ -520,7 +520,10 @@ const s32 dClothVobj07_0_c::cloth_counter = -1;
 
 /* 80064E48-80064F0C       .text cloth_copy__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_copy() {
-    /* Nonmatching */
+    swapArrays();
+    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80064F0C-80065020       .text init__14dClothVobj03_cFv */
