@@ -180,6 +180,68 @@ cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float dist
 /* 80063D84-800642D0       .text setNrm__15dCloth_packet_cFv */
 void dCloth_packet_c::setNrm() {
     /* Nonmatching */
+    cXyz *pPos = mpPosArr[mCurArr];
+    cXyz *pNrm = mpNrmArr[mCurArr];
+    mWave += mWaveSpeed;
+    field_0xF0 += field_0xF2;
+
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            cXyz pos = pPos[x + y * mFlyGridSize];
+            cXyz total = cXyz::Zero;
+            if (x != 0) {
+                // FIXME: y ± 1 is lifted out of the conditionals and reused when it should be calculated in-place.
+                //  This makes the stack not match either.
+                cXyz x_diff = pPos[x - 1 + y * mFlyGridSize] - pos;
+                if (y != 0) {
+                    cXyz y_diff = pPos[x + (y - 1) * mFlyGridSize] - pos;
+                    cXyz prod = y_diff.outprod(x_diff);
+                    cXyz norm = prod.normZP();
+                    total += norm;
+                }
+                if (y != mHoistGridSize - 1) {
+                    cXyz y_diff = pPos[x + (y + 1) * mFlyGridSize] - pos;
+                    cXyz prod = x_diff.outprod(y_diff);
+                    cXyz norm = prod.normZP();
+                    total += norm;
+                }
+            }
+            if (x != mFlyGridSize - 1) {
+                cXyz x_diff = pPos[x + 1 + y * mFlyGridSize] - pos;
+                if (y != 0) {
+                    cXyz y_diff = pPos[x + (y - 1) * mFlyGridSize] - pos;
+                    cXyz prod = x_diff.outprod(y_diff);
+                    cXyz norm = prod.normZP();
+                    total += norm;
+                }
+                if (y != mHoistGridSize - 1) {
+                    cXyz y_diff = pPos[x + (y + 1) * mFlyGridSize] - pos;
+                    cXyz prod = y_diff.outprod(x_diff);
+                    cXyz norm = prod.normZP();
+                    total += norm;
+                }
+            }
+
+            total = total.normZP();
+
+            mDoMtx_YrotS(mDoMtx_stack_c::get(), mRotateY * cM_ssin(mWave + mRipple * (x + y)));
+            cXyz temp;
+            MTXMultVec(mDoMtx_stack_c::get(), &total, &temp);
+            pNrm[x + mFlyGridSize * y] = temp.normZP();
+        }
+    }
+
+    // Set all back normals to the negative front normals.
+    cXyz* pNrmBack = mpNrmArrBack[mCurArr];
+    for (int y = 0; y < mHoistGridSize; y++) {
+        for (int x = 0; x < mFlyGridSize; x++) {
+            pNrmBack->x = -pNrm->x;
+            pNrmBack->y = -pNrm->y;
+            pNrmBack->z = -pNrm->z;
+            pNrmBack++;
+            pNrm++;
+        }
+    }
 }
 
 /* 800642D0-800642FC       .text setMtx__15dCloth_packet_cFPA4_f */
