@@ -49,6 +49,7 @@ public:
     }
 
     friend int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y);
+    friend dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
 
 private:
     /* 0x10 */ s32 mFlyGridSize;
