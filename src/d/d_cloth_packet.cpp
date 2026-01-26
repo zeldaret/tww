@@ -575,7 +575,19 @@ void dClothVobj04_c::cloth_copy() {
 
 /* 800654B8-800655CC       .text init__14dClothVobj04_cFv */
 void dClothVobj04_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        field_0x109 = 1;
+    } else {
+        field_0x109 = 0;
+    }
 }
 
 /* 800655CC-80065700       .text cloth_move__14dClothVobj04_cFv */
@@ -608,7 +620,19 @@ void dClothVobj05_c::cloth_copy() {
 
 /* 80065A5C-80065B70       .text init__14dClothVobj05_cFv */
 void dClothVobj05_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        field_0x109 = 1;
+    } else {
+        field_0x109 = 0;
+    }
 }
 
 /* 80065B70-80065CA0       .text cloth_move__14dClothVobj05_cFv */
@@ -646,7 +670,19 @@ void dClothVobj07_0_c::cloth_copy() {
 
 /* 80066014-80066128       .text init__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::init() {
-    /* Nonmatching */
+    if (cloth_counter == (s32)g_Counter.mTimer) {
+        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    } else {
+        dCloth_packet_c::init();
+    }
+
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
+        field_0x109 = 1;
+    } else {
+        field_0x109 = 0;
+    }
 }
 
 /* 80066128-8006625C       .text cloth_move__16dClothVobj07_0_cFv */
