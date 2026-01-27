@@ -116,7 +116,7 @@ daNpc_Rsh1_HIO_c::~daNpc_Rsh1_HIO_c() {}
 
 /* 0000021C-0000045C       .text checkCreateInShopPlayer__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
-    cXyz* curr_arr;
+    cXyz* curr_tbl;
     daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
 
     cXyz dir(
@@ -128,20 +128,20 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
     cXyz link_pos = link_p->current.pos;
     cXyz diff = link_pos - current.pos;
 
-    cXyz* chk_pos_arrs[] = {
+    cXyz* chk_pos_tbls[] = {
         l_in_chk_pos1_tbl,
         l_in_chk_pos2_tbl
     };
 
     int i, j, k, l;
     for (i = 0; i < 2; i++) {
-        for (j = 0, k = 1, l = 0, curr_arr = chk_pos_arrs[i]; j < 4;) {
-            cXyz temp2 = curr_arr[j] - link_pos;
-            cXyz temp3 = curr_arr[k] - link_pos;
-            cXyz outprod = temp2.outprod(temp3);
+        for (j = 0, k = 1, l = 0, curr_tbl = chk_pos_tbls[i]; j < 4;) {
+            cXyz temp2 = curr_tbl[j] - link_pos;
+            cXyz temp3 = curr_tbl[k] - link_pos;
+            cXyz t2_cross_t3 = temp2.outprod(temp3);
             cXyz base_y = cXyz::BaseY;
             
-            if (base_y.getDotProduct(outprod) > 0.0f) {
+            if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
                 l++;
             }
 
