@@ -8,6 +8,7 @@
 
 #include "SSystem/SComponent/c_counter.h"
 #include "assets/l_matDL__d_cloth_packet.h"
+#include "d/d_s_play.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
 dCloth_packet_c::dCloth_packet_c(
@@ -547,7 +548,50 @@ void dClothVobj03_c::init() {
 
 /* 80065020-8006515C       .text cloth_move__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_move() {
-    /* Nonmatching */
+    if (field_0x108) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
+    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+
+    if (field_0x109 != 0) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0;
+        mSpring = 0.4;
+        mGravity = -1.5;
+        mDrag = 0.7;
+        mFlyFlex = 0.75;
+        mHoistFlex = 0.6;
+        mWaveSpeed = 0;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    } else {
+        mSpring = 0.4;
+        mGravity = -1.5;
+        mDrag = 0.7;
+        mFlyFlex = 0.75;
+        mHoistFlex = 0.6;
+        mWaveSpeed = 0x400;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    }
+
+    mWindSpeed = windSpeed;
+    mWindSpeedWave = windSpeedWave;
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 8006515C-80065268       .text TexObjInit__14dClothVobj03_cFP7ResTIMG */
