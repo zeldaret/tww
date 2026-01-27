@@ -50,17 +50,17 @@ public:
     void talkInit();
     void normal_talk();
     u16 shop_talk();
-    void talk();
+    s16 talk();
     BOOL CreateInit();
     void createShopList();
     void setAttention();
     void lookBack();
     bool pathGet();
-    void getAimShopPosIdx();
+    int getAimShopPosIdx();
     bool shopPosMove();
     BOOL pathMove(int*);
     bool wait01();
-    void talk01();
+    bool talk01();
     void getdemo_action(void*);
     BOOL wait_action(void*);
     BOOL pl_shop_out_action(void*);
@@ -111,11 +111,13 @@ public:
     /* 0x758 */ cXyz field_0x758;
     /* 0x764 */ u8 field_0x764[0x766 - 0x764];
     /* 0x766 */ csXyz field_0x766;
-    /* 0x76C */ u8 field_0x76C[0x76F - 0x76C];
+    /* 0x76C */ u8 field_0x76C[0x76E - 0x76C];
+    /* 0x76E */ s8 field_0x76E;
     /* 0x76F */ u8 field_0x76F;
     /* 0x770 */ u8 field_0x770;
     /* 0x771 */ u8 field_0x771;
-    /* 0x772 */ u8 field_0x772[0x778 - 0x772];
+    /* 0x772 */ u8 field_0x772[0x774 - 0x772];
+    /* 0x774 */ f32 field_0x774;
     /* 0x778 */ u32 field_0x778;
     /* 0x77C */ u32 field_0x77C;
     /* 0x780 */ u32 field_0x780;
@@ -124,7 +126,7 @@ public:
     /* 0x78C */ s32 field_0x78C;
     /* 0x790 */ s16 field_0x790;
     /* 0x792 */ u8 field_0x792;
-    /* 0x793 */ s8 field_0x793;
+    /* 0x793 */ u8 field_0x793;
     /* 0x794 */ cXyz field_0x794;
     /* 0x7A0 */ cXyz field_0x7A0;
     /* 0x7AC */ ProcFunc field_0x7AC;
@@ -144,7 +146,8 @@ public:
     /* 0x960 */ s8 field_0x960;
     /* 0x961 */ s8 field_0x961;
     /* 0x962 */ s8 field_0x962;
-    /* 0x963 */ u8 field_0x963[0x968 - 0x963];
+    /* 0x963 */ u8 field_0x963;
+    /* 0x964 */ u8 field_0x964[0x968 - 0x964];
 };  // Size: 0x968
 
 class daNpc_Rsh1_HIO_c : public JORReflexible {
