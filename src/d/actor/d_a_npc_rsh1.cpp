@@ -160,7 +160,37 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
 
 /* 00000498-00000710       .text daNpc_Rsh1_checkRotenBaseTalkArea__Fv */
 static BOOL daNpc_Rsh1_checkRotenBaseTalkArea() {
-    /* Nonmatching */
+    static cXyz base_talk_area_tbl[] = {
+        cXyz(580.0f, 671.0f, -204393.0f),
+        cXyz(539.0f, 671.0f, -204321.0f),
+        cXyz(930.0f, 671.0f, -204114.0f),
+        cXyz(971.0f, 671.0f, -204189.0f)
+    };
+
+    daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
+    cXyz* talk_area_pos_tbl_p;
+    cXyz link_pos = link_p->current.pos;
+
+    int j, k, l;
+    for (talk_area_pos_tbl_p = base_talk_area_tbl, j = 0, k = 1, l = 0; j < 4;) {
+        cXyz temp2 = talk_area_pos_tbl_p[j] - link_pos;
+        cXyz temp3 = talk_area_pos_tbl_p[k] - link_pos;
+        cXyz t2_cross_t3 = temp2.outprod(temp3);
+        cXyz base_y = cXyz::BaseY;
+        
+        if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+            l++;
+        }
+
+        k++; j++;
+        if (k > 3) k = 0; 
+    }
+
+    if (l == 4 || l == 0) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /* 00000710-000007A0       .text daNpc_Rsh1_countShop__Fv */
@@ -222,7 +252,6 @@ static const int l_btp_ix_tbl[] = {
 
 /* 0000087C-00000A44       .text nodeCallBack_Rsh__FP7J3DNodei */
 static BOOL nodeCallBack_Rsh(J3DNode* i_node, int i_calcTiming) {
-    /* Instruction match */
     if (i_calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model_p = j3dSys.getModel();
         daNpc_Rsh1_c* actor_p = (daNpc_Rsh1_c *) model_p->getUserArea();
@@ -331,7 +360,6 @@ void daNpc_Rsh1_c::setTexAnm(s8 param_1) {
 
 /* 00000CA8-00000DDC       .text setAnmFromMsgTag__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::setAnmFromMsgTag() {
-    /* Instruction match */
     switch (dComIfGp_getMesgAnimeAttrInfo()) {
         case 0:
             setAnm(0);
@@ -371,7 +399,6 @@ void daNpc_Rsh1_c::setAnmFromMsgTag() {
 
 /* 00000DDC-00000F50       .text chkAttention__12daNpc_Rsh1_cF4cXyzs */
 bool daNpc_Rsh1_c::chkAttention(cXyz param_1, s16 param_2) {
-    /* Instruction match */
     daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
     
     f32 max_attn_dist_xz = l_HIO.field_0x0C.mMaxAttnDistXZ;
@@ -408,7 +435,31 @@ void daNpc_Rsh1_c::eventOrder() {
 
 /* 00001038-0000126C       .text checkOrder__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (field_0x95B == 5) {
+            field_0x95B = 0;
+            setAction(&daNpc_Rsh1_c::event_action, NULL);
+        } else if (field_0x95B == 4) {
+            field_0x95B = 0;
+            field_0x7B8.Reset();
+            setAction(&daNpc_Rsh1_c::getdemo_action, NULL);
+        }
+    } else if (eventInfo.checkCommandTalk()) {
+        if (field_0x95B == 1 || field_0x95B == 2 || field_0x95B == 3) {
+            daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
+            s16 temp = cLib_targetAngleY(&current.pos, &link_p->current.pos) - home.angle.y;
+            if (temp > 0x1800 || temp < -0x2800) {
+                field_0x780 = 0x2883;
+            } else if (field_0x95B != 2) {
+                field_0x7B8.shop_cam_action_init();
+            }
+            field_0x95B = 0;
+            field_0x771 = 1;
+            talkInit();
+        }
+    } else {
+        field_0x7B8.Save();
+    }
 }
 
 /* 0000126C-00001650       .text next_msgStatus__12daNpc_Rsh1_cFPUl */
