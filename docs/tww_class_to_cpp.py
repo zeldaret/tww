@@ -57,7 +57,7 @@ undefined_member_name_prefix = "field_0x"
 # undefined_member_name_prefix = "m"
 
 out_lines = []
-for i in range (struct.numComponents):
+for i in range (struct.getNumComponents()):
     data_type = str(struct.getComponent(i).getDataType().getName())
     offset = struct.getComponent(i).getOffset()
     hex_offset_string = str("%0*X" % (offset_pad_size, offset))
