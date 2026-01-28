@@ -796,7 +796,58 @@ void daNpc_Rsh1_c::setAttention() {
 
 /* 000025C0-00002868       .text lookBack__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::lookBack() {
-    /* Nonmatching */
+    /* Instruction match */
+    cXyz player_eye_pos;
+    cXyz* vec_p = NULL;
+    s16 temp2 = current.angle.y;
+    bool temp = true;
+    switch (field_0x95C) {
+    case 1:
+        if (field_0x770 != 0) {
+            player_eye_pos = dNpc_playerEyePos(l_HIO.field_0x0C.m04);
+            vec_p = &player_eye_pos;
+            setTexAnm(0);
+        } else {
+            vec_p = NULL;
+            setTexAnm(0);
+        }
+        break;
+    case 2:
+        if (mpShopItems) {
+            if (field_0x7B8.checkCamAction(NULL) || field_0x7B8.checkCamAction(&ShopCam_action_c::rsh_talk_cam_action)) {
+                player_eye_pos = dNpc_playerEyePos(l_HIO.field_0x0C.m04);
+                temp = false;
+            } else if (mpShopItems->mSelectedItemIdx == -1) {
+                player_eye_pos = field_0x7B8.getItemZoomPos(125.0f);
+                temp = false;
+            } else {
+                cXyz temp = mpShopItems->getSelectItemBasePos();
+                player_eye_pos = mpShopItems->getSelectItemPos();
+                field_0x954->setPos(temp);
+                field_0x954->setScale(
+                    l_HIO.field_0x34,
+                    l_HIO.field_0x38,
+                    l_HIO.field_0x3C,
+                    l_HIO.field_0x40,
+                    l_HIO.field_0x44
+                );
+                field_0x954->anm_play();
+            }
+            vec_p = &player_eye_pos;
+        } else {
+            vec_p = NULL;
+        }
+        break;
+    default:
+        break;
+    }
+
+    if (field_0x638.trnChk()) {
+        cLib_addCalcAngleS2(&field_0x764, l_HIO.field_0x0C.mMaxHeadTurnVel, 4, 0x800);
+    } else {
+        field_0x764 = 0;
+    }
+    field_0x638.lookAtTarget(&current.angle.y, vec_p, eyePos, temp2, field_0x764, temp);
 }
 
 /* 00002868-00002930       .text pathGet__12daNpc_Rsh1_cFv */
