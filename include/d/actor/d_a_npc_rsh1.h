@@ -48,9 +48,9 @@ public:
     u32 getMsg();
     void setCollision();
     void talkInit();
-    void normal_talk();
+    u16 normal_talk();
     u16 shop_talk();
-    s16 talk();
+    u16 talk();
     BOOL CreateInit();
     void createShopList();
     void setAttention();
@@ -61,7 +61,7 @@ public:
     BOOL pathMove(int*);
     bool wait01();
     bool talk01();
-    void getdemo_action(void*);
+    BOOL getdemo_action(void*);
     BOOL wait_action(void*);
     BOOL pl_shop_out_action(void*);
     bool evn_setAnm_init(int);
