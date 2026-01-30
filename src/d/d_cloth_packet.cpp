@@ -895,8 +895,7 @@ void dClothVobj05_c::TexObjLoad() {
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
 int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
-    /* Nonmatching */
-    return 0;
+    return x == 0 ? 1 : 0;
 }
 
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
@@ -1034,8 +1033,7 @@ void dClothVobj07_0_c::TexObjLoad() {
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */
 int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
-    /* Nonmatching */
-    return 0;
+    return x == 0 ? 1 : 0;
 }
 
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
