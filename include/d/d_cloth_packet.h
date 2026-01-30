@@ -89,7 +89,9 @@ protected:
     /* 0xF6 */ s16 mRotateY;
     /* 0xF8 */ u8 mCurArr;
 }; // Size: 0xFC
-dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+dCloth_packet_c* dCloth_packet_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+);
 
 class dCloth_packetXlu_c : public dCloth_packet_c {
     virtual void init();
@@ -98,8 +100,20 @@ class dCloth_packetXlu_c : public dCloth_packet_c {
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     virtual void TevSetting();
+
+private:
+    dCloth_packetXlu_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {}
+
+    friend dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+
+private:
+    u32 field_0xFC;
 };
-dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
+
+dCloth_packetXlu_c* dCloth_packetXlu_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+);
 
 class dClothVobj03_c : public dCloth_packet_c {
     virtual void init();
@@ -110,7 +124,7 @@ class dClothVobj03_c : public dCloth_packet_c {
     virtual void TevSetting();
     void cloth_copy();
 
-public:
+private:
     dClothVobj03_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
         if (posArr) {
@@ -118,7 +132,7 @@ public:
         } else {
             field_0x108 = 0;
         }
-    };
+    }
 
 public:
     static dClothVobj03_c* top_pointer;
@@ -142,7 +156,7 @@ class dClothVobj04_c : public dCloth_packet_c {
     virtual void TevSetting();
     void cloth_copy();
 
-public:
+private:
     dClothVobj04_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
         if (posArr) {
@@ -174,7 +188,7 @@ class dClothVobj05_c : public dCloth_packet_c {
     virtual void TevSetting();
     void cloth_copy();
 
-public:
+private:
     dClothVobj05_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
         if (posArr) {
@@ -182,7 +196,7 @@ public:
         } else {
             field_0x108 = 0;
         }
-    };
+    }
 
 public:
     static dClothVobj05_c* top_pointer;
@@ -206,7 +220,7 @@ class dClothVobj07_0_c : public dCloth_packet_c {
     virtual void TevSetting();
     void cloth_copy();
 
-public:
+private:
     dClothVobj07_0_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
         if (posArr) {
@@ -214,7 +228,7 @@ public:
         } else {
             field_0x108 = 0;
         }
-    };
+    }
 
 public:
     static dClothVobj07_0_c* top_pointer;

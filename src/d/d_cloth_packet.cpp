@@ -428,10 +428,10 @@ void dCloth_packet_c::plot() {
 
 /* 8006487C-800649C4       .text dCloth_packet_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
 dCloth_packet_c* dCloth_packet_create(
-    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int clothGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
 ) {
     /* Nonmatching */
-    dCloth_packet_c* pCloth = new dCloth_packet_c(i_toonimage, flyGridSize, clothGridSize, flyLength, hoistLength, tevstr, posArr);
+    dCloth_packet_c* pCloth = new dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
     if (pCloth) {
         // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
         bool succeeded;
@@ -507,8 +507,32 @@ void dCloth_packetXlu_c::cloth_draw() {
 }
 
 /* 80064CF8-80064E48       .text dCloth_packetXlu_create__FP7ResTIMGP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
-dCloth_packetXlu_c* dCloth_packetXlu_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**) {
+dCloth_packetXlu_c* dCloth_packetXlu_create(
+    ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
+) {
     /* Nonmatching */
+    dCloth_packetXlu_c* pCloth = new dCloth_packetXlu_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
+    if (pCloth) {
+        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
+        bool succeeded;
+        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
+            pCloth->mpSpeedArr)
+        {
+            succeeded = true;
+        } else {
+            succeeded = false;
+        }
+        if (!succeeded) {
+            return NULL;
+        }
+    }
+
+    if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 dClothVobj03_c* dClothVobj03_c::top_pointer;
