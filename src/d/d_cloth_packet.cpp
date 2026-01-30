@@ -595,8 +595,30 @@ void dClothVobj03_c::cloth_move() {
 }
 
 /* 8006515C-80065268       .text TexObjInit__14dClothVobj03_cFP7ResTIMG */
-void dClothVobj03_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+    GXInitTexObjCI(
+        &mTexObj,
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+        timg->mipmapCount > 1,
+        0
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80065268-800652A8       .text TexObjLoad__14dClothVobj03_cFv */
@@ -705,8 +727,30 @@ void dClothVobj04_c::cloth_move() {
 }
 
 /* 80065700-8006580C       .text TexObjInit__14dClothVobj04_cFP7ResTIMG */
-void dClothVobj04_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+    GXInitTexObjCI(
+        &mTexObj,
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+        timg->mipmapCount > 1,
+        0
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 8006580C-8006584C       .text TexObjLoad__14dClothVobj04_cFv */
@@ -793,8 +837,30 @@ void dClothVobj05_c::cloth_move() {
 }
 
 /* 80065CA0-80065DAC       .text TexObjInit__14dClothVobj05_cFP7ResTIMG */
-void dClothVobj05_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+    GXInitTexObjCI(
+        &mTexObj,
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+        timg->mipmapCount > 1,
+        0
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80065DAC-80065DEC       .text TexObjLoad__14dClothVobj05_cFv */
@@ -886,8 +952,30 @@ void dClothVobj07_0_c::cloth_move() {
 }
 
 /* 8006625C-80066368       .text TexObjInit__16dClothVobj07_0_cFP7ResTIMG */
-void dClothVobj07_0_c::TexObjInit(ResTIMG*) {
-    /* Nonmatching */
+void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
+    GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
+    GXInitTexObjCI(
+        &mTexObj,
+        &timg->format + timg->imageOffset,
+        timg->width,
+        timg->height,
+        GXCITexFmt(timg->format),
+        GXTexWrapMode(timg->wrapS),
+        GXTexWrapMode(timg->wrapT),
+        timg->mipmapCount > 1,
+        0
+    );
+    GXInitTexObjLOD(
+        &mTexObj,
+        GXTexFilter(timg->minFilter),
+        GXTexFilter(timg->magFilter),
+        timg->minLOD * 0.125f,
+        timg->maxLOD * 0.125f,
+        timg->LODBias * 0.01f,
+        timg->biasClamp,
+        timg->doEdgeLOD,
+        GXAnisotropy(timg->maxAnisotropy)
+    );
 }
 
 /* 80066368-800663A8       .text TexObjLoad__16dClothVobj07_0_cFv */

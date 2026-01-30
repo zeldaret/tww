@@ -127,7 +127,7 @@ public:
     friend dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
 private:
-    u8 padding_0xFC[0xC];
+    GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
@@ -147,7 +147,7 @@ public:
     static s32 cloth_counter;
 
 private:
-    u8 padding_0xFC[0xC];
+    GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
@@ -167,7 +167,7 @@ public:
     static s32 cloth_counter;
 
 private:
-    u8 padding_0xFC[0xC];
+    GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
@@ -187,7 +187,7 @@ public:
     static s32 cloth_counter;
 
 private:
-    u8 padding_0xFC[0xC];
+    GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
