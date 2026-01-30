@@ -902,7 +902,7 @@ int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr);
     if (pCloth) {
         // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
         bool succeeded;
@@ -1041,7 +1041,7 @@ int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr);
     if (pCloth) {
         // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
         bool succeeded;
