@@ -623,7 +623,8 @@ void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
 
 /* 80065268-800652A8       .text TexObjLoad__14dClothVobj03_cFv */
 void dClothVobj03_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 }
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
@@ -755,7 +756,8 @@ void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
 
 /* 8006580C-8006584C       .text TexObjLoad__14dClothVobj04_cFv */
 void dClothVobj04_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 }
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
@@ -865,7 +867,8 @@ void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
 
 /* 80065DAC-80065DEC       .text TexObjLoad__14dClothVobj05_cFv */
 void dClothVobj05_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 }
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
@@ -980,7 +983,8 @@ void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
 
 /* 80066368-800663A8       .text TexObjLoad__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::TexObjLoad() {
-    /* Nonmatching */
+    GXLoadTlut(&mTlutObj, 0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
 }
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */
