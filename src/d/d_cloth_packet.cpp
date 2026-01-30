@@ -658,7 +658,50 @@ void dClothVobj04_c::init() {
 
 /* 800655CC-80065700       .text cloth_move__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_move() {
-    /* Nonmatching */
+    if (field_0x108) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
+    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+
+    if (field_0x109 != 0) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0;
+        mSpring = 0.4;
+        mGravity = -1.5;
+        mDrag = 0.7;
+        mFlyFlex = 0.75;
+        mHoistFlex = 0.6;
+        mWaveSpeed = 0;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    } else {
+        mSpring = 0.4;
+        mGravity = -1.5;
+        mDrag = 0.7;
+        mFlyFlex = 0.75;
+        mHoistFlex = 0.6;
+        mWaveSpeed = 0x400;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    }
+
+    mWindSpeed = windSpeed;
+    mWindSpeedWave = windSpeedWave;
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 80065700-8006580C       .text TexObjInit__14dClothVobj04_cFP7ResTIMG */
@@ -703,7 +746,50 @@ void dClothVobj05_c::init() {
 
 /* 80065B70-80065CA0       .text cloth_move__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_move() {
-    /* Nonmatching */
+    if (field_0x108) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
+    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+
+    if (field_0x109 != 0) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0;
+        mSpring = 0.45;
+        mGravity = -1.0;
+        mDrag = 0.7;
+        mFlyFlex = 0.95;
+        mHoistFlex = 0.95;
+        mWaveSpeed = 0;
+        field_0xF2 = 0;
+        mRipple = 0;
+        mRotateY = 0;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    } else {
+        mSpring = 0.45;
+        mGravity = -1.0;
+        mDrag = 0.65;
+        mFlyFlex = 0.9;
+        mHoistFlex = 0.95;
+        mWaveSpeed = 0x200;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    }
+
+    mWindSpeed = windSpeed;
+    mWindSpeedWave = windSpeedWave;
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 80065CA0-80065DAC       .text TexObjInit__14dClothVobj05_cFP7ResTIMG */
@@ -753,7 +839,50 @@ void dClothVobj07_0_c::init() {
 
 /* 80066128-8006625C       .text cloth_move__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_move() {
-    /* Nonmatching */
+    if (field_0x108) {
+        if (cloth_counter == (s32)g_Counter.mTimer) {
+            cloth_copy();
+            return;
+        }
+        cloth_counter = g_Counter.mTimer;
+        top_pointer = this;
+    }
+
+    f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
+    f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
+
+    if (field_0x109 != 0) {
+        windSpeed *= 0.05f;
+        windSpeedWave = 0.0;
+        mSpring = 0.35;
+        mGravity = -1.0;
+        mDrag = 0.7;
+        mFlyFlex = 1.1;
+        mHoistFlex = 1.1;
+        mWaveSpeed = 0;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    } else {
+        mSpring = 0.4;
+        mGravity = -0.5;
+        mDrag = 0.7;
+        mFlyFlex = 1.1;
+        mHoistFlex = 1.1;
+        mWaveSpeed = 0x100;
+        field_0xF2 = 0;
+        mRipple = 900;
+        mRotateY = -800;
+        mWindSpeed = 7.0;
+        mWindSpeedWave = 6.0;
+    }
+
+    mWindSpeed = windSpeed;
+    mWindSpeedWave = windSpeedWave;
+
+    dCloth_packet_c::cloth_move();
 }
 
 /* 8006625C-80066368       .text TexObjInit__16dClothVobj07_0_cFP7ResTIMG */
