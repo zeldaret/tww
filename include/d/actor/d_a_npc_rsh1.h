@@ -57,7 +57,7 @@ public:
     void lookBack();
     bool pathGet();
     int getAimShopPosIdx();
-    bool shopPosMove();
+    BOOL shopPosMove();
     BOOL pathMove(int*);
     bool wait01();
     bool talk01();
@@ -149,43 +149,5 @@ public:
     /* 0x963 */ u8 field_0x963;
     /* 0x964 */ u8 field_0x964[0x968 - 0x964];
 };  // Size: 0x968
-
-class daNpc_Rsh1_HIO_c : public JORReflexible {
-public:
-    daNpc_Rsh1_HIO_c();
-    virtual ~daNpc_Rsh1_HIO_c();
-
-public:
-    /* 0x04 */ s8 field_0x04;
-    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
-    /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ dNpc_HIO_c field_0x0C;
-    /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ f32 field_0x38;
-    /* 0x3C */ f32 field_0x3C;
-    /* 0x40 */ f32 field_0x40;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
-    /* 0x4C */ f32 field_0x4C;
-    /* 0x50 */ f32 field_0x50;
-    /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 field_0x58;
-    /* 0x5C */ s8 field_0x5C;
-    /* 0x5D */ s8 field_0x5D;
-    /* 0x5E */ s8 field_0x5E;
-    /* 0x5F */ s8 field_0x5F;
-    /* 0x60 */ s8 field_0x60;
-    /* 0x61 */ s8 field_0x61;
-    /* 0x62 */ s8 field_0x62;
-    /* 0x63 */ s8 field_0x63;
-    /* 0x64 */ s8 field_0x64;
-    /* 0x65 */ s8 field_0x65;
-    /* 0x66 */ s8 field_0x66;
-    /* 0x67 */ s8 field_0x67;
-    /* 0x68 */ s8 field_0x68;
-    /* 0x69 */ s8 field_0x69;
-    /* 0x6A */ s8 field_0x6A;
-    /* 0x6B */ s8 field_0x6B;
-};  // Size: 0x6C
 
 #endif /* D_A_NPC_RSH1_H */
