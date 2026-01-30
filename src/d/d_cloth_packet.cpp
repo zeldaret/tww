@@ -761,8 +761,30 @@ void dClothVobj04_c::TexObjLoad() {
 }
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
+    dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    if (pCloth) {
+        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
+        bool succeeded;
+        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
+            pCloth->mpSpeedArr)
+        {
+            succeeded = true;
+        } else {
+            succeeded = false;
+        }
+        if (!succeeded) {
+            return NULL;
+        }
+    }
+
+    if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 80065998-80065A5C       .text cloth_copy__14dClothVobj05_cFv */
@@ -872,13 +894,36 @@ void dClothVobj05_c::TexObjLoad() {
 }
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
-void dClothVobj05_VtxFactorCB(dCloth_packet_c*, int, int) {
+int dClothVobj05_VtxFactorCB(dCloth_packet_c*, int, int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
+    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    if (pCloth) {
+        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
+        bool succeeded;
+        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
+            pCloth->mpSpeedArr)
+        {
+            succeeded = true;
+        } else {
+            succeeded = false;
+        }
+        if (!succeeded) {
+            return NULL;
+        }
+    }
+
+    if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+    }
+
+    return pCloth;
 }
 
 /* 80065F50-80066014       .text cloth_copy__16dClothVobj07_0_cFv */
@@ -988,11 +1033,35 @@ void dClothVobj07_0_c::TexObjLoad() {
 }
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */
-void dClothVobj07_0_VtxFactorCB(dCloth_packet_c*, int, int) {
+int dClothVobj07_0_VtxFactorCB(dCloth_packet_c*, int, int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
-dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**) {
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
+    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    if (pCloth) {
+        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
+        bool succeeded;
+        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
+            pCloth->mpSpeedArr)
+        {
+            succeeded = true;
+        } else {
+            succeeded = false;
+        }
+        if (!succeeded) {
+            return NULL;
+        }
+    }
+
+    if (pCloth && i_flagimage) {
+        pCloth->TexObjInit(i_flagimage);
+        pCloth->init();
+        pCloth->setFactorCheckCB(&dClothVobj07_0_VtxFactorCB);
+    }
+
+    return pCloth;
 }

@@ -131,7 +131,7 @@ private:
     u8 field_0x108;
     u8 field_0x109;
 };
-dClothVobj03_c* dClothVobj03_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj04_c : public dCloth_packet_c {
     virtual void init();
@@ -143,15 +143,27 @@ class dClothVobj04_c : public dCloth_packet_c {
     void cloth_copy();
 
 public:
+    dClothVobj04_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+        if (posArr) {
+            field_0x108 = 1;
+        } else {
+            field_0x108 = 0;
+        }
+    };
+
+public:
     static dClothVobj04_c* top_pointer;
     static s32 cloth_counter;
+
+    friend dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
-dClothVobj04_c* dClothVobj04_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj05_c : public dCloth_packet_c {
     virtual void init();
@@ -163,15 +175,27 @@ class dClothVobj05_c : public dCloth_packet_c {
     void cloth_copy();
 
 public:
+    dClothVobj05_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+        if (posArr) {
+            field_0x108 = 1;
+        } else {
+            field_0x108 = 0;
+        }
+    };
+
+public:
     static dClothVobj05_c* top_pointer;
     static s32 cloth_counter;
+
+    friend dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
-dClothVobj05_c* dClothVobj05_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj07_0_c : public dCloth_packet_c {
     virtual void init();
@@ -183,14 +207,26 @@ class dClothVobj07_0_c : public dCloth_packet_c {
     void cloth_copy();
 
 public:
+    dClothVobj07_0_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+        if (posArr) {
+            field_0x108 = 1;
+        } else {
+            field_0x108 = 0;
+        }
+    };
+
+public:
     static dClothVobj07_0_c* top_pointer;
     static s32 cloth_counter;
+
+    friend dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
     u8 field_0x109;
 };
-dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
+dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 #endif /* D_A_CLOTH_PACKET_H */
