@@ -894,7 +894,7 @@ void dClothVobj05_c::TexObjLoad() {
 }
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
-int dClothVobj05_VtxFactorCB(dCloth_packet_c*, int, int) {
+int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
     /* Nonmatching */
     return 0;
 }
@@ -1033,7 +1033,7 @@ void dClothVobj07_0_c::TexObjLoad() {
 }
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */
-int dClothVobj07_0_VtxFactorCB(dCloth_packet_c*, int, int) {
+int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
     /* Nonmatching */
     return 0;
 }
