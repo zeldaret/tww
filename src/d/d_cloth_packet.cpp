@@ -696,11 +696,11 @@ void dClothVobj04_c::cloth_move() {
     if (field_0x109 != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
-        mSpring = 0.4;
+        mSpring = 0.45;
         mGravity = -1.5;
-        mDrag = 0.7;
-        mFlyFlex = 0.75;
-        mHoistFlex = 0.6;
+        mDrag = 0.6;
+        mFlyFlex = 0.8;
+        mHoistFlex = 0.8;
         mWaveSpeed = 0;
         field_0xF2 = 0;
         mRipple = 900;
@@ -708,11 +708,11 @@ void dClothVobj04_c::cloth_move() {
         mWindSpeed = 7.0;
         mWindSpeedWave = 6.0;
     } else {
-        mSpring = 0.4;
+        mSpring = 0.45;
         mGravity = -1.5;
-        mDrag = 0.7;
-        mFlyFlex = 0.75;
-        mHoistFlex = 0.6;
+        mDrag = 0.6;
+        mFlyFlex = 0.8;
+        mHoistFlex = 0.8;
         mWaveSpeed = 0x400;
         field_0xF2 = 0;
         mRipple = 900;
