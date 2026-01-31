@@ -27,7 +27,7 @@ public:
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ u8 field_0x05[0x08 - 0x05];
     /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ dNpc_HIO_c field_0x0C;
+    /* 0x0C */ dNpc_HIO_c mNpcHIO;
     /* 0x34 */ f32 field_0x34;
     /* 0x38 */ f32 field_0x38;
     /* 0x3C */ f32 field_0x3C;
@@ -97,21 +97,21 @@ static cXyz l_in_chk_pos2_tbl[4] = {
 
 /* 000000EC-0000021C       .text __ct__16daNpc_Rsh1_HIO_cFv */
 daNpc_Rsh1_HIO_c::daNpc_Rsh1_HIO_c() {
-    field_0x0C.m04 = -20.0f;
-    field_0x0C.mMaxHeadX = 0x200;
-    field_0x0C.mMaxHeadY = 0x200;
-    field_0x0C.mMaxBackboneX = 0x1388;
-    field_0x0C.mMaxBackboneY = 0x1770;
-    field_0x0C.mMinHeadX = -0x200;
-    field_0x0C.mMinHeadY = -0x200;
-    field_0x0C.mMinBackboneX = -5000;
-    field_0x0C.mMinBackboneY = -6000;
-    field_0x0C.mMaxTurnStep = 0x1000;
-    field_0x0C.mMaxHeadTurnVel = 0x800;
-    field_0x0C.mAttnYOffset = 80.0f;
-    field_0x0C.mMaxAttnAngleY = 0x4000;
-    field_0x0C.m22 = 0;
-    field_0x0C.mMaxAttnDistXZ = 400.0f;
+    mNpcHIO.m04 = -20.0f;
+    mNpcHIO.mMaxHeadX = 0x200;
+    mNpcHIO.mMaxHeadY = 0x200;
+    mNpcHIO.mMaxBackboneX = 0x1388;
+    mNpcHIO.mMaxBackboneY = 0x1770;
+    mNpcHIO.mMinHeadX = -0x200;
+    mNpcHIO.mMinHeadY = -0x200;
+    mNpcHIO.mMinBackboneX = -5000;
+    mNpcHIO.mMinBackboneY = -6000;
+    mNpcHIO.mMaxTurnStep = 0x1000;
+    mNpcHIO.mMaxHeadTurnVel = 0x800;
+    mNpcHIO.mAttnYOffset = 80.0f;
+    mNpcHIO.mMaxAttnAngleY = 0x4000;
+    mNpcHIO.m22 = 0;
+    mNpcHIO.mMaxAttnDistXZ = 400.0f;
     field_0x34 = 1.0f;
     field_0x38 = 0.9f;
     field_0x3C = 0.5f;
@@ -331,7 +331,7 @@ static BOOL nodeCallBack_Rsh(J3DNode* i_node, int i_calcTiming) {
 /* 00000A44-00000B50       .text initTexPatternAnm__12daNpc_Rsh1_cFb */
 BOOL daNpc_Rsh1_c::initTexPatternAnm(bool i_modify) {
     J3DModelData* morf_model_data_p = mpMorf->getModel()->getModelData();
-    m_head_tex_pattern = (J3DAnmTexPattern *) dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[field_0x958]);
+    m_head_tex_pattern = (J3DAnmTexPattern *) dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[m958]);
     JUT_ASSERT(580, m_head_tex_pattern != NULL);
 
 
@@ -396,8 +396,8 @@ void daNpc_Rsh1_c::setAnm(s8 i_index) {
 
 /* 00000C64-00000CA8       .text setTexAnm__12daNpc_Rsh1_cFSc */
 void daNpc_Rsh1_c::setTexAnm(s8 param_1) {
-    if (field_0x958 != param_1 || field_0x958 == -1) {
-        field_0x958 = param_1;
+    if (m958 != param_1 || m958 == -1) {
+        m958 = param_1;
         initTexPatternAnm(true);
     }
 }
@@ -445,8 +445,8 @@ void daNpc_Rsh1_c::setAnmFromMsgTag() {
 bool daNpc_Rsh1_c::chkAttention(cXyz i_pos, s16 i_angleAdjustment) {
     daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
     
-    f32 max_attn_dist_xz = l_HIO.field_0x0C.mMaxAttnDistXZ;
-    int max_attn_angle_y = l_HIO.field_0x0C.mMaxAttnAngleY;
+    f32 max_attn_dist_xz = l_HIO.mNpcHIO.mMaxAttnDistXZ;
+    int max_attn_angle_y = l_HIO.mNpcHIO.mMaxAttnAngleY;
     cXyz pos_diff = link_p->current.pos - i_pos;
 
     f32 temp_abs_xz = pos_diff.absXZ();
@@ -464,7 +464,7 @@ bool daNpc_Rsh1_c::chkAttention(cXyz i_pos, s16 i_angleAdjustment) {
 /* 00000F50-00001038       .text eventOrder__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::eventOrder() {
     if (field_0x95B == 5) {
-        fopAcM_orderOtherEventId(this, field_0x790);
+        fopAcM_orderOtherEventId(this, mShopOutEventIdx);
     } else if (field_0x95B == 4) {
         fopAcM_orderOtherEvent2(this, "RSH_GET_DEMO", dEvtFlag_NOPARTNER_e);
     } else if (field_0x95B == 1 || field_0x95B == 2 || field_0x95B == 3) {
@@ -945,7 +945,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     attention_info.distances[8] = 173; // Bug?
     gravity = -30.0f;
     
-    switch (field_0x95E) {
+    switch (m95E) {
         case 0:
             setAction(&daNpc_Rsh1_c::wait_action, NULL);
             break;
@@ -953,7 +953,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
             break;
     }
 
-    field_0x758 = current.pos;
+    mAttnBasePos = current.pos;
     
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(l_cyl_src);
@@ -973,8 +973,8 @@ BOOL daNpc_Rsh1_c::CreateInit() {
         mShopItemsArr[field_0x788].init();
     }
 
+    // setShopIdx(int)?
     field_0x788 = -1;
-
     if (field_0x788 != -1) {
         mpShopItems = &mShopItemsArr[field_0x788];
         mShopCamAct.setCamDataIdx(field_0x788 + 8);
@@ -987,7 +987,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     set_mtx();
     mpMorf->setMorf(0.0f);
     field_0x794 = cXyz::Zero;
-    field_0x7A0 = field_0x794;
+    m7A0 = field_0x794;
     field_0x793 = 0;
     mEventCut.setActorInfo("Rsh1", this);
     mEventCut.setJntCtrlPtr(&mJntCtrl);
@@ -995,7 +995,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     if (checkCreateInShopPlayer()) {
         field_0x95B = 5;
         cLib_onBit<u32>(actor_status, fopAcStts_UNK4000_e);
-        field_0x790 = dComIfGp_evmng_getEventIdx("RSH_SHOP_OUT");
+        mShopOutEventIdx = dComIfGp_evmng_getEventIdx("RSH_SHOP_OUT");
         setAction(&daNpc_Rsh1_c::dummy_action, NULL);
     } else {
         field_0x95B = 0;
@@ -1071,9 +1071,9 @@ void daNpc_Rsh1_c::createShopList() {
 /* 00002568-000025C0       .text setAttention__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::setAttention() {
     attention_info.position.set(
-        field_0x758.x,
-        field_0x758.y + l_HIO.field_0x0C.mAttnYOffset,
-        field_0x758.z
+        mAttnBasePos.x,
+        mAttnBasePos.y + l_HIO.mNpcHIO.mAttnYOffset,
+        mAttnBasePos.z
     );
 
     eyePos = current.pos;
@@ -1089,7 +1089,7 @@ void daNpc_Rsh1_c::lookBack() {
     switch (field_0x95C) {
     case 1:
         if (field_0x770 != 0) {
-            player_eye_pos = dNpc_playerEyePos(l_HIO.field_0x0C.m04);
+            player_eye_pos = dNpc_playerEyePos(l_HIO.mNpcHIO.m04);
             vec_p = &player_eye_pos;
             setTexAnm(0);
         } else {
@@ -1100,7 +1100,7 @@ void daNpc_Rsh1_c::lookBack() {
     case 2:
         if (mpShopItems) {
             if (mShopCamAct.checkCamAction(NULL) || mShopCamAct.checkCamAction(&ShopCam_action_c::rsh_talk_cam_action)) {
-                player_eye_pos = dNpc_playerEyePos(l_HIO.field_0x0C.m04);
+                player_eye_pos = dNpc_playerEyePos(l_HIO.mNpcHIO.m04);
                 temp = false;
             } else if (mpShopItems->mSelectedItemIdx == -1) {
                 player_eye_pos = mShopCamAct.getItemZoomPos(125.0f);
@@ -1128,7 +1128,7 @@ void daNpc_Rsh1_c::lookBack() {
     }
 
     if (mJntCtrl.trnChk()) {
-        cLib_addCalcAngleS2(&field_0x764, l_HIO.field_0x0C.mMaxHeadTurnVel, 4, 0x800);
+        cLib_addCalcAngleS2(&field_0x764, l_HIO.mNpcHIO.mMaxHeadTurnVel, 4, 0x800);
     } else {
         field_0x764 = 0;
     }
@@ -1317,7 +1317,7 @@ bool daNpc_Rsh1_c::wait01() {
 /* 00002F5C-00003154       .text talk01__12daNpc_Rsh1_cFv */
 bool daNpc_Rsh1_c::talk01() {
     u16 result = talk();
-    if (result == 0x12) {
+    if (result == fopMsgStts_BOX_CLOSED_e) {
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         field_0x95C = field_0x95D;
         dComIfGp_event_onEventFlag(8);
@@ -1351,7 +1351,7 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
     UNUSED(i_unusedP);
     int staff_idx = dComIfGp_evmng_getMyStaffId("Rsh1");
 
-    if (field_0x960 == 0) {
+    if (mActionStatus == 0) {
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         link_p->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
         field_0x95C = field_0x95D;
@@ -1367,8 +1367,8 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
         }
 
         dComIfGp_evmng_cutEnd(staff_idx);
-        field_0x960++;
-    } else if (field_0x960 != -1) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
         dComIfGp_evmng_cutEnd(staff_idx);
         if (dComIfGp_evmng_endCheck("RSH_GET_DEMO")) {
             field_0x95B = 1;
@@ -1395,10 +1395,10 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
 BOOL daNpc_Rsh1_c::wait_action(void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (field_0x960 == 0) {
+    if (mActionStatus == 0) {
         field_0x95C = 1;
-        field_0x960++;
-    } else if (field_0x960 != -1) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
         s16 sum = current.angle.y + getHead_y() + getBackbone_y();
         field_0x770 = chkAttention(current.pos, sum);
         switch (field_0x95C) {
@@ -1419,14 +1419,14 @@ BOOL daNpc_Rsh1_c::pl_shop_out_action(void* i_unusedP) {
     UNUSED(i_unusedP);
 
     f32 trig_amplitude_1 = 140.0f;
-    if (field_0x960 == 0) {
+    if (mActionStatus == 0) {
         setAnm(6);
         field_0x794 = current.pos;
         field_0x794.x -= cM_ssin(current.angle.y) * trig_amplitude_1;
         field_0x794.z -= cM_scos(current.angle.y) * trig_amplitude_1;
         field_0x793 = 0;
-        field_0x960++;
-    } else if (field_0x960 != -1) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
         int temp_78C = field_0x78C;
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         cXyz link_pos = link_p->current.pos;
@@ -1436,8 +1436,8 @@ BOOL daNpc_Rsh1_c::pl_shop_out_action(void* i_unusedP) {
             f32 calc_pos = cLib_addCalcPos(&field_0x794, current.pos, 0.25f, REG10_F(1) + 5.0f, 1.0f);
             cLib_addCalcAngleS2(&current.angle.y, target, 4, 0x1000);
             if (calc_pos < 1.0f) {
-                cLib_addCalcPos(&field_0x7A0, temp, 0.25f, REG10_F(1) + 5.0f, 1.0f);
-                f32 mag = field_0x7A0.abs();
+                cLib_addCalcPos(&m7A0, temp, 0.25f, REG10_F(1) + 5.0f, 1.0f);
+                f32 mag = m7A0.abs();
                 if (mag > 1.0f) {
                     setAnm(5);
                 } else {
@@ -1448,7 +1448,7 @@ BOOL daNpc_Rsh1_c::pl_shop_out_action(void* i_unusedP) {
                 f32 trig_amplitude_2 = REG10_F(2) + 100.0f;
                 temp.x += trig_amplitude_2 * cM_ssin(current.angle.y);
                 temp.z += trig_amplitude_2 * cM_scos(current.angle.y);
-                cLib_addCalcPos(&field_0x7A0, temp, 0.25f, REG10_F(1) + 5.0f, 1.0f);
+                cLib_addCalcPos(&m7A0, temp, 0.25f, REG10_F(1) + 5.0f, 1.0f);
             }
         } else {
             field_0x794 = current.pos;
@@ -1626,14 +1626,14 @@ bool daNpc_Rsh1_c::privateCut() {
 
 BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
     UNUSED(i_unusedP);
-    if (field_0x960 == 0) {
+    if (mActionStatus == 0) {
         dComIfGp_evmng_getMyStaffId("Rsh1");
         field_0x95C = field_0x95D;
         field_0x95B = 0;
-        field_0x960++;
-    } else if (field_0x960 != -1) {
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
         privateCut();
-        if (dComIfGp_evmng_endCheck(field_0x790)) {
+        if (dComIfGp_evmng_endCheck(mShopOutEventIdx)) {
             if (cLib_checkBit<u32>(actor_status, 0x4000)) {
                 cLib_offBit<u32>(actor_status, 0x4000);
             }
@@ -1649,8 +1649,8 @@ BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
 /* 00003EEC-00003F08       .text dummy_action__12daNpc_Rsh1_cFPv */
 BOOL daNpc_Rsh1_c::dummy_action(void* i_unusedP) {
     UNUSED(i_unusedP);
-    if (field_0x960 == 0) {
-        field_0x960++;
+    if (mActionStatus == 0) {
+        mActionStatus++;
     }
     return TRUE;
 }
@@ -1665,17 +1665,17 @@ BOOL daNpc_Rsh1_c::_draw() {
     mpMorf->updateDL();
     mBtpAnm.remove(morf_model_data_p);
 
-    cXyz temp(
+    cXyz shadow_pos(
         current.pos.x,
         current.pos.y + 120.0f,
         current.pos.z
     );
 
     f32 ground_y = mAcch.m_ground_h;
-    field_0x29C = dComIfGd_setShadow(
-        field_0x29C, 
+    mShadowID = dComIfGd_setShadow(
+        mShadowID, 
         1, mpMorf->getModel(), 
-        &temp, 800.0f, 20.0f, 
+        &shadow_pos, 800.0f, 20.0f, 
         current.pos.y, ground_y, 
         mAcch.m_gnd, &tevStr
     );  
@@ -1722,31 +1722,31 @@ BOOL daNpc_Rsh1_c::_execute() {
 #endif
 
     cXyz center = dComIfGp_getCamera(0)->mLookat.mCenter;
-    cXyz diff = center - current.pos;
-    f32 dist = diff.abs();
+    cXyz lookat_diff = center - current.pos;
+    f32 lookat_dist = lookat_diff.abs();
 
-    if (dist > REG10_F(10) + 5000.0f) {
+    if (lookat_dist > REG10_F(10) + 5000.0f) {
         return TRUE;
     } else {
         mJntCtrl.setParam(
-            l_HIO.field_0x0C.mMaxBackboneX,
-            l_HIO.field_0x0C.mMaxBackboneY,
-            l_HIO.field_0x0C.mMinBackboneX,
-            l_HIO.field_0x0C.mMinBackboneY,
-            l_HIO.field_0x0C.mMaxHeadX,
-            l_HIO.field_0x0C.mMaxHeadY,
-            l_HIO.field_0x0C.mMinHeadX,
-            l_HIO.field_0x0C.mMinHeadY,
-            l_HIO.field_0x0C.mMaxTurnStep
+            l_HIO.mNpcHIO.mMaxBackboneX,
+            l_HIO.mNpcHIO.mMaxBackboneY,
+            l_HIO.mNpcHIO.mMinBackboneX,
+            l_HIO.mNpcHIO.mMinBackboneY,
+            l_HIO.mNpcHIO.mMaxHeadX,
+            l_HIO.mNpcHIO.mMaxHeadY,
+            l_HIO.mNpcHIO.mMinHeadX,
+            l_HIO.mNpcHIO.mMinHeadY,
+            l_HIO.mNpcHIO.mMaxTurnStep
         );
 
         playTexPatternAnm();
         
-        field_0x76E = mpMorf->play(&eyePos, 0, 0);
-        if (mpMorf->getFrame() < field_0x774) {
-            field_0x76E = 1;
+        mMorfIsStop = mpMorf->play(&eyePos, 0, 0);
+        if (mpMorf->getFrame() < mMorfPrevFrame) {
+            mMorfIsStop = true;
         }
-        field_0x774 = mpMorf->getFrame();
+        mMorfPrevFrame = mpMorf->getFrame();
         
         checkOrder();
 
@@ -1808,14 +1808,14 @@ cPhs_State daNpc_Rsh1_c::_create() {
 #if VERSION == VERSION_DEMO
         fopAcM_SetupActor(this, daNpc_Rsh1_c);
 #endif
-        field_0x95E = (fopAcM_GetParam(this) >> 0x14) & 0xF;
+        m95E = (fopAcM_GetParam(this) >> 0x14) & 0xF;
 
-        switch (field_0x95E) {
+        switch (m95E) {
             case 0:
-                field_0x95E = 0;
+                m95E = 0;
                 break;
             default:
-                field_0x95E = 0;
+                m95E = 0;
                 break;
         }
         
@@ -1863,9 +1863,9 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
     m_backbone_jnt_num = model_p->getJointName()->getIndex("backbone");
     JUT_ASSERT(DEMO_SELECT(2389, 2390), m_backbone_jnt_num >= 0);
 
-    switch (field_0x95E) {
+    switch (m95E) {
         case 0:
-            field_0x958 = 0;
+            m958 = 0;
             break;
     }
 
@@ -1903,9 +1903,9 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
 void daNpc_Rsh1_c::set_mtx() {
     J3DModel* morf_model_p = mpMorf->getModel();
     mDoMtx_stack_c::transS(
-        current.pos.x + field_0x7A0.x,
-        current.pos.y + field_0x7A0.y,
-        current.pos.z + field_0x7A0.z
+        current.pos.x + m7A0.x,
+        current.pos.y + m7A0.y,
+        current.pos.z + m7A0.z
     );
     mDoMtx_stack_c::YrotM(current.angle.y);
     morf_model_p->setBaseTRMtx(mDoMtx_stack_c::get());
