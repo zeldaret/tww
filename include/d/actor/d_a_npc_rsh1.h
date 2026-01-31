@@ -11,23 +11,23 @@ public:
     typedef BOOL (daNpc_Rsh1_c::*ProcFunc)(void*);
     static char m_arcname[];
 public:
-    bool chkAction(ProcFunc i_funcP) { return field_0x7AC == i_funcP; }
+    bool chkAction(ProcFunc i_funcP) { return mCurrProc == i_funcP; }
     s8 getBackboneJntNum() { return m_backbone_jnt_num; }
-    s16 getBackbone_x() { return field_0x638.getBackbone_x(); }
-    s16 getBackbone_y() { return field_0x638.getBackbone_y(); }
+    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
+    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
     s8 getHeadJntNum() { return m_head_jnt_num; }
-    s16 getHead_x() { return field_0x638.getHead_x(); }
-    s16 getHead_y() { return field_0x638.getHead_y(); }
+    s16 getHead_x() { return mJntCtrl.getHead_x(); }
+    s16 getHead_y() { return mJntCtrl.getHead_y(); }
     void incAttnSetCount() {}
     void setAction(ProcFunc i_funcP, void* i_actParam) {
-        if (field_0x7AC != i_funcP) {
-            if (field_0x7AC) {
+        if (mCurrProc != i_funcP) {
+            if (mCurrProc) {
                 field_0x960 = -1;
-                (this->*field_0x7AC)(NULL);
+                (this->*mCurrProc)(NULL);
             }
-            field_0x7AC = i_funcP;
+            mCurrProc = i_funcP;
             field_0x960 = 0;
-            (this->*field_0x7AC)(i_actParam);
+            (this->*mCurrProc)(i_actParam);
         }
     }
     void setAttentionBasePos(cXyz i_attBasePos) { field_0x758 = i_attBasePos; }
@@ -80,27 +80,27 @@ public:
     void set_mtx();
 
 public:
-    /* 0x290 */ request_of_phase_process_class field_0x290;
-    /* 0x298 */ mDoExt_McaMorf* field_0x298;
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ mDoExt_McaMorf* mpMorf;
     /* 0x29C */ u32 field_0x29C;
     /* 0x2A0 */ u8 field_0x2A0[0x2A4 - 0x2A0];
     /* 0x2A4 */ J3DAnmTexPattern* m_head_tex_pattern;
-    /* 0x2A8 */ mDoExt_btpAnm field_0x2A8;
+    /* 0x2A8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x2BC */ u8 field_0x2BC;
     /* 0x2BD */ u8 field_0x2BD[0x2BE - 0x2BD];
     /* 0x2BE */ s16 field_0x2BE;
     /* 0x2C0 */ u8 field_0x2C0[0x2C4 - 0x2C0];
-    /* 0x2C4 */ dBgS_ObjAcch field_0x2C4;
-    /* 0x488 */ dBgS_AcchCir field_0x488;
-    /* 0x4C8 */ dCcD_Stts field_0x4C8;
-    /* 0x504 */ dCcD_Cyl field_0x504;
+    /* 0x2C4 */ dBgS_ObjAcch mAcch;
+    /* 0x488 */ dBgS_AcchCir mAcchCir;
+    /* 0x4C8 */ dCcD_Stts mStts;
+    /* 0x504 */ dCcD_Cyl mCyl;
     /* 0x634 */ s8 m_head_jnt_num;
     /* 0x635 */ s8 m_backbone_jnt_num;
     /* 0x636 */ u8 field_0x636[0x638 - 0x636];
-    /* 0x638 */ dNpc_JntCtrl_c field_0x638;
-    /* 0x66C */ dNpc_EventCut_c field_0x66C;
-    /* 0x6D8 */ STControl field_0x6D8;
-    /* 0x700 */ dPath* field_0x700;
+    /* 0x638 */ dNpc_JntCtrl_c mJntCtrl;
+    /* 0x66C */ dNpc_EventCut_c mEventCut;
+    /* 0x6D8 */ STControl mSTControl;
+    /* 0x700 */ dPath* mpPath;
     /* 0x704 */ s8 field_0x704;
     /* 0x705 */ u8 field_0x705[0x708 - 0x705];
     /* 0x708 */ cXyz field_0x708[5];
@@ -128,12 +128,12 @@ public:
     /* 0x793 */ u8 field_0x793;
     /* 0x794 */ cXyz field_0x794;
     /* 0x7A0 */ cXyz field_0x7A0;
-    /* 0x7AC */ ProcFunc field_0x7AC;
-    /* 0x7B8 */ ShopCam_action_c field_0x7B8;
+    /* 0x7AC */ ProcFunc mCurrProc;
+    /* 0x7B8 */ ShopCam_action_c mShopCamAct;
     /* 0x810 */ ShopItems_c* mpShopItems;
-    /* 0x814 */ ShopItems_c field_0x814[4];
-    /* 0x924 */ __shop_items_set_data* field_0x924[12];
-    /* 0x954 */ ShopCursor_c* field_0x954;
+    /* 0x814 */ ShopItems_c mShopItemsArr[4];
+    /* 0x924 */ __shop_items_set_data* mShopItemDataPtrs[12];
+    /* 0x954 */ ShopCursor_c* mpShopCursor;
     /* 0x958 */ s8 field_0x958;
     /* 0x959 */ s8 field_0x959;
     /* 0x95A */ s8 field_0x95A;

@@ -302,14 +302,16 @@ static BOOL nodeCallBack_Rsh(J3DNode* i_node, int i_calcTiming) {
             MtxP anm_mtx = j3dSys.getModel()->getAnmMtx(jnt_no);
             mDoMtx_copy(anm_mtx, *calc_mtx);
             if (jnt_no == actor_p->getHeadJntNum()) {
-                cXyz temp1(0.0f, 0.0f, 0.0f);
+                cXyz temp1(0.0f, 0.0f, 0.0f);                
+                cXyz temp2;
                 cMtx_YrotM(*calc_mtx, -actor_p->getHead_y());
                 cMtx_ZrotM(*calc_mtx, -actor_p->getHead_x());
-                cXyz temp2;
                 MtxPosition(&temp1, &temp2);
+
                 actor_p->setAttentionBasePos(temp2);
                 temp1.set(28.0f, 20.0f, 0.0f);
                 MtxPosition(&temp1, &temp2);
+
                 actor_p->setEyePos(temp2);
                 if (actor_p->field_0x76F != 0xFF) {
                     actor_p->field_0x76F++;
@@ -327,18 +329,18 @@ static BOOL nodeCallBack_Rsh(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 00000A44-00000B50       .text initTexPatternAnm__12daNpc_Rsh1_cFb */
-BOOL daNpc_Rsh1_c::initTexPatternAnm(bool param_1) {
-    J3DModelData* morf_model_data_p = field_0x298->getModel()->getModelData();
+BOOL daNpc_Rsh1_c::initTexPatternAnm(bool i_modify) {
+    J3DModelData* morf_model_data_p = mpMorf->getModel()->getModelData();
     m_head_tex_pattern = (J3DAnmTexPattern *) dComIfG_getObjectRes(m_arcname, l_btp_ix_tbl[field_0x958]);
-    JUT_ASSERT(0x244, m_head_tex_pattern != NULL);
+    JUT_ASSERT(580, m_head_tex_pattern != NULL);
 
 
-    if (field_0x2A8.init(
+    if (mBtpAnm.init(
         morf_model_data_p, 
         m_head_tex_pattern, TRUE, 
         J3DFrameCtrl::EMode_LOOP, 
         1.0f, 0, -1, 
-        param_1, FALSE
+        i_modify, FALSE
     ) == 0) {
         return FALSE;
     }
@@ -361,7 +363,7 @@ void daNpc_Rsh1_c::playTexPatternAnm() {
 }
 
 /* 00000BDC-00000C64       .text setAnm__12daNpc_Rsh1_cFSc */
-void daNpc_Rsh1_c::setAnm(s8 param_1) {
+void daNpc_Rsh1_c::setAnm(s8 i_index) {
     static int play_mode_tbl[7] = {
         2, 2, 2, 2,
         2, 2, 2
@@ -378,15 +380,15 @@ void daNpc_Rsh1_c::setAnm(s8 param_1) {
     };
 
 
-    if (param_1 != field_0x959 || field_0x959 == -1) {
-        field_0x959 = param_1;
+    if (i_index != field_0x959 || field_0x959 == -1) {
+        field_0x959 = i_index;
         dNpc_setAnm_2(
-            field_0x298, 
-            play_mode_tbl[param_1],
-            morf_frame_tbl[param_1], 
-            play_speed_tbl[param_1],
-            l_bck_ix_tbl[param_1],
-            l_bas_ix_tbl[param_1],
+            mpMorf, 
+            play_mode_tbl[i_index],
+            morf_frame_tbl[i_index], 
+            play_speed_tbl[i_index],
+            l_bck_ix_tbl[i_index],
+            l_bas_ix_tbl[i_index],
             m_arcname
         );
     }
@@ -428,7 +430,7 @@ void daNpc_Rsh1_c::setAnmFromMsgTag() {
     }
 
     if (field_0x959 == 4) {
-        if (field_0x298->checkFrame(field_0x298->getEndFrame() - 1.0f)) {
+        if (mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
             if (--field_0x95A <= 0) {
                 setAnm(0);
                 field_0x95A = 0;
@@ -440,12 +442,12 @@ void daNpc_Rsh1_c::setAnmFromMsgTag() {
 }
 
 /* 00000DDC-00000F50       .text chkAttention__12daNpc_Rsh1_cF4cXyzs */
-bool daNpc_Rsh1_c::chkAttention(cXyz param_1, s16 param_2) {
+bool daNpc_Rsh1_c::chkAttention(cXyz i_pos, s16 i_angleAdjustment) {
     daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
     
     f32 max_attn_dist_xz = l_HIO.field_0x0C.mMaxAttnDistXZ;
     int max_attn_angle_y = l_HIO.field_0x0C.mMaxAttnAngleY;
-    cXyz pos_diff = link_p->current.pos - param_1;
+    cXyz pos_diff = link_p->current.pos - i_pos;
 
     f32 temp_abs_xz = pos_diff.absXZ();
     s16 angle = cM_atan2s(pos_diff.x, pos_diff.z);
@@ -455,7 +457,7 @@ bool daNpc_Rsh1_c::chkAttention(cXyz param_1, s16 param_2) {
         max_attn_angle_y += 0x71C;
     }
 
-    angle -= param_2;
+    angle -= i_angleAdjustment;
     return max_attn_angle_y > abs(angle) && max_attn_dist_xz > temp_abs_xz;
 }
 
@@ -483,7 +485,7 @@ void daNpc_Rsh1_c::checkOrder() {
             setAction(&daNpc_Rsh1_c::event_action, NULL);
         } else if (field_0x95B == 4) {
             field_0x95B = 0;
-            field_0x7B8.Reset();
+            mShopCamAct.Reset();
             setAction(&daNpc_Rsh1_c::getdemo_action, NULL);
         }
     } else if (eventInfo.checkCommandTalk()) {
@@ -493,23 +495,23 @@ void daNpc_Rsh1_c::checkOrder() {
             if (temp > DEMO_SELECT(0x2000, 0x1800) || temp < DEMO_SELECT(-0x2000, -0x2800)) {
                 field_0x780 = 0x2883;
             } else if (field_0x95B != 2) {
-                field_0x7B8.shop_cam_action_init();
+                mShopCamAct.shop_cam_action_init();
             }
             field_0x95B = 0;
             field_0x771 = 1;
             talkInit();
         }
     } else {
-        field_0x7B8.Save();
+        mShopCamAct.Save();
     }
 }
 
 /* 0000126C-00001650       .text next_msgStatus__12daNpc_Rsh1_cFPUl */
-u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
-    u16 result;    
+u16 daNpc_Rsh1_c::next_msgStatus(u32* o_pMsgNo) {
+    u16 msg_status;    
     s32 msg_rupee;
-    result = fopMsgStts_MSG_CONTINUES_e;
-    switch (*param_1) {
+    msg_status = fopMsgStts_MSG_CONTINUES_e;
+    switch (*o_pMsgNo) {
     case 0x2845:
     case 0x2846:
     case 0x2847:
@@ -531,67 +533,67 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
     case 0x2887:
     case 0x2888:
     case 0x288D:
-        *param_1 += 1;
+        *o_pMsgNo += 1;
         break;
     case 0x288C:
-        *param_1 = 0x2889;
+        *o_pMsgNo = 0x2889;
         break;
     case 0x2889:
         if (l_msg->mSelectNum == 0) {
             s32 msg_rupee = dComIfGp_getMessageRupee();
             if (msg_rupee > dComIfGs_getRupee()) {
-                *param_1 = 0x288A;
+                *o_pMsgNo = 0x288A;
                 break;
             }
 
             dComIfGp_setItemRupeeCount(-(int)msg_rupee);
-            *param_1 = 0x288D;
+            *o_pMsgNo = 0x288D;
             break;
         }
         
-        *param_1 = 0x288B; 
+        *o_pMsgNo = 0x288B; 
         break;
     case 0x2862:
         if (!shopPosMove()) {
-            result = fopMsgStts_MSG_DISPLAYED_e;
+            msg_status = fopMsgStts_MSG_DISPLAYED_e;
         } else {
             setAnm(0);
-            *param_1 += 1;
+            *o_pMsgNo += 1;
         }
         break;
     case 0x283D:
     case 0x283F:
     case 0x2841:
     case 0x2843:
-        *param_1 -= 1;
+        *o_pMsgNo -= 1;
         break;
     case 0x284C:
         if (l_msg->mSelectNum == 0) {
-            *param_1 = 0x284D;
+            *o_pMsgNo = 0x284D;
         } else {
-            *param_1 = 0x284A;
+            *o_pMsgNo = 0x284A;
         }
         break;
     case 0x2853:
         if (l_msg->mSelectNum == 0) {
-            *param_1 = 0x2855;
+            *o_pMsgNo = 0x2855;
         } else {
-            *param_1 = 0x2854;
+            *o_pMsgNo = 0x2854;
         }
         break;
     case 0x2854:
-        *param_1 = 0x284E;
+        *o_pMsgNo = 0x284E;
         break;
     case 0x2866:
-        *param_1 = 0x2863;
+        *o_pMsgNo = 0x2863;
         break;
     case 0x2863:
         if (CPad_CHECK_TRIG_B(0)) {
-            *param_1 = 0x2867;
+            *o_pMsgNo = 0x2867;
         } else {
             dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
             dComIfGp_setAStatusForce(dActStts_CANCEL_e);
-            result = fopMsgStts_MSG_DISPLAYED_e;
+            msg_status = fopMsgStts_MSG_DISPLAYED_e;
         }
         break;
     case 0x286B:
@@ -607,11 +609,11 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
     case 0x287F:
     case 0x2881:
         if (CPad_CHECK_TRIG_B(0)) {
-            *param_1 = 0x2867;
+            *o_pMsgNo = 0x2867;
         } else {
             dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
             dComIfGp_setAStatusForce(dActStts_CANCEL_e);
-            *param_1 += 1;
+            *o_pMsgNo += 1;
         }
         break;
     case 0x2868:
@@ -621,7 +623,7 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
         if (mpShopItems) {
             mpShopItems->mSelectedItemIdx = -1;
         }
-        *param_1 = 0x2863;
+        *o_pMsgNo = 0x2863;
         break;
     case 0x286C:
     case 0x286E:
@@ -637,7 +639,7 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
     case 0x2882:
         if (mpShopItems) {
             if (dComIfGp_checkMesgCancelButton()) {
-                *param_1 = *param_1 - 1;
+                *o_pMsgNo = *o_pMsgNo - 1;
                 break;
             }
             
@@ -646,17 +648,17 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
                 u8 status = dShop_BoughtErrorStatus(mpShopItems, 0, msg_rupee);
 
                 if (status & 0x20) {
-                    *param_1 = 0x2868;
+                    *o_pMsgNo = 0x2868;
                     break;
                 } 
 
                 if (status & 0x4) {
-                    *param_1 = 0x2869;
+                    *o_pMsgNo = 0x2869;
                     break;
                 } 
 
                 if (daNpc_Rsh1_RotenItemNumInBag() >= 3) {
-                    *param_1 = 0x2884;
+                    *o_pMsgNo = 0x2884;
                     break;
                 } 
                 
@@ -668,32 +670,32 @@ u16 daNpc_Rsh1_c::next_msgStatus(u32* param_1) {
 
                 if (!checkItemGet((int)mpShopItems->getSelectItemNo(), TRUE)) {
                     field_0x95B = 4;
-                    result = fopMsgStts_MSG_ENDS_e;
+                    msg_status = fopMsgStts_MSG_ENDS_e;
                     break;
                 }
 
                 execItemGet((int)mpShopItems->getSelectItemNo());
-                *param_1 = 0x286A;
+                *o_pMsgNo = 0x286A;
                 break;
             }
             
-            *param_1 -= 1;
+            *o_pMsgNo -= 1;
             break;
         }
         break;
     case 0x2849:
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1110);
-        result = fopMsgStts_MSG_ENDS_e;
+        msg_status = fopMsgStts_MSG_ENDS_e;
         break;
     case 0x2858:
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1108);
-        result = fopMsgStts_MSG_ENDS_e;
+        msg_status = fopMsgStts_MSG_ENDS_e;
         break;
     default:
-        result = fopMsgStts_MSG_ENDS_e;
+        msg_status = fopMsgStts_MSG_ENDS_e;
         break;
     }
-    return result;
+    return msg_status;
 }
 
 /* 00001650-00001808       .text getMsg__12daNpc_Rsh1_cFv */
@@ -765,16 +767,16 @@ void daNpc_Rsh1_c::setCollision() {
     if (chkAction(&daNpc_Rsh1_c::pl_shop_out_action)) {
         temp1 = l_HIO.field_0x54;
         temp2 = l_HIO.field_0x58;
-        field_0x504.SetC(field_0x794);
+        mCyl.SetC(field_0x794);
     } else {
         temp1 = l_HIO.field_0x50;
         temp2 = l_HIO.field_0x58;
-        field_0x504.SetC(current.pos);
+        mCyl.SetC(current.pos);
     }
 
-    field_0x504.SetR(temp1);
-    field_0x504.SetH(temp2);
-    dComIfG_Ccsp()->Set(&field_0x504);
+    mCyl.SetR(temp1);
+    mCyl.SetH(temp2);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 000018EC-000018F8       .text talkInit__12daNpc_Rsh1_cFv */
@@ -797,12 +799,12 @@ u16 daNpc_Rsh1_c::normal_talk() {
     }
 
     if (mpShopItems) {
-        cXyz zoom_pos = field_0x7B8.getItemZoomPos(125.0f);
+        cXyz zoom_pos = mShopCamAct.getItemZoomPos(125.0f);
         mpShopItems->Item_ZoomUp(zoom_pos);
     }
 
 
-    field_0x954->hide();
+    mpShopCursor->hide();
     if (dComIfGp_checkMesgSendButton() == 1) {
         field_0x778 = l_msg->mMsgNo;
 
@@ -824,18 +826,18 @@ u16 daNpc_Rsh1_c::normal_talk() {
         case 0x285E:
         case 0x2887:
         case 0x2888:
-            field_0x7B8.rsh_talk_cam_action_init(this, rel_cam_ctr_data[0], rel_cam_eye_data[0], 45.0f);
+            mShopCamAct.rsh_talk_cam_action_init(this, rel_cam_ctr_data[0], rel_cam_eye_data[0], 45.0f);
             break;
         case 0x2848:
         case 0x2851:
         case 0x2852:
         case 0x288D:
-            field_0x7B8.rsh_talk_cam_action_init(this, rel_cam_ctr_data[1], rel_cam_eye_data[1], 45.0f);
+            mShopCamAct.rsh_talk_cam_action_init(this, rel_cam_ctr_data[1], rel_cam_eye_data[1], 45.0f);
             break;  
         case 0x2847:
         default:
-            if (!field_0x7B8.checkCamAction(NULL) && !field_0x7B8.checkCamAction(&ShopCam_action_c::shop_cam_action)) {
-                field_0x7B8.shop_cam_action_init();
+            if (!mShopCamAct.checkCamAction(NULL) && !mShopCamAct.checkCamAction(&ShopCam_action_c::shop_cam_action)) {
+                mShopCamAct.shop_cam_action_init();
             }
             break;
         }
@@ -846,8 +848,8 @@ u16 daNpc_Rsh1_c::normal_talk() {
 
 /* 00001CB4-00001DE4       .text shop_talk__12daNpc_Rsh1_cFv */
 u16 daNpc_Rsh1_c::shop_talk() {
-    field_0x954->show();
-    if (mpShopItems && dShop_now_triggercheck(l_msg, &field_0x6D8, mpShopItems, &field_0x778, NULL, NULL)) {
+    mpShopCursor->show();
+    if (mpShopItems && dShop_now_triggercheck(l_msg, &mSTControl, mpShopItems, &field_0x778, NULL, NULL)) {
         field_0x749 = 1;
         field_0x77C = 0;
     }
@@ -928,7 +930,7 @@ u16 daNpc_Rsh1_c::talk() {
     }
 
     if (mpShopItems) {
-        field_0x7B8.m54 = mpShopItems->mSelectedItemIdx;
+        mShopCamAct.m54 = mpShopItems->mSelectedItemIdx;
     }
 
     return result;
@@ -953,29 +955,29 @@ BOOL daNpc_Rsh1_c::CreateInit() {
 
     field_0x758 = current.pos;
     
-    field_0x4C8.Init(0xFF, 0xFF, this);
-    field_0x504.Set(l_cyl_src);
-    field_0x504.SetStts(&field_0x4C8);
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
 
     field_0x962 = 0;
     field_0x749 = 0;
     field_0x780 = 0;
     field_0x792 = 0xFF;
 
-    field_0x7B8.setCamDataIdx(8);
-    field_0x7B8.setCamAction(NULL);
+    mShopCamAct.setCamDataIdx(8);
+    mShopCamAct.setCamAction(NULL);
 
     createShopList();
 
     if (field_0x788 != -1 && field_0x788 != -1) {
-        field_0x814[field_0x788].init();
+        mShopItemsArr[field_0x788].init();
     }
 
     field_0x788 = -1;
 
     if (field_0x788 != -1) {
-        mpShopItems = &field_0x814[field_0x788];
-        field_0x7B8.setCamDataIdx(field_0x788 + 8);
+        mpShopItems = &mShopItemsArr[field_0x788];
+        mShopCamAct.setCamDataIdx(field_0x788 + 8);
     } else {
         mpShopItems = NULL;
     }
@@ -983,12 +985,12 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     pathGet();
     fopAcM_setCullSizeFar(this, 0.25f);
     set_mtx();
-    field_0x298->setMorf(0.0f);
+    mpMorf->setMorf(0.0f);
     field_0x794 = cXyz::Zero;
     field_0x7A0 = field_0x794;
     field_0x793 = 0;
-    field_0x66C.setActorInfo("Rsh1", this);
-    field_0x66C.setJntCtrlPtr(&field_0x638);
+    mEventCut.setActorInfo("Rsh1", this);
+    mEventCut.setJntCtrlPtr(&mJntCtrl);
 
     if (checkCreateInShopPlayer()) {
         field_0x95B = 5;
@@ -1003,14 +1005,14 @@ BOOL daNpc_Rsh1_c::CreateInit() {
 }
 
 /* 00002358-000023A8       .text daNpc_Rsh1_checkRotenItemGet__Fi */
-static BOOL daNpc_Rsh1_checkRotenItemGet(int param_1) {
-    BOOL result;
-    if (param_1 != 0) {
-        result = dComIfGs_isGetItemReserve(param_1);
+static BOOL daNpc_Rsh1_checkRotenItemGet(int i_itemNo) {
+    BOOL roten_item_get_check;
+    if (i_itemNo != 0) {
+        roten_item_get_check = dComIfGs_isGetItemReserve(i_itemNo);
     } else {
-        result = dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e) ? TRUE : FALSE;
+        roten_item_get_check = dComIfGs_checkGetItem(dItem_DELIVERY_BAG_e) ? TRUE : FALSE;
     }
-    return result;
+    return roten_item_get_check;
 }
 
 extern Vec Item_set_pos_data_rshop_0[];
@@ -1026,41 +1028,41 @@ void daNpc_Rsh1_c::createShopList() {
     };
         
     int i, k;
-    for(k = 0, i = 0; i < ARRAY_SSIZE(field_0x814); i++) {
+    for(k = 0, i = 0; i < ARRAY_SSIZE(mShopItemsArr); i++) {
         int j = 0;
-        field_0x814[i].setItemDataIdx(8);
+        mShopItemsArr[i].setItemDataIdx(8);
         temp.y = y_vals[i];
 
-        while(j < (ARRAY_SSIZE(field_0x924) / ARRAY_SSIZE(field_0x814)) && k < ARRAY_SSIZE(field_0x924)) {
-            int idx = i * ((ARRAY_SSIZE(field_0x924) / ARRAY_SSIZE(field_0x814))) + j;
-            field_0x924[k] = NULL;
+        while(j < (ARRAY_SSIZE(mShopItemDataPtrs) / ARRAY_SSIZE(mShopItemsArr)) && k < ARRAY_SSIZE(mShopItemDataPtrs)) {
+            int idx = i * ((ARRAY_SSIZE(mShopItemDataPtrs) / ARRAY_SSIZE(mShopItemsArr))) + j;
+            mShopItemDataPtrs[k] = NULL;
             if (daNpc_Rsh1_checkRotenItemGet(k)) {
-                field_0x814[i].mItemActorProcessIds[j] = fopAcM_createShopItem(
+                mShopItemsArr[i].mItemActorProcessIds[j] = fopAcM_createShopItem(
                     (cXyz *)&Item_set_pos_data_rshop_0[idx], 
                     Item_setData_rshop[k]->mpItemData->mItemNo, 
                     &temp, fopAcM_GetRoomNo(this)
                 );
-                field_0x924[idx] = Item_setData_rshop[k];
+                mShopItemDataPtrs[idx] = Item_setData_rshop[k];
                 j++;
             }
             k++;
         }
 
-        field_0x814[i].setItemSum(j);
+        mShopItemsArr[i].setItemSum(j);
 
-        if (j < (ARRAY_SSIZE(field_0x924) / ARRAY_SSIZE(field_0x814))) {
+        if (j < (ARRAY_SSIZE(mShopItemDataPtrs) / ARRAY_SSIZE(mShopItemsArr))) {
             if (j == 0) {
                 i--;
             }
             break;
-        } else if (i == ARRAY_SSIZE(field_0x814) - 1) {
+        } else if (i == ARRAY_SSIZE(mShopItemsArr) - 1) {
             break;
         }
     }
 
     field_0x78C = i + 1;
     for (i = 0; i < field_0x78C; i++) {
-        field_0x814[i].setItemSetDataList(&field_0x924[i * 3]);
+        mShopItemsArr[i].setItemSetDataList(&mShopItemDataPtrs[i * 3]);
     }
 
     field_0x78C = field_0x78C > 1 ? field_0x78C : 1;
@@ -1097,24 +1099,24 @@ void daNpc_Rsh1_c::lookBack() {
         break;
     case 2:
         if (mpShopItems) {
-            if (field_0x7B8.checkCamAction(NULL) || field_0x7B8.checkCamAction(&ShopCam_action_c::rsh_talk_cam_action)) {
+            if (mShopCamAct.checkCamAction(NULL) || mShopCamAct.checkCamAction(&ShopCam_action_c::rsh_talk_cam_action)) {
                 player_eye_pos = dNpc_playerEyePos(l_HIO.field_0x0C.m04);
                 temp = false;
             } else if (mpShopItems->mSelectedItemIdx == -1) {
-                player_eye_pos = field_0x7B8.getItemZoomPos(125.0f);
+                player_eye_pos = mShopCamAct.getItemZoomPos(125.0f);
                 temp = false;
             } else {
                 cXyz temp = mpShopItems->getSelectItemBasePos();
                 player_eye_pos = mpShopItems->getSelectItemPos();
-                field_0x954->setPos(temp);
-                field_0x954->setScale(
+                mpShopCursor->setPos(temp);
+                mpShopCursor->setScale(
                     l_HIO.field_0x34,
                     l_HIO.field_0x38,
                     l_HIO.field_0x3C,
                     l_HIO.field_0x40,
                     l_HIO.field_0x44
                 );
-                field_0x954->anm_play();
+                mpShopCursor->anm_play();
             }
             vec_p = &player_eye_pos;
         } else {
@@ -1125,12 +1127,13 @@ void daNpc_Rsh1_c::lookBack() {
         break;
     }
 
-    if (field_0x638.trnChk()) {
+    if (mJntCtrl.trnChk()) {
         cLib_addCalcAngleS2(&field_0x764, l_HIO.field_0x0C.mMaxHeadTurnVel, 4, 0x800);
     } else {
         field_0x764 = 0;
     }
-    field_0x638.lookAtTarget(
+    
+    mJntCtrl.lookAtTarget(
         &current.angle.y, vec_p, 
         eyePos, temp2, 
         field_0x764, temp
@@ -1140,11 +1143,11 @@ void daNpc_Rsh1_c::lookBack() {
 /* 00002868-00002930       .text pathGet__12daNpc_Rsh1_cFv */
 bool daNpc_Rsh1_c::pathGet() {
     int param = (fopAcM_GetParam(this) >> 0x10) & 0xFF;
-    field_0x700 = dPath_GetRoomPath(param, fopAcM_GetRoomNo(this));
-    if (field_0x700) {        
+    mpPath = dPath_GetRoomPath(param, fopAcM_GetRoomNo(this));
+    if (mpPath) {        
         int i;
         dPnt* point_p;
-        for ((i = 0, point_p = field_0x700->m_points); i < field_0x700->m_num; i++, point_p++) {
+        for (i = 0, point_p = mpPath->m_points; i < mpPath->m_num; i++, point_p++) {
             if (point_p->mArg3 != 0xFF) {
                 field_0x708[point_p->mArg3].set(
                     point_p->m_position.x,
@@ -1236,7 +1239,7 @@ BOOL daNpc_Rsh1_c::pathMove(int* param_1) {
         temp = field_0x704 - 1;
     }
 
-    point = &field_0x700->m_points[temp];
+    point = &mpPath->m_points[temp];
     cXyz target_pos(point->m_position.x, point->m_position.y, point->m_position.z);
     int chase_result = cLib_chasePosXZ(&current.pos, target_pos, l_HIO.field_0x48);
 
@@ -1247,22 +1250,22 @@ BOOL daNpc_Rsh1_c::pathMove(int* param_1) {
             temp3 = temp2 + 9;
             
             if (temp2 != -1 && field_0x788 != temp2) {
-                field_0x814[temp2].init();
+                mShopItemsArr[temp2].init();
             }
 
             if (field_0x788 != -1 && field_0x788 != temp2) {
-                field_0x814[field_0x788].init();
+                mShopItemsArr[field_0x788].init();
             }
 
             field_0x788 = temp2;
             if (field_0x788 != -1) {
-                mpShopItems = &field_0x814[field_0x788];
-                field_0x7B8.setCamDataIdx(field_0x788 + 8);
+                mpShopItems = &mShopItemsArr[field_0x788];
+                mShopCamAct.setCamDataIdx(field_0x788 + 8);
             } else {
                 mpShopItems = NULL;
             }
 
-            field_0x7B8.setCamDataIdx(temp3);
+            mShopCamAct.setCamDataIdx(temp3);
             if (temp4 == temp2 + 1) {
                 cLib_addCalcAngleS2(&current.angle.y, home.angle.y, 8, 0x1000);
                 return TRUE;
@@ -1280,8 +1283,8 @@ bool daNpc_Rsh1_c::wait01() {
         field_0x95D = field_0x95C;
         field_0x95C = 2;
     } else {
-        if (field_0x504.ChkCoHit()) {
-            fopAc_ac_c* actor_p = field_0x504.GetCoHitAc();
+        if (mCyl.ChkCoHit()) {
+            fopAc_ac_c* actor_p = mCyl.GetCoHitAc();
             if (actor_p && fpcM_GetName(actor_p) == PROC_PLAYER) {
                 field_0x95B = 2;
                 field_0x793 = 1;
@@ -1308,7 +1311,7 @@ bool daNpc_Rsh1_c::wait01() {
         }
     }
 
-    return field_0x298->isMorf();
+    return mpMorf->isMorf();
 }
 
 /* 00002F5C-00003154       .text talk01__12daNpc_Rsh1_cFv */
@@ -1318,7 +1321,7 @@ bool daNpc_Rsh1_c::talk01() {
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         field_0x95C = field_0x95D;
         dComIfGp_event_onEventFlag(8);
-        field_0x7B8.Reset();
+        mShopCamAct.Reset();
         link_p->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
         field_0x771 = 0;
         setAnm(0);
@@ -1340,18 +1343,19 @@ bool daNpc_Rsh1_c::talk01() {
         dComIfGp_setAStatusForce(dActStts_CANCEL_e);
     }
 
-    return field_0x298->isMorf();
+    return mpMorf->isMorf();
 }
 
 /* 00003154-00003358       .text getdemo_action__12daNpc_Rsh1_cFPv */
-BOOL daNpc_Rsh1_c::getdemo_action(void*) {
+BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
+    UNUSED(i_unusedP);
     int staff_idx = dComIfGp_evmng_getMyStaffId("Rsh1");
 
     if (field_0x960 == 0) {
         daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
         link_p->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
         field_0x95C = field_0x95D;
-        field_0x7B8.Reset();
+        mShopCamAct.Reset();
 
         fpc_ProcID pid = fopAcM_createItemForPresentDemo(
             &current.pos, field_0x963, 
@@ -1388,8 +1392,8 @@ BOOL daNpc_Rsh1_c::getdemo_action(void*) {
 }
 
 /* 00003358-00003424       .text wait_action__12daNpc_Rsh1_cFPv */
-BOOL daNpc_Rsh1_c::wait_action(void* param_1) {
-    UNUSED(param_1);
+BOOL daNpc_Rsh1_c::wait_action(void* i_unusedP) {
+    UNUSED(i_unusedP);
 
     if (field_0x960 == 0) {
         field_0x95C = 1;
@@ -1411,8 +1415,9 @@ BOOL daNpc_Rsh1_c::wait_action(void* param_1) {
 }
 
 /* 00003424-00003840       .text pl_shop_out_action__12daNpc_Rsh1_cFPv */
-BOOL daNpc_Rsh1_c::pl_shop_out_action(void* param_1) {
-    UNUSED(param_1);
+BOOL daNpc_Rsh1_c::pl_shop_out_action(void* i_unusedP) {
+    UNUSED(i_unusedP);
+
     f32 trig_amplitude_1 = 140.0f;
     if (field_0x960 == 0) {
         setAnm(6);
@@ -1487,8 +1492,8 @@ bool daNpc_Rsh1_c::evn_talk_init(int param_1) {
 }
 
 /* 0000396C-000039D4       .text evn_continue_talk_init__12daNpc_Rsh1_cFi */
-bool daNpc_Rsh1_c::evn_continue_talk_init(int param_1) {
-    u32* end_msg_no_p = (u32 *) dComIfGp_evmng_getMyIntegerP(param_1, "EndMsgNo");
+bool daNpc_Rsh1_c::evn_continue_talk_init(int i_staffIdx) {
+    u32* end_msg_no_p = (u32 *) dComIfGp_evmng_getMyIntegerP(i_staffIdx, "EndMsgNo");
 
     if (end_msg_no_p) {
         field_0x784 = *end_msg_no_p;
@@ -1530,8 +1535,8 @@ BOOL daNpc_Rsh1_c::evn_talk() {
 }
 
 /* 00003B04-00003B88       .text evn_turn_init__12daNpc_Rsh1_cFi */
-bool daNpc_Rsh1_c::evn_turn_init(int param_1) {
-    int* prm_p = dComIfGp_evmng_getMyIntegerP(param_1, "prm");
+bool daNpc_Rsh1_c::evn_turn_init(int i_staffIdx) {
+    int* prm_p = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "prm");
     daPy_lk_c* link_p = DEMO_SELECT((daPy_lk_c *) dComIfGp_getPlayer(0), daPy_getPlayerLinkActorClass());
     int prm;
 
@@ -1564,7 +1569,7 @@ bool daNpc_Rsh1_c::privateCut() {
         "SETANM",
         "TURN"
     };
-    int staff_idx = dComIfGp_evmng_getMyStaffId(field_0x66C.getActorName());
+    int staff_idx = dComIfGp_evmng_getMyStaffId(mEventCut.getActorName());
     
     if (staff_idx == -1) {
         return false;
@@ -1619,9 +1624,8 @@ bool daNpc_Rsh1_c::privateCut() {
     return true;
 }
 
-BOOL daNpc_Rsh1_c::event_action(void* param_1) {
-    UNUSED(param_1);
-
+BOOL daNpc_Rsh1_c::event_action(void* i_unusedP) {
+    UNUSED(i_unusedP);
     if (field_0x960 == 0) {
         dComIfGp_evmng_getMyStaffId("Rsh1");
         field_0x95C = field_0x95D;
@@ -1653,13 +1657,13 @@ BOOL daNpc_Rsh1_c::dummy_action(void* i_unusedP) {
 
 /* 00003F08-00004040       .text _draw__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::_draw() {
-    J3DModel* morf_model_p = field_0x298->getModel();
+    J3DModel* morf_model_p = mpMorf->getModel();
     J3DModelData* morf_model_data_p = morf_model_p->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(morf_model_p, &tevStr);
-    field_0x2A8.entry(morf_model_data_p, field_0x2BC);
-    field_0x298->updateDL();
-    field_0x2A8.remove(morf_model_data_p);
+    mBtpAnm.entry(morf_model_data_p, field_0x2BC);
+    mpMorf->updateDL();
+    mBtpAnm.remove(morf_model_data_p);
 
     cXyz temp(
         current.pos.x,
@@ -1667,17 +1671,17 @@ BOOL daNpc_Rsh1_c::_draw() {
         current.pos.z
     );
 
-    f32 ground_y = field_0x2C4.m_ground_h;
+    f32 ground_y = mAcch.m_ground_h;
     field_0x29C = dComIfGd_setShadow(
         field_0x29C, 
-        1, field_0x298->getModel(), 
+        1, mpMorf->getModel(), 
         &temp, 800.0f, 20.0f, 
         current.pos.y, ground_y, 
-        field_0x2C4.m_gnd, &tevStr
+        mAcch.m_gnd, &tevStr
     );  
     
     if (mpShopItems && mpShopItems->mSelectedItemIdx >= 0) {
-        field_0x954->draw();
+        mpShopCursor->draw();
     }
 
     dSnap_RegistFig(DSNAP_TYPE_UNK5F, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
@@ -1724,7 +1728,7 @@ BOOL daNpc_Rsh1_c::_execute() {
     if (dist > REG10_F(10) + 5000.0f) {
         return TRUE;
     } else {
-        field_0x638.setParam(
+        mJntCtrl.setParam(
             l_HIO.field_0x0C.mMaxBackboneX,
             l_HIO.field_0x0C.mMaxBackboneY,
             l_HIO.field_0x0C.mMinBackboneX,
@@ -1738,17 +1742,17 @@ BOOL daNpc_Rsh1_c::_execute() {
 
         playTexPatternAnm();
         
-        field_0x76E = field_0x298->play(&eyePos, 0, 0);
-        if (field_0x298->getFrame() < field_0x774) {
+        field_0x76E = mpMorf->play(&eyePos, 0, 0);
+        if (mpMorf->getFrame() < field_0x774) {
             field_0x76E = 1;
         }
-        field_0x774 = field_0x298->getFrame();
+        field_0x774 = mpMorf->getFrame();
         
         checkOrder();
 
-        (this->*field_0x7AC)(NULL);
+        (this->*mCurrProc)(NULL);
 
-        field_0x7B8.move();
+        mShopCamAct.move();
         if (mpShopItems) {
             mpShopItems->Item_Move();
         }
@@ -1756,11 +1760,11 @@ BOOL daNpc_Rsh1_c::_execute() {
         eventOrder();
         lookBack();
         setAttention();
-        fopAcM_posMoveF(this, field_0x4C8.GetCCMoveP());
+        fopAcM_posMoveF(this, mStts.GetCCMoveP());
         
-        field_0x2C4.CrrPos(*dComIfG_Bgsp());
-        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(field_0x2C4.m_gnd);
-        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(field_0x2C4.m_gnd);
+        mAcch.CrrPos(*dComIfG_Bgsp());
+        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mAcch.m_gnd);
+        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
         
         set_mtx();
         setCollision();
@@ -1772,8 +1776,8 @@ BOOL daNpc_Rsh1_c::_execute() {
 /* 0000427C-00004308       .text _delete__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::_delete() {
     dComIfG_resDeleteDemo(&field_0x290, m_arcname);
-    if (DEMO_SELECT(true, heap) && field_0x298) {
-        field_0x298->stopZelAnime();
+    if (DEMO_SELECT(true, heap) && mpMorf) {
+        mpMorf->stopZelAnime();
     }
 
     if(l_HIO.field_0x08 >= 0) {
@@ -1797,7 +1801,7 @@ cPhs_State daNpc_Rsh1_c::_create() {
     fopAcM_SetupActor(this, daNpc_Rsh1_c);
 #endif
 
-    cPhs_State state = dComIfG_resLoad(&field_0x290, m_arcname);
+    cPhs_State state = dComIfG_resLoad(&mPhs, m_arcname);
 
 
     if (state == cPhs_COMPLEATE_e) {
@@ -1819,7 +1823,7 @@ cPhs_State daNpc_Rsh1_c::_create() {
             return cPhs_ERROR_e;
         }
 
-        cullMtx = field_0x298->getModel()->getBaseTRMtx();
+        cullMtx = mpMorf->getModel()->getBaseTRMtx();
 
         if (l_HIO.field_0x08 < 0) {
             l_HIO.field_0x04 = mDoHIO_createChild("露店の社長", &l_HIO); // "Stall owner"
@@ -1837,7 +1841,7 @@ cPhs_State daNpc_Rsh1_c::_create() {
 /* 00004698-000049A0       .text CreateHeap__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::CreateHeap() {
     J3DModelData* model_p = (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BDL_RS, RSH_BDL_RS));
-    field_0x298 = new mDoExt_McaMorf(
+    mpMorf = new mDoExt_McaMorf(
         model_p, 
         NULL, NULL, 
         (J3DAnmTransform *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BCK_RS_WAIT01, RSH_BCK_RS_WAIT01)), 
@@ -1846,7 +1850,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
         0, 0x11020203
     );
 
-    if (!field_0x298 || !field_0x298->getModel()) {
+    if (!mpMorf || !mpMorf->getModel()) {
 #if VERSION > VERSION_DEMO
         field_0x298 = NULL;
 #endif
@@ -1854,10 +1858,10 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
     }
 
     m_head_jnt_num = model_p->getJointName()->getIndex("head");
-    JUT_ASSERT(DEMO_SELECT(0x952, 0x953), m_head_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2386, 2387), m_head_jnt_num >= 0);
 
     m_backbone_jnt_num = model_p->getJointName()->getIndex("backbone");
-    JUT_ASSERT(DEMO_SELECT(0x955, 0x956), m_backbone_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(2389, 2390), m_backbone_jnt_num >= 0);
 
     switch (field_0x95E) {
         case 0:
@@ -1875,29 +1879,29 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
 
     for (u16 i = 0; i < model_p->getJointNum(); i++) {
         if (i == m_head_jnt_num || i == m_backbone_jnt_num) {
-            field_0x298->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Rsh);
+            mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Rsh);
         }
     }
 
-    field_0x298->getModel()->setUserArea((u32)this);
-    field_0x488.SetWall(30.0f, 0.0f);
+    mpMorf->getModel()->setUserArea((u32)this);
+    mAcchCir.SetWall(30.0f, 0.0f);
     cXyz* speed_p = &speed;
     cXyz* old_pos_p = &old.pos;
     cXyz* current_pos_p = &current.pos;
-    field_0x2C4.Set(current_pos_p, old_pos_p, this, 1, &field_0x488, speed_p);
+    mAcch.Set(current_pos_p, old_pos_p, this, 1, &mAcchCir, speed_p);
 
-    field_0x954 = ShopCursor_create(
+    mpShopCursor = ShopCursor_create(
         (J3DModelData *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BMD_SHOP_CURSOR01, RSH_BMD_SHOP_CURSOR01)),
         (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arcname, DEMO_SELECT(RSH_INDEX_BRK_SHOP_CURSOR01, RSH_BRK_SHOP_CURSOR01)),
         l_HIO.field_0x34
     );
 
-    return field_0x954 != NULL ? TRUE : FALSE;
+    return mpShopCursor != NULL ? TRUE : FALSE;
 }
 
 /* 000049A0-00004A28       .text set_mtx__12daNpc_Rsh1_cFv */
 void daNpc_Rsh1_c::set_mtx() {
-    J3DModel* morf_model_p = field_0x298->getModel();
+    J3DModel* morf_model_p = mpMorf->getModel();
     mDoMtx_stack_c::transS(
         current.pos.x + field_0x7A0.x,
         current.pos.y + field_0x7A0.y,
