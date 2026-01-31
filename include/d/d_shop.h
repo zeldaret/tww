@@ -63,7 +63,7 @@ public:
         m30 = 60.0f;
     }
     
-    void SetSelectIdx(s16 idx) { mCamDataIdx = idx; }
+    void SetSelectIdx(s16) {}
     void setCamAction(ActionFunc func) { mCurrActionFunc = func; }
     BOOL checkCamAction(ActionFunc func) { return mCurrActionFunc == func; }
     cXyz getItemZoomPos(f32 f31) {

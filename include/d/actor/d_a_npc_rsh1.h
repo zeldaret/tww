@@ -5,7 +5,6 @@
 #include "d/d_npc.h"
 #include "d/d_shop.h"
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Rsh1_c : public fopAc_ac_c {
 public:
