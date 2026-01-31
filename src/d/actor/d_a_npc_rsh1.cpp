@@ -1775,7 +1775,7 @@ BOOL daNpc_Rsh1_c::_execute() {
 
 /* 0000427C-00004308       .text _delete__12daNpc_Rsh1_cFv */
 BOOL daNpc_Rsh1_c::_delete() {
-    dComIfG_resDeleteDemo(&field_0x290, m_arcname);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
     if (DEMO_SELECT(true, heap) && mpMorf) {
         mpMorf->stopZelAnime();
     }
@@ -1852,7 +1852,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
 
     if (!mpMorf || !mpMorf->getModel()) {
 #if VERSION > VERSION_DEMO
-        field_0x298 = NULL;
+        mpMorf = NULL;
 #endif
         return FALSE;
     }
