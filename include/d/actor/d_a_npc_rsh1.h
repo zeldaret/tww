@@ -145,7 +145,7 @@ public:
     /* 0x960 */ s8 mActionStatus;
     /* 0x961 */ s8 m961;
     /* 0x962 */ s8 m962;
-    /* 0x963 */ u8 m963;
+    /* 0x963 */ u8 mItemNo;
     /* 0x964 */ u8 m964[0x968 - 0x964];
 };  // Size: 0x968
 

@@ -1328,13 +1328,13 @@ bool daNpc_Rsh1_c::talk01() {
 
         if (m778 == 0x2856) {
             m95B = 4;
-            m963 = 0x8C;
+            mItemNo = FLOWER_1;
         } else if (m778 == 0x288E) {
             m95B = 4;
-            m963 = 0x78;
+            mItemNo = NORMAL_SAIL;
         } else if (m778 == 0x285F) {
             m95B = 4;
-            m963 = 0x2A;
+            mItemNo = dItem_MAGIC_ARMOR_e;
         } else if (m778 == 0x2883 && m793 == true) {
             setAction(&daNpc_Rsh1_c::pl_shop_out_action, NULL);
         } 
@@ -1358,7 +1358,7 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
         mShopCamAct.Reset();
 
         fpc_ProcID pid = fopAcM_createItemForPresentDemo(
-            &current.pos, m963, 
+            &current.pos, mItemNo, 
             0, -1, 
             DEMO_SELECT(-1, fopAcM_GetRoomNo(this))
         );
@@ -1374,15 +1374,15 @@ BOOL daNpc_Rsh1_c::getdemo_action(void* i_unusedP) {
             m95B = 1;
             dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
 
-            if (m963 == 0x8C) {
+            if (mItemNo == FLOWER_1) {
                 m780 = 0x2857;
-            } else if (m963 == 0x78) {
+            } else if (mItemNo == NORMAL_SAIL) {
                 m780 = 0x288F;
-            } else if (m963 == 0x2A) {
+            } else if (mItemNo == dItem_MAGIC_ARMOR_e) {
                 m780 = 0x2860;
             }
 
-            m963 = 0xFF;
+            mItemNo = 0xFF;
 
             setAction(&daNpc_Rsh1_c::wait_action, NULL);
         }
