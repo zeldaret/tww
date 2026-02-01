@@ -5,9 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_oship.h"
+#include "d/d_item.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_s_play.h"
+
+const s32 daOship_c::m_heapsize = 0x1280;
+
+const char daOship_c::m_arc_name[] = "Oship";
 
 const dCcD_SrcCyl daOship_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -39,15 +45,14 @@ const dCcD_SrcCyl daOship_c::m_cyl_src = {
     }},
 };
 
-
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */
 daOship_HIO_c::daOship_HIO_c() {
     /* Nonmatching */
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daOship_c *)i_this)->_createHeap();
 }
 
 /* 000002D8-00000324       .text nodeControl_CB__FP7J3DNodei */
@@ -222,12 +227,94 @@ bool daOship_c::_draw() {
 
 /* 00002B54-00002DFC       .text createInit__9daOship_cFv */
 void daOship_c::createInit() {
-    /* Nonmatching */
+    /* Instruction match */
+    bool no_majuu_flag;
+    itemTableIdx = dComIfGp_CharTbl()->GetNameIndex(m_arc_name, 0);
+    mOrigPos = current.pos;
+    max_health = 3;
+    health = max_health;
+    mPlFireTimer = -1;
+    changeModeByRange();
+    attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
+    attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 34;
+    mStts.Init(0xFF, 0, this);
+
+    for (int i = 0; i < 5; i++) {
+        mCyl[i].Set(m_cyl_src);
+        mCyl[i].SetStts(&mStts);
+    }
+
+    mWave.mAnimX = cM_rndF(32768.0f);
+    mWave.mAnimZ = cM_rndF(32768.0f);
+
+    setMtx();
+
+    mpModel->calc();
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+    fopAcM_setCullSizeFar(this, 10.0f);
+
+
+    no_majuu_flag = mModelType != 0xFF || REG12_S(0) != 0;
+
+    if (!no_majuu_flag) {
+        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, 4, &current.pos, tevStr.mRoomNo, &current.angle);
+        static cXyz flag_offset = cXyz(0.0f, 800.0f, 0.0f);
+        mFlagOffset = flag_offset;
+    }
+
+    if (mPathId != 0xFF) {
+        mpPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
+    }
+
+    createWave();
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
+
+    mAcch.SetWallNone();
+    mAcch.SetRoofNone();
 }
 
 /* 00002DFC-00002F44       .text _createHeap__9daOship_cFv */
-void daOship_c::_createHeap() {
-    /* Nonmatching */
+BOOL daOship_c::_createHeap() {
+    /* Instruction match */
+    bool temp;
+    s32 file_index;
+
+    file_index = 3;
+    temp = false;
+
+    if (mModelType != 0xFF || REG12_S(0) != 0) {
+        temp = true;
+    }
+
+    if (temp) {
+        file_index = 4;
+    }
+
+    J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);
+    JUT_ASSERT(0x625, modelData != NULL);
+
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
+
+    if (!mpModel) {
+        return FALSE;
+    }
+
+    mpModel->setUserArea((u32) this);
+    for (u16 i = 0; i < modelData->getJointNum(); i++) {
+        switch (i) { // really?
+            case 1:
+            case 2:
+                modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
+                break;
+            default:
+                break;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 00002F44-00002F90       .text getArg__9daOship_cFv */
@@ -237,7 +324,38 @@ void daOship_c::getArg() {
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
 cPhs_State daOship_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daOship_c);
+
+    cPhs_State state = dComIfG_resLoad(&mPhs, m_arc_name);
+    
+    if (state == cPhs_COMPLEATE_e) {
+        getArg();
+
+        if (mSwitchA != 0xFF && dComIfGs_isSwitch(mSwitchA, fopAcM_GetRoomNo(this))) {
+            return cPhs_ERROR_e;
+        }
+
+        if (mSwitchB != 0xFF && !dComIfGs_isSwitch(mSwitchB, fopAcM_GetRoomNo(this))) {
+            return cPhs_ERROR_e;
+        }
+
+        if (mTriforce != 0xF) {
+            if (!dComIfGs_isCollectMapTriforce(mTriforce + 1)) {
+                return cPhs_ERROR_e;
+            }
+            if (mRandomSalvagePoint != 0xF && mRandomSalvagePoint != dComIfGs_getRandomSalvagePoint()) {
+                return cPhs_ERROR_e;
+            }
+        }
+        
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
+            return cPhs_ERROR_e;
+        }
+
+        createInit();
+    }
+
+    return state;
 }
 
 /* 00003E78-00003F20       .text _delete__9daOship_cFv */

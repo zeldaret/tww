@@ -56,12 +56,14 @@ public:
     bool _execute();
     bool _draw();
     void createInit();
-    void _createHeap();
+    BOOL _createHeap();
     void getArg();
     cPhs_State _create();
     bool _delete();
 
     static const dCcD_SrcCyl m_cyl_src;
+    static const char m_arc_name[];
+    static const s32 m_heapsize;
 
 public:
     /* 0x290 */ u8 m290[0x295 - 0x290];
