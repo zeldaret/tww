@@ -5,7 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_oship.h"
-#include "d/d_item.h"
+#include "d/actor/d_a_ship.h"
+#include "d/res/res_oship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
@@ -93,43 +94,106 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 }
 
 /* 000002D8-00000324       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeControl_CB(J3DNode* i_nodeP, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* model_p = j3dSys.getModel();
+        daOship_c* this_p = (daOship_c *) model_p->getUserArea();
+        if (this_p) {
+            this_p->_nodeControl(i_nodeP, model_p);
+        }
+    }
+    return true;
 }
 
 /* 00000324-00000410       .text _nodeControl__9daOship_cFP7J3DNodeP8J3DModel */
-void daOship_c::_nodeControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
+    J3DJoint* jnt_p = (J3DJoint *) i_nodeP;
+    s32 jnt_no = jnt_p->getJntNo();
+
+    mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
+    csXyz aim_rot(0, 0, 0);
+
+    switch (jnt_no) {
+        case 1:
+            aim_rot.x = mAimRotY;
+            break;
+        case 2:
+            mDoMtx_stack_c::ZrotM(l_HIO.mNode2RotZ);
+            aim_rot.z = -mAimRotX;
+            break;
+        default:
+            break;
+    }
+
+    mDoMtx_stack_c::ZXYrotM(aim_rot.x, aim_rot.y, aim_rot.z);
+    cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
+    i_modelP->setAnmMtx(jnt_no, mDoMtx_stack_c::get());
 }
 
 /* 0000044C-00000488       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-void pathMove_CB(cXyz*, cXyz*, cXyz*, void*) {
-    /* Nonmatching */
+int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+    return ((daOship_c *)i_this)->_pathMove(param_1, param_2, param_3);
 }
 
 /* 00000488-00000718       .text _pathMove__9daOship_cFP4cXyzP4cXyzP4cXyz */
-void daOship_c::_pathMove(cXyz*, cXyz*, cXyz*) {
+int daOship_c::_pathMove(cXyz*, cXyz*, cXyz*) {
     /* Nonmatching */
 }
 
 /* 00000718-000007E4       .text pathMove__9daOship_cFv */
 void daOship_c::pathMove() {
-    /* Nonmatching */
+    /* Instruction match */
+    cLib_addCalc2(&speedF, mVelocityFwdTarget, 0.1f, 2.0f);
+    dLib_pathMove(&mOrigPos, &m2D4, mpPath, speedF, pathMove_CB, this);
+    cLib_addCalcPosXZ2(&current.pos, mOrigPos, REG12_F(0) + 0.01f, speedF);
+    
+    if (speedF !=0.0f && mVelocityFwdTarget != 0.0f) {
+        s16 target = cLib_targetAngleY(&current.pos, &mOrigPos);
+        cLib_addCalcAngleS2(&shape_angle.y, target, 8, 0x100);
+    }
 }
 
 /* 000007E4-000008A0       .text plFireRepeat__9daOship_cFv */
-void daOship_c::plFireRepeat() {
-    /* Nonmatching */
+bool daOship_c::plFireRepeat() {
+    if (dComIfGp_getShipActor() && dComIfGp_getShipActor()->checkShootCannon()) {
+        mPlFireTimer = cM_rndF(20.0f) + 10.0f;
+        mAimCounter++;
+    }
+
+    if (mPlFireTimer != -1 && cLib_calcTimer(&mPlFireTimer) == 0) {
+        modeProcInit(1);
+        mPlFireTimer = -1;
+        return true;
+    }
+
+    return false;
 }
 
 /* 000008A0-000008F8       .text lineCheck__9daOship_cFP4cXyzP4cXyz */
-void daOship_c::lineCheck(cXyz*, cXyz*) {
-    /* Nonmatching */
+BOOL daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
+    mLinChk.Set(param_1, param_2, this);
+    return dComIfG_Bgsp()->LineCross(&mLinChk) ? true : false;
 }
 
 /* 000008F8-00000990       .text changeModeByRange__9daOship_cFv */
 void daOship_c::changeModeByRange() {
     /* Nonmatching */
+    f32 search_ac_dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    int proc_no;
+
+    if (search_ac_dist < l_HIO.mDistRangeA) {
+        proc_no = 4;
+    } else if (search_ac_dist < l_HIO.mDistRangeB) {
+        proc_no = 5;
+    } else if (search_ac_dist < l_HIO.mDistRangeC) {
+        proc_no = 6;
+    } else {
+        proc_no = 7;
+    }
+
+    if (mCurrentProc != proc_no) {
+        modeProcInit(proc_no);
+    } 
 }
 
 /* 00000990-00000C08       .text createWave__9daOship_cFv */
@@ -149,7 +213,12 @@ void daOship_c::checkTgHit() {
 
 /* 00001184-000011F4       .text setAttention__9daOship_cFv */
 void daOship_c::setAttention() {
-    /* Nonmatching */
+    attention_info.position = current.pos;
+    eyePos = current.pos;
+    if (dComIfGp_event_runCheck() == FALSE) {
+        attention_info.position.y += l_HIO.mAttentionOffsY;
+        eyePos.y += l_HIO.mEyeOffsY;
+    }
 }
 
 /* 000011F4-00001330       .text setCollision__9daOship_cFv */
@@ -169,17 +238,17 @@ void daOship_c::setMtx() {
 
 /* 000017CC-000017EC       .text modeWaitInit__9daOship_cFv */
 void daOship_c::modeWaitInit() {
-    /* Nonmatching */
+    changeModeByRange();
 }
 
 /* 000017EC-0000180C       .text modeWait__9daOship_cFv */
 void daOship_c::modeWait() {
-    /* Nonmatching */
+    changeModeByRange();
 }
 
 /* 0000180C-00001820       .text modeRangeAInit__9daOship_cFv */
 void daOship_c::modeRangeAInit() {
-    /* Nonmatching */
+    mAttackTimer = l_HIO.mAttackDelayA;
 }
 
 /* 00001820-00001900       .text modeRangeA__9daOship_cFv */
@@ -190,6 +259,12 @@ void daOship_c::modeRangeA() {
 /* 00001900-00001934       .text modeRangeBInit__9daOship_cFv */
 void daOship_c::modeRangeBInit() {
     /* Nonmatching */
+    if (mSubMode == 0) {
+        mAttackTimer = l_HIO.mAttackDelayA;
+        return;
+    }
+    
+    mAttackTimer = l_HIO.mAttackDelayB;
 }
 
 /* 00001934-00001A14       .text modeRangeB__9daOship_cFv */
@@ -199,7 +274,7 @@ void daOship_c::modeRangeB() {
 
 /* 00001A14-00001A28       .text modeRangeCInit__9daOship_cFv */
 void daOship_c::modeRangeCInit() {
-    /* Nonmatching */
+    mAttackTimer = l_HIO.mAttackDelayB;
 }
 
 /* 00001A28-00001AFC       .text modeRangeC__9daOship_cFv */
@@ -209,7 +284,6 @@ void daOship_c::modeRangeC() {
 
 /* 00001AFC-00001B00       .text modeRangeDInit__9daOship_cFv */
 void daOship_c::modeRangeDInit() {
-    /* Nonmatching */
 }
 
 /* 00001B00-00001B7C       .text modeRangeD__9daOship_cFv */
@@ -220,6 +294,8 @@ void daOship_c::modeRangeD() {
 /* 00001B7C-00001B90       .text modeDamageInit__9daOship_cFv */
 void daOship_c::modeDamageInit() {
     /* Nonmatching */
+    mAttackTimer = 0x3C;
+    mAttackSwayAmount = 0x12C;
 }
 
 /* 00001B90-00001C98       .text modeDamage__9daOship_cFv */
@@ -239,7 +315,13 @@ void daOship_c::modeAttack() {
 
 /* 00002044-00002104       .text modeDeleteInit__9daOship_cFv */
 void daOship_c::modeDeleteInit() {
-    /* Nonmatching */
+    fopAcM_seStart(this, 0x6A19, 0);
+
+    for (int i = 0; i < 3; i++) {
+        mSmokeFollowCallback[i].end();
+    }
+
+    fopAcM_createDisappear(this, &current.pos, 5, daDisItem_IBALL_e);
 }
 
 /* 00002104-00002414       .text modeDelete__9daOship_cFv */
@@ -289,7 +371,7 @@ bool daOship_c::_draw() {
 void daOship_c::createInit() {
     /* Instruction match */
     bool no_majuu_flag;
-    itemTableIdx = dComIfGp_CharTbl()->GetNameIndex(m_arc_name, 0);
+    itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Oship", 0);
     mOrigPos = current.pos;
     max_health = 3;
     health = max_health;
@@ -339,18 +421,14 @@ void daOship_c::createInit() {
 /* 00002DFC-00002F44       .text _createHeap__9daOship_cFv */
 BOOL daOship_c::_createHeap() {
     /* Instruction match */
-    bool temp;
+    bool load_vbtst;
     s32 file_index;
 
-    file_index = 3;
-    temp = false;
+    file_index = OSHIP_BDL_VBTSP;
+    load_vbtst = mModelType != 0xFF || REG12_S(0) != 0;
 
-    if (mModelType != 0xFF || REG12_S(0) != 0) {
-        temp = true;
-    }
-
-    if (temp) {
-        file_index = 4;
+    if (load_vbtst) {
+        file_index = OSHIP_BDL_VBTST;
     }
 
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);
@@ -461,8 +539,8 @@ static BOOL daOshipDelete(void* i_this) {
 }
 
 /* 00003F64-00003F88       .text daOshipExecute__FPv */
-static BOOL daOshipExecute(void*) {
-    /* Nonmatching */
+static BOOL daOshipExecute(void* i_this) {
+    return ((daOship_c*)i_this)->_execute();
 }
 
 /* 00003F88-00003FAC       .text daOshipDraw__FPv */

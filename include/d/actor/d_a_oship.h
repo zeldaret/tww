@@ -24,20 +24,20 @@ public:
         ModeProcFunc mUpdFunc;
         char* mModeName;
     };
-    
+
 #if VERSION == VERSION_DEMO
     u8 getSw() { return m295; }
 #else
     u8 getSw() { return mSwitchA; }
 #endif
     void isSpecial() {}
-    void modeProcInit(int) {}
+    void modeProcInit(int i_newMode) { modeProc(PROC_INIT, i_newMode); }
 
     void _nodeControl(J3DNode*, J3DModel*);
-    void _pathMove(cXyz*, cXyz*, cXyz*);
+    int _pathMove(cXyz*, cXyz*, cXyz*);
     void pathMove();
-    void plFireRepeat();
-    void lineCheck(cXyz*, cXyz*);
+    bool plFireRepeat();
+    BOOL lineCheck(cXyz*, cXyz*);
     void changeModeByRange();
     void createWave();
     void setWave();
@@ -91,7 +91,7 @@ public:
     /* 0x2B8 */ cXyz mOrigPos;
     /* 0x2C4 */ u8 m2C4[0x2C8 - 0x2C4];
     /* 0x2C8 */ cXyz mPathP0;
-    /* 0x2D4 */ u8 m2D4;
+    /* 0x2D4 */ s8 m2D4;
     /* 0x2D5 */ u8 m2D5[0x2D8 - 0x2D5];
     /* 0x2D8 */ dPath* mpPath;
     /* 0x2DC */ u8 m2DC[0x2E0 - 0x2DC];
@@ -145,7 +145,7 @@ public:
 class daOship_HIO_c : public mDoHIO_entry_c {
 public:
     daOship_HIO_c();
-    virtual ~daOship_HIO_c();
+    virtual ~daOship_HIO_c() {}
 public:
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ s8 field_0x05;
