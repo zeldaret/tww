@@ -145,7 +145,7 @@ private:
         }
     }
 
-public:
+private:
     static dClothVobj03_c* top_pointer;
     static s32 cloth_counter;
 
@@ -177,7 +177,7 @@ private:
         }
     };
 
-public:
+private:
     static dClothVobj04_c* top_pointer;
     static s32 cloth_counter;
 
@@ -209,7 +209,7 @@ private:
         }
     }
 
-public:
+private:
     static dClothVobj05_c* top_pointer;
     static s32 cloth_counter;
 
@@ -241,7 +241,7 @@ private:
         }
     }
 
-public:
+private:
     static dClothVobj07_0_c* top_pointer;
     static s32 cloth_counter;
 
