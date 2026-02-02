@@ -17,7 +17,7 @@ dCloth_packet_c::dCloth_packet_c(
     JUT_ASSERT(43, i_toonimage != NULL);
 
     GXInitTexObj(
-        &mToonTex,
+        getToonTexObjP(),
         (u8*)i_toonimage + i_toonimage->imageOffset,
         i_toonimage->width,
         i_toonimage->height,
@@ -27,7 +27,7 @@ dCloth_packet_c::dCloth_packet_c(
         i_toonimage->mipmapCount > 1
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         (GXTexFilter)i_toonimage->minFilter,
         (GXTexFilter)i_toonimage->magFilter,
         i_toonimage->minLOD * 0.125f,
@@ -329,7 +329,7 @@ void dCloth_packet_c::cloth_draw() {
 /* 80064330-8006441C       .text TexObjInit__15dCloth_packet_cFP7ResTIMG */
 void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
     GXInitTexObj(
-        &mTexObj,
+        getTexObjP(),
         (u8*)i_img + i_img->imageOffset,
         i_img->width,
         i_img->height,
@@ -339,7 +339,7 @@ void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
         i_img->mipmapCount > 1
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         GXTexFilter(i_img->minFilter),
         GXTexFilter(i_img->magFilter),
         i_img->minLOD * 0.125f,
@@ -353,7 +353,7 @@ void dCloth_packet_c::TexObjInit(ResTIMG* i_img) {
 
 /* 8006441C-80064444       .text TexObjLoad__15dCloth_packet_cFv */
 void dCloth_packet_c::TexObjLoad() {
-    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 80064444-80064718       .text TevSetting__15dCloth_packet_cFv */
@@ -528,18 +528,18 @@ s32 dClothVobj07_0_c::cloth_counter = -1;
 
 /* 80064E48-80064F0C       .text cloth_copy__14dClothVobj03_cFv */
 void dClothVobj03_c::cloth_copy() {
-    swapArrays();
-    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80064F0C-80065020       .text init__14dClothVobj03_cFv */
 void dClothVobj03_c::init() {
     if (cloth_counter == (s32)g_Counter.mTimer) {
-        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
     } else {
         dCloth_packet_c::init();
     }
@@ -582,7 +582,7 @@ void dClothVobj03_c::cloth_move() {
 void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
     GXInitTexObjCI(
-        &mTexObj,
+        getTexObjP(),
         &timg->format + timg->imageOffset,
         timg->width,
         timg->height,
@@ -593,7 +593,7 @@ void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
         0
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         GXTexFilter(timg->minFilter),
         GXTexFilter(timg->magFilter),
         timg->minLOD * 0.125f,
@@ -608,7 +608,7 @@ void dClothVobj03_c::TexObjInit(ResTIMG* timg) {
 /* 80065268-800652A8       .text TexObjLoad__14dClothVobj03_cFv */
 void dClothVobj03_c::TexObjLoad() {
     GXLoadTlut(&mTlutObj, 0);
-    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
@@ -631,18 +631,18 @@ dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 
 /* 800653F4-800654B8       .text cloth_copy__14dClothVobj04_cFv */
 void dClothVobj04_c::cloth_copy() {
-    swapArrays();
-    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 800654B8-800655CC       .text init__14dClothVobj04_cFv */
 void dClothVobj04_c::init() {
     if (cloth_counter == (s32)g_Counter.mTimer) {
-        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
     } else {
         dCloth_packet_c::init();
     }
@@ -685,7 +685,7 @@ void dClothVobj04_c::cloth_move() {
 void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
     GXInitTexObjCI(
-        &mTexObj,
+        getTexObjP(),
         &timg->format + timg->imageOffset,
         timg->width,
         timg->height,
@@ -696,7 +696,7 @@ void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
         0
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         GXTexFilter(timg->minFilter),
         GXTexFilter(timg->magFilter),
         timg->minLOD * 0.125f,
@@ -711,7 +711,7 @@ void dClothVobj04_c::TexObjInit(ResTIMG* timg) {
 /* 8006580C-8006584C       .text TexObjLoad__14dClothVobj04_cFv */
 void dClothVobj04_c::TexObjLoad() {
     GXLoadTlut(&mTlutObj, 0);
-    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
@@ -734,18 +734,18 @@ dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 
 /* 80065998-80065A5C       .text cloth_copy__14dClothVobj05_cFv */
 void dClothVobj05_c::cloth_copy() {
-    swapArrays();
-    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80065A5C-80065B70       .text init__14dClothVobj05_cFv */
 void dClothVobj05_c::init() {
     if (cloth_counter == (s32)g_Counter.mTimer) {
-        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
     } else {
         dCloth_packet_c::init();
     }
@@ -788,7 +788,7 @@ void dClothVobj05_c::cloth_move() {
 void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
     GXInitTexObjCI(
-        &mTexObj,
+        getTexObjP(),
         &timg->format + timg->imageOffset,
         timg->width,
         timg->height,
@@ -799,7 +799,7 @@ void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
         0
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         GXTexFilter(timg->minFilter),
         GXTexFilter(timg->magFilter),
         timg->minLOD * 0.125f,
@@ -814,7 +814,7 @@ void dClothVobj05_c::TexObjInit(ResTIMG* timg) {
 /* 80065DAC-80065DEC       .text TexObjLoad__14dClothVobj05_cFv */
 void dClothVobj05_c::TexObjLoad() {
     GXLoadTlut(&mTlutObj, 0);
-    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 80065DEC-80065DF8       .text dClothVobj05_VtxFactorCB__FP15dCloth_packet_cii */
@@ -843,18 +843,18 @@ dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
 
 /* 80065F50-80066014       .text cloth_copy__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::cloth_copy() {
-    swapArrays();
-    memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-    memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    changeCurrentBuff();
+    memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+    memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
 }
 
 /* 80066014-80066128       .text init__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::init() {
     if (cloth_counter == (s32)g_Counter.mTimer) {
-        memcpy(getCurrentNrmArr(), top_pointer->getCurrentNrmArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getCurrentNrmArrBack(), top_pointer->getCurrentNrmArrBack(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
-        memcpy(getSpeedArr(), top_pointer->getSpeedArr(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getNrmP(), top_pointer->getNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getBackNrmP(), top_pointer->getBackNrmP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
+        memcpy(getSpdP(), top_pointer->getSpdP(), sizeof(cXyz) * mHoistGridSize * mFlyGridSize);
     } else {
         dCloth_packet_c::init();
     }
@@ -897,7 +897,7 @@ void dClothVobj07_0_c::cloth_move() {
 void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
     GXInitTlutObj(&mTlutObj, (u8*)&timg->format + timg->paletteOffset, GXTlutFmt(timg->colorFormat), timg->numColors);
     GXInitTexObjCI(
-        &mTexObj,
+        getTexObjP(),
         &timg->format + timg->imageOffset,
         timg->width,
         timg->height,
@@ -908,7 +908,7 @@ void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
         0
     );
     GXInitTexObjLOD(
-        &mTexObj,
+        getTexObjP(),
         GXTexFilter(timg->minFilter),
         GXTexFilter(timg->magFilter),
         timg->minLOD * 0.125f,
@@ -923,7 +923,7 @@ void dClothVobj07_0_c::TexObjInit(ResTIMG* timg) {
 /* 80066368-800663A8       .text TexObjLoad__16dClothVobj07_0_cFv */
 void dClothVobj07_0_c::TexObjLoad() {
     GXLoadTlut(&mTlutObj, 0);
-    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXLoadTexObj(getTexObjP(), GX_TEXMAP0);
 }
 
 /* 800663A8-800663B4       .text dClothVobj07_0_VtxFactorCB__FP15dCloth_packet_cii */

@@ -48,7 +48,7 @@ public:
         setWindPower(wind, windWave);
     }
 
-    void swapArrays() { mCurArr ^= 1; }
+    void changeCurrentBuff() { mCurArr ^= 1; }
 
     bool chkCreateBuff() {
         if (mpPosArr[0] != NULL && mpPosArr[1] != NULL && mpNrmArr[0] != NULL && mpNrmArr[1] != NULL && mpNrmArrBack[0] != NULL && mpNrmArrBack[1] != NULL &&
@@ -57,10 +57,13 @@ public:
         return false;
     }
 
-    cXyz* getCurrentPosArr() const { return mpPosArr[mCurArr]; }
-    cXyz* getCurrentNrmArr() const { return mpNrmArr[mCurArr]; }
-    cXyz* getCurrentNrmArrBack() const { return mpNrmArrBack[mCurArr]; }
-    cXyz* getSpeedArr() const { return mpSpeedArr; }
+    cXyz* getPosP() const { return mpPosArr[mCurArr]; }
+    cXyz* getNrmP() const { return mpNrmArr[mCurArr]; }
+    cXyz* getBackNrmP() const { return mpNrmArrBack[mCurArr]; }
+    cXyz* getSpdP() const { return mpSpeedArr; }
+    u32 getVerticalNum() const { return mHoistGridSize; }
+    GXTexObj* getTexObjP() { return &mTexObj; }
+    GXTexObj* getToonTexObjP() { return &mToonTex; }
 
     friend int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y);
     friend dCloth_packet_c* dCloth_packet_create(ResTIMG*, ResTIMG*, int, int, float, float, dKy_tevstr_c*, cXyz**);
