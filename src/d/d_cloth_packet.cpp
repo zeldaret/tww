@@ -881,6 +881,7 @@ dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, 
     if (pCloth && i_flagimage) {
         pCloth->TexObjInit(i_flagimage);
         pCloth->init();
+        pCloth->setFactorCheckCB(dClothVobj05_VtxFactorCB);
     }
 
     return pCloth;
