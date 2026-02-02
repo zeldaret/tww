@@ -190,12 +190,11 @@ void dCloth_packet_c::draw() {
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
 void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restDist, float springFactor) {
-    /* Nonmatching */
-    // FIXME: Logic seems right, but the function stack and ordering are slightly off.
-    const cXyz diff = *pOther - *pPos;
+    cXyz diff = *pOther - *pPos;
     cXyz norm = diff.normZP();
-    const float dist = pPos->abs(*pOther);
-    norm *= (dist - restDist) * springFactor;
+    f32 dist = diff.abs() - restDist;
+    dist *= springFactor;
+    norm *= dist;
     *pDst += norm;
 }
 
