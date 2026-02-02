@@ -200,43 +200,58 @@ void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restD
 
 /* 80063A10-80063D84       .text getFactor__15dCloth_packet_cFP4cXyzP4cXyzP4cXyzfffii */
 cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float distFly, float distHoist, float distBoth, int x, int y) {
-    /* Nonmatching */
-    if (mpFactorCheckCB(this, x, y) != 0) {
+    static const u8 left_bit = 1 << 0;
+    static const u8 right_bit = 1 << 1;
+    static const u8 up_bit = 1 << 2;
+    static const u8 down_bit = 1 << 3;
+
+    if (mpFactorCheckCB(this, x, y)) {
         return cXyz::Zero;
     }
 
-    cXyz pos = pPos[x + y * mFlyGridSize];
-    const float speedDotNrm = pSpeed->inprod(pNrm[x + y * mFlyGridSize]);
-    cXyz ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
+    u8 neighborMask = 0;
 
-    // FIXME: Somehow the neighbor checks use a bitfield, and the bit flags are in static memory.
-    //   It uses left_bit, right_bit, up_bit, and down_bit.
-    const bool hasLeftNeighbor = x != 0;
-    const bool hasRightNeighbor = x != mFlyGridSize - 1;
-    const bool hasTopNeighbor = y != 0;
-    const bool hasBottomNeighbor = y != mHoistGridSize - 1;
-    if (hasLeftNeighbor) {
+    cXyz ret, pos;
+    pos = pPos[x + y * mFlyGridSize];
+    const float speedDotNrm = pSpeed->inprod(pNrm[x + y * mFlyGridSize]);
+    ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
+    ret.y += mGravity;
+
+    if (x != 0) {
+        neighborMask |= left_bit;
+    }
+    if (x != mFlyGridSize - 1) {
+        neighborMask |= right_bit;
+    }
+    if (y != 0) {
+        neighborMask |= up_bit;
+    }
+    if (y != mHoistGridSize - 1) {
+        neighborMask |= down_bit;
+    }
+
+    if (neighborMask & left_bit) {
         get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + y * mFlyGridSize], &ret, distFly, mSpring);
     }
-    if (hasRightNeighbor) {
+    if (neighborMask & right_bit) {
         get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + y * mFlyGridSize], &ret, distFly, mSpring);
     }
-    if (hasTopNeighbor) {
+    if (neighborMask & up_bit) {
         get_cloth_anim_sub_factor(&pos, &pPos[x + (y - 1) * mFlyGridSize], &ret, distHoist, mSpring);
     }
-    if (hasBottomNeighbor) {
+    if (neighborMask & down_bit) {
         get_cloth_anim_sub_factor(&pos, &pPos[x + (y + 1) * mFlyGridSize], &ret, distHoist, mSpring);
     }
-    if (hasLeftNeighbor && hasTopNeighbor) {
+    if ((neighborMask & left_bit) && (neighborMask & up_bit)) {
         get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
     }
-    if (hasLeftNeighbor && hasBottomNeighbor) {
+    if ((neighborMask & left_bit) && (neighborMask & down_bit)) {
         get_cloth_anim_sub_factor(&pos, &pPos[x - 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
     }
-    if (hasRightNeighbor && hasTopNeighbor) {
+    if ((neighborMask & right_bit) && (neighborMask & up_bit)) {
         get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y - 1) * mFlyGridSize], &ret, distBoth, mSpring);
     }
-    if (hasRightNeighbor && hasBottomNeighbor) {
+    if ((neighborMask & right_bit) && (neighborMask & down_bit)) {
         get_cloth_anim_sub_factor(&pos, &pPos[x + 1 + (y + 1) * mFlyGridSize], &ret, distBoth, mSpring);
     }
 
