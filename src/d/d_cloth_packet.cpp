@@ -587,33 +587,12 @@ void dClothVobj03_c::cloth_move() {
     if (field_0x109 != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
-        mSpring = 0.4;
-        mGravity = -1.5;
-        mDrag = 0.7;
-        mFlyFlex = 0.75;
-        mHoistFlex = 0.6;
-        mWaveSpeed = 0;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0, 0, 900, -800, 7.0, 6.0);
     } else {
-        mSpring = 0.4;
-        mGravity = -1.5;
-        mDrag = 0.7;
-        mFlyFlex = 0.75;
-        mHoistFlex = 0.6;
-        mWaveSpeed = 0x400;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0x400, 0, 900, -800, 7.0, 6.0);
     }
 
-    mWindSpeed = windSpeed;
-    mWindSpeedWave = windSpeedWave;
+    setWindPower(windSpeed, windSpeedWave);
 
     dCloth_packet_c::cloth_move();
 }
@@ -720,33 +699,12 @@ void dClothVobj04_c::cloth_move() {
     if (field_0x109 != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
-        mSpring = 0.45;
-        mGravity = -1.5;
-        mDrag = 0.6;
-        mFlyFlex = 0.8;
-        mHoistFlex = 0.8;
-        mWaveSpeed = 0;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0, 0, 900, -800, 7.0, 6.0);
     } else {
-        mSpring = 0.45;
-        mGravity = -1.5;
-        mDrag = 0.6;
-        mFlyFlex = 0.8;
-        mHoistFlex = 0.8;
-        mWaveSpeed = 0x400;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0x400, 0, 900, -800, 7.0, 6.0);
     }
 
-    mWindSpeed = windSpeed;
-    mWindSpeedWave = windSpeedWave;
+    setWindPower(windSpeed, windSpeedWave);
 
     dCloth_packet_c::cloth_move();
 }
@@ -853,33 +811,12 @@ void dClothVobj05_c::cloth_move() {
     if (field_0x109 != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
-        mSpring = 0.45;
-        mGravity = -1.0;
-        mDrag = 0.7;
-        mFlyFlex = 0.95;
-        mHoistFlex = 0.95;
-        mWaveSpeed = 0;
-        field_0xF2 = 0;
-        mRipple = 0;
-        mRotateY = 0;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.45, -1.0, 0.7, 0.95, 0.95, 0, 0, 0, 0, 7.0, 6.0);
     } else {
-        mSpring = 0.45;
-        mGravity = -1.0;
-        mDrag = 0.65;
-        mFlyFlex = 0.9;
-        mHoistFlex = 0.95;
-        mWaveSpeed = 0x200;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.45, -1.0, 0.65, 0.9, 0.95, 0x200, 0, 900, -800, 7.0, 6.0);
     }
 
-    mWindSpeed = windSpeed;
-    mWindSpeedWave = windSpeedWave;
+    setWindPower(windSpeed, windSpeedWave);
 
     dCloth_packet_c::cloth_move();
 }
@@ -991,33 +928,12 @@ void dClothVobj07_0_c::cloth_move() {
     if (field_0x109 != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
-        mSpring = 0.35;
-        mGravity = -1.0;
-        mDrag = 0.7;
-        mFlyFlex = 1.1;
-        mHoistFlex = 1.1;
-        mWaveSpeed = 0;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.35, -1.0, 0.7, 1.1, 1.1, 0, 0, 900, -800, 7.0, 6.0);
     } else {
-        mSpring = 0.4;
-        mGravity = -0.5;
-        mDrag = 0.7;
-        mFlyFlex = 1.1;
-        mHoistFlex = 1.1;
-        mWaveSpeed = 0x100;
-        field_0xF2 = 0;
-        mRipple = 900;
-        mRotateY = -800;
-        mWindSpeed = 7.0;
-        mWindSpeedWave = 6.0;
+        setParam(0.4, -0.5, 0.7, 1.1, 1.1, 0x100, 0, 900, -800, 7.0, 6.0);
     }
 
-    mWindSpeed = windSpeed;
-    mWindSpeedWave = windSpeedWave;
+    setWindPower(windSpeed, windSpeedWave);
 
     dCloth_packet_c::cloth_move();
 }
