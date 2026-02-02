@@ -213,7 +213,7 @@ cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float dist
     }
 
     cXyz pos = pPos[x + y * mFlyGridSize];
-    const float speedDotNrm = VECDotProduct(pSpeed, &pNrm[x + y * mFlyGridSize]);
+    const float speedDotNrm = pSpeed->inprod(pNrm[x + y * mFlyGridSize]);
     cXyz ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
 
     // FIXME: Somehow the neighbor checks use a bitfield, and the bit flags are in static memory.
