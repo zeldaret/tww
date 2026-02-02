@@ -245,55 +245,60 @@ cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float dist
 
 /* 80063D84-800642D0       .text setNrm__15dCloth_packet_cFv */
 void dCloth_packet_c::setNrm() {
-    /* Nonmatching */
-    cXyz* pPos = mpPosArr[mCurArr];
-    cXyz* pNrm = mpNrmArr[mCurArr];
+    cXyz* pPos = getPosP();
+    cXyz* pNrm = getNrmP();
+
     mWave += mWaveSpeed;
+
+    // It seems like field_0xF2 is always set to 0.
     field_0xF0 += field_0xF2;
 
-    for (int y = 0; y < mHoistGridSize; y++) {
-        for (int x = 0; x < mFlyGridSize; x++) {
-            cXyz pos = pPos[x + y * mFlyGridSize];
-            cXyz total = cXyz::Zero;
+    for (s32 y = 0; y < mHoistGridSize; y++) {
+        for (s32 x = 0; x < mFlyGridSize; x++) {
+            cXyz x_diff;
+            cXyz y_diff;
+            cXyz norm;
+            cXyz total;
+            cXyz pos;
+
+            pos = pPos[x + mFlyGridSize * y];
+            total = cXyz::Zero;
             if (x != 0) {
-                // FIXME: y ± 1 is lifted out of the conditionals and reused when it should be calculated in-place.
-                //  This makes the stack not match either.
-                cXyz x_diff = pPos[x - 1 + y * mFlyGridSize] - pos;
+                x_diff = pPos[x - 1 + mFlyGridSize * y] - pos;
                 if (y != 0) {
-                    cXyz y_diff = pPos[x + (y - 1) * mFlyGridSize] - pos;
-                    cXyz prod = y_diff.outprod(x_diff);
-                    cXyz norm = prod.normZP();
+                    y_diff = pPos[x + mFlyGridSize * (y - 1)] - pos;
+                    norm = y_diff.outprod(x_diff);
+                    norm = norm.normZP();
                     total += norm;
                 }
                 if (y != mHoistGridSize - 1) {
-                    cXyz y_diff = pPos[x + (y + 1) * mFlyGridSize] - pos;
-                    cXyz prod = x_diff.outprod(y_diff);
-                    cXyz norm = prod.normZP();
+                    y_diff = pPos[x + mFlyGridSize * (y + 1)] - pos;
+                    norm = x_diff.outprod(y_diff);
+                    norm = norm.normZP();
                     total += norm;
                 }
             }
             if (x != mFlyGridSize - 1) {
-                cXyz x_diff = pPos[x + 1 + y * mFlyGridSize] - pos;
+                x_diff = pPos[x + 1 + mFlyGridSize * y] - pos;
                 if (y != 0) {
-                    cXyz y_diff = pPos[x + (y - 1) * mFlyGridSize] - pos;
-                    cXyz prod = x_diff.outprod(y_diff);
-                    cXyz norm = prod.normZP();
+                    y_diff = pPos[x + mFlyGridSize * (y - 1)] - pos;
+                    norm = x_diff.outprod(y_diff);
+                    norm = norm.normZP();
                     total += norm;
                 }
                 if (y != mHoistGridSize - 1) {
-                    cXyz y_diff = pPos[x + (y + 1) * mFlyGridSize] - pos;
-                    cXyz prod = y_diff.outprod(x_diff);
-                    cXyz norm = prod.normZP();
+                    y_diff = pPos[x + mFlyGridSize * (y + 1)] - pos;
+                    norm = y_diff.outprod(x_diff);
+                    norm = norm.normZP();
                     total += norm;
                 }
             }
 
             total = total.normZP();
 
-            mDoMtx_YrotS(mDoMtx_stack_c::get(), mRotateY * cM_ssin(mWave + mRipple * (x + y)));
-            cXyz temp;
-            MTXMultVec(mDoMtx_stack_c::get(), &total, &temp);
-            pNrm[x + mFlyGridSize * y] = temp.normZP();
+            mDoMtx_stack_c::YrotS(mRotateY * cM_ssin(mWave + mRipple * (x + y)));
+            mDoMtx_stack_c::multVec(&total, &norm);
+            pNrm[x + mFlyGridSize * y] = norm.normZP();
         }
     }
 
@@ -301,11 +306,9 @@ void dCloth_packet_c::setNrm() {
     cXyz* pNrmBack = mpNrmArrBack[mCurArr];
     for (int y = 0; y < mHoistGridSize; y++) {
         for (int x = 0; x < mFlyGridSize; x++) {
-            pNrmBack->x = -pNrm->x;
-            pNrmBack->y = -pNrm->y;
-            pNrmBack->z = -pNrm->z;
-            pNrmBack++;
+            pNrmBack->set(-pNrm->x, -pNrm->y, -pNrm->z);
             pNrm++;
+            pNrmBack++;
         }
     }
 }
