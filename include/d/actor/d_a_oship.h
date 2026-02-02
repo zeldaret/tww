@@ -9,12 +9,22 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_path.h"
 #include "d/d_lib.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daOship_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        
+        PROC_INIT = 0,
+        PROC_EXEC = 1
     };
+
+    struct ActorModeTable {
+        typedef void (daOship_c::*ModeProcFunc)(void);
+        ModeProcFunc mInitFunc;
+        ModeProcFunc mUpdFunc;
+        char* mModeName;
+    };
+    
 #if VERSION == VERSION_DEMO
     u8 getSw() { return m295; }
 #else
@@ -104,7 +114,7 @@ public:
     /* 0x4B0 */ J3DModel* mpModel;
     /* 0x4B4 */ dCcD_Stts mStts;
     /* 0x4F0 */ dCcD_Cyl mCyl[5];
-    /* 0xAE0 */ dBgS_Acch mAcch;
+    /* 0xAE0 */ dBgS_ObjAcch mAcch;
     /* 0xCA4 */ dBgS_AcchCir mAcchCir;
     /* 0xCE4 */ dLib_wave_c mWave;
     /* 0xCF0 */ cXyz mTargetPos;
@@ -129,15 +139,52 @@ public:
     /* 0xD8A */ s16 mAimRotXTarget;
     /* 0xD8C */ u8 mBombAlloc[1];
     /* 0xD8D */ u8 mD8D[0xD94 - 0xD8D];
-    /* 0xD94 */ dBgS_LinChk mLinChk;
+    /* 0xD94 */ dBgS_ObjLinChk mLinChk;
 };
 
-class daOship_HIO_c {
+class daOship_HIO_c : public mDoHIO_entry_c {
 public:
     daOship_HIO_c();
-
+    virtual ~daOship_HIO_c();
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ s8 field_0x04;
+    /* 0x05 */ s8 field_0x05;
+    /* 0x06 */ s8 field_0x06;
+    /* 0x07 */ s8 field_0x07;
+    /* 0x08 */ s8 field_0x08;
+    /* 0x09 */ u8 field_0x09[0x0C - 0x09];
+    /* 0x0C */ f32 mAttentionOffsY;
+    /* 0x10 */ f32 mEyeOffsY;
+    /* 0x14 */ f32 mWaveOffsZ;
+    /* 0x18 */ f32 mTrackOffsZ;
+    /* 0x1C */ cXyz mBombOffset;
+    /* 0x28 */ f32 mDistRangeA;
+    /* 0x2C */ f32 mDistRangeB;
+    /* 0x30 */ f32 mDistRangeC;
+    /* 0x34 */ s16 mAttackDelayA;
+    /* 0x36 */ s16 mAttackDelayB;
+    /* 0x38 */ f32 mPathSpeed;
+    /* 0x3C */ f32 mSpecScale;
+    /* 0x40 */ f32 mTrackOffsY;
+    /* 0x44 */ f32 mTrackScaleY;
+    /* 0x48 */ f32 mSplashScaleTimerTarget;
+    /* 0x4C */ f32 mSplashMaxScaleTimer;
+    /* 0x50 */ f32 mWaveVelFade1;
+    /* 0x54 */ f32 mTrackVel;
+    /* 0x58 */ f32 mWaveVelSpeed;
+    /* 0x5C */ f32 mWaveVelFadeOffs;
+    /* 0x60 */ f32 mWaveMaxVelocity;
+    /* 0x64 */ cXyz mWaveCollapsePos0;
+    /* 0x70 */ cXyz mWaveCollapsePos1;
+    /* 0x7C */ f32 mBombSpeed;
+    /* 0x80 */ f32 mBombAcceleration;
+    /* 0x84 */ s16 mBombNoGravityTime;
+    /* 0x86 */ u8 field_0x86[0x88 - 0x86];
+    /* 0x88 */ f32 mBadAimAdjustDistanceStart;
+    /* 0x8C */ s16 mBadAimMax;
+    /* 0x8E */ s16 field_0x8E;
+    /* 0x90 */ s16 field_0x90;
+    /* 0x92 */ s16 mNode2RotZ;
+};  // Size: 0x94
 
 #endif /* D_A_OSHIP_H */

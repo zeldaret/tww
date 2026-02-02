@@ -45,9 +45,46 @@ const dCcD_SrcCyl daOship_c::m_cyl_src = {
     }},
 };
 
+static daOship_HIO_c l_HIO;
+
 /* 000000EC-00000234       .text __ct__13daOship_HIO_cFv */
 daOship_HIO_c::daOship_HIO_c() {
-    /* Nonmatching */
+    field_0x04 = 0;
+    field_0x06 = 0;
+    field_0x05 = 0;
+    field_0x07 = 0;
+    field_0x08 = 0;
+    mTrackOffsY = -0.04;
+    mTrackScaleY = 4.0;
+    mAttentionOffsY = 900.0;
+    mEyeOffsY = 300.0;
+    mWaveOffsZ = 380.0;
+    mTrackOffsZ = 0.0;
+    mDistRangeA = 2500.0;
+    mDistRangeB = 6000.0;
+    mDistRangeC = 12000.0;
+    mAttackDelayA = 0x1e;
+    mAttackDelayB = 200;
+    mSplashScaleTimerTarget = 200.0;
+    mSplashMaxScaleTimer = 300.0;
+    mWaveVelFade1 = 2.0;
+    mTrackVel = 300.0;
+    mWaveVelSpeed = 2.0;
+    mWaveMaxVelocity = 15.0;
+    mWaveVelFadeOffs = 0.0;
+    mWaveCollapsePos0.set(-80.0f, -50.0f, -150.0f);
+    mWaveCollapsePos1.set(-40.0f, -100.0f, -350.0f);
+    mBombOffset.set(450.0f, 0.0f, 0.0f);
+    mBombSpeed = 85.0;
+    mBombAcceleration = -2.0;
+    mBombNoGravityTime = 0x23;
+    mBadAimAdjustDistanceStart = 3500.0;
+    mBadAimMax = 0x3000;
+    field_0x8E = 0x3000;
+    field_0x90 = 0x3500;
+    mNode2RotZ = 0x2800;
+    mPathSpeed = 20.0;
+    mSpecScale = 0.75;
 }
 
 /* 000002B8-000002D8       .text createHeap_CB__FP10fopAc_ac_c */
@@ -211,8 +248,27 @@ void daOship_c::modeDelete() {
 }
 
 /* 00002414-0000263C       .text modeProc__9daOship_cFQ29daOship_c6Proc_ei */
-void daOship_c::modeProc(daOship_c::Proc_e, int) {
-    /* Nonmatching */
+void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
+    /* Instruction match */
+    static const ActorModeTable mode_tbl[8] = {
+        { &daOship_c::modeWaitInit,   &daOship_c::modeWait  , "WAIT"   },
+        { &daOship_c::modeAttackInit, &daOship_c::modeAttack, "ATTACK" },
+        { &daOship_c::modeDamageInit, &daOship_c::modeDamage, "DAMAGE" },
+        { &daOship_c::modeDeleteInit, &daOship_c::modeDelete, "DELETE" },
+        { &daOship_c::modeRangeAInit, &daOship_c::modeRangeA, "RANGE_A" },
+        { &daOship_c::modeRangeBInit, &daOship_c::modeRangeB, "RANGE_B" },
+        { &daOship_c::modeRangeCInit, &daOship_c::modeRangeC, "RANGE_C" },
+        { &daOship_c::modeRangeDInit, &daOship_c::modeRangeD, "RANGE_D" },
+    };
+    
+    if (i_procType == PROC_INIT) {
+        fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
+        cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
+        mCurrentProc = i_procNo;
+        (this->*mode_tbl[mCurrentProc].mInitFunc)();
+    } else if (i_procType == PROC_EXEC) {
+        (this->*mode_tbl[mCurrentProc].mUpdFunc)();
+    }
 }
 
 /* 0000263C-00002AD4       .text _execute__9daOship_cFv */
@@ -222,7 +278,11 @@ bool daOship_c::_execute() {
 
 /* 00002AD4-00002B54       .text _draw__9daOship_cFv */
 bool daOship_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), l_HIO.mSpecScale);
+    mDoExt_modelEntryDL(mpModel);
+    return true;
 }
 
 /* 00002B54-00002DFC       .text createInit__9daOship_cFv */
@@ -304,7 +364,7 @@ BOOL daOship_c::_createHeap() {
 
     mpModel->setUserArea((u32) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
-        switch (i) { // really?
+        switch (i) {
             case 1:
             case 2:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
@@ -319,7 +379,22 @@ BOOL daOship_c::_createHeap() {
 
 /* 00002F44-00002F90       .text getArg__9daOship_cFv */
 void daOship_c::getArg() {
-    /* Nonmatching */
+    u32 prms = fopAcM_GetParam(this);
+
+    mSubMode = prms & 0xFF;
+    mTriforce = (prms >> 8) & 0xF;
+    mRandomSalvagePoint = (prms >> 12) & 0xF;
+    mPathId = (prms >> 16) & 0xFF;
+    mSwitchA = (prms >> 24) & 0xFF;
+
+    s16 home_angle_x = home.angle.x; // they were storing non-angle data in this?
+
+    mSwitchB = home_angle_x & 0xFF;
+    mModelType = (home_angle_x >> 8) & 0xFF;
+
+    home.angle.x = 0;
+    current.angle.x = 0;
+    shape_angle.x = 0;
 }
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
@@ -360,7 +435,19 @@ cPhs_State daOship_c::_create() {
 
 /* 00003E78-00003F20       .text _delete__9daOship_cFv */
 bool daOship_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arc_name);
+
+    for (int i = 0; i < 3; i++) {
+        mSmokeFollowCallback[i].end();
+    }
+
+    mWaveCallback2.remove();
+    mWaveCallback1.remove();
+    mSplashCallback.remove();
+    mTrackCallback.remove();
+    mDoAud_seDeleteObject(&mBombSpawnPos);
+    
+    return true;
 }
 
 /* 00003F20-00003F40       .text daOshipCreate__FPv */
