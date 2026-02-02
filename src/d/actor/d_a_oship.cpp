@@ -205,7 +205,69 @@ void daOship_c::createWave() {
 
 /* 00000C08-00000E50       .text setWave__9daOship_cFv */
 void daOship_c::setWave() {
-    /* Nonmatching */
+    /* Instruction match */
+    f32 track_vel;
+    f32 wave_vel_fade;
+    f32 splash_scale_target;
+    f32 wave_max_velocity;
+
+    track_vel = l_HIO.mTrackVel;
+    wave_vel_fade = l_HIO.mWaveVelFade1;
+    splash_scale_target = l_HIO.mSplashScaleTimerTarget;
+    wave_max_velocity = l_HIO.mWaveMaxVelocity;
+
+    if (fopAcM_GetSpeedF(this) <= 2.0f || mCurrentProc == 3) {
+        wave_vel_fade = 0.0f;
+        splash_scale_target = 0.0f;
+        mTrackCallback.stop();
+    } else {
+        createWave();
+    }
+
+    mWavePos.y = dLib_getWaterY(mWavePos, mAcch);
+    mWaveRot.y = shape_angle.y;
+
+    if (mTrackCallback.getEmitter()) {
+        mTrackCallback.setIndirectTexData(l_HIO.mTrackOffsY, l_HIO.mTrackScaleY);
+        mTrackCallback.setSpeed(track_vel);
+        mTrackCallback.setWaterY(mWavePos.y);
+
+        if (mAcch.ChkWaterHit()) {
+            track_vel = mAcch.m_wtr.GetHeight();
+        } else {
+            track_vel = -G_CM3D_F_INF;
+        }
+
+        mTrackCallback.setWaterFlatY(track_vel);
+        mTrackCallback.setLimitSpeed(3.0f);
+    }
+
+    mWaveCallback2.setSpeed(wave_vel_fade);
+    mWaveCallback1.setSpeed(wave_vel_fade);
+
+    mWaveCallback2.setMaxSpeed(wave_max_velocity);
+    mWaveCallback1.setMaxSpeed(wave_max_velocity);
+
+    mWaveCallback2.setPitch(l_HIO.mWaveVelFadeOffs + 1.0f);
+    mWaveCallback1.setPitch(1.0f - l_HIO.mWaveVelFadeOffs);
+
+    cXyz collapse_pos_0_cb2 = l_HIO.mWaveCollapsePos0;
+    cXyz collapse_pos_1_cb2 = l_HIO.mWaveCollapsePos1;
+    cXyz collapse_pos_0_cb1 = collapse_pos_0_cb2;
+    cXyz collapse_pos_1_cb1 = collapse_pos_1_cb2;
+
+    mWaveCallback2.setAnchor(&collapse_pos_0_cb2, &collapse_pos_1_cb2);
+    
+    collapse_pos_0_cb1.x *= -1.0f;
+    collapse_pos_1_cb1.x *= -1.0f;
+    mWaveCallback1.setAnchor(&collapse_pos_0_cb1, &collapse_pos_1_cb1);
+
+    mWaveCallback2.setMaxDisSpeed(l_HIO.mWaveVelSpeed);
+    mWaveCallback1.setMaxDisSpeed(l_HIO.mWaveVelSpeed);
+
+    cLib_addCalc2(&mSplashScaleTimer, splash_scale_target, 0.1f, 10.0f);
+    mSplashCallback.setSpeed(mSplashScaleTimer);
+    mSplashCallback.setMaxSpeed(l_HIO.mSplashMaxScaleTimer);
 }
 
 /* 00000E50-00001184       .text checkTgHit__9daOship_cFv */
@@ -457,32 +519,32 @@ void daOship_c::modeAttackInit() {
 
     f32 target_to_curr_dist = (current.pos - mTargetPos).absXZ();
 
-    f32 amplitude = 0.0f;
+    f32 fVar1 = 0.0f;
     if (target_to_curr_dist > l_HIO.mBadAimAdjustDistanceStart) {
-        amplitude = (target_to_curr_dist - l_HIO.mBadAimAdjustDistanceStart) * 0.5f;
+        fVar1 = (target_to_curr_dist - l_HIO.mBadAimAdjustDistanceStart) * 0.5f;
     }
 
-    amplitude += 300.0f;
+    fVar1 += 300.0f;
 
     if (cM_rndF(100.0f) < 10.0f) {
-        amplitude = 0.0f;
+        fVar1 = 0.0f;
     }
 
     if (dComIfGp_checkPlayerStatus0(0, 0x1100000)) {
         mAimCounter = 0;
-        amplitude += 3000.0f;
+        fVar1 += 3000.0f;
     } else if (mAimCounter < 6) {
-        amplitude += (6 - mAimCounter) * 500.0f;
+        fVar1 += (6 - mAimCounter) * 500.0f;
     }
 
     if (l_HIO.field_0x08 != 0) {
-        amplitude = 0.0f;
+        fVar1 = 0.0f;
     }
 
     s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
 
-    mTargetPos.x -= amplitude * cM_ssin(angle);
-    mTargetPos.z -= amplitude * cM_scos(angle);
+    mTargetPos.x -= fVar1 * cM_ssin(angle);
+    mTargetPos.z -= fVar1 * cM_scos(angle);
 }
 
 /* 00001EC8-00002044       .text modeAttack__9daOship_cFv */
