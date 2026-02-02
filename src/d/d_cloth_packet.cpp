@@ -432,20 +432,10 @@ dCloth_packet_c* dCloth_packet_create(
 ) {
     /* Nonmatching */
     dCloth_packet_c* pCloth = new dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            pCloth = NULL;
-            return pCloth;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {
@@ -512,19 +502,10 @@ dCloth_packetXlu_c* dCloth_packetXlu_create(
 ) {
     /* Nonmatching */
     dCloth_packetXlu_c* pCloth = new dCloth_packetXlu_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            return NULL;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {
@@ -634,19 +615,10 @@ void dClothVobj03_c::TexObjLoad() {
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
     dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            return NULL;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {
@@ -746,19 +718,10 @@ void dClothVobj04_c::TexObjLoad() {
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
     dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            return NULL;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {
@@ -863,19 +826,10 @@ int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
     dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            return NULL;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {
@@ -981,19 +935,10 @@ int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
     dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr);
-    if (pCloth) {
-        // FIXME: Logic is close, but the `succeeded` variable might be auto-generated.
-        bool succeeded;
-        if (pCloth->mpPosArr[0] && pCloth->mpPosArr[1] && pCloth->mpNrmArr[0] && pCloth->mpNrmArr[1] && pCloth->mpNrmArrBack[0] && pCloth->mpNrmArrBack[1] &&
-            pCloth->mpSpeedArr)
-        {
-            succeeded = true;
-        } else {
-            succeeded = false;
-        }
-        if (!succeeded) {
-            return NULL;
-        }
+    if (pCloth && !pCloth->chkCreateBuff()) {
+        // FIXME: Logic is close, but the jumps are slightly different.
+        pCloth = NULL;
+        return pCloth;
     }
 
     if (pCloth && i_flagimage) {

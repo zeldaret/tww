@@ -49,6 +49,14 @@ public:
     }
 
     void swapArrays() { mCurArr ^= 1; }
+
+    bool chkCreateBuff() {
+        if (mpPosArr[0] != NULL && mpPosArr[1] != NULL && mpNrmArr[0] != NULL && mpNrmArr[1] != NULL && mpNrmArrBack[0] != NULL && mpNrmArrBack[1] != NULL &&
+            mpSpeedArr != NULL)
+            return true;
+        return false;
+    }
+
     cXyz* getCurrentPosArr() const { return mpPosArr[mCurArr]; }
     cXyz* getCurrentNrmArr() const { return mpNrmArr[mCurArr]; }
     cXyz* getCurrentNrmArrBack() const { return mpNrmArrBack[mCurArr]; }
