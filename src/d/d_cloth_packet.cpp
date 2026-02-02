@@ -74,21 +74,14 @@ int default_factor_checkCB(dCloth_packet_c* pPkt, int x, int y) {
 
 /* 8006313C-8006337C       .text init__15dCloth_packet_cFv */
 void dCloth_packet_c::init() {
-    /* Nonmatching */
     cXyz* pPos0 = mpPosArr[0];
     cXyz* pPos1 = mpPosArr[1];
     cXyz* pSpeed = mpSpeedArr;
     for (int y = 0; y < mHoistGridSize; y++) {
         for (int x = 0; x < mFlyGridSize; x++) {
-            pPos0->x = 0.0f;
-            pPos0->y = mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1));
-            pPos0->z = mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1));
-
-            pPos1->x = 0.0f;
-            pPos1->y = mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1));
-            pPos1->z = mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1));
-
-            *pSpeed = cXyz(0.0f, 0.0f, 0.0f);
+            pPos0->set(0.0f, mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1)), mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1)));
+            pPos1->set(0.0f, mHoistLength * ((f32)-y / (f32)(mHoistGridSize - 1)), mFlyLength * ((f32)x / (f32)(mFlyGridSize - 1)));
+            pSpeed->set(0.0f, 0.0f, 0.0f);
 
             pPos0++;
             pPos1++;
@@ -407,7 +400,7 @@ void dCloth_packet_c::plot() {
     float xPos = 0.0f;
     const float xStep = 1.0f / (f32)(mFlyGridSize - 1);
     const float yStep = 1.0f / (f32)(mHoistGridSize - 1);
-    // FIXME: x and xNext are in opposite registers.
+    // FIXME: x and xNext are in the correct registers, but xNext should be set before x.
     for (int x = 0, xNext = 1; x < mFlyGridSize - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (u8)(mHoistGridSize * 2));
 
