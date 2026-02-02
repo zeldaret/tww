@@ -414,12 +414,11 @@ void dCloth_packet_c::TevSetting() {
 
 /* 80064718-8006487C       .text plot__15dCloth_packet_cFv */
 void dCloth_packet_c::plot() {
-    /* Nonmatching */
     float xPos = 0.0f;
     const float xStep = 1.0f / (f32)(mFlyGridSize - 1);
     const float yStep = 1.0f / (f32)(mHoistGridSize - 1);
-    // FIXME: x and xNext are in the correct registers, but xNext should be set before x.
-    for (int x = 0, xNext = 1; x < mFlyGridSize - 1; x++, xNext++) {
+    int x, xNext = 1;
+    for (x = 0; x < mFlyGridSize - 1; x++, xNext++) {
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (u8)(mHoistGridSize * 2));
 
         float yPos = 0.0f;
