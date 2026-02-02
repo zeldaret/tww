@@ -105,7 +105,6 @@ void dCloth_packet_c::init() {
 void dCloth_packet_c::setGlobalWind(cXyz* wind) {
     Mtx mtx;
     MTXCopy(mMtx, mtx);
-    // FIXME: Is there a better way to set the translation?
     mtx[2][3] = 0.0f;
     mtx[1][3] = 0.0f;
     mtx[0][3] = 0.0f;
