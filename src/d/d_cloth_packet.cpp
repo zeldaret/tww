@@ -8,6 +8,7 @@
 
 #include "SSystem/SComponent/c_counter.h"
 #include "assets/l_matDL__d_cloth_packet.h"
+#include "assets/l_alpha_matDL__d_cloth_packet.h"
 #include "d/d_s_play.h"
 
 /* 80062D5C-800630B0       .text __ct__15dCloth_packet_cFP7ResTIMGiiffP12dKy_tevstr_cPP4cXyz */
@@ -482,7 +483,7 @@ void dCloth_packetXlu_c::TevSetting() {
     GXSetTevColorS10(GX_TEVREG0, mpTevstr->mColorC0);
     GXSetTevColor(GX_TEVREG1, mpTevstr->mColorK0);
     GXSetTevColor(GX_TEVREG2, mpTevstr->mColorK1);
-    GXCallDisplayList(l_matDL, 0x20);
+    GXCallDisplayList(l_alpha_matDL, 0x20);
 }
 
 /* 80064C98-80064CF8       .text cloth_draw__18dCloth_packetXlu_cFv */

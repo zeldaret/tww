@@ -2799,3 +2799,6 @@ extract:
 - symbol: l_matDL!.data:0x80376e20
   binary: assets/l_matDL__d_cloth_packet.bin
   header: assets/l_matDL__d_cloth_packet.h
+- symbol: l_alpha_matDL!.data:0x80376e60
+  binary: assets/l_alpha_matDL__d_cloth_packet.bin
+  header: assets/l_alpha_matDL__d_cloth_packet.h
