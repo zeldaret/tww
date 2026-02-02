@@ -109,9 +109,9 @@ void dCloth_packet_c::setGlobalWind(cXyz* wind) {
     mtx[2][3] = 0.0f;
     mtx[1][3] = 0.0f;
     mtx[0][3] = 0.0f;
-    MTXCopy(mtx, mDoMtx_stack_c::get());
-    MTXInverse(mDoMtx_stack_c::get(), mDoMtx_stack_c::get());
-    MTXMultVec(mDoMtx_stack_c::get(), wind, &mGlobalWind);
+    mDoMtx_stack_c::copy(mtx);
+    mDoMtx_stack_c::inverse();
+    mDoMtx_stack_c::multVec(wind, &mGlobalWind);
 }
 
 /* 80063400-80063728       .text cloth_move__15dCloth_packet_cFv */
@@ -169,7 +169,7 @@ void dCloth_packet_c::draw() {
     GXLoadTexObj(&this->mToonTex, GX_TEXMAP1);
     TevSetting();
 
-    MTXCopy(mMtx, mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(mMtx);
     mDoMtx_stack_c::scaleM(mScale);
     Mtx mtx;
     MTXConcat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mtx);
@@ -211,6 +211,7 @@ cXyz dCloth_packet_c::getFactor(cXyz* pPos, cXyz* pNrm, cXyz* pSpeed, float dist
     cXyz ret = pNrm[x + y * mFlyGridSize] * speedDotNrm;
 
     // FIXME: Somehow the neighbor checks use a bitfield, and the bit flags are in static memory.
+    //   It uses left_bit, right_bit, up_bit, and down_bit.
     const bool hasLeftNeighbor = x != 0;
     const bool hasRightNeighbor = x != mFlyGridSize - 1;
     const bool hasTopNeighbor = y != 0;
