@@ -614,7 +614,7 @@ void dClothVobj03_c::TexObjLoad() {
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         // FIXME: Logic is close, but the jumps are slightly different.
         pCloth = NULL;
@@ -717,7 +717,7 @@ void dClothVobj04_c::TexObjLoad() {
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr);
+    dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         // FIXME: Logic is close, but the jumps are slightly different.
         pCloth = NULL;
@@ -825,7 +825,7 @@ int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr);
+    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         // FIXME: Logic is close, but the jumps are slightly different.
         pCloth = NULL;
@@ -934,7 +934,7 @@ int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
     /* Nonmatching */
-    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr);
+    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         // FIXME: Logic is close, but the jumps are slightly different.
         pCloth = NULL;

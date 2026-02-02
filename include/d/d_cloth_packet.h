@@ -136,8 +136,8 @@ class dClothVobj03_c : public dCloth_packet_c {
     void cloth_copy();
 
 private:
-    dClothVobj03_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
-        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+    dClothVobj03_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
             field_0x108 = 1;
         } else {
@@ -168,8 +168,8 @@ class dClothVobj04_c : public dCloth_packet_c {
     void cloth_copy();
 
 private:
-    dClothVobj04_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
-        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+    dClothVobj04_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
             field_0x108 = 1;
         } else {
@@ -200,8 +200,8 @@ class dClothVobj05_c : public dCloth_packet_c {
     void cloth_copy();
 
 private:
-    dClothVobj05_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
-        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+    dClothVobj05_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr) {
         if (posArr) {
             field_0x108 = 1;
         } else {
@@ -232,8 +232,8 @@ class dClothVobj07_0_c : public dCloth_packet_c {
     void cloth_copy();
 
 private:
-    dClothVobj07_0_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
-        : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {
+    dClothVobj07_0_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
+        : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr) {
         if (posArr) {
             field_0x108 = 1;
         } else {
