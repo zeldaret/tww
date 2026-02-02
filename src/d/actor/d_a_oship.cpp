@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_oship.h"
+#include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_ship.h"
 #include "d/res/res_oship.h"
 #include "d/d_procname.h"
@@ -147,7 +148,7 @@ void daOship_c::pathMove() {
     dLib_pathMove(&mOrigPos, &m2D4, mpPath, speedF, pathMove_CB, this);
     cLib_addCalcPosXZ2(&current.pos, mOrigPos, REG12_F(0) + 0.01f, speedF);
     
-    if (speedF !=0.0f && mVelocityFwdTarget != 0.0f) {
+    if (speedF != 0.0f && mVelocityFwdTarget != 0.0f) {
         s16 target = cLib_targetAngleY(&current.pos, &mOrigPos);
         cLib_addCalcAngleS2(&shape_angle.y, target, 8, 0x100);
     }
@@ -170,14 +171,15 @@ bool daOship_c::plFireRepeat() {
 }
 
 /* 000008A0-000008F8       .text lineCheck__9daOship_cFP4cXyzP4cXyz */
-BOOL daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
+bool daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
     mLinChk.Set(param_1, param_2, this);
-    return dComIfG_Bgsp()->LineCross(&mLinChk) ? true : false;
+
+    /* This cast may be fake */ 
+    return (BOOL)dComIfG_Bgsp()->LineCross(&mLinChk);
 }
 
 /* 000008F8-00000990       .text changeModeByRange__9daOship_cFv */
 void daOship_c::changeModeByRange() {
-    /* Nonmatching */
     f32 search_ac_dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
     int proc_no;
 
@@ -207,7 +209,7 @@ void daOship_c::setWave() {
 }
 
 /* 00000E50-00001184       .text checkTgHit__9daOship_cFv */
-void daOship_c::checkTgHit() {
+bool daOship_c::checkTgHit() {
     /* Nonmatching */
 }
 
@@ -223,17 +225,99 @@ void daOship_c::setAttention() {
 
 /* 000011F4-00001330       .text setCollision__9daOship_cFv */
 void daOship_c::setCollision() {
-    /* Nonmatching */
+    /* Instruction match */
+    static f32 cyl_offset[5] = {
+        50.0f, -50.0f, 0.0f,
+        180.0f, -180.0f
+    };
+
+    static f32 cyl_r[5] = {
+        170.0f, 170.0f, 290.0f,
+        200.0f, 200.0f
+    };
+
+    static f32 cyl_h[5] = {
+        500.0f, 500.0f, 190.0f,
+        190.0f, 190.0f
+    };
+
+    f32 sin_angle_y = cM_ssin(current.angle.y);
+    f32 cos_angle_y = cM_scos(current.angle.y);
+    
+    dCcD_Cyl* curr_cyl_p = mCyl;
+    for (int i = 0; i < ARRAY_SSIZE(mCyl); i++, curr_cyl_p++) {
+        cXyz cyl_center(
+            current.pos.x + sin_angle_y * cyl_offset[i],
+            current.pos.y - 30.0f,
+            current.pos.z + cos_angle_y * cyl_offset[i]
+        );
+        curr_cyl_p->SetC(cyl_center);
+        curr_cyl_p->SetR(cyl_r[i]);
+        curr_cyl_p->SetH(cyl_h[i]);
+        dComIfG_Ccsp()->Set(curr_cyl_p);
+    }
 }
 
 /* 00001330-000014D4       .text attackCannon__9daOship_cFi */
-void daOship_c::attackCannon(int) {
-    /* Nonmatching */
+void daOship_c::attackCannon(int i_index) {
+    /* Instruction match */
+    csXyz rot = shape_angle;
+    rot.x -= mAimRotX;
+    rot.y += mAimRotY;
+    
+    int prm = daBomb_c::prm_make(daBomb_c::STATE_4, true, true);
+    daBomb_c* bomb_p = (daBomb_c *) fopAcM_fastCreate(PROC_BOMB, prm, &mBombSpawnPos, tevStr.mRoomNo, &rot);
+    
+    mBombPcId[i_index] = fpcM_GetID(bomb_p);
+    mBombAlloc[i_index] = 1;
+
+    bomb_p->setNoGravityTime(l_HIO.mBombNoGravityTime);
+    fopAcM_SetSpeedF(bomb_p, l_HIO.mBombSpeed * cM_scos(rot.x));
+
+    bomb_p->speed.y = -(l_HIO.mBombSpeed * cM_ssin(rot.x));
+
+    fopAcM_SetGravity(bomb_p, l_HIO.mBombAcceleration);
+    bomb_p->scale.setall(2.0f);
+
+    mDoAud_seStart(JA_SE_LK_SHIP_CANNON_FIRE, &mBombSpawnPos);
 }
 
 /* 000014D4-000017CC       .text setMtx__9daOship_cFv */
 void daOship_c::setMtx() {
-    /* Nonmatching */
+    /* Instruction match */
+    dLib_waveRot(&current.pos, f32(mAttackSwayAmount) * f32(REG12_S(3) + 1), &mWave);
+    
+    s16 temp_r30 = f32(mAttackSwayAmount * (REG12_S(5) + 10)) * cM_ssin(mAttackSwayTimer);
+    s16 temp_r0 = shape_angle.y + fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 temp_r4 = f32(temp_r30) * cM_scos(temp_r0);
+    s16 temp_r3 = f32(temp_r30) * cM_ssin(temp_r0);
+
+    if (mCurrentProc != 3) {
+        shape_angle.x = mWave.mRotX + temp_r4;
+        shape_angle.z = mWave.mRotZ + temp_r3;
+    }
+
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    cMtx_copy(mDoMtx_stack_c::get(), mFlagMtx);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    Vec o = { 0.0f, 0.0f, 0.0f };
+
+    o.y = l_HIO.mAttentionOffsY;
+    mDoMtx_stack_c::multVec(&o, &attention_info.position);
+    
+    o.y = l_HIO.mEyeOffsY;
+    mDoMtx_stack_c::multVec(&o, &eyePos);
+
+    o.y = 0.0f;
+    o.z = l_HIO.mWaveOffsZ;
+    mDoMtx_stack_c::multVec(&o, &mWavePos);
+
+    o.z = l_HIO.mTrackOffsZ;
+    mDoMtx_stack_c::multVec(&o, &mTrackPos);
 }
 
 /* 000017CC-000017EC       .text modeWaitInit__9daOship_cFv */
@@ -253,7 +337,22 @@ void daOship_c::modeRangeAInit() {
 
 /* 00001820-00001900       .text modeRangeA__9daOship_cFv */
 void daOship_c::modeRangeA() {
-    /* Nonmatching */
+    if ((mSubMode == 2 || mSubMode == 1) && mPathId != 0xFF) {
+        mVelocityFwdTarget = l_HIO.mPathSpeed;
+        pathMove();
+    }
+
+    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
+    mTargetPos = player_p->current.pos;
+    current.pos.y = dLib_getWaterY(current.pos, mAcch);
+
+    if (!checkTgHit() && !plFireRepeat()) {
+        if (cLib_calcTimer(&mAttackTimer) == 0) {
+            modeProcInit(1);
+        } else {
+            changeModeByRange();
+        }
+    }
 }
 
 /* 00001900-00001934       .text modeRangeBInit__9daOship_cFv */
@@ -269,7 +368,22 @@ void daOship_c::modeRangeBInit() {
 
 /* 00001934-00001A14       .text modeRangeB__9daOship_cFv */
 void daOship_c::modeRangeB() {
-    /* Nonmatching */
+    if ((mSubMode == 2 || mSubMode == 1) && mPathId != 0xFF) {
+        mVelocityFwdTarget = l_HIO.mPathSpeed;
+        pathMove();
+    }
+
+    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
+    mTargetPos = player_p->current.pos;
+    current.pos.y = dLib_getWaterY(current.pos, mAcch);
+
+    if (!checkTgHit() && !plFireRepeat()) {
+        if (cLib_calcTimer(&mAttackTimer) == 0) {
+            modeProcInit(1);
+        } else {
+            changeModeByRange();
+        }
+    }
 }
 
 /* 00001A14-00001A28       .text modeRangeCInit__9daOship_cFv */
@@ -279,45 +393,139 @@ void daOship_c::modeRangeCInit() {
 
 /* 00001A28-00001AFC       .text modeRangeC__9daOship_cFv */
 void daOship_c::modeRangeC() {
-    /* Nonmatching */
+    if (mSubMode == 2 && mPathId != 0xFF) {
+        mVelocityFwdTarget = l_HIO.mPathSpeed;
+        pathMove();
+    }
+
+    fopAc_ac_c* player_p = dComIfGp_getPlayer(0);
+    mTargetPos = player_p->current.pos;
+    current.pos.y = dLib_getWaterY(current.pos, mAcch);
+
+    if (!checkTgHit() && !plFireRepeat()) {
+        if (cLib_calcTimer(&mAttackTimer) == 0) {
+            modeProcInit(1);
+        } else {
+            changeModeByRange();
+        }
+    }
 }
 
 /* 00001AFC-00001B00       .text modeRangeDInit__9daOship_cFv */
 void daOship_c::modeRangeDInit() {
+    /* Empty method */
 }
 
 /* 00001B00-00001B7C       .text modeRangeD__9daOship_cFv */
 void daOship_c::modeRangeD() {
-    /* Nonmatching */
+    if (!checkTgHit()) {
+        if (mSubMode == 2 && mPathId != 0xFF) {
+            mVelocityFwdTarget = l_HIO.mPathSpeed;
+            pathMove();
+        }
+        current.pos.y = dLib_getWaterY(current.pos, mAcch);
+        changeModeByRange();
+    }
 }
 
 /* 00001B7C-00001B90       .text modeDamageInit__9daOship_cFv */
 void daOship_c::modeDamageInit() {
-    /* Nonmatching */
-    mAttackTimer = 0x3C;
-    mAttackSwayAmount = 0x12C;
+    mAttackTimer = 60;
+    mAttackSwayAmount = 300;
 }
 
 /* 00001B90-00001C98       .text modeDamage__9daOship_cFv */
 void daOship_c::modeDamage() {
-    /* Nonmatching */
+    /* Instruction match */
+    mAttackSwayTimer += REG12_S(2) + 0x1830;
+    cLib_addCalcAngleS2(&mAttackSwayAmount, 0, 10, 10);
+
+    f32 final_sway_amt = (mAttackSwayAmount * cM_ssin(mAttackSwayTimer) * 0.025f);
+    f32 water_height = dLib_getWaterY(current.pos, mAcch);
+    current.pos.y = final_sway_amt + water_height;
+
+    if (!checkTgHit() && (cLib_calcTimer(&mAttackTimer) == 0 || mAttackTimer <= -1)) {
+        changeModeByRange();
+    }
 }
 
 /* 00001C98-00001EC8       .text modeAttackInit__9daOship_cFv */
 void daOship_c::modeAttackInit() {
-    /* Nonmatching */
+    /* Instruction match */
+    mAttackTimer = -1;
+    mTargetPos = dComIfGp_getPlayer(0)->current.pos;
+
+    f32 target_to_curr_dist = (current.pos - mTargetPos).absXZ();
+
+    f32 amplitude = 0.0f;
+    if (target_to_curr_dist > l_HIO.mBadAimAdjustDistanceStart) {
+        amplitude = (target_to_curr_dist - l_HIO.mBadAimAdjustDistanceStart) * 0.5f;
+    }
+
+    amplitude += 300.0f;
+
+    if (cM_rndF(100.0f) < 10.0f) {
+        amplitude = 0.0f;
+    }
+
+    if (dComIfGp_checkPlayerStatus0(0, 0x1100000)) {
+        mAimCounter = 0;
+        amplitude += 3000.0f;
+    } else if (mAimCounter < 6) {
+        amplitude += (6 - mAimCounter) * 500.0f;
+    }
+
+    if (l_HIO.field_0x08 != 0) {
+        amplitude = 0.0f;
+    }
+
+    s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+
+    mTargetPos.x -= amplitude * cM_ssin(angle);
+    mTargetPos.z -= amplitude * cM_scos(angle);
 }
 
 /* 00001EC8-00002044       .text modeAttack__9daOship_cFv */
 void daOship_c::modeAttack() {
-    /* Nonmatching */
+    if (mPathId != 0xFF) {
+        mVelocityFwdTarget = 0.0f;
+        pathMove();
+    }
+
+    if (!checkTgHit()) {
+        current.pos.y = dLib_getWaterY(current.pos, mAcch);
+        if (mAttackTimer <= -1) {
+            cLib_distanceAngleS(mAimRotY, mAimRotYTarget);
+            cLib_distanceAngleS(mAimRotX, mAimRotXTarget);
+            mAttackTimer = -1;
+            if (l_HIO.field_0x06 != 0) {
+                changeModeByRange();
+            } else if (lineCheck(&mSmokePos, &mTargetPos)) {
+                changeModeByRange();
+            } else {
+                for (int i = 0; i < ARRAY_SSIZE(mBombAlloc); i++) {
+                    if (mBombAlloc[i] == 0 && speedF <= 2.0f) {
+                        attackCannon(i);
+                        mAttackTimer = 15;
+                        mAttackSwayAmount = 100;
+                        return;
+                    }
+                }
+            }
+        } else if (cLib_calcTimer(&mAttackTimer) == 0) {
+            changeModeByRange();
+        } else {
+            mAttackSwayTimer += REG12_S(2) + 0x1830;
+            cLib_addCalcAngleS2(&mAttackSwayAmount, 0, 10, 10);
+        }
+    } 
 }
 
 /* 00002044-00002104       .text modeDeleteInit__9daOship_cFv */
 void daOship_c::modeDeleteInit() {
-    fopAcM_seStart(this, 0x6A19, 0);
+    fopAcM_seStart(this, JA_SE_OBJ_ENEMY_SHIP_SINK, 0);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeFollowCallback); i++) {
         mSmokeFollowCallback[i].end();
     }
 
@@ -333,14 +541,14 @@ void daOship_c::modeDelete() {
 void daOship_c::modeProc(daOship_c::Proc_e i_procType, int i_procNo) {
     /* Instruction match */
     static const ActorModeTable mode_tbl[8] = {
-        { &daOship_c::modeWaitInit,   &daOship_c::modeWait  , "WAIT"   },
-        { &daOship_c::modeAttackInit, &daOship_c::modeAttack, "ATTACK" },
-        { &daOship_c::modeDamageInit, &daOship_c::modeDamage, "DAMAGE" },
-        { &daOship_c::modeDeleteInit, &daOship_c::modeDelete, "DELETE" },
+        { &daOship_c::modeWaitInit,   &daOship_c::modeWait,   "WAIT"    },
+        { &daOship_c::modeAttackInit, &daOship_c::modeAttack, "ATTACK"  },
+        { &daOship_c::modeDamageInit, &daOship_c::modeDamage, "DAMAGE"  },
+        { &daOship_c::modeDeleteInit, &daOship_c::modeDelete, "DELETE"  },
         { &daOship_c::modeRangeAInit, &daOship_c::modeRangeA, "RANGE_A" },
         { &daOship_c::modeRangeBInit, &daOship_c::modeRangeB, "RANGE_B" },
         { &daOship_c::modeRangeCInit, &daOship_c::modeRangeC, "RANGE_C" },
-        { &daOship_c::modeRangeDInit, &daOship_c::modeRangeD, "RANGE_D" },
+        { &daOship_c::modeRangeDInit, &daOship_c::modeRangeD, "RANGE_D" }
     };
     
     if (i_procType == PROC_INIT) {
@@ -371,17 +579,22 @@ bool daOship_c::_draw() {
 void daOship_c::createInit() {
     /* Instruction match */
     bool no_majuu_flag;
+
     itemTableIdx = dComIfGp_CharTbl()->GetNameIndex("Oship", 0);
+
     mOrigPos = current.pos;
+
     max_health = 3;
     health = max_health;
+
     mPlFireTimer = -1;
     changeModeByRange();
+
     attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
     attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 34;
-    mStts.Init(0xFF, 0, this);
 
-    for (int i = 0; i < 5; i++) {
+    mStts.Init(0xFF, 0, this);
+    for (int i = 0; i < ARRAY_SSIZE(mCyl); i++) {
         mCyl[i].Set(m_cyl_src);
         mCyl[i].SetStts(&mStts);
     }
@@ -390,15 +603,13 @@ void daOship_c::createInit() {
     mWave.mAnimZ = cM_rndF(32768.0f);
 
     setMtx();
-
     mpModel->calc();
     cullMtx = mpModel->getBaseTRMtx();
+
     fopAcM_setCullSizeBox(this, -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
     fopAcM_setCullSizeFar(this, 10.0f);
 
-
     no_majuu_flag = mModelType != 0xFF || REG12_S(0) != 0;
-
     if (!no_majuu_flag) {
         mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, 4, &current.pos, tevStr.mRoomNo, &current.angle);
         static cXyz flag_offset = cXyz(0.0f, 800.0f, 0.0f);
@@ -515,7 +726,7 @@ cPhs_State daOship_c::_create() {
 bool daOship_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeFollowCallback); i++) {
         mSmokeFollowCallback[i].end();
     }
 

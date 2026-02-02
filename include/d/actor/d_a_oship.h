@@ -37,11 +37,11 @@ public:
     int _pathMove(cXyz*, cXyz*, cXyz*);
     void pathMove();
     bool plFireRepeat();
-    BOOL lineCheck(cXyz*, cXyz*);
+    bool lineCheck(cXyz*, cXyz*);
     void changeModeByRange();
     void createWave();
     void setWave();
-    void checkTgHit();
+    bool checkTgHit();
     void setAttention();
     void setCollision();
     void attackCannon(int);
@@ -123,8 +123,7 @@ public:
     /* 0xD14 */ cXyz mFlagOffset;
     /* 0xD20 */ Mtx mFlagMtx;
     /* 0xD50 */ fpc_ProcID mFlagPcId;
-    /* 0xD54 */ fpc_ProcID mBombPcId[1];
-    /* 0xD58 */ u8 mD58[0xD68 - 0xD58];
+    /* 0xD54 */ fpc_ProcID mBombPcId[5];
     /* 0xD68 */ f32 mVelocityFwdTarget;
     /* 0xD6C */ int mAimCounter;
     /* 0xD70 */ int mHitTimer;
@@ -137,10 +136,11 @@ public:
     /* 0xD86 */ s16 mAimRotYTarget;
     /* 0xD88 */ s16 mAimRotX;
     /* 0xD8A */ s16 mAimRotXTarget;
-    /* 0xD8C */ u8 mBombAlloc[1];
-    /* 0xD8D */ u8 mD8D[0xD94 - 0xD8D];
+    /* 0xD8C */ u8 mBombAlloc[5];
+    /* 0xD91 */ u8 mD91[0xD94 - 0xD91];
     /* 0xD94 */ dBgS_ObjLinChk mLinChk;
-};
+};  // Size: 0xE00
+STATIC_ASSERT(sizeof(daOship_c) == 0xE00);
 
 class daOship_HIO_c : public mDoHIO_entry_c {
 public:
@@ -149,9 +149,9 @@ public:
 public:
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ s8 field_0x05;
-    /* 0x06 */ s8 field_0x06;
+    /* 0x06 */ u8 field_0x06;
     /* 0x07 */ s8 field_0x07;
-    /* 0x08 */ s8 field_0x08;
+    /* 0x08 */ u8 field_0x08;
     /* 0x09 */ u8 field_0x09[0x0C - 0x09];
     /* 0x0C */ f32 mAttentionOffsY;
     /* 0x10 */ f32 mEyeOffsY;
