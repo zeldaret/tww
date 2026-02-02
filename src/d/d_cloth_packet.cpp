@@ -545,9 +545,9 @@ void dClothVobj03_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        field_0x109 = 1;
+        mIsIndoors = 1;
     } else {
-        field_0x109 = 0;
+        mIsIndoors = 0;
     }
 }
 
@@ -565,7 +565,7 @@ void dClothVobj03_c::cloth_move() {
     f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
     f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
 
-    if (field_0x109 != 0) {
+    if (mIsIndoors != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.4, -1.5, 0.7, 0.75, 0.6, 0, 0, 900, -800, 7.0, 6.0);
@@ -648,9 +648,9 @@ void dClothVobj04_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        field_0x109 = 1;
+        mIsIndoors = 1;
     } else {
-        field_0x109 = 0;
+        mIsIndoors = 0;
     }
 }
 
@@ -668,7 +668,7 @@ void dClothVobj04_c::cloth_move() {
     f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
     f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
 
-    if (field_0x109 != 0) {
+    if (mIsIndoors != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.45, -1.5, 0.6, 0.8, 0.8, 0, 0, 900, -800, 7.0, 6.0);
@@ -751,9 +751,9 @@ void dClothVobj05_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        field_0x109 = 1;
+        mIsIndoors = 1;
     } else {
-        field_0x109 = 0;
+        mIsIndoors = 0;
     }
 }
 
@@ -771,7 +771,7 @@ void dClothVobj05_c::cloth_move() {
     f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
     f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
 
-    if (field_0x109 != 0) {
+    if (mIsIndoors != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.45, -1.0, 0.7, 0.95, 0.95, 0, 0, 0, 0, 7.0, 6.0);
@@ -860,9 +860,9 @@ void dClothVobj07_0_c::init() {
     }
 
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
-        field_0x109 = 1;
+        mIsIndoors = 1;
     } else {
-        field_0x109 = 0;
+        mIsIndoors = 0;
     }
 }
 
@@ -880,7 +880,7 @@ void dClothVobj07_0_c::cloth_move() {
     f32 windSpeed = g_regHIO.mChild[10].mFloatRegs[5] + 7.0f;
     f32 windSpeedWave = g_regHIO.mChild[10].mFloatRegs[6] + 2.0f;
 
-    if (field_0x109 != 0) {
+    if (mIsIndoors != 0) {
         windSpeed *= 0.05f;
         windSpeedWave = 0.0;
         setParam(0.35, -1.0, 0.7, 1.1, 1.1, 0, 0, 900, -800, 7.0, 6.0);

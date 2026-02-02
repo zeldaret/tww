@@ -154,7 +154,7 @@ public:
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
-    u8 field_0x109;
+    u8 mIsIndoors;
 };
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -186,7 +186,7 @@ public:
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
-    u8 field_0x109;
+    u8 mIsIndoors;
 };
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -218,7 +218,7 @@ public:
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
-    u8 field_0x109;
+    u8 mIsIndoors;
 };
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
@@ -250,7 +250,7 @@ public:
 private:
     GXTlutObj mTlutObj;
     u8 field_0x108;
-    u8 field_0x109;
+    u8 mIsIndoors;
 };
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
